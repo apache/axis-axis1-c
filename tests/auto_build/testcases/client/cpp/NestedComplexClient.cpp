@@ -55,10 +55,13 @@ int main(int argc, char* argv[])
 		strArray.m_Array[0] = "Apache";
 		strArray.m_Array[1] = "Axis C++";
 
+        xsd__int * arrayOfInt = new xsd__int[ARRAYSIZE];
 		intArray.m_Size = ARRAYSIZE;
-		intArray.m_Array = new xsd__int[ARRAYSIZE];
-		intArray.m_Array[0] = 6;
-		intArray.m_Array[1] = 7;
+		intArray.m_Array = new xsd__int*[ARRAYSIZE];
+        arrayOfInt[0] = 6;
+		intArray.m_Array[0] = &arrayOfInt[0];
+        arrayOfInt[1] = 7;
+		intArray.m_Array[1] = &arrayOfInt[1];
 
 		simpleArrays.stringArray = strArray;
 		simpleArrays.intArray = intArray;
@@ -82,14 +85,14 @@ int main(int argc, char* argv[])
 		cout << response->complexType1Array.m_Array[0]->ct1_int << endl;
 		cout << response->complexType1Array.m_Array[0]->simpleArrays->stringArray.m_Array[0] << " ";
 		cout << response->complexType1Array.m_Array[0]->simpleArrays->stringArray.m_Array[1] << endl;
-		cout << response->complexType1Array.m_Array[0]->simpleArrays->intArray.m_Array[0] << " ";
-		cout << response->complexType1Array.m_Array[0]->simpleArrays->intArray.m_Array[1] << endl;
+		cout << *(response->complexType1Array.m_Array[0]->simpleArrays->intArray.m_Array[0]) << " ";
+		cout << *(response->complexType1Array.m_Array[0]->simpleArrays->intArray.m_Array[1]) << endl;
 		cout << response->complexType1Array.m_Array[1]->ct1_string << endl;
 		cout << response->complexType1Array.m_Array[1]->ct1_int << endl;
 		cout << response->complexType1Array.m_Array[1]->simpleArrays->stringArray.m_Array[0] << " ";
 		cout << response->complexType1Array.m_Array[1]->simpleArrays->stringArray.m_Array[1] << endl;
-		cout << response->complexType1Array.m_Array[1]->simpleArrays->intArray.m_Array[0] << " ";
-		cout << response->complexType1Array.m_Array[1]->simpleArrays->intArray.m_Array[1] << endl;
+		cout << *(response->complexType1Array.m_Array[1]->simpleArrays->intArray.m_Array[0]) << " ";
+		cout << *(response->complexType1Array.m_Array[1]->simpleArrays->intArray.m_Array[1]) << endl;
 
 	}
 	catch(AxisException& e)

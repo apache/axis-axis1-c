@@ -42,11 +42,12 @@ int main(int argc, char* argv[])
     int entries[100];
     int i;
 
-    array_input.m_Array = entries;
+    array_input.m_Array = new int*[100];
     array_input.m_Size  = 100;
 
     for ( i = 0; i < 100; i++ ) {
       entries[i] = i;
+      array_input.m_Array[i] = &entries[i];
     }
 
     input = new Type();
@@ -55,7 +56,7 @@ int main(int argc, char* argv[])
     output = ws->getInput(input);
 
     for ( i = 0; i < 100; i++ ) {
-      cout << "item [" << i << "] = " << output->item.m_Array[i] << endl;
+      cout << "item [" << i << "] = " << *(output->item.m_Array[i]) << endl;
     }
     returnValue = 0; // Success
 

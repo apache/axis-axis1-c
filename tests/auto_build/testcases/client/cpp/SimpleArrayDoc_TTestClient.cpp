@@ -52,11 +52,13 @@ RETTYPE ThreadFunc(ARGTYPE Param)
 				ArrayTestPortType ws(endpoint);
 				//testing echoIntArray
 				IntArrayType arrin;
-				arrin.intItem.m_Array = new int[ARRAYSIZE];
+				arrin.intItem.m_Array = new int*[ARRAYSIZE];
+                int * intArray = new int[ARRAYSIZE];
 				arrin.intItem.m_Size = ARRAYSIZE;
 				for (x=0;x<ARRAYSIZE;x++)
 				{
-					arrin.intItem.m_Array[x] = x;
+                    intArray[x] = x;
+					arrin.intItem.m_Array[x] = &intArray[x];
 				}
 				if (ws.echoIntArray(&arrin)->intItem.m_Array != NULL)
 					cout << "successful "<<endl;

@@ -23,19 +23,22 @@ int main(int argc, char* argv[])
 
 		single=37;
 
+        xsd__int * arrayOfInt = new xsd__int[ARRAYSIZE];
 		intArray.m_Size = ARRAYSIZE;
-		intArray.m_Array = new xsd__int[ARRAYSIZE];
-		intArray.m_Array[0] = 6;
-		intArray.m_Array[1] = 7;
+		intArray.m_Array = new xsd__int*[ARRAYSIZE];
+		arrayOfInt[0] = 6;
+        intArray.m_Array[0] = &arrayOfInt[0];
+        arrayOfInt[1] = 7;
+		intArray.m_Array[1] = &arrayOfInt[1];
 
 		response = ws->sendPrimitiveAndArray(single, intArray);
-		cout << response->returnInt << " " << response->returnArray.m_Array[0] << " " << response->returnArray.m_Array[1] << endl;
+		cout << response->returnInt << " " << *(response->returnArray.m_Array[0]) << " " << *(response->returnArray.m_Array[1]) << endl;
 
 		single=43;
-		intArray.m_Array[0] = 13;
-		intArray.m_Array[1] = 17;
+        arrayOfInt[0] = 13;
+        arrayOfInt[1] = 17;
 		response = ws->sendArrayAndPrimitive(intArray, single);
-		cout << response->returnInt << " " << response->returnArray.m_Array[0] << " " << response->returnArray.m_Array[1] << endl;
+		cout << response->returnInt << " " << *(response->returnArray.m_Array[0]) << " " << *(response->returnArray.m_Array[1]) << endl;
 
 		delete ws;
 	}

@@ -44,17 +44,19 @@ int main(int argc, char* argv[])
 
 
 		/* Test a boolean array */
-		boolean_in.m_Array = new xsd__boolean[ARRAYSIZE];
+		boolean_in.m_Array = new xsd__boolean*[ARRAYSIZE];
+        xsd__boolean * booleanArray = new xsd__boolean[ARRAYSIZE];
 		boolean_in.m_Size = ARRAYSIZE;
         int x = 0;
 		for (x=0; x<ARRAYSIZE; x++)
 		{
-			boolean_in.m_Array[x] = (xsd__boolean)x;
+            booleanArray[x] = (xsd__boolean)x;
+			boolean_in.m_Array[x] = &booleanArray[x];
 		}
 		cout << "invoking echoBooleanArray..."<<endl;
 		boolean_out = ws.echoBooleanArray(boolean_in);
 		if(boolean_out.m_Size > 0)
-			if(boolean_out.m_Array[0] == (xsd__boolean)0)
+			if(*(boolean_out.m_Array[0]) == (xsd__boolean)0)
 				cout << "successful "<<endl;
 			else
 				cout << "failed "<<endl;		
@@ -97,16 +99,18 @@ int main(int argc, char* argv[])
 			cout << "failed "<<endl;		
                 */
 		/* Test an int array */
-		int_in.m_Array = new xsd__int[ARRAYSIZE];
+		int_in.m_Array = new xsd__int*[ARRAYSIZE];
+        xsd__int * intArray = new xsd__int[ARRAYSIZE];
 		int_in.m_Size = ARRAYSIZE;
 		for (x=0; x<ARRAYSIZE; x++)
 		{
-			int_in.m_Array[x] = x+1;
+            intArray[x] = x+1;
+			int_in.m_Array[x] = &intArray[x];
 		}
 		cout << "invoking echoIntArray..."<<endl;
 		int_out = ws.echoIntArray(int_in);
 		if(int_out.m_Size > 0)
-			if(int_out.m_Array[0] == 1)
+			if(*(int_out.m_Array[0]) == 1)
 				cout << "successful "<<endl;
 			else
 				cout << "failed "<<endl;		
@@ -114,16 +118,18 @@ int main(int argc, char* argv[])
 			cout << "failed "<<endl;
 
 		/* Test a long array */
-		long_in.m_Array = new xsd__long[ARRAYSIZE];
+		long_in.m_Array = new xsd__long*[ARRAYSIZE];
+        xsd__long * longArray = new xsd__long[ARRAYSIZE];
 		long_in.m_Size = ARRAYSIZE;
 		for (x=0; x<ARRAYSIZE; x++)
 		{
-			long_in.m_Array[x] = (xsd__long)x+200001;
+            longArray[x] = (xsd__long) x+ 200001;
+			long_in.m_Array[x] = &longArray[x];
 		}
 		cout << "invoking echoLongArray..."<<endl;
 		long_out = ws.echoLongArray(long_in);
 		if(long_out.m_Size > 0)
-			if(long_out.m_Array[0] == (xsd__long)200001)
+			if(*(long_out.m_Array[0]) == (xsd__long)200001)
 				cout << "successful "<<endl;
 			else
 				cout << "failed "<<endl;		
@@ -132,16 +138,18 @@ int main(int argc, char* argv[])
 
 
 		/* Test a float array */
-		float_in.m_Array = new xsd__float[ARRAYSIZE];
+		float_in.m_Array = new xsd__float*[ARRAYSIZE];
+        xsd__float * floatArray = new xsd__float[ARRAYSIZE];
 		float_in.m_Size = ARRAYSIZE;
 		for (x=0; x<ARRAYSIZE; x++)
 		{
-			float_in.m_Array[x] = (xsd__float)x+11.111;
+            floatArray[x] = (xsd__float) x+ 11.111;
+			float_in.m_Array[x] = &floatArray[x];
 		}
 		cout << "invoking echoFloatArray..."<<endl;
 		float_out = ws.echoFloatArray(float_in);
 		if(float_out.m_Size > 0)
-			if(float_out.m_Array[0] == (xsd__float)11.111)
+			if(*(float_out.m_Array[0]) == (xsd__float)11.111)
 				cout << "successful "<<endl;
 			else
 				cout << "failed "<<endl;		
@@ -149,16 +157,18 @@ int main(int argc, char* argv[])
 			cout << "failed "<<endl;		
 
 		/* Test a double array */
-		double_in.m_Array = new xsd__double[ARRAYSIZE];
+		double_in.m_Array = new xsd__double*[ARRAYSIZE];
+        xsd__double * doubleArray = new xsd__double[ARRAYSIZE];
 		double_in.m_Size = ARRAYSIZE;
 		for (x=0; x<ARRAYSIZE; x++)
 		{
-			double_in.m_Array[x] = (xsd__double)x+71.15656;
+            doubleArray[x] = (xsd__double)x+71.15656;
+			double_in.m_Array[x] = &doubleArray[x];
 		}
 		cout << "invoking echoDoubleArray..."<<endl;
 		double_out = ws.echoDoubleArray(double_in);
 		if(double_out.m_Size > 0)
-			if(double_out.m_Array[0] == (xsd__double)71.15656)
+			if(*(double_out.m_Array[0]) == (xsd__double)71.15656)
 				cout << "successful "<<endl;
 			else
 				cout << "failed "<<endl;		

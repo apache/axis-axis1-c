@@ -246,33 +246,30 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
             case XSD_BYTE:
             case XSD_UNSIGNEDBYTE:
             {
-                char* p = (char*)m_value.sta;
+                char** p = (char**)m_value.sta;
                 for (int ix=0;ix<m_nSize;ix++)
                 {
-                    pSZ.serializeAsElement(m_ItemName.c_str(), pNamespace, (void*)p, m_type);
-                    p++;
+                    pSZ.serializeAsElement(m_ItemName.c_str(), pNamespace, (void*)p[ix], m_type);
                 }
             }
                 break;
             case XSD_SHORT:
             case XSD_UNSIGNEDSHORT:
             {
-                short* p = (short*)m_value.sta;
+                short** p = (short**)m_value.sta;
                 for (int ix=0;ix<m_nSize;ix++)
                 {
-                    pSZ.serializeAsElement(m_ItemName.c_str(), pNamespace, (void*)p, m_type);
-                    p++;
+                    pSZ.serializeAsElement(m_ItemName.c_str(), pNamespace, (void*)p[ix], m_type);
                 }
             }
                 break;
             case XSD_LONG:
             case XSD_UNSIGNEDLONG:
 			{
-                LONGLONG* p = (LONGLONG*)m_value.sta;
+                LONGLONG** p = (LONGLONG**)m_value.sta;
                 for (int ix=0;ix<m_nSize;ix++)
                 {
-                    pSZ.serializeAsElement(m_ItemName.c_str(), pNamespace, (void*)p, m_type);
-                    p++;
+                    pSZ.serializeAsElement(m_ItemName.c_str(), pNamespace, (void*)p[ix], m_type);
                 }
             }
                 break;
@@ -280,22 +277,20 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
             case XSD_INTEGER:
             case XSD_DURATION:		
             {
-                long* p = (long*)m_value.sta;
+                long** p = (long**)m_value.sta;
                 for (int ix=0;ix<m_nSize;ix++)
                 {
-                    pSZ.serializeAsElement(m_ItemName.c_str(), pNamespace, (void*)p, m_type);
-                    p++;
+                    pSZ.serializeAsElement(m_ItemName.c_str(), pNamespace, (void*)p[ix], m_type);
                 }
             }
                 break;
             case XSD_DOUBLE:
             case XSD_DECIMAL:
             {
-                double* p = (double*)m_value.sta;
+                double** p = (double**)m_value.sta;
                 for (int ix=0;ix<m_nSize;ix++)
                 {
-                    pSZ.serializeAsElement(m_ItemName.c_str(), pNamespace, (void*)p, m_type);
-                    p++;
+                    pSZ.serializeAsElement(m_ItemName.c_str(), pNamespace, (void*)p[ix], m_type);
                 }
             }
                 break;
@@ -308,11 +303,10 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
             case XSD_DAY:
             case XSD_MONTH:
             {
-                tm* p = (tm*)m_value.sta;
+                tm** p = (tm**)m_value.sta;
                 for (int ix=0;ix<m_nSize;ix++)
                 {
-                    pSZ.serializeAsElement(m_ItemName.c_str(), pNamespace, (void*)p, m_type);
-                    p++;
+                    pSZ.serializeAsElement(m_ItemName.c_str(), pNamespace, (void*)p[ix], m_type);
                 }
             }
                 break;
@@ -320,21 +314,19 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
             case XSD_UNSIGNEDINT:
             case XSD_BOOLEAN:
             {
-                int* p = (int*)m_value.sta;
+                int** p = (int**)m_value.sta;
                 for (int ix=0;ix<m_nSize;ix++)
                 {
-                    pSZ.serializeAsElement(m_ItemName.c_str(), pNamespace, (void*)p, m_type);
-                    p++;
+                    pSZ.serializeAsElement(m_ItemName.c_str(), pNamespace, (void*)p[ix], m_type);
                 }
             }
                 break;
             case XSD_FLOAT:
             {
-                float* p = (float*)m_value.sta;
+                float** p = (float**)m_value.sta;
                 for (int ix=0;ix<m_nSize;ix++)
                 {
-                    pSZ.serializeAsElement(m_ItemName.c_str(), pNamespace, (void*)p, m_type);
-                    p++;
+                    pSZ.serializeAsElement(m_ItemName.c_str(), pNamespace, (void*)p[ix], m_type);
                 }
             }
                 break;
@@ -346,28 +338,25 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
                 AxisChar** p = (AxisChar**)m_value.sta;
                 for (int ix=0;ix<m_nSize;ix++)
                 {
-                    pSZ.serializeAsElement(m_ItemName.c_str(), pNamespace, (void*)*p, m_type);
-                    p++;
+                    pSZ.serializeAsElement(m_ItemName.c_str(), pNamespace, (void*)p[ix], m_type);
                 }
             }
                 break;
             case XSD_HEXBINARY:
             {
-                xsd__hexBinary* p = (xsd__hexBinary*)m_value.sta;
+                xsd__hexBinary** p = (xsd__hexBinary**)m_value.sta;
                 for (int ix=0;ix<m_nSize;ix++)
                 {
-                    pSZ.serializeAsElement(m_ItemName.c_str(), pNamespace, (void*)p, m_type);
-                    p++;
+                    pSZ.serializeAsElement(m_ItemName.c_str(), pNamespace, (void*)p[ix], m_type);
                 }
             }
                 break;
             case XSD_BASE64BINARY:
             {
-                xsd__base64Binary* p = (xsd__base64Binary*)m_value.sta;
+                xsd__base64Binary** p = (xsd__base64Binary**)m_value.sta;
                 for (int ix=0;ix<m_nSize;ix++)
                 {
-                    pSZ.serializeAsElement(m_ItemName.c_str(), pNamespace, (void*)p, m_type);
-                    p++;
+                    pSZ.serializeAsElement(m_ItemName.c_str(), pNamespace, (void*)p[ix], m_type);
                 }
             }
             default:

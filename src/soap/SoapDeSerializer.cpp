@@ -1040,7 +1040,7 @@ AxisSoapDeSerializerStringCopy (const char *s1)
 #define INIT_VALUE_XSDBINARY
 
 #define DESERIALIZE_ENCODED_ARRAY_BLOCK(cpp_type, conv_func) \
-Array.m_Array = new cpp_type[Array.m_Size];\
+Array.m_Array = new cpp_type*[Array.m_Size];\
 if (!Array.m_Array)\
 {\
     Array.m_Size = 0;\
@@ -1055,14 +1055,14 @@ for (; nIndex < Array.m_Size; nIndex++)\
     if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))\
     {\
         cpp_type* pr = conv_func(m_pNode->m_pchNameOrValue); \
-        ((cpp_type*)Array.m_Array)[nIndex] = *pr;\
+        ((cpp_type**)Array.m_Array)[nIndex] = pr;\
         delete pr;\
         m_pNode = m_pParser->next(); /* skip end element node too */\
         continue;\
     }\
     /* error : unexpected element type or end of stream */\
     m_nStatus = AXIS_FAIL;\
-    delete [] (cpp_type*)Array.m_Array;\
+    delete [] (cpp_type**)Array.m_Array;\
     Array.m_Array = 0;\
     Array.m_Size = 0;\
     return Array;\
@@ -1101,7 +1101,7 @@ m_pNode = m_pParser->next(); /* skip end element node too */\
 return Array;
 
 #define DESERIALIZE_LITERAL_ARRAY_BLOCK(cpp_type, conv_func) \
-            Array.m_Array = new cpp_type[INITIAL_ARRAY_SIZE];\
+            Array.m_Array = new cpp_type*[INITIAL_ARRAY_SIZE];\
             if (!Array.m_Array) return Array;\
             Array.m_Size = INITIAL_ARRAY_SIZE;\
             while(true)\
@@ -1116,7 +1116,7 @@ return Array;
                     if (!m_pNode)\
                     {\
                         m_nStatus = AXIS_FAIL;\
-                        delete [] (cpp_type*)Array.m_Array;\
+                        delete [] (cpp_type**)Array.m_Array;\
                         Array.m_Array = 0;\
                         Array.m_Size = 0;\
                         return Array;\
@@ -1126,8 +1126,8 @@ return Array;
                         m_pNode = m_pParser->next(true); /* charactor node */\
                         if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))\
                         {\
-                            ((cpp_type*)(Array.m_Array))[nIndex] = \
-                            *(conv_func(m_pNode->m_pchNameOrValue));\
+                            ((cpp_type**)(Array.m_Array))[nIndex] = \
+                            conv_func(m_pNode->m_pchNameOrValue);\
                             m_pNode = m_pParser->next(); \
                             /* skip end element node too */\
                             m_pNode = NULL; \
@@ -1153,7 +1153,7 @@ return Array;
                     /* if we come here it is an error situation */\
                     m_nStatus = AXIS_FAIL;\
                     m_pNode = NULL;\
-                    delete [] (cpp_type*)Array.m_Array;\
+                    delete [] (cpp_type**)Array.m_Array;\
                     Array.m_Array = 0;\
                     Array.m_Size = 0;\
                     return Array;\
@@ -1161,14 +1161,14 @@ return Array;
                 /* if we come here that means the array allocated is */\
                 /* not enough. So double it */\
                 void *tmp=Array.m_Array;\
-                Array.m_Array = new cpp_type[Array.m_Size*2];\
+                Array.m_Array = new cpp_type*[Array.m_Size*2];\
                 if (!Array.m_Array) \
                 {\
                     Array.m_Size = 0;\
                     return Array;\
                 }\
-                memcpy(Array.m_Array,tmp,Array.m_Size*sizeof(cpp_type));\
-                delete [] (cpp_type*)tmp;\
+                memcpy(Array.m_Array,tmp,Array.m_Size*sizeof(cpp_type*));\
+                delete [] (cpp_type**)tmp;\
                 Array.m_Size *= 2;\
                 /*Array.m_RealSize = Array.m_Size;*/\
             }\
@@ -1344,7 +1344,7 @@ SoapDeSerializer::getBasicArray (XSDTYPE nType,
 		    case XSD_DURATION:
 		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (xsd__duration, CONV_STRTODURATION)
 		    case XSD_BOOLEAN:
-				Array.m_Array = new long[Array.m_Size];
+				Array.m_Array = new long*[Array.m_Size];
 		
 				if (!Array.m_Array)
 				{
@@ -1362,15 +1362,15 @@ SoapDeSerializer::getBasicArray (XSDTYPE nType,
 				    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 				    {
 				    	Boolean booleanDeserializer;
-				    	((long *) Array.m_Array)[nIndex] =
-				    		*(booleanDeserializer.deserializeBoolean(m_pNode->m_pchNameOrValue));
+				    	((long **) Array.m_Array)[nIndex] =
+				    		(long *)booleanDeserializer.deserializeBoolean(m_pNode->m_pchNameOrValue);
 						m_pNode = m_pParser->next ();	/* skip end element node too */
 			
 						continue;
 				    }
 				    /* error : unexpected element type or end of stream */
 				    m_nStatus = AXIS_FAIL;
-				    delete[](long *) Array.m_Array;
+				    delete[](long **) Array.m_Array;
 				    Array.m_Array = 0;
 				    Array.m_Size = 0;
 				}
@@ -1398,7 +1398,7 @@ SoapDeSerializer::getBasicArray (XSDTYPE nType,
 		case XSD_UNSIGNEDBYTE:
 			DESERIALIZE_LITERAL_ARRAY_BLOCK (xsd__unsignedByte, CONV_STRTOUNSIGNEDBYTE)
 		case XSD_LONG:
-            Array.m_Array = new xsd__long[INITIAL_ARRAY_SIZE];
+            Array.m_Array = new xsd__long*[INITIAL_ARRAY_SIZE];
             if (!Array.m_Array) return Array;
             Array.m_Size = INITIAL_ARRAY_SIZE;
             while(true)
@@ -1413,7 +1413,7 @@ SoapDeSerializer::getBasicArray (XSDTYPE nType,
                     if (!m_pNode)
                     {
                         m_nStatus = AXIS_FAIL;
-                        delete [] (xsd__long*)Array.m_Array;
+                        delete [] (xsd__long**)Array.m_Array;
                         Array.m_Array = 0;
                         Array.m_Size = 0;
                         return Array;
@@ -1423,8 +1423,8 @@ SoapDeSerializer::getBasicArray (XSDTYPE nType,
                         m_pNode = m_pParser->next(true); /* charactor node */
                         if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
                         {
-                            ((xsd__long*)(Array.m_Array))[nIndex] = 
-                            *(CONV_STRTOLONG(m_pNode->m_pchNameOrValue));
+                            ((xsd__long**)(Array.m_Array))[nIndex] = 
+                            CONV_STRTOLONG(m_pNode->m_pchNameOrValue);
                             m_pNode = m_pParser->next(); 
                             /* skip end element node too */
                             m_pNode = NULL; 
@@ -1450,7 +1450,7 @@ SoapDeSerializer::getBasicArray (XSDTYPE nType,
                     /* if we come here it is an error situation */
                     m_nStatus = AXIS_FAIL;
                     m_pNode = NULL;
-                    delete [] (xsd__long*)Array.m_Array;
+                    delete [] (xsd__long**)Array.m_Array;
                     Array.m_Array = 0;
                     Array.m_Size = 0;
                     return Array;
@@ -1458,14 +1458,14 @@ SoapDeSerializer::getBasicArray (XSDTYPE nType,
                 /* if we come here that means the array allocated is */
                 /* not enough. So double it */
                 void *tmp=Array.m_Array;
-                Array.m_Array = new xsd__long[Array.m_Size*2];
+                Array.m_Array = new xsd__long*[Array.m_Size*2];
                 if (!Array.m_Array) 
                 {
                     Array.m_Size = 0;
                     return Array;
                 }
-                memcpy(Array.m_Array,tmp,Array.m_Size*sizeof(xsd__long));
-                delete [] (xsd__long*)tmp;
+                memcpy(Array.m_Array,tmp,Array.m_Size*sizeof(xsd__long*));
+                delete [] (xsd__long**)tmp;
                 Array.m_Size *= 2;
             }
             break;
@@ -1505,7 +1505,7 @@ SoapDeSerializer::getBasicArray (XSDTYPE nType,
 	// can have any of the following values '0', '1', 'false' or 'true', special,
 	// non-standard processing is required.  Thus the standard macro has had to be
 	// expanded and extended to cover the additional tests, unique to this type.
-		      Array.m_Array = new long[INITIAL_ARRAY_SIZE];
+		      Array.m_Array = new long*[INITIAL_ARRAY_SIZE];
 	
 		    if (!Array.m_Array)
 		    {
@@ -1529,7 +1529,7 @@ SoapDeSerializer::getBasicArray (XSDTYPE nType,
 			    if (!m_pNode)
 			    {
 				m_nStatus = AXIS_FAIL;
-				delete[](long *) Array.m_Array;
+				delete[](long **) Array.m_Array;
 				Array.m_Array = 0;
 				Array.m_Size = 0;
 				return Array;
@@ -1542,8 +1542,8 @@ SoapDeSerializer::getBasicArray (XSDTYPE nType,
 				if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 				{
 				    Boolean booleanDeserializer;
-				    ((long *) Array.m_Array)[nIndex] =
-				   		*(booleanDeserializer.deserializeBoolean(m_pNode->m_pchNameOrValue));
+				    ((long **) Array.m_Array)[nIndex] =
+				   		(long *)booleanDeserializer.deserializeBoolean(m_pNode->m_pchNameOrValue);
 	
 				    m_pNode = m_pParser->next ();
 				    /* skip end element node too */
@@ -1570,7 +1570,7 @@ SoapDeSerializer::getBasicArray (XSDTYPE nType,
 			    /* if we come here it is an error situation */
 			    m_nStatus = AXIS_FAIL;
 			    m_pNode = NULL;
-			    delete[](long *) Array.m_Array;
+			    delete[](long **) Array.m_Array;
 			    Array.m_Array = 0;
 			    Array.m_Size = 0;
 			    return Array;
@@ -1578,7 +1578,7 @@ SoapDeSerializer::getBasicArray (XSDTYPE nType,
 			/* if we come here that means the array allocated is */
 			/* not enough. So double it */
 			void *tmp = Array.m_Array;
-			Array.m_Array = new long[Array.m_Size * 2];
+			Array.m_Array = new long*[Array.m_Size * 2];
 	
 			if (!Array.m_Array)
 			{
@@ -1586,8 +1586,8 @@ SoapDeSerializer::getBasicArray (XSDTYPE nType,
 			    return Array;
 			}
 	
-			memcpy (Array.m_Array, tmp, Array.m_Size * sizeof (long));
-			delete[](long *) tmp;
+			memcpy (Array.m_Array, tmp, Array.m_Size * sizeof (long*));
+			delete[](long **) tmp;
 			Array.m_Size *= 2;
 			/*Array.m_RealSize = Array.m_Size; */
 		    }

@@ -17,6 +17,18 @@
 #include <axis/AxisException.hpp>
 #include <iostream>
 
+#ifdef WIN32
+  // Bug in MS Visual C++ 6.0. Fixed in Visual C++ .Net version.
+  // Cannot print an __int64 number with cout without this overloading
+  std::ostream& operator<<(std::ostream& os, __int64 i )
+  {
+    char buf[20];
+    sprintf(buf,"%I64d", i );
+    os << buf;
+    return os;
+  }
+#endif
+
 #define ARRAYSIZE 2
 
 int main(int argc, char* argv[])
@@ -54,12 +66,16 @@ int main(int argc, char* argv[])
 		ws.multiParametersNoReturn("Hey dude", 69, (xsd__double)17.19);
 		cout << "multiParametersNoReturn returned" << endl;
 
+        xsd__int * arrayOfInt = new xsd__int[3];
 		xsd__int_Array intArray;
-		intArray.m_Array = new xsd__int[3];
+		intArray.m_Array = new xsd__int*[3];
 		intArray.m_Size = 3;
-		intArray.m_Array[0]=37;
-		intArray.m_Array[1]=0;
-		intArray.m_Array[2]=43;
+        arrayOfInt[0] = 37;
+		intArray.m_Array[0] = &arrayOfInt[0];
+        arrayOfInt[1] = 0;
+		intArray.m_Array[1]=&arrayOfInt[1];
+        arrayOfInt[2] = 43;
+		intArray.m_Array[2]=&arrayOfInt[2];
 
 		xsd__string_Array stringArray;
 		stringArray.m_Array = new xsd__string[3];
@@ -100,18 +116,23 @@ int main(int argc, char* argv[])
 		 * Removed from WSDL for time being.
 		 */
 
-        int_in.m_Array = new xsd__int[ARRAYSIZE];
+        xsd__int * arrayOfInt2 = new xsd__int[ARRAYSIZE];
+        int_in.m_Array = new xsd__int*[ARRAYSIZE];
         int_in.m_Size = ARRAYSIZE;
-        for (int x=0; x<ARRAYSIZE; x++)
+        int x = 0;
+        for (x=0; x<ARRAYSIZE; x++)
         {
-            int_in.m_Array[x] = x+1;
+            arrayOfInt2[x] = x+1;
+            int_in.m_Array[x] = &arrayOfInt2[x];
         }
 
-        double_in.m_Array = new xsd__double[ARRAYSIZE];
+        xsd__double * arrayOfDouble = new xsd__double[ARRAYSIZE];
+        double_in.m_Array = new xsd__double*[ARRAYSIZE];
         double_in.m_Size = ARRAYSIZE;
-        for (int x=0; x<ARRAYSIZE; x++)
+        for (x=0; x<ARRAYSIZE; x++)
         {
-            double_in.m_Array[x] = (xsd__double)x+71.15656;
+            arrayOfDouble[x] = (xsd__double)x+71.15656;
+            double_in.m_Array[x] = &arrayOfDouble[x];
         }
 
         string_in.m_Array = new xsd__string[ARRAYSIZE];

@@ -54,11 +54,12 @@ RETTYPE ThreadFunc(ARGTYPE Param)
 				int entries[100];
 				int i;
 
-				array_input.m_Array = entries;
+				array_input.m_Array = new int*[100];
 				array_input.m_Size  = 100;
 
 				for ( i = 0; i < 100; i++ ) {
 				entries[i] = i;
+                    array_input.m_Array[i] = &entries[i];
 				}
 
 				input = new Type();
@@ -66,7 +67,7 @@ RETTYPE ThreadFunc(ARGTYPE Param)
 
 				output = ws->getInput(input);
 				i=0;				
-				cout << "item [" << i << "] = " << output->item.m_Array[i] << endl;			
+				cout << "item [" << i << "] = " << *(output->item.m_Array[i]) << endl;			
 				delete ws;
 				bSuccess = true;
         }

@@ -199,6 +199,13 @@ typedef enum {
 #define AXIS_DEFINED_ARRAY(type) \
     class type##_Array {\
       public:\
+        type ** m_Array;\
+        int m_Size;\
+    };
+
+#define AXIS_DEFINED_POINTER_ARRAY(type) \
+    class type##_Array {\
+      public:\
         type * m_Array;\
         int m_Size;\
     };
@@ -209,7 +216,7 @@ class Axis_Array {
     int m_Size;
 };
 
-AXIS_DEFINED_ARRAY(xsd__string)
+AXIS_DEFINED_POINTER_ARRAY(xsd__string)
 AXIS_DEFINED_ARRAY(xsd__integer)
 AXIS_DEFINED_ARRAY(xsd__int)
 AXIS_DEFINED_ARRAY(xsd__long)
@@ -218,7 +225,7 @@ AXIS_DEFINED_ARRAY(xsd__decimal)
 AXIS_DEFINED_ARRAY(xsd__float)
 AXIS_DEFINED_ARRAY(xsd__double)
 AXIS_DEFINED_ARRAY(xsd__boolean)
-AXIS_DEFINED_ARRAY(xsd__QName)
+AXIS_DEFINED_POINTER_ARRAY(xsd__QName)
 //AXIS_DEFINED_ARRAY(xsd__NCName)
 AXIS_DEFINED_ARRAY(xsd__dateTime)
 AXIS_DEFINED_ARRAY(xsd__unsignedByte)
@@ -227,8 +234,8 @@ AXIS_DEFINED_ARRAY(xsd__unsignedLong)
 AXIS_DEFINED_ARRAY(xsd__unsignedShort)
 AXIS_DEFINED_ARRAY(xsd__base64Binary)
 AXIS_DEFINED_ARRAY(xsd__hexBinary)
-AXIS_DEFINED_ARRAY(xsd__anyURI)
-AXIS_DEFINED_ARRAY(xsd__NMTOKEN)
+AXIS_DEFINED_POINTER_ARRAY(xsd__anyURI)
+AXIS_DEFINED_POINTER_ARRAY(xsd__NMTOKEN)
  
 #define AXIS_OUT_PARAM 
 

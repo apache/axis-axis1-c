@@ -199,6 +199,12 @@ typedef enum {
 
 #define AXISC_DEFINED_ARRAY(type) \
     typedef struct {\
+        type ** m_Array;\
+        int m_Size;\
+    } type##_Array;
+
+#define AXISC_DEFINED_POINTER_ARRAY(type) \
+    typedef struct {\
         type * m_Array;\
         int m_Size;\
     } type##_Array;
@@ -214,7 +220,7 @@ typedef struct {
     int m_Size;
 } Axisc_Array;
 
-AXISC_DEFINED_ARRAY(xsdc__string)
+AXISC_DEFINED_POINTER_ARRAY(xsdc__string)
 AXISC_DEFINED_ARRAY(xsdc__integer)
 AXISC_DEFINED_ARRAY(xsdc__int)
 AXISC_DEFINED_ARRAY(xsdc__long)
@@ -223,7 +229,7 @@ AXISC_DEFINED_ARRAY(xsdc__decimal)
 AXISC_DEFINED_ARRAY(xsdc__float)
 AXISC_DEFINED_ARRAY(xsdc__double)
 AXISC_DEFINED_ARRAY(xsdc__boolean)
-AXISC_DEFINED_ARRAY(xsdc__QName)
+AXISC_DEFINED_POINTER_ARRAY(xsdc__QName)
 //AXISC_DEFINED_ARRAY(xsdc__NCName)
 AXISC_DEFINED_ARRAY(xsdc__dateTime)
 AXISC_DEFINED_ARRAY(xsdc__unsignedByte)
@@ -232,8 +238,8 @@ AXISC_DEFINED_ARRAY(xsdc__unsignedLong)
 AXISC_DEFINED_ARRAY(xsdc__unsignedShort)
 AXISC_DEFINED_ARRAY2(xsdc__base64Binary)
 AXISC_DEFINED_ARRAY2(xsdc__hexBinary)
-AXISC_DEFINED_ARRAY(xsdc__anyURI)
-AXISC_DEFINED_ARRAY(xsdc__NMTOKEN)
+AXISC_DEFINED_POINTER_ARRAY(xsdc__anyURI)
+AXISC_DEFINED_POINTER_ARRAY(xsdc__NMTOKEN)
  
 static const int xsdc_boolean_true = 1;
 static const int xsdc_boolean_false = 0;

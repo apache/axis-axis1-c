@@ -31,25 +31,37 @@ int main(int argc, char* argv[])
 		ArrayOfArrayOf_xsd_int_Array parentArray;
 
 		/* Set xsd__int_Array into ArrayOf_xsd_int */
-		baseArray1.item.m_Array = new xsd__int[ARRAYSIZE];
+        xsd__int * baseArray1Vales = new xsd__int[ARRAYSIZE];
+		baseArray1.item.m_Array = new xsd__int*[ARRAYSIZE];
 		baseArray1.item.m_Size = ARRAYSIZE;
-		baseArray1.item.m_Array[0] = 1;
-		baseArray1.item.m_Array[1] = 2;
+        baseArray1Vales[0] = 1;
+		baseArray1.item.m_Array[0] = &baseArray1Vales[0];
+        baseArray1Vales[1] = 2;
+		baseArray1.item.m_Array[1] = &baseArray1Vales[1];
 
-		baseArray2.item.m_Array = new xsd__int[ARRAYSIZE];
+        xsd__int * baseArray2Vales = new xsd__int[ARRAYSIZE];
+		baseArray2.item.m_Array = new xsd__int*[ARRAYSIZE];
 		baseArray2.item.m_Size = ARRAYSIZE;
-		baseArray2.item.m_Array[0] = 3;
-		baseArray2.item.m_Array[1] = 4;
+        baseArray2Vales[0] = 3;
+		baseArray2.item.m_Array[0] = &baseArray2Vales[0];
+        baseArray2Vales[1] = 4;
+		baseArray2.item.m_Array[1] = &baseArray2Vales[1];
 
-		baseArray3.item.m_Array = new xsd__int[ARRAYSIZE];
+        xsd__int * baseArray3Vales = new xsd__int[ARRAYSIZE];
+		baseArray3.item.m_Array = new xsd__int*[ARRAYSIZE];
 		baseArray3.item.m_Size = ARRAYSIZE;
-		baseArray3.item.m_Array[0] = 5;
-		baseArray3.item.m_Array[1] = 6;
+        baseArray3Vales[0] = 5;
+		baseArray3.item.m_Array[0] = &baseArray3Vales[0];
+        baseArray3Vales[1] = 6;
+		baseArray3.item.m_Array[1] = &baseArray3Vales[1];
 
-		baseArray4.item.m_Array = new xsd__int[ARRAYSIZE];
+        xsd__int * baseArray4Vales = new xsd__int[ARRAYSIZE];
+		baseArray4.item.m_Array = new xsd__int*[ARRAYSIZE];
 		baseArray4.item.m_Size = ARRAYSIZE;
-		baseArray4.item.m_Array[0] = 7;
-		baseArray4.item.m_Array[1] = 8;
+        baseArray4Vales[0] = 7;
+		baseArray4.item.m_Array[0] = &baseArray4Vales[0];
+        baseArray4Vales[1] = 8;
+		baseArray4.item.m_Array[1] = &baseArray4Vales[1];
 
 		/* Set ArrayOf_xsd_int_Array into ArrayOfArrayOf_xsd_int */
 		subArray1.item.m_Array = new ArrayOf_xsd_int[ARRAYSIZE];
