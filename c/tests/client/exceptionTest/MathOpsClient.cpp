@@ -27,8 +27,8 @@ int main(int argc, char* argv[])
 		port = argv[2];
 	}
 	printf("Sending Requests to Server http://%s:%s ........\n\n", server, port);
-	sprintf(endpoint, "http://%s:%s/axis/MathOps", server, port);
-	//sprintf(endpoint, "http://%s:%s/", server, port);
+	//sprintf(endpoint, "http://%s:%s/axis/MathOps", server, port);
+	sprintf(endpoint, "http://%s:%s/", server, port);
 	MathOps ws(endpoint);
 
 	op = argv[3];
@@ -49,7 +49,6 @@ int main(int argc, char* argv[])
 	i1 = atoi(p1);
 	i2 = atoi(p2);
 
-        getchar();
 	if (strcmp(op, "div") == 0)
 	{
             try
