@@ -73,7 +73,7 @@ const AxisXMLCh* AxisUtils::m_strEmpty = NULL;
 const AxisXMLCh* AxisUtils::m_strLeftSqBracket = NULL;
 const AxisXMLCh* AxisUtils::m_strRightSqBracket = NULL;
 const AxisXMLCh* AxisUtils::m_strColon = NULL;
-
+AxisXMLCh AxisUtils::m_Buffer[CONVERT_BUFFER_SIZE]; 
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -101,3 +101,13 @@ void AxisUtils::Initialize()
 	m_strRightSqBracket = ToAxisXMLCh("]");
 	m_strColon = ToAxisXMLCh(":");
 }
+
+//following functions is not thread safe and should only be used 
+//for initialization purposes.
+const AxisXMLCh* AxisUtils::Convert(const AxisChar* pch)
+{
+	if (XMLString::transcode(pch, m_Buffer, CONVERT_BUFFER_SIZE))
+		return m_Buffer;
+	return NULL;
+}
+

@@ -58,6 +58,8 @@
  * @author Damitha Kumarage (damitha@opensource.lk, damitha@jkcsworld.com)
  *
  */
+#include <stdio.h>
+
 #include "AxisTime.h"
 #include "AxisUtils.h"
 

@@ -94,6 +94,7 @@ public:
 	AxisString m_URI;
 public:
 	ComplexObjectHandler();
+	~ComplexObjectHandler();
 	void Init();
 };
 

@@ -83,7 +83,6 @@ public:
 	static volatile bool m_bInit;
 	URIMapping();
 	virtual ~URIMapping();
-	static URITYPE Map(const AxisXMLString &uri);
 	static URITYPE Map(const AxisXMLCh* uri);
 };
 

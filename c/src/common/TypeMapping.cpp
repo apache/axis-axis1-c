@@ -67,12 +67,12 @@
 
 #include "TypeMapping.h"
 #include "AxisUtils.h"
-#define __TRC(X) AxisUtils::ToAxisXMLCh(X)
+#define __TRC(X) AxisUtils::Convert(X)
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
-map<const AxisXMLCh*, XSDTYPE> TypeMapping::m_sTypeMap;
+map<const AxisXMLString, XSDTYPE> TypeMapping::m_sTypeMap;
 volatile bool TypeMapping::m_bInit = false;
 
 TypeMapping::TypeMapping()
