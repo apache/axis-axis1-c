@@ -7,6 +7,15 @@
 #include <fstream>
 
 #define DEBUG
+#if defined(DEBUG)
+  #define DEBUG1(X) debugger.debug(X);
+  #define DEBUG2(X,Y) debugger.debug(X,Y);
+#endif
+#if !defined(DEBUG)
+  #define DEBUG1(X) "";
+  #define DEBUG2(X,Y) ""; 
+#endif
+
 extern unsigned char chEBuf[1024];
 using namespace std;
 class Debug
