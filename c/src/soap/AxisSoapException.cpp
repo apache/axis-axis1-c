@@ -32,18 +32,24 @@ AxisSoapException::AxisSoapException()
     processException(SERVER_SOAP_EXCEPTION);
 }
 
-AxisSoapException::AxisSoapException (int iExceptionCode)
+AxisSoapException::AxisSoapException (const int iExceptionCode)
 {
     m_iExceptionCode = iExceptionCode;
     processException (iExceptionCode);
 }
 
-AxisSoapException::AxisSoapException (exception* e)
+AxisSoapException::AxisSoapException(const int iExceptionCode, const char* pcMessage)
+{
+    m_iExceptionCode = iExceptionCode;
+    processException(iExceptionCode, pcMessage);
+}
+
+AxisSoapException::AxisSoapException (const exception* e)
 {
     processException (e);
 }
 
-AxisSoapException::AxisSoapException (exception* e, int iExceptionCode)
+AxisSoapException::AxisSoapException (const exception* e, const int iExceptionCode)
 {
     m_iExceptionCode = iExceptionCode;
     processException (e, iExceptionCode);
@@ -54,29 +60,35 @@ AxisSoapException::~AxisSoapException() throw ()
 
 }
 
-void AxisSoapException::processException (exception* e, int iExceptionCode)
+void AxisSoapException::processException (const exception* e, const int iExceptionCode)
 {
-    m_sMessage = getMessage (e) + getMessage (iExceptionCode);
+    m_sMessage = getMessage (e) + " " + getMessage (iExceptionCode);
 }
 
-void AxisSoapException::processException (exception* e)
+void AxisSoapException::processException (const exception* e)
 {
     m_sMessage = getMessage (e);
 }
 
-void AxisSoapException::processException(int iExceptionCode)
+void AxisSoapException::processException(const int iExceptionCode)
 {
     m_sMessage = getMessage (iExceptionCode);
 }
 
-const string AxisSoapException::getMessage (exception* objException)
+void AxisSoapException::processException(const int iExceptionCode, const char* pcMessage)
+{
+    AxisString sMessage = strdup(pcMessage);
+    m_sMessage = getMessage(iExceptionCode) + " " + sMessage;
+    delete pcMessage;
+}
+const string AxisSoapException::getMessage (const exception* objException)
 {
     m_sMessage = objException->what();
 
     return m_sMessage;
 }
 
-const string AxisSoapException::getMessage (int iExceptionCode)
+const string AxisSoapException::getMessage (const int iExceptionCode)
 {
     switch(iExceptionCode)
     {

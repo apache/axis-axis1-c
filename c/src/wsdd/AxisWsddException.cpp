@@ -32,18 +32,24 @@ AxisWsddException::AxisWsddException()
     processException(SERVER_WSDD_EXCEPTION);
 }
 
-AxisWsddException::AxisWsddException (int iExceptionCode)
+AxisWsddException::AxisWsddException (const int iExceptionCode)
 {
     m_iExceptionCode = iExceptionCode;
     processException (iExceptionCode);
 }
 
-AxisWsddException::AxisWsddException (exception* e)
+AxisWsddException::AxisWsddException(const int iExceptionCode, const char* pcMessage)
+{
+    m_iExceptionCode = iExceptionCode;
+    processException(iExceptionCode, pcMessage);
+}
+
+AxisWsddException::AxisWsddException (const exception* e)
 {
     processException (e);
 }
 
-AxisWsddException::AxisWsddException (exception* e, int iExceptionCode)
+AxisWsddException::AxisWsddException (const exception* e, const int iExceptionCode)
 {
     m_iExceptionCode = iExceptionCode;
     processException (e, iExceptionCode);
@@ -54,29 +60,35 @@ AxisWsddException::~AxisWsddException() throw ()
 
 }
 
-void AxisWsddException::processException (exception* e, int iExceptionCode)
+void AxisWsddException::processException (const exception* e, const int iExceptionCode)
 {
-    m_sMessage = getMessage (e) + getMessage (iExceptionCode);
+    m_sMessage = getMessage (e) + " " + getMessage (iExceptionCode);
 }
 
-void AxisWsddException::processException (exception* e)
+void AxisWsddException::processException (const exception* e)
 {
     m_sMessage = getMessage (e);
 }
 
-void AxisWsddException::processException(int iExceptionCode)
+void AxisWsddException::processException(const int iExceptionCode)
 {
     m_sMessage = getMessage (iExceptionCode);
 }
 
-const string AxisWsddException::getMessage (exception* objException)
+void AxisWsddException::processException(const int iExceptionCode, const char* pcMessage)
+{
+    AxisString sMessage = strdup(pcMessage);
+    m_sMessage = getMessage(iExceptionCode) + " " + sMessage;
+    delete pcMessage;
+}
+const string AxisWsddException::getMessage (const exception* objException)
 {
     m_sMessage = objException->what();
 
     return m_sMessage;
 }
 
-const string AxisWsddException::getMessage (int iExceptionCode)
+const string AxisWsddException::getMessage (const int iExceptionCode)
 {
     switch(iExceptionCode)
     {

@@ -23,47 +23,60 @@
 #include <exception>
 using namespace std;
 
-AxisException::AxisException (int iExceptionCode)
+AxisException::AxisException (const int iExceptionCode)
 {
     m_iExceptionCode = iExceptionCode;
     processException (iExceptionCode);
 }
 
-AxisException::AxisException (exception* e)
+AxisException::AxisException(const int iExceptionCode, const char* pcMessage)
+{
+    m_iExceptionCode = iExceptionCode;
+    processException(iExceptionCode, pcMessage);
+}
+
+AxisException::AxisException (const exception* e)
 {
     m_iExceptionCode = -1;
     processException (e);
 }
 
-AxisException::AxisException (exception* e, int iExceptionCode)
+AxisException::AxisException (const exception* e, const int iExceptionCode)
 {
     m_iExceptionCode = iExceptionCode;
     processException (e, iExceptionCode);
 }
 
-void AxisException::processException (exception* e, int iExceptionCode)
+void AxisException::processException (const exception* e, const int iExceptionCode)
 {
-    m_sMessage = getMessage (e) + getMessage (iExceptionCode);
+    m_sMessage = getMessage (e) + " " + getMessage (iExceptionCode);
 }
 
-void AxisException::processException (exception* e)
+void AxisException::processException (const exception* e)
 {
     m_sMessage = getMessage (e);
 }
 
-void AxisException::processException(int iExceptionCode)
+void AxisException::processException(const int iExceptionCode)
 {
     m_sMessage = getMessage (iExceptionCode);
 }
 
-const string AxisException::getMessage (exception* objException)
+void AxisException::processException(const int iExceptionCode, const char* pcMessage)
+{
+    AxisString sMessage = strdup(pcMessage);
+    m_sMessage = getMessage(iExceptionCode) + " " + sMessage;
+    delete pcMessage;
+}
+
+const string AxisException::getMessage (const exception* objException)
 {
     m_sMessage = objException->what();
 
     return m_sMessage;
 }
 
-const string AxisException::getMessage (int iExceptionCode)
+const string AxisException::getMessage (const int iExceptionCode)
 {
     switch(iExceptionCode)
     {

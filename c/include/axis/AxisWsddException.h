@@ -31,19 +31,22 @@ class STORAGE_CLASS_INFO AxisWsddException :public AxisException
 
 public:
     AxisWsddException();
-    AxisWsddException(int iExceptionCode);
-    AxisWsddException(exception* e);
-    AxisWsddException(exception* e, int iExceptionCode);
+    AxisWsddException(const int iExceptionCode);
+    AxisWsddException(const int iExceptionCode, const char* pcMessage);
+    AxisWsddException(const exception* e);
+    AxisWsddException(const exception* e, const int iExceptionCode);
     virtual ~AxisWsddException() throw();
     const char* what() throw();
     const int getExceptionCode();
-    const string getMessage(exception* e);
-    const string getMessage(int iExceptionCode);
-                                                                                                                             
+    const string getMessage(const exception* e);
+    const string getMessage(const int iExceptionCode);
+
 private:
-    void processException(exception* e);
-    void processException(exception* e, int iExceptionCode);
-    void processException(int iExceptionCode);
+    void processException(const exception* e);
+    void processException(const exception* e, const int iExceptionCode);
+    void processException(const int iExceptionCode);
+    void processException(const int iExceptionCode, const char* pcMessage);                                                                                                                           
+                                                                                                                             
     string m_sMessage;
     int m_iExceptionCode;
 };

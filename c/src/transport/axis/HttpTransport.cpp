@@ -575,7 +575,10 @@ HttpTransport::HTTPValidate (const std::string & p_HttpPacket)
     /* for the time being just get the payload. Here we need much work */
 
     m_bStatus = true;
-    int nHttpSatus;
+    int nHttpStatus;
+    int nHttpStatusCode;
+    char* pcIntToBuff;
+    char* pcMessage;// To hold Http error code message
 
     m_sHeader += p_HttpPacket;
 
@@ -604,8 +607,10 @@ HttpTransport::HTTPValidate (const std::string & p_HttpPacket)
 	{
 	    pos++;
 	    /* Get the HTTP status code of the packet obtained */
-	    nHttpSatus =
-		atoi (strLine.substr (pos, nxtpos - pos).c_str ()) / 100;
+	    nHttpStatusCode =
+		atoi (strLine.substr (pos, nxtpos - pos).c_str ());
+            /* Get the first digit of the code*/
+            nHttpStatus = nHttpStatusCode / 100;
 	}
 	else
 	    THROW_AXIS_TRANSPORT_EXCEPTION(SERVER_TRANSPORT_UNKNOWN_HTTP_RESPONSE);
@@ -615,32 +620,42 @@ HttpTransport::HTTPValidate (const std::string & p_HttpPacket)
 	/* Status code is 2xx; so valid packet. hence go ahead and extract
 	 * the payload. 
 	 */
-	if (nHttpSatus == 2)
+	if (nHttpStatus == 2)
 	{
 	    GetPayLoad (m_sHeader, offset);
 	}
-	else if (nHttpSatus == 3)
+	else if (nHttpStatus == 3)
 	    /* Status code is 3xx; some error has occurred */
 	{
 	    /* error recovery mechanism should go here */
-	    Error (m_sHeader.c_str ());
-	    THROW_AXIS_TRANSPORT_EXCEPTION(SERVER_TRANSPORT_PROCESS_EXCEPTION);
+	    //Error (m_sHeader.c_str ());
+            pcIntToBuff = new char[4 * sizeof(char)]; 
+            pcMessage = new char[256 * sizeof(char)];
+            sprintf(pcIntToBuff, "%d", nHttpStatusCode);
+            strcpy(pcMessage, "Http error code is : ");
+            strcat(pcMessage, pcIntToBuff); 
+	    THROW_AXIS_TRANSPORT_EXCEPTION2(SERVER_TRANSPORT_PROCESS_EXCEPTION, pcMessage);
 	}
-	else if (nHttpSatus == 4)
+	else if (nHttpStatus == 4)
 	    /* Status code is 4xx; some error has occurred */
 	{
 	    /* error recovery mechanism should go here */
-	    Error (m_sHeader.c_str ());
-	    THROW_AXIS_TRANSPORT_EXCEPTION(SERVER_TRANSPORT_PROCESS_EXCEPTION);
+	    //Error (m_sHeader.c_str ());
+            pcIntToBuff = new char[4 * sizeof(char)]; 
+            pcMessage = new char[256 * sizeof(char)];
+            sprintf(pcIntToBuff, "%d", nHttpStatusCode);
+            strcpy(pcMessage, "Http error code is : ");
+            strcat(pcMessage, pcIntToBuff); 
+	    THROW_AXIS_TRANSPORT_EXCEPTION2(SERVER_TRANSPORT_PROCESS_EXCEPTION, pcMessage);
 	}
-	else if (nHttpSatus == 5)
+	else if (nHttpStatus == 5)
 	    /* Status code is 5xx; some error has occurred */
 	{
 	    /* error recovery mechanism should go here */
 	    GetPayLoad (m_sHeader, offset);
 	    if (!m_bStatus)
 	    {
-		Error (m_sHeader.c_str ());
+		//Error (m_sHeader.c_str ());
 		THROW_AXIS_TRANSPORT_EXCEPTION(SERVER_TRANSPORT_HTTP_EXCEPTION);
 	    }
 	}
