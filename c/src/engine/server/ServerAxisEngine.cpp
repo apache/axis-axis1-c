@@ -57,6 +57,7 @@ int ServerAxisEngine::Process(Ax_soapstream* stream)
 				nSoapVersion = m_pDZ->GetVersion();
 				nSoapVersion = (nSoapVersion == VERSION_LAST) ? SOAP_VER_1_2 : nSoapVersion;
 				m_pSZ->setSoapVersion((SOAP_VERSION)nSoapVersion);
+				AXISTRACE1("SF_SOAPCONTENTERROR", CRITICAL);
 				m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_SOAPCONTENTERROR));
 				break; //do .. while(0)
 			}
@@ -64,6 +65,7 @@ int ServerAxisEngine::Process(Ax_soapstream* stream)
 			const char* cService = stream->transport.pGetTrtFunct(SERVICE_URI, stream);
 			if (!cService)
 			{
+				AXISTRACE1("SF_SOAPCONTENTERROR", CRITICAL);
 				m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_SOAPCONTENTERROR));
 				break; //do .. while(0)
 			}
@@ -138,6 +140,7 @@ int ServerAxisEngine::Process(Ax_soapstream* stream)
 			/* Set Soap version in the Serializer and the envelope */
 			if (AXIS_SUCCESS != m_pSZ->setSoapVersion((SOAP_VERSION)nSoapVersion))
 			{
+				AXISTRACE1("SF_SOAPCONTENTERROR", CRITICAL);
 				m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_SOAPCONTENTERROR));
 				break; //do .. while(0)
 			}
@@ -179,6 +182,7 @@ int ServerAxisEngine::Process(Ax_soapstream* stream)
 				}
 				if (m_pSZ->GetStyle() != nBindingStyle)
 				{
+					AXISTRACE1("SF_SOAPCONTENTERROR", CRITICAL);
 					m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_SOAPCONTENTERROR));
 					break; //do .. while(0)
 				}
@@ -349,6 +353,7 @@ int ServerAxisEngine::Invoke(MessageData* pMsg)
 
 	if (AXIS_SUCCESS != m_pDZ->FlushInputStream())
 	{
+		AXISTRACE1("SF_SOAPCONTENTERROR", CRITICAL);
 		m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_SOAPCONTENTERROR));
 		return AXIS_FAIL;
 	}
