@@ -60,7 +60,7 @@ APACHE_HOME="/usr/local/apache"
 EXPAT_HOME="/usr/local/expat1957"
 #xercesc home is needed if you use xercesc parser
 XERCESC_HOME="/usr/local/xerces-c"
-LD_LIBRARY_PATH="$XERCESC_HOME/lib:$EXPAT_HOME/lib:$AXISCPP_HOME/bin:$AXISCPP_DEPLOY/lib:$LD_LIBRARY_PATH"
+LD_LIBRARY_PATH="$XERCESC_HOME/lib:$EXPAT_HOME/lib:$AXISCPP_DEPLOY/bin:$AXISCPP_DEPLOY/lib:$LD_LIBRARY_PATH"
 export AXISCPP_HOME AXISCPP_DEPLOY XERCESC_HOME EXPAT_HOME APACHE2_HOME APACHE_HOME LD_LIBRARY_PATH
 ------------------------------------------------------------
 
