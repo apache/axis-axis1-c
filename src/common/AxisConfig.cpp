@@ -94,9 +94,11 @@ AxisConfig::~AxisConfig ()
 {
     for (int i = 0; i < AXCONF_LAST; i++)
     {
-	m_pcValueArray[i] = NULL;
+	free(m_pcValueArray[i]);
     }
 
+    if (m_pcAxisHome)
+        free(m_pcAxisHome);
 }
 
 int
