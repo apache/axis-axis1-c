@@ -43,7 +43,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "APACHE2_0_EXPORTS" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /O2 /I "../../../include" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "APACHE2_0_EXPORTS" /D "AXIS_APACHE1_3" /D "USE_EXPAT_PARSER" /YX /FD /c
+# ADD CPP /nologo /MT /W3 /O2 /I "../../../include" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "APACHE2_0_EXPORTS" /D "AXIS_APACHE1_3" /YX /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -69,7 +69,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "APACHE2_0_EXPORTS" /YX /FD /GZ /c
-# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /YX /FD /I /GZ "../../../include" /c
+# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "../../../include" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /YX /FD /GZ /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -79,7 +79,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 Common_D.lib Soap_D.lib wsdd_D.lib libapr.lib libhttpd.lib /nologo /dll /debug /machine:I386 /out:"../../../release/win32/mod_axis.dll" /pdbtype:sept /libpath:"../../../lib/axis" /libpath:"../../../lib/xerces-c" /libpath:"../../../lib/apache2_0"
+# ADD LINK32 Common_D.lib Soap_D.lib wsdd_D.lib xerces-c_2D.lib libapr.lib libhttpd.lib /nologo /dll /debug /machine:I386 /out:"../../../release/win32/mod_axis.dll" /pdbtype:sept /libpath:"../../../lib/axis" /libpath:"../../../lib/xerces-c" /libpath:"../../../lib/apache2_0"
 
 !ENDIF 
 
@@ -90,10 +90,6 @@ LINK32=link.exe
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
-# Begin Source File
-
-SOURCE=..\..\..\src\server\apache2\mod_axis2.c
-# End Source File
 # End Group
 # Begin Group "Header Files"
 

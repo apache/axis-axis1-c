@@ -222,14 +222,14 @@ int	initializeHeaderMap(const string &sHeaderLine, map<HTTP_MAP_KEYWORDS, HTTP_M
 
 int getHttpHeader(HTTP_MAP_KEYWORDS eKeyWord, map<HTTP_MAP_KEYWORDS, HTTP_MAP_TYPE*> *map_HTTP_Headers, HTTP_MAP_TYPE *objMapContent) {
 	
-	int iStatus = AXIS_FAIL;
+	int iStatus = FAIL;
 
 	if (map_HTTP_Headers->find(eKeyWord) != map_HTTP_Headers->end()) {
 		printf("debgu 1 = %s\n", (*map_HTTP_Headers)[eKeyWord]->objuHttpMapContent->msValue);
 		objMapContent = (HTTP_MAP_TYPE*) malloc(sizeof((*map_HTTP_Headers)[eKeyWord]));
 		objMapContent = (*map_HTTP_Headers)[eKeyWord];
 
-		iStatus = AXIS_SUCCESS;
+		iStatus = SUCCESS;
 	}
 	
 	return iStatus;

@@ -91,11 +91,11 @@ public class AllParamWriter implements SourceWriter{
 			if(wscontext.getWrapInfo().getImplStyle().equals(WrapperConstants.IMPL_STYLE_STRUCT)){
 					if(type.isArray()){
 						System.out.println("Array writer called ......");
-						(new org.apache.axis.wsdl.wsdl2ws.c.ArrayParamWriter(wscontext,type)).writeSource();	
+						(new org.apache.axis.wsdl.wsdl2ws.cpp.ArrayParamWriter(wscontext,type)).writeSource();	
 					}	
 					else{	
 						System.out.println("struct writer called ......");
-						(new org.apache.axis.wsdl.wsdl2ws.c.BeanParamWriter(wscontext,type)).writeSource();
+						(new org.apache.axis.wsdl.wsdl2ws.cpp.BeanParamWriter(wscontext,type)).writeSource();
 						(new ParmHeaderFileWriter(wscontext,type)).writeSource();	
 					}	
 				}	

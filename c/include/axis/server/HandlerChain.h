@@ -88,12 +88,11 @@ public:
 	int AddHandler(Handler* pHandler, int nScope, int nLibId);
 	HandlerChain();
 	virtual ~HandlerChain();
-	int AXISCALL Invoke(IMessageData* pMsg);
-	void AXISCALL OnFault(IMessageData* pMsg);
-	int AXISCALL GetType(){return CHAIN_HANDLER;};
-	int AXISCALL Init();
-	int AXISCALL Fini();
-	AXIS_BINDING_STYLE AXISCALL GetBindingStyle(){ return RPC_ENCODED;}; /* this is never called */
+	int Invoke(IMessageData* pMsg);
+	void OnFault(IMessageData* pMsg);
+	int GetType(){return CHAIN_HANDLER;};
+	int Init();
+	int Fini();
 
 private:
 	list<ChainItem> m_HandlerList;

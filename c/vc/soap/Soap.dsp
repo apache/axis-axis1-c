@@ -41,8 +41,8 @@ RSC=rc.exe
 # PROP Intermediate_Dir "../../bin/win32/soap"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /Od /I "../../include" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /D "USE_EXPAT_PARSER" /FD /c
-# SUBTRACT CPP /Fr /YX
+# ADD CPP /nologo /MT /W3 /O2 /I "../../include" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /FD /c
+# SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -65,7 +65,8 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "../../bin/win32/soap"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
-# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "../../include" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /D "USE_EXPAT_PARSER" /FR /FD /GZ /c
+# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "../../include" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FR /FD /GZ /c
+# SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -73,7 +74,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"../../lib/axis\Soap_D.lib"
+# ADD LIB32 /nologo /out:"../../lib/win32/axis\Soap_D.lib"
 
 !ENDIF 
 
@@ -134,15 +135,15 @@ SOURCE=..\..\src\soap\SoapMethod.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\soap\SoapParserExpat.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\soap\SoapSerializer.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\soap\URIMapping.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\soap\XMLStreamHandler.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -206,15 +207,15 @@ SOURCE=..\..\include\axis\soap\SoapMethod.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\axis\soap\SoapParserExpat.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\axis\soap\SoapSerializer.h
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\include\axis\soap\URIMapping.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\axis\soap\XMLStreamHandler.h
 # End Source File
 # End Group
 # End Target

@@ -331,7 +331,7 @@ int main(int argc, char *argv[ ])
 
 	//initializing Axis
 
-	initialize_module(1);
+	initialize_module(1, "");
 	
 	while (running) {
 		FD_ZERO(&sockSet);

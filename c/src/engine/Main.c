@@ -269,7 +269,7 @@ int main()
 
 	printf("soap request :\n %s\n", ip);
 
-	if (AXIS_SUCCESS != initialize_module(1)) return 1;
+	if (SUCCESS != initialize_module(1, "")) return 1;
 	for (xx =0; xx < 1 ; xx++)
 	{
 		printf("Sending Soap Response :\n");

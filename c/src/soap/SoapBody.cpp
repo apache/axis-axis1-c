@@ -103,27 +103,27 @@ void SoapBody::setSoapFault(SoapFault *ptrSoapFault)
 
 int SoapBody::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
 {
-	int iStatus= AXIS_SUCCESS;
+	int iStatus= SUCCESS;
 
 	do {		
-		pSZ.Serialize("<", gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix, ":", gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_BODY], NULL);
+		pSZ<< "<" << gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix << ":" << gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_BODY];
 		iStatus= serializeAttributes(pSZ);
-		if(iStatus==AXIS_FAIL) {
+		if(iStatus==FAIL) {
 			break;
 		}
 		
-		pSZ.Serialize(">", NULL);
+		pSZ<< ">";
 
 		if(m_pSoapMethod!=NULL) {
 			iStatus= m_pSoapMethod->serialize(pSZ);
-			if(iStatus==AXIS_FAIL) {
+			if(iStatus==FAIL) {
 				break;
 			}
 		} 
 		else if(m_pSoapFault!=NULL) 
 		{		
 			iStatus= m_pSoapFault->serialize(pSZ);
-			if(iStatus==AXIS_FAIL) {
+			if(iStatus==FAIL) {
 				break;
 			}
 		}
@@ -133,12 +133,12 @@ int SoapBody::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
 			if(m_pSoapFault!=NULL) 
 			{		
 				iStatus= m_pSoapFault->serialize(pSZ);
-				if(iStatus==AXIS_FAIL) 
+				if(iStatus==FAIL) 
 					break;
 			}
 		}
 		
-		pSZ.Serialize("</", gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix, ":", gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_BODY], ">", NULL);
+		pSZ<< "</"<< gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix<< ":" << gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_BODY]<< ">";
 	} while(0);
 
 	return iStatus;
@@ -151,14 +151,14 @@ void SoapBody::addAttribute(Attribute *attr)
 
 int SoapBody::serializeAttributes(SoapSerializer& pSZ)
 {
-	int iStatus= AXIS_SUCCESS;
+	int iStatus= SUCCESS;
 
 	list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
 
 	while(itCurrAttribute != m_attributes.end()) {		
 
 		iStatus= (*itCurrAttribute)->serialize(pSZ);
-		if(iStatus==AXIS_FAIL) {
+		if(iStatus==FAIL) {
 			break;
 		}
 		itCurrAttribute++;		

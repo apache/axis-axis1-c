@@ -95,13 +95,13 @@ HandlerPool::~HandlerPool()
 int HandlerPool::GetHandler(BasicHandler** ppHandler, string& sSessionId, int nScope, int nLibId)
 {
 	*ppHandler = NULL;
-	int Status = AXIS_FAIL;
+	int Status = FAIL;
 
 	switch (nScope)
 	{
 	case AH_APPLICATION:
 		do {
-			if ((Status = g_pAppScopeHandlerPool->GetInstance(ppHandler, nLibId)) == AXIS_SUCCESS)
+			if ((Status = g_pAppScopeHandlerPool->GetInstance(ppHandler, nLibId)) == SUCCESS)
 			{
 				return Status;
 			}
@@ -137,7 +137,7 @@ int HandlerPool::PoolHandler(string& sSessionId, BasicHandler* pHandler, int nSc
 		g_pRequestScopeHandlerPool->PutInstance(pHandler, nLibId);
 		break;
 	}
-	return AXIS_SUCCESS;
+	return SUCCESS;
 }
 
 int HandlerPool::GetGlobalRequestFlowHandlerChain(HandlerChain** ppChain, string& sSessionId)
@@ -150,7 +150,7 @@ int HandlerPool::GetGlobalRequestFlowHandlerChain(HandlerChain** ppChain, string
 	else
 	{
 		*ppChain = NULL;
-		return AXIS_SUCCESS; //NO_HANDLERS_CONFIGURED
+		return SUCCESS; //NO_HANDLERS_CONFIGURED
 	}
 }
 
@@ -164,7 +164,7 @@ int HandlerPool::GetGlobalResponseFlowHandlerChain(HandlerChain** ppChain, strin
 	else
 	{
 		*ppChain = NULL;
-		return AXIS_SUCCESS; //NO_HANDLERS_CONFIGURED
+		return SUCCESS; //NO_HANDLERS_CONFIGURED
 	}
 }
 
@@ -178,7 +178,7 @@ int HandlerPool::GetTransportRequestFlowHandlerChain(HandlerChain** ppChain, str
 	else
 	{
 		*ppChain = NULL;
-		return AXIS_SUCCESS; //NO_HANDLERS_CONFIGURED
+		return SUCCESS; //NO_HANDLERS_CONFIGURED
 	}
 }
 
@@ -192,7 +192,7 @@ int HandlerPool::GetTransportResponseFlowHandlerChain(HandlerChain** ppChain, st
 	else
 	{
 		*ppChain = NULL;
-		return AXIS_SUCCESS; //NO_HANDLERS_CONFIGURED
+		return SUCCESS; //NO_HANDLERS_CONFIGURED
 	}
 }
 
@@ -208,7 +208,7 @@ int HandlerPool::GetRequestFlowHandlerChain(HandlerChain** ppChain, string& sSes
 	{
 		*ppChain = NULL;
         AXISTRACE1("No handlers configured");
-		return AXIS_SUCCESS; //NO_HANDLERS_CONFIGURED
+		return SUCCESS; //NO_HANDLERS_CONFIGURED
 	}
 }
 
@@ -223,7 +223,7 @@ int HandlerPool::GetResponseFlowHandlerChain(HandlerChain** ppChain, string& sSe
 	else
 	{
 		*ppChain = NULL;
-		return AXIS_SUCCESS; //NO_HANDLERS_CONFIGURED
+		return SUCCESS; //NO_HANDLERS_CONFIGURED
 	}
 }
 
@@ -246,12 +246,12 @@ int HandlerPool::GetHandlerChain(string& sSessionId, HandlerChain** ppChain, con
 
 	WSDDHandler* pWSDDH;
 	BasicHandler* pBH;
-	int Status = AXIS_SUCCESS;
+	int Status = SUCCESS;
 
 	for (WSDDHandlerList::const_iterator it = pHandlerList->begin(); it != pHandlerList->end(); it++)
 	{
 		pWSDDH = (*it);
-		if ((Status = GetHandler(&pBH, sSessionId, pWSDDH->GetScope(),pWSDDH->GetLibId())) == AXIS_SUCCESS)
+		if ((Status = GetHandler(&pBH, sSessionId, pWSDDH->GetScope(),pWSDDH->GetLibId())) == SUCCESS)
 		{
 			if (NORMAL_HANDLER == pBH->GetType())
 			{
@@ -272,7 +272,7 @@ int HandlerPool::GetHandlerChain(string& sSessionId, HandlerChain** ppChain, con
 			break;
 		}
 	}
-	if (Status != AXIS_SUCCESS) //some failure so undo whatever done here
+	if (Status != SUCCESS) //some failure so undo whatever done here
 	{
         AXISTRACE1("handler failure");
 		string nosession = SESSIONLESSHANDLERS;
@@ -314,9 +314,9 @@ void HandlerPool::PoolHandlerChain(HandlerChain* pChain, string& sSessionId)
 int HandlerPool::GetWebService(BasicHandler** ppHandler, string& sSessionId, const WSDDHandler* pService)
 {
 	int Status;
-	if ((Status = GetHandler(ppHandler, sSessionId, pService->GetScope(), pService->GetLibId())) == AXIS_SUCCESS)
+	if ((Status = GetHandler(ppHandler, sSessionId, pService->GetScope(), pService->GetLibId())) == SUCCESS)
 	{
-		if (AXIS_SUCCESS != (Status = (*ppHandler)->Init()))
+		if (SUCCESS != (Status = (*ppHandler)->Init()))
 		{
 			(*ppHandler)->Fini();
 			PoolHandler(sSessionId, *ppHandler, pService->GetScope(), pService->GetLibId());

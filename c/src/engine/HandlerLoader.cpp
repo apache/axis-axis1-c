@@ -101,7 +101,7 @@ int HandlerLoader::DeleteHandler(BasicHandler* pHandler, int nLibId)
 		pHandlerInfo->m_Delete(pHandler);
 		if (pHandlerInfo->m_nObjCount == 0); //time to unload the DLL
 		unlock();
-		return AXIS_SUCCESS;
+		return SUCCESS;
 	}
 	else
 	{
@@ -119,7 +119,7 @@ int HandlerLoader::LoadLib(HandlerInformation* pHandlerInfo)
 	pHandlerInfo->m_Handler = dlopen(pHandlerInfo->m_sLib.c_str(), pHandlerInfo->m_nLoadOptions);
 	AXISTRACE1("after m_Handler = dlopen(pHandlerInfo->m_sLib.c_str(), pHandlerInfo->m_nLoadOptions);");  
 #endif
-	return (pHandlerInfo->m_Handler != 0)?AXIS_SUCCESS:AXIS_FAIL;
+	return (pHandlerInfo->m_Handler != 0)?SUCCESS:FAIL;
 }
 
 int HandlerLoader::UnloadLib(HandlerInformation* pHandlerInfo)
@@ -129,7 +129,7 @@ int HandlerLoader::UnloadLib(HandlerInformation* pHandlerInfo)
 #else //Linux
 	dlclose(pHandlerInfo->m_Handler);
 #endif
-	return AXIS_SUCCESS;
+	return SUCCESS;
 }
 
 int HandlerLoader::CreateHandler(BasicHandler** pHandler, int nLibId)
@@ -149,7 +149,7 @@ int HandlerLoader::CreateHandler(BasicHandler** pHandler, int nLibId)
 			return LIBRARY_PATH_EMPTY;
 		}
 		pHandlerInfo->m_nLoadOptions = RTLD_LAZY;
-		if (AXIS_SUCCESS == LoadLib(pHandlerInfo))
+		if (SUCCESS == LoadLib(pHandlerInfo))
 		{  
 			#ifdef WIN32
 			pHandlerInfo->m_Create = (CREATE_OBJECT)GetProcAddress(pHandlerInfo->m_Handler,CREATE_FUNCTION);
@@ -184,13 +184,13 @@ int HandlerLoader::CreateHandler(BasicHandler** pHandler, int nLibId)
     AXISTRACE1("pHandlerInfo->m_Create(&pBH);");
 	if (pBH)
 	{
-		if (AXIS_SUCCESS == pBH->Init())
+		if (SUCCESS == pBH->Init())
 		{
 			pHandlerInfo->m_nObjCount++;
 			*pHandler = pBH;
             AXISTRACE1("*pHandler = pBH;");
 			unlock();
-			return AXIS_SUCCESS;
+			return SUCCESS;
 		}
 		else
 		{

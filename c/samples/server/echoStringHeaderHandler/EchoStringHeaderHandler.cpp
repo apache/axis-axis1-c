@@ -85,9 +85,9 @@ int GetClassInstance(Handler **inst)
 	*inst = new ESHHandler();
 	if (*inst)
 	{
-		return AXIS_SUCCESS;
+		return SUCCESS;
 	}
-	return AXIS_FAIL;
+	return FAIL;
 }
 STORAGE_CLASS_INFO
 int DestroyInstance(Handler *inst)
@@ -95,9 +95,9 @@ int DestroyInstance(Handler *inst)
 	if (inst)
 	{
 		delete inst;
-		return AXIS_SUCCESS;
+		return SUCCESS;
 	}
-	return AXIS_FAIL;
+	return FAIL;
 }
 
 }

@@ -115,43 +115,43 @@ void SoapMethod::AddOutputParam(Param *param)
 }
 
 /*
- *This method return AXIS_SUCCESS if it serialize the SoapMethod successfully.
- * If not it returns AXIS_FAIL. The caller of this method has to deal in a 
+ *This method return SUCCESS if it serialize the SoapMethod successfully.
+ * If not it returns FAIL. The caller of this method has to deal in a 
  * appropriate manner after calling this method.
  */
 int SoapMethod::serialize(SoapSerializer& pSZ)
 {	
-	int iStatus= AXIS_SUCCESS;
+	int iStatus= SUCCESS;
 
 	do {
 		if(isSerializable()) {
 					
-			pSZ.Serialize("<", m_strPrefix.c_str(), ":", m_strLocalname.c_str(), " xmlns:", m_strPrefix.c_str(),
-				"=\"", m_strUri.c_str(), "\"", NULL);
+			pSZ << "<" << m_strPrefix.c_str() << ":" << m_strLocalname.c_str() << " xmlns:" << m_strPrefix.c_str()
+				<< "=\"" << m_strUri.c_str() << "\"";
 
 			iStatus= serializeAttributes(pSZ);
-			if(iStatus==AXIS_FAIL) {
+			if(iStatus==FAIL) {
 				break;
 			}
 			
-			pSZ.Serialize(">", NULL);
+			pSZ << ">";
 
 			iStatus= serializeOutputParam(pSZ);
-			if(iStatus==AXIS_FAIL) {
+			if(iStatus==FAIL) {
 				break;
 			}
 			
-			pSZ.Serialize("</", NULL);
+			pSZ << "</";
 
 			if(m_strPrefix.length() != 0) {					
-				pSZ.Serialize(m_strPrefix.c_str(), ":", NULL);
+				pSZ<< m_strPrefix.c_str() << ":";
 			}
 			
-			pSZ.Serialize(m_strLocalname.c_str(), ">", NULL);
+			pSZ << m_strLocalname.c_str() << ">";
 
-			iStatus= AXIS_SUCCESS;
+			iStatus= SUCCESS;
 		} else {
-			iStatus= AXIS_FAIL;
+			iStatus= FAIL;
 		}
 	} while(0);
 			
@@ -163,7 +163,7 @@ comm on 11/7/2003 9.10am
 int SoapMethod::serialize(string& sSerialized)
 {	
 	
-	int iStatus= AXIS_SUCCESS;
+	int iStatus= SUCCESS;
 
 	do {
 		if(isSerializable()) {
@@ -182,14 +182,14 @@ int SoapMethod::serialize(string& sSerialized)
 //			}
 
 			iStatus= serializeAttributes(sSerialized);
-			if(iStatus==AXIS_FAIL) {
+			if(iStatus==FAIL) {
 				break;
 			}
 
 			sSerialized+= ">";
 
 			iStatus= serializeOutputParam(sSerialized);
-			if(iStatus==AXIS_FAIL) {
+			if(iStatus==FAIL) {
 				break;
 			}
 
@@ -201,9 +201,9 @@ int SoapMethod::serialize(string& sSerialized)
 
 			sSerialized+= m_strLocalname+ ">"+ "\n";
 
-			iStatus= AXIS_SUCCESS;
+			iStatus= SUCCESS;
 		} else {
-			iStatus= AXIS_FAIL;
+			iStatus= FAIL;
 		}
 	} while(0);
 			
@@ -216,12 +216,12 @@ int SoapMethod::serializeOutputParam(SoapSerializer& pSZ)
 	int nStatus;
 	for (list<Param*>::iterator it = m_OutputParams.begin(); it != m_OutputParams.end(); it++)
 	{
-		if (AXIS_SUCCESS != (nStatus = (*it)->serialize(pSZ)))
+		if (SUCCESS != (nStatus = (*it)->serialize(pSZ)))
 		{
 			return nStatus;
 		}
 	}
-	return AXIS_SUCCESS;
+	return SUCCESS;
 }
 
 /*
@@ -241,7 +241,7 @@ bool SoapMethod::isSerializable()
 {
 	bool bStatus= true;	
 
-	//checking whether namespace qualified, if not return AXIS_FAIL
+	//checking whether namespace qualified, if not return FAIL
 	do {
 		if(m_strPrefix.length() == 0) {			
 			bStatus= false;		
@@ -259,7 +259,7 @@ int SoapMethod::addAttribute(Attribute *pAttribute)
 {
 	m_attributes.push_back(pAttribute);
 
-	return AXIS_SUCCESS;
+	return SUCCESS;
 }
 
 int SoapMethod::serializeAttributes(SoapSerializer& pSZ)
@@ -271,7 +271,7 @@ int SoapMethod::serializeAttributes(SoapSerializer& pSZ)
 		itCurrAttribute++;		
 	}	
 
-	return AXIS_SUCCESS;	
+	return SUCCESS;	
 }
 
 /*
@@ -285,6 +285,6 @@ int SoapMethod::serializeAttributes(string &sSerialized)
 		itCurrAttribute++;		
 	}	
 
-	return AXIS_SUCCESS;	
+	return SUCCESS;	
 }
 */

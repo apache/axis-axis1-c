@@ -2,8 +2,6 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include <axis/soap/SoapBody.h>
-#include <axis/soap/SoapMethod.h>
 #include <axis/engine/ServerAxisEngine.h>
 #include <stdio.h>
 #include <axis/common/AxisException.h>
@@ -29,25 +27,25 @@ ServerAxisEngine::~ServerAxisEngine()
 
 }
 
-int ServerAxisEngine::Process(Ax_soapstream* stream) 
+int ServerAxisEngine::Process(Ax_soapstream* soap) 
 {
 	int Status = 0;
-	/*AXIS_TRY*/
+//	AXIS_TRY
 		AXISTRACE1("ServerAxisEngine::Process");
 		const WSDDService* pService = NULL;
-		string sSessionId = stream->sessionid;
+		string sSessionId = soap->sessionid;
         AXISTRACE2("ServerAxisEngine::Process", sSessionId.c_str());
 		int nSoapVersion;
 
-		if (!(stream->transport.pSendFunct && stream->transport.pGetFunct &&
-			stream->transport.pSetTrtFunct && stream->transport.pGetTrtFunct))
-			return AXIS_FAIL;
+		if (!(soap->transport.pSendFunct && soap->transport.pGetFunct &&
+			soap->transport.pSendTrtFunct && soap->transport.pGetTrtFunct))
+			return FAIL;
 
 		do {
-			/* populate MessageData with transport information */
-			m_pMsgData->m_Protocol = stream->trtype;
+			//populate MessageData with transport information
+			m_pMsgData->m_Protocol = soap->trtype;
     
-			if (AXIS_SUCCESS != m_pDZ->SetInputStream(stream))
+			if (SUCCESS != m_pDZ->SetInputStream(soap))
 			{
 				nSoapVersion = m_pDZ->GetVersion();
 				nSoapVersion = (nSoapVersion == VERSION_LAST) ? SOAP_VER_1_2 : nSoapVersion;
@@ -56,13 +54,13 @@ int ServerAxisEngine::Process(Ax_soapstream* stream)
 				break; //do .. while(0)
 			}
 
-			const char* cService = stream->transport.pGetTrtFunct(SERVICE_URI, stream);
-			if (!cService)
+			const char* cService = get_header(soap, SOAPACTIONHEADER);
+			if (!cService) //get from URL if http
 			{
-				m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_SOAPCONTENTERROR));
-				break; //do .. while(0)
+				cService = get_service_from_uri(soap);
 			}
 			AxisString service = (cService == NULL)? "" : cService;
+			//AxisUtils::convert(service, (cService == NULL)? "" : cService);
 		  
 			AXISTRACE2("string service = ",service.c_str());
      
@@ -74,13 +72,12 @@ int ServerAxisEngine::Process(Ax_soapstream* stream)
 				m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_SOAPACTIONEMPTY));
 				break; //do .. while(0)
 			}
-			/* if there are quotes remove them. */
-			if (service.find('\"') != string::npos) 
+			if (service.find('\"') != string::npos) //if there are quotes remove them.
 			{
 				service = service.substr(1, service.length() - 2);
 			}
 
-			/* get service description object from the WSDD Deployment object */
+			//get service description object from the WSDD
 			pService = g_pWSDDDeployment->GetService(service.c_str());
 			if (!pService) 
 			{
@@ -92,136 +89,91 @@ int ServerAxisEngine::Process(Ax_soapstream* stream)
 			}
 
 			m_pMsgData->SetService(pService);
-
-			switch(pService->GetProvider())
-			{
-				case RPC_PROVIDER:
-					m_pSZ->SetStyle(RPC_ENCODED);
-					m_pDZ->SetStyle(RPC_ENCODED);
-					break;
-				case DOC_PROVIDER:
-					m_pSZ->SetStyle(DOC_LITERAL);
-					m_pDZ->SetStyle(DOC_LITERAL);
-					break;
-				case COM_PROVIDER: 
-					//TODO: ??
-					break;
-				default:;
-					//TODO: ??
-			}
-	
-			/* check for stream version in the request and decide whether we support it or not
-			 * if we do not support send a soapfault with version mismatch.	*/	  
-			nSoapVersion = m_pDZ->GetVersion();
-			if (nSoapVersion == VERSION_LAST) /* version not supported */
+			
+			//check for soap version in the request and decide whether we support it or not
+			//if we do not support send a soapfault with version mismatch.		  
+			nSoapVersion = m_pMsgData->m_pDZ->GetVersion();
+			if (nSoapVersion == VERSION_LAST) //version not supported
 			{
 				m_pSZ->setSoapVersion(SOAP_VER_1_2);
 				m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_VERSION_MISMATCH));
 				break; //do .. while(0)		
-			}
+			}		  
 
-			/* Set Soap version in the Serializer and the envelope */
-			if (AXIS_SUCCESS != m_pSZ->setSoapVersion((SOAP_VERSION)nSoapVersion))
+
+			//Set Soap version in the Serializer and the envelope
+			if (SUCCESS != m_pSZ->setSoapVersion((SOAP_VERSION)nSoapVersion))
 			{
-				m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_SOAPCONTENTERROR));
-				break; //do .. while(0)
+			  m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_SOAPCONTENTERROR));
+			  break; //do .. while(0)
 			}
 
-			/* get the operation name from transport information Ex: from SOAPAction header */
-			AxisString sOperation = stream->transport.pGetTrtFunct(OPERATION_NAME, stream);
-			if (sOperation.empty())
+			SoapMethod* pSm = m_pDZ->GetMethod();
+			if (pSm) 
 			{
-				m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_NOSOAPMETHOD));
-				break; //do .. while(0)
-			}
-			/* remove any quotes in the operation name */
-			if (sOperation.rfind('\"') != string::npos) 
-			{
-				sOperation = sOperation.substr(0, sOperation.length() - 1);
-			}
-
-			m_pMsgData->SetOperationName(sOperation.c_str());
-
-			if (pService->IsAllowedMethod(sOperation.c_str()))
-			{          
-				/* load actual web service handler */
-				if (AXIS_SUCCESS != g_pHandlerPool->GetWebService(&m_pWebService, sSessionId, pService))
+				const AxisChar* pMethod = pSm->getMethodName();
+				AXISTRACE2("pSm->getMethodName(); :", pMethod);
+				if (pMethod)
 				{
-					/* error : couldnot load web service */
-            		m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_COULDNOTLOADSRV));
+					if (pService->IsAllowedMethod(pMethod))
+					{          
+						//load actual web service handler
+						if (SUCCESS != g_pHandlerPool->GetWebService(&m_pWebService, sSessionId, pService))
+						{
+            				m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_COULDNOTLOADSRV));
+							//Error couldnot load web service
+							break; //do .. while(0)
+						}
+					}
+					else
+					{
+						m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_METHODNOTALLOWED));
+						//method is not an exposed allowed method
+						break; //do .. while(0)
+					}
+				}
+				else
+				{
+					m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_NOSOAPMETHOD));
+					//no method to be invoked
 					break; //do .. while(0)
 				}
-				/* check whether the provider type in the wsdd matchs the service's binding style */
-				if (m_pSZ->GetStyle() != m_pWebService->GetBindingStyle())
-				{
-					m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_SOAPCONTENTERROR));
-					break; //do .. while(0)
-				}
-			}
-			else
-			{
-				m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_METHODNOTALLOWED));
-				//method is not an exposed allowed method
-				break; //do .. while(0)
 			}
 			//Get Global and Transport Handlers
-			if(AXIS_SUCCESS != (Status = InitializeHandlers(sSessionId, stream->trtype)))
+			if(SUCCESS != (Status = InitializeHandlers(sSessionId, soap->trtype)))
 			{
 			  m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_COULDNOTLOADHDL));
 			  break; //do .. while(0)
 			}
     		//Get Service specific Handlers from the pool if configured any
-			if(AXIS_SUCCESS != (Status = g_pHandlerPool->GetRequestFlowHandlerChain(&m_pSReqFChain, sSessionId, pService)))
+			if(SUCCESS != (Status = g_pHandlerPool->GetRequestFlowHandlerChain(&m_pSReqFChain, sSessionId, pService)))
 			{        
 			  m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_COULDNOTLOADHDL));
 			  break; //do .. while(0)
 			}
             AXISTRACE1("received request flow handler chain");
-			if(AXIS_SUCCESS != (Status = g_pHandlerPool->GetResponseFlowHandlerChain(&m_pSResFChain, sSessionId, pService)))
+			if(SUCCESS != (Status = g_pHandlerPool->GetResponseFlowHandlerChain(&m_pSResFChain, sSessionId, pService)))
 			{        
 			  m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_COULDNOTLOADHDL));
 			  break; //do .. while(0)
 			}
-			/**
-			 * Let Deserializer parse the header section so that handlers can use them. 
-			 * Each handler should remove the header block targetted to it
-			 * and handlers may add header blocks to the DeSerializer and Serializer
-			 * irrespective of whether it is request message path or response path.
-			 * A header may be added to the Deserializer ONLY IF there is a CAN BE
-			 * a handler in this soap processor to handle it.
-			 */
-			if (AXIS_SUCCESS != m_pDZ->GetHeader())
-			{
-				m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_SOAPCONTENTERROR));
-				break; //do .. while(0)				
-			}
-			/**
-			 * Invoke all handlers including the webservice
-			 * in case of failure coresponding stream fault message will be set
-			 */
+
+			//and handlers may add headers to the Serializer.
+			//Invoke all handlers including the webservice
+			//in case of failure coresponding soap fault message will be set
 			Status = Invoke(m_pMsgData); //we generate response in the same way even if this has failed
 		}
 		while(0);
-		/**
-		 * Get any header blocks unprocessed (left) in the Deserializer and add them to the Serializer
-		 * They may be headers targetted to next soap processors
-		 */
-		HeaderBlock* pHderBlk = NULL;
-		while(true)
-		{
-			/* following function gets a header block from Deserializer irrespective of any thing */
-			pHderBlk = m_pDZ->GetHeaderBlock();
-			/* add it to the Serializer */
-			if (pHderBlk) m_pSZ->AddHeaderBlock(pHderBlk);
-			else break;
-		}
-		m_pSZ->SetOutputStream(stream);
+		//send any transoport information like http headers first
+		soap->transport.pSendTrtFunct(soap);
+		//Serialize
+		m_pSZ->SetOutputStream(soap);
 
 		//Pool back the Service specific handlers
 		if (m_pSReqFChain) g_pHandlerPool->PoolHandlerChain(m_pSReqFChain, sSessionId);
 		if (m_pSResFChain) g_pHandlerPool->PoolHandlerChain(m_pSResFChain, sSessionId);
 		//Pool back the Global and Transport handlers
-		//UnInitializeHandlers(sSessionId, stream->trtype);
+		//UnInitializeHandlers(sSessionId, soap->trtype);
 		//Pool back the webservice
 		if (m_pWebService) g_pHandlerPool->PoolWebService(sSessionId, m_pWebService, pService); 
 		return Status;
@@ -253,13 +205,13 @@ int ServerAxisEngine::Process(Ax_soapstream* stream)
 int ServerAxisEngine::Invoke(MessageData* pMsg)
 {
 	enum AE_LEVEL {AE_START=1, AE_TRH, AE_GLH, AE_SERH, AE_SERV};
-	int Status = AXIS_FAIL;
+	int Status = FAIL;
 	int level = AE_START;
 	do
 	{
 		//invoke transport request handlers
 		if (m_pTReqFChain) {
-			if(AXIS_SUCCESS != (Status = m_pTReqFChain->Invoke(pMsg)))
+			if(SUCCESS != (Status = m_pTReqFChain->Invoke(pMsg)))
 			{
                 AXISTRACE1("handler chain invoke not successful");
 				m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_HANDLERFAILED));
@@ -272,7 +224,7 @@ int ServerAxisEngine::Invoke(MessageData* pMsg)
 		//invoke global request handlers
 		if (m_pGReqFChain)
 		{
-			if(AXIS_SUCCESS != (Status = m_pGReqFChain->Invoke(pMsg)))
+			if(SUCCESS != (Status = m_pGReqFChain->Invoke(pMsg)))
 			{
 				m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_HANDLERFAILED));
 				break; //do .. while (0)
@@ -283,7 +235,7 @@ int ServerAxisEngine::Invoke(MessageData* pMsg)
 		//invoke service specific request handlers
 		if (m_pSReqFChain)
 		{
-			if(AXIS_SUCCESS != (Status = m_pSReqFChain->Invoke(pMsg)))
+			if(SUCCESS != (Status = m_pSReqFChain->Invoke(pMsg)))
 			{
 				m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_HANDLERFAILED));
 				break; //do .. while (0)
@@ -291,22 +243,11 @@ int ServerAxisEngine::Invoke(MessageData* pMsg)
 		}
 		AXISTRACE1("AFTER invoke service specific request handlers");
 		level++; //AE_SERH
-		/*
-		 * Before processing the soap body check whether there is any header blocks
-		 * with mustUnderstand attribute left unprocessed in the Deserializer. If so
-		 * return a soap fault.
-		 */
-		if (m_pDZ->IsAnyMustUnderstandHeadersLeft())
-		{
-			m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_MUST_UNDERSTAND));
-			break; //do .. while (0)
-		}
 		//call actual web service handler
 		if (m_pWebService)
 		{
-			if (AXIS_SUCCESS != (Status = m_pWebService->Invoke(pMsg)))
+			if (SUCCESS != (Status = m_pWebService->Invoke(pMsg)))
 			{
-                AXISTRACE1("Web service failed");
 				m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_WEBSERVICEFAILED));
 				break;
 			}        
@@ -320,7 +261,7 @@ int ServerAxisEngine::Invoke(MessageData* pMsg)
 
 	/*
 	The case clauses in this switch statement have no breaks.
-	Hence, if Everything up to web service invocation was successful
+	Hence, if Everything up to web service invokation was successful
 	then all response handlers are invoked. If there was a failure
 	at some point the response handlers from that point onwards
 	are invoked.
@@ -330,7 +271,7 @@ int ServerAxisEngine::Invoke(MessageData* pMsg)
 	
 	case AE_SERV: //Everything Success.
         AXISTRACE1("case AE_SERV:");
-		Status = AXIS_SUCCESS;
+		Status = SUCCESS;
 		//no break;
 	case AE_SERH: //actual web service handler has failed
 		//invoke web service specific response handlers

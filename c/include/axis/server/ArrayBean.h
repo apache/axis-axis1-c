@@ -73,35 +73,37 @@
 #include <list>
 using namespace std;
 
-//This class is used inside Param class only.
+//This class is used inside Param class and wrapper classes only.
 class ArrayBean : public IArrayBean
 {
-	friend class Param;
 public:
 	ArrayBean();
 	virtual ~ArrayBean();
-//	virtual int DeSerialize(SoapDeSerializer *pDZ);
-	virtual int Serialize(SoapSerializer& pSZ);
+	virtual int DeSerialize(IWrapperSoapDeSerializer *pDZ);
+	virtual int Serialize(IWrapperSoapSerializer& pSZ);
 	int GetArraySize();
+private:
+	int GetArrayBlockSize(list<int>::iterator it);
 
 public:
 	XSDTYPE m_type; //array element type
-	int m_nSize; //array size only one dimensional arrays
+	list<int> m_size; //array size only one dimensional arrays
 	AxisString m_ItemName;//name of an item like <item>34</item>
 	union uAValue //this is useful only when Param is used as a return parameter
 	{
 		void* sta; //simple type array
 		ComplexObjectHandler* cta; //complex type array
-	}m_value;
-private:
+	}m_value;	
 	AxisString m_TypeName;
 	AxisString m_URI;
 public: //IArrayBean Interface
-	void SetDimension(int nDim);
+	void AddDimension(int nDim);
 	void SetItemName(const AxisChar* sName);
 	void SetTypeName(const AxisChar* sName);
 	void SetUri(const AxisChar* sURI);
 	void RemoveArrayPointer();
+private:
+	BasicTypeSerializer m_BTSZ;
 };
 
 #endif // !defined(AFX_ARRAYBEAN_H__374BEDCF_E850_4907_9CF0_F2EBC61E54CF__INCLUDED_)

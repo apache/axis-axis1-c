@@ -1,6 +1,6 @@
 noinst_LTLIBRARIES = libsoap.la
 
-AM_CPPFLAGS = -Wall -DUSE_EXPAT_PARSER
+AM_CPPFLAGS = -Wshadow -Wall -pedantic -ansi
 libsoap_la_SOURCES = Attribute.cpp \
         BasicNode.cpp \
         CharacterElement.cpp \
@@ -14,8 +14,8 @@ libsoap_la_SOURCES = Attribute.cpp \
         SoapMethod.cpp \
         SoapSerializer.cpp \
         URIMapping.cpp \
-	SoapKeywordMapping.cpp \
-	SoapParserExpat.cpp
+        XMLStreamHandler.cpp \
+	SoapKeywordMapping.cpp
 
-libsoap_la_LIBADD = -L$(AXISCPP_HOME)/lib/expat -lexpat
+libsoap_la_LIBADD = -L$(AXISCPP_HOME)/lib/xerces-c -lxerces-c
 INCLUDES = -I$(AXISCPP_HOME)/include

@@ -59,10 +59,8 @@
  */
 package org.apache.axis.wsdl.wsdl2ws;
 
-import java.util.Enumeration;
 import java.util.Stack;
 import java.util.StringTokenizer;
-import java.util.Iterator;
 
 import javax.xml.namespace.QName;
 
@@ -214,7 +212,7 @@ public class WrapperUtils {
 	
 	public static String getClassNameFromParamInfoConsideringArrays(ParameterInfo param,WebServiceContext wscontext)throws WrapperFault{
 		Type type = wscontext.getTypemap().getType(param.getSchemaName());
-		if(!TypeMap.isSimpleType(param.getSchemaName())){ //array or complex types
+		if(type !=null){ //array or complex types
 			if (type.isArray()){
 				return type.getLanguageSpecificName();
 			}
@@ -224,17 +222,5 @@ public class WrapperUtils {
 		}else
 			return param.getLangName();			
 	}
-	
-	public static Type getArrayType(Type type)throws WrapperFault{
-		if(!type.isArray())
-			return null;
-		Iterator elements = type.getElementnames();
-		if(elements.hasNext()){
-			return type.getElementForElementName(
-				(String)elements.next()).getType();
-		}
-		throw new WrapperFault("Array type do not have any attibutes");
-	}
-
 }
 

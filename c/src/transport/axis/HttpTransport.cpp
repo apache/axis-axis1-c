@@ -91,7 +91,6 @@ HttpTransport::~HttpTransport()
 bool HttpTransport::Init()
 {
 	// open a channel for transport
-	m_HttpBindDone = false;
 	try
 	{
 		m_bStatus = true;
@@ -122,7 +121,7 @@ void HttpTransport::Fini()
  *	@param	p_Value		Property value
  */
 
-void  HttpTransport::SetProperty(const char* p_Property, const char* p_Value)
+void  HttpTransport::SetProperty(const std::string& p_Property, const std::string& p_Value)
 {
 	m_AdditionalHeader.push_back(std::make_pair(p_Property, p_Value));
 }
@@ -135,13 +134,13 @@ void  HttpTransport::SetProperty(const char* p_Property, const char* p_Value)
  *
  */
 
-const Transport& HttpTransport::operator >> (const char** pPayLoad)
+const Transport& HttpTransport::operator >> (std::string& p_Payload)
 {
 	if(!m_bStatus) 
 	{
 		// We have the payload; this is due to Fault request made in earlier call 
 		// to this method
-		*pPayLoad = m_PayLoad.c_str();
+		p_Payload = m_PayLoad;
 		return *this;
 	}
 
@@ -156,7 +155,7 @@ const Transport& HttpTransport::operator >> (const char** pPayLoad)
 	if(!m_bStatus) HTTPValidate(tmpPacket);
 
 	// At this point we have the payload at hand so give it out
-	*pPayLoad = m_PayLoad.c_str();
+	p_Payload = m_PayLoad;
 	return *this;
 }
 
@@ -166,11 +165,17 @@ const Transport& HttpTransport::operator >> (const char** pPayLoad)
  *
  */
 
-const Transport& HttpTransport::operator << (const char* p_Payload)
+const Transport& HttpTransport::operator << (const std::string& p_Payload)
 {
-	HTTPBind();	// Bind the SOAP-Envelop with HTTP headers
+	HTTPBind(p_Payload);	// Bind the SOAP-Envelop with HTTP headers
+
+#ifdef _DEBUG
+	std::cout << "\n\n\n";
+	std::cout << m_OutMsg.str() << std::endl;
+#endif
+
 	// Write to the established channel
-	m_Channel << p_Payload;
+	m_Channel << m_OutMsg.str();
 	return *this;
 }
 
@@ -183,52 +188,32 @@ const Transport& HttpTransport::operator << (const char* p_Payload)
  *
  */
 
-void HttpTransport::HTTPBind()
+void HttpTransport::HTTPBind(const std::string& p_Payload)
 {
-	if (m_HttpBindDone) return;
-	m_OutHttpHeaders = "";
+    m_OutMsg.flush();
 	if(m_Typ == POST)				// only POST is supported for now, wish-list: M-POST??
-		m_OutHttpHeaders = "POST ";
+		m_OutMsg << "POST ";
 
 	// Use HTTP 1.1; if HTTP 1.0 is required we have to manage with setting the properties
-	m_OutHttpHeaders += m_Url.GetResource() + " HTTP/1.1\r\n"; // no support for proxy server yet
-	m_OutHttpHeaders += "Host: " + m_Url.GetHostName();
+	m_OutMsg << m_Url.GetResource() << " HTTP/1.1\r\n"; // no support for proxy server yet
+	m_OutMsg << "Host: " << m_Url.GetHostName();
 
 	unsigned short port = m_Url.GetPort();
 
 	if(port != HTTP_PORT)
-	{
-		char buff[8];
-		sprintf(buff, "%u", port);
-		m_OutHttpHeaders += ":";
-		m_OutHttpHeaders += buff;
-	}
+		m_OutMsg << ":" << port;
 
-	m_OutHttpHeaders += "\r\n";
-	m_OutHttpHeaders += "Content-Type: text/xml; charset=\"UTF-8\"\r\n";	// We have to support other charsets
+	m_OutMsg << "\r\n";
+	m_OutMsg << "Content-Type: text/xml; charset=\"UTF-8\"\r\n";	// We have to support other charsets
+	m_OutMsg << "Content-Length: " << p_Payload.size() << "\r\n";
 	
 	//Set header values for additional prefixes, such as SOAPAction
 	for(int i=0; i < m_AdditionalHeader.size(); i++)
-	{
-		if (m_AdditionalHeader[i].first == "Content-Length")
-		{
-			m_OutHttpHeaders += m_AdditionalHeader[i].first;
-			m_OutHttpHeaders += ": "; 
-			m_OutHttpHeaders += m_AdditionalHeader[i].second;
-			m_OutHttpHeaders += "\r\n";
-		}
-		else
-		{
-			m_OutHttpHeaders += m_AdditionalHeader[i].first;
-			m_OutHttpHeaders += ": \""; 
-			m_OutHttpHeaders += m_AdditionalHeader[i].second;
-			m_OutHttpHeaders += "\"\r\n";
-		}
-	}
+		m_OutMsg << m_AdditionalHeader[i].first << ": \"" 
+		         << m_AdditionalHeader[i].second << "\"\r\n";
 
-	m_OutHttpHeaders += "\r\n";
-	m_Channel << m_OutHttpHeaders.c_str();
-	m_HttpBindDone = true;
+	m_OutMsg << "\r\n";
+	m_OutMsg << p_Payload;
 }
 
 

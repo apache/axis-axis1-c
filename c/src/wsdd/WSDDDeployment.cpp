@@ -144,22 +144,19 @@ const WSDDHandlerList* WSDDDeployment::GetGlobalResponseFlowHandlers()
 int WSDDDeployment::LoadWSDD(const AxisChar* sWSDD)
 {
 	m_sWSDDPath = string(sWSDD);
-
-	WSDDDocument* doc = new WSDDDocument();
-	if (AXIS_SUCCESS != doc->GetDeployment(sWSDD, this))
-
-
+	WSDDDocument doc;
+	if (SUCCESS != doc.GetDeployment(sWSDD, this))
 	{
-		return AXIS_FAIL;
+		return FAIL;
 	}
-	return AXIS_SUCCESS;
+	return SUCCESS;
 }
 
 int WSDDDeployment::UpdateWSDD()
 {
 	/* Do we need this method ? */
 
-	return AXIS_SUCCESS;
+	return SUCCESS;
 }
 
 
@@ -199,7 +196,7 @@ int WSDDDeployment::AddService(WSDDService* pService)
 {
 	if (!m_DeployedServices) m_DeployedServices = new WSDDServiceMap;
 	(*m_DeployedServices)[pService->GetServiceName()] = pService;
-	return AXIS_SUCCESS;
+	return SUCCESS;
 }		
 
 int WSDDDeployment::AddHandler(bool bGlobal, bool bRequestFlow, WSDDHandler* pHandler, AXIS_PROTOCOL_TYPE protocol)
@@ -222,7 +219,7 @@ int WSDDDeployment::AddHandler(bool bGlobal, bool bRequestFlow, WSDDHandler* pHa
 		if (!m_pTransportHandlers) m_pTransportHandlers = new WSDDTransport();
 		m_pTransportHandlers->AddHandler(bRequestFlow, protocol, pHandler);
 	}
-	return AXIS_SUCCESS;
+	return SUCCESS;
 }
 
 const WSDDHandlerList* WSDDDeployment::GetTransportRequestFlowHandlers(AXIS_PROTOCOL_TYPE protocol)
@@ -239,7 +236,7 @@ const WSDDHandlerList* WSDDDeployment::GetTransportResponseFlowHandlers(AXIS_PRO
 
 int WSDDDeployment::RemoveService(string sServiceName)
 {
-	int iStatus = AXIS_FAIL;
+	int iStatus = FAIL;
 
 	if (m_DeployedServices) {
 		WSDDServiceMap::iterator it = (*m_DeployedServices).find(sServiceName);
@@ -251,7 +248,7 @@ int WSDDDeployment::RemoveService(string sServiceName)
 			delete pService;
 			pService = NULL;
 
-			iStatus = AXIS_SUCCESS;			
+			iStatus = SUCCESS;			
 		}
 	}
 
@@ -260,7 +257,7 @@ int WSDDDeployment::RemoveService(string sServiceName)
 
 int WSDDDeployment::RemoveHandler(bool bGlobal, bool bRequestFlow, WSDDHandler* pHandler, AXIS_PROTOCOL_TYPE protocol)
 {
-	return AXIS_SUCCESS;	
+	return SUCCESS;	
 }
 
 /**
@@ -270,9 +267,9 @@ int WSDDDeployment::unDeploy(string sServiceName)
 {
 	AXISTRACE3("entered to WSDDDeployment::unDeploy");
 
-	int iStatus = AXIS_FAIL;
+	int iStatus = FAIL;
 
-	if (RemoveService(sServiceName) == AXIS_SUCCESS) {
+	if (RemoveService(sServiceName) == SUCCESS) {
 		/*
 		 Write to the server WSDD file
 		 CODE comes here
@@ -285,7 +282,7 @@ int WSDDDeployment::unDeploy(string sServiceName)
 		WSDDServiceMap::iterator itCurrService;
 
 		FILE* file;
-		int iWriteStatus = AXIS_SUCCESS;
+		int iWriteStatus = SUCCESS;
 
 		do {
 			file = fopen(m_sWSDDPath.c_str(), "w");
@@ -293,7 +290,7 @@ int WSDDDeployment::unDeploy(string sServiceName)
 				AXISTRACE3("WSDDDeployment::unDeploy, opened the file successfully");
 			} else {
 				AXISTRACE3("FAILED: WSDDDeployment::unDeploy, couldn't open the file successfully");
-				iWriteStatus = AXIS_FAIL;
+				iWriteStatus = FAIL;
 				break;
 			}
 
@@ -302,7 +299,7 @@ int WSDDDeployment::unDeploy(string sServiceName)
 			iWriteResult = fputs("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n", file);
 			if (iWriteResult<0) {
 				AXISTRACE3("WSDDDeployment::unDeploy, writing to the file is UNSUCCESSFULL");
-				iWriteStatus = AXIS_FAIL;
+				iWriteStatus = FAIL;
 				break;
 			} else {
 				AXISTRACE3("WSDDDeployment::unDeploy, writing to the file is SUCCESSFULL");
@@ -311,7 +308,7 @@ int WSDDDeployment::unDeploy(string sServiceName)
 			iWriteResult = fputs("<deployment xmlns=\"http://xml.apache.org/axis/wsdd/\" xmlns:java=\"http://xml.apache.org/axis/wsdd/providers/java\">\n", file);
 			if (iWriteResult<0) {
 				AXISTRACE3("WSDDDeployment::unDeploy, writing to the file is UNSUCCESSFULL");
-				iWriteStatus = AXIS_FAIL;
+				iWriteStatus = FAIL;
 				break;
 			} else {
 				AXISTRACE3("WSDDDeployment::unDeploy, writing to the file is SUCCESSFULL");
@@ -357,7 +354,7 @@ int WSDDDeployment::unDeploy(string sServiceName)
 					iWriteResult = fputs(achTmpChar, file);
 					if (iWriteResult<0) {
 						AXISTRACE3("WSDDDeployment::unDeploy, writing to the file is UNSUCCESSFULL");
-						iWriteStatus = AXIS_FAIL;
+						iWriteStatus = FAIL;
 						break;
 					} else {
 						AXISTRACE3("WSDDDeployment::unDeploy, writing to the file is SUCCESSFULL");
@@ -368,7 +365,7 @@ int WSDDDeployment::unDeploy(string sServiceName)
 			iWriteResult = fputs("</deployment>", file);
 			if (iWriteResult<0) {
 				AXISTRACE3("WSDDDeployment::unDeploy, writing to the file is UNSUCCESSFULL");
-				iWriteStatus = AXIS_FAIL;
+				iWriteStatus = FAIL;
 				break;
 			} else {
 				AXISTRACE3("WSDDDeployment::unDeploy, writing to the file is SUCCESSFULL");
@@ -381,8 +378,8 @@ int WSDDDeployment::unDeploy(string sServiceName)
 
 		LoadWSDD("C:/Axis/conf/server.wsdd");
 
-		if (iWriteStatus == AXIS_SUCCESS) {
-			iStatus = AXIS_SUCCESS;
+		if (iWriteStatus == SUCCESS) {
+			iStatus = SUCCESS;
 		}
 	} 
 
@@ -392,7 +389,7 @@ int WSDDDeployment::unDeploy(string sServiceName)
 /**
  * Performs the deployment.
  */
-int WSDDDeployment::deploy(string sServiceName, string sDllPath, Axis_Array inAllowedMethodsArray)
+int WSDDDeployment::deploy(string sServiceName, string sDllPath, Axis_ArrayTag inAllowedMethodsArray)
 {
 	AXISTRACE3("entered to WSDDDeployment::deploy");
 	AXISTRACE3(strcat("WSDDDeployment::deploy, sServiceName = ", sServiceName.c_str()));
@@ -405,7 +402,7 @@ int WSDDDeployment::deploy(string sServiceName, string sDllPath, Axis_Array inAl
 	WSDDServiceMap::iterator itCurrService;
 
 	FILE* file;
-	int iStatus = AXIS_SUCCESS;
+	int iStatus = SUCCESS;
 
 	do {
 		file = fopen(m_sWSDDPath.c_str(), "w");
@@ -414,7 +411,7 @@ int WSDDDeployment::deploy(string sServiceName, string sDllPath, Axis_Array inAl
 			AXISTRACE3("WSDDDeployment::deploy, opened the file successfully");
 		} else {
 			AXISTRACE3("WSDDDeployment::deploy, FAILED: couldn't open the file successfully");
-			iStatus = AXIS_FAIL;
+			iStatus = FAIL;
 			break;
 		}
 
@@ -423,7 +420,7 @@ int WSDDDeployment::deploy(string sServiceName, string sDllPath, Axis_Array inAl
 		iWriteResult = fputs("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n", file);
 		if (iWriteResult<0) {
 			AXISTRACE3("WSDDDeployment::deploy, writing to the file is UNSUCCESSFULL");
-			iStatus = AXIS_FAIL;
+			iStatus = FAIL;
 			break;
 		} else {
 			AXISTRACE3("WSDDDeployment::deploy, writing to the file is SUCCESSFULL");
@@ -432,7 +429,7 @@ int WSDDDeployment::deploy(string sServiceName, string sDllPath, Axis_Array inAl
 		iWriteResult = fputs("<deployment xmlns=\"http://xml.apache.org/axis/wsdd/\" xmlns:java=\"http://xml.apache.org/axis/wsdd/providers/java\">\n", file);
 		if (iWriteResult<0) {
 			AXISTRACE3("WSDDDeployment::deploy, writing to the file is UNSUCCESSFULL");
-			iStatus = AXIS_FAIL;
+			iStatus = FAIL;
 			break;
 		} else {
 			AXISTRACE3("WSDDDeployment::deploy, writing to the file is SUCCESSFULL");
@@ -478,7 +475,7 @@ int WSDDDeployment::deploy(string sServiceName, string sDllPath, Axis_Array inAl
 				iWriteResult = fputs(achTmpChar, file);
 				if (iWriteResult<0) {
 					AXISTRACE3("WSDDDeployment::deploy, writing to the file is UNSUCCESSFULL");
-					iStatus = AXIS_FAIL;
+					iStatus = FAIL;
 					break;
 				} else {
 					AXISTRACE3("WSDDDeployment::deploy, writing to the file is SUCCESSFULL");
@@ -512,7 +509,7 @@ int WSDDDeployment::deploy(string sServiceName, string sDllPath, Axis_Array inAl
 		iWriteResult = fputs(achTmpChar, file);
 		if (iWriteResult<0) {
 			AXISTRACE3("WSDDDeployment::deploy, writing to the file is UNSUCCESSFULL");
-			iStatus = AXIS_FAIL;
+			iStatus = FAIL;
 			break;
 		} else {
 			AXISTRACE3("WSDDDeployment::deploy, writing to the file is SUCCESSFULL");
@@ -526,7 +523,7 @@ int WSDDDeployment::deploy(string sServiceName, string sDllPath, Axis_Array inAl
 		iWriteResult = fputs("</deployment>", file);
 		if (iWriteResult<0) {
 			AXISTRACE3("WSDDDeployment::deploy, writing to the file is UNSUCCESSFULL");
-			iStatus = AXIS_FAIL;
+			iStatus = FAIL;
 			break;
 		} else {
 			AXISTRACE3("WSDDDeployment::deploy, writing to the file is SUCCESSFULL");
@@ -539,7 +536,7 @@ int WSDDDeployment::deploy(string sServiceName, string sDllPath, Axis_Array inAl
 
 	LoadWSDD("C:/Axis/conf/server.wsdd");
 
-	return AXIS_SUCCESS;
+	return SUCCESS;
 }
 
 DEPLOYMENTTYPE WSDDDeployment::GetDeploymentType() const

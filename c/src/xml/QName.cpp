@@ -71,10 +71,23 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-QName::QName()
+QName::QName(string& sLocalPart)
 {
-	uri = 0;
-	localname = 0;
+	m_sLocalPart= sLocalPart;
+}
+
+QName::QName(string& sNamespaceURI, string& sLocalPart)
+{
+	m_sNamespaceURI= sNamespaceURI;
+	m_sLocalPart= sLocalPart;
+}
+
+QName::QName(string& sNamespaceURI, string& sLocalPart, string& sPrefix)
+{
+	m_sNamespaceURI= sNamespaceURI;
+	m_sLocalPart= sLocalPart;
+	m_sPrefix= sPrefix;
+
 }
 
 QName::~QName()
@@ -82,30 +95,17 @@ QName::~QName()
 
 }
 
-void QName::SplitQNameString(const XMLCh* qname, XMLCh sep)
+string& QName::getLocalPart()
 {
-	XMLCh *p = const_cast<XMLCh*>(qname);
-	while (*p)
-	{
-		if (*p == sep)
-		{
-			*p = '\0'; //put null to separate local name from namespace
-			localname = ++p; //now p points to localpart
-			uri = qname; //qname points to uri
-			return; 
-		}
-		p++;
-	}
-	//if there is no separator that means there is no uri
-	localname = qname;
-	uri = 0; //no uri
+	return m_sLocalPart;
 }
 
-void QName::MergeQNameString(XMLCh sep)
+string& QName::getNamespaceURI()
 {
-	if (uri)
-	{
-		XMLCh* p = const_cast<XMLCh*>(localname);
-		*(--p) = sep;
-	}
+	return m_sNamespaceURI;
+}
+
+string& QName::getPrefix()
+{
+	return m_sPrefix;
 }

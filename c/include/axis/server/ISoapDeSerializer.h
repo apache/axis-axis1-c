@@ -1,3 +1,4 @@
+/* -*- C++ -*- */
 /*
  * The Apache Software License, Version 1.1
  *
@@ -58,10 +59,16 @@
  * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
  *
  */
-/* ISoapDeSerializer.h: interface for the ISoapDeSerializer class.*/
+// ISoapDeSerializer.h: interface for the ISoapDeSerializer class.
+//
+//////////////////////////////////////////////////////////////////////
 
 #if !defined(AFX_ISOAPDESERIALIZER_H__BE214866_1A80_44C4_9AAD_0475B0C5EA1C__INCLUDED_)
 #define AFX_ISOAPDESERIALIZER_H__BE214866_1A80_44C4_9AAD_0475B0C5EA1C__INCLUDED_
+
+#include <string>
+using namespace std;
+class IParam;
 
 class ISoapDeSerializer
 {
@@ -69,4 +76,4 @@ public:
 	virtual ~ISoapDeSerializer() {};
 };
 
-#endif /* !defined(AFX_ISOAPDESERIALIZER_H__BE214866_1A80_44C4_9AAD_0475B0C5EA1C__INCLUDED_) */
+#endif // !defined(AFX_ISOAPDESERIALIZER_H__BE214866_1A80_44C4_9AAD_0475B0C5EA1C__INCLUDED_)

@@ -68,10 +68,6 @@
 #if !defined(AFX_HARACTERELEMENT_H__55176899_E8B1_40ED_BA39_CB8C5590B4D2__INCLUDED_)
 #define AFX_HARACTERELEMENT_H__55176899_E8B1_40ED_BA39_CB8C5590B4D2__INCLUDED_
 
-#ifdef WIN32
-#pragma warning (disable : 4786)
-#endif
-
 #include "BasicNode.h"
 
 class CharacterElement : public BasicNode

@@ -87,7 +87,7 @@ public abstract class HeaderFileWriter extends BasicFileWriter {
 	   writeDistructors();
 	   writeMethods();
 	   this.writer.write("};\n\n");
-	   this.writer.write("#endif /* !defined(__"+classname.toUpperCase()+"_"+getFileType().toUpperCase()+"_H__INCLUDED_)*/\n");
+	   this.writer.write("#endif // !defined(__"+classname.toUpperCase()+"_"+getFileType().toUpperCase()+"_H__INCLUDED_)\n");
 	   //cleanup
 	   writer.flush();
 	   writer.close();

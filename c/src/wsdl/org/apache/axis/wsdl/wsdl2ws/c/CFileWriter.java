@@ -75,8 +75,12 @@ public abstract class CFileWriter extends BasicFileWriter{
 	   writeClassComment();
 	   writePreprocssorStatements();
 	   writeGlobalCodes();
+
 	  // this.writer.write("public class "+servicename+getExtendsPart()+"{\n");
+
 	   writeAttributes();
+	   writeConstructors();
+	   writeDistructors();
 	   writeMethods();
 	   //this.writer.write("}\n");
 	   //cleanup

@@ -108,36 +108,36 @@ void SoapHeader::addHeaderBlock(HeaderBlock* headerBlock)
 
 int SoapHeader::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
 {	
-	int iStatus= AXIS_SUCCESS;
+	int iStatus= SUCCESS;
 
 	do {
 		
-		pSZ.Serialize("<", gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix, ":", gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_HEADER], NULL);
+		pSZ << "<" << gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix << ":" << gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_HEADER];
 
 		iStatus= serializeNamespaceDecl(pSZ);
 		iStatus= serializeAttributes(pSZ);
 
-		if(iStatus==AXIS_FAIL) {
+		if(iStatus==FAIL) {
 			break;
 		}
 		
-		pSZ.Serialize(">", NULL);
+		pSZ<< ">";
 
 		list<HeaderBlock*>::iterator itCurrHeaderBlock= m_headerBlocks.begin();
 
 		while(itCurrHeaderBlock != m_headerBlocks.end()) {
 			iStatus= (*itCurrHeaderBlock)->serialize(pSZ);
-			if(iStatus==AXIS_FAIL) {
+			if(iStatus==FAIL) {
 				break;
 			}
 			itCurrHeaderBlock++;			
 		}
 
-		if(iStatus==AXIS_FAIL) {
+		if(iStatus==FAIL) {
 			break;
 		}
 		
-		pSZ.Serialize("</", gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix, ":", gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_HEADER], ">", NULL);
+		pSZ<< "</" << gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix << ":" << gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_HEADER] << ">";
 		
 	} while(0);
 
@@ -149,7 +149,7 @@ int SoapHeader::addAttribute(Attribute *pAttribute)
 {
 	m_attributes.push_back(pAttribute);
 
-	return AXIS_SUCCESS;
+	return SUCCESS;
 }
 
 
@@ -162,14 +162,14 @@ int SoapHeader::serializeAttributes(SoapSerializer& pSZ)
 		itCurrAttribute++;		
 	}	
 
-	return AXIS_SUCCESS;	
+	return SUCCESS;	
 }
 
 int SoapHeader::addNamespaceDecl(Attribute *pAttribute)
 {
 	m_namespaceDecls.push_back(pAttribute);
 
-	return AXIS_SUCCESS;
+	return SUCCESS;
 }
 
 int SoapHeader::serializeNamespaceDecl(SoapSerializer& pSZ)
@@ -182,7 +182,7 @@ int SoapHeader::serializeNamespaceDecl(SoapSerializer& pSZ)
 		itCurrNamespaceDecl++;		
 	}	
 
-	return AXIS_SUCCESS;
+	return SUCCESS;
 }
 
 IHeaderBlock* SoapHeader::getHeaderBlock()

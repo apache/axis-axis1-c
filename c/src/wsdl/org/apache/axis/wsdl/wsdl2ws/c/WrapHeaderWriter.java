@@ -64,10 +64,12 @@ package org.apache.axis.wsdl.wsdl2ws.c;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.MethodInfo;
+import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
 public class WrapHeaderWriter extends HeaderFileWriter{
@@ -89,13 +91,36 @@ public class WrapHeaderWriter extends HeaderFileWriter{
 
 	protected void writeClassComment() throws WrapperFault {
 			try{
-				writer.write("/*\n");
-				writer.write(" * This is the C wrapper header file genarated by the WSDL2Ws tool\n");
-				writer.write(" *\n");
-				writer.write(" */\n");
+				writer.write("/////////////////////////////////////////////////////////////////////////////\n");
+				writer.write("// This is the Service Class genarated by the tool WSDL2Ws\n");
+				writer.write("//		"+classname+".h: interface for the "+classname+"class.\n");
+				writer.write("//\n");
+				writer.write("//////////////////////////////////////////////////////////////////////\n");
 			}catch(IOException e){
 				throw new WrapperFault(e);
 			}
+	}
+
+	/* (non-Javadoc)
+	 * @see org.apache.axis.wsdl.wsdl2ws.cpp.HeaderFileWriter#writeConstructors()
+	 */
+	protected void writeConstructors() throws WrapperFault {
+		try{
+		writer.write("public:\n\t"+classname+"();\n");
+		}catch(IOException e){
+			throw new WrapperFault(e);
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see org.apache.axis.wsdl.wsdl2ws.cpp.HeaderFileWriter#writeDistructors()
+	 */
+	protected void writeDistructors() throws WrapperFault {
+		try{
+		writer.write("public:\n\tvirtual ~"+classname+"();\n");
+		}catch(IOException e){
+			throw new WrapperFault(e);
+		}
 	}
 
 	/* (non-Javadoc)
@@ -103,18 +128,20 @@ public class WrapHeaderWriter extends HeaderFileWriter{
 	 */
 	protected void writeMethods() throws WrapperFault {
 		try{
-			writer.write("/*implementation of BasicHandler interface*/\n");
-			writer.write("int AXISCALL Invoke(void*p, IMessageData* mc);\n");
-			writer.write("void AXISCALL OnFault(void*p, IMessageData* mc);\n");
-			writer.write("int AXISCALL Init(void*p);\n");
-			writer.write("int AXISCALL Fini(void*p);\n");
-			writer.write("/*Methods corresponding to the web service methods*/\n");
+			writer.write("public://implementation of WrapperClassHandler interface\n");
+			writer.write("\tint Invoke(IMessageData* mc);\n");
+			writer.write("\tvoid OnFault(IMessageData* pMsg);\n");
+			writer.write("\tint Init();\n");
+			writer.write("\tint Fini();\n");
+			writer.write("private://Methods corresponding to the web service methods\n");
+			writer.write("\tint SetResponseMethod(IMessageData* mc, const AxisChar* name);\n");
 			MethodInfo minfo;
 			for (int i = 0; i < methods.size(); i++) {
 					 minfo = (MethodInfo)methods.get(i);
-					 writer.write("int "+minfo.getMethodname()+CUtils.WRAPPER_METHOD_APPENDER+"(IMessageData* mc);");
+					 writer.write("\tint "+minfo.getMethodname()+CUtils.WRAPPER_METHOD_APPENDER+"(IMessageData* mc);");
 					 writer.write("\n");
-			}
+				 }
+     
 		}catch(IOException e){
 			throw new WrapperFault(e);
 		}
@@ -125,11 +152,22 @@ public class WrapHeaderWriter extends HeaderFileWriter{
 	 */
 	protected void writePreprocssorStatements() throws WrapperFault {
 		try{
+			writer.write("#include <axis/common/WrapperClassHandler.h>\n");
 			writer.write("#include <axis/common/IMessageData.h>\n");
+			writer.write("#include <axis/common/GDefine.h>\n");
 			writer.write("#include <axis/common/AxisWrapperAPI.h>\n\n");
+			//As there is no service header file for C the header files for types should be included here itself
+			Type atype;
+			Iterator types = this.wscontext.getTypemap().getTypes().iterator();
+			while(types.hasNext()){
+				atype = (Type)types.next();
+				writer.write("#include \""+atype.getLanguageSpecificName()+".h\"\n");
+			}
+			writer.write("\n");
 		}catch(IOException e){
 			throw new WrapperFault(e);
 		}
 	}
+	protected String getExtendsPart(){return " : public WrapperClassHandler";}
 	protected void writeAttributes()throws WrapperFault{}
 }

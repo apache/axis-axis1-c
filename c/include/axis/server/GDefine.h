@@ -1,3 +1,5 @@
+/* -*- C++ -*- */
+
 /*
  * The Apache Software License, Version 1.1
  *
@@ -67,19 +69,16 @@
 #define __GDEFINE_INCLUDED__
 /* This file contains all global definitions that are valid across whole Axis C++ project.*/
 
-typedef enum { AXIS_SUCCESS=0, AXIS_FAIL = -1, AXIS_OBJECT_ALREADY_EXISTS=1} AXIS_GLOBAL_ERROR;
+typedef enum { SUCCESS=0, FAIL = -1, OBJECT_ALREADY_EXISTS=1} AXIS_GLOBAL_ERROR;
 typedef enum { APTHTTP=1, APTFTP, APTSMTP, APTOTHER } AXIS_PROTOCOL_TYPE;
 
 #define SOAPACTIONHEADER "SOAPAction"
 
-#define AxisChar char
-#define AxisXMLCh char
-#define XMLCh AxisChar
+#define AxisChar char //Charactor used in Axis
+#define AxisString basic_string<char> //String used in Axis
 
-#ifdef __cplusplus
-#define AxisString basic_string<char>
+#define AxisXMLCh char //Xerces uses 16 bit char always.
 #define AxisXMLString basic_string<AxisXMLCh>
-#endif
 
 #ifdef WIN32
     #define AxisSprintf(X, Y, Z, W) sprintf(X, Z, W)
@@ -91,55 +90,4 @@ extern void Ax_Sleep(int);
 extern void ModuleInitialize();
 extern void ModuleUnInitialize();
 
-#if defined(__GNUC__)
-#define AXISCALL __attribute__((stdcall))
-#else
-#define AXISCALL __stdcall
-#endif
-
-#if defined(__GNUC__)
-# if defined(__GNU_PATCHLEVEL__)
-#  define __GNUC_VERSION__ (__GNUC__ * 10000 \
-                            + __GNUC_MINOR__ * 100 \
-                            + __GNUC_PATCHLEVEL__)
-# else
-#  define __GNUC_VERSION__ (__GNUC__ * 10000 \
-                            + __GNUC_MINOR__ * 100)
-# endif
-#endif
-
-/**
- * Following macro define an API function of Axis C++
- * Format of the AXISAPI macro is as follows
- *		AXISAPI(<METHOD NAME>, <PARAMETER LIST>)
- */
-
-#ifdef __cplusplus
-#define AXISAPI(M, P) AXISCALL M P = 0;
-#define APIHASPARAMS
-#define APINOPARAMS 
-#else 
-#define virtual 
-#if !defined(bool)
-#define bool unsigned char
-#define false 0
-#define true 1
-#endif
-#if !defined(NULL)
-#define NULL 0
-#endif
-#define AXISAPI(M, P) (AXISCALL* M) P;
-#define APIHASPARAMS void*p,
-#define APINOPARAMS void*p
-#endif
-
-#if defined (__GNUC__)
-#if __GNUC_VERSION__ > 30000
-#define AXISDESTRUCTOR void* unused; void AXISAPI(destructor,(APINOPARAMS))
-#else
-#define AXISDESTRUCTOR void* unused; void*unused1; void AXISAPI(destructor,(APINOPARAMS))
-#endif
-#else 
-#define AXISDESTRUCTOR void AXISAPI(destructor,(APINOPARAMS))
-#endif
 #endif /*__GDEFINE_INCLUDED__*/

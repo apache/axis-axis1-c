@@ -94,22 +94,27 @@ int SerializerPool::GetInstance(SoapSerializer** ppSZ)
 	else
 	{
 		*ppSZ = new SoapSerializer();
-	}
-	if (AXIS_SUCCESS != (*ppSZ)->Init())
-	{
-		delete *ppSZ;
-		*ppSZ = NULL;
-		unlock();
-		return AXIS_FAIL;
+		if (SUCCESS != (*ppSZ)->Init())
+		{
+			delete *ppSZ;
+			*ppSZ = NULL;
+			unlock();
+			return FAIL;
+		}
 	}
 	unlock();
-	return AXIS_SUCCESS;
+	return SUCCESS;
 }
 
 int SerializerPool::PutInstance(SoapSerializer* pSZ)
 {
+	if (SUCCESS != pSZ->Init())
+	{
+		delete pSZ;
+		return FAIL;
+	}
 	lock();
 	m_SZList.push_back(pSZ);
 	unlock();
-	return AXIS_SUCCESS;
+	return SUCCESS;
 }

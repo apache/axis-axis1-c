@@ -110,7 +110,7 @@ int BeanClass::GenerateSerializerAndDeSerializerImpl(File &file)
 	{
 		(*it)->GenerateDeserializerImpl(file);
 	}	
-	file << "\treturn AXIS_SUCCESS;" << endl;
+	file << "\treturn SUCCESS;" << endl;
 	file << "}" << endl;
 	file << endl;
 
@@ -131,7 +131,7 @@ int BeanClass::GenerateSerializerAndDeSerializerImpl(File &file)
 		(*it)->GenerateSerializerImpl(file);
 	}	
 	file << "\tpSZ << \"</\" << Axis_TypeName_" << m_Name << " << \">\";" << endl;
-	file << "\treturn AXIS_SUCCESS;" << endl;
+	file << "\treturn SUCCESS;" << endl;
 	file << "}" << endl;
 	file << endl;
 	file << "int Axis_GetSize_" << m_Name << "(" << m_Name << "* p)" << endl;

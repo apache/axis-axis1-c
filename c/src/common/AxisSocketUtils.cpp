@@ -116,5 +116,5 @@ int AxisSocketUtils::printSocketErrorDescription()
 	#else //Linux
 	#endif
 
-	return AXIS_SUCCESS;
+	return SUCCESS;
 }

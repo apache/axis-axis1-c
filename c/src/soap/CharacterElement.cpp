@@ -98,9 +98,9 @@ int CharacterElement::serialize(SoapSerializer& pSZ)
 {
 
 	//the serialization code should come here	
-	pSZ.Serialize(m_sValue.c_str(), NULL);
+	pSZ<< m_sValue.c_str();
 	
-	return AXIS_SUCCESS;
+	return SUCCESS;
 }
 
 /*
@@ -111,7 +111,7 @@ int CharacterElement::serialize(string &sSerialized)
 	//the serialization code should come here
 	sSerialized+= m_sValue;
 	
-	return AXIS_SUCCESS;
+	return SUCCESS;
 }
 */
 
@@ -124,5 +124,5 @@ int CharacterElement::setValue(const AxisChar* sValue)
 {
 	m_sValue= sValue;
 
-	return AXIS_SUCCESS;
+	return SUCCESS;
 }

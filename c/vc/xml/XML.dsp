@@ -41,7 +41,7 @@ RSC=rc.exe
 # PROP Intermediate_Dir "../../bin/win32/xml"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /O2 /I "../../include" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /D "USE_EXPAT_PARSER" /FD /c
+# ADD CPP /nologo /MT /W3 /O2 /I "../../include" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /FD /c
 # SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
@@ -66,6 +66,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
 # ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "../../include" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /GZ /c
+# SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -73,7 +74,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"../../lib/axis\XML_D.lib"
+# ADD LIB32 /nologo /out:"../../lib/win32/axis\XML_D.lib"
 
 !ENDIF 
 
@@ -86,23 +87,7 @@ LIB32=link.exe -lib
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=..\..\src\xml\Attribute.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\xml\Element.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\xml\Event.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\xml\QName.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\xml\StartElement.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -110,27 +95,7 @@ SOURCE=..\..\src\xml\StartElement.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=..\..\include\axis\xml\AnyElement.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\axis\xml\Attribute.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\axis\xml\Element.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\axis\xml\Event.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\axis\xml\QName.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\axis\xml\StartElement.h
 # End Source File
 # End Group
 # End Target

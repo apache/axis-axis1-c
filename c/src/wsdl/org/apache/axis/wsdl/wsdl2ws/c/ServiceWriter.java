@@ -93,11 +93,11 @@ public class ServiceWriter extends CFileWriter{
 
 	protected void writeClassComment() throws WrapperFault {
 		try{
-			writer.write("/*\n");	
-			writer.write(" * This is the Service implementation C file genarated by WSDL2Ws tool.\n");
-			writer.write(" * "+classname+".c\n");
-			writer.write(" *\n");
-			writer.write(" */\n");
+			writer.write("///////////////////////////////////////////////////////////////////////\n");	
+			writer.write("//This is the Service implementation C file genarated by theWSDL2Ws.\n");
+			writer.write("//		"+classname+".c\n");
+			writer.write("//\n");
+			writer.write("//////////////////////////////////////////////////////////////////////\n");
 		}catch(IOException e){
 			throw new WrapperFault(e);
 		}
@@ -109,46 +109,31 @@ public class ServiceWriter extends CFileWriter{
 	protected void writeMethods() throws WrapperFault {
 		MethodInfo minfo;
 		boolean isSimpleType;
-		try{
-		  	writer.write("\n");	
-		  	for(int i = 0; i < methods.size(); i++){
-			  	minfo = (MethodInfo)this.methods.get(i);
-				boolean isAllTreatedAsOutParams = false;
-				ParameterInfo returntype = null;
-				int noOfOutParams = minfo.getOutputParameterTypes().size();
-				if (0==noOfOutParams){
-					returntype = null;
-					writer.write("void ");
-				}
-				else if (1==noOfOutParams){
-					returntype = (ParameterInfo)minfo.getOutputParameterTypes().iterator().next();
-					String outparam = returntype.getLangName();
-					writer.write(WrapperUtils.getClassNameFromParamInfoConsideringArrays(returntype,wscontext)+" ");
-				}
-				else{
-					isAllTreatedAsOutParams = true;
-					writer.write("void ");
-				}
-			  	writer.write(minfo.getMethodname()+"(");
-			  	//write parameter names 
-				Iterator params = minfo.getInputParameterTypes().iterator();
-				if(params.hasNext()){
-					ParameterInfo fparam = (ParameterInfo)params.next();
-					writer.write(WrapperUtils.getClassNameFromParamInfoConsideringArrays(fparam,wscontext)+" Value"+0);
-				}
-				for(int j =1; params.hasNext();j++){
-					ParameterInfo nparam = (ParameterInfo)params.next();
-					writer.write(","+WrapperUtils.getClassNameFromParamInfoConsideringArrays(nparam,wscontext)+" Value"+j);
-				}
-				if (isAllTreatedAsOutParams){
-					params = minfo.getOutputParameterTypes().iterator();
-					for(int j =0; params.hasNext();j++){
-						ParameterInfo nparam = (ParameterInfo)params.next();
-						writer.write(", AXIS_OUT_PARAM"+WrapperUtils.getClassNameFromParamInfoConsideringArrays(nparam,wscontext)+" *OutValue"+j);
-					}					
-				}
-				writer.write(")\n{\n}\n");
-		  	}
+		 try{
+		  writer.write("\n");	
+		  for(int i = 0; i < methods.size(); i++){
+			  minfo = (MethodInfo)this.methods.get(i);
+
+			  if(minfo.getReturnType().getLangName()==null)
+				  writer.write("void ");
+			  else {
+				String outparam = minfo.getReturnType().getLangName();
+				writer.write(WrapperUtils.getClassNameFromParamInfoConsideringArrays(minfo.getReturnType(),wscontext)+" ");
+			  }
+			  writer.write(minfo.getMethodname()+"(");
+			  //write parameter names 
+			//write parameter names 
+			Iterator params = minfo.getParameterTypes().iterator();
+			if(params.hasNext()){
+				ParameterInfo fparam = (ParameterInfo)params.next();
+				writer.write(WrapperUtils.getClassNameFromParamInfoConsideringArrays(fparam,wscontext)+" Value"+0);
+			}
+			for(int j =1; params.hasNext();j++){
+				ParameterInfo nparam = (ParameterInfo)params.next();
+				writer.write(","+WrapperUtils.getClassNameFromParamInfoConsideringArrays(nparam,wscontext)+" Value"+j);
+			}
+			writer.write(")\n{\n}\n");
+		  }
 		}catch (Exception e) {
 			  e.printStackTrace();
 			  throw new WrapperFault(e);
@@ -162,7 +147,7 @@ public class ServiceWriter extends CFileWriter{
 			Type atype;
 			Iterator types = this.wscontext.getTypemap().getTypes().iterator();
 			HashSet typeSet = new HashSet();
-			writer.write("#include <axis/common/AxisUserAPI.h>\n");
+			writer.write("#include <AxisUserAPI.h>\n\n");
 			while(types.hasNext()){
 				atype = (Type)types.next();
 				typeSet.add(atype.getLanguageSpecificName());

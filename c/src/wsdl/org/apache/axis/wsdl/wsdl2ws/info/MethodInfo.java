@@ -62,32 +62,22 @@ package org.apache.axis.wsdl.wsdl2ws.info;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-
-import javax.xml.namespace.QName;
 
 public class MethodInfo {
     private String methodname;
-    private ArrayList inputParameters;
-    private ArrayList outputParameters;
-    private String soapAction;
-    private List inputEncoding;
-    private List outputEncoding;
-    private String inputUse;
-    private String outputUse;
-    private QName inputMessage;
-    private QName outputMessage;
+    private ArrayList parameters;
+    private ParameterInfo returnType;
 
     public MethodInfo() {
+        this.returnType = null;
         this.methodname = null;
-        inputParameters = new ArrayList(101);
-		outputParameters = new ArrayList(101);
+        parameters = new ArrayList(101);
     }
 
-    public MethodInfo(String methodname) {
+    public MethodInfo(ParameterInfo returnType, String methodname) {
+        this.returnType = returnType;
         this.methodname = methodname;
-        inputParameters = new ArrayList(101);
-		outputParameters = new ArrayList(101);
+        parameters = new ArrayList(101);
     }
 
     public String getMethodname() {
@@ -97,27 +87,26 @@ public class MethodInfo {
     public void setMethodname(String methodname) {
         this.methodname = methodname;
     }
+
+    public ParameterInfo getReturnType() {
+        return returnType;
+    }
+
+    public void setReturnType(ParameterInfo returnType) {
+        this.returnType = returnType;
+    }
 /*
     public Enumeration getParameters() {
         return this.parameters.keys();
     }
 */
-    public Collection getInputParameterTypes() {
-        return this.inputParameters;
+    public Collection getParameterTypes() {
+        return this.parameters;
     }
 
-    public void addInputParameter(ParameterInfo type) {
-        this.inputParameters.add(type);
+    public void addParameter(ParameterInfo type) {
+        this.parameters.add(type);
     }
-
-	public Collection getOutputParameterTypes() {
-		return this.outputParameters;
-	}
-
-	public void addOutputParameter(ParameterInfo type) {
-		this.outputParameters.add(type);
-	}
-    
 /*
     public ParameterInfo getParameter(String paramName) {
         Object obj = this.parameters.get(paramName);
@@ -126,102 +115,4 @@ public class MethodInfo {
         return null;
     }
 */
-    /**
-     * @return
-     */
-    public List getInputEncoding() {
-        return inputEncoding;
-    }
-
-    /**
-     * @return
-     */
-    public List getOutputEncoding() {
-        return outputEncoding;
-    }
-
-    /**
-     * @return
-     */
-    public String getSoapAction() {
-        return soapAction;
-    }
-
-    /**
-     * @param string
-     */
-    public void setInputEncoding(List string) {
-        inputEncoding = string;
-    }
-
-    /**
-     * @param string
-     */
-    public void setOutputEncoding(List string) {
-        outputEncoding = string;
-    }
-
-    /**
-     * @param string
-     */
-    public void setSoapAction(String string) {
-        soapAction = string;
-    }
-
-    /**
-     * @return
-     */
-    public String getInputUse() {
-        return inputUse;
-	}
-    /**
-     * @return
-     */
-    public String getOutputUse() {
-        return outputUse;
-    }
-
-    /**
-     * @param string
-     */
-    public void setInputUse(String string) {
-        inputUse = string;
-    }
-
-    /**
-     * @param string
-     */
-    public void setOutputUse(String string) {
-        outputUse = string;
-    }
-	/**
-	 * @return QName
-	 */
-	public QName getInputMessage() {
-		return inputMessage;
-	}
-
-	/**
-	 * @return QName
-	 */
-	public QName getOutputMessage() {
-		return outputMessage;
-	}
-
-	/**
-	 * Sets the inputMessage.
-	 * @param inputMessage The inputMessage to set
-	 */
-	public void setInputMessage(QName inputMessage) {
-		this.inputMessage = inputMessage;
-	}
-
-	/**
-	 * Sets the ouputMessage.
-	 * @param ouputMessage The ouputMessage to set
-	 */
-	public void setOutputMessage(QName ouputMessage) {
-		this.outputMessage = ouputMessage;
-	}
-
 }

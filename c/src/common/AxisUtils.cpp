@@ -67,6 +67,10 @@
 #include <axis/common/AxisUtils.h>
 #include <axis/common/GDefine.h>
 
+#include <xercesc/util/XMLString.hpp>
+
+XERCES_CPP_NAMESPACE_USE
+
 AxisXMLCh AxisUtils::m_Buffer[CONVERT_BUFFER_SIZE]; 
 
 //////////////////////////////////////////////////////////////////////
@@ -110,7 +114,7 @@ int AxisUtils::clearArray(char *arrCh, int iSize)
 		arrCh[iTmp] = '\0';
 	}
 
-	return AXIS_SUCCESS;
+	return SUCCESS;
 }
 
 bool AxisUtils::isCharacterAvailable(const string &sString, const char cCharacter)

@@ -113,7 +113,7 @@ public class ClientStubWriter extends CPPClassWriter{
 		writer.write("\tm_pCall = new Call();\n");
 		//TODO get TransportURI from WrapInfo and check what the transport is and do the following line accordingly
 		writer.write("\tm_pCall->SetProtocol(APTHTTP);\n");
-		//writer.write("\tm_pCall->SetHeader(\"SOAPAction\", \""+wscontext.getSerInfo().getServicename()+"\");\n");
+		writer.write("\tm_pCall->SetHeader(\"SOAPAction\", \""+wscontext.getSerInfo().getServicename()+"\");\n");
 		writer.write("\tm_pCall->SetEndpointURI(\""+wscontext.getWrapInfo().getTargetEndpointURI()+"\");\n");
 		writer.write("}\n\n");
 		}catch(IOException e){
@@ -141,7 +141,7 @@ public class ClientStubWriter extends CPPClassWriter{
 			MethodInfo minfo;
 			for (int i = 0; i < methods.size(); i++) {
 				minfo = (MethodInfo)methods.get(i);
-				this.writeMethodInWrapper(minfo);
+				this.writeMethodInWrapper(minfo.getMethodname(), minfo.getParameterTypes(),minfo.getReturnType());
 				writer.write("\n");
 			}
      
@@ -170,23 +170,7 @@ public class ClientStubWriter extends CPPClassWriter{
 	 * @throws IOException
 	 */
 
-	public void writeMethodInWrapper(MethodInfo minfo) throws WrapperFault,IOException {
-		boolean isAllTreatedAsOutParams = false;
-		ParameterInfo returntype = null;
-		int noOfOutParams = minfo.getOutputParameterTypes().size();
-		if (0==noOfOutParams){
-			returntype = null;
-		}
-		else if (1==noOfOutParams){
-			returntype = (ParameterInfo)minfo.getOutputParameterTypes().iterator().next();
-		}
-		else{
-			isAllTreatedAsOutParams = true;
-			//TODO make all outparams when there are more than one return params
-			throw new WrapperFault("WSDL2Ws does not still handle more than one return parameters");
-		}
-		Collection params = minfo.getInputParameterTypes();
-		String methodName = minfo.getMethodname();
+	public void writeMethodInWrapper(String methodName, Collection params, ParameterInfo returntype) throws WrapperFault,IOException {
 		Type retType = null;
 		boolean returntypeissimple = false;
 		boolean returntypeisarray = false;
@@ -270,15 +254,14 @@ public class ClientStubWriter extends CPPClassWriter{
 				//TODO initialize return parameter appropriately.
 			}
 		}
-		writer.write("\tif (AXIS_SUCCESS != m_pCall->Initialize(RPC_ENCODED)) return ");
+		writer.write("\tif (SUCCESS != m_pCall->Initialize()) return ");
 		if (returntype != null){
 			writer.write((returntypeisarray?"RetArray":returntypeissimple?"Ret":"pReturn")+";\n\t");
 		}
 		else{
 			writer.write(";\n\t");
 		}
-		writer.write("m_pCall->SetTransportProperty(SOAPACTION_HEADER, \""+wscontext.getSerInfo().getServicename()+"#"+methodName+"\");\n");
-		writer.write("\tm_pCall->SetSOAPVersion(SOAP_VER_1_1);\n"); //TODO check which version is it really.
+		writer.write("m_pCall->SetSOAPVersion(SOAP_VER_1_1);\n"); //TODO check which version is it really.
 		writer.write("\tm_pCall->SetOperation(\""+methodName+"\", \""+ wscontext.getWrapInfo().getTargetNameSpaceOfWSDL() +"\");\n");
 		for (int i = 0; i < paramsB.size(); i++) {
 			type = wscontext.getTypemap().getType(((ParameterInfo)paramsB.get(i)).getSchemaName());
@@ -291,104 +274,67 @@ public class ClientStubWriter extends CPPClassWriter{
 				typeisarray = false;
 			}
 			typeissimple = CPPUtils.isSimpleType(paraTypeName);
-			//writer.write("\tm_pCall->AddParameter(");			
+			writer.write("\tm_pCall->AddParameter(");			
 			if(typeisarray){
 				//arrays
-				QName qname = WrapperUtils.getArrayType(type).getName();
+				QName qname = type.getTypNameForAttribName("item");
 				String containedType = null;
 				if (CPPUtils.isSimpleType(qname)){
 					containedType = CPPUtils.getclass4qname(qname);
-					writer.write("\tm_pCall->AddBasicArrayParameter(");
 					writer.write("(Axis_Array*)(&Value"+i+"), "+CPPUtils.getXSDTypeForBasicType(containedType)+", \""+((ParameterInfo)paramsB.get(i)).getParamName()+"\"");					
 				}
 				else{
 					containedType = qname.getLocalPart();
-					writer.write("\tm_pCall->AddCmplxArrayParameter(");
-					//writer.write("(Axis_Array*)(&Value"+i+"), (void*)Axis_Serialize_"+containedType+", (void*)Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", Axis_TypeName_"+containedType+", Axis_URI_"+containedType+", \""+((ParameterInfo)paramsB.get(i)).getParamName()+"\"");
-					writer.write("(Axis_Array*)(&Value"+i+"), (void*)Axis_Serialize_"+containedType+", (void*)Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", Axis_TypeName_"+containedType+", Axis_URI_"+containedType);
+					writer.write("(Axis_Array*)(&Value"+i+"), (void*)Axis_Serialize_"+containedType+", (void*)Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", Axis_TypeName_"+containedType+", Axis_URI_"+containedType+", \""+((ParameterInfo)paramsB.get(i)).getParamName()+"\"");
 				}
 			}else if(typeissimple){
 				//for simple types	
-				writer.write("\tm_pCall->AddParameter(");	
 				writer.write("Value"+i+", \"" + ((ParameterInfo)paramsB.get(i)).getParamName()+"\", "+CPPUtils.getXSDTypeForBasicType(paraTypeName));
 			}else{
 				//for complex types 
-				writer.write("\tm_pCall->AddCmplxParameter(");
-				//writer.write("Value"+i+", (void*)Axis_Serialize_"+paraTypeName+", (void*)Axis_Delete_"+paraTypeName+", \"" + ((ParameterInfo)paramsB.get(i)).getParamName()+"\"");
-				writer.write("Value"+i+", (void*)Axis_Serialize_"+paraTypeName+", (void*)Axis_Delete_"+paraTypeName+", Axis_TypeName_"+outparamType+", Axis_URI_"+outparamType);
+				writer.write("Value"+i+", (void*)Axis_Serialize_"+paraTypeName+", (void*)Axis_Delete_"+paraTypeName+", \"" + ((ParameterInfo)paramsB.get(i)).getParamName()+"\"");
 			}
 			writer.write(");\n");
 		}
 		if (returntype == null){
 			writer.write("\tnStatus = m_pCall->Invoke();\n");
-			//writer.write("\tif (AXIS_SUCCESS != nStatus)\n\t{\n");
-			//writer.write("\t\t//What to do ? . Throw an exception ??? \n\t}\n");
-			writer.write("\tif (AXIS_SUCCESS == nStatus)\n\t{\n");
-			writer.write("\t\tif (AXIS_SUCCESS == m_pCall->CheckMessage(\""+methodName+"Response\", \""+wscontext.getWrapInfo().getTargetNameSpaceOfWSDL()+"\"))\n\t\t{\n");
+			writer.write("\tif (SUCCESS != nStatus)\n\t{\n");
 			writer.write("\t\t//What to do ? . Throw an exception ??? \n\t}\n");
-			writer.write("\t\t}\n");
-			
 			writer.write("\tm_pCall->UnInitialize();\n");
 		}
 		else if (returntypeisarray){
-			QName qname = WrapperUtils.getArrayType(retType).getName();
+			QName qname = retType.getTypNameForAttribName("item");
 			String containedType = null;
 			if (CPPUtils.isSimpleType(qname)){
 				containedType = CPPUtils.getclass4qname(qname);
-				//writer.write("\tm_pCall->SetReturnType((Axis_Array*)(&RetArray), "+CPPUtils.getXSDTypeForBasicType(containedType)+");\n");
-				
-				
-				
-				writer.write("\tnStatus = m_pCall->Invoke();\n");
-				writer.write("\tif (AXIS_SUCCESS == nStatus)\n\t{\n");
-				writer.write("\t\tif (AXIS_SUCCESS == m_pCall->CheckMessage(\""+methodName+"Response\", \""+wscontext.getWrapInfo().getTargetNameSpaceOfWSDL()+"\"))\n\t\t{\n");
-				writer.write("\t\t\tRetArray = ("+containedType+"&)m_pCall->GetBasicArray("+CPPUtils.getXSDTypeForBasicType(containedType)+",0,0);\n\t\t}\n");
-				writer.write("\t}\n");
-				writer.write("\tm_pCall->UnInitialize();\n");
-				writer.write("\treturn RetArray;\n");
-				
-				
+				writer.write("\tm_pCall->SetReturnType((Axis_Array*)(&RetArray), "+CPPUtils.getXSDTypeForBasicType(containedType)+");\n");
 			}
 			else{
 				containedType = qname.getLocalPart();
-				//writer.write("\tm_pCall->SetReturnType((Axis_Array*)(&RetArray), (void*) Axis_DeSerialize_"+containedType);
-				//writer.write(", (void*) Axis_Create_"+containedType+", (void*) Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", Axis_TypeName_"+containedType+", Axis_URI_"+containedType+");\n");
-				writer.write("\tnStatus = m_pCall->Invoke();\n");
-				writer.write("\tif (AXIS_SUCCESS == nStatus)\n\t{\n");
-				writer.write("\t\tif (AXIS_SUCCESS == m_pCall->CheckMessage(\""+methodName+"Response\", \""+wscontext.getWrapInfo().getTargetNameSpaceOfWSDL()+"\"))\n\t\t{\n");
-				writer.write("\t\t\tRetArray = ("+containedType+"&)m_pCall->GetCmplxArray("+"(void*)Axis_DeSerialize_"+containedType+", (void*)Axis_Create_"+containedType+", (void*)Axis_Delete_"+containedType+", (void*)Axis_GetSize_"+containedType+", Axis_TypeName_"+containedType+", Axis_URI_"+containedType+");\n");
-				writer.write("\t\t}\n");
-				writer.write("\tm_pCall->UnInitialize();\n");
-				writer.write("\treturn RetArray;\n");
+				writer.write("\tm_pCall->SetReturnType((Axis_Array*)(&RetArray), (void*) Axis_DeSerialize_"+containedType);
+				writer.write(", (void*) Axis_Create_"+containedType+", (void*) Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", Axis_TypeName_"+containedType+", Axis_URI_"+containedType+");\n");
 			}
-//			writer.write("\tnStatus = m_pCall->Invoke();\n");
-//			writer.write("\tif (AXIS_SUCCESS == nStatus)\n\t{\n");
-//			writer.write("\t\tif (AXIS_SUCCESS == m_pCall->CheckMessage(\""+methodName+"Response\", \""+wscontext.getWrapInfo().getTargetNameSpaceOfWSDL()+"\"))\n\t\t{\n");
-//			writer.write("\t\t\tRetArray = ("+outparamType+"&)m_pCall->GetBasicArray("+CPPUtils.getXSDTypeForBasicType(containedType)+",0,0);\n\t\t}\n");
-//			writer.write("\t}\n");
-//			writer.write("\tm_pCall->UnInitialize();\n");
-//			writer.write("\treturn RetArray;\n");
+			writer.write("\tnStatus = m_pCall->Invoke();\n");
+			writer.write("\tif (SUCCESS != nStatus)\n\t{\n");
+			writer.write("\t\tdelete RetArray.m_Array;\n");
+			writer.write("\t\tRetArray.m_Array = NULL;\n");
+			writer.write("\t\tRetArray.m_Size = 0;\n\t}\n");
+			writer.write("\tm_pCall->UnInitialize();\n");
+			writer.write("\treturn RetArray;\n");
 		}
 		else if(returntypeissimple){
-			//writer.write("\tm_pCall->SetReturnType("+CPPUtils.getXSDTypeForBasicType(outparamType)+");\n");
+			writer.write("\tm_pCall->SetReturnType("+CPPUtils.getXSDTypeForBasicType(outparamType)+");\n");
 			writer.write("\tnStatus = m_pCall->Invoke();\n");
-			//writer.write("\tif (AXIS_SUCCESS == nStatus)\n\t{\n");
-			writer.write("\tif (AXIS_SUCCESS == nStatus)\n\t{\n");
-			writer.write("\t\tif (AXIS_SUCCESS == m_pCall->CheckMessage(\""+methodName+"Response\", \""+wscontext.getWrapInfo().getTargetNameSpaceOfWSDL()+"\"))\n\t\t{\n");
-			//writer.write("\t\t\tRet = m_pCall->GetResult()->"+CPPUtils.getParameterGetValueMethodName(outparamType)+";\n\t\t}\n");
-			writer.write("\t\t\tRet = m_pCall->"+CPPUtils.getParameterGetValueMethodName(CPPUtils.getclass4qname(returntype.getType().getName()))+";\n\t\t}\n");
-			writer.write("\t}\n");
+			writer.write("\tif (SUCCESS == nStatus)\n\t{\n");
+			writer.write("\t\tRet = m_pCall->GetResult()->"+CPPUtils.getParameterGetValueMethodName(outparamType)+";\n\t}\n");
 			writer.write("\tm_pCall->UnInitialize();\n");
 			writer.write("\treturn Ret;\n");
 		}
 		else{
-			//writer.write("\tm_pCall->SetReturnType((void*) Axis_DeSerialize_"+outparamType+", (void*) Axis_Create_"+outparamType+", (void*) Axis_Delete_"+outparamType+", Axis_TypeName_"+outparamType+", Axis_URI_"+outparamType+");\n");
+			writer.write("\tm_pCall->SetReturnType((void*) Axis_DeSerialize_"+outparamType+", (void*) Axis_Create_"+outparamType+", (void*) Axis_Delete_"+outparamType+", Axis_TypeName_"+outparamType+", Axis_URI_"+outparamType+");\n");
 			writer.write("\tnStatus = m_pCall->Invoke();\n");
-			writer.write("\tif (AXIS_SUCCESS == nStatus)\n\t{\n");
-			writer.write("\t\tif (AXIS_SUCCESS == m_pCall->CheckMessage(\""+methodName+"Response\", \""+wscontext.getWrapInfo().getTargetNameSpaceOfWSDL()+"\"))\n\t\t{\n");
-			writer.write("\t\t\tpReturn = ("+outparamType+"*)m_pCall->GetCmplxObject("+"(void*)Axis_DeSerialize_"+outparamType+", (void*) Axis_Create_"+outparamType+", (void*) Axis_Delete_"+outparamType+", Axis_TypeName_"+outparamType+", Axis_URI_"+outparamType+");\n\t\t}\n");
-			writer.write("\t}\n");
-			
+			writer.write("\tif (SUCCESS == nStatus)\n\t{\n");
+			writer.write("\t\tm_pCall->GetResult((void**)&pReturn);\n\t}\n");
 			writer.write("\tm_pCall->UnInitialize();\n");
 			writer.write("\treturn pReturn;\n");						
 		}
@@ -408,9 +354,9 @@ public class ClientStubWriter extends CPPClassWriter{
 				if (type.isArray()) continue;
 				typeName = type.getLanguageSpecificName();
 				writer.write("extern int Axis_DeSerialize_"+typeName+"("+typeName+"* param, IWrapperSoapDeSerializer *pDZ);\n");
-				writer.write("extern void* Axis_Create_"+typeName+"(void* pObj, bool bArray = false, int nSize=0);\n");
+				writer.write("extern void* Axis_Create_"+typeName+"(bool bArray = false, int nSize=0);\n");
 				writer.write("extern void Axis_Delete_"+typeName+"("+typeName+"* param, bool bArray = false, int nSize=0);\n");
-				writer.write("extern int Axis_Serialize_"+typeName+"("+typeName+"* param, IWrapperSoapSerializer* pSZ, bool bArray = false);\n");
+				writer.write("extern int Axis_Serialize_"+typeName+"("+typeName+"* param, IWrapperSoapSerializer& pSZ, bool bArray = false);\n");
 				writer.write("extern int Axis_GetSize_"+typeName+"();\n\n");
 			}
 		} catch (IOException e) {

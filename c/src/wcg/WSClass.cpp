@@ -184,7 +184,7 @@ int WSClass::GenerateClassImpl(File &file)
 		file << "{" << endl;
 		file << "\tIWrapperSoapDeSerializer* pIWSDZ = NULL;" << endl;
 		file << "\tmc->getSoapDeSerializer(&pIWSDZ);" << endl;
-		file << "\tif (!pIWSDZ) return AXIS_FAIL;" << endl;
+		file << "\tif (!pIWSDZ) return FAIL;" << endl;
 		file << "\tconst AxisChar* method = pIWSDZ->GetMethodName();" << endl;
 		bool tab = true;
 		list<Method*>::iterator it;
@@ -195,7 +195,7 @@ int WSClass::GenerateClassImpl(File &file)
 			file << "\t\treturn " << (*it)->GetName() << "(mc);" << endl;
 			file << "\telse ";
 		}
-		file << "return AXIS_FAIL;" << endl;
+		file << "return FAIL;" << endl;
 		file << "}" << endl;
 		file << endl;
 
@@ -221,12 +221,12 @@ int WSClass::GenerateClassImpl(File &file)
 		file << "\tAxisString method = name;" << endl;
 		file << "\tIWrapperSoapSerializer* pIWSSZ = NULL;" << endl;
 		file << "\tmc->getSoapSerializer(&pIWSSZ);" << endl;
-		file << "\tif (!pIWSSZ) return AXIS_FAIL;" << endl;
+		file << "\tif (!pIWSSZ) return FAIL;" << endl;
 		file << "\tISoapMethod* pMethod = pIWSSZ->createSoapMethod();" << endl;
 		file << "\tpMethod->setLocalName(name);" << endl;
 		file << "\tpMethod->setPrefix(pIWSSZ->getNewNamespacePrefix());"<< endl; 
 		file << "\tpMethod->setUri(\"" << g_ClassNamespaces[m_AWSName] << "\");"<< endl; //http://www.opensource.lk will come from wsdd
-		file << "\treturn AXIS_SUCCESS;" << endl; 
+		file << "\treturn SUCCESS;" << endl; 
 		file << "}" << endl;
 		file << endl;
 

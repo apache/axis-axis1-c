@@ -74,11 +74,9 @@
 
 string MessageData::m_sBlankPropertyValue="";
 extern WSDDDeployment* g_pWSDDDeployment;
-IMessageDataFunctions IMessageData::ms_VFtable;
 
 MessageData::MessageData()
 {
-	__vfptr = &ms_VFtable;
 	m_pSZ = NULL;
 	m_pDZ = NULL;
 	m_bPastPivotState= false;
@@ -142,7 +140,7 @@ int MessageData::setPastPivotState(bool bState)
 {
 	m_bPastPivotState = bState;
 
-	return AXIS_SUCCESS;
+	return SUCCESS;
 }
 
 void MessageData::getSoapSerializer(IHandlerSoapSerializer **pIHandlerSoapSerializer)
@@ -150,12 +148,12 @@ void MessageData::getSoapSerializer(IHandlerSoapSerializer **pIHandlerSoapSerial
 	*pIHandlerSoapSerializer = static_cast<IHandlerSoapSerializer*>(m_pSZ);
 }
 
-void MessageData::GetSoapSerializer(IWrapperSoapSerializer **pIWrapperSoapSerializer)
+void MessageData::getSoapSerializer(IWrapperSoapSerializer **pIWrapperSoapSerializer)
 {
 	*pIWrapperSoapSerializer = static_cast<IWrapperSoapSerializer*>(m_pSZ);
 }
 
-void MessageData::GetSoapDeSerializer(IWrapperSoapDeSerializer **pIWrapperSoapDeSerializer)
+void MessageData::getSoapDeSerializer(IWrapperSoapDeSerializer **pIWrapperSoapDeSerializer)
 {
 	*pIWrapperSoapDeSerializer= static_cast<IWrapperSoapDeSerializer*>(m_pDZ);
 }
@@ -168,7 +166,7 @@ void MessageData::getSoapDeSerializer(IHandlerSoapDeSerializer **pIHandlerSoapDe
 int MessageData::setProperty(string &sName, string &sValue)
 {
 	m_Properties[sName.c_str()]= sValue;
-	return AXIS_SUCCESS;
+	return SUCCESS;
 }
 
 /*
