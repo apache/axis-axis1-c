@@ -23,7 +23,8 @@
 
 <br>
 <a href="#sample">Running your sample</a><br>
-<br>
+
+<a href="#handlers">Handlers</a><br><br>
 <b>Before you follow this guide, make sure that you have followed the</b> <a
 href="wininstall-guide.html">
 
@@ -278,6 +279,8 @@ int main()
 
 <br>
 <p>SUCCESS ! If you get the result, you are done.</p>
+
+<p><a name="handlers"></a></p>
 
 <h2>Handlers</h2>
 
