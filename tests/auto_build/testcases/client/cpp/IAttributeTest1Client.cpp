@@ -1,5 +1,5 @@
 /* Tests setLocalName() and getLocalName()in IAttribute class 
-  @Author : James Jose
+   @Author : James Jose
 */
 
 #include "Calculator.hpp"
@@ -22,19 +22,20 @@ int main(int argc, char* argv[])
 		const char *name="Name";
 		IHeaderBlock *phb = ws.createSOAPHeaderBlock("TestHeader","http://ws.apache.org/","ns");
 		IAttribute *attr=phb->createAttribute("NAME","ns","AXIS");
-		attr->setLocalName(name);
+		cout << attr->setLocalName(NULL)<<endl;
+		cout << attr->setLocalName(name)<<endl;
 		BasicNode *bn=phb->createImmediateChild(ELEMENT_NODE,"Project","","","");
 		IAttribute *attr1=bn->createAttribute("TYPE","Open Source");
 		attr1->setLocalName("Type");
-		cout << endl << "Header Attribute Name = " << attr->getLocalName();
-		cout << endl << "Child Node Attribute Name = " << attr1->getLocalName();
+		cout << "Header Attribute Name = " << attr->getLocalName()<< endl ;
+		cout << "Child Node Attribute Name = " << attr1->getLocalName() << endl;
 		op = "add";
 		i1 = 2;
 		i2 = 3;
 		if (strcmp(op, "add") == 0)
 		{
 			iResult = ws.add(i1, i2);
-			cout << endl << iResult << endl;
+			cout << iResult << endl;
 		}
 	}
 	catch(AxisException& e)
