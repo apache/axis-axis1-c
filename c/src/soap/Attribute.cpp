@@ -88,6 +88,12 @@ Attribute::Attribute(const Attribute& rCopy)
     this->m_value= rCopy.m_value;
 }
 
+Attribute* Attribute::clone()
+{
+    return new Attribute(*this);
+}
+
+
 /*
  *
  */
