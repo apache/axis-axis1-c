@@ -81,14 +81,14 @@ using namespace std;
 class ComplexElement : public BasicNode
 {
 public:
-	int setValue(string& sValue);
-	string& getValue();
+	int setValue(const AxisChar* sValue);
+	const AxisString& getValue();
 	NODE_TYPE getNodeType();
-	int setURI(const string& sURI);
+	int setURI(const AxisChar* sURI);
 	int serialize(SoapSerializer& pSZ);
 	int addChild(BasicNode* pBasicNode);
-	int setLocalName(const string& sLocalName);
-	int setPrefix(const string& sPrefix);
+	int setLocalName(const AxisChar* sLocalName);
+	int setPrefix(const AxisChar* sPrefix);
 	ComplexElement();
 	virtual ~ComplexElement();
 
@@ -97,9 +97,9 @@ private:
 	//int serializeChildren(string& sSerialized);
 	bool isSerializable();
 	list<BasicNode*> m_children;
-	string m_sPrefix;
-	string m_sLocalName;
-	string m_sURI;
+	AxisString m_sPrefix;
+	AxisString m_sLocalName;
+	AxisString m_sURI;
 };
 
 #endif // !defined(AFX_COMPLEXELEMENT_H__558543B0_B076_404C_A7FE_830E13C1785A__INCLUDED_)

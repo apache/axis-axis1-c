@@ -83,27 +83,27 @@ Attribute::~Attribute()
 
 }
 
-void Attribute::setLocalName(const string &localname)
+void Attribute::setLocalName(const AxisChar* localname)
 {
 	m_localname= localname;
 }
 
-void Attribute::setPrefix(const string &prefix)
+void Attribute::setPrefix(const AxisChar* prefix)
 {
 	m_prefix= prefix;
 }
 
-void Attribute::setUri(const string &uri)
+void Attribute::setUri(const AxisChar* uri)
 {
 	m_uri= uri;
 }
 
-void Attribute::setValue(const string &value)
+void Attribute::setValue(const AxisChar* value)
 {
 	m_value= value;
 }
 
-Attribute::Attribute(const string &localname, const string &prefix, const string &uri, const string &value)
+Attribute::Attribute(const AxisChar* localname, const AxisChar* prefix, const AxisChar* uri, const AxisChar* value)
 {
 	m_localname= localname;
 	m_prefix= prefix;

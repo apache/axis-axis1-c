@@ -127,6 +127,10 @@ SOURCE=..\..\src\soap\SoapHeader.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\soap\SoapKeywordMapping.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\soap\SoapMethod.cpp
 # End Source File
 # Begin Source File
@@ -192,6 +196,10 @@ SOURCE=..\..\src\soap\SoapFaults.h
 # Begin Source File
 
 SOURCE=..\..\src\soap\SoapHeader.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\soap\SoapKeywordMapping.h
 # End Source File
 # Begin Source File
 

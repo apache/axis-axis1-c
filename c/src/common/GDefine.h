@@ -71,8 +71,11 @@ typedef enum { SUCCESS=0, FAIL = -1, OBJECT_ALREADY_EXISTS=1} AXIS_GLOBAL_ERROR;
 typedef enum { APTHTTP=1, APTFTP, APTSMTP, APTOTHER } AXIS_PROTOCOL_TYPE;
 
 #define SOAPACTIONHEADER "SOAPAction"
+#define AxisChar wchar_t //Wide charactor used in Axis
+#define AxisString wstring //Wide string used in Axis 
 
 extern void Ax_Sleep(int);
 extern void ModuleInitialize();
+extern void ModuleUnInitialize();
 
 #endif //__GDEFINE_INCLUDED__

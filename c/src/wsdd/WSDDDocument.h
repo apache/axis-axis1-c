@@ -86,41 +86,41 @@ enum WSDDLevels {WSDD_UNKNOWN=1, WSDD_DEPLOYMENT, WSDD_UNDEPLOYMENT, WSDD_GLOBCO
 XERCES_CPP_NAMESPACE_USE;
 
 //wsdd file related defines
-#define METHODNAME_SEPARATOR " "
-#define ROLENAME_SEPARATOR ","
+#define METHODNAME_SEPARATOR L" "
+#define ROLENAME_SEPARATOR L","
 
 //keywords used in the wsdd file
-const char kw_depl[] = "deployment";
-const char kw_srv[] = "service";
-const char kw_glconf[] = "globalConfiguration";
-const char kw_param[] = "parameter"; 
-const char kw_hdl[] = "handler";
-const char kw_chain[] = "chain";
-const char kw_ns[] = "namespace";
-const char kw_prv[] = "provider";
-const char kw_cn[] = "className"; //must be changed to libname or so
-const char kw_am[] = "allowedMethods";
-const char kw_ar[] = "allowedRoles";
-const char kw_rqf[] = "requestFlow";
-const char kw_rsf[] = "responseFlow";
-const char kw_tr[] = "transport";
-const char kw_name[] = "name";
-const char kw_value[] = "value";
-const char kw_type[] = "type"; //what about this ? change to libname ?
-const char kw_scope[] = "scope";
-const char kw_http[] = "http";
-const char kw_smtp[] = "smtp";
+const AxisChar kw_depl[] = L"deployment";
+const AxisChar kw_srv[] = L"service";
+const AxisChar kw_glconf[] = L"globalConfiguration";
+const AxisChar kw_param[] = L"parameter"; 
+const AxisChar kw_hdl[] = L"handler";
+const AxisChar kw_chain[] = L"chain";
+const AxisChar kw_ns[] = L"namespace";
+const AxisChar kw_prv[] = L"provider";
+const AxisChar kw_cn[] = L"className"; //must be changed to libname or so
+const AxisChar kw_am[] = L"allowedMethods";
+const AxisChar kw_ar[] = L"allowedRoles";
+const AxisChar kw_rqf[] = L"requestFlow";
+const AxisChar kw_rsf[] = L"responseFlow";
+const AxisChar kw_tr[] = L"transport";
+const AxisChar kw_name[] = L"name";
+const AxisChar kw_value[] = L"value";
+const AxisChar kw_type[] = L"type"; //what about this ? change to libname ?
+const AxisChar kw_scope[] = L"scope";
+const AxisChar kw_http[] = L"http";
+const AxisChar kw_smtp[] = L"smtp";
 
 class WSDDDocument:public DefaultHandler
 {
 private:
 	int m_nLibId;
-	map<string, int>* m_pLibNameIdMap;
+	map<AxisString, int>* m_pLibNameIdMap;
 	WSDDDeployment* m_pDeployment; 
 	WSDDLevels m_lev0;
 	WSDDLevels m_lev1; //gets values WSDD_REQFLOW or WSDD_RESFLOW
 	WSDDLevels m_lev2; //gets values WSDD_HANDLER or WSDD_CHAIN
-	map<string, string> m_NsStack;
+	map<AxisString, AxisString> m_NsStack;
 	WSDDService* m_pService; //Place holder for currently created Service object
 	WSDDHandler* m_pHandler; //Place holder for currently created Handler object
 	//map<string, string> m_GlobalConfParams;
@@ -129,8 +129,8 @@ private:
 private:
 	void ProcessAttributes(WSDDLevels ElementType, const Attributes &attrs);
 	void GetParameters(WSDDLevels ElementType, const Attributes &attrs);
-	void AddAllowedRolesToService(string& value);
-	void AddAllowedMethodsToService(string& value);
+	void AddAllowedRolesToService(AxisString& value);
+	void AddAllowedMethodsToService(AxisString& value);
 
 public:
 	WSDDDocument();

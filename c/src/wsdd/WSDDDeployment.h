@@ -87,8 +87,8 @@ class WSDDDeployment
 public:
 	int LoadWSDD(string& sWSDD);
 	int UpdateWSDD(string& sWSDDNew);
-	const string& GetLibName(int nLibId);
-	const WSDDService* GetService(const string& sServiceName);
+	const AxisString& GetLibName(int nLibId);
+	const WSDDService* GetService(const AxisString& sServiceName);
 	const WSDDHandlerList* GetGlobalRequestFlowHandlers();
 	const WSDDHandlerList* GetGlobalResponseFlowHandlers();
 	const WSDDHandlerList* GetTransportRequestFlowHandlers(AXIS_PROTOCOL_TYPE protocol);
@@ -97,7 +97,7 @@ public:
 	WSDDDeployment();
 	virtual ~WSDDDeployment();
 private: //methods that only be used by WSDDDepolyment.
-	void SetLibIdMap(map<string, int>* pLibNameIdMap);
+	void SetLibIdMap(map<AxisString, int>* pLibNameIdMap);
 	int AddService(WSDDService* pService);
 	int AddHandler(bool bGlobal, bool bRequestFlow, WSDDHandler* pHandler, AXIS_PROTOCOL_TYPE protocol=APTHTTP);
 	int RemoveService(WSDDService* pService);
@@ -107,8 +107,8 @@ private:
 	WSDDHandlerList* m_GlobalRequestHandlers;
 	WSDDHandlerList* m_GlobalResponseHandlers;
 	WSDDTransport* m_pTransportHandlers;
-	map<string, int>* m_pLibNameIdMap;
-	string m_sAux;
+	map<AxisString, int>* m_pLibNameIdMap;
+	AxisString m_sAux;
 };
 
 #endif // !defined(AFX_WSDDDEPLOYMENT_H__2B3E0205_06F3_47C1_8D9C_479CBFB8ACC2__INCLUDED_)

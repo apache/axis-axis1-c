@@ -111,9 +111,9 @@ private:
 	bool isSerializable();	
 	int serializeOutputParam(SoapSerializer& pSZ);
 	//int serializeOutputParam(string&);
-	string m_strPrefix;
-	string m_strLocalname;
-	string m_strUri;
+	AxisString m_strPrefix;
+	AxisString m_strLocalname;
+	AxisString m_strUri;
 	list<Param*> m_inputParams;
 	Param* m_pOutputParam;
 	//string m_strMethodSerialized;
@@ -121,14 +121,14 @@ private:
 
 public:			
 	int addAttribute(Attribute* pAttribute);
-	string& getMethodName();	
+	const AxisString& getMethodName();	
 	int serialize(SoapSerializer& pSZ);
 	//int serialize(string&);
 	void setOutputParam(Param *param);
 	void addInputParam(Param* param);
-	void setUri(const string &uri);
-	void setLocalName(const string &localname);
-	void setPrefix(const string &prefix);
+	void setUri(const AxisString &uri);
+	void setLocalName(const AxisString &localname);
+	void setPrefix(const AxisString &prefix);
 	SoapMethod();
 	virtual ~SoapMethod();	
 };

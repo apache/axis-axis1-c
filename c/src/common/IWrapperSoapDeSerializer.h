@@ -79,7 +79,7 @@ class IParam;
 class IWrapperSoapDeSerializer : public virtual ISoapDeSerializer
 {
 public:
-	virtual string& GetMethodName()=0;
+	virtual const AxisString& GetMethodName()=0;
 	virtual IParam* GetParam()=0;
 	virtual int Deserialize(IParam* pIParam, int bHref)=0;
 	virtual ~IWrapperSoapDeSerializer() {};

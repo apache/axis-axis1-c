@@ -66,7 +66,6 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "WSDDService.h"
-#include <iostream>
 #include "../common/Debug.h"
 
 //////////////////////////////////////////////////////////////////////
@@ -103,29 +102,29 @@ WSDDService::~WSDDService()
 	}
 }
 
-void WSDDService::SetServiceName(const string& sServiceName)
+void WSDDService::SetServiceName(const AxisString& sServiceName)
 {
 	m_sName = sServiceName;
 }
 
-void WSDDService::SetProvider(const string& sProvider)
+void WSDDService::SetProvider(const AxisString& sProvider)
 {
 	m_sProvider = sProvider;
 }
 
-const string& WSDDService::GetServiceName()
+const AxisString& WSDDService::GetServiceName()
 {
 	return m_sName;
 }
 
-void WSDDService::AddAllowedMethod(const string& sMethodName)
+void WSDDService::AddAllowedMethod(const AxisString& sMethodName)
 {
 	m_AllowedMethods.push_back(sMethodName);
 }
 
-bool WSDDService::IsAllowedMethod(const string& sServiceName) const
+bool WSDDService::IsAllowedMethod(const AxisString& sServiceName) const
 {
-	list<string>::const_iterator iter;
+	list<AxisString>::const_iterator iter;
 
 	for(iter = m_AllowedMethods.begin();iter != m_AllowedMethods.end();iter++)
 	{
@@ -147,12 +146,12 @@ const WSDDHandlerList* WSDDService::GetResponseFlowHandlers() const
 	return m_ResponseHandlers;
 }
 
-void WSDDService::AddAllowedRole(const string& sRole)
+void WSDDService::AddAllowedRole(const AxisString& sRole)
 {
 	m_AllowedRoles.push_back(sRole);
 }
 
-const list<string>& WSDDService::GetAllowedRoles()
+const list<AxisString>& WSDDService::GetAllowedRoles()
 {
 	return m_AllowedRoles;
 }

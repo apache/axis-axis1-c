@@ -80,10 +80,10 @@ public:
 	virtual BasicNode* createChild(NODE_TYPE eNODE_TYPE)=0;
 	virtual BasicNode* getFirstChild()=0;
 	virtual int addChild(BasicNode* pBasicNode)=0;
-	virtual void setLocalName(const string &localname)=0;
-	virtual void setUri(const string &uri)=0;
-	virtual void setPrefix(const string &prefix)=0;
-	virtual void setValue(const string &value)=0;	
+	virtual void setLocalName(const AxisChar* localname)=0;
+	virtual void setUri(const AxisChar* uri)=0;
+	virtual void setPrefix(const AxisChar* prefix)=0;
+	virtual void setValue(const AxisChar* value)=0;	
 	virtual ~IHeaderBlock() {};
 };
 

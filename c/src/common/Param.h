@@ -88,29 +88,29 @@ class Param : public IParam
 	friend class XMLStreamHandler;
 public:
 	Param(){ m_Type = USER_TYPE;}; //if there is no attribute that says the type
-	Param(Param& param);
-	Param(string &str, XSDTYPE type=XSD_STRING);
+	Param(const Param& param);
+	Param(const AxisChar* str, XSDTYPE type = XSD_STRING);
 	Param(int nValue);
 	Param(float fValue);
 	Param(double dValue);
 	virtual ~Param();
-	void operator=(Param &param);
+	void operator=(const Param &param);
 
 private:
 	uParamValue m_Value;
-	string m_sValue; //value in case of XSD_STRING, XSD_HEXBINARY and XSD_BASE64BINARY
-	string m_sName; //Name of the parameter
+	AxisString m_sValue; //value in case of XSD_STRING, XSD_HEXBINARY and XSD_BASE64BINARY
+	AxisString m_sName; //Name of the parameter
 	XSDTYPE m_Type; //Type of the parameter
 
 //	static string m_sSZ; //Used for serialization
 	static char m_Buf[64]; //Used for conversions using sprintf
 
 private:
-	string m_strPrefix; //needed in serialization only
-	string m_strUri; //needed in serialization only
+	AxisString m_strPrefix; //needed in serialization only
+	AxisString m_strUri; //needed in serialization only
 
 public: //Conversion functions
-	int SetValue(string& sValue);
+	int SetValue(const AxisChar* sValue);
 	int SetValue(XSDTYPE nType, uParamValue Value);
 	XSDTYPE GetType() const;	
 	int serialize(IWrapperSoapSerializer& pSZ);
@@ -118,15 +118,15 @@ public: //Conversion functions
 	//Following functions are used by wrapper class methods making sure of the valid type.
 	int GetInt();
 	float GetFloat();
-	const string& GetString();
-	const string& GetHexString();
-	const string& GetBase64String();
-	void setPrefix(const string &prefix);
-	void setUri(const string &uri);
+	const AxisString& GetString();
+	const AxisString& GetHexString();
+	const AxisString& GetBase64String();
+	void setPrefix(const AxisChar* prefix);
+	void setUri(const AxisChar* uri);
 	int GetArraySize();
 	int SetArrayElements(void* pElements);
 	int SetUserType(IAccessBean* pObject);
-	void SetName(char* sName);
+	void SetName(const AxisChar* sName);
 private:
 	BasicTypeSerializer m_BTSZ;
 };

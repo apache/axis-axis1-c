@@ -73,18 +73,18 @@
 
 WSDDHandler::WSDDHandler()
 {
-  m_nLibId = 0;
-  m_nScope = AH_REQUEST; //default
-  m_sAux = "";
-  m_Params = NULL;
+	m_nLibId = 0;
+	m_nScope = AH_REQUEST; //default
+	m_sAux = L"";
+	m_Params = NULL;
 }
 
 WSDDHandler::~WSDDHandler()
 {
-  if (m_Params) delete m_Params;
+	if (m_Params) delete m_Params;
 }
 
-void WSDDHandler::SetLibName(const string& sLibName)
+void WSDDHandler::SetLibName(const AxisString& sLibName)
 {
 	m_sLibName = sLibName;
 }
@@ -99,7 +99,7 @@ int WSDDHandler::GetLibId() const
 	return m_nLibId;
 }
 
-const string& WSDDHandler::GetLibName() const
+const AxisString& WSDDHandler::GetLibName() const
 {
 	return m_sLibName;
 }
@@ -109,7 +109,7 @@ int WSDDHandler::GetScope() const
 	return m_nScope;
 }
 
-void WSDDHandler::SetScope(const string& sScope)
+void WSDDHandler::SetScope(const AxisString& sScope)
 {
 	if (sScope == kw_scope_app)
 		m_nScope = AH_APPLICATION;	
@@ -119,21 +119,21 @@ void WSDDHandler::SetScope(const string& sScope)
 		m_nScope = AH_REQUEST;	
 }
 
-const string& WSDDHandler::GetParameter(const string& sKey) const
+const AxisString& WSDDHandler::GetParameter(const AxisString& sKey) const
 {
 	if (m_Params->find(sKey) != m_Params->end())
 		return (*m_Params)[sKey];
 	return m_sAux;
 }
 
-void WSDDHandler::AddParameter(const string& sKey, const string& sValue)
+void WSDDHandler::AddParameter(const AxisString& sKey, const AxisString& sValue)
 {
-	if (!m_Params) m_Params = new map<string, string>;
+	if (!m_Params) m_Params = new map<AxisString, AxisString>;
 	(*m_Params)[sKey] = sValue; 
 }
 
-const map<string, string>* WSDDHandler::GetParameterList() const
+const map<AxisString, AxisString>* WSDDHandler::GetParameterList() const
 {
-  return m_Params;
+	return m_Params;
 }
 

@@ -82,27 +82,27 @@ using namespace std;
 class WSDDService : public WSDDHandler 
 {
 public:
-	void SetServiceName(const string& sServiceName);
-	void SetProvider(const string& sProvider);
-	const string& GetServiceName();
-	bool IsAllowedMethod(const string& sMethodName) const;
-	void AddAllowedMethod(const string& sMethodName);
+	void SetServiceName(const AxisString& sServiceName);
+	void SetProvider(const AxisString& sProvider);
+	const AxisString& GetServiceName();
+	bool IsAllowedMethod(const AxisString& sMethodName) const;
+	void AddAllowedMethod(const AxisString& sMethodName);
 	const WSDDHandlerList* GetResponseFlowHandlers() const;
 	void AddHandler(bool bRequestFlow, WSDDHandler* pHandler);
 	const WSDDHandlerList* GetRequestFlowHandlers() const;
-	void AddAllowedRole(const string& sRole);
-	const list<string>& GetAllowedRoles();
+	void AddAllowedRole(const AxisString& sRole);
+	const list<AxisString>& GetAllowedRoles();
 	WSDDService();
 	virtual ~WSDDService();
 
 private:
-	string m_sProvider;
-	list<string> m_AllowedMethods;
+	AxisString m_sProvider;
+	list<AxisString> m_AllowedMethods;
 	WSDDHandlerList* m_RequestHandlers;
 	WSDDHandlerList* m_ResponseHandlers;
-	list<string> m_AllowedRoles;
+	list<AxisString> m_AllowedRoles;
 };
 
-typedef map<string, WSDDService*> WSDDServiceMap;
+typedef map<AxisString, WSDDService*> WSDDServiceMap;
 
 #endif // !defined(AFX_WSDDSERVICE_H__F5F6BB58_0733_445B_97E3_B7488446AC47__INCLUDED_)

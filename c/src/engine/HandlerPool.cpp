@@ -75,10 +75,10 @@
 //////////////////////////////////////////////////////////////////////
 #include "../common/Debug.h"
 
-extern AppScopeHandlerPool g_AppScopeHandlerPool;
-extern RequestScopeHandlerPool g_RequestScopeHandlerPool;
-extern SessionScopeHandlerPool g_SessionScopeHandlerPool;
-extern WSDDDeployment g_WSDDDeployment;
+extern AppScopeHandlerPool* g_pAppScopeHandlerPool;
+extern RequestScopeHandlerPool* g_pRequestScopeHandlerPool;
+extern SessionScopeHandlerPool* g_pSessionScopeHandlerPool;
+extern WSDDDeployment* g_pWSDDDeployment;
 
 HandlerPool::HandlerPool()
 {
@@ -101,7 +101,7 @@ int HandlerPool::GetHandler(BasicHandler** ppHandler, string& sSessionId, int nS
 	{
 	case AH_APPLICATION:
 		do {
-			if ((Status = g_AppScopeHandlerPool.GetInstance(ppHandler, nLibId)) == SUCCESS)
+			if ((Status = g_pAppScopeHandlerPool->GetInstance(ppHandler, nLibId)) == SUCCESS)
 			{
 				return Status;
 			}
@@ -116,9 +116,9 @@ int HandlerPool::GetHandler(BasicHandler** ppHandler, string& sSessionId, int nS
 		} while (Status == HANDLER_BEING_USED);
 		break;
 	case AH_SESSION:
-		return g_SessionScopeHandlerPool.GetInstance(sSessionId, ppHandler, nLibId);
+		return g_pSessionScopeHandlerPool->GetInstance(sSessionId, ppHandler, nLibId);
 	case AH_REQUEST:
-		return g_RequestScopeHandlerPool.GetInstance(ppHandler, nLibId);
+		return g_pRequestScopeHandlerPool->GetInstance(ppHandler, nLibId);
 	}
 	return Status;
 }
@@ -128,13 +128,13 @@ int HandlerPool::PoolHandler(string& sSessionId, BasicHandler* pHandler, int nSc
 	switch (nScope)
 	{
 	case AH_APPLICATION:
-		g_AppScopeHandlerPool.PutInstance(pHandler, nLibId);
+		g_pAppScopeHandlerPool->PutInstance(pHandler, nLibId);
 		break;
 	case AH_SESSION:
-		g_SessionScopeHandlerPool.PutInstance(sSessionId, pHandler, nLibId);
+		g_pSessionScopeHandlerPool->PutInstance(sSessionId, pHandler, nLibId);
 		break;
 	case AH_REQUEST:
-		g_RequestScopeHandlerPool.PutInstance(pHandler, nLibId);
+		g_pRequestScopeHandlerPool->PutInstance(pHandler, nLibId);
 		break;
 	}
 	return SUCCESS;
@@ -142,7 +142,7 @@ int HandlerPool::PoolHandler(string& sSessionId, BasicHandler* pHandler, int nSc
 
 int HandlerPool::GetGlobalRequestFlowHandlerChain(HandlerChain** ppChain, string& sSessionId)
 {
-	const WSDDHandlerList* pHandlerList = g_WSDDDeployment.GetGlobalRequestFlowHandlers();
+	const WSDDHandlerList* pHandlerList = g_pWSDDDeployment->GetGlobalRequestFlowHandlers();
 	if (pHandlerList)
 	{
 		return GetHandlerChain(sSessionId, ppChain, pHandlerList);
@@ -156,7 +156,7 @@ int HandlerPool::GetGlobalRequestFlowHandlerChain(HandlerChain** ppChain, string
 
 int HandlerPool::GetGlobalResponseFlowHandlerChain(HandlerChain** ppChain, string& sSessionId)
 {
-	const WSDDHandlerList* pHandlerList = g_WSDDDeployment.GetGlobalResponseFlowHandlers();
+	const WSDDHandlerList* pHandlerList = g_pWSDDDeployment->GetGlobalResponseFlowHandlers();
 	if (pHandlerList)
 	{
 		return GetHandlerChain(sSessionId, ppChain, pHandlerList);
@@ -170,7 +170,7 @@ int HandlerPool::GetGlobalResponseFlowHandlerChain(HandlerChain** ppChain, strin
 
 int HandlerPool::GetTransportRequestFlowHandlerChain(HandlerChain** ppChain, string& sSessionId, AXIS_PROTOCOL_TYPE Protocol)
 {
-	const WSDDHandlerList* pHandlerList = g_WSDDDeployment.GetTransportRequestFlowHandlers(Protocol);
+	const WSDDHandlerList* pHandlerList = g_pWSDDDeployment->GetTransportRequestFlowHandlers(Protocol);
 	if (pHandlerList)
 	{
 		return GetHandlerChain(sSessionId, ppChain, pHandlerList);
@@ -184,7 +184,7 @@ int HandlerPool::GetTransportRequestFlowHandlerChain(HandlerChain** ppChain, str
 
 int HandlerPool::GetTransportResponseFlowHandlerChain(HandlerChain** ppChain, string& sSessionId, AXIS_PROTOCOL_TYPE Protocol)
 {
-	const WSDDHandlerList* pHandlerList = g_WSDDDeployment.GetTransportResponseFlowHandlers(Protocol);
+	const WSDDHandlerList* pHandlerList = g_pWSDDDeployment->GetTransportResponseFlowHandlers(Protocol);
 	if (pHandlerList)
 	{
 		return GetHandlerChain(sSessionId, ppChain, pHandlerList);

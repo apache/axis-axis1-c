@@ -99,6 +99,10 @@ SOURCE=..\..\src\common\AxisException.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\AxisUtils.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\BasicTypeSerializer.cpp
 # End Source File
 # Begin Source File
@@ -139,7 +143,7 @@ SOURCE=..\..\src\common\AxisException.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\common\AxisLog.h
+SOURCE=..\..\src\common\AxisUtils.h
 # End Source File
 # Begin Source File
 

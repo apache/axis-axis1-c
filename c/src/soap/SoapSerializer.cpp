@@ -74,6 +74,7 @@
 #include "../common/Packet.h"
 #include "../common/ArrayBean.h"
 #include "../common/BasicTypeSerializer.h"
+#include "SoapKeywordMapping.h"
 
 extern "C" int sendSoapResponse(char *cSerializedStream);
 
@@ -231,9 +232,9 @@ int SoapSerializer::setSoapVersion(SOAP_VERSION nSoapVersion)
 	pNS = new Attribute("xsi","xmlns","","http://www.w3.org/2001/XMLSchema-instance");
 	m_pSoapEnvelope->addNamespaceDecl(pNS);
 */
-	m_pSoapEnvelope->addStandardNamespaceDecl(g_sObjSoapEnvVersionsStruct[nSoapVersion].pEnv);
-	m_pSoapEnvelope->addStandardNamespaceDecl(g_sObjSoapEnvVersionsStruct[nSoapVersion].pXsd);
-	m_pSoapEnvelope->addStandardNamespaceDecl(g_sObjSoapEnvVersionsStruct[nSoapVersion].pXsi);
+	m_pSoapEnvelope->addStandardNamespaceDecl(SoapKeywordMapping::Map(nSoapVersion).pEnv);
+	m_pSoapEnvelope->addStandardNamespaceDecl(SoapKeywordMapping::Map(nSoapVersion).pXsd);
+	m_pSoapEnvelope->addStandardNamespaceDecl(SoapKeywordMapping::Map(nSoapVersion).pXsi);
 	return SUCCESS;
 }
 
@@ -256,6 +257,19 @@ IWrapperSoapSerializer& SoapSerializer::operator <<(const char *cSerialized)
 	return *this;
 	//call the ruputs to send this soap response
 	//ruputs(m_cSerializedBuffer);
+}
+
+IWrapperSoapSerializer& SoapSerializer::operator<<(const AxisChar* cSerialized)
+{
+	flushSerializedBuffer();
+	//following is done for the time being
+	int slen = wcslen(cSerialized);
+	for (m_iCurrentSerBufferSize=0; m_iCurrentSerBufferSize < slen; m_iCurrentSerBufferSize++)
+	{
+		m_cSerializedBuffer[m_iCurrentSerBufferSize] = (char) cSerialized[m_iCurrentSerBufferSize];
+	}
+	m_cSerializedBuffer[m_iCurrentSerBufferSize] = '\0';
+	return *this;
 }
 
 int SoapSerializer::flushSerializedBuffer()
@@ -282,17 +296,17 @@ IArrayBean* SoapSerializer::makeArrayBean(XSDTYPE nType, void* pArray)
 	return pAb;
 }
 
-string& SoapSerializer::SerializeBasicType(const string& sName, string& sValue, XSDTYPE type)
+const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, const AxisChar* sValue, XSDTYPE type)
 {
 	return m_BTSZ.serialize(sName, sValue, type);
 }
 
-string& SoapSerializer::SerializeBasicType(const string& sName, float fValue)
+const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, float fValue)
 {
 	return m_BTSZ.serialize(sName, fValue);	
 }
 
-string& SoapSerializer::SerializeBasicType(const string& sName, int nValue)
+const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, int nValue)
 {
 	return m_BTSZ.serialize(sName, nValue);		
 }
