@@ -31,7 +31,7 @@
 
 #ifdef AXIS_CLIENT_LIB
 #include <axis/client/Call.h>
-#include <axis/server/AxisEngine.h>
+#include "AxisEngine.h"
 #else
 #include "server/ServerAxisEngine.h"
 #endif
@@ -55,9 +55,9 @@
 #include "DeserializerPool.h"
 #include "../wsdd/WSDDDeployment.h"
 #include "../common/AxisUtils.h"
-#include <axis/server/AxisConfig.h>
+#include "../common/AxisConfig.h"
 #include "../wsdd/WSDDKeywords.h"
-#include <axis/server/AxisTrace.h>
+#include "../common/AxisTrace.h"
 #include "SOAPTransportFactory.h"
 #include "XMLParserFactory.h"
 

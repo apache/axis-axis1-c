@@ -19,10 +19,7 @@
 #define _HEADERBLOCK_H____OF_AXIS_INCLUDED_
 
 class BasicNode;
-#include "IHeaderBlock.h"
-#include <string>
-
-using namespace std;
+#include <axis/server/IHeaderBlock.h>
 
 /*
  *  @class BasicNode

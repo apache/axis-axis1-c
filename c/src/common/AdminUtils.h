@@ -25,7 +25,7 @@
 #if !defined(_ADMINUTILS_H____OF_AXIS_INCLUDED_)
 #define _ADMINUTILS_H____OF_AXIS_INCLUDED_
 
-#include <axis/server/IAdminUtils.h>
+#include "IAdminUtils.h"
 
 /**
  * @class AdminUtils

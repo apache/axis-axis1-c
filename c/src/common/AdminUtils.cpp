@@ -15,7 +15,7 @@
  *   limitations under the License.
  */
 
-#include <axis/server/AdminUtils.h>
+#include "AdminUtils.h"
 #include "../wsdd/WSDDDeployment.h"
 
 extern WSDDDeployment* g_pWSDDDeployment;

@@ -17,7 +17,7 @@
 #if !defined(_SOAPHEADER_H____OF_AXIS_INCLUDED_)
 #define _SOAPHEADER_H____OF_AXIS_INCLUDED_
 
-#include "ISoapHeader.h"
+#include <axis/server/ISoapHeader.h>
 
 /**
  * @class SoapHeader

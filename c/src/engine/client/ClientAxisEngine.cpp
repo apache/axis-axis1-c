@@ -19,7 +19,7 @@
 #include "../../wsdd/WSDDDeployment.h"
 #include "../HandlerPool.h"
 #include <axis/server/AxisException.h>
-#include <axis/server/AxisTrace.h>
+#include "../../common/AxisTrace.h"
 extern AxisTrace* g_pAT;
 
 extern WSDDDeployment* g_pWSDDDeployment;

@@ -374,6 +374,10 @@ SOURCE=..\include\axis\client\Call.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\axis\ISoapFault.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\axis\client\Stub.h
 # End Source File
 # End Group

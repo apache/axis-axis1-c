@@ -21,7 +21,7 @@
 
 #include <xercesc/util/BinInputStream.hpp>
 #include <axis/server/Packet.h>
-#include <axis/SOAPTransport.h>
+#include "../../transport/SOAPTransport.h"
 
 XERCES_CPP_NAMESPACE_USE
 

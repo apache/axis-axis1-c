@@ -21,7 +21,7 @@
 #if !defined(_WSDDHANDLER_H__NCLUDED_)
 #define _WSDDHANDLER_H__NCLUDED_
 
-#include "GDefine.h"
+#include <axis/server/GDefine.h>
 #include <string>
 #include <map>
 #include <list>

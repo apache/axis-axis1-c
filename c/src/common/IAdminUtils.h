@@ -26,7 +26,7 @@
 #if !defined(_IADMINUTILS_H____OF_AXIS_INCLUDED_)
 #define _IADMINUTILS_H____OF_AXIS_INCLUDED_
 
-#include "AxisUserAPI.h"
+#include <axis/server/AxisUserAPI.h>
 
 /**
  * @interface IAdminUtils

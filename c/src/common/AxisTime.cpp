@@ -20,7 +20,7 @@
  */
 
 #include <stdio.h>
-#include <axis/server/AxisTime.h>
+#include "AxisTime.h"
 #include "AxisUtils.h"
 
 #define TIMEBUFFSIZE 80

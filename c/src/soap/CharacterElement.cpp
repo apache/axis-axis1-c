@@ -38,8 +38,8 @@
 /* CharacterElement.cpp: implementation of the CharacterElement class. */
 
 
-#include <axis/server/CharacterElement.h>
-#include <axis/server/SoapSerializer.h>
+#include "CharacterElement.h"
+#include "SoapSerializer.h"
 #include <axis/server/GDefine.h>
 
 CharacterElement::CharacterElement():BasicNode( NULL, CHARACTER_NODE) 

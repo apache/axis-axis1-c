@@ -24,8 +24,8 @@
 #ifndef __AXISTIME_H_OF_AXIS_INCLUDED_
 #define __AXISTIME_H_OF_AXIS_INCLUDED_
 
-#include "TypeMapping.h"
-#include "IParam.h"
+#include <axis/server/TypeMapping.h>
+#include <axis/server/IParam.h>
 
 using namespace std;
 

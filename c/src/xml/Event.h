@@ -23,7 +23,7 @@
 #if !defined(AXIS_Event_H__OF_AXIS_INCLUDED_)
 #define AXIS_Event_H__OF_AXIS_INCLUDED_
 
-#include <axis/server/AnyElement.h>
+#include "AnyElement.h"
 
 #include <string>
 using namespace std;
