@@ -83,6 +83,8 @@ int ClientAxisEngine::process (SOAPTransport* pSoap)
 					memcpy( pszService, pchService + 1, iStringLength - 2);
 
 	        		pService = g_pWSDDDeployment->getService( pszService);
+
+					delete pszService;
 				}
 				else
 				{
