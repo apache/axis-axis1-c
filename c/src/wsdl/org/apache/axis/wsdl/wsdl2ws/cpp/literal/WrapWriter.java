@@ -244,6 +244,7 @@ public class WrapWriter extends CPPClassWriter{
 		writer.write(" */\n");
 		//method signature
 		writer.write("int "+classname+"::" + methodName + "(IMessageData* mc)\n{\n");
+		writer.write("\tint nStatus;\n");
 		writer.write("\tIWrapperSoapSerializer *pIWSSZ = NULL;\n");
 		writer.write("\tmc->GetSoapSerializer(&pIWSSZ);\n");
 		writer.write("\tif (!pIWSSZ) return AXIS_FAIL;\n");
@@ -284,7 +285,7 @@ public class WrapWriter extends CPPClassWriter{
 					"\n\t\t, \""+parameterName+"\", Axis_URI_"+paraTypeName+");\n");				
 			}
 		}
-			
+		writer.write("\tif (AXIS_SUCCESS != (nStatus = pIWSDZ->GetStatus())) return nStatus;\n");
 		if(returntype != null){				
 			/* Invoke the service when return type not void */
 			writer.write("\t"+outparamType+((returntypeisarray || returntypeissimple)?" ":" *")+ "ret = "+"pWs->"+methodName+"(");

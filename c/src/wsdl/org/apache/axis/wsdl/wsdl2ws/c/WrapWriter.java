@@ -256,6 +256,7 @@ public class WrapWriter extends CFileWriter{
 		writer.write(" */\n");
 		//method signature
 		writer.write("int "+ methodName + CUtils.WRAPPER_METHOD_APPENDER+ "(IMessageData* mc)\n{\n");
+		writer.write("\tint nStatus;\n");
 		writer.write("\tIMessageDataFunctions* pmcX = mc->__vfptr;\n");
 		writer.write("\tIWrapperSoapDeSerializer* pDZ = NULL;\n");
 		writer.write("\tIWrapperSoapDeSerializerFunctions* pDZX = NULL;\n");
@@ -321,7 +322,7 @@ public class WrapWriter extends CFileWriter{
 					"\n\t\t, Axis_TypeName_"+paraTypeName+", Axis_URI_"+paraTypeName+");\n");
 			}
 		}
-		
+		writer.write("\tif (AXIS_SUCCESS != (nStatus = pDZX->GetStatus(pDZ))) return nStatus;\n");		
 		if(returntype != null){
 			/* Invoke the service when return type not void */
 			writer.write("\tret = "+methodName+"(");

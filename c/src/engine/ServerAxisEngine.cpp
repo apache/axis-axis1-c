@@ -44,7 +44,10 @@ int ServerAxisEngine::Process(Ax_soapstream* stream)
                 AXISTRACE1("transport is not set properly", CRITICAL);
                 return AXIS_FAIL;
             }
-
+		/*
+		 * after this point we should return AXIS_SUCCESS. Otherwise the transport layer
+		 * may not send the response back (either soap fault or result).
+		 */
 		do {
 			/* populate MessageData with transport information */
 			m_pMsgData->m_Protocol = stream->trtype;
@@ -200,7 +203,7 @@ int ServerAxisEngine::Process(Ax_soapstream* stream)
 			 * Invoke all handlers including the webservice
 			 * in case of failure coresponding stream fault message will be set
 			 */
-			Status = Invoke(m_pMsgData); //we generate response in the same way even if this has failed
+			Status = Invoke(m_pMsgData); 
 		}
 		while(0);
 		/**
@@ -225,7 +228,6 @@ int ServerAxisEngine::Process(Ax_soapstream* stream)
 		//UnInitializeHandlers(sSessionId, stream->trtype);
 		//Pool back the webservice
 		if (m_pWebService) g_pHandlerPool->PoolWebService(sSessionId, m_pWebService, pService); 
-		return Status;
 //	AXIS_CATCH(exception* e)
 		//todo
 		/*
@@ -248,7 +250,7 @@ int ServerAxisEngine::Process(Ax_soapstream* stream)
 		*/
 
 //	AXIS_ENDCATCH
-	return Status;
+	return AXIS_SUCCESS;
 }
 
 int ServerAxisEngine::Invoke(MessageData* pMsg)
@@ -314,7 +316,7 @@ int ServerAxisEngine::Invoke(MessageData* pMsg)
 	if (AXIS_SUCCESS != m_pDZ->FlushInputStream())
 	{
 		m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_SOAPCONTENTERROR));
-		return AXIS_SUCCESS;
+		return AXIS_FAIL;
 	}
 
 	pMsg->setPastPivotState(true);
