@@ -599,8 +599,7 @@ Service
     "Courier New, Courier, mono">&lt;undeployment&gt;</FONT></B></DT>
 
     <DD>The root element of the deployment document which tells
-    Axis that this is an undeployment. Undeployments are only
-    useful as</DD>
+    Axis that this is an undeployment.</DD>
 
     <DT> </DT>
 
