@@ -2,7 +2,7 @@
 	<types>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://soapinterop.org/types" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:soap-enc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" targetNamespace="http://soapinterop.org/types">
 			<import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
-			<complexType name="SOAPStructFault">
+			<complexType name="DivByZeroStruct">
 				<sequence>
 					<element name="varString" type="xsd:string"/>
 					<element name="varInt" type="xsd:int"/>
@@ -12,7 +12,7 @@
 		</schema>
 	</types>
 	<message name="DivByZeroFault">
-		<part name="faultstruct" type="ns2:SOAPStructFault"/>
+		<part name="faultstruct1" type="ns2:DivByZeroStruct"/>
 	</message>
 	<message name="divRequest">
 		<part name="int0" type="xsd:int"/>
@@ -25,7 +25,7 @@
 		<operation name="div" parameterOrder ="int0 int1">
 			<input message="tns:divRequest"/>
 			<output message="tns:divResponse"/>
-			<fault name="DivByZeroFault" message="tns:DivByZeroFault"/>
+			<fault name="DivByZero" message="tns:DivByZeroFault"/>
 		 </operation>
 	</portType>
 	<binding name="MathOpsBinding" type="tns:MathOps">
@@ -43,14 +43,14 @@
                         namespace="http://localhost/axis/MathOps" 
                         use="encoded"/>
                 </output>
-			<fault name="DivByZeroFault">
-				<soap:fault name="DivByZeroFault" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://soapinterop.org/wsdl"/>
+			<fault name="DivByZero">
+				<soap:fault name="DivByZero" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://soapinterop.org/wsdl"/>
 			</fault>
 			</operation>
 		</binding>
 	<service name="MathOpsService">
-		<port name="MathOpsPort" binding="tns:MathOpsBinding">
-			<soap:address location="http://localhost/axis/MathOpsPort"/>
+		<port name="MathOps" binding="tns:MathOpsBinding">
+			<soap:address location="http://localhost/axis/MathOps"/>
 		</port>
 	</service>
 	<!-- Fault messages -->

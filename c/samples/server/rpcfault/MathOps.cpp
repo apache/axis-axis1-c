@@ -5,6 +5,7 @@
  */
 #include "MathOps.h"
 
+
 MathOps::MathOps()
 {
 }
@@ -13,8 +14,8 @@ MathOps::~MathOps()
 {
 }
 
-int MathOps::div(int Value0, int Value1) throw(AxisDivByZeroException)
+int MathOps::div(int Value0, int Value1)  
 {
     if (Value1 == 0) throw AxisDivByZeroException();
-    return Value0/Value1;
+        return Value0/Value1;
 }
