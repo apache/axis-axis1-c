@@ -1,1 +1,1 @@
-SUBDIRS = stubTest interop
+SUBDIRS = stubTest interop threadSafe
