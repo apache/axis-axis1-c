@@ -1,148 +1,231 @@
-/*
- *   Copyright 2003-2004 The Apache Software Foundation.
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- *
- * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
- *
- */
+#include <iostream.h>
+#include <fstream.h>
+#include <sys/time.h>
+#include "gen_src/InteropTestPortType.h"
 
-#include <string>
-#include <iostream>
-#include <time.h>
-#include <stdio.h>
-#include <sys/types.h>
-#include <sys/timeb.h>
+/////////////////////////////////////////////////////////////////////////////
+//
 
-#ifdef WIN32
-#else
-#include <sys/times.h>
-#include <unistd.h>
-#endif
+struct timeval time1, time2;
+struct timezone zone;
 
-
-#include <axis/AxisGenException.h>
-#include "./gen_src/InteropTestPortType.h"
-
-using namespace std;
-
-#define STRING_TO_SEND "HelloWorld"
-
-static void
-usage (char *programName, char *defaultURL)
+void tm_init()
 {
-    cout << "\nUsage:\n"
-	<< programName << " [-? | message_size [service_url]] " << endl
-	<< "    -?             Show this help.\n"
-	<< "    message_size   Size of the message sent in chars / 10\n"
-        << "                   (i.e. If you say 5, then 50 chars would be sent).\n"
-        << "                   Default is 10*10.\n"
-	<< "    service_url    URL of the service.\n"
-	<< "                   Default service URL is assumed to be " << defaultURL
-	<< "\n                   Could use http://localhost:8080/axis/services/echo to test with Axis Java."
-	<< endl;
+	zone.tz_minuteswest = 0;
+        zone.tz_dsttime = 0;
+}
+	
+#define	tm_start()	gettimeofday(&time1, &zone);
+
+int diff_time(struct timeval *time2, struct timeval *time1)
+{
+	return 1000000 * (time2->tv_sec - time1->tv_sec)
+		+ time2->tv_usec - time1->tv_usec;
+}
+
+int inline tm_stop()
+{
+	gettimeofday(&time2, &zone);
+	return diff_time(&time2, &time1);
 }
 
 
-int
-main (int argc, char *argv[])
-{
-    int length = 10;
-    char endpoint[256];
+/////////////////////////////////////////////////////////////////////////////
+//
 
-    // Set default service URL
-    sprintf (endpoint, "http://localhost/axis/base");
-    // Could use http://localhost:8080/axis/services/echo to test with Axis Java
+//#define	NUM_TEST_RUNS		5
 
-    try
-    {
+#define	TEST_STRING_DATA
+//#define	TEST_INT_DATA
+//#define	TEST_FLOAT_DATA
+//#define	TEST_STRUCT_DATA
+/////////////////////////////////////////////////////////////////////////////
+//
 
-	if (argc > 1)
-	{
-	    // Watch for special case help request
-	    if (!strncmp (argv[1], "-", 1)) // Check for - only so that it works for 
-                                            //-?, -h or --help; -anything 
-	    {
-		usage (argv[0], endpoint);
-		return 2;
-	    }
-	    length = atoi(argv[1]);
-	}
-        
-        if (argc > 2)
-            sprintf (endpoint, argv[2]);
+#define	MAX_LINE_LEN		256
 
-	cout << endl << " Using service at " << endpoint << endl << endl;
+//int test_rslt[NUM_TEST_RUNS];
+int* test_rslt;
+int next_elem;
 
-	InteropTestPortType ws (endpoint);
+#ifdef	TEST_STRING_DATA
+#define	DATA_TYPE	char*
+#define	DATA_FILE	"stringdata.txt"
+xsd__string_Array testdata;
+#else
 
-        ws.setTransportTimeout(2);
+#ifdef	TEST_INT_DATA
+#define	DATA_TYPE	int
+#define	DATA_FILE	"intdata.txt"
+xsd__int_Array testdata;
+#else
 
-        // Prepare the string to be sent 
-        char* buffer = new char[ length * strlen(STRING_TO_SEND) + 1];
-        buffer[0] = '\0';
-        for (int i = 0; i < length; i++ )
-            strcat(buffer, STRING_TO_SEND);
-	
-	// Time mesurement stuff
-	time_t startTime;
-        time_t endTime;
+#ifdef	TEST_FLOAT_DATA
+#define	DATA_TYPE	float
+#define	DATA_FILE	"floatdata.txt"
+xsd__float_Array testdata;
+#else
 
-	time( &startTime );
-
-        char* echoStringResult = ws.echoString(buffer);
-
-	time( &endTime );
-        printf( "Time spent to invoke method ws.echoString(buffer); = %lf s\n", difftime( endTime, startTime ) );
-
-	if (0 == strcmp(echoStringResult, buffer))
-	    printf ("successful\n");
-	else
-	    printf ("failed\n");
-
-        // Clean memory 
-        if (echoStringResult)
-            free(echoStringResult);
-
-        delete [] buffer;
-
-    }
-    catch (AxisException & e)
-    {
-	printf ("Exception : %s\n", e.what ());
-    }
-    catch (exception & e)
-    {
-	printf ("Unknown exception has occured\n");
-    }
-    catch (...)
-    {
-	printf ("Unknown exception has occured\n");
-    }
-
-    // System vs User time stuff
-#ifdef WIN32
-#else // Linux/Unix
-    tms timesSpent;
-    times(&timesSpent);
-
-    printf( "User time               = %ld clock ticks\n", timesSpent.tms_utime );
-    printf( "System time             = %ld clock ticks\n", timesSpent.tms_stime);
-    printf( "User time of children   = %ld clock ticks\n", timesSpent.tms_cutime);
-    printf( "System time of children = %ld clock ticks\n", timesSpent.tms_cstime);
-    printf( "Processor time used     = %ld clock ticks\n", clock());
-    printf( "Number of clock ticks per second = %ld clock ticks/s\n", sysconf(_SC_CLK_TCK) );
+#ifdef TEST_STRUCT_DATA
+#define DATA_TYPE 	ns_SOAPStruct
+#define DATA_FILE 	"structdata.txt"
+SOAPStruct_Array testdata;
+#endif
+#endif	
+#endif
 #endif
 
-    return 0;
+////////////////////////////////////////////////////////////////////////////////
+//
+InteropTestPortType tester;
+
+char *pchBuff;
+
+void inittestdata(int array_sz)
+{
+	testdata.m_Size = array_sz;
+#ifdef	TEST_STRING_DATA
+        if( !(testdata.m_Array = new char *[array_sz]))
+#else	
+	if (!(testdata.m_Array = (DATA_TYPE *)malloc(sizeof(DATA_TYPE) * array_sz)))
+#endif
+		exit(-1);
+	next_elem = 0;	
+}
+	
+
+int storetestdata(char* pchBuff)
+{
+#ifdef	TEST_STRING_DATA
+	//testdata.m_Array[next_elem] = pchBuff;
+        testdata.m_Array[next_elem] = new char [strlen(pchBuff) + 2];
+	strcpy(testdata.m_Array[next_elem], pchBuff);
+	//printf("pchBuff:%s\n", pchBuff);
+	//printf("testdata.m_Array:%s", testdata.m_Array[next_elem]);		
+	//printf("next_elem:%d\n", next_elem);
+	if (testdata.m_Array == NULL)
+		exit(-1);
+#else
+#ifdef	TEST_INT_DATA
+	testdata.m_Array[next_elem] = strtol(s, NULL, 10);
+#else
+#ifdef	TEST_FLOAT_DATA
+	testdata.m_Array[next_elem] = strtof(s, NULL);
+#else
+#ifdef	TEST_STRUCT_DATA
+	//	TODO
+	printf("\nERROR: TODO!\n");
+	exit(-1);	
+#endif
+#endif
+#endif
+#endif
+	return ++next_elem < testdata.m_Size;
+}
+
+
+void gettestdata(int intMaxLineLen)
+{
+	FILE *filePtr = fopen(DATA_FILE, "rt");
+	if (filePtr) {
+                pchBuff = new char [intMaxLineLen];
+		while (fgets(pchBuff, intMaxLineLen, filePtr))
+                {
+	            //printf("pchBuff:%s\n", pchBuff);
+		    if (!storetestdata(pchBuff))
+		        return;
+                }
+		fclose(filePtr);
+	
+		exit(-1);
+	}
+	
+	perror("Error");
+	exit(-1);
+}
+
+
+void test(int intNumRuns)
+{
+        test_rslt = new int[intNumRuns];	
+	printf("\nStarting... (microseconds)\n");
+	for (int ii = 0; ii < intNumRuns; ii++) {
+		tm_start();
+		
+		if (tester.
+#ifdef	TEST_STRING_DATA		
+		echoStringArray
+#else
+#ifdef	TEST_INT_DATA
+		echoIntegerArray
+#else
+#ifdef	TEST_FLOAT_DATA
+		echoFloatArray
+#else
+#ifdef TEST_STRUCT_DATA
+		echoStructArray
+#endif
+#endif
+#endif
+#endif
+		(testdata).m_Array == NULL) {
+                        printf("\nError: No data returned!\n");
+			exit(-1);
+                }
+                
+		test_rslt[ii] = tm_stop();		
+
+		printf("\n%d\n", test_rslt[ii]);
+	}
+
+	printf("\nDone.\n");
+}
+
+
+void save_results(char *save_as, char *desc, int intNumRuns)
+{
+	FILE *s = fopen(save_as, "wt");
+	if (s) {
+		fprintf(s, "%s\n", desc);
+		for (int ii = 0; ii < intNumRuns; ii++)
+			fprintf(s, "%d\n", test_rslt[ii]);
+
+		fclose(s);
+
+		printf("\nResult saved as %s\n", save_as);
+	}
+	else {
+		perror("Error");
+		exit(-1);
+	}
+}
+
+
+
+int main(int argc, char **argv)
+{
+	
+	if (6 == argc) {
+		int intNumElements = strtol(argv[1], NULL, 0);
+                int intMaxLineLen = strtol(argv[2], NULL, 0);
+                int intNumRuns = strtol(argv[3], NULL, 0);
+		printf("\nArray size: %d\n", intNumElements);
+		printf("\nMaximum line length: %d\n", intMaxLineLen);
+		printf("\nNumber of runs: %d\n", intNumRuns);
+
+		inittestdata(intNumElements);
+		
+		gettestdata(intMaxLineLen);
+
+		test(intNumRuns);
+		
+		//	FIXME:
+		save_results(argv[4], argv[5], intNumRuns);
+
+		return 0;
+
+	}
+	
+	printf("\nenter:largeArrays <array size> <maximum line length> <number of runs> <datafile> <comment>\n");
+	return -1;
 }
