@@ -19,7 +19,7 @@
  */
 
 #include "./gen_src/Counter.hpp"
-#include <axis/AxisGenException.hpp>
+#include <axis/AxisException.hpp>
 #include <iostream>
 
 bool IsNumber(const char* p);
