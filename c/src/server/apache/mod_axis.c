@@ -4,7 +4,7 @@
 #include <apache1_3/http_log.h>
 #include <apache1_3/http_protocol.h>
 #include <apache1_3/http_main.h>
-#include "../../common/Packet.h"
+#include <axis/common/Packet.h>
 #include <string.h>
 #include <malloc.h>
 
