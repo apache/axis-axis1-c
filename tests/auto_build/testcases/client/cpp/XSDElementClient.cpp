@@ -118,10 +118,10 @@ int main(int argc, char* argv[])
 		printf("unsigned long=%d\n", ulResult);
 
 		fResult = ws->setGetDataFloat((xsd__float)35.3535888888);
-		printf("float=%.9f\n", fResult); fflush(stdout);
+		printf("float=%.5f\n", fResult); fflush(stdout);
 
 		dResult = ws->setGetDataDouble((xsd__double)70.7175888888);
-		printf("double=%.9f\n", dResult); fflush(stdout);
+		printf("double=%.5f\n", dResult); fflush(stdout);
 
 		dateResult = ws->setGetDateType(testDate);
 		strftime(dateTime, 50, "%a %b %d %H:%M:%S %Y", &dateResult);
@@ -144,7 +144,7 @@ int main(int argc, char* argv[])
 		cout << "integer=" << intResult << endl;
 
 		decResult = ws->setGetDecimalType(929292929.5555555555555);
-		cout << "decimal=" << decResult << endl;
+        printf("decimal=%.5f\n", decResult); fflush(stdout);
 
 		b64Result = ws->setGetBase64BinaryType(b64Test);
 		cout << "base64Binary size=" << b64Result.__size << endl;
