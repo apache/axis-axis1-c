@@ -97,12 +97,13 @@ public class ClassLoader implements SourceWriter{
 	  writer.write("STORAGE_CLASS_INFO\n");
 	  writer.write("int GetClassInstance(BasicHandler **inst)\n");
 	  writer.write("{\n");
+	  writer.write("\t*inst = new BasicHandler();\n");
 	  writer.write("\tWrapperClassHandler* pWCH = new "+wrappername+"();\n");
+	  writer.write("\t(*inst)->_functions = 0;\n");
 	  writer.write("\tif (pWCH)\n");
 	  writer.write("\t{\n");
-	  writer.write("\t\tpWCH->Init();\n");
-	  writer.write("\t\t*inst = pWCH;\n");
-	  writer.write("\t\treturn AXIS_SUCCESS;\n");
+	  writer.write("\t\t(*inst)->_object = pWCH;\n");
+	  writer.write("\t\treturn pWCH->Init();\n");	  
 	  writer.write("\t}\n");
 	  writer.write("\treturn AXIS_FAIL;\n");
 	  writer.write("}\n");
@@ -114,6 +115,7 @@ public class ClassLoader implements SourceWriter{
 	  writer.write("\t\tWrapperClassHandler* pWCH = static_cast<WrapperClassHandler*>(inst);\n");
 	  writer.write("\t\tpWCH->Fini();\n");
 	  writer.write("\t\tdelete pWCH;\n");
+	  writer.write("\t\tdelete inst;\n");
 	  writer.write("\t\treturn AXIS_SUCCESS;\n");
 	  writer.write("\t}\n");
 	  writer.write("\treturn AXIS_FAIL;\n");

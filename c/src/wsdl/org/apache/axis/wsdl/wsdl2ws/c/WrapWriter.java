@@ -111,10 +111,11 @@ public class WrapWriter extends CFileWriter{
 	protected void writeMethods() throws WrapperFault {
 		try{
 			writer.write("/*implementation of BasicHandler interface*/\n");			
-			writer.write("void AXISCALL OnFault(void*p, IMessageData *pMsg)\n{\n}\n\n");
-			writer.write("int AXISCALL Init(void*p)\n{\n\treturn AXIS_SUCCESS;\n}\n\n");
-			writer.write("int AXISCALL Fini(void*p)\n{\n\treturn AXIS_SUCCESS;\n}\n\n");
-			writer.write("AXIS_BINDING_STYLE AXISCALL GetBindingStyle(void*p)\n{\n\treturn RPC_ENCODED;\n}\n\n");
+			writer.write("void AXISCALL "+classname+"_OnFault(void*p, void *pMsg){\n}\n\n");
+			writer.write("int AXISCALL "+classname+"_Init(void*p){\n\treturn AXIS_SUCCESS;\n}\n\n");
+			writer.write("int AXISCALL "+classname+"_Fini(void*p){\n\treturn AXIS_SUCCESS;\n}\n\n");
+			writer.write("int AXISCALL "+classname+"_GetType(void*p){\n\treturn WEBSERVICE_HANDLER;\n}\n\n");
+			writer.write("AXIS_BINDING_STYLE AXISCALL "+classname+"_GetBindingStyle(void*p){\n\treturn RPC_ENCODED;\n}\n\n");
 			writeInvoke();
 			writer.write("\n/*Methods corresponding to the web service methods*/\n");
 			MethodInfo minfo;
@@ -161,10 +162,14 @@ public class WrapWriter extends CFileWriter{
 		writer.write("\n/*\n");
 		writer.write(" * This method invokes the right service method \n");
 		writer.write(" */\n");
-		writer.write("int AXISCALL Invoke(void*p, IMessageData *mc)\n{\n");
+		writer.write("int AXISCALL "+classname+"_Invoke(void*p, void *pMsg){\n");
+		writer.write("\tIMessageData* mc = (IMessageData*)pMsg;\n");
 		writer.write("\tconst AxisChar* method = 0;\n");
-		writer.write("\tIMessageDataFunctions* pmcX = mc->__vfptr;\n");
-		writer.write("\tmethod = pmcX->GetOperationName(mc);\n");
+		writer.write("\tIWrapperSoapDeSerializer DZ = {0,0};\n");
+		writer.write("\tIWrapperSoapSerializer SZ = {0,0};\n");
+		writer.write("\tmethod = mc->_functions->GetOperationName(mc->_object);\n");
+		writer.write("\tmc->_functions->GetSoapSerializer(mc->_object, &SZ);\n");
+		writer.write("\tmc->_functions->GetSoapDeSerializer(mc->_object, &DZ);\n");		
 		//if no methods in the service simply return
 		if (methods.size() == 0) {
 			writer.write("}\n");
@@ -173,13 +178,13 @@ public class WrapWriter extends CFileWriter{
 		MethodInfo minfo = (MethodInfo)methods.get(0);
 		//if conditions (if parts)		
 		writer.write("\tif (0 == strcmp(method, \""+ minfo.getMethodname() +"\"))\n");
-		writer.write("\t\treturn "+minfo.getMethodname()+CUtils.WRAPPER_METHOD_APPENDER+"(mc);\n");
+		writer.write("\t\treturn "+minfo.getMethodname()+CUtils.WRAPPER_METHOD_APPENDER+"(DZ, SZ);\n");
 		//(else if parts)
 		if (methods.size() > 1) {
 			for (int i = 1; i < methods.size(); i++) {
 				minfo = (MethodInfo)methods.get(i);
 				writer.write("\telse if (0 == strcmp(method, \""+ minfo.getMethodname() +"\"))\n");
-				writer.write("\t\treturn "+minfo.getMethodname()+CUtils.WRAPPER_METHOD_APPENDER+"(mc);\n");
+				writer.write("\t\treturn "+minfo.getMethodname()+CUtils.WRAPPER_METHOD_APPENDER+"(DZ, SZ);\n");
 			}
 		}
 		//(else part)
@@ -254,13 +259,8 @@ public class WrapWriter extends CFileWriter{
 		writer.write(" * This method wrap the service method \n");
 		writer.write(" */\n");
 		//method signature
-		writer.write("int "+ methodName + CUtils.WRAPPER_METHOD_APPENDER+ "(IMessageData* mc)\n{\n");
+		writer.write("int "+ methodName + CUtils.WRAPPER_METHOD_APPENDER+ "(IWrapperSoapDeSerializer DZ, IWrapperSoapSerializer SZ)\n{\n");
 		writer.write("\tint nStatus;\n");
-		writer.write("\tIMessageDataFunctions* pmcX = mc->__vfptr;\n");
-		writer.write("\tIWrapperSoapDeSerializer* pDZ = 0;\n");
-		writer.write("\tIWrapperSoapDeSerializerFunctions* pDZX = 0;\n");
-		writer.write("\tIWrapperSoapSerializer* pSZ = 0;\n");
-		writer.write("\tIWrapperSoapSerializerFunctions* pSZX = 0;\n");
 		for (int i = 0; i < paramsB.size(); i++) {
 			paramTypeName = WrapperUtils.getClassNameFromParamInfoConsideringArrays((ParameterInfo)paramsB.get(i), wscontext);
 				writer.write("\t"+paramTypeName+" v"+i+";\n");
@@ -271,45 +271,37 @@ public class WrapWriter extends CFileWriter{
 		if (aretherearrayparams){
 			writer.write("\tAxis_Array array;\n");
 		}
-		writer.write("\tpmcX->GetSoapSerializer(mc, &pSZ);\n");
-		writer.write("\tif (!pSZ) return AXIS_FAIL;\n");
-		writer.write("\tpSZX = pSZ->__vfptr;\n");
-		writer.write("\tif (!pSZX) return AXIS_FAIL;\n");
-		writer.write("\tpmcX->GetSoapDeSerializer(mc, &pDZ);\n");
-		writer.write("\tif (!pDZ) return AXIS_FAIL;\n");
-		writer.write("\tpDZX = pDZ->__vfptr;\n");
-		writer.write("\tif (!pDZX) return AXIS_FAIL;\n");
-		writer.write("\tif (AXIS_SUCCESS != pDZX->CheckMessageBody(pDZ, \""+methodName+"\", \""+wscontext.getWrapInfo().getTargetNameSpaceOfWSDL()+"\")) return AXIS_FAIL;\n");
-		writer.write("\tpSZX->CreateSoapMethod(pSZ, \""+methodName+"Response\", \""+wscontext.getWrapInfo().getTargetNameSpaceOfWSDL()+"\");\n\n");
+		writer.write("\tif (AXIS_SUCCESS != DZ._functions->CheckMessageBody(DZ._object, \""+methodName+"\", \""+wscontext.getWrapInfo().getTargetNameSpaceOfWSDL()+"\")) return AXIS_FAIL;\n");
+		writer.write("\tSZ._functions->CreateSoapMethod(SZ._object, \""+methodName+"Response\", \""+wscontext.getWrapInfo().getTargetNameSpaceOfWSDL()+"\");\n");
 		//create and populate variables for each parameter
 		for (int i = 0; i < paramsB.size(); i++) {
 			paramTypeName = ((ParameterInfo)paramsB.get(i)).getLangName();
 			if((CUtils.isSimpleType(((ParameterInfo)paramsB.get(i)).getLangName()))){
 				//for simple types	
-				writer.write("\tv"+i+" = pDZX->"+CUtils.getParameterGetValueMethodName(paramTypeName, false)+"(pDZ, 0, 0);\n");
+				writer.write("\tv"+i+" = DZ._functions->"+CUtils.getParameterGetValueMethodName(paramTypeName, false)+"(DZ._object, 0, 0);\n");
 			}else if((type = this.wscontext.getTypemap().getType(((ParameterInfo)paramsB.get(i)).getSchemaName())) != null && type.isArray()){
 				QName qname = WrapperUtils.getArrayType(type).getName();
 				String containedType = null;
 				if (CUtils.isSimpleType(qname)){
 					containedType = CUtils.getclass4qname(qname);
-					writer.write("\tarray = pDZX->GetBasicArray(pDZ, "+CUtils.getXSDTypeForBasicType(containedType)+", 0, 0);\n");
+					writer.write("\tarray = DZ._functions->GetBasicArray(DZ._object, "+CUtils.getXSDTypeForBasicType(containedType)+", 0, 0);\n");
 					writer.write("\tmemcpy(&v"+i+", &array, sizeof(Axis_Array));\n");
 				}
 				else{
 					containedType = qname.getLocalPart();
-					writer.write("\tarray = pDZX->GetCmplxArray(pDZ, (void*)Axis_DeSerialize_"+containedType+ 
+					writer.write("\tarray = DZ._functions->GetCmplxArray(DZ._object, (void*)Axis_DeSerialize_"+containedType+ 
 						"\n\t\t, (void*)Axis_Create_"+containedType+", (void*)Axis_Delete_"+containedType+
 						"\n\t\t, (void*)Axis_GetSize_"+containedType+", Axis_TypeName_"+containedType+", Axis_URI_"+containedType+");\n");
 					writer.write("\tmemcpy(&v"+i+", &array, sizeof(Axis_Array));\n");
 				}
 			}else{
 				//for complex types 
-				writer.write("\tv"+i+" = ("+paramTypeName+"*)pDZX->GetCmplxObject(pDZ, (void*)Axis_DeSerialize_"+paramTypeName+
+				writer.write("\tv"+i+" = ("+paramTypeName+"*)DZ._functions->GetCmplxObject(DZ._object, (void*)Axis_DeSerialize_"+paramTypeName+
 					"\n\t\t, (void*)Axis_Create_"+paramTypeName+", (void*)Axis_Delete_"+paramTypeName+
 					"\n\t\t, Axis_TypeName_"+paramTypeName+", Axis_URI_"+paramTypeName+");\n");
 			}
 		}
-		writer.write("\tif (AXIS_SUCCESS != (nStatus = pDZX->GetStatus(pDZ))) return nStatus;\n");		
+		writer.write("\tif (AXIS_SUCCESS != (nStatus = DZ._functions->GetStatus(DZ._object))) return nStatus;\n");		
 		if(returntype != null){
 			/* Invoke the service when return type not void */
 			writer.write("\tret = "+methodName+"(");
@@ -322,24 +314,24 @@ public class WrapWriter extends CFileWriter{
 			writer.write(");\n");
 			/* set the result */
 			if (returntypeissimple){
-				writer.write("\treturn pSZX->AddOutputParam(pSZ, \""+methodName+"Return\", (void*)&ret, "+CUtils.getXSDTypeForBasicType(outparamTypeName)+");\n");
+				writer.write("\treturn SZ._functions->AddOutputParam(SZ._object, \""+methodName+"Return\", (void*)&ret, "+CUtils.getXSDTypeForBasicType(outparamTypeName)+");\n");
 			}else if(returntypeisarray){
 				QName qname = WrapperUtils.getArrayType(retType).getName();
 				String containedType = null;
 				if (CUtils.isSimpleType(qname)){
 					containedType = CUtils.getclass4qname(qname);
-					writer.write("\treturn pSZX->AddOutputBasicArrayParam(pSZ, (Axis_Array*)(&ret),"+CUtils.getXSDTypeForBasicType(containedType)+", \""+methodName+"Return\");\n");
+					writer.write("\treturn SZ._functions->AddOutputBasicArrayParam(SZ._object, (Axis_Array*)(&ret),"+CUtils.getXSDTypeForBasicType(containedType)+", \""+methodName+"Return\");\n");
 				}
 				else{
 					containedType = qname.getLocalPart();
-					writer.write("\treturn pSZX->AddOutputCmplxArrayParam(pSZ, (Axis_Array*)(&ret),"+ 
+					writer.write("\treturn SZ._functions->AddOutputCmplxArrayParam(SZ._object, (Axis_Array*)(&ret),"+ 
 					"(void*) Axis_Serialize_"+containedType+", (void*) Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", \""+methodName+"Return\", Axis_URI_"+containedType+");\n");
 				}
 			}
 			else{
 				//complex type
 				outparamTypeName = returntype.getLangName();//need to have complex type name without *
-				writer.write("\treturn pSZX->AddOutputCmplxParam(pSZ, ret, (void*)Axis_Serialize_"+outparamTypeName+", (void*)Axis_Delete_"+outparamTypeName+", \""+methodName+"Return\", 0);\n");
+				writer.write("\treturn SZ._functions->AddOutputCmplxParam(SZ._object, ret, (void*)Axis_Serialize_"+outparamTypeName+", (void*)Axis_Delete_"+outparamTypeName+", \""+methodName+"Return\", 0);\n");
 			}
 		}else{//method does not return anything
 			/* Invoke the service when return type is void */

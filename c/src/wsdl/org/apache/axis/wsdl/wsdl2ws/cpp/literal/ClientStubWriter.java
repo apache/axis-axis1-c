@@ -268,7 +268,7 @@ public class ClientStubWriter extends CPPClassWriter{
 				//TODO initialize return parameter appropriately.
 			}
 		}
-		writer.write("\tif (AXIS_SUCCESS != m_pCall->Initialize(DOC_LITERAL)) return ");
+		writer.write("\tif (AXIS_SUCCESS != m_pCall->Initialize(CPP_RPC_PROVIDER)) return ");
 		if (returntype != null){
 			writer.write((returntypeisarray?"RetArray":returntypeissimple?"Ret":"pReturn")+";\n\t");
 		}
