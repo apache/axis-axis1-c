@@ -2,4 +2,16 @@
 Axis Async Todo's
 =================
 
-(put all todo's relating to the Axis Internal Message Exchange stuff here)
+1. Rework the AxisEngine impl's (AxisClient and AxisServer)
+
+   AxisEngine implementations would no longer be Handlers.  Rather, they 
+   would be MessageExchange impl providers.  It's a subtle, but important
+   change.
+   
+2. Build a generic wrapper for existing Transports
+
+3. Modify the Call object to use MessageExchangeSynchronizer
+
+4. Documentation
+
+
