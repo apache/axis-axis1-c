@@ -34,14 +34,14 @@ TypeMappingTestCase::~TypeMappingTestCase()
 
 void TypeMappingTestCase::setUp()
 {
-	pTypeMapping = new TypeMapping();
+    pTypeMapping = new TypeMapping();
 
 }
 
 void TypeMappingTestCase::tearDown()
 {
-	delete pTypeMapping;
-	pTypeMapping = NULL;
+    delete pTypeMapping;
+    pTypeMapping = NULL;
 }
 
 
@@ -49,33 +49,33 @@ void TypeMappingTestCase::tearDown()
 
 Test* TypeMappingTestCase::suite()
 {
-	TestSuite *testSuite = new TestSuite("TypeMappingTestCase");
+    TestSuite *testSuite = new TestSuite("TypeMappingTestCase");
 
-	testSuite->addTest (new TestCaller <TypeMappingTestCase>
+    testSuite->addTest (new TestCaller <TypeMappingTestCase>
       ("testMap", &TypeMappingTestCase::testMap));
 
 
-	return testSuite;
+    return testSuite;
 
 
 }
 
 void TypeMappingTestCase::testMap()
 {
-	XSDTYPE ExpectedType=XSD_UNKNOWN;
-	const AxisXMLCh* myChar = "TestString";
+    XSDTYPE ExpectedType=XSD_UNKNOWN;
+    const AxisXMLCh* myChar = "TestString";
 
 
-	XSDTYPE xResult;
+    XSDTYPE xResult;
 
-	xResult = pTypeMapping->Map(myChar);
+    xResult = pTypeMapping->Map(myChar);
 
 
 
-	int x =  ExpectedType;
-	int y =  xResult;
+    int x =  ExpectedType;
+    int y =  xResult;
 
-	CPPUNIT_ASSERT_EQUAL(x,y);
+    CPPUNIT_ASSERT_EQUAL(x,y);
 
 
 

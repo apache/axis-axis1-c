@@ -33,98 +33,101 @@ AxisUtilsTestCase::~AxisUtilsTestCase()
 
 Test* AxisUtilsTestCase::suite()
 {
-	TestSuite *testSuite = new TestSuite("AxisUtilsTestCase");
+    TestSuite *testSuite = new TestSuite("AxisUtilsTestCase");
 
-	testSuite->addTest (new TestCaller <AxisUtilsTestCase>
+    testSuite->addTest (new TestCaller <AxisUtilsTestCase>
       ("testClearArray", &AxisUtilsTestCase::testClearArray));
 
-	testSuite->addTest (new TestCaller <AxisUtilsTestCase>
-      ("testIsCharacterAvailable", &AxisUtilsTestCase::testIsCharacterAvailable));
+    testSuite->addTest (new TestCaller <AxisUtilsTestCase>
+      ("testIsCharacterAvailable", 
+      &AxisUtilsTestCase::testIsCharacterAvailable));
 
 
-	testSuite->addTest (new TestCaller <AxisUtilsTestCase>
-      ("isCharacterAvailableref", &AxisUtilsTestCase::isCharacterAvailableref));
+    testSuite->addTest (new TestCaller <AxisUtilsTestCase>
+      ("isCharacterAvailableref", 
+      &AxisUtilsTestCase::isCharacterAvailableref));
 
 
-	testSuite->addTest (new TestCaller <AxisUtilsTestCase>
+    testSuite->addTest (new TestCaller <AxisUtilsTestCase>
       ("testToAxisXMLCh", &AxisUtilsTestCase::testToAxisXMLCh));
 
-	testSuite->addTest (new TestCaller <AxisUtilsTestCase>
+    testSuite->addTest (new TestCaller <AxisUtilsTestCase>
       ("testtoLowerCase", &AxisUtilsTestCase::testtoLowerCase));
 
-	//testSuite->addTest (new TestCaller <AxisUtilsTestCase>
-      //("testLowerCaseString", &AxisUtilsTestCase::testLowerCaseString));
+    /* testSuite->addTest (new TestCaller <AxisUtilsTestCase>
+     *  ("testLowerCaseString", &AxisUtilsTestCase::testLowerCaseString));
+     */
 
-	return testSuite;	
+    return testSuite;    
 }
 
 void AxisUtilsTestCase::testClearArray()
 {
-	int iLenght = 0;
-	int iExpectedLenght = 0;
-	char testArr[10] = "test line";
-	AxisUtils::clearArray(testArr, 10);
+    int iLenght = 0;
+    int iExpectedLenght = 0;
+    char testArr[10] = "test line";
+    AxisUtils::clearArray(testArr, 10);
 
-	iLenght = strlen(testArr);
+    iLenght = strlen(testArr);
 
-	CPPUNIT_ASSERT_EQUAL(iExpectedLenght, iLenght);
+    CPPUNIT_ASSERT_EQUAL(iExpectedLenght, iLenght);
 }
 
 void AxisUtilsTestCase::testIsCharacterAvailable()
 {
-	bool bResult = false;
-	bool bExpectedResult = true;
+    bool bResult = false;
+    bool bExpectedResult = true;
 
-	bResult = AxisUtils::isCharacterAvailable("test line", 's');
+    bResult = AxisUtils::isCharacterAvailable("test line", 's');
 
-	CPPUNIT_ASSERT_EQUAL(bExpectedResult, bResult);
+    CPPUNIT_ASSERT_EQUAL(bExpectedResult, bResult);
 
-	bResult = false;
-	bExpectedResult = false;
+    bResult = false;
+    bExpectedResult = false;
 
-	bResult = AxisUtils::isCharacterAvailable("test line", 'r');
+    bResult = AxisUtils::isCharacterAvailable("test line", 'r');
 
-	CPPUNIT_ASSERT_EQUAL(bExpectedResult, bResult);
+    CPPUNIT_ASSERT_EQUAL(bExpectedResult, bResult);
 }
 
 void AxisUtilsTestCase::isCharacterAvailableref()
 {
 
-	bool bResult = false;
-	bool bExpectedResult = true;
-	string myString = "MyTestString";
+    bool bResult = false;
+    bool bExpectedResult = true;
+    string myString = "MyTestString";
 
-	bResult = AxisUtils::isCharacterAvailable(myString, 'S');
+    bResult = AxisUtils::isCharacterAvailable(myString, 'S');
 
-	CPPUNIT_ASSERT_EQUAL(bExpectedResult, bResult);
+    CPPUNIT_ASSERT_EQUAL(bExpectedResult, bResult);
 }
 
 
 void AxisUtilsTestCase::testToAxisXMLCh()
 {
-	const AxisChar* myString = "MyTestString";
-	const AxisChar* cResult;
+    const AxisChar* myString = "MyTestString";
+    const AxisChar* cResult;
 
 
-	cResult = AxisUtils::ToAxisXMLCh(myString);
+    cResult = AxisUtils::ToAxisXMLCh(myString);
 
-	string ExpectedString = "MyTestString";
-	string actualString = cResult;
+    string ExpectedString = "MyTestString";
+    string actualString = cResult;
 
-	CPPUNIT_ASSERT_EQUAL(ExpectedString, actualString);
+    CPPUNIT_ASSERT_EQUAL(ExpectedString, actualString);
 }
 
 void AxisUtilsTestCase::testtoLowerCase()
 {
-	const char* myString = "MyTestString";
+    const char* myString = "MyTestString";
 
-	char* ExpectedString = NULL;
-	char* sResult;
+    char* ExpectedString = NULL;
+    char* sResult;
 
 
-	sResult = AxisUtils::toLowerCase(myString);
+    sResult = AxisUtils::toLowerCase(myString);
 
- 	CPPUNIT_ASSERT_EQUAL(ExpectedString, sResult); 
+     CPPUNIT_ASSERT_EQUAL(ExpectedString, sResult); 
 }
 
 

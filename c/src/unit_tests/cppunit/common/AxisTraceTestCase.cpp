@@ -33,39 +33,39 @@ AxisTraceTestCase::~AxisTraceTestCase()
 
 void AxisTraceTestCase::setUp()
 {
-	pAxisTrace = new AxisTrace();
+    pAxisTrace = new AxisTrace();
 
 }
 
 void AxisTraceTestCase::tearDown()
 {
-	delete pAxisTrace;
-	pAxisTrace = NULL;
+    delete pAxisTrace;
+    pAxisTrace = NULL;
 }
 
 
 void AxisTraceTestCase::testTraceOne()
 {
-	int ExpectedInt = 0;
+    int ExpectedInt = 0;
 
-	const char* s1 = "MyTestString";
+    const char* s1 = "MyTestString";
 
-	int iResult;
+    int iResult;
 
-	iResult = pAxisTrace->trace(s1);
+    iResult = pAxisTrace->trace(s1);
 
-	CPPUNIT_ASSERT_EQUAL(ExpectedInt,iResult);
+    CPPUNIT_ASSERT_EQUAL(ExpectedInt,iResult);
 
 }
 
 Test* AxisTraceTestCase::suite()
 {
-	TestSuite *testSuite = new TestSuite("AxisTraceTestCase");
+    TestSuite *testSuite = new TestSuite("AxisTraceTestCase");
 
-	testSuite->addTest (new TestCaller <AxisTraceTestCase>
+    testSuite->addTest (new TestCaller <AxisTraceTestCase>
       ("testTraceOne", &AxisTraceTestCase::testTraceOne));
 
-	return testSuite;
+    return testSuite;
 
 }
 
