@@ -131,17 +131,32 @@ public class ParmHeaderFileWriter extends ParamWriter{
 				}
 			}
 			else if ("int".equals(baseType.getLocalPart())){
-				if (restrictionData.size()>1){ //there are enumerations
-					writer.write("enum { ");
+				if (restrictionData.size()>1){ //there are enumerations or [min|max]Inclusive
+					boolean isEnum = false;
+					boolean hasRestrictionItems = false;
 					for(int i=1; i<restrictionData.size();i++){
 						QName value = (QName)restrictionData.elementAt(i);
 						if ("enumeration".equals(value.getLocalPart())){
-							if (i>1) writer.write(", ");
-							writer.write("ENUM"+classname.toUpperCase()+"_"+value.getNamespaceURI()+"="+value.getNamespaceURI()); 
-						}
+							isEnum = true;
+							if (i>1) writer.write(", "); else writer.write(" enum { ");
+							writer.write("ENUM"+classname.toUpperCase()+"_"+value.getNamespaceURI()+"="+value.getNamespaceURI());		
+						} else if("minInclusive".equals(value.getLocalPart())){
+								hasRestrictionItems = true;
+								if (i<=1) writer.write(langTypeName + " " + classname + ";\n");
+								writer.write("static const int "+classname+"_MinInclusive = "+value.getNamespaceURI()+";\n");
+						}else if("maxInclusive".equals(value.getLocalPart())){
+								hasRestrictionItems=true;
+								if (i<=1) writer.write(langTypeName + " " + classname + ";\n");
+								writer.write("static const int "+classname+"_MaxInclusive = "+value.getNamespaceURI()+";\n");
+						}									
 					}
-					writer.write("} "+classname+";\n");
+					if (isEnum )
+						 writer.write("} "+classname+";\n");
+					else if (!hasRestrictionItems) 
+						writer.write(langTypeName + " " + classname + ";\n"); 
 				}
+			else
+				writer.write(langTypeName + " " + classname + ";\n"); 
 			}
 			else{
 				writer.write(langTypeName + " " + classname + ";\n");
