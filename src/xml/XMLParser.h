@@ -31,6 +31,8 @@
 
 #include <axis/server/GDefine.h>
 
+AXIS_CPP_NAMESPACE_USE
+
 /**
  * @class XMLParser
  * @brief Interface that any parser wrapper should implement in order to be

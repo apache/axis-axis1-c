@@ -23,6 +23,8 @@
 #include <axis/server/Attribute.h>
 #include "../common/AxisUtils.h"
 
+AXIS_CPP_NAMESPACE_START
+
 //map<int, SoapKeywordStruct> SoapKeywordMapping::m_Map;
 SoapKeywordStruct SoapKeywordMapping::m_Map[VERSION_LAST];
 volatile bool SoapKeywordMapping::m_bInit = false;
@@ -92,4 +94,4 @@ const SoapKeywordStruct& SoapKeywordMapping::map(int nVersion)
 {
     return m_Map[nVersion];
 }
-	
+AXIS_CPP_NAMESPACE_END	

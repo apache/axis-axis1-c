@@ -29,6 +29,8 @@ extern void* GetUserDeSerializer();
 #include <axis/server/GDefine.h>
 #include <list>
 
+AXIS_CPP_NAMESPACE_START
+
 using namespace std;
 /**
     @class DeserializerPool
@@ -48,5 +50,7 @@ class DeserializerPool:protected SharedObject
         int getInstance (IWrapperSoapDeSerializer** ppDZ);
         int putInstance (IWrapperSoapDeSerializer* pDZ);
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif 

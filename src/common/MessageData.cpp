@@ -24,8 +24,11 @@
 #include "IDeployerUtils.h"
 #include "../wsdd/WSDDDeployment.h"
 
+extern AXIS_CPP_NAMESPACE_PREFIX WSDDDeployment* g_pWSDDDeployment;
+
+AXIS_CPP_NAMESPACE_START
+
 const AxisChar* MessageData::m_pachBlankPropertyValue = "";
-extern WSDDDeployment* g_pWSDDDeployment;
 IMessageDataFunctions IMessageData::ms_VFtable;
 AdminUtils MessageData::m_AdminUtil;
 
@@ -177,3 +180,4 @@ void MessageData::getAdminUtils (IAdminUtils** pIAdminUtils)
 {
     *pIAdminUtils = &m_AdminUtil;
 }
+AXIS_CPP_NAMESPACE_END

@@ -28,6 +28,8 @@
 #include <string>
 #include <axis/server/AxisException.h>
 
+AXIS_CPP_NAMESPACE_START
+
 using namespace std;
 
 class AxisMessage
@@ -42,6 +44,8 @@ private:
     string m_sMessage;
     int m_iExceptionCode;
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif
 

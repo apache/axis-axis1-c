@@ -55,6 +55,8 @@ typedef enum
     HEADER_LEVEL=0, HEADER_BLOCK_LEVEL, HEADER_BLOCK_INSIDE_LEVEL
 } HEADER_LEVELS;
 
+AXIS_CPP_NAMESPACE_START
+
 class SoapHeader : public ISoapHeader
 {
 private:    
@@ -144,6 +146,6 @@ public:
       */
     virtual ~SoapHeader();
 };
-
+AXIS_CPP_NAMESPACE_END
 #endif 
 

@@ -64,7 +64,10 @@
 
 #include <list>
 
-extern AxisTrace* g_pAT;
+extern AXIS_CPP_NAMESPACE_PREFIX AxisTrace* g_pAT;
+
+AXIS_CPP_NAMESPACE_START
+
 
 #define INITIAL_ARRAY_SIZE 1
 
@@ -3361,3 +3364,4 @@ void SoapDeSerializer::serializeTag(AxisString& xmlStr, const AnyElement* node, 
     }
 }
 
+AXIS_CPP_NAMESPACE_END

@@ -24,6 +24,8 @@
 #include "AxisUtils.h"
 #include <axis/server/GDefine.h>
 
+AXIS_CPP_NAMESPACE_START
+
 AxisXMLCh AxisUtils::m_Buffer[CONVERT_BUFFER_SIZE];
 
 AxisUtils::AxisUtils ()
@@ -126,3 +128,5 @@ char* AxisUtils::toLowerCase (const char* pchWord)
 
     return NULL;
 }
+
+AXIS_CPP_NAMESPACE_END

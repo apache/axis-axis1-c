@@ -25,12 +25,14 @@
 #include "DeserializerPool.h"
 #include "SerializerPool.h"
 #include "../common/AxisTrace.h"
-extern AxisTrace* g_pAT;
 
-extern DeserializerPool* g_pDeserializerPool;
-extern SerializerPool* g_pSerializerPool;
-extern HandlerPool* g_pHandlerPool;
+extern AXIS_CPP_NAMESPACE_PREFIX AxisTrace* g_pAT;
+extern AXIS_CPP_NAMESPACE_PREFIX DeserializerPool* g_pDeserializerPool;
+extern AXIS_CPP_NAMESPACE_PREFIX SerializerPool* g_pSerializerPool;
+extern AXIS_CPP_NAMESPACE_PREFIX HandlerPool* g_pHandlerPool;
 // extern WSDDDeployment* g_pWSDDDeployment;
+
+AXIS_CPP_NAMESPACE_START
 
 AxisEngine::AxisEngine ()
 {
@@ -115,3 +117,5 @@ int AxisEngine::initializeHandlers (string & sSessionId,
         return Status;
     return Status;
 }
+
+AXIS_CPP_NAMESPACE_END

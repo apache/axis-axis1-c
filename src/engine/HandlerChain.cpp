@@ -22,7 +22,11 @@
 
 #include "HandlerChain.h"
 #include "../common/AxisTrace.h"
-extern AxisTrace* g_pAT;
+
+extern AXIS_CPP_NAMESPACE_PREFIX AxisTrace* g_pAT;
+
+AXIS_CPP_NAMESPACE_START
+
 
 HandlerChain::HandlerChain ()
 {
@@ -111,3 +115,5 @@ int HandlerChain::fini ()
     m_HandlerList.clear ();
     return AXIS_SUCCESS;
 }
+
+AXIS_CPP_NAMESPACE_END

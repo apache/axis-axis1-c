@@ -179,7 +179,8 @@ public class ParmHeaderFileWriter extends ParamWriter{
 	  try{
 		Type atype;
 		Iterator types = this.wscontext.getTypemap().getTypes().iterator();
-		writer.write("#include <axis/server/AxisUserAPI.h>\n\n");
+		writer.write("#include <axis/server/AxisUserAPI.h>\n");
+		writer.write("AXIS_CPP_NAMESPACE_USE \n\n");
 		HashSet typeSet = new HashSet();
 		for (int i=0;i<attribs.length; i++)
 		{

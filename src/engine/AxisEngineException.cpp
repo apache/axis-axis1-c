@@ -25,6 +25,9 @@
  *    Default when no parameter passed. When thrown with no parameter
  *    more general SERVER_ENGINE_EXCEPTION is assumed.
 */
+
+AXIS_CPP_NAMESPACE_START
+
 AxisEngineException::AxisEngineException()
 {
     processException(SERVER_ENGINE_EXCEPTION);
@@ -150,3 +153,4 @@ const int AxisEngineException::getExceptionCode()
     return m_iExceptionCode;
 }
 
+AXIS_CPP_NAMESPACE_END

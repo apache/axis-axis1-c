@@ -40,8 +40,11 @@
 
 #include "../common/AxisTrace.h"
 #include "../common/AxisConfig.h"
-extern AxisTrace* g_pAT;
-extern AxisConfig* g_pConfig;
+
+extern AXIS_CPP_NAMESPACE_PREFIX AxisTrace* g_pAT;
+extern AXIS_CPP_NAMESPACE_PREFIX AxisConfig* g_pConfig;
+
+AXIS_CPP_NAMESPACE_START
 
 IWrapperSoapSerializerFunctions IWrapperSoapSerializer::ms_VFtable;
 
@@ -815,3 +818,5 @@ IHeaderBlock* SoapSerializer::getNextHeaderBlock()
 {
 	return m_pSoapEnvelope->m_pSoapHeader->getNextHeaderBlock();
 }
+
+AXIS_CPP_NAMESPACE_END

@@ -40,6 +40,9 @@
  * @brief Class that implements the SOAPTransport interface with LibWWW library.
  *
  */
+
+AXIS_CPP_NAMESPACE_USE
+
 class LibWWWTransport : public SOAPTransport
 {
 public:

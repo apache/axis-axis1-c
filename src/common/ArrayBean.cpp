@@ -25,6 +25,7 @@
 #include "BasicTypeSerializer.h"
 #include "../engine/AxisEngine.h"
 
+AXIS_CPP_NAMESPACE_START
 
 ArrayBean::ArrayBean()
 {
@@ -396,3 +397,5 @@ void ArrayBean::RemoveArrayPointer()
         m_value.sta = NULL;
     }
 }
+
+AXIS_CPP_NAMESPACE_END

@@ -47,6 +47,8 @@
 #define DLHandler void*
 #endif
 
+AXIS_CPP_NAMESPACE_START
+
 class SOAPTransport;
 
 typedef int (* CREATE_OBJECT1) (SOAPTransport** inst);
@@ -87,6 +89,8 @@ private:
     static DELETE_OBJECT1 m_Delete;
 
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif 
 

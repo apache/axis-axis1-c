@@ -32,6 +32,9 @@ using namespace std;
     @author Susantha Kumara (skumara@virtusa.com)
     @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
 */
+
+AXIS_CPP_NAMESPACE_START
+
 class AxisUtils
 {
     friend class TypeMapping;
@@ -94,5 +97,7 @@ class AxisUtils
         static AxisXMLCh m_Buffer[CONVERT_BUFFER_SIZE];
 
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif 

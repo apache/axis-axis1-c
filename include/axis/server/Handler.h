@@ -39,6 +39,8 @@
  *  are not needed to be implemented by the users. These are generic methods.
  */
 
+AXIS_CPP_NAMESPACE_START
+
 class Handler : public HandlerBase
 {
 public:
@@ -104,6 +106,8 @@ protected:
 	  */
 	string m_sEmpty;
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif 
 

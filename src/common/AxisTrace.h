@@ -51,6 +51,8 @@
  * @author Damitha Kumarage (damitha@opensource.lk, damitha@jkcsworld.com)
  */
 
+AXIS_CPP_NAMESPACE_START
+
 class AxisTrace
 {
 public:
@@ -175,6 +177,8 @@ private:
 };
 
 /* static AxisTrace tracer; */
+
+AXIS_CPP_NAMESPACE_END
 
 #endif
 

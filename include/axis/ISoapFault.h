@@ -28,6 +28,8 @@
 #if !defined(_ISOAPFAULT_H____OF_AXIS_INCLUDED_)
 #define _ISOAPFAULT_H____OF_AXIS_INCLUDED_
 
+AXIS_CPP_NAMESPACE_START
+
 using namespace std;
 
 /**
@@ -105,6 +107,8 @@ public:
     virtual int setCmplxFaultObject(const void* pCmplxFaultObject) = 0;
 
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif 
 

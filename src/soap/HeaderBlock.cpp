@@ -60,6 +60,8 @@
 #include "CharacterElement.h"
 #include <axis/server/Attribute.h>
 
+AXIS_CPP_NAMESPACE_START
+
 HeaderBlockFunctions IHeaderBlock::ms_VFtable;
 bool IHeaderBlock::bInitialized = false;
 
@@ -719,3 +721,5 @@ const BasicNode* HeaderBlock::getFirstChild()
 
     return NULL;
 }
+
+AXIS_CPP_NAMESPACE_END

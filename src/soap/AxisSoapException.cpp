@@ -25,6 +25,9 @@
  *    Default when no parameter passed. When thrown with no parameter
  *    more general SERVER_SOAP_EXCEPTION is assumed.
 */
+
+AXIS_CPP_NAMESPACE_START
+
 AxisSoapException::AxisSoapException()
 {
     processException(SERVER_SOAP_EXCEPTION);
@@ -132,3 +135,4 @@ const int AxisSoapException::getExceptionCode()
     return m_iExceptionCode;
 }
 
+AXIS_CPP_NAMESPACE_END

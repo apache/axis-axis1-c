@@ -30,9 +30,13 @@
 
 #include <list>
 
+
+AXIS_CPP_NAMESPACE_START
 using namespace std;
 
 class SoapSerializer;
+
+AXIS_CPP_NAMESPACE_END
 
 #endif
 
@@ -72,6 +76,9 @@ typedef struct {
 
 #ifdef __cplusplus
 
+AXIS_CPP_NAMESPACE_START
+using namespace std;
+
 class BasicNode
 {
 public:
@@ -87,7 +94,7 @@ public:
       *      (i.e pachPrefix has to be a empty string)).
       * The operation behavior depends on the TYPE of the node.
       */
-    virtual IAttribute* getAttribute(AxisChar* pachPrefix, AxisChar* pachLocalname, AxisChar* pachLocalname) = 0;
+//    virtual IAttribute* getAttribute(AxisChar* pachPrefix, AxisChar* pachLocalname, AxisChar* pachLocalname) = 0;
 
     /**
       * Returns the first Attribute of this node. The operation
@@ -256,7 +263,7 @@ public:
 
     virtual int serialize(SoapSerializer& pSZ) =0;
     virtual int serialize(SoapSerializer& pSZ, 
-        list<AxisChar*>& lstTmpNameSpaceStack) =0;
+    std::list<AxisChar*>& lstTmpNameSpaceStack) =0;
     BasicNode();
     BasicNode(const AxisChar* pachValue, NODE_TYPE eNodeType = ELEMENT_NODE);
     BasicNode(const BasicNode& rCopy);
@@ -278,12 +285,18 @@ protected:
 
 };
 
+AXIS_CPP_NAMESPACE_END
+
 #endif
+
+AXIS_CPP_NAMESPACE_START
 
 typedef struct { 
 	void* _object; /* this will be C++ Call Object */
 	BasicNodeFunctions* _functions; /* this is the static function table */
 } BasicNode_C;
+
+AXIS_CPP_NAMESPACE_END
 
 #ifndef __cplusplus
 typedef BasicNode_C BasicNode; 

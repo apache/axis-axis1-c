@@ -21,7 +21,7 @@
 
 #include "../wsdd/WSDDTransport.h"
 
-
+AXIS_CPP_NAMESPACE_START
 
 WSDDTransport::WSDDTransport()
 {
@@ -182,3 +182,4 @@ int WSDDTransport::updateWSDD(FILE* wsddfile, int tabcount)
     return AXIS_SUCCESS;
 }
 
+AXIS_CPP_NAMESPACE_END

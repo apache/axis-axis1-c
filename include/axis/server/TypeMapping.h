@@ -43,6 +43,8 @@ typedef enum XSDTYPETag
 #include <map>
 #include <string>
 
+AXIS_CPP_NAMESPACE_START
+
 using namespace std;
 
 /**
@@ -60,15 +62,17 @@ public:
     static void initialize();
 
 #if (defined(AIX) || (defined(_MSC_VER) && _MSC_VER >= 1300) || defined( __OS400__ ))
-    static std::map<AxisXMLString, XSDTYPE> m_sTypeMap;
+    static std::map<std::AxisXMLString, XSDTYPE> m_sTypeMap;
 #else
-    static std::map<const AxisXMLString, XSDTYPE> m_sTypeMap;
+    static std::map<const std::AxisXMLString, XSDTYPE> m_sTypeMap;
 #endif
     static volatile bool m_bInit;
     TypeMapping();
     virtual ~TypeMapping();
 
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif
 

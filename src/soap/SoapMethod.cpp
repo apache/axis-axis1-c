@@ -24,6 +24,7 @@
 #include <axis/server/Attribute.h>
 #include <axis/server/GDefine.h>
 
+AXIS_CPP_NAMESPACE_START
 
 SoapMethod::SoapMethod()
 {
@@ -281,6 +282,8 @@ int SoapMethod::reset()
 
     return AXIS_SUCCESS;
 }
+
+AXIS_CPP_NAMESPACE_END
 
 #ifdef UNIT_TESTING_ON
 int SoapMethod::initializeForTesting()

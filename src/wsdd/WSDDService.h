@@ -25,6 +25,9 @@
  *  @brief interface for the WSDDService class.
  *  @author Susantha Kumara (skumara@virtusa.com)
  */
+
+AXIS_CPP_NAMESPACE_START
+
 class WSDDService : public WSDDHandler 
 {
 public:
@@ -54,6 +57,8 @@ private:
 };
 
 typedef map<AxisString, WSDDService*> WSDDServiceMap;
+
+AXIS_CPP_NAMESPACE_END
 
 #endif
 

@@ -25,6 +25,9 @@
  *  @brief interface for the HandlerChain class.
  *  @author Susantha Kumara (skumara@virtusa.com)
  */
+
+AXIS_CPP_NAMESPACE_START
+
 class HandlerChain : public HandlerBase  
 {
     friend class HandlerPool;
@@ -51,6 +54,8 @@ private:
     list<ChainItem> m_HandlerList;
     list<ChainItem>::iterator m_itCurrHandler;
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif 
 

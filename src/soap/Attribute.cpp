@@ -41,6 +41,8 @@
 #include <axis/server/GDefine.h>
 #include "SoapSerializer.h"
 
+AXIS_CPP_NAMESPACE_START
+
 AttributeFunctions Attribute::ms_VFtable;
 bool Attribute::bInitialized = false;
 
@@ -216,4 +218,4 @@ Attribute::Attribute(const AxisChar *localname, const AxisChar *prefix,
     m_value= value;
 }
 
-
+AXIS_CPP_NAMESPACE_END

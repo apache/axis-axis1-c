@@ -165,10 +165,10 @@ public abstract class ParamWriter extends BasicFileWriter{
 			if (attrib.isSimpleType())
 				return CUtils.getBasicArrayNameforType(attrib.getTypeName());
 			else
-				return "struct " +CUtils.getCmplxArrayNameforType(attrib.getSchemaName());
+				return CUtils.getCmplxArrayNameforType(attrib.getSchemaName());
 		}
 		else if (!attrib.isSimpleType()){
-			return "struct " +attrib.getTypeName()+"*";	
+			return attrib.getTypeName()+"*";	
 		}else{
 			if (attrib.isAttribute() && attrib.isOptional()){ //variables corresponding to optional attributes are pointer types
 				return attrib.getTypeName()+"*";	

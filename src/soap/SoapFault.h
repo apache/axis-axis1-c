@@ -25,8 +25,6 @@
 #include <axis/ISoapFault.h>
 #include "../common/Param.h"
 #include <axis/server/SoapEnvVersions.h>
-class SoapSerializer;
-class SoapDeSerializer;
 
 #include <string>
 #include <map>
@@ -66,6 +64,11 @@ static SoapFaultStruct* s_parrSoapFaultStruct;
  *  Corrected it to serialize the correct prefix. Added the parameter
  *  "SOAP_VERSION eSoapVersion" to the "serialize" method.
  */
+
+AXIS_CPP_NAMESPACE_START
+
+class SoapSerializer;
+class SoapDeSerializer;
 
 class SoapFault : public ISoapFault  
 {
@@ -149,6 +152,8 @@ private:
     bool m_bIsSimpleDetail;
     static volatile bool m_bInit;
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif 
 

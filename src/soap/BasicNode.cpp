@@ -35,6 +35,9 @@
 
 
 #include <axis/server/BasicNode.h>
+
+AXIS_CPP_NAMESPACE_START
+
 BasicNode::BasicNode():m_pachValue(NULL)
 {}
 
@@ -63,3 +66,4 @@ BasicNode::~BasicNode()
 		free(m_pachValue);
 }
 
+AXIS_CPP_NAMESPACE_END

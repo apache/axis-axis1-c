@@ -40,6 +40,8 @@
 extern "C" int initialize_module (int bServer);
 extern "C" int uninitialize_module ();
 
+AXIS_CPP_NAMESPACE_USE
+
 bool CallBase::bInitialized = false;
 CallFunctions CallBase::ms_VFtable;
 

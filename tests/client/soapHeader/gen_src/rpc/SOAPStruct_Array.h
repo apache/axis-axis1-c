@@ -6,6 +6,8 @@
 #if !defined(__SOAPSTRUCT_ARRAY_ARRAY_H__INCLUDED_)
 #define __SOAPSTRUCT_ARRAY_ARRAY_H__INCLUDED_
 
+AXIS_CPP_NAMESPACE_USE
+
 class SOAPStruct;
 
 typedef struct SOAPStruct_ArrayTag

@@ -24,11 +24,12 @@
 #include "../HandlerPool.h"
 #include "../../common/AxisMessage.h"
 #include "../../common/AxisTrace.h"
-extern AxisTrace* g_pAT;
 
-extern HandlerPool* g_pHandlerPool;
-extern WSDDDeployment* g_pWSDDDeployment;
+extern AXIS_CPP_NAMESPACE_PREFIX AxisTrace* g_pAT;
+extern AXIS_CPP_NAMESPACE_PREFIX HandlerPool* g_pHandlerPool;
+extern AXIS_CPP_NAMESPACE_PREFIX WSDDDeployment* g_pWSDDDeployment;
 
+AXIS_CPP_NAMESPACE_START
 
 ServerAxisEngine::ServerAxisEngine ()
 {
@@ -516,3 +517,5 @@ int ServerAxisEngine::releaseHandlers(SOAPTransport* pStream)
 
     return AXIS_SUCCESS;
 }
+
+AXIS_CPP_NAMESPACE_END

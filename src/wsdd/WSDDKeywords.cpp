@@ -19,7 +19,6 @@
 
 #define __TRC(X) AxisUtils::ToAxisXMLCh(X)
 
-volatile bool WSDDKeywords::m_bInit = false;
 
 
 #define AX_DELETE(X) delete const_cast<AxisXMLCh*>(X)
@@ -46,6 +45,11 @@ const AxisXMLCh* kw_scope;
 const AxisXMLCh* kw_http;
 const AxisXMLCh* kw_smtp;
 const AxisXMLCh* kw_desc;
+
+AXIS_CPP_NAMESPACE_START
+
+volatile bool WSDDKeywords::m_bInit = false;
+
 
 WSDDKeywords::WSDDKeywords()
 {
@@ -97,4 +101,4 @@ void WSDDKeywords::unInitialize()
     }
 }
 
-
+AXIS_CPP_NAMESPACE_END

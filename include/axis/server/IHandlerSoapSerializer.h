@@ -20,6 +20,8 @@
 #include "IWrapperSoapSerializer.h"
 #include "SoapEnvVersions.h"
 
+AXIS_CPP_NAMESPACE_START
+
 class ISoapHeader;
 class IHeaderBlock;
 /**
@@ -141,6 +143,8 @@ public:
     virtual int AXISCALL setBodyAsBase64Binary(xsd__base64Binary body)=0;
     virtual const AxisChar* AXISCALL getBodyAsString()=0;
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif 
 

@@ -24,6 +24,7 @@
 #include "../../transport/SOAPTransport.h"
 
 XERCES_CPP_NAMESPACE_USE
+AXIS_CPP_NAMESPACE_USE
 
 class SoapBinInputStream : public BinInputStream
 {

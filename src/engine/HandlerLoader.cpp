@@ -28,9 +28,11 @@
 #include "../common/AxisUtils.h"
 #include "../wsdd/WSDDDeployment.h"
 #include "../common/AxisTrace.h"
-extern AxisTrace* g_pAT;
 
-extern WSDDDeployment* g_pWSDDDeployment;
+extern AXIS_CPP_NAMESPACE_PREFIX AxisTrace* g_pAT;
+extern AXIS_CPP_NAMESPACE_PREFIX WSDDDeployment* g_pWSDDDeployment;
+
+AXIS_CPP_NAMESPACE_START
 
 HandlerLoader::HandlerLoader ()
 {
@@ -245,3 +247,5 @@ int HandlerLoader::createHandler (BasicHandler** pHandler, int nLibId)
         //return SERVER_ENGINE_HANDLERCREATIONFAILED;
     }
 }
+
+AXIS_CPP_NAMESPACE_END

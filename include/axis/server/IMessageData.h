@@ -21,8 +21,12 @@
 
 #include "GDefine.h"
 
+AXIS_CPP_NAMESPACE_START
+
 class WSDDService;
 class IAdminUtils;
+
+AXIS_CPP_NAMESPACE_END
 
 #include "IHandlerSoapDeSerializer.h"
 #include "IHandlerSoapSerializer.h"
@@ -56,6 +60,9 @@ typedef IMessageData_C IMessageData;
  *   @author Susantha Kumara (skumara@virtusa.com, susantha@opensource.lk)
  *   @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
  */
+
+AXIS_CPP_NAMESPACE_START
+
 class IMessageData
 {
     /* Allow AxisAdminService access to the private methods */
@@ -105,6 +112,8 @@ public:
         ms_VFtable.getSoapDeSerializer = s_GetSoapDeSerializer;
     }
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif
 

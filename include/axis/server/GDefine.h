@@ -55,8 +55,29 @@ typedef enum
 #define XML_Ch AxisChar
 
 #ifdef __cplusplus
+
+#define AXIS_CPP_NAMESPACE_START namespace axiscpp {
+#define AXIS_CPP_NAMESPACE_END }
+/*
+The following is necessary for the skeletons and stubs to be built
+*/
+namespace axiscpp {}
+
+#define AXIS_CPP_NAMESPACE_USE using namespace axiscpp;
+#define AXIS_CPP_NAMESPACE_PREFIX axiscpp::
+
+
 #define AxisString basic_string<char>
 #define AxisXMLString basic_string<AxisXMLCh>
+
+#else
+
+#define AXIS_CPP_NAMESPACE_START 
+#define AXIS_CPP_NAMESPACE_END 
+
+#define AXIS_CPP_NAMESPACE_USE 
+#define AXIS_CPP_NAMESPACE_PREFIX
+
 #endif
 
 #ifdef WIN32

@@ -30,12 +30,9 @@
 #include <axis/server/GDefine.h>
 #include <axis/server/IHandlerSoapSerializer.h>
 #include <axis/server/IHandlerSoapDeSerializer.h>
-#include <axis/server/HeaderBlock.h>
-#include <axis/server/SoapHeader.h>
 #include <axis/server/BasicNode.h>
 #include <iostream>
 
-#include <axis/server/CharacterElement.h>
 
 
 ESHHandler::ESHHandler()
@@ -63,7 +60,7 @@ int ESHHandler::invoke(void *pvIMsg)
 
 	        pachTemp = "EchoStringHeaderHandlerPr1.id";
         
-		const AxisChar* pachHeaderVal = pIMsg->getProperty(pachTemp);
+		const AxisChar* pachHeaderVal = (AxisChar*)pIMsg->getProperty(pachTemp);
 		printf("in the ESHHandler::Invoke : %s\n",pachHeaderVal);
 
 		BasicNode* pBasicNode = pIHeaderBlock->createChild(CHARACTER_NODE);

@@ -28,9 +28,10 @@
 #include "AxisEngineException.h"
 #include "../common/AxisTrace.h"
                                                                                                                              
-extern AxisTrace* g_pAT;
+extern AXIS_CPP_NAMESPACE_PREFIX AxisTrace* g_pAT;
+extern AXIS_CPP_NAMESPACE_PREFIX AxisConfig* g_pConfig;
 
-extern AxisConfig* g_pConfig;
+AXIS_CPP_NAMESPACE_START
 
 const char* XMLParserFactory::m_pcLibraryPath = 0;
 DLHandler XMLParserFactory::m_LibHandler = 0;
@@ -140,3 +141,4 @@ int XMLParserFactory::unloadLib()
     return AXIS_SUCCESS;
 }
 
+AXIS_CPP_NAMESPACE_END

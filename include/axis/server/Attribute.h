@@ -29,6 +29,8 @@
 #include <list>
 #include <string>
 
+AXIS_CPP_NAMESPACE_START
+
 using namespace std;
 
 class SoapSerializer;
@@ -109,6 +111,8 @@ typedef struct {
 	void* _object; /* this will be C++ Call Object */
 	AttributeFunctions* _functions; /* this is the static function table */
 } Attribute_C;
+
+AXIS_CPP_NAMESPACE_END
 
 #ifndef __cplusplus
 typedef Attribute_C Attribute; 

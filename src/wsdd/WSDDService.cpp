@@ -23,7 +23,7 @@
 #include "WSDDService.h"
 #include "../common/AxisTrace.h"
 
-
+AXIS_CPP_NAMESPACE_START
 
 WSDDService::WSDDService()
 {
@@ -243,4 +243,4 @@ const char* WSDDService::getProviderString()
     return 0;
 }
 
-
+AXIS_CPP_NAMESPACE_END

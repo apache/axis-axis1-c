@@ -20,6 +20,8 @@
  
 #include "AxisMessage.h"
 
+AXIS_CPP_NAMESPACE_START
+
 const string& AxisMessage::getMessage(int iExceptionCode)
 {
     switch(iExceptionCode)
@@ -194,3 +196,4 @@ const string& AxisMessage::getMessage(int iExceptionCode)
     return m_sMessage;
 }
 
+AXIS_CPP_NAMESPACE_END

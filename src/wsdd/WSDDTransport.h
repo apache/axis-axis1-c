@@ -25,6 +25,11 @@
  *   @brief interface for the WSDDTransport class.
  *   @author Susantha Kumara (skumara@virtusa.com)
  */
+
+AXIS_CPP_NAMESPACE_START
+
+using namespace std;
+
 class WSDDTransport  
 {
 public:
@@ -42,6 +47,8 @@ private:
     map<AXIS_PROTOCOL_TYPE, WSDDHandlerList>* m_RequestHandlers;
     map<AXIS_PROTOCOL_TYPE, WSDDHandlerList>* m_ResponseHandlers;
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif 
 

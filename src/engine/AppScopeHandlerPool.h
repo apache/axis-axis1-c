@@ -26,6 +26,8 @@
 #include <list>
 #include <string>
 
+AXIS_CPP_NAMESPACE_START
+
 using namespace std;
 
 /*
@@ -47,5 +49,7 @@ class AppScopeHandlerPool:protected SharedObject
         int getInstance (BasicHandler** pHandler, int nLibId);
         int putInstance (BasicHandler* pHandler, int nLibId);
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif 

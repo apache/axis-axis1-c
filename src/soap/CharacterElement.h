@@ -46,6 +46,9 @@
  * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
  * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
  */
+
+AXIS_CPP_NAMESPACE_START
+
 class CharacterElement : public BasicNode
 {
 public:
@@ -275,5 +278,7 @@ public:
       */
     virtual ~CharacterElement();
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif 

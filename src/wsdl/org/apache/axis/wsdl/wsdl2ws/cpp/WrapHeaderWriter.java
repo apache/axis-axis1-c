@@ -118,7 +118,8 @@ public class WrapHeaderWriter extends HeaderFileWriter{
 			writer.write("#include <axis/server/IMessageData.h>\n");
 			writer.write("#include <axis/server/GDefine.h>\n");
 			writer.write("#include <axis/server/AxisWrapperAPI.h>\n");
-			writer.write("#include \"AxisServiceException.h\" \n\n");
+			writer.write("#include \"AxisServiceException.h\" \n");
+			writer.write("AXIS_CPP_NAMESPACE_USE \n\n");
 			//writeFaultHeaders();
 			
 		}catch(IOException e){

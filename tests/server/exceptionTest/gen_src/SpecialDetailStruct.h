@@ -8,6 +8,8 @@
 
 #include <axis/server/AxisUserAPI.h>
 
+AXIS_CPP_NAMESPACE_USE
+
 /*Local name and the URI for the type*/
 static const char* Axis_URI_SpecialDetailStruct = "http://soapinterop.org/types";
 static const char* Axis_TypeName_SpecialDetailStruct = "SpecialDetailStruct";

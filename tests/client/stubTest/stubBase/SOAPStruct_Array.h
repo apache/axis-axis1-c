@@ -9,6 +9,8 @@
 
 #include "SOAPStruct.h"
 
+AXIS_CPP_NAMESPACE_USE
+
 typedef struct SOAPStruct_ArrayTag
 {
 	SOAPStruct* m_Array;

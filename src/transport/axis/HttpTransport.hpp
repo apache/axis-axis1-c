@@ -44,8 +44,9 @@
     #include "SecureChannel.hpp"
 #endif
 #include "../../common/AxisTrace.h"
-extern AxisTrace* g_pAT;
 #include "AxisTransportException.h"
+
+extern AxisTrace* g_pAT;
 
 /*
  * Implements HTTP transport as SOAP-Envelop carrier, for sending/receiving

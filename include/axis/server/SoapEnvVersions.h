@@ -64,7 +64,11 @@ typedef enum SOAP_VERSIONTag
 
 #ifdef __cplusplus
 
+AXIS_CPP_NAMESPACE_START
+
 class Attribute;
+
+AXIS_CPP_NAMESPACE_END
 
 struct SoapEnvVersionsStruct 
 {    

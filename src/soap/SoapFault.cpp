@@ -47,8 +47,11 @@
 #include <axis/server/GDefine.h>
 #include "../common/AxisTrace.h"
 #include "../common/AxisConfig.h"
-extern AxisTrace* g_pAT;
-extern AxisConfig* g_pConfig;
+
+extern AXIS_CPP_NAMESPACE_PREFIX AxisTrace* g_pAT;
+extern AXIS_CPP_NAMESPACE_PREFIX AxisConfig* g_pConfig;
+
+AXIS_CPP_NAMESPACE_START
 
 volatile bool SoapFault::m_bInit = false;
 
@@ -410,3 +413,4 @@ bool SoapFault::operator ==(const SoapFault &objSoapFault)
     return false;
 }
 
+AXIS_CPP_NAMESPACE_END

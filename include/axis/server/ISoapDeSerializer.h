@@ -23,11 +23,16 @@
  *
  *  @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
  */
+
+AXIS_CPP_NAMESPACE_START
+
 class ISoapDeSerializer
 {
 public:
     virtual ~ISoapDeSerializer() {};
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif 
 

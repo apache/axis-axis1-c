@@ -14,8 +14,8 @@
 
 extern void* get_InteropTestPortTypeB_stub(const char* pchEndPointUri);
 extern void destroy_InteropTestPortTypeB_stub(void* p);
-extern void echoStructAsSimpleTypes(void* pStub, SOAPStruct* Value0, AXIS_OUT_PARAM float *OutValue0, AXIS_OUT_PARAM int *OutValue1, AXIS_OUT_PARAM xsd__string *OutValue2);
-extern SOAPStruct* echoSimpleTypesAsStruct(void* pStub, float Value0, int Value1, xsd__string Value2);
+extern void echoStructAsSimpleTypes(void* pStub, SOAPStruct* Value0, AXIS_OUT_PARAM xsd__string *OutValue0, AXIS_OUT_PARAM int *OutValue1, AXIS_OUT_PARAM float *OutValue2);
+extern SOAPStruct* echoSimpleTypesAsStruct(void* pStub, xsd__string Value0, int Value1, float Value2);
 extern SOAPStructStruct* echoNestedStruct(void* pStub, SOAPStructStruct* Value0);
 extern SOAPArrayStruct* echoNestedArray(void* pStub, SOAPArrayStruct* Value0);
 

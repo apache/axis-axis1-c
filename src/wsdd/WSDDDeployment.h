@@ -27,9 +27,12 @@
 
 #include <list>
 
+enum DEPLOYMENTTYPE {DT_DEPLOYMENT, DT_UNDEPLOYMENT};
+
+AXIS_CPP_NAMESPACE_START
+
 using namespace std;
 
-enum DEPLOYMENTTYPE {DT_DEPLOYMENT, DT_UNDEPLOYMENT};
 /*
  *  @class WSDDDeployment
  *  @brief interface for the WSDDDeployment class.
@@ -67,11 +70,13 @@ private:
     WSDDHandlerList* m_GlobalRequestHandlers;
     WSDDHandlerList* m_GlobalResponseHandlers;
     WSDDTransport* m_pTransportHandlers;
-    map<AxisString, int>* m_pLibNameIdMap;
-    AxisString m_sAux;
-    string m_sWSDDPath;
+    std::map<std::AxisString, int>* m_pLibNameIdMap;
+    std::AxisString m_sAux;
+    std::string m_sWSDDPath;
     DEPLOYMENTTYPE m_DeplType;
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif 
 

@@ -21,6 +21,8 @@
 
 #include "SharedObject.h"
 
+AXIS_CPP_NAMESPACE_START
+
 SharedObject::SharedObject ()
 {
     m_bLocked = false;
@@ -67,3 +69,5 @@ int SharedObject::unlock ()
     m_bLocked = false;
     return 0;
 }
+
+AXIS_CPP_NAMESPACE_END

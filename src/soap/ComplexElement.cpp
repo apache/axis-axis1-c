@@ -47,6 +47,8 @@
 #include <axis/server/GDefine.h>
 #include <axis/server/Attribute.h>
 
+AXIS_CPP_NAMESPACE_START
+
 ComplexElement::ComplexElement()
 {
     m_pachPrefix = '\0';
@@ -444,6 +446,7 @@ int ComplexElement::getNoOfChildren()
 {
     return iNoOfChildren;
 }
+//<<<<<<< ComplexElement.cpp
 
 const AxisChar* ComplexElement::getLocalName() {
     return m_pachLocalName; 
@@ -537,3 +540,6 @@ IAttribute* ComplexElement::getAttribute(AxisChar* pachPrefix,
 
     return NULL;
 }
+//=======
+
+AXIS_CPP_NAMESPACE_END//>>>>>>> 1.18.12.1

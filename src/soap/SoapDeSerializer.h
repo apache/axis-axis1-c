@@ -21,13 +21,15 @@
 #include "HeaderBlock.h"
 #include "../xml/XMLParser.h"
 
+AXIS_CPP_NAMESPACE_START
+
 class SoapFault;
 class SoapMethod;
 class SoapBody;
 class SoapEnvelope;
 class SoapHeader;
 class IHeaderBlock;
-
+using namespace std;
 /*
  *  @class SoapDeSerializer
  *  @brief interface for the SoapDeSerializer class.
@@ -212,6 +214,8 @@ private:
     xsd__base64Binary decodeFromBase64Binary(const AxisChar* pValue);
     xsd__hexBinary decodeFromHexBinary(const AxisChar* pValue);
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif 
 

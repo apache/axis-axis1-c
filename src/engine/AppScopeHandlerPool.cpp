@@ -24,9 +24,11 @@
 #include "HandlerLoader.h"
 #include <axis/server/AxisException.h>
 #include "../common/AxisTrace.h"
-extern AxisTrace* g_pAT;
 
-extern HandlerLoader* g_pHandlerLoader;
+extern AXIS_CPP_NAMESPACE_PREFIX AxisTrace* g_pAT;
+extern AXIS_CPP_NAMESPACE_PREFIX HandlerLoader* g_pHandlerLoader;
+
+AXIS_CPP_NAMESPACE_START
 
 /* this class does not do the object level blocking. Instead expects the 
  * thread level blocking and waiting by the caller thread.
@@ -100,3 +102,5 @@ int AppScopeHandlerPool::putInstance (BasicHandler* pHandler, int nLibId)
     unlock ();
     return AXIS_SUCCESS;
 }
+
+AXIS_CPP_NAMESPACE_END

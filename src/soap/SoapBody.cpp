@@ -41,7 +41,11 @@
 #include <axis/server/GDefine.h>
 #include <axis/server/Attribute.h>
 #include "../common/AxisTrace.h"
-extern AxisTrace* g_pAT;
+
+extern AXIS_CPP_NAMESPACE_PREFIX AxisTrace* g_pAT;
+
+AXIS_CPP_NAMESPACE_START
+
 
 SoapBody::SoapBody()
 {
@@ -148,6 +152,8 @@ int SoapBody::serializeAttributes(SoapSerializer& pSZ)
 
     return iStatus;
 }
+
+AXIS_CPP_NAMESPACE_END
 
 #ifdef UNIT_TESTING_ON
 int SoapBody::initializeForTesting()

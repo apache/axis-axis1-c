@@ -27,7 +27,9 @@
 #include "HandlerLoader.h"
 
 
-extern HandlerLoader* g_pHandlerLoader;
+extern AXIS_CPP_NAMESPACE_PREFIX HandlerLoader* g_pHandlerLoader;
+
+AXIS_CPP_NAMESPACE_START
 
 SessionScopeHandlerPool::SessionScopeHandlerPool ()
 {
@@ -154,3 +156,5 @@ void SessionScopeHandlerPool::endSession (string &sSessionId)
      * to SESSIONLESSHANDLERS        
      */
 }
+
+AXIS_CPP_NAMESPACE_END

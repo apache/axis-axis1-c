@@ -26,6 +26,7 @@
  *
  *   @author Susantha Kumara (skumara@virtusa.com)
  */
+AXIS_CPP_NAMESPACE_START
 class ClientAxisEngine:public AxisEngine
 {
     public:
@@ -39,5 +40,5 @@ class ClientAxisEngine:public AxisEngine
     private:
         SOAPTransport* m_pSoap;
 };
-
+AXIS_CPP_NAMESPACE_END
 #endif 

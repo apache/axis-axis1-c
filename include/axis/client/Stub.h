@@ -65,8 +65,15 @@
 #include <axis/server/Attribute.h>
 
 #ifdef __cplusplus
+
 #include <vector>
+
+AXIS_CPP_NAMESPACE_START
+
 using namespace std;
+
+AXIS_CPP_NAMESPACE_END
+
 #endif
 
 /**
@@ -132,6 +139,9 @@ typedef struct {
  * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
  * @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
  */
+
+AXIS_CPP_NAMESPACE_START
+
 class STORAGE_CLASS_INFO Stub
 {
   public:
@@ -668,6 +678,8 @@ class STORAGE_CLASS_INFO Stub
     long m_lTimeoutSeconds;
 
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif
 

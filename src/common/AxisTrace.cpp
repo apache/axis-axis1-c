@@ -27,8 +27,9 @@
 #include "AxisConfig.h"
 
 
-extern AxisConfig* g_pConfig;
+extern AXIS_CPP_NAMESPACE_PREFIX AxisConfig* g_pConfig;
 
+AXIS_CPP_NAMESPACE_START
 
 using namespace std;
 
@@ -265,3 +266,5 @@ int main(int argc, char* argv[])
   return 0;
 }
 */
+
+AXIS_CPP_NAMESPACE_END

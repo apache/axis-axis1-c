@@ -273,7 +273,7 @@ public class WrapWriter extends CFileWriter{
 			}
 		}	
 		writer.write("\tif (AXIS_SUCCESS != DZ._functions->checkMessageBody(DZ._object, \""+minfo.getInputMessage().getLocalPart()+"\", \""+minfo.getInputMessage().getNamespaceURI()+"\")) return AXIS_FAIL;\n");
-		writer.write("\tSZ._functions->CreateSoapMethod(SZ._object, \""+minfo.getOutputMessage().getLocalPart()+"\", \""+minfo.getOutputMessage().getNamespaceURI()+"\");\n");
+		writer.write("\tSZ._functions->createSoapMethod(SZ._object, \""+minfo.getOutputMessage().getLocalPart()+"\", \""+minfo.getOutputMessage().getNamespaceURI()+"\");\n");
 		//create and populate variables for each parameter
 		for (int i = 0; i < paramsB.size(); i++) {
 			ParameterInfo param = (ParameterInfo)paramsB.get(i);

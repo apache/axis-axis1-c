@@ -23,8 +23,9 @@
 #include "RequestScopeHandlerPool.h"
 #include "HandlerLoader.h"
 
+extern AXIS_CPP_NAMESPACE_PREFIX HandlerLoader* g_pHandlerLoader;
 
-extern HandlerLoader* g_pHandlerLoader;
+AXIS_CPP_NAMESPACE_START
 
 RequestScopeHandlerPool::RequestScopeHandlerPool ()
 {
@@ -95,3 +96,5 @@ int RequestScopeHandlerPool::putInstance (BasicHandler* pHandler, int nLibId)
     unlock ();
     return AXIS_SUCCESS;
 }
+
+AXIS_CPP_NAMESPACE_END

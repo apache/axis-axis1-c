@@ -25,6 +25,8 @@
  */
 #include "../server/IHeaderBlock.h"
 
+AXIS_CPP_NAMESPACE_START
+
 class ISoapHeader  
 {
 public:
@@ -37,6 +39,8 @@ public:
 
     virtual ~ISoapHeader() {};
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif 
 

@@ -25,11 +25,15 @@
  *  @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
  */
 
+AXIS_CPP_NAMESPACE_START
+
 class ISoapSerializer
 {
 public:
     virtual ~ISoapSerializer() {};
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif 
 

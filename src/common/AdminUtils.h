@@ -37,6 +37,9 @@
  * @brief  This class contains the Server side administration
  *         functionalities  
  */
+
+AXIS_CPP_NAMESPACE_START
+
 class AdminUtils : public IAdminUtils  
 {
 public:
@@ -53,6 +56,8 @@ public:
      */
     int updateWSDD(AxisChar* wsdd);
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif
 

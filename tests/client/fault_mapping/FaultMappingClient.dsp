@@ -119,18 +119,6 @@ SOURCE=.\gen_src\AxisClientException.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\gen_src\AxisDivByZeroException.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\gen_src\AxisNormalDetailException.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\gen_src\AxisOutOfBoundException.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\gen_src\DivByZeroStruct.h
 # End Source File
 # Begin Source File

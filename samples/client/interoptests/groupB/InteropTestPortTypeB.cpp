@@ -44,7 +44,7 @@ InteropTestPortTypeB::~InteropTestPortTypeB()
 /*
  * This method wrap the service methodechoStructAsSimpleTypes
  */
-void InteropTestPortTypeB::echoStructAsSimpleTypes(SOAPStruct* Value0, AXIS_OUT_PARAM  float *OutValue0, AXIS_OUT_PARAM  int *OutValue1, AXIS_OUT_PARAM  xsd__string *OutValue2)
+void InteropTestPortTypeB::echoStructAsSimpleTypes(SOAPStruct* Value0, AXIS_OUT_PARAM  xsd__string *OutValue0, AXIS_OUT_PARAM  int *OutValue1, AXIS_OUT_PARAM float *OutValue2)
 {
 	if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) return ;
 	m_pCall->setTransportProperty(SOAPACTION_HEADER , "groupB#echoStructAsSimpleTypes");
@@ -55,9 +55,9 @@ void InteropTestPortTypeB::echoStructAsSimpleTypes(SOAPStruct* Value0, AXIS_OUT_
 	{
 		if(AXIS_SUCCESS == m_pCall->checkMessage("echoStructAsSimpleTypesResponse", ""))
 		{
-			*OutValue0 = m_pCall->getElementAsFloat("outputFloat", 0);
+			*OutValue0 = m_pCall->getElementAsString("outputString", 0);
 			*OutValue1 = m_pCall->getElementAsInt("outputInteger", 0);
-			*OutValue2 = m_pCall->getElementAsString("outputString", 0);
+			*OutValue2 = m_pCall->getElementAsFloat("outputFloat", 0);
 		}
 	}
 	m_pCall->unInitialize();
@@ -67,16 +67,18 @@ void InteropTestPortTypeB::echoStructAsSimpleTypes(SOAPStruct* Value0, AXIS_OUT_
 /*
  * This method wrap the service methodechoSimpleTypesAsStruct
  */
-SOAPStruct* InteropTestPortTypeB::echoSimpleTypesAsStruct(float Value0, int Value1, xsd__string Value2)
+SOAPStruct* InteropTestPortTypeB::echoSimpleTypesAsStruct(xsd__string Value0, int Value1, float Value2)
 {
 	SOAPStruct* pReturn = NULL;
 	if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) return pReturn;
 	m_pCall->setTransportProperty(SOAPACTION_HEADER , "groupB#echoSimpleTypesAsStruct");
 	m_pCall->setSOAPVersion(SOAP_VER_1_1);
 	m_pCall->setOperation("echoSimpleTypesAsStruct", "http://soapinterop.org/");
-	m_pCall->addParameter((void*)&Value0, "inputFloat", XSD_FLOAT);
+	m_pCall->addParameter((void*)&Value0, "inputString", XSD_STRING);
 	m_pCall->addParameter((void*)&Value1, "inputInteger", XSD_INT);
-	m_pCall->addParameter((void*)&Value2, "inputString", XSD_STRING);
+	m_pCall->addParameter((void*)&Value2, "inputFloat", XSD_FLOAT);
+
+
 	if (AXIS_SUCCESS == m_pCall->invoke())
 	{
 		if(AXIS_SUCCESS == m_pCall->checkMessage("echoSimpleTypesAsStructResponse", ""))

@@ -25,6 +25,8 @@
 #include <axis/server/AxisException.h>
 using namespace std;
 
+AXIS_CPP_NAMESPACE_USE
+
 class STORAGE_CLASS_INFO AxisTransportException :public AxisException
 {
 

@@ -45,7 +45,7 @@
 
 typedef int (* CREATE_OBJECT2) (XMLParser** inst);
 typedef int (* DELETE_OBJECT2) (XMLParser* inst);
-
+AXIS_CPP_NAMESPACE_START
 class XMLParserFactory  
 {
 public:
@@ -83,6 +83,6 @@ private:
     static DELETE_OBJECT2 m_Delete;
 
 };
-
+AXIS_CPP_NAMESPACE_END
 #endif 
 

@@ -41,6 +41,8 @@
  *   @author Susantha Kumara (skumara@virtusa.com)
  */
 
+AXIS_CPP_NAMESPACE_START
+
 class AxisEngine 
 {
 protected:    
@@ -68,6 +70,8 @@ protected:
     virtual int initializeHandlers(string& sSessionId, 
         AXIS_PROTOCOL_TYPE protocol);
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif
 

@@ -23,6 +23,8 @@
 
 #include <axis/server/Handler.h>
 
+AXIS_CPP_NAMESPACE_USE
+
 class THandler : public Handler
 {
 public:

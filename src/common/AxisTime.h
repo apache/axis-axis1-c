@@ -47,6 +47,9 @@ typedef struct
  *   
  *  @author Damitha Kumarage (damitha@opensource.lk, damitha@jkcsworld.com)    
  */
+
+AXIS_CPP_NAMESPACE_START
+
 class AxisTime
 {
     public:
@@ -98,6 +101,8 @@ class AxisTime
         AxisString strXSDDuration;
         AxisString strXSDDate;
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif
 

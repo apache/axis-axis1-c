@@ -26,7 +26,9 @@
 #define NAMESPACESEPARATOR 0x03    /* Heart */
 #define FILEBUFFSIZE 1024
 
-extern AxisTrace* g_pAT;
+extern AXIS_CPP_NAMESPACE_PREFIX AxisTrace* g_pAT;
+
+AXIS_CPP_NAMESPACE_START
 
 WSDDDocument::WSDDDocument(map<AxisString, int>* pLibNameIdMap)
 {
@@ -671,6 +673,6 @@ void WSDDDocument::startElement(const AnyElement* pEvent)
     }
 }
 
-
+AXIS_CPP_NAMESPACE_END
 
 

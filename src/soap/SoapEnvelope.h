@@ -28,6 +28,8 @@
  * @author Roshan Weerasuriya (roshan@jkcs.slt.lk)
  */
 
+AXIS_CPP_NAMESPACE_START
+
 class SoapEnvelope  
 {
 friend class SoapSerializer;
@@ -62,5 +64,7 @@ public:
     SoapEnvelope();
     virtual ~SoapEnvelope();
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif

@@ -38,6 +38,8 @@
 #include "Receiver.hpp"
 #include <string>
 
+AXIS_CPP_NAMESPACE_USE
+
 class AxisTransport : public SOAPTransport
 {
 public:

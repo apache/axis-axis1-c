@@ -23,6 +23,8 @@
 
 #include <axis/server/IParam.h>
 
+AXIS_CPP_NAMESPACE_START
+
 class ArrayBean;
 /*
  *  @class Param
@@ -61,6 +63,8 @@ public:
         AXIS_OBJECT_DELETE_FUNCT pDelFunct);
     void setName(const AxisChar* sName);
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif 
 

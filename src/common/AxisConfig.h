@@ -26,7 +26,7 @@
 #define __AXIS_AXISCONFIG_H_OF_AXIS_INCLUDED__
 
 #define CONFBUFFSIZE 256
-
+#include <axis/server/GDefine.h>
 /**
  *   @class AxisConfig
  *   @brief class for taking configuration parameters.
@@ -55,6 +55,8 @@ enum g_axconfig
 	AXCONF_LISTENPORT,
 	AXCONF_LAST
 };
+
+AXIS_CPP_NAMESPACE_START
 
 class AxisConfig
 {
@@ -87,5 +89,8 @@ class AxisConfig
 
 		void setValue(int valuelength, g_axconfig valueindex, char* value);
 };
+
+AXIS_CPP_NAMESPACE_END
+
 #endif
 

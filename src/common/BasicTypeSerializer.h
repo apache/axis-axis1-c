@@ -51,12 +51,15 @@ const AxisChar ENCODED_SGL_QUOTE_STR[]        = "&apos;";
  *
  *   @author Susantha Kumara (skumara@virtusa.com)
  */
+
+AXIS_CPP_NAMESPACE_START
+
 class BasicTypeSerializer
 {
 public:
     BasicTypeSerializer();
     virtual ~BasicTypeSerializer();
-    const AxisString& getEntityReferenced(const AxisString& str);
+    const std::AxisString& getEntityReferenced(const std::AxisString& str);
     const AxisChar* serializeAsElement(const AxisChar* pName, 
         const void* pValue, XSDTYPE type);
     const AxisChar* serializeAsAttribute(const AxisChar* pName, 
@@ -76,15 +79,17 @@ private:
         AMPERSAND_CHAR        =    L'&'    /* Ampersand character */
     };
 private:
-    AxisString m_sSZ;
-    AxisString m_AuxStr;
-    AxisString m_strReturnVal;
+    std::AxisString m_sSZ;
+    std::AxisString m_AuxStr;
+    std::AxisString m_strReturnVal;
     AxisChar m_Buf[BTS_BUFFSIZE]; 
     /* used for numeric to string conversions with sprintf */
     AxisTime m_AxisTime;
     /* Current Serialization Style */
     AXIS_BINDING_STYLE m_nStyle;
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif 
 

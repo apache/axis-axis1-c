@@ -24,11 +24,15 @@
 #include "AxisUtils.h"
 #define __TRC(X) AxisUtils::Convert(X)
 
+AXIS_CPP_NAMESPACE_START
+using namespace std;
+
 #if !defined( AIX ) && !defined( __OS400__ )
-map < const AxisXMLString, XSDTYPE >
-    TypeMapping::m_sTypeMap;
+std::map < const std::AxisXMLString, XSDTYPE > 
+    AXIS_CPP_NAMESPACE_PREFIX TypeMapping::m_sTypeMap;
 #else
-map < AxisXMLString, XSDTYPE > TypeMapping::m_sTypeMap;
+std::map < std::AxisXMLString, XSDTYPE > 
+    AXIS_CPP_NAMESPACE_PREFIX TypeMapping::m_sTypeMap;
 #endif
 volatile bool TypeMapping::m_bInit = false;
 
@@ -85,3 +89,5 @@ XSDTYPE TypeMapping::map (const AxisXMLCh* sType)
     }
     return XSD_UNKNOWN;
 }
+
+AXIS_CPP_NAMESPACE_END

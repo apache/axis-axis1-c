@@ -21,6 +21,8 @@
 #include "SoapFault.h"
 #include <axis/server/SoapEnvVersions.h>
 
+AXIS_CPP_NAMESPACE_START
+
 class Attribute;
 
 /*
@@ -84,5 +86,7 @@ public:
     virtual ~SoapBody();
 
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif

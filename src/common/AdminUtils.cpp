@@ -18,7 +18,9 @@
 #include "AdminUtils.h"
 #include "../wsdd/WSDDDeployment.h"
 
-extern WSDDDeployment* g_pWSDDDeployment;
+extern AXIS_CPP_NAMESPACE_PREFIX WSDDDeployment* g_pWSDDDeployment;
+
+AXIS_CPP_NAMESPACE_START
 
 AdminUtils::AdminUtils()
 {
@@ -34,3 +36,5 @@ int AdminUtils::updateWSDD(AxisChar* wsdd)
 {
     return g_pWSDDDeployment->updateWSDD(wsdd);	
 }
+
+AXIS_CPP_NAMESPACE_END

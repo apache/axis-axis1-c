@@ -23,6 +23,8 @@
 #include "SoapSerializer.h"
 #include <list>
 
+AXIS_CPP_NAMESPACE_START
+
 class Attribute;
 
 using namespace std;
@@ -94,5 +96,7 @@ public:
     SoapMethod();
     virtual ~SoapMethod();
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif

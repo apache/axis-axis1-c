@@ -53,6 +53,9 @@
  * @brief Interface of the input/output stream of Axis transport. ISOAPTransport is
  *        derived from this interface
  */
+
+AXIS_CPP_NAMESPACE_START
+
 class AxisIOStream
 {
 public:
@@ -137,6 +140,8 @@ public:
  * @brief Interface of any Axis transport layer.
  *
  */
+AXIS_CPP_NAMESPACE_END
+AXIS_CPP_NAMESPACE_START
 class SOAPTransport : public AxisIOStream
 {
 public:
@@ -342,6 +347,8 @@ protected:
     AXIS_ENGINE_CALLBACK_RELEASE_SEND_BUFFER m_pReleaseBufferCallback;
 
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif
 

@@ -12,6 +12,8 @@
 #include <axis/ISoapFault.h>
 
 using namespace std;
+AXIS_CPP_NAMESPACE_USE
+
 class AxisServiceException: public AxisException
 {
 public:

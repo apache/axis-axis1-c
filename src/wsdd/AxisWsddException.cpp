@@ -25,6 +25,9 @@
  *    Default when no parameter passed. When thrown with no parameter
  *    more general SERVER_WSDD_EXCEPTION is assumed.
 */
+
+AXIS_CPP_NAMESPACE_START
+
 AxisWsddException::AxisWsddException()
 {
     processException(SERVER_WSDD_EXCEPTION);
@@ -128,3 +131,4 @@ const int AxisWsddException::getExceptionCode()
     return m_iExceptionCode;
 }
 
+AXIS_CPP_NAMESPACE_END

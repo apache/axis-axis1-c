@@ -28,6 +28,8 @@
 #include "AxisUtils.h"
 #include <axis/server/AxisUserAPI.h>
 
+AXIS_CPP_NAMESPACE_START
+
 int AxisEngine::m_bServer;
 
 
@@ -370,3 +372,5 @@ void ComplexObjectHandler::init ()
     m_TypeName = "";
     m_URI = "";
 }
+
+AXIS_CPP_NAMESPACE_END

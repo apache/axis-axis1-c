@@ -45,6 +45,8 @@
 #include "../../transport/SOAPTransport.h"
 #include <string.h>
 
+AXIS_CPP_NAMESPACE_USE
+
 class ApacheTransport : public SOAPTransport  
 {
 public:

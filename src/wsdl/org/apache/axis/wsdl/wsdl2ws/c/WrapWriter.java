@@ -249,7 +249,7 @@ public class WrapWriter extends CFileWriter{
 			}
 		}	
 		writer.write("\tif (AXIS_SUCCESS != DZ._functions->checkMessageBody(DZ._object, \""+methodName+"\", \""+wscontext.getWrapInfo().getTargetNameSpaceOfWSDL()+"\")) return AXIS_FAIL;\n");
-		writer.write("\tSZ._functions->CreateSoapMethod(SZ._object, \""+methodName+"Response\", \""+wscontext.getWrapInfo().getTargetNameSpaceOfWSDL()+"\");\n");
+		writer.write("\tSZ._functions->createSoapMethod(SZ._object, \""+methodName+"Response\", \""+wscontext.getWrapInfo().getTargetNameSpaceOfWSDL()+"\");\n");
 		//create and populate variables for each parameter
 		for (int i = 0; i < paramsB.size(); i++) {
 			paramTypeName = ((ParameterInfo)paramsB.get(i)).getLangName();

@@ -47,6 +47,9 @@ extern const AxisXMLCh* kw_desc;
  *  @brief interface for the WSDDKeywords class.
  *  @author Suasntha Kumara (skumara@virtusa.com, susantha@opensource.lk)
  */
+
+AXIS_CPP_NAMESPACE_START
+
 class WSDDKeywords  
 {
 public:
@@ -57,6 +60,8 @@ public:
 private:
     static volatile bool m_bInit;
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif 
 

@@ -20,11 +20,12 @@
 #include "../HandlerPool.h"
 #include <axis/server/AxisException.h>
 #include "../../common/AxisTrace.h"
-extern AxisTrace* g_pAT;
 
-extern WSDDDeployment* g_pWSDDDeployment;
-extern HandlerPool* g_pHandlerPool;
+extern AXIS_CPP_NAMESPACE_PREFIX AxisTrace* g_pAT;
+extern AXIS_CPP_NAMESPACE_PREFIX WSDDDeployment* g_pWSDDDeployment;
+extern AXIS_CPP_NAMESPACE_PREFIX HandlerPool* g_pHandlerPool;
 
+AXIS_CPP_NAMESPACE_START
 
 ClientAxisEngine::ClientAxisEngine ()
 {
@@ -224,3 +225,5 @@ void ClientAxisEngine::onFault (MessageData* pMsg)
 {
 
 }
+
+AXIS_CPP_NAMESPACE_END

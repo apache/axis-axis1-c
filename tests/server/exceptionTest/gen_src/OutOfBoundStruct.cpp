@@ -13,6 +13,7 @@ extern void Axis_Delete_SpecialDetailStruct(SpecialDetailStruct* param, bool bAr
 extern int Axis_Serialize_SpecialDetailStruct(SpecialDetailStruct* param, IWrapperSoapSerializer* pSZ, bool bArray = false);
 extern int Axis_GetSize_SpecialDetailStruct();
 
+
 /*
  * This static method serialize a OutOfBoundStruct type of object
  */

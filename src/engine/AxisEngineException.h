@@ -23,6 +23,9 @@
 
 #include <string>
 #include <axis/server/AxisException.h>
+
+AXIS_CPP_NAMESPACE_START
+
 using namespace std;
 
 class STORAGE_CLASS_INFO AxisEngineException :public AxisException
@@ -49,6 +52,8 @@ private:
     string m_sMessage;
     int m_iExceptionCode;
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif
 

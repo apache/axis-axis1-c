@@ -34,6 +34,9 @@
 #include <new>
 #include <typeinfo>
 #include <stdexcept>
+
+AXIS_CPP_NAMESPACE_START
+
 using namespace std;
 
 /*
@@ -220,6 +223,8 @@ public:
       */
     virtual const int getExceptionCode() = 0;
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif
 

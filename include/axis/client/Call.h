@@ -60,14 +60,20 @@
 #ifdef __cplusplus
 #include "../server/ISoapHeader.h"
 
+AXIS_CPP_NAMESPACE_START
+
 class ClientAxisEngine;
 class SOAPTransport;
 class MessageData;
 class SoapDeSerializer;
 class SoapSerializer;
 
+AXIS_CPP_NAMESPACE_END
+
 #else
 #endif
+
+AXIS_CPP_NAMESPACE_USE
 
 typedef struct {
     void (AXISCALL* setSOAPVersion)(void* pObj, SOAP_VERSION version);
@@ -228,7 +234,7 @@ typedef struct {
 } CallFunctions;
 
 #ifdef __cplusplus
-
+AXIS_CPP_NAMESPACE_START
 class STORAGE_CLASS_INFO CallBase
 {
 public:
@@ -804,7 +810,7 @@ private:
   /**
     * Proxy server name.
     */
-    std::string m_strProxyHost;
+    string m_strProxyHost;
   /**
     * Proxy server port.
     */
@@ -815,7 +821,7 @@ private:
     bool m_bUseProxy;
 
 };
-
+AXIS_CPP_NAMESPACE_END
 #endif
 
 #ifdef __cplusplus

@@ -42,6 +42,8 @@
 #include "SoapSerializer.h"
 #include <axis/server/GDefine.h>
 
+AXIS_CPP_NAMESPACE_START
+
 CharacterElement::CharacterElement():BasicNode( NULL, CHARACTER_NODE) 
 {
 }
@@ -106,3 +108,5 @@ bool CharacterElement::operator == ( const CharacterElement &objChEle)
     }
 
 }
+
+AXIS_CPP_NAMESPACE_END

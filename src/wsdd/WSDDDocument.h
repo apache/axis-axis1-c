@@ -47,6 +47,9 @@ enum WSDDLevels {WSDD_UNKNOWN=1, WSDD_DEPLOYMENT, WSDD_UNDEPLOYMENT,
  *  @author Sanjaya Sinharage(sanjaya@opensource.lk)
  *  @author Suasntha Kumara (skumara@virtusa.com, susantha@opensource.lk)
  */
+
+AXIS_CPP_NAMESPACE_START
+
 class WSDDDocument
 {
 
@@ -108,6 +111,8 @@ protected:
     AxisChar m_Buffer[TRANSCODE_BUFFER_SIZE];   
     /* used to transcode 'XMLCh' to AxisChar */
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif
 

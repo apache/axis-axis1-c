@@ -21,6 +21,7 @@
 
 #include "WSDDHandler.h"
 
+AXIS_CPP_NAMESPACE_START
 
 WSDDHandler::WSDDHandler()
 {
@@ -135,4 +136,4 @@ void WSDDHandler::printTabs(int count)
     for (int x=0; x<count; x++) *this << "\t";
 }
 
-
+AXIS_CPP_NAMESPACE_END

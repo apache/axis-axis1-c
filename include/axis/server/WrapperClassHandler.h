@@ -26,6 +26,8 @@
  *
  */
 
+AXIS_CPP_NAMESPACE_START
+
 class WrapperClassHandler : public HandlerBase 
 {
 public:
@@ -34,6 +36,8 @@ public:
     virtual AXIS_BINDING_STYLE AXISCALL getBindingStyle()=0;
     int AXISCALL getType(){return WEBSERVICE_HANDLER;};
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif 
 

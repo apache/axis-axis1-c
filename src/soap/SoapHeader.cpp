@@ -36,6 +36,8 @@
 #include <axis/server/Attribute.h>
 #include "HeaderBlock.h"
 
+AXIS_CPP_NAMESPACE_START
+
 SoapHeader::SoapHeader()
 {
 
@@ -263,3 +265,5 @@ IHeaderBlock* SoapHeader::getNextHeaderBlock()
 		tmpIHeaderBlock = *m_itHeaderBlocks;
 	return tmpIHeaderBlock;
 }
+
+AXIS_CPP_NAMESPACE_END

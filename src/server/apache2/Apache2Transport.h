@@ -47,6 +47,8 @@
 #include <string.h>
 #endif
 
+AXIS_CPP_NAMESPACE_USE
+
 class Apache2Transport : public SOAPTransport  
 {
 public:

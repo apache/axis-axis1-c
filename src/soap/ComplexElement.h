@@ -52,6 +52,8 @@
 #include <axis/server/BasicNode.h>
 #include <axis/server/Attribute.h>
 
+AXIS_CPP_NAMESPACE_START
+
 using namespace std;
 
 /**
@@ -285,5 +287,7 @@ private:
     list <Attribute *>::iterator m_viCurrentAttribute;
 
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif

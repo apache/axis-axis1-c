@@ -38,6 +38,8 @@
 
 #ifdef __cplusplus
 
+AXIS_CPP_NAMESPACE_START
+
 class IHandlerSoapDeSerializer : public IWrapperSoapDeSerializer
 {
 public:
@@ -74,6 +76,8 @@ public:
     virtual IHeaderBlock* getHeaderBlock(const AxisChar* pName, 
         const AxisChar* pNamespace) = 0;
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #else
 

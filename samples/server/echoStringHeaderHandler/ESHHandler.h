@@ -30,6 +30,8 @@
 
 #include <axis/server/Handler.h>
 
+AXIS_CPP_NAMESPACE_USE
+
 class ESHHandler : public Handler
 {
 public:

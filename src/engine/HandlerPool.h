@@ -33,6 +33,8 @@
 #include <list>
 #include <string>
 
+AXIS_CPP_NAMESPACE_START
+
 using namespace std;
 /*
  *   @class HandlerPool
@@ -76,5 +78,7 @@ class HandlerPool:protected SharedObject
     private:
         list <HandlerChain*>m_ChainStore;
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif 

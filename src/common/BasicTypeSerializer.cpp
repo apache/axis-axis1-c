@@ -25,6 +25,8 @@
 #include "../soap/apr_base64.h"
 #include "../soap/HexCoder.h"
 
+AXIS_CPP_NAMESPACE_START
+
 BasicTypeSerializer::BasicTypeSerializer ()
 {
     m_sSZ = "";
@@ -387,3 +389,5 @@ const AxisString &BasicTypeSerializer::getEntityReferenced
 							  */ 
     return m_strReturnVal;
 }
+
+AXIS_CPP_NAMESPACE_END

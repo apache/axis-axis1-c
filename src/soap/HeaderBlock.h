@@ -18,8 +18,13 @@
 #if !defined(_HEADERBLOCK_H____OF_AXIS_INCLUDED_)
 #define _HEADERBLOCK_H____OF_AXIS_INCLUDED_
 
-class BasicNode;
 #include <axis/server/IHeaderBlock.h>
+#include <string>
+
+AXIS_CPP_NAMESPACE_START
+
+using namespace std;
+class BasicNode;
 
 /*
  *  @class BasicNode
@@ -63,9 +68,7 @@ class BasicNode;
  * Added doxygen comments to help autobuild API docs
  */
 
-#include <string>
 
-using namespace std;
 
 class HeaderBlock : public IHeaderBlock
 {
@@ -394,6 +397,8 @@ public:
     int serialize(SoapSerializer& pSZ);    
 
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif 
 

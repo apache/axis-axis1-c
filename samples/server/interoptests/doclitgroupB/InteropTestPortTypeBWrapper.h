@@ -13,6 +13,8 @@
 #include <axis/server/IWrapperSoapDeSerializer.h>
 #include <axis/server/IWrapperSoapSerializer.h>
 
+AXIS_CPP_NAMESPACE_USE
+
 class InteropTestPortTypeBWrapper : public WrapperClassHandler
 {
 private:// Actual web service object

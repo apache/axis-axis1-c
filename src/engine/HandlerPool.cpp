@@ -27,12 +27,14 @@
 #include "../wsdd/WSDDDeployment.h"
 #include <axis/server/AxisException.h>
 #include "../common/AxisTrace.h"
-extern AxisTrace* g_pAT;
 
-extern AppScopeHandlerPool* g_pAppScopeHandlerPool;
-extern RequestScopeHandlerPool* g_pRequestScopeHandlerPool;
-extern SessionScopeHandlerPool* g_pSessionScopeHandlerPool;
-extern WSDDDeployment* g_pWSDDDeployment;
+extern AXIS_CPP_NAMESPACE_PREFIX AxisTrace* g_pAT;
+extern AXIS_CPP_NAMESPACE_PREFIX AppScopeHandlerPool* g_pAppScopeHandlerPool;
+extern AXIS_CPP_NAMESPACE_PREFIX RequestScopeHandlerPool* g_pRequestScopeHandlerPool;
+extern AXIS_CPP_NAMESPACE_PREFIX SessionScopeHandlerPool* g_pSessionScopeHandlerPool;
+extern AXIS_CPP_NAMESPACE_PREFIX WSDDDeployment* g_pWSDDDeployment;
+
+AXIS_CPP_NAMESPACE_START
 
 HandlerPool::HandlerPool ()
 {
@@ -358,3 +360,5 @@ void HandlerPool::poolWebService (string &sSessionId, BasicHandler* pHandler,
     poolHandler (sSessionId, pHandler, pHandlerInfo->getScope (),
         pHandlerInfo->getLibId ());
 }
+
+AXIS_CPP_NAMESPACE_END

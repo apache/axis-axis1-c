@@ -43,6 +43,9 @@
  *
  *   @author Damitha Kumarage (damitha@opensource.lk, damitha@jkcsworld.com)
  */
+
+AXIS_CPP_NAMESPACE_START
+
 class AxisFile
 {
 public:
@@ -123,5 +126,8 @@ public:
 private:
     FILE* pFILEFile;    
 };
+
+AXIS_CPP_NAMESPACE_END
+
 #endif
 

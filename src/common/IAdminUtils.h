@@ -39,6 +39,9 @@
  *         functionalities
  * @author Suasntha Kumara (skumara@virtusa.com, susantha@opensource.lk)
  */
+
+AXIS_CPP_NAMESPACE_START
+
 class IAdminUtils  
 {
 public:
@@ -54,6 +57,8 @@ public:
      */
     virtual int updateWSDD(AxisChar* wsdd)=0;
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif 
 

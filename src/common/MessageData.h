@@ -36,6 +36,9 @@ struct ltstr
   }
 };
 
+AXIS_CPP_NAMESPACE_START
+using namespace std;
+
 class MessageData : public IMessageData
 {
 public:
@@ -81,6 +84,8 @@ private:
     map <AxisChar*, AxisChar*, ltstr> m_Properties;
     static const AxisChar* m_pachBlankPropertyValue;
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif 
 

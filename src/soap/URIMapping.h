@@ -26,6 +26,8 @@ enum URITYPE { URI_XSI, URI_XSD, URI_ENC, URI_ENVELOPE, URI_UNKNOWN};
 #include <string>
 #include <axis/server/GDefine.h>
 
+AXIS_CPP_NAMESPACE_START
+
 using namespace std;
 
 /*
@@ -45,5 +47,7 @@ public:
     virtual ~URIMapping();
     static URITYPE map(const AxisXMLCh* uri);
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif

@@ -29,6 +29,8 @@
  *   @author Susantha Kumara (skumara@virtusa.com)
 */
 
+AXIS_CPP_NAMESPACE_START
+
 class IArrayBean
 {
     public:
@@ -44,5 +46,7 @@ class IArrayBean
     virtual void SetTypeName (const AxisChar* sName) = 0;
     virtual void SetUri (const AxisChar* sURI) = 0;
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif 

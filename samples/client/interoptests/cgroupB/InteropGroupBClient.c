@@ -62,7 +62,7 @@ int main(int argc, char* argv[])
 	/*testing echo Simple types as struct*/
 	str = strdup("content of string passed");
 	printf("invoking echoSimpleTypesAsStruct...\n");
-	if (echoSimpleTypesAsStruct(pstub, 12345.67890, 5000, str) != NULL)
+	if (echoSimpleTypesAsStruct(pstub, str, 5000, 12345.67890) != NULL)
 		printf("successful\n");
 	else
 		printf("failed\n");
@@ -72,7 +72,7 @@ int main(int argc, char* argv[])
 	ss.varInt = 5000;
 	ss.varString = strdup("content of string passed");
 	printf("invoking echoStructAsSimpleTypes...\n");
-	echoStructAsSimpleTypes(pstub, &ss, &outFloat, &outInt, &outStr);
+	echoStructAsSimpleTypes(pstub, &ss, &outStr, &outInt, &outFloat);
 	if (outInt == 5000 && (0 == strcmp(outStr,"content of string passed")) && outFloat > 12345.67)
 		printf("successful\n");
 	else

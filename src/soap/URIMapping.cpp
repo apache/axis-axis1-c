@@ -24,6 +24,9 @@
 
 #define __TRC(X) AxisUtils::Convert(X)
 
+AXIS_CPP_NAMESPACE_START
+
+using namespace std;
 map<AxisXMLString, URITYPE> URIMapping::m_sURIMap;
 volatile bool URIMapping::m_bInit = false;
 
@@ -60,3 +63,5 @@ URITYPE URIMapping::map(const AxisXMLCh* uri)
     }
     return URI_UNKNOWN;
 }
+
+AXIS_CPP_NAMESPACE_END

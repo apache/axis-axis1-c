@@ -11,6 +11,7 @@
 #include <axis/server/IMessageData.h>
 #include <axis/server/GDefine.h>
 #include <axis/server/AxisWrapperAPI.h>
+AXIS_CPP_NAMESPACE_USE
 
 class InteropTestPortTypeWrapper : public WrapperClassHandler
 {

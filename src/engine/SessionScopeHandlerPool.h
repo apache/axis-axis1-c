@@ -29,6 +29,8 @@
 #include <list>
 #include <string>
 
+AXIS_CPP_NAMESPACE_START
+
 using namespace std;
 /*
  *   @class SessionScopeHandlerPool
@@ -52,5 +54,7 @@ class SessionScopeHandlerPool:protected SharedObject
             int nLibId);
         void endSession (string &sSessionId);
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif 

@@ -108,6 +108,9 @@ typedef IWrapperSoapSerializer_C IWrapperSoapSerializer;
  *  @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
  *
  */
+
+AXIS_CPP_NAMESPACE_START
+
 class IWrapperSoapSerializer : public ISoapSerializer
 {
 public:
@@ -314,6 +317,8 @@ public:
         ms_VFtable.serializeAnyObject = s_SerializeAnyObject;
     }
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif
 #endif 

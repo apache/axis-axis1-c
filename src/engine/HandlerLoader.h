@@ -34,8 +34,12 @@ using namespace std;
 #define CREATE_FUNCTION "GetClassInstance"
 #define DELETE_FUNCTION "DestroyInstance"
 
+AXIS_CPP_NAMESPACE_START
+
 typedef int (* CREATE_OBJECT) (BasicHandler** inst);
 typedef int (* DELETE_OBJECT) (BasicHandler* inst);
+
+AXIS_CPP_NAMESPACE_END
 
 #if defined(USE_LTDL)
 #include <ltdl.h>
@@ -68,7 +72,7 @@ typedef int (* DELETE_OBJECT) (BasicHandler* inst);
  *
  *   @author Susantha Kumara (skumara@virtusa.com)
  */
-
+AXIS_CPP_NAMESPACE_START
 class HandlerLoader:protected SharedObject
 {
     private:
@@ -100,6 +104,6 @@ class HandlerLoader:protected SharedObject
         int loadLib (HandlerInformation* pHandlerInfo);
         int unloadLib (HandlerInformation* pHandlerInfo);
 };
-
+AXIS_CPP_NAMESPACE_END
 
 #endif 

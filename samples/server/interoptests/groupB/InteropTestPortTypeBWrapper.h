@@ -12,6 +12,8 @@
 #include <axis/server/GDefine.h>
 #include <axis/server/AxisWrapperAPI.h>
 
+AXIS_CPP_NAMESPACE_USE
+
 class InteropTestPortTypeBWrapper : public WrapperClassHandler
 {
 private:/* Actual web service object*/

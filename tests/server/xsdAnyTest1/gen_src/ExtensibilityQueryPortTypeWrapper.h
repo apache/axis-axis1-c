@@ -12,6 +12,7 @@
 #include <axis/server/GDefine.h>
 #include <axis/server/AxisWrapperAPI.h>
 
+AXIS_CPP_NAMESPACE_USE
 
 class ExtensibilityQueryPortTypeWrapper : public WrapperClassHandler
 {

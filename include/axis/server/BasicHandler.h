@@ -29,6 +29,8 @@
 #include <axis/server/IMessageData.h>
 #include "GDefine.h"
 
+AXIS_CPP_NAMESPACE_START
+
 enum HANDLER_TYPE { NORMAL_HANDLER, WEBSERVICE_HANDLER, CHAIN_HANDLER };
 
 typedef struct 
@@ -230,6 +232,8 @@ public:
     virtual int AXISCALL getType()=0;
 };
 #endif
+
+AXIS_CPP_NAMESPACE_END
 
 #endif 
 

@@ -74,7 +74,7 @@ int AXISCALL InteropTestPortTypeBWrapper_Invoke(void*p, void *pMsg){
 /*Methods corresponding to the web service methods*/
 
 /*forward declaration for the c method echoStructAsSimpleTypes */
-extern void echoStructAsSimpleTypes(SOAPStruct*, AXIS_OUT_PARAM float*, AXIS_OUT_PARAM int*, AXIS_OUT_PARAM xsd__string*);
+extern void echoStructAsSimpleTypes(SOAPStruct*, AXIS_OUT_PARAM xsd__string*, AXIS_OUT_PARAM int*, AXIS_OUT_PARAM float*);
 
 /*
  * This method wrap the service method 
@@ -83,9 +83,9 @@ int echoStructAsSimpleTypesWrapped(IWrapperSoapDeSerializer DZ, IWrapperSoapSeri
 {
 	int nStatus;
 	SOAPStruct* v0;
-	float out0;
+	xsd__string out0;
 	int out1;
-	xsd__string out2;
+	float out2;
 	if (AXIS_SUCCESS != DZ._functions->checkMessageBody(DZ._object, "echoStructAsSimpleTypes", "http://soapinterop.org/")) return AXIS_FAIL;
 	SZ._functions->createSoapMethod(SZ._object, "echoStructAsSimpleTypesResponse", "http://soapinterop.org/");
 	v0 = (SOAPStruct*)DZ._functions->getCmplxObject(DZ._object, (void*)Axis_DeSerialize_SOAPStruct
@@ -93,15 +93,15 @@ int echoStructAsSimpleTypesWrapped(IWrapperSoapDeSerializer DZ, IWrapperSoapSeri
 		, Axis_TypeName_SOAPStruct, Axis_URI_SOAPStruct);
 	if (AXIS_SUCCESS != (nStatus = DZ._functions->getStatus(DZ._object))) return nStatus;
 	echoStructAsSimpleTypes(v0,&out0,&out1,&out2);
-	SZ._functions->addOutputParam(SZ._object, "outputFloat", (void*)&out0, XSD_FLOAT);
+	SZ._functions->addOutputParam(SZ._object, "outputString", (void*)&out0, XSD_STRING);
 	SZ._functions->addOutputParam(SZ._object, "outputInteger", (void*)&out1, XSD_INT);
-	SZ._functions->addOutputParam(SZ._object, "outputString", (void*)&out2, XSD_STRING);
+    SZ._functions->addOutputParam(SZ._object, "outputFloat", (void*)&out2, XSD_FLOAT);
 	return AXIS_SUCCESS;
 }
 
 
 /*forward declaration for the c method echoSimpleTypesAsStruct */
-extern SOAPStruct* echoSimpleTypesAsStruct(float,int,xsd__string);
+extern SOAPStruct* echoSimpleTypesAsStruct(xsd__string,int,float);
 
 /*
  * This method wrap the service method 
@@ -109,15 +109,16 @@ extern SOAPStruct* echoSimpleTypesAsStruct(float,int,xsd__string);
 int echoSimpleTypesAsStructWrapped(IWrapperSoapDeSerializer DZ, IWrapperSoapSerializer SZ)
 {
 	int nStatus;
-	float v0;
+	xsd__string v0;
 	int v1;
-	xsd__string v2;
+	float v2;
+
 	SOAPStruct* ret;
 	if (AXIS_SUCCESS != DZ._functions->checkMessageBody(DZ._object, "echoSimpleTypesAsStruct", "http://soapinterop.org/")) return AXIS_FAIL;
 	SZ._functions->createSoapMethod(SZ._object, "echoSimpleTypesAsStructResponse", "http://soapinterop.org/");
-	v0 = DZ._functions->getElementAsFloat(DZ._object, 0, 0);
+	v0 = DZ._functions->getElementAsString(DZ._object, 0, 0);
 	v1 = DZ._functions->getElementAsInt(DZ._object, 0, 0);
-	v2 = DZ._functions->getElementAsString(DZ._object, 0, 0);
+    v2 = DZ._functions->getElementAsFloat(DZ._object, 0, 0);
 	if (AXIS_SUCCESS != (nStatus = DZ._functions->getStatus(DZ._object))) return nStatus;
 	ret = echoSimpleTypesAsStruct(v0,v1,v2);
 	return SZ._functions->addOutputCmplxParam(SZ._object, ret, (void*)Axis_Serialize_SOAPStruct, (void*)Axis_Delete_SOAPStruct, "echoSimpleTypesAsStructReturn", 0);

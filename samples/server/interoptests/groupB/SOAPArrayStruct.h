@@ -9,6 +9,8 @@
 
 #include <axis/server/AxisUserAPI.h>
 
+AXIS_CPP_NAMESPACE_USE
+
 /*Local name and the URI for the type*/
 static const char* Axis_URI_SOAPArrayStruct = "http://soapinterop.org/xsd";
 static const char* Axis_TypeName_SOAPArrayStruct = "SOAPArrayStruct";

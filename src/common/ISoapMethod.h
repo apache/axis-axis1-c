@@ -20,6 +20,9 @@
 #define AXIS_SOAPMETHODBASE_H__OF_AXIS_INCLUDED_
 
 #include <string>
+
+AXIS_CPP_NAMESPACE_START
+
 using namespace std;
 /*
  *   @class ISoapMethod
@@ -39,5 +42,7 @@ class ISoapMethod
     {
     };
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif 

@@ -24,6 +24,9 @@
 #include "BasicTypeSerializer.h"
 
 #include <list>
+
+AXIS_CPP_NAMESPACE_START
+
 using namespace std;
 
 /**
@@ -63,5 +66,7 @@ class ArrayBean:public IArrayBean
         void SetUri (const AxisChar* sURI);
         void RemoveArrayPointer ();
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif 

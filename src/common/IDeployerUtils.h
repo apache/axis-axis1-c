@@ -30,6 +30,8 @@
  *   @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
  */
 
+AXIS_CPP_NAMESPACE_START
+
 class IDeployerUtils
 {
     public:
@@ -41,5 +43,7 @@ class IDeployerUtils
         {
         };
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif 

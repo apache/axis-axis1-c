@@ -29,8 +29,10 @@
 
 #include <stdio.h>
 #include "../common/AxisTrace.h"
-extern AxisTrace* g_pAT;
 
+extern AXIS_CPP_NAMESPACE_PREFIX AxisTrace* g_pAT;
+
+AXIS_CPP_NAMESPACE_START
 
 SoapEnvelope::SoapEnvelope()
 {
@@ -291,6 +293,8 @@ int SoapEnvelope::serializeStandardNamespaceDecl(SoapSerializer &pSZ)
     }    
     return AXIS_SUCCESS;
 }
+
+AXIS_CPP_NAMESPACE_END
 
 #ifdef UNIT_TESTING_ON
 int SoapEnvelope::initializeForTesting(SOAP_VERSION eSoapVersion)

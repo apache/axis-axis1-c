@@ -36,6 +36,9 @@
  *   @author Damitha Kumarage (damitha@opensource.lk, damitha@jkcsworld.com)
  *
  */
+
+AXIS_CPP_NAMESPACE_START
+
 class SharedObject
 {
     public:
@@ -51,5 +54,7 @@ class SharedObject
     pthread_mutex_t *mut;
 #endif
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif 

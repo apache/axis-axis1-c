@@ -91,13 +91,15 @@ int InteropTestPortTypeBWrapper::echoStructAsSimpleTypes(void* pMsg)
 		, (void*)Axis_Create_SOAPStruct, (void*)Axis_Delete_SOAPStruct
 		, "inputStruct", Axis_URI_SOAPStruct);
 	if (AXIS_SUCCESS != (nStatus = pIWSDZ->getStatus())) return nStatus;
-	float out0;
+	xsd__string out0;
 	int out1;
-	xsd__string out2;
+	float out2;
 	pWs->echoStructAsSimpleTypes(v0,&out0,&out1,&out2);
-	pIWSSZ->addOutputParam("outputFloat", (void*)&out0, XSD_FLOAT);
-	pIWSSZ->addOutputParam("outputInteger", (void*)&out1, XSD_INT);
-	pIWSSZ->addOutputParam("outputString", (void*)&out2, XSD_STRING);
+	pIWSSZ->addOutputParam("outputString", (void*)&out0, XSD_STRING);
+   	pIWSSZ->addOutputParam("outputInteger", (void*)&out1, XSD_INT);
+	pIWSSZ->addOutputParam("outputFloat", (void*)&out2, XSD_FLOAT);
+
+
 	return AXIS_SUCCESS;
 }
 
@@ -118,9 +120,10 @@ int InteropTestPortTypeBWrapper::echoSimpleTypesAsStruct(void* pMsg)
 	/* check whether we have got correct message */
 	if (AXIS_SUCCESS != pIWSDZ->checkMessageBody("echoSimpleTypesAsStruct", "http://soapinterop.org/")) return AXIS_FAIL;
 	pIWSSZ->createSoapMethod("echoSimpleTypesAsStructResponse", "http://soapinterop.org/");
-	float v0 = pIWSDZ->getElementAsFloat("inputFloat",0);
-	int v1 = pIWSDZ->getElementAsInt("inputInteger",0);
-	xsd__string v2 = pIWSDZ->getElementAsString("inputString",0);
+	xsd__string v0 = pIWSDZ->getElementAsString("inputString",0);
+   	int v1 = pIWSDZ->getElementAsInt("inputInteger",0);
+	float v2 = pIWSDZ->getElementAsFloat("inputFloat",0);
+
 	if (AXIS_SUCCESS != (nStatus = pIWSDZ->getStatus())) return nStatus;
 	SOAPStruct* ret = pWs->echoSimpleTypesAsStruct(v0,v1,v2);
 	return pIWSSZ->addOutputCmplxParam(ret, (void*)Axis_Serialize_SOAPStruct, (void*)Axis_Delete_SOAPStruct, "echoSimpleTypesAsStructReturn", Axis_URI_SOAPStruct);

@@ -25,6 +25,8 @@
 
 #define TIMEBUFFSIZE 80
 
+AXIS_CPP_NAMESPACE_START
+
 AxisTime::AxisTime ()
 {
 
@@ -582,3 +584,5 @@ long AxisTime::deserializeDuration (const AxisChar* strValue, XSDTYPE type)
 
 }
 */
+
+AXIS_CPP_NAMESPACE_END

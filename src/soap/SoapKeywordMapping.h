@@ -23,6 +23,8 @@
 
 using namespace std;
 
+AXIS_CPP_NAMESPACE_START
+
 struct SoapKeywordStruct 
 {    
     const AxisXMLCh* pchNamespaceUri;
@@ -32,12 +34,13 @@ struct SoapKeywordStruct
     const Attribute* pXsi;
     const Attribute* pXsd;
 };
-
+AXIS_CPP_NAMESPACE_END
 /*
  * @class SoapKeywordMapping
  * @brief interface for the SoapKeywordMapping class.
  * @author Susantha Kumara (skumara@virtusa.com)
  */
+AXIS_CPP_NAMESPACE_START
 class SoapKeywordMapping  
 {
 public:
@@ -52,5 +55,5 @@ public:
     static const SoapKeywordStruct& map(int nVersion);
     static void uninitialize();
 };
-
+AXIS_CPP_NAMESPACE_END
 #endif

@@ -30,6 +30,9 @@
  *
  *  @author Susantha Kumara (skumara@virtusa.com)
  */
+
+AXIS_CPP_NAMESPACE_START
+
 class ServerAxisEngine:public AxisEngine
 {
     private:
@@ -56,5 +59,7 @@ class ServerAxisEngine:public AxisEngine
         virtual int invoke(MessageData* pMsg);
         virtual void onFault(MessageData* pMsg);
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif 

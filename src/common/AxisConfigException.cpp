@@ -25,6 +25,9 @@
  *    Default when no parameter passed. When thrown with no parameter
  *    more general SERVER_CONFIG_EXCEPTION is assumed.
 */
+
+AXIS_CPP_NAMESPACE_START
+
 AxisConfigException::AxisConfigException()
 {
     processException(SERVER_CONFIG_EXCEPTION);
@@ -120,3 +123,5 @@ const int AxisConfigException::getExceptionCode()
 {
     return m_iExceptionCode;
 }
+
+AXIS_CPP_NAMESPACE_END

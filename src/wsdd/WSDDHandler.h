@@ -40,6 +40,8 @@ const AxisChar kw_scope_req[] = "request";
  *  @author Susantha Kumara (skumara@virtusa.com)
  */
 
+AXIS_CPP_NAMESPACE_START
+
 class WSDDHandler  
 {
 public:
@@ -72,6 +74,8 @@ protected:
 };
 
 typedef list<WSDDHandler*> WSDDHandlerList;
+
+AXIS_CPP_NAMESPACE_END
 
 #endif 
 

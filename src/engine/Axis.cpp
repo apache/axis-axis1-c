@@ -61,6 +61,8 @@
 #include "SOAPTransportFactory.h"
 #include "XMLParserFactory.h"
 
+AXIS_CPP_NAMESPACE_USE
+
 #define BYTESTOREAD 64
 // The relative location of the wsdl files hardcoded
 #define WSDLDIRECTORY "/wsdls/"

@@ -23,6 +23,9 @@
 #include "time.h"
 
 #include <string>
+
+AXIS_CPP_NAMESPACE_START
+
 using namespace std;
 /*
  *  @class ComplexObjectHandler
@@ -83,6 +86,8 @@ public:
         AXIS_OBJECT_DELETE_FUNCT pDelFunct)=0;
     virtual void setName(const AxisChar* sName)=0;
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif 
 

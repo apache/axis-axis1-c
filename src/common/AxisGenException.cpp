@@ -21,7 +21,10 @@
 
 #include <axis/AxisGenException.h>
 #include <exception>
-using namespace std;
+
+AXIS_CPP_NAMESPACE_START
+
+//using namespace std;
 
 AxisGenException::AxisGenException (const int iExceptionCode)
 {
@@ -121,3 +124,4 @@ const int AxisGenException::getExceptionCode()
     return m_iExceptionCode; 
 }
 
+AXIS_CPP_NAMESPACE_END

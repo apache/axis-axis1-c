@@ -29,6 +29,8 @@ extern void* GetUserSerializer();
 #include <axis/server/GDefine.h>
 #include <list>
 
+AXIS_CPP_NAMESPACE_START
+
 using namespace std;
 /*
  *   @class SerializerPool
@@ -49,5 +51,7 @@ class SerializerPool:protected SharedObject
         int getInstance (IWrapperSoapSerializer** ppSZ);
         int putInstance (IWrapperSoapSerializer* pSZ);
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif 
