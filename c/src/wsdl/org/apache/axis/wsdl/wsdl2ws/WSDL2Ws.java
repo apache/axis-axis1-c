@@ -168,6 +168,7 @@ public class WSDL2Ws {
 		this.portTypeEntry = symbolTable.getPortTypeEntry(binding.getPortType().getQName());
 		if (portTypeEntry == null)
 			throw new WrapperFault("Service not found");
+		ports = this.serviceentry.getService().getPorts().values().iterator();
 		this.targetEndpointURI = SymbolTableParsingUtils.getTargetEndPointURI(ports);			
     }
     
@@ -194,7 +195,6 @@ public class WSDL2Ws {
 		this.serviceStyle = bindingEntry.getBindingStyle().getName();
 		//extract the trasport type as a uri
 		this.transportURI = SymbolTableParsingUtils.getTransportType(bindingEntry.getBinding());
-		
         List operations = bindingEntry.getBinding().getBindingOperations();
         if (operations != null) {
 
