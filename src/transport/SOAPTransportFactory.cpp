@@ -49,7 +49,7 @@ int SOAPTransportFactory::initialize()
 	m_pcLibraryPath = "AxisTransport.dll"; //this will be taken from configuration file
 #endif
 #else
-	m_pcLibraryPath = "libAxisTransport.so"; //this will be taken from configuration file
+	m_pcLibraryPath = "/usr/local/Axis/libs/libaxis_transport.so"; //this will be taken from configuration file
 #endif
 	if (!loadLib())
 	{

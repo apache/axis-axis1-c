@@ -26,22 +26,6 @@
 extern int process_request (SOAPTransport* str);
 extern unsigned char chEBuf[1024];
 
-/* Call initialize_module() [of Packet.h] from within this method */
-extern "C" static void module_init(server_rec* svr_rec, pool* p)
-{
-    initialize_module (1);
-}
-
-/* Call initialize_process() [of Packet.h] from within this method */
-extern "C" static void axis_Init (server_rec* svr_rec, pool* p)
-{
-}
-
-/*Call finalize_process() [of Packet.h] from within this method*/
-extern "C" static void axis_Fini (server_rec* svr_rec, pool* p)
-{
-}
-
 int axis_handler_helper(request_rec* req_rec)
 {
     int rc;
@@ -73,16 +57,34 @@ int axis_handler_helper(request_rec* req_rec)
     return OK;	
 }
 
-extern "C" static int axis_handler(request_rec* req_rec)
+/* Call initialize_module() [of Packet.h] from within this method */
+extern "C"
+{ 
+static void module_init(server_rec* svr_rec, pool* p)
+{
+    initialize_module (1);
+}
+
+/* Call initialize_process() [of Packet.h] from within this method */
+static void axis_Init (server_rec* svr_rec, pool* p)
+{
+}
+
+/*Call finalize_process() [of Packet.h] from within this method*/
+static void axis_Fini (server_rec* svr_rec, pool* p)
+{
+}
+
+static int axis_handler(request_rec* req_rec)
 {
 	return axis_handler_helper(req_rec);
 }
 
 /* Make the name of the content handler known to Apache */
-extern "C" static handler_rec axis_handlers[] = { {"axis", axis_handler}, {NULL} };
+static handler_rec axis_handlers[] = { {"axis", axis_handler}, {NULL} };
 
 /* Tell Apache what phases of the transaction we handle */
-extern "C" module MODULE_VAR_EXPORT axis_module = {
+ module MODULE_VAR_EXPORT axis_module = {
     STANDARD_MODULE_STUFF,
     module_init,                /* module initializer                 */
     NULL,                       /* per-directory config creator       */
@@ -103,3 +105,4 @@ extern "C" module MODULE_VAR_EXPORT axis_module = {
     axis_Fini,                  /* process exit/cleanup               */
     NULL                        /* [1]  post read_request handling    */
 };
+}

@@ -11,7 +11,8 @@ libserver_engine_la_SOURCES = ../Axis.cpp \
                 ../RequestScopeHandlerPool.cpp \
                 ../SerializerPool.cpp \
                 ../SessionScopeHandlerPool.cpp \
-                ../SharedObject.cpp
+                ../SharedObject.cpp \
+                ../../transport/SOAPTransportFactory.cpp
 		
 libserver_engine_la_LIBADD = $(LDFLAGS) ../../common/libcommon.la ../../soap/libsoap.la ../../wsdd/libwsdd.la ../../xml/libxml.la
 INCLUDES = -I$(AXISCPP_HOME)/include
