@@ -157,7 +157,7 @@ void XMLStreamHandler::startElement(const string& uri,const string& localname,co
 		//FillFault(uri,localname,qname,attrs);
 	}
 	else { //Soap error
-		m_Success = FAIL;
+		m_Success = AXIS_FAIL;
 	}
 	break;
 	case SOAP_HEADER:
@@ -205,11 +205,11 @@ void XMLStreamHandler::startElement(const string& uri,const string& localname,co
 			m_nParamNestingLevel++;
 			break;
 		default:
-			m_Success = FAIL;
+			m_Success = AXIS_FAIL;
 		}
 	break;
 	default:
-		m_Success = FAIL;
+		m_Success = AXIS_FAIL;
 	}
 }
 
@@ -245,7 +245,7 @@ void XMLStreamHandler::endElement (const string& uri, const string& localname,co
 		m_PL1= SOAP_UNKNOWN;
 		break;
 	default:
-		m_Success = FAIL;
+		m_Success = AXIS_FAIL;
 	}
 }
 
@@ -287,12 +287,12 @@ void XMLStreamHandler::warning(const SAX::SAXParseException& exception)
 void XMLStreamHandler::error(const SAX::SAXParseException& exception)
 {
 //  sprintf((char*)chEBuf, "Error : %s", __TRC(exception.getMessage()));
-	m_Success = FAIL;
+	m_Success = AXIS_FAIL;
 }
 void XMLStreamHandler::fatalError(const SAX::SAXParseException& exception)
 {
 // sprintf((char*)chEBuf, "Fatal Error : %s", __TRC(exception.getMessage()));
-	m_Success = FAIL;
+	m_Success = AXIS_FAIL;
 }
 
 int XMLStreamHandler::Success()
@@ -384,7 +384,7 @@ void XMLStreamHandler::SetParamType(const AttributesT &attrs)
 							m_Param.m_Value.pArray->m_type = USER_TYPE;
 							//array of custom data types
 						}
-						if(SUCCESS != SetArrayDimensions(sDimensions))
+						if(AXIS_SUCCESS != SetArrayDimensions(sDimensions))
 						{
 							//couldnt get dimension of the array - error condition
 						}
@@ -436,7 +436,7 @@ int XMLStreamHandler::SetArrayDimensions(AxisXMLString &sDimensions)
 		m_Param.m_Value.pArray->m_size.push_back(atoi(sDimensions.substr(si+1,(ei-si-1)).c_str()));
 		si = ei;
 	} while (sDimensions.find(',', si+1) != string::npos);
-	return SUCCESS;
+	return AXIS_SUCCESS;
 }
 
 Param* XMLStreamHandler::GetParam()
@@ -475,7 +475,7 @@ void XMLStreamHandler::Init()
 	m_PL0 = SOAP_UNKNOWN;
 	m_PL1 = SOAP_UNKNOWN;
 	m_PL2 = SOAP_UNKNOWN;
-	m_Success = SUCCESS;
+	m_Success = AXIS_SUCCESS;
 	m_nSoapVersion = SOAP_VER_1_1;
 	for (m_it = m_Params.begin(); m_it != m_Params.end(); m_it++)
 	{

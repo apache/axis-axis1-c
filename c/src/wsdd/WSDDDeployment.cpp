@@ -146,7 +146,7 @@ int WSDDDeployment::LoadWSDD(const AxisChar* sWSDD)
 	m_sWSDDPath = string(sWSDD);
 
 	WSDDDocument* doc = new WSDDDocument();
-	if (SUCCESS != doc->GetDeployment(sWSDD, this))
+	if (AXIS_SUCCESS != doc->GetDeployment(sWSDD, this))
 
 
 	{

@@ -144,7 +144,7 @@ int SoapDeSerializer::SetInputStream(const Ax_soapstream* pInputStream)
 		m_pInputStream->transport.pGetFunct(m_hugebuffer, HUGE_BUFFER_SIZE, &nChars, m_pInputStream->str.ip_stream);
 	//if no soap then quit
 
-	if (nChars <= 0) return FAIL;
+	if (nChars <= 0) return AXIS_FAIL;
 	//MemBufInputSource Input((const unsigned char*)m_hugebuffer, nChars , "bufferid");
 
 	//Input.setEncoding("UTF-16");
@@ -158,7 +158,7 @@ int SoapDeSerializer::SetInputStream(const Ax_soapstream* pInputStream)
     m_pParser.parse_continue(m_hugebuffer, HUGE_BUFFER_SIZE);
     m_pParser.parse_end();
     
-	return SUCCESS;
+	return AXIS_SUCCESS;
 
 }
 
