@@ -423,15 +423,15 @@ void WSDDDocument::processAttributes(WSDDLevels eElementType,
 void WSDDDocument::getParameters(WSDDLevels eElementType,
                              const AnyElement* pEvent)
 {
-	const XML_Ch* pcLocalname;
-	const XML_Ch* pcNamespace;
-    const XML_Ch* pcValue;
+    const XML_Ch* pcLocalname;
+    const XML_Ch* pcNamespace;
+    const XML_Ch* pcValue = 0;
     const XML_Ch* pcType;
-    const XML_Ch* pcName;
-	for (int i=0; pEvent->m_pchAttributes[i]; i+=3)
-	{
-		pcLocalname = pEvent->m_pchAttributes[i];
-		pcNamespace = pEvent->m_pchAttributes[i+1];
+    const XML_Ch* pcName = 0;
+    for (int i=0; pEvent->m_pchAttributes[i]; i+=3)
+    {
+        pcLocalname = pEvent->m_pchAttributes[i];
+        pcNamespace = pEvent->m_pchAttributes[i+1];
         pcValue = pEvent->m_pchAttributes[i+2];
         if (0 == strcmp(pcLocalname, kw_name))
         {

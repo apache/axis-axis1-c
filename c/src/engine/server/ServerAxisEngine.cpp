@@ -206,7 +206,7 @@ int ServerAxisEngine::process(SOAPTransport* pStream)
             /* Check whether the provider type in the wsdd matchs the service's 
 	     * binding style 
 	     */
-            AXIS_BINDING_STYLE nBindingStyle;
+            AXIS_BINDING_STYLE nBindingStyle =  RPC_ENCODED;
             if (0 != m_pWebService->_functions)
             /* C service */
             {
