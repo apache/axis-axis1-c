@@ -2134,10 +2134,17 @@ unsigned char SoapDeSerializer::getElementAsUnsignedByte(const AxisChar* pName,
     return ret;
 }
 
-long SoapDeSerializer::getElementAsLong(const AxisChar* pName,
+#ifdef WIN32
+__int64 SoapDeSerializer::getElementAsLong(const AxisChar* pName,
                                         const AxisChar* pNamespace)
 {
-    long ret = 0;
+    __int64 ret = 0;
+#else
+long long SoapDeSerializer::getElementAsLong(const AxisChar* pName,
+                                        const AxisChar* pNamespace)
+{
+    long long ret = 0;
+#endif
     if (AXIS_SUCCESS != m_nStatus) return ret;
     if (RPC_ENCODED == m_nStyle)
     {
@@ -2173,7 +2180,8 @@ long SoapDeSerializer::getElementAsLong(const AxisChar* pName,
             m_pNode = m_pParser->next(true); /* charactor node */
             if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
             {
-                ret = strtol(m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
+//                ret = strtol(m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
+                ret = strtoll(m_pNode->m_pchNameOrValue);
                 m_pNode = m_pParser->next(); /* skip end element node too */
                 m_pNode = NULL;
                 /* this is important in doc/lit style when deserializing 
@@ -3654,5 +3662,50 @@ void SoapDeSerializer::getChardataAs(void* pValue, XSDTYPE type)
         }
     }
 }
+
+#ifdef WIN32
+	__int64 SoapDeSerializer::strtoll(const char * pValue)
+	{
+		__int64	llRetVal = 0;
+		__int64	llPowerOf10 = 1;
+#else
+	long long SoapDeSerializer::strtoll(const char * pValue)
+	{
+		long long llRetVal = 0;
+		long long llPowerOf10 = 1;
+#endif
+		int		iLength = strlen( pValue);
+		int		iCountDownTo = 0;
+		bool	bMinus = false;
+
+		if( *pValue == '-')
+		{
+			bMinus = true;
+			iCountDownTo = 1;
+		}
+
+		if( iLength > 0)
+		{
+			iLength--;
+		}
+
+		for( int iCount = iLength; iCount >= iCountDownTo; iCount--)
+		{
+#ifdef WIN32
+			llRetVal += (__int64)(pValue[iCount] - '0') * llPowerOf10;
+			llPowerOf10 *= (__int64) 10;
+#else
+			llRetVal += (long long)(pValue[iCount] - '0') * llPowerOf10;
+			llPowerOf10 *= (long long) 10;
+#endif
+		}
+
+		if( bMinus)
+		{
+			llRetVal = -llRetVal;
+		}
+
+		return llRetVal;
+	}
 
 AXIS_CPP_NAMESPACE_END

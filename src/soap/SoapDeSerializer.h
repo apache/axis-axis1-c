@@ -123,8 +123,13 @@ public:
         const AxisChar* pNamespace);
     unsigned char AXISCALL getElementAsUnsignedByte(const AxisChar* pName, 
         const AxisChar* pNamespace);
-    long AXISCALL getElementAsLong(const AxisChar* pName, 
+#ifdef WIN32
+    __int64 AXISCALL getElementAsLong(const AxisChar* pName, 
         const AxisChar* pNamespace);
+#else
+    long long AXISCALL getElementAsLong(const AxisChar* pName, 
+        const AxisChar* pNamespace);
+#endif
     long AXISCALL getElementAsInteger(const AxisChar* pName, 
         const AxisChar* pNamespace);
     unsigned long AXISCALL getElementAsUnsignedLong(const AxisChar* pName, 
@@ -215,6 +220,12 @@ private:
         const AxisChar* pNamespace);
     xsd__base64Binary decodeFromBase64Binary(const AxisChar* pValue);
     xsd__hexBinary decodeFromHexBinary(const AxisChar* pValue);
+
+#ifdef WIN32
+	__int64 strtoll(const char *);
+#else
+	long long strtoll(const char *);
+#endif
 };
 
 AXIS_CPP_NAMESPACE_END

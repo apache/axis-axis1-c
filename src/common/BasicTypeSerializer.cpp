@@ -87,7 +87,7 @@ const AxisChar* BasicTypeSerializer::serializeAsElement (const AxisChar* pName,
         case XSD_LONG:
 //FJP v Added
 #ifdef WIN32
-            AxisSprintf (m_Buf, BTS_BUFFSIZE, "%lld", *((__int64*)(pValue)));
+            AxisSprintf (m_Buf, BTS_BUFFSIZE, "%I64d", *((__int64*)(pValue)));
 #else
             AxisSprintf (m_Buf, BTS_BUFFSIZE, "%lld", *((long long*)(pValue)));
 #endif
