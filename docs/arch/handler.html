@@ -26,16 +26,16 @@
 <a href="#API">API Notes for Handler writers</a> <br> <br> </p>
 
 
-<p> <a name="#introduction"> </a>
+<p> <a name="#introduction"> </a> </p>
 <p>Handlers are pluggable components in Axis C++. We have included a set of sample handlers for your reference. You could write your own handlers by following the instructions given for the sample Handlers. <br> <br>
 
 <b>Note: If you are using Client side Handlers you need to enter the following entry to the [Axis_Folder]/axiscpp.conf configuration file. </b> <br> <br>
-ClientWSDDFilePath:xxx <br>
+ClientWSDDFilePath:xxx <br> <br>
 Here xxx should be the path to the “client.wsdd” file.
 <br>
 
 </p>
-<a name="#sample"> </a>
+<p><a name="#sample"> </a> </p>
 <p><b>Testing the sample Handlers </b> </p> 
 <br>
 
@@ -50,18 +50,18 @@ This sample handler will simply add a SOAP Header to the generated SOAP request.
 Please note that these are very primitive sample handlers and are presented here to give you an idea about writing your own Handlers. <br> </p>
 
 <p>
-<b>echoStringHeaderHandler</b> <br>
+<b>echoStringHeaderHandler</b> <br> <br>
 <b>Building the Sample Handlers in RedHat linux</b> <br><br>
 
-<b>Building echoStringHeaderHandler</b> (A server side handler sample) <br>
-The build files are available at <br>
+<b>Building echoStringHeaderHandler</b> (A server side handler sample) <br> <br>
+The build files are available at <br> <br>
 AXISCPP_HOME/samples/server/echoStringHeaderHandler.<br>
 Change your current directory to this directory and then you could execute the following. <br><br>
      make  <br><br>
      make install  <br><br>
 The handler so file will be created at  $AXISCPP_DEPLOY/lib   directory <br> <br>
 
-<b>Configuring the Handler</b> <br>
+<b>Configuring the Handler</b> <br> <br>
 Now edit the AXISCPP_DEPLOY/etc/server.wsdd  to include the handler for a particular service. <br> <br>
 </p>
 
@@ -82,20 +82,20 @@ Now edit the AXISCPP_DEPLOY/etc/server.wsdd  to include the handler for a partic
 </p>
 
 <p>
-<b>Note:</b> Make sure you specify the correct path of the handler so in the server.wsdd file. Replace the AXISCPP_DEPLOY with the exact relative path which AXISCPP_DEPLOY  points to. (eg:  type="/usr/local/axiscpp_deploy/etc/libeshhandler.so  ) <br>
+<b>Note:</b> Make sure you specify the correct path of the handler so in the server.wsdd file. Replace the AXISCPP_DEPLOY with the exact relative path which AXISCPP_DEPLOY  points to. (eg:  type="/usr/local/axiscpp_deploy/etc/libeshhandler.so  ) <br> <br>
 Now you are almost done to run your server side handler.<br>
 Restart the Apache server and that's it. <br> <br>
-<b>Running the Handler</b> <br>
+<b>Running the Handler</b> <br> <br>
 Since this Handler is configured to the Calculator web service in the above step, this Handler will be executed when a client send a SOAP request to the Calculator web service. <br><br>
 
 <b>testHandler</b> <br> <br>
 <b>Building the Sample Handlers in RedHat linux</b> <br><br>
 
-<b>Building testHandler</b> (A client side handler sample) <br>
+<b>Building testHandler</b> (A client side handler sample) <br> <br>
 The build files are available at  AXISCPP_HOME/samples/client/testHandler. Change your current directory to this direcotory and then you could execute the following. <br><br>
      make <br><br>
      make install <br><br>
-The handler so file will be created at $AXISCPP_DEPLOY/lib/.  <br>
+The handler so file will be created at $AXISCPP_DEPLOY/lib/.  <br> <br>
 
 <b>Configuring the Handler</b> <br> <br>
 
@@ -115,17 +115,17 @@ Now edit the AXISCPP_DEPLOY/etc/client.wsdd  to include the handler for a partic
 </p>
 
 <p>
-<b>Note:</b> Make sure you specify the correct path of the handler so in the client.wsdd file. Replace the AXISCPP_DEPLOY with the exact relative path which  AXISCPP_DEPLOY  points to. (eg:  type="/usr/local/axiscpp_deploy/lib/libtest_client_handler.so) <br>
+<b>Note:</b> Make sure you specify the correct path of the handler so in the client.wsdd file. Replace the AXISCPP_DEPLOY with the exact relative path which  AXISCPP_DEPLOY  points to. (eg:  type="/usr/local/axiscpp_deploy/lib/libtest_client_handler.so) <br> <br>
 
-Now you are almost done to run your client side handler. <br>
+Now you are almost done to run your client side handler. <br> <br>
 <b>Note:</b> If you are using Client side Handlers you need to enter the  <ClientWSDDFilePath>  entry in the AXISCPP_DEPLOY/etc/axiscpp.conf configuration file. (See above) <br> <br>
-<b>Running the Handler</b> <br>
+<b>Running the Handler</b> <br> <br>
 Since this Handler is configured to the Calculator web service in the above step, this Handler will be executed when you run the calculator web service client. (It is at  AXISCPP_DEPLOY/bin/calculator )
 </p>
 
-<p>
-<a name="#creating"> </a>
-<b>Handler Notes:</b>  <br>
+
+<p><a name="#creating"> </a> </p>
+<p><b>Handler Notes:</b>  <br>
 1) You can see the Handler behavior through the TCP Monitor. (TCP Monitor is a Axis Java tool) <br>
 2) To get an idea of Handlers look at the Handler sample source files. <br>
      a. echoStringHeaderHandler (AXISCPP_HOME/samples/server/echoStringHeaderHandler)  <br>
@@ -133,11 +133,11 @@ Since this Handler is configured to the Calculator web service in the above step
 
  </p>
 
-<p> 
 
-<a name="#API"> </a>
+
+<p><a name="#API"> </a> </p>
 <br>
-<b>The Handler API and details for Handler writers</b> <br><br>
+<p><b>The Handler API and details for Handler writers</b> <br><br>
 
 Now you have seen some sample Handlers so that you can explore more on Handlers. The following sections helps you for the same. <br> <br>
 
@@ -236,7 +236,7 @@ xsd__base64Binary bb = pIHandlerSoapDeSerializer-&gtgetBodyAsBase64Binary();<br>
 
 <p>
 <b>Notes:</b><br>
-Have a look at the following classes at the API docs to see all the available functions and their respective descriptions. (You can even look at the relavent .h/.hpp header files for the API comments) <br>
+Have a look at the following classes at the API docs to see all the available functions and their respective descriptions. (You can even look at the relevent .h/.hpp header files for the API comments) <br>
 IhandlerSoapDeSerializer<br>
 IHeaderBlock<br>
 BasicNode<br>
@@ -249,47 +249,46 @@ With the sample code samples provided above and with the API notes a developer w
 This tutorial will be updated frequently with the new additions and specially with your suggestions.<br><br>
 
 </p>
-<p>
 
-<a name="#windows"></a>
+<p><a name="#windows"></a> 
 
 <h1>Windows</h1> </p>
 
-<p><a href="#introduction1"> Introduction to Handlers </a> <br> <br>
-<a href="#sample1">Sample Handlers (building, running)</a> <br> <br>
-<a href="#creating1">Creating your own Handlers </a> <br> <br>
-<a href="#API1">API Notes for Handler writers</a> <br> <br> </p>
+<p><a href="#introd"> Introduction to Handlers </a> <br> <br>
+<a href="#sam">Sample Handlers (building, running)</a> <br> <br>
+<a href="#create">Creating your own Handlers </a> <br> <br>
+<a href="#APP">API Notes for Handler writers</a> <br> <br> </p>
 
 
-<p> <a name="#introduction1"> </a>
+<p> <a name="#introd"> </a> </p>
 
 <p>Handlers are pluggable components in Axis C++. We have included a set of sample handlers for your reference. <br> <br>
-You could write your own handlers by following the instructions given for the sample Handlers.<br>
-<b>Note: If you are using Client side Handlers you need to enter the following entry to the [Axis_Folder]/axiscpp.conf configuration file.</b> <br>
-ClientWSDDFilePath:Axis\conf\client.wsdd <br>
-After entering this entry to your [Axis_Folder]/axiscpp.conf configuration file will look like:<br>
+You could write your own handlers by following the instructions given for the sample Handlers.<br> <br>
+<b>Note: If you are using Client side Handlers you need to enter the following entry to the [Axis_Folder]/axiscpp.conf configuration file.</b> <br> <br>
+ClientWSDDFilePath:Axis\conf\client.wsdd <br> <br>
+After entering this entry to your [Axis_Folder]/axiscpp.conf configuration file will look like:<br> <br>
 LogPath:Axis\logs\AxisLog.txt<br>
 WSDDFilePath:Axis\conf\server.wsdd<br>
-ClientWSDDFilePath:Axis\conf\client.wsdd<br>
+ClientWSDDFilePath:Axis\conf\client.wsdd<br> <br> </p>
 
-<a name="#sample1"> </a>
-
-<b>Testing the sample Handlers </b><br>
-We have included the following sample Handlers for your reference.<br>
-1) <b>echoStringHeaderHandler</b> (A server side handler sample) This sample handler will simply echo (i.e send back) the string which you send in the SOAP Header in the SOAP request. <br> <br>
-2)<b>testHandler</b> (A client side handler sample)<br> 
+<p><a name="#sam"> </a> </p>
+<p>
+<b>Testing the sample Handlers </b><br> <br>
+We have included the following sample Handlers for your reference.<br> <br>
+1) <b>echoStringHeaderHandler</b> (A server side handler sample) <br> <br>This sample handler will simply echo (i.e send back) the string which you send in the SOAP Header in the SOAP request. <br> <br>
+2)<b>testHandler</b> (A client side handler sample)<br>  <br>
 This sample handler will simply add a SOAP Header to the generated SOAP request.<br>
-Please note that these are very primitive sample handlers and are presented here to give you an idea about writing your own Handlers.<br>
+Please note that these are very primitive sample handlers and are presented here to give you an idea about writing your own Handlers.<br> <br>
 <b>echoStringHeaderHandler</b> <br> <br>
 <b>Building the Sample Handlers in VC</b> <br>
 
 </p>
-<p>
-<b>Building echoStringHeaderHandler</b> (A server side handler sample) <br>
+<p> 
+<b>Building echoStringHeaderHandler</b> (A server side handler sample) <br> <br>
 The VC dsw file (ServerHandlers.dsw) is available at Axis_Extract/vc/samples/server/ ServerHandlers.dsw.<br>
 Open this file and build the project echoStringHeaderHandler. Once the build is successful you will find the DLL (echoStringHeaderHandler.dll) at Axis_Extract/bin. <br>
- If you see this DLL at the above location you are done with the first step.<br>
-<b>Configuring the Handler</b> <br>
+ If you see this DLL at the above location you are done with the first step.<br> <br>
+<b>Configuring the Handler</b> <br> <br>
 Now edit the  [Axis_Folder]/conf/server.wsdd  to include the handler for a particular service.<br>
 </p>
 <p>
@@ -307,17 +306,18 @@ Now edit the  [Axis_Folder]/conf/server.wsdd  to include the handler for a parti
 &lt;/service&gt;<br><br>
 <b>Note:</b> Make sure you specify the correct path of the handler dll in the server.wsdd file. <br>
 Now you are almost done to run your server side handler.<br>
-Restart the Apache server.<br>
+Restart the Apache server.<br> <br>
 
-</p><p>
+</p>
+<p>
 <b>Running the Handler</b> <br> <br>
-Since this Handler is configured to the Calculator web service in the above step, this Handler will be executed when a client send a SOAP request to the Calculator web service.<br>
-<b>testHandler</b> <br>
-<b>Building the Sample Handlers in VC</b> <br>
+Since this Handler is configured to the Calculator web service in the above step, this Handler will be executed when a client send a SOAP request to the Calculator web service.<br> <br>
+<b>testHandler</b> <br> <br>
+<b>Building the Sample Handlers in VC</b> <br> <br>
 <b>Building testHandler </b>(A client side handler sample)<br> <br>
 The VC dsw file <b>(ClientHandlers.dsw)</b> is available at Axis_Extract/vc/samples/client/ClientHandlers.dsw.Open this file and build the project TestHandler.  <br>
-Once the build is successful you will find the DLL testHandler.dll) at Axis_Extract/bin. If you see this DLL at the above location you are done with the first step. <br>
-<b>Configuring the Handler</b> <br>
+Once the build is successful you will find the DLL testHandler.dll) at Axis_Extract/bin. If you see this DLL at the above location you are done with the first step. <br> <br>
+<b>Configuring the Handler</b> <br> <br>
 Now edit the [Axis_Folder]/conf/client.wsdd to include the handler for a particular service. <br>
 </p>
 <p>
@@ -332,13 +332,13 @@ Now edit the [Axis_Folder]/conf/client.wsdd to include the handler for a particu
 </p>
 <p>
 <b>Note:</b> Make sure you specify the correct path of the handler dll in the client.wsdd file. <br>
-Now you are almost done to run your client side handler. <br>
-<b>Note: </b>If you are using Client side Handlers you need to enter the ClientWSDDFilePath entry in the [Axis_Folder]/axiscpp.conf  configuration file. (See above) <br>
-<b>Running the Handler</b> <br>
-Since this Handler is configured to the Calculator web service in the above step, this Handler will be executed when you run the calculator web service client. (It is at  [Axis_Extract]/bin/Calculator.exe)  <br>
+Now you are almost done to run your client side handler. <br> <br>
+<b>Note: If you are using Client side Handlers you need to enter the ClientWSDDFilePath entry in the [Axis_Folder]/axiscpp.conf  configuration file. (See above) </b> <br> <br>
+<b>Running the Handler</b> <br> <br>
+Since this Handler is configured to the Calculator web service in the above step, this Handler will be executed when you run the calculator web service client. (It is at  [Axis_Extract]/bin/Calculator.exe)  <br> <br> </p>
 
-<a name="#creating1"> </a>
-Handler Notes: <br>
+<p><a name="#create"> </a> </p>
+<p>Handler Notes: <br> <br>
 1) You can see the Handler behavior through the TCP Monitor. (TCP Monitor is a Axis Java tool) <br> <br>
 2) To get an idea of Handlers look at the Handler sample source files. <br> <br>
 a. echoStringHeaderHandler ([Axis_Extract]/samples/server/echoStringHeaderHandler)  <br> <br>
@@ -347,8 +347,8 @@ b. testHandler ([Axis_Extract]/samples/client/testHandler)  <br> <br>
 </p>
  <p>
   
-<a name="#API1"> </a>
-<b>The Handler API and details for Handler writers</b> <br><br>
+<a name="#APP"> </a> </p>
+<p><b>The Handler API and details for Handler writers</b> <br><br>
 
 Now you have seen some sample Handlers so that you can explore more on Handlers. The following sections helps you for the same. <br><br>
 
