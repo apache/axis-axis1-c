@@ -126,3 +126,14 @@ int CharacterElement::setValue(const AxisChar* sValue)
 
 	return AXIS_SUCCESS;
 }
+
+bool CharacterElement::operator ==( const CharacterElement &objChEle) 
+{
+	if (objChEle.m_sValue == m_sValue) {
+		return true;
+	}
+	else {
+		return false;
+	}
+
+}

@@ -288,3 +288,32 @@ int SoapMethod::serializeAttributes(string &sSerialized)
 	return AXIS_SUCCESS;	
 }
 */
+
+int SoapMethod::reset()
+{
+	m_strUri = "";
+	m_strLocalname = "";
+	m_strPrefix = "";
+	m_OutputParams.clear();
+	m_attributes.clear();
+
+	return AXIS_SUCCESS;
+}
+
+int SoapMethod::initializeForTesting()
+{
+	m_strPrefix = "mn";
+	m_strLocalname = "add";
+	m_strUri = "http://myurl.com";
+
+	Attribute* pAttribute = new Attribute();
+	pAttribute->initializeForTesting();
+	addAttribute(pAttribute);
+
+	/*
+	Param* pParam = new Param(100);
+	AddOutputParam(pParam);
+	*/
+
+	return AXIS_SUCCESS;
+}
