@@ -63,9 +63,9 @@
 #if !defined(AFX_SOAPMETHOD_H__85B1A3F0_CD15_4607_AAAB_665A66AA8546__INCLUDED_)
 #define AFX_SOAPMETHOD_H__85B1A3F0_CD15_4607_AAAB_665A66AA8546__INCLUDED_
 
-#include <axis/common/Param.h>
+#include <axis/server/Param.h>
 #include "../common/ISoapMethod.h"
-#include <axis/soap/SoapSerializer.h>
+#include <axis/server/SoapSerializer.h>
 #include <list>
 
 class Attribute;

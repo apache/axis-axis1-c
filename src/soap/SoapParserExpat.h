@@ -68,12 +68,12 @@
 #define __SoapParserExpat_H_INCLUDED__
 
 #include <expat/expat.h>
-#include <axis/common/Packet.h>
+#include <axis/server/Packet.h>
 
 #include "../xml/QName.h"
-#include <axis/xml/AnyElement.h>
+#include <axis/server/AnyElement.h>
 #include "../xml/Event.h"
-#include <axis/xml/XMLParser.h>
+#include <axis/server/XMLParser.h>
 
 #include <queue>
 #include <map>

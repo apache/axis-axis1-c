@@ -64,12 +64,12 @@
 #define __AXISENGINE_INCLUDED__
 
 
-#include "../common/GDefine.h"
-#include "../common/Packet.h"
-#include "../soap/SoapSerializer.h"
-#include "../soap/SoapDeSerializer.h"
-#include "../common/BasicHandler.h"
-#include "../common/MessageData.h"
+#include "GDefine.h"
+#include "Packet.h"
+#include "SoapSerializer.h"
+#include "SoapDeSerializer.h"
+#include "BasicHandler.h"
+#include "MessageData.h"
 #include "HandlerChain.h"
 /**
     @class AxisEngine

@@ -64,7 +64,7 @@
 #if !defined(AFX_SHAREDOBJECT_H__0805D25C_2F7E_4B19_BECE_0A8BFE9F0830__INCLUDED_)
 #define AFX_SHAREDOBJECT_H__0805D25C_2F7E_4B19_BECE_0A8BFE9F0830__INCLUDED_
 
-#include <axis/common/GDefine.h>
+#include <axis/server/GDefine.h>
 #ifdef WIN32
 #else //Linux
 #include "pthread.h"

@@ -65,7 +65,7 @@
 
 #include "HeaderBlock.h"
 #include "SoapEnvVersions.h"
-#include "../common/ISoapHeader.h"
+#include "ISoapHeader.h"
 
 /**
     @class SoapHeader

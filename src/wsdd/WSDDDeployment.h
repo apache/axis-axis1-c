@@ -67,8 +67,8 @@
 #if !defined(AFX_WSDDDEPLOYMENT_H__2B3E0205_06F3_47C1_8D9C_479CBFB8ACC2__INCLUDED_)
 #define AFX_WSDDDEPLOYMENT_H__2B3E0205_06F3_47C1_8D9C_479CBFB8ACC2__INCLUDED_
 
-#include <axis/wsdd/WSDDService.h>
-#include <axis/wsdd/WSDDHandler.h>
+#include <axis/server/WSDDService.h>
+#include <axis/server/WSDDHandler.h>
 #include "WSDDTransport.h"
 #include "../common/IDeployerUtils.h"
 

@@ -64,8 +64,8 @@
 #define AFX_ARRAYBEAN_H__374BEDCF_E850_4907_9CF0_F2EBC61E54CF__INCLUDED_
 
 #include "IArrayBean.h"
-#include <axis/common/IParam.h>
-#include <axis/common/BasicTypeSerializer.h>
+#include <axis/server/IParam.h>
+#include <axis/server/BasicTypeSerializer.h>
 
 #include <list>
 using namespace std;

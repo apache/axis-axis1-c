@@ -60,7 +60,7 @@
 #if !defined(AFX_SOAPKEYWORDMAPPING_H__7ED17E2B_F729_4256_985A_0D8F70D55D2A__INCLUDED_)
 #define AFX_SOAPKEYWORDMAPPING_H__7ED17E2B_F729_4256_985A_0D8F70D55D2A__INCLUDED_
 
-#include <axis/soap/SoapEnvVersions.h>
+#include <axis/server/SoapEnvVersions.h>
 #include <map>
 
 using namespace std;

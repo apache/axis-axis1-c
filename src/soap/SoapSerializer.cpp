@@ -73,17 +73,17 @@
 #endif
 
 #include "SoapEnvelope.h"
-#include <axis/soap/SoapSerializer.h>
-#include <axis/soap/HeaderBlock.h>
-#include <axis/common/GDefine.h>
-#include <axis/common/Packet.h>
+#include <axis/server/SoapSerializer.h>
+#include <axis/server/HeaderBlock.h>
+#include <axis/server/GDefine.h>
+#include <axis/server/Packet.h>
 #include "../common/ArrayBean.h"
-#include <axis/common/BasicTypeSerializer.h>
+#include <axis/server/BasicTypeSerializer.h>
 #include "../soap/SoapKeywordMapping.h"
 #include <stdio.h>
 #include <stdarg.h>
 
-#include <axis/common/AxisTrace.h>
+#include <axis/server/AxisTrace.h>
 extern AxisTrace* g_pAT;
 
 //////////////////////////////////////////////////////////////////////

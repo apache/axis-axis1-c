@@ -62,8 +62,8 @@
 #define AFX_SERIALIZERPOOL_H__45283A27_9196_4ACF_952F_88C564A4BD40__INCLUDED_
 
 #include "SharedObject.h"
-#include <axis/soap/SoapSerializer.h>
-#include <axis/common/GDefine.h>
+#include <axis/server/SoapSerializer.h>
+#include <axis/server/GDefine.h>
 #include <list>
 
 using namespace std;

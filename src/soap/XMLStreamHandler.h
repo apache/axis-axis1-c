@@ -69,14 +69,14 @@
 #include <xercesc/util/PlatformUtils.hpp>
 #include <xercesc/framework/MemBufInputSource.hpp>
 
-#include <axis/common/Param.h>
+#include <axis/server/Param.h>
 #include "../common/ArrayBean.h"
 #include "SoapEnvelope.h"
 #include "SoapHeader.h"
 #include "SoapMethod.h"
 #include "SoapBody.h"
 #include "SoapFault.h"
-#include <axis/common/GDefine.h>
+#include <axis/server/GDefine.h>
 #include "SoapKeywordMapping.h"
 
 #define TRANSCODE_BUFFER_SIZE 256
