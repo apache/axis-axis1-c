@@ -95,7 +95,7 @@ typedef struct{
 typedef AxisChar * xsd__anyURI;
 
 typedef enum {
-	RPC_ENCODED, //default
+	RPC_ENCODED, /*default*/
 	DOC_LITERAL,
 	RPC_LITERAL
 } AXIS_BINDING_STYLE;

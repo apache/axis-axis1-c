@@ -56,9 +56,8 @@
  *
  *
  */
-// IMessageData.h:
-//
-//////////////////////////////////////////////////////////////////////
+/* IMessageData.h:*/
+
 
 
 #if !defined(AFX_IMESSAGEDATA_H__EEFDCDB4_6ABA_48CA_8B45_B4FDA6045822__INCLUDED_)
