@@ -57,7 +57,7 @@
  *
  *
  *
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
+ * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
  *
  */
 
@@ -78,8 +78,11 @@
 #include <axis/server/Packet.h>
 #include <axis/server/AxisConfig.h>
 #include "../../common/AxisSocketUtils.h"
-#include <axis/server/AxisTrace.h>
+//#include <axis/server/AxisTrace.h>
 #include "ServerHelper.h"
+#include <axis/server/GDefine.h>
+
+//extern AxisTrace* g_pAT;
 
 #define MAXPENDING 5    /* Maximum outstanding connection requests */
 #define RCVBUFSIZE 1000   /* Size of receive buffer */
@@ -93,87 +96,177 @@ char echoBuffer[RCVBUFSIZE];        /* Buffer for echo string */
 const char *pcHttpBody;
 int iClntSocket;
 map<HTTP_MAP_KEYWORDS, HTTP_MAP_TYPE*> map_HTTP_Headers;
+const int HEADER_ARRAY_SIZE = 10;
+HttpHeaders g_pHttpHeaders[HEADER_ARRAY_SIZE];
+int iHeaderCount = 0;
+bool g_blnBodySizeAvailable = false;
+int g_iBodySize =0;
 
-extern AxisTrace* g_pAT;
+#define AXIS_URI_EXTENSION "/axis"
 
-int send_response_bytes(const char * res, const void* opstream) 
-{	
-	AXISTRACE3("calling send_response_bytes");
-	AXISTRACE3(res);
+/* Following is the character that should be used to separate the method name in the 
+ * SOAPAction header value. Ex: "http://localhost:80/axis/Calculator#Add"
+ */
+#define SOAPACTION_METHODNAME_SEPARATOR "#"
 
-	int iMsgSize = strlen(res);
+AXIS_TRANSPORT_STATUS AXISCALL send_response_bytes(const char* buffer, const void* bufferid, const void* pStream)
+{
+	/*
+	 *TODO: 
+	 * //--------------Change this, sending of transport related info has to be done in "set_transport_information" method.
+	 */
+	//AXISTRACE3("sending trasport info");	
 	
-	if (send(iClntSocket, res, iMsgSize, 0) == AXIS_SOCKET_ERROR)
-		printf("%s\n","send() failed");	
+	int iMsgSize = strlen(buffer);
+	char pchContentLength[4];
+	_itoa(iMsgSize, pchContentLength, 10);
 
-	return 0;
+	char res[1000]= {'\0'};
+	strcpy(res, "HTTP/1.1 200 OK\nDate: Wed, 03 Sep 2003 09:23:06 GMT\nContent-Length: ");
+	strcat(res, pchContentLength);
+	strcat(res, "\nContent-Type: text/xml\r\n\r\n");
+	//--------------END OF Change this, sending of transport related info has to be done in "set_transport_information" method.
+
+	strcat(res, buffer);
+	
+	//AXISTRACE3(res);
+	
+	if (send(iClntSocket, res, strlen(res), 0) == AXIS_SOCKET_ERROR) {
+		printf("%s\n","send() failed");	
+		return TRANSPORT_FAILED;
+	} else {
+		return TRANSPORT_FINISHED;
+	}
+
 }
 
-int get_request_bytes(char * req, int reqsize, int* retsize, const void* ipstream) 
+AXIS_TRANSPORT_STATUS AXISCALL get_request_bytes(const char** req, int* retsize, const void* stream)
 {
 	req[0]= '\0';
-	strcat(req, pcHttpBody);
+
+	*req = pcHttpBody;
 	*retsize= strlen(pcHttpBody);
-//	*retsize = wcslen(ip)*2;
-//	memcpy(req, ip, *retsize);
-	return 0;
+
+	return TRANSPORT_FINISHED;
 }
 
-int send_transport_information(Ax_soapstream* sSoapstream) 
+void AXISCALL set_transport_information(AXIS_TRANSPORT_INFORMATION_TYPE type, const char* value, const void* stream)
 {
-	AXISTRACE3("sending trasport info");	
+	//AXISTRACE3("sending trasport info.......");	
 	
 	char *res ="HTTP/1.1 200 OK\nContent-Type: text/xml; charset=utf-8\nDate: Wed, 03 Sep 2003 09:23:06 GMT\nConnection: close\n\n";
-	AXISTRACE3(res);
+	//AXISTRACE3(res);
 
 	int iMsgSize = strlen(res);
 
 	if (send(iClntSocket, res, iMsgSize, 0) == AXIS_SOCKET_ERROR)
 		printf("%s\n","send() failed");
-
-	return 0;
 }
 
-int receive_transport_information(Ax_soapstream *str) {
-
-	return 0;
-}
-
-int executeWork() {
-
-	Ax_soapstream* str = (Ax_soapstream*)malloc(sizeof(Ax_soapstream));
-	str->trtype = APTHTTP;
-	str->sessionid = "somesessionid";
-	str->so.http.ip_method = AXIS_HTTP_POST;
-	str->str.ip_stream = "is";
-	str->str.op_stream = "os";
-	str->so.http.ip_headers = (Ax_header*)malloc(sizeof(Ax_header));
-	//str->so.http.ip_headers->headername = SOAPACTIONHEADER;
-	//str->so.http.ip_headers->headervalue = "\"Calculator\"";	
-	str->so.http.ip_headercount = 0;
-
-	char pchURIValue[100] = {0};
-	strcat(pchURIValue, "http://someurl");
-		
-	if (map_HTTP_Headers.find(HMK_URI) != map_HTTP_Headers.end()) {
-		const char* pChTemp = map_HTTP_Headers[HMK_URI]->objuHttpMapContent->msValue;
-		strcat(pchURIValue, pChTemp);
+const char* AXISCALL get_transport_information(AXIS_TRANSPORT_INFORMATION_TYPE type, const void* pStream) 
+{
+	const Ax_soapstream* stream = (Ax_soapstream*) pStream;
+	const char* ptemp;
+	switch(type)
+	{
+	case SOAPACTION_HEADER:
+		return get_property(stream, "SOAPAction");
+		/* TODO */
+		//return "abc";
+		/*-------------------*/
+	case SERVICE_URI:
+		if (strstr(stream->so.http->uri_path, AXIS_URI_EXTENSION))
+		{
+			return strstr(stream->so.http->uri_path, AXIS_URI_EXTENSION) +
+				strlen(AXIS_URI_EXTENSION) + 1;
+		}
+		else
+		{
+			return stream->so.http->uri_path;
+		}
+	case OPERATION_NAME:
+		ptemp = get_property(stream, "SOAPAction");
+		/* TODO */
+		/*-------------------*/
+		if (ptemp) 
+		{
+			if (strstr(ptemp, SOAPACTION_METHODNAME_SEPARATOR))
+			{
+				return strstr(ptemp, SOAPACTION_METHODNAME_SEPARATOR) +
+					strlen(SOAPACTION_METHODNAME_SEPARATOR);
+			}
+			else
+			{
+				return ptemp;
+			}
+		}
+	case SOAP_MESSAGE_LENGTH: 
+		return get_property(stream, "Content-Length"); /*this is apache module and transport is http so the key*/
+		/* TODO */
+		return 0;
+		/*-------------------*/
+	default:;
 	}
+	return NULL;
+}
 
-	str->so.http.uri_path = pchURIValue;
+void AXISCALL release_receive_buffer(const char* buffer, const void* stream)
+{
 
-	//set transport
-	str->transport.pSendFunct = send_response_bytes;
-	str->transport.pGetFunct = get_request_bytes;
-	str->transport.pSendTrtFunct = (AXIS_SEND_TRANSPORT_INFORMATION)send_transport_information;
-	str->transport.pGetTrtFunct = (AXIS_GET_TRANSPORT_INFORMATION)receive_transport_information;
+}
+
+int executeWork(Ax_soapstream* pStr) {
+
+	Ax_soapstream* str = pStr;
 
 	process_request(str);	
 
-	free(str->so.http.ip_headers);
-	free(str);
+	//free(str->so.http->ip_headers);
+	//free(str);
 
 	return 0;
+}
+
+int initializeStuff() {
+
+	for (int i=0; i<RCVBUFSIZE; i++) {
+		echoBuffer[i] = '\0';
+	}
+
+	memset(&g_pHttpHeaders, 0, sizeof(HttpHeaders)*HEADER_ARRAY_SIZE);
+
+	iHeaderCount=0;
+	g_blnBodySizeAvailable = false;
+	g_iBodySize =0;
+
+	return AXIS_SUCCESS;
+}
+
+int releaseStuff() {
+	
+	/*
+	 release the map_HTTP_Headers
+	 */
+	map<HTTP_MAP_KEYWORDS, HTTP_MAP_TYPE*>::iterator ite_map_HTTP_Headers = map_HTTP_Headers.begin();
+
+	while (ite_map_HTTP_Headers!= map_HTTP_Headers.end()) {
+		free (((*ite_map_HTTP_Headers).second)->objuHttpMapContent);
+		free (((*ite_map_HTTP_Headers).second));
+
+		ite_map_HTTP_Headers++;
+	}
+
+	map_HTTP_Headers.clear();
+
+	/*
+	 *release the g_pHttpHeaders
+	 */
+	for (int i=0; i<iHeaderCount; i++) {
+		free(g_pHttpHeaders[i].header_name);
+		free(g_pHttpHeaders[i].header_value);
+	}
+
+	return AXIS_SUCCESS;
 }
 
 int createTCPServerSocket(unsigned short port)
@@ -229,48 +322,157 @@ int acceptTCPConnection(int servSock)
     return clntSock;
 }
 
+int getHttpBodySize(string &sStream) {
+
+	//AXISTRACE3("In the NEW CODE getHttpBodySize():-------------------\n");
+
+	int iBodySize =0;
+	bool blnContinue = true;
+	string strTmpLine = "";
+	int iTmpPos=0;
+	bool blnFullHeaderAvailable = false;
+	int iFindStartLocation =0;
+	string sTmpStream = sStream;
+
+	iTmpPos = sTmpStream.find("\r\n\r\n");
+	if (iTmpPos != string::npos) {
+		sTmpStream = sTmpStream.substr(iFindStartLocation, iTmpPos+2);
+		blnFullHeaderAvailable = true;
+	}
+
+	iTmpPos = 0;
+
+	while (blnContinue) {
+		iTmpPos = sTmpStream.find("\n", iFindStartLocation);
+		if ((iTmpPos==string::npos) && (blnFullHeaderAvailable)) {
+			iBodySize = -1; //To indicate an error
+			blnContinue = false;			
+		} else if ((iTmpPos==string::npos) && (blnFullHeaderAvailable==false)) {
+			blnContinue = false; //Not a error, but can't procede			
+		} else {
+			strTmpLine = sTmpStream.substr(iFindStartLocation, (iTmpPos-iFindStartLocation));			
+			
+			int iTmpLoc = strTmpLine.find("Content-Length");
+			if (iTmpLoc != string::npos) {
+				iTmpLoc = strTmpLine.find(":");
+				string sTmpLen = strTmpLine.substr(iTmpLoc+1);
+				iBodySize = atoi(sTmpLen.c_str());
+				g_blnBodySizeAvailable = true;
+				blnContinue = false;
+				break;
+			}
+
+			iFindStartLocation = iTmpPos+1;
+		}		
+	}
+
+	return iBodySize;
+}
+
+bool checkStreamIsFullyRead(string &sStream) {
+
+	//AXISTRACE3("In the NEW CODE checkStreamIsFullyRead():-------------------\n");
+
+	int iTmpPos=0;
+	string strTmpBody = "";
+
+	iTmpPos = sStream.find("\r\n\r\n");
+
+	if (iTmpPos != string::npos) {
+		iTmpPos+=4;
+	}
+
+	strTmpBody = sStream.substr(iTmpPos);
+
+	if (strTmpBody.length() < g_iBodySize) {
+		return false;
+	} else {
+		return true;
+	}
+}
+
 void handleTCPClient(int clntSocket)
 {
+	Ax_soapstream* str = (Ax_soapstream*)malloc(sizeof(Ax_soapstream));
+
+	/*populate Ax_soapstream struct with relevant transport function pointers*/
+	str->transport.pSendFunct = send_response_bytes;
+	str->transport.pGetFunct = get_request_bytes;
+	str->transport.pSetTrtFunct = set_transport_information;
+	str->transport.pGetTrtFunct = get_transport_information;
+	str->transport.pRelBufFunct = release_receive_buffer;
+
+	str->trtype = APTHTTP;
+	str->so.http = (Ax_stream_http*)malloc(sizeof(Ax_stream_http));
+	str->sessionid = "this is temporary session id";
+	str->str.ip_stream = "";
+	str->str.op_stream = "";
+
     int recvMsgSize;                    /* Size of received message */
-	echoBuffer[0] = '\0';
 
     /* Receive message from client */
-    if ((recvMsgSize = recv(clntSocket, echoBuffer, RCVBUFSIZE, 0)) < 0)
-        printf("%s\n","recv() failed");
+	
+	string sClientReqStream;
+	bool blnContinue = true;
 
-	AXISTRACE3("----------START request stream of client------------");
-	AXISTRACE3(strcat(echoBuffer,"\n"));	
-	AXISTRACE3("----------END request stream of client--------------");
-
-	/*
-	while (recvMsgSize>0) {
-		if ((recvMsgSize = recv(clntSocket, echoBuffer, RCVBUFSIZE, 64)) < 0)
+	while (blnContinue) {
+		if ((recvMsgSize = recv(clntSocket, echoBuffer, RCVBUFSIZE, 0)) < 0) {
 			printf("%s\n","recv() failed");
+		} else {
+			sClientReqStream+= echoBuffer;
+			//AXISTRACE3("recd sClientReqStream:-------------------\n%s\n");
+			//AXISTRACE3(sClientReqStream.c_str());
+			
+			if (g_blnBodySizeAvailable == false) {
+				g_iBodySize = getHttpBodySize(sClientReqStream);
+			}
 
-		AXISTRACE3(strcat(echoBuffer,"\n"));	
-		AXISTRACE3(recvMsgSize);
-	}	
-	*/
-
-	string sClientReqStream = echoBuffer;
+			if (g_iBodySize > 0) {
+				if (checkStreamIsFullyRead(sClientReqStream)) {
+					blnContinue = false;
+				}
+			}
+		}
+	}
 
 	string sHTTPHeaders = "";
 	string sHTTPBody = "";
 
-	getSeperatedHTTPParts(sClientReqStream, sHTTPHeaders, sHTTPBody, &map_HTTP_Headers);
+	getSeperatedHTTPParts(sClientReqStream, sHTTPHeaders, sHTTPBody, &map_HTTP_Headers, str, g_pHttpHeaders, HEADER_ARRAY_SIZE, &iHeaderCount);
 	
-	AXISTRACE3("----------START extracted HTTP Headers------------");
-	AXISTRACE3(sHTTPHeaders.c_str());
-	AXISTRACE3("----------END extracted HTTP Headers--------------");
+	//AXISTRACE3("----------START extracted HTTP Headers------------");
+	//AXISTRACE3(sHTTPHeaders.c_str());
+	//AXISTRACE3("----------END extracted HTTP Headers--------------");
 
-	AXISTRACE3("----------START extracted HTTP Body---------------");
-	AXISTRACE3(sHTTPBody.c_str());
-	AXISTRACE3("----------END extracted HTTP Body-----------------");
+	//AXISTRACE3("----------START extracted HTTP Body---------------");
+	//AXISTRACE3(sHTTPBody.c_str());
+	//AXISTRACE3("----------END extracted HTTP Body-----------------");
+
+	str->so.http->uri_path = map_HTTP_Headers[HMK_URI]->objuHttpMapContent->msValue;
+
+	str->so.http->ip_headercount = iHeaderCount;  
+
+	str->so.http->ip_headers = new Ax_header();
+	str->so.http->ip_headers = (Ax_header*)(g_pHttpHeaders);
+
+	switch (map_HTTP_Headers[HMK_METHOD]->objuHttpMapContent->eHTTP_KEYWORD)
+	{
+	case HK_GET:
+      str->so.http->ip_method = AXIS_HTTP_GET;
+      break;
+	case HK_POST:
+      str->so.http->ip_method = AXIS_HTTP_POST;
+      break;
+	default:
+      str->so.http->ip_method = AXIS_HTTP_UNSUPPORTED;   
+	}
 
 	pcHttpBody = sHTTPBody.c_str();
 	iClntSocket = clntSocket;
 
-	executeWork();		
+	executeWork(str);
+
+	releaseStuff();
 
 	#ifdef WIN32
 	closesocket(clntSocket);    /* Close client socket */
@@ -355,6 +557,7 @@ int main(int argc, char *argv[ ])
 		{        
 			if (FD_ISSET(servSock[0], &sockSet))
 			{
+				initializeStuff();
 				/*
 				DEBUG line
 				printf("Request on port %d (cmd-line position):  \n", 0);
@@ -363,7 +566,7 @@ int main(int argc, char *argv[ ])
 			}
 		}
 
-		AXISTRACE3("end of main while");
+		//AXISTRACE3("end of main while");
 	}
 
 	//uninitializing Axis
@@ -386,7 +589,7 @@ int main(int argc, char *argv[ ])
 	#else //Linux
 	#endif
 
-	AXISTRACE3("End of main");
+	//AXISTRACE3("End of main");
 
 	return 0;
 }
