@@ -86,12 +86,11 @@ const char ENCODED_SGL_QUOTE_STR[]		= "&apos;";	// Encoded string for double quo
 class BasicTypeSerializer
 {
 public:
-	static string GetEntityReferenced(const string& str);
-	static string m_AuxStr;
-	static string& serialize(const string& sName, string& sValue, XSDTYPE type=XSD_STRING);
-	static string& serialize(const string& sName, float fValue);
-	static string& serialize(const string& sName, int nValue);
-	static const char* BasicTypeStr(XSDTYPE type);
+	string GetEntityReferenced(const string& str);
+	string& serialize(const string& sName, string& sValue, XSDTYPE type=XSD_STRING);
+	string& serialize(const string& sName, float fValue);
+	string& serialize(const string& sName, int nValue);
+	const char* BasicTypeStr(XSDTYPE type);
 	BasicTypeSerializer();
 	virtual ~BasicTypeSerializer();
 
@@ -106,10 +105,11 @@ private:
 	};
 private:
 
-	static void HelpSerialize(const string &sName, const string &sValue);
-	static string m_sSZ;
-	static char m_Buf[64]; //used for numeric to string conversions with sprintf
-	static XSDTYPE m_Type; //used to temporarily set the type of item being serialized.
+	void HelpSerialize(const string &sName, const string &sValue);
+	string m_sSZ;
+	string m_AuxStr;
+	char m_Buf[32]; //used for numeric to string conversions with sprintf
+	XSDTYPE m_Type; //used to temporarily set the type of item being serialized.
 };
 
 #endif // !defined(AFX_BASICTYPESERIALIZER_H__7ECDFED3_F3D5_48A1_A7EF_1E30B93BDB2C__INCLUDED_)
