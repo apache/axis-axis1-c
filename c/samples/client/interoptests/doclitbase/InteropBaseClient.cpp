@@ -12,14 +12,14 @@ int main(int argc, char* argv[])
 	char buffer1[100];
 	
 	InteropTestPortType ws;
-/*	printf("invoking echoString...\n");
+	printf("invoking echoString...\n");
 	//testing echoString 
 	if (0 == strcmp(ws.echoString("hello world"), "hello world"))
 		printf("successful\n");
 	else
 		printf("failed\n");
-*/	// testing echoStringArray 
-	ArrayOfstring arrstr;
+	// testing echoStringArray 
+/*	ArrayOfstring arrstr;
 	arrstr.m_Array = new char*[ARRAYSIZE];
 	arrstr.m_Size = ARRAYSIZE;
 	for (x=0;x<ARRAYSIZE;x++)
@@ -45,8 +45,8 @@ int main(int argc, char* argv[])
 			printf("failed\n");
 	}
 	printf("Done\n");
-	// testing echoInteger 
-/*	printf("invoking echoInteger...\n");
+*/	// testing echoInteger 
+	printf("invoking echoInteger...\n");
 	if (ws.echoInteger(56) == 56)
 		printf("successful\n");
 	else
@@ -84,7 +84,7 @@ int main(int argc, char* argv[])
 	else
 		printf("failed\n");
 	// testing echo Struct
-	SOAPStruct stct;
+/*	SOAPStruct stct;
 	stct.varFloat = 12345.7346345;
 	stct.varInt = 5000;
 	stct.varString = "This is string in SOAPStruct";
@@ -136,7 +136,7 @@ int main(int argc, char* argv[])
 //		printf("successful\n");
 //	else
 //		printf("failed\n");
-	//testing echo decimal
+*/	//testing echo decimal
 	printf("invoking echoDecimal...\n");
 	if (ws.echoDecimal(1234.567890) > 1234.56)
 		printf("successful\n");
@@ -148,6 +148,6 @@ int main(int argc, char* argv[])
 		printf("successful\n");
 	else
 		printf("failed\n");
-*/	getchar();
+	getchar();
 	return 0;
 }

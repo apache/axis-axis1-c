@@ -7,8 +7,6 @@
 #endif
 #include "InteropTestPortTypeWrapper.h"
 
-extern BasicHandlerFunctions InteropTestPortTypeWrapper_functions;
-
 extern "C" {
 STORAGE_CLASS_INFO
 int GetClassInstance(BasicHandler **inst)

@@ -23,7 +23,7 @@ InteropTestPortTypeWrapper::~InteropTestPortTypeWrapper()
 }
 
 //implementation of WrapperClassHandler interface
-void InteropTestPortTypeWrapper::OnFault(IMessageData *pMsg)
+void InteropTestPortTypeWrapper::OnFault(void *pMsg)
 {
 }
 
@@ -41,8 +41,9 @@ int InteropTestPortTypeWrapper::Fini()
 /////////////////////////////////////////////////////////////////
 // This method invokes the right service method 
 //////////////////////////////////////////////////////////////////
-int InteropTestPortTypeWrapper::Invoke(IMessageData *mc)
+int InteropTestPortTypeWrapper::Invoke(void *pMsg)
 {
+	IMessageData *mc = (IMessageData*)pMsg;
 	const AxisChar *method = mc->GetOperationName();
 	if (0 == strcmp(method, "echoString"))
 		return echoString(mc);
