@@ -120,7 +120,7 @@ int ESHHandler::Invoke(IMessageData *pIMsg)
 
         strTemp = "EchoStringHeaderHandlerPr1.id";
         size_t nSize = strlen(pIMsg->getProperty(strTemp).c_str()) + 30;
-        sHeaderVal = malloc(nSize);
+        sHeaderVal = (char*) malloc(nSize);
 		strcpy(sHeaderVal, pIMsg->getProperty(strTemp).c_str());
         realloc(sHeaderVal, 30);
 		strcpy(sHeaderVal," After Append by Handler");

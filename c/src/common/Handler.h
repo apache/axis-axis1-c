@@ -1,4 +1,6 @@
+#ifdef WIN32
 #pragma warning (disable : 4786)
+#endif
 
 #if !defined(__HANDLER_INCLUDED__)
 #define __HANDLER_INCLUDED__

@@ -138,7 +138,7 @@ void Url::ParseURL(std::string& url)
 			begpos = pos = 0;
 			std::string key(":/?");
 			
-			while(pos = url.find_first_of(key, begpos))
+			while((pos = url.find_first_of(key, begpos)))
 			{
 				if(pos == std::string::npos) // only host name found
 				{

@@ -64,7 +64,9 @@
 // BeanClass.cpp: implementation of the BeanClass class.
 //
 //////////////////////////////////////////////////////////////////////
+#ifdef WIN32
 #pragma warning (disable : 4786)
+#endif
 
 #include "BeanClass.h"
 

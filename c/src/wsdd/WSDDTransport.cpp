@@ -80,7 +80,7 @@ WSDDTransport::WSDDTransport()
 WSDDTransport::~WSDDTransport()
 {
 	map<AXIS_PROTOCOL_TYPE, WSDDHandlerList>::iterator iter;
-	WSDDHandlerList * hl = NULL;
+	//WSDDHandlerList * hl = NULL;
 	WSDDHandlerList::iterator iter2;
 	if(m_RequestHandlers)
 	{

@@ -64,7 +64,9 @@
 // HandlerPool.h: interface for the HandlerPool class.
 //
 //////////////////////////////////////////////////////////////////////
+#ifdef WIN32
 #pragma warning (disable : 4503)
+#endif
 
 #if !defined(AFX_HANDLERPOOL_H__6C2A4C96_7115_43C6_9EFA_CDAC9247D109__INCLUDED_)
 #define AFX_HANDLERPOOL_H__6C2A4C96_7115_43C6_9EFA_CDAC9247D109__INCLUDED_

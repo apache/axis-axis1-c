@@ -136,7 +136,7 @@ int HandlerLoader::CreateHandler(BasicHandler** pHandler, int nLibId)
 	HandlerInformation* pHandlerInfo = NULL;
 	if (m_HandlerInfoList.find(nLibId) == m_HandlerInfoList.end())
 	{
-		HandlerInformation* pHandlerInfo = new HandlerInformation();
+		pHandlerInfo = new HandlerInformation();
 		pHandlerInfo->m_sLib = g_pWSDDDeployment->GetLibName(nLibId);
 		if (pHandlerInfo->m_sLib.empty())
 		{
