@@ -47,6 +47,8 @@ HexBinary::~HexBinary()
 
 	    m_Buf = new char[strlen (serializedValue) + 1];
 	    strcpy (m_Buf, serializedValue);
+        // Samisa: serializedValue no more required, hence clean
+        delete [] serializedValue;
 	    return m_Buf;
     }
 	
