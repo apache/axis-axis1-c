@@ -18,13 +18,14 @@
  * This is for primitive types only
  */
 
-using namespace std;
 
 #include "NillableArrays.hpp"
 #include <axis/AxisException.hpp>
 #include <iostream>
 
 #define ARRAYSIZE 3
+
+using namespace std;
 
 int main(int argc, char* argv[])
 {

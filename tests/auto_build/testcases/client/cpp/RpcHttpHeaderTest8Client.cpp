@@ -1,6 +1,5 @@
 /*
  *   Copyright 2003-2004 The Apache Software Foundation.
-// (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -45,6 +44,7 @@ main(int argc, char *argv[])
     sprintf(endpoint, "http://%s:%s/axis/base", server, port);
     /*Set for HTTP transport */
     InteropTestPortType ws(endpoint, APTHTTP1_1);
+	ws.setTransportProperty("SOAPAction" , "InteropBase#echoString");
 
     //set HTTP headers
      ws.setTransportProperty(NULL, "lang2");
@@ -110,8 +110,8 @@ main(int argc, char *argv[])
     ws.deleteTransportProperty("Accept-Language");
 
     //now the request should not have these removed headers
-		bool bSuccess = false;
-		int	iRetryIterationCount = 3;
+		bSuccess = false;
+		iRetryIterationCount = 3;
 
 		do
 		{

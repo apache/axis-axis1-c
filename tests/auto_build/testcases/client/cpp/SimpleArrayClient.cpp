@@ -44,11 +44,11 @@ int main(int argc, char* argv[])
 	ArrayTestPortType ws(endpoint);
 	//testing echoIntArray
          intArrayType arrin;
-         arrin.intItem.m_Array = new int[ARRAYSIZE];
+         arrin.intItem.m_Array = new int*[ARRAYSIZE];
          arrin.intItem.m_Size = ARRAYSIZE;
          for (x=0;x<ARRAYSIZE;x++)
          {
-           arrin.intItem.m_Array[x] = x;
+           arrin.intItem.m_Array[x] =&x;
          }
          printf("invoking echoIntArray...\n");
          if (ws.echoIntArray(&arrin)->intItem.m_Array != NULL)
