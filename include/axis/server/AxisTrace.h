@@ -71,10 +71,12 @@
 #if defined(__AXISTRACE__)
   #define AXISTRACE1(X) tracer.trace(X,__FILE__,__LINE__);
   #define AXISTRACE2(X,Y) tracer.trace(X,Y,__FILE__,__LINE__);
+  #define AXISTRACE3(X) tracer.trace(X);
 #endif
 #if !defined(__AXISTRACE__)
   #define AXISTRACE1(X) "";
   #define AXISTRACE2(X,Y) "";
+  #define AXISTRACE3(X) "";
 #endif
 
 //extern unsigned char chEBuf[1024];
@@ -89,6 +91,12 @@ public:
 	virtual ~AxisTrace();
     int trace(const char* sLog, char* arg2, int arg3);
     int trace(const char* sLog1, const char* sLog2, char* arg3, int arg4);
+	/**
+	 * Writes the given string to the standard console.
+	 * @param pchLog The given string which will be printed to the standard console.
+	 * @return The status which indicates whether the operation is success (SUCCESS) or not (FAIL).
+	 */
+	int trace(const char* pchLog);
     int GetConfPath();
   
 private:
