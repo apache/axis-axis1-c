@@ -470,6 +470,10 @@ SOURCE=..\src\soap\SoapAttachment.hpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\soap\SoapDeSerializer.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\soap\SoapSerializer.h
 # End Source File
 # End Group
