@@ -61,6 +61,7 @@
  *
  *
  * @author Lilantha Darshana (lilantha@virtusa.com)
+ * @author Damitha Kumarage (damitha@jkcsworld.com, damitha@opensource.lk)
  *
  */
 
@@ -134,28 +135,61 @@ void  HttpTransport::SetProperty(const std::string& p_Property, const std::strin
  *
  */
 
-const Transport& HttpTransport::operator >> (std::string& p_Payload)
+const Transport& HttpTransport::operator >> (const char** pPayLoad)
 {
 	if(!m_bStatus) 
 	{
 		// We have the payload; this is due to Fault request made in earlier call 
 		// to this method
-		p_Payload = m_PayLoad;
+		*pPayLoad = m_PayLoad.c_str();
+    
 		return *this;
 	}
 
 	std::string tmpPacket;	// use temporary, need to workout for this
-	m_Channel >> tmpPacket;
+  if(m_IsHttpHeader == 1)
+  {
+      //printf("m_IsHttpHeader == 1\n");
+	     m_Channel >> tmpPacket;
+      *pPayLoad = tmpPacket.c_str();
+      
+      return *this;
+  }
+  //printf("tmpPacket:%s\n", tmpPacket.c_str());
     
 #ifdef _DEBUG
 	std::cout << "\n\n\nGot the message:\r\n\r\n" << tmpPacket << "\n\n";
 #endif
-	
-	// Validate the HTTP packet
-	if(!m_bStatus) HTTPValidate(tmpPacket);
-
-	// At this point we have the payload at hand so give it out
-	p_Payload = m_PayLoad;
+    do //process will step into this only if http validation is not done. That is, until the stream
+      //contain the httpd header.
+    {
+        m_Channel >> tmpPacket;
+        
+        // Validate the HTTP packet
+        if(m_IsHttpHeader == 1) //if header is validated but payload has zero length, process will steop into this.
+        {
+            //printf("while,m_IsHttpHeader == 1\n");
+            *pPayLoad = tmpPacket.c_str();
+            
+            break;
+        }
+        //printf("do while\n"); 
+        if(m_bStatus) HTTPValidate(tmpPacket); //Validate the header
+        int j = strlen(tmpPacket.c_str());
+        if(j == 0)
+            break;
+        *pPayLoad = m_PayLoad.c_str();
+        int i = strlen(m_PayLoad.c_str());
+        //printf("i:%d\n", i);
+        //If payload has nonzero length
+        if(i > 0)
+        {
+            //printf("if i> 0\n");
+            break;
+        }
+  } while(true);
+  
+  	
 	return *this;
 }
 
@@ -245,13 +279,22 @@ void HttpTransport::HTTPValidate(const std::string& p_HttpPacket)
 	// for the time being just get the payload. Here we need much work
 
 	m_bStatus = true;
-	std::string::size_type pos = p_HttpPacket.find('\n'), nxtpos;
+  int nHttpSatus;
+  
+  m_sHeader +=  p_HttpPacket;
+  
+  //printf("m_sHeader:%s\n", m_sHeader.c_str());
+  std::string::size_type pos, nxtpos;
+	pos = p_HttpPacket.find("\r\n\r\n");
+	if(pos == std::string::npos)
+  {
+    m_PayLoad = "";
+    return; //unexpected string
+  }
 
-	int nHttpSatus;
-
-	if(pos == std::string::npos) return; //unexpected string
-
-	std::string strLine = p_HttpPacket.substr(0, pos + 1);
+  m_IsHttpHeader = 1; //We have the stream until payload
+  pos = m_sHeader.find('\n');    
+	std::string strLine = m_sHeader.substr(0, pos + 1);
 	std::string::size_type offset = pos + 1;
 
 	// Check for HTTP header validity; HTTP 1.0 / HTTP 1.0 is supported.
@@ -273,27 +316,28 @@ void HttpTransport::HTTPValidate(const std::string& p_HttpPacket)
 		// Status code is 2xx; so valid packet. hence go ahead and extract the payload.
 		if(nHttpSatus == 2)
 		{
-			GetPayLoad(p_HttpPacket, offset);
+            //printf("nHttpSatus is 2\n");
+			GetPayLoad(m_sHeader, offset);
 		}
 		else if(nHttpSatus == 3)	// Status code is 3xx; some error has occurred
 		{
 			// error recovery mechanism should go here
-			Error(p_HttpPacket.c_str());
+			Error(m_sHeader.c_str());
 			throw ChannelException("HTTP Error, cannot process response message...");
 		}
 		else if(nHttpSatus == 4)	// Status code is 4xx; some error has occurred
 		{
 			// error recovery mechanism should go here
-			Error(p_HttpPacket.c_str());
+			Error(m_sHeader.c_str());
 			throw ChannelException("HTTP Error, cannot process response message...");
 		}
 		else if(nHttpSatus == 5)	// Status code is 5xx; some error has occurred
 		{
 			// error recovery mechanism should go here
-			GetPayLoad(p_HttpPacket, offset);
+			GetPayLoad(m_sHeader, offset);
 			if (!m_bStatus) 
 			{
-				Error(p_HttpPacket.c_str());
+				Error(m_sHeader.c_str());
 				throw AxisException(HTTP_ERROR);
 			}
 		}
@@ -313,7 +357,7 @@ void HttpTransport::GetPayLoad(const std::string& p_HttpPacket, std::string::siz
 {
 	std::string::size_type pos, nxtpos;
 	std::string strLine;
-	int len=0;
+	//int len=0;
 
 	// process rest of the HTTP packet
 	while (true)
@@ -328,24 +372,27 @@ void HttpTransport::GetPayLoad(const std::string& p_HttpPacket, std::string::siz
 
 		// Get the payload size from the header.
 		if((pos = strLine.find("Content-Length:")) != std::string::npos) 
-			len = atoi(strLine.substr(pos + strlen("Content-Length: ")).c_str());
+			m_intBodyLength = atoi(strLine.substr(pos + strlen("Content-Length: ")).c_str());
+      //printf("m_intBodyLength:%d\n", m_intBodyLength);
 	}
 
 	m_PayLoad = p_HttpPacket.substr(offset);
+    //printf("m_PayLoad:%s\n", m_PayLoad.c_str());
+  
 
-	pos = m_PayLoad.rfind('0');
+	//pos = m_PayLoad.rfind('0');
 
-	if(std::string::npos != pos && m_PayLoad[pos+1] != '\"')
-	{
+	//if(std::string::npos != pos && m_PayLoad[pos+1] != '\"')
+	//{
 		//nxtpos = m_PayLoad.find("1df");
 		//if(std::string::npos != nxtpos && '\n' == m_PayLoad[nxtpos+4])
-		{
-			m_bStatus = false; // we have the payload
+		//{
+			//m_bStatus = false; // we have the payload
 			// Extract the SOAP message
-			m_PayLoad = m_PayLoad.substr(m_PayLoad.find('<'));
-			m_PayLoad = m_PayLoad.substr(0, m_PayLoad.rfind('>') + 1);
-		}
-	}
+			//m_PayLoad = m_PayLoad.substr(m_PayLoad.find('<'));
+			//m_PayLoad = m_PayLoad.substr(0, m_PayLoad.rfind('>') + 1);
+		//}
+	//}
 
 #ifdef _DEBUG
 	std::cout << "Payload:\n" << m_PayLoad << std::endl;
@@ -369,4 +416,20 @@ void HttpTransport::Error(const char * err)
 void HttpTransport::ClearAdditionalHeaders()
 {
     m_AdditionalHeader.clear();
+}
+
+int HttpTransport::getBodyLength()
+{
+  return m_intBodyLength;
+}
+
+void HttpTransport::setBodyLength(int bodyLength)
+{
+  m_intBodyLength = bodyLength;
+  
+}
+
+int HttpTransport::getIsHttpHeader()
+{
+  return m_IsHttpHeader;
 }

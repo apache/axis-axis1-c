@@ -59,6 +59,7 @@
  *
  *
  * @author Lilantha Darshana (lilantha@virtusa.com)
+ * @author Damitha Kumarage (damitha@jkcsworld.com, damitha@opensource.lk)
  *
  */
 
@@ -98,13 +99,12 @@ bool Channel::Open(std::string& p_RemoteNode, unsigned short p_RemoteEnd) throw 
 {
 	m_RemoteNode = p_RemoteNode;
 	m_RemoteEnd  = p_RemoteEnd;
-
+    //printf("open a new connection\n");
 	if(!Init())
 		throw ChannelException("Cannot initialize a channel to the remote end");
 
 	sockaddr_in clAddr, svAddr;			  
-
-	if ((m_Sock = socket(PF_INET, SOCK_STREAM, 0)) != INVALID_SOCKET)
+	if ((m_Sock = socket(AF_INET, SOCK_STREAM, 0)) != INVALID_SOCKET)
 	{
 		clAddr.sin_family = AF_INET;     // AF_INET (address family Internet).
 		clAddr.sin_port   = 0; 			 // No Specify Port required
@@ -229,11 +229,12 @@ const Channel& Channel::operator << (const std::string& msg)
 /**
  * Read/receive a message from the remote server; reading may be done in chunks.
  *
- * @param	string to hold the read Message 
+ * @param	string to hold the read data chunk
  */
 
 const Channel& Channel::operator >> (std::string& msg)
 {
+	msg = "";
 	if(INVALID_SOCKET == m_Sock) 
 	{
 		Error("Reading cannot be done without having a open socket.");
@@ -241,31 +242,26 @@ const Channel& Channel::operator >> (std::string& msg)
 	}
 
 	int nByteRecv = 0;
-	const int BUF_SIZE = 4096;
+	const int BUF_SIZE = 512;
 	char buf[BUF_SIZE];
-	
-	do	// Manage multiple chuncks of the message
-	{
+  
 		if ((nByteRecv = recv(m_Sock, (char *) &buf, BUF_SIZE - 1, 0)) == SOCKET_ERROR)
 		{
+            perror("recv SOCKET_ERROR");
 			Error("Channel error while getting data.");
-			CloseChannel();
-			throw ChannelException("Input streaming error on Channel while getting data");
+			//CloseChannel();
+            return *this;
+			//throw ChannelException("Input streaming error on Channel while getting data");
 		}
-
 		if(nByteRecv)
 		{
-			buf[nByteRecv + 1] = '\0';	// got a part of the message, so add it to form 
-			msg += buf;					// the whole message
-
-			//Validate according to the transport; check whether we are in a position to return.
-			if (!m_pTransportHandler->GetStatus(msg)) 
-				break;
+            //printf("if(nByteRecv)\n");
+			buf[nByteRecv] = '\0';	// got a part of the message, so add it to form 
+            msg = buf;
+            //printf("buf:%s\n", buf);
 		}
 		else
-			break; // we have the whole message or an error has occured
-	 }
-	 while (true);
+            printf("execution break\n");
 
 	 return *this;
 }
