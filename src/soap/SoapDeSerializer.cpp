@@ -75,7 +75,6 @@ AXIS_CPP_NAMESPACE_START
     m_pParser = XMLParserFactory::getParserObject ();
     m_pEnv = NULL;
     m_pHeader = NULL;
-    m_pcFaultDetail = new char[100];
     m_pInputStream = 0;
     m_nStatus = AXIS_SUCCESS;
 }
@@ -91,7 +90,6 @@ SoapDeSerializer::~SoapDeSerializer ()
 	XMLParserFactory::destroyParserObject (m_pParser);
 	//delete m_pParser;
     }
-    delete[]m_pcFaultDetail;
 }
 
 int
@@ -497,27 +495,6 @@ SoapDeSerializer::checkForFault (const AxisChar * pName,
     {
 	throw AxisGenException (AXISC_NODE_VALUE_MISMATCH_EXCEPTION);
     }
-}
-
-int
-SoapDeSerializer::getFault ()
-{
-    /* TODO : */
-    //if (!m_pNode) m_pNode = m_pParser->next();
-    //if (m_pNode)
-    //{
-    m_pcFaultDetail = "This is a hard coded test error";
-
-    return AXIS_SUCCESS;
-    //}
-}
-
-int
-SoapDeSerializer::getFaultDetail (char **ppcDetail)
-{
-    *ppcDetail = m_pcFaultDetail;
-
-    return AXIS_SUCCESS;
 }
 
 int

@@ -127,10 +127,10 @@ AXISC_STORAGE_CLASS_INFO int axiscGetElementAsIntCall(AXISCHANDLE call, const Ax
 	return c->getElementAsInt(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO int axiscGetFaultDetailCall(AXISCHANDLE call, char * * ppcDetail) {
+/*AXISC_STORAGE_CLASS_INFO int axiscGetFaultDetailCall(AXISCHANDLE call, char * * ppcDetail) {
 	Call *c = (Call*)call;
 	return c->getFaultDetail(ppcDetail);
-}
+}*/
 
 AXISC_STORAGE_CLASS_INFO xsdc__boolean axiscGetElementAsBooleanCall(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {

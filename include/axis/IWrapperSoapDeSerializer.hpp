@@ -57,7 +57,6 @@ public:
     /* Methods used by wrappers to get a deserialized value of basic types */
     virtual int AXISCALL getElementAsInt(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
-    virtual int AXISCALL getFaultDetail(char** ppcDetail) = 0;
     virtual xsd__boolean AXISCALL getElementAsBoolean(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
     virtual unsigned int AXISCALL getElementAsUnsignedInt(const AxisChar* 

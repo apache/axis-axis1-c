@@ -74,10 +74,10 @@ AXISC_STORAGE_CLASS_INFO int axiscGetElementAsIntIWrapperSoapDeSerializer(AXISCH
 	return dz->getElementAsInt(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO int axiscGetFaultDetailIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, char * * ppcDetail) {
+/*AXISC_STORAGE_CLASS_INFO int axiscGetFaultDetailIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, char * * ppcDetail) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 	return dz->getFaultDetail(ppcDetail);
-}
+}*/
 
 AXISC_STORAGE_CLASS_INFO xsdc__boolean axiscGetElementAsBooleanIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {

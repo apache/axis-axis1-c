@@ -280,7 +280,6 @@ public:
      */
     int AXISCALL getElementAsInt(const AxisChar* pName,
         const AxisChar* pNamespace);
-        int AXISCALL getFaultDetail(char** ppcDetail);
     xsd__boolean AXISCALL getElementAsBoolean(const AxisChar* pName,
         const AxisChar* pNamespace);
     unsigned int AXISCALL getElementAsUnsignedInt(const AxisChar* pName,

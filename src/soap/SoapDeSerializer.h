@@ -85,7 +85,6 @@ private:
     int m_nStatus;
     /* Provider type of current service that uses this DeSerializer object */
     PROVIDERTYPE m_ProviderType;
-    char* m_pcFaultDetail;
     SOAPTransport* m_pInputStream;
 
 private:
@@ -109,7 +108,6 @@ public:
     AxisChar* AXISCALL getBodyAsChar();
     int AXISCALL setNewSoapBody(AxisChar* pNewSoapBody);
     bool isAnyMustUnderstandHeadersLeft();
-    int getFault();
     int AXISCALL checkMessageBody(const AxisChar* pName, 
         const AxisChar* pNamespace);
     void* AXISCALL checkForFault(const AxisChar* pName, 
@@ -144,7 +142,6 @@ public:
     /* Methods used by wrappers to get a deserialized value of basic types */
     int AXISCALL getElementAsInt(const AxisChar* pName, 
         const AxisChar* pNamespace);
-    int AXISCALL getFaultDetail(char** ppcDetail);
     xsd__boolean AXISCALL getElementAsBoolean(const AxisChar* pName, 
         const AxisChar* pNamespace);
     unsigned int AXISCALL getElementAsUnsignedInt(const AxisChar* pName, 

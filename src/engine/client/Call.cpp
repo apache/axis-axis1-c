@@ -468,11 +468,6 @@ int Call::getElementAsInt (const AxisChar* pName, const AxisChar* pNamespace)
     return m_pIWSDZ->getElementAsInt (pName, pNamespace);
 }
 
-int Call::getFaultDetail(char** ppcDetail)
-{
-    return m_pIWSDZ->getFaultDetail(ppcDetail);
-}
-
 xsd__boolean Call::getElementAsBoolean (const AxisChar* pName, 
     const AxisChar* pNamespace)
 {
