@@ -4,7 +4,7 @@
 
 Notes:
    This is a build file for use with the Jakarta Ant build tool.
-   For more information on using the build refer to building-axis.html under docs
+   For more information on using the build refer to build_guide.html under docs
    
 
 Prerequisites:
@@ -204,9 +204,6 @@ Copyright:
     <!--
     TODO followings 
     1) task to run the tests when server is ready 
-    2) task to run all usage tests
-    
-    The work is straight foward from the axis build.xml yet I try to keep the ant file 
-    for time been.
-    -->
+    2) task to run all usage tests 
+   -->
  </project>
