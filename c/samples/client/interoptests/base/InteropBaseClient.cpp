@@ -1,5 +1,7 @@
 // InteropBaseClient.cpp : Defines the entry point for the console application.
 //
+#include <string>
+using namespace std;
 
 #include "InteropTestPortType.h" 
 
@@ -15,6 +17,12 @@ int main(int argc, char* argv[])
 
 	printf("invoking echoString...\n");
 	//testing echoString 
+	string bigstring;
+	for (int ii=0;ii<200;ii++)
+	{
+		bigstring += "hello world ";
+	}
+	printf(ws.echoString(bigstring.c_str()));
 	if (0 == strcmp(ws.echoString("hello world"), "hello world"))
 		printf("successful\n");
 	else

@@ -145,9 +145,18 @@ public class Type {
             	this.languageSpecificName = qname2LSN();
         else{
         	//remove any funny Charactors
-			this.languageSpecificName.replaceAll("/","_");  
-			this.languageSpecificName.replaceAll(":","_");   
-			
+			this.languageSpecificName = this.languageSpecificName.replaceAll("/","_");  
+			this.languageSpecificName = this.languageSpecificName.replaceAll(":","_");
+			// JBY : add this one more clean?
+			// This arrived in case of inner type declaration. And for compilation
+			// we replace all '>' by '_' (not the first one). Quick and durty fix.
+			if ( this.languageSpecificName.length() > 1 )  {
+				char first = this.languageSpecificName.charAt(0);
+				if ( this.languageSpecificName.charAt(0) == '>' )
+					this.languageSpecificName = ">" + this.languageSpecificName.substring(1).replaceAll(">","_");
+				else 
+					this.languageSpecificName = this.languageSpecificName.replaceAll(">","_");
+			}			
         }    
        	this.attribOrder = new Vector();
     }

@@ -122,9 +122,11 @@ public class BeanParamWriter extends ParamCFileWriter{
 		
 		writer.write("int Axis_Serialize_"+classname+"("+classname+"* param, IWrapperSoapSerializer* pSZ, bool bArray)\n{\n");
 		if (attribs.length == 0) {
-			 //nothing to print if this is simple type we have inbuild types
-			 System.out.println("possible error class with no attributes....................");
-			 return;
+			System.out.println("possible error class with no attributes....................");
+			writer.write("\tpSZ->_functions->Serialize(SZ._object, \">\", 0);\n");
+			writer.write("\treturn AXIS_SUCCESS;\n");
+			writer.write("}\n\n");				 
+			return;
 		 }
 		String arrayType = null;
 		writer.write("\t/* first serialize attributes if any*/\n");
@@ -135,10 +137,10 @@ public class BeanParamWriter extends ParamCFileWriter{
 			else{
 				if (attribs[i].isOptional()){
 					writer.write("\tif (0 != param->"+attribs[i].getParamName()+")\n");
-					writer.write("\tpSZ->_functions->SerializeAsAttribute(SZ._object, \""+attribs[i].getElementName().getLocalPart()+"\", 0, (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
+					writer.write("\tpSZ->_functions->SerializeAsAttribute(SZ._object, \""+attribs[i].getParamName()+"\", 0, (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
 				}
 				else{
-					writer.write("\tpSZ->_functions->SerializeAsAttribute(SZ._object, \""+attribs[i].getElementName().getLocalPart()+"\", 0, (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
+					writer.write("\tpSZ->_functions->SerializeAsAttribute(SZ._object, \""+attribs[i].getParamName()+"\", 0, (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
 				}
 			}
 		}

@@ -280,58 +280,60 @@ public class WSDL2Ws {
 				}*/
 	    	}
     	   	else{
-	    	  	while (paramlist.hasNext()) {
+	    	  	while (paramlist.hasNext()) { //RPC style messages can have multiple parts
 	        	 	Part p = (Part) paramlist.next();
 	            	pinfo = createParameterInfo(p);
 					if (null != pinfo) minfo.addInputParameter(pinfo);
 	           	}
             }
             //get the return type
-            Iterator returnlist = op.getOutput().getMessage().getParts().values().iterator();
-			if ("document".equals(bindingEntry.getBindingStyle().getName())){
-				Part part = (Part) returnlist.next();
-				/*if ("parameters".equals(part.getName())){*///to have "parameters" is not a must. Ref : WS-I Basic profile 1.0
-					element = symbolTable.getElement(part.getElementName());
-					qname = element.getRefType().getQName();
-					if (qname != null){
-						minfo.setOutputMessage(element.getQName());
-						type = this.typeMap.getType(qname);				
-						if(type == null)
-							 throw new WrapperFault("unregisterd type "+qname+" refered");
-						/*if(type.getLanguageSpecificName().startsWith(">")){*///anyway skip the wrapping element type even if it is a named type.
-							//get inner attributes and elements and add them as parameters 
-							ArrayList elementlist = new ArrayList();
-							Iterator names = type.getElementnames();
-							while (names.hasNext()){
-								elementlist.add(names.next());
-							}
-							Type innerType;
-							for (int i = 0 ; i < elementlist.size(); i++) {
-								String elementname = (String)elementlist.get(i);
-								innerType = type.getElementForElementName(elementname).getType();
-								pinfo = new ParameterInfo(innerType,elementname);
-								pinfo.setElementName(type.getElementForElementName(elementname).getName());
-								minfo.addOutputParameter(pinfo);		
-							}							
-						/*}
-						else{
-							pinfo = new ParameterInfo(type,element.getQName().getLocalPart());
-							pinfo.setElementName(element.getQName());
-							minfo.addOutputParameter(pinfo);							
-						}*/
-						pinfo = new ParameterInfo(type,part.getName());
-						pinfo.setElementName(part.getElementName());					}
-				/*}
+			if(op.getOutput()!=null){
+	            Iterator returnlist = op.getOutput().getMessage().getParts().values().iterator();
+				if (returnlist.hasNext() && "document".equals(bindingEntry.getBindingStyle().getName())){
+					Part part = (Part) returnlist.next();
+					/*if ("parameters".equals(part.getName())){*///to have "parameters" is not a must. Ref : WS-I Basic profile 1.0
+						element = symbolTable.getElement(part.getElementName());
+						qname = element.getRefType().getQName();
+						if (qname != null){
+							minfo.setOutputMessage(element.getQName());
+							type = this.typeMap.getType(qname);				
+							if(type == null)
+								 throw new WrapperFault("unregisterd type "+qname+" refered");
+							/*if(type.getLanguageSpecificName().startsWith(">")){*///anyway skip the wrapping element type even if it is a named type.
+								//get inner attributes and elements and add them as parameters 
+								ArrayList elementlist = new ArrayList();
+								Iterator names = type.getElementnames();
+								while (names.hasNext()){
+									elementlist.add(names.next());
+								}
+								Type innerType;
+								for (int i = 0 ; i < elementlist.size(); i++) {
+									String elementname = (String)elementlist.get(i);
+									innerType = type.getElementForElementName(elementname).getType();
+									pinfo = new ParameterInfo(innerType,elementname);
+									pinfo.setElementName(type.getElementForElementName(elementname).getName());
+									minfo.addOutputParameter(pinfo);		
+								}							
+							/*}
+							else{
+								pinfo = new ParameterInfo(type,element.getQName().getLocalPart());
+								pinfo.setElementName(element.getQName());
+								minfo.addOutputParameter(pinfo);							
+							}*/
+							pinfo = new ParameterInfo(type,part.getName());
+							pinfo.setElementName(part.getElementName());					}
+					/*}
+					else{
+						throw new WrapperFault("A message name of document literal style WSDL is not \"parameters\"");
+					}*/
+				}
 				else{
-					throw new WrapperFault("A message name of document literal style WSDL is not \"parameters\"");
-				}*/
-			}
-			else{
-	            while (returnlist.hasNext()) {
-	                Part p = ((Part) returnlist.next());
-					pinfo = createParameterInfo(p);
-					if (null != pinfo) minfo.addOutputParameter(pinfo);
-	            }
+		            while (returnlist.hasNext()) { //RPC style messages can have multiple parts
+		                Part p = ((Part) returnlist.next());
+						pinfo = createParameterInfo(p);
+						if (null != pinfo) minfo.addOutputParameter(pinfo);
+		            }
+				}
 			}
         }
         return methods;

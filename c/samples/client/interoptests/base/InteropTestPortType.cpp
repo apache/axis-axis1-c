@@ -32,7 +32,7 @@ InteropTestPortType::~InteropTestPortType()
 /////////////////////////////////////////////////////////////////
 // This method wrap the service methodechoString
 //////////////////////////////////////////////////////////////////
-AxisChar* InteropTestPortType::echoString(AxisChar* Value0)
+AxisChar* InteropTestPortType::echoString(const AxisChar* Value0)
 {
 	int nStatus;
 	AxisChar* Ret;

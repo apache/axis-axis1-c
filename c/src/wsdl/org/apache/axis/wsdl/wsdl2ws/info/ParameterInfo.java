@@ -67,8 +67,22 @@ public class ParameterInfo {
 	protected QName elementName;
 	
     public String getParamName() {
-        return attribName;
+		// TODO: design review needed
+		// 		- If type and name are equals add "_Ref" ie : ref="..."
+		String result;
+		if (isReference())
+			result = attribName + "_Ref";
+		else
+			result = attribName;
+		return result;	        
     }
+
+	/**
+	 * @return boolean
+	 */
+	public boolean isReference() {
+		return type != null && attribName.equals(type.getLanguageSpecificName());
+	}
 
     public void setParamName(String paramName) {
         this.attribName = paramName;
