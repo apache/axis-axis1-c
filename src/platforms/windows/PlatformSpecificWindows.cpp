@@ -40,4 +40,12 @@ std::string* getPlatformErrorMessage(long errorNumber)
     return returningString;
 }
 
+HMODULE callLoadLib(LPCTSTR lib)
+{
+
+        SetErrorMode(SEM_FAILCRITICALERRORS); //Disable display of the critical-error-handler message box
+        return LoadLibrary(lib);
+}
+
+
 

@@ -50,7 +50,7 @@
 #define RTLD_LAZY 0    // not sure this is needed?
 
 #define PLATFORM_LOADLIBINIT()
-#define PLATFORM_LOADLIB(_lib)     LoadLibrary(_lib)
+#define PLATFORM_LOADLIB(_lib)     callLoadLib(_lib)
 #define PLATFORM_UNLOADLIB         FreeLibrary
 #define PLATFORM_GETPROCADDR       GetProcAddress
 #define PLATFORM_LOADLIBEXIT()
@@ -98,6 +98,8 @@
 #define PRINTF_LONGLONG_FORMAT_SPECIFIER_CHARS "I64d"
 
 std::string* getPlatformErrorMessage(long errorNumber);
+
+HMODULE callLoadLib(LPCTSTR lib);
 
 #endif
 
