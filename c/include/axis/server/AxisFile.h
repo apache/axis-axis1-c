@@ -18,6 +18,7 @@
 #define __AXIS_AXISFILE_H_OF_AXIS_INCLUDED__
 #include <axis/server/GDefine.h>
 #include <stdio.h>
+#include <string.h>
 
 /**
  *   @class AxisFile
@@ -43,6 +44,7 @@ public:
      */
     AxisFile()
     {
+		pFILEFile = NULL;
     }
 
     /**
@@ -73,8 +75,16 @@ public:
      */
     int fileGet(char* sLine, int iBufferSize)
     {
-        if(fgets (sLine, iBufferSize, pFILEFile) != NULL)
-            return AXIS_SUCCESS;
+        if(fgets (sLine, iBufferSize, pFILEFile) != NULL )
+		{
+			char * newline = strpbrk(sLine, "\n");
+			if(newline)
+			{
+				*newline = '\0';
+			}
+			return AXIS_SUCCESS;
+		}
+
         return AXIS_FAIL;
     }
 
