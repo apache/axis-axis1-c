@@ -82,7 +82,7 @@ Param::~Param ()
 
         case XSD_INT:
         case XSD_BOOLEAN:
-            m_Value.nValue;
+            delete m_Value.nValue;
             break; 
 
         case XSD_UNSIGNEDINT:
