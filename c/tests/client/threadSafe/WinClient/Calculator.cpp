@@ -73,7 +73,7 @@ int Calculator::add(int Value0, int Value1)
 			cFaultstring = m_pCall->getElementAsString("faultstring", 0);
 			cFaultactor = m_pCall->getElementAsString("faultactor", 0);
 				  cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-				  throw AxisException(cFaultdetail);
+				  throw AxisGenException(cFaultdetail);
 		}
 		else throw;
 	}
@@ -123,7 +123,7 @@ int Calculator::sub(int Value0, int Value1)
 			cFaultstring = m_pCall->getElementAsString("faultstring", 0);
 			cFaultactor = m_pCall->getElementAsString("faultactor", 0);
 				  cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-				  throw AxisException(cFaultdetail);
+				  throw AxisGenException(cFaultdetail);
 		}
 		else throw;
 	}
@@ -173,7 +173,7 @@ int Calculator::mul(int Value0, int Value1)
 			cFaultstring = m_pCall->getElementAsString("faultstring", 0);
 			cFaultactor = m_pCall->getElementAsString("faultactor", 0);
 				  cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-				  throw AxisException(cFaultdetail);
+				  throw AxisGenException(cFaultdetail);
 		}
 		else throw;
 	}
@@ -223,7 +223,7 @@ int Calculator::div(int Value0, int Value1)
 			cFaultstring = m_pCall->getElementAsString("faultstring", 0);
 			cFaultactor = m_pCall->getElementAsString("faultactor", 0);
 				  cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-				  throw AxisException(cFaultdetail);
+				  throw AxisGenException(cFaultdetail);
 		}
 		else throw;
 	}
@@ -243,7 +243,7 @@ DWORD WINAPI Threaded( LPVOID /* lpData */ )
 
 	for(;;)
 	{
-	
+		
 		int result = cal.add(22, 33);
 		printf("The result is xxxx : %d", result);
 		printf("\n");
@@ -259,10 +259,12 @@ DWORD WINAPI Threaded1( LPVOID /* lpData */ )
 	
 	for(;;)
 	{
+		
 		int result1 = cal1.add(22, 5);
 		printf("The result is xxxx : %d", result1);
 		printf("\n");
 		Sleep(1000);
+		
 	}
 
 	
