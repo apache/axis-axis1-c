@@ -127,22 +127,27 @@ typedef unsigned long xsd__unsignedLong;
  * Axis C++ defined type for xml basic type unsignedShort
  */
 typedef unsigned short xsd__unsignedShort;
+
 /**
- * @struct xsd__base64Binary
+ * @class xsd__base64Binary
  * Axis C++ defined type for xml basic type base64Binary
  */
-typedef struct {
+class xsd__base64Binary {
+public:
     xsd__unsignedByte * __ptr;
     xsd__int __size;
-} xsd__base64Binary;
+};
+
 /**
- * @struct xsd__hexBinary
+ * @class xsd__hexBinary
  * Axis C++ defined type for xml basic type hexBinary
  */
-typedef struct{
+class xsd__hexBinary {
+public:
     xsd__unsignedByte * __ptr;
     xsd__int __size;
-} xsd__hexBinary;
+};
+
 /**
  * @typedef xsd__anyURI
  * Axis C++ defined type for xml basic type anyURI
@@ -209,11 +214,12 @@ typedef enum {
 typedef char* XML_String;
 
 /**
- * @struct AnyType
+ * @class AnyType
  * Axis C++ defined type for handling xsd:any.
  */
-typedef struct 
+class AnyType
 {
+public:
     /**
      * @var _array Contains an array of xml encoded strings.
      */
@@ -222,7 +228,7 @@ typedef struct
      * @var _size Contains how many xml strings are there in _array
      */
     int _size;
-} AnyType;
+};
 
 AXIS_CPP_NAMESPACE_END
 #endif
