@@ -65,7 +65,10 @@ Axis2Transport::~Axis2Transport ()
         delete [] m_pcEndpointUri;
     }
 
-    delete m_pChannel;
+    if (m_pChannel)
+        delete m_pChannel;
+    if (m_pFactory)
+        delete m_pFactory;
 }
 
 /*

@@ -139,12 +139,15 @@ throw (AxisTransportException&)
 #ifdef FJPDebug
             printf( "<IPV6Channel::open()=exception\n");
 #endif
-
+            free (addrInfo0);
             throw AxisTransportException( SERVER_TRANSPORT_SOCKET_CONNECT_ERROR);
             continue;
         }
         break;
     }
+
+    // Samisa: free addrInfo0 - no longer needed
+    free (addrInfo0);
 
     if (m_Sock < 0)
     {

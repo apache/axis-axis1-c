@@ -33,7 +33,7 @@ using namespace std;
 
 /** Channel::Channel() Constructor
  */
-Channel::Channel ():m_Sock (INVALID_SOCKET), m_iMsgLength( 0), m_lTimeoutSeconds(0)
+Channel::Channel ():m_Sock (INVALID_SOCKET), m_iMsgLength( 0), m_sMsg(NULL), m_lTimeoutSeconds(0)
 {
 #ifdef FJPDebug
 printf( ">Channel::Channel()\n");
@@ -62,6 +62,9 @@ printf( ">Channel::~Channel()\n");
 	{
 		closeChannel();
 	}
+
+        if (m_sMsg)
+            delete [] m_sMsg;
 
 #ifdef FJPDebug
 printf( "<Channel::~Channel()\n");
@@ -490,6 +493,11 @@ printf( "<Channel::operator >> exception=SERVER_TRANSPORT_INPUT_STREAMING_ERROR\
 		{
 			m_iMsgLength = nByteRecv;
 
+                        if (m_sMsg) 
+                        {
+                            delete [] m_sMsg;
+                            m_sMsg = NULL;
+                        }
 			m_sMsg = new char[nByteRecv];
 
 			memcpy( m_sMsg, buf, nByteRecv);
