@@ -1,7 +1,7 @@
--This folder contains the source needed to build the Axis java service needed to run the soap header based session client
+-This folder contains the sources needed to build the Axis java service needed to run the soap header based session client
 
--compile this java source file and deploy it in Axis java (visit http://ws.apache.org/axis/java/index.html for further 
-details)
+-compile these java source files and deploy them in Axis java (visit http://ws.apache.org/axis/java/index.html on how to 
+achieve this)
 
 -The following should be put in the server-config.wsdd of Axis java for this service to behave as having session scope.
 
