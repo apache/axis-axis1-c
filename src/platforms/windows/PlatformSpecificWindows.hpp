@@ -18,6 +18,7 @@
 #if !defined( _PLATFORM_SPECIFIC_WINDOWS_HPP )
 #define _PLATFORM_SPECIFIC_WINDOWS_HPP
 
+#define _WIN32_WINNT 0x0400
 #include <windows.h>
 
 // =============================================================
