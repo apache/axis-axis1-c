@@ -189,7 +189,7 @@ to [CHECKOUT_HOME]\c\lib\apache1_3.</p>
 <p><b>Building the AxisServer and AxisClient dlls </b> </p>
 
 <p>Build the AxisServer and AxisClient projects,
-Which will build the AxisServer.dll and AxisClient.dll and also AxisServer.lib and AxisClient.lib
+Which will build the AxisServer_D.dll and AxisClient_D.dll and also AxisServer_D.lib and AxisClient_D.lib
 in [CHECKOUT_HOME]\c\bin.</p>
 
 <p><b>Building Apache Modules (Apache 1.3.X and Apache 2.X) </b> </p>
@@ -219,18 +219,11 @@ with the correct module for the Apache server version that you have installed). 
 
 <p><b>Axis Transport Library</b></p>
 <p>In VC++ distribution workspace build AxisTransport project.Then AxisTransport.dll will be built.</p>
-<p><b>Xerces Parser Library</b></p>
-<p>In VC++ distribution workspace build AxisXMLParserXerces project. Then AxisXMLParserXerces.dll will be built.</p>  
-<p><b>Expat Parser Library</b></p>
-<p>In VC++ distribution workspace build AxisXMLParserExpat project. Then AxisXMLParserExpat.dll will be built</p> 
+<p><b>Xerces Parser Library and Expat Parser Library</b></p>
+<p>In VC++ distribution workspace build either AxisXMLParserXerces project or AxisXMLParserExpat project. Then AxisXMLParser.dll will be built.</p>  
 
-<p><b> Building AxisTransport.dll and AxisXMLParser.dll</b>
-<br>Build the AxisTransport and AxisXMLParser projects,Which will build the AxisTransport.dll and AxisXMLParser.dll and also AxisTransport.lib and AxisXMLParser.lib
-in [CHECKOUT_HOME]\c\bin.</p>
-
-
-
-
+<p><b> Building AxisTransport_D.dll  and AxisXMLParser_D.dll</b>
+<br>Build the AxisTransport and AxisXMLParser projects. Which will build the AxisTransport_D.dll and AxisXMLParser_D.dll in [CHECKOUT_HOME]\c\bin. Also will build  libexpat.lib or xerces-c_2.lib or  xerces-c_2D.lib in [CHECKOUT_HOME]\c\lib  </p>
 
 <p><a name="deployaxis"></a></p>
 
@@ -262,14 +255,13 @@ i)You will find AxisServer.dll and APACHE_MODULE in [CHECKOUT_HOME]\c\bin direct
 <br>
 ii)Copy APACHE_MODULE to [APACHE_HOME]\modules directory of your apache installation.
 <br>
-iii)Copy AxisServer.dll to any location specified by your PATH environment variable 
+iii)Copy AxisServer_D.dll  to any location specified by your PATH environment variable 
 <br>
-iv)Copy AxisTransport.dll to any location specified by your PATH environment variable 
+iv)Copy AxisTransport_D.dll to any location specified by your PATH environment variable 
 <br>
-v)Copy AxisXMLParser.dll to any location specified by your PATH environment variable 
+v)Copy AxisXMLParser_D.dll to any location specified by your PATH environment variable 
 <p>
-<b>NOTE:</b>Usually it is a best practice to copy AxisServer.dll,AxisTransport.dll and AxisXMLParser.dll to [AXIS_HOME]\libs\ directory and
-add that directory to your PATH environment variable.
+<b>NOTE:</b>Usually it is a best practice to copy AxisServer_D.dll ,AxisTransport_D.dll and AxisXMLParser_D.dll  to [AXIS_HOME]\libs\ directory and add that directory to your PATH environment variable.
 
 
 <br> <br>
@@ -306,22 +298,22 @@ contain the following lines.
 <br>
 AXISLOGPATH:XXXX<br>
 WSDDFILEPATH:YYYY<br>
-AXISTRANSPORT_HTTP:ZZZZ<br>
+AXISTRANSPORT_HTTP:ZZZZ (Not necessary)<br>
 AXISXMLPARSER:WWWW<br>
 
 <br>
 Where XXXX will be the path to a file named AxisLog (The log file)and YYYY
-will be the path to the server.wsdd file.ZZZZ will be the path to AxisTransport.dll if it's a HTTP(if the selected transport is SMTP then should give that path.WWWW will be the path to AxisXMLParser.dll<br>
+will be the path to the server.wsdd file.ZZZZ will be the path to AxisTransport_D.dll if it's a HTTP(if the selected transport is SMTP then should give that path.WWWW will be the path to AxisXMLParser_D.dll<br>
 <br>
 i.e.<br>
 AXISLOGPATH:[APACHE_HOME]\Axis\logs\AxisLog.log  
 
 <br>
 WSDDFILEPATH:[APACHE_HOME]\Axis\conf\server.wsdd <br>
-AXISTRANSPORT_HTTP:[APACHE_HOME]\Axis\libs\AxisTransport.dll <br>
-AXISXMLPARSER:[APACHE_HOME]\Axis\libs\AxisXMLParser.dll <br>
+AXISTRANSPORT_HTTP:[APACHE_HOME]\Axis\libs\AxisTransport_D.dll <br>
+AXISXMLPARSER:[APACHE_HOME]\Axis\libs\AxisXMLParser_D.dll <br>
 
-<p><b>Note:If the AxisTransport.dll and AxisXMLParser.dll paths are not given in axiscpp.conf then the hardcoded values will be used.For that set the path of these 2 in the PATH environment variable or copy them to the same location as the Client.exe.</b></p>
+<p><b>Note:If the AxisTransport_D.dll and AxisXMLParser_D.dll paths are not given in axiscpp.conf then the hardcoded values will be used.For that set the path of these two in the PATH environment variable or copy them to the same location as the Client.exe.</b></p>
 <br>
 <p>6)Select start-&gt;programs-&gt;Apache HTTP server-&gt;Control Apache
 Server-&gt;stop to stop the apache server
