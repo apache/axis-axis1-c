@@ -88,5 +88,6 @@ public interface GenerationConstants {
     public static final String WS4J2EE_PROPERTY_FILE = "ws4j2ee.properties";
 
     public static final String JBOSS_DD = "jboss.xml";
+    public static final String JONAS_DD = "jonas-ejb-jar.xml";
     public static final String GERONIMO_DD = "geronimo.xml";
 }
