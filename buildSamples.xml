@@ -1,0 +1,271 @@
+<project name="AxisCPPSamples" default="buildSamples" basedir=".">
+<description >
+This ANT script compiles samples for Axis C++
+
+This script is intended for use with Java 1.4+ and Apache ANT 1.6+.
+Ant is available from: http://ant.apache.org/
+
+To allow the automated finding of all available samples, use has been made of the
+ant-contrib project offering.  Also, to compile C/C++ code you will require the
+cpptasks extension to ANT. You will need to place the JAR files within:
+	[ant install dir]/lib
+These are available from: http://ant-contrib.sourceforge.net/
+{Note: The cpptasks are a seperate download from ant-contrib}
+
+Associated with this build script are property files for each platform, the script
+will automatically determine the correct one to be used;
+	- build.Win32.properties
+	- build.Linux.properties
+	- build.AIX.properties
+Please use these to configure directories to suit the needs of your system.
+
+Notes:
+* The following compilers will be required;
+	- Windows = Microsoft Visual C++ 6.0
+	- Linux   = gcc
+	- AIX     = Visual Age
+</description>
+	<!--
+	  Load definition of C/C++ Tasks and Types
+	  To allow the compilation and linking of C/C++ code
+	  -->
+	<taskdef resource="cpptasks.tasks"/>
+	<typedef resource="cpptasks.types"/>
+
+	<property environment="env"/>
+
+	<!--
+	  Load definition of Additional Tasks and Types
+	  -->
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+
+	<!--
+	  These properties should be the same for all environments, so have not been
+	  included within the property files
+	  -->
+	<property name="dir.samples" value="${basedir}/samples"/>
+	<!--property name="samples.list" value="base doclitbase"/-->
+	<property name="dir.include" value="${basedir}/include"/>
+	
+	<!--property name="sampleName" value="base"/-->
+
+	<!--
+	  Compiler definitions
+	  -->
+	  
+		<!--
+		  Definition of Visual C++ compiler
+		  -->
+		<compiler id="VisualC++" name="msvc" if="windows">
+			<compilerarg value="/nologo"/>
+			<compilerarg value="/MD"/>
+			<compilerarg value="/W3"/>
+			<compilerarg value="/GX"/>
+			<compilerarg value="/Od"/>
+			<includepath path="${dir.include}"/>
+			<defineset>
+				<define name="WIN32"/>
+				<define name="NDEBUG"/>
+				<define name="_WINDOWS"/>
+				<define name="_MBCS"/>
+				<define name="_USRDLL"/>
+				<define name="ENABLE_AXIS_EXCEPTION"/>
+			</defineset>
+			<compilerarg value="/FD"/>
+			<compilerarg value="/c"/>
+		</compiler>
+		
+		<!--
+		  Definition of gcc compile for Linux
+		  -->
+		<compiler id="Linuxgcc" name="g++" if="linux">
+			<compilerarg value="-g"/>
+			<defineset>
+				<define name="ENABLE_AXIS_EXCEPTION"/>
+				<define name="HAVE_CONFIG_H"/>
+				<define name="PIC"/>
+			</defineset>
+			<includepath path="${dir.include}"/>
+		</compiler>
+	
+		<!--
+		  Definition of xlc compile for AIX
+		  -->
+		<compiler id="AIXxlc" name="xlC" if="aix">
+			<compilerarg value="-g"/>
+			<compilerarg value="-V"/>
+			<compilerarg value="-qstaticinline"/>
+
+			<defineset>
+				<define name="ENABLE_AXIS_EXCEPTION"/>
+				<define name="HAVE_CONFIG_H"/>
+				<define name="AIX"/>
+			</defineset>
+			<includepath path="${dir.include}"/>
+		</compiler>
+
+	<!--
+	  Linker Definitions
+	  -->
+	
+		<!--
+		  Definition of Visual C++ linker
+		  -->
+		<linker id="VisualC++Linker" name="msvc" if="windows">
+			<linkerarg value="/machine:I386"/>
+			<linkerarg value="/nologo"/>
+			<linkerarg value="/pdb:none"/>
+		</linker>
+	
+		<!--
+		  Definition of Linux linker
+		  -->
+		<linker id="LinuxLinker" name="g++" libtool="true" if="linux">
+			<linkerarg value="-g"/>
+			<libset libs="stdc++"/>
+			<libset libs="dl"/>
+			<libset libs="pthread"/>
+		</linker>
+	
+		<!--
+		  Definition of AIX linker
+		  -->
+		<linker id="AIXLinker" name="xlC" libtool="false" if="aix">
+			<!-- debug is on for all -->
+			<linkerarg value="-g"/>
+		</linker>	
+
+	<!--
+	  Determine platform
+	  -->
+	<target name="pre-init">
+		<condition property="windows">
+			<os family="windows"/>
+		</condition>
+		<condition property="aix">
+			<os name="AIX"/>
+		</condition>
+		<condition property="linux">
+			<os name="Linux"/>
+		</condition>
+	</target>
+
+	<!--
+	  Check if an individual samples name has been specified
+	  -->
+	<target name="checkIfIndividualTest">
+		<condition property="individualTest">
+			<isset property="samples.name"/>
+		</condition>
+	</target>
+	
+	<!--
+	  Initialize properties
+      -->
+	<target name="initialize" depends="pre-init, checkIfIndividualTest">
+		<condition property="platform" value="Win32">
+			<isset property="windows"/>
+		</condition>
+		<condition property="platform" value="Linux">
+			<isset property="linux"/>
+		</condition>
+		<condition property="platform" value="AIX">
+			<isset property="aix"/>
+		</condition>
+
+		<condition property="dir.xmlParser" value="${env.XERCES_HOME}/bin">
+			<and>
+				<not>
+					<isset property="dir.xmlParser"/>
+				</not>
+				<isset property="windows"/>
+			</and>
+		</condition>
+		<condition property="dir.xmlParser" value="${env.XERCES_HOME}/lib">
+			<and>
+				<not>
+					<isset property="dir.xmlParser"/>
+				</not>
+				<not>
+					<isset property="windows"/>
+				</not>
+			</and>
+		</condition>
+		
+		<!-- Load properties from file -->
+		<property file="${basedir}/build/build.${platform}.properties"/>
+		
+		<!-- Get directory to contain log file -->
+		<dirname file="${results.log}" property="dir.results"/>
+		
+		<mkdir dir="${dir.obj}/objects"/>
+		<mkdir dir="${dir.obj}/samples"/>
+	</target>
+
+
+	<target name="compileSamples">
+		
+                <for list="base,doclitbase,doclitgroupB,groupB" param="sampleName">
+                    <sequential>
+    			<!--Build client-->
+			<property name="clientSampleDir" value="client/interoptests"/>		
+			<echo>Building ${clientSampleDir}/@{sampleName}</echo>
+			<cc failonerror="false" incremental="false" outfile="${dir.obj}/samples/@{sampleName}"
+		 objdir="${dir.obj}/objects" exceptions="true"
+		 outtype="executable" subsystem="console">
+		 	<!-- Compilers -->
+			<compiler refid="VisualC++"/>
+			<compiler refid="Linuxgcc"/>
+			<compiler refid="AIXxlc"/>
+			<!-- Linkers -->
+			<linker refid="VisualC++Linker"/>
+			<linker refid="LinuxLinker"/>
+			<linker refid="AIXLinker"/>
+			<!-- Additional library of Axis Client -->
+			<libset dir="${dir.obj}/bin" libs="${clientLibraryName}"/>
+			<!-- Files to be compiled -->
+			<includepath path="${dir.include}"/>
+			<fileset dir="${dir.samples}/${clientSampleDir}/@{sampleName}">
+				<include name="*.cpp"/>
+			</fileset>
+		</cc>
+    			<!--Build server-->		
+			<property name="serverSampleDir" value="server/interoptests"/>		
+			<echo>Building ${serverSampleDir}/@{sampleName}</echo>
+			<cc failonerror="false" incremental="false" outfile="${dir.obj}/samples/@{sampleName}"
+		 objdir="${dir.obj}/objects" exceptions="true"
+		 outtype="shared" subsystem="console" >
+		 	<!-- Compilers -->
+			<compiler refid="VisualC++"/>
+			<compiler refid="Linuxgcc"/>
+			<compiler refid="AIXxlc"/>
+			<!-- Linkers -->
+			<linker refid="VisualC++Linker"/>
+			<linker refid="LinuxLinker"/>
+			<linker refid="AIXLinker"/>
+			<!-- Additional library of Axis Client -->
+			<libset dir="${dir.obj}/bin" libs="${serverEngineLibraryName}"/>
+			<!-- Files to be compiled -->
+			<includepath path="${dir.include}"/>
+			<fileset dir="${dir.samples}/${serverSampleDir}/@{sampleName}">
+				<include name="*.cpp"/>
+			</fileset>
+		</cc>
+  		    </sequential>
+</for>
+		<copy file="${dir.samples}/client/run_interoptests.sh" tofile="${dir.obj}/samples/run_interoptests.sh" overwrite="false"/>
+		<copy file="${dir.samples}/client/run_interoptests.bat" tofile="${dir.obj}/samples/run_interoptests.bat" overwrite="false"/>
+	</target>
+	
+	<!--
+	  Build samples
+	  -->
+	<target name="buildSamples" unless="runOnly" depends="initialize, compileSamples" description="Build all sampless"/>	 
+	<!--
+	  Remove all generated samples artifacts
+	  -->
+	<target name="clean" depends="initialize" description="Remove all generated samples artifacts">
+		<delete dir="${dir.samples.generated}"/>
+		<delete dir="${dir.results}"></delete>
+	</target>
+</project>
