@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN"><html><head>
+	<meta http-equiv="CONTENT-TYPE" content="text/html; charset=iso-8859-1"><title></title>
+	
+	<meta name="GENERATOR" content="OpenOffice.org 1.0.2  (Linux)">
+	<meta name="CREATED" content="20031201;21290000">
+	<meta name="CHANGED" content="20031204;21345900">
+	<meta name="SDFOOTNOTE" content=";;;;P">
+	<meta name="SDENDNOTE" content="ARABIC">
+	<style>
+	<!--
+		@page { size: 21.59cm 27.94cm; margin-left: 3cm; margin-right: 3cm; margin-top: 1.27cm; margin-bottom: 1.27cm }
+		P { margin-bottom: 0.21cm }
+		H1 { margin-top: 0.78cm; margin-bottom: 0.11cm; line-height: 100%; page-break-after: auto }
+		H1.western { font-family: "Arial"; font-size: 17pt; so-language: en-US }
+		H1.cjk { font-family: "Arial"; font-size: 17pt }
+		H1.ctl { font-family: "Arial"; font-size: 17pt }
+	-->
+	</style></head>
+
+<body lang="en-US">
+<div type="HEADER">
+	<p style="margin-bottom: 0cm;"><br>
+	</p>
+</div>
+<h1 lang="en-GB" class="western" style="margin-top: 0.42cm; margin-bottom: 0cm;">
+<font size="4" style="font-size: 16pt;">Geronimo &#8211; JSR-109 Service
+Impl Integration</font></h1>
+<p lang="en-GB" style="margin-bottom: 0cm; line-height: 100%;"><br>
+</p>
+<p lang="en-GB" style="margin-bottom: 0cm; line-height: 100%;"><font face="Arial"><font size="2" style="font-size: 11pt;">The
+geronimo &#8211; JSR-109 Service Impl integration basically consists
+in the definition of a deployment architecture that defines the way
+how web services are implemented in Geronimo server and a set of
+interfaces that will be used by classes responsible for the ws's
+deployment..</font></font></p>
+<p lang="en-GB" style="margin-bottom: 0cm; line-height: 100%;"><br>
+</p>
+<p lang="en-GB" style="margin-bottom: 0cm; line-height: 100%;"><font face="Arial"><font size="2" style="font-size: 11pt;">The
+architecture proposal consist in:</font></font></p>
+<p lang="en-GB" style="margin-bottom: 0cm; line-height: 100%;"><br>
+</p>
+<ul>
+	<li><p lang="en-GB" style="margin-bottom: 0cm; line-height: 100%;"><font face="Arial"><font size="2" style="font-size: 11pt;">A
+	servlet listener that will wait for soap calls. This servlet provide
+	by Axis will act as a JAX-RPC handler and will be in charge to
+	dispatch request either to POJOs or EJBs.</font></font></p>
+	</li><li><p lang="en-GB" style="margin-bottom: 0cm; line-height: 100%;"><font face="Arial"><font size="2" style="font-size: 11pt;">The
+	Axis webapp will be deployed  at startup. Or if It's possible as
+	soon as JAX-RPC handler is need.</font></font></p>
+	</li><li><p lang="en-GB" style="margin-bottom: 0cm;"><font face="Arial"><font size="2" style="font-size: 11pt;">There
+	will be only one web-app where will reside the listeners and impl
+	for the web ws, and the proxys to call the ejb service impl.</font></font></p>
+	</li><li><p lang="en-GB" style="margin-bottom: 0cm;"></p>
+</li></ul>
+<p lang="en-GB" style="margin-bottom: 0cm; line-height: 100%;"><font face="Arial"><font size="2" style="font-size: 11pt;">-
+Deployment</font></font></p>
+<p lang="en-GB" style="margin-bottom: 0cm; line-height: 100%;"><br>
+</p>
+<ol>
+	<li><p style="margin-bottom: 0cm; line-height: 100%;"><font face="Arial"><font size="2" style="font-size: 11pt;">We
+	will extend existing module in charge of WAR  and EJB-JAR
+	deployment, to take into consideration specific ws deployment files.</font></font></p>
+	</li><li><p style="margin-bottom: 0cm; line-height: 100%;"><font face="Arial"><font size="2" style="font-size: 11pt;">A
+	service provided by the JSR-109 team will be used for the parsing of
+	files descriptor related to ws like webservice.xml. If we deployed
+	the Axis webapp the first time a JAX-RPC handler is need, we will
+	trigger an event that will do it </font></font>
+	</p>
+	</li><li><p style="margin-bottom: 0cm; line-height: 100%;"><font face="Arial"><font size="2" style="font-size: 11pt;">Once
+	the parsing is done the binding in JNDI will occur.</font></font></p>
+	</li><li><p style="margin-bottom: 0cm; line-height: 100%;"><font face="Arial"><font size="2" style="font-size: 11pt;">Then
+	the service endpoint implementation given to axis. We will use
+	Axis's integration facilities to register each ws in Axis's servlet.</font></font></p>
+</li></ol>
+<p style="margin-bottom: 0cm; line-height: 100%;"><br>
+</p>
+<p style="margin-bottom: 0cm; line-height: 100%;"><font face="Arial"><font size="2" style="font-size: 11pt;">The
+figure shows the ws deployent architecture defined for our proposal.</font></font></p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm; page-break-before: always;">
+<img src="../images/Geronimov1_002.jpg" name="Graphic1" align="left" width="450" height="825" border="0"><br clear="left"><br>
+</p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm;"><font face="Arial"><font size="2" style="font-size: 11pt;">This
+figure shows the behavior of our proposal during deployment of apps.</font></font></p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm;"><img src="../images/Geronimov1.jpg" name="Graphic2" align="left" width="484" height="628" border="0"><br clear="left"><br>
+</p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm;"><br>
+</p>
+<p style="margin-bottom: 0cm; line-height: 100%;"><font face="Arial"><font size="2" style="font-size: 11pt;">Our
+concerns.</font></font></p>
+<p style="margin-bottom: 0cm; line-height: 100%;"><font face="Arial"><font size="2" style="font-size: 11pt;">1.
+ We have to be sure that the service has started after the web
+container, because our service depends on it. How do we manage
+dependencies. ?</font></font></p>
+<p style="margin-bottom: 0cm; line-height: 100%;"><font face="Arial"><font size="2" style="font-size: 11pt;">2.
+Is it possible to have more than one listener (JAX-RPC handler) ?</font></font></p>
+<div type="FOOTER">
+	<p style="margin-top: 1.23cm; margin-bottom: 0cm;"><br>
+	</p>
+</div>
+</body></html>

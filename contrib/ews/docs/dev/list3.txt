@@ -1,0 +1,31 @@
+package com.jwsbook.jaxrpc;
+public class BookQuoteBindingImpl  implements com.jwsbook.jaxrpc.BookQuote{
+	private com.jwsbook.jaxrpc.BookQuote bean = null;
+	private org.openejb.EJBContainer container;
+	public BookQuoteBindingImpl(){
+		String containerID = "com.jwsbook.jaxrpc.BookQuoteBean";
+		org.openejb.ContainerIndex index = org.openejb.ContainerIndex.getInstance();
+		this.container = index.getContainer(containerID);
+	}
+	public float getBookPrice(java.lang.String isbn) throws java.rmi.RemoteException,com.jwsbook.jaxrpc.InvalidIsbnException{
+		java.lang.reflect.Method callMethod = org.apache.geronimo.ews.ws4j2ee.utils.Utils.getJavaMethod("com.jwsbook.jaxrpc.BookQuote","getBookPrice");
+		ContainerIndex index = ContainerIndex.getInstance();
+
+            int length = index.length();
+
+            for(int i = 0;i<length;i++){
+                EJBContainer contianer = index.getContainer(i);
+                if(contianer!= null){
+                String name = contianer.getEJBName();
+                if("BasicStatelessBean".equals(name)){
+                  Class bean = Class.forName("org.openejb.test.stateless.BasicStatelessBean");		            Object[] arguments = new Object[]{isbn};
+                  try{
+                      Object result = container.invoke(callMethod, arguments, null);
+  		          return ((java.lang.Float)result).floatValue();
+                  }catch(Throwable e){
+                      throw new org.apache.geronimo.ews.ws4j2ee.wsutils.J2EEFault(e);
+	            }
+              }	
+            }
+	}
+}

@@ -1,0 +1,15 @@
+<service-ref xmlns="http://java.sun.com/xml/ns/j2ee">
+     <service-ref-name>service/Joe</service-ref-name>
+     <service-interface>javax.xml.rpc.Service</service-interface>
+     <wsdl-file>WEB-INF/joe.wsdl</wsdl-file>
+     <jaxrpc-mapping-file>WEB-INF/joe.xml</jaxrpc-mapping-file>
+     <service-qname></service-qname>
+     <port-component-ref>
+         <service-endpoint-interface>sample.Joe</service-endpoint-interface>
+         <port-component-link>JoePort</port-component-link>
+     </port-component-ref>
+     <handler>
+         <handler-name></handler-name>
+         <handler-class></handler-class>
+     </handler>
+</service-ref>

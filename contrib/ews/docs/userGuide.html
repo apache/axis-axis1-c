@@ -1,14 +1,48 @@
 <html>
+<head>
+<link rel="stylesheet" type="text/css" href="ews.css">
+</head>
 <body>
-<h1>Ws4J2ee tool</h1>
-<h2>using with WSDL</h2>
-you need the webservice.xml file, jaxrpcmapper.xml file, x.wsdl file
-<p>look at the org.apache.geronimo.ews.ws4j2ee.GenerateTest</p>
-<h2>using without WSDL</h2>
+<h1>Using the Ws4J2ee tool</h1>
+<p>you need to have the following files 
+<ol>
+<li>webservice.xml file</li>
+<li>SEI(class file)</li>
+<li>Implementation bean(class file)</li>
+<li>ejb-jar.xml/web.xml file</li>
+<li>(optional wsdl file and jaxrpcmapping file/both or none) 
+</ol>
+</p>
+<p>Above files should be packaged in to a jar file as 
+follows</p>
 
-	<p>you need to have the 
-	webservice.xml file AND SEI (optional Implemntation bean and ejb-jar.xml/web.xml file) 
-	</p>
+<h2>Use with JAR/(WAR/EAR not yet implemented) file</h2>
+<code>
+org.apache.geronimo.ews.ws4j2ee.toWs.Ws4J2EEwithoutWSDL jar-filec out-dir
+</code>
+<br><br>
+(WAR/EAR file is not implemented)
+<p> for sample jar files build the ews and look in the <code>target/generated/samples</code>
+
+<h3>If EJB based jar file should be like this</h3>
+<pre> 
+	/-META-INF/webservice.xml
+	 -META-INF/ejb-jar.xml
+         -SEI class
+         -service implementation bean class
+         -any other referance classes
+</pre>
+<h3>If web based jar file should be like this</h3>
+<pre> 
+	/-META-INF/webservice.xml
+	 -META-INF/web.xml
+         -SEI class
+         -service implementation bean class
+         -any other referance classes
+</pre>
+
+<h2>Use with Class files and DD are in directory hirachey</h2>
+	<code>org.apache.geronimo.ews.ws4j2ee.toWs.Ws4J2EEwithoutWSDL arguments</code>
 	<p>args is String array s.t.</p>
 	<ol>
 		<li>first argument is webservice.xml file</li> 
@@ -24,6 +58,13 @@ you need the webservice.xml file, jaxrpcmapper.xml file, x.wsdl file
 
 
 <p>look at the org.apache.geronimo.ews.ws4j2ee.GenerateWithoutWSDLTest</p>
+
+<!--
+<h2>Using with WSDL</h2>
+you need the webservice.xml file, jaxrpcmapper.xml file, x.wsdl file
+<p>look at the org.apache.geronimo.ews.ws4j2ee.GenerateTest</p>
+-->
+
 <h2>Appendix</h2>
 <h3>Service Endpoint Interface</h3>
 <p>The JAX-RPC specification requires that a JAX-RPC service endpoint interface must

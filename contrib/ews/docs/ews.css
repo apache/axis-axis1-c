@@ -1,0 +1,35 @@
+.example {
+	BACKGROUND: #ccccff
+}
+.xml {
+	BACKGROUND: #eeeeee
+}
+.java {
+	BACKGROUND: #eeeeee
+}
+
+H2 {
+	BACKGROUND-COLOR: #ffdda8
+}
+H3 {
+	BACKGROUND-COLOR: #ffdda8;
+}
+H1 {
+	BACKGROUND-COLOR: #ffdda8;
+}
+
+code {
+	 BACKGROUND-COLOR: #ffeefa; 
+}
+.note {
+	FONT-WEIGHT: bold
+}
+.head {
+	FONT-WEIGHT: bold; FONT-SIZE: 240%; TEXT-ALIGN: center
+}
+TD.section {
+	FONT-WEIGHT: bold; FONT-SIZE: 180%; BACKGROUND-COLOR: #82adf6; TEXT-ALIGN: center
+}
+SMALL.red {
+	COLOR: red
+}

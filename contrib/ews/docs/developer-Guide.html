@@ -1,0 +1,22 @@
+<html>
+<head>
+<title>Developer Guide-EWS</title>
+<link rel="stylesheet" type="text/css" href="ews.css">
+</head>
+<body>
+<h1>EWS</h1>
+<p>How it is implemented</p>
+<h2><a href="dev/server.html">Server Side Implementation</a></h2>
+<h2><a href="dev/client.html">Client Side Implementation</a></h2>
+<h3>Deployment Descriptor (DD) parsing</h3> 
+<p>There are two DD added to the JSR109, they are webservice.xml file and the jaxrpc-mapping file. For those two we are using JAXB to parse them.</p>
+<p>For deal with WSDL file we are using the JAXRPC-Mapper which is a extension of WSDL2Java and Java2WSDL of axis.</p>
+<p>To parse the web.xml file and ejb-jar.xml the tool use DOM for the time been. We are considering possibility of using Geronimo DD parsing technique. (Use the method standalone, maybe we can get the information from Geronimo when our tool is used inside Geronimo)</p>
+<h2><a href="dev/Geronimov-axisIntegration.html">Geronimov Axis Integration</a></h2>
+<h2><a href="proposedframework.html">Proposed Framework</a></h2>
+<h2><a href="dev/sec.html">Security</h2>
+<h2><a href="dev/trans.html">Transaction</h2>
+
+
+</body>
+</html>

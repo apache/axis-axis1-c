@@ -1,0 +1,103 @@
+<html>
+<head>
+<title></title>
+<link rel="stylesheet" type="text/css" href="../ews.css">
+</head>
+<body>
+<h1>Server side Implementation</h1>
+<p>The Server side implementation is based on generating EJB/Java class that is realized by the Service implementation Bean. Then a web service is generated to receive the SOAP request and sending the request to the EJB/Java Class. The EWS is a tool which will accept a WAR/JAR/EAR file as given by the Usage Scenario’s documentation and generated above explained Web Service and EJB.<p>
+<p>Two cases are explaied below</p>
+
+<h2>JAR/WAR file, Java Class based implementation</h2> 
+	<ol>
+	<li>parse the webservice.xml file</li>
+	<li>if wsdl file and jaxrpc mapping file does not exsits create them using the SEI</li>
+	<li>generate axis skelton for axis using the "wsdl file"</li> 
+	<li>generate the wrapper webservice file</li>
+	<li>generate the one jar file which has all information to deploy the service.
+	(this is not done yet)</li>
+	</ol>
+	
+<h2>JAR/EAR file,EJB based implementation</h2> 	
+      <ol>
+	<li>parse the webservice.xml file</li> 
+	<li>if wsdl file and jaxrpc mapping file does not exsits create them using the SEI</li>
+	<li>generate axis skelton for axis using the "wsdl file"</li> 
+	<li>generate ejb remote/local and home interface files.</li> 
+	<li>generate the wrapper webservice file</li>
+	<li>generate the container DD if required</li>
+	<li>if the ejb-jar.xml file has security entry add security handler to axis wsdd file </li>
+	<li>generate the one jar file which has all information to deploy the service.</li>
+	</ol>
+<p>This is how it looks like when the Wraper Web service is generated and deployed in the JAX-RPC runtime</p>
+<h2>Architecture Diagram</h2>
+<img src="../images/server.gif"/>
+<br>
+<h2>Sequance Diagram</h2>
+<ol>
+<img src="../images/seq.png"/>
+<li>The WS client will send the SOAP request to axis.</li> 
+<li>Axis will parse the SOAP request.</li>  
+<li>Axis will call the request message handlers associated with the web service. (they will take care of the security and transaction mapping of the WS).</li>  
+<li>Axis will create the wrapper ws instance. (At this point the axis will call the Geronimo and get a reference to the serviceImplBean of ejb. This may be serviceImplBean itself or a indirect reference.) This will most likely to be taken from a Bean pool.</li>  
+<li>When the webserive method is called in the wrapper Ws the corresponding method in the reference to the service Impl bean will be called.</li>  
+<li>If result exists it will be given to the axis.</li>  
+<li>Axis will call the response handlers associated with the WS.</li>  
+<li>The result is marshaled and sent to the Client as SOAP.</li>  
+</ol>
+
+<h2>Class Diagram</h2>
+<img src="../images/class.png"/>
+<p>The tool will generate dummy Remote(Local) interface and  dummy Home(LocalHome) interface.
+they are for deploy the ejb in the continer and is transparet from the deployer ews user.</p>
+<p>There are three ways the Web Service can accsess the ejb.</p>
+<ol>
+<li><h3><a href="list1.txt">Use the remote interface</a></h3></li>
+<code>
+<pre>
+java.util.Properties env = PropertyLoader.loadProperties("jndi.properties");
+javax.naming.Context initial = new javax.naming.InitialContext(env);
+Object objref = initial.lookup("ejb/bookquote");
+BookQuoteHome home = (BookQuoteHome)PortableRemoteObject
+				.narrow(objref,BookQuoteHome.class);
+return home.create();
+</pre>
+</code>
+<li><h3><a href="list2.txt">Use the Local interface</a></h3></li>
+<code>
+<pre>
+Context initial = new javax.naming.InitialContext();
+Object objref = jndiContext.lookup("java:comp/env/ejb/"bookquote);
+BookQuoteHome home = (BookQuoteHome)objref;
+return home.create();
+</pre>
+</code>
+
+<li><h3><a href="list3.txt">Use the Internals interface</a></h3>
+<code>
+<pre>
+ContainerIndex index = ContainerIndex.getInstance();
+int length = index.length();
+for(int i=0;i<length;i++){
+    EJBContainer contianer = index.getContainer(i);
+    if(contianer!= null){
+        String name = contianer.getEJBName();
+        if("BasicStatelessBean".equals(name)){
+            Class bean = Class.forName("org.openejb.test.stateless.BasicStatelessBean");		            Object[] arguments = new Object[]{isbn};
+	    try{
+		Object result = container.invoke(callMethod, arguments, null);
+		return ((java.lang.Float)result).floatValue();
+	    }catch(Throwable e){
+	       throw new org.apache.geronimo.ews.ws4j2ee.wsutils.J2EEFault(e);
+	    }
+         }	
+     }
+}
+</pre>
+</code></li>
+
+
+	
+</ol>
+</body>
+</html>
