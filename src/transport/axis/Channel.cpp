@@ -236,34 +236,37 @@ const Channel& Channel::operator << (const char* msg)
 
 const Channel& Channel::operator >> (std::string& msg)
 {
-        msg = "";
+	msg = "";
         if(INVALID_SOCKET == m_Sock)
         {
                 Error("Reading cannot be done without having a open socket.");
-                throw ChannelException("Input streaming error on undefined channel; please open the channel first");
+                throw ChannelException("Input streaming error on " \
+		"undefined channel; please open the channel first");
         }
 
         int nByteRecv = 0;
         const int BUF_SIZE = 512;
         char buf[BUF_SIZE];
 
-                if ((nByteRecv = recv(m_Sock, (char *) &buf, BUF_SIZE - 1, 0)) == SOCKET_ERROR)
-                {
-            perror("recv SOCKET_ERROR");
-                        Error("Channel error while getting data.");
-                        //CloseChannel();
-            return *this;
-                        //throw ChannelException("Input streaming error on Channel while getting data");
-                }
-                if(nByteRecv)
-                {
-            //printf("if(nByteRecv)\n");
-                        buf[nByteRecv] = '\0';  // got a part of the message, so add it to form
-            msg = buf;
-            //printf("buf:%s\n", buf);
-                }
-                else
-            printf("execution break\n");
+        if ((nByteRecv = recv(m_Sock, (char *) &buf, BUF_SIZE - 1, 0)) 
+		== SOCKET_ERROR)
+        {
+        	perror("recv SOCKET_ERROR");
+                Error("Channel error while getting data.");
+                //CloseChannel();
+            	return *this;
+                //throw ChannelException("Input streaming error on Channel " \
+		//"while getting data");
+	}
+        if(nByteRecv)
+        {
+		printf("nByteRecv:%d\n", nByteRecv);
+                buf[nByteRecv] = '\0';  // got a part of the message, so add " \		"to form
+            	msg = buf;
+            	//printf("buf:%s\n", buf);
+	}
+        else
+        	printf("execution break\n");
 
          return *this;
 }
