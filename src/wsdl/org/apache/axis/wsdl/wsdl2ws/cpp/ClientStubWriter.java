@@ -451,8 +451,6 @@ public class ClientStubWriter extends CPPClassWriter{
 				if (typeName.startsWith(">")) continue;
 				typeSet.add(typeName);
 			}
-			writer.write("bool CallBase::bInitialized;\n" +
-				"CallFunctions CallBase::ms_VFtable;\n");
 			Iterator itr = typeSet.iterator();
 			while(itr.hasNext())
 			{
