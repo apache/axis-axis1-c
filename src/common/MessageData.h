@@ -73,13 +73,11 @@
 #endif // _MSC_VER > 1000
 
 #include "GDefine.h"
-#include "Param.h"
-#include "ISoapDeSerializer.h"
-#include "ISoapSerializer.h"
 #include "IMessageData.h"
 #include "../wsdd/WSDDService.h"
 #include "../soap/SoapSerializer.h"
 #include "../soap/SoapDeSerializer.h"
+#include "Param.h"
 
 #include <string>
 #include <list>
@@ -98,8 +96,8 @@ public:
 public:
 	void SetDeSerializer(SoapDeSerializer* pDZ);
 	void SetSerializer(SoapSerializer* pSZ);
-	void SetUserName(string m_sUserName);
-	string GetUserName();
+	void SetUserName(string& m_sUserName);
+	string& GetUserName();
 	void SetService(WSDDService* argService);
 	WSDDService* GetService();  
 	AXIS_PROTOCOL_TYPE m_Protocol;
