@@ -96,7 +96,7 @@
 			            <linker extends="OS400Linker">
                                  <linkerarg value="-qDUPPROC"/>
                                  <linkerarg value="-qDUPVAR"/>
-                                 <linkerarg location="end" value="${dir.bin}/lib/${clientLibraryName}.so"/>
+                                 <linkerarg location="end" value="${dir.bin}/${clientLibraryName}.so"/>
                               </linker>
 					<!-- Additional library of the Axis Client Library -->
 					<libset dir="${dir.bin}" libs="${clientLibraryName}" unless="os400"/>
@@ -120,7 +120,7 @@
 					<!-- Linkers -->
 					<linker refid="AIXLinker"/>
 					<!-- Additional library of the Axis Client Library -->
-					<libset dir="${dir.bin}/lib" libs="${clientLibraryName}"/>
+					<libset dir="${dir.bin}" libs="${clientLibraryName}"/>
 					<!-- Files to be compiled -->
 					<fileset dir="${dir.src}">
 						<include name="cbindings/*.cpp"/>
