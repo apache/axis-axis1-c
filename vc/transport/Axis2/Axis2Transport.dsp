@@ -104,6 +104,10 @@ SOURCE=..\..\..\src\transport\axis2\Channel.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\transport\axis2\SecureChannel.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\transport\axis2\URL.cpp
 # End Source File
 # End Group
@@ -125,6 +129,10 @@ SOURCE=..\..\..\src\transport\axis2\Channel.h
 # Begin Source File
 
 SOURCE=..\..\..\src\transport\axis2\Platform.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\transport\axis2\SecureChannel.h
 # End Source File
 # Begin Source File
 
