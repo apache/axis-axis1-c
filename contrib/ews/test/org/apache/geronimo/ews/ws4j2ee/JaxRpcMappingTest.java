@@ -70,6 +70,7 @@ import org.apache.geronimo.ews.AbstractTestCase;
 import org.apache.geronimo.ews.jaxrpcmapping.J2eeEmitter;
 import org.apache.geronimo.ews.jaxrpcmapping.JaxRpcMapper;
 import org.apache.geronimo.ews.ws4j2ee.context.ContextFactory;
+import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 import org.apache.geronimo.ews.ws4j2ee.context.JaxRpcMapperContext;
 import org.apache.geronimo.ews.ws4j2ee.context.wsdl.WSDLContext;
 
@@ -86,6 +87,8 @@ public class JaxRpcMappingTest extends AbstractTestCase{
 
 	public void testGoogleTypeMapping() throws Exception{
 	    try {
+	    	   J2EEWebServiceContext context = ContextFactory.getJ2EEWsContext(true);
+	    	   context.setMiscInfo(ContextFactory.createMiscInfo());
 	           String mappingfile = sampleDir +"mapper/google/GoogleSearch.xml";
 	           String wsdlfile = sampleDir +"mapper/google/GoogleSearch.wsdl";
 	           J2eeEmitter j2ee = new J2eeEmitter();
@@ -97,11 +100,13 @@ public class JaxRpcMappingTest extends AbstractTestCase{
 	           System.out.println();
 	           j2ee.runServerSide(wsdlfile);
 	           WSDLContext wscontext = ContextFactory.createWSDLContext(j2ee.getSymbolTable());
+			   context.setWSDLContext(wscontext);
 	           PortEntry port = wscontext.getPort(new QName("GoogleSearchPort"));
 	           BindingEntry be = wscontext.getBinding(new QName("urn:GoogleSearch","GoogleSearchBinding"));
 	           PortTypeEntry pe = wscontext.getPortType(new QName("urn:GoogleSearch","GoogleSearchPort"));
 	           JaxRpcMapper mapper = j2ee.getJaxRpcMapper();
 	           JaxRpcMapperContext mc =ContextFactory.createJaxRpcMapperContext(new Object[]{mapper,j2ee});
+	           context.setJAXRPCMappingContext(mc);
 	           Assert.assertNotNull(port);
 	           Assert.assertNotNull(be);
 	           Assert.assertNotNull(pe);
@@ -114,6 +119,8 @@ public class JaxRpcMappingTest extends AbstractTestCase{
 	}
 	public void testBookTypeMapping() throws Exception{
 	    try {
+			   J2EEWebServiceContext context = ContextFactory.getJ2EEWsContext(true);
+			   context.setMiscInfo(ContextFactory.createMiscInfo());
 	           String mappingfile = sampleDir +"jaxrpc/book/BookQuote.xml";
 	           String wsdlfile = sampleDir +"jaxrpc/book/BookQuote.wsdl";
 	           J2eeEmitter j2ee = new J2eeEmitter();
