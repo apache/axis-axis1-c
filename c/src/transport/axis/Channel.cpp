@@ -64,6 +64,7 @@
 #include "Platform.hpp"
 #include "Channel.hpp"
 #include <iostream>
+#include <stdio.h>
 #include "Transport.hpp"
 
 using namespace std;

@@ -66,6 +66,7 @@
 #include "Receiver.hpp"
 #include "HttpTransport.hpp"
 #include <iostream>
+#include <stdio.h>
 
 
 Receiver::~Receiver()
