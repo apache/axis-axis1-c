@@ -1,2 +1,2 @@
 #!/bin/bash
-configure --libdir=$AXISCPP_HOME/src/server/handlers/custom/echoStringHeaderHandler/lib
+configure --libdir=$AXIS_HOME/handlers/custom/echoStringHeaderHandler

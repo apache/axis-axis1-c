@@ -80,6 +80,8 @@
 
 ESHHandler::ESHHandler()
 {
+    m_pOption = NULL;
+    m_sEmpty = "";
 
 }
 
@@ -88,19 +90,19 @@ ESHHandler::~ESHHandler()
 
 }
 
-string ESHHandler::GetOption(string sArg)
+const string& ESHHandler::GetOption(const string& sArg)
 {
-	return NULL;
+  map<string, string>::const_iterator it = m_pOption->find(sArg);
+  if (it != m_pOption->end())
+  {
+      return (*it).second;
+  }
+  return m_sEmpty;	
 }
 
-void ESHHandler::SetOption(string sOption, string Value)
+void ESHHandler::SetOptionList(const map<string, string>* OptionList)
 {
-
-}
-
-void ESHHandler::SetOptionList(map<string, string>* OptionList)
-{
-
+   m_pOption = OptionList;
 }
 
 int ESHHandler::Invoke(IMessageData *pIMsg)
