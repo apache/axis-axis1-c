@@ -235,27 +235,27 @@ public class ClientStubWriter extends CPPClassWriter{
 				String containedType = null;
 				if (CUtils.isSimpleType(qname)){
 					containedType = CUtils.getclass4qname(qname);
-					writer.write("\tm_pCall->AddBasicArrayParameter(");			
+					writer.write("\tm_pCall->addBasicArrayParameter(");			
 					writer.write("(Axis_Array*)(&Value"+i+"), "+CUtils.getXSDTypeForBasicType(containedType)+", \""+((ParameterInfo)paramsB.get(i)).getParamName()+"\"");					
 				}
 				else{
 					containedType = qname.getLocalPart();
-					writer.write("\tm_pCall->AddCmplxArrayParameter(");			
+					writer.write("\tm_pCall->addCmplxArrayParameter(");			
 					writer.write("(Axis_Array*)(&Value"+i+"), (void*)Axis_Serialize_"+containedType+", (void*)Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", \""+((ParameterInfo)paramsB.get(i)).getParamName()+"\", Axis_URI_"+containedType);
 				}
 			}else if(typeissimple){
 				//for simple types	
-				writer.write("\tm_pCall->AddParameter(");			
+				writer.write("\tm_pCall->addParameter(");			
 				writer.write("(void*)&Value"+i+", \"" + ((ParameterInfo)paramsB.get(i)).getParamName()+"\", "+CUtils.getXSDTypeForBasicType(paramTypeName));
 			}else{
 				//for complex types 
-				writer.write("\tm_pCall->AddCmplxParameter(");			
+				writer.write("\tm_pCall->addCmplxParameter(");			
 				writer.write("Value"+i+", (void*)Axis_Serialize_"+paramTypeName+", (void*)Axis_Delete_"+paramTypeName+", \"" + ((ParameterInfo)paramsB.get(i)).getParamName()+"\", Axis_URI_"+paramTypeName);
 			}
 			writer.write(");\n");
 		}
 		writer.write("\tif (AXIS_SUCCESS == m_pCall->invoke())\n\t{\n");
-		writer.write("\t\tif(AXIS_SUCCESS == m_pCall->CheckMessage(\""+minfo.getMethodname()+"Response\", \""+wscontext.getWrapInfo().getTargetNameSpaceOfWSDL()+"\"))\n\t\t{\n");
+		writer.write("\t\tif(AXIS_SUCCESS == m_pCall->checkMessage(\""+minfo.getMethodname()+"Response\", \""+wscontext.getWrapInfo().getTargetNameSpaceOfWSDL()+"\"))\n\t\t{\n");
 		if ( isAllTreatedAsOutParams) {
 			String currentParamName;
 			String currentParaType;
