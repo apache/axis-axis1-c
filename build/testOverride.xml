@@ -1,0 +1,29 @@
+
+<project name="test_properties" default="overrideTest" basedir="..">
+
+	<target name="overrideTest">
+
+		<if>
+		<isset property="test.include"/>
+		<then>
+			<propertycopy property="dir.include" from="test.include" override="true" silent="true"/>
+		</then>
+		</if>
+
+		<if>
+		<isset property="test.axisJARs"/>
+		<then>
+			<propertycopy property="dir.axisJARs" from="test.axisJARs" override="true" silent="true"/>
+		</then>
+		</if>
+
+		<if>
+		<isset property="test.xmlParser"/>
+		<then>
+			<propertycopy property="dir.xmlParser" from="test.xmlParser" override="true" silent="true"/>
+		</then>
+		</if>
+
+	</target>
+
+</project>

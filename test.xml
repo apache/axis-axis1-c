@@ -1,6 +1,7 @@
 <project name="test" default="testSuite">
 
 	<import file="${basedir}/build/buildInitialize.xml"/>
+	<import file="${basedir}/build/testOverride.xml"/>
 	<import file="${basedir}/build/testInitialize.xml"/>
 	<import file="${basedir}/build/buildTest.xml"/>
 	<import file="${basedir}/build/validateTest.xml"/>
@@ -13,8 +14,12 @@
 	<!--
 	  Default target that set all the required framework to build, run and report on the tests
 	  -->
-	<target name="testSuite" depends="initialize, initializeTest, compileMonitorUtility, initializeLogFile, runTests, displayAllResults"
+	<target name="testSuite" depends="preInitializeTest, overrideTest, initialize, initializeTest, compileMonitorUtility, initializeLogFile, runTests, displayAllResults"
 	 description="Build and Run all tests"/>
+
+	<target name="preInitializeTest" depends="pre-init">
+		<property file="${dir.properties}/test.properties" />
+	</target>
 
 	<!--
 	  Loop through all the test xml properties files in the tests
