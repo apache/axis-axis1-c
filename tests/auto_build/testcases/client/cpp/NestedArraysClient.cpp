@@ -82,7 +82,7 @@ int main(int argc, char* argv[])
 
 		xsd__int_Array response = ws->sendNestedArrays(parentArray);
 
-		cout << response.m_Array[0] << " " << response.m_Array[1] << endl;
+		cout << *(response.m_Array[0]) << " " << *(response.m_Array[1]) << endl;
 
 		delete ws;
 	}
