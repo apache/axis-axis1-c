@@ -167,14 +167,19 @@ It could happen with some other apache 2 versions or in different service packs.
 
 <p>STEPS:</p>
 <p>
-1. Create a folder of your choice. We will call this folder as SIMPLE_AXIS_SERVER_FOLDER. <br> <br>
-2. Unzip axis-c-1.1-win32.zip to a folder of your choice. Say this folder is AXIS_EXTRACT.<br> <br>
-3. Inside the extracted folder AXIS_EXTRACT there is a sub folder called deploy. Copy whole deploy folder to SIMPLE_AXIS_SERVER_FOLDER.<br> <br>
+1. Create a folder of your choice. We will call this folder as SIMPLE_AXIS_SERVER_FOLDER.<br> <br>
+2. Unzip the binary distribution to a folder of your choice. Say this folder is AXIS_EXTRACT.<br> <br>
+3. Inside the extracted folder AXIS_EXTRACT there is a sub folder called deploy. Copy the whole deploy folder to  SIMPLE_AXIS_SERVER_FOLDER.<br> <br>
 4. Rename copied "deploy" folder to "Axis". Lets say this folder is AXIS_FOLDER.<br> <br>
-5. Set environment variable AXISCPP_DEPLOY to point to the above folder.<br> <br>
-6. Copy the SimpleAxisServer.exe from AXIS_EXTRACT/bin to the SIMPLE_AXIS_SERVER_FOLDER. <br> <br>
-7. Copy the content of AXIS_FOLDER/lib to the SIMPLE_AXIS_SERVER_FOLDER.<br> <br>
-8. Start the SimpleAxisServer by providing the port to which it operates.(eg: c:\SimpleAxisServer>SimpleAxisServer 80) </p>
+5. Set environment variable AXISCPP_DEPLOY to point to above AXIS_FOLDER.<br> <br>
+6. Add AXIS_FOLDER/lib to the PATH environment variable.<br> <br>
+7. Copy the SimpleAxisServer.exe from AXIS_EXTRACT/bin to the SIMPLE_AXIS_SERVER_FOLDER.<br> <br>
+8. Copy AxisServer.dll and AxisTransport.dll from AXIS_EXTRACT/bin folder to AXIS_FOLDER/lib <br> <br>
+9.If you want to use the Expat parser with Axis C++, rename AxisXMLParser_Expat.dll (which is located at  AXIS_EXTRACT/bin) to AxisXMLParser.dll and copy it to AXIS_FOLDER/lib <br> <br>
+10.If you want to use the Xerces parser with Axis C++, rename AxisXMLParser_Xerces.dll (which is located at  AXIS_EXTRACT/bin) to AxisXMLParser.dll and copy it to AXIS_FOLDER/lib <br> <br>
+11. Start the SimpleAxisServer by providing the port to which it operates.(eg: c:\SimpleAxisServer>SimpleAxisServer 80)
+
+</p>
 
 <p><a name="#samples"></a></p>
 <h1>Running Provided Samples</h1>
@@ -216,6 +221,7 @@ There are seven projects in the workspace.
 <div id="pdf" align="right">
 <a href="wininstall-guide.pdf"><img alt="PDF" src="../skin/images/pdfdoc.gif" class="skin"><br>
           PDF</a>
+
 
 
 
