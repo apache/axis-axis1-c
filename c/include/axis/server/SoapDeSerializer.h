@@ -67,8 +67,10 @@
 #if !defined(AFX_SOAPDESERIALIZER_H__FD0E7C3B_B887_480A_9E2A_20736A88B09B__INCLUDED_)
 #define AFX_SOAPDESERIALIZER_H__FD0E7C3B_B887_480A_9E2A_20736A88B09B__INCLUDED_
 
-#include "../common/IHandlerSoapDeSerializer.h"
-#include "XMLStreamHandler.h"
+#include <axis/common/IHandlerSoapDeSerializer.h>
+//#include "XMLStreamHandler.h"
+#include <axis/soap/XMLSimpleHandler.h>
+#include <string>
 
 #define HUGE_BUFFER_SIZE 8192
 
@@ -81,10 +83,13 @@ class SoapFault;
 class SoapDeSerializer : public IHandlerSoapDeSerializer
 {
 private:
-	XMLStreamHandler* m_pHandler;
-	SAX2XMLReader* m_pParser;
+	//XMLStreamHandler* m_pHandler;
+    XMLStreamHandler m_pHandler;
+	//SAX2XMLReader* m_pParser;   
+	SAX::XMLReader<std::string> m_pParser;
 	const Ax_soapstream* m_pInputStream;
 	char m_hugebuffer[HUGE_BUFFER_SIZE];
+    string m_sHugebuffer;
 	Param* m_pLastArrayParam;
 public:
 	int GetVersion();
