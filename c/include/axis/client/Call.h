@@ -257,7 +257,7 @@ public:
 	{ return ((CallBase*)pObj)->SetTransportProperty(type,value);};
 	static int AXISCALL s_SetProtocol(void* pObj, AXIS_PROTOCOL_TYPE protocol)
 	{ return ((CallBase*)pObj)->SetProtocol(protocol);};
-	static int AXISCALL s_Initialize(void* pObj, PROVIDERTYPE nStyle, int secure)
+	static int AXISCALL s_InitializeCall(void* pObj, PROVIDERTYPE nStyle, int secure)
 	{ return ((CallBase*)pObj)->Initialize(nStyle, secure);};
 	static int AXISCALL s_Invoke(void* pObj)
 	{ return ((CallBase*)pObj)->Invoke();};
@@ -387,7 +387,7 @@ public:
 		ms_VFtable.SetSOAPVersion = s_SetSOAPVersion;
 		ms_VFtable.SetTransportProperty = s_SetTransportProperty;
 		ms_VFtable.SetProtocol = s_SetProtocol;
-		ms_VFtable.Initialize = s_Initialize;
+		ms_VFtable.Initialize = s_InitializeCall;
 		ms_VFtable.Invoke = s_Invoke;
 		ms_VFtable.UnInitialize = s_UnInitialize;
 		ms_VFtable.SetOperation = s_SetOperation;
