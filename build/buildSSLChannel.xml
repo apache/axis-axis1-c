@@ -18,7 +18,7 @@
             <cc outfile="${dir.bin}/${channelLibraryName}" objdir="${dir.objects}" 
              exceptions="true" outtype="shared" multithreaded="true">
                <!-- Compilers -->
-               <includepath path="${SSLChannel.HTTP.dir.openSSL}"/>
+               <includepath path="${HTTP.SSLChannel.dir}"/>
                <compiler refid="SolarisCC"/>
                <compiler refid="Linuxgcc"/>
                <compiler extends="VisualC++">
@@ -39,7 +39,7 @@
                <linker refid="LinuxLinker"/>
                <linker extends="VisualC++Linker">
                   <syslibset libs="wsock32"/>
-                  <syslibset libs="ssleay32,libeay32" dir="${SSLChannel.HTTP.dir.openSSL}/lib"/>
+                  <syslibset libs="ssleay32,libeay32" dir="${HTTP.SSLChannel.dir}/lib"/>
                </linker>
 
                <linker refid="OS400Linker"/>

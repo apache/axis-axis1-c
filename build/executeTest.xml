@@ -82,9 +82,9 @@
 						 output="${results.stdout}" error="${results.stderr}"
 						 failifexecutionfails="false" vmlauncher="false">
 							<arg line="${clientArgs}"/>
-							<env key="PATH" path="${java.library.path}${path.separator}${dir.libraries}${path.separator}${dir.xmlParser}${path.separator}${dir.gskit}/lib"/>
-							<env key="LD_LIBRARY_PATH" path="${dir.libraries}${path.separator}${dir.xmlParser}${path.separator}${dir.gskit}/lib"/>
-							<env key="LIBPATH" path="${dir.libraries}${path.separator}${dir.xmlParser}${path.separator}${dir.gskit}/lib"/>
+							<env key="PATH" path="${java.library.path}${path.separator}${dir.libraries}${path.separator}${dir.xmlParser}${path.separator}${HTTP.SSLChannel.dir}/lib"/>
+							<env key="LD_LIBRARY_PATH" path="${dir.libraries}${path.separator}${dir.xmlParser}${path.separator}${HTTP.SSLChannel.dir}/lib"/>
+							<env key="LIBPATH" path="${dir.libraries}${path.separator}${dir.xmlParser}${path.separator}${HTTP.SSLChannel.dir}/lib"/>
 							<env key="AXISCPP_DEPLOY" value="${axiscpp_deploy}"/>
 						</exec>
 						<stopwatch name="${testName}.timer" action="total"/>
@@ -130,8 +130,8 @@
 ClientLogPath:${test.directory}/ClientLog
 Transport_http:${dir.libraries}/${libraryPrefix}${transportLibraryName}${librarySuffix}
 XMLParser:${dir.libraries}/${libraryPrefix}${xmlParserLibraryName}${librarySuffix}
-Channel_HTTP:${dir.libraries}/${libraryPrefix}${HTTP.channelLibraryName}${librarySuffix}
-Channel_HTTP_SSL:${dir.libraries}/${libraryPrefix}${HTTP.secureChannelLibraryName}${librarySuffix}
+Channel_HTTP:${dir.libraries}/${libraryPrefix}${HTTP.ChannelLibraryName}${librarySuffix}
+Channel_HTTP_SSL:${dir.libraries}/${libraryPrefix}${HTTP.SecureChannelLibraryName}${librarySuffix}
 
 </echo>
 	</target>

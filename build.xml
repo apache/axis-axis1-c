@@ -118,23 +118,23 @@ Notes:
 		</if>
 
 		<if>
-			<equals arg1="${channel.HTTP}" arg2="true"/>
+			<equals arg1="${HTTP.Channel}" arg2="true"/>
 			<then>
 				<antcall target="compileAxisHTTPTransportChannel" inheritall="true">
 					<param name="transport" value="axis3"/>
 					<param name="channel" value="HTTPChannel"/>
-					<param name="channelLibraryName" value="${HTTP.channelLibraryName}"/>
+					<param name="channelLibraryName" value="${HTTP.ChannelLibraryName}"/>
 				</antcall>
 			</then>
 		</if>
 
 		<if>
-			<equals arg1="${SSLchannel.HTTP}" arg2="true"/>
+			<equals arg1="${HTTP.SSLChannel}" arg2="true"/>
 			<then>
 				<antcall target="compileAxisHTTPTransportSSLChannel" inheritall="true">
 					<param name="transport" value="axis3"/>
 					<param name="channel" value="HTTPSSLChannel"/>
-					<param name="channelLibraryName" value="${HTTP.secureChannelLibraryName}"/>
+					<param name="channelLibraryName" value="${HTTP.SecureChannelLibraryName}"/>
 				</antcall>
 			</then>
 		</if>
