@@ -2,11 +2,11 @@ POST /Calculator/services/Calculator HTTP/1.1
 Host: localhost:13260
 Content-Type: text/xml; charset=UTF-8
 SOAPAction: "Calculator#add"
-Content-Length: 725
+Content-Length: 760
 
 <?xml version='1.0' encoding='utf-8' ?>
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-<SOAP-ENV:Header><ns2:TestHeader xmlns:ns2="http://ws.apache.org/"><np:Name xmlns:np="http://ws.apache.org/"><np1:FirstPart xmlns:np1="http://ws.apache.org/">APACHE</np1:FirstPart><np1:LastPart>APACHE</np1:LastPart></np:Name><Project Type="Open Source">AXISCPP</Project>This is a test message</ns2:TestHeader></SOAP-ENV:Header>
+<SOAP-ENV:Header><ns2:TestHeader xmlns:ns2="http://ws.apache.org/"><np:Name xmlns:np="http://ws.apache.org/"><np1:FirstPart xmlns:np1="http://ws.apache.org/">APACHE</np1:FirstPart><np:LastPart><np:LastPartChild>APACHE</np:LastPartChild></np:LastPart></np:Name><Project Type="Open Source">AXISCPP</Project>This is a test message</ns2:TestHeader></SOAP-ENV:Header>
 <SOAP-ENV:Body>
 <ns1:add xmlns:ns1="http://localhost/axis/Calculator">
 <ns1:arg_0_0>2</ns1:arg_0_0>

@@ -275,6 +275,11 @@ public:
       */
     const AxisChar* getPrefix();
 
+    /**
+     * Set a pointer to the parent node.
+     */
+    void setParent(ComplexElement *parent);
+
 private:
     int iNoOfChildren;
     int serializeChildren(SoapSerializer& pSZ);
@@ -296,6 +301,8 @@ private:
       * Attributes iterator
       */
     std::list <Attribute *>::iterator m_viCurrentAttribute;
+
+    ComplexElement * m_pParent;
 
 };
 

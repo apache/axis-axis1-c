@@ -48,7 +48,7 @@
 
 AXIS_CPP_NAMESPACE_START
 
-ComplexElement::ComplexElement()
+ComplexElement::ComplexElement():m_pParent(NULL)
 {
     m_pachPrefix = '\0';
     m_pachLocalName = '\0';
@@ -59,7 +59,7 @@ ComplexElement::ComplexElement()
 }
 
 ComplexElement::ComplexElement(AxisChar *pachLocalName, AxisChar *pachPrefix,
-                               AxisChar *pachUri)
+                               AxisChar *pachUri): m_pParent(NULL)
 {
     m_pachLocalName = new AxisChar[strlen(pachLocalName)+1];
     strcpy(m_pachLocalName, pachLocalName);
@@ -73,7 +73,7 @@ ComplexElement::ComplexElement(AxisChar *pachLocalName, AxisChar *pachPrefix,
 }
 
 ComplexElement::ComplexElement(const ComplexElement& rCopy)
-:BasicNode(rCopy), m_pachPrefix(NULL), m_pachLocalName(NULL), m_pachURI(NULL)
+:BasicNode(rCopy), m_pachPrefix(NULL), m_pachLocalName(NULL), m_pachURI(NULL), m_pParent(NULL)
 {
     this->iNoOfChildren = rCopy.iNoOfChildren;
     
@@ -115,6 +115,7 @@ ComplexElement::~ComplexElement()
     delete [] m_pachPrefix;
     delete [] m_pachLocalName;
     delete [] m_pachURI;
+    m_pParent = NULL;
 
     /* 
      *Clear the Attributes 
@@ -186,6 +187,11 @@ int ComplexElement::addChild(BasicNode *pBasicNode)
 {
     if (pBasicNode)
     {
+        if (pBasicNode->getNodeType() == ELEMENT_NODE)
+        {
+            ComplexElement *pComplexElement = static_cast<ComplexElement*>(pBasicNode);
+            pComplexElement->setParent(this);
+        }
         m_children.push_back(pBasicNode);
         iNoOfChildren++;
         return AXIS_SUCCESS;
@@ -246,6 +252,28 @@ int ComplexElement::serialize(SoapSerializer& pSZ,
         {    
             bool blnIsNewNamespace = false;
 
+            // Check if we have no namespace prefix, but do have a namespace URI
+            if ( (m_pachPrefix == NULL || strlen(m_pachPrefix) == 0)
+                && (m_pachURI != NULL && strlen(m_pachURI) != 0))
+            {
+                // Is this a child node?
+                if (m_pParent != NULL)
+                {
+                    // Does the parent uses the same namespace URI?
+                    if ( m_pParent->getURI() != NULL 
+                        && strlen(m_pParent->getURI()) != 0
+                        && strcmp(m_pachURI, m_pParent->getURI()) == 0)
+                    {
+                        // Does the parent have a namespace prefix?
+                        if (m_pParent->getPrefix() != NULL && strlen(m_pParent->getPrefix()) != 0)
+                        {
+                            setPrefix(m_pParent->getPrefix());
+                            setURI("");
+                        }
+                    }
+                }
+            }
+            
             pSZ.serialize("<", NULL);    
             if( (m_pachPrefix != NULL) && (strlen(m_pachPrefix) != 0))
             {                
@@ -367,6 +395,11 @@ int ComplexElement::setURI(const AxisChar* pachURI)
     return AXIS_SUCCESS;
 }
 
+void ComplexElement::setParent(ComplexElement *parent)
+{
+    m_pParent = parent;
+}
+
 int ComplexElement::serializeChildren(SoapSerializer& pSZ)
 {
     list<BasicNode*>::iterator itCurrBasicNode= m_children.begin();
@@ -475,6 +508,10 @@ const AxisChar* ComplexElement::getLocalName() {
 }
 
 const AxisChar* ComplexElement::getURI() {
+    if ((m_pachURI == NULL || strlen(m_pachURI) == 0) && m_pParent != NULL)
+    {
+        return m_pParent->getURI();
+    }
     return m_pachURI;
 }
 

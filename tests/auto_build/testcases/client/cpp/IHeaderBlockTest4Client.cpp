@@ -40,9 +40,11 @@ int main(int argc, char* argv[])
 			cout << "Project Type=" << a->getValue();
 		BasicNode * Bnode7=phb->createChild(CHARACTER_NODE);
 		Bnode7->setValue("AXISCPP");
+        BasicNode * Bnode4a=phb->createChild(ELEMENT_NODE,"LastPartChild","","http://ws.apache.org/", NULL);
+        Bnode4->addChild(Bnode4a);
 		Bnode6->addChild(Bnode7);
 		Bnode3->addChild(Bnode2);
-		Bnode4->addChild(Bnode5);
+		Bnode4a->addChild(Bnode5);
 		Bnode1->addChild(Bnode3);
 		Bnode1->addChild(Bnode4);
 		phb->addChild(Bnode1);
