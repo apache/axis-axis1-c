@@ -29,7 +29,7 @@
 #define PLATFORM_CLIENTLOG_PATH      "/usr/local/axiscpp_deploy/log/AxisClientLog"
 #define PLATFORM_CONFIG_PATH         "/etc/axiscpp.conf"
 #define PLATFORM_CHANNEL_PATH        "libhttp_channel.so"
-#define PLATFORM_SSLCHANNEL_PATH     "libhttp_channelssl.so"
+#define PLATFORM_SSLCHANNEL_PATH     "Unknown"
 #define PLATFORM_SECUREINFO			 ""
 
 // =============================================================

@@ -360,7 +360,7 @@ int Call::openConnection()
 			m_pTransport->setTransportProperty( CHANNEL_HTTP_DLL_NAME, pcChannelHTTPLibraryPath);
 		}
 
-        if( pcChannelHTTPSSLLibraryPath)
+        if( strcmp( "Unknown", pcChannelHTTPSSLLibraryPath) != 0)
 		{
 			m_pTransport->setTransportProperty( CHANNEL_HTTP_SSL_DLL_NAME, pcChannelHTTPSSLLibraryPath);
 		}

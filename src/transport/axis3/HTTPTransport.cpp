@@ -67,21 +67,7 @@ HTTPTransport::~HTTPTransport()
     {
 	delete[] m_pcEndpointUri;
     }
-/* This is done by delete m_pChannelFactory!
-    if( m_pNormalChannel)
-	{
-		delete m_pNormalChannel;
 
-		m_pNormalChannel = 0;
-	}
-
-    if( m_pSecureChannel)
-	{
-		delete m_pSecureChannel;
-
-		m_pSecureChannel = 0;
-	}
-*/
     if( m_pChannelFactory)
 	{
 		delete m_pChannelFactory;

@@ -30,12 +30,12 @@
   #define PLATFORM_XMLPARSER_PATH      "AxisXMLParser_D.dll"
   #define PLATFORM_TRANSPORTHTTP_PATH  "HTTPTransport_D.dll"
   #define PLATFORM_CHANNEL_PATH		   "HTTPChannel_D.dll"
-  #define PLATFORM_SSLCHANNEL_PATH	   "HTTPSSLChannel_D.dll"
+  #define PLATFORM_SSLCHANNEL_PATH	   "Unknown"
 #else
   #define PLATFORM_XMLPARSER_PATH      "AxisXMLParser.dll"
   #define PLATFORM_TRANSPORTHTTP_PATH  "HTTPTransport.dll"
   #define PLATFORM_CHANNEL_PATH		   "HTTPChannel.dll"
-  #define PLATFORM_SSLCHANNEL_PATH	   "HTTPSSLChannel.dll"
+  #define PLATFORM_SSLCHANNEL_PATH	   "Unknown"
 #endif
 
 #define PLATFORM_LOG_PATH            ""

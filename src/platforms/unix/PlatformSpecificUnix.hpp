@@ -25,7 +25,7 @@
 #define PLATFORM_XMLPARSER_PATH      "libaxis_xmlparser.so"
 #define PLATFORM_TRANSPORTHTTP_PATH  "libhttp_transport.so"
 #define PLATFORM_CHANNEL_PATH        "libhttp_channel.so"
-#define PLATFORM_SSLCHANNEL_PATH     "libhttp_channelssl.so"
+#define PLATFORM_SSLCHANNEL_PATH     "Unknown"
 
 #define PLATFORM_LOG_PATH            "/usr/local/axiscpp_deploy/log/AxisLog"
 #define PLATFORM_CLIENTLOG_PATH      "/usr/local/axiscpp_deploy/log/AxisClientLog"
