@@ -292,22 +292,22 @@ int main()
 <p>AxisXMLParser.dll should be placed in the path that's specified by axiscpp.conf.Or with the client.exe.AxisXMLParser libs (libexpat.lib and xerces-c_2.lib(Release) or xerces-c_2D.lib (Debug)) should be in [CHECKOUT_ HOME]\c\lib</p>
 
 <p><b>Axiscpp.conf file contains the following paths</b><br>
-AXISLOGPATH:XXXX<br>
-WSDDFILEPATH:YYYY<br>
-AXISTRANSPORT_HTTP:ZZZZ (Not necessary)<br>
-AXISXMLPARSER:WWWW<br>
+LogPath:XXXX<br>
+WSDDFilePath:YYYY<br>
+Transport_http:ZZZZ (Not necessary)<br>
+XMLParser:WWWW<br>
 
 <br>
 Where XXXX will be the path to a file named AxisLog (The log file)and YYYY
 will be the path to the server.wsdd file.ZZZZ will be the path to AxisTransport_D.dll if it's a HTTP(if the selected transport is SMTP then should give that path.WWWW will be the path to AxisXMLParser_D.dll<br>
 <br>
 i.e.<br>
-AXISLOGPATH:[APACHE_HOME]\Axis\logs\AxisLog.log  
+LogPath:[APACHE_HOME]\Axis\logs\AxisLog.log  
 
 <br>
-WSDDFILEPATH:[APACHE_HOME]\Axis\conf\server.wsdd <br>
-AXISTRANSPORT_HTTP:[APACHE_HOME]\Axis\libs\AxisTransport_D.dll <br>
-AXISXMLPARSER:[APACHE_HOME]\Axis\libs\AxisXMLParser_D.dll <br></p>
+WSDDFilePath:[APACHE_HOME]\Axis\conf\server.wsdd <br>
+Transport_http:[APACHE_HOME]\Axis\libs\AxisTransport_D.dll <br>
+XMLParser:[APACHE_HOME]\Axis\libs\AxisXMLParser_D.dll <br></p>
 
 <p><a name="handlers"></a></p>
 
