@@ -349,10 +349,15 @@ public class ClientStubWriter extends CPPClassWriter{
 
 		}
 		//added by nithya
-		System.out.println("Fault message ............................"+minfo.getFaultMessage());
+		
 		writer.write("\t}\n");//damitha
 		writer.write("\tcatch(AxisException& e)\n\t{\n");//damitha
-		writer.write("\t\tif (AXIS_SUCCESS == m_pCall->checkFault(\"Fault\",\""+wscontext.getWrapInfo().getTargetEndpointURI()+"\" ))");//damitha
+		writer.write("\t\tint iExceptionCode = e.getExceptionCode();\n");
+		writer.write("\t\tif(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)\n");
+      writer.write("\t\t{\n");
+      writer.write("\t\t\tthrow;\n");
+      writer.write("\t\t}\n");
+		writer.write("\t\telse if (AXIS_SUCCESS == m_pCall->checkFault(\"Fault\",\""+wscontext.getWrapInfo().getTargetEndpointURI()+"\" ))");//damitha
 		writer.write("//Exception handling code goes here\n");
 		writer.write("\t\t{\n");//damitha
 		writer.write("\t\t\tcFaultcode = m_pCall->getElementAsString(\"faultcode\", 0);\n");//damitha
