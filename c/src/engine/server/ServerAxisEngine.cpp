@@ -231,6 +231,11 @@ int ServerAxisEngine::Process(Ax_soapstream* stream)
 			Status = Invoke(m_pMsgData); 
 		}
 		while(0);
+
+		if (AXIS_SUCCESS != m_pDZ->FlushInputStream())
+		{
+			AXISTRACE1("SF_SOAPCONTENTERROR", CRITICAL);
+		}
 		/**
 		 * Get any header blocks unprocessed (left) in the Deserializer and add them to the Serializer
 		 * They may be headers targetted to next soap processors
@@ -350,13 +355,6 @@ int ServerAxisEngine::Invoke(MessageData* pMsg)
 		level++; //AE_SERV
 	}
 	while(0);
-
-	if (AXIS_SUCCESS != m_pDZ->FlushInputStream())
-	{
-		AXISTRACE1("SF_SOAPCONTENTERROR", CRITICAL);
-		m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_SOAPCONTENTERROR));
-		return AXIS_FAIL;
-	}
 
 	pMsg->setPastPivotState(true);
 
