@@ -24,7 +24,7 @@
 #include <iostream>
 
 #include <axis/AxisException.hpp>
-#include "InteropTestPortType.h"
+#include "InteropTestPortType.hpp"
 
 using namespace std;
 

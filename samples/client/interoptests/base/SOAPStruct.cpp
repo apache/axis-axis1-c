@@ -3,8 +3,7 @@
  * This file contains functions to manipulate complex type SOAPStruct
  */
 
-#include <malloc.h>
-#include "SOAPStruct.h"
+#include "SOAPStruct.hpp"
 #include <axis/AxisWrapperAPI.hpp>
 
 /*
@@ -89,6 +88,9 @@ SOAPStruct::SOAPStruct()
 {
 	/*do not allocate memory to any pointer members here
 	 because deserializer will allocate memory anyway. */
+	memset( &varString, 0, sizeof( xsd__string));
+	memset( &varInt, 0, sizeof( xsd__int));
+	memset( &varFloat, 0, sizeof( xsd__float));
 }
 
 SOAPStruct::~SOAPStruct()
