@@ -62,6 +62,7 @@ public:
      */
     virtual xsd__hexBinary AXISCALL getBodyAsHexBinary()=0;
     virtual xsd__base64Binary AXISCALL getBodyAsBase64Binary()=0;
+    virtual AxisChar* AXISCALL getBodyAsChar()=0;
     virtual int AXISCALL setNewSoapBody(AxisChar* pNewSoapBody)=0;
 
 	/**

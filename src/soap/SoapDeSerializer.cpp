@@ -36,6 +36,10 @@
  *  SoapDeSerializer::getHeader() method was completely rewriten.
  */
 
+/*
+ * Revision 1.3  2004/11/27 roshan
+ * Added the implementation of the setNewSoapBody() method.
+ */
 
 #ifdef WIN32
 #pragma warning (disable : 4101)
@@ -3911,11 +3915,16 @@ SoapDeSerializer::getBodyAsBase64Binary ()
     return bb;
 }
 
+AxisChar* SoapDeSerializer::getBodyAsChar()
+{
+	return NULL;
+}
+
 int
 SoapDeSerializer::setNewSoapBody (AxisChar * pNewSoapBody)
 {
-    /* TODO */
-    return 0;
+    DeSerializerMemBufInputStream stream(pNewSoapBody);
+    return m_pParser->setInputStream(&stream);
 }
 
 bool
@@ -4255,5 +4264,24 @@ LONGLONG SoapDeSerializer::strtoll( const char *pValue)
 
     return llRetVal;
 }
+
+/* This function is never called. */
+AXIS_TRANSPORT_STATUS SoapDeSerializer::DeSerializerMemBufInputStream::sendBytes(const char* pcSendBuffer, const void* pBufferid)
+{
+        return TRANSPORT_FINISHED;
+}
+                                                                                                                                                                            
+AXIS_TRANSPORT_STATUS SoapDeSerializer::DeSerializerMemBufInputStream::getBytes(char* pcBuffer, int* piRetSize)
+{
+        if (!m_pcDeSeriaMemBuffer) return TRANSPORT_FAILED;
+        int nBufLen = strlen(m_pcDeSeriaMemBuffer);
+        if (0 == nBufLen) return TRANSPORT_FINISHED;
+        nBufLen = ((*piRetSize - 1) < nBufLen) ? (*piRetSize - 1) : nBufLen;
+        strncpy(pcBuffer, m_pcDeSeriaMemBuffer, nBufLen);
+        pcBuffer[nBufLen] = 0;
+        m_pcDeSeriaMemBuffer+=nBufLen;
+        return TRANSPORT_IN_PROGRESS;
+}
+
 
 AXIS_CPP_NAMESPACE_END

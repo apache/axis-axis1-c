@@ -34,7 +34,15 @@ using namespace std;
  *  @class SoapDeSerializer
  *  @brief interface for the SoapDeSerializer class.
  *  @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
+ *  @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
  */
+
+/*
+ * Revision 1.1  2004/11/27 roshan
+ * Added the implementation of the setNewSoapBody() method. For the same 
+ * purpose added the new class "DeSerializerMemBufInputStream".
+ */
+
 class SoapDeSerializer : public IHandlerSoapDeSerializer
 {
 private:
@@ -73,6 +81,7 @@ public:
      */
     xsd__hexBinary AXISCALL getBodyAsHexBinary();
     xsd__base64Binary AXISCALL getBodyAsBase64Binary();
+    AxisChar* AXISCALL getBodyAsChar();
     int AXISCALL setNewSoapBody(AxisChar* pNewSoapBody);
     bool isAnyMustUnderstandHeadersLeft();
     int getFault();
@@ -213,6 +222,25 @@ public:
 	AnyType* AXISCALL getAnyObject();
     void serializeTag(AxisString& xmlStr, const AnyElement* node, AxisString& nsDecls);
     void getChardataAs(void* pValue, XSDTYPE type);
+
+    /*
+     *This class is used by the DeSerializer to set the input stream back to 
+     * the parser in following situations:
+     *  - The SOAPHeaders change the SOAPBody and want to set it back to the
+     *     DeSerializer.
+     */
+    class DeSerializerMemBufInputStream : public AxisIOStream
+        {
+        private:
+                const char* m_pcDeSeriaMemBuffer;
+        public:
+                DeSerializerMemBufInputStream(const char* pcDeSeriaMemBuffer)
+                {m_pcDeSeriaMemBuffer = pcDeSeriaMemBuffer;};
+                virtual ~DeSerializerMemBufInputStream(){};
+                AXIS_TRANSPORT_STATUS sendBytes(const char* pcSendBuffer, const void* pBufferid);
+                AXIS_TRANSPORT_STATUS getBytes(char* pcBuffer, int* piRetSize);
+        };
+
 
 
 private:
