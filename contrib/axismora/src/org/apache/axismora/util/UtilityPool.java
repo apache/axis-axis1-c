@@ -53,18 +53,43 @@
  * <http://www.apache.org/>.
  */
 
-package org.apache.axismora.encoding;
+package org.apache.axismora.util;
 
-import org.apache.axis.encoding.SerializationContext;
-
+import java.util.ArrayList;
+import java.util.Vector;
 
 /**
- *  This class represent anything that is serilizable.
- *  it uses Parameter to serialize
- * @see org.apache.axismora.encoding.Parameter
- * @see org.apache.axismora.soap.BasicMessageData
- * @author Srinath Perera (hemapani@opensource.lk)
+ * @author Srinath Perera(hemapani@opensource.lk)
  */
-public interface Serializable {
-    public void serialize(SerializationContext sc)throws java.io.IOException;
+
+public class UtilityPool {
+	private static Vector arrayLists = new Vector();
+	public static ArrayList getArrayList(){
+		synchronized(arrayLists){
+			if(arrayLists.size() > 0)
+				return (ArrayList)arrayLists.firstElement();
+			else
+				return new ArrayList(20);		
+		}
+	}
+	
+	public static void returnArrayList(ArrayList list){
+		list.clear();
+		arrayLists.add(list);
+	}
+	private static Vector vectors = new Vector();
+	public static Vector getVector(){
+		synchronized(vectors){
+			if(vectors.size() > 0)
+				return (Vector)vectors.firstElement();
+			else
+				return new Vector(20);		
+		}
+	}
+	
+	public static void returnVectors(Vector list){
+		list.clear();
+		vectors.add(list);
+	}
+	
 }

@@ -57,7 +57,6 @@ package org.apache.axismora.wsdl2ws.testing;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Vector;
 
 import javax.xml.namespace.QName;
@@ -70,7 +69,6 @@ import org.apache.axismora.wsdl2ws.info.Type;
 import org.apache.axismora.wsdl2ws.info.TypeMap;
 import org.apache.axismora.wsdl2ws.info.WebServiceContext;
 import org.apache.axismora.wsdl2ws.java.JavaClassWriter;
-import org.apache.axismora.wsdl2ws.java.JavaUtils;
 
 /**
  * jkumaran@opensource.lk

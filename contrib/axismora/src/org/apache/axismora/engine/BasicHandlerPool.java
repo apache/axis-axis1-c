@@ -101,10 +101,10 @@ public class BasicHandlerPool implements HandlerPool {
     private Hashtable classname2HandlerInfo;
 
     private BasicHandlerPool(AxisDeployment deployment) {
-        this.transportRequestHandlers = new Vector();
-        this.transportResponseHandlers = new Vector();
-        this.globelRequestFlowHandlers = new Vector();
-        this.globelResponseFlowHandlers = new Vector();
+        this.transportRequestHandlers = new Vector(10);
+        this.transportResponseHandlers = new Vector(10);
+        this.globelRequestFlowHandlers = new Vector(10);
+        this.globelResponseFlowHandlers = new Vector(10);
         this.deployment = deployment;
         classname2HandlerInfo = new Hashtable();
         log.info("HandlerPool initialized");
@@ -241,7 +241,7 @@ public class BasicHandlerPool implements HandlerPool {
         if (requestFlow != null)
             reqHandlers = requestFlow.getHandlers();
         else
-            reqHandlers = new Vector();
+            reqHandlers = new Vector(0);
         return this.loadHandlers(reqHandlers);
     }
 	/**
@@ -254,7 +254,7 @@ public class BasicHandlerPool implements HandlerPool {
         if (responseFlow != null) {
             resHandlers = responseFlow.getHandlers();
         } else
-            resHandlers = new Vector();
+            resHandlers = new Vector(0);
         return this.loadHandlers(resHandlers);
     }
 
@@ -268,7 +268,7 @@ public class BasicHandlerPool implements HandlerPool {
     //TODO clear the  context of more than one Falut flow in Service
     public HandlerChain getSeriveFaultFlowHandlers(WSDDService service) throws ClassImplementationNotFoundException {
         WSDDFaultFlow[] faults = service.getFaultFlows();
-        Vector faultHandlers = new Vector();
+        Vector faultHandlers = new Vector(10);
         Vector handlers;
         if(faults != null || faults.length != 0){
             for(int i=0;i<faults.length;i++){

@@ -64,10 +64,6 @@ import java.util.Vector;
 
 import javax.xml.namespace.QName;
 
-import org.apache.axismora.deployment.AxisDeployment;
-import org.apache.axismora.deployment.WebServiceNotFoundException;
-import org.apache.axismora.util.SingeltonException;
-
 import org.apache.axis.components.logger.LogFactory;
 import org.apache.axis.deployment.wsdd.WSDDBeanMapping;
 import org.apache.axis.deployment.wsdd.WSDDChain;
@@ -83,6 +79,8 @@ import org.apache.axis.deployment.wsdd.WSDDTransport;
 import org.apache.axis.deployment.wsdd.WSDDTypeMapping;
 import org.apache.axis.encoding.SerializationContext;
 import org.apache.axis.encoding.SerializationContextImpl;
+import org.apache.axismora.deployment.AxisDeployment;
+import org.apache.axismora.deployment.WebServiceNotFoundException;
 import org.apache.commons.logging.Log;
 import org.apache.xerces.parsers.DOMParser;
 import org.w3c.dom.Document;
@@ -241,14 +239,14 @@ public class WSDDDeployment extends WSDDElement implements AxisDeployment {
     public Vector getGlobelResponseFlowHandlers() {
         WSDDResponseFlow rH = (this.globalConfig.getResponseFlow());
         if (rH == null)
-            return new Vector();
+            return new Vector(0);
         return rH.getHandlers();
     }
 
     public Vector getGlobelRequestFlowHandlers() {
         WSDDRequestFlow rH = (this.globalConfig.getRequestFlow());
         if (rH == null)
-            return new Vector();
+            return new Vector(0);
         return rH.getHandlers();
     }
 
@@ -261,7 +259,7 @@ public class WSDDDeployment extends WSDDElement implements AxisDeployment {
                     return requestFlow.getHandlers();
             }
         }
-        return new Vector();
+        return new Vector(0);
     }
 
     public Vector getTransportResponseFlowHandlers(String type) {
@@ -274,7 +272,7 @@ public class WSDDDeployment extends WSDDElement implements AxisDeployment {
                     return responseFlow.getHandlers();
             }
         }
-        return new Vector();
+        return new Vector(0);
     }
 
     protected QName getElementName() {

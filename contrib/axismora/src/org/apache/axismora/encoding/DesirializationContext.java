@@ -67,12 +67,6 @@ import javax.xml.parsers.FactoryConfigurationError;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.soap.SOAPException;
 
-import org.apache.axismora.MessageContext;
-import org.apache.axismora.soap.XMLTextData;
-import org.apache.axismora.util.AxisUtils;
-import org.apache.axismora.util.Parser2Element;
-import org.apache.axismora.wsdl2ws.java.ParmWriter;
-
 import org.apache.axis.AxisFault;
 import org.apache.axis.Constants;
 import org.apache.axis.components.logger.LogFactory;
@@ -81,6 +75,12 @@ import org.apache.axis.message.SOAPEnvelope;
 import org.apache.axis.message.SOAPHeaderElement;
 import org.apache.axis.soap.SOAPConstants;
 import org.apache.axis.utils.NSStack;
+import org.apache.axismora.MessageContext;
+import org.apache.axismora.soap.XMLTextData;
+import org.apache.axismora.util.AxisUtils;
+import org.apache.axismora.util.Parser2Element;
+import org.apache.axismora.util.PerfLog;
+import org.apache.axismora.util.UtilityPool;
 import org.apache.commons.logging.Log;
 import org.w3c.dom.Attr;
 import org.w3c.dom.DOMException;
@@ -119,10 +119,13 @@ public class DesirializationContext {
     private int blindLevel = 0; //reads until the same level you started
     private AxisPullParser axispullparser;
 
+
     public DesirializationContext(MessageContext md, InputStream ins, Style style)
         throws AxisFault {
-
         try {
+			if(PerfLog.LOG_PERF){
+					PerfLog.recored(System.currentTimeMillis(),"MID_POINT");
+			}         
             //get the common document
             this.doc = AxisUtils.getCommonDomDocument();
 
@@ -131,17 +134,25 @@ public class DesirializationContext {
             this.method = null;
 
             InputStreamReader in = new InputStreamReader(ins);
-
             String streamEnc = (md != null?md.getStreamEncoding():null);
+
+			if(PerfLog.LOG_PERF){
+					PerfLog.recored(System.currentTimeMillis(),"MID_POINT5");
+			}         
+
             XmlPullParserFactory factory =
                 XmlPullParserFactory.newInstance(
                     System.getProperty(XmlPullParserFactory.PROPERTY_NAME),
                     null);
+
             factory.setNamespaceAware(true);
             factory.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
             this.xpp = factory.newPullParser();
             xpp.setInput(in);
 			this.axispullparser = new AxisPullParser(this.xpp);
+			if(PerfLog.LOG_PERF){
+					PerfLog.recored(System.currentTimeMillis(),"MID_POINT2");
+			}         
         } catch (FactoryConfigurationError e) {
             log.error(e);
             e.printStackTrace();
@@ -194,11 +205,13 @@ public class DesirializationContext {
             log.info("headers creatd");
 
             SOAPHeaderElement header;
-            for (int i = 0; i < headers.size(); i++) {
+            int headerSize = headers.size();
+            for (int i = 0; i <headerSize; i++) {
                 header = (SOAPHeaderElement) headers.get(i);
                 header.setEnvelope(env);
                 this.messageData.addSoapHeader(header);
             }
+			UtilityPool.returnVectors(headers);
             //we are done  if body is all right we will give the control to the wrappers.
         } catch (XmlPullParserException e) {
             log.error("error parsing known tags", e);
@@ -329,7 +342,7 @@ public class DesirializationContext {
      * @throws AxisFault
      */
     public Vector createHeaders() throws AxisFault {
-        Vector v = new Vector();
+        Vector v = UtilityPool.getVector();
         SOAPHeaderElement he = null;
         SOAPHeaderElementContent hec = null;
         Element e = null;
@@ -1051,6 +1064,10 @@ public class DesirializationContext {
 	 */
 	public Vector getHeaders() {
 		return headers;
+	}
+	
+	public void finish(){
+	
 	}
 
 }

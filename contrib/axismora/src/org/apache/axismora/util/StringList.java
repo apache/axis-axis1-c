@@ -1,3 +1,4 @@
+package org.apache.axismora.util;
 /*
  * The Apache Software License, Version 1.1
  *
@@ -53,18 +54,40 @@
  * <http://www.apache.org/>.
  */
 
-package org.apache.axismora.encoding;
-
-import org.apache.axis.encoding.SerializationContext;
-
-
 /**
- *  This class represent anything that is serilizable.
- *  it uses Parameter to serialize
- * @see org.apache.axismora.encoding.Parameter
- * @see org.apache.axismora.soap.BasicMessageData
- * @author Srinath Perera (hemapani@opensource.lk)
+ * @author Srinath Perera(hemapani@opensource.lk)
  */
-public interface Serializable {
-    public void serialize(SerializationContext sc)throws java.io.IOException;
+public class StringList {
+	private final int INITIAL_SIZE = 20;
+	private final int INCERMENT = 20; 
+	private String[] list;
+	private int index; 
+	
+	public StringList(){
+		list = new String[INITIAL_SIZE];
+		index = 0;
+	}
+	
+	public void add(String val){
+		list[index] = val;
+		index++;
+		if(index == INITIAL_SIZE){
+			String[] listT = list;
+			list = new String[list.length + INCERMENT];
+			for(int i = 0;i<index;i++){
+				list[i]  = listT[i];
+			}
+		}
+	}
+	
+	public String get(int index){
+		if(index < this.index){
+			return list[index];
+		}else
+			throw new ArrayIndexOutOfBoundsException();			
+	}
+	
+	public int size(){
+		return index;
+	} 
 }

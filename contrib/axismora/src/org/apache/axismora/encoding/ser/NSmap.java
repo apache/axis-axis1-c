@@ -53,18 +53,61 @@
  * <http://www.apache.org/>.
  */
 
-package org.apache.axismora.encoding;
+package org.apache.axismora.encoding.ser;
 
-import org.apache.axis.encoding.SerializationContext;
+import java.util.ArrayList;
+import java.util.HashMap;
 
+import org.apache.axismora.util.UtilityPool;
 
 /**
- *  This class represent anything that is serilizable.
- *  it uses Parameter to serialize
- * @see org.apache.axismora.encoding.Parameter
- * @see org.apache.axismora.soap.BasicMessageData
- * @author Srinath Perera (hemapani@opensource.lk)
+ * This Map is a Hash map which can hold multiple values.
+ * The request for the get() and remove() will work on the first
+ * ocurance they found. 
+ * @author Srinath Perera(hemapani@opensource.lk)
  */
-public interface Serializable {
-    public void serialize(SerializationContext sc)throws java.io.IOException;
+
+public class NSmap extends HashMap{
+
+    /* (non-Javadoc)
+     * @see java.util.Map#get(java.lang.Object)
+     */
+    public Object get(Object key) {
+        Object obj =  super.get(key);
+        if(obj instanceof ArrayList){
+			ArrayList list = ((ArrayList)obj);
+			return list.get(list.size()-1);	
+        }
+        return obj;
+    }
+
+    /* (non-Javadoc)
+     * @see java.util.Map#put(java.lang.Object, java.lang.Object)
+     */
+    public Object put(Object key, Object value) {
+		if(containsKey(key)){
+			ArrayList list = UtilityPool.getArrayList();
+			list.add(remove(key));
+			list.add(value);
+			value = list;
+		}
+		super.put(key, value);
+        return null;
+    }
+
+    /* (non-Javadoc)
+     * @see java.util.Map#remove(java.lang.Object)
+     */
+    public Object remove(Object key) {
+		Object obj =  super.get(key);
+		if(obj instanceof ArrayList){
+			ArrayList list = ((ArrayList)obj);		
+			if(list.size() < 2 )
+				return super.remove(key);
+			return list.remove(0);	
+		}
+        return super.remove(key);
+    }
+    
+
 }

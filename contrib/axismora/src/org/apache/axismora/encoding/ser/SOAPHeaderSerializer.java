@@ -53,18 +53,58 @@
  * <http://www.apache.org/>.
  */
 
-package org.apache.axismora.encoding;
+package org.apache.axismora.encoding.ser;
+
+import java.io.IOException;
+import java.util.Iterator;
 
 import org.apache.axis.encoding.SerializationContext;
-
+import org.apache.axis.message.SOAPHeaderElement;
+import org.apache.axismora.encoding.SOAPHeaderElementContent;
+import org.apache.axismora.encoding.Serializable;
+import org.w3c.dom.Element;
 
 /**
- *  This class represent anything that is serilizable.
- *  it uses Parameter to serialize
- * @see org.apache.axismora.encoding.Parameter
- * @see org.apache.axismora.soap.BasicMessageData
- * @author Srinath Perera (hemapani@opensource.lk)
+ * @author Srinath Perera(hemapani@opensource.lk)
  */
-public interface Serializable {
-    public void serialize(SerializationContext sc)throws java.io.IOException;
+
+public class SOAPHeaderSerializer implements Serializable{
+	private SOAPHeaderElement soapHe;
+	public SOAPHeaderSerializer(SOAPHeaderElement soapHe){
+		this.soapHe = soapHe;
+	}
+    public void serialize(SerializationContext sc) throws IOException {
+		StringBuffer sbuf =  new StringBuffer();
+		String localName = soapHe.getName();
+		String nsuri = soapHe.getNamespaceURI();
+		String prefix = soapHe.getPrefix();
+		if(prefix == null || prefix.length()< 1)
+			sbuf.append('<').append(localName).append(" ");
+		else
+			sbuf.append('<').append(prefix).append(":").append(localName).append(" ");
+		sbuf.append("xmlns:").append(" = ").append("\"").append(nsuri).append("\" ");
+		
+		Iterator prefixs = soapHe.getNamespacePrefixes();
+		while(prefixs.hasNext()){
+			String aPrefix = (String)prefixs.next();
+			String uri = soapHe.getNamespaceURI(aPrefix);
+			sbuf.append(" xmlns:").append(aPrefix).append(" = ").append("\"").append(uri).append("\" ");
+		}
+		sbuf.append(">\n");
+		sc.writeString(sbuf.toString());
+		sbuf.delete(0,sbuf.length()-1);
+		
+		SOAPHeaderElementContent h = (SOAPHeaderElementContent)soapHe.getObjectValue();
+		  for (int i = 0; i < h.size(); i++) {
+			  Element e = h.getElement(i);
+			  sc.writeDOMElement(e);
+		  }
+		if(prefix == null || prefix.length()< 1)
+			sbuf.append("</").append(localName).append("> ");
+		else	
+			sbuf.append("</").append(prefix).append(":").append(localName).append("> ");
+		sc.writeString(sbuf.toString());
+			
+    }
+
 }

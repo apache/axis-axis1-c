@@ -53,18 +53,51 @@
  * <http://www.apache.org/>.
  */
 
-package org.apache.axismora.encoding;
+package org.apache.axismora.util;
 
-import org.apache.axis.encoding.SerializationContext;
-
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
- *  This class represent anything that is serilizable.
- *  it uses Parameter to serialize
- * @see org.apache.axismora.encoding.Parameter
- * @see org.apache.axismora.soap.BasicMessageData
- * @author Srinath Perera (hemapani@opensource.lk)
+ * @author Srinath Perera(hemapani@opensource.lk)
  */
-public interface Serializable {
-    public void serialize(SerializationContext sc)throws java.io.IOException;
+
+public class PerfLog {
+	public static boolean LOG_PERF = true; 
+	private static int MAX = 20;
+	private static long[] readings = new long[MAX];
+	private static String[] messages = new String[MAX];
+	private static int count = 0;
+	public static void recored(long time){
+		readings[count] = time;
+		count++;
+	}
+	
+	public static void recored(long time,String message){
+		readings[count] = time;
+		messages[count] = message;
+		count++;
+	}
+	
+	public static void print(){
+		try {
+			PrintWriter w = new PrintWriter(new FileWriter("perf.log",true));
+			long full = readings[count -1] - readings[0];
+			long reading;
+			w.write("------------ it takes "+ full + " -------------------\n");
+			for(int i = 1;i<count;i++){
+				reading = readings[i] - readings[i-1];
+				String line = messages[i-1] + " to " + messages[i]+ " = " + reading + "("+(reading*100/full)+"%)";
+				System.out.println(line);
+				w.write(line+"\n");
+			}
+			w.write("\n");
+			w.close();
+			count = 0;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

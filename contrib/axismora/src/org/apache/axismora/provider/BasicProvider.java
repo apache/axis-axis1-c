@@ -62,6 +62,7 @@ import org.apache.axismora.Handler;
 import org.apache.axismora.MessageContext;
 import org.apache.axismora.handlers.BasicHandler;
 import org.apache.axismora.util.AxisUtils;
+import org.apache.axismora.util.PerfLog;
 
 import org.apache.axis.AxisFault;
 import org.apache.axis.deployment.wsdd.WSDDService;
@@ -83,7 +84,7 @@ public class BasicProvider extends BasicHandler implements Provider {
     public void invoke(MessageContext msgdata) throws AxisFault {
         try {
             // read  and validate body element and read the method name if it is RPC style.
-            msgdata.startParseSOAPBody();
+          msgdata.startParseSOAPBody();
 
             String scope = service.getParameter(Constants.PARAMETER_SCOPE);
 
@@ -136,7 +137,16 @@ public class BasicProvider extends BasicHandler implements Provider {
             //if not one of above that means we should load new wrapper
             if (this.wrapper == null)
                 this.wrapper = this.loadNewWrapper();
+			if(PerfLog.LOG_PERF){
+				PerfLog.recored(System.currentTimeMillis(),"WRAP_START");
+			}
+      
             this.wrapper.invoke(msgdata);
+            
+			if(PerfLog.LOG_PERF){
+				PerfLog.recored(System.currentTimeMillis(),"WRAP_END");
+			}
+  
 
             //k ... we are done now return the service object
             if (!Constants.SCOPE_APPLICATION.equals(scope))

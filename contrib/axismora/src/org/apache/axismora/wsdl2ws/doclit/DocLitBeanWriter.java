@@ -1,14 +1,11 @@
 package org.apache.axismora.wsdl2ws.doclit;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
 import javax.xml.namespace.QName;
-import org.apache.axismora.encoding.AxisPullParser;
-import org.apache.axismora.wsdl2ws.java.JavaClassWriter;
-import org.apache.axismora.wsdl2ws.java.JavaUtils;
+
 import org.apache.axismora.wsdl2ws.WrapperConstants;
 import org.apache.axismora.wsdl2ws.WrapperFault;
 import org.apache.axismora.wsdl2ws.WrapperUtils;
@@ -16,6 +13,8 @@ import org.apache.axismora.wsdl2ws.info.ElementInfo;
 import org.apache.axismora.wsdl2ws.info.Type;
 import org.apache.axismora.wsdl2ws.info.TypeMap;
 import org.apache.axismora.wsdl2ws.info.WebServiceContext;
+import org.apache.axismora.wsdl2ws.java.JavaClassWriter;
+import org.apache.axismora.wsdl2ws.java.JavaUtils;
 
 
 /**

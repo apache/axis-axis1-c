@@ -14,7 +14,6 @@ import org.apache.axismora.wsdl2ws.info.ParameterInfo;
 import org.apache.axismora.wsdl2ws.info.Type;
 import org.apache.axismora.wsdl2ws.info.TypeMap;
 import org.apache.axismora.wsdl2ws.info.WebServiceContext;
-
 import org.apache.axismora.wsdl2ws.java.client.StubWriter;
 
 /**

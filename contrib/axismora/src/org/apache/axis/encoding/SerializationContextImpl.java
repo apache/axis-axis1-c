@@ -126,6 +126,9 @@ public class SerializationContextImpl implements SerializationContext
     private int lastPrefixIndex = 1;
     private MessageContext msgContext;
     private QName currentXMLType;
+    
+	private char[] buffer = new char[1024];
+	private int index = 0;
 
     /** The SOAP context we're using */
     private SOAPConstants soapConstants = SOAPConstants.SOAP11_CONSTANTS;
@@ -1049,10 +1052,11 @@ public class SerializationContextImpl implements SerializationContext
         throws IOException
     {
         if (writingStartTag) {
-            writer.write('>');
+			writer.write('>');
+			index++;
             writingStartTag = false;
         }
-        writer.write(string);
+		writer.write(string);
         onlyXML=false;
     }
 
@@ -1379,4 +1383,18 @@ public class SerializationContextImpl implements SerializationContext
         SimpleValueSerializer simpleSer = (SimpleValueSerializer)ser;
         return simpleSer.getValueAsString(value, this);
     }
+    /* (non-Javadoc)
+     * @see org.apache.axis.encoding.SerializationContext#endTag()
+     */
+    public void endTag()throws IOException {
+		throw new UnsupportedOperationException();
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.axis.encoding.SerializationContext#startTag(java.lang.String, java.lang.String)
+     */
+    public void startTag(String prefixedName, String additional)throws IOException {
+        throw new UnsupportedOperationException();
+    }
+
 }

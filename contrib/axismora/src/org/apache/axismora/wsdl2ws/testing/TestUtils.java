@@ -20,7 +20,7 @@ public class TestUtils {
 		}
 	
 	public static char getRandomchar(){
-		return (char)rand.nextInt();
+		return (char)(48 + rand.nextInt(45));
 	}
 
 	public static long getRandomLong(){
@@ -51,7 +51,7 @@ public class TestUtils {
 		int length = rand.nextInt(50);
 		char[] chars = new char[length];
 		for(int i = 0;i<length;i++){
-			chars[i] = (char)rand.nextInt(24);
+			chars[i] = getRandomchar();
 		}
 		return new String(chars);
 	}

@@ -55,7 +55,6 @@
 
 package org.apache.axismora.wsdl2ws.msg;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;

@@ -75,7 +75,6 @@ import java.util.Vector;
 
 import javax.xml.namespace.QName;
 
-import org.apache.axismora.wrappers.simpleType.HexBinaryParam;
 import org.apache.axismora.wsdl2ws.WrapperConstants;
 import org.apache.axismora.wsdl2ws.WrapperFault;
 

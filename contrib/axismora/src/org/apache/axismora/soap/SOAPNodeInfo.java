@@ -55,11 +55,13 @@
 
 package org.apache.axismora.soap;
 
+
 import java.util.ArrayList;
 
 import javax.xml.namespace.QName;
 
 import org.apache.axismora.deployment.AxisDeployment;
+import org.apache.axismora.util.UtilityPool;
 /**
  * This class represnt the information about an SOAP node. The SOAP node is 
  * defined in the same context as by the SOAP specification 1.2 . The roles and the 
@@ -68,7 +70,7 @@ import org.apache.axismora.deployment.AxisDeployment;
  */
 
 public class SOAPNodeInfo {
-    /* all the roles olayed by this soapnode*/
+    /* all the roles played by this soapnode*/
     private ArrayList roles;
     /* all the headers understood by the soap node */
     private ArrayList understandHeaders;
@@ -77,8 +79,8 @@ public class SOAPNodeInfo {
 
     public SOAPNodeInfo(AxisDeployment deployment) {
         this.deployment = deployment;
-        this.roles = new ArrayList();
-        this.understandHeaders = new ArrayList();
+        this.roles = UtilityPool.getArrayList();
+        this.understandHeaders = UtilityPool.getArrayList();
     }
 
     public ArrayList getAllRoles() {
@@ -99,5 +101,9 @@ public class SOAPNodeInfo {
     public void addUnderstandHeader(QName header) {
         if (header != null && !this.understandHeaders.contains(header))
             understandHeaders.add(header);
+    }
+    public void finish(){
+		UtilityPool.returnArrayList(understandHeaders);
+		UtilityPool.returnArrayList(roles);
     }
 }

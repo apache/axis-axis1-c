@@ -313,6 +313,10 @@ public interface SerializationContext extends javax.xml.rpc.encoding.Serializati
      `* @return QName of xmlType or null
      */
     public QName getCurrentXMLType();
+    
+    public void startTag(String prefixedName,String additional)throws IOException;
+    
+    public void endTag()throws IOException;
 
 }
 
