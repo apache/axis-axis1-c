@@ -87,18 +87,32 @@ enum NODE_TYPE { ELEMENT_NODE=1, CHARACTER_NODE};
 class BasicNode
 {
 public:
+	/**
+	 * Returns the number of child elements of this element. The return value
+	 *  depends on the TYPE of the node.
+	 * @return The number of child elements of this element. The return value
+	 *  depends on the TYPE of the node.
+	 */
+	virtual int getNoOfChildren() = 0;
+	virtual BasicNode* getFirstChild() = 0;
+	virtual BasicNode* getLastChild() = 0;
+	virtual BasicNode* getChild(int iChildPosition) = 0;
 	//virtual bool operator ==( const BasicNode &objChEle)=0;
-	virtual const AxisString& getValue()=0;
-	virtual int setValue(const AxisChar* sValue)=0;
+	virtual const AxisChar* getValue()=0;
+	virtual int setValue(const AxisChar* pachValue)=0;
 	virtual NODE_TYPE getNodeType()=0;
+	virtual int setURI(const AxisChar* sURI) =0;
+	virtual int addChild(BasicNode* pBasicNode) =0;
+	virtual int setLocalName(const AxisChar* sLocalName) =0;
+	virtual int setPrefix(const AxisChar* sPrefix) =0;
 	virtual int serialize(SoapSerializer& pSZ) =0;
 	virtual int serialize(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceStack) =0;
 	virtual ~BasicNode() {};
 
 protected:
 	NODE_TYPE m_iNodeType;
-	string m_sPrefix;
-	AxisString m_sValue;
+	//string m_sPrefix;
+	AxisChar* m_pachValue;
 };
 
 #endif // !defined(AFX_BASICNODE_H__623900B8_2737_4E36_8F26_97898C5BD47D__INCLUDED_)
