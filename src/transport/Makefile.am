@@ -1,1 +1,1 @@
-SUBDIRS = axis2 axis3 
+SUBDIRS = axis2 @AXIS3BUILD@

@@ -220,11 +220,11 @@ AXIS_TRANSPORT_STATUS
     // NB: This calculation may not necessarily be correct when dealing with SSL
     //     messages as the length of the encoded message is not necessarily the
     //         same as the length of the uncoded message.
-    char buff[8];
-
-    sprintf (buff, "%d", m_strBytesToSend.length ());
-
-    this->setTransportProperty ("Content-Length", buff);
+	char buff[8];
+	
+	sprintf (buff, "%d", m_strBytesToSend.length ());
+	
+	this->setTransportProperty ("Content-Length", buff);
 
     // The header is now complete.  The message header and message can now be
     // transmitted.
