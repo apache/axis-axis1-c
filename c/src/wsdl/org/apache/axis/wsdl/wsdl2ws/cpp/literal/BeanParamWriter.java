@@ -152,7 +152,8 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 		 */
 		writer.write("\tif ( param == NULL ) {\n");
 		writer.write("\t /* TODO : may need to check nillable value*/\n"); 
-		writer.write("\t pSZ->SerializeAsAttribute(\"nil\", \"http://www.w3.org/2001/XMLSchema-instance\", (void*)&(xsd_boolean_true), XSD_BOOLEAN);\n");
+		//writer.write("\t pSZ->SerializeAsAttribute(\"nil\", \"http://www.w3.org/2001/XMLSchema-instance\", (void*)&(xsd_boolean_true), XSD_BOOLEAN);\n");
+		writer.write("\tpSZ->SerializeAsAttribute(\"xsi:nil\", 0, (void*)&(xsd_boolean_true), XSD_BOOLEAN);\n");
 		writer.write("\t pSZ->Serialize(\">\", NULL);\n");
 		writer.write("\treturn AXIS_SUCCESS;\n");
 		writer.write("\t}\n");
@@ -289,6 +290,10 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 			}
 			else if (!attribs[i].isSimpleType()){
 				writer.write("\t\t"+attribs[i].getParamName()+"=0;\n");
+			} else {
+				/* Needed for shared libraries */
+				if ("xsd__string".equals(attribs[i].getTypeName()))
+				   writer.write("\t\t"+attribs[i].getParamName()+" = 0;\n");
 			}
 		}			
 		writer.write("}\n");
