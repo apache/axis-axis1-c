@@ -251,7 +251,7 @@ AXIS_JARS_HOME</strong></p>
 
 <p></p>
 
-<p><strong>$ cd $AXISCPP_HOME/c/src/wsdl/</strong></p>
+<p><strong>$ cd $AXISCPP_HOME/src/wsdl/</strong></p>
 
 <p></p>
 
@@ -539,13 +539,13 @@ filled for you.</strong></p>
 <p></p>
 
 <p>The Folder called deploy in the
-<strong>/home/axisuser/projects/axis_c/</strong> should be copied to apache
+<strong>$AXISCPP_HOME/</strong> should be copied to apache
 root folder .Rename the deploy folder as <strong>"Axis"</strong>. Give all
 permissions to this folder.</p>
 
 <p></p>
 
-<p><strong>$ cp &#x2013;rf /home/axisuser/projects/axis_c/deloy
+<p><strong>$ cp &#x2013;rf $AXISCPP_HOME/deloy
 /usr/local/apache</strong></p>
 
 <p><strong>$ cd /usr/local/apache</strong></p>
@@ -1032,7 +1032,7 @@ handler is writing to a file the number of times the service is accessed.</p>
 <p></p>
 
 <p><strong>cd
-/home/axisuser/projects/axis_c/src/server/handlers/custom/loghandler</strong></p>
+$AXISCPP_HOME/src/server/handlers/custom/loghandler</strong></p>
 
 <p><strong>$sh autogen.sh</strong></p>
 
@@ -1416,13 +1416,13 @@ filled for you.</strong></p>
 <p></p>
 
 <p>The Folder called deploy in the
-<strong>/home/axisuser/projects/axis_c/</strong> should be copied to apache
+<strong>$AXISCPP_HOME/</strong> should be copied to apache
 root folder .Rename the deploy folder as <strong>"Axis"</strong>. Give all
 permissions to this folder.</p>
 
 <p></p>
 
-<p><strong>$ cp &#x2013;rf /home/axisuser/projects/axis_c/deloy
+<p><strong>$ cp &#x2013;rf $AXISCPP_HOME/deloy
 /usr/local/apache</strong></p>
 
 <p><strong>$ cd /usr/local/apache</strong></p>
