@@ -63,8 +63,8 @@
 #ifndef APR_BASE64_H
 #define APR_BASE64_H
 
-//#include "apu.h"
-//#include "apr_general.h"
+/*#include "apu.h"*/
+/*#include "apr_general.h"*/
 
 #define APU_DECLARE(x) x
 
