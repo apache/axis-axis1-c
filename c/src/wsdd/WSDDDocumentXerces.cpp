@@ -50,8 +50,8 @@ WSDDDocumentXerces::~WSDDDocumentXerces()
 int WSDDDocumentXerces::GetDeployment(const AxisChar* sWSDD,
                                       WSDDDeployment* pDeployment)
 {
-    m_pDeployment = pDeployment;   /* this enables the access to Deployment 
-    object while parsing */
+    m_pDeployment = pDeployment;   
+    /* this enables the access to Deployment object while parsing */
     if (AXIS_SUCCESS != ParseDocument(sWSDD)) 
     {
         AXISTRACE1("Deployment descripter loading failed", CRITICAL);
@@ -81,8 +81,8 @@ int WSDDDocumentXerces::ParseDocument(const AxisChar* sWSDD)
 int WSDDDocumentXerces::UpdateDeployment(const AxisChar* sWSDD,
                                          WSDDDeployment* pDeployment)
 {
-    m_pDeployment = pDeployment; /* this enables the access to Deployment 
-    object while parsing */
+    m_pDeployment = pDeployment; 
+    /* this enables the access to Deployment object while parsing */
     try
     {
         MemBufInputSource Input((const unsigned char*)sWSDD, strlen(sWSDD) ,
@@ -112,11 +112,11 @@ void  WSDDDocumentXerces::endElement (const XMLCh *const uri,
 {
     AxisXMLString sLname = __XTRC(localname);
     const AxisXMLCh* lname = sLname.c_str();
-    if (!XMLString::equals(lname, kw_param)) /* just neglect endElement 
-        of parameter */
+    if (!XMLString::equals(lname, kw_param)) 
+    /* just neglect endElement of parameter */
     {
-        if (m_lev1 == WSDD_UNKNOWN) /* not inside a requestFlow or 
-            responseFlow elements */
+        if (m_lev1 == WSDD_UNKNOWN) 
+        /* not inside a requestFlow or responseFlow elements */
         {
             switch(m_lev0)
             {
@@ -278,7 +278,8 @@ void WSDDDocumentXerces::ProcessAttributes(WSDDLevels ElementType,
                 /* we get the libname for the hanlder here ??? */
                 m_pHandler->SetLibName(value);
                 if (m_pLibNameIdMap->find(value) != 
-                    m_pLibNameIdMap->end()) /* libray name already in the map */
+                    m_pLibNameIdMap->end()) 
+                    /* libray name already in the map */
                 {
                     m_pHandler->SetLibId((*m_pLibNameIdMap)[value]);
                 }
@@ -596,8 +597,8 @@ void WSDDDocumentXerces::startElement(const XMLCh *const uri,
     {
         if(XMLString::equals(lname, kw_param))
         {  
-            GetParameters(m_lev2, attrs); /* must be parameters of 
-            a handler or a chain */
+            GetParameters(m_lev2, attrs); 
+            /* must be parameters of a handler or a chain */
         }
 
         else if(XMLString::equals(lname, kw_hdl))
@@ -622,15 +623,15 @@ void WSDDDocumentXerces::startElement(const XMLCh *const uri,
 void WSDDDocumentXerces::startPrefixMapping(const XMLCh* const prefix,
                                             const XMLCh* const uri)
 {
-    m_NsStack[__XTRC(prefix)] = __XTRC(uri); /* I think the same prifix 
-    cannot repeat ??? */
+    m_NsStack[__XTRC(prefix)] = __XTRC(uri); 
+    /* I think the same prifix cannot repeat ??? */
 }
 
 void WSDDDocumentXerces::endPrefixMapping(const XMLCh* const prefix)
 {
 //    string sPrifix = prefix;
-    m_NsStack.erase(__XTRC(prefix)); /* I think the same prifix cannot 
-    repeat ??? */
+    m_NsStack.erase(__XTRC(prefix)); 
+    /* I think the same prifix cannot repeat ??? */
 }
 
 void  WSDDDocumentXerces::characters (const XMLCh *const chars,

@@ -55,9 +55,9 @@ public:
     int GetDeployment(const AxisChar* sWSDD, WSDDDeployment* pDeployment);
     int UpdateDeployment(const AxisChar* sWSDD, WSDDDeployment* pDeployment);
 
-    // -----------------------------------------------------------------------
-    //  Implementations of the SAX DocumentHandler interface
-    // -----------------------------------------------------------------------
+    
+    /*  Implementations of the SAX DocumentHandler interface */
+    
     void startElement(const XMLCh *const uri, const XMLCh *const localname, 
         const XMLCh *const qname, const Attributes &attrs);
     void characters (const XMLCh *const chars, const unsigned int length);
@@ -66,9 +66,9 @@ public:
     void startPrefixMapping(const XMLCh* const prefix, const XMLCh* const uri);
     void endPrefixMapping(const XMLCh* const prefix);
 
-    // -----------------------------------------------------------------------
-    //  Implementations of the SAX ErrorHandler interface
-    // -----------------------------------------------------------------------
+    
+    /*  Implementations of the SAX ErrorHandler interface */
+    
     void warning(const SAXParseException& exception);
     void error(const SAXParseException& exception);
     void fatalError(const SAXParseException& exception);
