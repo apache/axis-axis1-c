@@ -132,7 +132,7 @@ public class ParmHeaderFileWriter extends ParamWriter{
 	  try{
 		Type atype;
 		Iterator types = this.wscontext.getTypemap().getTypes().iterator();
-		writer.write("#include <string>\nusing namespace std;\n\n");
+		writer.write("#include <AxisUserAPI.h>\n\n");
 		HashSet typeSet = new HashSet();
 		while(types.hasNext()){
 			atype = (Type)types.next();
