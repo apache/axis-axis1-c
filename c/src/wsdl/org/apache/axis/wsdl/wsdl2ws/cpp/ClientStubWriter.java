@@ -215,16 +215,12 @@ public class ClientStubWriter extends CPPClassWriter{
 		}
 		String channelSecurityType = (WrapperConstants.CHANNEL_SECURITY_SSL.equals(wscontext.getWrapInfo().getChannelSecurity()))?
 										"SSL_CHANNEL" : "NORMAL_CHANNEL";
-//		begin added NIthya
-		//	  writer.write("int Ret;\n");
-			  writer.write("\tchar* cFaultcode;\n");//damitha added \t
-			  writer.write("\tchar* cFaultstring;\n");//damitha \t
-			  writer.write("\tchar* cFaultactor;\n");//damitha \t
-			  writer.write("\tchar* cFaultdetail;\n");//damitha \t
- //     end of Nithya								
-		//	begin added by nithya
-		  writer.write("\ttry\n\t{");//damitha \n
-		//ended by nithya								
+
+		writer.write("\tchar* cFaultcode;\n");
+		writer.write("\tchar* cFaultstring;\n");
+		writer.write("\tchar* cFaultactor;\n");
+		writer.write("\tchar* cFaultdetail;\n");
+		writer.write("\ttry\n\t{");				
 		writer.write("\n\t\tif (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, "+channelSecurityType +")) \n\t\t\treturn ");//damitha
 		if (returntype != null){
 			writer.write((returntypeisarray?"RetArray":returntypeissimple?"Ret":"pReturn")+";\n");
@@ -232,7 +228,6 @@ public class ClientStubWriter extends CPPClassWriter{
 		else{
 			writer.write(";\n");
 		}
-	
 		writer.write("\t\tm_pCall->setTransportProperty(SOAPACTION_HEADER , \""+minfo.getSoapAction()+"\");\n");
 		writer.write("\t\tm_pCall->setSOAPVersion(SOAP_VER_1_1);\n"); //TODO check which version is it really.
 		writer.write("\t\tm_pCall->setOperation(\""+minfo.getMethodname()+"\", \""+wscontext.getWrapInfo().getTargetNameSpaceOfWSDL()+"\");\n");
@@ -273,8 +268,8 @@ public class ClientStubWriter extends CPPClassWriter{
 			}
 			writer.write(");\n");
 		}
-		writer.write("\t\tif (AXIS_SUCCESS == m_pCall->invoke())\n\t\t{\n");//damitha
-		writer.write("\t\t\tif(AXIS_SUCCESS == m_pCall->checkMessage(\""+minfo.getOutputMessage().getLocalPart()+"\", \""+wscontext.getWrapInfo().getTargetNameSpaceOfWSDL()+"\"))\n\t\t\t{\n");//damitha
+		writer.write("\t\tif (AXIS_SUCCESS == m_pCall->invoke())\n\t\t{\n");
+		writer.write("\t\t\tif(AXIS_SUCCESS == m_pCall->checkMessage(\""+minfo.getOutputMessage().getLocalPart()+"\", \""+wscontext.getWrapInfo().getTargetNameSpaceOfWSDL()+"\"))\n\t\t\t{\n");
 				
 		if ( isAllTreatedAsOutParams) {
 			String currentParamName;
@@ -299,140 +294,139 @@ public class ClientStubWriter extends CPPClassWriter{
 					String containedType = null;
 					if (CUtils.isSimpleType(qname)){
 						containedType = CUtils.getclass4qname(qname);
-						writer.write("\t\t\t\t" + currentParamName + " = ("+currentParaType+"&)m_pCall->getBasicArray("+CUtils.getXSDTypeForBasicType(containedType)+", \""+currentType.getParamName()+"\", 0);\n");//damitha
+						writer.write("\t\t\t\t" + currentParamName + " = ("+currentParaType+"&)m_pCall->getBasicArray("+CUtils.getXSDTypeForBasicType(containedType)+", \""+currentType.getParamName()+"\", 0);\n");
 					}
 					else{
 						containedType = qname.getLocalPart();
-						writer.write("\t\t\t\t" + currentParamName + " = ("+currentParaType+"&)m_pCall->getCmplxArray((void*) Axis_DeSerialize_"+containedType);//damitha
-						writer.write("\t\t\t\t, (void*) Axis_Create_"+containedType+", (void*) Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", \""+currentType.getParamName()+"\", Axis_URI_"+containedType+");\n");//damitha
+						writer.write("\t\t\t\t" + currentParamName + " = ("+currentParaType+"&)m_pCall->getCmplxArray((void*) Axis_DeSerialize_"+containedType);
+						writer.write("\t\t\t\t, (void*) Axis_Create_"+containedType+", (void*) Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", \""+currentType.getParamName()+"\", Axis_URI_"+containedType+");\n");
 					}
 				}
 				else if(typeissimple){
-				   writer.write("\t\t\t\t" + currentParamName + " = m_pCall->"+ CUtils.getParameterGetValueMethodName(currentParaType, false)+"(\""+currentType.getParamName()+"\", 0);\n");//damitha
+				   writer.write("\t\t\t\t" + currentParamName + " = m_pCall->"+ CUtils.getParameterGetValueMethodName(currentParaType, false)+"(\""+currentType.getParamName()+"\", 0);\n");
 				}
 				else{
-				   writer.write("\t\t\t\t" + currentParamName + " = ("+currentParaType+"*)m_pCall->getCmplxObject((void*) Axis_DeSerialize_"+currentParaType+", (void*) Axis_Create_"+currentParaType+", (void*) Axis_Delete_"+currentParaType+",\""+currentType.getParamName()+"\", 0);\n"); //damitha
+				   writer.write("\t\t\t\t" + currentParamName + " = ("+currentParaType+"*)m_pCall->getCmplxObject((void*) Axis_DeSerialize_"+currentParaType+", (void*) Axis_Create_"+currentParaType+", (void*) Axis_Delete_"+currentParaType+",\""+currentType.getParamName()+"\", 0);\n"); 
 				}				
 			}	
-			writer.write("\t\t\t}\n");//damitha
-			writer.write("\t\t}\n\t\tm_pCall->unInitialize();\n");//damitha
+			writer.write("\t\t\t}\n");
+			writer.write("\t\t}\n\t\tm_pCall->unInitialize();\n");
 		}
 		else if (returntype == null){
-			writer.write("\t\t\t/*not successful*/\n\t\t}\n");//damitha
-			writer.write("\t\t}\n\t\tm_pCall->unInitialize();\n");//damitha
+			writer.write("\t\t\t/*not successful*/\n\t\t}\n");
+			writer.write("\t\t}\n\t\tm_pCall->unInitialize();\n");
 		}
 		else if (returntypeisarray){
 			QName qname = WrapperUtils.getArrayType(retType).getName();
 			String containedType = null;
 			if (CUtils.isSimpleType(qname)){
 				containedType = CUtils.getclass4qname(qname);
-				writer.write("\t\t\t\tRetArray = ("+outparamTypeName+"&)m_pCall->getBasicArray("+CUtils.getXSDTypeForBasicType(containedType)+", \""+returntype.getParamName()+"\", 0);\n\t\t\t}\n");//damitha
+				writer.write("\t\t\t\tRetArray = ("+outparamTypeName+"&)m_pCall->getBasicArray("+CUtils.getXSDTypeForBasicType(containedType)+", \""+returntype.getParamName()+"\", 0);\n\t\t\t}\n");
 			}
 			else{
 				containedType = qname.getLocalPart();
 				writer.write("\t\t\t\tRetArray = ("+outparamTypeName+"&)m_pCall->getCmplxArray((void*) Axis_DeSerialize_"+containedType);//damitha
-				writer.write(", (void*) Axis_Create_"+containedType+", (void*) Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", \""+returntype.getParamName()+"\", Axis_URI_"+containedType+");\n\t\t\t}\n");//damitha
+				writer.write(", (void*) Axis_Create_"+containedType+", (void*) Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", \""+returntype.getParamName()+"\", Axis_URI_"+containedType+");\n\t\t\t}\n");
 			}
-			writer.write("\t\t}\n\t\tm_pCall->unInitialize();\n");//damitha
-			writer.write("\t\treturn RetArray;\n");//damitha
+			writer.write("\t\t}\n\t\tm_pCall->unInitialize();\n");
+			writer.write("\t\treturn RetArray;\n");
 		}
 		else if(returntypeissimple){
-			writer.write("\t\t\t\tRet = m_pCall->"+ CUtils.getParameterGetValueMethodName(outparamTypeName, false)+"(\""+returntype.getParamName()+"\", 0);\n\t\t\t}\n");//damitha
-			writer.write("\t\t}\n\t\tm_pCall->unInitialize();\n");//damitha
-			writer.write("\t\treturn Ret;\n");//damitha
+			writer.write("\t\t\t\tRet = m_pCall->"+ CUtils.getParameterGetValueMethodName(outparamTypeName, false)+"(\""+returntype.getParamName()+"\", 0);\n\t\t\t}\n");
+			writer.write("\t\t}\n\t\tm_pCall->unInitialize();\n");
+			writer.write("\t\treturn Ret;\n");
 		}
 		else{
 			outparamTypeName = returntype.getLangName();//need to have complex type name without *
-			writer.write("\t\t\t\tpReturn = ("+outparamTypeName+"*)m_pCall->getCmplxObject((void*) Axis_DeSerialize_"+outparamTypeName+", (void*) Axis_Create_"+outparamTypeName+", (void*) Axis_Delete_"+outparamTypeName+",\""+returntype.getParamName()+"\", 0);\n\t\t}\n");//damitha
-			writer.write("\t\t}\n\t\tm_pCall->unInitialize();\n");//damitha
-			writer.write("\t\treturn pReturn;\n");//damitha
+			writer.write("\t\t\t\tpReturn = ("+outparamTypeName+"*)m_pCall->getCmplxObject((void*) Axis_DeSerialize_"+outparamTypeName+", (void*) Axis_Create_"+outparamTypeName+", (void*) Axis_Delete_"+outparamTypeName+",\""+returntype.getParamName()+"\", 0);\n\t\t}\n");
+			writer.write("\t\t}\n\t\tm_pCall->unInitialize();\n");
+			writer.write("\t\treturn pReturn;\n");
 
 		}
-		//added by nithya
-		
-		writer.write("\t}\n");//damitha
-		writer.write("\tcatch(AxisException& e)\n\t{\n");//damitha
+		//added by nithya		
+		writer.write("\t}\n");
+		writer.write("\tcatch(AxisException& e)\n\t{\n");
 		writer.write("\t\tint iExceptionCode = e.getExceptionCode();\n");
 		writer.write("\t\tif(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)\n");
-      writer.write("\t\t{\n");
-      writer.write("\t\t\tthrow;\n");
-      writer.write("\t\t}\n");
-		writer.write("\t\telse if (AXIS_SUCCESS == m_pCall->checkFault(\"Fault\",\""+wscontext.getWrapInfo().getTargetEndpointURI()+"\" ))");//damitha
+        writer.write("\t\t{\n");
+        writer.write("\t\t\tthrow;\n");
+        writer.write("\t\t}\n");
+		writer.write("\t\telse if (AXIS_SUCCESS == m_pCall->checkFault(\"Fault\",\""+wscontext.getWrapInfo().getTargetEndpointURI()+"\" ))");
 		writer.write("//Exception handling code goes here\n");
-		writer.write("\t\t{\n");//damitha
-		writer.write("\t\t\tcFaultcode = m_pCall->getElementAsString(\"faultcode\", 0);\n");//damitha
-                writer.write("\t\t\tcFaultstring = m_pCall->getElementAsString(\"faultstring\", 0);\n");//damitha
-		writer.write("\t\t\tcFaultactor = m_pCall->getElementAsString(\"faultactor\", 0);\n");//damitha
-              
-		//writer.write("\t\t\tif(0 != strcmp(\"service_exception\", cFaultstring))\n");//damitha
-                //writer.write("\t\t\t{\n");//damitha
-		//writer.write("\t\t\t\t  cFaultdetail = m_pCall->getElementAsString(\"faultdetail\", 0);\n");//damitha
-		//writer.write("\t\t\t\t  throw AxisException(cFaultdetail);\n");//damitha
-		//writer.write("\t\t\t}\n");//damitha
-		//writer.write("\t\t\telse\n");//damitha
-		//writer.write("\t\t\t{\n");//damitha
-		//writer.write("\t\t\t\tif (AXIS_SUCCESS == m_pCall->checkFault(\"faultdetail\",\""+wscontext.getWrapInfo().getTargetEndpointURI()+"\"))\n");//damitha
-
-//		to get fault info  		
+		writer.write("\t\t{\n");
+		writer.write("\t\t\tcFaultcode = m_pCall->getElementAsString(\"faultcode\", 0);\n");
+        writer.write("\t\t\tcFaultstring = m_pCall->getElementAsString(\"faultstring\", 0);\n");
+		writer.write("\t\t\tcFaultactor = m_pCall->getElementAsString(\"faultactor\", 0);\n");        	
+       //to get fault info  		    
 		Iterator paramsFault = minfo.getFaultType().iterator();
 		String faultInfoName =null;
 		String faultType =null;	 
 		String langName =null;
 		String paramName =null;	
-	    if (!paramsFault.hasNext()){
-			writer.write("\t\t\t\t  cFaultdetail = m_pCall->getElementAsString(\"faultdetail\", 0);\n");//damitha
-			writer.write("\t\t\t\t  throw AxisException(cFaultdetail);\n");//damitha		
+		boolean flag =false;
+		int j =0;
+	    if (!paramsFault.hasNext())
+	    {
+			writer.write("\t\t\tcFaultdetail = m_pCall->getElementAsString(\"faultdetail\", 0);\n");
+			writer.write("\t\t\tthrow AxisGenException(cFaultdetail);\n");		
 	    }
+		else
+		{
+			flag =true;			
+		}	    
 		while (paramsFault.hasNext()){
+			j =j+1;
 			FaultInfo info = (FaultInfo)paramsFault.next();
 			faultInfoName =info.getFaultInfo();	     
 			ArrayList paramInfo =info.getParams();
-			for (int i= 0; i < paramInfo.size(); i++) {				
-				ParameterInfo par =(ParameterInfo)paramInfo.get(i);                                                                                                                                                           
-				paramName  = par.getParamName();
-				langName =par.getLangName();
-				faultType = WrapperUtils.getClassNameFromParamInfoConsideringArrays(par,wscontext);
-				writeExceptions(faultType,faultInfoName,paramName,langName);
-				}
-			     writer.write("\t\t\telse\n\t\t\t{\n");//damitha
- 				 writer.write("\t\t\t\t  cFaultdetail = m_pCall->getElementAsString(\"faultdetail\", 0);\n");//damitha
-				 writer.write("\t\t\t\t  throw AxisException(cFaultdetail);\n");//damitha
-				 writer.write("\t\t\t}\n");//damitha
-			}
+			for (int i= 0; i < paramInfo.size(); i++) 
+			{				
+				 ParameterInfo par =(ParameterInfo)paramInfo.get(i);                                                                                                                                                           
+				 paramName  = par.getParamName();
+				 langName =par.getLangName();
+				 faultType = WrapperUtils.getClassNameFromParamInfoConsideringArrays(par,wscontext);
+				  if ( j > 1){				  	 
+			          writer.write("\t\t\telse if");
+					  writeExceptions(faultType,faultInfoName,paramName,langName);
+				  }					 
+			  	  else
+				  {				  	 
+					   writer.write("\t\t\tif");
+					   writeExceptions(faultType,faultInfoName,paramName,langName);
+				  }				
+				}					     
+			}		
+			
+		    if (flag ==true)
+		    {		    	    
+			        writer.write("\t\t\telse\n\t\t\t{\n");
+					writer.write("\t\t\t\t  cFaultdetail = m_pCall->getElementAsString(\"faultdetail\", 0);\n");
+					writer.write("\t\t\t\t  throw AxisGenException(cFaultdetail);\n");
+			        writer.write("\t\t\t}\n");		
+		    }	    
 		
-
-		writer.write("\t\t}\n");//damitha
-		writer.write("\t\telse throw;\n");//damitha
-		writer.write("\t}\n");//damitha
-		//writer.write("m_pCall->unInitialize();\n");//damitha
-		//writer.write("return Ret;\n");//damitha
-	
-		//end of nithya add
-		
-		//write end of method
+		writer.write("\t\t}\n");
+		writer.write("\t\telse throw;\n");
+		writer.write("\t}\n");		
 		writer.write("}\n");
-	}
-	
-	/* written by NIthya to get the expections */
+	}	
 	private void writeExceptions(String faulttype,String faultInfoName,String paramName,String langName) throws WrapperFault{
-		try{
-			    
-		        //writer.write("else\n");//damitha
-		        writer.write("\t\t\tif(0 == strcmp(\""+langName+"\", cFaultstring))\n");//damitha
-		        writer.write("\t\t\t{\n");//damitha
-		        writer.write("\t\t\t\tif (AXIS_SUCCESS == m_pCall->checkFault(\"faultdetail\",\""+wscontext.getWrapInfo().getTargetEndpointURI()+"\"))\n");//damitha
-                        writer.write("\t\t\t\t{\n");//damitha added
-			writer.write("\t\t\t\t\t"+faulttype+" pFaultDetail = NULL;\n");//damitha
-			writer.write("\t\t\t\t\tpFaultDetail = ("+faulttype+")m_pCall->\n");//damitha
-                        writer.write("\t\t\t\t\t\tgetCmplxObject((void*) Axis_DeSerialize_"+langName+",\n");//damitha
-                        writer.write("\t\t\t\t\t\t(void*) Axis_Create_"+langName+",\n");//damitha
-                        writer.write("\t\t\t\t\t\t(void*) Axis_Delete_"+langName+",\""+paramName+"\", 0);\n");//damitha
-			//writer.write("char* temp = pFaultDetail->varString;");//damitha
-                        writer.write("\t\t\t\t\t/*User code to handle the struct can be inserted here*/\n");//damitha
-			writer.write("\t\t\t\t\tm_pCall->unInitialize();\n");//damitha
-			writer.write("\t\t\t\t\tthrow Axis"+faultInfoName+"Exception(pFaultDetail);\n");//damitha
-			writer.write("\t\t\t\t}\n");//damitha
-			writer.write("\t\t\t}\n");//damitha
+		try{		  
+			   writer.write("(0 == strcmp(\""+langName+"\", cFaultstring))\n");     
+		       // writer.write("\t\t\tif(0 == strcmp(\""+langName+"\", cFaultstring))\n");
+		        writer.write("\t\t\t{\n");
+		        writer.write("\t\t\t\tif (AXIS_SUCCESS == m_pCall->checkFault(\"faultdetail\",\""+wscontext.getWrapInfo().getTargetEndpointURI()+"\"))\n");
+                writer.write("\t\t\t\t{\n");
+			    writer.write("\t\t\t\t\t"+faulttype+" pFaultDetail = NULL;\n");
+		    	writer.write("\t\t\t\t\tpFaultDetail = ("+faulttype+")m_pCall->\n");
+                writer.write("\t\t\t\t\t\tgetCmplxObject((void*) Axis_DeSerialize_"+langName+",\n");
+                writer.write("\t\t\t\t\t\t(void*) Axis_Create_"+langName+",\n");
+                writer.write("\t\t\t\t\t\t(void*) Axis_Delete_"+langName+",\""+paramName+"\", 0);\n");
+                writer.write("\t\t\t\t\t/*User code to handle the struct can be inserted here*/\n");
+			    writer.write("\t\t\t\t\tm_pCall->unInitialize();\n");
+			    writer.write("\t\t\t\t\tthrow Axis"+faultInfoName+"Exception(pFaultDetail);\n");
+			    writer.write("\t\t\t\t}\n");
+			    writer.write("\t\t\t}\n");
 		}		
 		catch (IOException e) {
 					throw new WrapperFault(e);
