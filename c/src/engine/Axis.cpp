@@ -154,6 +154,12 @@ extern "C" int process_request(Ax_soapstream *stream)
 				//i.e "/abc/xyz/" part of http://somehost/abc/xyz/
 				string sUriWOAxis = stream->transport.pGetTrtFunct(SERVICE_URI, stream);
 				string sServiceName;
+				bool bNoExt = true;
+				if (sUriWOAxis == "/" ) 
+				{
+					bNoExt = false;
+					sUriWOAxis = "";
+				}
 
 				if (sUriWOAxis.empty())
 				{
@@ -184,6 +190,7 @@ extern "C" int process_request(Ax_soapstream *stream)
 						stream->transport.pSendFunct("<tr><td width=\"20%\">", NULL, stream);
 						stream->transport.pSendFunct((char *)pService->GetServiceName(), NULL, stream);
 						stream->transport.pSendFunct("</td><td width=\"10%\" align=\"left\"><a href=\"./", NULL, stream);
+						if (bNoExt) stream->transport.pSendFunct("axis/", NULL, stream);
 						stream->transport.pSendFunct((char *)pService->GetServiceName(), NULL, stream);
 						stream->transport.pSendFunct("?wsdl", NULL, stream);
 						stream->transport.pSendFunct("\">wsdl</a></td><td width=\"70%\">", NULL, stream);

@@ -8,7 +8,7 @@
 #include <string.h>
 #include <malloc.h>
 
-#define AXIS_URI_EXTENSION "/axis/"
+#define AXIS_URI_EXTENSION "/axis"
 /* NO_OF_SERIALIZE_BUFFERS should be equal to the corresponding value in the axis configuration file */
 #define NO_OF_SERIALIZE_BUFFERS 10
 
@@ -142,6 +142,11 @@ static AXIS_TRANSPORT_STATUS AXISCALL get_request_bytes(const char** req, int* r
 		return TRANSPORT_IN_PROGRESS;
 }
 
+static void AXISCALL release_receive_buffer(const char* buffer, const Ax_soapstream* stream)
+{
+	
+}
+
 static const char* AXISCALL get_transport_information(AXIS_TRANSPORT_INFORMATION_TYPE type, Ax_soapstream* stream)
 {
 	const char* ptemp;
@@ -153,7 +158,7 @@ static const char* AXISCALL get_transport_information(AXIS_TRANSPORT_INFORMATION
 		if (strstr(stream->so.http->uri_path, AXIS_URI_EXTENSION))
 		{
 			return strstr(stream->so.http->uri_path, AXIS_URI_EXTENSION) +
-				strlen(AXIS_URI_EXTENSION);
+				strlen(AXIS_URI_EXTENSION) + 1;
 		}
 		else
 		{
@@ -197,6 +202,7 @@ static int axis_handler(request_rec *req_rec)
 	sstr->transport.pGetFunct = get_request_bytes;
 	sstr->transport.pSetTrtFunct = set_transport_information;
 	sstr->transport.pGetTrtFunct = get_transport_information;
+	sstr->transport.pRelBufFunct = release_receive_buffer;
 	sstr->trtype = APTHTTP;
 	sstr->so.http = malloc(sizeof(Ax_stream_http));
 	/*req_rec is used as both input and output streams*/
@@ -266,17 +272,20 @@ static int axis_handler(request_rec *req_rec)
 		if(!pbuffers[index].buffer) break;
 		contentLength += strlen(pbuffers[index].buffer);
 	}
-	sprintf(strtonum, "%d", contentLength);
-	set_transport_information(SOAP_MESSAGE_LENGTH, strtonum, sstr);
-    ap_send_http_header(req_rec);
-	//Send all buffers
-	pbuffers = (sendbuffers*)sstr->reserved1;
-	for (index=0;index < NO_OF_SERIALIZE_BUFFERS; index++)
+	if (contentLength != 0) // do only if the http body is not empty.
 	{
-		if(!pbuffers[index].buffer) break;
-		ap_rputs(pbuffers[index].buffer, req_rec);
-		//Let Axis know that the buffer is no longer in use
-		axis_buffer_release(pbuffers[index].buffer, pbuffers[index].bufferid , sstr);
+		sprintf(strtonum, "%d", contentLength);
+		set_transport_information(SOAP_MESSAGE_LENGTH, strtonum, sstr);
+		ap_send_http_header(req_rec);
+		//Send all buffers
+		pbuffers = (sendbuffers*)sstr->reserved1;
+		for (index=0;index < NO_OF_SERIALIZE_BUFFERS; index++)
+		{
+			if(!pbuffers[index].buffer) break;
+			ap_rputs(pbuffers[index].buffer, req_rec);
+			//Let Axis know that the buffer is no longer in use
+			axis_buffer_release(pbuffers[index].buffer, pbuffers[index].bufferid , sstr);
+		}
 	}
 	//Free the array 
 	if (sstr->reserved1) free(sstr->reserved1);

@@ -101,7 +101,6 @@ SoapSerializer::SoapSerializer()
 		m_pSZBuffers[x].inuse = 0;
 		m_pSZBuffers[x].buffer = NULL;
 	}
-	SetNextSerilizeBuffer();
 }
 
 SoapSerializer::~SoapSerializer()
@@ -330,25 +329,30 @@ int SoapSerializer::SetOutputStream(const Ax_soapstream* pStream)
 	if(m_pSoapEnvelope) {
 		Serialize("<?xml version='1.0' encoding='utf-8' ?>", NULL);
 		iStatus= m_pSoapEnvelope->serialize(*this, (SOAP_VERSION)m_iSoapVersion);
-		flushSerializedBuffer();
+		SendSerializedBuffer();
 	}
 	return iStatus;
 }
 
+/**
+ * Initializing the members of the class. This is needed since
+ * the same object instance of this class, may be used to server
+ * several SOAP requests.
+ */
 int SoapSerializer::Init()
 {
-	//initializing the members of the class. This is needed since
-	// the same object instance of this class, may be used to server
-	// several SOAP requests.
+	m_nStatus = AXIS_SUCCESS;
 
 	if(m_pSoapEnvelope) {
 		delete m_pSoapEnvelope;
 		m_pSoapEnvelope= NULL;
 	}
 
-	//Adding SoapEnvelop and SoapBody to Serializer
+	/* Adding SoapEnvelop and SoapBody to Serializer */
 	m_pSoapEnvelope = new SoapEnvelope();
 	m_pSoapEnvelope->setSoapBody(new SoapBody());
+	
+	SetNextSerilizeBuffer();
 
 	iCounter=0;
 	return AXIS_SUCCESS;
@@ -373,16 +377,27 @@ const AxisChar* SoapSerializer::getNewNamespacePrefix()
 
 IWrapperSoapSerializer& SoapSerializer::operator <<(const AxisChar* cSerialized)
 {
+	if (AXIS_SUCCESS != m_nStatus) 
+	{
+		/* some thing has gone wrong. So do nothing */
+		return *this;
+	}
+
 	int iTmpSerBufferSize = strlen(cSerialized);
 	if((m_nFilledSize + iTmpSerBufferSize)>= m_nCurrentBufferSize) 
 	{
-		flushSerializedBuffer();
 		/*
-		 * Above call will send the current buffer to the transport and gets
+		 * Send the current buffer to the transport and get
 		 * another buffer to be filled
 		 */
-		strcat((char*)m_pSZBuffers[m_nCurrentBufferIndex].buffer, cSerialized);
-		m_nFilledSize += iTmpSerBufferSize;
+		if (AXIS_SUCCESS == SendSerializedBuffer())
+		{
+			if (AXIS_SUCCESS == SetNextSerilizeBuffer())
+			{
+				strcat((char*)m_pSZBuffers[m_nCurrentBufferIndex].buffer, cSerialized);
+				m_nFilledSize += iTmpSerBufferSize;
+			}
+		}
 	}
 	else
 	{
@@ -392,7 +407,7 @@ IWrapperSoapSerializer& SoapSerializer::operator <<(const AxisChar* cSerialized)
 	return *this;
 }
 
-int SoapSerializer::flushSerializedBuffer()
+int SoapSerializer::SendSerializedBuffer()
 {
 	int nStatus;
 	if (NULL != m_pOutputStream->transport.pSendFunct)
@@ -403,14 +418,9 @@ int SoapSerializer::flushSerializedBuffer()
 		/* transport layer has done with the buffer.So same buffer can be re-used*/
 		{
 			m_pSZBuffers[m_nCurrentBufferIndex].buffer[0] = '\0'; /* put nul */
-			m_nFilledSize = 0;
+			m_pSZBuffers[m_nCurrentBufferIndex].inuse = 0; /* not in use */
 		}
-		else if (TRANSPORT_IN_PROGRESS == nStatus) 
-		/* buffer is being used by the transport layer. So we have to use another buffer*/
-		{
-			return SetNextSerilizeBuffer();
-		}
-		else
+		else if (TRANSPORT_FAILED == nStatus) 
 		{
 			return AXIS_FAIL;
 		}
@@ -436,6 +446,7 @@ int SoapSerializer::SetNextSerilizeBuffer()
 			{
 				m_nCurrentBufferIndex = x;
 				m_pSZBuffers[m_nCurrentBufferIndex].inuse = 1;
+				m_pSZBuffers[m_nCurrentBufferIndex].buffer[0] = '\0';
 				m_nFilledSize = 0;
 				m_nCurrentBufferSize = m_nInitialBufferSize*(1 << m_nCurrentBufferIndex);
 				return AXIS_SUCCESS;
@@ -447,6 +458,7 @@ int SoapSerializer::SetNextSerilizeBuffer()
 			m_nCurrentBufferSize = m_nInitialBufferSize*(1 << m_nCurrentBufferIndex);			
 			m_pSZBuffers[m_nCurrentBufferIndex].buffer = new char[m_nCurrentBufferSize];
 			m_pSZBuffers[m_nCurrentBufferIndex].inuse = 1;
+			m_pSZBuffers[m_nCurrentBufferIndex].buffer[0] = '\0';
 			m_nFilledSize = 0;
 			return AXIS_SUCCESS;
 		}
