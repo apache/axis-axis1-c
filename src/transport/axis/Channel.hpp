@@ -36,6 +36,7 @@
 
 #include <string>
 #include "Transport.hpp"
+#include <axis/AxisTransportException.h>
 
 /* platform specific stuff */
 
@@ -113,7 +114,7 @@ public:
 
     /* Open a socket to a given remote node/server address with remote port */
     virtual bool  Open(std::string& p_RemoteNode, unsigned short p_RemoteEnd) 
-        throw (ChannelException);
+        throw (AxisTransportException);
 
     /* Close all open sockets and clean up */
     virtual void  Close(){CloseChannel();}

@@ -19,7 +19,7 @@
  *
  */
 
-#include "AxisConfigException.h"
+#include <axis/AxisConfigException.h>
 #include <exception>
 using namespace std;
 
@@ -40,6 +40,7 @@ AxisConfigException::AxisConfigException (int iExceptionCode)
 
 AxisConfigException::AxisConfigException (exception* e)
 {
+    m_iExceptionCode = -1;
     processException (e);
 }
 
@@ -71,26 +72,25 @@ void AxisConfigException::processException(int iExceptionCode)
 
 const string AxisConfigException::getMessage (exception* objException)
 {
-    string sMessage = objException->what();
+    m_sMessage = objException->what();
 
-    return sMessage;
+    return m_sMessage;
 }
 
 const string AxisConfigException::getMessage (int iExceptionCode)
 {
-    string sMessage;
     switch(iExceptionCode)
     {
         case SERVER_CONFIG_TRANSPORT_CONF_FAILED:
-            sMessage = "Transport layer is not configured properly";
+            m_sMessage = "Transport layer is not configured properly";
             break;
         case SERVER_CONFIG_LIBRARY_PATH_EMPTY:
-            sMessage = "Library path is empty(Not in server.wsdd file)";
+            m_sMessage = "Library path is empty(Not in server.wsdd file)";
             break;
         default:
-            sMessage = "Unknown Axis C++ Configuration Exception";
+            m_sMessage = "Unknown Axis C++ Configuration Exception";
     }
-    return sMessage;
+    return m_sMessage;
 }
 
 const char* AxisConfigException::what() throw ()

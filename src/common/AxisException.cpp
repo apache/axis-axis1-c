@@ -31,6 +31,7 @@ AxisException::AxisException (int iExceptionCode)
 
 AxisException::AxisException (exception* e)
 {
+    m_iExceptionCode = -1;
     processException (e);
 }
 
@@ -57,31 +58,30 @@ void AxisException::processException(int iExceptionCode)
 
 const string AxisException::getMessage (exception* objException)
 {
-    string sMessage = objException->what();
+    m_sMessage = objException->what();
 
-    return sMessage;
+    return m_sMessage;
 }
 
 const string AxisException::getMessage (int iExceptionCode)
 {
-    string sMessage;
     switch(iExceptionCode)
     {
         case AXISC_SERVICE_THROWN_EXCEPTION:
-            sMessage = "A service has thrown an exception. see detail";
+            m_sMessage = "A service has thrown an exception. see detail";
             break;
         case SERVER_TEST_EXCEPTION:
-            sMessage = "This is a testing error";
+            m_sMessage = "This is a testing error";
             break;
         case AXISC_NODE_VALUE_MISMATCH_EXCEPTION:
-            sMessage = "Cannot deserialize the requested element";
+            m_sMessage = "Cannot deserialize the requested element";
             break;
         default:
-            sMessage = "Unknown Exception has occured";
+            m_sMessage = "Unknown Exception has occured";
 
     } 
 
-    return sMessage;
+    return m_sMessage;
 
 }
 
