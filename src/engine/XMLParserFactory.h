@@ -29,6 +29,7 @@
 
 #include <axis/GDefine.hpp>
 #include "../xml/XMLParser.h"
+#include "../common/AxisTrace.h"
 
 #define CREATE_FUNCTION2 "CreateInstance"
 #define DELETE_FUNCTION2 "DestroyInstance"

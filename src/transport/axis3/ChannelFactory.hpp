@@ -29,6 +29,7 @@
 
 #include <axis/GDefine.hpp>
 #include "IChannel.hpp"
+#include "../../common/AxisTrace.h"
 
 #define ChannelFactory_MaxListSize	2
 #define CREATE_FUNCTION3			"CreateInstance"

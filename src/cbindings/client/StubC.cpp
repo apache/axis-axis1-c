@@ -194,22 +194,22 @@ AXISC_STORAGE_CLASS_INFO AXISC_PROTOCOL_TYPE axiscGetTransportProtocol(AXISCHAND
 	return (AXISC_PROTOCOL_TYPE)(s->getTransportProtocol());
 }
 
-AXISC_STORAGE_CLASS_INFO AXISCHANDLE getCall(AXISCHANDLE stub) { 
+AXISC_STORAGE_CLASS_INFO AXISCHANDLE axiscGetCall(AXISCHANDLE stub) { 
 	StubC *s = (StubC*)stub;
 	return s->getCallStubC();
 }
 
-AXISC_STORAGE_CLASS_INFO void applyUserPreferences(AXISCHANDLE stub) { 
+AXISC_STORAGE_CLASS_INFO void axiscApplyUserPreferences(AXISCHANDLE stub) { 
 	StubC *s = (StubC*)stub;
 	s->applyUserPreferencesStubC(); 
 }
 
-AXISC_STORAGE_CLASS_INFO void setSOAPHeadersStubC(AXISCHANDLE stub) { 
+AXISC_STORAGE_CLASS_INFO void axiscSetSOAPHeaders(AXISCHANDLE stub) { 
 	StubC *s = (StubC*)stub;
 	s->setSOAPHeadersStubC(); 
 }
 
-AXISC_STORAGE_CLASS_INFO void setSOAPMethodAttributesStubC(AXISCHANDLE stub) { 
+AXISC_STORAGE_CLASS_INFO void axiscSetSOAPMethodAttributes(AXISCHANDLE stub) { 
 	StubC *s = (StubC*)stub;
 	s->setSOAPMethodAttributesStubC(); 
 }
