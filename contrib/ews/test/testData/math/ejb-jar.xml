@@ -6,10 +6,10 @@
 			<display-name>BookQuoteService</display-name>
 			<ejb-name>MathFace</ejb-name>
 			<home>testData.math.MathFaceHome</home>
-			<remote>testData.math.MathFace</remote>
+			<remote>testData.math.MathFaceEJB</remote>
 			<ejb-class>testData.math.MathFaceImpl</ejb-class>
 			<session-type>Stateless</session-type>
 			<transaction-type>Bean</transaction-type>
-		</session
->	</enterprise-beans>
+		</session>
+		</enterprise-beans>
 </ejb-jar>
