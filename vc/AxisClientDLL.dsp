@@ -418,6 +418,10 @@ SOURCE=..\src\soap\xsd\NOTATION.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\soap\OtherFaultException.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\common\Param.cpp
 # End Source File
 # Begin Source File
