@@ -150,7 +150,7 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 		for(int i = 0; i< attribs.length;i++){
 			if(CPPUtils.isSimpleType(attribs[i][1])){
 				//if simple type
-				writer.write("\tpSZ << pSZ.SerializeBasicType(\""+attribs[i][0]+"\", param->"+attribs[i][0]+");\n");
+				writer.write("\tpSZ << pSZ.SerializeBasicType(\""+attribs[i][0]+"\", param->"+attribs[i][0]+", "+ CPPUtils.getXSDTypeForBasicType(attribs[i][1])+");\n");
 			}else if((t = wscontext.getTypemap().getType(new QName(attribs[i][2],attribs[i][3])))!= null && t.isArray()){
 				//if Array
 				QName qname = t.getTypNameForAttribName("item");
@@ -197,7 +197,10 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 				String arrayType = null;
 				if (CPPUtils.isSimpleType(qname)){
 					arrayType = CPPUtils.getclass4qname(qname);
-					writer.write("\tparam->"+attribs[i][0]+" = ("+attribs[i][1]+"&)pIWSDZ->GetArray("+CPPUtils.getXSDTypeForBasicType(arrayType)+");\n");
+					writer.write("\tparam->"+attribs[i][0]+".m_Size = pIWSDZ->GetArraySize();\n");
+					writer.write("\tif (param->"+attribs[i][0]+".m_Size < 1) return FAIL;\n");
+					writer.write("\tparam->"+attribs[i][0]+".m_Array = new "+arrayType+"[param->"+attribs[i][0]+".m_Size];\n");
+					writer.write("\tif (SUCCESS != pIWSDZ->GetArray((Axis_Array*)(&param->"+attribs[i][0]+"), "+CPPUtils.getXSDTypeForBasicType(arrayType)+")) return FAIL;\n");
 				}
 				else{
 					arrayType = qname.getLocalPart();

@@ -83,49 +83,49 @@ BasicTypeSerializer::~BasicTypeSerializer()
 
 }
 
-const AxisChar* BasicTypeSerializer::serialize(const AxisChar* sName, int nValue)
+const AxisChar* BasicTypeSerializer::serialize(const AxisChar* sName, int nValue, XSDTYPE type)
 {
-	m_Type = XSD_INT;
+	m_Type = type;
 	AxisSprintf(m_Buf, BTS_BUFFSIZE, "%d", nValue);
 	HelpSerialize(sName, sName);
 	return m_sSZ.c_str();
 }
 
-const AxisChar* BasicTypeSerializer::serialize(const AxisChar* sName, unsigned int unValue)
+const AxisChar* BasicTypeSerializer::serialize(const AxisChar* sName, unsigned int unValue, XSDTYPE type)
 {
-	m_Type = XSD_UNSIGNEDINT;
+	m_Type = type;
 	AxisSprintf(m_Buf, BTS_BUFFSIZE, "%d", unValue);
 	HelpSerialize(sName, sName);
 	return m_sSZ.c_str();
 }
 
-const AxisChar* BasicTypeSerializer::serialize(const AxisChar* sName, char cValue)
+const AxisChar* BasicTypeSerializer::serialize(const AxisChar* sName, char cValue, XSDTYPE type)
 {
-	m_Type = XSD_BYTE;
+	m_Type = type;
 	AxisSprintf(m_Buf, BTS_BUFFSIZE, "%c", cValue);
 	HelpSerialize(sName, sName);
 	return m_sSZ.c_str();
 }
 
-const AxisChar* BasicTypeSerializer::serialize(const AxisChar* sName, unsigned char ucValue)
+const AxisChar* BasicTypeSerializer::serialize(const AxisChar* sName, unsigned char ucValue, XSDTYPE type)
 {
-	m_Type = XSD_UNSIGNEDBYTE;
+	m_Type = type;
 	AxisSprintf(m_Buf, BTS_BUFFSIZE, "%c", ucValue);
 	HelpSerialize(sName, sName);
 	return m_sSZ.c_str();
 }
 
-const AxisChar* BasicTypeSerializer::serialize(const AxisChar* sName, short sValue)
+const AxisChar* BasicTypeSerializer::serialize(const AxisChar* sName, short sValue, XSDTYPE type)
 {
-	m_Type = XSD_SHORT;
+	m_Type = type;
 	AxisSprintf(m_Buf, BTS_BUFFSIZE, "%d", sValue);
 	HelpSerialize(sName, sName);
 	return m_sSZ.c_str();
 }
 
-const AxisChar* BasicTypeSerializer::serialize(const AxisChar* sName, unsigned short usValue)
+const AxisChar* BasicTypeSerializer::serialize(const AxisChar* sName, unsigned short usValue, XSDTYPE type)
 {
-	m_Type = XSD_UNSIGNEDSHORT;
+	m_Type = type;
 	AxisSprintf(m_Buf, BTS_BUFFSIZE, "%d", usValue);
 	HelpSerialize(sName, sName);
 	return m_sSZ.c_str();
@@ -139,17 +139,17 @@ const AxisChar* BasicTypeSerializer::serialize(const AxisChar* sName, long lValu
 	return m_sSZ.c_str();
 }
 
-const AxisChar* BasicTypeSerializer::serialize(const AxisChar* sName, unsigned long ulValue)
+const AxisChar* BasicTypeSerializer::serialize(const AxisChar* sName, unsigned long ulValue, XSDTYPE type)
 {
-	m_Type = XSD_UNSIGNEDLONG;
+	m_Type = type;
 	AxisSprintf(m_Buf, BTS_BUFFSIZE, "%d", ulValue);
 	HelpSerialize(sName, sName);
 	return m_sSZ.c_str();
 }
 
-const AxisChar* BasicTypeSerializer::serialize(const AxisChar* sName, float fValue)
+const AxisChar* BasicTypeSerializer::serialize(const AxisChar* sName, float fValue, XSDTYPE type)
 {
-	m_Type = XSD_FLOAT;
+	m_Type = type;
 	AxisSprintf(m_Buf, BTS_BUFFSIZE, "%f", fValue);
 	HelpSerialize(sName, sName);
 	return m_sSZ.c_str();
@@ -187,6 +187,11 @@ void BasicTypeSerializer::HelpSerialize(const AxisChar* sName, const AxisChar* s
 	switch (m_Type)
 	{
 	case XSD_STRING:
+	case XSD_HEXBINARY:
+	case XSD_BASE64BINARY:
+	case XSD_ANYURI:
+	case XSD_QNAME:
+	case XSD_NOTATION:			
 		m_AuxStr = sValue;
 		m_sSZ += GetEntityReferenced(m_AuxStr).c_str();	
 		break;
@@ -204,6 +209,7 @@ const AxisChar* BasicTypeSerializer::BasicTypeStr(XSDTYPE type)
 	switch (type)
 	{
 	case XSD_INT: return "int";
+	case XSD_BOOLEAN: return "boolean";
     case XSD_UNSIGNEDINT: return "unsignedInt";
     case XSD_SHORT: return "short";
     case XSD_UNSIGNEDSHORT: return "unsignedShort";

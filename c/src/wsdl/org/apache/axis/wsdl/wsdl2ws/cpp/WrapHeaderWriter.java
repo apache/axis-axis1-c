@@ -153,10 +153,7 @@ public class WrapHeaderWriter extends HeaderFileWriter{
 			writer.write("#include <axis/common/WrapperClassHandler.h>\n");
 			writer.write("#include <axis/common/IMessageData.h>\n");
 			writer.write("#include <axis/common/GDefine.h>\n");
-			writer.write("#include <axis/common/IWrapperSoapDeSerializer.h>\n");
-			writer.write("#include <axis/common/IWrapperSoapSerializer.h>\n");
-			writer.write("#include <axis/common/ISoapMethod.h>\n");
-			writer.write("#include <axis/common/IParam.h>\n\n");
+			writer.write("#include <axis/common/AxisWrapperAPI.h>\n\n");
 		}catch(IOException e){
 			throw new WrapperFault(e);
 		}
