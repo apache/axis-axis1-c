@@ -41,11 +41,16 @@ public class RequestForwarder extends Thread {
 	}
 
 	public void run() {
-		char[] buffer = new char[1];
+		char[] buffer = new char[1024];
 		try {
 			int ret = 0;
-			while ((ret = reader.read(buffer)) != -1) {
-				String line = new String(buffer);
+			while ((ret = reader.read(buffer, 0, 1023)) != -1) {
+				String line = new String(buffer, 0, ret);
+				if(line.equalsIgnoreCase("STOPTCPM")) {
+					System.err.println("*** RECEIVED STOP COMMAND. Stopping ***");
+					break;
+				}
+
 				// give the incoming line to the handler
 				requestHandler.incomingRequestLine(line);
 
