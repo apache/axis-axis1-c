@@ -23,14 +23,12 @@
 
 #if !defined(_AXIS_SSLCHANNEL_HPP)
 #define _AXIS_SSLCHANNEL_HPP
-//#include <axis/server/Packet.hpp>
 #include "SOAPTransport.h"
 #include <string>
 AXIS_CPP_NAMESPACE_USE
 class SSLChannel
 {
 public:
-    virtual ~SSLChannel(){};
     virtual bool SSLInit() = 0;
     virtual bool openSSLConnection(unsigned int* pSock) = 0;
     virtual int SSLRead(std::string& msg) = 0;

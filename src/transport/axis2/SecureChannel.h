@@ -1,3 +1,5 @@
+#if !defined(_AXIS_SECURECHANNEL_H)
+#define _AXIS_SECURECHANNEL_H
 #include "ISecureChannel.hpp"
 #include "SSLChannelFactory.hpp"
 #include "../SSLChannel.hpp"
@@ -38,3 +40,6 @@ protected:
         SSLChannelFactory* m_pFactory;
         SSLChannel* m_pSSLChannel;
 };
+
+#endif
+
