@@ -21,10 +21,22 @@
  * funtion.
  *
  * @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
+ * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
  */
+
+/*
+ * Revision 1.1  2004/12/01 roshan
+ * Added the new class "AnyElemntUtils". Here we have a method to convers a 
+ *  AnyElement to a string.
+ */
+
  
 #if !defined(__ANYELEMENT_H__OF_AXIS_INCLUDED_)
 #define __ANYELEMENT_H__OF_AXIS_INCLUDED_
+
+#include <string>
+
+using namespace std;
 
 /**
  * @def MAX_NO_OF_ATTRIBUTES
@@ -82,6 +94,30 @@ typedef struct
      */
     const char* m_pchAttributes[MAX_NO_OF_ATTRIBUTES*3]; 
 } AnyElement;
+
+/*
+ * The AnyElement utility class.
+ */
+class AnyElemntUtils
+{
+	public:
+		static string toString(const AnyElement* pNode) {
+        		string sTmpVal;              			                                                                                                                                                  
+        		switch(pNode->m_type) {
+                		case CHARACTER_ELEMENT:
+                        		sTmpVal = string(pNode->m_pchNameOrValue);
+                        		break;
+				case END_ELEMENT:
+					//sTmpVal = "<" + pNode->m_pchNameOrValue + ;
+                                        break;
+				case START_ELEMENT:
+					//TODO.
+					break;
+        		}
+
+			return sTmpVal;
+		}
+};
 
 #endif
 

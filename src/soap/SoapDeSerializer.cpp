@@ -3911,13 +3911,54 @@ xsd__base64Binary
 SoapDeSerializer::getBodyAsBase64Binary ()
 {
     /* TODO */
-    xsd__base64Binary bb;
-    return bb;
+
+    AxisChar* pBodyContent = (AxisChar*)malloc(1000);
+        pBodyContent[0] = '\0';
+                                                                                                                                                                            
+        m_pNode = m_pParser->next ();
+                                                                                                                                                                            
+        if ((START_ELEMENT == m_pNode->m_type) &&
+        (0 == strcmp (m_pNode->m_pchNameOrValue,
+                      SoapKeywordMapping::map (m_nSoapVersion).
+                      pchWords[SKW_BODY]))) {
+                /* This is done to skip the BODY element declaration*/
+                m_pNode = m_pParser->next ();
+        }
+                                                                                                                                                                            
+        while (!((END_ELEMENT == m_pNode->m_type) &&
+        (0 == strcmp (m_pNode->m_pchNameOrValue,
+                      SoapKeywordMapping::map (m_nSoapVersion).
+                      pchWords[SKW_BODY])))) {
+                strcat(pBodyContent, (AnyElemntUtils::toString(m_pNode)).c_str());
+        }
+
+    return decodeFromBase64Binary(pBodyContent);
+
 }
 
 AxisChar* SoapDeSerializer::getBodyAsChar()
 {
-	return NULL;
+	AxisChar* pBodyContent = (AxisChar*)malloc(1000);
+	pBodyContent[0] = '\0';
+
+	m_pNode = m_pParser->next ();
+
+	if ((START_ELEMENT == m_pNode->m_type) &&
+        (0 == strcmp (m_pNode->m_pchNameOrValue,
+                      SoapKeywordMapping::map (m_nSoapVersion).
+                      pchWords[SKW_BODY]))) {
+		/* This is done to skip the BODY element declaration*/
+		m_pNode = m_pParser->next ();
+	}
+
+	while (!((END_ELEMENT == m_pNode->m_type) &&
+        (0 == strcmp (m_pNode->m_pchNameOrValue,
+                      SoapKeywordMapping::map (m_nSoapVersion).
+                      pchWords[SKW_BODY])))) {
+		strcat(pBodyContent, (AnyElemntUtils::toString(m_pNode)).c_str());
+	}		
+
+	return pBodyContent;
 }
 
 int
