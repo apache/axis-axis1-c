@@ -11,11 +11,14 @@
 #XMLParser:The xml parser library
 #NodeName:Node name
 #ListenPort:Listening port
-
+#Channel_HTTP:The HTTP transport channel library
+#Channel_HTTP_SSL:The HTTP transport secure channel library
 
 #LogPath:Axis\logs\AxisLog.txt
 #WSDDFilePath:Axis\conf\server.wsdd
 LogPath:C:\Program Files\Apache Group\Apache\Axis\logs\AxisLog.txt
 WSDDFilePath:C:\Program Files\Apache Group\Apache\Axis\conf\server.wsdd
 XMLParser:AxisXMLParser.dll
-Transport_http:AxisTransport.dll
+Transport_http:HTTPTransport.dll
+Channel_HTTP:HTTPChannel.dll
+Channel_HTTP_SSL:HTTPSSLChannel.dll
