@@ -202,8 +202,12 @@ Please use these to configure directories to suit the needs of your system.
 	
 	<target name="packageUnixDeliverable" unless="windows">
 		<mkdir dir="${dir.zips}"/>
-		<tar destfile="${dir.zips}/${release}.tar.gz" basedir="${dir.release}/.."
-		 includes="${release}/**" followsymlinks="false" compression="gzip"/>
+        <exec executable="tar" dir="${dir.release}/..">
+                <arg line="-cvf ${dir.zips}/${release}.tar ${release}"/>
+        </exec>
+        <exec executable="gzip" dir="${dir.zips}">
+            <arg line="${release}.tar"/>
+        </exec>      
 	</target>
 
 	<target name="packageDeliverable" depends="packageWindowsDeliverable, packageUnixDeliverable"/>
