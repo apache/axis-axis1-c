@@ -48,7 +48,19 @@ int main(int argc, char* argv[])
 
 	if (strcmp(op, "div") == 0)
 	{
+            try
+            {
 		iResult = ws.div(i1, i2);		
+            }
+            catch(AxisDivByZeroException& e)
+            {
+            }
+            catch(exception& e)
+            {
+            }
+            catch(...)
+            {
+            }
 	}
 	else 
 	{
