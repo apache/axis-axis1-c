@@ -1,11 +1,11 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html">
-  <title>Axis C++ windows user guide</title>
+  <title>Axis C++ Windows User Guide</title>
 </head>
 
 <body>
-<h1>Axis C++ windows user guide</h1>
+<h1>Axis C++ Windows User Guide</h1>
 
 <h2>Creating And Deploying your own Web Service</h2>
 
@@ -13,7 +13,7 @@
 <a href="#wsdl2ws">How to use the WSDL2WS tool on the command line</a><br>
 
 <a href="#deploy">Deploying your web service</a>
-<br><a href="#deploy">Deploying your web service Using AdminClient Tool</a>
+<br><a href="#deploy">Deploying your web service using AdminClient Tool</a>
 
 
 <br>
@@ -46,7 +46,7 @@ service. <br>
 
 
 <br>
-Here we discuss the first apporach since the tool to support Method 2 (i.e
+Here we discuss the first approach since the tool to support Method 2 (i.e
 wcg.exe) is in a primitive and frozen state.<br>
 Here the document is written with the idea that the user uses Visual C++
 (VC). But the user could use this guide with a different IDE of his choice. 
@@ -67,7 +67,7 @@ will generate the web service skeleton and other required files.
 <br>
 2) Run the WSDL2WS tool (refer the section below 'How to use the WSDL2WS tool
 on the command line') and generate the server side skeletons and wrappers.
-These files will be in two new folder which are gentrated from the tool
+These files will be in two new folders which are generated from the tool
 called 'ServerOut' and 'ClientOut'. 
 <br>
 3) Create a VC workspace. 
@@ -81,7 +81,7 @@ folder. Calculator.cpp Calculator.h
 6) Set the include path to the include directory of the binary distribution
 (These include files are in AXIS_EXTRACT/include/). 
 <br>
-7) Fill the empty methods of the generated skelitons.
+7) Fill the empty methods of the generated skeletons.
 <br>
 8) Generate the lib (eg: MyCalculator.lib) 
 <br>
@@ -133,7 +133,7 @@ wsdl4j.jar
 xml-apis.jar
 
 <br>
-The CLASSPATH Environment Variabe should have the absolute paths of the jars
+The CLASSPATH Environment Variable should have the absolute paths of the jars
 (including the jar file name) given as a semicolon separated list.
 <br>
  <br>
@@ -157,7 +157,7 @@ org.apache.axis.wsdl.wsdl2ws.WSDL2Ws Calculator.wsdl -o./ServerOut -lc++
 
 <br>
 <br>
-If the file generation is successful the tool will display the files the it has
+If the file generation is successful the tool will display the files that it has
 generated. The skeletons and wrappers will be generated in
 [WSDL2WS_FOLDER]\ServerOut. <br>
 <br>
@@ -217,7 +217,7 @@ Now you have deployed your web service</p>
 
 <h2>Deploying your web service Using AdminClient Tool</h2>
 
-<p>The wsdl2ws Tool generates the deploy.wsdd and the undeploy.wsdd files needed for the AdminClient. Once we have these files, we have to deploy the web service (in this case the calculator service) with the AdminClietn. We do this with the  AdminClient.exe which comes with axiscpp binary distribution. A typical invocation of the AdminClient looks like this.
+<p>The wsdl2ws Tool generates the deploy.wsdd and the undeploy.wsdd files needed for the AdminClient. Once we have these files, we have to deploy the web service (in this case the calculator service) with the AdminClient. We do this with the  AdminClient.exe which comes with axiscpp binary distribution. A typical invocation of the AdminClient looks like this.
 </p>
 <p>
 <b>AdminClient  &lt;server&gt; &lt;Port&gt; &lt;wsddfile&gt;</b>
@@ -234,7 +234,7 @@ where local host would be the server where the Axis cpp server is hosted and 80 
 <br>
 
 <p>With the WSDL2WS tool you have almost developed your client. What you have
-to do next is write a file which has a main method and create a object of the
+to do next is write a file which has a main method and create an object of the
 stub and invoke your methods on that. <br>
 1) Create a vc workspace. <br>
 2) Create a 'Win32 Console Application'. <br>
