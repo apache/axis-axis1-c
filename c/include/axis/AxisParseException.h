@@ -26,7 +26,7 @@
 #include <axis/server/AxisException.h>
 using namespace std;
 
-class AxisParseException :public AxisException
+class STORAGE_CLASS_INFO AxisParseException :public AxisException
 {
 
 public:
