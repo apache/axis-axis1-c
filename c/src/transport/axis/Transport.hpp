@@ -26,6 +26,10 @@
  * Added setProxy
  */
 
+/*
+ * Revision 1.2  2004/06/08 samisa
+ * Added setTimeout
+ */
 
 #if !defined(_AXIS_TRANSPORT_HPP)
 #define _AXIS_TRANSPORT_HPP
@@ -61,7 +65,12 @@ public:
     virtual void setBodyLength(int bodyLength) = 0;
     virtual int getIsHttpHeader() = 0;
     virtual void setProxy(const char* pcProxyHost, unsigned int uiProxyPort) = 0;
-
+  /**
+    * Set transport timeout.
+    *
+    * @param lSeconds Timeout in seconds
+    */
+    virtual void setTimeout(const long lSeconds) = 0;
 
 protected:
 
