@@ -409,6 +409,7 @@ public class Call implements javax.xml.rpc.Call {
         returnJavaType = class1;
     }
 
+   
     /**
      * @param string
      */
