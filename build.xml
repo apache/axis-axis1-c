@@ -38,6 +38,7 @@ Notes:
 	<import file="${basedir}/build/buildTraceTool.xml"/>
 	<import file="${basedir}/build/buildClient.xml"/>
 	<import file="${basedir}/build/buildTransport.xml"/>
+	<import file="${basedir}/build/buildTransportIPV6.xml"/>
 	<import file="${basedir}/build/buildXMLParser.xml"/>
 	<import file="${basedir}/build/buildServerEngine.xml"/>
 	<import file="${basedir}/build/buildApache13Module.xml"/>
@@ -95,15 +96,6 @@ Notes:
 		<!-- Determine which flavour of transport to use -->
 		<!-- Ideally extend this to produce multiple flavours -->
 		<if>
-			<equals arg1="${transport.axis}" arg2="true"/>
-			<then>
-				<antcall target="compileAxisTransport" inheritall="true">
-					<param name="transport" value="axis"/>
-					<param name="transportLibraryName" value="${axis.transportLibraryName}"/>
-				</antcall>
-			</then>
-		</if>
-		<if>
 			<equals arg1="${transport.axis2}" arg2="true"/>
 			<then>
 				<antcall target="compileAxisTransport" inheritall="true">
@@ -112,16 +104,21 @@ Notes:
 				</antcall>
 			</then>
 		</if>
-		<if>
-			<equals arg1="${transport.libwww}" arg2="true"/>
-			<then>
-				<antcall target="compileAxisTransport" inheritall="true">
-					<param name="transport" value="libwww"/>
-					<param name="transportLibraryName" value="${libwww.transportLibraryName}"/>
-				</antcall>
-			</then>
-		</if>
 	</target>
+
+        <target name="compileTransportIPV6">
+                <if>
+                        <equals arg1="${transport.axis2.ipv6}" arg2="true"/>
+                        <then>
+                                <antcall target="compileAxisTransportIPV6" inheritall="true">
+                                        <param name="transport.root" value="axis2"/>
+                                        <param name="transport" value="ipv6"/>
+                                        <param name="transportLibraryName" value="${axis2.ipv6.transportLibraryName}"/>
+                                </antcall>
+                        </then>
+                </if>
+        </target>
+
 
 	<target name="compileXMLParser">
 		<!-- Determine which flavour of xmlParser to use -->
@@ -149,22 +146,12 @@ Notes:
 				</antcall>
 			</then>
 		</if>
-		<if>
-			<equals arg1="${xmlParser.expat}" arg2="true"/>
-			<then>
-				<antcall target="compileAxisXMLParser" inheritall="true">
-					<param name="xmlParser" value="expat"/>
-					<param name="dir.xmlParser" value="${expat.dir.xmlParser}"/>
-					<param name="xmlParserLibrary" value="${expat.xmlParserLibrary}"/>
-					<param name="xmlParserLibraryName" value="${expat.xmlParserLibraryName}"/>
-				</antcall>
-			</then>
-		</if>
 	</target>
 
 	<target name="compile">
 		<antcall target="compileClient" inheritall="true"/>
 		<antcall target="compileTransport" inheritall="true"/>
+		<antcall target="compileTransportIPV6" inheritall="true"/>
 		<antcall target="compileXMLParser" inheritall="true"/>
 		<antcall target="compileServer" inheritall="true"/>
 	</target>
