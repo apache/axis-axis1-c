@@ -126,7 +126,6 @@ public class FileSerachAgent {
         for (int i = 0; i < dirs.length; i++) {
             String filename = location.getAbsolutePath() + "/" + dirs[i];
             File file = new File(filename);
-//			System.out.println(file.getAbsolutePath());
             if (file.isFile()) {
                 if (!isAcceptedFile(filename))
                     continue;

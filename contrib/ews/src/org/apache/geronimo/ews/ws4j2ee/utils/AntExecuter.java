@@ -16,10 +16,7 @@
 
 package org.apache.geronimo.ews.ws4j2ee.utils;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+
 
 
 /**
@@ -28,23 +25,19 @@ import java.io.OutputStream;
  * It should be replaced by call to the Project class.</p>  
  * @author hemapani
  */
-public class AntExecuter {
-	private String buildFile = "build.xml";
-	
-	public void execute(String buildFile)throws Exception{
-////		Process p = Runtime.getRuntime().exec("echo %JAVA_HOME%");
-//  		Process p = Runtime.getRuntime().exec(new String[]{"notepad"});
-//		BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
-//		String line = null;
-//		while((line = in.readLine())!= null){
-//			System.out.println(line);
-//		}
-//wait till the ant jar added
-//		org.apache.tools.ant.Main.main(new String[]{"-f",buildFile,"-verbose","-debug"});
-//TODO  following code should load the tool.jar but it does not work yet
-//		ClassLoader cl = org.apache.axis.utils.ClassUtils.createClassLoader(
-//					"H:/j2sdk1.4.1_01/lib/tools.jar",
-//					ClassLoader.getSystemClassLoader());
-		//org.apache.tools.ant.Main.start(new String[]{"-f",buildFile},null,cl);
-	}
+public class AntExecuter{
+    public void execute(String buildFile) throws Exception {
+        //wait till the ant jar added
+        try{
+//			Class.forName("com.sun.tools.javac.Main");
+//			org.apache.tools.ant.Main.start(
+//				new String[] { "-f", buildFile },
+//				null,
+//				cl);
+        }catch(ClassCastException e){
+			System.out.println("Ant file will not be run programatcally as the " +
+				"$JAVA_HOME/lib/tool.jar is not in the class path. To run the ant " +
+				"prgramatically add that jar to classpath");
+        }
+    }
 }

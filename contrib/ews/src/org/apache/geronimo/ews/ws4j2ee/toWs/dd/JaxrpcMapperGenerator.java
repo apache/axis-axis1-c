@@ -55,17 +55,17 @@
 
 package org.apache.geronimo.ews.ws4j2ee.toWs.dd;
 
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+
 import org.apache.axis.components.logger.LogFactory;
 import org.apache.axis.wsdl.Java2WSDL;
 import org.apache.axis.wsdl.fromJava.Emitter;
 import org.apache.commons.logging.Log;
+import org.apache.geronimo.ews.ws4j2ee.context.InputOutputFile;
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 import org.apache.geronimo.ews.ws4j2ee.toWs.Generator;
-
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 
 /**
  * <p>This genarated theWrapper WS required in the
@@ -74,32 +74,28 @@ import java.io.PrintWriter;
  * @author Srinath Perera(hemapani@opensource.lk)
  */
 public class JaxrpcMapperGenerator extends Java2WSDL implements Generator {
-	private J2EEWebServiceContext j2eewscontext;
+    private J2EEWebServiceContext j2eewscontext;
 
-	protected static Log log =
-			LogFactory.getLog(JaxrpcMapperGenerator.class.getName());
+    protected static Log log =
+        LogFactory.getLog(JaxrpcMapperGenerator.class.getName());
 
-	public JaxrpcMapperGenerator(J2EEWebServiceContext j2eewscontext) {
-		this.j2eewscontext = j2eewscontext;
-	}
+    public JaxrpcMapperGenerator(J2EEWebServiceContext j2eewscontext) {
+        this.j2eewscontext = j2eewscontext;
+    }
 
-	public void generate() throws GenerationFault {
-		try {
-			String fileName = j2eewscontext.getMiscInfo().getJaxrpcfile();
+    public void generate() throws GenerationFault {
+        InputOutputFile outfile = j2eewscontext.getMiscInfo().getJaxrpcfile();
 
-			PrintWriter pw = new PrintWriter(new FileWriter(fileName));
-			this.j2eewscontext.getJAXRPCMappingContext().serialize(pw);
-			pw.close();
-			if(j2eewscontext.getMiscInfo().isVerbose())
-				log.info(fileName + " genarated .................");
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw GenerationFault.createGenerationFault(e);
-		}
-	}
+        PrintWriter pw =
+            new PrintWriter(new OutputStreamWriter(outfile.getOutStream()));
+        this.j2eewscontext.getJAXRPCMappingContext().serialize(pw);
+        pw.close();
+        if (j2eewscontext.getMiscInfo().isVerbose())
+            log.info(outfile.fileName() + " genarated .................");
+    }
 
-	public Emitter getEmmiter() {
-		return emitter;
-	}
+    public Emitter getEmmiter() {
+        return emitter;
+    }
 
 }

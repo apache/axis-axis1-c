@@ -98,6 +98,10 @@ public class GenerationConstants {
 	public static final String J2EE_VERSION =  "j2ee-version";
 	public static final String J2EE_VERSION_1_3 =  "1.3";
 	public static final String J2EE_VERSION_1_4 =  "1.4";
+	public static final String AXIS_HOST =  "axis-host";
+	public static final String AXIS_PORT =  "axis-port";
+	public static final String AXIS_WEBAPPS_LIB =  "axis-webapps-lib";
+	public static final String EJB_DEPLOY_DIR =  "ejb-deploy";
 	
 	
 	private static Properties properties;
