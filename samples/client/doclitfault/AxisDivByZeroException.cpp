@@ -1,4 +1,3 @@
-/* -*- C++ -*- */
 /*
  *   Copyright 2003-2004 The Apache Software Foundation.
  *
@@ -14,8 +13,8 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  *
- * 
- * @author  wsdl2ws generated
+ *
+ *   @author Damitha Kumarage (damitha@opensource.lk, damitha@jkcsworld.com)
  *
  */
 
