@@ -73,13 +73,12 @@ X <sanjaya>	In the WSDDDocument.cpp write the code to handle the end element for
 
 Session
 -------
-! <team> 	Some encapsulation of the idea of a session that's transport-independent
-! <team> 	An example/sample for a SOAP session header/handler
+! <team> 	SOAP session support
+! <team> 	A sample for a SOAP session handler
 
 Transport
 ---------
-! <team> 	Pluggable transport API
-! <team> 	HTTPS listener and sender
+! <team> 	Pluggable transport API for client
 ! <team> 	Support for "SOAP messages with attachments"
 
 Security
@@ -87,15 +86,12 @@ Security
 ! <team> 	Support transport-level security
 ! <team> 	Support SOAP-level security
 ! <team> 	Support for existing security SOAP-level standards
-! <team> 	An example/sample for a SOAP Basic Authentication header/handler
+! <team> 	A sample for a SOAP Basic Authentication handler
 
 Service Description and Discovery (WSDL)
 ----------------------------------------
-! <team> 	Support the ability to query a service's description at runtime (e.g. 
-		GET ...?wsdl)
 ! <team> 	Support a basic html page describing the service (via an HTTP GET)
-! <team> 	Support a pretty html page describing the service (via an HTTP GET)
-! <team> 	Tools and/or run-time support for proxy generation from WSDL and/or WSDD
+* <nadika> 	Tools and/or run-time support for stub generation from WSDL
 
 FUTURE ENHANCEMENTS
 -------------------
