@@ -76,10 +76,12 @@ public class DocLitWebServiceGenarator implements WebServiceGenarator {
 	 * @see org.apache.axismora.wsdl2ws.WebServiceGenarator#genarate()
 	 */
 	public void genarate() throws WrapperFault {
+	
 		String language = wscontext.getWrapInfo().getWrapperLanguage();
-
-		if (WrapperConstants.LANGUAGE_JAVA.equalsIgnoreCase(language)) {
-			(new Genarator(WrapperConstants.GENERATOR_PARAM_JAVA, wscontext))
+		System.out.println(language);
+		if(WrapperConstants.LANGUAGE_JAVA.equalsIgnoreCase(language)){
+	   // if(WrapperConstants.SERVER_CLIENT.equals(wscontext.getWrapInfo().getTargetEngine())){
+			(new Genarator(WrapperConstants.GENERATOR_DOCLIT_PARAM_JAVA, wscontext))
 				.genarate();
 			(new Genarator(WrapperConstants.GENERATOR_DOCLIT_WRAPPER_JAVA,
 				wscontext))
@@ -87,9 +89,14 @@ public class DocLitWebServiceGenarator implements WebServiceGenarator {
 			(new Genarator(WrapperConstants.GENERATOR_DOCLIT_SERVICE_JAVA,
 				wscontext))
 				.genarate();
-
-		} else {
-			throw new WrapperFault("Unsupported Language" + language);
-		}
+			(new Genarator(WrapperConstants.GENERATOR_DOCLIT_STUB_JAVA,
+							wscontext))
+							.genarate();
+			(new Genarator(WrapperConstants.GENERATOR_STUB_LOCATOR_JAVA, wscontext)).genarate();
+			(new Genarator(WrapperConstants.GENERATOR_STUB_SERVICE_INTERFACE_JAVA, wscontext)).genarate();	
 	}
+
+} // generate
+
+
 }

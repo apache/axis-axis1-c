@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 
 import javax.xml.namespace.QName;
-
+import org.apache.axismora.encoding.AxisPullParser;
 import org.apache.axismora.wsdl2ws.java.JavaClassWriter;
 import org.apache.axismora.wsdl2ws.java.JavaUtils;
 import org.apache.axismora.wsdl2ws.WrapperConstants;
@@ -31,11 +31,8 @@ public class DocLitBeanWriter extends JavaClassWriter {
     Type type; // type of this param
     String[][] attribs;
 
-    public DocLitBeanWriter(WebServiceContext wscontext, Type type)
-        throws WrapperFault {
-        super(
-            WrapperUtils.getPackegeName4QualifiedName(
-                type.getLanguageSpecificName()),
+  	public DocLitBeanWriter(WebServiceContext wscontext, Type type) throws WrapperFault {
+		super(WrapperUtils.getPackegeName4QualifiedName(type.getLanguageSpecificName()),
             WrapperUtils.getClassNameFromFullyQualifiedName(
                 type.getLanguageSpecificName()));
         this.wscontext = wscontext;
@@ -44,8 +41,7 @@ public class DocLitBeanWriter extends JavaClassWriter {
             throw new WrapperFault("I am doclit in, out param writer. I do not write arrays");
 
         this.attribs =
-            this.getAttribList(
-                wscontext.getSerInfo().getQualifiedServiceName());
+				 this.getAttribList(wscontext.getSerInfo().getQualifiedServiceName());
     }
 
     /**
@@ -62,15 +58,16 @@ public class DocLitBeanWriter extends JavaClassWriter {
             }
 
             writer.write("\t\tint count = " + this.attribs.length + ";\n");
+				      writer.write("\t\tAxisPullParser aXpp = msgdata.getAxisParser();\n");
+					  
             writer.write("\t\tint state=aXpp.next();\n");
-            writer.write("\t\t{\n");
             writer.write(
                 "\t\t//if the type of the next tag is end tag that means the content of element is null\n");
             writer.write("if(state == XmlPullParser.END_TAG){\n");
             writer.write("\t\t\t return null;\n");
             writer.write("\t\t}else if(state == XmlPullParser.START_TAG){\n");
             writer.write(
-                "\t\t}else{\nthrow new Exception(\" Invalid things inside element tag. Text data is in the element straight away\");}\n");
+						  "\t\t}else{\nthrow new AxisFault(\" Invalid things inside element tag. Text data is in the element straight away\");}\n");
 
             //start looping
             writer.write("\t\tfor(int i = 0;i<count;i++) {\n");
@@ -213,18 +210,6 @@ public class DocLitBeanWriter extends JavaClassWriter {
                 return;
             }
 
-            writer.write(
-                "\t\tString m_URI =\""
-                    + type.getName().getNamespaceURI()
-                    + "\";\n");
-            writer.write(
-                "\t\tString type_name = \""
-                    + type.getName().getLocalPart()
-                    + "\";\n");
-
-            writer.write(
-                "\t\t\torg.apache.axismora.wsdl2ws.java.ParmWriter.tagWritten = false;\n");
-
             writer.write("\t\t//write the parameters\n\n");
             for (int i = 0; i < attribs.length; i++) {
                 /**
@@ -238,9 +223,7 @@ public class DocLitBeanWriter extends JavaClassWriter {
                 if (TypeMap.isSimpleType(attribs[i][1])) {
                     //for simple type
                     writer.write(
-                        "\t\tcontext.writeString(\"<"
-                            + attribs[i][0]
-                            + ">\");\n");
+							"\t\tcontext.writeString(\"<" + attribs[i][0] + ">\");\n");
                     writer.write(
                         check4null
                             ? "\t\tif(this." + attribs[i][0] + "!=null){\n"
@@ -287,23 +270,18 @@ public class DocLitBeanWriter extends JavaClassWriter {
                 } else {
                     //for complex type 
                     writer.write(
-                        "\t\tcontext.writeString(\"<"
-                            + attribs[i][0]
-                            + ">\");\n");
+							"\t\tcontext.writeString(\"<" + attribs[i][0] + ">\");\n");
                     writer.write(
                         check4null
                             ? "\t\tif(this." + attribs[i][0] + "!=null){\n"
                             : "");
                     writer.write(
                         "\t\t\torg.apache.axismora.wsdl2ws.java.ParmWriter.tagWritten = true;\n");
-                    writer.write(
-                        "\t\t\t" + attribs[i][0] + ".serialize(context);\n");
+						writer.write("\t\t\t" + attribs[i][0] + ".serialize(context);\n");
                 }
                 writer.write(check4null ? "\t\t}\n" : "");
                 writer.write(
-                    "\t\tcontext.writeString(\"</"
-                        + attribs[i][0]
-                        + ">\\n\");\n\n");
+						"\t\tcontext.writeString(\"</" + attribs[i][0] + ">\\n\");\n\n");
             }
 
         } catch (IOException e) {
@@ -318,11 +296,10 @@ public class DocLitBeanWriter extends JavaClassWriter {
 
     protected void writeClassComment() throws WrapperFault {
         try {
-            writer.write(
-                "/**\n * <p>This class is genarated by the tool WSDL2Ws.\n"
-                    + " * It take care of the serialization and the desirialization of\n"
-                    + " * the in and out parameters of document literal web service.\n"
-                    + " */ \n");
+			  writer.write("/**\n * <p>This class is genarated by the tool WSDL2Ws.\n" +
+				  " * It take care of the serialization and the desirialization of\n" +
+				  " * the in and out parameters of document literal web service.\n" +
+				  " */ \n");
         } catch (IOException e) {
             e.printStackTrace();
             throw new WrapperFault(e);
@@ -331,11 +308,10 @@ public class DocLitBeanWriter extends JavaClassWriter {
 
     protected void writeImportStatements() throws WrapperFault {
         try {
+					writer.write("import org.apache.axis.AxisFault;\n");
             writer.write("import org.xmlpull.v1.XmlPullParser;\n");
-            writer.write(
-                "import org.apache.axismora.encoding.AxisPullParser;\n");
+					writer.write("import org.apache.axismora.encoding.AxisPullParser;\n");
         } catch (IOException e) {
-            e.printStackTrace();
             throw new WrapperFault(e);
         }
     }
@@ -388,8 +364,6 @@ public class DocLitBeanWriter extends JavaClassWriter {
             writer.write(
                 "\tpublic org.apache.axismora.encoding.InParameter desierialize(org.apache.axismora.MessageContext msgdata)throws org.apache.axis.AxisFault{\n");
             this.writeDesireializeCode();
-            writer.write("\t\treturn this;\n");
-            writer.write("\n\t}\n");
         } catch (IOException e) {
             e.printStackTrace();
             throw new WrapperFault(e);
@@ -417,10 +391,10 @@ public class DocLitBeanWriter extends JavaClassWriter {
         new File(
             wscontext.getWrapInfo().getTargetOutputLocation()
                 + "/"
-                + WrapperUtils
-                    .getPackegeName4QualifiedName(
-                        type.getLanguageSpecificName())
-                    .replace('.', '/'))
+				  + WrapperUtils.getPackegeName4QualifiedName(
+					  type.getLanguageSpecificName()).replace(
+					  '.',
+					  '/'))
             .mkdirs();
         String fileName =
             wscontext.getWrapInfo().getTargetOutputLocation()
@@ -469,12 +443,10 @@ public class DocLitBeanWriter extends JavaClassWriter {
             attribs[i][6] = null;
         }
 
-        for (int i = attribfeilds.size();
-            i < attribfeilds.size() + elementfeilds.size();
-            i++) {
+        
+		  for (int i = attribfeilds.size(); i < attribfeilds.size()+elementfeilds.size(); i++) {
             attribs[i] = new String[7];
-            attribs[i][0] =
-                ((String) elementfeilds.get(i - attribfeilds.size()));
+			  attribs[i][0] = ((String) elementfeilds.get(i - attribfeilds.size()));
 
             ElementInfo element = type.getElementForElementName(attribs[i][0]);
             Type t = element.getType();
@@ -497,16 +469,9 @@ public class DocLitBeanWriter extends JavaClassWriter {
 
             if (element.getMaxOccurs() > 1) {
                 attribs[i][1] = attribs[i][1] + "[]";
-                Type typedata =
-                    new Type(
-                        new QName(
-                            name.getNamespaceURI(),
-                            name.getLocalPart() + "Array"),
-                        null,
-                        false,
-                        WrapperConstants.LANGUAGE_JAVA);
-                typedata.setTypeNameForElementName(
-                    new ElementInfo(new QName("item"), t));
+				  Type typedata = new Type(new QName(name.getNamespaceURI(),name.getLocalPart()+"Array")
+					  ,null,false,WrapperConstants.LANGUAGE_JAVA);
+				  typedata.setTypeNameForElementName(new ElementInfo(new QName("item"),t));
                 typedata.setArray(true);
                 attribs[i][4] = TypeMap.regestorArrayTypeToCreate(typedata);
                 attribs[i][5] = t.getName().getNamespaceURI();
@@ -550,18 +515,17 @@ public class DocLitBeanWriter extends JavaClassWriter {
                         type.getLanguageSpecificName())
                     + "(");
             if (attribs.length > 0) {
-                writer.write(attribs[0][1] + " " + attribs[0][0]);
+				  writer.write(attribs[0][1]
+						  + " "
+						  + attribs[0][0]);
                 for (int i = 1; i < this.attribs.length; i++)
-                    writer.write(attribs[i][1] + " " + attribs[i][0]);
+					  writer.write(", "+attribs[i][1]
+							  + " "
+							  + attribs[i][0]);
             }
             writer.write("){\n");
             for (int i = 0; i < this.attribs.length; i++)
-                writer.write(
-                    "\t\tthis."
-                        + attribs[i][0]
-                        + " = "
-                        + attribs[i][0]
-                        + ";\n");
+				  writer.write("\t\tthis." + attribs[i][0] + " = " + attribs[i][0] + ";\n");
             writer.write("\t}\n");
         } catch (IOException e) {
             throw new WrapperFault(e);
@@ -576,8 +540,7 @@ public class DocLitBeanWriter extends JavaClassWriter {
             writer.write("this." + attribs[i][0] + " =");
 
             if (name.endsWith("[]")) {
-                writer.write(
-                    !"byte[]".equals(name) ? (" new " + name + "{") : "");
+				  writer.write(!"byte[]".equals(name) ? (" new " + name + "{") : "");
                 temp = attribs[i][1];
                 attribs[i][1] = name.substring(0, name.length() - 2);
             }
