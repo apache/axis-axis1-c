@@ -167,6 +167,7 @@ public class ClientStubHeaderWriter extends HeaderFileWriter{
 	protected void writePreprocssorStatements() throws WrapperFault {
 		try{
 			writer.write("#include <axis/client/Stub.h>\n");
+			writer.write("#include <axis/AxisGenException.h>\n");
 			Type atype;
 			Iterator types = this.wscontext.getTypemap().getTypes().iterator();
 			HashSet typeSet = new HashSet();
