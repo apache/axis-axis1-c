@@ -858,14 +858,14 @@ int SoapSerializer::serializeAsChardata(void* pValue, XSDTYPE type)
         break;
     case XSD_LONG:
     case XSD_INTEGER:
-        AxisSprintf (m_Buf, BTS_BUFFSIZE, "%d", *((long*)(pValue)));
+        AxisSprintf (m_Buf, BTS_BUFFSIZE, "%ld", *((long*)(pValue)));
         break;
     case XSD_DURATION:
         AxisSprintf (m_Buf, BTS_BUFFSIZE, "%s", m_BTSZ.m_AxisTime.serialize(
             *((long*)(pValue)), type).c_str ());
         break;
     case XSD_UNSIGNEDLONG:
-        AxisSprintf (m_Buf, BTS_BUFFSIZE, "%u", *((unsigned long*)(pValue)));
+        AxisSprintf (m_Buf, BTS_BUFFSIZE, "%lu", *((unsigned long*)(pValue)));
         break;
     case XSD_FLOAT:
         AxisSprintf (m_Buf, BTS_BUFFSIZE, "%f", *((float*)(pValue)));
@@ -900,3 +900,4 @@ int SoapSerializer::serializeAsChardata(void* pValue, XSDTYPE type)
 }
 
 AXIS_CPP_NAMESPACE_END
+
