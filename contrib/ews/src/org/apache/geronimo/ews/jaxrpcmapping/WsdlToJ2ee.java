@@ -59,8 +59,11 @@ import org.apache.axis.utils.CLOption;
 import org.apache.axis.utils.CLOptionDescriptor;
 import org.apache.axis.utils.JavaUtils;
 import org.apache.axis.utils.Messages;
+import org.apache.axis.utils.CLArgsParser;
 import org.apache.axis.wsdl.gen.Parser;
 import org.apache.axis.wsdl.gen.WSDL2;
+
+import java.util.List;
 
 /**
  * @author Ias (iasandcb@tmax.co.kr)
@@ -277,6 +280,42 @@ public class WsdlToJ2ee extends WSDL2 {
 		}
 	} // validateOptions
 
+    /**
+     * run
+     * checkes the command-line arguments and runs the tool.
+     * 
+     * @param args String[] command-line arguments.
+     */
+    protected void run(String[] args) {
+        // Parse the arguments
+        CLArgsParser argsParser = new CLArgsParser(args, options);
+
+        // Print parser errors, if any
+        if (null != argsParser.getErrorString()) {
+            System.err.println(Messages.getMessage("error01", argsParser.getErrorString()));
+            printUsage();
+        }
+
+        // Get a list of parsed options
+        List clOptions = argsParser.getArguments();
+        int size = clOptions.size();
+
+        // Parse the options and configure the emitter as appropriate.
+        for (int i = 0; i < size; i++) {
+            parseOption((CLOption) clOptions.get(i));
+        }
+
+        // validate argument combinations
+        // 
+        validateOptions();
+        try {
+            parser.run(wsdlURI);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(-1);
+        }
+    }    // run
+    
 	/**
 	 * Main
 	 */
