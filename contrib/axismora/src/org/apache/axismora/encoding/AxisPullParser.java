@@ -81,12 +81,10 @@ public class AxisPullParser {
         return this.xpp;
     }
 
-    // removes unnecassary whitespaces.
+    // removes whitespaces.
     /**
      * Removes whitespaces 
-     *  1)between two start tags
-     *  2)two end tags
-     *  3)between end tag that follows the starttag
+     *  
      */
     public int next() throws AxisFault {
         try {
