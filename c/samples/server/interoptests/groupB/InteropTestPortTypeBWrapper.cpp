@@ -85,8 +85,8 @@ int InteropTestPortTypeBWrapper::echoStructAsSimpleTypes(void* pMsg)
 	mc->GetSoapDeSerializer(&pIWSDZ);
 	if (!pIWSDZ) return AXIS_FAIL;
 	/* check whether we have got correct message */
-	if (AXIS_SUCCESS != pIWSDZ->CheckMessageBody("echoStructAsSimpleTypes", "")) return AXIS_FAIL;
-	pIWSSZ->CreateSoapMethod("echoStructAsSimpleTypesResponse", "");
+	if (AXIS_SUCCESS != pIWSDZ->CheckMessageBody("echoStructAsSimpleTypes", "http://soapinterop.org/")) return AXIS_FAIL;
+	pIWSSZ->CreateSoapMethod("echoStructAsSimpleTypesResponse", "http://soapinterop.org/");
 	SOAPStruct *v0 = (SOAPStruct*)pIWSDZ->GetCmplxObject((void*)Axis_DeSerialize_SOAPStruct
 		, (void*)Axis_Create_SOAPStruct, (void*)Axis_Delete_SOAPStruct
 		, "inputStruct", Axis_URI_SOAPStruct);
@@ -116,8 +116,8 @@ int InteropTestPortTypeBWrapper::echoSimpleTypesAsStruct(void* pMsg)
 	mc->GetSoapDeSerializer(&pIWSDZ);
 	if (!pIWSDZ) return AXIS_FAIL;
 	/* check whether we have got correct message */
-	if (AXIS_SUCCESS != pIWSDZ->CheckMessageBody("echoSimpleTypesAsStruct", "")) return AXIS_FAIL;
-	pIWSSZ->CreateSoapMethod("echoSimpleTypesAsStructResponse", "");
+	if (AXIS_SUCCESS != pIWSDZ->CheckMessageBody("echoSimpleTypesAsStruct", "http://soapinterop.org/")) return AXIS_FAIL;
+	pIWSSZ->CreateSoapMethod("echoSimpleTypesAsStructResponse", "http://soapinterop.org/");
 	float v0 = pIWSDZ->GetElementAsFloat("inputFloat",0);
 	int v1 = pIWSDZ->GetElementAsInt("inputInteger",0);
 	xsd__string v2 = pIWSDZ->GetElementAsString("inputString",0);
@@ -141,8 +141,8 @@ int InteropTestPortTypeBWrapper::echoNestedStruct(void* pMsg)
 	mc->GetSoapDeSerializer(&pIWSDZ);
 	if (!pIWSDZ) return AXIS_FAIL;
 	/* check whether we have got correct message */
-	if (AXIS_SUCCESS != pIWSDZ->CheckMessageBody("echoNestedStruct", "")) return AXIS_FAIL;
-	pIWSSZ->CreateSoapMethod("echoNestedStructResponse", "");
+	if (AXIS_SUCCESS != pIWSDZ->CheckMessageBody("echoNestedStruct", "http://soapinterop.org/")) return AXIS_FAIL;
+	pIWSSZ->CreateSoapMethod("echoNestedStructResponse", "http://soapinterop.org/");
 	SOAPStructStruct *v0 = (SOAPStructStruct*)pIWSDZ->GetCmplxObject((void*)Axis_DeSerialize_SOAPStructStruct
 		, (void*)Axis_Create_SOAPStructStruct, (void*)Axis_Delete_SOAPStructStruct
 		, "inputStruct", Axis_URI_SOAPStructStruct);
@@ -166,8 +166,8 @@ int InteropTestPortTypeBWrapper::echoNestedArray(void* pMsg)
 	mc->GetSoapDeSerializer(&pIWSDZ);
 	if (!pIWSDZ) return AXIS_FAIL;
 	/* check whether we have got correct message */
-	if (AXIS_SUCCESS != pIWSDZ->CheckMessageBody("echoNestedArray", "")) return AXIS_FAIL;
-	pIWSSZ->CreateSoapMethod("echoNestedArrayResponse", "");
+	if (AXIS_SUCCESS != pIWSDZ->CheckMessageBody("echoNestedArray", "http://soapinterop.org/")) return AXIS_FAIL;
+	pIWSSZ->CreateSoapMethod("echoNestedArrayResponse", "http://soapinterop.org/");
 	SOAPArrayStruct *v0 = (SOAPArrayStruct*)pIWSDZ->GetCmplxObject((void*)Axis_DeSerialize_SOAPArrayStruct
 		, (void*)Axis_Create_SOAPArrayStruct, (void*)Axis_Delete_SOAPArrayStruct
 		, "inputStruct", Axis_URI_SOAPArrayStruct);

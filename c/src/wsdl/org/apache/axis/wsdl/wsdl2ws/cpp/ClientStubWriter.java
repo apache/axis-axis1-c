@@ -255,7 +255,7 @@ public class ClientStubWriter extends CPPClassWriter{
 		}
 		writer.write("\tm_pCall->SetTransportProperty(SOAPACTION_HEADER , \""+minfo.getSoapAction()+"\");\n");
 		writer.write("\tm_pCall->SetSOAPVersion(SOAP_VER_1_1);\n"); //TODO check which version is it really.
-		writer.write("\tm_pCall->SetOperation(\""+minfo.getMethodname()+"\", \"\");\n");
+		writer.write("\tm_pCall->SetOperation(\""+minfo.getMethodname()+"\", \""+wscontext.getWrapInfo().getTargetNameSpaceOfWSDL()+"\");\n");
 		for (int i = 0; i < paramsB.size(); i++) {
 			type = wscontext.getTypemap().getType(((ParameterInfo)paramsB.get(i)).getSchemaName());
 			if (type != null){
@@ -293,7 +293,7 @@ public class ClientStubWriter extends CPPClassWriter{
 			writer.write(");\n");
 		}
 		writer.write("\tif (AXIS_SUCCESS == m_pCall->Invoke())\n\t{\n");
-		writer.write("\t\tif(AXIS_SUCCESS == m_pCall->CheckMessage(\""+minfo.getMethodname()+"Response\", \"\"))\n\t\t{\n");
+		writer.write("\t\tif(AXIS_SUCCESS == m_pCall->CheckMessage(\""+minfo.getMethodname()+"Response\", \""+wscontext.getWrapInfo().getTargetNameSpaceOfWSDL()+"\"))\n\t\t{\n");
 		if ( isAllTreatedAsOutParams) {
 			String currentParamName;
 			String currentParaType;

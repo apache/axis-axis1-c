@@ -33,7 +33,7 @@ int Axis_Serialize_SOAPStructStruct(SOAPStructStruct* param, IWrapperSoapSeriali
 	pSZ->_functions->SerializeAsElement(pSZ->_object, "varString", (void*)&(param->varString), XSD_STRING);
 	pSZ->_functions->SerializeAsElement(pSZ->_object, "varInt", (void*)&(param->varInt), XSD_INT);
 	pSZ->_functions->SerializeAsElement(pSZ->_object, "varFloat", (void*)&(param->varFloat), XSD_FLOAT);
-	Axis_Serialize_SOAPStruct(param->varStruct, pSZ->_object, false);
+	Axis_Serialize_SOAPStruct(param->varStruct, pSZ, false);
 
 	pSZ->_functions->SerializeEndElementOfType(pSZ->_object, Axis_TypeName_SOAPStructStruct);
 	return AXIS_SUCCESS;

@@ -165,7 +165,7 @@ public class BeanParamWriter extends ParamCFileWriter{
 			}
 			else{
 				//if complex type
-				writer.write("\tAxis_Serialize_"+attribs[i].getTypeName()+"(param->"+attribs[i].getParamName()+", SZ._object, false);\n");
+				writer.write("\tAxis_Serialize_"+attribs[i].getTypeName()+"(param->"+attribs[i].getParamName()+", pSZ, false);\n");
 			}			
 		}
 		writer.write("\n\tpSZ->_functions->SerializeEndElementOfType(pSZ->_object, Axis_TypeName_"+classname+");\n");
