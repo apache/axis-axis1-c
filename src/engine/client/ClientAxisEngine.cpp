@@ -64,27 +64,41 @@ int ClientAxisEngine::process (SOAPTransport* pSoap)
 	
 	    do
 	    {
+// Get the service name that was specified in the second parameter of the call
+// to setTransportProperty( SOAPACTION_HEADER , "") matches a service name in
+// the 'service' part of the WSDD file then call that service now.
 	        const char* pchService = pSoap->getServiceName();
 	        
-	        if (pchService == NULL || strchr(pchService,'#') == NULL)
-	        {
-	        	pService = g_pWSDDDeployment->getService (pchService);
-	        }
-	        else
-	        {
-		        char * pchTempService = new char [strlen(pchService)+1];
-			// Skip the starting double quote
-		        strcpy(pchTempService, pchService+1);
-		
-		        /* The String returned as the service name has the format "Calculator#add".
-		        So null terminate string at #.  */
-		        *(strchr(pchTempService, '#')) = '\0';
+// Check that there is a valid service name.
+	        if( pchService != NULL)
+			{
+// The convention for the service name appears to be service#port
+				if( strchr( pchService, '#') == NULL)
+				{
+// If there is no # seperator, then strip off the outer quotes.
+					int		iStringLength = strlen( pchService);
+					char *	pszService = new char[iStringLength];
 
-		        /* get service description object from the WSDD Deployment object */
-		        pService = g_pWSDDDeployment->getService (pchTempService);
-		        delete [] pchTempService; // Samisa: should delete the whole array
-	        }
+					memset( pszService, 0, iStringLength);
+					memcpy( pszService, pchService + 1, iStringLength - 2);
 
+	        		pService = g_pWSDDDeployment->getService( pszService);
+				}
+				else
+				{
+					char * pchTempService = new char [strlen(pchService)+1];
+// Skip the starting double quote
+					strcpy(pchTempService, pchService+1);
+			
+// The String returned as the service name has the format "Calculator#add".
+// So null terminate string at #.
+					*(strchr(pchTempService, '#')) = '\0';
+
+// get service description object from the WSDD Deployment object
+					pService = g_pWSDDDeployment->getService (pchTempService);
+					delete [] pchTempService; // Samisa: should delete the whole array
+				}
+			}
 	        //Get Global and Transport Handlers
 	
 	        Status = initializeHandlers (sSessionId, pSoap->getProtocol());
