@@ -274,6 +274,10 @@ SOURCE=..\src\common\MessageData.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\soap\Namespace.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\soap\xsd\NOTATION.cpp
 # End Source File
 # Begin Source File
@@ -414,7 +418,15 @@ SOURCE=..\src\soap\xsd\XSD_QName.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
+SOURCE=..\src\soap\Attribute.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\axis\ISoapFault.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\soap\Namespace.h
 # End Source File
 # Begin Source File
 

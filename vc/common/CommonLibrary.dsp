@@ -134,6 +134,10 @@ SOURCE=..\..\src\common\MessageData.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\soap\Namespace.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\Packet.cpp
 # End Source File
 # Begin Source File
@@ -254,7 +258,15 @@ SOURCE=..\..\include\axis\server\IHeaderBlock.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\axis\IHeaderBlock.hpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\axis\server\IMessageData.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\axis\INamespace.hpp
 # End Source File
 # Begin Source File
 
@@ -279,6 +291,10 @@ SOURCE=..\..\include\axis\server\IWrapperSoapSerializer.h
 # Begin Source File
 
 SOURCE=..\..\src\common\MessageData.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\soap\Namespace.h
 # End Source File
 # Begin Source File
 

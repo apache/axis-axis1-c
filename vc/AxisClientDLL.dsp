@@ -278,6 +278,10 @@ SOURCE=..\src\common\MessageData.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\soap\Namespace.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\soap\xsd\NOTATION.cpp
 # End Source File
 # Begin Source File
@@ -487,6 +491,10 @@ SOURCE=..\include\axis\IWrapperSoapDeSerializer.hpp
 # Begin Source File
 
 SOURCE=..\include\axis\IWrapperSoapSerializer.hpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\soap\Namespace.h
 # End Source File
 # Begin Source File
 
