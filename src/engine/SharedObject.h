@@ -24,6 +24,7 @@
 
 #include <axis/GDefine.hpp>
 #ifdef WIN32
+#include <windows.h>
 #else //Linux
 #include "pthread.h"
 #endif
@@ -50,6 +51,7 @@ class SharedObject
     private:
         bool m_bLocked;
 #ifdef WIN32
+    HANDLE          mut;
 #else                           //Linux
     pthread_mutex_t *mut;
 #endif

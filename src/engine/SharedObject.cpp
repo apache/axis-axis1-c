@@ -28,6 +28,7 @@ SharedObject::SharedObject ()
 {
     m_bLocked = false;
 #ifdef WIN32
+    mut = CreateMutex(NULL, FALSE, NULL);
 #else //Linux
     mut = new pthread_mutex_t;
     pthread_mutex_init (mut, NULL);
@@ -37,6 +38,7 @@ SharedObject::SharedObject ()
 SharedObject::~SharedObject ()
 {
 #ifdef WIN32
+    CloseHandle(mut);
 #else //Linux
     pthread_mutex_destroy (mut);
     delete mut;
@@ -49,11 +51,7 @@ SharedObject::~SharedObject ()
 int SharedObject::lock ()
 {
 #ifdef WIN32
-    while (m_bLocked)
-    {
-        PLATFORM_SLEEP(0);
-    }
-
+    WaitForSingleObject(mut, INFINITE);
 #else //Linux
     pthread_mutex_lock (mut);
 #endif
@@ -64,6 +62,7 @@ int SharedObject::lock ()
 int SharedObject::unlock ()
 {
 #ifdef WIN32
+    ReleaseMutex(mut);
 #else //Linux
     pthread_mutex_unlock (mut);
 #endif
