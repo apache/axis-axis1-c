@@ -466,7 +466,8 @@ public class WSDL2Ws {
 
 		Vector enumdata = null;
 		if(type.isSimpleType())
-			enumdata = Utils.getEnumerationBaseAndValues(node,symbolTable);
+			//enumdata = Utils.getEnumerationBaseAndValues(node,symbolTable);
+		enumdata = CUtils.getEnumerationBaseAndValues(node,symbolTable);
 		if(enumdata != null){
 			typedata.setEnumerationdata(enumdata);
 		}else if(type instanceof CollectionType){
