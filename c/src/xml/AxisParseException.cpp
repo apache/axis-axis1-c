@@ -92,13 +92,16 @@ const string AxisParseException::getMessage (const int iExceptionCode)
     switch(iExceptionCode)
     {
         case SERVER_PARSE_BUFFER_EMPTY:
-            m_sMessage = "Buffer received from the parser is empty";
+            m_sMessage = "AxisParseException:Buffer received from the parser is empty";
             break;
         case SERVER_PARSE_PARSER_FAILED:
-            m_sMessage = "Parser failed";
+            m_sMessage = "AxisParseException:XML_STATUS_ERROR thrown from parser";
+            break;
+        case SERVER_PARSE_TRANSPORT_FAILED:
+            m_sMessage = "AxisParseException:Error when getting the byte stream from the transport";
             break;
         default:
-            m_sMessage = "Unknown Parse Exception"; 
+            m_sMessage = "AxisParseException:Unknown Parse Exception"; 
     }
     return m_sMessage;
 }
