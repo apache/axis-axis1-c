@@ -98,10 +98,12 @@ Thread Safety:
 http://www.w3.org/Library/User/Architecture/Events.html says 
 “LibWWW is not posix thread safe but it uses a 'pseudo-thread' 
 model based on non-blocking sockets and interleaved IO.” 
-I did a bit of research and figured out how to make this implementation 
-thread safe. I was able to successfully use the 'pseudo-thread'
-model of LibWWW and achieve thread safety. You could test the thread 
-safety with the test in tests/client/threadSafe/. 
+I did a bit of research and figured out how to make LibWWW thread safe. 
+However I was unable to successfully use the 'pseudo-thread'
+model of LibWWW and achieve thread safety with Axis C++. I think the problem 
+could be solved by enabling library level one off initilizations possible
+from a globle initilizer, which is not supported by current Axis C++
+architecture. Hence thread safety with LibWWW remains a TODO.
 
 - Samisa...
 
