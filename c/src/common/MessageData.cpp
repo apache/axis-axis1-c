@@ -98,7 +98,7 @@ void MessageData::SetUserName(string m_sUserName)
 string MessageData::GetUserName()
 {
   //return m_sUserName;
-  return "damitha";
+  return "damitha kumarage";
   
 }
 
@@ -109,15 +109,5 @@ void MessageData::SetService(WSDDService* argService)
 WSDDService* MessageData::GetService()
 {
   return m_Service;
-
-}
-
-void MessageData::SetIsServiceAllowed(int m_IsServiceAllowed)
-{
-  m_IsServiceAllowed = m_IsServiceAllowed;
-}
-int MessageData::GetIsServiceAllowed()
-{
-  return m_IsServiceAllowed;
 
 }
