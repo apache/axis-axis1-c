@@ -105,7 +105,7 @@ int SoapBody::serialize(string& sSerialized, SOAP_VERSION eSoapVersion)
 	int iStatus= SUCCESS;
 
 	do {
-		sSerialized= sSerialized+ "<"+ g_sObjSoapEnvVersionsStruct[eSoapVersion].pchEnvelopePrefix+ ":" + g_sObjSoapEnvVersionsStruct[eSoapVersion].pcharWords[SKW_BODY];
+		sSerialized= sSerialized+ "<"+ g_sObjSoapEnvVersionsStruct[eSoapVersion].pchEnvelopePrefix+ ":" + g_sObjSoapEnvVersionsStruct[eSoapVersion].pcharWords[SKW_BODY];		
 		iStatus= serializeAttributes(sSerialized);
 		if(iStatus==FAIL) {
 			break;
