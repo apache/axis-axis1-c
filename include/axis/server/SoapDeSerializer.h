@@ -103,7 +103,7 @@ public:
     
     /* Methods used by wrappers to get a deserialized value of basic types */
     int AXISCALL getElementAsInt(const AxisChar* pName, 
-        const AxisChar* pNamespace, int& iResult);
+        const AxisChar* pNamespace);
     int AXISCALL getFaultDetail(char** ppcDetail);
     xsd__boolean AXISCALL getElementAsBoolean(const AxisChar* pName, 
         const AxisChar* pNamespace);

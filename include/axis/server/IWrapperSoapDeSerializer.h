@@ -50,7 +50,7 @@ typedef struct {
     
     /* Methods used by wrappers to get a deserialized value of basic types */
     int (AXISCALL* getElementAsInt)(void* pObj, const AxisChar* pName, 
-        const AxisChar* pNamespace, int& iResult);
+        const AxisChar* pNamespace);
     int (AXISCALL* getFaultDetail)(void* pObj, char** ppcDetail);
     xsd__boolean (AXISCALL* getElementAsBoolean)(void* pObj, 
         const AxisChar* pName, const AxisChar* pNamespace);
@@ -181,7 +181,7 @@ public:
     
     /* Methods used by wrappers to get a deserialized value of basic types */
     virtual int AXISCALL getElementAsInt(const AxisChar* pName, 
-        const AxisChar* pNamespace, int& iResult)=0;
+        const AxisChar* pNamespace)=0;
     virtual int AXISCALL getFaultDetail(char** ppcDetail) = 0;
     virtual xsd__boolean AXISCALL getElementAsBoolean(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
@@ -305,9 +305,9 @@ public:
     {return ((IWrapperSoapDeSerializer*)pObj)->getCmplxObject(pDZFunct, 
     pCreFunct, pDelFunct, pName, pNamespace);};
     static int AXISCALL s_GetElementAsInt(void* pObj, const AxisChar* pName, 
-        const AxisChar* pNamespace, int& iResult)
+        const AxisChar* pNamespace)
     { return ((IWrapperSoapDeSerializer*)pObj)->getElementAsInt(pName, 
-    pNamespace, iResult);};
+    pNamespace);};
     static int AXISCALL s_GetFaultDetail(void* pObj, char** ppcDetail)
     { return ((IWrapperSoapDeSerializer*)pObj)->getFaultDetail(ppcDetail);};
     static xsd__boolean AXISCALL s_GetElementAsBoolean(void* pObj, const 
