@@ -1,3 +1,8 @@
+When you download the source you have only Makfile.am's and configure.ac and
+autogen.sh script for building.
+to build go to axisroot dirctory.
+sh autogen.sh
+
 If you want to avoid cluttering of the source with object files use the build directory
 to generate your object files. To do that do it as follows.
 Copy the axisconfigure file from c directory to c/build directory.
@@ -8,3 +13,9 @@ into
 
 Now from c/build directory run
 sh axisconfigure
+
+Note: Make sure you set the environment variables
+APACHE_HOME and XERCES_HOME to appropriate values
+for examele
+APACHE_HOME="/usr/local/apache"
+XERCES_HOME="/usr/local/xerces_c"
