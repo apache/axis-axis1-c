@@ -39,7 +39,7 @@ AnyType* ExtensibilityQueryPortType::query(AnyType* Value0)
 {
 	AnyType* pReturn = NULL;
 	try
-	{	if (AXIS_SUCCESS != m_pCall->initialize(CPP_DOC_PROVIDER, NORMAL_CHANNEL)) return pReturn;
+	{	if (AXIS_SUCCESS != m_pCall->initialize(CPP_DOC_PROVIDER)) return pReturn;
 		m_pCall->setTransportProperty(SOAPACTION_HEADER , "testXSDANY#query");
 	m_pCall->setSOAPVersion(SOAP_VER_1_1);
 	m_pCall->setOperation("query", "urn:ExtensibilityQuery");
