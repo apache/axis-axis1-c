@@ -70,7 +70,10 @@ int MathOps::div(int Value0, int Value1)
 			cFaultstring = m_pCall->getElementAsString("faultstring", 0);
 			cFaultactor = m_pCall->getElementAsString("faultactor", 0);
 		        cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-		        throw AxisGenException(cFaultdetail);
+                        if(cFaultdetail)
+		            throw AxisGenException(cFaultdetail);
+                        else
+                            throw AxisGenException(SERVER_UNKNOWN_ERROR);
 		}
 		else throw;
 	}

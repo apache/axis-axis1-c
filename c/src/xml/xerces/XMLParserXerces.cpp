@@ -76,8 +76,6 @@ int XMLParserXerces::getStatus()
 const AnyElement* XMLParserXerces::next(bool isCharData)
 {
     bool bCanParseMore = false;
-    try
-    {
         if(!m_bFirstParsed)
         {
             m_pParser->parseFirst(*m_pInputSource, m_ScanToken);
@@ -105,26 +103,11 @@ const AnyElement* XMLParserXerces::next(bool isCharData)
             else if (AXIS_FAIL == m_Xhandler.getStatus()) return NULL;
             else if (!bCanParseMore) return NULL;
         }
-    }
-    catch(AxisParseException& e)
-    {
-        throw;
-    }
-    catch(AxisException& e)
-    {
-        throw;
-    }
-    catch(...)
-    {
-        throw;
-    }
 }
 
 const AnyElement* XMLParserXerces::anyNext()
 {
     bool bCanParseMore = false;
-    try
-    {
 		/* 
 		 * Say the SAX event handler to record prefix mappings too 
 		 * By default the event handler do not record them.
@@ -153,19 +136,6 @@ const AnyElement* XMLParserXerces::anyNext()
             else if (AXIS_FAIL == m_Xhandler.getStatus()) return NULL;
             else if (!bCanParseMore) return NULL;
         }
-    }
-    catch(AxisParseException& e)
-    {
-        throw;
-    }
-    catch(AxisException& e)
-    {
-        throw;
-    }
-    catch(...)
-    {
-        throw;
-    }
 }
 
 const XML_Ch* XMLParserXerces::getPrefix4NS(const XML_Ch* pcNS)

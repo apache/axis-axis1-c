@@ -138,6 +138,8 @@ void SoapFault::initialize()
             {"Server", "Unknown Engine Exception", "", ""},
             {"Server", "Cannot load web service", "", ""},
             {"Server", "Cannot load service handlers", "", ""},
+            {"Server", "DLOPEN FAILED in loading transport library", "", ""},
+            {"Server", "DLOPEN FAILED in loading parser library", "", ""},
             {"Server", "A service handler failed", "", ""},
             {"Server", "Webservice failed", "", ""},
             {"Server", "Handler initialization failed", "", ""},
