@@ -51,18 +51,6 @@ Package=<4>
 
 ###############################################################################
 
-Project: "SimpleAxisServer"=".\server\simple_axis_server\SimpleAxisServer.dsp" - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
 Project: "SoapLibrary"=".\soap\SoapLibrary.dsp" - Package Owner=<4>
 
 Package=<5>
