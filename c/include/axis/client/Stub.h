@@ -22,6 +22,12 @@
  * Stub.h: interface for the Stubclass.
  *
  */
+
+/*
+ * Revision 1.1  2004/05/31 samisa
+ * Added setProxy
+ */
+
 #if !defined(_STUB_H____OF_AXIS_INCLUDED_)
 #define _STUB_H____OF_AXIS_INCLUDED_
 
@@ -32,22 +38,45 @@ class Stub
 {
   public:
     Stub (const char *pchEndpointUri);
-      virtual ~ Stub ();
+    virtual ~ Stub ();
     int initilizeCall ();
     void setEndPoint (char *pcEndPoint);
     void setTransportProperty (const char *pcKey, const char *pcValue);
     IHeaderBlock *createHeaderBlock (AxisChar * pachLocalName,
 				     AxisChar * pachPrefix,
 				     AxisChar * pachUri);
+  /**
+    * Set proxy server and port for transport.
+    *
+    * @param pcProxyHost Host name of proxy server
+    * @param uiProxyPort Port of proxy server
+    */
+    void setProxy(const char* pcProxyHost, unsigned int uiProxyPort);
 
   protected:
-    void applyUserPreferences ();
-    void setTransportProperties ();
-    void setSOAPHeaders ();
+    void applyUserPreferences();
+    void setTransportProperties();
+    void setSOAPHeaders();
+    void setProxy();
+
     Call *m_pCall;
     vector < char *>m_vKeys;
     vector < char *>m_vValues;
     vector < IHeaderBlock * >m_vSOAPHeaderBlocks;
+
+  /**
+    * Proxy server name.
+    */
+    std::string m_strProxyHost;
+  /**
+    * Proxy server port.
+    */
+    unsigned int m_uiProxyPort;
+  /**
+    * Use Proxy or not?
+    */
+    bool m_bUseProxy;
+
 
 };
 
