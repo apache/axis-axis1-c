@@ -77,13 +77,12 @@ public class Type {
     /* max no of attribs expected in a type */
     private static final int MAXIMUM_NO_ATTRIBS = 101;
     private QName name;
-
+	private boolean isSimpleType=false;
 	/**
-	  * If the specified node represents a supported JAX-RPC enumeration,
-	  * a Vector is returned which contains the base type and the enumeration values.
+	  * If the specified node represents a supported JAX-RPC restriction,
+	  * a Vector is returned which contains the base type and the values.
 	  * The first element in the vector is the base type (an TypeEntry).
-	  * Subsequent elements are values (Strings).
-	  * If this is not an enumeration, null is value.
+	  * Subsequent elements are values(QNames) if any.
 	  */
     private Vector enumerationdata;
 
@@ -314,7 +313,8 @@ public class Type {
     /**
      * @param vector
      */
-    public void setEnumerationdata(Vector vector) {
+    public void setRestrictiondata(Vector vector) {
+		isSimpleType = true;
         enumerationdata = vector;
     }
 
@@ -368,4 +368,19 @@ public class Type {
 		/* TODO also make the inner type of this be referenced*/
 		
 	}
+	/**
+	 * @return boolean
+	 */
+	public boolean isSimpleType() {
+		return isSimpleType;
+	}
+
+	/**
+	 * Sets the isSimpleType.
+	 * @param isSimpleType The isSimpleType to set
+	 */
+	public void setSimpleType(boolean isSimpleType) {
+		this.isSimpleType = isSimpleType;
+	}
+
 }

@@ -90,6 +90,8 @@ import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.TypeMap;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 import org.apache.axis.wsdl.wsdl2ws.info.WrapperInfo;
+import org.apache.axis.wsdl.symbolTable.DefinedElement;
+import org.apache.axis.wsdl.symbolTable.CollectionElement;
 import org.w3c.dom.Node;
 
 /**
@@ -244,15 +246,17 @@ public class WSDL2Ws {
             //add each parameter to parameter list
             if ("document".equals(bindingEntry.getBindingStyle().getName())){
 				Part part = (Part) paramlist.next();
-				/* if ("parameters".equals(part.getName())){ */ //to have "parameters" is not a must. Ref : WS-I Basic profile 1.0
-					element = symbolTable.getElement(part.getElementName());
-					qname = element.getRefType().getQName();
-					if (qname != null){
-						minfo.setInputMessage(element.getQName());
-						type = this.typeMap.getType(qname);				
+				element = symbolTable.getElement(part.getElementName());
+				qname = element.getRefType().getQName();
+				if (qname != null){
+					minfo.setInputMessage(element.getQName());
+					type = this.typeMap.getType(qname);
+					boolean wrapped = true; //TODO take this from a commandline argument
+					if (wrapped){
 						if(type == null)
 							 throw new WrapperFault("unregisterd type "+qname+" refered");
-						/* if(type.getLanguageSpecificName().startsWith(">")){*/ //anyway skip the wrapping element type even if it is a named type.
+						else{
+							/* if(type.getLanguageSpecificName().startsWith(">")){*/ //anyway skip the wrapping element type even if it is a named type.
 							//get inner attributes and elements and add them as parameters
 							ArrayList elementlist = new ArrayList();
 							Iterator names = type.getElementnames();
@@ -267,17 +271,14 @@ public class WSDL2Ws {
 								pinfo.setElementName(type.getElementForElementName(elementname).getName());
 								minfo.addInputParameter(pinfo);		
 							}
-						/*}
-						else{
-							pinfo = new ParameterInfo(type,element.getQName().getLocalPart());
-							pinfo.setElementName(element.getQName());
-							minfo.addInputParameter(pinfo);
-						}*/
+							//remove the type that represents the wrapping element so that such type is not created.
+							this.typeMap.removeType(qname);
+						}
 					}
-				/*}
-				else{
-					throw new WrapperFault("A message name of document literal style WSDL is not \"parameters\"");
-				}*/
+					else{
+						
+					}
+				}
 	    	}
     	   	else{
 	    	  	while (paramlist.hasNext()) { //RPC style messages can have multiple parts
@@ -291,15 +292,17 @@ public class WSDL2Ws {
 	            Iterator returnlist = op.getOutput().getMessage().getParts().values().iterator();
 				if (returnlist.hasNext() && "document".equals(bindingEntry.getBindingStyle().getName())){
 					Part part = (Part) returnlist.next();
-					/*if ("parameters".equals(part.getName())){*///to have "parameters" is not a must. Ref : WS-I Basic profile 1.0
-						element = symbolTable.getElement(part.getElementName());
-						qname = element.getRefType().getQName();
-						if (qname != null){
-							minfo.setOutputMessage(element.getQName());
-							type = this.typeMap.getType(qname);				
+					element = symbolTable.getElement(part.getElementName());
+					qname = element.getRefType().getQName();
+					if (qname != null){
+						minfo.setOutputMessage(element.getQName());
+						type = this.typeMap.getType(qname);				
+						boolean wrapped = true; //TODO take this from a commandline argument
+						if (wrapped){
 							if(type == null)
 								 throw new WrapperFault("unregisterd type "+qname+" refered");
-							/*if(type.getLanguageSpecificName().startsWith(">")){*///anyway skip the wrapping element type even if it is a named type.
+							else{
+								/*if(type.getLanguageSpecificName().startsWith(">")){*///anyway skip the wrapping element type even if it is a named type.
 								//get inner attributes and elements and add them as parameters 
 								ArrayList elementlist = new ArrayList();
 								Iterator names = type.getElementnames();
@@ -314,18 +317,15 @@ public class WSDL2Ws {
 									pinfo.setElementName(type.getElementForElementName(elementname).getName());
 									minfo.addOutputParameter(pinfo);		
 								}							
-							/*}
-							else{
-								pinfo = new ParameterInfo(type,element.getQName().getLocalPart());
-								pinfo.setElementName(element.getQName());
-								minfo.addOutputParameter(pinfo);							
-							}*/
-							pinfo = new ParameterInfo(type,part.getName());
-							pinfo.setElementName(part.getElementName());					}
-					/*}
-					else{
-						throw new WrapperFault("A message name of document literal style WSDL is not \"parameters\"");
-					}*/
+								pinfo = new ParameterInfo(type,part.getName());
+								pinfo.setElementName(part.getElementName());
+								//remove the type that represents the wrapping element so that such type is not created.							
+								this.typeMap.removeType(qname);
+							}
+						}
+						else{
+						}
+					}
 				}
 				else{
 		            while (returnlist.hasNext()) { //RPC style messages can have multiple parts
@@ -441,7 +441,6 @@ public class WSDL2Ws {
 			}
 			type.getRefType();
 		}
-	
 		return createTypeInfo(type,targetLanguage);
 	}
     
@@ -453,8 +452,16 @@ public class WSDL2Ws {
      */
 
 	public Type createTypeInfo(TypeEntry type,String targetLanguage)throws WrapperFault{
-		Type typedata = typeMap.getType(type.getQName());
-		
+		if (!type.isReferenced()) return null; //do not add types which are not used in the wsdl
+		if (type instanceof CollectionElement){ //an array
+		}
+		else if (type instanceof DefinedElement){ //skip any wrapping elements where ref=....
+			if (type.getRefType() != null){
+				return createTypeInfo(type.getRefType(), targetLanguage);
+			}
+			return null;
+		}
+		Type typedata = typeMap.getType(type.getQName());		
 		if(typedata!= null){
 			//type is a inbild type or a already created type
 			return typedata;  
@@ -467,19 +474,19 @@ public class WSDL2Ws {
 			if (CUtils.isSimpleType(qn)) return null;
 			QName newqn = new QName(type.getQName().getNamespaceURI(), qn.getLocalPart()+"_Array");
 			typedata = new Type(newqn, newqn.getLocalPart(), true, targetLanguage);
+			typeMap.addType(newqn, typedata);
 		}else {
 			typedata = new Type(type.getQName(), type.getQName().getLocalPart(), true, targetLanguage);
+			typeMap.addType(type.getQName(), typedata);
 		}
-		typeMap.addType(type.getQName(), typedata);
 			
 		Node node = type.getNode();
 
-		Vector enumdata = null;
-		if(type.isSimpleType())
-			//enumdata = Utils.getEnumerationBaseAndValues(node,symbolTable);
-		enumdata = CUtils.getEnumerationBaseAndValues(node,symbolTable);
-		if(enumdata != null){
-			typedata.setEnumerationdata(enumdata);
+		Vector restrictdata = null;
+		if(type.isSimpleType()){
+			restrictdata = CUtils.getRestrictionBaseAndValues(node,symbolTable);
+			if(restrictdata != null)
+				typedata.setRestrictiondata(restrictdata);
 		}else if(type instanceof CollectionType){
 			typedata.setTypeNameForElementName(new ElementInfo(type.getQName(),
 					createTypeInfo(type.getRefType().getQName(),targetLanguage)));
@@ -551,12 +558,16 @@ public class WSDL2Ws {
 							if(typeName.getLocalPart().indexOf('[')>0){
 								String localpart = typeName.getLocalPart().substring(0,typeName.getLocalPart().indexOf('['));
 								typeName = new QName(typeName.getNamespaceURI(),localpart);
+								ElementInfo eleinfo = new ElementInfo(elem.getName(),createTypeInfo(elem.getType(),targetLanguage));
+								eleinfo.setMinOccurs(elem.getMinOccrs());
+								eleinfo.setMaxOccurs(elem.getMaxOccurs());
+								typedata.setTypeNameForElementName(eleinfo);
+							}else{
+								ElementInfo eleinfo = new ElementInfo(elem.getName(),createTypeInfo(typeName,targetLanguage));
+								eleinfo.setMinOccurs(elem.getMinOccrs());
+								eleinfo.setMaxOccurs(elem.getMaxOccurs());
+								typedata.setTypeNameForElementName(eleinfo);
 							}
-								
-							ElementInfo eleinfo = new ElementInfo(elem.getName(),createTypeInfo(typeName,targetLanguage));
-							eleinfo.setMinOccurs(elem.getMinOccrs());
-							eleinfo.setMaxOccurs(elem.getMaxOccurs());
-							typedata.setTypeNameForElementName(eleinfo);
 						}			
 					}
 				}
