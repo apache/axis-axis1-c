@@ -13,7 +13,7 @@ AxisConfig::~AxisConfig()
 {
 }
 
-bool AxisConfig::ReadConfFile()
+int AxisConfig::ReadConfFile()
 {
     FILE* fileConfig = NULL;
     FILE* fileConfig2 = NULL;
@@ -73,8 +73,10 @@ bool AxisConfig::ReadConfFile()
 
         }
         fclose(fileConfig);
+        
 
     #endif
+    return SUCCESS;
 }
 
 char* AxisConfig::GetWsddFilePath()
