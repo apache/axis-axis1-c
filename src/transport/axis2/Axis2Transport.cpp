@@ -201,6 +201,10 @@ AXIS_TRANSPORT_STATUS Axis2Transport::getBytes( char* pcBuffer, int* pSize )
                     m_bChunked = false;
                 }
 
+                m_strResponseHTTPHeaders = m_strReceived.substr(0 ,m_strReceived.find ("\r\n\r\n") + 2 );
+
+                processResponseHTTPHeaders();
+
                 // Skip headers and get payload
                 m_strReceived = m_strReceived.substr(m_strReceived.find ("\r\n\r\n") + 4 );
             }
@@ -525,3 +529,45 @@ axtoi (char *hexStg)
     }
     return (intValue);
 }
+
+void Axis2Transport::processResponseHTTPHeaders()
+{
+    unsigned int iPosition = std::string::npos;
+    unsigned int iStartPosition = iPosition;
+    if ( (iPosition = m_strResponseHTTPHeaders.find("HTTP") ) != std::string::npos)
+    {
+        m_strResponseHTTPProtocol = m_strResponseHTTPHeaders.substr( iPosition, strlen ("HTTP/1.x") );
+        iPosition += strlen ("HTTP/1.x");
+        while( m_strResponseHTTPHeaders.substr()[iPosition] == ' ' )
+            iPosition++;
+        iStartPosition = iPosition;
+        while( m_strResponseHTTPHeaders.substr()[iPosition] != ' ' )
+            iPosition++;
+        
+        m_strResponseHTTPStatusCode = m_strResponseHTTPHeaders.substr( iStartPosition, iPosition - iStartPosition );
+        // reached the end of the first line
+        iStartPosition = m_strResponseHTTPHeaders.find("\n");
+        iStartPosition++;
+
+        // read header fields and add to vector
+        do
+        {
+            m_strResponseHTTPHeaders = m_strResponseHTTPHeaders.substr( iStartPosition );
+            iPosition = m_strResponseHTTPHeaders.find("\n");
+            if ( iPosition == std::string::npos )
+                break;
+            std::string strHeaderLine = m_strResponseHTTPHeaders.substr(0, iPosition);
+            unsigned int iSeperator = strHeaderLine.find(":");
+            if (iSeperator == std::string::npos )
+                break;
+            iStartPosition = iPosition + 1;
+            m_vResponseHTTPHeaders.push_back ( std::make_pair (strHeaderLine.substr(0, iSeperator), strHeaderLine.substr(iSeperator + 1, strHeaderLine.length() - iSeperator - 1 - 1 ) ) );
+        } while (iPosition != std::string::npos);
+    
+    }
+    else
+    {
+        throw AxisTransportException(SERVER_TRANSPORT_UNKNOWN_HTTP_RESPONSE, "Protocol is not HTTP.");
+    }
+}
+
