@@ -283,7 +283,7 @@ void HttpTransport::HTTPBind()
     /* Set header values for additional prefixes, such as SOAPAction */
     for(int i=0; i < m_AdditionalHeader.size(); i++)
     {
-        if (m_AdditionalHeader[i].first == "Content-Length")
+        if (m_AdditionalHeader[i].first != "SOAPAction" )
         {
             m_OutHttpHeaders += m_AdditionalHeader[i].first;
             m_OutHttpHeaders += ": "; 
