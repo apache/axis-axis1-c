@@ -1,12 +1,8 @@
-Null returned for Element_node
-Null returned for Character_node
+1
 Project Type=Open Source
-No Of Children=5
-First Node Name = Name
-Second Node Name = Location Value =Sri Lanka
+No Of Children=8
+First Node Name = Project
+Parent Node Name = Location Value =Sri Lanka
 Last Child Value=message
-NULL is returned for non existing node
-NULL is returned for child location 0
-NULL is returned for -ve  child location
 5
 ---------------------- TEST COMPLETE -----------------------------

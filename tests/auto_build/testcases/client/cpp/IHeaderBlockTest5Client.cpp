@@ -30,13 +30,28 @@ int main(int argc, char* argv[])
 		AxisChar *prefix="np";
 		AxisChar *uri="http://ws.apache.org/";
 		IHeaderBlock *phb = ws.createSOAPHeaderBlock("TestHeader","http://ws.apache.org/");
-		/*Test for NULL arguments */
+
+		
+		/*An element node Bnoden1 is created  and set its name using setLocalName() */
 		BasicNode * Bnoden=phb->createImmediateChild(ELEMENT_NODE,NULL,NULL,NULL,NULL);
-		if(Bnoden==NULL)
-			cout << "Null returned for Element_node" << endl;
-		BasicNode * Bnoden1=phb->createImmediateChild(CHARACTER_NODE,NULL,NULL,NULL,NULL);
+		cout<<Bnoden->getNodeType()<<endl;
+        Bnoden->setLocalName("Project");
+		BasicNode *ch=phb->createChild(CHARACTER_NODE,NULL,NULL,NULL,"AXISCPP");
+		Bnoden->addChild(ch);
+
+		/*Test for NULL arguments. An element node Bnoden is created without any name */
+		BasicNode * Bnoden1=phb->createImmediateChild(ELEMENT_NODE,NULL,NULL,NULL,NULL);
 		if(Bnoden1==NULL)
+			cout << "Null returned for Element_node" << endl;
+		
+		BasicNode * Bnoden2=phb->createImmediateChild(CHARACTER_NODE,NULL,NULL,NULL,NULL);
+		if(Bnoden2==NULL)
 			cout << "Null returned for Character_node" << endl;
+		else{
+			Bnoden2->setValue("AXISCPP");
+		}
+
+
 		BasicNode * Bnode1=phb->createImmediateChild(ELEMENT_NODE,localname,prefix,uri, NULL);	
         BasicNode * Bnode2=phb->createChild(CHARACTER_NODE,NULL,NULL,NULL,"AXIS");
 		BasicNode * Bnode3=phb->createChild(ELEMENT_NODE,"FirstPart","np1","http://ws.apache.org/", NULL);
@@ -58,25 +73,25 @@ int main(int argc, char* argv[])
 		cout << "No Of Children=" << phb->getNoOfChildren()<< endl ;
 	    BasicNode * firstnode=phb->getFirstChild();
 		cout << "First Node Name = " << firstnode->getLocalName()<< endl ;
-		BasicNode * secondnode=phb->getChild(2);
-		BasicNode * childnode=secondnode->getFirstChild();		
-		cout << "Second Node Name = " << secondnode->getLocalName()<< endl ;
-		cout <<  " Value =" << childnode->getValue();
+		BasicNode * parentnode=phb->getChild(5);
+		BasicNode * childnode=parentnode->getFirstChild();		
+		cout << "Parent Node Name = " << parentnode->getLocalName();
+		cout <<  " Value =" << childnode->getValue() << endl;
 		BasicNode * lastnode=phb->getLastChild();
 		cout  << "Last Child Value=" << lastnode->getValue()<< endl;
 		BasicNode *nullNode=phb->getChild(phb->getNoOfChildren()+1);
-		if(nullNode==NULL)
-			cout << "NULL is returned for non existing node" << endl ;
+		if(nullNode!=NULL)
+			cout << "NULL is not returned for non existing node" << endl ;
 		BasicNode *nullNode1=phb->getChild(0);
-		if(nullNode1==NULL)
-			cout << "NULL is returned for child location 0"<< endl ;
+		if(nullNode1!=NULL)
+			cout << "NULL is not returned for child location 0"<< endl ;
 		BasicNode *nullNode2=phb->getChild(-2);
-		if(nullNode2==NULL)
-			cout << "NULL is returned for -ve  child location"<< endl;
+		if(nullNode2!=NULL)
+			cout << "NULL is not returned for -ve  child location"<< endl;
 		if (strcmp(op, "add") == 0)
 		{
 			iResult=ws.add(i1, i2);	
-			cout << endl << iResult << endl;
+			cout << iResult << endl;
 		}
 	    
 	}
