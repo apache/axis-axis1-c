@@ -60,8 +60,9 @@ package org.apache.axis.wsdl.wsdl2ws.c.literal;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Vector;
+
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.MethodInfo;
@@ -197,12 +198,15 @@ public class ClientStubHeaderWriter extends HeaderFileWriter {
 			writer.write("#include <axis/server/AxisWrapperAPI.h>\n");
 			Type atype;
 			Iterator types = this.wscontext.getTypemap().getTypes().iterator();
-			HashSet typeSet = new HashSet();
+			Vector typeSet = new Vector();
 			while (types.hasNext()) {
 				atype = (Type) types.next();
 				if (atype.getLanguageSpecificName().startsWith(">"))
 					continue;
-				typeSet.add(atype.getLanguageSpecificName());
+				if ( ! atype.isArray() )
+					typeSet.insertElementAt(atype.getLanguageSpecificName(), 0);
+				else
+					typeSet.add(atype.getLanguageSpecificName());
 			}
 			Iterator itr = typeSet.iterator();
 			while (itr.hasNext()) {
