@@ -23,6 +23,8 @@
 #include "IWrapperSoapSerializer.hpp"
 #include "BasicHandler.hpp"
 
+AXIS_CPP_NAMESPACE_START
+
 /**
  * @file AxisWrapperAPI.hpp
  * This file contains the API functions that are implemented by the WSDL2Ws
@@ -64,6 +66,7 @@ typedef int (* AXIS_SERIALIZE_FUNCT)(void*, void*, bool bArray);
  */
 typedef int (* AXIS_OBJECT_SIZE_FUNCT)(void);
 
+AXIS_CPP_NAMESPACE_END
 
 #endif
  
