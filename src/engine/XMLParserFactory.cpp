@@ -47,11 +47,11 @@ int XMLParserFactory::initialize()
 {
 #ifdef WIN32
 #ifdef _DEBUG
-	m_pcLibraryPath = "AxisXMLParser_D.dll"; //this will be taken from configuration file
-	//m_pcLibraryPath = g_pConfig->getAxConfProperty(AXCONF_XMLPARSER);
+	//m_pcLibraryPath = "AxisXMLParser_D.dll"; //this will be taken from configuration file
+	m_pcLibraryPath = g_pConfig->getAxConfProperty(AXCONF_XMLPARSER);
 #else
-	m_pcLibraryPath = "AxisXMLParser.dll"; //this will be taken from configuration file
-	//m_pcLibraryPath = g_pConfig->getAxConfProperty(AXCONF_XMLPARSER);
+	//m_pcLibraryPath = "AxisXMLParser.dll"; //this will be taken from configuration file
+	m_pcLibraryPath = g_pConfig->getAxConfProperty(AXCONF_XMLPARSER);
 #endif
 #else
 	m_pcLibraryPath = "/usr/local/Axis/libs/libaxis_xmlparser.so"; //this will be taken from configuration file
