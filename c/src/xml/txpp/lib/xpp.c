@@ -26,24 +26,21 @@
 #include "tag.h"
 
 
-#define MALLOC(s) (ct->m_mem.malloc_fcn((s)))
-#define MEMMOVE(p1, p2, s) (ct->m_mem.memmove_fcn((p1), (p2), (s)))
-#define REALLOC(p,s) (ct->m_mem.realloc_fcn((p),(s)))
-#define FREE(p) (ct->m_mem.free_fcn((p)))
-#define    MIN_BUFF_SZ    512    /* 0x10000 */
-#define INIT_BUFFER_SIZE 512 /* keep INIT_BUFFER_SIZE <= MIN_BUFF_SZ */
+#define MALLOC(s) (ct->m_mem.mallocFcn((s)))
+#define MEMMOVE(p1, p2, s) (ct->m_mem.memMoveFcn((p1), (p2), (s)))
+#define REALLOC(p,s) (ct->m_mem.reallocFcn((p),(s)))
+#define FREE(p) (ct->m_mem.freeFcn((p)))
+#define MIN_BUFF_SZ 128    /* 0x10000 */
+#define INIT_BUFFER_SIZE 128 /* keep INIT_BUFFER_SIZE <= MIN_BUFF_SZ */
 #define protocolEncodingName (ct->m_protocolEncodingName)
 #define initEncoding (ct->m_initEncoding)
 #define encoding (ct->m_encoding)
 #define ns (ct->m_ns)
-#define tok_state (ct->m_tok_state)
+#define tokState (ct->m_tokState)
 #define state (ct->m_state)
-#define num_chars (ct->m_num_chars)
+#define numOfChars (ct->m_numOfChars)
 #define XmlParseXmlDeclNS XmlParseXmlDecl
-#define eventPtr (ct->m_eventPtr)
-#define eventEndPtr (ct->m_eventEndPtr)
-#define XmlConvert XmlUtf8Convert
-#define data_counter (ct->m_data_counter)
+#define dataCounter (ct->m_dataCounter)
 #define namespaceSeparator (ct->m_namespaceSeparator)
 
 
@@ -51,282 +48,344 @@ int isDone = 0;
 
 enum 
 {
-        PROLOG, CONTENT
+    PROLOG, CONTENT
 };
 
-typedef struct xpp_context
+/** Struct which represents the parser object. All the member variables of this parser
+  * object are prefixed with m_ to represent them as parser memeber variables through
+  * out the code*/
+typedef struct SPPContext
 {
-    char *buff;
-    char *utf8buff;
-    int buff_sz;
-    int utf8buff_sz;
-    char *dirty;
-    char *next;
-    int m_num_chars;
+    char *m_buff;/* Tokenized ptr data buffer*/
+    char *m_utf8Buff;/* Utf8 tokenized ptr data buffer*/
+    int m_buffSize;/* Tokenized ptr data buffer size*/
+    int m_utf8BuffSize;/* Utf8 8 tokenized ptr data buffer size*/
+    char *m_prevTokPoint;/* This points to the previous tokenizing point of the buffer.
+                            This means that when the buffer to be tokenized is passed
+                            to the xmltok_impl.c's tokenizeContent method this pointer keeps
+                            pointing to the end of data so far tokenized. Only m_currentTokPoint
+                            is increased inside the tokenizeContent method*/
+    char *m_currentTokPoint;/* This points to the current tokenizing point of the buffer*/
+    int m_numOfChars;/* Number of characters to be parsed in the buffer*/
     int m_state;
-    int m_tok_state;
-    data_t data;
-    int m_data_counter;
-    const XML_Char *m_protocolEncodingName;
-    INIT_ENCODING m_initEncoding;
-    const ENCODING *m_encoding;
+    int m_tokState;/* Tokenizing state. Holds prolog or content*/
+    TokDataStruct m_data;/* Tokenized ptr data structure*/
+    int m_dataCounter;
+    const XML_Char *m_protocolEncodingName;/* Encoding name*/
+    INIT_ENCODING m_initEncoding;/* Encoding structure*/
+    const ENCODING *m_encoding;/* Encoding structure*/
     XML_Bool m_ns;
-      const char *m_eventPtr;
-      const char *m_eventEndPtr;
-    const XML_Memory_Handling_Suite m_mem;
+    const SppMemoryHandlingSuite m_mem;/* Memory handling suite*/
     XML_Char m_namespaceSeparator;
     
-    int (*get_block)(char *buff, int buff_sz, int *numchars);
+    int (*getBlock)(char *buff, int buffSize, int *numchars);
 
-} xpp_context;
+} SPPContext;
 
 
-static enum XML_Error
-processXmlDecl(xpp_context_t* ct, int isGeneralTextEntity,
-               const char *s, const char *next)
+static enum SPP_Error
+processXmlDecl(SPPParser* ct, int isGeneralTextEntity,
+               const char *s, const char *currentTokPoint)
 {
-  /* const XML_Char *encodingName = NULL; */
-  /* const XML_Char *storedEncName = NULL; */
-  const char *version = NULL;
-  const char *versionend;
-  /* const XML_Char *storedversion = NULL; */
-  int standalone = -1;
+    /* const XML_Char *encodingName = NULL; */
+    /* const XML_Char *storedEncName = NULL; */
+    const char *version = NULL;
+    const char *versionend;
+    /* const XML_Char *storedversion = NULL; */
+    int standalone = -1;
 
-  if (!(ns
+    if (!(ns
         ? XmlParseXmlDeclNS
         : XmlParseXmlDecl)(isGeneralTextEntity,
-                           /*Default encoding*/
-                           encoding,
-                           s,
-                           next,
-                           &eventPtr,
-                           &version,
-                           &versionend,
-                           &protocolEncodingName,
-                           /*Encoding is taken from the xml file declaration*/
-                           &encoding,
-                           &standalone))
+        /*Default encoding*/
+        encoding,
+        s,
+        currentTokPoint,
+        0,
+        &version,
+        &versionend,
+        &protocolEncodingName,
+        /*Encoding is taken from the xml file declaration*/
+        &encoding,
+        &standalone))
 
-    return XML_ERROR_SYNTAX;
-  else
-  {
-    /* printf("version:%s\n", version); */
-    /* printf("versionend:%s\n", versionend); */
-    *(protocolEncodingName + (ct->next - protocolEncodingName) - 3) = '\0';
+    return SPP_ERROR_SYNTAX;
+    else
+    {
+        /* printf("version:%s\n", version); */
+        /* printf("versionend:%s\n", versionend); */
+        *(protocolEncodingName + (ct->m_currentTokPoint - protocolEncodingName) - 3) = '\0';
     
-    printf("encodingName:%s\n", protocolEncodingName);
-    /* if(standalone) */
+        printf("encodingName:%s\n", protocolEncodingName);
+        /* if(standalone) */
         /* printf("standalone:%s\n", standalone); */
-    initialize_encoding(ct);
-    
-  }
-   
+        initializeEncoding(ct);
+    }
 }
 
 int ret_status;
-
-int parse(xpp_context_t *ct)
+enum SPP_Error parseProlog(SPPParser* ct)
 {
-    ct->data.num_ptrs = 0;
-    ct->data.num_ptrs_utf8 = 0;
-    ct->dirty = ct->next;
-    do {
+    ct->m_data.numOfPtrs = 0;
+    ct->m_data.numOfPtrsUtf8 = 0;
+    ct->m_prevTokPoint = ct->m_currentTokPoint;
+    do 
+    {
         ret_status = 0;    
-        if(PROLOG == tok_state)
+        if(PROLOG == tokState)
         {
-            initialize_encoding(ct);
-            /* printf("num_chars:%d\n", num_chars); */
+            initializeEncoding(ct);
+            /* printf("numOfChars:%d\n", numOfChars); */
             /* XmlPrologTok is defined in xmltok.h
              */
-            ret_status = XmlPrologTok(&state, &ct->data, encoding, &num_chars, 
-                ct->dirty, &ct->next);
-            if(XML_ERROR_NONE == ret_status)
+            ret_status = XmlPrologTok(&state, &ct->m_data, encoding, &numOfChars, 
+                ct->m_prevTokPoint, &ct->m_currentTokPoint);
+            if(SPP_ERROR_NONE == ret_status)
             {
-                /* printf("ct->dirty:%s\n", ct->dirty); */
-                /* printf("ct->next:%s\n", ct->next); */
-                processXmlDecl(ct, 0, ct->dirty, ct->next);
-                ct->dirty = ct->next;
+                /* printf("ct->m_prevTokPoint:%s\n", ct->m_prevTokPoint); */
+                /* printf("ct->m_currentTokPoint:%s\n", ct->m_currentTokPoint); */
+                processXmlDecl(ct, 0, ct->m_prevTokPoint, ct->m_currentTokPoint);
+                ct->m_prevTokPoint = ct->m_currentTokPoint;
             }
         }
-        if(XML_ERROR_NONE == ret_status)
+        return SPP_ERROR_NONE;
+    
+    } while (loadBuffer(ct));
+
+    return SPP_ERROR_PARSE_FAILED;
+}
+
+enum SPP_Error parseContent(SPPParser* ct)
+{
+    ct->m_data.numOfPtrs = 0;
+    ct->m_data.numOfPtrsUtf8 = 0;
+    /* Initialially m_preveTokPoint points to the currentTokPoint*/
+    ct->m_prevTokPoint = ct->m_currentTokPoint;
+    do
+    {
+        ret_status = 0;    
+        if(PROLOG == tokState)
         {
-            tok_state = CONTENT;
-            /* printf("num_chars:%d\n", num_chars); */
-            /* XmlContentTok is defined in xmltok.h.
-             *
-             */
-            ret_status = XmlContentTok(&state, &ct->data, encoding,
-                &num_chars, ct->dirty, &ct->next);
-        /* printf("tempStatus:%d\n", tempStatus); */
-        /* printf("ct->dirty:%s\n", ct->dirty); */
-        /* printf("ct->next:%s\n", ct->next); */
-            if(XML_ERROR_NONE == ret_status)
+            initializeEncoding(ct);
+            /* printf("numOfChars:%d\n", numOfChars); */
+
+            /* XmlPrologTok is defined in xmltok.h. While method is executed
+             * prevTokPoint is not changed. currentTokPoint moves forward*/
+            ret_status = XmlPrologTok(&state, &ct->m_data, encoding, &numOfChars, 
+            ct->m_prevTokPoint, &ct->m_currentTokPoint);
+            if(SPP_ERROR_NONE == ret_status)
             {
-                return XML_ERROR_NONE;
+                /* printf("ct->m_prevTokPoint:%s\n", ct->m_prevTokPoint); */
+                /* printf("ct->m_currentTokPoint:%s\n", ct->m_currentTokPoint); */
+                processXmlDecl(ct, 0, ct->m_prevTokPoint, ct->m_currentTokPoint);
+                ct->m_prevTokPoint = ct->m_currentTokPoint;
+            }
+        }
+        if(SPP_ERROR_NONE == ret_status)
+        {
+            tokState = CONTENT;
+            /* printf("numOfChars:%d\n", numOfChars); */
+            /* XmlContentTok is defined in xmltok.h.*/
+
+            
+            /* XmlContentTok is defined in xmltok.h. While method is executed
+             * prevTokPoint is not changed. currentTokPoint moves forward 
+             * until a valid tag element is completed*/
+            ret_status = XmlContentTok(&state, &ct->m_data, encoding,
+                &numOfChars, ct->m_prevTokPoint, &ct->m_currentTokPoint);
+            /* printf("tempStatus:%d\n", tempStatus); */
+            /* printf("ct->m_prevTokPoint:%s\n", ct->m_prevTokPoint); */
+            /* printf("ct->m_currentTokPoint:%s\n", ct->m_currentTokPoint); */
+            if(SPP_ERROR_NONE == ret_status)
+            {
+                return SPP_ERROR_NONE;
             }
         }    
     
-    } while (load_buffer(ct));
+    } while (loadBuffer(ct));
 
-    return XML_TEST_ERROR;
+    return SPP_ERROR_PARSE_FAILED;
 }
 
-    
-int load_buffer(xpp_context_t *ct)
+int loadBuffer(SPPParser *ct)
 {
     if(isDone)
-        return XML_ERROR_NONE;
-    int sz = ct->buff_sz - (int)(ct->next - ct->buff);
-    if (sz < MIN_BUFF_SZ) 
+        return SPP_ERROR_NONE;
+    /* Holds the size from the parser buffer beginning to the
+     * end of used data. Simply said, this is the already
+     * used data to make a tag, remaining in the buffer*/
+    int usedData;
+    /* Take the size of data that is remained from the previous parse
+     * iteration failing to complete a tag element */
+    int unusedData = (int)(ct->m_currentTokPoint - ct->m_prevTokPoint);
+    /* We can get rid of used data and use used data size and vacant size
+     * to fill the buffer again*/
+    int toBeFilledSize = ct->m_buffSize - unusedData;
+    /* We define MIN_BUFFER_SZ as the minimum value the toBeFilledSize
+     * could assume.
+     * If the toBeFilledSize is less than the MIN_BUFFER_SZ,
+     * buffer size is doubled for performance reasons */
+    if (toBeFilledSize < MIN_BUFF_SZ)
     {
-        int ii, n, m;
-        n = (int)(ct->next - ct->dirty);
-        ct->buff_sz *= 2;
-        sz = ct->buff_sz - n;
-        ct->buff = REALLOC(ct->buff, ct->buff_sz);
-
-        m = (int)(ct->dirty - ct->buff);
-        MEMMOVE(ct->buff, ct->dirty, n);
-        ct->dirty = ct->buff;
-        ct->next = ct->dirty + n;
+        int ii;
+        ct->m_buffSize *= 2;/* Double the parser buffer size*/
+        /* Now since the buffer size is increased the fill
+         * size is also increased*/
+        toBeFilledSize = ct->m_buffSize - unusedData;
+        /* Move the used data to the beginning of the parser
+         * buffer. Used data will be lost */
+        MEMMOVE(ct->m_buff, ct->m_prevTokPoint, unusedData);
+        ct->m_buff = REALLOC(ct->m_buff, ct->m_buffSize);
+        usedData = (int)(ct->m_prevTokPoint - ct->m_buff);
+        /*MEMMOVE(ct->m_buff, ct->m_prevTokPoint, unusedData);*/
+        ct->m_prevTokPoint = ct->m_buff;
+        ct->m_currentTokPoint = ct->m_prevTokPoint + unusedData;
         ii = 0;
-        while (ii < ct->data.num_ptrs)
-            ct->data.ptrs[ii++] -= m;
+        /* Move the already tokenized data pointers */
+        while (ii < ct->m_data.numOfPtrs)
+            ct->m_data.ptrBuff[ii++] -= usedData;
     }
-    
-    /* printf("ct->buff_sz:%d\n", ct->buff_sz); */
-    if(!ct->get_block(ct->next, sz, &num_chars)) 
+    else /* Don't double the buffer size. But get rid of the used data*/
     {
-        return XML_TEST_ERROR;
+        int ii;
+
+        usedData = (int)(ct->m_prevTokPoint - ct->m_buff);
+        MEMMOVE(ct->m_buff, ct->m_prevTokPoint, unusedData);
+        ct->m_prevTokPoint = ct->m_buff;
+        ct->m_currentTokPoint = ct->m_prevTokPoint + unusedData;
+        ii = 0;
+        while (ii < ct->m_data.numOfPtrs)
+            ct->m_data.ptrBuff[ii++] -= usedData;
+    }
+
+    if(!ct->getBlock(ct->m_currentTokPoint, toBeFilledSize, &numOfChars))
+    {
+        return SPP_ERROR_READ_BLOCK;
     }
     else
-        return XML_ERROR_NONE;
+        return SPP_ERROR_NONE; 
 }
 
-int get_block(char *buff, int buff_sz, int* numchars)
+int getBlock(char *buff, int toBeFilledSize, int* numchars)
 {
     int len;
     int done;
     *numchars = 0;
-    len = fread(buff, 1, buff_sz, stdin);
+    len = fread(buff, 1, toBeFilledSize, stdin);
     printf("len:%d\n", len);
     *numchars += len;
         if (ferror(stdin))
         {
             fprintf(stderr, "Read error\n");
-                exit(-1);
+            exit(-1);
         }
         done = feof(stdin);
     if(done) 
         isDone = 1;
-
-    return XML_ERROR_NONE;
+    printf("came3\n");
+    return SPP_ERROR_NONE;
 }
 
 
-xpp_context_t* parser_create(const XML_Char *encodingName)
+SPPParser* parserCreate(const XML_Char *encodingName)
 {
-    return parser_create_mh(encodingName, NULL, NULL);
+    return parserCreate_mh(encodingName, NULL, NULL);
 }
 
-xpp_context_t* parser_create_ns(const XML_Char *encodingName, XML_Char nsSep)
+SPPParser* parserCreate_ns(const XML_Char *encodingName, XML_Char nsSep)
 {
     XML_Char tmp[2];
     *tmp = nsSep;
-    return parser_create_mh(encodingName, NULL, tmp);
+    return parserCreate_mh(encodingName, NULL, tmp);
 }
 
-xpp_context_t* parser_create_mh(const XML_Char *encodingName, 
-                                const XML_Memory_Handling_Suite *memsuite,
-                                XML_Char nsSep)
+SPPParser* parserCreate_mh(const XML_Char *encodingName, 
+    const SppMemoryHandlingSuite *memsuite,
+    XML_Char nsSep)
 {
-    return parser_create_in(encodingName, memsuite, nsSep);
+    return parserCreate_in(encodingName, memsuite, nsSep);
 }
 
-static xpp_context_t* parser_create_in(const XML_Char *encodingName,
-                                       const XML_Memory_Handling_Suite *memsuite,
-                                       XML_Char nsSep)
+/** Create parser*/
+static SPPParser* parserCreate_in(const XML_Char *encodingName,
+    const SppMemoryHandlingSuite *memsuite,
+    XML_Char nsSep)
 {
-    xpp_context_t* ct;
-
+    SPPParser* ct;
+    /* If memory handling functions are externally provided*/
     if (memsuite) 
     {
-            XML_Memory_Handling_Suite *mtemp;
-        ct = (xpp_context_t*) memsuite->malloc_fcn(sizeof(struct xpp_context));
-            if (ct != NULL) 
-            {
-                  mtemp = (XML_Memory_Handling_Suite *)&(ct->m_mem);
-                  mtemp->malloc_fcn = memsuite->malloc_fcn;
-                  mtemp->memmove_fcn = memsuite->memmove_fcn;
-                  mtemp->realloc_fcn = memsuite->realloc_fcn;
-                  mtemp->free_fcn = memsuite->free_fcn;
-            }
-      }
-      else 
-      {
-            XML_Memory_Handling_Suite *mtemp;
-            ct = (xpp_context_t*) malloc(sizeof(struct xpp_context));
-            if (ct != NULL) 
-            {
-                  mtemp = (XML_Memory_Handling_Suite *)&(ct->m_mem);
-                  mtemp->malloc_fcn = malloc;
-                  mtemp->memmove_fcn = memmove;
-                  mtemp->realloc_fcn = realloc;
-                  mtemp->free_fcn = free;
-            }
-      }
+        SppMemoryHandlingSuite *mtemp;
+        ct = (SPPParser*) memsuite->mallocFcn(sizeof(struct SPPContext));
+        if (ct != NULL) 
+        {
+            mtemp = (SppMemoryHandlingSuite *)&(ct->m_mem);
+            mtemp->mallocFcn = memsuite->mallocFcn;
+            mtemp->memMoveFcn = memsuite->memMoveFcn;
+            mtemp->reallocFcn = memsuite->reallocFcn;
+            mtemp->freeFcn = memsuite->freeFcn;
+        }
+    }
+    else /* Use system memory handling functions*/
+    {
+        SppMemoryHandlingSuite *mtemp;
+        ct = (SPPParser*) malloc(sizeof(struct SPPContext));
+        if (ct != NULL) 
+        {
+            mtemp = (SppMemoryHandlingSuite *)&(ct->m_mem);
+            mtemp->mallocFcn = malloc;
+            mtemp->memMoveFcn = memmove;
+            mtemp->reallocFcn = realloc;
+            mtemp->freeFcn = free;
+        }
+    }
 
-    ct->buff_sz = INIT_BUFFER_SIZE;
-    ct->utf8buff_sz = ct->buff_sz;
-        char* buff = (char*) malloc(ct->buff_sz * sizeof(char));
-        char* utf8buff = (char*) malloc(ct->utf8buff_sz * sizeof(char));
-    if(buff == NULL || utf8buff == NULL)
+    ct->m_buffSize = INIT_BUFFER_SIZE;
+    ct->m_utf8BuffSize = ct->m_buffSize;
+    char* buff = (char*) malloc(ct->m_buffSize * sizeof(char));
+    char* utf8Buff = (char*) malloc(ct->m_utf8BuffSize * sizeof(char));
+    if(buff == NULL || utf8Buff == NULL)
         return NULL;
-        ct->buff = buff;
-    ct->utf8buff = utf8buff;
+    ct->m_buff = buff;
+    ct->m_utf8Buff = utf8Buff;
     
-
     namespaceSeparator = '!';
-      ns = XML_FALSE;
+    ns = XML_FALSE;
 
-
-    if(XML_ERROR_NONE == parser_init(ct, encodingName))
+    if(SPP_ERROR_NONE == parserInit(ct, encodingName))
         return ct;
     else
         return NULL;
 }
 
-static int parser_init(xpp_context_t* ct, const XML_Char *encodingName)
+/** Initialize parser*/
+static int parserInit(SPPParser* ct, const XML_Char *encodingName)
 {
     if(ct)
     {
-        num_chars = 0;
-        ct->next = ct->buff;
-        ct->dirty = ct->buff;
+        numOfChars = 0;
+        ct->m_currentTokPoint = ct->m_buff;
+        ct->m_prevTokPoint = ct->m_buff;
         state = S_0;
-        tok_state = PROLOG;
-        ct->get_block = get_block;
-        ct->data.ptrs = NULL;
-        ct->data.utf8ptrs = NULL;
-        /* number of pointers that can be held in the data.ptrs buffer is initialized
-         * to this amount at the beginning
-         */
-        ct->data.ptrs_sz = 8;
-        data_counter = 0;
-        eventPtr = NULL;
-        eventEndPtr = NULL;
+        tokState = PROLOG;
+        ct->getBlock = getBlock;
+        ct->m_data.ptrBuff = NULL;
+        ct->m_data.utf8PtrBuff = NULL;
+        ct->m_data.ptrBuffSize = 8;
+        dataCounter = 0;
         protocolEncodingName = encodingName;
 
-        return XML_ERROR_NONE;
+        return SPP_ERROR_NONE;
     }
     else
-        return XML_TEST_ERROR;
+        return SPP_ERROR_PARSER_INIT_FAILED;
 }
 
-static int initialize_encoding(xpp_context_t* ct)
+/** Initialize encoding*/
+static int initializeEncoding(SPPParser* ct)
 {
-        const char *s;
-#ifdef XML_UNICODE
+    const char *s;
+    #ifdef XML_UNICODE
         char encodingBuf[128];
         if (!protocolEncodingName)
             s = NULL;
@@ -335,111 +394,111 @@ static int initialize_encoding(xpp_context_t* ct)
             int i;
             for (i = 0; protocolEncodingName[i]; i++) 
             {
-                    if (i == sizeof(encodingBuf) - 1
-                            || (protocolEncodingName[i] & ~0x7f) != 0) 
-                    {
-                            encodingBuf[0] = '\0';
-                            break;
-                    }
-                    encodingBuf[i] = (char)protocolEncodingName[i];
+                if (i == sizeof(encodingBuf) - 1
+                    || (protocolEncodingName[i] & ~0x7f) != 0) 
+                {
+                    encodingBuf[0] = '\0';
+                    break;
+                }
+                encodingBuf[i] = (char)protocolEncodingName[i];
             }
             encodingBuf[i] = '\0';
             s = encodingBuf;
-    }
-#else
+        }
+    #else
     /* printf("protocolEncodingName:%s\n", protocolEncodingName); */
-        s = protocolEncodingName;
-#endif
-        if ((ns ? XmlInitEncodingNS : XmlInitEncoding)(&initEncoding,
-            &encoding, s))
-        return XML_ERROR_NONE;
-        /* return handleUnknownEncoding(parser, protocolEncodingName); */
+    s = protocolEncodingName;
+    #endif
+    if ((ns ? XmlInitEncodingNS : XmlInitEncoding)(&initEncoding,
+        &encoding, s))
+        return SPP_ERROR_NONE;
+    /* return handleUnknownEncoding(parser, protocolEncodingName); */
 }
 
-void* parser_free(xpp_context_t* ct)
+void* parserFree(SPPParser* ct)
 {
     free(ct);
 }
 
-data_t* next(xpp_context_t* ct)
+TokDataStruct* next(SPPParser* ct)
 {
-    data_counter = 0;
-    if(XML_ERROR_NONE == parse(ct))
+    dataCounter = 0;
+    if(SPP_ERROR_NONE == parseContent(ct))
     {
-        process_data(ct, encoding);
-        return &ct->data;
+        processData(ct, encoding);
+        return &ct->m_data;
     }
     else
         return NULL;    
 
 }
 
-static int add_utf8_ptr(char *ptr, data_t *data)
+static int addUtf8Ptr(char *ptr, TokDataStruct *data)
 {
-        if (data->num_ptrs_utf8 == data->ptrs_sz
-                || !data->utf8ptrs) 
+    if (data->numOfPtrsUtf8 == data->ptrBuffSize
+        || !data->utf8PtrBuff) 
+    {
+        int sz = data->ptrBuffSize << 1;
+        char **ptrBuff = (char **)malloc(sz << 2);
+        if (!ptrBuff)
+            return SPP_ERROR_NO_MEMORY;
+        if (data->utf8PtrBuff) 
         {
-                int sz = data->ptrs_sz << 1;
-                char **ptrs = (char **)malloc(sz << 2);
-                if (!ptrs)
-                        return XML_ERROR_NO_MEMORY;
-                if (data->utf8ptrs) 
-                {
-                       memmove(ptrs, data->utf8ptrs, data->num_ptrs_utf8 << 2);
-                       free(data->utf8ptrs);
-                }
-                data->utf8ptrs = ptrs;
-                data->ptrs_sz = sz;
+            memmove(ptrBuff, data->utf8PtrBuff, data->numOfPtrsUtf8 << 2);
+            free(data->utf8PtrBuff);
         }
+        data->utf8PtrBuff = ptrBuff;
+        data->ptrBuffSize = sz;
+    }
 
-        data->utf8ptrs[data->num_ptrs_utf8++] = ptr;
+    data->utf8PtrBuff[data->numOfPtrsUtf8++] = ptr;
 
-        return XML_ERROR_NONE;
+    return SPP_ERROR_NONE;
 }
 
 
-static void process_data(xpp_context_t* ct)
+static void processData(SPPParser* ct)
 {
     int intCount = 0;
     char holder;
-        int bufSize;
-        int totLen = 0;
+    int bufSize;
+    int totLen = 0;
     int wordLen = 0;
     int tempDiff;
-    XML_Char* toPtr = (XML_Char *) ct->utf8buff;    
-    XML_Char* startPtr = (XML_Char *) ct->utf8buff;
-    XML_Char* endPtr = (XML_Char *) ct->utf8buff;
-    while(intCount < ct->data.num_ptrs)
+    XML_Char* toPtr = (XML_Char *) ct->m_utf8Buff;    
+    XML_Char* startPtr = (XML_Char *) ct->m_utf8Buff;
+    XML_Char* endPtr = (XML_Char *) ct->m_utf8Buff;
+    while(intCount < ct->m_data.numOfPtrs)
     {
-        const char *rawNameEnd = &ct->data.ptrs[intCount + 1][1];
-        const char *fromPtr = ct->data.ptrs[intCount];
-        tempDiff = ct->data.ptrs[intCount+1] - ct->data.ptrs[intCount];
+        const char *rawNameEnd = &ct->m_data.ptrBuff[intCount + 1][1];
+        const char *fromPtr = ct->m_data.ptrBuff[intCount];
+        tempDiff = ct->m_data.ptrBuff[intCount+1] - ct->m_data.ptrBuff[intCount];
         if(tempDiff <= 1)
             return;
         startPtr += wordLen;
         /* printf("fromPtr:\n\n%s\n\n", fromPtr); */
         /* printf("rawNameEnd:\n\n%s\n\n", rawNameEnd); */
         
-            if(ct->utf8buff_sz < ct->buff_sz)
-            {
-            ct->utf8buff_sz = 2 * ct->buff_sz;
-            /* printf("utf8buff_sz:%d\n", ct->utf8buff_sz); */
-                char *temp = (char *)REALLOC(ct->utf8buff, ct->utf8buff_sz);
-                      if (temp == NULL)
-                        return XML_ERROR_NO_MEMORY;
-                      ct->utf8buff = temp;
-            }
-            XmlDamConvert(encoding, &fromPtr, rawNameEnd,
-                (ICHAR **)&toPtr, (ICHAR *)ct->utf8buff + ct->utf8buff_sz);
+        if(ct->m_utf8BuffSize < ct->m_buffSize)
+        {
+            ct->m_utf8BuffSize = 2 * ct->m_buffSize;
+            /* printf("m_utf8BuffSize:%d\n", ct->m_utf8BuffSize); */
+            char *temp = (char *)REALLOC(ct->m_utf8Buff, ct->m_utf8BuffSize);
+            if (temp == NULL)
+                return SPP_ERROR_NO_MEMORY;
+            ct->m_utf8Buff = temp;
+        }
+        SppUtf8Convert(encoding, &fromPtr, rawNameEnd,
+            (ICHAR **)&toPtr, (ICHAR *)ct->m_utf8Buff + ct->m_utf8BuffSize);
         /* printf("startPtr:\n%s\n", startPtr); */
         /* printf("toPtr:\n%s\n", toPtr); */
         wordLen = toPtr - startPtr;
         /* printf("wordLen:%d\n", wordLen); */
-            totLen += wordLen;
+        totLen += wordLen;
             
         endPtr = toPtr - 1;
-        add_utf8_ptr(startPtr, &ct->data);
-        add_utf8_ptr(endPtr, &ct->data);
+        addUtf8Ptr(startPtr, &ct->m_data);
+        addUtf8Ptr(endPtr, &ct->m_data);
         intCount += 2;
     }
 
@@ -447,19 +506,19 @@ static void process_data(xpp_context_t* ct)
         
 }
 
-int get_next_element_as_int(xpp_context_t* ct, int* parse_error)
+int getNextElementAsInt(SPPParser* ct, int* parseError)
 {
     int intTemp;
     char* temp;
 
-    data_counter = 0;
-        temp = ct->data.utf8ptrs[data_counter +  1][1];
-        ct->data.utf8ptrs[data_counter + 1][1] = XML_T('\0');
-    /* printf("ct->data.ptrs[0]:%s\n", ct->data.ptrs[0]); */
-        sscanf(ct->data.utf8ptrs[data_counter], "%d", &intTemp);
-        ct->data.utf8ptrs[data_counter + 1][1] = temp;
+    dataCounter = 0;
+        temp = ct->m_data.utf8PtrBuff[dataCounter +  1][1];
+        ct->m_data.utf8PtrBuff[dataCounter + 1][1] = XML_T('\0');
+    /* printf("ct->m_data.ptrBuff[0]:%s\n", ct->m_data.ptrBuff[0]); */
+        sscanf(ct->m_data.utf8PtrBuff[dataCounter], "%d", &intTemp);
+        ct->m_data.utf8PtrBuff[dataCounter + 1][1] = temp;
                         
-    *parse_error = XML_ERROR_NONE;    
+    *parseError = SPP_ERROR_NONE;    
     return intTemp;
 
 }
@@ -467,30 +526,27 @@ int get_next_element_as_int(xpp_context_t* ct, int* parse_error)
 /*
  *   Prier to call this method state should be START_TAG
  */
-int get_next_attribute_as_int(xpp_context_t* ct, int* parse_error)
+int getNextAttributeAsInt(SPPParser* ct, int* parseError)
 {
     int intTemp;
     char* temp;
-    data_t* data;
+    TokDataStruct* data;
 
-    if (2 >= ct->data.num_ptrs_utf8) 
+    if (2 >= ct->m_data.numOfPtrsUtf8) 
     {
-        *parse_error = XML_TEST_ERROR;
+        *parseError = SPP_ERROR_UNEXPECTED_TOKEN_CONTENT;
         return 0;
     }
-
-
-    data_counter += 2;
-        temp = ct->data.ptrs[data_counter + 1][1];
-        ct->data.utf8ptrs[data_counter+1][1] = '\0';
-        /* printf("ct->data.ptrs[data_counter]:%s\n", 
-         * ct->data.ptrs[data_counter]); 
-         */
-        sscanf(ct->data.utf8ptrs[data_counter], "%d", &intTemp);
-        ct->data.utf8ptrs[data_counter+1][1] = temp;
-                        
-        
-    *parse_error = XML_ERROR_NONE;
+    dataCounter += 2;
+    temp = ct->m_data.ptrBuff[dataCounter + 1][1];
+    ct->m_data.utf8PtrBuff[dataCounter+1][1] = '\0';
+    /* printf("ct->m_data.ptrBuff[dataCounter]:%s\n", 
+     * ct->m_data.ptrBuff[dataCounter]); 
+     */
+    sscanf(ct->m_data.utf8PtrBuff[dataCounter], "%d", &intTemp);
+    ct->m_data.utf8PtrBuff[dataCounter+1][1] = temp;
+    
+    *parseError = SPP_ERROR_NONE;
     return intTemp;
 
 }

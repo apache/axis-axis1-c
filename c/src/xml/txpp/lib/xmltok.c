@@ -35,24 +35,13 @@
 #endif
 
 /**
- * xpp_prolog_tok and xpp_content_tok are defined in xmltok_impl.c
- * xpp_prolog_tok tokenize the xml declaration
- * xpp_content_tok tokenize the xml content
+ * tokenizeProlog and tokenizeContent are defined in xmltok_impl.c
+ * tokenizeProlog tokenize the xml declaration
+ * tokenizeContent tokenize the xml content
  */
 #define VTABLE1 \
-  { PREFIX(xpp_prolog_tok), PREFIX(xpp_content_tok), \
-    PREFIX(cdataSectionTok) IGNORE_SECTION_TOK_VTABLE }, \
-  { PREFIX(attributeValueTok), PREFIX(entityValueTok) }, \
-  PREFIX(sameName), \
-  PREFIX(nameMatchesAscii), \
-  PREFIX(nameLength), \
-  PREFIX(skipS), \
-  PREFIX(getAtts), \
-  PREFIX(charRefNumber), \
-  PREFIX(predefinedEntityName), \
-  PREFIX(updatePosition), \
-  PREFIX(isPublicId)
-
+  { PREFIX(tokenizeProlog), PREFIX(tokenizeContent)}, \
+  PREFIX(nameMatchesAscii)
 
 #define VTABLE VTABLE1, PREFIX(toUtf8), PREFIX(toUtf16)
 
@@ -982,12 +971,12 @@ streqci(const char *s1, const char *s2)
   return 1;
 }
 
-static void PTRCALL
+/*static void PTRCALL
 initUpdatePosition(const ENCODING *enc, const char *ptr,
                    const char *end, POSITION *pos)
 {
   normal_updatePosition(&utf8_encoding.enc, ptr, end, pos);
-}
+}*/
 
 static int
 toAscii(const ENCODING *enc, const char *ptr, const char *end)
@@ -1604,10 +1593,10 @@ getEncodingIndex(const char *name)
  */
 
 static int
-initScan(int* parser_state, data_t* data, const ENCODING **encodingTable,
+initScan(int* parserState, TokDataStruct* data, const ENCODING **encodingTable,
          const INIT_ENCODING *enc,
          int state,
-         int *num_chars,
+         int *numOfChars,
      char* end,
          const char **nextTokPtr)
 {
@@ -1619,7 +1608,7 @@ initScan(int* parser_state, data_t* data, const ENCODING **encodingTable,
  */
       encPtr = enc->encPtr;
       *encPtr = encodingTable[INIT_ENC_INDEX(enc)];
-      return XmlTok(parser_state, data,*encPtr, state, num_chars, end, nextTokPtr);
+      return XmlTok(parserState, data,*encPtr, state, numOfChars, end, nextTokPtr);
 /*    end temp code
  */
   if (ptr == end)
@@ -1674,7 +1663,7 @@ initScan(int* parser_state, data_t* data, const ENCODING **encodingTable,
           && state == XML_CONTENT_STATE)
         break;
       *encPtr = encodingTable[UTF_16LE_ENC];
-      return XmlTok(parser_state, data,*encPtr, state, num_chars, end,
+      return XmlTok(parserState, data,*encPtr, state, numOfChars, end,
           nextTokPtr);
     case 0xFFFE:
       if (INIT_ENC_INDEX(enc) == ISO_8859_1_ENC
@@ -1719,7 +1708,7 @@ initScan(int* parser_state, data_t* data, const ENCODING **encodingTable,
         if (state == XML_CONTENT_STATE && INIT_ENC_INDEX(enc) == UTF_16LE_ENC)
           break;
         *encPtr = encodingTable[UTF_16BE_ENC];
-        return XmlTok(parser_state, data, *encPtr, state, num_chars,
+        return XmlTok(parserState, data, *encPtr, state, numOfChars,
             end, nextTokPtr);
       }
       else if (ptr[1] == '\0') 
@@ -1736,14 +1725,14 @@ initScan(int* parser_state, data_t* data, const ENCODING **encodingTable,
         if (state == XML_CONTENT_STATE)
           break;
         *encPtr = encodingTable[UTF_16LE_ENC];
-        return XmlTok(parser_state, data,*encPtr, state, num_chars,
+        return XmlTok(parserState, data,*encPtr, state, numOfChars,
             end, nextTokPtr);
       }
       break;
     }
   }
   *encPtr = encodingTable[INIT_ENC_INDEX(enc)];
-  return XmlTok(parser_state, data,*encPtr, state, num_chars, end, nextTokPtr);
+  return XmlTok(parserState, data,*encPtr, state, numOfChars, end, nextTokPtr);
 }
 
 
