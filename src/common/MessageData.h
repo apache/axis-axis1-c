@@ -50,9 +50,11 @@ public:
 private:
     void getAdminUtils(IAdminUtils** pIAdminUtils);
 public:
-	const void* getProperty(AxisChar* pachName);
+    const void* getProperty(AxisChar* pachName);
+    void* getComplexProperty(AxisChar* pachName);
     int setProperty(AxisChar* pachName, const AxisChar* pachValue);
     int setProperty(AxisChar* pachName, const void* pachValue, int len);
+    void setComplexProperty(AxisChar* pachName, void* pachValue, int iObjectSize);
     void setOperationName(const AxisChar* pchOperation)
     {m_sOperationName = pchOperation;};
     void getSoapDeSerializer
@@ -83,6 +85,7 @@ private:
     bool m_bPastPivotState;
     map <AxisChar*, AxisChar*, ltstr> m_Properties;
     static const AxisChar* m_pachBlankPropertyValue;
+    map <AxisChar*, void*, ltstr> m_ComplexProperties;
 };
 
 AXIS_CPP_NAMESPACE_END

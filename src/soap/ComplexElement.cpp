@@ -402,7 +402,7 @@ NODE_TYPE ComplexElement::getNodeType() const
     return m_iNodeType;
 }
 
-const BasicNode* ComplexElement::getFirstChild() const
+BasicNode* ComplexElement::getFirstChild()
 {
     list<BasicNode*>::const_iterator itCurrChild= m_children.begin();
 
@@ -414,9 +414,9 @@ const BasicNode* ComplexElement::getFirstChild() const
     return NULL;
 }
 
-const BasicNode* ComplexElement::getLastChild() const
+BasicNode* ComplexElement::getLastChild()
 {
-    list<BasicNode*>::const_reverse_iterator ritCurrChild= m_children.rbegin();
+    list<BasicNode*>::reverse_iterator ritCurrChild= m_children.rbegin();
 
     if (ritCurrChild != m_children.rend())
     {        
@@ -426,7 +426,7 @@ const BasicNode* ComplexElement::getLastChild() const
     return NULL;
 }
 
-const BasicNode* ComplexElement::getChild(int iChildPosition) const
+BasicNode* ComplexElement::getChild(int iChildPosition)
 {
     if (iChildPosition > iNoOfChildren)
     {

@@ -160,6 +160,16 @@ int MessageData::setProperty (AxisChar* pachName, const void* pachValue, int len
      return AXIS_SUCCESS;
 }
 
+void MessageData::setComplexProperty(AxisChar* pachName, void* pValue, int iObjectSize)
+{
+    AxisChar* pachTmpName = new AxisChar[strlen (pachName) + 1];
+    strcpy (pachTmpName, pachName);
+    void* pchTmpObject = malloc(iObjectSize);
+    pchTmpObject = pValue;
+
+    m_ComplexProperties[pachTmpName] = pchTmpObject;
+}
+
 /*
  *    The method caller has to check whether the returned string is empty or
  *    not. If it is empty then the idea is that the property is not 
@@ -173,6 +183,16 @@ const void* MessageData::getProperty (AxisChar* pachName)
     }
 
     return m_pachBlankPropertyValue;
+}
+
+void* MessageData::getComplexProperty(AxisChar* pachName)
+{
+    if (m_ComplexProperties.find (pachName) != m_ComplexProperties.end ())
+    {
+        return m_ComplexProperties[pachName];
+    }
+                                                                                                                                                                            
+    return NULL;	
 }
 
 void MessageData::getAdminUtils (IAdminUtils** pIAdminUtils)

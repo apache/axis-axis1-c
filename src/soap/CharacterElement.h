@@ -164,7 +164,7 @@ public:
       *
       * @return Always return NULL to indicate unsuccessfull operation.
       */
-     const BasicNode* getFirstChild() const {return NULL;}
+     BasicNode* getFirstChild() {return NULL;}
 
     /**
       * This method is overridden to return NULL always because this 
@@ -173,7 +173,7 @@ public:
       *
       * @return Always return NULL to indicate unsuccessfull operation.
       */
-    const BasicNode* getLastChild() const {return NULL;}
+    BasicNode* getLastChild() {return NULL;}
 
     /**
       * This method is overridden to return NULL always because this 
@@ -183,7 +183,7 @@ public:
       * @param iChildPosition The child position.
       * @return Always return NULL to indicate unsuccessfull operation.
       */
-    const BasicNode* getChild(int iChildPosition) const {return NULL;}
+    BasicNode* getChild(int iChildPosition) {return NULL;}
 
     /**
       * This method is overridden to return fail(AXIS_FAIL) always because this 

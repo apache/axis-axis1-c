@@ -166,7 +166,7 @@ public:
       *
       * @return The first Child Node of this Element.
       */
-    virtual const BasicNode* getFirstChild() const = 0;
+    virtual BasicNode* getFirstChild() = 0;
 
     /**
       * Gets the last Child Node of this Complex Element. The operation
@@ -174,7 +174,7 @@ public:
       *
       * @return The last Child Node of this Element.
       */
-    virtual const BasicNode* getLastChild() const = 0;
+    virtual BasicNode* getLastChild() = 0;
 
     /**
       * Get the Child Node of the given position. The operation behavior
@@ -183,7 +183,7 @@ public:
       * @param iChildPosition The child position.
       * @return The Child Node of the given position.
       */
-    virtual const BasicNode* getChild(int iChildPosition) const = 0;
+    virtual BasicNode* getChild(int iChildPosition) = 0;
 
     /**
       * Adds the given child node to this Element. The operation behavior

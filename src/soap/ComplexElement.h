@@ -159,21 +159,21 @@ public:
       * @param iChildPosition The child position.
       * @return The Child Node of the given position.
       */
-    const BasicNode* getChild(int iChildPosition) const;
+    BasicNode* getChild(int iChildPosition);
 
     /**
       * Gets the last Child Node of this Complex Element.
       *
       * @return The last Child Node of this Complex Element.
       */
-    const BasicNode* getLastChild() const;
+    BasicNode* getLastChild();
 
     /**
       * Gets the first Child Node of this Complex Element.
       *
       * @return The first Child Node of this Complex Element.
       */
-    const BasicNode* getFirstChild() const;
+    BasicNode* getFirstChild();
 
     /**
       * Adds the given child node to this Complex Element.
