@@ -441,7 +441,11 @@ throw (AxisException, AxisTransportException)
                                            + 2 - start);
                 processResponseHTTPHeaders ();
 
-                if (m_iResponseHTTPStatusCode != 200 && m_iResponseHTTPStatusCode != 500)
+                if (m_iResponseHTTPStatusCode == 100) 
+                {
+                    m_bReadPastHTTPHeaders = false; 
+                }
+                else if (m_iResponseHTTPStatusCode < 200 || m_iResponseHTTPStatusCode >= 300)
                 {
                     throw
                     AxisTransportException
