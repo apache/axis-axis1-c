@@ -3,7 +3,7 @@
 #if !defined(__PACKET_H_INCLUDED__)
 #define __PACKET_H_INCLUDED__
 
-#include "../common/GDefine.h"
+#include "GDefine.h"
 
 typedef struct 
 {
@@ -34,9 +34,6 @@ typedef struct
 
 typedef struct
 {
-	char * ip_soap;
-	long ip_soapcount;
-	const char * op_soap;
 	header * ip_headers;
 	int ip_headercount;
 	header * op_headers;
@@ -63,6 +60,39 @@ typedef struct
 } soapstream;
 
 char* getheader(soapstream* soap, char* pchkey);
+
+//This function is implemented in axis
+//int initialize_module();
+
+//This function is implemented in axis
+//int initialize_process();
+
+
+//This function is implemented in axis
+//int finalize_process();
+
+#ifdef __cplusplus
+extern "C"
+{
+  //This function should be implemented by module authors
+  //Allows to send pieces of soap response the transport handler
+  int send_response_bytes(char * res);
+
+  //This function should be implemented by module authors
+  //Allows axis to get pieces of the request as they come to the transport listener
+  int get_request_bytes(char * req, int reqsize, int* retsize);
+
+  //This fucntion should be implemented by module authors
+  int send_transport_information(soapstream *);
+}
+
+#else
+  int send_response_bytes(char * res);
+
+  int get_request_bytes(char * req, int reqsize, int* retsize);
+
+  int send_transport_information(soapstream *);
+#endif
 
 #endif
 
