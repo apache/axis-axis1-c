@@ -58,22 +58,27 @@ package org.apache.geronimo.ews.ws4j2ee.toWs;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Vector;
 
 import org.apache.axis.components.logger.LogFactory;
+import org.apache.axis.utils.ClassUtils;
+import org.apache.axis.wsdl.fromJava.Emitter;
 import org.apache.commons.logging.Log;
 import org.apache.geronimo.ews.ws4j2ee.context.ContextFactory;
 import org.apache.geronimo.ews.ws4j2ee.context.ContextValidator;
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
+import org.apache.geronimo.ews.ws4j2ee.context.impl.AxisEmitterBasedJaxRpcMapperContext;
 import org.apache.geronimo.ews.ws4j2ee.context.impl.J2EEWebServiceContextImpl;
+import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.AxisEmitterBasedWSCFContext;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFContext;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFPortComponent;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFWebserviceDescription;
+import org.apache.geronimo.ews.ws4j2ee.context.wsdl.impl.AxisEmitterBasedWSDLContext;
 import org.apache.geronimo.ews.ws4j2ee.parsers.EJBDDParser;
 import org.apache.geronimo.ews.ws4j2ee.parsers.WebDDParser;
 import org.apache.geronimo.ews.ws4j2ee.toWs.wsdl.WSDLGenarator;
+import org.apache.geronimo.ews.ws4j2ee.utils.JarFileLoader;
 import org.apache.geronimo.ews.ws4j2ee.utils.Utils;
 
 /**
@@ -87,13 +92,26 @@ public class Ws4J2EEwithoutWSDL implements Generator {
     private Vector genarators;
     private String[] args;
     private J2EEWebServiceContext wscontext;
-    private boolean verbose = false;
+    private boolean verbose = true;
     private Ws4J2eeWtihoutWSDLCLOptionParser clparser;
+	private File jarfile;
+    
+    private InputStream ejbddin;
+    private InputStream webddin;
+    private Emitter emitter;
+	
+	public Ws4J2EEwithoutWSDL(){
+		emitter = new Emitter();	
+	}
+
 
     public Ws4J2EEwithoutWSDL(String[] args, boolean useSEI) throws GenerationFault {
+		this();
 		try{
+			
 			this.args = args;
 	        genarators = new Vector();
+			
 			
 			//create the context
 	        this.wscontext = new J2EEWebServiceContextImpl(false);
@@ -101,7 +119,7 @@ public class Ws4J2EEwithoutWSDL implements Generator {
 			wscontext.getMiscInfo().setVerbose(verbose);
 			
 			//parse the arguments 
-			clparser = new Ws4J2eeWtihoutWSDLCLOptionParser(args);
+			clparser = new Ws4J2eeWtihoutWSDLCLOptionParser(args,emitter);
 			this.wscffile = clparser.getWSCFFileLocation();
 			wscontext.getMiscInfo().setWsConfFileLocation(clparser.getOutPutLocation());
 			wscontext.getMiscInfo().setOutputPath(clparser.getOutPutLocation());
@@ -115,6 +133,29 @@ public class Ws4J2EEwithoutWSDL implements Generator {
 			throw new GenerationFault(e);
 		}	
     }
+
+	public Ws4J2EEwithoutWSDL(String jarFile,String outputDirOption) throws GenerationFault {
+			this();
+			jarfile = new File(jarFile);
+			genarators = new Vector();
+			
+			JarFileLoader jarfileLoader = new JarFileLoader(jarFile);
+			ejbddin = jarfileLoader.getEjbJarfile();
+			webddin = jarfileLoader.getWebddfile();
+			
+			//create the context
+			this.wscontext = new J2EEWebServiceContextImpl(false);
+			this.wscontext.setMiscInfo(ContextFactory.createMiscInfo());
+			wscontext.getMiscInfo().setVerbose(verbose);
+			
+			//parse the arguments 
+			wscontext.getMiscInfo().setWsConfFileLocation(outputDirOption);
+			wscontext.getMiscInfo().setOutputPath(outputDirOption);
+			
+			//create the wscf context
+			WSCFContext wscfcontext = ContextFactory.createWSCFContext(jarfileLoader.getWscfFile());
+			wscontext.setWSCFContext(wscfcontext);
+	}
 
     /**
      * genarate. what is genarated is depend on genarators included.
@@ -152,14 +193,51 @@ public class Ws4J2EEwithoutWSDL implements Generator {
 			wscontext.getMiscInfo().setWsdlFile(wsdlFile);
 			wscontext.getMiscInfo().setJaxrpcfile(Utils.getAbsolutePath(wscfwsdis.getJaxrpcMappingFile(),wscontext.getMiscInfo().getOutPutPath()));
 			
+			File file = new File(wscontext.getMiscInfo().getOutPutPath()+"/META-INF");
+			if (!file.exists())
+				file.mkdirs();
+			
 			//generate the wsdl file
+			if(jarfile != null){
+				ClassUtils.setDefaultClassLoader(ClassUtils.createClassLoader(
+						jarfile.getAbsolutePath(),this.getClass().getClassLoader()));
+			}
+
             if (verbose)
                 log.info("calling Java2WSDL to genarated wsdl ...........");
             WSDLGenarator wsdlgen = (WSDLGenarator) GeneratorFactory.createGenerator(wscontext, GenerationConstants.WSDL_GENERATOR);
-            wsdlgen.setArgs(clparser.getArgsforJava2WSDLEmitter(seiName,wsdlFile));
-            //other than genarating the WSDL file this will initaite all the contxt's
-            //and validate the Context.	
-            wsdlgen.genarate();
+
+			emitter.setLocationUrl("http://127.0.0.1");
+			emitter.setServicePortName(port.getWsdlPort().getLocalpart());
+			String wsdlImplFilename = null;
+			int mode = Emitter.MODE_ALL;
+			if(clparser != null){
+				wsdlImplFilename = clparser.getWsdlImplFilename();
+				mode = clparser.getMode();
+			}
+
+			 // Find the class using the name
+			 emitter.setCls(seiName);
+			 // Generate a full wsdl, or interface & implementation wsdls
+			 if (wsdlImplFilename == null) {
+				 emitter.emit(wsdlFile,mode);
+			 } else {
+				 emitter.emit(wsdlFile, wsdlImplFilename);
+			 }
+			 
+			//initiate the wsdlContext
+			this.wscontext.setWSDLContext(new AxisEmitterBasedWSDLContext(emitter.getWSDL()));
+			//parse the ejb-jar.xml here
+			ContextValidator validator = new ContextValidator(wscontext);
+			//initiate the jaxrpcmapping context 
+			this.wscontext.setJAXRPCMappingContext(new AxisEmitterBasedJaxRpcMapperContext(emitter, wscontext));
+			//initiate the wscf context 
+			this.wscontext.setWSCFContext(new AxisEmitterBasedWSCFContext(emitter, wscontext));
+			//validate the j2ee context
+			validator.validateWithOutWSDL(emitter);
+
+	
+				 // everything is good
             if (verbose)
                 log.info("genarating jaxrpc-mapper.xml ..............");
 			Generator jaxrpcfilegen = GeneratorFactory.createGenerator(wscontext,
@@ -175,7 +253,7 @@ public class Ws4J2EEwithoutWSDL implements Generator {
 
 			//remove the repeting SEI. TODO is this required to remove or not                     
 			String repeatingSEIName = wscontext.getMiscInfo().getOutPutPath()+"/"+seiName.replace('.','/')+".java"; 
-			File file = new File(repeatingSEIName);
+			file = new File(repeatingSEIName);
 			if(file.exists()){
 				file.delete();
 				System.out.println(repeatingSEIName + " deleted..............");
@@ -184,13 +262,16 @@ public class Ws4J2EEwithoutWSDL implements Generator {
 			if(ejbLink != null){
 				wscontext.getMiscInfo().setEjbName(ejbLink);
 				EJBDDParser ejbDDparser = new EJBDDParser(wscontext);
-				file = new File(clparser.getEjbConfFileLocation()); 
-				InputStream ejbddin;
-				if(file.exists()){
-					ejbddin = new FileInputStream(file);
-				}else{
-					ejbddin = Ws4J2EEwithoutWSDL.class.getResourceAsStream("META-INF/ejb-jar.xml");
+				 
+				if(ejbddin == null){
+					file = new File(clparser.getEjbConfFileLocation());
+					if(file.exists()){
+						ejbddin = new FileInputStream(file);
+					}else{
+						ejbddin = Ws4J2EEwithoutWSDL.class.getResourceAsStream("META-INF/ejb-jar.xml");
+					}
 				}
+
 				if (ejbddin != null) {
 					ejbDDparser.parse(ejbddin);
 					ejbddin.close();
@@ -206,11 +287,12 @@ public class Ws4J2EEwithoutWSDL implements Generator {
 				//parse the web.xml file and gereratre wrapper
 				WebDDParser webddp = new WebDDParser(wscontext);
 				file = new File(clparser.getWebConfFileLocation());
-				InputStream webddin  = null;
-				if(file.exists()){
-						webddin = new FileInputStream(file);
-				}else{
-					webddin = Ws4J2EEwithoutWSDL.class.getResourceAsStream("META-INF/web.xml");				
+				if(webddin == null){				
+					if(file.exists()){
+							webddin = new FileInputStream(file);
+					}else{
+						webddin = Ws4J2EEwithoutWSDL.class.getResourceAsStream("META-INF/web.xml");				
+					}
 				}
 				if(webddin != null){
 					webddp.parse(webddin);
@@ -223,7 +305,8 @@ public class Ws4J2EEwithoutWSDL implements Generator {
 				GenerationConstants.AXIS_WEBSERVICE_WRAPPER_GENERATOR);
 			wrapgen.genarate();
 
-        } catch (IOException e) {
+        } catch (Exception e) {
+        	e.printStackTrace();
             throw GenerationFault.createGenerationFault(e);
         }
     }
@@ -241,7 +324,16 @@ public class Ws4J2EEwithoutWSDL implements Generator {
 	 * @throws Exception
 	 */
     public static void main(String[] args) throws Exception {
-        Ws4J2EEwithoutWSDL gen = new Ws4J2EEwithoutWSDL(args, false);
+		Ws4J2EEwithoutWSDL gen = null;
+    	if(args.length == 1){
+    		 //means a jar file option given 
+			 gen = new Ws4J2EEwithoutWSDL(args[0],"-o.");
+    	}else if(args.length == 2){
+    		//means jar file option and output dir given
+			gen = new Ws4J2EEwithoutWSDL(args[0],args[1]);
+    	}else{
+			gen = new Ws4J2EEwithoutWSDL(args,false);    	
+    	}
         gen.genarate();
     }
 }

@@ -55,7 +55,7 @@
 
 package org.apache.geronimo.ews.ws4j2ee.context;
 
-import java.io.FileInputStream;
+import java.io.InputStream;
 
 import org.apache.axis.wsdl.symbolTable.SymbolTable;
 import org.apache.geronimo.ews.jaxrpcmapping.J2eeEmitter;
@@ -88,7 +88,7 @@ public class ContextFactory {
         throw new UnrecoverableGenarationFault("unknown mapper type");
     }
 
-    public static WSCFContext createWSCFContext(FileInputStream in) throws GenerationFault {
+    public static WSCFContext createWSCFContext(InputStream in) throws GenerationFault {
         try {
             return new WSCFContextImpl(in);
         } catch (WSCFException e) {

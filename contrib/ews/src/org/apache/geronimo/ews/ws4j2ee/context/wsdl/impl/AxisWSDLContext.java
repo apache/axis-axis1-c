@@ -66,6 +66,7 @@ import javax.wsdl.PortType;
 import javax.wsdl.Service;
 import javax.xml.namespace.QName;
 
+import org.apache.axis.components.logger.LogFactory;
 import org.apache.axis.wsdl.symbolTable.BindingEntry;
 import org.apache.axis.wsdl.symbolTable.Element;
 import org.apache.axis.wsdl.symbolTable.PortEntry;
@@ -74,8 +75,11 @@ import org.apache.axis.wsdl.symbolTable.ServiceEntry;
 import org.apache.axis.wsdl.symbolTable.SymTabEntry;
 import org.apache.axis.wsdl.symbolTable.SymbolTable;
 import org.apache.axis.wsdl.symbolTable.TypeEntry;
+import org.apache.commons.logging.Log;
 import org.apache.geronimo.ews.ws4j2ee.context.wsdl.WSDLContext;
 import org.apache.geronimo.ews.ws4j2ee.context.wsdl.type.SchemaType;
+
+
 
 /**
  * <p>This Class is a wrapper fo the Axis SymbolTable. Since SymbolTable is parsed
@@ -85,6 +89,8 @@ import org.apache.geronimo.ews.ws4j2ee.context.wsdl.type.SchemaType;
  * @author Srinath Perera(hemapani@opensource.lk)
  */
 public class AxisWSDLContext implements WSDLContext {
+	protected static Log log =
+				LogFactory.getLog(AxisWSDLContext.class.getName());
     private SymbolTable symbolTable;
     private HashMap services;
     private HashMap bindings;
@@ -115,7 +121,7 @@ public class AxisWSDLContext implements WSDLContext {
                     this.portetypes.put(portType.getQName(), entry);
                 } else if (entry instanceof PortEntry) {
                     PortEntry port = ((PortEntry) entry);
-                    this.ports.put(port.getQName(), entry);
+                    this.ports.put(port.getQName().getLocalPart(), entry);
                 }
 
             }
@@ -211,12 +217,12 @@ public class AxisWSDLContext implements WSDLContext {
      * @see org.apache.geronimo.ews.ws4j2ee.context.wsdl.WSDLContext#getPort()
      */
     public PortEntry getPort(QName name) {
+    	log.info("getting port type "+name);
         Object obj = this.ports.get(name);
         //when Symbol table populates the URI of the port is given as ""
         //so we have to cheat 
         if (obj == null) {
-            name = new QName(name.getLocalPart());
-            obj = this.ports.get(name);
+            obj = this.ports.get(name.getLocalPart());
         }
         
 

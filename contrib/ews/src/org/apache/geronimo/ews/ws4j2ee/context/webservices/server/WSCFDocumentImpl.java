@@ -54,7 +54,7 @@
  */
 package org.apache.geronimo.ews.ws4j2ee.context.webservices.server;
 
-import java.io.FileInputStream;
+import java.io.InputStream;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -86,7 +86,7 @@ public class WSCFDocumentImpl implements WSCFConstants, WSCFDocument{
 	//This is kept basically to meet the future demands of the serialising.
 	private Webservices jaxbWebservices;
 
-	public WSCFDocumentImpl(FileInputStream in)throws WSCFException{
+	public WSCFDocumentImpl(InputStream in)throws WSCFException{
 		try{
 			
 			JAXBContext jc = JAXBContext.newInstance( "org.apache.geronimo.ews.ws4j2ee.context.webservices.server.jaxb" );
