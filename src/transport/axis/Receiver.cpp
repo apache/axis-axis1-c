@@ -84,7 +84,7 @@ const std::string& Receiver::Recv() throw (AxisException)
 		// Get the fault message.
 		*m_pTrChannel >> repMsg;
 		#ifdef _DEBUG
-			std::cerr << ex.GetErrorMsg() << std::endl;
+		//	std::cerr << ex.GetErrorMsg() << std::endl;
 		#endif
 	}
 	catch(...)

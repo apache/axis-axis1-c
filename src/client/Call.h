@@ -8,6 +8,8 @@
 #include "../common/IParam.h"
 #include "../engine/ClientAxisEngine.h"
 
+class AxisTransport;
+
 /* A separate call class object should be used by each thread */
 class Call  
 {
@@ -55,6 +57,7 @@ private:
 	XSDTYPE m_nReturnType;
 	ComplexObjectHandler m_ReturnCplxObj;
 	Ax_soapstream m_Soap;
+	AxisTransport* m_pTransport;
 };
 
 #endif // !defined(AFX_CALL_H__D13E5626_0A9B_43EA_B606_364B98CEDAA8__INCLUDED_)
