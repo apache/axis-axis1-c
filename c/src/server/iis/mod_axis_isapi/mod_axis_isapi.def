@@ -1,0 +1,8 @@
+; MOD_AXIS_ISAPI.def : declares the module parameters for the DLL.
+
+LIBRARY	     "MOD_AXIS_ISAPI"
+
+EXPORTS
+	HttpExtensionProc
+	GetExtensionVersion
+	TerminateExtension
