@@ -73,6 +73,7 @@
 char BasicTypeSerializer::m_Buf[64];
 XSDTYPE BasicTypeSerializer::m_Type;
 string BasicTypeSerializer::m_sSZ = "";
+string BasicTypeSerializer::m_AuxStr = "";
 
 BasicTypeSerializer::BasicTypeSerializer()
 {
@@ -142,5 +143,67 @@ const char* BasicTypeSerializer::BasicTypeStr(XSDTYPE type)
 
 string& BasicTypeSerializer::GetEntityReferenced(const string &str)
 {
-	return str;
+	int pos;
+	//replace "&" with "&amp;" if any
+	m_AuxStr = str;
+	pos = 0;
+	while (true)
+	{
+		pos = m_AuxStr.find('&', pos);
+		if (pos < m_AuxStr.length())
+		{
+			m_AuxStr = m_AuxStr.replace(pos, 1, "&amp;");
+		}
+		else break;
+		pos++;
+	}
+	//replace "<" with "&lt;" if any
+	pos = 0;
+	while (true)
+	{
+		pos = m_AuxStr.find('<', pos);
+		if (pos < m_AuxStr.length())
+		{
+			m_AuxStr = m_AuxStr.replace(pos, 1, "&lt;");
+		}
+		else break;
+		pos++;
+	}
+	//replace ">" with "&gt;" if any
+	pos = 0;
+	while (true)
+	{
+		pos = m_AuxStr.find('>', pos);
+		if (pos < m_AuxStr.length())
+		{
+			m_AuxStr = m_AuxStr.replace(pos, 1, "&gt;");
+		}
+		else break;
+		pos++;
+	}
+	//replace "'" with "&apos;" if any
+	pos = 0;
+	while (true)
+	{
+		pos = m_AuxStr.find('\'', pos);
+		if (pos < m_AuxStr.length())
+		{
+			m_AuxStr = m_AuxStr.replace(pos, 1, "&apos;");
+		}
+		else break;
+		pos++;
+	}
+	//replace """ with "&quot;" if any
+	pos = 0;
+	while (true)
+	{
+		pos = m_AuxStr.find('"', pos);
+		if (pos < m_AuxStr.length())
+		{
+			m_AuxStr = m_AuxStr.replace(pos, 1, "&quot;");
+		}
+		else break;
+		pos++;
+	}
+	return m_AuxStr;
 }
