@@ -80,12 +80,21 @@ main(int argc, char *argv[])
     ws.deleteTrasportProperty("Accept-Language");
 
     //now the request should not have these removed headers
-
+    try
+    {
     if (0 == strcmp(ws.echoString("hello world"), "hello world"))
         printf("successful\n");
     else
         printf("failed\n");
-
+    }
+    catch(AxisException& e)
+    {
+        printf("%s\n", e.what());
+    }
+    catch(...)
+    {
+        printf("unknown exception\n");
+    }
 
     printf("HTTP Header test end\n");
     return 0;
