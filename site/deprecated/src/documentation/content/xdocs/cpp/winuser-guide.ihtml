@@ -202,7 +202,7 @@ sure you add these lines at the correct place, i.e at service level.
 
 <br>
 <br>
-&lt;service name="Calculator" provider="C:RPC" description="Calculator Web
+&lt;service name="Calculator" provider="CPP:RPC" description="Calculator Web
 Service"&gt;
 
 <br>
