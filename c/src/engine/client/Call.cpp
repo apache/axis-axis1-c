@@ -81,6 +81,8 @@ Call::Call()
 	m_pIWSDZ = NULL;
 	m_Soap.so.http.ip_headercount = 0;
 	m_Soap.so.http.ip_headers = NULL;
+	m_Soap.so.http.op_headercount = 0;
+	m_Soap.so.http.op_headers = NULL;
 	initialize_module(0, "");
 	m_pTransport = NULL;
 	m_nReturnType = XSD_UNKNOWN;
@@ -407,6 +409,7 @@ int Call::Initialize()
 	try {
 		InitializeObjects();
 		m_Soap.sessionid = "somesessionid1234";
+		remove_headers(&m_Soap);
 		if (SUCCESS != OpenConnection()) return FAIL;
 		if (m_pAxisEngine) delete m_pAxisEngine;
 		m_pAxisEngine = new ClientAxisEngine();

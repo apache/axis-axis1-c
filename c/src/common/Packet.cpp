@@ -78,6 +78,21 @@ int set_header(Ax_soapstream* soap, char * pchkey, char * pchvalue)
 	return 0;
 }
 
+void remove_headers(Ax_soapstream* soap)
+{
+	if (soap->so.http.ip_headercount > 0)
+	{
+		soap->so.http.ip_headercount = 0;
+		free(soap->so.http.ip_headers);
+		soap->so.http.ip_headers = NULL;
+	}
+	if (soap->so.http.op_headercount > 0)
+	{
+		soap->so.http.op_headercount = 0;
+		free(soap->so.http.op_headers);
+		soap->so.http.op_headers = NULL;
+	}
+}
 
 const char* get_header(const Ax_soapstream* soap,const char* pchkey)
 {
