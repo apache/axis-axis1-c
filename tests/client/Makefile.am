@@ -1,1 +1,1 @@
-SUBDIRS = stubTest
+SUBDIRS = stubTest interop
