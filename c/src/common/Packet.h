@@ -157,6 +157,8 @@ extern "C"
 
 	/*This fucntion should be implemented by module authors*/
 	int send_transport_information(Ax_soapstream *str);
+
+	int receive_transport_information(Ax_soapstream *str);
 #ifdef __cplusplus
 }
 #endif
