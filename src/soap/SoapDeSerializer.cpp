@@ -1051,8 +1051,9 @@ for (; nIndex < Array.m_Size; nIndex++)\
     m_pNode = m_pParser->next(true); /* charactor node */\
     if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))\
     {\
-        ((cpp_type*)Array.m_Array)[nIndex] = \
-        *conv_func(m_pNode->m_pchNameOrValue);\
+        cpp_type* pr = conv_func(m_pNode->m_pchNameOrValue); \
+        ((cpp_type*)Array.m_Array)[nIndex] = *pr;\
+        delete pr;\
         m_pNode = m_pParser->next(); /* skip end element node too */\
         continue;\
     }\

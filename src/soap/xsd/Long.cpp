@@ -38,6 +38,7 @@ xsd__long* Long::deserializeLong(const AxisChar* valueAsChar) throw (AxisSoapExc
     }
     m_Long = new xsd__long;
     *m_Long = static_cast<xsd__long> (*returnValue);
+    delete returnValue; // Samissa - need to clean this memory
     return m_Long;
 }
 

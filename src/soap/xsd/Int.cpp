@@ -37,6 +37,7 @@ xsd__int* Int::deserializeInt(const AxisChar* valueAsChar) throw (AxisSoapExcept
     }
     m_Int = new xsd__int;
     *m_Int = static_cast<xsd__int> (*returnValue);
+    delete returnValue; // Samissa - need to clean this memory
     return m_Int;
 }
 

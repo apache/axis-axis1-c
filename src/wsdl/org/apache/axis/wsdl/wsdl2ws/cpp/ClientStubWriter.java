@@ -709,8 +709,12 @@ public class ClientStubWriter extends CPPClassWriter
                         //            writer.write("\t\t}\n\t\tm_pCall->unInitialize();\n");
 			if (outparamTypeName.equals("xsd__string") ) 
                         	writer.write("\t\treturn Ret;\n");
-			else 
-	                        writer.write("\t\treturn *Ret;\n");
+			else
+                        {
+				writer.write("\t\t" + outparamTypeName + " r = *Ret;\n"); // make deep copy
+				writer.write("\t\tdelete Ret;\n");  // delete pointer
+                                writer.write("\t\treturn r;\n");
+                        }
                     }
                     else
                     {

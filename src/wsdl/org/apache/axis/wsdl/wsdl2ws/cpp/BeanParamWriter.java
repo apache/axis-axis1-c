@@ -450,16 +450,19 @@ public class BeanParamWriter extends ParamCPPFileWriter
 								|| attribs[i].getTypeName().equals("xsd__notation"))
                     	{
 	                        //TODO handle optional attributes
-	                        writer.write(
-	                            "\tparam->"
-	                                + attribs[i].getParamNameAsMember()
-	                                + " = *(pIWSDZ->"
-	                                + CUtils.getParameterGetValueMethodName(
-	                                    attribs[i].getTypeName(),
-	                                    attribs[i].isAttribute())
-	                                + "(\""
-	                                + attribs[i].getParamName()
-	                                + "\",0));\n");
+				writer.write( "\t" + attribs[i].getTypeName() + "* p_" + attribs[i].getParamNameAsMember()
+                                        + " = (pIWSDZ->"
+                                        + CUtils.getParameterGetValueMethodName(
+                                            attribs[i].getTypeName(),
+                                            attribs[i].isAttribute())
+                                        + "(\""
+                                        + attribs[i].getParamName()
+                                        + "\",0));\n");
+                                writer.write(
+                                    "\tparam->"
+                                        + attribs[i].getParamNameAsMember() + " = *p_" + attribs[i].getParamNameAsMember() + ";\n");
+
+                                writer.write("\tdelete p_" + attribs[i].getParamNameAsMember() + ";\n");
                     	}
                     	else if(attribs[i].getTypeName().equals("xsd__string"))
 			{
@@ -477,16 +480,20 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     	else
                     	{
 	                        //TODO handle optional attributes
-	                        writer.write(
-	                            "\tparam->"
-	                                + attribs[i].getParamNameAsMember()
-	                                + " = *(pIWSDZ->"
-	                                + CUtils.getParameterGetValueMethodName(
-	                                    attribs[i].getTypeName(),
-	                                    attribs[i].isAttribute())
-	                                + "(\""
-	                                + attribs[i].getParamName()
-	                                + "\",0));\n");
+				writer.write( "\t" + attribs[i].getTypeName() + "* p_" + attribs[i].getParamNameAsMember()
+                                        + " = (pIWSDZ->"
+                                        + CUtils.getParameterGetValueMethodName(
+                                            attribs[i].getTypeName(),
+                                            attribs[i].isAttribute())
+                                        + "(\""
+                                        + attribs[i].getParamName()
+                                        + "\",0));\n");
+                                writer.write(
+                                    "\tparam->"
+                                        + attribs[i].getParamNameAsMember() + " = *p_" + attribs[i].getParamNameAsMember() + ";\n");
+
+                                writer.write("\tdelete p_" + attribs[i].getParamNameAsMember() + ";\n");
+
                     	}
                     }
                     else
