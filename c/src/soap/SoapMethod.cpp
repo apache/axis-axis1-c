@@ -126,28 +126,28 @@ int SoapMethod::serialize(SoapSerializer& pSZ)
 	do {
 		if(isSerializable()) {
 					
-			pSZ << "<" << m_strPrefix.c_str() << ":" << m_strLocalname.c_str() << " xmlns:" << m_strPrefix.c_str()
-				<< "=\"" << m_strUri.c_str() << "\"";
+			pSZ.Serialize("<", m_strPrefix.c_str(), ":", m_strLocalname.c_str(), " xmlns:", m_strPrefix.c_str(),
+				"=\"", m_strUri.c_str(), "\"", NULL);
 
 			iStatus= serializeAttributes(pSZ);
 			if(iStatus==FAIL) {
 				break;
 			}
 			
-			pSZ << ">";
+			pSZ.Serialize(">", NULL);
 
 			iStatus= serializeOutputParam(pSZ);
 			if(iStatus==FAIL) {
 				break;
 			}
 			
-			pSZ << "</";
+			pSZ.Serialize("</", NULL);
 
 			if(m_strPrefix.length() != 0) {					
-				pSZ<< m_strPrefix.c_str() << ":";
+				pSZ.Serialize(m_strPrefix.c_str(), ":", NULL);
 			}
 			
-			pSZ << m_strLocalname.c_str() << ">";
+			pSZ.Serialize(m_strLocalname.c_str(), ">", NULL);
 
 			iStatus= SUCCESS;
 		} else {

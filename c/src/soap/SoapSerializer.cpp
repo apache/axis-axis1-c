@@ -314,7 +314,7 @@ int SoapSerializer::SetOutputStream(const Ax_soapstream* pStream)
 	int iStatus= SUCCESS;
 
 	if(m_pSoapEnvelope) {
-		*this << "<?xml version='1.0' encoding='utf-8' ?>";
+		Serialize("<?xml version='1.0' encoding='utf-8' ?>", NULL);
 		iStatus= m_pSoapEnvelope->serialize(*this, (SOAP_VERSION)m_iSoapVersion);
 		flushSerializedBuffer();
 	}

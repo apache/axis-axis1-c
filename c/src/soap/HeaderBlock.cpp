@@ -132,8 +132,8 @@ int HeaderBlock::serialize(SoapSerializer& pSZ)
 	do {
 		if(isSerializable()) {
 
-			pSZ<< "<" << m_prefix.c_str() << ":" << m_localname.c_str()
-				<< " xmlns:"<< m_prefix.c_str() << "=\"" << m_uri.c_str() << "\"";
+			pSZ.Serialize("<", m_prefix.c_str(), ":", m_localname.c_str(),
+				" xmlns:", m_prefix.c_str(), "=\"", m_uri.c_str(), "\"", NULL);
 
 			iStatus= attrSerialize(pSZ);
 			if(iStatus==FAIL) {
@@ -145,14 +145,14 @@ int HeaderBlock::serialize(SoapSerializer& pSZ)
 				break;
 			}
 			
-			pSZ<< ">";
+			pSZ.Serialize(">", NULL);
 
 			iStatus= serializeChildren(pSZ);
 			if(iStatus==FAIL) {
 				break;
 			}
 
-			pSZ<< "</" << m_prefix.c_str() << ":" << m_localname.c_str() << ">";
+			pSZ.Serialize("</", m_prefix.c_str(), ":", m_localname.c_str(), ">", NULL);
 			
 		} else {
 			iStatus= FAIL;

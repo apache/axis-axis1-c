@@ -107,24 +107,24 @@ int ComplexElement::serialize(SoapSerializer& pSZ)
 	do {
 		if(isSerializable()) 
 		{	
-			pSZ << "<";	
+			pSZ.Serialize("<", NULL);	
 			if(m_sPrefix.length() != 0) {				
-				pSZ<< m_sPrefix.c_str() << ":";
+				pSZ.Serialize(m_sPrefix.c_str(), ":", NULL);
 			}
-			pSZ<< m_sLocalName.c_str();
+			pSZ.Serialize(m_sLocalName.c_str(), NULL);
 			if((m_sPrefix.length() != 0) && (m_sURI.length() != 0)) {
-				pSZ<< " xmlns:" << m_sPrefix.c_str() << "=\"" << m_sURI.c_str() << "\"";
+				pSZ.Serialize(" xmlns:", m_sPrefix.c_str(), "=\"", m_sURI.c_str(), "\"", NULL);
 			}
-			pSZ<< ">";
+			pSZ.Serialize(">", NULL);
 			iStatus= serializeChildren(pSZ);
 			if(iStatus==FAIL) {
 				break;
 			}
-			pSZ<< "</";
+			pSZ.Serialize("</", NULL);
 			if(m_sPrefix.length() != 0) {				
-				pSZ<< m_sPrefix.c_str() << ":";
+				pSZ.Serialize(m_sPrefix.c_str(), ":", NULL);
 			}
-			pSZ<< m_sLocalName.c_str() << ">";
+			pSZ.Serialize(m_sLocalName.c_str(), ">", NULL);
 			iStatus= SUCCESS;
 		} 
 		else

@@ -94,8 +94,8 @@ public class ServiceWriter extends CFileWriter{
 	protected void writeClassComment() throws WrapperFault {
 		try{
 			writer.write("///////////////////////////////////////////////////////////////////////\n");	
-			writer.write("//This is the Service implementation C file genarated by theWSDL2Ws.\n");
-			writer.write("//		"+classname+".c\n");
+			writer.write("//This is the Service implementation C file genarated by WSDL2Ws tool.\n");
+			writer.write("//"+classname+".c\n");
 			writer.write("//\n");
 			writer.write("//////////////////////////////////////////////////////////////////////\n");
 		}catch(IOException e){
@@ -114,7 +114,7 @@ public class ServiceWriter extends CFileWriter{
 		  for(int i = 0; i < methods.size(); i++){
 			  minfo = (MethodInfo)this.methods.get(i);
 
-			  if(minfo.getReturnType().getLangName()==null)
+			  if(minfo.getReturnType()==null)
 				  writer.write("void ");
 			  else {
 				String outparam = minfo.getReturnType().getLangName();
@@ -147,7 +147,7 @@ public class ServiceWriter extends CFileWriter{
 			Type atype;
 			Iterator types = this.wscontext.getTypemap().getTypes().iterator();
 			HashSet typeSet = new HashSet();
-			writer.write("#include <AxisUserAPI.h>\n\n");
+			writer.write("#include <AxisUserAPI.h>\n");
 			while(types.hasNext()){
 				atype = (Type)types.next();
 				typeSet.add(atype.getLanguageSpecificName());

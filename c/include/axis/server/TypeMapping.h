@@ -1,5 +1,3 @@
-/* -*- C++ -*- */
-
 /*
  * The Apache Software License, Version 1.1
  *
@@ -60,9 +58,8 @@
  * @author Susantha Kumara (skumara@virtusa.com)
  *
  */
-// TypeMapping.h: interface for the TypeMapping class.
-//
-//////////////////////////////////////////////////////////////////////
+/* TypeMapping.h: interface for the TypeMapping class.*/
+
 #ifdef WIN32
 #pragma warning (disable : 4786)
 #endif
@@ -102,4 +99,4 @@ public:
 
 #endif
 
-#endif // !defined(AFX_TYPEMAPPING_H__B09703CE_154D_400E_A4E6_ED01901B33A0__INCLUDED_)
+#endif /* !defined(AFX_TYPEMAPPING_H__B09703CE_154D_400E_A4E6_ED01901B33A0__INCLUDED_) */

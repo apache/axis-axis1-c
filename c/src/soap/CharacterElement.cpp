@@ -98,7 +98,7 @@ int CharacterElement::serialize(SoapSerializer& pSZ)
 {
 
 	//the serialization code should come here	
-	pSZ<< m_sValue.c_str();
+	pSZ.Serialize(m_sValue.c_str(), NULL);
 	
 	return SUCCESS;
 }

@@ -1,5 +1,3 @@
-/* -*- C++ -*- */
-
 /*
  * The Apache Software License, Version 1.1
  *
@@ -60,9 +58,7 @@
  * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
  *
  */
-// IMessageData.h: interface for the IMessageData class.
-//
-//////////////////////////////////////////////////////////////////////
+/* IMessageData.h: interface for the IMessageData class.*/
 
 #if !defined(AFX_IMESSAGEDATA_H__EEFDCDB4_6ABA_48CA_8B45_B4FDA6045822__INCLUDED_)
 #define AFX_IMESSAGEDATA_H__EEFDCDB4_6ABA_48CA_8B45_B4FDA6045822__INCLUDED_
@@ -100,7 +96,7 @@ typedef struct IMessageDataTag
 
 typedef struct IMessageDataXTag
 {
-	void AXISAPI(destructor, (APINOPARAMS))
+	AXISDESTRUCTOR
 
 #endif
 	
@@ -125,6 +121,8 @@ private:
 public:
 	virtual int setProperty(string& sName, string& sValue)=0;
 	virtual string& getProperty(string& sName)=0;
+	virtual void AXISCALL getSoapSerializer(IWrapperSoapSerializer** pIWSS)=0;
+	virtual void AXISCALL getSoapDeSerializer(IWrapperSoapDeSerializer** pIWSDS)=0;
 	virtual void getSoapSerializer(IHandlerSoapSerializer** pIHandlerSoapSerializer)=0;
 	virtual void getSoapDeSerializer(IHandlerSoapDeSerializer** pIHandlerSoapDeSerializer)=0;
 	virtual void SetUserName(string& m_sUserName)=0;
@@ -137,7 +135,7 @@ protected:
   string m_sUserName;  
 };
 #endif
-#endif // !defined(AFX_IMESSAGEDATA_H__EEFDCDB4_6ABA_48CA_8B45_B4FDA6045822__INCLUDED_)
+#endif /* !defined(AFX_IMESSAGEDATA_H__EEFDCDB4_6ABA_48CA_8B45_B4FDA6045822__INCLUDED_) */
 
 
 

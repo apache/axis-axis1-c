@@ -58,9 +58,7 @@
  * @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
  *
  */
-// AxisUserAPI.h: interface for the AxisUserAPI class.
-//
-//////////////////////////////////////////////////////////////////////
+/* AxisUserAPI.h: interface for the AxisUserAPI class. */
 
 #if !defined(AFX_AXISWRAPPERAPI_H__6E27008D_DCA0_4F28_AC82_FEEBE1A1CBBB__INCLUDED_)
 #define AFX_AXISWRAPPERAPI_H__6E27008D_DCA0_4F28_AC82_FEEBE1A1CBBB__INCLUDED_
@@ -94,4 +92,4 @@ typedef int (* AXIS_SERIALIZE_FUNCT)(void*, IWrapperSoapSerializer*, bool bArray
 typedef int (* AXIS_OBJECT_SIZE_FUNCT)(void);
 
 
-#endif // !defined(AFX_AXISWRAPPERAPI_H__6E27008D_DCA0_4F28_AC82_FEEBE1A1CBBB__INCLUDED_)
+#endif /* !defined(AFX_AXISWRAPPERAPI_H__6E27008D_DCA0_4F28_AC82_FEEBE1A1CBBB__INCLUDED_) */

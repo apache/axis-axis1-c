@@ -106,13 +106,14 @@ public interface WrapperConstants {
 	public static final int GENERATOR_PARAM_CPP_ALL = 20 ;
 	public static final int GENERATOR_SERVICE_HPP = 21 ;
 	//c constants 
-	public static final int GENERATOR_WRAPPER_C = 22;
-	public static final int GENERATOR_CLIENT_STUB_C = 23;
-	public static final int GENERATOR_SERVICE_C = 24 ;
-	public static final int GENERATOR_WRAPPER_H = 25;
-	public static final int GENERATOR_CLIENT_STUB_H = 26;
-	public static final int GENERATOR_PARAM_C_ALL = 27 ;
-	public static final int GENERATOR_CLIENT_STUB_C_WRAPPER = 28;
+	public static final int GENERATOR_CLASSLOADER_C = 22 ;
+	public static final int GENERATOR_WRAPPER_C = 23;
+	public static final int GENERATOR_CLIENT_STUB_C = 24;
+	public static final int GENERATOR_SERVICE_C = 25 ;
+	public static final int GENERATOR_WRAPPER_H = 26;
+	public static final int GENERATOR_CLIENT_STUB_H = 27;
+	public static final int GENERATOR_PARAM_C_ALL = 28;
+	public static final int GENERATOR_CLIENT_STUB_C_WRAPPER = 29;
 
 
 

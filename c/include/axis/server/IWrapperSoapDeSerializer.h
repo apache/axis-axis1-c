@@ -61,10 +61,7 @@
  *
  */
 
-// IWrapperSoapDeSerializer.h: interface for the IWrapperSoapDeSerializer class.
-//
-//////////////////////////////////////////////////////////////////////
-
+/* IWrapperSoapDeSerializer.h: interface for the IWrapperSoapDeSerializer class.*/
 #if !defined(AFX_IWRAPPERSOAPDESERIALIZER_H__A6C89D23_4098_4A73_BFD7_D8F115AD9BA0__INCLUDED_)
 #define AFX_IWRAPPERSOAPDESERIALIZER_H__A6C89D23_4098_4A73_BFD7_D8F115AD9BA0__INCLUDED_
 
@@ -94,12 +91,12 @@ typedef struct IWrapperSoapDeSerializerTag
 
 typedef struct IWrapperSoapDeSerializerXTag
 {
-	void AXISAPI(destructor,(APINOPARAMS))
+	AXISDESTRUCTOR
 
 #endif
 	
 	virtual const AxisChar* AXISAPI(GetMethodName,(APINOPARAMS))
-//	virtual int AXISAPI(Deserialize,(APIHASPARAMS IParam* pIParam, int bHref));
+/*	virtual int AXISAPI(Deserialize,(APIHASPARAMS IParam* pIParam, int bHref));*/
 
 	/* Method used by wrappers to get a deserialized Array of complex types */
 	virtual Axis_Array AXISAPI(GetCmplxArray,(APIHASPARAMS void* pDZFunct, void* pCreFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pchTypeName, const AxisChar* pchURI))
@@ -134,7 +131,7 @@ typedef struct IWrapperSoapDeSerializerXTag
     virtual struct tm AXISAPI(GetDate,(APINOPARAMS))
     virtual struct tm AXISAPI(GetTime,(APINOPARAMS))
     virtual long AXISAPI(GetDuration,(APINOPARAMS))
-//	virtual IParam* AXISAPI(GetParam,(APINOPARAMS))
+/*	virtual IParam* AXISAPI(GetParam,(APINOPARAMS))*/
 
 #ifdef __cplusplus
 };
@@ -142,4 +139,4 @@ typedef struct IWrapperSoapDeSerializerXTag
 } IWrapperSoapDeSerializerX;
 #endif
 
-#endif // !defined(AFX_IWRAPPERSOAPDESERIALIZER_H__A6C89D23_4098_4A73_BFD7_D8F115AD9BA0__INCLUDED_)
+#endif /* !defined(AFX_IWRAPPERSOAPDESERIALIZER_H__A6C89D23_4098_4A73_BFD7_D8F115AD9BA0__INCLUDED_) */
