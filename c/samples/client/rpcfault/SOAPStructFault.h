@@ -16,11 +16,14 @@ static const char* Axis_TypeName_SOAPStructFault = "SOAPStructFault";
 class SOAPStructFault
 {
 public:
-	xsd__string varString;
+        xsd__string varString;
 	int varInt;
-	float varFloat;
-	SOAPStructFault();
-	virtual ~SOAPStructFault();
+        float varFloat;
+        SOAPStructFault();
+        virtual ~SOAPStructFault();
+        void setFaultcode();
+        void setFaultstring();
+        void setFaultDetail();
 };
 
 #endif /* !defined(__SOAPSTRUCTFAULT_PARAM_H__OF_AXIS_INCLUDED_)*/

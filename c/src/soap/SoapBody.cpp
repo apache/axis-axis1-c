@@ -33,6 +33,8 @@
 #include <axis/server/SoapSerializer.h>
 #include <axis/server/GDefine.h>
 #include <axis/server/Attribute.h>
+#include <axis/server/AxisTrace.h>
+extern AxisTrace* g_pAT;
 
 SoapBody::SoapBody()
 {
@@ -69,6 +71,7 @@ int SoapBody::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
 
     do
     {        
+        AXISTRACE1("came5", INFO);
         pSZ.serialize("<", gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix,
             ":", gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_BODY],
             NULL);
@@ -80,22 +83,25 @@ int SoapBody::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
         
         pSZ.serialize(">", NULL);
 
-        if(m_pSoapMethod!=NULL)
+        if(NULL != m_pSoapFault) 
+        {        
+            AXISTRACE1("came6", INFO);
+            iStatus= m_pSoapFault->serialize(pSZ);
+            if(iStatus==AXIS_FAIL)
+            {
+                AXISTRACE1("came7", INFO);
+                break;
+            }
+        }
+        else if(NULL != m_pSoapMethod)
         {
+            AXISTRACE1("came8", INFO);
             iStatus= m_pSoapMethod->serialize(pSZ);
             if(iStatus==AXIS_FAIL)
             {
                 break;
             }
         } 
-        else if(m_pSoapFault!=NULL) 
-        {        
-            iStatus= m_pSoapFault->serialize(pSZ);
-            if(iStatus==AXIS_FAIL)
-            {
-                break;
-            }
-        }
         else
         {
             m_pSoapFault = SoapFault::getSoapFault(SERVER_ENGINE_WEBSERVICEFAILED);
@@ -106,6 +112,7 @@ int SoapBody::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
                     break;
             }
         }
+        AXISTRACE1("came9", INFO);
         
         pSZ.serialize("</", gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix,
             ":", gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_BODY],

@@ -104,16 +104,22 @@ public:
 
     void setPrefix(const AxisChar* prefix);
 
+    int setParam(Param* pParam, const AxisChar* pchName, const void* pValue, XSDTYPE type);
+
 private:
     /* string m_sFaultSerialized; */
     string m_sFaultDetail;
     string m_sFaultactor;
     string m_sFaultstring;
     string m_sFaultcode;
+    Param* m_pFaultcodeParam;
+    Param* m_pFaultstringParam;
+    Param* m_pFaultactorParam;
     Param* m_pFaultDetail;
     AxisString m_strPrefix;
     AxisString m_strLocalname;
     AxisString m_strUri;
+    bool m_bIsSimpleDetail;
     static volatile bool m_bInit;
 };
 

@@ -165,6 +165,7 @@ public:
     AxisException(int iExceptionCode);
     AxisException(exception* e);
     AxisException(exception* e, int iExceptionCode);
+    AxisException(char* pcMessage){m_sMessage = pcMessage;};
     virtual ~AxisException() throw();
     virtual const char* what() throw();
     virtual const int getExceptionCode();
