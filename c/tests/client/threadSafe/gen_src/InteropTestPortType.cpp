@@ -75,7 +75,7 @@ xsd__string InteropTestPortType::echoString(xsd__string Value0)
 			cFaultstring = m_pCall->getElementAsString("faultstring", 0);
 			cFaultactor = m_pCall->getElementAsString("faultactor", 0);
 				  cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-				  throw AxisException(cFaultdetail);
+				  throw AxisGenException(cFaultdetail);
 		}
 		else throw;
 	}
@@ -124,7 +124,7 @@ xsd__string_Array InteropTestPortType::echoStringArray(xsd__string_Array Value0)
 			cFaultstring = m_pCall->getElementAsString("faultstring", 0);
 			cFaultactor = m_pCall->getElementAsString("faultactor", 0);
 				  cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-				  throw AxisException(cFaultdetail);
+				  throw AxisGenException(cFaultdetail);
 		}
 		else throw;
 	}
@@ -173,7 +173,7 @@ int InteropTestPortType::echoInteger(int Value0)
 			cFaultstring = m_pCall->getElementAsString("faultstring", 0);
 			cFaultactor = m_pCall->getElementAsString("faultactor", 0);
 				  cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-				  throw AxisException(cFaultdetail);
+				  throw AxisGenException(cFaultdetail);
 		}
 		else throw;
 	}
@@ -222,7 +222,7 @@ xsd__int_Array InteropTestPortType::echoIntegerArray(xsd__int_Array Value0)
 			cFaultstring = m_pCall->getElementAsString("faultstring", 0);
 			cFaultactor = m_pCall->getElementAsString("faultactor", 0);
 				  cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-				  throw AxisException(cFaultdetail);
+				  throw AxisGenException(cFaultdetail);
 		}
 		else throw;
 	}
@@ -271,7 +271,7 @@ float InteropTestPortType::echoFloat(float Value0)
 			cFaultstring = m_pCall->getElementAsString("faultstring", 0);
 			cFaultactor = m_pCall->getElementAsString("faultactor", 0);
 				  cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-				  throw AxisException(cFaultdetail);
+				  throw AxisGenException(cFaultdetail);
 		}
 		else throw;
 	}
@@ -320,7 +320,7 @@ xsd__float_Array InteropTestPortType::echoFloatArray(xsd__float_Array Value0)
 			cFaultstring = m_pCall->getElementAsString("faultstring", 0);
 			cFaultactor = m_pCall->getElementAsString("faultactor", 0);
 				  cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-				  throw AxisException(cFaultdetail);
+				  throw AxisGenException(cFaultdetail);
 		}
 		else throw;
 	}
@@ -369,7 +369,7 @@ SOAPStruct* InteropTestPortType::echoStruct(SOAPStruct* Value0)
 			cFaultstring = m_pCall->getElementAsString("faultstring", 0);
 			cFaultactor = m_pCall->getElementAsString("faultactor", 0);
 				  cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-				  throw AxisException(cFaultdetail);
+				  throw AxisGenException(cFaultdetail);
 		}
 		else throw;
 	}
@@ -418,7 +418,7 @@ SOAPStruct_Array InteropTestPortType::echoStructArray(SOAPStruct_Array Value0)
 			cFaultstring = m_pCall->getElementAsString("faultstring", 0);
 			cFaultactor = m_pCall->getElementAsString("faultactor", 0);
 				  cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-				  throw AxisException(cFaultdetail);
+				  throw AxisGenException(cFaultdetail);
 		}
 		else throw;
 	}
@@ -464,7 +464,7 @@ void InteropTestPortType::echoVoid()
 			cFaultstring = m_pCall->getElementAsString("faultstring", 0);
 			cFaultactor = m_pCall->getElementAsString("faultactor", 0);
 				  cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-				  throw AxisException(cFaultdetail);
+				  throw AxisGenException(cFaultdetail);
 		}
 		else throw;
 	}
@@ -513,7 +513,7 @@ xsd__base64Binary InteropTestPortType::echoBase64(xsd__base64Binary Value0)
 			cFaultstring = m_pCall->getElementAsString("faultstring", 0);
 			cFaultactor = m_pCall->getElementAsString("faultactor", 0);
 				  cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-				  throw AxisException(cFaultdetail);
+				  throw AxisGenException(cFaultdetail);
 		}
 		else throw;
 	}
@@ -562,7 +562,7 @@ xsd__dateTime InteropTestPortType::echoDate(xsd__dateTime Value0)
 			cFaultstring = m_pCall->getElementAsString("faultstring", 0);
 			cFaultactor = m_pCall->getElementAsString("faultactor", 0);
 				  cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-				  throw AxisException(cFaultdetail);
+				  throw AxisGenException(cFaultdetail);
 		}
 		else throw;
 	}
@@ -611,7 +611,7 @@ xsd__hexBinary InteropTestPortType::echoHexBinary(xsd__hexBinary Value0)
 			cFaultstring = m_pCall->getElementAsString("faultstring", 0);
 			cFaultactor = m_pCall->getElementAsString("faultactor", 0);
 				  cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-				  throw AxisException(cFaultdetail);
+				  throw AxisGenException(cFaultdetail);
 		}
 		else throw;
 	}
@@ -660,7 +660,7 @@ xsd__decimal InteropTestPortType::echoDecimal(xsd__decimal Value0)
 			cFaultstring = m_pCall->getElementAsString("faultstring", 0);
 			cFaultactor = m_pCall->getElementAsString("faultactor", 0);
 				  cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-				  throw AxisException(cFaultdetail);
+				  throw AxisGenException(cFaultdetail);
 		}
 		else throw;
 	}
@@ -709,7 +709,7 @@ xsd__boolean InteropTestPortType::echoBoolean(xsd__boolean Value0)
 			cFaultstring = m_pCall->getElementAsString("faultstring", 0);
 			cFaultactor = m_pCall->getElementAsString("faultactor", 0);
 				  cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-				  throw AxisException(cFaultdetail);
+				  throw AxisGenException(cFaultdetail);
 		}
 		else throw;
 	}
