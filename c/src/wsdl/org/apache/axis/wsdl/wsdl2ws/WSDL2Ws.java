@@ -349,7 +349,8 @@ public class WSDL2Ws {
 		if (targetLanguage == null) targetLanguage = "c++";
 		if (targetEngine == null) targetEngine = "server";
 		if (targetoutputLocation == null) targetoutputLocation = "./";
-		
+		QName serviceqname = getServiceEntry().getService().getQName();
+		servicename = serviceqname.getLocalPart();
         ArrayList methods = this.getServiceInfo(this.porttype, targetLanguage);
         TypeMap typeMap = this.getTypeInfo(targetLanguage);
         //TODO	chaeck weather the name at the WrapperConstant Doclit is right "doc"
