@@ -125,7 +125,7 @@ void ModuleUnInitialize ()
 STORAGE_CLASS_INFO int process_request(SOAPTransport* pStream)
 {
     int Status = AXIS_FAIL;
-    FILE* WsddFile;
+    FILE* WsddFile = NULL;
     char ReadBuffer[BYTESTOREAD];
     ReadBuffer[0] = '\0';
 
