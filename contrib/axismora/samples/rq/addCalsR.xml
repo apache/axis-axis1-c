@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
- <soapenv:Body>
-  <add soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns="someuri">
-   <op1 xsi:type="xsd:int">8</op1>
-   <op2 xsi:type="xsd:int">2</op2>
-  </add>
- </soapenv:Body>
-</soapenv:Envelope>
