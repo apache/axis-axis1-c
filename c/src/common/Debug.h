@@ -16,7 +16,7 @@
   #define DEBUG2(X,Y) ""; 
 #endif
 
-extern unsigned char chEBuf[1024];
+//extern unsigned char chEBuf[1024];
 using namespace std;
 class Debug
 {
