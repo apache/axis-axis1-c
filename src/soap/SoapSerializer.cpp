@@ -206,7 +206,6 @@ int SoapSerializer::addFaultDetail(void* pObject, void* pSZFunct,
                                         void* pDelFunct, const AxisChar* pName,
                                         const AxisChar* pNamespace )
 { 
-    AXISTRACE1("came1", INFO);
     Param* pParam = new Param();
     pParam->m_Value.pCplxObj = new ComplexObjectHandler;
     pParam->m_Value.pCplxObj->pObject = pObject;
@@ -215,7 +214,6 @@ int SoapSerializer::addFaultDetail(void* pObject, void* pSZFunct,
     if(m_pSoapEnvelope && (m_pSoapEnvelope->m_pSoapBody) && (m_pSoapEnvelope->
         m_pSoapBody->m_pSoapFault)) 
     {
-        AXISTRACE1("came2", INFO);
         m_pSoapEnvelope->m_pSoapBody->m_pSoapFault->setFaultDetail(pParam);
     }
     pParam->setName(pName);
@@ -224,7 +222,6 @@ int SoapSerializer::addFaultDetail(void* pObject, void* pSZFunct,
 
 int SoapSerializer::setSoapFault(SoapFault *pSoapFault)
 {
-    AXISTRACE1("came3", INFO);
     int intStatus= AXIS_FAIL;
 
     if(m_pSoapEnvelope && (m_pSoapEnvelope->m_pSoapBody))
@@ -448,7 +445,6 @@ int SoapSerializer::createSoapMethod(const AxisChar* sLocalName,
 int SoapSerializer::createSoapFault(const AxisChar* sLocalName, 
                                      const AxisChar* sURI)
 {
-    AXISTRACE1("came4", INFO);
     SoapFault* pSoapFault = new SoapFault();
     setSoapFault(pSoapFault);
     pSoapFault->setLocalName(sLocalName);
