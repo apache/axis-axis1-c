@@ -1,4 +1,3 @@
-/* -*- C++ -*- */
 /*
  *   Copyright 2003-2004 The Apache Software Foundation.
  *
@@ -16,7 +15,7 @@
  */
 
 /*
- *	@author sanjaya singharage (sanjayas@opensource.lk)
+ *    @author sanjaya singharage (sanjayas@opensource.lk)
  */
 
 
@@ -38,37 +37,38 @@
 #include <xercesc/parsers/SAXParser.hpp>
 #include <xercesc/framework/XMLPScanToken.hpp>
 #include "SoapInputSource.h"
-//using namespace std;
+/* using namespace std; */
 XERCES_CPP_NAMESPACE_USE
 
 class SoapParserXerces: public XMLParser
 {
 
 public:
-	SoapParserXerces();
-	~SoapParserXerces();
+    SoapParserXerces();
+    ~SoapParserXerces();
 
-	int SetInputStream(const Ax_soapstream* pInputStream);
-	const Ax_soapstream* GetInputStream(){return m_pInputStream;};
-	int Init();
-	const XML_Ch* GetNS4Prefix(const XML_Ch* prefix);
-	int GetStatus();
-	const AnyElement* Next();
-	AXIS_TRANSPORT_STATUS GetTransportStatus(){ return m_nTransportStatus;};
-	void SetTransportStatus(AXIS_TRANSPORT_STATUS nStatus){ m_nTransportStatus = nStatus;};
+    int SetInputStream(const Ax_soapstream* pInputStream);
+    const Ax_soapstream* GetInputStream(){return m_pInputStream;};
+    int Init();
+    const XML_Ch* GetNS4Prefix(const XML_Ch* prefix);
+    int GetStatus();
+    const AnyElement* Next();
+    AXIS_TRANSPORT_STATUS GetTransportStatus(){ return m_nTransportStatus;};
+    void SetTransportStatus(AXIS_TRANSPORT_STATUS nStatus)
+    { m_nTransportStatus = nStatus;};
 
 
-	const Ax_soapstream* m_pInputStream;
+    const Ax_soapstream* m_pInputStream;
 
 private:
-	int m_nStatus;
-	SAX2XMLReader* m_pParser;
-	//SAXParser* m_pParser;
-	AXIS_TRANSPORT_STATUS m_nTransportStatus;
+    int m_nStatus;
+    SAX2XMLReader* m_pParser;
+    /* SAXParser* m_pParser; */
+    AXIS_TRANSPORT_STATUS m_nTransportStatus;
     XMLPScanToken token;
-	XercesHandler Xhandler;
-	bool firstParsed;
-	SoapInputSource* is;
+    XercesHandler Xhandler;
+    bool firstParsed;
+    SoapInputSource* is;
 
 
 };

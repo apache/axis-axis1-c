@@ -1,4 +1,3 @@
-/* -*- C++ -*- */
 /*
  *   Copyright 2003-2004 The Apache Software Foundation.
  *
@@ -16,7 +15,7 @@
  */
 
 /*
- *	@author sanjaya singharage (sanjayas@opensource.lk)
+ * @author sanjaya singharage (sanjayas@opensource.lk)
  */
 
 
@@ -29,63 +28,65 @@
 
 SoapParserXerces::SoapParserXerces()
 {
-	m_nStatus = NULL;
-	firstParsed = false;
-	m_pParser = XMLReaderFactory::createXMLReader();
+    m_nStatus = NULL;
+    firstParsed = false;
+    m_pParser = XMLReaderFactory::createXMLReader();
 
 }
 
 SoapParserXerces::~SoapParserXerces()
 {
-	m_nStatus = NULL;
+    m_nStatus = NULL;
 }
 
 int SoapParserXerces::SetInputStream(const Ax_soapstream* pInputStream)
 {
-	m_pInputStream = pInputStream;
-	is = new SoapInputSource(m_pInputStream->transport.pGetFunct, m_pInputStream);
-	//SoapInputSource is(m_pInputStream->transport.pGetFunct, m_pInputStream->str.ip_stream);
-	m_pParser->setContentHandler(&Xhandler);
-	//return m_pHandler->Success();
-	return AXIS_SUCCESS;
+    m_pInputStream = pInputStream;
+    is = new SoapInputSource(m_pInputStream->transport.pGetFunct,
+        m_pInputStream);
+    /* SoapInputSource is(m_pInputStream->transport.pGetFunct, 
+    m_pInputStream->str.ip_stream); */
+    m_pParser->setContentHandler(&Xhandler);
+    /* return m_pHandler->Success(); */
+    return AXIS_SUCCESS;
 }
 
 int SoapParserXerces::Init()
 {
-	if (firstParsed)
-	{
-		m_pParser->parseReset(token);
-		firstParsed = false;
-	}
-	return 0;
+    if (firstParsed)
+    {
+        m_pParser->parseReset(token);
+        firstParsed = false;
+    }
+    return 0;
 }
 
 const XML_Ch* SoapParserXerces::GetNS4Prefix(const XML_Ch* prefix)
 {
-	return Xhandler.NS4Prefix(prefix);
+    return Xhandler.NS4Prefix(prefix);
 }
 
 int SoapParserXerces::GetStatus()
 {
-	m_nStatus = AXIS_SUCCESS; /*TODO:Check if an error occured in expat */
-	return m_nStatus;
+    m_nStatus = AXIS_SUCCESS; /*TODO:Check if an error occured in expat */
+    return m_nStatus;
 }
 
 const AnyElement* SoapParserXerces::Next()
 {
 
-	if(!firstParsed)
-	{
-		m_pParser->parseFirst(*is, token);
-		firstParsed = true;
-	}
+    if(!firstParsed)
+    {
+        m_pParser->parseFirst(*is, token);
+        firstParsed = true;
+    }
 
-	Xhandler.freeElement();
-	while (true)
-	{
-		m_pParser->parseNext(token);
-		AnyElement* elem = Xhandler.getAnyElement();
-		if (elem) return elem;
-		else if (AXIS_FAIL == Xhandler.GetStatus()) return NULL; 
-	}
+    Xhandler.freeElement();
+    while (true)
+    {
+        m_pParser->parseNext(token);
+        AnyElement* elem = Xhandler.getAnyElement();
+        if (elem) return elem;
+        else if (AXIS_FAIL == Xhandler.GetStatus()) return NULL; 
+    }
 }
