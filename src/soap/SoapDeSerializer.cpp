@@ -237,7 +237,12 @@ int SoapDeSerializer::getHeader ()
 				break;
 			}
 
-			HeaderBlock *pHeaderBlock = new HeaderBlock ();
+            /* The following is done to ignore anything (eg : the toplevel 
+               whitespaces) but a start element.*/
+            if (START_ELEMENT != m_pNode->m_type)
+                continue;
+
+            HeaderBlock *pHeaderBlock = new HeaderBlock ();
 
 			if (m_pNode->m_pchNamespace)
 			{
