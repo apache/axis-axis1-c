@@ -107,7 +107,8 @@ const string AxisTransportException::getMessage (const int iExceptionCode)
             m_sMessage = "Unknow HTTP response, cannot process response message";
             break;
         case SERVER_TRANSPORT_UNEXPECTED_STRING:
-            m_sMessage = "Unexpected string";
+            m_sMessage = "Unexpected string received. Most probably server " \
+                "returned an empty stream";
             break;
         case SERVER_TRANSPORT_CHANNEL_INIT_ERROR:
             m_sMessage = "Cannot initialize a channel to the remote end";
