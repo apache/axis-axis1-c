@@ -63,6 +63,13 @@ import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
  */
 public class SourceWriterFactory {
 	public static SourceWriter createSourceWriter(int genaratorType,WebServiceContext wscontext)throws WrapperFault{
+		//write deployment or undeployment wsdd files 
+		if (genaratorType == WrapperConstants.GENERATOR_DEPLOYMENT){
+			return new DeploymentWriter(wscontext);
+		}
+		else if (genaratorType == WrapperConstants.GENERATOR_UNDEPLOYMENT){
+			return new UndeploymentWriter(wscontext);			
+		}
 		if("rpc".equals(wscontext.getWrapInfo().getWrapperStyle())){
 			//C++
 			if(genaratorType == WrapperConstants.GENERATOR_PARAM_CPP_ALL)
