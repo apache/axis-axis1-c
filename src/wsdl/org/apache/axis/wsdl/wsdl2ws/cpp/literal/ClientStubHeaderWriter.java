@@ -18,6 +18,12 @@
 /**
  * @author Srinath Perera(hemapani@openource.lk)
  * @author Susantha Kumara(susantha@opensource.lk, skumara@virtusa.com)
+ * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
+ */
+
+/*
+ * Revision 1.1  2004/05/26 samisa
+ * Added Stub base class into code generation
  */
 
 package org.apache.axis.wsdl.wsdl2ws.cpp.literal;
@@ -57,11 +63,11 @@ public class ClientStubHeaderWriter extends HeaderFileWriter{
 	 * @see org.apache.axis.wsdl.wsdl2ws.cpp.HeaderFileWriter#writeAttributes()
 	 */
 	protected void writeAttributes() throws WrapperFault {
-		try {
+		/*try {
 			writer.write("private:\n\tCall* m_pCall;\n");
 		}catch(IOException e){
 			throw new WrapperFault(e);
-		}
+		}*/
 	}
 
 	/* (non-Javadoc)
@@ -84,7 +90,8 @@ public class ClientStubHeaderWriter extends HeaderFileWriter{
 	 */
 	protected void writeConstructors() throws WrapperFault {
 		try{
-		writer.write("public:\n\t"+classname+"();\n");
+			writer.write("public:\n\t"+classname+"(const char* pcEndpointUri);\n");
+			//writer.write("public:\n\t"+classname+"();\n");
 		}catch(IOException e){
 			throw new WrapperFault(e);
 		}
@@ -158,7 +165,7 @@ public class ClientStubHeaderWriter extends HeaderFileWriter{
 	 */
 	protected void writePreprocssorStatements() throws WrapperFault {
 		try{
-			writer.write("#include <axis/client/Call.h>\n");
+			writer.write("#include <axis/client/Stub.h>\n");
 			Type atype;
 			Iterator types = this.wscontext.getTypemap().getTypes().iterator();
 			HashSet typeSet = new HashSet();

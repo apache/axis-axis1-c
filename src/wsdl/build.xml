@@ -1,4 +1,4 @@
- <project name="axis-mora" default="jar" basedir=".">
+ <project name="axis-mora" default="jar" basedir="../..">
 	<description>
    Build file for Axis
 
