@@ -348,7 +348,10 @@ public class ParmHeaderFileWriter extends ParamWriter
     {
         try
         {
-            writer.write("\t~" + classname + "();\n");
+            if (this.type.isFault())
+                writer.write("\t~" + classname + "() throw();\n");
+            else
+                writer.write("\t~" + classname + "();\n");
         }
         catch (IOException e)
         {
