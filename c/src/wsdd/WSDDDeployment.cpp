@@ -107,9 +107,10 @@ int WSDDDeployment::loadWSDD(const AxisChar* sWSDD)
     WSDDDocument* doc = new WSDDDocument(m_pLibNameIdMap);
     if (AXIS_SUCCESS != doc->getDeployment(sWSDD, this))
     {
-            printf("wsdd loading failed\n");
+        //printf("wsdd loading failed\n");
         delete doc;
-        return AXIS_FAIL;
+        //return AXIS_FAIL;
+        throw AxisWsddException(SERVER_WSDD_FILE_NOT_FOUND);
     }
 #ifdef _DEBUG
     printf("wsdd loading successful\n");
