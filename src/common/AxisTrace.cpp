@@ -43,7 +43,7 @@ AxisTrace::~AxisTrace ()
 
 int AxisTrace::openFile ()
 {
-    char* sFileName = g_pConfig->getAxisLogPath ();
+    char* sFileName = g_pConfig->GetAxisLogPath ();
     if ((fileTrace = fopen (sFileName, "a")) == NULL)
         return AXIS_FAIL;
     fclose (fileTrace);
@@ -61,6 +61,7 @@ int AxisTrace::openFile ()
     if ((fileTrace = fopen (sFileName, "a")) == NULL)
         return AXIS_FAIL;
 
+    free(setPerm);
     return AXIS_SUCCESS;
 }
 
@@ -74,7 +75,8 @@ int AxisTrace::openFileByClient ()
     return AXIS_SUCCESS;
 }
 
-int AxisTrace::logaxis (const char* sLog, int level, char* arg2, int arg3)
+
+int AxisTrace::logthis (const char* sLog, int level, char* arg2, int arg3)
 {
     time_t ltime;
     time (&ltime);
@@ -110,6 +112,15 @@ int AxisTrace::logaxis (const char* sLog, int level, char* arg2, int arg3)
     fputs (strLine, fileTrace);
     fputs ("\n", fileTrace);
     fputs (sLog, fileTrace);
+    fputs (":", fileTrace);
+
+    return AXIS_SUCCESS;
+
+}
+int AxisTrace::logaxis (const char* sLog, int level, char* arg2, int arg3)
+{
+    
+    int intResult = logthis(sLog, level, arg2, arg3);
     fputs ("\n", fileTrace);
     fputs ("-------------------------------------------------", fileTrace);
     fputs ("\n", fileTrace);
@@ -117,54 +128,67 @@ int AxisTrace::logaxis (const char* sLog, int level, char* arg2, int arg3)
     fflush (fileTrace);
 
     return AXIS_SUCCESS;
-
 }
 
 int AxisTrace::logaxis (const char* sLog1, const char* sLog2, int level,
     char* arg3, int arg4)
 {
-    time_t ltime;
-    time (&ltime);
-
-    fputs ("Severity Level : ", fileTrace);
-    switch (level)
+    int intResult = logthis(sLog1, level, arg3, arg4);
+    if(AXIS_SUCCESS == intResult)
     {
-        case 1:
-            strLevel = "CRITICAL";
-            break;
-        case 2:
-            strLevel = "WARN";
-            break;
-        case 3:
-            strLevel = "INFO";
-            break;
-        case 4:
-            strLevel = "TRIVIAL";
-            break;
+        fputs (sLog2, fileTrace);
+        fputs ("\n", fileTrace);
+        fputs ("-------------------------------------------------", fileTrace);
+        fputs ("\n", fileTrace);
+
+        fflush (fileTrace);
+
+        return AXIS_SUCCESS;
     }
-    fputs (strLevel, fileTrace);
-    fputs ("\n", fileTrace);
+    return AXIS_FAIL;
 
-    fputs ("time : ", fileTrace);
-    fputs (ctime (&ltime), fileTrace);
-    fputs ("file : ", fileTrace);
-    fputs (arg3, fileTrace);
-    fputs ("\n", fileTrace);
-    fputs ("line : ", fileTrace);
-    sprintf (strLine, "%d", arg4);
-    fputs (strLine, fileTrace);
-    fputs ("\n", fileTrace);
-    fputs (sLog1, fileTrace);
-    fputs (" ", fileTrace);
-    fputs (sLog2, fileTrace);
-    fputs ("\n", fileTrace);
-    fputs ("-------------------------------------------------", fileTrace);
-    fputs ("\n", fileTrace);
+}
 
-    fflush (fileTrace);
+int AxisTrace::logaxis (const char* sLog1, const long nLog2, int level,
+    char* arg3, int arg4)
+{
+    char* convToLong = (char*) malloc(4 * sizeof(char));
+    int intResult = logthis(sLog1, level, arg3, arg4);
+    if(AXIS_SUCCESS == intResult)
+    {
+	sprintf(convToLong, "%d", nLog2);
+        fputs (convToLong, fileTrace);
+        fputs ("\n", fileTrace);
+        fputs ("-------------------------------------------------", fileTrace);
+        fputs ("\n", fileTrace);
 
-    return AXIS_SUCCESS;
+        fflush (fileTrace);
 
+        return AXIS_SUCCESS;
+    }
+    free(convToLong);
+    return AXIS_FAIL;
+}
+
+int AxisTrace::logaxis (const char* sLog1, const double dLog2, int level,
+    char* arg3, int arg4)
+{
+    char* convToDouble = (char*) malloc(4 * sizeof(char));
+    int intResult = logthis(sLog1, level, arg3, arg4);
+    if(AXIS_SUCCESS == intResult)
+    {
+	sprintf(convToDouble, "%f", dLog2);
+        fputs (convToDouble, fileTrace);
+        fputs ("\n", fileTrace);
+        fputs ("-------------------------------------------------", fileTrace);
+        fputs ("\n", fileTrace);
+
+        fflush (fileTrace);
+
+        return AXIS_SUCCESS;
+    }
+    free(convToDouble);
+    return AXIS_FAIL;
 }
 
 int AxisTrace::trace (const char *pchLog)
