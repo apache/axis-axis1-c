@@ -52,6 +52,11 @@ int SoapParserXerces::SetInputStream(const Ax_soapstream* pInputStream)
 
 int SoapParserXerces::Init()
 {
+	if (firstParsed)
+	{
+		m_pParser->parseReset(token);
+		firstParsed = false;
+	}
 	return 0;
 }
 
