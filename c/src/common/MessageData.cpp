@@ -90,15 +90,14 @@ void MessageData::SetDeSerializer(SoapDeSerializer *pDZ)
 	m_pDZ = pDZ;
 }
 
-void MessageData::SetUserName(string m_sUserName)
+void MessageData::SetUserName(string& m_sUserName)
 {
   m_sUserName = m_sUserName;
 }
-string MessageData::GetUserName()
+string& MessageData::GetUserName()
 {
-  //return m_sUserName;
-  return "damitha kumarage";
-  
+  return m_sUserName;
+ // return "damitha kumarage"; 
 }
 
 void MessageData::SetService(WSDDService* argService)

@@ -91,6 +91,10 @@ SOURCE=..\..\src\common\AccessBean.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\ArrayBean.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\AxisException.cpp
 # End Source File
 # Begin Source File
@@ -123,6 +127,10 @@ SOURCE=..\..\src\common\AccessBean.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\ArrayBean.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\AxisException.h
 # End Source File
 # Begin Source File
@@ -147,7 +155,19 @@ SOURCE=..\..\src\common\GDefine.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\IAccessBean.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\IArrayBean.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\IMessageData.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\IParam.h
 # End Source File
 # Begin Source File
 

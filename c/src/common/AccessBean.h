@@ -72,56 +72,19 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-//this is a trick :-)
-#define ACCESSBEAN_SERIALIZABLE int DeSerialize(ISoapDeSerializer *pDZ);int Serialize(ISoapSerializer& pSZ); int GetSize();
-
-#include "../common/GDefine.h"
+#include "GDefine.h"
+#include "IAccessBean.h"
 #include "../soap/TypeMapping.h"
-#include "ISoapSerializer.h"
-#include "ISoapDeSerializer.h"
 
-#include <list>
 #include <string>
 using namespace std;
 
-class SoapDeSerializer;
-
-class AccessBean  
+class AccessBean : public IAccessBean 
 {
 public:
 	AccessBean();
 	virtual ~AccessBean(){};
-	virtual int DeSerialize(ISoapDeSerializer *pDZ);
-	virtual int Serialize(ISoapSerializer& pSZ);
-	virtual int GetSize();
-	string m_TypeName;
-	string m_URI;
-};
-
-//This class is used inside Param class and wrapper classes only.
-class ArrayBean : public AccessBean
-{
-public:
-	ArrayBean();
-	virtual ~ArrayBean();
-	virtual int DeSerialize(ISoapDeSerializer *pDZ);
-	virtual int Serialize(ISoapSerializer& pSZ);
-	int GetArraySize();
-private:
-	int GetArrayBlockSize(list<int>::iterator it);
-//	void DeleteArray(list<int>::iterator it, int nItemOffset, int nItemSize, int nDim);
-//	int SerializeArray(list<int>::iterator it, int nItemOffset, int nItemSize, int nDim, string& sSerialized);
-//	int DeSerializeArray(list<int>::iterator it, int nItemOffset, int nItemSize, int nDim, SoapDeSerializer *pDZ);
-
-public:
-	XSDTYPE m_type; //array element type
-	list<int> m_size; //array size only one dimensional arrays
-	string m_ItemName;//name of an item like <item>34</item>
-	union uAValue //this is useful only when Param is used as a return parameter
-	{
-		void* sta; //simple type array
-		AccessBean* cta; //complex type array
-	}m_value;	
+	ACCESSBEAN_SERIALIZABLE
 };
 
 #endif // !defined(AFX_ACCESSBEAN_H__DAFED24B_0423_4501_BD9C_8EE072651FFF__INCLUDED_)

@@ -66,17 +66,16 @@
 #if !defined(AFX_ISOAPDESERIALIZER_H__BE214866_1A80_44C4_9AAD_0475B0C5EA1C__INCLUDED_)
 #define AFX_ISOAPDESERIALIZER_H__BE214866_1A80_44C4_9AAD_0475B0C5EA1C__INCLUDED_
 
-#include "Param.h"
-
 #include <string>
 using namespace std;
+class IParam;
 
 class ISoapDeSerializer
 {
 public:
 	virtual string& GetMethodName()=0;
-	virtual Param* GetParam()=0;
-	virtual int Deserialize(Param* pParam, int bHref)=0;
+	virtual IParam* GetParam()=0;
+	virtual int Deserialize(IParam* pIParam, int bHref)=0;
 };
 
 #endif // !defined(AFX_ISOAPDESERIALIZER_H__BE214866_1A80_44C4_9AAD_0475B0C5EA1C__INCLUDED_)

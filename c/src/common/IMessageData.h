@@ -67,16 +67,19 @@
 #if !defined(AFX_IMESSAGEDATA_H__EEFDCDB4_6ABA_48CA_8B45_B4FDA6045822__INCLUDED_)
 #define AFX_IMESSAGEDATA_H__EEFDCDB4_6ABA_48CA_8B45_B4FDA6045822__INCLUDED_
 
-#include "ISoapDeSerializer.h"
-#include "ISoapSerializer.h"
+#include <string>
+using namespace std;
+
+class ISoapDeSerializer;
+class ISoapSerializer;
 
 class IMessageData
 {
 public:
 	virtual ISoapSerializer* getSoapSerializer()=0;
 	virtual ISoapDeSerializer* getSoapDeserializer()=0;
-  virtual void SetUserName(string m_sUserName)=0;
-	virtual string GetUserName()=0;
+	virtual void SetUserName(string& m_sUserName)=0;
+	virtual string& GetUserName()=0;
 
 protected:
   string m_sUserName;  
