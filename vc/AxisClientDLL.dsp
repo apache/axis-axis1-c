@@ -334,6 +334,34 @@ SOURCE=..\src\engine\XMLParserFactory.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
+SOURCE=..\include\axis\AxisConfigException.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\axis\AxisEngineException.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\axis\server\AxisException.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\axis\AxisParseException.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\axis\AxisSoapException.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\axis\AxisTransportException.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\axis\AxisWsddException.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\axis\client\Call.h
 # End Source File
 # Begin Source File
