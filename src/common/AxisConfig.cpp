@@ -64,12 +64,10 @@ AxisConfig::AxisConfig ()
     m_pcValueArray[AXCONF_XMLPARSER] = "AxisXMLParser.dll";
 	m_pcValueArray[AXCONF_TRANSPORTHTTP] = "AxisTransport.dll";
 #else
-	m_pcValueArray[AXCONF_XMLPARSER] = "/usr/local/Axis/libs/libaxis_xmlparser.so";
-	m_pcValueArray[AXCONF_TRANSPORTHTTP] = "/usr/local/Axis/libs/libaxis_transport.so";
-        m_pcValueArray[AXCONF_LOGPATH] = "/usr/local/Axis/logs/AxisLog";
-        m_pcValueArray[AXCONF_CLIENTLOGPATH] = "/usr/local/Axis/logs/AxisClientLog";
-        //m_pcValueArray[AXCONF_WSDDFILEPATH] = "/usr/local/Axis/conf/server.wsdd";
-        //m_pcValueArray[AXCONF_CLIENTWSDDFILEPATH] = "/usr/local/Axis/conf/client.wsdd";
+	m_pcValueArray[AXCONF_XMLPARSER] = "/usr/local/axiscpp_deploy/lib/libaxis_xmlparser.so";
+	m_pcValueArray[AXCONF_TRANSPORTHTTP] = "/usr/local/axiscpp_deploy/lib/libaxis_transport.so";
+        m_pcValueArray[AXCONF_LOGPATH] = "/usr/local/axiscpp_deploy/log/AxisLog";
+        m_pcValueArray[AXCONF_CLIENTLOGPATH] = "/usr/local/axiscpp_deploy/log/AxisClientLog";
         m_pcValueArray[AXCONF_NODENAME] = "<server name>";
         m_pcValueArray[AXCONF_LISTENPORT] = "<listen port>";
 #endif
