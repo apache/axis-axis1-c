@@ -74,6 +74,7 @@
 #endif // _MSC_VER > 1000
 
 #include "IParam.h"
+#include "BasicTypeSerializer.h"
 
 #include <string>
 using namespace std;
@@ -126,6 +127,8 @@ public: //Conversion functions
 	int SetArrayElements(void* pElements);
 	int SetUserType(IAccessBean* pObject);
 	void SetName(char* sName);
+private:
+	BasicTypeSerializer m_BTSZ;
 };
 
 #endif // !defined(AFX_PARAM_H__351B13BB_5D03_40C5_93F5_56D17295A8BD__INCLUDED_)

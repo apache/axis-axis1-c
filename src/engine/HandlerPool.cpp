@@ -290,12 +290,12 @@ HandlerChain* HandlerPool::LoadHandlerChain(WSDDHandlerList *pHandlerList)
 			DEBUG1("AFTER BasicHandler *pBh = LoadHandler(*it);");
 			if (pBh)
 			{
-				DEBUG1("BEFORE pH = dynamic_cast<Handler*>(pBh);");
+				DEBUG1("BEFORE pH = static_cast<Handler*>(pBh);");
 				if (pBh->GetType() == NORMAL_HANDLER)
 					pH = static_cast<Handler*>(pBh);
 				else
 					pH = NULL;
-				DEBUG1("AFTER pH = dynamic_cast<Handler*>(pBh);");
+				DEBUG1("AFTER pH = static_cast<Handler*>(pBh);");
 				if (pH)
 				{          
 					DEBUG1("if (pH)");
