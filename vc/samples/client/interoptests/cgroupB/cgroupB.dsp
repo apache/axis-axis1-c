@@ -113,6 +113,10 @@ SOURCE=..\..\..\..\..\samples\client\interoptests\cgroupB\SOAPStructStruct.c
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
+SOURCE=..\..\..\..\..\samples\client\interoptests\cgroupB\InteropTestPortTypeB.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\..\..\samples\client\interoptests\cgroupB\SOAPArrayStruct.h
 # End Source File
 # Begin Source File

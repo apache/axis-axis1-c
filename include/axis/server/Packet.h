@@ -104,7 +104,7 @@ typedef struct
 
 typedef struct
 {
-	const char* uri_path;
+	char* uri_path;
 	Ax_header* ip_headers;
 	int ip_headercount;
 	Ax_header* op_headers;
