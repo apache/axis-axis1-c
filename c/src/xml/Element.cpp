@@ -26,8 +26,6 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-namespace axisxml {
-
 Element::Element()
 {
 
@@ -38,5 +36,4 @@ Element::~Element()
 
 }
 
-}
 

@@ -68,8 +68,6 @@
 
 #include "Event.h"
 
-namespace axisxml {
-
 class Element : public Event  
 {
 public:
@@ -92,6 +90,5 @@ class EndPrefix : public Element
 
 typedef Element EndElement;
 
-};
 
 #endif // !defined(AFX_ELEMENT_H__93E0989D_3148_4E7B_AA81_9D1DF43975B0__INCLUDED_)

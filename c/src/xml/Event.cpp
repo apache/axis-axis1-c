@@ -26,8 +26,6 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-namespace axisxml {
-
 Event::Event()
 {
 
@@ -38,5 +36,4 @@ Event::~Event()
 
 }
 
-}
 

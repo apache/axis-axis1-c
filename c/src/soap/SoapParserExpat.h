@@ -87,9 +87,9 @@ private:
 	XML_Parser m_Parser;
 	const Ax_soapstream* m_pInputStream;
 	const char* m_pCurrentBuffer;
-	axisxml::Event* m_pLastEvent;
+	Event* m_pLastEvent;
 	AnyElement m_Element;
-	queue<axisxml::Event*> m_Events;
+	queue<Event*> m_Events;
 	map<AxisXMLString, AxisXMLString> m_NsStack;
 	int m_nStatus;
 	AXIS_TRANSPORT_STATUS m_nTransportStatus;

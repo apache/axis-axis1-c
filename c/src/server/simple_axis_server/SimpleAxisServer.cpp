@@ -75,11 +75,11 @@
 #endif
 
 //#include <stdio.h>
-#include <axis/common/Packet.h>
-#include <axis/common/AxisConfig.h>
-#include <axis/common/AxisSocketUtils.h>
-#include <axis/common/AxisTrace.h>
-#include <axis/server/simple_axis_server/ServerHelper.h>
+#include <axis/server/Packet.h>
+#include <axis/server/AxisConfig.h>
+#include "../../common/AxisSocketUtils.h"
+#include <axis/server/AxisTrace.h>
+#include "ServerHelper.h"
 
 #define MAXPENDING 5    /* Maximum outstanding connection requests */
 #define RCVBUFSIZE 1000   /* Size of receive buffer */
@@ -93,6 +93,8 @@ char echoBuffer[RCVBUFSIZE];        /* Buffer for echo string */
 const char *pcHttpBody;
 int iClntSocket;
 map<HTTP_MAP_KEYWORDS, HTTP_MAP_TYPE*> map_HTTP_Headers;
+
+extern AxisTrace* g_pAT;
 
 int send_response_bytes(const char * res, const void* opstream) 
 {	

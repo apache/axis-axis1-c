@@ -27,7 +27,6 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-namespace axisxml {
 
 StartElement::StartElement()
 {
@@ -36,11 +35,10 @@ StartElement::StartElement()
 
 StartElement::~StartElement()
 {
-	for (list<Attribute*>::iterator it = m_Attributes.begin(); it != m_Attributes.end(); it++)
+	for (list<SimpleAttribute*>::iterator it = m_Attributes.begin(); it != m_Attributes.end(); it++)
 	{
 		delete *it;
 	}
 }
 
-}
 

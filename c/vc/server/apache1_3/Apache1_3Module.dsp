@@ -54,7 +54,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386
-# ADD LINK32 CommonLibrary.lib SoapLibrary.lib WsddLibrary.lib ServerEngineLibrary.lib XmlLibrary.lib libexpat.lib ApacheCore.lib /nologo /dll /machine:I386 /out:"../../../release/win32/mod_axis.dll" /libpath:"../../../lib/axis" /libpath:"../../../lib/apache1_3" /libpath:"../../../lib/expat"
+# ADD LINK32 AxisServer.lib ApacheCore.lib /nologo /dll /machine:I386 /out:"../../../release/win32/mod_axis.dll" /libpath:"../../../release/win32" /libpath:"../../../lib/apache1_3"
 # SUBTRACT LINK32 /profile
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
