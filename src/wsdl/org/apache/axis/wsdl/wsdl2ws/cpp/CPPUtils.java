@@ -84,22 +84,32 @@ public class CPPUtils {
 		 class2QNamemap.put("float", new QName(WrapperConstants.SCHEMA_NAMESPACE, "float"));
 		 class2QNamemap.put("long", new QName(WrapperConstants.SCHEMA_NAMESPACE, "long"));
 		 class2QNamemap.put("double", new QName(WrapperConstants.SCHEMA_NAMESPACE, "double"));
-		 class2QNamemap.put("int", new QName(WrapperConstants.SCHEMA_NAMESPACE, "boolean"));
 		 class2QNamemap.put("char", new QName(WrapperConstants.SCHEMA_NAMESPACE, "char"));
 		 class2QNamemap.put("short", new QName(WrapperConstants.SCHEMA_NAMESPACE, "short"));
 		 class2QNamemap.put("string", new QName(WrapperConstants.SCHEMA_NAMESPACE, "string"));
-		 class2QNamemap.put("string", new QName(WrapperConstants.SCHEMA_NAMESPACE, "base64Binary"));
-
+		 class2QNamemap.put("Axis_DateTime", new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"));
+		 class2QNamemap.put("Axis_Date", new QName(WrapperConstants.SCHEMA_NAMESPACE, "date"));
+		 class2QNamemap.put("Axis_Time", new QName(WrapperConstants.SCHEMA_NAMESPACE, "time"));
+		 class2QNamemap.put("Axis_Base64Binary", new QName(WrapperConstants.SCHEMA_NAMESPACE, "base64Binary"));
+		 class2QNamemap.put("Axis_HexBinary", new QName(WrapperConstants.SCHEMA_NAMESPACE, "hexBinary"));
+		 class2QNamemap.put("Axis_Decimal", new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"));
+		 class2QNamemap.put("Axis_Boolean", new QName(WrapperConstants.SCHEMA_NAMESPACE, "boolean"));
+		
 		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "int"), "int");
 		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "byte"), "unsigned char");
 		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "float"), "float");
 		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "long"), "long");
 		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "double"), "double");
-		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "boolean"), "int");
 		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "char"), "char");
 		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "short"), "short");
 		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "string"), "string");
-		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "base64Binary"), "string");
+ 		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"), "Axis_DateTime");
+		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "date"), "Axis_Date");
+		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "time"), "Axis_Time");
+		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "base64Binary"), "Axis_Base64Binary");
+		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "hexBinary"), "Axis_HexBinary");
+		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"), "Axis_Decimal");
+		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "boolean"), "Axis_Boolean");
 	}
 	public static boolean isSimpleType(String name){
 		if(class2QNamemap.containsKey(name))
@@ -126,6 +136,13 @@ public class CPPUtils {
 		type2getValueMethodName.put("unsigned int","GetUnsignedInt");
 		type2getValueMethodName.put("unsigned short","GetUnsignedShort");
 		type2getValueMethodName.put("unsigned char","GetUnsignedChar");
+		type2getValueMethodName.put("Axis_DateTime","GetDateTime");
+		type2getValueMethodName.put("Axis_Date","GetDate");
+		type2getValueMethodName.put("Axis_Time","GetTime");
+		type2getValueMethodName.put("Axis_Base64Binary","GetBase64String");
+		type2getValueMethodName.put("Axis_HexBinary","GetHexString");
+		type2getValueMethodName.put("Axis_Decimal","GetDecimal");
+		type2getValueMethodName.put("Axis_Boolean","GetInt");
 		String methodname;
 		if((methodname = (String)type2getValueMethodName.get(typeName))!= null)
 			return methodname+"()";
@@ -153,6 +170,7 @@ public class CPPUtils {
 	public static String getXSDTypeForBasicType(String stype){
 		if ("int".equals(stype)) return "XSD_INT";
 		else if ("string".equals(stype)) return "XSD_STRING";
+		else if ("char*".equals(stype)) return "XSD_STRING";
 		else if ("unsigned int".equals(stype)) return "XSD_UNSIGNEDINT";
 		else if ("short".equals(stype)) return "XSD_SHORT";
 		else if ("unsigned short".equals(stype)) return "XSD_UNSIGNEDSHORT";
@@ -162,7 +180,13 @@ public class CPPUtils {
 		else if ("unsigned char".equals(stype)) return "XSD_BYTE";
 		else if ("float".equals(stype)) return "XSD_FLOAT";
 		else if ("double".equals(stype)) return "XSD_DOUBLE";
-		else if ("struct tm".equals(stype)) return "XSD_DATETIME";
+		else if ("Axis_DateTime".equals(stype)) return "XSD_DATETIME";
+		else if ("Axis_Date".equals(stype)) return "XSD_DATE";
+		else if ("Axis_Time".equals(stype)) return "XSD_TIME";
+		else if ("Axis_Base64Binary".equals(stype)) return "XSD_BASE64BINARY";
+		else if ("Axis_HexBinary".equals(stype)) return "XSD_HEXBINARY";
+		else if ("Axis_Decimal".equals(stype)) return "XSD_DECIMAL";
+		else if ("Axis_Boolean".equals(stype)) return "XSD_BOOLEAN";
 		else return "unknown type";
 	}
 }

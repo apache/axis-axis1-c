@@ -134,7 +134,7 @@ public class ServiceWriter extends CPPClassWriter{
 		  for(int i = 0; i < methods.size(); i++){
 			  minfo = (MethodInfo)this.methods.get(i);
 
-			  if(minfo.getReturnType().getLangName()==null)
+			  if(minfo.getReturnType()== null)
 				  writer.write("void ");
 			  else {
 				String outparam = minfo.getReturnType().getLangName();

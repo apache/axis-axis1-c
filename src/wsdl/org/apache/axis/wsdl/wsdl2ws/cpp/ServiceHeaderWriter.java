@@ -147,7 +147,7 @@ public class ServiceHeaderWriter extends HeaderFileWriter{
 		  for(int i = 0; i < methods.size(); i++){
 			  minfo = (MethodInfo)this.methods.get(i);
 			  //write return type
-			  if(minfo.getReturnType().getLangName()==null)
+			  if(minfo.getReturnType()==null)
 				  writer.write("\t\tvoid ");
 			  else {
 			  	  String outparam = minfo.getReturnType().getLangName();

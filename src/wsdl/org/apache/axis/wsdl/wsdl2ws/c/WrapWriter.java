@@ -66,6 +66,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
+import javax.xml.namespace.QName;
+
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
 import org.apache.axis.wsdl.wsdl2ws.cpp.CPPUtils;
@@ -207,25 +209,33 @@ public class WrapWriter extends CFileWriter{
 	 */
 
 	public void writeMethodInWrapper(String methodName, Collection params, ParameterInfo returntype) throws WrapperFault,IOException {
-		Type retType = wscontext.getTypemap().getType(returntype.getSchemaName());
-		String outparamType;
+		Type retType = null;
+		String outparamType = null;
 		boolean returntypeissimple = false;
 		boolean returntypeisarray = false;
-		if (retType != null){
-			outparamType = retType.getLanguageSpecificName();
-			returntypeisarray = retType.isArray();
+		if (returntype != null){
+			retType = wscontext.getTypemap().getType(returntype.getSchemaName());
+			if (retType != null){
+				outparamType = retType.getLanguageSpecificName();
+				returntypeisarray = retType.isArray();
+			}
+			else{
+				outparamType = returntype.getLangName();
+			}
+			returntypeissimple = CPPUtils.isSimpleType(outparamType);
 		}
-		else{
-			outparamType = returntype.getLangName();
-		}
-		returntypeissimple = CPPUtils.isSimpleType(outparamType);
 		String paraTypeName;
 		ArrayList paramsB = new ArrayList(params);
 		Type type;
 
 		writer.write("\n//forward declaration for the c method "+methodName+" \n");
 		//TODO forward declaration writing logic should be changed when arrays come into picture
-		writer.write("extern \"C\" "+outparamType+((returntypeissimple||returntypeisarray)?" ":" *")+methodName+"(");
+		if (returntype == null){
+			writer.write("extern \"C\" void "+methodName+"(");
+		}
+		else{ 
+			writer.write("extern \"C\" "+outparamType+((returntypeissimple||returntypeisarray)?" ":" *")+methodName+"(");
+		}
 
 		for (int i = 0; i < paramsB.size(); i++) {
 			if (i>0) writer.write(",");
@@ -259,10 +269,14 @@ public class WrapWriter extends CFileWriter{
 				//for simple types	
 				writer.write("\t"+paraTypeName+" v"+i+" = pIWSDZ->"+CPPUtils.getParameterGetValueMethodName(paraTypeName)+";\n");
 			}else if((type = this.wscontext.getTypemap().getType(((ParameterInfo)paramsB.get(i)).getSchemaName())) != null && type.isArray()){
-				String containedType = type.getTypNameForAttribName("item").getLocalPart();
-				if(CPPUtils.isSimpleType(containedType)){
+				QName qname = type.getTypNameForAttribName("item");
+				String containedType = null;
+				if (CPPUtils.isSimpleType(qname)){
+					containedType = CPPUtils.getclass4qname(qname);
 					writer.write("\t"+paraTypeName+" v"+i+" = ("+paraTypeName+"&)pIWSDZ->GetArray("+CPPUtils.getXSDTypeForBasicType(containedType)+");\n");
-				}else{
+				}
+				else{
+					containedType = qname.getLocalPart();
 					writer.write("\t"+paraTypeName+" v"+i+" = ("+paraTypeName+"&)pIWSDZ->GetArray((AXIS_DESERIALIZE_FUNCT)Axis_DeSerialize_"+containedType+ 
 						"\n\t\t, (AXIS_OBJECT_CREATE_FUNCT)Axis_Create_"+containedType+", (AXIS_OBJECT_DELETE_FUNCT)Axis_Delete_"+containedType+
 						"\n\t\t, (AXIS_OBJECT_SIZE_FUNCT)Axis_GetSize_"+containedType+", Axis_TypeName_"+containedType+", Axis_URI_"+containedType+");\n");
@@ -275,23 +289,28 @@ public class WrapWriter extends CFileWriter{
 			}
 		}
 		
-		if(!(outparamType == null ||outparamType.equals("void"))){				
+		if(returntype != null){
 			/* Invoke the service when return type not void */
 			writer.write("\t"+outparamType+((returntypeisarray || returntypeissimple)?" ":" *")+ "ret = "+methodName+"(");
-			for (int i = 0; i <  paramsB.size() - 1; i++) {
-				writer.write("v" + i + ",");
+			if (0<paramsB.size()){
+				for (int i = 0; i <  paramsB.size() - 1; i++) {
+					writer.write("v" + i + ",");
+				}
+				writer.write("v" + ( paramsB.size() - 1));
 			}
-			writer.write("v" + ( paramsB.size() - 1));
 			writer.write(");\n");
 			/* set the result */
 			if (returntypeissimple){
 				writer.write("\treturn pIWSSZ->AddOutputParam(\""+methodName+"Return\", ret);\n");
 			}else if(returntypeisarray){
-				String containedType = retType.getTypNameForAttribName("item").getLocalPart();
-				if (CPPUtils.isSimpleType(containedType)){ //array of basic types
+				QName qname = retType.getTypNameForAttribName("item");
+				String containedType = null;
+				if (CPPUtils.isSimpleType(qname)){
+					containedType = CPPUtils.getclass4qname(qname);
 					writer.write("\treturn pIWSSZ->AddOutputParam(\""+methodName+"Return\", (Axis_Array*)(&ret),"+CPPUtils.getXSDTypeForBasicType(containedType)+");\n");
 				}
-				else{ //array of complex types
+				else{
+					containedType = qname.getLocalPart();
 					writer.write("\treturn pIWSSZ->AddOutputParam(\""+methodName+"Return\", (Axis_Array*)(&ret),"+ 
 					"(void*) Axis_Serialize_"+containedType+", (void*) Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", Axis_TypeName_"+containedType+", Axis_URI_"+containedType+");\n");
 				}
@@ -302,11 +321,13 @@ public class WrapWriter extends CFileWriter{
 			}
 		}else{//method does not return anything
 			/* Invoke the service when return type is void */
-			writer.write("\t pWs->" + methodName + "(");
-			for (int i = 0; i <  paramsB.size() - 1; i++) {
-				writer.write("v" + i + ",");
+			writer.write("\tpWs->" + methodName + "(");
+			if (0<paramsB.size()){
+				for (int i = 0; i <  paramsB.size() - 1; i++) {
+					writer.write("v" + i + ",");
+				}
+				writer.write("v" + ( paramsB.size() - 1));
 			}
-			writer.write("v" + ( paramsB.size() - 1));
 			writer.write(")\n");
 			writer.write("\treturn SUCCESS;\n");
 		}
@@ -320,9 +341,12 @@ public class WrapWriter extends CFileWriter{
 	protected void writeGlobalCodes() throws WrapperFault {
 		Iterator types = wscontext.getTypemap().getTypes().iterator();
 		String typeName;
+		Type type;
 		try {
 			while(types.hasNext()){
-				typeName = ((Type)types.next()).getLanguageSpecificName();
+				type = (Type)types.next();
+				if (type.isArray()) continue;
+				typeName = type.getLanguageSpecificName();
 				writer.write("extern int Axis_DeSerialize_"+typeName+"("+typeName+"* param, IWrapperSoapDeSerializer *pDZ);\n");
 				writer.write("extern void* Axis_Create_"+typeName+"(bool bArray = false, int nSize=0);\n");
 				writer.write("extern void Axis_Delete_"+typeName+"("+typeName+"* param, bool bArray = false, int nSize=0);\n");
