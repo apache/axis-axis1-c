@@ -5,23 +5,25 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 
-import org.apache.axis.AxisFault;
+import javax.xml.namespace.QName;
+
+
+
 import org.apache.axismora.Constants;
-import org.apache.axismora.MessageContext;
-import org.apache.axismora.encoding.AxisPullParser;
+
+
 import org.apache.axismora.wsdl2ws.WrapperFault;
 import org.apache.axismora.wsdl2ws.WrapperUtils;
 import org.apache.axismora.wsdl2ws.info.MethodInfo;
 import org.apache.axismora.wsdl2ws.info.ParameterInfo;
-import org.apache.axismora.wsdl2ws.info.Type;
-import org.apache.axismora.wsdl2ws.info.TypeMap;
+
+
 import org.apache.axismora.wsdl2ws.info.WebServiceContext;
 import org.apache.axismora.wsdl2ws.java.JavaClassWriter;
 import org.apache.axismora.wsdl2ws.java.JavaUtils;
-import org.apache.axismora.wsdl2ws.java.WrapWriter;
-import org.xmlpull.v1.XmlPullParser;
+
+
 
 
 /**
@@ -81,9 +83,12 @@ protected String getExtendsPart() {
 
 protected void writeImportStatements() throws WrapperFault {
 		try {
-			writer.write(
-				"import org.apache.axis.AxisFault;\nimport org.apache.axis.message.SOAPFault;\n");
+			writer.write("import org.apache.axis.AxisFault;\nimport org.apache.axis.message.SOAPFault;\n");
 			writer.write("import org.xmlpull.v1.XmlPullParser;\n");
+			writer.write("import javax.xml.namespace.QName;\n");
+			writer.write("import org.apache.axismora.encoding.AxisPullParser;\n");
+			writer.write("import org.apache.axismora.provider.result.DocLiteralSerializer;\n");
+			writer.write("import org.apache.axis.enum.Use;\n");
 		} catch (IOException e) {
 			throw new WrapperFault(e);
 		}
@@ -111,13 +116,13 @@ protected void writeMethods() throws WrapperFault {
 	//write service wrapping methods
 	for (int i = 0; i < methods.size(); i++) {
 		minfo = (MethodInfo) methods.get(i);
-			this.writeMethodInWrapper(
-				minfo.getMethodname(),
-				minfo.getParameterTypes(),
-				minfo.getReturnType());
+		System.out.println("Details of the method "+ minfo.getMethodname()+" collection "+minfo.getParameterTypes().size()+"  returnType "+minfo.getReturnType());
+
+			this.writeMethodInWrapper(minfo.getMethodname(), minfo.getParameterTypes(), minfo.getReturnType());
 			writer.write("\n");
 		}
-	} catch (IOException e) {
+		
+		} catch (IOException e) {
 		throw new WrapperFault(e);
 	}
 }
@@ -136,7 +141,7 @@ protected void writeInvoke() throws IOException{
 		  writer.write("\t\t try{\n");
 		  writer.write(
 			  "\t\t\tString methodToCall = msgdata.getMethodName().getLocalPart();\n");
-		  writer.write("\t\t\tmsgdata.setLitereal(true);\n");
+		  writer.write("\t\t\tmsgdata.setUse(Use.LITERAL);\n");
 		  //if no methods in the service simply return
 		  if (methods.size() == 0) {
 			  writer.write("\t}\n");
@@ -200,48 +205,46 @@ public void writeMethodInWrapper(
 
 	
 	ArrayList paramsB = new ArrayList(params);
-	//Iterator p = params.iterator();
 
+	   if(paramsB.get(0)!=null){ 	
 	ParameterInfo pinfo=(ParameterInfo) paramsB.get(0);
-
+   
+   if(pinfo.getElementName()==null)
+	   throw new WrapperFault("Document Literal service accept only elements\n");
+   
 // Writing validation code for start tag.
-	writer.write("\t\t//This is a docLit service.\n Therefore cursor of the pull parser is at body tag\n");
-	writer.write("\t\tAxisPullParser aXpp = msgdata.getAxisPullParser();\n");
+	writer.write("\t\t//This is a docLit service. Therefore cursor of the pull parser is at body tag\n");
+	writer.write("\t\tAxisPullParser aXpp = msgdata.getAxisParser();\n");
 	writer.write("\t//The current state is the body tag. We move one step ahead using aXpp.next()\n");
 	writer.write("\t\tint state=aXpp.next();\n");
 	writer.write("\t\tif(state == XmlPullParser.START_TAG){\n");
 	writer.write("\t\t//Validate the local name of the parameter\n");
-	writer.write("\t\t\taXpp.getName().equals(\"Get the elementName of pinfo.get(0)\");\n");
+	writer.write("\t\t\taXpp.getName().equals(\""+ pinfo.getElementName().getLocalPart() +"\");\n");
 	writer.write("\t\t}else{\n");
 	writer.write("\t\t\tthrow new AxisFault(\"Empty Soap Body, or text node in the soap body.\");\n}\n");
-	writer.write("\t// Validation of start tag is done.");
+	writer.write("\t// Validation of start tag is done.\n");
 
 
 // Create the parameter class for the first parameter. 
 // Other parameters are ignored
-	System.out.println(paramsB.size());
+
+   
 	writer.write(
 			JavaUtils.getSimpleTypeParameterCreationCode(
 				pinfo,
 				wscontext,
 				1));
 	
+   }
 	if (!(outparam == null || outparam.equals("void"))) {
-		boolean isSimpleType = TypeMap.isSimpleType(outparam);
-		boolean isArray = false;
-		Type type;
-		if ((type = this.wscontext.getTypemap().getType(returntype.getSchemaName()))
-			!= null)
-			isArray = type.isArray();
-			
-		// TODO :: Dimuthu ::: a big todo. This is ugly. Check for enums as well. Or invert checking is better if not element ignore.
-		if (isSimpleType || isArray) {
+		QName eleQname = returntype.getElementName();
+		if (eleQname==null) {
 			 throw new WrapperFault("Return type has to be a element declaration");
 		} else {
 			writer.write("org.apache.axismora.encoding.OutParameter outParam = service." + methodName + "(paramIn1);\n");
-			writer.write("msgData.setSoapBodyContents(new DocLitSerializer(outParam,qame));\n");
-			writer.write("paramIn1");
-			writer.write("));\n");
+			writer.write("QName qname = new QName(\""+eleQname.getNamespaceURI()+ "\", \"" + eleQname.getLocalPart()+"\");\n"); 
+			writer.write("msgdata.setSoapBodyContent(new DocLiteralSerializer(outParam,qname));\n");
+		     
 		}
 		
 	} else { // well .. web service is returning void.

@@ -3,6 +3,7 @@ package org.apache.axismora.wsdl2ws.doclit;
 
 import java.util.Iterator;
 
+import org.apache.axismora.wsdl2ws.SourceWriter;
 import org.apache.axismora.wsdl2ws.WrapperConstants;
 import org.apache.axismora.wsdl2ws.WrapperFault;
 import org.apache.axismora.wsdl2ws.info.Type;
@@ -31,7 +32,7 @@ import org.apache.axismora.wsdl2ws.info.WebServiceContext;
  * @author Dimuthu Leelaratne. muthulee@yahoo.com
  *
  */
-public class AllDocLitParamWriter {
+public class AllDocLitParamWriter implements SourceWriter {
 /*	TODO :: Check for R2201 compliance.
  *  NO support for arrays of enums ?????
  *  Arrays can exist only inside beans ..... and how is the problem
