@@ -12,9 +12,11 @@
 
 #include "ComplexLists.hpp"
 #include <axis/AxisException.hpp>
-#include <iostream.h>
+#include <iostream>
 
 #define ARRAYSIZE 2
+
+using namespace std;
 
 void printResponse(attrlisterr* ale)
 {
