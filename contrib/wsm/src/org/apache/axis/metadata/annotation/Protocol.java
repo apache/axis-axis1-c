@@ -4,7 +4,7 @@ import java.lang.annotation.*;
 
 /**
  * @author Ias
- *
+ * @deprecated
  */
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
