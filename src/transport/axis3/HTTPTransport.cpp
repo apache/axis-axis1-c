@@ -221,7 +221,7 @@ void HTTPTransport::closeConnection()
  * this will be set to TRANSPORT_FINISHED.  Otherwise, an exception will have
  * been thrown.
  */
-AXIS_TRANSPORT_STATUS HTTPTransport::flushOutput() throw (HTTPTransportException)
+AXIS_TRANSPORT_STATUS HTTPTransport::flushOutput() throw (AxisException, HTTPTransportException)
 {
     if( m_bReopenConnection)
     {
