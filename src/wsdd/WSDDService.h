@@ -78,9 +78,10 @@ using namespace std;
 class WSDDService : public WSDDHandler 
 {
 public:
+	const list<AxisString> getAllowedMethods() const;
 	void SetServiceName(const AxisChar* sServiceName);
 	void SetProvider(const AxisChar* sProvider);
-	const AxisChar* GetServiceName();
+	const AxisChar* GetServiceName() const;
 	bool IsAllowedMethod(const AxisChar* sMethodName) const;
 	void AddAllowedMethod(const AxisChar* sMethodName);
 	const WSDDHandlerList* GetResponseFlowHandlers() const;

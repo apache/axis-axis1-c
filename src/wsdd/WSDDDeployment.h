@@ -89,7 +89,7 @@ public:
 	const WSDDHandlerList* GetGlobalResponseFlowHandlers();
 	const WSDDHandlerList* GetTransportRequestFlowHandlers(AXIS_PROTOCOL_TYPE protocol);
 	const WSDDHandlerList* GetTransportResponseFlowHandlers(AXIS_PROTOCOL_TYPE protocol);
-	const WSDDServiceMap* GetWSDDServiceMap();
+	const WSDDServiceMap* GetWSDDServiceMap() const;
 	WSDDDeployment();
 	virtual ~WSDDDeployment();
 private: //methods that only be used by WSDDDepolyment.
