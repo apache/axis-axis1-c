@@ -38,8 +38,8 @@
 const int    WS_VERSION_REQD    = 0x0101;
 
 /* macros to get version major & minor */
-inline WS_VERSION_MAJOR() {return HIBYTE(WS_VERSION_REQD);}
-inline WS_VERSION_MINOR() {return LOBYTE(WS_VERSION_REQD);}
+inline int WS_VERSION_MAJOR() {return HIBYTE(WS_VERSION_REQD);}
+inline int WS_VERSION_MINOR() {return LOBYTE(WS_VERSION_REQD);}
 
 
 #else

@@ -34,8 +34,8 @@ private:
     virtual int openSecureSocket(){ return 0;};
     virtual int closeSecureSocket(){ return 0;};
 
-    virtual bool writeSecureSocket(const char *){return true;};
-    virtual bool readSecureSocket( char *, int){return true;};
+    virtual bool writeSecureSocket(const char *p1){return true;};
+    virtual bool readSecureSocket( char *p1, int p2){return true;};
 
     virtual void setSecureError(int iError){};
     virtual char* getSecureError(){ return NULL;};
