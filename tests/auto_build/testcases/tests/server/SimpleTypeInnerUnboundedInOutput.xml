@@ -1,8 +1,8 @@
 <service>
-    <name>SimpleTypeInnerUnboundedInputOutput</name>
-    <description>SimpleTypeInnerUnboundedInputOutput service</description>
+    <name>SimpleTypeInnerUnboundedInOutput</name>
+    <description>SimpleTypeInnerUnboundedInOutput service</description>
     <serviceLang>cpp</serviceLang>
-    <serviceCode>SimpleTypeInnerUnboundedInputOutputWS.cpp</serviceCode>
-    <wsdl>SimpleTypeInnerUnboundedInputOutput.wsdl</wsdl>
+    <serviceCode>SimpleTypeInnerUnboundedInOutputWS.cpp</serviceCode>
+    <wsdl>SimpleTypeInnerUnboundedInOutput.wsdl</wsdl>
 	<servicename></servicename>
 </service>
