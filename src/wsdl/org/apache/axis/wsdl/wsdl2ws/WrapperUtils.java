@@ -83,10 +83,6 @@ public class WrapperUtils {
     	if (type.isArray()){
 			QName qname = getArrayType(type).getName(); 
 			//this can never be a simple type
-			if (CUtils.isSimpleType(qname) && !CUtils.isDefinedSimpleType(qname)){
-				throw new WrapperFault("No need to create an Array for simple type "+qname+"\n" +
-					"It seems that some thing wrong with symbolTable population - Susantha");
-			}
 			return CUtils.getCmplxArrayNameforType(qname);
     	}
     	else{

@@ -104,6 +104,9 @@ public class ServiceHeaderWriter extends HeaderFileWriter{
 		boolean isSimpleType;
 		try{
 		  	writer.write("\tpublic: \n");	
+			writer.write("\t\tvoid onFault();\n");
+			writer.write("\t\tvoid init();\n");
+			writer.write("\t\tvoid fini();\n");
 		  	for(int i = 0; i < methods.size(); i++){
 			  	minfo = (MethodInfo)this.methods.get(i);
 				boolean isAllTreatedAsOutParams = false;
@@ -195,8 +198,8 @@ public class ServiceHeaderWriter extends HeaderFileWriter{
 							faultInfoName =info.getFaultInfo();	     
 							writer.write("#include \"Axis"+faultInfoName.toString()+"Exception.h\"\n");
 					}
-					writer.write("\n");
 				}			
+				writer.write("\n");
 			}catch(IOException e){
 				throw new WrapperFault(e);
 			}
