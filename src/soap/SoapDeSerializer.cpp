@@ -78,6 +78,7 @@
 #include <axis/server/Packet.h>
 #include <axis/server/AxisTrace.h>
 
+
 #ifdef USE_EXPAT_PARSER
 #include "SoapParserExpat.h"
 #elif USE_XERCES_PARSER
@@ -477,7 +478,7 @@ int SoapDeSerializer::GetArraySize(const AnyElement* pElement)
 		if (URI_ENC == URIMapping::Map(pElement->m_pchAttributes[i+1]) &&
 			(0 == strcmp(pElement->m_pchAttributes[i], SoapKeywordMapping::Map(m_nSoapVersion).pchWords[SKW_ARRAYTYPE])))
 		{
-			QName qn;
+			::QName qn;
 			qn.SplitQNameString(pElement->m_pchAttributes[i+2], '[');
 			nSize = strtol(qn.localname, &m_pEndptr, 10);
 			qn.MergeQNameString('[');
@@ -2199,7 +2200,7 @@ XSDTYPE SoapDeSerializer::GetXSDType(const AnyElement* pElement)
 	{
 		if (URI_XSI == URIMapping::Map(pElement->m_pchAttributes[i+1]))
 		{
-			QName qn;
+			::QName qn;
 			XSDTYPE type = XSD_UNKNOWN;
 			qn.SplitQNameString(pElement->m_pchAttributes[i+2], ':');
 			const char* pNS = m_pParser->GetNS4Prefix(qn.uri);
