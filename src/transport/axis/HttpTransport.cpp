@@ -403,7 +403,7 @@ HttpTransport::HTTPBind ()
      */
     if(m_bUseProxy) 
     {
-    	m_OutHttpHeaders += m_Url.getURL() + " HTTP/1.0\r\n";
+    	m_OutHttpHeaders += m_Url.getURL() + " HTTP/1.1\r\n";
     }
     else
 	m_OutHttpHeaders += m_Url.GetResource () + " HTTP/1.1\r\n";
