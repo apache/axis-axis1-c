@@ -129,9 +129,9 @@ public class WrapWriter extends CFileWriter{
 		writer.write("\tconst AxisChar* method = 0;\n");
 		writer.write("\tIWrapperSoapDeSerializer DZ = {0,0};\n");
 		writer.write("\tIWrapperSoapSerializer SZ = {0,0};\n");
-		writer.write("\tmethod = mc->_functions->GetOperationName(mc->_object);\n");
-		writer.write("\tmc->_functions->GetSoapSerializer(mc->_object, &SZ);\n");
-		writer.write("\tmc->_functions->GetSoapDeSerializer(mc->_object, &DZ);\n");		
+		writer.write("\tmethod = mc->_functions->getOperationName(mc->_object);\n");
+		writer.write("\tmc->_functions->getSoapSerializer(mc->_object, &SZ);\n");
+		writer.write("\tmc->_functions->getSoapDeSerializer(mc->_object, &DZ);\n");		
 		//if no methods in the service simply return
 		if (methods.size() == 0) {
 			writer.write("}\n");
@@ -261,24 +261,24 @@ public class WrapWriter extends CFileWriter{
 				String containedType = null;
 				if (CUtils.isSimpleType(qname)){
 					containedType = CUtils.getclass4qname(qname);
-					writer.write("\tarray = DZ._functions->GetBasicArray(DZ._object, "+CUtils.getXSDTypeForBasicType(containedType)+", 0, 0);\n");
+					writer.write("\tarray = DZ._functions->getBasicArray(DZ._object, "+CUtils.getXSDTypeForBasicType(containedType)+", 0, 0);\n");
 					writer.write("\tmemcpy(&v"+i+", &array, sizeof(Axis_Array));\n");
 				}
 				else{
 					containedType = qname.getLocalPart();
-					writer.write("\tarray = DZ._functions->GetCmplxArray(DZ._object, (void*)Axis_DeSerialize_"+containedType+ 
+					writer.write("\tarray = DZ._functions->getCmplxArray(DZ._object, (void*)Axis_DeSerialize_"+containedType+ 
 						"\n\t\t, (void*)Axis_Create_"+containedType+", (void*)Axis_Delete_"+containedType+
 						"\n\t\t, (void*)Axis_GetSize_"+containedType+", Axis_TypeName_"+containedType+", Axis_URI_"+containedType+");\n");
 					writer.write("\tmemcpy(&v"+i+", &array, sizeof(Axis_Array));\n");
 				}
 			}else{
 				//for complex types 
-				writer.write("\tv"+i+" = ("+paramTypeName+"*)DZ._functions->GetCmplxObject(DZ._object, (void*)Axis_DeSerialize_"+paramTypeName+
+				writer.write("\tv"+i+" = ("+paramTypeName+"*)DZ._functions->getCmplxObject(DZ._object, (void*)Axis_DeSerialize_"+paramTypeName+
 					"\n\t\t, (void*)Axis_Create_"+paramTypeName+", (void*)Axis_Delete_"+paramTypeName+
 					"\n\t\t, Axis_TypeName_"+paramTypeName+", Axis_URI_"+paramTypeName+");\n");
 			}
 		}
-		writer.write("\tif (AXIS_SUCCESS != (nStatus = DZ._functions->GetStatus(DZ._object))) return nStatus;\n");		
+		writer.write("\tif (AXIS_SUCCESS != (nStatus = DZ._functions->getStatus(DZ._object))) return nStatus;\n");		
 		if(returntype != null){
 			/* Invoke the service when return type not void */
 			writer.write("\tret = "+methodName+"(");
@@ -291,24 +291,24 @@ public class WrapWriter extends CFileWriter{
 			writer.write(");\n");
 			/* set the result */
 			if (returntypeissimple){
-				writer.write("\treturn SZ._functions->AddOutputParam(SZ._object, \""+methodName+"Return\", (void*)&ret, "+CUtils.getXSDTypeForBasicType(outparamTypeName)+");\n");
+				writer.write("\treturn SZ._functions->addOutputParam(SZ._object, \""+methodName+"Return\", (void*)&ret, "+CUtils.getXSDTypeForBasicType(outparamTypeName)+");\n");
 			}else if(returntypeisarray){
 				QName qname = WrapperUtils.getArrayType(retType).getName();
 				String containedType = null;
 				if (CUtils.isSimpleType(qname)){
 					containedType = CUtils.getclass4qname(qname);
-					writer.write("\treturn SZ._functions->AddOutputBasicArrayParam(SZ._object, (Axis_Array*)(&ret),"+CUtils.getXSDTypeForBasicType(containedType)+", \""+methodName+"Return\");\n");
+					writer.write("\treturn SZ._functions->addOutputBasicArrayParam(SZ._object, (Axis_Array*)(&ret),"+CUtils.getXSDTypeForBasicType(containedType)+", \""+methodName+"Return\");\n");
 				}
 				else{
 					containedType = qname.getLocalPart();
-					writer.write("\treturn SZ._functions->AddOutputCmplxArrayParam(SZ._object, (Axis_Array*)(&ret),"+ 
+					writer.write("\treturn SZ._functions->addOutputCmplxArrayParam(SZ._object, (Axis_Array*)(&ret),"+ 
 					"(void*) Axis_Serialize_"+containedType+", (void*) Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", \""+methodName+"Return\", Axis_URI_"+containedType+");\n");
 				}
 			}
 			else{
 				//complex type
 				outparamTypeName = returntype.getLangName();//need to have complex type name without *
-				writer.write("\treturn SZ._functions->AddOutputCmplxParam(SZ._object, ret, (void*)Axis_Serialize_"+outparamTypeName+", (void*)Axis_Delete_"+outparamTypeName+", \""+methodName+"Return\", Axis_URI_"+outparamTypeName+");\n");
+				writer.write("\treturn SZ._functions->addOutputCmplxParam(SZ._object, ret, (void*)Axis_Serialize_"+outparamTypeName+", (void*)Axis_Delete_"+outparamTypeName+", \""+methodName+"Return\", Axis_URI_"+outparamTypeName+");\n");
 			}
 		}else if (isAllTreatedAsOutParams){
 			writer.write("\t" + methodName + "(");
@@ -336,23 +336,23 @@ public class WrapWriter extends CFileWriter{
 				returntypeissimple = CUtils.isSimpleType(outparamType);
 				returnParamName = ((ParameterInfo)paramsC.get(i)).getParamName();
 				if (returntypeissimple){
-					writer.write("\tSZ._functions->AddOutputParam(SZ._object, \""+returnParamName+"\", (void*)&out"+i+", "+CUtils.getXSDTypeForBasicType(outparamType)+");\n");
+					writer.write("\tSZ._functions->addOutputParam(SZ._object, \""+returnParamName+"\", (void*)&out"+i+", "+CUtils.getXSDTypeForBasicType(outparamType)+");\n");
 				}else if(returntypeisarray){
 					QName qname = WrapperUtils.getArrayType(retType).getName();
 					String containedType = null;
 					if (CUtils.isSimpleType(qname)){
 						containedType = CUtils.getclass4qname(qname);
-						writer.write("\tSZ._functions->AddOutputBasicArrayParam(SZ._object, (Axis_Array*)(&out"+i+"), "+CUtils.getXSDTypeForBasicType(containedType)+ ", \""+returnParamName+"\");\n");
+						writer.write("\tSZ._functions->addOutputBasicArrayParam(SZ._object, (Axis_Array*)(&out"+i+"), "+CUtils.getXSDTypeForBasicType(containedType)+ ", \""+returnParamName+"\");\n");
 					}
 					else{
 						containedType = qname.getLocalPart();
-						writer.write("\tSZ._functions->AddOutputCmplxArrayParam(SZ._object, (Axis_Array*)(&out"+i+"),"+ 
+						writer.write("\tSZ._functions->addOutputCmplxArrayParam(SZ._object, (Axis_Array*)(&out"+i+"),"+ 
 						"(void*) Axis_Serialize_"+containedType+", (void*) Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", \""+returnParamName+"\", Axis_URI_"+containedType+");\n");
 					}
 				}
 				else{
 					//complex type
-					writer.write("\tSZ._functions->AddOutputCmplxParam(SZ._object, out"+i+", (void*)Axis_Serialize_"+outparamType+", (void*)Axis_Delete_"+outparamType+", \""+returnParamName+"\", Axis_URI_"+outparamType+");\n");
+					writer.write("\tSZ._functions->addOutputCmplxParam(SZ._object, out"+i+", (void*)Axis_Serialize_"+outparamType+", (void*)Axis_Delete_"+outparamType+", \""+returnParamName+"\", Axis_URI_"+outparamType+");\n");
 				}
 			}			
 			writer.write("\treturn AXIS_SUCCESS;\n");
