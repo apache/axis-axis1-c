@@ -6,6 +6,7 @@
 			<echo message="we are in windows"/>
 			<property name="ps" value="\"/>
 			<property name="parserliblocation" value="${env.XERCES_HOME}/bin/${xerces.xmlParserLibrary}${librarySuffix}"/>
+			<property name="serverwsddfile" value="${basedir}/build/server.wsdd.win32" />
 			<condition property="parserspecificlibname" value="${xml4c.xmlParserLibraryName}">
 				<equals arg1="${xmlParser.xml4c}" arg2="true" />
 			</condition>
@@ -61,6 +62,7 @@
 			<echo message="we are in linux" />
 			<property name="ps" value="/"/>
 			<property name="parserliblocation" value="${env.XERCES_HOME}/lib/lib${xerces.xmlParserLibrary}${librarySuffix}"/>
+			<property name="serverwsddfile" value="${basedir}/build/server.wsdd.linux" />
 
 
 
