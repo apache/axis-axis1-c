@@ -78,6 +78,7 @@ import org.apache.axismora.deployment.AxisDeployment;
 import org.apache.axismora.encoding.DesirializationContext;
 import org.apache.axismora.encoding.OutParameter;
 import org.apache.axismora.encoding.Serializable;
+import org.apache.axismora.provider.result.DocLiteralResult;
 import org.apache.axismora.provider.result.HandlerResetResult;
 import org.apache.axismora.provider.result.MSGResult;
 import org.apache.axismora.provider.result.RPCResult;
@@ -89,6 +90,7 @@ import org.apache.axis.components.logger.LogFactory;
 import org.apache.axis.deployment.wsdd.WSDDService;
 import org.apache.axis.encoding.SerializationContext;
 import org.apache.axis.encoding.SerializationContextImpl;
+import org.apache.axis.enum.Style;
 import org.apache.axis.message.SOAPBody;
 import org.apache.axis.message.SOAPBodyElement;
 import org.apache.axis.message.SOAPEnvelope;
@@ -143,7 +145,7 @@ public class BasicMessageContext implements MessageContext {
     /* serializer of the result */
     private SerializationContext serializer;
     /* Service Style */
-    private int style;
+    private Style style;
 
     private Writer w;
 
@@ -173,7 +175,8 @@ public class BasicMessageContext implements MessageContext {
     private String streamEncoding;
     //indicate at server side or the client side
     private boolean atServerSide;
-
+    //indicate to use literal or encoded
+    private boolean isLiteral=false;
 	/**
 	 * this Constructor is for the sake of testing only
 	 */
@@ -198,12 +201,14 @@ public class BasicMessageContext implements MessageContext {
         this.soapHeaderElements = new Vector(ELEMENT_MAP_SIZE);
         this.createdSoapHeaders = new Vector(ELEMENT_MAP_SIZE);
         this.streamEncoding = streamEncoding;
+        this.methodName = service.getQName();
+        this.style = service.getStyle();
         //initialize desirialization context - this drives the desiarialization
         this.deserializer =
             new DesirializationContext(
                 this,
                 inStream,
-                (service != null ? this.service.getProviderQName() : null));
+                (service != null ? this.service.getStyle() : null));
 
         w = new OutputStreamWriter(this.outStream);
         /*
@@ -235,6 +240,7 @@ public class BasicMessageContext implements MessageContext {
         this.service = service;
         this.outStream = requestContext.getSender().getOut();
         this.streamEncoding = requestContext.getEncoding();
+        this.style=service.getStyle();
         //initialize desirialization context - this drives the desiarialization
         this.deserializer =
             new DesirializationContext(
@@ -300,9 +306,12 @@ public class BasicMessageContext implements MessageContext {
     }
 
     public boolean setSoapBodyContent(Object result) throws AxisFault {
-        if (result instanceof OutParameter)
-            this.resultValue = new RPCResult((OutParameter) result, this.methodName);
-        else if (result instanceof Element[])
+        System.out.println(""+this.style.getName());
+        if (result instanceof OutParameter){
+           if(this.style.getName().equals("document")){
+                this.resultValue = new DocLiteralResult((OutParameter)result);
+           }else this.resultValue = new RPCResult((OutParameter) result, this.methodName);	
+        }else if (result instanceof Element[])
             this.resultValue = new MSGResult((Element[]) result);
         else if (result instanceof InputParameterInfo[])
             this.resultValue =
@@ -437,6 +446,11 @@ public class BasicMessageContext implements MessageContext {
         this.deserializer.startParseSOAPBody();
     }
 
+    public void setLitereal(boolean boo){
+		isLiteral = boo;
+    }
+    
+    
     /**
      * The serialization is done by the means adding the headers(they are kept separate up to the point)
      * and body to the envelope and calling the the <code>output(SerializationContext)</code> on the <code>SOAPEnvelope.</code>
@@ -459,6 +473,10 @@ public class BasicMessageContext implements MessageContext {
             Iterator headers = this.soapHeaderElements.iterator();
             SOAPHeaderElement header;
             
+            if(this.isLiteral){
+                 serializer.setDoMultiRefs(false);
+                 serializer.setShouldSendXSIType(true);
+            }
             /**
              *  recived headers are added if they are relay = true or not meant to
              *  This node.
@@ -531,7 +549,7 @@ public class BasicMessageContext implements MessageContext {
         this.deserializer.resetBlindLevel();
     }
 
-    public void setStyle(int style) {
+    public void setStyle(Style style) {
         this.style = style;
     }
 
