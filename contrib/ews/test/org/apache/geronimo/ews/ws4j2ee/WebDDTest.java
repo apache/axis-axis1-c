@@ -55,11 +55,10 @@
 package org.apache.geronimo.ews.ws4j2ee;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 
 import junit.framework.Assert;
-import junit.framework.TestCase;
 
+import org.apache.geronimo.ews.AbstractTestCase;
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 import org.apache.geronimo.ews.ws4j2ee.context.JaxRpcMapperContext;
 import org.apache.geronimo.ews.ws4j2ee.context.MiscInfo;
@@ -67,13 +66,19 @@ import org.apache.geronimo.ews.ws4j2ee.context.impl.MiscInfoImpl;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFContext;
 import org.apache.geronimo.ews.ws4j2ee.context.wsdl.WSDLContext;
 import org.apache.geronimo.ews.ws4j2ee.parsers.WebDDParser;
-import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 
 /**
  * @author hemapani
  */
-public class WebDDTest extends TestCase{
-	public void testWebDD() throws FileNotFoundException, GenerationFault{
+public class WebDDTest extends AbstractTestCase{
+    /**
+     * @param testName
+     */
+    public WebDDTest(String testName) {
+        super(testName);
+    }
+
+	public void testWebDD() throws Exception{
 		J2EEWebServiceContext con = new J2EEWebServiceContext() {
 			public WSDLContext getWSDLContext() {return null;}
 			public void setWSDLContext(WSDLContext wsdlcontext) {}
@@ -87,7 +92,7 @@ public class WebDDTest extends TestCase{
 			}
 		};
 	   WebDDParser pars = new WebDDParser(con);
-	   pars.parse(new FileInputStream("src/test/testData/servletBase/web.xml"));
+	   pars.parse(new FileInputStream(sampleDir + "servlet/math/web.xml"));
 	   Assert.assertEquals("org.apache.axis.transport.http.AxisServlet",pars.getServletClass()); 
 	}
 }

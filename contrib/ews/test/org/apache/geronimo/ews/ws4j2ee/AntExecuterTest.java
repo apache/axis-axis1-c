@@ -54,47 +54,27 @@
  */
 package org.apache.geronimo.ews.ws4j2ee;
 
-import javax.xml.namespace.QName;
-
-import junit.framework.Assert;
-
-import org.apache.axis.wsdl.symbolTable.BindingEntry;
-import org.apache.axis.wsdl.symbolTable.PortEntry;
 import org.apache.geronimo.ews.AbstractTestCase;
-import org.apache.geronimo.ews.jaxrpcmapping.J2eeEmitter;
-import org.apache.geronimo.ews.ws4j2ee.context.ContextFactory;
-import org.apache.geronimo.ews.ws4j2ee.context.wsdl.WSDLContext;
+import org.apache.geronimo.ews.ws4j2ee.utils.AntExecuter;
 
 /**
  * @author hemapani
  */
-public class WSDLTest extends AbstractTestCase{
-    /**
-     * @param testName
-     */
-    public WSDLTest(String testName) {
-        super(testName);
-    }
+public class AntExecuterTest extends AbstractTestCase{
+	/**
+	 * @param testName
+	 */
+	public AntExecuterTest(String testName) {
+		super(testName);
+	}
 
-	public void testGoogleWSDL() throws Exception{
-		   String mappingfile = sampleDir +"mapper/google/GoogleSearch.xml";
-		   String wsdlfile = sampleDir + "mapper/google/GoogleSearch.wsdl";
-		   J2eeEmitter j2ee = new J2eeEmitter();
-		   j2ee.setMappingFilePath(mappingfile);
-		   j2ee.setOutputDir(outDir);
-		   j2ee.setServerSide(true);
-		   j2ee.setVerbose(false);
-		   j2ee.setHelperWanted(true);
-		   System.out.println();
-		   j2ee.runServerSide(wsdlfile);
-		   WSDLContext wscontext = ContextFactory.createWSDLContext(j2ee.getSymbolTable());
-		   PortEntry port = wscontext.getPort(new QName("GoogleSearchPort"));
-		   BindingEntry be = wscontext.getBinding(new QName("urn:GoogleSearch","GoogleSearchBinding"));
-		   
-		   Assert.assertEquals(wscontext.getTargetNSURI(),"urn:GoogleSearch");
-		   Assert.assertNotNull(port);
-		   Assert.assertNotNull(be);
-		   Assert.assertNotNull(wscontext.getService(
-				new QName("urn:GoogleSearch","GoogleSearchService")));
+	public void testBuildFile() throws Exception{
+		try{
+			AntExecuter exec = new AntExecuter();
+			exec.execute(testDir + "testData/testBuildfile.xml");
+		}catch(Exception e){
+			e.printStackTrace();
+			throw e;
+		}
 	}
 }
