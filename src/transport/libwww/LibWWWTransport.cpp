@@ -1,0 +1,359 @@
+/*
+ *   Copyright 2003-2004 The Apache Software Foundation.
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ *
+ * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
+ *
+ */
+
+
+#include "LibWWWTransport.h"
+#include "WWWLib.h"
+#include "WWWInit.h"
+
+/*PRIVATE int printer (const char * fmt, va_list pArgs)
+{
+    return (vfprintf(stdout, fmt, pArgs));
+}*/
+
+/*PRIVATE int tracer (const char * fmt, va_list pArgs)
+{
+    return (vfprintf(stderr, fmt, pArgs));
+}*/
+
+int terminate_handler (HTRequest * request, HTResponse * response,
+                               void * param, int status)
+{
+    /*if (status == HT_LOADED && m_pResult ) {
+        HTPrint("%s\n", HTChunk_m_pcData(m_pResult));
+        HTChunk_delete(m_pResult);
+    }*/
+
+    HTEventList_stopLoop();
+    return status;
+}
+
+
+LibWWWTransport::LibWWWTransport()
+:m_pRequest(NULL), m_pResult(NULL), m_pcData(NULL), m_pcProxy(NULL), m_iBytesLeft(0), m_pcReceived(NULL)
+
+{
+    //Create a new premptive client 
+    HTProfile_newNoCacheClient("AxisCpp", "1.3");
+    //Disable interactive mode, could be useful when debugging
+    HTAlert_setInteractive(NO);
+    // Add our own filter to do the clean up after response received
+    HTNet_addAfter(terminate_handler, NULL, NULL, HT_ALL, HT_FILTER_LAST);
+    //How long we are going to wait for a response
+    HTHost_setEventTimeout(20000);
+
+    m_pRequest = HTRequest_new();
+
+}
+
+LibWWWTransport::~LibWWWTransport()
+{
+    if (m_pResult)
+        HTChunk_delete(m_pResult);
+    if(m_pRequest)
+        HTRequest_delete(m_pRequest);
+    if (m_pcData)
+        free(m_pcData);
+    if (m_pcProxy)
+        free(m_pcProxy);
+    //if (m_pcReceived) //This is not required as the m_pRequest Chunk deletion takes care of this
+    //    free(m_pcReceived);
+
+    //Terminate libwww 
+    HTProfile_delete();
+
+    //Samisa:This deletion should also go to the base class 
+    //destructos as is the setEndpointUri method should
+    if (m_pcEndpointUri)
+        free(m_pcEndpointUri);
+}
+
+AXIS_TRANSPORT_STATUS LibWWWTransport::sendBytes(const char* pcSendBuffer, 
+		const void* pBufferid)
+{
+    //Samisa: Why do I have to go through the buffers of Serializer?
+    //If I am the transport, I would like the serializer 
+    //to give me the m_pcData to be sent. 
+    //This method causes, high degree of coupling between the transport 
+    //and the Serializer. See the SOAPTrasport ducumetation for details.
+    //SOAP transport expects the implementation to send the m_pcData over the wire
+    //in flushOutput() and not in this method. I think there need to be some 
+    //renaming here.
+
+    //In LibWWW context, the library is going to handle the document content
+    //that is to be posted. Hence I am not going to bother about buffering
+    //here.
+
+    //As per the SOAPTrasport documentation, I assume that if I get 
+    //null pcSendBuffer, that indicated the end of the document to be sent.
+    if (pcSendBuffer)
+    {
+        char* temp = m_pcData;
+        if (m_pcData)
+            m_pcData = (char*)malloc(sizeof(char) * (strlen(m_pcData) + strlen(pcSendBuffer) + 1));
+        else
+            m_pcData = (char*)malloc(sizeof(char) * (strlen(pcSendBuffer) + 1));
+
+        m_pcData[0] = '\0';
+        if(temp)
+        {
+            strcat(m_pcData, temp);
+            free(temp);
+        }
+        strcat(m_pcData, pcSendBuffer);
+        m_pReleaseBufferCallback(pcSendBuffer, pBufferid);
+    }
+     
+    return TRANSPORT_IN_PROGRESS;
+
+}
+     
+AXIS_TRANSPORT_STATUS LibWWWTransport::getBytes(char* pcBuffer, int* piRetSize)
+{
+    if (m_iBytesLeft > 0)
+    {
+        int iToCopy = (*piRetSize < m_iBytesLeft) ? *piRetSize : m_iBytesLeft;
+        strncpy(pcBuffer, m_pcReceived + (strlen(m_pcReceived) - m_iBytesLeft), iToCopy);
+                m_iBytesLeft -= iToCopy;
+        *piRetSize = iToCopy;
+        return TRANSPORT_IN_PROGRESS;
+    }
+    else
+    {
+        return TRANSPORT_FINISHED;
+    }
+
+}
+     
+int LibWWWTransport::openConnection()
+{
+    //Samisa: I wonder is this should be an API call.
+    //It should not be the job of the upper layers to tell the trasport 
+    //to open and close connections. Rather the transport should determine 
+    //when to do that, when sendBytes is called
+    //Infact, in LibWWW, opening and closing the connection is trasparernt.
+    //Rather the user has to focus on the content to be sent, formats, semantics etc.
+    //So I think there is nothing to be done here, in case of LibWWW. 
+    //I think it is better to rename this method to intialize in SOAP transport.
+    return AXIS_SUCCESS;
+}
+     
+void LibWWWTransport::closeConnection()
+{
+    //Samisa: comment on openConnection apply here too.
+}
+     
+void LibWWWTransport::registerReleaseBufferCallback(
+                    AXIS_ENGINE_CALLBACK_RELEASE_SEND_BUFFER pFunct)
+{
+    m_pReleaseBufferCallback = pFunct;
+}
+
+void LibWWWTransport::setTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE eType,
+                    const char* pcValue)
+{
+    char* key = NULL;
+    switch(eType)
+    {
+    case SOAPACTION_HEADER:
+        key = "SOAPAction";
+        break;
+    case SERVICE_URI: /* need to set ? NO*/
+        break;
+    case OPERATION_NAME: /* need to set ? NO */
+        break;
+    case SOAP_MESSAGE_LENGTH: //No need to set, LibWWW sets this
+        break;
+    default:;
+    }
+    
+    if (!key) 
+        return;
+    
+    char* value = const_cast<char*>(pcValue);
+    HTRequest_addExtraHeader(m_pRequest, key, value);
+}
+     
+const char* LibWWWTransport::getTransportProperty(
+                    AXIS_TRANSPORT_INFORMATION_TYPE eType)
+{
+    return "TODO";
+}
+     
+void LibWWWTransport::setTransportProperty(const char* pcKey, const char* pcValue)
+{
+    char* key = const_cast<char*>(pcKey);
+    char* value = const_cast<char*>(pcValue);
+    HTRequest_addExtraHeader(m_pRequest, key, value);
+}
+     
+const char* LibWWWTransport::getTransportProperty(const char* pcKey)
+{
+    return "TODO"; //this could be implemented with HTAssocList * HTRequest_extraHeader (HTRequest * request); 
+}
+     
+void LibWWWTransport::setAttachment(const char* pcAttachmentid, const char* pcAttachment)
+{
+    //TODO
+}
+     
+const char* LibWWWTransport::getAttachment(const char* pcAttachmentid)
+{
+    return "TODO";
+}
+
+void LibWWWTransport::setEndpointUri(const char* pcEndpointUri)
+{
+    //Samisa:This too should go to the base class SOAPTransport
+    //It is not point duplicating this method in all transport implementations
+    m_pcEndpointUri = strdup(pcEndpointUri);
+}
+     
+void LibWWWTransport::setSessionId(const char* pcSessionId)
+{
+    //TODO
+}
+
+const char* LibWWWTransport::getSessionId()
+{
+    //TODO
+}
+     
+const char* LibWWWTransport::getServiceName()
+{
+    //Samisa: Copied and pasted from AxisTrasport class.
+    //Should be moved to SOAPTrasport class as it is always derived from the 
+    //inherited attribute
+    char* pachTmp = strrchr (m_pcEndpointUri, '/');
+
+    if (pachTmp != NULL)
+    {
+        int iTmp = strlen (pachTmp);
+
+        if (iTmp <= 1)
+        {
+            return NULL;
+        }
+        else
+        {
+            pachTmp = pachTmp + 1;
+        }
+    }
+
+    return pachTmp;
+
+}
+     
+AXIS_PROTOCOL_TYPE LibWWWTransport::getProtocol()
+{
+    return APTHTTP;//HTTP
+}
+     
+int LibWWWTransport::getSubProtocol()
+{
+    return 0; //TODO:Should return POST
+}
+     
+AXIS_TRANSPORT_STATUS LibWWWTransport::flushOutput()
+{
+    //HTRequest * request = NULL;
+    //HTParentAnchor* src = NULL;
+    //HTAnchor * dst = NULL;
+
+//#ifdef HT_EXT
+    HTRequest_setOutputFormat(m_pRequest, WWW_SOURCE);
+    HTRequest_setOutputFormat(m_pRequest, HTAtom_for ("text/xml"));
+    HTRequest_setMethod(m_pRequest, METHOD_EXT_0);
+    HTMethod_setExtensionMethod(METHOD_EXT_0, "POST", NO);
+        
+    if(HTRequest_setMessageBody(m_pRequest, m_pcData) == NO)
+        return TRANSPORT_FAILED;
+
+    HTRequest_setMessageBodyFormat(m_pRequest, HTAtom_for ("text/xml"));
+    HTRequest_setMessageBodyLength(m_pRequest, strlen(m_pcData));
+    if (m_pResult)
+        HTChunk_delete(m_pResult);
+    m_pResult = HTLoadToChunk(m_pcEndpointUri, m_pRequest);
+    HTEventList_loop(m_pRequest);
+    
+    if (m_pcReceived)
+        free(m_pcReceived);
+    
+    if(m_pResult)
+    {
+        m_pcReceived = HTChunk_data(m_pResult);
+        if(m_pcReceived)
+        {
+            m_iBytesLeft = strlen(m_pcReceived);
+            return TRANSPORT_FINISHED;
+        }
+        else
+            return TRANSPORT_FAILED;
+    }
+    else
+        return TRANSPORT_FAILED;
+//#endif //HT_EXT
+    
+}
+     
+void LibWWWTransport::setProxy(const char* pcProxyHost, unsigned int uiProxyPort)
+{
+    if(m_pcProxy)
+        free(m_pcProxy);
+
+     char port[10];
+     sprintf(port, "%d", uiProxyPort);
+     m_pcProxy = (char*)malloc(sizeof(char) * (strlen(pcProxyHost) + strlen(":") + strlen(port) + 1));
+     strcat(m_pcProxy, pcProxyHost);
+     strcat(m_pcProxy, ":");
+     strcat(m_pcProxy, port);
+     HTRequest_setProxy(m_pRequest, m_pcProxy);
+}
+
+void LibWWWTransport::setTimeout(const long lSeconds)
+{
+    //Samisa: Got the feeling that LibWWWTransport::setTimeout 
+    //should use milliseconds rather than seconds
+    HTHost_setEventTimeout(lSeconds * 1000);
+}
+
+
+extern "C" {
+STORAGE_CLASS_INFO
+int CreateInstance(SOAPTransport **inst)
+{
+        *inst = new LibWWWTransport();
+        if (*inst)
+        {
+                return AXIS_SUCCESS;
+        }
+        return AXIS_FAIL;
+}
+STORAGE_CLASS_INFO
+int DestroyInstance(SOAPTransport *inst)
+{
+        if (inst)
+        {
+                delete inst;
+                return AXIS_SUCCESS;
+        }
+        return AXIS_FAIL;
+}
+}
+
