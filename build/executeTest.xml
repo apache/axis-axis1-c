@@ -134,7 +134,7 @@
 				</parallel>
 			</try>
 			<catch>
-				<echo message="Exception in Ant try/catch block"/>
+				<echo message="Exception in monitor caught it in Ant try/catch block while trying to run test ${testName}"/>
 				<antcall target="stopMonitor" inheritall="true"/>
 			</catch>
 			<finally>

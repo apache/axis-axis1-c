@@ -149,9 +149,14 @@ HeaderBlock::~HeaderBlock()
     m_children.clear();
 }
 
-void HeaderBlock::setLocalName(const AxisChar* localname)
+int HeaderBlock::setLocalName(const AxisChar* localname)
 {
-    m_localname= localname;
+	if(localname==NULL)
+	{
+		return AXIS_FAIL;
+	}
+    m_localname=localname;
+    return AXIS_SUCCESS;
 }
 
 const AxisChar * HeaderBlock::getLocalName()
@@ -166,26 +171,34 @@ const AxisChar * HeaderBlock::getLocalName()
  * on the mailing list agreed to add back in this method.
  * Jira issue AXISCPP-135
  */
-void HeaderBlock::setPrefix(const AxisChar* prefix)
+int HeaderBlock::setPrefix(const AxisChar* prefix)
 {
     m_sPrefix= prefix;
+    return AXIS_SUCCESS;
 }
 
-void HeaderBlock::setURI(const AxisChar* uri)
+int HeaderBlock::setURI(const AxisChar* uri)
 {
     m_uri= uri;
+    return AXIS_SUCCESS;
 }
 
-void HeaderBlock::addAttribute(Attribute* pAttr)
+int HeaderBlock::addAttribute(Attribute* pAttr)
 {
     if (pAttr)
     {
         m_attributes.push_back(pAttr);
+        return AXIS_SUCCESS;
+    }
+    else
+    {
+    	return AXIS_FAIL;
     }
 }
 
 int HeaderBlock::serialize(SoapSerializer& pSZ)
 {
+	
     /*
      *In the code we don't look whether the m_sPrefix is available or
      *    not. Instead directly insert it. The reason is that the SOAP
@@ -299,7 +312,7 @@ int HeaderBlock::attrSerialize(SoapSerializer& pSZ,
 
 bool HeaderBlock::isSerializable()
 {
-    bool bStatus= true;    
+    bool bStatus= true;
 
     if(m_localname.length() == 0)
     {
@@ -344,6 +357,7 @@ int HeaderBlock::addChild(BasicNode *pBasicNode)
 int HeaderBlock::serializeChildren(SoapSerializer& pSZ,
                                    list<AxisChar*>& lstTmpNameSpaceStack)
 {
+	// soapserialiser does not have an == operator so can't check it
     list<BasicNode*>::iterator itCurrBasicNode= m_children.begin();
 
     while(itCurrBasicNode != m_children.end())
@@ -366,6 +380,10 @@ int HeaderBlock::serializeChildren(SoapSerializer& pSZ,
 INamespace* HeaderBlock::createNamespaceDecl(const AxisChar *prefix,
         const AxisChar *uri) 
 {
+	if(prefix==NULL || uri==NULL)
+	{
+		return NULL;
+	}
     Namespace* pNamespace = new Namespace(prefix, uri);
     m_namespaceDecls.push_back(pNamespace);
 
@@ -508,6 +526,7 @@ bool HeaderBlock::operator ==( const HeaderBlock &objHeaderBlock)
 
 BasicNode* HeaderBlock::createImmediateChild(NODE_TYPE eNODE_TYPE)
 {
+	
     BasicNode* pBasicNode = NULL;
 
     do
@@ -528,7 +547,6 @@ BasicNode* HeaderBlock::createImmediateChild(NODE_TYPE eNODE_TYPE)
         m_children.push_back(pBasicNode);
         iNoOFChildren++;
     } while (0);
-
     return pBasicNode;
 }
 
@@ -536,7 +554,7 @@ IAttribute* HeaderBlock::createAttribute(const AxisChar *localname,
                                         const AxisChar *prefix,
                                         const AxisChar *value)
 {
-    Attribute* pAttribute = 0;
+    Attribute* pAttribute = NULL;
 
     if (localname)
     {
@@ -553,8 +571,12 @@ IAttribute* HeaderBlock::createAttribute(const AxisChar *localname,
                                         const AxisChar *uri,
                                         const AxisChar *value)
 {
-    Attribute* pAttribute = new Attribute(localname, prefix, uri, value);
-    m_attributes.push_back(pAttribute);
+	Attribute* pAttribute=NULL;
+	if(localname)
+	{
+	    pAttribute = new Attribute(localname, prefix, uri, value);
+	    m_attributes.push_back(pAttribute);
+	}
 
     return pAttribute;
 }
@@ -655,17 +677,18 @@ IAttribute* HeaderBlock::createStdAttribute(HEADER_BLOCK_STD_ATTR_TYPE
 const AxisChar* HeaderBlock::getAttributeValue(const AxisChar *localname,
                                          const AxisChar *prefix)
 {
-     list<Attribute*>::iterator itAttr = m_attributes.begin();
+   	list<Attribute*>::iterator itAttr = m_attributes.begin();
  	while (itAttr != m_attributes.end()) 
  	{
  		Attribute* pAttribute = *itAttr;
  		if (!strcmp(pAttribute->getLocalName(),localname) &&
  			!strcmp(pAttribute->getPrefix(),prefix)) 
- 			return pAttribute->getValue();
+ 			{
+ 				return pAttribute->getValue();
+ 			}
  		itAttr++;
  	}
- 
-     return NULL;
+    return NULL;
 }
  
 

@@ -87,9 +87,15 @@ AXISC_STORAGE_CLASS_INFO int axiscAddChildIHeaderBlock(AXISCHANDLE headerBlock, 
 	return hdr->addChild((BasicNode*)pBasicNode);
 }
 
-AXISC_STORAGE_CLASS_INFO void axiscSetLocalNameIHeaderBlock(AXISCHANDLE headerBlock, const AxiscChar * localname) {
+AXISC_STORAGE_CLASS_INFO int axiscSetLocalNameIHeaderBlock(AXISCHANDLE headerBlock, const AxiscChar * localname) 
+{
+	if(0==localname)
+	{
+		return AXIS_FAIL;
+	}
 	IHeaderBlock *hdr = (IHeaderBlock*)headerBlock;
 	hdr->setLocalName(localname);
+	return AXIS_SUCCESS;
 }
 
 AXISC_STORAGE_CLASS_INFO const AxiscChar * axiscGetLocalNameIHeaderBlock(AXISCHANDLE headerBlock) {
@@ -102,9 +108,14 @@ AXISC_STORAGE_CLASS_INFO void axiscSetUriIHeaderBlock(AXISCHANDLE headerBlock, c
 	hdr->setURI(uri);
 }
 
-AXISC_STORAGE_CLASS_INFO void axiscSetPrefixIHeaderBlock(AXISCHANDLE headerBlock, const AxiscChar * prefix) {
+AXISC_STORAGE_CLASS_INFO int axiscSetPrefixIHeaderBlock(AXISCHANDLE headerBlock, const AxiscChar * prefix) {
+	if(0==prefix)
+	{
+		return AXIS_FAIL;
+	}
 	IHeaderBlock *hdr = (IHeaderBlock*)headerBlock;
 	hdr->setPrefix(prefix);
+	return AXIS_SUCCESS;
 }
 
 AXISC_STORAGE_CLASS_INFO AXISCHANDLE axiscCloneHeaderBlockIHeaderBlock(AXISCHANDLE headerBlock) {

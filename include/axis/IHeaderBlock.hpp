@@ -255,7 +255,7 @@ public:
       * Adds a child node to the Header Block.
       *
       * @param pBasicNode The child node pointer which is to be added.
-      * @return AXIS_SUCCESS to indicate successfull operation.
+      * @return AXIS_SUCCESS to indicate successfull operation.AXIS_FAIL otherwise
       */
     virtual int addChild(BasicNode* pBasicNode)=0;
 
@@ -263,8 +263,9 @@ public:
       * Sets the local name of this Header Block.
       *
       * @param localname The localname to set in.
+      * @return AXIS_SUCCESS if successful AXIS_FAIL otherwise
       */
-    virtual void setLocalName(const AxisChar* localname)=0;
+    virtual int setLocalName(const AxisChar* localname)=0;
     
     /**
       * Gets the local name of this Header Block.
@@ -276,9 +277,11 @@ public:
       * Sets the namespace uri of this Header Block.
       *
       * @param uri The namespace uri to set in.
+      * @return AXIS_SUCCESS if successful AXIS_FAIL otherwise
+      * 
       */
 
-    virtual void setURI(const AxisChar* uri)=0;
+    virtual int setURI(const AxisChar* uri)=0;
 
 	/* 
 	 * Commented by Susantha - 21/06/2004
@@ -292,8 +295,9 @@ public:
       * Sets the prefix of this Header Block.
       *
       * @param prefix The prefix to set in.
+      * @return AXIS_SUCCESS if successful AXIS_FAIL otherwise
       */
-    virtual void setPrefix(const AxisChar* prefix)=0;
+    virtual int setPrefix(const AxisChar* prefix)=0;
 
 #ifdef UNIT_TESTING_ON
     /**

@@ -61,10 +61,10 @@ public:
     Attribute* clone(); 
     virtual ~Attribute();
 
-    void setValue(const AxisChar* value);
-    void setURI(const AxisChar* uri);
-    void setPrefix(const AxisChar* prefix);
-    void setLocalName(const AxisChar* localname);    
+    int setValue(const AxisChar* value);
+    int setURI(const AxisChar* uri);
+    int setPrefix(const AxisChar* prefix);
+    int setLocalName(const AxisChar* localname);
 
     const AxisChar* getValue();
     const AxisChar* getURI();

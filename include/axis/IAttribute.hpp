@@ -40,11 +40,31 @@ class IAttribute
 public:        
 
     virtual ~IAttribute() {};
-
-    virtual void setValue(const AxisChar* value) = 0;
-    virtual void setURI(const AxisChar* uri) = 0;
-    virtual void setPrefix(const AxisChar* prefix) = 0;
-    virtual void setLocalName(const AxisChar* localname) = 0;    
+	/**
+	 * try to set theattribute with given value
+	 * @param AxisChar* the value to set the value to 
+	 * @return AXIS_SUCCESS if succeeded, AXIS_Fail otherwise. NOTE: Passing NULL will result in a AXIS_FAIL
+	 */
+    virtual int setValue(const AxisChar* value) = 0;
+    
+	/**
+	 * try to set the URI
+	 * @param AxisChar* the value to set the URI to 
+	 * @return AXIS_SUCCESS if succeeded, AXIS_Fail otherwise. NOTE: Passing NULL will result in a AXIS_FAIL
+	 */
+    virtual int setURI(const AxisChar* uri) = 0;
+	/**
+	 * try to set the prefix with given value
+	 * @param AxisChar* the prefix to set to 
+	 * @return AXIS_SUCCESS if succeeded, AXIS_Fail otherwise. NOTE: Passing NULL will result in a AXIS_FAIL
+	 */
+    virtual int setPrefix(const AxisChar* prefix) = 0;
+	/**
+	 * try to set the attribute with given value
+	 * @param AxisChar* the value to set the local name to 
+	 * @return AXIS_SUCCESS if succeeded, AXIS_Fail otherwise. NOTE: Passing NULL will result in a AXIS_FAIL
+	 */
+    virtual int setLocalName(const AxisChar* localname) = 0;    
     virtual const AxisChar* getValue() = 0;
     virtual const AxisChar* getURI() = 0;
     virtual const AxisChar* getPrefix() = 0;

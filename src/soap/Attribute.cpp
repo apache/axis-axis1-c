@@ -52,24 +52,45 @@ Attribute::~Attribute()
 
 }
 
-void Attribute::setLocalName(const AxisChar* localname)
+int Attribute::setLocalName(const AxisChar* localname)
 {
+	if(NULL==localname)
+	{
+		return AXIS_FAIL;
+	}
     m_localname= localname;
+    return AXIS_SUCCESS;
 }
 
-void Attribute::setPrefix(const AxisChar* prefix)
+int Attribute::setPrefix(const AxisChar* prefix)
 {
+	if(NULL==prefix)
+	{
+		return AXIS_FAIL;
+	}
+	
     m_prefix= prefix;
+    return AXIS_SUCCESS;
 }
 
-void Attribute::setURI(const AxisChar* uri)
+int Attribute::setURI(const AxisChar* uri)
 {
+	if(NULL==uri)
+	{
+		return AXIS_FAIL;
+	}
     m_uri= uri;
+    return AXIS_SUCCESS;
 }
 
-void Attribute::setValue(const AxisChar* value)
+int Attribute::setValue(const AxisChar* value)
 {
+	if(NULL==value)
+	{
+		return AXIS_FAIL;
+	}
     m_value= value;
+    return AXIS_SUCCESS;
 }
 
 

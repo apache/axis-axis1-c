@@ -102,11 +102,14 @@ public:
       * @param prefix The prefix of the attribute. 
       * @param uri The namespace uri of the attribute. 
       * 
-      * @return A pointer to the created Attribute will be returned. 
+      * @return A pointer to the created Attribute will be returned. or NULL if unsuccessful
       */
     INamespace* createNamespaceDecl(const AxisChar *prefix, 
             const AxisChar *uri); 
 
+	/**
+	 * return the first child of this headerblock or NULL if there isn't one.
+	 */
     BasicNode* getFirstChild();
 
     /**
@@ -181,8 +184,9 @@ public:
       * Adds a Attribute to this Header Block.
       *
       * @param attr The Attribute to be added.
+      * @return AXIS_SUCCESS if successful AXIS_FAIL otherwise
       */
-    void addAttribute(Attribute* attr);
+    int addAttribute(Attribute* attr);
 
     /**
      * A user can use this method to create a standard HeaderBlock attribute. 
@@ -211,13 +215,13 @@ public:
      * The vallues which could be
      * passes are SOAP_VER_1_1 and SOAP_VER_1_2.
      *
-     * @return A pointer to the created standard Attribute will be returned.
+     * @return A pointer to the created standard Attribute will be returned. or NULL if unsuccessful
      */
     IAttribute* createStdAttribute(HEADER_BLOCK_STD_ATTR_TYPE eStdAttrType, 
         SOAP_VERSION eSOAP_VERSION);
 
     /**
-      * Creates a Attribute and adds it to this Header Block. This method might
+      * Creates a Attribute and adds it to this Header Block. This method will return 
       *  null to indicate unsuccessfull operation. The caller of this method 
       *  should check for the return NULL value.
       *
@@ -239,7 +243,7 @@ public:
       * @param prefix The prefix of the attribute.
       * @param value The value of the attribute.
       *
-      * @return A pointer to the created Attribute will be returned.
+      * @return A pointer to the created Attribute will be returned. or NULL if not successful
       */
     IAttribute* createAttribute(const AxisChar* localname, 
         const AxisChar* prefix, const AxisChar* value);
@@ -251,7 +255,7 @@ public:
       * @param localname The local name of the attribute.
       * @param prefix The prefix of the attribute.
       *
-      * @return the value of the attribute
+      * @return the value of the attribute or NULL if not successful
       */
      virtual const AxisChar* getAttributeValue(const AxisChar* localname,
          const AxisChar* prefix);
@@ -311,7 +315,7 @@ public:
       * Adds a child node to the Header Block.
       *
       * @param pBasicNode The child node pointer which is to be added.
-      * @return AXIS_SUCCESS to indicate successfull operation.
+      * @return AXIS_SUCCESS to indicate successfull operation, AXIS_FAIL Otherwise
       */
     int addChild(BasicNode* pBasicNode);
 
@@ -319,15 +323,18 @@ public:
       * Sets the local name of this Header Block.
       *
       * @param localname The localname to set in.
+      * @return AXIS_SUCCESS if successful AXIS_FAIL otherwise
       */
-    void setLocalName(const AxisChar* localname);
+    int setLocalName(const AxisChar* localname);
+    
     const AxisChar * getLocalName();
     /**
       * Sets the namespace uri of this Header Block.
       *
       * @param uri The namespace uri to set in.
+      * @return AXIS_SUCCESS if succcesful, AXIS_FAIL otherwise
       */
-    void setURI(const AxisChar* uri);
+    int setURI(const AxisChar* uri);
 
 	/* 
 	 * Commented by Susantha - 21/06/2004
@@ -341,8 +348,9 @@ public:
       * Sets the prefix of this Header Block.
       *
       * @param prefix The prefix to set in.
+      * @return AXIS_SUCCESS if successful,  AXIS_FAIL otherwuse,
       */
-    void setPrefix(const AxisChar* prefix);
+    int setPrefix(const AxisChar* prefix);
 
     /**
       * Sets the namespace declaration of the Header Block.
