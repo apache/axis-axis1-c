@@ -1,0 +1,11 @@
+noParametersNoReturn
+noParametersNoReturn returned
+noParametersIntReturn
+noParametersIntReturn returned 27
+multiParametersNoReturn
+multiParametersNoReturn returned
+noParametersMultiReturn
+noParametersMultiReturn returned 39.41 99 Well Done
+multiArrayParametersIntReturn
+multiArrayParametersIntReturn returned 43
+---------------------- TEST COMPLETE -----------------------------

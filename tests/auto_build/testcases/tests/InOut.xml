@@ -1,0 +1,13 @@
+<test>
+    <name>InOut</name>
+    <description>InOut</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>InOutClient.cpp</clientCode>
+    <wsdl>InOut.wsdl</wsdl>
+    <expected>
+        <output>
+            InOut.expected
+        </output>
+    </expected>
+	<endpoint>http://localhost:80/InOut/services/InOut</endpoint>
+</test>
