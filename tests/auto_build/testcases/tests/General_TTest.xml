@@ -1,0 +1,14 @@
+<test>
+    <name>General_TTest</name>
+    <description>General_TTest</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>General_TTestClient.cpp</clientCode>
+    <wsdl>CalculatorDoc.wsdl</wsdl>
+    <expected>
+        <output>
+            General_TTest.expected
+        </output>	
+    </expected>
+	<endpoint>http://localhost:80/Calculator/services/Calculator</endpoint>
+	<nomonitor>true</nomonitor>
+</test>
