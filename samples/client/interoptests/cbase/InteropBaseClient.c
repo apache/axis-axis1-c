@@ -19,6 +19,10 @@ int main(int argc, char* argv[])
 	SOAPStruct stct;
 	time_t tim;
 	struct tm* lt;
+	struct tm retlt;
+	xsd__base64Binary bb;
+	xsd__hexBinary hb;
+	const char* bstr = "some string that is sent encoded to either base64Binary or hexBinary";
 	void* pstub = get_InteropTestPortType_stub();
 	printf("invoking echoString...\n");
 	/*testing echoString */
@@ -109,27 +113,39 @@ int main(int argc, char* argv[])
 	printf("successful\n");
 	
 	/*testing echo base 64 binary*/
-/*	printf("invoking echoBase64...\n");
-	if (0 == strcmp(ws.echoBase64(pstub, "BCDF675E234242WHRTKMJDGKGUEJ898636JFJFHEJDGWTDHFJRURYGBCDHTWRSG"),
-		"BCDF675E234242WHRTKMJDGKGUEJ898636JFJFHEJDGWTDHFJRURYGBCDHTWRSG"))
+
+	printf("invoking echoBase64...\n");
+	bb.__ptr = (unsigned char*)strdup(bstr);
+	bb.__size = strlen(bstr);
+	if (bb.__size == echoBase64(pstub,bb).__size)
+	{
 		printf("successful\n");
+		printf("Returned String :\n%s\n", bb.__ptr);
+	}
 	else
 		printf("failed\n");
+
 	time(&tim);
 	lt = gmtime(&tim);
 	printf("invoking echoDate...\n");
-	if (memcmp(&(echoDate(pstub, *lt)), lt, sizeof(tm)) == 0)
+	retlt = echoDate(pstub, *lt);
+	if (memcmp(&retlt, lt, sizeof(struct tm)) == 0)
 		printf("successful\n");
 	else
 		printf("failed\n");
 	//testing echo hex binary
+
 	printf("invoking echoHexBinary...\n");
-	if (0 == strcmp(echoHexBinary(pstub, "CCCFFA46552BC7D5A09BC5F23DE9E0FE7862AD45BC87D02FEE"),
-		"CCCFFA46552BC7D5A09BC5F23DE9E0FE7862AD45BC87D02FEE"))
+	hb.__ptr = (unsigned char*)strdup(bstr);
+	hb.__size = strlen(bstr);
+	if (hb.__size == echoHexBinary(pstub, hb).__size)
+	{
 		printf("successful\n");
+		printf("Returned String :\n%s\n", hb.__ptr);
+	}
 	else
 		printf("failed\n");
-*/	/*testing echo decimal*/
+	/*testing echo decimal*/
 	printf("invoking echoDecimal...\n");
 	if (echoDecimal(pstub, 1234.567890) > 1234.56)
 		printf("successful\n");

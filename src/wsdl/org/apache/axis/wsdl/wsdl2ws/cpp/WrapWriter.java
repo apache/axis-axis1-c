@@ -320,13 +320,13 @@ public class WrapWriter extends CPPClassWriter{
 				else{
 					containedType = qname.getLocalPart();
 					writer.write("\treturn pIWSSZ->AddOutputCmplxArrayParam((Axis_Array*)(&ret),"+ 
-					"(void*) Axis_Serialize_"+containedType+", (void*) Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", \""+methodName+"Return\", 0);\n");
+					"(void*) Axis_Serialize_"+containedType+", (void*) Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", \""+methodName+"Return\", Axis_URI_"+containedType+");\n");
 				}
 			}
 			else{
 				//complex type
 				outparamTypeName = returntype.getLangName();//need to have complex type name without *
-				writer.write("\treturn pIWSSZ->AddOutputCmplxParam(ret, (void*)Axis_Serialize_"+outparamTypeName+", (void*)Axis_Delete_"+outparamTypeName+", \""+methodName+"Return\", 0);\n");
+				writer.write("\treturn pIWSSZ->AddOutputCmplxParam(ret, (void*)Axis_Serialize_"+outparamTypeName+", (void*)Axis_Delete_"+outparamTypeName+", \""+methodName+"Return\", Axis_URI_"+outparamTypeName+");\n");
 			}
 		}else if (isAllTreatedAsOutParams){
 			writer.write("\tpWs->" + methodName + "(");
@@ -366,12 +366,12 @@ public class WrapWriter extends CPPClassWriter{
 					else{
 						containedType = qname.getLocalPart();
 						writer.write("\tpIWSSZ->AddOutputCmplxArrayParam((Axis_Array*)(&out"+i+"),"+ 
-						"(void*) Axis_Serialize_"+containedType+", (void*) Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", \""+returnParamName+"\", 0);\n");
+						"(void*) Axis_Serialize_"+containedType+", (void*) Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", \""+returnParamName+"\", Axis_URI_"+containedType+");\n");
 					}
 				}
 				else{
 					//complex type
-					writer.write("\tpIWSSZ->AddOutputCmplxParam(out"+i+", (void*)Axis_Serialize_"+outparamType+", (void*)Axis_Delete_"+outparamType+", \""+returnParamName+"\", 0);\n");
+					writer.write("\tpIWSSZ->AddOutputCmplxParam(out"+i+", (void*)Axis_Serialize_"+outparamType+", (void*)Axis_Delete_"+outparamType+", \""+returnParamName+"\", Axis_URI_"+outparamType+");\n");
 				}
 			}			
 			writer.write("\treturn AXIS_SUCCESS;\n");

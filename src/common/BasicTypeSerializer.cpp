@@ -186,8 +186,9 @@ const AxisChar* BasicTypeSerializer::SerializeAsElement(const AxisChar* pName, c
 
 const AxisChar* BasicTypeSerializer::EncodeToHexBinary(const xsd__hexBinary* pBinary)
 {
-	char *outstr = (char*) malloc(pBinary->__size*2);
+	char *outstr = (char*) malloc(pBinary->__size*2+1);
 	Hex_Encode(outstr, pBinary->__ptr, pBinary->__size);
+	outstr[pBinary->__size*2]=0;
 	m_AuxStr = outstr;
 	free(outstr);
 	return m_AuxStr.c_str();
@@ -196,8 +197,9 @@ const AxisChar* BasicTypeSerializer::EncodeToHexBinary(const xsd__hexBinary* pBi
 const AxisChar* BasicTypeSerializer::EncodeToBase64Binary(const xsd__base64Binary* pBinary)
 {
 	int len = apr_base64_encode_len(pBinary->__size);
-	char *outstr = (char*) malloc(len);
-	apr_base64_encode_binary(outstr, pBinary->__ptr, len);
+	char *outstr = (char*) malloc(len+1);
+	len = apr_base64_encode_binary(outstr, pBinary->__ptr, pBinary->__size);
+	outstr[len]=0;
 	m_AuxStr = outstr;
 	free(outstr);
 	return m_AuxStr.c_str();

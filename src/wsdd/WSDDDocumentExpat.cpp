@@ -289,7 +289,7 @@ void WSDDDocumentExpat::ProcessAttributes(WSDDLevels ElementType, const XML_Ch *
 		case WSDD_SERVICE: //add this attribute to current service object
 			if (0 == strcmp(qn.localname, kw_name))
 			{
-				m_pService->SetServiceName(value);
+				m_pService->SetName(value);
 			}
 			else if (0 == strcmp(qn.localname, kw_prv))
 			{
@@ -307,7 +307,7 @@ void WSDDDocumentExpat::ProcessAttributes(WSDDLevels ElementType, const XML_Ch *
 		case WSDD_HANDLER: //add this attribute to current handler object
 			if (0 == strcmp(qn.localname, kw_name))
 			{
-				//usefull ? ignore for now .. //TODO
+				m_pHandler->SetName(value);
 			}
 			else if (0 == strcmp(qn.localname, kw_type))
 			{
