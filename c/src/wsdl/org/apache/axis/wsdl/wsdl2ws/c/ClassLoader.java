@@ -107,9 +107,9 @@ public class ClassLoader implements SourceWriter{
 	  writer.write("\t\tpBHX->Fini = Fini;\n");
 	  writer.write("\t\tpBH->__vfptr = pBHX;\n");
 	  writer.write("\t\t*inst = pBH;\n");
-	  writer.write("\t\treturn SUCCESS;\n");
+	  writer.write("\t\treturn AXIS_SUCCESS;\n");
 	  writer.write("\t}\n");
-	  writer.write("\treturn FAIL;\n");
+	  writer.write("\treturn AXIS_FAIL;\n");
 	  writer.write("}\n\n");
 	  writer.write("STORAGE_CLASS_INFO \n");
 	  writer.write("int DestroyInstance(BasicHandler *inst)\n");
@@ -120,9 +120,9 @@ public class ClassLoader implements SourceWriter{
 	  writer.write("\t\tpBH = inst;\n");
 	  writer.write("\t\tfree(pBH->__vfptr);\n");
 	  writer.write("\t\tfree(pBH);\n");
-	  writer.write("\t\treturn SUCCESS;\n");
+	  writer.write("\t\treturn AXIS_SUCCESS;\n");
 	  writer.write("\t}\n");
-	  writer.write("\treturn FAIL;\n");
+	  writer.write("\treturn AXIS_FAIL;\n");
 	  writer.write("}\n");
 	  writer.flush();
 	  writer.close();

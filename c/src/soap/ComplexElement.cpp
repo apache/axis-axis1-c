@@ -86,24 +86,24 @@ ComplexElement::~ComplexElement()
 int ComplexElement::setPrefix(const AxisChar* sPrefix)
 {
 	m_sPrefix= sPrefix;
-	return SUCCESS;
+	return AXIS_SUCCESS;
 }
 
 int ComplexElement::setLocalName(const AxisChar* sLocalName)
 {
 	m_sLocalName= sLocalName;
-	return SUCCESS;
+	return AXIS_SUCCESS;
 }
 
 int ComplexElement::addChild(BasicNode *pBasicNode)
 {
 	m_children.push_back(pBasicNode);
-	return SUCCESS;
+	return AXIS_SUCCESS;
 }
 
 int ComplexElement::serialize(SoapSerializer& pSZ)
 {
-	int iStatus= SUCCESS;
+	int iStatus= AXIS_SUCCESS;
 	do {
 		if(isSerializable()) 
 		{	
@@ -117,7 +117,7 @@ int ComplexElement::serialize(SoapSerializer& pSZ)
 			}
 			pSZ.Serialize(">", NULL);
 			iStatus= serializeChildren(pSZ);
-			if(iStatus==FAIL) {
+			if(iStatus==AXIS_FAIL) {
 				break;
 			}
 			pSZ.Serialize("</", NULL);
@@ -125,11 +125,11 @@ int ComplexElement::serialize(SoapSerializer& pSZ)
 				pSZ.Serialize(m_sPrefix.c_str(), ":", NULL);
 			}
 			pSZ.Serialize(m_sLocalName.c_str(), ">", NULL);
-			iStatus= SUCCESS;
+			iStatus= AXIS_SUCCESS;
 		} 
 		else
 		{
-			iStatus= FAIL;
+			iStatus= AXIS_FAIL;
 		}
 	} while(0);	
 	return iStatus;
@@ -139,7 +139,7 @@ int ComplexElement::serialize(SoapSerializer& pSZ)
 comm on 10/7/2003 6.20pm
 int ComplexElement::serialize(string &sSerialized)
 {
-	int iStatus= SUCCESS;
+	int iStatus= AXIS_SUCCESS;
 
 	do {
 		if(isSerializable()) {
@@ -159,7 +159,7 @@ int ComplexElement::serialize(string &sSerialized)
 			sSerialized+= ">";
 
 			iStatus= serializeChildren(sSerialized);
-			if(iStatus==FAIL) {
+			if(iStatus==AXIS_FAIL) {
 				break;
 			}
 
@@ -171,9 +171,9 @@ int ComplexElement::serialize(string &sSerialized)
 
 			sSerialized+= m_sLocalName+ ">"+ "\n";
 
-			iStatus= SUCCESS;
+			iStatus= AXIS_SUCCESS;
 		} else {
-			iStatus= FAIL;
+			iStatus= AXIS_FAIL;
 		}
 	} while(0);
 			
@@ -205,7 +205,7 @@ bool ComplexElement::isSerializable()
 int ComplexElement::setURI(const AxisChar* sURI)
 {
 	m_sURI= sURI;
-	return SUCCESS;
+	return AXIS_SUCCESS;
 }
 
 int ComplexElement::serializeChildren(SoapSerializer& pSZ)
@@ -218,7 +218,7 @@ int ComplexElement::serializeChildren(SoapSerializer& pSZ)
 		itCurrBasicNode++;		
 	}	
 
-	return SUCCESS;
+	return AXIS_SUCCESS;
 }
 
 /*
@@ -233,7 +233,7 @@ int ComplexElement::serializeChildren(string &sSerialized)
 		itCurrBasicNode++;		
 	}	
 
-	return SUCCESS;
+	return AXIS_SUCCESS;
 }
 */
 
@@ -263,5 +263,5 @@ const AxisString& ComplexElement::getValue()
  */
 int ComplexElement::setValue(const AxisChar* sValue)
 {
-	return SUCCESS;
+	return AXIS_SUCCESS;
 }

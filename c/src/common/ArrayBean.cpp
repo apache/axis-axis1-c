@@ -195,7 +195,7 @@ int ArrayBean::GetArrayBlockSize(list<int>::iterator it)
 int ArrayBean::DeSerialize(SoapDeSerializer *pDZ)
 {
 	Param* p;
-	if ((XSD_UNKNOWN == m_type) ||(0==m_size.size())||(!m_value.sta)) return FAIL;
+	if ((XSD_UNKNOWN == m_type) ||(0==m_size.size())||(!m_value.sta)) return AXIS_FAIL;
 	switch (m_type)
 	{
 	case XSD_BYTE:
@@ -207,7 +207,7 @@ int ArrayBean::DeSerialize(SoapDeSerializer *pDZ)
 			for (int ix=0;ix<blocksize;ix++)
 			{
 				p = (Param*)pDZ->GetParam();
-				if (!p) return FAIL;
+				if (!p) return AXIS_FAIL;
 				a[ix] = p->GetByte();
 			}		
 		}
@@ -221,7 +221,7 @@ int ArrayBean::DeSerialize(SoapDeSerializer *pDZ)
 			for (int ix=0;ix<blocksize;ix++)
 			{
 				p = (Param*)pDZ->GetParam();
-				if (!p) return FAIL;
+				if (!p) return AXIS_FAIL;
 				a[ix] = p->GetShort();
 			}		
 		}
@@ -237,7 +237,7 @@ int ArrayBean::DeSerialize(SoapDeSerializer *pDZ)
 			for (int ix=0;ix<blocksize;ix++)
 			{
 				p = (Param*)pDZ->GetParam();
-				if (!p) return FAIL;
+				if (!p) return AXIS_FAIL;
 				a[ix] = p->GetLong();
 			}		
 		}
@@ -251,7 +251,7 @@ int ArrayBean::DeSerialize(SoapDeSerializer *pDZ)
 			for (int ix=0;ix<blocksize;ix++)
 			{
 				p = (Param*)pDZ->GetParam();
-				if (!p) return FAIL;
+				if (!p) return AXIS_FAIL;
 				a[ix] = p->GetDouble();
 			}		
 		}
@@ -271,7 +271,7 @@ int ArrayBean::DeSerialize(SoapDeSerializer *pDZ)
 			for (int ix=0;ix<blocksize;ix++)
 			{
 				p = (Param*)pDZ->GetParam();
-				if (!p) return FAIL;
+				if (!p) return AXIS_FAIL;
 				a[ix] = p->GetDate();
 			}		
 		}
@@ -286,7 +286,7 @@ int ArrayBean::DeSerialize(SoapDeSerializer *pDZ)
 			for (int ix=0;ix<blocksize;ix++)
 			{
 				p = (Param*)pDZ->GetParam();
-				if (!p) return FAIL;
+				if (!p) return AXIS_FAIL;
 				a[ix] = p->GetInt();
 			}
 		}
@@ -299,7 +299,7 @@ int ArrayBean::DeSerialize(SoapDeSerializer *pDZ)
 			for (int ix=0;ix<blocksize;ix++)
 			{
 				p = (Param*)pDZ->GetParam();
-				if (!p) return FAIL;
+				if (!p) return AXIS_FAIL;
 				a[ix] = p->GetFloat();
 			}
 		}
@@ -317,7 +317,7 @@ int ArrayBean::DeSerialize(SoapDeSerializer *pDZ)
 			for (int ix=0;ix<blocksize;ix++)
 			{
 				p = (Param*)pDZ->GetParam();
-				if (!p) return FAIL;
+				if (!p) return AXIS_FAIL;
 				a[ix] = p->GetString();
 			}
 		}
@@ -340,7 +340,7 @@ int ArrayBean::DeSerialize(SoapDeSerializer *pDZ)
 		break;
 	default:;
 	}
-	return SUCCESS;
+	return AXIS_SUCCESS;
 }
 
 int ArrayBean::Serialize(SoapSerializer& pSZ)
@@ -479,7 +479,7 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
 		break;
 	default:;
 	}
-	return SUCCESS;
+	return AXIS_SUCCESS;
 }
 
 void ArrayBean::AddDimension(int nDim)

@@ -110,8 +110,8 @@ public class WrapWriter extends CFileWriter{
 		try{
 			writer.write("/*implementation of BasicHandler interface*/\n");			
 			writer.write("void AXISCALL OnFault(void*p, IMessageData *pMsg)\n{\n}\n\n");
-			writer.write("int AXISCALL Init(void*p)\n{\n\treturn SUCCESS;\n}\n\n");
-			writer.write("int AXISCALL Fini(void*p)\n{\n\treturn SUCCESS;\n}\n\n");
+			writer.write("int AXISCALL Init(void*p)\n{\n\treturn AXIS_SUCCESS;\n}\n\n");
+			writer.write("int AXISCALL Fini(void*p)\n{\n\treturn AXIS_SUCCESS;\n}\n\n");
 			writeInvoke();
 			writer.write("\n/*Methods corresponding to the web service methods*/\n");
 			MethodInfo minfo;
@@ -161,9 +161,9 @@ public class WrapWriter extends CFileWriter{
 		writer.write("\tIWrapperSoapDeSerializerX *pDZX = NULL;\n");
 		writer.write("\tconst AxisChar* method = NULL;\n");
 		writer.write("\tpmcX->getSoapDeSerializer(mc, &pDZ);\n");
-		writer.write("\tif (!pDZ) return FAIL;\n");
+		writer.write("\tif (!pDZ) return AXIS_FAIL;\n");
 		writer.write("\tpDZX = pDZ->__vfptr;\n");
-		writer.write("\tif (!pDZX) return FAIL;\n");
+		writer.write("\tif (!pDZX) return AXIS_FAIL;\n");
 		writer.write("\tmethod = pDZX->GetMethodName(pDZ);\n");
 		//if no methods in the service simply return
 		if (methods.size() == 0) {
@@ -183,7 +183,7 @@ public class WrapWriter extends CFileWriter{
 			}
 		}
 		//(else part)
-		writer.write("\telse return FAIL;\n");
+		writer.write("\telse return AXIS_FAIL;\n");
 		//end of method
 		writer.write("}\n\n");
 	}
@@ -270,13 +270,13 @@ public class WrapWriter extends CFileWriter{
 			writer.write("\tAxis_Array array;\n");
 		}
 		writer.write("\tpmcX->getSoapSerializer(mc, &pSZ);\n");
-		writer.write("\tif (!pSZ) return FAIL;\n");
+		writer.write("\tif (!pSZ) return AXIS_FAIL;\n");
 		writer.write("\tpSZX = pSZ->__vfptr;\n");
-		writer.write("\tif (!pSZX) return FAIL;\n");
+		writer.write("\tif (!pSZX) return AXIS_FAIL;\n");
 		writer.write("\tpmcX->getSoapDeSerializer(mc, &pDZ);\n");
-		writer.write("\tif (!pDZ) return FAIL;\n");
+		writer.write("\tif (!pDZ) return AXIS_FAIL;\n");
 		writer.write("\tpDZX = pDZ->__vfptr;\n");
-		writer.write("\tif (!pDZX) return FAIL;\n");
+		writer.write("\tif (!pDZX) return AXIS_FAIL;\n");
 		writer.write("\tpSZX->createSoapMethod(pSZ, \""+methodName+"Response\", pSZX->getNewNamespacePrefix(pSZ), \""+wscontext.getWrapInfo().getTargetNameSpaceOfWSDL()+"\");\n\n");
 		//create and populate variables for each parameter
 		for (int i = 0; i < paramsB.size(); i++) {
@@ -291,7 +291,7 @@ public class WrapWriter extends CFileWriter{
 					containedType = CUtils.getclass4qname(qname);
 					writer.write("\tarray = pDZX->GetBasicArray(pDZ, "+CUtils.getXSDTypeForBasicType(containedType)+");\n");
 					writer.write("\tmemcpy(&v"+i+", &array, sizeof(Axis_Array));\n");
-					writer.write("\tif (v"+i+".m_Size < 1) return FAIL;\n");
+					writer.write("\tif (v"+i+".m_Size < 1) return AXIS_FAIL;\n");
 				}
 				else{
 					containedType = qname.getLocalPart();
@@ -348,7 +348,7 @@ public class WrapWriter extends CFileWriter{
 				writer.write("v" + ( paramsB.size() - 1));
 			}
 			writer.write(");\n");
-			writer.write("\treturn SUCCESS;\n");
+			writer.write("\treturn AXIS_SUCCESS;\n");
 		}
 		//write end of method
 		writer.write("}\n");

@@ -101,9 +101,9 @@ public class ClassLoader implements SourceWriter{
 	  writer.write("\t{\n");
 	  writer.write("\t\tpWCH->Init();\n");
 	  writer.write("\t\t*inst = pWCH;\n");
-	  writer.write("\t\treturn SUCCESS;\n");
+	  writer.write("\t\treturn AXIS_SUCCESS;\n");
 	  writer.write("\t}\n");
-	  writer.write("\treturn FAIL;\n");
+	  writer.write("\treturn AXIS_FAIL;\n");
 	  writer.write("}\n");
 	  writer.write("STORAGE_CLASS_INFO \n");
 	  writer.write("int DestroyInstance(BasicHandler *inst)\n");
@@ -113,9 +113,9 @@ public class ClassLoader implements SourceWriter{
 	  writer.write("\t\tWrapperClassHandler* pWCH = static_cast<WrapperClassHandler*>(inst);\n");
 	  writer.write("\t\tpWCH->Fini();\n");
 	  writer.write("\t\tdelete pWCH;\n");
-	  writer.write("\t\treturn SUCCESS;\n");
+	  writer.write("\t\treturn AXIS_SUCCESS;\n");
 	  writer.write("\t}\n");
-	  writer.write("\treturn FAIL;\n");
+	  writer.write("\treturn AXIS_FAIL;\n");
 	  writer.write("}\n");
 	  writer.write("}\n");
 	  writer.flush();

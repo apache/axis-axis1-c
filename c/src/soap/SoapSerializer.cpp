@@ -99,21 +99,21 @@ int SoapSerializer::setSoapEnvelope(SoapEnvelope *pSoapEnvelope)
 {
 	m_pSoapEnvelope = pSoapEnvelope;
 
-	return SUCCESS;
+	return AXIS_SUCCESS;
 }
 
 int SoapSerializer::setSoapHeader(SoapHeader *pSoapHeader)
 {
-	int intStatus = FAIL;
+	int intStatus = AXIS_FAIL;
 
 	if(m_pSoapEnvelope) {
 
 		if((m_pSoapEnvelope)&& (m_pSoapEnvelope->m_pSoapHeader)) {
 			//no need to create a SOAP Header, it already exists
-			intStatus= OBJECT_ALREADY_EXISTS;
+			intStatus= AXIS_OBJECT_ALREADY_EXISTS;
 		} else {
 			m_pSoapEnvelope->setSoapHeader(pSoapHeader);
-			intStatus= SUCCESS;
+			intStatus= AXIS_SUCCESS;
 		}
 	}
 
@@ -122,11 +122,11 @@ int SoapSerializer::setSoapHeader(SoapHeader *pSoapHeader)
 
 int SoapSerializer::setSoapBody(SoapBody *pSoapBody)
 {
-	int intStatus= FAIL;
+	int intStatus= AXIS_FAIL;
 
 	if(m_pSoapEnvelope) {
 		m_pSoapEnvelope->setSoapBody(pSoapBody);
-		intStatus= SUCCESS;
+		intStatus= AXIS_SUCCESS;
 	}
 
 	return intStatus;
@@ -134,11 +134,11 @@ int SoapSerializer::setSoapBody(SoapBody *pSoapBody)
 
 int SoapSerializer::setSoapMethod(SoapMethod *pSoapMethod)
 {
-	int intStatus= FAIL;
+	int intStatus= AXIS_FAIL;
 
 	if(m_pSoapEnvelope && (m_pSoapEnvelope->m_pSoapBody)) {
 		m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod= pSoapMethod;
-		intStatus= SUCCESS;
+		intStatus= AXIS_SUCCESS;
 	}
 
 	return intStatus;
@@ -160,7 +160,7 @@ int SoapSerializer::AddOutputParamHelper(const AxisChar* pchName, XSDTYPE nType,
 		m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->AddOutputParam(pParam);
 	}
 	pParam->SetName(pchName);
-	return SUCCESS;
+	return AXIS_SUCCESS;
 }
 
 int SoapSerializer::AddOutputParam(const AxisChar* pchName, unsigned int unValue, XSDTYPE type)
@@ -260,7 +260,7 @@ int SoapSerializer::AddOutputBasicArrayParam(const AxisChar* pchName, const Axis
 		m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->AddOutputParam(pParam);
 	}
 	pParam->SetName(pchName);
-	return SUCCESS;	
+	return AXIS_SUCCESS;	
 }
 
 int SoapSerializer::AddOutputCmplxArrayParam(const AxisChar* pchName, const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pchTypeName, const AxisChar* pchURI)
@@ -278,7 +278,7 @@ int SoapSerializer::AddOutputCmplxArrayParam(const AxisChar* pchName, const Axis
 		m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->AddOutputParam(pParam);
 	}
 	pParam->SetName(pchName);
-	return SUCCESS;
+	return AXIS_SUCCESS;
 }
 
 int SoapSerializer::AddOutputCmplxParam(const AxisChar* pchName, void* pObject, void* pSZFunct, void* pDelFunct)
@@ -293,16 +293,16 @@ int SoapSerializer::AddOutputCmplxParam(const AxisChar* pchName, void* pObject, 
 		m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->AddOutputParam(pParam);
 	}
 	pParam->SetName(pchName);
-	return SUCCESS;
+	return AXIS_SUCCESS;
 }
 
 int SoapSerializer::setSoapFault(SoapFault *pSoapFault)
 {
-	int intStatus= FAIL;
+	int intStatus= AXIS_FAIL;
 
 	if(m_pSoapEnvelope && (m_pSoapEnvelope->m_pSoapBody)) {
 		m_pSoapEnvelope->m_pSoapBody->m_pSoapFault= pSoapFault;
-		intStatus= SUCCESS;
+		intStatus= AXIS_SUCCESS;
 	}
 
 	return intStatus;
@@ -311,7 +311,7 @@ int SoapSerializer::setSoapFault(SoapFault *pSoapFault)
 int SoapSerializer::SetOutputStream(const Ax_soapstream* pStream)
 {
 	m_pOutputStream = pStream;
-	int iStatus= SUCCESS;
+	int iStatus= AXIS_SUCCESS;
 
 	if(m_pSoapEnvelope) {
 		Serialize("<?xml version='1.0' encoding='utf-8' ?>", NULL);
@@ -339,7 +339,7 @@ int SoapSerializer::Init()
 	iCounter=0;
 	m_iCurrentSerBufferSize=0;
 	m_cSerializedBuffer[0]='\0'; //make buffer to empty content (as a char*)
-	return SUCCESS;
+	return AXIS_SUCCESS;
 }
 
 int SoapSerializer::setSoapVersion(SOAP_VERSION nSoapVersion)
@@ -349,7 +349,7 @@ int SoapSerializer::setSoapVersion(SOAP_VERSION nSoapVersion)
 	m_pSoapEnvelope->addStandardNamespaceDecl(SoapKeywordMapping::Map(nSoapVersion).pEnv);
 	m_pSoapEnvelope->addStandardNamespaceDecl(SoapKeywordMapping::Map(nSoapVersion).pXsd);
 	m_pSoapEnvelope->addStandardNamespaceDecl(SoapKeywordMapping::Map(nSoapVersion).pXsi);
-	return SUCCESS;
+	return AXIS_SUCCESS;
 }
 
 const AxisChar* SoapSerializer::getNewNamespacePrefix()
@@ -391,7 +391,7 @@ int SoapSerializer::flushSerializedBuffer()
 		m_pOutputStream->transport.pSendFunct(m_cSerializedBuffer, m_pOutputStream->str.op_stream);
 	m_cSerializedBuffer[0]= '\0';
 	m_iCurrentSerBufferSize=0;
-	return SUCCESS;
+	return AXIS_SUCCESS;
 }
 
 int SoapSerializer::createSoapMethod(const AxisChar* sLocalName, const AxisChar* sPrefix, const AxisChar* sURI)
@@ -401,7 +401,7 @@ int SoapSerializer::createSoapMethod(const AxisChar* sLocalName, const AxisChar*
 	pMethod->setLocalName(sLocalName);
 	pMethod->setPrefix(sPrefix);
 	pMethod->setUri(sURI);
-	return SUCCESS;
+	return AXIS_SUCCESS;
 }
 
 /**
@@ -507,7 +507,7 @@ IHeaderBlock* SoapSerializer::createHeaderBlock()
 
 int SoapSerializer::setHeaderBlock(HeaderBlock *pHeaderBlock)
 {
-	int intStatus= FAIL;
+	int intStatus= AXIS_FAIL;
 
 	if((m_pSoapEnvelope)&& (m_pSoapEnvelope->m_pSoapHeader)) {
 		//no need to create a SOAP Header, it already exists
@@ -517,7 +517,7 @@ int SoapSerializer::setHeaderBlock(HeaderBlock *pHeaderBlock)
 	}
 
 	m_pSoapEnvelope->m_pSoapHeader->addHeaderBlock(pHeaderBlock);
-	intStatus= SUCCESS;
+	intStatus= AXIS_SUCCESS;
 
 	return intStatus;
 }
@@ -533,7 +533,7 @@ int SoapSerializer::removeSoapHeader()
 	delete m_pSoapEnvelope->m_pSoapHeader;
 	m_pSoapEnvelope->m_pSoapHeader= NULL;
 
-	return SUCCESS;
+	return AXIS_SUCCESS;
 }
 
 /**
@@ -556,7 +556,7 @@ int SoapSerializer::SerializeCmplxArray(const Axis_Array* pArray, void* pSZFunct
 	   Array will be deleted when the complex type that contains this array is deleted */
 	pAb->RemoveArrayPointer();
 	delete pParam;
-	return SUCCESS;
+	return AXIS_SUCCESS;
 }
 
 /**
@@ -577,7 +577,7 @@ int SoapSerializer::SerializeBasicArray(const Axis_Array* pArray, XSDTYPE nType,
 	   Array will be deleted when the complex type that contains this array is deleted */
 	pAb->RemoveArrayPointer();
 	delete pParam;
-	return SUCCESS;
+	return AXIS_SUCCESS;
 }
 
 int SoapSerializer::AddOutputParam(const AxisChar* pchName, void* pValue, XSDTYPE type)
@@ -629,7 +629,7 @@ int SoapSerializer::AddOutputParam(const AxisChar* pchName, void* pValue, XSDTYP
 		AddOutputParam(pchName,*((struct tm*)(pValue)),type);
         break;        
 	}
-	return SUCCESS;
+	return AXIS_SUCCESS;
 }
 
 int SoapSerializer::SerializeBasicType(const AxisChar* pchName, void* pValue, XSDTYPE type)
@@ -685,11 +685,11 @@ int SoapSerializer::SerializeBasicType(const AxisChar* pchName, void* pValue, XS
 	if (NULL != pSerialized)
 	{
 		*this << pSerialized;
-		return SUCCESS;
+		return AXIS_SUCCESS;
 	}
 	else
 	{
-		return FAIL;
+		return AXIS_FAIL;
 	}
 }
 
