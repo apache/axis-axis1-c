@@ -71,6 +71,28 @@ AXIS_CPP_NAMESPACE_START
             }
         }
         delete maxLength;
+
+        Length* length= getLength();
+        if (length->isSet())
+        {
+            if (value->__size != length->getLength())
+            {
+                AxisString exceptionMessage =
+                "Length of value to be serialized is not the same as Length specified for this type.  Length = ";
+                AxisChar* lengthAsString = new AxisChar[10];
+                sprintf(lengthAsString, "%d", length->getLength());
+                exceptionMessage += lengthAsString;
+                exceptionMessage += ", Length of value = ";
+                sprintf(lengthAsString, "%d", value->__size);
+                exceptionMessage += lengthAsString;
+                exceptionMessage += ".";
+                delete [] lengthAsString;
+                
+                throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
+                    const_cast<AxisChar*>(exceptionMessage.c_str()));
+            }
+        }
+        delete length;
      
 	    int len = apr_base64_encode_len (value->__size);	    
 	    AxisChar* serializedValue = new AxisChar[len + 1];
@@ -109,6 +131,11 @@ AXIS_CPP_NAMESPACE_START
     MaxLength* Base64Binary::getMaxLength()
     {
         return new MaxLength();
+    }
+
+    Length* Base64Binary::getLength()
+    {
+        return new Length();
     }
 
 AXIS_CPP_NAMESPACE_END

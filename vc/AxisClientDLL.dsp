@@ -290,6 +290,10 @@ SOURCE=..\src\soap\xsd\Integer.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\soap\xsd\constraints\Length.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\soap\xsd\Long.cpp
 # End Source File
 # Begin Source File

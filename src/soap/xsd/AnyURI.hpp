@@ -25,6 +25,7 @@
 #include "IAnySimpleType.hpp"
 #include "constraints/MinLength.hpp"
 #include "constraints/MaxLength.hpp"
+#include "constraints/Length.hpp"
 
 AXIS_CPP_NAMESPACE_START
 
@@ -88,6 +89,12 @@ protected:
      */
     MaxLength* getMaxLength();
 
+    /**
+     * Creates a Length object, used to allocate storage.  By default the AnyURI
+     * object does not have this specified, so this is an unset Length object.
+     * @return An unset Length object
+     */
+    Length* getLength();
     
 private:
     AxisChar* m_AnyURI;

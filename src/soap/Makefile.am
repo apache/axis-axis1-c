@@ -48,6 +48,7 @@ libsoap_la_SOURCES = Attribute.cpp \
         xsd/constraints/Pattern.cpp \
         xsd/constraints/MinLength.cpp \
         xsd/constraints/MaxLength.cpp \
+        xsd/constraints/Length.cpp \
         xsd/constraints/MinInclusive.cpp \
         xsd/constraints/MinExclusive.cpp \
         xsd/constraints/MaxInclusive.cpp \

@@ -27,6 +27,7 @@
 #include <axis/AxisUserAPI.hpp>
 #include "constraints/MinLength.hpp"
 #include "constraints/MaxLength.hpp"
+#include "constraints/Length.hpp"
 
 AXIS_CPP_NAMESPACE_START
 
@@ -88,6 +89,13 @@ protected:
      * @return An unset MaxLength object
      */
     MaxLength* getMaxLength();
+
+    /**
+     * Creates a Length object, used to allocate storage.  By default the Base64Binary
+     * object does not have this specified, so this is an unset Length object.
+     * @return An unset Length object
+     */
+    Length* getLength();
 
 private:
 	xsd__base64Binary* m_Base64Binary;
