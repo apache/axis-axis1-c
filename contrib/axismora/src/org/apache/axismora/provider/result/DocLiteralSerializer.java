@@ -7,8 +7,6 @@ import javax.xml.namespace.QName;
 import org.apache.axismora.encoding.OutParameter;
 import org.apache.axismora.encoding.Serializable;
 
-import org.apache.axis.encoding.SerializationContext;
-
 /**
  * Manages serialization of the body.
  * Serialization at both client and server side should be taken care of by this.
@@ -28,11 +26,11 @@ public class DocLiteralSerializer implements Serializable {
 	  /**
 		* this method is called by the SOAPHeaderElement when serializing
 		*/
-	   public void serialize(SerializationContext sc) throws IOException {
+	   public void serialize(org.apache.axis.encoding.SerializationContext sc) throws IOException {
            
-            if(parm != null){ 		 
-               //writing start tag
-            	StringBuffer buf = new StringBuffer();
+			if(parm != null){ 		 
+			   //writing start tag
+				StringBuffer buf = new StringBuffer();
 				String uri = eleQName.getNamespaceURI();
 				if (uri != null && !("".equals(uri))) {
 					buf.append("<pre:").append(this.eleQName.getLocalPart());
@@ -40,13 +38,13 @@ public class DocLiteralSerializer implements Serializable {
 					buf.append("\">\n");
 				} else {
 					buf.append("<").append(this.eleQName.getLocalPart());
-                	buf.append(">\n");
+					buf.append(">\n");
 				}
 				sc.writeString(buf.toString());
-               	parm.serialize(sc);
+				parm.serialize(sc);
                	
-               	//writing end tag
-               	buf = new StringBuffer();
+				//writing end tag
+				buf = new StringBuffer();
 				if (uri != null && !("".equals(uri))) {
 					buf.append("\n</pre:").append(this.eleQName.getLocalPart());
 					buf.append(">\n");
@@ -54,7 +52,7 @@ public class DocLiteralSerializer implements Serializable {
 					buf.append("\n</").append(this.eleQName.getLocalPart());
 					buf.append(">\n");
 				}
-			    sc.writeString(buf.toString());
+				sc.writeString(buf.toString());
 			} else System.out.println("DEBUG - The param is null");
 	   }
 

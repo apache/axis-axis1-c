@@ -118,7 +118,9 @@ public class RPCTestCaseWriter extends JavaClassWriter {
 			//writer.write("\t}\n");
 
 			writer.write("\n\tpublic " + classname + "()" + "{\n");
-			writer.write("\n\t\tstub = (new HeavyTestLocator(enduri)).getStub();\n");
+			writer.write("\n\t\tstub = (new "+
+				wscontext.getSerInfo().getQualifiedServiceName()
+				+"Locator(enduri)).getStub();\n");
 			writer.write("\t}\n");
         } catch (Exception e) {
             e.printStackTrace();
@@ -166,7 +168,7 @@ public class RPCTestCaseWriter extends JavaClassWriter {
                 Vector params = new Vector(minfo.getParameterTypes());
                 
 				for (int j = 0; j <params.size(); j++){ 
-					ParameterInfo parm = (ParameterInfo)params.get(0);
+					ParameterInfo parm = (ParameterInfo)params.get(j);
 					t = parm.getType();
 										
 					if(t.isArray()){
@@ -183,7 +185,7 @@ public class RPCTestCaseWriter extends JavaClassWriter {
 								writer.write("\t\taparam"+ var +".init();\n");
 							}else{
 								writer.write("\t\t"+wrappername + " atparam"+ var +" = new "+ wrappername + "();\n");
-								writer.write("\t\tatparam"+ var +".init();");
+								writer.write("\t\tatparam"+ var +".init();\n");
 								writer.write("\t\t"+javaType + " aparam"+ var +" = atparam.getParam();\n");
 							}
 							
@@ -202,18 +204,18 @@ public class RPCTestCaseWriter extends JavaClassWriter {
 						String javaType = t.getLanguageSpecificName();
 						String wrappername = TypeMap.getWrapperCalssNameForJavaClass(javaType);
 						if(javaType.equals(wrappername)){
-							writer.write("\t\t"+javaType + " param"+j+" = new "+ javaType + "()\n");
+							writer.write("\t\t"+javaType + " param"+j+" = new "+ javaType + "();\n");
 							writer.write("\t\tparam"+j+".init();\n");
 						}else{
-							writer.write(wrappername + " tparam"+j+" = new "+ wrappername + "();\n");
-							writer.write("\t\ttparam"+j+".init();");
-							writer.write("\t\t"+javaType + " param"+j+" = tparam.getParam();\n");
+							writer.write("\t\t"+wrappername + " tparam"+j+" = new "+ wrappername + "();\n");
+							writer.write("\t\ttparam"+j+".init();\n");
+							writer.write("\t\t"+javaType + " param"+j+" = tparam"+j+".getParam();\n");
 						}	
 					}
 				}
 				writer.write("\t\t");
                 if(!"void".equals(outparam))
-					writer.write(outparam + "returnVal = ");
+					writer.write(outparam + " returnVal = ");
 				writer.write("stub."+minfo.getMethodname() +"(");
                 if(params.size()>0){
 					writer.write("param0");
@@ -221,7 +223,7 @@ public class RPCTestCaseWriter extends JavaClassWriter {
 				for (int j = 1; j<params.size(); j++) 
 					writer.write(",param"+j);
 				writer.write(");\n");
-				writer.write("\tSystem.out.println(\"test"+minfo.getMethodname()+" passes\");");	
+				writer.write("\tSystem.out.println(\"test"+minfo.getMethodname()+" passes\");\n");	
 				writer.write("\t}\n");
             }
         } catch (Exception e) {

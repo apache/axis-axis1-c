@@ -56,6 +56,7 @@
 package org.apache.axismora.encoding.ser;
 
 import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Stack;
@@ -93,15 +94,13 @@ public class SerializationContext extends org.apache.axis.encoding.Serialization
 	private final byte[] WSB = " ".getBytes();
 	
 	private EnhancedWriter writer;
-	private StringBuffer nameSapceBuffer = new StringBuffer();
-	private boolean addNameSpace = false;
+
 	private HashMap namespaces = new NSmap();
 	
 	private Stack sedStack = new Stack();
 	private int namespaceIndex = 0;
 	private StartElementData sed;
 	private ByteArrayStack stack = new ByteArrayStack();
-	
 	
     /**
      * @param writer
@@ -205,33 +204,9 @@ public class SerializationContext extends org.apache.axis.encoding.Serialization
 		writer.write(GTB);
 	}
 
-//	/**
-//	 * use this if you can manage attributes but to parser to manage the elements Namesapces
-//	 */
-//	public void startTag(String uri,String localName,String attributes)throws IOException{
-//		if(uri == null ||"".equals(uri)){
-//			if(attributes == null){
-//				byte[] prefixedB = localName.getBytes();
-//				writer.write(LTB);
-//				writer.write(prefixedB);
-//				writer.write(GTB);
-//				stack.push(prefixedB);
-//			}else{
-//				byte[] prefixedB = localName.getBytes();
-//				writer.write(LTB);
-//				writer.write(prefixedB);
-//				writer.write(WSB);
-//					writer.write(attributes);
-//
-//				writer.write(GTB);
-//				stack.push(prefixedB);
-//			}		
-//		}
-//	}
-	
-	/**
-	 * use this if user can managed the all the prefixses
-	 */	
+	/* (non-Javadoc)
+	 * @see org.apache.axis.encoding.SerializationContext#startTag(java.lang.String, java.lang.String)
+	 */
 	public void startTag(String prefixedName, String additional) throws IOException {
 		byte[] prefixedB = prefixedName.getBytes();
 		writer.write(LTB);

@@ -57,10 +57,8 @@ package org.apache.axismora.provider.result;
 
 import java.io.IOException;
 
-import org.apache.axismora.encoding.Serializable;
-
 import org.apache.axis.components.logger.LogFactory;
-import org.apache.axis.encoding.SerializationContext;
+import org.apache.axismora.encoding.Serializable;
 import org.apache.commons.logging.Log;
 import org.w3c.dom.Element;
 
@@ -79,7 +77,7 @@ public class MSGResult implements Serializable {
     /**
      * this method is called by the SOAPHeaderElement when serializing
      */
-    public void serialize(SerializationContext sc) throws IOException {
+    public void serialize(org.apache.axis.encoding.SerializationContext sc) throws IOException {
         for (int i = 0; i < msgResult.length; i++) {
             sc.writeDOMElement(msgResult[i]);
         }

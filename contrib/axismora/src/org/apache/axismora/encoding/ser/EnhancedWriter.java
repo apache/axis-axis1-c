@@ -55,6 +55,7 @@
 
 package org.apache.axismora.encoding.ser;
 
+import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
@@ -66,18 +67,18 @@ import java.io.Writer;
  */
 public class EnhancedWriter extends Writer{
 	private static final int BUF_LENGHTH = 8*1024;
-	private OutputStream writer; 
-	private byte[] buffer = new byte[BUF_LENGHTH];
-	private int index = 0; //index the position next byte to be written
+	private BufferedOutputStream writer; 
+//	private byte[] buffer = new byte[BUF_LENGHTH];
+//	private int index = 0; //index the position next byte to be written
 	
 	
 		
-	public EnhancedWriter(OutputStream writer){
+	public EnhancedWriter(BufferedOutputStream writer){
 		this.writer = writer;
 	}
 	
     public void close() throws IOException {
-		writer.write(buffer,0,index);
+//		writer.write(buffer,0,index);
 		writer.close();
     }
 
@@ -85,9 +86,9 @@ public class EnhancedWriter extends Writer{
      * @see java.io.Writer#flush()
      */
     public void flush() throws IOException {
-		writer.write(buffer,0,index);
+//		writer.write(buffer,0,index);
 		writer.flush();
-		index = 0;
+//		index = 0;
 	}
 
     /* (non-Javadoc)
@@ -95,53 +96,57 @@ public class EnhancedWriter extends Writer{
      */
     public void write(char[] cbuf, int off, int len) throws IOException {
 		byte[] bval = String.valueOf(cbuf,off,len).getBytes();
-		int length = bval.length;
-		for(int j = 0;j<length;j++){
-			buffer[index] = bval[j];
-			index++;
-			if(index == BUF_LENGHTH){
-				writer.write(buffer);
-				index = 0;
-			}
-		}	
+//		int length = bval.length;
+//		for(int j = 0;j<length;j++){
+//			buffer[index] = bval[j];
+//			index++;
+//			if(index == BUF_LENGHTH){
+//				writer.write(buffer);
+//				index = 0;
+//			}
+//		}
+		writer.write(bval);	
     }
 
 	public void write(byte[] subBuf, int off, int len) throws IOException {
-		int subBufLen = len;
-		if(subBufLen + index < BUF_LENGHTH){
-			System.arraycopy(subBuf, off,buffer,index ,subBufLen) ;
-			index = index + subBufLen;
-		}else{
-			//add one as the index is not written
-			int towrite = BUF_LENGHTH - index; 
-			//copy till the buffer fill
-			System.arraycopy(subBuf, off,buffer,index ,towrite) ; 
-			//write the buffer
-			writer.write(buffer);
-			//write the what is left
-			int lefttowrite =  subBufLen - towrite;
-			System.arraycopy(subBuf, towrite,buffer,0,lefttowrite) ;
-			index = lefttowrite;
-		}
+//		int subBufLen = len;
+//		if(subBufLen + index < BUF_LENGHTH){
+//			System.arraycopy(subBuf, off,buffer,index ,subBufLen) ;
+//			index = index + subBufLen;
+//		}else{
+//			//add one as the index is not written
+//			int towrite = BUF_LENGHTH - index; 
+//			//copy till the buffer fill
+//			System.arraycopy(subBuf, off,buffer,index ,towrite) ; 
+//			//write the buffer
+//			writer.write(buffer);
+//			//write the what is left
+//			int lefttowrite =  subBufLen - towrite;
+//			System.arraycopy(subBuf, towrite,buffer,0,lefttowrite) ;
+//			index = lefttowrite;
+
+//		}
+		writer.write(subBuf,off,len);
 	}
 	
 	public void write(byte[] subBuf) throws IOException {
-		int subBufLen = subBuf.length;
-		if(subBufLen + index < BUF_LENGHTH){
-			System.arraycopy(subBuf, 0,buffer,index ,subBufLen) ;
-			index = index + subBufLen;
-		}else{
-			//add one as the index is not written
-			int towrite = BUF_LENGHTH - index; 
-			//copy till the buffer fill
-			System.arraycopy(subBuf, 0,buffer,index ,towrite) ; 
-			//write the buffer
-			writer.write(buffer);
-			//write the what is left
-			int lefttowrite =  subBufLen - towrite;
-			System.arraycopy(subBuf, towrite,buffer,0,lefttowrite) ;
-			index = lefttowrite;
-		}
+//		int subBufLen = subBuf.length;
+//		if(subBufLen + index < BUF_LENGHTH){
+//			System.arraycopy(subBuf, 0,buffer,index ,subBufLen) ;
+//			index = index + subBufLen;
+//		}else{
+//			//add one as the index is not written
+//			int towrite = BUF_LENGHTH - index; 
+//			//copy till the buffer fill
+//			System.arraycopy(subBuf, 0,buffer,index ,towrite) ; 
+//			//write the buffer
+//			writer.write(buffer);
+//			//write the what is left
+//			int lefttowrite =  subBufLen - towrite;
+//			System.arraycopy(subBuf, towrite,buffer,0,lefttowrite) ;
+//			index = lefttowrite;
+//		}
+		writer.write(subBuf);
 	}
 
 
@@ -157,8 +162,9 @@ public class EnhancedWriter extends Writer{
      * @see java.io.Writer#write(int)
      */
     public void write(int c) throws IOException {
-		buffer[index] = (byte)c;
-		index++;
+//		buffer[index] = (byte)c;
+//		index++;
+		writer.write((byte)c);
     }
 
     /**
@@ -175,22 +181,27 @@ public class EnhancedWriter extends Writer{
      */
     public void write(String str) throws IOException {
 		byte[] subBuf = str.getBytes();
-		int subBufLen = subBuf.length;
-		if(subBufLen + index < BUF_LENGHTH){
-			System.arraycopy(subBuf, 0,buffer,index ,subBufLen) ;
-			index = index + subBufLen;
-		}else{
-			//add one as the index is not written
-			int towrite = BUF_LENGHTH - index; 
-			//copy till the buffer fill
-			System.arraycopy(subBuf, 0,buffer,index ,towrite) ; 
-			//write the buffer
-			writer.write(buffer);
-			//write the what is left
-			int lefttowrite =  subBufLen - towrite;
-			System.arraycopy(subBuf, towrite,buffer,0,lefttowrite) ;
-			index = lefttowrite;
-		}
+//		int subBufLen = subBuf.length;
+//		if(subBufLen + index < BUF_LENGHTH){
+//			System.arraycopy(subBuf, 0,buffer,index ,subBufLen) ;
+//			index = index + subBufLen;
+//		}else{
+//			//add one as the index is not written
+//			int towrite = BUF_LENGHTH - index; 
+//			//copy till the buffer fill
+//			System.out.println(index + " + " + towrite + " = "+BUF_LENGHTH);
+//			System.arraycopy(subBuf, 0,buffer,index ,towrite) ; 
+//			//write the buffer
+//			writer.write(buffer);
+//			//write the what is left
+//			int lefttowrite =  subBufLen - towrite;
+//			System.arraycopy(subBuf, towrite,buffer,0,lefttowrite) ;
+//			index = lefttowrite;
+//			writer.write(buffer,0,index);
+//			writer.write(subBuf,0,subBufLen);
+//			index = 0;
+//		}
+		writer.write(subBuf);
     }
 
 }

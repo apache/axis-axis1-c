@@ -105,7 +105,7 @@ public class DeploymentWriter implements SourceWriter {
             writer.write(
                 "<deployment xmlns=\"http://xml.apache.org/axis/wsdd/\" xmlns:java=\"http://xml.apache.org/axis/wsdd/providers/java\">\n");
             writer.write(
-                "\t<service name==\"" + servicename + "\" provider=\"java:RPC\">\n");
+                "\t<service name=\"" + servicename + "\" provider=\"java:RPC\">\n");
             writer.write("\t\t<parameter name=\"allowedMethods\" value=\"*\"/>\n");
             writer.write(
                 "\t\t<parameter name=\"className\" value=\" " + servcieclass + "\"/>\n");

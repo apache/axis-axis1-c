@@ -63,8 +63,6 @@ import org.apache.axismora.encoding.OutParameter;
 import org.apache.axismora.encoding.Serializable;
 import org.apache.axismora.soap.BasicMessageContext;
 
-import org.apache.axis.encoding.SerializationContext;
-
 /**
  * This calss is used for the represents the RPC style result 
  *  @author Srianth Perera (hemapani@opensource.lk)
@@ -84,7 +82,7 @@ public class RPCResult implements Serializable {
     /**
      * this method is called by the SOAPHeaderElement when serializing
      */
-    public void serialize(SerializationContext sc) throws IOException {
+    public void serialize(org.apache.axis.encoding.SerializationContext sc) throws IOException {
         StringBuffer buf = new StringBuffer();
         if (parm != null) {
             if (method != null) {

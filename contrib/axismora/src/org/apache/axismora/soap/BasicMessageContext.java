@@ -55,9 +55,13 @@
 
 package org.apache.axismora.soap;
 
+import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -187,11 +191,32 @@ public class BasicMessageContext implements MessageContext {
 	/**
 	 * this Constructor is for the sake of testing only
 	 */
-	public BasicMessageContext(){
+	public BasicMessageContext(OutputStream outStream,SOAPNodeInfo nodeinfo,WSDDService service){
 		this.propertyMap = new Hashtable(PROPERTY_MAP_SIZE);
 		this.soapHeaderElements = UtilityPool.getVector();
 		this.createdSoapHeaders = UtilityPool.getVector();
+		this.nodeinfo = nodeinfo;
+		this.service = service;
+		/*
+		  initializing the serialization context
+		  This is comlpletly borrowed from existing Apache Axis. this drives all the serialization.
+		  The implementation  uses on the Envelope,Header and the Body of the org.apache.axis.message
+		  serializzation of these naturally followed the existing model.
+		*/
+		log.info("creating serialization context");
+		if(!org.apache.axismora.Constants.USE_MORA_SERIALIZER){
+			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(outStream));
+    		w = new PrintWriter(bw);
+			serializer = new SerializationContextImpl(w);
+		}else{
+			w = new EnhancedWriter(new BufferedOutputStream(outStream));
+			serializer = new org.apache.axismora.encoding.ser.SerializationContext((EnhancedWriter)w);	
+		}		
+			 
+
 	}	
+
+	public BasicMessageContext(){}
 
     public BasicMessageContext(
         InputStream inStream,
@@ -202,36 +227,18 @@ public class BasicMessageContext implements MessageContext {
         Session currentSession,
         String streamEncoding)
         throws AxisFault {
-		this();
+		this(outStream,nodeinfo,service);
         this.servicepool = servicepool;
         this.currentSession = currentSession;
-        
-        this.nodeinfo = nodeinfo;
-        this.service = service;
-  //      this.outStream = outStream;
         this.streamEncoding = streamEncoding;
-       // this.methodName = service.getQName();
         this.style = service.getStyle();
         //initialize desirialization context - this drives the desiarialization
+		log.info("creating desirialization context");
         this.deserializer =
             new DesirializationContext(
                 this,
                 inStream,
                 (service != null ? this.service.getStyle() : null));
-//		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(outStream));
-//        w = new PrintWriter(bw);
-       w = new EnhancedWriter(outStream);
-        /*
-          initializing the serialization context
-          This is comlpletly borrowed from existing Apache Axis. this drives all the serialization.
-          The implementation  uses on the Envelope,Header and the Body of the org.apache.axis.message
-          serializzation of these naturally followed the existing model.
-        */
-		if(!org.apache.axismora.Constants.USE_MORA_SERIALIZER)
-			 serializer = new SerializationContextImpl(w);
-		else		
-			 serializer = new org.apache.axismora.encoding.ser.SerializationContext((EnhancedWriter)w);
-
         log.info("MessageContext created.......");
 
     }
@@ -242,34 +249,16 @@ public class BasicMessageContext implements MessageContext {
         ServicePool servicepool,
         ClientRequestContext requestContext)
         throws AxisFault {
-		this();
+		this(requestContext.getSender().getOut(),nodeinfo,service);
         this.servicepool = servicepool;
         this.currentSession = null;
-
-        this.nodeinfo = nodeinfo;
-        this.service = service;
-        this.outStream = requestContext.getSender().getOut();
         this.streamEncoding = requestContext.getEncoding();
-       
+		log.info("creating desirialization context"); 
         this.deserializer =
             new DesirializationContext(
                 this,
                 requestContext.getSender().getIn(),
                 requestContext.getStyle());
-
-//		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(outStream));
-//		w = new PrintWriter(bw);
-		w = new EnhancedWriter(outStream);
-        /*
-          initializing the serialization context
-          This is comlpletly borrowed from existing Apache Axis. this drives all the serialization.
-          The implementation  uses on the Envelope,Header and the Body of the org.apache.axis.message
-          serializzation of these naturally followed the existing model.
-        */
-       if(!org.apache.axismora.Constants.USE_MORA_SERIALIZER)
-       		serializer = new SerializationContextImpl(w);
-       else		
-	   		serializer = new org.apache.axismora.encoding.ser.SerializationContext((EnhancedWriter)w);
         
         this.style=requestContext.getStyle();
         this.use = requestContext.getUse();

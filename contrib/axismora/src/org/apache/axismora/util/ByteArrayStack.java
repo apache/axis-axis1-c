@@ -22,14 +22,13 @@ public class ByteArrayStack {
 		stack = new byte[stack.length + initalSize][];
 		System.arraycopy(temp, 0,stack,0,temp.length) ;
 		stack[index] = bytes;	
-		index ++;
 	}
 	
 	public byte[] pop(){
 		if(index == 0 )
 			throw new RuntimeException("stack is empty");
-		index--;
 		byte[] ret = stack[index];
+		index++;
 		return ret;
 	}
 	

@@ -57,7 +57,9 @@ package org.apache.axismora.engine;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -83,9 +85,11 @@ import org.apache.axismora.soap.BasicMessageContext;
 import org.apache.axismora.soap.SOAPNodeInfo;
 import org.apache.axismora.util.AxisUtils;
 import org.apache.axismora.util.PerfLog;
+import org.apache.axismora.util.SingeltonException;
 
 import org.apache.axis.AxisFault;
 import org.apache.axis.components.logger.LogFactory;
+import org.apache.axis.deployment.wsdd.WSDDException;
 import org.apache.axis.deployment.wsdd.WSDDService;
 import org.apache.axis.encoding.SerializationContextImpl;
 import org.apache.axis.message.SOAPEnvelope;
@@ -119,90 +123,93 @@ public class AxisEngine extends BasicHandler {
 	}
 
     public AxisEngine(String filename,ServletContext servletcontext) throws Exception {
-		this.servletcontext = servletcontext;
-        log.info("Axis Engine initializing");
-
-        	
-		File file = null;
-		
-		// the logic is borrowed from 
-		// 		org.apache.axis.configuration.EngineConfigurationFactoryServlet
-		// LOGIC of the method
-		// if(servlet)
-		//		load file using servlet context
-		// else
-		//		load the file from .
-		// if(file not exists)
-		//	create file
-		//load the WSDDDeployment	 	
-		
-        if(servletcontext != null){
-        	//The accsess is from the servlet try to get it from the WEB-INF
-			String appWebInfPath = "/WEB-INF";
-			String realWebInfPath = servletcontext.getRealPath(appWebInfPath);
-
-			   if (realWebInfPath != null)
-				   file = new File(realWebInfPath, filename);
-				   if(file == null || !file.exists()){
-					/**
-					 * If path/file doesn't exist, it may still be accessible
-					 * as a resource-stream (i.e. it may be packaged in a JAR
-					 * or WAR file).
-					 */
-				   //String name = appWebInfPath + "/" + filename;
-				   //InputStream is = servletcontext.getResourceAsStream(name);
-				   
-				   //but the WSDDDeploymet accept only String in inputstreams ):
-				   //SO above code is TODO  ... we will not support the file inside 
-				   //JAR or WAR yet.
-				   file = new File(filename);    
-			   }else{
-				System.out.println(realWebInfPath +" is null");	
-			   }
-        
-        }else
-        	//no servlets, try where u are.	
-			file = new File(filename);        
-        
-        
-        
-        
-        //if a configaration file does not exists create a file 
-        if (!file.exists()) {
-            file.createNewFile();
-            PrintWriter w = new PrintWriter(new FileOutputStream(file));
-            BufferedReader re =
-                new BufferedReader(
-                    new InputStreamReader(
-                        this.getClass().getClassLoader().getResourceAsStream(
-                            (Constants.CLIENT_CONFIG_FILE.equals(filename)
-                                ? "org/apache/axismora/client/"
-                                : "org/apache/axismora/server/")
-                                + filename)));
-            String line;
-            while ((line = re.readLine()) != null) {
-                w.write(line + "\n");
+		try {
+            this.servletcontext = servletcontext;
+            log.info("Axis Engine initializing");
+            File file = null;
+            
+            // the logic is borrowed from 
+            // 		org.apache.axis.configuration.EngineConfigurationFactoryServlet
+            // LOGIC of the method
+            // if(servlet)
+            //		load file using servlet context
+            // else
+            //		load the file from .
+            // if(file not exists)
+            //	create file
+            //load the WSDDDeployment	 	
+            
+            if(servletcontext != null){
+            	//The accsess is from the servlet try to get it from the WEB-INF
+            	String appWebInfPath = "/WEB-INF";
+            	String realWebInfPath = servletcontext.getRealPath(appWebInfPath);
+            
+            	   if (realWebInfPath != null)
+            		   file = new File(realWebInfPath, filename);
+            		   if(file == null || !file.exists()){
+            			/**
+            			 * If path/file doesn't exist, it may still be accessible
+            			 * as a resource-stream (i.e. it may be packaged in a JAR
+            			 * or WAR file).
+            			 */
+            		   //String name = appWebInfPath + "/" + filename;
+            		   //InputStream is = servletcontext.getResourceAsStream(name);
+            		   
+            		   //but the WSDDDeploymet accept only String in inputstreams ):
+            		   //SO above code is TODO  ... we will not support the file inside 
+            		   //JAR or WAR yet.
+            		   file = new File(filename);    
+            	   }else{
+            		System.out.println(realWebInfPath +" is null");	
+            	   }
+            
+            }else
+            	//no servlets, try where u are.	
+            	file = new File(filename);        
+            
+            
+            
+            
+            //if a configaration file does not exists create a file 
+            if (!file.exists()) {
+                file.createNewFile();
+                PrintWriter w = new PrintWriter(new FileOutputStream(file));
+                BufferedReader re =
+                    new BufferedReader(
+                        new InputStreamReader(
+                            this.getClass().getClassLoader().getResourceAsStream(
+                                (Constants.CLIENT_CONFIG_FILE.equals(filename)
+                                    ? "org/apache/axismora/client/"
+                                    : "org/apache/axismora/server/")
+                                    + filename)));
+                String line;
+                while ((line = re.readLine()) != null) {
+                    w.write(line + "\n");
+                }
+                w.flush();
+                w.close();
             }
-            w.flush();
-            w.close();
-        }
-
-        //create the deployment
-        deployment = WSDDDeployment.getInstance(file.getAbsolutePath());
-        pool = BasicHandlerPool.getInstance(deployment);
-        servicepool = new SimpleServicePool();
-        //initialize the handler pool
-        pool.init();
-        if (deployment == null) {
-            log.fatal("Can't continue make sure the server-config.wsdd is wellformed and exist");
-            throw AxisUtils.getTheAixsFault(
-                org.apache.axis.Constants.FAULT_SOAP12_RECEIVER,
-                "Internal Server Error : configaration fails",
-                deployment,
-                this.getName(),
-                null);
-            //we cant continue
-        }
+            
+            //create the deployment
+            deployment = WSDDDeployment.getInstance(file.getAbsolutePath());
+            pool = BasicHandlerPool.getInstance(deployment);
+            servicepool = new SimpleServicePool();
+            //initialize the handler pool
+            pool.init();
+            if (deployment == null) {
+                log.fatal("Can't continue make sure the server-config.wsdd is wellformed and exist");
+                throw AxisUtils.getTheAixsFault(
+                    org.apache.axis.Constants.FAULT_SOAP12_RECEIVER,
+                    "Internal Server Error : configaration fails",
+                    deployment,
+                    this.getName(),
+                    null);
+                //we cant continue
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        } 
     }
 
     public String getName() {
@@ -223,27 +230,29 @@ public class AxisEngine extends BasicHandler {
         String usrname,
         char[] passwd,
         String encoding) {
-       
-    	log.info("start processing service " + SOAPAction);
+		MessageContext data = null;
+		try {       
+    		log.info("start processing service " + SOAPAction);
     
-		if(PerfLog.LOG_PERF){
-			PerfLog.recored(System.currentTimeMillis(),"START");
-		}
+			if(PerfLog.LOG_PERF){
+				PerfLog.recored(System.currentTimeMillis(),"START");
+			}
 	
-    	// supporting both method name - Dimuthu.
-		String methodName = "";
-		String serviceName = "";   
-   
-		int index = SOAPAction.indexOf('$');
-        if(index==-1){
-			serviceName=SOAPAction.trim();
-		}else{
-			serviceName=SOAPAction.substring(0,index).trim();
-		   	methodName=SOAPAction.substring(index+1).trim();
-		 }
-   
-        MessageContext data = null;
-        try {
+    		// supporting both method name - Dimuthu.
+			String methodName = "";
+			String serviceName = "";   
+	   
+			int index = SOAPAction.indexOf('$');
+	        if(index==-1){
+				serviceName=SOAPAction.trim();
+			}else{
+				serviceName=SOAPAction.substring(0,index).trim();
+			   	methodName=SOAPAction.substring(index+1).trim();
+			 }
+			 
+			log.info("loading handlers");
+
+
             WSDDService service = deployment.getService(new QName(serviceName));
             handlers = new Handler[7];
             /**
@@ -262,6 +271,7 @@ public class AxisEngine extends BasicHandler {
             /**
              * get the handler Information and create a SOAPNodeInfo
              */
+			log.info("loading soap node information");
             SOAPNodeInfo nodeinfo = new SOAPNodeInfo(deployment);
             ArrayList roles = new ArrayList();
             ArrayList headers = new ArrayList();
@@ -286,19 +296,20 @@ public class AxisEngine extends BasicHandler {
 			if(PerfLog.LOG_PERF){
 				PerfLog.recored(System.currentTimeMillis(),"START_INIT_DONE");
 			}
-
+			log.info("initializing done");
             /**
              * Initalize the MessageData
              */
             data =
                 new BasicMessageContext(in, out, nodeinfo, 
                 			service, servicepool, session, encoding);
-            
+			log.info("message context created");
+			
             if(!methodName.equals("")){
                 data.setMethodName(new QName(serviceName,methodName));
             }
             
-            
+			log.info("loading provider");
             //load the provider
             org.apache.axismora.provider.Provider provider 
             				= ProviderFactory.getProvider(data);
@@ -306,8 +317,9 @@ public class AxisEngine extends BasicHandler {
             
 			if(PerfLog.LOG_PERF){
 				PerfLog.recored(System.currentTimeMillis(),"START_PARSING");
+				System.out.println(System.currentTimeMillis()+"START_PARSING");
 			}
-
+			log.info("start parsing");
             data.parseAndValidateKnownTags();
             //set http user detail
             data.setUser(usrname);
@@ -355,6 +367,7 @@ public class AxisEngine extends BasicHandler {
             pool.returnGlobelResponseFlowHandlers((HandlerChain) handlers[5]);
             pool.returnTransportResponseFlowHandlers(Constants.HTTP, (HandlerChain) handlers[6]);
         } catch (Exception e) {
+			e.printStackTrace();
             log.error(e.getMessage(), e);
             QName faultCode = org.apache.axis.Constants.FAULT_SOAP12_RECEIVER;
             String message = e.getMessage();
@@ -378,7 +391,6 @@ public class AxisEngine extends BasicHandler {
                 log.info("MessageContext is null sending error");
                 sentTheSOAPFaultWhenMSGDataIsNull(e, out, faultCode);
             }
-            e.printStackTrace();
         } finally {
             //code to write the result to the out put using out.
             try {

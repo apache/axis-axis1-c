@@ -7,8 +7,6 @@ import javax.xml.namespace.QName;
 import org.apache.axismora.encoding.OutParameter;
 import org.apache.axismora.encoding.Serializable;
 
-import org.apache.axis.encoding.SerializationContext;
-
 /**
  * Manages serialization of the body.
  * Serialization at both client and server side should be taken care of by this.
@@ -27,9 +25,9 @@ public class DocLiteralSerializer implements Serializable {
 	  /**
 		* this method is called by the SOAPHeaderElement when serializing
 		*/
-	   public void serialize(SerializationContext sc) throws IOException {
-            if(parm != null){ 		 
-               	   parm.serialize(sc);
+	   public void serialize(org.apache.axis.encoding.SerializationContext sc) throws IOException {
+			if(parm != null){ 		 
+				   parm.serialize(sc);
 			} else System.out.println("DEBUG - The param is null");
 	   }
 

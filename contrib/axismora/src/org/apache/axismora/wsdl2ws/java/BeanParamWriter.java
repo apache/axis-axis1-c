@@ -104,13 +104,10 @@ public class BeanParamWriter extends ParmWriter {
 				Type t;
 				boolean check4null = !JavaUtils.isJavaSimpleType(attribs[i].javaType);
 
-
-
 				if (TypeMap.isSimpleType(attribs[i].javaType)) {
 					//for simple type
 					writer.write(
-						"\t\tcontext.startTag(\"" + attribs[i].javaNm + "\",null);\n");
-
+						"\t\tcontext.writeString(\"<" + attribs[i].javaNm + ">\");\n");
 					writer.write(
 						check4null
 							? "\t\tif(this." + attribs[i].javaNm + "!=null){\n"
@@ -130,10 +127,10 @@ public class BeanParamWriter extends ParmWriter {
 							+ arrayType.getNamespaceURI()
 							+ "\\\"";
 					writer.write(
-						"\t\tcontext.startTag(\""
-							+ attribs[i].javaNm  +"\"" + ","  +"\""
+						"\t\tcontext.writeString(\"<"
+							+ attribs[i].javaNm
 							+ arrTypeAdditionalString
-							+ "\");\n");
+							+ ">\");\n");
 					writer.write(
 						check4null
 							? "\t\tif(this." + attribs[i].javaNm + "!=null){\n"
@@ -148,7 +145,7 @@ public class BeanParamWriter extends ParmWriter {
 				} else {
 					//for complex type 
 					writer.write(
-						"\t\tcontext.startTag(\"" + attribs[i].javaNm + "\",null);\n");
+						"\t\tcontext.writeString(\"<" + attribs[i].javaNm + ">\");\n");
 					writer.write(
 						check4null
 							? "\t\tif(this." + attribs[i].javaNm + "!=null){\n"
@@ -157,7 +154,7 @@ public class BeanParamWriter extends ParmWriter {
 				}
 				writer.write(check4null ? "\t\t}\n" : "");
 				writer.write(
-					"\t\tcontext.endTag();\n\n");
+					"\t\tcontext.writeString(\"</" + attribs[i].javaNm + ">\\n\");\n\n");
 			}
 
 		} catch (IOException e) {
@@ -165,6 +162,91 @@ public class BeanParamWriter extends ParmWriter {
 			throw new WrapperFault(e);
 		}
 	}
+	
+	public void writeSerialieCode1() throws WrapperFault {
+		try {
+			if (attribs.length == 0) {
+				//nothing to print if this is simple type we have inbuild types
+				System.out.println(
+					"possible error calss with no attributes....................");
+				return;
+			}
+
+			writer.write(
+				"\t\tjava.lang.String m_URI =\"" + type.getName().getNamespaceURI() + "\";\n");
+			writer.write(
+				"\t\tjava.lang.String type_name = \"" + type.getName().getLocalPart() + "\";\n");
+
+
+			writer.write("\t\t//write the parameters\n\n");
+			for (int i = 0; i < attribs.length; i++) {
+				/**
+				 * if(WrapperConstants.STYLE_DOCUMENT.equals(this.wscontext.getWrapInfo().getWrapperStyle()));
+				 * write the type=typename code here 
+				 */
+
+				Type t;
+				boolean check4null = !JavaUtils.isJavaSimpleType(attribs[i].javaType);
+
+				if (TypeMap.isSimpleType(attribs[i].javaType)) {
+					//for simple type
+					writer.write(
+						"\t\tcontext.writeString(\"<" + attribs[i].javaNm + ">\");\n");
+					writer.write(
+						check4null
+							? "\t\tif(this." + attribs[i].javaNm + "!=null){\n"
+							: "");
+					writer.write(
+						"\t\t\tcontext.writeSafeString(java.lang.String.valueOf("
+							+ attribs[i].javaNm
+							+ "));\n");
+
+				} else if (attribs[i].javaType.endsWith("[]") && !"byte[]".equals(attribs[i].javaType)){
+					//for array type
+					QName arrayType = attribs[i].xmlType;
+					String arrTypeAdditionalString =
+						" xsi:type=\\\"soapenc:Array\\\" soapenc:arrayType=\\\"ns2:"
+							+ arrayType.getLocalPart()
+							+ "[]\\\" xmlns:ns2 = \\\""
+							+ arrayType.getNamespaceURI()
+							+ "\\\"";
+					writer.write(
+						"\t\tcontext.writeString(\"<"
+							+ attribs[i].javaNm
+							+ arrTypeAdditionalString
+							+ ">\");\n");
+					writer.write(
+						check4null
+							? "\t\tif(this." + attribs[i].javaNm + "!=null){\n"
+							: "");
+					writer.write("\t\t\tcontext.writeString(\"\\n\");\n");
+					writer.write("\t\t\t"
+							+ attribs[i].wrapName+ " item" + i
+							+ " = new " + attribs[i].wrapName + "();\n");
+					writer.write(
+						"\t\t\titem" + i + ".setParam(" + attribs[i].javaNm + ");\n");
+					writer.write("\t\t\titem" + i + ".serialize(context);\n");
+				} else {
+					//for complex type 
+					writer.write(
+						"\t\tcontext.writeString(\"<" + attribs[i].javaNm + ">\");\n");
+					writer.write(
+						check4null
+							? "\t\tif(this." + attribs[i].javaNm + "!=null){\n"
+							: "");
+					writer.write("\t\t\t" + attribs[i].javaNm + ".serialize(context);\n");
+				}
+				writer.write(check4null ? "\t\t}\n" : "");
+				writer.write(
+					"\t\tcontext.writeString(\"</" + attribs[i].javaNm + ">\\n\");\n\n");
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new WrapperFault(e);
+		}
+	}
+
 
 	public String capitalizeFirstCaractor(String value) {
 		char[] chars = value.toCharArray();

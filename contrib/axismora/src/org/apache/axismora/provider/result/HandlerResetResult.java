@@ -59,8 +59,6 @@ import java.io.IOException;
 
 import org.apache.axismora.encoding.Serializable;
 
-import org.apache.axis.encoding.SerializationContext;
-
 /**
  * This calss is use to reset the result back to the SOAP body at the response Handlers 
  * @author Srinath Perera(hemapani@opensource.lk)
@@ -75,7 +73,7 @@ public class HandlerResetResult implements Serializable {
     /**
      * this method is called by the SOAPHeaderElement when serializing
      */
-    public void serialize(SerializationContext sc) throws IOException {
+    public void serialize(org.apache.axis.encoding.SerializationContext sc) throws IOException {
         sc.writeString(bodyContent);
     }
 }
