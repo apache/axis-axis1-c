@@ -38,10 +38,10 @@ public:
     virtual ~AxisParseException() throw();
     const char* what() throw();
     const int getExceptionCode();
-    const string getMessage(const exception* e);
-    const string getMessage(const int iExceptionCode);
                                                                                                                              
 private:
+    const string getMessage(const exception* e);
+    const string getMessage(const int iExceptionCode);
     void processException(const exception* e);
     void processException(const exception* e, const int iExceptionCode);
     void processException(const int iExceptionCode);

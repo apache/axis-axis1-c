@@ -8,6 +8,7 @@
 
 #include <axis/client/Stub.h>
 /*include Exception header files here*/
+#include <axis/AxisGenException.h>
 
 
 class MathOps :public Stub

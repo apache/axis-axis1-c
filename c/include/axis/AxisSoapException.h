@@ -38,9 +38,10 @@ public:
     virtual ~AxisSoapException() throw();
     const char* what() throw();
     const int getExceptionCode();
+
+private:
     const string getMessage(const exception* e);
     const string getMessage(const int iExceptionCode);
-private:
     void processException(const exception* e);
     void processException(const exception* e, const int iExceptionCode);
     void processException(const int iExceptionCode);
