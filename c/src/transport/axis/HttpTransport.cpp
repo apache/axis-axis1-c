@@ -97,7 +97,9 @@ bool HttpTransport::Init()
 		std::string host = m_Url.GetHostName();
 		m_Channel.Open(host, m_Url.GetPort());
 		m_Channel.SetTransportHandler(this);
+#ifdef _DEBUG
         cout << "Transport:init() successfull" << endl;
+#endif
 	}
 	catch(ChannelException& chEx)
 	{
