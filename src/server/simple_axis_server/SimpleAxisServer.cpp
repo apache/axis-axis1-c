@@ -78,6 +78,7 @@
 #include <axis/common/Packet.h>
 #include <axis/common/AxisConfig.h>
 #include <axis/common/AxisSocketUtils.h>
+#include <axis/common/AxisTrace.h>
 #include <axis/server/simple_axis_server/ServerHelper.h>
 
 #define MAXPENDING 5    /* Maximum outstanding connection requests */
@@ -95,8 +96,8 @@ map<HTTP_MAP_KEYWORDS, HTTP_MAP_TYPE*> map_HTTP_Headers;
 
 int send_response_bytes(const char * res, const void* opstream) 
 {	
-	printf("calling send_response_bytes\n");
-	printf("%s", res);
+	AXISTRACE3("calling send_response_bytes");
+	AXISTRACE3(res);
 
 	int iMsgSize = strlen(res);
 	
@@ -118,10 +119,10 @@ int get_request_bytes(char * req, int reqsize, int* retsize, const void* ipstrea
 
 int send_transport_information(Ax_soapstream* sSoapstream) 
 {
-	//printf("sending trasport info");	
+	AXISTRACE3("sending trasport info");	
 	
 	char *res ="HTTP/1.1 200 OK\nContent-Type: text/xml; charset=utf-8\nDate: Wed, 03 Sep 2003 09:23:06 GMT\nConnection: close\n\n";
-	//printf(res);
+	AXISTRACE3(res);
 
 	int iMsgSize = strlen(res);
 
@@ -165,10 +166,6 @@ int executeWork() {
 	str->transport.pSendTrtFunct = (AXIS_SEND_TRANSPORT_INFORMATION)send_transport_information;
 	str->transport.pGetTrtFunct = (AXIS_GET_TRANSPORT_INFORMATION)receive_transport_information;
 
-	//DEBUG line
-	//printf("soap request :\n %s\n", echoBuffer);
-//	wprintf(L"soap request :\n %s\n", ip);
-	printf("\nbefore process_request(str)\n");
 	process_request(str);	
 
 	free(str->so.http.ip_headers);
@@ -219,14 +216,13 @@ int acceptTCPConnection(int servSock)
     /* Wait for a client to connect */
     if ((clntSock = accept(servSock, (struct sockaddr *) &echoClntAddr, &clntLen)) < 0) {
         printf("%s\n","accept() failed");		
-		//printSocketErrorDescription();
 		AxisSocketUtils::printSocketErrorDescription();
 	}
     
     /* clntSock is connected to a client! */
-    
-	//Debug line
-    //printf("Handling client %s\n", inet_ntoa(echoClntAddr.sin_addr));
+	/*
+	AXISTRACE3(strcat("Handling client ", inet_ntoa(echoClntAddr.sin_addr)));
+	*/
 
     return clntSock;
 }
@@ -240,20 +236,17 @@ void handleTCPClient(int clntSocket)
     if ((recvMsgSize = recv(clntSocket, echoBuffer, RCVBUFSIZE, 0)) < 0)
         printf("%s\n","recv() failed");
 
-	//DEBUG info
-	printf("----------START request stream of client------------\n");
-	printf("%s\n\n", echoBuffer);	
-	printf("----------END request stream of client------------\n");
+	AXISTRACE3("----------START request stream of client------------");
+	AXISTRACE3(strcat(echoBuffer,"\n"));	
+	AXISTRACE3("----------END request stream of client--------------");
 
 	/*
 	while (recvMsgSize>0) {
-		printf("hi \n");
 		if ((recvMsgSize = recv(clntSocket, echoBuffer, RCVBUFSIZE, 64)) < 0)
 			printf("%s\n","recv() failed");
 
-		printf("%s\n\n", echoBuffer);	
-		printf("%d\n", recvMsgSize);
-		printf("----2------END request stream of client------------\n");
+		AXISTRACE3(strcat(echoBuffer,"\n"));	
+		AXISTRACE3(recvMsgSize);
 	}	
 	*/
 
@@ -264,15 +257,13 @@ void handleTCPClient(int clntSocket)
 
 	getSeperatedHTTPParts(sClientReqStream, sHTTPHeaders, sHTTPBody, &map_HTTP_Headers);
 	
-	//DEBUG info
-	//printf("----------START extracted HTTP Headers------------\n");
-	//cout<<sHTTPHeaders<<endl;
-	//printf("----------END extracted HTTP Headers------------\n");
+	AXISTRACE3("----------START extracted HTTP Headers------------");
+	AXISTRACE3(sHTTPHeaders.c_str());
+	AXISTRACE3("----------END extracted HTTP Headers--------------");
 
-	//DEBUG info
-	//printf("----------START extracted HTTP Body------------\n");
-	//cout<<sHTTPBody<<endl;
-	//printf("----------END extracted HTTP Body------------\n");
+	AXISTRACE3("----------START extracted HTTP Body---------------");
+	AXISTRACE3(sHTTPBody.c_str());
+	AXISTRACE3("----------END extracted HTTP Body-----------------");
 
 	pcHttpBody = sHTTPBody.c_str();
 	iClntSocket = clntSocket;
@@ -352,20 +343,25 @@ int main(int argc, char *argv[ ])
 		selTimeout.tv_sec = timeout;       /* timeout (secs.) */
 		selTimeout.tv_usec = 0;            /* 0 microseconds */
 
-		if (select(maxDescriptor+1, &sockSet, NULL, NULL, &selTimeout) == 0)
+		if (select(maxDescriptor+1, &sockSet, NULL, NULL, &selTimeout) == 0) {
+			/*
+			DEBUG line
 			printf("No echo requests for %ld secs...Server still alive\n", timeout);
+			*/
+		}
 		else 
 		{        
 			if (FD_ISSET(servSock[0], &sockSet))
 			{
-				//DEBUG line
-				//printf("Request on port %d (cmd-line position):  \n", 0);
-				handleTCPClient(acceptTCPConnection(servSock[0]));				
+				/*
+				DEBUG line
+				printf("Request on port %d (cmd-line position):  \n", 0);
+				*/
+				handleTCPClient(acceptTCPConnection(servSock[0]));
 			}
 		}
 
-		//DEBUG info
-		//printf("end of main while\n");
+		AXISTRACE3("end of main while");
 	}
 
 	//uninitializing Axis
@@ -388,7 +384,7 @@ int main(int argc, char *argv[ ])
 	#else //Linux
 	#endif
 
-	printf("End of main\n");
+	AXISTRACE3("End of main");
 
 	return 0;
 }
