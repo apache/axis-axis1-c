@@ -90,7 +90,8 @@ public class JaxrpcMapperGenarator extends Java2WSDL implements Generator {
             PrintWriter pw = new PrintWriter(new FileWriter(fileName));
             this.j2eewscontext.getJAXRPCMappingContext().serialize(pw);
             pw.close();
-            System.out.println(fileName + " genarated .................");
+			if(j2eewscontext.getMiscInfo().isVerbose())
+            	log.info(fileName + " genarated .................");
         } catch (IOException e) {
             e.printStackTrace();
             throw new GenerationFault(e);

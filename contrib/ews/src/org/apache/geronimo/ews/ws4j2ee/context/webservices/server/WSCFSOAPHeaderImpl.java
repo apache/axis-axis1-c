@@ -2,7 +2,7 @@
  * The Apache Software License, Version 1.1
  *
  *
- * Copyright (c) 2001-2004 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -56,6 +56,7 @@ package org.apache.geronimo.ews.ws4j2ee.context.webservices.server;
 
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFConstants;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFSOAPHeader;
+import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.jaxb.XsdQNameType;
 import org.w3c.dom.Element;
 
 /**
@@ -63,54 +64,71 @@ import org.w3c.dom.Element;
  * Basically this is  a Qname
  */
 public class WSCFSOAPHeaderImpl extends WSCFElement implements WSCFSOAPHeader {
+	
+	/**
+	 * SOAP header namespace
+	 */
+	private String namespaceURI;
+	
+	/**
+	 * Soap Header local part
+	 */
+	private String localpart;
+	
+	//////////////////////////////////jaxb interfacing block ///////////////////////////////
+	
+	private XsdQNameType jaxbSoapHeader;
+	
+	public WSCFSOAPHeaderImpl(XsdQNameType jaxbSoapHeader){
+		this.jaxbSoapHeader = jaxbSoapHeader;
+		
+		if(null != jaxbSoapHeader.getValue()){	
+			this.localpart = jaxbSoapHeader.getValue().getLocalPart();
+			this.namespaceURI = jaxbSoapHeader.getValue().getNamespaceURI();
+		}
+			
+	}
+	
+	
+	////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * The constructor. This will get the namespace and the localpart of the SOAP header
+	 * @param e SOAP header element
+	 * @throws WSCFException
+	 */
+	public WSCFSOAPHeaderImpl(Element e)throws WSCFException{
+		super(e);
+		//		extract the namespace URI
+  		Element element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_NAMESPACE_URI);
+  		if(null != element){this.namespaceURI = element.getChildNodes().item(0).toString();}
 
-    /**
-     * SOAP header namespace
-     */
-    private String namespaceURI;
+  		//extract the local part
+  		element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_LOCALPART);
+  		if(null != element){this.localpart = element.getChildNodes().item(0).toString();}
+	}
+	
+	/**
+	 * gets the local part of the soap header
+	 * @return local part
+	 */
+	public String getLocalpart() {
+		return localpart;
+	}
 
-    /**
-     * Soap Header local part
-     */
-    private String localpart;
+	/**
+	 * Gets teh namespace of the SOAP header
+	 * @return namespace
+	 */
+	public String getNamespaceURI() {
+		return namespaceURI;
+	}
 
-    /**
-     * The constructor. This will get the namespace and the localpart of the SOAP header
-     * 
-     * @param e SOAP header element
-     * @throws WSCFException 
-     */
-    public WSCFSOAPHeaderImpl(Element e) throws WSCFException {
-        super(e);
-        //		extract the namespace URI
-        Element element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_NAMESPACE_URI);
-        if (null != element) {
-            this.namespaceURI = element.getChildNodes().item(0).getNodeValue();
-        }
-
-        //extract the local part
-        element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_LOCALPART);
-        if (null != element) {
-            this.localpart = element.getChildNodes().item(0).getNodeValue();
-        }
-    }
-
-    /**
-     * gets the local part of the soap header
-     * 
-     * @return local part
-     */
-    public String getLocalpart() {
-        return localpart;
-    }
-
-    /**
-     * Gets teh namespace of the SOAP header
-     * 
-     * @return namespace
-     */
-    public String getNamespaceURI() {
-        return namespaceURI;
-    }
+	/**
+	 * @return
+	 */
+	public XsdQNameType getJaxbSoapHeader() {
+		return jaxbSoapHeader;
+	}
 
 }

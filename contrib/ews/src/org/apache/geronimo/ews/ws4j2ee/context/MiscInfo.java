@@ -55,14 +55,15 @@
 
 package org.apache.geronimo.ews.ws4j2ee.context;
 
+import java.util.ArrayList;
+
+import javax.wsdl.Port;
+
 import org.apache.axis.wsdl.symbolTable.BindingEntry;
 import org.apache.axis.wsdl.symbolTable.PortTypeEntry;
 import org.apache.axis.wsdl.symbolTable.ServiceEntry;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFPortComponent;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFWebserviceDescription;
-
-import javax.wsdl.Port;
-import java.util.ArrayList;
 
 /**
  * <p>This class interface the importent information about the webservice

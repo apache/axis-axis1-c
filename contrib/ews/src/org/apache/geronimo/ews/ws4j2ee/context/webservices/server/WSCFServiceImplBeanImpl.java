@@ -2,7 +2,7 @@
  * The Apache Software License, Version 1.1
  *
  *
- * Copyright (c) 2001-2004 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -56,42 +56,82 @@ package org.apache.geronimo.ews.ws4j2ee.context.webservices.server;
 
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFConstants;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFServiceImplBean;
+import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.jaxb.ServiceImplBeanType;
 import org.w3c.dom.Element;
 
 /**
- * This encapsulates the Service Implementation bean element whih is a level 3 elemet. This is the concrete implementation of teh
+ * This encapsulates the Service Implementation bean element whih is a level 3 elemet. This is the concrete implementation of teh 
  * WSCFServiceImplBean
+ *
  */
 public class WSCFServiceImplBeanImpl extends WSCFElement implements WSCFServiceImplBean {
-
-    /**
-     * Service Implementation bean ejblink
-     */
-    private String ejblink;
-
-    /**
-     * The constructor. Parse the only child element it has: the ejblink element.
-     * 
-     * @param e Service implimentation bean Element
-     * @throws WSCFException 
-     */
-    public WSCFServiceImplBeanImpl(Element e) throws WSCFException {
-        super(e);
+	
+	/**
+	 * Service Implementation bean ejblink
+	 */
+	private String ejblink;
+	
+	private String servletlink;
+	
 		
-        //extracting the ejb-link
-        Element element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_EJB_LINK);
-        if (null != element) {
-            this.ejblink = element.getChildNodes().item(0).getNodeValue();
-        }
-    }
+		
+		
+	//////////////////////////////jaxb interfacing block////////////////////////////////
+	
+	private ServiceImplBeanType jaxbServiceImplBean;
+	
+	
+	public WSCFServiceImplBeanImpl(ServiceImplBeanType jaxbServiceImplBean){
+		if(null == jaxbServiceImplBean){return;}
+		
+		this.jaxbServiceImplBean = jaxbServiceImplBean;
+		
+//		///////////assigning the values //////////////
+		
+		if(null != this.jaxbServiceImplBean.getEjbLink())
+			this.ejblink = jaxbServiceImplBean.getEjbLink().getValue();
+		
+		if(null != jaxbServiceImplBean.getServletLink())
+			this.servletlink = jaxbServiceImplBean.getServletLink().getValue();	
+		
+	}
+	
+	
+	/////////////////////////////////////////////////////////////////////////////////////
+		
+	/**
+	 * The constructor. Parse the only child element it has: the ejblink element.
+	 * @param e Service implimentation bean Element 
+	 * @throws WSCFException
+	 */
+	public WSCFServiceImplBeanImpl(Element e) throws WSCFException{
+		super(e);
+		
+		//extracting the ejb-link
+		Element element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_EJB_LINK);
+		if(null != element){this.ejblink = element.getChildNodes().item(0).toString();}
+	}
 
-    /**
-     * Gets the ejblink elemet of the service implementation bean element
-     * 
-     * @return ejb link
-     */
-    public String getEjblink() {
-        return ejblink;
-    }
+	/**
+	 * Gets the ejblink elemet of the service implementation bean element
+	 * @return ejb link
+	 */
+	public String getEjblink() {
+		return ejblink;
+	}
+
+	/**
+	 * @return
+	 */
+	public ServiceImplBeanType getJaxbServiceImplBean() {
+		return jaxbServiceImplBean;
+	}
+
+	/**
+	 * @return
+	 */
+	public String getServletlink() {
+		return servletlink;
+	}
 
 }

@@ -2,7 +2,7 @@
  * The Apache Software License, Version 1.1
  *
  *
- * Copyright (c) 2001-2004 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -56,61 +56,86 @@ package org.apache.geronimo.ews.ws4j2ee.context.webservices.server;
 
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFConstants;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFWSDLPort;
+import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.jaxb.XsdQNameType;
 import org.w3c.dom.Element;
 
 /**
  * This encapsulates the Qname wsdlport name and this is the concrete implementation of the WSCFWSDLPort
+ *
  */
 public class WSCFWSDLPortImpl extends WSCFElement implements WSCFWSDLPort {
-
-    /**
-     * WSDL Port namespace URI
-     */
-    private String namespaceURI;
-
-    /**
-     * WSDL port local part
-     */
-    private String localpart;
-
-    /**
-     * The constructor. this will get the naspace and the lacalpart extracted from the element.
-     * 
-     * @param e 
-     * @throws WSCFException 
-     */
-    public WSCFWSDLPortImpl(Element e) throws WSCFException {
-        super(e);
-        //extract the namespace URI
-        Element element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_NAMESPACE_URI);
-        if (null != element) {
-            this.namespaceURI = element.getChildNodes().item(0).getNodeValue();
-        }
+	
+	/**
+	 * WSDL Port namespace URI
+	 */
+	private String namespaceURI;
+	
+	/**
+	 * WSDL port local part
+	 */
+	private String localpart;
+	
+	
+	////////////////////////////////jaxb interfacing block/////////////////////////////////////
+	
+	private XsdQNameType jaxbWSDLPort;
+	
+	public WSCFWSDLPortImpl(XsdQNameType jaxbWSDLPort){
 		
-        //extract the local part
-        element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_LOCALPART);
-        if (null != element) {
-            this.localpart = element.getChildNodes().item(0).getNodeValue();
-        }
+		if(null == jaxbWSDLPort){return;}
+		
+		this.jaxbWSDLPort = jaxbWSDLPort;		
 
-    }
+		if(null != jaxbWSDLPort.getValue()){
+			this.localpart = jaxbWSDLPort.getValue().getLocalPart();
+			this.namespaceURI = jaxbWSDLPort.getValue().getNamespaceURI();
+		}
+		
+		
+	}
+	
+	
+	///////////////////////////////////////////////////////////////////////////////////////////
+	
+	
+	/**
+	 * The constructor. this will get the naspace and the lacalpart extracted from the element.
+	 * @param e
+	 * @throws WSCFException
+	 */
+	public WSCFWSDLPortImpl(Element e) throws WSCFException{
+		super(e);
+		//extract the namespace URI
+		Element element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_NAMESPACE_URI);
+		if(null != element){this.namespaceURI = element.getNodeValue();}
+		
+		//extract the local part
+		element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_LOCALPART);
+		if(null != element){this.localpart = element.getNodeValue();}		
+		
+	}
 
-    /**
-     * Gets the local part of the WSDL port element
-     * 
-     * @return local part
-     */
-    public String getLocalpart() {
-        return localpart;
-    }
+	/**
+	 * Gets the local part of the WSDL port element
+	 * @return local part
+	 */
+	public String getLocalpart() {
+		return localpart;
+	}
 
-    /**
-     * Gets the namespace URI of the WSDL port element
-     * 
-     * @return 
-     */
-    public String getNamespaceURI() {
-        return namespaceURI;
-    }
+	/**
+	 * Gets the namespace URI of the WSDL port element
+	 * @return
+	 */
+	public String getNamespaceURI() {
+		return namespaceURI;
+	}
+
+	/**
+	 * @return
+	 */
+	public XsdQNameType getJaxbWSDLPort() {
+		return jaxbWSDLPort;
+	}
 
 }

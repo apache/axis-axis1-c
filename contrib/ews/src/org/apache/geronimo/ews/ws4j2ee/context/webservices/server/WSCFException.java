@@ -2,7 +2,7 @@
  * The Apache Software License, Version 1.1
  *
  *
- * Copyright (c) 2001-2004 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -54,11 +54,16 @@
  */
 package org.apache.geronimo.ews.ws4j2ee.context.webservices.server;
 
-import java.io.IOException;
-
 /**
  * @author Chathura Herath
+ *
  */
-public class WSCFException extends IOException {
+public class WSCFException extends Exception{
 
+	public WSCFException(Exception e){
+		super(e);
+	}
+	public WSCFException(String message){
+		super(message);
+	}
 }

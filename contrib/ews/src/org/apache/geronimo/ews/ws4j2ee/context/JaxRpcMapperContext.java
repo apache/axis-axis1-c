@@ -55,17 +55,18 @@
 
 package org.apache.geronimo.ews.ws4j2ee.context;
 
+import java.io.InputStream;
+import java.io.Writer;
+
+import javax.wsdl.Operation;
+import javax.wsdl.Port;
+import javax.xml.namespace.QName;
+
 import org.apache.axis.wsdl.symbolTable.BindingEntry;
 import org.apache.axis.wsdl.symbolTable.PortTypeEntry;
 import org.apache.axis.wsdl.symbolTable.ServiceEntry;
 import org.apache.geronimo.ews.jaxrpcmapping.descriptor.JavaWsdlMapping;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
-
-import javax.wsdl.Operation;
-import javax.wsdl.Port;
-import javax.xml.namespace.QName;
-import java.io.InputStream;
-import java.io.Writer;
 
 /**
  * <p>This is the interface which is shared by the application as the
@@ -96,7 +97,7 @@ public interface JaxRpcMapperContext {
      */
     public abstract String getJavaMethodParamType(BindingEntry bEntry,
                                                   Operation operation,
-                                                  int position);
+                                                  int position,QName type);
 
     /**
      * @param bEntry    

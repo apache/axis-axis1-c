@@ -2,7 +2,7 @@
  * The Apache Software License, Version 1.1
  *
  *
- * Copyright (c) 2001-2004 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -54,16 +54,21 @@
  */
 package org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces;
 
+import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.jaxb.Webservices;
+
 /**
  * This will interface the webservices.xml document itself. it represents teh he
  * webservices.xml document and will give an interface to the document element:the webservices element; where the element tree begins
+ *
  */
 public interface WSCFDocument {
-
-    /**
-     * The is the getter for the document element thus the gateway to all teh elements in the webservices.xml
-     * 
-     * @return webservices Element
-     */
-    public WSCFWebservices getWebservices();
+	
+	/**
+	 * The is the getter for the document element thus the gateway to all teh elements in the webservices.xml
+	 * @return webservices Element
+	 */
+	public WSCFWebservices getWebservices()  ;
+	
+	
+	public Webservices getJaxbWebservices();
 }

@@ -59,7 +59,13 @@
                 <produces dir="${dir}/org/apache/geronimo/ews/jaxrpcmapping/descriptor"
                           name="* impl/*"/>
             </xjc>
-
+            <xjc target="${dir}"
+                 schema="${basedir}/src/schema/webservices.xsd"
+                 package="org.apache.geronimo.ews.ws4j2ee.context.webservices.server.jaxb"
+                 extension="true" >
+                <produces dir="${dir}/org/apache/geronimo/ews/ws4j2ee/context/webservices/server/jaxb"
+                          name="* impl/*"/>
+            </xjc>
         </j:jelly>
     </goal>
 

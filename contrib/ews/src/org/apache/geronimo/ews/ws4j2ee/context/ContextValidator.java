@@ -56,10 +56,7 @@
 package org.apache.geronimo.ews.ws4j2ee.context;
 
 import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -68,28 +65,26 @@ import java.util.Properties;
 
 import javax.wsdl.Fault;
 import javax.wsdl.Operation;
-import javax.wsdl.Part;
 import javax.wsdl.Port;
 import javax.wsdl.Service;
 import javax.xml.namespace.QName;
 
-import org.apache.axis.Constants;
 import org.apache.axis.wsdl.fromJava.Emitter;
 import org.apache.axis.wsdl.symbolTable.BindingEntry;
+import org.apache.axis.wsdl.symbolTable.Parameter;
+import org.apache.axis.wsdl.symbolTable.Parameters;
 import org.apache.axis.wsdl.symbolTable.PortEntry;
 import org.apache.axis.wsdl.symbolTable.ServiceEntry;
-import org.apache.axis.wsdl.symbolTable.TypeEntry;
 import org.apache.geronimo.ews.ws4j2ee.context.impl.SEIOperationImpl;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFPortComponent;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFWebserviceDescription;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationConstants;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 import org.apache.geronimo.ews.ws4j2ee.toWs.UnrecoverableGenarationFault;
-import org.apache.geronimo.ews.ws4j2ee.utils.packager.Packager;
 
 /**
- * <p>Before the code genaration this class is used to analyis the parse ifnoremation
- * and make sure that the data populated in the different *Context are
+ * <p>Before the code genaration this class is used to analyis the parse inforemation
+ * and make sure that the data populated in the different *Context* are
  * consistent. This class will populate the most of the infomation in the
  * MiscInfo.</p>
  * 
@@ -104,8 +99,6 @@ public class ContextValidator {
 			// String configFile = AxisProperties.getProperty(GenerationConstants.OPTION_WS4J2EE_PROPERTY_FILE,
 					 //       GenerationConstants.WS4J2EE_PROPERTY_FILE);
 			String configFile = "src/conf/ws4j2ee.properties";
-
-            System.out.println(">>>> configFile:" + configFile);
             Properties prperties = new Properties();
             try {
                 prperties.load(new FileInputStream(configFile));
@@ -114,7 +107,6 @@ public class ContextValidator {
                 prperties.load(istream);
             }
             String containerDD = prperties.getProperty(GenerationConstants.J2EE_CONTAINER_DD);
-            System.out.println("$$$$$$$$" + containerDD);
             context.getMiscInfo().setJ2eeContainerDDName(containerDD);
         } catch (Exception e) {
             throw GenerationFault.createGenerationFault(e);
@@ -163,7 +155,7 @@ public class ContextValidator {
                     "webservice.xml file");
         WSCFPortComponent port = ports[0];
         context.getMiscInfo().setWscfport(port);
-        context.getMiscInfo().setJaxrpcSEI(port.getServiceEndpointInterface());
+       // context.getMiscInfo().setJaxrpcSEI(port.getServiceEndpointInterface());
         context.getMiscInfo().setEjbbean(port.getServiceEndpointInterface() + "Bean");
         context.getMiscInfo().setEjbhome(port.getServiceEndpointInterface() + "Home");
         context.getMiscInfo().setEjbsei(port.getServiceEndpointInterface() + "EJB");
@@ -173,6 +165,9 @@ public class ContextValidator {
 
         PortEntry wsdlport = context.getWSDLContext().getPort(portName);
 
+		if (wsdlport == null)
+			throw new UnrecoverableGenarationFault("wsdl port can not be null, you may have the " +
+				"wsdlport define wrongly on the webservice.xml");
         Iterator services = context.getWSDLContext().getServices().iterator();
         while (services.hasNext()) {
             ServiceEntry service = (ServiceEntry) services.next();
@@ -197,92 +192,58 @@ public class ContextValidator {
         context.getMiscInfo().setTargetPortType(context.getWSDLContext().getPortType(portTypename));
 
         context.validate();
-        try {
-            PrintWriter writer = new PrintWriter(new FileWriter(Packager.JARCONF_FILE, false));
-            writer.write("ejb:" + context.getMiscInfo().getEjbbean() + "\n");
-            writer.write("ejb:" + context.getMiscInfo().getEjbhome() + "\n");
-            writer.write("ejb:" + context.getMiscInfo().getEjbsei() + "\n");
-            writer.write("ejb:" + context.getMiscInfo().getOutPutPath() + "/ejb/ejb-jar.xml\n");
-
-            Iterator types = context.getWSDLContext().getTypes().values().iterator();
-
-            while (types.hasNext()) {
-                TypeEntry type = (TypeEntry) types.next();
-                QName name = type.getQName();
-                if (!(Constants.URI_1999_SCHEMA_XSD.equals(name.getLocalPart())
-                        || Constants.URI_2000_SCHEMA_XSD.equals(name.getLocalPart())
-                        || Constants.URI_2001_SCHEMA_XSD.equals(name.getLocalPart()))) {
-                    String typename = context.getJAXRPCMappingContext().getJavaType((name));
-                    if (name != null) {
-                        writer.write("jaxrpc:" + name + "\n");
-                        writer.write("ejb:" + name + "\n");
-                    }
-                }
-            }
 			
             //find and populate the information about the SEI in the 
             //MiscInfo
+		String seiName = context.getJAXRPCMappingContext()
+			.getServiceEndpointInterfaceName(context.getMiscInfo().getTargetPortType(),context.getMiscInfo().gettargetBinding());
+		context.getMiscInfo().setJaxrpcSEI(seiName);	    
 			
-            List operations = context.getMiscInfo().getTargetPortType().getPortType().getOperations();
-            for (int i = 0; i < operations.size(); i++) {
-                SEIOperation seiOp = new SEIOperationImpl();
+        List operations = context.getMiscInfo().getTargetPortType().getPortType().getOperations();
+        for (int i = 0; i < operations.size(); i++) {
+            SEIOperation seiOp = new SEIOperationImpl();
 
-                Operation op = (Operation) operations.get(i);
-                BindingEntry binding = context.getMiscInfo().gettargetBinding();
+            Operation op = (Operation) operations.get(i);
+            BindingEntry binding = context.getMiscInfo().gettargetBinding();
+            
+			//got to get the same parameter order as the JAXRPC mapper does
+			//So I am using the same methods. Can somebody find something better?? 
+			Parameters parms = binding.getParameters(op);
+			//set return type	
+			 String returnType = context.getJAXRPCMappingContext().getJavaMethodReturnType(binding, op);
+			 seiOp.setReturnType(returnType);
 
-                Iterator returnlist =
-                        op.getOutput().getMessage().getParts().values().iterator();
-                //set return type	
-                seiOp.setReturnType(context.getJAXRPCMappingContext().getJavaMethodReturnType(binding, op));
-                //set method name 
-                seiOp.setMethodName(context.getJAXRPCMappingContext().getJavaMethodName(binding, op));
 
-                Iterator paramlist =
-                        op.getInput().getMessage().getParts().values().iterator();
-                String parameterName = null;
-                String parameterType = null;	  
-				
-                //fins the parameters and add each parameter to parameter list 
-                while (paramlist.hasNext()) {
-                    Part p = (Part) paramlist.next();
-                    parameterName = p.getName();
+			 //set method name 
+			 String methodName = context.getJAXRPCMappingContext().getJavaMethodName(binding, op);
+			 seiOp.setMethodName(methodName);
 
-                    parameterType = context.getJAXRPCMappingContext().getJavaMethodParamType(binding, op, i);
-                    seiOp.addParameter(parameterType, parameterName);
-                    i++;
-                }
-
-                //let us find the faults
-                Map faults = op.getFaults();
-                if (faults != null) {
-                    Iterator it = faults.values().iterator();
-                    while (it.hasNext()) {
-                        Fault fault = (Fault) it.next();
-                        String faulltName = context.getJAXRPCMappingContext()
-                                .getExceptionType(fault.getMessage().getQName());
-                        seiOp.addFault(faulltName);
-                        writer.write("jaxrpc:" + faulltName + "\n");
-                        writer.write("ejb:" + faulltName + "\n");
-                    }
-                }
-                context.getMiscInfo().setSEIOperations(seiOp);
-            }
-
-            String seiName = context.getJAXRPCMappingContext()
-                    .getServiceEndpointInterfaceName(context.getMiscInfo().getTargetPortType()
-                            , context.getMiscInfo().gettargetBinding());
-
-            String serviceName = context.getJAXRPCMappingContext()
-                    .getServiceInterfaceName(context.getMiscInfo().gettargetService());
-            writer.write("jaxrpc:" + seiName + "\n");
-            writer.write("jaxrpc:" + serviceName + "\n");
-            writer.write("jaxrpc:" + seiName + "BindingImpl\n");
-            writer.write("jaxrpc:" + seiName + "BindingStub\n");
-            writer.write("jaxrpc:" + serviceName + "Locator\n");
-            writer.flush();
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+			//Iterator paramlist = parms.list.iterator();
+			 String parameterName = null;
+			 String parameterType = null;	  
+			
+			 //find the parameters and add each parameter to parameter list 
+			 for (int paramCount = 0;paramCount < parms.list.size();paramCount++) {
+				 Parameter p = (Parameter) parms.list.get(paramCount);
+				 parameterName = p.getName();
+				 parameterType = context.getJAXRPCMappingContext().getJavaMethodParamType(binding, op, paramCount,p.getType().getQName());
+				 seiOp.addParameter(parameterType, parameterName);
+			 }
+			 //let us find the faults
+			 Map faults = parms.faults;
+			 if (faults != null) {
+				 Iterator it = faults.values().iterator();
+				 while (it.hasNext()) {
+					 Fault fault = (Fault) it.next();
+					 String faulltName = context.getJAXRPCMappingContext()
+							 .getExceptionType(fault.getMessage().getQName());
+					 seiOp.addFault(faulltName);
+				 }
+			 }
+            context.getMiscInfo().setSEIOperations(seiOp);
         }
+//        
+//        String serviceName = context.getJAXRPCMappingContext()
+//                .getServiceInterfaceName(context.getMiscInfo().gettargetService());
     }
 }

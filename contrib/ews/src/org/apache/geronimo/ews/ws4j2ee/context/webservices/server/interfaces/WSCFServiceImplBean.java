@@ -2,7 +2,7 @@
  * The Apache Software License, Version 1.1
  *
  *
- * Copyright (c) 2001-2004 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -54,16 +54,24 @@
  */
 package org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces;
 
+import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.jaxb.ServiceImplBeanType;
+
+
+
 /**
  * This will interface the Service implementation bean element which is a layer 3 element in the webservices.xml
+ *
  */
 public interface WSCFServiceImplBean {
-
-    /**
-     * Gets the ejblink elemet of the service implementation bean element
-     * 
-     * @return ejb link
-     */
-    public String getEjblink();
+	
+	/**
+	 * Gets the ejblink elemet of the service implementation bean element
+	 * @return ejb link
+	 */
+	public String getEjblink() ;
+	
+	public String getServletlink();
+	
+	public ServiceImplBeanType getJaxbServiceImplBean();
 
 }

@@ -2,7 +2,7 @@
  * The Apache Software License, Version 1.1
  *
  *
- * Copyright (c) 2001-2004 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -54,30 +54,35 @@
  */
 package org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces;
 
+import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.jaxb.ParamValueType;
+
+
+
 /**
- * This interface the layer 4 element :init parameter of the webservices.xml. he interface will publish sufficient information about the
+ * This interface the layer 4 element :init parameter of the webservices.xml. he interface will publish sufficient information about the 
  * element
+ *
  */
 public interface WSCFInitParam {
-
-    /**
-     * Gets the description of the init parameter element
-     * 
-     * @return description
-     */
-    public String getDescription();
-
-    /**
-     * Gets the name of the init parameter element
-     * 
-     * @return name
-     */
-    public String getParamName();
-
-    /**
-     * Gets the value of the init parameter element
-     * 
-     * @return value
-     */
-    public String getParamValue();
+	
+	/**
+	 * Gets the description of the init parameter element
+	 * @return description
+	 */
+	public String getDescription();
+	
+	/**
+	 * Gets the name of the init parameter element
+	 * @return name
+	 */
+	public String getParamName() ;
+	
+	/**
+	 * Gets the value of the init parameter element
+	 * @return value
+	 */
+	public String getParamValue();
+	
+	
+	public ParamValueType getJaxbInitParameter() ;
 }

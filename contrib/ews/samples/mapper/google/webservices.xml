@@ -5,21 +5,21 @@
              xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
              http://www.ibm.com/webservices/xsd/j2ee_web_services_1_1.xsd"
              version="1.1">
-  <display-name>Time WebService</display-name>
+  <display-name>French Zip</display-name>
   <webservice-description>
-    <webservice-description-name>Time WebService</webservice-description-name>
-    <wsdl-file>TimePort.wsdl</wsdl-file>
-    <jaxrpc-mapping-file>TimeMapping.xml</jaxrpc-mapping-file>
+    <webservice-description-name>Google Serach WebService</webservice-description-name>
+    <wsdl-file>GoogleSearch.wsdl</wsdl-file>
+    <jaxrpc-mapping-file>GoogleSearch.xml</jaxrpc-mapping-file>
     <port-component>
       <description>port component description</description>
-      <port-component-name>TimePort</port-component-name>
+      <port-component-name>GoogleSearchPort</port-component-name>
 
       <!-- Should be the right way to use QName with JAXB parsing --> 
-     <wsdl-port xmlns:time="jonas:Time">time:TimePort</wsdl-port> 
+     <wsdl-port xmlns:ns="urn:GoogleSearch">ns:GoogleSearchPort</wsdl-port> 
 
-      <service-endpoint-interface>org.objectweb.jonas.jtests.beans.time.TimeBean</service-endpoint-interface>
+      <service-endpoint-interface>org.objectweb.wssample.gen.google.GoogleSearchPort</service-endpoint-interface>
       <service-impl-bean>
-        <ejb-link>TimeBeanSLR</ejb-link>
+        <ejb-link>GoogleBean</ejb-link>
       </service-impl-bean>
     </port-component>
   </webservice-description>

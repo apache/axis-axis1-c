@@ -82,6 +82,8 @@ public class WebServiceDDGenarator implements Generator {
 
     public void genarate() throws GenerationFault {
         try {
+			if(j2eewscontext.getMiscInfo().isVerbose())
+				log.info(j2eewscontext.getMiscInfo().getWsConfFileLocation()+" generated ....");
             PrintWriter out = new PrintWriter(new FileWriter(j2eewscontext.getMiscInfo().getWsConfFileLocation()));
             j2eewscontext.getWSCFContext().serialize(out);
             out.close();

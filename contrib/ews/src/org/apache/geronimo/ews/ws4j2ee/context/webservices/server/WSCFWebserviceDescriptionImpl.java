@@ -2,7 +2,7 @@
  * The Apache Software License, Version 1.1
  *
  *
- * Copyright (c) 2001-2004 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -54,191 +54,225 @@
  */
 package org.apache.geronimo.ews.ws4j2ee.context.webservices.server;
 
+import java.util.HashMap;
+
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFConstants;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFPortComponent;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFWebserviceDescription;
+import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.jaxb.PathType;
+import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.jaxb.PortComponentType;
+import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.jaxb.WebserviceDescriptionType;
 import org.w3c.dom.Element;
-
-import java.util.HashMap;
 
 /**
  * This represents a level 1 element in the Element tree :webservice-description. This is the concrete implementation of the
  * WSCFWebServiceDescription interface
+ *
  */
-public class WSCFWebserviceDescriptionImpl extends WSCFElement implements WSCFWebserviceDescription {
+public class WSCFWebserviceDescriptionImpl extends WSCFElement implements WSCFWebserviceDescription{
 
-    /**
-     * This will refer to the multiple port components that can be there in the webservice-description Element.
-     */
-    private HashMap portComponent = new HashMap();
-
-    /**
-     * Webservice-description - description
-     */
-    private String description;
-
-    /**
-     * Webservice-description - display name
-     */
-    private String displayName;
-
-    /**
-     * Webservice-description - small icon
-     */
-    private String smallIcon;
-
-    /**
-     * Webservice-description - large icon
-     */
-    private String largeIcon;
-
-    /**
-     * Webservice-description - name
-     */
-    private String webserviceDescriptionName;
-
-    /**
-     * Webservice-description - wsdl file
-     */
-    private String wsdlFile;
-
-    /**
-     * Webservice-description - jaxrpc mapping file
-     */
-    private String jaxrpcMappingFile;
-
-    /**
-     * The constructor. Here the child elements will be created recursively in a depth first manner.
-     * This is the concrete implementation of the WSCFWebserviceDescrption.
-     * 
-     * @param e Webservice-description Element
-     * @throws WSCFException 
-     */
-    public WSCFWebserviceDescriptionImpl(Element e) throws WSCFException {
-        super(e);
-        //extract the description
-        Element element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_DESCRIPTION);
-        if (null != element) {
-            this.description = element.getChildNodes().item(0).getNodeValue();
-        }
+	/**
+	 * This will refer to the multiple port components that can be there in the webservice-description Element.
+	 */
+	private HashMap portComponent = new HashMap();
+	
+	/**
+	 * Webservice-description - description
+	 */
+	private String description;
+	
+	/**
+	 * Webservice-description - display name
+	 */
+	private String displayName;
+	
+	/**
+	 * Webservice-description - small icon
+	 */
+	private String smallIcon;
+	
+	/**
+	 * Webservice-description - large icon
+	 */
+	private String largeIcon;
+	
+	/**
+	 * Webservice-description - name
+	 */
+	private String webserviceDescriptionName;
+	
+	/**
+	 * Webservice-description - wsdl file
+	 */
+	private String wsdlFile;
+	
+	/**
+	 * Webservice-description - jaxrpc mapping file
+	 */
+	private String jaxrpcMappingFile;
+	
+	
+	////////////////////////////////////jaxb interfacing block /////////////////////////////////////////////
+	
+	private WebserviceDescriptionType jaxbWebserviesDescription;
+	
+	
+	public WSCFWebserviceDescriptionImpl(WebserviceDescriptionType jaxbWebserviesDescription) throws WSCFException{
+		this.jaxbWebserviesDescription = jaxbWebserviesDescription;
 		
-        //extract the display name
-        element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_DISPLAY_NAME);
-        if (null != element) {
-            this.displayName = element.getChildNodes().item(0).getNodeValue();
-        }
+		///////////////assigning the values //////////////
+		if(null != jaxbWebserviesDescription.getDescription())
+  			this.description =jaxbWebserviesDescription.getDescription().getValue();
 		
-        //extract the small icon.
-        element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_SMALL_ICON);
-        if (null != element) {
-            this.smallIcon = element.getChildNodes().item(0).getNodeValue();
-        }
+		if(null != jaxbWebserviesDescription.getDisplayName())			
+  			this.displayName =jaxbWebserviesDescription.getDisplayName().getValue();
+  		
+  		if(null != jaxbWebserviesDescription.getIcon()){
+  			if(null != (PathType)(jaxbWebserviesDescription.getIcon()).getSmallIcon())
+  				this.smallIcon =((PathType)(jaxbWebserviesDescription.getIcon()).getSmallIcon()).getValue();
+  				
+  			if(null != (PathType)(jaxbWebserviesDescription.getIcon()).getLargeIcon())
+  				this.largeIcon =((PathType)(jaxbWebserviesDescription.getIcon()).getLargeIcon()).getValue();
+  		}
+  		
+  		if(null != jaxbWebserviesDescription.getWebserviceDescriptionName())
+  			this.webserviceDescriptionName = jaxbWebserviesDescription.getWebserviceDescriptionName().getValue();
+  		
+  		if(null != jaxbWebserviesDescription.getWsdlFile())
+  			this.wsdlFile = ((PathType)jaxbWebserviesDescription.getWsdlFile()).getValue();
+  		
+  		if(null != jaxbWebserviesDescription.getJaxrpcMappingFile())
+  			this.jaxrpcMappingFile = ((PathType)jaxbWebserviesDescription.getJaxrpcMappingFile()).getValue();
+  		
+  		java.util.List list = this.jaxbWebserviesDescription.getPortComponent();
+  		if (0 == list.size()){throw new WSCFException("At least one port-component element should exist in the "+this.description+" webservices element.");}
+  		for(int i=0; i < list.size(); i++){
+	  		WSCFPortComponent portComponent = new WSCFPortComponentImpl(((PortComponentType)list.get(i)));
+	  		this.portComponent.put(portComponent.getPortComponentName(), portComponent);
+		}
+	}
+	
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	
+	/**
+	 * The constructor. Here the child elements will be created recursively in a depth first manner.
+	 * This is the concrete implementation of the WSCFWebserviceDescrption.
+	 * @param e Webservice-description Element
+	 * @throws WSCFException
+	 */
+	public WSCFWebserviceDescriptionImpl(Element e)throws WSCFException{
+		super(e);
+		//extract the description
+		Element element = this.getChildElement(e,WSCFConstants.ELEM_WSCF_DESCRIPTION);
+		if(null != element){this.description = element.getChildNodes().item(0).toString();}
 		
-        //extract the large icon
-        element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_LARGE_ICON);
-        if (null != element) {
-            this.largeIcon = element.getChildNodes().item(0).getNodeValue();
-        }
+		//extract the display name
+		element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_DISPLAY_NAME);
+		if(null != element){this.displayName = element.getChildNodes().item(0).toString();}
 		
-        //extract the webservice description name.
-        element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_WEBSERVICES_DESCRIPTION_NAME);
-        if (null != element) {
-            this.webserviceDescriptionName = element.getChildNodes().item(0).getNodeValue();
-        }
+		//extract the small icon.
+		element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_SMALL_ICON);
+		if(null != element){this.smallIcon = element.getChildNodes().item(0).toString();}
 		
-        //extract the wsdl file
-        element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_WSDLFILE);
-        if (null != element) {
-            this.wsdlFile = element.getChildNodes().item(0).getNodeValue();
-        }
+		//extract the large icon
+		element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_LARGE_ICON);
+		if (null != element){this.largeIcon = element.getChildNodes().item(0).toString();}
 		
-        //extract the jax rpc mapping file
-        element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_JAXRPC_MAPPING_FILE);
-        if (null != element) {
-            this.jaxrpcMappingFile = element.getChildNodes().item(0).getNodeValue();
-        }
+		//extract the webservice description name.
+		element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_WEBSERVICES_DESCRIPTION_NAME);
+		if(null != element){this.webserviceDescriptionName = element.getChildNodes().item(0).toString();}
 		
-        //extract the port component
-        Element[] elements = this.getChildElements(e, WSCFConstants.ELEM_WSCF_PORT_COMPONENT);
-        for (int i = 0; i < elements.length; i++) {
-            WSCFPortComponent portComponent = new WSCFPortComponentImpl(elements[i]);
-            this.portComponent.put(portComponent.getPortComponentName(), portComponent);
-        }
+		//extract the wsdl file
+		element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_WSDLFILE);
+		if(null != element){this.wsdlFile = element.getChildNodes().item(0).toString();}
+		
+		//extract the jax rpc mapping file
+		element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_JAXRPC_MAPPING_FILE);
+		if(null != element){this.jaxrpcMappingFile = element.getChildNodes().item(0).toString();}
+		
+		//extract the port component
+		Element[] elements = this.getChildElements(e, WSCFConstants.ELEM_WSCF_PORT_COMPONENT);
+		for(int i=0; i < elements.length; i++){
+			WSCFPortComponent portComponent = new WSCFPortComponentImpl(elements[i]);
+			this.portComponent.put(portComponent.getPortComponentName(), portComponent);
+		}
+		
+	}
+		
+		
+	/**
+	 * Gets the description of the webservices-description Element
+	 * @return description
+	 */
+	public String getDescription() {
+		return description;
+	}
 
-    }
+	/**
+	 * Gets the display name of the webservices-description Element
+	 * @return display-name
+	 */
+	public String getDisplayName() {
+		return displayName;
+	}
 
-    /**
-     * Gets the description of the webservices-description Element
-     * 
-     * @return description
-     */
-    public String getDescription() {
-        return description;
-    }
+	/**
+	 * Gets the JAXRPC mapping file of the webservices-description Element
+	 * @return JAXRPC-mapping-file
+	 */
+	public String getJaxrpcMappingFile() {
+		return jaxrpcMappingFile;
+	}
 
-    /**
-     * Gets the display name of the webservices-description Element
-     * 
-     * @return display-name
-     */
-    public String getDisplayName() {
-        return displayName;
-    }
+	/**
+	 * Gets the large icon of the webservices-description Element
+	 * @return large-icon
+	 */
+	public String getLargeIcon() {
+		return largeIcon;
+	}
 
-    /**
-     * Gets the JAXRPC mapping file of the webservices-description Element
-     * 
-     * @return JAXRPC-mapping-file
-     */
-    public String getJaxrpcMappingFile() {
-        return jaxrpcMappingFile;
-    }
+	/**
+	 * Gets the port compoments of the webservices-description Element as an array
+	 * @return port components
+	 */
+	public WSCFPortComponent[] getPortComponent() {
+		WSCFPortComponent[] portComponents = new WSCFPortComponent[this.portComponent.size()];
+		this.portComponent.values().toArray(portComponents);
+		return portComponents;
+	}
 
-    /**
-     * Gets the large icon of the webservices-description Element
-     * 
-     * @return large-icon
-     */
-    public String getLargeIcon() {
-        return largeIcon;
-    }
+	/**
+	 * Gets the small icon of the webservices-description Element
+	 * @return small-icon
+	 */
+	public String getSmallIcon() {
+		return smallIcon;
+	}
 
-    /**
-     * Gets the port compoments of the webservices-description Element as an array
-     * 
-     * @return port components
-     */
-    public WSCFPortComponent[] getPortComponent() {
-        WSCFPortComponent[] portComponents = new WSCFPortComponent[this.portComponent.size()];
-        this.portComponent.values().toArray(portComponents);
-        return portComponents;
-    }
+	/**
+	 * Gets the name of the webservices-description Element
+	 * @return webservice-description-name
+	 */
+	public String getWebserviceDescriptionName() {
+		return webserviceDescriptionName;
+	}
 
-    /**
-     * Gets the small icon of the webservices-description Element
-     * 
-     * @return small-icon
-     */
-    public String getSmallIcon() {
-        return smallIcon;
-    }
+	/**
+	 * Gets the wsdl file of the webservices-description Element
+	 * @return wsdl-file
+	 */
+	public String getWsdlFile() {
+		return wsdlFile;
+	}
 
-    /**
-     * Gets the name of the webservices-description Element
-     * 
-     * @return webservice-description-name
-     */
-    public String getWebserviceDescriptionName() {
-        return webserviceDescriptionName;
-    }
-
-    /**
-     * Gets the wsdl file of the webservices-description Element
-     * 
-     * @return wsdl-file
-     */
-    public String getWsdlFile() {
-        return wsdlFile;
-    }
+	/**
+	 * @return
+	 */
+	public WebserviceDescriptionType getJaxbWebserviesDescription() {
+		return jaxbWebserviesDescription;
+	}
 
 }

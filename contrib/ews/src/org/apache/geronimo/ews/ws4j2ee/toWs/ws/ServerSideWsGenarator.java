@@ -103,7 +103,7 @@ public class ServerSideWsGenarator implements Generator {
             j2eewscontext.setWSDLContext(ContextFactory.createWSDLContext(axisSymboltable));
 
             JaxRpcMapper mapper = j2ee.getJaxRpcMapper();
-            j2eewscontext.setJAXRPCMappingContext(ContextFactory.createJaxRpcMapperContext(mapper));
+            j2eewscontext.setJAXRPCMappingContext(ContextFactory.createJaxRpcMapperContext(new Object[]{mapper,j2ee}));
 
         } catch (Exception e) {
             e.printStackTrace();

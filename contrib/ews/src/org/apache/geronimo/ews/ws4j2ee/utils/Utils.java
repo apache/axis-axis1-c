@@ -783,5 +783,12 @@ public class Utils {
         return confFileLocation + "/" + path;
 
     }
+    
+    public static String firstCharacterToLowerCase(String name){
+    	char[] charName = name.toCharArray();
+    	if(charName.length > 0)
+    		charName[0] = Character.toLowerCase(charName[0]); 
+    	return new String(charName); 	
+    }
 
 }

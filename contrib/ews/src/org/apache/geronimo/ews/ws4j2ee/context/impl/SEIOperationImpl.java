@@ -55,11 +55,10 @@
 
 package org.apache.geronimo.ews.ws4j2ee.context.impl;
 
-import org.apache.geronimo.ews.ws4j2ee.context.SEIOperation;
-
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
+
+import org.apache.geronimo.ews.ws4j2ee.context.SEIOperation;
 
 /**
  * @author hemapani
@@ -68,14 +67,15 @@ public class SEIOperationImpl implements SEIOperation {
     private String methodName;
     private String returnType;
     private HashMap parameters = new HashMap();
+    private ArrayList parmNames = new ArrayList();
     private ArrayList faults = new ArrayList();
 
     public String getMethodName() {
         return methodName;
     }
 
-    public Map getParameters() {
-        return parameters;
+    public ArrayList getParameterNames() {
+        return parmNames;
     }
 
     public ArrayList getFaults() {
@@ -87,6 +87,7 @@ public class SEIOperationImpl implements SEIOperation {
     }
 
     public void addParameter(String type, String name) {
+		parmNames.add(name);
         parameters.put(name, type);
     }
 
@@ -100,6 +101,13 @@ public class SEIOperationImpl implements SEIOperation {
 
     public void setReturnType(String returnType) {
         this.returnType = returnType;
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.geronimo.ews.ws4j2ee.context.SEIOperation#getParameterTypes()
+     */
+    public String getParameterType(String name) {
+        return (String)parameters.get(name);
     }
 
 }
