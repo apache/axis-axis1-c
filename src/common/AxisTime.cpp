@@ -291,7 +291,7 @@ int AxisTime::mkCTime()
             m_TM.tm_year -= 1900;
             m_TM.tm_mon--;
             m_TM.tm_isdst = -1;
-#ifndef WIN32
+#if !defined(WIN32) && !defined(AIX)
             m_TM.tm_zone = NULL;
             m_TM.tm_gmtoff = -1;
 #endif
@@ -372,7 +372,7 @@ int AxisTime::mkCTime()
             m_TM.tm_min = 0;
             m_TM.tm_sec = 0;
             m_TM.tm_isdst = -1;
-#ifndef WIN32
+#if !defined(WIN32) && !defined(AIX)
             m_TM.tm_zone = NULL;
             m_TM.tm_gmtoff = -1;
 #endif            
@@ -444,7 +444,7 @@ int AxisTime::mkCTime()
             m_TM.tm_mon = 0;
             m_TM.tm_mday = 0;
             m_TM.tm_isdst = -1;
-#ifndef WIN32
+#if !defined(WIN32) && !defined(AIX)
             m_TM.tm_zone = NULL;
             m_TM.tm_gmtoff = -1;
 #endif
