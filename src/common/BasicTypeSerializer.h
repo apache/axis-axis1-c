@@ -71,7 +71,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include "../soap/TypeMapping.h"
+#include "TypeMapping.h"
 
 #include <string>
 using namespace std;
