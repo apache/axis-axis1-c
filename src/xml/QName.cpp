@@ -61,102 +61,51 @@
  *
  */
 
-// Attribute.cpp: implementation of the Attribute class.
+// QName.cpp: implementation of the QName class.
 //
 //////////////////////////////////////////////////////////////////////
 
-#include "Attribute.h"
-#include "../common/GDefine.h"
-#include <iostream>
+#include "QName.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-Attribute::Attribute()
+QName::QName(string& sLocalPart)
 {
-	
+	m_sLocalPart= sLocalPart;
 }
 
-Attribute::~Attribute()
+QName::QName(string& sNamespaceURI, string& sLocalPart)
+{
+	m_sNamespaceURI= sNamespaceURI;
+	m_sLocalPart= sLocalPart;
+}
+
+QName::QName(string& sNamespaceURI, string& sLocalPart, string& sPrefix)
+{
+	m_sNamespaceURI= sNamespaceURI;
+	m_sLocalPart= sLocalPart;
+	m_sPrefix= sPrefix;
+
+}
+
+QName::~QName()
 {
 
 }
 
-void Attribute::setLocalName(const string &localname)
+string& QName::getLocalPart()
 {
-	m_localname= localname;
+	return m_sLocalPart;
 }
 
-void Attribute::setPrefix(const string &prefix)
+string& QName::getNamespaceURI()
 {
-	m_prefix= prefix;
+	return m_sNamespaceURI;
 }
 
-void Attribute::setUri(const string &uri)
+string& QName::getPrefix()
 {
-	m_uri= uri;
-}
-
-void Attribute::setValue(const string &value)
-{
-	m_value= value;
-}
-
-Attribute::Attribute(const string &localname, const string &prefix, const string &uri, const string &value)
-{
-	m_localname= localname;
-	m_prefix= prefix;
-	m_uri= uri;
-	m_value= value;
-}
-
-/*
- *
- */
-int Attribute::serialize(string& sSerialized)
-{	
-	int intStatus= FAIL;
-
-	if (isSerializable()) {
-		sSerialized+= " ";
-
-		if(!m_prefix.empty()) {
-			sSerialized= sSerialized+ m_prefix+ ":";
-		}
-
-		sSerialized= sSerialized + m_localname +
-			"=\""+ m_value+ "\"";
-
-		intStatus= SUCCESS;
-	}
-
-	return intStatus;	
-}
-
-/*string& Attribute::serialize()
-{	
-	m_strAttrSerialized="";
-
-	if (isSerializable()) {
-		if(!m_prefix.empty()) {
-			m_strAttrSerialized= m_prefix+ ":";
-		}
-
-		m_strAttrSerialized= m_strAttrSerialized + m_localname +
-			"=\""+ m_value+ "\"";
-	}
-
-	return m_strAttrSerialized;	
-}*/
-
-bool Attribute::isSerializable()
-{
-	bool bStatus= true;
-
-	if(m_localname.empty()) {
-		bStatus= false;
-	}
-
-	return bStatus;
+	return m_sPrefix;
 }

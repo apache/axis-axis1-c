@@ -61,102 +61,56 @@
  *
  */
 
-// Attribute.cpp: implementation of the Attribute class.
+// QName.h: interface for the QName class.
 //
 //////////////////////////////////////////////////////////////////////
 
-#include "Attribute.h"
-#include "../common/GDefine.h"
-#include <iostream>
+#if !defined(AFX_QNAME_H__7E4E7E7B_F051_4989_89A6_F0248109C410__INCLUDED_)
+#define AFX_QNAME_H__7E4E7E7B_F051_4989_89A6_F0248109C410__INCLUDED_
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+#if _MSC_VER > 1000
+#pragma once
+#endif // _MSC_VER > 1000
 
-Attribute::Attribute()
-{
-	
-}
+#include <string>
 
-Attribute::~Attribute()
-{
+using namespace std;
 
-}
-
-void Attribute::setLocalName(const string &localname)
-{
-	m_localname= localname;
-}
-
-void Attribute::setPrefix(const string &prefix)
-{
-	m_prefix= prefix;
-}
-
-void Attribute::setUri(const string &uri)
-{
-	m_uri= uri;
-}
-
-void Attribute::setValue(const string &value)
-{
-	m_value= value;
-}
-
-Attribute::Attribute(const string &localname, const string &prefix, const string &uri, const string &value)
-{
-	m_localname= localname;
-	m_prefix= prefix;
-	m_uri= uri;
-	m_value= value;
-}
-
-/*
+/**
+ *	Qualified name according to "Namespaces in XML" specification.
+ *	
+ *	QName	  ::=  (Prefix ':')? LocalPart										<br>
+ *	Prefix	  ::=  NCName														<br>
+ *	LocalPart ::=  NCName														<br>
+ *	NCName	  ::=  (Letter | '_') (NCNameChar)*  ;  An XML Name, minus the ":"	<br>
+ *	NCNameChar ::=  Letter | Digit | '.' | '-' | '_' etc.						<br>
  *
+ *	The Prefix provides the namespace prefix part of the qualified name, and must 
+ *	be associated with a namespace URI reference in a namespace declaration. 
+ *	The LocalPart provides the local part of the qualified name. 
+ *	Note that the prefix functions only as a placeholder for a namespace name. 
+ *	Applications should use the namespace name, not the prefix, in constructing 
+ *	names whose scope extends beyond the containing document.
+ *
+ *	
+ *	@brief	Qualified name according to "Namespaces in XML" specification
  */
-int Attribute::serialize(string& sSerialized)
-{	
-	int intStatus= FAIL;
 
-	if (isSerializable()) {
-		sSerialized+= " ";
-
-		if(!m_prefix.empty()) {
-			sSerialized= sSerialized+ m_prefix+ ":";
-		}
-
-		sSerialized= sSerialized + m_localname +
-			"=\""+ m_value+ "\"";
-
-		intStatus= SUCCESS;
-	}
-
-	return intStatus;	
-}
-
-/*string& Attribute::serialize()
-{	
-	m_strAttrSerialized="";
-
-	if (isSerializable()) {
-		if(!m_prefix.empty()) {
-			m_strAttrSerialized= m_prefix+ ":";
-		}
-
-		m_strAttrSerialized= m_strAttrSerialized + m_localname +
-			"=\""+ m_value+ "\"";
-	}
-
-	return m_strAttrSerialized;	
-}*/
-
-bool Attribute::isSerializable()
+class QName  
 {
-	bool bStatus= true;
+public:
+	string& getPrefix();
+	string& getNamespaceURI();
+	string& getLocalPart();
+	QName(string& sNamespaceURI, string& sLocalPart, string& sPrefix);
+	QName(string& sNamespaceURI, string& sLocalPart);
+	QName(string& sLocalPart);
+	virtual ~QName();
 
-	if(m_localname.empty()) {
-		bStatus= false;
-	}
+private:
+	string m_sPrefix;
+	string m_sNamespaceURI;
+	string m_sLocalPart;
+};
 
-	return bStatus;
-}
+#endif // !defined(AFX_QNAME_H__7E4E7E7B_F051_4989_89A6_F0248109C410__INCLUDED_)
