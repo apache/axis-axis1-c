@@ -9,6 +9,7 @@
 #include <axis/client/Stub.h>
 #include "SOAPStruct_Array.h"
 #include "SOAPStruct.h"
+#include <axis/AxisGenException.h>
 
 class InteropTestPortType :public Stub 
 {
