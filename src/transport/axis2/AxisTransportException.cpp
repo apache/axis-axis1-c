@@ -153,6 +153,29 @@ const string AxisTransportException::getMessage (const int iExceptionCode)
         case SERVER_TRANSPORT_BUFFER_EMPTY:
             m_sMessage = "AxisTransportException:Transport buffer is empty";
             break;
+		case CLIENT_TRANSPORT_EXCEPTION:
+		{
+            m_sMessage = "AxisTransportException:Generic client transport exception";
+			break;
+		}
+
+		case CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED:
+		{
+            m_sMessage = "AxisTransportException:Client failed to open";
+			break;
+		}
+
+		case CLIENT_TRANSPORT_TYPE_MISMATCH:
+		{
+            m_sMessage = "AxisTransportException:Client attempted to use SSL functions without the proper prerquistes";
+			break;
+		}
+
+		case CLIENT_TRANSPORT_HAS_NO_SECURE_TRANSPORT_LAYER:
+		{
+            m_sMessage = "AxisTransportException:Client attempted to use secure transport (https) without an SSL layer";
+			break;
+		}
         default:
             m_sMessage = "AxisTransportException:Unknown Transport Exception"; 
     }
