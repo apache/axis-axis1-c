@@ -63,10 +63,48 @@ import org.apache.geronimo.ews.ws4j2ee.context.SEIOperation;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 import org.apache.geronimo.ews.ws4j2ee.toWs.JavaClassWriter;
 
+
 /**
- * This class can be used to write the appropriate SessionBean
- * class for the given port type.
- * 
+ * <p>This class can be used to write the appropriate SessionBean
+ * class for the given port type. 
+ * A Stateless Session Bean, as defined by the Enterprise JavaBeans specification, 
+ * can be used to implement a Web service to be deployed in the EJB container. 
+ * A Stateless Session Bean does not have to worry about multi-threaded access. 
+ * The EJB container is required to serialize request flow through any particular 
+ * instance of a Service Implementation Bean. The requirements for creating a Service
+ * Implementation Bean as a Stateless Session EJB are repeated in part here.</p>
+ * <ol>
+ * 	   <li>The Service Implementation Bean must have a default public constructor.</li>
+ *     <li>The Service Implementation Bean may implement the Service Endpoint Interface, 
+ *      but it is not required to do so. The bean must implement all the method
+ *      signatures of the SEI.<li>
+ *     <li>The Service Implementation Bean methods are not required to throw 
+ *     javax.rmi.RemoteException. The business methods of the bean must be public 
+ *     and must not be final or static. It may implement other methods in addition
+ *      to those defined by the SEI.</li>
+ *     <li>A Service Implementation Bean must be a stateless object.
+ *      A Service Implementation Bean must not save client specific state 
+ *     across method calls either within the bean instance’s data members or 
+ *     external to the instance.</li>
+ *     <li>The class must be public, must not be final and must not be abstract.</li>
+ *     <li>The class must not define the finalize() method.</li>
+ *     <li>Currently, it must implement the ejbCreate() and ejbRemove() methods which
+ *      take no arguments. This is a requirement of the EJB container, but generally
+ *      can be stubbed out with an empty implementation.</li>
+ *     <li>Currently, a Stateless Session Bean must implement the javax.ejb.SessionBean 
+ *     interface either directly or indirectly. This interface allows the container to notify the Service Implementation Bean of impending changes in its state. The full requirements of this interface are defined in the Enterprise JavaBeans specification section 7.5.1.</li>
+ *     <li>The Enterprise JavaBeans specification section 7.8.2 defines the allowed
+ *     container service access requirements.</li>
+ * </ol>
+ * <h5>Exposing an existing EJB</h5>
+ * <p>An existing Enterprise JavaBean may be used as a Service Implementation Bean if it meets the following requirements:</p>
+ *	<ol>
+ *	<li>The business methods of the EJB bean class that are exposed on the SEI must meet the Service</li>
+ *   <li>Implementation Bean requirements defined in section 5.3.1.</li>
+ *   <li>The SEI must meet the requirements described in the JAX-RPC specification for Service Endpoint Interfaces.</li>
+ *   <li>The transaction attributes of the SEI methods must not include Mandatory.</li>
+ *   <li>The developer must package the Web service as described in section 5.4 and must specify an ejb-link from the port in the Web services deployment descriptor to the existing EJB.</li>
+ *   <ol>
  * @author Rajith Priyanga
  * @author Srinath Perera
  * @date Nov 26, 2003

@@ -100,10 +100,20 @@ public class EJBDDWriter extends AbstractWriter {
 		if(index>0){
 		  ejbname = ejbname.substring(index+1);
 		} 
+		String version = GenerationConstants.J2EE_VERSION_1_4; 
+		version = GenerationConstants.getProperties()
+			.getProperty(GenerationConstants.WS4J2EE_PROVIDER); 
+
 
 		out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-		out.write("<!DOCTYPE ejb-jar PUBLIC '-//Sun Microsystems, Inc.//DTD Enterprise JavaBeans 2.0//EN' 'http://java.sun.com/dtd/ejb-jar_2_0.dtd'>\n");
-		out.write("<ejb-jar>\n");
+		if(version == GenerationConstants.J2EE_VERSION_1_4){
+			out.write("<ejb-jar xmlns=\"http://java.sun.com/xml/ns/j2ee\">\n");
+		}else{
+			out.write("<!DOCTYPE ejb-jar PUBLIC '-//Sun Microsystems, Inc.//DTD Enterprise JavaBeans 2.0//EN' 'http://java.sun.com/dtd/ejb-jar_2_0.dtd'>\n");
+			out.write("<ejb-jar>\n");
+		}
+		
+
 		out.write("<display-name>" + j2eewscontext.getMiscInfo().getWscfdWsDesxription().getDisplayName() + "</display-name>\n");
 		out.write("\t<enterprise-beans>\n");
 		out.write("\t\t<session>\n");
