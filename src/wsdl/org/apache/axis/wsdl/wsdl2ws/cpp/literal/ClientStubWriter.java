@@ -290,7 +290,7 @@ public class ClientStubWriter extends CPPClassWriter{
 				} else if( "int".equals( elementType)) {
 					writer.write("\t{\n");
 					writer.write("\t\tchar buffer[20];\n");
-					writer.write("\t\titoa( Value"+i+", buffer, 10);\n");
+					writer.write("\t\tsprintf(buffer,\"%d\", Value"+i+");\n");
 					writer.write("\t\tsetSOAPMethodAttribute(\""+ param.getParamName() + "\", \"\", buffer);\n");
 					writer.write("\t}\n");
 				} else {
