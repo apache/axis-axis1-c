@@ -73,11 +73,12 @@ public class RemoteInterfacedBasedWrapperClassWriter4JOnAS extends SimpleRemoteI
     }
 
     protected String getJNDIHostAndPort() {
+        // TODO using carol MultiOrb, port number can change from protocol to protocol (jrmp, iiop, jeremie) 
         return "127.0.0.1:1099";
     }
 
     protected String getJNDIInitialContextFactory() {
-        return "org.jnp.interfaces.NamingContextFactory";
+        return "org.objectweb.carol.jndi.spi.MultiOrbInitialContextFactory";
     }
 
 }

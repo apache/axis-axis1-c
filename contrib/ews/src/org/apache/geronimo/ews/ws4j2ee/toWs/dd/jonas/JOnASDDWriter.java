@@ -69,7 +69,7 @@ public class JOnASDDWriter extends AbstractWriter {
 
 	public String getFileName() {
 		return j2eewscontext.getMiscInfo().getOutPutPath() +
-				"/ejb/META-INF/JonAs.xml";
+				"/ejb/META-INF/jonas-ejb-jar.xml";
 	}
 
 	/* (non-Javadoc)
@@ -86,7 +86,7 @@ public class JOnASDDWriter extends AbstractWriter {
 		out.write("<jonas-ejb-jar xmlns=\"http://www.objectweb.org/jonas/ns\"\n");
 		out.write("               xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n");
 		out.write("               xsi:schemaLocation=\"http://www.objectweb.org/jonas/ns\"\n");
-		out.write("                                    http://www.objectweb.org/jonas/ns/jonas-ejb-jar_4_0.xsd\">\n");
+		out.write("                                    http://www.objectweb.org/jonas/ns/jonas-ejb-jar_4_1.xsd\">\n");
 		out.write("	<jonas-session>\n");
 		out.write("	  <ejb-name>" + j2eewscontext.getMiscInfo().getEjbName() + "</ejb-name>\n");
 		String implStyle = j2eewscontext.getMiscInfo().getImplStyle();
@@ -96,8 +96,7 @@ public class JOnASDDWriter extends AbstractWriter {
 		}
 		if(GenerationConstants.USE_LOCAL_AND_REMOTE.equals(implStyle)
 			|| GenerationConstants.USE_LOCAL.equals(implStyle)){
-			//TODO fill this what is the correct tag for JonAs	
-			//out.write("	  <local-jndi-name>" + "ejb/" +ejbname+ "Local"+"</local-jndi-name>\n");
+			out.write("	  <jndi-local-name>" + "ejb/" +ejbname+ "Local"+"</jndi-local-name>\n");
 		}
 		out.write("	</jonas-session>\n");
 		out.write("</jonas-ejb-jar>\n");
