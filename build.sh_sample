@@ -3,11 +3,11 @@
 echo "----------------------------------"
 echo "build server, client and samples"
 echo "----------------------------------"
-#sh autogen.sh
+sh autogen.sh
 echo "run configure"
 ./configure --prefix=/usr/local/axiscpp_deploy \
     --with-apache2=/usr/local/apache2 \
-    --with-expat=/usr/local/expat1957
+    --with-expat=/usr/local/Expat
 echo "make"
 make 2> build_errors
 echo "make install"
