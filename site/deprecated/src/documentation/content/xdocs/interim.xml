@@ -12,8 +12,17 @@ Nightly builds are done of the current source in the
 CVS repository.  The source and binaries from these builds are available at:
 <br/>
 <blockquote>
-<link href="http://cvs.apache.org/dist/axis/nightly">
+<link href="http://cvs.apache.org/dist/axis/nightly ">
 http://cvs.apache.org/dist/axis/nightly
+</link>
+</blockquote>
+</p>
+<p>
+Nightly Snapshots of the current CVS source tree are available at:
+<br/>
+<blockquote>
+<link href="http://cvs.apache.org/snapshots/ws-axis/">
+http://cvs.apache.org/snapshots/ws-axis/
 </link>
 </blockquote>
 </p>
