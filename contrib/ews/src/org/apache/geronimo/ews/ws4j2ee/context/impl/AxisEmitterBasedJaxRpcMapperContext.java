@@ -55,6 +55,25 @@
 
 package org.apache.geronimo.ews.ws4j2ee.context.impl;
 
+import java.io.InputStream;
+import java.io.Writer;
+import java.lang.reflect.Method;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import javax.wsdl.Binding;
+import javax.wsdl.Operation;
+import javax.wsdl.Part;
+import javax.wsdl.Port;
+import javax.wsdl.Service;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.namespace.QName;
+
 import org.apache.axis.wsdl.fromJava.Emitter;
 import org.apache.axis.wsdl.symbolTable.BindingEntry;
 import org.apache.axis.wsdl.symbolTable.PortTypeEntry;
@@ -79,24 +98,6 @@ import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 import org.apache.geronimo.ews.ws4j2ee.context.JaxRpcMapperContext;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 import org.apache.geronimo.ews.ws4j2ee.toWs.UnrecoverableGenarationFault;
-
-import javax.wsdl.Binding;
-import javax.wsdl.Operation;
-import javax.wsdl.Part;
-import javax.wsdl.Port;
-import javax.wsdl.Service;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.namespace.QName;
-import java.io.InputStream;
-import java.io.Writer;
-import java.lang.reflect.Method;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 /**
  * This class wrap the JAXRPCMapper and only expose a interface to
@@ -145,7 +146,7 @@ public class AxisEmitterBasedJaxRpcMapperContext implements JaxRpcMapperContext 
      */
     public String getJavaMethodParamType(BindingEntry bEntry,
                                          Operation operation,
-                                         int position) {
+                                         int position,QName type) {
         Method m = (Method) this.methods.get(operation.getName());
         //axis do not map the method names or types
         //so this should do 

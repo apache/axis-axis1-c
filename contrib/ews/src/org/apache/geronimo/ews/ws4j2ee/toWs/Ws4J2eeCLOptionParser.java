@@ -55,11 +55,11 @@
 
 package org.apache.geronimo.ews.ws4j2ee.toWs;
 
+import java.util.List;
+
 import org.apache.axis.utils.CLArgsParser;
 import org.apache.axis.utils.CLOption;
 import org.apache.axis.utils.CLOptionDescriptor;
-
-import java.util.List;
 
 /**
  * @author hemapani

@@ -2,7 +2,7 @@
  * The Apache Software License, Version 1.1
  *
  *
- * Copyright (c) 2001-2004 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -54,85 +54,114 @@
  */
 package org.apache.geronimo.ews.ws4j2ee.context.webservices.server;
 
+import java.util.List;
+
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFConstants;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFInitParam;
+import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.jaxb.DescriptionType;
+import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.jaxb.ParamValueType;
 import org.w3c.dom.Element;
 
 /**
- * This will encapsulate the init parameter element and the information will be able access
+ * This will encapsulate the init parameter element and the information will be able access 
  * using the interface published.
+ *
  */
 public class WSCFInitParamImpl extends WSCFElement implements WSCFInitParam {
 
-    /**
-     * Init parameter name
-     */
-    private String paramName;
-
-    /**
-     * Init parameter value
-     */
-    private String paramValue;
-
-    /**
-     * Init parameter description
-     */
-    private String description;
-
-    /**
-     * The constructor. this willget the child nodes that provide teh sufficient statistics about the init parameters.
-     * 
-     * @param e init parameter Element
-     * @throws WSCFException 
-     */
-    public WSCFInitParamImpl(Element e) throws WSCFException {
-        super(e);
+	/**
+	 * Init parameter name 
+	 */
+	private String paramName;
+	
+	/**
+	 * Init parameter value
+	 */
+	private String paramValue;
+	
+	/**
+	 * Init parameter description
+	 */
+	private String description;
+	
+	
+	////////////////////////////////////////jaxb intefacing block////////////////////////////
+	
+	private ParamValueType jaxbInitParameter;
+	
+	public WSCFInitParamImpl(ParamValueType jaxbInitParameter){
+		this.jaxbInitParameter = jaxbInitParameter;
 		
-        //extract param name
-        Element element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_PARAM_NAME);
-        if (null != element) {
-            this.paramName = element.getChildNodes().item(0).getNodeValue();
-        }
+		/////////////////asigning values///////////////////
+		if(null != jaxbInitParameter.getParamName())
+			this.paramName = jaxbInitParameter.getParamName().getValue();
 		
-        //extract param value
-        element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_PARAM_VLAUE);
-        if (null != element) {
-            this.paramValue = element.getChildNodes().item(0).getNodeValue();
-        }
+		if(null != jaxbInitParameter.getParamValue())	
+		this.paramValue = jaxbInitParameter.getParamValue().getValue();
 		
-        // extract the description
-        element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_DESCRIPTION);
-        if (null != element) {
-            this.description = element.getChildNodes().item(0).getNodeValue();
-        }
+		List temp = null;
+		temp = jaxbInitParameter.getDescription();
+		if(0 != temp.size())
+			this.description = ((DescriptionType)temp.get(0)).getValue();
+	
+	}
+	
+	
+	/////////////////////////////////////////////////////////////////////////////////////////	
+	
+	/**
+	 * The constructor. this willget the child nodes that provide teh sufficient statistics about the init parameters.
+	 * @param e init parameter Element
+	 * @throws WSCFException
+	 */
+	public WSCFInitParamImpl(Element e) throws WSCFException{
+		super(e);
+		
+		//extract param name
+		Element element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_PARAM_NAME);
+		if(null != element){this.paramName = element.getChildNodes().item(0).toString();}
+		
+		//extract param value
+		element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_PARAM_VLAUE);
+		if(null != element){this.paramValue = element.getChildNodes().item(0).toString();}
+		
+		// extract the description
+		element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_DESCRIPTION);
+		if(null != element){this.description = element.getChildNodes().item(0).toString();}
+		
+	
+	}
+	
+	
+	/**
+	 * Gets the description of the init parameter element
+	 * @return description
+	 */
+	public String getDescription() {
+		return description;
+	}
 
-    }
+	/**
+	 * Gets the name of the init parameter element
+	 * @return name
+	 */
+	public String getParamName() {
+		return paramName;
+	}
 
-    /**
-     * Gets the description of the init parameter element
-     * 
-     * @return description
-     */
-    public String getDescription() {
-        return description;
-    }
+	/**
+	 * Gets the value of the init parameter element
+	 * @return value
+	 */
+	public String getParamValue() {
+		return paramValue;
+	}
 
-    /**
-     * Gets the name of the init parameter element
-     * 
-     * @return name
-     */
-    public String getParamName() {
-        return paramName;
-    }
-
-    /**
-     * Gets the value of the init parameter element
-     * 
-     * @return value
-     */
-    public String getParamValue() {
-        return paramValue;
-    }
+	/**
+	 * @return
+	 */
+	public ParamValueType getJaxbInitParameter() {
+		return jaxbInitParameter;
+	}
 
 }

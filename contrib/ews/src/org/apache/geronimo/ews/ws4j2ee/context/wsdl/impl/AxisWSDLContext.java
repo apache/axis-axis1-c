@@ -217,6 +217,8 @@ public class AxisWSDLContext implements WSDLContext {
             name = new QName(name.getLocalPart());
             obj = this.ports.get(name);
         }
+        
+
         return (PortEntry) obj;
     }
 

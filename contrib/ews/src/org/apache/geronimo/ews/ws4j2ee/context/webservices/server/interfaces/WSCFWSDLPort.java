@@ -2,7 +2,7 @@
  * The Apache Software License, Version 1.1
  *
  *
- * Copyright (c) 2001-2004 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -54,23 +54,28 @@
  */
 package org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces;
 
+import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.jaxb.XsdQNameType;
+
+
+
 /**
  * @author Chathura Herath
+ *
  */
 public interface WSCFWSDLPort {
-
-    /**
-     * Gets the local part of the WSDL port element
-     * 
-     * @return local part
-     */
-    public String getLocalpart();
-
-    /**
-     * Gets the namespace URI of the WSDL port element
-     * 
-     * @return 
-     */
-    public String getNamespaceURI();
+	
+	/**
+	 * Gets the local part of the WSDL port element
+	 * @return local part
+	 */
+	public String getLocalpart();
+	
+	/**
+	 * Gets the namespace URI of the WSDL port element
+	 * @return
+	 */
+	public String getNamespaceURI();
+	
+	public XsdQNameType getJaxbWSDLPort();
 
 }

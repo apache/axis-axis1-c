@@ -2,7 +2,7 @@
  * The Apache Software License, Version 1.1
  *
  *
- * Copyright (c) 2001-2004 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -54,71 +54,70 @@
  */
 package org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces;
 
+import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.jaxb.PortComponentType;
+
+
+
+
 /**
- * This interfaces the port component element of the webservices.xml.
+ * This interfaces the port component element of the webservices.xml. 
+ *
  */
 public interface WSCFPortComponent {
 
-    /**
-     * Gets the description of the port component Element
-     * 
-     * @return description
-     */
-    public String getDescription();
-
-    /**
-     * Gets the display name of the port component Element
-     * 
-     * @return display name
-     */
-    public String getDisplayName();
-
-    /**
-     * Gets the large icon of the port component Element
-     * 
-     * @return large icon
-     */
-    public String getLargeIcon();
-
-    /**
-     * Gets the port componenet name of the port component Element
-     * 
-     * @return name
-     */
-    public String getPortComponentName();
-
-    /**
-     * Gets the SEI of the port component Element
-     * 
-     * @return SEI
-     */
-    public String getServiceEndpointInterface();
-
-    /**
-     * Gets the service implimentation bean of the port component Element
-     * 
-     * @return service inplinmentation bean
-     */
-    public WSCFServiceImplBean getServiceImplBean();
-
-    /**
-     * Gets the small icon of the port component Element
-     * 
-     * @return small icon
-     */
-    public String getSmallIcon();
-
-    /**
-     * Gets the wsdl port of the port component Element
-     * 
-     * @return wsd; port
-     */
-    public WSCFWSDLPort getWsdlPort();
-
-    /**
-     * Gets the handlers of the port component Element as an array
-     * 
-     * @return handlers
-     */
-    public WSCFHandler[] getHandlers();
+	/**
+	 * Gets the description of the port component Element
+	 * @return description
+	 */	
+	public String getDescription();
+	
+	/**
+	 * Gets the display name of the port component Element
+	 * @return display name
+	 */	
+	public String getDisplayName() ;
+	
+	/**
+	 * Gets the large icon of the port component Element
+	 * @return large icon
+	 */
+	public String getLargeIcon() ;
+	
+	/**
+	 * Gets the port componenet name of the port component Element
+	 * @return name
+	 */
+	public String getPortComponentName();
+	
+	/**
+	 * Gets the SEI of the port component Element
+	 * @return SEI
+	 */
+	public String getServiceEndpointInterface() ;
+	
+	/**
+	 * Gets the service implimentation bean of the port component Element
+	 * @return service inplinmentation bean
+	 */
+	public WSCFServiceImplBean getServiceImplBean() ;
+	
+	/**
+	 * Gets the small icon of the port component Element
+	 * @return small icon
+	 */
+	public String getSmallIcon() ;
+	
+	/**
+	 * Gets the wsdl port of the port component Element
+	 * @return wsd; port
+	 */
+	public WSCFWSDLPort getWsdlPort() ;
+	
+	/**
+	 * Gets the handlers of the port component Element as an array
+	 * @return handlers
+	 */
+	public WSCFHandler[] getHandlers();
+	
+	public PortComponentType getJaxbPortComponent();
 }

@@ -2,7 +2,7 @@
  * The Apache Software License, Version 1.1
  *
  *
- * Copyright (c) 2001-2004 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -54,71 +54,71 @@
  */
 package org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces;
 
+import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.jaxb.PortComponentHandlerType;
+
+
+
+
 /**
  * @author Chathura Herath
+ *
  */
 public interface WSCFHandler {
-
-    /**
-     * Gets the description of the handler element
-     * 
-     * @return description
-     */
-    public String getDescription();
-
-    /**
-     * Gets the display name of the handler element
-     * 
-     * @return display-name
-     */
-    public String getDisplayName();
-
-    /**
-     * Gets the class of the handler element
-     * 
-     * @return handler-class
-     */
-    public String getHandlerClass();
-
-    /**
-     * Gets the name of the handler element
-     * 
-     * @return handler-name
-     */
-    public String getHandlerName();
-
-    /**
-     * Gets the large icon of the handler element
-     * 
-     * @return large-icon
-     */
-    public String getLargeIcon();
-
-    /**
-     * Gets the small icon of the handler element
-     * 
-     * @return small-icon
-     */
-    public String getSmallIcon();
-
-    /**
-     * Gets the soap headers of the handler element
-     * 
-     * @return soap-headers
-     */
-    public String[] getSoapHeader();
-
-    /**
-     * Gets the soap roles of the handler element
-     * 
-     * @return soap-roles
-     */
-    public String[] getSoapRole();
-
-    /**
-     * Gets the init paramaeters of the handler element as a array
-     * 
-     * @return init-parameters
-     */
-    public WSCFInitParam[] getInitParam();
+	
+	/**
+	 * Gets the description of the handler element
+	 * @return description
+	 */
+	public String getDescription() ;
+	
+	/**
+	 * Gets the display name of the handler element
+	 * @return display-name
+	 */
+	public String getDisplayName() ;
+	
+	/**
+	 * Gets the class of the handler element
+	 * @return handler-class
+	 */
+	public String getHandlerClass() ;
+	
+	/**
+	 * Gets the name of the handler element
+	 * @return handler-name
+	 */
+	public String getHandlerName() ;
+	
+	/**
+	 * Gets the large icon of the handler element
+	 * @return large-icon
+	 */
+	public String getLargeIcon();
+	
+	/**
+	 * Gets the small icon of the handler element
+	 * @return small-icon
+	 */
+	public String getSmallIcon();
+	
+	/**
+	 * Gets the soap headers of the handler element
+	 * @return soap-headers
+	 */
+	public String[] getSoapHeader();
+	
+	/**
+	 * Gets the soap roles of the handler element
+	 * @return soap-roles
+	 */
+	public String[] getSoapRole();
+	
+	/**
+	 * Gets the init paramaeters of the handler element as a array
+	 * @return init-parameters
+	 */
+	public WSCFInitParam[] getInitParam();
+	
+	
+	public PortComponentHandlerType getJaxbHandler() ;
 }

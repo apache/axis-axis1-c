@@ -77,40 +77,35 @@ public class AxisEmitterBasedWSCFContext implements WSCFContext {
      * @see org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFContext#getDescription()
      */
     public String getDescription() {
-        // TODO Auto-generated method stub
-        return null;
+		throw new UnsupportedOperationException();
     }
 
     /* (non-Javadoc)
      * @see org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFContext#getDisplayName()
      */
     public String getDisplayName() {
-        // TODO Auto-generated method stub
-        return null;
-    }
+		throw new UnsupportedOperationException();
+	}
 
     /* (non-Javadoc)
      * @see org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFContext#getLargeIcon()
      */
     public String getLargeIcon() {
-        // TODO Auto-generated method stub
-        return null;
-    }
+		throw new UnsupportedOperationException();
+	}
 
     /* (non-Javadoc)
      * @see org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFContext#getSmallIcon()
      */
     public String getSmallIcon() {
-        // TODO Auto-generated method stub
-        return null;
+		throw new UnsupportedOperationException();
     }
 
     /* (non-Javadoc)
      * @see org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFContext#getWebServicesDescription()
      */
     public WSCFWebserviceDescription[] getWebServicesDescription() {
-        // TODO Auto-generated method stub
-        return null;
+		throw new UnsupportedOperationException();
     }
 
     public void serialize(java.io.Writer out) throws GenerationFault {
@@ -124,9 +119,8 @@ public class AxisEmitterBasedWSCFContext implements WSCFContext {
             out.write("<jaxrpc-mapping-file>" + j2eeweserviceContext.getMiscInfo().getJaxrpcfile() + "</jaxrpc-mapping-file>\n");
             out.write("<port-component>\n");
             out.write("<port-component-name>" + emitter.getPortTypeName() + "</port-component-name>\n");
-            out.write("<wsdl-port>\n");
-            out.write("<namespaceURI>" + j2eeweserviceContext.getWSDLContext().getTargetNSURI() + "</namespaceURI>\n");
-            out.write("<localpart>" + j2eeweserviceContext.getMiscInfo().getTargetPort().getName() + "</localpart>\n");
+            out.write("<wsdl-port xmlns:ns1=\""+ j2eeweserviceContext.getWSDLContext().getTargetNSURI() + "\">\n");
+            out.write("ns1:" + j2eeweserviceContext.getMiscInfo().getTargetPort().getName());
             out.write("</wsdl-port>\n");
             out.write("<service-endpoint-interface>" + emitter.getCls().getName() + "</service-endpoint-interface>\n");
             out.write("<service-impl-bean>\n");

@@ -55,6 +55,10 @@
 
 package org.apache.geronimo.ews.ws4j2ee.toWs;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Vector;
+
 import org.apache.axis.components.logger.LogFactory;
 import org.apache.commons.logging.Log;
 import org.apache.geronimo.ews.ws4j2ee.context.ContextFactory;
@@ -62,10 +66,6 @@ import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 import org.apache.geronimo.ews.ws4j2ee.context.impl.J2EEWebServiceContextImpl;
 import org.apache.geronimo.ews.ws4j2ee.parsers.EJBDDParser;
 import org.apache.geronimo.ews.ws4j2ee.toWs.wsdl.WSDLGenarator;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Vector;
 
 /**
  * <p>this class genarate the code when the WSDL presents.</p>
@@ -82,7 +82,7 @@ public class Ws4J2EEwithoutWSDL implements Generator {
     private boolean useSEI = true;
     private String[] args;
     private J2EEWebServiceContext wscontext;
-    private boolean verbose = true;
+    private boolean verbose = false;
 
     public Ws4J2EEwithoutWSDL(String[] args, boolean useSEI) throws GenerationFault {
         genarators = new Vector();
@@ -98,6 +98,7 @@ public class Ws4J2EEwithoutWSDL implements Generator {
         //the EJB or the SEI (which is already exists) need not to be genarated   		
         this.useSEI = useSEI;
         this.wscontext.setMiscInfo(ContextFactory.createMiscInfo());
+		wscontext.getMiscInfo().setVerbose(verbose);
     }
 
     /**

@@ -55,6 +55,8 @@
 
 package org.apache.geronimo.ews.ws4j2ee.toWs;
 
+import java.io.FileInputStream;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.geronimo.ews.ws4j2ee.context.ContextFactory;
@@ -65,15 +67,12 @@ import org.apache.geronimo.ews.ws4j2ee.context.impl.J2EEWebServiceContextImpl;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFContext;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFWebserviceDescription;
 import org.apache.geronimo.ews.ws4j2ee.utils.Utils;
-import org.w3c.dom.Document;
-
-import javax.xml.parsers.DocumentBuilderFactory;
 
 /**
  * <p>this class genarate the code when the WSDL presents.</p>
  */
 public class Ws4J2EEwithWSDL implements Generator {
-    private boolean verbose = true;
+    private boolean verbose = false;
     private Ws4J2eeCLOptionParser clparser;
     protected static Log log =
             LogFactory.getLog(Ws4J2EEwithWSDL.class.getName());
@@ -107,10 +106,10 @@ public class Ws4J2EEwithWSDL implements Generator {
             J2EEWebServiceContext wscontext = new J2EEWebServiceContextImpl(true);
             wscontext.setMiscInfo(misc);
             //parsing of the webservice.xml happen here 
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            dbf.setNamespaceAware(true);
-            Document wscfdoc = dbf.newDocumentBuilder().parse(wscffile);
-            WSCFContext wscfcontext = ContextFactory.createWSCFContext(wscfdoc);
+//            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+//            dbf.setNamespaceAware(true);
+//            Document wscfdoc = dbf.newDocumentBuilder().parse(wscffile);
+            WSCFContext wscfcontext = ContextFactory.createWSCFContext(new FileInputStream(wscffile));
             wscontext.setWSCFContext(wscfcontext);
             if (verbose)
                 log.info(wscffile + " parsed ..");
@@ -124,6 +123,7 @@ public class Ws4J2EEwithWSDL implements Generator {
 
             wscontext.getMiscInfo().setJaxrpcfile(Utils.getAbsolutePath(wscfwsdiss[0].getJaxrpcMappingFile(), wscffile.substring(0, index)));
             wscontext.getMiscInfo().setWsdlFile(Utils.getAbsolutePath(wscfwsdiss[0].getWsdlFile(), wscffile.substring(0, index)));
+			wscontext.getMiscInfo().setVerbose(verbose);
             if (isSeverSideCodeGenaration) {
                 //JAX-RPC mapper calling       
                 GeneratorFactory.createGenerator(wscontext,
@@ -172,9 +172,7 @@ public class Ws4J2EEwithWSDL implements Generator {
     }
 
     public static void main(String[] args) throws Exception {
-        //String wscffile  = "./samples/book/webservice.xml";
         Ws4J2EEwithWSDL gen = new Ws4J2EEwithWSDL(args);
         gen.genarate();
-
     }
 }

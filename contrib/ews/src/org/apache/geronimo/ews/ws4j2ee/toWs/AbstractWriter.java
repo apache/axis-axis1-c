@@ -55,12 +55,14 @@
 
 package org.apache.geronimo.ews.ws4j2ee.toWs;
 
-import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+
+import org.apache.axis.components.logger.LogFactory;
+import org.apache.commons.logging.Log;
+import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 
 /**
  * <p>This is a conveniance class to wite the Writers</p>
@@ -71,8 +73,10 @@ public abstract class AbstractWriter implements Writer {
      * <p>this parameter act as a mediator, It contains all the information
      * this will be passed to the each writer. This will make sure
      * even if the information that should passed around it will keep
-     * method signatures intace.</p>
+     * method signatures intact.</p>
      */
+	protected static Log log =
+				LogFactory.getLog(AbstractWriter.class.getName());
     protected J2EEWebServiceContext j2eewscontext;
     /* this is used to write the file */
     protected PrintWriter out;
@@ -84,8 +88,8 @@ public abstract class AbstractWriter implements Writer {
 
         try {
             File file = new File(getFileName());
-
-            System.out.println("genarating ... " + file.getAbsolutePath());
+			if(j2eewscontext.getMiscInfo().isVerbose())
+            	log.info("genarating ... " + file.getAbsolutePath());
 
             if (!overwrite && file.exists()) {
                 throw new GenerationFault("the file already exists .. tool will not overwrite it ");

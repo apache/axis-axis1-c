@@ -14,6 +14,7 @@ import org.apache.geronimo.ews.ws4j2ee.toWs.Ws4J2EEwithWSDL;
 public class GenerateTest 
 	extends AbstractTestCase
 {
+	private String outDir = "target/generated/samples/";
 	/**
 	 * Create the test case
 	 *
@@ -37,40 +38,44 @@ public class GenerateTest
 	{
 		//client side
 		String args[] = new String[]{getTestFile("src/samples/jaxrpc/book/webservice.xml"),
-									 "-o" + getTestFile("generated/withWSDL/client/book")};
+									 "-o" + getTestFile(outDir+"withWSDL/client/book")};
 		Ws4J2EEwithWSDL.main(args);
 		//server side
 		String args1[] = new String[]{getTestFile("src/samples/jaxrpc/book/webservice.xml"),
-									 "-o" + getTestFile("generated/withWSDL/server/book"),"--server-side"};
+									 "-o" + getTestFile(outDir+"withWSDL/server/book"),"--server-side"};
 		Ws4J2EEwithWSDL.main(args1);
-		
-		//genarate the code when WSDL is not avalible, this do not work with the new
-			  //axis code ... still do not get what is the problem.
-//			  java.lang.NullPointerException
-//				  at org.apache.axis.wsdl.fromJava.Types.getTypeQName(Types.java:688)
-//				  at org.apache.axis.wsdl.fromJava.Types.writeTypeForPart(Types.java:420)
-//				  at org.apache.axis.wsdl.fromJava.Emitter.writePartToMessage(Emitter.java:1854)
-//				  at org.apache.axis.wsdl.fromJava.Emitter.writeFaultMessage(Emitter.java:1783)
-//				  at org.apache.axis.wsdl.fromJava.Emitter.writeMessages(Emitter.java:1130)
-//				  at org.apache.axis.wsdl.fromJava.Emitter.writePortType(Emitter.java:1066)
-//				  at org.apache.axis.wsdl.fromJava.Emitter.getWSDL(Emitter.java:499)
-//				  at org.apache.axis.wsdl.fromJava.Emitter.emit(Emitter.java:350)
-//				  at org.apache.axis.wsdl.fromJava.Emitter.emit(Emitter.java:445)
-//		 nothing to do with ws4j2ee as the run with the java2WSDL gives the same error.
-//		have to check with new checkout ... or this a bug at Axis 
         
-//				String[] args2 = new String[]{"-otarget/generated/withoutWSDL/server/META-INF/book1.wsdl" ,"-l" ,"http://127.0.0.1/ws4j2ee/","com.jwsbook.jaxrpc.BookQuote"};
-//			  Ws4J2EEwithoutWSDL.main(args2);
+//			String[] args2 = new String[]{"-o"+outDir+"withoutWSDL/server/META-INF/book1.wsdl" ,"-l" ,"http://127.0.0.1/ws4j2ee/","com.jwsbook.jaxrpc.BookQuote"};
+//			Ws4J2EEwithoutWSDL.main(args2);
 	}
 
-	public void testTimeSample() throws Exception
-	{
+	public void testTimeSample() throws Exception{
 		String args[] = new String[]{getTestFile("src/samples/jaxrpc/time/webservices.xml"),
-									 "-o" + getTestFile("generated/withWSDL/client/time")};
+									 "-o" + getTestFile(outDir+"withWSDL/client/time")};
 		Ws4J2EEwithWSDL.main(args);
 		
 		args = new String[]{getTestFile("src/samples/jaxrpc/time/webservices.xml"),
-											 "-o" + getTestFile("generated/withWSDL/server/time"),"--server-side"};
+											 "-o" + getTestFile(outDir+"withWSDL/server/time"),"--server-side"};
 		Ws4J2EEwithWSDL.main(args);
 	}
+	
+	public void testZipSample() throws Exception{
+			String args[] = new String[]{getTestFile("src/samples/mapper/frenchzip/webservices.xml"),
+										 "-o" + getTestFile(outDir+"withWSDL/client/zip")};
+			Ws4J2EEwithWSDL.main(args);
+		
+			args = new String[]{getTestFile("src/samples/mapper/frenchzip/webservices.xml"),
+												 "-o" + getTestFile(outDir+"withWSDL/server/zip"),"--server-side"};
+			Ws4J2EEwithWSDL.main(args);
+	}
+	public void testGoogleSample() throws Exception{
+				String args[] = new String[]{getTestFile("src/samples/mapper/google/webservices.xml"),
+											 "-o" + getTestFile(outDir+"withWSDL/client/google")};
+				Ws4J2EEwithWSDL.main(args);
+		
+				args = new String[]{getTestFile("src/samples/mapper/google/webservices.xml"),
+													 "-o" + getTestFile(outDir+"withWSDL/server/google"),"--server-side"};
+				Ws4J2EEwithWSDL.main(args);
+	}	
+	
 }

@@ -56,6 +56,8 @@
 package org.apache.geronimo.ews.ws4j2ee.toWs.wsdl;
 
 import org.apache.axis.components.logger.LogFactory;
+import org.apache.axis.encoding.TypeMapping;
+import org.apache.axis.encoding.TypeMappingImpl;
 import org.apache.axis.utils.CLArgsParser;
 import org.apache.axis.utils.CLOption;
 import org.apache.axis.utils.Messages;
@@ -131,6 +133,9 @@ public class WSDLGenarator extends Java2WSDL implements Generator {
                 emitter.setNamespaceMap(namespaceMap);
             }
             
+			TypeMapping tm = new TypeMappingImpl(emitter.getDefaultTypeMapping());
+			emitter.setTypeMapping(tm);
+            
             // Find the class using the name
             emitter.setCls(className);
 
@@ -142,8 +147,8 @@ public class WSDLGenarator extends Java2WSDL implements Generator {
             if (!file.exists())
                 file.mkdirs();
 
-            if (index > 0)
-                outputlocation = outputlocation.substring(0, index);
+//            if (index > 0)
+//                outputlocation = outputlocation.substring(0, index);
 
             j2eewscontext.getMiscInfo()
                     .setOutputPath(outputlocation);

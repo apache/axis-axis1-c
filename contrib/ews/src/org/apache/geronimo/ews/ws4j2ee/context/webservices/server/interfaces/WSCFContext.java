@@ -2,7 +2,7 @@
  * The Apache Software License, Version 1.1
  *
  *
- * Copyright (c) 2001-2004 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -59,43 +59,41 @@ import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 /**
  * This will inteface the wholw webservice.xml file and will give sufficient access to
  * all the elements and attrebutes either directly or through other interfaces.
+ *
  */
 public interface WSCFContext {
-    /**
-     * Gets the Description element of the webservices.xml
-     * 
-     * @return description
-     */
-    public String getDescription();
+	/**
+	 * Gets the Description element of the webservices.xml
+	 * @return description
+	 */
+	public String getDescription();
+	
+	/**
+	 * Gets the display name element of the webservices.xml
+	 * @return display name
+	 */
+	public String getDisplayName();
+	
+	/**
+	 * Gets the small icon of the webservices,xml
+	 * @return small icon
+	 */
+	public String getSmallIcon();
+	
+	/**
+	 * Gets the large icon of the webservices.xml
+	 * @return large icon
+	 */
+	public String getLargeIcon();
+	
+	/**
+	 * Gets the webservice description elements as an array
+	 * @return web service description(s)
+	 */
+	public WSCFWebserviceDescription[] getWebServicesDescription();
+	
+	public void serialize(java.io.Writer out) throws GenerationFault;
 
-    /**
-     * Gets the display name element of the webservices.xml
-     * 
-     * @return display name
-     */
-    public String getDisplayName();
-
-    /**
-     * Gets the small icon of the webservices,xml
-     * 
-     * @return small icon
-     */
-    public String getSmallIcon();
-
-    /**
-     * Gets the large icon of the webservices.xml
-     * 
-     * @return large icon
-     */
-    public String getLargeIcon();
-
-    /**
-     * Gets the webservice description elements as an array
-     * 
-     * @return web service description(s)
-     */
-    public WSCFWebserviceDescription[] getWebServicesDescription();
-
-    public void serialize(java.io.Writer out) throws GenerationFault;
+	
 
 }

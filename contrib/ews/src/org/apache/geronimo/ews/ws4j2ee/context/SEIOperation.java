@@ -56,7 +56,6 @@
 package org.apache.geronimo.ews.ws4j2ee.context;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 /**
  * represent a operation in the SEI.
@@ -69,7 +68,9 @@ public interface SEIOperation {
     /**
      * @return a Map in which key is the parameter name and the Type is the value.
      */
-    public Map getParameters();
+    public ArrayList getParameterNames();
+    
+	public String getParameterType(String name);
 
     /**
      * @return ArrayList of Strings
