@@ -18,7 +18,20 @@ SessionScopeHandlerPool::SessionScopeHandlerPool()
 
 SessionScopeHandlerPool::~SessionScopeHandlerPool()
 {
-
+	for (map<int, SessionHandlers*>::iterator it = m_Handlers.begin(); it != m_Handlers.end(); it++)
+	{
+		SessionHandlers* pSH = (*it).second;
+		for (SessionHandlers::iterator itr = pSH->begin(); itr != pSH->end(); itr++)
+		{
+			for (list<BasicHandler*>::iterator ite = (*itr).second.begin(); ite != (*itr).second.end(); ite++)
+			{
+				g_HandlerLoader.DeleteHandler(*ite, (*it).first);
+			}
+			(*itr).second.clear();
+		}
+		delete pSH;
+	}
+	m_Handlers.clear();
 }
 
 int SessionScopeHandlerPool::GetInstance(string& sSessionId, BasicHandler** pHandler, int nLibId)

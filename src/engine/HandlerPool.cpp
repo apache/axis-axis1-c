@@ -86,6 +86,10 @@ HandlerPool::HandlerPool()
 
 HandlerPool::~HandlerPool()
 {
+	for (list<HandlerChain*>::iterator it = m_ChainStore.begin(); it != m_ChainStore.end(); it++)
+	{
+		delete (*it);
+	}
 }
 
 int HandlerPool::GetHandler(BasicHandler** ppHandler, string& sSessionId, int nScope, int nLibId)

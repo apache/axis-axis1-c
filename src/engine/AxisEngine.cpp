@@ -71,12 +71,6 @@
 #include "DeserializerPool.h"
 #include "SerializerPool.h"
 
-//extern int send_response_bytes(char * res);
-
-//extern int get_request_bytes(char * req, int reqsize, int* retsize);
-
-//extern int send_transport_information(soapstream *);
-
 extern DeserializerPool g_DeserializerPool;
 extern SerializerPool g_SerializerPool;
 extern HandlerPool g_HandlerPool;
@@ -243,7 +237,7 @@ int AxisEngine::Process(Ax_soapstream* soap)
 		//send any transoport information like http headers first
 		send_transport_information(soap);
 		//Serialize
-		m_pSZ->SetOutputStream(soap->str.ip_stream);
+		m_pSZ->SetOutputStream(soap->str.op_stream);
 
 		//Pool back the Service specific handlers
 		if (m_pSReqFChain) g_HandlerPool.PoolHandlerChain(m_pSReqFChain, sSessionId);

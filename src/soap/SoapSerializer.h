@@ -103,7 +103,7 @@ public:
 	const char* getNewNamespacePrefix();
 	int setSoapVersion(SOAP_VERSION);
 	int Init();
-	int SetOutputStream(void* pStream);
+	int SetOutputStream(const void* pStream);
 	int setSoapFault(SoapFault* pSoapFault);
 	int setSoapMethod(SoapMethod* pSoapMethod);
 	int setSoapBody(SoapBody* pSoapBody);
@@ -122,7 +122,7 @@ public: //Basic Type Serializing methods
 	string& SerializeBasicType(const string& sName, int nValue);
 private:
 	BasicTypeSerializer m_BTSZ;
-	void* m_pOutputStream;
+	const void* m_pOutputStream;
 };
 
 #endif // !defined(AFX_SOAPSERIALIZER_H__C37229AD_BD54_430D_9619_E4574CF95334__INCLUDED_)
