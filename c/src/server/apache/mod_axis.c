@@ -89,7 +89,7 @@ static int axis_handler(request_rec *r)
 
 	sstr = malloc(sizeof(soapstream));
 	sstr->trtype=APTHTTP;
-	r->content_type = "text/html";
+	r->content_type = "text/xml"; //for SOAP 1.2 this this should be "application/soap+xml" but keep this for the moment
 	//set up the read policy from the client.
 	if ((rc = ap_setup_client_block(r, REQUEST_CHUNKED_ERROR)) != OK)
 	{
