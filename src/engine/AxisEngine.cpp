@@ -75,7 +75,7 @@
 
 #ifdef WIN32
 //#define WSDDFILEPATH "./Axis/conf/server.wsdd"
-#define WSDDFILEPATH "C:/Apache/Axis/server.wsdd"
+#define WSDDFILEPATH "e:/Axis/server.wsdd"
 #else //For linux
 #define WSDDFILEPATH "/usr/local/axiscpp/axis/server.wsdd"
 #endif
@@ -211,9 +211,6 @@ int AxisEngine::Process(soapstream* soap)
 				service= cService;
 		  }
 		  
-		  //string service = getheader(soap, SOAPACTIONHEADER);
-		  service = service.substr(1, service.length() - 2);
-
 		  DEBUG2("string service = Maths :",service.c_str());
      
 		  if (service.empty()) 
@@ -221,6 +218,7 @@ int AxisEngine::Process(soapstream* soap)
 			  pMsg->m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_SOAPACTIONEMPTY));
 			  break; //do .. while(0)
 		  }
+		  service = service.substr(1, service.length() - 2);
 		  pService = m_pWSDD->GetService(service);
 		  if (!pService) {
 			  pMsg->m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_SERVICENOTFOUND));
