@@ -134,15 +134,15 @@ SOURCE=..\..\src\soap\SoapMethod.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\soap\SoapParser.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\soap\SoapSerializer.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\soap\URIMapping.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\soap\XMLSimpleHandler.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -206,15 +206,15 @@ SOURCE=..\..\include\axis\soap\SoapMethod.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\axis\soap\SoapParser.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\axis\soap\SoapSerializer.h
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\include\axis\soap\URIMapping.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\axis\soap\XMLSimpleHandler.h
 # End Source File
 # End Group
 # End Target

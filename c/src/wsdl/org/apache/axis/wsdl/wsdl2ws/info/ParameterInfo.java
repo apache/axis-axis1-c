@@ -63,7 +63,8 @@ import javax.xml.namespace.QName;
 public class ParameterInfo {
     private Type type;
     private String attribName;
-
+	private String namespace;
+	
     public String getLangName() {
         return type.getLanguageSpecificName();
     }

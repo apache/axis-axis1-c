@@ -67,8 +67,15 @@ public class MethodInfo {
     private String methodname;
     private ArrayList parameters;
     private ParameterInfo returnType;
+	private ArrayList inputParameters;
+	private ArrayList returnParameters;
+	private ArrayList faults;
+	private boolean isRequestBodyLiteral;
+	private boolean isResponseBodyLiteral;
+	private boolean isFaultBodyLiteral;
+    
     private String soapAction;
-
+	
     public MethodInfo() {
         this.returnType = null;
         this.methodname = null;
