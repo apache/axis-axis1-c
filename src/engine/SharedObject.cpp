@@ -72,26 +72,43 @@
 SharedObject::SharedObject()
 {
 	m_bLocked = false;
-    mut = new pthread_mutex_t;
-    pthread_mutex_init(mut, NULL);
+    #ifdef WIN32
+    #else //Linux
+        mut = new pthread_mutex_t;
+        pthread_mutex_init(mut, NULL);
+    #endif	
 }
 
 SharedObject::~SharedObject()
 {
-    pthread_mutex_destroy(mut);
+    #ifdef WIN32
+    #else //Linux
+        pthread_mutex_destroy(mut);
+    #endif
 }
 //Following functions should be improved to avoid chances of failure
 //using platform specific mechanisms
 int SharedObject::lock()
 {
-    pthread_mutex_lock(mut);
+    #ifdef WIN32
+        while (m_bLocked)
+        {
+            Ax_Sleep(0);
+        }
+
+    #else //Linux
+        pthread_mutex_lock(mut);
+    #endif
 	m_bLocked = true;
 	return 0;
 }
 
 int SharedObject::unlock()
 {
-    pthread_mutex_unlock(mut);
+    #ifdef WIN32
+    #else //Linux
+        pthread_mutex_unlock(mut);
+    #endif
 	m_bLocked = false;
 	return 0;
 }
