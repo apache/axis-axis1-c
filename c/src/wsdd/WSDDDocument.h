@@ -104,6 +104,12 @@ private:
 	WSDDService * tempService;
 	WSDDTransport * tempTr;
 	AXIS_PROTOCOL_TYPE protocol;
+	char * ch;
+	XMLCh * xch;
+	XMLCh * xchName;
+	XMLCh * xchValue;
+	XMLCh * xchType;
+	char * svsch;
 public:
 	WSDDDocument();
 	~WSDDDocument();
