@@ -39,7 +39,7 @@ int ClientAxisEngine::Process(Ax_soapstream* pSoap)
 	string sSessionId = m_pSoap->sessionid;
 
 	if (!(m_pSoap->transport.pSendFunct && m_pSoap->transport.pGetFunct &&
-		m_pSoap->transport.pSendTrtFunct && m_pSoap->transport.pGetTrtFunct))
+		m_pSoap->transport.pSetTrtFunct && m_pSoap->transport.pGetTrtFunct))
 		return AXIS_FAIL;
 
 	do {
@@ -63,6 +63,14 @@ int ClientAxisEngine::Process(Ax_soapstream* pSoap)
 
 		//Invoke all handlers and then the remote webservice
 		Status = Invoke(m_pMsgData); //we generate response in the same way even if this has failed
+		if (AXIS_SUCCESS == Status)
+		{
+			int nSoapVersion = m_pDZ->GetVersion();
+			if (nSoapVersion == VERSION_LAST) /* version not supported */
+			{
+				return AXIS_FAIL;
+			}
+		}
 	}
 	while(0);
 
@@ -126,10 +134,9 @@ int ClientAxisEngine::Invoke(MessageData* pMsg)
 	
 	do 
 	{
-		if (AXIS_SUCCESS != (Status = m_pSoap->transport.pSendTrtFunct(m_pSoap))) break;
 		if (AXIS_SUCCESS != (Status = m_pSZ->SetOutputStream(m_pSoap))) break;
+		m_pSZ->MarkEndOfStream();
 		pMsg->setPastPivotState(true);
-		if (AXIS_SUCCESS != (Status = m_pSoap->transport.pGetTrtFunct(m_pSoap))) break;
 		if (AXIS_SUCCESS != (Status = m_pDZ->SetInputStream(m_pSoap))) break;
 	}
 	while(0);

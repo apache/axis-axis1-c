@@ -108,21 +108,13 @@ void WSDDService::SetProvider(const AxisChar* sProvider)
 {
 	if (0 == strcmp(sProvider, "C:RPC"))
 	{
-		m_Provider = C_RPC_PROVIDER;
-	}
-	else if (0 == strcmp(sProvider, "CPP:RPC"))
-	{
-		m_Provider = CPP_RPC_PROVIDER;
+		m_Provider = RPC_PROVIDER;
 	}
 	else if (0 == strcmp(sProvider, "C:DOCUMENT"))
 	{
-		m_Provider = C_DOC_PROVIDER;
+		m_Provider = DOC_PROVIDER;
 	}
-	else if (0 == strcmp(sProvider, "CPP:DOCUMENT"))
-	{
-		m_Provider = CPP_DOC_PROVIDER;
-	}
-	else if (0 == strcmp(sProvider, "COM"))
+	else if (0 == strcmp(sProvider, "MS:COM"))
 	{
 		m_Provider = COM_PROVIDER;
 	}
@@ -132,7 +124,7 @@ void WSDDService::SetProvider(const AxisChar* sProvider)
 	}
 }
 
-PROVIDERTYPE WSDDService::GetProvider()
+PROVIDERTYPE WSDDService::GetProvider() const
 {
 	return m_Provider;
 }

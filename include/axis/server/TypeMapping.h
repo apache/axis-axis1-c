@@ -1,5 +1,3 @@
-/* -*- C++ -*- */
-
 /*
  * The Apache Software License, Version 1.1
  *
@@ -60,9 +58,8 @@
  * @author Susantha Kumara (skumara@virtusa.com)
  *
  */
-// TypeMapping.h: interface for the TypeMapping class.
-//
-//////////////////////////////////////////////////////////////////////
+/* TypeMapping.h: interface for the TypeMapping class.*/
+
 #ifdef WIN32
 #pragma warning (disable : 4786)
 #endif
@@ -70,18 +67,23 @@
 #if !defined(AFX_TYPEMAPPING_H__B09703CE_154D_400E_A4E6_ED01901B33A0__INCLUDED_)
 #define AFX_TYPEMAPPING_H__B09703CE_154D_400E_A4E6_ED01901B33A0__INCLUDED_
 
-#include <map>
-#include <string>
 #include "GDefine.h"
 
-using namespace std;
-
-enum XSDTYPE { XSD_UNKNOWN=1, XSD_INT, XSD_FLOAT, XSD_STRING, XSD_LONG, XSD_SHORT, XSD_BYTE, XSD_UNSIGNEDLONG, \
+typedef enum XSDTYPETag 
+{ XSD_UNKNOWN=1, XSD_INT, XSD_FLOAT, XSD_STRING, XSD_LONG, XSD_SHORT, XSD_BYTE, XSD_UNSIGNEDLONG, \
 				XSD_BOOLEAN, XSD_UNSIGNEDINT, XSD_UNSIGNEDSHORT, XSD_UNSIGNEDBYTE, \
 				XSD_DOUBLE, XSD_DECIMAL, XSD_DURATION, XSD_DATETIME, XSD_TIME, XSD_DATE, \
 				XSD_YEARMONTH, XSD_YEAR, XSD_MONTHDAY, XSD_DAY, XSD_MONTH, XSD_HEXBINARY, \
 				XSD_BASE64BINARY, XSD_ANYURI, XSD_QNAME, XSD_NOTATION, XSD_INTEGER, \
-				XSD_ARRAY, USER_TYPE, ACCESSOR };
+				XSD_ARRAY, USER_TYPE, ACCESSOR 
+} XSDTYPE;
+
+#ifdef __cplusplus
+
+#include <map>
+#include <string>
+
+using namespace std;
 
 class TypeMapping  
 {
@@ -95,4 +97,6 @@ public:
 
 };
 
-#endif // !defined(AFX_TYPEMAPPING_H__B09703CE_154D_400E_A4E6_ED01901B33A0__INCLUDED_)
+#endif
+
+#endif /* !defined(AFX_TYPEMAPPING_H__B09703CE_154D_400E_A4E6_ED01901B33A0__INCLUDED_) */

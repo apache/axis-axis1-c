@@ -60,6 +60,10 @@
  * @author Sanjaya Singharage (sanjayas@jkcsworld.com)
  *
  */
+#ifdef WIN32
+#else
+#define PATH_MAX 4096
+#endif
 
 #include <apache2_0/httpd.h>
 #include <apache2_0/http_config.h>
@@ -71,25 +75,31 @@
 #include <axis/common/Packet.h>
 #include <malloc.h>
 
+#define AXIS_URI_EXTENSION "/axis/"
+
 /*
 The apache 2.0 module for Axis. THIS IS NOT COMPLETED
 */
 
 extern int process_request(Ax_soapstream* str);
-//extern int process(soapstream *);
+/*extern int process(soapstream *);*/
 extern unsigned char chEBuf[1024];
 
-//Should dispatch the headers from within this method
+#define SIZEOFMODULEBUFFER 100
+
+char g_buffer[SIZEOFMODULEBUFFER];
+
+/*Should dispatch the headers from within this method*/
 int send_transport_information(Ax_soapstream* hdr)
 {
       ap_send_http_header((request_rec*)hdr->str.op_stream);
 	  return 0;
 }
 
-//Call initialize_module() [of Packet.h] from within this method
+/*Call initialize_module() [of Packet.h] from within this method*/
 void module_init(server_rec *svr_rec, apr_pool_t* p)
 {
-	initialize_module(1, "");
+	initialize_module(1);
 }
 
 int send_response_bytes(char* res, void* opstream)
@@ -98,23 +108,27 @@ int send_response_bytes(char* res, void* opstream)
 	return 0;
 }
 
-//Call initialize_process() [of Packet.h] from within this method
+/*Call initialize_process() [of Packet.h] from within this method*/
 void  axis_Init(server_rec *svr_rec, apr_pool_t* p)
 {}
-//Call finalize_process() [of Packet.h] from within this method
+/*Call finalize_process() [of Packet.h] from within this method*/
 void axis_Fini(server_rec *svr_rec, apr_pool_t* p)
 {}
 
-int get_request_bytes(char* req, int reqsize, int* retsize, void* ipstream)
+/**
+ * This function is called by the Axis Engine whenever it needs to get bytes from the 
+ * transport layer.
+ */
+int get_request_bytes(const char** req, int* retsize, const void* ipstream)
 {
 	int len_read;
-	//ap_hard_timeout("util_read", (request_rec*)ipstream);
-	len_read = ap_get_client_block((request_rec*)ipstream, req, reqsize);
-	//ap_reset_timeout((request_rec*)ipstream);
+//	ap_hard_timeout("util_read", (request_rec*)ipstream);
+	len_read = ap_get_client_block((request_rec*)ipstream, g_buffer, SIZEOFMODULEBUFFER);
+//	ap_reset_timeout((request_rec*)ipstream);
+	*req = g_buffer;
 	*retsize =  len_read;
 	return 0;
 }
-
 
 static int mod_axis_method_handler (request_rec *req_rec)
 {
@@ -138,31 +152,31 @@ static int mod_axis_method_handler (request_rec *req_rec)
 	sstr->transport.pGetTrtFunct = send_transport_information; /*isn't there a get transport information function for apache module ?*/
 
 	sstr->trtype = APTHTTP;
-	//req_rec is used as both input and output streams
+	/*req_rec is used as both input and output streams*/
 	sstr->str.ip_stream = req_rec;
 	sstr->str.op_stream = req_rec;
-	//just add some sessionid
+	/*just add some sessionid*/
 	sstr->sessionid = "this is temporary session id";
 
 
-	//set up the read policy from the client.
+	/*set up the read policy from the client.*/
 	if ((rc = ap_setup_client_block(req_rec, REQUEST_CHUNKED_ERROR)) != OK)
 	{
 		return rc;
 	}
 
-	//the member, "path" of "parsed_uri" contains the uri of the 
-	//request (i.e "/abc/xyz" part of http://somehost/abc/xyz)
+	/*the member, "path" of "parsed_uri" contains the uri of the*/ 
+	/*request (i.e "/abc/xyz" part of http://somehost/abc/xyz)*/
 	sstr->so.http.uri_path = req_rec->parsed_uri.path;
 
-	//ap_table_elts returns an array_header struct. The nelts element of that struct contains the number of
-	//input header elements. Finally assigns that to the axis soap data structure. 
+	/*ap_table_elts returns an array_header struct. The nelts element of that struct contains the number of*/
+	/*input header elements. Finally assigns that to the axis soap data structure. */
 	sstr->so.http.ip_headercount = ap_table_elts(req_rec->headers_in)->nelts;  
 
 
 	if (sstr->so.http.ip_headercount > 0)
 	{
-		//obtain the array_header from the headers_in table and assign it to the axis soap structure
+		/*obtain the array_header from the headers_in table and assign it to the axis soap structure*/
 		arr = ap_table_elts(req_rec->headers_in);
 		pHeaderTable = arr->elts;
 		sstr->so.http.ip_headers = malloc(sizeof(Ax_header)*sstr->so.http.ip_headercount);
@@ -173,7 +187,7 @@ static int mod_axis_method_handler (request_rec *req_rec)
 			(pAx_Headers+ix)->headervalue = (pHeaderTable+ix)->val;
 		}	
 	}
-	//Determine the http method and assign it to the axis soap structure
+	/*Determine the http method and assign it to the axis soap structure*/
 	switch (req_rec->method_number)
 	{
 	case M_GET:
@@ -183,15 +197,15 @@ static int mod_axis_method_handler (request_rec *req_rec)
 	case M_POST:
       sstr->so.http.ip_method = AXIS_HTTP_POST;
 	  req_rec->content_type = "text/xml"; 
-	//for SOAP 1.2 this this should be "application/soap+xml" 
-	//but keep this for the moment
+	/*for SOAP 1.2 this this should be "application/soap+xml" */
+	/*but keep this for the moment*/
       break;
 	default:
       sstr->so.http.ip_method = AXIS_HTTP_UNSUPPORTED;   
 	}
 
-  	//tell the client that we are ready to receive content and check whether client will send content
-	//control will pass to this block only if there is body content in the request
+  	/*tell the client that we are ready to receive content and check whether client will send content*/
+	/*control will pass to this block only if there is body content in the request*/
     if (ap_should_client_block(req_rec));
 
 	if(0 != process_request(sstr))
@@ -202,16 +216,16 @@ static int mod_axis_method_handler (request_rec *req_rec)
 
 
 	free(sstr);
-	//free(arr);
+	/*free(arr);*/
 	return OK;
 }
 
 static void mod_axis_register_hooks (apr_pool_t *p)
 {
 	ap_hook_child_init(module_init, NULL, NULL, APR_HOOK_REALLY_FIRST);
-	//ap_hook_pre_connection(axis_Init, NULL, NULL, APR_HOOK_FIRST);
+	/*ap_hook_pre_connection(axis_Init, NULL, NULL, APR_HOOK_FIRST);*/
 	ap_hook_handler(mod_axis_method_handler, NULL, NULL, APR_HOOK_LAST);
-	//ap_hook_process_connection(axis_Fini, NULL, NULL, APR_HOOK_REALLY_LAST);
+	/*ap_hook_process_connection(axis_Fini, NULL, NULL, APR_HOOK_REALLY_LAST);*/
 }
 
 
