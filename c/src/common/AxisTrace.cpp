@@ -82,6 +82,7 @@ AxisTrace::~AxisTrace()
 
 int AxisTrace::trace(const char* sLog,char* arg2, int arg3)
 {
+    //system("echo 'came here' >> __damtemp");
     m_sFileName =  g_pConfig->GetAxisLogPath();
     if ((fileTrace = fopen(m_sFileName, "a")) == NULL)
         return FAIL;
@@ -117,6 +118,7 @@ int AxisTrace::trace(const char* sLog,char* arg2, int arg3)
 
 int AxisTrace::trace(const char* sLog1, const char* sLog2,char* arg3, int arg4)
 {
+    //system("echo 'came here2' >> __damtemp");
   m_sFileName =  g_pConfig->GetAxisLogPath();
   if ((fileTrace = fopen(m_sFileName, "a")) == NULL)
         return FAIL;

@@ -62,7 +62,7 @@ int ServerAxisEngine::Process(Ax_soapstream* soap)
 			AxisString service = (cService == NULL)? "" : cService;
 			//AxisUtils::convert(service, (cService == NULL)? "" : cService);
 		  
-//			AXISTRACE2("string service = ",service.c_str());
+			AXISTRACE2("string service = ",service.c_str());
      
 			if (service.empty()) 
 			{
@@ -112,7 +112,7 @@ int ServerAxisEngine::Process(Ax_soapstream* soap)
 			if (pSm) 
 			{
 				const AxisChar* pMethod = pSm->getMethodName();
-//				AXISTRACE2("pSm->getMethodName(); :", pMethod);
+				AXISTRACE2("pSm->getMethodName(); :", pMethod);
 				if (pMethod)
 				{
 					if (pService->IsAllowedMethod(pMethod))
@@ -151,6 +151,7 @@ int ServerAxisEngine::Process(Ax_soapstream* soap)
 			  m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_COULDNOTLOADHDL));
 			  break; //do .. while(0)
 			}
+            AXISTRACE1("received request flow handler chain");
 			if(SUCCESS != (Status = g_pHandlerPool->GetResponseFlowHandlerChain(&m_pSResFChain, sSessionId, pService)))
 			{        
 			  m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_COULDNOTLOADHDL));
@@ -212,12 +213,13 @@ int ServerAxisEngine::Invoke(MessageData* pMsg)
 		if (m_pTReqFChain) {
 			if(SUCCESS != (Status = m_pTReqFChain->Invoke(pMsg)))
 			{
+                AXISTRACE1("handler chain invoke not successful");
 				m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_HANDLERFAILED));
 				break; //do .. while (0)
 			}
 
 		}
-//		AXISTRACE1("AFTER invoke transport request handlers");
+		AXISTRACE1("AFTER invoke transport request handlers");
 		level++; // AE_TRH
 		//invoke global request handlers
 		if (m_pGReqFChain)
@@ -228,7 +230,7 @@ int ServerAxisEngine::Invoke(MessageData* pMsg)
 				break; //do .. while (0)
 			}		
 		}
-//        AXISTRACE1("AFTER invoke global request handlers");
+        AXISTRACE1("AFTER invoke global request handlers");
 		level++; //AE_GLH
 		//invoke service specific request handlers
 		if (m_pSReqFChain)
@@ -239,7 +241,7 @@ int ServerAxisEngine::Invoke(MessageData* pMsg)
 				break; //do .. while (0)
 			}
 		}
-//		AXISTRACE1("AFTER invoke service specific request handlers");
+		AXISTRACE1("AFTER invoke service specific request handlers");
 		level++; //AE_SERH
 		//call actual web service handler
 		if (m_pWebService)
@@ -250,7 +252,7 @@ int ServerAxisEngine::Invoke(MessageData* pMsg)
 				break;
 			}        
 		}
-//		AXISTRACE1("AFTER call actual web service handler");
+		AXISTRACE1("AFTER call actual web service");
 		level++; //AE_SERV
 	}
 	while(0);
@@ -292,7 +294,7 @@ int ServerAxisEngine::Invoke(MessageData* pMsg)
 		//no break;
 	case AE_START:;//transport handlers have failed
 	};
-//	AXISTRACE1("end axisengine process()");
+	AXISTRACE1("end axisengine process()");
 	return Status;
 }
 

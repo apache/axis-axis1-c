@@ -98,7 +98,7 @@ int WSDDDocument::ParseDocument(const AxisChar* sWSDD)
 		SAX2XMLReader* parser = XMLReaderFactory::createXMLReader();
 		parser->setContentHandler(this);
 		parser->setErrorHandler(this);     
-		AXISTRACE1("BEFORE parser->parse(sWSDD);");
+		//AXISTRACE1("BEFORE parser->parse(sWSDD);");
 		parser->parse(sWSDD);   
 		delete parser;
 	}
