@@ -451,9 +451,9 @@ HttpTransport::HTTPBind ()
 	else
 	{
 	    m_OutHttpHeaders += m_AdditionalHeader[i].first;
-	    m_OutHttpHeaders += ": \"";
+	    m_OutHttpHeaders += ": ";
 	    m_OutHttpHeaders += m_AdditionalHeader[i].second;
-	    m_OutHttpHeaders += "\"\r\n";
+	    m_OutHttpHeaders += "\r\n";
 	}
     }
 

@@ -234,7 +234,16 @@ int Call::setProtocol (AXIS_PROTOCOL_TYPE protocol)
 int Call::setTransportProperty (AXIS_TRANSPORT_INFORMATION_TYPE type,
     const char* value)
 {
-    m_pTransport->setTransportProperty(type, value);
+    // Samisa - if SOAPAction is being set add extra "" to value
+    if (type == SOAPACTION_HEADER)
+    {
+        char* tempvalue = new char[strlen(value) + 3];
+        sprintf( tempvalue, "\"%s\"", value);
+        m_pTransport->setTransportProperty(type, tempvalue);
+        delete [] tempvalue;
+    }
+    else
+        m_pTransport->setTransportProperty(type, value);
     return AXIS_SUCCESS;
 }
 
