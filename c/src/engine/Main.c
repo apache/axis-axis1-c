@@ -70,12 +70,23 @@
 
 extern int process_request(soapstream *);
 
-char* ip = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><soapenv:Body><add soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"><op1 xsi:type=\"xsd:int\">3</op1><op2 xsi:type=\"xsd:int\">4</op2></add></soapenv:Body></soapenv:Envelope>";
+//soap request with headers
+char* ip = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><soapenv:Envelope \
+			xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" \
+			xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" \
+			xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"> \
+			<soapenv:Header><t:Transaction xmlns:t=\"http://example.org/2001/06/tx\" \
+			soapenv:mustUnderstand=\"true\" >Hello Req Header Val</t:Transaction> \
+			</soanenv:Header> \
+			<soapenv:Body><add soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"> \
+			<op1 xsi:type=\"xsd:int\">3</op1><op2 xsi:type=\"xsd:int\">4</op2> \
+			</add></soapenv:Body></soapenv:Envelope>";
 
 //	char* ip = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><soapenv:Body><echo soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"><op1 xsi:type=\"xsd:string\">Hello World!</op1></echo></soapenv:Body></soapenv:Envelope>";
+
 	
 	//user type that contains an array of another user type
-//	char* ip = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><soapenv:Envelope xmlns:soapenv=\"\
+	//char* ip = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><soapenv:Envelope xmlns:soapenv=\"\
 		http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"\
 		xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><soapenv:Body><Store \
 		soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"><def:Person xmlns:def=\"\
