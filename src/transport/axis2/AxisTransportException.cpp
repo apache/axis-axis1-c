@@ -122,18 +122,6 @@ const string AxisTransportException::getMessage (const int iExceptionCode)
             m_sMessage = "AxisTransportException:Cannot initialize a " \
                 "channel to the remote end";
             break;
-        case SERVER_TRANSPORT_SOCKET_CREATE_ERROR:
-            m_sMessage = "AxisTransportException:Sockets error Couldn't" \
-               " create socket";
-            break;
-        case SERVER_TRANSPORT_SOCKET_CONNECT_ERROR:
-            m_sMessage = "AxisTransportException:Cannot open a channel to the" \
-            " remote end, shutting down the channel";
-            break;
-        case SERVER_TRANSPORT_INVALID_SOCKET:
-            m_sMessage = "AxisTransportException:Invalid socket. Socket may" \
-                " not be open";
-            break;
         case SERVER_TRANSPORT_OUTPUT_STREAMING_ERROR:
             m_sMessage = "AxisTransportException:Output streaming error on" \
                 " Channel while writing data";
@@ -153,29 +141,36 @@ const string AxisTransportException::getMessage (const int iExceptionCode)
         case SERVER_TRANSPORT_BUFFER_EMPTY:
             m_sMessage = "AxisTransportException:Transport buffer is empty";
             break;
-		case CLIENT_TRANSPORT_EXCEPTION:
-		{
+	case CLIENT_TRANSPORT_EXCEPTION:
+	{
             m_sMessage = "AxisTransportException:Generic client transport exception";
 			break;
-		}
+	}
 
-		case CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED:
-		{
+	case CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED:
+	{
             m_sMessage = "AxisTransportException:Client failed to open";
-			break;
-		}
+		break;
+	}
 
-		case CLIENT_TRANSPORT_TYPE_MISMATCH:
-		{
+	case CLIENT_TRANSPORT_TYPE_MISMATCH:
+	{
             m_sMessage = "AxisTransportException:Client attempted to use SSL functions without the proper prerquistes";
-			break;
-		}
+		break;
+	}
 
-		case CLIENT_TRANSPORT_HAS_NO_SECURE_TRANSPORT_LAYER:
-		{
+	case CLIENT_TRANSPORT_HAS_NO_SECURE_TRANSPORT_LAYER:
+	{
             m_sMessage = "AxisTransportException:Client attempted to use secure transport (https) without an SSL layer";
-			break;
-		}
+		break;
+	}
+
+        case SERVER_TRANSPORT_LOADING_SSLCHANNEL_FAILED:
+        {
+            m_sMessage = "DLOPEN FAILED in loading ssl channel library";
+            break;
+        }
+
         default:
             m_sMessage = "AxisTransportException:Unknown Transport Exception"; 
     }

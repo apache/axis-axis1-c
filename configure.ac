@@ -169,12 +169,39 @@ AC_ARG_ENABLE(log, [  --enable-log    enable log facility.],
   ENABLELOGGING="-DENABLE_AXISTRACE"
 )
 
+AC_MSG_CHECKING(whether to build ssh transport channellibrary.)
+AC_ARG_WITH(axis2-ssl,
+[  --with-axis2-ssl[=PATH]      build transport channellibrary.],
+[ case "$withval" in
+  no)
+    AC_MSG_RESULT(no)
+    SSLBUILD=""
+    ;;
+  *)
+    AC_MSG_RESULT(yes)
+    dnl test for  ssl directory
+    if test -d $withval; then
+        sslinc="-I$withval/include"
+        ssllib="-L$withval/lib -lssl -L$withval/lib -lcrypto -ldl"
+    else
+        AC_MSG_ERROR(could not find ssl. stop)
+    fi
+    SSLBUILD="ssl"
+  
+  ;;
+  esac ],
+  AC_MSG_RESULT(no)
+  SSLBUILD=""
+)
+
 APACHE2INC=$apache2inc
 APACHEINC=$apacheinc
 XERCESCINC=$xercescinc
 XERCESCLIB=$xercesclib
 EXPATINC=$expatinc
 EXPATLIB=$expatlib
+SSLINC=$sslinc
+SSLLIB=$ssllib
 LINKCLIENTLIB="-L${AXISCPP_HOME}/src/engine/client -laxiscpp_client -ldl"
 AC_SUBST(APACHE2INC)
 AC_SUBST(APACHEINC)
@@ -182,6 +209,8 @@ AC_SUBST(XERCESCINC)
 AC_SUBST(XERCESCLIB)
 AC_SUBST(EXPATINC)
 AC_SUBST(EXPATLIB)
+AC_SUBST(SSLINC)
+AC_SUBST(SSLLIB)
 AC_SUBST(XERCESCBUILD)
 AC_SUBST(EXPATBUILD)
 AC_SUBST(APACHE2BUILD)
@@ -191,6 +220,7 @@ AC_SUBST(TESTCASESBUILD)
 AC_SUBST(SAMPLESBUILD)
 AC_SUBST(LIBWWWBUILD)
 AC_SUBST(TSPPBUILD)
+AC_SUBST(SSLBUILD)
 
 CFLAGS="-Wall -Wshadow ${ENABLELOGGING}"
 CPPFLAGS="-Wall -Wshadow ${ENABLELOGGING}"
@@ -208,6 +238,7 @@ AC_OUTPUT(Makefile \
     src/xml/Makefile \
     src/transport/Makefile \
     src/transport/axis2/Makefile \
+    src/transport/axis2/ssl/Makefile \
     src/transport/axis2/ipv6/Makefile \
     src/engine/Makefile \
     src/engine/server/Makefile \
@@ -242,6 +273,7 @@ AC_OUTPUT(Makefile \
     samples/client/interoptests/doclitbase/Makefile \
     samples/client/interoptests/doclitgroupB/Makefile \
     samples/client/simple/Makefile \
+    samples/client/ssl_client/Makefile \
     samples/client/array/Makefile \
     samples/client/ref/Makefile \
     samples/client/rpcfault/Makefile \

@@ -1,4 +1,6 @@
 #include "ISecureChannel.hpp"
+#include "SSLChannelFactory.hpp"
+#include "../SSLChannel.hpp"
 #include "Channel.h"
 #include <iostream>
 using namespace std;
@@ -33,4 +35,6 @@ private:
 
 protected:
 	string	sServerName;
+        SSLChannelFactory* m_pFactory;
+        SSLChannel* m_pSSLChannel;
 };

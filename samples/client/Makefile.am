@@ -1,1 +1,1 @@
-SUBDIRS = simple interoptests rpcfault doclitfault testHandler array ref
+SUBDIRS = simple interoptests rpcfault doclitfault testHandler array ref ssl_client
