@@ -130,6 +130,14 @@ public:
 		return m_sMsg;
 	}
 
+  /**
+    * Set proxy server and port for transport.
+    *
+    * @param pcProxyHost Host name of proxy server
+    * @param uiProxyPort Port of proxy server
+    */
+    void setProxy (const char *pcProxyHost, unsigned int uiProxyPort);
+
 protected:
     /* OS specific initilization */
     virtual bool Init();
@@ -158,6 +166,18 @@ protected:
     */
     long m_lTimeoutSeconds;
 
+  /**
+    * Proxy server name.
+    */
+    std::string m_strProxyHost;
+  /**
+    * Proxy server port.
+    */
+    unsigned int m_uiProxyPort;
+  /**
+    * Use Proxy or not?
+    */
+    bool m_bUseProxy;
 };
 
 #endif

@@ -265,13 +265,23 @@ Axis2Transport::getHTTPHeaders ()
     URL & url = m_pChannel->getURLObject ();
 
     m_strHeaderBytesToSend = m_strHTTPMethod + " ";
-    m_strHeaderBytesToSend += std::string (url.getResource ()) + " ";
+    if (m_bUseProxy)
+        m_strHeaderBytesToSend += std::string (url.getURL ()) + " ";
+    else
+        m_strHeaderBytesToSend += std::string (url.getResource ()) + " ";
+
     m_strHeaderBytesToSend += m_strHTTPProtocol + "\r\n";
-    m_strHeaderBytesToSend += std::string ("Host: ") + url.getHostName ();
+
+    if (m_bUseProxy)
+        m_strHeaderBytesToSend += std::string ("Host: ") + m_strProxyHost;
+    else
+        m_strHeaderBytesToSend += std::string ("Host: ") + url.getHostName ();
 
     unsigned short uiPort = url.getPort ();
+    if (m_bUseProxy)
+        uiPort = m_uiProxyPort;
     char buff[8];
-
+   
     sprintf (buff, "%u", uiPort);
 
     m_strHeaderBytesToSend += ":";
@@ -999,6 +1009,7 @@ Axis2Transport::getSubProtocol ()
 void
 Axis2Transport::setProxy (const char *pcProxyHost, unsigned int uiProxyPort)
 {
+    m_pChannel->setProxy(pcProxyHost, uiProxyPort);
     m_strProxyHost = pcProxyHost;
     m_uiProxyPort = uiProxyPort;
     m_bUseProxy = true;
@@ -1149,6 +1160,10 @@ Axis2Transport::processResponseHTTPHeaders ()
 
 	    // We need to close the connection and open a new one if we have 'Connection: close'
 	    if (key == "Connection" && value == " close")
+		m_bReopenConnection = true;
+
+	    // We need to close the connection and open a new one if we have 'Proxy-Connection: close'
+	    if (key == "Proxy-Connection" && value == " close")
 		m_bReopenConnection = true;
 
 	    // For both HTTP/1.0 and HTTP/1.1,

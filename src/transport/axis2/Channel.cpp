@@ -148,18 +148,25 @@ throw (AxisTransportException&)
 		sockaddr_in			svAddr;
 		struct hostent *	pHostEntry = NULL;
 
+                const char* host = m_URL.getHostName();
+                unsigned int port = m_URL.getPort();
+                if (m_bUseProxy)
+                {
+                    port = m_uiProxyPort;
+                    host = m_strProxyHost.c_str();
+                }
 		svAddr.sin_family = AF_INET;
-		svAddr.sin_port = htons (m_URL.getPort());
+		svAddr.sin_port = htons (port);
 
 		// Probably this is the host-name of the server we are connecting to...
-		if( (pHostEntry = gethostbyname( m_URL.getHostName())))
+		if( (pHostEntry = gethostbyname(host)))
 		{
 			svAddr.sin_addr.s_addr = ((struct in_addr *) pHostEntry->h_addr)->s_addr;
 		}
 		else
 		{
 			// No this is the IP address
-			svAddr.sin_addr.s_addr = inet_addr (m_URL.getHostName());
+			svAddr.sin_addr.s_addr = inet_addr (host);
 		}
 
 		// Attempt to connect to the remote server.
@@ -310,7 +317,6 @@ bool Channel::Init ()
  */
 const Channel &Channel::operator << (const char *msg)
 {
-
 	// Check that the Tx/Rx sockets are valid (this will have been done if the
 	// application has called the open method first.
     if( INVALID_SOCKET == m_Sock)
@@ -663,4 +669,11 @@ void Channel::hexOutput( char * psData, int iDataLength)
 
 		printf( "%s %s\n", sLineHex.c_str(), sLineChar.c_str());
 	}
+}
+
+void Channel::setProxy (const char *pcProxyHost, unsigned int uiProxyPort)
+{
+    m_strProxyHost = pcProxyHost;
+    m_uiProxyPort = uiProxyPort;
+    m_bUseProxy = true;
 }
