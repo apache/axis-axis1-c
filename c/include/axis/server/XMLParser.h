@@ -78,7 +78,7 @@ public:
 	virtual int Init()=0;
 	virtual const XML_Ch* GetNS4Prefix(const XML_Ch* prefix)=0;
 	virtual int GetStatus()=0;
-	virtual const AnyElement* Next()=0;
+	virtual const AnyElement* Next(bool isCharData=false)=0;
 	virtual AXIS_TRANSPORT_STATUS GetTransportStatus()=0;
 	virtual void SetTransportStatus(AXIS_TRANSPORT_STATUS nStatus)=0;
 
