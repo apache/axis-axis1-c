@@ -333,7 +333,7 @@ public:
       * @param localname The localname to set in.
       */
     void setLocalName(const AxisChar* localname);
-
+    const AxisChar * getLocalName();
     /**
       * Sets the namespace uri of this Header Block.
       *
