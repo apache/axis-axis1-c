@@ -81,12 +81,9 @@ public abstract class HeaderFileWriter extends BasicFileWriter {
 	   //includes
 	   writePreprocssorStatements();
 		//class
-	   this.writer.write("class "+classname+getExtendsPart()+"\n{\n");
 	   writeAttributes();
-	   writeConstructors();
-	   writeDistructors();
 	   writeMethods();
-	   this.writer.write("};\n\n");
+	   this.writer.write("\n\n");
 	   this.writer.write("#endif // !defined(__"+classname.toUpperCase()+"_H__INCLUDED_)\n");
 	   //cleanup
 	   writer.flush();
@@ -99,7 +96,6 @@ public abstract class HeaderFileWriter extends BasicFileWriter {
 		}
 
 	}
-	protected String getExtendsPart(){return " ";}
 	protected abstract File getFilePath()throws WrapperFault;
 
 }

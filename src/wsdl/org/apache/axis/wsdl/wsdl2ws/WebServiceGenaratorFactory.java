@@ -58,7 +58,7 @@ package org.apache.axis.wsdl.wsdl2ws;
 
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 import org.apache.axis.wsdl.wsdl2ws.rpc.RPCWebServiceGenarator;
-
+import org.apache.axis.wsdl.wsdl2ws.doclit.DocLitWebServiceGenarator;
 /**
  * Create the concreate WebService Genarator depends on the options.
  * @author Srinath Perera (hemapani@opensource.lk)
@@ -67,7 +67,10 @@ import org.apache.axis.wsdl.wsdl2ws.rpc.RPCWebServiceGenarator;
 public class WebServiceGenaratorFactory {
 	public static WebServiceGenarator createWebServiceGenarator(WebServiceContext wscontext){
 		if(wscontext.getWrapInfo().getWrapperStyle() == WrapperConstants.STYLE_RPC)
-			return new 	RPCWebServiceGenarator(wscontext);											
-		return null;
+			return new 	RPCWebServiceGenarator(wscontext);	
+		else if(wscontext.getWrapInfo().getWrapperStyle() == WrapperConstants.STYLE_DOCUMENT)										
+			return new 	DocLitWebServiceGenarator(wscontext);
+		else	
+			return null;
 	}
 }
