@@ -1,1 +1,1 @@
-SUBDIRS = apache adminservice
+SUBDIRS = apache2 adminservice
