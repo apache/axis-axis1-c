@@ -1,0 +1,8 @@
+<service>
+    <name>SimpleTypeInnerUnbounded</name>
+    <description>SimpleTypeInnerUnbounded Service</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>SimpleTypeInnerUnboundedWS.cpp</serviceCode>
+    <wsdl>SimpleTypeInnerUnbounded.wsdl</wsdl>
+	<servicename></servicename>
+</service>

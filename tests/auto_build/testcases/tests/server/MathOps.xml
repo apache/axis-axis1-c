@@ -1,0 +1,8 @@
+<service>
+    <name>MathOps</name>
+    <description>MathOps Service</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>MathOps.cpp</serviceCode>
+    <wsdl>MathOps.wsdl</wsdl>
+	<servicename></servicename>
+</service>

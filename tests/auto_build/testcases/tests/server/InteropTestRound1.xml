@@ -1,0 +1,8 @@
+<service>
+    <name>Enumeration</name>
+    <description>Enumeration Service</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>EnumerationWS.cpp</serviceCode>
+    <wsdl>Enumeration.wsdl</wsdl>
+	<servicename></servicename>
+</service>

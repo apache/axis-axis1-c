@@ -1,0 +1,8 @@
+<service>
+    <name>SimpleRef</name>
+    <description>SimpleRef Service</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>RefTestPortType.cpp</serviceCode>
+    <wsdl>SimpleRef.wsdl</wsdl>
+	<servicename></servicename>
+</service>

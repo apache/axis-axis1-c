@@ -1,0 +1,8 @@
+<service>
+    <name>FirstLevelElemType</name>
+    <description>FirstLevelElemType Service</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>FirstLevelElemType.cpp</serviceCode>
+    <wsdl></wsdl>
+	<servicename></servicename>
+</service>
