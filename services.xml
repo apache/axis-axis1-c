@@ -20,7 +20,7 @@
 		</fileset>
 	</copy>
 	<copy file="${env.XERCES_HOME}\bin\xerces-c_2_2_0.dll" 
-		todir="D:\san\works\checkouts\Axis\lib"/>
+		todir="${basedir}/../../../Axis/lib"/>
 
 	<condition property="parserspecificlibname" value="${xml4c.xmlParserLibraryName}">
 			<equals arg1="${xmlParser.xml4c}" arg2="true" />
