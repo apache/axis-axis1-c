@@ -9,7 +9,7 @@ AM_CPPFLAGS setting)
 
 I observed that the transport is much faster when it is used without 
 100-continue. However, to disable 100-continue, LibWWW need to be built 
-with –with-extension option  (--./configure with-extension)
+with -–with-extension option  (./configure --with-extension)
 
 You do not need to bother about location of LibWWW headers and libraries, 
 provided that you have done the LibWWW installation properly. 
