@@ -67,7 +67,7 @@
 #if !defined(AFX_WSDDHANDLER_H__51DC7642_033D_443B_9D97_5825C38B23DB__INCLUDED_)
 #define AFX_WSDDHANDLER_H__51DC7642_033D_443B_9D97_5825C38B23DB__INCLUDED_
 
-#include "../common/GDefine.h"
+#include "GDefine.h"
 #include <string>
 #include <map>
 #include <list>

@@ -68,9 +68,9 @@
 
 #include "WSDDDeployment.h"
 #include "WSDDDocument.h"
-#include <axis/common/GDefine.h>
-#include <axis/common/AxisConfig.h>
-#include <axis/common/AxisTrace.h>
+#include <axis/server/GDefine.h>
+#include <axis/server/AxisConfig.h>
+#include <axis/server/AxisTrace.h>
 
 extern AxisTrace* g_pAT;
 

@@ -59,8 +59,8 @@
  *
  */
 
-#include <axis/common/AxisConfig.h>
-#include <axis/common/GDefine.h>
+#include <axis/server/AxisConfig.h>
+#include <axis/server/GDefine.h>
 #include "AxisUtils.h"
 #include <stdlib.h>
 #include <stdio.h>

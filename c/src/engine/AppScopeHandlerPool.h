@@ -59,7 +59,7 @@
 #define AFX_APPSCOPEHANDLERPOOL_H__A94BE166_F35A_40B9_8B17_9ED3D1886503__INCLUDED_
 
 #include "SharedObject.h"
-#include <axis/common/BasicHandler.h>
+#include <axis/server/BasicHandler.h>
 
 #include <map>
 #include <list>

@@ -60,7 +60,7 @@
 #if !defined(__WRAPPERCLASSHANDLER_INCLUDED__)
 #define __WRAPPERCLASSHANDLER_INCLUDED__
 
-#include <axis/common/BasicHandler.h>
+#include <axis/server/BasicHandler.h>
 /**
     @class WrapperClassHandler
     @brief

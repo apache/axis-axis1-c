@@ -67,7 +67,7 @@
 #if !defined(_AXIS_RECEIVER_HPP)
 #define _AXIS_RECEIVER_HPP
 
-#include <axis/common/AxisException.h>
+#include <axis/server/AxisException.h>
 
 #include "Transport.hpp"
 

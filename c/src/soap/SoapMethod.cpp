@@ -66,8 +66,8 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "SoapMethod.h"
-#include <axis/soap/Attribute.h>
-#include <axis/common/GDefine.h>
+#include <axis/server/Attribute.h>
+#include <axis/server/GDefine.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction

@@ -69,7 +69,7 @@
 enum URITYPE { URI_XSI, URI_XSD, URI_ENC, URI_ENVELOPE, URI_UNKNOWN};
 #include <map>
 #include <string>
-#include <axis/common/GDefine.h>
+#include <axis/server/GDefine.h>
 
 using namespace std;
 /**

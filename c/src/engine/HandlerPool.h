@@ -64,11 +64,11 @@
 #if !defined(AFX_HANDLERPOOL_H__6C2A4C96_7115_43C6_9EFA_CDAC9247D109__INCLUDED_)
 #define AFX_HANDLERPOOL_H__6C2A4C96_7115_43C6_9EFA_CDAC9247D109__INCLUDED_
 
-#include <axis/wsdd/WSDDHandler.h>
-#include <axis/wsdd/WSDDService.h>
-#include <axis/common/BasicHandler.h>
+#include <axis/server/WSDDHandler.h>
+#include <axis/server/WSDDService.h>
+#include <axis/server/BasicHandler.h>
 #include "HandlerLoader.h"
-#include <axis/engine/HandlerChain.h>
+#include <axis/server/HandlerChain.h>
 #include "SharedObject.h"
 
 #include <list>

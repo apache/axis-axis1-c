@@ -64,9 +64,9 @@
 #include "../soap/XMLStreamHandler.h"
 #include "../common/TypeMapping.h"
 #include "../soap/URIMapping.h"
-#include <axis/soap/Attribute.h>
-#include <axis/soap/SoapEnvVersions.h>
-#include <axis/soap/CharacterElement.h>
+#include <axis/server/Attribute.h>
+#include <axis/server/SoapEnvVersions.h>
+#include <axis/server/CharacterElement.h>
 #include "../common/AxisUtils.h"
 
 XMLStreamHandler::XMLStreamHandler()

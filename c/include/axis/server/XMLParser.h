@@ -58,7 +58,7 @@
  */
 
 #include "AnyElement.h"
-#include <axis/common/Packet.h>
+#include "Packet.h"
 
 #if !defined(__XMLPARSER_H_INCLUDED__)
 #define __XMLPARSER_H_INCLUDED__

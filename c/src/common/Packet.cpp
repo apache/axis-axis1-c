@@ -59,11 +59,11 @@
  *
  */
 
-#include <axis/common/Packet.h>
+#include <axis/server/Packet.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <axis/common/AxisTrace.h>
+#include <axis/server/AxisTrace.h>
 extern AxisTrace* g_pAT;
 
 extern "C"

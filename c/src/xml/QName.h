@@ -68,7 +68,7 @@
 #if !defined(AFX_QNAME_H__7E4E7E7B_F051_4989_89A6_F0248109C410__INCLUDED_)
 #define AFX_QNAME_H__7E4E7E7B_F051_4989_89A6_F0248109C410__INCLUDED_
 
-#include <axis/common/GDefine.h>
+#include <axis/server/GDefine.h>
 
 /**
  *	Qualified name according to "Namespaces in XML" specification.

@@ -64,9 +64,9 @@
 #if !defined(AFX_IHEADERBLOCK_H__1FFF90C8_3E12_4EFD_8D97_61E2E92A0BB7__INCLUDED_)
 #define AFX_IHEADERBLOCK_H__1FFF90C8_3E12_4EFD_8D97_61E2E92A0BB7__INCLUDED_
 
-#include "../soap/BasicNode.h"
-#include "../soap/SoapEnvVersions.h"
-#include "../soap/Attribute.h"
+#include "BasicNode.h"
+#include "SoapEnvVersions.h"
+#include "Attribute.h"
 
 enum HEADER_BLOCK_STD_ATTR_TYPE { ROLE_NEXT=1, ROLE_NONE=2, 
 	ROLE_ULTIMATE_RECEIVER=3, ACTOR=4, MUST_UNDERSTAND_TRUE= 5, 

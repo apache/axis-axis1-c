@@ -65,7 +65,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include <axis/common/TypeMapping.h>
+#include <axis/server/TypeMapping.h>
 #include "AxisUtils.h"
 #define __TRC(X) AxisUtils::Convert(X)
 

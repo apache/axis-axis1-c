@@ -5,7 +5,7 @@
 #if !defined(AFX_SERVERAXISENGINE_H__8E421346_17A9_47EF_9003_6DC9C6F7787A__INCLUDED_)
 #define AFX_SERVERAXISENGINE_H__8E421346_17A9_47EF_9003_6DC9C6F7787A__INCLUDED_
 
-#include <axis/engine/AxisEngine.h>
+#include <axis/server/AxisEngine.h>
 /**
     @class ServerAxisEngine
     @brief interface for the ServerAxisEngine class.

@@ -59,7 +59,7 @@
 #define AFX_REQUESTSCOPEHANDLERPOOL_H__310FD607_517E_4644_8922_0B1CFDE9E5BE__INCLUDED_
 
 #include "SharedObject.h"
-#include <axis/common/BasicHandler.h>
+#include <axis/server/BasicHandler.h>
 
 #include <map>
 #include <list>

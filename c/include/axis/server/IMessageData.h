@@ -65,7 +65,7 @@
 
 #ifdef __cplusplus
 
-#include "../wsdd/WSDDService.h"
+#include "WSDDService.h"
 #include <string>
 using namespace std;
 

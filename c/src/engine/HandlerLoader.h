@@ -60,8 +60,8 @@
 #if !defined(__HANDLERLOADER_H_INCLUDED__)
 #define __HANDLERLOADER_H_INCLUDED__
 
-#include <axis/common/MessageData.h>
-#include <axis/common/GDefine.h>
+#include <axis/server/MessageData.h>
+#include <axis/server/GDefine.h>
 #include "../common/WrapperClassHandler.h"
 #include "SharedObject.h"
 

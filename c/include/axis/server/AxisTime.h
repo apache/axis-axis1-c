@@ -60,8 +60,8 @@
 
 #include <time.h>
 #include <string>
-#include <axis/common/TypeMapping.h>
-#include <axis/common/IParam.h>
+#include "TypeMapping.h"
+#include "IParam.h"
 
 using namespace std;
 

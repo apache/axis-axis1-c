@@ -61,8 +61,8 @@
 #if !defined(AFX_HANDLERCHAIN_H__675E51BF_2FD7_4860_B3DE_F8B5A978EB99__INCLUDED_)
 #define AFX_HANDLERCHAIN_H__675E51BF_2FD7_4860_B3DE_F8B5A978EB99__INCLUDED_
 
-#include "../common/BasicHandler.h"
-#include "../common/Handler.h"
+#include "BasicHandler.h"
+#include "Handler.h"
 #include <list>
 
 using namespace std;

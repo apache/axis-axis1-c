@@ -64,7 +64,7 @@
 #if !defined(AFX_WSDDTRANSPORT_H__A7F3A046_7764_4EAB_8867_B26A18F1A931__INCLUDED_)
 #define AFX_WSDDTRANSPORT_H__A7F3A046_7764_4EAB_8867_B26A18F1A931__INCLUDED_
 
-#include <axis/wsdd/WSDDHandler.h>
+#include <axis/server/WSDDHandler.h>
 #include <map>
 /**
     @class WSDDTransport

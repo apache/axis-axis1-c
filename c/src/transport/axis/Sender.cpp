@@ -61,8 +61,8 @@
  * @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
  *
  */
-#include <client/transport/axis/Platform.hpp>
-#include <client/transport/axis/Sender.hpp>
+#include "Platform.hpp"
+#include "Sender.hpp"
 
 
 Sender::Sender(Transport *pTr)

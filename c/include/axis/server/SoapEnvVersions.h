@@ -71,7 +71,7 @@
 #define __SOAPENVVERSIONS_H_INCLUDED___
 
 #include <stdlib.h>
-#include "../common/GDefine.h"
+#include "GDefine.h"
 
 /*
  *Here SKW stands for SoapKeyWord. This is a internal naming convension

@@ -1,9 +1,9 @@
 #include <iostream>
 #include <errno.h>
 
-#include <axis/client/transport/axis/Platform.hpp>
-#include <axis/client/transport/axis/SecureChannel.hpp>
-#include <axis/client/transport/axis/Transport.hpp>
+#include "Platform.hpp"
+#include "SecureChannel.hpp"
+#include "Transport.hpp"
 
 
 using namespace std;

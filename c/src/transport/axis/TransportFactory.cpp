@@ -56,9 +56,9 @@
  */
 
 
-#include <client/transport/axis/Platform.hpp>
-#include <client/transport/axis/TransportFactory.hpp>
-#include <client/transport/axis/HttpTransport.hpp>
+#include "Platform.hpp"
+#include "TransportFactory.hpp"
+#include "HttpTransport.hpp"
 
 
 Transport* TransportFactory::GetTransport(Url& url, bool secure)

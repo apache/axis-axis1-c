@@ -74,7 +74,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include <axis/common/AxisUserAPI.h>
+#include <axis/server/AxisUserAPI.h>
 /**
     @class IDeployerUtils
     @brief interface for the IDeployerUtils class.

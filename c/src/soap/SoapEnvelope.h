@@ -64,9 +64,9 @@
 #if !defined(AFX_SOAPENVELOPE_H__285E1A2E_AC87_4F69_BAF2_4D556F43EC7C__INCLUDED_)
 #define AFX_SOAPENVELOPE_H__285E1A2E_AC87_4F69_BAF2_4D556F43EC7C__INCLUDED_
 
-#include <axis/soap/SoapHeader.h>
+#include <axis/server/SoapHeader.h>
 #include "SoapBody.h"
-#include <axis/soap/SoapEnvVersions.h>
+#include <axis/server/SoapEnvVersions.h>
 /**
     @class SoapEnvelope
     @brief interface for the SoapEnvelope class.

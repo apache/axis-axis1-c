@@ -66,9 +66,9 @@
 
 #include "GDefine.h"
 #include "IMessageData.h"
-#include "../wsdd/WSDDService.h"
-#include "../soap/SoapSerializer.h"
-#include "../soap/SoapDeSerializer.h"
+#include "WSDDService.h"
+#include "SoapSerializer.h"
+#include "SoapDeSerializer.h"
 #include "Param.h"
 
 #include <string>

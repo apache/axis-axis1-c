@@ -69,9 +69,9 @@
 #pragma warning (disable : 4786)
 #endif
 
-#include <axis/soap/Attribute.h>
-#include <axis/common/GDefine.h>
-#include <axis/soap/SoapSerializer.h>
+#include <axis/server/Attribute.h>
+#include <axis/server/GDefine.h>
+#include <axis/server/SoapSerializer.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction

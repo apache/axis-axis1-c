@@ -64,19 +64,19 @@
 // SoapDeSerializer.cpp: implementation of the SoapDeSerializer class.
 //
 //////////////////////////////////////////////////////////////////////
-#include <axis/soap/SoapDeSerializer.h>
+#include <axis/server/SoapDeSerializer.h>
 #include "SoapEnvelope.h"
 #include "SoapKeywordMapping.h"
 #include "URIMapping.h"
-#include <axis/soap/SoapHeader.h>
+#include <axis/server/SoapHeader.h>
 #include "SoapMethod.h"
 #include "SoapBody.h"
-#include "SoapFault.h"
+#include <axis/server/SoapFault.h>
 #include "ComplexElement.h"
-#include <axis/soap/CharacterElement.h>
-#include <axis/common/GDefine.h>
-#include <axis/common/Packet.h>
-#include <axis/common/AxisTrace.h>
+#include <axis/server/CharacterElement.h>
+#include <axis/server/GDefine.h>
+#include <axis/server/Packet.h>
+#include <axis/server/AxisTrace.h>
 
 #ifdef USE_EXPAT_PARSER
 #include "SoapParserExpat.h"

@@ -61,10 +61,10 @@
 // ArrayBean.cpp: implementation of the ArrayBean class.
 //
 //////////////////////////////////////////////////////////////////////
-#include <axis/common/Param.h>
+#include <axis/server/Param.h>
 #include "ArrayBean.h"
-#include <axis/common/BasicTypeSerializer.h>
-#include <axis/engine/AxisEngine.h>
+#include <axis/server/BasicTypeSerializer.h>
+#include <axis/server/AxisEngine.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction

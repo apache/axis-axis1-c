@@ -65,7 +65,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "AxisUtils.h"
-#include <axis/common/GDefine.h>
+#include <axis/server/GDefine.h>
 
 AxisXMLCh AxisUtils::m_Buffer[CONVERT_BUFFER_SIZE]; 
 

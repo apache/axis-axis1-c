@@ -5,8 +5,8 @@
 #if !defined(__INTEROPTESTPORTTYPEWRAPPER_H__INCLUDED_)
 #define __INTEROPTESTPORTTYPEWRAPPER_H__INCLUDED_
 
-#include <axis/common/IMessageData.h>
-#include <axis/common/AxisWrapperAPI.h>
+#include <axis/server/IMessageData.h>
+#include <axis/server/AxisWrapperAPI.h>
 
 /*implementation of BasicHandler interface*/
 int AXISCALL InteropTestPortTypeWrapper_Invoke(void*p, void* mc);

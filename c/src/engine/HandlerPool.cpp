@@ -70,7 +70,7 @@
 #include "RequestScopeHandlerPool.h"
 #include "SessionScopeHandlerPool.h"
 #include "../wsdd/WSDDDeployment.h"
-#include <axis/common/AxisTrace.h>
+#include <axis/server/AxisTrace.h>
 extern AxisTrace* g_pAT;
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction

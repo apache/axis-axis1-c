@@ -62,9 +62,9 @@
 #if !defined(_AXIS_AXIS_TRANSPORT_HPP)
 #define _AXIS_AXIS_TRANSPORT_HPP
 
-#include <axis/common/Packet.h>
-#include "axis/Sender.hpp"
-#include "axis/Receiver.hpp"
+#include <axis/server/Packet.h>
+#include "Sender.hpp"
+#include "Receiver.hpp"
 
 class AxisTransport
 {

@@ -65,18 +65,18 @@
 #if !defined(AFX_CALL_H__D13E5626_0A9B_43EA_B606_364B98CEDAA8__INCLUDED_)
 #define AFX_CALL_H__D13E5626_0A9B_43EA_B606_364B98CEDAA8__INCLUDED_
 
-#include "../axis/common/AxisWrapperAPI.h"
-#include "../axis/soap/SoapEnvVersions.h"
-#include "../axis/wsdd/WSDDDefines.h"
+#include "../server/AxisWrapperAPI.h"
+#include "../server/SoapEnvVersions.h"
+#include "../server/WSDDDefines.h"
 
 #ifdef __cplusplus
-#include "../axis/common/IParam.h"
-#include "../axis/engine/ClientAxisEngine.h"
+#include "../server/IParam.h"
+#include "../server/ClientAxisEngine.h"
 #include <list>
 using namespace std;
 class AxisTransport;
 #else
-#include "../axis/common/Packet.h"
+#include "../server/Packet.h"
 #endif
 
 typedef struct {

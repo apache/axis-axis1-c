@@ -64,10 +64,10 @@
  */
 
 
-#include <client/transport/axis/Platform.hpp>
-#include <client/transport/axis/HttpTransport.hpp>
+#include "Platform.hpp"
+#include "HttpTransport.hpp"
 #include <iostream>
-#include <axis/common/AxisException.h>
+#include <axis/server/AxisException.h>
 
 using namespace std;
 

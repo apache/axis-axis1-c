@@ -65,10 +65,10 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include <axis/engine/AxisEngine.h>
-#include <axis/common/Param.h>
+#include <axis/server/AxisEngine.h>
+#include <axis/server/Param.h>
 #include "ArrayBean.h"
-#include <axis/common/BasicTypeSerializer.h>
+#include <axis/server/BasicTypeSerializer.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include "AxisUtils.h"

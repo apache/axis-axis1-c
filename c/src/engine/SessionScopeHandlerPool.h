@@ -65,7 +65,7 @@
 #define SESSIONLESSHANDLERS	"0aaaaa"
 
 #include "SharedObject.h"
-#include <axis/common/BasicHandler.h>
+#include <axis/server/BasicHandler.h>
 
 #include <map>
 #include <list>

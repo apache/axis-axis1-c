@@ -73,11 +73,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <malloc.h>
-#include <axis/common/Packet.h>
+#include <axis/server/Packet.h>
 #include <string>
 #include <map>
 
-#include "../soap/SoapFault.h"
+#include <axis/server/SoapFault.h>
 #include "../soap/URIMapping.h"
 #include "../soap/SoapKeywordMapping.h"
 #include "HandlerLoader.h"
@@ -89,11 +89,11 @@
 #include "DeserializerPool.h"
 #include "../wsdd/WSDDDeployment.h"
 #include "../common/AxisUtils.h"
-#include <axis/common/AxisConfig.h>
+#include <axis/server/AxisConfig.h>
 #include "../wsdd/WSDDKeywords.h"
-#include <axis/common/AxisTrace.h>
+#include <axis/server/AxisTrace.h>
 
-#include <client/Call.h>
+#include <axis/client/Call.h>
 
 #define BYTESTOREAD 64
 //the relative location of the wsdl files hardcoded

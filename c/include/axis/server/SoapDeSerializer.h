@@ -63,12 +63,12 @@
 #if !defined(AFX_SOAPDESERIALIZER_H__FD0E7C3B_B887_480A_9E2A_20736A88B09B__INCLUDED_)
 #define AFX_SOAPDESERIALIZER_H__FD0E7C3B_B887_480A_9E2A_20736A88B09B__INCLUDED_
 
-#include "../common/IHandlerSoapDeSerializer.h"
+#include "IHandlerSoapDeSerializer.h"
 #include "SoapEnvVersions.h"
 #include "HeaderBlock.h"
-#include "../wsdd/WSDDDefines.h"
-#include "../xml/XMLParser.h"
-#include "../xml/AnyElement.h"
+#include "WSDDDefines.h"
+#include "XMLParser.h"
+#include "AnyElement.h"
 
 class SoapFault;
 class SoapMethod;

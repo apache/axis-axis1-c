@@ -63,9 +63,9 @@
 #if !defined(AFX_IHANDLERSOAPDESERIALIZER_H__EAD744F9_FEB3_4885_9510_D7BAD8C5AD1C__INCLUDED_)
 #define AFX_IHANDLERSOAPDESERIALIZER_H__EAD744F9_FEB3_4885_9510_D7BAD8C5AD1C__INCLUDED_
 
-#include "../common/IWrapperSoapDeSerializer.h"
-#include "../common/IHeaderBlock.h"
-#include "../common/AxisUserAPI.h"
+#include "IWrapperSoapDeSerializer.h"
+#include "IHeaderBlock.h"
+#include "AxisUserAPI.h"
 /**
     @class IHandlerSoapDeSerializer
     @brief interface for the IHandlerSoapDeSerializer class.

@@ -2,10 +2,10 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include <axis/engine/ClientAxisEngine.h>
+#include <axis/server/ClientAxisEngine.h>
 #include "../wsdd/WSDDDeployment.h"
 #include "HandlerPool.h"
-#include <axis/common/AxisTrace.h>
+#include <axis/server/AxisTrace.h>
 extern AxisTrace* g_pAT;
 
 extern WSDDDeployment* g_pWSDDDeployment;

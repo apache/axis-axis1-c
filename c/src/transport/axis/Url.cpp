@@ -63,8 +63,8 @@
  */
 
 
-#include <client/transport/axis/Platform.hpp>
-#include <client/transport/axis/Url.hpp>
+#include "Platform.hpp"
+#include "Url.hpp"
 #include <ctype.h>
 #include <iostream>
 using namespace std;

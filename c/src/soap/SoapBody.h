@@ -65,8 +65,8 @@
 #define AFX_SOAPBODY_H__D1A60F04_287F_4688_A8F0_10BE0EA25775__INCLUDED_
 
 #include "SoapMethod.h"
-#include "SoapFault.h"
-#include <axis/soap/SoapEnvVersions.h>
+#include <axis/server/SoapFault.h>
+#include <axis/server/SoapEnvVersions.h>
 
 class Attribute;
 
