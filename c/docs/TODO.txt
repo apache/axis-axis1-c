@@ -61,10 +61,10 @@ AXISDEPLOY
 
 GENERAL / UNCATEGORIZED
 -----------------------
-! <team>	In the WSDDDocument.cpp for each and every XMLString::transcode() you have to 
+X <sanjaya>	In the WSDDDocument.cpp for each and every XMLString::transcode() you have to 
 		use a corrosponding XMLString::release() to relase the allocated memeory
 
-* <sanjaya>	In the WSDDDocument.cpp write the code to handle Responseflows in the Transport
+X <sanjaya>	In the WSDDDocument.cpp write the code to handle Responseflows in the Transport
 element.
 * <susantha> 	Improve AxisEngine to send back the WSDL upon http GET request. Ex. http://url/service?wsdl
 
