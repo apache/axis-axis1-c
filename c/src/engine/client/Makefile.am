@@ -1,5 +1,5 @@
 lib_LTLIBRARIES = libaxiscpp_client.la
-AM_CPPFLAGS = $(CPPFLAGS) -DUSE_LTDL -DAXIS_CLIENT_LIB
+AM_CPPFLAGS = $(CPPFLAGS) -DAXIS_CLIENT_LIB
 libaxiscpp_client_la_SOURCES = ../Axis.cpp \
 		ClientAxisEngine.cpp \
 		../AxisEngine.cpp \
