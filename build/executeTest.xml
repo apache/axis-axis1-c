@@ -31,13 +31,13 @@
 		<replaceregexp file="${r_expected.file}" match="Host: localhost:[0-9]*" replace="Host: localhost:${monitorPort}" byline="true"/>
 	</target>
 
-	<target name="setTestArgs" depends="setEndpoint, setForMonitor"/>
+	<target name="setTestArgs" depends="setEndpoint, setForMonitor, setForNoMonitor"/>
 
 	<target name="setEndpoint" unless="test.endpoint">
 		<property name="clientArgs" value="" />
 	</target>
 
-	<target name="setForMonitor" if="test.endpoint">
+	<target name="setForMonitor" if="test.endpoint" unless="test.nomonitor">
 		<propertyregex property="protocol" input="${test.endpoint}"
 			           regexp="(.*)://" select="\1"/>
 
@@ -50,6 +50,50 @@
 		<property name="clientArgs" value="${protocol}://localhost:${monitorPort}/${context}"/>
 	</target>
 
+	<target name="setForNoMonitor" depends="checkIfEndpointSet" if="endpoint.ok">
+		<propertyregex property="protocol" input="${test.endpoint}"
+			           regexp="(.*)://" select="\1"/>
+
+        <propertyregex property="restOfURL" input="${test.endpoint}"
+                       regexp="://(.*)" select="\1"/>
+
+        <propertyregex property="context" input="${restOfURL}"
+                       regexp="/(.*)" select="\1"/>
+
+		<property name="clientArgs" value="${protocol}://${testHost}:${testPort}/${context}"/>
+	</target>
+
+	<target name="checkIfEndpointSet">
+		<condition property="endpoint.ok">
+			<isset property="test.endpoint"/>
+		</condition>
+		<fail message="Endpoint not specified" unless="endpoint.ok"/>
+	</target>
+
+	<target name="startMonitor" unless="test.nomonitor">
+		<echo message="Starting monitor forwarding to ${testHost}:${testPort}"/>
+		<!-- Run Monitor utility to allow validation of message across the wire -->
+		<java classname="org.apache.test.TCPMonitor" fork="true">
+			<arg line="-l ${monitorPort}"/>
+			<arg line="-p ${testPort}"/>
+			<arg line="-h ${testHost}"/>
+			<arg line="-o ${test.directory}/tcpm.req"/>
+			<arg line="-r ${test.directory}/tcpm.res"/>
+			<classpath>
+				<pathelement location="${basedir}/tests/utils/monitor/monitor.jar"/>
+			</classpath>
+		</java>
+	</target>
+	<target name="stopMonitor" unless="test.nomonitor">
+		<java classname="org.apache.test.StopTCPMonitor">
+			<arg line="-p ${monitorPort}"/>
+			<arg line="-h localhost"/>
+			<classpath>
+				<pathelement location="${basedir}/tests/utils/monitor/monitor.jar"/>
+			</classpath>
+		</java>
+	</target>
+
 	<!--
 	  Execute the test
 	  -->
@@ -58,18 +102,8 @@
 		<trycatch>
 			<try>
 				<parallel timeout="60000" failonany="false">
-					<echo message="Starting monitor forwarding to ${testHost}:${testPort}"/>
-					<!-- Run Monitor utility to allow validation of message across the wire -->
-					<java classname="org.apache.test.TCPMonitor" fork="true">
-						<arg line="-l ${monitorPort}"/>
-						<arg line="-p ${testPort}"/>
-						<arg line="-h ${testHost}"/>
-						<arg line="-o ${test.directory}/tcpm.req"/>
-						<arg line="-r ${test.directory}/tcpm.res"/>
-						<classpath>
-							<pathelement location="${basedir}/tests/utils/monitor/monitor.jar"/>
-						</classpath>
-					</java>
+
+					<antcall target="startMonitor" inheritall="true"/>
 		
 					<sequential>
 						<!-- Wait for jvm to start monitor program -->
@@ -87,22 +121,21 @@
 							<env key="LIBPATH" path="${dir.libraries}${path.separator}${dir.xmlParser}${path.separator}${HTTP.SSLChannel.dir}/lib"/>
 							<env key="AXISCPP_DEPLOY" value="${axiscpp_deploy}"/>
 						</exec>
+
 						<stopwatch name="${testName}.timer" action="total"/>
 						<propertycopy property="timer1" from="${testName}.timer"/>
  						<echo file="${results.log}" append="true"
  		 				      message="${testName} - Execution Time - ${timer1}${line.separator}"/>
 						<echo message="${testName} - Execution Time - ${timer1}"/>
-						<java classname="org.apache.test.StopTCPMonitor">
-							<arg line="-p ${monitorPort}"/>
-							<arg line="-h localhost"/>
-							<classpath>
-								<pathelement location="${basedir}/tests/utils/monitor/monitor.jar"/>
-							</classpath>
-						</java>
+
+						<antcall target="stopMonitor" inheritall="true"/>
+
 					</sequential>
 				</parallel>
 			</try>
 			<catch>
+				<echo message="Exception in Ant try/catch block"/>
+				<antcall target="stopMonitor" inheritall="true"/>
 			</catch>
 			<finally>
 				<sleep seconds="1"/>

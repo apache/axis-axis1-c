@@ -274,7 +274,6 @@ Additionally the following files may also be added
 
     <p>
     The optional tags shown in example 2 are detailed below.
-    </p>
 
     <DL>
         <DT>&lt;request&gt;</DT>
@@ -294,9 +293,51 @@ Additionally the following files may also be added
             match the service portion of the SOAPAction of the request being 
             sent to the service.</DD>
     </DL>
+    </p>
+
+
 
 	 <p>
-	 The example 3 shows all the optional tags that are available for dynamic client tests <a href="#dynamic">(See Dynamic Clients)</a>.
+	 The example 3 shows all the additional tags that are available for tests.
+    </p>
+
+    <div class="example">
+    <pre>
+
+     &lt;test&gt;
+        &lt;name&gt;CalculatorDocSSL&lt;/name&gt;
+		  &lt;description&gt;CalculatorDoc using SSL&lt;/description&gt;
+        &lt;clientLang&gt;cpp&lt;/clientLang&gt;
+        &lt;clientCode&gt;CalculatorDocSSLClient.cpp&lt;/clientCode&gt;
+        &lt;wsdl&gt;CalculatorDoc.wsdl&lt;/wsdl&gt;
+        &lt;expected&gt;
+            &lt;output&gt;
+                CalculatorDoc.cpp.out
+            &lt;/output&gt;
+        &lt;/expected&gt;
+        &lt;endpoint&gt;https://localhost:80/Calculator/services/Calculator&lt;/endpoint&gt;
+        &lt;nomonitor&gt;true&lt;/nomonitor&gt;
+        &lt;port&gt;9443&lt;/port&gt;
+    &lt;/test&gt;
+    </pre>
+    </div>
+    <p class="example">example 3</p>
+
+    <p>
+    The optional tags shown in example 3 are detailed below.
+
+    <DL>
+		  <DT>&lt;nomonitor&gt;</DT>
+		  <DD>This tells the framework not to invoke the <a href="#monitor">TCP monitor utility</a> when sending a request. This means that the message on-the-wire will not be checked. This is required for SSL tests as the monitor cannot operate over SSL</DD>
+
+        <DT>&lt;port&gt;</DT>
+		  <DD>This is the port to send the request to. This will override the testPort property specified in the main Ant properties files or on the command line. This is used so that SSL tests can specify the SSL port of the service without having to do 2 tests runs.</DD>
+
+    </DL>
+    </p>
+
+	 <p>
+	 The example 4 shows all the optional tags that are available for dynamic client tests <a href="#dynamic">(See Dynamic Clients)</a>.
     </p>
 
     <div class="example">
@@ -318,10 +359,10 @@ Additionally the following files may also be added
     &lt;/test&gt;
     </pre>
     </div>
-    <p class="example">example 3</p>
+    <p class="example">example 4</p>
 
     <p>
-    The optional tags shown in example 3 are detailed below.
+    The optional tags shown in example 4 are detailed below.
     </p>
 
     <DL>
@@ -349,7 +390,7 @@ If handlers have been specified in the test properties file for a test <a href="
 <br/>
 e.g.
 <br/>
-In example 2 above a directory of handler_chain was specified. This directory is the parent of the library directories, but a sub directory of the ws-axis/c/tests/auto_build/testcases/handlers/ directory. The handler_chain directory structure is shown in example 4
+In example 2 above a directory of handler_chain was specified. This directory is the parent of the library directories, but a sub directory of the ws-axis/c/tests/auto_build/testcases/handlers/ directory. The handler_chain directory structure is shown in example 5
 </p>
 <div class="example">
 	<pre>
@@ -365,7 +406,7 @@ In example 2 above a directory of handler_chain was specified. This directory is
 	</code>
 	</pre>
 </div>
-    <p class="example">example 4</p>
+    <p class="example">example 5</p>
 
 <p>
 When built this will produce 2 libraries in the test output directory called libtesthandler.so and libtesthandler2.so on Linux and testhandler.dll and testhandler2.dll on Windows.
@@ -382,7 +423,7 @@ A dynamic client is a client that uses the Call object directly and all initiali
 <br/>
 e.g.
 <br/>
-In example 3 above a dynamicCodeDirectory of Test01 was specified. This directory is a sub directory of the ws-axis/c/tests/auto_build/testcases/dynamic directory. This directory structure is shown in example 5.
+In example 5 above a dynamicCodeDirectory of Test01 was specified. This directory is a sub directory of the ws-axis/c/tests/auto_build/testcases/dynamic directory. This directory structure is shown in example 6.
 </p>
 <div class="example">
 	<pre>
@@ -392,7 +433,7 @@ In example 3 above a dynamicCodeDirectory of Test01 was specified. This director
 	</code>
 	</pre>
 </div>
-    <p class="example">example 5</p>
+    <p class="example">example 6</p>
 
 
 <h2 id="monitor">TCP Monitor Utility</h2>

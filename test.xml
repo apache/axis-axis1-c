@@ -99,7 +99,7 @@
 		<property name="results.stderr" value="${test.directory}/${testName}.err"/>
 	</target>
 
-	<target name="checkIfRequestFile" if="testExpectedRequest">
+	<target name="checkIfRequestFile" if="testExpectedRequest" unless="test.nomonitor">
 		<available file="${dir.autotests}/output/${testExpectedRequest}" property="requestFileExists"/>
 	</target>
 

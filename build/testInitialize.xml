@@ -27,7 +27,7 @@
 	<!--
 	  Load the xml properties file for test and derive required properties
 	  -->
-	<target name="setPropertiesForTest" depends="loadXMLProperties,setTestName,setTestDesc,setTestCode,setClientLang,setTestWsdl,setTestEndpoint,setTestExpected,setTestExpectedRequest,setHandlerDirectory,setHandlerService,setHandlersPresent"/>
+	<target name="setPropertiesForTest" depends="loadXMLProperties,setTestName,setTestDesc,setTestCode,setClientLang,setTestWsdl,setTestEndpoint,setTestExpected,setTestExpectedRequest,setHandlerDirectory,setHandlerService,setHandlersPresent,setTestPort"/>
 
 	<target name="loadXMLProperties">
 		<echo message="Loading XML file ${test_property}"/>
@@ -62,6 +62,9 @@
 	</target>
 	<target name="setHandlerService" if="test.handler.service">
 		<propertycopy property="serviceName" from="test.handler.service"/>
+	</target>
+	<target name="setTestPort" if="test.port">
+		<propertycopy property="testPort" from="test.port" override="true"/>
 	</target>
 	<!--
 	  Only set HandlersPresent if all info available
