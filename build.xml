@@ -36,7 +36,33 @@ Notes:
 	<import file="${basedir}/buildClient.xml"/>
 	<import file="${basedir}/buildTransport.xml"/>
 	<import file="${basedir}/buildXMLParser.xml"/>
+	<import file="${basedir}/buildServerEngine.xml"/>
+	<import file="${basedir}/buildApache13Module.xml"/>
+	<import file="${basedir}/buildApache20Module.xml"/>
+	<import file="${basedir}/buildSimpleAxisServer.xml"/>
 	<import file="${basedir}/buildWSDL2Ws.xml"/>
+
+	<target name="compileServer">
+		<antcall target="compileAxisServerEngine" inheritall="true"/>
+		<if>
+			<equals arg1="${server.apache13}" arg2="true"/>
+			<then>
+				<antcall target="compileApache13Module" inheritall="true"/>
+			</then>
+		</if>
+		<if>
+			<equals arg1="${server.apache20}" arg2="true"/>
+			<then>
+				<antcall target="compileApache20Module" inheritall="true"/>
+			</then>
+		</if>
+		<if>
+			<equals arg1="${server.simpleAxisServer}" arg2="true"/>
+			<then>
+				<antcall target="compileSimpleAxisServer" inheritall="true"/>
+			</then>
+		</if>
+	</target>
 
 	<target name="compileTransport">
 		<!-- Determine which flavour of transport to use -->
@@ -112,6 +138,7 @@ Notes:
 		<antcall target="compileAxisClient" inheritall="true"/>
 		<antcall target="compileTransport" inheritall="true"/>
 		<antcall target="compileXMLParser" inheritall="true"/>
+		<antcall target="compileServer" inheritall="true"/>
 	</target>
 
 	<import file="${basedir}/buildDocumentation.xml"/>

@@ -1,0 +1,67 @@
+<project name="Axis C Apache 2.0 Server Module" default="compileApache20Module" basedir=".">
+
+	<!--
+	  Compile the Apache 2.0 Axis Server Module
+	  -->
+	<target name="compileApache20Module">
+		<mkdir dir="${dir.objects}"/>
+		<mkdir dir="${dir.bin}"/>
+		<copy todir="${basedir}/include/apache2_0">
+			<fileset dir="${apache20.dir.server}/include" includes="**"/>
+		</copy>
+		<if>
+			<not>
+				<isset property="aix"/>
+			</not>
+			<then>
+				<cc outfile="${dir.bin}/${apache20.serverLibraryName}" objdir="${dir.objects}"
+				 exceptions="true" failonerror="false" outtype="shared" multithreaded="true">
+				  	<!-- Compilers -->
+					<compiler refid="SolarisCC"/>
+					<compiler refid="Linuxgcc"/>
+					<compiler extends="VisualC++">
+						<defineset>
+							<define name="APACHE2_0_EXPORTS"/>
+						</defineset>
+					</compiler>
+					<includepath path="${apache20.dir.server}/include" unless="windows"/>
+					<!-- Additional compiler flag for Client library on all platforms -->
+					<defineset>
+						<define name="AXIS_APACHE1_3"/>
+					</defineset>
+					<!-- Linkers -->
+					<linker refid="SolarisLinker"/>
+					<linker refid="LinuxLinker"/>
+					<linker refid="VisualC++Linker"/>
+					<libset dir="${apache20.dir.server}/lib" libs="libapr, libhttpd" if="windows"/>
+					<libset dir="${dir.bin}" libs="${serverEngineLibraryName}"/>
+					<!-- Files to be compiled -->
+					<fileset dir="${dir.src.instrumented}">
+						<include name="server/apache2/*.cpp"/>
+					</fileset>
+				</cc>
+			</then>
+			<else>
+				<cc outfile="${dir.bin}/${libraryPrefix}${apache20.serverLibraryName}${librarySuffix}" objdir="${dir.objects}"
+				 exceptions="true" failonerror="false" multithreaded="true">
+				  	<!-- Compilers -->
+					<compiler refid="AIXxlc"/>
+					<includepath path="${apache20.dir.server}/include"/>
+					<!-- Additional compiler flag for Client library on all platforms -->
+					<defineset>
+						<define name="AXIS_APACHE1_3"/>
+					</defineset>
+					<!-- Linkers -->
+					<linker extends="AIXLinker">
+						<linkerarg value="-r"/>
+					</linker>
+					<libset dir="${dir.bin}" libs="${serverEngineLibraryName}"/>
+					<!-- Files to be compiled -->
+					<fileset dir="${dir.src.instrumented}">
+						<include name="server/apache2/*.cpp"/>
+					</fileset>
+				</cc>
+			</else>
+		</if>
+	</target>
+</project>

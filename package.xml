@@ -107,13 +107,20 @@ Please use these to configure directories to suit the needs of your system.
 		<!-- Copy across DLLs into release package -->
 		<mkdir dir="${dir.release}/bin"/>
 		<copy todir="${dir.release}/bin">
-			<fileset dir="${dir.bin}" includes="*.dll"/>
-			<fileset dir="${dir.bin}" includes="${clientLibraryName}.lib"/>
+			<fileset dir="${dir.bin}">
+				<include name="*.dll"/>
+				<include name="*.exe"/>
+			</fileset>
 		</copy>
 
 		<!-- Copy across LIB file into release package -->
 		<mkdir dir="${dir.release}/lib/axis"/>
-		<copy todir="${dir.release}/lib/axis" file="${dir.bin}/${clientLibraryName}.lib"/>
+		<copy todir="${dir.release}/lib/axis">
+			<fileset dir="${dir.bin}">
+				<include name="${clientLibraryName}.lib"/>
+				<include name="${serverEngineLibraryName}.lib"/>
+			</fileset>
+		</copy>
 
 		<!-- Copy across MS Visual C++ Project files for samples into release package -->
 		<mkdir dir="${dir.release}/vc"/>
@@ -145,9 +152,9 @@ Please use these to configure directories to suit the needs of your system.
 	</target>
 
 	<target name="copyAndLinkAIXLibraries" if="aix">
-		<basename property="libraryName" file="${fullLibraryName}" suffix=".so"/>
+		<basename property="libraryName" file="${fullLibraryName}" suffix="${librarySuffix}"/>
 		<mkdir dir="${dir.release}/lib/axis"/>
-		<copy file="${dir.bin}/${libraryName}.so" tofile="${dir.release}/lib/axis/${libraryName}${version}.so"/>
+		<copy file="${dir.bin}/${libraryName}${librarySuffix}" tofile="${dir.release}/lib/axis/${libraryName}${version}.so"/>
 
 		<symlink link="${dir.release}/lib/axis/${libraryName}${majorVersion}.so"
 		 resource="${libraryName}${version}.so" overwrite="true"/>
@@ -161,12 +168,22 @@ Please use these to configure directories to suit the needs of your system.
 
 	<target name="copyUnixLibraries" unless="windows">
 		<path id="libraries">
-			<fileset dir="${dir.bin}" includes="lib*"/>
+			<fileset dir="${dir.bin}" includes="${libraryPrefix}*"/>
 		</path>
 
 		<foreach target="copyAndLinkUnixLibraries" param="fullLibraryName" inheritall="true">
 			<path refid="libraries"/>
 		</foreach>
+		
+		<if>
+			<equals arg1="${server.simpleAxisServer}" arg2="true"/>
+			<then>
+				<mkdir dir="${dir.release}/bin"/>
+				<copy todir="${dir.release}/bin">
+					<fileset dir="${dir.bin}" includes="${simpleAxisServerExecutableName}"/>
+				</copy>				
+			</then>
+		</if>
 	</target>
 
 	<target name="copyLibraries" depends="copyWindowsLibraries, copyUnixLibraries"/>
@@ -211,8 +228,7 @@ Please use these to configure directories to suit the needs of your system.
 		<antcall target="copySource" inheritall="true"/>
 		<antcall target="copyTraceInstrumentedSource" inheritall="true"/>
 		<antcall target="copyWSDL2Ws" inheritall="true"/>
-		<antcall target="packageDeliverable" inheritall="true">
-		</antcall>
+		<antcall target="packageDeliverable" inheritall="true"/>
 	</target>
 
 	<target name="packageAll">

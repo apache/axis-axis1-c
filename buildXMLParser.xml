@@ -40,7 +40,7 @@
 				</cc>
 			</then>
 			<else>
-				<cc outfile="${dir.bin}/lib${xmlParserLibraryName}.so" objdir="${dir.objects}"
+				<cc outfile="${dir.bin}/${libraryPrefix}${xmlParserLibraryName}${librarySuffix}" objdir="${dir.objects}"
 				 exceptions="true" failonerror="false" multithreaded="true">
 				 	<!-- Compilers -->
 					<compiler refid="AIXxlc"/>

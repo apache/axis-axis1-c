@@ -70,7 +70,7 @@
 			<compilerarg value="/FD"/>
 			<compilerarg value="/c"/>
 		</compiler>
-		
+
 		<!--
 		  Definition of gcc compile for Linux
 	      -->
@@ -86,7 +86,7 @@
 			</defineset>
 			<includepath path="${dir.include}"/>
 		</compiler>
-		
+
 		<!--
 		  Definition of xlc compile for AIX
 	      -->
@@ -105,7 +105,7 @@
 	<!--
 	  Linker Definitions
 	  -->
-		<!-- Definition of Solars linker -->
+		<!-- Definition of Solaris linker -->
 		<linker id="SolarisLinker" name="CC" libtool="true" if="solaris">
 			<linkerarg value="-g" if="debug"/>
 			<linkerarg value="-Qoption"/>
@@ -134,8 +134,11 @@
 		<!--
 	      Definition of AIX linker
 	      -->
-		<linker id="AIXLinker" name="xlC" libtool="false" if="aix">
+		<linker id="AIXExecutableLinker" name="xlC" libtool="false" if="aix">
 			<linkerarg value="-g" if="debug"/>
+		</linker>
+
+		<linker id="AIXLinker" extends="AIXExecutableLinker" name="xlC" libtool="false" if="aix">
 			<linkerarg value="-qmkshrobj"/>
 			<linkerarg value="-L/usr/lib/threads"/>
 			<linkerarg value="-lpthreads"/>

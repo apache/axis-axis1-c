@@ -1,0 +1,28 @@
+<project name="Axis C Simple Axis Server" default="compileSimpleAxisServer" basedir=".">
+
+	<!--
+	  Compile the Simple Axis Server
+	  -->
+	<target name="compileSimpleAxisServer">
+		<mkdir dir="${dir.objects}"/>
+		<mkdir dir="${dir.bin}"/>
+		<cc outfile="${dir.bin}/${simpleAxisServerExecutableName}" objdir="${dir.objects}"
+		 exceptions="true" failonerror="false" outtype="executable" multithreaded="true">
+		  	<!-- Compilers -->
+			<compiler refid="SolarisCC"/>
+			<compiler refid="Linuxgcc"/>
+			<compiler extends="VisualC++"/>
+			<compiler refid="AIXxlc"/>
+			<!-- Linkers -->
+			<linker refid="SolarisLinker"/>
+			<linker refid="LinuxLinker"/>
+			<linker refid="VisualC++Linker"/>
+			<linker refid="AIXExecutableLinker"/>
+			<libset dir="${dir.bin}" libs="${serverEngineLibraryName}"/>
+			<!-- Files to be compiled -->
+			<fileset dir="${dir.src.instrumented}">
+				<include name="server/simple_axis_server/*.cpp"/>
+			</fileset>
+		</cc>
+	</target>
+</project>

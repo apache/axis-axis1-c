@@ -36,7 +36,7 @@
 				</cc>
 			</then>
 			<else>
-				<cc outfile="${dir.bin}/lib${transportLibraryName}.so" objdir="${dir.objects}"
+				<cc outfile="${dir.bin}/${libraryPrefix}${transportLibraryName}${librarySuffix}" objdir="${dir.objects}"
 				 exceptions="true" failonerror="false" multithreaded="true">
 					<!-- Compilers -->
 					<compiler refid="AIXxlc"/>
