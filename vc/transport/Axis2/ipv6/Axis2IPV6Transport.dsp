@@ -104,6 +104,10 @@ SOURCE=..\..\..\..\src\transport\axis2\Channel.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\..\src\transport\axis2\ChannelFactory.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\..\src\transport\axis2\ipv6\IPV6Channel.cpp
 # End Source File
 # Begin Source File
