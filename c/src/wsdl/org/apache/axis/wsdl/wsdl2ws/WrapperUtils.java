@@ -62,6 +62,7 @@ package org.apache.axis.wsdl.wsdl2ws;
 import java.util.Enumeration;
 import java.util.Stack;
 import java.util.StringTokenizer;
+import java.util.Iterator;
 
 import javax.xml.namespace.QName;
 
@@ -227,12 +228,13 @@ public class WrapperUtils {
 	public static Type getArrayType(Type type)throws WrapperFault{
 		if(!type.isArray())
 			return null;
-		Enumeration elements = type.getElementnames();
-		if(elements.hasMoreElements()){
+		Iterator elements = type.getElementnames();
+		if(elements.hasNext()){
 			return type.getElementForElementName(
-				(String)elements.nextElement()).getType();
+				(String)elements.next()).getType();
 		}
 		throw new WrapperFault("Array type do not have any attibutes");
 	}
+
 }
 
