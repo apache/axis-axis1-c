@@ -3,8 +3,8 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "Call.h"
-//#include "../../../common/IMessageData.h"
-//#include "../../../common/ISoapMethod.h"
+//#include "../common/IMessageData.h"
+//#include "../common/ISoapMethod.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -247,15 +247,10 @@ int Call::SetHeader(char *key, char *value)
  * bytes to/from the server.
  */
 int Call::OpenConnection()
-{
-	//Step 1 - Open Transport layer connection taking into account protocol and endpoint URI in m_Soap
-	//Step 2 - Set Created streams to m_Soap.str.ip_stream and m_Soap.str.op_stream
-	//Step 3 - Add function pointers to the m_Soap structure
-	m_Soap.transport.pGetFunct = get_request_bytes;
-	m_Soap.transport.pSendFunct = send_response_bytes;
-	m_Soap.transport.pGetTrtFunct = receive_transport_information;
-	m_Soap.transport.pSendTrtFunct = send_transport_information;
-	return SUCCESS;
+{ 
+    m_pTransport = new AxisTransport(m_Soap);
+    
+	return m_Transport->OpenConnection();
 }
 
 /**
@@ -263,13 +258,7 @@ int Call::OpenConnection()
  */
 void Call::CloseConnection()
 {
-	//Step 1 - Close 2 streams
-	//Step 2 - Possibly delete the streams
-	//Step 3 - Set function pointers in the m_Soap structure to NULL;
-	m_Soap.transport.pGetFunct = NULL;
-	m_Soap.transport.pSendFunct = NULL;
-	m_Soap.transport.pGetTrtFunct = NULL;
-	m_Soap.transport.pSendTrtFunct = NULL;
+    m_pTransport->CloseConnection();
 }
 
 void Call::SetSOAPVersion(SOAP_VERSION version)

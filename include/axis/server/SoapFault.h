@@ -81,7 +81,8 @@ class SoapFault
 {
 public:
 	static SoapFault* getSoapFault(int);
-	static void initialize();	
+	static void initialize();
+    char* getSoapString();	
 	int serialize(SoapSerializer& pSZ);	
 	//int serialize(string&);	
 	virtual ~SoapFault();
