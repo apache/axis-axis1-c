@@ -69,6 +69,7 @@
 #include <axis/soap/SoapSerializer.h>
 #include <axis/common/GDefine.h>
 #include <axis/soap/BasicNode.h>
+#include <axis/soap/ComplexElement.h>
 #include <axis/soap/CharacterElement.h>
 
 //////////////////////////////////////////////////////////////////////
@@ -129,40 +130,60 @@ int HeaderBlock::serialize(SoapSerializer& pSZ)
 
 	int iStatus= AXIS_SUCCESS;
 
+	list<AxisChar*> lstTmpNameSpaceStack;
+	bool blnIsNewNamespace = false;
+
 	do {
-		if(isSerializable()) {
+		/*
+		TO DO: ReWrite the following logic to deal with name spaces
+		*/
 
-			pSZ.Serialize("<", m_prefix.c_str(), ":", m_localname.c_str(),
-				" xmlns:", m_prefix.c_str(), "=\"", m_uri.c_str(), "\"", NULL);
+		pSZ.Serialize("<", NULL);
 
-			iStatus= attrSerialize(pSZ);
-			if(iStatus==AXIS_FAIL) {
-				break;
+		if(m_prefix.length() == 0) {
+			m_prefix = pSZ.GetNamespacePrefix(m_uri.c_str(), blnIsNewNamespace);
+			if (blnIsNewNamespace) {
+				lstTmpNameSpaceStack.push_back((AxisChar*)m_uri.c_str());
 			}
-
-			iStatus= serializeNamespaceDecl(pSZ);
-			if(iStatus==AXIS_FAIL) {
-				break;
-			}
-			
-			pSZ.Serialize(">", NULL);
-
-			iStatus= serializeChildren(pSZ);
-			if(iStatus==AXIS_FAIL) {
-				break;
-			}
-
-			pSZ.Serialize("</", m_prefix.c_str(), ":", m_localname.c_str(), ">", NULL);
-			
-		} else {
-			iStatus= AXIS_FAIL;
 		}
+
+		pSZ.Serialize(m_prefix.c_str(), ":", m_localname.c_str(),
+			" xmlns:", m_prefix.c_str(), "=\"", m_uri.c_str(), "\"", NULL);
+
+		iStatus= attrSerialize(pSZ, lstTmpNameSpaceStack);
+		if(iStatus==AXIS_FAIL) {
+			break;
+		}
+
+		iStatus= serializeNamespaceDecl(pSZ);
+		if(iStatus==AXIS_FAIL) {
+			break;
+		}
+		
+		pSZ.Serialize(">", NULL);
+
+		iStatus= serializeChildren(pSZ, lstTmpNameSpaceStack);
+		if(iStatus==AXIS_FAIL) {
+			break;
+		}
+
+		pSZ.Serialize("</", m_prefix.c_str(), ":", m_localname.c_str(), ">", NULL);
+
+		/*
+		 *Removing the namespace list of this headerblock from the stack.
+		 */
+		list<AxisChar*>::iterator itCurrentNamespace = lstTmpNameSpaceStack.begin();
+		while (itCurrentNamespace != lstTmpNameSpaceStack.end()) {
+			pSZ.RemoveNamespacePrefix(*itCurrentNamespace);
+			itCurrentNamespace++;
+		}
+			
 	} while(0);
 
 	return iStatus;
 }
 
-int HeaderBlock::attrSerialize(SoapSerializer& pSZ)
+int HeaderBlock::attrSerialize(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceStack)
 {
 	int iStatus= AXIS_SUCCESS;
 
@@ -170,12 +191,12 @@ int HeaderBlock::attrSerialize(SoapSerializer& pSZ)
 
 	while(itCurrAttribute != m_attributes.end()) {		
 
-		iStatus= (*itCurrAttribute)->serialize(pSZ);
+		iStatus= (*itCurrAttribute)->serialize(pSZ, lstTmpNameSpaceStack);
 		if(iStatus==AXIS_FAIL) {
 			break;
 		}
-		itCurrAttribute++;		
-	}	
+		itCurrAttribute++;
+	}
 
 	return iStatus;
 }
@@ -233,14 +254,19 @@ int HeaderBlock::addChild(BasicNode *pBasicNode)
 	return AXIS_SUCCESS;
 }
 
-int HeaderBlock::serializeChildren(SoapSerializer& pSZ)
+int HeaderBlock::serializeChildren(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceStack)
 {
 	list<BasicNode*>::iterator itCurrBasicNode= m_children.begin();
 
-	while(itCurrBasicNode != m_children.end()) {		
-		(*itCurrBasicNode)->serialize(pSZ);
-		itCurrBasicNode++;		
-	}	
+	while(itCurrBasicNode != m_children.end()) {
+		if ((*itCurrBasicNode)->getNodeType() == ELEMENT_NODE) {
+			(*itCurrBasicNode)->serialize(pSZ, lstTmpNameSpaceStack);
+		} else {
+			/* for CHARACTER_NODE types */
+			(*itCurrBasicNode)->serialize(pSZ);
+		}
+		itCurrBasicNode++;
+	}
 
 	return AXIS_SUCCESS;
 }
@@ -301,4 +327,47 @@ BasicNode* HeaderBlock::createChild(NODE_TYPE eNODE_TYPE)
 	}
 
 	return pBasicNode;
+}
+
+int HeaderBlock::initializeForTesting()
+{
+	setPrefix("m");
+	setLocalName("reservation");
+	setUri("http://travelcompany.example.org/reservation");
+
+	Attribute* pAttribute2 = new Attribute();
+	pAttribute2->setPrefix("SOAP-ENV");
+	pAttribute2->setLocalName("role");
+	pAttribute2->setValue("http://www.w3.org/2003/05/soap-envelope/role/next");
+
+	Attribute* pAttribute3 = new Attribute();
+	pAttribute3->setPrefix("SOAP-ENV");
+	pAttribute3->setLocalName("mustUnderstand");
+	pAttribute3->setValue("true");
+
+	addAttribute(pAttribute2);
+	addAttribute(pAttribute3);
+
+	ComplexElement* pComplexElement = new ComplexElement();
+	pComplexElement->setPrefix("m");
+	pComplexElement->setLocalName("reference");
+	pComplexElement->addChild(new CharacterElement("abcdefgh"));
+
+	ComplexElement* pComplexElement2 = new ComplexElement();
+	pComplexElement2->setPrefix("m");
+	pComplexElement2->setLocalName("dateAndTime");
+	pComplexElement2->addChild(new CharacterElement("2001-11-29T13:20:00.000-05:00"));
+
+	addChild(pComplexElement);
+	addChild(pComplexElement2);
+
+	return AXIS_SUCCESS;	
+}
+
+bool HeaderBlock::operator ==( const HeaderBlock &objHeaderBlock)
+{
+	/*
+	 *TODO : the logic
+	 */
+	return true;
 }
