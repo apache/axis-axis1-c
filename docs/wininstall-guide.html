@@ -25,6 +25,10 @@ Windows XP 2002 Professional<br></p>
 <br>
 6. <a href="#writews">Writing your web services and client applications using
 Axis C++.</a><br>
+7. <a href="#parser1">Installing the Expat Parser</a> <br>
+8. <a href="#parser2">Installing the Xerces Parser</a> <br>
+
+ 
 
 <p><a name="dist"></a></p>
 
@@ -61,6 +65,20 @@ Axis C++.</a><br>
 <br>
 
 6. "samples" folder contains sources of all the server and client samples including interop tests.</p>
+
+<p><a name="#parser1"> </a> </p>
+<h1>Installing the Expat XML parser </h1>
+<p>If you decide to use the Expat parser you need to install the Expat parser. Download the Expat-1.95.7 binary version from <a href="http://sourceforge.net/projects/expat/">http://sourceforge.net/projects/expat/</a> <br> <br>
+Extract the Expat binaries to a folder Called Expat ,we will refer to this folder as [EXPAT_EXTRACT].</p> <br> <br>
+
+<p><a name="#parser2"> </a> </p>
+
+<h1>Installing the Xerces XML parser</h1>
+<br> 
+<p>If you decide to use the Xerces parser you need to install the Xerces parser. Download the Xerces-C 2.2.0 ( 32 bit binary release) from:
+<a href="http://xml.apache.org/xerces-c/download.cgi">http://xml.apache.org/xerces-c/download.cgi</a> <br> <br>
+
+Extract the Xerces-C 2.2.0 binary version. We will refer to this folder as [XERCES_EXTRACT].</p>
 
 <p><a name=#apache"></a></p>  
 <h1> Installation with Apache 1.3.X/2.X web server</h1>
@@ -106,39 +124,33 @@ AXISMODULE is either mod_axis.dll for apache 1.3.X or mod_axis2.dll for apache 2
 
 11.If you want to use the Xerces parser with Axis C++, rename AxisXMLParser_Xerces.dll (which is located at AXIS_EXTRACT/bin) to AxisXMLParser.dll and copy it to AXIS_FOLDER/lib </p>
 <br>
-<p><b>Installing the Expat XML parser </b></p>
+<p><li>Copy libexpat.dll file from [EXPAT_EXTRACT]\Libs to [AXISCPP_DEPLOY]/lib/ </li> 
+ <li>Copy xerces-c_2_2_0.dll from [XERCES_EXTRACT]/bin/ to [AXISCPP_DEPLOY]/lib/ </li> 
+ </p> <br> <br>
+<p><b>Note:</b> This could also be done by editing the axiscpp.conf. <br>
 
-<p>If you decide to use the Expat parser you need to install the Expat parser. Download the Expat-1.95.7 binary version from <a href="http://sourceforge.net/projects/expat/">http://sourceforge.net/projects/expat/</a> <br> <br>
-Extract the Expat binaries to a folder Called Expat ,we will refer to this folder as [EXPAT_EXTRACT]. <br> <br>
-Copy libexpat.dll file from [EXPAT_EXTRACT]\Libs to [AXISCPP_DEPLOY]/lib/ <br> <br> <br>
-<p><b>Installing the Xerces XML parser</b>
-<br> <br>
-If you decide to use the Xerces parser you need to install the Xerces parser. Download the Xerces-C 2.2.0 ( 32 bit binary release) from:
-<a href="http://xml.apache.org/xerces-c/download.cgi">http://xml.apache.org/xerces-c/download.cgi</a> <br> <br>
-
-Extract the Xerces-C 2.2.0 binary version. We will refer to this folder as [XERCES_EXTRACT]. Copy xerces-c_2_2_0.dll from [XERCES_EXTRACT]/bin/ to [AXISCPP_DEPLOY]/lib/ <br>
-<br> <br>
-
-12. Open the AXIS_FOLDER/axiscpp.conf_win for editing. The contents of the file will look as follows.<br> <br>
+12. Open the AXISCPP_DEPLOY/axiscpp.conf_win for editing. The contents of the file will look as follows.<br> <br>
 
 LogPath:XXXX <br>
 WSDDFilePath:YYYY <br>
-
+XMLParser:ZZZZ <br>
+Transport_http:AAAA <br>
 <br>
- XXXX is the path to a file named AxisLog (The log file)and YYYY is the path to the server.wsdd file. Give the appropriate values for XXXX and YYYY as follows.<br> <br>
+ XXXX is the path to a file named AxisLog (The log file)and YYYY is the path to the server.wsdd file. Give the appropriate values for XXXX and YYYY as follows.ZZZZ is the path to the XMLParser and AAAA is the path to the Transport used.<br> <br>
 
 i.e. <br> <br>
 
 LogPath: [APACHE_HOME]\Axis\logs\AxisLog <br>
 WSDDFilePath: [APACHE_HOME]\Axis\conf\server.wsdd <br>
+XMLParser:[APACHE_HOME]\Axis\lib\AxisXMLParser.dll
+Transport_http:[APACHE_HOME]\Axis\lib\AxisTransport.dll<br>
 
-<br>
 server.wsdd is located at [APACHE_HOME]\Axis\conf\ for Apache 1.3 and Apache 2. (There will be three wsdd files in the [APACHE_HOME]\Axis\conf\ rename the relevant wsdd file of your platform to server.wsdd).<br> <br>
 
 Also in order to run the provided samples do the following.<br> <br>
 Open server.wsdd for editing. For each service element, locate the element "parameter name", which has the value "classname". <br>
 Give the absolute path of the indicated webservice.dll  in the "value" attribute <br>  <br>
-Rename axiscpp.conf_win which is in AXIS_FOLDER to axiscpp.conf <br> <br>
+Rename axiscpp.conf_win which is in AXISCPP_DEPLOY to axiscpp.conf <br> <br>
 
 13. Restart the apache web server. If you have done correctly apache server will start without giving any error.</p> 
 <br> 
@@ -159,7 +171,7 @@ this machine. <br> <br>
 It could happen with some other apache 2 versions or in different service packs.
 ) <br> <br>
 
-14. Open an internet browser and check http://localhost/axis. If the module has loaded properly then you will get the axis welcome page with a listing of deployed web services.<br> <br>
+14. Open an internet browser and check <a href="http://localhost/axis">http://localhost/axis</a> If the module has loaded properly then you will get the axis welcome page with a listing of deployed web services.<br> <br>
 
 <p><a name=#simpleaxis"></a></p>
 
@@ -184,7 +196,7 @@ It could happen with some other apache 2 versions or in different service packs.
 <p><a name="#samples"></a></p>
 <h1>Running Provided Samples</h1>
 
-<p>If Axis installation is a complete success, then the following sample web services and handlers have been installed successfully.<br> <br>
+<p>If Axis installation is a complete success, then the following sample web services and handlers have been installed successfully. Please click on the following link to see the deployed web services. <a href="http://localhost/axis">http://localhost/axis</a> <br> <br>
 
 You will find the built console applications at AXIS/c/bin directory. Following are the built .exe files. <br> <br>
 1.base.exe <br>
@@ -218,11 +230,10 @@ There are seven projects in the workspace.
 
 <p>For writing your own web services and client applications see the <a href="winuser-guide.html"><b>Windows User Guide</a></b> </p>
 
+
 <div id="pdf" align="right">
 <a href="wininstall-guide.pdf"><img alt="PDF" src="../skin/images/pdfdoc.gif" class="skin"><br>
           PDF</a>
-
-
 
 
 
