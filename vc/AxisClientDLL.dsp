@@ -486,6 +486,10 @@ SOURCE=..\src\soap\SoapFault.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\soap\SoapFaultException.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\soap\SoapHeader.cpp
 # End Source File
 # Begin Source File
