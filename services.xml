@@ -1,0 +1,250 @@
+<project name="services" default="deployServices">
+
+
+	<import file="${basedir}/build/buildInitialize.xml"/>
+	<import file="${basedir}/build/testInitialize.xml"/>
+
+	<target name="prepareDeployment" depends="initialize">
+	<copy todir="${basedir}\..\..\..\Axis" >
+		<fileset dir="${basedir}\deploy">
+		<include name="**/*" />
+		</fileset>
+	</copy>
+
+	<copy todir="${basedir}\..\..\..\Axis\lib">
+		<fileset dir="${basedir}\..\..\..\obj\bin\">
+			<include name="AxisServer.dll"/>
+			<include name="HTTPChannel.dll"/>
+			<include name="HTTPTransport.dll"/>
+		</fileset>
+	</copy><!--
+	<copy file="${basedir}\..\..\..\obj\bin\AxisXMLParserXerces.dll" 				tofile="${basedir}\..\..\..\Axis\lib\AxisXMLParser.dll" />
+-->
+
+
+
+	<echo file="D:\san\works\checkouts\Axis\axiscpp.conf">
+# The comment character is '#'
+#Available directives are as follows
+#(Some of these directives may not be implemented yet)
+#
+#WSDDFilePath:The path to the server wsdd
+#LogPath:The path to the axis log 
+#ClientLogPath:The path to the axis client log
+#ClientWSDDFilePath:The path to the client wsdd
+#Transport_http:The HTTP transport library
+#Transport_smtp:The SMTP transport library
+#XMLParser:The xml parser library
+#NodeName:Node name
+#ListenPort:Listening port
+#
+LogPath:${basedir}\..\..\..\Axis\log\server.log
+WSDDFilePath:${basedir}\..\..\..\Axis\conf\server.wsdd
+Transport_http:${basedir}\..\..\..\Axis\lib\HTTPTransport.dll
+XMLParser:${basedir}\..\..\..\Axis\lib\AxisXMLParser.dll
+Channel_HTTP:${basedir}\..\..\..\Axis\lib\HTTPChannel.dll
+	</echo>
+
+
+
+
+
+
+	<echo file="D:\san\works\checkouts\Axis\bull.conf" append="true">
+bull1
+	</echo>
+	<echo file="D:\san\works\checkouts\Axis\bull.conf" append="true">
+bull2
+	</echo>	
+
+
+	<exec executable="${basedir}\..\..\..\Axis\run.bat" newenvironment="true">
+		<env key="AXISCPP_DEPLOY" value="D:\san\works\checkouts\Axis"/>
+		<env key="PATH" value="${java.library.path};D:\san\works\checkouts\Axis\lib" />
+	</exec>
+
+
+	</target>
+
+
+	<target name="writeaxiscppconf">
+
+		<xmlproperty file="${dir.test.generated}\server\${serviceLang}\${serviceName}\deploy.wsdd" keepRoot="true"/>
+			<echo message="${dir.test.generated}\server\${serviceLang}\${serviceName}\deploy.wsdd" />
+			<echo message="${deployment.service.parameter(name)}" />
+			<condition property="xxx" value="yahoo">
+			<equals arg1="${deployment.service.parameter(name)}" arg2="className"/>
+			</condition>
+
+<property name="toot" value="bug"/>
+<property name="toot" value="bee"/>
+
+	
+
+			<echo message="${toot}"/>
+	</target>
+
+
+
+
+
+
+
+
+
+
+	<target name="deployServices" depends="initialize, runServices"
+	 	description="Build and deploy services for tests"/>
+
+
+
+	<target name="runServices" depends="setServiceList">
+		<foreach target="runService" param="service_property" inheritall="true">
+			<path refid="service_properties"/>
+		</foreach>
+<!--
+<echo message="xxxxxxxxxxxxx ${serviceName}"/>
+<echo message="xxxxxxxxxxxxx ${serviceLang}"/>
+		<foreach target="writeaxiscppconf" param="wsdd_property" inheritall="true">
+			<path refid="wsdd_properties"/>
+		</foreach>
+-->
+
+	</target>
+
+
+
+	<target name="setServiceList" depends="setListType,setIndividual,setFromList,setAll"/>
+
+	<target name="setListType">
+		<condition property="allService">
+			<and>
+				<not>
+					<isset property="service.name"/>
+				</not>
+				<not>
+					<isset property="service.list"/>
+				</not>
+			</and>
+		</condition>
+	</target>
+
+	<!--
+	  Create a list of just 1 Service from command line parameter -Dservice.name=
+	  -->
+	<target name="setIndividual" if="service.name">
+		<echo message="setIndividual ${service.name}"/>
+		<path id="service_properties">
+			<fileset dir="${dir.autotests}/tests/server" includes="${service.name}.xml"/>
+		</path>
+	</target>
+
+
+	<!--
+	  Create a list of Services from a properties file unless an individual Service has been specified too
+	  -->
+	<target name="setFromList" if="service.list" unless="service.name">
+		<echo message="setFromList ${service.list}"/>
+		<path id="service_properties">
+			<fileset dir="${dir.autotests}/tests/server" includesfile="${service.list}"/>
+		</path>
+	</target>
+
+	<!--
+	  Create a list of all the Services
+	  -->
+	<target name="setAll" if="allService">
+		<echo message="setAll ${dir.autotests}/tests/server"/>
+		<path id="service_properties">
+			<fileset dir="${dir.autotests}/tests/server" includes="*.xml"/>
+		</path>
+	</target>
+
+	<target name="runService" depends="setPropertiesForService,generateStubs, compileService, writeaxiscppconf"/>	
+
+	<target name="setPropertiesForService" depends="loadXMLProperties,setServiceName,setServiceDesc,setServiceCode,setServiceLang,setServiceWsdl"/>
+
+
+	<target name="loadXMLProperties">
+		<echo message="Loading XML file ${service_property}"/>
+		<xmlproperty file="${service_property}" keepRoot="true"/>
+	</target>
+	<target name="setServiceName" if="service.name">
+		<propertycopy property="serviceName" from="service.name"/>
+	</target>
+	<target name="setServiceDesc" if="service.description">
+		<propertycopy property="serviceDesc" from="service.description"/>
+	</target>
+	<target name="setServiceCode" if="service.serviceCode">
+		<propertycopy property="serviceCode" from="service.serviceCode"/>
+	</target>
+	<target name="setServiceLang" if="service.serviceLang">
+		<propertycopy property="serviceLang" from="service.serviceLang"/>
+	</target>
+	<target name="setServiceWsdl" if="service.wsdl">
+		<propertycopy property="serviceWsdl" from="service.wsdl"/>
+	</target>
+	<target name="cleanService">
+		<delete dir="${dir.test.generated}/${serviceLang}/${serviceName}"/>
+	</target>
+
+	<target name="setLanguage">
+		<condition property="generated.lang" value="c++">
+			<equals arg1="${serviceLang}" arg2="cpp"/>
+		</condition>
+	</target>
+
+	<target name="generateStubs" depends="setLanguage">
+		<!-- Make directory in which all generated code shall be placed -->
+		<echo message="${dir.test.generated}\server\${serviceLang}\${serviceName}"/>
+		<mkdir dir="${dir.test.generated}\server\${serviceLang}\${serviceName}"/>
+		<!-- Setup classpath for WSDL2Ws -->
+		<path id ="cp">
+			<fileset dir="${dir.wsdl2ws}" includes="wsdl2ws.jar"/>
+			<fileset dir="${dir.axisJARs}" includes="*.jar"/>
+		</path>
+		<!-- Run WSDL2Ws -->
+		<java classname="org.apache.axis.wsdl.wsdl2ws.WSDL2Ws" fork="true">
+			<classpath refid="cp"/>
+			<arg value="${dir.autotests}\wsdls\${serviceWsdl}"/>
+			<arg value="-o${dir.test.generated}\server\${serviceLang}\${serviceName}"/>
+			<arg value="-l${generated.lang}"/>
+			<arg value="-sserver"/>
+		</java>
+	</target>
+
+	<target name="compileService">
+	<copy file="${dir.autotests}\server\${serviceLang}\${serviceCode}"
+		tofile="${dir.test.generated}\server\${serviceLang}\${serviceName}\${serviceCode}" overwrite="true"/>
+		<cc failonerror="false" incremental="false"
+			outfile="${dir.test.generated}\server\${serviceLang}\${serviceName}\${serviceName}"
+		 	objdir="${dir.test.generated}\server\${serviceLang}\${serviceName}" exceptions="true"
+		 	outtype="shared" subsystem="console">
+
+		 	<!-- Compilers -->
+			<compiler refid="VisualC++"/>
+
+			<!-- Linkers -->
+			<linker refid="VisualC++Linker"/>
+
+			<!-- Axis Client .lib file location, or UNIX shared object -->
+			<libset dir="${dir.lib}" libs="${serverEngineLibraryName}"/>
+
+			<!-- Files to be compiled -->
+			<includepath path="${dir.include}"/>
+
+			<fileset dir="${dir.test.generated}\server\${serviceLang}\${serviceName}">
+				<include name="*.cpp"/>
+			</fileset>
+		</cc>
+<!--
+<echo message="zzzzzzzzzzzzz ${serviceName}"/>
+<echo message="zzzzzzzzzzzzz ${serviceLang}"/>
+		<path id="wsdd_properties">
+			<fileset dir="${dir.test.generated}\server\${serviceLang}\${serviceName}" includes="deploy.wsdd"/>
+		</path>
+-->
+	</target>
+
+
+</project>
