@@ -63,9 +63,8 @@ xsd__int Calculator::div(xsd__int Value0, xsd__int Value1)
 	{
 		if(AXIS_SUCCESS == m_pCall->checkMessage("divResponse", "http://localhost/axis/Calculator"))
 		{
-			Ret = m_pCall->getElementAsInt("divReturn", 0);
+			Ret = *(m_pCall->getElementAsInt("divReturn", 0));
 		}
-
 	}
 	m_pCall->unInitialize();
 	return Ret;
