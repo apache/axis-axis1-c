@@ -32,18 +32,18 @@ AxisParseException::AxisParseException()
     processException(SERVER_TRANSPORT_EXCEPTION);
 }
 
-AxisParseException::AxisParseException (int iExceptionCode)
+AxisParseException::AxisParseException (const int iExceptionCode)
 {
     m_iExceptionCode = iExceptionCode;
     processException (iExceptionCode);
 }
 
-AxisParseException::AxisParseException (exception* e)
+AxisParseException::AxisParseException (const exception* e)
 {
     processException (e);
 }
 
-AxisParseException::AxisParseException (exception* e, int iExceptionCode)
+AxisParseException::AxisParseException (const exception* e, const int iExceptionCode)
 {
     processException (e, iExceptionCode);
 }
@@ -53,29 +53,35 @@ AxisParseException::~AxisParseException() throw ()
 
 }
 
-void AxisParseException::processException (exception* e, int iExceptionCode)
+void AxisParseException::processException (const exception* e, const int iExceptionCode)
 {
-    m_sMessage = getMessage (e) + getMessage (iExceptionCode);
+    m_sMessage = getMessage (e) + " " + getMessage (iExceptionCode);
 }
 
-void AxisParseException::processException (exception* e)
+void AxisParseException::processException (const exception* e)
 {
     m_sMessage = getMessage (e);
 }
 
-void AxisParseException::processException(int iExceptionCode)
+void AxisParseException::processException(const int iExceptionCode)
 {
     m_sMessage = getMessage (iExceptionCode);
 }
 
-const string AxisParseException::getMessage (exception* objException)
+void AxisParseException::processException(const int iExceptionCode, const char* pcMessage)
+{
+    AxisString sMessage = strdup(pcMessage);
+    m_sMessage = getMessage(iExceptionCode) + " " + sMessage;
+    delete pcMessage;
+}
+const string AxisParseException::getMessage (const exception* objException)
 {
     m_sMessage = objException->what();
 
     return m_sMessage;
 }
 
-const string AxisParseException::getMessage (int iExceptionCode)
+const string AxisParseException::getMessage (const int iExceptionCode)
 {
     switch(iExceptionCode)
     {

@@ -32,18 +32,24 @@ AxisEngineException::AxisEngineException()
     processException(SERVER_ENGINE_EXCEPTION);
 }
 
-AxisEngineException::AxisEngineException (int iExceptionCode)
+AxisEngineException::AxisEngineException (const int iExceptionCode)
 {
     m_iExceptionCode = iExceptionCode;
     processException (iExceptionCode);
 }
 
-AxisEngineException::AxisEngineException (exception* e)
+AxisEngineException::AxisEngineException(const int iExceptionCode, const char* pcMessage)
+{
+    m_iExceptionCode = iExceptionCode;
+    processException(iExceptionCode, pcMessage);
+}
+
+AxisEngineException::AxisEngineException (const exception* e)
 {
     processException (e);
 }
 
-AxisEngineException::AxisEngineException (exception* e, int iExceptionCode)
+AxisEngineException::AxisEngineException (const exception* e, const int iExceptionCode)
 {
     m_iExceptionCode = iExceptionCode;
     processException (e, iExceptionCode);
@@ -54,29 +60,35 @@ AxisEngineException::~AxisEngineException() throw ()
 
 }
 
-void AxisEngineException::processException (exception* e, int iExceptionCode)
+void AxisEngineException::processException (const exception* e, const int iExceptionCode)
 {
-    m_sMessage = getMessage (e) + getMessage (iExceptionCode);
+    m_sMessage = getMessage (e) + " " + getMessage (iExceptionCode);
 }
 
-void AxisEngineException::processException (exception* e)
+void AxisEngineException::processException (const exception* e)
 {
     m_sMessage = getMessage (e);
 }
 
-void AxisEngineException::processException(int iExceptionCode)
+void AxisEngineException::processException(const int iExceptionCode)
 {
     m_sMessage = getMessage (iExceptionCode);
 }
 
-const string AxisEngineException::getMessage (exception* objException)
+void AxisEngineException::processException(const int iExceptionCode, const char* pcMessage)
+{
+    AxisString sMessage = strdup(pcMessage);
+    m_sMessage = getMessage(iExceptionCode) + " " + sMessage;
+    //delete pcMessage;
+}
+const string AxisEngineException::getMessage (const exception* objException)
 {
     m_sMessage = objException->what();
 
     return m_sMessage;
 }
 
-const string AxisEngineException::getMessage (int iExceptionCode)
+const string AxisEngineException::getMessage (const int iExceptionCode)
 {
     switch(iExceptionCode)
     {
