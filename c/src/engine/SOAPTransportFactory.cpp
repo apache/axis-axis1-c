@@ -24,6 +24,9 @@
 #include "SOAPTransportFactory.h"
 #include <axis/SOAPTransport.h>
 #include <stdio.h>
+#include <axis/server/AxisConfig.h>
+
+extern AxisConfig* g_pConfig;
 
 const char* SOAPTransportFactory::m_pcLibraryPath = 0;
 DLHandler SOAPTransportFactory::m_LibHandler = 0;
@@ -44,9 +47,11 @@ int SOAPTransportFactory::initialize()
 {
 #ifdef WIN32
 #ifdef _DEBUG
-	m_pcLibraryPath = "AxisTransport_D.dll"; //this will be taken from configuration file
+	m_pcLibraryPath = g_pConfig->getAxConfProperty(AXCONF_TRANSPORTHTTP);
+	//m_pcLibraryPath = "AxisTransport_D.dll"; //this will be taken from configuration file
 #else
-	m_pcLibraryPath = "AxisTransport.dll"; //this will be taken from configuration file
+	m_pcLibraryPath = g_pConfig->getAxConfProperty(AXCONF_TRANSPORTHTTP);
+	//m_pcLibraryPath = "AxisTransport.dll"; //this will be taken from configuration file
 #endif
 #else
 	m_pcLibraryPath = "/usr/local/Axis/libs/libaxis_transport.so"; //this will be taken from configuration file
