@@ -270,6 +270,7 @@ int ServerAxisEngine::Invoke(MessageData* pMsg)
 	{
 	
 	case AE_SERV: //Everything Success.
+        AXISTRACE1("case AE_SERV:");
 		Status = SUCCESS;
 		//no break;
 	case AE_SERH: //actual web service handler has failed
