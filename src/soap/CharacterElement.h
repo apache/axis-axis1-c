@@ -50,6 +50,34 @@ class CharacterElement : public BasicNode
 {
 public:
 
+    /**
+      * This method is overridden to always return NULL because this is a CharacterElement.
+      * A user of a CharacterElement should not use this method
+      */
+    virtual IAttribute* getFirstAttribute()
+    { return NULL; }
+                                                                                                                                                                            
+    /**
+      * This method is overridden to always return NULL because this is a CharacterElement.
+      * A user of a CharacterElement should not use this method
+      */    
+    virtual IAttribute* getLastAttribute()
+    { return NULL; }
+                                                                                                                                                                            
+    /**
+      * This method is overridden to always return NULL because this is a CharacterElement.
+      * A user of a CharacterElement should not use this method
+      */    
+    virtual IAttribute* getNextAttribute()
+    { return NULL; }
+
+    /**
+      * This method is overridden to always return NULL because this is a CharacterElement.
+      * A user of a CharacterElement should not use this method
+      */
+    virtual IAttribute* getCurrentAttribute()
+    { return NULL; }
+
     /** 
       * This method is overridden to always return NULL because this is a CharacterElement. 
       * A user of a CharacterElement should not use this method 

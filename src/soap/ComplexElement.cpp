@@ -448,3 +448,56 @@ int ComplexElement::getNoOfChildren()
 const AxisChar* ComplexElement::getLocalName() {
     return m_pachLocalName; 
 }
+
+IAttribute* ComplexElement::getFirstAttribute()
+{
+    m_viCurrentAttribute = m_attributes.begin();
+    if ( m_viCurrentAttribute == m_attributes.end())
+        return NULL;
+    else
+        return ((IAttribute*)*m_viCurrentAttribute);                                                                                                                                                                           
+}
+                                                                                                                                                                            
+IAttribute* ComplexElement::getLastAttribute()
+{
+    /*To do : check the logic
+    */
+/*    m_viCurrentAttribute = m_attributes.end();
+    if ( m_viCurrentAttribute == m_attributes.end())
+        return NULL;
+    else
+        return ((IAttribute*)*m_viCurrentAttribute);
+*/
+
+    list <Attribute*>::reverse_iterator iAttributeReverseIte = m_attributes.rbegin();
+    if (iAttributeReverseIte == m_attributes.rend()) {
+         m_viCurrentAttribute = m_attributes.end();
+	return NULL;
+    } else {
+	m_viCurrentAttribute = m_attributes.end();
+  	return ((IAttribute*)*iAttributeReverseIte);
+    }
+}
+                                                                                                                                                                            
+IAttribute* ComplexElement::getNextAttribute()
+{
+    //already at the end?
+    if (m_viCurrentAttribute == m_attributes.end())
+        return NULL;
+                                                                                                                                                                            
+    m_viCurrentAttribute++;
+    if ( m_viCurrentAttribute == m_attributes.end())
+        return NULL;
+    else
+        return ((IAttribute*)*m_viCurrentAttribute);
+}
+
+IAttribute* ComplexElement::getCurrentAttribute()
+{
+    //already at the end?
+    if ( m_viCurrentAttribute == m_attributes.end())
+        return NULL;
+    else
+        return ((IAttribute*)*m_viCurrentAttribute);
+}
+

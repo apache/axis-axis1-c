@@ -76,6 +76,31 @@ class BasicNode
 {
 public:
 
+    /**
+      * Returns the first Attribute of this node. The operation
+      * behavior depends on the TYPE of the node.
+      */
+    virtual IAttribute* getFirstAttribute() = 0;
+
+    /**
+      * Returns the last Attribute of this node. The operation
+      * behavior depends on the TYPE of the node.
+      */
+    virtual IAttribute* getLastAttribute() = 0;
+
+    /**
+      * Returns the next Attribute of this node. The operation
+      * behavior depends on the TYPE of the node.
+      */
+    virtual IAttribute* getNextAttribute() = 0;
+
+    /**
+      * Returns the current Attribute of this node. The operation
+      * behavior depends on the TYPE of the node.
+      */
+    virtual IAttribute* getCurrentAttribute() = 0;
+
+
     /** 
       * Creates an Attribute and adds it to this Basic Node. 
       * 
