@@ -70,6 +70,7 @@ import org.w3c.dom.Node;
 public class WSDL2Ws {
 
     private String language;
+	private boolean wsdlWrappingStyle;
 
     private String qualifiedServiceName;
     private SymbolTable symbolTable;
@@ -221,7 +222,10 @@ public class WSDL2Ws {
 					minfo.setInputMessage(minfoqname);
 					System.out.println(minfoqname.getLocalPart()+"setInputMessage.............?????????????");
 					type = this.typeMap.getType(qname);
-					boolean wrapped = true; //TODO take this from a commandline argument
+					//boolean wrapped = true; //TODO take this from a commandline argument
+					//boolean wrapped = false; //just for testing the non-wrapped style wsdl
+					boolean wrapped = wsdlWrappingStyle;
+
 					if (wrapped){
 						if(type == null)
 							 throw new WrapperFault("unregisterd type "+qname+" refered");
@@ -250,8 +254,18 @@ public class WSDL2Ws {
 							//this.typeMap.removeType(qname);
 						}
 					}
-					else{
-						
+					else{ // for non-wrapped style wsdl's
+						if(type == null)
+							 throw new WrapperFault("unregisterd type "+qname+" refered");
+						else{
+							// String elementName = (String)type.getName().toString();
+							String elementName = (String)element.getQName().getLocalPart();
+							pinfo = new ParameterInfo(type,elementName);
+							pinfo.setElementName(type.getName());
+							if (type.getName().equals(CUtils.anyTypeQname))
+								pinfo.setAnyType(true);
+							minfo.addInputParameter(pinfo);
+						}
 					}
 				}
 	    	}
@@ -293,7 +307,8 @@ public class WSDL2Ws {
 					if (qname != null){
 						minfo.setOutputMessage(minfoqname);
 						type = this.typeMap.getType(qname);				
-						boolean wrapped = true; //TODO take this from a commandline argument
+						//boolean wrapped = true; //TODO take this from a commandline argument
+						boolean wrapped = wsdlWrappingStyle;
 						if (wrapped){
 							if(type == null)
 								 throw new WrapperFault("unregisterd type "+qname+" refered");
@@ -322,7 +337,19 @@ public class WSDL2Ws {
 								//this.typeMap.removeType(qname);
 							}
 						}
-						else{
+						else{ // for non-wrapped style wsdl's
+							if(type == null)
+								 throw new WrapperFault("unregisterd type "+qname+" refered");
+							else{
+								// String elementName = (String)type.getName().toString();
+								String elementName = (String)element.getQName().getLocalPart();
+								symbolTable.dump ( System.out);
+								pinfo = new ParameterInfo(type,elementName);
+								pinfo.setElementName(type.getName());
+								if (type.getName().equals(CUtils.anyTypeQname))
+									pinfo.setAnyType(true);
+								minfo.addOutputParameter(pinfo);
+							}
 						}
 					}
 				}
@@ -390,13 +417,25 @@ public class WSDL2Ws {
         String targetLanguage,
         String targetImplementationStyle,
         String targetEngine,
-        String security)
+        String security,
+	    String wsdlWrapStyle)
         throws WrapperFault {
         	
 		if (targetLanguage == null) targetLanguage = "c++";
 		if (targetEngine == null) targetEngine = "server";
 		if (targetoutputLocation == null) targetoutputLocation = "./";
+		if (wsdlWrapStyle == null) wsdlWrapStyle = "wrapped";
+		
 		this.language = targetLanguage;
+		
+		if (wsdlWrapStyle.equalsIgnoreCase("wrapped"))
+		{
+			this.wsdlWrappingStyle = true;
+		}
+		else
+		{
+			this.wsdlWrappingStyle = false;
+		}
 		
 		perprocess();
 		
@@ -678,6 +717,7 @@ public class WSDL2Ws {
      * --help (later ???? not emplemented)
      * -i implementation style (struct|order|simple) default is struct--- (usergetvalue() with PP or use getTag() ect ....)
      * -s (client|server|both)  
+     * -w wrapping style of the WSDL (wrapped|nonwrapped) - default is wrapped
      * 
      * Note:  PP - pull parser
      * @param args
@@ -693,7 +733,8 @@ public class WSDL2Ws {
                     + "-o target output folder - default is current folder\n"
                     + "-l target language(c|c++) - default is c++\n"
                     + "-s target side(client|server) - default is server\n"
-                    + "-c channel security(ssl|none) - default is none\n");
+                    + "-c channel security(ssl|none) - default is none\n"
+                    + "-w wrapping style of the WSDL (wrapped|nonwrapped) - default is wrapped\n");
         else {
             WSDL2Ws gen = new WSDL2Ws(data);
             gen.genarateWrappers(
@@ -702,7 +743,8 @@ public class WSDL2Ws {
                 data.getOptionBykey("l"),
                 data.getOptionBykey("i"),
                 data.getOptionBykey("s"),
-                data.getOptionBykey("c"));
+                data.getOptionBykey("c"),
+			    data.getOptionBykey("w"));
         }
     }
 }
