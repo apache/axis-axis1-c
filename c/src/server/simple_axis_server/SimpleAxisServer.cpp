@@ -91,6 +91,7 @@
 char echoBuffer[RCVBUFSIZE];        /* Buffer for echo string */
 const char *pcHttpBody;
 int iClntSocket;
+map<HTTP_MAP_KEYWORDS, HTTP_MAP_TYPE*> map_HTTP_Headers;
 
 int send_response_bytes(const char * res, const void* opstream) 
 {	
@@ -142,8 +143,16 @@ int executeWork() {
 	//str->so.http.ip_headers->headername = SOAPACTIONHEADER;
 	//str->so.http.ip_headers->headervalue = "\"Calculator\"";	
 	str->so.http.ip_headercount = 0;
-	//str->so.http.uri_path = "http://someurl/axis/Calculator";
-	str->so.http.uri_path = "http://someurl/axis/Deployment";
+
+	char pchURIValue[100] = {0};
+	strcat(pchURIValue, "http://someurl");
+		
+	if (map_HTTP_Headers.find(HMK_URI) != map_HTTP_Headers.end()) {
+		const char* pChTemp = map_HTTP_Headers[HMK_URI]->objuHttpMapContent->msValue;
+		strcat(pchURIValue, pChTemp);
+	}
+
+	str->so.http.uri_path = pchURIValue;
 
 	//set transport
 	str->transport.pSendFunct = send_response_bytes;
@@ -246,7 +255,7 @@ void handleTCPClient(int clntSocket)
 	string sHTTPHeaders = "";
 	string sHTTPBody = "";
 
-	getSeperatedHTTPParts(sClientReqStream, sHTTPHeaders, sHTTPBody);
+	getSeperatedHTTPParts(sClientReqStream, sHTTPHeaders, sHTTPBody, &map_HTTP_Headers);
 	
 	//DEBUG info
 	//printf("----------START extracted HTTP Headers------------\n");
