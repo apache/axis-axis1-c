@@ -36,7 +36,7 @@ XMLParserExpat::XMLParserExpat()
 {
     m_pLastEvent = NULL;
     m_Parser = XML_ParserCreateNS(NULL, NAMESPACESEPARATOR);
-	m_pCurrentBuffer = 0;
+    m_pCurrentBuffer = 0;
 }
 
 XMLParserExpat::~XMLParserExpat()
@@ -60,7 +60,7 @@ void XMLParserExpat::startElement(const XML_Ch *qname,const XML_Ch **attrs)
     pSE->m_Namespace  = qn.uri ? qn.uri : "";
     qn.mergeQNameString(NAMESPACESEPARATOR);
     SimpleAttribute *pAt = NULL;
-    for (int i = 0; attrs[i]; i += 2) 
+    for (int i = 0; attrs[i]; i += 2)
     {
         qn.splitQNameString(attrs[i], NAMESPACESEPARATOR);
         pAt = new SimpleAttribute();
@@ -93,7 +93,7 @@ void  XMLParserExpat::characters(const XML_Ch *chars, int length)
     pTemp[length] = '\0';
     /* putting nul charactor so that chars can be used safely */
     Event* pLastEvent;
-    if (!m_Events.empty()) 
+    if (!m_Events.empty())
     {
         pLastEvent = m_Events.back();
         if (CHARACTER_ELEMENT == pLastEvent->getType())
@@ -101,8 +101,8 @@ void  XMLParserExpat::characters(const XML_Ch *chars, int length)
         {
             pLastEvent->m_NameOrValue += pTemp;
             pTemp[length] = replacedchar;
-            /* put back the character that was there before putting nul 
-             * charactor 
+            /* put back the character that was there before putting nul
+             * charactor
              */
             return;
         }
@@ -114,7 +114,7 @@ void  XMLParserExpat::characters(const XML_Ch *chars, int length)
     /* put back the character that was there before putting nul charactor */
 }
 
-void XMLParserExpat::startPrefixMapping(const XML_Ch *prefix, 
+void XMLParserExpat::startPrefixMapping(const XML_Ch *prefix,
                                          const XML_Ch *uri)
 {
     if (prefix && uri)
@@ -181,7 +181,7 @@ const AnyElement* XMLParserExpat::next(bool isCharData)
                 m_Events.push(m_pLastEvent);
                 nStatus = parseNext();
                 if (TRANSPORT_FAILED == nStatus) return NULL;
-                if ((TRANSPORT_FINISHED == nStatus) && m_Events.empty()) 
+                if ((TRANSPORT_FINISHED == nStatus) && m_Events.empty())
                     //throw AxisParseException(SERVER_PARSE_TRANSPORT_FAILED);
                     return NULL;
             }
@@ -192,19 +192,19 @@ const AnyElement* XMLParserExpat::next(bool isCharData)
                 {
                 case START_ELEMENT:
                     {
-                        for (list<SimpleAttribute*>::iterator it = 
+                        for (list<SimpleAttribute*>::iterator it =
                             ((StartElement*)m_pLastEvent)->m_Attributes.begin()
                             ; it != ((StartElement*)m_pLastEvent)->
                             m_Attributes.end(); it++)
                         {
-                            m_Element.m_pchAttributes[i+0] = 
+                            m_Element.m_pchAttributes[i+0] =
                                 (*it)->m_Name.c_str();
                             if ((*it)->m_Namespace.empty())
-								m_Element.m_pchAttributes[i+1] = 0;
-							else
-								m_Element.m_pchAttributes[i+1] = 
+                                m_Element.m_pchAttributes[i+1] = 0;
+                            else
+                                m_Element.m_pchAttributes[i+1] =
                                 (*it)->m_Namespace.c_str();
-                            m_Element.m_pchAttributes[i+2] = 
+                            m_Element.m_pchAttributes[i+2] =
                                 (*it)->m_Value.c_str();
                             i+=3;
                         }
@@ -214,26 +214,26 @@ const AnyElement* XMLParserExpat::next(bool isCharData)
                     }
                     /* no break */
                 case END_ELEMENT:
-					if (((StartElement*)m_pLastEvent)->
+                    if (((StartElement*)m_pLastEvent)->
                         m_Namespace.empty())
-						m_Element.m_pchNamespace = 0;
-					else 
-						m_Element.m_pchNamespace =
-						((StartElement*)m_pLastEvent)->m_Namespace.c_str();
+                        m_Element.m_pchNamespace = 0;
+                    else
+                        m_Element.m_pchNamespace =
+                        ((StartElement*)m_pLastEvent)->m_Namespace.c_str();
                     /* no break */
                 case CHARACTER_ELEMENT:
                     m_Element.m_pchNameOrValue = m_pLastEvent->
                         m_NameOrValue.c_str();
                     m_Element.m_type = type;
-					if (!isCharData && (CHARACTER_ELEMENT == type))
-					{ /* ignorable white space */
-						delete m_pLastEvent;
-						m_pLastEvent = NULL;
-						break;						
-					}
+                    if (!isCharData && (CHARACTER_ELEMENT == type))
+                    { /* ignorable white space */
+                        delete m_pLastEvent;
+                        m_pLastEvent = NULL;
+                        break;
+                    }
                     return &m_Element;
                 case START_PREFIX:
-                    m_NsStack[m_pLastEvent->m_NameOrValue] = 
+                    m_NsStack[m_pLastEvent->m_NameOrValue] =
                         ((StartPrefix*)m_pLastEvent)->m_Namespace;
                     /* I think the same prifix cannot repeat ??? */
                     delete m_pLastEvent;
@@ -271,21 +271,21 @@ int XMLParserExpat::parseNext()
     AXIS_TRANSPORT_STATUS iTransportStatus;
     try
     {
-	m_pCurrentBuffer = (char*) XML_GetBuffer(m_Parser, EXPAT_BUFFER_SIZE);
-	if (m_pCurrentBuffer)
-	{
-		iTransportStatus = m_pInputStream->getBytes(m_pCurrentBuffer, &nChars);
-		if (nChars > 0)
-		{
-			if (XML_STATUS_ERROR == XML_ParseBuffer(m_Parser, nChars, false))
-				m_nStatus = AXIS_FAIL;
-		}
-		if (TRANSPORT_FAILED == iTransportStatus) XML_ParseBuffer(m_Parser, 0, true);
+    m_pCurrentBuffer = (char*) XML_GetBuffer(m_Parser, EXPAT_BUFFER_SIZE);
+    if (m_pCurrentBuffer)
+    {
+        iTransportStatus = m_pInputStream->getBytes(m_pCurrentBuffer, &nChars);
+        if (nChars > 0)
+        {
+            if (XML_STATUS_ERROR == XML_ParseBuffer(m_Parser, nChars, false))
+                m_nStatus = AXIS_FAIL;
+        }
+        if (TRANSPORT_FAILED == iTransportStatus) XML_ParseBuffer(m_Parser, 0, true);
                 if(AXIS_FAIL == m_nStatus)
                     throw AxisParseException( SERVER_PARSE_PARSER_FAILED);
                 if(TRANSPORT_FAILED == iTransportStatus)
                     throw AxisParseException(SERVER_PARSE_TRANSPORT_FAILED);
-	}
+    }
         else throw AxisParseException(SERVER_PARSE_BUFFER_EMPTY);
     /* end of parsing */
     }
@@ -310,7 +310,7 @@ int XMLParserExpat::getStatus()
 }
 
 /**
- * Sets the new input stream and resets XMLParserExpat object state to 
+ * Sets the new input stream and resets XMLParserExpat object state to
  * initial state
  */
 int XMLParserExpat::setInputStream(AxisIOStream* pInputStream)
@@ -318,7 +318,7 @@ int XMLParserExpat::setInputStream(AxisIOStream* pInputStream)
     m_pInputStream = pInputStream;
     XML_ParserReset(m_Parser, NULL);
     XML_SetUserData(m_Parser, this);
-    XML_SetNamespaceDeclHandler(m_Parser, s_startPrefixMapping, 
+    XML_SetNamespaceDeclHandler(m_Parser, s_startPrefixMapping,
         s_endPrefixMapping);
     XML_SetElementHandler(m_Parser, s_startElement, s_endElement);
     XML_SetCharacterDataHandler(m_Parser, s_characters);
@@ -367,7 +367,7 @@ const AnyElement* XMLParserExpat::anyNext()
                 m_Events.push(m_pLastEvent);
                 nStatus = parseNext();
                 if (TRANSPORT_FAILED == nStatus) return NULL;
-                if ((TRANSPORT_FINISHED == nStatus) && m_Events.empty()) 
+                if ((TRANSPORT_FINISHED == nStatus) && m_Events.empty())
                     return NULL;
             }
             else
@@ -377,19 +377,19 @@ const AnyElement* XMLParserExpat::anyNext()
                 {
                 case START_ELEMENT:
                     {
-                        for (list<SimpleAttribute*>::iterator it = 
+                        for (list<SimpleAttribute*>::iterator it =
                             ((StartElement*)m_pLastEvent)->m_Attributes.begin()
                             ; it != ((StartElement*)m_pLastEvent)->
                             m_Attributes.end(); it++)
                         {
-                            m_Element.m_pchAttributes[i+0] = 
+                            m_Element.m_pchAttributes[i+0] =
                                 (*it)->m_Name.c_str();
                             if ((*it)->m_Namespace.empty())
-								m_Element.m_pchAttributes[i+1] = 0;
-							else
-								m_Element.m_pchAttributes[i+1] = 
+                                m_Element.m_pchAttributes[i+1] = 0;
+                            else
+                                m_Element.m_pchAttributes[i+1] =
                                 (*it)->m_Namespace.c_str();
-                            m_Element.m_pchAttributes[i+2] = 
+                            m_Element.m_pchAttributes[i+2] =
                                 (*it)->m_Value.c_str();
                             i+=3;
                         }
@@ -399,12 +399,12 @@ const AnyElement* XMLParserExpat::anyNext()
                     }
                     /* no break */
                 case END_ELEMENT:
-					if (((StartElement*)m_pLastEvent)->
+                    if (((StartElement*)m_pLastEvent)->
                         m_Namespace.empty())
-						m_Element.m_pchNamespace = 0;
-					else 
-						m_Element.m_pchNamespace =
-						((StartElement*)m_pLastEvent)->m_Namespace.c_str();
+                        m_Element.m_pchNamespace = 0;
+                    else
+                        m_Element.m_pchNamespace =
+                        ((StartElement*)m_pLastEvent)->m_Namespace.c_str();
                     /* no break */
                 case CHARACTER_ELEMENT:
                     m_Element.m_pchNameOrValue = m_pLastEvent->
@@ -412,18 +412,18 @@ const AnyElement* XMLParserExpat::anyNext()
                     m_Element.m_type = type;
                     return &m_Element;
                 case START_PREFIX:
-                    m_NsStack[m_pLastEvent->m_NameOrValue] = 
+                    m_NsStack[m_pLastEvent->m_NameOrValue] =
                         ((StartPrefix*)m_pLastEvent)->m_Namespace;
                     m_Element.m_pchNamespace = ((StartElement*)m_pLastEvent)->
                         m_Namespace.c_str();
                     m_Element.m_pchNameOrValue = ((StartElement*)m_pLastEvent)
-						->m_NameOrValue.c_str();
+                        ->m_NameOrValue.c_str();
                     m_Element.m_type = type;
                     return &m_Element;
                 case END_PREFIX:
                     m_NsStack.erase(m_pLastEvent->m_NameOrValue);
                     m_Element.m_pchNameOrValue = ((StartElement*)m_pLastEvent)
-						->m_NameOrValue.c_str();
+                        ->m_NameOrValue.c_str();
                     m_Element.m_type = type;
                     return &m_Element;
                 }
@@ -448,15 +448,15 @@ const AnyElement* XMLParserExpat::anyNext()
 
 const XML_Ch* XMLParserExpat::getPrefix4NS(const XML_Ch* pcNS)
 {
-	for (map<AxisXMLString, AxisXMLString>::iterator it;
-		 it!=m_NsStack.end(); it++)
-	{
-		if ((*it).second == pcNS)
-		{
-			return (*it).first.c_str();
-		}
-	}
-	return 0;
+    for (map<AxisXMLString, AxisXMLString>::iterator it;
+         it!=m_NsStack.end(); it++)
+    {
+        if ((*it).second == pcNS)
+        {
+            return (*it).first.c_str();
+        }
+    }
+    return 0;
 }
 
 

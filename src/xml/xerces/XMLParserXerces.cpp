@@ -71,41 +71,47 @@ const XML_Ch* XMLParserXerces::getNS4Prefix(const XML_Ch* prefix)
 
 int XMLParserXerces::getStatus()
 {
-	return m_Xhandler.getStatus();
+    return m_Xhandler.getStatus();
 }
 
 const AnyElement* XMLParserXerces::next(bool isCharData)
 {
-	bool bCanParseMore = false;
+    bool bCanParseMore = false;
     try
     {
-		if(!m_bFirstParsed)
-		{
-			m_pParser->parseFirst(*m_pInputSource, m_ScanToken);
-			m_bFirstParsed = true;
-		}
+        if(!m_bFirstParsed)
+        {
+            m_pParser->parseFirst(*m_pInputSource, m_ScanToken);
+            m_bFirstParsed = true;
+        }
 
-		m_Xhandler.freeElement();
-		while (true)
-		{
-			AnyElement* elem = m_Xhandler.getAnyElement();
-			if (!elem)
-			{
-				bCanParseMore = m_pParser->parseNext(m_ScanToken);
-				elem = m_Xhandler.getAnyElement();
-			}
-			if (elem) 
-			{
-				if (!isCharData && (CHARACTER_ELEMENT == elem->m_type))
-				{ /* ignorable white space */
-					m_Xhandler.freeElement();
-					continue;		
-				}			
-				return elem;
-			}
-			else if (AXIS_FAIL == m_Xhandler.getStatus()) return NULL;
-			else if (!bCanParseMore) return NULL;
-		}
+        m_Xhandler.freeElement();
+        while (true)
+        {
+            AnyElement* elem = m_Xhandler.getAnyElement();
+            if (!elem)
+            {
+                bCanParseMore = m_pParser->parseNext(m_ScanToken);
+                elem = m_Xhandler.getAnyElement();
+            }
+            if (elem)
+            {
+                if ((START_PREFIX == elem->m_type) ||
+                (END_PREFIX == elem->m_type))
+                {
+                    m_Xhandler.freeElement();
+                    continue;
+                }
+                if (!isCharData && (CHARACTER_ELEMENT == elem->m_type))
+                { /* ignorable white space */
+                    m_Xhandler.freeElement();
+                    continue;
+                }
+                return elem;
+            }
+            else if (AXIS_FAIL == m_Xhandler.getStatus()) return NULL;
+            else if (!bCanParseMore) return NULL;
+        }
     }
     catch(AxisParseException& e)
     {
@@ -123,11 +129,48 @@ const AnyElement* XMLParserXerces::next(bool isCharData)
 
 const AnyElement* XMLParserXerces::anyNext()
 {
-	return 0;
+    bool bCanParseMore = false;
+    try
+    {
+        if(!m_bFirstParsed)
+        {
+            m_pParser->parseFirst(*m_pInputSource, m_ScanToken);
+            m_bFirstParsed = true;
+        }
+
+        m_Xhandler.freeElement();
+        while (true)
+        {
+            AnyElement* elem = m_Xhandler.getAnyElement();
+            if (!elem)
+            {
+                bCanParseMore = m_pParser->parseNext(m_ScanToken);
+                elem = m_Xhandler.getAnyElement();
+            }
+            if (elem)
+            {
+                return elem;
+            }
+            else if (AXIS_FAIL == m_Xhandler.getStatus()) return NULL;
+            else if (!bCanParseMore) return NULL;
+        }
+    }
+    catch(AxisParseException& e)
+    {
+        throw;
+    }
+    catch(AxisException& e)
+    {
+        throw;
+    }
+    catch(...)
+    {
+        throw;
+    }
 }
 
 const XML_Ch* XMLParserXerces::getPrefix4NS(const XML_Ch* pcNS)
 {
-	return 0;
+    return m_Xhandler.prefix4NS(pcNS);
 }
 

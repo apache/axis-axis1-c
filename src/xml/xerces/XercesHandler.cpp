@@ -30,7 +30,7 @@ XercesHandler::XercesHandler()
 {
     m_nStatus = AXIS_SUCCESS;
     Nelement = (AnyElement*)malloc(sizeof (AnyElement));
-	m_bEndElementFollows = false;
+    m_bEndElementFollows = false;
 }
 
 XercesHandler::~XercesHandler()
@@ -48,7 +48,7 @@ void XercesHandler::startElement(const XMLCh *const uri,const XMLCh *const
     
     unsigned int len = attrs.getLength();
     unsigned int index;
-	unsigned int i = 0;
+    unsigned int i = 0;
     for (index = 0; index < len*3; index+=3)
     {    
         Nelement->m_pchAttributes[index] = 
@@ -57,7 +57,7 @@ void XercesHandler::startElement(const XMLCh *const uri,const XMLCh *const
             XMLString::transcode(attrs.getURI(i));
         Nelement->m_pchAttributes[index+2] = 
             XMLString::transcode(attrs.getValue(i));
-		i++;
+        i++;
     }
     Nelement->m_pchAttributes[len*3]=NULL;
 }
@@ -71,6 +71,19 @@ const XML_Ch* XercesHandler::ns4Prefix(const XML_Ch* prefix)
     return NULL;
 }
 
+const XML_Ch* XercesHandler::prefix4NS(const XML_Ch* pcNS)
+{
+    for (map<AxisXMLString, AxisXMLString>::iterator it;
+         it!=m_NsStack.end(); it++)
+    {
+        if ((*it).second == pcNS)
+        {
+            return (*it).first.c_str();
+        }
+    }
+    return 0;
+}
+    
 void XercesHandler::characters(const XMLCh* const chars, 
                                const unsigned int length)
 {
@@ -100,13 +113,13 @@ void XercesHandler::endElement (const XMLCh *const uri,
                                 const XMLCh *const localname,
                                 const XMLCh *const qname)
 {
-	if (m_pCurrElement && (START_ELEMENT == m_pCurrElement->m_type)) 
-	/* it seems that both startElement and endElemen events fired within a 
-	single parseNext call */
-	{
-		m_bEndElementFollows = true;
-		return;
-	}
+    if (m_pCurrElement && (START_ELEMENT == m_pCurrElement->m_type))
+    /* it seems that both startElement and endElemen events fired within a
+    single parseNext call */
+    {
+        m_bEndElementFollows = true;
+        return;
+    }
     m_pCurrElement = Nelement;
     Nelement->m_type = END_ELEMENT;
     Nelement->m_pchNameOrValue = XMLString::transcode(localname);
@@ -114,9 +127,10 @@ void XercesHandler::endElement (const XMLCh *const uri,
     Nelement->m_pchAttributes[0] = NULL;
 }
 
-void XercesHandler::startPrefixMapping(const XMLCh* const prefix, 
+void XercesHandler::startPrefixMapping(const XMLCh* const prefix,
                                        const XMLCh* const uri)
 {
+    m_pCurrElement = Nelement;
     Nelement->m_type = START_PREFIX;
     Nelement->m_pchNameOrValue = XMLString::transcode(prefix);
     Nelement->m_pchNamespace = XMLString::transcode(uri);
@@ -125,6 +139,7 @@ void XercesHandler::startPrefixMapping(const XMLCh* const prefix,
 
 void XercesHandler::endPrefixMapping(const XMLCh* const prefix)
 {
+    m_pCurrElement = Nelement;
     Nelement->m_type = END_PREFIX;
     Nelement->m_pchNameOrValue = XMLString::transcode(prefix);
     m_NsStack.erase(XMLString::transcode(prefix));
@@ -134,17 +149,17 @@ void XercesHandler::freeElement()
 {
     if (m_pCurrElement)
     {
-		if (m_bEndElementFollows)
-			/* free only attributes list if available */
-		{
-			m_bEndElementFollows = false;
-			Nelement->m_type = END_ELEMENT;
-			Nelement->m_pchAttributes[0] = NULL;
-		}
-		else
-			/* free all inner strings */
-		{
-			m_pCurrElement = 0;
-		}
+        if (m_bEndElementFollows)
+            /* free only attributes list if available */
+        {
+            m_bEndElementFollows = false;
+            Nelement->m_type = END_ELEMENT;
+            Nelement->m_pchAttributes[0] = NULL;
+        }
+        else
+            /* free all inner strings */
+        {
+            m_pCurrElement = 0;
+        }
     }
 }

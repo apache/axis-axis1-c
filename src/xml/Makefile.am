@@ -1,6 +1,6 @@
 noinst_LTLIBRARIES = libxml.la
-SUBDIRS = expat xerces
-#SUBDIRS = expat
+#SUBDIRS = expat xerces
+SUBDIRS = expat
 #SUBDIRS = xerces
 
 AM_CPPFLAGS = $(CPPFLAGS)
