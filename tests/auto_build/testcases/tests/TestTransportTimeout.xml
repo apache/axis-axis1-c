@@ -1,0 +1,13 @@
+<test>
+    <name>TestTransportTimeout</name>
+    <description>TestTransportTimeout</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>TestTransportTimeoutClient.cpp</clientCode>
+    <wsdl>TestTransportTimeout.wsdl</wsdl>
+    <expected>
+        <output>
+            TestTransportTimeout.expected
+        </output>
+    </expected>
+	<endpoint>http://localhost:80/TestTransportTimeout/services/TestTransportTimeoutPort</endpoint>
+</test>

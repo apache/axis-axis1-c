@@ -1,0 +1,16 @@
+<test>
+    <name>TestTransportProperties</name>
+    <description>TestTransportProperties</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>TestTransportPropertiesClient.cpp</clientCode>
+    <wsdl>CalculatorDoc.wsdl</wsdl>
+    <expected>
+        <output>
+            TestTransportProperties.expected
+        </output>
+        <request>
+            TestTransportPropertiesRequest.out
+        </request>
+    </expected>
+	<endpoint>http://localhost:80/Calculator/services/Calculator</endpoint>
+</test>
