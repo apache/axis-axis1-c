@@ -1,6 +1,6 @@
 noinst_LTLIBRARIES = libsoap.la
 
-
+AM_CPPFLAGS = -Wshadow -Wall -pedantic -ansi
 libsoap_la_SOURCES = Attribute.cpp \
         BasicNode.cpp \
         CharacterElement.cpp \
