@@ -17,6 +17,7 @@
  *
  * @author Damitha Kumarage (damitha@opensource.lk, damitha@jkcsworld.com)
  * @author Sanjaya Singharage (sanjayas@opensource.lk, sanjayas@jkcsworld.com)
+ * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
  *
  */
 
@@ -141,7 +142,7 @@ AxisConfig::readConfFile ()
      */
     if (AXIS_SUCCESS != fileConfig.fileOpen (sNewConfPath, "r"))
     {
-	free (sNewConfPath);
+	
 
 #ifdef _DEBUG
 	printf
@@ -153,6 +154,7 @@ AxisConfig::readConfFile ()
 	printf ("Warning - The configuration file was not found (%s).\n",
 		sNewConfPath);
 #endif
+        free (sNewConfPath);
 	return AXIS_SUCCESS;
     }
 
