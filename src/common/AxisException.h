@@ -60,7 +60,6 @@
  */
 
 #include <string>
-#include <iostream>
 #include <exception>
 #include "../soap/SoapFaults.h"
 using namespace std;

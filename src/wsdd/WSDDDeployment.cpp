@@ -115,7 +115,7 @@ WSDDDeployment::~WSDDDeployment()
 		for(iter2=m_DeployedServices->begin()
 				;iter2!=m_DeployedServices->end();iter2++)
 		{
-			delete (iter2->second);
+			delete ((*iter2).second);
 		}
 	}
 

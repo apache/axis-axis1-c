@@ -67,7 +67,7 @@
 #include "URIMapping.h"
 #include "../common/AxisUtils.h"
 
-#define __TRC(X) AxisUtils::ToAxisXMLCh(X)
+#define __TRC(X) AxisUtils::Convert(X)
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -94,15 +94,6 @@ void URIMapping::Initialize()
 		m_sURIMap[__TRC("http://schemas.xmlsoap.org/soap/envelope/")] = URI_ENVELOPE;
 		m_bInit = true;
 	}
-}
-
-URITYPE URIMapping::Map(const AxisXMLString &uri)
-{
-	if (m_sURIMap.find(uri) != m_sURIMap.end())
-	{
-		return m_sURIMap[uri];
-	}
-	return URI_UNKNOWN;
 }
 
 URITYPE URIMapping::Map(const AxisXMLCh* uri)
