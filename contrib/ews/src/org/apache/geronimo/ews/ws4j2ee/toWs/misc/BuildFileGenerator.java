@@ -82,7 +82,7 @@ public class BuildFileGenerator implements Generator {
 		this.j2eewscontext = j2eewscontext;
 	}
 
-	public void genarate() throws GenerationFault {
+	public void generate() throws GenerationFault {
 		try {
 			String buildfile = j2eewscontext.getMiscInfo().getOutPutPath() + "/build.xml";
 			if(j2eewscontext.getMiscInfo().isVerbose())

@@ -136,7 +136,6 @@ public class WebEndpointWrapperClassWriter extends JavaClassWriter {
 				+ getName(j2eewscontext).replace('.', '/')
 				+ "Impl.java";
 		//j2eewscontext.getMiscInfo().getJaxrpcSEI().replace('.','/')+"BindingImpl.java";
-		log.info(filename + " generating.....................");
 		return filename;
 	}
 	/* (non-Javadoc)

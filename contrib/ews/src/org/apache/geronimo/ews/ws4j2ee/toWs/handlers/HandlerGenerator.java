@@ -55,6 +55,8 @@
 
 package org.apache.geronimo.ews.ws4j2ee.toWs.handlers;
 
+import java.util.HashMap;
+
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFHandler;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
@@ -68,7 +70,14 @@ import org.apache.geronimo.ews.ws4j2ee.toWs.Writer;
  */
 public class HandlerGenerator implements Generator {
 	private J2EEWebServiceContext j2eewscontext;
-	private Writer[] writers = null;
+	private Writer[] writers = new Writer[0];
+	
+	private static HashMap handlermap = new HashMap();
+	static {
+		handlermap.put("org.apache.ws.axis.security.CheckPoint4J2EEHandler",
+			"org.apache.ws.axis.security.CheckPoint4J2EEHandler");
+	};
+
 
 	public HandlerGenerator(J2EEWebServiceContext j2eewscontext) throws GenerationFault {
 		this.j2eewscontext = j2eewscontext;
@@ -76,18 +85,22 @@ public class HandlerGenerator implements Generator {
 			if(handlers!= null){
 				writers = new Writer[handlers.length];
 				for (int i = 0; i < handlers.length; i++) {
-					writers[i] = new HandlerWriter(j2eewscontext, handlers[i]);
+					if(!handlermap.containsKey(handlers[i].getHandlerClass())
+						&& j2eewscontext.getMiscInfo().getJarFileName() == null){
+						writers[i] = new HandlerWriter(j2eewscontext, handlers[i]);
+					}
 				}
-			}else
-				writers = new Writer[0];
+			}
 	}
 
 	/**
 	 * genarate the handlers
 	 */
-	public void genarate() throws GenerationFault {
+	public void generate() throws GenerationFault {
 		for (int i = 0; i < writers.length; i++) {
-			writers[i].writeCode();
+			if(writers[i] != null){
+				writers[i].writeCode();			
+			}
 		}
 	}
 }

@@ -92,7 +92,7 @@ public class Ws4J2EEwithWSDL implements Generator {
      * 
      * @see org.apache.geronimo.ews.ws4j2ee.toWs.Generator#genarate()
      */
-    public void genarate() throws GenerationFault {
+    public void generate() throws GenerationFault {
 
             try {
                 String wscffile = clparser.getWscffile();
@@ -118,7 +118,7 @@ public class Ws4J2EEwithWSDL implements Generator {
                 genarate(wscfwsdiss[0]);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
-                throw new GenerationFault(e);
+                throw GenerationFault.createGenerationFault(e);
             }            
         }
 		public void genarate(WSCFWebserviceDescription wscfwsdis) throws GenerationFault {            
@@ -133,7 +133,7 @@ public class Ws4J2EEwithWSDL implements Generator {
             //JAX-RPC mapper calling       
 			Generator jaxrpcmapperGen = GeneratorFactory.createGenerator(wscontext,
                     GenerationConstants.SEI_AND_TYPES_GENERATOR);
-			jaxrpcmapperGen.genarate();
+			jaxrpcmapperGen.generate();
 			ContextValidator cvalidater = new ContextValidator(wscontext);
 			cvalidater.validateWithWSDL();
             //get and populate the symbol table 
@@ -146,33 +146,33 @@ public class Ws4J2EEwithWSDL implements Generator {
 					log.info("genarating ejb >>");
 				Generator ejbGen =	GeneratorFactory.createGenerator(wscontext,
 						GenerationConstants.EJB_GENERATOR);
-				ejbGen.genarate();
+				ejbGen.generate();
 				if (verbose)
 					log.info("genarating web service wrapper >>");
 				Generator wrapperWsGen = GeneratorFactory.createGenerator(wscontext,
 						GenerationConstants.AXIS_WEBSERVICE_WRAPPER_GENERATOR);
-				wrapperWsGen.genarate();
+				wrapperWsGen.generate();
 				if (verbose)
 					log.info("genarating j2ee dd >>");
 				Generator j2eeContainerDDGen = GeneratorFactory.createGenerator(wscontext, GenerationConstants.J2EE_CONTAINER_DD_GENERATOR);
-				j2eeContainerDDGen.genarate();
+				j2eeContainerDDGen.generate();
             }else{
             	//in this case user should fill the implementation 
             	//in the *BindingImpl class 
 				wscontext.getMiscInfo().setImplwithEJB(false);
 				Generator webCointainerDDGen = GeneratorFactory.createGenerator(wscontext, GenerationConstants.WEB_CONTAINER_DD_GENERATOR);
-				webCointainerDDGen.genarate();
+				webCointainerDDGen.generate();
             }
 			Generator buildFileGen = GeneratorFactory.createGenerator(wscontext, GenerationConstants.BUILD_FILE_GENERATOR);
-			buildFileGen.genarate();
+			buildFileGen.generate();
 			Generator handlerGen = GeneratorFactory.createGenerator(wscontext,
                 GenerationConstants.HANDLER_GENERATOR);
-			handlerGen.genarate();
+			handlerGen.generate();
     }
 
 
     public static void main(String[] args) throws Exception {
         Ws4J2EEwithWSDL gen = new Ws4J2EEwithWSDL(args);
-        gen.genarate();
+        gen.generate();
     }
 }

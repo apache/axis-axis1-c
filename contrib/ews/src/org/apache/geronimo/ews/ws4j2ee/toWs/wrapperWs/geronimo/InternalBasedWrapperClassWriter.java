@@ -125,7 +125,9 @@ public class InternalBasedWrapperClassWriter extends JavaClassWriter {
 				+ getName(j2eewscontext).replace('.', '/')
 				+ "Impl.java";
 		//j2eewscontext.getMiscInfo().getJaxrpcSEI().replace('.','/')+"BindingImpl.java";
-		log.info(filename + " generating.....................");
+		if(j2eewscontext.getMiscInfo().isVerbose()){
+			log.info(filename + " generating.....................");
+		}
 		return filename;
 	}
 		protected void writeMethods() throws GenerationFault {

@@ -86,15 +86,18 @@ public abstract class AbstractWriter implements Writer {
     public AbstractWriter(J2EEWebServiceContext j2eewscontext)
             throws GenerationFault {
         this.j2eewscontext = j2eewscontext;
-
+		boolean verbose = j2eewscontext.getMiscInfo().isVerbose();
         try {
             File file = new File(getFileName());
-			if(j2eewscontext.getMiscInfo().isVerbose())
-            	log.info("genarating ... " + file.getAbsolutePath());
-
+			if(verbose){
+				log.info("genarating ... " + file.getAbsolutePath());
+			}
             if (!isOverWrite() && file.exists()) {
             	out = null;
-				log.info("the file already exists .. tool will not overwrite it ");
+				if(verbose){
+					log.info("the file already exists .. tool will not overwrite it ");
+				}
+
             } else {
                 File parent = file.getParentFile();
                 if (parent != null)
@@ -104,10 +107,40 @@ public abstract class AbstractWriter implements Writer {
             }
 
         } catch (IOException e) {
-            throw new GenerationFault(e);
+            throw GenerationFault.createGenerationFault(e);
         }
 
     }
+    
+	public AbstractWriter(J2EEWebServiceContext j2eewscontext,String filename)
+			throws GenerationFault {
+		this.j2eewscontext = j2eewscontext;
+		boolean verbose = j2eewscontext.getMiscInfo().isVerbose();
+		try {
+			File file = new File(filename);
+			if(verbose){
+				log.info("genarating ... " + file.getAbsolutePath());
+			}
+			if (!isOverWrite() && file.exists()) {
+				out = null;
+				if(verbose){
+					log.info("the file already exists .. tool will not overwrite it ");
+				}
+
+			} else {
+				File parent = file.getParentFile();
+				if (parent != null)
+					parent.mkdirs();
+				file.createNewFile();
+				out = new PrintWriter(new FileWriter(file, false));
+			}
+
+		} catch (IOException e) {
+			throw GenerationFault.createGenerationFault(e);
+		}
+
+	}
+
 
     /**
      * return complete path for the file associated with this writer

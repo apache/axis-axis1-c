@@ -152,7 +152,7 @@ public class WSDLGenerator extends Java2WSDL implements Generator {
 		}
 	} // run
 
-	public void genarate() throws GenerationFault {
+	public void generate() throws GenerationFault {
 		try {
 			//write the WSDLFile
 			this.run(args);

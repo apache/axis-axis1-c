@@ -95,7 +95,7 @@ public class EJBGenerator implements Generator {
 		ddwriter = WriterFactory.createWriter(context, GenerationConstants.EJB_DD_WRITER);
 	}
 
-	public void genarate() throws GenerationFault {
+	public void generate() throws GenerationFault {
 		if(homewriter != null)
 			homewriter.writeCode();
 		if(remotewriter != null)	

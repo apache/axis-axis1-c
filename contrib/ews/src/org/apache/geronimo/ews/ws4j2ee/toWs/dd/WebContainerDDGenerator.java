@@ -73,7 +73,7 @@ public class WebContainerDDGenerator implements Generator {
         
     }
 
-    public void genarate() throws GenerationFault {
+    public void generate() throws GenerationFault {
     	System.out.println("code to generatre web.xml");
     }
 }
