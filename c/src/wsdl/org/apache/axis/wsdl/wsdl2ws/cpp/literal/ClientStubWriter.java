@@ -324,7 +324,8 @@ public class ClientStubWriter extends CPPClassWriter{
 			writer.write(");\n");
 		}
 		writer.write("\tif (AXIS_SUCCESS == m_pCall->Invoke())\n\t{\n");
-		writer.write("\t\tif(AXIS_SUCCESS == m_pCall->CheckMessage(\""+minfo.getOutputMessage().getLocalPart()+"\", \""+minfo.getOutputMessage().getNamespaceURI()+"\"))\n\t\t{\n");
+		if(minfo.getOutputMessage()!=null)
+			writer.write("\t\tif(AXIS_SUCCESS == m_pCall->CheckMessage(\""+minfo.getOutputMessage().getLocalPart()+"\", \""+minfo.getOutputMessage().getNamespaceURI()+"\"))\n\t\t{\n");
 		if ( isAllTreatedAsOutParams) {
 			String currentParamName;
 			String currentParaType;
@@ -367,7 +368,8 @@ public class ClientStubWriter extends CPPClassWriter{
 			writer.write("\t}\n\tm_pCall->UnInitialize();\n");	
 		}
 		else if (returntype == null){
-			writer.write("\t\t\t/*not successful*/\n\t\t}\n");
+			if(minfo.getOutputMessage()!=null)
+				writer.write("\t\t\t/*not successful*/\n\t\t}\n");
 			writer.write("\t}\n\tm_pCall->UnInitialize();\n");
 		}
 		else if (returntypeisarray){

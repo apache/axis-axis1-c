@@ -288,5 +288,15 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 		}catch(IOException e){
 			throw new WrapperFault(e);
 		}
-	}		
+	}	
+	protected void writeRestrictionCheckerFunction() throws WrapperFault {
+		try{
+			writer.write("int Check_Restrictions_"+classname+"("+classname+" value)\n");
+			writer.write("{\n");
+			//TODO write code to check the restrictions
+			writer.write("}\n");					
+		}catch(IOException e){
+			throw new WrapperFault(e);
+		}
+	}	
 }
