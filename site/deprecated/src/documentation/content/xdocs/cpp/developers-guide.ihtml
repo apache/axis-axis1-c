@@ -1,0 +1,258 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<HTML>
+<HEAD>
+  <TITLE>Axis C++ Developer's Guide</TITLE>
+  <LINK href="axis.css" rel="stylesheet" type="text/css">
+</HEAD>
+
+<BODY>
+  <CENTER>
+    <H1><IMG src="images/axis.jpg" height="96" width="176"></H1>
+  </CENTER>
+
+  <H1>Axis C++ Developer's Guide</H1>
+
+<h2>0.1 Version</h2>
+
+<h3>Table of Contents</h3>
+
+<p><a href="#Introduction">Introduction</a>
+<br>
+<a href="#General_Guidelines">General Guidelines</a> <br>
+<a href="#Development_Environment">Development Environment</a> <br>
+<a href="#Configuration_Properties">Configuration Properties</a> <br>
+
+<a href="#Compile_And_Run">Compile and Run</a>
+ <br>
+<a href="#Adding_Testcases">Adding Testcases</a> </p>
+
+<p><a href="#ModuleAPI">Writing
+Transport Modules</a><br>
+<a href="#TestStructure">Test and Samples Structure</a> <br>
+<a href="#CodeChecks">Adding Source Code Checks</a> <br>
+<a href="#JUnit">CUnit and Axis</a> <br>
+<a href="#Debugging">Debugging</a> <br>
+&nbsp; </p>
+
+<a name="Introduction"></a>
+<h2>Introduction</h2>
+
+<p>This document is intended
+for the developer who wish to download and compile and
+test the axis C++ server.</p>
+
+<a name="General_Guidelines"></a>
+<h2>General Guidelines</h2>
+
+<ul>
+ <li>TO DO ...</li>
+</ul>
+
+<a name="Development_Environment"></a>
+<h2>Development Environment</h2>
+
+<p>The following packages are
+required for axis development: </p>
+
+<ul>
+ <li><a href="http://xml.apache.org/dist/xerces-j">xerces</a>
+     - xml processor</li>
+</ul>
+
+<a name="Configuration_Properties"></a>
+<h2>Configuration Properties</h2>
+
+<p>TO DO ... </p>
+
+<a name="Compile_And_Run"></a>
+<h2>Compile and Run</h2>
+
+<p>
+
+This document is intended for the developer who wish to download and test the axiscpp server.<br>
+
+Checkout axiscpp from cvs repository.<br><br>
+To build axisengine library<br>
+==================<br><br>
+When you download the source you have only Makfile.am's and configure.ac and
+autogen.sh script for building.
+<br><br>
+make sure you create and  set the environment variable AXISCPP_HOME
+to reflect the path to the directory where you downloaded the axiscpp.
+for example I have it as following
+<br><br>
+AXISCPP_HOME="/home/damitha/projects/axiscpp/c" <br> <br>where c is the rood directory
+for axiscpp source. There you find autogen.sh, configure.ac etc.<br>
+
+<br>
+to build go to $AXISCPP_HOME dirctory.<br><br>
+sh autogen.sh
+<br><br>
+To avoid cluttering of the source with object files use the build directory
+to generate your object files.
+<br><br>
+Now from c/build directory run<br><br>
+sh runconfigure
+<br><br>
+This will create all the Makefiles in a tree starting from build directory.<br><br>
+make<br>
+then<br>
+make install<br>
+<br>
+this will install libaxiscpp_mod.so in c/release directory.<br><br>
+copy this to <apache home>/libexec directory and restart apache
+to load the axisengine in apache.
+<br><br>
+Note: in $AXISCPP_HOME/include you have folder called xercesc apache1_3
+apache2_0. Copy the corresponding include files into them.
+<br><br><br>
+To build samples<br>
+===========<br>
+Go to the samples folder<br><br>
+$(AXISCPP_HOME)/src/server/samples<br><br>
+and select the sample you want. As an example we try on
+simplewebservice<br>
+type the following commands in that order<br><br>
+sh autogen.sh<br>
+sh runconfig<br>
+make<br>
+make install<br>
+<br>
+this will install the sample library in /usr/local/apache/Axis/webservices 
+<br><br>
+note: the server.wsdd file for this sample has to be put in<br><br>
+/usr/local/apache/Axis/conf folder.<br><br>
+This path is hardcoded in Axis.cpp file as following
+<br><br>
+#define WSDDFILEPATH "/usr/local/apache/Axis/conf/server.wsdd"<br>
+
+</p>
+
+<a name="Adding_Testcases"></a>
+<h2>Adding Testcases</h2>
+
+<p>See Also: <a href="#TestStructure">Test
+and Samples Structure</a></p>
+
+<a name="ModuleAPI"></a>
+<h2>Writing Transport Modules</h2>
+
+<p>Axis C++ is plugged-in to any transport listener
+such as Apache Web Server or IIS through a Transport Module. Axis Engine and
+the Transport Module can be developed in 2 ways.</p>
+
+<p>They can be
+compiled and linked together into a single DLL (or Shared Object) which is
+plugged into the Transport Listener. This way reduces one level of indirection
+and leads to performance.</p>
+
+<p>They can be
+made 2 separate DLLs (or Shared Objects). Advantage of this method is that the
+2 modules can be developed separately.</p>
+
+<p>Module should be written specifically for
+each kind of Transport Listener (Apache or IIS) whereas the AxisEngine
+is not specific to Transport Listener. </p>
+
+<p>So this API defines the way that Transport
+Module communicates with the AxisEngine. </p>
+
+<h3>Module side API</h3>
+
+<p>There is a set of functions to be
+implemented by each module. AxisEngine needs the
+module to implement them.</p>
+
+<p>int send_transport_information(TransportInfo*)</p>
+
+<p>int get_request_bytes(char*, int, int*)</p>
+
+<p>int send_response_bytes(char*)</p>
+
+<p><b>send_transport_information</b><b></b></p>
+
+<p>AxisEngine may call this function to send transport specific
+information of the response (Ex : http headers for
+HTTP transport).</p>
+
+<p><b>get_request_bytes</b><b></b></p>
+
+<p>AxisEngine calls this function whenever it needs more soap
+request bytes in the incoming stream. AxisEngine may
+call this function more than once. </p>
+
+<p><b>send_response_bytes</b><b></b></p>
+
+<p>AxisEngine calls this function whenever it wants to send a
+fragment of soap response to the Transport Listener. This function may also be
+called by the AxisEngine more than once depending on
+the size of the response. The transport listener may accumulate or send each
+fragment at each function call.</p>
+
+<h3>AxisEngine side API</h3>
+
+<p>AxisEngine has implemented following functions to be used by
+any Transport Module.</p>
+
+<p> 1. int initialize_module()</p>
+
+<p> 2. int initialize_process()</p>
+
+<p> 3. int process_request(TransportInfo*)</p>
+
+<p> 4. int finalize_process()</p>
+
+<p><b>initialize_module</b><b></b></p>
+
+<p>Transport Module <b>MUST </b>call this function when it loads the AxisEngine.
+If this function returns FAIL it cannot be assured that the AxisEngine
+works properly. Loading of all AxisEngine&#8217;s
+components (DLLs) are done within this function.</p>
+
+<p><b>initialize_process</b><b></b></p>
+
+<p>As the AxisEngine
+is single threaded model, simultaneous requests are served by several processes
+spawned. So when each process is spawned, its initialization should be done.
+Therefore the Transport Module <b>MUST </b>call
+this API function when it spawns a new AxisEngine
+process.</p>
+
+<p><b>process_request</b><b></b></p>
+
+<p>Transport Module calls this function for
+each soap request. Transport Module should fill a TransportInfo
+structure with the relevant transport information and pass it to the process_request function. Returning FAIL indicates a
+critical error in processing the soap request (not a generation of Soap Fault).</p>
+
+<p><b>finalize_process</b><b> </b></p>
+
+<p>This function does the opposite of what initialize_process does and <b>MUST </b>be
+called by Transport Module for the process end.</p>
+
+<p><o:p>&nbsp;</o:p></p>
+
+<a name="TestStructure"></a>
+<h2>Test Structure</h2>
+
+<p>&nbsp;</p>
+
+<a name="CodeChecks"></a>
+<h2>Adding Source Code Checks</h2>
+
+<p>&nbsp;</p>
+
+<a name="JUnit"></a>
+<h2>CUnit and Axis</h2>
+
+<p>&nbsp;</p>
+
+<a name="Debugging"></a>
+<h2>Debugging</h2>
+
+</div>
+
+</body>
+
+</html>
