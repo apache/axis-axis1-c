@@ -67,6 +67,7 @@ int Calculator::sub(int Value0, int Value1)
 		if(AXIS_SUCCESS == m_pCall->checkMessage("subResponse", "http://localhost/axis/Calculator"))
 		{
 			Ret = m_pCall->getElementAsInt("subReturn", 0);
+			printf("Ret:%d\n", Ret);
 		}
 	}
 	m_pCall->unInitialize();
@@ -91,6 +92,7 @@ int Calculator::mul(int Value0, int Value1)
 		if(AXIS_SUCCESS == m_pCall->checkMessage("mulResponse", "http://localhost/axis/Calculator"))
 		{
 			Ret = m_pCall->getElementAsInt("addReturn", 0);
+			printf("Ret:%d\n", Ret);
 		}
 	}
 	m_pCall->unInitialize();
@@ -115,6 +117,7 @@ int Calculator::div(int Value0, int Value1)
 		if(AXIS_SUCCESS == m_pCall->checkMessage("divResponse", "http://localhost/axis/Calculator"))
 		{
 			Ret = m_pCall->getElementAsInt("addReturn", 0);
+			printf("Ret:%d\n", Ret);
 		}
 	}
 	m_pCall->unInitialize();
@@ -124,5 +127,6 @@ int Calculator::div(int Value0, int Value1)
 int Calculator::getFaultDetail(char** ppcDetail)
 {
     m_pCall->getFaultDetail(ppcDetail);
+	return 0;
 }
 
