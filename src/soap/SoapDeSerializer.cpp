@@ -388,7 +388,7 @@ void* SoapDeSerializer::checkForFault(const AxisChar* pName,
 	//pFault->setFaultactor(getElementAsString("faultactor", 0));
         pcFaultactor = getElementAsString("faultactor", 0);
         pFault->setFaultactor(pcFaultactor == NULL ? "" : pcFaultactor);
-        pcDetail = getElementAsString("faultdetail", 0);
+        pcDetail = getElementAsString("detail", 0);
 	if(pcDetail)
 	{
 	    pFault->setFaultDetail(pcDetail);
