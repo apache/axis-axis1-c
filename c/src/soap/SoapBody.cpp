@@ -107,7 +107,7 @@ int SoapBody::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
         } 
         else
         {
-            m_pSoapFault = SoapFault::getSoapFault(SERVER_ENGINE_WEBSERVICEFAILED);
+            m_pSoapFault = SoapFault::getSoapFault(SERVER_ENGINE_WEBSERVICE_FAILED);
             if(m_pSoapFault!=NULL) 
             {        
                 iStatus= m_pSoapFault->serialize(pSZ, eSoapVersion);

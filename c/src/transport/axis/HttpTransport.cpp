@@ -42,7 +42,6 @@
 #include "HttpTransport.hpp"
 #include <iostream>
 #include <stdio.h>
-#include <axis/server/AxisException.h>
 #include <axis/server/GDefine.h>
 
 using namespace std;
@@ -117,8 +116,7 @@ bool HttpTransport::Init ()
 {
     /* open a channel for transport */
     m_HttpBindDone = false;
-    try
-    {
+    AXISC_TRY
 	m_bStatus = true;
 	std::string host = m_Url.GetHostName();
         unsigned int port = m_Url.GetPort();
@@ -134,12 +132,11 @@ bool HttpTransport::Init ()
 #ifdef _DEBUG
 	cout << "Transport:init() successfull" << endl;
 #endif
-    }
-    catch (ChannelException & chEx)
-    {
-	std::cerr << chEx.GetErr () << std::endl;
-	throw;
-    }
+    AXISC_CATCH(AxisTransportException & chEx)
+	 AXISC_THROW_SAME
+    AXISC_CATCH(AxisException & chEx)
+         AXISC_THROW_SAME
+    AXISC_ENDCATCH
     return true;
 }
 
@@ -595,16 +592,14 @@ HttpTransport::HTTPValidate (const std::string & p_HttpPacket)
 	{
 	    /* error recovery mechanism should go here */
 	    Error (m_sHeader.c_str ());
-	    throw ChannelException ("HTTP Error, cannot process response \
-                    message...");
+	    THROW_AXIS_TRANSPORT_EXCEPTION(SERVER_TRANSPORT_PROCESS_EXCEPTION);
 	}
 	else if (nHttpSatus == 4)
 	    /* Status code is 4xx; some error has occurred */
 	{
 	    /* error recovery mechanism should go here */
 	    Error (m_sHeader.c_str ());
-	    throw ChannelException ("HTTP Error, cannot process response \
-                    message...");
+	    THROW_AXIS_TRANSPORT_EXCEPTION(SERVER_TRANSPORT_PROCESS_EXCEPTION);
 	}
 	else if (nHttpSatus == 5)
 	    /* Status code is 5xx; some error has occurred */
@@ -614,13 +609,12 @@ HttpTransport::HTTPValidate (const std::string & p_HttpPacket)
 	    if (!m_bStatus)
 	    {
 		Error (m_sHeader.c_str ());
-		throw AxisException (SERVER_TRANSPORT_HTTP_EXCEPTION);
+		THROW_AXIS_TRANSPORT_EXCEPTION(SERVER_TRANSPORT_HTTP_EXCEPTION);
 	    }
 	}
     }
     else
-	throw ChannelException ("Unknow HTTP response, cannot process \
-            response message...");
+	THROW_AXIS_TRANSPORT_EXCEPTION(SERVER_TRANSPORT_UNKNOWN_HTTP_RESPONSE);
 
 }
 
