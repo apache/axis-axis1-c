@@ -162,11 +162,11 @@ public:
 	virtual float GetFloat() = 0;
     virtual double GetDouble() = 0;
     virtual double GetDecimal() = 0;
-	virtual const AxisString& GetString() = 0;
-    virtual const AxisString& GetAnyURI() = 0;
-    virtual const AxisString& GetQName() = 0;
-	virtual const AxisString& GetHexString() = 0;
-	virtual const AxisString& GetBase64String() = 0;
+	virtual const AxisChar* GetString() = 0;
+    virtual const AxisChar* GetAnyURI() = 0;
+    virtual const AxisChar* GetQName() = 0;
+	virtual const AxisChar* GetHexString() = 0;
+	virtual const AxisChar* GetBase64String() = 0;
 	virtual const AxisString& GetTypeName() = 0;
     /*return a tm struct which contain year-month-date-hour-
       minute-second*/

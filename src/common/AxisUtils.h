@@ -82,10 +82,6 @@ public:
 	AxisUtils();
 	virtual ~AxisUtils();
 	// any usefull static const AxisXMLCh strings. 
-	static const AxisXMLCh* m_strEmpty;
-	static const AxisXMLCh* m_strLeftSqBracket;
-	static const AxisXMLCh* m_strRightSqBracket;
-	static const AxisXMLCh* m_strColon;
     
 private:
 	static const AxisXMLCh* Convert(const AxisChar* pch);

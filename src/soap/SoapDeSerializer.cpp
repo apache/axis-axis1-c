@@ -153,6 +153,9 @@ int SoapDeSerializer::Deserialize(IParam* pIParam, int bHref)
 		if (pParam->m_Value.pArray && pParam->m_Value.pArray->m_value.sta)
 		{
 			pParam->m_Value.pArray->DeSerialize(this);
+			//After deserializing the array is handed over to the Application or web service
+			//So dont keep it here any longer.
+			pParam->m_Value.pArray->m_value.sta = NULL;
 		}
 		else
 			return FAIL;
@@ -162,6 +165,9 @@ int SoapDeSerializer::Deserialize(IParam* pIParam, int bHref)
 		{
 			if (pParam->m_Value.pCplxObj->pObject && pParam->m_Value.pCplxObj->pDZFunct)
 				pParam->m_Value.pCplxObj->pDZFunct(pParam->m_Value.pCplxObj->pObject, this);
+			//After deserializing the complex object is handed over to the Application or web service
+			//So dont keep it here any longer.
+			pParam->m_Value.pCplxObj->pObject = NULL;
 		}
 		else
 			return FAIL;
@@ -191,6 +197,7 @@ const AxisChar* SoapDeSerializer::GetMethodName()
 	{
 		return m_pHandler->m_pMethod->getMethodName();
 	}
+	return NULL;
 }
 
 int SoapDeSerializer::GetVersion()

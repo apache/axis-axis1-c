@@ -65,6 +65,7 @@ package org.apache.axis.wsdl.wsdl2ws.info;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
+import java.util.Iterator;
 
 import javax.xml.namespace.QName;
 
@@ -140,7 +141,12 @@ public class Type {
     }
 
     public Enumeration getAttribNames() {
-        return this.types.keys();
+    	if (hasOrder){
+    		return attribOrder.elements();	
+    	}
+    	else{
+        	return this.types.keys();
+    	}
     }
 
 /*    public void setTypeNameForAttribName(String attribName, String typeName) {
@@ -211,4 +217,15 @@ public class Type {
 		isArray = b;
 	}
 
+	public boolean isContainedType(Type containedType){
+		Iterator ntype = this.types.values().iterator();
+		QName typeName;
+		while(ntype.hasNext()){
+			typeName = (QName)ntype.next();
+			if(typeName.equals(containedType.name)){
+				return true;
+			}
+		}		
+		return false;
+	}
 }
