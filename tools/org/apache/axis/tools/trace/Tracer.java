@@ -355,9 +355,17 @@ class Tracer extends BufferedWriter {
 			String contents = type.substring(0, type.length() - 1);
 			if (typetable.keySet().contains(contents)) {
 				parms += (String) typetable.get(contents) + ", 0, " + name;
+			} else if (contents.startsWith("Axis") && contents.endsWith("Exception")) {
+				parms += "AXISEXCEPTION, sizeof(" + type + "), " + name;
+			} else if (contents.equals("exception")) {
+				parms += "EXCEPTION, sizeof(" + type + "), " + name;
 			} else {
 				parms += "DATA, sizeof(" + type + "), " + name;
 			}
+		} else if (type.startsWith("Axis") && type.endsWith("Exception")) {
+			parms += "AXISEXCEPTION, sizeof(" + type + "), " + name;
+		} else if (type.equals("exception")) {
+			parms += "EXCEPTION, sizeof(" + type + "), " + name;
 		} else {
 			parms += "DATA, sizeof(" + type + "), " + name;
 		}

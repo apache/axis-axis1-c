@@ -60,23 +60,25 @@ AXIS_CPP_NAMESPACE_START
 // Unfortunately the trace type has to be an int with #defines, not an enum because
 // it is used with '...' and va_args, and ints can be used with '...' but enums 
 // cannot.
-#define TRACETYPE_UNKNOWN	0
-#define TRACETYPE_CHAR		1
-#define TRACETYPE_USHORT	2
-#define TRACETYPE_SHORT		3
-#define TRACETYPE_UINT		4
-#define TRACETYPE_INT		5
-#define TRACETYPE_ULONG		6
-#define TRACETYPE_LONG		7
-#define TRACETYPE_UDOUBLE	8
-#define TRACETYPE_DOUBLE	9
-#define TRACETYPE_FLOAT		10
-#define TRACETYPE_BOOL		11
-#define TRACETYPE_POINTER	12
-#define TRACETYPE_DATA		13
-#define TRACETYPE_STRING	14
-#define TRACETYPE_STLSTRING	15
-#define TRACETYPE_ANONYMOUS	16
+#define TRACETYPE_UNKNOWN		0
+#define TRACETYPE_CHAR			1
+#define TRACETYPE_USHORT		2
+#define TRACETYPE_SHORT			3
+#define TRACETYPE_UINT			4
+#define TRACETYPE_INT			5
+#define TRACETYPE_ULONG			6	
+#define TRACETYPE_LONG			7
+#define TRACETYPE_UDOUBLE		8
+#define TRACETYPE_DOUBLE		9
+#define TRACETYPE_FLOAT			10
+#define TRACETYPE_BOOL			11
+#define TRACETYPE_POINTER		12
+#define TRACETYPE_DATA			13
+#define TRACETYPE_STRING		14
+#define TRACETYPE_STLSTRING		15
+#define TRACETYPE_ANONYMOUS		16
+#define TRACETYPE_EXCEPTION		17
+#define TRACETYPE_AXISEXCEPTION	18
 
 class AxisTraceEntrypoints {
 public:
@@ -283,6 +285,7 @@ private:
 
     static int logthis(const char* pcLog, int level, char* arg2, int arg3);
 	static void addParameter(std::string& line, int type, unsigned len, void *value);
+	static void addDataParameter(std::string& line, unsigned len, void *value);
     static void traceHeader();
 };
 

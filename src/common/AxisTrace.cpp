@@ -25,11 +25,12 @@
 #include <stdarg.h>
 #include <stdlib.h>
 #include "AxisUtils.h"
-#include <axis/GDefine.hpp>
+#include <axis/AxisException.hpp>
 #include "AxisConfig.h"
 #include <string>
 // cctype is needed to make isprint compile on linux
 #include <cctype>
+#include <exception>
 
 extern AXIS_CPP_NAMESPACE_PREFIX AxisConfig* g_pConfig;
 AXIS_CPP_NAMESPACE_START
@@ -390,39 +391,16 @@ void AxisTrace::addParameter(string& line, int type, unsigned len, void *value)
 		line += *((bool*)value)?"true":"false";
 		break;
 
-	/*
-	 * This code only prints out the first 32 bytes of storage pointed at by a 
-	 * pointer. This is to prevent huge blocks of atorage repeatedly being output
-	 * to the trace file. 32 bytes seems quite a low limit. Maybe this limit 
-	 * could be increased in the future. Large blocks of storage could be output
-	 * in a more human-friendly format.
-	 */
 	case TRACETYPE_POINTER:	
             pcValue = *((char**)pcValue);
 		sprintf(prim,"%p ",pcValue);	
 		line += prim;	
-            if (NULL==pcValue) return;
-		// no break!
+            if (NULL!=pcValue) 
+			addDataParameter(line,len,value);
+		break;
 	
 	case TRACETYPE_DATA:	
-		try {
-			line += "[";
-			for (unsigned i=0; i<len && i<32; i++) {
-				int x = (int)(pcValue[i]);
-				sprintf(prim,"%2.2X",x);
-				line += prim;
-			}
-			line += "] <";
-			for (unsigned j=0; j<len && j<32; j++) {
-				char c = pcValue[j];
-				if (!isprint(c)) c='.';
-				sprintf(prim,"%c",c);
-				line += prim;
-			}
-			line += ">";
-		} catch (...) {
-			line += "<BADPOINTER>";
-		}
+		addDataParameter(line,len,value);
 		break;
 
 	case TRACETYPE_STRING:	
@@ -441,9 +419,41 @@ void AxisTrace::addParameter(string& line, int type, unsigned len, void *value)
 
 	case TRACETYPE_STLSTRING:
 		try {
-			line += "\"";	
-   		      line += ((string*)value)->c_str();
-			line += "\"";	
+			string *str = static_cast<string*>(value);
+			if (str) {
+				line += "\"";	
+   			      line += str->c_str();
+				line += "\"";	
+			} else line += "<BADPOINTER>";
+		} catch (...) {
+			line += "<BADPOINTER>";
+		}
+		break;
+
+	case TRACETYPE_EXCEPTION:
+		try {
+			exception *ex = static_cast<exception*>(value);
+	   	      const char *msg = ex->what();
+			if (NULL==msg) msg = "\?\?\?\?";
+			line += "exception(\"";
+	   	      line += msg;
+			line += "\")";	
+		} catch (...) {
+			line += "<BADPOINTER>";
+		}
+		break;
+
+	case TRACETYPE_AXISEXCEPTION:
+		try {
+			AxisException *ex = static_cast<AxisException*>(value);
+		      const int code = ex->getExceptionCode();
+	   	      const char *msg = ex->what();
+			if (NULL==msg) msg = "\?\?\?\?";
+			line += "AxisException(";	
+   		      line += code;
+   		     	line += ", \"";
+	   	      line += msg;
+			line += "\")";	
 		} catch (...) {
 			line += "<BADPOINTER>";
 		}
@@ -459,6 +469,36 @@ void AxisTrace::addParameter(string& line, int type, unsigned len, void *value)
 		line += prim;
 		line += ">";
 		break;
+	}
+}
+
+/**
+ * This code only prints out the first 32 bytes of storage pointed at by a 
+ * pointer. This is to prevent huge blocks of atorage repeatedly being output
+ * to the trace file. 32 bytes seems quite a low limit. Maybe this limit 
+ * could be increased in the future. Large blocks of storage could be output
+ * in a more human-friendly format.
+ */
+void AxisTrace::addDataParameter(string& line, unsigned len, void *value) {
+	char prim[32]; // Plenty big enough to hold a primitive
+      char *pcValue = (char*)value;
+	try {
+		line += "[";
+		for (unsigned i=0; i<len && i<32; i++) {
+			int x = (int)(pcValue[i]);
+			sprintf(prim,"%2.2X",x);
+			line += prim;
+		}
+		line += "] <";
+		for (unsigned j=0; j<len && j<32; j++) {
+			char c = pcValue[j];
+			if (!isprint(c)) c='.';
+			sprintf(prim,"%c",c);
+			line += prim;
+		}
+		line += ">";
+	} catch (...) {
+		line += "<BADPOINTER>";
 	}
 }
 
