@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- $Revision$ $Date$ -->
+
+<project default="jar"
+    xmlns:j="jelly:core"
+    xmlns:ant="jelly:ant">
+
+    <goal name="setclasspath">
+        <path id="test.classpath">
+            <path refid="maven.dependency.classpath"/>
+        </path>
+    </goal>
+
+    <preGoal name="java:compile">
+        <attainGoal name="generate:jaxb"/>
+    </preGoal>
+
+    <!--
+    <goal name="xjc:compile" prereqs="setclasspath"
+        description="Runs XJC task">
+        <taskdef name="groovyc" classname="org.codehaus.groovy.ant.Groovyc" classpathref="test.classpath"/>
+        <groovyc destdir="${basedir}/target/classes" srcdir="${basedir}/src/java" listfiles="false">
+            <classpath refid="test.classpath"/>
+        </groovyc>
+    </goal>
+    -->
+    
+    <goal name="generate:jaxb"
+        description="Generates the XML beans using JAXB">
+
+        <j:jelly xmlns="jelly:ant">
+
+            <j:set var="dir" value="${basedir}/target/src"/>
+
+            <taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
+                <classpath refid="maven.dependency.classpath"/>
+            </taskdef>
+
+            <ant:mkdir dir="${dir}"/>
+
+            <xjc target="${dir}" package="org.apache.geronimo.ews.ws4j2ee.parsers.ejbdd" schema="${basedir}/src/schema/ejb-jar.xsd" extension="true" />
+
+            <xjc target="${dir}" schema="${basedir}/src/schema/j2ee_jaxrpc_mapping_1_1.xsd" package="org.apache.geronimo.ews.jaxrpcmapping.descriptor" extension="true" />
+
+
+            <!--            
+            <xjc target="${dir}" package="org.apache.geronimo.xmlbeans.ejb" extension="true">
+                <arg value="-nv"/>
+
+                <schema dir="${basedir}/src/schema" includes="j2ee_1*.xsd,ejb-jar*.xsd"/>
+                <binding dir="${basedir}/src/etc" includes="*.xjb"/>
+            </xjc>
+            -->
+        </j:jelly>
+    </goal>
+
+</project>
