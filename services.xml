@@ -14,22 +14,16 @@
 
 	<copy todir="${basedir}/../../../Axis/lib">
 		<fileset dir="${basedir}/../../../obj/bin/">
-			<include name="${serverEngineLibraryName}${librarySuffix}"/>
-			<include name="${HTTP.ChannelLibraryName}${librarySuffix}"/>
-			<include name="${transportLibraryName}${librarySuffix}"/>
+			<include name="${libraryPrefix}${serverEngineLibraryName}${librarySuffix}"/>
+			<include name="${libraryPrefix}${HTTP.ChannelLibraryName}${librarySuffix}"/>
+			<include name="${libraryPrefix}${transportLibraryName}${librarySuffix}"/>
 		</fileset>
 	</copy>
-	<copy file="${env.XERCES_HOME}\bin\xerces-c_2_2_0.dll" 
-		todir="${basedir}/../../../Axis/lib"/>
 
-	<condition property="parserspecificlibname" value="${xml4c.xmlParserLibraryName}">
-			<equals arg1="${xmlParser.xml4c}" arg2="true" />
-	</condition>
-	<condition property="parserspecificlibname" value="${xerces.xmlParserLibraryName}" >
-			<equals arg1="${xmlParser.xerces}" arg2="true" />	
-	</condition>
+	<copy file="${parserliblocation}" 
+		todir="${basedir}/../../../Axis/lib"/>
 	<copy file="${basedir}/../../../obj/bin/${parserspecificlibname}${librarySuffix}" 
-		tofile="${basedir}/../../../Axis/lib/${xmlParserLibraryName}${librarySuffix}" />
+		tofile="${basedir}/../../../Axis/lib/${libraryPrefix}${xmlParserLibraryName}${librarySuffix}" />
 
 
 	<echo file="${axiscppconffile}"># The comment character is '#'
@@ -47,14 +41,14 @@
 #ListenPort:Listening port
 #
 LogPath:${basedir}${ps}..${ps}..${ps}..${ps}Axis${ps}log${ps}server.log
-WSDDFilePath:${basedir}${ps}..${ps}..${ps}..${ps}Axis${ps}conf${ps}server.wsdd
-Transport_http:${basedir}${ps}..${ps}..${ps}..${ps}Axis${ps}lib${ps}HTTPTransport.dll
-XMLParser:${basedir}${ps}..${ps}..${ps}..${ps}Axis${ps}lib${ps}AxisXMLParser.dll
-Channel_HTTP:${basedir}${ps}..${ps}..${ps}..${ps}Axis${ps}lib${ps}HTTPChannel.dll
+WSDDFilePath:${serverwsddpath}
+Transport_http:${basedir}${ps}..${ps}..${ps}..${ps}Axis${ps}lib${ps}${libraryPrefix}${HTTP.transportLibraryName}${librarySuffix}
+XMLParser:${basedir}${ps}..${ps}..${ps}..${ps}Axis${ps}lib${ps}${libraryPrefix}${xmlParserLibraryName}${librarySuffix}
+Channel_HTTP:${basedir}${ps}..${ps}..${ps}..${ps}Axis${ps}lib${ps}${libraryPrefix}${HTTP.ChannelLibraryName}${librarySuffix}
 	</echo>
 
 	<copy file="${basedir}/build/server.wsdd.services" 
-			tofile="${basedir}/../../../Axis/conf/server.wsdd"/>
+			tofile="${serverwsddpath}"/>
 
 	</target>
 
@@ -228,7 +222,7 @@ Channel_HTTP:${basedir}${ps}..${ps}..${ps}..${ps}Axis${ps}lib${ps}HTTPChannel.dl
 				<include name="*.cpp"/>
 			</fileset>
 		</cc>
-		<copy file="${dir.test.generated}/server/${serviceLang}/${serviceName}/${serviceName}${librarySuffix}" 
+		<copy file="${dir.test.generated}/server/${serviceLang}/${serviceName}/${libraryPrefix}${serviceName}${librarySuffix}" 
 			todir="${basedir}/../../../Axis/webservices"/>
 	</target>
 
