@@ -74,13 +74,11 @@
 #include <stdlib.h>
 #include "../common/GDefine.h"
 
-class Attribute;
-
 /*
  *Here SKW stands for SoapKeyWord. This is a internal naming convension
  * for Axis C++.
  */
-enum SOAP_WORDS {
+typedef enum SOAP_WORDSTag {
 	SKW_ENVELOPE=0, //this should always be 0 - Susantha
 	SKW_HEADER,
 	SKW_BODY,
@@ -100,14 +98,18 @@ enum SOAP_WORDS {
 	SKW_ID,
 
 	SOAP_WORDS_LAST //this should be the number of entries in this enum - Susantha
-};
+} SOAP_WORDS;
 
-enum SOAP_VERSION {
+typedef enum SOAP_VERSIONTag {
 	SOAP_VER_1_1=0,
 	SOAP_VER_1_2,
 
 	VERSION_LAST
-};
+} SOAP_VERSION;
+
+#ifdef __cplusplus
+
+class Attribute;
 
 struct SoapEnvVersionsStruct 
 {	
@@ -168,5 +170,6 @@ static SoapEnvVersionsStruct gs_SoapEnvVersionsStruct[VERSION_LAST]=
 		},
 	}
 };
+#endif
 
 #endif //__SOAPENVVERSIONS_H_INCLUDED___

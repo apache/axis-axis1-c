@@ -881,8 +881,17 @@ struct tm Call::GetTimeOutParam()
 }
 long Call::GetDurationOutParam()
 {
-	struct tm zero;
 	Param* param = GetOutParam();
 	if (!param) return 0; //TODO this is an error situation. Should be handled.
 	return param->GetDuration();
 }
+
+/*global function to be used in C stubs */
+extern "C" Call* GetCallObject(AXIS_PROTOCOL_TYPE nProtocol, AxisChar* pchEndpointURI)
+{
+	Call* pCall = new Call();
+	pCall->SetProtocol(nProtocol);
+	pCall->SetEndpointURI(pchEndpointURI);
+	return pCall;
+}
+
