@@ -94,7 +94,8 @@ public class Java2WsdlWithMetadata extends org.apache.axis.wsdl.Java2WSDL {
 			
 			Class<?> serviceEndpointInterface = emitter.getCls();
 			
-			String targetNamespace = serviceEndpointInterface.getAnnotation(TargetNamespace.class).value();
+            TargetNamespace targetNamespaceAnnotation = serviceEndpointInterface.getAnnotation(TargetNamespace.class); 
+			String targetNamespace = targetNamespaceAnnotation.value();
 			if (targetNamespace != null) {
                 Package javaPackage = serviceEndpointInterface.getPackage();
                 java.lang.String javaPackageName = null;
