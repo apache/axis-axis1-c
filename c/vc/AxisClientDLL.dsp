@@ -138,6 +138,10 @@ SOURCE=..\src\common\AxisException.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\xml\AxisParseException.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\soap\AxisSoapException.cpp
 # End Source File
 # Begin Source File
@@ -147,6 +151,10 @@ SOURCE=..\src\common\AxisTime.cpp
 # Begin Source File
 
 SOURCE=..\src\common\AxisTrace.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\transport\axis\AxisTransportException.cpp
 # End Source File
 # Begin Source File
 
