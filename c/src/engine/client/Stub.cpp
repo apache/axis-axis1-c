@@ -21,7 +21,7 @@
  * Stub.cpp: implemtation for the Stub.
  */
 
-#include <Stub.h>
+#include <axis/client/Stub.h>
 #include <stdio.h>
 
 #include <axis/server/AxisWrapperAPI.h>
