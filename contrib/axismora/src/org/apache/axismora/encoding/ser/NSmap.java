@@ -61,9 +61,6 @@ import java.util.HashMap;
 import org.apache.axismora.util.UtilityPool;
 
 /**
- * This Map is a Hash map which can hold multiple values.
- * The request for the get() and remove() will work on the first
- * ocurance they found. 
  * @author Srinath Perera(hemapani@opensource.lk)
  */
 
@@ -76,7 +73,7 @@ public class NSmap extends HashMap{
         Object obj =  super.get(key);
         if(obj instanceof ArrayList){
 			ArrayList list = ((ArrayList)obj);
-			return list.get(list.size()-1);	
+			return list.get(0);	
         }
         return obj;
     }
@@ -108,6 +105,5 @@ public class NSmap extends HashMap{
 		}
         return super.remove(key);
     }
-    
 
 }

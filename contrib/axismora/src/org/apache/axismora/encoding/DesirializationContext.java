@@ -126,6 +126,7 @@ public class DesirializationContext {
 			if(PerfLog.LOG_PERF){
 					PerfLog.recored(System.currentTimeMillis(),"MID_POINT");
 			}         
+			log.info("preparing desirialization context");
             //get the common document
             this.doc = AxisUtils.getCommonDomDocument();
 
@@ -139,7 +140,7 @@ public class DesirializationContext {
 			if(PerfLog.LOG_PERF){
 					PerfLog.recored(System.currentTimeMillis(),"MID_POINT5");
 			}         
-
+			log.info("creating pull parser");
             XmlPullParserFactory factory =
                 XmlPullParserFactory.newInstance(
                     System.getProperty(XmlPullParserFactory.PROPERTY_NAME),
@@ -149,29 +150,18 @@ public class DesirializationContext {
             factory.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
             this.xpp = factory.newPullParser();
             xpp.setInput(in);
+			log.info("creating axis pull parser");
 			this.axispullparser = new AxisPullParser(this.xpp);
 			if(PerfLog.LOG_PERF){
 					PerfLog.recored(System.currentTimeMillis(),"MID_POINT2");
 			}         
-        } catch (FactoryConfigurationError e) {
+        } catch (Exception e) {
             log.error(e);
             e.printStackTrace();
             throw AxisUtils.getTheAixsFault(
                 org.apache.axis.Constants.FAULT_SOAP12_RECEIVER,
                 e.getMessage(),null,null,e);
-        } catch (ParserConfigurationException e) {
-            log.error(e);
-            e.printStackTrace();
-            throw AxisUtils.getTheAixsFault(
-                org.apache.axis.Constants.FAULT_SOAP12_RECEIVER,
-                e.getMessage(),null,null,e);
-        } catch (XmlPullParserException e) {
-            log.error(e);
-            e.printStackTrace();
-            throw AxisUtils.getTheAixsFault(
-                org.apache.axis.Constants.FAULT_SOAP12_RECEIVER,
-                e.getMessage(),null,null,e);
-        }
+        } 
     }
 
     // this constructor is written for the sole purpose of unit testing.

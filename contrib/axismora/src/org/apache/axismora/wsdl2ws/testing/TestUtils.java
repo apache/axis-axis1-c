@@ -7,7 +7,7 @@ import java.util.Random;
  * @author Srinath Perera(hemapani@opensource.lk)
  */
 public class TestUtils {
-	public static String ENDPOINT_URI = "http://127.0.0.1:8080/axismora/servlet/AxisServlet";
+	public static String ENDPOINT_URI = "http://127.0.0.1:5555/axismora/servlet/AxisServlet";
 	private static Random rand = new Random();
 	private HashMap initializeMap = new HashMap();
 	

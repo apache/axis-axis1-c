@@ -174,11 +174,12 @@ public class ArrayParamWriter extends ParmWriter {
 
     public void writeSerialieCode() throws WrapperFault {
         try {
+			writer.write("\t\tif(param == null)\n\t\t\treturn;\n");
             writer.write("\t\tfor (int i = 0; i < param.length; i++) {\n");
             writer.write(
-                "\t\t\tcontext.startTag(\"item\"+i,\""
+                "\t\t\tcontext.writeString(\"<item\"+i+ \" "
                     + org.apache.axismora.wsdl2ws.WrapperUtils.getParamTypeString(qname)
-                    + "\");\n");
+                    + ">\");\n");
             writer.write(
                 JavaUtils.isJavaSimpleType(arrtype) ? "" : "\t\t\tif(param[i]!=null){\n");
             if (!org.apache.axismora.wsdl2ws.info.TypeMap.isSimpleType(arrtype)) {
@@ -186,11 +187,34 @@ public class ArrayParamWriter extends ParmWriter {
             } else
                 writer.write("\t\t\t\tcontext.writeSafeString(java.lang.String.valueOf(param[i]));\n");
             writer.write(JavaUtils.isJavaSimpleType(arrtype) ? "" : "\t\t\t}\n");
-            writer.write("\t\t\tcontext.endTag();\n\t\t}\n");
+            writer.write("\t\t\tcontext.writeString(\"</item\"+i+ \">\");\n\t\t}\n");
         } catch (IOException e) {
             e.printStackTrace();
             throw new WrapperFault(e);
         }
     }
+    
+	public void writeSerialieCode1() throws WrapperFault {
+		try {
+
+			writer.write("\t\tfor (int i = 0; i < param.length; i++) {\n");
+			writer.write(
+				"\t\t\tcontext.writeString(\"<item\"+i+ \" "
+					+ org.apache.axismora.wsdl2ws.WrapperUtils.getParamTypeString(qname)
+					+ ">\");\n");
+			writer.write(
+				JavaUtils.isJavaSimpleType(arrtype) ? "" : "\t\t\tif(param[i]!=null){\n");
+			if (!org.apache.axismora.wsdl2ws.info.TypeMap.isSimpleType(arrtype)) {
+				writer.write("\t\t\t\tparam[i].serialize(context);\n");
+			} else
+				writer.write("\t\t\t\tcontext.writeSafeString(java.lang.String.valueOf(param[i]));\n");
+			writer.write(JavaUtils.isJavaSimpleType(arrtype) ? "" : "\t\t\t}\n");
+			writer.write("\t\t\tcontext.writeString(\"</item\"+i+ \">\");\n\t\t}\n");
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new WrapperFault(e);
+		}
+	}
+
 
 }

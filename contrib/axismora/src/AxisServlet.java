@@ -118,7 +118,7 @@ public class AxisServlet extends HttpServlet {
 
             String soapAction = this.getServiceName(request);
 
-            response.setContentType("text/html");
+            response.setContentType("text/xml");
             /**
              * Calling the SOAP engine to process the SOAP message
              */
@@ -133,6 +133,7 @@ public class AxisServlet extends HttpServlet {
             , null //TODO set encoding from request
             );
         } catch (Exception e) {
+        	e.printStackTrace();
             e.printStackTrace(print);
             print.flush();
         }

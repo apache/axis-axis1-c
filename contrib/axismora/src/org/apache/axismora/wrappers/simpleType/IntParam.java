@@ -88,7 +88,7 @@ public class IntParam implements InOutParameter {
         throws AxisFault {
         String value = msgdata.nextText();
         if (value != null)
-            this.param = Integer.parseInt(value);
+            this.param = Integer.parseInt(value.trim());
         return this;
     }
 

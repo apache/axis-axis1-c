@@ -102,7 +102,7 @@ public class StringParam implements InOutParameter, OutParameter, InParameter {
 //        buf.append(param);
 //        buf.append("</String>\n");
         try {
-            context.writeString(param);
+            context.writeSafeString(param);
         } catch (IOException e) {
             e.printStackTrace(); //ioexception
         }

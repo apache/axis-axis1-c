@@ -64,7 +64,7 @@ import java.io.PrintWriter;
  */
 
 public class PerfLog {
-	public static boolean LOG_PERF = true; 
+	public static boolean LOG_PERF = false; 
 	private static int MAX = 20;
 	private static long[] readings = new long[MAX];
 	private static String[] messages = new String[MAX];
@@ -81,23 +81,23 @@ public class PerfLog {
 	}
 	
 	public static void print(){
-		try {
-			PrintWriter w = new PrintWriter(new FileWriter("perf.log",true));
-			long full = readings[count -1] - readings[0];
-			long reading;
+        try {
+            PrintWriter w = new PrintWriter(new FileWriter("perf.log",true));
+            long full = readings[count -1] - readings[0];
+            long reading;
 			w.write("------------ it takes "+ full + " -------------------\n");
-			for(int i = 1;i<count;i++){
+            for(int i = 1;i<count;i++){
 				reading = readings[i] - readings[i-1];
-				String line = messages[i-1] + " to " + messages[i]+ " = " + reading + "("+(reading*100/full)+"%)";
-				System.out.println(line);
-				w.write(line+"\n");
-			}
-			w.write("\n");
-			w.close();
-			count = 0;
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+            	String line = messages[i-1] + " to " + messages[i]+ " = " + reading + "("+(reading*100/full)+"%)";
+            	System.out.println(line);
+            	w.write(line+"\n");
+            }
+            w.write("\n");
+            w.close();
+            count = 0;
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 	}
 }

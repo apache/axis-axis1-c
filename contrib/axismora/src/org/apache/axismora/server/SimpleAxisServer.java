@@ -61,10 +61,9 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import org.apache.axis.components.logger.LogFactory;
 import org.apache.axismora.Constants;
 import org.apache.axismora.engine.AxisEngine;
-
-import org.apache.axis.components.logger.LogFactory;
 import org.apache.commons.logging.Log;
 /**
  * This is a standalone axis Server, this is not intended for used in havy loads. Under
@@ -82,8 +81,8 @@ public class SimpleAxisServer {
     private ServerSocket serverSocket;
     private AxisEngine engine;
 
-    public SimpleAxisServer(int port) throws Exception {
-        this.engine = new AxisEngine(Constants.SERVER_CONFIG_FILE);
+    public SimpleAxisServer(int port,String confFile) throws Exception {
+        this.engine = new AxisEngine(confFile);
         serverSocket = null;
         try {
             serverSocket = new ServerSocket(port);
@@ -152,7 +151,12 @@ public class SimpleAxisServer {
                 while (((inC = in.read()) != -1) && (((char) inC) != '<')) {
                     if (((char) (inC)) == '\n')
                         buff = buff.delete(0, buff.length() - 1);
-                    else if (
+					else if (((char) (inC)) == ':' && "STOP".equals(buff.toString().trim())) {
+						this.out.close();
+						this.in.close();
+						clientSocket.close();
+						stopServer();
+					}else if (
                         ((char) (inC)) == ':' && "SOAPAction".equals(buff.toString().trim())) {
                         buff = buff.delete(1, buff.length());
                         while (((inC = in.read()) != -1) && ((char) inC) != '\n') {
@@ -177,18 +181,37 @@ public class SimpleAxisServer {
                 this.out.close();
                 this.in.close();
                 clientSocket.close();
-            } catch (IOException e) {
+             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    protected void stop() throws IOException {
+    public void stopServer() throws IOException {
         serverSocket.close();
     }
 
     public static void main(String[] args) throws Exception {
-        SimpleAxisServer server = new SimpleAxisServer(4444);
-        server.start();
+       // SimpleAxisServer server = new SimpleAxisServer(4444);
+       int port = 5555;
+       String confFile = Constants.SERVER_CONFIG_FILE;
+       if(args.length > 0){
+       		if("STOP".equals(args[0])){
+       			Socket s = new Socket("127.0.0.1",5555);
+				OutputStream out = s.getOutputStream();
+				out.write("STOP".getBytes());
+				out.close();
+       			s.close();
+       			System.out.println("stoped");
+       			return;
+       		}
+			port = Integer.parseInt(args[0]);
+       }
+       if(args.length > 1){
+			confFile = args[1];
+       }
+       
+	   SimpleAxisServer server = new SimpleAxisServer(port,confFile);
+       server.start();
     }
 }
