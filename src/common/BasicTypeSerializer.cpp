@@ -159,8 +159,9 @@ const AxisChar* BasicTypeSerializer::serializeAsElement (const AxisChar* pName,
            // direct return not good for maintainability 
            //     m_sSZ += " xsi:nil=\"true\"/>\n";
            //     return m_sSZ.c_str ();
-				m_sSZ += " xsi:nil=\"true\" ";
+				m_sSZ += " xsi:nil=\"true\">";
             }
+            else
             {
             	String stringSerializer;
             	m_sSZ += stringSerializer.serialize(pStr);
@@ -178,8 +179,9 @@ const AxisChar* BasicTypeSerializer::serializeAsElement (const AxisChar* pName,
            // direct return not good for maintainability 
            //     m_sSZ += " xsi:nil=\"true\"/>\n";
            //     return m_sSZ.c_str ();
-				m_sSZ += " xsi:nil=\"true\" ";
+				m_sSZ += " xsi:nil=\"true\">";
             }
+            else
             {
             	AnyURI anyURISerializer;
             	m_sSZ += anyURISerializer.serialize(pStr);
@@ -197,8 +199,9 @@ const AxisChar* BasicTypeSerializer::serializeAsElement (const AxisChar* pName,
            // direct return not good for maintainability 
            //     m_sSZ += " xsi:nil=\"true\"/>\n";
            //     return m_sSZ.c_str ();
-				m_sSZ += " xsi:nil=\"true\" ";
+				m_sSZ += " xsi:nil=\"true\">";
             }
+            else
             {
             	XSD_QName QNameSerializer;
             	m_sSZ += QNameSerializer.serialize(pStr);
@@ -216,8 +219,9 @@ const AxisChar* BasicTypeSerializer::serializeAsElement (const AxisChar* pName,
            // direct return not good for maintainability 
            //     m_sSZ += " xsi:nil=\"true\"/>\n";
            //     return m_sSZ.c_str ();
-				m_sSZ += " xsi:nil=\"true\" ";
+				m_sSZ += " xsi:nil=\"true\">";
             }
+            else
             {
             	NOTATION notationSerializer;
             	m_sSZ += notationSerializer.serialize(pStr);
