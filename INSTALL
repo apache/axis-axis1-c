@@ -160,7 +160,7 @@ Now you need the deployment descripter(server.wsdd) to deploy server samples you
 By default there is a deployment descripter in $AXISCPP_DEPLOY/conf to
 deploy samples
 
-In $AXISCPP_DEPLOY/axiscpp.conf file you can give paths to
+In $AXISCPP_DEPLOY/etc/axiscpp.conf file you can give paths to
 your log files, configuration files libraries etc.
 ------------------------------------------------------------------------------------------
 # The comment character is '#'
