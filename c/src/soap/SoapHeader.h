@@ -68,10 +68,6 @@
 #if !defined(AFX_SOAPHEADER_H__9EFB8E6F_A23B_4DC7_AB92_1E572A26B09C__INCLUDED_)
 #define AFX_SOAPHEADER_H__9EFB8E6F_A23B_4DC7_AB92_1E572A26B09C__INCLUDED_
 
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
-
 #include "HeaderBlock.h"
 #include "SoapEnvVersions.h"
 #include "../common/ISoapHeader.h"

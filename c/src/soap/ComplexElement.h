@@ -68,10 +68,6 @@
 #if !defined(AFX_COMPLEXELEMENT_H__558543B0_B076_404C_A7FE_830E13C1785A__INCLUDED_)
 #define AFX_COMPLEXELEMENT_H__558543B0_B076_404C_A7FE_830E13C1785A__INCLUDED_
 
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
-
 #include <string>
 #include <list>
 #include "BasicNode.h"

@@ -68,10 +68,6 @@
 #if !defined(AFX_HANDLERCHAIN_H__675E51BF_2FD7_4860_B3DE_F8B5A978EB99__INCLUDED_)
 #define AFX_HANDLERCHAIN_H__675E51BF_2FD7_4860_B3DE_F8B5A978EB99__INCLUDED_
 
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
-
 #include "../common/BasicHandler.h"
 #include "../common/Handler.h"
 #include <list>

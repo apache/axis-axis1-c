@@ -66,6 +66,8 @@
 
 #include "GDefine.h"
 
+#define AXIS_URI_EXTENSION "/axis/"
+
 typedef struct 
 {
 	const void* ip_stream;
@@ -121,8 +123,8 @@ typedef struct
 	AXIS_PROTOCOL_TYPE trtype;
 } Ax_soapstream;
 
-char* getheader(Ax_soapstream* soap, char* pchkey);
-
+const char* get_header(const Ax_soapstream* soap, const char* pchkey);
+const char* get_service_from_uri(const Ax_soapstream* soap);
 
 //This function is implemented in axis
 //int initialize_process();

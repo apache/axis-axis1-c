@@ -68,10 +68,6 @@
 #if !defined(AFX_QNAME_H__7E4E7E7B_F051_4989_89A6_F0248109C410__INCLUDED_)
 #define AFX_QNAME_H__7E4E7E7B_F051_4989_89A6_F0248109C410__INCLUDED_
 
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
-
 #include <string>
 
 using namespace std;

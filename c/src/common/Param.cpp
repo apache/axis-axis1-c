@@ -67,16 +67,12 @@
 
 #include "Param.h"
 #include "ArrayBean.h"
-#include "AccessBean.h"
 #include "BasicTypeSerializer.h"
 #include <stdlib.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
-//string Param::m_sSZ = "";
-//string ArrayBean::m_sSZ = "";
-char Param::m_Buf[64];
 
 Param::Param(const Param& param)
 {
@@ -85,9 +81,9 @@ Param::Param(const Param& param)
 	m_Type = param.m_Type;	
 	if (m_Type == USER_TYPE) 
 	{
-		m_Value.pBean = new AccessBean();
-		m_Value.pBean->m_TypeName = param.m_Value.pBean->m_TypeName;
-		m_Value.pBean->m_URI = param.m_Value.pBean->m_URI;
+		m_Value.pCplxObj = new ComplexObjectHandler;
+		m_Value.pCplxObj->m_TypeName = param.m_Value.pCplxObj->m_TypeName;
+		m_Value.pCplxObj->m_URI = param.m_Value.pCplxObj->m_URI;
 	}
 	else if(m_Type == XSD_ARRAY)
 	{
@@ -146,7 +142,8 @@ Param::~Param()
 		if (m_Value.pArray) delete m_Value.pArray;
 		break;
 	case USER_TYPE:
-		if (m_Value.pBean) delete m_Value.pBean;
+		if (m_Value.pCplxObj->pObject) m_Value.pCplxObj->pDelFunct(m_Value.pCplxObj->pObject);
+		delete m_Value.pCplxObj;
 		break;
 	default:;
 	}
@@ -235,7 +232,7 @@ XSDTYPE Param::GetType() const
 
 int Param::serialize(IWrapperSoapSerializer& pSZ)
 {
-	string ATprefix;
+	AxisString ATprefix;
 	switch (m_Type){
 	case XSD_INT:
 		pSZ << m_BTSZ.serialize(m_sName.c_str(), m_Value.nValue);
@@ -270,10 +267,10 @@ int Param::serialize(IWrapperSoapSerializer& pSZ)
 		ATprefix = pSZ.getNewNamespacePrefix();
 
 		pSZ << " xmlns:enc"; 
-		pSZ << "=\"http://www.w3.org/2001/06/soap-encoding\"";
+		pSZ << "=\"http://www.w3.org/2001/06/soap-encoding\" ";
 		if (m_Value.pArray->m_type == USER_TYPE)
 		{
-			pSZ << " xmlns:" << ATprefix.c_str() << "=" << m_Value.pArray->m_URI.c_str(); 
+			pSZ << "xmlns:" << ATprefix.c_str() << "=" << m_Value.pArray->m_URI.c_str() << " "; 
 		}
 		pSZ << "enc:arrayType=";
 		if (m_Value.pArray->m_type == USER_TYPE)
@@ -286,10 +283,11 @@ int Param::serialize(IWrapperSoapSerializer& pSZ)
 			pSZ << m_BTSZ.BasicTypeStr(m_Value.pArray->m_type);
 		}
 		{
+			char Buf[10]; //maximum array dimension is 99999999
 			for (list<int>::iterator it=m_Value.pArray->m_size.begin(); it!=m_Value.pArray->m_size.end(); it++)
 			{
-				sprintf(m_Buf,"[%d]", *it);
-				pSZ << m_Buf;
+				sprintf(Buf,"[%d]", *it);
+				pSZ << Buf;
 			}
 		}
 		pSZ << ">";
@@ -306,7 +304,7 @@ int Param::serialize(IWrapperSoapSerializer& pSZ)
 		pSZ << ">";
 		break;
 	case USER_TYPE:
-		m_Value.pBean->Serialize(pSZ);
+		m_Value.pCplxObj->pSZFunct(m_Value.pCplxObj->pObject, pSZ);
 		break;
 	default:;
 	}
@@ -365,7 +363,7 @@ int Param::SetValue(XSDTYPE nType, uParamValue Value)
 		m_Value.pArray = Value.pArray;
 		break;
 	case USER_TYPE:
-		m_Value.pBean = Value.pBean;
+		m_Value.pCplxObj = Value.pCplxObj;
 		break;
 	default:
 		return FAIL; //this is an unexpected situation
@@ -390,7 +388,7 @@ void Param::operator=(const Param &param)
 	m_Type = param.m_Type;	
 	if (m_Type == USER_TYPE) 
 	{
-		m_Value.pBean = param.m_Value.pBean;
+		m_Value.pCplxObj = param.m_Value.pCplxObj;
 	}
 	else if(m_Type == XSD_ARRAY)
 	{
@@ -408,10 +406,22 @@ int Param::GetArraySize()
 	return m_Value.pArray->GetArraySize();
 }
 
+/*
 int Param::SetUserType(IAccessBean* pObject)
 {
 	if (m_Type != USER_TYPE) return FAIL;
 	m_Value.pIBean = pObject;
+	return SUCCESS;
+}
+*/
+
+int Param::SetUserType(void* pObject, AXIS_DESERIALIZE_FUNCT pDZFunct, AXIS_OBJECT_DELETE_FUNCT pDelFunct)
+{
+	if (m_Type != USER_TYPE) return FAIL;
+	m_Value.pCplxObj = new ComplexObjectHandler;
+	m_Value.pCplxObj->pObject = pObject;
+	m_Value.pCplxObj->pDZFunct = pDZFunct;
+	m_Value.pCplxObj->pDelFunct = pDelFunct;
 	return SUCCESS;
 }
 
@@ -420,13 +430,60 @@ int Param::SetArrayElements(void* pElements)
 	if (m_Type != XSD_ARRAY) return FAIL;
 	if (m_Value.pArray)
 	{
-		m_Value.pArray->m_value.sta = pElements;
-		return SUCCESS;
+		if (m_Value.pArray->m_type != USER_TYPE)
+		{
+			m_Value.pArray->m_value.sta = pElements;
+			return SUCCESS;
+		}
+		else //unexpected situation
+		{
+			return FAIL;
+		}
 	}
 	return FAIL;
+}
+
+//following function is called to set array of user types.
+int Param::SetArrayElements(void* pObject, AXIS_DESERIALIZE_FUNCT pDZFunct, AXIS_OBJECT_DELETE_FUNCT pDelFunct, AXIS_OBJECT_SIZE_FUNCT pSizeFunct)
+{
+	if (m_Type != XSD_ARRAY) return FAIL;
+	if (m_Value.pArray)
+	{
+		if (m_Value.pArray->m_type == USER_TYPE)
+		{
+			m_Value.pArray->m_value.cta = new ComplexObjectHandler;
+			m_Value.pArray->m_value.cta->pDZFunct = pDZFunct;
+			m_Value.pArray->m_value.cta->pDelFunct = pDelFunct;
+			m_Value.pArray->m_value.cta->pSizeFunct = pSizeFunct;
+			m_Value.pArray->m_value.cta->pObject = pObject;
+			return SUCCESS;
+		}
+		else //unexpected situation
+		{
+			return FAIL;
+		}
+	}
+	return FAIL;	
 }
 
 void Param::SetName(const AxisChar* sName)
 {
 	m_sName = sName;
+}
+
+// ComplexObjectHandler functions
+ComplexObjectHandler::ComplexObjectHandler()
+{
+	Init();
+}
+
+void ComplexObjectHandler::Init()
+{
+	pObject = NULL;
+	pSZFunct = NULL;
+	pDelFunct = NULL; 
+	pDZFunct = NULL;
+	pSizeFunct = NULL;
+	m_TypeName = L"";
+	m_URI = L"";	
 }

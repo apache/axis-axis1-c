@@ -68,10 +68,6 @@
 #if !defined(AFX_SOAPSERIALIZER_H__C37229AD_BD54_430D_9619_E4574CF95334__INCLUDED_)
 #define AFX_SOAPSERIALIZER_H__C37229AD_BD54_430D_9619_E4574CF95334__INCLUDED_
 
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
-
 #include "../common/IWrapperSoapSerializer.h"
 #include "../common/IHandlerSoapSerializer.h"
 #include "../common/BasicTypeSerializer.h"
@@ -90,7 +86,7 @@ class SoapSerializer : public IWrapperSoapSerializer, public IHandlerSoapSeriali
 {
 private:
 	int iCounter;
-	char cCounter[64];
+	AxisChar cCounter[64];
 	SoapEnvelope* m_pSoapEnvelope;	
 	int m_iSoapVersion;
 	char m_cSerializedBuffer[SERIALIZE_BUFFER_SIZE];
@@ -101,7 +97,7 @@ public:
 	IWrapperSoapSerializer& operator<<(const char* cSerialized);
 	IWrapperSoapSerializer& operator<<(const AxisChar* cSerialized);
 	//ISoapSerializer& operator<<(const char *cSerialized);
-	const char* getNewNamespacePrefix();
+	const AxisChar* getNewNamespacePrefix();
 	int setSoapVersion(SOAP_VERSION);
 	int Init();
 	int SetOutputStream(const void* pStream);
@@ -113,7 +109,10 @@ public:
 	SoapSerializer();
 	virtual ~SoapSerializer();
 	IParam* setResponseParam(XSDTYPE nType, uParamValue Value);
+	IParam* setResponseParam(IArrayBean* pArrayBean);
+	IParam* setResponseParam(void* pObject, void* pDZFunct, void* pDelFunct);
 	IArrayBean* makeArrayBean(XSDTYPE nType, void* pArray);
+	IArrayBean* makeArrayBean(void* pObject, void* pSZFunct, void* pDelFunct, void* pSizeFunct);
 public: //Basic Type Serializing methods
 	int removeSoapHeader();
 	int setHeaderBlock(HeaderBlock* pHeaderBlock);

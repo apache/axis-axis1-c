@@ -68,10 +68,6 @@
 #if !defined(AFX_WSDDSERVICE_H__F5F6BB58_0733_445B_97E3_B7488446AC47__INCLUDED_)
 #define AFX_WSDDSERVICE_H__F5F6BB58_0733_445B_97E3_B7488446AC47__INCLUDED_
 
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
-
 #include "WSDDHandler.h"
 
 #include <string>
