@@ -250,6 +250,7 @@ int ComplexElement::serialize(SoapSerializer& pSZ,
             if( (m_pachPrefix != NULL) && (strlen(m_pachPrefix) != 0))
             {                
                 pSZ.serialize(m_pachPrefix, ":", NULL);
+                blnIsNewNamespace = true;
             }
             else if ( (m_pachURI != NULL) && (strlen(m_pachURI) != 0))
             {
@@ -271,7 +272,7 @@ int ComplexElement::serialize(SoapSerializer& pSZ,
                     ( (m_pachURI != NULL) && (strlen(m_pachURI) != 0)) && 
                     (blnIsNewNamespace))
             {
-                pSZ.serialize(" xmlns:", m_pachPrefix, "=\"", m_pachURI, "\" ",
+                pSZ.serialize(" xmlns:", m_pachPrefix, "=\"", m_pachURI, "\"",
                     NULL);
             }
 
