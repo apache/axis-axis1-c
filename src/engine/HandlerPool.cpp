@@ -205,7 +205,7 @@ int HandlerPool::getHandlerChain (string &sSessionId, HandlerChain** ppChain,
 {
     lock ();
     *ppChain = NULL;
-    HandlerChain* pChain;
+    HandlerChain* pChain = NULL;
     // check m_ChainStore to get a HandlerChain
     if (!m_ChainStore.empty ())
     {
@@ -218,8 +218,8 @@ int HandlerPool::getHandlerChain (string &sSessionId, HandlerChain** ppChain,
         pChain = new HandlerChain ();
     }
 
-    WSDDHandler* pWSDDH;
-    BasicHandler* pBH;
+    WSDDHandler* pWSDDH = NULL;
+    BasicHandler* pBH = NULL;
     int Status = AXIS_SUCCESS;
 
     for (WSDDHandlerList::const_iterator it = pHandlerList->begin ();
