@@ -1,5 +1,6 @@
 #include "AxisConfig.h"
 #include "GDefine.h"
+#include "AxisUtils.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -20,7 +21,7 @@ int AxisConfig::ReadConfFile()
     char sNewConfPath[CONFBUFFSIZE] = {0};
     char line[CONFBUFFSIZE] = {0};
     char key[CONFBUFFSIZE] = {0};
-    char value[CONFBUFFSIZE] = {0};
+	char value[CONFBUFFSIZE] = {0};
 
 	sConfPath = getenv("AXIS_HOME");
 	if (!sConfPath) return FAIL;
@@ -40,6 +41,12 @@ int AxisConfig::ReadConfFile()
         }
         k += 1;
         int j=0;
+		
+		/*
+		 *To clear the character array named value
+		 */
+		AxisUtils::clearArray(value, CONFBUFFSIZE);
+
         while(line[k] != '\n')
         {
             value[j]=line[k];
