@@ -68,17 +68,6 @@
 #include <axis/client/transport/axis/HttpTransport.hpp>
 
 
-
-TransportFactory::TransportFactory()
-{
-
-}
-
-TransportFactory::~TransportFactory()
-{
-
-}
-
 Transport* TransportFactory::GetTransport(Url& url)
 {
 	if(url.GetProtocol() == Url::http)
