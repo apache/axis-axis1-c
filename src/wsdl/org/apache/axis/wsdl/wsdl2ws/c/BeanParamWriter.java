@@ -79,7 +79,6 @@ public class BeanParamWriter extends ParamCFileWriter{
 		writer.write("int Axis_GetSize_"+classname+"()\n{\n\treturn sizeof("+classname+");\n}\n");
 	}
 	private void writeSerializeGlobalMethod()throws IOException,WrapperFault{
-		Type t;
 		writer.write("/**\n");
 		writer.write(" * This static method serialize a "+classname+" type of object\n");
 		writer.write(" */\n");
@@ -141,7 +140,6 @@ public class BeanParamWriter extends ParamCFileWriter{
 	
 	}
 	private void writeDeSerializeGlobalMethod()throws IOException,WrapperFault{	
-		Type t;
 		writer.write("/**\n");
 		writer.write(" * This static method deserialize a "+classname+" type of object\n");
 		writer.write(" */\n");
