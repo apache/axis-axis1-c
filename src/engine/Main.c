@@ -79,7 +79,7 @@ extern int process_request(Ax_soapstream *str);
 			soapenv:mustUnderstand=\"true\" >Hello Req Header Val</t:Transaction></soapenv:Header> \
 			<soapenv:Body><add soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"><op1 xsi:type=\"xsd:int\">3</op1><op2 xsi:type=\"xsd:int\">4</op2></add></soapenv:Body></soapenv:Envelope>";
 
-//	char* ip = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><soapenv:Body><Add soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"><op1 xsi:type=\"xsd:int\">3</op1><op2 xsi:type=\"xsd:int\">4</op2></Add></soapenv:Body></soapenv:Envelope>";
+	char* ip = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><soapenv:Body><Add soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"><op1 xsi:type=\"xsd:int\">3</op1><op2 xsi:type=\"xsd:int\">4</op2></Add></soapenv:Body></soapenv:Envelope>";
 
 //	char* ip = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><soapenv:Body><Echo soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"><op1 xsi:type=\"xsd:string\">Hello World!</op1></Echo></soapenv:Body></soapenv:Envelope>";
 
@@ -144,7 +144,7 @@ extern int process_request(Ax_soapstream *str);
 		</soapenv:Envelope>";
 
 	//Add two Points
-	char* ip = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\
+//	char* ip = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\
 		<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\
 		<soapenv:Body>\
 		<AddPoint soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">\
@@ -235,6 +235,11 @@ int main()
 //	str->so.http.ip_headers->headervalue = "\"Calculator\"";	
 	str->so.http.ip_headercount = 0;
 	str->so.http.uri_path = "http://someurl/axis/Calculator";
+
+	//set transport
+	str->transport.pSendFunct = send_response_bytes;
+	str->transport.pGetFunct = get_request_bytes;
+	str->transport.pSendTrtFunct = send_transport_information;
 
 	printf("soap request :\n %s\n", ip);
 

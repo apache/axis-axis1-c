@@ -77,8 +77,6 @@
 #include "SoapKeywordMapping.h"
 #include <stdio.h>
 
-extern "C" int sendSoapResponse(char *cSerializedStream);
-
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -295,7 +293,7 @@ int SoapSerializer::setSoapFault(SoapFault *pSoapFault)
 	return m_sSerializedStream;
 }*/
 
-int SoapSerializer::SetOutputStream(const void* pStream)
+int SoapSerializer::SetOutputStream(const Ax_soapstream* pStream)
 {
 	m_pOutputStream = pStream;
 	int iStatus= SUCCESS;
@@ -379,7 +377,8 @@ IWrapperSoapSerializer& SoapSerializer::operator<<(const AxisChar* cSerialized)
 int SoapSerializer::flushSerializedBuffer()
 {
 	//sendSoapResponse(m_cSerializedBuffer);
-	send_response_bytes(m_cSerializedBuffer, m_pOutputStream);
+	if (NULL != m_pOutputStream->transport.pSendFunct)
+		m_pOutputStream->transport.pSendFunct(m_cSerializedBuffer, m_pOutputStream->str.op_stream);
 	m_cSerializedBuffer[0]= '\0';
 	m_iCurrentSerBufferSize=0;
 	return SUCCESS;

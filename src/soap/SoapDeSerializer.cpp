@@ -92,9 +92,9 @@ SoapDeSerializer::~SoapDeSerializer()
 	delete m_pParser;
 }
 
-int SoapDeSerializer::SetInputStream(const void* InputStream)
+int SoapDeSerializer::SetInputStream(const Ax_soapstream* pInputStream)
 {
-	m_pInputStream = InputStream;
+	m_pInputStream = pInputStream;
 	//---------------------start--------------------------
 	//Deserialize
 	//---------START XERCES SAX2 SPCIFIC CODE---------//
@@ -103,7 +103,8 @@ int SoapDeSerializer::SetInputStream(const void* InputStream)
 	int nChars = 0;
 	//request a huge number of bytes to get the whole soap request
 	//when pull parsing is used this should change
-	get_request_bytes(m_hugebuffer, HUGE_BUFFER_SIZE, &nChars, m_pInputStream);
+	if (NULL != m_pInputStream->transport.pGetFunct)
+		m_pInputStream->transport.pGetFunct(m_hugebuffer, HUGE_BUFFER_SIZE, &nChars, m_pInputStream->str.ip_stream);
 	//if no soap then quit
 	if (nChars <= 0) return FAIL;
 	MemBufInputSource Input((const unsigned char*)m_hugebuffer, nChars , "bufferid");
