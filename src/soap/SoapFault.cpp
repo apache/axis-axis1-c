@@ -34,7 +34,7 @@
  *      setParam(m_pFaultcodeParam, "faultcode", &sFaultcode, XSD_STRING); 
  *      After change:
  *      setParam(m_pFaultcodeParam, "faultcode", sFaultcode.c_str(), XSD_STRING); 
- * Changed the "SOAP-ENV" prefix was hard-coded in the "serialize" method.
+ * Changed. The "SOAP-ENV" prefix was hard-coded in the "serialize" method.
  *  Corrected it to serialize the correct prefix.
  */
 
