@@ -28,35 +28,6 @@ char echoBuffer[RCVBUFSIZE];        /* Buffer for echo string */
 const char *pcHttpBody;
 int iClntSocket;
 
-int executeWork() {
-
-	Ax_soapstream* str = (Ax_soapstream*)malloc(sizeof(Ax_soapstream));
-	str->trtype = APTHTTP;
-	str->sessionid = "somesessionid";
-	str->so.http.ip_method = AXIS_HTTP_POST;
-	str->str.ip_stream = "is";
-	str->str.op_stream = "os";
-	str->so.http.ip_headers = (Ax_header*)malloc(sizeof(Ax_header));
-//	str->so.http.ip_headers->headername = SOAPACTIONHEADER;
-//	str->so.http.ip_headers->headervalue = "\"Calculator\"";	
-	str->so.http.ip_headercount = 0;
-	str->so.http.uri_path = "http://someurl/axis/Calculator";
-
-	//DEBUG line
-	//printf("soap request :\n %s\n", echoBuffer);
-//	wprintf(L"soap request :\n %s\n", ip);
-
-	initialize_module(1, WSDDFILEPATH);
-	
-	process_request(str);	
-	
-	uninitialize_module();
-	free(str->so.http.ip_headers);
-	free(str);
-
-	return 0;
-}
-
 int send_response_bytes(const char * res, const void* opstream) 
 {	
 	//printf("calling send_response_bytes");
@@ -92,6 +63,36 @@ int send_transport_information(Ax_soapstream* sSoapstream)
 
 	if (send(iClntSocket, res, iMsgSize, 0) == AXIS_SOCKET_ERROR)
 		printf("%s\n","send() failed");
+
+	return 0;
+}
+
+int executeWork() {
+
+	Ax_soapstream* str = (Ax_soapstream*)malloc(sizeof(Ax_soapstream));
+	str->trtype = APTHTTP;
+	str->sessionid = "somesessionid";
+	str->so.http.ip_method = AXIS_HTTP_POST;
+	str->str.ip_stream = "is";
+	str->str.op_stream = "os";
+	str->so.http.ip_headers = (Ax_header*)malloc(sizeof(Ax_header));
+//	str->so.http.ip_headers->headername = SOAPACTIONHEADER;
+//	str->so.http.ip_headers->headervalue = "\"Calculator\"";	
+	str->so.http.ip_headercount = 0;
+	str->so.http.uri_path = "http://someurl/axis/Calculator";
+
+	//set transport
+	str->transport.pSendFunct = send_response_bytes;
+	str->transport.pGetFunct = get_request_bytes;
+	str->transport.pSendTrtFunct = (AXIS_SEND_TRANSPORT_INFORMATION)send_transport_information;
+	//DEBUG line
+	//printf("soap request :\n %s\n", echoBuffer);
+//	wprintf(L"soap request :\n %s\n", ip);
+
+	process_request(str);	
+
+	free(str->so.http.ip_headers);
+	free(str);
 
 	return 0;
 }
@@ -275,7 +276,9 @@ int main(int argc, char *argv[ ])
 		}
 	}
 	///////////////
-
+	
+	initialize_module(1, WSDDFILEPATH);
+	
 	while (running) {
 		FD_ZERO(&sockSet);
 		FD_SET(servSock[0], &sockSet);	
@@ -301,6 +304,8 @@ int main(int argc, char *argv[ ])
 		//DEBUG info
 		//printf("end of main while\n");
 	}
+
+	uninitialize_module();
 
 	/* Close sockets */
     for (iPort = 0; iPort < noPorts; iPort++) {
