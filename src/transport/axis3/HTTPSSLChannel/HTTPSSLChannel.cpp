@@ -1,4 +1,12 @@
 #include "HTTPSSLChannel.hpp"
+#include "../../../platforms/PlatformAutoSense.hpp"
+
+/**
+ * cert_verify_callback( int ok, X509_STORE_CTX * ctx)
+ *
+ * cert_verify_callback callback
+ *
+ */
 
 static int cert_verify_callback( int ok, X509_STORE_CTX * ctx)
 {
@@ -10,6 +18,13 @@ static int cert_verify_callback( int ok, X509_STORE_CTX * ctx)
 
   return ok;
 }
+
+/**
+ * HTTPSSLChannel::HTTPSSLChannel()
+ *
+ * HTTPSSLChannel constuctor
+ *
+ */
 
 HTTPSSLChannel::HTTPSSLChannel()
 {
@@ -38,6 +53,13 @@ HTTPSSLChannel::HTTPSSLChannel()
 	m_sslHandle = NULL;
 }
 
+/**
+ * HTTPSSLChannel::~HTTPSSLChannel()
+ *
+ * HTTPSSLChannel destuctor
+ *
+ */
+
 HTTPSSLChannel::~HTTPSSLChannel()
 {
 	OpenSSL_Close();
@@ -52,22 +74,56 @@ HTTPSSLChannel::~HTTPSSLChannel()
 	StopSockets();
 }
 
+/**
+ * HTTPSSLChannel::getURL()
+ *
+ * Return the URL currently assicated with the channel object.
+ *
+ * @return char * containing the URL associated with the open socket
+ */
+
 const char * HTTPSSLChannel::getURL()
 {
-// Return the URL currently assicated with the channel object.
     return m_URL.getURL();
 }
 
+/**
+ * HTTPSSLChannel::setURL( const char * cpURL)
+ *
+ * Set the Channel URL to the new value.
+ *
+ * @param const char * containing the new URL
+ */
+
 void HTTPSSLChannel::setURL( const char * cpURL)
 {
-// Set the Channel URL to the new value.
     m_URL.setURL( cpURL);
 }
+
+/**
+ * HTTPSSLChannel::getURLObject()
+ *
+ * Return the current URL object
+ *
+ * @return URL & current URL object
+ */
 
 URL & HTTPSSLChannel::getURLObject()
 {
     return m_URL;
 }
+
+/**
+ * HTTPSSLChannel::open()
+ *
+ * Main method for opening a HTTP channel.  If a channel is already open, it is
+ * closed before attempting to open a new channel.  If the method fails to open
+ * a new channel then an exception will be thrown.
+ *
+ * @return boolean flag set to AXIS_FAIL or AXIS_SUCCESS depending on outcome
+ * of opening a channel (Since an exception is always thrown on failure, the
+ * returned flag will only be returned on a successful outcome).
+ */
 
 bool HTTPSSLChannel::open() throw (HTTPTransportException&)
 {
@@ -77,6 +133,8 @@ bool HTTPSSLChannel::open() throw (HTTPTransportException&)
 	{
 		CloseChannel();
 	}
+
+	m_LastError = "No Errors";
 
 	if( (bSuccess = OpenChannel()) != AXIS_SUCCESS)
 	{
@@ -88,6 +146,15 @@ bool HTTPSSLChannel::open() throw (HTTPTransportException&)
 
 	return bSuccess;
 }
+
+/**
+ * HTTPSSLChannel::close()
+ *
+ * Main method for closing a HTTP channel.
+ *
+ * @return boolean flag set to AXIS_FAIL or AXIS_SUCCESS depending on outcome
+ * of closing the channel.
+ */
 
 bool HTTPSSLChannel::close()
 {
@@ -101,10 +168,33 @@ bool HTTPSSLChannel::close()
 	return AXIS_SUCCESS;
 }
 
+/**
+ * HTTPSSLChannel::GetLastErrorMsg()
+ *
+ * Returns the last reported error on the channel.
+ *
+ * @return string containing last error.
+ */
+
 const std::string & HTTPSSLChannel::GetLastErrorMsg()
 {
 	return m_LastError;
 }
+
+/**
+ * HTTPSSLChannel::operator >> (const char * msg)
+ *
+ * This method attempts to read a message from the curently open channel.  If
+ * there is no currently open channel, then the method throws an exception.  If
+ * there is an open channel, but nothing to recieve, then then method will
+ * timeout and throw an exception.  If the mesage is interrupted or the
+ * transmitting side closes then an exception is thrown.
+ *
+ * @param character pointer containing an array of character that can be filled
+ * by the reieved message (NB: The maximum message length is BUF_SIZE).
+ * @return character pointer pointing to the array of character containing the
+ * recieved message.
+ */
 
 const IChannel & HTTPSSLChannel::operator >> (const char * msg)
 {
@@ -124,6 +214,18 @@ const IChannel & HTTPSSLChannel::operator >> (const char * msg)
 
 	return *this;
 }
+
+/**
+ * HTTPSSLChannel::operator << (const char * msg)
+ *
+ * This method attempts to write a message to the curently open channel.  If
+ * there is no currently open channel, then the method throws an exception.  If
+ * there is an open channel, but the mesage is interrupted or the recieving
+ * side closes then an exception is thrown.
+ *
+ * @param character pointer pointing to the array of character containing the
+ * message to be transmitted.
+ */
 
 const IChannel & HTTPSSLChannel::operator << (const char * msg)
 {
@@ -145,15 +247,51 @@ const IChannel & HTTPSSLChannel::operator << (const char * msg)
 	return *this;
 }
 
+/**
+ * HTTPSSLChannel::setTimeout( const long lSeconds)
+ *
+ * Set the Rx message timeout (in seconds)
+ *
+ * @param long containing timeout value in seconds
+ */
+
 void HTTPSSLChannel::setTimeout( const long lSeconds)
 {
     m_lTimeoutSeconds = lSeconds;
 }
 
+/**
+ * HTTPSSLChannel::setSocket( unsigned int uiNewSocket)
+ *
+ * This is used by the server side to change the server socket.
+ *
+ * @param unsigned int containing the new server socket.
+ */
+
 void HTTPSSLChannel::setSocket( unsigned int uiNewSocket)
 {
     m_Sock = uiNewSocket;
 }
+
+/**
+ * HTTPSSLChannel::setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char * value)
+ *
+ * The following list can be set using this property:-
+ * SOAPACTION_HEADER			- No action
+ * SERVICE_URI					- No action
+ * OPERATION_NAME				- No action
+ * SOAP_MESSAGE_LENGTH			- No action
+ * TRANSPORT_PROPERTIES			- No action
+ * SECURE_PROPERTIES			- No action
+ * DLL_NAME						- No action
+ * CHANNEL_HTTP_SSL_DLL_NAME	- No action
+ * CHANNEL_HTTP_DLL_NAME		- No action
+ *
+ * @param AXIS_TRANSPORT_INFORMATION_TYPE contains the type of property to be
+ *        set.
+ *        const char * contains the value for the type to be set to.
+ * @return boolean flag indicating success of the alteration. 
+ */
 
 bool HTTPSSLChannel::setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char* value)
 {
@@ -162,10 +300,38 @@ bool HTTPSSLChannel::setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type,
 	return bSuccess;
 }
 
+/**
+ * HTTPSSLChannel::getTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type)
+ *
+ * The following list can be retrieved using this property:-
+ * SOAPACTION_HEADER			- No action
+ * SERVICE_URI					- No action
+ * OPERATION_NAME				- No action
+ * SOAP_MESSAGE_LENGTH			- No action
+ * TRANSPORT_PROPERTIES			- No action
+ * SECURE_PROPERTIES			- No action
+ * DLL_NAME						- No action
+ * CHANNEL_HTTP_SSL_DLL_NAME	- No action
+ * CHANNEL_HTTP_DLL_NAME		- No action
+ *
+ * @param AXIS_TRANSPORT_INFORMATION_TYPE contains the type of property to be
+ *        recovered.
+ * @return const char * contains the value for the requested type.
+ */
+
 const char * HTTPSSLChannel::getTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type)
 {
 	return NULL;
 }
+
+/**
+ * HTTPSSLChannel::setProxy( const char * pcProxyHost, unsigned int uiProxyPort)
+ *
+ * Setup he proxy values to be used by the channel.
+ *
+ * @param const char * containing the name of the proxy host.
+ *		  unsigned int containing the proxy port value.
+ */
 
 void HTTPSSLChannel::setProxy (const char *pcProxyHost, unsigned int uiProxyPort)
 {
@@ -178,8 +344,19 @@ void HTTPSSLChannel::setProxy (const char *pcProxyHost, unsigned int uiProxyPort
 // | Protected methods														  |
 // | -----------------														  |
 // +--------------------------------------------------------------------------+
+
+/**
+ * HTTPSSLChannel::OpenChannel()
+ *
+ * Protected function
+ *
+ * @param
+ * @return 
+ */
+
 bool HTTPSSLChannel::OpenChannel()
 {
+// This method is common to all channel implementations
 	bool	bSuccess = (bool) AXIS_FAIL;
 
 // Create the Client (Rx) side first.
@@ -191,7 +368,8 @@ bool HTTPSSLChannel::OpenChannel()
     // hints is used after zero cleared
     memset( &aiHints, 0, sizeof( aiHints));
 
-    aiHints.ai_family = PF_UNSPEC;
+    aiHints.ai_family = PF_UNSPEC;		// This allows the sockets code to use
+										// whatever socket family is available.
     aiHints.ai_socktype = SOCK_STREAM;
 
     char szPort[7];
@@ -225,11 +403,26 @@ bool HTTPSSLChannel::OpenChannel()
         {
             // Cannot open a channel to the remote end, shutting down the
             // channel and then throw an exception.
-            CloseChannel();
+            // Before we do anything else get the last error message;
+			long dw = GETLASTERROR
 
+			CloseChannel();
             free( paiAddrInfo0);
+			
+			string* message = PLATFORM_GET_ERROR_MESSAGE(dw);
 
-            throw HTTPTransportException( SERVER_TRANSPORT_SOCKET_CONNECT_ERROR);
+			char fullMessage[600];
+			sprintf(fullMessage,
+				"Failed to open connection to server: \n \
+				hostname='%s'\n\
+				port='%d'\n\
+				Error Message='%s'\
+				Error Code='%d'\n",
+				m_URL.getHostName(), m_URL.getPort(), message->c_str(), (int)dw);
+				
+			delete(message);
+
+			throw HTTPTransportException( CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED, fullMessage);
         }
 
         break;
@@ -240,7 +433,7 @@ bool HTTPSSLChannel::OpenChannel()
 
     if( m_Sock < 0)
     {
-        // Sockets error - Couldn't create socket.  Close the channel and throw
+        // Sockets error Couldn't create socket.  Close the channel and throw
         // an exception.
         CloseChannel();
 
@@ -316,44 +509,26 @@ bool HTTPSSLChannel::OpenChannel()
 // Cannot open a channel to the remote end, shutting down the
 // channel and then throw an exception.
 
-#ifdef WIN32
 // Before we do anything else get the last error message;
-// I'd like to put the getting of the error message into platform specifics
-// but not sure how!  I think it would be nicer to make the platform
-// specifics a class and not just macros.  That way we could have e.g.
-// char * Windows#getLastErrorMessage().
-		long lLastError = GetLastError();
-#endif // WIN32
+			long dw = GETLASTERROR
+			CloseChannel();
 
-		CloseChannel();
+			
+			string* message = PLATFORM_GET_ERROR_MESSAGE(dw);
 
-#ifdef WIN32
-		char	szErrorBuffer[200]; 
-	    LPVOID	lpErrorBuffer;
+			char fullMessage[600];
+			sprintf(fullMessage,
+				"Failed to open connection to server: \n \
+				hostname='%s'\n\
+				port='%d'\n\
+				Error Message='%s'\
+				Error Code='%d'\n",
+				m_URL.getHostName(), m_URL.getPort(), message->c_str(), dw);
+				
+			delete(message);
 
-		FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER|FORMAT_MESSAGE_FROM_SYSTEM,
-					   NULL,
-					   lLastError,
-					   MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT),
-					   (LPTSTR) &lpErrorBuffer,
-					   0,
-					   NULL);
+		m_LastError = fullMessage;
 
-		sprintf( szErrorBuffer, 
-				 "Failed to open connection to server:\n\
-				 hostname='%s'\n\
-				 port='%d'\n\
-				 Error Message='%s'\
-				 Error Code='%d'\n",                     \
-				 m_URL.getHostName(), m_URL.getPort(), lpErrorBuffer, lLastError); 
- 
-	    LocalFree( lpErrorBuffer);
-
-		m_LastError = szErrorBuffer;
-#else // WIN32 not defined
-		m_LastError = "Cannot open a channel to the remote end.";
-
-#endif // WIN32
 	    return bSuccess;
     }
 	else
@@ -380,6 +555,15 @@ bool HTTPSSLChannel::OpenChannel()
     return bSuccess;
 }
 
+/**
+ * HTTPSSLChannel::CloseChannel()
+ *
+ * Protected function
+ *
+ * @param
+ * @return 
+ */
+
 void HTTPSSLChannel::CloseChannel()
 {
     if( INVALID_SOCKET != m_Sock) // Check if socket already closed : AXISCPP-185
@@ -392,6 +576,15 @@ void HTTPSSLChannel::CloseChannel()
 		m_Sock = INVALID_SOCKET; // fix for AXISCPP-185
 	}
 }
+
+/**
+ * HTTPSSLChannel::StartSockets()
+ *
+ * Protected function
+ *
+ * @param
+ * @return 
+ */
 
 bool HTTPSSLChannel::StartSockets()
 {
@@ -437,6 +630,15 @@ bool HTTPSSLChannel::StartSockets()
     return bSuccess;
 }
 
+/**
+ * HTTPSSLChannel::StopSockets()
+ *
+ * Protected function
+ *
+ * @param
+ * @return 
+ */
+
 void HTTPSSLChannel::StopSockets()
 {
 #ifdef WIN32
@@ -445,10 +647,11 @@ void HTTPSSLChannel::StopSockets()
 }
 
 /**
- * Channel::applyTimeout()
+ * HTTPSSLChannel::applyTimeout()
  *
  * @return int 
  */
+
 int HTTPSSLChannel::applyTimeout()
 {
     fd_set			set;
@@ -465,6 +668,14 @@ int HTTPSSLChannel::applyTimeout()
     /* select returns 0 if timeout, 1 if input available, -1 if error. */
     return select( FD_SETSIZE, &set, NULL, NULL, &timeout);
 }
+
+/**
+ * HTTPSSLChannel::ReadFromSocket( const char * pszRxBuffer)
+ *
+ * Protected function
+ *
+ * @return int 
+ */
 
 int HTTPSSLChannel::ReadFromSocket( const char * pszRxBuffer)
 {
@@ -487,6 +698,14 @@ int HTTPSSLChannel::ReadFromSocket( const char * pszRxBuffer)
 	return nByteRecv;
 }
 
+/**
+ * HTTPSSLChannel::WriteToSocket( const char * psTxBuffer, int iSize)
+ *
+ * Protected function
+ *
+ * @return int 
+ */
+
 int HTTPSSLChannel::WriteToSocket( const char * psTxBuffer, int iSize)
 {
 	int nByteSent;
@@ -504,6 +723,14 @@ int HTTPSSLChannel::WriteToSocket( const char * psTxBuffer, int iSize)
 	return nByteSent;
 }
 
+/**
+ * HTTPSSLChannel::OpenSSL_Initialise()
+ *
+ * Protected function
+ *
+ * @return int 
+ */
+
 void HTTPSSLChannel::OpenSSL_Initialise()
 {
 // Lets get nice error messages
@@ -512,6 +739,14 @@ void HTTPSSLChannel::OpenSSL_Initialise()
 // Setup all the global SSL stuff
 	SSLeay_add_ssl_algorithms();
 }
+
+/**
+ * HTTPSSLChannel::OpenSSL_Open()
+ *
+ * Protected function
+ *
+ * @return int 
+ */
 
 bool HTTPSSLChannel::OpenSSL_Open()
 {
@@ -566,6 +801,14 @@ bool HTTPSSLChannel::OpenSSL_Open()
 	return bSuccess;
 }
 
+/**
+ * HTTPSSLChannel::OpenSSL_Close()
+ *
+ * Protected function
+ *
+ * @return int 
+ */
+
 int HTTPSSLChannel::OpenSSL_Close()
 {
     if( m_sslHandle)
@@ -585,6 +828,14 @@ int HTTPSSLChannel::OpenSSL_Close()
 
 	return 0;
 }
+
+/**
+ * HTTPSSLChannel::OpenSSL_SetSecureError( int iError)
+ *
+ * Protected function
+ *
+ * @return int 
+ */
 
 void HTTPSSLChannel::OpenSSL_SetSecureError( int iError)
 {

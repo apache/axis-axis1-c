@@ -1,6 +1,11 @@
 #include "HTTPChannel.hpp"
 #include "../../../platforms/PlatformAutoSense.hpp"
 
+/**
+ * HTTPChannel::HTTPChannel()
+ *
+ * HTTPChannel constuctor
+ */
 
 HTTPChannel::HTTPChannel()
 {
@@ -24,6 +29,13 @@ HTTPChannel::HTTPChannel()
 	}
 }
 
+/**
+ * HTTPChannel::~HTTPChannel()
+ *
+ * HTTPChannel destuctor
+ *
+ */
+
 HTTPChannel::~HTTPChannel()
 {
 // If the socket value is not invalid, then close the socket before
@@ -36,22 +48,56 @@ HTTPChannel::~HTTPChannel()
 	StopSockets();
 }
 
+/**
+ * HTTPChannel::getURL()
+ *
+ * Return the URL currently assicated with the channel object.
+ *
+ * @return char * containing the URL associated with the open socket
+ */
+
 const char * HTTPChannel::getURL()
 {
-// Return the URL currently assicated with the channel object.
     return m_URL.getURL();
 }
 
+/**
+ * HTTPChannel::setURL( const char * cpURL)
+ *
+ * Set the Channel URL to the new value.
+ *
+ * @param const char * containing the new URL
+ */
+
 void HTTPChannel::setURL( const char * cpURL)
 {
-// Set the Channel URL to the new value.
     m_URL.setURL( cpURL);
 }
+
+/**
+ * HTTPChannel::getURLObject()
+ *
+ * Return the current URL object
+ *
+ * @return URL & current URL object
+ */
 
 URL & HTTPChannel::getURLObject()
 {
     return m_URL;
 }
+
+/**
+ * HTTPChannel::open()
+ *
+ * Main method for opening a HTTP channel.  If a channel is already open, it is
+ * closed before attempting to open a new channel.  If the method fails to open
+ * a new channel then an exception will be thrown.
+ *
+ * @return boolean flag set to AXIS_FAIL or AXIS_SUCCESS depending on outcome
+ * of opening a channel (Since an exception is always thrown on failure, the
+ * returned flag will only be returned on a successful outcome).
+ */
 
 bool HTTPChannel::open() throw (HTTPTransportException&)
 {
@@ -62,6 +108,8 @@ bool HTTPChannel::open() throw (HTTPTransportException&)
 		CloseChannel();
 	}
 
+	m_LastError = "No Errors";
+
 	if( (bSuccess = OpenChannel()) != AXIS_SUCCESS)
 	{
 		throw HTTPTransportException( SERVER_TRANSPORT_SOCKET_CONNECT_ERROR,
@@ -70,6 +118,15 @@ bool HTTPChannel::open() throw (HTTPTransportException&)
 
 	return bSuccess;
 }
+
+/**
+ * HTTPChannel::close()
+ *
+ * Main method for closing a HTTP channel.
+ *
+ * @return boolean flag set to AXIS_FAIL or AXIS_SUCCESS depending on outcome
+ * of closing the channel.
+ */
 
 bool HTTPChannel::close()
 {
@@ -83,10 +140,33 @@ bool HTTPChannel::close()
 	return AXIS_SUCCESS;
 }
 
+/**
+ * HTTPChannel::GetLastErrorMsg()
+ *
+ * Returns the last reported error on the channel.
+ *
+ * @return string containing last error.
+ */
+
 const std::string & HTTPChannel::GetLastErrorMsg()
 {
 	return m_LastError;
 }
+
+/**
+ * HTTPChannel::operator >> (const char * msg)
+ *
+ * This method attempts to read a message from the curently open channel.  If
+ * there is no currently open channel, then the method throws an exception.  If
+ * there is an open channel, but nothing to recieve, then then method will
+ * timeout and throw an exception.  If the mesage is interrupted or the
+ * transmitting side closes then an exception is thrown.
+ *
+ * @param character pointer containing an array of character that can be filled
+ * by the reieved message (NB: The maximum message length is BUF_SIZE).
+ * @return character pointer pointing to the array of character containing the
+ * recieved message.
+ */
 
 const IChannel & HTTPChannel::operator >> (const char * msg)
 {
@@ -159,7 +239,19 @@ const IChannel & HTTPChannel::operator >> (const char * msg)
 	return *this;
 }
 
-const IChannel & HTTPChannel::operator << (const char* msg)
+/**
+ * HTTPChannel::operator << (const char * msg)
+ *
+ * This method attempts to write a message to the curently open channel.  If
+ * there is no currently open channel, then the method throws an exception.  If
+ * there is an open channel, but the mesage is interrupted or the recieving
+ * side closes then an exception is thrown.
+ *
+ * @param character pointer pointing to the array of character containing the
+ * message to be transmitted.
+ */
+
+const IChannel & HTTPChannel::operator << (const char * msg)
 {
 // Check that the Tx/Rx sockets are valid (this will have been done if the
 // application has called the open method first.
@@ -192,29 +284,93 @@ const IChannel & HTTPChannel::operator << (const char* msg)
 	return *this;
 }
 
+/**
+ * HTTPChannel::setTimeout( const long lSeconds)
+ *
+ * Set the Rx message timeout (in seconds)
+ *
+ * @param long containing timeout value in seconds
+ */
+
 void HTTPChannel::setTimeout( const long lSeconds)
 {
     m_lTimeoutSeconds = lSeconds;
 }
+
+/**
+ * HTTPChannel::setSocket( unsigned int uiNewSocket)
+ *
+ * This is used by the server side to change the server socket.
+ *
+ * @param unsigned int containing the new server socket.
+ */
 
 void HTTPChannel::setSocket( unsigned int uiNewSocket)
 {
     m_Sock = uiNewSocket;
 }
 
-bool HTTPChannel::setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char* value)
+/**
+ * HTTPChannel::setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char * value)
+ *
+ * The following list can be set using this property:-
+ * SOAPACTION_HEADER			- No action
+ * SERVICE_URI					- No action
+ * OPERATION_NAME				- No action
+ * SOAP_MESSAGE_LENGTH			- No action
+ * TRANSPORT_PROPERTIES			- No action
+ * SECURE_PROPERTIES			- No action
+ * DLL_NAME						- No action
+ * CHANNEL_HTTP_SSL_DLL_NAME	- No action
+ * CHANNEL_HTTP_DLL_NAME		- No action
+ *
+ * @param AXIS_TRANSPORT_INFORMATION_TYPE contains the type of property to be
+ *        set.
+ *        const char * contains the value for the type to be set to.
+ * @return boolean flag indicating success of the alteration. 
+ */
+
+bool HTTPChannel::setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char * value)
 {
 	bool	bSuccess = false;
 
 	return bSuccess;
 }
 
+/**
+ * HTTPChannel::getTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type)
+ *
+ * The following list can be retrieved using this property:-
+ * SOAPACTION_HEADER			- No action
+ * SERVICE_URI					- No action
+ * OPERATION_NAME				- No action
+ * SOAP_MESSAGE_LENGTH			- No action
+ * TRANSPORT_PROPERTIES			- No action
+ * SECURE_PROPERTIES			- No action
+ * DLL_NAME						- No action
+ * CHANNEL_HTTP_SSL_DLL_NAME	- No action
+ * CHANNEL_HTTP_DLL_NAME		- No action
+ *
+ * @param AXIS_TRANSPORT_INFORMATION_TYPE contains the type of property to be
+ *        recovered.
+ * @return const char * contains the value for the requested type.
+ */
+
 const char * HTTPChannel::getTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type)
 {
 	return NULL;
 }
 
-void HTTPChannel::setProxy (const char *pcProxyHost, unsigned int uiProxyPort)
+/**
+ * HTTPChannel::setProxy( const char * pcProxyHost, unsigned int uiProxyPort)
+ *
+ * Setup he proxy values to be used by the channel.
+ *
+ * @param const char * containing the name of the proxy host.
+ *		  unsigned int containing the proxy port value.
+ */
+
+void HTTPChannel::setProxy( const char * pcProxyHost, unsigned int uiProxyPort)
 {
     m_strProxyHost = pcProxyHost;
     m_uiProxyPort = uiProxyPort;
@@ -225,8 +381,19 @@ void HTTPChannel::setProxy (const char *pcProxyHost, unsigned int uiProxyPort)
 // | Protected methods														  |
 // | -----------------														  |
 // +--------------------------------------------------------------------------+
+
+/**
+ * HTTPChannel::OpenChannel()
+ *
+ * Protected function
+ *
+ * @param
+ * @return 
+ */
+
 bool HTTPChannel::OpenChannel()
 {
+// This method is common to all channel implementations
 	bool	bSuccess = (bool) AXIS_FAIL;
 
 // Create the Client (Rx) side first.
@@ -238,7 +405,8 @@ bool HTTPChannel::OpenChannel()
     // hints is used after zero cleared
     memset( &aiHints, 0, sizeof( aiHints));
 
-    aiHints.ai_family = PF_UNSPEC;
+    aiHints.ai_family = PF_UNSPEC;		// This allows the sockets code to use
+										// whatever socket family is available.
     aiHints.ai_socktype = SOCK_STREAM;
 
     char szPort[7];
@@ -291,7 +459,7 @@ bool HTTPChannel::OpenChannel()
 				
 			delete(message);
 
-			throw HTTPTransportException( SERVER_TRANSPORT_OPEN_CONNECTION_FAILED, fullMessage);
+			throw HTTPTransportException( CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED, fullMessage);
         }
 
         break;
@@ -424,6 +592,15 @@ bool HTTPChannel::OpenChannel()
     return bSuccess;
 }
 
+/**
+ * HTTPChannel::CloseChannel()
+ *
+ * Protected function
+ *
+ * @param
+ * @return 
+ */
+
 void HTTPChannel::CloseChannel()
 {
     if( INVALID_SOCKET != m_Sock) // Check if socket already closed : AXISCPP-185
@@ -436,6 +613,15 @@ void HTTPChannel::CloseChannel()
 		m_Sock = INVALID_SOCKET; // fix for AXISCPP-185
 	}
 }
+
+/**
+ * HTTPChannel::StartSockets()
+ *
+ * Protected function
+ *
+ * @param
+ * @return 
+ */
 
 bool HTTPChannel::StartSockets()
 {
@@ -481,6 +667,15 @@ bool HTTPChannel::StartSockets()
     return bSuccess;
 }
 
+/**
+ * HTTPChannel::StopSockets()
+ *
+ * Protected function
+ *
+ * @param
+ * @return 
+ */
+
 void HTTPChannel::StopSockets()
 {
 #ifdef WIN32
@@ -489,10 +684,13 @@ void HTTPChannel::StopSockets()
 }
 
 /**
- * Channel::applyTimeout()
+ * HTTPChannel::applyTimeout()
+ *
+ * Protected function
  *
  * @return int 
  */
+
 int HTTPChannel::applyTimeout()
 {
     fd_set			set;
