@@ -80,8 +80,8 @@ public class WSDLTest extends AbstractTestCase {
     public void testGoogleWSDL() throws Exception {
         J2EEWebServiceContext context = ContextFactory.getJ2EEWsContext(true);
         context.setMiscInfo(ContextFactory.createMiscInfo());
-        String mappingfile = sampleDir + "mapper/google/GoogleSearch.xml";
-        String wsdlfile = sampleDir + "mapper/google/GoogleSearch.wsdl";
+        String mappingfile = getTestFile(sampleDir + "mapper/google/GoogleSearch.xml");
+        String wsdlfile = getTestFile(sampleDir + "mapper/google/GoogleSearch.wsdl");
         J2eeEmitter j2ee = new J2eeEmitter();
         j2ee.setMappingFilePath(mappingfile);
         j2ee.setOutputDir(outDir);

@@ -54,8 +54,12 @@
  */
 package org.apache.geronimo.ews.ws4j2ee;
 
+import java.io.File;
+
 import org.apache.geronimo.ews.AbstractTestCase;
 import org.apache.geronimo.ews.ws4j2ee.utils.AntExecuter;
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.taskdefs.Ant;
 
 /**
  * @author hemapani
@@ -71,10 +75,30 @@ public class AntExecuterTest extends AbstractTestCase{
 	public void testBuildFile() throws Exception{
 		try{
 			AntExecuter exec = new AntExecuter();
-			exec.execute(testDir + "testData/testBuildfile.xml");
+			exec.execute(getTestFile(testDir + "testData/testBuildfile.xml"));
 		}catch(Exception e){
 			e.printStackTrace();
 			throw e;
 		}
 	}
+	public void testBuildFile1() throws Exception{
+		try{
+			Project project = new Project();
+			project.init();
+			Ant ant = new Ant();
+			ant.setProject(project);
+			File file = new File(getTestFile(testDir
+				 + "testData/testBuildfile.xml"));
+			ant.setAntfile(file.getAbsolutePath());
+			ant.setDir(file.getParentFile());
+			ant.init();
+			//ant.setOutput("ant.log");
+			ant.execute();
+			System.out.print("Done");
+		}catch(Exception e){
+			e.printStackTrace();
+			throw e;
+		}
+	}
+	
 }

@@ -22,7 +22,9 @@ public class ServiceRefTest extends AbstractTestCase{
 	public void testRefFile1() throws Exception{
 		try {
 			ServiceReferanceParser parser 
-				= new ServiceReferanceParser(new FileInputStream(testDir+"org/apache/geronimo/ews/ws4j2ee/seviceRef/service-ref1.xml"));
+				= new ServiceReferanceParser(new FileInputStream(
+					getTestFile(testDir+"org/apache/geronimo/ews/" +
+						"ws4j2ee/seviceRef/service-ref1.xml")));
 			ServiceReferance ref = 	parser.getRef();
 			Assert.assertEquals("service/Joe",ref.getServicerefName());
 			Assert.assertEquals("javax.xml.rpc.Service",ref.getServiceInterface());
@@ -37,7 +39,9 @@ public class ServiceRefTest extends AbstractTestCase{
 	public void testRefFile2() throws Exception{
 		try {
 			ServiceReferanceParser parser 
-				= new ServiceReferanceParser(new FileInputStream(testDir+"org/apache/geronimo/ews/ws4j2ee/seviceRef/service-ref2.xml"));
+				= new ServiceReferanceParser(new FileInputStream(
+					getTestFile(testDir+"org/apache/geronimo/ews/ws4j2ee/" +
+						"seviceRef/service-ref2.xml")));
 			ServiceReferance ref = 	parser.getRef();
 			Assert.assertEquals("service/Joe",ref.getServicerefName());
 			Assert.assertEquals("javax.xml.rpc.Service",ref.getServiceInterface());

@@ -29,8 +29,15 @@ public class MapperTest
 	 */
 	public static Test suite()
 	{
-		return new TestSuite( MapperTest.class );
+		TestSuite sute = new TestSuite(); 
+		sute.addTest(TestSuite.createTest(MapperTest.class,"testHeavyWeight"));
+		sute.addTest(TestSuite.createTest(MapperTest.class,"testLightWeight"));
+		sute.addTest(TestSuite.createTest(MapperTest.class,"testGoogle"));
+		sute.addTest(TestSuite.createTest(MapperTest.class,"testFrenchZip"));
+		//sute.addTest(TestSuite.createTest(MapperTest.class,"testAnonymousTypes"));
+		return sute;
 	}
+
 
 	/**
 	 * Rigourous Test :-)
@@ -63,10 +70,10 @@ public class MapperTest
 		WsdlToJ2ee.main(args);
 	}
 
-//	  public void testAnonymousTypes() throws Exception {
-//		  String args[] = new String[]{"-m",getTestFile(sampleDir +"mapper/anonymous/mapping.xml"),
-//									   "-o", getTestFile("target/generated/samples/mapper/anonymous"),
-//									   getTestFile(sampleDir +"mapper/anonymous/anonymous.wsdl")};
-//		  WsdlToJ2ee.main(args);
-//	  }
+	  public void testAnonymousTypes() throws Exception {
+		  String args[] = new String[]{"-m",getTestFile(sampleDir +"mapper/anonymous/mapping.xml"),
+									   "-o", getTestFile("target/generated/samples/mapper/anonymous"),
+									   getTestFile(sampleDir +"mapper/anonymous/anonymous.wsdl")};
+		  WsdlToJ2ee.main(args);
+	  }
 }
