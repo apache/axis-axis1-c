@@ -79,7 +79,7 @@ int main(int argc, char* argv[])
 		printf("successful\n");
 	else
 		printf("failed\n");	
-	getchar();
+	/*getchar();*/
         }
         catch(AxisException& e)
         {

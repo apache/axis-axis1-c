@@ -201,7 +201,7 @@ int main(int argc, char* argv[])
 	else
 		printf("failed\n");
 		
-	getchar();
+	/*getchar();*/
         }
         catch(AxisException& e)
         {
