@@ -84,6 +84,7 @@ using namespace std;
 class WSDDDeployment  
 {
 public:
+	string& GetLibName(int nLibId);
 	int SetServices(WSDDServiceMap * svs);
 	WSDDService* GetService(string& sServiceName);
 	int LoadWSDD(string& sWSDD);

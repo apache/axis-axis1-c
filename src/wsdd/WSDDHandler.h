@@ -80,11 +80,14 @@
 
 using namespace std;
 
+enum AXIS_HANDLER_SCOPE {AH_APPLICATION=1, AH_SESSION, AH_REQUEST};
+
 class WSDDHandler  
 {
 public:
 	virtual string& GetLibName();
-	int GetLibID();
+	virtual int GetLibID();
+	virtual int GetScope();
 	virtual void SetLibName(string& sLibName);
 	WSDDHandler();
 	virtual ~WSDDHandler();
@@ -94,6 +97,7 @@ public:
 
 protected:
 	int m_nLibId;
+	int m_nScope;
 	string m_sName;
 	string m_sLibName;
 	map<string, string>* m_Option;
