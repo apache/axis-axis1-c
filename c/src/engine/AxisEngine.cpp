@@ -24,15 +24,6 @@
  *       "This product includes software developed by the
  *        Apache Software Foundation (http://www.apache.org/)."
  *    Alternately, this acknowledgment may appear in the software itself,
-
-
-
-
-
-
-
-
-
  *    if and wherever such third-party acknowledgments normally appear.
  *
  * 4. The names "SOAP" and "Apache Software Foundation" must
@@ -83,7 +74,7 @@
 
 
 #ifdef WIN32
-#define WSDDFILEPATH "C:/Apache/Axis/server.wsdd"
+#define WSDDFILEPATH "./Axis/conf/server.wsdd"
 #else //For linux
 #define WSDDFILEPATH "/usr/local/axiscpp/axis/server.wsdd"
 #endif
@@ -96,8 +87,6 @@
 
 
 AxisEngine* AxisEngine::m_pObject = NULL;
-
-
 
 AxisEngine::AxisEngine()
 {
@@ -119,6 +108,15 @@ AxisEngine::~AxisEngine()
 	delete m_pHandlerPool;
 	//unload xerces DLL
 	XMLPlatformUtils::Terminate();
+}
+
+WSDDDeployment * AxisEngine::getWSDDDeployment()
+{
+	if(m_pWSDD)
+	{
+		return m_pWSDD; 
+	}
+	return NULL;
 }
 
 AxisEngine* AxisEngine::GetAxisEngine()
@@ -149,11 +147,11 @@ AxisEngine* AxisEngine::GetAxisEngine()
 
 int AxisEngine::Process(soapstream* soap) 
 {
-	send_response_bytes("in process");
+
   try
   {
     DEBUG1("AxisEngine::Process");
-
+ 
 	  MessageData* pMsg = NULL;
 	  MemBufInputSource* pSoapInput = NULL;
 	  WSDDHandlerList* pHandlerList = NULL;
@@ -167,15 +165,15 @@ int AxisEngine::Process(soapstream* soap)
 		  pMsg->m_Protocol = soap->trtype;
 		  pMsg->SetSerializer(m_pSZ);
 		  pMsg->SetDeSerializer(m_pDZ);
-
+    
 		  //Adding SoapEnvelop and SoapBody to Serializer
 		  SoapEnvelope* pEnv = new SoapEnvelope();
 		  pMsg->m_pSZ->setSoapEnvelope(pEnv);
 		  pMsg->m_pSZ->setSoapBody(new SoapBody());
 
-		  string service = "Maths";//getheader(soap, SOAPACTIONHEADER);
+		  string service = getheader(soap, SOAPACTIONHEADER);
+		  service = service.substr(1, service.length() - 2);
 
-    
       DEBUG2("string service = Maths :",service.c_str());
      
 		  if (service.empty()) 
@@ -204,7 +202,7 @@ DEBUG1(hugebuffer);
           //if no soap then quit
 		  if (nChars <= 0) break;
 		  pSoapInput = new MemBufInputSource((const unsigned char*)hugebuffer, nChars ,"bufferid",false);
- 
+
 		  if (SUCCESS != m_pDZ->SetStream(pSoapInput)) //this parses the full soap request.
 		  {
 			  pMsg->m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_SOAPCONTENTERROR));
@@ -309,7 +307,7 @@ DEBUG1(hugebuffer);
 	  if (pSoapInput) delete pSoapInput; //this should not be done if we use progressive parsing
 	  //set soap version to the serializer.
 	  //Serialize
-	  //m_sResponse = "";
+	  send_transport_information(soap);
 	  int iStatus= m_pSZ->getStream();
       
 	  //soap->so.http.op_soap = new char(sResponse.length() + 1); 
