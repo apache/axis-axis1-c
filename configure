@@ -2111,7 +2111,7 @@ LINKCLIENTLIB="-L${AXISCPP_HOME}/src/engine/client -laxiscpp_client -ldl"
 
 CFLAGS="-Wall -Wshadow ${ENABLELOGGING}"
 CPPFLAGS="-Wall -Wshadow ${ENABLELOGGING}"
-LDFLAGS="-s -lstdc++"
+LDFLAGS="-lstdc++"
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -4068,7 +4068,7 @@ irix5* | irix6* | nonstopux*)
 # This must be Linux ELF.
 linux-gnu*)
   case $host_cpu in
-  alpha* | hppa* | i*86 | mips | mipsel | powerpc* | sparc* | ia64* | s390* | x86_64*)
+  alpha* | hppa* | i*86 | mips | mipsel | powerpc* | sparc* | ia64*)
     lt_cv_deplibs_check_method=pass_all ;;
   *)
     # glibc up to 2.1.1 does not perform some relocations on ARM
@@ -7000,30 +7000,6 @@ linux-gnu*)
   # people can always --disable-shared, the test was removed, and we
   # assume the GNU/Linux dynamic linker is in use.
   dynamic_linker='GNU/Linux ld.so'
-
-  # Find out which ABI we are using (multilib Linux x86_64 hack).
-  libsuff=
-  case "$host_cpu" in
-  x86_64*|s390x*)
-    echo '#line 7008 "configure"' > conftest.$ac_ext
-    if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
-  (eval $ac_compile) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-      case `/usr/bin/file conftest.$ac_objext` in
-      *64-bit*)
-        libsuff=64
-        ;;
-      esac
-    fi
-    rm -rf conftest*
-    ;;
-  *)
-    ;;
-  esac
-  sys_lib_dlsearch_path_spec="/lib${libsuff} /usr/lib${libsuff}"
-  sys_lib_search_path_spec="/lib${libsuff} /usr/lib${libsuff} /usr/local/lib${libsuff}"
   ;;
 
 netbsd*)
@@ -7677,7 +7653,7 @@ else
     lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 7680 "configure"
+#line 7656 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -7775,7 +7751,7 @@ else
     lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 7778 "configure"
+#line 7754 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -8503,7 +8479,7 @@ LIBTOOL='$(SHELL) $(top_builddir)/libtool'
 
 
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ac_config_files="$ac_config_files Makefile src/Makefile src/common/Makefile src/soap/Makefile src/wsdd/Makefile src/xml/Makefile src/transport/Makefile src/transport/axis/Makefile src/transport/libwww/Makefile src/engine/Makefile src/engine/server/Makefile src/engine/client/Makefile src/server/Makefile src/server/apache2/Makefile src/server/apache/Makefile src/server/simple_axis_server/Makefile src/server/adminservice/Makefile src/client/Makefile src/client/adminclient/Makefile src/xml/expat/Makefile src/xml/xerces/Makefile samples/Makefile samples/server/Makefile samples/server/interoptests/Makefile samples/server/interoptests/base/Makefile samples/server/interoptests/cbase/Makefile samples/server/interoptests/groupB/Makefile samples/server/interoptests/cgroupB/Makefile samples/server/interoptests/doclitbase/Makefile samples/server/interoptests/doclitgroupB/Makefile samples/server/simple/Makefile samples/server/rpcfault/Makefile samples/server/doclitfault/Makefile samples/server/echoStringHeaderHandler/Makefile samples/client/Makefile samples/client/interoptests/Makefile samples/client/interoptests/base/Makefile samples/client/interoptests/cbase/Makefile samples/client/interoptests/groupB/Makefile samples/client/interoptests/cgroupB/Makefile samples/client/interoptests/doclitbase/Makefile samples/client/interoptests/doclitgroupB/Makefile samples/client/simple/Makefile samples/client/rpcfault/Makefile samples/client/doclitfault/Makefile samples/client/testHandler/Makefile tests/Makefile tests/client/Makefile tests/client/stubTest/Makefile tests/client/stubTest/stubBase/Makefile tests/client/interop/Makefile tests/client/interop/round1/Makefile tests/client/interop/round1/gen_src/Makefile tests/client/threadSafe/Makefile tests/client/threadSafe/gen_src/Makefile tests/client/fault_mapping/Makefile tests/client/fault_mapping/gen_src/Makefile tests/client/exceptionTest/Makefile tests/client/exceptionTest/gen_src/Makefile tests/client/soapHeader/Makefile tests/client/soapHeader/test1/Makefile tests/client/soapHeader/test1/rpc/Makefile tests/client/soapHeader/test2/Makefile tests/client/soapHeader/test2/rpc/Makefile tests/client/soapHeader/test3/Makefile tests/client/soapHeader/test3/rpc/Makefile tests/client/soapHeader/test4/Makefile tests/client/soapHeader/test4/rpc/Makefile tests/client/soapHeader/test6/Makefile tests/client/soapHeader/test6/rpc/Makefile tests/client/soapHeader/test8/Makefile tests/client/soapHeader/test8/rpc/Makefile tests/client/soapHeader/test9/Makefile tests/client/soapHeader/test9/rpc/Makefile tests/client/soapHeader/test10/Makefile tests/client/soapHeader/test10/rpc/Makefile tests/client/xsdAnyTest1/Makefile tests/client/xsdAnyTest1/gen_src/Makefile tests/client/httpHeader/Makefile tests/client/httpHeader/test1/Makefile tests/client/httpHeader/test1/rpc/Makefile tests/client/httpHeader/test2/Makefile tests/client/httpHeader/test2/rpc/Makefile tests/client/httpHeader/test3/Makefile tests/client/httpHeader/test3/rpc/Makefile tests/client/httpHeader/test4/Makefile tests/client/httpHeader/test4/rpc/Makefile tests/client/httpHeader/test5/Makefile tests/client/httpHeader/test5/rpc/Makefile tests/client/httpHeader/test7/Makefile tests/client/httpHeader/test7/rpc/Makefile tests/client/httpHeader/test8/Makefile tests/client/httpHeader/test8/rpc/Makefile tests/server/Makefile tests/server/exceptionTest/Makefile tests/server/exceptionTest/gen_src/Makefile tests/server/xsdAnyTest1/Makefile tests/server/xsdAnyTest1/gen_src/Makefile"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ac_config_files="$ac_config_files Makefile src/Makefile src/common/Makefile src/soap/Makefile src/wsdd/Makefile src/xml/Makefile src/transport/Makefile src/transport/axis/Makefile src/transport/libwww/Makefile src/engine/Makefile src/engine/server/Makefile src/engine/client/Makefile src/server/Makefile src/server/apache2/Makefile src/server/apache/Makefile src/server/simple_axis_server/Makefile src/server/adminservice/Makefile src/client/Makefile src/client/adminclient/Makefile src/xml/expat/Makefile src/xml/xerces/Makefile samples/Makefile samples/server/Makefile samples/server/interoptests/Makefile samples/server/interoptests/base/Makefile samples/server/interoptests/cbase/Makefile samples/server/interoptests/groupB/Makefile samples/server/interoptests/cgroupB/Makefile samples/server/interoptests/doclitbase/Makefile samples/server/interoptests/doclitgroupB/Makefile samples/server/simple/Makefile samples/server/array/Makefile samples/server/ref/Makefile samples/server/rpcfault/Makefile samples/server/doclitfault/Makefile samples/server/echoStringHeaderHandler/Makefile samples/client/Makefile samples/client/interoptests/Makefile samples/client/interoptests/base/Makefile samples/client/interoptests/cbase/Makefile samples/client/interoptests/groupB/Makefile samples/client/interoptests/cgroupB/Makefile samples/client/interoptests/doclitbase/Makefile samples/client/interoptests/doclitgroupB/Makefile samples/client/simple/Makefile samples/client/array/Makefile samples/client/ref/Makefile samples/client/rpcfault/Makefile samples/client/doclitfault/Makefile samples/client/testHandler/Makefile tests/Makefile tests/client/Makefile tests/client/stubTest/Makefile tests/client/stubTest/stubBase/Makefile tests/client/interop/Makefile tests/client/interop/round1/Makefile tests/client/interop/round1/gen_src/Makefile tests/client/threadSafe/Makefile tests/client/threadSafe/gen_src/Makefile tests/client/fault_mapping/Makefile tests/client/fault_mapping/gen_src/Makefile tests/client/exceptionTest/Makefile tests/client/exceptionTest/gen_src/Makefile tests/client/soapHeader/Makefile tests/client/soapHeader/test1/Makefile tests/client/soapHeader/test1/rpc/Makefile tests/client/soapHeader/test2/Makefile tests/client/soapHeader/test2/rpc/Makefile tests/client/soapHeader/test3/Makefile tests/client/soapHeader/test3/rpc/Makefile tests/client/soapHeader/test4/Makefile tests/client/soapHeader/test4/rpc/Makefile tests/client/soapHeader/test6/Makefile tests/client/soapHeader/test6/rpc/Makefile tests/client/soapHeader/test8/Makefile tests/client/soapHeader/test8/rpc/Makefile tests/client/soapHeader/test9/Makefile tests/client/soapHeader/test9/rpc/Makefile tests/client/soapHeader/test10/Makefile tests/client/soapHeader/test10/rpc/Makefile tests/client/xsdAnyTest1/Makefile tests/client/xsdAnyTest1/gen_src/Makefile tests/client/httpHeader/Makefile tests/client/httpHeader/test1/Makefile tests/client/httpHeader/test1/rpc/Makefile tests/client/httpHeader/test2/Makefile tests/client/httpHeader/test2/rpc/Makefile tests/client/httpHeader/test3/Makefile tests/client/httpHeader/test3/rpc/Makefile tests/client/httpHeader/test4/Makefile tests/client/httpHeader/test4/rpc/Makefile tests/client/httpHeader/test5/Makefile tests/client/httpHeader/test5/rpc/Makefile tests/client/httpHeader/test7/Makefile tests/client/httpHeader/test7/rpc/Makefile tests/client/httpHeader/test8/Makefile tests/client/httpHeader/test8/rpc/Makefile tests/server/Makefile tests/server/exceptionTest/Makefile tests/server/exceptionTest/gen_src/Makefile tests/server/xsdAnyTest1/Makefile tests/server/xsdAnyTest1/gen_src/Makefile"
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -9076,6 +9052,8 @@ do
   "samples/server/interoptests/doclitbase/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/server/interoptests/doclitbase/Makefile" ;;
   "samples/server/interoptests/doclitgroupB/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/server/interoptests/doclitgroupB/Makefile" ;;
   "samples/server/simple/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/server/simple/Makefile" ;;
+  "samples/server/array/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/server/array/Makefile" ;;
+  "samples/server/ref/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/server/ref/Makefile" ;;
   "samples/server/rpcfault/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/server/rpcfault/Makefile" ;;
   "samples/server/doclitfault/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/server/doclitfault/Makefile" ;;
   "samples/server/echoStringHeaderHandler/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/server/echoStringHeaderHandler/Makefile" ;;
@@ -9088,6 +9066,8 @@ do
   "samples/client/interoptests/doclitbase/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/client/interoptests/doclitbase/Makefile" ;;
   "samples/client/interoptests/doclitgroupB/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/client/interoptests/doclitgroupB/Makefile" ;;
   "samples/client/simple/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/client/simple/Makefile" ;;
+  "samples/client/array/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/client/array/Makefile" ;;
+  "samples/client/ref/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/client/ref/Makefile" ;;
   "samples/client/rpcfault/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/client/rpcfault/Makefile" ;;
   "samples/client/doclitfault/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/client/doclitfault/Makefile" ;;
   "samples/client/testHandler/Makefile" ) CONFIG_FILES="$CONFIG_FILES samples/client/testHandler/Makefile" ;;
