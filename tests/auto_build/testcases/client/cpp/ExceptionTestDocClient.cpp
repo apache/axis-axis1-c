@@ -2,9 +2,11 @@
 #include <axis/AxisException.hpp>
 #include <ctype.h>
 #include <iostream>
+#include <signal.h>
+
+void sig_handler(int);
 
 void PrintUsage();
-bool IsNumber(const char* p);
 
 int main(int argc, char* argv[])
 {
@@ -20,7 +22,13 @@ int main(int argc, char* argv[])
 	int iResult;
 	char* pcDetail;
 
-	url = argv[1];
+	signal(SIGILL, sig_handler);
+	signal(SIGABRT, sig_handler);
+	signal(SIGSEGV, sig_handler);
+	signal(SIGFPE, sig_handler);
+
+	if(argc>1)
+		url = argv[1];
 
 	op = "div";
 	
@@ -122,11 +130,9 @@ void PrintUsage()
 	exit(1);
 }
 
-bool IsNumber(const char* p)
-{
-	for (int x=1; x < strlen(p); x++)
-	{
-		if (!isdigit(p[x])) return false;
-	}
-	return true;
+void sig_handler(int sig) {
+	signal(sig, sig_handler);
+	cout << "SIGNAL RECEIVED " << sig << endl;
+	exit(1);
 }
+

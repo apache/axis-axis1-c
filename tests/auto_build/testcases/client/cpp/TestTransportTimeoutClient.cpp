@@ -1,6 +1,9 @@
 #include "Timeout.hpp"
 #include <stdio.h>
 #include <iostream>
+#include <signal.h>
+
+void sig_handler(int);
 
 int main(int argc, char* argv[])
 {
@@ -9,7 +12,13 @@ int main(int argc, char* argv[])
 	int iResult;
 	int rc=1;
 
-	url = argv[1];
+	signal(SIGILL, sig_handler);
+	signal(SIGABRT, sig_handler);
+	signal(SIGSEGV, sig_handler);
+	signal(SIGFPE, sig_handler);
+
+	if(argc>1)
+		url = argv[1];
 
 	try
 	{
@@ -37,4 +46,11 @@ int main(int argc, char* argv[])
   cout << "---------------------- TEST COMPLETE -----------------------------"<< endl;	
 	return rc;
 }
+
+void sig_handler(int sig) {
+	signal(sig, sig_handler);
+	cout << "SIGNAL RECEIVED " << sig << endl;
+	exit(1);
+}
+
 
