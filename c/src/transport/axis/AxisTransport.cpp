@@ -74,6 +74,8 @@ int AxisTransport::openConnection()
      * and endpoint URI in m_Soap
      */
     Url objUrl(m_pcEndpointUri);
+    try
+    {
     m_pHttpTransport = TransportFactory::GetTransport(objUrl, secure);
     memset(&m_SendBuffers, 0, sizeof(BufferInfo)*NO_OF_SERIALIZE_BUFFERS); 
     //set the proxy
@@ -103,6 +105,20 @@ int AxisTransport::openConnection()
     {
         return AXIS_FAIL;
     }
+    }
+    catch(AxisTransportException& e)
+    {
+        throw;
+    }
+    catch(AxisException& e)
+    {
+        throw;
+    }
+    catch(...)
+    {
+        throw;
+    }
+
 }        
 
 void AxisTransport::closeConnection()
@@ -217,12 +233,29 @@ AXIS_TRANSPORT_STATUS AXISCALL AxisTransport::s_Get_bytes(const char** res,
 
 AXIS_TRANSPORT_STATUS AxisTransport::getBytes(char* pcBuffer, int* pSize)
 {
-	if (0 <= m_iBytesLeft)
-	{
-		m_pcReceived = m_pReceiver->Recv();
-		if (m_pcReceived)
-			m_iBytesLeft = strlen(m_pcReceived);
-	}
+    if (0 <= m_iBytesLeft)
+    {
+        try
+        {
+            m_pcReceived = m_pReceiver->Recv();
+            if (m_pcReceived)
+                m_iBytesLeft = strlen(m_pcReceived);
+            else
+                throw AxisTransportException(SERVER_TRANSPORT_BUFFER_EMPTY);
+        }
+        catch(AxisTransportException& e)
+        {
+            throw;
+        }
+        catch(AxisException& e)
+        {
+            throw;
+        }
+        catch(...)
+        {
+            throw;
+        }
+    }
     if (m_pcReceived)
     {
 		int iToCopy = (*pSize < m_iBytesLeft) ? *pSize : m_iBytesLeft;

@@ -86,7 +86,7 @@ am__quote = @am__quote@
 install_sh = @install_sh@
 lib_LTLIBRARIES = libaxis_expat.la
 AM_CPPFLAGS = $(CPPFLAGS)
-libaxis_expat_la_SOURCES = XMLParserExpat.cpp ParserLoader.cpp
+libaxis_expat_la_SOURCES = XMLParserExpat.cpp ParserLoader.cpp ../AxisParseException.cpp
 
 libaxis_expat_la_LIBADD = -L$(EXPAT_HOME) -lexpat -lstdc++
 INCLUDES = -I$(AXISCPP_HOME)/include
@@ -98,7 +98,8 @@ LTLIBRARIES = $(lib_LTLIBRARIES)
 
 libaxis_expat_la_LDFLAGS =
 libaxis_expat_la_DEPENDENCIES =
-am_libaxis_expat_la_OBJECTS = XMLParserExpat.lo ParserLoader.lo
+am_libaxis_expat_la_OBJECTS = XMLParserExpat.lo ParserLoader.lo \
+	AxisParseException.lo
 libaxis_expat_la_OBJECTS = $(am_libaxis_expat_la_OBJECTS)
 
 DEFS = @DEFS@
@@ -108,7 +109,8 @@ LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
-@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/ParserLoader.Plo \
+@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/AxisParseException.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/ParserLoader.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/XMLParserExpat.Plo
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -160,6 +162,7 @@ clean-libLTLIBRARIES:
 	  echo "rm -f \"$${dir}/so_locations\""; \
 	  rm -f "$${dir}/so_locations"; \
 	done
+AxisParseException.lo: ../AxisParseException.cpp
 libaxis_expat.la: $(libaxis_expat_la_OBJECTS) $(libaxis_expat_la_DEPENDENCIES) 
 	$(CXXLINK) -rpath $(libdir) $(libaxis_expat_la_LDFLAGS) $(libaxis_expat_la_OBJECTS) $(libaxis_expat_la_LIBADD) $(LIBS)
 
@@ -169,6 +172,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/AxisParseException.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ParserLoader.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/XMLParserExpat.Plo@am__quote@
 
@@ -192,6 +196,24 @@ distclean-depend:
 @AMDEP_TRUE@	depfile='$(DEPDIR)/$*.Plo' tmpdepfile='$(DEPDIR)/$*.TPlo' @AMDEPBACKSLASH@
 @AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 	$(LTCXXCOMPILE) -c -o $@ `test -f '$<' || echo '$(srcdir)/'`$<
+
+AxisParseException.o: ../AxisParseException.cpp
+@AMDEP_TRUE@	source='../AxisParseException.cpp' object='AxisParseException.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/AxisParseException.Po' tmpdepfile='$(DEPDIR)/AxisParseException.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o AxisParseException.o `test -f '../AxisParseException.cpp' || echo '$(srcdir)/'`../AxisParseException.cpp
+
+AxisParseException.obj: ../AxisParseException.cpp
+@AMDEP_TRUE@	source='../AxisParseException.cpp' object='AxisParseException.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/AxisParseException.Po' tmpdepfile='$(DEPDIR)/AxisParseException.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o AxisParseException.obj `cygpath -w ../AxisParseException.cpp`
+
+AxisParseException.lo: ../AxisParseException.cpp
+@AMDEP_TRUE@	source='../AxisParseException.cpp' object='AxisParseException.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/AxisParseException.Plo' tmpdepfile='$(DEPDIR)/AxisParseException.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o AxisParseException.lo `test -f '../AxisParseException.cpp' || echo '$(srcdir)/'`../AxisParseException.cpp
 CXXDEPMODE = @CXXDEPMODE@
 
 mostlyclean-libtool:
