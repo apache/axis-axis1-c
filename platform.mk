@@ -92,7 +92,7 @@ AX_OBJ_DIR_APACHE   = $(AX_OBJ_DIR)/server/apache
 AX_OBJ_DIR_SECURITY   = $(AX_OBJ_DIR)/security
 AX_OBJ_DIR_HANDLERS   = $(AX_OBJ_DIR)/server/handlers
 AX_DIR_RELEASE   = $(AX_DIR)/release/$(TARGET_PLATFORM)
-AX_DIR_AXIS = $(AX_DIR)/axis
+AX_DIR_AXIS = $(AX_DIR)/deploy
 
 AX_INC_DIR_COMMON = $(AX_SRC_DIR)/common
 AX_INC_DIR_SOAP = $(AX_SRC_DIR)/soap
