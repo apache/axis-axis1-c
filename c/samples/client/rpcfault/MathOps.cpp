@@ -8,6 +8,20 @@
 
 #include <axis/server/AxisWrapperAPI.h>
 
+extern int Axis_DeSerialize_SOAPStructFault(SOAPStructFault* param,
+    IWrapperSoapDeSerializer *pDZ);
+                                                                                                                             
+extern void* Axis_Create_SOAPStructFault(SOAPStructFault *Obj, bool bArray = false,
+    int nSize=0);
+                                                                                                                             
+extern void Axis_Delete_SOAPStructFault(SOAPStructFault* param, bool bArray = false,
+    int nSize=0);
+                                                                                                                             
+extern int Axis_Serialize_SOAPStructFault(SOAPStructFault* param, IWrapperSoapSerializer* pSZ,
+    bool bArray = false);
+                                                                                                                             
+extern int Axis_GetSize_SOAPStructFault();
+
 bool CallBase::bInitialized;
 CallFunctions CallBase::ms_VFtable;
 MathOps::MathOps(const char* pchEndpointUri)
@@ -61,6 +75,8 @@ int MathOps::div(int Value0, int Value1)
                             getCmplxObject((void*) Axis_DeSerialize_SOAPStructFault, 
                             (void*) Axis_Create_SOAPStructFault, 
                             (void*) Axis_Delete_SOAPStructFault,"faultstruct", 0);
+                            throw AxisException();
+                        
                     }
                 }
 	}

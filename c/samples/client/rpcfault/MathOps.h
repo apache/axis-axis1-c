@@ -7,6 +7,8 @@
 #define __MATHOPS_CLIENTSTUB_H__OF_AXIS_INCLUDED_
 
 #include <axis/client/Call.h>
+#include "SOAPStructFault.h"
+#include <axis/server/AxisException.h>
 #include <ctype.h>
 
 class MathOps 
