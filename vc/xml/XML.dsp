@@ -132,6 +132,10 @@ SOURCE=..\..\include\axis\xml\QName.h
 
 SOURCE=..\..\include\axis\xml\StartElement.h
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\include\axis\xml\XMLParser.h
+# End Source File
 # End Group
 # End Target
 # End Project

@@ -80,6 +80,7 @@ SoapParserExpat::SoapParserExpat()
 SoapParserExpat::~SoapParserExpat()
 {
 	if (m_pLastEvent) delete m_pLastEvent;
+	XML_ParserFree(m_Parser);
 }
 
 void SoapParserExpat::startElement(const XMLCh *qname,const XMLCh **attrs)
@@ -180,6 +181,7 @@ const AnyElement* SoapParserExpat::Next()
 		{
 			nStatus = ParseNext();
 			if (TRANSPORT_FAILED == nStatus) return NULL;
+			if (AXIS_FAIL == m_nStatus) return NULL;
 		}
 
 		if (!m_Events.empty())

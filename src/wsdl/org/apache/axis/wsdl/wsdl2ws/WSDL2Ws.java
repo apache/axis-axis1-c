@@ -587,12 +587,10 @@ public class WSDL2Ws {
 			Element element = symbolTable.getElement(part.getElementName());
 			qname = element.getRefType().getQName();
 		}
-		TypeEntry tentry = symbolTable.getType(qname);
-		
+		TypeEntry tentry = symbolTable.getType(qname);		
 		Type type = this.typeMap.getType(qname);
 		if(type == null)
 			throw new WrapperFault("unregisterd type "+qname+" refered");
-			
 		ParameterInfo parainfo = 
 			new ParameterInfo(type,part.getName());
 		parainfo.setElementName(part.getElementName());

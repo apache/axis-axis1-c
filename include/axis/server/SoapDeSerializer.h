@@ -66,20 +66,8 @@
 #include <axis/common/IHandlerSoapDeSerializer.h>
 #include <axis/soap/SoapEnvVersions.h>
 #include <axis/soap/HeaderBlock.h>
-
-#ifdef USE_EXPAT_PARSER
-#include "SoapParserExpat.h"
-#define SoapParser SoapParserExpat
-#elif USE_XERCES_PARSER
-#include "SoapParserXerces.h"
-#define SoapParser SoapParserXerces
-#else
-#include "SoapParser.h"
-#endif
-
+#include <axis/xml/XMLParser.h>
 #include <axis/xml/AnyElement.h>
-
-#include <string>
 
 class SoapFault;
 class SoapMethod;
@@ -87,11 +75,10 @@ class SoapBody;
 class SoapEnvelope;
 class SoapHeader;
 class IHeaderBlock;
+
 /**
     @class SoapDeSerializer
     @brief interface for the SoapDeSerializer class.
-
-
     @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
 */
 class SoapDeSerializer : public IHandlerSoapDeSerializer
@@ -99,7 +86,7 @@ class SoapDeSerializer : public IHandlerSoapDeSerializer
 private:
 	SoapEnvelope* m_pEnv;
 	SoapHeader* m_pHeader;
-    SoapParser* m_pParser;
+    XMLParser* m_pParser;
 	/* Current Serialization Style */
 	AXIS_BINDING_STYLE m_nStyle;
 	/* Last procesed node needed when the attributes are processed */
@@ -191,10 +178,13 @@ public:
     struct tm AXISCALL GetAttributeAsTime(const AxisChar* pName, const AxisChar* pNamespace);
     long AXISCALL GetAttributeAsDuration(const AxisChar* pName, const AxisChar* pNamespace);
 	
-	void* CreateArray(XSDTYPE nType, int nSize);
-	void DeleteArray(Axis_Array* pArray , XSDTYPE nType);
+//	void* CreateArray(XSDTYPE nType, int nSize);
+//	void DeleteArray(Axis_Array* pArray , XSDTYPE nType);
 	void SetStyle(AXIS_BINDING_STYLE nStyle){ m_nStyle = nStyle;};
 	XSDTYPE GetXSDType(const AnyElement* pElement);
+	int AXISCALL GetStatus(){return m_nStatus;};
+
+private:
 	int GetElementForAttributes(const AxisChar* pName, const AxisChar* pNamespace);
 	xsd__base64Binary DecodeFromBase64Binary(const AxisChar* pValue);
 	xsd__hexBinary DecodeFromHexBinary(const AxisChar* pValue);

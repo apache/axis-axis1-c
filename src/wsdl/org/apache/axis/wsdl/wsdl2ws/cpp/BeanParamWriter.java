@@ -206,7 +206,7 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 					"\n\t\t, \""+attribs[i].getParamName()+"\", Axis_URI_"+attribs[i].getTypeName()+");\n");				
 			}		
 		}
-		writer.write("\treturn AXIS_SUCCESS;\n");
+		writer.write("\treturn pIWSDZ->GetStatus();\n");
 		writer.write("}\n");
 	}
 	
