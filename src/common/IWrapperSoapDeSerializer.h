@@ -1,5 +1,4 @@
 /* -*- C++ -*- */
-
 /*
  * The Apache Software License, Version 1.1
  *
@@ -57,50 +56,34 @@
  *
  *
  *
- * @author Susantha Kumara (skumara@virtusa.com)
+ * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
  *
  */
-// SoapDeSerializer.h: interface for the SoapDeSerializer class.
+
+// IWrapperSoapDeSerializer.h: interface for the IWrapperSoapDeSerializer class.
 //
 //////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_SOAPDESERIALIZER_H__FD0E7C3B_B887_480A_9E2A_20736A88B09B__INCLUDED_)
-#define AFX_SOAPDESERIALIZER_H__FD0E7C3B_B887_480A_9E2A_20736A88B09B__INCLUDED_
+#if !defined(AFX_IWRAPPERSOAPDESERIALIZER_H__A6C89D23_4098_4A73_BFD7_D8F115AD9BA0__INCLUDED_)
+#define AFX_IWRAPPERSOAPDESERIALIZER_H__A6C89D23_4098_4A73_BFD7_D8F115AD9BA0__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include "../common/IWrapperSoapDeSerializer.h"
-#include "../common/IHandlerSoapDeSerializer.h"
-#include "XMLStreamHandler.h"
+#include "ISoapDeSerializer.h"
+#include <string>
+using namespace std;
+class IParam;
 
-class SoapEnvelope;
-class SoapHeader;
-class SoapMethod;
-class SoapBody;
-class SoapFault;
-
-class SoapDeSerializer : public IWrapperSoapDeSerializer, public IHandlerSoapDeSerializer
+class IWrapperSoapDeSerializer : public ISoapDeSerializer
 {
-private:
-	XMLStreamHandler* m_pHandler;
-	SAX2XMLReader* m_pParser;
 public:
-	int GetVersion();
-	string& GetMethodName();
-	void Init();
-	IParam* GetParam();
-	int Deserialize(IParam* pIParam, int bHref);
-	SoapFault* GetFault();
-	SoapMethod* GetMethod();
-	SoapBody* GetBody();
-	SoapHeader* GetHeader();
-	SoapEnvelope* GetEnvelope();
-	int SetStream(InputSource* sStream);
-	SoapDeSerializer();
-	virtual ~SoapDeSerializer();
+	virtual string& GetMethodName()=0;
+	virtual IParam* GetParam()=0;
+	virtual int Deserialize(IParam* pIParam, int bHref)=0;
+	virtual ~IWrapperSoapDeSerializer() {};
 
 };
 
-#endif // !defined(AFX_SOAPDESERIALIZER_H__FD0E7C3B_B887_480A_9E2A_20736A88B09B__INCLUDED_)
+#endif // !defined(AFX_IWRAPPERSOAPDESERIALIZER_H__A6C89D23_4098_4A73_BFD7_D8F115AD9BA0__INCLUDED_)

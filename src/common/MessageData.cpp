@@ -120,7 +120,7 @@ ISoapSerializer* MessageData::getSoapSerializer()
 }
 */
 
-ISoapDeSerializer* MessageData::getSoapDeserializer()
+IWrapperSoapDeSerializer* MessageData::getSoapDeserializer()
 {
 	return m_pDZ;
 }
@@ -145,4 +145,14 @@ void MessageData::getSoapSerializer(IHandlerSoapSerializer **pIHandlerSoapSerial
 void MessageData::getSoapSerializer(IWrapperSoapSerializer **pIWrapperSoapSerializer)
 {
 	*pIWrapperSoapSerializer = dynamic_cast<IWrapperSoapSerializer*>(m_pSZ);
+}
+
+void MessageData::getSoapDeSerializer(IWrapperSoapDeSerializer **pIWrapperSoapDeSerializer)
+{
+	*pIWrapperSoapDeSerializer= dynamic_cast<IWrapperSoapDeSerializer*>(m_pDZ);
+}
+
+void MessageData::getSoapDeSerializer(IHandlerSoapDeSerializer **pIHandlerSoapDeSerializer)
+{
+	*pIHandlerSoapDeSerializer= dynamic_cast<IHandlerSoapDeSerializer*>(m_pDZ);
 }
