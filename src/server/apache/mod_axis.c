@@ -7,10 +7,10 @@
 #include "../../common/Packet.h"
 #include <string.h>
 #include <malloc.h>
+
 /*
 AxisConfig.h contains definitions for the wsdd file path
 */
-#include "../../common/AxisConfig.h"
 
 #define xxx ap_log_rerror(APLOG_MARK,APLOG_ERR, globr,"logged here");
 #define yyy ap_log_rerror(APLOG_MARK, APLOG_ERR, globr,"logged here");
@@ -35,7 +35,8 @@ void module_init(server_rec *svr_rec, pool* p)
 	/*
 	WSDDFILEPATH Defined in common/AxisConfig.h
 	*/
-	initialize_module(1, WSDDFILEPATH);
+    
+	initialize_module(1, "");
 }
 
 int send_response_bytes(const char* res, const void* opstream)

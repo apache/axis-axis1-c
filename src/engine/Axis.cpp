@@ -87,7 +87,9 @@
 #include "DeserializerPool.h"
 #include "../wsdd/WSDDDeployment.h"
 #include "../common/AxisUtils.h"
+#include "../common/AxisConfig.h"
 #include "../wsdd/WSDDKeywords.h"
+
 
 #define BYTESTOREAD 64
 //the relative location of the wsdl files hardcoded
@@ -108,6 +110,7 @@ SerializerPool* g_pSerializerPool;
 HandlerPool* g_pHandlerPool;
 //un synchronized read-only global variables.
 WSDDDeployment* g_pWSDDDeployment;
+AxisConfig* g_pConfig;
 
 #define AXISTRACE1 
 
@@ -235,7 +238,8 @@ extern "C" int initialize_module(int bServer, const char * wsddPath)
 	URIMapping::Initialize();
 	SoapFault::initialize();
 	ModuleInitialize();
-	if (SUCCESS != g_pWSDDDeployment->LoadWSDD(wsddPath)) return FAIL;
+    char* pWsddPath = g_pConfig->GetWsddFilePath();
+	if (SUCCESS != g_pWSDDDeployment->LoadWSDD(pWsddPath)) return FAIL;
 	return SUCCESS;
 }
 
@@ -268,6 +272,9 @@ void ModuleInitialize()
 	g_pHandlerPool = new HandlerPool();
 	//un synchronized read-only global variables.
 	g_pWSDDDeployment = new WSDDDeployment();
+    g_pConfig = new AxisConfig();
+    
+    
 }
 
 void ModuleUnInitialize()
@@ -282,4 +289,5 @@ void ModuleUnInitialize()
 	delete g_pHandlerPool;
 	//un synchronized read-only global variables.
 	delete g_pWSDDDeployment;
+    delete g_pConfig;
 }
