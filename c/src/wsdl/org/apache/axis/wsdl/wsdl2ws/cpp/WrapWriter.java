@@ -239,7 +239,6 @@ public class WrapWriter extends CPPClassWriter{
 		//create and populate variables for each parameter
 		String paraTypeName;
 		ArrayList paramsB = new ArrayList(params);
-		Iterator p =  params.iterator();
 		for (int i = 0; i < paramsB.size(); i++) {
 			paraTypeName = ((ParameterInfo)paramsB.get(i)).getLangName();
 			Type type;

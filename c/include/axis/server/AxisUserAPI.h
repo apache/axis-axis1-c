@@ -58,9 +58,7 @@
  * @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
  *
  */
-// AxisUserAPI.h: interface for the AxisUserAPI class.
-//
-//////////////////////////////////////////////////////////////////////
+/* AxisUserAPI.h: interface for the AxisUserAPI class.*/
 
 #if !defined(AFX_AXISUSERAPI_H__6E27008D_DCA0_4F28_AC82_FEEBE1A1CBBB__INCLUDED_)
 #define AFX_AXISUSERAPI_H__6E27008D_DCA0_4F28_AC82_FEEBE1A1CBBB__INCLUDED_
@@ -96,4 +94,4 @@ typedef char* Axis_AnyURI;
 
 #endif
 
-#endif // !defined(AFX_AXISUSERAPI_H__6E27008D_DCA0_4F28_AC82_FEEBE1A1CBBB__INCLUDED_)
+#endif /* !defined(AFX_AXISUSERAPI_H__6E27008D_DCA0_4F28_AC82_FEEBE1A1CBBB__INCLUDED_) */

@@ -1,5 +1,3 @@
-/* -*- C++ -*- */
-
 /*
  * The Apache Software License, Version 1.1
  *
@@ -122,4 +120,9 @@ extern void ModuleUnInitialize();
 #define APINOPARAMS void*p
 #endif
 
+#if defined (__GNUC__)
+#define AXISDESTRUCTOR void* unused; void AXISAPI(destructor,(APINOPARAMS))
+#else 
+#define AXISDESTRUCTOR void AXISAPI(destructor,(APINOPARAMS))
+#endif
 #endif /*__GDEFINE_INCLUDED__*/

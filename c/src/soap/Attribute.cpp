@@ -119,13 +119,13 @@ int Attribute::serialize(SoapSerializer& pSZ) const
 	int intStatus= FAIL;
 
 	if (isSerializable()) {		
-		pSZ<< " ";
+		pSZ.Serialize(" ", NULL);
 
 		if(!m_prefix.empty()) {			
-			pSZ << m_prefix.c_str() << ":";
+			pSZ.Serialize(m_prefix.c_str(), ":", NULL);
 		}
 
-		pSZ<< m_localname.c_str() << "=\"" << m_value.c_str() << "\"";
+		pSZ.Serialize(m_localname.c_str(), "=\"", m_value.c_str(), "\"", NULL);
 
 		intStatus= SUCCESS;
 	}

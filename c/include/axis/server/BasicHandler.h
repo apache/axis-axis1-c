@@ -61,9 +61,7 @@
  *
  */
 
-// BasicHandler.h: interface for the BasicHandler class.
-//
-//////////////////////////////////////////////////////////////////////
+/* BasicHandler.h: interface for the BasicHandler class.*/
 
 #if !defined(AFX_BASICHANDLER_H__FFF77AB5_015C_4B48_9BAC_D84A7C493015__INCLUDED_)
 #define AFX_BASICHANDLER_H__FFF77AB5_015C_4B48_9BAC_D84A7C493015__INCLUDED_
@@ -89,7 +87,7 @@ typedef struct BasicHandlerTag
 } BasicHandler;
 typedef struct BasicHandlerXTag
 {
-	void AXISAPI(destructor, (APINOPARAMS))
+	AXISDESTRUCTOR
 
 #endif
 
@@ -104,4 +102,4 @@ typedef struct BasicHandlerXTag
 #else
 } BasicHandlerX;
 #endif
-#endif // !defined(AFX_BASICHANDLER_H__FFF77AB5_015C_4B48_9BAC_D84A7C493015__INCLUDED_)
+#endif /* !defined(AFX_BASICHANDLER_H__FFF77AB5_015C_4B48_9BAC_D84A7C493015__INCLUDED_) */

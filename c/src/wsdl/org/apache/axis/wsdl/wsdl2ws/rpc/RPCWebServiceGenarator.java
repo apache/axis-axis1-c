@@ -105,7 +105,7 @@ public class RPCWebServiceGenarator implements WebServiceGenarator{
 				(new Genarator(WrapperConstants.GENERATOR_WRAPPER_H, wscontext)).genarate();
 				(new Genarator(WrapperConstants.GENERATOR_SERVICE_C, wscontext)).genarate();
 				(new Genarator(WrapperConstants.GENERATOR_PARAM_C_ALL, wscontext)).genarate();	
-				(new Genarator(WrapperConstants.GENERATOR_CLASSLOADER_CPP, wscontext)).genarate();				 				 	
+				(new Genarator(WrapperConstants.GENERATOR_CLASSLOADER_C, wscontext)).genarate();				 				 	
 			}else{
 				 (new Genarator(WrapperConstants.GENERATOR_CLIENT_STUB_C, wscontext)).genarate();
 				 (new Genarator(WrapperConstants.GENERATOR_CLIENT_STUB_H, wscontext)).genarate();

@@ -145,7 +145,7 @@ public class CPPUtils {
 		type2getValueMethodName.put("Axis_Boolean","GetInt");
 		String methodname;
 		if((methodname = (String)type2getValueMethodName.get(typeName))!= null)
-			return methodname+"()";
+			return methodname;
 		return null;	
 	}
 	
