@@ -159,6 +159,10 @@ SOURCE=..\..\src\common\GDefine.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\Handler.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\IAccessBean.h
 # End Source File
 # Begin Source File
