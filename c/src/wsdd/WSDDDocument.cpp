@@ -348,10 +348,10 @@ void WSDDDocument::AddAllowedRolesToService(AxisString& value)
 		do 
 		{
 			pos = value.find(ROLENAME_SEPARATOR, prepos);
-//			cout << value.substr(prepos, pos) << endl;
-			m_pService->AddAllowedRole(value.substr(prepos, pos));
+			if (AxisString::npos == pos) break;
+			m_pService->AddAllowedRole(value.substr(prepos, pos-prepos));
 			prepos = pos + 1;
-		} while (AxisString::npos != pos);
+		} while (true);
 	}
 }
 
@@ -363,10 +363,10 @@ void WSDDDocument::AddAllowedMethodsToService(AxisString& value)
 		do 
 		{
 			pos = value.find(METHODNAME_SEPARATOR, prepos);
-//			cout << value.substr(prepos, pos) << endl;
-			m_pService->AddAllowedMethod(value.substr(prepos, pos));
+			if (AxisString::npos == pos) break;
+			m_pService->AddAllowedMethod(value.substr(prepos, pos-prepos));
 			prepos = pos + 1;
-		} while (AxisString::npos != pos);
+		} while (true);
 	}
 }
 

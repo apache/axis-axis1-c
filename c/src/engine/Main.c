@@ -79,7 +79,7 @@ extern int process_request(Ax_soapstream *str);
 			soapenv:mustUnderstand=\"true\" >Hello Req Header Val</t:Transaction></soapenv:Header> \
 			<soapenv:Body><add soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"><op1 xsi:type=\"xsd:int\">3</op1><op2 xsi:type=\"xsd:int\">4</op2></add></soapenv:Body></soapenv:Envelope>";
 
-char* ip = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><soapenv:Body><add soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"><op1 xsi:type=\"xsd:int\">3</op1><op2 xsi:type=\"xsd:int\">4</op2></add></soapenv:Body></soapenv:Envelope>";
+char* ip = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><soapenv:Body><Add soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"><op1 xsi:type=\"xsd:int\">3</op1><op2 xsi:type=\"xsd:int\">4</op2></Add></soapenv:Body></soapenv:Envelope>";
 //AxisChar* ip = L"<?xml version=\"1.0\" encoding=\"UTF-8\"?><soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><soapenv:Body><add soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"><op1 xsi:type=\"xsd:int\">3</op1><op2 xsi:type=\"xsd:int\">4</op2></add></soapenv:Body></soapenv:Envelope>";
 
 //	char* ip = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><soapenv:Body><echo soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"><op1 xsi:type=\"xsd:string\">Hello World!</op1></echo></soapenv:Body></soapenv:Envelope>";
@@ -161,8 +161,25 @@ char* ip = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><soapenv:Envelope xmlns:so
 		</soapenv:Body>\
 		</soapenv:Envelope>";
 
+	//Add Distance between two Points
+//	char* ip = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\
+		<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\
+		<soapenv:Body>\
+		<Distance soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">\
+		<Point1 xsi:type=\"ns1:Point\" xmlns:ns1=\"http://www.opensource.lk/Axis/\">\
+		<x xsi:type=\"xsd:int\">23</x>\
+		<y xsi:type=\"xsd:int\">77</y>\
+		</Point1>\
+		<Point2 xsi:type=\"ns2:Point\" xmlns:ns2=\"http://www.opensource.lk/Axis/\">\
+		<x xsi:type=\"xsd:int\">77</x>\
+		<y xsi:type=\"xsd:int\">23</y>\
+		</Point2>\
+		</Distance>\
+		</soapenv:Body>\
+		</soapenv:Envelope>";
+
 	//Array of Point
-	//char* ip = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><soapenv:Envelope xmlns:soapenv=\"\
+//	char* ip = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><soapenv:Envelope xmlns:soapenv=\"\
 		http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"\
 		xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><soapenv:Body><EchoPointArray \
 		soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"><enc:Array xmlns:def=\"\
@@ -181,6 +198,29 @@ char* ip = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><soapenv:Envelope xmlns:so
 		<y xsi:type=\"xsd:int\">66</y>\
 		</Point>\
 		</enc:Array> </EchoPointArray></soapenv:Body></soapenv:Envelope>";
+	//Get Perimeter of a Triangle
+//	char* ip = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><soapenv:Envelope xmlns:soapenv=\"\
+		http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"\
+		xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"> \
+		<soapenv:Body> \
+		<Perimeter soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"> \
+		<Triangle xsi:type=\"ns1:Triangle\" xmlns:ns1=\"http://www.opensource.lk/Axis/\"> \
+		<Point>\
+		<x xsi:type=\"xsd:int\">11</x>\
+		<y xsi:type=\"xsd:int\">22</y>\
+		</Point>\
+		<Point>\
+		<x xsi:type=\"xsd:int\">33</x>\
+		<y xsi:type=\"xsd:int\">44</y>\
+		</Point>\
+		<Point>\
+		<x xsi:type=\"xsd:int\">55</x>\
+		<y xsi:type=\"xsd:int\">66</y>\
+		</Point>\
+		</Triangle> \
+		</Perimeter> \
+		</soapenv:Body> \
+		</soapenv:Envelope>";
 
 int main() 
 {		
@@ -192,19 +232,20 @@ int main()
 	str->str.ip_stream = "is";
 	str->str.op_stream = "os";
 	str->so.http.ip_headers = (Ax_header*)malloc(sizeof(Ax_header));
-	str->so.http.ip_headers->headername = SOAPACTIONHEADER;
-	str->so.http.ip_headers->headervalue = "\"Calculator\"";	
-	str->so.http.ip_headercount = 1;
+//	str->so.http.ip_headers->headername = SOAPACTIONHEADER;
+//	str->so.http.ip_headers->headervalue = "\"Calculator\"";	
+	str->so.http.ip_headercount = 0;
+	str->so.http.uri_path = "http://someurl/axis/Calculator";
 
-//	printf("soap request :\n %s\n", ip);
+	printf("soap request :\n %s\n", ip);
 //	wprintf(L"soap request :\n %s\n", ip);
 
 	initialize_module();
-	for (xx =0; xx < 1000 ; xx++)
+	for (xx =0; xx < 10 ; xx++)
 	{
-	//	printf("Sending Soap Response :\n");
+		printf("Sending Soap Response :\n");
 		process_request(str);
-	//	printf("\n");
+		printf("\n");
 	}
 	uninitialize_module();
 	free(str->so.http.ip_headers);

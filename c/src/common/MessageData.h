@@ -68,10 +68,6 @@
 #if !defined(AFX_MESSAGEDATA_H__8B839E07_3D23_46C6_8743_543B4917D202__INCLUDED_)
 #define AFX_MESSAGEDATA_H__8B839E07_3D23_46C6_8743_543B4917D202__INCLUDED_
 
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
-
 #include "GDefine.h"
 #include "IMessageData.h"
 #include "../wsdd/WSDDService.h"

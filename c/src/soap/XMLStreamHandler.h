@@ -73,7 +73,6 @@
 #include <xercesc/framework/MemBufInputSource.hpp>
 
 #include "../common/Param.h"
-#include "../common/AccessBean.h"
 #include "../common/ArrayBean.h"
 #include "SoapEnvelope.h"
 #include "SoapHeader.h"
@@ -117,14 +116,13 @@ private:
 	int Success();
 	Param m_Param; //Param to which each parameter data is extracted
 	ArrayBean m_ArrayBean;
-	AccessBean m_AccessBean;
+	ComplexObjectHandler m_AccessBean;
 	int m_Success;
 	SOAP_PARSE_LEVEL m_PL0;
 	SOAP_PARSE_LEVEL m_PL1;
 	SOAP_PARSE_LEVEL m_PL2;
 	AxisString m_sLastElement;
-
-	HeaderBlock* pHeaderBlock;
+	HeaderBlock* m_pHeaderBlock;
 private:
 	void createHeaderBlock(const XMLCh *const uri,const XMLCh *const localname,const XMLCh *const qname,const Attributes &attrs);
 	int m_nParamNestingLevel;

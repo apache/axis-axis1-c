@@ -160,9 +160,9 @@ extern "C" int process_request(Ax_soapstream *str)
 				string sServiceName;
 				bool bNoSlash = false;
 
-				if (sUri.find("/axis/") != string::npos)
+				if (sUri.find(AXIS_URI_EXTENSION) != string::npos)
 				{
-					sUriWOAxis = sUri.substr(sUri.find("/axis/") + 6);
+					sUriWOAxis = sUri.substr(sUri.find(AXIS_URI_EXTENSION) + 6);
 				}
 				else
 				{	

@@ -68,10 +68,6 @@
 #if !defined(AFX_SOAPENVELOPE_H__285E1A2E_AC87_4F69_BAF2_4D556F43EC7C__INCLUDED_)
 #define AFX_SOAPENVELOPE_H__285E1A2E_AC87_4F69_BAF2_4D556F43EC7C__INCLUDED_
 
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
-
 #include "SoapHeader.h"
 #include "SoapBody.h"
 #include "SoapEnvVersions.h"

@@ -79,6 +79,7 @@ XMLStreamHandler::XMLStreamHandler()
 	m_pBody = NULL;
 	m_pFault = NULL;
 	m_pMethod = NULL;
+	m_pHeaderBlock = NULL;
 	m_it = NULL;
 }
 
@@ -89,6 +90,7 @@ XMLStreamHandler::~XMLStreamHandler()
 	if (m_pBody) delete m_pBody;
 	if (m_pFault) delete m_pFault;
 	if (m_pMethod) delete m_pMethod;
+	if (m_pHeaderBlock) delete m_pHeaderBlock;
 }
 /*
  * Please do a bench test with following parameter inside soap method
@@ -223,7 +225,7 @@ void XMLStreamHandler::endElement (const XMLCh *const uri,const XMLCh *const loc
 		break;
 	case SOAP_HEADER_BLOCK: //enf of a HeaderBlock
 		//Add HeaderBlock to Header
-		m_pHead->addHeaderBlock(pHeaderBlock);
+		m_pHead->addHeaderBlock(m_pHeaderBlock);
 
 		m_PL1= SOAP_UNKNOWN;
 		break;
@@ -242,7 +244,7 @@ void  XMLStreamHandler::characters (const XMLCh *const chars,const unsigned int 
 	{
 		//Get the value of the header entry
 		CharacterElement* pCharacterElement= new CharacterElement(chars);
-		pHeaderBlock->addChild(pCharacterElement);
+		m_pHeaderBlock->addChild(pCharacterElement);
 	}
 }
 
@@ -307,9 +309,9 @@ void XMLStreamHandler::SetParamType(const Attributes &attrs)
 						{
 							//custom data type
 							m_Param.m_Type = USER_TYPE;
-							m_Param.m_Value.pBean = &m_AccessBean; //ArrayBean can be used as an AccessBean;
-							m_Param.m_Value.pBean->m_TypeName = sType;
-							m_Param.m_Value.pBean->m_URI = m_NsStack[sPrefix];
+							m_Param.m_Value.pCplxObj = &m_AccessBean; //ArrayBean can be used as an AccessBean;
+							m_Param.m_Value.pCplxObj->m_TypeName = sType;
+							m_Param.m_Value.pCplxObj->m_URI = m_NsStack[sPrefix];
 						}
 					}
 					else
@@ -437,6 +439,9 @@ void XMLStreamHandler::Init()
 	if (m_pBody) delete m_pBody;
 	if (m_pFault) delete m_pFault;
 	if (m_pMethod) delete m_pMethod;
+	m_ArrayBean.m_size.clear();
+	m_AccessBean.Init();
+	m_sLastElement = L"";
 	m_pEnv = NULL;
 	m_pHead = NULL;
 	m_pBody = NULL;
@@ -559,14 +564,14 @@ void XMLStreamHandler::FillMethod(const XMLCh *const uri, const XMLCh *const loc
 
 void XMLStreamHandler::createHeaderBlock(const XMLCh *const uri, const XMLCh *const localname, const XMLCh *const qname, const Attributes &attrs)
 {
-	pHeaderBlock= new HeaderBlock();
+	m_pHeaderBlock= new HeaderBlock();
 	AxisString str;	
 	str = qname;
 	if (str.find(L':') != AxisString::npos) 
 	{
 		str = str.substr(0, str.find(L':'));
-		pHeaderBlock->setPrefix(str.c_str());		
+		m_pHeaderBlock->setPrefix(str.c_str());		
 	}
-	pHeaderBlock->setLocalName(localname);
-	pHeaderBlock->setUri(uri);
+	m_pHeaderBlock->setLocalName(localname);
+	m_pHeaderBlock->setUri(uri);
 }

@@ -58,13 +58,12 @@
  * @author Susantha Kumara (skumara@virtusa.com)
  *
  */
-// ArrayBean.cpp: implementation of the ArrayBeanI class.
+// ArrayBean.cpp: implementation of the ArrayBean class.
 //
 //////////////////////////////////////////////////////////////////////
-#include "AccessBean.h"
+#include "Param.h"
 #include "ArrayBean.h"
 #include "BasicTypeSerializer.h"
-#include "Param.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -102,15 +101,22 @@ ArrayBean::~ArrayBean()
 		//continue this for all basic types
 	case USER_TYPE: //array of user types
 		{
-			AccessBean* pItem;
-			int itemsize = m_value.cta->GetSize();
-			list<int>::iterator it = m_size.begin();
-			int blocksize = GetArrayBlockSize(it);
-			unsigned long ptrval = reinterpret_cast<unsigned long>(m_value.cta);
-			for (int x=0; x<blocksize; x++)
+			if (m_value.cta)
 			{
-				pItem = reinterpret_cast<AccessBean*>(ptrval+x*itemsize);
-				delete pItem;
+				list<int>::iterator it = m_size.begin();
+				int blocksize = GetArrayBlockSize(it);
+/*
+				void* pItem;
+				int itemsize = m_value.cta->pSizeFunct();
+				unsigned long ptrval = reinterpret_cast<unsigned long>(m_value.cta->pObject);
+				for (int x=0; x<blocksize; x++)
+				{
+					pItem = reinterpret_cast<void*>(ptrval+x*itemsize);
+					m_value.cta->pDelFunct(pItem);
+				}
+*/			
+				m_value.cta->pDelFunct(m_value.cta->pObject, true, blocksize);
+				delete m_value.cta;
 			}
 		}
 		break;
@@ -137,29 +143,7 @@ int ArrayBean::GetArrayBlockSize(list<int>::iterator it)
 		return size;
 	}
 }
-/*
-void ArrayBean::DeleteArray(list<int>::iterator it, int nItemOffset, int nItemSize, int nDim)
-{
-	AccessBean* p;
-	nDim--;
-	if (nDim > 0)
-	{	
-		int curdim = *it;
-		it++;
-		for (int d=0; d<curdim; d++) //do for each dimension
-		{
-			DeleteArray(it,nItemOffset + GetArrayBlockSize(it)*d,nItemSize,nDim);
-		}
-		return;
-	}
-	unsigned long ptrval = reinterpret_cast<unsigned long>(m_value.cta) + nItemOffset*nItemSize;
-	for (int x=0; x<*it; x++)
-	{
-		p = reinterpret_cast<AccessBean*>(ptrval+x*nItemSize);
-		delete p;
-	}
-}
-*/
+
 int ArrayBean::DeSerialize(IWrapperSoapDeSerializer *pDZ)
 {
 	Param* p;
@@ -208,16 +192,16 @@ int ArrayBean::DeSerialize(IWrapperSoapDeSerializer *pDZ)
 		//continue this for all basic types
 	case USER_TYPE: //array of user types
 		{
-			IAccessBean* pItem;
-			int itemsize = m_value.cta->GetSize();
+			void* pItem;
+			int itemsize = m_value.cta->pSizeFunct();
 			list<int>::iterator it = m_size.begin();
 			int blocksize = GetArrayBlockSize(it);
-			unsigned long ptrval = reinterpret_cast<unsigned long>(m_value.cta);
+			unsigned long ptrval = reinterpret_cast<unsigned long>(m_value.cta->pObject);
 			for (int x=0; x<blocksize; x++)
 			{
 				pDZ->GetParam(); //discard outer param corresponding to custom type - get only inner members
-				pItem = reinterpret_cast<IAccessBean*>(ptrval+x*itemsize);
-				pItem->DeSerialize(pDZ);
+				pItem = reinterpret_cast<void*>(ptrval+x*itemsize);
+				m_value.cta->pDZFunct(pItem, pDZ);
 			}
 		}
 		break;
@@ -225,30 +209,7 @@ int ArrayBean::DeSerialize(IWrapperSoapDeSerializer *pDZ)
 	}
 	return SUCCESS;
 }
-/*
-int ArrayBean::DeSerializeArray(list<int>::iterator it, int nItemOffset, int nItemSize, int nDim, SoapDeSerializer *pDZ)
-{
-	AccessBean* p;
-	nDim--;
-	if (nDim > 0)
-	{	
-		int curdim = *it;
-		it++;
-		for (int d=0; d<curdim; d++) //do for each dimension
-		{
-			DeSerializeArray(it,nItemOffset + GetArrayBlockSize(it)*d,nItemSize,nDim,pDZ);
-		}
-		return SUCCESS;
-	}
-	unsigned long ptrval = reinterpret_cast<unsigned long>(m_value.cta) + nItemOffset*nItemSize;
-	for (int x=0; x<*it; x++)
-	{
-		p = reinterpret_cast<AccessBean*>(ptrval+x*nItemSize);
-		p->DeSerialize(pDZ);
-	}
-	return SUCCESS;
-}
-*/
+
 int ArrayBean::Serialize(IWrapperSoapSerializer& pSZ)
 {	
 	switch (m_type)
@@ -291,15 +252,15 @@ int ArrayBean::Serialize(IWrapperSoapSerializer& pSZ)
 		break;
 	case USER_TYPE:
 		{
-			AccessBean* pItem;
-			int itemsize = m_value.cta->GetSize();
+			void* pItem;
+			int itemsize = m_value.cta->pSizeFunct();
 			list<int>::iterator it = m_size.begin();
 			int blocksize = GetArrayBlockSize(it);
-			unsigned long ptrval = reinterpret_cast<unsigned long>(m_value.cta);
+			unsigned long ptrval = reinterpret_cast<unsigned long>(m_value.cta->pObject);
 			for (int x=0; x<blocksize; x++)
 			{
-				pItem = reinterpret_cast<AccessBean*>(ptrval+x*itemsize);
-				pItem->Serialize(pSZ);
+				pItem = reinterpret_cast<void*>(ptrval+x*itemsize);
+				m_value.cta->pSZFunct(pItem, pSZ, true);
 			}
 		}
 		break;
@@ -307,30 +268,7 @@ int ArrayBean::Serialize(IWrapperSoapSerializer& pSZ)
 	}
 	return SUCCESS;
 }
-/*
-int ArrayBean::SerializeArray(list<int>::iterator it, int nItemOffset, int nItemSize, int nDim, string& sSerialized)
-{
-	AccessBean* p;
-	nDim--;
-	if (nDim > 0)
-	{	
-		int curdim = *it;
-		it++;
-		for (int d=0; d<curdim; d++) //do for each dimension
-		{
-			SerializeArray(it,nItemOffset + GetArrayBlockSize(it)*d,nItemSize,nDim,sSerialized);
-		}
-		return SUCCESS;
-	}
-	unsigned long ptrval = reinterpret_cast<unsigned long>(m_value.cta) + nItemOffset*nItemSize;
-	for (int x=0; x<*it; x++)
-	{
-		p = reinterpret_cast<AccessBean*>(ptrval+x*nItemSize);
-		p->Serialize(sSerialized);
-	}
-	return SUCCESS;
-}
-*/
+
 void ArrayBean::AddDimension(int nDim)
 {
 	m_size.push_back(nDim);
@@ -339,4 +277,14 @@ void ArrayBean::AddDimension(int nDim)
 void ArrayBean::SetItemName(const AxisChar* sName)
 {
 	m_ItemName = sName;
+}
+
+void ArrayBean::SetTypeName(const AxisChar* sName)
+{
+	m_TypeName = sName;
+}
+
+void ArrayBean::SetUri(const AxisChar* sURI)
+{
+	m_URI = sURI;
 }

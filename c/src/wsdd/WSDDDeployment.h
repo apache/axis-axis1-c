@@ -69,10 +69,6 @@
 #if !defined(AFX_WSDDDEPLOYMENT_H__2B3E0205_06F3_47C1_8D9C_479CBFB8ACC2__INCLUDED_)
 #define AFX_WSDDDEPLOYMENT_H__2B3E0205_06F3_47C1_8D9C_479CBFB8ACC2__INCLUDED_
 
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
-
 #include "WSDDService.h"
 #include "WSDDHandler.h"
 #include "WSDDTransport.h"

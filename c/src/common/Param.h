@@ -69,22 +69,18 @@
 #if !defined(AFX_PARAM_H__351B13BB_5D03_40C5_93F5_56D17295A8BD__INCLUDED_)
 #define AFX_PARAM_H__351B13BB_5D03_40C5_93F5_56D17295A8BD__INCLUDED_
 
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
-
 #include "IParam.h"
 #include "BasicTypeSerializer.h"
 
 #include <string>
 using namespace std;
 
-class AccessBean;
 class ArrayBean;
 
 class Param : public IParam
 {
 	friend class SoapDeSerializer;
+	friend class SoapSerializer;
 	friend class XMLStreamHandler;
 public:
 	Param(){ m_Type = USER_TYPE;}; //if there is no attribute that says the type
@@ -101,9 +97,6 @@ private:
 	AxisString m_sValue; //value in case of XSD_STRING, XSD_HEXBINARY and XSD_BASE64BINARY
 	AxisString m_sName; //Name of the parameter
 	XSDTYPE m_Type; //Type of the parameter
-
-//	static string m_sSZ; //Used for serialization
-	static char m_Buf[64]; //Used for conversions using sprintf
 
 private:
 	AxisString m_strPrefix; //needed in serialization only
@@ -125,7 +118,9 @@ public: //Conversion functions
 	void setUri(const AxisChar* uri);
 	int GetArraySize();
 	int SetArrayElements(void* pElements);
-	int SetUserType(IAccessBean* pObject);
+	int SetArrayElements(void* pObject, AXIS_DESERIALIZE_FUNCT pDZFunct, AXIS_OBJECT_DELETE_FUNCT pDelFunct, AXIS_OBJECT_SIZE_FUNCT pSizeFunct);
+//	int SetUserType(IAccessBean* pObject);
+	int SetUserType(void* pObject, AXIS_DESERIALIZE_FUNCT pDZFunct, AXIS_OBJECT_DELETE_FUNCT pDelFunct);
 	void SetName(const AxisChar* sName);
 private:
 	BasicTypeSerializer m_BTSZ;

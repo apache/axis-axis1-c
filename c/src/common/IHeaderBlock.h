@@ -68,10 +68,6 @@
 #if !defined(AFX_IHEADERBLOCK_H__1FFF90C8_3E12_4EFD_8D97_61E2E92A0BB7__INCLUDED_)
 #define AFX_IHEADERBLOCK_H__1FFF90C8_3E12_4EFD_8D97_61E2E92A0BB7__INCLUDED_
 
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
-
 #include "../soap/BasicNode.h"
 
 class IHeaderBlock

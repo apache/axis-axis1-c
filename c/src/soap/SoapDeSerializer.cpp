@@ -157,9 +157,10 @@ int SoapDeSerializer::Deserialize(IParam* pIParam, int bHref)
 			return FAIL;
 		break;
 	case USER_TYPE:
-		if (pParam->m_Value.pBean)
+		if (pParam->m_Value.pCplxObj)
 		{
-			pParam->m_Value.pBean->DeSerialize(this);
+			if (pParam->m_Value.pCplxObj->pObject && pParam->m_Value.pCplxObj->pDZFunct)
+				pParam->m_Value.pCplxObj->pDZFunct(pParam->m_Value.pCplxObj->pObject, this);
 		}
 		else
 			return FAIL;
