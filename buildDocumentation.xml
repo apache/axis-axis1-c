@@ -1,0 +1,13 @@
+<project name="Axis C API Documentation" default="documentation" basedir=".">
+
+	<!--
+	  Generate documention
+	  Note: Requires doxygen be installed and available on the system path
+	  -->
+	<target name="documentation" description="Generate documentation" unless="aix">
+		<exec executable="doxygen" dir="${basedir}/docs/apidocs">
+			<arg value="${basedir}/docs/apidocs/doxygenconf"/>
+		</exec>
+	</target>
+
+</project>

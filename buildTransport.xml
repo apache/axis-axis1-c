@@ -1,0 +1,55 @@
+<project name="Axis C Transport" default="compileAxisTransport" basedir=".">
+
+	<!--
+	  Compile the Axis Transport Library
+	  -->
+	<target name="compileAxisTransport">
+		<mkdir dir="${dir.objects}"/>
+		<mkdir dir="${dir.bin}"/>
+		<if>
+			<not>
+				<isset property="aix"/>
+			</not>
+			<then>
+				<cc outfile="${dir.bin}/${transportLibraryName}" objdir="${dir.objects}"
+				 exceptions="true" failonerror="false" outtype="shared" multithreaded="true">
+					<!-- Compilers -->
+					<compiler refid="SolarisCC"/>
+					<compiler refid="Linuxgcc"/>
+					<compiler extends="VisualC++">
+						<defineset>
+							<define name="AXISTRANSPORTDLL_EXPORTS"/>
+						</defineset>
+					</compiler>
+					<!-- Linkers -->
+					<linker refid="SolarisLinker"/>
+					<linker refid="LinuxLinker"/>
+					<linker extends="VisualC++Linker">
+						<syslibset libs="wsock32"/>
+					</linker>
+					<!-- Files to compile -->
+					<fileset dir="${dir.src}">
+						<include name="transport/${transport}/*.cpp"/>
+						<!-- The following files need to be excluded -->
+						<exclude name="transport/${transport}/SecureChannel.cpp"/>
+					</fileset>
+				</cc>
+			</then>
+			<else>
+				<cc outfile="${dir.bin}/lib${transportLibraryName}.so" objdir="${dir.objects}"
+				 exceptions="true" failonerror="false" multithreaded="true">
+					<!-- Compilers -->
+					<compiler refid="AIXxlc"/>
+					<!-- Linkers -->
+					<linker refid="AIXLinker"/>
+					<!-- Files to compile -->
+					<fileset dir="${dir.src}">
+						<include name="transport/${transport}/*.cpp"/>
+						<!-- The following files need to be excluded -->
+						<exclude name="transport/${transport}/SecureChannel.cpp"/>
+					</fileset>
+				</cc>
+			</else>
+		</if>
+	</target>
+</project>

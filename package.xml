@@ -1,0 +1,234 @@
+<project name="Apache Axis C Packaging" default="package" basedir=".">
+
+	<import file="${basedir}/buildInitialize.xml"/>
+
+	<target name="copySource">
+		<mkdir dir="${dir.release}"/>
+		<copy todir="${dir.release}">
+			<fileset dir="${basedir}" includes="**"/>
+		</copy>
+	</target>
+
+	<target name="copyLicense">
+		<!-- Copy license into release package -->
+		<mkdir dir="${dir.release}"/>
+		<copy todir="${dir.release}">
+			<fileset dir="${basedir}">
+				<include name="LICENSE"/>
+				<include name="NOTICE"/>
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="copyDeploy">
+		<!-- Copy deploy directory into release package -->
+		<mkdir dir="${dir.release}/deploy"/>
+		<copy todir="${dir.release}/deploy">
+			<fileset dir="${basedir}/deploy" includes="**"/>
+		</copy>
+	</target>
+	
+	<target name="copyDocumentation">
+		<!-- Copy documentation into release package -->
+		<mkdir dir="${dir.release}/docs"/>
+		<copy todir="${dir.release}/docs">
+			<fileset dir="${basedir}/docs" includes="**"/>
+		</copy>	
+	</target>
+
+	<target name="copyInclude">
+		<!-- Copy include files into release package -->
+		<mkdir dir="${dir.release}/include"/>
+		<copy todir="${dir.release}/include">
+			<fileset dir="${basedir}/include" includes="**"/>
+		</copy>
+	</target>
+
+	<target name="copyLibs">
+		<!-- Copy across libs into release package -->
+		<mkdir dir="${dir.release}/lib"/>
+		<copy todir="${dir.release}/lib">
+			<fileset dir="${basedir}/lib" includes="**"/>
+		</copy>
+	</target>
+	
+	<target name="copyAxisJars">
+		<!-- Copy across Axis Java JARs -->
+		<mkdir dir="${dir.release}/lib/axisjava"/>
+		<copy todir="${dir.release}/lib/axisjava">
+			<fileset dir="${dir.axisJARs}" includes="*.jar"/>
+		</copy>
+	</target>
+
+	<target name="copyWSDL2Ws">
+		<!-- Create JAR file for WSDL2Ws -->
+		<mkdir dir="${dir.release}/lib/axis"/>
+		<copy todir="${dir.release}/lib/axis" file="${dir.classes}/wsdl2ws.jar"/>
+	</target>
+
+	<target name="copySamples">
+		<!-- Copy across samples into release package -->
+		<mkdir dir="${dir.release}/samples"/>
+		<copy todir="${dir.release}/samples">
+			<fileset dir="${basedir}/samples" includes="**"/>
+		</copy>
+	</target>
+
+	<target name="copyTests">
+		<!-- Copy across tests into release package -->
+		<mkdir dir="${dir.release}/tests"/>
+		<copy todir="${dir.release}/tests">
+			<fileset dir="${basedir}/tests" includes="**"/>
+		</copy>
+	</target>
+
+	<target name="copyWindowsLibraries" if="windows">
+		<!-- Copy across DLLs into release package -->
+		<mkdir dir="${dir.release}/bin"/>
+		<copy todir="${dir.release}/bin">
+			<fileset dir="${dir.bin}" includes="*.dll"/>
+			<fileset dir="${dir.bin}" includes="${clientLibraryName}.lib"/>
+		</copy>
+
+		<!-- Copy across LIB file into release package -->
+		<mkdir dir="${dir.release}/lib/axis"/>
+		<copy todir="${dir.release}/lib/axis" file="${dir.bin}/${clientLibraryName}.lib"/>
+
+		<!-- Copy across MS Visual C++ Project files for samples into release package -->
+		<mkdir dir="${dir.release}/vc"/>
+		<copy todir="${dir.release}/vc">
+			<fileset dir="${basedir}/vc" includes="samples/**"/>
+		</copy>	
+	</target>
+
+	<target name="copyAndLinkLinuxLibraries" if="linux">
+		<basename property="libraryName" file="${fullLibraryName}" suffix=".so"/>
+		<mkdir dir="${dir.release}/lib/axis"/>
+		<copy file="${dir.bin}/${libraryName}.so" tofile="${dir.release}/lib/axis/${libraryName}.so.${version}"/>
+
+		<symlink link="${dir.release}/lib/axis/${libraryName}.so.${majorVersion}"
+		 resource="${libraryName}.so.${version}" overwrite="true"/>
+		<symlink link="${dir.release}/lib/axis/${libraryName}.so"
+		 resource="${libraryName}.so.${majorVersion}" overwrite="true"/>
+	</target>
+
+	<target name="copyAndLinkSolarisLibraries" if="solaris">
+		<basename property="libraryName" file="${fullLibraryName}" suffix=".so"/>
+		<mkdir dir="${dir.release}/lib/axis"/>
+		<copy file="${dir.bin}/${libraryName}.so" tofile="${dir.release}/lib/axis/${libraryName}.so.${version}"/>
+
+		<symlink link="${dir.release}/lib/axis/${libraryName}.so.${majorVersion}"
+		 resource="${libraryName}.so.${version}" overwrite="true"/>
+		<symlink link="${dir.release}/lib/axis/${libraryName}.so"
+		 resource="${libraryName}.so.${majorVersion}" overwrite="true"/>
+	</target>
+
+	<target name="copyAndLinkAIXLibraries" if="aix">
+		<basename property="libraryName" file="${fullLibraryName}" suffix=".so"/>
+		<mkdir dir="${dir.release}/lib/axis"/>
+		<copy file="${dir.bin}/${libraryName}.so" tofile="${dir.release}/lib/axis/${libraryName}${version}.so"/>
+
+		<symlink link="${dir.release}/lib/axis/${libraryName}${majorVersion}.so"
+		 resource="${libraryName}${version}.so" overwrite="true"/>
+		<symlink link="${dir.release}/lib/axis/${libraryName}.so"
+		 resource="${libraryName}${majorVersion}.so" overwrite="true"/>
+		<symlink link="${dir.release}/lib/axis/${libraryName}.a"
+		 resource="${libraryName}.so" overwrite="true"/>
+	</target>
+
+	<target name="copyAndLinkUnixLibraries" depends="copyAndLinkLinuxLibraries, copyAndLinkSolarisLibraries, copyAndLinkAIXLibraries"/>
+
+	<target name="copyUnixLibraries" unless="windows">
+		<path id="libraries">
+			<fileset dir="${dir.bin}" includes="lib*"/>
+		</path>
+
+		<foreach target="copyAndLinkUnixLibraries" param="fullLibraryName" inheritall="true">
+			<path refid="libraries"/>
+		</foreach>
+	</target>
+
+	<target name="copyLibraries" depends="copyWindowsLibraries, copyUnixLibraries"/>
+
+	<target name="packageWindowsDeliverable" if="windows">
+		<mkdir dir="${dir.zips}"/>
+		<zip destfile="${dir.zips}/${release}.zip" basedir="${dir.release}/.." includes="${release}/**" />
+	</target>
+	
+	<target name="packageUnixDeliverable" unless="windows">
+		<mkdir dir="${dir.zips}"/>
+		<tar destfile="${dir.zips}/${release}.tar.gz" basedir="${dir.release}/.."
+		 includes="${release}/**" followsymlinks="false" compression="gzip"/>
+	</target>
+
+	<target name="packageDeliverable" depends="packageWindowsDeliverable, packageUnixDeliverable"/>
+
+	<target name="packageBinaryRelease">
+		<antcall target="copyLicense" inheritall="true"/>
+		<antcall target="copyDeploy" inheritall="true"/>
+		<antcall target="copyDocumentation" inheritall="true"/>
+		<antcall target="copyInclude" inheritall="true"/>
+		<antcall target="copyLibs" inheritall="true"/>
+		<antcall target="copyAxisJars" inheritall="true"/>
+		<antcall target="copySamples" inheritall="true"/>
+		<antcall target="copyTests" inheritall="true"/>
+		<antcall target="copyWSDL2Ws" inheritall="true"/>
+		<antcall target="copyLibraries" inheritall="true"/>
+		<antcall target="packageDeliverable" inheritall="true"/>
+	</target>
+
+	<target name="copyTraceInstrumentedSource" if="trace">
+		<!-- Use trace instrumented source -->
+		<delete dir="${dir.release}/src"/>
+		<mkdir dir="${dir.release}/src"/>
+		<copy todir="${dir.release}/src">
+			<fileset dir="${dir.src.instrumented}" includes="**"/>
+		</copy>
+	</target>
+
+	<target name="packageSourceRelease">
+		<antcall target="copySource" inheritall="true"/>
+		<antcall target="copyTraceInstrumentedSource" inheritall="true"/>
+		<antcall target="copyWSDL2Ws" inheritall="true"/>
+		<antcall target="packageDeliverable" inheritall="true"/>
+	</target>
+
+	<target name="packageWithoutTrace">
+		<antcall target="packageBinaryRelease" inheritall="true">
+			<param name="release" value="${release}-bin"/>
+			<param name="dir.release" value="${dir.release}-bin"/>
+		</antcall>
+		<antcall target="packageSourceRelease" inheritall="true">
+			<param name="release" value="${release}-src"/>
+			<param name="dir.release" value="${dir.release}-src"/>
+		</antcall>
+	</target>
+
+	<target name="packageWithTrace">
+		<antcall target="packageBinaryRelease" inheritall="true">
+			<param name="dir.bin" value="${dir.bin}/trace"/>
+			<param name="release" value="${release}-bin-trace"/>
+			<param name="dir.release" value="${dir.release}-bin-trace"/>
+		</antcall>
+		<antcall target="packageSourceRelease" inheritall="true">
+			<param name="trace" value="true"/>
+			<param name="release" value="${release}-src-trace"/>
+			<param name="dir.release" value="${dir.release}-src-trace"/>
+		</antcall>
+	</target>
+
+	<target name="package" depends="initialize" description="Package ready for delivery">
+		<antcall target="packageWithoutTrace" inheritall="true"/>
+		<antcall target="packageWithTrace" inheritall="true"/>
+	</target>
+	
+	<target name="clean" depends="initialize" description="Remove built packages">
+		<delete dir="${dir.release}-bin"/>
+		<delete dir="${dir.release}-src"/>
+		<delete dir="${dir.release}-bin-trace"/>
+		<delete dir="${dir.release}-src-trace"/>
+		<delete>
+			<fileset dir="${dir.zips}" includes="${release}**"/>
+		</delete>
+	</target>
+</project>

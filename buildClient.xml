@@ -1,0 +1,79 @@
+<project name="Axis C Client" default="compileAxisClient" basedir=".">
+
+	<!--
+	  Compile the Axis Client Library
+	  -->
+	<target name="compileAxisClient">
+		<mkdir dir="${dir.objects}"/>
+		<mkdir dir="${dir.bin}"/>
+		<if>
+			<not>
+				<isset property="aix"/>
+			</not>
+			<then>
+				<cc outfile="${dir.bin}/${clientLibraryName}" objdir="${dir.objects}"
+				 exceptions="true" failonerror="false" outtype="shared" multithreaded="true">
+				  	<!-- Compilers -->
+					<compiler refid="SolarisCC"/>
+					<compiler refid="Linuxgcc"/>
+					<compiler extends="VisualC++">
+						<defineset>
+							<define name="AXISCLIENTDLL_EXPORTS"/>
+						</defineset>
+					</compiler>
+					<!-- Additional compiler flag for Client library on all platforms -->
+					<defineset>
+						<define name="AXIS_CLIENT_LIB"/>
+						<define name="ENABLE_AXISTRACE" if="trace"/>
+					</defineset>
+					<!-- Linkers -->
+					<linker refid="SolarisLinker"/>
+					<linker refid="LinuxLinker"/>
+					<linker refid="VisualC++Linker"/>
+					<!-- Files to be compiled -->
+					<fileset dir="${dir.src.instrumented}">
+						<include name="common/*.cpp"/>
+						<include name="engine/*.cpp"/>
+						<include name="engine/client/*.cpp"/>
+						<include name="soap/*.cpp"/>
+						<include name="soap/*.c"/>
+						<include name="wsdd/*.cpp"/>
+						<include name="xml/*.cpp"/>
+						<include name="transport/axis/AxisTransportException.cpp"/>
+						<!-- The following files need to be excluded -->
+						<exclude name="common/Packet.cpp"/>
+						<exclude name="common/AxisSocketUtils.cpp"/>
+					</fileset>
+				</cc>
+			</then>
+			<else>
+				<cc outfile="${dir.bin}/lib${clientLibraryName}.so" objdir="${dir.objects}"
+				 exceptions="true" failonerror="false" multithreaded="true">
+				  	<!-- Compilers -->
+					<compiler refid="AIXxlc"/>
+					<!-- Additional compiler flag for Client library on all platforms -->
+					<defineset>
+						<define name="AXIS_CLIENT_LIB"/>
+						<define name="ENABLE_AXISTRACE" if="trace"/>
+					</defineset>
+					<!-- Linkers -->
+					<linker refid="AIXLinker"/>
+					<!-- Files to be compiled -->
+					<fileset dir="${dir.src.instrumented}">
+						<include name="common/*.cpp"/>
+						<include name="engine/*.cpp"/>
+						<include name="engine/client/*.cpp"/>
+						<include name="soap/*.cpp"/>
+						<include name="soap/*.c"/>
+						<include name="wsdd/*.cpp"/>
+						<include name="xml/*.cpp"/>
+						<include name="transport/axis/AxisTransportException.cpp"/>
+						<!-- The following files need to be excluded -->
+						<exclude name="common/Packet.cpp"/>
+						<exclude name="common/AxisSocketUtils.cpp"/>
+					</fileset>
+				</cc>
+			</else>
+		</if>
+	</target>
+</project>

@@ -1,0 +1,63 @@
+<project name="Axis C XML Parser" default="compileAxisXMLParser" basedir=".">
+
+	<!--
+	  Compile the Axis XML Parser Library
+	  -->
+	<target name="compileAxisXMLParser">
+		<mkdir dir="${dir.objects}"/>
+		<mkdir dir="${dir.bin}"/>
+		<if>
+			<not>
+				<isset property="aix"/>
+			</not>
+			<then>
+				<cc outfile="${dir.bin}/${xmlParserLibraryName}" objdir="${dir.objects}"
+				 exceptions="true" failonerror="false" outtype="shared" multithreaded="true">
+				 	<!-- Compilers -->
+					<compiler refid="SolarisCC"/>
+					<compiler refid="Linuxgcc"/>
+					<compiler refid="AIXxlc"/>
+					<compiler extends="VisualC++">
+						<defineset>
+							<define name="AXISXMLPARSERXERCES_EXPORTS"/>
+						</defineset>
+					</compiler>
+					<!-- Additional include directory for XML Parser -->
+					<includepath path="${dir.xmlParser}/include"/>
+					<includepath path="${dir.xmlParser}/lib"/>
+					<!-- Linkers -->
+					<linker refid="SolarisLinker"/>
+					<linker refid="VisualC++Linker"/>
+					<linker refid="LinuxLinker"/>
+					<linker refid="AIXLinker"/>
+					<!-- Additional library of XMLParser -->
+					<libset dir="${dir.xmlParser}/lib" libs="${xmlParserLibrary}"/>
+					<!-- Files to be compiled -->
+					<fileset dir="${dir.src}">
+						<include name="xml/${xmlParser}/*.cpp"/>
+						<include name="xml/AxisParseException.cpp"/>
+					</fileset>
+				</cc>
+			</then>
+			<else>
+				<cc outfile="${dir.bin}/lib${xmlParserLibraryName}.so" objdir="${dir.objects}"
+				 exceptions="true" failonerror="false" multithreaded="true">
+				 	<!-- Compilers -->
+					<compiler refid="AIXxlc"/>
+					<!-- Additional include directory for XML Parser -->
+					<includepath path="${dir.xmlParser}/include"/>
+					<includepath path="${dir.xmlParser}/lib"/>
+					<!-- Linkers -->
+					<linker refid="AIXLinker"/>
+					<!-- Additional library of XMLParser -->
+					<libset dir="${dir.xmlParser}/lib" libs="${xmlParserLibrary}"/>
+					<!-- Files to be compiled -->
+					<fileset dir="${dir.src}">
+						<include name="xml/${xmlParser}/*.cpp"/>
+						<include name="xml/AxisParseException.cpp"/>
+					</fileset>
+				</cc>
+			</else>
+		</if>
+	</target>
+</project>

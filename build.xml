@@ -1,7 +1,7 @@
-<project name="AxisC" default="production" basedir=".">
+<project name="Apache Axis C" default="build" basedir=".">
 	<description>
-This ANT script compiles and packages the Apache AxisC runtime binaries and
-WSDL2Ws tooling.
+This ANT script compiles Apache AxisC runtime binaries, WSDL2Ws tooling and
+documentation.  To package a release deliverable use package.xml after building.
 
 This script is intended for use with Java 1.4+ and Apache ANT 1.6+.
 Ant is available from: http://ant.apache.org/
@@ -30,565 +30,134 @@ Notes:
 	- AIX     = Visual Age
 	</description>
 
-	<!--
-	  Load definition of C/C++ Tasks and Types
-	  To allow the compilation and linking of C/C++ code
-	  -->
-	<taskdef resource="cpptasks.tasks"/>
-	<typedef resource="cpptasks.types"/>
+	<import file="${basedir}/buildInitialize.xml"/>
+	<import file="${basedir}/buildTraceTool.xml"/>
+	<import file="${basedir}/buildClient.xml"/>
+	<import file="${basedir}/buildTransport.xml"/>
+	<import file="${basedir}/buildXMLParser.xml"/>
+	<import file="${basedir}/buildWSDL2Ws.xml"/>
 
-	<!--
-	  Load definition of Additional Tasks and Types
-	  -->
-	<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
-
-	<!--
-	  These properties will be the same for all environments, so have not been
-	  included within the property files
-	  -->
-	<property name="dir.src" value="${basedir}/src"/>
-	<property name="dir.include" value="${basedir}/include"/>
-	<property name="dir.tools" value="${basedir}/tools"/>
-
-	<!--
-	  Load versioning information from version.properties
-	  -->
-	<property file="${basedir}/version.properties"/>
-
-      <!-- 
-        Uncomment the trace property (or put it in your favourite properties file) to 
-        instrument the Axis C++ source code with entry/exit trace. This is off by default.
-	  <property name="trace" value="true"/> 
-        -->
-
-	<!--
-	  Compile the Trace tool
-	  -->
-	<target name="compileTraceTool" depends="initialize" if="trace">
-		<mkdir dir="${dir.classes}"/>
-		<javac srcdir="${dir.tools}/trace" destdir="${dir.classes}" listfiles="true">
-    	      </javac>
-	</target>
-	
-	<!--
-	  Package Trace tool code into tracetool.jar
-	  -->
-	<target name="buildTraceTool" depends="compileTraceTool" if="trace">
-		<jar jarfile="${dir.classes}/tracetool.jar" basedir="${dir.classes}">
-			<include name="org/apache/axis/tracetool/**"/>
-			<manifest>
-				<attribute name="Main-Class"
-				 value="org.apache.axis.tracetool.AddEntryAndExitTrace"/>
-			</manifest>
-		</jar>
-	</target>
-	
-	<target name="copyUntracedSource" if="trace">
-		<copy todir="${dir.classes}/..">
-			<fileset dir="${dir.src}/..">
-                        <include name="src/**"/>
-                  </fileset>
-		</copy>
-	</target>
-
-	<target name="runTraceTool" depends="copyUntracedSource" if="trace">
-		<java jar="${dir.classes}/tracetool.jar" fork="true">
-			<arg value="${dir.src.instrumented}"/>
-		</java>
-      </target>
-
-	<!--
-	  Compile, package and run the trace tool
-	  -->
-	<target name="addTrace" depends="buildTraceTool, runTraceTool" if="trace"
-	  description="Compile, jar and run the trace tool"/>
-
-	<!--
-	  Compiler Definitions
-	  -->
-		<!-- Definition of cc compile for Solaris -->
-		<compiler id="SolarisCC" name="CC" if="solaris">
-			<compilerarg value="-g" if="debug"/>
-			<compilerarg value="-KPIC"/>
-			<compilerarg value="-xildoff"/>
-			<compilerarg value="-pta"/>
-			<compilerarg value="-instances=global"/>
-			<defineset>
-				<define name="ENABLE_AXIS_EXCEPTION"/>
-				<define name="HAVE_CONFIG_H"/>
-				<define name="PIC"/>
-			</defineset>
-			<includepath path="${dir.include}"/>
-		</compiler>
-
-		<!--
-		  Definition of Visual C++ compiler
-		  -->
-		<compiler id="VisualC++" name="msvc" if="windows">
-			<compilerarg value="/nologo"/>
-			<compilerarg value="/MD"/>
-			<!-- Display all warnings -->
-			<compilerarg value="/W3"/>
-			<compilerarg value="/GX"/>
-			<compilerarg value="/Gm" if="debug"/>
-			<compilerarg value="/ZI" if="debug"/>
-			<compilerarg value="/Od"/>
-			<includepath path="${dir.include}"/>
-			<defineset>
-				<define name="WIN32"/>
-				<define name="_DEBUG" if="debug"/>
-				<define name="NDEBUG" unless="debug"/>
-				<define name="_WINDOWS"/>
-				<define name="_MBCS"/>
-				<define name="_USRDLL"/>
-				<define name="ENABLE_AXIS_EXCEPTION"/>
-			</defineset>
-			<compilerarg value="/FD"/>
-			<compilerarg value="/c"/>
-		</compiler>
-		
-		<!--
-		  Definition of gcc compile for Linux
-	      -->
-		<compiler id="Linuxgcc" name="g++" if="linux">
-			<compilerarg value="-g" if="debug"/>
-			<compilerarg value="-Wall"/>
-			<compilerarg value="-Wshadow"/>
-			<compilerarg value="-O2"/>
-			<defineset>
-				<define name="ENABLE_AXIS_EXCEPTION"/>
-				<define name="HAVE_CONFIG_H"/>
-				<define name="PIC"/>
-			</defineset>
-			<includepath path="${dir.include}"/>
-		</compiler>
-		
-		<!--
-		  Definition of xlc compile for AIX
-	      -->
-		<compiler id="AIXxlc" name="xlC" if="aix">
-			<compilerarg value="-g" if="debug"/>
-			<compilerarg value="-V"/>
-			<compilerarg value="-qstaticinline"/>
-			<defineset>
-				<define name="ENABLE_AXIS_EXCEPTION"/>
-				<define name="HAVE_CONFIG_H"/>
-				<define name="AIX"/>
-			</defineset>
-			<includepath path="${dir.include}"/>
-		</compiler>
-
-	<!--
-	  Linker Definitions
-	  -->
-		<!-- Definition of Solars linker -->
-		<linker id="SolarisLinker" name="CC" libtool="true" if="solaris">
-			<linkerarg value="-g" if="debug"/>
-			<linkerarg value="-Qoption"/>
-			<linkerarg value="ld"/>
-			<linkerarg value="-zmuldefs"/>
-		</linker>
-
-		<!--
-		  Definition of Visual C++ linker
-		  -->
-		<linker id="VisualC++Linker" name="msvc" if="windows">
-			<linkerarg value="/debug" if="debug"/>
-			<linkerarg value="/machine:I386"/>
-			<linkerarg value="/nologo"/>
-			<linkerarg value="/pdb:none"/>
-		</linker>
-	
-		<!--
-	      Definition of Linux linker
-	      -->
-		<linker id="LinuxLinker" name="g++" libtool="true" if="linux">
-			<linkerarg value="-g" if="debug"/>
-			<libset libs="stdc++"/>
-		</linker>
-		
-		<!--
-	      Definition of AIX linker
-	      -->
-		<linker id="AIXLinker" name="xlC" libtool="false" if="aix">
-			<linkerarg value="-g" if="debug"/>
-			<linkerarg value="-qmkshrobj"/>
-			<linkerarg value="-L/usr/lib/threads"/>
-			<linkerarg value="-lpthreads"/>
-			<linkerarg value="-lm"/>
-			<linkerarg value="-lc_r"/>
-			<linkerarg value="-lc"/>
-		</linker>	
-
-	<!--
-	  Determine platform
-	  -->
-	<target name="pre-init">
-		<condition property="solaris">
-            	<os name="SunOS"/>
-		</condition>
-		<condition property="windows">
-			<os family="windows"/>
-		</condition>
-		<condition property="aix">
-            <os name="AIX"/>
-        </condition>
-        <condition property="linux">
-            <os name="Linux"/>
-        </condition>
-	</target>
-	
-	<!--
-	  Initialize properties
-      -->
-	<target name="initialize" depends="pre-init">
-		<condition property="platform" value="SunOS">
-			<isset property="solaris"/>
-		</condition>
-		<condition property="platform" value="Win32">
-			<isset property="windows"/>
-		</condition>
-		<condition property="platform" value="Linux">
-			<isset property="linux"/>
-		</condition>
-		<condition property="platform" value="AIX">
-			<isset property="aix"/>
-		</condition>
-		
-		<!-- Load properties from file -->
-		<property file="${basedir}/build.${platform}.properties"/>
-
-		<condition property="dir.src.instrumented" value="${dir.classes}/../src">
-			<isset property="trace"/>
-		</condition>
-		<condition property="dir.src.instrumented" value="${dir.src}">
-                  <not>
-			     <isset property="trace"/>
-                  </not>
-		</condition>
-	</target>
-
-	<!--
-	  Compile the Axis Client Library
-	  -->
-	<target name="compileAxisClient" depends="initialize">
-		<mkdir dir="${dir.objects}"/>
-		<mkdir dir="${dir.bin}"/>
+	<target name="compileTransport">
+		<!-- Determine which flavour of transport to use -->
+		<!-- Ideally extend this to produce multiple flavours -->
 		<if>
-			<not>
-				<isset property="aix"/>
-			</not>
+			<equals arg1="${transport.axis}" arg2="true"/>
 			<then>
-				<cc outfile="${dir.bin}/${clientLibraryName}" objdir="${dir.objects}"
-				 exceptions="true" failonerror="false" outtype="shared" multithreaded="true">
-				  	<!-- Compilers -->
-					<compiler refid="SolarisCC"/>
-					<compiler refid="Linuxgcc"/>
-					<compiler extends="VisualC++">
-						<defineset>
-							<define name="AXISCLIENTDLL_EXPORTS"/>
-						</defineset>
-					</compiler>
-					<!-- Additional compiler flag for Client library on all platforms -->
-					<defineset>
-						<define name="AXIS_CLIENT_LIB"/>
-						<define name="ENABLE_AXISTRACE" if="trace"/>
-					</defineset>
-					<!-- Linkers -->
-					<linker refid="SolarisLinker"/>
-					<linker refid="LinuxLinker"/>
-					<linker refid="VisualC++Linker"/>
-					<!-- Files to be compiled -->
-					<fileset dir="${dir.src.instrumented}">
-						<include name="common/*.cpp"/>
-						<include name="engine/*.cpp"/>
-						<include name="engine/client/*.cpp"/>
-						<include name="soap/*.cpp"/>
-						<include name="soap/*.c"/>
-						<include name="wsdd/*.cpp"/>
-						<include name="xml/*.cpp"/>
-						<include name="transport/axis/AxisTransportException.cpp"/>
-						<!-- The following files need to be excluded -->
-						<exclude name="common/Packet.cpp"/>
-						<exclude name="common/AxisSocketUtils.cpp"/>
-					</fileset>
-				</cc>
+				<antcall target="compileAxisTransport" inheritall="true">
+					<param name="transport" value="axis"/>
+					<param name="transportLibraryName" value="${axis.transportLibraryName}"/>
+				</antcall>
 			</then>
-			<else>
-				<cc outfile="${dir.bin}/${clientLibraryFileName}" objdir="${dir.objects}"
-				 exceptions="true" failonerror="false" multithreaded="true">
-				  	<!-- Compilers -->
-					<compiler refid="AIXxlc"/>
-					<!-- Additional compiler flag for Client library on all platforms -->
-					<defineset>
-						<define name="AXIS_CLIENT_LIB"/>
-						<define name="ENABLE_AXISTRACE" if="trace"/>
-					</defineset>
-					<!-- Linkers -->
-					<linker refid="AIXLinker"/>
-					<!-- Files to be compiled -->
-					<fileset dir="${dir.src.instrumented}">
-						<include name="common/*.cpp"/>
-						<include name="engine/*.cpp"/>
-						<include name="engine/client/*.cpp"/>
-						<include name="soap/*.cpp"/>
-						<include name="soap/*.c"/>
-						<include name="wsdd/*.cpp"/>
-						<include name="xml/*.cpp"/>
-						<include name="transport/axis/AxisTransportException.cpp"/>
-						<!-- The following files need to be excluded -->
-						<exclude name="common/Packet.cpp"/>
-						<exclude name="common/AxisSocketUtils.cpp"/>
-					</fileset>
-				</cc>
-			</else>
+		</if>
+		<if>
+			<equals arg1="${transport.axis2}" arg2="true"/>
+			<then>
+				<antcall target="compileAxisTransport" inheritall="true">
+					<param name="transport" value="axis2"/>
+					<param name="transportLibraryName" value="${axis2.transportLibraryName}"/>
+				</antcall>
+			</then>
+		</if>
+		<if>
+			<equals arg1="${transport.libwww}" arg2="true"/>
+			<then>
+				<antcall target="compileAxisTransport" inheritall="true">
+					<param name="transport" value="libwww"/>
+					<param name="transportLibraryName" value="${libwww.transportLibraryName}"/>
+				</antcall>
+			</then>
 		</if>
 	</target>
 
-	<!--
-	  Compile the Axis Transport Library
-	  -->
-	<target name="compileAxisTransport" depends="initialize">
-		<mkdir dir="${dir.objects}"/>
-		<mkdir dir="${dir.bin}"/>
+	<target name="compileXMLParser">
+		<!-- Determine which flavour of xmlParser to use -->
+		<!-- Ideally extend this to produce multiple flavours -->
 		<if>
-			<not>
-				<isset property="aix"/>
-			</not>
+			<equals arg1="${xmlParser.xml4c}" arg2="true"/>
 			<then>
-				<cc outfile="${dir.bin}/${transportLibraryName}" objdir="${dir.objects}"
-				 exceptions="true" failonerror="false" outtype="shared" multithreaded="true">
-					<!-- Compilers -->
-					<compiler refid="SolarisCC"/>
-					<compiler refid="Linuxgcc"/>
-					<compiler extends="VisualC++">
-						<defineset>
-							<define name="AXISTRANSPORTDLL_EXPORTS"/>
-						</defineset>
-					</compiler>
-					<!-- Linkers -->
-					<linker refid="SolarisLinker"/>
-					<linker refid="LinuxLinker"/>
-					<linker extends="VisualC++Linker">
-						<syslibset libs="wsock32"/>
-					</linker>
-					<!-- Files to compile -->
-					<fileset dir="${dir.src}">
-						<include name="transport/${transport}/*.cpp"/>
-						<!-- The following files need to be excluded -->
-						<exclude name="transport/${transport}/SecureChannel.cpp"/>
-					</fileset>
-				</cc>
+				<antcall target="compileAxisXMLParser" inheritall="true">
+					<param name="xmlParser" value="xml4c"/>
+					<param name="dir.xmlParser" value="${xml4c.dir.xmlParser}"/>
+					<param name="xmlParserLibrary" value="${xml4c.xmlParserLibrary}"/>
+					<param name="xmlParserLibraryName" value="${xml4c.xmlParserLibraryName}"/>
+				</antcall>
 			</then>
-			<else>
-				<cc outfile="${dir.bin}/${transportLibraryFileName}" objdir="${dir.objects}"
-				 exceptions="true" failonerror="false" multithreaded="true">
-					<!-- Compilers -->
-					<compiler refid="AIXxlc"/>
-					<!-- Linkers -->
-					<linker refid="AIXLinker"/>
-					<!-- Files to compile -->
-					<fileset dir="${dir.src}">
-						<include name="transport/${transport}/*.cpp"/>
-						<!-- The following files need to be excluded -->
-						<exclude name="transport/${transport}/SecureChannel.cpp"/>
-					</fileset>
-				</cc>
-			</else>
+		</if>
+		<if>
+			<equals arg1="${xmlParser.xerces}" arg2="true"/>
+			<then>
+				<antcall target="compileAxisXMLParser" inheritall="true">
+					<param name="xmlParser" value="xerces"/>
+					<param name="dir.xmlParser" value="${xerces.dir.xmlParser}"/>
+					<param name="xmlParserLibrary" value="${xerces.xmlParserLibrary}"/>
+					<param name="xmlParserLibraryName" value="${xerces.xmlParserLibraryName}"/>
+				</antcall>
+			</then>
+		</if>
+		<if>
+			<equals arg1="${xmlParser.expat}" arg2="true"/>
+			<then>
+				<antcall target="compileAxisXMLParser" inheritall="true">
+					<param name="xmlParser" value="expat"/>
+					<param name="dir.xmlParser" value="${expat.dir.xmlParser}"/>
+					<param name="xmlParserLibrary" value="${expat.xmlParserLibrary}"/>
+					<param name="xmlParserLibraryName" value="${expat.xmlParserLibraryName}"/>
+				</antcall>
+			</then>
 		</if>
 	</target>
 
-	<!--
-	  Compile the Axis XML Parser Library
-	  -->
-	<target name="compileAxisXMLParser" depends="initialize">
-		<mkdir dir="${dir.objects}"/>
-		<mkdir dir="${dir.bin}"/>
-		<if>
-			<not>
-				<isset property="aix"/>
-			</not>
-			<then>
-				<cc outfile="${dir.bin}/${xmlParserLibraryName}" objdir="${dir.objects}"
-				 exceptions="true" failonerror="false" outtype="shared" multithreaded="true">
-				 	<!-- Compilers -->
-					<compiler refid="SolarisCC"/>
-					<compiler refid="Linuxgcc"/>
-					<compiler refid="AIXxlc"/>
-					<compiler extends="VisualC++">
-						<defineset>
-							<define name="AXISXMLPARSERXERCES_EXPORTS"/>
-						</defineset>
-					</compiler>
-					<!-- Additional include directory for XML Parser -->
-					<includepath path="${dir.xmlParser}/include"/>
-					<includepath path="${dir.xmlParser}/lib"/>
-					<!-- Linkers -->
-					<linker refid="SolarisLinker"/>
-					<linker refid="VisualC++Linker"/>
-					<linker refid="LinuxLinker"/>
-					<linker refid="AIXLinker"/>
-					<!-- Additional library of XMLParser -->
-					<libset dir="${dir.xmlParser}/lib" libs="${xmlParserLibrary}"/>
-					<!-- Files to be compiled -->
-					<fileset dir="${dir.src}">
-						<include name="xml/${xmlParser}/*.cpp"/>
-						<include name="xml/AxisParseException.cpp"/>
-					</fileset>
-				</cc>
-			</then>
-			<else>
-				<cc outfile="${dir.bin}/${xmlParserLibraryFileName}" objdir="${dir.objects}"
-				 exceptions="true" failonerror="false" multithreaded="true">
-				 	<!-- Compilers -->
-					<compiler refid="AIXxlc"/>
-					<!-- Additional include directory for XML Parser -->
-					<includepath path="${dir.xmlParser}/include"/>
-					<includepath path="${dir.xmlParser}/lib"/>
-					<!-- Linkers -->
-					<linker refid="AIXLinker"/>
-					<!-- Additional library of XMLParser -->
-					<libset dir="${dir.xmlParser}/lib" libs="${xmlParserLibrary}"/>
-					<!-- Files to be compiled -->
-					<fileset dir="${dir.src}">
-						<include name="xml/${xmlParser}/*.cpp"/>
-						<include name="xml/AxisParseException.cpp"/>
-					</fileset>
-				</cc>
-			</else>
-		</if>
+
+	<target name="compileWithDebug">
+		<antcall target="compileAxisClient" inheritall="true">
+			<param name="debug" value="on"/>
+			<param name="dir.bin" value="${dir.bin}/debug"/>
+			<param name="dir.objects" value="${dir.objects}/debug"/>
+		</antcall>
+		<antcall target="compileTransport" inheritall="true">
+			<param name="debug" value="on"/>
+			<param name="dir.bin" value="${dir.bin}/debug"/>
+			<param name="dir.objects" value="${dir.objects}/debug"/>
+		</antcall>
+		<antcall target="compileXMLParser" inheritall="true">
+			<param name="debug" value="on"/>
+			<param name="dir.bin" value="${dir.bin}/debug"/>
+			<param name="dir.objects" value="${dir.objects}/debug"/>
+		</antcall>
 	</target>
 
-	<!--
-	  Compile the WSDL2Ws code
-	  -->
-	<target name="compileWSDL2Ws">
-		<mkdir dir="${dir.classes}"/>
-		<!-- Setup classpath for compiling WSDL2Ws -->
-		<path id ="cp">
-			<fileset dir="${dir.axisJARs}" includes="*.jar"/>
-		</path>
-		<!-- Compile WSDL2Ws -->
-		<javac srcdir="${dir.src}/wsdl" destdir="${dir.classes}" listfiles="true">
-      		<classpath refid="cp"/>
-    	</javac>
+	<target name="compileWithoutDebug">
+		<antcall target="compileAxisClient" inheritall="true"/>
+		<antcall target="compileTransport" inheritall="true"/>
+		<antcall target="compileXMLParser" inheritall="true"/>
 	</target>
-	
-	<!--
-	  Compile all C/C++ code and WSDL2Ws java code
-	  -->
-	<target name="compile" depends="compileAxisClient, compileAxisTransport, compileAxisXMLParser, compileWSDL2Ws"
+
+	<target name="compileWithTrace" depends="initialize, addTrace">
+		<antcall target="compileWithDebug" inheritall="true">
+			<param name="trace" value="true"/>
+			<param name="dir.src" value="${dir.src.instrumented}"/>
+			<param name="dir.bin" value="${dir.bin}/trace"/>
+			<param name="dir.objects" value="${dir.objects}/trace"/>
+		</antcall>
+		<antcall target="compileWithoutDebug" inheritall="true">
+			<param name="trace" value="true"/>
+			<param name="dir.src" value="${dir.src.instrumented}"/>
+			<param name="dir.bin" value="${dir.bin}/trace"/>
+			<param name="dir.objects" value="${dir.objects}/trace"/>
+		</antcall>
+	</target>
+
+	<target name="compileWithoutTrace" depends="initialize">
+		<antcall target="compileWithDebug" inheritall="true"/>
+		<antcall target="compileWithoutDebug" inheritall="true"/>
+	</target>
+	  
+	<target name="compile" depends="compileWithTrace, compileWithoutTrace, compileWSDL2Ws, buildWSDL2WsJARFile"
 	  description="Compile all C/C++ code and WSDL2Ws java code"/>
 
-	<!--
-	  Generate documention
-	  Note: Requires doxygen be installed and available on the system path
-	  -->
-	<target name="documentation" unless="aix" description="Generate documentation" depends="initialize">
-		<exec executable="doxygen" dir="${basedir}/docs/apidocs">
-			<arg value="${basedir}/docs/apidocs/doxygenconf"/>
-		</exec>
-	</target>
+	<import file="${basedir}/buildDocumentation.xml"/>
 
-	<!--
-	  Copy across DLLs and library files for windows 
-	  -->
-	<target name="packageBinsWindows" if="windows">
-		<!-- Copy across DLLs -->
-		<mkdir dir="${dir.package.bin}"/>
-		<copy todir="${dir.package.bin}">
-			<fileset dir="${dir.bin}" includes="*.dll" excludes="*_D.dll"/>
-		</copy>
-		<!-- Copy across library files -->
-		<mkdir dir="${dir.package.lib}"/>
-		<copy todir="${dir.package.lib}"
-		 file="${dir.bin}/${clientLibraryName}.lib"/>
-	</target>
-
-	<!--
-	  Copy across the binaries for unix
-	  Create symbolic links to libraries
-	  -->
-	<target name="packageBinsUnix" unless="windows">
-		<!-- Copy across libraries -->
-		<mkdir dir="${dir.package.lib}"/>
-		<copy todir="${dir.package.lib}">
-			<fileset dir="${dir.bin}" includes="*.so"/>
-			<mapper type="glob" from="*.so" to="*.so.${version}"/>
-		</copy>
-		<!-- Create symbolic links to Client library -->
-		<symlink link="${dir.package.lib}/lib${clientLibraryName}.so.${majorVersion}"
-		 resource="lib${clientLibraryName}.so.${version}" overwrite="true"/>
-		<!-- Create symbolic links to Transport library -->
-		<symlink link="${dir.package.lib}/lib${transportLibraryName}.so.${majorVersion}"
-		 resource="lib${transportLibraryName}.so.${version}" overwrite="true"/>
-		<!-- Create symbolic links to XML Parser library -->
-		<symlink link="${dir.package.lib}/lib${xmlParserLibraryName}.so.${majorVersion}"
-		 resource="lib${xmlParserLibraryName}.so.${version}" overwrite="true"/>
-	</target>
-
-	<!--
-	  Create additional symbolic links to libraries as required for AIX
-	  -->	
-	<target name="packageBinsAIX" if="aix" depends="packageBinsUnix">
-		<!-- Create symbolic link to Client library -->
-		<symlink link="${dir.package.lib}/lib${clientLibraryName}.a"
-		 resource="lib${clientLibraryName}.so.${version}" overwrite="true"/>
-		<!-- Create symbolic link to Transport library -->
-		<symlink link="${dir.package.lib}/lib${transportLibraryName}.a"
-		 resource="lib${transportLibraryName}.so.${version}" overwrite="true"/>
-		<!-- Create symbolic link to XML Parser library -->
-		<symlink link="${dir.package.lib}/lib${xmlParserLibraryName}.a"
-		 resource="lib${xmlParserLibraryName}.so.${version}" overwrite="true"/>
-	</target>
-
-	<!--
-	  Package compiled binaries ready for distribution
-	  -->
-	<target name="packageBins" depends="packageBinsWindows, packageBinsUnix, packageBinsAIX"/>
-
-	<!--
-	  Copy across the Axis include files
-	  -->
-	<target name="packageIncludeFiles">
-		<mkdir dir="${dir.package.include}"/>
-		<copy todir="${dir.package.include}">
-			<fileset dir="${dir.include}" includes="axis/**"/>
-		</copy>
-	</target>
-
-	<!--
-	  Package WSDL2Ws code into WSDL2Ws.jar
-	  -->
-	<target name="packageWSDL2Ws">
-		<mkdir dir="${dir.package.WSDL2Ws}"/>
-		<jar jarfile="${dir.package.WSDL2Ws}/wsdl2ws.jar" basedir="${dir.classes}">
-			<include name="org/apache/axis/wsdl/**"/>
-			<manifest>
-				<attribute name="Main-Class"
-				 value="org.apache.axis.wsdl.wsdl2ws.WSDL2Ws"/>
-			</manifest>
-		</jar>
-	</target>
-	
-	<!--
-	  Package Documentation
-	  -->
-	<target name="packageDocumentation">
-		<mkdir dir="${dir.package.docs}"/>
-		<copy todir="${dir.package.docs}">
-			<fileset dir="${basedir}/docs/apidocs">
-				<include name="html/**"/>
-				<include name="latex/**"/>
-			</fileset>
-		</copy>
-	</target>
-
-	<!--
-	  Package all artifacts ready for distribution
-	  -->	
-	<target name="package" depends="packageBins, packageIncludeFiles, packageWSDL2Ws, packageDocumentation"
-	 description="Package all artifacts ready for distribution"/>
+	<target name="build" depends="compile, documentation"/>
 
 	<!--
 	  Validate all artifacts produced for Windows platform
@@ -661,25 +230,11 @@ Notes:
 	</target>
 
 	<!--
-	  Build and package all artifacts ready for distribution
-	  -->
-	<target name="production" depends="addTrace, compile, documentation, package, validate"
-	 description="Build and package all artifacts ready for distribution"/>
-
-	<target name="addDebug">
-		<property name="debug" value="true"/>
-	</target>
-
-	<!--
-	  Build and package all artifacts ready for distribution
-	  -->
-	<target name="development" depends="addDebug, addTrace, compile, documentation, package, validate"
-	 description="Build and package all artifacts"/>
-
-	<!--
 	  Remove all generated artifaces
 	  -->
 	<target name="clean" depends="initialize" description="Remove all generated artifacts">
+		<!-- Delete trace instrumented C/C++ code -->
+		<delete dir="${dir.src.instrumented}"/>
 		<!-- Delete compiled C/C++ code -->
 		<delete dir="${dir.bin}"/>
 		<delete dir="${dir.objects}"/>
@@ -688,12 +243,6 @@ Notes:
 		<!-- Delete generated Documentation -->
 		<delete dir="${basedir}/docs/apidocs/html"/>
 		<delete dir="${basedir}/docs/apidocs/latex"/>
-		<!-- Delete packaged artifacts -->
-		<delete dir="${dir.package.bin}"/>
-		<delete dir="${dir.package.lib}"/>
-		<delete dir="${dir.package.include}"/>
-		<delete dir="${dir.package.WSDL2Ws}"/>
-		<delete dir="${dir.package.docs}"/>
 	</target>
 
 </project>

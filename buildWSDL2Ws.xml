@@ -1,0 +1,24 @@
+<project name="Axis C WSDL2Ws" default="compileWSDL2Ws" basedir=".">
+
+	<target name="compileWSDL2Ws">
+		<mkdir dir="${dir.classes}"/>
+		<!-- Setup classpath for compiling WSDL2Ws -->
+		<path id ="cp">
+			<fileset dir="${dir.axisJARs}" includes="*.jar"/>
+		</path>
+		<!-- Compile WSDL2Ws -->
+		<javac srcdir="${dir.src}/wsdl" destdir="${dir.classes}">
+      		<classpath refid="cp"/>
+    	</javac>
+	</target>
+	
+	<target name="buildWSDL2WsJARFile">
+		<jar jarfile="${dir.classes}/wsdl2ws.jar" basedir="${dir.classes}">
+			<include name="org/apache/axis/wsdl/**"/>
+			<manifest>
+				<attribute name="Main-Class"
+				 value="org.apache.axis.wsdl.wsdl2ws.WSDL2Ws"/>
+			</manifest>
+		</jar>
+	</target>
+</project>

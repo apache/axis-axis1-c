@@ -1,0 +1,185 @@
+<project name="Initialize Apache Axis C Build" default="initialize" basedir=".">
+	<!--
+	  Load definition of C/C++ Tasks and Types
+	  To allow the compilation and linking of C/C++ code
+	  -->
+	<taskdef resource="cpptasks.tasks"/>
+	<typedef resource="cpptasks.types"/>
+
+	<!--
+	  Load definition of Additional Tasks and Types
+	  -->
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+
+	<!--
+	  These properties will be the same for all environments, so have not been
+	  included within the property files
+	  -->
+	<property name="dir.src" value="${basedir}/src"/>
+	<property name="dir.include" value="${basedir}/include"/>
+	<property name="dir.tools" value="${basedir}/tools"/>
+
+	<property environment="env"/>
+
+	<!--
+	  Load versioning information from version.properties
+	  -->
+	<property file="${basedir}/version.properties"/>
+
+
+	<!--
+	  Compiler Definitions
+	  -->
+		<!-- Definition of cc compile for Solaris -->
+		<compiler id="SolarisCC" name="CC" if="solaris">
+			<compilerarg value="-g" if="debug"/>
+			<compilerarg value="-KPIC"/>
+			<compilerarg value="-xildoff"/>
+			<compilerarg value="-pta"/>
+			<compilerarg value="-instances=global"/>
+			<defineset>
+				<define name="ENABLE_AXIS_EXCEPTION"/>
+				<define name="HAVE_CONFIG_H"/>
+				<define name="PIC"/>
+			</defineset>
+			<includepath path="${dir.include}"/>
+		</compiler>
+
+		<!--
+		  Definition of Visual C++ compiler
+		  -->
+		<compiler id="VisualC++" name="msvc" if="windows">
+			<compilerarg value="/nologo"/>
+			<compilerarg value="/MD"/>
+			<!-- Display all warnings -->
+			<compilerarg value="/W3"/>
+			<compilerarg value="/GX"/>
+			<compilerarg value="/Gm" if="debug"/>
+			<compilerarg value="/ZI" if="debug"/>
+			<compilerarg value="/Od"/>
+			<includepath path="${dir.include}"/>
+			<defineset>
+				<define name="WIN32"/>
+				<define name="_DEBUG" if="debug"/>
+				<define name="NDEBUG" unless="debug"/>
+				<define name="_WINDOWS"/>
+				<define name="_MBCS"/>
+				<define name="_USRDLL"/>
+				<define name="ENABLE_AXIS_EXCEPTION"/>
+			</defineset>
+			<compilerarg value="/FD"/>
+			<compilerarg value="/c"/>
+		</compiler>
+		
+		<!--
+		  Definition of gcc compile for Linux
+	      -->
+		<compiler id="Linuxgcc" name="g++" if="linux">
+			<compilerarg value="-g" if="debug"/>
+			<compilerarg value="-Wall"/>
+			<compilerarg value="-Wshadow"/>
+			<compilerarg value="-O2"/>
+			<defineset>
+				<define name="ENABLE_AXIS_EXCEPTION"/>
+				<define name="HAVE_CONFIG_H"/>
+				<define name="PIC"/>
+			</defineset>
+			<includepath path="${dir.include}"/>
+		</compiler>
+		
+		<!--
+		  Definition of xlc compile for AIX
+	      -->
+		<compiler id="AIXxlc" name="xlC" if="aix">
+			<compilerarg value="-g" if="debug"/>
+			<compilerarg value="-V"/>
+			<compilerarg value="-qstaticinline"/>
+			<defineset>
+				<define name="ENABLE_AXIS_EXCEPTION"/>
+				<define name="HAVE_CONFIG_H"/>
+				<define name="AIX"/>
+			</defineset>
+			<includepath path="${dir.include}"/>
+		</compiler>
+
+	<!--
+	  Linker Definitions
+	  -->
+		<!-- Definition of Solars linker -->
+		<linker id="SolarisLinker" name="CC" libtool="true" if="solaris">
+			<linkerarg value="-g" if="debug"/>
+			<linkerarg value="-Qoption"/>
+			<linkerarg value="ld"/>
+			<linkerarg value="-zmuldefs"/>
+		</linker>
+
+		<!--
+		  Definition of Visual C++ linker
+		  -->
+		<linker id="VisualC++Linker" name="msvc" if="windows">
+			<linkerarg value="/debug" if="debug"/>
+			<linkerarg value="/machine:I386"/>
+			<linkerarg value="/nologo"/>
+			<linkerarg value="/pdb:none"/>
+		</linker>
+	
+		<!--
+	      Definition of Linux linker
+	      -->
+		<linker id="LinuxLinker" name="g++" libtool="true" if="linux">
+			<linkerarg value="-g" if="debug"/>
+			<libset libs="stdc++"/>
+		</linker>
+		
+		<!--
+	      Definition of AIX linker
+	      -->
+		<linker id="AIXLinker" name="xlC" libtool="false" if="aix">
+			<linkerarg value="-g" if="debug"/>
+			<linkerarg value="-qmkshrobj"/>
+			<linkerarg value="-L/usr/lib/threads"/>
+			<linkerarg value="-lpthreads"/>
+			<linkerarg value="-lm"/>
+			<linkerarg value="-lc_r"/>
+			<linkerarg value="-lc"/>
+		</linker>
+
+	<!--
+	  Determine platform
+	  -->
+	<target name="pre-init">
+		<condition property="solaris">
+            	<os name="SunOS"/>
+		</condition>
+		<condition property="windows">
+			<os family="windows"/>
+		</condition>
+		<condition property="aix">
+            <os name="AIX"/>
+        </condition>
+        <condition property="linux">
+            <os name="Linux"/>
+        </condition>
+	</target>
+	
+	<!--
+	  Initialize properties
+      -->
+	<target name="initialize" depends="pre-init">
+		<condition property="platform" value="SunOS">
+			<isset property="solaris"/>
+		</condition>
+		<condition property="platform" value="Win32">
+			<isset property="windows"/>
+		</condition>
+		<condition property="platform" value="Linux">
+			<isset property="linux"/>
+		</condition>
+		<condition property="platform" value="AIX">
+			<isset property="aix"/>
+		</condition>
+		
+		<!-- Load properties from file -->
+		<property file="${basedir}/build.${platform}.properties"/>
+	</target>
+</project>
