@@ -16,7 +16,7 @@
 
 
 /**
- * @file BasicNode.h
+ * @file BasicNode.hpp
  *
  * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
  */
@@ -25,11 +25,8 @@
 #define _BASICNODE_H____OF_AXIS_INCLUDED_
 
 #include "GDefine.hpp"
-
-#ifdef __cplusplus
-
+#include <axis/IAttribute.hpp>
 #include <list>
-
 
 AXIS_CPP_NAMESPACE_START
 using namespace std;
@@ -37,10 +34,6 @@ using namespace std;
 class SoapSerializer;
 
 AXIS_CPP_NAMESPACE_END
-
-#endif
-
-#include <axis/IAttribute.hpp>
 
 enum NODE_TYPE { ELEMENT_NODE=1, CHARACTER_NODE};
 
@@ -67,14 +60,6 @@ enum NODE_TYPE { ELEMENT_NODE=1, CHARACTER_NODE};
  * Revision 1.3  2004/07/28 roshan
  * Added the method getLocalName()
  */
-
-
-typedef struct {
-	int (AXISCALL* getNoOfChildren)(void* pObj);
-	/*add akk itger aou fybctuibs gere.*/
-} BasicNodeFunctions;
-
-#ifdef __cplusplus
 
 AXIS_CPP_NAMESPACE_START
 using namespace std;
@@ -297,21 +282,6 @@ protected:
 };
 
 AXIS_CPP_NAMESPACE_END
-
-#endif
-
-AXIS_CPP_NAMESPACE_START
-
-typedef struct { 
-	void* _object; /* this will be C++ Call Object */
-	BasicNodeFunctions* _functions; /* this is the static function table */
-} BasicNode_C;
-
-AXIS_CPP_NAMESPACE_END
-
-#ifndef __cplusplus
-typedef BasicNode_C BasicNode; 
-#endif
 
 #endif 
 

@@ -25,6 +25,8 @@
 
 #include <axis/server/GDefine.hpp>
 
+AXIS_CPP_NAMESPACE_START
+
 /**
  *   @class IAttribute
  *   @brief interface for the IAttribute class.
@@ -47,7 +49,8 @@ public:
     virtual const AxisChar* getUri() = 0;
     virtual const AxisChar* getPrefix() = 0;
     virtual const AxisChar* getLocalName() = 0;
-
 };
+
+AXIS_CPP_NAMESPACE_END
 
 #endif

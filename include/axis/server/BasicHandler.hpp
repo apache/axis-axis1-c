@@ -17,7 +17,7 @@
  */
 
 /**
- * @file BasicHandler.h
+ * @file BasicHandler.hpp
  *
  * @author Susantha Kumara (skumara@virtusa.com)
  * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com) *
@@ -49,8 +49,6 @@ typedef struct
     /* present only for interfaces passed from C to C++ (eg:BasicHandler) */
     BasicHandlerFunctions* _functions;
 } BasicHandler;
-
-#ifdef __cplusplus
 
 /**
   * @class HandlerBase
@@ -231,7 +229,6 @@ public:
       */
     virtual int AXISCALL getType()=0;
 };
-#endif
 
 AXIS_CPP_NAMESPACE_END
 

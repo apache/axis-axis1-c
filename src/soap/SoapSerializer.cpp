@@ -46,8 +46,6 @@ extern AXIS_CPP_NAMESPACE_PREFIX AxisConfig* g_pConfig;
 
 AXIS_CPP_NAMESPACE_START
 
-IWrapperSoapSerializerFunctions IWrapperSoapSerializer::ms_VFtable;
-
 SoapSerializer::SoapSerializer()
 {
     m_pSoapEnvelope = NULL;

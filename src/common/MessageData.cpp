@@ -29,7 +29,6 @@ extern AXIS_CPP_NAMESPACE_PREFIX WSDDDeployment* g_pWSDDDeployment;
 AXIS_CPP_NAMESPACE_START
 
 const AxisChar* MessageData::m_pachBlankPropertyValue = "";
-IMessageDataFunctions IMessageData::ms_VFtable;
 AdminUtils MessageData::m_AdminUtil;
 
 MessageData::MessageData ()

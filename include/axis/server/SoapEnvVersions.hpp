@@ -62,8 +62,6 @@ typedef enum SOAP_VERSIONTag
     VERSION_LAST
 } SOAP_VERSION;
 
-#ifdef __cplusplus
-
 AXIS_CPP_NAMESPACE_START
 
 class Attribute;
@@ -130,6 +128,4 @@ static SoapEnvVersionsStruct gs_SoapEnvVersionsStruct[VERSION_LAST]=
     }
 };
 #endif
-
-#endif 
 

@@ -254,9 +254,6 @@ extern "C" int initialize_module (int bServer)
     TypeMapping::initialize ();
     URIMapping::initialize ();
     SoapFault::initialize ();
-    IWrapperSoapDeSerializer::s_Initialize ();
-    IWrapperSoapSerializer::s_Initialize ();
-    IMessageData::s_Initialize ();
     ModuleInitialize ();
     if (bServer) // no client side wsdd processing at the moment
     {

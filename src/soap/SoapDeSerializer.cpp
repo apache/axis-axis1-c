@@ -73,8 +73,6 @@ AXIS_CPP_NAMESPACE_START
 
 #define INITIAL_ARRAY_SIZE 1
 
-IWrapperSoapDeSerializerFunctions IWrapperSoapDeSerializer::ms_VFtable;
-
 SoapDeSerializer::SoapDeSerializer()
 {
 	m_pParser = XMLParserFactory::getParserObject();
@@ -519,10 +517,11 @@ Axis_Array SoapDeSerializer::getCmplxArray(void* pDZFunct, void* pCreFunct,
                 pItem = reinterpret_cast<void*>(ptrval+nIndex*itemsize);
                 if (C_RPC_PROVIDER == getCurrentProviderType())
                 {
-                    IWrapperSoapDeSerializer_C cWSD;
-                    cWSD._object = this;
-                    cWSD._functions = &IWrapperSoapDeSerializer::ms_VFtable;
-                    ((AXIS_DESERIALIZE_FUNCT)pDZFunct)(pItem, &cWSD);
+                    // Disable C support
+                    //IWrapperSoapDeSerializer_C cWSD;
+                    //cWSD._object = this;
+                    //cWSD._functions = &IWrapperSoapDeSerializer::ms_VFtable;
+                    //((AXIS_DESERIALIZE_FUNCT)pDZFunct)(pItem, &cWSD);
                 }
                 else
                 {
@@ -577,11 +576,12 @@ Axis_Array SoapDeSerializer::getCmplxArray(void* pDZFunct, void* pCreFunct,
                     pItem = reinterpret_cast<void*>(ptrval+nIndex*itemsize);
                     if (C_DOC_PROVIDER == getCurrentProviderType())
                     {
-                        IWrapperSoapDeSerializer_C cWSD;
-                        cWSD._object = this;
-                        cWSD._functions = &IWrapperSoapDeSerializer::ms_VFtable;
-                        m_nStatus = ((AXIS_DESERIALIZE_FUNCT)pDZFunct)
-                            (pItem, &cWSD);
+                        // Disable C support
+                        //IWrapperSoapDeSerializer_C cWSD;
+                        //cWSD._object = this;
+                        //cWSD._functions = &IWrapperSoapDeSerializer::ms_VFtable;
+                        //m_nStatus = ((AXIS_DESERIALIZE_FUNCT)pDZFunct)
+                        //   (pItem, &cWSD);
                     }
                     else
                     {
@@ -1169,10 +1169,11 @@ void* SoapDeSerializer::getCmplxObject(void* pDZFunct, void* pCreFunct,
         {
             if (C_RPC_PROVIDER == getCurrentProviderType())
             {
-                IWrapperSoapDeSerializer_C cWSD;
-                cWSD._object = this;
-                cWSD._functions = &IWrapperSoapDeSerializer::ms_VFtable;
-                m_nStatus = ((AXIS_DESERIALIZE_FUNCT)pDZFunct)(pObject, &cWSD);
+                // Disable C support
+                //IWrapperSoapDeSerializer_C cWSD;
+                //cWSD._object = this;
+                //cWSD._functions = &IWrapperSoapDeSerializer::ms_VFtable;
+                //m_nStatus = ((AXIS_DESERIALIZE_FUNCT)pDZFunct)(pObject, &cWSD);
             }
             else
             {
@@ -1222,11 +1223,12 @@ void* SoapDeSerializer::getCmplxObject(void* pDZFunct, void* pCreFunct,
             {
                 if (C_DOC_PROVIDER == getCurrentProviderType())
                 {
-                    IWrapperSoapDeSerializer_C cWSD;
-                    cWSD._object = this;
-                    cWSD._functions = &IWrapperSoapDeSerializer::ms_VFtable;
-                    m_nStatus = ((AXIS_DESERIALIZE_FUNCT)pDZFunct)
-                        (pObject, &cWSD);
+                    // Disable C support
+                    //IWrapperSoapDeSerializer_C cWSD;
+                    //cWSD._object = this;
+                    //cWSD._functions = &IWrapperSoapDeSerializer::ms_VFtable;
+                    //m_nStatus = ((AXIS_DESERIALIZE_FUNCT)pDZFunct)
+                    //    (pObject, &cWSD);
                 }
                 else
                 {
@@ -1302,10 +1304,11 @@ void* SoapDeSerializer::getCmplxFaultObject(void* pDZFunct, void* pCreFunct,
         {
             if (C_RPC_PROVIDER == getCurrentProviderType())
             {
-                IWrapperSoapDeSerializer_C cWSD;
-                cWSD._object = this;
-                cWSD._functions = &IWrapperSoapDeSerializer::ms_VFtable;
-                m_nStatus = ((AXIS_DESERIALIZE_FUNCT)pDZFunct)(pObject, &cWSD);
+                // Disable C support
+                //IWrapperSoapDeSerializer_C cWSD;
+                //cWSD._object = this;
+                //cWSD._functions = &IWrapperSoapDeSerializer::ms_VFtable;
+                //m_nStatus = ((AXIS_DESERIALIZE_FUNCT)pDZFunct)(pObject, &cWSD);
             }
             else
             {
@@ -1349,11 +1352,12 @@ void* SoapDeSerializer::getCmplxFaultObject(void* pDZFunct, void* pCreFunct,
             {
                 if (C_DOC_PROVIDER == getCurrentProviderType())
                 {
-                    IWrapperSoapDeSerializer_C cWSD;
-                    cWSD._object = this;
-                    cWSD._functions = &IWrapperSoapDeSerializer::ms_VFtable;
-                    m_nStatus = ((AXIS_DESERIALIZE_FUNCT)pDZFunct)
-                        (pObject, &cWSD);
+                    // Disable C support
+                    //IWrapperSoapDeSerializer_C cWSD;
+                    //cWSD._object = this;
+                    //cWSD._functions = &IWrapperSoapDeSerializer::ms_VFtable;
+                    //m_nStatus = ((AXIS_DESERIALIZE_FUNCT)pDZFunct)
+                    //    (pObject, &cWSD);
                 }
                 else
                 {

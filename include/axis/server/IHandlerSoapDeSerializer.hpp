@@ -36,8 +36,6 @@
  * to the DeSerialzer.
  */
 
-#ifdef __cplusplus
-
 AXIS_CPP_NAMESPACE_START
 
 class IHandlerSoapDeSerializer : public IWrapperSoapDeSerializer
@@ -78,21 +76,6 @@ public:
 };
 
 AXIS_CPP_NAMESPACE_END
-
-#else
-
-typedef struct 
-{ 
-    void* unused; 
-    /* this corresponds to C++ virtual function 
-     * pointer which is ignored in C 
-     */ 
-    void* unused_; 
-    /* this corresponds to IWrapperSoapDeSerializerFunctions pointer */
-    IHandlerSoapDeSerializerFunctions* __vfptr;
-} IHandlerSoapDeSerializer;
-
-#endif
 
 #endif 
 

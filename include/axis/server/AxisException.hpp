@@ -28,7 +28,6 @@
 #define __AXISEXCEPTION_H_OF_AXIS_INCLUDED_
 
 #include <axis/server/GDefine.hpp>
-
 #include <string>
 #include <exception>
 #include <new>
@@ -36,7 +35,6 @@
 #include <stdexcept>
 
 AXIS_CPP_NAMESPACE_START
-
 using namespace std;
 
 /*

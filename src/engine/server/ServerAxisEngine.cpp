@@ -420,11 +420,12 @@ int ServerAxisEngine::invoke (MessageData* pMsg)
             if (0 != m_pWebService->_functions)
             /* C web service */
             {
-                IMessageData_C cMC = { 0, 0 };
-                cMC._object = pMsg;
-                cMC._functions = &IMessageData::ms_VFtable;
-                Status = m_pWebService->_functions->invoke (m_pWebService->
-                    _object, &cMC);
+                // Disable C support
+                //IMessageData_C cMC = { 0, 0 };
+                //cMC._object = pMsg;
+                //cMC._functions = &IMessageData::ms_VFtable;
+                //Status = m_pWebService->_functions->invoke (m_pWebService->
+                //    _object, &cMC);
             }
             else if (0 != m_pWebService->_object)
             {

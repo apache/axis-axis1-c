@@ -62,9 +62,6 @@
 
 AXIS_CPP_NAMESPACE_START
 
-HeaderBlockFunctions IHeaderBlock::ms_VFtable;
-bool IHeaderBlock::bInitialized = false;
-
 HeaderBlock::HeaderBlock()
 {
     iNoOFChildren = 0;

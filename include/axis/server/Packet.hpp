@@ -248,10 +248,8 @@ typedef struct
  */
 #define NO_OF_SERIALIZE_BUFFERS 20
 
-#ifdef __cplusplus
 extern "C"
 {
-#endif
 /*
  * Functions to manipulate Ax_soapstream object. Implemented in Packet.cpp
  *
@@ -303,9 +301,7 @@ STORAGE_CLASS_INFO void axis_buffer_release(const char* buffer,
                                             const void* bufferid, 
                                             const void* stream);
 
-#ifdef __cplusplus
 }
-#endif
 
 #endif
 

@@ -24,7 +24,7 @@
 #include "BasicHandler.hpp"
 
 /**
- * @file AxisWrapperAPI.h
+ * @file AxisWrapperAPI.hpp
  * This file contains the API functions that are implemented by the WSDL2Ws
  * tool generated code to manipulate C/C++ type for each complex type in a xml
  * schema.

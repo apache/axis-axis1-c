@@ -43,9 +43,6 @@
 
 AXIS_CPP_NAMESPACE_START
 
-AttributeFunctions Attribute::ms_VFtable;
-bool Attribute::bInitialized = false;
-
 Attribute::Attribute()
 {
     

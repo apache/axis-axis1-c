@@ -159,39 +159,15 @@ int Param::serialize (SoapSerializer &pSZ)
 	case USER_TYPE:
             if (RPC_ENCODED == pSZ.getStyle ())
             {
-                if (C_RPC_PROVIDER == pSZ.getCurrentProviderType ())
-                {
-                    IWrapperSoapSerializer_C cWSS;
-                    cWSS._object = &pSZ;
-                    cWSS._functions = &IWrapperSoapSerializer::ms_VFtable;
-                    m_Value.pCplxObj->pSZFunct (m_Value.pCplxObj->pObject,
-                        &cWSS, false);
-                }
-                else
-                {
-                    m_Value.pCplxObj->pSZFunct (m_Value.pCplxObj->pObject,
-                                                  &pSZ, false);
-                }
+                m_Value.pCplxObj->pSZFunct (m_Value.pCplxObj->pObject, &pSZ, false);
             }
             else
             {
                 pSZ.serialize ("<", m_sName.c_str (), NULL); 
-		/* note : ">" is not serialized to enable the type's serializer
-		 * to add attributes 
-		 */
-                if (C_DOC_PROVIDER == pSZ.getCurrentProviderType ())
-                {
-                    IWrapperSoapSerializer_C cWSS;
-                    cWSS._object = &pSZ;
-                    cWSS._functions = &IWrapperSoapSerializer::ms_VFtable;
-                    m_Value.pCplxObj->pSZFunct (m_Value.pCplxObj->pObject,
-                        &cWSS, false);
-                }
-                else
-                {
-                    m_Value.pCplxObj->pSZFunct (m_Value.pCplxObj->pObject,
-                        &pSZ, false);
-                }
+                /* note : ">" is not serialized to enable the type's serializer
+                 * to add attributes 
+                 */
+                m_Value.pCplxObj->pSZFunct (m_Value.pCplxObj->pObject, &pSZ, false);
                 pSZ.serialize ("</", m_sName.c_str (), ">", NULL);
             }
             break;

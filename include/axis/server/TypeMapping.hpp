@@ -23,6 +23,8 @@
 #define _TYPEMAPPING_H____OF_AXIS_INCLUDED_
 
 #include "GDefine.hpp"
+#include <map>
+#include <string>
 
 typedef enum XSDTYPETag 
 { XSD_UNKNOWN=1, XSD_INT, XSD_FLOAT, XSD_STRING, XSD_LONG, XSD_SHORT, \
@@ -37,11 +39,6 @@ typedef enum XSDTYPETag
                 XSD_INTEGER, \
                 XSD_ARRAY, USER_TYPE, ACCESSOR, XSD_NMTOKEN, XSD_ANY
 } XSDTYPE;
-
-#ifdef __cplusplus
-
-#include <map>
-#include <string>
 
 AXIS_CPP_NAMESPACE_START
 
@@ -75,7 +72,3 @@ public:
 AXIS_CPP_NAMESPACE_END
 
 #endif
-
-#endif 
-
-

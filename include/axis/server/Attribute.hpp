@@ -15,7 +15,7 @@
  */
 
  /**
- * @file Attribute.h
+ * @file Attribute.hpp
  *
  *
  */
@@ -24,19 +24,14 @@
 #define _ATTRIBUTE_H____OF_AXIS_INCLUDED_
 
 #include "GDefine.hpp"
-
-#ifdef __cplusplus
+#include <axis/IAttribute.hpp>
 #include <list>
 #include <string>
 
 AXIS_CPP_NAMESPACE_START
-
 using namespace std;
 
 class SoapSerializer;
-#include <axis/IAttribute.hpp>
-
-#endif
 
 /**
  *   @class Attribute
@@ -48,29 +43,9 @@ class SoapSerializer;
  *
  */
 
-/*
- * Revision 1.1  2004/05/25 samisa
- * Added copy constructor
- */
-
-/*
- * Revision 1.11  2004/06/13 susantha
- * Added support for writing C web services and handlers
- */
-
-typedef struct {
-	void (AXISCALL* setValue)(void* pObj, const AxisChar* value);
-	/*add all other API functions here*/
-} AttributeFunctions;
-
-#ifdef __cplusplus
-
 class Attribute : public IAttribute
 {
 public:        
-	static AttributeFunctions ms_VFtable;
-	static bool bInitialized;
-
 #ifdef UNIT_TESTING_ON
     int initializeForTesting();
 #endif
@@ -105,18 +80,7 @@ private:
 
 };
 
-#endif
-
-typedef struct { 
-	void* _object; /* this will be C++ Call Object */
-	AttributeFunctions* _functions; /* this is the static function table */
-} Attribute_C;
-
 AXIS_CPP_NAMESPACE_END
-
-#ifndef __cplusplus
-typedef Attribute_C Attribute; 
-#endif
 
 #endif
 

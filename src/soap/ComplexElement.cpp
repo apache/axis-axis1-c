@@ -41,11 +41,10 @@
 
 /* ComplexElement.cpp: implementation of the ComplexElement class. */
 
-
-#include "ComplexElement.h"
-#include "SoapSerializer.h"
 #include <axis/server/GDefine.hpp>
 #include <axis/server/Attribute.hpp>
+#include "ComplexElement.h"
+#include "SoapSerializer.h"
 
 AXIS_CPP_NAMESPACE_START
 

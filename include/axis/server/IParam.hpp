@@ -21,7 +21,6 @@
 #include "AxisWrapperAPI.hpp"
 #include "TypeMapping.hpp"
 #include "time.h"
-
 #include <string>
 
 AXIS_CPP_NAMESPACE_START
