@@ -2,102 +2,55 @@
 
 <head>
 <title>Changes in Axis</title>
-<style>
-<!--
- li.MsoNormal
-	{mso-style-parent:"";
-	margin-bottom:.0001pt;
-	font-size:12.0pt;
-	font-family:"Times New Roman";
-	margin-left:0in; margin-right:0in; margin-top:0in}
--->
-</style>
 <link rel="stylesheet" type="text/css" href="AxisMora.css">
 </head>
 
 <body>
-
-<h1 align="center"><a name="top"></a>Axis-Mora</h1>
-
-<h1><font size="5">Changes in Axis-Mora</font></h1>
-
-<p align="left"><b>Contents</b></p>
-
-<p><a href="#Rationale for changes in Axis-Mora">Rationale for changes in 
-Axis-Mora </a> 
-<BR><a href="#Proposed Deserialization Model">Proposed Deserialization model</a><BR>
-<a href="#Proposed Wrapper Class Model">Proposed Wrapper Class Model</a><BR>
-<a href="#Proposed WSDL Support">Proposed WSDL Support</a><BR>
-<a href="#Proposed Axis-Mora">Proposed Axis-Mora </a>
-<BR><a href="#Limitations">Limitation</a><BR>&nbsp;</p>
-
-<p align="center" style="text-align: left">
-<h2><b><font size="4"><a name="Rationale for changes in Axis-Mora">Rationale for 
-changes in Axis-Mora</a></font></b></h2>
-<p>The concepts behind the architecture of axis-cpp suggested 
-modifications to axis-java with the objective of archieving performance 
-improvement in order of magnitudes. </p>
-<p>Changes are in two major areas;</p>
-<ul>
-  <li><b><font size="4">Deserialization </font></b>use the pull structure for parsing xml 
-  instead of call back structure for parsing.</li>
-  <li><b><font size="4">Eliminating reflection</font></b> by using the wrappers as 
-  in cpp architecture.</li>
-  <li><b><font size="4">WSDL2Java Support</font></b>&nbsp; in axis-Mora 
-  discourages taking java class and making it a web service.</li>
+<h1>Changes in Axis-Mora</h1>
+<h2>Contents</h2>
+<a href="#1">Rationale for changes in Axis-Mora</a><br>
+<a href="#2">Proposed Deserialization model</a><br>
+<a href="#3">Proposed Wrapper Class Model</a><br>
+<a href="#4">Proposed WSDL Support</a><br>
+<a href="#5">Proposed Axis-Mora</a><br>
+<a href="#6">Limitation</a><br>
 </ul>
 
+<h2><a name="1">Rationale for changes in Axis-Mora</a></h2>
 
-<h2><b><font size="4"><a name="Proposed Deserialization Model">Proposed Deserialization Model</a></font></b></h2>
-<p><font face="Verdana"><span style="font-size: 12.0pt; ">The 
-deserialization of the soap message is done using xml pull. Deserialization of 
-the soap body is performed by the application and not by the axis engine</span></font><span style="font-size: 12.0pt; font-family: Times New Roman">.</span></p>
-<h2><span style="font-family: Verdana; font-weight:700"><font size="4">
-<a name="Proposed Wrapper Class Model">Proposed Wrapper 
-Class Model</a></font></span></h2>
-<p class="MsoNormal">Just as in axis cpp there is a wrapper class for each web 
-service class. This wrapper class is written with full awareness of the actual 
-web service class. Axis engine would call the invoke( ) method of the wrapper 
-class which in turn would call the correct method in the web service.</p>
-<h2><span style="font-family: Verdana; font-weight:700"><font size="4">
-<a name="Proposed WSDL Support">Proposed WSDL 
-Support</a></font></span></h2>
-<p class="MsoNormal">Web service application developers should be encouraged to 
-use the top down approach rather than bottom up approach, i.e. they should be 
-encouraged to begin by describing web service in wsdl, rather than taking any 
-java/cpp class and publish it as a web service. </p>
-<p class="MsoNormal">
-<span style="font-size: 12.0pt; font-family: Verdana">The wrapper class, 
-web service classes are auto generated using the <a href="WSDL2Ws%20spec.htm">
-WSDL2Ws tool</a>.</span></p>
-<h2>
-<span style="font-family: Verdana; font-weight:700"><font size="4">
-<a name="Proposed Axis-Mora">Proposed Axis-Mora</a></font></span></h2>
-<p class="MsoNormal">Since there are significant changes in xml parsing &quot;deserialization 
-part&quot; of the axis had to be replaced. Minor modifications had to be done to axis architecture 
-with the introduction of wrappers.&nbsp;&nbsp; </p>
-<h2><b><font size="4"><a name="Limitations">Limitations</a></font></b></h2>
+<p>The concepts behind the architecture of axis-cpp suggested modifications to axis-java with the objective of archieving performance improvement in order of magnitudes.</p>
+
+Changes are in two major areas;<br>
 <ul>
-  <li>
-<p class="MsoNormal">We are not supporting multirefs.</p>
-  </li>
-  <li>
-<p class="MsoNormal">We are not support for attachments.</p>
-  </li>
+<li>Deserialization use the pull structure for parsing xml instead of call back structure for parsing.</li>
+<li>Eliminating reflection by using the wrappers as in cpp architecture.</li>
+<li>WSDL2Java Support  in axis-Mora discourages taking java class and making it a web service.</li>
 </ul>
-<p class="MsoNormal">&nbsp;</p>
-<blockquote>
-  <blockquote>
-    <blockquote>
-      <blockquote>
-        <p class="MsoNormal"><span style="font-family: Verdana">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <a href="#top">Back to Top</a></span></p>
-      </blockquote>
-    </blockquote>
-  </blockquote>
-</blockquote>
-<p>&nbsp;</p>
 
+<h2><a name="2">Proposed Deserialization model</a></h2>
+
+<p>The deserialization of the soap message is done using xml pull. Deserialization of the soap body is performed by the application and not by the axis engine.
+</p>
+<h2><a name="3">Proposed Wrapper Class Model</a></h2>
+<p>
+Just as in axis cpp there is a wrapper class for each web service class. This wrapper class is written with full awareness of the actual web service class. Axis engine would call the invoke( ) method of the wrapper class which in turn would call the correct method in the web service.
+</p>
+
+<h2><a name="4">Proposed WSDL Support</a></h2>
+<p>
+Web service application developers should be encouraged to use the top down approach rather than bottom up approach, i.e. they should be encouraged to begin by describing web service in wsdl, rather than taking any java/cpp class and publish it as a web service.
+
+The wrapper class, web service classes are auto generated using the <a href="WSDL2Ws%20spec.htm"> WSDL2Ws tool</a>
+</p>
+<h2><a name="5">Proposed Axis-Mora</a></h2>
+<p>
+Since there are significant changes in xml parsing "deserialization part" of the axis had to be replaced. Minor modifications had to be done to axis architecture with the introduction of wrappers.  
+</p>
+<h2><a name="6">Limitation</a></h2>
+    <ul>
+	<li>We are not supporting multirefs.</li>
+	<li>We are not support for attachments.</li>
+    </ul>
 
 </body>
 

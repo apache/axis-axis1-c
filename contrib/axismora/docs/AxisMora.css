@@ -11,13 +11,17 @@ BODY {
 	MARGIN-LEFT: 40px; COLOR: #000000; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; BACKGROUND-COLOR: #ffffff
 }
 H2 {
-	BACKGROUND-POSITION: left 50% ; MARGIN-LEFT: -30px; BACKGROUND-COLOR: #dce1ff; TEXT-DECORATION: underline
+	BACKGROUND-POSITION: left 50% ; MARGIN-LEFT: -30px; BACKGROUND-COLOR: #ffdda8; TEXT-DECORATION: underline
 }
 H3 {
 	MARGIN-LEFT: -10px
 }
 H1 {
 	MARGIN-LEFT: -30px
+}
+
+code {
+	BACKGROUND-POSITION: left 50% ; MARGIN-LEFT: -30px; BACKGROUND-COLOR: #ffeefa; 
 }
 .note {
 	FONT-WEIGHT: bold
