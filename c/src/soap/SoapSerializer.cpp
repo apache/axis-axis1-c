@@ -776,6 +776,8 @@ void SoapSerializer::SerializeEndElementOfType(const AxisChar* pName)
  *                 transport's AXIS_MODULE_CALLBACK_SEND_MESSAGE_BYTES 
  *                 callback
  */
+ 
+#ifndef USER_SERIALIZER 
 void axis_buffer_release(const char* buffer, const void* bufferid, 
                          const void* stream)
 {
@@ -784,6 +786,7 @@ void axis_buffer_release(const char* buffer, const void* bufferid,
     char *pChar = const_cast<char*>(buffer);
     pChar[0] = '\0'; /* set nul */ 
 }
+#endif
 
 IHeaderBlock* SoapSerializer::createHeaderBlock(AxisChar *pachLocalName, 
                                                 AxisChar *pachPrefix, 

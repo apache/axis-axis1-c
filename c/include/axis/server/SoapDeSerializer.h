@@ -186,6 +186,7 @@ public:
 //	void* CreateArray(XSDTYPE nType, int nSize);
 //	void DeleteArray(Axis_Array* pArray , XSDTYPE nType);
 	void SetStyle(AXIS_BINDING_STYLE nStyle){ m_nStyle = nStyle;};
+	AXIS_BINDING_STYLE GetStyle(){return m_nStyle;};	
 	XSDTYPE GetXSDType(const AnyElement* pElement);
 	int AXISCALL GetStatus(){return m_nStatus;};
 

@@ -99,8 +99,8 @@ public:
 	MessageData();
 	virtual ~MessageData();
 public:
-	SoapSerializer* m_pSZ;
-	SoapDeSerializer* m_pDZ;
+	IWrapperSoapSerializer* m_pSZ;
+	IWrapperSoapDeSerializer* m_pDZ;
 private:
 	void GetAdminUtils(IAdminUtils** pIAdminUtils);
 public:
@@ -115,8 +115,8 @@ public:
 	IWrapperSoapDeSerializer* getSoapDeserializer();
 	int setPastPivotState(bool bState);
 	bool isPastPivot();
-	void SetDeSerializer(SoapDeSerializer* pDZ);
-	void SetSerializer(SoapSerializer* pSZ);
+	void SetDeSerializer(IWrapperSoapDeSerializer* pDZ);
+	void SetSerializer(IWrapperSoapSerializer* pSZ);
 	void SetUserName(string& m_sUserName);
 	string& GetUserName();
 	void SetService(const WSDDService* argService);

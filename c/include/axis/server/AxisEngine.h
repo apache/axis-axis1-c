@@ -81,8 +81,8 @@
 class AxisEngine 
 {
 protected:	
-	SoapSerializer* m_pSZ;
-	SoapDeSerializer* m_pDZ;
+	IWrapperSoapSerializer* m_pSZ;
+	IWrapperSoapDeSerializer* m_pDZ;
 	HandlerChain* m_pGReqFChain;
 	HandlerChain* m_pGResFChain;
 	HandlerChain* m_pTReqFChain;

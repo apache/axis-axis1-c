@@ -20,7 +20,12 @@
 #define AXIS_DESERIALIZERPOOL_H__INCLUDED_
 
 #include "SharedObject.h"
+#ifdef USER_DESERIALIZER
+#include <axis/server/IWrapperSoapDeSerializer.h>
+extern void* GetUserDeSerializer();
+#else
 #include <axis/server/SoapDeSerializer.h>
+#endif
 #include <axis/server/GDefine.h>
 #include <list>
 
@@ -38,10 +43,10 @@ class DeserializerPool:protected SharedObject
         DeserializerPool ();
         virtual ~ DeserializerPool ();
     private:
-        list <SoapDeSerializer*>m_DZList;
+        list <IWrapperSoapDeSerializer*>m_DZList;
     public:
-        int GetInstance (SoapDeSerializer** ppDZ);
-        int PutInstance (SoapDeSerializer* pDZ);
+        int GetInstance (IWrapperSoapDeSerializer** ppDZ);
+        int PutInstance (IWrapperSoapDeSerializer* pDZ);
 };
 
 #endif 

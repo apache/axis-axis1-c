@@ -20,7 +20,12 @@
 #define AXIS_SERIALIZERPOOL_H__INCLUDED_
 
 #include "SharedObject.h"
+#ifdef USER_SERIALIZER
+#include <axis/server/IWrapperSoapSerializer.h>
+extern void* GetUserSerializer();
+#else
 #include <axis/server/SoapSerializer.h>
+#endif 
 #include <axis/server/GDefine.h>
 #include <list>
 
@@ -39,10 +44,10 @@ class SerializerPool:protected SharedObject
         SerializerPool ();
         virtual ~ SerializerPool ();
     private:
-        list <SoapSerializer*>m_SZList;
+        list <IWrapperSoapSerializer*>m_SZList;
     public:
-        int GetInstance (SoapSerializer** ppSZ);
-        int PutInstance (SoapSerializer* pSZ);
+        int GetInstance (IWrapperSoapSerializer** ppSZ);
+        int PutInstance (IWrapperSoapSerializer* pSZ);
 };
 
 #endif 

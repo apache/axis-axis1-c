@@ -68,6 +68,10 @@
 #include "AxisUserAPI.h"
 #include "TypeMapping.h"
 #include "ISoapSerializer.h"
+#include "SoapHeader.h"
+#include "IHeaderBlock.h"
+#include "WSDDDefines.h"
+#include "Packet.h"
 
 #endif
 
@@ -134,6 +138,20 @@ public:
 	/* following two functions are needed by serializer functions of complex types for RPC style web services */
 	virtual void AXISCALL SerializeStartElementOfType(const AxisChar* pName, const AxisChar* pNamespace, const AxisChar* pPrefix)=0;
 	virtual void AXISCALL SerializeEndElementOfType(const AxisChar* pName)=0;
+
+	/* Externalization of serializer API */
+	virtual int AXISCALL SetOutputStream(const Ax_soapstream* pStream)=0;
+	virtual void AXISCALL MarkEndOfStream()=0;	
+	virtual	int AXISCALL Init()=0;	
+	virtual IHeaderBlock* AXISCALL createHeaderBlock()=0;
+	virtual	int AXISCALL setSoapVersion(SOAP_VERSION)=0;
+	virtual int AXISCALL setSoapHeader(SoapHeader* pSoapHeader)=0;
+	virtual IHeaderBlock* AXISCALL createHeaderBlock(AxisChar *pachLocalName, AxisChar *pachPrefix, AxisChar *pachUri)=0;	
+	virtual PROVIDERTYPE AXISCALL GetCurrentProviderType()=0;
+	virtual void AXISCALL SetCurrentProviderType(PROVIDERTYPE nType)=0;	
+	virtual void AXISCALL SetStyle(AXIS_BINDING_STYLE nStyle)=0;
+	virtual AXIS_BINDING_STYLE AXISCALL GetStyle()=0;
+
 	/* following stuff is needed to provide the interface for C web services */
 public:
 	static IWrapperSoapSerializerFunctions ms_VFtable;
