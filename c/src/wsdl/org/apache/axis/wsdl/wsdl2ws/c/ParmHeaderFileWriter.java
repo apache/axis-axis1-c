@@ -64,6 +64,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Iterator;
 
 import javax.xml.namespace.QName;
@@ -130,13 +131,25 @@ public class ParmHeaderFileWriter extends ParamWriter{
 	  try{
 		Type atype;
 		Iterator types = this.wscontext.getTypemap().getTypes().iterator();
+		writer.write("#include <axis/common/AxisUserAPI.h>\n\n");
+		HashSet typeSet = new HashSet();
 		while(types.hasNext()){
-			if(!(atype = (Type)types.next()).equals(this.type)){
-				if (false){ //TODO check if this class has a member of the type in this include file. otherwise do not include
-					writer.write("#include \""+atype.getLanguageSpecificName()+".h\"\n");
+			atype = (Type)types.next();
+			if(!(atype.equals(this.type))){
+				if (this.type.isContainedType(atype)){ 
+					typeSet.add(atype.getLanguageSpecificName());
 				}
 			}
+		}		
+		Iterator itr = typeSet.iterator();
+		while(itr.hasNext())
+		{
+			writer.write("#include \""+itr.next().toString()+".h\"\n");
 		}
+		writer.write("/*Local name and the URI for the type*/\n");
+		writer.write("static const char* Axis_URI_"+classname+" = \""+type.getName().getNamespaceURI()+"\";\n");
+		writer.write("static const char* Axis_TypeName_"+classname+" = \""+type.getName().getLocalPart()+"\";\n\n");
+		
 	  }catch(IOException e){
 	  	throw new WrapperFault(e);
 	  }

@@ -66,6 +66,7 @@
 #include "GDefine.h"
 #include "IWrapperSoapDeSerializer.h"
 #include "IWrapperSoapSerializer.h"
+#include "BasicHandler.h"
 
 /**
  * Function that deserializes a custom type 

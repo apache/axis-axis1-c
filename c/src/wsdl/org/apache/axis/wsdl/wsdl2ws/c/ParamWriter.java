@@ -72,6 +72,7 @@ import javax.xml.namespace.QName;
 
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
+import org.apache.axis.wsdl.wsdl2ws.cpp.CPPUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
@@ -127,8 +128,8 @@ public abstract class ParamWriter extends BasicFileWriter{
    
             QName name = type.getTypNameForAttribName(attribs[i][0]);
             
-            if(CUtils.isSimpleType(name))
-                attribs[i][1] = CUtils.getclass4qname(name);
+            if(CPPUtils.isSimpleType(name))
+                attribs[i][1] = CPPUtils.getclass4qname(name);
             else
            		attribs[i][1] = this.wscontext.getTypemap().getType(name).getLanguageSpecificName();
 
@@ -149,7 +150,10 @@ public abstract class ParamWriter extends BasicFileWriter{
 			else{
 				return classname+"*"; //All complex types will be pointers	
 			}
-		}else
+		}else if (name != null){
+			return CUtils.getclass4qname(name);
+		}
+		else 
 			return classname;
 	}
 	

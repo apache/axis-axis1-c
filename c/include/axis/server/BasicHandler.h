@@ -68,7 +68,6 @@
 
 #include "IMessageData.h"
 #include "GDefine.h"
-#include "AxisWrapperAPI.h"
 
 enum HANDLER_TYPE { NORMAL_HANDLER, WEBSERVICE_HANDLER, CHAIN_HANDLER };
 

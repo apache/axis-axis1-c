@@ -77,9 +77,6 @@ public class CUtils {
 	private static Hashtable type2getValueMethodName = new Hashtable();
 	
 	static{
-		 /*
-		  * This type mapping is not complete. Susantha Ayya Can u please fill it 
-		  */		
 		 class2QNamemap.put("int", new QName(WrapperConstants.SCHEMA_NAMESPACE, "int"));
 		 class2QNamemap.put("unsigned char", new QName(WrapperConstants.SCHEMA_NAMESPACE, "byte"));
 		 class2QNamemap.put("float", new QName(WrapperConstants.SCHEMA_NAMESPACE, "float"));
@@ -146,7 +143,7 @@ public class CUtils {
 		type2getValueMethodName.put("Axis_Boolean","GetInt");
 		String methodname;
 		if((methodname = (String)type2getValueMethodName.get(typeName))!= null)
-			return methodname + "()";
+			return methodname;
 		return null;	
 	}
 	
@@ -167,5 +164,27 @@ public class CUtils {
 	}
 	public static String getWebServiceNameFromWrapperName(String wname){
 		return wname.substring(0, wname.length()- CUtils.WRAPPER_NAME_APPENDER.length());
+	}
+	public static String getXSDTypeForBasicType(String stype){
+		if ("int".equals(stype)) return "XSD_INT";
+		else if ("string".equals(stype)) return "XSD_STRING";
+		else if ("char*".equals(stype)) return "XSD_STRING";
+		else if ("unsigned int".equals(stype)) return "XSD_UNSIGNEDINT";
+		else if ("short".equals(stype)) return "XSD_SHORT";
+		else if ("unsigned short".equals(stype)) return "XSD_UNSIGNEDSHORT";
+		else if ("long".equals(stype)) return "XSD_LONG";
+		else if ("unsigned long".equals(stype)) return "XSD_UNSIGNEDLONG";
+		else if ("char".equals(stype)) return "XSD_BYTE";
+		else if ("unsigned char".equals(stype)) return "XSD_BYTE";
+		else if ("float".equals(stype)) return "XSD_FLOAT";
+		else if ("double".equals(stype)) return "XSD_DOUBLE";
+		else if ("Axis_DateTime".equals(stype)) return "XSD_DATETIME";
+		else if ("Axis_Date".equals(stype)) return "XSD_DATE";
+		else if ("Axis_Time".equals(stype)) return "XSD_TIME";
+		else if ("Axis_Base64Binary".equals(stype)) return "XSD_BASE64BINARY";
+		else if ("Axis_HexBinary".equals(stype)) return "XSD_HEXBINARY";
+		else if ("Axis_Decimal".equals(stype)) return "XSD_DECIMAL";
+		else if ("Axis_Boolean".equals(stype)) return "XSD_BOOLEAN";
+		else return "unknown type";
 	}
 }
