@@ -192,7 +192,10 @@
 	<!--
 	  Initialize properties
       -->
-	<target name="initialize" depends="pre-init">
+
+	<target name="initialize" depends="set-platform-specifics, checkIfDebug" />
+
+	<target name="set-platform-specifics" depends="pre-init">
 		<condition property="platform" value="SunOS">
 			<isset property="solaris"/>
 		</condition>
@@ -217,4 +220,34 @@
   		<!-- Load properties from file -->
  		<property file="${dir.properties}/build.${platform}.properties"/>
 	</target>
+
+	<!--
+	  Change the name of the DLL files if compiling with debug on windows
+	  -->
+	<target name="checkIfDebug" if="debug">
+		<if>
+			<and>
+				<isset property="windows"/>
+				<equals arg1="${debug}" arg2="true" casesensitive="false"/>
+			</and>
+			<then>
+				<property name="clientLibraryName_D" value="${clientLibraryName}_D"/>
+				<property name="transportLibraryName_D" value="${transportLibraryName}_D"/>
+				<property name="xmlParserLibraryName_D" value="${xmlParserLibraryName}_D"/>
+				<property name="xml4c.xmlParserLibraryName_D" value="${xml4c.xmlParserLibraryName}_D"/>
+				<property name="xerces.xmlParserLibraryName_D" value="${xerces.xmlParserLibraryName}_D"/>
+				<property name="axis2.transportLibraryName_D" value="${axis2.transportLibraryName}_D"/>
+				<property name="axis2.ipv6.transportLibraryName_D" value="${axis2.ipv6.transportLibraryName}_D"/>
+
+				<propertycopy property="clientLibraryName" from="clientLibraryName_D" override="true"/>
+				<propertycopy property="transportLibraryName" from="transportLibraryName_D" override="true"/>
+				<propertycopy property="xmlParserLibraryName" from="xmlParserLibraryName_D" override="true"/>
+				<propertycopy property="xml4c.xmlParserLibraryName" from="xml4c.xmlParserLibraryName_D" override="true"/>
+				<propertycopy property="xerces.xmlParserLibraryName" from="xerces.xmlParserLibraryName_D" override="true"/>
+				<propertycopy property="axis2.transportLibraryName" from="axis2.transportLibraryName_D" override="true"/>
+				<propertycopy property="axis2.ipv6.transportLibraryName" from="axis2.ipv6.transportLibraryName_D" override="true"/>
+			</then>
+		</if>
+	</target>
+		
 </project>

@@ -3,7 +3,7 @@
    <!--
     Compile the Axis Transport Library
     -->
-   <target name="compileAxisTransport">
+	 <target name="compileAxisTransport">
       <mkdir dir="${dir.objects}"/>
       <mkdir dir="${dir.bin}"/>
       <if>
@@ -11,21 +11,11 @@
             <isset property="aix"/>
          </not>
          <then>
-				<!--  Check to see if we are in debug mode so need _D library name -->
-				<if>
-					<and>
-						<isset property="windows"/>
-						<equals arg1="${debug}" arg2="true"/>
-					</and>
-					<then>
-						<property name="completeTransportLibraryName" value="${transportLibraryName}_D"/>
-					</then>
-					<else>
-						<property name="completeTransportLibraryName" value="${transportLibraryName}"/>
-					</else>
-				</if>
-
-            <cc outfile="${dir.bin}/${completeTransportLibraryName}" objdir="${dir.objects}"
+				<!--
+				  Library name may have been change if windows debug build. Changed
+				  in buildInitialize.xml
+				  -->
+            <cc outfile="${dir.bin}/${transportLibraryName}" objdir="${dir.objects}"
              exceptions="true" outtype="shared" multithreaded="true">
                <!-- Compilers -->
                <compiler refid="SolarisCC"/>

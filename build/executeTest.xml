@@ -113,7 +113,7 @@
 	<!--
 	  Create configuration file to use when running test
 	  -->
-	<target name="createConfigurationFile" if="successfulClientCompilation">
+	<target name="createConfigurationFile" depends="checkIfDebug" if="successfulClientCompilation">
 		<dirname file="${axiscpp.conf}" property="confFileDirectory"/>
 
 		<mkdir dir="${confFileDirectory}"/>

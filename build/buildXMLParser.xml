@@ -3,7 +3,7 @@
 	<!--
 	  Compile the Axis XML Parser Library
 	  -->
-	<target name="compileAxisXMLParser">
+	  <target name="compileAxisXMLParser">
 		<mkdir dir="${dir.objects}"/>
 		<mkdir dir="${dir.bin}"/>
 		<if>
@@ -11,21 +11,11 @@
 				<isset property="aix"/>
 			</not>
 			<then>
-				<!--  Check to see if we are in debug mode -->
-				<if>
-					<and>
-						<isset property="windows"/>
-						<equals arg1="${debug}" arg2="true"/>
-					</and>
-					<then>
-						<property name="completeXmlParserLibraryName" value="${xmlParserLibraryName}_D"/>
-					</then>
-					<else>
-						<property name="completeXmlParserLibraryName" value="${xmlParserLibraryName}"/>
-					</else>
-				</if>
-
-				<cc outfile="${dir.bin}/${completeXmlParserLibraryName}" objdir="${dir.objects}"
+				<!--
+				  Library name may have been change if windows debug build. Changed
+				  in buildInitialize.xml
+				  -->
+				<cc outfile="${dir.bin}/${xmlParserLibraryName}" objdir="${dir.objects}"
 				 exceptions="true" outtype="shared" multithreaded="true">
 				 	<!-- Compilers -->
 					<compiler refid="SolarisCC"/>

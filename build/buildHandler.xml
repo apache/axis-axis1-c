@@ -49,10 +49,23 @@
 		</condition>
 	</target>
 
+	<target name="checkIfDebugName" if="debug">
+		<if>
+			<and>
+				<isset property="windows"/>
+				<equals arg1="${debug}" arg2="true" casesensitive="false"/>
+			</and>
+			<then>
+				<property name="handlerLibraryName_D" value="${handlerLibraryName}_D"/>
+				<propertycopy property="handlerLibraryName" from="handlerLibraryName_D" override="true"/>
+			</then>
+		</if>
+	</target>
+
 	<!--
 	  Builds a test handler
 	  -->
-	<target name="buildTestHandler" depends="setHandlerLibraryName, compileTestHandler, validateHandlerCompilation, insertEntriesInWSDDFile"/>
+	<target name="buildTestHandler" depends="setHandlerLibraryName, checkIfDebugName, compileTestHandler, validateHandlerCompilation, insertEntriesInWSDDFile"/>
 
 	<!--
 	  Locate all Handlers needing to be build for this client

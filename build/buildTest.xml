@@ -52,10 +52,6 @@
 	  Compile test client
 	  -->
 	<target name="compileClient" depends="generateStubs, copyClient" unless="runOnly">
-		<!--
-		<cc failonerror="false" incremental="false" outfile="${dir.test.generated}/${client.lang}/${testName}/${testName}"
-		 objdir="${dir.test.generated}/${client.lang}/${testName}" exceptions="true"
-		-->
 		<cc failonerror="false" incremental="false" outfile="${test.directory}/${testName}"
 		 objdir="${test.directory}" exceptions="true"
 		 outtype="executable" subsystem="console">
