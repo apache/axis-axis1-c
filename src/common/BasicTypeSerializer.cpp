@@ -21,7 +21,7 @@
 
 
 #include <stdio.h>
-#include <axis/server/BasicTypeSerializer.h>
+#include "BasicTypeSerializer.h"
 #include "../soap/apr_base64.h"
 #include "../soap/HexCoder.h"
 

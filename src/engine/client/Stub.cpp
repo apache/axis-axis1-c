@@ -39,9 +39,9 @@
 
 #include <axis/client/Stub.h>
 #include <stdio.h>
-#include <axis/SOAPTransport.h>
+#include "../../transport/SOAPTransport.h"
 #include <axis/server/AxisWrapperAPI.h>
-#include <axis/server/SoapSerializer.h>
+#include "../../soap/SoapSerializer.h"
 
 StubFunctions Stub::ms_VFtable;
 bool Stub::bInitialized = false;

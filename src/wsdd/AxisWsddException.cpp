@@ -19,9 +19,7 @@
  *
  */
 
-#include <axis/AxisWsddException.h>
-#include <exception>
-using namespace std;
+#include "AxisWsddException.h"
 
 /**
  *    Default when no parameter passed. When thrown with no parameter
@@ -87,12 +85,12 @@ void AxisWsddException::processException(const int iExceptionCode, char* pcMessa
     if(pcMessage)
         delete pcMessage;
 }
-const string AxisWsddException::getMessage (const exception* objException)
+const string& AxisWsddException::getMessage (const exception* objException)
 {
     return objException->what();
 }
 
-const string AxisWsddException::getMessage (const int iExceptionCode)
+const string& AxisWsddException::getMessage (const int iExceptionCode)
 {
     switch(iExceptionCode)
     {

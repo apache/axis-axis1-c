@@ -20,7 +20,6 @@
 #include "AxisUserAPI.h"
 #include "TypeMapping.h"
 #include "WSDDDefines.h"
-#include <axis/SOAPTransport.h>
 
 #ifdef __cplusplus
 
@@ -275,10 +274,10 @@ public:
     virtual int AXISCALL getStatus()=0;
     
     /* Externalization of deserializer API */
-    virtual int setInputStream(SOAPTransport* pInputStream)=0;
-    virtual int init()=0;
-    virtual PROVIDERTYPE getCurrentProviderType()=0;
-    virtual void setCurrentProviderType(PROVIDERTYPE nType)=0;    
+//    virtual int setInputStream(SOAPTransport* pInputStream)=0;
+//    virtual int init()=0;
+//    virtual PROVIDERTYPE getCurrentProviderType()=0;
+//    virtual void setCurrentProviderType(PROVIDERTYPE nType)=0;    
     virtual AXIS_BINDING_STYLE getStyle()=0;    
     virtual void setStyle(AXIS_BINDING_STYLE nStyle)=0;
     virtual int getVersion()=0;

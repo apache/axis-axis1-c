@@ -52,13 +52,13 @@
 #pragma warning (disable : 4786)
 #endif
 
-#include <axis/server/HeaderBlock.h>
-#include <axis/server/SoapSerializer.h>
+#include "HeaderBlock.h"
+#include "SoapSerializer.h"
 #include <axis/server/GDefine.h>
 #include <axis/server/BasicNode.h>
 #include "ComplexElement.h"
-#include <axis/server/CharacterElement.h>
-#include <axis/server/Attribute.h>
+#include "CharacterElement.h"
+#include <axis/server/attribute.h>
 
 HeaderBlockFunctions IHeaderBlock::ms_VFtable;
 bool IHeaderBlock::bInitialized = false;

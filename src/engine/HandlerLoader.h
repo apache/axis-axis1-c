@@ -19,12 +19,12 @@
 #if !defined(__HANDLERLOADER_H_OF_AXIS_INCLUDED__)
 #define __HANDLERLOADER_H_OF_AXIS_INCLUDED__
 
-#include <axis/server/MessageData.h>
+#include "../common/MessageData.h"
 #include <axis/server/GDefine.h>
 #include <axis/server/WrapperClassHandler.h>
 #include "SharedObject.h"
-#include <axis/AxisEngineException.h>
-#include <axis/AxisConfigException.h>
+#include "AxisEngineException.h"
+#include "../common/AxisConfigException.h"
 
 #include <map>
 #include <string>

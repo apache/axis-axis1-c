@@ -17,7 +17,7 @@
 #if !defined(_MESSAGEDATA_H____OF_AXIS_INCLUDED_)
 #define _MESSAGEDATA_H____OF_AXIS_INCLUDED_
 
-#include "IMessageData.h"
+#include <axis/server/IMessageData.h>
 #include "AdminUtils.h"
 
 /*

@@ -22,8 +22,8 @@
 #include "../../common/AxisUtils.h"
 #include "../../wsdd/WSDDDeployment.h"
 #include "../HandlerPool.h"
-#include <axis/server/AxisMessage.h>
-#include <axis/server/AxisTrace.h>
+#include "../../common/AxisMessage.h"
+#include "../../common/AxisTrace.h"
 extern AxisTrace* g_pAT;
 
 extern HandlerPool* g_pHandlerPool;

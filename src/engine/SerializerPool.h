@@ -24,7 +24,7 @@
 #include <axis/server/IWrapperSoapSerializer.h>
 extern void* GetUserSerializer();
 #else
-#include <axis/server/SoapSerializer.h>
+#include "../soap/SoapSerializer.h"
 #endif 
 #include <axis/server/GDefine.h>
 #include <list>

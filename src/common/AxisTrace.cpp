@@ -19,12 +19,12 @@
  *
  */
 
-#include <axis/server/AxisTrace.h>
+#include "AxisTrace.h"
 #include <time.h>
 #include <stdio.h>
 #include "AxisUtils.h"
 #include <axis/server/GDefine.h>
-#include <axis/server/AxisConfig.h>
+#include "AxisConfig.h"
 
 
 extern AxisConfig* g_pConfig;

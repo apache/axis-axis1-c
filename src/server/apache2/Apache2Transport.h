@@ -33,7 +33,7 @@
 #include <apache2_0/http_log.h>
 #include <apache2_0/ap_compat.h>
 #include <apache2_0/apr_tables.h>
-#include <axis/SOAPTransport.h>
+#include "../../transport/SOAPTransport.h"
 #include <string.h>
 
 class Apache2Transport : public SOAPTransport  

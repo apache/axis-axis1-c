@@ -21,9 +21,8 @@
 #if !defined(AXIS_WSDDDEPLOYMENT_H__OF_AXIS_INCLUDED_)
 #define AXIS_WSDDDEPLOYMENT_H__OF_AXIS_INCLUDED_
 
-#include <axis/server/WSDDService.h>
-#include <axis/server/WSDDHandler.h>
-#include <axis/AxisWsddException.h>
+#include "WSDDService.h"
+#include "WSDDHandler.h"
 #include "WSDDTransport.h"
 
 #include <list>

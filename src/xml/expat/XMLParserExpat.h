@@ -29,10 +29,10 @@
 #include <axis/server/Packet.h>
 
 #include "../QName.h"
-#include <axis/server/AnyElement.h>
+#include "../AnyElement.h"
 #include "../Event.h"
-#include <axis/server/XMLParser.h>
-#include <axis/AxisParseException.h>
+#include "../XMLParser.h"
+#include "../AxisParseException.h"
 
 #include <queue>
 #include <map>

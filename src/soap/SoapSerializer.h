@@ -17,11 +17,11 @@
 #if !defined(_SOAPSERIALIZER_H____OF_AXIS_INCLUDED_)
 #define _SOAPSERIALIZER_H____OF_AXIS_INCLUDED_
 
-#include "IHandlerSoapSerializer.h"
-#include <axis/SOAPTransport.h>
+#include <axis/server/IHandlerSoapSerializer.h>
+#include "../transport/SOAPTransport.h"
 
-#include "BasicTypeSerializer.h"
-#include "WSDDDefines.h"
+#include "../common/BasicTypeSerializer.h"
+#include <axis/server/WSDDDefines.h>
 
 class SoapEnvelope;
 class SoapHeader;

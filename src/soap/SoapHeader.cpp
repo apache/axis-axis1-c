@@ -30,11 +30,11 @@
 #pragma warning (disable : 4786)
 #endif
 
-#include <axis/server/SoapHeader.h>
-#include <axis/server/SoapSerializer.h>
+#include "SoapHeader.h"
+#include "SoapSerializer.h"
 #include <axis/server/GDefine.h>
 #include <axis/server/Attribute.h>
-#include <axis/server/HeaderBlock.h>
+#include "HeaderBlock.h"
 
 SoapHeader::SoapHeader()
 {

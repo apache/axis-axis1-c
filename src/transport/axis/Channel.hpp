@@ -36,7 +36,7 @@
 
 #include <string>
 #include "Transport.hpp"
-#include <axis/AxisTransportException.h>
+#include "AxisTransportException.h"
 
 /* platform specific stuff */
 

@@ -338,6 +338,10 @@ SOURCE=..\src\engine\XMLParserFactory.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
+SOURCE=..\include\axis\ISoapFault.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\axis\server\Packet.h
 # End Source File
 # End Group

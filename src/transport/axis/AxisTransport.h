@@ -33,7 +33,7 @@
 #if !defined(_AXIS_AXIS_TRANSPORT_HPP)
 #define _AXIS_AXIS_TRANSPORT_HPP
 
-#include <axis/SOAPTransport.h>
+#include "../SOAPTransport.h"
 #include "Sender.hpp"
 #include "Receiver.hpp"
 

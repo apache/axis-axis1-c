@@ -22,6 +22,7 @@
  */
 
 #include "AxisAdminServiceWrapper.h"
+#include "../../common/IAdminUtils.h"
 
 AxisAdminServiceWrapper::AxisAdminServiceWrapper ()
 {

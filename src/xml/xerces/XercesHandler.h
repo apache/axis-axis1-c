@@ -18,9 +18,9 @@
  *    @author sanjaya singharage (sanjayas@opensource.lk)
  */
 
-#include    <xercesc/sax/HandlerBase.hpp>
-#include    <xercesc/sax2/DefaultHandler.hpp>
-#include <axis/server/AnyElement.h>
+#include <xercesc/sax/HandlerBase.hpp>
+#include <xercesc/sax2/DefaultHandler.hpp>
+#include "../AnyElement.h"
 #include <stdlib.h>
 #include <map>
 #include <string>

@@ -23,7 +23,7 @@
 #include "AppScopeHandlerPool.h"
 #include "HandlerLoader.h"
 #include <axis/server/AxisException.h>
-#include <axis/server/AxisTrace.h>
+#include "../common/AxisTrace.h"
 extern AxisTrace* g_pAT;
 
 extern HandlerLoader* g_pHandlerLoader;

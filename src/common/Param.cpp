@@ -19,10 +19,10 @@
  *
  */
 
-#include <axis/server/AxisEngine.h>
-#include <axis/server/Param.h>
+#include "../engine/AxisEngine.h"
+#include "Param.h"
 #include "ArrayBean.h"
-#include <axis/server/BasicTypeSerializer.h>
+#include "BasicTypeSerializer.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include "AxisUtils.h"

@@ -18,36 +18,34 @@
  *
  */
  
-#ifndef __AXISWSDDEXCEPTION_H_OF_AXIS_INCLUDED_
-#define __AXISWSDDEXCEPTION_H_OF_AXIS_INCLUDED_
+#ifndef __AXISENGINEEXCEPTION_H_OF_AXIS_INCLUDED_
+#define __AXISENGINEEXCEPTION_H_OF_AXIS_INCLUDED_
 
 #include <string>
-#include <exception>
 #include <axis/server/AxisException.h>
 using namespace std;
 
-class STORAGE_CLASS_INFO AxisWsddException :public AxisException
+class STORAGE_CLASS_INFO AxisEngineException :public AxisException
 {
 
 public:
-    AxisWsddException();
-    AxisWsddException(const int iExceptionCode);
-    AxisWsddException(const int iExceptionCode, char* pcMessage);
-    AxisWsddException(const exception* e);
-    AxisWsddException(const exception* e, const int iExceptionCode);
-    virtual ~AxisWsddException() throw();
+    AxisEngineException();
+    AxisEngineException(const int iExceptionCode);
+    AxisEngineException(const int iExceptionCode, char* pcMessage);
+    AxisEngineException(const exception* e);
+    AxisEngineException(const exception* e, const int iExceptionCode);
+    virtual ~AxisEngineException() throw();
     const char* what() throw();
     const int getExceptionCode();
-
+                                                                                                                             
 private:
-    const string getMessage(const exception* e);
-    const string getMessage(const int iExceptionCode);
+    const string& getMessage(const exception* e);
+    const string& getMessage(const int iExceptionCode);
     void processException(const exception* e);
     void processException(const exception* e, const int iExceptionCode);
     void processException (const exception* e, char* pcMessage);
     void processException(const int iExceptionCode);
-    void processException(const int iExceptionCode, char* pcMessage);                                                                  
-                                                                                                                             
+    void processException(const int iExceptionCode, char* pcMessage);                                                                                                                           
     string m_sMessage;
     int m_iExceptionCode;
 };

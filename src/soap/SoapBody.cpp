@@ -37,10 +37,10 @@
  */
 
 #include "SoapBody.h"
-#include <axis/server/SoapSerializer.h>
+#include "SoapSerializer.h"
 #include <axis/server/GDefine.h>
 #include <axis/server/Attribute.h>
-#include <axis/server/AxisTrace.h>
+#include "../common/AxisTrace.h"
 extern AxisTrace* g_pAT;
 
 SoapBody::SoapBody()

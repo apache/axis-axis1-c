@@ -29,14 +29,14 @@
 #include <axis/server/Packet.h>
 #include "../QName.h"
 #include "../Event.h"
-#include <axis/server/XMLParser.h>
+#include "../XMLParser.h"
 #include "XercesHandler.h"
 
 #include <xercesc/sax2/SAX2XMLReader.hpp>
 #include <xercesc/parsers/SAXParser.hpp>
 #include <xercesc/framework/XMLPScanToken.hpp>
 #include "SoapInputSource.h"
-#include <axis/AxisParseException.h>
+#include "../AxisParseException.h"
 
 XERCES_CPP_NAMESPACE_USE
 

@@ -27,15 +27,15 @@
 
 
 #include <axis/client/Call.h>
-#include <axis/server/AxisConfig.h>
+#include "../../common/AxisConfig.h"
 #include "../../transport/axis/AxisTransport.h"
 #include "../../transport/axis/Channel.hpp"
 #include "ClientAxisEngine.h"
 #include "../SOAPTransportFactory.h"
-#include <axis/SOAPTransport.h>
-#include <axis/server/SoapSerializer.h>
-#include <axis/server/SoapDeSerializer.h>
-#include <axis/server/HeaderBlock.h>
+#include "../../transport/SOAPTransport.h"
+#include "../../soap/SoapSerializer.h"
+#include "../../soap/SoapDeSerializer.h"
+#include "../../soap/HeaderBlock.h"
 
 extern "C" int initialize_module (int bServer);
 

@@ -18,13 +18,13 @@
  *
  */
 
-#include <axis/server/AxisEngine.h>
+#include "AxisEngine.h"
 #include <stdio.h>
 
 #include "HandlerPool.h"
 #include "DeserializerPool.h"
 #include "SerializerPool.h"
-#include <axis/server/AxisTrace.h>
+#include "../common/AxisTrace.h"
 extern AxisTrace* g_pAT;
 
 extern DeserializerPool* g_pDeserializerPool;

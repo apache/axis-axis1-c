@@ -20,7 +20,7 @@
  */
 
 #include "DeserializerPool.h"
-#include <axis/server/AxisTrace.h>
+#include "../common/AxisTrace.h"
 extern AxisTrace* g_pAT;
 
 DeserializerPool::DeserializerPool ()
@@ -52,7 +52,7 @@ int DeserializerPool::getInstance (IWrapperSoapDeSerializer** ppDZ)
 #else
         *ppDZ = new SoapDeSerializer ();
 #endif                
-        if (AXIS_SUCCESS != (*ppDZ)->init ())
+        if (AXIS_SUCCESS != ((SoapDeSerializer*)(*ppDZ))->init ())
         {
             delete* ppDZ;
             *ppDZ = NULL;
@@ -67,7 +67,7 @@ int DeserializerPool::getInstance (IWrapperSoapDeSerializer** ppDZ)
 
 int DeserializerPool::putInstance (IWrapperSoapDeSerializer* pDZ)
 {
-    if (AXIS_SUCCESS != pDZ->init ())
+    if (AXIS_SUCCESS != ((SoapDeSerializer*)pDZ)->init ())
     {
         delete pDZ;
         return AXIS_FAIL;

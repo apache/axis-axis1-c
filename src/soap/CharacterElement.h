@@ -33,7 +33,7 @@
 #pragma warning (disable : 4786)
 #endif
 
-#include "BasicNode.h"
+#include <axis/server/BasicNode.h>
 
 /**
  * @class CharacterElement

@@ -21,7 +21,7 @@
 #include "WSDDDocument.h"
 #include "WSDDKeywords.h"
 #include "../engine/XMLParserFactory.h"
-#include <axis/server/AxisTrace.h>
+#include "../common/AxisTrace.h"
 
 #define NAMESPACESEPARATOR 0x03    /* Heart */
 #define FILEBUFFSIZE 1024

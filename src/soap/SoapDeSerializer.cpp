@@ -33,26 +33,26 @@
 #pragma warning (disable : 4101)
 #endif
 
-#include <axis/server/SoapDeSerializer.h>
+#include "SoapDeSerializer.h"
 #include "SoapEnvelope.h"
 #include "SoapKeywordMapping.h"
 #include "URIMapping.h"
-#include <axis/server/SoapHeader.h>
+#include "SoapHeader.h"
 #include "SoapMethod.h"
 #include "SoapBody.h"
 #include "SoapFault.h"
 #include "ComplexElement.h"
-#include <axis/server/CharacterElement.h>
+#include "CharacterElement.h"
 #include <axis/server/GDefine.h>
 #include <axis/server/Packet.h>
-#include <axis/server/AxisTrace.h>
+#include "../common/AxisTrace.h"
 #include "apr_base64.h"
 #include "HexCoder.h"
 #include "../engine/XMLParserFactory.h"
-#include <axis/server/XMLParser.h>
+#include "../xml/XMLParser.h"
 #include "../xml/QName.h"
 #include <axis/server/Attribute.h>
-#include <axis/AxisSoapException.h>
+#include "AxisSoapException.h"
 #include <axis/AxisGenException.h>
 
 #include <list>
