@@ -51,7 +51,7 @@
 #include "SoapFault.h"
 #include "ComplexElement.h"
 #include "CharacterElement.h"
-#include <axis/GDefine.hpp>
+#include <axis/server/GDefine.hpp>
 #include "../common/AxisTrace.h"
 #include "apr_base64.h"
 #include "HexCoder.h"
@@ -636,15 +636,23 @@ SoapDeSerializer::getCmplxArray (void *pDZFunct, void *pCreFunct,
 			m_pNode = m_pParser->next ();
 			//Jira AXISCPP-145
 			//point to next element (can be next array elemnt or different object)
-			m_pParser->next ();
-			//Skip past end of item
-		    m_pNode = m_pParser->next ();
+			m_pNode = m_pParser->next ();
 // > FJP
 
-			if (0 == strcmp (pName, m_pNode->m_pchNameOrValue))
+			if( m_pNode->m_type == END_ELEMENT)
 			{
-				m_pNode = NULL;
+//Skip past end of item
+			    m_pNode = m_pParser->next();
+
+				if (0 == strcmp (pName, m_pNode->m_pchNameOrValue))
+				{
+					if( m_pNode->m_type != START_ELEMENT)
+					{
+						m_pNode = NULL;
+					}
+				}
 			}
+
 // < FJP
 			continue;
 		    }
