@@ -36,6 +36,7 @@
 
 ApacheTransport::ApacheTransport(void* pContext)
 {
+    m_eProtocolType = APTHTTP1_1;
     m_bHeadersSent = false;
 	m_pContext = pContext;
 #ifndef CHUNCKED_DATA_SUPPORTED
@@ -272,7 +273,18 @@ const char* ApacheTransport::getServiceName()
 
 AXIS_PROTOCOL_TYPE ApacheTransport::getProtocol()
 {
-	return APTHTTP;
+	return m_eProtocolType;
+}
+
+int ApacheTransport::setProtocol(AXIS_PROTOCOL_TYPE eProtocol)
+{
+    if( eProtocol == APTHTTP1_1 || eProtocol == APTHTTP1_0 )
+    {
+       m_eProtocolType = eProtocol;
+       return AXIS_SUCCESS;
+    }
+    else
+        return AXIS_FAIL;
 }
 
 int ApacheTransport::getSubProtocol()

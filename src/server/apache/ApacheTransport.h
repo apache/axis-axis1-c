@@ -71,6 +71,7 @@ public:
 	const char* getSessionId();
 	const char* getServiceName();
 	AXIS_PROTOCOL_TYPE getProtocol();
+    int setProtocol(AXIS_PROTOCOL_TYPE eProtocol);
 	int getSubProtocol();
 	AXIS_TRANSPORT_STATUS flushOutput();
   /**

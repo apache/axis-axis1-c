@@ -29,6 +29,7 @@
 
 Apache2Transport::Apache2Transport(void* pContext)
 {
+    m_eProtocolType = APTHTTP1_1;
 	m_pContext = pContext;
 #ifndef CHUNCKED_DATA_SUPPORTED
     m_pBuffers = new BufferInfo[NO_OF_SERIALIZE_BUFFERS];
@@ -247,8 +248,20 @@ const char* Apache2Transport::getServiceName()
 
 AXIS_PROTOCOL_TYPE Apache2Transport::getProtocol()
 {
-	return APTHTTP1_1;
+	return m_eProtocolType;
 }
+ 
+int Apache2Transport::setProtocol(AXIS_PROTOCOL_TYPE eProtocol)
+{
+    if( eProtocol == APTHTTP1_1 || eProtocol == APTHTTP1_0 )
+    {
+       m_eProtocolType = eProtocol;
+       return AXIS_SUCCESS;
+    }
+    else
+        return AXIS_FAIL;
+}
+
 
 int Apache2Transport::getSubProtocol()
 {

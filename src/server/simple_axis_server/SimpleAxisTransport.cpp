@@ -29,6 +29,7 @@
 
 SimpleAxisTransport::SimpleAxisTransport (int iSocket)
 {
+    m_eProtocolType = APTHTTP1_1;
     m_iSocket = iSocket;
     m_bReadPastHeaders = false;
     m_strPayloadToSend = "";
@@ -294,6 +295,18 @@ SimpleAxisTransport::getProtocol ()
 {
     return APTHTTP1_1;
 }
+
+int SimpleAxisTransport::setProtocol(AXIS_PROTOCOL_TYPE eProtocol)
+{
+    if( eProtocol == APTHTTP1_1 || eProtocol == APTHTTP1_0 )
+    {
+       m_eProtocolType = eProtocol;
+       return AXIS_SUCCESS;
+    }
+    else
+        return AXIS_FAIL;
+}
+
 
 int
 SimpleAxisTransport::getSubProtocol ()
