@@ -221,12 +221,12 @@ AXIS_CPP_NAMESPACE_START
         /* if the timezone is represented adding 'Z' at the end */
         if ((cTemp = const_cast<char*>(strpbrk (valueAsChar, "Z"))) != NULL)
         {
-            time_t temp = mktime (&value); // convert tm object to seconds
-            if (temp == -1)
+            time_t tempmktime = mktime (&value); // convert tm object to seconds
+            if (tempmktime == -1)
             {
             	throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
             }
-            pTm = localtime (&temp); // construct tm object from seconds
+            pTm = localtime (&tempmktime); // construct tm object from seconds
             memcpy (&value, pTm, sizeof (tm));
             time_t t = mktime (&value);
             if (t == -1)
