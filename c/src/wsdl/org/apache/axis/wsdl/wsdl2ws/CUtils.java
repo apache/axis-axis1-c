@@ -73,6 +73,7 @@ public class CUtils {
 		class2QNamemap.put("xsd__unsignedLong", new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedLong"));
 		class2QNamemap.put("xsd__unsignedShort", new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedShort"));
 		class2QNamemap.put("xsd__QName", new QName(WrapperConstants.SCHEMA_NAMESPACE, "QName"));
+		class2QNamemap.put("xsd__NMTOKEN", new QName(WrapperConstants.SCHEMA_NAMESPACE,"NMTOKEN"));
 		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "int"), "int");
 		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "byte"), "unsigned char");
 		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "float"), "float");
@@ -95,6 +96,7 @@ public class CUtils {
 		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedLong"), "xsd__unsignedLong");
 		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedShort"), "xsd__unsignedShort");
 		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "QName"), "xsd__QName");
+		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "NMTOKEN"), "xsd__NMTOKEN");
 		
 		/* TODO:
 		 *   Should be removed when the following issue will be fixed :
@@ -149,6 +151,7 @@ public class CUtils {
 		type2getValueMethodName.put("xsd__boolean","Boolean");
 		type2getValueMethodName.put("xsd__anyURI","String");
 		type2getValueMethodName.put("xsd__QName","String");
+		type2getValueMethodName.put("xsd__NMTOKEN","String");
 		type2BasicArrayName.put("int","xsd__int_Array");
 		type2BasicArrayName.put("float","xsd__float_Array");
 		type2BasicArrayName.put("xsd__string","xsd__string_Array");
@@ -169,6 +172,7 @@ public class CUtils {
 		type2BasicArrayName.put("xsd__boolean","xsd__boolean_Array");
 		type2BasicArrayName.put("xsd__anyURI","xsd__anyURI_Array");
 		type2BasicArrayName.put("xsd__QName","xsd__QName_Array");
+		type2BasicArrayName.put("xsd__NMTOKEN","xsd__NMTOKEN_Array");
 		basicType2EnumMap.put("int","XSD_INT");
 		basicType2EnumMap.put("float","XSD_FLOAT");
 		basicType2EnumMap.put("xsd__string","XSD_STRING");
@@ -189,6 +193,7 @@ public class CUtils {
 		basicType2EnumMap.put("xsd__boolean","XSD_BOOLEAN");
 		basicType2EnumMap.put("xsd__anyURI","XSD_ANYURI");
 		basicType2EnumMap.put("xsd__QName","XSD_QNAME");
+		basicType2EnumMap.put("xsd__NMTOKEN","XSD_NMTOKEN");
 	}
 	
 	public static void addSchemaDefinedSimpleType(QName qname, String type){

@@ -140,7 +140,11 @@ typedef struct{
  * Axis C++ defined type for xml basic type anyURI
  */
 typedef AxisChar * xsd__anyURI;
-
+/**
+ * @typedef xsd__NMTOKEN
+ * Axis C++ defined type for xml basic type anyURI
+ */
+typedef AxisChar * xsd__NMTOKEN;
 /**
  * @enum AXIS_BINDING_STYLE
  * Enumeration for the different wsdl styles. This is used by the Axis
@@ -177,6 +181,7 @@ typedef AXIS_DEFINED_ARRAY(xsd__unsignedShort) xsd__unsignedShort_Array;
 typedef AXIS_DEFINED_ARRAY(xsd__base64Binary) xsd__base64Binary_Array;
 typedef AXIS_DEFINED_ARRAY(xsd__hexBinary) xsd__hexBinary_Array;
 typedef AXIS_DEFINED_ARRAY(xsd__anyURI) xsd__anyURI_Array;
+typedef AXIS_DEFINED_ARRAY(xsd__NMTOKEN) xsd__NMTOKEN_Array;
  
 #define AXIS_OUT_PARAM 
 
