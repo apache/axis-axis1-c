@@ -1,6 +1,6 @@
-noinst_LTLIBRARIES = libtransport.la
+lib_LTLIBRARIES = libaxis_transport.la
 AM_CPPFLAGS = $(CPPFLAGS)
-libtransport_la_SOURCES = Channel.cpp HttpTransport.cpp Receiver.cpp Sender.cpp \
+libaxis_transport_la_SOURCES = Channel.cpp HttpTransport.cpp Receiver.cpp Sender.cpp \
         Transport.cpp TransportFactory.cpp Url.cpp AxisTransport.cpp
 
 libtransport_la_LIBADD = -lstdc++
