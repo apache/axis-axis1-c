@@ -111,8 +111,8 @@ int BeanClass::GenerateSerializerAndDeSerializerImpl(File &file)
 
 	file << "int " << m_Name << "::Serialize(ISoapSerializer& pSZ)" << endl;
 	file << "{" << endl;
-	file << "\tm_URI = \"" << g_ClassNamespaces[m_Name] << "\"" << endl;
-	file << "\tstring sPrefix = mc->getSoapSerializer()->getNewNamespacePrefix();" << endl;
+	file << "\tm_URI = \"" << g_ClassNamespaces[m_Name] << "\";" << endl;
+	file << "\tstring sPrefix = pSZ.getNewNamespacePrefix();" << endl;
 	file << "\tm_TypeName = \"" << m_Name << "\";" << endl;
 	file << "\tpSZ << \"<\" << m_TypeName.c_str() << \" xsi:type=\\\"\" << sPrefix.c_str() <<\":\" << m_TypeName.c_str() << \" xmlns:\" << sPrefix.c_str() << \"=\\\"\" << m_URI.c_str() << \"\\\">\";" << endl;
 	for (it = m_Variables.begin(); it != m_Variables.end(); it++)
@@ -121,6 +121,11 @@ int BeanClass::GenerateSerializerAndDeSerializerImpl(File &file)
 	}	
 	file << "\tpSZ << \"</\" << m_TypeName.c_str() << \">\";" << endl;
 	file << "\treturn SUCCESS;" << endl;
+	file << "}" << endl;
+	file << endl;
+	file << "int " << m_Name << "::GetSize()" << endl;
+	file << "{" << endl;
+	file << "\treturn sizeof(" << m_Name <<");" << endl;
 	file << "}" << endl;
 	file << endl;
 	return 0;
