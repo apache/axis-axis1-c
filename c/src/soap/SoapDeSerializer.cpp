@@ -349,6 +349,9 @@ void* SoapDeSerializer::checkForFault(const AxisChar* pName,
 {
     const char* pcCmplxFaultName;
     char* pcDetail;
+    char* pcFaultCode;
+    char* pcFaultstring;
+    char* pcFaultactor;
     if(0 == strcmp("Fault", pName))
     {
         if (0 != strcmp(m_pNode->m_pchNameOrValue, pName))
@@ -367,9 +370,15 @@ void* SoapDeSerializer::checkForFault(const AxisChar* pName,
 
 	/*We deserialize fault code in doc literal.*/
 	setStyle(DOC_LITERAL);
-	pFault->setFaultcode(getElementAsString("faultcode", 0));
-        pFault->setFaultstring(getElementAsString("faultstring", 0));
-	pFault->setFaultactor(getElementAsString("faultactor", 0));
+	//pFault->setFaultcode(getElementAsString("faultcode", 0));
+        pcFaultCode = getElementAsString("faultcode", 0);
+        pFault->setFaultcode(pcFaultCode == NULL ? "" : pcFaultCode);
+        //pFault->setFaultstring(getElementAsString("faultstring", 0));
+        pcFaultstring = getElementAsString("faultstring", 0);
+        pFault->setFaultstring(pcFaultstring == NULL ? "" : pcFaultstring);
+	//pFault->setFaultactor(getElementAsString("faultactor", 0));
+        pcFaultactor = getElementAsString("faultactor", 0);
+        pFault->setFaultactor(pcFaultactor == NULL ? "" : pcFaultactor);
         pcDetail = getElementAsString("faultdetail", 0);
 	if(pcDetail)
 	{
