@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:C="http://xml.apache.org/axis/wsdd/providers/C" xmlns:CPP="http://xml.apache.org/axis/wsdd/providers/CPP">
+	<globalConfiguration>
+	</globalConfiguration>
+
+	<service name="AxisBenchSoapSvc" provider="CPP:DOCUMENT" description="Axis C++ web service">
+		<parameter name="className" value="D:\san\works\checkouts\Axis\webservices\AxisBench.dll"/>
+		<parameter name="allowedMethods" value="doBenchRequest "/>
+	</service>
+	<service name="Calculator" provider="CPP:RPC" description="Axis C++ web service">
+		<parameter name="className" value="D:\san\works\checkouts\Axis\webservices\Calculator.dll"/>
+		<parameter name="allowedMethods" value="add sub mul div "/>
+	</service>
+
+</deployment>
