@@ -1,1 +1,1 @@
-SUBDIRS = interoptests simple rpcfault doclitfault array ref
+SUBDIRS = interoptests simple rpcfault doclitfault array
