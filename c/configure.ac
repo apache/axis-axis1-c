@@ -1,9 +1,14 @@
 AC_INIT(FULL-PACKAGE-NAME, VERSION, BUG-REPORT-ADDRESS)
 AM_INIT_AUTOMAKE(0.3)
 AM_CONFIG_HEADER(config.h)
+#if you use expat parser
 CFLAGS="-Wall -Wshadow -DUSE_EXPAT_PARSER"
 CPPFLAGS="-Wall -Wshadow -DUSE_EXPAT_PARSER"
 LDFLAGS="-s -L$EXPAT_HOME/lib -lexpat -lstdc++"
+#if you use xercesc parser
+#CFLAGS="-Wall -Wshadow -DUSE_XERCES_PARSER"
+#CPPFLAGS="-Wall -Wshadow -DUSE_XERCES_PARSER"
+#LDFLAGS="-s -L$XERCESC_HOME/lib -lxerces-c -lstdc++"
 AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_INSTALL
