@@ -430,17 +430,18 @@ public class WrapWriter extends CPPClassWriter{
 
 	private void writeExceptions(String faulttype,String faultInfoName,String paramName,String langName) throws WrapperFault{
 			try{
-					writer.write("\tcatch(Axis"+faultInfoName+"Exception& e)\n"); //nithya
-					writer.write("\t{\n");                       
-					writer.write("\t\tpIWSSZ->createSoapFault(\""+langName+"\", \""+wscontext.getWrapInfo().getTargetNameSpaceOfWSDL()+"\");\n");                                             
-					writer.write("\t\t"+faulttype+" pObjFault = new "+langName+"();\n");//damitha
-					writer.write("\t\t/*User may write code here to fill the struct*/\n");
-					writer.write("\t\tif (pObjFault)\n");                        
-					writer.write("\t\t\tpIWSSZ->addFaultDetail(pObjFault, (void*) Axis_Serialize_"+langName+",\n");//damitha
-					writer.write("\t\t\t(void*) Axis_Delete_"+langName+",\""+faultInfoName+"\", Axis_URI_"+langName+");\n");//damitha
-					writer.write("\t\tthrow;\n");//damitha
+					writer.write("\tcatch("+faulttype+" pObjFault)\n"); 
+					writer.write("\t{\n"); 
+				writer.write("\t\tif (pObjFault)\n"); 
+				writer.write("\t\t{\n");                     
+					writer.write("\t\tpIWSSZ->createSoapFault(\""+faultInfoName+"\", \""+wscontext.getWrapInfo().getTargetNameSpaceOfWSDL()+"\",\"AxisC++ Faultcode\", \"Custom Out of bound exception\");\n");                                                             
+				//	writer.write("\t\t"+faulttype+" pObjFault = new "+langName+"();\n");//damitha			                 
+					writer.write("\t\t\tpIWSSZ->addFaultDetail(pObjFault, (void*) Axis_Serialize_"+langName+",\n");
+					writer.write("\t\t\t(void*) Axis_Delete_"+langName+",\""+faultInfoName+"\", Axis_URI_"+langName+");\n");
+					writer.write("\t\tthrow AxisServiceException();\n");
+				writer.write("\t\t}\n");
 					writer.write("\t}\n");
-					writer.write("\n");
+					writer.write("\n");					
 			}
 			catch (IOException e) {
 					throw new WrapperFault(e);

@@ -31,21 +31,18 @@ import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
  */
 public class ExceptionWriter extends CPPExceptionClassWriter{
 	   private WebServiceContext wscontext;
-	   private ArrayList methods;		
-	  // String  classname = "AxisDivByZeroException";	
+	   private ArrayList methods;		  
 	   String faultInfoName;
 	   String langName;
 	   String faultType;
 	   
-		public ExceptionWriter(WebServiceContext wscontext,String faultInfoName,String langName,String faultType)throws WrapperFault{
+		public ExceptionWriter(WebServiceContext wscontext,String faultInfoName)throws WrapperFault{
 			super(WrapperUtils.getClassNameFromFullyQualifiedName(wscontext.getSerInfo().getQualifiedServiceName()));
 			this.wscontext = wscontext;
 			this.methods = wscontext.getSerInfo().getMethods();
 			this.faultInfoName ="Axis"+faultInfoName+"Exception";
-			this.langName =langName;
-			this.faultType =faultType;
-	
-			
+			//this.langName =langName;
+			//this.faultType =faultType;			
 		}
 	
 	    protected File getFilePath() throws WrapperFault {
@@ -99,26 +96,26 @@ public class ExceptionWriter extends CPPExceptionClassWriter{
 		writer.write("\tprocessException(m_iExceptionCode); \n");
 		writer.write("}\n\n");
 		
-		writer.write(faultInfoName+"::"+faultInfoName+"("+faultType +"pFault)\n");
+		writer.write(faultInfoName+"::"+faultInfoName+"(ISoapFault* pFault)\n");
 		writer.write("{\n");
-		writer.write("\tm_iExceptionCode = AXISC_SERVICE_THROWN_EXCEPTION;\n");//damitha
-		writer.write("\tprocessException(pFault);");//damitha
+		writer.write("\tm_iExceptionCode = AXISC_SERVICE_THROWN_EXCEPTION;\n");
+		writer.write("\tprocessException(pFault);");
 		writer.write("}\n\n");
 		
 		writer.write(faultInfoName+"::"+faultInfoName+"(int iExceptionCode)\n");
 		writer.write("{\n\n");
-		writer.write("\tm_iExceptionCode = iExceptionCode;\n");//damitha
-		writer.write("\tprocessException (iExceptionCode);\n");//damitha
+		writer.write("\tm_iExceptionCode = iExceptionCode;\n");
+		writer.write("\tprocessException (iExceptionCode);\n");
 		writer.write("}\n\n");
 		
 		writer.write(faultInfoName+"::"+faultInfoName+"(exception* e)\n");
 		writer.write("{\n");
-		writer.write("\tprocessException (e);\n");//damitha
+		writer.write("\tprocessException (e);\n");
 		writer.write("}\n\n");
 		
 		writer.write(faultInfoName+"::"+faultInfoName+"(exception* e,int iExceptionCode)\n");
 		writer.write("{\n\n");
-		writer.write("\tprocessException (e, iExceptionCode);\n");//damitha
+		writer.write("\tprocessException (e, iExceptionCode);\n");
 		writer.write("}\n\n");	
 	    }catch(IOException e){
 			throw new WrapperFault(e);
@@ -136,33 +133,32 @@ public class ExceptionWriter extends CPPExceptionClassWriter{
 			}
 		}
 		
-	   protected void writeMethods() throws WrapperFault {
-	
+	   protected void writeMethods() throws WrapperFault {	
 	   try{	
 	       writer.write("void "+faultInfoName+":: processException(exception* e, int iExceptionCode)\n");
 	       writer.write("{\n");
-	       writer.write("\tm_sMessage = getMessage (e) + getMessage (iExceptionCode);\n");//damitha
+	       writer.write("\tm_sMessage = getMessage (e) + getMessage (iExceptionCode);\n");
 	       writer.write("}\n\n");
 
-	       writer.write("void "+faultInfoName+"::processException ("+faultType+" pFault)\n");
+	       writer.write("void "+faultInfoName+"::processException (ISoapFault* pFault)\n");
 		   writer.write("{\n");
-                   writer.write("\t/*User can do something like deserializing the struct into a string*/");//damitha
+           writer.write("\t/*User can do something like deserializing the struct into a string*/\n");
 		   writer.write("}\n\n");
 
 		   writer.write("void "+faultInfoName+"::processException(exception* e)\n");
 		   writer.write("{\n");
-		   writer.write("\tm_sMessage = getMessage (e);\n");//damitha
+		   writer.write("\tm_sMessage = getMessage (e);\n");
 		   writer.write("}\n\n");
 
-		    writer.write("void "+faultInfoName+"::processException(int iExceptionCode)\n");//damitha
+		    writer.write("void "+faultInfoName+"::processException(int iExceptionCode)\n");
 		    writer.write("{\n");
-		    writer.write("\tm_sMessage = getMessage (iExceptionCode);\n");//damitha
+		    writer.write("\tm_sMessage = getMessage (iExceptionCode);\n");
 		    writer.write("}\n\n");
 		
 	       writer.write("const string "+faultInfoName+"::getMessage (exception* objException)\n");
 	       writer.write("{\n");
-	       writer.write("\tstring sMessage = objException->what();\n");//damitha
-	       writer.write("\treturn sMessage;\n");//damitha
+	       writer.write("\tstring sMessage = objException->what();\n");
+	       writer.write("\treturn sMessage;\n");
 	       writer.write("}\n\n");
 
 		   writer.write("const string "+faultInfoName+"::getMessage (int iExceptionCode)\n");
