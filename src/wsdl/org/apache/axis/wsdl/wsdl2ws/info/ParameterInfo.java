@@ -67,7 +67,7 @@ public class ParameterInfo {
                 }
                 // Samisa: This second call to TypeMap.resoleveWSDL2LanguageNameClashes
                 // is made to make sure after replacinf ANON_TOKEN it is still not a keyword
-                attribName = TypeMap.resoleveWSDL2LanguageNameClashes(attribName, WrapperConstants.LANGUAGE_CPP);
+                attribName = TypeMap.resolveWSDL2LanguageNameClashes(attribName, WrapperConstants.LANGUAGE_CPP);
 
 		if (isReference())
 			result = attribName + "_Ref";
@@ -89,7 +89,7 @@ public class ParameterInfo {
         {
             paramName = paramName.substring(paramName.lastIndexOf(SymbolTable.ANON_TOKEN)+1,paramName.length());
         }
-        paramName = TypeMap.resoleveWSDL2LanguageNameClashes(paramName, WrapperConstants.LANGUAGE_CPP);
+        paramName = TypeMap.resolveWSDL2LanguageNameClashes(paramName, WrapperConstants.LANGUAGE_CPP);
         //Samisa
         this.attribName = paramName;
     }
@@ -120,7 +120,7 @@ public class ParameterInfo {
         {
             paramName = paramName.substring(paramName.lastIndexOf(SymbolTable.ANON_TOKEN)+1,paramName.length());
         }
-        paramName = TypeMap.resoleveWSDL2LanguageNameClashes(paramName, WrapperConstants.LANGUAGE_CPP);
+        paramName = TypeMap.resolveWSDL2LanguageNameClashes(paramName, WrapperConstants.LANGUAGE_CPP);
 	return paramName;
 
     }

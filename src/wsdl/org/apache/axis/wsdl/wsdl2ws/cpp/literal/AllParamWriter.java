@@ -71,7 +71,6 @@ public class AllParamWriter implements SourceWriter
     public void writeSource() throws WrapperFault
     {
         Iterator enu = wscontext.getTypemap().getTypes().iterator();
-        String generator = wscontext.getWrapInfo().getImplStyle();
         Type type = null;
         while (enu.hasNext())
         {

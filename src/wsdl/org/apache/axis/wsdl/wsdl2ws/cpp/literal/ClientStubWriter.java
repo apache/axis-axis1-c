@@ -394,7 +394,6 @@ public class ClientStubWriter extends CPPClassWriter
         ArrayList paramsC = (ArrayList) minfo.getOutputParameterTypes();
         if (isAllTreatedAsOutParams)
         {
-            String currentParaTypeName;
             for (int i = 0; i < paramsC.size(); i++)
             {
                 type =
@@ -526,10 +525,6 @@ public class ClientStubWriter extends CPPClassWriter
                                 + param.getParamName()
                                 + "\", \"\", buffer);\n");
                         writer.write("\t}\n");
-                    }
-                    else
-                    {
-                        int t = 0;
                     }
                 }
             }

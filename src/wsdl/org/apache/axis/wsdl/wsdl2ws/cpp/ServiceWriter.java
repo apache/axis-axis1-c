@@ -146,7 +146,6 @@ public class ServiceWriter extends CPPClassWriter
     protected void writeMethods() throws WrapperFault
     {
         MethodInfo minfo;
-        boolean isSimpleType;
         try
         {
             writer.write(
@@ -178,7 +177,6 @@ public class ServiceWriter extends CPPClassWriter
                 }
                 else
                 {
-
                     if (1 == noOfOutParams)
                     {
                         returntype =
@@ -186,7 +184,6 @@ public class ServiceWriter extends CPPClassWriter
                                 .getOutputParameterTypes()
                                 .iterator()
                                 .next();
-                        String outparam = returntype.getLangName();
                         writer.write(
                             WrapperUtils
                                 .getClassNameFromParamInfoConsideringArrays(
@@ -267,5 +264,4 @@ public class ServiceWriter extends CPPClassWriter
             throw new WrapperFault(e);
         }
     }
-
 }

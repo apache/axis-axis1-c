@@ -368,7 +368,7 @@ public class WrapWriter extends CPPClassWriter
         }
         //create and populate variables for each parameter
         String paraTypeName;
-        String parameterName;
+
         String elementName;
         String returnParamName;
         ArrayList paramsB = new ArrayList(params);
@@ -395,7 +395,7 @@ public class WrapWriter extends CPPClassWriter
                     paraTypeName = param.getLangName();
                 }
             }
-            parameterName = param.getParamName();
+
             elementName = param.getElementNameAsString();
             if (type != null && type.isSimpleType())
             { //schema defined simpleType possibly with restrictions

@@ -13,25 +13,29 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
- 
+
 package org.apache.axis.wsdl.wsdl2ws;
 /**
  * This is specialized exceptions .... do need any optional information to carry .. to be decided??? 
  * @author hemapani
  */
-public class WrapperFault extends Exception {
-    public WrapperFault() {
-    }
+public class WrapperFault extends Exception
+{
+    public WrapperFault()
+    {}
 
-    public WrapperFault(String message) {
+    public WrapperFault(String message)
+    {
         super(message);
     }
 
-    public WrapperFault(String message, Throwable cause) {
-        super(message);
+    public WrapperFault(String message, Throwable cause)
+    {
+        super(message, cause);
     }
 
-    public WrapperFault(Throwable cause) {
-        super(cause.getMessage());
+    public WrapperFault(Throwable cause)
+    {
+        super(cause);
     }
 }
