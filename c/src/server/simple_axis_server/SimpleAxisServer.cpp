@@ -119,9 +119,10 @@ AXIS_TRANSPORT_STATUS AXISCALL send_response_bytes(const char* buffer, const voi
 	
 	int iMsgSize = strlen(buffer);
 	char pchContentLength[4];
-	_itoa(iMsgSize, pchContentLength, 10);
+	sprintf(pchContentLength, "%d", iMsgSize);
 
-	char res[1000]= {'\0'};
+	char *res = (char*) malloc(iMsgSize + 200);
+	res[0] = 0;
 	strcpy(res, "HTTP/1.1 200 OK\nDate: Wed, 03 Sep 2003 09:23:06 GMT\nContent-Length: ");
 	strcat(res, pchContentLength);
 	strcat(res, "\nContent-Type: text/xml\r\n\r\n");
@@ -132,9 +133,11 @@ AXIS_TRANSPORT_STATUS AXISCALL send_response_bytes(const char* buffer, const voi
 	//AXISTRACE3(res);
 	
 	if (send(iClntSocket, res, strlen(res), 0) == AXIS_SOCKET_ERROR) {
+		free(res);
 		printf("%s\n","send() failed");	
 		return TRANSPORT_FAILED;
 	} else {
+		free(res);
 		return TRANSPORT_FINISHED;
 	}
 
@@ -448,11 +451,11 @@ void handleTCPClient(int clntSocket)
 	//AXISTRACE3(sHTTPBody.c_str());
 	//AXISTRACE3("----------END extracted HTTP Body-----------------");
 
-	str->so.http->uri_path = map_HTTP_Headers[HMK_URI]->objuHttpMapContent->msValue;
+	str->so.http->uri_path = strdup(map_HTTP_Headers[HMK_URI]->objuHttpMapContent->msValue);
 
 	str->so.http->ip_headercount = iHeaderCount;  
 
-	str->so.http->ip_headers = new Ax_header();
+	str->so.http->ip_headers = (Ax_header*)malloc(sizeof(Ax_header));
 	str->so.http->ip_headers = (Ax_header*)(g_pHttpHeaders);
 
 	switch (map_HTTP_Headers[HMK_METHOD]->objuHttpMapContent->eHTTP_KEYWORD)
@@ -471,6 +474,11 @@ void handleTCPClient(int clntSocket)
 	iClntSocket = clntSocket;
 
 	executeWork(str);
+	/* De-allocate the memory */
+	free(str->so.http->ip_headers);
+	free(str->so.http->uri_path);	
+	free(str->so.http);
+	free(str);
 
 	releaseStuff();
 
