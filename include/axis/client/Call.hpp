@@ -479,7 +479,7 @@ public:
     { return ((CallBase*)pObj)->getElementAsDouble(pName, pNamespace);};
     static double AXISCALL s_GetElementAsDecimal(void* pObj,
         const AxisChar* pName, const AxisChar* pNamespace)
-    { return ((CallBase*)pObj)->getElementAsDouble(pName, pNamespace);};
+    { return ((CallBase*)pObj)->getElementAsDecimal(pName, pNamespace);};
     static AxisChar* AXISCALL s_GetElementAsString(void* pObj,
         const AxisChar* pName, const AxisChar* pNamespace)
     { return ((CallBase*)pObj)->getElementAsString(pName, pNamespace);};

@@ -366,7 +366,7 @@ public:
     pNamespace);};
     static double AXISCALL s_GetElementAsDecimal(void* pObj, 
         const AxisChar* pName, const AxisChar* pNamespace)
-    { return ((IWrapperSoapDeSerializer*)pObj)->getElementAsDouble(pName, 
+    { return ((IWrapperSoapDeSerializer*)pObj)->getElementAsDecimal(pName, 
     pNamespace);};
     static AxisChar* AXISCALL s_GetElementAsString(void* pObj, 
         const AxisChar* pName, const AxisChar* pNamespace)
