@@ -62,7 +62,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include <axis/soap/SoapKeywordMapping.h>
+#include "SoapKeywordMapping.h"
 #include <axis/soap/Attribute.h>
 #include "../common/AxisUtils.h"
 
