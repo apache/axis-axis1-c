@@ -76,6 +76,9 @@ extern WSDDDeployment* g_pWSDDDeployment;
 
 HandlerLoader::HandlerLoader()
 {
+#if defined(USE_LTDL)
+	lt_dlinit();
+#endif
 }
 
 HandlerLoader::~HandlerLoader()
@@ -90,6 +93,9 @@ HandlerLoader::~HandlerLoader()
 		delete pHandlerInfo;
 	}
 	unlock();
+	#if defined(US_LTDL)
+		lt_dlexit();
+	#endif
 }
 
 int HandlerLoader::DeleteHandler(BasicHandler* pHandler, int nLibId)
@@ -113,17 +119,33 @@ int HandlerLoader::DeleteHandler(BasicHandler* pHandler, int nLibId)
 
 int HandlerLoader::LoadLib(HandlerInformation* pHandlerInfo)
 {	
-#ifdef WIN32
+//#ifdef WIN32
+#if defined(USE_LTDL)
+	pHandlerInfo->m_Handler = lt_dlopen(pHandlerInfo->m_sLib.c_str());
+        if(!pHandlerInfo->m_Handler)
+	{
+		printf("DLOPEN FAILED: %s\n", lt_dlerror());
+	}
+#elif defined(WIN32)
 	pHandlerInfo->m_Handler = LoadLibrary(pHandlerInfo->m_sLib.c_str());
 #else //Linux
+	pHandlerInfo->m_nLoadOptions = RTLD_LAZY;
 	pHandlerInfo->m_Handler = dlopen(pHandlerInfo->m_sLib.c_str(), pHandlerInfo->m_nLoadOptions);	
+        if(!pHandlerInfo->m_Handler)
+        {
+            printf("DLOPEN FAILED: %s\n", dlerror());
+            exit(1);
+        }
 #endif
 	return (pHandlerInfo->m_Handler != 0)?AXIS_SUCCESS:AXIS_FAIL;
 }
 
 int HandlerLoader::UnloadLib(HandlerInformation* pHandlerInfo)
 {
-#ifdef WIN32
+//#ifdef WIN32
+#if defined(USE_LTDL)
+	lt_dlclose(pHandlerInfo->m_Handler);
+#elif defined(WIN32)
 	FreeLibrary(pHandlerInfo->m_Handler);
 #else //Linux
 	dlclose(pHandlerInfo->m_Handler);
@@ -146,10 +168,14 @@ int HandlerLoader::CreateHandler(BasicHandler** pHandler, int nLibId)
 			unlock();
 			return LIBRARY_PATH_EMPTY;
 		}
-		pHandlerInfo->m_nLoadOptions = RTLD_LAZY;
+		//pHandlerInfo->m_nLoadOptions = RTLD_LAZY;
 		if (AXIS_SUCCESS == LoadLib(pHandlerInfo))
 		{  
-			#ifdef WIN32
+			//#ifdef WIN32
+			#if defined(USE_LTDL)
+				pHandlerInfo->m_Create = (CREATE_OBJECT)lt_dlsym(pHandlerInfo->m_Handler,CREATE_FUNCTION);
+			        pHandlerInfo->m_Delete = (DELETE_OBJECT)lt_dlsym(pHandlerInfo->m_Handler,DELETE_FUNCTION);
+			#elif defined(WIN32)	
 			pHandlerInfo->m_Create = (CREATE_OBJECT)GetProcAddress(pHandlerInfo->m_Handler,CREATE_FUNCTION);
 			pHandlerInfo->m_Delete = (DELETE_OBJECT)GetProcAddress(pHandlerInfo->m_Handler,DELETE_FUNCTION);
 			#else //Linux
