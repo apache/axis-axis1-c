@@ -254,11 +254,6 @@ extern "C" int initialize_module (int bServer)
     TypeMapping::initialize ();
     URIMapping::initialize ();
     SoapFault::initialize ();
-
-
-#ifdef AXIS_CLIENT_LIB
-    CallBase::s_Initialize ();
-#endif
     IWrapperSoapDeSerializer::s_Initialize ();
     IWrapperSoapSerializer::s_Initialize ();
     IMessageData::s_Initialize ();

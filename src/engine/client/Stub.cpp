@@ -43,8 +43,7 @@
 #include <axis/server/AxisWrapperAPI.hpp>
 #include "../../soap/SoapSerializer.h"
 
-StubFunctions Stub::ms_VFtable;
-bool Stub::bInitialized = false;
+AXIS_CPP_NAMESPACE_USE
 
 Stub::Stub(const char *pcEndPointUri, AXIS_PROTOCOL_TYPE eProtocol) : m_lTimeoutSeconds(0)
 {
@@ -416,112 +415,5 @@ int Stub::getStatus()
 const AxisChar* Stub::getNamespacePrefix(const AxisChar* pNamespace)
 {
     return m_pCall->getNamespacePrefix(pNamespace);
-}
-
-/* global function to be used in C stubs */
-extern "C" void* getStubObject (AXIS_PROTOCOL_TYPE nProtocol, 
-    AxisChar* pchEndpointURI)
-{
-    Call_C* pCall = (Call_C*) malloc (sizeof (Call_C));
-    pCall->_object = new Call ();
-    pCall->_functions = &Call::ms_VFtable;
-    ((Call*) pCall->_object)->setProtocol (nProtocol);
-    ((Call*) pCall->_object)->setEndpointURI (pchEndpointURI);
-    return pCall;
-}
-
-extern "C" void destroyStubObject (void* pCall)
-{
-    Call* pObject = (Call*) ((Call_C*)pCall)->_object;
-    delete pObject;
-    free (pCall);
-}
-
-HeaderBlock_C Stub::s_createSOAPHeaderBlock(void* pObj, 
-    AxisChar * pachLocalName, AxisChar * pachUri)
-{
-	HeaderBlock_C blk;
-	blk._functions = &(IHeaderBlock::ms_VFtable);
-	blk._object = ((Stub*)pObj)->createSOAPHeaderBlock(pachLocalName, pachUri);
-	return blk;
-}
-
-HeaderBlock_C Stub::s_getFirstSOAPHeaderBlock(void* pObj)
-{
-	HeaderBlock_C blk;
-	blk._functions = &(IHeaderBlock::ms_VFtable);
-	blk._object = ((Stub*)pObj)->getFirstSOAPHeaderBlock();
-	return blk;
-}
-
-HeaderBlock_C Stub::s_getNextSOAPHeaderBlock(void* pObj)
-{
-	HeaderBlock_C blk;
-	blk._functions = &(IHeaderBlock::ms_VFtable);
-	blk._object = ((Stub*)pObj)->getNextSOAPHeaderBlock();
-	return blk;
-}
-
-HeaderBlock_C Stub::s_getCurrentSOAPHeaderBlock(void* pObj)
-{
-	HeaderBlock_C blk;
-	blk._functions = &(IHeaderBlock::ms_VFtable);
-	blk._object = ((Stub*)pObj)->getCurrentSOAPHeaderBlock();
-	return blk;
-}
-
-Attribute_C Stub::s_getFirstSOAPMethodAttribute(void* pObj)
-{
-	Attribute_C attr;
-	attr._functions = &(Attribute::ms_VFtable);
-	attr._object = ((Stub*)pObj)->getFirstSOAPMethodAttribute();
-	return attr;
-}
-
-Attribute_C Stub::s_getNextSOAPMethodAttribute(void* pObj)
-{
-	Attribute_C attr;
-	attr._functions = &(Attribute::ms_VFtable);
-	attr._object = ((Stub*)pObj)->getNextSOAPMethodAttribute();
-	return attr;
-}
-
-Attribute_C Stub::s_getCurrentSOAPMethodAttribute(void* pObj)
-{
-	Attribute_C attr;
-	attr._functions = &(Attribute::ms_VFtable);
-	attr._object = ((Stub*)pObj)->getCurrentSOAPMethodAttribute();
-	return attr;
-}
-
-void Stub::s_Initialize()
-{	
-	if (bInitialized) return;
-	bInitialized = true;
-	ms_VFtable.setEndpoint = s_setEndpoint;
-	ms_VFtable.setTransportProperty = s_setTransportProperty;
-	ms_VFtable.getFirstTrasportPropertyKey = s_getFirstTrasportPropertyKey;
-	ms_VFtable.getNextTrasportPropertyKey = s_getNextTrasportPropertyKey;
-	ms_VFtable.getCurrentTrasportPropertyKey = s_getCurrentTrasportPropertyKey;
-	ms_VFtable.getCurrentTrasportPropertyValue = s_getCurrentTrasportPropertyValue;
-	ms_VFtable.deleteCurrentTrasportProperty = s_deleteCurrentTrasportProperty;
-	ms_VFtable.deleteTrasportProperty = s_deleteTrasportProperty;
-	ms_VFtable.setHandlerProperty = s_setHandlerProperty;
-	ms_VFtable.createSOAPHeaderBlock = s_createSOAPHeaderBlock;
-	ms_VFtable.getFirstSOAPHeaderBlock = s_getFirstSOAPHeaderBlock;
-	ms_VFtable.getNextSOAPHeaderBlock = s_getNextSOAPHeaderBlock;
-	ms_VFtable.getCurrentSOAPHeaderBlock = s_getCurrentSOAPHeaderBlock;
-	ms_VFtable.deleteCurrentSOAPHeaderBlock = s_deleteCurrentSOAPHeaderBlock;
-	ms_VFtable.deleteSOAPHeaderBlock = s_deleteSOAPHeaderBlock;
-	ms_VFtable.setProxy = s_setProxy;
-	ms_VFtable.setSOAPMethodAttribute = s_setSOAPMethodAttribute;
-	ms_VFtable.getFirstSOAPMethodAttribute = s_getFirstSOAPMethodAttribute;
-	ms_VFtable.getNextSOAPMethodAttribute = s_getNextSOAPMethodAttribute;
-	ms_VFtable.getCurrentSOAPMethodAttribute = s_getCurrentSOAPMethodAttribute;
-	ms_VFtable.deleteCurrentSOAPMethodAttribute = s_deleteCurrentSOAPMethodAttribute;
-	ms_VFtable.deleteSOAPMethodAttribute = s_deleteSOAPMethodAttribute;
-	ms_VFtable.setTransportTimeout = s_setTransportTimeout;
-	ms_VFtable.getStatus = s_getStatus;
-	ms_VFtable.getNamespacePrefix = s_getNamespacePrefix;
 }
 

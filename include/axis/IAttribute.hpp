@@ -33,8 +33,6 @@
  *
  */
 
-#ifdef __cplusplus
-
 class IAttribute
 {
 public:        
@@ -51,8 +49,5 @@ public:
     virtual const AxisChar* getLocalName() = 0;
 
 };
-
-#endif
-
 
 #endif
