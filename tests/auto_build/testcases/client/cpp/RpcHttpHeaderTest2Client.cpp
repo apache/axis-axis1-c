@@ -117,8 +117,8 @@ main(int argc, char *argv[])
     ws.deleteTransportProperty("Date");
 
     //now the request should not have these removed headers
-		bool bSuccess = false;
-		int	iRetryIterationCount = 3;
+		bSuccess = false;
+		iRetryIterationCount = 3;
 
 		do
 		{
