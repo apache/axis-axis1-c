@@ -58,7 +58,7 @@
  * @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
  *
  */
-/* AxisUserAPI.h: interface for the AxisUserAPI class. */
+/* AxisWrapperAPI.h: interface for the AxisUserAPI class. */
 
 #if !defined(AFX_AXISWRAPPERAPI_H__6E27008D_DCA0_4F28_AC82_FEEBE1A1CBBB__INCLUDED_)
 #define AFX_AXISWRAPPERAPI_H__6E27008D_DCA0_4F28_AC82_FEEBE1A1CBBB__INCLUDED_

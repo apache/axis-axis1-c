@@ -54,14 +54,9 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  *
- *
- *
- *
- * @author Susantha Kumara (skumara@virtusa.com)
- *
  */
 
-// Param.h: interface for the Param class.
+// Param.h:
 //
 //////////////////////////////////////////////////////////////////////
 #ifdef WIN32
@@ -79,7 +74,13 @@
 using namespace std;
 
 class ArrayBean;
+/**
+    @class Param
+    @brief interface for the Param class.
 
+
+    @author Susantha Kumara (skumara@virtusa.com)
+*/
 class Param : public IParam
 {
 	friend class SoapSerializer;
