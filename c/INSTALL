@@ -39,6 +39,7 @@ A note about AXIS_HOME
 Copy $AXISCPP_HOME/deploy folder to a place of your choice and define AXIS_HOME pointing to it.
 cp -rf $AXISCPP_HOME/deploy /usr/local/
 mv /usr/local/deploy /usr/local/Axis
+Give read write permissions to /usr/local/Axis
 
 EXPAT_HOME points to where you installed expat
 XERCESC_HOME points to where you installed xereces-c
@@ -203,3 +204,7 @@ libaxis_xercesc.so to libaxis_xmlparser.so.
 To run interop samples
 cd $AXISCPP_HOME/samples/client
 sh run_interoptests.sh
+
+If you have done installation successfully it will display the Axis C++ welcome page when you point to URI http://localhost/axis .
+Note: In the axis welcome page all the services in $AXIS_HOME/conf/server.wsdd are listed. This does not mean
+that the libraries corresponding to these services are deployed yet. It merely list whatever in the server.wsdd.
