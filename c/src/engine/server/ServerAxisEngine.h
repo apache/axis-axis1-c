@@ -19,10 +19,10 @@
 #define AXIS_SERVERAXISENGINE_H__OF_AXIS_INCLUDED_
 
 #include <axis/server/AxisEngine.h>
-#include "../AxisEngineException.h"
-#include "../../soap/AxisSoapException.h"
-#include "../../wsdd/AxisWsddException.h"
-#include "../../common/AxisConfigException.h"
+#include <axis/AxisEngineException.h>
+#include <axis/AxisSoapException.h>
+#include <axis/AxisWsddException.h>
+#include <axis/AxisConfigException.h>
 /*
  *  @class ServerAxisEngine
  *  @brief interface for the ServerAxisEngine class.

@@ -45,7 +45,8 @@ const char* Receiver::Recv()
             return NULL;
     if (0 == m_BytesRead)
     {
-        AXISC_TRY
+        try
+        {
 #ifdef _DEBUG
                     printf("try\n");
 #endif
@@ -56,18 +57,21 @@ const char* Receiver::Recv()
                         return NULL;
             }
             m_MsgSize = strlen(m_pMsg);        
-        AXISC_CATCH(AxisException& ex)
-                  printf("catch\n");
+	}
+        catch(AxisException& ex)
+        {
             /* Get the fault message. */
             *m_pTrChannel >> (&m_pMsg);
             m_MsgSize = strlen(m_pMsg);
             #ifdef _DEBUG
             /*    std::cerr << ex.GetErrorMsg() << std::endl; */
             #endif
-        AXISC_CATCH(...)
+	}
+        catch(...)
+        {
             AXISTRACE1("SERVER_TRANSPORT_RECEPTION_EXCEPTION", CRITICAL);
-            THROW_AXIS_TRANSPORT_EXCEPTION(SERVER_TRANSPORT_RECEPTION_EXCEPTION);
-        AXISC_ENDCATCH
+            throw AxisTransportException(SERVER_TRANSPORT_RECEPTION_EXCEPTION);
+	}
     }
         /* printf("m_MsgSize:%d\n", m_MsgSize); */
     if (m_MsgSize > 0)
