@@ -3,7 +3,7 @@
  * This file contains definitions of the web service
  */
 
-#include "RefTestPortType.h"
+#include "RefTestPortType.hpp"
 
 
 RefTestPortType::RefTestPortType()
