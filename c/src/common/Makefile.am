@@ -3,7 +3,7 @@ AM_CPPFLAGS = -Wall -DUSE_EXPAT_PARSER
 libcommon_la_SOURCES = Param.cpp TypeMapping.cpp Packet.cpp MessageData.cpp \
  BasicTypeSerializer.cpp ArrayBean.cpp AxisTime.cpp \
  GDefine.cpp AxisUtils.cpp AxisTrace.cpp AxisException.cpp AxisConfig.cpp \
- AxisSocketUtils.cpp
+ AxisSocketUtils.cpp AdminUtils.cpp
 
 libcommon_la_LIBADD = -L$(AXISCPP_HOME)/lib/expat -lexpat -lstdc++
 INCLUDES = -I$(AXISCPP_HOME)/include

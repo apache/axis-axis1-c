@@ -1,5 +1,3 @@
-/* -*- C++ -*- */
-
 /*
  * The Apache Software License, Version 1.1
  *
@@ -56,40 +54,28 @@
  *
  *
  */
-#ifdef WIN32
-#pragma warning(disable : 4786)
-#endif
 
-#if !defined(__WSDDDOCUMENTS_H_INCLUDED__)
-#define __WSDDDOCUMENTS_H_INCLUDED__
+#if !defined(__WSDDDOCUMENT_H_INCLUDED__)
+#define __WSDDDOCUMENT_H_INCLUDED__
 
 #include "WSDDDeployment.h"
 #include <axis/server/WSDDService.h>
 #include "../xml/QName.h"
-
-#include <expat/expat.h>
-#include <string>
-#include <map>
-
-using namespace std;
 
 enum WSDDLevels {WSDD_UNKNOWN=1, WSDD_DEPLOYMENT, WSDD_UNDEPLOYMENT, WSDD_GLOBCONF, WSDD_SERVICE, WSDD_HANDLER, WSDD_CHAIN, WSDD_TRANSPORT, WSDD_REQFLOW, WSDD_RESFLOW, WSDD_PARAM };
 
 //wsdd file related defines
 #define METHODNAME_SEPARATOR ' '
 #define ROLENAME_SEPARATOR ','
-#define TRANSCODE_BUFFER_SIZE 256
+#define TRANSCODE_BUFFER_SIZE 1024
 /**
     @class WSDDDocument
-    @brief
-
-
-    @author sanjaya sinharage(sanjaya@opensource.lk)
+    @brief Interface for WSDD processor
     @author Suasntha Kumara (skumara@virtusa.com, susantha@opensource.lk)
 */
 class WSDDDocument
 {
-private: 
+protected: 
 	bool m_bFatalError;
 	bool m_bError;
 	int m_nLibId;
@@ -101,39 +87,12 @@ private:
 	map<AxisXMLString, AxisXMLString> m_NsStack;
 	WSDDService* m_pService; //Place holder for currently created Service object
 	WSDDHandler* m_pHandler; //Place holder for currently created Handler object
-	//map<string, string> m_GlobalConfParams;
 	AXIS_PROTOCOL_TYPE m_CurTrType; //Current transport type of transport handlers
 	AxisChar m_Buffer[TRANSCODE_BUFFER_SIZE]; //used to transcode 'XMLCh' to AxisChar
-
-private:
-	//const AxisChar* __XTRC(const string& pChar);
-	void ProcessAttributes(WSDDLevels ElementType, const XML_Ch **attrs);
-	void GetParameters(WSDDLevels ElementType, const XML_Ch **attrs);
-	void AddAllowedRolesToService(const AxisXMLCh* value);
-	void AddAllowedMethodsToService(const AxisXMLCh* value);
-
 public:
-	WSDDDocument();
-	~WSDDDocument();
-	int ParseDocument(const AxisChar* sWSDD);
-	int GetDeployment(const AxisChar* sWSDD, WSDDDeployment* pDeployment);
-
-	void startElement(const XML_Ch *qname,const XML_Ch **attrs);
-	void endElement(const XML_Ch *qname);
-	void characters(const XML_Ch *chars,int length);
-	void startPrefixMapping(const XML_Ch *prefix, const XML_Ch *uri);
-	void endPrefixMapping(const XML_Ch *prefix);
-
-	inline static void XMLCALL s_startElement(void* p, const XML_Ch *qname,const XML_Ch **attrs)
-	{((WSDDDocument*)p)->startElement(qname,attrs);};
-	inline static void XMLCALL s_endElement(void* p, const XML_Ch *qname)
-	{((WSDDDocument*)p)->endElement(qname);};
-	inline static void XMLCALL s_characters(void* p, const XML_Ch *chars,int length)
-	{((WSDDDocument*)p)->characters(chars,length);};
-	inline static void XMLCALL s_startPrefixMapping(void* p, const XML_Ch *prefix, const XML_Ch *uri)
-	{((WSDDDocument*)p)->startPrefixMapping(prefix, uri);};
-	inline static void XMLCALL s_endPrefixMapping(void* p, const XML_Ch *prefix)
-	{((WSDDDocument*)p)->endPrefixMapping(prefix);};
+	virtual ~WSDDDocument(){};
+	virtual int GetDeployment(const AxisChar* sWSDD, WSDDDeployment* pDeployment)=0;
+	virtual int UpdateDeployment(const AxisChar* sWSDD, WSDDDeployment* pDeployment)=0;
 };
 
-#endif //__WSDDDOCUMENTS_H_INCLUDED__
+#endif //__WSDDDOCUMENT_H_INCLUDED__

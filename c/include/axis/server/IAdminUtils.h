@@ -55,63 +55,23 @@
  *
  */
 
-// WSDDDeployment.h:
-//
-//////////////////////////////////////////////////////////////////////
-#ifdef WIN32
-#pragma warning (disable : 4786)
-#endif
-
-#if !defined(AFX_WSDDDEPLOYMENT_H__2B3E0205_06F3_47C1_8D9C_479CBFB8ACC2__INCLUDED_)
-#define AFX_WSDDDEPLOYMENT_H__2B3E0205_06F3_47C1_8D9C_479CBFB8ACC2__INCLUDED_
-
-#include <axis/server/WSDDService.h>
-#include <axis/server/WSDDHandler.h>
-#include "WSDDTransport.h"
-
-#include <list>
-
-using namespace std;
-
-enum DEPLOYMENTTYPE {DT_DEPLOYMENT, DT_UNDEPLOYMENT};
 /**
-    @class WSDDDeployment
-    @brief interface for the WSDDDeployment class.
-    @author Susantha Kumara (skumara@virtusa.com)
-*/
-class WSDDDeployment
+ * @class WSDDDocument
+ * @brief This Interface contains the Server side administration functionality like
+ * deploying and undeploying services/handlers dynamically.
+ * @author Suasntha Kumara (skumara@virtusa.com, susantha@opensource.lk)
+ */
+
+#if !defined(_IADMINUTILS_H____INCLUDED_)
+#define _IADMINUTILS_H____INCLUDED_
+
+#include "AxisUserAPI.h"
+
+class IAdminUtils  
 {
-	friend class WSDDDocumentExpat;
-	friend class WSDDDocumentXerces;
 public:
-	int LoadWSDD(const AxisChar* sWSDD);
-	int UpdateWSDD(const AxisChar* sWSDD);
-	int SaveWSDD();
-	const AxisChar* GetLibName(int nLibId);
-	const WSDDService* GetService(const AxisChar* sServiceName);
-	const WSDDHandlerList* GetGlobalRequestFlowHandlers();
-	const WSDDHandlerList* GetGlobalResponseFlowHandlers();
-	const WSDDHandlerList* GetTransportRequestFlowHandlers(AXIS_PROTOCOL_TYPE protocol);
-	const WSDDHandlerList* GetTransportResponseFlowHandlers(AXIS_PROTOCOL_TYPE protocol);
-	const WSDDServiceMap* GetWSDDServiceMap() const;
-	DEPLOYMENTTYPE GetDeploymentType() const;
-	WSDDDeployment();
-	virtual ~WSDDDeployment();
-private: //methods that only be used by WSDDDepolyment.
-	int AddService(WSDDService* pService);
-	int AddHandler(bool bGlobal, bool bRequestFlow, WSDDHandler* pHandler, AXIS_PROTOCOL_TYPE protocol=APTHTTP);
-	int RemoveService(WSDDService* pService);
-	int RemoveHandler(bool bGlobal, bool bRequestFlow, WSDDHandler* pHandler, AXIS_PROTOCOL_TYPE protocol=APTHTTP);
-	void SetDeploymentType(DEPLOYMENTTYPE nType);
-private:
-	WSDDServiceMap* m_DeployedServices;
-	WSDDHandlerList* m_GlobalRequestHandlers;
-	WSDDHandlerList* m_GlobalResponseHandlers;
-	WSDDTransport* m_pTransportHandlers;
-	map<AxisString, int>* m_pLibNameIdMap;
-	AxisString m_sAux;
-	string m_sWSDDPath;
-	DEPLOYMENTTYPE m_DeplType;
+	virtual ~IAdminUtils(){};
+	virtual int UpdateWSDD(AxisChar* wsdd)=0;
 };
 
-#endif // !defined(AFX_WSDDDEPLOYMENT_H__2B3E0205_06F3_47C1_8D9C_479CBFB8ACC2__INCLUDED_)
+#endif /*_IADMINUTILS_H____INCLUDED_*/

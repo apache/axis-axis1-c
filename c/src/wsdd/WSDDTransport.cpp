@@ -1,5 +1,3 @@
-/* -*- C++ -*- */
-
 /*
  * The Apache Software License, Version 1.1
  *
@@ -132,6 +130,27 @@ void WSDDTransport::AddHandler(bool bRequestFlow, AXIS_PROTOCOL_TYPE protocol, W
 		if (!m_ResponseHandlers) m_ResponseHandlers = new map<AXIS_PROTOCOL_TYPE, WSDDHandlerList>;
 		(*m_ResponseHandlers)[protocol].push_back(pHandler);
 	}
+}
+
+int WSDDTransport::RemoveHandler(bool bRequestFlow, AXIS_PROTOCOL_TYPE protocol, WSDDHandler* pHandler)
+{
+	map<AXIS_PROTOCOL_TYPE, WSDDHandlerList>* pTempHandlers = bRequestFlow ? m_RequestHandlers : m_ResponseHandlers;
+	WSDDHandlerList* pList = &(*(pTempHandlers->find(protocol))).second;
+	if (pList)
+	{
+		for (WSDDHandlerList::iterator itr = pList->begin();
+			 itr != pList->end(); itr++)
+		{
+			if (strcmp((*itr)->GetLibName(), pHandler->GetLibName()) == 0)
+			{
+				pList->remove(*itr);
+				delete (*itr);
+				delete pHandler;
+				return AXIS_SUCCESS;
+			}
+		}
+	}
+	return AXIS_NO_SUCH_HANDLER;	
 }
 
 int WSDDTransport::UpdateWSDD(FILE* wsddfile, int tabcount)

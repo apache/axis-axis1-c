@@ -1,5 +1,3 @@
-/* -*- C++ -*- */
-
 /*
  * The Apache Software License, Version 1.1
  *
@@ -83,8 +81,6 @@ const AxisChar kw_scope_req[] = "request";
 /**
     @class WSDDHandler
     @brief interface for the WSDDHandler class.
-
-
     @author Susantha Kumara (skumara@virtusa.com)
 */
 class WSDDHandler  

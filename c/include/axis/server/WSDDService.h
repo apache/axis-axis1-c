@@ -74,8 +74,6 @@ using namespace std;
 /**
     @class WSDDService
     @brief interface for the WSDDService class.
-
-
     @author Susantha Kumara (skumara@virtusa.com)
 */
 class WSDDService : public WSDDHandler 
@@ -90,6 +88,7 @@ public:
 	void AddAllowedMethod(const AxisChar* sMethodName);
 	const WSDDHandlerList* GetResponseFlowHandlers() const;
 	void AddHandler(bool bRequestFlow, WSDDHandler* pHandler);
+	int RemoveHandler(bool bRequestFlow, WSDDHandler* pHandler);
 	const WSDDHandlerList* GetRequestFlowHandlers() const;
 	void AddAllowedRole(const AxisChar* sRole);
 	const list<AxisString>& GetAllowedRoles();

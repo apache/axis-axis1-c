@@ -86,6 +86,10 @@ LIB32=link.exe -lib
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
+SOURCE=..\..\src\common\AdminUtils.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\ArrayBean.cpp
 # End Source File
 # Begin Source File
@@ -142,6 +146,10 @@ SOURCE=..\..\src\common\TypeMapping.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
+SOURCE=..\..\include\axis\server\AdminUtils.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\axis\server\AxisConfig.h
 # End Source File
 # Begin Source File
@@ -171,6 +179,10 @@ SOURCE=..\..\include\axis\server\BasicTypeSerializer.h
 # Begin Source File
 
 SOURCE=..\..\include\axis\server\GDefine.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\axis\server\IAdminUtils.h
 # End Source File
 # Begin Source File
 

@@ -3,7 +3,7 @@
     <booleanAttribute
         key="org.eclipse.ui.externaltools.ATTR_RUN_IN_BACKGROUND" value="false"/>
     <stringAttribute
-        key="org.eclipse.ui.externaltools.ATTR_TOOL_ARGUMENTS" value="-cvf wsdl2ws.jar -C ..\c\src\wsdl\bin\ org"/>
+        key="org.eclipse.ui.externaltools.ATTR_TOOL_ARGUMENTS" value="-cvf wsdl2ws.jar -C ..\src\wsdl\bin\ org"/>
     <stringAttribute
         key="org.eclipse.ui.externaltools.ATTR_RUN_BUILD_KINDS" value="full,incremental,auto,"/>
     <stringAttribute

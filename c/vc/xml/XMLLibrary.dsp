@@ -110,7 +110,7 @@ SOURCE=..\..\src\xml\StartElement.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=..\..\include\axis\xml\AnyElement.h
+SOURCE=..\..\include\axis\server\AnyElement.h
 # End Source File
 # Begin Source File
 
@@ -134,7 +134,7 @@ SOURCE=..\..\src\xml\StartElement.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\axis\xml\XMLParser.h
+SOURCE=..\..\include\axis\server\XMLParser.h
 # End Source File
 # End Group
 # End Target

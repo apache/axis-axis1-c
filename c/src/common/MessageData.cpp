@@ -75,6 +75,7 @@
 const AxisChar* MessageData::m_pachBlankPropertyValue = "";
 extern WSDDDeployment* g_pWSDDDeployment;
 IMessageDataFunctions IMessageData::ms_VFtable;
+AdminUtils  MessageData::m_AdminUtil;
 
 MessageData::MessageData()
 {
@@ -200,7 +201,7 @@ const AxisChar* MessageData::getProperty(AxisChar* pachName)
 	return m_pachBlankPropertyValue;
 }
 
-void MessageData::getWSDDDeployment(IDeployerUtils **pIDeployerUtils)
+void MessageData::GetAdminUtils(IAdminUtils** pIAdminUtils)
 {
-	*pIDeployerUtils= static_cast<IDeployerUtils*>(g_pWSDDDeployment);
+	*pIAdminUtils = &m_AdminUtil;
 }

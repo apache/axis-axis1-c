@@ -1,3 +1,5 @@
+/* -*- C++ -*- */
+
 /*
  * The Apache Software License, Version 1.1
  *
@@ -54,64 +56,62 @@
  *
  *
  */
-
-// WSDDDeployment.h:
-//
-//////////////////////////////////////////////////////////////////////
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#if !defined(AFX_WSDDDEPLOYMENT_H__2B3E0205_06F3_47C1_8D9C_479CBFB8ACC2__INCLUDED_)
-#define AFX_WSDDDEPLOYMENT_H__2B3E0205_06F3_47C1_8D9C_479CBFB8ACC2__INCLUDED_
+#if !defined(__WSDDDOCUMENTXERCES_H_INCLUDED__)
+#define __WSDDDOCUMENTXERCES_H_INCLUDED__
 
-#include <axis/server/WSDDService.h>
-#include <axis/server/WSDDHandler.h>
-#include "WSDDTransport.h"
-
-#include <list>
+#include "WSDDDocument.h"
+#include <xercesc/sax2/DefaultHandler.hpp>
+#include <xercesc/sax2/SAX2XMLReader.hpp>
+#include <xercesc/sax2/XMLReaderFactory.hpp>
+#include <xercesc/util/PlatformUtils.hpp>
+#include <string>
+#include <map>
 
 using namespace std;
 
-enum DEPLOYMENTTYPE {DT_DEPLOYMENT, DT_UNDEPLOYMENT};
+XERCES_CPP_NAMESPACE_USE;
+
 /**
-    @class WSDDDeployment
-    @brief interface for the WSDDDeployment class.
-    @author Susantha Kumara (skumara@virtusa.com)
+    @class WSDDDocumentXerces
+    @brief
+    @author sanjaya sinharage(sanjaya@opensource.lk)
+    @author Suasntha Kumara (skumara@virtusa.com, susantha@opensource.lk)
 */
-class WSDDDeployment
+class WSDDDocumentXerces : public WSDDDocument, public DefaultHandler
 {
-	friend class WSDDDocumentExpat;
-	friend class WSDDDocumentXerces;
-public:
-	int LoadWSDD(const AxisChar* sWSDD);
-	int UpdateWSDD(const AxisChar* sWSDD);
-	int SaveWSDD();
-	const AxisChar* GetLibName(int nLibId);
-	const WSDDService* GetService(const AxisChar* sServiceName);
-	const WSDDHandlerList* GetGlobalRequestFlowHandlers();
-	const WSDDHandlerList* GetGlobalResponseFlowHandlers();
-	const WSDDHandlerList* GetTransportRequestFlowHandlers(AXIS_PROTOCOL_TYPE protocol);
-	const WSDDHandlerList* GetTransportResponseFlowHandlers(AXIS_PROTOCOL_TYPE protocol);
-	const WSDDServiceMap* GetWSDDServiceMap() const;
-	DEPLOYMENTTYPE GetDeploymentType() const;
-	WSDDDeployment();
-	virtual ~WSDDDeployment();
-private: //methods that only be used by WSDDDepolyment.
-	int AddService(WSDDService* pService);
-	int AddHandler(bool bGlobal, bool bRequestFlow, WSDDHandler* pHandler, AXIS_PROTOCOL_TYPE protocol=APTHTTP);
-	int RemoveService(WSDDService* pService);
-	int RemoveHandler(bool bGlobal, bool bRequestFlow, WSDDHandler* pHandler, AXIS_PROTOCOL_TYPE protocol=APTHTTP);
-	void SetDeploymentType(DEPLOYMENTTYPE nType);
 private:
-	WSDDServiceMap* m_DeployedServices;
-	WSDDHandlerList* m_GlobalRequestHandlers;
-	WSDDHandlerList* m_GlobalResponseHandlers;
-	WSDDTransport* m_pTransportHandlers;
-	map<AxisString, int>* m_pLibNameIdMap;
-	AxisString m_sAux;
-	string m_sWSDDPath;
-	DEPLOYMENTTYPE m_DeplType;
+	const AxisChar* __XTRC(const XMLCh* pChar);
+	void ProcessAttributes(WSDDLevels ElementType, const Attributes &attrs);
+	void GetParameters(WSDDLevels ElementType, const Attributes &attrs);
+	void AddAllowedRolesToService(const AxisXMLCh* value);
+	void AddAllowedMethodsToService(const AxisXMLCh* value);
+	int ParseDocument(const AxisChar* sWSDD);
+
+public:
+	WSDDDocumentXerces(map<AxisString, int>* pLibNameIdMap);
+	~WSDDDocumentXerces();
+	int GetDeployment(const AxisChar* sWSDD, WSDDDeployment* pDeployment);
+	int UpdateDeployment(const AxisChar* sWSDD, WSDDDeployment* pDeployment);
+
+    // -----------------------------------------------------------------------
+    //  Implementations of the SAX DocumentHandler interface
+    // -----------------------------------------------------------------------
+	void startElement(const XMLCh *const uri, const XMLCh *const localname,	const XMLCh *const qname, const Attributes &attrs);
+	void characters (const XMLCh *const chars, const unsigned int length);
+	void endElement (const XMLCh *const uri, const XMLCh *const localname,	const XMLCh *const qname);
+	void startPrefixMapping(const XMLCh* const prefix, const XMLCh* const uri);
+	void endPrefixMapping(const XMLCh* const prefix);
+
+	// -----------------------------------------------------------------------
+    //  Implementations of the SAX ErrorHandler interface
+    // -----------------------------------------------------------------------
+    void warning(const SAXParseException& exception);
+    void error(const SAXParseException& exception);
+    void fatalError(const SAXParseException& exception);
 };
 
-#endif // !defined(AFX_WSDDDEPLOYMENT_H__2B3E0205_06F3_47C1_8D9C_479CBFB8ACC2__INCLUDED_)
+#endif //__WSDDDOCUMENTXERCES_H_INCLUDED__

@@ -1,5 +1,3 @@
-/* -*- C++ -*- */
-
 /*
  * The Apache Software License, Version 1.1
  *
@@ -58,6 +56,7 @@
  *
  *
  * @author Sanjaya Singharage
+ * @author Susantha Kumara (skumara@virtusa.com, susantha@opensource.lk)
  *
  */
 
@@ -195,6 +194,28 @@ void  WSDDService::AddHandler(bool bRequestFlow, WSDDHandler* pHandler)
 	}
 }
 
+/**
+ * This method removes the service specific handler of this service. But the entry
+ * in WSDDDeployment's <LibId, LibName> is not removed because the same handler may
+ * be in use by other services. 
+ */
+int WSDDService::RemoveHandler(bool bRequestFlow, WSDDHandler* pHandler)
+{
+	WSDDHandlerList* pTempList = bRequestFlow ? m_RequestHandlers : m_ResponseHandlers;
+	if (!pTempList) return AXIS_NO_SUCH_HANDLER;
+	for (WSDDHandlerList::iterator itr = pTempList->begin();
+		 itr != pTempList->end(); itr++)
+	{
+		if (strcmp((*itr)->GetLibName(), pHandler->GetLibName()) == 0)
+		{
+			pTempList->remove(*itr);
+			delete (*itr);
+			delete pHandler;
+			return AXIS_SUCCESS;
+		}
+	}
+	return AXIS_NO_SUCH_HANDLER;
+}
 
 const list<AxisString> WSDDService::getAllowedMethods() const
 {

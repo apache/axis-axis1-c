@@ -70,6 +70,7 @@
 #include "SoapSerializer.h"
 #include "SoapDeSerializer.h"
 #include "Param.h"
+#include "AdminUtils.h"
 
 #include <string>
 #include <list>
@@ -100,6 +101,8 @@ public:
 public:
 	SoapSerializer* m_pSZ;
 	SoapDeSerializer* m_pDZ;
+private:
+	void GetAdminUtils(IAdminUtils** pIAdminUtils);
 public:
 	const AxisChar* getProperty(AxisChar* pachName);
 	int setProperty(AxisChar* pachName, const AxisChar* pachValue);
@@ -126,7 +129,7 @@ protected:
   const WSDDService* m_Service;
 
 private:
-	void getWSDDDeployment(IDeployerUtils** pIDeployerUtils);
+	static AdminUtils m_AdminUtil;
 	bool m_bPastPivotState;
 	map <AxisChar*, AxisChar*, ltstr> m_Properties;
 	static const AxisChar* m_pachBlankPropertyValue;
