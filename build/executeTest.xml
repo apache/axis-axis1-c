@@ -82,7 +82,7 @@
 						 output="${results.stdout}" error="${results.stderr}"
 						 failifexecutionfails="false" vmlauncher="false">
 							<arg line="${clientArgs}"/>
-							<env key="PATH" path="${java.library.path}${path.separator}${dir.libraries}${path.separator}${dir.xmlParser}${path.separator}${HTTP.SSLChannel.dir}/lib"/>
+							<env key="PATH" path="${java.library.path}${path.separator}${dir.libraries}${path.separator}${dir.xmlParser}${path.separator}${HTTP.SSLChannel.dir}/bin"/>
 							<env key="LD_LIBRARY_PATH" path="${dir.libraries}${path.separator}${dir.xmlParser}${path.separator}${HTTP.SSLChannel.dir}/lib"/>
 							<env key="LIBPATH" path="${dir.libraries}${path.separator}${dir.xmlParser}${path.separator}${HTTP.SSLChannel.dir}/lib"/>
 							<env key="AXISCPP_DEPLOY" value="${axiscpp_deploy}"/>
