@@ -31,51 +31,64 @@ import java.util.HashSet;
 
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 
-public class WebServiceContext {
+public class WebServiceContext
+{
     private WrapperInfo wrapInfo;
     private ServiceInfo serInfo;
     private TypeMap typemap;
-    
-	private HashSet generatedFileList = new HashSet();
-	
-    public WebServiceContext(WrapperInfo wrapInfo, ServiceInfo serInfo, TypeMap typemap) throws WrapperFault {
+
+    private HashSet generatedFileList = new HashSet();
+
+    public WebServiceContext(
+        WrapperInfo wrapInfo,
+        ServiceInfo serInfo,
+        TypeMap typemap)
+        throws WrapperFault
+    {
         this.wrapInfo = wrapInfo;
         this.serInfo = serInfo;
         this.typemap = typemap;
 
         if (wrapInfo == null || this.serInfo == null || this.typemap == null)
-            throw new WrapperFault("Insuficent Info");
+        {
+            throw new WrapperFault("Insufficient Info");
+        }
     }
 
     /**
      * @return ServiceInfo
      */
-    public ServiceInfo getSerInfo() {
+    public ServiceInfo getSerInfo()
+    {
         return serInfo;
     }
 
-	/**
-	 * Adds a name of the generated file 
-	 * @param filename
-	 */
-	public void addGeneratedFile(String filename){
-		generatedFileList.add(filename);
-	}
-	
-	public HashSet getGeneratedFileList(){
-		return generatedFileList;
-	}
+    /**
+     * Adds a name of the generated file 
+     * @param filename
+     */
+    public void addGeneratedFile(String filename)
+    {
+        generatedFileList.add(filename);
+    }
+
+    public HashSet getGeneratedFileList()
+    {
+        return generatedFileList;
+    }
     /**
      * @return TypeMap
      */
-    public TypeMap getTypemap() {
+    public TypeMap getTypemap()
+    {
         return typemap;
     }
 
     /**
      * @return WrapperInfo
      */
-    public WrapperInfo getWrapInfo() {
+    public WrapperInfo getWrapInfo()
+    {
         return wrapInfo;
     }
 
