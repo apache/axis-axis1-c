@@ -702,6 +702,15 @@ IAttribute* HeaderBlock::createStdAttribute(HEADER_BLOCK_STD_ATTR_TYPE
 const AxisChar* HeaderBlock::getAttributeValue(const AxisChar *localname,
                                          const AxisChar *prefix)
 {
+     if(!localname)
+     {
+        localname="";
+     }
+     if(!prefix)
+     {
+        prefix="";
+     }
+ 
    	list<Attribute*>::iterator itAttr = m_attributes.begin();
  	while (itAttr != m_attributes.end()) 
  	{

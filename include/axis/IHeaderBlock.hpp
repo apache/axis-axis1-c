@@ -166,7 +166,11 @@ public:
         eStdAttrType, SOAP_VERSION eSOAP_VERSION) =0;
 
     /**
-      * Creates a Attribute and adds it to this Header Block.
+      * Creates a Attribute and adds it to this Header Block. 
+      * NOTE: No checking is done to see if this attribute creation applies to the xsd rules. 
+      * We expect that the server side will fail.
+      * e.g. If creating more than one attribute with the same name the outcome is undefined
+      * 
       *
       * @param localname The local name of the attribute.
       * @param prefix The prefix of the attribute.
@@ -181,6 +185,9 @@ public:
 
     /**
       * Creates a Attribute and adds it to this Header Block.
+      * NOTE: No checking is done to see if this attribute creation applies to the xsd rules. 
+      * We expect that the server side will fail.
+      * e.g. If creating more than one attribute with the same name the outcome is undefined
       *
       * @param localname The local name of the attribute.
       * @param prefix The prefix of the attribute.
