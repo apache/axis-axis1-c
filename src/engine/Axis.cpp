@@ -30,7 +30,7 @@
 #include <unistd.h>
 #endif
 
-#include <axis/Axis.h>
+#include <axis/Axis.hpp>
 
 #ifdef AXIS_CLIENT_LIB
 #include <axis/client/Call.h>
