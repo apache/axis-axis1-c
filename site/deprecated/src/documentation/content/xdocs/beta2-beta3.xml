@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.2//EN" "./dtd/document-v12.dtd">
+<document> 
+  <header> 
+    <title>WebServices - Axis</title> 
+  </header> 
+  <body> 
+    <section>
+      <title>WebServices - Axis - Changes from beta2 to beta3</title>
+<p>
+<ul>
+<li>JAX-RPC/SAAJ interfaces are now fully compatible with JAX-RPC final version.
+And the implementation mostly supports these interfaces!</li>
+
+<li>Support for the new version of the DIME specification for attachments.</li>
+
+<li>Support for the new javax.xml.namespace.QName, rather than multiple
+QName classes</li>
+
+<li>Holders are now generated in a "holders" package.</li>
+
+<li>You cannot set arbitrary properties on the Call object for now due to JAX-RPC
+limitations.  We are working with Sun on resolving this.</li>
+
+<li>Underscores are now supported in names mapped from/to WSDL, and will no longer be removed.</li>
+
+<li>Various bug fixes and improvements.</li>
+</ul>
+</p>
+    </section>
+  </body>
+</document>
