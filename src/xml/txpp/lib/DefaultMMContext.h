@@ -27,7 +27,7 @@ private:
 	DefaultMMContext();
 	virtual ~DefaultMMContext();
 public:
-    //static DefaultMMContext defaultContext;
+    static DefaultMMContext defaultContext;
 };
 
 TXPP_NAMESPACE_END
