@@ -270,10 +270,10 @@ public class WrapWriter extends CFileWriter{
 			if((CUtils.isSimpleType(((ParameterInfo)paramsB.get(i)).getLangName()))){
 				//for simple types	
 				if ("char*".equals(paraTypeName)){
-					writer.write("\t"+paraTypeName+" v"+i+" = strdup(param->"+CUtils.getParameterGetValueMethodName(paraTypeName)+");\n");
+					writer.write("\t"+paraTypeName+" v"+i+" = strdup(param"+i+"->"+CUtils.getParameterGetValueMethodName(paraTypeName)+");\n");
 				}
 				else {
-					writer.write("\t"+paraTypeName+" v"+i+" = param->"+CUtils.getParameterGetValueMethodName(paraTypeName)+";\n");
+					writer.write("\t"+paraTypeName+" v"+i+" = param"+i+"->"+CUtils.getParameterGetValueMethodName(paraTypeName)+";\n");
 				}
 					 
 			}else if((type = this.wscontext.getTypemap().getType(((ParameterInfo)paramsB.get(i)).getSchemaName())) != null 
