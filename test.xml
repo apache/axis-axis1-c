@@ -531,9 +531,9 @@ XMLParser:${dir.libraries}/${libraryPrefix}${xmlParserLibraryName}${librarySuffi
 							<!-- <arg line="-p ${monitorPort}"/>
 							<arg line="-s localhost"/> -->
 							<arg line="${clientArgs}"/>
-							<env key="PATH" path="${java.library.path};${dir.libraries};${dir.xmlParser};${dir.gskit}/bin"/>
-							<env key="LD_LIBRARY_PATH" path="${dir.libraries};${dir.xmlParser};${dir.gskit}/lib"/>
-							<env key="LIBPATH" path="${dir.libraries};${dir.xmlParser};${dir.gskit}/lib"/>
+							<env key="PATH" path="${java.library.path}${path.separator}${dir.libraries}${path.separator}${dir.xmlParser}${path.separator}${dir.gskit}/bin"/>
+							<env key="LD_LIBRARY_PATH" path="${dir.libraries}${path.separator}${dir.xmlParser}${path.separator}${dir.gskit}/lib"/>
+							<env key="LIBPATH" path="${dir.libraries}${path.separator}${dir.xmlParser}${path.separator}${dir.gskit}/lib"/>
 							<env key="AXISCPP_DEPLOY" value="${axiscpp_deploy}"/>
 						</exec>
 						<echo message="EXEC FINISHED"/>

@@ -227,6 +227,7 @@ private:
     int setFilePerm(const char* pcFileName);
     int logthis(const char* pcLog, int level, char* arg2, int arg3);
 	void addParameter(std::string& line, AxisTraceType type, unsigned len, void *value);
+    void traceHeader();
 };
 
 AXIS_CPP_NAMESPACE_END

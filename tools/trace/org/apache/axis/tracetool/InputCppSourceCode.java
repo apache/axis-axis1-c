@@ -112,7 +112,9 @@ class InputCppSourceCode {
 				idx++;
 
 			} else if (
-				!Character.isLetter(rest.charAt(0)) && '~' != rest.charAt(0)) {
+				!Character.isLetter(rest.charAt(0)) 
+                              && '~' != rest.charAt(0) 
+                              && '_' != rest.charAt(0)) {
 				Utils.rude(
 					"Lines must start with a letter ",
 					name,

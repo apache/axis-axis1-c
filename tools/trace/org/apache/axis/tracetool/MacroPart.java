@@ -35,6 +35,7 @@ class MacroPart extends FilePart {
 					"AXIS_CPP_NAMESPACE_END",
 					"AXIS_CPP_NAMESPACE_USE",
 					"AXIS_CPP_NAMESPACE_PREFIX",
+                              "XERCES_CPP_NAMESPACE_USE",
 					"TXPP_NAMESPACE_START",
 					"TXPP_NAMESPACE_END" }));
 	private final static Set knownMacros =

@@ -61,7 +61,7 @@ class Signature {
 
 	private final static Set specialOperators =
 		new HashSet(
-			Arrays.asList(new Object[] { "(", ")", "*", ",", "&", "]", "[" }));
+			Arrays.asList(new Object[] { "(", ")", "*", ",", "&", "]", "[", "=" }));
 
 	/**
 	 * Takes an unparsed signature string and parses it.
@@ -288,10 +288,12 @@ class Signature {
 			token = (String) it.next();
 
 			int template = 0; // Depth of template scope
+                  boolean foundEquals = false; // Ignore default value for an optional parameter
 			ArrayList parm = new ArrayList();
 			while (!token.equals(")")
 				&& (!token.equals(",") || template > 0)) {
-				parm.add(token);
+                        if (token.equals("=")) foundEquals=true;
+                        if (!foundEquals)	parm.add(token);
 				if (contains(token, "<"))
 					template++;
 				if (contains(token, ">"))

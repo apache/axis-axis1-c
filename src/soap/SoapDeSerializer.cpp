@@ -69,8 +69,13 @@ extern AXIS_CPP_NAMESPACE_PREFIX AxisTrace* g_pAT;
 
 AXIS_CPP_NAMESPACE_START
 
-
 #define INITIAL_ARRAY_SIZE 1
+
+#ifdef WIN32
+#define LONGLONG __int64
+#else
+#define LONGLONG long long
+#endif
 
 SoapDeSerializer::SoapDeSerializer()
 {
@@ -869,13 +874,7 @@ Axis_Array SoapDeSerializer::getBasicArray(XSDTYPE nType,
             case XSD_UNSIGNEDBYTE:
                 DESERIALIZE_ENCODED_ARRAY_BLOCK(unsigned char, CONV_STRTOUL)
             case XSD_LONG:
-//FJP v Added
-#ifdef WIN32
-                DESERIALIZE_ENCODED_ARRAY_BLOCK(__int64, CONV_STRTOUL)
-#else
-                DESERIALIZE_ENCODED_ARRAY_BLOCK(long long, CONV_STRTOUL)
-#endif
-//FJP ^ Added
+                DESERIALIZE_ENCODED_ARRAY_BLOCK(LONGLONG, CONV_STRTOUL)
             case XSD_INTEGER:
                 DESERIALIZE_ENCODED_ARRAY_BLOCK(long, CONV_STRTOL)
             case XSD_UNSIGNEDLONG:
@@ -1032,13 +1031,7 @@ Axis_Array SoapDeSerializer::getBasicArray(XSDTYPE nType,
         case XSD_UNSIGNEDBYTE:
             DESERIALIZE_LITERAL_ARRAY_BLOCK(unsigned char, CONV_STRTOUL)
         case XSD_LONG:
-//FJP v Added
-#ifdef WIN32
-            DESERIALIZE_ENCODED_ARRAY_BLOCK(__int64, CONV_STRTOUL)
-#else
-            DESERIALIZE_ENCODED_ARRAY_BLOCK(long long, CONV_STRTOUL)
-#endif
-//FJP ^ Added
+            DESERIALIZE_ENCODED_ARRAY_BLOCK(LONGLONG, CONV_STRTOUL)
         case XSD_INTEGER:
             DESERIALIZE_LITERAL_ARRAY_BLOCK(long, CONV_STRTOL)
         case XSD_UNSIGNEDLONG:
@@ -2138,17 +2131,10 @@ unsigned char SoapDeSerializer::getElementAsUnsignedByte(const AxisChar* pName,
     return ret;
 }
 
-#ifdef WIN32
-__int64 SoapDeSerializer::getElementAsLong(const AxisChar* pName,
+LONGLONG SoapDeSerializer::getElementAsLong(const AxisChar* pName,
                                         const AxisChar* pNamespace)
 {
-    __int64 ret = 0;
-#else
-long long SoapDeSerializer::getElementAsLong(const AxisChar* pName,
-                                        const AxisChar* pNamespace)
-{
-    long long ret = 0;
-#endif
+    LONGLONG ret = 0;
     if (AXIS_SUCCESS != m_nStatus) return ret;
     if (RPC_ENCODED == m_nStyle)
     {
@@ -3619,14 +3605,8 @@ void SoapDeSerializer::getChardataAs(void* pValue, XSDTYPE type)
             *((unsigned char*)(pValue)) = strtoul(m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
             break;
         case XSD_LONG:
-//FJP v Added
-#ifdef WIN32
-            *((__int64*)(pValue)) = strtol(m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
-#else
-            *((long long*)(pValue)) = strtol(m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
-#endif
+            *((LONGLONG*)(pValue)) = strtol(m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
             break;
-//FJP ^ Added
         case XSD_INTEGER:
             *((long*)(pValue)) = strtol(m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
             break;
@@ -3667,17 +3647,10 @@ void SoapDeSerializer::getChardataAs(void* pValue, XSDTYPE type)
     }
 }
 
-#ifdef WIN32
-	__int64 SoapDeSerializer::strtoll(const char * pValue)
+	LONGLONG SoapDeSerializer::strtoll(const char * pValue)
 	{
-		__int64	llRetVal = 0;
-		__int64	llPowerOf10 = 1;
-#else
-	long long SoapDeSerializer::strtoll(const char * pValue)
-	{
-		long long llRetVal = 0;
-		long long llPowerOf10 = 1;
-#endif
+		LONGLONG	llRetVal = 0;
+		LONGLONG	llPowerOf10 = 1;
 		int		iLength = strlen( pValue);
 		int		iCountDownTo = 0;
 		bool	bMinus = false;
@@ -3695,13 +3668,8 @@ void SoapDeSerializer::getChardataAs(void* pValue, XSDTYPE type)
 
 		for( int iCount = iLength; iCount >= iCountDownTo; iCount--)
 		{
-#ifdef WIN32
-			llRetVal += (__int64)(pValue[iCount] - '0') * llPowerOf10;
-			llPowerOf10 *= (__int64) 10;
-#else
-			llRetVal += (long long)(pValue[iCount] - '0') * llPowerOf10;
-			llPowerOf10 *= (long long) 10;
-#endif
+			llRetVal += (LONGLONG)(pValue[iCount] - '0') * llPowerOf10;
+			llPowerOf10 *= (LONGLONG) 10;
 		}
 
 		if( bMinus)

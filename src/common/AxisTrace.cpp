@@ -23,6 +23,7 @@
 #include <time.h>
 #include <stdio.h>
 #include <stdarg.h>
+#include <stdlib.h>
 #include "AxisUtils.h"
 #include <axis/server/GDefine.hpp>
 #include "AxisConfig.h"
@@ -57,6 +58,7 @@ int AxisTrace::openFile ()
     if(AXIS_FAIL == m_fileTrace.fileOpen(sFileName, "a"))
         return AXIS_FAIL;
 	m_bLoggingOn = true;
+      traceHeader();
 	return AXIS_SUCCESS;
 }
 
@@ -72,6 +74,7 @@ int AxisTrace::openFileByClient ()
     if(AXIS_FAIL == m_fileTrace.fileOpen(sFileName, "a"))
         return AXIS_FAIL;
 	m_bLoggingOn = true;
+    traceHeader();
     return AXIS_SUCCESS;
 }
 
@@ -245,6 +248,25 @@ int AxisTrace::trace (const char *pchLog)
 {
     printf ("DEBUG LINE :\n%s\n", pchLog);
     return AXIS_SUCCESS;
+}
+
+void AxisTrace::traceHeader()
+{
+    traceLine("--------- Axis C++ trace ----------");
+    traceLine("Dumping environment variables...");
+    char *envVars[]={"PATH","LIBPATH","LD_LIBRARY_PATH","AXISCPP_DEPLOY","PWD",
+        "CLASSPATH","INCLUDE","LIB","NLSPATH","OS","COMPUTERNAME","USERNAME",
+        "HOSTNAME","LANG","LOGIN","LOGNAME","MACHTYPE","OSTYPE","UID","USER"};
+    for (int i=0; i<sizeof(envVars)/4; i++) {
+        string text = envVars[i];
+        const char *value = getenv(envVars[i]);
+        if (NULL==value) text += " was not set";
+        else {
+            text += "=";
+            text += value;
+        }
+        traceLine(text.c_str());
+    }
 }
 
 void AxisTrace::traceLine(const char *data) 
