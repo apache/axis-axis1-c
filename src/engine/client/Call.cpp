@@ -100,8 +100,20 @@ void Call::addCmplxParameter (void* pObject, void* pSZFunct, void* pDelFunct,
 
 int Call::invoke ()
 {
-     m_nStatus =  m_pAxisEngine->process(m_pTransport);
-     return m_nStatus;
+    try
+    {
+        m_nStatus =  m_pAxisEngine->process(m_pTransport);
+    }
+    catch(AxisException& e)
+    {
+        throw;
+    }
+    catch(...)
+    {
+        throw;
+    }
+
+    return m_nStatus;
 }
 
 int Call::initialize (PROVIDERTYPE nStyle, int secure)
@@ -167,17 +179,17 @@ int Call::initialize (PROVIDERTYPE nStyle, int secure)
         m_nStatus = AXIS_FAIL;        
         return AXIS_FAIL;
     }
-    catch (ChannelException e)
+    catch (AxisException& e)
     {
         /* printf(e.GetErr().c_str()); */
-        m_nStatus = AXIS_FAIL;        
-        return AXIS_FAIL;
+        m_nStatus = AXIS_FAIL;
+        throw;
     }
     catch (...)
     {
         /* printf("Unknown exception occured in the client"); */
         m_nStatus = AXIS_FAIL;        
-        return AXIS_FAIL;
+        throw;
     }
 }
 
@@ -223,6 +235,8 @@ int Call::setTransportProperty (AXIS_TRANSPORT_INFORMATION_TYPE type,
  */
 int Call::openConnection(int secure)
 {
+    try
+    {
     m_pTransport = SOAPTransportFactory::getTransportObject(m_nTransportType);
 	if (!m_pTransport) return AXIS_FAIL;
 	m_pTransport->setEndpointUri(m_pcEndPointUri);
@@ -231,6 +245,16 @@ int Call::openConnection(int secure)
     if( m_bUseProxy )
     	m_pTransport->setProxy(m_strProxyHost.c_str(), m_uiProxyPort);
     m_nStatus = m_pTransport->openConnection();
+    }
+    catch(AxisException& e)
+    {
+        throw;
+    }
+    catch(...)
+    {
+        throw;
+    }
+
     return m_nStatus;
 }
 
