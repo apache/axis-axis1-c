@@ -63,7 +63,7 @@ void TypeMapping::initialize ()
         m_sTypeMap[std::string ("float")] = XSD_FLOAT;
         m_sTypeMap[std::string ("double")] = XSD_DOUBLE;
         m_sTypeMap[std::string ("decimal")] = XSD_DECIMAL;
-        m_sTypeMap[std::string ("std::string")] = XSD_STRING;
+        m_sTypeMap[std::string ("string")] = XSD_STRING;
         m_sTypeMap[std::string ("base64Binary")] = XSD_BASE64BINARY;
         m_sTypeMap[std::string ("hexBinary")] = XSD_HEXBINARY;
         m_sTypeMap[std::string ("anyURI")] = XSD_ANYURI;
