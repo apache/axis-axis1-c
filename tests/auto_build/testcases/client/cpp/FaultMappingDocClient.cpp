@@ -22,7 +22,7 @@ int main(int argc, char* argv[])
 	url = argv[1];
 
 	sprintf(endpoint, "%s", url);
-	MathOps ws(endpoint);
+
 
 	op = "div";
 
@@ -40,6 +40,7 @@ int main(int argc, char* argv[])
 			}
 			try
 			{
+				MathOps ws(endpoint);
 				cout << "Trying to " << op << " " << i1 << " by " << i2 << endl;
 				iResult = ws.div(i1, i2);		
 				cout << "Result is " << iResult << endl;
