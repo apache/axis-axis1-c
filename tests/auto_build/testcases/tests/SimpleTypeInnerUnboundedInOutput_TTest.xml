@@ -1,0 +1,14 @@
+<test>
+    <name>SimpleTypeInnerUnboundedInOutput_TTest</name>
+    <description>SimpleTypeInnerUnboundedInOutput_TTest</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>SimpleTypeInnerUnboundedInOutput_TTestClient.cpp</clientCode>
+    <wsdl>SimpleTypeInnerUnboundedInOutput.wsdl</wsdl>
+    <expected>
+        <output>
+            SimpleTypeInnerUnboundedInOutput_TTest.expected
+        </output>
+    </expected>
+	<endpoint>http://localhost:9080/SimpleTypeInnerUnboundedInOutput/services/sampleWS</endpoint>
+	<nomonitor>true</nomonitor>
+</test>

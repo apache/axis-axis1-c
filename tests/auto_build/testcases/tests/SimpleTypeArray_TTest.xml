@@ -1,0 +1,14 @@
+<test>
+    <name>SimpleTypeArray_TTest</name>
+    <description>SimpleTypeArray_TTest</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>SimpleTypeArray_TTestClient.cpp</clientCode>
+    <wsdl>SimpleTypeArray.wsdl</wsdl>
+    <expected>
+        <output>
+            SimpleTypeArray_TTest.expected
+        </output>
+    </expected>
+	<endpoint>http://localhost:9080/SimpleTypeArray/services/sampleWS</endpoint>
+	<nomonitor>true</nomonitor>
+</test>
