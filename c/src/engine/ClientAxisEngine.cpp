@@ -37,36 +37,14 @@ int ClientAxisEngine::Process(Ax_soapstream* soap)
 
 	do {
 		//populate MessageData with transport information
-		m_pMsgData->m_Protocol = soap->trtype;
-
+		send_transport_information(soap);
 		const char* cService = get_header(soap, SOAPACTIONHEADER);
-		if (!cService) //get from URL if http
+		if(SUCCESS != m_pSZ->SetOutputStream(soap->str.op_stream))
 		{
-			cService = get_service_from_uri(soap);
-		}
-		AxisString service = (cService == NULL)? "" : cService;
-		//AxisUtils::convert(service, (cService == NULL)? "" : cService);
-	  
-//			AXISTRACE2("string service = ",service.c_str());
- 
-		if (service.empty()) 
-		{
-			break; //do .. while(0)
-		}
-		if (service.find('\"') != string::npos) //if there are quotes remove them.
-		{
-			service = service.substr(1, service.length() - 2);
+			break;
 		}
 
-		//get service description object from the WSDD
-		pService = g_pWSDDDeployment->GetService(service.c_str());
-		if (!pService) 
-		{
-			break; //do .. while(0)
-		}
-
-		m_pMsgData->SetService(pService);
-		
+/*
 		//Get Global and Transport Handlers
 		if(SUCCESS != (Status = InitializeHandlers(sSessionId, soap->trtype)))
 		{
@@ -81,12 +59,15 @@ int ClientAxisEngine::Process(Ax_soapstream* soap)
 		{        
 		  break; //do .. while(0)
 		}
+*/
 
-		//and handlers may add headers to the Serializer.
 		//Invoke all handlers and then the remote webservice
 		Status = Invoke(m_pMsgData); //we generate response in the same way even if this has failed
 	}
 	while(0);
+
+		receive_transport_information(soap);
+		m_pDZ->SetInputStream(soap->str.ip_stream);
 
 	//Pool back the Service specific handlers
 	if (m_pSReqFChain) g_pHandlerPool->PoolHandlerChain(m_pSReqFChain, sSessionId);
@@ -101,6 +82,12 @@ int ClientAxisEngine::Invoke(MessageData* pMsg)
 	enum AE_LEVEL {AE_START=1, AE_TRH, AE_GLH, AE_SERH, AE_SERV};
 	int Status = FAIL;
 	int level = AE_START;
+	/*
+	No Client side handlers for now. Therefore returns SUCCESS
+	*/
+	Status = SUCCESS;
+
+	/*
 	do
 	{
 		//invoke client side service specific request handlers
@@ -138,17 +125,9 @@ int ClientAxisEngine::Invoke(MessageData* pMsg)
 
 	}
 	while(0);
-/*
-	send_transport_information(soap);
-	//Serialize and send to server
-	m_pSZ->SetOutputStream(soap->str.op_stream);
+	*/
 
-	pMsg->setPastPivotState(true);
-
-	receive_transport_information(&soap);
-	//receive response from the server and Deserialize
-	m_pDZ->SetInputStream(soap->str.ip_stream);
-*/
+	/*
 	switch (level)
 	{
 	case AE_SERV: //everything success
@@ -176,6 +155,7 @@ int ClientAxisEngine::Invoke(MessageData* pMsg)
 		//no break;
 	case AE_START:;//transport handlers have failed
 	};
+	*/
 //	AXISTRACE1("end axisengine process()");
 	return Status;
 }
