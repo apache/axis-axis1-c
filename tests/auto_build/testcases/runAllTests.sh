@@ -33,7 +33,7 @@ fi
 rm -rf $OUTPUT_DIR
 
 passed=0
-num_tests=20
+num_tests=21
 
 # inserted Adrian Dick by
 #test1 
@@ -95,6 +95,9 @@ runTestCase.sh wsdls/InteropTestRound1.wsdl c++
 [[ $? -eq 0 ]] && passed=$(($passed + 1))
 #test20
 runTestCase.sh wsdls/ExtensibilityQuery.wsdl c++
+[[ $? -eq 0 ]] && passed=$(($passed + 1))
+#test21
+runTestCase.sh wsdls/Calculator.wsdl c++
 [[ $? -eq 0 ]] && passed=$(($passed + 1))
 
 #runTestCase.sh wsdls/SimpleTypeArray.wsdl c++
