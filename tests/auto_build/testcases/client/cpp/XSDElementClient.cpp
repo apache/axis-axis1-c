@@ -124,16 +124,18 @@ int main(int argc, char* argv[])
 		printf("double=%.5f\n", dResult); fflush(stdout);
 
 		dateResult = ws->setGetDateType(testDate);
-		strftime(dateTime, 50, "%a %b %d %H:%M:%S %Y", &dateResult);
+		strftime(dateTime, 50, "%a %b %d %Y", &dateResult);
 		cout << "date=" << dateTime << endl;
 
 		dateTimeResult = ws->setGetDateTimeType(testDate);
 		strftime(dateTime, 50, "%a %b %d %H:%M:%S %Y", &dateTimeResult);
 		cout << "dateTime=" << dateTime << endl;
 
-		timeResult = ws->setGetTimeType(testDate);
-		strftime(dateTime, 50, "%a %b %d %H:%M:%S %Y", &timeResult);
-		cout << "time=" << dateTime << endl;
+//  This is being commented out due to issue on some servers
+//  An additional testcase XSDTime has been created to isolate this test.
+//		timeResult = ws->setGetTimeType(testDate);
+//		strftime(dateTime, 50, "%H:%M:%S", &timeResult);
+//		cout << "time=" << dateTime << endl;
 
 		strResult = ws->setGetDataString("never odd or even");
 		cout << "string=" << strResult << endl;

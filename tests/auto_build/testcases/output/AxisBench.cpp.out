@@ -7,8 +7,7 @@ Count : 100
  DoubleType 11.111
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 10
  FloatType 5.5
@@ -24,8 +23,7 @@ Count : 100
  DoubleType 22.222
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 20
  FloatType 11
@@ -43,8 +41,7 @@ Count : 100
  DoubleType 33.333
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 30
  FloatType 16.5
@@ -62,8 +59,7 @@ Count : 100
  DoubleType 44.444
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 40
  FloatType 22
@@ -81,8 +77,7 @@ Count : 100
  DoubleType 55.555
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 50
  FloatType 27.5
@@ -100,8 +95,7 @@ Count : 100
  DoubleType 66.666
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 60
  FloatType 33
@@ -119,8 +113,7 @@ Count : 100
  DoubleType 77.777
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 70
  FloatType 38.5
@@ -138,8 +131,7 @@ Count : 100
  DoubleType 88.888
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 80
  FloatType 44
@@ -157,8 +149,7 @@ Count : 100
  DoubleType 99.999
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 90
  FloatType 49.5
@@ -176,8 +167,7 @@ Count : 100
  DoubleType 111.11
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 100
  FloatType 55
@@ -195,8 +185,7 @@ Count : 100
  DoubleType 122.221
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 110
  FloatType 60.5
@@ -214,8 +203,7 @@ Count : 100
  DoubleType 133.332
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 120
  FloatType 66
@@ -233,8 +221,7 @@ Count : 100
  DoubleType 144.443
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 130
  FloatType 71.5
@@ -252,8 +239,7 @@ Count : 100
  DoubleType 155.554
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 140
  FloatType 77
@@ -271,8 +257,7 @@ Count : 100
  DoubleType 166.665
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 150
  FloatType 82.5
@@ -290,8 +275,7 @@ Count : 100
  DoubleType 177.776
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 160
  FloatType 88
@@ -309,8 +293,7 @@ Count : 100
  DoubleType 188.887
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 170
  FloatType 93.5
@@ -328,8 +311,7 @@ Count : 100
  DoubleType 199.998
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 180
  FloatType 99
@@ -347,8 +329,7 @@ Count : 100
  DoubleType 211.109
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 190
  FloatType 104.5
@@ -366,8 +347,7 @@ Count : 100
  DoubleType 222.22
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 200
  FloatType 110
@@ -385,8 +365,7 @@ Count : 100
  DoubleType 233.331
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 210
  FloatType 115.5
@@ -404,8 +383,7 @@ Count : 100
  DoubleType 244.442
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 220
  FloatType 121
@@ -423,8 +401,7 @@ Count : 100
  DoubleType 255.553
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 230
  FloatType 126.5
@@ -442,8 +419,7 @@ Count : 100
  DoubleType 266.664
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 240
  FloatType 132
@@ -461,8 +437,7 @@ Count : 100
  DoubleType 277.775
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 250
  FloatType 137.5
@@ -480,8 +455,7 @@ Count : 100
  DoubleType 288.886
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 260
  FloatType 143
@@ -499,8 +473,7 @@ Count : 100
  DoubleType 299.997
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 270
  FloatType 148.5
@@ -518,8 +491,7 @@ Count : 100
  DoubleType 311.108
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 280
  FloatType 154
@@ -537,8 +509,7 @@ Count : 100
  DoubleType 322.219
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 290
  FloatType 159.5
@@ -556,8 +527,7 @@ Count : 100
  DoubleType 333.33
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 300
  FloatType 165
@@ -575,8 +545,7 @@ Count : 100
  DoubleType 344.441
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 310
  FloatType 170.5
@@ -594,8 +563,7 @@ Count : 100
  DoubleType 355.552
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 320
  FloatType 176
@@ -613,8 +581,7 @@ Count : 100
  DoubleType 366.663
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 330
  FloatType 181.5
@@ -632,8 +599,7 @@ Count : 100
  DoubleType 377.774
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 340
  FloatType 187
@@ -651,8 +617,7 @@ Count : 100
  DoubleType 388.885
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 350
  FloatType 192.5
@@ -670,8 +635,7 @@ Count : 100
  DoubleType 399.996
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 360
  FloatType 198
@@ -689,8 +653,7 @@ Count : 100
  DoubleType 411.107
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 370
  FloatType 203.5
@@ -708,8 +671,7 @@ Count : 100
  DoubleType 422.218
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 380
  FloatType 209
@@ -727,8 +689,7 @@ Count : 100
  DoubleType 433.329
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 390
  FloatType 214.5
@@ -746,8 +707,7 @@ Count : 100
  DoubleType 444.44
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 400
  FloatType 220
@@ -765,8 +725,7 @@ Count : 100
  DoubleType 455.551
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 410
  FloatType 225.5
@@ -784,8 +743,7 @@ Count : 100
  DoubleType 466.662
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 420
  FloatType 231
@@ -803,8 +761,7 @@ Count : 100
  DoubleType 477.773
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 430
  FloatType 236.5
@@ -822,8 +779,7 @@ Count : 100
  DoubleType 488.884
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 440
  FloatType 242
@@ -841,8 +797,7 @@ Count : 100
  DoubleType 499.995
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 450
  FloatType 247.5
@@ -860,8 +815,7 @@ Count : 100
  DoubleType 511.106
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 460
  FloatType 253
@@ -879,8 +833,7 @@ Count : 100
  DoubleType 522.217
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 470
  FloatType 258.5
@@ -898,8 +851,7 @@ Count : 100
  DoubleType 533.328
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 480
  FloatType 264
@@ -917,8 +869,7 @@ Count : 100
  DoubleType 544.439
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 490
  FloatType 269.5
@@ -936,8 +887,7 @@ Count : 100
  DoubleType 555.55
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 500
  FloatType 275
@@ -955,8 +905,7 @@ Count : 100
  DoubleType 566.661
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 510
  FloatType 280.5
@@ -974,8 +923,7 @@ Count : 100
  DoubleType 577.772
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 520
  FloatType 286
@@ -993,8 +941,7 @@ Count : 100
  DoubleType 588.883
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 530
  FloatType 291.5
@@ -1012,8 +959,7 @@ Count : 100
  DoubleType 599.994
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 540
  FloatType 297
@@ -1031,8 +977,7 @@ Count : 100
  DoubleType 611.105
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 550
  FloatType 302.5
@@ -1050,8 +995,7 @@ Count : 100
  DoubleType 622.216
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 560
  FloatType 308
@@ -1069,8 +1013,7 @@ Count : 100
  DoubleType 633.327
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 570
  FloatType 313.5
@@ -1088,8 +1031,7 @@ Count : 100
  DoubleType 644.438
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 580
  FloatType 319
@@ -1107,8 +1049,7 @@ Count : 100
  DoubleType 655.549
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 590
  FloatType 324.5
@@ -1126,8 +1067,7 @@ Count : 100
  DoubleType 666.66
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 600
  FloatType 330
@@ -1145,8 +1085,7 @@ Count : 100
  DoubleType 677.771
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 610
  FloatType 335.5
@@ -1164,8 +1103,7 @@ Count : 100
  DoubleType 688.882
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 620
  FloatType 341
@@ -1183,8 +1121,7 @@ Count : 100
  DoubleType 699.993
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 630
  FloatType 346.5
@@ -1202,8 +1139,7 @@ Count : 100
  DoubleType 711.104
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 640
  FloatType 352
@@ -1221,8 +1157,7 @@ Count : 100
  DoubleType 722.215
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 650
  FloatType 357.5
@@ -1240,8 +1175,7 @@ Count : 100
  DoubleType 733.326
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 660
  FloatType 363
@@ -1259,8 +1193,7 @@ Count : 100
  DoubleType 744.437
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 670
  FloatType 368.5
@@ -1278,8 +1211,7 @@ Count : 100
  DoubleType 755.548
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 680
  FloatType 374
@@ -1297,8 +1229,7 @@ Count : 100
  DoubleType 766.659
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 690
  FloatType 379.5
@@ -1316,8 +1247,7 @@ Count : 100
  DoubleType 777.77
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 700
  FloatType 385
@@ -1335,8 +1265,7 @@ Count : 100
  DoubleType 788.881
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 710
  FloatType 390.5
@@ -1354,8 +1283,7 @@ Count : 100
  DoubleType 799.992
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 720
  FloatType 396
@@ -1373,8 +1301,7 @@ Count : 100
  DoubleType 811.103
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 730
  FloatType 401.5
@@ -1392,8 +1319,7 @@ Count : 100
  DoubleType 822.214
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 740
  FloatType 407
@@ -1411,8 +1337,7 @@ Count : 100
  DoubleType 833.325
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 750
  FloatType 412.5
@@ -1430,8 +1355,7 @@ Count : 100
  DoubleType 844.436
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 760
  FloatType 418
@@ -1449,8 +1373,7 @@ Count : 100
  DoubleType 855.547
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 770
  FloatType 423.5
@@ -1468,8 +1391,7 @@ Count : 100
  DoubleType 866.658
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 780
  FloatType 429
@@ -1487,8 +1409,7 @@ Count : 100
  DoubleType 877.769
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 790
  FloatType 434.5
@@ -1506,8 +1427,7 @@ Count : 100
  DoubleType 888.88
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 800
  FloatType 440
@@ -1525,8 +1445,7 @@ Count : 100
  DoubleType 899.991
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 810
  FloatType 445.5
@@ -1544,8 +1463,7 @@ Count : 100
  DoubleType 911.102
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 820
  FloatType 451
@@ -1563,8 +1481,7 @@ Count : 100
  DoubleType 922.213
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 830
  FloatType 456.5
@@ -1582,8 +1499,7 @@ Count : 100
  DoubleType 933.324
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 840
  FloatType 462
@@ -1601,8 +1517,7 @@ Count : 100
  DoubleType 944.435
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 850
  FloatType 467.5
@@ -1620,8 +1535,7 @@ Count : 100
  DoubleType 955.546
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 860
  FloatType 473
@@ -1639,8 +1553,7 @@ Count : 100
  DoubleType 966.657
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 870
  FloatType 478.5
@@ -1658,8 +1571,7 @@ Count : 100
  DoubleType 977.768
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 880
  FloatType 484
@@ -1677,8 +1589,7 @@ Count : 100
  DoubleType 988.879
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 890
  FloatType 489.5
@@ -1696,8 +1607,7 @@ Count : 100
  DoubleType 999.99
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 900
  FloatType 495
@@ -1715,8 +1625,7 @@ Count : 100
  DoubleType 1011.1
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 910
  FloatType 500.5
@@ -1734,8 +1643,7 @@ Count : 100
  DoubleType 1022.21
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 920
  FloatType 506
@@ -1753,8 +1661,7 @@ Count : 100
  DoubleType 1033.32
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 930
  FloatType 511.5
@@ -1772,8 +1679,7 @@ Count : 100
  DoubleType 1044.43
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 940
  FloatType 517
@@ -1791,8 +1697,7 @@ Count : 100
  DoubleType 1055.55
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 950
  FloatType 522.5
@@ -1810,8 +1715,7 @@ Count : 100
  DoubleType 1066.66
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 960
  FloatType 528
@@ -1829,8 +1733,7 @@ Count : 100
  DoubleType 1077.77
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 970
  FloatType 533.5
@@ -1848,8 +1751,7 @@ Count : 100
  DoubleType 1088.88
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 980
  FloatType 539
@@ -1867,8 +1769,7 @@ Count : 100
  DoubleType 1099.99
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 990
  FloatType 544.5
@@ -1886,8 +1787,7 @@ Count : 100
  DoubleType 1111.1
  BooleanType 1
  DateTimeType Fri Nov 12 07:58:43 2004
- DateType Fri Nov 12 00:00:00 2004
- TimeType Thu Jan 01 07:58:43 1970
+ DateType Fri Nov 12 2004
  ByteType 1
  DecimalType 1000
  FloatType 550

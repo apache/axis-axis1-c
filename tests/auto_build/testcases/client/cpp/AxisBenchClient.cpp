@@ -187,10 +187,12 @@ int main(int argc, char* argv[])
 			  cout << " BooleanType " << output->infos.m_Array[i]->BooleanType << endl;
   			  strftime(dateTime, 50, "%a %b %d %H:%M:%S %Y", &output->infos.m_Array[i]->DateTimeType);
 			  cout << " DateTimeType " << dateTime << endl;
-  			  strftime(dateTime, 50, "%a %b %d %H:%M:%S %Y", &output->infos.m_Array[i]->DateType);
+  			  strftime(dateTime, 50, "%a %b %d %Y", &output->infos.m_Array[i]->DateType);
 			  cout << " DateType " << dateTime << endl;
-  			  strftime(dateTime, 50, "%a %b %d %H:%M:%S %Y", &output->infos.m_Array[i]->TimeType);
-			  cout << " TimeType " << dateTime << endl;
+// This is being removed due to problem in some servers.
+// See XSDTime or XSDTimeNil testcases for full validation of the xsd:time type
+//            strftime(dateTime, 50, "%H:%M:%S", &output->infos.m_Array[i]->TimeType);
+//			  cout << " TimeType " << dateTime << endl;
 			  cout << " ByteType " << output->infos.m_Array[i]->ByteType << endl;
 			  cout << " DecimalType " << output->infos.m_Array[i]->DecimalType << endl;
 			  cout << " FloatType " << output->infos.m_Array[i]->FloatType << endl;

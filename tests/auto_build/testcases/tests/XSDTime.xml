@@ -1,0 +1,14 @@
+<test>
+    <name>XSDTime</name>
+    <description>Test sending and receiving the xsd:time type as an element</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>XSDTimeClient.cpp</clientCode>
+    <wsdl>XSDElement.wsdl</wsdl>
+    <expected>
+        <output>
+            XSDTime.expected
+        </output>
+    </expected>
+	<endpoint>http://localhost:80/XSDElement/services/XSDElementPort</endpoint>
+</test>
+
