@@ -25,7 +25,7 @@
 #pragma warning (disable : 4786)
 #endif
 
-#include <axis/wcg/Method.h>
+#include "Method.h"
 
 
 /*
@@ -160,10 +160,10 @@ int Method::GenerateMethodImpl(string& sClassName, File &file)
     file << endl;
     if (m_pReturnType->IsComplexType()) 
     {
-        file << "\tIParam* pRetParam = pIWSSZ->AddOutputParam(ret, 
-            (AXIS_SERIALIZE_FUNCT)Axis_Serialize_" <<
-        m_pReturnType->GetTypeName() << ", 
-        (AXIS_OBJECT_DELETE_FUNCT)Axis_Delete_" << m_pReturnType->GetTypeName()
+        file << "\tIParam* pRetParam = pIWSSZ->AddOutputParam(ret,\
+            (void*)Axis_Serialize_" <<
+        m_pReturnType->GetTypeName() << ",\
+        (void*)Axis_Delete_" << m_pReturnType->GetTypeName()
         << ");" << endl;        
     }
     else

@@ -23,7 +23,7 @@
 #pragma warning (disable : 4786)
 #endif
 
-#include <axis/wcg/BeanClass.h>
+#include "BeanClass.h"
 
 
 BeanClass::BeanClass()
