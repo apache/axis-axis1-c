@@ -50,6 +50,7 @@ Axis2Transport::Axis2Transport ():m_bReopenConnection (false),
     m_pcReceived = 0;
     m_pChannel = new Channel ();
     m_bChannelSecure = false;
+	m_bMimeTrue = false;
     m_viCurrentHeader = m_vHTTPHeaders.begin();
 }
 
