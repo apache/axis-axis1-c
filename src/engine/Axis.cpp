@@ -395,6 +395,7 @@ STORAGE_CLASS_INFO
 int uninitialize_module ()
 {
     g_bModuleInitialize = false;
+	TypeMapping::uninitialize();
     SOAPTransportFactory::uninitialize();
     ModuleUnInitialize ();
     SoapKeywordMapping::uninitialize ();

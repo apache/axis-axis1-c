@@ -50,42 +50,52 @@ void TypeMapping::initialize ()
 {
     if (!m_bInit)
     {
-        m_sTypeMap[__TRC ("int")] = XSD_INT;
-        m_sTypeMap[__TRC ("boolean")] = XSD_BOOLEAN;
-        m_sTypeMap[__TRC ("unsignedInt")] = XSD_UNSIGNEDINT;
-        m_sTypeMap[__TRC ("short")] = XSD_SHORT;
-        m_sTypeMap[__TRC ("unsignedShort")] = XSD_UNSIGNEDSHORT;
-        m_sTypeMap[__TRC ("byte")] = XSD_BYTE;
-        m_sTypeMap[__TRC ("unsignedByte")] = XSD_UNSIGNEDBYTE;
-        m_sTypeMap[__TRC ("long")] = XSD_LONG;
-        m_sTypeMap[__TRC ("integer")] = XSD_INTEGER;
-        m_sTypeMap[__TRC ("unsignedLong")] = XSD_UNSIGNEDLONG;
-        m_sTypeMap[__TRC ("float")] = XSD_FLOAT;
-        m_sTypeMap[__TRC ("double")] = XSD_DOUBLE;
-        m_sTypeMap[__TRC ("decimal")] = XSD_DECIMAL;
-        m_sTypeMap[__TRC ("string")] = XSD_STRING;
-        m_sTypeMap[__TRC ("base64Binary")] = XSD_BASE64BINARY;
-        m_sTypeMap[__TRC ("hexBinary")] = XSD_HEXBINARY;
-        m_sTypeMap[__TRC ("anyURI")] = XSD_ANYURI;
-        m_sTypeMap[__TRC ("QName")] = XSD_QNAME;
-        m_sTypeMap[__TRC ("duration")] = XSD_DURATION;
-        m_sTypeMap[__TRC ("dateTime")] = XSD_DATETIME;
-        m_sTypeMap[__TRC ("date")] = XSD_DATE;
-        m_sTypeMap[__TRC ("time")] = XSD_TIME;
-        m_sTypeMap[__TRC ("gYearMonth")] = XSD_YEARMONTH;
-        m_sTypeMap[__TRC ("gYear")] = XSD_YEAR;
-        m_sTypeMap[__TRC ("gMonthDay")] = XSD_MONTHDAY;
-        m_sTypeMap[__TRC ("gDay")] = XSD_DAY;
-        m_sTypeMap[__TRC ("gMonth")] = XSD_MONTH;
+        m_sTypeMap[std::string ("int")] = XSD_INT;
+        m_sTypeMap[std::string ("boolean")] = XSD_BOOLEAN;
+        m_sTypeMap[std::string ("unsignedInt")] = XSD_UNSIGNEDINT;
+        m_sTypeMap[std::string ("short")] = XSD_SHORT;
+        m_sTypeMap[std::string ("unsignedShort")] = XSD_UNSIGNEDSHORT;
+        m_sTypeMap[std::string ("byte")] = XSD_BYTE;
+        m_sTypeMap[std::string ("unsignedByte")] = XSD_UNSIGNEDBYTE;
+        m_sTypeMap[std::string ("long")] = XSD_LONG;
+        m_sTypeMap[std::string ("integer")] = XSD_INTEGER;
+        m_sTypeMap[std::string ("unsignedLong")] = XSD_UNSIGNEDLONG;
+        m_sTypeMap[std::string ("float")] = XSD_FLOAT;
+        m_sTypeMap[std::string ("double")] = XSD_DOUBLE;
+        m_sTypeMap[std::string ("decimal")] = XSD_DECIMAL;
+        m_sTypeMap[std::string ("std::string")] = XSD_STRING;
+        m_sTypeMap[std::string ("base64Binary")] = XSD_BASE64BINARY;
+        m_sTypeMap[std::string ("hexBinary")] = XSD_HEXBINARY;
+        m_sTypeMap[std::string ("anyURI")] = XSD_ANYURI;
+        m_sTypeMap[std::string ("QName")] = XSD_QNAME;
+        m_sTypeMap[std::string ("duration")] = XSD_DURATION;
+        m_sTypeMap[std::string ("dateTime")] = XSD_DATETIME;
+        m_sTypeMap[std::string ("date")] = XSD_DATE;
+        m_sTypeMap[std::string ("time")] = XSD_TIME;
+        m_sTypeMap[std::string ("gYearMonth")] = XSD_YEARMONTH;
+        m_sTypeMap[std::string ("gYear")] = XSD_YEAR;
+        m_sTypeMap[std::string ("gMonthDay")] = XSD_MONTHDAY;
+        m_sTypeMap[std::string ("gDay")] = XSD_DAY;
+        m_sTypeMap[std::string ("gMonth")] = XSD_MONTH;
         m_bInit = true;
     }
 }
 
+void TypeMapping::uninitialize()
+{
+    if (m_bInit)
+	{
+        m_sTypeMap.clear();
+		m_bInit = false;
+	}
+}
+
+
 XSDTYPE TypeMapping::map (const AxisXMLCh* sType)
 {
-    if (m_sTypeMap.find (sType) != m_sTypeMap.end ())
+    if (m_sTypeMap.find (std::string(sType)) != m_sTypeMap.end ())
     {
-        return m_sTypeMap[sType];
+        return m_sTypeMap[std::string(sType)];
     }
     return XSD_UNKNOWN;
 }
