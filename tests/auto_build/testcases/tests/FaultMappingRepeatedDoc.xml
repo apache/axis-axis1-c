@@ -1,0 +1,13 @@
+<test>
+    <name>FaultMappingRepeatedDoc</name>
+    <description>FaultMappingDoc but calling the same stub and not creating a new one each call. We had problems on windows only doing this.</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>FaultMappingRepeatedDocClient.cpp</clientCode>
+    <wsdl>FaultMappingDoc.wsdl</wsdl>
+    <expected>
+        <output>
+            FaultMappingRepeatedDoc.cpp.out
+        </output>
+    </expected>
+	<endpoint>http://localhost:80/FaultMapping/services/MathOps</endpoint>
+</test>
