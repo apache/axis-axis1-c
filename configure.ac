@@ -94,21 +94,21 @@ AC_ARG_ENABLE(tspp, [  --enable-tspp    build tspp xml parser library. default=n
   TSPPBUILD=""
 )
 
-AC_MSG_CHECKING(whether to build axis3 client transport library)
-AC_ARG_ENABLE(axis3, [  --enable-axis3    build axis3 client transport library. default=no],
+AC_MSG_CHECKING(whether to build axis2 client transport library)
+AC_ARG_ENABLE(axis2, [  --enable-axis2    build axis2 client transport library. default=no],
 [ case "${enableval}" in
   no)
     AC_MSG_RESULT(no)
-    AXIS3BUILD=""
+    AXIS2BUILD=""
     ;;
   *)
     AC_MSG_RESULT(yes)
-    AXIS3BUILD="axis3"
+    AXIS2BUILD="axis2"
 
     ;;
   esac ],
   AC_MSG_RESULT(no)
-  AXIS3BUILD=""
+  AXIS2BUILD=""
 )
 
 AC_MSG_CHECKING(whether to build test cases)
@@ -201,6 +201,10 @@ AC_ARG_WITH(axis2-ssl,
     ;;
   *)
     AC_MSG_RESULT(yes)
+    dnl test whether axis2 build enabled
+    if test  axis2 != "$AXIS2BUILD"; then
+        AC_MSG_ERROR("Axis2 transport is not enabled. stop")
+    fi
     dnl test for  ssl directory
     if test -d $withval; then
         sslinc="-I$withval/include"
@@ -226,10 +230,6 @@ AC_ARG_WITH(axis3-ssl,
     ;;
   *)
     AC_MSG_RESULT(yes)
-    dnl test whether axis3 build enabled
-    if test  axis3 != "$AXIS3BUILD"; then
-        AC_MSG_ERROR("Axis3 transport is not enabled. stop")
-    fi
 
     dnl test for  ssl directory
     if test -d $withval; then
@@ -280,7 +280,7 @@ AC_SUBST(LINKCLIENTLIB)
 AC_SUBST(TESTCASESBUILD)
 AC_SUBST(CPPUNITBUILD)
 AC_SUBST(SAMPLESBUILD)
-AC_SUBST(AXIS3BUILD)
+AC_SUBST(AXIS2BUILD)
 AC_SUBST(TSPPBUILD)
 AC_SUBST(SSLBUILD)
 AC_SUBST(AXIS3SSLBUILD)

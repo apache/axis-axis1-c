@@ -20,10 +20,9 @@
 # Following is the configure options with a brief description
 # --prefix=path to your installation folder. default is /usr/ocal/axiscpp_deploy
 # --enable-tspp    Whether tspp parser library should be built. by default this is not built
-# --enable-axis3    build axis3 client transport library. default=no
+# --enable-axis2    build axis2 client transport library. default=no
 # --enable-testcases    build test cases. default=no
 # --enable-samples    build samples. default=yes
-# --enable-axis3    build axis3 client transport library. default=no
 # --with-apache2=PATH    path to apache2 installation. if not given apache2 module library is not built.
 # --with-apache=PATH    path to apache1 installation. if not given apache1 module library is not built.
 # --with-xercesc=PATH    path to xercesc installation. if not given xercesc parser library is not built.
@@ -41,5 +40,5 @@ echo     "If you need to configure with different/more options modify/add before
 echo     ""
 ./configure --prefix=/usr/local/axiscpp_deploy \
     --with-apache2=/usr/local/apache2 \
-    --with-xercesc=/usr/local/xerces-c
+    --with-xercesc=/usr/local/xerces-c 
 
