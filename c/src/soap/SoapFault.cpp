@@ -66,6 +66,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "SoapFault.h"
+#include "SoapSerializer.h"
 #include "SoapEnvVersions.h"
 #include "../common/GDefine.h"
 
@@ -114,6 +115,31 @@ SoapFault::~SoapFault()
 	return SUCCESS;
 }*/
 
+int SoapFault::serialize(SoapSerializer& pSZ)
+{
+	//written according to SOAP Version 1.1
+
+	int iStatus= SUCCESS;
+		
+	pSZ << "<SOAP-ENV:Fault>";	
+	pSZ << "<faultcode>" << m_sFaultcode.c_str()<< "</faultcode>";
+	pSZ << "<faultstring>"<<m_sFaultstring.c_str()<<"</faultstring>";
+
+	if(!m_sFaultactor.empty()) {		
+		pSZ<< "<faultactor>"<< m_sFaultactor.c_str() <<"</faultactor>";
+	}
+
+	if(!m_sDetail.empty()) {		
+		pSZ<< "<detail>" << m_sDetail.c_str() <<"</detail>";
+	}
+	
+	pSZ<< "</SOAP-ENV:Fault>";
+
+	return iStatus;
+}
+
+/*
+comm on 11/7/2003 at 9.30am
 int SoapFault::serialize(string& sSerialized)
 {
 	//written according to SOAP Version 1.1
@@ -136,27 +162,7 @@ int SoapFault::serialize(string& sSerialized)
 
 	return iStatus;
 }
-
-/*string& SoapFault::serialize()
-{
-	//written according to SOAP Version 1.2 Part 1 specification 
-	// 17 December 2001 Working Draft.
-    
-	m_sFaultSerialized="";
-
-	m_sFaultSerialized= "<faultcode>"+ m_sFaultcode+ "</faultcode>"+
-		"<faultstring>"+m_sFaultstring+"</faultstring>";
-
-	if(!m_sFaultactor.empty()) {
-		m_sFaultSerialized+= "<faultactor>"+ m_sFaultactor +"</faultactor>";
-	}
-
-	if(!m_sDetail.empty()) {
-		m_sFaultSerialized+= "<detail>"+ m_sDetail +"</detail>";
-	}
-
-	return m_sFaultSerialized;
-}*/
+*/
 
 void SoapFault::initialize()
 {

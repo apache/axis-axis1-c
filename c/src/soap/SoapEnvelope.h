@@ -81,10 +81,10 @@ class SoapEnvelope
 friend class SoapSerializer;
 
 private:
-	int serializeNamespaceDecl(string&);
-	//string serializeNamespaceDecl();
-	int serializeAttributes(string&);
-	//string serializeAttributes();
+	int serializeNamespaceDecl(SoapSerializer& pSZ);
+	//int serializeNamespaceDecl(string&);
+	int serializeAttributes(SoapSerializer& pSZ);
+	//int serializeAttributes(string&);
 	SoapHeader *m_pSoapHeader;
 	SoapBody *m_pSoapBody;
 	//string m_strEnvelopSerialized;
@@ -95,9 +95,9 @@ private:
 public:	
 	int setPrefix(const string& prefix);
 	int addNamespaceDecl(Attribute* pAttribute);
-	int addAttribute(Attribute* pAttribute);
-	int serialize(string&, SOAP_VERSION iSoapVersion);
-	//string& serialize()
+	int addAttribute(Attribute* pAttribute);	
+	int serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion);
+	//int serialize(string &sSerialized, SOAP_VERSION eSoapVersion);
 	void setSoapBody(SoapBody* soapBody);
 	void setSoapHeader(SoapHeader* soapHeader);
 	SoapEnvelope();

@@ -66,6 +66,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "ComplexElement.h"
+#include "SoapSerializer.h"
 #include "../common/GDefine.h"
 
 //////////////////////////////////////////////////////////////////////
@@ -103,6 +104,51 @@ int ComplexElement::addChild(BasicNode *pBasicNode)
 	return SUCCESS;
 }
 
+int ComplexElement::serialize(SoapSerializer& pSZ)
+{
+	int iStatus= SUCCESS;
+
+	do {
+		if(isSerializable()) {
+			
+			pSZ << "<";
+			
+			if(m_sPrefix.length() != 0) {				
+				pSZ<< m_sPrefix.c_str() << ":";
+			}
+			
+			pSZ<< m_sLocalName.c_str();
+
+			if((m_sPrefix.length() != 0) && (m_sURI.length() != 0)) {
+				pSZ<< " xmlns:" << m_sPrefix.c_str() << "=\"" << m_sURI.c_str() << "\"";
+			}
+			
+			pSZ<< ">";
+
+			iStatus= serializeChildren(pSZ);
+			if(iStatus==FAIL) {
+				break;
+			}
+			
+			pSZ<< "</";
+
+			if(m_sPrefix.length() != 0) {				
+				pSZ<< m_sPrefix.c_str() << ":";
+			}
+			
+			pSZ<< m_sLocalName.c_str() << ">";
+
+			iStatus= SUCCESS;
+		} else {
+			iStatus= FAIL;
+		}
+	} while(0);
+			
+	return iStatus;
+}
+
+/*
+comm on 10/7/2003 6.20pm
 int ComplexElement::serialize(string &sSerialized)
 {
 	int iStatus= SUCCESS;
@@ -145,6 +191,7 @@ int ComplexElement::serialize(string &sSerialized)
 			
 	return iStatus;
 }
+*/
 
 bool ComplexElement::isSerializable()
 {
@@ -174,6 +221,21 @@ int ComplexElement::setURI(const string &sURI)
 	return SUCCESS;
 }
 
+int ComplexElement::serializeChildren(SoapSerializer& pSZ)
+{
+
+	list<BasicNode*>::iterator itCurrBasicNode= m_children.begin();
+
+	while(itCurrBasicNode != m_children.end()) {		
+		(*itCurrBasicNode)->serialize(pSZ);
+		itCurrBasicNode++;		
+	}	
+
+	return SUCCESS;
+}
+
+/*
+comm on 10/7/2003 6.20pm
 int ComplexElement::serializeChildren(string &sSerialized)
 {
 
@@ -186,3 +248,4 @@ int ComplexElement::serializeChildren(string &sSerialized)
 
 	return SUCCESS;
 }
+*/

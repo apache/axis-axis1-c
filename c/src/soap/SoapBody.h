@@ -115,7 +115,7 @@ class SoapBody
 friend class SoapSerializer;
 
 private:
-	int serializeAttributes(string& sSerialized);
+	int serializeAttributes(SoapSerializer& pSZ);
 	list<Attribute*> m_attributes;
 	SoapMethod *m_pSoapMethod;
 	SoapFault *m_pSoapFault;
@@ -124,7 +124,8 @@ private:
 public:
 	void addAttribute(Attribute* attr);
 	//string& serialize();
-	int serialize(string&, SOAP_VERSION eSoapVersion);
+	int serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion);
+	//int serialize(string&, SOAP_VERSION eSoapVersion);
 	void setSoapFault(SoapFault* ptrSoapFault);
 	void setSoapMethod(SoapMethod* ptrSoapMethod);
 	SoapBody();

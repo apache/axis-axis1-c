@@ -66,6 +66,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "SoapBody.h"
+#include "SoapSerializer.h"
 #include "../common/GDefine.h"
 #include "Attribute.h"
 
@@ -100,6 +101,39 @@ void SoapBody::setSoapFault(SoapFault *ptrSoapFault)
 	m_pSoapFault= ptrSoapFault;
 }
 
+int SoapBody::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
+{
+	int iStatus= SUCCESS;
+
+	do {		
+		pSZ<< "<" << g_sObjSoapEnvVersionsStruct[eSoapVersion].pchEnvelopePrefix << ":" << g_sObjSoapEnvVersionsStruct[eSoapVersion].pcharWords[SKW_BODY];
+		iStatus= serializeAttributes(pSZ);
+		if(iStatus==FAIL) {
+			break;
+		}
+		
+		pSZ<< ">";
+
+		if(m_pSoapMethod!=NULL) {
+			iStatus= m_pSoapMethod->serialize(pSZ);
+			if(iStatus==FAIL) {
+				break;
+			}
+		} else if(m_pSoapFault!=NULL) {		
+			iStatus= m_pSoapFault->serialize(pSZ);
+			if(iStatus==FAIL) {
+				break;
+			}
+		}
+		
+		pSZ<< "</"<< g_sObjSoapEnvVersionsStruct[eSoapVersion].pchEnvelopePrefix<< ":" << g_sObjSoapEnvVersionsStruct[eSoapVersion].pcharWords[SKW_BODY]<< ">";
+	} while(0);
+
+	return iStatus;
+}
+
+/*
+comm on 10/7/2003 9.10pm
 int SoapBody::serialize(string& sSerialized, SOAP_VERSION eSoapVersion)
 {
 	int iStatus= SUCCESS;
@@ -129,30 +163,33 @@ int SoapBody::serialize(string& sSerialized, SOAP_VERSION eSoapVersion)
 
 	return iStatus;
 }
-
-/*string& SoapBody::serialize()
-{
-	m_strBodySerialized="";
-
-	m_strBodySerialized="<SOAP-ENV:Body>";
-
-	if(m_pSoapMethod!=NULL) {
-		m_strBodySerialized += m_pSoapMethod->serialize();
-	} else if(m_pSoapFault!=NULL) {
-		//m_strBodySerialized += "SOAP FAULT serialization";
-		m_strBodySerialized += m_pSoapFault->serialize();
-	}
-
-	m_strBodySerialized += "</SOAP-ENV:Body>";
-
-	return m_strBodySerialized;
-}*/
+*/
 
 void SoapBody::addAttribute(Attribute *attr)
 {
 	m_attributes.push_back(attr);
 }
 
+int SoapBody::serializeAttributes(SoapSerializer& pSZ)
+{
+	int iStatus= SUCCESS;
+
+	list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
+
+	while(itCurrAttribute != m_attributes.end()) {		
+
+		iStatus= (*itCurrAttribute)->serialize(pSZ);
+		if(iStatus==FAIL) {
+			break;
+		}
+		itCurrAttribute++;		
+	}	
+
+	return iStatus;
+}
+
+/*
+comm on 10/07/2003 8.50pm
 int SoapBody::serializeAttributes(string &sSerialized)
 {
 	int iStatus= SUCCESS;
@@ -170,3 +207,4 @@ int SoapBody::serializeAttributes(string &sSerialized)
 
 	return iStatus;
 }
+*/

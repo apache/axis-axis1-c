@@ -66,6 +66,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "HeaderBlock.h"
+#include "SoapSerializer.h"
 #include "../common/GDefine.h"
 #include "BasicNode.h"
 
@@ -116,7 +117,7 @@ void HeaderBlock::setValue(const string &value)
 	m_value= value;
 }
 
-int HeaderBlock::serialize(string& sSerialized)
+int HeaderBlock::serialize(SoapSerializer& pSZ)
 {
 	/*
 	 *In the code we don't look whether the m_prefix is available or
@@ -130,8 +131,48 @@ int HeaderBlock::serialize(string& sSerialized)
 	do {
 		if(isSerializable()) {
 
+			pSZ<< "<" << m_prefix.c_str() << ":" << m_localname.c_str()
+				<< " xmlns:"<< m_prefix.c_str() << "=\"" << m_uri.c_str() << "\"";
+
+			iStatus= attrSerialize(pSZ);
+			if(iStatus==FAIL) {
+				break;
+			}
+			
+			pSZ<< ">";
+
+			iStatus= serializeChildren(pSZ);
+			if(iStatus==FAIL) {
+				break;
+			}
+
+			pSZ<< "</" << m_prefix.c_str() << ":" << m_localname.c_str() << ">";
+			
+		} else {
+			iStatus= FAIL;
+		}
+	} while(0);
+
+	return iStatus;
+}
+
+/*
+int HeaderBlock::serialize(string& sSerialized)
+{
+	/*
+	 *In the code we don't look whether the m_prefix is available or
+	 *	not. Instead directly insert it. The reason is that the SOAP
+	 *  1.1 spec says that "All immediate child elements of the SOAP 
+	 *  Header element MUST be namespace-qualified".
+	 */
+
+	/*int iStatus= SUCCESS;
+
+	do {
+		if(isSerializable()) {
+
 			sSerialized= sSerialized + "<" + m_prefix + ":" + m_localname +
-								" xmlns:"+ m_prefix +"=\""+ m_uri+ "\"";
+								" xmlns:"+ m_prefix +"=\""+ m_uri+ "\"";			
 
 			iStatus= attrSerialize(sSerialized);
 			if(iStatus==FAIL) {
@@ -157,36 +198,28 @@ int HeaderBlock::serialize(string& sSerialized)
 
 	return iStatus;
 }
+*/
 
-/*string& HeaderBlock::serialize()
-{*/
-	/*
-	 *In the code we don't look whether the m_prefix is available or
-	 *	not. Instead directly insert it. The reason is that the SOAP
-	 *  1.1 spec says that "All immediate child elements of the SOAP 
-	 *  Header element MUST be namespace-qualified".
-	 */
+int HeaderBlock::attrSerialize(SoapSerializer& pSZ)
+{
+	int iStatus= SUCCESS;
 
+	list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
 
-/*	m_strSerialized= "";
+	while(itCurrAttribute != m_attributes.end()) {		
 
-	if(isSerializable()) {
-		string strAttrSerialized= attrSerialize();
-
-		m_strSerialized= "<" + m_prefix + ":" + m_localname + " xmlns:"+ m_prefix +
-							"=\""+ m_uri+ "\"";
-
-		if(!strAttrSerialized.empty()) {	//NOTE: check whether the list is empty
-			m_strSerialized= m_strSerialized+ " "+ strAttrSerialized;		
+		iStatus= (*itCurrAttribute)->serialize(pSZ);
+		if(iStatus==FAIL) {
+			break;
 		}
+		itCurrAttribute++;		
+	}	
 
-		m_strSerialized= m_strSerialized + ">" + m_value + "</"+ m_prefix + 
-				":"+ m_localname+ ">";
-	}
+	return iStatus;
+}
 
-	return m_strSerialized;
-}*/
-
+/*
+comm on 10/7/2003 6.00pm
 int HeaderBlock::attrSerialize(string& sSerialized)
 {
 	int iStatus= SUCCESS;
@@ -204,25 +237,7 @@ int HeaderBlock::attrSerialize(string& sSerialized)
 
 	return iStatus;
 }
-
-/*string HeaderBlock::attrSerialize()
-{
-	string strAttrSerialized;
-
-	list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
-
-	while(itCurrAttribute != m_attributes.end()) {		
-
-		strAttrSerialized= strAttrSerialized+ (*itCurrAttribute)->serialize();
-		itCurrAttribute++;
-
-		if(itCurrAttribute != m_attributes.end()) {
-			strAttrSerialized= strAttrSerialized+ " ";
-		}
-	}	
-
-	return strAttrSerialized;
-}*/
+*/
 
 bool HeaderBlock::isSerializable()
 {
@@ -256,6 +271,20 @@ int HeaderBlock::addChild(BasicNode *pBasicNode)
 	return SUCCESS;
 }
 
+int HeaderBlock::serializeChildren(SoapSerializer& pSZ)
+{
+	list<BasicNode*>::iterator itCurrBasicNode= m_children.begin();
+
+	while(itCurrBasicNode != m_children.end()) {		
+		(*itCurrBasicNode)->serialize(pSZ);
+		itCurrBasicNode++;		
+	}	
+
+	return SUCCESS;
+}
+
+/*
+comm on 10/7/2003 6.00pm
 int HeaderBlock::serializeChildren(string &sSerialized)
 {
 	list<BasicNode*>::iterator itCurrBasicNode= m_children.begin();
@@ -267,3 +296,4 @@ int HeaderBlock::serializeChildren(string &sSerialized)
 
 	return SUCCESS;
 }
+*/
