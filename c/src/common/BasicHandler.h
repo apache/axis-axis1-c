@@ -74,14 +74,16 @@
 
 #include "IMessageData.h"
 
+enum HANDLER_TYPE { NORMAL_HANDLER, WEBSERVICE_HANDLER, CHAIN_HANDLER };
+
 class BasicHandler  
 {
 public:
 	BasicHandler(){};
 	virtual ~BasicHandler(){};
-
 	virtual int Invoke(IMessageData* pMsg) = 0;
 	virtual void OnFault(IMessageData* pMsg) = 0;
+	virtual int GetType() = 0;
 };
 
 #endif // !defined(AFX_BASICHANDLER_H__FFF77AB5_015C_4B48_9BAC_D84A7C493015__INCLUDED_)

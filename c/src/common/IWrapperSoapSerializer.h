@@ -80,7 +80,7 @@ union uParamValue;
 #include "TypeMapping.h"
 #include "ISoapSerializer.h"
 
-class IWrapperSoapSerializer  : public ISoapSerializer
+class IWrapperSoapSerializer  : virtual public ISoapSerializer
 {
 
 public:	

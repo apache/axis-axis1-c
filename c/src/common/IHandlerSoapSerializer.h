@@ -76,7 +76,7 @@
 class ISoapHeader;
 class IHeaderBlock;
 
-class IHandlerSoapSerializer : public ISoapSerializer
+class IHandlerSoapSerializer : virtual public ISoapSerializer
 {
 public:		
 	virtual IHeaderBlock* createHeaderBlock()=0;

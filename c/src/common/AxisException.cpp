@@ -33,28 +33,28 @@ void AxisException::processException(int exceptionCode)
 string AxisException::getMessage(exception* e)
 {
   string sMessage;
-  exception *objType = dynamic_cast<bad_alloc*> (e);
+  exception *objType = static_cast<bad_alloc*> (e);
   if(objType != NULL)
   {
     //cout << "bad_alloc" << endl;
     sMessage = "thrown by new";
   }
 
-  objType = dynamic_cast<bad_cast*> (e);
+  objType = static_cast<bad_cast*> (e);
   if(objType != NULL)
   {
     //cout << "bad_cast" << endl;
     sMessage = "thrown by dynamic_cast when fails with a referenced type";
   }
 
-  objType = dynamic_cast<bad_exception*> (e);
+  objType = static_cast<bad_exception*> (e);
   if(objType != NULL)
   {
     //cout << "bad_exception" << endl;
     sMessage = "thrown when an exception doesn't match any catch";
   }
 
-  objType = dynamic_cast<bad_typeid*> (e);
+  objType = static_cast<bad_typeid*> (e);
   if(objType != NULL)
   {
     //cout << "bad_typeid" << endl;
