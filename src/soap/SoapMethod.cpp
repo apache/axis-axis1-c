@@ -66,6 +66,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "SoapMethod.h"
+#include "SoapSerializer.h"
 #include "Attribute.h"
 #include "../common/GDefine.h"
 
@@ -120,16 +121,49 @@ void SoapMethod::setOutputParam(Param &param)
  * If not it returns FAIL. The caller of this method has to deal in a 
  * appropriate manner after calling this method.
  */
+int SoapMethod::serialize(SoapSerializer& pSZ)
+{	
+	int iStatus= SUCCESS;
+
+	do {
+		if(isSerializable()) {
+					
+			pSZ << "<" << m_strPrefix.c_str() << ":" << m_strLocalname.c_str() << " xmlns:" << m_strPrefix.c_str()
+				<< "=\"" << m_strUri.c_str() << "\"";
+
+			iStatus= serializeAttributes(pSZ);
+			if(iStatus==FAIL) {
+				break;
+			}
+			
+			pSZ << ">";
+
+			iStatus= serializeOutputParam(pSZ);
+			if(iStatus==FAIL) {
+				break;
+			}
+			
+			pSZ << "</";
+
+			if(m_strPrefix.length() != 0) {					
+				pSZ<< m_strPrefix.c_str() << ":";
+			}
+			
+			pSZ << m_strLocalname.c_str() << ">";
+
+			iStatus= SUCCESS;
+		} else {
+			iStatus= FAIL;
+		}
+	} while(0);
+			
+	return iStatus;
+}
+
+/*
+comm on 11/7/2003 9.10am
 int SoapMethod::serialize(string& sSerialized)
 {	
-	/* commented on 10th Jun 2003 at 4.10 pm
-	sSerialized= sSerialized+ "<"+ m_strPrefix+ ":"+ m_strLocalname+ 
-					" xmlns:"+ m_strPrefix+ "=\""+ m_strUri+ "\">";
-
-	serializeOutputParam(sSerialized);
-
-	sSerialized= sSerialized+ "</"+ m_strPrefix+ ":"+ m_strLocalname+ ">"+ "\n";	
-	*/
 	
 	int iStatus= SUCCESS;
 
@@ -177,36 +211,24 @@ int SoapMethod::serialize(string& sSerialized)
 			
 	return iStatus;
 }
+*/
 
-/*string& SoapMethod::serialize()
-{
-	m_strMethodSerialized="";
+int SoapMethod::serializeOutputParam(SoapSerializer& pSZ)
+{	
+	//serialization sould come here
+	//return m_pOutputParam->serialize(pSZ);
 
-	m_strMethodSerialized= "<"+ m_strPrefix+ ":"+ m_strLocalname+ 
-					" xmlns:"+ m_strPrefix+ "=\""+ m_strUri+ "\">"+
-					serializeOutputParam()+
-					"</"+ m_strPrefix+ ":"+ m_strLocalname+ ">";	
-			
-	return m_strMethodSerialized;
-}*/
+	pSZ<<"serialization of output param";
+	return SUCCESS;
+}
 
+/*
+comm on 11/7/2003 9.10am
 int SoapMethod::serializeOutputParam(string& sSerialized)
 {	
 	return m_pOutputParam->serialize(sSerialized);
 }
-
-/*string SoapMethod::serializeOutputParam()
-{
-	string strOutputParamSer="";
-	
-	//add serialization of param here
-	strOutputParamSer= "serialization of out put param";*/
-	/*this shout change to
-	 * strOutputParamSer= m_pOutputParam.serialize();
-	 */
-
-	/*return strOutputParamSer;
-}*/
+*/
 
 string& SoapMethod::getMethodName()
 {
@@ -238,6 +260,20 @@ int SoapMethod::addAttribute(Attribute *pAttribute)
 	return SUCCESS;
 }
 
+int SoapMethod::serializeAttributes(SoapSerializer& pSZ)
+{
+	list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
+
+	while(itCurrAttribute != m_attributes.end()) {		
+		(*itCurrAttribute)->serialize(pSZ);
+		itCurrAttribute++;		
+	}	
+
+	return SUCCESS;	
+}
+
+/*
+comm on 11/7/2003 9.10am
 int SoapMethod::serializeAttributes(string &sSerialized)
 {
 	list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
@@ -249,3 +285,4 @@ int SoapMethod::serializeAttributes(string &sSerialized)
 
 	return SUCCESS;	
 }
+*/
