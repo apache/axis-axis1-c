@@ -61,7 +61,7 @@ import org.apache.geronimo.ews.ws4j2ee.context.wsdl.WSDLContext;
 /**
  * <p>This interface has all the information about the J2EE webservice that is 
  * going to be genarated. from this interface onward all the codes are 
- * ws4j2ee. If we using any class from the geranimo deployment we should 
+ * ws4j2ee. If we using any class from the geronimo deployment we should 
  * wrap them. This is a Code whith runing once. It is worth keeping the 
  * code independent.<p>
  * 

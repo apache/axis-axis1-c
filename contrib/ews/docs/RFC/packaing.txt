@@ -1,0 +1,23 @@
+# this is the purposed packaging of the ws4j2ee genarated code in the server side.
+  
+root faloder is in the name of the webservice 
+
+<WEB-SERVICE-NAME>
+	-> ejb -> <WEB-SERVICE-NAME>HOME.java
+			  <WEB-SERVICE-NAME>EJB.java
+			  <WEB-SERVICE-NAME>BEAN.java
+			  ejb-jar.xml 
+			  
+	-> server -> <WEB-SERVICE-NAME>.java
+				 <WEB-SERVICE-NAME>BindingImpl.java
+				 <WEB-SERVICE-NAME>BindingStub.java
+				 <WEB-SERVICE-NAME>Service.java
+				 <WEB-SERVICE-NAME>ServiceLocator.java
+				 deploy.wsdd
+				 undeploy.wsdd
+				 other complex type java -> xml binding classes
+				 
+	<WEB-SERVICE-NAME>.wsdl
+	<WEB-SERVICE-NAME>.xml
+	webservice.xml
+	geronimo-deployment-discriptor
