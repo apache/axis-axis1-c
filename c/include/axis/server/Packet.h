@@ -140,9 +140,9 @@ typedef enum
  * This function is provided by the transport modules. Called by Axis engine when it needs to send SOAP
  * message. This function may be called several times.
  * @param 
- *		1st - buffer
- *		2nd - buffer id		
- *		3rd - Ax_soapstream object
+ *		1st - null terminated character buffer to be sent
+ *		2nd - buffer id	which identifies the buffer
+ *		3rd - Ax_soapstream object which act like a thread id
  * @return
  *	TRANSPORT_FINISHED - Transport done and buffer is free to re-use.
  *  TRANSPORT_IN_PROGRESS - Transport is in progress and buffer cannot be re-used yet.
@@ -158,7 +158,7 @@ typedef AXIS_TRANSPORT_STATUS (AXISCALL * AXIS_MODULE_CALLBACK_SEND_MESSAGE_BYTE
  * @param 
  *		1st - pointer to buffer pointer to which the transport's buffer is set
  *		2nd - pointer to an int to which the number of bytes read is set
- *		3rd - Ax_soapstream object		
+ *		3rd - Ax_soapstream object which act like a thread id
  * @return
  *	TRANSPORT_FINISHED - No any more message bytes to be received. If a buffer is present it is the last
  *						 buffer.
@@ -172,8 +172,8 @@ typedef AXIS_TRANSPORT_STATUS (AXISCALL * AXIS_MODULE_CALLBACK_GET_MESSAGE_BYTES
  * This function is provided by the transport modules. Called by Axis engine when it needs to say the
  * transport module that the engine is no longer using the buffer and can be re-used.
  * @param 
- *		1st - buffer
- *		2nd - Ax_soapstream object	
+ *		1st - buffer that Axis got from the transport layer.
+ *		2nd - Ax_soapstream object which act like a thread id
  */
 typedef void (AXISCALL * AXIS_MODULE_CALLBACK_RELEASE_RECEIVE_BUFFER)(const char*, const void*);
 
@@ -184,7 +184,7 @@ typedef void (AXISCALL * AXIS_MODULE_CALLBACK_RELEASE_RECEIVE_BUFFER)(const char
  * @param
  *		1st - Transport information type to set
  *		2nd - Information value
- *		3rd - Ax_soapstream object		
+ *		3rd - Ax_soapstream object which act like a thread id
  */
 typedef void (AXISCALL * AXIS_MODULE_CALLBACK_SET_TRANSPORT_INFORMATION)(AXIS_TRANSPORT_INFORMATION_TYPE, const char*, const void*);
 
@@ -193,7 +193,7 @@ typedef void (AXISCALL * AXIS_MODULE_CALLBACK_SET_TRANSPORT_INFORMATION)(AXIS_TR
  * transport information such as http headers. This function can be called only once.
  * @param
  *		1st - Transport information type to get
- *		2nd - Ax_soapstream object		
+ *		2nd - Ax_soapstream object which act like a thread id
  */
 typedef const char* (AXISCALL * AXIS_MODULE_CALLBACK_GET_TRANSPORT_INFORMATION)(AXIS_TRANSPORT_INFORMATION_TYPE, const void*);
 
@@ -207,9 +207,9 @@ typedef const char* (AXISCALL * AXIS_MODULE_CALLBACK_GET_TRANSPORT_INFORMATION)(
  * Axis engine.This function should be called for each buffer if AXIS_MODULE_CALLBACK_SEND_MESSAGE_BYTES
  * returned TRANSPORT_IN_PROGRESS.
  * @param 
- *		1st - buffer
- *		2nd - buffer id		
- *		3rd - Ax_soapstream object	
+ *		1st - buffer that Axis gave to the transport layer
+ *		2nd - buffer id	which uniquely identifies the buffer
+ *		3rd - Ax_soapstream object which act like a thread id
  */
 typedef void (AXISCALL * AXIS_ENGINE_CALLBACK_RELEASE_SEND_BUFFER)(const char*, const void*, const void*);
 

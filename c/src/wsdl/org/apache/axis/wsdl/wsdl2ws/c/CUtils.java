@@ -100,7 +100,7 @@ public class CUtils {
 		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "double"), "double");
 		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "char"), "char");
 		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "short"), "short");
-		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "string"), "char*");
+		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "string"), "xsd_string");
 		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"), "Axis_DateTime");
 		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "date"), "Axis_Date");
 		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "time"), "Axis_Time");

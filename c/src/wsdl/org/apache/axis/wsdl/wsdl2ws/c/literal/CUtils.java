@@ -91,8 +91,8 @@ public class CUtils {
 		class2QNamemap.put("xsd__time", new QName(WrapperConstants.SCHEMA_NAMESPACE, "time"));
 		class2QNamemap.put("xsd__base64Binary", new QName(WrapperConstants.SCHEMA_NAMESPACE, "base64Binary"));
 		class2QNamemap.put("xsd__hexBinary", new QName(WrapperConstants.SCHEMA_NAMESPACE, "hexBinary"));
-		class2QNamemap.put("xsd_decimal", new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"));
-		class2QNamemap.put("xsd_boolean", new QName(WrapperConstants.SCHEMA_NAMESPACE, "boolean"));
+		class2QNamemap.put("xsd__decimal", new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"));
+		class2QNamemap.put("xsd__boolean", new QName(WrapperConstants.SCHEMA_NAMESPACE, "boolean"));
 		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "int"), "int");
 		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "byte"), "unsigned char");
 		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "float"), "float");
@@ -100,17 +100,17 @@ public class CUtils {
 		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "double"), "double");
 		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "char"), "char");
 		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "short"), "short");
-		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "string"), "string");
+		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "string"), "xsd__string");
 		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"), "xsd__dateTime");
-		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "date"), "xsd_date");
-		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "time"), "xsd_time");
+		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "date"), "xsd__date");
+		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "time"), "xsd__time");
 		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "base64Binary"), "xsd__base64Binary");
 		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "hexBinary"), "xsd__hexBinary");
 		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"), "xsd__decimal");
 		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "boolean"), "xsd__boolean");
 		type2getValueMethodName.put("int","Int");
 		type2getValueMethodName.put("float","Float");
-		type2getValueMethodName.put("string","String");
+		type2getValueMethodName.put("xsd__string","String");
 		type2getValueMethodName.put("long","Long");
 		type2getValueMethodName.put("short","Short");
 		type2getValueMethodName.put("char","Char");
@@ -128,7 +128,7 @@ public class CUtils {
 		type2getValueMethodName.put("xsd__boolean","Boolean");
 		type2BasicArrayName.put("int","xsd__int_Array");
 		type2BasicArrayName.put("float","xsd__float_Array");
-		type2BasicArrayName.put("string","xsd__string_Array");
+		type2BasicArrayName.put("xsd__string","xsd__string_Array");
 		type2BasicArrayName.put("long","xsd__long_Array");
 		type2BasicArrayName.put("short","xsd__short_Array");
 		type2BasicArrayName.put("char","xsd__byte_Array");
@@ -212,5 +212,5 @@ public class CUtils {
 			return arrayName;
 		}
 		return null;		
-	}	   
+	}
 }

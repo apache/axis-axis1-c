@@ -66,16 +66,14 @@ package org.apache.axis.wsdl.wsdl2ws.c.literal;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.Iterator;
 
 import javax.xml.namespace.QName;
 
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
-import org.apache.axis.wsdl.wsdl2ws.cpp.CPPUtils;
-import org.apache.axis.wsdl.wsdl2ws.c.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
+import org.apache.axis.wsdl.wsdl2ws.info.TypeMap;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
 public abstract class ParamWriter extends BasicFileWriter{
@@ -113,14 +111,14 @@ public abstract class ParamWriter extends BasicFileWriter{
    
  	/* genarate the arrtibs array */
     public String[][] getAttribList(String Qualifiedname) throws WrapperFault {
-        String[][] attribs;
-        ArrayList attribfeilds = new ArrayList();
+		String[][] attribs;
+		ArrayList attribfeilds = new ArrayList();
 		ArrayList elementfeilds = new ArrayList();
 
-        Iterator names = type.getAttributeNames();
-        while (names.hasNext()){
+		Iterator names = type.getAttributeNames();
+		while (names.hasNext()){
 			attribfeilds.add(names.next());
-        }
+		}
         
 		names = type.getElementnames();
 				while (names.hasNext()){
@@ -128,36 +126,38 @@ public abstract class ParamWriter extends BasicFileWriter{
 		}
         
         
-        //get all the fields
-  
-        attribs = new String[attribfeilds.size()+elementfeilds.size()][];
-        for (int i = 0; i < attribfeilds.size(); i++) {
-        	//[variablename,typename,typeQNameURI,typeQNamelocalpart,attributeTypeURI,attributeTypeLocalpart]
-            attribs[i] = new String[6];
-            attribs[i][0] = ((String) attribfeilds.get(i));
+		//get all the fields
+		int intAttrFieldSz = attribfeilds.size();
+		int intEleFieldSz = elementfeilds.size();
+		attribs = new String[intAttrFieldSz+intEleFieldSz][];
+
+		for (int i = 0 ; i < intAttrFieldSz; i++) {
+			//[variablename,typename,typeQNameURI,typeQNamelocalpart,attributeTypeURI,attributeTypeLocalpart]
+			attribs[i] = new String[6];
+			attribs[i][0] = ((String) attribfeilds.get(i));
    
-            Type attribType = type.getTypForAttribName(attribs[i][0]);
+			Type attribType = type.getTypForAttribName(attribs[i][0]);
             
-            if(CPPUtils.isSimpleType(attribType.getName()))
-                attribs[i][1] = CPPUtils.getclass4qname(attribType.getName());
-            else
-           		attribs[i][1] = attribType.getLanguageSpecificName();
+			if(CUtils.isSimpleType(attribType.getName()))
+				attribs[i][1] = CUtils.getclass4qname(attribType.getName());
+			else
+				attribs[i][1] = attribType.getLanguageSpecificName();
 
-		    attribs[i][2] = attribType.getName().getNamespaceURI();
-		    attribs[i][3] = attribType.getName().getLocalPart();
+			attribs[i][2] = attribType.getName().getNamespaceURI();
+			attribs[i][3] = attribType.getName().getLocalPart();
 
-	        attribs[i][4] = null;
+			attribs[i][4] = null;
 			attribs[i][5] = null;
-        }
-        
-		for (int i = attribfeilds.size(); i < elementfeilds.size()+attribfeilds.size(); i++) {
+		}
+
+		for (int i = intAttrFieldSz ; i < intAttrFieldSz+intEleFieldSz; i++) {
 			attribs[i] = new String[6];
 			attribs[i][0] = ((String) elementfeilds.get(i));
    
 			Type elementType = type.getElementForElementName(attribs[i][0]).getType();
             
-			if(CPPUtils.isSimpleType(elementType.getName()))
-				attribs[i][1] = CPPUtils.getclass4qname(elementType.getName());
+			if(CUtils.isSimpleType(elementType.getName()))
+				attribs[i][1] = CUtils.getclass4qname(elementType.getName());
 			else
 				attribs[i][1] = elementType.getLanguageSpecificName();
 
@@ -171,26 +171,21 @@ public abstract class ParamWriter extends BasicFileWriter{
 				attribs[i][4] = null;
 				attribs[i][5] = null;
 		   }
-		}
-
-        
-        return attribs;
+		}        
+		return attribs;
     }
     
  	protected String getCorrectParmNameConsideringArraysAndComplexTypes(QName name,String classname)throws WrapperFault{
 		//System.out.println(name);
 		Type t = wscontext.getTypemap().getType(name);
-		if(!CUtils.isSimpleType(name)){ //array or complex types
+		if(!TypeMap.isSimpleType(name)){ //array or complex types
 			if (t.isArray()){
 				return t.getLanguageSpecificName();
 			}
 			else{
 				return classname+"*"; //All complex types will be pointers	
 			}
-		}else if (name != null){
-			return CUtils.getclass4qname(name);
-		}
-		else 
+		}else
 			return classname;
 	}
 	

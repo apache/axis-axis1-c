@@ -70,7 +70,6 @@ import javax.xml.namespace.QName;
 
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
-import org.apache.axis.wsdl.wsdl2ws.cpp.CPPUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
@@ -91,7 +90,7 @@ public class ArrayParamWriter extends ParamWriter{
 			}
 			//include header file for the contained type
 			QName qname = WrapperUtils.getArrayType(type).getName(); 
-			if (!CPPUtils.isSimpleType(qname)){
+			if (!CUtils.isSimpleType(qname)){
 				writer.write("#include \""+attribs[0][1]+".h\"\n\n");
 			}
 			else{
