@@ -6,7 +6,7 @@ import org.apache.axis.MessageContext;
 import org.apache.axis.client.async.AsyncCall;
 import org.apache.axis.client.async.Listener;
 import org.apache.axis.components.logger.LogFactory;
-import org.apache.axis.utils.JavaUtils;
+import org.apache.axis.utils.Messages;
 import org.apache.commons.logging.Log;
 
 /**
@@ -71,24 +71,24 @@ public class SimpleAsyncCall
           } else {
           }
         } catch (AxisFault fault) {
-          log.error(JavaUtils.getMessage("exception00"), fault);
+          log.error(Messages.getMessage("exception00"), fault);
           try {
             listener.onFault(fault);
           } catch (java.rmi.RemoteException re) {
-            log.error(JavaUtils.getMessage("exception00"), re);
+            log.error(Messages.getMessage("exception00"), re);
           }
         } catch (Exception e) {
-          log.error(JavaUtils.getMessage("exception00"), e);
+          log.error(Messages.getMessage("exception00"), e);
           try {
             listener.onFault(AxisFault.makeFault(e));
           } catch (java.rmi.RemoteException re) {
-            log.error(JavaUtils.getMessage("exception00"), re);
+            log.error(Messages.getMessage("exception00"), re);
           }
         } finally {
           try {
             listener.invokeComplete();
           } catch (java.rmi.RemoteException re) {
-            log.error(JavaUtils.getMessage("exception00"), re);
+            log.error(Messages.getMessage("exception00"), re);
           }
         }
         if (log.isDebugEnabled()) {
