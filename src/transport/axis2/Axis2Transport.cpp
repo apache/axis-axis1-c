@@ -559,12 +559,25 @@ throw (AxisException, AxisTransportException)
                         m_strReceived.substr (0, m_iContentLength);
 
                     // Start looking for the next chunk
-                    unsigned int endOfChunkData = m_strReceived.find ("\r\n");	// Skip end of previous chunk
-                    m_strReceived = m_strReceived.substr (endOfChunkData + 2);
+                    // The format we are expecting here is:
+                    // <previous chunk>\r\n<chunk size>\r\n<next chunk>
 
-                    endOfChunkData = m_strReceived.find ("\r\n");	// Locate start of next chunk
+                    unsigned int endOfChunkData = m_strReceived.find ("\r\n");
+	
+                    // Make sure that we have the found the end of previous chunk
+                    while (endOfChunkData == std::string::npos)
+                    {
+                        std::string strTempRecv = "";
+                        *m_pChannel >> strTempRecv;
+                        m_strReceived += strTempRecv;
+                        endOfChunkData = m_strReceived.find ("\r\n");
+                    }
 
-                    // Make sure we have the starting line of next chunk
+                    m_strReceived = m_strReceived.substr (endOfChunkData + 2); // Skip end of previous chunk
+                 
+                    endOfChunkData = m_strReceived.find ("\r\n");  // Locate the start of next chunk
+
+                    // Make sure that we have the starting line of next chunk
                     while (endOfChunkData == std::string::npos)
                     {
                         std::string strTempRecv = "";
