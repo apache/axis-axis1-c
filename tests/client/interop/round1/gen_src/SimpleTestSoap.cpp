@@ -40,7 +40,7 @@ void SimpleTestSoap::echoVoid()
 {
 	try
 	{
-		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
+		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER)) 
 			return ;
 		m_pCall->setTransportProperty(SOAPACTION_HEADER , "null");
 		m_pCall->setSOAPVersion(SOAP_VER_1_1);
@@ -81,7 +81,7 @@ int SimpleTestSoap::echoInteger(int Value0)
 	int Ret;
 	try
 	{
-		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
+		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER)) 
 			return Ret;
 		m_pCall->setTransportProperty(SOAPACTION_HEADER , "null");
 		m_pCall->setSOAPVersion(SOAP_VER_1_1);
@@ -124,7 +124,7 @@ float SimpleTestSoap::echoFloat(float Value0)
 	float Ret;
 	try
 	{
-		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
+		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER)) 
 			return Ret;
 		m_pCall->setTransportProperty(SOAPACTION_HEADER , "null");
 		m_pCall->setSOAPVersion(SOAP_VER_1_1);
@@ -167,7 +167,7 @@ xsd__string SimpleTestSoap::echoString(xsd__string Value0)
 	xsd__string Ret;
 	try
 	{
-		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
+		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER)) 
 			return Ret;
 		m_pCall->setTransportProperty(SOAPACTION_HEADER , "null");
 		m_pCall->setSOAPVersion(SOAP_VER_1_1);
@@ -210,7 +210,7 @@ xsd__base64Binary SimpleTestSoap::echoBase64(xsd__base64Binary Value0)
 	xsd__base64Binary Ret;
 	try
 	{
-		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
+		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER)) 
 			return Ret;
 		m_pCall->setTransportProperty(SOAPACTION_HEADER , "null");
 		m_pCall->setSOAPVersion(SOAP_VER_1_1);
@@ -252,7 +252,7 @@ xsd__dateTime SimpleTestSoap::echoDate(xsd__dateTime Value0)
 	xsd__dateTime Ret;
 	try
 	{
-		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
+		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER)) 
 			return Ret;
 		m_pCall->setTransportProperty(SOAPACTION_HEADER , "null");
 		m_pCall->setSOAPVersion(SOAP_VER_1_1);
@@ -295,7 +295,7 @@ SOAPStruct* SimpleTestSoap::echoStruct(SOAPStruct* Value0)
 	SOAPStruct* pReturn = NULL;
 	try
 	{
-		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
+		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER)) 
 			return pReturn;
 		m_pCall->setTransportProperty(SOAPACTION_HEADER , "null");
 		m_pCall->setSOAPVersion(SOAP_VER_1_1);
@@ -338,7 +338,7 @@ xsd__int_Array SimpleTestSoap::echoIntegerArray(xsd__int_Array Value0)
 	xsd__int_Array RetArray = {NULL, 0};
 	try
 	{
-		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
+		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER)) 
 			return RetArray;
 		m_pCall->setTransportProperty(SOAPACTION_HEADER , "null");
 		m_pCall->setSOAPVersion(SOAP_VER_1_1);
@@ -381,7 +381,7 @@ xsd__float_Array SimpleTestSoap::echoFloatArray(xsd__float_Array Value0)
 	xsd__float_Array RetArray = {NULL, 0};
 	try
 	{
-		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
+		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER)) 
 			return RetArray;
 		m_pCall->setTransportProperty(SOAPACTION_HEADER , "null");
 		m_pCall->setSOAPVersion(SOAP_VER_1_1);
@@ -424,7 +424,7 @@ xsd__string_Array SimpleTestSoap::echoStringArray(xsd__string_Array Value0)
 	xsd__string_Array RetArray = {NULL, 0};
 	try
 	{
-		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
+		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER)) 
 			return RetArray;
 		m_pCall->setTransportProperty(SOAPACTION_HEADER , "null");
 		m_pCall->setSOAPVersion(SOAP_VER_1_1);
@@ -467,7 +467,7 @@ SOAPStruct_Array SimpleTestSoap::echoStructArray(SOAPStruct_Array Value0)
 	SOAPStruct_Array RetArray = {NULL, 0};
 	try
 	{
-		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
+		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER)) 
 			return RetArray;
 		m_pCall->setTransportProperty(SOAPACTION_HEADER , "null");
 		m_pCall->setSOAPVersion(SOAP_VER_1_1);
@@ -510,7 +510,7 @@ xsd__decimal SimpleTestSoap::echoDecimal(xsd__decimal Value0)
 	xsd__decimal Ret;
 	try
 	{
-		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
+		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER)) 
 			return Ret;
 		m_pCall->setTransportProperty(SOAPACTION_HEADER , "null");
 		m_pCall->setSOAPVersion(SOAP_VER_1_1);
@@ -553,7 +553,7 @@ xsd__boolean SimpleTestSoap::echoBoolean(xsd__boolean Value0)
 	xsd__boolean Ret;
 	try
 	{
-		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
+		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER)) 
 			return Ret;
 		m_pCall->setTransportProperty(SOAPACTION_HEADER , "null");
 		m_pCall->setSOAPVersion(SOAP_VER_1_1);
@@ -596,7 +596,7 @@ xsd__hexBinary SimpleTestSoap::echoHexBinary(xsd__hexBinary Value0)
 	xsd__hexBinary Ret;
 	try
 	{
-		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
+		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER)) 
 			return Ret;
 		m_pCall->setTransportProperty(SOAPACTION_HEADER , "null");
 		m_pCall->setSOAPVersion(SOAP_VER_1_1);
