@@ -107,7 +107,7 @@ Extract the Xerces-C 2.2.0 binary version. We will refer to this folder as [XERC
 7. Add the following lines to the bottom of Apache configuration file httpd.conf located in APACHE_FOLDER/conf <br> 
 <br>
 LoadModule axis_module modules/AXISMODULE<br>
-&lt;Location/axis&gt;<br>
+&lt;Location /axis&gt;<br>
 SetHandler axis <br>
 &lt;/Location&gt;<br> <br>
 
@@ -124,12 +124,12 @@ AXISMODULE is either mod_axis.dll for apache 1.3.X or mod_axis2.dll for apache 2
 
 11.If you want to use the Xerces parser with Axis C++, rename AxisXMLParser_Xerces.dll (which is located at AXIS_EXTRACT/bin) to AxisXMLParser.dll and copy it to AXIS_FOLDER/lib </p>
 <br>
-<p><li>Copy libexpat.dll file from [EXPAT_EXTRACT]\Libs to [AXISCPP_DEPLOY]/lib/ </li> 
- <li>Copy xerces-c_2_2_0.dll from [XERCES_EXTRACT]/bin/ to [AXISCPP_DEPLOY]/lib/ </li> 
+<p><li>Copy libexpat.dll file from [EXPAT_EXTRACT]\Libs to AXIS_FOLDER/lib/ </li> 
+ <li>Copy xerces-c_2_2_0.dll from [XERCES_EXTRACT]/bin/ to AXIS_FOLDER/lib/ </li> 
  </p> <br> <br>
 <p><b>Note:</b> This could also be done by editing the axiscpp.conf. <br>
 
-12. Open the AXISCPP_DEPLOY/axiscpp.conf_win for editing. The contents of the file will look as follows.<br> <br>
+12. Open the AXIS_FOLDER/axiscpp.conf_win for editing. The contents of the file will look as follows.<br> <br>
 
 LogPath:XXXX <br>
 WSDDFilePath:YYYY <br>
@@ -150,7 +150,7 @@ server.wsdd is located at [APACHE_HOME]\Axis\conf\ for Apache 1.3 and Apache 2. 
 Also in order to run the provided samples do the following.<br> <br>
 Open server.wsdd for editing. For each service element, locate the element "parameter name", which has the value "classname". <br>
 Give the absolute path of the indicated webservice.dll  in the "value" attribute <br>  <br>
-Rename axiscpp.conf_win which is in AXISCPP_DEPLOY to axiscpp.conf <br> <br>
+Rename axiscpp.conf_win which is in AXIS_FOLDER to axiscpp.conf <br> <br>
 
 13. Restart the apache web server. If you have done correctly apache server will start without giving any error.</p> 
 <br> 
@@ -262,14 +262,13 @@ There are seven projects in the workspace.
 
 <h1>Writing your web services and client applications using Axis C++.</h1>
 
-<p>For writing your own web services and client applications see the <a href="winuser-guide.html"><b>Windows User Guide</a></b>
+<p>For writing your own web services and client applications see the <a href="winuser-guide.html"><b>Windows User Guide</a></b> 
 
 <div id="pdf" align="right">
 <a href="wininstall-guide.pdf"><img alt="PDF" src="../skin/images/pdfdoc.gif" class="skin"><br>
           PDF</a>
 
-
- </p>
+</p>
 
 
 
