@@ -18,6 +18,7 @@
 #include "ClientAxisEngine.h"
 #include "../../wsdd/WSDDDeployment.h"
 #include "../HandlerPool.h"
+#include <axis/server/AxisException.h>
 #include <axis/server/AxisTrace.h>
 extern AxisTrace* g_pAT;
 
@@ -45,6 +46,7 @@ int ClientAxisEngine::process (Ax_soapstream* pSoap)
     int Status;
     const WSDDService* pService = NULL;
 
+    AXISC_TRY
     if (!pSoap)
     {
         AXISTRACE1 ("Ax_soapstream is null", CRITICAL);
@@ -58,6 +60,7 @@ int ClientAxisEngine::process (Ax_soapstream* pSoap)
         m_pSoap->transport.pSetTrtFunct && m_pSoap->transport.pGetTrtFunct))
     {
         AXISTRACE1 ("transport is not set properly", CRITICAL);
+        AXISC_THROW(AXISC_TRANSPORT_CONF_ERROR);
         return AXIS_FAIL;
     }
 
@@ -73,6 +76,7 @@ int ClientAxisEngine::process (Ax_soapstream* pSoap)
         if (AXIS_SUCCESS !=
             (Status = initializeHandlers (sSessionId, pSoap->trtype)))
         {
+            AXISC_THROW(HANDLER_INIT_FAIL);
             break;          //do .. while(0)
         }
         //Get Service specific Handlers from the pool if configured any
@@ -108,7 +112,22 @@ int ClientAxisEngine::process (Ax_soapstream* pSoap)
      *     sSessionId);
      * // Pool back the Global and Transport handlers
      * UnInitializeHandlers(sSessionId, soap->trtype);
-     */ 
+     */
+
+     AXISC_CATCH(exception& e)
+#ifdef __ENABLE_AXIS_EXCEPTION__
+        AxisException* objException = (AxisException*) &e;
+        char* pcTempStr = (char*) objException->what();
+        AXISTRACE2("Error:", pcTempStr, CRITICAL);
+        return objException->getExceptionCode();
+#endif
+
+         
+     AXISC_CATCH(...)
+#ifdef __ENABLE_AXIS_EXCEPTION__
+         return AXISC_UNKNOWN_ERROR;
+#endif
+     AXISC_ENDCATCH 
     return Status;
 }
 
@@ -217,7 +236,6 @@ int ClientAxisEngine::invoke (MessageData* pMsg)
         case AE_START:; // service specific handlers have failed
     };
 
-    // AXISTRACE1("end axisengine process()");
     return Status;
 }
 
@@ -248,3 +266,4 @@ char* ClientAxisEngine::get_service_name (const char* pch_uri_path)
 
     return pachTmp;
 }
+

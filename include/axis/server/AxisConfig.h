@@ -19,7 +19,7 @@
 
 #define CONFBUFFSIZE 256
 
-/*
+/**
  *   @class AxisConfig
  *   @brief class for taking configuration parameters.
  *   
@@ -36,57 +36,59 @@
 class AxisConfig
 {
     public:
-        AxisConfig();
-        ~AxisConfig();
-    /*
+    AxisConfig();
+    ~AxisConfig();
+
+    /**
      * This is called to get the server.wsdd file path.
      * 
      * @return the server.wsdd file path 
      */
-        char* getWsddFilePath();
-     /*
-      * This is called to get the AxisLog file path.
-      *
-      * @return the AxisLog file path.
-      */
-        char* getAxisLogPath();
-        /*
-         * This is called to get the AxisClientLog file path.
-         *
-         * @return the AxisClientLog file path.
-         */
-        char* AxisConfig::getAxisClientLogPath ();
-        
-    /*
+    char* getWsddFilePath();
+
+    /**
+     * This is called to get the AxisLog file path.
+     *
+     * @return the AxisLog file path.
+     */
+    char* getAxisLogPath();
+
+    /**
+     * This is called to get the AxisClientLog file path.
+     *
+     * @return the AxisClientLog file path.
+     */
+    char* AxisConfig::getAxisClientLogPath ();    
+
+    /**
      * This is called to get the client.wsdd file path.
      * 
      * @return the client.wsdd file path 
      */
-        char* getClientWsddFilePath();
+    char* getClientWsddFilePath();
 
-    /*
+    /**
      * This method will read from the configuration file called axiscpp.conf
      * which is located in a place defined by AXIS_HOME environment variable. 
      *
      * @return The status which indicates whether the operation is success 
      * (AXIS_SUCCESS) or not (AXIS_FAIL).
      */
-        int readConfFile();
+    int readConfFile();
 
-        char* getAxisHomePath();
+    /**
+     * This is called to get the value of $AXIS_HOME env variable.
+     * 
+     * @return the $AXIS_HOME value
+     */
+    char* getAxisHomePath();
         
     private:         
-        /* char m_WsddFilePath[CONFBUFFSIZE]; */
-        /* char m_AxisLogPath[CONFBUFFSIZE]; */
-        /* char m_sWsddFilePath[CONFBUFFSIZE]; */
-        /* char m_sAxisLogPath[CONFBUFFSIZE]; */
-        char* m_sAxisHome;
-        char* m_sWsddFilePath;
-        char* m_sAxisLogPath;
-        char* m_sAxisClientLogPath;
-        char* m_sClientWsddFilePath;
-        char* m_sValue;
-        char m_sLine[CONFBUFFSIZE];
+        char* m_pcAxisHome;
+        char* m_pcWsddFilePath;
+        char* m_pcAxisLogPath;
+        char* m_pcAxisClientLogPath;
+        char* m_pcClientWsddFilePath;
 };
 #endif
 

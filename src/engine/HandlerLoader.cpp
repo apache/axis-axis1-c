@@ -27,6 +27,7 @@
 #include <stdio.h>
 #include "../common/AxisUtils.h"
 #include "../wsdd/WSDDDeployment.h"
+#include <axis/server/AxisException.h>
 #include <axis/server/AxisTrace.h>
 extern AxisTrace* g_pAT;
 
@@ -86,7 +87,8 @@ int HandlerLoader::loadLib (HandlerInformation* pHandlerInfo)
     pHandlerInfo->m_Handler = lt_dlopen (pHandlerInfo->m_sLib.c_str ());
     if (!pHandlerInfo->m_Handler)
     {
-        printf ("DLOPEN FAILED: %s\n", lt_dlerror ());
+        AXISTRACE1("DLOPEN FAILED", CRITICAL);
+        AXISC_THROW(LOADLIBRARY_FAILED);
     }
 #elif defined(WIN32)
     pHandlerInfo->m_Handler = LoadLibrary (pHandlerInfo->m_sLib.c_str ());
@@ -96,8 +98,10 @@ int HandlerLoader::loadLib (HandlerInformation* pHandlerInfo)
         dlopen (pHandlerInfo->m_sLib.c_str (), pHandlerInfo->m_nLoadOptions);
     if (!pHandlerInfo->m_Handler)
     {
-        printf ("DLOPEN FAILED: %s\n", dlerror ());
-        exit (1);
+        AXISTRACE1("DLOPEN FAILED", CRITICAL);
+        AXISC_THROW(LOADLIBRARY_FAILED);
+        //printf ("DLOPEN FAILED: %s\n", dlerror ());
+        //exit (1);
     }
 #endif
     return (pHandlerInfo->m_Handler != 0) ? AXIS_SUCCESS : AXIS_FAIL;
@@ -129,7 +133,9 @@ int HandlerLoader::createHandler (BasicHandler** pHandler, int nLibId)
         {
             delete pHandlerInfo;
             unlock ();
-            return LIBRARY_PATH_EMPTY;
+            AXISTRACE1("LIBRARY_PATH_EMPTY", CRITICAL);
+            AXISC_THROW(LIBRARY_PATH_EMPTY);
+            //return LIBRARY_PATH_EMPTY;
         }
         // pHandlerInfo->m_nLoadOptions = RTLD_LAZY;
         if (AXIS_SUCCESS == loadLib (pHandlerInfo))
@@ -163,7 +169,8 @@ int HandlerLoader::createHandler (BasicHandler** pHandler, int nLibId)
                 delete pHandlerInfo;
                 unlock ();
                 AXISTRACE1 ("Library loading failed", CRITICAL);
-                return LOADLIBRARY_FAILED;
+                AXISC_THROW(LOADLIBRARY_FAILED);
+                //return LOADLIBRARY_FAILED;
             }
             else // success
             {
@@ -174,7 +181,8 @@ int HandlerLoader::createHandler (BasicHandler** pHandler, int nLibId)
         {
             unlock ();
             AXISTRACE1 ("Library loading failed", CRITICAL);
-            return LOADLIBRARY_FAILED;
+            AXISC_THROW(LOADLIBRARY_FAILED);
+            //return LOADLIBRARY_FAILED;
         }
     }
 
@@ -198,12 +206,16 @@ int HandlerLoader::createHandler (BasicHandler** pHandler, int nLibId)
                 pBH->_functions->fini (pBH->_object);
                 pHandlerInfo->m_Delete (pBH);
                 unlock ();
-                return HANDLER_INIT_FAIL;
+                AXISTRACE1("HANDLER_INIT_FAIL", CRITICAL);
+                AXISC_THROW(HANDLER_INIT_FAIL);
+                //return HANDLER_INIT_FAIL;
             }
         }
         else if (0 == pBH->_object)
         {
-            return CREATION_FAILED;
+            AXISTRACE1("HANDLER_CREATION_FAILED", CRITICAL);
+            AXISC_THROW(HANDLER_CREATION_FAILED);
+            //return HANDLER_CREATION_FAILED;
         }
         else
         /* C++ service or handler */
@@ -220,13 +232,17 @@ int HandlerLoader::createHandler (BasicHandler** pHandler, int nLibId)
                 ((HandlerBase*) pBH->_object)->fini ();
                 pHandlerInfo->m_Delete (pBH);
                 unlock ();
-                return HANDLER_INIT_FAIL;
+                AXISTRACE1("HANDLER_INIT_FAIL", CRITICAL);
+                AXISC_THROW(HANDLER_INIT_FAIL);
+                //return HANDLER_INIT_FAIL;
             }
         }
     }
     else
     {
         unlock ();
-        return CREATION_FAILED;
+        AXISTRACE1("HANDLER_CREATION_FAILED", CRITICAL);
+        AXISC_THROW(HANDLER_CREATION_FAILED);
+        //return HANDLER_CREATION_FAILED;
     }
 }

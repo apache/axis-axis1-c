@@ -53,6 +53,7 @@ private:
     int m_nStatus;
     /* Provider type of current service that uses this DeSerializer object */
     PROVIDERTYPE m_ProviderType;
+    char* m_pcFaultDetail;
 
 private:
     int AXISCALL getArraySize(const AnyElement* pElement);
@@ -74,7 +75,7 @@ public:
     xsd__base64Binary AXISCALL getBodyAsBase64Binary();
     int AXISCALL setNewSoapBody(AxisChar* pNewSoapBody);
     bool isAnyMustUnderstandHeadersLeft();
-    SoapFault* getFault();
+    int getFault();
     int AXISCALL checkMessageBody(const AxisChar* pName, 
         const AxisChar* pNamespace);
     /* to get any header blocks left in the Deserializer */
@@ -102,7 +103,8 @@ public:
     
     /* Methods used by wrappers to get a deserialized value of basic types */
     int AXISCALL getElementAsInt(const AxisChar* pName, 
-        const AxisChar* pNamespace);
+        const AxisChar* pNamespace, int& iResult);
+    int AXISCALL getFaultDetail(char** ppcDetail);
     xsd__boolean AXISCALL getElementAsBoolean(const AxisChar* pName, 
         const AxisChar* pNamespace);
     unsigned int AXISCALL getElementAsUnsignedInt(const AxisChar* pName, 
