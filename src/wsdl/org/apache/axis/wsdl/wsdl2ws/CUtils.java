@@ -63,7 +63,6 @@ package org.apache.axis.wsdl.wsdl2ws;
 
 import java.util.Hashtable;
 import javax.xml.namespace.QName;
-import org.apache.axis.wsdl.wsdl2ws.WrapperConstants;
 import java.util.Vector;
 import org.w3c.dom.Node;
 import org.apache.axis.wsdl.symbolTable.SymbolTable;
@@ -73,6 +72,7 @@ import org.w3c.dom.NodeList;
 import org.apache.axis.wsdl.symbolTable.TypeEntry;
 import javax.xml.rpc.holders.BooleanHolder;
 import org.apache.axis.wsdl.symbolTable.SchemaUtils;
+import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.TypeMap;
 
 public class CUtils {
@@ -246,6 +246,7 @@ public class CUtils {
 		}
 		return arrayName;		
 	}
+	
 	public static String getBasicArrayNameforType(String stype){
 		if (type2BasicArrayName.containsKey(stype))
 			return (String)type2BasicArrayName.get(stype);
