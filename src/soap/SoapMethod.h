@@ -75,12 +75,35 @@
 #include "../common/Param.h"
 #include <list>
 
+class Attribute;
+
 using namespace std;
+
+/**
+ *	The SOAP method.
+ *
+ *  SOAP Body child Element:
+ *  All child element information items of the SOAP Body element information item:
+ *		- SHOULD have a [namespace name] property which has a value, that is the name of the element 
+ *		  SHOULD be namespace qualified.
+ *		- MAY have any number of character information item children. Child character information 
+ *		  items whose character code is amongst the white space characters as defined by XML 1.0 [XML 1.0] 
+ *		  are considered significant.
+ *		- MAY have any number of element information item children. Such element information items MAY be 
+ *		  namespace qualified.
+ *		- MAY have zero or more attribute information items in its [attributes] property. Among these MAY 
+ *		  be the following, which has special significance for SOAP processing:
+ *			- encodingStyle attribute information item
+ *
+ *	
+ *	@brief	The SOAP Body of a SOAP Envelope according to SOAP 1.2 specification.
+ */
 
 class SoapMethod  
 {
 
 private:
+	list<Attribute*> m_attributes;
 	bool isSerializable();
 	//string serializeOutputParam();
 	int serializeOutputParam(string&);
@@ -93,6 +116,8 @@ private:
 	//test line
 
 public:	
+	int serializeAttributes(string& sSerialized);
+	int addAttribute(Attribute* pAttribute);
 	string& getMethodName();
 	//string& serialize();
 	int serialize(string&);
