@@ -46,7 +46,8 @@ int ClientAxisEngine::process (SOAPTransport* pSoap)
     int Status = AXIS_FAIL;
     const WSDDService* pService = NULL;
 
-    AXISC_TRY
+    try
+    {
     if (!pSoap)
     {
         AXISTRACE1 ("Transport is null", CRITICAL);
@@ -67,7 +68,7 @@ int ClientAxisEngine::process (SOAPTransport* pSoap)
         Status = initializeHandlers (sSessionId, pSoap->getProtocol());
         if (AXIS_SUCCESS != Status)
         {
-            THROW_AXIS_ENGINE_EXCEPTION(SERVER_ENGINE_HANDLER_INIT_FAILED);
+            throw AxisEngineException(SERVER_ENGINE_HANDLER_INIT_FAILED);
             break;          //do .. while(0)
         }
         //Get Service specific Handlers from the pool if configured any
@@ -103,9 +104,11 @@ int ClientAxisEngine::process (SOAPTransport* pSoap)
      * // Pool back the Global and Transport handlers
      * UnInitializeHandlers(sSessionId, soap->trtype);
      */
-    AXISC_CATCH(AxisException& e)
-        AXISC_THROW_SAME;
-    AXISC_ENDCATCH
+    }
+    catch(AxisException& e)
+    {
+        throw;
+    }
     return Status;
 }
 

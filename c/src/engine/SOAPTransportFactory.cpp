@@ -66,7 +66,7 @@ int SOAPTransportFactory::initialize()
         {
             unloadLib();
                         AXISTRACE1("SERVER_ENGINE_LOADING_TRANSPORT_FAILED", CRITICAL);
-                        THROW_AXIS_ENGINE_EXCEPTION2(SERVER_ENGINE_LOADING_TRANSPORT_FAILED,  strdup(m_pcLibraryPath));
+                        throw AxisEngineException(SERVER_ENGINE_LOADING_TRANSPORT_FAILED,  strdup(m_pcLibraryPath));
 			//throw AxisEngineException(SERVER_ENGINE_LIBRARY_LOADING_FAILED, strdup(m_pcLibraryPath));
         }
         else
@@ -77,7 +77,7 @@ int SOAPTransportFactory::initialize()
 	else
 	{
                 AXISTRACE1("SERVER_ENGINE_LOADING_TRANSPORT_FAILED", CRITICAL);
-                THROW_AXIS_ENGINE_EXCEPTION2(SERVER_ENGINE_LOADING_TRANSPORT_FAILED,  strdup(m_pcLibraryPath));
+                throw AxisEngineException(SERVER_ENGINE_LOADING_TRANSPORT_FAILED,  strdup(m_pcLibraryPath));
 		//throw AxisEngineException(SERVER_ENGINE_LIBRARY_LOADING_FAILED, strdup(m_pcLibraryPath));
 	}
 	return AXIS_FAIL;
@@ -110,7 +110,7 @@ int SOAPTransportFactory::loadLib()
     if (!m_LibHandler)
     {
         AXISTRACE1("SERVER_ENGINE_LOADING_TRANSPORT_FAILED", CRITICAL);
-        THROW_AXIS_ENGINE_EXCEPTION(SERVER_ENGINE_LOADING_TRANSPORT_FAILED);
+        throw AxisEngineException(SERVER_ENGINE_LOADING_TRANSPORT_FAILED);
         //printf("DLOPEN FAILED in loading transport library: %s\n", lt_dlerror ());
     }
 #elif defined(WIN32)
@@ -120,7 +120,7 @@ int SOAPTransportFactory::loadLib()
     if (!m_LibHandler)
     {
         AXISTRACE1("SERVER_ENGINE_LOADING_TRANSPORT_FAILED", CRITICAL);
-        THROW_AXIS_ENGINE_EXCEPTION(SERVER_ENGINE_LOADING_TRANSPORT_FAILED);
+        throw AxisEngineException(SERVER_ENGINE_LOADING_TRANSPORT_FAILED);
         //printf("DLOPEN FAILED in loading transport library: %s\n", dlerror());
     }
 #endif

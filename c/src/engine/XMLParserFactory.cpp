@@ -67,7 +67,7 @@ int XMLParserFactory::initialize()
         {
             unloadLib();
                         AXISTRACE1("SERVER_ENGINE_LOADING_PARSER_FAILED" , CRITICAL);
-                        THROW_AXIS_ENGINE_EXCEPTION2(SERVER_ENGINE_LOADING_PARSER_FAILED, strdup(m_pcLibraryPath));
+                        throw AxisEngineException(SERVER_ENGINE_LOADING_PARSER_FAILED, strdup(m_pcLibraryPath));
 			//throw AxisEngineException(SERVER_ENGINE_LIBRARY_LOADING_FAILED, strdup(m_pcLibraryPath));
         }
         else
@@ -78,7 +78,7 @@ int XMLParserFactory::initialize()
 	else
 	{
                 AXISTRACE1("SERVER_ENGINE_LOADING_PARSER_FAILED" , CRITICAL);
-                THROW_AXIS_ENGINE_EXCEPTION2(SERVER_ENGINE_LOADING_PARSER_FAILED, strdup(m_pcLibraryPath));
+                throw AxisEngineException(SERVER_ENGINE_LOADING_PARSER_FAILED, strdup(m_pcLibraryPath));
 		//throw AxisEngineException(SERVER_ENGINE_LIBRARY_LOADING_FAILED, strdup(m_pcLibraryPath));
 	}
 	return AXIS_FAIL;
@@ -111,7 +111,7 @@ int XMLParserFactory::loadLib()
     if (!m_LibHandler)
     {
         AXISTRACE1("SERVER_ENGINE_LOADING_PARSER_FAILED" , CRITICAL);
-        THROW_AXIS_ENGINE_EXCEPTION(SERVER_ENGINE_LOADING_PARSER_FAILED);
+        throw AxisEngineException(SERVER_ENGINE_LOADING_PARSER_FAILED);
         //printf("DLOPEN FAILED in loading parser library: %s\n", lt_dlerror ());
     }
 #elif defined(WIN32)
@@ -121,7 +121,7 @@ int XMLParserFactory::loadLib()
     if (!m_LibHandler)
     {
         AXISTRACE1("SERVER_ENGINE_LOADING_PARSER_FAILED" , CRITICAL);
-        THROW_AXIS_ENGINE_EXCEPTION(SERVER_ENGINE_LOADING_PARSER_FAILED);
+        throw AxisEngineException(SERVER_ENGINE_LOADING_PARSER_FAILED);
         //printf("DLOPEN FAILED in loading parser library: %s\n", dlerror());
     }
 #endif

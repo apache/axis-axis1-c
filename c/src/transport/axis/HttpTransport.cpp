@@ -623,7 +623,7 @@ HttpTransport::HTTPValidate (const std::string & p_HttpPacket)
     if (pos == std::string::npos)
     {
 	m_PayLoad = "";
-	THROW_AXIS_TRANSPORT_EXCEPTION(SERVER_TRANSPORT_UNEXPECTED_STRING);/* unexpected string */
+	throw AxisTransportException(SERVER_TRANSPORT_UNEXPECTED_STRING);/* unexpected string */
     }
 
     m_IsHttpHeader = 1;		/* We have the stream until payload */
@@ -649,7 +649,7 @@ HttpTransport::HTTPValidate (const std::string & p_HttpPacket)
             nHttpStatus = nHttpStatusCode / 100;
 	}
 	else
-	    THROW_AXIS_TRANSPORT_EXCEPTION(SERVER_TRANSPORT_UNKNOWN_HTTP_RESPONSE);
+	    throw AxisTransportException(SERVER_TRANSPORT_UNKNOWN_HTTP_RESPONSE);
             //damitha_check
 
 
@@ -670,7 +670,7 @@ HttpTransport::HTTPValidate (const std::string & p_HttpPacket)
             sprintf(pcIntToBuff, "%d", nHttpStatusCode);
             strcpy(pcMessage, "Http error code is : ");
             strcat(pcMessage, pcIntToBuff); 
-	    THROW_AXIS_TRANSPORT_EXCEPTION2(SERVER_TRANSPORT_PROCESS_EXCEPTION, strdup(pcMessage));
+	    throw AxisTransportException(SERVER_TRANSPORT_PROCESS_EXCEPTION, strdup(pcMessage));
 	}
 	else if (nHttpStatus == 4)
 	    /* Status code is 4xx; some error has occurred */
@@ -682,7 +682,7 @@ HttpTransport::HTTPValidate (const std::string & p_HttpPacket)
             sprintf(pcIntToBuff, "%d", nHttpStatusCode);
             strcpy(pcMessage, "Http error code is : ");
             strcat(pcMessage, pcIntToBuff); 
-	    THROW_AXIS_TRANSPORT_EXCEPTION2(SERVER_TRANSPORT_PROCESS_EXCEPTION, strdup(pcMessage));
+	    throw AxisTransportException(SERVER_TRANSPORT_PROCESS_EXCEPTION, strdup(pcMessage));
 	}
 	else if (nHttpStatus == 5)
 	    /* Status code is 5xx; some error has occurred */
@@ -692,12 +692,12 @@ HttpTransport::HTTPValidate (const std::string & p_HttpPacket)
 	    if (!m_bStatus)
 	    {
 		//Error (m_sHeader.c_str ());
-		THROW_AXIS_TRANSPORT_EXCEPTION(SERVER_TRANSPORT_HTTP_EXCEPTION);
+		throw AxisTransportException(SERVER_TRANSPORT_HTTP_EXCEPTION);
 	    }
 	}
     }
     else
-	THROW_AXIS_TRANSPORT_EXCEPTION(SERVER_TRANSPORT_UNKNOWN_HTTP_RESPONSE);
+	throw AxisTransportException(SERVER_TRANSPORT_UNKNOWN_HTTP_RESPONSE);
     }
     catch(AxisTransportException& e)
     {
@@ -761,7 +761,7 @@ HttpTransport::GetPayLoad (const std::string & p_HttpPacket,
                 AXISTRACE1("SERVER_TRANSPORT_PROCESS_EXCEPTION:content type is not xml", INFO);
                 char* pcMessage = new char[256 * sizeof(char)];
                 strcpy(pcMessage, "Content type is not xml");
-	        THROW_AXIS_TRANSPORT_EXCEPTION2(SERVER_TRANSPORT_PROCESS_EXCEPTION, pcMessage);
+	        throw AxisTransportException(SERVER_TRANSPORT_PROCESS_EXCEPTION, pcMessage);
             }
                 
         }
