@@ -23,23 +23,29 @@ import org.jabber.jabberbeans.util.JID;
  * @author James M Snell <jasnell@us.ibm.com>
  */
 public class JabberSender 
-  extends BasicHandler {
+  extends BasicHandler
+  implements JabberHandler {
+
+  private Packet packet = null;
 
   public void invoke(
     MessageContext context) 
       throws AxisFault {
         JabberConnection connection = 
           initializeConnection(context);
-        Holder holder = new Holder();
         Packet request = 
           createRequestPacketFromMessage(
             context.getRequestMessage(), 
             context);
-        connection.send(request, holder);
+        connection.send(request, this);
         try {
-          holder.waitForPacket();
+          synchronized(this) {
+            while (packet == null) {
+              wait(1000);
+            }
+          }
         } catch (InterruptedException e) {}
-        Packet response = holder.getPacket();
+        Packet response = packet;
         context.setResponseMessage(
           createResponseMessageFromPacket(
             response, 
@@ -92,7 +98,11 @@ public class JabberSender
             DefaultExtension ext = (DefaultExtension)e.nextElement();
             StringBuffer buf = new StringBuffer(ext.toString());
             if (buf.indexOf(Constants.URI_DEFAULT_SOAP_ENV) > 0) {
-                message = new Message(ext.toString());
+              String envbuf =
+                buf.substring(
+                  buf.indexOf(">") + 1,
+                  buf.indexOf("</soap>"));
+                message = new Message(envbuf);
             } else {
               // ignore non soap stuff for now
             }
@@ -101,24 +111,6 @@ public class JabberSender
       return message;
   }
 
-  private class Holder 
-    implements JabberHandler {
-      private Packet packet;
-      public Packet getPacket() {
-        return this.packet;
-      }
-      public synchronized void waitForPacket()
-        throws InterruptedException {
-          if (packet != null) return;
-          wait();
-      }
-      public synchronized void receivedPacket(
-        Packet packet) {
-          this.packet = packet;
-          notifyAll();
-      }
-  }
-  
   public static class AxisExtension
     extends XMLData 
     implements MessageExtension, QueryExtension {
@@ -136,8 +128,16 @@ public class JabberSender
             String env = 
               message.getSOAPPart().
                 getEnvelope().toString();
+            
+            buffer.append("<soap xmlns=\"jabber:iq:soap\">");
             buffer.append(env);
+            buffer.append("</soap>");
           } catch (SOAPException e) {}
       }      
+  }
+  
+  public synchronized void receivedPacket(Packet packet) {
+    this.packet = packet;
+    notifyAll();
   }
 }
