@@ -45,6 +45,13 @@ public class ServiceWriter extends CPPClassWriter
         this.methods = wscontext.getSerInfo().getMethods();
     }
 
+    public void writeSource() throws WrapperFault
+    {
+        // We should not overwrite the service file if it already exsists
+        if (! getFilePath().exists())
+            super.writeSource();
+    }
+
     protected void writeClassComment() throws WrapperFault
     {
         try
