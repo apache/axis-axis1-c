@@ -99,6 +99,12 @@ const string AxisEngineException::getMessage (const int iExceptionCode)
         case SERVER_ENGINE_COULD_NOT_LOAD_HDL:
             m_sMessage = "AxisEngineException:Could not load handler";
             break;
+        case SERVER_ENGINE_LOADING_TRANSPORT_FAILED:
+            m_sMessage = "DLOPEN FAILED in loading transport library";
+            break;
+        case SERVER_ENGINE_LOADING_PARSER_FAILED:
+            m_sMessage = "DLOPEN FAILED in loading parser library";
+            break;
         case SERVER_ENGINE_HANDLER_FAILED:
             m_sMessage = "AxisEngineException:Handler failed";
             break;
