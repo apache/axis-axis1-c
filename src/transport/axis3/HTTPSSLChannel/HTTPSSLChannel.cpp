@@ -441,7 +441,9 @@ bool HTTPSSLChannel::StartSockets()
 
 void HTTPSSLChannel::StopSockets()
 {
+#ifdef WIN32
 	WSACleanup();
+#endif // WIN32
 }
 
 /**

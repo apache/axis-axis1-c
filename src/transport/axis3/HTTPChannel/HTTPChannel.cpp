@@ -487,7 +487,9 @@ bool HTTPChannel::StartSockets()
 
 void HTTPChannel::StopSockets()
 {
+#ifdef WIN32
 	WSACleanup();
+#endif // WIN32
 }
 
 /**

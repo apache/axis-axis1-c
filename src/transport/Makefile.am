@@ -1,1 +1,1 @@
-SUBDIRS = axis2 
+SUBDIRS = axis2 axis3 

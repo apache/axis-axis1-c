@@ -250,6 +250,9 @@ AC_OUTPUT(Makefile \
     src/transport/axis2/Makefile \
     src/transport/axis2/ssl/Makefile \
     src/transport/axis2/ipv6/Makefile \
+    src/transport/axis3/Makefile \
+    src/transport/axis3/HTTPChannel/Makefile \
+    src/transport/axis3/HTTPSSLChannel/Makefile \
     src/engine/Makefile \
     src/engine/server/Makefile \
     src/engine/client/Makefile  \
