@@ -1,0 +1,8 @@
+<service>
+    <name>AxisBench</name>
+    <description>AxisBench Service</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>AxisBench.cpp</serviceCode>
+    <wsdl>AxisBench.wsdl</wsdl>
+	<servicename></servicename>
+</service>

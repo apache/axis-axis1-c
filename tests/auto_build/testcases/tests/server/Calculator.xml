@@ -1,0 +1,8 @@
+<service>
+    <name>Calculator</name>
+    <description>Calculator</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>Calculator.cpp</serviceCode>
+    <wsdl>Calculator.wsdl</wsdl>
+	<servicename></servicename>
+</service>
