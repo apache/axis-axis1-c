@@ -78,6 +78,7 @@ public class Type {
     /* max no of attribs expected in a type */
     private static final int MAXIMUM_NO_ATTRIBS = 101;
     private QName name;
+    private boolean isAttribute;
 
     /* This can be null */
     private String languageSpecificName;
