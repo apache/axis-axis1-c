@@ -34,6 +34,11 @@
 #define IGNORE_SECTION_TOK_VTABLE /* as nothing */
 #endif
 
+/**
+ * xpp_prolog_tok and xpp_content_tok are defined in xmltok_impl.c
+ * xpp_prolog_tok tokenize the xml declaration
+ * xpp_content_tok tokenize the xml content
+ */
 #define VTABLE1 \
   { PREFIX(xpp_prolog_tok), PREFIX(xpp_content_tok), \
     PREFIX(cdataSectionTok) IGNORE_SECTION_TOK_VTABLE }, \
@@ -326,6 +331,13 @@ enum
   UTF8_cval4 = 0xf0
 };
 
+/** Converts from utf8 to utf8.
+  * @param encoding type
+  * @param 
+  * @param
+  * @param
+  * @param
+  */
 static void PTRCALL
 utf8_toUtf8(const ENCODING *enc,
             const char **fromP, const char *fromLim,
@@ -1590,16 +1602,6 @@ getEncodingIndex(const char *name)
  * XML_CONTENT_STATE if we're parsing an external text entity, and
  * XML_PROLOG_STATE otherwise.
  */
-
-
-static void
-initEncTable(const ENCODING **encodingTable)
-{
-        /* *encodingTable = encodingTable[INIT_ENC_INDEX(enc)]; */
-        *encodingTable = &utf8_encoding_ns;
-
-        return;
-}
 
 static int
 initScan(int* parser_state, data_t* data, const ENCODING **encodingTable,

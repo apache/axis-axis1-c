@@ -20,7 +20,6 @@
 #include "internal.h"
 #include "xpp.h"
 #include "xmltok.h"
-#include "xmlrole.h"
 #ifdef HAVE_XPP_CONFIG_H
 #include "../xpp_config.h"
 #endif
@@ -88,7 +87,6 @@ processXmlDecl(xpp_context_t* ct, int isGeneralTextEntity,
 {
   /* const XML_Char *encodingName = NULL; */
   /* const XML_Char *storedEncName = NULL; */
-  const ENCODING *newEncoding = NULL;
   const char *version = NULL;
   const char *versionend;
   /* const XML_Char *storedversion = NULL; */
@@ -97,6 +95,7 @@ processXmlDecl(xpp_context_t* ct, int isGeneralTextEntity,
   if (!(ns
         ? XmlParseXmlDeclNS
         : XmlParseXmlDecl)(isGeneralTextEntity,
+                           /*Default encoding*/
                            encoding,
                            s,
                            next,
@@ -104,7 +103,8 @@ processXmlDecl(xpp_context_t* ct, int isGeneralTextEntity,
                            &version,
                            &versionend,
                            &protocolEncodingName,
-                           &newEncoding,
+                           /*Encoding is taken from the xml file declaration*/
+                           &encoding,
                            &standalone))
 
     return XML_ERROR_SYNTAX;
@@ -136,6 +136,8 @@ int parse(xpp_context_t *ct)
         {
             initialize_encoding(ct);
             /* printf("num_chars:%d\n", num_chars); */
+            /* XmlPrologTok is defined in xmltok.h
+             */
             ret_status = XmlPrologTok(&state, &ct->data, encoding, &num_chars, 
                 ct->dirty, &ct->next);
             if(XML_ERROR_NONE == ret_status)
@@ -150,6 +152,9 @@ int parse(xpp_context_t *ct)
         {
             tok_state = CONTENT;
             /* printf("num_chars:%d\n", num_chars); */
+            /* XmlContentTok is defined in xmltok.h.
+             *
+             */
             ret_status = XmlContentTok(&state, &ct->data, encoding,
                 &num_chars, ct->dirty, &ct->next);
         /* printf("tempStatus:%d\n", tempStatus); */
@@ -357,7 +362,7 @@ void* parser_free(xpp_context_t* ct)
 data_t* next(xpp_context_t* ct)
 {
     data_counter = 0;
-    if(!parse(ct))    
+    if(XML_ERROR_NONE == parse(ct))
     {
         process_data(ct, encoding);
         return &ct->data;
