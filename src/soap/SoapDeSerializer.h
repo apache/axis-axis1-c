@@ -71,14 +71,14 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include "XMLStreamHandler.h"
-#include "SoapEnvelope.h"
-#include "SoapHeader.h"
-#include "SoapMethod.h"
-#include "SoapBody.h"
-#include "SoapFault.h"
-#include "../common/Param.h"
 #include "../common/ISoapDeSerializer.h"
+#include "XMLStreamHandler.h"
+
+class SoapEnvelope;
+class SoapHeader;
+class SoapMethod;
+class SoapBody;
+class SoapFault;
 
 class SoapDeSerializer : public ISoapDeSerializer
 {
