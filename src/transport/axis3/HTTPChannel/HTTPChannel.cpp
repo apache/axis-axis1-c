@@ -2,8 +2,6 @@
 
 HTTPChannel::HTTPChannel()
 {
-	memset( &m_URL, 0, sizeof( URL));
-
 	m_LastError = "No Errors";
 
 	m_Sock = INVALID_SOCKET;
@@ -104,7 +102,7 @@ const IChannel & HTTPChannel::operator >> (const char * msg)
 
     int		nByteRecv = 0;
     char	buf[BUF_SIZE];
-	int		iBufSize = BUF_SIZE - 1;
+	int		iBufSize = BUF_SIZE - 10;
 
     //assume timeout not set; set default tatus to OK
     int iTimeoutStatus = 1;
@@ -143,7 +141,7 @@ const IChannel & HTTPChannel::operator >> (const char * msg)
 		// Recv SOCKET_ERROR, Channel error while getting data
 		m_LastError = "Channel error while getting data";
 
-		/*CloseChannel();*/
+		//CloseChannel();
 
 		throw HTTPTransportException( SERVER_TRANSPORT_INPUT_STREAMING_ERROR, 
 									  (char *) m_LastError.c_str());
@@ -151,10 +149,9 @@ const IChannel & HTTPChannel::operator >> (const char * msg)
 
     if( nByteRecv)
     {
-		/* printf("nByteRecv:%d\n", nByteRecv); */
 		buf[nByteRecv] = '\0';
-		/* got a part of the message, so add to form */
-		memcpy( (void *) msg, buf, nByteRecv);
+		// got a part of the message, so add to form
+		memcpy( (void *) msg, buf, nByteRecv + 1);
     }
 
 	return *this;

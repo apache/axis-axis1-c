@@ -29,19 +29,13 @@
 
 #include <axis/GDefine.hpp>
 #include "IChannel.hpp"
-#include "../../common/AxisTrace.h"
 
 #define ChannelFactory_MaxListSize	2
 #define CREATE_FUNCTION3			"CreateInstance"
 #define DELETE_FUNCTION3			"DestroyInstance"
-#define INIT_FUNCTION3  			"initializeLibrary"
-#define UNINIT_FUNCTION3			"uninitializeLibrary"
 
 typedef int (* CREATE_OBJECT3) (IChannel** inst);
 typedef int (* DELETE_OBJECT3) (IChannel* inst);
-typedef void (* INIT_OBJECT3) (AxisTraceEntrypoints& ep);
-typedef void (* UNINIT_OBJECT3) ();
-
 AXIS_CPP_NAMESPACE_START
 class ChannelFactory  
 {

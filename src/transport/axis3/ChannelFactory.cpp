@@ -47,11 +47,6 @@ ChannelFactory::~ChannelFactory()
 {
 	for( int iCount = 0; iCount < m_iLibCount; iCount++)
 	{
-		if( m_pLibName[iCount] != NULL)
-		{
-			delete m_pLibName[iCount];
-		}
-
 		if( m_pChannel[iCount] != NULL)
 		{
 			if( m_LibHandler[iCount] != NULL)
@@ -62,6 +57,11 @@ ChannelFactory::~ChannelFactory()
 			}
 
 			m_pChannel[iCount] = 0;
+		}
+
+		if( m_pLibName[iCount] != NULL)
+		{
+			delete m_pLibName[iCount];
 		}
 
 		if( m_LibHandler[iCount] != NULL)
@@ -102,8 +102,8 @@ IChannel * ChannelFactory::LoadChannelLibrary( const char * pcLibraryName)
 
 #ifdef ENABLE_AXISTRACE
             // Load function to do lib level inits
-            INIT_OBJECT3 initializeLibrary;
-            initializeLibrary = (INIT_OBJECT3) PLATFORM_GETPROCADDR(sLibHandler, INIT_FUNCTION3);
+            void (*initializeLibrary) (AxisTraceEntrypoints&);
+            initializeLibrary = (void (*)(AxisTraceEntrypoints&))PLATFORM_GETPROCADDR(sLibHandler, "initializeLibrary");
 
             AxisTraceEntrypoints ep;
             AxisTrace::getTraceEntrypoints(ep);
@@ -144,13 +144,6 @@ bool ChannelFactory::UnLoadChannelLibrary( IChannel * pIChannel)
 			DELETE_OBJECT3 sDelete = (DELETE_OBJECT3) PLATFORM_GETPROCADDR( m_LibHandler[iCount], DELETE_FUNCTION3);
 
 			sDelete( pIChannel);
-
-#ifdef ENABLE_AXISTRACE
-            UNINIT_OBJECT3 uninitializeLibrary;
-            uninitializeLibrary = (UNINIT_OBJECT3) PLATFORM_GETPROCADDR(m_LibHandler[iCount], UNINIT_FUNCTION3);
-            if (uninitializeLibrary)
-                 (*uninitializeLibrary)();
-#endif
 
 			m_pChannel[iCount] = 0;
 

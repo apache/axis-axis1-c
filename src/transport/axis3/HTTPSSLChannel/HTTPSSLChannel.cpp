@@ -13,8 +13,6 @@ static int cert_verify_callback( int ok, X509_STORE_CTX * ctx)
 
 HTTPSSLChannel::HTTPSSLChannel()
 {
-	memset( &m_URL, 0, sizeof( URL));
-
 	m_LastError = "No Errors";
 
 	m_Sock = INVALID_SOCKET;

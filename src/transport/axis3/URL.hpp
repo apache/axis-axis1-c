@@ -32,6 +32,7 @@ const unsigned short HTTP_PORT  = 80;
 const unsigned short HTTPS_PORT = 443;
 const unsigned short FTP_PORT   = 21;
 
+using namespace std;
 
 /*
  *    Implementation of URL to manupulate URLs.  

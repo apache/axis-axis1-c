@@ -78,9 +78,6 @@ extern "C"
     STORAGE_CLASS_INFO void uninitializeLibrary (void)
     {
         // Do uninit actions
-#ifdef ENABLE_AXISTRACE
-        AxisTrace::deleteTraceEntrypoints();
-#endif
     }
 }
 
