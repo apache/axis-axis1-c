@@ -131,6 +131,7 @@ public class WrapHeaderWriter extends HeaderFileWriter{
 			writer.write("\tvoid AXISCALL OnFault(IMessageData* pMsg);\n");
 			writer.write("\tint AXISCALL Init();\n");
 			writer.write("\tint AXISCALL Fini();\n");
+			writer.write("AXIS_BINDING_STYLE AXISCALL GetBindingStyle(){return RPC_ENCODED;};\n");
 			writer.write("private:/*Methods corresponding to the web service methods*/\n");
 			MethodInfo minfo;
 			for (int i = 0; i < methods.size(); i++) {
@@ -153,7 +154,9 @@ public class WrapHeaderWriter extends HeaderFileWriter{
 			writer.write("#include <axis/common/WrapperClassHandler.h>\n");
 			writer.write("#include <axis/common/IMessageData.h>\n");
 			writer.write("#include <axis/common/GDefine.h>\n");
-			writer.write("#include <axis/common/AxisWrapperAPI.h>\n\n");
+			//writer.write("#include <axis/common/AxisWrapperAPI.h>\n\n");
+			writer.write("#include <axis/common/IWrapperSoapDeSerializer.h>\n");
+			writer.write("#include <axis/common/IWrapperSoapSerializer.h>\n\n");
 		}catch(IOException e){
 			throw new WrapperFault(e);
 		}

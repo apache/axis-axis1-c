@@ -74,6 +74,7 @@ public class CPPUtils {
 	private static Hashtable class2QNamemap = new Hashtable();
 	private static Hashtable qname2classmap = new Hashtable();
 	private static Hashtable type2getValueMethodName = new Hashtable();
+	private static Hashtable type2BasicArrayName = new Hashtable();
 	
 	static{	
 		 class2QNamemap.put("int", new QName(WrapperConstants.SCHEMA_NAMESPACE, "int"));
@@ -83,14 +84,23 @@ public class CPPUtils {
 		 class2QNamemap.put("double", new QName(WrapperConstants.SCHEMA_NAMESPACE, "double"));
 		 class2QNamemap.put("char", new QName(WrapperConstants.SCHEMA_NAMESPACE, "char"));
 		 class2QNamemap.put("short", new QName(WrapperConstants.SCHEMA_NAMESPACE, "short"));
-		 class2QNamemap.put("string", new QName(WrapperConstants.SCHEMA_NAMESPACE, "string"));
-		 class2QNamemap.put("Axis_DateTime", new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"));
-		 class2QNamemap.put("Axis_Date", new QName(WrapperConstants.SCHEMA_NAMESPACE, "date"));
-		 class2QNamemap.put("Axis_Time", new QName(WrapperConstants.SCHEMA_NAMESPACE, "time"));
-		 class2QNamemap.put("Axis_Base64Binary", new QName(WrapperConstants.SCHEMA_NAMESPACE, "base64Binary"));
-		 class2QNamemap.put("Axis_HexBinary", new QName(WrapperConstants.SCHEMA_NAMESPACE, "hexBinary"));
-		 class2QNamemap.put("Axis_Decimal", new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"));
-		 class2QNamemap.put("Axis_Boolean", new QName(WrapperConstants.SCHEMA_NAMESPACE, "boolean"));
+		 //class2QNamemap.put("string", new QName(WrapperConstants.SCHEMA_NAMESPACE, "string"));
+		 //class2QNamemap.put("AxisChar*", new QName(WrapperConstants.SCHEMA_NAMESPACE, "string"));
+		 class2QNamemap.put("xsd__string", new QName(WrapperConstants.SCHEMA_NAMESPACE, "string"));
+		 //class2QNamemap.put("Axis_DateTime", new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"));
+		 class2QNamemap.put("xsd__dateTime", new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"));
+		 //class2QNamemap.put("Axis_Date", new QName(WrapperConstants.SCHEMA_NAMESPACE, "date"));
+		 class2QNamemap.put("xsd__date", new QName(WrapperConstants.SCHEMA_NAMESPACE, "date"));
+		 //class2QNamemap.put("Axis_Time", new QName(WrapperConstants.SCHEMA_NAMESPACE, "time"));
+		 class2QNamemap.put("xsd__time", new QName(WrapperConstants.SCHEMA_NAMESPACE, "time"));
+		 //class2QNamemap.put("Axis_Base64Binary", new QName(WrapperConstants.SCHEMA_NAMESPACE, "base64Binary"));
+		 class2QNamemap.put("xsd__base64Binary", new QName(WrapperConstants.SCHEMA_NAMESPACE, "base64Binary"));
+		 //class2QNamemap.put("Axis_HexBinary", new QName(WrapperConstants.SCHEMA_NAMESPACE, "hexBinary"));
+		 class2QNamemap.put("xsd__hexBinary", new QName(WrapperConstants.SCHEMA_NAMESPACE, "hexBinary"));
+		 //class2QNamemap.put("Axis_Decimal", new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"));
+		 class2QNamemap.put("xsd_decimal", new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"));
+		 //class2QNamemap.put("Axis_Boolean", new QName(WrapperConstants.SCHEMA_NAMESPACE, "boolean"));
+		 class2QNamemap.put("xsd__boolean", new QName(WrapperConstants.SCHEMA_NAMESPACE, "boolean"));
 		
 		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "int"), "int");
 		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "byte"), "unsigned char");
@@ -99,14 +109,25 @@ public class CPPUtils {
 		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "double"), "double");
 		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "char"), "char");
 		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "short"), "short");
-		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "string"), "string");
- 		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"), "Axis_DateTime");
-		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "date"), "Axis_Date");
-		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "time"), "Axis_Time");
-		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "base64Binary"), "Axis_Base64Binary");
-		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "hexBinary"), "Axis_HexBinary");
-		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"), "Axis_Decimal");
-		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "boolean"), "Axis_Boolean");
+		 //qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "string"), "string");
+		 //qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "string"), "AxisChar*");
+ 		 //qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"), "Axis_DateTime");
+		 //qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "date"), "Axis_Date");
+		 //qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "time"), "Axis_Time");
+		 //qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "base64Binary"), "Axis_Base64Binary");
+		 //qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "hexBinary"), "Axis_HexBinary");
+		 //qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"), "Axis_Decimal");
+		 //qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "boolean"), "Axis_Boolean");
+		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "string"), "xsd__string");
+		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"), "xsd__dateTime");
+		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "date"), "xsd__date");
+		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "time"), "xsd__time");
+		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "base64Binary"), "xsd__base64Binary");
+		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "hexBinary"), "xsd__hexBinary");
+		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"), "xsd__decimal");
+		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "boolean"), "xsd__boolean");
+
+		 
 	}
 	public static boolean isSimpleType(String name){
 		if(class2QNamemap.containsKey(name))
@@ -122,27 +143,56 @@ public class CPPUtils {
 
 	
 	public static String getParameterGetValueMethodName(String typeName){
-		type2getValueMethodName.put("int","GetInt");
-		type2getValueMethodName.put("float","GetFloat");
-		type2getValueMethodName.put("string","GetString");
-		type2getValueMethodName.put("long","GetLong");
-		type2getValueMethodName.put("short","GetShort");
-		type2getValueMethodName.put("char","GetChar");
-		type2getValueMethodName.put("double","GetDouble");
-		type2getValueMethodName.put("unsigned long","GetUnsignedLong");
-		type2getValueMethodName.put("unsigned int","GetUnsignedInt");
-		type2getValueMethodName.put("unsigned short","GetUnsignedShort");
-		type2getValueMethodName.put("unsigned char","GetUnsignedChar");
-		type2getValueMethodName.put("Axis_DateTime","GetDateTime");
-		type2getValueMethodName.put("Axis_Date","GetDate");
-		type2getValueMethodName.put("Axis_Time","GetTime");
-		type2getValueMethodName.put("Axis_Base64Binary","GetBase64String");
-		type2getValueMethodName.put("Axis_HexBinary","GetHexString");
-		type2getValueMethodName.put("Axis_Decimal","GetDecimal");
-		type2getValueMethodName.put("Axis_Boolean","GetInt");
+		type2getValueMethodName.put("int","GetElementAsInt");
+		type2getValueMethodName.put("float","GetElementAsFloat");
+		//type2getValueMethodName.put("string","GetString");
+		//type2getValueMethodName.put("AxisChar*","GetElementAsString");
+		type2getValueMethodName.put("xsd__string","GetElementAsString");
+		type2getValueMethodName.put("long","GetElementAsLong");
+		type2getValueMethodName.put("short","GetElementAsShort");
+		type2getValueMethodName.put("char","GetElementAsChar");
+		type2getValueMethodName.put("double","GetElementAsDouble");
+		type2getValueMethodName.put("unsigned long","GetElementAsUnsignedLong");
+		type2getValueMethodName.put("unsigned int","GetElementAsUnsignedInt");
+		type2getValueMethodName.put("unsigned short","GetElementAsUnsignedShort");
+		type2getValueMethodName.put("unsigned char","GetElementAsUnsignedChar");
+		//type2getValueMethodName.put("Axis_DateTime","GetElementAsDateTime");
+		//type2getValueMethodName.put("Axis_Date","GetElementAsDate");
+		//type2getValueMethodName.put("Axis_Time","GetElementAsTime");
+		//type2getValueMethodName.put("Axis_Base64Binary","GetElementAsBase64Binary");
+		//type2getValueMethodName.put("Axis_HexBinary","GetElementAsHexBinary");
+		//type2getValueMethodName.put("Axis_Decimal","GetElementAsDecimal");
+		//type2getValueMethodName.put("Axis_Boolean","GetElementAsBoolean");
+		type2getValueMethodName.put("xsd__dateTime","GetElementAsDateTime");
+		type2getValueMethodName.put("xsd__date","GetElementAsDate");
+		type2getValueMethodName.put("xsd__time","GetElementAsTime");
+		type2getValueMethodName.put("xsd__base64Binary","GetElementAsBase64Binary");
+		type2getValueMethodName.put("xsd__hexBinary","GetElementAsHexBinary");
+		type2getValueMethodName.put("xsd__decimal","GetElementAsDecimal");
+		type2getValueMethodName.put("xsd__boolean","GetElementAsBoolean");
+		
+		type2BasicArrayName.put("int","xsd__int_Array");
+		type2BasicArrayName.put("float","xsd__float_Array");
+		type2BasicArrayName.put("xsd__string","xsd__string_Array");
+		type2BasicArrayName.put("long","xsd__long_Array");
+		type2BasicArrayName.put("short","xsd__short_Array");
+		type2BasicArrayName.put("char","xsd__byte_Array");
+		type2BasicArrayName.put("double","xsd__double_Array");
+		type2BasicArrayName.put("unsigned long","xsd__unsignedLong_Array");
+		type2BasicArrayName.put("unsigned int","xsd__unsignedInt_Array");
+		type2BasicArrayName.put("unsigned short","xsd__unsignedShort_Array");
+		type2BasicArrayName.put("unsigned char","xsd__unsignedByte_Array");
+		type2BasicArrayName.put("xsd__dateTime","xsd__dateTime_Array");
+		type2BasicArrayName.put("xsd__date","xsd__date_Array");
+		type2BasicArrayName.put("xsd__time","xsd__time_Array");
+		type2BasicArrayName.put("xsd__base64Binary","xsd__base64Binary_Array");
+		type2BasicArrayName.put("xsd__hexBinary","xsd__hexBinary_Array");
+		type2BasicArrayName.put("xsd__decimal","xsd__decimal_Array");
+		type2BasicArrayName.put("xsd__boolean","xsd__boolean_Array");
+		
 		String methodname;
 		if((methodname = (String)type2getValueMethodName.get(typeName))!= null)
-			return methodname + "()";
+			return methodname + "(0,0)";
 		return null;	
 	}
 	
@@ -166,8 +216,10 @@ public class CPPUtils {
 	}
 	public static String getXSDTypeForBasicType(String stype){
 		if ("int".equals(stype)) return "XSD_INT";
-		else if ("string".equals(stype)) return "XSD_STRING";
-		else if ("char*".equals(stype)) return "XSD_STRING";
+		//else if ("string".equals(stype)) return "XSD_STRING";
+		//else if ("AxisChar*".equals(stype)) return "XSD_STRING";
+		else if ("xsd__string".equals(stype)) return "XSD_STRING";
+		//else if ("char*".equals(stype)) return "XSD_STRING";
 		else if ("unsigned int".equals(stype)) return "XSD_UNSIGNEDINT";
 		else if ("short".equals(stype)) return "XSD_SHORT";
 		else if ("unsigned short".equals(stype)) return "XSD_UNSIGNEDSHORT";
@@ -177,13 +229,29 @@ public class CPPUtils {
 		else if ("unsigned char".equals(stype)) return "XSD_BYTE";
 		else if ("float".equals(stype)) return "XSD_FLOAT";
 		else if ("double".equals(stype)) return "XSD_DOUBLE";
-		else if ("Axis_DateTime".equals(stype)) return "XSD_DATETIME";
-		else if ("Axis_Date".equals(stype)) return "XSD_DATE";
-		else if ("Axis_Time".equals(stype)) return "XSD_TIME";
-		else if ("Axis_Base64Binary".equals(stype)) return "XSD_BASE64BINARY";
-		else if ("Axis_HexBinary".equals(stype)) return "XSD_HEXBINARY";
-		else if ("Axis_Decimal".equals(stype)) return "XSD_DECIMAL";
-		else if ("Axis_Boolean".equals(stype)) return "XSD_BOOLEAN";
+		//else if ("Axis_DateTime".equals(stype)) return "XSD_DATETIME";
+		//else if ("Axis_Date".equals(stype)) return "XSD_DATE";
+		//else if ("Axis_Time".equals(stype)) return "XSD_TIME";
+		//else if ("Axis_Base64Binary".equals(stype)) return "XSD_BASE64BINARY";
+		//else if ("Axis_HexBinary".equals(stype)) return "XSD_HEXBINARY";
+		//else if ("Axis_Decimal".equals(stype)) return "XSD_DECIMAL";
+		//else if ("Axis_Boolean".equals(stype)) return "XSD_BOOLEAN";
+		else if ("xsd__dateTime".equals(stype)) return "XSD_DATETIME";
+		else if ("xsd__date".equals(stype)) return "XSD_DATE";
+		else if ("xsd__time".equals(stype)) return "XSD_TIME";
+		else if ("xsd__base64Binary".equals(stype)) return "XSD_BASE64BINARY";
+		else if ("xsd__hexBinary".equals(stype)) return "XSD_HEXBINARY";
+		else if ("xsd__decimal".equals(stype)) return "XSD_DECIMAL";
+		else if ("xsd__boolean".equals(stype)) return "XSD_BOOLEAN";
+
 		else return "unknown type";
+	}
+	
+	public static String getBasicArrayNameforType(String stype){
+		String arrayName;
+		if((arrayName = (String)type2BasicArrayName.get(stype))!= null){
+			return arrayName;
+		}
+		return null;		
 	}
 }
