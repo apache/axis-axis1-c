@@ -87,10 +87,6 @@ LIB32=link.exe -lib
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=..\..\src\common\AccessBean.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\common\ArrayBean.cpp
 # End Source File
 # Begin Source File
@@ -131,10 +127,6 @@ SOURCE=..\..\src\common\TypeMapping.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=..\..\src\common\AccessBean.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\common\ArrayBean.h
 # End Source File
 # Begin Source File
@@ -164,10 +156,6 @@ SOURCE=..\..\src\common\GDefine.h
 # Begin Source File
 
 SOURCE=..\..\src\common\Handler.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\common\IAccessBean.h
 # End Source File
 # Begin Source File
 
