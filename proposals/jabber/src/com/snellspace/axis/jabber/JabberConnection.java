@@ -24,6 +24,8 @@ import org.jabber.jabberbeans.util.JID;
 public class JabberConnection
   implements ConnectionListener, PacketListener {
 
+  public static boolean DEBUG = false;
+
   protected ConnectionBean cb;
   protected String loginid;
   protected boolean connected;
@@ -91,6 +93,9 @@ public class JabberConnection
   public void receivedPacket(
     PacketEvent event) {
     Packet packet = event.getPacket();
+    if (DEBUG) {
+      System.out.println("receivedPacket >>"  + packet);
+    }
     if (!connected) {
       if (processLogin(packet)) {
         connected = true;
@@ -103,7 +108,7 @@ public class JabberConnection
   }
 
   protected void processPacket(
-    Packet packet) {
+    Packet packet) {      
       try {
         ContentPacket cp = (ContentPacket)packet;
         JabberHandler handler = 

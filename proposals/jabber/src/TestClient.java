@@ -6,6 +6,7 @@ import org.apache.axis.client.Call;
 import org.apache.axis.client.Service;
 import org.apache.axis.configuration.XMLStringProvider;
 
+import com.snellspace.axis.jabber.JabberConnection;
 import com.snellspace.axis.jabber.JabberTransport;
 
 /**
@@ -22,15 +23,15 @@ public class TestClient {
     
   private static void client() throws Exception {
     JabberTransport transport = new JabberTransport();
-    transport.setTo("<someid>@jabber.org/service1");    
+    transport.setTo("JamesMSnell@jabber.org/service1");    
     Service service = new Service(new XMLStringProvider(dep));
     Call call = (Call)service.createCall();
     call.setOperationName(new QName("urn:test", "echo"));
     call.addParameter("a", XMLType.XSD_STRING, ParameterMode.IN);
     call.setReturnType(XMLType.XSD_STRING);
     call.setTransport(transport);
-    call.setUsername("<someid>2@jabber.org/service2");
-    call.setPassword("<somepassword>");
+    call.setUsername("JamesMSnell2@jabber.org/service2");
+    call.setPassword("knight12");
     String s = (String)call.invoke(new String[] {"test"});
     System.out.println(s);
   }
@@ -38,6 +39,7 @@ public class TestClient {
   public static void main(
     String[] args) 
       throws Exception {
+        //JabberConnection.DEBUG = true;
         client();
   }
 }

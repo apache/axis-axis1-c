@@ -74,10 +74,16 @@ public class JabberServer
                 JID from = iq.getFromAddress();
                 JID to = iq.getToAddress();
                 String id = iq.getIdentifier();
-                Message soapMessage = new Message(buffer.toString());
+                String envbuf =
+                  buffer.substring(
+                    buffer.indexOf(">") + 1,
+                    buffer.indexOf("</soap>"));
+                Message soapMessage = new Message(envbuf);
                 try {
                   processMessage(from,to,id,soapMessage);
-                } catch (AxisFault ex) {}
+                } catch (AxisFault ex) {
+                  System.out.println(ex);
+                }
               } else {
                 // ignore for now
               }
@@ -101,7 +107,6 @@ public class JabberServer
     String id,
     Message soapMessage)
       throws AxisFault {
-      
         AxisEngine engine = JabberServer.getAxisEngine();
         MessageContext context = 
           new MessageContext(engine);
@@ -124,9 +129,10 @@ public class JabberServer
         iqb.addExtension(
           new JabberSender.AxisExtension(
             response));
-        
         try {
           send(iqb.build());
-        } catch (InstantiationException e) {}
+        } catch (InstantiationException e) {
+          System.out.println(e);
+        }
   }
 }

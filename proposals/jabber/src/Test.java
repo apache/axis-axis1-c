@@ -37,6 +37,7 @@ public class Test {
     "</undeployment>";
 
   public static void main(String[] args) throws Exception {
+    JabberConnection.DEBUG = true;
     deploy();
     JabberServer service1 = server();
     client();
@@ -47,7 +48,7 @@ public class Test {
   public static JabberServer server() {
     return 
       new JabberServer(
-        "<someid>@jabber.org/service1", "knight12");
+        "JamesMSnell@jabber.org/service1", "knight12");
   }
 
   public static void deploy() 
@@ -77,7 +78,7 @@ public class Test {
   private static void client() throws Exception {
     
     JabberTransport transport = new JabberTransport();
-    transport.setTo("<someid>@jabber.org/service1");
+    transport.setTo("JamesMSnell@jabber.org/service1");
     
     Service service = new Service(new XMLStringProvider(dep));
     Call call = (Call)service.createCall();
@@ -86,8 +87,8 @@ public class Test {
     call.setReturnType(XMLType.XSD_STRING);
     //call.setReturnQName(new QName("arg", "urn:test"));
     call.setTransport(transport);
-    call.setUsername("<someid>2@jabber.org/service2");
-    call.setPassword("<somepassword>");
+    call.setUsername("JamesMSnell2@jabber.org/service2");
+    call.setPassword("knight12");
     
     String s = (String)call.invoke(new String[] {"test"});
     System.out.println(s);
