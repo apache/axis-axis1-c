@@ -156,8 +156,7 @@ public class ClientStubWriter extends CPPClassWriter{
 	protected void writePreprocssorStatements() throws WrapperFault {
 		try{
 			writer.write("#include \""+classname+".h\"\n\n");
-			writer.write("#include <axis/common/IWrapperSoapDeSerializer.h>\n");
-			writer.write("#include <axis/common/IWrapperSoapSerializer.h>\n\n");
+			writer.write("#include <axis/common/AxisWrapperAPI.h>\n\n");
 		}catch(IOException e){
 			throw new WrapperFault(e);
 		}
@@ -290,7 +289,7 @@ public class ClientStubWriter extends CPPClassWriter{
 				}
 			}else if(typeissimple){
 				//for simple types	
-				writer.write("Value"+i+", \"" + ((ParameterInfo)paramsB.get(i)).getParamName()+"\"");
+				writer.write("Value"+i+", \"" + ((ParameterInfo)paramsB.get(i)).getParamName()+"\", "+CPPUtils.getXSDTypeForBasicType(paraTypeName));
 			}else{
 				//for complex types 
 				writer.write("Value"+i+", Axis_Serialize_"+paraTypeName+", Axis_Delete_"+paraTypeName+", \"" + ((ParameterInfo)paramsB.get(i)).getParamName()+"\"");

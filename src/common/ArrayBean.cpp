@@ -355,7 +355,7 @@ int ArrayBean::Serialize(IWrapperSoapSerializer& pSZ)
 			int blocksize = GetArrayBlockSize(it);
 			for (int ix=0;ix<blocksize;ix++)
 			{
-				pSZ << m_BTSZ.serialize(m_ItemName.c_str(), *p);
+				pSZ << m_BTSZ.serialize(m_ItemName.c_str(), *p, m_type);
 				p++;
 			}
 		}
@@ -368,7 +368,7 @@ int ArrayBean::Serialize(IWrapperSoapSerializer& pSZ)
 			int blocksize = GetArrayBlockSize(it);
 			for (int ix=0;ix<blocksize;ix++)
 			{
-				pSZ << m_BTSZ.serialize(m_ItemName.c_str(), *p);
+				pSZ << m_BTSZ.serialize(m_ItemName.c_str(), *p, m_type);
 				p++;
 			}
 		}
@@ -383,7 +383,7 @@ int ArrayBean::Serialize(IWrapperSoapSerializer& pSZ)
 			int blocksize = GetArrayBlockSize(it);
 			for (int ix=0;ix<blocksize;ix++)
 			{
-				pSZ << m_BTSZ.serialize(m_ItemName.c_str(), *p);
+				pSZ << m_BTSZ.serialize(m_ItemName.c_str(), *p, m_type);
 				p++;
 			}
 		}
@@ -396,7 +396,7 @@ int ArrayBean::Serialize(IWrapperSoapSerializer& pSZ)
 			int blocksize = GetArrayBlockSize(it);
 			for (int ix=0;ix<blocksize;ix++)
 			{
-				pSZ << m_BTSZ.serialize(m_ItemName.c_str(), *p);
+				pSZ << m_BTSZ.serialize(m_ItemName.c_str(), *p, m_type);
 				p++;
 			}
 		}
@@ -429,7 +429,7 @@ int ArrayBean::Serialize(IWrapperSoapSerializer& pSZ)
 			int blocksize = GetArrayBlockSize(it);
 			for (int ix=0;ix<blocksize;ix++)
 			{
-				pSZ << m_BTSZ.serialize(m_ItemName.c_str(), *pInt);
+				pSZ << m_BTSZ.serialize(m_ItemName.c_str(), *pInt, m_type);
 				pInt++;
 			}
 		}
@@ -441,7 +441,7 @@ int ArrayBean::Serialize(IWrapperSoapSerializer& pSZ)
 			int blocksize = GetArrayBlockSize(it);
 			for (int ix=0;ix<blocksize;ix++)
 			{
-				pSZ << m_BTSZ.serialize(m_ItemName.c_str(), *pFloat);
+				pSZ << m_BTSZ.serialize(m_ItemName.c_str(), *pFloat, m_type);
 				pFloat++;
 			}
 		}
@@ -458,7 +458,7 @@ int ArrayBean::Serialize(IWrapperSoapSerializer& pSZ)
 			int blocksize = GetArrayBlockSize(it);
 			for (int ix=0;ix<blocksize;ix++)
 			{
-				pSZ << m_BTSZ.serialize(m_ItemName.c_str(), pStr->c_str());
+				pSZ << m_BTSZ.serialize(m_ItemName.c_str(), pStr->c_str(), m_type);
 				pStr++;
 			}
 		}

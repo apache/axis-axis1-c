@@ -60,6 +60,9 @@
  * @author Susantha Kumara (skumara@virtusa.com)
  *
  */
+#ifdef WIN32
+#pragma warning (disable : 4390) //empty controlled statement found;
+#endif
 
 #include <axis/engine/HandlerLoader.h>
 #include <stdio.h>
