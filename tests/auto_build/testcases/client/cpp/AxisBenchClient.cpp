@@ -51,6 +51,8 @@ int main(int argc, char* argv[])
     } else
       ws = new AxisBench();
 
+	ws->SetSecure( "C:\\GSK\\Ver7c\\myKeyRing.kdb", "axis4all", "AXIS", "NONE", "05", "NONE", false);
+
     BenchDataType *input;
     BenchDataType *output;
     xsd__unsignedByte* buffer;
@@ -59,14 +61,26 @@ int main(int argc, char* argv[])
     input = new BenchDataType();
     input->count = 100;
       
-    input->infos.m_Array = new BenchBasicDataType[input->count];
+//    input->infos.m_Array = new BenchBasicDataType[input->count];
+#ifdef WIN32
+	BenchBasicDataType **	ppBBDT = (BenchBasicDataType **) new BenchBasicDataType *[input->count];
+	__int64					ll = 0;
+#else
+    BenchBasicDataType **	ppBBDT = (BenchBasicDataType **) new BenchBasicDataType *[input->count];
+	long long				ll = 0;
+#endif
+
+	input->infos.m_Array = ppBBDT;
+
     input->infos.m_Size = input->count;
-      
+
+//	input->infos.m_Array[0] = new BenchBasicDataType();
+
     time_t tim;
     tim = 1100246323;
     tm* lt = gmtime(&tim);
       
-    buffer = (xsd__unsignedByte*)calloc (1, input->count + 1 );
+    buffer = (xsd__unsignedByte*)calloc (1, input->count + 2);
     strcpy ( (char *)buffer, "A");
 
     for ( int i = 0; i < input->count ; i++ ) {
@@ -82,7 +96,7 @@ int main(int argc, char* argv[])
         type->ByteType = '1';
         type->DecimalType = 10*(i+1);
         type->FloatType = (float)((float)(11*(i+1))/(float)2.0);
-        type->LongType = (i+1)*10000;
+        type->LongType = ll;
         type->QNameType = "toto";
         type->ShortType = (i+1);
         type->Base64BinaryType.__size=i;
@@ -90,7 +104,28 @@ int main(int argc, char* argv[])
         type->HexBinary.__size=i;
         type->HexBinary.__ptr=buffer;
 
-        input->infos.m_Array[i] = *type;
+		if( i == 990)
+		{
+//			*ppBBDT = type;
+			*ppBBDT = NULL;
+		}
+		else
+		{
+			*ppBBDT = type;
+		}
+
+//		input->infos.m_Array[i] = type;
+
+		ppBBDT++;
+
+		if( ll == 0)
+		{
+			ll = 1;
+		}
+		else
+		{
+			ll += ll;
+		}
 
         strcat ( (char *)buffer, "A");
     }
@@ -136,35 +171,42 @@ int main(int argc, char* argv[])
       cout << "Input Count : " << input->count << endl;
       cout << "Count : " << output->count << endl;
       for ( ; i < output->count ; i++ ) {
-          cout << " ----------------------------------------------" << endl;
-          cout << " StringType " << output->infos.m_Array[i].StringType << endl;
-          cout << " IntType " << output->infos.m_Array[i].IntType << endl;
-          cout << " IntegerType " << output->infos.m_Array[i].IntegerType << endl;
-          cout << " DoubleType " << output->infos.m_Array[i].DoubleType << endl;
-          cout << " BooleanType " << output->infos.m_Array[i].BooleanType << endl;
-  		  strftime(dateTime, 50, "%a %b %d %H:%M:%S %Y", &output->infos.m_Array[i].DateTimeType);
-          cout << " DateTimeType " << dateTime << endl;
-  		  strftime(dateTime, 50, "%a %b %d %H:%M:%S %Y", &output->infos.m_Array[i].DateType);
-          cout << " DateType " << dateTime << endl;
-  		  strftime(dateTime, 50, "%a %b %d %H:%M:%S %Y", &output->infos.m_Array[i].TimeType);
-          cout << " TimeType " << dateTime << endl;
-          cout << " ByteType " << output->infos.m_Array[i].ByteType << endl;
-          cout << " DecimalType " << output->infos.m_Array[i].DecimalType << endl;
-          cout << " FloatType " << output->infos.m_Array[i].FloatType << endl;
-          cout << " LongType " << output->infos.m_Array[i].LongType << endl;
-          cout << " QNameType " << output->infos.m_Array[i].QNameType << endl;
-          cout << " ShortType " << output->infos.m_Array[i].ShortType << endl;
-
-          cout << " Base64BinaryType " << output->infos.m_Array[i].Base64BinaryType.__size << endl;
-		  if( output->infos.m_Array[i].Base64BinaryType.__size > 0)
+		  if( output->infos.m_Array[i] != (BenchBasicDataType *) 0xcdcdcdcd)
 		  {
-	          cout << " Base64BinaryType " << output->infos.m_Array[i].Base64BinaryType.__ptr << endl;
-		  }
+			  cout << " ----------------------------------------------" << endl;
+			  cout << " StringType " << output->infos.m_Array[i]->StringType << endl;
+			  cout << " IntType " << output->infos.m_Array[i]->IntType << endl;
+			  cout << " IntegerType " << output->infos.m_Array[i]->IntegerType << endl;
+			  cout << " DoubleType " << output->infos.m_Array[i]->DoubleType << endl;
+			  cout << " BooleanType " << output->infos.m_Array[i]->BooleanType << endl;
+  			  strftime(dateTime, 50, "%a %b %d %H:%M:%S %Y", &output->infos.m_Array[i]->DateTimeType);
+			  cout << " DateTimeType " << dateTime << endl;
+  			  strftime(dateTime, 50, "%a %b %d %H:%M:%S %Y", &output->infos.m_Array[i]->DateType);
+			  cout << " DateType " << dateTime << endl;
+  			  strftime(dateTime, 50, "%a %b %d %H:%M:%S %Y", &output->infos.m_Array[i]->TimeType);
+			  cout << " TimeType " << dateTime << endl;
+			  cout << " ByteType " << output->infos.m_Array[i]->ByteType << endl;
+			  cout << " DecimalType " << output->infos.m_Array[i]->DecimalType << endl;
+			  cout << " FloatType " << output->infos.m_Array[i]->FloatType << endl;
+#ifdef WIN32
+			  printf( " LongType %I64d\n", output->infos.m_Array[i]->LongType);
+#else
+			  printf( " LongType %ll\n", output->infos.m_Array[i]->LongType);
+#endif
+			  cout << " QNameType " << output->infos.m_Array[i]->QNameType << endl;
+			  cout << " ShortType " << output->infos.m_Array[i]->ShortType << endl;
 
-          cout << " HexBinaryType " << output->infos.m_Array[i].HexBinary.__size << endl;
-		  if( output->infos.m_Array[i].HexBinary.__size > 0)
-		  {
-			cout << " HexBinaryType " << output->infos.m_Array[i].HexBinary.__ptr << endl;
+			  cout << " Base64BinaryType " << output->infos.m_Array[i]->Base64BinaryType.__size << endl;
+			  if( output->infos.m_Array[i]->Base64BinaryType.__size > 0)
+			  {
+				  cout << " Base64BinaryType " << output->infos.m_Array[i]->Base64BinaryType.__ptr << endl;
+			  }
+
+			  cout << " HexBinaryType " << output->infos.m_Array[i]->HexBinary.__size << endl;
+			  if( output->infos.m_Array[i]->HexBinary.__size > 0)
+			  {
+				cout << " HexBinaryType " << output->infos.m_Array[i]->HexBinary.__ptr << endl;
+			  }
 		  }
       }
       returnValue = 0; // Success

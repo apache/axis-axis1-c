@@ -173,40 +173,59 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 				}
 				else
 				{
+					Iterator	itForTypes = wscontext.getTypemap().getTypes().iterator();
+					boolean		foundService = false;
+					boolean		nillable = false;
+        	
+					while( itForTypes.hasNext() && !foundService)
+					{
+						Type aType = (Type) itForTypes.next();
+        		
+						if( aType.getLanguageSpecificName().indexOf( ">") > -1)
+						{
+							Iterator	itForElemName = aType.getElementnames();
+					
+							foundService = true;
+
+							while( itForElemName.hasNext() && !nillable)
+							{
+								String key = (String) itForElemName.next();
+        				
+								if( aType.getElementForElementName( key).getNillable())
+								{
+									nillable = true;
+								}
+							}
+						}
+					}
+					
 					arrayType = attribs[i].getTypeName();
-					writer.write("\t// >FJP Additional code to find is reference is pointer or pointer to a pointer\n");
-					writer.write("\tint\t\tiStarCount = 0;\n");
-					writer.write("\tchar\tszParam[256];\n");
-					writer.write("\tchar *\tpStar = szParam;\n\n");
-					writer.write("\tstrcpy( szParam, typeid( param->" + attribs[i].getParamNameAsMember() + ".m_Array).name());\n\n");
-					writer.write("\twhile( (pStar = strchr( pStar, '*')) != NULL)\n");
-					writer.write("\t{\n");
-					writer.write("\t\tiStarCount++;\n");
-					writer.write("\t\tpStar++;\n");
-					writer.write("\t}\n\n");
-					writer.write("\tif( iStarCount == 1)\n");
-					writer.write("\t{\n");
-					writer.write("\t\tpSZ->serializeCmplxArray((Axis_Array*)(&param->"+attribs[i].getParamNameAsMember()+"),\n"); 
-					writer.write("\t\t\t\t\t\t\t (void*) Axis_Serialize_"+arrayType+",\n");
-					writer.write("\t\t\t\t\t\t\t (void*) Axis_Delete_"+arrayType+",\n");
-					writer.write("\t\t\t\t\t\t\t (void*) Axis_GetSize_"+arrayType+",\n");
-					writer.write("\t\t\t\t\t\t\t \""+attribs[i].getElementNameAsString()+"\", Axis_URI_"+arrayType+");\n");
-					writer.write("\t}\n");
-					writer.write("\telse\n");
-					writer.write("\t{\n");
-					writer.write("\t\tAxis_Array\tsAA;\n\n");
-					writer.write("\t\tsAA.m_Size = 1;\n\n");
-					writer.write("\t\tfor( int iCount = 0; iCount < param->count; iCount++)\n");
-					writer.write("\t\t{\n");
-					writer.write("\t\t\tsAA.m_Array = (void **)param->"+attribs[i].getElementNameAsString()+".m_Array[iCount];\n\n");
-					writer.write("\t\tpSZ->serializeCmplxArray( &sAA,\n");
-					writer.write("\t\t\t\t\t\t\t (void*) Axis_Serialize_"+arrayType+",\n");
-					writer.write("\t\t\t\t\t\t\t (void*) Axis_Delete_"+arrayType+",\n");
-					writer.write("\t\t\t\t\t\t\t (void*) Axis_GetSize_"+arrayType+",\n");
-					writer.write("\t\t\t\t\t\t\t \""+attribs[i].getElementNameAsString()+"\", Axis_URI_"+arrayType+");\n");
-					writer.write("\t\t}\n");
-					writer.write("\t}\n");
-					writer.write("\t// <FJP\n");
+					writer.write("\t// Additional code to find is reference is pointer or pointer to a pointer\n");
+					
+					if( nillable)
+					{
+						writer.write("\tAxis_Array\tsAA;\n\n");
+						writer.write("\tsAA.m_Size = 1;\n\n");
+						writer.write("\tfor( int iCount = 0; iCount < param->count; iCount++)\n");
+						writer.write("\t{\n");
+						writer.write("\t\tsAA.m_Array = (void **)param->"+attribs[i].getElementNameAsString()+".m_Array[iCount];\n\n");
+						writer.write("\tpSZ->serializeCmplxArray( &sAA,\n");
+						writer.write("\t\t\t\t\t\t (void*) Axis_Serialize_"+arrayType+",\n");
+						writer.write("\t\t\t\t\t\t (void*) Axis_Delete_"+arrayType+",\n");
+						writer.write("\t\t\t\t\t\t (void*) Axis_GetSize_"+arrayType+",\n");
+						writer.write("\t\t\t\t\t\t \""+attribs[i].getElementNameAsString()+"\", Axis_URI_"+arrayType+");\n");
+						writer.write("\t}\n");
+					}
+					else
+					{
+						writer.write("\tpSZ->serializeCmplxArray((Axis_Array*)(&param->"+attribs[i].getParamNameAsMember()+"),\n"); 
+						writer.write("\t\t\t\t\t\t (void*) Axis_Serialize_"+arrayType+",\n");
+						writer.write("\t\t\t\t\t\t (void*) Axis_Delete_"+arrayType+",\n");
+						writer.write("\t\t\t\t\t\t (void*) Axis_GetSize_"+arrayType+",\n");
+						writer.write("\t\t\t\t\t\t \""+attribs[i].getElementNameAsString()+"\", Axis_URI_"+arrayType+");\n");
+					}
+					
+					writer.write("\t// End\n");
 				}
 			}
 			else if (attribs[i].isSimpleType()){
@@ -269,48 +288,63 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 				}
 				else
 				{
+					Iterator	itForTypes = wscontext.getTypemap().getTypes().iterator();
+					boolean		foundService = false;
+					boolean		nillable = false;
+        	
+					while( itForTypes.hasNext() && !foundService)
+					{
+						Type aType = (Type) itForTypes.next();
+        		
+						if( aType.getLanguageSpecificName().indexOf( ">") > -1)
+						{
+							Iterator	itForElemName = aType.getElementnames();
+					
+							foundService = true;
+
+							while( itForElemName.hasNext() && !nillable)
+							{
+								String key = (String) itForElemName.next();
+        				
+								if( aType.getElementForElementName( key).getNillable())
+								{
+									nillable = true;
+								}
+							}
+						}
+					}
+					
 					arrayType = attribs[i].getTypeName();
 					writer.write("\tarray = pIWSDZ->getCmplxArray((void*)Axis_DeSerialize_"+arrayType+",\n"+ 
 								 "\t\t\t\t\t\t\t\t  (void*)Axis_Create_"+arrayType+",\n"+
 								 "\t\t\t\t\t\t\t\t  (void*)Axis_Delete_"+arrayType+",\n"+
 								 "\t\t\t\t\t\t\t\t  (void*)Axis_GetSize_"+arrayType+",\n"+
 								 "\t\t\t\t\t\t\t\t  \""+attribs[i].getElementNameAsString()+"\", Axis_URI_"+arrayType+");\n\n");
-					writer.write("\t// >FJP Additional code to find is reference is pointer or pointer to a pointer\n");
-					writer.write("\tint\t\tiStarCount = 0;\n");
-					writer.write("\tchar\tszParam[256];\n");
-					writer.write("\tchar *\tpStar = szParam;\n\n");
-					writer.write("\tstrcpy( szParam, typeid( param->"+attribs[i].getElementNameAsString()+".m_Array).name());\n\n");
-					writer.write("\twhile( (pStar = strchr( pStar, '*')) != NULL)\n");
-					writer.write("\t{\n");
-					writer.write("\t\tiStarCount++;\n");
-					writer.write("\t\tpStar++;\n");
-					writer.write("\t}\n\n");
-					writer.write("\tif( iStarCount == 1)\n");
-					writer.write("\t{\n\n");
-					writer.write("\tparam->"+attribs[i].getParamNameAsMember()+" = ("+attribs[i].getTypeName()+"_Array&)array;\n");	
-					writer.write("\t}\n");
-					writer.write("\telse\n");
-					writer.write("\t{\n");
-					writer.write("\t\t"+attribs[i].getTypeName()+" **	ppBBDT = param->"+attribs[i].getElementNameAsString()+".m_Array;\n\n");
-					writer.write("\t\tparam->"+attribs[i].getElementNameAsString()+".m_Size = array.m_Size;\n\n");
-					writer.write("\t\tif( param->"+attribs[i].getElementNameAsString()+".m_Array == NULL)\n");
-					writer.write("\t\t{\n");
-					writer.write("#ifdef WIN32\n");
-					writer.write("\t\t\tppBBDT = ("+attribs[i].getTypeName()+" **) new __int64[array.m_Size];\n");
-					writer.write("#else\n");
-					writer.write("\t\t\tppBBDT = ("+attribs[i].getTypeName()+" **) long long[array.m_Size];\n");
-					writer.write("#endif\n");
-					writer.write("\t\t\tparam->"+attribs[i].getElementNameAsString()+".m_Array = ppBBDT;\n");
-					writer.write("\t\t}\n\n");
-					writer.write("\t"+attribs[i].getTypeName()+" *	pBBDT = ("+attribs[i].getTypeName()+" *) array.m_Array;\n\n");
-					writer.write("\tfor( int iCount = 0; iCount < array.m_Size; iCount++)\n");
-					writer.write("\t{\n");
-					writer.write("\t\t*ppBBDT = pBBDT;\n\n");
-					writer.write("\t\tppBBDT++;\n");
-					writer.write("\t\tpBBDT++;\n");
-					writer.write("\t}\n");
-					writer.write("\t}\n");
-					writer.write("\t// <FJP\n");
+					writer.write("\t// Additional code to find is reference is pointer or pointer to a pointer\n");
+
+					if( nillable)
+					{
+						writer.write("\t"+attribs[i].getTypeName()+" **	pp = param->"+attribs[i].getElementNameAsString()+".m_Array;\n\n");
+						writer.write("\tparam->"+attribs[i].getElementNameAsString()+".m_Size = array.m_Size;\n\n");
+						writer.write("\tif( param->"+attribs[i].getElementNameAsString()+".m_Array == NULL)\n");
+						writer.write("\t{\n");
+						writer.write("\t\tpp = ("+attribs[i].getTypeName()+" **) new "+attribs[i].getTypeName()+"*[array.m_Size];\n");
+						writer.write("\t\tparam->"+attribs[i].getElementNameAsString()+".m_Array = pp;\n");
+						writer.write("\t}\n\n");
+						writer.write("\t"+attribs[i].getTypeName()+" *	p = ("+attribs[i].getTypeName()+" *) array.m_Array;\n\n");
+						writer.write("\tfor( int iCount = 0; iCount < array.m_Size; iCount++)\n");
+						writer.write("\t{\n");
+						writer.write("\t\t*pp = p;\n\n");
+						writer.write("\t\tpp++;\n");
+						writer.write("\t\tp++;\n");
+						writer.write("\t}\n");
+					}
+					else
+					{
+						writer.write("\tparam->"+attribs[i].getParamNameAsMember()+" = ("+attribs[i].getTypeName()+"_Array&)array;\n");	
+					}
+					
+					writer.write("\t// End\n");
 				}
 			}
 			else if(attribs[i].isSimpleType())
