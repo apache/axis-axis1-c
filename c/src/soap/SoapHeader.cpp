@@ -187,17 +187,22 @@ int SoapHeader::serializeNamespaceDecl(SoapSerializer& pSZ)
 
 IHeaderBlock* SoapHeader::getHeaderBlock()
 {
+	HeaderBlock* tmpHeaderBlock = NULL;
+
 	list<HeaderBlock*>::iterator itCurrHeaderBlock= m_headerBlocks.begin();
 
 	if(itCurrHeaderBlock != m_headerBlocks.end()) {			
-
-		/*
-		 *Actually a dynamic cast is not needed here. But it
-		 * is done for safe side.
-		 */
-		return dynamic_cast<IHeaderBlock*>(*itCurrHeaderBlock);
+		tmpHeaderBlock = (*itCurrHeaderBlock);
+		m_headerBlocks.pop_front();
 	}
 
-	return NULL;
+	return tmpHeaderBlock;
 
+}
+
+int SoapHeader::setPrefix(const char* pcPrefix)
+{
+	m_pcPrefix = pcPrefix;
+
+	return AXIS_SUCCESS;
 }

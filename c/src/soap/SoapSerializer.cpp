@@ -296,6 +296,10 @@ int SoapSerializer::setSoapVersion(SOAP_VERSION nSoapVersion)
 	m_pSoapEnvelope->addStandardNamespaceDecl(SoapKeywordMapping::Map(nSoapVersion).pEnv);
 	m_pSoapEnvelope->addStandardNamespaceDecl(SoapKeywordMapping::Map(nSoapVersion).pXsd);
 	m_pSoapEnvelope->addStandardNamespaceDecl(SoapKeywordMapping::Map(nSoapVersion).pXsi);
+
+	/* Adding the standard SOAP namespace to the namespace stack */
+	m_NsStack[SoapKeywordMapping::Map(nSoapVersion).pchNamespaceUri] = SoapKeywordMapping::Map(nSoapVersion).pchPrefix;
+
 	return AXIS_SUCCESS;
 }
 void SoapSerializer::RemoveNamespacePrefix(const AxisChar* pNamespace)
@@ -313,6 +317,18 @@ const AxisChar* SoapSerializer::GetNamespacePrefix(const AxisChar* pNamespace)
 		m_nCounter++;
 		AxisSprintf(m_Buf, 8, "ns%d", m_nCounter);
 		m_NsStack[pNamespace] = m_Buf;
+	}
+	return m_NsStack[pNamespace].c_str();
+}
+
+const AxisChar* SoapSerializer::GetNamespacePrefix(const AxisChar* pNamespace, bool& blnIsNewPrefix)
+{
+	if (m_NsStack.find(pNamespace) == m_NsStack.end())
+	{
+		m_nCounter++;
+		AxisSprintf(m_Buf, 8, "ns%d", m_nCounter);
+		m_NsStack[pNamespace] = m_Buf;
+		blnIsNewPrefix = true;
 	}
 	return m_NsStack[pNamespace].c_str();
 }
@@ -545,6 +561,13 @@ int SoapSerializer::SerializeBasicArray(const Axis_Array* pArray, XSDTYPE nType,
 	return AXIS_SUCCESS;
 }
 
+int SoapSerializer::setOutputStreamForTesting(const Ax_soapstream* pStream)
+{
+	m_pOutputStream = pStream;
+
+	return AXIS_SUCCESS;
+}
+
 /**
  * Basic output parameter going to be serialized as an Element later
  */
@@ -739,5 +762,3 @@ void axis_buffer_release(const char* buffer, const void* bufferid, const void* s
 	char *pChar = const_cast<char*>(buffer);
 	pChar[0] = '\0'; /* set nul */ 
 }
-
-

@@ -133,6 +133,33 @@ int Attribute::serialize(SoapSerializer& pSZ) const
 	return intStatus;	
 }
 
+int Attribute::serialize(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceStack)
+{	
+	int intStatus= AXIS_FAIL;
+
+	if (isSerializable()) {		
+		pSZ.Serialize(" ", NULL);
+
+		if(!m_prefix.empty()) {			
+			pSZ.Serialize(m_prefix.c_str(), ":", NULL);
+		} else if (!m_uri.empty()) {
+			bool blnIsNewNamespace = false;
+			m_prefix = pSZ.GetNamespacePrefix(m_uri.c_str(), blnIsNewNamespace);
+			if (blnIsNewNamespace) {
+				lstTmpNameSpaceStack.push_back((AxisChar*)m_uri.c_str());
+			}
+
+			pSZ.Serialize(m_prefix.c_str(), ":", NULL);
+		}
+
+		pSZ.Serialize(m_localname.c_str(), "=\"", m_value.c_str(), "\"", NULL);
+
+		intStatus= AXIS_SUCCESS;
+	}
+
+	return intStatus;	
+}
+
 /*
 commented on 10Jul2003 3.30 pm
 int Attribute::serialize(string& sSerialized)
@@ -165,4 +192,14 @@ bool Attribute::isSerializable() const
 	}
 
 	return bStatus;
+}
+
+int Attribute::initializeForTesting()
+{
+	m_prefix = "pr";
+	m_localname = "age";
+	m_uri = "http://myurl.com";
+	m_value = "25";
+
+	return AXIS_SUCCESS;
 }

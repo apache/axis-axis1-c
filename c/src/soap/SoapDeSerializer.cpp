@@ -72,6 +72,8 @@
 #include <axis/soap/SoapMethod.h>
 #include <axis/soap/SoapBody.h>
 #include <axis/soap/SoapFault.h>
+#include <axis/soap/ComplexElement.h>
+#include <axis/soap/CharacterElement.h>
 #include <axis/common/GDefine.h>
 #include <axis/common/Packet.h>
 #include <axis/common/AxisTrace.h>
@@ -184,13 +186,78 @@ int SoapDeSerializer::GetHeader()
 		m_nStatus = AXIS_FAIL;
 		return m_nStatus;
 	}
-	if ((START_ELEMENT != m_pNode->m_type) && (0 == strcmp(m_pNode->m_pchNameOrValue, SoapKeywordMapping::Map(m_nSoapVersion).pchWords[SKW_HEADER])))
+
+	if ((START_ELEMENT == m_pNode->m_type) && (0 == strcmp(m_pNode->m_pchNameOrValue, SoapKeywordMapping::Map(m_nSoapVersion).pchWords[SKW_HEADER])))
 	{
 		m_pHeader = new SoapHeader();
 		/* Set any attributes/namspaces to the SoapHeader object */
-		m_pNode = NULL; /*This is to indicate that node is identified and used */
-		return m_nStatus;
+
+		bool blnConStatus = true;
+		int iLevel = HEADER_LEVEL;
+		int iHeaderBlockStackLevel = 0;
+		HeaderBlock* pHeaderBlock;
+		ComplexElement* pComplexElement;
+		CharacterElement* pCharacterElement;
+
+		while (blnConStatus) {
+			m_pNode = m_pParser->Next();
+
+			if ((END_ELEMENT == m_pNode->m_type) && (0 == strcmp(m_pNode->m_pchNameOrValue, SoapKeywordMapping::Map(m_nSoapVersion).pchWords[SKW_HEADER]))) {
+				m_pNode = NULL; /*This is to indicate that node is identified and used */
+				return m_nStatus;
+			} else {
+				if (START_ELEMENT == m_pNode->m_type) {
+					if (iLevel == HEADER_LEVEL) {
+						pHeaderBlock = new HeaderBlock();
+		
+						pHeaderBlock->setUri(m_pNode->m_pchNamespace);
+						pHeaderBlock->setLocalName(m_pNode->m_pchNameOrValue);
+
+						if ((m_pNode->m_pchAttributes) != NULL) {
+							int iAttributeArrayIndex = 0;
+							while (true) {
+								Attribute* pAttribute = new Attribute();
+								pAttribute->setLocalName(m_pNode->m_pchAttributes[iAttributeArrayIndex++]);
+								pAttribute->setUri(m_pNode->m_pchAttributes[iAttributeArrayIndex++]);
+								pAttribute->setValue(m_pNode->m_pchAttributes[iAttributeArrayIndex++]);
+
+								pHeaderBlock->addAttribute(pAttribute);
+								
+								if (m_pNode->m_pchAttributes[iAttributeArrayIndex] == '\0') {
+									break;
+								}
+							}
+						}
+
+						iLevel = HEADER_BLOCK_LEVEL;
+					} else if (iLevel == HEADER_BLOCK_LEVEL) {
+						iHeaderBlockStackLevel++;
+
+						pComplexElement = new ComplexElement();
+						
+						pComplexElement->setURI(m_pNode->m_pchNamespace);
+						pComplexElement->setLocalName(m_pNode->m_pchNameOrValue);
+
+						iLevel = HEADER_BLOCK_INSIDE_LEVEL;
+					}
+				} else if (END_ELEMENT == m_pNode->m_type) {
+					if ((iLevel == HEADER_BLOCK_LEVEL) && (iHeaderBlockStackLevel==0)) {
+						m_pHeader->addHeaderBlock(pHeaderBlock);
+						iLevel = HEADER_LEVEL;
+					} else if ((iLevel == HEADER_BLOCK_INSIDE_LEVEL) && (iHeaderBlockStackLevel>0)) {
+						pHeaderBlock->addChild(pComplexElement);
+						iHeaderBlockStackLevel--;
+						iLevel = HEADER_BLOCK_LEVEL;
+					}
+				} else if (CHARACTER_ELEMENT == m_pNode->m_type) {
+					pCharacterElement = new CharacterElement(m_pNode->m_pchNameOrValue);
+
+					pComplexElement->addChild(pCharacterElement);
+				}
+			}
+		}
 	}
+
 	return m_nStatus;
 }
 
@@ -2090,8 +2157,8 @@ void SoapDeSerializer::DeleteArray(Axis_Array* pArray , XSDTYPE nType)
 HeaderBlock* SoapDeSerializer::GetHeaderBlock()
 {
 	if (!m_pHeader) return NULL;
-	/*TODO : get a header block left in the m_pHeader (remove it from there) and return */
-	return NULL;
+
+	return (HeaderBlock*)m_pHeader->getHeaderBlock();
 }
 /**
  * Used probably by a handler to add a header block to the Deserializer. Probably to be 

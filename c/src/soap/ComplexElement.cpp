@@ -135,6 +135,51 @@ int ComplexElement::serialize(SoapSerializer& pSZ)
 	return iStatus;
 }
 
+int ComplexElement::serialize(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceStack)
+{
+	int iStatus= AXIS_SUCCESS;
+	do {
+		if(isSerializable()) 
+		{	
+			bool blnIsNewNamespace = false;
+
+			pSZ.Serialize("<", NULL);	
+			if(m_sPrefix.length() != 0) {				
+				pSZ.Serialize(m_sPrefix.c_str(), ":", NULL);
+			} else if (m_sURI.length() != 0) {
+				m_sPrefix = pSZ.GetNamespacePrefix(m_sURI.c_str(), blnIsNewNamespace);
+				if (blnIsNewNamespace) {
+					lstTmpNameSpaceStack.push_back((AxisChar*)m_sURI.c_str());
+				}
+				pSZ.Serialize(m_sPrefix.c_str(), ":", NULL);
+			}
+
+			pSZ.Serialize(m_sLocalName.c_str(), NULL);
+
+			if((m_sPrefix.length() != 0) && (m_sURI.length() != 0) && (blnIsNewNamespace)) {
+				pSZ.Serialize(" xmlns:", m_sPrefix.c_str(), "=\"", m_sURI.c_str(), "\"", NULL);
+			}
+			pSZ.Serialize(">", NULL);
+
+			iStatus= serializeChildren(pSZ, lstTmpNameSpaceStack);
+			if(iStatus==AXIS_FAIL) {
+				break;
+			}
+			pSZ.Serialize("</", NULL);
+			if(m_sPrefix.length() != 0) {				
+				pSZ.Serialize(m_sPrefix.c_str(), ":", NULL);
+			}
+			pSZ.Serialize(m_sLocalName.c_str(), ">", NULL);
+			iStatus= AXIS_SUCCESS;
+		} 
+		else
+		{
+			iStatus= AXIS_FAIL;
+		}
+	} while(0);	
+	return iStatus;
+}
+
 /*
 comm on 10/7/2003 6.20pm
 int ComplexElement::serialize(string &sSerialized)
@@ -186,13 +231,6 @@ bool ComplexElement::isSerializable()
 	bool bStatus= true;
 
 	do {
-		if(m_sURI.length()!=0) {
-			if(m_sPrefix.length()==0) {
-				bStatus= false;
-				break;
-			}
-		}
-
 		if(m_sLocalName.length()==0) {
 			bStatus= false;
 			break;
@@ -210,11 +248,29 @@ int ComplexElement::setURI(const AxisChar* sURI)
 
 int ComplexElement::serializeChildren(SoapSerializer& pSZ)
 {
-
 	list<BasicNode*>::iterator itCurrBasicNode= m_children.begin();
 
-	while(itCurrBasicNode != m_children.end()) {		
+	while(itCurrBasicNode != m_children.end()) {
+		
 		(*itCurrBasicNode)->serialize(pSZ);
+		
+		itCurrBasicNode++;		
+	}	
+
+	return AXIS_SUCCESS;
+}
+
+int ComplexElement::serializeChildren(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceStack)
+{
+	list<BasicNode*>::iterator itCurrBasicNode= m_children.begin();
+
+	while(itCurrBasicNode != m_children.end()) {
+		if ((*itCurrBasicNode)->getNodeType() == ELEMENT_NODE) {
+			(*itCurrBasicNode)->serialize(pSZ, lstTmpNameSpaceStack);	
+		} else {
+			/* for CHARACTER_NODE */
+			(*itCurrBasicNode)->serialize(pSZ);
+		}
 		itCurrBasicNode++;		
 	}	
 
