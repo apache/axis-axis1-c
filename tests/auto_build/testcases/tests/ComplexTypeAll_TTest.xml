@@ -11,4 +11,5 @@
     </expected>
 	<endpoint>http://localhost:80/ComplexTypeAll/services/Service</endpoint>
 	<nomonitor>true</nomonitor>
+	<notrace>true</notrace>
 </test>

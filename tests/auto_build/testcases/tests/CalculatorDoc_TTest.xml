@@ -11,4 +11,5 @@
     </expected>
 	<endpoint>http://localhost:80/Calculator/services/Calculator</endpoint>
 	<nomonitor>true</nomonitor>
+	<notrace>true</notrace>
 </test>

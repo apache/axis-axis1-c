@@ -161,7 +161,19 @@
 # Channel_HTTP:          The HTTP transport channel library
 # Channel_HTTP_SSL:      The HTTP transport secure channel library
 #
+</echo>
+        <!-- Allow tracing to be turned off -->
+        <if>
+            <not>
+                <isset property="test.notrace"/>
+            </not>
+            <then>    
+                <echo file="${axiscpp.conf}" append="true">
 ClientLogPath:${test.directory}/ClientLog.taw
+</echo>   
+            </then>
+        </if>   
+        <echo file="${axiscpp.conf}" append="true">
 Transport_http:${dir.libraries}/${libraryPrefix}${transportLibraryName}${librarySuffix}
 XMLParser:${dir.libraries}/${libraryPrefix}${xmlParserLibraryName}${librarySuffix}
 Channel_HTTP:${dir.libraries}/${libraryPrefix}${HTTP.ChannelLibraryName}${librarySuffix}

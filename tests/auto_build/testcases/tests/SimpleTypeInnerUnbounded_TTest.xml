@@ -11,4 +11,5 @@
     </expected>
 	<endpoint>http://localhost:9080/SimpleTypeInnerUnbounded/services/sampleWS</endpoint>
 	<nomonitor>true</nomonitor>
+	<notrace>true</notrace>
 </test>
