@@ -11,7 +11,7 @@ echo "run automake."            &&
 automake --add-missing --gnu    &&
 
 echo "./configure --bindir=$AXISCPP_HOME/samples/client/"
-./configure --bindir=$AXISCPP_HOME/samples/client/
+./configure --bindir=$AXISCPP_HOME/samples/client/ --libdir=$AXIS_HOME/handlers/
 
 echo "make"
 make 2> sample_client_build_errors
