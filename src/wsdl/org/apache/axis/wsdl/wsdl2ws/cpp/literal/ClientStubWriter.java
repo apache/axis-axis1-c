@@ -398,8 +398,7 @@ public class ClientStubWriter
         writer.write("\ttry\n\t{");
 
         writer.write(
-            "\tif (AXIS_SUCCESS != m_pCall->initialize(CPP_DOC_PROVIDER, "
-                + "NORMAL_CHANNEL"
+            "\tif (AXIS_SUCCESS != m_pCall->initialize(CPP_DOC_PROVIDER"
                 + ")) return ");
         if (returntype != null)
         {

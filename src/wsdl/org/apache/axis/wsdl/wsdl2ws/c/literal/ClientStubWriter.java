@@ -251,8 +251,7 @@ public class ClientStubWriter
         writer.write(
             "\t/* Following will establish the connections with the server too */\n");
         writer.write(
-            "\tif (AXIS_SUCCESS != pCall->_functions->initialize(pCall->_object, C_DOC_PROVIDER, "
-                + "NORMAL_CHANNEL"
+            "\tif (AXIS_SUCCESS != pCall->_functions->initialize(pCall->_object, C_DOC_PROVIDER "
                 + ")) return ");
         if (returntype != null)
         {

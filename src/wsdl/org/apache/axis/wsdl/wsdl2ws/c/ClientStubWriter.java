@@ -295,8 +295,6 @@ public class ClientStubWriter extends CFileWriter
         writer.write(
             "\tif (AXIS_SUCCESS != pCall->_functions->initialize(pCall->_object,"
                 + provider
-                + ", "
-                + "NORMAL_CHANNEL"
                 + ")) return ");
         if (returntype != null)
         {

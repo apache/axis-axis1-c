@@ -352,8 +352,7 @@ public class ClientStubWriter extends CPPClassWriter
         writer.write("\tconst char* pcCmplxFaultName;\n");
         writer.write("\ttry\n\t{");
         writer.write(
-            "\n\t\tif (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, "
-                + "NORMAL_CHANNEL"
+            "\n\t\tif (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER"
                 + ")) \n\t\t\treturn ");
         //damitha
         if (returntype != null)
