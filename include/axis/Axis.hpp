@@ -24,7 +24,7 @@
 #if !defined(__AXIS_H_OF_AXIS_INCLUDED__)
 #define __AXIS_H_OF_AXIS_INCLUDED__
 
-#include <axis/server/GDefine.hpp>
+#include <axis/GDefine.hpp>
 
 AXIS_CPP_NAMESPACE_START
 

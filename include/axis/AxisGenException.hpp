@@ -23,7 +23,7 @@
 
 #include <string>
 #include <exception>
-#include <axis/server/AxisException.hpp>
+#include <axis/AxisException.hpp>
 
 AXIS_CPP_NAMESPACE_START
 

@@ -26,7 +26,7 @@
 #if !defined(_BASICHANDLER_H__OF_AXIS_INCLUDED_)
 #define _BASICHANDLER_H__OF_AXIS_INCLUDED_
 
-#include <axis/server/IMessageData.hpp>
+#include <axis/IMessageData.hpp>
 #include "GDefine.hpp"
 
 AXIS_CPP_NAMESPACE_START

@@ -23,7 +23,7 @@
 #if !defined(_IATTRIBUTE_H____OF_AXIS_INCLUDED_)
 #define _IATTRIBUTE_H____OF_AXIS_INCLUDED_
 
-#include <axis/server/GDefine.hpp>
+#include <axis/GDefine.hpp>
 
 AXIS_CPP_NAMESPACE_START
 
