@@ -308,9 +308,6 @@ public class BasicMessageContext implements MessageContext {
 
     public boolean setSoapBodyContent(Object result) throws AxisFault {
        if (result instanceof OutParameter){
-           if(this.style.getName().equals("document")){
-                this.resultValue = new DocLiteralResult((OutParameter)result);
-           }else 
            		this.resultValue = new RPCResult((OutParameter) result, this.methodName);	
         }else if (result instanceof Element[])
             this.resultValue = new MSGResult((Element[]) result);
@@ -322,6 +319,18 @@ public class BasicMessageContext implements MessageContext {
         return true;
     }
 
+    /**
+     * This method takes care of serializing of body according to the style.
+     * Style specific serialization is handled in the java classes in the package
+     * provider.serializers.
+     * 
+     * @param styleProvider Manages serialization of the body acording to the style.
+     * @throws AxisFault
+     */ 
+	public void setSoapBodyContents(Serializable styleProvider) throws AxisFault{
+			this.resultValue = styleProvider; 
+    }
+    
     public QName getMethodName() {
         return this.methodName;
     }
