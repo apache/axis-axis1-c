@@ -39,16 +39,30 @@ import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
 public class ArrayParamWriter extends ParamWriter
 {
+    /**
+     * @param wscontext
+     * @param type
+     * @throws WrapperFault
+     */
     public ArrayParamWriter(WebServiceContext wscontext, Type type)
         throws WrapperFault
     {
         super(wscontext, type);
     }
+
+    /**
+     * @return
+     * @throws WrapperFault
+     */
     public boolean isSimpleTypeArray() throws WrapperFault
     {
         QName qname = WrapperUtils.getArrayType(type).getName();
         return CUtils.isSimpleType(qname);
     }
+
+    /* (non-Javadoc)
+     * @see org.apache.axis.wsdl.wsdl2ws.SourceWriter#writeSource()
+     */
     public void writeSource() throws WrapperFault
     {
         try
@@ -111,11 +125,17 @@ public class ArrayParamWriter extends ParamWriter
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#getFilePath()
+     */
     protected File getFilePath() throws WrapperFault
     {
         return this.getFilePath(false);
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#getFilePath(boolean)
+     */
     protected File getFilePath(boolean useServiceName) throws WrapperFault
     {
         String targetOutputLocation =
@@ -145,6 +165,9 @@ public class ArrayParamWriter extends ParamWriter
         return new File(fileName);
     }
 
+    /**
+     * @throws WrapperFault
+     */
     protected void writeArrayStruct() throws WrapperFault
     {
         try
@@ -152,15 +175,15 @@ public class ArrayParamWriter extends ParamWriter
             writer.write("typedef struct " + classname + "Tag\n{\n");
             /*
              * Needed for self referenced  array else compilation failed.
-            * <xsd:complexType name="Type1">
-            *	<xsd:sequence>
-            *		<xsd:element name="followings" maxOccurs="unbounded" minOccurs="0" type="tns:Type1" />
-            *		<xsd:element name="kind" type="xsd:string" />
-            *		<xsd:element name="index" type="xsd:int" />
-            *	</xsd:sequence>
-            *	<xsd:attribute name="att_kind" type="tns:Kind" />
-            * </xsd:complexType>
-            */
+             * <xsd:complexType name="Type1">
+             *	<xsd:sequence>
+             *		<xsd:element name="followings" maxOccurs="unbounded" minOccurs="0" type="tns:Type1" />
+             *		<xsd:element name="kind" type="xsd:string" />
+             *		<xsd:element name="index" type="xsd:int" />
+             *	</xsd:sequence>
+             *	<xsd:attribute name="att_kind" type="tns:Kind" />
+             * </xsd:complexType>
+             */
             //writer.write("\t"+attribs[0].getTypeName()+"* m_Array;\n\tint m_Size;\n} "+classname+";\n\n");
             if (attribs[0].isSimpleType())
             {
@@ -182,15 +205,27 @@ public class ArrayParamWriter extends ParamWriter
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#writeConstructors()
+     */
     protected void writeConstructors() throws WrapperFault
     {}
 
+    /* (non-Javadoc)
+     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#writeDestructors()
+     */
     protected void writeDestructors() throws WrapperFault
     {}
 
+    /* (non-Javadoc)
+     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#writeMethods()
+     */
     protected void writeMethods() throws WrapperFault
     {}
 
+    /**
+     * @return
+     */
     protected String getFileType()
     {
         return "Array";

@@ -37,7 +37,12 @@ import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 public class ClientStubHeaderWriter extends HeaderFileWriter
 {
     private WebServiceContext wscontext;
-    private ArrayList methods;
+    protected ArrayList methods;
+
+    /**
+     * @param wscontext
+     * @throws WrapperFault
+     */
     public ClientStubHeaderWriter(WebServiceContext wscontext)
         throws WrapperFault
     {
@@ -48,11 +53,17 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
         this.methods = wscontext.getSerInfo().getMethods();
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#getFilePath()
+     */
     protected File getFilePath() throws WrapperFault
     {
         return this.getFilePath(false);
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#getFilePath(boolean)
+     */
     protected File getFilePath(boolean useServiceName) throws WrapperFault
     {
         String targetOutputLocation =
@@ -81,13 +92,13 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
     }
 
     /* (non-Javadoc)
-     * @see org.apache.axis.wsdl.wsdl2ws.cpp.HeaderFileWriter#writeAttributes()
+     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#writeAttributes()
      */
     protected void writeAttributes() throws WrapperFault
     {}
 
     /* (non-Javadoc)
-     * @see org.apache.axis.wsdl.wsdl2ws.cpp.HeaderFileWriter#writeClassComment()
+     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#writeClassComment()
      */
     protected void writeClassComment() throws WrapperFault
     {
@@ -109,7 +120,7 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
     }
 
     /* (non-Javadoc)
-     * @see org.apache.axis.wsdl.wsdl2ws.cpp.HeaderFileWriter#writeMethods()
+     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#writeMethods()
      */
     protected void writeMethods() throws WrapperFault
     {
@@ -245,6 +256,10 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
             throw new WrapperFault(e);
         }
     }
+
+    /**
+     * @return
+     */
     protected String getFileType()
     {
         return "ClientStub";
