@@ -33,5 +33,5 @@
     <classpathentry kind="lib" path="E:/lib/xml-apis.jar"/>
     <classpathentry kind="lib" path="E:/lib/xmlParserAPIs.jar"/>
     <classpathentry kind="lib" path="E:/lib/activation.jar"/>
-    <classpathentry kind="output" path=""/>
+    <classpathentry kind="output" path="bin"/>
 </classpath>

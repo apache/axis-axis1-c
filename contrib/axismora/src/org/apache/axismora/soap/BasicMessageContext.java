@@ -79,7 +79,7 @@ import org.apache.axismora.encoding.AxisPullParser;
 import org.apache.axismora.encoding.DesirializationContext;
 import org.apache.axismora.encoding.OutParameter;
 import org.apache.axismora.encoding.Serializable;
-import org.apache.axismora.provider.result.DocLiteralResult;
+import org.apache.axismora.provider.result.DocLiteralSerializer;
 import org.apache.axismora.provider.result.HandlerResetResult;
 import org.apache.axismora.provider.result.MSGResult;
 import org.apache.axismora.provider.result.RPCResult;
@@ -92,6 +92,7 @@ import org.apache.axis.deployment.wsdd.WSDDService;
 import org.apache.axis.encoding.SerializationContext;
 import org.apache.axis.encoding.SerializationContextImpl;
 import org.apache.axis.enum.Style;
+import org.apache.axis.enum.Use;
 import org.apache.axis.message.SOAPBody;
 import org.apache.axis.message.SOAPBodyElement;
 import org.apache.axis.message.SOAPEnvelope;
@@ -177,7 +178,7 @@ public class BasicMessageContext implements MessageContext {
     //indicate at server side or the client side
     private boolean atServerSide;
     //indicate to use literal or encoded
-    private boolean isLiteral=false;
+    private Use use = Use.ENCODED;
 	/**
 	 * this Constructor is for the sake of testing only
 	 */
@@ -202,7 +203,7 @@ public class BasicMessageContext implements MessageContext {
         this.soapHeaderElements = new Vector(ELEMENT_MAP_SIZE);
         this.createdSoapHeaders = new Vector(ELEMENT_MAP_SIZE);
         this.streamEncoding = streamEncoding;
-        this.methodName = service.getQName();
+       // this.methodName = service.getQName();
         this.style = service.getStyle();
         //initialize desirialization context - this drives the desiarialization
         this.deserializer =
@@ -241,8 +242,7 @@ public class BasicMessageContext implements MessageContext {
         this.service = service;
         this.outStream = requestContext.getSender().getOut();
         this.streamEncoding = requestContext.getEncoding();
-        this.style = requestContext.getStyle();//service.getStyle();
-        //initialize desirialization context - this drives the desiarialization
+       
         this.deserializer =
             new DesirializationContext(
                 this,
@@ -257,7 +257,10 @@ public class BasicMessageContext implements MessageContext {
           serializzation of these naturally followed the existing model.
         */
         serializer = new SerializationContextImpl(w);
-
+        
+        this.style=requestContext.getStyle();
+        this.use = requestContext.getUse();
+        
         log.info("MessageContext created.......");
 
     }
@@ -308,33 +311,24 @@ public class BasicMessageContext implements MessageContext {
 
     public boolean setSoapBodyContent(Object result) throws AxisFault {
        if (result instanceof OutParameter){
-           		this.resultValue = new RPCResult((OutParameter) result, this.methodName);	
+           	this.resultValue = new RPCResult((OutParameter) result, this.methodName);	
         }else if (result instanceof Element[])
             this.resultValue = new MSGResult((Element[]) result);
+        else if( result instanceof DocLiteralSerializer)
+            this.resultValue = (DocLiteralSerializer)result;
         else if (result instanceof InputParameterInfo[])
-            this.resultValue =
-                new RequestBodyContent((InputParameterInfo[]) result, this.methodName);
+            this.resultValue = new RequestBodyContent((InputParameterInfo[]) result, this.methodName);
         else
             throw new AxisFault("unknown result type set to message Context");
         return true;
     }
 
-    /**
-     * This method takes care of serializing of body according to the style.
-     * Style specific serialization is handled in the java classes in the package
-     * provider.serializers.
-     * 
-     * @param styleProvider Manages serialization of the body acording to the style.
-     * @throws AxisFault
-     */ 
-	public void setSoapBodyContents(Serializable styleProvider) throws AxisFault{
-			this.resultValue = styleProvider; 
-    }
-    
+   
     public QName getMethodName() {
         return this.methodName;
     }
-
+    
+     
     public void setMethodName(QName mName) {
         this.methodName = mName;
     }
@@ -456,8 +450,8 @@ public class BasicMessageContext implements MessageContext {
         this.deserializer.startParseSOAPBody();
     }
 
-    public void setLitereal(boolean boo){
-		isLiteral = boo;
+    public void setUse(Use tUse){
+		this.use = tUse;
     }
     
     
@@ -483,7 +477,8 @@ public class BasicMessageContext implements MessageContext {
             Iterator headers = this.soapHeaderElements.iterator();
             SOAPHeaderElement header;
             
-            if(this.isLiteral){
+            if(this.use.equals(Use.LITERAL)){
+            	 log.info("I am literal delete me");
                  serializer.setDoMultiRefs(false);
                  serializer.setShouldSendXSIType(true);
             }
@@ -514,11 +509,11 @@ public class BasicMessageContext implements MessageContext {
 
             this.soapEnvelope.addBodyElement(bo);
 
-            ///specific to rpc
-            if (this.methodName != null) {
-                bo.setName(this.methodName.getLocalPart() + "Response");
-                bo.setNamespaceURI(this.methodName.getNamespaceURI());
-            }
+//  NOt needed specific to rpc
+//            if (this.methodName != null) {
+//                bo.setName(this.methodName.getLocalPart() + "Response");
+//                bo.setNamespaceURI(this.methodName.getNamespaceURI());
+//            }
 
             /*
                ** registor our Serializer **
