@@ -51,9 +51,9 @@ int Debug::debug(const string &sLog1, const string &sLog2,string arg3, int arg4)
     time_t ltime;
     time(&ltime);
     //*fout << "time:" << ctime(&ltime) << ":" << sLog1.c_str() << " " << sLog2.c_str() << endl;
-    *fout << "time:" << ctime(&ltime) \
-    << " :file:"<< arg3 << " :line:" << arg4 << endl \    
-    << sLog1.c_str() << " " << sLog2.c_str() << endl \
+    *fout << "time:" << ctime(&ltime)
+    << " :file:"<< arg3 << " :line:" << arg4 << endl    
+    << sLog1.c_str() << " " << sLog2.c_str() << endl
     << "-------------------------------------------------" << endl;
     sprintf((char*)chEBuf,sLog1.c_str(), sLog2.c_str());
     return SUCCESS;
