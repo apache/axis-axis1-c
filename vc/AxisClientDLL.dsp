@@ -40,6 +40,7 @@ RSC=rc.exe
 # PROP Use_Debug_Libraries 0
 # PROP Output_Dir "Release"
 # PROP Intermediate_Dir "Release"
+# PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "AXISCLIENTDLL_EXPORTS" /YX /FD /c
 # ADD CPP /nologo /MT /W3 /GX /O2 /I "../include" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "AXISCLIENTDLL_EXPORTS" /D "USE_EXPAT_PARSER" /D "AXIS_CLIENT_LIB" /YX /FD /c
@@ -52,7 +53,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386
-# ADD LINK32 libexpat.lib /nologo /dll /machine:I386 /libpath:"../lib/expat"
+# ADD LINK32 libexpat.lib wsock32.lib /nologo /dll /machine:I386 /out:"../release/win32/AxisClientDLL.dll" /libpath:"../lib/expat"
 
 !ELSEIF  "$(CFG)" == "AxisClientDLL - Win32 Debug"
 
@@ -63,8 +64,9 @@ LINK32=link.exe
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "Debug"
+# PROP Output_Dir "../release/win32/"
 # PROP Intermediate_Dir "Debug"
+# PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "AXISCLIENTDLL_EXPORTS" /YX /FD /GZ /c
 # ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "../include" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "AXISCLIENTDLL_EXPORTS" /D "USE_EXPAT_PARSER" /D "AXIS_CLIENT_LIB" /YX /FD /GZ /c
@@ -77,7 +79,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 libexpat.lib /nologo /dll /debug /machine:I386 /pdbtype:sept /libpath:"../lib/expat"
+# ADD LINK32 libexpat.lib wsock32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept /libpath:"../lib/expat"
 
 !ENDIF 
 
@@ -126,7 +128,7 @@ SOURCE=..\src\common\AxisTrace.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\client\transport\axis\AxisTransport.cpp
+SOURCE=..\src\transport\axis\AxisTransport.cpp
 # End Source File
 # Begin Source File
 
@@ -142,11 +144,11 @@ SOURCE=..\src\common\BasicTypeSerializer.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\client\Call.cpp
+SOURCE=..\src\engine\client\Call.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\client\transport\axis\Channel.cpp
+SOURCE=..\src\transport\axis\Channel.cpp
 # End Source File
 # Begin Source File
 
@@ -194,7 +196,7 @@ SOURCE=..\src\soap\HeaderBlock.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\client\transport\axis\HttpTransport.cpp
+SOURCE=..\src\transport\axis\HttpTransport.cpp
 # End Source File
 # Begin Source File
 
@@ -214,7 +216,7 @@ SOURCE=..\src\xml\QName.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\client\transport\axis\Receiver.cpp
+SOURCE=..\src\transport\axis\Receiver.cpp
 # End Source File
 # Begin Source File
 
@@ -222,7 +224,7 @@ SOURCE=..\src\engine\RequestScopeHandlerPool.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\client\transport\axis\Sender.cpp
+SOURCE=..\src\transport\axis\Sender.cpp
 # End Source File
 # Begin Source File
 
@@ -282,11 +284,11 @@ SOURCE=..\src\xml\StartElement.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\client\transport\axis\Transport.cpp
+SOURCE=..\src\transport\axis\Transport.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\client\transport\axis\TransportFactory.cpp
+SOURCE=..\src\transport\axis\TransportFactory.cpp
 # End Source File
 # Begin Source File
 
@@ -298,7 +300,7 @@ SOURCE=..\src\soap\URIMapping.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\client\transport\axis\Url.cpp
+SOURCE=..\src\transport\axis\Url.cpp
 # End Source File
 # Begin Source File
 
@@ -330,135 +332,7 @@ SOURCE=..\src\wsdd\WSDDTransport.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=..\src\engine\AppScopeHandlerPool.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\common\ArrayBean.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\client\transport\axis\AxisTransport.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\common\AxisUtils.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\axis\client\Call.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\soap\ComplexElement.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\engine\DeserializerPool.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\xml\Element.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\xml\Event.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\engine\HandlerLoader.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\engine\HandlerPool.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\common\IArrayBean.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\common\IDeployerUtils.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\common\ISoapMethod.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\xml\QName.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\engine\RequestScopeHandlerPool.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\engine\SerializerPool.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\engine\ServerAxisEngine.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\engine\SessionScopeHandlerPool.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\engine\SharedObject.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\xml\SimpleAttribute.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\soap\SoapBody.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\soap\SoapEnvelope.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\soap\SoapKeywordMapping.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\soap\SoapMethod.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\soap\SoapParserExpat.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\xml\StartElement.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\soap\URIMapping.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\common\WrapperClassHandler.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\wsdd\WSDDDeployment.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\wsdd\WSDDDocument.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\wsdd\WSDDKeywords.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\wsdd\WSDDTransport.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
