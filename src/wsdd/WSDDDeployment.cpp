@@ -241,6 +241,7 @@ int WSDDDeployment::SaveWSDD()
 const WSDDService* WSDDDeployment::GetService(const AxisChar* sServiceName)
 {
 	WSDDServiceMap::iterator iter;
+	if (!m_DeployedServices) return NULL;
 	iter = m_DeployedServices->find(sServiceName);
 	if (iter != m_DeployedServices->end())
 	{
