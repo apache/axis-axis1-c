@@ -660,25 +660,41 @@ XMLParser:${dir.libraries}/${libraryPrefix}${xmlParserLibraryName}${librarySuffi
 		<property file="${test.endpoints}"/>
 	</target>
 
-	<target name="setTestProperties" depends="setEPName,setURI,setEP"/>
+	<target name="setTestProperties" depends="setEPName,useDefaultEndpoint,setURI,setEP"/>
 
 	<target name="setEPName">
 		<property name="EPName" value="${testName}EP"/>
 	</target>
 
-	<target name="setURI" if="${EPName}">
-		<propertycopy property="EP" from="${EPName}"/>
+	<!-- If there is no entry in the test.endpoints file do not set any program args -->
+	<target name="useDefaultEndpoint" unless="${EPName}">
+		<property name="clientArgs" value=""/>
 	</target>
 
+	<!-- Check to see if the entry in test.endpoints is UseSpecifiedServerPort.
+	     If so then pass -p ${monitorPort} -s localhost args, otherwise read
+		  the endpoint from the file -->
+	<target name="setURI" unless="clientArgs">
+		<propertycopy property="EP" from="${EPName}"/>
+		<condition property="emptyEP">
+			<equals arg1="${EP}" arg2="UseSpecifiedServerPort" trim="true"/>
+		</condition>
+	</target>
+
+	<!-- Check to see if the entry in test.endpoints is UseSpecifiedServerPort.
+	     If so then pass -p ${testPort} -s ${testHost} args, otherwise read
+		  the endpoint from the file -->
 	<target name="setEP">
 		<condition property="clientArgs" value="-p ${monitorPort} -s localhost">
+			<isset property="emptyEP"/>
+		</condition>
+
+		<condition property="endpoint" value="http://localhost:${monitorPort}/${EP}">
 			<not>
-				<isset property="EP"/>
+				<isset property="emptyEP"/>
 			</not>
 		</condition>
-		<condition property="endpoint" value="http://localhost:${monitorPort}/${EP}">
-			<isset property="EP"/>
-		</condition>
+
 		<condition property="clientArgs" value="${endpoint}">
 			<isset property="endpoint"/>
 		</condition>
