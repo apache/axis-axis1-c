@@ -1,15 +1,15 @@
 <test>
-    <name>ComplexTypeAll</name>
-    <description>ComplexTypeAll</description>
+    <name>NilValuesTest</name>
+    <description>NilValuesTest</description>
     <clientLang>cpp</clientLang>
-    <clientCode>ComplexTypeAllClient.cpp</clientCode>
+    <clientCode>NilValuesTestClient.cpp</clientCode>
     <wsdl>ComplexTypeAll.wsdl</wsdl>
     <expected>
         <output>
-            ComplexTypeAll.cpp.out
+            NilValuesTest.cpp.out
         </output>
 		<request>
-			ComplexTypeAll.request
+			NilValuesTest.request
 		</request>
     </expected>
 	<endpoint>-e http://localhost:9080/ComplexTypeAll/services/Service</endpoint>

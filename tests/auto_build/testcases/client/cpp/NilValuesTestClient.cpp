@@ -34,9 +34,6 @@ int main(int argc, char* argv[])
       ws = new operations();
 
     aRecord* input = new aRecord();
-    input->field1 = "Hello World!";
-    input->field2 = "I'm still here!";
-    input->field3 = "Now I go!";
     xsd__boolean result = (xsd__boolean)0;
     result = ws->myOperation(input);
 
@@ -57,15 +54,15 @@ int main(int argc, char* argv[])
   // Samisa : clean up memory allocated for stub
   try
   {
-	  delete ws; 
+   delete ws; 
   }
   catch(exception& exception)
   {
-  	cout << "Exception on clean up of ws : " << exception.what()<<endl;
+    cout << "Exception on clean up of ws : " << exception.what()<<endl;
   }
   catch(...)
   {
-  	cout << "Unknown exception on clean up of ws : " << endl;
+   cout << "Unknown exception on clean up of ws : " << endl;
   }
   cout << "---------------------- TEST COMPLETE -----------------------------"<< endl;
 

@@ -1,0 +1,18 @@
+POST /ComplexTypeAll/services/Service HTTP/1.1
+Host: localhost:13260
+Content-Type: text/xml; charset=UTF-8
+SOAPAction: "http://complextype.test.apache.org"
+Content-Length: 504
+
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:myOperation xmlns:ns1="http://complextype.test.apache.org">
+<ns1:aType><ns1:field1 xsi:nil="true"></ns1:field1>
+<ns1:field2 xsi:nil="true"></ns1:field2>
+<ns1:field3 xsi:nil="true"></ns1:field3>
+</ns1:aType>
+</ns1:myOperation>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+

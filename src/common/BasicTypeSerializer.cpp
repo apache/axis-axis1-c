@@ -61,206 +61,240 @@ const AxisChar* BasicTypeSerializer::serializeAsElement (const AxisChar* pName,
         m_sSZ += "\"";
     }
     m_sSZ += ">";
-    switch (type)
+    
+    if (!pValue)
     {
-        case XSD_INT:
-            {
-                Int intSerializer;
-                m_sSZ += intSerializer.serialize(pValue);
-            }
-            break;
-        case XSD_BOOLEAN:
-        	{
-        		Boolean booleanSerializer;
-           		m_sSZ += booleanSerializer.serialize(pValue);
-        	}
-            break;
-        case XSD_UNSIGNEDINT:
-            {
-                UnsignedInt unsignedIntSerializer;
-                m_sSZ += unsignedIntSerializer.serialize(pValue);
-            }
-            break;
-        case XSD_SHORT:
-            {
-                Short shortSerializer;
-                m_sSZ += shortSerializer.serialize(pValue);
-            }
-            break;
-        case XSD_UNSIGNEDSHORT:
-            {
-                UnsignedShort unsignedShortSerializer;
-                m_sSZ += unsignedShortSerializer.serialize(pValue);
-            }
-            break;
-        case XSD_BYTE:
-            {
-                Byte byteSerializer;
-                m_sSZ += byteSerializer.serialize(pValue);
-            }
-            break;
-        case XSD_UNSIGNEDBYTE:
-            {
-                UnsignedByte unsignedByteSerializer;
-                m_sSZ += unsignedByteSerializer.serialize(pValue);
-            }
-            break;
-        case XSD_LONG:
-            {
-                Long longSerializer;
-                m_sSZ += longSerializer.serialize(pValue);
-            }
-            break;
-        case XSD_INTEGER:
-            {
-                Integer integerSerializer;
-                m_sSZ += integerSerializer.serialize(pValue);
-            }
-            break;
-        case XSD_DURATION:
-        	{
-        		Duration durationSerializer;
-        		m_sSZ += durationSerializer.serialize(pValue);
-        	}
-            break;
-        case XSD_UNSIGNEDLONG:
-            {
-                UnsignedLong unsignedLongSerializer;
-                m_sSZ += unsignedLongSerializer.serialize(pValue);
-            }
-            break;
-        case XSD_FLOAT:
-        	{
-        		Float floatSerializer;
-        		m_sSZ += floatSerializer.serialize(pValue);
-        	}
-            break;
-        case XSD_DOUBLE:
-        	{
-        		Double doubleSerializer;
-        		m_sSZ += doubleSerializer.serialize(pValue);
-        	}
-        	break;
-        case XSD_DECIMAL:
-        	{
-        		Decimal decimalSerializer;
-        		m_sSZ += decimalSerializer.serialize(pValue);
-        	}
-            break;
-        case XSD_STRING:
-	        pStr = *((char**)(pValue));
-            if (!pStr)
-            {
-                /*
-                 * It is a null value not an empty value.
-                 */
-                m_sSZ = "<";
-                m_sSZ += pName;
-           // direct return not good for maintainability 
-           //     m_sSZ += " xsi:nil=\"true\"/>\n";
-           //     return m_sSZ.c_str ();
-				m_sSZ += " xsi:nil=\"true\">";
-            }
-            else
-            {
-            	String stringSerializer;
-            	m_sSZ += stringSerializer.serialize(pStr);
-            }
-            break;
-        case XSD_ANYURI:
-            pStr = *((char**)(pValue));
-            if (!pStr)
-            {
-                /*
-                 * It is a null value not an empty value.
-                 */
-                m_sSZ = "<";
-                m_sSZ += pName;
-           // direct return not good for maintainability 
-           //     m_sSZ += " xsi:nil=\"true\"/>\n";
-           //     return m_sSZ.c_str ();
-				m_sSZ += " xsi:nil=\"true\">";
-            }
-            else
-            {
-            	AnyURI anyURISerializer;
-            	m_sSZ += anyURISerializer.serialize(pStr);
-            }
-            break;
-        case XSD_QNAME:
-	        pStr = *((char**)(pValue));
-            if (!pStr)
-            {
-                /*
-                 * It is a null value not an empty value.
-                 */
-                m_sSZ = "<";
-                m_sSZ += pName;
-           // direct return not good for maintainability 
-           //     m_sSZ += " xsi:nil=\"true\"/>\n";
-           //     return m_sSZ.c_str ();
-				m_sSZ += " xsi:nil=\"true\">";
-            }
-            else
-            {
-            	XSD_QName QNameSerializer;
-            	m_sSZ += QNameSerializer.serialize(pStr);
-            }
-            break;
-        case XSD_NOTATION:
-            pStr = *((char**)(pValue));
-            if (!pStr)
-            {
-                /*
-                 * It is a null value not an empty value.
-                 */
-                m_sSZ = "<";
-                m_sSZ += pName;
-           // direct return not good for maintainability 
-           //     m_sSZ += " xsi:nil=\"true\"/>\n";
-           //     return m_sSZ.c_str ();
-				m_sSZ += " xsi:nil=\"true\">";
-            }
-            else
-            {
-            	NOTATION notationSerializer;
-            	m_sSZ += notationSerializer.serialize(pStr);
-            }
-            break;
-        case XSD_HEXBINARY:
-        	{
-        		HexBinary hexBinarySerializer;
-        		m_sSZ += hexBinarySerializer.serialize(pValue);
-        	}
-            break;
-        case XSD_BASE64BINARY:
-        	{
-        		Base64Binary base64BinarySerializer;
-        		m_sSZ += base64BinarySerializer.serialize(pValue);
-        	}
-            break;
-        case XSD_DATETIME:
-        	{
-        		DateTime dateTimeSerializer;
-        		m_sSZ += dateTimeSerializer.serialize(pValue);
-        	}
-        	break;
-        case XSD_DATE:
-        	{
-        		Date dateSerializer;
-        		m_sSZ += dateSerializer.serialize(pValue);
-        	}
-        	break;
-        case XSD_TIME:
-        	{
-        		Time timeSerializer;
-        		m_sSZ += timeSerializer.serialize(pValue);
-        	}
-            break;
-        default:
-            return NULL;
+        /*
+         * It is a null value not an empty value.
+         */
+        m_sSZ = "<";
+        if (NULL != pPrefix)
+        { 
+            m_sSZ += pPrefix;
+            m_sSZ += ":";
+        }
+        m_sSZ += pName;
+        m_sSZ += " xsi:nil=\"true\">";
     }
-
+    else
+    {
+        switch (type)
+        {
+            case XSD_INT:
+                {
+                    Int intSerializer;
+                    m_sSZ += intSerializer.serialize(pValue);
+                }
+                break;
+            case XSD_BOOLEAN:
+            	{
+            		Boolean booleanSerializer;
+               		m_sSZ += booleanSerializer.serialize(pValue);
+            	}
+                break;
+            case XSD_UNSIGNEDINT:
+                {
+                    UnsignedInt unsignedIntSerializer;
+                    m_sSZ += unsignedIntSerializer.serialize(pValue);
+                }
+                break;
+            case XSD_SHORT:
+                {
+                    Short shortSerializer;
+                    m_sSZ += shortSerializer.serialize(pValue);
+                }
+                break;
+            case XSD_UNSIGNEDSHORT:
+                {
+                    UnsignedShort unsignedShortSerializer;
+                    m_sSZ += unsignedShortSerializer.serialize(pValue);
+                }
+                break;
+            case XSD_BYTE:
+                {
+                    Byte byteSerializer;
+                    m_sSZ += byteSerializer.serialize(pValue);
+                }
+                break;
+            case XSD_UNSIGNEDBYTE:
+                {
+                    UnsignedByte unsignedByteSerializer;
+                    m_sSZ += unsignedByteSerializer.serialize(pValue);
+                }
+                break;
+            case XSD_LONG:
+                {
+                    Long longSerializer;
+                    m_sSZ += longSerializer.serialize(pValue);
+                }
+                break;
+            case XSD_INTEGER:
+                {
+                    Integer integerSerializer;
+                    m_sSZ += integerSerializer.serialize(pValue);
+                }
+                break;
+            case XSD_DURATION:
+            	{
+            		Duration durationSerializer;
+            		m_sSZ += durationSerializer.serialize(pValue);
+            	}
+                break;
+            case XSD_UNSIGNEDLONG:
+                {
+                    UnsignedLong unsignedLongSerializer;
+                    m_sSZ += unsignedLongSerializer.serialize(pValue);
+                }
+                break;
+            case XSD_FLOAT:
+            	{
+            		Float floatSerializer;
+            		m_sSZ += floatSerializer.serialize(pValue);
+            	}
+                break;
+            case XSD_DOUBLE:
+            	{
+            		Double doubleSerializer;
+            		m_sSZ += doubleSerializer.serialize(pValue);
+            	}
+            	break;
+            case XSD_DECIMAL:
+            	{
+            		Decimal decimalSerializer;
+            		m_sSZ += decimalSerializer.serialize(pValue);
+            	}
+                break;
+            case XSD_STRING:
+    	        pStr = *((char**)(pValue));
+                if (!pStr)
+                {
+                    /*
+                     * It is a null value not an empty value.
+                     */
+                    m_sSZ = "<";
+                    if (NULL != pPrefix)
+                    { 
+                        m_sSZ += pPrefix;
+                        m_sSZ += ":";
+                    }
+                    m_sSZ += pName;
+    				m_sSZ += " xsi:nil=\"true\">";
+                }
+                else
+                {
+                	String stringSerializer;
+                	m_sSZ += stringSerializer.serialize(pStr);
+                }
+                break;
+            case XSD_ANYURI:
+                pStr = *((char**)(pValue));
+                if (!pStr)
+                {
+                    /*
+                     * It is a null value not an empty value.
+                     */
+                    m_sSZ = "<";
+                    if (NULL != pPrefix)
+                    { 
+                        m_sSZ += pPrefix;
+                        m_sSZ += ":";
+                    }
+                    m_sSZ += pName;
+               // direct return not good for maintainability 
+               //     m_sSZ += " xsi:nil=\"true\"/>\n";
+               //     return m_sSZ.c_str ();
+    				m_sSZ += " xsi:nil=\"true\">";
+                }
+                else
+                {
+                	AnyURI anyURISerializer;
+                	m_sSZ += anyURISerializer.serialize(pStr);
+                }
+                break;
+            case XSD_QNAME:
+    	        pStr = *((char**)(pValue));
+                if (!pStr)
+                {
+                    /*
+                     * It is a null value not an empty value.
+                     */
+                    m_sSZ = "<";
+                    if (NULL != pPrefix)
+                    { 
+                        m_sSZ += pPrefix;
+                        m_sSZ += ":";
+                    }
+                    m_sSZ += pName;
+               // direct return not good for maintainability 
+               //     m_sSZ += " xsi:nil=\"true\"/>\n";
+               //     return m_sSZ.c_str ();
+    				m_sSZ += " xsi:nil=\"true\">";
+                }
+                else
+                {
+                	XSD_QName QNameSerializer;
+                	m_sSZ += QNameSerializer.serialize(pStr);
+                }
+                break;
+            case XSD_NOTATION:
+                pStr = *((char**)(pValue));
+                if (!pStr)
+                {
+                    /*
+                     * It is a null value not an empty value.
+                     */
+                    m_sSZ = "<";
+                    if (NULL != pPrefix)
+                    { 
+                        m_sSZ += pPrefix;
+                        m_sSZ += ":";
+                    }
+                    m_sSZ += pName;
+               // direct return not good for maintainability 
+               //     m_sSZ += " xsi:nil=\"true\"/>\n";
+               //     return m_sSZ.c_str ();
+    				m_sSZ += " xsi:nil=\"true\">";
+                }
+                else
+                {
+                	NOTATION notationSerializer;
+                	m_sSZ += notationSerializer.serialize(pStr);
+                }
+                break;
+            case XSD_HEXBINARY:
+            	{
+            		HexBinary hexBinarySerializer;
+            		m_sSZ += hexBinarySerializer.serialize(pValue);
+            	}
+                break;
+            case XSD_BASE64BINARY:
+            	{
+            		Base64Binary base64BinarySerializer;
+            		m_sSZ += base64BinarySerializer.serialize(pValue);
+            	}
+                break;
+            case XSD_DATETIME:
+            	{
+            		DateTime dateTimeSerializer;
+            		m_sSZ += dateTimeSerializer.serialize(pValue);
+            	}
+            	break;
+            case XSD_DATE:
+            	{
+            		Date dateSerializer;
+            		m_sSZ += dateSerializer.serialize(pValue);
+            	}
+            	break;
+            case XSD_TIME:
+            	{
+            		Time timeSerializer;
+            		m_sSZ += timeSerializer.serialize(pValue);
+            	}
+                break;
+            default:
+                return NULL;
+        }
+    }
     m_sSZ += "</";
 	if (NULL != pPrefix) {
 		m_sSZ += pPrefix;
