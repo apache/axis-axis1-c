@@ -40,7 +40,7 @@
 extern "C" int initialize_module (int bServer);
 extern "C" int uninitialize_module ();
 
-extern "C" bool g_bModuleInitialize;
+extern bool g_bModuleInitialize;
 
 AXIS_CPP_NAMESPACE_USE
 
