@@ -1,7 +1,1 @@
-bin_PROGRAMS = thSafeTest
-SUBDIRS =
-AM_CPPFLAGS = $(CPPFLAGS)
-thSafeTest_SOURCES = Client.cpp gen_src/InteropTestPortType.cpp gen_src/SOAPStruct.cpp 
-
-thSafeTest_LDADD   =  $(LDFLAGS) -laxiscpp_client -lpthread
-INCLUDES = -I$(AXISCPP_HOME)/include
+SUBDIRS = gen_src

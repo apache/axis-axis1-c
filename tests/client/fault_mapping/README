@@ -164,3 +164,46 @@
    }
    ...
    ...
+
+   When the AxisDivByZeroException is thrown from the MathOps.cpp will be caught
+   from MathOpsClient.cpp, the file we wrote containing the main method.
+   Inside the generated AxisDivByZeroException class we might write the 
+   code to translate the pFaultDetails information into a descriptive string.
+
+   ...
+   ...
+   /*User can do something like deserializing the struct into a string*/
+       int iSize = strlen(pFault->varString) + 8;
+       char* sMessage = new char[iSize];
+       m_sMessage = new char[iSize];
+       char* carrTempBuff =new char[4 * sizeof(char)];
+       sprintf(carrTempBuff, "%d", pFault->varInt);
+       strcpy(sMessage, carrTempBuff);
+       strcat(sMessage, "\n");
+       sprintf(carrTempBuff, "%f", pFault->varFloat);
+       strcat(sMessage, carrTempBuff);
+       strcat(sMessage, "\n");
+       strcat(sMessage, pFault->varString);
+       strcat(sMessage, "\n");
+       m_sMessage = sMessage;
+       delete(sMessage);
+   ...
+   ...
+
+   In order to test the sample you need to do the following
+
+   To test the DivByZero exception
+
+   ./mathops localhost 80 div 10 0 //You pass the second parameter zero
+
+   To test the OutOfBound exception
+
+  ./mathops localhost 80 div 10 -5 //You pass one parameter negative
+
+   To test the NormalDetail exception
+
+  ./mathops localhost 80 div 1000 5 //You pass the first parameter 1000
+
+
+
+
