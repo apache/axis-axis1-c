@@ -252,9 +252,17 @@ int ServerAxisEngine::Invoke(MessageData* pMsg)
 
 	pMsg->setPastPivotState(true);
 
+	/*
+	The case clauses in this switch statement have no breaks.
+	Hence, if Everything up to web service invokation was successful
+	then all response handlers are invoked. If there was a failure
+	at some point the response handlers from that point onwards
+	are invoked.
+	*/
 	switch (level)
 	{
-	case AE_SERV: //everything success
+	
+	case AE_SERV: //Everything Success.
 		Status = SUCCESS;
 		//no break;
 	case AE_SERH: //actual web service handler has failed
