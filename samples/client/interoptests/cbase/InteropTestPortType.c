@@ -13,7 +13,7 @@ extern int Axis_Serialize_SOAPStruct(SOAPStruct* param, IWrapperSoapSerializer* 
 extern int Axis_GetSize_SOAPStruct();
 
 void* get_InteropTestPortType_stub(){
-	return GetStubObject(APTHTTP, "http://localhost/axis/InteropBase");
+	return GetStubObject(APTHTTP, "http://localhost:5555/axis/InteropBase");
 }
 void destroy_InteropTestPortType_stub(void* p){
 	DestroyStubObject(p);
