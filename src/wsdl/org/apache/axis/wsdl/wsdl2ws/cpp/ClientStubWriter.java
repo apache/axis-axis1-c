@@ -238,6 +238,7 @@ public class ClientStubWriter extends CPPClassWriter{
 		writer.write("\t\tm_pCall->setTransportProperty(SOAPACTION_HEADER , \""+minfo.getSoapAction()+"\");\n");
 		writer.write("\t\tm_pCall->setSOAPVersion(SOAP_VER_1_1);\n"); //TODO check which version is it really.
 		writer.write("\t\tm_pCall->setOperation(\""+minfo.getMethodname()+"\", \""+wscontext.getWrapInfo().getTargetNameSpaceOfWSDL()+"\");\n");
+		writer.write("\t\tapplyUserPreferences();\n");
 		for (int i = 0; i < paramsB.size(); i++) {
 			type = wscontext.getTypemap().getType(((ParameterInfo)paramsB.get(i)).getSchemaName());
 			if (type != null){
@@ -387,11 +388,11 @@ public class ClientStubWriter extends CPPClassWriter{
 				writeExceptions(faultType,faultInfoName,paramName,langName);
 				}
 			}
-		writer.write("\t\t\telse\n\t\t\t{\n");//damitha
+//		writer.write("\t\t\telse\n\t\t\t{\n");//damitha
 
 		writer.write("\t\t\t\t  cFaultdetail = m_pCall->getElementAsString(\"faultdetail\", 0);\n");//damitha
 		writer.write("\t\t\t\t  throw AxisException(cFaultdetail);\n");//damitha
-		writer.write("\t\t\t}\n");//damitha
+//		writer.write("\t\t\t}\n");//damitha
 
 		writer.write("\t\t}\n");//damitha
 		writer.write("\t\telse throw;\n");//damitha
