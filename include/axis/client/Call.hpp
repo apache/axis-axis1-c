@@ -447,6 +447,11 @@ private:
     * It is possible that initialize_module could have been called already.
     */
     bool m_bModuleInitialized;
+
+  /**
+    * To track if the initialize was called/matched with an uninitialize
+    */
+    bool m_bCallInitialized;
   
     // Samisa m_pchSessionID was misssing and there was a compile error due to this
     char* m_pchSessionID;
