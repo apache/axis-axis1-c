@@ -66,9 +66,9 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "ESHHandler.h"
-#include "../../../../common/GDefine.h"
-#include "../../../../common/IHandlerSoapSerializer.h"
-#include "../../../../common/IHandlerSoapDeSerializer.h"
+#include <GDefine.h>
+#include <IHandlerSoapSerializer.h>
+#include <IHandlerSoapDeSerializer.h>
 #include "../../../../soap/HeaderBlock.h"
 #include "../../../../soap/SoapHeader.h"
 #include "../../../../soap/BasicNode.h"
@@ -105,6 +105,8 @@ void ESHHandler::SetOptionList(map<string, string>* OptionList)
 
 int ESHHandler::Invoke(IMessageData *pIMsg)
 {
+    string strTemp;
+    AxisChar* sHeaderVal;
 	if(pIMsg->isPastPivot()) {
 		//this is a response
 		IHandlerSoapSerializer* pISZ;
@@ -116,8 +118,12 @@ int ESHHandler::Invoke(IMessageData *pIMsg)
 		pIHeaderBlock->setUri("http://soapinterop.org/echoheader/");
 		pIHeaderBlock->setPrefix("m");
 
-		string sHeaderVal= pIMsg->getProperty(string("EchoStringHeaderHandlerPr1.id"));
-		sHeaderVal+= " After Append by Handler";
+        strTemp = "EchoStringHeaderHandlerPr1.id";
+        size_t nSize = strlen(pIMsg->getProperty(strTemp).c_str()) + 30;
+        sHeaderVal = malloc(nSize);
+		strcpy(sHeaderVal, pIMsg->getProperty(strTemp).c_str());
+        realloc(sHeaderVal, 30);
+		strcpy(sHeaderVal," After Append by Handler");
 		pIHeaderBlock->setValue(sHeaderVal);
 
 		BasicNode* pBasicNode = pIHeaderBlock->createChild(CHARACTER_NODE);
@@ -140,7 +146,8 @@ int ESHHandler::Invoke(IMessageData *pIMsg)
 			sHeaderValue= pBasicNode->getValue();
 		}
 
-		pIMsg->setProperty(string("EchoStringHeaderHandlerPr1.id"), sHeaderValue);
+        strTemp = "EchoStringHeaderHandlerPr1.id";
+		pIMsg->setProperty(strTemp, sHeaderValue);
 		//pIMsg->setProperty(string("EchoSt"), sHeaderValue);
 		
 	}
