@@ -51,7 +51,7 @@ using namespace std;
 #define THROW_AXIS_TRANSPORT_EXCEPTION(X) throw AxisTransportException(X)
 #define THROW_AXIS_PARSE_EXCEPTION(X) throw AxisParseException(X)
 
-#define THROW_AXIS_EXCEPTION2(X, Y) throw AxisException(X)
+#define THROW_AXIS_EXCEPTION2(X, Y) throw AxisException(X, Y)
 #define THROW_AXIS_CONFIG_EXCEPTION2(X, Y) throw AxisConfigException(X, Y)
 #define THROW_AXIS_SOAP_EXCEPTION2(X, Y) throw AxisSoapException(X, Y)
 #define THROW_AXIS_WSDD_EXCEPTION2(X, Y) throw AxisWsddException(X, Y)
