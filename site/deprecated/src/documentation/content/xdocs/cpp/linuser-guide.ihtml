@@ -246,7 +246,7 @@ HTTP support)</p>
                                                                         
                                                           
                                             <p>- Basic Wrapper Class Generator
- tool with following functionalities.</p>
+ tool.</p>
                                                                         
                                                                         
                                                                         
@@ -299,14 +299,11 @@ client   applications.</p>
                                                                         
                                                           
                                             <p>- Speed: Axis uses SAX (event-based)
-   parsing to acheive significantly greater speed than earlier versions of
- Apache</p>
+   parsing to acheive significantly greater speed</p>
                                                                         
                                                                         
                                                                         
-                                                                        
-                                                          
-                                            <p>SOAP.</p>
+                                                                         
                                                                         
                                                                         
                                                                         
@@ -782,7 +779,8 @@ for instructions on installing Axis C++</p>
                                                                         
                                                           
                                             <p>add this jar to the classpath
- as   well.</p>
+ as   well.(In the binary distribution you don't need to create this jar. It is already in
+$AXISCPP_HOME/lib/axis)</p>
                                                                         
                                                                         
                                                                         
@@ -934,7 +932,7 @@ sample with the already generated files in the first round and<br>
                                                           
                                             <p>The Folder called deploy in
  the                                       <strong>$AXISCPP_HOME/</strong>
-    should    be copied to apache root folder .Rename the deploy folder as
+    should    be copied to a folder of your choice .Rename the deploy folder as
                                              <strong> "Axis"</strong>   
  .  Give all permissions to this folder.</p>
                                                                         
@@ -949,13 +947,13 @@ sample with the already generated files in the first round and<br>
                                                                         
                                                           
                                             <p><strong>$ cp &#8211;rf $AXISCPP_HOME/deploy
-    /usr/local/apache</strong></p>
+    /usr/local</strong></p>
                                                                         
                                                                         
                                                                         
                                                                         
                                                           
-                                            <p><strong>$ cd /usr/local/apache</strong></p>
+                                            <p><strong>$ cd /usr/local</strong></p>
                                                                         
                                                                         
                                                                         
@@ -993,7 +991,7 @@ sample with the already generated files in the first round and<br>
                                                                         
                                                                         
                                                           
-                                            <p><strong>AXIS_HOME="/usr/local/apache/Axis"</strong></p>
+                                            <p><strong>AXIS_HOME="/usr/local/Axis"</strong></p>
                                                                         
                                                                         
                                                                         
@@ -1076,7 +1074,7 @@ entry given below appropriately  filled for this service).</p>
           <b>&lt;service&gt;</b><br>
            <strong></strong><b>&lt;service name ="Calculator" provider ="CPP:RPC"
   description:"Simple calculator web service"&gt;<br>
-    &lt;parameter name="classname" &nbsp;value = "/usr/local/apache/Axis/webservices/libcalculator.so"
+    &lt;parameter name="classname" &nbsp;value = "/usr/local/Axis/webservices/libcalculator.so"
 /&gt;</b></p>
                                                                         
                                                                         
@@ -1098,12 +1096,7 @@ entry given below appropriately  filled for this service).</p>
                                                                         
                                                                         
                                                                         
-                                                                        
-                                                          
-                                            <p>You have to rename the relevant
- server.wsdd to match with the Apache version that you are using.&nbsp; 
-                                                 <br>
-                                            <strong></strong></p>
+
                                                                         
                                                                         
                                                                          
@@ -1414,7 +1407,7 @@ which contain all the neccessary entries for these sevices.<br>
                                           <br>
                                           <p>sample executables will be created
 in your current folder.<br>
-to run the samples for example</p>                                           
+to run samples one by one</p>                                           
                                                                         
                                                                         
                                                                         
@@ -1427,6 +1420,8 @@ to run the samples for example</p>
 80 &nbsp;</strong></strong></p>
                                             <p><strong><strong><br>
                                             </strong></strong></p>
+<p> to run all the samples at once <br>
+sh run_interoptests.sh (Note: local host and port 80 is assumed) </p>
                                                                         
                                                                         
                                                                         
