@@ -1,75 +1,57 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions targetNamespace="http://localhost/axis/MathOps" 
-xmlns="http://schemas.xmlsoap.org/wsdl/" 
-xmlns:apachesoap="http://xml.apache.org/xml-soap"
-xmlns:impl="http://localhost/axis/MathOps"
-xmlns:intf="http://localhost/axis/MathOps"
-xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
-xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
-xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" 
-xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-xmlns:s="http://soapinterop.org/xsd">
-<types>
-    <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
-        targetNamespace="http://localhost/axis/MathOps">
-        <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
-        <complexType name="SOAPStruct">
-            <sequence>
-                <element name="varString" type="xsd:string"/>
-                <element name="varInt" type="xsd:int"/>
-                <element name="varFloat" type="xsd:float"/>
-            </sequence>
-        </complexType>
-        <complexType name="SOAPStructFault">
-            <sequence>
-                <element name="soapStruct" type="intf:SOAPStruct"/>
-            </sequence>
-        </complexType>
-    </schema>
-
-    <wsdl:message name="divRequest">
-        <wsdl:part name="in0" type="xsd:int"/>
-        <wsdl:part name="in1" type="xsd:int"/>
-    </wsdl:message>
-    <wsdl:message name="divResponse">
-        <wsdl:part name="addReturn" type="xsd:int"/>
-    </wsdl:message>
-    <message name="DivByZeroFault">
-        <part name="faultstruct" type="intf:SOAPStructFault"/>
-    </message>
-    <wsdl:portType name="MathOps">
-        <wsdl:operation name="div" parameterOrder="in0 in1">
-            <wsdl:input message="intf:divRequest" name="divRequest"/>
-            <wsdl:output message="intf:divResponse" name="divResponse"/>
-            <fault name="DivByZeroFault" message="intf:SOAPStructFault"/>
-        </wsdl:operation>
-    </wsdl:portType>
-    <wsdl:binding name="MathOpsSoapBinding" type="intf:MathOps">
-        <wsdlsoap:binding style="rpc"
-        transport="http://schemas.xmlsoap.org/soap/http"/>
-
-        <wsdl:operation name="div">
-            <wsdlsoap:operation soapAction="MathOps#div"/>
-                <wsdl:input name="divRequest">
-                    <wsdlsoap:body 
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://soapinterop.org/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns2="http://soapinterop.org/types" targetNamespace="http://soapinterop.org/wsdl">
+	<types>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://soapinterop.org/types" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:soap-enc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" targetNamespace="http://soapinterop.org/types">
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+			<complexType name="SOAPStructFault">
+				<sequence>
+					<element name="varString" type="xsd:string"/>
+					<element name="varInt" type="xsd:int"/>
+					<element name="varFloat" type="xsd:float"/>
+				</sequence>
+			</complexType>
+		</schema>
+	</types>
+	<message name="DivByZeroFault">
+		<part name="faultstruct" type="ns2:SOAPStructFault"/>
+	</message>
+	<message name="divRequest">
+		<part name="int0" type="xsd:int"/>
+		<part name="int1" type="xsd:int"/>
+	</message>
+	<message name="divResponse">
+		<part name="addReturn" type="xsd:int"/>
+	</message>
+	<portType name="MathOps">
+		<operation name="div" parameterOrder ="int0 int1">
+			<input message="tns:divRequest"/>
+			<output message="tns:divResponse"/>
+			<fault name="DivByZeroFault" message="tns:DivByZeroFault"/>
+		 </operation>
+	</portType>
+	<binding name="MathOpsBinding" type="tns:MathOps">
+		<soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<operation name="div">
+			  <soap:operation soapAction="MathOps#div"/>
+                <input name="divRequest">
+                    <soap:body 
                         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" 
                         namespace="http://localhost/axis/MathOps" 
                         use="encoded"/>
-                </wsdl:input>
-                <wsdl:output name="divResponse">
-                    <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" 
+                </input>
+                <output name="divResponse">
+                    <soap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" 
                         namespace="http://localhost/axis/MathOps" 
                         use="encoded"/>
-                </wsdl:output>
-                <fault name="DivByZeroFault">
-                    <soap:fault name="DivByZeroFault" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-                        namespace="http://soapinterop.org/wsdl"/>
-                </fault>
-        </wsdl:operation>
-    </wsdl:binding>  
-    <wsdl:service name="MathOps">
-        <wsdl:port binding="intf:MathOpsSoapBinding" name="MathOps">
-            <wsdlsoap:address location="http://localhost/axis/MathOps"/>
-        </wsdl:port>
-    </wsdl:service>
-</wsdl:definitions>
+                </output>
+			<fault name="DivByZeroFault">
+				<soap:fault name="DivByZeroFault" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://soapinterop.org/wsdl"/>
+			</fault>
+			</operation>
+		</binding>
+	<service name="MathOpsService">
+		<port name="MathOpsPort" binding="tns:MathOpsBinding">
+			<soap:address location="http://localhost/axis/MathOpsPort"/>
+		</port>
+	</service>
+	<!-- Fault messages -->
+</definitions>
