@@ -69,7 +69,7 @@
 #pragma warning (disable : 4786)
 #endif
 
-#include <axis/soap/SoapEnvelope.h>
+#include "SoapEnvelope.h"
 #include <axis/common/GDefine.h>
 #include <axis/soap/SoapSerializer.h>
 

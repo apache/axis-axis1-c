@@ -73,7 +73,7 @@
 #include <axis/soap/SoapSerializer.h>
 #include <axis/common/GDefine.h>
 #include <axis/soap/BasicNode.h>
-#include <axis/soap/ComplexElement.h>
+#include "ComplexElement.h"
 #include <axis/soap/CharacterElement.h>
 
 //////////////////////////////////////////////////////////////////////
