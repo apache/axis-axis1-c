@@ -74,7 +74,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"../../lib/win32/axis\Common_D.lib"
+# ADD LIB32 /nologo /out:"../../lib/axis\Common_D.lib"
 
 !ENDIF 
 
