@@ -22,6 +22,9 @@ int main(int argc, char* argv[])
   bool endpoint_set = false;
   int returnValue = 1; // Assume Failure
 
+  Type1* input = NULL;
+  Type1* result = NULL;
+
   endpoint_set = parse_args_for_endpoint(&argc, argv, &endpoint);
 
   try {
@@ -32,8 +35,7 @@ int main(int argc, char* argv[])
     } else
       ws = new EnumerationWS();
 
-    Type1* input = new Type1();
-    Type1* result = NULL;
+    input = new Type1();
 
     input->enum_string="one";
     input->att_enum_string="one";
@@ -63,6 +65,10 @@ int main(int argc, char* argv[])
     if(endpoint_set)
       free(endpoint);
   }
+  delete ws;
+  delete input;
+  delete result;
+
   return returnValue;
 }
 
