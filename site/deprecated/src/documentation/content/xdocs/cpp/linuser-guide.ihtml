@@ -1,7 +1,7 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html">
-  <title>Axis C++ User Guide (Alpha)</title>
+  <title>Axis C++ User Guide</title>
 </head>
 
 <body>
@@ -148,7 +148,7 @@ described in Installation guide. That is you need</p>
 
 <p>- Axis C++</p>
 
-<p>- Apache1.3</p>
+<p>- Apache1.3 (or Apache2.0)</p>
 
 <p>- xerces-C</p>
 
@@ -168,7 +168,7 @@ methods of a InteropBase service deployed on Axis C++. You can find the
 
 <p></p>
 
-<p><strong>$AXISCPP_HOME/src/server/samples/interoptests/base</strong></p>
+<p><strong>$AXISCPP_HOME/samples/client/interoptests/base </strong></p>
 
 <p></p>
 
@@ -180,7 +180,7 @@ WSDL2Ws tool is in</p>
 
 <p></p>
 
-<p><strong>$axiscpp_home/src/wsdl</strong></p>
+<p><strong>$AXISCPP_HOME/src/wsdl</strong></p>
 
 <p></p>
 
@@ -545,7 +545,7 @@ permissions to this folder.</p>
 
 <p></p>
 
-<p><strong>$ cp &#x2013;rf $AXISCPP_HOME/deloy
+<p><strong>$ cp &#x2013;rf $AXISCPP_HOME/deploy
 /usr/local/apache</strong></p>
 
 <p><strong>$ cd /usr/local/apache</strong></p>
@@ -577,7 +577,7 @@ makefiles instead of the following commands to build.)</p>
 
 <p></p>
 
-<p><strong>cd $AXISCPP_HOME/src/server/samples/introptests/base</strong></p>
+<p><strong>cd $AXISCPP_HOME/samples/server/introptests/base</strong></p>
 
 <p></p>
 
@@ -598,7 +598,7 @@ libinteropbase.so ./*.o</strong></p>
 
 <p>By typing this in the command line the dynamic library (
 <strong>libinteropbase.so</strong> for example) is created which is used for
-the deployment. This library is automatically is placed in</p>
+the deployment. This library has to be placed in</p>
 
 <p></p>
 
@@ -615,8 +615,7 @@ appropriately filled for this service).</p>
 
 <p><strong>&lt;?xml version="1.0" encoding="UTF-8"?&gt;</strong><br>
 <strong>&lt;deployment
-xmlns="http://xml.apache.org/axis/wsdd/"xmlns:C="http://xml.apache.org/axis/wsdd/providers/c"&gt;</strong><br>
-<strong>&lt;globalConfiguration&gt;</strong><br>
+xmlns="http://xml.apache.org/axis/wsdd/"xmlns:C="http://xml.apache.org/axis/wsdd/providers/c"&gt;</strong><br><br>
 <strong>&lt; service name="InteropBase" provider="C:RPC"
 description="SOAPBuilders Interoperability Lab Round 2 base test suite
 described at http://www.whitemesa.com/interop/proposal2.html
@@ -666,7 +665,7 @@ C++ Client class and header file.</p>
 
 <p></p>
 
-<p><strong>cd $AXISCPP_HOME/src/client/samples/interoptests/base</strong></p>
+<p><strong>cd $AXISCPP_HOME/samples/client/interoptests/base</strong></p>
 
 <p></p>
 
@@ -952,12 +951,6 @@ printf("successful\n");</strong></p>
 
 <p><strong>}</strong></p>
 
-<p></p>
-
-<p>Copy from <strong>$AXISCPP_HOME/bin/libaxiscpp_mod.a</strong> to
-<strong>$AXISCPP_HOME/lib/axis</strong></p>
-
-<p></p>
 
 <p>Creating the client library</p>
 
@@ -983,7 +976,7 @@ runconfig script)</p>
 
 <p>Now</p>
 
-<p><strong>cd $AXISCPP_HOME/src/client/samples/interoptests/base</strong></p>
+<p><strong>cd $AXISCPP_HOME/samples/client/interoptests/base</strong></p>
 
 <p></p>
 
@@ -992,25 +985,24 @@ runconfig script)</p>
 </strong><strong>- ansi -g -O2 -c ./*.cpp -fPIC</strong></p>
 
 <p></p>
+<p>
+<strong>$ g++ -g -O2 -o interopbase InteropBaseClient.o SOAPStruct.o InteropTestPortType.o $AXISCPP_HOME/lib/axis/libaxiscpp_client.a $AXISCPP_HOME/bin/libaxiscpp_mod.a -L$AXISCPP_HOME/lib/xerces-c -lxerces-c -ldl</strong><br>
 
-<p><strong>$ g++ -g -O2 -o interopbase InteropBaseClient.o SOAPStruct.o
-InteropTestPortType.o</strong></p>
-
-<p><strong>$AXISCPP_HOME/lib/axis/libaxiscpp_client.a
-$AXISCPP_HOME/lib/axis/libaxiscpp_mod.a-</strong><strong>L$AXISCPP_HOME/lib/xerces-c
--lxerces-c -ldl<br>
-</strong><strong>$AXISCPP_HOME/src/client/lib/libaxiscpp_client.a
-</strong><strong>$AXISCPP_HOME/release/libaxiscpp_mod.a<br>
--L$AXISCPP_HOME/lib/xerces-c -lxerces-c -ldl</strong></p>
+</p>
 
 <p></p>
-
+<p>
+Note that in the above command replace libaxiscpp_mod.a with libaxiscpp_mod2.a if you work with
+apache2
+</p>
 <p>Start the Apache Server(Assuming base service is deployed.)</p>
 
 <p><strong>$ /usr/local/apache/bin/apachectl start</strong></p>
 
 <p>to run</p>
-
+<p>
+<strong>$ cd $AXISCPP_HOME/samples/client/interoptests/base
+</p>
 <p><strong>$ ./interopbase</strong></p>
 
 <p><a name="Handler"></a></p>
@@ -1021,10 +1013,7 @@ $AXISCPP_HOME/lib/axis/libaxiscpp_mod.a-</strong><strong>L$AXISCPP_HOME/lib/xerc
 
 <p>If you want to test handlers go into the
 <strong>$AXISCPP_HOME/src/server/handlers</strong> folder where example
-handlers are included (If you use the binary download sample handler
-libraries are included in <strong>$(AXIS_HOME)/handlers</strong>
-folder(assuming that you created this folder as described in installation
-guide). Several sample handlers are included there covering the concepts of
+handlers are included. Several sample handlers are included there covering the concepts of
 service specific, global and transport handlers. We will show you the detail
 of running a service specific handler named loghandler. The task of this
 handler is writing to a file the number of times the service is accessed.</p>
@@ -1077,7 +1066,7 @@ value="/usr/local/apache/Axis/webservices/libinteropbase.so"/&gt;</strong><br>
 <p>Restart the apache web server and test your handler using the web service
 client for InteropBase webservice. When the client is run an entry will be
 added to
-<strong>/usr/local/apache/Axis/handlers/custom/loghandler/LogAccessCountFile</strong>
+<strong>$AXIS_HOME/handlers/custom/loghandler/LogAccessCountFile</strong>
 Note that the folder in which the LogAccessCountFile is created should have
 write access. You can test the global handlers and transport handlers in a
 similar manner. Note the change you have to make in server.wsdd. You can see
@@ -1165,7 +1154,7 @@ AXIS_JARS_HOME</strong></p>
 
 <p></p>
 
-<p><strong>$AXISCPP_HOME/samples/interoptests/base</strong>.</p>
+<p><strong>$AXISCPP_HOME/samples/server/interoptests/base</strong>.</p>
 
 <p></p>
 
@@ -1422,7 +1411,7 @@ permissions to this folder.</p>
 
 <p></p>
 
-<p><strong>$ cp &#x2013;rf $AXISCPP_HOME/deloy
+<p><strong>$ cp &#x2013;rf $AXISCPP_HOME/deploy
 /usr/local/apache</strong></p>
 
 <p><strong>$ cd /usr/local/apache</strong></p>
@@ -1447,7 +1436,7 @@ makefiles instead of the following commands to build.)</p>
 
 <p></p>
 
-<p><strong>cd $AXISCPP_HOME/src/server/samples/introptest/base</strong></p>
+<p><strong>cd $AXISCPP_HOME/samples/server/introptests/base</strong></p>
 
 <p></p>
 
@@ -1458,15 +1447,14 @@ makefiles instead of the following commands to build.)</p>
 <p></p>
 
 <p><strong>$ g++ -shared -Wl,--whole-archive -Wl,--no-whole-archive -I. -I..
--L$AXISCPP_HOME/lib/xerces-c<br>
-</strong><strong>-lxerces-c -Wl,-soname -Wl,libinteropbase.so.0 -o
+-L$AXISCPP_HOME/lib/xerces-c -lxerces-c -Wl,-soname -Wl,libinteropbase.so.0 -o
 libinteropbase.so ./*.o</strong></p>
 
 <p></p>
 
 <p>By typing this in the command line the dynamic library (
 <strong>libinteropbase.so</strong> for example) is created which is used for
-the deployment. This library is automatically is placed in</p>
+the deployment. This library has to be placed in</p>
 
 <p></p>
 
@@ -1484,8 +1472,7 @@ appropriately filled for this service).</p>
 <p><strong>&lt;?xml version="1.0" encoding="UTF-8"?&gt;</strong><br>
 <strong>&lt;deployment xmlns="http://xml.apache.org/axis/wsdd/"
 xmlns:C="http://xml.apache.org/axis/wsdd/providers/c"&gt;</strong></p>
-
-<p><strong>&lt;globalConfiguration&gt;</strong><br>
+<br>
 <strong>&lt; service name="InteropBase" provider="C:RPC"
 description="SOAPBuilders Interoperability Lab Round 2 base test suite
 described at http://www.whitemesa.com/interop/proposal2.html
@@ -1842,12 +1829,8 @@ installed in <strong>$AXISCPP_HOME/lib/axis</strong></p>
 <p></p>
 
 <p><strong>$ g++ -g -O2 -o interopbase InteropBaseClient.o SOAPStruct.o
-InteropTestPortType.o<br>
-</strong><strong>$AXISCPP_HOME/lib/axis/libaxiscpp_client.a
-$AXISCPP_HOME/lib/axis/libaxiscpp_mod.a <br>
--</strong><strong>L$AXISCPP_HOME/lib/xerces-c -lxerces-c -ldl <br>
-</strong><strong>$AXISCPP_HOME/lib/axis/libaxiscpp_client.a <br>
-</strong><strong>$AXISCPP_HOME/lib/axis/libaxiscpp_mod.a
+InteropTestPortType.o $AXISCPP_HOME/lib/axis/libaxiscpp_client.a
+$AXISCPP_HOME/lib/axis/libaxiscpp_mod.a -L$AXISCPP_HOME/lib/xerces-c -lxerces-c -ldl $AXISCPP_HOME/lib/axis/libaxiscpp_client.a $AXISCPP_HOME/lib/axis/libaxiscpp_mod.a
 -L$AXISCPP_HOME/lib/xerces-c -lxerces-c -ldl</strong></p>
 
 <p></p>
@@ -1861,7 +1844,9 @@ $AXISCPP_HOME/lib/axis/libaxiscpp_mod.a <br>
 <p></p>
 
 <p>To Run</p>
-
+<p>
+<strong>$ cd $AXISCPP_HOME/samples/client/interoptests/base
+</p>
 <p><strong>$ ./interopbase</strong></p>
 
 <p><a name="Handler1"></a></p>
@@ -1871,8 +1856,7 @@ $AXISCPP_HOME/lib/axis/libaxiscpp_mod.a <br>
 <p></p>
 
 <p>Sample handler libraries are included in
-<strong>$(AXIS_HOME)/handlers</strong> folder(assuming that you created this
-folder as described in installation guide). Several sample handlers are
+<strong>$(AXISCPP_HOME)/src/server/handlers</strong> folder. Several sample handlers are
 included there covering the concepts of service specific, global and
 transport handlers. We will show you the detail of running a service specific
 handler named loghandler. The task of this handler is writing to a file the
