@@ -57,6 +57,8 @@ package org.apache.axismora.wsdl2ws.info;
 
 import javax.xml.namespace.QName;
 
+import org.apache.axismora.wsdl2ws.WrapperConstants;
+
 /**
  * this class represents Parameter(message in the wsdl) 
  * @author Srinath Perera(hemapani@opensource.lk)
@@ -76,7 +78,7 @@ public class ParameterInfo {
 
     public ParameterInfo(Type type,String attribName) {
         this.type = type;
-        this.attribName = attribName;
+        this.attribName = TypeMap.resoleveWSDL2LanguageNameClashes(attribName,WrapperConstants.LANGUAGE_JAVA);;
     }
     public Type getType() {
         return type;

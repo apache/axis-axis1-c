@@ -55,7 +55,6 @@
 
 package org.apache.axismora.wsdl2ws.java;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -80,9 +79,11 @@ public class ServiceWriter extends JavaClassWriter {
                 wscontext.getSerInfo().getQualifiedServiceName()),
             WrapperUtils.getClassNameFromFullyQualifiedName(
                 wscontext.getSerInfo().getQualifiedServiceName())
-                + "Impl");
+                + "Impl",wscontext.getWrapInfo().getTargetOutputLocation());
+                
         this.wscontext = wscontext;
         this.methods = wscontext.getSerInfo().getMethods();
+        this.overwrite = false;
     }
 
     protected void writeClassComment() throws WrapperFault {
@@ -148,25 +149,25 @@ public class ServiceWriter extends JavaClassWriter {
         }
     }
 
-    protected File getJavaFilePath() {
-        String targetOutputLocation =
-            this.wscontext.getWrapInfo().getTargetOutputLocation();
-        if (targetOutputLocation.endsWith("/"))
-            targetOutputLocation =
-                targetOutputLocation.substring(0, targetOutputLocation.length() - 1);
-        new File(
-            targetOutputLocation
-                + "/"
-                + WrapperUtils
-                    .getPackegeName4QualifiedName(
-                        this.wscontext.getSerInfo().getQualifiedServiceName())
-                    .replace('.', '/'))
-            .mkdirs();
-        String fileName =
-            targetOutputLocation
-                + "/"
-                + this.wscontext.getSerInfo().getQualifiedServiceName().replace('.', '/')
-                + "Impl.java";
-        return new File(fileName);
-    }
+//    protected File getJavaFilePath() {
+//        String targetOutputLocation =
+//            this.wscontext.getWrapInfo().getTargetOutputLocation();
+//        if (targetOutputLocation.endsWith("/"))
+//            targetOutputLocation =
+//                targetOutputLocation.substring(0, targetOutputLocation.length() - 1);
+//        new File(
+//            targetOutputLocation
+//                + "/"
+//                + WrapperUtils
+//                    .getPackegeName4QualifiedName(
+//                        this.wscontext.getSerInfo().getQualifiedServiceName())
+//                    .replace('.', '/'))
+//            .mkdirs();
+//        String fileName =
+//            targetOutputLocation
+//                + "/"
+//                + this.wscontext.getSerInfo().getQualifiedServiceName().replace('.', '/')
+//                + "Impl.java";
+//        return new File(fileName);
+//    }
 }

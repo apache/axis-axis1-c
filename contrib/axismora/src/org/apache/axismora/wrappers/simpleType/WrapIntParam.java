@@ -55,69 +55,70 @@
 
 package org.apache.axismora.wrappers.simpleType;
 
-/**
- * @author vtpavan
- */
-
 import java.io.IOException;
 
 import org.apache.axis.AxisFault;
 import org.apache.axis.encoding.SerializationContext;
 import org.apache.axismora.MessageContext;
 import org.apache.axismora.encoding.InOutParameter;
+/**
+ * @author VTpavan
+ */
 
-public class ByteParam implements InOutParameter {
-    public byte param;
+public class WrapIntParam implements InOutParameter {
+	private Integer param;
 
-    public ByteParam() {
-    }
+	public WrapIntParam() {
+	}
 
-    public ByteParam(MessageContext msgdata) throws AxisFault {
-        desierialize(msgdata);
-    }
+	public WrapIntParam(MessageContext msgdata) throws AxisFault {
+		desierialize(msgdata);
+	}
 
-    public ByteParam(byte param) {
-        this.param = param;
-    }
+	public WrapIntParam(Integer param) {
+		this.param = param;
+	}
 
-    public void serialize(SerializationContext context) {
-//        String type_name = "byte";
-//        StringBuffer buf = new StringBuffer();
-//        buf
-//            .append("<Byte xsi:type=\"ns1:")
-//            .append(type_name)
-//            .append("\" xmlns:ns1 =\"")
-//            .append(Constants.DEFAULT_SIMPLETYPE_ENCODING_URI)
-//            .append("\">");
-//        buf.append(Byte.toString(param));
-//        buf.append("</Byte>\n");
-        try {
-            context.writeString(Byte.toString(param));
-        } catch (IOException e) {
-            e.printStackTrace(); //ioexception
-        }
 
-    }
+	public org.apache.axismora.encoding.InParameter desierialize(MessageContext msgdata)
+		throws AxisFault {
+		String value = msgdata.nextText();
+		if (value != null)
+			this.param = new Integer(Integer.parseInt(value));
+		return this;
+	}
 
-    /**
-     * @return
-     */
-    public byte getParam() {
-        return param;
-    }
+	public void serialize(SerializationContext context) {
+//		  String type_name = "int";
+//		  StringBuffer buf = new StringBuffer();
+//
+//		  buf
+//			  .append("<Int xsi:type=\"ns1:")
+//			  .append(type_name)
+//			  .append("\" xmlns:ns1 =\"")
+//			  .append(Constants.DEFAULT_SIMPLETYPE_ENCODING_URI)
+//			  .append("\">");
+//		  buf.append(Integer.toString(param));
+//		  buf.append("</Int>\n");
+		try {
+			context.writeString(Integer.toString(param.intValue()));
+		} catch (IOException e) {
+			e.printStackTrace(); //ioexception
+		}
+	}
 
-    public org.apache.axismora.encoding.InParameter desierialize(MessageContext msgdata)
-        throws AxisFault {
-        String value = msgdata.nextText();
-        if (value != null)
-            this.param = Byte.parseByte(value);
-        return this;
-    }
+	/**
+	 * @return
+	 */
+	public Integer getParam() {
+		return param;
+	}
+
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
-		return Byte.toString(param);
+		return Integer.toString(param.intValue());
 	}
 
 }

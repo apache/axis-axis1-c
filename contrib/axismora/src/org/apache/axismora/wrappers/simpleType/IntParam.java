@@ -57,12 +57,10 @@ package org.apache.axismora.wrappers.simpleType;
 
 import java.io.IOException;
 
-import org.apache.axismora.Constants;
-import org.apache.axismora.MessageContext;
-import org.apache.axismora.encoding.InOutParameter;
-
 import org.apache.axis.AxisFault;
 import org.apache.axis.encoding.SerializationContext;
+import org.apache.axismora.MessageContext;
+import org.apache.axismora.encoding.InOutParameter;
 /**
  * @author VTpavan
  */
@@ -81,6 +79,10 @@ public class IntParam implements InOutParameter {
         this.param = param;
     }
 
+	public IntParam(Integer param) {
+		this.param = param.intValue();
+	}
+
     public org.apache.axismora.encoding.InParameter desierialize(MessageContext msgdata)
         throws AxisFault {
         String value = msgdata.nextText();
@@ -90,19 +92,19 @@ public class IntParam implements InOutParameter {
     }
 
     public void serialize(SerializationContext context) {
-        String type_name = "int";
-        StringBuffer buf = new StringBuffer();
-
-        buf
-            .append("<Int xsi:type=\"ns1:")
-            .append(type_name)
-            .append("\" xmlns:ns1 =\"")
-            .append(Constants.DEFAULT_SIMPLETYPE_ENCODING_URI)
-            .append("\">");
-        buf.append(Integer.toString(param));
-        buf.append("</Int>\n");
+//        String type_name = "int";
+//        StringBuffer buf = new StringBuffer();
+//
+//        buf
+//            .append("<Int xsi:type=\"ns1:")
+//            .append(type_name)
+//            .append("\" xmlns:ns1 =\"")
+//            .append(Constants.DEFAULT_SIMPLETYPE_ENCODING_URI)
+//            .append("\">");
+//        buf.append(Integer.toString(param));
+//        buf.append("</Int>\n");
         try {
-            context.writeString(buf.toString());
+            context.writeString(Integer.toString(param));
         } catch (IOException e) {
             e.printStackTrace(); //ioexception
         }
@@ -114,5 +116,12 @@ public class IntParam implements InOutParameter {
     public int getParam() {
         return param;
     }
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	public String toString() {
+		return Integer.toString(param);
+	}
 
 }

@@ -67,26 +67,43 @@ import org.apache.axismora.wsdl2ws.WrapperFault;
  * @author Srianth Perera(hemapani@opensource.lk)
  */
 public abstract class JavaClassWriter implements SourceWriter {
-    protected String servicename;
+    protected String classname;
+    protected String packageName;  
     private String pacakgesatement;
     protected BufferedWriter writer;
-    public JavaClassWriter(String packagename, String classname) throws WrapperFault {
-        this.servicename = classname;
+    private String targetDirectory;
+    protected boolean overwrite = true;
+    
+    public JavaClassWriter(String packagename, String classname,String targetDirectory) throws WrapperFault {
+		this.classname = classname;
+		int arrayIndex = classname.indexOf('[');  
+		if( arrayIndex >0) 
+			this.classname = 
+				classname.substring(0,arrayIndex)+"Array";
+		this.packageName = packagename;
         if (packagename != null && !packagename.trim().equals(""))
             this.pacakgesatement = "package " + packagename + ";\n";
         else
             this.pacakgesatement = "";
+        this.targetDirectory = targetDirectory;
+        
+     
     }
     public void writeSource() throws WrapperFault {
         try {
-            this.writer = new BufferedWriter(new FileWriter(getJavaFilePath(), false));
+        	File file = getJavaFilePath();
+        	if(!overwrite && file.exists()){
+        		System.out.println("the WSDL2WS will not overwrite the service file");
+        		return;
+        	}	
+            this.writer = new BufferedWriter(new FileWriter(file, false));
             //this.writer = new BufferedWriter(new FileWriter(getJavaFilePath()));
             this.writer.write(this.pacakgesatement);
             writeImportStatements();
             writeClassComment();
             this.writer.write(
                 "public class "
-                    + servicename
+                    + classname
                     + getExtendsPart()
                     + getimplementsPart()
                     + "{\n");
@@ -119,5 +136,14 @@ public abstract class JavaClassWriter implements SourceWriter {
     protected abstract void writeAttributes() throws WrapperFault;
     protected abstract void writeConstructors() throws WrapperFault;
     protected abstract void writeMethods() throws WrapperFault;
-    protected abstract File getJavaFilePath() throws WrapperFault;
+    protected final File getJavaFilePath() throws WrapperFault{   	
+		if(!targetDirectory.endsWith("/"))
+			targetDirectory = targetDirectory + "/";
+ 
+    	String path = targetDirectory + packageName.replace('.','/');
+    	File packagefolder  = new File(path);
+    	if(!packagefolder.exists())
+			packagefolder.mkdirs();
+ 	  	return new File(path+"/"+classname+".java");
+    }
 }

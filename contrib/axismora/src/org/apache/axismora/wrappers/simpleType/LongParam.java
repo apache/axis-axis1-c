@@ -57,18 +57,17 @@ package org.apache.axismora.wrappers.simpleType;
 
 import java.io.IOException;
 
-import org.apache.axismora.Constants;
-import org.apache.axismora.MessageContext;
-import org.apache.axismora.encoding.InOutParameter;
-
 import org.apache.axis.AxisFault;
 import org.apache.axis.encoding.SerializationContext;
+import org.apache.axismora.MessageContext;
+import org.apache.axismora.encoding.InOutParameter;
 
 /**
  * @author Srinath Perera(hemapani@opensource.lk)
  */
 public class LongParam implements InOutParameter {
     private long param;
+	public LongParam(){}
     public LongParam(MessageContext msgdata) throws AxisFault {
         desierialize(msgdata);
     }
@@ -84,18 +83,22 @@ public class LongParam implements InOutParameter {
     public LongParam(long param) {
         this.param = param;
     }
+    
+	public LongParam(Long param) {
+		this.param = param.longValue();
+	}
 
     public void serialize(SerializationContext context) {
-        String type_name = "long";
-        StringBuffer buf = new StringBuffer();
-
-        buf.append("<Long xsi:type=\"ns1:").append(type_name).append(
-            "\" xmlns:ns1 =\"").append(
-            Constants.DEFAULT_SIMPLETYPE_ENCODING_URI + "\">");
-        buf.append(String.valueOf(param));
-        buf.append("</Long>\n");
+//        String type_name = "long";
+//        StringBuffer buf = new StringBuffer();
+//
+//        buf.append("<Long xsi:type=\"ns1:").append(type_name).append(
+//            "\" xmlns:ns1 =\"").append(
+//            Constants.DEFAULT_SIMPLETYPE_ENCODING_URI + "\">");
+//        buf.append(String.valueOf(param));
+//        buf.append("</Long>\n");
         try {
-            context.writeString(buf.toString());
+            context.writeString(String.valueOf(param));
         } catch (IOException e) {
             e.printStackTrace(); //ioexception
         }
@@ -108,5 +111,12 @@ public class LongParam implements InOutParameter {
     public long getParam() {
         return param;
     }
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	public String toString() {
+		return String.valueOf(param);
+	}
 
 }

@@ -61,14 +61,12 @@ package org.apache.axismora.wrappers.simpleType;
 
 import java.io.IOException;
 
-import org.apache.axismora.Constants;
+import org.apache.axis.AxisFault;
+import org.apache.axis.encoding.SerializationContext;
 import org.apache.axismora.MessageContext;
 import org.apache.axismora.encoding.InOutParameter;
 import org.apache.axismora.encoding.InParameter;
 import org.apache.axismora.encoding.OutParameter;
-
-import org.apache.axis.AxisFault;
-import org.apache.axis.encoding.SerializationContext;
 
 public class StringParam implements InOutParameter, OutParameter, InParameter {
     public String param;
@@ -91,19 +89,19 @@ public class StringParam implements InOutParameter, OutParameter, InParameter {
     }
 
     public void serialize(SerializationContext context) {
-        String type_name = "string";
-        StringBuffer buf = new StringBuffer();
-
-        buf
-            .append("<String xsi:type=\"ns1:")
-            .append(type_name)
-            .append("\" xmlns:ns1 =\"")
-            .append(Constants.DEFAULT_SIMPLETYPE_ENCODING_URI)
-            .append("\">");
-        buf.append(param);
-        buf.append("</String>\n");
+//        String type_name = "string";
+//        StringBuffer buf = new StringBuffer();
+//
+//        buf
+//            .append("<String xsi:type=\"ns1:")
+//            .append(type_name)
+//            .append("\" xmlns:ns1 =\"")
+//            .append(Constants.DEFAULT_SIMPLETYPE_ENCODING_URI)
+//            .append("\">");
+//        buf.append(param);
+//        buf.append("</String>\n");
         try {
-            context.writeString(buf.toString());
+            context.writeString(param);
         } catch (IOException e) {
             e.printStackTrace(); //ioexception
         }
@@ -115,4 +113,11 @@ public class StringParam implements InOutParameter, OutParameter, InParameter {
     public String getParam() {
         return param;
     }
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	public String toString() {
+		return param;
+	}
+
 }

@@ -59,11 +59,10 @@ import java.io.IOException;
 
 import org.apache.axis.AxisFault;
 import org.apache.axis.encoding.SerializationContext;
-
+import org.apache.axis.message.SOAPFault;
 import org.apache.axismora.MessageContext;
 import org.apache.axismora.encoding.InOutParameter;
 import org.apache.axismora.encoding.InParameter;
-import org.apache.axis.message.SOAPFault;
 
 /**
  * Created on Sep 18, 2003
@@ -144,14 +143,14 @@ public class DurationParam implements InOutParameter {
      * @see org.apache.axismora.encoding.Parameter#serialize(org.apache.axis.encoding.SerializationContext)
      */
     public void serialize(SerializationContext context) {
-        String type_name = "Duration";
-        StringBuffer buf = new StringBuffer();
-        buf.append("<Duration xsi:type=\"ns1:").append(type_name + "\" xmlns:ns1 =\"");
-        buf.append(org.apache.axis.Constants.URI_2001_SCHEMA_XSD + "/#duration\">");
-        buf.append(param);
-        buf.append("</Duration>\n");
+//        String type_name = "Duration";
+//        StringBuffer buf = new StringBuffer();
+//        buf.append("<Duration xsi:type=\"ns1:").append(type_name + "\" xmlns:ns1 =\"");
+//        buf.append(org.apache.axis.Constants.URI_2001_SCHEMA_XSD + "/#duration\">");
+//        buf.append(param);
+//        buf.append("</Duration>\n");
         try {
-            context.writeString(buf.toString());
+            context.writeString(param);
         } catch (IOException e) {
             e.printStackTrace(); //ioexception
         }
@@ -280,8 +279,8 @@ public class DurationParam implements InOutParameter {
         return duration.toString();
     }
 
-    public String getParam() {
-        return this.param;
+    public DurationParam getParam() {
+        return this;
 
     }
 }

@@ -61,12 +61,10 @@ package org.apache.axismora.wrappers.simpleType;
 
 import java.io.IOException;
 
-import org.apache.axismora.Constants;
-import org.apache.axismora.MessageContext;
-import org.apache.axismora.encoding.InOutParameter;
-
 import org.apache.axis.AxisFault;
 import org.apache.axis.encoding.SerializationContext;
+import org.apache.axismora.MessageContext;
+import org.apache.axismora.encoding.InOutParameter;
 
 public class CharParam implements InOutParameter {
     public char param;
@@ -81,6 +79,10 @@ public class CharParam implements InOutParameter {
     public CharParam(char param) {
         this.param = param;
     }
+    
+	public CharParam(Character param) {
+		this.param = param.charValue();
+	}
 
     public org.apache.axismora.encoding.InParameter desierialize(MessageContext msgdata)
         throws AxisFault {
@@ -91,18 +93,18 @@ public class CharParam implements InOutParameter {
     }
 
     public void serialize(SerializationContext context) {
-        String type_name = "char";
-        StringBuffer buf = new StringBuffer();
-
-        buf
-            .append("<Char xsi:type=\"ns1:" + type_name)
-            .append("\" xmlns:ns1 =\"")
-            .append(Constants.DEFAULT_SIMPLETYPE_ENCODING_URI)
-            .append("\">");
-        buf.append(Integer.toString(param));
-        buf.append("</Char>\n");
+//		  String type_name = "char";
+//        StringBuffer buf = new StringBuffer();
+//
+//        buf
+//            .append("<Char xsi:type=\"ns1:" + type_name)
+//            .append("\" xmlns:ns1 =\"")
+//            .append(Constants.DEFAULT_SIMPLETYPE_ENCODING_URI)
+//            .append("\">");
+//        buf.append(Integer.toString(param));
+//        buf.append("</Char>\n");
         try {
-            context.writeString(buf.toString());
+            context.writeChars(new char[]{param},1,1);
         } catch (IOException e) {
             e.printStackTrace(); //ioexception
         }

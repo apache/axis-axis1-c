@@ -61,12 +61,10 @@ package org.apache.axismora.wrappers.simpleType;
 
 import java.io.IOException;
 
-import org.apache.axismora.Constants;
-import org.apache.axismora.MessageContext;
-import org.apache.axismora.encoding.InOutParameter;
-
 import org.apache.axis.AxisFault;
 import org.apache.axis.encoding.SerializationContext;
+import org.apache.axismora.MessageContext;
+import org.apache.axismora.encoding.InOutParameter;
 
 public class DoubleParam implements InOutParameter {
     public double param;
@@ -81,21 +79,25 @@ public class DoubleParam implements InOutParameter {
     public DoubleParam(double param) {
         this.param = param;
     }
+    
+	public DoubleParam(Double param) {
+		this.param = param.doubleValue();
+	}
 
     public void serialize(SerializationContext context) {
-        String type_name = "double";
-        StringBuffer buf = new StringBuffer();
-
-        buf
-            .append("<Double xsi:type=\"ns1:")
-            .append(type_name)
-            .append("\" xmlns:ns1 =\"")
-            .append(Constants.DEFAULT_SIMPLETYPE_ENCODING_URI)
-            .append("\">");
-        buf.append(Double.toString(param));
-        buf.append("</Double>\n");
+//        String type_name = "double";
+//        StringBuffer buf = new StringBuffer();
+//
+//        buf
+//            .append("<Double xsi:type=\"ns1:")
+//            .append(type_name)
+//            .append("\" xmlns:ns1 =\"")
+//            .append(Constants.DEFAULT_SIMPLETYPE_ENCODING_URI)
+//            .append("\">");
+//        buf.append(Double.toString(param));
+//        buf.append("</Double>\n");
         try {
-            context.writeString(buf.toString());
+            context.writeString(Double.toString(param));
         } catch (IOException e) {
             e.printStackTrace(); //ioexception
         }
@@ -116,5 +118,12 @@ public class DoubleParam implements InOutParameter {
             this.param = Double.parseDouble(value);
         return this;
     }
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	public String toString() {
+		return Double.toString(param);
+	}
 
 }

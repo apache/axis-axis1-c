@@ -87,7 +87,7 @@ public class MSGWrapWriter extends JavaClassWriter {
                 wscontext.getSerInfo().getQualifiedServiceName()),
             WrapperUtils.getClassNameFromFullyQualifiedName(
                 wscontext.getSerInfo().getQualifiedServiceName())
-                + Constants.WRAPPER_NAME_APPENDER);
+                + Constants.WRAPPER_NAME_APPENDER,wscontext.getWrapInfo().getTargetOutputLocation());
         this.wscontext = wscontext;
         methods = this.wscontext.getSerInfo().getMethods();
     }
@@ -128,7 +128,7 @@ public class MSGWrapWriter extends JavaClassWriter {
         try {
             writer.write(
                 "\tpublic "
-                    + servicename
+                    + classname
                     + "(){\n\t\t\tservice = new "
                     + wscontext.getSerInfo().getQualifiedServiceName()
                     + "();\n\t}\n\n");
@@ -359,28 +359,28 @@ public class MSGWrapWriter extends JavaClassWriter {
     			}
     		}
     	}*/
-    /**
-     * get the name of the output file
-     * @return
-     */
-    public File getJavaFilePath() {
-        String dirpath;
-        String targetOutputLocation =
-            this.wscontext.getWrapInfo().getTargetOutputLocation();
-        if (targetOutputLocation.endsWith("/"))
-            targetOutputLocation =
-                targetOutputLocation.substring(0, targetOutputLocation.length() - 1);
-        if (targetOutputLocation.equals(""))
-            dirpath = targetOutputLocation;
-        else
-            dirpath =
-                targetOutputLocation
-                    + "/"
-                    + WrapperUtils
-                        .getPackegeName4QualifiedName(
-                            this.wscontext.getSerInfo().getQualifiedServiceName())
-                        .replace('.', '/');
-        new File(dirpath).mkdirs();
-        return new File(dirpath + "/" + servicename + ".java");
-    }
+//    /**
+//     * get the name of the output file
+//     * @return
+//     */
+//    public File getJavaFilePath() {
+//        String dirpath;
+//        String targetOutputLocation =
+//            this.wscontext.getWrapInfo().getTargetOutputLocation();
+//        if (targetOutputLocation.endsWith("/"))
+//            targetOutputLocation =
+//                targetOutputLocation.substring(0, targetOutputLocation.length() - 1);
+//        if (targetOutputLocation.equals(""))
+//            dirpath = targetOutputLocation;
+//        else
+//            dirpath =
+//                targetOutputLocation
+//                    + "/"
+//                    + WrapperUtils
+//                        .getPackegeName4QualifiedName(
+//                            this.wscontext.getSerInfo().getQualifiedServiceName())
+//                        .replace('.', '/');
+//        new File(dirpath).mkdirs();
+//        return new File(dirpath + "/" + servicename + ".java");
+//    }
 }

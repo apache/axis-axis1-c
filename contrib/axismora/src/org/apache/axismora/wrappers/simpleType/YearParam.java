@@ -61,7 +61,6 @@ import java.text.NumberFormat;
 import org.apache.axis.AxisFault;
 import org.apache.axis.encoding.SerializationContext;
 import org.apache.axis.message.SOAPFault;
-
 import org.apache.axismora.MessageContext;
 import org.apache.axismora.encoding.InOutParameter;
 import org.apache.axismora.encoding.InParameter;
@@ -208,8 +207,8 @@ public class YearParam implements InOutParameter {
         }
         return s;
     }
-    public String getParam() {
-        return this.param;
+    public YearParam getParam() {
+        return this;
     }
 
 }

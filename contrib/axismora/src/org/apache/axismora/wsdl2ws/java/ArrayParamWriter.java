@@ -56,8 +56,6 @@
 package org.apache.axismora.wsdl2ws.java;
 
 import java.io.IOException;
-import java.util.Enumeration;
-import java.util.Iterator;
 
 import javax.xml.namespace.QName;
 
@@ -66,8 +64,6 @@ import org.apache.axismora.wsdl2ws.WrapperUtils;
 import org.apache.axismora.wsdl2ws.info.Type;
 import org.apache.axismora.wsdl2ws.info.TypeMap;
 import org.apache.axismora.wsdl2ws.info.WebServiceContext;
-
-import org.apache.axis.encoding.SerializationContext;
 
 /**
  * @author {jkuamranc@opensource.lk}
@@ -156,6 +152,11 @@ public class ArrayParamWriter extends ParmWriter {
                         + WrapperUtils.getWrapperName4FullyQualifiedName(arrtype)
                         + ")obj.get(i);\n");
             } else {
+            	if(arrtype.endsWith("[]")){
+            		String temparrtype =  arrtype.substring(0,arrtype.indexOf("["));
+					writer.write("\t\t" + arrtype + "[] arr = new " + temparrtype + "[length][];\n");
+            		
+            	}else	
                 writer.write(
                     "\t\t" + arrtype + "[] arr = new " + arrtype + "[length];\n");
                 writer.write("\t\tfor(int i = 0;i<length;i++)\n");
@@ -209,7 +210,7 @@ public class ArrayParamWriter extends ParmWriter {
 //                    "\t\t\t\torg.apache.axismora.wsdl2ws.java.ParmWriter.tagWritten = true;\n");
                 writer.write("\t\t\t\tparam[i].serialize(context);\n");
             } else
-                writer.write("\t\t\t\tcontext.writeString(String.valueOf(param[i]));\n");
+                writer.write("\t\t\t\tcontext.writeString(java.lang.String.valueOf(param[i]));\n");
             writer.write(JavaUtils.isJavaSimpleType(arrtype) ? "" : "\t\t\t}\n");
             writer.write("\t\t\tcontext.writeString(\"</item\"+i+ \">\");\n\t\t}\n");
 //            writer.write("\t\t//name of parameter will be written by upper level\n");
