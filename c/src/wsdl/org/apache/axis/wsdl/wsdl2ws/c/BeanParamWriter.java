@@ -229,7 +229,7 @@ public class BeanParamWriter extends ParamCFileWriter{
 					"\n\t\t, Axis_TypeName_"+attribs[i].getTypeName()+", Axis_URI_"+attribs[i].getTypeName()+");\n");
 			}			
 		}
-		writer.write("\treturn AXIS_SUCCESS;\n");
+		writer.write("\treturn pDZX->GetStatus(pDZ);\n");
 		writer.write("}\n");
 	}
 	

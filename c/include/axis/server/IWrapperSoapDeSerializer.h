@@ -129,6 +129,7 @@ typedef struct {
     struct tm (AXISCALL* GetAttributeAsDate)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
     struct tm (AXISCALL* GetAttributeAsTime)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
     long (AXISCALL* GetAttributeAsDuration)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
+	int (AXISCALL* GetStatus)(void* pObj);
 } IWrapperSoapDeSerializerFunctions;
 
 #ifndef __cplusplus
@@ -137,6 +138,12 @@ typedef struct {
 	void* unused; /* this corresponds to C++ virtual function pointer which is ignored in C */ 
 	IWrapperSoapDeSerializerFunctions* __vfptr;
 } IWrapperSoapDeSerializer;
+
+typedef struct { 
+	void* unused; /* this corresponds to C++ virtual function pointer which is ignored in C */ 
+	void* unused_; /* this corresponds to IWrapperSoapDeSerializerFunctions pointer */
+	IHandlerSoapDeSerializerFunctions* __vfptr;
+} IHandlerSoapDeSerializer;
 
 #else
 /**
@@ -150,7 +157,8 @@ typedef struct {
 class IWrapperSoapDeSerializer : public ISoapDeSerializer
 {
 protected:
-	void* __vfptr;
+	void* __vfptr_IWSDZ;
+	void* __vfptr_IHSDZ;
 public:
 	virtual ~IWrapperSoapDeSerializer(){};
 
@@ -208,6 +216,8 @@ public:
     virtual struct tm AXISCALL GetAttributeAsDate(const AxisChar* pName, const AxisChar* pNamespace)=0;
     virtual struct tm AXISCALL GetAttributeAsTime(const AxisChar* pName, const AxisChar* pNamespace)=0;
     virtual long AXISCALL GetAttributeAsDuration(const AxisChar* pName, const AxisChar* pNamespace)=0;
+	virtual int AXISCALL GetStatus()=0;
+
 	/* following stuff is needed to provide the interface for C web services */
 public:
 	static IWrapperSoapDeSerializerFunctions ms_VFtable;
@@ -307,6 +317,8 @@ public:
 	{ return ((IWrapperSoapDeSerializer*)pObj)->GetAttributeAsTime(pName, pNamespace);};
     static long AXISCALL s_GetAttributeAsDuration(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((IWrapperSoapDeSerializer*)pObj)->GetAttributeAsDuration(pName, pNamespace);};
+	static int AXISCALL s_GetStatus(void* pObj)
+	{ return ((IWrapperSoapDeSerializer*)pObj)->GetStatus();};
 	static void s_Initialize()
 	{
 		ms_VFtable.CheckMessageBody = s_CheckMessageBody;
@@ -357,6 +369,7 @@ public:
 		ms_VFtable.GetAttributeAsDate = s_GetAttributeAsDate;
 		ms_VFtable.GetAttributeAsTime = s_GetAttributeAsTime;
 		ms_VFtable.GetAttributeAsDuration = s_GetAttributeAsDuration;
+		ms_VFtable.GetStatus = s_GetStatus;
 	}
 };
 #endif

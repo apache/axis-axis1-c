@@ -59,7 +59,6 @@
  */
 package org.apache.axis.wsdl.wsdl2ws;
 
-import java.util.Enumeration;
 import java.util.Stack;
 import java.util.StringTokenizer;
 import java.util.Iterator;

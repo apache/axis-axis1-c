@@ -85,6 +85,7 @@ BasicTypeSerializer::~BasicTypeSerializer()
 
 const AxisChar* BasicTypeSerializer::SerializeAsElement(const AxisChar* pName, const void* pValue, XSDTYPE type)
 {
+	const AxisChar* pStr;
 	m_sSZ = "<";
 	m_sSZ += pName;
 	if (RPC_ENCODED == m_nStyle)
@@ -149,8 +150,10 @@ const AxisChar* BasicTypeSerializer::SerializeAsElement(const AxisChar* pName, c
 	case XSD_STRING:
 	case XSD_ANYURI:
 	case XSD_QNAME:
-	case XSD_NOTATION:			
-		m_AuxStr = *((char**)(pValue));
+	case XSD_NOTATION:
+		pStr = *((char**)(pValue));
+		if (!pStr) break;
+		m_AuxStr = pStr;
 		m_sSZ += GetEntityReferenced(m_AuxStr).c_str();	
 		break;
 	case XSD_HEXBINARY:

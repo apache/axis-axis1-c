@@ -160,7 +160,7 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 				writer.write("\tpSZ->SerializeAsElement(\""+attribs[i].getParamName()+"\", (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");				
 			}else{
 				//if complex type
-				writer.write("\tpSZ->Serialize(\"<"+attribs[i].getParamName()+">\", 0);\n");
+				writer.write("\tpSZ->Serialize(\"<"+attribs[i].getParamName()+"\", 0);\n");
 				writer.write("\tAxis_Serialize_"+attribs[i].getTypeName()+"(param->"+attribs[i].getParamName()+", pSZ);\n");
 				writer.write("\tpSZ->Serialize(\"<"+attribs[i].getParamName()+">\", 0);\n");
 			}
@@ -202,7 +202,7 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 					"\n\t\t, \""+attribs[i].getParamName()+"\", Axis_URI_"+attribs[i].getTypeName()+");\n");				
 			}		
 		}
-		writer.write("\treturn AXIS_SUCCESS;\n");
+		writer.write("\treturn pIWSDZ->GetStatus();\n");
 		writer.write("}\n");
 	}
 	
