@@ -143,6 +143,7 @@ int Attribute::serialize(SoapSerializer& pSZ,
             if (blnIsNewNamespace)
             {
                 lstTmpNameSpaceStack.push_back((AxisChar*)m_uri.c_str());
+				pSZ.serialize("xmlns:", m_prefix.c_str(), "=\"", m_uri.c_str(), "\" ", NULL);
             }
 
             pSZ.serialize(m_prefix.c_str(), ":", NULL);
