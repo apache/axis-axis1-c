@@ -39,7 +39,11 @@ int terminate_handler (HTRequest * request, HTResponse * response,
         HTPrint("%s\n", HTChunk_m_pcData(m_pResult));
         HTChunk_delete(m_pResult);
     }*/
-
+    //if (HTNet_isIdle())
+    //if (HTNet_idle())
+    //if (HTNet_isEmpty())
+    HTRequest_forceFlush(request);
+    HTPrint("req count %d\n",HTNet_count());
     HTEventList_stopLoop();
     return status;
 }
@@ -94,7 +98,7 @@ LibWWWTransport::~LibWWWTransport()
     //    free(m_pcReceived);
 
     //Terminate libwww 
-    HTProfile_delete();
+    //HTProfile_delete();
 
     //Samisa:This deletion should also go to the base class 
     //destructos as is the setEndpointUri method should
