@@ -14,6 +14,7 @@ date=Fri Nov 12 2004
 dateTime=Fri Nov 12 07:58:43 2004
 string=never odd or even
 small string=m
+empty string = <empty string>
 integer=919191919
 decimal=929292929.55556
 base64Binary size=41

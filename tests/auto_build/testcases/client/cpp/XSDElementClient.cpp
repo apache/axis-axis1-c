@@ -164,7 +164,16 @@ int main(int argc, char* argv[])
 		cout << "string=" << strResult << endl;
 		strResult = ws->setGetDataString("m");
 		cout << "small string=" << strResult << endl;
-
+        strResult = ws->setGetDataString("");
+        if (&strResult != NULL && strResult == NULL)
+        {
+            cout << "empty string = <empty string>" << endl;
+        }
+        else
+        {
+            cout << "empty string failed " << endl;
+        }
+        
 		intResult = ws->setGetIntegerType(919191919);
 		cout << "integer=" << intResult << endl;
 
