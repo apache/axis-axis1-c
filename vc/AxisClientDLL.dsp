@@ -350,7 +350,7 @@ SOURCE=..\include\axis\AxisEngineException.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\axis\server\AxisException.h
+SOURCE=..\include\axis\server\AxisException.hpp
 # End Source File
 # Begin Source File
 
@@ -370,15 +370,15 @@ SOURCE=..\include\axis\AxisWsddException.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\axis\client\Call.h
+SOURCE=..\include\axis\client\Call.hpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\axis\ISoapFault.h
+SOURCE=..\include\axis\ISoapFault.hpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\axis\client\Stub.h
+SOURCE=..\include\axis\client\Stub.hpp
 # End Source File
 # End Group
 # Begin Group "Resource Files"
