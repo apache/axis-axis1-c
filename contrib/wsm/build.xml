@@ -20,27 +20,26 @@
     </target>
 
     <target name="compile">
-        <javac srcdir="src:samples" destdir="bin" debug="on" fork="yes" 
-        executable="${tiger.home}/bin/javac" source="1.5">
+        <javac srcdir="src:samples" destdir="bin" debug="on" source="1.5">
             <classpath refid="classpath"/>
             <compilerarg value="-Xlint:unchecked"/>
         </javac>
     </target>
 
     <target name="run" depends="compile">
-        <java jvm="${tiger.home}/bin/java" classname="org.apache.axis.metadata.JaxRpcMappingGenerator" fork="true">
+        <java classname="org.apache.axis.metadata.JaxRpcMappingGenerator">
             <classpath refid="classpath"/>
              <arg value="test.YourService"/>
         </java>
-        <java jvm="${tiger.home}/bin/java" classname="org.apache.axis.metadata.JaxRpcMappingGenerator" fork="true">
+        <java classname="org.apache.axis.metadata.JaxRpcMappingGenerator">
             <classpath refid="classpath"/>
              <arg value="MyService"/>
         </java>
-        <java jvm="${tiger.home}/bin/java" classname="org.apache.axis.metadata.Java2WsdlWithMetadata" fork="true">
+        <java classname="org.apache.axis.metadata.Java2WsdlWithMetadata">
             <classpath refid="classpath"/>
              <arg value="test.YourService"/>
         </java>
-        <java jvm="${tiger.home}/bin/java" classname="org.apache.axis.metadata.Java2WsdlWithMetadata" fork="true">
+        <java classname="org.apache.axis.metadata.Java2WsdlWithMetadata">
             <classpath refid="classpath"/>
              <arg value="MyService"/>
         </java>
