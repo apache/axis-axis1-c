@@ -75,6 +75,7 @@ class IHandlerSoapDeSerializer;
 //class ISoapSerializer;
 class IHandlerSoapSerializer;
 class IWrapperSoapSerializer;
+class IDeployerUtils;
 
 class IMessageData
 {
@@ -93,6 +94,8 @@ public:
 
 	virtual void getSoapDeSerializer(IWrapperSoapDeSerializer** pIWrapperSoapDeSerializer)=0;
 	virtual void getSoapDeSerializer(IHandlerSoapDeSerializer** pIHandlerSoapDeSerializer)=0;
+
+	virtual void getWSDDDeployment(IDeployerUtils** pIDeployerUtils) = 0;
 
 	virtual void SetUserName(string& m_sUserName)=0;
 	virtual string& GetUserName()=0;

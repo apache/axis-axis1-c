@@ -112,6 +112,7 @@ protected:
   const WSDDService* m_Service;
 
 private:
+	void getWSDDDeployment(IDeployerUtils** pIDeployerUtils);
 	bool m_bPastPivotState;
 	map <string, string> m_Properties;
 	static string m_sBlankPropertyValue;
