@@ -6,7 +6,7 @@
     <wsdl>XSDElementNil.wsdl</wsdl>
     <expected>
         <output>
-            XSDElement.expected
+            XSDElementNil.expected
         </output>
     </expected>
 	<endpoint>http://localhost:80/XSDElementNil/services/XSDElementNilPort</endpoint>
