@@ -6,6 +6,15 @@ AXIS_CPP_NAMESPACE_START
     {
     }
 
+    HexBinary::~HexBinary()
+    {
+        if (m_HexBinary)
+        {
+            delete m_HexBinary;
+            m_HexBinary = NULL;
+        }
+    }
+
     AxisChar* HexBinary::serialize(const void* value) throw (AxisSoapException)
     {
     	return serialize((xsd__hexBinary*) value);

@@ -38,7 +38,7 @@ AxisChar* Decimal::serialize(const double* value) throw (AxisSoapException)
     }
     m_Buf = new char[strlen (serializedValue) + 1];
     strcpy (m_Buf, serializedValue);
-    delete serializedValue;        
+    delete [] serializedValue;        
     return m_Buf;
 }
 
