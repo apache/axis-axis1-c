@@ -111,7 +111,7 @@ int SOAPTransportFactory::uninitialize()
  */
 SOAPTransport* SOAPTransportFactory::getTransportObject(AXIS_PROTOCOL_TYPE eProtocol)
 {
-	SOAPTransport* pTpt;
+	SOAPTransport* pTpt = NULL;
 	m_Create(&pTpt);
         pTpt->setProtocol(eProtocol);
 	return pTpt;
