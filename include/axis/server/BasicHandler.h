@@ -48,7 +48,7 @@ class HandlerBase
 {
 public:
     HandlerBase(){};
-    ~HandlerBase(){};
+    virtual ~HandlerBase(){};
     virtual int AXISCALL invoke(void* pMsg)=0;
     virtual void AXISCALL onFault(void* mMsg)=0;
     virtual int AXISCALL init()=0;

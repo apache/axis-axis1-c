@@ -140,3 +140,4 @@ int DestroyInstance(XMLParser *inst)
 	return AXIS_FAIL;
 }
 }
+

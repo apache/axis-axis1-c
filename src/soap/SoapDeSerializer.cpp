@@ -181,11 +181,12 @@ int SoapDeSerializer::getHeader()
             }
             else
             {
+                pComplexElement = new ComplexElement();
+                pHeaderBlock = new HeaderBlock();
                 if (START_ELEMENT == m_pNode->m_type)
                 {
                     if (iLevel == HEADER_LEVEL)
                     {
-                        pHeaderBlock = new HeaderBlock();
         
                         pHeaderBlock->setUri(m_pNode->m_pchNamespace);
                         pHeaderBlock->setLocalName(m_pNode->m_pchNameOrValue);
@@ -219,7 +220,6 @@ int SoapDeSerializer::getHeader()
                     {
                         iHeaderBlockStackLevel++;
 
-                        pComplexElement = new ComplexElement();
                         
                         pComplexElement->setURI(m_pNode->m_pchNamespace);
                         pComplexElement->setLocalName(m_pNode->
