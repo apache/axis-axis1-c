@@ -44,28 +44,36 @@ void URIMapping::initialize()
 {
     if (!m_bInit)
     {
-        m_sURIMap[__TRC("http://www.w3.org/2001/XMLSchema")] = URI_XSD;
-        m_sURIMap[__TRC("http://www.w3.org/2001/XMLSchema-instance")] = 
+        m_sURIMap[std::string("http://www.w3.org/2001/XMLSchema")] = URI_XSD;
+        m_sURIMap[std::string("http://www.w3.org/2001/XMLSchema-instance")] = 
             URI_XSI;
 
-        m_sURIMap[__TRC("http://www.w3.org/2001/06/soap-encoding")] = URI_ENC;
-		m_sURIMap[__TRC("http://schemas.xmlsoap.org/soap/encoding/")] = URI_ENC;
-        m_sURIMap[__TRC("http://schemas.xmlsoap.org/soap/envelope/")] = 
+        m_sURIMap[std::string("http://www.w3.org/2001/06/soap-encoding")] = URI_ENC;
+		m_sURIMap[std::string("http://schemas.xmlsoap.org/soap/encoding/")] = URI_ENC;
+        m_sURIMap[std::string("http://schemas.xmlsoap.org/soap/envelope/")] = 
             URI_ENVELOPE;
 
-        m_sURIMap[__TRC("http://www.w3.org/1999/XMLSchema")] = URI_XSD;
-        m_sURIMap[__TRC("http://www.w3.org/1999/XMLSchema-instance")] = 
+        m_sURIMap[std::string("http://www.w3.org/1999/XMLSchema")] = URI_XSD;
+        m_sURIMap[std::string("http://www.w3.org/1999/XMLSchema-instance")] = 
             URI_XSI;
 
         m_bInit = true;
     }
 }
 
+void URIMapping::uninitialize()
+{
+    if (m_bInit)
+    {
+		m_sURIMap.clear();
+        m_bInit = false;
+	}
+}
 URITYPE URIMapping::getURI(const AxisXMLCh* uri)
 {
-    if (m_sURIMap.find(uri) != m_sURIMap.end())
+	if (m_sURIMap.find(std::string(uri)) != m_sURIMap.end())
     {
-        return m_sURIMap[uri];
+        return m_sURIMap[std::string(uri)];
     }
     return URI_UNKNOWN;
 }

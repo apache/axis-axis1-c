@@ -396,9 +396,10 @@ int uninitialize_module ()
 {
     g_bModuleInitialize = false;
 	TypeMapping::uninitialize();
+	URIMapping::uninitialize();
     SOAPTransportFactory::uninitialize();
-    ModuleUnInitialize ();
-    SoapKeywordMapping::uninitialize ();
+    ModuleUnInitialize();
+    SoapKeywordMapping::uninitialize();
     XMLParserFactory::uninitialize();
     return AXIS_SUCCESS;
 }
