@@ -31,19 +31,14 @@
 #include <stdarg.h>
 
 #if defined(ENABLE_AXISTRACE)  
-  #define AXISTRACE1(X, Y) AxisTrace::logaxis(X,Y,__FILE__,__LINE__);
-  #define AXISTRACE2(X, Y, Z) AxisTrace::logaxis(X,Y,Z,__FILE__,__LINE__);
+  #define AXISTRACE1(X, L) AxisTrace::logaxis(X,NULL,"W",__FILE__,__LINE__);
+  #define AXISTRACE2(X, Y, L) AxisTrace::logaxis(X,Y,"W",__FILE__,__LINE__);
   #define AXISTRACE3(X) AxisTrace::trace(X);
 #else
-  #define AXISTRACE1(X,Y)
-  #define AXISTRACE2(X,Y,Z)
+  #define AXISTRACE1(X,L)
+  #define AXISTRACE2(X,Y,L)
   #define AXISTRACE3(X)
 #endif
-
-typedef enum 
-{ 
-    CRITICAL=1, WARN, INFO, TRIVIAL
-} AXIS_SEVERITY_LEVEL;
 
 /**
  * @class AxisTrace
@@ -80,6 +75,17 @@ AXIS_CPP_NAMESPACE_START
 #define TRACETYPE_EXCEPTION		17
 #define TRACETYPE_AXISEXCEPTION	18
 
+#define TRACE_ENTRY  ">"
+#define TRACE_EXIT   "<"
+#define TRACE_AUDIT  "A"
+#define TRACE_DEBUG  "D"
+#define TRACE_EVENT  "E"
+#define TRACE_INFO   "I"
+#define TRACE_SYSOUT "O"
+#define TRACE_UNCOND "U"
+#define TRACE_WARN   "W"
+#define TRACE_EXCEPT "X"
+
 class AxisTraceEntrypoints {
 public:
     void (*m_traceLine)(const char *data);
@@ -110,23 +116,6 @@ public:
 
     /**
      * This is called in writing to the log file whose path is specified in 
-     * $AXIS_HOME/axiscpp.conf file.
-     * This method is used when the caller has only one 
-     * string message as argument. User
-     * can also specify the severity of the message by assigning level 
-     * argument to one
-     * of CRITICAL, WARN, INFO or TRIVIAL.
-     * @param sLog string message
-     * @param level severity level
-     * @param arg2 file name
-     * @param arg3 line number
-     * @return The status which indicates whether the operation is success 
-     * (AXIS_SUCCESS) or not (AXIS_FAIL).
-     */
-    static int logaxis(const char* sLog, int level, char* arg2, int arg3);
-
-    /**
-     * This is called in writing to the log file whose path is specified in 
      * $AXIS_HOME/axiscpp.c     * onf file.
      * This method is used when the caller has two string messages 
      * as arguments. One may be his      *own message.
@@ -141,8 +130,8 @@ public:
      * @return The status which indicates whether the operation is success 
      * (AXIS_SUCCESS) or not     * (AXIS_FAIL).
      */
-    static int logaxis(const char* sLog1, const char* sLog2, int level, char* arg3, 
-        int arg4);
+    static int logaxis(const char* sLog1, const char* sLog2, 
+		const char *type, char* file, int line);
 
     /**
      * Writes the given string to the standard console. 
@@ -192,6 +181,9 @@ public:
     static inline void traceLine(const char *data) {(*g_traceEntrypoints->m_traceLine)(data); }
 #else
     static inline void traceLine(const char *data) {traceLineInternal(data);}
+    static void traceLineInternal(const char *type, const char *classname, 
+								  const char *methodname, const void *that, 
+								  const char *parms);
 #endif
     static void traceLineInternal(const char *data);
 
@@ -286,12 +278,12 @@ public:
 private:
 	static bool m_bLoggingOn;
     static AxisFile *m_fileTrace;
-	static std::stack<std::string> m_stack;
 
     static int logthis(const char* pcLog, int level, char* arg2, int arg3);
 	static void addParameter(std::string& line, int type, unsigned len, void *value);
 	static void addDataParameter(std::string& line, unsigned len, void *value);
     static void traceHeader();
+    static void traceLine2(const char *data);
 };
 
 AXIS_CPP_NAMESPACE_END

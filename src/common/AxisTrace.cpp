@@ -31,6 +31,8 @@
 // cctype is needed to make isprint compile on linux
 #include <cctype>
 #include <exception>
+#include <ctime>
+#include <cstring>
 
 extern AXIS_CPP_NAMESPACE_PREFIX AxisConfig* g_pConfig;
 AXIS_CPP_NAMESPACE_START
@@ -38,7 +40,6 @@ using namespace std;
 
 bool AxisTrace::m_bLoggingOn = false;
 AxisFile *AxisTrace::m_fileTrace = NULL;
-std::stack<std::string> AxisTrace::m_stack;
 
 int AxisTrace::openFile ()
 {
@@ -78,71 +79,24 @@ bool AxisTrace::isTraceOn()
     return m_bLoggingOn; 
 }
 
-int AxisTrace::logaxis (const char* sLog1, const char* sLog2, int level,
-    char* arg3, int arg4)
+int AxisTrace::logaxis (const char* sLog1, const char* sLog2, const char *type,
+    char* file, int line)
 {
     if (!m_bLoggingOn) return AXIS_FAIL;
 
-    time_t ltime;
-    time (&ltime);
-    string text = "Severity Level : ";
-    switch (level)
-    {
-        case 1:
-            text += "CRITICAL";
-            break;
-        case 2:
-            text += "WARN";
-            break;
-        case 3:
-            text += "INFO";
-            break;
-        default:
-            text += "TRIVIAL";
-            break;
-    }
+    string name = file;
+	name += "@";
+	name += line;
 
-    traceLine(text.c_str());
-    text = "time : ";
-    text += ctime (&ltime);
-    text += "file : ";
-    text += arg3;
-    traceLine(text.c_str());
-    text = "line : ";
-    char buff[32];
-    sprintf (buff, "%d", arg4);
-    text += buff;
-    traceLine(text.c_str());
-    text = sLog1;
+    string text = sLog1;
     text += ":";
     if(0 != sLog2)
         text += sLog2;
-    traceLine(text.c_str());
-    traceLine("-------------------------------------------------");
+
+    traceLineInternal(type,name.c_str(),NULL,NULL,text.c_str());
     return AXIS_SUCCESS;
 }
 
-int AxisTrace::logaxis (const char* sLog, int level, char* arg2, int arg3)
-{
-    return logaxis(sLog,NULL,level,arg2,arg3);
-}
-/*
-int AxisTrace::logaxis (const char* sLog1, const int nLog2, int level,
-    char* arg3, int arg4)
-{
-    char convToInt[32];
-    sprintf(convToInt, "%d", nLog2);
-    return logaxis(sLog1,convToInt,level,arg3,arg4);
-}
-
-int AxisTrace::logaxis (const char* sLog1, const double dLog2, int level,
-    char* arg3, int arg4)
-{
-    char convToDouble[32];
-    sprintf(convToDouble, "%f", dLog2);
-    return logaxis(sLog1,convToDouble,level,arg3,arg4);
-}
-*/
 int AxisTrace::trace (const char *pchLog)
 {
     if (pchLog != NULL) {
@@ -154,20 +108,19 @@ int AxisTrace::trace (const char *pchLog)
 
 void AxisTrace::traceHeader()
 {
-    traceLine("--------- Axis C++ trace ----------");
+    traceLine2("************ Start Display Current Environment ************");
     string text = "Axis C++ libraries built on ";
     text += __DATE__;
     text += " at ";
     text += __TIME__;
-    traceLine(text.c_str());
+    traceLine2(text.c_str());
 
     time_t ltime;
     time (&ltime);
     text = "Trace produced on ";
     text += ctime (&ltime);
-    traceLine(text.c_str());
+    traceLine2(text.c_str());
 
-    traceLine("Dumping environment variables...");
     char *envVars[]={"PATH","LIBPATH","LD_LIBRARY_PATH","AXISCPP_DEPLOY","PWD",
         "CLASSPATH","INCLUDE","LIB","NLSPATH","OS","COMPUTERNAME","USERNAME",
         "HOSTNAME","LANG","LOGIN","LOGNAME","MACHTYPE","OSTYPE","UID","USER"};
@@ -175,17 +128,14 @@ void AxisTrace::traceHeader()
 	{
         text = envVars[i];
         const char *value = getenv(envVars[i]);
-        if (NULL==value)
-		{
-			text += " was not set";
-		}
-        else 
+        if (NULL!=value)
 		{
             text += "=";
             text += value;
+	        traceLine2(text.c_str());
         }
-        traceLine(text.c_str());
     }
+    traceLine2("************* End Display Current Environment *************");
 
 	// Write out the config settings
 	traceLine("-------------- Config File settings START ----------------");
@@ -235,7 +185,64 @@ void AxisTrace::traceHeader()
 
 }
 
+void AxisTrace::traceLineInternal(const char *type, const char *classname, 
+								  const char *methodname, const void *that, 
+								  const char *parms) 
+{
+    time_t current = time(NULL);
+	struct tm *tm = localtime(&current);
+
+	// TODO: Milliseconds
+	const int timelen=256;
+	char strtime[timelen];
+	memset(strtime,0,timelen);
+	strftime(strtime,timelen,"[%d/%m/%y %H:%M:%S:000 %Z]",tm);
+	strtime[timelen-1]='\0';
+
+	string text = strtime;
+	text += " 1 ";  // TODO: this should be the thread id
+
+	if (NULL==classname) text += "-";
+	else text += classname;
+	text += " ";
+	text += type;
+	if (NULL!=methodname) {
+		text += " ";
+		text += methodname;
+	}
+	text += " ";
+	if (NULL != that) {
+		char prim[32];
+		sprintf(prim,"|%p|",that);
+		text += prim;
+		if (NULL!=parms) text += ",";
+	}
+
+	if (NULL != parms) {
+		if (NULL==strchr(parms,'\n')) {
+			text += parms;
+			traceLine2(text.c_str());
+		} else {
+			// Multi-line output
+			text += "------------>";
+			traceLine2(text.c_str());
+			const char *tok = strtok(const_cast<char*>(parms),"\n");
+			while (NULL != tok) {
+				traceLineInternal(tok);
+				tok = strtok(NULL,"\n");
+			}
+		}
+	} else {
+		traceLine2(text.c_str());
+	}
+}
+
 void AxisTrace::traceLineInternal(const char *data) 
+{
+	traceLineInternal(TRACE_INFO,NULL,NULL,NULL,data);
+}
+
+void AxisTrace::traceLine2(const char *data) 
 {
     if (!isTraceOn()) return;
     m_fileTrace->filePuts(data);
@@ -251,44 +258,22 @@ void AxisTrace::traceEntryInternal(const char *className, const char *methodName
 
 	try {
 		string line;
-		for (unsigned is=0; is<m_stack.size(); is++) line += " ";
-		line += "{ ";
-		if (NULL!=className) {
-			line += className;
-			line += "::";
-		}
-		if (NULL!=methodName)
-			line += methodName;
-		if (NULL!=that) {
-			line += "<";
-			char prim[32];
-			sprintf(prim,"%p",that);
-			line += prim;
-			line += ">";
-		}
-		line += "(";
-
-		for (int i=0; i<nParms; i++) {
-			int type = va_arg(args, int);
-			unsigned len = va_arg(args, unsigned);
-			void *value = va_arg(args, void*);
-			if (0!=i) line += ", ";
-			addParameter(line,type,len,value);
+		const char *parms = NULL;
+		if (0<nParms) {
+			for (int i=0; i<nParms; i++) {
+				int type = va_arg(args, int);
+				unsigned len = va_arg(args, unsigned);
+				void *value = va_arg(args, void*);
+				if (0!=i) line += ", ";
+				addParameter(line,type,len,value);
+			}
+			parms = line.c_str();
 		}
 
-		line += ")";
-		traceLine(line.c_str());
+		traceLineInternal(TRACE_ENTRY,className,methodName,that,parms);
     } catch (...) {
-        traceLine("Unknown exception caught during trace entry");
+        traceLineInternal(TRACE_EXCEPT,NULL,NULL,NULL,"Unknown exception caught during trace entry");
     }
-
-    string name;
-    if (NULL!=className) {
-        name = className;
-	  name += "::";
-	  name += methodName;
-    } else name = methodName;
-    m_stack.push(name);
 }
 
 void AxisTrace::traceExitInternal(const char *className, const char *methodName, int returnIndex,
@@ -297,38 +282,25 @@ void AxisTrace::traceExitInternal(const char *className, const char *methodName,
     if (!isTraceOn()) return;
 
 	try {
-		// Careful here in case entries and exits don't match
-		string name;
-            if (NULL!=className) {
-                name = className;
-		    name += "::";
-		    name += methodName;
-            } else name = methodName;
-		while (m_stack.size()>0 && name!=m_stack.top()) m_stack.pop();
-		if (m_stack.size()>0) m_stack.pop();
-
 		string line;
-		for (unsigned is=0; is<m_stack.size(); is++) line += " ";
-		line += "} ";
-		if (NULL!=className) {
-			line += className;
-			line += "::";
-		}
-		if (NULL!=methodName) 
-			line += methodName;
-            if (0!=returnIndex) { // Zero means only one return
-                  line += "@";
-                  char prim[32];
-                  sprintf(prim,"%d",returnIndex);
-                  line += prim;
-            }
-		line += "(";
-		if (TRACETYPE_UNKNOWN != type)
+		bool added = false;
+        if (0!=returnIndex) { // Zero means only one return
+               line = "@";
+               char prim[32];
+               sprintf(prim,"%d",returnIndex);
+               line += prim;
+			   added = true;
+        }
+
+		if (TRACETYPE_UNKNOWN != type) {
+			if (added) line += " ";
 			addParameter(line,type,len,value);
-		line += ")";
-		traceLine(line.c_str());
+			added = true;
+		}
+
+		traceLineInternal(TRACE_EXIT,className,methodName,NULL,added?line.c_str():NULL);
     } catch (...) {
-        traceLine("Unknown exception caught during trace exit");
+        traceLineInternal(TRACE_EXCEPT,NULL,NULL,NULL,"Unknown exception caught during trace exit");
     }
 }
 
@@ -338,35 +310,22 @@ void AxisTrace::traceCatchInternal(const char *className, const char *methodName
     if (!isTraceOn()) return;
 
 	try {
-		// The method that caught the exception may not be top of the stack.
-		string name = className;
-		name += "::";
-		name += methodName;
-		while (m_stack.size()>0 && name!=m_stack.top()) m_stack.pop();
-
 		string line;
-		for (unsigned is=0; is<m_stack.size(); is++) line += " ";
-		line += "! ";
-		if (NULL!=className) {
-			line += className;
-			line += "::";
-		}
-		if (NULL!=methodName) 
-			line += methodName;
-		line += " caught ";
-            if (0!=catchIndex) { // Zero means only one catch
-                  line += "@";
-                  char prim[32];
-                  sprintf(prim,"%d",catchIndex);
-                  line += prim;
-                  line += " ";
-            }
+        if (0!=catchIndex) { // Zero means only one catch
+              line = "@";
+              char prim[32];
+              sprintf(prim,"%d",catchIndex);
+              line += prim;
+              line += " ";
+        }
+
+		line += "caught ";
 		if (TRACETYPE_UNKNOWN != type)
 			addParameter(line,type,len,value);
-            else line += "\"...\"";
-		traceLine(line.c_str());
+        else line += "\"...\"";
+		traceLineInternal(TRACE_EXCEPT,className,methodName,NULL,line.c_str());
     } catch (...) {
-        traceLine("Unknown exception caught during trace catch");
+        traceLineInternal(TRACE_EXCEPT,NULL,NULL,NULL,"Unknown exception caught during trace catch");
     }
 }
 
@@ -380,7 +339,7 @@ void AxisTrace::addParameter(string& line, int type, unsigned len, void *value)
 	case TRACETYPE_USHORT:	sprintf(prim,"%hu",*((short *)value));	line += prim;	break;
 	case TRACETYPE_SHORT:	sprintf(prim,"%hd",*((short *)value));	line += prim;	break;
 	case TRACETYPE_UINT:	sprintf(prim,"%u" ,*((int   *)value));	line += prim;	break;
-	case TRACETYPE_INT:	sprintf(prim,"%d" ,*((int   *)value));	line += prim;	break;
+	case TRACETYPE_INT:		sprintf(prim,"%d" ,*((int   *)value));	line += prim;	break;
 	case TRACETYPE_ULONG:	sprintf(prim,"%lu",*((long  *)value));	line += prim;	break;
 	case TRACETYPE_LONG:	sprintf(prim,"%ld",*((long  *)value));	line += prim;	break;
 	case TRACETYPE_UDOUBLE:	sprintf(prim,"%Lu",*((double*)value));	line += prim;	break;
