@@ -280,16 +280,16 @@ void XMLStreamHandler::endPrefixMapping(const std::string& prefix)
 	m_NsStack.erase(__XTRC(prefix)); //I think the same prifix cannot repeat ???
 }
 
-void XMLStreamHandler::warning(const SAX::SAXException& exception)
+void XMLStreamHandler::warning(const SAX::SAXParseException& exception)
 {
 
 }
-void XMLStreamHandler::error(const SAX::SAXException& exception)
+void XMLStreamHandler::error(const SAX::SAXParseException& exception)
 {
 //  sprintf((char*)chEBuf, "Error : %s", __TRC(exception.getMessage()));
 	m_Success = AXIS_FAIL;
 }
-void XMLStreamHandler::fatalError(const SAX::SAXException& exception)
+void XMLStreamHandler::fatalError(const SAX::SAXParseException& exception)
 {
 // sprintf((char*)chEBuf, "Fatal Error : %s", __TRC(exception.getMessage()));
 	m_Success = AXIS_FAIL;

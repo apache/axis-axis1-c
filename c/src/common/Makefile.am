@@ -5,5 +5,5 @@ libcommon_la_SOURCES = Param.cpp TypeMapping.cpp Packet.cpp MessageData.cpp \
  GDefine.cpp AxisUtils.cpp AxisTrace.cpp AxisException.cpp AxisConfig.cpp \
  AxisSocketUtils.cpp
 
-libcommon_la_LIBADD = -L$(AXISCPP_HOME)/lib/arabica -lArabica -lstdc++
+libcommon_la_LIBADD = -L$(AXISCPP_HOME)/lib/arabica -lArabica -lexpat -lstdc++
 INCLUDES = -I$(AXISCPP_HOME)/include
