@@ -24,6 +24,9 @@
 package org.apache.axis.wsdl.wsdl2ws.cpp.literal;
 import java.util.Iterator;
 
+import javax.xml.namespace.QName;
+
+import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.SourceWriter;
 import org.apache.axis.wsdl.wsdl2ws.WrapperConstants;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
@@ -36,7 +39,7 @@ public class AllParamWriter implements SourceWriter{
 	public AllParamWriter(WebServiceContext wscontext){
 		this.wscontext =wscontext;
 	}
-
+	
 	/**
 	 * genarate all the wrappets for custom complex types.
 	 * @see org.apache.axis.wsdl.wsdl2ws.SourceWriter#writeSource()
@@ -51,7 +54,13 @@ public class AllParamWriter implements SourceWriter{
 			if(wscontext.getWrapInfo().getImplStyle().equals(WrapperConstants.IMPL_STYLE_STRUCT)){
 				if(type.isArray()){
 					System.out.println("Array writer called ......");
-					(new ArrayParamWriter(wscontext,type)).writeSource();	
+					QName qname = type.getName();
+					if (CUtils.isSimpleType(qname) && !CUtils.isDefinedSimpleType(qname)){
+						throw new WrapperFault("No need to create an Array for simple type "+qname+"\n" +
+							"It seems that some thing wrong with symbolTable population - Susantha");
+					}
+					ArrayParamWriter writer = (new ArrayParamWriter(wscontext,type));	
+					if (!writer.isSimpleTypeArray()) writer.writeSource();
 				}	
 				else{
 					/* TODO check whether this type is referenced or not. Synthesize only if  reference

@@ -94,6 +94,18 @@ public class ServiceWriter extends CPPClassWriter{
 		MethodInfo minfo;
 		boolean isSimpleType;
 		try{
+			writer.write("\n/* This function is called by the AxisEngine when something went wrong" +
+				"\n with the current web service request processing. Appropriate actions should" +
+				"\n be taken here.*/");
+			writer.write("\nvoid "+classname+"::onFault()\n{\n}");
+			writer.write("\n/* This function is called by the AxisEngine when this web service" +
+				"\n library is first loaded. So here we can initialize any global/static" +
+				"\n data structures of this web service or open database connections */");
+			writer.write("\nvoid "+classname+"::init()\n{\n}");
+			writer.write("\n/* This function is called by the AxisEngine when this web service" +
+				"\n library is unloaded. So we can deallocate any global/static data structures" +
+				"\n and close database connections etc here. */");
+			writer.write("\nvoid "+classname+"::fini()\n{\n}");
 		  	writer.write("\n");	
 		  	for(int i = 0; i < methods.size(); i++){
 				minfo = (MethodInfo)this.methods.get(i);

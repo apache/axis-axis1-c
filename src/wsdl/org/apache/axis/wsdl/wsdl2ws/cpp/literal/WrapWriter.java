@@ -99,9 +99,12 @@ public class WrapWriter extends CPPClassWriter{
 		try{
 			writer.write("/*implementation of WrapperClassHandler interface*/\n");
 			
-			writer.write("void "+classname+"::onFault(void *pMsg)\n{\n}\n\n");
-			writer.write("int "+classname+"::init()\n{\n\treturn AXIS_SUCCESS;\n}\n\n");
-			writer.write("int "+classname+"::fini()\n{\n\treturn AXIS_SUCCESS;\n}\n\n");
+			writer.write("void "+classname+"::onFault(void *pMsg)\n{" +
+				"\n\tpWs->onFault();\n}\n\n");
+			writer.write("int "+classname+"::init()\n{\n" +
+				"\tpWs->init();\n\treturn AXIS_SUCCESS;\n}\n\n");
+			writer.write("int "+classname+"::fini()\n{\n" +
+				"\tpWs->fini();\n\treturn AXIS_SUCCESS;\n}\n\n");
 			writeInvoke();
 			writer.write("\n/*Methods corresponding to the web service methods*/\n");
 			MethodInfo minfo;

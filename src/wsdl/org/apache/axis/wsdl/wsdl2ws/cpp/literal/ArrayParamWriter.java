@@ -101,6 +101,11 @@ public class ArrayParamWriter extends ParamWriter{
 		}
 	}
 		
+	public boolean isSimpleTypeArray()throws WrapperFault{
+		QName qname = WrapperUtils.getArrayType(type).getName(); 
+		return CUtils.isSimpleType(qname);
+	}
+	
 	protected void writeConstructors()throws WrapperFault{}
 	   
 	protected void writeDistructors() throws WrapperFault {}
