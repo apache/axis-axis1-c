@@ -272,7 +272,7 @@ void AxisTrace::traceLineInternal(const char *type, const char *classname,
 	text += " ";
 	if (NULL != that) {
 		char prim[32];
-		sprintf(prim,"|%p|",that);
+		sprintf(prim,"@%p",that);
 		text += prim;
 		if (NULL!=parms) text += ",";
 	}
@@ -334,7 +334,7 @@ void AxisTrace::traceEntryInternal(const char *className, const char *methodName
     }
 }
 
-void AxisTrace::traceExitInternal(const char *className, const char *methodName, int returnIndex,
+void AxisTrace::traceExitInternal(const char *className, const char *methodName, const void* that, int returnIndex,
 						  int type, unsigned len, void *value)
 {
     if (!isTraceOn()) return;
@@ -356,13 +356,13 @@ void AxisTrace::traceExitInternal(const char *className, const char *methodName,
 			added = true;
 		}
 
-		traceLineInternal(TRACE_EXIT,className,methodName,NULL,added?line.c_str():NULL);
+		traceLineInternal(TRACE_EXIT,className,methodName,that,added?line.c_str():NULL);
     } catch (...) {
         traceLineInternal(TRACE_EXCEPT,NULL,NULL,NULL,"Unknown exception caught during trace exit");
     }
 }
 
-void AxisTrace::traceCatchInternal(const char *className, const char *methodName, int catchIndex,
+void AxisTrace::traceCatchInternal(const char *className, const char *methodName, const void* that, int catchIndex,
 						   int type, unsigned len, void *value)
 {
     if (!isTraceOn()) return;
@@ -381,7 +381,7 @@ void AxisTrace::traceCatchInternal(const char *className, const char *methodName
 		if (TRACETYPE_UNKNOWN != type)
 			addParameter(line,type,len,value);
         else line += "\"...\"";
-		traceLineInternal(TRACE_EXCEPT,className,methodName,NULL,line.c_str());
+		traceLineInternal(TRACE_EXCEPT,className,methodName,that,line.c_str());
     } catch (...) {
         traceLineInternal(TRACE_EXCEPT,NULL,NULL,NULL,"Unknown exception caught during trace catch");
     }

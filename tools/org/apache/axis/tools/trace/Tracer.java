@@ -187,6 +187,10 @@ class Tracer extends BufferedWriter {
 				"Expecting to return void from a method that returns a value: "
 					+ signature.toString());
 
+		String that = "NULL";
+		if (headers.isInstanceMethod(signature))
+			that = "this";
+
 		// Enclose the printf/return in {} in case if/then doesn't have {}
 		String line = "\t{\n";
 		line += "\t\t" + hashifdef;
@@ -199,6 +203,8 @@ class Tracer extends BufferedWriter {
 			+ ", \""
 			+ signature.getMethodName()
 			+ "\", "
+			+ that
+			+ ", "
 			+ returnIndex
 			+ ");\t"
 			+ SIGNATURE
@@ -227,6 +233,10 @@ class Tracer extends BufferedWriter {
 				"Expecting to return a value from a method that returns void: "
 					+ signature.toString());
 
+		String that = "NULL";
+		if (headers.isInstanceMethod(signature))
+			that = "this";
+
 		// Enclose the printf/return in {} in case if/then doesn't have {}
 		// Copy the return value into a local called traceRet in case the
 		// return value has side-effects such as "return i++;" or "return func();"
@@ -251,6 +261,8 @@ class Tracer extends BufferedWriter {
 			+ ", \""
 			+ signature.getMethodName()
 			+ "\", "
+			+ that
+			+ ", "
 			+ returnIndex
 			+ getTypeParms(signature.getReturnType(), true)
 			+ ");\t"
@@ -270,6 +282,10 @@ class Tracer extends BufferedWriter {
 		if (!signature.traceable())
 			return;
 
+		String that = "NULL";
+		if (headers.isInstanceMethod(signature))
+			that = "this";
+
 		String line =
 			"\n"
 				+ "\t"
@@ -286,6 +302,8 @@ class Tracer extends BufferedWriter {
 				+ ", \""
 				+ signature.getMethodName()
 				+ "\", "
+				+ that
+				+ ", "
 				+ catchIndex
 				+ getTypeParms(value);
 		line += ");\t" + SIGNATURE + "\n";

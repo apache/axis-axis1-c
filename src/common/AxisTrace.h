@@ -108,9 +108,9 @@ class AxisTraceEntrypoints {
 public:
     void (*m_traceLine)(const char *data);
     void (*m_traceEntry)(const char *className, const char *methodName, const void* that, int nParms, va_list vargs);
-    void (*m_traceExit)(const char *className, const char *methodName, int returnIndex,
+    void (*m_traceExit)(const char *className, const char *methodName, const void* that, int returnIndex,
 		int type, unsigned len, void *value);
-    void (*m_traceCatch)(const char *className, const char *methodName, int catchIndex,
+    void (*m_traceCatch)(const char *className, const char *methodName, const void* that, int catchIndex,
 		int type, unsigned len, void *value);
     bool m_traceOn;
 };
@@ -230,34 +230,34 @@ public:
 	 * Traces the exit to a method.
 	 */
 #ifdef AXISTRACE_LIBRARY
-    static inline void traceExit(const char *className, const char *methodName, int returnIndex,
+    static inline void traceExit(const char *className, const char *methodName, const void* that, int returnIndex,
 		int type=TRACETYPE_UNKNOWN, unsigned len=0, void *value=0) { 
-            (*g_traceEntrypoints->m_traceExit)(className,methodName,returnIndex,type,len,value); 
+            (*g_traceEntrypoints->m_traceExit)(className,methodName,that,returnIndex,type,len,value); 
     }
 #else
-    static inline void traceExit(const char *className, const char *methodName, int returnIndex,
+    static inline void traceExit(const char *className, const char *methodName, const void* that, int returnIndex,
 		int type=TRACETYPE_UNKNOWN, unsigned len=0, void *value=0) {
-        traceExitInternal(className,methodName,returnIndex,type,len,value);
+        traceExitInternal(className,methodName,that,returnIndex,type,len,value);
     }
 #endif
-	static void traceExitInternal(const char *className, const char *methodName, int returnIndex,
+	static void traceExitInternal(const char *className, const char *methodName, const void* that, int returnIndex,
 		int type=TRACETYPE_UNKNOWN, unsigned len=0, void *value=0);
 
 	/**
 	 * Traces something that has been caught
 	 */
 #ifdef AXISTRACE_LIBRARY
-    static inline void traceCatch(const char *className, const char *methodName, int catchIndex,
+    static inline void traceCatch(const char *className, const char *methodName, const void* that, int catchIndex,
 		int type=TRACETYPE_UNKNOWN, unsigned len=0, void *value=0) { 
-            (*g_traceEntrypoints->m_traceCatch)(className,methodName,catchIndex,type,len,value); 
+            (*g_traceEntrypoints->m_traceCatch)(className,methodName,that,catchIndex,type,len,value); 
     }
 #else
-    static inline void traceCatch(const char *className, const char *methodName, int catchIndex,
+    static inline void traceCatch(const char *className, const char *methodName, const void* that, int catchIndex,
 		int type=TRACETYPE_UNKNOWN, unsigned len=0, void *value=0) {
-        traceCatchInternal(className,methodName,catchIndex,type,len,value);
+        traceCatchInternal(className,methodName,that,catchIndex,type,len,value);
     }
 #endif
-	static void traceCatchInternal(const char *className, const char *methodName, int catchIndex,
+	static void traceCatchInternal(const char *className, const char *methodName, const void* that, int catchIndex,
 		int type=TRACETYPE_UNKNOWN, unsigned len=0, void *value=0);
       /**
        * Closes the trace file
