@@ -1,0 +1,14 @@
+<test>
+    <name>DynamicGetAnyObjectSOAPFaultTest</name>
+    <description>DynamicGetAnyObjectSOAPFaultTest</description>
+	<dynamicCode>true</dynamicCode>
+	<dynamicCodeDirectory>DynamicGetAnyObjectSOAPFaultTest</dynamicCodeDirectory>
+    <clientLang>cpp</clientLang>
+    <wsdl>CalculatorDoc.wsdl</wsdl>
+    <expected>
+        <output>
+            DynamicGetAnyObjectSOAPFaultTest.expected
+        </output>        	
+    </expected>
+	<endpoint>http://localhost:80/Calculator/services/Calculator</endpoint>
+</test>

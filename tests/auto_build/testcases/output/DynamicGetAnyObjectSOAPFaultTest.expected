@@ -1,0 +1,5 @@
+
+0
+1
+<soapenv:Fault><faultcode xmlns="">Server.generalException</faultcode><faultstring xmlns="">java.lang.ArithmeticException: / by zero</faultstring><detail xmlns=""/></soapenv:Fault>
+----------------------------TEST COMPLETE------------------------------------
