@@ -75,6 +75,7 @@
 class IHeaderBlock
 {
 public:
+	virtual int initializeForTesting() = 0;
 	virtual BasicNode* createChild(NODE_TYPE eNODE_TYPE)=0;
 	virtual BasicNode* getFirstChild()=0;
 	virtual int addChild(BasicNode* pBasicNode)=0;
