@@ -127,7 +127,6 @@ public: //Conversion functions
 	const string& GetString();
 	const string& GetHexString();
 	const string& GetBase64String();
-	const AccessBean* GetUserType() const;
 	void setPrefix(const string &prefix);
 	void setUri(const string &uri);
 };
