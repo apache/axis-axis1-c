@@ -18,11 +18,6 @@
  *
  */
 
-/*
- * This is the Client Stub Class genarated by the tool WSDL2Ws
- * AxisDivByZeroException.h: interface for the AxisDivByZeroExceptionclass.
- *
- */
 #if !defined(__AXISDIVBYZEROEXCEPTION_EXCEPTION_H__INCLUDED_)
 #define __AXISDIVBYZEROEXCEPTION_EXCEPTION_H__INCLUDED_
 
