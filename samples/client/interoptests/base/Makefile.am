@@ -1,7 +1,6 @@
-bin_PROGRAMS = base
+bin_PROGRAMS = InteropBase
 SUBDIRS =
 AM_CPPFLAGS = $(CPPFLAGS)
-base_SOURCES = InteropBaseClient.cpp InteropTestPortType.cpp  SOAPStruct.cpp 
-
-base_LDADD   =  @LINKCLIENTLIB@
+InteropBase_SOURCES =  SOAPStruct.cpp InteropTestPortType.cpp AxisClientException.cpp
+InteropBase_LDADD = $(LDFLAGS)
 INCLUDES = -I$(AXISCPP_HOME)/include

@@ -1,7 +1,6 @@
-bin_PROGRAMS = groupB
+bin_PROGRAMS = InteropGroupB
 SUBDIRS =
 AM_CPPFLAGS = $(CPPFLAGS)
-groupB_SOURCES = InteropGroupBClient.cpp InteropTestPortTypeB.cpp SOAPArrayStruct.cpp SOAPStruct.cpp SOAPStructStruct.cpp
-
-groupB_LDADD   =  @LINKCLIENTLIB@
+InteropGroupB_SOURCES =  SOAPStruct.cpp SOAPArrayStruct.cpp SOAPStructStruct.cpp AxisClientException.cpp InteropTestPortTypeB.cpp
+InteropGroupB_LDADD = $(LDFLAGS)
 INCLUDES = -I$(AXISCPP_HOME)/include
