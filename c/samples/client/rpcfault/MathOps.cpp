@@ -24,7 +24,7 @@ MathOps::MathOps()
 {
 	m_pCall = new Call();
 	m_pCall->setProtocol(APTHTTP);
-	m_pCall->setEndpointURI("http://localhost:5555/axis/MathOps");
+	m_pCall->setEndpointURI("http://localhost/axis/MathOps");
 }
 
 MathOps::~MathOps()
@@ -81,6 +81,8 @@ int MathOps::div(int Value0, int Value1)
 						(void*) Axis_Create_DivByZeroStruct,
 						(void*) Axis_Delete_DivByZeroStruct,"faultstruct1", 0);
 					/*User code to handle the struct can be inserted here*/
+                                        char* temp = pFaultDetail->varString;
+                                        printf("%s\n", temp);
                                         printf("faultcode:%s\n", cFaultcode);
                                         printf("faultstring:%s\n", cFaultstring);
                                         printf("faultactor:%s\n", cFaultactor);

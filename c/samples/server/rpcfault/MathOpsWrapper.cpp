@@ -87,7 +87,7 @@ int MathOpsWrapper::div(void* pMsg)
                 pObjFault->varFloat = 10.52;
 		if (pObjFault)
 			pIWSSZ->addFaultDetail(pObjFault, (void*) Axis_Serialize_DivByZeroStruct,
-			(void*) Axis_Delete_DivByZeroStruct,"DivByZeroFault", Axis_URI_DivByZeroStruct);
+			(void*) Axis_Delete_DivByZeroStruct,"DivByZero", Axis_URI_DivByZeroStruct);
 		throw;
 	}
 
