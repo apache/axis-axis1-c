@@ -17,7 +17,13 @@
  * 
  * @author Sanjaya Singharage (sanjayas@opensource.lk)
  * @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
+ * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
  *
+ */
+
+/*
+ * Revision 1.1  2004/05/31 samisa
+ * Added setProxy
  */
 
 
@@ -35,6 +41,7 @@ bool CallBase::bInitialized = false;
 CallFunctions CallBase::ms_VFtable;
 
 Call::Call ()
+:m_strProxyHost(""), m_uiProxyPort(0), m_bUseProxy(false)
 {
     m_pAxisEngine = NULL;
     m_pMsgData = NULL;
@@ -219,6 +226,10 @@ int Call::openConnection(int secure)
     m_pTransport = SOAPTransportFactory::getTransportObject(m_nTransportType);
 	if (!m_pTransport) return AXIS_FAIL;
 	m_pTransport->setEndpointUri(m_pcEndPointUri);
+  
+    //if use proxy then set proxy
+    if( m_bUseProxy )
+    	m_pTransport->setProxy(m_strProxyHost.c_str(), m_uiProxyPort);
     m_nStatus = m_pTransport->openConnection();
     return m_nStatus;
 }
@@ -568,3 +579,12 @@ int Call::getStatus()
 {
 	return m_nStatus;
 }
+
+void 
+Call::setProxy(const char* pcProxyHost, unsigned int uiProxyPort)
+{
+    m_strProxyHost = pcProxyHost;
+    m_uiProxyPort = uiProxyPort;
+    m_bUseProxy = true;    
+}
+
