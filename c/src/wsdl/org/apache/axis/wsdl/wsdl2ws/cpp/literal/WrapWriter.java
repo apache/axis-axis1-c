@@ -230,13 +230,20 @@ public class WrapWriter extends CPPClassWriter{
 		if (returntype != null){
 			retType = wscontext.getTypemap().getType(returntype.getSchemaName());
 			if (retType != null){
-				outparamType = retType.getLanguageSpecificName();
-				returntypeisarray = retType.isArray();
+				if (retType.isSimpleType()){ //schema defined simpleType possibly with restrictions
+					returntypeissimple = true;
+					outparamType = CUtils.getclass4qname(retType.getBaseType()); 
+				}
+				else{
+					outparamType = retType.getLanguageSpecificName();
+					returntypeisarray = retType.isArray();
+					returntypeissimple = CUtils.isSimpleType(outparamType);
+				}
 			}
 			else{
 				outparamType = returntype.getLangName();
+				returntypeissimple = CUtils.isSimpleType(outparamType);
 			}
-			returntypeissimple = CUtils.isSimpleType(outparamType);
 		}
 		writer.write("\n/*\n");
 		writer.write(" * This method wrap the service method \n");
@@ -261,13 +268,22 @@ public class WrapWriter extends CPPClassWriter{
 		String returnParamName;
 		ArrayList paramsB = new ArrayList(params);
 		for (int i = 0; i < paramsB.size(); i++) {
-			paraTypeName = ((ParameterInfo)paramsB.get(i)).getLangName();
+			type = this.wscontext.getTypemap().getType(((ParameterInfo)paramsB.get(i)).getSchemaName());
+			if (type.isSimpleType()){ //schema defined simpleType possibly with restrictions
+				paraTypeName = CUtils.getclass4qname(type.getBaseType());;
+			}
+			else{
+				paraTypeName = ((ParameterInfo)paramsB.get(i)).getLangName();
+			}
 			parameterName = ((ParameterInfo)paramsB.get(i)).getParamName();
 			elementName = ((ParameterInfo)paramsB.get(i)).getElementName().getLocalPart();
-			if((CUtils.isSimpleType(((ParameterInfo)paramsB.get(i)).getLangName()))){
+			if (type.isSimpleType()){ //schema defined simpleType possibly with restrictions
+				writer.write("\t"+paraTypeName+" v"+i+" = pIWSDZ->"+CUtils.getParameterGetValueMethodName(paraTypeName, false)+"(\""+elementName+"\",0);\n");
+			}
+			else if((CUtils.isSimpleType(((ParameterInfo)paramsB.get(i)).getLangName()))){
 				//for simple types	
 				writer.write("\t"+paraTypeName+" v"+i+" = pIWSDZ->"+CUtils.getParameterGetValueMethodName(paraTypeName, false)+"(\""+elementName+"\",0);\n");
-			}else if((type = this.wscontext.getTypemap().getType(((ParameterInfo)paramsB.get(i)).getSchemaName())) != null && type.isArray()){
+			}else if((type != null) && type.isArray()){
 				Type arrayType = WrapperUtils.getArrayType(type);
 				QName qname = arrayType.getName();
 				String containedType = null;
@@ -353,13 +369,20 @@ public class WrapWriter extends CPPClassWriter{
 			for (int i = 0; i < paramsC.size(); i++) {
 				retType = wscontext.getTypemap().getType(((ParameterInfo)paramsC.get(i)).getSchemaName());
 				if (retType != null){
-					outparamType = retType.getLanguageSpecificName();
-					returntypeisarray = retType.isArray();
+					if (retType.isSimpleType()){
+						returntypeissimple = true;
+						outparamType = CUtils.getclass4qname(retType.getBaseType()); 
+					}
+					else{
+						outparamType = retType.getLanguageSpecificName();
+						returntypeisarray = retType.isArray();
+						returntypeissimple = CUtils.isSimpleType(outparamType);
+					}
 				}
 				else{
 					outparamType = returntype.getLangName();
+					returntypeissimple = CUtils.isSimpleType(outparamType);
 				}
-				returntypeissimple = CUtils.isSimpleType(outparamType);
 				returnParamName = ((ParameterInfo)paramsC.get(i)).getElementName().getLocalPart();
 				if (returntypeissimple){
 					writer.write("\tpIWSSZ->AddOutputParam(\""+returnParamName+"\", (void*)&out"+i+", "+CUtils.getXSDTypeForBasicType(outparamType)+");\n");

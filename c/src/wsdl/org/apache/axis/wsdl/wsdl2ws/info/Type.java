@@ -308,8 +308,10 @@ public class Type {
 		if (vector != null){
 			isSimpleType = true;
 			BaseType basetype = (BaseType)vector.firstElement();
-			if (basetype != null)
+			if (basetype != null){
 				setBaseType(basetype.getQName());
+				CUtils.addSchemaDefinedSimpleType(name, CUtils.getclass4qname(baseType));
+			}
 	        enumerationdata = vector;
 		}
     }
