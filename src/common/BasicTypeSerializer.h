@@ -48,6 +48,8 @@
 #include "../soap/xsd/Int.hpp"
 #include "../soap/xsd/Short.hpp"
 #include "../soap/xsd/Byte.hpp"
+#include "../soap/xsd/NonNegativeInteger.hpp"
+#include "../soap/xsd/UnsignedLong.hpp"
 
 using namespace std;
 

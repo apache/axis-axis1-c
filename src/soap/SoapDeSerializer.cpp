@@ -877,6 +877,8 @@ SoapDeSerializer::getArraySize (const AnyElement * pElement)
 
 /* Following macros are used just to shorten the coding */
 #define CONV_STRTOL(str) strtol(str, &m_pEndptr, 10)
+#define CONV_STRTONONNEGATIVEINTEGER(str) AxisSoapDeSerializerStringToNonNegativeInteger(str)
+#define CONV_STRTOUNSIGNEDLONG(str) AxisSoapDeSerializerStringToUnsignedLong(str)
 #define CONV_STRTOBYTE(str) AxisSoapDeSerializerStringToByte(str)
 #define CONV_STRTOSHORT(str) AxisSoapDeSerializerStringToShort(str)
 #define CONV_STRTOINT(str) AxisSoapDeSerializerStringToInt(str)
@@ -897,6 +899,18 @@ SoapDeSerializer::getArraySize (const AnyElement * pElement)
 #define CONV_STRTOSTRING(str) AxisSoapDeSerializerStringToString(str)
 #define CONV_STRTOQNAME(str) AxisSoapDeSerializerStringToQName(str)
 #define CONV_STRTONOTATION(str) AxisSoapDeSerializerStringToNotation(str)
+
+unsigned long AxisSoapDeSerializerStringToUnsignedLong(const char *valueAsChar)
+{
+    UnsignedLong unsignedLongDeserializer;
+    return *(unsignedLongDeserializer.deserializeUnsignedLong(valueAsChar));
+}
+
+LONGLONG AxisSoapDeSerializerStringToNonNegativeInteger(const char *valueAsChar)
+{
+    NonNegativeInteger nonNegativeIntegerDeserializer;
+    return *(nonNegativeIntegerDeserializer.deserializeNonNegativeInteger(valueAsChar));
+}
 
 char AxisSoapDeSerializerStringToByte(const char *valueAsChar)
 {
@@ -1173,7 +1187,7 @@ SoapDeSerializer::getBasicArray (XSDTYPE nType,
 		    case XSD_INTEGER:
 		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (LONGLONG, CONV_STRTOINTEGER)
 		    case XSD_UNSIGNEDLONG:
-		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (unsigned long, CONV_STRTOUL)
+		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (unsigned long, CONV_STRTOUNSIGNEDLONG)
 		    case XSD_FLOAT:
 		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (float, CONV_STRTOFLOAT)
 		    case XSD_DOUBLE:
@@ -1260,7 +1274,7 @@ SoapDeSerializer::getBasicArray (XSDTYPE nType,
 		case XSD_INTEGER:
 		    DESERIALIZE_LITERAL_ARRAY_BLOCK (LONGLONG, CONV_STRTOINTEGER)
 		case XSD_UNSIGNEDLONG:
-			DESERIALIZE_LITERAL_ARRAY_BLOCK (unsigned long, CONV_STRTOUL)
+			DESERIALIZE_LITERAL_ARRAY_BLOCK (unsigned long, CONV_STRTOUNSIGNEDLONG)
 		case XSD_FLOAT:
 			DESERIALIZE_LITERAL_ARRAY_BLOCK (float, CONV_STRTOFLOAT)
 		case XSD_DOUBLE:
@@ -2592,9 +2606,10 @@ SoapDeSerializer::getElementAsUnsignedLong (const AxisChar * pName,
 	    m_pNode = m_pParser->next (true);	/* charactor node */
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
-		ret = strtoul (m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
-		m_pNode = m_pParser->next ();	/* skip end element node too */
-		return ret;
+            UnsignedLong unsignedLongDeserializer;
+            ret = *( unsignedLongDeserializer.deserializeUnsignedLong(m_pNode->m_pchNameOrValue) );
+    		m_pNode = m_pParser->next ();	/* skip end element node too */
+    		return ret;
 	    }
 	}
 	else
@@ -2617,13 +2632,14 @@ SoapDeSerializer::getElementAsUnsignedLong (const AxisChar * pName,
 	    m_pNode = m_pParser->next (true);	/* charactor node */
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
-		ret = strtoul (m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
-		m_pNode = m_pParser->next ();	/* skip end element node too */
-		m_pNode = NULL;
-		/* this is important in doc/lit style when deserializing 
-		 * arrays 
-		 */
-		return ret;
+            UnsignedLong unsignedLongDeserializer;
+            ret = *( unsignedLongDeserializer.deserializeUnsignedLong(m_pNode->m_pchNameOrValue) );
+    		m_pNode = m_pParser->next ();	/* skip end element node too */
+    		m_pNode = NULL;
+    		/* this is important in doc/lit style when deserializing 
+    		 * arrays 
+    		 */
+    		return ret;
 	    }
 	    else
 	    {
@@ -4127,8 +4143,10 @@ SoapDeSerializer::getChardataAs (void *pValue, XSDTYPE type)
 		}
 	    break;
 	case XSD_UNSIGNEDLONG:
-	    *((unsigned long *) (pValue)) =
-		strtoul (m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
+        {
+            UnsignedLong unsignedLongDeserializer;
+            pValue = unsignedLongDeserializer.deserialize(m_pNode->m_pchNameOrValue);
+        }
 	    break;
 	case XSD_FLOAT:
 		{

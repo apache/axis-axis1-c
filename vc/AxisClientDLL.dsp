@@ -306,6 +306,10 @@ SOURCE=..\src\soap\Namespace.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\soap\xsd\NonNegativeInteger.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\soap\xsd\NOTATION.cpp
 # End Source File
 # Begin Source File
@@ -411,6 +415,10 @@ SOURCE=..\src\soap\xsd\Time.cpp
 # Begin Source File
 
 SOURCE=..\src\common\TypeMapping.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\soap\xsd\UnsignedLong.cpp
 # End Source File
 # Begin Source File
 
