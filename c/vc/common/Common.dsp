@@ -195,6 +195,10 @@ SOURCE=..\..\src\common\IArrayBean.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\IDeployerUtils.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\IHandlerSoapDeSerializer.h
 # End Source File
 # Begin Source File
