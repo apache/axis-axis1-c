@@ -45,6 +45,7 @@ AxisConfigException::AxisConfigException (exception* e)
 
 AxisConfigException::AxisConfigException (exception* e, int iExceptionCode)
 {
+    m_iExceptionCode = iExceptionCode;
     processException (e, iExceptionCode);
 }
 

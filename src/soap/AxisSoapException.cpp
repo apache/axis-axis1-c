@@ -45,6 +45,7 @@ AxisSoapException::AxisSoapException (exception* e)
 
 AxisSoapException::AxisSoapException (exception* e, int iExceptionCode)
 {
+    m_iExceptionCode = iExceptionCode;
     processException (e, iExceptionCode);
 }
 
