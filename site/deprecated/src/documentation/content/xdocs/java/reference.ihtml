@@ -986,7 +986,7 @@ definition:<BR>
 
    <TD>Flag to turn on support for a when .NET1.0 can't
    correctly handle some bits of XML <A href=
-   "http://nagoya.apache.org/bugzilla/show_bug.cgi?id=17021">that
+   "http://nagoya.apache.org/jira/secure/ViewIssue.jspa?key=AXIS-667">that
    it should.</A> The flag defaults to true; if some .NET
    clients are failing to handle a Web Service returning an
    empty array inside another object, set this flag to

@@ -177,7 +177,7 @@
   <P>Please send feedback about the package to "<A href=
   "mailto:axis-user@ws.apache.org">axis-user@ws.apache.org</A>".
   Also, Axis is registered in <A href=
-  "http://nagoya.apache.org/bugzilla">bugzilla</A>, the Apache bug
+  "http://issues.apache.org/jira">jira</A>, the Apache bug
   tracking and feature-request database.</P>
 
   <H3>What's in this release?</H3>
