@@ -88,10 +88,10 @@ Axis C++.</a><br>
 
 7. Edit Apache configuration file httpd.conf located in APACHE_FOLDER/conf and add following lines at the end.<br> 
 <br>
-LoadModule axis_module modules/AXISMODULE
+LoadModule axis_module modules/AXISMODULE<br>
 &lt;Location&gt;<br>
 SetHandler axis <br>
-&lt;Location&gt;<br>
+&lt;Location&gt;<br> <br>
 
 Where AXISMODULE is either mod_axis.dll for apache 1.3.X or mod_axis2.dll for apache 2.X. <br>
 <br>
