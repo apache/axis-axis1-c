@@ -3,7 +3,7 @@
 DWORD WINAPI HttpExtensionProc(IN EXTENSION_CONTROL_BLOCK *pECB)
 {
 	static char szMessage[] = 
-	"<hello>Go to hell</hello>\r\n";
+	"<hello>Test</hello>\r\n";
 
 	HSE_SEND_HEADER_EX_INFO HeaderExInfo;
 
