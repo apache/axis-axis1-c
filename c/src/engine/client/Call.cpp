@@ -181,12 +181,13 @@ void Call::AddParameter(const AxisChar* pStrValue,const char* pchName)
 /**
  * Method used to add arrays of basic types as parameters
  */
-void Call::AddParameter(Axis_Array* pArray, XSDTYPE nType)
+void Call::AddParameter(Axis_Array* pArray, XSDTYPE nType, const char* pchTypeName)
 {
 	IArrayBean* pAb = m_pIWSSZ->makeArrayBean(nType, (void*)(pArray->m_Array));
 	pAb->AddDimension(pArray->m_Size);
 	pAb->SetItemName("item");
 	IParam* pRetParam = m_pIWSSZ->AddOutputParam(pAb);
+	pRetParam->SetName(pchTypeName);
 }
 
 void Call::AddParameter(Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const char* pchTypeName)
