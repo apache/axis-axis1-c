@@ -877,6 +877,7 @@ SoapDeSerializer::getArraySize (const AnyElement * pElement)
 
 /* Following macros are used just to shorten the coding */
 #define CONV_STRTOL(str) strtol(str, &m_pEndptr, 10)
+#define CONV_STRTOSHORT(str) AxisSoapDeSerializerStringToShort(str)
 #define CONV_STRTOINT(str) AxisSoapDeSerializerStringToInt(str)
 #define CONV_STRTOLONG(str) AxisSoapDeSerializerStringToLong(str)
 #define CONV_STRTOINTEGER(str) AxisSoapDeSerializerStringToInteger(str)
@@ -895,6 +896,12 @@ SoapDeSerializer::getArraySize (const AnyElement * pElement)
 #define CONV_STRTOSTRING(str) AxisSoapDeSerializerStringToString(str)
 #define CONV_STRTOQNAME(str) AxisSoapDeSerializerStringToQName(str)
 #define CONV_STRTONOTATION(str) AxisSoapDeSerializerStringToNotation(str)
+
+short AxisSoapDeSerializerStringToShort(const char *valueAsChar)
+{
+    Short shortDeserializer;
+    return *(shortDeserializer.deserializeShort(valueAsChar));
+}
 
 int AxisSoapDeSerializerStringToInt(const char *valueAsChar)
 {
@@ -1147,7 +1154,7 @@ SoapDeSerializer::getBasicArray (XSDTYPE nType,
 		    case XSD_UNSIGNEDINT:
 				DESERIALIZE_ENCODED_ARRAY_BLOCK (unsigned int, CONV_STRTOUL)
 		    case XSD_SHORT:
-		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (short,CONV_STRTOL)
+		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (short,CONV_STRTOSHORT)
 		    case XSD_UNSIGNEDSHORT:
 		    	DESERIALIZE_ENCODED_ARRAY_BLOCK(unsigned short, CONV_STRTOUL)
 		    case XSD_BYTE:
@@ -1234,7 +1241,7 @@ SoapDeSerializer::getBasicArray (XSDTYPE nType,
 		case XSD_UNSIGNEDINT:
 		    DESERIALIZE_LITERAL_ARRAY_BLOCK (unsigned int, CONV_STRTOUL)
 		case XSD_SHORT:
-			DESERIALIZE_LITERAL_ARRAY_BLOCK (short, CONV_STRTOL)
+			DESERIALIZE_LITERAL_ARRAY_BLOCK (short, CONV_STRTOSHORT)
 		case XSD_UNSIGNEDSHORT:
 			DESERIALIZE_LITERAL_ARRAY_BLOCK (unsigned short, CONV_STRTOUL)
 		case XSD_BYTE:
@@ -2135,9 +2142,10 @@ SoapDeSerializer::getElementAsShort (const AxisChar * pName,
 	    m_pNode = m_pParser->next (true);	/* charactor node */
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
-		ret = strtol (m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
-		m_pNode = m_pParser->next ();	/* skip end element node too */
-		return ret;
+            Short shortDeserializer;
+            ret = *( shortDeserializer.deserializeShort(m_pNode->m_pchNameOrValue));
+    		m_pNode = m_pParser->next ();	/* skip end element node too */
+    		return ret;
 	    }
 	}
 	else
@@ -2160,9 +2168,10 @@ SoapDeSerializer::getElementAsShort (const AxisChar * pName,
 	    m_pNode = m_pParser->next (true);	/* charactor node */
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
-		ret = strtol (m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
-		m_pNode = m_pParser->next ();	/* skip end element node too */
-		m_pNode = NULL;
+            Short shortDeserializer;
+            ret = *( shortDeserializer.deserializeShort(m_pNode->m_pchNameOrValue));
+    		m_pNode = m_pParser->next ();	/* skip end element node too */
+    		m_pNode = NULL;
 		/* this is important in doc/lit style when deserializing
 		 * arrays
 		 */
@@ -4071,8 +4080,10 @@ SoapDeSerializer::getChardataAs (void *pValue, XSDTYPE type)
 		strtoul (m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
 	    break;
 	case XSD_SHORT:
-	    *((short *) (pValue)) =
-		(short) strtod (m_pNode->m_pchNameOrValue, &m_pEndptr);
+        {
+            Short shortDeserializer;
+            pValue = shortDeserializer.deserialize(m_pNode->m_pchNameOrValue);
+        }
 	    break;
 	case XSD_UNSIGNEDSHORT:
 	    *((unsigned short *) (pValue)) =
