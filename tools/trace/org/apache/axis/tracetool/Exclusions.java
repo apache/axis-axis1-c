@@ -38,6 +38,7 @@ public class Exclusions {
 			"apr_base64.h",
 			"apr_xlate.h",
 			"Channel.h",
+			"SecureChannel.hpp",
 		// Axis.cpp contains a copyright sign (circle with a "C" in it) which 
 		// makes readline throw a MalformedInputException on linux possibly due to 
 		// locale/charset problems.
