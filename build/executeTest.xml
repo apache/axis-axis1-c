@@ -130,8 +130,8 @@
 ClientLogPath:${test.directory}/ClientLog
 Transport_http:${dir.libraries}/${libraryPrefix}${transportLibraryName}${librarySuffix}
 XMLParser:${dir.libraries}/${libraryPrefix}${xmlParserLibraryName}${librarySuffix}
-Channel_HTTP:${dir.libraries}/${libraryPrefix}${channelLibraryName}${librarySuffix}
-Channel_HTTP_SSL:${dir.libraries}/${libraryPrefix}${secureChannelLibraryName}${librarySuffix}
+Channel_HTTP:${dir.libraries}/${libraryPrefix}${HTTP.channelLibraryName}${librarySuffix}
+Channel_HTTP_SSL:${dir.libraries}/${libraryPrefix}${HTTP.secureChannelLibraryName}${librarySuffix}
 
 </echo>
 	</target>
