@@ -58,10 +58,11 @@ class TypeMapping
 public:
     static XSDTYPE map(const AxisXMLCh* sType);
     static void initialize();
-#ifndef AIX
-    static std::map<const AxisXMLString, XSDTYPE> m_sTypeMap;
+
+#if (defined(AIX) || (defined(_MSC_VER) && _MSC_VER >= 1300))
+    static std::map<AxisXMLString, XSDTYPE> m_sTypeMap;
 #else
-    static std::map<AxisXMLString, XSDTYPE> TypeMapping::m_sTypeMap;
+    static std::map<const AxisXMLString, XSDTYPE> TypeMapping::m_sTypeMap;
 #endif
     static volatile bool m_bInit;
     TypeMapping();
