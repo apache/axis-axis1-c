@@ -70,14 +70,11 @@
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
-char BasicTypeSerializer::m_Buf[64];
-XSDTYPE BasicTypeSerializer::m_Type;
-string BasicTypeSerializer::m_sSZ = "";
-string BasicTypeSerializer::m_AuxStr = "";
 
 BasicTypeSerializer::BasicTypeSerializer()
 {
-
+	m_sSZ = "";
+	m_AuxStr = "";
 }
 
 BasicTypeSerializer::~BasicTypeSerializer()
