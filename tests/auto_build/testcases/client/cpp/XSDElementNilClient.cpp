@@ -122,35 +122,94 @@ int main(int argc, char* argv[])
 
 		boolResult = ws->setGetDataBoolean(&boolInput);
 		cout << "bool=" << *boolResult << endl;
+		boolResult = ws->setGetDataBoolean(NULL);
+		if(boolResult)
+			cout << "bool nil=" << *boolResult << endl;
+		else
+			cout << "bool nil=NULL" << endl;
 
 		bResult = ws->setGetDataByte(&bInput);
-		printf("byte=%d\n", *bResult);
+		printf("byte=%d\n", *bResult); fflush(stdout);
+		bResult = ws->setGetDataByte(NULL);
+		if(bResult) {
+			printf("byte nil=%d\n", *bResult); fflush(stdout);
+		}
+		else
+			cout << "byte nil=NULL" << endl;
+
 
 		ubResult = ws->setGetDataUnsignedByte(&ubInput);
-		printf("unsigned byte=%d\n", *ubResult);
+		printf("unsigned byte=%d\n", *ubResult); fflush(stdout);
+		ubResult = ws->setGetDataUnsignedByte(NULL);
+		if(ubResult) {
+			printf("unsigned byte nil=%d\n", *ubResult); fflush(stdout);
+		}
+		else
+			cout << "unsigned byte nil=NULL" << endl;
 
 		sResult = ws->setGetDataShort(&sInput);
-		printf("short=%d\n", *sResult);
+		cout << "short=" << *sResult << endl;
+		sResult = ws->setGetDataShort(NULL);
+		if(sResult)
+			cout << "short nil=" << *sResult << endl;
+		else
+			cout << "short nil=NULL" << endl;
 
 		usResult = ws->setGetDataUnsignedShort(&usInput);
-		printf("unsigned short=%d\n", *usResult);
+		cout << "unsigned short=" << *usResult << endl;
+		usResult = ws->setGetDataUnsignedShort(NULL);
+		if(usResult)
+			cout << "unsigned short nil=" << *usResult << endl;
+		else
+			cout << "unsigned short nil=NULL" << endl;
 
 		iResult = ws->setGetDataInt(&iInput);
-		printf("int=%d\n", *iResult);
+		cout << "int=" << *iResult << endl;
+		iResult = ws->setGetDataInt(NULL);
+		if(iResult)
+			cout << "int nil=" << *iResult << endl;
+		else
+			cout << "int nil=NULL" << endl;
 
 		uiResult = ws->setGetDataUnsignedInt(&uiInput);
-		printf("unsigned int=%d\n", *uiResult);fflush(stdout);
+		cout << "unsigned int=" << *uiResult << endl;
+		uiResult = ws->setGetDataUnsignedInt(NULL);
+		if(uiResult)
+			cout << "unsigned int nil=" << *uiResult << endl;
+		else
+			cout << "unsigned int nil=NULL" << endl;
 
 		lResult = ws->setGetDataLong(&lInput);
 		cout << "long=" << *lResult << endl;
+		lResult = ws->setGetDataLong(NULL);
+		if(lResult)
+			cout << "long nil=" << *lResult << endl;
+		else
+			cout << "long nil=NULL" << endl;
+
 		ulResult = ws->setGetDataUnsignedLong(&ulInput);
-		printf("unsigned long=%d\n", *ulResult);
+		cout << "unsigned long=" << *ulResult << endl;
+		ulResult = ws->setGetDataUnsignedLong(NULL);
+		if(ulResult)
+			cout << "unsigned long nil=" << *ulResult << endl;
+		else
+			cout << "unsigned long nil=NULL" << endl;
 
 		fResult = ws->setGetDataFloat(&fInput);
 		printf("float=%.5f\n", *fResult); fflush(stdout);
+		fResult = ws->setGetDataFloat(NULL);
+		if(fResult) {
+			printf("float nil=%.5f\n", *fResult); fflush(stdout);
+		} else
+			cout << "float nil=NULL" << endl;
 
 		dResult = ws->setGetDataDouble(&dInput);
 		printf("double=%.5f\n", *dResult); fflush(stdout);
+		dResult = ws->setGetDataDouble(NULL);
+		if(dResult) {
+			printf("double nil=%.5f\n", *dResult); fflush(stdout);
+		} else
+			cout << "double nil=NULL" << endl;
 
         durationResult = ws->setGetDataDurationType(&durationInput);
         cout << "duration=" << *durationResult << endl;
@@ -158,10 +217,24 @@ int main(int argc, char* argv[])
 		dateResult = ws->setGetDateType(&testDate);
 		strftime(dateTime, 50, "%a %b %d %Y", dateResult);
 		cout << "date=" << dateTime << endl;
+		dateResult = ws->setGetDateType(NULL);
+		if(dateResult) {
+			strftime(dateTime, 50, "%a %b %d %Y", dateResult);
+			cout << "date nil=" << dateTime << endl;
+		}
+		else
+			cout << "date nil=NULL" << endl;
 
 		dateTimeResult = ws->setGetDateTimeType(&testDate);
 		strftime(dateTime, 50, "%a %b %d %H:%M:%S %Y", dateTimeResult);
 		cout << "dateTime=" << dateTime << endl;
+		dateTimeResult = ws->setGetDateTimeType(NULL);
+		if(dateTimeResult) {
+			strftime(dateTime, 50, "%a %b %d %H:%M:%S %Y", dateTimeResult);
+			cout << "dateTime nil=" << dateTime << endl;
+		}
+		else
+			cout << "dateTime nil=NULL" << endl;
 
 //  This is being commented out due to issue on some servers
 //  An additional testcase XSDTimeNil has been created to isolate this test.
@@ -173,12 +246,27 @@ int main(int argc, char* argv[])
 		cout << "string=" << strResult << endl;
 		strResult = ws->setGetDataString("m");
 		cout << "small string=" << strResult << endl;
+		strResult = ws->setGetDataString(NULL);
+		if(strResult)
+			cout << "string nil=" << strResult << endl;
+		else
+			cout << "string nil=NULL" << endl;
 
 		intResult = ws->setGetIntegerType(&intInput);
 		cout << "integer=" << *intResult << endl;
+		intResult = ws->setGetIntegerType(NULL);
+		if(intResult)
+			cout << "integer nil=" << *intResult << endl;
+		else
+			cout << "integer nil=NULL" << endl;
 
 		decResult = ws->setGetDecimalType(&decInput);
         printf("decimal=%.5f\n", *decResult); fflush(stdout);
+		decResult = ws->setGetDecimalType(NULL);
+        if(decResult) {
+			printf("decimal nil=%.5f\n", *decResult); fflush(stdout);
+		} else
+			cout << "decimal nil=NULL" << endl;
 
 		b64Result = ws->setGetBase64BinaryType(&b64Test);
 		cout << "base64Binary size=" << b64Result->__size << endl;
@@ -186,6 +274,11 @@ int main(int argc, char* argv[])
 		{
 			cout << "base64Binary data=" << b64Result->__ptr << endl;
 		}
+		b64Result = ws->setGetBase64BinaryType(NULL);
+		if(b64Result)
+			cout << "base64Binary nil size=" << b64Result->__size << endl;
+		else
+			cout << "base64Binary nil=NULL" << endl;
 
 		hexResult = ws->setGetHexBinary(&hexTest);
 		cout << "hexBinary size=" << hexResult->__size << endl;
@@ -193,6 +286,12 @@ int main(int argc, char* argv[])
 		{
 			cout << "hexBinary data=" << hexResult->__ptr << endl;
 		}
+		hexResult = ws->setGetHexBinary(&hexTest);
+		if(hexResult)
+			cout << "hexBinary nil size=" << hexResult->__size << endl;
+		else
+			cout << "hexBinary nil=NULL" << endl;
+
 		bSuccess = true;
 		delete ws;
 	}
