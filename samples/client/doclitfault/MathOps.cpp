@@ -59,7 +59,12 @@ int MathOps::div(int Value0, int Value1)
     }
     catch(AxisException& e)
     {
-        if(AXIS_SUCCESS == m_pCall->checkFault("Fault",
+        int iExceptionCode = e.getExceptionCode();
+        if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
+        {
+            throw;
+        }
+	else if(AXIS_SUCCESS == m_pCall->checkFault("Fault",
             "http://localhost/axis/MathOps/types")) //Exception handling code goes here
         {
             cFaultcode = m_pCall->getElementAsString("faultcode", 0);
