@@ -469,7 +469,6 @@ extern "C" void* GetStubObject(AXIS_PROTOCOL_TYPE nProtocol, AxisChar* pchEndpoi
 extern "C" void DestroyStubObject(void* pCall)
 {
 	Call* pObject = (Call*)((Call_C*)pCall)->_object;
-	pObject->UnInitialize();
 	delete 	pObject;
 	free(pCall);
 }
