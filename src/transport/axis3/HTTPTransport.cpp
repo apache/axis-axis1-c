@@ -25,7 +25,6 @@
 #endif
 
 #include "HTTPTransport.hpp"
-#include "../../common/AxisGenException.h"
 
 #include <stdio.h>
 #include <iostream>
