@@ -15,7 +15,7 @@
 			<include name="**/*.class"/>
 			<manifest>
 				<attribute name="Main-Class"
-				 value="org.apache.test.mockserver.MockServer"/>
+				 value="org.apache.axis.test.mockserver.MockServer"/>
 			</manifest>
 		</jar>
 	</target>
