@@ -134,10 +134,21 @@ main(int argc, char *argv[])
     }
     strcpy(buffer1, bigstring.c_str());
     //printf(ws.echoString(buffer1));
+    try
+    {
     if (0 == strcmp(ws.echoString("hello world"), "hello world"))
 	printf("successful\n");
     else
 	printf("failed\n");
+    }
+    catch(AxisException& e)
+    {
+        printf("%s\n", e.what());
+    }
+    catch(...)
+    {
+        printf("Unknown exception\n");
+    }
 
     printf("Test trasport property accessors\n");
     printf("First trasport key = %s\n", ws.getFirstTrasportPropertyKey());

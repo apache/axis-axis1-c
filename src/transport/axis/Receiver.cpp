@@ -37,6 +37,8 @@ const char* Receiver::Recv()
       int bodyLength;
       int isHttpHeader;
     const char* pToReturn = NULL;
+    try
+    {
       isHttpHeader = m_pTrChannel->getIsHttpHeader();
       bodyLength = m_pTrChannel->getBodyLength();
       /* printf("bodyLength:%d\n", bodyLength); */
@@ -45,11 +47,7 @@ const char* Receiver::Recv()
             return NULL;
     if (0 == m_BytesRead)
     {
-        try
-        {
-#ifdef _DEBUG
-                    printf("try\n");
-#endif
+
             *m_pTrChannel >> (&m_pMsg);
                     if(m_pMsg == NULL)
             {
@@ -57,21 +55,21 @@ const char* Receiver::Recv()
                         return NULL;
             }
             m_MsgSize = strlen(m_pMsg);        
-	}
-        catch(AxisException& ex)
-        {
+	//}
+        //catch(AxisException& ex)
+        //{
             /* Get the fault message. */
-            *m_pTrChannel >> (&m_pMsg);
-            m_MsgSize = strlen(m_pMsg);
-            #ifdef _DEBUG
+          //  *m_pTrChannel >> (&m_pMsg);
+          //  m_MsgSize = strlen(m_pMsg);
+          //  #ifdef _DEBUG
             /*    std::cerr << ex.GetErrorMsg() << std::endl; */
-            #endif
-	}
-        catch(...)
-        {
-            AXISTRACE1("SERVER_TRANSPORT_RECEPTION_EXCEPTION", CRITICAL);
-            throw AxisTransportException(SERVER_TRANSPORT_RECEPTION_EXCEPTION);
-	}
+          //  #endif
+	//}
+        //catch(...)
+        //{
+          //  AXISTRACE1("SERVER_TRANSPORT_RECEPTION_EXCEPTION", CRITICAL);
+          //  throw AxisTransportException(SERVER_TRANSPORT_RECEPTION_EXCEPTION);
+	//}
     }
         /* printf("m_MsgSize:%d\n", m_MsgSize); */
     if (m_MsgSize > 0)
@@ -95,6 +93,15 @@ const char* Receiver::Recv()
     {
             printf("m_MsgSize == 0, so return NULL\n");
         return NULL;
+    }
+    }
+    catch(AxisTransportException& e)
+    {
+        throw;
+    }
+    catch(...)
+    {
+        throw;
     }
 }
 

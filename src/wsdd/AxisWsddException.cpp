@@ -79,7 +79,8 @@ void AxisWsddException::processException(const int iExceptionCode, char* pcMessa
 {
     AxisString sMessage = strdup(pcMessage);
     m_sMessage = getMessage(iExceptionCode) + " " + sMessage;
-    delete pcMessage;
+    if(pcMessage)
+        delete pcMessage;
 }
 const string AxisWsddException::getMessage (const exception* objException)
 {

@@ -78,7 +78,9 @@ void AxisTransportException::processException(const int iExceptionCode, char* pc
 {
     AxisString sMessage = strdup(pcMessage);
     m_sMessage = getMessage(iExceptionCode) + " " + sMessage;
-    delete pcMessage;
+    m_sMessage = getMessage(iExceptionCode);
+    if(pcMessage)
+        delete pcMessage;
 }
 const string AxisTransportException::getMessage (const exception* objException)
 {
