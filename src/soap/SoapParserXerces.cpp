@@ -39,7 +39,7 @@ SoapParserXerces::~SoapParserXerces()
     m_nStatus = NULL;
 }
 
-int SoapParserXerces::SetInputStream(const Ax_soapstream* pInputStream)
+int SoapParserXerces::setInputStream(const Ax_soapstream* pInputStream)
 {
     m_pInputStream = pInputStream;
     is = new SoapInputSource(m_pInputStream->transport.pGetFunct,
@@ -51,7 +51,7 @@ int SoapParserXerces::SetInputStream(const Ax_soapstream* pInputStream)
     return AXIS_SUCCESS;
 }
 
-int SoapParserXerces::Init()
+int SoapParserXerces::init()
 {
     if (firstParsed)
     {
@@ -61,18 +61,18 @@ int SoapParserXerces::Init()
     return 0;
 }
 
-const XML_Ch* SoapParserXerces::GetNS4Prefix(const XML_Ch* prefix)
+const XML_Ch* SoapParserXerces::getNS4Prefix(const XML_Ch* prefix)
 {
     return Xhandler.NS4Prefix(prefix);
 }
 
-int SoapParserXerces::GetStatus()
+int SoapParserXerces::getStatus()
 {
     m_nStatus = AXIS_SUCCESS; /*TODO:Check if an error occured in expat */
     return m_nStatus;
 }
 
-const AnyElement* SoapParserXerces::Next(bool isCharData)
+const AnyElement* SoapParserXerces::next(bool isCharData)
 {
 
     if(!firstParsed)

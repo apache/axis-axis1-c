@@ -202,7 +202,7 @@ public class ClientStubWriter extends CFileWriter{
 										"SSL_CHANNEL" : "NORMAL_CHANNEL";
 		String provider =  minfo.getInputUse().equals("literal") ?"C_RPC_LITERAL_PROVIDER":"C_RPC_PROVIDER";
 		writer.write("\t/* Following will establish the connections with the server too */\n");
-		writer.write("\tif (AXIS_SUCCESS != pCall->_functions->Initialize(pCall->_object,"+ provider+", "+channelSecurityType+")) return ");
+		writer.write("\tif (AXIS_SUCCESS != pCall->_functions->initialize(pCall->_object,"+ provider+", "+channelSecurityType+")) return ");
 		if (returntype != null){
 			writer.write((returntypeisarray?"RetArray":returntypeissimple?"Ret":"pReturn")+";\n");
 		}
@@ -248,7 +248,7 @@ public class ClientStubWriter extends CFileWriter{
 			}
 			writer.write(");\n");
 		}
-		writer.write("\tif (AXIS_SUCCESS == pCall->_functions->Invoke(pCall->_object))\n\t{\n");
+		writer.write("\tif (AXIS_SUCCESS == pCall->_functions->invoke(pCall->_object))\n\t{\n");
 		writer.write("\t\tif(AXIS_SUCCESS == pCall->_functions->CheckMessage(pCall->_object, \""+methodName+"Response\", \"\"))\n\t\t{\n");
 		if ( isAllTreatedAsOutParams) {
 			String currentParamName;
@@ -292,11 +292,11 @@ public class ClientStubWriter extends CFileWriter{
 				}				
 			}	
 			writer.write("\t\t}\n");
-			writer.write("\t}\n\tpCall->_functions->UnInitialize(pCall->_object);\n");
+			writer.write("\t}\n\tpCall->_functions->unInitialize(pCall->_object);\n");
 		}
 		else if (returntype == null){
 			writer.write("\t\t\t/*not successful*/\n\t\t}\n");
-			writer.write("\t}\n\tpCall->_functions->UnInitialize(pCall->_object);\n");
+			writer.write("\t}\n\tpCall->_functions->unInitialize(pCall->_object);\n");
 		}
 		else if (returntypeisarray){
 			QName qname = WrapperUtils.getArrayType(retType).getName();
@@ -313,20 +313,20 @@ public class ClientStubWriter extends CFileWriter{
 				writer.write("\t\t\tmemcpy(&RetArray, &array, sizeof(Axis_Array));\n");
 			}
 			writer.write("\t\t}\n");
-			writer.write("\t}\n\tpCall->_functions->UnInitialize(pCall->_object);\n");
+			writer.write("\t}\n\tpCall->_functions->unInitialize(pCall->_object);\n");
 			writer.write("\treturn RetArray;\n");
 		}
 		else if(returntypeissimple){
 			writer.write("\t\t\tRet = pCall->_functions->"+ CUtils.getParameterGetValueMethodName(outparamTypeName, false)+"(pCall->_object, \""+returntype.getParamName()+"\", 0);\n");
 			writer.write("\t\t}\n");
-			writer.write("\t}\n\tpCall->_functions->UnInitialize(pCall->_object);\n");
+			writer.write("\t}\n\tpCall->_functions->unInitialize(pCall->_object);\n");
 			writer.write("\treturn Ret;\n");
 		}
 		else{
 			outparamTypeName = returntype.getLangName();//need to have complex type name without *
 			writer.write("\t\t\tpReturn = ("+outparamTypeName+"*)pCall->_functions->GetCmplxObject(pCall->_object, (void*) Axis_DeSerialize_"+outparamTypeName+", (void*) Axis_Create_"+outparamTypeName+", (void*) Axis_Delete_"+outparamTypeName+",\""+returntype.getParamName()+"\", 0);\n"); 
 			writer.write("\t\t}\n");
-			writer.write("\t}\n\tpCall->_functions->UnInitialize(pCall->_object);\n");
+			writer.write("\t}\n\tpCall->_functions->unInitialize(pCall->_object);\n");
 			writer.write("\treturn pReturn;\n");						
 		}
 		//write end of method

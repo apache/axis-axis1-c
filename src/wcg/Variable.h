@@ -25,8 +25,8 @@
 #pragma warning (disable : 4786)
 #endif
 
-#if !defined(AXIS_VARIABLE_H__INCLUDED_)
-#define AXIS_VARIABLE_H__INCLUDED_
+#if !defined(AXIS_VARIABLE_H__OF_AXIS_INCLUDED_)
+#define AXIS_VARIABLE_H__OF_AXIS_INCLUDED_
 
 #include "File.h"
 

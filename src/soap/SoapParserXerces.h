@@ -23,8 +23,8 @@
 #pragma warning (disable : 4786)
 #endif
 
-#if !defined(__SoapParserXerces_H_INCLUDED__)
-#define __SoapParserXerces_H_INCLUDED__
+#if !defined(__SoapParserXerces_H_OF_AXIS_INCLUDED__)
+#define __SoapParserXerces_H_OF_AXIS_INCLUDED__
 
 #include <axis/server/Packet.h>
 #include "../xml/QName.h"
@@ -47,14 +47,14 @@ public:
     SoapParserXerces();
     ~SoapParserXerces();
 
-    int SetInputStream(const Ax_soapstream* pInputStream);
-    const Ax_soapstream* GetInputStream(){return m_pInputStream;};
-    int Init();
-    const XML_Ch* GetNS4Prefix(const XML_Ch* prefix);
-    int GetStatus();
-    const AnyElement* Next(bool isCharData=false);
-    AXIS_TRANSPORT_STATUS GetTransportStatus(){ return m_nTransportStatus;};
-    void SetTransportStatus(AXIS_TRANSPORT_STATUS nStatus)
+    int setInputStream(const Ax_soapstream* pInputStream);
+    const Ax_soapstream* getInputStream(){return m_pInputStream;};
+    int init();
+    const XML_Ch* getNS4Prefix(const XML_Ch* prefix);
+    int getStatus();
+    const AnyElement* next(bool isCharData=false);
+    AXIS_TRANSPORT_STATUS getTransportStatus(){ return m_nTransportStatus;};
+    void setTransportStatus(AXIS_TRANSPORT_STATUS nStatus)
     { m_nTransportStatus = nStatus;};
 
 

@@ -61,7 +61,7 @@ int CharacterElement::serialize(SoapSerializer& pSZ)
 {
     if (m_pachValue != NULL)
     {
-        pSZ.Serialize(m_pachValue, NULL);
+        pSZ.serialize(m_pachValue, NULL);
         return AXIS_SUCCESS;
     }
     else

@@ -60,7 +60,7 @@ void SoapMethod::setUri(const AxisChar* uri)
     m_strUri = uri;
 }
 
-void SoapMethod::AddOutputParam(Param *param)
+void SoapMethod::addOutputParam(Param *param)
 {
     if (param)
     {
@@ -82,7 +82,7 @@ int SoapMethod::serialize(SoapSerializer& pSZ)
         if(isSerializable())
         {
                     
-            pSZ.Serialize("<", m_strPrefix.c_str(), ":", m_strLocalname.c_str(),
+            pSZ.serialize("<", m_strPrefix.c_str(), ":", m_strLocalname.c_str(),
                 " xmlns:", m_strPrefix.c_str(),
                 "=\"", m_strUri.c_str(), "\"", NULL);
 
@@ -92,7 +92,7 @@ int SoapMethod::serialize(SoapSerializer& pSZ)
                 break;
             }
             
-            pSZ.Serialize(">", NULL);
+            pSZ.serialize(">", NULL);
 
             iStatus= serializeOutputParam(pSZ);
             if(iStatus==AXIS_FAIL)
@@ -100,14 +100,14 @@ int SoapMethod::serialize(SoapSerializer& pSZ)
                 break;
             }
             
-            pSZ.Serialize("</", NULL);
+            pSZ.serialize("</", NULL);
 
             if(m_strPrefix.length() != 0)
             {                    
-                pSZ.Serialize(m_strPrefix.c_str(), ":", NULL);
+                pSZ.serialize(m_strPrefix.c_str(), ":", NULL);
             }
             
-            pSZ.Serialize(m_strLocalname.c_str(), ">", NULL);
+            pSZ.serialize(m_strLocalname.c_str(), ">", NULL);
 
             iStatus= AXIS_SUCCESS;
         }

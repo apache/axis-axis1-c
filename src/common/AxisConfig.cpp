@@ -49,7 +49,7 @@ AxisConfig::~AxisConfig ()
         delete m_sValue;
 }
 
-int AxisConfig::ReadConfFile ()
+int AxisConfig::readConfFile ()
 {
     FILE* fileConfig = NULL;
     char* sConfPath = NULL;
@@ -106,23 +106,23 @@ int AxisConfig::ReadConfFile ()
     return AXIS_SUCCESS;
 }
 
-char* AxisConfig::GetWsddFilePath ()
+char* AxisConfig::getWsddFilePath ()
 {
     return m_sWsddFilePath;
 }
 
-char* AxisConfig::GetAxisLogPath ()
+char* AxisConfig::getAxisLogPath ()
 {
     return m_sAxisLogPath;
 }
 
 
-char* AxisConfig::GetClientWsddFilePath ()
+char* AxisConfig::getClientWsddFilePath ()
 {
     return m_sClientWsddFilePath;
 }
 
-char* AxisConfig::GetAxisHomePath ()
+char* AxisConfig::getAxisHomePath ()
 {
     return m_sAxisHome;
 }

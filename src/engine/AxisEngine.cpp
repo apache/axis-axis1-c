@@ -49,31 +49,31 @@ AxisEngine::AxisEngine ()
 AxisEngine::~AxisEngine ()
 {
     if (m_pDZ)
-        g_pDeserializerPool->PutInstance (m_pDZ);
+        g_pDeserializerPool->putInstance (m_pDZ);
     if (m_pSZ)
-        g_pSerializerPool->PutInstance (m_pSZ);
+        g_pSerializerPool->putInstance (m_pSZ);
     if (m_pMsgData)
         delete m_pMsgData;
 }
 
-int AxisEngine::Initialize ()
+int AxisEngine::initialize ()
 {
     int Status;
     m_pMsgData = new MessageData ();
     if (!m_pMsgData)
         return AXIS_FAIL;
     // Create and initialize Serializer and Deserializer objects
-    if (AXIS_SUCCESS != (Status = g_pSerializerPool->GetInstance (&m_pSZ)))
+    if (AXIS_SUCCESS != (Status = g_pSerializerPool->getInstance ((IWrapperSoapSerializer**)&m_pSZ)))
         return Status;
-    if (AXIS_SUCCESS != (Status = g_pDeserializerPool->GetInstance (&m_pDZ)))
+    if (AXIS_SUCCESS != (Status = g_pDeserializerPool->getInstance ((IWrapperSoapDeSerializer**)&m_pDZ)))
         return Status;
-    m_pMsgData->SetSerializer (m_pSZ);
-    m_pMsgData->SetDeSerializer (m_pDZ);
+    m_pMsgData->setSerializer (m_pSZ);
+    m_pMsgData->setDeSerializer (m_pDZ);
 
     return AXIS_SUCCESS;
 }
 
-void AxisEngine::UnInitialize ()
+void AxisEngine::unInitialize ()
 {
     if (m_pMsgData)
     {
@@ -86,31 +86,31 @@ void AxisEngine::UnInitialize ()
      */ 
 }
 
-int AxisEngine::InitializeHandlers (string & sSessionId, 
+int AxisEngine::initializeHandlers (string & sSessionId, 
     AXIS_PROTOCOL_TYPE protocol)
 {
     int Status = AXIS_SUCCESS;
     // Get Global Handlers from the pool if configured any
     if (AXIS_SUCCESS !=
         (Status =
-        g_pHandlerPool->GetGlobalRequestFlowHandlerChain (&m_pGReqFChain,
+        g_pHandlerPool->getGlobalRequestFlowHandlerChain (&m_pGReqFChain,
         sSessionId)))
         return Status;
     if (AXIS_SUCCESS !=
         (Status =
-        g_pHandlerPool->GetGlobalResponseFlowHandlerChain (&m_pGResFChain,
+        g_pHandlerPool->getGlobalResponseFlowHandlerChain (&m_pGResFChain,
         sSessionId)))
         return Status;
 
     // Get Transport Handlers from the pool if configured any
     if (AXIS_SUCCESS !=
         (Status =
-        g_pHandlerPool->GetTransportRequestFlowHandlerChain (&m_pTReqFChain,
+        g_pHandlerPool->getTransportRequestFlowHandlerChain (&m_pTReqFChain,
         sSessionId, protocol)))
         return Status;
     if (AXIS_SUCCESS !=
         (Status =
-        g_pHandlerPool->GetTransportResponseFlowHandlerChain (&m_pTResFChain,
+        g_pHandlerPool->getTransportResponseFlowHandlerChain (&m_pTResFChain,
         sSessionId, protocol)))
         return Status;
     return Status;

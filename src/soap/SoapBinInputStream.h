@@ -16,12 +16,8 @@
 
 /* SoapBinInputStream.h: interface for the SoapBinInputStream class. */
 
-#if !defined(AXIS_SOAPBININPUTSTREAM_H__INCLUDED_)
-#define AXIS_SOAPBININPUTSTREAM_H__INCLUDED_
-
-#if _MSC_VER > 1000
-#pragma once
-#endif /* _MSC_VER > 1000 */
+#if !defined(AXIS_SOAPBININPUTSTREAM_H__OF_AXIS_INCLUDED_)
+#define AXIS_SOAPBININPUTSTREAM_H__OF_AXIS_INCLUDED_
 
 #include <xercesc/util/BinInputStream.hpp>
 #include <axis/server/Packet.h>
