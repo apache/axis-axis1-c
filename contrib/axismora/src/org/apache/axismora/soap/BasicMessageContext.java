@@ -147,7 +147,7 @@ public class BasicMessageContext implements MessageContext {
     /* serializer of the result */
     private SerializationContext serializer;
     /* Service Style */
-    private Style style;
+    private Style style = Style.RPC;
 
     private Writer w;
 
@@ -509,11 +509,11 @@ public class BasicMessageContext implements MessageContext {
 
             this.soapEnvelope.addBodyElement(bo);
 
-//  NOt needed specific to rpc
-//            if (this.methodName != null) {
-//                bo.setName(this.methodName.getLocalPart() + "Response");
-//                bo.setNamespaceURI(this.methodName.getNamespaceURI());
-//            }
+			//needed specific to rpc
+            if (this.style ==  Style.RPC){
+                bo.setName(this.methodName.getLocalPart() + "Response");
+                bo.setNamespaceURI(this.methodName.getNamespaceURI());
+            }
 
             /*
                ** registor our Serializer **
