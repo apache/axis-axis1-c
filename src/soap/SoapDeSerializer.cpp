@@ -2990,8 +2990,8 @@ SoapDeSerializer::getElementAsString (const AxisChar * pName,
 		//     it is not a simple object.  As added protection against
 		//     false findings, the namespace has been set to an invalid
 		//     value of a single space character.
-		if (strlen (ret) < 3 && pNamespace != NULL && *pNamespace == ' ')
-		{
+		if (strlen (ret) < 3 && pNamespace != NULL) {
+		 	if (*pNamespace == ' ') {
 		    bool bReturn = false;
 
 		    if (strlen (ret) == 0)
@@ -3019,6 +3019,7 @@ SoapDeSerializer::getElementAsString (const AxisChar * pName,
 
 			return 0;
 		    }
+		 	}
 		}
 
 		m_pNode = m_pParser->next ();	/* skip end element node too */
