@@ -294,7 +294,6 @@ int main()
       This sample handler will simply echo (i.e send back) the string which you send in the SOAP request.
 <br>2)testHandler (A client side handler sample)</p> 
 <p>This sample handler will simply add a SOAP Header to the generated SOAP request.</p>
-<br>
 <p>Please note that these are very primitive sample handlers and are presented here to give you an idea about writing your own Handlers.</p>
 <p><b>echoStringHeaderHandler</b></p>
 <p><b>Building the Sample Handlers in VC</b></p>
@@ -304,29 +303,29 @@ int main()
 <p>The VC dsw file (ServerHandlers.dsw) is available at AXIS_EXTRACT/vc/samples/server/ ServerHandlers.dsw. Open this file and build the project echoStringHeaderHandler. Once the build is successful you will find the DLL (echoStringHeaderHandler.dll) at AXIS_EXTRACT/bin. If you see this DLL at the above location you are done with the first step.</p>
 <p><b>Configuring the Handler</b></p>
 <p>Now edit the AXIS_FOLDER /conf/server.wsdd to include the handler for a particular service.</p>
-<p>&lt;service name="Calculator" provider="CPP:RPC" description="Simple Calculator Axis C++ Service ";&gt
+<p>&lt;service name="Calculator" provider="CPP:RPC" description="Simple Calculator Axis C++ Service "&gt
 <br>
-&lt;requestFlow name="CalculatorHandlers";&gt
+&lt;requestFlow name="CalculatorHandlers"&gt
 <br>  
-&lt;handler name="ESHHandler" type=" AXIS_EXTRACT/bin/echoStringHeaderHandler.dll";&gt
+&lt;handler name="ESHHandler" type=" AXIS_EXTRACT/bin/echoStringHeaderHandler.dll"&gt
 <br>
-&lt;/handler;&gt
+&lt;/handler&gt
 <br>  
-&lt;/requestFlow;&gt
+&lt;/requestFlow&gt
 <br> 
-&lt;responseFlow name="CalculatorHandlers";&gt
+&lt;responseFlow name="CalculatorHandlers"&gt
 <br>      
-&lt;handler name="ESHHandler" type=" AXIS_EXTRACT/bin/echoStringHeaderHandler.dll";&gt 
+&lt;handler name="ESHHandler" type=" AXIS_EXTRACT/bin/echoStringHeaderHandler.dll"&gt 
 <br>    
-&lt;/handler;&gt
+&lt;/handler&gt
 <br> 
-&lt;/responseFlow;&gt
+&lt;/responseFlow&gt
 <br> 
-&lt;parameter name="allowedMethods" value="add sub mul div "/;&gt
+&lt;parameter name="allowedMethods" value="add sub mul div "/&gt
 <br>
-&lt;parameter name="className" value="Axis\webservices\Calculator.dll" /;&gt
+&lt;parameter name="className" value="Axis\webservices\Calculator.dll" /&gt
 <br>
-&lt;/service;&gt</p>
+&lt;/service&gt</p>
 <p><b>Note: Make sure you specify the correct path of the handler dll in the server.wsdd file.</b></p>
 <p>Now you are almost done to run your server side handler.
 <br>
@@ -338,21 +337,20 @@ Restart the Apache server and thats it.</p>
 <p><b>testHandler</b></p>
 <p><b>Building the Sample Handlers in VC</b></p>
 <p>Building testHandler (A client side handler sample)</p>
-<br>
 <p>The VC dsw file (ServerHandlers.dsw) is available at AXIS_EXTRACT/vc/samples/client/ClientHandlers.dsw. Open this file and build the project TestHandler. Once the build is successful you will find the DLL (testHandler.dll) at AXIS_EXTRACT/bin. If you see this DLL at the above location you are done with the first step.</p>
 <p><b>Configuring the Handler</b></p>
 <p>Now edit the AXIS_FOLDER /conf/client.wsdd to include the handler for a particular service.</p>
-<p>&lt;service name="Calculator" provider="CPP:DOCUMENT" description="Calculator web service";&gt
+<p>&lt;service name="Calculator" provider="CPP:DOCUMENT" description="Calculator web service"&gt
 <br>
-&lt;requestFlow name="CalculatorHandlers";&gt 
+&lt;requestFlow name="CalculatorHandlers"&gt 
 <br>       
-&lt;handler name="TestHandler" type=" AXIS_EXTRACT/bin/testHandler.dll";&gt
+&lt;handler name="TestHandler" type=" AXIS_EXTRACT/bin/testHandler.dll"&gt
 <br>
-&lt;/handler;&gt
+&lt;/handler&gt
 <br>  
-&lt;/requestFlow;&gt
+&lt;/requestFlow&gt
 <br>
-&lt;/service;&gt</p>
+&lt;/service&gt</p>
 <p><b>Note: Make sure you specify the correct path of the handler dll in the client.wsdd file.</b></p>
 <p>Now you are almost done to run your client side handler.</p>
 <p><b>Note: If you are using Client side Handlers you need to enter the CLIENTWSDDFILEPATH  entry in the AXIS_FOLDER/axiscpp.conf configuration file. (See above)</b></p>
