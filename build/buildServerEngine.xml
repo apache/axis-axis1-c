@@ -40,6 +40,9 @@
 						<include name="soap/*.c"/>
 						<include name="wsdd/*.cpp"/>
 						<include name="xml/*.cpp"/>
+						<include name="platforms/windows/*.cpp" if="windows"/>
+						<include name="platforms/unix/*.cpp" if="linux"/>
+						<include name="platforms/unix/*.cpp" if="solaris"/>
 						<include name="platforms/os400/PlatformSpecificOS400.cpp" if="os400"/>
 						<!-- The following files need to be excluded @Adrian - query these! -->
 						<exclude name="common/Packet.cpp"/>
@@ -68,6 +71,7 @@
 						<include name="wsdd/*.cpp"/>
 						<include name="xml/*.cpp"/>
 						<include name="transport/axis/AxisTransportException.cpp"/>
+						<include name="platforms/unix/*.cpp"/>
 						<!-- The following files need to be excluded -->
 						<exclude name="common/Packet.cpp"/>
 						<exclude name="common/AxisSocketUtils.cpp"/>
