@@ -90,11 +90,44 @@ TranslationUnit::~TranslationUnit()
 	}
 }
 
-int TranslationUnit::GenerateWSDL()
+int TranslationUnit::GenerateWSDL(string& sServiceFile, string& sURI)
 {
 	try {
-
-	
+		if (!m_pWSClass) {
+			cout << "No web service class found" << endl;	
+			return 1;
+		}
+		string fname = sServiceFile + ".wsdl"; 
+		File file(fname);
+		file << "<?xml version=\"1.0\" encoding=\"utf-8\" ?>"<< endl;
+		file << "<definitions targetNamespace=\"http://" << sURI.c_str() << "/Axis/" << sServiceFile.c_str() << "\""<< endl;
+		file << "xmlns=\"http://schemas.xmlsoap.org/wsdl/\""<< endl;
+		file << "xmlns:soap=\"http://schemas.xmlsoap.org/wsdl/soap/\""<< endl;
+		file << "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\""<< endl;
+		file << "xmlns:xsdl=\""<< sServiceFile.c_str() << "-xsd\""<< endl; //xsd local
+		file << "xmlns:impl=\"http://" << sURI.c_str() << "/Axis/" << sServiceFile.c_str() << "\""<< endl; //implimentation
+		file << "xmlns:soapenc=\"http://schemas.xmlsoap.org/soap/encoding/\">" << endl;
+		//types section
+		if (!m_Beans.empty())
+		{
+			file << "<types>" << endl;
+			file << "<schema targetNamespace=\"" << sServiceFile.c_str() << "-xsd\" "<< "xmlns=\"http://www.w3.org/2001/XMLSchema\" " << "xmlns:wsdl=\"http://schemas.xmlsoap.org/wsdl/\">" << endl;
+			//generate schema for types
+			for (list<BeanClass*>::iterator it = m_Beans.begin(); it != m_Beans.end(); it++)
+			{
+				(*it)->GenerateWSDLSchema(file);
+			}
+			file << "</schema>" << endl;
+			file << "</types>" << endl;
+		}
+		//messages section
+		m_pWSClass->GenerateWSDLMessages(file);
+		//porttypes section
+		m_pWSClass->GenerateWSDLPortTypes(file, sServiceFile);
+		//bindings section
+		//create only soap - rpc - http binding for now
+		GenerateWSDLBinding(file, sServiceFile, SOAP_BINDING, SOAP_RPC, HTTP_TRANSPORT, sURI);
+		file << "</definitions>" << endl;
 	}
 	catch(...) //any exception
 	{
@@ -239,7 +272,7 @@ int TranslationUnit::GenerateServiceFile(string& sServiceFile)
 		file << "{" << endl;
 		file << "\tif (inst) " << endl;
 		file << "\t{" << endl;
-		file << "\t\tWrapperClassHandler* pWCH = dynamic_cast<WrapperClassHandler*>(inst);" << endl;
+		file << "\t\tWrapperClassHandler* pWCH = reinterpret_cast<WrapperClassHandler*>(inst);" << endl;
 		file << "\t\tpWCH->Fini();" << endl;
 		file << "\t\tdelete pWCH;" << endl;
 		file << "\t\treturn SUCCESS;" << endl;
@@ -254,4 +287,45 @@ int TranslationUnit::GenerateServiceFile(string& sServiceFile)
 		return 1;
 	}
 	return 0; //success
+}
+
+int TranslationUnit::GenerateWSDLBinding(File &file, string& sServiceName, int nBinding, int nStyle, int nTransport, string& sURI)
+{
+	file << "<binding name=\"" << sServiceName;
+	switch (nBinding)
+	{
+	case SOAP_BINDING: file << "Soap"; break;
+	case HTTP_BINDING: file << "Http"; break;
+	default: return 1; //error
+	}
+	file << "Binding\" type=\"impl:" << sServiceName << "PortType\">" << endl;
+	switch (nBinding)
+	{
+	case SOAP_BINDING: 
+		{
+			file << "<soap:binding style=\"";
+			switch (nStyle)
+			{
+			case SOAP_RPC: file << "rpc"; break;
+			case SOAP_DOCUMENT: file << "document"; break;
+			default: return 1; //error
+			}
+			file << "\" transport=\"";
+			switch (nTransport)
+			{
+			case HTTP_TRANSPORT: file << "http://schemas.xmlsoap.org/soap/http"; break;
+			default: return 1; //error
+			}
+			file << "\" />" << endl;
+		}
+		break;
+	case HTTP_BINDING: 
+		{
+			
+		}
+		break;
+	default: return 1; //error
+	}
+	m_pWSClass->GenerateOperationsInBinding(file, sServiceName, nBinding, nStyle, sURI); 
+	file << "</binding>" << endl;
 }

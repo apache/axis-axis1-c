@@ -191,3 +191,76 @@ int Method::GenerateMethodImpl(string& sClassName, File &file)
 	return 0;
 }
 
+int Method::GenerateWSDLMessages(File &file)
+{
+	file << "<message name=\"" << m_Name << "Request\">" << endl;
+	for (list<Variable*>::iterator it = m_Params.begin(); it != m_Params.end(); it++)
+	{
+		(*it)->GenerateWSDLPartInMessage(file, true);
+	}
+	file << "</message>" << endl;
+	if (m_pReturnType)
+	{
+		file << "<message name=\"" << m_Name << "Response\">" << endl;
+		m_pReturnType->GenerateWSDLPartInMessage(file, false);
+		file << "</message>" << endl;
+	}
+	return 0; //success
+}
+
+int Method::GenerateWSDLOperationInPortType(File &file)
+{
+	file << "<operation name=\"" << m_Name << "\">" << endl;
+	file << "<input message=\"impl:" << m_Name << "Request\" />" << endl; 
+	file << "<output message=\"impl:" << m_Name << "Response\" />" << endl; 
+	file << "</operation>" << endl;
+	return 0;
+}
+
+int Method::GenerateOperationInBinding(File &file, string &sServiceName, int nBinding, int nStyle, string &sURI)
+{
+	file << "<operation name=\"" << m_Name << "\">" << endl;
+	switch (nBinding)
+	{
+	case SOAP_BINDING: 
+		{
+			file << "<soap:operation soapAction=\"" << sServiceName << "\" style=\""; //service name should be in soapAction
+			switch (nStyle)
+			{
+			case SOAP_RPC: 
+				{	
+					file << "rpc\" />" << endl;
+					file << "<input>" << endl;
+					file << "<soap:body use=\"encoded\" namespace=\"http://" << sURI << "/\" encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" />" << endl; 
+					file << "</input>" << endl;
+					file << "<output>" << endl;
+					file << "<soap:body use=\"encoded\" namespace=\"http://" << sURI << "/\" encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" />" << endl; 
+					file << "</output>" << endl;
+				}
+				break;
+			case SOAP_DOCUMENT: 
+				{
+					file << "document\" />" << endl; 
+					file << "<input>" << endl;
+					file << "<soap:body use=\"literal\" />" << endl; 
+					file << "</input>" << endl;
+					file << "<output>" << endl;
+					file << "<soap:body use=\"literal\" />" << endl; 
+					file << "</output>" << endl;
+
+				}
+				break;
+			default: return 1; //error
+			}
+		}
+		break;
+	case HTTP_BINDING: 
+		{
+			
+		}
+		break;
+	default: return 1; //error
+	}
+	file << "</operation>" << endl;
+	return 0;
+}
