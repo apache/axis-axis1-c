@@ -18,6 +18,9 @@
 /*
  *	@author sanjaya singharage (sanjayas@opensource.lk)
  */
+#ifdef WIN32
+#pragma warning (disable : 4786)
+#endif
 
 #include "XercesHandler.h"
 #include <xercesc/sax2/Attributes.hpp>
@@ -26,7 +29,7 @@
 
 XercesHandler::XercesHandler()
 {
-	test = 0;
+	m_nStatus = AXIS_SUCCESS;
 	Nelement = (AnyElement*)malloc(sizeof (AnyElement));
 }
 
@@ -36,8 +39,7 @@ XercesHandler::~XercesHandler()
 
 void XercesHandler::startElement(const XMLCh *const uri,const XMLCh *const localname,const XMLCh *const qname,const Attributes &attrs)
 {
-	printf("%s", "in start element");
-	test++;
+	m_pCurrElement = Nelement;
 	Nelement->m_type = START_ELEMENT;
 	Nelement->m_pchNameOrValue = XMLString::transcode(localname);
 	Nelement->m_pchNamespace = XMLString::transcode(uri);
@@ -51,7 +53,6 @@ void XercesHandler::startElement(const XMLCh *const uri,const XMLCh *const local
 		nextattrindex += 3;
 	}
 	Nelement->m_pchAttributes[len*3]=NULL;
-
 }
 
 const XML_Ch* XercesHandler::NS4Prefix(const XML_Ch* prefix)
@@ -65,8 +66,7 @@ const XML_Ch* XercesHandler::NS4Prefix(const XML_Ch* prefix)
 
 void XercesHandler::characters(const XMLCh* const chars, const unsigned int length)
 {
-	printf("%s", XMLString::transcode(chars));
-	test++;
+	m_pCurrElement = Nelement;
 	Nelement->m_type = CHARACTER_ELEMENT;
 	Nelement->m_pchNameOrValue = XMLString::transcode(chars);
 }
@@ -79,12 +79,17 @@ void XercesHandler::resetDocument()
 void XercesHandler::warning(const SAXParseException& exception)
 {}
 void XercesHandler::error(const SAXParseException& exception)
-{}
+{
+	m_nStatus = AXIS_FAIL;
+}
 void XercesHandler::fatalError(const SAXParseException& exception)
-{}
+{
+	m_nStatus = AXIS_FAIL;
+}
 
 void XercesHandler::endElement (const XMLCh *const uri,const XMLCh *const localname,const XMLCh *const qname)
 {
+	m_pCurrElement = Nelement;
 	Nelement->m_type = END_ELEMENT;
 	Nelement->m_pchNameOrValue = XMLString::transcode(localname);
 	Nelement->m_pchNamespace = XMLString::transcode(uri);
@@ -104,4 +109,13 @@ void XercesHandler::endPrefixMapping(const XMLCh* const prefix)
 	Nelement->m_type = END_PREFIX;
 	Nelement->m_pchNameOrValue = XMLString::transcode(prefix);
 	m_NsStack.erase(XMLString::transcode(prefix));
+}
+
+void XercesHandler::freeElement()
+{
+	if (m_pCurrElement)
+	{
+		//free inner variables
+		m_pCurrElement = 0;
+	}
 }

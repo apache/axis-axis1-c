@@ -47,8 +47,7 @@ unsigned int SoapBinInputStream::curPos() const
 
 unsigned int SoapBinInputStream::readBytes(XMLByte* const toFill, const unsigned int maxToRead)
 {
-	int nRead = 0;
-	m_pReadFunct((const char**)toFill, (int*)&maxToRead, m_pContext);
-    
+	int nRead = maxToRead;
+	m_pReadFunct((const char**)&toFill, (int*)&nRead, m_pContext);
 	return nRead;
 }

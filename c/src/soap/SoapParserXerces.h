@@ -58,13 +58,12 @@ public:
 	void SetTransportStatus(AXIS_TRANSPORT_STATUS nStatus){ m_nTransportStatus = nStatus;};
 
 
-
+	const Ax_soapstream* m_pInputStream;
 
 private:
 	int m_nStatus;
 	SAX2XMLReader* m_pParser;
 	//SAXParser* m_pParser;
-	const Ax_soapstream* m_pInputStream;
 	AXIS_TRANSPORT_STATUS m_nTransportStatus;
     XMLPScanToken token;
 	XercesHandler Xhandler;

@@ -43,7 +43,7 @@ SoapParserXerces::~SoapParserXerces()
 int SoapParserXerces::SetInputStream(const Ax_soapstream* pInputStream)
 {
 	m_pInputStream = pInputStream;
-	is = new SoapInputSource(m_pInputStream->transport.pGetFunct, m_pInputStream->str.ip_stream);
+	is = new SoapInputSource(m_pInputStream->transport.pGetFunct, m_pInputStream);
 	//SoapInputSource is(m_pInputStream->transport.pGetFunct, m_pInputStream->str.ip_stream);
 	m_pParser->setContentHandler(&Xhandler);
 	//return m_pHandler->Success();
@@ -75,9 +75,12 @@ const AnyElement* SoapParserXerces::Next()
 		firstParsed = true;
 	}
 
-	m_pParser->parseNext(token);
-
-	return Xhandler.getAnyElement();
-	//handler
-	//return NULL;
+	Xhandler.freeElement();
+	while (true)
+	{
+		m_pParser->parseNext(token);
+		AnyElement* elem = Xhandler.getAnyElement();
+		if (elem) return elem;
+		else if (AXIS_FAIL == Xhandler.GetStatus()) return NULL; 
+	}
 }
