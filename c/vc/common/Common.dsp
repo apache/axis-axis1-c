@@ -171,6 +171,14 @@ SOURCE=..\..\src\common\IArrayBean.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\IHandlerSoapSerializer.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\IHeaderBlock.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\IMessageData.h
 # End Source File
 # Begin Source File
@@ -183,11 +191,19 @@ SOURCE=..\..\src\common\ISoapDeserializer.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\ISoapHeader.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\ISoapMethod.h
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\common\ISoapSerializer.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\IWrapperSoapSerializer.h
 # End Source File
 # Begin Source File
 
