@@ -58,32 +58,28 @@
  */
 
 /**
-    @class 
-    @brief 
+    @class Attribute
+    @brief Class used to store any XML attribute
     @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
 */
 
-#if !defined(AFX_STARTELEMENT_H__932C3C70_0E61_48FD_A83D_37399F6DB023__INCLUDED_)
-#define AFX_STARTELEMENT_H__932C3C70_0E61_48FD_A83D_37399F6DB023__INCLUDED_
-
-#include <list>
+#if !defined(AFX_ATTRIBUTE_H__93C9B708_3BA1_4933_BE5F_BEABABD92E0C__INCLUDED_)
+#define AFX_ATTRIBUTE_H__93C9B708_3BA1_4933_BE5F_BEABABD92E0C__INCLUDED_
+#include <string>
 using namespace std;
-
-#include "Element.h"
-#include "SimpleAttribute.h"
 
 namespace axisxml {
 
-class StartElement : public Element  
+class Attribute  
 {
 public:
-	StartElement();
-	virtual ~StartElement();
-	list<Attribute*> m_Attributes;
-public:
-	virtual XML_NODE_TYPE GetType() { return START_ELEMENT;};
+	Attribute();
+	virtual ~Attribute();
+	string m_Namespace;
+	string m_Name;
+	string m_Value;
 };
 
 };
 
-#endif // !defined(AFX_STARTELEMENT_H__932C3C70_0E61_48FD_A83D_37399F6DB023__INCLUDED_)
+#endif // !defined(AFX_ATTRIBUTE_H__93C9B708_3BA1_4933_BE5F_BEABABD92E0C__INCLUDED_)

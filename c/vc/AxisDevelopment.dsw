@@ -3,30 +3,6 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 
 ###############################################################################
 
-Project: "Apache1_3Module"=".\server\apache1_3\Apache1_3Module.dsp" - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "Apache2_0Module"=".\server\apache2_0\Apache2_0Module.dsp" - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
 Project: "AxisTransportLibrary"=".\client\transport\axis\AxisTransportLibrary.dsp" - Package Owner=<4>
 
 Package=<5>
