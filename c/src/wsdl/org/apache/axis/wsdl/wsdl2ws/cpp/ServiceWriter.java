@@ -138,7 +138,6 @@ public class ServiceWriter extends CPPClassWriter{
 				  writer.write("void ");
 			  else {
 				String outparam = minfo.getReturnType().getLangName();
-				isSimpleType = CPPUtils.isSimpleType(outparam);
 				writer.write(WrapperUtils.getClassNameFromParamInfoConsideringArrays(minfo.getReturnType(),wscontext));
 			  }
 			  writer.write(" "+classname+"::"+minfo.getMethodname()+"(");
@@ -147,12 +146,10 @@ public class ServiceWriter extends CPPClassWriter{
 			Iterator params = minfo.getParameterTypes().iterator();
 			if(params.hasNext()){
 				ParameterInfo fparam = (ParameterInfo)params.next();
-				isSimpleType = CPPUtils.isSimpleType(fparam.getLangName());
 				writer.write(WrapperUtils.getClassNameFromParamInfoConsideringArrays(fparam,wscontext)+" Value"+0);
 			}
 			for(int j =1; params.hasNext();j++){
 				ParameterInfo nparam = (ParameterInfo)params.next();
-				isSimpleType = CPPUtils.isSimpleType(nparam.getLangName());
 				writer.write(", "+WrapperUtils.getClassNameFromParamInfoConsideringArrays(nparam,wscontext)+" Value"+j);
 			}
 			writer.write(")\n{\n}\n");

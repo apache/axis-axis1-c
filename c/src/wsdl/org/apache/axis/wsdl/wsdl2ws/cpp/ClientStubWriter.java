@@ -154,10 +154,8 @@ public class ClientStubWriter extends CPPClassWriter{
 	protected void writePreprocssorStatements() throws WrapperFault {
 		try{
 			writer.write("#include \""+classname+".h\"\n\n");
-			writer.write("#include <GDefine.h>\n");
 			writer.write("#include <IWrapperSoapDeSerializer.h>\n");
 			writer.write("#include <IWrapperSoapSerializer.h>\n");
-			writer.write("#include <IParam.h>\n\n");
 		}catch(IOException e){
 			throw new WrapperFault(e);
 		}
