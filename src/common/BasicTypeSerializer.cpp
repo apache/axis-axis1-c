@@ -54,8 +54,10 @@ const AxisChar* BasicTypeSerializer::serializeAsElement (const AxisChar* pName,
     switch (type)
     {
         case XSD_INT:
-            AxisSprintf (m_Buf, BTS_BUFFSIZE, "%d", *((int*)(pValue)));
-            m_sSZ += m_Buf;
+            {
+                Int intSerializer;
+                m_sSZ += intSerializer.serialize(pValue);
+            }
             break;
         case XSD_BOOLEAN:
         	{
@@ -271,8 +273,10 @@ const AxisChar* BasicTypeSerializer::serializeAsAttribute
     switch (type)
     {
         case XSD_INT:
-            AxisSprintf (m_Buf, BTS_BUFFSIZE, "%d", *((int*)(pValue)));
-            m_sSZ += m_Buf;
+            {
+                Int intSerializer;
+                m_sSZ += intSerializer.serialize(pValue);
+            }
             break;
         case XSD_BOOLEAN:
         	{
