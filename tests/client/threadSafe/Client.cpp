@@ -213,6 +213,9 @@ run(void *arg)
     return 0;
 }
 
+
+void cleanup(void*arg);
+
 int
 main(int argc, char *argv[])
 {
@@ -232,6 +235,9 @@ main(int argc, char *argv[])
     ws = NULL; 
     */
 
+    // initialize Axis client platform
+    initialize_module(0);
+
     pthread_t thread[NUM_THREADS];
     pthread_attr_t attr;
     int rc, t, status = 0;
@@ -243,7 +249,7 @@ main(int argc, char *argv[])
     for (t = 0; t < NUM_THREADS; t++)
     {
 	printf("Creating thread %d\n", t);
-	rc = pthread_create(&thread[t], &attr, run, (void*)ws);
+	rc = pthread_create(&thread[t], &attr, run, NULL);
 	if (rc)
 	{
 	    printf("ERROR; return code from pthread_create() is %d\n", rc);
@@ -255,10 +261,10 @@ main(int argc, char *argv[])
 
     /* Free attribute and wait for the other threads */
     pthread_attr_destroy(&attr);
-    /*for (t = 0; t < NUM_THREADS; t++)
-    {
-	//rc = pthread_join(thread[t], (void **)&status);
-	rc = pthread_detach(thread[t]);
+    //for (t = 0; t < NUM_THREADS; t++)
+    //{
+	rc = pthread_join(thread[NUM_THREADS-1], (void **)&status);
+	//rc = pthread_detach(thread[t]);
 	if (rc)
 	{
 	    printf("ERROR return code from pthread_join() is %d\n", rc);
@@ -266,7 +272,19 @@ main(int argc, char *argv[])
 	    //exit(-1);
 	}
 	printf("Joined thread %ld\n", thread[t]);
-    }*/
+    //}*/
 
+    //{pthread_cleanup_push(cleanup, NULL);}
+    printf( "about to exut\n");
     pthread_exit(NULL);
 }
+
+
+void cleanup(void*arg)
+{
+    printf( "about to clean up\n");
+    // Axis plaform terminate
+    uninitialize_module();
+    printf( "Done clean up\n");
+}
+
