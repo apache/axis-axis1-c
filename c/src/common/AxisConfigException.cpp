@@ -80,7 +80,8 @@ void AxisConfigException::processException(const int iExceptionCode, char* pcMes
 {
     AxisString sMessage = strdup(pcMessage);
     m_sMessage = getMessage(iExceptionCode) + " " + sMessage;
-    delete pcMessage;
+    if(pcMessage)
+        delete pcMessage;
 }
 
 const string AxisConfigException::getMessage (const exception* objException)

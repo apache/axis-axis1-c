@@ -102,7 +102,7 @@ public:
     void  SetProperty(const char* p_Property, const char* p_Value);
 
     /* Read from a HTTP transport handler and store read payload */
-    const Transport& operator >> (const char** pPayload);
+    const Transport& operator >> (const char** pPayload); 
 
     /* Write a given payload by using HTTP transport as carrier */
     const Transport& operator << (const char* p_Payload);

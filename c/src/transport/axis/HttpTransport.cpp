@@ -183,6 +183,8 @@ const Transport &
 HttpTransport::operator >> (const char **pPayLoad)
 {
     std::string tmpPacket;	/* use temporary, need to workout for this */
+    try
+    {
     if (!m_bStatus)
     {
 	/* We have the payload; this is due to Fault request made in */
@@ -191,8 +193,6 @@ HttpTransport::operator >> (const char **pPayLoad)
 	
 	return *this;
     }
-    try
-    {
         /* Http header is processed and validated. We now receive the payload */
         /* from the channel */
         if (m_IsHttpHeader == 1)
@@ -263,6 +263,7 @@ HttpTransport::operator >> (const char **pPayLoad)
     }
     catch(AxisTransportException& e)
     {
+  
         throw;
     }
     catch(AxisException& e)
@@ -412,7 +413,14 @@ HttpTransport::HTTPBind ()
 
 bool HttpTransport::GetStatus (const std::string & p_HttpPacket)
 {
-    HTTPValidate (p_HttpPacket);
+    try
+    {
+        HTTPValidate (p_HttpPacket);
+    }
+    catch(AxisTransportException& e)
+    {
+        throw;
+    }
     return m_bStatus;
 }
 
@@ -581,7 +589,8 @@ HttpTransport::HTTPValidate (const std::string & p_HttpPacket)
     char* pcMessage;// To hold Http error code message
 
     m_sHeader += p_HttpPacket;
-
+    try
+    {
     std::string::size_type pos, nxtpos;
     pos = p_HttpPacket.find ("\r\n\r\n");	/*Search for end of http header */
     if (pos == std::string::npos)
@@ -662,6 +671,15 @@ HttpTransport::HTTPValidate (const std::string & p_HttpPacket)
     }
     else
 	THROW_AXIS_TRANSPORT_EXCEPTION(SERVER_TRANSPORT_UNKNOWN_HTTP_RESPONSE);
+    }
+    catch(AxisTransportException& e)
+    {
+        throw;
+    }
+    catch(...)
+    {
+        throw;
+    }
 
 }
 
@@ -707,6 +725,19 @@ HttpTransport::GetPayLoad (const std::string & p_HttpPacket,
 	{
 	    chunked = true;
 	}
+        if ((pos = strLine.find ("Content-Type:")) != std::string::npos)
+        {
+            std::string strContentType = strLine.substr
+                (pos + strlen("Content-Type: ") + 5, 3).c_str ();
+            if("xml" != strContentType)
+            {
+                AXISTRACE1("SERVER_TRANSPORT_PROCESS_EXCEPTION:content type is not xml", INFO);
+                char* pcMessage = new char[256 * sizeof(char)];
+                strcpy(pcMessage, "Content type is not xml");
+	        THROW_AXIS_TRANSPORT_EXCEPTION2(SERVER_TRANSPORT_PROCESS_EXCEPTION, pcMessage);
+            }
+                
+        }
     }
     m_PayLoad = p_HttpPacket.substr (offset);	/* rest from the offset is payload */
 

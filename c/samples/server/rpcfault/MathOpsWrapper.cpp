@@ -105,6 +105,10 @@ int MathOpsWrapper::div(void* pMsg)
 			(void*) Axis_Delete_DivByZeroStruct,"DivByZero", Axis_URI_DivByZeroStruct);
 		throw;
 	}
+        catch(...)
+        {
+            throw;
+        }
 
 }
 

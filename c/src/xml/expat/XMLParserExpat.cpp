@@ -165,6 +165,7 @@ const AnyElement* XMLParserExpat::next(bool isCharData)
             nStatus = parseNext();
             if (TRANSPORT_FAILED == nStatus) return NULL;
             if ((TRANSPORT_FINISHED == nStatus) && m_Events.empty())
+                //throw AxisParseException(SERVER_PARSE_TRANSPORT_FAILED);
                 return NULL;
             if (AXIS_FAIL == m_nStatus) return NULL;
         }
@@ -181,6 +182,7 @@ const AnyElement* XMLParserExpat::next(bool isCharData)
                 nStatus = parseNext();
                 if (TRANSPORT_FAILED == nStatus) return NULL;
                 if ((TRANSPORT_FINISHED == nStatus) && m_Events.empty()) 
+                    //throw AxisParseException(SERVER_PARSE_TRANSPORT_FAILED);
                     return NULL;
             }
             else
