@@ -1,11 +1,15 @@
-import org.apache.axis.metadata.annotation.*;
+import javax.jws.*;
+import javax.jws.soap.*;
 
-@Protocol(soapStyle=EncodingType.DOCUMENT_LITERAL)
-@TargetNamespace("http://ws.apache.org/axis/")
-@ServiceLocation("http://localhost:8080/axis/services/MyService")
-@WsdlFile("MyService.wsdl")
+@WebService(
+        targetNamespace="http://ws.apache.org/axis/"
+            )
+@SOAPBinding(
+        style=SOAPBinding.Style.RPC,
+        use = SOAPBinding.Use.ENCODED
+        )
 public class MyService {
-	@Operation
+	@WebMethod
 	public void doSomething() {
 		
 	}
