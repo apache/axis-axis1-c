@@ -66,6 +66,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "Param.h"
+#include "ArrayBean.h"
 #include "AccessBean.h"
 #include "BasicTypeSerializer.h"
 #include <stdlib.h>
@@ -84,18 +85,18 @@ Param::Param(Param& param)
 	m_Type = param.m_Type;	
 	if (m_Type == USER_TYPE) 
 	{
-		m_Value.o = new AccessBean();
-		m_Value.o->m_TypeName = param.m_Value.o->m_TypeName;
-		m_Value.o->m_URI = param.m_Value.o->m_URI;
+		m_Value.pBean = new AccessBean();
+		m_Value.pBean->m_TypeName = param.m_Value.pBean->m_TypeName;
+		m_Value.pBean->m_URI = param.m_Value.pBean->m_URI;
 	}
 	else if(m_Type == XSD_ARRAY)
 	{
-		m_Value.a = new ArrayBean();
-		m_Value.a->m_TypeName = param.m_Value.a->m_TypeName;
-		m_Value.a->m_URI = param.m_Value.a->m_URI;
-		m_Value.a->m_type = param.m_Value.a->m_type;
-		m_Value.a->m_size = param.m_Value.a->m_size;
-		m_Value.a->m_ItemName = param.m_Value.a->m_ItemName;
+		m_Value.pArray = new ArrayBean();
+		m_Value.pArray->m_TypeName = param.m_Value.pArray->m_TypeName;
+		m_Value.pArray->m_URI = param.m_Value.pArray->m_URI;
+		m_Value.pArray->m_type = param.m_Value.pArray->m_type;
+		m_Value.pArray->m_size = param.m_Value.pArray->m_size;
+		m_Value.pArray->m_ItemName = param.m_Value.pArray->m_ItemName;
 		//copy constructor is not intended to use to copy the array in
 		//union v
 	}	
@@ -120,21 +121,21 @@ Param::Param(string &str, XSDTYPE type)
 Param::Param(int nValue)
 {
 	m_sName = "Int";
-	m_Value.n = nValue;
+	m_Value.nValue = nValue;
 	m_Type = XSD_INT;
 }
 
 Param::Param(float fValue)
 {
 	m_sName = "Float";
-	m_Value.f = fValue;
+	m_Value.fValue = fValue;
 	m_Type = XSD_FLOAT;
 }
 
 Param::Param(double dValue)
 {
 	m_sName = "Double";
-	m_Value.d = dValue;
+	m_Value.dValue = dValue;
 	m_Type = XSD_DOUBLE;
 }
 
@@ -142,10 +143,10 @@ Param::~Param()
 {
 	switch (m_Type){
 	case XSD_ARRAY:
-		if (m_Value.a) delete m_Value.a;
+		if (m_Value.pArray) delete m_Value.pArray;
 		break;
 	case USER_TYPE:
-		if (m_Value.o) delete m_Value.o;
+		if (m_Value.pBean) delete m_Value.pBean;
 		break;
 	default:;
 	}
@@ -209,7 +210,7 @@ int Param::GetInt()
 	{
 		//exception
 	}
-	return m_Value.n;
+	return m_Value.nValue;
 }
 
 float Param::GetFloat()
@@ -224,7 +225,7 @@ float Param::GetFloat()
 	{
 		//exception
 	}
-	return m_Value.f;
+	return m_Value.fValue;
 }
 
 XSDTYPE Param::GetType() const
@@ -237,10 +238,10 @@ int Param::serialize(ISoapSerializer& pSZ)
 	string ATprefix;
 	switch (m_Type){
 	case XSD_INT:
-		pSZ << BasicTypeSerializer::serialize(m_sName, m_Value.n).c_str();
+		pSZ << BasicTypeSerializer::serialize(m_sName, m_Value.nValue).c_str();
 		break;
 	case XSD_FLOAT:
-		pSZ << BasicTypeSerializer::serialize(m_sName, m_Value.f).c_str();
+		pSZ << BasicTypeSerializer::serialize(m_sName, m_Value.fValue).c_str();
 		break;
 	case XSD_STRING:
 		pSZ << BasicTypeSerializer::serialize(m_sName, m_sValue).c_str();
@@ -255,7 +256,7 @@ int Param::serialize(ISoapSerializer& pSZ)
 		//pSZ << "<abc:ArrayOfPhoneNumbers xmlns:abc="http://example.org/2001/06/numbers"
 		//				xmlns:enc="http://www.w3.org/2001/06/soap-encoding" 
         //              enc:arrayType="abc:phoneNumberType[2]" >";
-		if (!m_Value.a) return FAIL; //error condition
+		if (!m_Value.pArray) return FAIL; //error condition
 		pSZ << "<";
 		if (!m_strPrefix.empty())
 		{
@@ -270,29 +271,29 @@ int Param::serialize(ISoapSerializer& pSZ)
 
 		pSZ << " xmlns:enc"; 
 		pSZ << "=\"http://www.w3.org/2001/06/soap-encoding\"";
-		if (m_Value.a->m_type == USER_TYPE)
+		if (m_Value.pArray->m_type == USER_TYPE)
 		{
-			pSZ << " xmlns:" << ATprefix.c_str() << "=" << m_Value.a->m_URI.c_str(); //this prefix should be dynamically taken from serializer.
+			pSZ << " xmlns:" << ATprefix.c_str() << "=" << m_Value.pArray->m_URI.c_str(); //this prefix should be dynamically taken from serializer.
 		}
 		pSZ << "enc:arrayType=";
-		if (m_Value.a->m_type == USER_TYPE)
+		if (m_Value.pArray->m_type == USER_TYPE)
 		{
-			pSZ << ATprefix.c_str() << ":" << m_Value.a->m_TypeName.c_str(); //this prefix should be dynamically taken from serializer.
+			pSZ << ATprefix.c_str() << ":" << m_Value.pArray->m_TypeName.c_str(); //this prefix should be dynamically taken from serializer.
 		}
 		else //basic type array
 		{
 			pSZ << "xsd:";
-			pSZ << BasicTypeSerializer::BasicTypeStr(m_Value.a->m_type);
+			pSZ << BasicTypeSerializer::BasicTypeStr(m_Value.pArray->m_type);
 		}
 		{
-			for (list<int>::iterator it=m_Value.a->m_size.begin(); it!=m_Value.a->m_size.end(); it++)
+			for (list<int>::iterator it=m_Value.pArray->m_size.begin(); it!=m_Value.pArray->m_size.end(); it++)
 			{
 				sprintf(m_Buf,"[%d]", *it);
 				pSZ << m_Buf;
 			}
 		}
 		pSZ << ">";
-		m_Value.a->Serialize(pSZ); //Only serializes the inner items
+		m_Value.pArray->Serialize(pSZ); //Only serializes the inner items
 		pSZ << "</";
 		if (!m_strPrefix.empty())
 		{
@@ -305,7 +306,7 @@ int Param::serialize(ISoapSerializer& pSZ)
 		pSZ << ">";
 		break;
 	case USER_TYPE:
-		m_Value.o->Serialize(pSZ);
+		m_Value.pBean->Serialize(pSZ);
 		break;
 	default:;
 	}
@@ -321,10 +322,10 @@ int Param::SetValue(string &sValue)
 	switch (m_Type)
 	{
 	case XSD_INT:
-		m_Value.n = atoi(sValue.c_str());
+		m_Value.nValue = atoi(sValue.c_str());
 		break;
 	case XSD_FLOAT:
-		m_Value.f = atof(sValue.c_str());
+		m_Value.fValue = atof(sValue.c_str());
 		break;
 	case XSD_STRING:
 	case XSD_HEXBINARY:
@@ -335,6 +336,35 @@ int Param::SetValue(string &sValue)
 	case XSD_ARRAY:
 	case USER_TYPE:
 		//this is an error situation - probably something wrong with the soap
+		break;
+	default:
+		return FAIL; //this is an unexpected situation
+	}
+	return SUCCESS;
+}
+
+int Param::SetValue(XSDTYPE nType, uParamValue Value)
+{
+	m_Type = nType;
+	switch (m_Type)
+	{
+	case XSD_INT:
+		m_Value.nValue = Value.nValue;
+		break;
+	case XSD_FLOAT:
+		m_Value.fValue = Value.fValue;
+		break;
+	case XSD_STRING:
+	case XSD_HEXBINARY:
+	case XSD_BASE64BINARY:
+		m_sValue = Value.pStrValue->c_str();
+		break;
+	//Continue this for all basic types
+	case XSD_ARRAY:
+		m_Value.pArray = Value.pArray;
+		break;
+	case USER_TYPE:
+		m_Value.pBean = Value.pBean;
 		break;
 	default:
 		return FAIL; //this is an unexpected situation
@@ -359,14 +389,43 @@ void Param::operator=(Param &param)
 	m_Type = param.m_Type;	
 	if (m_Type == USER_TYPE) 
 	{
-		m_Value.o = param.m_Value.o;
+		m_Value.pBean = param.m_Value.pBean;
 	}
 	else if(m_Type == XSD_ARRAY)
 	{
-		m_Value.a = param.m_Value.a;
+		m_Value.pArray = param.m_Value.pArray;
 	}	
 	else 
 	{
 		m_Value = param.m_Value;
 	}
+}
+
+int Param::GetArraySize()
+{
+	if (m_Type != XSD_ARRAY) return 0;
+	return m_Value.pArray->GetArraySize();
+}
+
+int Param::SetUserType(IAccessBean* pObject)
+{
+	if (m_Type != USER_TYPE) return FAIL;
+	m_Value.pIBean = pObject;
+	return SUCCESS;
+}
+
+int Param::SetArrayElements(void* pElements)
+{
+	if (m_Type != XSD_ARRAY) return FAIL;
+	if (m_Value.pArray)
+	{
+		m_Value.pArray->m_value.sta = pElements;
+		return SUCCESS;
+	}
+	return FAIL;
+}
+
+void Param::SetName(char* sName)
+{
+	m_sName = sName;
 }

@@ -60,7 +60,7 @@
  * @author Roshan Weerasuriya (roshan@jkcs.slt.lk)
  *
  */
-// SoapMethodBase.h: interface for the SoapMethodBase class.
+// ISoapMethod.h: interface for the ISoapMethod class.
 //
 //////////////////////////////////////////////////////////////////////
 
