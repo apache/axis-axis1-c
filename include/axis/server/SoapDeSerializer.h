@@ -204,7 +204,8 @@ public:
     AXIS_BINDING_STYLE getStyle(){return m_nStyle;};    
     XSDTYPE getXSDType(const AnyElement* pElement);
     int AXISCALL getStatus(){return m_nStatus;};
-	AnyType* AXISCALL getAnyObject();            
+	AnyType* AXISCALL getAnyObject();
+    AxisString serializeTag(const AnyElement* node);
 
 private:
     int getElementForAttributes(const AxisChar* pName, 
