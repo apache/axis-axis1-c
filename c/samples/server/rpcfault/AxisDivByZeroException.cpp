@@ -18,11 +18,6 @@
  *
  */
 
-/*
- * This is the  implementation file genarated by WSDL2Ws tool.
- * AxisDivByZeroException.cpp: implemtation for the AxisDivByZeroException.
- *
- */
 
 #include "AxisDivByZeroException.h"
 

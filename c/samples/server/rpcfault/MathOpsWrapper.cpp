@@ -18,11 +18,6 @@
  *
  */
 
-/*
- * This is the Service implementation CPP file genarated by theWSDL2Ws.
- * MathOpsWrapper.cpp: implemtation for the MathOpsWrapper.
- * 
- */
 
 #include "MathOpsWrapper.h"
 
