@@ -260,4 +260,6 @@ if you want other
 sh run_interoptests.sh <server> <port>
 eg: sh run_interoptests.sh -u localhost -p 80
 
-
+Note for people who downloaded Axis C++ binary.
+In this case all the libraries are already generated for you in $AXISCPP_HOME/bin.
+You need just build samples.
