@@ -101,6 +101,13 @@ void WSDDService::addAllowedMethod(const AxisChar* sMethodName)
 bool WSDDService::isAllowedMethod(const AxisChar* sServiceName) const
 {
     list<AxisString>::const_iterator iter;
+    iter = m_AllowedMethods.begin();
+
+    if ((*iter) == "*")
+    {
+        return true;
+    }
+
     for(iter = m_AllowedMethods.begin();iter != m_AllowedMethods.end();iter++)
     {
         if((*iter) == sServiceName)

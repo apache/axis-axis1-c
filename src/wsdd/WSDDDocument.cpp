@@ -533,6 +533,10 @@ void WSDDDocument::addAllowedMethodsToService(const AxisXMLCh* pcValue)
             prepos = pos + 1;
         } while (true);
     }
+    else
+    {
+        m_pService->addAllowedMethod("*");
+    }
 }
 
 
