@@ -420,7 +420,7 @@ XMLParser:${dir.libraries}/${libraryPrefix}${xmlParserLibraryName}${librarySuffi
 						<arg line="-l ${monitorPort}"/>
 						<arg line="-p ${testPort}"/>
 						<arg line="-h ${testHost}"/>
-						<arg line="-o ${dir.test.generated}/${testName}/tcpm.out"/>
+						<arg line="-o ${dir.test.generated}/${client.lang}/${testName}/tcpm.out"/>
 						<classpath>
 							<pathelement location="${basedir}/tests/utils/monitor/monitor.jar"/>
 						</classpath>
@@ -430,9 +430,9 @@ XMLParser:${dir.libraries}/${libraryPrefix}${xmlParserLibraryName}${librarySuffi
 						<!-- Wait for jvm to start monitor program -->
 						<sleep seconds="5"/>
 						<!-- Run the client test -->
-						<exec executable="${dir.test.generated}/${testName}/${testName}"
-						 dir="${dir.test.generated}/${testName}" output="${results.file}"
-						 error="${dir.test.generated}/${testName}/${testName}.err"
+						<exec executable="${dir.test.generated}/${client.lang}/${testName}/${testName}"
+						 dir="${dir.test.generated}/${client.lang}/${testName}" output="${results.file}"
+						 error="${dir.test.generated}/${client.lang}/${testName}/${testName}.err"
 						 failifexecutionfails="false" vmlauncher="false">
 							<arg line="-p ${monitorPort}"/>
 							<arg line="-s localhost"/>
