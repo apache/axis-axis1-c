@@ -876,7 +876,6 @@ SoapDeSerializer::getArraySize (const AnyElement * pElement)
  */
 
 /* Following macros are used just to shorten the coding */
-#define CONV_STRTOL(str) strtol(str, &m_pEndptr, 10)
 #define CONV_STRTONONNEGATIVEINTEGER(str) AxisSoapDeSerializerStringToNonNegativeInteger(str)
 #define CONV_STRTOUNSIGNEDLONG(str) AxisSoapDeSerializerStringToUnsignedLong(str)
 #define CONV_STRTOUNSIGNEDINT(str) AxisSoapDeSerializerStringToUnsignedInt(str)
@@ -887,7 +886,6 @@ SoapDeSerializer::getArraySize (const AnyElement * pElement)
 #define CONV_STRTOINT(str) AxisSoapDeSerializerStringToInt(str)
 #define CONV_STRTOLONG(str) AxisSoapDeSerializerStringToLong(str)
 #define CONV_STRTOINTEGER(str) AxisSoapDeSerializerStringToInteger(str)
-#define CONV_STRTOUL(str) strtoul(str, &m_pEndptr, 10)
 #define CONV_STRTODECIMAL(str) AxisSoapDeSerializerStringToDecimal(str)
 #define CONV_STRTOFLOAT(str) AxisSoapDeSerializerStringToFloat(str)
 #define CONV_STRTODOUBLE(str) AxisSoapDeSerializerStringToDouble(str)
@@ -1778,8 +1776,8 @@ SoapDeSerializer::getAttributeAsInt (const AxisChar * pName,
 	{
 	    if (0 == strcmp (m_pCurrNode->m_pchAttributes[i], pName))
 	    {
-		ret = strtol (m_pCurrNode->m_pchAttributes[i + 2],
-			      &m_pEndptr, 10);
+            Int intDeserializer;
+            ret = *(intDeserializer.deserializeInt(m_pCurrNode->m_pchAttributes[i + 2]));
 		return ret;
 	    }
 	}
@@ -1826,31 +1824,31 @@ unsigned int
 SoapDeSerializer::getAttributeAsUnsignedInt (const AxisChar * pName,
 					     const AxisChar * pNamespace)
 {
-DESERIALIZE_GET_ATTRIBUTE_AS (unsigned int, CONV_STRTOUL,
+DESERIALIZE_GET_ATTRIBUTE_AS (unsigned int, CONV_STRTOUNSIGNEDINT,
 				  INIT_VALUE_NUMBER)}
 short
 SoapDeSerializer::getAttributeAsShort (const AxisChar * pName,
 				       const AxisChar * pNamespace)
 {
-DESERIALIZE_GET_ATTRIBUTE_AS (short, CONV_STRTOL, INIT_VALUE_NUMBER)}
+DESERIALIZE_GET_ATTRIBUTE_AS (short, CONV_STRTOSHORT, INIT_VALUE_NUMBER)}
 unsigned short
 SoapDeSerializer::getAttributeAsUnsignedShort (const AxisChar *
 					       pName,
 					       const AxisChar * pNamespace)
 {
-DESERIALIZE_GET_ATTRIBUTE_AS (unsigned short, CONV_STRTOUL,
+DESERIALIZE_GET_ATTRIBUTE_AS (unsigned short, CONV_STRTOUNSIGNEDSHORT,
 				  INIT_VALUE_NUMBER)}
 char
 SoapDeSerializer::getAttributeAsByte (const AxisChar * pName, const
 				      AxisChar * pNamespace)
 {
-DESERIALIZE_GET_ATTRIBUTE_AS (char, CONV_STRTOL, INIT_VALUE_NUMBER)}
+DESERIALIZE_GET_ATTRIBUTE_AS (char, CONV_STRTOBYTE, INIT_VALUE_NUMBER)}
 unsigned char
 SoapDeSerializer::getAttributeAsUnsignedByte (const AxisChar *
 					      pName, const
 					      AxisChar * pNamespace)
 {
-DESERIALIZE_GET_ATTRIBUTE_AS (unsigned char, CONV_STRTOUL,
+DESERIALIZE_GET_ATTRIBUTE_AS (unsigned char, CONV_STRTOUNSIGNEDBYTE,
 				  INIT_VALUE_NUMBER)}
 LONGLONG
 SoapDeSerializer::getAttributeAsLong (const AxisChar * pName, const
@@ -1867,7 +1865,7 @@ SoapDeSerializer::getAttributeAsUnsignedLong (const AxisChar *
 					      pName, const
 					      AxisChar * pNamespace)
 {
-DESERIALIZE_GET_ATTRIBUTE_AS (unsigned long, CONV_STRTOUL,
+DESERIALIZE_GET_ATTRIBUTE_AS (unsigned long, CONV_STRTOUNSIGNEDLONG,
 				  INIT_VALUE_NUMBER)}
 float
 SoapDeSerializer::getAttributeAsFloat (const AxisChar * pName, const
