@@ -61,6 +61,7 @@ Call::Call ()
     m_nTransportType = APTHTTP1_1;
     m_pTransport = SOAPTransportFactory::getTransportObject(m_nTransportType);
     m_nStatus = AXIS_SUCCESS;
+    m_pchSessionID = NULL;
 }
 
 Call::~Call ()
@@ -202,6 +203,10 @@ int Call::initialize (PROVIDERTYPE nStyle, int secure)
                         default:;
                                 //TODO: ??
                     }
+                    if(m_pchSessionID)
+                    {
+                        msgData->setProperty("sessionid", m_pchSessionID);
+                    }
                     return AXIS_SUCCESS;
                 }
             }
@@ -236,7 +241,11 @@ int Call::unInitialize ()
 			/* Test if deserialization failed */
 			m_nStatus = m_pIWSDZ->getStatus();
 		}
-			
+		MessageData *msgData = m_pAxisEngine->getMessageData();	
+        AxisChar * pachTemp = (AxisChar *)msgData->getProperty("sessionid");
+        int len = strlen(pachTemp);
+        m_pchSessionID = new char[len];
+        strcpy(m_pchSessionID, pachTemp);
         m_pAxisEngine->unInitialize ();
         delete m_pAxisEngine;
         m_pAxisEngine = NULL;
