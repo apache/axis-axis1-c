@@ -327,7 +327,7 @@ int ServerAxisEngine::process(SOAPTransport* pStream)
      //m_pSZ->setSoapFault (SoapFault::getSoapFault (CLIENT_SOAP_SOAPCONTENTERROR));
         int iExceptionCode = e.getExceptionCode();
         //char* pcTempStr = (char*) e.what();
-        AXISTRACE2("Exception:", pcTempStr, CRITICAL);
+        //AXISTRACE2("Exception:", pcTempStr, CRITICAL);
         if(AXISC_SERVICE_THROWN_EXCEPTION == iExceptionCode)
         {
             /*Writes the SoapMessage in which soap body contains only Fault*/
