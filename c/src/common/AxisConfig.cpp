@@ -134,7 +134,7 @@ int AxisConfig::readConfFile ()
         sscanf (carrLine, "%s", key);
 		iValueLength = linesize - strlen (key) - 1;
 
-        for(int i=0;i<=AXCONF_LAST;i++)
+        for(int i=0;i<AXCONF_LAST;i++)
 		{
 			if(strcmp(key, m_pcKeyArray[i]) == 0)
 			{
