@@ -80,6 +80,7 @@ extern "C" int process_request(Ax_soapstream *str)
 					DEBUG1("Status = engine->Process(str);");
 				    DEBUG1("are we successful?");            
 					Status = SUCCESS;
+					delete engine;
 				}
 			}
 			//Handler the GET method
