@@ -1,0 +1,239 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE> Portability Guide </TITLE>
+<META NAME="Author" CONTENT="Lilantha">
+<META NAME="Keywords" CONTENT="">
+<META NAME="Description" CONTENT="">
+</HEAD>
+
+<BODY>
+<h1>Portability Guide</h1>
+<P>
+This document provides general guidelines for writing C/C++ code in a portable fashion for AXIS C++ project. New development must adhere to these guidelines to ensure portability and thus avoid rework. Note that these guidelines are not intended to replace more general guidelines for writing good code, but to supplement and extend them.  
+<P>
+These are the general guidelines for engineering and re-engineering code to be portable, and for keeping it that way.
+<UL>
+	<LI>First, do no harm. That is, don't do more than you need to do - keep changes small and local.
+	<LI>If you see the need to generalize a solution, do it. If you solve a problem once, (almost) any solution is fine. If you solve it twice, you should think about a general solution. If you have to solve it a third time, you should go for a general solution.
+	<LI>Conditionalize (via <TT>#ifdef</TT>) specific platform dependencies .
+</UL>
+<P>
+The following guidelines should be followed to maximize portability. The list of guidelines is open for extension - if you find a non-portable construct in any code, raise the issue and it will be addressed.<BR>
+
+<P>
+
+<UL>
+<LI>Use ANSI C/C++ always possible. Different compilers support different variants of C++. The best chance for portability is to avoid non-standard constructs - even though they may be "convenient" in the short term. <BR>
+<LI>Unix is case sensitive. Windows is not. <br>
+There are several places where this comes up. The most frequent is in the #include for StdAfx.h - it won't work if you type "stdafx.h" instead.
+<LI> Always put a new line at the end of all source files. Not having a new-line char at the end of file breaks .h files with the Sun WorkShop compiler and it breaks .cpp files on HP. 
+<LI>Scope of loop variables
+<br>
+The construction: <br>
+<br><TT>
+&nbsp;for(int i = 0;i&lt;10;i++)<br>
+&nbsp;{<br>
+&nbsp;	…<br>
+&nbsp;}<br>
+<br>
+&nbsp;x = i; </TT>//trying to use the loop variable is no longer valid C++ - the standard was changed, then changed back. It still works with VC++, but it won&apos;t work with other compilers. The Solaris compiler will complain when you try to use the variable after the loop - be ready for it. You should probably change it to something like this:<br>
+<br><TT>
+&nbsp;int i;<br>
+&nbsp;for(i = 0;i<10;i++)<br>
+&nbsp;{<br>
+&nbsp;	…<br>
+&nbsp;}<br>
+<br>
+&nbsp;x = i;<br>
+<br></TT>
+<LI>Register declaration without type
+<p>
+VC++ and Solaris C++ compilers allow register declarations without a type - they allow a "default" type of int to be inferred. This is not standard C++, and should be avoided. 
+<br>
+<LI>Prefer localtime_r() to localtime()
+<p>
+The Microsoft implementation of localtime is thread safe, while the standard C library (and most Unix) implementation is not. Use localtime_r() as a direct replacement for localtime().<br><br>
+<LI>Prefer strtok_r() to strtok()
+<p>
+The Microsoft implementation of strtok() is thread-safe, while the Unix implementation is not. The Microsoft version achieves thread-safety by using thread-local-storage, which is relatively inefficient. To create efficient, portable, thread-safe code, use the strtok_r() function instead. <br>
+<br>
+<LI>Language
+<P>
+<UL>
+	<LI>Preprocessors Directives are very much the same in all preprocessors, except that some preprocessors may not 
+	    know about the defined operator in a <TT>#if</TT>directive nor about the <TT>#pragma</TT> directive. 
+		The <TT>#pragma</TT> directive should pose no problems even to old preprocessors if it comes indented. Furthermore, it is advisable to enclose them with <TT>#ifdef</TT>'s in order to document under which platform they make sense: <BR><BR>
+		<TT>
+		#ifdef &lt;platform-specific-symbol&gt;<BR>
+		   #pragma ...<BR>
+		#endif<BR>
+		</TT><BR>
+	<LI> The interpretation of the <B>-I</B> command option can differ from one system to another. Besides, it is not covered by the Standard. For example, the directive <TT>#include "dir/file.h" </TT> in conjunction with <B>-I..</B> would cause most preprocessors in a Unix-like environment to search for <TT>file.h</TT> in <TT>../dir</TT> but under VMS <TT>file.h</TT> is only searched for in the subdirectory <TT>dir</TT> in the current working directory.
+	<LI>All Unix flavours differ significantly in their raw i/o interface (that is, <TT>ioctl</TT> system call) which should be avoided if possible. 
+	<LI> Prefer new-style #includes. Use<TT><br>
+#include &lt;cstring&gt;<br>
+rather than<br>
+#include &lt;string.h&gt;<br>
+
+<LI>If you must #ifdef…
+<p>
+For code that is specific to WIN32, the VC++ compiler defines the WIN32 symbol automatically. So you can use:<br>
+<tt>
+#ifdef WIN32<br>
+#endif<br>
+</tt><br>
+to isolate this code. For code that is specific to UNIX but is not applicable under WIN32, use<br>
+<tt>
+#ifdef UNIX<br>
+#endif<br>
+</tt>
+<LI>Avoid using RTTI
+<p>
+<br>
+<LI>Nested Class Access
+<P>
+VC++ differs from standard C++ in the access granted to nested classes. For example, the following code is legal in VC++, but illegal in C++:
+<P>
+<TT>
+class Outer<BR>
+{<BR>
+&nbsp;&nbsp;private:<BR>
+&nbsp;&nbsp;&nbsp;enum OuterStatus { GOOD, BAD, VERYBAD};<BR>
+&nbsp;&nbsp;&nbsp; …<BR>
+&nbsp;&nbsp;&nbsp;class Inner <BR>
+&nbsp;&nbsp;&nbsp;{<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;public:<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OuterStatus status;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;…<BR>
+&nbsp;&nbsp;&nbsp;}<BR>
+};<BR>
+</TT>
+<P>The problem is that OuterStatus is not available to class Inner - being a nested class doesn't give Inner rights to private members. One solution is for Inner class to be a friend of the Outer class: 
+<P>
+<TT>
+class Outer<BR>
+{<BR>
+&nbsp;&nbsp;private:<BR>
+&nbsp;&nbsp;&nbsp;enum OuterStatus { GOOD, BAD, VERYBAD};<BR>
+&nbsp;&nbsp;&nbsp;…<BR>
+&nbsp;&nbsp;&nbsp;class Inner; // forward decl<BR>
+&nbsp;&nbsp;&nbsp;friend class Inner;<BR>
+<BR>
+&nbsp;&nbsp;&nbsp;class Inner <BR>
+&nbsp;&nbsp;&nbsp;{<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;public:<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;OuterStatus status;
+&nbsp;&nbsp;&nbsp;&nbsp;…<BR>
+&nbsp;&nbsp;&nbsp;}<BR>
+};<BR>
+</TT>
+<br>
+<LI> Use extern "C" to access 3rd party C libraries like:
+<p>
+&nbsp;#ifdef __cplusplus <br>
+&nbsp;extern "C" {<br>
+&nbsp;#endif <br>
+&nbsp;....<br>
+&nbsp;#ifdef __cplusplus<br>
+&nbsp;}<br>
+&nbsp;#endif<br>
+
+
+<br><br>
+</UL>
+<BR><BR>
+<b>-----------------------------------------------------------------------------------------------------------------</b>
+
+<H1>Best Practices</H1>
+<p>
+<OL>
+	<LI>Always test floating-point numbers as <= or >=, never use an exact comparison (== or !=).
+	<LI>The readability of names of  functions, variables and functions parameters must be supported by the use of capitalizing. This means that ‘words’ in a name always start with a capital and continue with lower case. 
+	<LI>It is preferred that the line width does not exceed the width of the Comment Blocks in order to keep the code readable on screen and on the printer. In some cases however it is difficult to avoid.
+	<LI>When testing incrementing or decrementing counters try to use the &gt;= or &lt;= instead of == in if-statements. This is one of the important defensive programming rules. If for some reason the value of the counter gets higher or lower than expected in the test for equal you would run into problems.
+	<LI>The asterisk (‘*’) in a pointer declaration sticks to the variable name or parameter name.<BR>
+		eg: float *RealValuePtr;
+</OL>
+<br><br><br>
+<UL>
+<LI><B>Functions</B><BR>
+<P>
+Functions should be short and sweet, and do just one thing.  They should
+fit on one or two screenfuls of text (the ISO/ANSI screen size is 80x24,
+as we all know), and do one thing and do that well.<BR> 
+<BR>
+The maximum length of a function is inversely proportional to the
+complexity and indentation level of that function.  So, if you have a
+conceptually simple function that is just one long (but simple)
+case-statement, where you have to do lots of small things for a lot of
+different cases, it's OK to have a longer function. <BR>
+<BR>
+However, if you have a complex function, and you suspect that a
+less-than-gifted first-year high-school student might not even
+understand what the function is all about, you should adhere to the
+maximum limits all the more closely.  Use helper functions with
+descriptive names (you can ask the compiler to in-line them if you think
+it's performance-critical, and it will probably do a better job of it
+that you would have done). <BR>
+<BR>
+Another measure of the function is the number of local variables.  They
+shouldn't exceed 5-10, or you're doing something wrong.  Re-think the
+function, and split it into smaller pieces.  A human brain can
+generally easily keep track of about 7 different things, anything more
+and it gets confused.  You know you're brilliant, but maybe you'd like
+to understand what you did 2 weeks from now. 
+<BR>
+<BR>
+<BR><BR>
+
+<LI><B>Naming</B>
+<BR><P>
+C is a Spartan language, and so should your naming be.  C programmers 
+do not use cute names like ThisVariableIsATemporaryCounter.  A C 
+programmer would call that variable "tmp", which is much easier to 
+write, and not the least more difficult to understand. <BR>
+<BR>
+HOWEVER, while mixed-case names are frowned upon, descriptive names for
+global variables are a must.  To call a global function "foo" is a
+shooting offense. <BR>
+<BR>
+GLOBAL variables (to be used only if you _really_ need them) need to
+have descriptive names, as do global functions.  If you have a function
+that counts the number of active users, you should call that
+"count_active_users()" or similar, you should _not_ call it "cntusr()". <BR>
+<BR>
+Encoding the type of a function into the name (so-called Hungarian
+notation) is brain damaged - the compiler knows the types anyway and can
+check those, and it only confuses the programmer.  No wonder MicroSoft
+makes buggy programs. <BR>
+<BR>
+LOCAL variable names should be short, and to the point.  If you have
+some random integer loop counter, it should probably be called "i". 
+Calling it "loop_counter" is non-productive, if there is no chance of it
+being mis-understood.  Similarly, "tmp" can be just about any type of
+variable that is used to hold a temporary value. <BR>
+<BR>
+If you are afraid to mix up your local variable names, you have another
+problem, which is called the function-growth-hormone-imbalance syndrome. 
+See next chapter.
+<BR><BR><BR>
+<LI><B>Testing</B> 
+<P> The goal of any software development effort is to produce code that works as intended. The only way to ensure that is to test it. Given that humans learn most efficiently, and perceive patterns best, when stimulus and response are close in time, it follows that the most efficient way to locate and fix defects is to test code as soon as it is written. <BR><BR>
+
+<UL>
+<LI>Plan ahead to test your changes. If you don't have a test harness, build one. If you can't test your changes, you're hacking.
+<LI>Your test harness is part of the code deliverables. It needs to be commited, along with any data needed, so that somebody else can test your code when they need to make a change. 
+<LI>Make sure your testing exercises the critical paths. You don't have to go crazy building test harnesses, but you need to know that you're writing good code. 
+<LI>Make sure your test harness is under your control.  If you depend on other elements for testing your components, you introduce a development dependency that will inject delay into the development and testing of both the library and the client.
+<LI>Make sure your test harness is portable too. Needless to say, if code is to be portable, it must be built and tested in all target environments. Keep it simple, and plan for it to be scriptable. That means - command lines
+</UL>
+</UL>
+</UL>
+<br><br><br>
+Links:<br>
+<a href="http://www.gotdotnet.com/team/cplusplus/articles/compmig.doc">Microsoft Visual C++ .NET Compiler Migration Guide</a>
+
+<br><br><br>
+</BODY>
+</HTML>
