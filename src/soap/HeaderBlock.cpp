@@ -615,13 +615,14 @@ IAttribute* HeaderBlock::createAttribute(const AxisChar * pLocalName,
                                          const AxisChar * pValue)
 {
 // Check that the contents of the passed parameters are valid.
-	if( pLocalName == NULL || pPrefix == NULL)
+	if( NULL == pLocalName || 0 == strlen( pLocalName))
 	{
 		return NULL;
 	}
-	else if( strlen( pLocalName) == 0 || strlen( pPrefix) == 0)
+
+	if( !pPrefix)
 	{
-		return NULL;
+		pPrefix = "";
 	}
 
 	if( !pURI)
