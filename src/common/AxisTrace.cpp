@@ -451,6 +451,16 @@ void AxisTrace::addParameter(string& line, AxisTraceType type, unsigned len, voi
 		}
 		break;
 
+	case TRACETYPE_STLSTRING:
+		try {
+			line += "\"";	
+   		      line += ((string*)value)->c_str();
+			line += "\"";	
+		} catch (...) {
+			line += "<BADPOINTER>";
+		}
+		break;
+
 	default:
 		sprintf(prim,"%d",type);
 		line += "<UNKNOWNTYPE";				

@@ -30,7 +30,6 @@ AXIS_CPP_NAMESPACE_START
   * to the C language types.
   * @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
   */
-#define AxisChar char
 
 /**
  * @typedef xsd__string
@@ -182,32 +181,38 @@ typedef enum {
 } AXIS_BINDING_STYLE;
 
 #define AXIS_DEFINED_ARRAY(type) \
-    struct {\
+    class type##_Array {\
+      public:\
         type * m_Array;\
         int m_Size;\
-    }
+    };
 
-typedef AXIS_DEFINED_ARRAY(void) Axis_Array;
-typedef AXIS_DEFINED_ARRAY(xsd__string) xsd__string_Array;
-typedef AXIS_DEFINED_ARRAY(xsd__integer) xsd__integer_Array;
-typedef AXIS_DEFINED_ARRAY(xsd__int) xsd__int_Array;
-typedef AXIS_DEFINED_ARRAY(xsd__long) xsd__long_Array;
-typedef AXIS_DEFINED_ARRAY(xsd__short) xsd__short_Array;
-typedef AXIS_DEFINED_ARRAY(xsd__decimal) xsd__decimal_Array;
-typedef AXIS_DEFINED_ARRAY(xsd__float) xsd__float_Array;
-typedef AXIS_DEFINED_ARRAY(xsd__double) xsd__double_Array;
-typedef AXIS_DEFINED_ARRAY(xsd__boolean) xsd__boolean_Array;
-typedef AXIS_DEFINED_ARRAY(xsd__QName) xsd__QName_Array;
-typedef AXIS_DEFINED_ARRAY(xsd__NCName) xsd__NCName_Array;
-typedef AXIS_DEFINED_ARRAY(xsd__dateTime) xsd__dateTime_Array;
-typedef AXIS_DEFINED_ARRAY(xsd__unsignedByte) xsd__unsignedByte_Array;
-typedef AXIS_DEFINED_ARRAY(xsd__unsignedInt) xsd__unsignedInt_Array;
-typedef AXIS_DEFINED_ARRAY(xsd__unsignedLong) xsd__unsignedLong_Array;
-typedef AXIS_DEFINED_ARRAY(xsd__unsignedShort) xsd__unsignedShort_Array;
-typedef AXIS_DEFINED_ARRAY(xsd__base64Binary) xsd__base64Binary_Array;
-typedef AXIS_DEFINED_ARRAY(xsd__hexBinary) xsd__hexBinary_Array;
-typedef AXIS_DEFINED_ARRAY(xsd__anyURI) xsd__anyURI_Array;
-typedef AXIS_DEFINED_ARRAY(xsd__NMTOKEN) xsd__NMTOKEN_Array;
+class Axis_Array {
+  public:
+    void* m_Array;
+    int m_Size;
+};
+
+AXIS_DEFINED_ARRAY(xsd__string)
+AXIS_DEFINED_ARRAY(xsd__integer)
+AXIS_DEFINED_ARRAY(xsd__int)
+AXIS_DEFINED_ARRAY(xsd__long)
+AXIS_DEFINED_ARRAY(xsd__short)
+AXIS_DEFINED_ARRAY(xsd__decimal)
+AXIS_DEFINED_ARRAY(xsd__float)
+AXIS_DEFINED_ARRAY(xsd__double)
+AXIS_DEFINED_ARRAY(xsd__boolean)
+AXIS_DEFINED_ARRAY(xsd__QName)
+AXIS_DEFINED_ARRAY(xsd__NCName)
+AXIS_DEFINED_ARRAY(xsd__dateTime)
+AXIS_DEFINED_ARRAY(xsd__unsignedByte)
+AXIS_DEFINED_ARRAY(xsd__unsignedInt)
+AXIS_DEFINED_ARRAY(xsd__unsignedLong)
+AXIS_DEFINED_ARRAY(xsd__unsignedShort)
+AXIS_DEFINED_ARRAY(xsd__base64Binary)
+AXIS_DEFINED_ARRAY(xsd__hexBinary)
+AXIS_DEFINED_ARRAY(xsd__anyURI)
+AXIS_DEFINED_ARRAY(xsd__NMTOKEN)
  
 #define AXIS_OUT_PARAM 
 

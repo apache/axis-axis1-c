@@ -14,10 +14,8 @@
  *   limitations under the License.
  */
 package org.apache.axis.tracetool;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.Writer;
-import java.util.Hashtable;
+import java.io.*;
+import java.util.*;
 
 /**
  * A Buffered write that also contains the methods to add in in trace
@@ -46,7 +44,15 @@ class Tracer extends BufferedWriter {
 		typetable.put("double", "DOUBLE");
 		typetable.put("float", "FLOAT");
 		typetable.put("bool", "BOOL");
+		typetable.put("string", "STLSTRING");
+		typetable.put("AxisString", "STLSTRING");
+		typetable.put("AxisXMLString", "STLSTRING");
+		typetable.put("xsd__string", "STLSTRING");
 	}
+
+	private final static Set charSet =
+		new HashSet(Arrays.asList(new Object[] {
+		"char", "AxisChar", "AxisXMLChar", "XML_Ch" }));
 
 	/**
 	 * @param writer a writer to the output file.
@@ -232,7 +238,7 @@ class Tracer extends BufferedWriter {
 			parms += "UNKNOWN, 0, NULL";
 		else if (type.endsWith("*")) {
 			String contents = type.substring(0, type.length() - 1);
-			if ("char".equals(contents))
+			if (charSet.contains(contents))
 				parms += "STRING, 0, " + name;
 			else if ("void".equals(contents))
 				// We just don't know what this void* is pointing at 
