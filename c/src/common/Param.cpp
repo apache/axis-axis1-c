@@ -67,6 +67,7 @@
 
 #include "Param.h"
 #include "AccessBean.h"
+#include "../common/AxisException.h"
 #include "BasicTypeSerializer.h"
 #include <stdlib.h>
 
@@ -160,7 +161,7 @@ const string& Param::GetString()
 	}
 	else 
 	{
-		//exception
+		throw new AxisException(SF_PARATYPEMISMATCH); 
 	}
 	return m_sValue;
 }
@@ -174,7 +175,7 @@ const string& Param::GetHexString()
 	}
 	else 
 	{
-		//exception
+		throw new AxisException(SF_PARATYPEMISMATCH); 
 	}
 	return m_sValue;
 }
@@ -188,7 +189,7 @@ const string& Param::GetBase64String()
 	}
 	else 
 	{
-		//exception
+		throw new AxisException(SF_PARATYPEMISMATCH); 
 	}
 	return m_sValue;
 }
@@ -207,7 +208,7 @@ int Param::GetInt()
 	}
 	else 
 	{
-		//exception
+    throw new AxisException(SF_PARATYPEMISMATCH); 
 	}
 	return m_Value.n;
 }
@@ -222,7 +223,7 @@ float Param::GetFloat()
 	}
 	else
 	{
-		//exception
+		throw new AxisException(SF_PARATYPEMISMATCH); 
 	}
 	return m_Value.f;
 }
@@ -334,6 +335,7 @@ int Param::SetValue(string &sValue)
 	//Continue this for all basic types
 	case XSD_ARRAY:
 	case USER_TYPE:
+    throw new AxisException(SF_PARATYPEMISMATCH);
 		//this is an error situation - probably something wrong with the soap
 		break;
 	default:
