@@ -80,13 +80,10 @@ public class JaxRpcMapper {
         Unmarshaller u = null;
         try {
             u = jc.createUnmarshaller();
-        } catch (JAXBException e) {
-            e.printStackTrace();
-        }
-        try {
             mapping = (JavaWsdlMapping) u.unmarshal(is);
         } catch (JAXBException e2) {
-            e2.printStackTrace();
+            //e2.printStackTrace();
+            throw new RuntimeException(e2);
         }
     }
 
