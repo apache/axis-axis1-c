@@ -67,9 +67,31 @@
 #include <string.h>
 #include <malloc.h>
 #include "../common/Packet.h"
-#include "../common/AxisConfig.h"
+//#include "../common/AxisConfig.h"
 
 extern int process_request(Ax_soapstream *str);
+
+int send_response_bytes(const char * res, const void* opstream) 
+{	
+	//printf("calling send_response_bytes");
+	//printf("%s", res);
+
+
+	return 0;
+}
+
+int get_request_bytes(char * req, int reqsize, int* retsize, const void* ipstream) 
+{
+
+	return 0;
+}
+
+int send_transport_information(Ax_soapstream* sSoapstream) 
+{
+	//printf("sending trasport info");	
+
+	return 0;
+}
 
 //soap request with headers
 //char* ip = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><soapenv:Envelope \
@@ -244,7 +266,7 @@ int main()
 
 	printf("soap request :\n %s\n", ip);
 
-	if (SUCCESS != initialize_module(1, WSDDFILEPATH)) return 1;
+	if (SUCCESS != initialize_module(1, "")) return 1;
 	for (xx =0; xx < 1 ; xx++)
 	{
 		printf("Sending Soap Response :\n");
