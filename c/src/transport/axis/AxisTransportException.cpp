@@ -136,7 +136,7 @@ const string AxisTransportException::getMessage (const int iExceptionCode)
                 " Channel while writing data";
             break;
         case SERVER_TRANSPORT_INPUT_STREAMING_ERROR:
-            m_sMessage = "AxisTransportException:Input streaming error while" \ 
+            m_sMessage = "AxisTransportException:Input streaming error while" \
                 " getting data";
             break;
         case SERVER_TRANSPORT_TIMEOUT_EXCEPTION:
