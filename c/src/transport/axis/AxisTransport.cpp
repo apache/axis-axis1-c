@@ -210,16 +210,24 @@ AXIS_TRANSPORT_STATUS AXISCALL AxisTransport::s_Get_bytes(const char** res, int*
 
 AXIS_TRANSPORT_STATUS AxisTransport::Get_bytes(const char** res, int* retsize, const void* pSStream)
 {
-    	const char* strReceive =  m_pReceiver->Recv();
+    const char* strReceive =  m_pReceiver->Recv();
 	if (strReceive)
 	{
+#ifdef USE_XERCES_PARSER
+		char* pBuffer = const_cast<char*>(*res);
+		strcpy(pBuffer, strReceive);
+#else
 		*res = strReceive;
+#endif
 		*retsize = strlen(strReceive);
 		return TRANSPORT_IN_PROGRESS;
 	}
 	else
 	{
+#ifdef USE_XERCES_PARSER
+#else
 		*res = NULL;
+#endif
 		*retsize = 0;
 		return TRANSPORT_FINISHED;
 	}
