@@ -204,14 +204,14 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 				}
 				else{
 					arrayType = qname.getLocalPart();
-					writer.write("\tparam->"+attribs[i][0]+" = ("+attribs[i][1]+"&)pIWSDZ->GetArray((AXIS_DESERIALIZE_FUNCT)Axis_DeSerialize_"+arrayType+ 
-						"\n\t\t, (AXIS_OBJECT_CREATE_FUNCT)Axis_Create_"+arrayType+", (AXIS_OBJECT_DELETE_FUNCT)Axis_Delete_"+arrayType+
-						"\n\t\t, (AXIS_OBJECT_SIZE_FUNCT)Axis_GetSize_"+arrayType+", Axis_TypeName_"+arrayType+", Axis_URI_"+arrayType+");\n");
+					writer.write("\tparam->"+attribs[i][0]+" = ("+attribs[i][1]+"&)pIWSDZ->GetArray((void*)Axis_DeSerialize_"+arrayType+ 
+						"\n\t\t, (void*)Axis_Create_"+arrayType+", (void*)Axis_Delete_"+arrayType+
+						"\n\t\t, (void*)Axis_GetSize_"+arrayType+", Axis_TypeName_"+arrayType+", Axis_URI_"+arrayType+");\n");
 				}
 			}else{
 				//if complex type
-				writer.write("\tparam->"+attribs[i][0]+" = ("+attribs[i][1]+"*)pIWSDZ->GetObject((AXIS_DESERIALIZE_FUNCT)Axis_DeSerialize_"+attribs[i][1]+
-					"\n\t\t, (AXIS_OBJECT_CREATE_FUNCT)Axis_Create_"+attribs[i][1]+", (AXIS_OBJECT_DELETE_FUNCT)Axis_Delete_"+attribs[i][1]+
+				writer.write("\tparam->"+attribs[i][0]+" = ("+attribs[i][1]+"*)pIWSDZ->GetObject((void*)Axis_DeSerialize_"+attribs[i][1]+
+					"\n\t\t, (void*)Axis_Create_"+attribs[i][1]+", (void*)Axis_Delete_"+attribs[i][1]+
 					"\n\t\t, Axis_TypeName_"+attribs[i][1]+", Axis_URI_"+attribs[i][1]+");\n");				
 			}		
 		}
