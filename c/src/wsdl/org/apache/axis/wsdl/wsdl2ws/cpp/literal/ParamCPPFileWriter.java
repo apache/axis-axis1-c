@@ -118,7 +118,6 @@ public abstract class ParamCPPFileWriter extends ParamWriter{
 	try {
 		writer.write("#include <malloc.h>\n");
 		writer.write("#include <axis/server/AxisWrapperAPI.h>\n\n");
-		writer.write("#include <axis/server/AxisTrace.h>\n\n");		
 		writer.write("#include \""+this.classname + ".h\"\n");
 		writer.write("extern AxisTrace* g_pAT;\n");
 	} catch (IOException e) {

@@ -86,7 +86,7 @@ int main(int argc, char* argv[])
 	else
 		printf("failed\n");
 	/*testing echo Array of Struct*/
-/*	arrstct.m_Array = malloc(sizeof(SOAPStruct)*ARRAYSIZE);
+	arrstct.m_Array = malloc(sizeof(SOAPStruct)*ARRAYSIZE);
 	arrstct.m_Size = ARRAYSIZE;
 	for (x=0;x<ARRAYSIZE;x++)
 	{
@@ -95,20 +95,19 @@ int main(int argc, char* argv[])
 		sprintf(buffer1, "varString of %dth element of SOAPStruct array", x);
 		arrstct.m_Array[x].varString = buffer1;
 	}
-*/	
+	
 	/*testing echo Struct Array*/
-/*	printf("invoking echoStructArray...\n");
+	printf("invoking echoStructArray...\n");
 	if (echoStructArray(pstub, arrstct).m_Array != NULL)
 		printf("successful\n");
 	else
-		printf("failed\n");
-*/		
+		printf("failed\n");		
 	/*testing echo void*/
-/*	
+	
 	printf("invoking echoVoid...\n");
 	echoVoid(pstub);
 	printf("successful\n");
-*/	
+	
 	/*testing echo base 64 binary*/
 /*	printf("invoking echoBase64...\n");
 	if (0 == strcmp(ws.echoBase64(pstub, "BCDF675E234242WHRTKMJDGKGUEJ898636JFJFHEJDGWTDHFJRURYGBCDHTWRSG"),
@@ -131,21 +130,19 @@ int main(int argc, char* argv[])
 	else
 		printf("failed\n");
 */	/*testing echo decimal*/
-/*	printf("invoking echoDecimal...\n");
+	printf("invoking echoDecimal...\n");
 	if (echoDecimal(pstub, 1234.567890) > 1234.56)
 		printf("successful\n");
 	else
 		printf("failed\n");
-*/		
+		
 	/*testing echo boolean*/
-/*	printf("invoking echoBoolean...\n");
+	printf("invoking echoBoolean...\n");
 	if (echoBoolean(pstub, true_) == true_)
 		printf("successful\n");
 	else
 		printf("failed\n");
 		
-	getchar();
-	return 0;
-*/	
+	getchar();	
 	destroy_InteropTestPortType_stub(pstub);
 }

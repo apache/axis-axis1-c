@@ -128,4 +128,8 @@ public interface WrapperConstants {
 	public static final String CLIENT = "client";
 	
 	public static final String SOAPENC_ARRAY = "Array";
+	
+	//channel security types
+	public static final String CHANNEL_SECURITY_NONE = "none";
+	public static final String CHANNEL_SECURITY_SSL = "ssl";
 }

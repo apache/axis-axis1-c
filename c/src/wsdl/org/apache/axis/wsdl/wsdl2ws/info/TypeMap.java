@@ -97,53 +97,53 @@ public class TypeMap {
 	private static Hashtable cppkeywords = new Hashtable();
 
 	static {
-		// java -> xml type mapping
+		// c -> xml type mapping
 		
-		basicTypeClass2QNamemap.put("int", new QName(WrapperConstants.SCHEMA_NAMESPACE, "int"));
-		basicTypeClass2QNamemap.put("byte", new QName(WrapperConstants.SCHEMA_NAMESPACE, "byte"));
-		basicTypeClass2QNamemap.put("float", new QName(WrapperConstants.SCHEMA_NAMESPACE, "float"));
-		basicTypeClass2QNamemap.put("long", new QName(WrapperConstants.SCHEMA_NAMESPACE, "long"));
-		basicTypeClass2QNamemap.put("double", new QName(WrapperConstants.SCHEMA_NAMESPACE, "double"));
-		basicTypeClass2QNamemap.put("boolean", new QName(WrapperConstants.SCHEMA_NAMESPACE, "boolean"));
-		basicTypeClass2QNamemap.put("char", new QName(WrapperConstants.SCHEMA_NAMESPACE, "char"));
-		basicTypeClass2QNamemap.put("short", new QName(WrapperConstants.SCHEMA_NAMESPACE, "short"));
-		basicTypeClass2QNamemap.put("java.lang.String", new QName(WrapperConstants.SCHEMA_NAMESPACE, "string"));
-		basicTypeClass2QNamemap.put("java.math.BigDecimal", new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"));
-		basicTypeClass2QNamemap.put("java.math.BigInteger", new QName(WrapperConstants.SCHEMA_NAMESPACE, "integer"));
-		basicTypeClass2QNamemap.put("java.utils.Calendar", new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"));
-		basicTypeClass2QNamemap.put("java.utils.Date", new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"));
+		basicTypeClass2QNamemap.put("xsd__int", new QName(WrapperConstants.SCHEMA_NAMESPACE, "int"));
+		basicTypeClass2QNamemap.put("xsd__byte", new QName(WrapperConstants.SCHEMA_NAMESPACE, "byte"));
+		basicTypeClass2QNamemap.put("xsd__float", new QName(WrapperConstants.SCHEMA_NAMESPACE, "float"));
+		basicTypeClass2QNamemap.put("xsd__long", new QName(WrapperConstants.SCHEMA_NAMESPACE, "long"));
+		basicTypeClass2QNamemap.put("xsd__double", new QName(WrapperConstants.SCHEMA_NAMESPACE, "double"));
+		basicTypeClass2QNamemap.put("xsd__boolean", new QName(WrapperConstants.SCHEMA_NAMESPACE, "boolean"));
+		basicTypeClass2QNamemap.put("xsd__integer", new QName(WrapperConstants.SCHEMA_NAMESPACE, "integer"));
+		basicTypeClass2QNamemap.put("xsd__short", new QName(WrapperConstants.SCHEMA_NAMESPACE, "short"));
+		basicTypeClass2QNamemap.put("xsd__string", new QName(WrapperConstants.SCHEMA_NAMESPACE, "string"));
+		basicTypeClass2QNamemap.put("xsd__decimal", new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"));
+		basicTypeClass2QNamemap.put("xsd__dateTime", new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"));
+		basicTypeClass2QNamemap.put("xsd__time", new QName(WrapperConstants.SCHEMA_NAMESPACE, "time"));
+		basicTypeClass2QNamemap.put("xsd__QName", new QName(WrapperConstants.SCHEMA_NAMESPACE, "Qname"));
+		basicTypeClass2QNamemap.put("xsd__date", new QName(WrapperConstants.SCHEMA_NAMESPACE, "date"));
+		basicTypeClass2QNamemap.put("xsd__base64Binary", new QName(WrapperConstants.SCHEMA_NAMESPACE, "base64Binary"));
+		basicTypeClass2QNamemap.put("xsd__hexBinary", new QName(WrapperConstants.SCHEMA_NAMESPACE, "hexBinary"));
+		basicTypeClass2QNamemap.put("xsd__unsignedByte", new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedByte"));
+		basicTypeClass2QNamemap.put("xsd__unsignedInt", new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedInt"));
+		basicTypeClass2QNamemap.put("xsd__unsignedLong", new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedLong"));
+		basicTypeClass2QNamemap.put("xsd__unsignedShort", new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedShort"));
+		basicTypeClass2QNamemap.put("xsd__anyURI", new QName(WrapperConstants.SCHEMA_NAMESPACE, "anyURI"));
 		
-		// xml -> java type mapping 
+		// xml -> c type mapping 
 	
-		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "int"), "int");
-		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "byte"), "byte");
-		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "float"), "float");
-		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "long"), "long");
-		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "integer"), "long");
-		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "double"), "double");
-		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "boolean"), "boolean");
-		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "char"), "char");
-		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "short"), "short");
-		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "string"), "java.lang.String");
-		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"), "java.math.BigDecimal");
-		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "Qname"), "javax.xml.namespace.QName");
-		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"), "java.utils.Date");
-		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "date"), "java.utils.Date");
-		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "time"), "java.utils.Date");
-		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "base64Binary"), "byte[]");
-		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "hexBinary"), "byte[]");
-		
-		basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "int"), "java.lang.Integer");
-		basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "byte"), "java.lang.Byte");
-		basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "float"), "java.lang.Float");
-		basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "long"), "java.lang.Long");
-		basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "double"), "java.lang.Double");
-		basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "boolean"), "java.lang.Boolean");
-		basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "char"), "java.lang.Charcter");
-		basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "short"), "java.lang.Short");
-		basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "string"), "java.lang.String");
-		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"), "java.math.BigDecimal");
-		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "QName"), "javax.xml.namespace.QName");		
+		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "integer"), "xsd__integer");
+		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "string"), "xsd__string");
+		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"), "xsd__decimal");
+		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "Qname"), "xsd__QName");
+		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"), "xsd__dateTime");
+		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "date"), "xsd__date");
+		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "time"), "xsd__time");
+		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "base64Binary"), "xsd__base64Binary");
+		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "hexBinary"), "xsd__hexBinary");
+		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "int"), "xsd__int");
+		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "byte"), "xsd__byte");
+		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "float"), "xsd__float");
+		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "long"), "xsd__long");
+		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "double"), "xsd__double");
+		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "boolean"), "xsd__boolean");
+		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "short"), "xsd__short");
+		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedByte"), "xsd__unsignedByte");
+		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedInt"), "xsd__unsignedInt");
+		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedLong"), "xsd__unsignedLong");
+		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedShort"), "xsd__unsignedShort");
+		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "anyURI"), "xsd__anyURI");
 
 		String[] words1 ={"abstract","default","if","private","this","boolean","do","implements",
 			"protected","throw","break","double","import","public","throws","byte","else","instanceof",

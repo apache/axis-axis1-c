@@ -69,6 +69,7 @@ import java.util.Iterator;
 
 import javax.xml.namespace.QName;
 
+import org.apache.axis.wsdl.wsdl2ws.WrapperConstants;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
 import org.apache.axis.wsdl.wsdl2ws.CUtils;
@@ -233,8 +234,10 @@ public class ClientStubWriter extends CFileWriter{
 				//TODO initialize return parameter appropriately.
 			}
 		}
+		String channelSecurityType = (WrapperConstants.CHANNEL_SECURITY_SSL.equals(wscontext.getWrapInfo().getChannelSecurity()))?
+										"SSL_CHANNEL" : "NORMAL_CHANNEL";
 		writer.write("\t/* Following will establish the connections with the server too */\n");
-		writer.write("\tif (AXIS_SUCCESS != pCall->_functions->Initialize(pCall->_object, C_DOC_PROVIDER,false_)) return ");
+		writer.write("\tif (AXIS_SUCCESS != pCall->_functions->Initialize(pCall->_object, C_DOC_PROVIDER, "+channelSecurityType+")) return ");
 		if (returntype != null){
 			writer.write((returntypeisarray?"RetArray":returntypeissimple?"Ret":"pReturn")+";\n");
 		}

@@ -68,6 +68,7 @@ import java.util.Iterator;
 
 import javax.xml.namespace.QName;
 
+import org.apache.axis.wsdl.wsdl2ws.WrapperConstants;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
 import org.apache.axis.wsdl.wsdl2ws.CUtils;
@@ -155,7 +156,7 @@ public class ClientStubWriter extends CPPClassWriter{
 	protected void writePreprocssorStatements() throws WrapperFault {
 		try{
 			writer.write("#include \""+classname+".h\"\n\n");
-			writer.write("#include <axis/common/AxisWrapperAPI.h>\n\n");
+			writer.write("#include <axis/server/AxisWrapperAPI.h>\n\n");
 		}catch(IOException e){
 			throw new WrapperFault(e);
 		}
@@ -276,7 +277,9 @@ public class ClientStubWriter extends CPPClassWriter{
 				//TODO initialize return parameter appropriately.
 			}
 		}
-		writer.write("\tif (AXIS_SUCCESS != m_pCall->Initialize(CPP_RPC_PROVIDER)) return ");
+		String channelSecurityType = (WrapperConstants.CHANNEL_SECURITY_SSL.equals(wscontext.getWrapInfo().getChannelSecurity()))?
+										"SSL_CHANNEL" : "NORMAL_CHANNEL";
+		writer.write("\tif (AXIS_SUCCESS != m_pCall->Initialize(CPP_RPC_PROVIDER, "+channelSecurityType +")) return ");
 		if (returntype != null){
 			writer.write((returntypeisarray?"RetArray":returntypeissimple?"Ret":"pReturn")+";\n");
 		}
@@ -413,6 +416,8 @@ public class ClientStubWriter extends CPPClassWriter{
 				if (typeName.startsWith(">")) continue;
 				typeSet.add(typeName);
 			}
+			writer.write("bool CallBase::bInitialized;\n" +
+				"CallFunctions CallBase::ms_VFtable;\n");
 			Iterator itr = typeSet.iterator();
 			while(itr.hasNext())
 			{

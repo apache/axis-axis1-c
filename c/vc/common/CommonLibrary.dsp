@@ -142,123 +142,83 @@ SOURCE=..\..\src\common\TypeMapping.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=..\..\src\common\ArrayBean.h
+SOURCE=..\..\include\axis\server\AxisConfig.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\axis\common\AxisConfig.h
+SOURCE=..\..\include\axis\server\AxisException.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\axis\common\AxisException.h
+SOURCE=..\..\include\axis\server\AxisTime.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\common\AxisSocketUtils.h
+SOURCE=..\..\include\axis\server\AxisTrace.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\axis\common\AxisTime.h
+SOURCE=..\..\include\axis\server\AxisUserAPI.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\axis\common\AxisTrace.h
+SOURCE=..\..\include\axis\server\AxisWrapperAPI.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\axis\common\AxisUserAPI.h
+SOURCE=..\..\include\axis\server\BasicTypeSerializer.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\common\AxisUtils.h
+SOURCE=..\..\include\axis\server\GDefine.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\axis\common\AxisWrapperAPI.h
+SOURCE=..\..\include\axis\server\IHandlerSoapDeSerializer.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\axis\common\BasicHandler.h
+SOURCE=..\..\include\axis\server\IHandlerSoapSerializer.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\axis\common\BasicTypeSerializer.h
+SOURCE=..\..\include\axis\server\IMessageData.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\axis\GDefine.h
+SOURCE=..\..\include\axis\server\IParam.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\axis\common\Handler.h
+SOURCE=..\..\include\axis\server\IWrapperSoapDeSerializer.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\common\IArrayBean.h
+SOURCE=..\..\include\axis\server\IWrapperSoapSerializer.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\common\IDeployerUtils.h
+SOURCE=..\..\include\axis\server\MessageData.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\axis\common\IHandlerSoapDeSerializer.h
+SOURCE=..\..\include\axis\server\Packet.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\axis\common\IHandlerSoapSerializer.h
+SOURCE=..\..\include\axis\server\Param.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\axis\common\IHeaderBlock.h
+SOURCE=..\..\include\axis\server\SoapEnvVersions.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\axis\common\IMessageData.h
+SOURCE=..\..\include\axis\server\TypeMapping.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\axis\common\IParam.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\axis\common\ISoapDeSerializer.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\axis\common\ISoapHeader.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\common\ISoapMethod.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\axis\common\ISoapSerializer.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\axis\common\IWrapperSoapDeSerializer.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\axis\common\IWrapperSoapSerializer.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\common\MessageData.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\axis\common\Packet.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\axis\common\Param.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\axis\common\TypeMapping.h
+SOURCE=..\..\include\axis\server\WrapperClassHandler.h
 # End Source File
 # End Group
 # End Target

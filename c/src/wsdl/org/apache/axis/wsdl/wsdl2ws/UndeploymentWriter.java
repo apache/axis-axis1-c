@@ -23,7 +23,7 @@ public class UndeploymentWriter extends WsddWriter {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(getFilePath(this.wscontext, "undeploy"), false));
 			writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 			writer.write("<undeployment xmlns=\"http://xml.apache.org/axis/wsdd/\""+
-				" xmlns:"+this.providerLang+"=\"http://xml.apache.org/axis/wsdd/providers/"+this.providerLang+">\n");
+				" xmlns:"+this.providerLang+"=\"http://xml.apache.org/axis/wsdd/providers/"+this.providerLang+"\">\n");
 			writer.write("\t<service name=\""+this.servicename+"\"/>\n");
 			writer.write("</undeployment>\n");
 			writer.flush();
