@@ -42,8 +42,8 @@ public:
     const int getExceptionCode();
 
 private:
-    const string& getMessage(const exception* e);
-    const string& getMessage(const int iExceptionCode);
+    const string getMessage(const exception* e);
+    const string getMessage(const int iExceptionCode);
     void processException(const exception* e);
     void processException(const exception* e, const int iExceptionCode);
 	void processException (const exception* e, char* pcMessage);

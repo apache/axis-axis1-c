@@ -84,14 +84,14 @@ void AxisParseException::processException(const int iExceptionCode, char* pcMess
     if(pcMessage)
         delete pcMessage;
 }
-const string& AxisParseException::getMessage (const exception* objException)
+const string AxisParseException::getMessage (const exception* objException)
 {
 	static string objExDetail = objException->what();
 
     return objExDetail;
 }
 
-const string& AxisParseException::getMessage (const int iExceptionCode)
+const string AxisParseException::getMessage (const int iExceptionCode)
 {
     switch(iExceptionCode)
     {

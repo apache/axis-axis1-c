@@ -88,14 +88,14 @@ void AxisSoapException::processException(const int iExceptionCode, char* pcMessa
     if(pcMessage)
         delete pcMessage;
 }
-const string& AxisSoapException::getMessage (const exception* objException)
+const string AxisSoapException::getMessage (const exception* objException)
 {
     static string objExDetail = objException->what();
 
     return objExDetail;
 }
 
-const string& AxisSoapException::getMessage (const int iExceptionCode)
+const string AxisSoapException::getMessage (const int iExceptionCode)
 {
     switch(iExceptionCode)
     {

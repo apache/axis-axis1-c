@@ -88,14 +88,14 @@ void AxisWsddException::processException(const int iExceptionCode, char* pcMessa
     if(pcMessage)
         delete pcMessage;
 }
-const string& AxisWsddException::getMessage (const exception* objException)
+const string AxisWsddException::getMessage (const exception* objException)
 {
     static string objExDetail = objException->what();
 
     return objExDetail;
 }
 
-const string& AxisWsddException::getMessage (const int iExceptionCode)
+const string AxisWsddException::getMessage (const int iExceptionCode)
 {
     switch(iExceptionCode)
     {

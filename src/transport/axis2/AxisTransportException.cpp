@@ -83,14 +83,14 @@ void AxisTransportException::processException(const int iExceptionCode, char* pc
     m_sMessage = getMessage(iExceptionCode) + " " + sMessage;
 }
 
-const string& AxisTransportException::getMessage (const exception* objException)
+const string AxisTransportException::getMessage (const exception* objException)
 {
 	static string objExDetail = objException->what();
 
     return objExDetail;
 }
 
-const string& AxisTransportException::getMessage (const int iExceptionCode)
+const string AxisTransportException::getMessage (const int iExceptionCode)
 {
     switch(iExceptionCode)
     {

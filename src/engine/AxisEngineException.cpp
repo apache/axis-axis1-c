@@ -88,14 +88,14 @@ void AxisEngineException::processException(const int iExceptionCode, char* pcMes
     if(pcMessage)
         delete pcMessage;
 }
-const string& AxisEngineException::getMessage (const exception* objException)
+const string AxisEngineException::getMessage (const exception* objException)
 {
     static string objExDetail = objException->what();
 
     return objExDetail;
 }
 
-const string& AxisEngineException::getMessage (const int iExceptionCode)
+const string AxisEngineException::getMessage (const int iExceptionCode)
 {
     switch(iExceptionCode)
     {
