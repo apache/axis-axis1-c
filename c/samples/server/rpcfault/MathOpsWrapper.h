@@ -18,11 +18,6 @@
  *
  */
 
-/*
- * This is the Service Class genarated by the tool WSDL2Ws
- *		MathOpsWrapper.h: interface for the MathOpsWrapperclass.
- *
- */
 #if !defined(__MATHOPSWRAPPER_SERVERWRAPPER_H__INCLUDED_)
 #define __MATHOPSWRAPPER_SERVERWRAPPER_H__INCLUDED_
 

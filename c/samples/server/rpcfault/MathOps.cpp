@@ -17,11 +17,6 @@
  *   @author Damitha Kumarage (damitha@opensource.lk, damitha@jkcsworld.com)
  *
  */
-/*
- *This is the Service implementation CPP file genarated by theWSDL2Ws.
- *		MathOps.cpp: implemtation for the MathOps.
- *
- */
 #include "MathOps.h"
 
 
