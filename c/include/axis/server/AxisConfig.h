@@ -66,6 +66,8 @@ class AxisConfig
         char* m_pcAxisHome;
 		char* m_pcKeyArray [NOOFPROPERTIES];
 		char* m_pcValueArray [NOOFPROPERTIES];
+
+		void setValue(int valuelength, g_axconfig valueindex, char* value);
 };
 #endif
 
