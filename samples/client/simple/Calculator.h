@@ -7,7 +7,10 @@
 #define __CALCULATOR_CLIENTSTUB_H__OF_AXIS_INCLUDED_
 
 #include <axis/client/Stub.hpp>
+#include <axis/client/Call.hpp>
 #include <ctype.h>
+
+AXIS_CPP_NAMESPACE_USE
 
 class Calculator 
 {
