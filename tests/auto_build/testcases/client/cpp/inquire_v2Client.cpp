@@ -27,7 +27,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <axis/server/AxisException.h>
+#include <axis/server/AxisException.hpp>
 using namespace std;
 
 #include "Inquire.h"
