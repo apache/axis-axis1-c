@@ -184,7 +184,7 @@ const Transport& HttpTransport::operator << (const std::string& p_Payload)
 
 void HttpTransport::HTTPBind(const std::string& p_Payload)
 {
-    m_OutMsg = "";
+    m_OutMsg.flush();
 	if(m_Typ == POST)				// only POST is supported for now, wish-list: M-POST??
 		m_OutMsg << "POST ";
 
