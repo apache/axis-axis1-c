@@ -89,7 +89,8 @@ Call::~Call ()
     if (m_bModuleInitialized)
         uninitialize_module();
     if (m_pcEndPointUri)
-        delete [] m_pcEndPointUri;   
+        delete [] m_pcEndPointUri;  
+	m_pcEndPointUri = NULL;
 }
 
 int Call::setEndpointURI (const char* pchEndpointURI)

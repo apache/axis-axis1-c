@@ -1,5 +1,6 @@
 #include "MathOps.hpp"
 #include <axis/AxisException.hpp>
+#include <axis/Axis.hpp>
 #include <ctype.h>
 #include <iostream>
 #include <signal.h>
@@ -35,6 +36,7 @@ int main(int argc, char* argv[])
 	i1 = 10;
 	i2 = 5;
 
+	Axis::initialize(false);
 	if (strcmp(op, "div") == 0)
 	{
 	    for(p3 = 0; p3 < 3; p3++)
@@ -120,6 +122,7 @@ int main(int argc, char* argv[])
 		cout << "Invalid operation " << op <<endl<<endl;
 		PrintUsage();
 	}
+	Axis::terminate();
 	cout << "---------------------- TEST COMPLETE -----------------------------" << endl;
 	return 0;
 }

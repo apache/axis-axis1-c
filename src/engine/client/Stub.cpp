@@ -42,15 +42,19 @@ Stub::Stub(const char *pcEndPointUri, AXIS_PROTOCOL_TYPE eProtocol)
 Stub::~Stub()
 {
     delete m_pCall;
+	m_pCall = NULL;
+
 	unsigned int j=0;
     for (j = 0; j < m_vSOAPHeaderBlocks.size(); j++)
     {
 	    delete m_vSOAPHeaderBlocks[j];
+		m_vSOAPHeaderBlocks[j] = NULL;
     }
 
     for (j = 0; j < m_vSOAPMethodAttributes.size(); j++)
     {
 	    delete m_vSOAPMethodAttributes[j];
+	    m_vSOAPMethodAttributes[j] = NULL;
     }
 }
 

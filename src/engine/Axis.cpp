@@ -87,7 +87,7 @@ WSDDDeployment* g_pWSDDDeployment;
 AxisConfig* g_pConfig;
 
 //Keeps track of whether initialize_module/uninitialize_module was called
-bool g_bModuleInitialize;
+bool g_bModuleInitialize = false;
 
 void ModuleInitialize ()
 {    
