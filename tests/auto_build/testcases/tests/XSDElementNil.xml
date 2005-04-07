@@ -9,6 +9,6 @@
             XSDElementNil.expected
         </output>
     </expected>
-	<endpoint>http://localhost:80/XSDElementNil/services/XSDElementNilPort</endpoint>
+	<endpoint>http://localhost:80/axis/XSDElementNil</endpoint>
 </test>
 

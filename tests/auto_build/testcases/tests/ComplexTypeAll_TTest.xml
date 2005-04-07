@@ -9,7 +9,7 @@
             ComplexTypeAll_TTest.expected
         </output>	
     </expected>
-	<endpoint>http://localhost:80/ComplexTypeAll/services/Service</endpoint>
+	<endpoint>http://localhost:80/axis/ComplexTypeAll</endpoint>
 	<nomonitor>true</nomonitor>
 	<notrace>true</notrace>
 </test>

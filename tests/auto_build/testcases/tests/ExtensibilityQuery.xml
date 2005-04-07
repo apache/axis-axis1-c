@@ -9,5 +9,5 @@
             ExtensibilityQuery.cpp.out
         </output>
     </expected>
-	<endpoint>http://localhost:8080/axis/testXSDANY</endpoint>
+	<endpoint>http://localhost:80/axis/ExtensibilityQuery</endpoint>
 </test>

@@ -9,5 +9,5 @@
             SimpleTypeInnerUnboundedInOutput.cpp.out
         </output>
     </expected>
-	<endpoint>-e http://localhost:9080/SimpleTypeInnerUnboundedInOutput/services/sampleWS</endpoint>
+	<endpoint>-e http://localhost:80/axis/SimpleTypeInnerUnboundedInOutputWSService</endpoint>
 </test>

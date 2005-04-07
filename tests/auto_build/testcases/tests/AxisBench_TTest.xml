@@ -9,7 +9,7 @@
             AxisBench_TTest.expected
         </output>
     </expected>
-	<endpoint>http://localhost:9080/AxisBench/services/AxisBenchSoapImpl</endpoint>
+	<endpoint>http://localhost:80/axis/AxisBench</endpoint>
 	<nomonitor>true</nomonitor>
 	<notrace>true</notrace>
 </test>

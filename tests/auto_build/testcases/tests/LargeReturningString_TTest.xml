@@ -9,7 +9,7 @@
             LargeReturningString_TTest.expected
         </output>
     </expected>
-	<endpoint>http://localhost:9080/LargeReturningString/services/LargeReturningString</endpoint>
+	<endpoint>http://localhost:80/axis/LargeReturningStringService</endpoint>
 	<nomonitor>true</nomonitor>
 	<notrace>true</notrace>
 </test>

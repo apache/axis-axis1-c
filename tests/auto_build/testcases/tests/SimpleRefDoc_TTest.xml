@@ -9,7 +9,7 @@
             SimpleRefDoc_TTest.expected
         </output>
     </expected>
-	<endpoint>http://localhost:80/SimpleRef/services/RefTest</endpoint>
+	<endpoint>http://localhost:80/axis/RefDoc</endpoint>
 	<nomonitor>true</nomonitor>
 	<notrace>true</notrace>
 </test>

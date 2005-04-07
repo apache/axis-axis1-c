@@ -9,5 +9,5 @@
             SimpleArray.cpp.out
         </output>
     </expected>
-	<endpoint>http://localhost/axis/array</endpoint>
+	<endpoint>http://localhost:80/axis/Array</endpoint>
 </test>

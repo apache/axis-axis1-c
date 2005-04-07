@@ -9,6 +9,6 @@
             FourLevelTestDoc.expected
         </output>
     </expected>
-    <endpoint>http://localhost:80/axis/FourLevelTestDocService</endpoint>
+    <endpoint>http://localhost:80/axis/FourLevelTestDoc</endpoint>
 </test>
 

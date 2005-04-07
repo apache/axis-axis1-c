@@ -12,6 +12,6 @@
             NillableArraysRequest.out
         </request>
     </expected>
-	<endpoint>http://localhost:80/NillableArrays/services/NillableArraysPort</endpoint>
+	<endpoint>http://localhost:80/axis/NillableArrays</endpoint>
 </test>
 

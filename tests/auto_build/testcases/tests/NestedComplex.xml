@@ -9,5 +9,5 @@
             NestedComplex.expected
         </output>
     </expected>
-	<endpoint>http://localhost:80/NestedComplex/services/NestedComplex</endpoint>
+	<endpoint>http://localhost:80/axis/NestedComplex</endpoint>
 </test>

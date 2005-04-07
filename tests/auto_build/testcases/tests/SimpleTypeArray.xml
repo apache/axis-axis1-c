@@ -9,5 +9,5 @@
             SimpleTypeArray.cpp.out
         </output>
     </expected>
-	<endpoint>-e http://localhost:9080/SimpleTypeArray/services/sampleWS</endpoint>
+	<endpoint>-e http://localhost:80/axis/SimpleTypeArrayService</endpoint>
 </test>

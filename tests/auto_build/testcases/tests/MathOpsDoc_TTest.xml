@@ -9,7 +9,7 @@
             MathOpsDoc_TTest.expected
         </output>
     </expected>
-	<endpoint>http://localhost:80/MathOps/services/MathOps</endpoint>
+	<endpoint>http://localhost:80/axis/MathOpsDoc</endpoint>
 	<nomonitor>true</nomonitor>
 	<notrace>true</notrace>
 </test>

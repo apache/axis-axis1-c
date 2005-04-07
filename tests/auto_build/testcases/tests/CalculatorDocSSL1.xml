@@ -9,7 +9,7 @@
            CalculatorDocSSL1.expected
         </output>
     </expected>
-        <endpoint>https://localhost:80/Calculator/services/Calculator</endpoint>
+        <endpoint>https://localhost:80/axis/CalculatorDoc</endpoint>
         <nomonitor>true</nomonitor>
         <port>9443</port>
 </test>

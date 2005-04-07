@@ -9,7 +9,7 @@
             Enumeration_TTest.expected
         </output>
     </expected>
-	<endpoint>http://localhost:9080/Enumeration/services/sampleWS</endpoint>
+	<endpoint>http://localhost:80/axis/EnumerationWSService</endpoint>
 	<nomonitor>true</nomonitor>
 	<notrace>true</notrace>
 </test>

@@ -9,5 +9,5 @@
             Enumeration.cpp.out
         </output>
     </expected>
-	<endpoint>-e http://localhost:9080/Enumeration/services/sampleWS</endpoint>
+	<endpoint>-e http://localhost:80/axis/EnumerationWSService</endpoint>
 </test>

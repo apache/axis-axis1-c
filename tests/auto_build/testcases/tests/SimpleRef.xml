@@ -9,5 +9,5 @@
             SimpleRef.cpp.out
         </output>
     </expected>
-	<endpoint>http://localhost/axis/ref</endpoint>
+	<endpoint>http://localhost:80/axis/Ref</endpoint>
 </test>

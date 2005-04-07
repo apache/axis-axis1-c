@@ -9,5 +9,5 @@
             ManyTypeRefRoot.cpp.out
         </output>
     </expected>
-	<endpoint>-e http://localhost:9080/ManyTypeRefRoot/services/sampleWS</endpoint>
+	<endpoint>-e http://localhost:80/axis/ManyTypeRefRoot</endpoint>
 </test>

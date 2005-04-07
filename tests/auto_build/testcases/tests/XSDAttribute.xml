@@ -9,5 +9,5 @@
             XSDAttribute.expected
         </output>
     </expected>
-	<endpoint>http://localhost:80/XSDAttribute/services/XSDAttribute</endpoint>
+	<endpoint>http://localhost:80/axis/XSDAttribute</endpoint>
 </test>

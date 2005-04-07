@@ -9,5 +9,5 @@
             ComplexLists.expected
         </output>
     </expected>
-	<endpoint>http://localhost/ComplexLists/services/ComplexLists</endpoint>
+	<endpoint>http://localhost:80/axis/ComplexListsService</endpoint>
 </test>

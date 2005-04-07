@@ -9,7 +9,7 @@
             SimpleTypeInnerUnbounded_TTest.expected
         </output>
     </expected>
-	<endpoint>http://localhost:9080/SimpleTypeInnerUnbounded/services/sampleWS</endpoint>
+	<endpoint>http://localhost:80/axis/SimpleTypeInnerUnboundedWSService</endpoint>
 	<nomonitor>true</nomonitor>
 	<notrace>true</notrace>
 </test>

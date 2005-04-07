@@ -9,5 +9,5 @@
             LargeReturningString.cpp.out
         </output>
     </expected>
-	<endpoint>-e http://localhost:9080/LargeReturningString/services/LargeReturningString</endpoint>
+	<endpoint>-e http://localhost:80/axis/LargeReturningStringService</endpoint>
 </test>

@@ -9,5 +9,5 @@
             PrimitiveAndArray.expected
         </output>
     </expected>
-	<endpoint>http://localhost:80/PrimitiveAndArray/services/PrimitiveAndArray</endpoint>
+	<endpoint>http://localhost:80/axis/PrimitiveAndArray</endpoint>
 </test>

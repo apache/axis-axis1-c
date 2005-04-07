@@ -9,5 +9,5 @@
             IAttributeTest2.expected
         </output>
     </expected>
-	<endpoint>http://localhost:80/Calculator/services/Calculator</endpoint>
+	<endpoint>http://localhost:80/axis/CalculatorDoc</endpoint>
 </test>

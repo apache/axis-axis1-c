@@ -9,6 +9,6 @@
             SimpleArrays.expected
         </output>
     </expected>
-	<endpoint>http://localhost:80/SimpleArrays/services/SimpleArraysPort</endpoint>
+	<endpoint>http://localhost:80/axis/SimpleArrays</endpoint>
 </test>
 
