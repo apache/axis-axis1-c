@@ -2,6 +2,7 @@
 
 	<property name="testProperties" value="test_properties.xml"/>
 	<property name="dir.autotests" value="${basedir}/tests/auto_build/testcases"/>
+	<property name="dir.testproperties" value="${dir.autotests}/tests"/>
 
 	<target name="initializeTest">
 		<!-- Get directory to contain log file -->
