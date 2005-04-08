@@ -43,5 +43,19 @@
 		<parameter name="allowedMethods" value="getInput "/>
 	</service>
 
+	<service name="doclitfault" provider="CPP:DOCUMENT" description="This is an Axis C++ web service for demonstrate fault value handling in DOCUMENT style service.">
+		<parameter name="className" value="C:\obj\samples\doclitfault.dll"/>
+		<parameter name="allowedMethods" value="div "/>
+	</service>
+
+	<service name="rpcfault" provider="CPP:RPC" description="This is an Axis C++ web service for demonstrate fault value handling in RPC style service">
+		<parameter name="className" value="C:\obj\samples\rpcfault.dll"/>
+		<parameter name="allowedMethods" value="div "/>
+	</service>
+
+	<service name="ref" provider="CPP:RPC" description="This is an Axis C++ web service for demonstrate Value Pass by Reference. This is a RPC style service. ">
+		<parameter name="className" value="C:\obj\samples\ref.dll"/>
+		<parameter name="allowedMethods" value="echoInt "/>
+	</service>
 
 </deployment>
