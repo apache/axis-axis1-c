@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<undeployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:CPP="http://xml.apache.org/axis/wsdd/providers/CPP">
-	<service name="ref"/>
-</undeployment>

@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:CPP="http://xml.apache.org/axis/wsdd/providers/CPP">
-	<service name="ref" provider="CPP:RPC" description="Axis C++ web service">
-		<parameter name="className" value="/user/local/apache/axis/ref.so"/>
-		<parameter name="allowedMethods" value="echoInt "/>
-	</service>
-</deployment>
