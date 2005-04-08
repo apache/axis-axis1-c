@@ -81,8 +81,8 @@ main (int argc, char *argv[])
 		printf ("successful\n");
 	    else
 		printf ("failed\n");
-	    
-            // testing echoStringArray 
+
+	    // testing echoStringArray 
 	    xsd__string_Array arrstr;
 	    arrstr.m_Array = new char *[ARRAYSIZE];
 	    arrstr.m_Size = ARRAYSIZE;

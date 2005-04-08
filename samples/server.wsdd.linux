@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deployment xmlns="http:xml.apache.org/axis/wsdd/" xmlns:C="http:xml.apache.org/axis/wsdd/providers/C" xmlns:CPP="http:xml.apache.org/axis/wsdd/providers/CPP">
+	<globalConfiguration>
+	</globalConfiguration>
+        <service name="array" provider="CPP:DOCUMENT" description="Axis C++ web service">
+                <parameter name="className" value="/home/obj/samples/libarray.so"/>
+                <parameter name="allowedMethods" value="getInput "/>
+        </service>
+        <service name="bench" provider="CPP:DOCUMENT" description="Axis C++ web service">
+                <parameter name="className" value="/home/obj/samples/libbench.so"/>
+                <parameter name="allowedMethods" value="doBenchRequest "/>
+        </service>
+        <service name="calculator" provider="CPP:RPC" description="Axis C++ web service">
+                <parameter name="className" value="/home/obj/samples/libcalculator.so"/>
+                <parameter name="allowedMethods" value="add sub mul div "/>
+        </service>
+        <service name="element" provider="CPP:DOCUMENT" description="Axis C++ web service">
+                <parameter name="className" value="/home/obj/samples/libelement.so"/>
+                <parameter name="allowedMethods" value="setGetDataInt setGetDataUnsignedInt setGetDataLong setGetDataUnsignedLong setGetDataDouble setGetDataFloat setGetDataByte setGetDataUnsignedByte setGetDataBoolean setGetDataString setGetDataShort setGetDataUnsignedShort setGetDateTimeType setGetDateType setGetDataDurationType setGetTimeType setGetBase64BinaryType setGetHexBinary setGetDecimalType setGetIntegerType setQNameType getQNameType setAnyURIType getAnyURIType "/>
+        </service>
+	<service name="enumeration" provider="CPP:DOCUMENT" description="Axis C++ web service">
+                <parameter name="className" value="/home/obj/samples/libenumeration.so"/>
+                <parameter name="allowedMethods" value="getInput "/>
+        </service>
+        <service name="transportProperties" provider="CPP:DOCUMENT" description="Axis C++ web service">
+                <parameter name="className" value="/home/obj/samples/libtransportProperties.so"/>
+                <parameter name="allowedMethods" value="add sub mul div "/>
+        </service>
+	<service name="base" provider="CPP:RPC" description="SOAPBuilders Interoperability Lab Round 2 base test suite described at http:www.whitemesa.com/interop/proposal2.html ">
+		<parameter name="allowedMethods" value="echoString EchoInt echoStringArray echoInteger echoIntegerArray echoFloat echoFloatArray echoStruct echoStructArray echoVoid echoBase64 echoDate echoHexBinary echoDecimal echoBoolean "/>	
+		<parameter name="className" value="/home/obj/samples/libbase.so" />
+	</service>
+</deployment>
