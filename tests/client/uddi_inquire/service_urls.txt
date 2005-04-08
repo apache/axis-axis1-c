@@ -1,8 +1,0 @@
-http://uddi.ibm.com/beta/inquiryapi
-http://www-3.ibm.com/services/uddi/inquiryapi
-http://www-3.ibm.com/services/uddi/testregistry/inquiryapi
-http://uddi.microsoft.com/inquire
-http://test.uddi.microsoft.com/inquire
-http://uddi.sap.com/UDDI/api/inquiry
-http://udditest.sap.com/UDDI/api/inquiry/
-http://www.systinet.com/wasp/uddi/inquiry/
