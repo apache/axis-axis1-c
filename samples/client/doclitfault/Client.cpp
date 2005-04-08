@@ -29,7 +29,7 @@ usage (char *programName, char *defaultURL)
 	<< "    service_url    URL of the service.\n"
 	<< "    Default service URL is assumed to be " << defaultURL
 	<<
-	"\n    Could use http://localhost:8080/axis/services/echo to test with Axis Java."
+	"\n    Could use http://localhost:80/axis/doclitfault"
 	<< endl;
 }
 
@@ -45,8 +45,8 @@ int main(int argc, char* argv[])
     char* pcDetail;
 
     // Set default service URL
-    sprintf (endpoint, "http://localhost/axis/MathOpsDL");
-    sprintf(original, "http://localhost/axis/MathOpsDL");
+    sprintf (endpoint, "http://localhost:80/axis/doclitfault");
+    sprintf(original, "http://localhost:80/axis/doclitfault");
 
     try
     {
@@ -105,6 +105,7 @@ int main(int argc, char* argv[])
 
 	if (strcmp(op, "div") == 0)
 	{
+		ws.setTransportProperty("SOAPAction" , "doclitfault#div");
 		iResult = ws.div(i1, i2);		
                 printf("Result is:%d\n", iResult);
 	}
