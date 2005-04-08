@@ -1,0 +1,119 @@
+<div align="center">
+  <h6><strong><font size="7">Axis C++ Samples Guide.</font></strong></h6>
+  <h1 align="left">How to build the Samples?</h1>
+  <p align="justify"> <font size="4">01.) In command prompt go to the folder where 
+    you have extracted the source<br>
+    02.) Then run the command <font color="#990000"><em><strong>ant -f buildSamples.xml</strong></em></font> 
+    (assuming you have ant and other ant related packages installed - see <a href="./antbuild-guide.html">ant 
+    build guide</a> for more information).<br>
+    03.) This will make the sample executable files and server shared library 
+    files for the samples in the C\obj\samples folder on Windows or /home/obj/samples 
+    folder on Linux. </font> </p>
+  <h1 align="justify">How to run the build client applications? </h1>
+  <p align="justify"><font size="4">01.) Run the apache server or the <em><strong>SimpleAxisServer 
+    &lt;<font color="#990000">Server Port</font> <font color="#990000">Number</font>&gt;</strong></em>. 
+    In order to run the sample <font color="#000000">executable</font>s use the 
+    <font color="#996600">server.wsdd.win32</font> on Windows or <font color="#996600">server.wsdd.linux</font> 
+    on Linux which are in [<font color="#FF00FF">\ws-axis\c\samples</font>]. To 
+    learn more on how to get Axis C++ up and running please read <a href="wininstall-guide.html">Windows 
+    install guide</a> ot <a href="lininstall-guide.html">Linux install guide</a>.<br>
+    02.) In command prompt go to [\obj\samples] on Windows or [/home/obj/samples] 
+    on Linux.<br>
+    03.)Then use any client name to run the sample. This will use the default 
+    URL (<font color="#000000">E.g. for calculator </font><font color="#0000FF"> 
+    http://localhost:80/axis/calculator</font>) to run the sample. If server is 
+    SimpleAxisServer then specify URL as in step no 06 with the &lt;<font color="#990000">Server 
+    Port</font> <font color="#990000">Number</font>&gt; which was given when running 
+    Simple Axis Server<br>
+    04.) Following are the existing client samples.</font></p>
+  <table width="102%" border="1">
+    <tr> 
+      <td colspan="2"><div align="center"> 
+          <h2>SAMPLE NAME</h2>
+        </div></td>
+      <td width="71%"><div align="center"> 
+          <h2>DISCRIPTION</h2>
+        </div></td>
+    </tr>
+    <tr> 
+      <td width="6%"><div align="center">01.</div></td>
+      <td width="23%"><font size="3"> array</font></td>
+      <td><font size="3">This is an Axis C++ web service to Simple Type Array 
+        which returns an array of elements. This is a DOCUMENT style service.</font></td>
+    </tr>
+    <tr> 
+      <td><div align="center">02.</div></td>
+      <td><font size="3">base</font></td>
+      <td><font size="3">This is an Axis C++ web service to Base which is use 
+        to demonstrate Complex data types. SOAPBuilders Interoperability Lab Round 
+        2 base test suite described at http://www.whitemesa.com/interop/proposal2.html. 
+        This is a RPC style service.</font></td>
+    </tr>
+    <tr> 
+      <td><div align="center">03.</div></td>
+      <td><font size="3">bench</font></td>
+      <td><font size="3">This is an Axis C++ web service to demonstrate Axis Bench 
+        which is use to demonstrate Complex data types. This is a DOCUMENT style 
+        service.</font></td>
+    </tr>
+    <tr> 
+      <td><div align="center">04.</div></td>
+      <td>doclitfault</td>
+      <td>This is an Axis C++ web service to demonstrate fault value handling 
+        in DOCUMENT style service.</td>
+    </tr>
+    <tr> 
+      <td><div align="center">05.</div></td>
+      <td><font size="3">calculator</font></td>
+      <td><font size="3">This is an Axis C++ Service to demonstrate Calculator. 
+        This will support addition (add) subtraction (sub) multiplication (mul) 
+        division (div). This is a RPC style service.</font></td>
+    </tr>
+    <tr> 
+      <td><div align="center">06.</div></td>
+      <td><font size="3">element</font></td>
+      <td><font size="3">This is an Axis C++ web service to demonstrate XSD Element 
+        which is use XSD data types. This is use set methods to retrieve XSD data 
+        types. This is a DOCUMENT style service.</font></td>
+    </tr>
+    <tr> 
+      <td><div align="center">07.</div></td>
+      <td><font size="3">enumeration</font></td>
+      <td><font size="3">This is an Axis C++ web service to Enumeration demonstrate 
+        enum data type. This is a DOCUMENT style service.</font></td>
+    </tr>
+    <tr>
+      <td><div align="center">08.</div></td>
+      <td>ref</td>
+      <td>This is an Axis C++ web service to demonstrate Value Pass by Reference. 
+        This is a RPC style service. </td>
+    </tr>
+    <tr> 
+      <td><div align="center">09.</div></td>
+      <td>rpcfault</td>
+      <td>This is an Axis C++ web service to demonstrate fault value handling 
+        in RPC style service</td>
+    </tr>
+    <tr> 
+      <td><div align="center">10.</div></td>
+      <td><font size="3">transportProperties</font></td>
+      <td><font size="3">This is an Axis C++ web service to demonstrate Transport 
+        Property. This is a DOCUMENT style service.</font></td>
+    </tr>
+  </table>
+  <p align="left">&nbsp;</p>
+  <p align="left"><font size="4">05.) To get help on how to run <strong><em>&lt;<font color="#990000">sample 
+    executable name</font>&gt; [<font color="#006600">-?</font>] <font color="#006600">-h<font color="#000000">]</font></font> 
+    </em></strong><br>
+    06.) To run a sample simply run using <em><strong>&lt;<font color="#990000">sample 
+    executeble name</font>&gt;</strong> </em>or using<strong> <em>&lt;<font color="#990000">sample 
+    executeble name</font>&gt; [<font color="#006600">server URL</font><font color="#000000">]</font></em></strong> 
+    </font></p>
+  <p align="left"><font size="4">E.g. To run calculator client with Simple Axis 
+    Server started on port number 9090 use:<br>
+    <font size="4"><strong><em>calculator </em></strong></font><em><strong><font color="#0000FF">http://localhost:9090/axis/calculator</font></strong></em></font></p>
+  <p align="left"><font size="4"><br>
+    </font> </p>
+  <p align="justify"><br>
+  </p>
+</div>
