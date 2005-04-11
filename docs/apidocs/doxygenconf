@@ -301,7 +301,7 @@ WARN_LOGFILE           =
 # directories like "/usr/src/myproject". Separate the files or directories 
 # with spaces.
 
-INPUT                  = ../../include/axis ../../include/axis/server ../../include/axis/client ../../tests/client/exceptionTest ../../samples
+INPUT                  = ../../include/axis ../../include/axis/server ../../include/axis/client ../../samples
 
 #INPUT                  = ../../ ../../src ../../src/common ../../src/engine ../../src/engine/server ../../src/engine/client ../../src/soap ../../src/wsdd ../../src/xml ../../src/server ../../src/server/apache ../../src/wcg ../../src/wsdl ../../src/transport ../../src/transport/axis ../../include/axis ../../include/axis/server ../../include/axis/client
 
