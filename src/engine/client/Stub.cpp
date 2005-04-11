@@ -77,40 +77,47 @@ Stub::setTransportProperty (const char *pcKey, const char *pcValue)
 {
     if (m_pTransport)
     {
-	if (strcmp (pcKey, "SOAPAction") == 0)	//Samisa: Setting SOAPAction, 
+		if(!pcKey)
+		{
+			m_pTransport=NULL; //this should be set to null. otherwise the previous setting can be still there.
+			return;// if the pcKey is set to null, the method returns
+		}
+
+		else if (strcmp (pcKey, "SOAPAction") == 0)	//Samisa: Setting SOAPAction, 
 	    //may need to add '"' to value - AXISCPP-531
-	{
+		{
 	    // both "" missing
-	    if (pcValue
-		&& (pcValue[0] != '"'
+			if (pcValue
+			&& (pcValue[0] != '"'
 		    && pcValue[strlen (pcValue) - 1] != '"'))
-	    {
-		char *tempvalue = new char[strlen (pcValue) + 3];
-		sprintf (tempvalue, "\"%s\"", pcValue);
-		m_pTransport->setTransportProperty (pcKey, tempvalue);
-		delete[]tempvalue;
-	    }
-	    else if (pcValue && (pcValue[0] != '"'))	//starting '"' missing
-	    {
-		char *tempvalue = new char[strlen (pcValue) + 2];
-		sprintf (tempvalue, "\"%s", pcValue);
-		m_pTransport->setTransportProperty (pcKey, tempvalue);
-		delete[]tempvalue;
-	    }
-	    else if (pcValue && (pcValue[strlen (pcValue) - 1] != '"'))	// ending '"' missing
-	    {
-		char *tempvalue = new char[strlen (pcValue) + 3];
-		sprintf (tempvalue, "\"%s\"", pcValue);
-		m_pTransport->setTransportProperty (pcKey, tempvalue);
-		delete[]tempvalue;
-	    }
-	    else		// both "" present
-		m_pTransport->setTransportProperty (pcKey, pcValue);
-	}
-	else
-	{
-	    m_pTransport->setTransportProperty (pcKey, pcValue);
-	}
+			{
+				char *tempvalue = new char[strlen (pcValue) + 3];
+				sprintf (tempvalue, "\"%s\"", pcValue);
+				m_pTransport->setTransportProperty (pcKey, tempvalue);
+				delete[]tempvalue;
+			}
+			else if (pcValue && (pcValue[0] != '"'))	//starting '"' missing
+			{
+				char *tempvalue = new char[strlen (pcValue) + 2];
+				sprintf (tempvalue, "\"%s", pcValue);
+				m_pTransport->setTransportProperty (pcKey, tempvalue);
+				delete[]tempvalue;
+			}
+			else if (pcValue && (pcValue[strlen (pcValue) - 1] != '"'))	// ending '"' missing
+			{
+				char *tempvalue = new char[strlen (pcValue) + 3];
+				sprintf (tempvalue, "\"%s\"", pcValue);
+				m_pTransport->setTransportProperty (pcKey, tempvalue);
+				delete[]tempvalue;
+			}
+			else		// both "" present
+				m_pTransport->setTransportProperty (pcKey, pcValue);
+		}
+	
+		else
+		{
+			 m_pTransport->setTransportProperty (pcKey, pcValue);
+		}
     }
 }
 
