@@ -870,12 +870,12 @@ int SoapSerializer::addOutputParam( const AxisChar * pchName,
     case XSD_INTEGER:
         if (pValue == NULL)
         {
-            pParam->m_Value.lValue = NULL;
+            pParam->m_Value.llValue = NULL;
         }
         else
         {
-            pParam->m_Value.lValue = new long;
-            *(pParam->m_Value.lValue) = *((long *) (pValue));
+            pParam->m_Value.llValue = new xsd__integer;
+            *(pParam->m_Value.llValue) = *((xsd__integer *) (pValue));
         }
         break;        
 

@@ -82,13 +82,13 @@ ArrayBean::~ArrayBean()
             }
                 break;
             case XSD_LONG:
+            case XSD_INTEGER:
             case XSD_UNSIGNEDLONG:
 			{
                 LONGLONG* a = (LONGLONG *)m_value.sta;
                 delete [] a;
             }
                 break;
-            case XSD_INTEGER:
             case XSD_DURATION:		
             {
                 long* a = (long*)m_value.sta;

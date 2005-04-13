@@ -110,7 +110,7 @@ Param::~Param ()
             break;
 
         case XSD_INTEGER:
-            delete m_Value.lValue;
+            delete m_Value.llValue;
             break;        
 
         case XSD_DURATION:
@@ -278,7 +278,7 @@ int Param::serialize (SoapSerializer &pSZ)
             pSZ.serializeAsElement(m_sName.c_str (), m_Value.llValue, m_Type);
             break;
 	case XSD_INTEGER:
-            pSZ.serializeAsElement(m_sName.c_str (), m_Value.lValue, m_Type);
+            pSZ.serializeAsElement(m_sName.c_str (), m_Value.llValue, m_Type);
             break;
 	case XSD_UNSIGNEDLONG:
             pSZ.serializeAsElement(m_sName.c_str (), m_Value.ulValue, m_Type);
@@ -344,7 +344,7 @@ int Param::setValue (XSDTYPE nType, ParamValue Value)
             m_Value.llValue = Value.llValue;
             break;
         case XSD_INTEGER:
-            m_Value.lValue = Value.lValue;
+            m_Value.llValue = Value.llValue;
             break;
         case XSD_UNSIGNEDLONG:
             m_Value.ulValue = Value.ulValue;
