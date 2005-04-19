@@ -77,7 +77,10 @@ Notes:
             </fileset>   
 	    </copy>
         <exec executable="rc">
-            <arg line="/fo ${basedir}/build/version.res ${basedir}/build/version.temp.rc"/>
+<!--            <arg ="/fo '${basedir}/build/version.res' '${basedir}/build/version.temp.rc'"/>-->
+			<arg value="/fo"/>
+        	<arg value="${basedir}/build/version.res"/>
+        	<arg value="${basedir}/build/version.temp.rc"/>
         </exec>
     </target>
 
