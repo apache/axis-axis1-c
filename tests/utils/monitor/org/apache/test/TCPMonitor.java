@@ -32,7 +32,7 @@ public class TCPMonitor {
 	private static FileWriter requestFileWriter;
 	private static FileWriter responseFileWriter;
 	private static boolean responseFileWriterOpen = false;
-	private static TestClientListener T = null;
+	private static TestClientListener testClientListener = null;
 
 	/**
 	 * Creates a new TCPMonitor listening on the given port for incoming requests (this is always on localhost of course!)
@@ -57,8 +57,8 @@ public class TCPMonitor {
 		/*
 		 * Create a thread which listens for incoming requests
 		 */
-		T = new TestClientListener(listenerPort, serviceHost, servicePort);
-		T.startListener();
+		testClientListener = new TestClientListener(listenerPort, serviceHost, servicePort);
+		testClientListener.startListener();
 	}
 
 	public static TCPMonitor getInstance() throws Exception {
@@ -81,15 +81,15 @@ public class TCPMonitor {
 	}
 
 	public static void stop() {
-		T.stopListener();
+		testClientListener.stopListener();
 		try {
 			requestFileWriter.close();
 			responseFileWriter.close();
 		} catch (Exception e) {
-			;
+		    e.printStackTrace();
+			
 		}
 		singleton=null;
-		System.exit(0);
 	}
 
 	public void writeRequest(String inputLine) {

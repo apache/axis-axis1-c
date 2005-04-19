@@ -20,6 +20,7 @@ import java.io.*;
 import java.net.*;
 
 public class StopTCPMonitor {
+    public static final String STOPTCPMON = "STOPTCPM";
 
 	private String hostname = null;
 	private int port = 0;
@@ -33,10 +34,9 @@ public class StopTCPMonitor {
 		Socket socket = null;
 		BufferedWriter dos = null;
 		try {
-			String stopString = "STOPTCPM";
-			socket = new Socket(hostname, port);
+		socket = new Socket(hostname, port);
 			dos = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-			dos.write(stopString);
+			dos.write(STOPTCPMON);
 		} catch (UnknownHostException uhe) {
 			uhe.printStackTrace();
 		} catch (ConnectException ce) {
