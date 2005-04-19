@@ -5,7 +5,7 @@
 	  and convert these files to the OS specific format so the filesmatch
 	  comparison later in this script works on all platforms.
 	  -->
-	<target name="setExpectations" depends="setResultExpectations, setRequestExpectations"/> 
+	<target name="setExpectations" depends="setResultExpectations, setRequestExpectations"/>
 
 	<target name="setResultExpectations" unless="buildOnly">
 		<basename file="${expected.file}" property="expected.file.basename"/>
@@ -41,10 +41,10 @@
 		<propertyregex property="protocol" input="${test.endpoint}"
 			           regexp="(.*)://" select="\1"/>
 
-        <propertyregex property="restOfURL" input="${test.endpoint}"
+		<propertyregex property="restOfURL" input="${test.endpoint}"
                        regexp="://(.*)" select="\1"/>
 
-        <propertyregex property="context" input="${restOfURL}"
+		<propertyregex property="context" input="${restOfURL}"
                        regexp="/(.*)" select="\1"/>
 
 		<property name="clientArgs" value="${protocol}://localhost:${monitorPort}/${context}"/>
@@ -52,12 +52,12 @@
 
 	<target name="setForNoMonitor" depends="checkIfEndpointSet" if="endpoint.ok">
 
-        <propertyregex property="restOfURL" input="${test.endpoint}"
+		<propertyregex property="restOfURL" input="${test.endpoint}"
                        regexp="://(.*)" select="\1"/>
 
 		<propertyregex property="protocol" input="${test.endpoint}"
 			           regexp="(.*)://${restOfURL}" select="\1"/>
-        <propertyregex property="context" input="${restOfURL}"
+		<propertyregex property="context" input="${restOfURL}"
                        regexp="/(.*)" select="\1"/>
 
 		<property name="clientArgs" value="${protocol}://${testHost}:${testPort}/${context}"/>
@@ -77,7 +77,7 @@
 	<target name="startMonitor" unless="test.nomonitor">
 		<echo message="Starting monitor forwarding to ${testHost}:${testPort}"/>
 		<!-- Run Monitor utility to allow validation of message across the wire -->
-		<java classname="org.apache.test.TCPMonitor" fork="true" outputproperty="mon.out">
+		<java classname="org.apache.test.TCPMonitor" outputproperty="mon.out">
 			<arg line="-l ${monitorPort}"/>
 			<arg line="-p ${testPort}"/>
 			<arg line="-h ${testHost}"/>
@@ -106,41 +106,29 @@
 
 		<trycatch>
 			<try>
-				<parallel timeout="120000" failonany="false">
+				<antcall target="startMonitor" inheritall="true"/>
+				<echo message="Running Test ${testName} ${clientArgs}"/>
+				<!-- Run the client test -->
+				<stopwatch name="${testName}.timer" action="start" />
+				<exec dir="${test.directory}" executable="${test.directory}/${testName}" output="${results.stdout}" error="${results.stderr}" failifexecutionfails="false" vmlauncher="false">
+					<arg line="${clientArgs}" />
+					<env key="PATH" path="${java.library.path}${path.separator}${dir.libraries}${path.separator}${dir.xmlParser}${path.separator}${HTTP.SSLChannel.eay.dir}${path.separator}${test.directory}" />
+					<env key="LD_LIBRARY_PATH" path="${dir.libraries}${path.separator}${dir.xmlParser}${path.separator}${HTTP.SSLChannel.dir}/lib${path.separator}${test.directory}" />
+					<env key="LIBPATH" path="${dir.libraries}${path.separator}${dir.xmlParser}${path.separator}${HTTP.SSLChannel.dir}/lib${path.separator}${test.directory}" />
+					<env key="AXISCPP_DEPLOY" value="${axiscpp_deploy}" />
+				</exec>
 
-					<antcall target="startMonitor" inheritall="true"/>
-		
-					<sequential>
-						<!-- Wait for jvm to start monitor program -->
-						<sleep seconds="10"/>
-						<echo message="Running Test ${testName} ${clientArgs}"/>
-						<!-- Run the client test -->
-						<stopwatch name="${testName}.timer" action="start"/>
-						<exec dir="${test.directory}"
-						 executable="${test.directory}/${testName}"
-						 output="${results.stdout}" error="${results.stderr}"
-						 failifexecutionfails="false" vmlauncher="false">
-							<arg line="${clientArgs}"/>
-							<env key="PATH" path="${java.library.path}${path.separator}${dir.libraries}${path.separator}${dir.xmlParser}${path.separator}${HTTP.SSLChannel.eay.dir}${path.separator}${test.directory}"/>
-							<env key="LD_LIBRARY_PATH" path="${dir.libraries}${path.separator}${dir.xmlParser}${path.separator}${HTTP.SSLChannel.dir}/lib${path.separator}${test.directory}"/>
-							<env key="LIBPATH" path="${dir.libraries}${path.separator}${dir.xmlParser}${path.separator}${HTTP.SSLChannel.dir}/lib${path.separator}${test.directory}"/>
-							<env key="AXISCPP_DEPLOY" value="${axiscpp_deploy}"/>
-						</exec>
+				<stopwatch name="${testName}.timer" action="total" />
+				<propertycopy property="timer1" from="${testName}.timer" />
+				<echo file="${results.log}" append="true" message="${testName} - Execution Time - ${timer1}${line.separator}" />
+				<echo message="${testName} - Execution Time - ${timer1}" />
 
-						<stopwatch name="${testName}.timer" action="total"/>
-						<propertycopy property="timer1" from="${testName}.timer"/>
- 						<echo file="${results.log}" append="true"
- 		 				      message="${testName} - Execution Time - ${timer1}${line.separator}"/>
-						<echo message="${testName} - Execution Time - ${timer1}"/>
+				<antcall target="stopMonitor" inheritall="true" />
 
-						<antcall target="stopMonitor" inheritall="true"/>
-
-					</sequential>
-				</parallel>
 			</try>
 			<catch>
-				<echo message="Exception in monitor caught it in Ant try/catch block while trying to run test ${testName}"/>
-				<antcall target="stopMonitor" inheritall="true"/>
+				<echo message="Exception in monitor caught it in Ant try/catch block while trying to run test ${testName}" />
+				<antcall target="stopMonitor" inheritall="true" />
 			</catch>
 			<finally>
 				<sleep seconds="1"/>
@@ -167,10 +155,10 @@
 		<!-- Decide whether the Channel_HTTP_SSL directive should be 
 		commented according to build.PLATFORM.properties -->
 		<condition property="commentSSLDirective" value="#">
-				<isfalse value="${HTTP.SSLChannel}"/>
+			<isfalse value="${HTTP.SSLChannel}"/>
 		</condition>
 		<condition property="commentSSLDirective" value="">
-				<istrue value="${HTTP.SSLChannel}"/>
+			<istrue value="${HTTP.SSLChannel}"/>
 		</condition>
 
 		<echo file="${axiscpp.conf}">#Available directives are as follows:
@@ -184,18 +172,18 @@
 # Channel_HTTP_SSL:      The HTTP transport secure channel library
 #
 </echo>
-        <!-- Allow tracing to be turned off -->
-        <if>
-            <not>
-                <isset property="test.notrace"/>
-            </not>
-            <then>    
-                <echo file="${axiscpp.conf}" append="true">
+		<!-- Allow tracing to be turned off -->
+		<if>
+			<not>
+				<isset property="test.notrace"/>
+			</not>
+			<then>
+				<echo file="${axiscpp.conf}" append="true">
 ClientLogPath:${test.directory}/ClientLog.taw
-</echo>   
-            </then>
-        </if>   
-        <echo file="${axiscpp.conf}" append="true">
+</echo>
+			</then>
+		</if>
+		<echo file="${axiscpp.conf}" append="true">
 Transport_http:${dir.libraries}/${libraryPrefix}${transportLibraryName}${librarySuffix}
 #XMLParser:${dir.libraries}/${libraryPrefix}${xmlParserLibraryName}${librarySuffix}
 XMLParser:${dir.libraries}/${ClientParserLib}
