@@ -86,7 +86,7 @@ int ClientAxisEngine::process (SOAPTransport* pSoap)
 
 	        		pService = g_pWSDDDeployment->getService( pszService);
 
-					delete pszService;
+					delete [] pszService;
 				}
 				else
 				{
