@@ -1,0 +1,43 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+	<TITLE>Axis Reference Guide</TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.1  (Linux)">
+	<META NAME="CREATED" CONTENT="20050421;14185500">
+	<META NAME="CHANGED" CONTENT="20050421;14283800">
+</HEAD>
+<BODY LANG="en-US" DIR="LTR">
+<H1 ALIGN=CENTER><IMG SRC="images/axis.jpg" NAME="Graphic1" ALIGN=BOTTOM WIDTH=176 HEIGHT=96 BORDER=0></H1>
+<H1>Axis C++ Reference Guide</H1>
+<P><I>1.5 Version</I> <BR><I>Feedback: <A HREF="axis-c-dev@ws.apache.org">axis-c-dev@ws.apache.org</A></I>
+</P>
+<H3>Table of Contents</H3>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="#Client">Client Stub</A></P>
+	<UL>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="#Proxy">Setting Proxy</A>
+				</P>
+	</UL>
+</UL>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<H2><A NAME="Client"></A>Client Stub</H2>
+<H3><A NAME="Proxy"></A>Setting Proxy</H3>
+<P>One can make use of a proxy server by setting the proxy name and
+port using setProxy(strName,intPort) method of the client stub.</P>
+<P>Following sample code snippet shows how this could be done:</P>
+<P>In the client's main program</P>
+<PRE>            // Create the clinet stub              
+            ClientStub *stub=new ClientStub(strServiceEndPoint);
+            // set the proxy setting
+            stub-&gt;setProxy(&quot;Your_Proxy_Host_Name&quot;,3128 /*Proxy server port*/ );
+            // Use the stub object as usual
+</PRE><P>
+That is all; Everything related to proxy will be handled by the
+transport library transparent to the client stub.</P>
+<PRE STYLE="margin-bottom: 0.2in"></PRE><P>
+<A NAME="axis_components63"></A><BR><BR>
+</P>
+</BODY>
+</HTML>
