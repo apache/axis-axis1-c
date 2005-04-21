@@ -290,8 +290,6 @@ Notes:
 		</cc>
   		    </sequential>
 </for>
-		<copy file="${dir.samples}/client/run_interoptests.sh" tofile="${dir.obj}/samples/run_interoptests.sh" overwrite="false"/>
-		<copy file="${dir.samples}/client/run_interoptests.bat" tofile="${dir.obj}/samples/run_interoptests.bat" overwrite="false"/>
 	</target>
 	
 	<!--
