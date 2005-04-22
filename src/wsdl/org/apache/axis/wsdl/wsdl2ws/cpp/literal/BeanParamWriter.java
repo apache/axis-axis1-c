@@ -334,13 +334,21 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 							|| typename.equals("xsd__NMTOKEN"))
 					{
 						writer.write("\tparam->"+attribs[i].getParamNameAsMember()+".m_Array = ("+attribs[i].getTypeName()+"*)new "+attribs[i].getTypeName()+"[array.m_Size];\n");
+						writer.write("\tparam->"+attribs[i].getParamNameAsMember()+
+							".m_Size = array.m_Size;\n\n");
+						writer.write("\tmemcpy( param->"+attribs[i].getParamNameAsMember()+
+							".m_Array, array.m_Array, sizeof( "+attribs[i].getTypeName()+
+							") * array.m_Size);\n");
 					}
 					else
 					{
 						writer.write("\tparam->"+attribs[i].getParamNameAsMember()+".m_Array = ("+attribs[i].getTypeName()+"**)new "+attribs[i].getTypeName()+"*[array.m_Size];\n");
+						writer.write("\tparam->"+attribs[i].getParamNameAsMember()+
+							".m_Size = array.m_Size;\n\n");
+						writer.write("\tmemcpy( param->"+attribs[i].getParamNameAsMember()+
+							".m_Array, array.m_Array, sizeof( "+attribs[i].getTypeName()+
+							"*) * array.m_Size);\n");
 					}
-					writer.write("\tparam->"+attribs[i].getParamNameAsMember()+".m_Size = array.m_Size;\n\n");
-					writer.write("\tmemcpy( param->"+attribs[i].getParamNameAsMember()+".m_Array, array.m_Array, sizeof( "+attribs[i].getTypeName()+") * array.m_Size);\n");
 				}
 				else
 				{
