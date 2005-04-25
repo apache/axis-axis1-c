@@ -294,17 +294,17 @@ STORAGE_CLASS_INFO int process_request(SOAPTransport* pStream)
 
 #ifdef WIN32
 
-static volatile long g_uModuleInitializing = 0;
-static void start_initializing()
-{
-    long exchange = 1;
-    long comperand = 0;
-    while (InterlockedCompareExchange(((void **)&g_uModuleInitializing), (void *)&exchange, (void *) &comperand));
-}
-static void done_initializing()
-{
-    g_uModuleInitializing = 0;
-}
+static volatile long g_uModuleInitializing = 0; 
+static void start_initializing() 
+{ 
+    while (InterlockedIncrement((LONG*)&g_uModuleInitializing) != 1) { 
+        InterlockedDecrement((LONG*)&g_uModuleInitializing); 
+    } 
+} 
+static void done_initializing() 
+{ 
+    InterlockedDecrement((LONG*)&g_uModuleInitializing); 
+} 
 
 #else
 
