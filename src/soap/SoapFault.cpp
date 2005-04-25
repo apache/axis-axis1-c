@@ -65,6 +65,7 @@ volatile bool SoapFault::m_bInit = false;
 SoapFault::SoapFault()
 {
     m_bIsSimpleDetail = false;
+    m_pFaultDetail = NULL;
 }
 
 SoapFault::~SoapFault()
@@ -72,7 +73,7 @@ SoapFault::~SoapFault()
     delete m_pFaultcodeParam;
     delete m_pFaultstringParam;
     delete m_pFaultactorParam;
-    delete m_pFaultDetail;
+    if (NULL!=m_pFaultDetail) delete m_pFaultDetail;
     m_pFaultcodeParam = NULL;
     m_pFaultstringParam = NULL;
     m_pFaultactorParam = NULL;

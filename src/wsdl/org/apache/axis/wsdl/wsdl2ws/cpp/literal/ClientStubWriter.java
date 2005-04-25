@@ -1145,6 +1145,7 @@ public class ClientStubWriter
 	    writer.write ("\t\t\t\t\tdelete [] const_cast<char*>(detail);\n");
 		writer.write ("\t\t\t\t}\n\n");
 	    writer.write ("\t\t\t\tm_pCall->unInitialize();\n");
+	    writer.write ("\t\t\t\tdelete pSoapFault;\n");
 	    writer.write ("\t\t\t\tthrow ofe;\n");
 	}
 	else
@@ -1233,6 +1234,7 @@ public class ClientStubWriter
 	    writer.write ("\t\t\t\t\tdelete [] const_cast<char*>(detail);\n");
 		writer.write ("\t\t\t\t}\n\n");
 	    writer.write ("\t\t\t\tm_pCall->unInitialize();\n");
+	    writer.write ("\t\t\t\tdelete pSoapFault;\n");
 	    writer.write ("\t\t\t\tthrow ofe;\n");
 	    writer.write ("\t\t\t}\n");
 	}
@@ -1240,6 +1242,7 @@ public class ClientStubWriter
 	writer.write ("\t\telse\n");
 	writer.write ("\t\t{\n");
 	writer.write ("\t\t\tm_pCall->unInitialize();\n"); // AXISCPP-477
+	writer.write ("\t\t\tdelete pSoapFault;\n");
 	writer.write ("\t\t\tthrow;\n");
 	writer.write ("\t\t}\n");
 	writer.write ("\t}\n");
@@ -1280,6 +1283,7 @@ public class ClientStubWriter
 		write
 		("\t\t\t\tpFaultDetail->setExceptionCode(e.getExceptionCode());\n");
 	    writer.write ("\t\t\t\tm_pCall->unInitialize();\n");
+	    writer.write ("\t\t\t\tdelete pSoapFault;\n");
 	    writer.write ("\t\t\t\tthrow *pFaultDetail;\n");
 	    writer.write ("\t\t\t}\n");
 	}
