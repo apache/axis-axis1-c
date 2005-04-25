@@ -1204,12 +1204,16 @@ return Array;
                             m_pCurrNode = m_pNode;\
                             /* Need to verify if the return value is NULL. */\
                             xsd__boolean * isNill = getAttributeAsBoolean("nil", 0);\
-                            if (NULL != isNill && true_ == *isNill)\
-                            {\
-                                ((cpp_type*)Array.m_Array)[nIndex] = NULL;\
-                                m_pNode = m_pParser->next();\
-                                m_pNode = NULL;\
-                                continue;\
+                            if (NULL != isNill) {\
+                            	if (true_ == *isNill) {\
+                          	      ((cpp_type*)Array.m_Array)[nIndex] = NULL;\
+                            	    m_pNode = m_pParser->next();\
+                                	m_pNode = NULL;\
+	                                delete isNill;\
+    	                            continue;\
+        	                    } else {\
+            	                	delete isNill;\
+                	            }\
                             }\
                         }\
                         m_pNode = m_pParser->next(true); /* charactor node */\
@@ -1690,8 +1694,11 @@ SoapDeSerializer::getCmplxObject (void *pDZFunct, void *pCreFunct,
         		{
         		    m_pParser->next ();
         		    m_pNode = NULL;
+                    delete isNill;
         		    return NULL;
-        		}
+        		} else {
+        			delete isNill;
+        		}	
             }
 	    }
 	    m_pNode = NULL;	/* node identified and used */
@@ -1824,16 +1831,20 @@ SoapDeSerializer::getCmplxFaultObject (void *pDZFunct, void *pCreFunct,
 	     */
 	    if (0 != m_pNode->m_pchAttributes[0])
 	    {
-		m_pCurrNode = m_pNode;
-		/*
-		 * Need to verify if the return value is NULL.
-		 */
-		if (*(getAttributeAsBoolean ("nil", 0)) == true_)
-		{
-		    m_pParser->next ();
-		    m_pNode = NULL;
-		    return NULL;
-		}
+			m_pCurrNode = m_pNode;
+			xsd__boolean * isNill = getAttributeAsBoolean("nil", 0);
+            if (NULL != isNill)
+            {
+                if(true_ == *isNill)
+        		{
+        		    m_pParser->next ();
+        		    m_pNode = NULL;
+                    delete isNill;
+        		    return NULL;
+        		} else {
+        			delete isNill;
+        		}
+            }
 	    }
 	    m_pNode = NULL;	/* node identified and used */
 	    void *pObject = ((AXIS_OBJECT_CREATE_FUNCT) pCreFunct)
@@ -3501,12 +3512,15 @@ xsd__hexBinary *
              * Need to verify if the return value is NULL.
              */
             xsd__boolean * isNill = getAttributeAsBoolean("nil", 0);
-            if (NULL != isNill && true_ == *isNill)
-            {
-                m_pNode = m_pParser->next();
-                m_pNode = NULL;
-                return ret;
-            }
+            if(true_ == *isNill)
+    		{
+    		    m_pParser->next ();
+    		    m_pNode = NULL;
+                delete isNill;
+    		    return NULL;
+    		} else {
+    			delete isNill;
+    		}
         }
 
         m_pNode = m_pParser->next (true);    /* charactor node */
@@ -3615,12 +3629,15 @@ xsd__base64Binary *
              * Need to verify if the return value is NULL.
              */
             xsd__boolean * isNill = getAttributeAsBoolean("nil", 0);
-            if (NULL != isNill && true_ == *isNill)
-            {
-                m_pNode = m_pParser->next();
-                m_pNode = NULL;
-                return ret;
-            }
+            if(true_ == *isNill)
+    		{
+    		    m_pParser->next ();
+    		    m_pNode = NULL;
+                delete isNill;
+    		    return NULL;
+    		} else {
+    			delete isNill;
+    		}
         }
 
         m_pNode = m_pParser->next (true);	/* charactor node */
