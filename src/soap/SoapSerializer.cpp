@@ -953,7 +953,9 @@ int SoapSerializer::addOutputParam( const AxisChar * pchName,
             pParam->m_Value.hbValue = new xsd__hexBinary;
             pParam->m_Value.hbValue->__size = (*((xsd__hexBinary *) (pValue))).__size;
             pParam->m_Value.hbValue->__ptr = new xsd__unsignedByte[pParam->m_Value.hbValue->__size + 1];
-            strcpy((char*)(pParam->m_Value.hbValue->__ptr), (char*)(*((xsd__hexBinary *) (pValue))).__ptr);        
+            memcpy((char*)(pParam->m_Value.hbValue->__ptr), 
+				(char*)(*((xsd__hexBinary *) (pValue))).__ptr,
+				pParam->m_Value.hbValue->__size);        
         }
         break;
 
@@ -967,7 +969,9 @@ int SoapSerializer::addOutputParam( const AxisChar * pchName,
             pParam->m_Value.b64bValue = new xsd__base64Binary;
             pParam->m_Value.b64bValue->__size = (*((xsd__base64Binary *) (pValue))).__size;
             pParam->m_Value.b64bValue->__ptr = new xsd__unsignedByte[pParam->m_Value.b64bValue->__size + 1];
-            strcpy((char*)(pParam->m_Value.b64bValue->__ptr), (char*)(*((xsd__base64Binary *) (pValue))).__ptr);
+            memcpy((char*)(pParam->m_Value.b64bValue->__ptr), 
+				(char*)(*((xsd__base64Binary *) (pValue))).__ptr, 
+				pParam->m_Value.b64bValue->__size); 
         }
         break;
 
