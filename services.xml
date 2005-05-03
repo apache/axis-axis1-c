@@ -47,8 +47,9 @@ XMLParser:${basedir}${ps}..${ps}..${ps}..${ps}Axis${ps}lib${ps}${libraryPrefix}$
 Channel_HTTP:${basedir}${ps}..${ps}..${ps}..${ps}Axis${ps}lib${ps}${libraryPrefix}${HTTP.ChannelLibraryName}${librarySuffix}
 	</echo>
 
-	<copy file="${serverwsddfile}" 
-			tofile="${serverwsddpath}"/>
+<!--	<copy file="${serverwsddfile}" 
+			tofile="${serverwsddpath}"/> -->
+
 
 	</target>
 
@@ -84,9 +85,24 @@ Channel_HTTP:${basedir}${ps}..${ps}..${ps}..${ps}Axis${ps}lib${ps}${libraryPrefi
 	</target>
 
 
-	<target name="deployServices" depends="initialize, stopserver, prepareDeployment, buildServices, runserver"
+	<target name="deployServices" depends="initialize, stopserver, prepareDeployment, startWSDDFile, buildServices, endWSDDFile, runserver"
 	 	description="Build and deploy services for tests"/>
 
+
+	<target name="startWSDDFile">
+<echo file="${basedir}/build/server.wsdd">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:C="http://xml.apache.org/axis/wsdd/providers/C" xmlns:CPP="http://xml.apache.org/axis/wsdd/providers/CPP"&gt;
+
+&lt;globalConfiguration&gt;
+&lt;/globalConfiguration&gt;
+</echo>
+	</target>
+
+
+	<target name="endWSDDFile">
+	<echo file="${basedir}/build/server.wsdd" append="true">&lt;/deployment&gt;</echo>
+	<move file="${basedir}/build/server.wsdd" todir="${basedir}/../../../Axis/conf"/>
+	</target>
 
 
 	<target name="buildServices" depends="initialize, setServiceList">
@@ -143,7 +159,7 @@ Channel_HTTP:${basedir}${ps}..${ps}..${ps}..${ps}Axis${ps}lib${ps}${libraryPrefi
 		</path>
 	</target>
 
-	<target name="buildService" depends="setPropertiesForService,generateStubs, compileService"/>	
+	<target name="buildService" depends="setPropertiesForService,generateStubs, compileService, generateWSDDService"/>	
 
 	<target name="setPropertiesForService" depends="loadXMLProperties,setServiceName,setServiceDesc,setServiceCode,setServiceLang,setServiceWsdl"/>
 
@@ -224,7 +240,61 @@ Channel_HTTP:${basedir}${ps}..${ps}..${ps}..${ps}Axis${ps}lib${ps}${libraryPrefi
 		</cc>
 		<copy failonerror="false" file="${dir.test.generated}/server/${serviceLang}/${serviceName}/${libraryPrefix}${serviceName}${librarySuffix}" 
 			todir="${basedir}/../../../Axis/webservices"/>
+		<!-- <antcall target="generateWSDDService" inheritall="true"/> -->
 	</target>
+
+
+
+
+<target name="generateWSDDService">
+<xmlproperty file="${dir.test.generated}/server/${serviceLang}/${serviceName}/deploy.wsdd" collapseAttributes="true"/>
+
+
+<propertyselector property="name.list"
+                  delimiter=","
+                  match="deployment.service.parameter.name"
+                  select="\0"
+                  casesensitive="false" />
+
+<propertyselector property="value.list"
+                  delimiter=","
+                  match="deployment.service.parameter.value"
+                  select="\0"
+                  casesensitive="false" />
+
+
+	<propertycopy property="nameslist" from="${name.list}"/>
+<var name="op1" value="0"/>
+	<for list="${nameslist}" param="letter" trim="false">
+		<sequential>
+		<math result="op1" operand1="${op1}" operation="+" operand2="1" datatype="int"/>
+		<property name="name.${op1}" value="@{letter}"/>
+		<condition property="amindex" value="${op1}">
+		<equals arg1="@{letter}" arg2="allowedMethods"/>
+		</condition>
+
+		</sequential>
+	</for>
+<var name="op1" value="0"/>
+
+	<propertycopy property="valuelist" from="${value.list}"/>
+	<for list="${valuelist}" param="letter" trim="false">
+		<sequential>
+		<math result="op1" operand1="${op1}" operation="+" operand2="1" datatype="int"/>
+		<property name="value.${op1}" value="@{letter}"/>
+		</sequential>
+	</for>
+
+	<propertycopy property="am.value" from="value.${amindex}"/>
+	
+<echo file="${basedir}/build/server.wsdd" append="true">
+&lt;service name="${deployment.service.name}" provider="${deployment.service.provider}" description="Axis C++ web service" &gt;
+&lt;parameter name="className" value="${basedir}${ps}..${ps}..${ps}..${ps}Axis${ps}webservices${ps}${libraryPrefix}${serviceName}${librarySuffix}"/&gt;
+&lt;parameter name="allowedMethods" value="${am.value} "/&gt;
+&lt;/service&gt;
+</echo>
+</target>
+
 
 
 </project>
