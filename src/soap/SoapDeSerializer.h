@@ -97,9 +97,13 @@ public:
     int getVersion();
     SoapEnvelope* getEnvelope();
     int getHeader();
-	//Chinthana:This method adds to allow "all" & "choice" constructs to peek head next element.
-	const char* getPeek(); 
-	//28/04/2005
+	/**
+	* This method allows to peek for the name of the next element in XML stream.
+	* Useful in supporting "all" & "choice" WSDL constructs.
+	* @return Name of the next element in XML stream 
+	*/
+	const char* peekNextElementName(); 
+	
     int flushInputStream();
     PROVIDERTYPE getCurrentProviderType() { return m_ProviderType;};
     void setCurrentProviderType(PROVIDERTYPE nType) { m_ProviderType = nType;};
