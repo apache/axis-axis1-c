@@ -134,7 +134,7 @@ Notes:
 	<target name="compileTransport">
 		<!-- Determine which flavour of transport to use -->
 		<!-- Ideally extend this to produce multiple flavours -->
-		<if>
+		<!--if>
 			<equals arg1="${transport.axis2}" arg2="true"/>
 			<then>
 				<antcall target="compileAxisTransport" inheritall="true">
@@ -142,7 +142,7 @@ Notes:
 					<param name="transportLibraryName" value="${axis2.transportLibraryName}"/>
 				</antcall>
 			</then>
-		</if>
+		</if-->
 
 		<if>
 			<equals arg1="${transport.HTTP}" arg2="true"/>
@@ -178,7 +178,7 @@ Notes:
 	</target>
 
         <target name="compileTransportIPV6">
-                <if>
+                <!--if>
                         <equals arg1="${transport.axis2.ipv6}" arg2="true"/>
                         <then>
                                 <antcall target="compileAxisTransportIPV6" inheritall="true">
@@ -187,7 +187,7 @@ Notes:
                                         <param name="transportLibraryName" value="${axis2.ipv6.transportLibraryName}"/>
                                 </antcall>
                         </then>
-                </if>
+                </if-->
         </target>
 
 	<target name="compileXMLParser">
