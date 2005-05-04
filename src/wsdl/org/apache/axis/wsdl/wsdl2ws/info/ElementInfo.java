@@ -31,6 +31,10 @@ public class ElementInfo
     private int minOccurs = 1;
     private boolean nillable = false;
 
+    //Dushshantha
+    //this variable states whether this element is an xsd:choice or not
+    private boolean choiceElement = false;
+    //............................................
     public ElementInfo(QName name, Type type)
     {
         this.name = name;
@@ -143,5 +147,19 @@ public class ElementInfo
                 + "|)\n";
         return str;
     }
+    
+    //Dushshantha:
+    //getter and setter for the attribute choiceElement
+    
+    public boolean getChoiceElement()
+	{
+		return this.choiceElement;
+	}
+	
+	public void setChoiceElement( boolean newChoiceElement)
+	{
+		this.choiceElement = newChoiceElement;
+	}
+	//.................................................
 
 }

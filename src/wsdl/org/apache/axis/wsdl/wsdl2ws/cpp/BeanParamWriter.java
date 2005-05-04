@@ -214,7 +214,17 @@ public class BeanParamWriter extends ParamCPPFileWriter
         String arrayType;
         for (int i = 0; i < attribs.length; i++)
         {
-            if (attribs[i].isAnyType())
+			
+			//Dushshantha:
+			//if the attribute is a choice 
+			//following should do
+			
+			if(attribs[i].getChoiceElement())
+			{
+				writer.write("\tif(param->" + attribs[i].getParamNameAsMember()+ ")\n\t{\n\t");
+			}
+			//..............................................................................
+			if (attribs[i].isAnyType())
             {
                 writer.write("\tpSZ->serializeAnyObject(param->any);\n");
             }
@@ -355,7 +365,14 @@ public class BeanParamWriter extends ParamCPPFileWriter
                                 + attribs[i].getParamNameAsMember()
                                 + ", pSZ);\n");
                     }
-        }
+			//Dushshantha:
+			//end if choice element
+			
+			if(attribs[i].getChoiceElement())
+				writer.write("\t}\n");
+
+			
+		}
         writer.write(
             "\n\tpSZ->serialize(\"</\", Axis_TypeName_"
                 + classname
@@ -367,7 +384,9 @@ public class BeanParamWriter extends ParamCPPFileWriter
     private void writeDeSerializeGlobalMethod()
         throws IOException, WrapperFault
     {
-        writer.write("/*\n");
+        
+    	
+    	writer.write("/*\n");
         writer.write(
             " * This static method deserialize a "
                 + classname
@@ -379,6 +398,9 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 + "("
                 + classname
                 + "* param, IWrapperSoapDeSerializer* pIWSDZ)\n{\n");
+
+		
+
         if (attribs.length == 0)
         {
             System.out.println(
@@ -389,9 +411,34 @@ public class BeanParamWriter extends ParamCPPFileWriter
             return;
         }
         String arrayType = null;
+        
+        
+		//Dushshantha:
+		//peekCalled boolean variable checks whether the Line 
+		//const char* choiceName=pIWSDZ->peekNextElementName(); has been wriiten in the generated cade.
+		boolean peekCalled=false;
+        
         for (int i = 0; i < attribs.length; i++)
         {
-            if (attribs[i].isAnyType())
+            //Dushshantha:
+            //if the attribute is a choice
+            //following should do :-)
+        	        	
+            if(attribs[i].getChoiceElement())
+            {
+				if(!peekCalled)
+				{
+					writer.write("\tconst char* choiceName=pIWSDZ->peekNextElementName();\n");
+					peekCalled=true;
+				}
+				
+				writer.write("\tif(strcmp(choiceName,\"" + attribs[i].getParamNameAsMember()+ "\")==0)\n\t{\n\t");
+								           	           	
+            }
+        	//.............................................
+            
+            
+        	if (attribs[i].isAnyType())
             {
                 writer.write("\tparam->any = pIWSDZ->getAnyObject();\n");
             }
@@ -516,7 +563,14 @@ public class BeanParamWriter extends ParamCPPFileWriter
                                 + attribs[i].getTypeName()
                                 + ");\n");
                     }
-        }
+			
+			
+			//Dushshantha:
+			//end if
+			
+			if(attribs[i].getChoiceElement())
+				writer.write("\t}\n");
+		}
         writer.write("\treturn pIWSDZ->getStatus();\n");
         writer.write("}\n");
     }

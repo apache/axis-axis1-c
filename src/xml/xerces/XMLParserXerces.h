@@ -49,8 +49,9 @@ public:
     int setInputStream(AxisIOStream* pInputStream);
     const XML_Ch* getNS4Prefix(const XML_Ch* pcPrefix);
     int getStatus();
-    const AnyElement* next(bool bIsCharData=false);
+    const AnyElement* next(bool bIsCharData=false);//Chinthana:change to accept "all" construct 27/04/2005
     const AnyElement* anyNext();
+	const char* peek(); //Chinthana:Add the method to peek head and find the next element 27/04/2005.
     const XML_Ch* getPrefix4NS(const XML_Ch* pcNS);
 
 private:
@@ -59,6 +60,7 @@ private:
     XercesHandler m_Xhandler;
     bool m_bFirstParsed;
     SoapInputSource* m_pInputSource;
+	bool m_bPeeked;
 
 
 };

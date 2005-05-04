@@ -97,6 +97,9 @@ public:
     int getVersion();
     SoapEnvelope* getEnvelope();
     int getHeader();
+	//Chinthana:This method adds to allow "all" & "choice" constructs to peek head next element.
+	const char* getPeek(); 
+	//28/04/2005
     int flushInputStream();
     PROVIDERTYPE getCurrentProviderType() { return m_ProviderType;};
     void setCurrentProviderType(PROVIDERTYPE nType) { m_ProviderType = nType;};

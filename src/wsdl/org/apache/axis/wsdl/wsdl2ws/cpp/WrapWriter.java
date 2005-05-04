@@ -476,6 +476,7 @@ public class WrapWriter extends CPPClassWriter
         {
         	/* Invoke the service when return type not void */
         	writer.write("\t\t" + outparamTypeName);
+        	System.out.println(outparamTypeName);
         	if (returntypeissimple
         			&& returntype.isNillable()
         			&&!(outparamTypeName.equals("xsd__string")

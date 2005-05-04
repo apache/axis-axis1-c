@@ -46,6 +46,11 @@ public class CElementDecl //extends ElementDecl
     // Indicate if the CElementDecl represents
     // an xsd:any element
     private boolean anyElement = false;
+    
+    // Dushshantha:
+    // indicate if the CElementDecl represents 
+    // an xsd:choice element 
+    private boolean choiceElement = false;
 
     /** Field documentation */
     private String documentation;
@@ -98,6 +103,20 @@ public class CElementDecl //extends ElementDecl
     {
         this.anyElement = anyElement;
     }
+    
+    // Dushshantha:
+    //setters and getters for choiceElement
+    
+    public boolean getChoiceElement()
+    {
+        return this.choiceElement;
+    }
+
+    public void setChoiceElement(boolean choiceElement)
+    {
+        this.choiceElement = choiceElement;
+    }
+    
     /**
      * @return
      */

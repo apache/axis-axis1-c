@@ -30,6 +30,7 @@
 #include "../transport/SOAPTransport.h"
 
 #include <axis/GDefine.hpp>
+#include <iostream>
 
 AXIS_CPP_NAMESPACE_USE
 
@@ -107,7 +108,7 @@ public:
      *         of the current XML element. See AnyElement.h for the
      *         structure of AnyElement.
      */
-    virtual const AnyElement* next(bool bIsCharData=false)=0;
+    virtual const AnyElement* next(bool bIsCharData=false)=0; 
     /**
      * Used to get the any next XML event. The valid events are start element,
      * end element, character data and prefix mappings. If we think of SAX  
@@ -124,6 +125,12 @@ public:
      * @return Returns a filled AnyElement structure that contains all the data
      *         of the current XML element. See AnyElement.h for the structure
      *         of AnyElement.
+     */
+	virtual const char* peek()=0; //Chinthana:Add the method to peek head and find the next element 26/04/2005.
+    /**
+     * @brief  Peek a head and get the next elemnt. .
+     * @param  peek is pointer to bool type wich have to set true in side this method.
+     * @return Return the name of the next element. 
      */
     virtual const AnyElement* anyNext()=0;
     /**

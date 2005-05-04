@@ -40,7 +40,11 @@ public :
     ~XercesHandler();
     const XML_Ch* ns4Prefix(const XML_Ch* prefix);
     const XML_Ch* prefix4NS(const XML_Ch* pcNS);
-    AnyElement* getAnyElement();
+	AnyElement* getAnyElement();
+  /**
+    * //Chinthana:This is the method use by XercesPaser to peek ahead next element name
+	*/
+	const char* peekNextElementName();
 	void setGetPrefixMappings(bool bValue);
 	void reset();
 

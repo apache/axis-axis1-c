@@ -366,6 +366,24 @@ SoapDeSerializer::getHeader ()
     return m_nStatus;
 }
 
+//Chinthana:This method adds to allow "all" & "choice" constructs to peek head next element.
+const char*
+SoapDeSerializer::getPeek ()
+{
+		
+	if (m_pParser)
+	
+	{
+		const char* name = m_pParser->peek ();
+		return name;
+
+	}
+			
+	return NULL;
+	
+}
+//28/04/2005
+
 int
 SoapDeSerializer::getBody ()
 {

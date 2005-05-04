@@ -245,8 +245,10 @@ AnyElement* XercesHandler::getAnyElement()
 {
 	if (m_bGetPrefixMappings)
 	{
+		
 		if (m_CurrPrefixMappings.size() > 0)
 		{
+			
 			map<const AxisChar*, const AxisChar*>::iterator it = 
 				m_CurrPrefixMappings.begin();
 			m_pPrefixMappingElement->m_pchNameOrValue = (*it).first;
@@ -258,12 +260,19 @@ AnyElement* XercesHandler::getAnyElement()
 		}
 		else if (m_bStartElementWaiting)
 		{
+			
 			m_pCurrElement = m_pNextElement;
 			m_bStartElementWaiting = false;
 		}
 	}
 	return m_pCurrElement;
 }
+//Chinthana:This is the method will use by the XercesPaser to peek head the next element 
+const char* XercesHandler::peekNextElementName()
+{
+    return m_pCurrElement->m_pchNameOrValue;
+}
+//28/04/2005
 
 void XercesHandler::setGetPrefixMappings(bool bValue)
 {

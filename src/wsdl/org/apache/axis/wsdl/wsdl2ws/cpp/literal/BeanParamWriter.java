@@ -173,7 +173,21 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 		
 		writer.write("\n\t/* then serialize elements if any*/\n");
 		for(int i = attributeParamCount; i< attribs.length;i++){
-			if(attribs[i].isAnyType()){
+	
+			//Dushshantha:
+			//if the attribute is a choice 
+			//following should do
+			
+			if(attribs[i].getChoiceElement())
+			{
+				writer.write("\tif(param->" + attribs[i].getParamNameAsMember()+ ")\n\t{\n\t");
+			}
+			//..............................................................................
+
+
+
+			if(attribs[i].isAnyType())
+			{
 				writer.write("\tpSZ->serializeAnyObject(param->any);\n");
 			}
 			else if(attribs[i].isArray()){
@@ -282,7 +296,14 @@ public class BeanParamWriter extends ParamCPPFileWriter{
                  writer.write("\tAxis_Serialize_"+attribs[i].getTypeName()+"(param->"+attribs[i].getParamName()+", pSZ);\n");
                  writer.write("\tpSZ->serialize(\"</\", pSZ->getNamespacePrefix(\"" + type.getName().getNamespaceURI() + "\"), \":\", \""+elm+"\", \">\", 0);\n");
 
+		
 			}
+			//Dushshantha:
+			//end if choice element
+			
+			if(attribs[i].getChoiceElement())
+				writer.write("\t}\n");
+		
 		}
 		writer.write("\treturn AXIS_SUCCESS;\n");
 		writer.write("}\n\n");
@@ -306,15 +327,37 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 		 String arrayType = null;
 		 
 		/* Needed for Aix xlc */
+		
+		
+		
 		for(int i = 0; i< attribs.length;i++){
+			
 			if(attribs[i].isArray()) {
 				writer.write("\tAxis_Array array;\n\n");
 				break;
 			}
 		}			
 		
-		for( int i = 0; i < attribs.length; i++)
+		
+		boolean peekCalled=false;
+        
+		for (int i = 0; i < attribs.length; i++)
 		{
+			//Dushshantha:
+			//if the attribute is a 'choice' construct we have to peek and make the choice
+        	        	
+			if(attribs[i].getChoiceElement())
+			{
+				if(!peekCalled)
+				{
+					writer.write("\tconst char* choiceName=pIWSDZ->peekNextElementName();\n");
+					peekCalled=true;
+				}
+				
+				writer.write("\tif(strcmp(choiceName,\"" + attribs[i].getParamNameAsMember()+ "\")==0)\n\t{\n\t");
+								           	           	
+			}
+			//.............................................
 			if( attribs[i].isAnyType())
 			{
 				writer.write("\tparam->any = pIWSDZ->getAnyObject();\n");
@@ -334,21 +377,13 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 							|| typename.equals("xsd__NMTOKEN"))
 					{
 						writer.write("\tparam->"+attribs[i].getParamNameAsMember()+".m_Array = ("+attribs[i].getTypeName()+"*)new "+attribs[i].getTypeName()+"[array.m_Size];\n");
-						writer.write("\tparam->"+attribs[i].getParamNameAsMember()+
-							".m_Size = array.m_Size;\n\n");
-						writer.write("\tmemcpy( param->"+attribs[i].getParamNameAsMember()+
-							".m_Array, array.m_Array, sizeof( "+attribs[i].getTypeName()+
-							") * array.m_Size);\n");
 					}
 					else
 					{
 						writer.write("\tparam->"+attribs[i].getParamNameAsMember()+".m_Array = ("+attribs[i].getTypeName()+"**)new "+attribs[i].getTypeName()+"*[array.m_Size];\n");
-						writer.write("\tparam->"+attribs[i].getParamNameAsMember()+
-							".m_Size = array.m_Size;\n\n");
-						writer.write("\tmemcpy( param->"+attribs[i].getParamNameAsMember()+
-							".m_Array, array.m_Array, sizeof( "+attribs[i].getTypeName()+
-							"*) * array.m_Size);\n");
 					}
+					writer.write("\tparam->"+attribs[i].getParamNameAsMember()+".m_Size = array.m_Size;\n\n");
+					writer.write("\tmemcpy( param->"+attribs[i].getParamNameAsMember()+".m_Array, array.m_Array, sizeof( "+attribs[i].getTypeName()+") * array.m_Size);\n");
 				}
 				else
 				{
@@ -446,12 +481,20 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 					"\n\t\t, (void*)Axis_Create_"+attribs[i].getTypeName()+", (void*)Axis_Delete_"+attribs[i].getTypeName()+
 					"\n\t\t, \""+ soapTagName +"\", Axis_URI_"+attribs[i].getTypeName()+");\n");				
 			}		
+			
+			//Dushshantha:
+			//end if
+			
+			if(attribs[i].getChoiceElement())
+				writer.write("\t}\n");
+		
+		
 		}
 		if (extensionBaseAttrib != null && extensionBaseAttrib.getTypeName() != null)
 		{
 			writer.write("\tpIWSDZ->getChardataAs((void*)&(param->"+extensionBaseAttrib.getParamNameAsMember()+"), "+CUtils.getXSDTypeForBasicType(extensionBaseAttrib.getTypeName())+");\n");
 		}
-		
+				
 		writer.write("\treturn pIWSDZ->getStatus();\n");
 		writer.write("}\n");
 	}

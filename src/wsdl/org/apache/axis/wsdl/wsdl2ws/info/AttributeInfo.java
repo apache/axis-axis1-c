@@ -18,7 +18,7 @@
 /*
  * Created on Jan 12, 2004
  *
- */
+ */  
 
 package org.apache.axis.wsdl.wsdl2ws.info;
 
@@ -34,7 +34,11 @@ public class AttributeInfo extends ParameterInfo
     private String typeNamespace;
     private String className;
     private String attribNameAsMember;
-
+    
+    //Dushshantha:
+    //this variable states whether the attribute is an xsd:choice
+    private boolean choiceElement = false;
+    
     /**
      * @param type
      * @param attribName
@@ -154,4 +158,18 @@ public class AttributeInfo extends ParameterInfo
             this.attribNameAsMember = attribName;
         }
     }
+    
+    //Dushshantha:
+    //getter and setter for choiceElement
+    
+    public boolean getChoiceElement()
+    {
+    	return this.choiceElement;
+    }
+    
+    public void setChoiceElement(boolean newChoiceElement)
+    {
+    	this.choiceElement=newChoiceElement;
+    }
+    //.................................................
 }

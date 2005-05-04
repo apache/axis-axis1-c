@@ -512,6 +512,11 @@ public class CSchemaUtils extends SchemaUtils
 
                                 if (elem != null)
                                 {
+                                	//Dushshantha
+                                	//indicates that this is a choice element
+                                	elem.setChoiceElement(true); 
+                                	if(elem.getChoiceElement())
+                                	//.................................
                                     v.add(elem);
                                 }
                             }

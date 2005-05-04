@@ -1012,6 +1012,12 @@ public class WSDL2Ws
                                 eleinfo.setMinOccurs(elem.getMinOccurs());
                                 eleinfo.setMaxOccurs(elem.getMaxOccurs());
                                 eleinfo.setNillable( elem.isNillable());
+                                
+                                // Dushshantha:
+                                // states whether this element is a xsd:choice
+                                eleinfo.setChoiceElement(elem.getChoiceElement());
+                                //.................................................
+                                
                                 typedata.setTypeNameForElementName(eleinfo);
                             }
                         }

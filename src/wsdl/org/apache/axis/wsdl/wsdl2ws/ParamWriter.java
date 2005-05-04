@@ -97,7 +97,8 @@ public abstract class ParamWriter extends BasicFileWriter
     /* genarate the attribs array */
     private void populateAttribList() throws WrapperFault
     {
-        ElementInfo elemi = type.getExtensionBaseType();
+    	
+    	ElementInfo elemi = type.getExtensionBaseType();
         if (elemi != null)
         {
             extensionBaseAttrib = new AttributeInfo(this.classname);
@@ -106,6 +107,8 @@ public abstract class ParamWriter extends BasicFileWriter
                 CUtils.getclass4qname(elemi.getType().getName()));
             extensionBaseAttrib.setType(elemi.getType());
             extensionBaseAttrib.setElementName(elemi.getName());
+            
+            
         }
         ArrayList attribfeilds = new ArrayList();
         ArrayList elementfeilds = new ArrayList();
@@ -142,6 +145,8 @@ public abstract class ParamWriter extends BasicFileWriter
             this.attribs[i].setType(attribType);
             this.attribs[i].setAttribute(true);
             this.attribs[i].setElementName(attribType.getName());
+            
+                        
             //TODO this is wrong. correct immediately. this will cause attributes serialized incorrectly
             //TODO : how to find whether this attribute is optional or not ?
         }
@@ -169,6 +174,13 @@ public abstract class ParamWriter extends BasicFileWriter
             }
             this.attribs[i].setType(elementType);
             this.attribs[i].setElementName(elem.getName());
+            //Dushshantha:
+            //setting the choice element availability.
+            this.attribs[i].setChoiceElement(elem.getChoiceElement());
+                                   
+            //..................................................
+            
+            
             if (elementType.isArray())
             { //soap encoding arrays.
                 Type arrayType = WrapperUtils.getArrayType(elementType);

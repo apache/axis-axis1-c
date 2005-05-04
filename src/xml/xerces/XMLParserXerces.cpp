@@ -32,6 +32,7 @@ XERCES_CPP_NAMESPACE_USE
 XMLParserXerces::XMLParserXerces()
 {
     m_bFirstParsed = false;
+	m_bPeeked = false;
     m_pParser = XMLReaderFactory::createXMLReader();
     m_pInputSource = NULL;
 }
@@ -78,21 +79,35 @@ int XMLParserXerces::getStatus()
 
 const AnyElement* XMLParserXerces::next(bool isCharData)
 {
-    bool bCanParseMore = false;
+	bool bCanParseMore = false;
         if(!m_bFirstParsed)
         {
             m_pParser->parseFirst(*m_pInputSource, m_ScanToken);
             m_bFirstParsed = true;
         }
 
-        m_Xhandler.freeElement();
+		if(!m_bPeeked) 
+		{
+			m_Xhandler.freeElement();
+		}
         while (true)
         {
             AnyElement* elem = m_Xhandler.getAnyElement();
             if (!elem)
             {
-                bCanParseMore = m_pParser->parseNext(m_ScanToken);
-                elem = m_Xhandler.getAnyElement();
+				//Chinthana:check the peek is called or not
+				if(!m_bPeeked) 
+				{
+					bCanParseMore = m_pParser->parseNext(m_ScanToken);
+				}
+				else
+				{
+					m_bPeeked = false;
+					bCanParseMore = true;
+				}
+				elem = m_Xhandler.getAnyElement();
+				
+				//27/04/2005
             }
             if (elem)
             {
@@ -101,12 +116,35 @@ const AnyElement* XMLParserXerces::next(bool isCharData)
                     m_Xhandler.freeElement();
                     continue;
                 }
-                return elem;
+
+				if( m_bPeeked )
+					m_bPeeked = false;
+                
+				return elem;
             }
             else if (AXIS_FAIL == m_Xhandler.getStatus()) return NULL;
             else if (!bCanParseMore) return NULL;
         }
 }
+//Chinthana:New method which peek a head next element 
+//Here always Peek() will call after the first pase done
+const char* XMLParserXerces::peek()
+{
+	if(!m_bFirstParsed)
+    {
+		m_pParser->parseFirst(*m_pInputSource, m_ScanToken);
+        m_bFirstParsed = true;
+    }
+	 
+	bool bCanParseMore = true;
+
+	bCanParseMore = m_pParser->parseNext(m_ScanToken);
+	const char* name = m_Xhandler.peekNextElementName();
+	m_bPeeked = true;
+	return name;
+	
+}
+//27/04/2005
 
 const AnyElement* XMLParserXerces::anyNext()
 {
