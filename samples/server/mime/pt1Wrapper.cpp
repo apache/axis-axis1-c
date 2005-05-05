@@ -45,8 +45,12 @@ int pt1Wrapper::invoke(void *pMsg)
 	const AxisChar *method = mc->getOperationName();
 	if (0 == strcmp(method, "EchoAttachment"))
 		return EchoAttachment(mc);
+    else if (0 == strcmp(method, "EchoAttachments"))
+		return EchoAttachments(mc);
 	else return AXIS_FAIL;
 }
+
+
 
 
 /*Methods corresponding to the web service methods*/
@@ -74,21 +78,56 @@ int pt1Wrapper::EchoAttachment(void* pMsg) {
 
     ISoapAttachment* objSoapAttach = pIWSDZ->getAttachment(v0);
     ISoapAttachment* objSoapAttach2 = pIWSDZ->getAttachment(v1);
-    //ISoapAttachment** objSoapAttach3 = pIWSDZ->getAllAttachments();    
+        
+	if (AXIS_SUCCESS != (nStatus = pIWSDZ->getStatus())) return nStatus;
+	try
+	{		
+       ISoapAttachment* ret = pWs->EchoAttachment(objSoapAttach);
+       ISoapAttachment* ret2 = pWs->EchoAttachment(objSoapAttach2);
+     
+        pIWSSZ->addAttachment(v0, ret);		
+        pIWSSZ->addAttachment(v1, ret2);
+        
+        pIWSSZ->addOutputParam("EchoAttachmentReturn", (void*)v0, XSD_STRING);
+        return pIWSSZ->addOutputParam("EchoAttachmentReturn", (void*)v1, XSD_STRING);
+      
+	}
+	catch(...){
+	}
+}
+
+
+
+    int pt1Wrapper::EchoAttachments(void* pMsg) {
+    IMessageData* mc = (IMessageData*)pMsg;
+	int nStatus;
+	IWrapperSoapSerializer* pIWSSZ = NULL;
+	mc->getSoapSerializer(&pIWSSZ);
+	if (!pIWSSZ) return AXIS_FAIL;
+	IWrapperSoapDeSerializer* pIWSDZ = NULL;
+	mc->getSoapDeSerializer(&pIWSDZ);
+	if (!pIWSDZ) return AXIS_FAIL;
+	/* check whether we have got correct message */
+    if (AXIS_SUCCESS != pIWSDZ->checkMessageBody("EchoAttachments", "urn:EchoAttachmentsService")) return AXIS_FAIL;	
+	pIWSSZ->createSoapMethod("EchoAttachmentResponse", "urn:EchoAttachmentsService");
+
+    xsd__string v0 = pIWSDZ->getElementAsString("id1",0);
+    xsd__string v1 = pIWSDZ->getElementAsString("id2",0);
+
+    int iAttchArraySize= 0;
+    ISoapAttachment** objSoapAttach3 = pIWSDZ->getAllAttachments(&iAttchArraySize);
     
 	if (AXIS_SUCCESS != (nStatus = pIWSDZ->getStatus())) return nStatus;
 	try
 	{		
-        ISoapAttachment* ret = pWs->EchoAttachment(objSoapAttach);
-        ISoapAttachment* ret2 = pWs->EchoAttachment(objSoapAttach2);
-       // ISoapAttachment** ret3 = pWs->EchoAttachments(objSoapAttach3);
-        pIWSSZ->addAttachment(v0, ret);		
-        pIWSSZ->addAttachment(v1, ret2);
-         // pIWSSZ->addAttachments(ret3);
-        
-        return pIWSSZ->addOutputParam("EchoAttachmentReturn", (void*)&v0, XSD_STRING);
-         // return pIWSSZ->addOutputParam("EchoAttachmentReturn", (void*)&ret3, XSD_STRING);
+          ISoapAttachment** ret3 = pWs->EchoAttachments(objSoapAttach3);
+          pIWSSZ->addAttachments(ret3,iAttchArraySize);
+
+       
+          pIWSSZ->addOutputParam("EchoAttachmentReturn", (void*)v0, XSD_STRING);
+          return pIWSSZ->addOutputParam("EchoAttachmentReturn", (void*)v1, XSD_STRING);
+         
 	}
-	catch(...){
+    	catch(...){
 	}
 }

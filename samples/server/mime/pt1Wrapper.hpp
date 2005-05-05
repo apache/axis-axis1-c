@@ -30,6 +30,8 @@ public:/*implementation of WrapperClassHandler interface*/
 	AXIS_BINDING_STYLE AXISCALL getBindingStyle(){return RPC_ENCODED;};
 private:/*Methods corresponding to the web service methods*/
 	int EchoAttachment(void* pMsg);
+    int EchoAttachments(void* pMsg);
+
 };
 
 #endif /* !defined(__PT1WRAPPER_SERVERWRAPPER_H__INCLUDED_)*/
