@@ -35,38 +35,38 @@ Axis C++.</a><br>
 <p><a name="dist"></a></p>
 
 <h1>What binary distribution contains</h1>
-
-<p>1. The binary distribution contains the following folders
+The binary distribution extracts to a folder named axis-c-1-5-win32.
 <br>
-
--&gt; bin<br>
--&gt; deploy<br>
--&gt; docs <br>
--&gt; include<br>
--&gt; lib<br>
--&gt; samples<br>
-
+The sub folders in the binary distribution and their contents are listed in the table below:
 <br>
-2.The folder “bin” contains sample clients and other dlls which are needed to run the Axis c++ server
-<br> <br>
+<table border=1>
+<tr><td><b>Folder Name</b></td><td><b>Contents</b></td></tr>
 
-3.Inside the "deploy" folder following sub folders exist 
+<tr><td>bin</td><td>Contains Axis C++ DLLs, the SimpleAxisServer executable and client sample executables</td></tr>
+
+<tr><td>deploy</td><td>
+Inside the "deploy" folder following sub folders can be found
 <br>
-
--&gt; conf (This includes the server.wsdd, which is the deployment descriptor used for deploying services.) <br>
--&gt; handlers (This includes sample handler dlls) <br>
--&gt; libs (Contains dlls which are needed by axis.) <br>
--&gt; logs (Directory for logs) <br>
--&gt; webservices (Contains sample web services that can be deployed with Axis C++) <br>
--&gt; wsdls (Contains sample wsdls)<br>
-
+-> conf (This includes the sample server.wsdd, which is the deployment descriptor used for deploying services, as well as the sample client.wsdd, which can be used to configure client side handlers.)
 <br>
-4. The "include" folder contains all the include files which are necessary for building Axis c++ clients. <br> <br>
-
-5. "lib" folder contains jars needed to use the wsdl2ws tool. <br>
+-> handlers (This includes sample handler dlls)
 <br>
+-> webservices (Contains sample web services that can be deployed with Axis C++)
+<br>
+-> wsdls (Contains sample wsdls)
+<br>
+The other folders are empty and you can ignore those.
+</td></tr>
 
-6. "samples" folder contains sources of all the server and client samples including interop tests.</p>
+<tr><td>docs</td><td>Axis C++ documentation, including the API documentation.</td></tr>
+
+<tr><td>include</td><td>Contains header files, which are required for building web service specific generated stubs.</td></tr>
+
+<tr><td>lib</td><td>Contains AxisClient.lib and AxisServer.lib, which is required by the compiler when building web services. It also contains the wsdl2ws.jar which is the Java tool that can be used for C/C++ code generation using WSDLs. </td></tr>
+
+<tr><td>samples</td><td>Contains samples (clients and server in seperate folders) as well as a sample server.wsdd that can be used as the deployment descriptor to run the samples. There is a readme.txt as well. </td></tr>
+
+</table>
 
 <p><a name="parser2"> </a> </p>
 
@@ -292,13 +292,12 @@ For more information on how to build samples using ant please see <a href="sampl
 <p><a name="playsamples"></a></p>
 
 <h1>Using Visual C++ to play with provided samples.</h1>
-
-<p>In your Axis_Extract/samples folder you have the samples.<br> <br>
- If you are using Visual C++ you can open the workspace file for client applications which are in Axis_Extract\c\samples\client\interoptests\interoptests.dsw <br> <br>
- Deployable webservices are in Axis_Extract\c\samples\server\interoptests\interoptests.dsw and you can play with them. <br> <br>
-There are seven projects in the workspace.
-<br> <br> </p>
-
+<p>
+The VC++ projects are outdated. You can use ant scripts to buils the samples (please see <a href="samples-guide.html">Axis C++ Samples Guide</a>)
+<br>
+If you have some time to spare to create the project files, please contribute those to the project.
+, you are much enco
+</p>
 <p><a name="writews"></a></p>
 
 <h1>Writing your web services and client applications using Axis C++.</h1>
