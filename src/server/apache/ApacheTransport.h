@@ -76,7 +76,8 @@ public:
 	// hawkeyeThis used to return "value" but now fails because of the changed signature
 	// What should it be ?
 	ISoapAttachment* getAttachment(const char* pcAttachmentid){return NULL;};
-	
+    ISoapAttachment** getAllAttachments(int *pAttchArraySize){return NULL;};
+
 	/** 
 	 * end of fixing build breaks
 	 */
