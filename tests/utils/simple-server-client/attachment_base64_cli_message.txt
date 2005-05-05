@@ -1,0 +1,41 @@
+POST /axis/servlet/AxisServlet HTTP/1.0
+Content-Type: multipart/related; type="text/xml"; start="<1505912FEDEB53D396BC22103DA3A51A>"; 	boundary="----=_Part_0_6349096.1105418692309"
+Accept: application/soap+xml, application/dime, multipart/related, text/*
+User-Agent: Axis/1.2beta
+Host: 127.0.0.1:5555
+Cache-Control: no-cache
+Pragma: no-cache
+SOAPAction: ""
+Content-Length:995
+SOAPAction: "AttService#EchoAttachment"
+
+
+------=_Part_0_6349096.1105418692309
+Content-Type: text/xml; charset=UTF-8
+Content-Transfer-Encoding:8-bit 
+Content-Id: <1505912FEDEB53D396BC22103DA3A51A>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+ <soapenv:Body>
+  <ns1:EchoAttachment soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:ns1="urn:EchoAttachmentsService">
+    <id1 xsi:type="xsd:string">000001233</id1>
+    <id2 xsi:type="xsd:string">000001234</id2>
+   </ns1:EchoAttachment>
+ </soapenv:Body>
+</soapenv:Envelope>
+------=_Part_0_6349096.1105418692309
+Content-Type: text/xml
+Content-Transfer-Encoding: base64
+Content-Id: <000001233>
+
+SGVsbG8=
+
+------=_Part_0_6349096.1105418692309
+Content-Type: text/xml
+Content-Transfer-Encoding: base64
+Content-Id: <000001234>
+
+R29vZA==
+
+------=_Part_0_6349096.1105418692309
