@@ -164,3 +164,27 @@ char* AttachmentHelper::getIncomingSOAPMimeHeaders()
 {
 	return pMime;
 }
+
+ISoapAttachment** AttachmentHelper::getAllAttachments(int *pAttchArraySize)
+{
+	
+	ISoapAttachment** attachArray = (ISoapAttachment**)new SoapAttachment*[mymap.size()];
+    //SoapAttachment** attachArray = new SoapAttachment*[mymap.size()];
+    map<const string, ISoapAttachment*>::iterator itCurrMap= mymap.begin();
+
+     int i = 0;
+    while(itCurrMap != mymap.end())
+    {        
+        
+        attachArray[i] = (*itCurrMap).second;
+
+        itCurrMap++; 
+        i++;
+    }      
+
+    *pAttchArraySize = i;
+
+    return attachArray;
+   
+     //return mymap;	
+}

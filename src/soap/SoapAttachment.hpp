@@ -58,6 +58,7 @@ private:
     int iEncodingStyle;
     
 public:	
+    const char* getAttachmentId();
 	const char* getHeader(const char* pchName);
 	xsd__base64Binary* getBody();
 	void serialize(SoapSerializer& pSZ);

@@ -46,7 +46,7 @@ typedef enum
 class STORAGE_CLASS_INFO ISoapAttachment  
 {
 public:
-
+	virtual const char* getAttachmentId()=0;
 	/**
 	  * Allows the user to add the Attachment Body
 	  */

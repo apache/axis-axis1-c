@@ -160,6 +160,7 @@ public:
 	virtual AnyType* AXISCALL getAnyObject()=0;            
     virtual void getChardataAs(void* pValue, XSDTYPE type)=0;
 	virtual ISoapAttachment* getAttachment(const char* pcAttachmentid)=0;
+	virtual ISoapAttachment** getAllAttachments(int *pAttchArraySize)=0;
 	/**
 	* This method allows to peek for the name of the next element in XML stream.
 	* Useful in supporting "all" & "choice" WSDL constructs.

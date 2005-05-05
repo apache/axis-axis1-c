@@ -59,6 +59,7 @@ private:
 public:
 	char* getIncomingSOAPMimeHeaders();
 	ISoapAttachment* getAttachment (const char* pcAttchId);
+    ISoapAttachment** getAllAttachments(int *pAttchArraySize);
 	void extract_info(string header,const char* label,SoapAttachment* pSoapAttachment, int& iEncodingType);
 	void extract_SOAPMimeHeaders(char* pBuffer);
 	void extract_Soap (char* pBuffer);

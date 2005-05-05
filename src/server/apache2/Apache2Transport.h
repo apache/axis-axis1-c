@@ -47,7 +47,7 @@
 #include <string.h>
 #endif
 
-//#include "AttachmentHelper.h"
+#include "AttachmentHelper.h"
 #include <axis/ISoapAttachment.hpp>
 
 AXIS_CPP_NAMESPACE_USE
@@ -71,6 +71,7 @@ public:
     const char* getTransportProperty(const char* pcKey, bool response=true);
 	void setAttachment(const char* pcAttachmentid, const char* pcAttachment){};
 	ISoapAttachment* getAttachment(const char* pcAttachmentid);
+    ISoapAttachment** getAllAttachments(int *pAttchArraySize);
 	void setEndpointUri(const char* pcEndpointUri)
 	{m_pcEndpointUri = new char[strlen(pcEndpointUri)+1]; strcpy(m_pcEndpointUri,pcEndpointUri);};
 	void setSessionId(const char* pcSessionId);
@@ -89,7 +90,7 @@ public:
     void setTimeout(const long lSeconds) {};
 
 private:
-//	AttachmentHelper* pAttachmentHelper;
+	AttachmentHelper* pAttachmentHelper;
 	void* m_pContext;
 #ifndef CHUNCKED_DATA_SUPPORTED
     BufferInfo* m_pBuffers;

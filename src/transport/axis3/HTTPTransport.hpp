@@ -91,6 +91,7 @@ class HTTPTransport:public SOAPTransport
 
     void					setAttachment( const char * pcAttachmentId, const char * pcAttachment) {};
 	ISoapAttachment *		getAttachment( const char * pcAttachmentId) { return NULL;};
+    ISoapAttachment**       getAllAttachments(int *pAttchArraySize) { return NULL;}; 
     char *					getIncomingSOAPMimeHeaders() {return NULL;}
 	const char *			getLastChannelError();
 

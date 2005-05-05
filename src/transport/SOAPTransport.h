@@ -292,6 +292,8 @@ public:
      *         corresponding to the pcAttachmentid is not found.
      */    
 	virtual ISoapAttachment* getAttachment(const char* pcAttachmentid)=0;
+	virtual ISoapAttachment** getAllAttachments(int *pAttchArraySize)=0;
+
 
 	virtual char* getIncomingSOAPMimeHeaders()=0;
 

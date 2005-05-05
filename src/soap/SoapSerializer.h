@@ -178,6 +178,7 @@ public:
 	void addAttachmentBody(const AxisChar* achId, xsd__base64Binary* pAttchBody);
 	void addAttachmentHeader(const AxisChar* achId, const AxisChar* achHeaderName, const AxisChar* achHeaderValue);
 	void addAttachment(const AxisChar* achId, ISoapAttachment* pAttach);
+    void addAttachments(ISoapAttachment** pAttach, int iAttchArraySize);
 	IHeaderBlock* getHeaderBlock(const AxisChar* pcName, const AxisChar* pcNamespace);
 	/*
 	* TODO: Have to remove this method. Date logged 13Jan2005

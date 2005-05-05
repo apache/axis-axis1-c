@@ -1503,6 +1503,17 @@ void SoapSerializer::addAttachment( const AxisChar * achId, ISoapAttachment * pA
 	m_SoapAttachments[achId] = pAttach;
 }
 
+void SoapSerializer::addAttachments(ISoapAttachment** pAttach, int iAttchArraySize)
+{   
+     for (int i=0; i < iAttchArraySize; i++)
+    {
+         const char *id = ((ISoapAttachment*)pAttach[i])->getAttachmentId();
+         m_SoapAttachments[id] = pAttach[i];
+      
+    }
+ 
+}
+
 void SoapSerializer::addAttachmentHeader(const AxisChar * achId,
 										 const AxisChar * achHeaderName,
 										 const AxisChar * achHeaderValue)

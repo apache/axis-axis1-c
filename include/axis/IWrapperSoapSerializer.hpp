@@ -160,6 +160,8 @@ public:
 
     virtual void addAttachment(const AxisChar* achId, ISoapAttachment* objAttach)=0;
 
+	virtual void addAttachments(ISoapAttachment** pAttach, int iAttchArraySize)=0;
+
 	virtual void addAttachmentBody(const AxisChar* achId, xsd__base64Binary* pAttchBody)=0;
 
 	virtual void addAttachmentHeader(const AxisChar* achId, const AxisChar* achHeaderName, const AxisChar* achHeaderValue)=0;

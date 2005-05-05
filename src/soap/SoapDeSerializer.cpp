@@ -4658,6 +4658,11 @@ SoapDeSerializer::DeSerializerMemBufInputStream::getBytes (char *pcBuffer,
 ISoapAttachment* SoapDeSerializer::getAttachment(const char* pcAttachmentid)	
 {    		
     return m_pInputStream->getAttachment(pcAttachmentid);	 	
+}
+
+ISoapAttachment** SoapDeSerializer::getAllAttachments(int *pAttchArraySize)
+{
+    return m_pInputStream->getAllAttachments(pAttchArraySize);
 }	
 
 AXIS_CPP_NAMESPACE_END

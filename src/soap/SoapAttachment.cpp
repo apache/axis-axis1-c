@@ -111,6 +111,11 @@ const char* SoapAttachment::getHeader(const char *pchName)
 		return m_AttachementHeaders->getHeader(pchName).c_str();
 }
 
+const char* SoapAttachment::getAttachmentId()
+{
+   return getHeader("Content-Id");
+}
+
 AXIS_CPP_NAMESPACE_END
 
 

@@ -253,6 +253,7 @@ public:
       *Returns the attachemtn object for the given id.
       */
     ISoapAttachment* getAttachment(const char* pcAttachmentid);
+    ISoapAttachment** getAllAttachments(int *pAttchArraySize);
 
 	/**
 	 * Returns a complex fault as an XML string 

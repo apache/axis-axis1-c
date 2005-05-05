@@ -64,6 +64,11 @@ AXIS_CPP_NAMESPACE_USE class SimpleAxisTransport:public SOAPTransport
 	return NULL;
     };
 
+    ISoapAttachment** getAllAttachments(int *pAttchArraySize)
+    {
+	return NULL;
+    };
+
     char* getIncomingSOAPMimeHeaders() {
 	return "incoming headers";
     };
