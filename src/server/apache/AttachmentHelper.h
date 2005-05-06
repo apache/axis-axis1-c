@@ -54,7 +54,7 @@ struct ltstr
 class AttachmentHelper  
 {
 private:
-	map<const string, ISoapAttachment*> mymap;
+	map<string, ISoapAttachment*> mymap;
 	char* pMime;
 public:
 	char* getIncomingSOAPMimeHeaders();
