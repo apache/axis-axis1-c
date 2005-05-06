@@ -234,8 +234,29 @@ public abstract class ParamWriter extends BasicFileWriter
             }
             else
             {
-                if (attrib.isAttribute() && attrib.isOptional())
-                { //variables corresponding to optional attributes are pointer types
+            /**
+             * Dushshantha:
+             * If a simple type attribute is a choice element,
+             * it should be defined as a pointer
+             */
+            	if(attrib.getChoiceElement())
+            	{
+            		String typename = attrib.getTypeName();
+            		if (typename.equals("xsd__string")
+							|| typename.equals("xsd__anyURI")
+							|| typename.equals("xsd__QName")
+							|| typename.equals("xsd__notation")
+							|| typename.equals("xsd__NMTOKEN"))
+            			return attrib.getTypeName();
+            		else
+            			return attrib.getTypeName() + "*";
+            		
+            	}
+                       	
+            	if (attrib.isAttribute() && attrib.isOptional())
+                { 
+            		
+            		//variables corresponding to optional attributes are pointer types
                     return attrib.getTypeName() + "*";
                 }
                 else

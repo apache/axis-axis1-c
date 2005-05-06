@@ -281,7 +281,17 @@ public class BeanParamWriter extends ParamCPPFileWriter{
  				}
  				else
  				{
- 					writer.write("\tpSZ->serializeAsElement(\""+attribs[i].getSOAPElementNameAsString()+"\", Axis_URI_" + classname + ", (void*)&(param->"+attribs[i].getParamNameWithoutSymbols()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
+ 				/**
+ 				  * Dushshantha:
+ 				  * If the simple type is a choice 
+ 				  * it is handled as a pointer variable.
+ 				  * These variables should be defined as pointers in the header file.
+ 				  */
+ 				 					
+ 					if(attribs[i].getChoiceElement())
+ 						writer.write("\tpSZ->serializeAsElement(\""+attribs[i].getSOAPElementNameAsString()+"\", Axis_URI_" + classname + ", (void*)(param->"+attribs[i].getParamNameWithoutSymbols()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
+ 					else
+ 						writer.write("\tpSZ->serializeAsElement(\""+attribs[i].getSOAPElementNameAsString()+"\", Axis_URI_" + classname + ", (void*)&(param->"+attribs[i].getParamNameWithoutSymbols()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");	
  				}
  
 			}else{
@@ -453,10 +463,20 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 				}
 				else
 				{
-					writer.write("\t" + attribs[i].getTypeName() + " * " + attribs[i].getParamNameAsMember()+ " = NULL;\n");
-					writer.write("\tif ((" + attribs[i].getParamNameAsMember()+ " = pIWSDZ->"+CUtils.getParameterGetValueMethodName(attribs[i].getTypeName(), attribs[i].isAttribute())+"( \""+ soapTagName +"\",0)) != NULL)\n");
-					writer.write("\t\tparam->"+attribs[i].getParamNameAsMember()+" = *( " + attribs[i].getParamNameAsMember()+" );\n");
+			    /**
+			      * Dushshantha:
+			      * If the simple type is a choice 
+			      * it is handled as a pointer variable.
+			      * These variables should be defined as pointers in the header file.
+			      */
+					if(attribs[i].getChoiceElement())
+						writer.write("\tparam->"+attribs[i].getParamNameAsMember()+" = pIWSDZ->"+CUtils.getParameterGetValueMethodName(attribs[i].getTypeName(), attribs[i].isAttribute())+"( \""+ soapTagName +"\",0);\n");
+					else{	
+						writer.write("\t" + attribs[i].getTypeName() + " * " + attribs[i].getParamNameAsMember()+ " = NULL;\n");
+						writer.write("\tif ((" + attribs[i].getParamNameAsMember()+ " = pIWSDZ->"+CUtils.getParameterGetValueMethodName(attribs[i].getTypeName(), attribs[i].isAttribute())+"( \""+ soapTagName +"\",0)) != NULL)\n");
+						writer.write("\t\tparam->"+attribs[i].getParamNameAsMember()+" = *( " + attribs[i].getParamNameAsMember()+" );\n");
 //                                        writer.write("\t\tdelete " + attribs[i].getParamNameAsMember()+";\n");
+					}
 				}
 			}
 			else
