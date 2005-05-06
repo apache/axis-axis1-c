@@ -103,6 +103,10 @@ SOURCE=..\..\..\src\server\apache\ApacheTransport.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\server\apache\AttachmentHelper.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\server\apache\mod_axis.cpp
 # End Source File
 # End Group
@@ -112,6 +116,10 @@ SOURCE=..\..\..\src\server\apache\mod_axis.cpp
 # Begin Source File
 
 SOURCE=..\..\..\src\server\apache\ApacheTransport.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\server\apache\AttachmentHelper.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"

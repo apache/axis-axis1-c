@@ -45,6 +45,8 @@
 
 #include "../../transport/SOAPTransport.h"
 #include <string.h>
+#include "AttachmentHelper.h"
+#include <axis/ISoapAttachment.hpp>
 
 AXIS_CPP_NAMESPACE_USE
 
@@ -64,19 +66,20 @@ public:
     const char* getTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE eType);
     int setTransportProperty(const char* pcKey, const char* pcValue);
     const char* getTransportProperty(const char* pcKey, bool response=true);
-	void setAttachment(const char* pcAttachmentid, const char* pcAttachment){};
+    void setAttachment(const char* pcAttachmentid, const char* pcAttachment){};
+	
 	
 	/**
 	 * fixing build breaks: Start
 	 */
 	
 	// hawkeye: This should return something ? Asking on mailing list what !
-	char* getIncomingSOAPMimeHeaders(){return NULL;}
+	char* getIncomingSOAPMimeHeaders();
 	
 	// hawkeyeThis used to return "value" but now fails because of the changed signature
 	// What should it be ?
-	ISoapAttachment* getAttachment(const char* pcAttachmentid){return NULL;};
-    ISoapAttachment** getAllAttachments(int *pAttchArraySize){return NULL;};
+	ISoapAttachment* getAttachment(const char* pcAttachmentid);
+    ISoapAttachment** getAllAttachments(int *pAttchArraySize);
 
 	/** 
 	 * end of fixing build breaks
@@ -99,6 +102,7 @@ public:
     void setTimeout(const long lSeconds) {};
 
 private:
+    AttachmentHelper* pAttachmentHelper;
 	void* m_pContext;
     bool m_bHeadersSent;
 #ifndef CHUNCKED_DATA_SUPPORTED
