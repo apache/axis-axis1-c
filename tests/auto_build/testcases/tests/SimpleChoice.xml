@@ -1,0 +1,13 @@
+<test>
+    <name>SimpleChoice</name>
+    <description>SimpleChoice</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>SimpleChoiceClient.cpp</clientCode>
+    <wsdl>SimpleChoice.wsdl</wsdl>
+    <expected>
+        <output>
+            SimpleChoice.expected
+        </output>
+    </expected>
+	<endpoint>http://localhost:80/axis/SimpleChoice</endpoint>
+</test>

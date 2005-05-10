@@ -1,0 +1,6 @@
+Calling the Service...
+Value1->IntValue->m_Array[0] = 1
+Value1->IntValue->m_Array[1] = 2
+Value1->IntValue->m_Array[2] = 3
+Value1->IntValue->m_Array[3] = 4
+Value1->IntValue->m_Array[4] = 5

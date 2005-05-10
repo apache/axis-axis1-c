@@ -1,0 +1,13 @@
+<test>
+    <name>UnboundedChoice</name>
+    <description>UnboundedChoice</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>UnboundedChoiceClient.cpp</clientCode>
+    <wsdl>UnboundedChoice.wsdl</wsdl>
+    <expected>
+        <output>
+            UnboundedChoice.expected
+        </output>
+    </expected>
+	<endpoint>http://localhost:80/axis/UnboundedChoice</endpoint>
+</test>

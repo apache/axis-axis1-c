@@ -1,0 +1,8 @@
+<service>
+    <name>BasicChoice</name>
+    <description>BasicChoice</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>ChoiceTestSoap.cpp</serviceCode>
+    <wsdl>BasicChoice.wsdl</wsdl>
+	<servicename></servicename>
+</service>
