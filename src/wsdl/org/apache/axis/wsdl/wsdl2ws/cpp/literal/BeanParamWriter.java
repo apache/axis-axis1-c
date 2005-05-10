@@ -195,7 +195,18 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 				if (attribs[i].isSimpleType()){
  					//writer.write("\tpSZ->serializeBasicArray((Axis_Array*)(&param->"+attribs[i].getParamNameAsMember()+"),"+CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+", \""+attribs[i].getParamName()+"\");\n");
  					// cblecken 17/01/2005
-					writer.write("\tpSZ->serializeBasicArray((Axis_Array*)(&param->"+attribs[i].getParamName()+"), Axis_URI_" + classname + ","+CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+", \""+attribs[i].getParamNameAsSOAPElement()+"\");\n"); 
+									
+					
+					/**
+					 *Dushshantha:
+					 *If the element is a Choice,
+					 *It should be treated as a pointer to an array. 
+					 */
+					
+					if(attribs[i].getChoiceElement())
+						writer.write("\tpSZ->serializeBasicArray((Axis_Array*)(param->"+attribs[i].getParamName()+"), Axis_URI_" + classname + ","+CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+", \""+attribs[i].getParamNameAsSOAPElement()+"\");\n"); 
+					else
+						writer.write("\tpSZ->serializeBasicArray((Axis_Array*)(&param->"+attribs[i].getParamName()+"), Axis_URI_" + classname + ","+CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+", \""+attribs[i].getParamNameAsSOAPElement()+"\");\n"); 
 				}
 				else
 				{
@@ -390,10 +401,34 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 					}
 					else
 					{
-						writer.write("\tparam->"+attribs[i].getParamNameAsMember()+".m_Array = ("+attribs[i].getTypeName()+"**)new "+attribs[i].getTypeName()+"*[array.m_Size];\n");
+						
+						/**
+						 *Dushshantha:
+						 *If the element is a Choice,
+						 *It should be treated as a pointer to an array. 
+						 */
+						
+						if(attribs[i].getChoiceElement())
+							writer.write("\tparam->"+attribs[i].getParamNameAsMember()+"->m_Array = ("+attribs[i].getTypeName()+"**)new "+attribs[i].getTypeName()+"*[array.m_Size];\n");
+						else
+							writer.write("\tparam->"+attribs[i].getParamNameAsMember()+".m_Array = ("+attribs[i].getTypeName()+"**)new "+attribs[i].getTypeName()+"*[array.m_Size];\n");
 					}
-					writer.write("\tparam->"+attribs[i].getParamNameAsMember()+".m_Size = array.m_Size;\n\n");
-					writer.write("\tmemcpy( param->"+attribs[i].getParamNameAsMember()+".m_Array, array.m_Array, sizeof( "+attribs[i].getTypeName()+") * array.m_Size);\n");
+					
+					/**
+					 *Dushshantha:
+					 *If the element is a Choice,
+					 *It should be treated as a pointer to an array. 
+					 */
+					
+					if(attribs[i].getChoiceElement()){
+						writer.write("\tparam->"+attribs[i].getParamNameAsMember()+"->m_Size = array.m_Size;\n\n");
+						writer.write("\tmemcpy( param->"+attribs[i].getParamNameAsMember()+"->m_Array, array.m_Array, sizeof( "+attribs[i].getTypeName()+") * array.m_Size);\n");
+					}
+					else{
+						writer.write("\tparam->"+attribs[i].getParamNameAsMember()+".m_Size = array.m_Size;\n\n");
+						writer.write("\tmemcpy( param->"+attribs[i].getParamNameAsMember()+".m_Array, array.m_Array, sizeof( "+attribs[i].getTypeName()+") * array.m_Size);\n");
+					}
+									
 				}
 				else
 				{
@@ -554,15 +589,36 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 		writer.write("\n"+classname+"::"+classname+"()\n{\n");
 		writer.write("\t/*do not allocate memory to any pointer members here\n\t because deserializer will allocate memory anyway. */\n");
 		for(int i = 0; i< attribs.length;i++){
-			if (attribs[i].isArray()){
-				writer.write("\t"+attribs[i].getParamNameAsMember()+".m_Array = 0;\n");
-				writer.write("\t"+attribs[i].getParamNameAsMember()+".m_Size = 0;\n");
+			if (attribs[i].isArray())
+			{
+				
+				/**
+				 * Dushshantha:
+				 * If the element is a Choice,
+				 * it sould be treated as a pointer to an array.
+				 * Memory should be allocated for that.
+				 */
+				
+				if(attribs[i].getChoiceElement())
+				{
+					writer.write("\t"+attribs[i].getParamNameAsMember()+" = new "+CUtils.getBasicArrayNameforType(attribs[i].getTypeName())+"();\n");
+					writer.write("\t"+attribs[i].getParamNameAsMember()+"->m_Array = 0;\n");
+					writer.write("\t"+attribs[i].getParamNameAsMember()+"->m_Size = 0;\n");
+				}
+				
+				else
+				{
+					writer.write("\t"+attribs[i].getParamNameAsMember()+".m_Array = 0;\n");
+					writer.write("\t"+attribs[i].getParamNameAsMember()+".m_Size = 0;\n");
+				}
 			}
-			else if (!attribs[i].isSimpleType()){
+			else if (!attribs[i].isSimpleType())
+			{
 				writer.write("\t"+attribs[i].getParamNameAsMember()+"=0;\n");
-			} else {
-				/* Needed for shared libraries */
-			      writer.write("\tmemset( &" + attribs[i].getParamNameAsMember() + ", 0, sizeof( " + attribs[i].getTypeName() + "));\n");
+			} 
+						
+			else{
+				writer.write("\tmemset( &" + attribs[i].getParamNameAsMember() + ", 0, sizeof( " + attribs[i].getTypeName() + "));\n");
 			}
 		}			
 		writer.write("}\n");

@@ -219,7 +219,16 @@ public abstract class ParamWriter extends BasicFileWriter
         {
             if (attrib.isSimpleType())
             {
-                return CUtils.getBasicArrayNameforType(attrib.getTypeName());
+                /**
+                 * Dushshantha:
+                 * if the element is a choice element,
+                 * it should be defined as a pointer to an array.
+                 */
+            	
+            	if(attrib.getChoiceElement())
+                	return CUtils.getBasicArrayNameforType(attrib.getTypeName())+"*";
+                else
+                	return CUtils.getBasicArrayNameforType(attrib.getTypeName());
             }
             else
             {
