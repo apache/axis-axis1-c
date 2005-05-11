@@ -640,14 +640,35 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                         }
                         else
                         {
-                            writer.write(
-                                "\tpIWSSZ->addOutputParam(\""
-                                    + returnParamName
-                                    + "\", (void*)&out"
-                                    + i
-                                    + ", "
-                                    + CUtils.getXSDTypeForBasicType(outparamType)
-                                    + ");\n");
+                        	//Chinthana:
+                        	//changes have done to handle pointers.
+                        	String containedDataType = CUtils.getXSDTypeForBasicType(outparamType);
+                        	if (containedDataType.equals ("XSD_STRING")
+                    				|| containedDataType.equals ("XSD_ANYURI")
+                    				|| containedDataType.equals ("XSD_QNAME")
+                    				|| containedDataType.equals ("XSD_NOTATION"))
+                        	{
+                        		writer.write(
+                                        "\tpIWSSZ->addOutputParam(\""
+                                            + returnParamName
+                                            + "\", (void*)out"
+                                            + i
+                                            + ", "
+                                            + CUtils.getXSDTypeForBasicType(outparamType)
+                                            + ");\n");
+                        	}
+                        	else
+                        	{
+                        		writer.write(
+                                        "\tpIWSSZ->addOutputParam(\""
+                                            + returnParamName
+                                            + "\", (void*)&out"
+                                            + i
+                                            + ", "
+                                            + CUtils.getXSDTypeForBasicType(outparamType)
+                                            + ");\n");
+                        	}
+                            //10/05/2005..........................................................
                         }
                     }
                     else

@@ -792,8 +792,18 @@ public class ClientStubWriter
 		    typeisarray = false;
 		}
 		typeissimple = CUtils.isSimpleType (currentParaType);
-
-		currentParamName = "*OutValue" + i;
+		
+		//Chinthana:
+		//Changes have done for handle AXIS_OUT_PARAM Types.
+		if (currentParaType.equals ("xsd__string")
+				|| currentParaType.equals ("xsd__anyURI")
+				|| currentParaType.equals ("xsd__QName")
+				|| currentParaType.equals ("xsd__notation"))
+			currentParamName = "*OutValue" + i;
+		else
+			currentParamName = "OutValue" + i;
+		//10/05/2005.................................................
+		
 		// Some code need to be merged as we have some duplicated in coding here.
 		if (typeisarray)
 		{
