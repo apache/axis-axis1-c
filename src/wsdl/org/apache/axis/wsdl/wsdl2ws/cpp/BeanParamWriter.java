@@ -212,9 +212,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
         writer.write("\t}\n\n");
 
         String arrayType;
-        
-        boolean firstIfWritten=false;
-        
+		boolean firstIfWritten=false;
         for (int i = 0; i < attribs.length; i++)
         {
 			
@@ -224,14 +222,16 @@ public class BeanParamWriter extends ParamCPPFileWriter
 			
 			if(attribs[i].getChoiceElement())
 			{
-				if(!firstIfWritten){
+				if(!firstIfWritten)
+				{
 					writer.write("\tif");
 					firstIfWritten=true;
 				}
-				else{
+				else
+				{
 					writer.write("\telse if");
 				}
-				
+
 				writer.write("(param->" + attribs[i].getParamNameAsMember()+ ")\n\t{\n\t");
 			}
 			//..............................................................................
@@ -427,11 +427,10 @@ public class BeanParamWriter extends ParamCPPFileWriter
 		//Dushshantha:
 		//peekCalled boolean variable checks whether the Line 
 		//const char* choiceName=pIWSDZ->peekNextElementName(); has been wriiten in the generated cade.
-		boolean peekCalled=false;
-        
-        boolean firstIfWritten=false;
-		
-		for (int i = 0; i < attribs.length; i++)
+		boolean peekCalled = false;
+        boolean firstIfWritten = false;
+
+        for (int i = 0; i < attribs.length; i++)
         {
             //Dushshantha:
             //if the attribute is a choice
@@ -444,16 +443,18 @@ public class BeanParamWriter extends ParamCPPFileWriter
 					writer.write("\tconst char* choiceName=pIWSDZ->peekNextElementName();\n");
 					peekCalled=true;
 				}
-				
-				if(!firstIfWritten){
+
+				if(!firstIfWritten)
+				{
 					writer.write("\tif");
 					firstIfWritten=true;
 				}
-				else{
+				else
+				{
 					writer.write("\telse if");
 				}
 				
-				writer.write("(strcmp(choiceName,\"" + attribs[i].getParamNameAsMember()+ "\")==0)\n\t{\n\t");
+				writer.write("\tif(strcmp(choiceName,\"" + attribs[i].getParamNameAsMember()+ "\")==0)\n\t{\n\t");
 								           	           	
             }
         	//.............................................
