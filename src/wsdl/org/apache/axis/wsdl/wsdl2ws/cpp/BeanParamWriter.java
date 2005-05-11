@@ -212,6 +212,9 @@ public class BeanParamWriter extends ParamCPPFileWriter
         writer.write("\t}\n\n");
 
         String arrayType;
+        
+        boolean firstIfWritten=false;
+        
         for (int i = 0; i < attribs.length; i++)
         {
 			
@@ -221,7 +224,15 @@ public class BeanParamWriter extends ParamCPPFileWriter
 			
 			if(attribs[i].getChoiceElement())
 			{
-				writer.write("\tif(param->" + attribs[i].getParamNameAsMember()+ ")\n\t{\n\t");
+				if(!firstIfWritten){
+					writer.write("\tif");
+					firstIfWritten=true;
+				}
+				else{
+					writer.write("\telse if");
+				}
+				
+				writer.write("(param->" + attribs[i].getParamNameAsMember()+ ")\n\t{\n\t");
 			}
 			//..............................................................................
 			if (attribs[i].isAnyType())
@@ -418,7 +429,9 @@ public class BeanParamWriter extends ParamCPPFileWriter
 		//const char* choiceName=pIWSDZ->peekNextElementName(); has been wriiten in the generated cade.
 		boolean peekCalled=false;
         
-        for (int i = 0; i < attribs.length; i++)
+        boolean firstIfWritten=false;
+		
+		for (int i = 0; i < attribs.length; i++)
         {
             //Dushshantha:
             //if the attribute is a choice
@@ -432,7 +445,15 @@ public class BeanParamWriter extends ParamCPPFileWriter
 					peekCalled=true;
 				}
 				
-				writer.write("\tif(strcmp(choiceName,\"" + attribs[i].getParamNameAsMember()+ "\")==0)\n\t{\n\t");
+				if(!firstIfWritten){
+					writer.write("\tif");
+					firstIfWritten=true;
+				}
+				else{
+					writer.write("\telse if");
+				}
+				
+				writer.write("(strcmp(choiceName,\"" + attribs[i].getParamNameAsMember()+ "\")==0)\n\t{\n\t");
 								           	           	
             }
         	//.............................................

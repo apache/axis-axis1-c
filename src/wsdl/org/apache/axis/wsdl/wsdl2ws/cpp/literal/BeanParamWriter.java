@@ -172,6 +172,9 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 		}
 		
 		writer.write("\n\t/* then serialize elements if any*/\n");
+		
+		boolean firstIfWritten=false;
+		
 		for(int i = attributeParamCount; i< attribs.length;i++){
 	
 			//Dushshantha:
@@ -180,7 +183,14 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 			
 			if(attribs[i].getChoiceElement())
 			{
-				writer.write("\tif(param->" + attribs[i].getParamNameAsMember()+ ")\n\t{\n\t");
+				if(!firstIfWritten){
+					writer.write("\tif");
+					firstIfWritten=true;
+				}
+				else{
+					writer.write("\telse if");
+				}
+				writer.write("(param->" + attribs[i].getParamNameAsMember()+ ")\n\t{\n\t");
 			}
 			//..............................................................................
 
@@ -361,6 +371,7 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 		
 		
 		boolean peekCalled=false;
+		boolean firstIfWritten=false;
         
 		for (int i = 0; i < attribs.length; i++)
 		{
@@ -374,8 +385,14 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 					writer.write("\tconst char* choiceName=pIWSDZ->peekNextElementName();\n");
 					peekCalled=true;
 				}
-				
-				writer.write("\tif(strcmp(choiceName,\"" + attribs[i].getParamNameAsMember()+ "\")==0)\n\t{\n\t");
+				if(!firstIfWritten){
+					writer.write("\tif");
+					firstIfWritten=true;
+				}
+				else{
+					writer.write("\telse if");
+				}
+				writer.write("(strcmp(choiceName,\"" + attribs[i].getParamNameAsMember()+ "\")==0)\n\t{\n\t");
 								           	           	
 			}
 			//.............................................
@@ -589,8 +606,7 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 		writer.write("\n"+classname+"::"+classname+"()\n{\n");
 		writer.write("\t/*do not allocate memory to any pointer members here\n\t because deserializer will allocate memory anyway. */\n");
 		for(int i = 0; i< attribs.length;i++){
-			if (attribs[i].isArray())
-			{
+			if (attribs[i].isArray()){
 				
 				/**
 				 * Dushshantha:
@@ -599,26 +615,25 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 				 * Memory should be allocated for that.
 				 */
 				
-				if(attribs[i].getChoiceElement())
-				{
+				if(attribs[i].getChoiceElement()){
 					writer.write("\t"+attribs[i].getParamNameAsMember()+" = new "+CUtils.getBasicArrayNameforType(attribs[i].getTypeName())+"();\n");
 					writer.write("\t"+attribs[i].getParamNameAsMember()+"->m_Array = 0;\n");
 					writer.write("\t"+attribs[i].getParamNameAsMember()+"->m_Size = 0;\n");
 				}
 				
-				else
-				{
-					writer.write("\t"+attribs[i].getParamNameAsMember()+".m_Array = 0;\n");
-					writer.write("\t"+attribs[i].getParamNameAsMember()+".m_Size = 0;\n");
+				else{
+				writer.write("\t"+attribs[i].getParamNameAsMember()+".m_Array = 0;\n");
+				writer.write("\t"+attribs[i].getParamNameAsMember()+".m_Size = 0;\n");
 				}
 			}
-			else if (!attribs[i].isSimpleType())
-			{
+			else if (!attribs[i].isSimpleType()){
 				writer.write("\t"+attribs[i].getParamNameAsMember()+"=0;\n");
-			} 
-						
-			else{
-				writer.write("\tmemset( &" + attribs[i].getParamNameAsMember() + ", 0, sizeof( " + attribs[i].getTypeName() + "));\n");
+			} else {
+				/* Needed for shared libraries */
+			    if(attribs[i].getChoiceElement())
+			    	writer.write("\tmemset( " + attribs[i].getParamNameAsMember() + ", 0, sizeof( " + attribs[i].getTypeName() + "));\n");
+				else
+					writer.write("\tmemset( &" + attribs[i].getParamNameAsMember() + ", 0, sizeof( " + attribs[i].getTypeName() + "));\n");
 			}
 		}			
 		writer.write("}\n");
