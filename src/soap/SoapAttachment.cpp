@@ -92,6 +92,20 @@ void SoapAttachment::serialize(SoapSerializer &pSZ)
     else if (iEncodingStyle == AXIS_BINARY)
     {
         pSZ.serialize("\n", NULL);
+        
+        
+        string attachBody = m_binaryBody;
+       
+        int boundary = attachBody.find("------=_Part_0_6349096.11054186923",0);
+        if (boundary != -1)
+        {
+            string attachment = attachBody.substr(0,(boundary-1));
+            char* binary = new char[attachment.length() + 1];
+            strcpy(binary, attachment.c_str());        
+             m_binaryBody = binary;            
+            pSZ.serialize(m_binaryBody, NULL);
+        }
+        else              
         pSZ.serialize(m_binaryBody, NULL);
     }
 
