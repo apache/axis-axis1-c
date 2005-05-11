@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META name="GENERATOR" content="IBM Software Development Platform">
+<TITLE>XSD_Objects.html</TITLE>
+</HEAD>
+<BODY>
+<H1 align="center">XSD Objects</H1>
+<H2>XML Schema Part 2 : Datatypes</H2>
+<P>The types and formatting of data transmitted in a SOAP message is defined by the XML Schema, in particular Part 2 : Datatypes. The full specification can be seen <A
+	href="http://www.w3.org/TR/2001/REC-xmlschema-2-20010502/">here</A>.</P>
+<H3>Built-in types</H3>
+<P>Within <A
+	href="http://www.w3.org/TR/2001/REC-xmlschema-2-20010502/#built-in-datatypes">section
+3</A>  of the above specification 44 built-in datatypes are described, encompasing Strings, numeric, time and encoded binary datatypes. These datatypes are split into two groups, primitive and derived types.</P>
+<P><IMG border="1" src="../images/XSD_Objects_Heirarchy.JPG" width="680"
+	height="588"></P>
+<H4>Primitive Types</H4>
+<P>The XML schema provides 19 primitive types. As all data is represented in text form within XML, the value space for each datatype needs to be specified, for example numeric types cannot  contain alphabetic characters. To do this, each type defines a number of contraining facets and the values within these facets allows the XML engine to validate the data. See <A
+	href="#Constraining Facets">Constraining Facets</A> below for further information on how these are used.</P>
+<P><IMG border="1" src="../images/XSD_PrimitiveTypes.JPG" width="680"
+	height="233" alt="The 19 primitive data types are: string, boolean, decimal, float, double, duration, dateTime, time, date, gYearMonth, gYear, gMonthDay, gDay, gMonth, hexBinary, base64Binary, anyURI, QName, NOTATION"></P><P>See <A
+	href="http://www.w3.org/TR/2001/REC-xmlschema-2-20010502/#built-in-primitive-datatypes">section
+3.2</A> of the specification for full detail on each datatype.</P>
+<H4>Derived Types</H4>
+<P>The XML Schema allows additional types to be derived from the primitive types, and has 25 built-in derived types. 12 data types are derived from the string primitive data type.</P>
+<IMG border="1" src="../images/XSD_String_DerivedTypes.JPG" width="252"
+	height="359" alt="The 12 types derived from the string primitive data type are: normalizedString, token, language, Name, NCName, ID, IDREF, IDREFS, ENTITY, ENTITIES, NMTOKEN and NMTOKENS">
+<P>The remaining 13 data types are derived from the decimal primitive data type.</P>
+
+<P><IMG border="1" src="../images/XSD_Decimal_DerivedTypes.JPG"
+	width="503" height="359" alt="The 13 data types derived from the decimal primitive data type are: integer, nonPositiveInteger, negativeInteger, long, int, short, byte, nonNegativeInteger, unsignedLong, unsignedInt, unsignedShort, unsignedByte, positiveInteger"></P>
+<P>A derived type uses the same contraining facets as the type from which it is derived, but provides differing values for one or more facet so as to further restrict the value space. For example; the decimal allows fraction digits, while the integer derived type sets this facet to 0.</P><P>See <A
+	href="http://www.w3.org/TR/2001/REC-xmlschema-2-20010502/#built-in-derived">section
+3.3</A> of the specification for full detail on each datatype.</P>
+<H4>User defined derived types</H4>
+<P>In the same way as the XML Schema defines a number of built-in datatypes the user can also provide additional derived types. This can be done in the WSDL document, or an XSD referred from a WSDL document.</P>
+<P>The following shows how you can create a new type called <code>direction</code>, which is derived from the <code>NMTOKEN</code> built-in type, to only have the values <code>fromKey</code> and <code>toKey</code>, by restricting the <code>enumeration</code> constraining facet.</P>
+<PRE>	&lt;xsd:simpleType name="direction"&gt;
+		&lt;xsd:restriction base="NMTOKEN"&gt;
+			&lt;xsd:enumeration value="fromKey"/&gt;
+			&lt;xsd:enumeration value="toKey"/&gt;
+		&lt;/xsd:restriction&gt;
+	&lt;/xsd:simpleType&gt;</PRE>
+<H3><A name="Constraining Facets">Constraining Facets</A></H3>
+<P>As mentioned above, the value spaces of each of the built-in types are controlled by constraining facets. The XML Schema provides 12 constraining facets, as described in <A
+	href="http://www.w3.org/TR/2001/REC-xmlschema-2-20010502/#rf-facets">section
+4.3</A>.</P>
+<P>The 12 constraining facets are:</P>
+<UL>
+<LI><code>length</code></LI>
+<LI><code>minLength</code></LI>
+<LI><code>maxLength</code></LI>
+<LI><code>pattern</code> - describes the form of the data, typically using regular expression syntax.</LI>
+<LI><code>enumeration</code> - specifies a fixed set of permitted values</LI>
+<LI><code>whiteSpace</code> - how to handle whitespace characters</LI>
+<UL>
+<LI><code>preserve</code> - value is unchanged</LI>
+<LI><code>replace</code> - all occurances of tab, line feed and carriage return are replaced with a space</LI>
+<LI><code>collapse</code> - after the process of <CODE>replace</CODE>, remove all contigious repeating occurances of spaces, and strip leading and trailing spaces</LI>
+</UL>
+<LI><code>maxInclusive</code></LI>
+<LI><code>maxExclusive</code></LI>
+<LI><code>minExclusive</code></LI>
+<LI><code>minInclusive</code></LI>
+<LI><code>totalDigits</code></LI>
+<LI><code>fractionDigits</code></LI>
+</UL>
+<P>Each primitive datatype uses a subset of these contraining facets, to suit the characteristics of that particular datatype. <A
+	href="http://www.w3.org/TR/2001/REC-xmlschema-2-20010502/#defn-coss">Section
+4.1.5</A> of the XML Schema provides a table of which facets are used for each datatype.</P>
+<P>It is permitted for the value of a constraining facet to be undefined, with the exception of whitespace which must be specified as one of preserve, replace or collapse.</P>
+<HR>
+<H1 align="center">Axis C++ Implementation of XSD built-in types</H1>
+<H2>C++ Objects</H2>
+<P>In version 1.5 of Apache Axis C++, an object model was introduced to the SOAP engine for the XSD built-in types. The object heirarchy mimics the order in which the datatypes are derived from each other.</P>
+<H3>IAnySimpleType Interface</H3>
+<P>All the XSD type objects implement the IAnySimpleType interface, which provides the following methods, which must be implemented by all implementing classes</P>
+<UL>
+<code>AxisChar* serialize(const void* value) throw (AxisSoapException)</code><BR>
+<code>void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)</code>
+</UL>
+<P>The IAnySimpleType interface provides the following utility method, which should be called by all implementing classes when serializing data.</P>
+<UL>
+<code>AxisChar* serialize(const AxisChar* value) throw (AxisSoapException);</code>
+</UL>
+<P>This method resolves reserved characters (eg <code>&amp;</code> is replaced by <code>&amp;amp;</code>), processes <code>Whitespace</code>, validates <code>Pattern</code> and ensures value is contained within <code>Enumeration</code>.</P>
+<H3>Object Heirarchy</H3>
+<P>Below is a portion of the C++ object heirarchy, which, as you will notice, is very similar to the <A
+	href="http://www.w3.org/TR/2001/REC-xmlschema-2-20010502/#built-in-datatypes">diagram
+of built-in datatypes</A> in the XSD Schema.</P>
+<P><IMG border="1" src="../images/XSDObjects_Heirarchy.gif" width="824"
+	height="717"></P>
+<H3>Mapping XSD built-in types to C/C++ types</H3>
+<P>Within the Axis engine mappings are provided between the XSD built-in types and the native C/C++ types. To aid understanding and maintain consistency, these are declared as typedefs to match the XSD type names. These typedefs should be used throughout the engine for:</P>
+<UL>
+<LI>Clarity of code, making it clear which type is being handled at any point in the code</LI>
+<LI>Ease of maintenance, should a native type need to be altered, it need only be done in the typedef without further changes through the codebase.</LI>
+</UL>
+<H4>C++ Types</H4>
+<P>The mapping from C++ types to the XSD built-in types is defined in <code>AxisUserAPI.hpp</code>. For each XSD built-in type a corresponding typedef is declared in the form <code>xsd__&lt;<I>type</I>&gt;</code>, eg: <code>xsd__string</code>.</P>
+<P>Note: <code>AxisUserAPI.hpp</code> only declares those types currenty supported within the user API.</P>
+<H4>C Types</H4>
+<P>Similar to the C++ API, the mapping from C types to the XSD built-in types is defined in <code>AxisUserAPI.h</code>. A typedef is declared for each XSD built-in type, in the form <code>xsdc__&lt;<I>type</I>&gt;</code>, eg: <code>xsdc__string</code>.</P>
+<H3>IConstrainingFacet Interface</H3>
+<P>All the Constraining Facet objects implement the IConstrainingFacet interface. This provides the following utility method, which allows the XSD objects to determine if a given facet has been defined:</P>
+<UL><code>bool isSet();</code></UL>
+<P>The following Constraining Facet objects provide utility methods to assist the serialization/deserialization of XSD built-in types:</P>
+<UL>
+Enumeration
+<UL><code>void validateEnumeration(const AxisChar* value) throw (AxisSoapException);</code></UL>
+Pattern
+<UL><code>void validatePattern(const AxisChar* value) throw (AxisSoapException);</code></UL>
+WhiteSpace
+<UL><code>const AxisChar* processWhiteSpace(const AxisChar* valueToProcess);</code></UL>
+</UL>
+<HR>
+<H1>Current Limitations</H1>
+<H2>Support XSD Types</H2>
+<P>Currently, only some of the XSD built-in types are supported on the user API and the WSDL2Ws tooling. The following diagram highlights (within red boxes) those types not currently supported:</P>
+<H2>Function Limitation</H2>
+<P>Currently, the XSD objects are utility classes for the serialization and deserialization of the XSD built-in types. However, it is intended these will be converted to become fully functional data containers, which can be used to carry the data through the client engine. Doing this will allow earlier validation of content, and should allow for simplification of the serialization engine.</P>
+<H2>Pattern Constraining Facet</H2>
+<P>The implementation of the pattern constraining facet is incomplete. It needs to validate against a given regular expression, following this, the pattern for each of data types needs to be updated with the regular expression to describe their particular data type.</P>
+<HR>
+<H1>References</H1>
+<P>XML Schema Part 2 : Datatypes - <A href="http://www.w3.org/TR/2001/REC-xmlschema-2-20010502/">http://www.w3.org/TR/2001/REC-xmlschema-2-20010502/</A></P>
+<H2>Outstanding Issues</H2>
+<A href="http://issues.apache.org/jira/browse/AXISCPP-291">AXISCPP-291</A> - dateTime unable to support dates prior to 1970.<BR>
+<A href="http://issues.apache.org/jira/browse/AXISCPP-416">AXISCPP-416</A> - support remaining XSD built-in types
+</BODY>
+</HTML>
