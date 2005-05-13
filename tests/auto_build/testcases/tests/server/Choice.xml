@@ -1,8 +1,0 @@
-<service>
-    <name>Choice</name>
-    <description>Choice</description>
-    <serviceLang>cpp</serviceLang>
-    <serviceCode>ChoiceTestSoap.cpp</serviceCode>
-    <wsdl>Choice.wsdl</wsdl>
-	<servicename></servicename>
-</service>
