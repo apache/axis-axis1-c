@@ -1,0 +1,13 @@
+<test>
+    <name>CombinedChoice</name>
+    <description>CombinedChoice</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>CombinedChoiceClient.cpp</clientCode>
+    <wsdl>CombinedChoice.wsdl</wsdl>
+    <expected>
+        <output>
+            CombinedChoice.expected
+        </output>
+    </expected>
+	<endpoint>http://localhost:80/axis/CombinedChoice</endpoint>
+</test>

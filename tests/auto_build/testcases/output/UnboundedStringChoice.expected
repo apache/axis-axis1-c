@@ -1,0 +1,6 @@
+Calling the Service...
+Value1->StringValue->m_Array[0] = a
+Value1->StringValue->m_Array[1] = b
+Value1->StringValue->m_Array[2] = c
+Value1->StringValue->m_Array[3] = d
+Value1->StringValue->m_Array[4] = e
