@@ -269,8 +269,11 @@ AnyElement* XercesHandler::getAnyElement()
 }
 //Chinthana:This is the method will use by the XercesPaser to peek head the next element 
 const char* XercesHandler::peekNextElementName()
-{
-    return m_pCurrElement->m_pchNameOrValue;
+{		
+    if (m_pCurrElement)
+		return m_pCurrElement->m_pchNameOrValue;
+	else 
+		return NULL;
 }
 //28/04/2005
 

@@ -137,8 +137,18 @@ const char* XMLParserXerces::peek()
     }
 	 
 	bool bCanParseMore = true;
-
+	
+	m_Xhandler.freeElement();
 	bCanParseMore = m_pParser->parseNext(m_ScanToken);
+	AnyElement* elem = m_Xhandler.getAnyElement();
+	while (CHARACTER_ELEMENT == elem->m_type) // we never peek for char data
+											  //hence this is a white space
+    { /* ignorable white space */
+        m_Xhandler.freeElement();
+		bCanParseMore = m_pParser->parseNext(m_ScanToken);
+		elem = m_Xhandler.getAnyElement();
+     }
+
 	const char* name = m_Xhandler.peekNextElementName();
 	m_bPeeked = true;
 	return name;
