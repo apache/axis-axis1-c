@@ -650,7 +650,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                         	{
                         		writer.write(
                                         "\tpIWSSZ->addOutputParam(\""
-                                            + returnParamName
+                                            + returnParamName.substring(returnParamName.lastIndexOf(">")+1)
                                             + "\", (void*)out"
                                             + i
                                             + ", "
