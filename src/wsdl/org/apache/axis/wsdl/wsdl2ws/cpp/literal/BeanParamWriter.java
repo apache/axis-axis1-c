@@ -421,7 +421,11 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 							|| typename.equals("xsd__notation")
 							|| typename.equals("xsd__NMTOKEN"))
 					{
-						writer.write("\tparam->"+attribs[i].getParamNameAsMember()+".m_Array = ("+attribs[i].getTypeName()+"*)new "+attribs[i].getTypeName()+"[array.m_Size];\n");
+						
+						if(attribs[i].getChoiceElement())			
+							writer.write("\tparam->"+attribs[i].getParamNameAsMember()+"->m_Array = ("+attribs[i].getTypeName()+"*)new "+attribs[i].getTypeName()+"[array.m_Size];\n");
+						else
+							writer.write("\tparam->"+attribs[i].getParamNameAsMember()+".m_Array = ("+attribs[i].getTypeName()+"*)new "+attribs[i].getTypeName()+"[array.m_Size];\n");
 					}
 					else
 					{
