@@ -105,7 +105,7 @@ enum AxisTraceState
 	STATE_STARTUP
 };
 
-class AxisTraceEntrypoints {
+class STORAGE_CLASS_INFO AxisTraceEntrypoints {
 public:
     void (*m_traceLine)(const char *data);
     void (*m_traceEntry)(const char *className, const char *methodName, const void* that, int nParms, va_list vargs);
@@ -118,7 +118,10 @@ public:
 
 #ifdef AXISTRACE_LIBRARY
     extern AxisTraceEntrypoints *g_traceEntrypoints;
+#elif !defined(AXIS_CLIENTC_LIB)
+	extern AxisTraceEntrypoints g_traceEntrypoints;
 #endif
+
 #ifdef AXISTRACE_LIBRARY_MAINENTRYPOINT
     AxisTraceEntrypoints *g_traceEntrypoints = NULL;
 #endif
@@ -269,28 +272,18 @@ public:
        * Returns the trace entrypoints to pass to a dynamically loaded library.
        */
 #ifdef AXISTRACE_LIBRARY
-      static void getTraceEntrypoints(AxisTraceEntrypoints& entrypoints) {
-         entrypoints = *g_traceEntrypoints;
+      static AxisTraceEntrypoints* getTraceEntrypoints() {
+          return g_traceEntrypoints;
       }
-#else
-      static void getTraceEntrypoints(AxisTraceEntrypoints& entrypoints) {
-         entrypoints.m_traceLine = traceLineInternal;
-         entrypoints.m_traceEntry = traceEntryInternal;
-         entrypoints.m_traceExit = traceExitInternal;
-         entrypoints.m_traceCatch = traceCatchInternal;
-         entrypoints.m_traceOn = isTraceOn();
+#elif !defined(AXIS_CLIENTC_LIB)
+      static AxisTraceEntrypoints* getTraceEntrypoints() {
+         return &g_traceEntrypoints;
       }
 #endif
 
 #ifdef AXISTRACE_LIBRARY
-      static void setTraceEntrypoints(AxisTraceEntrypoints& entrypoints) {
-          g_traceEntrypoints = new AxisTraceEntrypoints;
-          *g_traceEntrypoints = entrypoints;
-      }
-
-      static void deleteTraceEntrypoints() {
-          if (NULL!=g_traceEntrypoints)
-              delete g_traceEntrypoints;
+      static void setTraceEntrypoints(AxisTraceEntrypoints* entrypoints) {
+          g_traceEntrypoints = entrypoints;
       }
 #endif
 

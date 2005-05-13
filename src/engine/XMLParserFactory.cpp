@@ -73,10 +73,8 @@ int XMLParserFactory::initialize()
             INIT_OBJECT2 initializeLibrary;
             initializeLibrary = (INIT_OBJECT2) PLATFORM_GETPROCADDR(m_LibHandler, INIT_FUNCTION2);
 
-            AxisTraceEntrypoints ep;
-            AxisTrace::getTraceEntrypoints(ep);
             if (initializeLibrary)
-                 (*initializeLibrary)(ep);
+                 (*initializeLibrary)(AxisTrace::getTraceEntrypoints());
 #endif
 	  }
 	}

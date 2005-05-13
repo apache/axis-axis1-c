@@ -42,6 +42,14 @@ using namespace std;
 enum AxisTraceState AxisTrace::m_bLoggingOn = STATE_UNINITIALISED;
 AxisFile *AxisTrace::m_fileTrace = NULL;
 
+AxisTraceEntrypoints g_traceEntrypoints = {
+    AxisTrace::traceLineInternal,
+    AxisTrace::traceEntryInternal,
+    AxisTrace::traceExitInternal,
+    AxisTrace::traceCatchInternal,
+    AxisTrace::isTraceOn
+};
+
 int AxisTrace::openFile ()
 {
     return initialise(g_pConfig->getAxisConfProperty(AXCONF_LOGPATH), STATE_ON);

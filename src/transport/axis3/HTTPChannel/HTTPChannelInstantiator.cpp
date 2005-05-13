@@ -69,7 +69,7 @@ extern "C"
 
     /*  initializeLibrary() Is a C interface.
      */
-    STORAGE_CLASS_INFO void initializeLibrary (AxisTraceEntrypoints& ep)
+    STORAGE_CLASS_INFO void initializeLibrary (AxisTraceEntrypoints* ep)
     {
         // Do init actions
 #ifdef ENABLE_AXISTRACE
@@ -82,9 +82,6 @@ extern "C"
     STORAGE_CLASS_INFO void uninitializeLibrary (void)
     {
         // Do uninit actions
-#ifdef ENABLE_AXISTRACE
-        AxisTrace::deleteTraceEntrypoints();
-#endif
     }
 
     STORAGE_CLASS_INFO const char * WhatAmI()

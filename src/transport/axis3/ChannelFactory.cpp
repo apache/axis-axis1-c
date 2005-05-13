@@ -93,15 +93,12 @@ IChannel * ChannelFactory::LoadChannelLibrary( g_ChannelType eChannelType, const
 
 #ifdef ENABLE_AXISTRACE
 // Load function to do lib level inits
-			void (*initializeLibrary) (AxisTraceEntrypoints&);
-			initializeLibrary = (void (*)(AxisTraceEntrypoints&))PLATFORM_GETPROCADDR(sLibHandler, "initializeLibrary");
-
-			AxisTraceEntrypoints ep;
-			AxisTrace::getTraceEntrypoints( ep);
+			void (*initializeLibrary) (AxisTraceEntrypoints*);
+			initializeLibrary = (void (*)(AxisTraceEntrypoints*))PLATFORM_GETPROCADDR(sLibHandler, "initializeLibrary");
 
 			if( initializeLibrary)
 			{
-				(*initializeLibrary) ( ep);
+				(*initializeLibrary) (AxisTrace::getTraceEntrypoints());
 			}
 #endif
 

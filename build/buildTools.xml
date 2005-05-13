@@ -122,7 +122,7 @@
 					<compiler refid="AIXxlc"/>
 					<!-- Additional compiler flag for Client library on all platforms -->
 					<defineset>
-						<define name="AXIS_CLIENT_LIB"/>
+						<define name="AXIS_CLIENTC_LIB"/>
 						<define name="ENABLE_AXISTRACE" if="trace"/>
 					</defineset>
 					<includepath path="${dir.include}${path.separator}${dir.obj}/include"/>
