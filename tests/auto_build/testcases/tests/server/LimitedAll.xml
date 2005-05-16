@@ -1,0 +1,8 @@
+<service>
+    <name>LimitedAll</name>
+    <description>LimitedAllTest</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>AllTestSoap.cpp</serviceCode>
+    <wsdl>LimitedAllTest.wsdl</wsdl>
+	<servicename></servicename>
+</service>

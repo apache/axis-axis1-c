@@ -1,0 +1,13 @@
+<test>
+    <name>LimitedAll</name>
+    <description>LimitedAllTest</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>LimitedAllTestlClient.cpp</clientCode>
+    <wsdl>LimitedAllTest.wsdl</wsdl>
+    <expected>
+        <output>
+            LimitedAll.expected
+        </output>
+    </expected>
+	<endpoint>http://localhost:80/axis/LimitedAll</endpoint>
+</test>

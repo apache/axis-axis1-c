@@ -1,0 +1,8 @@
+<service>
+    <name>CombinedAll</name>
+    <description>CombinedAllTest</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>AllTestSoap.cpp</serviceCode>
+    <wsdl>CombinedAllTest.wsdl</wsdl>
+	<servicename></servicename>
+</service>

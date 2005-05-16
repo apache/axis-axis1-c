@@ -1,0 +1,15 @@
+
+Sending.................
+NonAllIntValue = 3
+AllValue0 = 5
+AllValue2 = TINTIN
+NonAllStringValue = HELLO
+
+Received................
+NonAllIntValue = 3
+AllValue0 = 5
+AllValue2 = TINTIN
+NonAllStringValue = HELLO
+
+Successfull
+---------------------- TEST COMPLETE -----------------------------

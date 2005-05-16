@@ -1,0 +1,13 @@
+<test>
+    <name>BasicAll</name>
+    <description>BaiscAll</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>BasicAllTestClient.cpp</clientCode>
+    <wsdl>BasicAllTest.wsdl</wsdl>
+    <expected>
+        <output>
+            BasicAll.expected
+        </output>
+    </expected>
+	<endpoint>http://localhost:80/axis/BasicAll</endpoint>
+</test>

@@ -1,0 +1,13 @@
+<test>
+    <name>CombinedAll</name>
+    <description>CombinedAllTest</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>CombinedAllTestClient.cpp</clientCode>
+    <wsdl>CombinedAllTest.wsdl</wsdl>
+    <expected>
+        <output>
+            CombinedAll.expected
+        </output>
+    </expected>
+	<endpoint>http://localhost:80/axis/CombinedAll</endpoint>
+</test>
