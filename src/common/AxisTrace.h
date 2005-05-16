@@ -191,7 +191,7 @@ public:
      * Finds out whether trace is on.
      */
 #ifdef AXISTRACE_LIBRARY
-    static inline bool isTraceOn() { return g_traceEntrypoints->m_traceOn; }
+    static inline bool isTraceOn() { return (*g_traceEntrypoints->m_traceOn)(); }
 #else
     static bool isTraceOn();
 #endif
