@@ -180,6 +180,15 @@ public abstract class ParamWriter extends BasicFileWriter
                                    
             //..................................................
             
+            //Chinthana:
+            //setting the all element availability.
+            this.attribs[i].setAllElement(elem.getAllElement());
+            //04/05/2005..................................................
+            //setting the minoccures
+            this.attribs[i].setMinOccurs(elem.getMinOccurs());
+            //12/05/2005..................................................
+
+            
             
             if (elementType.isArray())
             { //soap encoding arrays.

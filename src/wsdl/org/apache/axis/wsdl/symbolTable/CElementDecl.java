@@ -51,7 +51,13 @@ public class CElementDecl //extends ElementDecl
     // indicate if the CElementDecl represents 
     // an xsd:choice element 
     private boolean choiceElement = false;
-
+    
+    // Chinthana:
+    // indicate if the CElementDecl represents 
+    // an xsd:all element 
+    private boolean allElement = false;
+    //04/05/2005
+    
     /** Field documentation */
     private String documentation;
 
@@ -116,6 +122,20 @@ public class CElementDecl //extends ElementDecl
     {
         this.choiceElement = choiceElement;
     }
+    
+    //Chinthana:
+    //setters and getters for allElement
+    
+    public boolean getAllElement()
+    {
+        return this.allElement;
+    }
+
+    public void setAllElement(boolean allElement)
+    {
+        this.allElement = allElement;
+    }
+    //04/05/2005
     
     /**
      * @return

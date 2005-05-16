@@ -35,6 +35,12 @@ public class ElementInfo
     //this variable states whether this element is an xsd:choice or not
     private boolean choiceElement = false;
     //............................................
+    
+    //Chinthana:
+    //this variable states whether this element is an xsd:all or not
+    private boolean allElement = false;
+    //............................................
+    
     public ElementInfo(QName name, Type type)
     {
         this.name = name;
@@ -161,5 +167,20 @@ public class ElementInfo
 		this.choiceElement = newChoiceElement;
 	}
 	//.................................................
+	
+    //Chinthana:
+    //getter and setter for the attribute allElement
+    
+    public boolean getAllElement()
+	{
+		return this.allElement;
+	}
+	
+	public void setAllElement( boolean newAllElement)
+	{
+		this.allElement = newAllElement;
+	}
+	//04/05/2005.................................................
+
 
 }

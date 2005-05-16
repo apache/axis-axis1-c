@@ -1018,6 +1018,11 @@ public class WSDL2Ws
                                 eleinfo.setChoiceElement(elem.getChoiceElement());
                                 //.................................................
                                 
+                                // Chinthana:
+                                // states whether this element is a xsd:all
+                                eleinfo.setAllElement(elem.getAllElement());
+                                //04/05/2005.................................................
+                                
                                 typedata.setTypeNameForElementName(eleinfo);
                             }
                         }

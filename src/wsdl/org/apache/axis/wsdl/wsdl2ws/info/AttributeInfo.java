@@ -30,14 +30,24 @@ public class AttributeInfo extends ParameterInfo
     private boolean isSimpleType = true;
     private boolean isAttribute = false;
     private boolean isOptional = false;
+    //Chinthana:To get Max and Min occures
+    private int maxOccurs = 1;
+    private int minOccurs = 1;
+    //12/05/2005...........................
     private String typeName;
     private String typeNamespace;
     private String className;
     private String attribNameAsMember;
     
+    
     //Dushshantha:
     //this variable states whether the attribute is an xsd:choice
     private boolean choiceElement = false;
+    
+    //Chinthana:
+    //this variable states whether the attribute is an xsd:all
+    private boolean allElement = false;
+    //04/05/2005...............................................
     
     /**
      * @param type
@@ -172,4 +182,53 @@ public class AttributeInfo extends ParameterInfo
     	this.choiceElement=newChoiceElement;
     }
     //.................................................
+    
+    //Chinthana:
+    //getter and setter for allElement
+    
+    public boolean getAllElement()
+    {
+    	return this.allElement;
+    }
+    
+    public void setAllElement(boolean newAllElement)
+    {
+    	this.allElement=newAllElement;
+    }
+    //04/05/2005.................................................
+    //Chinthana: Changes to do modification for handle Min and Max occures
+    /**
+     * @return int
+     */
+    public int getMaxOccurs()
+    {
+        return this.maxOccurs;
+    }
+
+    /**
+     * @return int
+     */
+    public int getMinOccurs()
+    {
+        return this.minOccurs;
+    }
+    /**
+     * Sets the maxOccurs.
+     * @param maxOccurs The maxOccurs to set
+     */
+    public void setMaxOccurs(int maxOccurs)
+    {
+        this.maxOccurs = maxOccurs;
+    }
+
+    /**
+     * Sets the minOccurs.
+     * @param minOccurs The minOccurs to set
+     */
+    public void setMinOccurs(int minOccurs)
+    {
+        this.minOccurs = minOccurs;
+    }
+    //12/05/2005
+
 }

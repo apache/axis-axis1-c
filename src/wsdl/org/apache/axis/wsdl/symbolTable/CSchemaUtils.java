@@ -830,6 +830,11 @@ public class CSchemaUtils extends SchemaUtils
 
                 if (elem != null)
                 {
+                	//Chinthana
+                	//indicates that this is an "all" element
+                	elem.setAllElement(true); 
+                	if(elem.getAllElement())
+                	//04/05/2005.................................
                     v.add(elem);
                 }
             }
