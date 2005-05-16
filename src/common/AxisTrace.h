@@ -113,7 +113,7 @@ public:
 		int type, unsigned len, void *value);
     void (*m_traceCatch)(const char *className, const char *methodName, const void* that, int catchIndex,
 		int type, unsigned len, void *value);
-    bool m_traceOn;
+    bool (*m_traceOn) ();
 };
 
 #ifdef AXISTRACE_LIBRARY
