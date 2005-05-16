@@ -80,6 +80,14 @@ public class ParmHeaderFileWriter extends ParamWriter
                 	this.writer.write(" : public SoapFaultException");
                 this.writer.write("\n{\n");
                 writeAttributes();
+                
+                /**
+                 * Dushshantha:
+                 * Call writeGetSetMethods() method.
+                 */
+                
+                writeGetSetMethods();
+                //..................................
                 writeConstructors();
                 writeDestructors();
                 this.writer.write("};\n\n");
@@ -332,12 +340,62 @@ public class ParmHeaderFileWriter extends ParamWriter
             throw new WrapperFault(e);
         }
     }
+    
+   /**
+    * Dushshantha:
+    * This method writes getters and setters of the attributes.
+    */
+    protected void writeGetSetMethods() throws WrapperFault
+    {
+        if (type.isArray())
+        {
+            return;
+        }
+        try
+        {
+            for (int i = 0; i < attribs.length; i++)
+            {
+                /**
+                 * Dushshantha:
+                 * Write setter
+                 */
+            	
+            	writer.write(
+                    "\n\t"
+                        + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+                        + " get"
+                        + attribs[i].getParamNameWithoutSymbols()
+                        + "();\n");
+            	
+            	/**
+                 * Dushshantha:
+                 * Write getter
+                 */
+            	
+            	writer.write(
+                        "\t"
+                            + "void set"
+                            + attribs[i].getParamNameWithoutSymbols()
+                            + "(" 
+							+ getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+                            + " InValue);\n");
+                
+                
+            }
+        }
+        catch (IOException e)
+        {
+            throw new WrapperFault(e);
+        }
+    }
+    
+    
 
     protected void writeConstructors() throws WrapperFault
     {
         try
         {
-            writer.write("\t" + classname + "();\n");
+            writer.write("\n\t" + classname + "();\n");
         }
         catch (IOException e)
         {

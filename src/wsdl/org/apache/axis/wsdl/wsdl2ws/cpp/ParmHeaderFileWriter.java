@@ -71,6 +71,8 @@ public class ParmHeaderFileWriter extends ParamWriter
            		this.writer.write(" : public SoapFaultException");
             this.writer.write("\n{\n");
 
+            writeGetSetMethods();
+            
             writeAttributes();
             writeConstructors();
             writeDestructors();
@@ -123,6 +125,56 @@ public class ParmHeaderFileWriter extends ParamWriter
             throw new WrapperFault(e);
         }
     }
+    
+    
+    /**
+     * Dushshantha:
+     * This method writes getters and setters of the attributes.
+     */
+     protected void writeGetSetMethods() throws WrapperFault
+     {
+         if (type.isArray())
+         {
+             return;
+         }
+         try
+         {
+             for (int i = 0; i < attribs.length; i++)
+             {
+                 /**
+                  * Dushshantha:
+                  * Write setter
+                  */
+             	
+             	writer.write(
+                     "\t"
+                         + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+                         + " get"
+                         + attribs[i].getParamNameWithoutSymbols()
+                         + "();\n");
+             	
+             	/**
+                  * Dushshantha:
+                  * Write getter
+                  */
+             	
+             	writer.write(
+                         "\t"
+                             + "void set"
+                             + attribs[i].getParamNameWithoutSymbols()
+                             + "(" 
+ 							+ getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+                             + " InValue);\n\n");
+                 
+                 
+             }
+         }
+         catch (IOException e)
+         {
+             throw new WrapperFault(e);
+         }
+     }
+     
 
     protected void writeConstructors() throws WrapperFault
     {

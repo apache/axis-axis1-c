@@ -83,6 +83,8 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 				writer.write("int Axis_GetSize_"+typeName+"();\n\n");
 			}	
 		}
+		
+		writeGetSetMethods();
 		writeSerializeGlobalMethod();
 		writeDeSerializeGlobalMethod();
 		writeCreateGlobalMethod();
@@ -92,6 +94,88 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 			throw new WrapperFault(e);
 		}
 	}
+	
+	/**
+	 * Dushshantha:
+	 * following method writes getters and setters for the attributes
+	 */
+	
+	private void writeGetSetMethods() throws WrapperFault{
+		/**
+		 * Dushshantha:
+		 * writing getter
+		 */
+		
+		if (type.isArray())
+        {
+            return;
+        }
+        try
+        {
+            for (int i = 0; i < attribs.length; i++){
+            
+                /**
+                 * Dushshantha:
+                 * Write getter
+                 */
+            	
+            	writer.write(
+                    "\n"
+                        + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+                        + " " 
+						+ classname
+						+ "::get"
+                        + attribs[i].getParamNameWithoutSymbols()
+                        + "()\n{\n");
+            	
+            	writer.write(
+                     "\t"
+            			+ "return "
+						+ attribs[i].getParamNameWithoutSymbols()
+						+ " ; \n}\n");
+            			
+            				
+            	/**
+                 * Dushshantha:
+                 * Write setter
+                 */
+            	
+            	writer.write(
+                        "\n"
+                            + "void "
+							+ classname 
+							+ "::set"
+                            + attribs[i].getParamNameWithoutSymbols()
+                            + "(" 
+							+ getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+                            + " InValue)\n{\n");
+            	
+            	writer.write(
+                        "\t"
+               			+ attribs[i].getParamNameWithoutSymbols()
+   						+ " = InValue ; \n");
+            	
+            	if (attribs[i].getChoiceElement()){
+            		for (int j = 0; j < attribs.length; j++){
+            			if ((attribs[j].getChoiceElement())&& (j!=i))
+            				writer.write(
+                                    "\t"
+                           			+ attribs[j].getParamNameWithoutSymbols()
+               						+ " = NULL ; \n");
+            		}
+            	}
+            	
+            	writer.write("}\n");
+                                           
+            }
+        }
+        catch (IOException e)
+        {
+            throw new WrapperFault(e);
+        }
+		
+	}
+	
 	private void writeGetSizeGlobalMethod() throws IOException{
 		writer.write("/*\n");
 		writer.write(" * This static method gives the size of "+classname+" type of object\n");
