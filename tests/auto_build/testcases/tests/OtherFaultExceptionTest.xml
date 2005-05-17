@@ -1,0 +1,13 @@
+<test>
+    <name>OtherFaultException</name>
+    <description>OtherFaultException</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>OtherFaultExceptionTest.cpp</clientCode>
+    <wsdl>OtherFaultException.wsdl</wsdl>
+    <expected>
+        <output>
+            OtherFaultExceptionTest.cpp.out
+        </output>
+    </expected>
+	<endpoint>http://localhost:80/axis/MathOpsDoc</endpoint>
+</test>
