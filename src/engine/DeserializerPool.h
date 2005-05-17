@@ -21,12 +21,7 @@
 #define AXIS_DESERIALIZERPOOL_H__OF_AXIS_INCLUDED_
 
 #include "SharedObject.h"
-#ifdef USER_DESERIALIZER
-#include <axis/IWrapperSoapDeSerializer.hpp>
-extern void* GetUserDeSerializer();
-#else
 #include "../soap/SoapDeSerializer.h"
-#endif
 #include <axis/GDefine.hpp>
 #include <list>
 

@@ -74,11 +74,7 @@ int DeserializerPool::getInstance (IWrapperSoapDeSerializer** ppDZ)
     }
     else
     {
-#ifdef USER_DESERIALIZER
-        *ppDZ = (IWrapperSoapDeSerializer*)GetUserDeSerializer();
-#else
         *ppDZ = new SoapDeSerializer ();
-#endif                
         if (AXIS_SUCCESS != ((SoapDeSerializer*)(*ppDZ))->init ())
         {
             delete* ppDZ;
