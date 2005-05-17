@@ -23,14 +23,18 @@
 // =============================================================
 // Default paths to shared library/DLLs and files
 // =============================================================
-#define PLATFORM_XMLPARSER_PATH      "libaxis_xmlparser.so"
-#define PLATFORM_TRANSPORTHTTP_PATH  "libhttp_transport.so"
+
+#define PLATFORM_DEFAULT_DEPLOY_PATH ""
+
+#define PLATFORM_XMLPARSER_PATH      PLATFORM_DEFAULT_DEPLOY_PATH "libaxis_xmlparser.so"
+#define PLATFORM_TRANSPORTHTTP_PATH  PLATFORM_DEFAULT_DEPLOY_PATH "libhttp_transport.so"
+#define PLATFORM_CHANNEL_PATH        PLATFORM_DEFAULT_DEPLOY_PATH "libhttp_channel.so"
+#define PLATFORM_SSLCHANNEL_PATH     PLATFORM_DEFAULT_DEPLOY_PATH "Unknown"
 
 #define PLATFORM_LOG_PATH            "/usr/local/axiscpp_deploy/log/AxisLog"
 #define PLATFORM_CLIENTLOG_PATH      "/usr/local/axiscpp_deploy/log/AxisClientLog"
 #define PLATFORM_CONFIG_PATH         "/etc/axiscpp.conf"
-#define PLATFORM_CHANNEL_PATH        "libhttp_channel.so"
-#define PLATFORM_SSLCHANNEL_PATH     "Unknown"
+
 #define PLATFORM_SECUREINFO			 ""
 
 // =============================================================
@@ -44,7 +48,7 @@
 #define PLATFORM_UNLOADLIB         os400_dlclose
 #define PLATFORM_GETPROCADDR       os400_dlsym
 #define PLATFORM_LOADLIBEXIT()
-#define PLATFORM_LOADLIB_ERROR     ""
+#define PLATFORM_LOADLIB_ERROR     strerror(errno)
 
 extern void	*os400_dlopen(const char *);
 extern void	*os400_dlsym(void *, const char *);
@@ -57,16 +61,23 @@ extern int   os400_dlclose(void *);
 // STRTOASC is to translate single byte 'native' character representation to ASCII
 // ASCTOSTR is to translate single byte ascii representation to 'native' character (EBCDIC)
 // CANNOT be used with constants
-extern char*      cvtSingleByteEbcdicToAsciiStr( char* );
-extern char*      cvtSingleByteAsciiToEbcdicStr( char* );
-#define PLATFORM_STRTOASC( x ) cvtSingleByteEbcdicToAsciiStr( (char*)(x) )
-#define PLATFORM_ASCTOSTR( x ) cvtSingleByteAsciiToEbcdicStr( (char*)(x) )
+extern char*      strtoasc( char* );
+extern char*      asctostr( char* );
+#define PLATFORM_STRTOASC( x ) strtoasc( (char*)(x) )
+#define PLATFORM_ASCTOSTR( x ) asctostr( (char*)(x) )
+
+// reference to ebcdic to ascii conversion table 
+extern const char EBCDICtoASCII[256];
+
+// Following returns a buffer that must be free'ed by caller. 
+extern char *toUTF8(char *b, int len);
 
 // =============================================================
 // Miscellaneous
 // =============================================================
 #include <sys/time.h>
 #include <unistd.h>
+#include <errno.h>
 #define PLATFORM_SLEEP(x) sleep(0);
 
 /**
@@ -75,7 +86,7 @@ extern char*      cvtSingleByteAsciiToEbcdicStr( char* );
  * and that it returns a long
  * @return long the lsat error message for this thread
  */
-#define GETLASTERROR -1;
+#define GETLASTERROR errno;
 
 
 /**
@@ -84,7 +95,7 @@ extern char*      cvtSingleByteAsciiToEbcdicStr( char* );
  * @return the error message. NOTE: The caller is responsible for deleting the returned string
  */
 #include <string>
-#define PLATFORM_GET_ERROR_MESSAGE(errorNumber) new string();
+#define PLATFORM_GET_ERROR_MESSAGE(errorNumber) new string(strerror(errorNumber));
 
 /**
  * type to be used for 64bit integers
