@@ -232,9 +232,10 @@ public abstract class ParamWriter extends BasicFileWriter
                  * Dushshantha:
                  * if the element is a choice element,
                  * it should be defined as a pointer to an array.
+                 * Chinthana: Same changes will need for the 'all' element
                  */
             	
-            	if(attrib.getChoiceElement())
+            	if(attrib.getChoiceElement() || attrib.getAllElement())
                 	return CUtils.getBasicArrayNameforType(attrib.getTypeName())+"*";
                 else
                 	return CUtils.getBasicArrayNameforType(attrib.getTypeName());
@@ -256,8 +257,9 @@ public abstract class ParamWriter extends BasicFileWriter
              * Dushshantha:
              * If a simple type attribute is a choice element,
              * it should be defined as a pointer
+             * Chinthana: Same changes will need for the 'all' element
              */
-            	if(attrib.getChoiceElement())
+            	if(attrib.getChoiceElement() || attrib.getAllElement())
             	{
             		String typename = attrib.getTypeName();
             		if (typename.equals("xsd__string")

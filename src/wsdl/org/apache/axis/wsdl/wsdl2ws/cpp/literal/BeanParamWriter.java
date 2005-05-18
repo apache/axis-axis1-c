@@ -286,10 +286,12 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 			
 			if(attribs[i].getAllElement())
 			{
-				writer.write("\tif(param->" + attribs[i].getParamNameAsMember()+ ")\n\t{\n\t");
-					
+				if(attribs[i].getMinOccurs() == 0)
+				{
+					writer.write("\tif(param->" + attribs[i].getParamNameAsMember()+ ")\n\t{\n\t");
+				}
 			}
-			//12/05/2005........................................................................
+			//17/05/2005........................................................................
 
 			if(attribs[i].isAnyType())
 			{
@@ -306,9 +308,10 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 					 *Dushshantha:
 					 *If the element is a Choice,
 					 *It should be treated as a pointer to an array. 
+					 *Chinthana: This is the same in 'all' element
 					 */
 					
-					if(attribs[i].getChoiceElement())
+					if(attribs[i].getChoiceElement() || attribs[i].getAllElement())
 						writer.write("\tpSZ->serializeBasicArray((Axis_Array*)(param->"+attribs[i].getParamName()+"), Axis_URI_" + classname + ","+CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+", \""+attribs[i].getParamNameAsSOAPElement()+"\");\n"); 
 					else
 						writer.write("\tpSZ->serializeBasicArray((Axis_Array*)(&param->"+attribs[i].getParamName()+"), Axis_URI_" + classname + ","+CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+", \""+attribs[i].getParamNameAsSOAPElement()+"\");\n"); 
@@ -402,9 +405,10 @@ public class BeanParamWriter extends ParamCPPFileWriter{
  				  * If the simple type is a choice 
  				  * it is handled as a pointer variable.
  				  * These variables should be defined as pointers in the header file.
+ 				  * Chinthana: This is the same in 'all' element
  				  */
  				 					
- 					if(attribs[i].getChoiceElement())
+ 					if(attribs[i].getChoiceElement() || attribs[i].getAllElement())
  						writer.write("\tpSZ->serializeAsElement(\""+attribs[i].getSOAPElementNameAsString()+"\", Axis_URI_" + classname + ", (void*)(param->"+attribs[i].getParamNameWithoutSymbols()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
  					else
  						writer.write("\tpSZ->serializeAsElement(\""+attribs[i].getSOAPElementNameAsString()+"\", Axis_URI_" + classname + ", (void*)&(param->"+attribs[i].getParamNameWithoutSymbols()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");	
@@ -432,8 +436,11 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 			
 			//Chinthana: end if 
 			if(attribs[i].getAllElement())
-				writer.write("\t}\n");
-
+			{
+				if(attribs[i].getMinOccurs() == 0)
+					writer.write("\t}\n");
+			}
+			//17/05/2005.........................................
 		
 		}
 		writer.write("\treturn AXIS_SUCCESS;\n");
@@ -472,8 +479,7 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 		
 		boolean peekCalled=false;
         boolean firstIfWritten=false;
-        writer.write("\tconst char* allName = NULL;\n");
-        writer.write("\tbool peekCalled = false;\n");
+        boolean foundAll = false;
 
 		for (int i = 0; i < attribs.length; i++)
 		{
@@ -509,6 +515,13 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 			{
 				if(attribs[i].getMinOccurs() == 0)
 				{
+					if(!foundAll)
+					{
+				        writer.write("\tconst char* allName = NULL;\n");
+				        writer.write("\tbool peekCalled = false;\n");
+				        foundAll = true;
+					}
+
 					writer.write("\n\tif(!peekCalled)\n\t{\n\t");
 					writer.write("\tallName=pIWSDZ->peekNextElementName();\n");
 					writer.write("\t\tpeekCalled = true;\n");
@@ -550,9 +563,10 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 						 *Dushshantha:
 						 *If the element is a Choice,
 						 *It should be treated as a pointer to an array. 
+						 *Chinthana: This is the same in 'all' element
 						 */
 						
-						if(attribs[i].getChoiceElement())
+						if(attribs[i].getChoiceElement() || attribs[i].getAllElement())
 							writer.write("\tparam->"+attribs[i].getParamNameAsMember()+"->m_Array = ("+attribs[i].getTypeName()+"**)new "+attribs[i].getTypeName()+"*[array.m_Size];\n");
 						else
 							writer.write("\tparam->"+attribs[i].getParamNameAsMember()+".m_Array = ("+attribs[i].getTypeName()+"**)new "+attribs[i].getTypeName()+"*[array.m_Size];\n");
@@ -562,9 +576,11 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 					 *Dushshantha:
 					 *If the element is a Choice,
 					 *It should be treated as a pointer to an array. 
+					 *Chinthana: This is the same in 'all' element
 					 */
 					
-					if(attribs[i].getChoiceElement()){
+					if(attribs[i].getChoiceElement() || attribs[i].getAllElement())
+					{
 						writer.write("\tparam->"+attribs[i].getParamNameAsMember()+"->m_Size = array.m_Size;\n\n");
 						writer.write("\tmemcpy( param->"+attribs[i].getParamNameAsMember()+"->m_Array, array.m_Array, sizeof( "+attribs[i].getTypeName()+") * array.m_Size);\n");
 					}
@@ -647,8 +663,9 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 			      * If the simple type is a choice 
 			      * it is handled as a pointer variable.
 			      * These variables should be defined as pointers in the header file.
+			      * Chinthana: This is the same in 'all' element
 			      */
-					if(attribs[i].getChoiceElement())
+					if(attribs[i].getChoiceElement() || attribs[i].getAllElement())
 						writer.write("\tparam->"+attribs[i].getParamNameAsMember()+" = pIWSDZ->"+CUtils.getParameterGetValueMethodName(attribs[i].getTypeName(), attribs[i].isAttribute())+"( \""+ soapTagName +"\",0);\n");
 					else{	
 						writer.write("\t" + attribs[i].getTypeName() + " * " + attribs[i].getParamNameAsMember()+ " = NULL;\n");
@@ -748,9 +765,10 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 				 * If the element is a Choice,
 				 * it sould be treated as a pointer to an array.
 				 * Memory should be allocated for that.
+				 * Chinthana: This is the same in 'all' element
 				 */
 				
-				if(attribs[i].getChoiceElement())
+				if(attribs[i].getChoiceElement() || attribs[i].getAllElement())
 				{
 					writer.write("\t"+attribs[i].getParamNameAsMember()+" = new "+CUtils.getBasicArrayNameforType(attribs[i].getTypeName())+"();\n");
 					writer.write("\t"+attribs[i].getParamNameAsMember()+"->m_Array = 0;\n");

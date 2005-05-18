@@ -319,6 +319,19 @@ public class BeanParamWriter extends ParamCPPFileWriter
 				writer.write("(param->" + attribs[i].getParamNameAsMember()+ ")\n\t{\n\t");
 			}
 			//..............................................................................
+			
+			//Chinthana:
+			//if the attribute is a 'all' following should do
+			
+			if(attribs[i].getAllElement())
+			{
+				if(attribs[i].getMinOccurs() == 0)
+				{
+					writer.write("\tif(param->" + attribs[i].getParamNameAsMember()+ ")\n\t{\n\t");
+				}
+			}
+			//17/05/2005........................................................................
+
 			if (attribs[i].isAnyType())
             {
                 writer.write("\tpSZ->serializeAnyObject(param->any);\n");
@@ -443,7 +456,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                         		 * if the element is a choice element,
                         		 * it should be treated as a pointer
                         		 */
-	                            if (attribs[i].getChoiceElement())
+	                            if (attribs[i].getChoiceElement() || attribs[i].getAllElement())
 	                            	writer.write(
 	                            			"\tpSZ->serializeAsElement(\""
 	                            			+ attribs[i].getParamName()
@@ -481,6 +494,14 @@ public class BeanParamWriter extends ParamCPPFileWriter
 			
 			if(attribs[i].getChoiceElement())
 				writer.write("\t}\n");
+			
+			//Chinthana: end if 
+			if(attribs[i].getAllElement())
+			{
+				if(attribs[i].getMinOccurs() == 0)
+					writer.write("\t}\n");
+			}
+			//17/05/2005.........................................
 
 			
 		}
@@ -529,6 +550,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
 		//const char* choiceName=pIWSDZ->peekNextElementName(); has been wriiten in the generated cade.
 		boolean peekCalled = false;
         boolean firstIfWritten = false;
+        boolean foundAll = false;
 
         for (int i = 0; i < attribs.length; i++)
         {
@@ -559,6 +581,28 @@ public class BeanParamWriter extends ParamCPPFileWriter
             }
         	//.............................................
             
+			//Chinthana:
+			//if the attribute is a 'all' construct we have to check Min occures
+			if(attribs[i].getAllElement())
+			{
+				if(attribs[i].getMinOccurs() == 0)
+				{
+					if(!foundAll)
+					{
+				        writer.write("\tconst char* allName = NULL;\n");
+				        writer.write("\tbool peekCalled = false;\n");
+				        foundAll = true;
+					}
+
+					writer.write("\n\tif(!peekCalled)\n\t{\n\t");
+					writer.write("\tallName=pIWSDZ->peekNextElementName();\n");
+					writer.write("\t\tpeekCalled = true;\n");
+					writer.write("\t}\n");
+					writer.write("\tif(strcmp(allName,\"" + attribs[i].getParamNameAsMember()+ "\")==0)\n\t{\n\t");
+					writer.write("\tpeekCalled = false;\n\t");
+				}
+			}
+			//17/05/2005...........................................................
             
         	if (attribs[i].isAnyType())
             {
@@ -656,7 +700,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     		 * it should be treated as a pointer.
                     		 */
                     		
-                    		if(attribs[i].getChoiceElement())
+                    		if(attribs[i].getChoiceElement() || attribs[i].getAllElement())
                     			writer.write(
                                         "\tparam->"
                                             + attribs[i].getParamNameAsMember() + " = (pIWSDZ->"
@@ -712,6 +756,14 @@ public class BeanParamWriter extends ParamCPPFileWriter
 			
 			if(attribs[i].getChoiceElement())
 				writer.write("\t}\n");
+			
+			//Chinthana: end if
+			if(attribs[i].getAllElement())
+			{
+				if(attribs[i].getMinOccurs() == 0)
+					writer.write("\t}\n");
+			}
+			//17/05/2005.........................................
 		}
         writer.write("\treturn pIWSDZ->getStatus();\n");
         writer.write("}\n");
