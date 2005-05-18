@@ -440,7 +440,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
             writer.write("\t" + outparamType);
             if (!returntypeisarray 
         		&& (!returntypeissimple
-            		|| (!returntypeissimple
+            		|| (returntypeissimple		//Chinthana:This has been changed because XSDElementNill Test failed.
         				&& returntype.isNillable()
 						&& !(retType.getLanguageSpecificName().equals("xsd__string")
 							|| retType.getLanguageSpecificName().equals("xsd__anyURI")
