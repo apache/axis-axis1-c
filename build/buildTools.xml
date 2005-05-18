@@ -102,11 +102,11 @@
 					<linker refid="SolarisLinker"/>
 					<linker refid="LinuxLinker"/>
 					<linker refid="VisualC++Linker"/>
-			            <linker extends="OS400Linker">
-                                 <linkerarg value="-qDUPPROC"/>
-                                 <linkerarg value="-qDUPVAR"/>
-                                 <linkerarg location="end" value="${dir.bin}/${clientLibraryName}.so"/>
-                              </linker>
+			        <linker extends="OS400Linker">
+                        <linkerarg value="-qDUPPROC"/>
+                        <linkerarg value="-qDUPVAR"/>
+                        <linkerarg location="end" value="${dir.bin}/lib${clientLibraryName}.so"/>
+                    </linker>
 					<!-- Additional library of the Axis Client Library -->
 					<libset dir="${dir.bin}" libs="${clientLibraryName}" unless="os400"/>
 					<!-- Files to be compiled -->
