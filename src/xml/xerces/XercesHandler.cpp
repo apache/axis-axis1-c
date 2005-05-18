@@ -21,6 +21,7 @@
 #ifdef WIN32
 #pragma warning (disable : 4786)
 #endif
+#include "../../platforms/PlatformAutoSense.hpp"
 
 #include "XercesHandler.h"
 #include <xercesc/sax2/Attributes.hpp>
@@ -245,10 +246,8 @@ AnyElement* XercesHandler::getAnyElement()
 {
 	if (m_bGetPrefixMappings)
 	{
-		
 		if (m_CurrPrefixMappings.size() > 0)
 		{
-			
 			map<const AxisChar*, const AxisChar*>::iterator it = 
 				m_CurrPrefixMappings.begin();
 			m_pPrefixMappingElement->m_pchNameOrValue = (*it).first;
@@ -260,7 +259,6 @@ AnyElement* XercesHandler::getAnyElement()
 		}
 		else if (m_bStartElementWaiting)
 		{
-			
 			m_pCurrElement = m_pNextElement;
 			m_bStartElementWaiting = false;
 		}
@@ -303,5 +301,4 @@ void XercesHandler::reset()
 		m_CurrPrefixMappings.erase(it);
 	}
 }
-
 
