@@ -81,12 +81,19 @@
 			<compiler refid="VisualC++"/>
 			<compiler refid="Linuxgcc"/>
 			<compiler refid="AIXxlc"/>
+            <compiler extends="OS400icc"> 
+ 			   <compilerarg value="-g"/>
+            </compiler>
 			<!-- Linkers -->
 			<linker refid="VisualC++Linker"/>
 			<linker refid="LinuxLinker"/>
 			<linker refid="AIXExecutableLinker"/>
+		    <linker extends="OS400ExecutableLinker">
+  		         <linkerarg location="end" value="${dir.lib}/lib${clientLibraryName}.so"/>
+		    </linker>
+
 			<!-- Axis Client .lib file location, or UNIX shared object -->
-			<libset dir="${dir.lib}" libs="${clientLibraryName}"/>
+			<libset dir="${dir.lib}" libs="${clientLibraryName}" unless="os400"/>
 			<!-- Files to be compiled -->
 			<includepath path="${dir.include}"/>
 			<fileset dir="${test.directory}">
@@ -104,13 +111,17 @@
 			<compiler refid="VisualC++"/>
 			<compiler refid="Linuxgcc"/>
 			<compiler refid="AIXxlc"/>
+			<compiler refid="OS400icc"/>
 			<!-- Linkers -->
 			<linker refid="VisualC++Linker"/>
 			<linker refid="LinuxLinker"/>
 			<linker refid="AIXExecutableLinker"/>
+		    <linker extends="OS400ExecutableLinker">
+  		         <linkerarg location="end" value="${dir.lib}/lib${clientLibraryName}.so"/>
+		    </linker>
 			<!-- Axis Client .lib file location, or UNIX shared object -->
-			<libset dir="${dir.lib}" libs="${clientLibraryName}"/>
-			<libset dir="${test.directory}" libs="${libraryName}"/>
+			<libset dir="${dir.lib}" libs="${clientLibraryName}" unless="os400"/>
+			<libset dir="${test.directory}" libs="${libraryName}" unless="os400"/>
 			<!-- Files to be compiled -->
 			<includepath path="${dir.include}"/>
 			<fileset dir="${test.directory}">
