@@ -14,6 +14,8 @@
  *   limitations under the License.
  */
 
+#include "../platforms/PlatformAutoSense.hpp"
+
 /* base64 encoder/decoder. Originally part of main/util.c
  * but moved here so that support/ab and apr_sha1.c could
  * use it. This meant removing the apr_palloc()s and adding
@@ -21,14 +23,11 @@
  */
 
 #include "apr_base64.h"
-#if APR_CHARSET_EBCDIC
-#include "apr_xlate.h"
-#endif                /* APR_CHARSET_EBCDIC */
 
 /* aaaack but it's fast and const should make it shared text page. */
 static const unsigned char pr2six[256] =
 {
-    #if !APR_CHARSET_EBCDIC
+    #ifndef __OS400__
         /* ASCII table */
         64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
         64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
@@ -46,7 +45,7 @@ static const unsigned char pr2six[256] =
         64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
         64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
         64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64
-    #else /* APR_CHARSET_EBCDIC */
+    #else /* __OS400__ */
         /* EBCDIC table */
         64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
         64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
@@ -67,49 +66,29 @@ static const unsigned char pr2six[256] =
     #endif /* APR_CHARSET_EBCDIC */
 };
 
-#if APR_CHARSET_EBCDIC
-static apr_xlate_t *xlate_to_ebcdic;
-static unsigned char os_toascii[256];
+#ifdef __OS400__
 
-APU_DECLARE(apr_status_t) apr_base64init_ebcdic(apr_xlate_t *to_ascii,
-                                             apr_xlate_t *to_ebcdic)
-{
-    int i;
-    apr_size_t inbytes_left, outbytes_left;
-    apr_status_t rv;
-    int onoff;
-    
-    /* Only single-byte conversion is supported. */
-    rv = apr_xlate_get_sb(to_ascii, &onoff);
-    if (rv)
-    {
-        return rv;
-    }
-    if (!onoff)
-    { /* If conversion is not single-byte-only */
-        return APR_EINVAL;
-    }
-    rv = apr_xlate_get_sb(to_ebcdic, &onoff);
-    if (rv)
-    {
-        return rv;
-    }
-    if (!onoff)
-    { /* If conversion is not single-byte-only */
-        return APR_EINVAL;
-    }
-    xlate_to_ebcdic = to_ebcdic;
-    for (i = 0; i < sizeof(os_toascii); i++)
-    {
-        os_toascii[i] = i;
-    }
-    inbytes_left = outbytes_left = sizeof(os_toascii);
-    apr_xlate_conv_buffer(to_ascii, os_toascii, &inbytes_left,
-                          os_toascii, &outbytes_left);
+static unsigned char os_toascii[256] = {
+/* 0    1    2    3    4    5    6    7    8    9    A    B    C    D    E    F */
+   0,   1,   2,   3, 156,   9, 134, 127, 151, 141, 142,  11,  12,  13,  14,  15,    
+  16,  17,  18,  19, 157, 133,   8, 135,  24,  25, 146, 143,  28,  29,  30,  31,    
+ 128, 129, 130, 131, 132,  10,  23,  27, 136, 137, 138, 139, 140,   5,   6,   7,    
+ 144, 145,  22, 147, 148, 149, 150,   4, 152, 153, 154, 155,  20,  21, 158,  26,    
+  32, 160, 226, 228, 224, 225, 227, 229, 231, 241, 162,  46,  60,  40,  43, 124,    
+  38, 233, 234, 235, 232, 237, 238, 239, 236, 223,  33,  36,  42,  41,  59, 172,    
+  45,  47, 194, 196, 192, 193, 195, 197, 199, 209, 166,  44,  37,  95,  62,  63,    
+  248, 201, 202, 203, 200, 205, 206, 207, 204,  96,  58,  35,  64,  39,  61,  34,   
+  216,  97,  98,  99, 100, 101, 102, 103, 104, 105, 171, 187, 240, 253, 254, 177,   
+  176, 106, 107, 108, 109, 110, 111, 112, 113, 114, 170, 186, 230, 184, 198, 164,   
+  181, 126, 115, 116, 117, 118, 119, 120, 121, 122, 161, 191, 208, 221, 222, 174,   
+   94, 163, 165, 183, 169, 167, 182, 188, 189, 190,  91,  93, 175, 168, 180, 215,   
+  123,  65,  66,  67,  68,  69,  70,  71,  72,  73, 173, 244, 246, 242, 243, 245,   
+  125,  74,  75,  76,  77,  78,  79,  80,  81,  82, 185, 251, 252, 249, 250, 255,   
+   92, 247,  83,  84,  85,  86,  87,  88,  89,  90, 178, 212, 214, 210, 211, 213,   
+   48,  49,  50,  51,  52,  53,  54,  55,  56,  57, 179, 219, 220, 217, 218, 159
+};
 
-    return APR_SUCCESS;
-}
-#endif /* APR_CHARSET_EBCDIC */
+#endif /* __OS400__ */
 
 APU_DECLARE(int) apr_base64_decode_len(const char *bufcoded)
 {
@@ -128,17 +107,8 @@ APU_DECLARE(int) apr_base64_decode_len(const char *bufcoded)
 
 APU_DECLARE(int) apr_base64_decode(char *bufplain, const char *bufcoded)
 {
-#if APR_CHARSET_EBCDIC
-    apr_size_t inbytes_left, outbytes_left;
-#endif                /* APR_CHARSET_EBCDIC */
     int len;
-    
     len = apr_base64_decode_binary((unsigned char *) bufplain, bufcoded);
-#if APR_CHARSET_EBCDIC
-    inbytes_left = outbytes_left = len;
-    apr_xlate_conv_buffer(xlate_to_ebcdic, bufplain, &inbytes_left,
-                          bufplain, &outbytes_left);
-#endif                /* APR_CHARSET_EBCDIC */
     bufplain[len] = '\0';
     return len;
 }
@@ -206,10 +176,9 @@ APU_DECLARE(int) apr_base64_encode_len(int len)
 
 APU_DECLARE(int) apr_base64_encode(char *encoded, const char *string, int len)
 {
-#if !APR_CHARSET_EBCDIC
-    return apr_base64_encode_binary(encoded, (const unsigned char *) string, 
-        len);
-#else /* APR_CHARSET_EBCDIC */
+#ifndef __OS400__
+    return apr_base64_encode_binary(encoded, (const unsigned char *) string, len);
+#else /* __OS400__ */
     int i;
     char *p;
 
@@ -242,7 +211,7 @@ APU_DECLARE(int) apr_base64_encode(char *encoded, const char *string, int len)
 
     *p++ = '\0';
     return p - encoded;
-#endif                /* APR_CHARSET_EBCDIC */
+#endif                /* __OS400__ */
 }
 
 /* This is the same as apr_base64_encode() except on EBCDIC machines, where
