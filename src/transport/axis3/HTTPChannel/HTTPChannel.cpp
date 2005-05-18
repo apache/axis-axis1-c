@@ -53,8 +53,8 @@ HTTPChannel::HTTPChannel()
 
 HTTPChannel::~HTTPChannel()
 {
-// If the socket value is not invalid, then close the socket before
-// deleting the Channel object.
+	// If the socket value is not invalid, then close the socket before
+	// deleting the Channel object.
 	if( m_Sock != INVALID_SOCKET)
 	{
 		CloseChannel();
@@ -187,9 +187,9 @@ const IChannel & HTTPChannel::operator >> (const char * msg)
 {
     if (INVALID_SOCKET == m_Sock)
     {
-// Error - Reading cannot be done without having a open socket Input
-//         streaming error on undefined channel; please open the
-//		   channel first
+		// Error - Reading cannot be done without having a open socket Input
+		//         streaming error on undefined channel; please open the
+		//		   channel first
 
 		m_LastError = "No open socket to read from.";
 
@@ -267,12 +267,12 @@ const IChannel & HTTPChannel::operator >> (const char * msg)
 
 const IChannel & HTTPChannel::operator << (const char * msg)
 {
-// Check that the Tx/Rx sockets are valid (this will have been done if the
-// application has called the open method first.
+	// Check that the Tx/Rx sockets are valid (this will have been done if the
+	// application has called the open method first.
     if( INVALID_SOCKET == m_Sock)
     {
-// Error - Writing cannot be done without having a open socket to
-//         remote end.  Throw an exception.
+		// Error - Writing cannot be done without having a open socket to
+		//         remote end.  Throw an exception.
 
 		m_LastError = "No valid socket open";
 
@@ -285,8 +285,8 @@ const IChannel & HTTPChannel::operator << (const char * msg)
 
     if( (nByteSent = send( m_Sock, msg, size, MSG_DONTROUTE)) == SOCKET_ERROR)
     {
-// Output streaming error while writing data.  Close the channel and
-// throw an exception.
+		// Output streaming error while writing data.  Close the channel and
+		// throw an exception.
 		CloseChannel();
 
 		ReportError( "Channel error", "while writing data");
@@ -408,10 +408,10 @@ void HTTPChannel::setProxy( const char * pcProxyHost, unsigned int uiProxyPort)
 
 bool HTTPChannel::OpenChannel()
 {
-// This method is common to all channel implementations
+	// This method is common to all channel implementations
 	bool	bSuccess = (bool) AXIS_FAIL;
 
-// Create the Client (Rx) side first.
+	// Create the Client (Rx) side first.
 #ifdef IPV6
     struct addrinfo		aiHints;
 	struct addrinfo *	paiAddrInfo;
@@ -504,18 +504,19 @@ bool HTTPChannel::OpenChannel()
 		return bSuccess;
 	}
 
-// If the transport was initilised, then create client and server sockets.
+	// If the transport was initilised, then create client and server sockets.
     sockaddr_in	clAddr;
+    memset(&clAddr, 0, sizeof(sockaddr_in));
 
 	clAddr.sin_family = AF_INET;	// AF_INET (address family Internet).
 	clAddr.sin_port = 0;			// No Specify Port required.
 	clAddr.sin_addr.s_addr = INADDR_ANY;
 
-// Attempt to bind the client to the client socket.
+	// Attempt to bind the client to the client socket.
 	if( bind( m_Sock, (struct sockaddr *) &clAddr, sizeof( clAddr)) == SOCKET_ERROR)
 	{
-// Error whilst binding. Cannot open a channel to the remote end,
-// shutting down the channel and then throw an exception.
+		// Error whilst binding. Cannot open a channel to the remote end,
+		// shutting down the channel and then throw an exception.
 		CloseChannel();
 
 		m_LastError = "Error whilst binding. Cannot open a channel to the remote end,";
@@ -523,20 +524,21 @@ bool HTTPChannel::OpenChannel()
 		return bSuccess;
 	}
 
-// Although the above fragment makes use of the bind() API, it would be
-// just as effective to skip over this call as there are no specific
-// local port ID requirements for this client. The only advantage that
-// bind() offers is the accessibility of the port which the system 
-// chose via the .sin_port member of the cli_addr structure which will 
-// be set upon success of the bind() call.
+	// Although the above fragment makes use of the bind() API, it would be
+	// just as effective to skip over this call as there are no specific
+	// local port ID requirements for this client. The only advantage that
+	// bind() offers is the accessibility of the port which the system 
+	// chose via the .sin_port member of the cli_addr structure which will 
+	// be set upon success of the bind() call.
 
-// Create the Server (Tx) side.
+	// Create the Server (Tx) side.
 
 	sockaddr_in			svAddr;
 	struct hostent *	pHostEntry = NULL;
 	const char *		host = m_URL.getHostName();
 	unsigned int		port = m_URL.getPort();
 
+    memset(&svAddr, 0, sizeof(sockaddr_in));
 	if( m_bUseProxy)
 	{
 		port = m_uiProxyPort;
@@ -546,32 +548,32 @@ bool HTTPChannel::OpenChannel()
 	svAddr.sin_family = AF_INET;
 	svAddr.sin_port = htons( port);
 
-// Probably this is the host-name of the server we are connecting to...
+	// Probably this is the host-name of the server we are connecting to...
 	if( (pHostEntry = gethostbyname( host)))
 	{
 		svAddr.sin_addr.s_addr = ((struct in_addr *) pHostEntry->h_addr)->s_addr;
 	}
 	else
 	{
-// No this is the IP address
+		// No this is the IP address
 		svAddr.sin_addr.s_addr = inet_addr( host);
 	}
 
-// Attempt to connect to the remote server.
+	// Attempt to connect to the remote server.
 	if( connect( m_Sock, (struct sockaddr *) &svAddr, sizeof (svAddr)) == SOCKET_ERROR)
 	{
-// Cannot open a channel to the remote end, shutting down the
-// channel and then throw an exception.
+		// Cannot open a channel to the remote end, shutting down the
+		// channel and then throw an exception.
 
-// Before we do anything else get the last error message;
-			long dw = GETLASTERROR
-			CloseChannel();
+		// Before we do anything else get the last error message;
+		long dw = GETLASTERROR
+		CloseChannel();
 
 			
-			string* message = PLATFORM_GET_ERROR_MESSAGE(dw);
+		string* message = PLATFORM_GET_ERROR_MESSAGE(dw);
 
-			char fullMessage[600];
-			sprintf(fullMessage,
+		char fullMessage[600];
+		sprintf(fullMessage,
 				"Failed to open connection to server: \n \
 				hostname='%s'\n\
 				port='%d'\n\
@@ -579,7 +581,7 @@ bool HTTPChannel::OpenChannel()
 				Error Code='%d'\n",
 				m_URL.getHostName(), m_URL.getPort(), message->c_str(), dw);
 				
-			delete(message);
+		delete(message);
 
 		m_LastError = fullMessage;
 
@@ -648,21 +650,21 @@ bool HTTPChannel::StartSockets()
 						// maximum number of sockets available and the maximum
 						// datagram size.
 
-// wsaData filled by Windows Sockets DLLs.
+	// wsaData filled by Windows Sockets DLLs.
     if( WSAStartup( WS_VERSION_REQD, &wsaData))
     {
-// Error - Could not setup underlying Windows socket transport mechanism.
+		// Error - Could not setup underlying Windows socket transport mechanism.
 		m_LastError = "WinSock DLL not responding.";
     }
     else
     {
-// Query to see whether the available version matches what is required
+		// Query to see whether the available version matches what is required
 		if ((LOBYTE( wsaData.wVersion) <  WS_VERSION_MAJOR()) ||
 			(LOBYTE( wsaData.wVersion) == WS_VERSION_MAJOR() &&
 			 HIBYTE( wsaData.wVersion) <  WS_VERSION_MINOR()))
 		{
-// Error - Underlying Windows socket transport version is not compatible with
-//		   what is required.
+			// Error - Underlying Windows socket transport version is not compatible with
+			//		   what is required.
 			char 	szErrorBuffer[100];
 
 			sprintf( szErrorBuffer,
@@ -680,7 +682,7 @@ bool HTTPChannel::StartSockets()
 		}
     }
 #else
-// Other OS specific Intitialization goes here
+	// Other OS specific Intitialization goes here
 
 	bSuccess = true;
 #endif
