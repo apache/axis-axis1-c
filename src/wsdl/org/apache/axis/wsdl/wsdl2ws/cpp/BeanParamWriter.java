@@ -438,15 +438,31 @@ public class BeanParamWriter extends ParamCPPFileWriter
                         	}
                         	else
                         	{
-	                            writer.write(
-	                                "\tpSZ->serializeAsElement(\""
-	                                    + attribs[i].getParamName()
-	                                    + "\", (void*)&(param->"
-	                                    + attribs[i].getParamNameAsMember()
-	                                    + "), "
-	                                    + CUtils.getXSDTypeForBasicType(
-	                                        attribs[i].getTypeName())
-	                                    + ");\n");
+                        		/**
+                        		 * Dushshantha:
+                        		 * if the element is a choice element,
+                        		 * it should be treated as a pointer
+                        		 */
+	                            if (attribs[i].getChoiceElement())
+	                            	writer.write(
+	                            			"\tpSZ->serializeAsElement(\""
+	                            			+ attribs[i].getParamName()
+											+ "\", (void*)(param->"
+											+ attribs[i].getParamNameAsMember()
+											+ "), "
+											+ CUtils.getXSDTypeForBasicType(
+													attribs[i].getTypeName())
+											+ ");\n");
+	                            else
+	                            	writer.write(
+	    	                                "\tpSZ->serializeAsElement(\""
+	    	                                    + attribs[i].getParamName()
+	    	                                    + "\", (void*)&(param->"
+	    	                                    + attribs[i].getParamNameAsMember()
+	    	                                    + "), "
+	    	                                    + CUtils.getXSDTypeForBasicType(
+	    	                                        attribs[i].getTypeName())
+	    	                                    + ");\n");
                         	}
                         }
                     }
@@ -538,7 +554,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
 					writer.write("\telse if");
 				}
 				
-				writer.write("\tif(strcmp(choiceName,\"" + attribs[i].getParamNameAsMember()+ "\")==0)\n\t{\n\t");
+				writer.write("(strcmp(choiceName,\"" + attribs[i].getParamNameAsMember()+ "\")==0)\n\t{\n\t");
 								           	           	
             }
         	//.............................................
@@ -634,7 +650,26 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     	else
                     	{
 	                        //TODO handle optional attributes
-				writer.write( "\t" + attribs[i].getTypeName() + "* p_" + attribs[i].getParamNameAsMember()
+                    		/**
+                    		 * Dushshantha:
+                    		 * if the element is a choice element,
+                    		 * it should be treated as a pointer.
+                    		 */
+                    		
+                    		if(attribs[i].getChoiceElement())
+                    			writer.write(
+                                        "\tparam->"
+                                            + attribs[i].getParamNameAsMember() + " = (pIWSDZ->"
+                                        + CUtils.getParameterGetValueMethodName(
+                                            attribs[i].getTypeName(),
+                                            attribs[i].isAttribute())
+                                        + "(\""
+                                        + attribs[i].getParamName()
+                                        + "\",0));\n");
+                    		
+                    		else{
+                    		
+                    			writer.write( "\t" + attribs[i].getTypeName() + "* p_" + attribs[i].getParamNameAsMember()
                                         + " = (pIWSDZ->"
                                         + CUtils.getParameterGetValueMethodName(
                                             attribs[i].getTypeName(),
@@ -647,6 +682,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                                         + attribs[i].getParamNameAsMember() + " = *p_" + attribs[i].getParamNameAsMember() + ";\n");
 
                                 writer.write("\tdelete p_" + attribs[i].getParamNameAsMember() + ";\n");
+                    		}
 
                     	}
                     }

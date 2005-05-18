@@ -71,9 +71,8 @@ public class ParmHeaderFileWriter extends ParamWriter
            		this.writer.write(" : public SoapFaultException");
             this.writer.write("\n{\n");
 
-            writeGetSetMethods();
-            
             writeAttributes();
+            writeGetSetMethods();
             writeConstructors();
             writeDestructors();
             this.writer.write("};\n\n");
