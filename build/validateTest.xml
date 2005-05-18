@@ -41,7 +41,21 @@
 	<!--
 	  Validate the test
 	  -->
-	<target name="validateTestClient" if="successfulClientCompilation" unless="buildOnly">
+	<target name="OS400ConvertOutputFiles" if="os400">
+         <move file="${results.stdout}" tofile="${results.stdout}.tmp" overwrite="true"/>
+         <exec executable="setccsid" failonerror="true">
+            <arg line="37 ${results.stdout}.tmp"/>
+         </exec>
+         <exec executable="touch" failonerror="true">
+            <arg line="-C 819 ${results.stdout}"/>
+         </exec>
+         <exec executable="cp" failonerror="true">
+              <arg line="-tf ${results.stdout}.tmp ${results.stdout}"/>
+         </exec>
+         <delete file="${results.stdout}.tmp"/>
+      </target>
+
+	<target name="validateTestClient" if="successfulClientCompilation" unless="buildOnly" depends="OS400ConvertOutputFiles">
 		<condition property="clientRunStatus" value="PASSED">
 			<filesmatch file1="${results.stdout}" file2="${expected.file}"/>
 		</condition>
