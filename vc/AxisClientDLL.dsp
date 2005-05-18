@@ -106,7 +106,7 @@ SOURCE=..\src\engine\AppScopeHandlerPool.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\soap\apr_base64.c
+SOURCE=..\src\soap\apr_base64.cpp
 # End Source File
 # Begin Source File
 
