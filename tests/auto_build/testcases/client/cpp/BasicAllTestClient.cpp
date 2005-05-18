@@ -48,22 +48,21 @@ main (int argc, char *argv[])
 			AllTestSoap ws (endpoint, APTHTTP1_1);
 
 			AllComplexType* inParam = new AllComplexType();
-			
-			inParam->IntValue = 5;
+			inParam->IntValue = new int;
+			*(inParam->IntValue) = 5;
 			inParam->StringValue = "HELLO";
 
 			printf("\nSending.................");
-			printf("\nIntValue = %d",inParam->IntValue);
+			printf("\nIntValue = %d",*(inParam->IntValue));
 			printf("\nStringValue= %s",inParam->StringValue);
 			
-		
 			ws.setTransportProperty("SOAPAction" , "BasicAll#echoAll");
 			AllComplexType* outParam = ws.echoAll(inParam);
 
 			if (outParam != NULL)
 			{
 				printf("\n\nReceived................");
-				printf("\nIntValue = %d",outParam->IntValue);
+				printf("\nIntValue = %d",*(outParam->IntValue));
 				printf("\nStringValue= %s",outParam->StringValue);
 				printf("\n\nSuccessfull\n");
 			}

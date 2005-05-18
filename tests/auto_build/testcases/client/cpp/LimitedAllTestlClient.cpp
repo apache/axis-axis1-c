@@ -49,20 +49,21 @@ main (int argc, char *argv[])
 
 			AllComplexType* inParam = new AllComplexType();
 			
-			inParam->Value0 = 5;
+			inParam->Value0 = new int;
+			*(inParam->Value0) = 5;
 			inParam->Value2 = "HELLO";
 
 			printf("\nSending.................");
-			printf("\nValue0 = %d",inParam->Value0);
+			printf("\nValue0 = %d",*(inParam->Value0));
 			printf("\nValue2 = %s",inParam->Value2);
 			
-			ws.setTransportProperty("SOAPAction" , "LimitedAll#echoAll");
+			ws.setTransportProperty("SOAPAction" , "AllComplexType#echoAll");
 			AllComplexType* outParam = ws.echoAll(inParam);
 
 			if (outParam != NULL)
 			{
 				printf("\n\nReceived................");
-				printf("\nValue0 = %d",outParam->Value0);
+				printf("\nValue0 = %d",*(outParam->Value0));
 				printf("\nValue2 = %s",outParam->Value2);
 				printf("\n\nSuccessfull\n");
 			}

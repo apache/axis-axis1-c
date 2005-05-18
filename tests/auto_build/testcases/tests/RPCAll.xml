@@ -1,0 +1,13 @@
+<test>
+    <name>RPCAll</name>
+    <description>RPCAllTest</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>RPCAllTestClient.cpp</clientCode>
+    <wsdl>RPCAllTest.wsdl</wsdl>
+    <expected>
+        <output>
+            RPCAll.expected
+        </output>
+    </expected>
+	<endpoint>http://localhost:80/axis/RPCAll</endpoint>
+</test>

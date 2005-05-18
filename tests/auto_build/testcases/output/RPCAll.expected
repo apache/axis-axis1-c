@@ -1,0 +1,21 @@
+
+Sending................
+
+Length = 3
+Width = 5
+Depth = 2.500000
+Color = RED
+
+Received................
+
+Non All Int Value = 15
+Non All Double Value = 37.500000
+
+All Values are...
+	Length = 3
+	Depth = 2.500000
+	Color = RED
+
+Non All String Value = Success
+
+---------------------- TEST COMPLETE -----------------------------

@@ -1,10 +1,10 @@
-#include "AllComplexType.hpp"
-#include "AllTestSoap.hpp"
+#include "ADEC_MAST_Port.hpp"
+#include "SummaryResult.hpp"
 #include <iostream>
 #include <axis/AxisException.hpp>
 #include <ctype.h>
 
-#define WSDL_DEFAULT_ENDPOINT "http://localhost:80/axis/CombinedAll"
+#define WSDL_DEFAULT_ENDPOINT "http://localhost:80/axis/RPCAll"
 
 void PrintUsage();
 
@@ -45,38 +45,41 @@ main (int argc, char *argv[])
     {
 		try
 		{
-			AllTestSoap ws (endpoint, APTHTTP1_1);
-			AllComplexType* inParam = new AllComplexType();
+			ADEC_MAST_Port ws (endpoint, APTHTTP1_1);
 
-			inParam->NonAllIntValue = 3;
-			inParam->Value0 = new int;
-			*(inParam->Value0) = 5;
-			inParam->Value2 = "TINTIN";
-			inParam->NonAllStringValue = "HELLO";
-
-			printf("\nSending.................");
-			printf("\nNonAllIntValue = %d",inParam->NonAllIntValue);
-			printf("\nAllValue0 = %d",*(inParam->Value0));
-			printf("\nAllValue2 = %s",inParam->Value2);
-			printf("\nNonAllStringValue = %s",inParam->NonAllStringValue);
+			SummaryResult* outParam = new SummaryResult();
 			
-			ws.setTransportProperty("SOAPAction" , "CombinedAll#echoAll");
-			AllComplexType* outParam = ws.echoAll(inParam);
+			xsd__string Value0 = "RED";
+			xsd__int Value1 = 3;
+			xsd__int Value3 = 5;
+			xsd__double Value2 = 2.5;
+
+			printf("\nSending................\n");
+			printf("\nLength = %d",Value1);
+			printf("\nWidth = %d",Value3);
+			printf("\nDepth = %f",Value2);
+			printf("\nColor = %s",Value0);
+
+				
+		
+			ws.setTransportProperty("SOAPAction" , "RPCAll#doGetSummary");
+			outParam = ws.doGetSummary(Value0, Value1, Value2, Value3);
 
 			if (outParam != NULL)
 			{
-				printf("\n\nReceived................");
-				printf("\nNonAllIntValue = %d",outParam->NonAllIntValue);
-				printf("\nAllValue0 = %d",*(outParam->Value0));
-				printf("\nAllValue2 = %s",outParam->Value2);
-				printf("\nNonAllStringValue = %s",outParam->NonAllStringValue);
-				printf("\n\nSuccessfull\n");
+				printf("\n\nReceived................\n");
+				printf("\nNon All Int Value = %d",outParam->NonAllIntValue);
+				printf("\nNon All Double Value = %f",outParam->NonAllDoubleValue);
+				printf("\n\nAll Values are...");
+				printf("\n\tLength = %d",*(outParam->length));
+				printf("\n\tDepth = %f",*(outParam->depth));
+				printf("\n\tColor = %s",outParam->color);
+				printf("\n\nNon All String Value = %s\n\n",outParam->NonAllStringValue);
 			}
 			else
-				printf("\nFault\n");
+				printf("\n\nFault\n");
 
 			bSuccess = true;
-			delete inParam;
 			delete outParam;
 		}
 		catch (AxisException & e)
@@ -117,7 +120,7 @@ main (int argc, char *argv[])
     cout <<
 	"---------------------- TEST COMPLETE -----------------------------"
 	<< endl;
-    
-	return returnValue;
+
+    return returnValue;
 
 }
