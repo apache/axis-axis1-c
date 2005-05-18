@@ -105,15 +105,22 @@
 		  Definition of icc compile for OS400
 	      -->
 		<compiler id="OS400icc" name="icc" if="os400">
+			<compilerarg value="-+"/>
+			<compilerarg value="-g" if="debug"/>
+			<compilerarg value="-O" unless="debug"/>
 			<compilerarg value="-qLOCALETYPE=*LOCALEUCS2"/>
 			<compilerarg value="-qENUM=*INT"/>
-			<compilerarg value="-g" if="debug"/>
+			<compilerarg value="-qTGTRLS=V5R1M0"/>
+			<compilerarg value="-qRTTICAST"/>
+			<compilerarg value="-qTEMPLATE=*TEMPINC"/>
+			<compilerarg value="-qTERASPACE=*YES *TSIFC"/>
+			<compilerarg value="-qSTGMDL=*INHERIT"/>
 			<defineset>
 				<define name="ENABLE_AXIS_EXCEPTION"/>
 				<define name="HAVE_CONFIG_H"/>
 				<define name="OS400"/>
 				<define name="AS400"/>
-				<define name="_XOPEN_SOURCE" value="520"/>
+				<define name="_XOPEN_SOURCE" value="510"/>
 				<define name="_MULTI_THREADED"/>
 			</defineset>
 			<includepath path="${dir.include}"/>
@@ -168,7 +175,13 @@
 		</linker>
 
 		<!-- Definition of OS/400 linker -->
+		<linker id="OS400ExecutableLinker" name="icc" libtool="false" if="os400">
+		    <linkerarg value="-qTGTRLS=V5R1M0"/>
+		</linker>
+		
 		<linker id="OS400Linker" name="ld" libtool="false" if="os400">
+		    <linkerarg value="-qTGTRLS=V5R1M0"/>
+			<linkerarg value="-qSTGMDL=*INHERIT"/>
 		</linker>
 
 	<!--
