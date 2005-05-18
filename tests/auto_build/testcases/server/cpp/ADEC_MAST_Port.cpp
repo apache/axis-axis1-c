@@ -56,8 +56,10 @@ SummaryResult* ADEC_MAST_Port::doGetSummary(xsd__string Value0, xsd__int Value1,
 	cal = (Value1 * Value2 * Value3);
 	outParam->NonAllIntValue = square;
 	outParam->NonAllDoubleValue = cal;
-	outParam->length = Value1;
-	outParam->depth = Value2;
+	outParam->length = new int;
+	*(outParam->length) = Value1;
+	outParam->depth = new double;
+	*(outParam->depth) = Value2;
 	outParam->color = Value0;
 
 	if(cal != 0)
