@@ -1,11 +1,11 @@
-#include <iostream.h>
+#include <iostream>
 #include "ChoiceTestSoap.hpp"
 #include "ChoiceComplexType.hpp"
 
 
 using namespace std;
 
-void main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
 	
 	try
@@ -59,6 +59,7 @@ void main(int argc, char *argv[])
     {
 	printf ("Unknown exception has occured\n");
     }
+	return 0;
 
 }
 
