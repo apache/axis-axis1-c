@@ -188,10 +188,19 @@ Transport_http:${dir.libraries}/${libraryPrefix}${transportLibraryName}${library
 #XMLParser:${dir.libraries}/${libraryPrefix}${xmlParserLibraryName}${librarySuffix}
 XMLParser:${dir.libraries}/${ClientParserLib}
 Channel_HTTP:${dir.libraries}/${libraryPrefix}${HTTP.ChannelLibraryName}${librarySuffix}
-${commentSSLDirective}Channel_HTTP_SSL:${dir.libraries}/${libraryPrefix}${HTTP.SecureChannelLibraryName}${librarySuffix}
-
 </echo>
+<if>
+	<istrue value="${test.ssl}" />
+<then>
+   <echo file="${axiscpp.conf}" append="true">Channel_HTTP_SSL:${dir.libraries}/${libraryPrefix}${HTTP.SecureChannelLibraryName}${librarySuffix}
+   </echo>	
+</then>
+<else>  
+	<echo file="${axiscpp.conf}" append="true">
+${commentSSLDirective}Channel_HTTP_SSL:${dir.libraries}/${libraryPrefix}${HTTP.SecureChannelLibraryName}${librarySuffix}
+	</echo>
+</else>
+</if>
 	</target>
 
 </project>
-
