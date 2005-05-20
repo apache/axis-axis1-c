@@ -12,5 +12,6 @@
         <endpoint>https://localhost:80/axis/CalculatorDoc</endpoint>
         <nomonitor>true</nomonitor>
         <port>9443</port>
+		<ssl>true</ssl>
 </test>
 
