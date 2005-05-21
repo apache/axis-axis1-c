@@ -126,11 +126,11 @@ protected:
      */
     enum
     {
-        GREATER_THAN_CHAR    =    L'>',    /* Greater than character */
-        LESSER_THAN_CHAR    =    L'<',    /* Less than character */
-        SINGLE_QUOTE_CHAR    =    L'\'',    /* Single quotation character */
-        DOUBLE_QUOTE_CHAR    =    L'\"',    /* Double quotation character */
-        AMPERSAND_CHAR        =    L'&'    /* Ampersand character */
+        GREATER_THAN_CHAR    =    '>',     /* Greater than character */
+        LESSER_THAN_CHAR    =     '<',     /* Less than character */
+        SINGLE_QUOTE_CHAR    =    '\'',    /* Single quotation character */
+        DOUBLE_QUOTE_CHAR    =    '\"',    /* Double quotation character */
+        AMPERSAND_CHAR        =   '&'      /* Ampersand character */
     };
 
     AxisChar* m_Buf;

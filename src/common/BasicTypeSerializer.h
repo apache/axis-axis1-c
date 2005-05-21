@@ -137,11 +137,11 @@ public:
 private:
     enum
     {
-        GREATOR_THAN_CHAR    =    L'>',    /* Greator than character */
-        LESSER_THAN_CHAR    =    L'<',    /* Less than character */
-        SINGLE_QUOTE_CHAR    =    L'\'',    /* Single quotation character */
-        DOUBLE_QUOTE_CHAR    =    L'\"',    /* Double quotation character */
-        AMPERSAND_CHAR        =    L'&'    /* Ampersand character */
+        GREATOR_THAN_CHAR    =   '>',     /* Greator than character */
+        LESSER_THAN_CHAR    =    '<',     /* Less than character */
+        SINGLE_QUOTE_CHAR    =   '\'',    /* Single quotation character */
+        DOUBLE_QUOTE_CHAR    =   '\"',    /* Double quotation character */
+        AMPERSAND_CHAR        =  '&'      /* Ampersand character */
     };
 private:
     AxisString m_sSZ;
