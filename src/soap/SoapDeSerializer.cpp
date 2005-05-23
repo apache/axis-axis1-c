@@ -585,7 +585,7 @@ SoapDeSerializer::getCmplxArray (void *pDZFunct, void *pCreFunct,
     int nIndex = 0;
     void *pItem;
     int itemsize;
-    unsigned long ptrval;
+    char *ptrval;
 
     if (AXIS_SUCCESS != m_nStatus)
     {
@@ -631,7 +631,7 @@ SoapDeSerializer::getCmplxArray (void *pDZFunct, void *pCreFunct,
 	    }
 
 	    itemsize = ((AXIS_OBJECT_SIZE_FUNCT) pSizeFunct) ();
-	    ptrval = reinterpret_cast < unsigned long >(Array.m_Array);
+	    ptrval = (char *)Array.m_Array;
 
 	    for (; nIndex < Array.m_Size; nIndex++)
 	    {
@@ -647,8 +647,7 @@ SoapDeSerializer::getCmplxArray (void *pDZFunct, void *pCreFunct,
 		    return Array;
 		}
 
-		pItem =
-		    reinterpret_cast < void *>(ptrval + nIndex * itemsize);
+		pItem = ptrval + nIndex * itemsize;
 
 		if (C_RPC_PROVIDER == getCurrentProviderType ())
 		{
@@ -697,7 +696,7 @@ SoapDeSerializer::getCmplxArray (void *pDZFunct, void *pCreFunct,
 
 	while (true)
 	{
-	    ptrval = reinterpret_cast < unsigned long >(Array.m_Array);
+	    ptrval = (char *)Array.m_Array;
 
 	    for (; nIndex < Array.m_Size; nIndex++)
 	    {
@@ -730,9 +729,7 @@ SoapDeSerializer::getCmplxArray (void *pDZFunct, void *pCreFunct,
 		    }
 
 		    m_pNode = NULL;	/* recognized and used the node */
-		    pItem =
-			reinterpret_cast <
-			void *>(ptrval + nIndex * itemsize);
+		    pItem = ptrval + nIndex * itemsize;
 
 		    if (C_DOC_PROVIDER == getCurrentProviderType ())
 		    {

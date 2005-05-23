@@ -47,9 +47,8 @@ ArrayBean::~ArrayBean()
                 {
                     m_value.cta->pDelFunct(m_value.cta->pObject, true, m_nSize);
                 }
-                /* make sure that the ComplexObjectHandler's destructor does 
-		 * not try to delete the objects again 
-		 */
+                // make sure that the ComplexObjectHandler's destructor does 
+                // not try to delete the objects again 
                 m_value.cta->pObject = NULL;
             }
             delete m_value.cta;
@@ -154,7 +153,7 @@ ArrayBean::~ArrayBean()
                 delete [] a;
             }
                 break;
-                /* continue this for all basic types */
+                // continue this for all basic types
                 default:;
         }
     }
@@ -172,15 +171,15 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
         void* pItem;
         AXIS_BINDING_STYLE nStyle = pSZ.getStyle();
         int itemsize = m_value.cta->pSizeFunct();
-        unsigned long ptrval = reinterpret_cast<unsigned long>(m_value.cta->pObject);
+        char *ptrval = (char *)m_value.cta->pObject;
         if (DOC_LITERAL == nStyle) 
-        /* Serialize functions for doc/lit services do not know the instance 
-         * name and will not serialize outer element for the type 
-	 */ 
         {
+            // Serialize functions for doc/lit services do not know the instance 
+            // name and will not serialize outer element for the type 
+      
             for (int x=0; x<m_nSize; x++)
             {
-                pItem = reinterpret_cast<void*>(ptrval+x*itemsize);
+                pItem = ptrval+x*itemsize;
 
 				// try to find the prefix - array prefix overrides the
 				// serializer prefix
@@ -202,11 +201,10 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
 	            else
 	                pSZ.serialize("<", m_ItemName.c_str(), NULL); 
 				
-                /* note : ">" is not serialized to enable the type's serializer
-                 * to add attributes 
-                 */
+                // note : ">" is not serialized to enable the type's serializer
+                // to add attributes 
                 m_value.cta->pSZFunct(pItem, &pSZ, true); 
-                /* no matter true or false is passed */
+                // no matter true or false is passed
             	if (pPrefix != NULL)
                 	pSZ.serialize("</", pPrefix, ":", m_ItemName.c_str(), ">", NULL);
 	            else
@@ -219,16 +217,14 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
             }
         }
         else 
-        {
-	    /* Serialize functions for RPC-encoded services will serialize 
-	     * outer element for the type. Also the type information is not 
-	     * added to the outer element as this object is part of an array 
-	     * (serialize function knows that when the 3rd parameter is 
-	     * 'true'. 
-	     */
+        {          
+            // Serialize functions for RPC-encoded services will serialize 
+            // outer element for the type. Also the type information is not 
+            // added to the outer element as this object is part of an array 
+            // (serialize function knows that when the 3rd parameter is 'true'. 
             for (int x=0; x<m_nSize; x++)
             {
-                pItem = reinterpret_cast<void*>(ptrval+x*itemsize);
+                pItem = ptrval+x*itemsize;
                 m_value.cta->pSZFunct(pItem, &pSZ, true);
             }
         }
@@ -236,9 +232,9 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
     else
     {
         AXIS_BINDING_STYLE nStyle = pSZ.getStyle();
-        /* this is to prevent serializing type information for basic array 
-	 * elements 
-	 */
+        
+        // this is to prevent serializing type information for basic array elements 
+ 
 	   	const AxisChar* pNamespace = pSZ.getNamespace();
        	        
        	if (RPC_ENCODED == nStyle) pSZ.setStyle(RPC_LITERAL); 
@@ -363,7 +359,7 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
             default:
                 break;
         }
-	/* restore Serializer's style after array serialization is finished */
+	// restore Serializer's style after array serialization is finished
 	if (RPC_ENCODED == nStyle) pSZ.setStyle(RPC_ENCODED);
     }
     return AXIS_SUCCESS;
