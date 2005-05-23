@@ -13,6 +13,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include "../../platforms/PlatformAutoSense.hpp"
+
 #include "Long.hpp"
 
 AXIS_CPP_NAMESPACE_START
@@ -58,25 +60,15 @@ xsd__long* Long::deserializeLong(const AxisChar* valueAsChar) throw (AxisSoapExc
 }
 
 MinInclusive* Long::getMinInclusive()
-{ 
-    AxisChar* end;    
-    LONGLONG* minInclusive = new LONGLONG;
-    *minInclusive = strtol ("-9223372036854775808", &end, 10);
-    
-    MinInclusive* retVal = new MinInclusive(*minInclusive);
-    delete minInclusive;
-    return retVal;
+{    
+    LONGLONG minInclusive = LONGLONGVALUE(-9223372036854775808);
+    return new MinInclusive(minInclusive);
 }
 
 MaxInclusive* Long::getMaxInclusive()
-{
-    AxisChar* end;    
-    LONGLONG* maxInclusive = new LONGLONG;
-    *maxInclusive = strtol ("9223372036854775807", &end, 10);
-    
-    MaxInclusive* retVal = new MaxInclusive(*maxInclusive);
-    delete maxInclusive;
-    return retVal;
+{   
+    LONGLONG maxInclusive = LONGLONGVALUE(9223372036854775807);
+    return new MaxInclusive(maxInclusive);
 }
 
 AXIS_CPP_NAMESPACE_END
