@@ -72,8 +72,9 @@ AXIS_TRANSPORT_STATUS WSDDDocument::WSDDFileInputStream::sendBytes(const char* p
 
 AXIS_TRANSPORT_STATUS WSDDDocument::WSDDFileInputStream::getBytes(char* pcBuffer, int* piRetSize)
 {
+	/* open in binary because on ebcdic platforms the data will get converted */
 	if (!m_pFile)
-		m_pFile = fopen(m_pcWSDDFileName, "r");
+		m_pFile = fopen(m_pcWSDDFileName, "rb");
     if (NULL == m_pFile) 
     { 
         return TRANSPORT_FAILED;
