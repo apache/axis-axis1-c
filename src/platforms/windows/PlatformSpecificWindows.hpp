@@ -91,6 +91,7 @@
  * type to be used for 64bit integers
  */
 #define LONGLONG __int64
+#define LONGLONGVALUE(value) value##I64
 
 /**
  * Format string to be used in printf for 64bit integers

@@ -101,6 +101,7 @@ extern char *toUTF8(char *b, int len);
  * type to be used for 64bit integers
  */
 #define LONGLONG long long
+#define LONGLONGVALUE(value) value##LL
 
 /**
  * Format string to be used in printf for 64bit integers
