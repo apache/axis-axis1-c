@@ -26,9 +26,46 @@
 #endif
 
 #include "HTTPTransport.hpp"
+#include "../../platforms/PlatformAutoSense.hpp"
 
 #include <stdio.h>
 #include <iostream>
+
+// =================================================================
+// In order to parse the HTTP protocol data on an ebcdic system, we
+// need to ensure that the various tokens we are looking for to distinguish
+// between the HTTP headers and payload are in ASCII.  So the following 
+// defines for carriage return-line feed, etc. are ensured to be in ascii
+// by using ascii hexadecimal representation of the tokens.
+// =================================================================
+
+// Ascii character defines                   
+#define ASCII_C_EQUAL         '\x3D'    // '='  
+#define ASCII_C_DASH          '\x2D'    // '-'  
+#define ASCII_C_LF            '\x0A'    // '\n'
+#define ASCII_C_CR            '\x0D'    // '\r' 
+#define ASCII_C_SPACE         '\x20'    // ' ' 
+#define ASCII_C_SEMI          '\x3B'    // ';' 
+
+#define ASCII_C_LOWERCASEA    '\x61'    // 'a'
+#define ASCII_C_LOWERCASEF    '\x66'    // 'f'
+#define ASCII_C_UPPERCASEA    '\x41'    // 'A'
+#define ASCII_C_UPPERCASEF    '\x46'    // 'F'
+
+#define ASCII_C_ZERO          '\x30'    // '0'
+#define ASCII_C_NINE          '\x39'    // '9'
+
+// Ascii string defines
+#define ASCII_S_LF             "\x0a"                 // "\n"     
+#define ASCII_S_CRLF           "\x0d\x0a"             // "\r\n"     
+#define ASCII_S_CRLFCRLF       "\x0d\x0a\x0d\x0a"     // "\r\n\r\n"  
+
+#define ASCII_S_HTTP           "\x48\x54\x54\x50"     // "HTTP"
+#define ASCII_S_CONTENT_LENGTH "\x43\x6F\x6E\x74\x65\x6E\x74\x2D\x4c\x65\x6e\x67\x74\x68\x3a\x20" // "Content-Length: " 
+#define ASCII_S_TRANSFERENCODING_CHUNKED "\x54\x72\x61\x6E\x73\x66\x65\x72\x2D\x45\x6E\x63\x6F\x64\x69\x6E\x67\x3A\x20\x63\x68\x75\x6e\x6b\x65\x64" // "Transfer-Encoding: chunked"
+
+#define ASCII_S_LEFTPAREN      "\x28"   // "("
+#define ASCII_S_COLON          "\x3A"   // ":" 
 
 /*
  * HTTPTransport constuctor
@@ -71,13 +108,12 @@ HTTPTransport::~HTTPTransport()
 {
     if( m_pcEndpointUri)
     {
-	delete[] m_pcEndpointUri;
+		delete[] m_pcEndpointUri;
     }
 
     if( m_pChannelFactory)
 	{
 		delete m_pChannelFactory;
-
 		m_pChannelFactory = 0;
 	}
 
@@ -99,10 +135,10 @@ void HTTPTransport::setEndpointUri( const char * pcEndpointUri) throw (HTTPTrans
     // Get the current channel URI
     if( m_pActiveChannel != NULL && m_pActiveChannel->getURL())
     {
-	// Does the new URI equal the existing channel URI?
+		// Does the new URI equal the existing channel URI?
 		if( strcmp (m_pActiveChannel->getURL (), pcEndpointUri) != 0)
 		{
-	    // There is a new URI.
+	    	// There is a new URI.
 			bUpdateURL = true;
 		}
     }
@@ -128,7 +164,7 @@ void HTTPTransport::setEndpointUri( const char * pcEndpointUri) throw (HTTPTrans
 
 		m_bReopenConnection = true;
 
-	// Check if the new URI requires SSL (denoted by the https prefix).
+		// Check if the new URI requires SSL (denoted by the https prefix).
 		if( (m_pActiveChannel->getURLObject()).getProtocol() == URL::https)
 		{
 			if( m_pSecureChannel != NULL)
@@ -149,9 +185,9 @@ void HTTPTransport::setEndpointUri( const char * pcEndpointUri) throw (HTTPTrans
 		}
 		else
 		{
-	    // URI does not require a secure channel.  Delete the existing
-	    // channel if it is secure and create a new unsecure
-	    // channel.
+	    	// URI does not require a secure channel.  Delete the existing
+	    	// channel if it is secure and create a new unsecure
+	    	// channel.
 			if (m_bChannelSecure)
 			{
 				if( m_pNormalChannel != NULL)
@@ -171,10 +207,10 @@ void HTTPTransport::setEndpointUri( const char * pcEndpointUri) throw (HTTPTrans
 		}
     }
 
-// Need this code to set the channel timeout.  If the timeout was changed
-// before the channel was created, then it may not have the correct timeout.
-// By setting it here, the channel is sure to have the correct timeout value
-// next time the channel is read.
+	// Need this code to set the channel timeout.  If the timeout was changed
+	// before the channel was created, then it may not have the correct timeout.
+	// By setting it here, the channel is sure to have the correct timeout value
+	// next time the channel is read.
 	if( m_pActiveChannel != NULL)
 	{
 		m_pActiveChannel->setTimeout( m_lChannelTimeout);
@@ -230,8 +266,8 @@ AXIS_TRANSPORT_STATUS HTTPTransport::flushOutput() throw (AxisException, HTTPTra
 
 		if( m_pActiveChannel->open() != AXIS_SUCCESS)
 		{
-		    int				iStringLength = m_pActiveChannel->GetLastErrorMsg().length() + 1;
-			const char *	pszLastError = new char[iStringLength];
+		    int	iStringLength = m_pActiveChannel->GetLastErrorMsg().length() + 1;
+			const char * pszLastError = new char[iStringLength];
 
 		    memcpy( (void *) pszLastError,
 					m_pActiveChannel->GetLastErrorMsg().c_str(),
@@ -257,8 +293,19 @@ AXIS_TRANSPORT_STATUS HTTPTransport::flushOutput() throw (AxisException, HTTPTra
     // transmitted.
 	try
 	{
+#ifndef __OS400__
 		*m_pActiveChannel << this->getHTTPHeaders ();
 		*m_pActiveChannel << this->m_strBytesToSend.c_str ();
+#else		
+        const char *buf = this->getHTTPHeaders ();
+        char *utf8Buf = toUTF8((char *)buf, strlen(buf)+1);
+		*m_pActiveChannel << utf8Buf;
+        free(utf8Buf);
+        buf     = this->m_strBytesToSend.c_str();
+        utf8Buf = toUTF8((char *)buf, strlen(buf)+1);
+		*m_pActiveChannel << utf8Buf;
+        free(utf8Buf);
+#endif
 	}
 	catch( HTTPTransportException & e)
 	{
@@ -408,24 +455,24 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 
 				iIterationCountdown = 100;
 				
-// getBytes needs to be able to exit any of the following loops if the expected
-// character sequence is never detected.  This is done using a simple counter.
-// If the loop has not exited on its own accord after say 100 tries, it is safe
-// to assume that it never will...  To make the test less likely to cause
-// problems with very long messages, the countdown is only decremented when no
-// data has been received.
+				// getBytes needs to be able to exit any of the following loops if the expected
+				// character sequence is never detected.  This is done using a simple counter.
+				// If the loop has not exited on its own accord after say 100 tries, it is safe
+				// to assume that it never will...  To make the test less likely to cause
+				// problems with very long messages, the countdown is only decremented when no
+				// data has been received.
 
 				do
 				{
 					do
 					{
-						if (m_strReceived.find( "\r\n\r\n") == std::string::npos)
+						if (m_strReceived.find( ASCII_S_CRLFCRLF ) == std::string::npos)
 						{
 							m_pszRxBuffer [0] = '\0';
 							*m_pActiveChannel >> m_pszRxBuffer;
 
-// If data has been received, then add the data to the received message buffer
-// and reset the countdown.  Otherwise, decrement the countdown.
+							// If data has been received, then add the data to the received message buffer
+							// and reset the countdown.  Otherwise, decrement the countdown.
 							if( strlen( m_pszRxBuffer) > 0)
 							{
 							    m_strReceived += m_pszRxBuffer;
@@ -436,7 +483,7 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 								iIterationCountdown--;
 							}
 						}
-					} while( m_strReceived.find( "\r\n\r\n") == std::string::npos && iIterationCountdown > 0);
+					} while( m_strReceived.find( ASCII_S_CRLFCRLF ) == std::string::npos && iIterationCountdown > 0);
 
 					if( iIterationCountdown == 0)
 					{
@@ -444,23 +491,23 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 													  "Timed out waiting for HTTP header message (1).");
 					}
 
-					if( m_strReceived.find ("HTTP") == std::string::npos)
+					if( m_strReceived.find( ASCII_S_HTTP ) == std::string::npos)
 					{
 						iIterationCountdown = 100;
 
-			// Most probably what we read was left overs from earlier reads
-			// Skip this \r\n\r\n
-						m_strReceived = m_strReceived.substr( m_strReceived.find( "\r\n\r\n") + 4);
+						// Most probably what we read was left overs from earlier reads
+						// Skip this \r\n\r\n
+						m_strReceived = m_strReceived.substr( m_strReceived.find( ASCII_S_CRLFCRLF ) + 4);
 
 						do
 						{
-							if( m_strReceived.find( "\r\n\r\n") == std::string::npos)
+							if( m_strReceived.find( ASCII_S_CRLFCRLF ) == std::string::npos)
 							{
 								m_pszRxBuffer [0] = '\0';
 								*m_pActiveChannel >> m_pszRxBuffer;
 
-// If data has been received, then add the data to the received message buffer
-// and reset the countdown.  Otherwise, decrement the countdown.
+								// If data has been received, then add the data to the received message buffer
+								// and reset the countdown.  Otherwise, decrement the countdown.
 								if( strlen( m_pszRxBuffer) > 0)
 								{
 									m_strReceived += m_pszRxBuffer;
@@ -471,7 +518,7 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 									iIterationCountdown--;
 								}
 							}
-						} while( m_strReceived.find( "\r\n\r\n") == std::string::npos && iIterationCountdown > 0);
+						} while( m_strReceived.find( ASCII_S_CRLFCRLF ) == std::string::npos && iIterationCountdown > 0);
 
 						if( iIterationCountdown == 0)
 						{
@@ -479,23 +526,23 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 														  "Timed out waiting for HTTP header message (2).");
 						}
 
-			// now this must contain HTTP. Else there is a conent error.
+						// now this must contain HTTP. Else there is a content error.
 					}
 
-		    //now we have found the end of headers
+		    		//now we have found the end of headers
 					m_bReadPastHTTPHeaders = true;
 
 				    unsigned int pos = 0;
 
-		    // Look for content lenght
-				    if( (pos = m_strReceived.find( "Content-Length: ")) != std::string::npos)
+		    		// Look for content lenght
+				    if( (pos = m_strReceived.find( ASCII_S_CONTENT_LENGTH )) != std::string::npos)
 					{
 						m_iContentLength = atoi( m_strReceived.substr( pos + strlen( "Content-Length: "),
-																	   m_strReceived.find( "\n", pos)).c_str());
+																	   m_strReceived.find( ASCII_S_LF, pos)).c_str());
 				    }
 
-		    // Check if the message is chunked
-				    if( (pos = m_strReceived.find( "Transfer-Encoding: chunked")) != std::string::npos)
+		   			 // Check if the message is chunked
+				    if( (pos = m_strReceived.find( ASCII_S_TRANSFERENCODING_CHUNKED )) != std::string::npos)
 					{
 						m_bChunked = true;
 					}
@@ -504,27 +551,27 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 						m_bChunked = false;
 					}
 
-		    // check if there is HTTP header. If not, there must be an error and 
-		    // will be detected by processResponseHTTPHeaders()
-		    // However, must make sure that the left overs from eatlier reads
-		    // do not appear before HTTP/1.x
-					start = m_strReceived.find( "HTTP");
+		    		// check if there is HTTP header. If not, there must be an error and 
+		   			// will be detected by processResponseHTTPHeaders()
+		   			// However, must make sure that the left overs from eatlier reads
+		    		// do not appear before HTTP/1.x
+					start = m_strReceived.find( ASCII_S_HTTP );
 
 					if( start == std::string::npos)
 					{
 						start = 0;
 					}
 
-		    // Extract HTTP headers and process them
+		   			// Extract HTTP headers and process them
 				    m_strResponseHTTPHeaders = m_strReceived.substr( start,
-																     m_strReceived.find( "\r\n\r\n") + 2 - start);
+											m_strReceived.find( ASCII_S_CRLFCRLF ) + 2 - start);
 				    processResponseHTTPHeaders();
 
 				    if( m_iResponseHTTPStatusCode == 100)
 				    {
-			// Samisa: We found Continue. Keep on reading and processing headers
-			// till we get a HTTP code other than 100
-			// Here it is assumed that the whole of the request is already sent
+						// Samisa: We found Continue. Keep on reading and processing headers
+						// till we get a HTTP code other than 100
+						// Here it is assumed that the whole of the request is already sent
 						m_pszRxBuffer [0] = '\0';
 						*m_pActiveChannel >> m_pszRxBuffer;
 						m_strReceived = m_pszRxBuffer;
@@ -544,13 +591,13 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 												  const_cast <char *> (m_strResponseHTTPStatusMessage.c_str()));
 				}
 
-		// Done with HTTP headers, get payload
-				m_strReceived = m_strReceived.substr( m_strReceived.find( "\r\n\r\n", start) + 4);
+				// Done with HTTP headers, get payload
+				m_strReceived = m_strReceived.substr( m_strReceived.find( ASCII_S_CRLFCRLF, start) + 4);
 		    }
 
-	    // Read past headers. Deal with payload
+	   		 // Read past headers. Deal with payload
 
-	    // make sure we have a message with some content
+	   		 // make sure we have a message with some content
 		    if( m_strReceived.length () == 0)
 			{
 				m_pszRxBuffer [0] = '\0';
@@ -583,11 +630,11 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 		 *
 		 *      footer         = *entity-header
 		 */
-		// firstly read in the chunk size line.
-		//There might be chunk extensions in there too but we may not need them
-				unsigned int endOfChunkData = m_strReceived.find( "\r\n");
+				// firstly read in the chunk size line.
+				//There might be chunk extensions in there too but we may not need them
+				unsigned int endOfChunkData = m_strReceived.find( ASCII_S_CRLF );
 
-		// make sure we have read at least some part of the message
+				// make sure we have read at least some part of the message
 				if( endOfChunkData == std::string::npos)
 				{
 					iIterationCountdown = 100;
@@ -607,7 +654,7 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 						}
 
 						m_strReceived = m_pszRxBuffer;
-						endOfChunkData = m_strReceived.find( "\r\n");
+						endOfChunkData = m_strReceived.find( ASCII_S_CRLF );
 					} while( endOfChunkData == std::string::npos && iIterationCountdown > 0);
 				}
 
@@ -619,22 +666,22 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 
 				int endOfChunkSize = endOfChunkData;
 
-		// now get the size of the chunk from the data
-		// look to see if there are any extensions - these are put in brackets so look for those
-				if( m_strReceived.substr( 0, endOfChunkData).find( "(") != string::npos)
+				// now get the size of the chunk from the data
+				// look to see if there are any extensions - these are put in brackets so look for those
+				if( m_strReceived.substr( 0, endOfChunkData).find( ASCII_S_LEFTPAREN ) != string::npos)
 				{
-					endOfChunkSize = m_strReceived.find( "(");
+					endOfChunkSize = m_strReceived.find( ASCII_S_LEFTPAREN );
 				}
 
-		// convert the hex String into the length of the chunk
+				// convert the hex String into the length of the chunk
 				m_iContentLength = axtoi( (char *) m_strReceived.substr( 0, endOfChunkSize).c_str());
 
-		// if the chunk size is zero then we have reached the footer
-		// If we have reached the footer then we can throw it away because we don't need it
+				// if the chunk size is zero then we have reached the footer
+				// If we have reached the footer then we can throw it away because we don't need it
 				if( m_iContentLength > 0)
 				{
-		    // now get the chunk without the CRLF
-		    // check if we have read past chunk length
+		 			// now get the chunk without the CRLF
+		    		// check if we have read past chunk length
 					if( m_strReceived.length() >= (endOfChunkData + 2 + m_iContentLength))
 					{
 						m_strReceived = m_strReceived.substr( endOfChunkData + 2, m_iContentLength);
@@ -643,9 +690,9 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 					{
 						m_strReceived = m_strReceived.substr( endOfChunkData + 2);
 					}
-		    /* We have received part of chunk data. If received payload
-		     *  is a mime struct, process it
-		     */
+					
+		    		// We have received part of chunk data. If received payload
+		     		// is a mime struct, process it
 					if( m_bMimeTrue)
 					{
 						processRootMimeBody();
@@ -658,26 +705,26 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 			}
 			else if( m_bChunked)	// read continued portions of a chunk
 			{
-		// Samisa - NOTE: It looks as if there is some logic duplication
-		// in this block, where we read continued chunks and the block
-		// above, where we read the first chunk. However, there are slight
-		// logical differences here, and that is necessary to enable the
-		// pull model used by the parser - this logic makes pulling more
-		// efficient (30th Sept 2004)
+				// Samisa - NOTE: It looks as if there is some logic duplication
+				// in this block, where we read continued chunks and the block
+				// above, where we read the first chunk. However, there are slight
+				// logical differences here, and that is necessary to enable the
+				// pull model used by the parser - this logic makes pulling more
+				// efficient (30th Sept 2004)
 				if( m_strReceived.length () >= m_iContentLength)	// We have reached end of current chunk
 				{
-		    // Get remainder of current chunk
+		    		// Get remainder of current chunk
 					std::string strTemp = m_strReceived.substr( 0, m_iContentLength);
 
-		    // Start looking for the next chunk
-		    // The format we are expecting here is:
-		    // <previous chunk>\r\n<chunk size>\r\n<next chunk>
+		    		// Start looking for the next chunk
+		    		// The format we are expecting here is:
+		    		// <previous chunk>\r\n<chunk size>\r\n<next chunk>
 
-					unsigned int	endOfChunkData = m_strReceived.find( "\r\n");
+					unsigned int endOfChunkData = m_strReceived.find( ASCII_S_CRLF );
 					
 					iIterationCountdown = 100;
 
-		    // Make sure that we have the found the end of previous chunk
+		    		// Make sure that we have the found the end of previous chunk
 					while( endOfChunkData == std::string::npos && iIterationCountdown > 0)
 					{
 						m_pszRxBuffer [0] = '\0';
@@ -693,7 +740,7 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 						}
 
 						m_strReceived += m_pszRxBuffer;
-						endOfChunkData = m_strReceived.find( "\r\n");
+						endOfChunkData = m_strReceived.find( ASCII_S_CRLF );
 					}
 
 					if( iIterationCountdown == 0)
@@ -704,11 +751,11 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 
 				    m_strReceived = m_strReceived.substr( endOfChunkData + 2);	// Skip end of previous chunk
 
-				    endOfChunkData = m_strReceived.find( "\r\n");	// Locate the start of next chunk
+				    endOfChunkData = m_strReceived.find( ASCII_S_CRLF );	// Locate the start of next chunk
 
 					iIterationCountdown = 100;
 
-		    // Make sure that we have the starting line of next chunk
+		    		// Make sure that we have the starting line of next chunk
 					while( endOfChunkData == std::string::npos && iIterationCountdown > 0)
 					{
 						m_pszRxBuffer [0] = '\0';
@@ -724,7 +771,7 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 						}
 
 						m_strReceived += m_pszRxBuffer;
-						endOfChunkData = m_strReceived.find( "\r\n");
+						endOfChunkData = m_strReceived.find( ASCII_S_CRLF );
 					}
 
 					if( iIterationCountdown == 0)
@@ -735,24 +782,24 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 
 				    int endOfChunkSize = endOfChunkData;
 
-		    // look to see if there are any extensions - these are put in brackets so look for those
-				    if (m_strReceived.substr (0, endOfChunkData).find ("(") != string::npos)
+		    		// look to see if there are any extensions - these are put in brackets so look for those
+				    if (m_strReceived.substr (0, endOfChunkData).find ( ASCII_S_LEFTPAREN ) != string::npos)
 				    {
-						endOfChunkSize = m_strReceived.find ("(");
+						endOfChunkSize = m_strReceived.find ( ASCII_S_LEFTPAREN );
 					}
 
-		    // convert the hex String into the length of the chunk
+		    		// convert the hex String into the length of the chunk
 				    int iTempContentLength = axtoi( (char *) m_strReceived.substr( 0, endOfChunkSize).c_str());
 
-		    // if the chunk size is zero then we have reached the footer
-		    // If we have reached the footer then we can throw it away because we don't need it
+		    		// if the chunk size is zero then we have reached the footer
+		    		// If we have reached the footer then we can throw it away because we don't need it
 				    if( iTempContentLength > 0)
 				    {
-			// Update the content lenght to be remainde of previous chunk and lenght of new chunk
+						// Update the content lenght to be remainde of previous chunk and lenght of new chunk
 						m_iContentLength += iTempContentLength;
 
-			// now get the chunk without the CRLF
-			// check if we have read past chunk length
+						// now get the chunk without the CRLF
+						// check if we have read past chunk length
 						if( m_strReceived.length() >= (endOfChunkData + 2 + iTempContentLength))
 						{
 							m_strReceived = m_strReceived.substr( endOfChunkData + 2, iTempContentLength);
@@ -762,9 +809,8 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 							m_strReceived = m_strReceived.substr( endOfChunkData + 2);
 						}
 
-			/* We have received part of chunk data. If received payload
-			 *  is a mime struct, process it
-			 */
+						// We have received part of chunk data. If received payload
+						// is a mime struct, process it
 						if( m_bMimeTrue)
 						{
 							processRootMimeBody();
@@ -775,24 +821,22 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 						m_strReceived = "";
 					}
 
-		    // Append the data of new chunk to data from previous chunk
+		    		// Append the data of new chunk to data from previous chunk
 					m_strReceived = strTemp + m_strReceived;
 
 					}		// End of if (m_strReceived.length() >= m_iContentLength)
-		// If we have not reached end of current chunk, nothing to be done
+					// If we have not reached end of current chunk, nothing to be done
 				}
 				else		// Not chunked
 				{
-		//nothing to do here
-		/* We have received part of chunk data. If received payload
-		 *  is a mime struct, process it
-		 */
-				if( m_bMimeTrue)
-				{
-					processRootMimeBody();
+					// We have received part of chunk data. If received payload
+		 			// is a mime struct, process it
+					if( m_bMimeTrue)
+					{
+						processRootMimeBody();
+					}
 				}
 			}
-		}
 
 		    m_pcReceived = m_strReceived.c_str();
 
@@ -1178,15 +1222,15 @@ int axtoi( char *pcHexStg)
 			break;
 		}
 	
-		if( pcHexStg[iN] > 0x29 && pcHexStg[iN] < 0x40)	//if 0 to 9
+		if( pcHexStg[iN] >= ASCII_C_ZERO && 
+			pcHexStg[iN] <= ASCII_C_NINE)
 		{
 			iDigit[iN] = pcHexStg[iN] & 0x0f;	//convert to int
 		}
-		else if (pcHexStg[iN] >= 'a' && pcHexStg[iN] <= 'f')	//if a to f
-		{
-			iDigit[iN] = (pcHexStg[iN] & 0x0f) + 9;	//convert to int
-		}
-		else if (pcHexStg[iN] >= 'A' && pcHexStg[iN] <= 'F')	//if A to F
+		else if ((pcHexStg[iN] >= ASCII_C_LOWERCASEA && 
+		          pcHexStg[iN] <= ASCII_C_LOWERCASEF) ||
+		         (pcHexStg[iN] >= ASCII_C_UPPERCASEA && 
+		          pcHexStg[iN] <= ASCII_C_UPPERCASEF))
 		{
 			iDigit[iN] = (pcHexStg[iN] & 0x0f) + 9;	//convert to int
 		}
@@ -1195,7 +1239,7 @@ int axtoi( char *pcHexStg)
 			break;
 		}
 
-	iN++;
+		iN++;
     }
 
     iCount = iN;
@@ -1204,9 +1248,9 @@ int axtoi( char *pcHexStg)
 
     while( iN < iCount)
     {
-	// digit[n] is value of hex digit at position n
-	// (m << 2) is the number of positions to shift
-	// OR the bits into return value
+		// digit[n] is value of hex digit at position n
+		// (m << 2) is the number of positions to shift
+		// OR the bits into return value
 		intValue = intValue | (iDigit[iN] << (iM << 2));
 		iM--;			// adjust the position to set
 		iN++;			// next digit to process
@@ -1223,42 +1267,43 @@ void HTTPTransport::processResponseHTTPHeaders() throw (HTTPTransportException)
     unsigned int iPosition = std::string::npos;
     unsigned int iStartPosition = iPosition;
 
-    if( (iPosition = m_strResponseHTTPHeaders.find( "HTTP")) != std::string::npos)
+    if( (iPosition = m_strResponseHTTPHeaders.find( ASCII_S_HTTP )) != std::string::npos)
     {
 		m_strResponseHTTPProtocol = m_strResponseHTTPHeaders.substr( iPosition, strlen( "HTTP/1.x"));
 		iPosition += strlen( "HTTP/1.x");
 
-		while( m_strResponseHTTPHeaders.substr()[iPosition] == ' ')
+		while( m_strResponseHTTPHeaders.substr()[iPosition] == ASCII_C_SPACE)
 		{
 			iPosition++;
 		}
 
 		iStartPosition = iPosition;
 
-		while( m_strResponseHTTPHeaders.substr()[iPosition] != ' ')
+		while( m_strResponseHTTPHeaders.substr()[iPosition] != ASCII_C_SPACE )
 		{
 			iPosition++;
 		}
 
-		std::string strResponseHTTPStatusCode = m_strResponseHTTPHeaders.substr( iStartPosition,
-																				 iPosition - iStartPosition);
-		m_iResponseHTTPStatusCode = atoi( strResponseHTTPStatusCode.c_str());
+		std::string strResponseHTTPStatusCode = 
+               m_strResponseHTTPHeaders.substr( iStartPosition,iPosition - iStartPosition);
+		m_iResponseHTTPStatusCode = atoi( PLATFORM_ASCTOSTR(strResponseHTTPStatusCode.c_str()));
 
 		iStartPosition = ++iPosition;
-		iPosition = m_strResponseHTTPHeaders.find( "\n");
-		m_strResponseHTTPStatusMessage = m_strResponseHTTPHeaders.substr( iStartPosition,
-																		  iPosition - iStartPosition - 1);
+		iPosition = m_strResponseHTTPHeaders.find( ASCII_S_LF );
+		m_strResponseHTTPStatusMessage = 
+              m_strResponseHTTPHeaders.substr( iStartPosition,iPosition - iStartPosition - 1);
+        PLATFORM_ASCTOSTR(m_strResponseHTTPStatusMessage.c_str());
 
-	// reached the end of the first line
-		iStartPosition = m_strResponseHTTPHeaders.find( "\n");
+		// reached the end of the first line
+		iStartPosition = m_strResponseHTTPHeaders.find( ASCII_S_LF );
 
 		iStartPosition++;
 
-	// read header fields and add to vector
+		// read header fields and add to vector
 		do
 		{
 		    m_strResponseHTTPHeaders = m_strResponseHTTPHeaders.substr( iStartPosition);
-			iPosition = m_strResponseHTTPHeaders.find( "\n");
+			iPosition = m_strResponseHTTPHeaders.find( ASCII_S_LF );
 
 		    if( iPosition == std::string::npos)
 		    {
@@ -1266,7 +1311,7 @@ void HTTPTransport::processResponseHTTPHeaders() throw (HTTPTransportException)
 			}
 
 			std::string		strHeaderLine = m_strResponseHTTPHeaders.substr( 0, iPosition);
-			unsigned int	iSeperator = strHeaderLine.find(":");
+			unsigned int	iSeperator = strHeaderLine.find( ASCII_S_COLON );
 
 		    if( iSeperator == std::string::npos)
 			{
@@ -1278,18 +1323,20 @@ void HTTPTransport::processResponseHTTPHeaders() throw (HTTPTransportException)
 			string	key = strHeaderLine.substr( 0, iSeperator);
 			string	value = strHeaderLine.substr( iSeperator + 1,
 												  strHeaderLine.length () - iSeperator - 1 - 1);
+            PLATFORM_ASCTOSTR(key.c_str());
+            PLATFORM_ASCTOSTR(value.c_str());
 
 			m_vResponseHTTPHeaders.push_back( std::make_pair( key, value));
 
-	    // if HTTP/1.0 we have to always close the connection by default
+	   	 	// if HTTP/1.0 we have to always close the connection by default
 		    if( m_eProtocolType == APTHTTP1_0)
 			{
 				m_bReopenConnection = true;
 			}
 
-	    // if HTTP/1.1 we have to assume persistant connection by default
+	    	// if HTTP/1.1 we have to assume persistant connection by default
 
-	    // We need to close the connection and open a new one if we have 'Connection: close'
+	    	// We need to close the connection and open a new one if we have 'Connection: close'
 			if( key == "Connection" && value == " close")
 			{
 				m_bReopenConnection = true;
@@ -1299,24 +1346,24 @@ void HTTPTransport::processResponseHTTPHeaders() throw (HTTPTransportException)
             if (key == "Proxy-Connection" && value == " close")
                 m_bReopenConnection = true;
 
-	    // For both HTTP/1.0 and HTTP/1.1,
-	    // We need to keep the connection if we have 'Connection: Keep-Alive'
+	    	// For both HTTP/1.0 and HTTP/1.1,
+	    	// We need to keep the connection if we have 'Connection: Keep-Alive'
 			if( key == "Connection" && value == " Keep-Alive")
 			{
 				m_bReopenConnection = false;
 			}
 
-	    // Look for cookies
+	    	// Look for cookies
 			if( m_bMaintainSession && !(m_strSessionKey.size() > 0))
 		    {
 				if( key == "Set-Cookie")
 				{
 					m_strSessionKey = value;
 
-		    // Spec syntax : Set-Cookie: NAME=VALUE; expires=DATE; path=PATH; domain=DOMAIN_NAME; secure
-		    // This code assumes it to be : Set-Cookie: NAME=VALUE; Anything_else
-		    // And discards stuff after first ';'
-		    // This is the same assumption used in Axis Java
+		    		// Spec syntax : Set-Cookie: NAME=VALUE; expires=DATE; path=PATH; domain=DOMAIN_NAME; secure
+		    		// This code assumes it to be : Set-Cookie: NAME=VALUE; Anything_else
+		    		// And discards stuff after first ';'
+		    		// This is the same assumption used in Axis Java
 					unsigned long ulKeyEndsAt = m_strSessionKey.find( ";");
 		    
 					if( ulKeyEndsAt != std::string::npos)
@@ -1326,7 +1373,7 @@ void HTTPTransport::processResponseHTTPHeaders() throw (HTTPTransportException)
 				}
 		    }
 
-	    /* If Content-Type: Multipart/Related; boundary=<MIME_boundary>; type=text/xml;
+	    	/* If Content-Type: Multipart/Related; boundary=<MIME_boundary>; type=text/xml;
 	       start="<content id>" */
 			if( key == "Content-Type")
 			{
@@ -1343,13 +1390,13 @@ void HTTPTransport::processResponseHTTPHeaders() throw (HTTPTransportException)
 				if( "Multipart/Related" == strTypePart)
 				{
 					m_bMimeTrue = true;
-					m_strContentType = m_strContentType.substr( ulMimePos + 1,
-																m_strContentType.length());
+					m_strContentType = m_strContentType.substr( ulMimePos + 1, m_strContentType.length());
 
 				    ulMimePos = m_strContentType.find( "boundary=");
 					m_strMimeBoundary = m_strContentType.substr( ulMimePos);
 					ulMimePos = m_strMimeBoundary.find( ";");
 					m_strMimeBoundary = m_strMimeBoundary.substr( 9, ulMimePos - 9);
+                    PLATFORM_STRTOASC(m_strMimeBoundary.c_str());
 
 					ulMimePos = m_strContentType.find( "type=");
 					m_strMimeType = m_strContentType.substr( ulMimePos);
@@ -1380,21 +1427,21 @@ void HTTPTransport::processRootMimeBody()
     {
 		do
 		{
-			if( m_strReceived.find( "\r\n\r\n") == std::string::npos)
+			if( m_strReceived.find( ASCII_S_CRLFCRLF ) == std::string::npos)
 			{
 				m_pszRxBuffer [0] = '\0';
 				*m_pActiveChannel >> m_pszRxBuffer;
 				m_strReceived += m_pszRxBuffer;
 			}
-		} while( m_strReceived.find( "\r\n\r\n") == std::string::npos);
+		} while( m_strReceived.find( ASCII_S_CRLFCRLF ) == std::string::npos);
 
-	//now we have found the end of root mime header
+		//now we have found the end of root mime header
 		m_bReadPastRootMimeHeader = true;
 
-	//processMimeHeader(); For the time being we don't process this
-	// Done with root mime body headers, get rest of the payload 
-	// which contain the soap message
-		m_strReceived = m_strReceived.substr( m_strReceived.find( "\r\n\r\n") + 4);
+		//processMimeHeader(); For the time being we don't process this
+		// Done with root mime body headers, get rest of the payload 
+		// which contain the soap message
+		m_strReceived = m_strReceived.substr( m_strReceived.find( ASCII_S_CRLFCRLF ) + 4);
 	
 		unsigned int intMimeTemp = m_strReceived.find( m_strMimeBoundary);
 
@@ -1402,10 +1449,9 @@ void HTTPTransport::processRootMimeBody()
 		{
 			m_strReceived = m_strReceived.substr( 0, intMimeTemp);
 			m_strMimeReceived = m_strReceived.substr( intMimeTemp);
+            PLATFORM_ASCTOSTR(m_strMimeReceived.c_str());
 
-	    /* Using m_strMimeReceived will be 
-	     * continued when getAttachment is called.
-	     */
+	    	// Using m_strMimeReceived will be continued when getAttachment is called.
 			m_bMimeTrue = false;
 		}
     }
@@ -1417,10 +1463,9 @@ void HTTPTransport::processRootMimeBody()
 		{
 			m_strReceived = m_strReceived.substr( 0, intMimeTemp);
 			m_strMimeReceived = m_strReceived.substr( intMimeTemp);
+            PLATFORM_ASCTOSTR(m_strMimeReceived.c_str());
 
-	    /* Using m_strMimeReceived will be 
-	     * continued when getAttachment is called.
-	     */
+	    	// Using m_strMimeReceived will be continued when getAttachment is called.
 			m_bMimeTrue = false;
 		}
 
