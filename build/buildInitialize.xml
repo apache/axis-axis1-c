@@ -92,6 +92,7 @@
 		<compiler id="AIXxlc" name="xlC" if="aix">
 			<compilerarg value="-g" if="debug"/>
 			<compilerarg value="-V"/>
+			<compilerarg value="-qthreaded"/>
 			<compilerarg value="-qstaticinline"/>
 			<defineset>
 				<define name="ENABLE_AXIS_EXCEPTION"/>
