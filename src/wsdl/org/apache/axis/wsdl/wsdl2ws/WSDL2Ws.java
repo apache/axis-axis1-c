@@ -1145,8 +1145,7 @@ public class WSDL2Ws
                 gen.generateWrappers(
                     null,
                     data.getOptionBykey("o"),
-//                    data.getOptionBykey("l"),
-                    data.getOptionBykey("i"),
+                    data.getOptionBykey("l"),
                     data.getOptionBykey("s"),
                     data.getOptionBykey("w"));
 
@@ -1170,15 +1169,6 @@ public class WSDL2Ws
     {
         for(int i=0; i<data.getArgumentCount(); i++)
         {
-            // implementation style- NO LONGER SUPPORTED
-            String implementationStyle=data.getOptionBykey("i");
-            if(implementationStyle!=null)
-            {
-                // This is no longer supported so return false;
-                return false;
-            }
-
-            
             // Check that those supported args have only the acceptable options.
             // target language
             String language = data.getOptionBykey("l");
