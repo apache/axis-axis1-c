@@ -24,24 +24,24 @@
 
 HTTPChannel::HTTPChannel()
 {
-	m_LastError = "No Errors";
+    m_LastError = "No Errors";
 
-	m_Sock = INVALID_SOCKET;
+    m_Sock = INVALID_SOCKET;
 
-	m_bUseProxy = false;
+    m_bUseProxy = false;
     m_strProxyHost = "";
     m_uiProxyPort = 0;
 
 #ifdef WIN32
-	m_lTimeoutSeconds = 10;
+    m_lTimeoutSeconds = 10;
 #else
-	m_lTimeoutSeconds = 0;
+    m_lTimeoutSeconds = 0;
 #endif
 
-	if( !StartSockets())
-	{
-		throw HTTPTransportException( SERVER_TRANSPORT_CHANNEL_INIT_ERROR);
-	}
+    if( !StartSockets())
+    {
+        throw HTTPTransportException( SERVER_TRANSPORT_CHANNEL_INIT_ERROR);
+    }
 }
 
 /**
@@ -53,14 +53,14 @@ HTTPChannel::HTTPChannel()
 
 HTTPChannel::~HTTPChannel()
 {
-	// If the socket value is not invalid, then close the socket before
-	// deleting the Channel object.
-	if( m_Sock != INVALID_SOCKET)
-	{
-		CloseChannel();
-	}
+    // If the socket value is not invalid, then close the socket before
+    // deleting the Channel object.
+    if( m_Sock != INVALID_SOCKET)
+    {
+        CloseChannel();
+    }
 
-	StopSockets();
+    StopSockets();
 }
 
 /**
@@ -116,22 +116,22 @@ URL & HTTPChannel::getURLObject()
 
 bool HTTPChannel::open() throw (HTTPTransportException&)
 {
-	bool	bSuccess = (bool) AXIS_FAIL;
+    bool    bSuccess = (bool) AXIS_FAIL;
 
     if( m_Sock != INVALID_SOCKET)
-	{
-		CloseChannel();
-	}
+    {
+        CloseChannel();
+    }
 
-	m_LastError = "No Errors";
+    m_LastError = "No Errors";
 
-	if( (bSuccess = OpenChannel()) != AXIS_SUCCESS)
-	{
-		throw HTTPTransportException( SERVER_TRANSPORT_SOCKET_CONNECT_ERROR,
-									  (char *) m_LastError.c_str());
-	}
+    if( (bSuccess = OpenChannel()) != AXIS_SUCCESS)
+    {
+        throw HTTPTransportException( SERVER_TRANSPORT_SOCKET_CONNECT_ERROR,
+                                      (char *) m_LastError.c_str());
+    }
 
-	return bSuccess;
+    return bSuccess;
 }
 
 /**
@@ -145,14 +145,14 @@ bool HTTPChannel::open() throw (HTTPTransportException&)
 
 bool HTTPChannel::close()
 {
-	if( m_Sock != INVALID_SOCKET)
-	{
-		CloseChannel();
-	}
+    if( m_Sock != INVALID_SOCKET)
+    {
+        CloseChannel();
+    }
 
-	m_Sock = INVALID_SOCKET;
+    m_Sock = INVALID_SOCKET;
 
-	return AXIS_SUCCESS;
+    return AXIS_SUCCESS;
 }
 
 /**
@@ -165,7 +165,7 @@ bool HTTPChannel::close()
 
 const std::string & HTTPChannel::GetLastErrorMsg()
 {
-	return m_LastError;
+    return m_LastError;
 }
 
 /**
@@ -187,70 +187,70 @@ const IChannel & HTTPChannel::operator >> (const char * msg)
 {
     if (INVALID_SOCKET == m_Sock)
     {
-		// Error - Reading cannot be done without having a open socket Input
-		//         streaming error on undefined channel; please open the
-		//		   channel first
+        // Error - Reading cannot be done without having a open socket Input
+        //         streaming error on undefined channel; please open the
+        //         channel first
 
-		m_LastError = "No open socket to read from.";
+        m_LastError = "No open socket to read from.";
 
-		throw HTTPTransportException( SERVER_TRANSPORT_INVALID_SOCKET,
-									  (char *) m_LastError.c_str());
+        throw HTTPTransportException( SERVER_TRANSPORT_INVALID_SOCKET,
+                                      (char *) m_LastError.c_str());
     }
 
-    int		nByteRecv = 0;
-    char	buf[BUF_SIZE];
-	int		iBufSize = BUF_SIZE - 10;
+    int     nByteRecv = 0;
+    char    buf[BUF_SIZE];
+    int     iBufSize = BUF_SIZE - 10;
 
     //assume timeout not set; set default tatus to OK
     int iTimeoutStatus = 1;
 
     //check if timeout set
     if( m_lTimeoutSeconds)
-	{
+    {
         iTimeoutStatus = applyTimeout();
-	}
+    }
 
     // Handle timeout outcome
     if( iTimeoutStatus < 0)
     {
-		// Error
-		m_LastError = "Channel error while waiting for timeout";
+        // Error
+        m_LastError = "Channel error while waiting for timeout";
 
         // Select SOCKET_ERROR. Channel error while waiting for timeout
         throw HTTPTransportException( SERVER_TRANSPORT_TIMEOUT_EXCEPTION, 
-									  (char *) m_LastError.c_str());
+                                      (char *) m_LastError.c_str());
     }
 
     if( iTimeoutStatus == 0)
     {
-		// Timeout expired - select timeout expired.
+        // Timeout expired - select timeout expired.
         // Channel error connection timeout before receving
-		m_LastError = "Channel error: connection timed out before receving";
+        m_LastError = "Channel error: connection timed out before receving";
 
         throw HTTPTransportException( SERVER_TRANSPORT_TIMEOUT_EXPIRED, 
-									  (char *) m_LastError.c_str());
+                                      (char *) m_LastError.c_str());
     }
 
     // Either timeout was not set or data available before timeout; so read
 
     if( (nByteRecv = recv( m_Sock, (char *) &buf, iBufSize, 0)) == SOCKET_ERROR)
     {
-		ReportError( "Channel error", "while reading data");
+        ReportError( "Channel error", "while reading data");
 
-		CloseChannel();
+        CloseChannel();
 
-		throw HTTPTransportException( SERVER_TRANSPORT_INPUT_STREAMING_ERROR, 
-									  (char *) m_LastError.c_str());
+        throw HTTPTransportException( SERVER_TRANSPORT_INPUT_STREAMING_ERROR, 
+                                      (char *) m_LastError.c_str());
     }
 
     if( nByteRecv)
     {
-		buf[nByteRecv] = '\0';
-		// got a part of the message, so add to form
-		memcpy( (void *) msg, buf, nByteRecv + 1);
+        buf[nByteRecv] = '\0';
+        // got a part of the message, so add to form
+        memcpy( (void *) msg, buf, nByteRecv + 1);
     }
 
-	return *this;
+    return *this;
 }
 
 /**
@@ -267,35 +267,39 @@ const IChannel & HTTPChannel::operator >> (const char * msg)
 
 const IChannel & HTTPChannel::operator << (const char * msg)
 {
-	// Check that the Tx/Rx sockets are valid (this will have been done if the
-	// application has called the open method first.
+    // Check that the Tx/Rx sockets are valid (this will have been done if the
+    // application has called the open method first.
     if( INVALID_SOCKET == m_Sock)
     {
-		// Error - Writing cannot be done without having a open socket to
-		//         remote end.  Throw an exception.
+        // Error - Writing cannot be done without having a open socket to
+        //         remote end.  Throw an exception.
 
-		m_LastError = "No valid socket open";
+        m_LastError = "No valid socket open";
 
-		throw HTTPTransportException( SERVER_TRANSPORT_INVALID_SOCKET,
-									  (char *) m_LastError.c_str());
+        throw HTTPTransportException( SERVER_TRANSPORT_INVALID_SOCKET,
+                                      (char *) m_LastError.c_str());
     }
 
     int size = strlen( msg);
-	int nByteSent;
+    int nByteSent;
 
+#ifdef __OS400__
+    if( (nByteSent = send( m_Sock, (char *)msg, size, MSG_DONTROUTE)) == SOCKET_ERROR)
+#else
     if( (nByteSent = send( m_Sock, msg, size, MSG_DONTROUTE)) == SOCKET_ERROR)
+#endif
     {
-		// Output streaming error while writing data.  Close the channel and
-		// throw an exception.
-		CloseChannel();
+        // Output streaming error while writing data.  Close the channel and
+        // throw an exception.
+        CloseChannel();
 
-		ReportError( "Channel error", "while writing data");
+        ReportError( "Channel error", "while writing data");
 
-		throw HTTPTransportException( SERVER_TRANSPORT_OUTPUT_STREAMING_ERROR,
-									  (char *) m_LastError.c_str());
+        throw HTTPTransportException( SERVER_TRANSPORT_OUTPUT_STREAMING_ERROR,
+                                      (char *) m_LastError.c_str());
     }
 
-	return *this;
+    return *this;
 }
 
 /**
@@ -326,18 +330,18 @@ void HTTPChannel::setSocket( unsigned int uiNewSocket)
 
 /**
  * HTTPChannel::setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type,
- *									  const char * value)
+ *                                    const char * value)
  *
  * The following list can be set using this property:-
- * SOAPACTION_HEADER			- No action
- * SERVICE_URI					- No action
- * OPERATION_NAME				- No action
- * SOAP_MESSAGE_LENGTH			- No action
- * TRANSPORT_PROPERTIES			- No action
- * SECURE_PROPERTIES			- No action
- * DLL_NAME						- No action
- * CHANNEL_HTTP_SSL_DLL_NAME	- No action
- * CHANNEL_HTTP_DLL_NAME		- No action
+ * SOAPACTION_HEADER            - No action
+ * SERVICE_URI                  - No action
+ * OPERATION_NAME               - No action
+ * SOAP_MESSAGE_LENGTH          - No action
+ * TRANSPORT_PROPERTIES         - No action
+ * SECURE_PROPERTIES            - No action
+ * DLL_NAME                     - No action
+ * CHANNEL_HTTP_SSL_DLL_NAME    - No action
+ * CHANNEL_HTTP_DLL_NAME        - No action
  *
  * @param AXIS_TRANSPORT_INFORMATION_TYPE contains the type of property to be
  *        set.
@@ -347,24 +351,24 @@ void HTTPChannel::setSocket( unsigned int uiNewSocket)
 
 bool HTTPChannel::setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char * value)
 {
-	bool	bSuccess = false;
+    bool    bSuccess = false;
 
-	return bSuccess;
+    return bSuccess;
 }
 
 /**
  * HTTPChannel::getTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type)
  *
  * The following list can be retrieved using this property:-
- * SOAPACTION_HEADER			- No action
- * SERVICE_URI					- No action
- * OPERATION_NAME				- No action
- * SOAP_MESSAGE_LENGTH			- No action
- * TRANSPORT_PROPERTIES			- No action
- * SECURE_PROPERTIES			- No action
- * DLL_NAME						- No action
- * CHANNEL_HTTP_SSL_DLL_NAME	- No action
- * CHANNEL_HTTP_DLL_NAME		- No action
+ * SOAPACTION_HEADER            - No action
+ * SERVICE_URI                  - No action
+ * OPERATION_NAME               - No action
+ * SOAP_MESSAGE_LENGTH          - No action
+ * TRANSPORT_PROPERTIES         - No action
+ * SECURE_PROPERTIES            - No action
+ * DLL_NAME                     - No action
+ * CHANNEL_HTTP_SSL_DLL_NAME    - No action
+ * CHANNEL_HTTP_DLL_NAME        - No action
  *
  * @param AXIS_TRANSPORT_INFORMATION_TYPE contains the type of property to be
  *        recovered.
@@ -373,7 +377,7 @@ bool HTTPChannel::setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, co
 
 const char * HTTPChannel::getTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type)
 {
-	return NULL;
+    return NULL;
 }
 
 /**
@@ -382,7 +386,7 @@ const char * HTTPChannel::getTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE 
  * Setup he proxy values to be used by the channel.
  *
  * @param const char * containing the name of the proxy host.
- *		  unsigned int containing the proxy port value.
+ *        unsigned int containing the proxy port value.
  */
 
 void HTTPChannel::setProxy( const char * pcProxyHost, unsigned int uiProxyPort)
@@ -393,8 +397,8 @@ void HTTPChannel::setProxy( const char * pcProxyHost, unsigned int uiProxyPort)
 }
 
 // +--------------------------------------------------------------------------+
-// | Protected methods														  |
-// | -----------------														  |
+// | Protected methods                                                        |
+// | -----------------                                                        |
 // +--------------------------------------------------------------------------+
 
 /**
@@ -408,26 +412,26 @@ void HTTPChannel::setProxy( const char * pcProxyHost, unsigned int uiProxyPort)
 
 bool HTTPChannel::OpenChannel()
 {
-	// This method is common to all channel implementations
-	bool	bSuccess = (bool) AXIS_FAIL;
+    // This method is common to all channel implementations
+    bool    bSuccess = (bool) AXIS_FAIL;
 
-	// Create the Client (Rx) side first.
+    // Create the Client (Rx) side first.
 #ifdef IPV6
-    struct addrinfo		aiHints;
-	struct addrinfo *	paiAddrInfo;
-	struct addrinfo *	paiAddrInfo0;
+    struct addrinfo     aiHints;
+    struct addrinfo *   paiAddrInfo;
+    struct addrinfo *   paiAddrInfo0;
 
     // hints is used after zero cleared
     memset( &aiHints, 0, sizeof( aiHints));
 
-    aiHints.ai_family = PF_UNSPEC;		// This allows the sockets code to use
-										// whatever socket family is available.
+    aiHints.ai_family = PF_UNSPEC;      // This allows the sockets code to use
+                                        // whatever socket family is available.
     aiHints.ai_socktype = SOCK_STREAM;
 
     char szPort[7];
    
-    const char	*	pszHost = m_URL.getHostName();
-    unsigned int	uiPort = m_URL.getPort();
+    const char  *   pszHost = m_URL.getHostName();
+    unsigned int    uiPort = m_URL.getPort();
 
     if( m_bUseProxy)
     {
@@ -445,8 +449,8 @@ bool HTTPChannel::OpenChannel()
     for( paiAddrInfo = paiAddrInfo0; paiAddrInfo; paiAddrInfo = paiAddrInfo->ai_next)
     {
         m_Sock = socket( paiAddrInfo->ai_family,
-						 paiAddrInfo->ai_socktype,
-						 paiAddrInfo->ai_protocol);
+                         paiAddrInfo->ai_socktype,
+                         paiAddrInfo->ai_protocol);
 
         if( m_Sock < 0)
         {
@@ -458,25 +462,25 @@ bool HTTPChannel::OpenChannel()
             // Cannot open a channel to the remote end, shutting down the
             // channel and then throw an exception.
             // Before we do anything else get the last error message;
-			long dwError = GETLASTERROR
+            long dwError = GETLASTERROR
 
-			CloseChannel();
+            CloseChannel();
             freeaddrinfo( paiAddrInfo0);
-			
-			string *	message = PLATFORM_GET_ERROR_MESSAGE( dwError);
-			char		fullMessage[600];
-			sprintf(fullMessage,
-				"Failed to open connection to server: \n \
-				hostname='%s'\n\
-				port='%d'\n\
-				Error Message='%s'\
-				Error Code='%d'\n",
-				m_URL.getHostName(), m_URL.getPort(), message->c_str(), (int) dwError);
-				
-			delete( message);
+            
+            string *    message = PLATFORM_GET_ERROR_MESSAGE( dwError);
+            char        fullMessage[600];
+            sprintf(fullMessage,
+                "Failed to open connection to server: \n \
+                hostname='%s'\n\
+                port='%d'\n\
+                Error Message='%s'\
+                Error Code='%d'\n",
+                m_URL.getHostName(), m_URL.getPort(), message->c_str(), (int) dwError);
+                
+            delete( message);
 
-			throw HTTPTransportException( CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED,
-										  fullMessage);
+            throw HTTPTransportException( CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED,
+                                          fullMessage);
         }
 
         break;
@@ -494,103 +498,111 @@ bool HTTPChannel::OpenChannel()
         throw HTTPTransportException( SERVER_TRANSPORT_SOCKET_CREATE_ERROR);
     }
 
-	bSuccess = AXIS_SUCCESS;
+    bSuccess = AXIS_SUCCESS;
 
 #else // IPV6 not defined
     if( (m_Sock = socket( PF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET)
-	{
-		m_LastError = "Could not Create a socket.";
+    {
+        m_LastError = "Could not Create a socket.";
 
-		return bSuccess;
-	}
+        return bSuccess;
+    }
 
-	// If the transport was initilised, then create client and server sockets.
-    sockaddr_in	clAddr;
+    // If the transport was initilised, then create client and server sockets.
+    sockaddr_in clAddr;
     memset(&clAddr, 0, sizeof(sockaddr_in));
 
-	clAddr.sin_family = AF_INET;	// AF_INET (address family Internet).
-	clAddr.sin_port = 0;			// No Specify Port required.
-	clAddr.sin_addr.s_addr = INADDR_ANY;
+    clAddr.sin_family = AF_INET;    // AF_INET (address family Internet).
+    clAddr.sin_port = 0;            // No Specify Port required.
+    clAddr.sin_addr.s_addr = INADDR_ANY;
 
-	// Attempt to bind the client to the client socket.
-	if( bind( m_Sock, (struct sockaddr *) &clAddr, sizeof( clAddr)) == SOCKET_ERROR)
-	{
-		// Error whilst binding. Cannot open a channel to the remote end,
-		// shutting down the channel and then throw an exception.
-		CloseChannel();
+    // Attempt to bind the client to the client socket.
+    if( bind( m_Sock, (struct sockaddr *) &clAddr, sizeof( clAddr)) == SOCKET_ERROR)
+    {
+        // Error whilst binding. Cannot open a channel to the remote end,
+        // shutting down the channel and then throw an exception.
+        CloseChannel();
 
-		m_LastError = "Error whilst binding. Cannot open a channel to the remote end,";
+        m_LastError = "Error whilst binding. Cannot open a channel to the remote end,";
 
-		return bSuccess;
-	}
+        return bSuccess;
+    }
 
-	// Although the above fragment makes use of the bind() API, it would be
-	// just as effective to skip over this call as there are no specific
-	// local port ID requirements for this client. The only advantage that
-	// bind() offers is the accessibility of the port which the system 
-	// chose via the .sin_port member of the cli_addr structure which will 
-	// be set upon success of the bind() call.
+    // Although the above fragment makes use of the bind() API, it would be
+    // just as effective to skip over this call as there are no specific
+    // local port ID requirements for this client. The only advantage that
+    // bind() offers is the accessibility of the port which the system 
+    // chose via the .sin_port member of the cli_addr structure which will 
+    // be set upon success of the bind() call.
 
-	// Create the Server (Tx) side.
+    // Create the Server (Tx) side.
 
-	sockaddr_in			svAddr;
-	struct hostent *	pHostEntry = NULL;
-	const char *		host = m_URL.getHostName();
-	unsigned int		port = m_URL.getPort();
+    sockaddr_in         svAddr;
+    struct hostent *    pHostEntry = NULL;
+    const char *        host = m_URL.getHostName();
+    unsigned int        port = m_URL.getPort();
 
     memset(&svAddr, 0, sizeof(sockaddr_in));
-	if( m_bUseProxy)
-	{
-		port = m_uiProxyPort;
-		host = m_strProxyHost.c_str();
-	}
-
-	svAddr.sin_family = AF_INET;
-	svAddr.sin_port = htons( port);
-
-	// Probably this is the host-name of the server we are connecting to...
-	if( (pHostEntry = gethostbyname( host)))
-	{
-		svAddr.sin_addr.s_addr = ((struct in_addr *) pHostEntry->h_addr)->s_addr;
-	}
-	else
-	{
-		// No this is the IP address
-		svAddr.sin_addr.s_addr = inet_addr( host);
-	}
-
-	// Attempt to connect to the remote server.
-	if( connect( m_Sock, (struct sockaddr *) &svAddr, sizeof (svAddr)) == SOCKET_ERROR)
-	{
-		// Cannot open a channel to the remote end, shutting down the
-		// channel and then throw an exception.
-
-		// Before we do anything else get the last error message;
-		long dw = GETLASTERROR
-		CloseChannel();
-
-			
-		string* message = PLATFORM_GET_ERROR_MESSAGE(dw);
-
-		char fullMessage[600];
-		sprintf(fullMessage,
-				"Failed to open connection to server: \n \
-				hostname='%s'\n\
-				port='%d'\n\
-				Error Message='%s'\
-				Error Code='%d'\n",
-				m_URL.getHostName(), m_URL.getPort(), message->c_str(), dw);
-				
-		delete(message);
-
-		m_LastError = fullMessage;
-
-	    return bSuccess;
+    if( m_bUseProxy)
+    {
+        port = m_uiProxyPort;
+        host = m_strProxyHost.c_str();
     }
-	else
-	{
-		bSuccess = AXIS_SUCCESS;
-	}
+
+    svAddr.sin_family = AF_INET;
+    svAddr.sin_port = htons( port);
+
+    // Probably this is the host-name of the server we are connecting to...
+#ifdef __OS400__
+    if( (pHostEntry = gethostbyname( (char *)host)))
+#else
+	if( (pHostEntry = gethostbyname( host)))
+#endif
+    {
+        svAddr.sin_addr.s_addr = ((struct in_addr *) pHostEntry->h_addr)->s_addr;
+    }
+    else
+    {
+        // No this is the IP address
+#ifdef __OS400__
+        svAddr.sin_addr.s_addr = inet_addr( (char *)host);
+#else
+		svAddr.sin_addr.s_addr = inet_addr( host);
+#endif
+    }
+
+    // Attempt to connect to the remote server.
+    if( connect( m_Sock, (struct sockaddr *) &svAddr, sizeof (svAddr)) == SOCKET_ERROR)
+    {
+        // Cannot open a channel to the remote end, shutting down the
+        // channel and then throw an exception.
+
+        // Before we do anything else get the last error message;
+        long dw = GETLASTERROR
+        CloseChannel();
+
+            
+        string* message = PLATFORM_GET_ERROR_MESSAGE(dw);
+
+        char fullMessage[600];
+        sprintf(fullMessage,
+                "Failed to open connection to server: \n \
+                hostname='%s'\n\
+                port='%d'\n\
+                Error Message='%s'\
+                Error Code='%d'\n",
+                m_URL.getHostName(), m_URL.getPort(), message->c_str(), dw);
+                
+        delete(message);
+
+        m_LastError = fullMessage;
+
+        return bSuccess;
+    }
+    else
+    {
+        bSuccess = AXIS_SUCCESS;
+    }
 
 #endif // IPV6
 
@@ -623,14 +635,14 @@ bool HTTPChannel::OpenChannel()
 void HTTPChannel::CloseChannel()
 {
     if( INVALID_SOCKET != m_Sock) // Check if socket already closed : AXISCPP-185
-	{
+    {
 #ifdef WIN32
-		closesocket( m_Sock);
+        closesocket( m_Sock);
 #else
-		::close( m_Sock);
+        ::close( m_Sock);
 #endif
-		m_Sock = INVALID_SOCKET; // fix for AXISCPP-185
-	}
+        m_Sock = INVALID_SOCKET; // fix for AXISCPP-185
+    }
 }
 
 /**
@@ -644,47 +656,47 @@ void HTTPChannel::CloseChannel()
 
 bool HTTPChannel::StartSockets()
 {
-	bool	bSuccess = false;
+    bool    bSuccess = false;
 #ifdef WIN32
-    WSADATA wsaData;	// Contains vendor-specific information, such as the
-						// maximum number of sockets available and the maximum
-						// datagram size.
+    WSADATA wsaData;    // Contains vendor-specific information, such as the
+                        // maximum number of sockets available and the maximum
+                        // datagram size.
 
-	// wsaData filled by Windows Sockets DLLs.
+    // wsaData filled by Windows Sockets DLLs.
     if( WSAStartup( WS_VERSION_REQD, &wsaData))
     {
-		// Error - Could not setup underlying Windows socket transport mechanism.
-		m_LastError = "WinSock DLL not responding.";
+        // Error - Could not setup underlying Windows socket transport mechanism.
+        m_LastError = "WinSock DLL not responding.";
     }
     else
     {
-		// Query to see whether the available version matches what is required
-		if ((LOBYTE( wsaData.wVersion) <  WS_VERSION_MAJOR()) ||
-			(LOBYTE( wsaData.wVersion) == WS_VERSION_MAJOR() &&
-			 HIBYTE( wsaData.wVersion) <  WS_VERSION_MINOR()))
-		{
-			// Error - Underlying Windows socket transport version is not compatible with
-			//		   what is required.
-			char 	szErrorBuffer[100];
+        // Query to see whether the available version matches what is required
+        if ((LOBYTE( wsaData.wVersion) <  WS_VERSION_MAJOR()) ||
+            (LOBYTE( wsaData.wVersion) == WS_VERSION_MAJOR() &&
+             HIBYTE( wsaData.wVersion) <  WS_VERSION_MINOR()))
+        {
+            // Error - Underlying Windows socket transport version is not compatible with
+            //         what is required.
+            char    szErrorBuffer[100];
 
-			sprintf( szErrorBuffer,
-					 "Windows Sockets version %d.%d is not supported by winsock2.dll",
-					 LOBYTE( wsaData.wVersion),
-					 HIBYTE( wsaData.wVersion));
+            sprintf( szErrorBuffer,
+                     "Windows Sockets version %d.%d is not supported by winsock2.dll",
+                     LOBYTE( wsaData.wVersion),
+                     HIBYTE( wsaData.wVersion));
 
-			m_LastError = szErrorBuffer;
+            m_LastError = szErrorBuffer;
 
-			StopSockets();
-		}
-		else
-		{
-			bSuccess = true;
-		}
+            StopSockets();
+        }
+        else
+        {
+            bSuccess = true;
+        }
     }
 #else
-	// Other OS specific Intitialization goes here
+    // Other OS specific Intitialization goes here
 
-	bSuccess = true;
+    bSuccess = true;
 #endif
 
     return bSuccess;
@@ -702,7 +714,7 @@ bool HTTPChannel::StartSockets()
 void HTTPChannel::StopSockets()
 {
 #ifdef WIN32
-	WSACleanup();
+    WSACleanup();
 #endif // WIN32
 }
 
@@ -716,8 +728,8 @@ void HTTPChannel::StopSockets()
 
 int HTTPChannel::applyTimeout()
 {
-    fd_set			set;
-    struct timeval	timeout;
+    fd_set          set;
+    struct timeval  timeout;
 
     // Initialize the file descriptor set.
     FD_ZERO( &set);
@@ -733,11 +745,11 @@ int HTTPChannel::applyTimeout()
 
 void HTTPChannel::ReportError( char * szText1, char * szText2)
 {
-	long		dwMsg = GETLASTERROR
-	string *	sMsg = PLATFORM_GET_ERROR_MESSAGE( dwMsg);
-	char		szMsg[600];
+    long        dwMsg = GETLASTERROR
+    string *    sMsg = PLATFORM_GET_ERROR_MESSAGE( dwMsg);
+    char        szMsg[600];
 
-	sprintf( szMsg, "%s %d %s: '%s'\n", szText1, (int) dwMsg, szText2, sMsg->c_str());
+    sprintf( szMsg, "%s %d %s: '%s'\n", szText1, (int) dwMsg, szText2, sMsg->c_str());
 
-	m_LastError = szMsg;
+    m_LastError = szMsg;
 }
