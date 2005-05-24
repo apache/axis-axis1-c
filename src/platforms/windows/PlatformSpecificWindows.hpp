@@ -27,6 +27,8 @@
 // =============================================================
 // Default paths to shared library/DLLs and files
 // =============================================================
+#define PLATFORM_DEFAULT_DEPLOY_PATH ""
+
 #ifdef _DEBUG
   #define PLATFORM_XMLPARSER_PATH      "AxisXMLParser_D.dll"
   #define PLATFORM_TRANSPORTHTTP_PATH  "HTTPTransport_D.dll"

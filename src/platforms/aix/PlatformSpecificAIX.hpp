@@ -23,6 +23,8 @@
 // =============================================================
 // Default paths to shared library/DLLs and files
 // =============================================================
+#define PLATFORM_DEFAULT_DEPLOY_PATH ""
+
 #define PLATFORM_XMLPARSER_PATH      "libaxis_xmlparser.a"
 #define PLATFORM_TRANSPORTHTTP_PATH  "libhttp_transport.a"
 
