@@ -31,7 +31,6 @@ AXIS_CPP_NAMESPACE_START
 BasicTypeSerializer::BasicTypeSerializer ()
 {
     m_sSZ = "";
-    m_AuxStr = "";
 }
 
 BasicTypeSerializer::~BasicTypeSerializer ()
@@ -40,19 +39,19 @@ BasicTypeSerializer::~BasicTypeSerializer ()
 }
 
 const AxisChar* BasicTypeSerializer::serializeAsElement (const AxisChar* pName,
-    const void* pValue, XSDTYPE type)
+    IAnySimpleType* pSimpleType)
 {
-	return serializeAsElement(pName, NULL, pValue, type);
+	return serializeAsElement(pName, NULL, pSimpleType);
 }
 
 const AxisChar* BasicTypeSerializer::serializeAsElement (const AxisChar* pName,
-    const AxisChar* pPrefix, const void* pValue, XSDTYPE type)
+    const AxisChar* pPrefix, IAnySimpleType* pSimpleType)
 {
-    return serializeAsElement(pName, pPrefix, NULL, pValue, type);
+    return serializeAsElement(pName, pPrefix, NULL, pSimpleType);
 }
 
 const AxisChar* BasicTypeSerializer::serializeAsElement (const AxisChar* pName,
-    const AxisChar* pPrefix, const AxisChar* pNamespace, const void* pValue, XSDTYPE type)
+    const AxisChar* pPrefix, const AxisChar* pNamespace, IAnySimpleType* pSimpleType)
 {
     m_sSZ = "<";
 	if (NULL != pPrefix) { 
@@ -74,12 +73,12 @@ const AxisChar* BasicTypeSerializer::serializeAsElement (const AxisChar* pName,
     if (RPC_ENCODED == m_nStyle)
     {
         m_sSZ += " xsi:type=\"xsd:";
-        m_sSZ += basicTypeStr (type);
+        m_sSZ += basicTypeStr (pSimpleType->getType());
         m_sSZ += "\"";
     }
     m_sSZ += ">";
     
-    if (!pValue)
+    if (pSimpleType->isNil())
     {
         /*
          * It is a null value not an empty value.
@@ -104,149 +103,7 @@ const AxisChar* BasicTypeSerializer::serializeAsElement (const AxisChar* pName,
     }
     else
     {
-        switch (type)
-        {
-            case XSD_INT:
-                {
-                    Int intSerializer;
-                    m_sSZ += intSerializer.serialize(pValue);
-                }
-                break;
-            case XSD_BOOLEAN:
-            	{
-            		Boolean booleanSerializer;
-               		m_sSZ += booleanSerializer.serialize(pValue);
-            	}
-                break;
-            case XSD_UNSIGNEDINT:
-                {
-                    UnsignedInt unsignedIntSerializer;
-                    m_sSZ += unsignedIntSerializer.serialize(pValue);
-                }
-                break;
-            case XSD_SHORT:
-                {
-                    Short shortSerializer;
-                    m_sSZ += shortSerializer.serialize(pValue);
-                }
-                break;
-            case XSD_UNSIGNEDSHORT:
-                {
-                    UnsignedShort unsignedShortSerializer;
-                    m_sSZ += unsignedShortSerializer.serialize(pValue);
-                }
-                break;
-            case XSD_BYTE:
-                {
-                    Byte byteSerializer;
-                    m_sSZ += byteSerializer.serialize(pValue);
-                }
-                break;
-            case XSD_UNSIGNEDBYTE:
-                {
-                    UnsignedByte unsignedByteSerializer;
-                    m_sSZ += unsignedByteSerializer.serialize(pValue);
-                }
-                break;
-            case XSD_LONG:
-                {
-                    Long longSerializer;
-                    m_sSZ += longSerializer.serialize(pValue);
-                }
-                break;
-            case XSD_INTEGER:
-                {
-                    Integer integerSerializer;
-                    m_sSZ += integerSerializer.serialize(pValue);
-                }
-                break;
-            case XSD_DURATION:
-            	{
-            		Duration durationSerializer;
-            		m_sSZ += durationSerializer.serialize(pValue);
-            	}
-                break;
-            case XSD_UNSIGNEDLONG:
-                {
-                    UnsignedLong unsignedLongSerializer;
-                    m_sSZ += unsignedLongSerializer.serialize(pValue);
-                }
-                break;
-            case XSD_FLOAT:
-            	{
-            		Float floatSerializer;
-            		m_sSZ += floatSerializer.serialize(pValue);
-            	}
-                break;
-            case XSD_DOUBLE:
-            	{
-            		Double doubleSerializer;
-            		m_sSZ += doubleSerializer.serialize(pValue);
-            	}
-            	break;
-            case XSD_DECIMAL:
-            	{
-            		Decimal decimalSerializer;
-            		m_sSZ += decimalSerializer.serialize(pValue);
-            	}
-                break;
-            case XSD_STRING:
-                {
-                	String stringSerializer;
-                	m_sSZ += stringSerializer.serialize(pValue);
-                }
-                break;
-            case XSD_ANYURI:
-                {
-                	AnyURI anyURISerializer;
-                	m_sSZ += anyURISerializer.serialize(pValue);
-                }
-                break;
-            case XSD_QNAME:
-                {
-                	XSD_QName QNameSerializer;
-                	m_sSZ += QNameSerializer.serialize(pValue);
-                }
-                break;
-            case XSD_NOTATION:
-                {
-                	NOTATION notationSerializer;
-                	m_sSZ += notationSerializer.serialize(pValue);
-                }
-                break;
-            case XSD_HEXBINARY:
-            	{
-            		HexBinary hexBinarySerializer;
-            		m_sSZ += hexBinarySerializer.serialize(pValue);
-            	}
-                break;
-            case XSD_BASE64BINARY:
-            	{
-            		Base64Binary base64BinarySerializer;
-            		m_sSZ += base64BinarySerializer.serialize(pValue);
-            	}
-                break;
-            case XSD_DATETIME:
-            	{
-            		DateTime dateTimeSerializer;
-            		m_sSZ += dateTimeSerializer.serialize(pValue);
-            	}
-            	break;
-            case XSD_DATE:
-            	{
-            		Date dateSerializer;
-            		m_sSZ += dateSerializer.serialize(pValue);
-            	}
-            	break;
-            case XSD_TIME:
-            	{
-            		Time timeSerializer;
-            		m_sSZ += timeSerializer.serialize(pValue);
-            	}
-                break;
-            default:
-                return NULL;
-        }
+        m_sSZ += pSimpleType->serialize();
     }
     m_sSZ += "</";
 	if (NULL != pPrefix) {
@@ -258,31 +115,9 @@ const AxisChar* BasicTypeSerializer::serializeAsElement (const AxisChar* pName,
     return m_sSZ.c_str ();
 }
 
-const AxisChar* BasicTypeSerializer::encodeToHexBinary 
-    (const xsd__hexBinary* pBinary)
-{
-    char* outstr = new char[pBinary->__size * 2 + 1];
-    Hex_Encode (outstr, pBinary->__ptr, pBinary->__size);
-    outstr[pBinary->__size * 2] = 0;
-    m_AuxStr = outstr;
-    delete [] outstr;
-    return m_AuxStr.c_str ();
-}
-
-const AxisChar* BasicTypeSerializer::encodeToBase64Binary (const xsd__base64Binary* pBinary)
-{
-    int len = apr_base64_encode_len (pBinary->__size);
-    char* outstr = new char[len + 1];
-    len = apr_base64_encode_binary (outstr, pBinary->__ptr, pBinary->__size);
-    outstr[len] = 0;
-    m_AuxStr = outstr;
-    delete [] outstr;
-    return m_AuxStr.c_str ();
-}
-
 const AxisChar* BasicTypeSerializer::serializeAsAttribute 
     (const AxisChar* pName, const AxisChar* pPrefix,
-    const void* pValue, XSDTYPE type)
+    IAnySimpleType* pSimpleType)
 {
     m_sSZ = ' ';
     if (pPrefix)
@@ -293,149 +128,9 @@ const AxisChar* BasicTypeSerializer::serializeAsAttribute
     m_sSZ += pName;
     m_sSZ += '=';
     m_sSZ += '"';
-    switch (type)
-    {
-        case XSD_INT:
-            {
-                Int intSerializer;
-                m_sSZ += intSerializer.serialize(pValue);
-            }
-            break;
-        case XSD_BOOLEAN:
-        	{
-            	Boolean booleanSerializer;
-            	m_sSZ += booleanSerializer.serialize(pValue);
-        	}
-            break;
-        case XSD_UNSIGNEDINT:
-            {
-                UnsignedInt unsignedIntSerializer;
-                m_sSZ += unsignedIntSerializer.serialize(pValue);
-            }
-            break;
-        case XSD_SHORT:
-            {
-                Short shortSerializer;
-                m_sSZ += shortSerializer.serialize(pValue);
-            }
-            break;
-        case XSD_UNSIGNEDSHORT:
-            {
-                UnsignedShort unsignedShortSerializer;
-                m_sSZ += unsignedShortSerializer.serialize(pValue);
-            }
-            break;
-        case XSD_BYTE:
-            {
-                Byte byteSerializer;
-                m_sSZ += byteSerializer.serialize(pValue);
-            }
-            break;
-        case XSD_UNSIGNEDBYTE:
-            {
-                UnsignedByte unsignedByteSerializer;
-                m_sSZ += unsignedByteSerializer.serialize(pValue);
-            }
-            break;
-        case XSD_LONG:
-            {
-                Long longSerializer;
-                m_sSZ += longSerializer.serialize(pValue);
-            }
-            break;
-        case XSD_INTEGER:
-            {
-                Integer integerSerializer;
-                m_sSZ += integerSerializer.serialize(pValue);
-            }
-            break;
-        case XSD_DURATION:
-        	{
-        		Duration durationSerializer;
-        		m_sSZ += durationSerializer.serialize(pValue);
-        	}
-            break;
-        case XSD_UNSIGNEDLONG:
-            {
-                UnsignedLong unsignedLongSerializer;
-                m_sSZ += unsignedLongSerializer.serialize(pValue);
-            }
-            break;
-        case XSD_FLOAT:
-        	{
-        		Float floatSerializer;
-        		m_sSZ += floatSerializer.serialize(pValue);
-        	}
-            break;
-        case XSD_DOUBLE:
-        	{
-        		Double doubleSerializer;
-        		m_sSZ += doubleSerializer.serialize(pValue);
-        	}
-        	break;
-        case XSD_DECIMAL:
-        	{
-        		Decimal decimalSerializer;
-        		m_sSZ += decimalSerializer.serialize(pValue);
-        	}
-            break;
-        case XSD_ANYURI:
-            {
-           		AnyURI anyURISerializer;
-           		m_sSZ += anyURISerializer.serialize(pValue);
-            }
-        	break;
-        case XSD_STRING:
-        	{
-        		String stringSerializer;
-        		m_sSZ += stringSerializer.serialize(pValue);
-        	}
-        	break;
-        case XSD_QNAME:
-	        {
-        		XSD_QName QNameSerializer;
-        		m_sSZ += QNameSerializer.serialize(pValue);
-        	}
-        	break;
-        case XSD_NOTATION:
-        	{
-        		NOTATION notationSerializer;
-            	m_sSZ += notationSerializer.serialize(pValue);
-        	}
-            break;
-        case XSD_HEXBINARY:
-        	{
-        		HexBinary hexBinarySerializer;
-        		m_sSZ += hexBinarySerializer.serialize(pValue);
-        	}
-            break;
-        case XSD_BASE64BINARY:
-        	{
-        		Base64Binary base64BinarySerializer;
-        		m_sSZ += base64BinarySerializer.serialize(pValue);
-        	}
-            break;
-        case XSD_DATETIME:
-        	{
-        		DateTime dateTimeSerializer;
-        		m_sSZ += dateTimeSerializer.serialize(pValue);
-        	}
-        	break;
-        case XSD_DATE:
-	        {
-	        	Date dateSerializer;
-	        	m_sSZ += dateSerializer.serialize(pValue);
-	        }
-	        break;
-        case XSD_TIME:
-        	{
-        		Time timeSerializer;
-        		m_sSZ += timeSerializer.serialize(pValue);
-        	}
-        	break;
-        default:
-            return NULL;
-    }
+    
+    m_sSZ += pSimpleType->serialize();
+
     m_sSZ += '"';
     return m_sSZ.c_str ();
 }
@@ -501,64 +196,6 @@ const AxisChar* BasicTypeSerializer::basicTypeStr (XSDTYPE type)
         default:
             return " ";
     }
-}
-
-const AxisString &BasicTypeSerializer::getEntityReferenced 
-    (const AxisString &strVal)
-{
-    m_strReturnVal = "";
-    if (strVal.empty ())
-        return strVal;
-
-    /* Find entity reference characters and returns the first any of chars find
-     * position
-     */ 
-    unsigned int nPos = strVal.find_first_of (XML_ENTITY_REFERENCE_CAHRS);
-
-    /* Check for position validity */
-    if (AxisString::npos == nPos)
-        return strVal;
-
-    int nOldIdx = 0;            // Counter value
-    while (AxisString::npos != nPos)
-    {                         // Get pointered character
-        switch (strVal.at (nPos))
-        {
-            case LESSER_THAN_CHAR:     // Process < character
-                m_strReturnVal.append (strVal.substr (nOldIdx, nPos - nOldIdx));
-                m_strReturnVal.append (ENCODED_LESSER_STR);
-                break;
-            case GREATOR_THAN_CHAR:    // Process > character
-                m_strReturnVal.append (strVal.substr (nOldIdx, nPos - nOldIdx));
-                m_strReturnVal.append (ENCODED_GREATOR_STR);
-                break;
-            case AMPERSAND_CHAR:       // Process & character
-                m_strReturnVal.append (strVal.substr (nOldIdx, nPos - nOldIdx));
-                m_strReturnVal.append (ENCODED_AMPERSAND_STR);
-                break;
-            case DOUBLE_QUOTE_CHAR:    // Process " character
-                m_strReturnVal.append (strVal.substr (nOldIdx, nPos - nOldIdx));
-                m_strReturnVal.append (ENCODED_DBL_QUOTE_STR);
-                break;
-            case SINGLE_QUOTE_CHAR:    // Process ' character
-                m_strReturnVal.append (strVal.substr (nOldIdx, nPos - nOldIdx));
-                m_strReturnVal.append (ENCODED_SGL_QUOTE_STR);
-                break;
-        }
-        nOldIdx = ++nPos;     // Get old position
-        /* Find the next entity reference characters from previous found 
-	 * position,
-	 */ 
-        nPos = strVal.find_first_of (XML_ENTITY_REFERENCE_CAHRS, nPos);
-    }
-
-    int nDataLen = strVal.length ();    // Get the length of the field value
-    int nLen = nDataLen - nOldIdx;      // Get remaining number of characters   
-    if (nLen > 0)
-        m_strReturnVal += strVal.substr (nOldIdx, nLen); /* Apend the remaining
-							  * data
-							  */ 
-    return m_strReturnVal;
 }
 
 AXIS_CPP_NAMESPACE_END

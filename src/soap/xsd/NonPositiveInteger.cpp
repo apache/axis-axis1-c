@@ -21,13 +21,23 @@ NonPositiveInteger::NonPositiveInteger():m_NonPositiveInteger(NULL)
 {
 }
 
+NonPositiveInteger::NonPositiveInteger(const xsd__nonPositiveInteger* value):m_NonPositiveInteger(NULL)
+{
+    if (value)
+    {
+        setNil(false);
+        serialize(value);
+    }
+}
+
+
 NonPositiveInteger::~NonPositiveInteger()
 {
 }
 
-AxisChar* NonPositiveInteger::serialize(const void* value) throw (AxisSoapException)
+XSDTYPE NonPositiveInteger::getType()
 {
-    return serialize((unsigned LONGLONG*) value);  
+    return XSD_NONPOSITIVEINTEGER;
 }
 
 void* NonPositiveInteger::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
@@ -36,7 +46,7 @@ void* NonPositiveInteger::deserialize(const AxisChar* valueAsChar) throw (AxisSo
 }
 
 
-AxisChar* NonPositiveInteger::serialize(const unsigned LONGLONG* value) throw (AxisSoapException)
+AxisChar* NonPositiveInteger::serialize(const xsd__nonPositiveInteger* value) throw (AxisSoapException)
 {
     MinInclusive* minInclusive = getMinInclusive();
     if (minInclusive->isSet())
@@ -168,7 +178,7 @@ unsigned LONGLONG* NonPositiveInteger::deserializeNonPositiveInteger(const AxisC
         m_NonPositiveInteger = NULL;
     }
     
-    m_NonPositiveInteger = new unsigned LONGLONG;
+    m_NonPositiveInteger = new xsd__nonPositiveInteger;
     if (*valueAsChar == '-')
     {
         const AxisChar* tempVar = valueAsChar + 1;

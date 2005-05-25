@@ -38,16 +38,21 @@ public:
     Boolean();
     
     /**
+     * Constructor providing a value for later serialization
+     * @param value The value to be serialized
+     */
+    Boolean(const xsd__boolean* value);
+    
+    /**
      * Destructor
      */
     ~Boolean();
 
-	/**
-	 * Serialize value to it's on-the-wire string form.
-	 * @param value The value to be serialized.
-	 * @return Serialized form of value.
-	 */
-    AxisChar* serialize(const void* value) throw (AxisSoapException);
+    /**
+     * Get the xsd type of this simple type.
+     * @return the xsd type of this simple type
+     */
+    XSDTYPE getType();
 	
 	/**
 	 * Deserialize value from it's on-the-wire string form.
@@ -57,13 +62,6 @@ public:
     void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException);
 	
 	/**
-	 * Serialize boolean value to it's on-the-wire string form.
-	 * @param value The boolean value to be serialized.
-	 * @return Serialized form of boolean value.
-	 */
-    AxisChar* serialize(const xsd__boolean * value) throw (AxisSoapException);
-	
-	/**
 	 * Deserialized boolean value from it's on-the-wire string form.
 	 * @param valueAsChar Serialized form of boolean value.
 	 * @return Deserialized boolean value.
@@ -71,6 +69,13 @@ public:
     xsd__boolean * deserializeBoolean(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 protected:
+
+    /**
+     * Serialize boolean value to it's on-the-wire string form.
+     * @param value The boolean value to be serialized.
+     * @return Serialized form of boolean value.
+     */
+    AxisChar* serialize(const xsd__boolean * value) throw (AxisSoapException);
 
     /**
      * Creates a WhiteSpace object to collapse whitespace

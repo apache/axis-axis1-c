@@ -17,9 +17,23 @@
 
 AXIS_CPP_NAMESPACE_START
 
-unsigned LONGLONG* NegativeInteger::deserializeNegativeInteger(const AxisChar* valueAsChar) throw (AxisSoapException)
+NegativeInteger::NegativeInteger(const xsd__negativeInteger* value)
 {
-    return (unsigned LONGLONG*) deserialize(valueAsChar);
+    if (value)
+    {
+        setNil(false);
+        serialize(value);
+    }
+}
+
+XSDTYPE NegativeInteger::getType()
+{
+    return XSD_NEGATIVEINTEGER;
+}
+
+xsd__negativeInteger* NegativeInteger::deserializeNegativeInteger(const AxisChar* valueAsChar) throw (AxisSoapException)
+{
+    return (xsd__negativeInteger*) deserialize(valueAsChar);
 }
 
 MaxInclusive* NegativeInteger::getMaxInclusive()

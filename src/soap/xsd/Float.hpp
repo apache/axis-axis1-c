@@ -43,30 +43,28 @@ public:
     Float();
 
     /**
+     * Constructor providing a value for later serialization
+     * @param value The value to be serialized
+     */
+    Float(const xsd__float* value);
+
+    /**
      * Destructor
      */
     ~Float();
 
-	/**
-	 * Serialize value to it's on-the-wire string form.
-	 * @param value The value to be serialized.
-	 * @return Serialized form of value.
-	 */
-    AxisChar* serialize(const void* value) throw (AxisSoapException);
-	
+    /**
+     * Get the xsd type of this simple type.
+     * @return the xsd type of this simple type
+     */
+    XSDTYPE getType();
+
 	/**
 	 * Deserialize value from it's on-the-wire string form.
 	 * @param valueAsChar Serialized form of value.
 	 * @return Deserialized value.
 	 */
     void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException);
-	
-	/**
-	 * Serialize Float value to it's on-the-wire string form.
-	 * @param value The Float value to be serialized.
-	 * @return Serialized form of Float value.
-	 */
-    AxisChar* serialize(const xsd__float* value) throw (AxisSoapException);
 	
 	/**
 	 * Deserialized Float value from it's on-the-wire string form.
@@ -76,6 +74,13 @@ public:
     xsd__float* deserializeFloat(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 protected:
+
+    /**
+     * Serialize Float value to it's on-the-wire string form.
+     * @param value The Float value to be serialized.
+     * @return Serialized form of Float value.
+     */
+    AxisChar* serialize(const xsd__float* value) throw (AxisSoapException);
 
     /**
      * Creates a MinInclusive object.  For the Float type this is undefined, 

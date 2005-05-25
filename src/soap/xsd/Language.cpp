@@ -17,6 +17,20 @@
 
 AXIS_CPP_NAMESPACE_START
 
+Language::Language(const xsd__language value)
+{
+    if (value)
+    {
+        setNil(false);
+        serialize(value);
+    }
+}
+
+XSDTYPE Language::getType()
+{
+    return XSD_LANGUAGE;
+}
+
 AxisChar* Language::deserializeLanguage(const AxisChar* valueAsChar) throw (AxisSoapException)
 {
     return (AxisChar*) deserialize(valueAsChar);

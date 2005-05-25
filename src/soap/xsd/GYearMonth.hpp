@@ -41,14 +41,19 @@ public:
      * Constructor
      */
     GYearMonth();
-    
-  /**
-    * Serialize value to it's on-the-wire string form.
-    * @param value The value to be serialized.
-    * @return Serialized form of value.
-   */
-    AxisChar* serialize(const void* value) throw (AxisSoapException);
-    
+
+    /**
+     * Constructor providing a value for later serialization
+     * @param value The value to be serialized
+     */
+    GYearMonth(const xsd__gYearMonth* value);
+
+    /**
+     * Get the xsd type of this simple type.
+     * @return the xsd type of this simple type
+     */
+    XSDTYPE getType();
+   
   /**
     * Deserialize value from it's on-the-wire string form.
     * @param valueAsChar Serialized form of value.
@@ -57,13 +62,6 @@ public:
     void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException);
     
   /**
-    * Serialize GYearMonth value to it's on-the-wire string form.
-   * @param value The GYearMonth value to be serialized.
-   * @return Serialized form of GYearMonth value.
-  */
-    AxisChar* serialize(const struct tm* value) throw (AxisSoapException);
-   
-  /**
     * Deserialized GYearMonth value from it's on-the-wire string form.
   * @param valueAsChar Serialized form of GYearMonth value.
    * @return Deserialized GYearMonth value.
@@ -71,6 +69,13 @@ public:
     struct tm* deserializeGYearMonth(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 protected:
+
+    /**
+     * Serialize GYearMonth value to it's on-the-wire string form.
+     * @param value The GYearMonth value to be serialized.
+     * @return Serialized form of GYearMonth value.
+     */
+    AxisChar* serialize(const struct tm* value) throw (AxisSoapException);
 
     /**
      * Creates a MinInclusive object.  For the GYearMonth type this is undefined, 

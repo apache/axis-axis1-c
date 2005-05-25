@@ -32,6 +32,23 @@ using namespace std;
 class IDREF : public NCName {
 public:
 
+	/**
+	 * Constructor
+	 */
+	IDREF();
+
+    /**
+     * Constructor providing a value for later serialization
+     * @param value The value to be serialized
+     */
+    IDREF(const xsd__IDREF value);
+
+    /**
+     * Get the xsd type of this simple type.
+     * @return the xsd type of this simple type
+     */
+    XSDTYPE getType();
+
     /**
      * Deserialized IDREF value from it's on-the-wire string form.
      * @param valueAsChar Serialized form of IDREF value.

@@ -43,11 +43,16 @@ public:
     ~Int();
 
     /**
-     * Serialize value to it's on-the-wire string form.
-     * @param value The value to be serialized.
-     * @return Serialized form of value.
-     */  
-    AxisChar* serialize(const void* value) throw (AxisSoapException);
+     * Constructor providing a value for later serialization
+     * @param value The value to be serialized
+     */
+    Int(const xsd__int* value);
+
+    /**
+     * Get the xsd type of this simple type.
+     * @return the xsd type of this simple type
+     */
+    XSDTYPE getType();
 
     /**
      * Deserialize value from it's on-the-wire string form.
@@ -57,13 +62,6 @@ public:
     void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException);
 
     /**
-     * Serialize Int value to it's on-the-wire string form.
-     * @param value The Int value to be serialized.
-     * @return Serialized form of Int value.
-     */  
-    AxisChar* serialize(const xsd__int* value) throw (AxisSoapException);
-  
-    /**
      * Deserialized Int value from it's on-the-wire string form.
      * @param valueAsChar Serialized form of Int value.
      * @return Deserialized Int value.
@@ -71,6 +69,13 @@ public:
     xsd__int* deserializeInt(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 protected:
+
+    /**
+     * Serialize Int value to it's on-the-wire string form.
+     * @param value The Int value to be serialized.
+     * @return Serialized form of Int value.
+     */  
+    AxisChar* serialize(const xsd__int* value) throw (AxisSoapException);
 
     /**
      * Creates a MinInclusive object.  For the Int type this is defined as

@@ -32,12 +32,24 @@ using namespace std;
 class PositiveInteger : public NonNegativeInteger {
 public:
 
-  /**
-   * Deserialized PositiveInteger value from it's on-the-wire string form.
-   * @param valueAsChar Serialized form of PositiveInteger value.
-   * @return Deserialized PositiveInteger value.
-   */
-    unsigned LONGLONG* deserializePositiveInteger(const AxisChar* valueAsChar) throw (AxisSoapException);
+    /**
+     * Constructor providing a value for later serialization
+     * @param value The value to be serialized
+     */
+    PositiveInteger(const xsd__positiveInteger* value);
+
+    /**
+     * Get the xsd type of this simple type.
+     * @return the xsd type of this simple type
+     */
+    XSDTYPE getType();
+
+    /**
+     * Deserialized PositiveInteger value from it's on-the-wire string form.
+     * @param valueAsChar Serialized form of PositiveInteger value.
+     * @return Deserialized PositiveInteger value.
+     */
+    xsd__positiveInteger* deserializePositiveInteger(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 protected:
 

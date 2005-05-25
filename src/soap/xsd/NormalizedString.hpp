@@ -33,6 +33,23 @@ class NormalizedString : public String {
 public:
 
     /**
+     * Constructor
+     */
+    NormalizedString();
+
+    /**
+     * Constructor providing a value for later serialization
+     * @param value The value to be serialized
+     */
+    NormalizedString(const xsd__normalizedString value);
+
+    /**
+     * Get the xsd type of this simple type.
+     * @return the xsd type of this simple type
+     */
+    XSDTYPE getType();
+
+    /**
      * Deserialized NormalizedString value from it's on-the-wire string form.
      * @param valueAsChar Serialized form of NormalizedString value.
      * @return Deserialized NormalizedString value.

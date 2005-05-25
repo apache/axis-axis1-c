@@ -42,12 +42,17 @@ public:
      */
     Time();
 
-	/**
-	 * Serialize value to it's on-the-wire string form.
-	 * @param value The value to be serialized.
-	 * @return Serialized form of value.
-	 */
-    AxisChar* serialize(const void* value) throw (AxisSoapException);
+    /**
+     * Constructor providing a value for later serialization
+     * @param value The value to be serialized
+     */
+    Time(const xsd__time* value);
+
+    /**
+     * Get the xsd type of this simple type.
+     * @return the xsd type of this simple type
+     */
+    XSDTYPE getType();
 	
 	/**
 	 * Deserialize value from it's on-the-wire string form.
@@ -57,13 +62,6 @@ public:
     void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException);
 	
 	/**
-	 * Serialize Time value to it's on-the-wire string form.
-	 * @param value The Time value to be serialized.
-	 * @return Serialized form of Time value.
-	 */
-    AxisChar* serialize(const xsd__time* value) throw (AxisSoapException);
-	
-	/**
 	 * Deserialized Time value from it's on-the-wire string form.
 	 * @param valueAsChar Serialized form of Time value.
 	 * @return Deserialized Time value.
@@ -71,6 +69,13 @@ public:
     xsd__time* deserializeTime(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 protected:
+
+    /**
+     * Serialize Time value to it's on-the-wire string form.
+     * @param value The Time value to be serialized.
+     * @return Serialized form of Time value.
+     */
+    AxisChar* serialize(const xsd__time* value) throw (AxisSoapException);
 
     /**
      * Creates a MinInclusive object.  For the Time type this is undefined, 

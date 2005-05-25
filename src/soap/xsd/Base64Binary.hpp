@@ -45,27 +45,25 @@ public:
      * Destructor
      */    
     ~Base64Binary();
+
+    /**
+     * Constructor providing a value for later serialization
+     * @param value The value to be serialized
+     */
+    Base64Binary(const xsd__base64Binary* value);
+
+    /**
+     * Get the xsd type of this simple type.
+     * @return the xsd type of this simple type
+     */
+    XSDTYPE getType();
     
-	/**
-	 * Serialize value to it's on-the-wire string form.
-	 * @param value The value to be serialized.
-	 * @return Serialized form of value.
-	 */
-    AxisChar* serialize(const void* value) throw (AxisSoapException);
-	
 	/**
 	 * Deserialize value from it's on-the-wire string form.
 	 * @param valueAsChar Serialized form of value.
 	 * @return Deserialized value.
 	 */
     void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException);
-	
-	/**
-	 * Serialize Base64Binary value to it's on-the-wire string form.
-	 * @param value The Base64Binary value to be serialized.
-	 * @return Serialized form of Base64Binary value.
-	 */
-    AxisChar* serialize(const xsd__base64Binary * value) throw (AxisSoapException);
 	
 	/**
 	 * Deserialized Base64Binary value from it's on-the-wire string form.
@@ -75,6 +73,13 @@ public:
     xsd__base64Binary * deserializeBase64Binary(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 protected:
+
+    /**
+     * Serialize Base64Binary value to it's on-the-wire string form.
+     * @param value The Base64Binary value to be serialized.
+     * @return Serialized form of Base64Binary value.
+     */
+    AxisChar* serialize(const xsd__base64Binary * value) throw (AxisSoapException);
 
     /**
      * Creates a minLength object, used to allocate storage.  By default the Base64Binary

@@ -44,12 +44,17 @@ public:
     ~Integer();
 
     /**
-     * Serialize value to it's on-the-wire string form.
-     * @param value The value to be serialized.
-     * @return Serialized form of value.
-    */
-    AxisChar* serialize(const void* value) throw (AxisSoapException);
-    
+     * Constructor providing a value for later serialization
+     * @param value The value to be serialized
+     */
+    Integer(const xsd__integer* value);
+
+    /**
+     * Get the xsd type of this simple type.
+     * @return the xsd type of this simple type
+     */
+    XSDTYPE getType();
+
     /**
      * Deserialize value from it's on-the-wire string form.
      * @param valueAsChar Serialized form of value.
@@ -58,13 +63,6 @@ public:
     void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException);
     
     /**
-     * Serialize Integer value to it's on-the-wire string form.
-     * @param value The Integer value to be serialized.
-     * @return Serialized form of Integer value.
-     */
-    AxisChar* serialize(const xsd__integer* value) throw (AxisSoapException);
-  
-    /**
      * Deserialized Integer value from it's on-the-wire string form.
      * @param valueAsChar Serialized form of Integer value.
      * @return Deserialized Integer value.
@@ -72,6 +70,13 @@ public:
     xsd__integer* deserializeInteger(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 protected:
+
+    /**
+     * Serialize Integer value to it's on-the-wire string form.
+     * @param value The Integer value to be serialized.
+     * @return Serialized form of Integer value.
+     */
+    AxisChar* serialize(const xsd__integer* value) throw (AxisSoapException);
 
     /**
      * Creates a FractionDigits object.  For the Integer type this is defined as 0.

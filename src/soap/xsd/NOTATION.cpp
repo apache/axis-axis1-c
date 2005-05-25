@@ -21,9 +21,18 @@ NOTATION::NOTATION():m_NOTATION(NULL)
 {
 }
 
-AxisChar* NOTATION::serialize(const void* value) throw (AxisSoapException)
+NOTATION::NOTATION(const xsd__notation value):m_NOTATION(NULL)
 {
-	return serialize((xsd__notation) value);
+    if (value)
+    {
+        setNil(false);
+        serialize(value);
+    }
+}
+
+XSDTYPE NOTATION::getType()
+{
+    return XSD_NOTATION;
 }
 
 void* NOTATION::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)

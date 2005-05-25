@@ -25,9 +25,18 @@ Integer::~Integer()
 {
 }
 
-AxisChar* Integer::serialize(const void* value) throw (AxisSoapException)
+Integer::Integer(const xsd__integer* value):m_Integer(NULL)
 {
-    return serialize((xsd__integer*) value);  
+    if (value)
+    {
+        setNil(false);
+        serialize(value);
+    }
+}
+
+XSDTYPE Integer::getType()
+{
+    return XSD_INTEGER;
 }
 
 void* Integer::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)

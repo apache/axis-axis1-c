@@ -17,6 +17,23 @@
 
 AXIS_CPP_NAMESPACE_START
 
+NMTOKEN::NMTOKEN()
+{}
+
+NMTOKEN::NMTOKEN(const xsd__NMTOKEN value)
+{
+    if (value)
+    {
+        setNil(false);
+        serialize(value);
+    }
+}
+
+XSDTYPE NMTOKEN::getType()
+{
+    return XSD_NMTOKEN;
+}
+
 AxisChar* NMTOKEN::deserializeNMTOKEN(const AxisChar* valueAsChar) throw (AxisSoapException)
 {
     return (AxisChar*) deserialize(valueAsChar);

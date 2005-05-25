@@ -21,11 +21,20 @@ AXIS_CPP_NAMESPACE_START
     {
     }
 
-    AxisChar* Date::serialize(const void* value) throw (AxisSoapException)
+    Date::Date(const xsd__date* value):m_Date(NULL)
     {
-    	return serialize((xsd__date*) value);
+        if (value)
+        {
+            setNil(false);
+            serialize(value);
+        }
     }
-	
+
+    XSDTYPE Date::getType()
+    {
+        return XSD_DATE;
+    }
+
     void* Date::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
     {
     	return (void*) deserializeDate(valueAsChar);

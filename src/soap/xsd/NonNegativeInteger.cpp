@@ -21,13 +21,22 @@ NonNegativeInteger::NonNegativeInteger():m_NonNegativeInteger(NULL)
 {
 }
 
+NonNegativeInteger::NonNegativeInteger(const xsd__nonNegativeInteger* value):m_NonNegativeInteger(NULL)
+{
+    if (value)
+    {
+        setNil(false);
+        serialize(value);
+    }
+}
+
 NonNegativeInteger::~NonNegativeInteger()
 {
 }
 
-AxisChar* NonNegativeInteger::serialize(const void* value) throw (AxisSoapException)
+XSDTYPE NonNegativeInteger::getType()
 {
-    return serialize((unsigned LONGLONG*) value);  
+    return XSD_NONNEGATIVEINTEGER;
 }
 
 void* NonNegativeInteger::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
@@ -36,7 +45,7 @@ void* NonNegativeInteger::deserialize(const AxisChar* valueAsChar) throw (AxisSo
 }
 
 
-AxisChar* NonNegativeInteger::serialize(const unsigned LONGLONG* value) throw (AxisSoapException)
+AxisChar* NonNegativeInteger::serialize(const xsd__nonNegativeInteger* value) throw (AxisSoapException)
 {
     MinInclusive* minInclusive = getMinInclusive();
     if (minInclusive->isSet())
@@ -150,7 +159,7 @@ AxisChar* NonNegativeInteger::serialize(const unsigned LONGLONG* value) throw (A
     return m_Buf;
 }
 
-unsigned LONGLONG* NonNegativeInteger::deserializeNonNegativeInteger(const AxisChar* valueAsChar) throw (AxisSoapException)
+xsd__nonNegativeInteger* NonNegativeInteger::deserializeNonNegativeInteger(const AxisChar* valueAsChar) throw (AxisSoapException)
 {
     AxisChar* end;
     
@@ -159,7 +168,7 @@ unsigned LONGLONG* NonNegativeInteger::deserializeNonNegativeInteger(const AxisC
         delete m_NonNegativeInteger;
         m_NonNegativeInteger = NULL;
     }
-    m_NonNegativeInteger = new unsigned LONGLONG;
+    m_NonNegativeInteger = new xsd__nonNegativeInteger;
     *m_NonNegativeInteger = strtol (valueAsChar, &end, 10);
   
     return m_NonNegativeInteger;

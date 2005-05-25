@@ -114,7 +114,7 @@ SOURCE=..\src\engine\AppScopeHandlerPool.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\soap\apr_base64.c
+SOURCE=..\src\soap\apr_base64.cpp
 # End Source File
 # Begin Source File
 
@@ -155,10 +155,6 @@ SOURCE=..\src\common\AxisMessage.cpp
 # Begin Source File
 
 SOURCE=..\src\soap\AxisSoapException.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\common\AxisTime.cpp
 # End Source File
 # Begin Source File
 

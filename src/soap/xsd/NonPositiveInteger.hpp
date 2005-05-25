@@ -36,6 +36,12 @@ public:
      * Constructor
      */
     NonPositiveInteger();
+
+    /**
+     * Constructor providing a value for later serialization
+     * @param value The value to be serialized
+     */
+    NonPositiveInteger(const xsd__nonPositiveInteger* value);
     
     /**
      * Destructor
@@ -43,12 +49,11 @@ public:
     ~NonPositiveInteger();
 
     /**
-     * Serialize value to it's on-the-wire string form.
-     * @param value The value to be serialized.
-     * @return Serialized form of value.
-    */
-    AxisChar* serialize(const void* value) throw (AxisSoapException);
-    
+     * Get the xsd type of this simple type.
+     * @return the xsd type of this simple type
+     */
+    XSDTYPE getType();
+
     /**
      * Deserialize value from it's on-the-wire string form.
      * @param valueAsChar Serialized form of value.
@@ -56,21 +61,21 @@ public:
      */
     void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException);
     
-    /**
-     * Serialize NonPositiveInteger value to it's on-the-wire string form.
-     * @param value The NonPositiveInteger value to be serialized.
-     * @return Serialized form of NonPositiveInteger value.
-     */
-    AxisChar* serialize(const unsigned LONGLONG* value) throw (AxisSoapException);
-  
   /**
    * Deserialized NonPositiveInteger value from it's on-the-wire string form.
    * @param valueAsChar Serialized form of NonPositiveInteger value.
    * @return Deserialized NonPositiveInteger value.
    */
-    unsigned LONGLONG* deserializeNonPositiveInteger(const AxisChar* valueAsChar) throw (AxisSoapException);
+    xsd__nonPositiveInteger* deserializeNonPositiveInteger(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 protected:
+
+    /**
+     * Serialize NonPositiveInteger value to it's on-the-wire string form.
+     * @param value The NonPositiveInteger value to be serialized.
+     * @return Serialized form of NonPositiveInteger value.
+     */
+    AxisChar* serialize(const xsd__nonPositiveInteger* value) throw (AxisSoapException);
 
     /**
      * Creates a MaxInclusive object.  For the NonPositiveInteger type this is
@@ -80,7 +85,7 @@ protected:
     virtual MaxInclusive* getMaxInclusive();
 
 private:
-   unsigned LONGLONG* m_NonPositiveInteger;
+   xsd__nonPositiveInteger* m_NonPositiveInteger;
 
 };
 

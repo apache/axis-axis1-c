@@ -17,7 +17,7 @@
 
 AXIS_CPP_NAMESPACE_START
 
-IAnySimpleType::IAnySimpleType():m_Buf(NULL)
+IAnySimpleType::IAnySimpleType():m_Buf(NULL), m_isNil(true)
 {
 }
 
@@ -28,6 +28,21 @@ IAnySimpleType::~IAnySimpleType()
         delete [] m_Buf;
         m_Buf = NULL;
     }
+}
+
+bool IAnySimpleType::isNil()
+{
+    return m_isNil;
+}
+
+void IAnySimpleType::setNil(bool nil)
+{
+    m_isNil = nil;
+}
+
+AxisChar* IAnySimpleType::serialize()
+{
+    return m_Buf;
 }
 
 AxisChar* IAnySimpleType::serialize(const AxisChar* value) throw (AxisSoapException)

@@ -21,13 +21,22 @@ Float::Float():m_Float(NULL)
 {
 }
 
+Float::Float(const xsd__float* value):m_Float(NULL)
+{
+    if (value)
+    {
+        setNil(false);
+        serialize(value);
+    }
+}
+
 Float::~Float()
 {
 }
 
-AxisChar* Float::serialize(const void* value) throw (AxisSoapException)
+XSDTYPE Float::getType()
 {
-	return serialize((xsd__float*) value);	
+    return XSD_FLOAT;
 }
 
 void* Float::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)

@@ -41,13 +41,18 @@ public:
      * Constructor
      */
     Date();
-    
-	/**
-	 * Serialize value to it's on-the-wire string form.
-	 * @param value The value to be serialized.
-	 * @return Serialized form of value.
-	 */
-    AxisChar* serialize(const void* value) throw (AxisSoapException);
+
+    /**
+     * Constructor providing a value for later serialization
+     * @param value The value to be serialized
+     */
+    Date(const xsd__date* value);
+
+    /**
+     * Get the xsd type of this simple type.
+     * @return the xsd type of this simple type
+     */
+    XSDTYPE getType();
 	
 	/**
 	 * Deserialize value from it's on-the-wire string form.
@@ -57,13 +62,6 @@ public:
     void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException);
 	
 	/**
-	 * Serialize Date value to it's on-the-wire string form.
-	 * @param value The Date value to be serialized.
-	 * @return Serialized form of Date value.
-	 */
-    AxisChar* serialize(const xsd__date* value) throw (AxisSoapException);
-	
-	/**
 	 * Deserialized Date value from it's on-the-wire string form.
 	 * @param valueAsChar Serialized form of Date value.
 	 * @return Deserialized Date value.
@@ -71,6 +69,13 @@ public:
     xsd__date* deserializeDate(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 protected:
+
+    /**
+     * Serialize Date value to it's on-the-wire string form.
+     * @param value The Date value to be serialized.
+     * @return Serialized form of Date value.
+     */
+    AxisChar* serialize(const xsd__date* value) throw (AxisSoapException);
 
     /**
      * Creates a MinInclusive object.  For the Date type this is undefined, 

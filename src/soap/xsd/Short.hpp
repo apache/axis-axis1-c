@@ -43,11 +43,16 @@ public:
     ~Short();
 
     /**
-     * Serialize value to it's on-the-wire string form.
-     * @param value The value to be serialized.
-     * @return Serialized form of value.
-     */  
-    AxisChar* serialize(const void* value) throw (AxisSoapException);
+     * Constructor providing a value for later serialization
+     * @param value The value to be serialized
+     */
+    Short(const xsd__short* value);
+
+    /**
+     * Get the xsd type of this simple type.
+     * @return the xsd type of this simple type
+     */
+    XSDTYPE getType();
 
     /**
      * Deserialize value from it's on-the-wire string form.
@@ -57,13 +62,6 @@ public:
     void* deserializer(const AxisChar* valueAsChar) throw (AxisSoapException);
 
     /**
-     * Serialize Short value to it's on-the-wire string form.
-     * @param value The Short value to be serialized.
-     * @return Serialized form of Short value.
-     */  
-    AxisChar* serialize(const xsd__short* value) throw (AxisSoapException);
-  
-    /**
      * Deserialized Short value from it's on-the-wire string form.
      * @param valueAsChar Serialized form of Short value.
      * @return Deserialized Short value.
@@ -71,6 +69,13 @@ public:
     xsd__short* deserializeShort(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 protected:
+
+    /**
+     * Serialize Short value to it's on-the-wire string form.
+     * @param value The Short value to be serialized.
+     * @return Serialized form of Short value.
+     */  
+    AxisChar* serialize(const xsd__short* value) throw (AxisSoapException);
 
     /**
      * Creates a MinInclusive object.  For the Short type this is defined as

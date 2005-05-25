@@ -21,13 +21,22 @@ UnsignedLong::UnsignedLong():m_UnsignedLong(NULL)
 {
 }
 
+UnsignedLong::UnsignedLong(const xsd__unsignedLong* value):m_UnsignedLong(NULL)
+{
+    if (value)
+    {
+        setNil(false);
+        serialize(value);
+    }
+}
+
 UnsignedLong::~UnsignedLong()
 {
 }
 
-AxisChar* UnsignedLong::serialize(const void* value) throw (AxisSoapException)
+XSDTYPE UnsignedLong::getType()
 {
-    return serialize((xsd__unsignedLong*) value);
+    return XSD_UNSIGNEDLONG;
 }
 
 void* UnsignedLong::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)

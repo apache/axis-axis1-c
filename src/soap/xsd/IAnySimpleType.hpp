@@ -29,6 +29,7 @@
 #include "constraints/WhiteSpace.hpp"
 #include "constraints/Pattern.hpp"
 #include "constraints/Enumeration.hpp"
+#include <axis/TypeMapping.hpp>
 
 AXIS_CPP_NAMESPACE_START
 
@@ -72,19 +73,24 @@ public:
      */
     virtual ~IAnySimpleType();
 
-	/**
-	 * Serialize value to it's on-the-wire string form.
-	 * @param value The value to be serialized.
-	 * @return Serialized form of value.
-	 */
-    virtual AxisChar* serialize(const void* value) throw (AxisSoapException) = 0;
-	
-	/**
-	 * Deserialize value from it's on-the-wire string form.
-	 * @param valueAsChar Serialized form of value.
-	 * @return Deserialized value.
-	 */
-    virtual void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException) = 0;
+    /**
+     * This method provides ability to determine if value is nill.
+     * @return true is value is nil, otherwise false
+     */
+    bool isNil();
+
+    /**
+     * Get the xsd type of this simple type.
+     * @return the xsd type of this simple type
+     */
+    virtual XSDTYPE getType() = 0;
+
+    /**
+     * Provides the contained value in it's on-the-wire string form.
+     * @return Serialized form of value
+     */
+    AxisChar* serialize();
+
 
     /**
      * Take partially serialized value, process WhiteSpace and validate Pattern.
@@ -94,6 +100,8 @@ public:
     AxisChar* serialize(const AxisChar* value) throw (AxisSoapException);
 
 protected:
+
+    void setNil(bool nil);
 
     /**
      * Replace all XML reserved characters in string
@@ -126,14 +134,15 @@ protected:
      */
     enum
     {
-        GREATER_THAN_CHAR    =    '>',     /* Greater than character */
-        LESSER_THAN_CHAR    =     '<',     /* Less than character */
+        GREATER_THAN_CHAR    =    '>',    /* Greater than character */
+        LESSER_THAN_CHAR    =    '<',    /* Less than character */
         SINGLE_QUOTE_CHAR    =    '\'',    /* Single quotation character */
         DOUBLE_QUOTE_CHAR    =    '\"',    /* Double quotation character */
-        AMPERSAND_CHAR        =   '&'      /* Ampersand character */
+        AMPERSAND_CHAR        =    '&'    /* Ampersand character */
     };
 
     AxisChar* m_Buf;
+    bool m_isNil;
     
 private:
     AxisString m_strReturnVal;

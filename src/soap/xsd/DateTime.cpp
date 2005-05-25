@@ -25,11 +25,20 @@ AXIS_CPP_NAMESPACE_START
     {
     }
 
-    AxisChar* DateTime::serialize(const void* value) throw (AxisSoapException)
+    DateTime::DateTime(const xsd__dateTime* value):m_DateTime(NULL)
     {
-    	return serialize((xsd__dateTime*) value);
+        if (value)
+        {
+            setNil(false);
+            serialize(value);
+        }
     }
-	
+    
+    XSDTYPE DateTime::getType()
+    {
+        return XSD_DATETIME;
+    }
+    
     void* DateTime::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
     {
     	return (void*) deserializeDateTime(valueAsChar);

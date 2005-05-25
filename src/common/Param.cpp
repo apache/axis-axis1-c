@@ -39,6 +39,13 @@ Param::~Param ()
     int i;
     XML_String pStr = 0;
     AnyType* pAny = 0;
+    
+    if (m_AnySimpleType)
+    {
+        delete m_AnySimpleType;
+        m_AnySimpleType = NULL;
+    }
+    
     switch (m_Type)
     {
         case XSD_ARRAY:
@@ -48,28 +55,6 @@ Param::~Param ()
         case USER_TYPE:
             delete m_Value.pCplxObj;
             break;
-        case XSD_STRING:
-        case XSD_ANYURI:
-        case XSD_QNAME:
-        case XSD_NOTATION:
-            if (AxisEngine::m_bServer)
-            {
-                delete [] const_cast<char*>(m_Value.pStrValue);
-            }
-            break;
-        /*case XSD_BASE64BINARY:
-            if (AxisEngine::m_bServer)
-            {
-                delete [] m_Value.b64bValue->__ptr;
-            }
-            break;
-        case XSD_HEXBINARY:
-            if (AxisEngine::m_bServer)
-            {
-                delete [] m_Value.hbValue->__ptr;
-            }
-            break;
-            */
         case XSD_ANY:
             pAny = (AnyType*)m_Value.pAnyObject;
             for (i=0; i<pAny->_size; i++)
@@ -79,73 +64,6 @@ Param::~Param ()
             }
             delete [] pAny;
             break;
-
-        case XSD_INT:
-        case XSD_BOOLEAN:
-            delete m_Value.nValue;
-            break; 
-
-        case XSD_UNSIGNEDINT:
-            delete m_Value.unValue;
-            break;
-
-        case XSD_SHORT:
-            delete m_Value.sValue;
-            break; 
-
-        case XSD_UNSIGNEDSHORT:
-            delete m_Value.usValue;
-            break;         
-
-        case XSD_BYTE:
-            delete m_Value.cValue;
-            break; 
-
-        case XSD_UNSIGNEDBYTE:
-            delete m_Value.ucValue;
-            break;
-
-        case XSD_LONG:
-            delete m_Value.llValue;
-            break;
-
-        case XSD_INTEGER:
-            delete m_Value.llValue;
-            break;        
-
-        case XSD_DURATION:
-            delete m_Value.lDuration;
-            break;        
-
-        case XSD_UNSIGNEDLONG:
-            delete m_Value.ulValue;
-            break;
-
-        case XSD_FLOAT:
-            delete m_Value.fValue;
-            break;
-
-        case XSD_DOUBLE:
-        case XSD_DECIMAL:
-            delete m_Value.dValue;
-            break;              
-
-        case XSD_HEXBINARY:
-            //delete [] m_Value.hbValue->__ptr;
-            //delete m_Value.hbValue;
-            break;
-
-        case XSD_BASE64BINARY:
-            //delete [] m_Value.b64bValue->__ptr;
-            //delete m_Value.b64bValue;
-            break;
-
-        case XSD_DATETIME:
-        case XSD_DATE:
-        case XSD_TIME:
-            delete m_Value.tValue;
-            break;
-
         default:;
     }
 }
@@ -255,138 +173,17 @@ int Param::serialize (SoapSerializer &pSZ)
       case XSD_ANY:
              pSZ.serializeAnyObject(m_Value.pAnyObject);
              break;
-	case XSD_INT:
-      case XSD_BOOLEAN:
-            pSZ.serializeAsElement(m_sName.c_str (), m_Value.nValue, m_Type);
-            break;
-	case XSD_UNSIGNEDINT:
-            pSZ.serializeAsElement(m_sName.c_str (), m_Value.unValue, m_Type);
-            break;
-	case XSD_SHORT:
-            pSZ.serializeAsElement(m_sName.c_str (), m_Value.sValue, m_Type);
-            break;
-	case XSD_UNSIGNEDSHORT:
-            pSZ.serializeAsElement(m_sName.c_str (), m_Value.usValue, m_Type);
-            break;
-	case XSD_BYTE:
-            pSZ.serializeAsElement(m_sName.c_str (), m_Value.cValue, m_Type);
-            break;
-	case XSD_UNSIGNEDBYTE:
-            pSZ.serializeAsElement(m_sName.c_str (), m_Value.ucValue, m_Type);
-            break;
-	case XSD_LONG:
-            pSZ.serializeAsElement(m_sName.c_str (), m_Value.llValue, m_Type);
-            break;
-	case XSD_INTEGER:
-            pSZ.serializeAsElement(m_sName.c_str (), m_Value.llValue, m_Type);
-            break;
-	case XSD_UNSIGNEDLONG:
-            pSZ.serializeAsElement(m_sName.c_str (), m_Value.ulValue, m_Type);
-            break;
-	case XSD_FLOAT:
-            pSZ.serializeAsElement(m_sName.c_str (), m_Value.fValue, m_Type);
-            break;
-	case XSD_DOUBLE:
-	case XSD_DECIMAL:
-            pSZ.serializeAsElement(m_sName.c_str (), m_Value.dValue, m_Type);
-            break;
-      case XSD_STRING:
-      case XSD_ANYURI:
-      case XSD_QNAME:
-      case XSD_NOTATION:
-            pSZ.serializeAsElement(m_sName.c_str (), (void *) m_Value.pStrValue, m_Type);
-            break;
-	case XSD_HEXBINARY:
-            pSZ.serializeAsElement(m_sName.c_str (), m_Value.hbValue, m_Type);
-            break;
-	case XSD_BASE64BINARY:
-            pSZ.serializeAsElement(m_sName.c_str (), m_Value.b64bValue, m_Type);
-            break;
-	case XSD_DURATION:
-            pSZ.serializeAsElement(m_sName.c_str (), m_Value.lDuration, m_Type);
-            break;
-      case XSD_DATETIME:
-      case XSD_DATE:
-      case XSD_TIME:
-            pSZ.serializeAsElement(m_sName.c_str (), m_Value.tValue, m_Type);
-            break;
       default:
-            return AXIS_FAIL; //this is an unexpected situation
+            pSZ.serializeAsElement((AxisChar*) m_sName.c_str (), (IAnySimpleType*) m_AnySimpleType);
+            break;
     }
     return AXIS_SUCCESS;
 }
 
-int Param::setValue (XSDTYPE nType, ParamValue Value)
+void Param::setValue( XSDTYPE nType, IAnySimpleType* value)
 {
     m_Type = nType;
-    switch (m_Type)
-    {
-        case XSD_INT:
-        case XSD_BOOLEAN:
-            m_Value.nValue = Value.nValue;
-            break;
-        case XSD_UNSIGNEDINT:
-            m_Value.unValue = Value.unValue;
-            break;
-        case XSD_SHORT:
-            m_Value.sValue = Value.sValue;
-            break;
-        case XSD_UNSIGNEDSHORT:
-            m_Value.usValue = Value.usValue;
-            break;
-        case XSD_BYTE:
-            m_Value.cValue = Value.cValue;
-            break;
-        case XSD_UNSIGNEDBYTE:
-            m_Value.ucValue = Value.ucValue;
-            break;
-        case XSD_LONG:
-            m_Value.llValue = Value.llValue;
-            break;
-        case XSD_INTEGER:
-            m_Value.llValue = Value.llValue;
-            break;
-        case XSD_UNSIGNEDLONG:
-            m_Value.ulValue = Value.ulValue;
-            break;
-        case XSD_FLOAT:
-            m_Value.fValue = Value.fValue;
-            break;
-        case XSD_DOUBLE:
-        case XSD_DECIMAL:
-            m_Value.dValue = Value.dValue;
-            break;
-        case XSD_STRING:
-        case XSD_ANYURI:
-        case XSD_QNAME:
-        case XSD_NOTATION:
-            m_Value.pStrValue = Value.pStrValue;
-            break;
-        case XSD_HEXBINARY:
-            m_Value.hbValue = Value.hbValue;
-            break;
-        case XSD_BASE64BINARY:
-            m_Value.b64bValue = Value.b64bValue;
-            break;
-        case XSD_DURATION:
-            m_Value.lDuration = Value.lDuration;
-        case XSD_DATETIME:
-        case XSD_DATE:
-        case XSD_TIME:
-            m_Value.tValue = Value.tValue;
-            /* m_uAxisTime.setValue(nType, m_Value);
-             * Continue this for all basic types
-	     */ 
-        case XSD_ARRAY:
-            m_Value.pArray = Value.pArray;
-            break;
-        case USER_TYPE:
-            m_Value.pCplxObj = Value.pCplxObj;
-            break;
-        default:
-            return AXIS_FAIL; //this is an unexpected situation
-    }
-    return AXIS_SUCCESS;
+    m_AnySimpleType = value;
 }
 
 void Param::setPrefix (const AxisChar* prefix)

@@ -25,9 +25,18 @@ Int::~Int()
 {
 }
 
-AxisChar* Int::serialize(const void* value) throw (AxisSoapException)
+Int::Int(const xsd__int* value):m_Int(NULL)
 {
-    return serialize((xsd__int*) value);
+    if (value)
+    {
+        setNil(false);
+        serialize(value);
+    }
+}
+
+XSDTYPE Int::getType()
+{
+    return XSD_INT;
 }
 
 void* Int::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
@@ -58,46 +67,30 @@ xsd__int* Int::deserializeInt(const AxisChar* valueAsChar) throw (AxisSoapExcept
 
 MinInclusive* Int::getMinInclusive()
 {   
-  AxisChar* end;    
-  LONGLONG* minInclusive = new LONGLONG;
-  *minInclusive = strtol ("-2147483648", &end, 10);
+    LONGLONG minInclusive = LONGLONGVALUE(-2147483648);
     
-    MinInclusive* retVal = new MinInclusive(*minInclusive);
-    delete minInclusive;
-    return retVal;
+    return new MinInclusive(minInclusive);
 }
 
 MinExclusive* Int::getMinExclusive()
 {   
-  AxisChar* end;    
-  LONGLONG* minExclusive = new LONGLONG;
-  *minExclusive = strtol ("-2147483649", &end, 10);
+    LONGLONG minExclusive = LONGLONGVALUE(-2147483649);
 
-    MinExclusive* retVal = new MinExclusive(*minExclusive);
-    delete minExclusive;
-    return retVal;
+    return new MinExclusive(minExclusive);
 }
 
 MaxInclusive* Int::getMaxInclusive()
 {   
-  AxisChar* end;    
-  LONGLONG* maxInclusive = new LONGLONG;
-  *maxInclusive = strtol ("2147483647", &end, 10);
+    LONGLONG maxInclusive = LONGLONGVALUE(2147483647);
     
-    MaxInclusive* retVal = new MaxInclusive(*maxInclusive);
-    delete maxInclusive;
-    return retVal;
+    return new MaxInclusive(maxInclusive);
 }
 
 MaxExclusive* Int::getMaxExclusive()
 {   
-  AxisChar* end;    
-  LONGLONG* maxExclusive = new LONGLONG;
-  *maxExclusive = strtol ("2147483648", &end, 10);
+    LONGLONG maxExclusive = LONGLONGVALUE(2147483648);
     
-    MaxExclusive* retVal = new MaxExclusive(*maxExclusive);
-    delete maxExclusive;
-    return retVal;
+    return new MaxExclusive(maxExclusive);
 }
 
 AXIS_CPP_NAMESPACE_END

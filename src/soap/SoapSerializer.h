@@ -27,6 +27,28 @@
 #include <stdarg.h>
 #include <cctype>
 
+#include "xsd/GYearMonth.hpp"
+#include "xsd/GYear.hpp"
+#include "xsd/GMonthDay.hpp"
+#include "xsd/GDay.hpp"
+#include "xsd/GMonth.hpp"
+#include "xsd/NonNegativeInteger.hpp"
+#include "xsd/PositiveInteger.hpp"
+#include "xsd/NonPositiveInteger.hpp"
+#include "xsd/NegativeInteger.hpp"
+#include "xsd/NormalizedString.hpp"
+#include "xsd/Token.hpp"
+#include "xsd/Language.hpp"
+#include "xsd/Name.hpp"
+#include "xsd/NCName.hpp"
+#include "xsd/ID.hpp"
+#include "xsd/IDREF.hpp"
+#include "xsd/IDREFS.hpp"
+#include "xsd/ENTITY.hpp"
+#include "xsd/ENTITIES.hpp"
+#include "xsd/NMTOKEN.hpp"
+#include "xsd/NMTOKENS.hpp"
+
 AXIS_CPP_NAMESPACE_START
 
 class SoapEnvelope;
@@ -169,6 +191,7 @@ private:
 	void serializeAttachments(SoapSerializer &pSZ);
     BasicTypeSerializer m_BTSZ;
     SOAPTransport* m_pOutputStream;
+    IAnySimpleType* createSimpleTypeObject(void * pValue, XSDTYPE type);
 
 public:
 	IHeaderBlock* getCurrentHeaderBlock();
@@ -196,11 +219,24 @@ public:
     int AXISCALL addOutputParam(const AxisChar* pchName, 
         void* pValue, XSDTYPE type);
     int AXISCALL serializeAsElement(const AxisChar* pchName, 
-        void* pValue, XSDTYPE type);
-	int AXISCALL serializeAsElement(const AxisChar* pchName, 
-		const AxisChar* pNamespace, void* pValue, XSDTYPE type);
-    int AXISCALL serializeAsAttribute(const AxisChar* pName, 
-        const AxisChar* pNamespace, void* pValue, XSDTYPE type);
+                                    void* pValue,
+                                    XSDTYPE type);
+    int AXISCALL serializeAsElement(const AxisChar* pchName,
+                                    const AxisChar* pNamespace,
+                                    void* pValue,
+                                    XSDTYPE type);
+    int AXISCALL serializeAsElement(const AxisChar* pchName,
+                                    IAnySimpleType* pSimpleType);
+	int AXISCALL serializeAsElement(const AxisChar* pchName,
+                                    const AxisChar* pNamespace,
+                                    IAnySimpleType* pSimpleType);
+    int AXISCALL serializeAsAttribute(const AxisChar* pName,
+                                      const AxisChar* pNamespace,
+                                      void* pValue,
+                                      XSDTYPE type);
+    int AXISCALL serializeAsAttribute(const AxisChar* pName,
+                                      const AxisChar* pNamespace,
+                                      IAnySimpleType* pSimpleType);
     void AXISCALL serializeVargs(int count, const char** args);
     void AXISCALL serialize(const char* pFirst, ...);
     void setStyle(AXIS_BINDING_STYLE nStyle)

@@ -33,6 +33,23 @@ class NMTOKEN : public Token {
 public:
 
     /**
+     * Constructor
+     */
+    NMTOKEN();
+
+    /**
+     * Constructor providing a value for later serialization
+     * @param value The value to be serialized
+     */
+    NMTOKEN(const xsd__NMTOKEN value);
+
+    /**
+     * Get the xsd type of this simple type.
+     * @return the xsd type of this simple type
+     */
+    XSDTYPE getType();
+    
+    /**
      * Deserialized NMTOKEN value from it's on-the-wire string form.
      * @param valueAsChar Serialized form of NMTOKEN value.
      * @return Deserialized NMTOKEN value.

@@ -43,11 +43,16 @@ public:
     ~Byte();
 
     /**
-     * Serialize value to it's on-the-wire string form.
-     * @param value The value to be serialized.
-     * @return Serialized form of value.
-     */  
-    AxisChar* serialize(const void* value) throw (AxisSoapException);
+     * Constructor providing a value for later serialization
+     * @param value The value to be serialized
+     */
+    Byte(const xsd__byte* value);
+
+    /**
+     * Get the xsd type of this simple type.
+     * @return the xsd type of this simple type
+     */
+    XSDTYPE getType();
 
     /**
      * Deserialize value from it's on-the-wire string form.
@@ -57,13 +62,6 @@ public:
     void* deserializer(const AxisChar* valueAsChar) throw (AxisSoapException);
 
     /**
-     * Serialize Byte value to it's on-the-wire string form.
-     * @param value The Byte value to be serialized.
-     * @return Serialized form of Byte value.
-     */  
-    AxisChar* serialize(const xsd__byte* value) throw (AxisSoapException);
-  
-    /**
      * Deserialized Byte value from it's on-the-wire string form.
      * @param valueAsChar Serialized form of Byte value.
      * @return Deserialized Byte value.
@@ -71,6 +69,13 @@ public:
     xsd__byte* deserializeByte(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 protected:
+
+    /**
+     * Serialize Byte value to it's on-the-wire string form.
+     * @param value The Byte value to be serialized.
+     * @return Serialized form of Byte value.
+     */  
+    AxisChar* serialize(const xsd__byte* value) throw (AxisSoapException);
 
     /**
      * Creates a MinInclusive object.  For the Byte type this is defined as

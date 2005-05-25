@@ -17,6 +17,23 @@
 
 AXIS_CPP_NAMESPACE_START
 
+Token::Token()
+{}
+
+Token::Token(const xsd__token value)
+{
+    if (value)
+    {
+        setNil(false);
+        serialize(value);
+    }
+}
+
+XSDTYPE Token::getType()
+{
+    return XSD_TOKEN;
+}
+
 AxisChar* Token::deserializeToken(const AxisChar* valueAsChar) throw (AxisSoapException)
 {
     return (AxisChar*) deserialize(valueAsChar);

@@ -21,13 +21,22 @@ UnsignedShort::UnsignedShort():m_UnsignedShort(NULL)
 {
 }
 
+UnsignedShort::UnsignedShort(const xsd__unsignedShort* value):m_UnsignedShort(NULL)
+{
+    if (value)
+    {
+        setNil(false);
+        serialize(value);
+    }
+}
+
 UnsignedShort::~UnsignedShort()
 {
 }
 
-AxisChar* UnsignedShort::serialize(const void* value) throw (AxisSoapException)
+XSDTYPE UnsignedShort::getType()
 {
-    return serialize((xsd__unsignedShort *) value);
+    return XSD_UNSIGNEDSHORT;
 }
 
 void* UnsignedShort::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
@@ -35,7 +44,7 @@ void* UnsignedShort::deserialize(const AxisChar* valueAsChar) throw (AxisSoapExc
     return (void*) deserializeUnsignedShort(valueAsChar);
 }
 
-AxisChar* UnsignedShort::serialize(xsd__unsignedShort * value) throw (AxisSoapException)
+AxisChar* UnsignedShort::serialize(const xsd__unsignedShort * value) throw (AxisSoapException)
 {
     xsd__unsignedInt valueAsInt = static_cast<xsd__unsignedInt>(*value);
     return UnsignedInt::serialize(&valueAsInt);
@@ -57,13 +66,9 @@ xsd__unsignedShort* UnsignedShort::deserializeUnsignedShort(const AxisChar* valu
 
 MaxInclusive* UnsignedShort::getMaxInclusive()
 {
-   AxisChar* end;    
-   LONGLONG* maxInclusive = new LONGLONG;
-   *maxInclusive = strtol ("65535", &end, 10);
+    LONGLONG maxInclusive = LONGLONGVALUE(65535);
     
-    MaxInclusive* retVal = new MaxInclusive(*maxInclusive);
-    delete maxInclusive;
-    return retVal;
+    return new MaxInclusive(maxInclusive);
 }
 
 AXIS_CPP_NAMESPACE_END

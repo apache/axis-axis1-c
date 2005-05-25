@@ -40,13 +40,18 @@ public:
      */
     XSD_QName();
 
-	/**
-	 * Serialize value to it's on-the-wire string form.
-	 * @param value The value to be serialized.
-	 * @return Serialized form of value.
-	 */
-    AxisChar* serialize(const void* value) throw (AxisSoapException);
-	
+        /**
+     * Constructor providing a value for later serialization
+     * @param value The value to be serialized
+     */
+    XSD_QName(const xsd__QName value);
+
+    /**
+     * Get the xsd type of this simple type.
+     * @return the xsd type of this simple type
+     */
+    XSDTYPE getType();
+
 	/**
 	 * Deserialize value from it's on-the-wire string form.
 	 * @param valueAsChar Serialized form of value.
@@ -55,13 +60,6 @@ public:
     void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 	/**
-	 * Serialize QName to it's on-the-wire string form.
-	 * @param value The QName to be serialized.
-	 * @return Serialized form of QName.
-	 */
-    AxisChar* serialize(const xsd__QName value) throw (AxisSoapException);
-	
-	/**
 	 * Deserialize QName from it's on-the-wire string form.
 	 * @param valueAsChar Serialized form of QName.
 	 * @return Deserialized QName.
@@ -69,6 +67,13 @@ public:
     xsd__QName deserializeQName(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 protected:
+
+    /**
+     * Serialize QName to it's on-the-wire string form.
+     * @param value The QName to be serialized.
+     * @return Serialized form of QName.
+     */
+    AxisChar* serialize(const xsd__QName value) throw (AxisSoapException);
 
     /**
      * Creates a WhiteSpace object to collapse whitespace

@@ -17,6 +17,23 @@
 
 AXIS_CPP_NAMESPACE_START
 
+ENTITY::ENTITY()
+{}
+
+ENTITY::ENTITY(const xsd__ENTITY value)
+{
+    if (value)
+    {
+        setNil(false);
+        serialize(value);
+    }
+}
+
+XSDTYPE ENTITY::getType()
+{
+    return XSD_ENTITY;
+}
+
 AxisChar* ENTITY::deserializeENTITY(const AxisChar* valueAsChar) throw (AxisSoapException)
 {
     return (AxisChar*) deserialize(valueAsChar);

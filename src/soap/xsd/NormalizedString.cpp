@@ -17,6 +17,23 @@
 
 AXIS_CPP_NAMESPACE_START
 
+NormalizedString::NormalizedString()
+{}
+
+NormalizedString::NormalizedString(const xsd__normalizedString value)
+{
+    if (value)
+    {
+        setNil(false);
+        serialize(value);
+    }
+}
+
+XSDTYPE NormalizedString::getType()
+{
+    return XSD_NORMALIZEDSTRING;
+}
+
 AxisChar* NormalizedString::deserializeNormalizedString(const AxisChar* valueAsChar) throw (AxisSoapException)
 {
     return (AxisChar*) deserialize(valueAsChar);

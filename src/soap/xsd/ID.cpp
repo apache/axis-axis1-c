@@ -17,6 +17,23 @@
 
 AXIS_CPP_NAMESPACE_START
 
+ID::ID()
+{}
+
+ID::ID(const xsd__ID value)
+{
+	if (value)
+    {
+        setNil(false);
+        serialize(value);
+    }
+}
+
+XSDTYPE ID::getType()
+{
+    return XSD_ID;
+}
+
 AxisChar* ID::deserializeID(const AxisChar* valueAsChar) throw (AxisSoapException)
 {
     return (AxisChar*) deserialize(valueAsChar);

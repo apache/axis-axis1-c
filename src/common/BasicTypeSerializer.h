@@ -28,7 +28,6 @@
 #define _BASICTYPESERIALIZER_H____OF_AXIS_INCLUDED_
 
 #include <axis/TypeMapping.hpp>
-#include "AxisTime.h"
 #include <string>
 #include "../soap/xsd/Boolean.hpp"
 #include "../soap/xsd/AnyURI.hpp"
@@ -86,33 +85,30 @@ class BasicTypeSerializer
 public:
     BasicTypeSerializer();
     virtual ~BasicTypeSerializer();
-    const AxisString& getEntityReferenced(const AxisString& str);
 
     /**
      * Serializes a SOAP Element.
      * 
-     * This is essentially serializeAsElement(const AxisChar* pName, const AxisChar* pPrefix, const void* pValue, XSDTYPE type)
+     * This is essentially serializeAsElement(const AxisChar* pName, const AxisChar* pPrefix, IAnySimpleType* pSimpleType, XSDTYPE type)
      * with pPrefix = NULL;
      * 
      * @param pName the name gives for this element.
-     * @param pValue the value for this element.
-     * @param type the xsd type of the value.
+     * @param pSimpleType the value for this element.
      */
     const AxisChar* serializeAsElement(const AxisChar* pName, 
-        const void* pValue, XSDTYPE type);
+        IAnySimpleType* pSimpleType);
     /**
      * Serializes a SOAP Element.
      * 
-     * This is essentially serializeAsElement(const AxisChar* pName, const AxisChar* pPrefix, const AxisChar* pNamespace, const void* pValue, XSDTYPE type)
+     * This is essentially serializeAsElement(const AxisChar* pName, const AxisChar* pPrefix, const AxisChar* pNamespace, IAnySimpleType* pSimpleType, XSDTYPE type)
      * with pNamespace = NULL;
      * 
      * @param pName the name gives for this element.
      * @param pPrefix the optional prefix for this element.
-     * @param pValue the value for this element.
-     * @param type the xsd type of the value.
+     * @param pSimpleType the value for this element.
      */
 	const AxisChar* serializeAsElement(const AxisChar* pName, 
-        const AxisChar* pPrefix, const void* pValue, XSDTYPE type);
+        const AxisChar* pPrefix, IAnySimpleType* pSimpleType);
     /**
      * Serializes a SOAP Element.
      * If a namespace is provided, it will be declared, so ensure appropriate
@@ -121,35 +117,26 @@ public:
      * @param pName the name gives for this element.
      * @param pPrefix the optional prefix for this element.
      * @param pNamespace the namespace uri to be used for this element and prefix.
-     * @param pValue the value for this element.
-     * @param type the xsd type of the value.
+     * @param pSimpleType the value for this element.
      */
     const AxisChar* serializeAsElement(const AxisChar* pName, 
-        const AxisChar* pPrefix, const AxisChar* pNamespace, const void* pValue,
-        XSDTYPE type);
+        const AxisChar* pPrefix, const AxisChar* pNamespace, IAnySimpleType* pSimpleType);
     const AxisChar* serializeAsAttribute(const AxisChar* pName, 
-        const AxisChar* pPrefix, const void* pValue, XSDTYPE type);
-    const AxisChar* encodeToHexBinary(const xsd__hexBinary* pBinary);
-    const AxisChar* encodeToBase64Binary(const xsd__base64Binary* pBinary);
+        const AxisChar* pPrefix, IAnySimpleType* pSimpleType);
     void setStyle(AXIS_BINDING_STYLE nStyle){ m_nStyle = nStyle;};
     static const AxisChar* basicTypeStr(XSDTYPE type);
 
 private:
     enum
     {
-        GREATOR_THAN_CHAR    =   '>',     /* Greator than character */
-        LESSER_THAN_CHAR    =    '<',     /* Less than character */
-        SINGLE_QUOTE_CHAR    =   '\'',    /* Single quotation character */
-        DOUBLE_QUOTE_CHAR    =   '\"',    /* Double quotation character */
-        AMPERSAND_CHAR        =  '&'      /* Ampersand character */
+        GREATOR_THAN_CHAR    =    '>',    /* Greator than character */
+        LESSER_THAN_CHAR    =    '<',    /* Less than character */
+        SINGLE_QUOTE_CHAR    =    '\'',    /* Single quotation character */
+        DOUBLE_QUOTE_CHAR    =    '\"',    /* Double quotation character */
+        AMPERSAND_CHAR        =    '&'    /* Ampersand character */
     };
 private:
     AxisString m_sSZ;
-    AxisString m_AuxStr;
-    AxisString m_strReturnVal;
-    AxisChar m_Buf[BTS_BUFFSIZE]; 
-    /* used for numeric to string conversions with sprintf */
-    AxisTime m_AxisTime;
     /* Current Serialization Style */
     AXIS_BINDING_STYLE m_nStyle;
 };

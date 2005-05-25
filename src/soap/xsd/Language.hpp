@@ -33,6 +33,18 @@ class Language : public Token {
 public:
 
     /**
+     * Constructor providing a value for later serialization
+     * @param value The value to be serialized
+     */
+    Language(const xsd__language value);
+
+    /**
+     * Get the xsd type of this simple type.
+     * @return the xsd type of this simple type
+     */
+    XSDTYPE getType();
+
+    /**
      * Deserialized Language value from it's on-the-wire string form.
      * @param valueAsChar Serialized form of Language value.
      * @return Deserialized Language value.

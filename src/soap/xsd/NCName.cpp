@@ -17,6 +17,23 @@
 
 AXIS_CPP_NAMESPACE_START
 
+NCName::NCName()
+{}
+
+NCName::NCName(const xsd__NCName value)
+{
+    if (value)
+    {
+        setNil(false);
+        serialize(value);
+    }
+}
+
+XSDTYPE NCName::getType()
+{
+    return XSD_NCNAME;
+}
+
 AxisChar* NCName::deserializeNCName(const AxisChar* valueAsChar) throw (AxisSoapException)
 {
     return (AxisChar*) deserialize(valueAsChar);

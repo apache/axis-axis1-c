@@ -42,12 +42,17 @@ public:
      */
     GYear();
     
-  /**
-    * Serialize value to it's on-the-wire string form.
-    * @param value The value to be serialized.
-    * @return Serialized form of value.
-   */
-    AxisChar* serialize(const void* value) throw (AxisSoapException);
+    /**
+     * Constructor providing a value for later serialization
+     * @param value The value to be serialized
+     */
+    GYear(const xsd__gYear* value);
+    
+    /**
+     * Get the xsd type of this simple type.
+     * @return the xsd type of this simple type
+     */
+    XSDTYPE getType();
     
   /**
     * Deserialize value from it's on-the-wire string form.
@@ -57,13 +62,6 @@ public:
     void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException);
     
   /**
-    * Serialize GYear value to it's on-the-wire string form.
-   * @param value The GYear value to be serialized.
-   * @return Serialized form of GYear value.
-  */
-    AxisChar* serialize(const struct tm* value) throw (AxisSoapException);
-   
-  /**
     * Deserialized GYear value from it's on-the-wire string form.
   * @param valueAsChar Serialized form of GYear value.
    * @return Deserialized GYear value.
@@ -71,6 +69,13 @@ public:
     struct tm* deserializeGYear(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 protected:
+
+    /**
+     * Serialize GYear value to it's on-the-wire string form.
+     * @param value The GYear value to be serialized.
+     * @return Serialized form of GYear value.
+     */
+    AxisChar* serialize(const struct tm* value) throw (AxisSoapException);
 
     /**
      * Creates a MinInclusive object.  For the GYear type this is undefined, 

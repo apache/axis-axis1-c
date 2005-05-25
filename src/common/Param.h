@@ -24,6 +24,7 @@
 
 #include "ComplexObjectHandler.h"
 #include "../platforms/PlatformAutoSense.hpp"
+#include "../soap/xsd/IAnySimpleType.hpp"
 
 AXIS_CPP_NAMESPACE_START
 
@@ -32,27 +33,11 @@ class ArrayBean;
 class ParamValue
 {
 public:
-    int * nValue;
-    unsigned int * unValue;
-    short * sValue;
-    unsigned short * usValue;
-    long * lValue;
-    unsigned long* ulValue;
-    LONGLONG * llValue;
-    char * cValue;
-    unsigned char * ucValue;
-    float * fValue;
-    double * dValue;
-    struct tm * tValue;/* this will hold the c type tm struct*/
-    xsd__hexBinary * hbValue;
-    xsd__base64Binary * b64bValue;
-    long * lDuration;/* duration in seconds*/
     union {
         class ArrayBean* pArray; /* this is used to hold arrays */
         class IArrayBean* pIArray; /* used by wrapper classes */
     };
     ComplexObjectHandler* pCplxObj;
-    const AxisChar* pStrValue;
     AnyType* pAnyObject; /* used to hold AnyType struct for xsd:any */
 };
 
@@ -68,7 +53,7 @@ class Param
     friend class SoapSerializer;
     friend class SoapFault;
 public:
-    Param(){ m_Type = USER_TYPE;}; 
+    Param(){ m_Type = USER_TYPE; m_AnySimpleType = NULL;}; 
     /* if there is no attribute that says the type */
     virtual ~Param();
 
@@ -78,9 +63,10 @@ private:
     XSDTYPE m_Type; /* Type of the parameter */
     AxisString m_strPrefix; /* needed in serialization only */
     AxisString m_strUri; /* needed in serialization only */
+    IAnySimpleType* m_AnySimpleType;
 
 public: 
-    int setValue(XSDTYPE nType, ParamValue Value);
+    void setValue(XSDTYPE nType, IAnySimpleType* value);
     int serialize(SoapSerializer& pSZ);
     void setPrefix(const AxisChar* prefix);
     void setURI(const AxisChar* uri);

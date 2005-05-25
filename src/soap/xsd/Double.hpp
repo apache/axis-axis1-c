@@ -41,26 +41,24 @@ public:
      */
     Double();
 
-	/**
-	 * Serialize value to it's on-the-wire string form.
-	 * @param value The value to be serialized.
-	 * @return Serialized form of value.
-	 */
-    AxisChar* serialize(const void* value) throw (AxisSoapException);
-	
+    /**
+     * Constructor providing a value for later serialization
+     * @param value The value to be serialized
+     */
+    Double(const xsd__double* value);
+ 
+     /**
+     * Get the xsd type of this simple type.
+     * @return the xsd type of this simple type
+     */
+    XSDTYPE getType();
+ 	
 	/**
 	 * Deserialize value from it's on-the-wire string form.
 	 * @param valueAsChar Serialized form of value.
 	 * @return Deserialized value.
 	 */
     void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException);
-	
-	/**
-	 * Serialize Double value to it's on-the-wire string form.
-	 * @param value The Double value to be serialized.
-	 * @return Serialized form of Double value.
-	 */
-    AxisChar* serialize(const xsd__double* value) throw (AxisSoapException);
 	
 	/**
 	 * Deserialized Double value from it's on-the-wire string form.
@@ -70,6 +68,13 @@ public:
     xsd__double* deserializeDouble(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 protected:
+
+    /**
+     * Serialize Double value to it's on-the-wire string form.
+     * @param value The Double value to be serialized.
+     * @return Serialized form of Double value.
+     */
+    AxisChar* serialize(const xsd__double* value) throw (AxisSoapException);
 
     /**
      * Creates a MinInclusive object.  For the Double type this is undefined, 

@@ -101,6 +101,7 @@
 #define PRINTF_LONGLONG_FORMAT_SPECIFIER "%I64d"
 #define PRINTF_LONGLONG_FORMAT_SPECIFIER_CHARS "I64d"
 
+
 std::string* getPlatformErrorMessage(long errorNumber);
 
 HMODULE callLoadLib(LPCTSTR lib);

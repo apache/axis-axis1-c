@@ -17,9 +17,23 @@
 
 AXIS_CPP_NAMESPACE_START
 
-unsigned LONGLONG* PositiveInteger::deserializePositiveInteger(const AxisChar* valueAsChar) throw (AxisSoapException)
+PositiveInteger::PositiveInteger(const xsd__positiveInteger* value)
 {
-    return (unsigned LONGLONG*) deserialize(valueAsChar);
+    if (value)
+    {
+        setNil(false);
+        serialize(value);
+    }
+}
+
+XSDTYPE PositiveInteger::getType()
+{
+    return XSD_POSITIVEINTEGER;
+}
+
+xsd__positiveInteger* PositiveInteger::deserializePositiveInteger(const AxisChar* valueAsChar) throw (AxisSoapException)
+{
+    return (xsd__positiveInteger*) deserialize(valueAsChar);
 }
 
 MinInclusive* PositiveInteger::getMinInclusive()

@@ -262,21 +262,17 @@ SoapFault::SoapFault(string sFaultcode, string sFaultstring, string sFaultactor,
     m_sFaultDetail= sDetail;    
 }
 
-int SoapFault::setParam(Param* pParam, const AxisChar* pchName, const void* pValue, XSDTYPE type)
+int SoapFault::setParam(Param* pParam, const AxisChar* pchName, const AxisChar* pValue, XSDTYPE type)
 {
     if (!pParam) return AXIS_FAIL;
-    pParam->m_Type = type;
     pParam->m_sName = pchName;
-    //pParam->m_Value.pStrValue = *((char**)(pValue));
-    pParam->m_Value.pStrValue = new char[strlen((const char*)pValue)+1];
-    strcpy((char*)(pParam->m_Value.pStrValue),(const char*)pValue);
+    pParam->setValue(type, new String((xsd__string) pValue));
     return AXIS_SUCCESS;
 }
 
 int SoapFault::setFaultcode(const AxisChar* sFaultcode)
 {
     m_pFaultcodeParam = new Param();
-    //setParam(m_pFaultcodeParam, "faultcode", &sFaultcode, XSD_STRING); 
 	setParam(m_pFaultcodeParam, "faultcode", sFaultcode, XSD_STRING); 
     m_sFaultcode= sFaultcode;
 

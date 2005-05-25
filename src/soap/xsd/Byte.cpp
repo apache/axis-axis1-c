@@ -25,9 +25,18 @@ Byte::~Byte()
 {
 }
 
-AxisChar* Byte::serialize(const void* value) throw (AxisSoapException)
+Byte::Byte(const xsd__byte* value):m_Byte(NULL)
 {
-    return serialize((xsd__byte*) value);
+    if (value)
+    {
+        setNil(false);
+        serialize(value);
+    }
+}
+
+XSDTYPE Byte::getType()
+{
+    return XSD_BYTE;
 }
 
 void* Byte::deserializer(const AxisChar* valueAsChar) throw (AxisSoapException)

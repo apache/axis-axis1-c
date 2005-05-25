@@ -21,11 +21,20 @@ AXIS_CPP_NAMESPACE_START
     {
     }
 
-    AxisChar* GYearMonth::serialize(const void* value) throw (AxisSoapException)
+    GYearMonth::GYearMonth(const xsd__gYearMonth* value):m_GYearMonth(NULL)
     {
-       return serialize((struct tm*) value);
+        if (value)
+        {
+            setNil(false);
+            serialize(value);
+        }
     }
-  
+
+    XSDTYPE GYearMonth::getType()
+    {
+        return XSD_YEARMONTH;
+    }
+
     void* GYearMonth::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
     {
        return (void*) deserializeGYearMonth(valueAsChar);

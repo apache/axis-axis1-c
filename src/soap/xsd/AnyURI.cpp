@@ -21,11 +21,20 @@ AXIS_CPP_NAMESPACE_START
     {
     }
 
-    AxisChar* AnyURI::serialize(const void* value) throw (AxisSoapException)
+    AnyURI::AnyURI(const xsd__anyURI value):m_AnyURI(NULL)
     {
-    	return serialize((xsd__anyURI) value);
+        if (value)
+        {
+            setNil(false);            
+            serialize(value);
+        }
     }
-	
+    
+    XSDTYPE AnyURI::getType()
+    {
+        return XSD_ANYURI;
+    }
+
     void* AnyURI::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
     {
     	return (void*) deserializeAnyURI(valueAsChar);

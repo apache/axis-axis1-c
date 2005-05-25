@@ -21,11 +21,20 @@ AXIS_CPP_NAMESPACE_START
     {
     }
 
-    AxisChar* GMonthDay::serialize(const void* value) throw (AxisSoapException)
+    GMonthDay::GMonthDay(const xsd__gMonthDay* value):m_GMonthDay(NULL)
     {
-       return serialize((struct tm*) value);
+        if (value)
+        {
+            setNil(false);
+            serialize(value);
+        }
     }
-  
+
+    XSDTYPE GMonthDay::getType()
+    {
+        return XSD_MONTHDAY;
+    }
+
     void* GMonthDay::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
     {
        return (void*) deserializeGMonthDay(valueAsChar);

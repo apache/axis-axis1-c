@@ -763,6 +763,150 @@ int SoapSerializer::setOutputStreamForTesting(SOAPTransport* pStream)
 }
 #endif
 
+IAnySimpleType* SoapSerializer::createSimpleTypeObject(void * pValue, XSDTYPE type)
+{
+    IAnySimpleType* xsdValue = NULL;
+    switch (type)
+    {
+        case XSD_FLOAT:
+            xsdValue = new Float((xsd__float*) pValue);
+            break;
+        case XSD_BOOLEAN:
+            xsdValue = new Boolean((xsd__boolean*) pValue);
+            break;
+        case XSD_DOUBLE:
+            xsdValue = new Double((xsd__double*) pValue);
+            break;
+        case XSD_DURATION:
+            xsdValue = new Duration((xsd__duration*) pValue);
+            break;
+        case XSD_DATETIME:
+            xsdValue = new DateTime((xsd__dateTime*) pValue);
+            break;
+        case XSD_TIME:
+            xsdValue = new Time((xsd__time*) pValue);
+            break;
+        case XSD_DATE:
+            xsdValue = new Date((xsd__date*) pValue);
+            break;
+        case XSD_YEARMONTH:
+            xsdValue = new GYearMonth((xsd__gYearMonth*) pValue);
+            break;
+        case XSD_YEAR:
+            xsdValue = new GYear((xsd__gYear*) pValue);
+            break;
+        case XSD_MONTHDAY:
+            xsdValue = new GMonthDay((xsd__gMonthDay*) pValue);
+            break;
+        case XSD_DAY:
+            xsdValue = new GDay((xsd__gDay*) pValue);
+            break;
+        case XSD_MONTH:
+            xsdValue = new GMonth((xsd__gMonth*) pValue);
+            break;
+        case XSD_HEXBINARY:
+            xsdValue = new HexBinary((xsd__hexBinary*) pValue);
+            break;
+        case XSD_BASE64BINARY:
+            xsdValue = new Base64Binary((xsd__base64Binary*) pValue);
+            break;
+        case XSD_ANYURI:
+            xsdValue = new AnyURI((xsd__anyURI) pValue);
+            break;
+        case XSD_QNAME:
+            xsdValue = new XSD_QName((xsd__QName) pValue);
+            break;
+        case XSD_NOTATION:
+            xsdValue = new NOTATION((xsd__notation) pValue);
+            break;
+        case XSD_DECIMAL:
+            xsdValue = new Decimal((xsd__decimal*) pValue);
+            break;
+        case XSD_INTEGER:
+            xsdValue = new Integer((xsd__integer*) pValue);
+            break;
+        case XSD_LONG:
+            xsdValue = new Long((xsd__long*) pValue);
+            break;
+        case XSD_INT:
+            xsdValue = new Int((xsd__int*) pValue);
+            break;
+        case XSD_SHORT:
+            xsdValue = new Short((xsd__short*) pValue);
+            break;
+        case XSD_BYTE:
+            xsdValue = new Byte((xsd__byte*) pValue);
+            break;
+        case XSD_NONNEGATIVEINTEGER:
+            xsdValue = new NonNegativeInteger((xsd__nonNegativeInteger*) pValue);
+            break;
+        case XSD_UNSIGNEDLONG:
+            xsdValue = new UnsignedLong((xsd__unsignedLong*) pValue);
+            break;
+        case XSD_UNSIGNEDINT:
+            xsdValue = new UnsignedInt((xsd__unsignedInt*) pValue);
+            break;
+        case XSD_UNSIGNEDSHORT:
+            xsdValue = new UnsignedShort((xsd__unsignedShort*) pValue);
+            break;
+        case XSD_UNSIGNEDBYTE:
+            xsdValue = new UnsignedByte((xsd__unsignedByte*) pValue);
+            break;
+        case XSD_POSITIVEINTEGER:
+            xsdValue = new PositiveInteger((xsd__positiveInteger*) pValue);
+            break;
+        case XSD_NONPOSITIVEINTEGER:
+            xsdValue = new NonPositiveInteger((xsd__nonPositiveInteger*) pValue);
+            break;
+        case XSD_NEGATIVEINTEGER:
+            xsdValue = new NegativeInteger((xsd__negativeInteger*) pValue);
+            break;
+        case XSD_STRING:
+            xsdValue = new String((xsd__string) pValue);
+            break;
+        case XSD_NORMALIZEDSTRING:
+            xsdValue = new NormalizedString((xsd__normalizedString) pValue);
+            break;
+        case XSD_TOKEN:
+            xsdValue = new Token((xsd__token) pValue);
+            break;
+        case XSD_LANGUAGE:
+            xsdValue = new Language((xsd__language) pValue);
+            break;
+        case XSD_NAME:
+            xsdValue = new Name((xsd__Name) pValue);
+            break;
+        case XSD_NCNAME:
+            xsdValue = new NCName((xsd__NCName) pValue);
+            break;
+        case XSD_ID:
+            xsdValue = new ID((xsd__ID) pValue);
+            break;
+        case XSD_IDREF:
+            xsdValue = new IDREF((xsd__IDREF) pValue);
+            break;
+        case XSD_IDREFS:
+            xsdValue = new IDREFS((xsd__IDREFS) pValue);
+            break;
+        case XSD_ENTITY:
+            xsdValue = new ENTITY((xsd__ENTITY) pValue);
+            break;
+        case XSD_ENTITIES:
+            xsdValue = new ENTITIES((xsd__ENTITIES) pValue);
+            break;
+        case XSD_NMTOKEN:
+            xsdValue = new NMTOKEN((xsd__NMTOKEN) pValue);
+            break;
+        case XSD_NMTOKENS:
+            xsdValue = new NMTOKENS((xsd__NMTOKENS) pValue);
+            break;
+        default:
+            break;
+    }
+    
+    return xsdValue;
+}
+
 /*
  * Basic output parameter going to be serialized as an Element later
  */
@@ -770,6 +914,8 @@ int SoapSerializer::addOutputParam( const AxisChar * pchName,
 								    void * pValue, 
                                     XSDTYPE type)
 {
+    IAnySimpleType* xsdValue = createSimpleTypeObject(pValue, type);
+    
     Param * pParam = new Param();
 
     if( !pParam)
@@ -780,221 +926,9 @@ int SoapSerializer::addOutputParam( const AxisChar * pchName,
     pParam->m_Type = type;
     pParam->m_sName = pchName;
 
-    switch( type)
-    {
-    case XSD_INT:
-    case XSD_BOOLEAN:
-        if (pValue == NULL)
-        {
-            pParam->m_Value.nValue = NULL;
-        }
-        else
-        {
-            pParam->m_Value.nValue = new int;
-            *(pParam->m_Value.nValue) = *((int *) (pValue));
-        }
-        break; 
 
-    case XSD_UNSIGNEDINT:
-        if (pValue == NULL)
-        {
-            pParam->m_Value.unValue = NULL;
-        }
-        else
-        {
-            pParam->m_Value.unValue = new unsigned int;
-            *(pParam->m_Value.unValue) = *((unsigned int *) (pValue));
-        }
-        break;
-
-    case XSD_SHORT:
-        if (pValue == NULL)
-        {
-            pParam->m_Value.sValue = NULL;
-        }
-        else
-        {
-            pParam->m_Value.sValue = new short;
-            *(pParam->m_Value.sValue) = *((short *) (pValue));
-        }
-        break; 
-
-    case XSD_UNSIGNEDSHORT:
-        if (pValue == NULL)
-        {
-             pParam->m_Value.usValue = NULL;
-        }
-        else 
-        {
-            pParam->m_Value.usValue = new unsigned short;
-            *(pParam->m_Value.usValue) = *((unsigned short *) (pValue));
-        }
-        break;         
-
-    case XSD_BYTE:
-        if (pValue == NULL)
-        {
-            pParam->m_Value.cValue = NULL;
-        }
-        else
-        {
-            pParam->m_Value.cValue = new char;
-            *(pParam->m_Value.cValue) = *((char *) (pValue));
-        }
-        break; 
-
-    case XSD_UNSIGNEDBYTE:
-        if (pValue == NULL)
-        {
-            pParam->m_Value.ucValue = NULL; 
-        }
-        else
-        {
-            pParam->m_Value.ucValue = new unsigned char;
-            *(pParam->m_Value.ucValue) = *((unsigned char *) (pValue));
-        }
-        break;
-
-    case XSD_LONG:
-        if (pValue == NULL)
-        {
-            pParam->m_Value.llValue = NULL;
-        }
-        else
-        {        
-            pParam->m_Value.llValue = new LONGLONG;
-            *(pParam->m_Value.llValue) = *((LONGLONG *) (pValue));
-        }
-        break;
-
-    case XSD_INTEGER:
-        if (pValue == NULL)
-        {
-            pParam->m_Value.llValue = NULL;
-        }
-        else
-        {
-            pParam->m_Value.llValue = new xsd__integer;
-            *(pParam->m_Value.llValue) = *((xsd__integer *) (pValue));
-        }
-        break;        
-
-    case XSD_DURATION:
-        if (pValue == NULL)
-        {
-            pParam->m_Value.lDuration = NULL;
-        }
-        else
-        {
-            pParam->m_Value.lDuration = new long;
-            *(pParam->m_Value.lDuration) = *((long *) (pValue));
-        }
-        break;        
-
-    case XSD_UNSIGNEDLONG:
-        if (pValue == NULL)
-        {
-            pParam->m_Value.ulValue = NULL;
-        }
-        else
-        {
-            pParam->m_Value.ulValue = new unsigned long;
-            *(pParam->m_Value.ulValue) = *((unsigned long *) (pValue));
-        }
-        break;
-
-    case XSD_FLOAT:
-        if (pValue == NULL)
-        {
-            pParam->m_Value.fValue = NULL;
-        }
-        else
-        {
-            pParam->m_Value.fValue = new float;
-            *(pParam->m_Value.fValue) = *((float *) (pValue));
-        }
-        break;
-
-    case XSD_DOUBLE:
-    case XSD_DECIMAL:
-        if (pValue == NULL)
-        {
-            pParam->m_Value.dValue = NULL;
-        }
-        else
-        {
-            pParam->m_Value.dValue = new double;
-            *(pParam->m_Value.dValue) = *((double *) (pValue));
-        }
-        break;              
-
-    case XSD_ANYURI:
-    case XSD_QNAME:
-    case XSD_NOTATION:
-    case XSD_STRING:
-        if (pValue == NULL)
-        {
-            pParam->m_Value.pStrValue = NULL;
-        }
-        else
-        {
-            pParam->m_Value.pStrValue = new char[strlen((const char*)pValue)+1];
-            strcpy((char*)(pParam->m_Value.pStrValue),(const char*)pValue);
-        }
-        break;
-
-    case XSD_HEXBINARY:
-        if (pValue == NULL)
-        {
-             pParam->m_Value.hbValue = NULL;
-        }
-        else
-        {
-            pParam->m_Value.hbValue = new xsd__hexBinary;
-            pParam->m_Value.hbValue->__size = (*((xsd__hexBinary *) (pValue))).__size;
-            pParam->m_Value.hbValue->__ptr = new xsd__unsignedByte[pParam->m_Value.hbValue->__size + 1];
-            memcpy((char*)(pParam->m_Value.hbValue->__ptr), 
-				(char*)(*((xsd__hexBinary *) (pValue))).__ptr,
-				pParam->m_Value.hbValue->__size);        
-        }
-        break;
-
-    case XSD_BASE64BINARY:
-        if (pValue == NULL)
-        {
-            pParam->m_Value.b64bValue = NULL;
-        }
-        else
-        {
-            pParam->m_Value.b64bValue = new xsd__base64Binary;
-            pParam->m_Value.b64bValue->__size = (*((xsd__base64Binary *) (pValue))).__size;
-            pParam->m_Value.b64bValue->__ptr = new xsd__unsignedByte[pParam->m_Value.b64bValue->__size + 1];
-            memcpy((char*)(pParam->m_Value.b64bValue->__ptr), 
-				(char*)(*((xsd__base64Binary *) (pValue))).__ptr, 
-				pParam->m_Value.b64bValue->__size); 
-        }
-        break;
-
-    case XSD_DATETIME:
-    case XSD_DATE:
-    case XSD_TIME:
-        if (pValue == NULL)
-        {
-            pParam->m_Value.tValue = NULL;
-        }
-        else
-        {
-            pParam->m_Value.tValue = new struct tm;
-            *(pParam->m_Value.tValue) = *((struct tm *) (pValue));
-        }
-        break; 
-
-    default:
-        delete pParam;
-
-        return AXIS_FAIL;
-    }
-
+    pParam->setValue(type, xsdValue);
+    
     if( m_pSoapEnvelope &&
 		(m_pSoapEnvelope->m_pSoapBody) &&
 		(m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod)) 
@@ -1012,16 +946,30 @@ int SoapSerializer::addOutputParam( const AxisChar * pchName,
 }
 
 int SoapSerializer::serializeAsElement( const AxisChar * pName,
-									    void * pValue, 
+                                        void * pValue, 
                                         XSDTYPE type)
 {
-	return serializeAsElement( pName, NULL, pValue, type);
+  return serializeAsElement( pName, NULL, pValue, type);
+}
+
+int SoapSerializer::serializeAsElement( const AxisChar * pName, 
+                                        const AxisChar * pNamespace,
+                                        void * pValue, 
+                                        XSDTYPE type) 
+{
+    IAnySimpleType* pSimpleType = createSimpleTypeObject(pValue, type);
+    
+    return serializeAsElement(pName, pNamespace, pSimpleType);
+}
+int SoapSerializer::serializeAsElement( const AxisChar * pName,
+									    IAnySimpleType * pSimpleType)
+{
+	return serializeAsElement( pName, NULL, pSimpleType);
 }
 
 int SoapSerializer::serializeAsElement( const AxisChar * pName, 
 									    const AxisChar * pNamespace,
-									    void * pValue, 
-                                        XSDTYPE type) 
+									    IAnySimpleType * pSimpleType) 
 {
     const AxisChar* pPrefix = NULL;
     bool blnIsNewPrefix = false;
@@ -1035,13 +983,13 @@ int SoapSerializer::serializeAsElement( const AxisChar * pName,
 
     if( blnIsNewPrefix)
     {
-        pSerialized = m_BTSZ.serializeAsElement( pName, pPrefix, pNamespace, pValue, type);
+        pSerialized = m_BTSZ.serializeAsElement( pName, pPrefix, pNamespace, pSimpleType);
         
 		removeNamespacePrefix( pNamespace);
     }
     else
     {
-        pSerialized = m_BTSZ.serializeAsElement( pName, pPrefix, pValue, type);
+        pSerialized = m_BTSZ.serializeAsElement( pName, pPrefix, pSimpleType);
     }
 
     if( pSerialized)
@@ -1054,10 +1002,19 @@ int SoapSerializer::serializeAsElement( const AxisChar * pName,
 	return AXIS_FAIL;  // Can it only be unsuccessful?
 } 
 
+int SoapSerializer::serializeAsAttribute( const AxisChar * pName,
+                                          const AxisChar * pNamespace,
+                                          void * pValue,
+                                          XSDTYPE type)
+{
+    IAnySimpleType* pSimpleType = createSimpleTypeObject(pValue, type);
+    
+    return serializeAsAttribute(pName, pNamespace, pSimpleType);
+}
+
 int SoapSerializer::serializeAsAttribute( const AxisChar * pName, 
                                           const AxisChar * pNamespace, 
-                                          void * pValue,
-										  XSDTYPE type)
+                                          IAnySimpleType* pSimpleType)
 {
     const AxisChar * pPrefix = NULL;
 
@@ -1066,7 +1023,7 @@ int SoapSerializer::serializeAsAttribute( const AxisChar * pName,
         pPrefix = getNamespacePrefix( pNamespace);
     }
 
-    const AxisChar * pSerialized = m_BTSZ.serializeAsAttribute(pName, pPrefix, pValue, type);
+    const AxisChar * pSerialized = m_BTSZ.serializeAsAttribute(pName, pPrefix, pSimpleType);
 
     if( pSerialized)
     {
@@ -1286,196 +1243,8 @@ int SoapSerializer::serializeAsChardata( void * pValue, XSDTYPE type)
 {
     char * pStr = m_Buf;
 
-    switch( type)
-    {
-    case XSD_INT:
-        {
-            Int intSerializer;
-
-            pStr = intSerializer.serialize( pValue);
-        }
-        break;
-
-    case XSD_BOOLEAN:
-        {
-            Boolean booleanSerializer;
-
-            pStr = booleanSerializer.serialize( pValue);
-        }
-        break;
-
-    case XSD_UNSIGNEDINT:
-        {
-            UnsignedInt unsignedIntSerializer;
-
-            pStr = unsignedIntSerializer.serialize( pValue);
-        }
-        break;
-
-    case XSD_SHORT:
-        {
-            Short shortSerializer;
-
-            pStr = shortSerializer.serialize( pValue);
-        }
-        break;
-
-    case XSD_UNSIGNEDSHORT:
-        {
-            UnsignedShort unsignedShortSerializer;
-
-            pStr = unsignedShortSerializer.serialize( pValue);
-        }
-        break;
-
-    case XSD_BYTE:
-        {
-            Byte byteSerializer;
-
-            pStr = byteSerializer.serialize( pValue);
-        }
-        break;
-
-    case XSD_UNSIGNEDBYTE:
-        {
-            UnsignedByte unsignedByteSerializer;
-
-            pStr = unsignedByteSerializer.serialize( pValue);
-        }
-        break;
-
-    case XSD_LONG:
-        {
-            Long longSerializer;
-
-            pStr = longSerializer.serialize( pValue);
-        }
-        break;
-
-    case XSD_INTEGER:
-        {
-            Integer integerSerializer;
-
-            pStr = integerSerializer.serialize( pValue);
-        }
-        break;
-
-    case XSD_DURATION:
-        {
-            Duration durationSerializer;
-
-            pStr = durationSerializer.serialize( pValue);
-        }
-        break;
-
-    case XSD_UNSIGNEDLONG:
-        {
-            UnsignedLong unsignedLongSerializer;
-
-            pStr = unsignedLongSerializer.serialize( pValue);
-        }
-        break;
-
-    case XSD_FLOAT:
-        {
-            Float floatSerializer;
-
-            pStr = floatSerializer.serialize( pValue);
-        }
-        break;
-
-    case XSD_DOUBLE:
-        {
-            Double doubleSerializer;
-
-            pStr = doubleSerializer.serialize( pValue);
-        }
-		break;
-
-    case XSD_DECIMAL:
-        {
-            Decimal decimalSerializer;
-
-            pStr = decimalSerializer.serialize( pValue);
-        }
-        break;
-
-    case XSD_STRING:
-        {
-            String stringSerializer;
-
-            pStr = stringSerializer.serialize( pValue);
-        }
-        break;
-
-    case XSD_ANYURI:
-        {
-            AnyURI anyURISerializer;
-
-            pStr = anyURISerializer.serialize( pValue);
-        }
-        break;
-
-    case XSD_QNAME:
-        {
-            XSD_QName qNameSerializer;
-
-            pStr = qNameSerializer.serialize( pValue);
-        }
-        break;
-
-    case XSD_NOTATION:
-        {
-            NOTATION notationSerializer;
-
-            pStr = notationSerializer.serialize( pValue);
-        }
-        break;
-
-    case XSD_HEXBINARY:
-        {
-            HexBinary hexBinarySerializer;
-
-            pStr = hexBinarySerializer.serialize( pValue);
-        }
-        break;
-
-    case XSD_BASE64BINARY:
-        {
-            Base64Binary base64BinarySerializer;
-
-            //pStr = base64BinarySerializer.serialize(pValue);
-            strcpy( pStr, base64BinarySerializer.serialize( pValue));            
-        }
-        break;
-
-    case XSD_DATETIME:
-        {
-            DateTime dateTimeSerializer;
-
-            pStr = dateTimeSerializer.serialize( pValue);
-        }
-        break;
-
-    case XSD_DATE:
-        {
-            Date dateSerializer;
-
-            pStr = dateSerializer.serialize( pValue);
-        }
-        break;
-
-    case XSD_TIME:
-        {
-            Time timeSerializer;
-
-            pStr = timeSerializer.serialize( pValue);
-        }
-        break;
-
-    default:
-		;
-    }
+    IAnySimpleType* pSimpleType = createSimpleTypeObject(pValue, type);
+    pStr = pSimpleType->serialize();
 
     *this << pStr;
 

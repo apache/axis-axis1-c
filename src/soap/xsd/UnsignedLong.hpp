@@ -36,18 +36,23 @@ public:
      * Constructor
      */
     UnsignedLong();
-    
+
+    /**
+     * Constructor providing a value for later serialization
+     * @param value The value to be serialized
+     */
+    UnsignedLong(const xsd__unsignedLong* value);
+
     /**
      * Destructor
      */
     ~UnsignedLong();
 
     /**
-     * Serialize value to it's on-the-wire string form.
-     * @param value The value to be serialized.
-     * @return Serialized form of value.
-     */  
-    AxisChar* serialize(const void* value) throw (AxisSoapException);
+     * Get the xsd type of this simple type.
+     * @return the xsd type of this simple type
+     */
+    XSDTYPE getType();
 
     /**
      * Deserialize value from it's on-the-wire string form.
@@ -56,13 +61,6 @@ public:
      */  
     void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException);
 
-    /**
-     * Serialize UnsignedLong value to it's on-the-wire string form.
-     * @param value The UnsignedLong value to be serialized.
-     * @return Serialized form of UnsignedLong value.
-     */  
-    AxisChar* serialize(const xsd__unsignedLong* value) throw (AxisSoapException);
-  
   /**
    * Deserialized UnsignedLong value from it's on-the-wire string form.
    * @param valueAsChar Serialized form of UnsignedLong value.
@@ -71,6 +69,13 @@ public:
     xsd__unsignedLong* deserializeUnsignedLong(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 protected:
+
+    /**
+     * Serialize UnsignedLong value to it's on-the-wire string form.
+     * @param value The UnsignedLong value to be serialized.
+     * @return Serialized form of UnsignedLong value.
+     */  
+    AxisChar* serialize(const xsd__unsignedLong* value) throw (AxisSoapException);
 
     /**
      * Creates a MaxInclusive object.  For the UnsignedLong type this is

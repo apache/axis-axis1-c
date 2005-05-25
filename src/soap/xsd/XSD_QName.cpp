@@ -21,11 +21,20 @@ AXIS_CPP_NAMESPACE_START
     {
     }
 
-    AxisChar* XSD_QName::serialize(const void* value) throw (AxisSoapException)
+    XSD_QName::XSD_QName(const xsd__QName value):m_QName(NULL)
     {
-    	return serialize((xsd__QName) value);
+        if (value)
+        {
+            setNil(false);
+            serialize(value);
+        }
     }
-	
+    
+    XSDTYPE XSD_QName::getType()
+    {
+        return XSD_QNAME;
+    }
+    
     void* XSD_QName::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
     {
     	return (void*) deserializeQName(valueAsChar);

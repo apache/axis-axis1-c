@@ -25,11 +25,20 @@ AXIS_CPP_NAMESPACE_START
     {
     }
 
-    AxisChar* HexBinary::serialize(const void* value) throw (AxisSoapException)
+    HexBinary::HexBinary(const xsd__hexBinary* value):m_HexBinary(NULL)
     {
-    	return serialize((xsd__hexBinary*) value);
+        if (value)
+        {
+            setNil(false);
+            serialize(value);
+        }
     }
-	
+    
+    XSDTYPE HexBinary::getType()
+    {
+        return XSD_HEXBINARY;
+    }
+    
     void* HexBinary::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
     {
     	return (void*) deserializeHexBinary(valueAsChar);

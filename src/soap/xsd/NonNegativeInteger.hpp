@@ -43,34 +43,39 @@ public:
     ~NonNegativeInteger();
 
     /**
-     * Serialize value to it's on-the-wire string form.
-     * @param value The value to be serialized.
-     * @return Serialized form of value.
-    */
-    AxisChar* serialize(const void* value) throw (AxisSoapException);
+     * Constructor providing a value for later serialization
+     * @param value The value to be serialized
+     */
+    NonNegativeInteger(const xsd__nonNegativeInteger* value);
+
+    /**
+     * Get the xsd type of this simple type.
+     * @return the xsd type of this simple type
+     */
+    XSDTYPE getType();
     
     /**
-     * Deserialize value from it's on-the-wire string form.
-     * @param valueAsChar Serialized form of value.
-     * @return Deserialized value.
+     * Deserialized NonNegativeInteger value from it's on-the-wire string form.
+     * @param valueAsChar Serialized form of NonNegativeInteger value.
+     * @return Deserialized NonNegativeInteger value.
      */
-    void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException);
-    
+     void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException);  
+
+    /**
+     * Deserialized NonNegativeInteger value from it's on-the-wire string form.
+     * @param valueAsChar Serialized form of NonNegativeInteger value.
+     * @return Deserialized NonNegativeInteger value.
+     */
+     xsd__nonNegativeInteger* deserializeNonNegativeInteger(const AxisChar* valueAsChar) throw (AxisSoapException);
+
+protected:
+
     /**
      * Serialize NonNegativeInteger value to it's on-the-wire string form.
      * @param value The NonNegativeInteger value to be serialized.
      * @return Serialized form of NonNegativeInteger value.
      */
-    AxisChar* serialize(const unsigned LONGLONG* value) throw (AxisSoapException);
-  
-  /**
-   * Deserialized NonNegativeInteger value from it's on-the-wire string form.
-   * @param valueAsChar Serialized form of NonNegativeInteger value.
-   * @return Deserialized NonNegativeInteger value.
-   */
-    unsigned LONGLONG* deserializeNonNegativeInteger(const AxisChar* valueAsChar) throw (AxisSoapException);
-
-protected:
+    AxisChar* serialize(const xsd__nonNegativeInteger* value) throw (AxisSoapException);
 
     /**
      * Creates a MinInclusive object.  For the NonNegativeInteger type this is
@@ -80,7 +85,7 @@ protected:
     virtual MinInclusive* getMinInclusive();
 
 private:
-   unsigned LONGLONG* m_NonNegativeInteger;
+   xsd__nonNegativeInteger* m_NonNegativeInteger;
 
 };
 

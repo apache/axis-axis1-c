@@ -25,9 +25,18 @@ Decimal::~Decimal()
 {
 }
 
-AxisChar* Decimal::serialize(const void* value) throw (AxisSoapException)
+Decimal::Decimal(const xsd__decimal* value):m_Decimal(NULL)
 {
-	return serialize((xsd__decimal*) value);	
+    if (value)
+    {
+        setNil(false);
+        serialize(value);
+    }
+}
+
+XSDTYPE Decimal::getType()
+{
+    return XSD_DECIMAL;
 }
 
 void* Decimal::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)

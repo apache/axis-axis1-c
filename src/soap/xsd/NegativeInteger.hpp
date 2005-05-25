@@ -31,13 +31,24 @@ using namespace std;
 
 class NegativeInteger : public NonPositiveInteger {
 public:
+    /**
+     * Constructor providing a value for later serialization
+     * @param value The value to be serialized
+     */
+    NegativeInteger(const xsd__negativeInteger* value);
 
-  /**
-   * Deserialized NegativeInteger value from it's on-the-wire string form.
-   * @param valueAsChar Serialized form of NegativeInteger value.
-   * @return Deserialized NegativeInteger value.
-   */
-    unsigned LONGLONG* deserializeNegativeInteger(const AxisChar* valueAsChar) throw (AxisSoapException);
+    /**
+     * Get the xsd type of this simple type.
+     * @return the xsd type of this simple type
+     */
+    XSDTYPE getType();
+
+    /**
+     * Deserialized NegativeInteger value from it's on-the-wire string form.
+     * @param valueAsChar Serialized form of NegativeInteger value.
+     * @return Deserialized NegativeInteger value.
+     */
+    xsd__negativeInteger* deserializeNegativeInteger(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 protected:
 

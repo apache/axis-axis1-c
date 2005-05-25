@@ -21,9 +21,18 @@ AXIS_CPP_NAMESPACE_START
     {
     }
 
-    AxisChar* GYear::serialize(const void* value) throw (AxisSoapException)
+    GYear::GYear(const xsd__gYear* value):m_GYear(NULL)
     {
-       return serialize((struct tm*) value);
+        if (value)
+        {
+            setNil(false);
+            serialize(value);
+        }
+    }
+
+    XSDTYPE GYear::getType()
+    {
+        return XSD_YEAR;
     }
   
     void* GYear::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)

@@ -47,26 +47,24 @@ public:
     */
     ~HexBinary();
 
-	/**
-	 * Serialize value to it's on-the-wire string form.
-	 * @param value The value to be serialized.
-	 * @return Serialized form of value.
-	 */
-    AxisChar* serialize(const void* value) throw (AxisSoapException);
-	
+        /**
+     * Constructor providing a value for later serialization
+     * @param value The value to be serialized
+     */
+    HexBinary(const xsd__hexBinary* value);
+
+    /**
+     * Get the xsd type of this simple type.
+     * @return the xsd type of this simple type
+     */
+    XSDTYPE getType();
+
 	/**
 	 * Deserialize value from it's on-the-wire string form.
 	 * @param valueAsChar Serialized form of value.
 	 * @return Deserialized value.
 	 */
     void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException);
-	
-	/**
-	 * Serialize HexBinary value to it's on-the-wire string form.
-	 * @param value The HexBinary value to be serialized.
-	 * @return Serialized form of HexBinary value.
-	 */
-    AxisChar* serialize(const xsd__hexBinary * value) throw (AxisSoapException);
 	
 	/**
 	 * Deserialized HexBinary value from it's on-the-wire string form.
@@ -76,6 +74,13 @@ public:
     xsd__hexBinary * deserializeHexBinary(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 protected:
+
+    /**
+     * Serialize HexBinary value to it's on-the-wire string form.
+     * @param value The HexBinary value to be serialized.
+     * @return Serialized form of HexBinary value.
+     */
+    AxisChar* serialize(const xsd__hexBinary * value) throw (AxisSoapException);
 
     /**
      * Creates a minLength object, used to allocate storage.  By default the HexBinary

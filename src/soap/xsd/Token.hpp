@@ -33,6 +33,23 @@ class Token : public NormalizedString {
 public:
 
     /**
+     * Constructor
+     */
+    Token();
+
+    /**
+     * Constructor providing a value for later serialization
+     * @param value The value to be serialized
+     */
+    Token(const xsd__token value);
+
+    /**
+     * Get the xsd type of this simple type.
+     * @return the xsd type of this simple type
+     */
+    XSDTYPE getType();
+
+    /**
      * Deserialized Token value from it's on-the-wire string form.
      * @param valueAsChar Serialized form of Token value.
      * @return Deserialized Token value.

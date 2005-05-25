@@ -39,13 +39,18 @@ public:
      * Constructor
      */
     String();
-	
+
     /**
-     * Serialize value to it's on-the-wire string form.
-     * @param value The value to be serialized.
-     * @return Serialized form of value.
+     * Constructor providing a value for later serialization
+     * @param value The value to be serialized
      */
-	AxisChar* serialize(const void* value) throw (AxisSoapException);
+    String(const xsd__string value);
+
+    /**
+     * Get the xsd type of this simple type.
+     * @return the xsd type of this simple type
+     */
+    XSDTYPE getType();
 
     /**
      * Deserialize value from it's on-the-wire string form.
@@ -55,13 +60,6 @@ public:
 	void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException);
 
     /**
-     * Serialize String value to it's on-the-wire string form.
-     * @param value The String value to be serialized.
-     * @return Serialized form of String value.
-     */	
-	AxisChar* serialize(const xsd__string value) throw (AxisSoapException);
-
-    /**
      * Deserialized String value from it's on-the-wire string form.
      * @param valueAsChar Serialized form of String value.
      * @return Deserialized String value.
@@ -69,6 +67,13 @@ public:
 	xsd__string deserializeString(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 protected:
+
+    /**
+     * Serialize String value to it's on-the-wire string form.
+     * @param value The String value to be serialized.
+     * @return Serialized form of String value.
+     */   
+  AxisChar* serialize(const xsd__string value) throw (AxisSoapException);
 
     /**
      * Creates a minLength object, used to allocate storage.  By default the String

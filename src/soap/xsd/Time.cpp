@@ -21,9 +21,18 @@ AXIS_CPP_NAMESPACE_START
     {
     }
 
-    AxisChar* Time::serialize(const void* value) throw (AxisSoapException)
+    Time::Time(const xsd__time* value):m_Time(NULL)
     {
-    	return serialize((xsd__time*) value);
+        if (value)
+        {
+            setNil(false);
+            serialize(value);
+        }
+    }
+
+    XSDTYPE Time::getType()
+    {
+        return XSD_TIME;
     }
 	
     void* Time::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)

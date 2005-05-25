@@ -33,6 +33,23 @@ class ENTITY : public NCName {
 public:
 
     /**
+     * Constructor
+     */
+    ENTITY();
+
+    /**
+     * Constructor providing a value for later serialization
+     * @param value The value to be serialized
+     */
+    ENTITY(const xsd__ENTITY value);
+
+    /**
+     * Get the xsd type of this simple type.
+     * @return the xsd type of this simple type
+     */
+    XSDTYPE getType();
+
+    /**
      * Deserialized ENTITY value from it's on-the-wire string form.
      * @param valueAsChar Serialized form of ENTITY value.
      * @return Deserialized ENTITY value.

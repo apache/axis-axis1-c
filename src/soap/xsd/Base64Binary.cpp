@@ -25,11 +25,20 @@ AXIS_CPP_NAMESPACE_START
     {
     }
 
-    AxisChar* Base64Binary::serialize(const void* value) throw (AxisSoapException)
+    Base64Binary::Base64Binary(const xsd__base64Binary* value):m_Base64Binary(NULL)
     {
-    	return serialize((xsd__base64Binary*) value);
+        if (value)
+        {
+            setNil(false);
+            serialize(value);
+        }
     }
-	
+
+    XSDTYPE Base64Binary::getType()
+    {
+        return XSD_BASE64BINARY;
+    }
+    
     void* Base64Binary::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
     {
     	return (void*) deserializeBase64Binary(valueAsChar);

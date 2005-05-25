@@ -47,13 +47,18 @@ public:
      * Destructor
      */
     ~Decimal();
-    
-	/**
-	 * Serialize value to it's on-the-wire string form.
-	 * @param value The value to be serialized.
-	 * @return Serialized form of value.
-	 */
-    AxisChar* serialize(const void* value) throw (AxisSoapException);
+
+    /**
+     * Constructor providing a value for later serialization
+     * @param value The value to be serialized
+     */
+    Decimal(const xsd__decimal* value);
+
+    /**
+     * Get the xsd type of this simple type.
+     * @return the xsd type of this simple type
+     */
+    XSDTYPE getType();
 	
 	/**
 	 * Deserialize value from it's on-the-wire string form.
@@ -63,20 +68,20 @@ public:
     void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException);
 	
 	/**
-	 * Serialize Decimal value to it's on-the-wire string form.
-	 * @param value The Decimal value to be serialized.
-	 * @return Serialized form of Decimal value.
-	 */
-    AxisChar* serialize(const xsd__decimal* value) throw (AxisSoapException);
-	
-	/**
 	 * Deserialized Decimal value from it's on-the-wire string form.
 	 * @param valueAsChar Serialized form of Decimal value.
 	 * @return Deserialized Decimal value.
 	 */
     xsd__decimal* deserializeDecimal(const AxisChar* valueAsChar) throw (AxisSoapException);
-
+    
 protected:
+
+    /**
+     * Serialize Decimal value to it's on-the-wire string form.
+     * @param value The Decimal value to be serialized.
+     * @return Serialized form of Decimal value.
+     */
+    AxisChar* serialize(const xsd__decimal* value) throw (AxisSoapException);
 
     /**
      * Creates a MinInclusive object.  For the Decimal type this is undefined, 

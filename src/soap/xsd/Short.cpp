@@ -25,9 +25,18 @@ Short::~Short()
 {
 }
 
-AxisChar* Short::serialize(const void* value) throw (AxisSoapException)
+Short::Short(const xsd__short* value):m_Short(NULL)
 {
-    return serialize((xsd__short*) value);
+    if (value)
+    {
+        setNil(false);
+        serialize(value);
+    }
+}
+
+XSDTYPE Short::getType()
+{
+    return XSD_SHORT;
 }
 
 void* Short::deserializer(const AxisChar* valueAsChar) throw (AxisSoapException)

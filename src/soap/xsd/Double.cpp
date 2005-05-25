@@ -21,9 +21,18 @@ Double::Double():m_Double(NULL)
 {
 }
 
-AxisChar* Double::serialize(const void* value) throw (AxisSoapException)
+Double::Double(const xsd__double* value):m_Double(NULL)
 {
-	return serialize((double*) value);	
+    if (value)
+    {
+        setNil(false);
+        serialize(value);
+    }
+}
+
+XSDTYPE Double::getType()
+{
+    return XSD_DOUBLE;
 }
 
 void* Double::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)

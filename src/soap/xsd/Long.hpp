@@ -42,11 +42,16 @@ public:
     ~Long();
 
     /**
-     * Serialize value to it's on-the-wire string form.
-     * @param value The value to be serialized.
-     * @return Serialized form of value.
-     */  
-    AxisChar* serialize(const void* value) throw (AxisSoapException);
+     * Constructor providing a value for later serialization
+     * @param value The value to be serialized
+     */
+    Long(const xsd__long* value);
+
+    /**
+     * Get the xsd type of this simple type.
+     * @return the xsd type of this simple type
+     */
+    XSDTYPE getType();
 
     /**
      * Deserialize value from it's on-the-wire string form.
@@ -55,13 +60,6 @@ public:
      */  
     void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException);
 
-    /**
-     * Serialize Long value to it's on-the-wire string form.
-     * @param value The Long value to be serialized.
-     * @return Serialized form of Long value.
-     */  
-    AxisChar* serialize(const xsd__long* value) throw (AxisSoapException);
-  
   /**
    * Deserialized Long value from it's on-the-wire string form.
    * @param valueAsChar Serialized form of Long value.
@@ -70,6 +68,13 @@ public:
     xsd__long* deserializeLong(const AxisChar* valueAsChar) throw (AxisSoapException);
     
 protected:
+
+    /**
+     * Serialize Long value to it's on-the-wire string form.
+     * @param value The Long value to be serialized.
+     * @return Serialized form of Long value.
+     */  
+    AxisChar* serialize(const xsd__long* value) throw (AxisSoapException);
 
     /**
      * Creates a MinInclusive object.  For the Long type this is defined as

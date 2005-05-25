@@ -21,18 +21,22 @@ Boolean::Boolean():m_Boolean(NULL)
 {
 }
 
+Boolean::Boolean(const xsd__boolean* value):m_Boolean(NULL)
+{
+    if (value)
+    {
+        setNil(false);
+        serialize(value);
+    }
+}
+
 Boolean::~Boolean()
 {
 }
 
-/**
- * Serialize value to it's on-the-wire string form.
- * @param value The value to be serialized.
- * @return Serialized form of value.
- */
-AxisChar* Boolean::serialize(const void* value) throw (AxisSoapException)
+XSDTYPE Boolean::getType()
 {
-	return serialize((xsd__boolean *) value);	
+    return XSD_BOOLEAN;
 }
 
 /**

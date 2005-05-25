@@ -17,6 +17,23 @@
 
 AXIS_CPP_NAMESPACE_START
 
+IDREFS::IDREFS()
+{}
+
+IDREFS::IDREFS(const xsd__IDREFS value)
+{
+    if (value)
+    {
+        setNil(false);
+        serialize(value);
+    }
+}
+
+XSDTYPE IDREFS::getType()
+{
+    return XSD_IDREFS;
+}
+
 AxisChar* IDREFS::deserializeIDREFS(const AxisChar* valueAsChar) throw (AxisSoapException)
 {
     return (AxisChar*) deserialize(valueAsChar);

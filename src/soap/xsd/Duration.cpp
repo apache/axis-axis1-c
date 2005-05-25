@@ -21,11 +21,20 @@ AXIS_CPP_NAMESPACE_START
     {
     }
 
-    AxisChar* Duration::serialize(const void* value) throw (AxisSoapException)
+    Duration::Duration(const xsd__duration* value):m_Duration(NULL)
     {
-    	return serialize((xsd__duration*) value);
+        if (value)
+        {
+            setNil(false);
+            serialize(value);
+        }
     }
-	
+
+    XSDTYPE Duration::getType()
+    {
+        return XSD_DURATION;
+    }
+
     void* Duration::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
     {
     	return (void*) deserializeDuration(valueAsChar);

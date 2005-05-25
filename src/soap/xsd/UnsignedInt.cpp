@@ -21,13 +21,22 @@ UnsignedInt::UnsignedInt():m_UnsignedInt(NULL)
 {
 }
 
+UnsignedInt::UnsignedInt(const xsd__unsignedInt* value):m_UnsignedInt(NULL)
+{
+    if (value)
+    {
+        setNil(false);
+        serialize(value);
+    }
+}
+
 UnsignedInt::~UnsignedInt()
 {
 }
 
-AxisChar* UnsignedInt::serialize(const void* value) throw (AxisSoapException)
+XSDTYPE UnsignedInt::getType()
 {
-    return serialize((xsd__unsignedInt*) value);
+    return XSD_UNSIGNEDINT;
 }
 
 void* UnsignedInt::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
@@ -57,13 +66,9 @@ xsd__unsignedInt* UnsignedInt::deserializeUnsignedInt(const AxisChar* valueAsCha
 
 MaxInclusive* UnsignedInt::getMaxInclusive()
 {
-   AxisChar* end;    
-   LONGLONG* maxInclusive = new LONGLONG;
-   *maxInclusive = strtol ("4294967295", &end, 10);
+    LONGLONG maxInclusive = LONGLONGVALUE(4294967295);
     
-    MaxInclusive* retVal = new MaxInclusive(*maxInclusive);
-    delete maxInclusive;
-    return retVal;
+    return new MaxInclusive(maxInclusive);
 }
 
 AXIS_CPP_NAMESPACE_END

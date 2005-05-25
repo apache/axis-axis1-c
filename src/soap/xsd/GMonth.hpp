@@ -41,28 +41,26 @@ public:
      * Constructor
      */
     GMonth();
-    
-  /**
-    * Serialize value to it's on-the-wire string form.
-    * @param value The value to be serialized.
-    * @return Serialized form of value.
-   */
-    AxisChar* serialize(const void* value) throw (AxisSoapException);
-    
-  /**
-    * Deserialize value from it's on-the-wire string form.
-    * @param valueAsChar Serialized form of value.
-    * @return Deserialized value.
+
+    /**
+     * Constructor providing a value for later serialization
+     * @param value The value to be serialized
+     */
+    GMonth(const xsd__gMonth* value);
+
+    /**
+     * Get the xsd type of this simple type.
+     * @return the xsd type of this simple type
+     */
+    XSDTYPE getType();
+
+    /**
+     * Deserialize value from it's on-the-wire string form.
+     * @param valueAsChar Serialized form of value.
+     * @return Deserialized value.
      */
     void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException);
     
-  /**
-    * Serialize GMonth value to it's on-the-wire string form.
-   * @param value The GMonth value to be serialized.
-   * @return Serialized form of GMonth value.
-  */
-    AxisChar* serialize(const struct tm* value) throw (AxisSoapException);
-   
   /**
     * Deserialized GMonth value from it's on-the-wire string form.
   * @param valueAsChar Serialized form of GMonth value.
@@ -71,6 +69,13 @@ public:
     struct tm* deserializeGMonth(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 protected:
+
+    /**
+     * Serialize GMonth value to it's on-the-wire string form.
+     * @param value The GMonth value to be serialized.
+     * @return Serialized form of GMonth value.
+     */
+    AxisChar* serialize(const struct tm* value) throw (AxisSoapException);
 
     /**
      * Creates a MinInclusive object.  For the GMonth type this is undefined, 

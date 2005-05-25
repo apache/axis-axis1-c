@@ -42,12 +42,17 @@ public:
      */
     Duration();
 
-	/**
-	 * Serialize value to it's on-the-wire string form.
-	 * @param value The value to be serialized.
-	 * @return Serialized form of value.
-	 */
-    AxisChar* serialize(const void* value) throw (AxisSoapException);
+    /**
+     * Constructor providing a value for later serialization
+     * @param value The value to be serialized
+     */
+    Duration(const xsd__duration* value);
+
+    /**
+     * Get the xsd type of this simple type.
+     * @return the xsd type of this simple type
+     */
+    XSDTYPE getType();
 	
 	/**
 	 * Deserialize value from it's on-the-wire string form.
@@ -57,13 +62,6 @@ public:
     void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException);
 	
 	/**
-	 * Serialize Duration value to it's on-the-wire string form.
-	 * @param value The Duration value to be serialized.
-	 * @return Serialized form of Duration value.
-	 */
-    AxisChar* serialize(const xsd__duration* value) throw (AxisSoapException);
-	
-	/**
 	 * Deserialized Duration value from it's on-the-wire string form.
 	 * @param valueAsChar Serialized form of Duration value.
 	 * @return Deserialized Duration value.
@@ -71,6 +69,13 @@ public:
     xsd__duration* deserializeDuration(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 protected:
+
+    /**
+     * Serialize Duration value to it's on-the-wire string form.
+     * @param value The Duration value to be serialized.
+     * @return Serialized form of Duration value.
+     */
+    AxisChar* serialize(const xsd__duration* value) throw (AxisSoapException);
 
     /**
      * Creates a MinInclusive object.  For the Duration type this is undefined, 

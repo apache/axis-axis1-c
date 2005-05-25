@@ -41,32 +41,30 @@ public:
      * Constructor
      */
     DateTime();
+
+    /**
+     * Constructor providing a value for later serialization
+     * @param value The value to be serialized
+     */
+    DateTime(const xsd__dateTime* value);
     
     /**
      * Destructor
      */
     ~DateTime();
-    
-	/**
-	 * Serialize value to it's on-the-wire string form.
-	 * @param value The value to be serialized.
-	 * @return Serialized form of value.
-	 */
-    AxisChar* serialize(const void* value) throw (AxisSoapException);
-	
+
+    /**
+     * Get the xsd type of this simple type.
+     * @return the xsd type of this simple type
+     */
+    XSDTYPE getType();
+
 	/**
 	 * Deserialize value from it's on-the-wire string form.
 	 * @param valueAsChar Serialized form of value.
 	 * @return Deserialized value.
 	 */
     void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException);
-	
-	/**
-	 * Serialize DateTime value to it's on-the-wire string form.
-	 * @param value The DateTime value to be serialized.
-	 * @return Serialized form of DateTime value.
-	 */
-    AxisChar* serialize(const xsd__dateTime* value) throw (AxisSoapException);
 	
 	/**
 	 * Deserialized DateTime value from it's on-the-wire string form.
@@ -76,6 +74,13 @@ public:
     xsd__dateTime* deserializeDateTime(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 protected:
+
+    /**
+     * Serialize DateTime value to it's on-the-wire string form.
+     * @param value The DateTime value to be serialized.
+     * @return Serialized form of DateTime value.
+     */
+    AxisChar* serialize(const xsd__dateTime* value) throw (AxisSoapException);
 
     /**
      * Creates a MinInclusive object.  For the DateTime type this is undefined, 

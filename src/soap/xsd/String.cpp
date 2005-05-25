@@ -21,9 +21,18 @@ String::String():m_String(NULL)
 {
 }
 
-AxisChar* String::serialize(const void* value) throw (AxisSoapException)
+String::String(const xsd__string value):m_String(NULL)
 {
-	return serialize((xsd__string) value);
+        if (value)
+        {
+            setNil(false);
+            serialize(value);
+        }
+}
+
+XSDTYPE String::getType()
+{
+    return XSD_STRING;
 }
 
 void* String::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)

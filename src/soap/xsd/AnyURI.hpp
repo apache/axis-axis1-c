@@ -40,26 +40,24 @@ public:
      */
     AnyURI();
 
-	/**
-	 * Serialize value to it's on-the-wire string form.
-	 * @param value The value to be serialized.
-	 * @return Serialized form of value.
-	 */
-    AxisChar* serialize(const void* value) throw (AxisSoapException);
-	
+    /**
+     * Constructor providing a value for later serialization
+     * @param value The value to be serialized
+     */
+    AnyURI(const xsd__anyURI value);
+
+    /**
+     * Get the xsd type of this simple type.
+     * @return the xsd type of this simple type
+     */
+    XSDTYPE getType();
+    
 	/**
 	 * Deserialize value from it's on-the-wire string form.
 	 * @param valueAsChar Serialized form of value.
 	 * @return Deserialized value.
 	 */
     void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException);
-	
-	/**
-	 * Serialize AnyURI value to it's on-the-wire string form.
-	 * @param value The AnyURI value to be serialized.
-	 * @return Serialized form of AnyURI value.
-	 */
-    AxisChar* serialize(const xsd__anyURI value) throw (AxisSoapException);
 	
 	/**
 	 * Deserialized AnyURI value from it's on-the-wire string form.
@@ -69,6 +67,13 @@ public:
     xsd__anyURI deserializeAnyURI(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 protected:
+
+    /**
+     * Serialize AnyURI value to it's on-the-wire string form.
+     * @param value The AnyURI value to be serialized.
+     * @return Serialized form of AnyURI value.
+     */
+    AxisChar* serialize(const xsd__anyURI value) throw (AxisSoapException);
 
     /**
      * Creates a WhiteSpace object to replace whitespace

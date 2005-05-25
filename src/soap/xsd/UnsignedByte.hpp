@@ -38,16 +38,21 @@ public:
     UnsignedByte();
     
     /**
+     * Constructor providing a value for later serialization
+     * @param value The value to be serialized
+     */
+    UnsignedByte(const xsd__unsignedByte* value);
+    
+    /**
      * Destructor
      */
     ~UnsignedByte();
 
     /**
-     * Serialize value to it's on-the-wire string form.
-     * @param value The value to be serialized.
-     * @return Serialized form of value.
-     */  
-    AxisChar* serialize(const void* value) throw (AxisSoapException);
+     * Get the xsd type of this simple type.
+     * @return the xsd type of this simple type
+     */
+    XSDTYPE getType();
 
     /**
      * Deserialize value from it's on-the-wire string form.
@@ -57,13 +62,6 @@ public:
     void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException);
 
     /**
-     * Serialize UnsignedByte value to it's on-the-wire string form.
-     * @param value The UnsignedByte value to be serialized.
-     * @return Serialized form of UnsignedByte value.
-     */  
-    AxisChar* serialize(const xsd__unsignedByte* value) throw (AxisSoapException);
-  
-    /**
      * Deserialized UnsignedByte value from it's on-the-wire string form.
      * @param valueAsChar Serialized form of UnsignedByte value.
      * @return Deserialized UnsignedByte value.
@@ -71,6 +69,13 @@ public:
     xsd__unsignedByte* deserializeUnsignedByte(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 protected:
+
+    /**
+     * Serialize UnsignedByte value to it's on-the-wire string form.
+     * @param value The UnsignedByte value to be serialized.
+     * @return Serialized form of UnsignedByte value.
+     */  
+    AxisChar* serialize(const xsd__unsignedByte* value) throw (AxisSoapException);
 
     /**
      * Creates a MaxInclusive object.  For the UnsignedByte type this is

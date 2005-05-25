@@ -27,10 +27,18 @@ Long::~Long()
 {
 }
 
-
-AxisChar* Long::serialize(const void* value) throw (AxisSoapException)
+Long::Long(const xsd__long* value): m_Long(NULL)
 {
-    return serialize((xsd__long*) value);
+    if (value)
+    {
+        setNil(false);
+        serialize(value);
+    }
+}
+
+XSDTYPE Long::getType()
+{
+    return XSD_LONG;
 }
 
 void* Long::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
