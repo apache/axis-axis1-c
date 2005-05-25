@@ -211,6 +211,9 @@ int ClientAxisEngine::invoke (MessageData* pMsg)
 
         if (AXIS_SUCCESS != (Status = m_pSZ->setOutputStream (m_pSoap)))
             break;
+        
+        m_pSoap->openConnection();
+
         m_pSZ->markEndOfStream();
 
         level++; // AE_SERV

@@ -273,8 +273,6 @@ void HTTPTransport::closeConnection()
  */
 AXIS_TRANSPORT_STATUS HTTPTransport::flushOutput() throw (AxisException, HTTPTransportException)
 {
-    this->openConnection();
-
     // In preperation for sending the message, calculate the size of the message
     // by using the string length method.
     // NB: This calculation may not necessarily be correct when dealing with SSL
