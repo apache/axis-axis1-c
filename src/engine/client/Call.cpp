@@ -441,7 +441,6 @@ int Call::openConnection()
     	    m_pTransport->setProxy(m_strProxyHost.c_str(), m_uiProxyPort);
 		}
 
-        m_nStatus = m_pTransport->openConnection();
     }
     catch( AxisException& e)
     {
@@ -465,8 +464,6 @@ void Call::closeConnection()
 {
 	if (m_pTransport) {
         m_pTransport->closeConnection();
-	//    SOAPTransportFactory::destroyTransportObject(m_pTransport);
-	//	m_pTransport = NULL;
 	}
 }
 
