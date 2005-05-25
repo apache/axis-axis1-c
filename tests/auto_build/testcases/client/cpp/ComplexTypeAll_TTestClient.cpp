@@ -147,7 +147,8 @@ int main(int argc, char *argv[])
 		#else	
 			pthread_t thread[NUM_THREADS];
 			pthread_attr_t attr;
-			int rc, t, status = 0;
+			int rc, t;
+            void *status;
 		//   Initialize and set thread detached attribute
 			pthread_attr_init(&attr);
 			pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
@@ -164,7 +165,7 @@ int main(int argc, char *argv[])
 		pthread_attr_destroy(&attr);
 		/* Wait for the threads to terminate  */
 		for(t=0;t<NUM_THREADS;t++){
-			rc = pthread_join(thread[t], (void **)&status);
+			rc = pthread_join(thread[t], &status);
 				if (rc)
 				{
 					cout<<"ERROR from pthread_join()"<<endl;
