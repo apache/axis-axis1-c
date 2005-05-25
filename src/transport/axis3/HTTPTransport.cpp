@@ -223,11 +223,24 @@ void HTTPTransport::setEndpointUri( const char * pcEndpointUri) throw (HTTPTrans
 
 int HTTPTransport::openConnection()
 {
-     // Samisa : opening the connection is really done in flushOutput method
-     // hence it is not reqquired to do that in here, and makes the trasport 
-     // relatively faster
-     // Fix for AXISCPP-481
-     return AXIS_SUCCESS;
+    if( m_bReopenConnection)
+    {
+		m_bReopenConnection = false;
+
+		if( m_pActiveChannel->open() != AXIS_SUCCESS)
+		{
+		    int	iStringLength = m_pActiveChannel->GetLastErrorMsg().length() + 1;
+			const char * pszLastError = new char[iStringLength];
+
+		    memcpy( (void *) pszLastError,
+					m_pActiveChannel->GetLastErrorMsg().c_str(),
+					iStringLength);
+
+		    throw HTTPTransportException( CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED,
+										  (char *) pszLastError);
+		}
+	}
+    return AXIS_SUCCESS;
 }
 
 /*
@@ -260,23 +273,7 @@ void HTTPTransport::closeConnection()
  */
 AXIS_TRANSPORT_STATUS HTTPTransport::flushOutput() throw (AxisException, HTTPTransportException)
 {
-    if( m_bReopenConnection)
-    {
-		m_bReopenConnection = false;
-
-		if( m_pActiveChannel->open() != AXIS_SUCCESS)
-		{
-		    int	iStringLength = m_pActiveChannel->GetLastErrorMsg().length() + 1;
-			const char * pszLastError = new char[iStringLength];
-
-		    memcpy( (void *) pszLastError,
-					m_pActiveChannel->GetLastErrorMsg().c_str(),
-					iStringLength);
-
-		    throw HTTPTransportException( CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED,
-										  (char *) pszLastError);
-			}
-		}
+    this->openConnection();
 
     // In preperation for sending the message, calculate the size of the message
     // by using the string length method.
