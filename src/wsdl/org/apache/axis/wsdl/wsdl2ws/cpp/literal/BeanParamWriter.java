@@ -582,11 +582,11 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 					if(attribs[i].getChoiceElement() || attribs[i].getAllElement())
 					{
 						writer.write("\tparam->"+attribs[i].getParamNameAsMember()+"->m_Size = array.m_Size;\n\n");
-						writer.write("\tmemcpy( param->"+attribs[i].getParamNameAsMember()+"->m_Array, array.m_Array, sizeof( "+attribs[i].getTypeName()+") * array.m_Size);\n");
+						writer.write("\tmemcpy( param->"+attribs[i].getParamNameAsMember()+"->m_Array, array.m_Array, sizeof( "+attribs[i].getTypeName()+" *) * array.m_Size);\n");
 					}
 					else{
 						writer.write("\tparam->"+attribs[i].getParamNameAsMember()+".m_Size = array.m_Size;\n\n");
-						writer.write("\tmemcpy( param->"+attribs[i].getParamNameAsMember()+".m_Array, array.m_Array, sizeof( "+attribs[i].getTypeName()+") * array.m_Size);\n");
+						writer.write("\tmemcpy( param->"+attribs[i].getParamNameAsMember()+".m_Array, array.m_Array, sizeof( "+attribs[i].getTypeName()+" *) * array.m_Size);\n");
 					}
 									
 				}
