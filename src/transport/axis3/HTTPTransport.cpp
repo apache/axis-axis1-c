@@ -99,6 +99,8 @@ m_bMaintainSession (false)
 #else
 	m_lChannelTimeout = 0;
 #endif
+	m_pNormalChannel = m_pChannelFactory->createChannel(UnsecureChannel);
+	m_pSecureChannel = m_pChannelFactory->createChannel(SecureChannel);
 }
 
 /*

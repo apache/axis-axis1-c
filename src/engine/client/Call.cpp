@@ -394,22 +394,8 @@ int Call::openConnection()
 			}
 		}
 
-        char * pcChannelHTTPLibraryPath = g_pConfig->getAxisConfProperty( AXCONF_CHANNEL_HTTP);
-        char * pcChannelHTTPSSLLibraryPath = g_pConfig->getAxisConfProperty( AXCONF_SSLCHANNEL_HTTP);
-        char * pcSSLChannelInfo = g_pConfig->getAxisConfProperty( AXCONF_SECUREINFO);
-
-        if( pcChannelHTTPLibraryPath)
-		{
-			m_nStatus = m_pTransport->setTransportProperty( CHANNEL_HTTP_DLL_NAME, pcChannelHTTPLibraryPath);
-		}
-
-        if( strcmp( "Unknown", pcChannelHTTPSSLLibraryPath) != 0)
-		{
-			m_nStatus = m_pTransport->setTransportProperty( CHANNEL_HTTP_SSL_DLL_NAME, pcChannelHTTPSSLLibraryPath);
-		}
-
         m_pTransport->setEndpointUri( m_pcEndPointUri);
-
+        char * pcSSLChannelInfo = g_pConfig->getAxisConfProperty( AXCONF_SECUREINFO);
 		if( pcSSLChannelInfo && strlen( pcSSLChannelInfo) > 0)
 		{
 			char *	pszArgPtr = NULL;

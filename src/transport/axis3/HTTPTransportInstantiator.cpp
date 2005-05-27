@@ -32,6 +32,7 @@
 #endif
 
 #include "HTTPTransport.hpp"
+#include "ChannelFactory.hpp"
 
 // Instanciate functions for HTTPTransport instances.
 extern "C"
@@ -71,6 +72,7 @@ extern "C"
     STORAGE_CLASS_INFO void uninitializeLibrary (void)
     {
         // Do uninit actions
+		ChannelFactory::unloadChannels();
 
     }
 
@@ -90,6 +92,11 @@ extern "C"
 		strcat( szWhatAmI, szInfo);
 #endif
 		return pszWhatAmI;
+	}
+
+	STORAGE_CLASS_INFO void preloadChannels(char *unsecChannel, char *secChannel)
+	{
+		ChannelFactory::preloadChannels(unsecChannel, secChannel);
 	}
 }
 

@@ -32,6 +32,9 @@
 
 AXIS_CPP_NAMESPACE_START
 
+#define MAXCHANNELS (int)MaxChannelCount
+ChannelLibrary *ChannelFactory::m_ChannelLibrary[MAXCHANNELS] = {NULL,NULL};
+
 ChannelFactory::ChannelFactory()
 {
 	for( int iCount = 0; iCount < (int) MaxChannelCount; iCount++)
@@ -46,7 +49,7 @@ ChannelFactory::~ChannelFactory()
 {
 	for( int eChannelType = 0; eChannelType < (int) MaxChannelCount; eChannelType++)
 	{
-		UnLoadChannelLibrary( (g_ChannelType) eChannelType, m_pChannel[eChannelType]);
+		UnLoadChannelLibrary( (g_ChannelType) eChannelType);
 	}
 }
 
@@ -54,11 +57,9 @@ IChannel * ChannelFactory::LoadChannelLibrary( g_ChannelType eChannelType, const
 {
 	DLHandler	sLibHandler;
 	IChannel *	pChannel = NULL;
-	int			iLibCount = 0;
+	int			iLibCount = (int) eChannelType;
 
-	iLibCount = (int) eChannelType;
-
-// Additional code added to block reloading of DLL if name has not changed.
+    // Additional code added to block reloading of DLL if name has not changed.
 	if( m_pLibName[iLibCount] == NULL ||
 		strcmp( pcLibraryName, m_pLibName[iLibCount]) != 0)
 	{
@@ -102,26 +103,23 @@ IChannel * ChannelFactory::LoadChannelLibrary( g_ChannelType eChannelType, const
 			}
 #endif
 
-// Additional code added to that when the user wants to load a different
-// library from that which is already loaded, it will now allow the change.
-			UnLoadChannelLibrary( eChannelType, m_pChannel[iLibCount]);
+            // Additional code added to that when the user wants to load a different
+            // library from that which is already loaded, it will now allow the change.
+			UnLoadChannelLibrary(eChannelType);
                         
-                        if (m_pLibName[iLibCount])
-                        {
-                            delete [] m_pLibName[iLibCount];
-                            m_pLibName[iLibCount] = NULL;
-                        }
+            if (m_pLibName[iLibCount])
+            {
+                delete [] m_pLibName[iLibCount];
+                m_pLibName[iLibCount] = NULL;
+            }
 
 			m_pLibName[iLibCount] = new char[ strlen( pcLibraryName) + 1];
-
 			strcpy( m_pLibName[iLibCount], pcLibraryName);
-
 			m_LibHandler[iLibCount] = sLibHandler;
 
 			if( sCreate)
 			{
 				sCreate( &pChannel);
-
 				m_pChannel[iLibCount] = pChannel;
 			}
 		}
@@ -134,7 +132,7 @@ IChannel * ChannelFactory::LoadChannelLibrary( g_ChannelType eChannelType, const
 	return pChannel;
 }
 
-bool ChannelFactory::UnLoadChannelLibrary( g_ChannelType eChannelType, IChannel * pIChannel)
+bool ChannelFactory::UnLoadChannelLibrary( g_ChannelType eChannelType)
 {
 	bool	bSuccess = false;
 	int		iLibIndex = (int) eChannelType;
@@ -175,6 +173,79 @@ bool ChannelFactory::UnLoadChannelLibrary( g_ChannelType eChannelType, IChannel 
 	}
 
 	return bSuccess;
+}
+
+void ChannelFactory::preloadChannels(char *unsecChannel, char *secChannel)
+{
+	if (unsecChannel && strcmp(unsecChannel,"Unknown")) preloadChannel(UnsecureChannel, unsecChannel);
+	if (secChannel && strcmp(secChannel,"Unknown")) preloadChannel(SecureChannel, secChannel);
+}
+
+void ChannelFactory::preloadChannel(g_ChannelType type, const char *pcLibraryName)
+{
+	int iLibCount = (int)type;
+	ChannelLibrary *pCh = new ChannelLibrary();
+
+	pCh->m_Library = PLATFORM_LOADLIB( pcLibraryName);
+	if( !pCh->m_Library)
+	{
+		delete pCh;
+		throw HTTPTransportException( SERVER_TRANSPORT_LOADING_CHANNEL_FAILED, PLATFORM_LOADLIB_ERROR);
+	}
+
+	pCh->m_Create = (CREATE_OBJECT3) PLATFORM_GETPROCADDR( pCh->m_Library, CREATE_FUNCTION3);
+	pCh->m_Delete = (DELETE_OBJECT3) PLATFORM_GETPROCADDR( pCh->m_Library, DELETE_FUNCTION3);
+	if (!pCh->m_Create || !pCh->m_Delete)
+	{
+		PLATFORM_UNLOADLIB( pCh->m_Library);
+		delete pCh;
+		char * pszErrorInfo = new char[ strlen( pcLibraryName) + 1];
+		strcpy( pszErrorInfo, pcLibraryName);
+		if( type == UnsecureChannel)
+		{
+			throw HTTPTransportException( SERVER_TRANSPORT_LOADING_CHANNEL_FAILED, pszErrorInfo);
+		}
+		else
+		{
+			throw HTTPTransportException( SERVER_TRANSPORT_LOADING_SSLCHANNEL_FAILED, pszErrorInfo);
+		}
+	}
+
+#ifdef ENABLE_AXISTRACE
+	// Load function to do lib level inits
+	void (*initializeLibrary) (AxisTraceEntrypoints*);
+	initializeLibrary = (void (*)(AxisTraceEntrypoints*))PLATFORM_GETPROCADDR(pCh->m_Library, "initializeLibrary");
+	if( initializeLibrary)
+	{
+		(*initializeLibrary) (AxisTrace::getTraceEntrypoints());
+	}
+#endif
+	m_ChannelLibrary[iLibCount] = pCh;
+}
+
+IChannel *ChannelFactory::createChannel(g_ChannelType type) 
+{
+	int iLibCount = (int)type;
+	IChannel *pChannel = NULL;
+	if (m_ChannelLibrary[iLibCount])
+	{
+		m_ChannelLibrary[iLibCount]->m_Create(&pChannel);
+		m_pChannel[iLibCount] = pChannel;
+	}
+	return pChannel;
+}
+
+void ChannelFactory::unloadChannels()
+{
+	for (int i=0; i<(int)MaxChannelCount; i++) 
+	{
+		if (m_ChannelLibrary[i])
+		{
+			PLATFORM_UNLOADLIB(m_ChannelLibrary[i]->m_Library);
+			delete m_ChannelLibrary[i];
+			m_ChannelLibrary[i] = NULL;
+		}
+	}
 }
 
 AXIS_CPP_NAMESPACE_END
