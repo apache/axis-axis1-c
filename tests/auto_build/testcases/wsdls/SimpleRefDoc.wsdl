@@ -17,7 +17,7 @@
 <wsdl:definitions targetNamespace="http://soapinterop.org" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://soapinterop.org" xmlns:intf="http://soapinterop.org" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
  <wsdl:types>
   <schema elementFormDefault="qualified" targetNamespace="http://soapinterop.org" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://soapinterop.org" xmlns:intf="http://soapinterop.org" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
-   <complexType name="IntType">
+   <complexType name="intType">
     <sequence>
      <element name="intItem" type="xsd:int"/>
     </sequence>
@@ -25,14 +25,14 @@
    <element name="echoInt">
     <complexType>
      <sequence>
-      <element name="arg_0_0" nillable="true" type="impl:IntType"/>
+      <element name="arg_0_0" nillable="true" type="impl:intType"/>
      </sequence>
     </complexType>
    </element>
    <element name="echoIntResponse">
     <complexType>
      <sequence>
-      <element name="echoIntReturn" nillable="true" type="impl:IntType"/>
+      <element name="echoIntReturn" nillable="true" type="impl:intType"/>
      </sequence>
     </complexType>
    </element>
