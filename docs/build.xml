@@ -37,7 +37,7 @@
   <property name="IEPath" location="C:\Program Files\Internet Explorer"/>
   
   <!-- Where the ws-site root directory is on your machine -->
-  <property name="dir.root.ws-site" value="C:\Documents and Settings\Administrator\My Documents\projects\CWSS\WSAD Workspace\ws-site"/>
+  <property name="dir.root.ws-site" value="${basedir}/../../ws-site"/>
   
   <!--                                                                        -->
   <!-- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ -->
@@ -60,8 +60,13 @@
   <target name="build-C-site" depends="checkConfiguration">
   	<antcall target="build-site"/>
   	<antcall target="copyIntoAxisCDocs" />
-  	
   </target>
+
+  <target name="build-C-site-only" depends="checkConfiguration">
+  	<antcall target="build-site-only"/>
+  	<antcall target="copyIntoAxisCDocs" />
+  </target>
+
   <target name="checkConfiguration">
 	<!-- Check that ws-axis/site and ws-axis/c/docs are available -->
 	<!-- check IE setup -->

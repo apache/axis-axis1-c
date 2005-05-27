@@ -1,70 +1,331 @@
-<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-   <title>Axis C++ Memory Management Guide</title>
-<link href="axis.css" rel=stylesheet type=text/css>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--*** This is a generated file.  Do not edit.  ***-->
+<link rel="stylesheet" href="../../skin/tigris.css" type="text/css">
+<link rel="stylesheet" href="../../skin/mysite.css" type="text/css">
+<link rel="stylesheet" href="../../skin/site.css" type="text/css">
+<link media="print" rel="stylesheet" href="../../skin/print.css" type="text/css">
+<title>Axis C++ Memory Management Guide</title>
 </head>
-<body>
+<body bgcolor="white" class="composite">
+<!--================= start Banner ==================-->
+<div id="banner">
+<table width="100%" cellpadding="8" cellspacing="0" summary="banner" border="0">
+<tbody>
+<tr>
+<!--================= start Group Logo ==================-->
+<td align="left">
+<div class="groupLogo">
+<a href="http://ws.apache.org/"><img border="0" class="logoImage" alt="The Apache WebServices Project" src="../../images/project-logo.jpg"></a>
+</div>
+</td>
+<!--================= end Group Logo ==================-->
+<!--================= start Project Logo ==================--><td align="right">
+<div class="projectLogo">
+<a href="http://ws.apache.org/axis/"><img border="0" class="logoImage" alt="The Apache Axis Project" src="../../images/axis.jpg"></a>
+</div>
+</td>
+<!--================= end Project Logo ==================-->
+<!--================= start Search ==================--><td valign="top" rowspan="2" align="right" class="search">
+<form target="_blank" action="http://www.google.com/search" method="get">
+<table summary="search" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td bgcolor="#a5b6c6" colspan="3"><img height="10" width="1" alt="" src="../../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td colspan="3"><img height="8" width="1" alt="" src="../../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td><img height="1" width="1" alt="" src="../../skin/images/spacer.gif" class="spacer"></td><td nowrap="nowrap"><input value="ws.apache.org" name="sitesearch" type="hidden"><input size="10" name="q" id="query" type="text"><img height="1" width="5" alt="" src="../../skin/images/spacer.gif" class="spacer"><input name="Search" value="GO" type="submit">
+<br>
+                          Search WS</td><td><img height="1" width="1" alt="" src="../../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td colspan="3"><img height="7" width="1" alt="" src="../../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td class="bottom-left-thick"></td><td bgcolor="#a5b6c6"><img height="1" width="1" alt="" src="../../skin/images/spacer.gif" class="spacer"></td><td class="bottom-right-thick"></td>
+</tr>
+</table>
+</form>
+</td>
+<!--================= end Search ==================-->
+</tr>
+</tbody>
+</table>
+</div>
+<!--================= end Banner ==================-->
+<!--================= start Main ==================-->
+<table width="100%" cellpadding="0" cellspacing="0" border="0" summary="nav" id="breadcrumbs">
+<tbody>
+<!--================= start Status ==================-->
+<tr class="status">
+<td>
+<!--================= start BreadCrumb ==================--><a href="http://www.apache.org/">Apache</a> | <a href="http://ws.apache.org/">WS</a><a href=""></a>
+<!--================= end BreadCrumb ==================--></td><td id="tabs">
+<!--================= start Tabs ==================-->
+<div class="tab">
+<span class="selectedTab"><a class="base-selected" href="../../index.html">WebServices-Axis</a></span>
+</div>
+<!--================= end Tabs ==================-->
+</td>
+</tr>
+</tbody>
+</table>
+<!--================= end Status ==================-->
+<table id="main" width="100%" cellpadding="8" cellspacing="0" summary="" border="0">
+<tbody>
+<tr valign="top">
+<!--================= start Menu ==================-->
+<td id="leftcol">
+<div id="navcolumn">
+<div class="menuBar">
+<div class="menu">
+<span class="menuLabel">Axis</span>
+ 
+<div class="menuItem">
+<a href="../../index.html">Introduction</a>
+</div>
+ 
+<div class="menuItem">
+<a href="../../news.html">News</a>
+</div>
 
-<center>
-<h1>
-<img SRC="../images/axis.jpg" height=96 width=176></h1></center>
+ 
+<div class="menuItem">
+<a href="http://wiki.apache.org/ws/FrontPage/Axis">FAQ/Wiki</a>
+</div>
+ 
+<div class="menu">
+<span class="menuLabel">Get Involved</span>
+  
+<div class="menuItem">
+<a href="../../overview.html">Overview</a>
+</div>
+  
+<div class="menuItem">
+<a href="../../cvs.html">CVS Repository</a>
+</div>
+  
+<div class="menuItem">
+<a href="../../mail.html">Mailing Lists</a>
+</div>
+  
+<div class="menuItem">
+<a href="../../ref.html">Reference Library</a>
+</div>
+  
+<div class="menuItem">
+<a href="../../bugs.html">Bugs</a>
+</div>
+  
+<div class="menuItem">
+<a href="../../howtobuild.html">HowToBuildSite</a>
+</div>
+ 
+</div>
+ 
+<div class="menu">
+<span class="menuLabel">Axis (Java)</span>
+  
+<div class="menuItem">
+<a href="../../java/index.html">Documentation</a>
+</div>
+  
+<div class="menuItem">
+<a href="../../java/install.html">Installation</a>
+</div>
+  
+<div class="menuItem">
+<a href="../../java/user-guide.html">User's Guide</a>
+</div>
+  
+<div class="menuItem">
+<a href="../../java/developers-guide.html">Developer's Guide</a>
+</div>
+  
+<div class="menuItem">
+<a href="../../java/integration-guide.html">Integration Guide</a>
+</div>
+  
+<div class="menuItem">
+<a href="../../java/architecture-guide.html">Architecture Guide</a>
+</div>
+  
+<div class="menuItem">
+<a href="../../java/reference.html">Reference Guide</a>
+</div>
+  
+<div class="menuItem">
+<a href="../../java/reading.html">Reading Guide</a>
+</div>
+  
+<div class="menuItem">
+<a href="../../java/requirements.html">Requirements</a>
+</div>
+ 
+</div>
+ 
+<div class="menu">
+<span class="menuLabel">Axis (C++)</span>
+  
+<div class="menuItem">
+<a href="../../cpp/index.html">Latest Axis C++ Release!</a>
+</div>
+  
+<div class="menuItem">
+<a href="../../cpp/documentation.html">Documentation</a>
+</div>
+  
+<div class="menuItem">
+<a href="../../cpp/download.html">Download</a>
+</div>
+  
+<div class="menuItem">
+<a href="http://wiki.apache.org/ws/FrontPage/AxisCPP">Wiki Pages</a>
+</div>
+  
+<div class="menuItem">
+<a href="../../cpp/who.html">Who we are</a>
+</div>
+  
+</div>
 
-<h1>
-Axis C++ Memory Management Guide</h1>
-<br><i>1.0 Version</i>
-<br><i>Feedback: <a href="mailto:axis-c-dev@ws.apache.org">axis-c-dev@ws.apache.org</a></i>
-<h3>
-Contents</h3>
-<a href="#Introduction">Introduction</a>
-<br><a href="#Semantics">Allocation/De-allocation Semantics</a>
-<br><a href="#IHeaderBlock">Dealing with SOAP Headers</a>
-<br><a href="#Open Issues">Open Issues</a>
+<div class="menu">
+<span class="menuLabel">Downloads</span>
+  
+<div class="menuItem">
+<a href="../../releases.html">Releases</a>
+</div>
+  
+<div class="menuItem">
+<a href="../../interim.html">Interim Drops</a>
+</div>
+  
+<div class="menuItem">
+<a href="http://cvs.apache.org/viewcvs/ws-axis/">Source Code</a>
+</div>
 
-<h2><a NAME="Introduction"></a>Introduction</h2>
-<p> This guide records the memory management semantics and some of the rationales of the design decisions on which memory management semantics are based on. Being a C/C++ application, it is a must that all users as well as developers have a clear understanding on how to deal with memory allocation and deallocation. 
-<p> The allocation and deallocation mechanisms are centered around the serializer and deserializer operations in Axis C++. At the moment, because Axis C++ support both C and C++ clients and services, the deserializer uses <i>malloc()</i> for memory allocation. Hence C++ users may have to live with <i>free()</i> (instead of <i>delete</i>) for deallocation. Of course one could still use delete from C++ programs, however this may not guarantee the cleanest memory deallocation.
+</div>
 
-<h2><a NAME="Semantics"></a>Allocation/De-allocation Semantics</h2>
-<h3>Parameters</h3>
-On the server side all the parameters added to the serializer are de-allocated by the Axis Engine after serializing. Hence the user would not have to destruct the parameters to a function call after calling the function.
+<div class="menu">
+<span class="menuLabel">Translation</span>
+  
+<div class="menuItem">
+<a href="http://ws.apache.org/axis/jp/">Japanese</a>
+</div>
 
-On the client side, the user is responsibe for deallocating memory after a function call.
-Please have a look at the base sample ($AXIS_HOME/samples/client/interoptests/base/) for a client side sample.
+</div>
 
-Axis C++ does not provide a special function for dynamic allocation of objects.
-One can select his/her own allocation mechanism. (<i>malloc()</i> in case of C programs and/or <i>new</i> in case of C++ programs)
+<div class="menu">
+<span class="menuLabel">Related Projects</span>
+  
+<div class="menuItem">
+<a href="http://ws.apache.org/wsif/">WSIF</a>
+</div>
+  
+<div class="menuItem">
+<a href="http://cvs.apache.org/viewcvs/*checkout*/ws-wsil/java/README.htm">WSIL</a>
+</div>
+  
+<div class="menuItem">
+<a href="http://www-124.ibm.com/developerworks/projects/wsdl4j/">WSDL4J</a>
+</div>
+  
+<div class="menuItem">
+<a href="http://www.uddi4j.org/">UDDI4J</a>
+</div>
 
-<h3>Other Objects</h3>
-For XML elements and attribute objects that are created by IHandlerSoapSerializer, HeaderBlock and Attribute, the rules for deleting the objects when the request or response is processed are as follows.
+</div>
+
+<div class="menu">
+<span class="menuLabel">Misc</span>
+  
+<div class="menuItem">
+<a href="../../site.html">Whole Site</a>
+</div>
+  
+<div class="menuItem">
+<a href="../../who.html">Who We Are</a>
+</div>
+  
+<div class="menuItem">
+<a href="../../contact.html">Contact</a>
+</div>
+  
+<div class="menuItem">
+<a href="../../legal.html">Legal</a>
+</div>
+  
+<div class="menuItem">
+<a href="../../docs.html">Notes/Docs</a>
+</div>
+
+</div>
+
+
+</div>
+</div>
+</div>
+</td>
+<!--================= end Menu ==================-->
+<!--================= start Content ==================--><td>
+<div id="bodycol">
+<div class="app">
+<div align="center">
+<h1>Axis C++ Memory Management Guide</h1>
+</div>
+<div class="h3">
+<div class="h3">
+<h3>Axis C++ Memory Management Guide</h3>
+</div>
+<br>
+<em>1.0 Version</em>
+<br>
+<em>Feedback: axis-c-dev@ws.apache.org</em>
+<div class="h4">
+<h4>Introduction</h4>
+</div>
+<p>This guide records the memory management semantics and some of the rationales of the design decisions on which memory management semantics are based on. Being a C/C++ application, it is a must that all users as well as developers have a clear understanding on how to deal with memory allocation and deallocation.</p>
+<p>The allocation and deallocation mechanisms are centered around the serializer and deserializer operations in Axis C++. At the moment, because Axis C++ support both C and C++ clients and services, the deserializer uses <em>malloc()</em> for memory allocation. Hence C++ users may have to live with <em>free()</em> (instead of <em>delete</em>) for deallocation. Of course one could still use delete from C++ programs, however this may not guarantee the cleanest memory deallocation.</p>
+<div class="h4">
+<h4>Allocation/De-allocation Semantics</h4>
+</div>
+<div class="h2">
+<h2>Parameters</h2>
+</div>
+<em>malloc()</em><em>new</em>
+<div class="h2">
+<h2>Other Objects</h2>
+</div>
 <ol>
-<li> Any outbound objects created, either by a client application or by a handler, must be managed by the creator him(her)self. The Axis C++ engine does not delete any objects (HeaderBlocks, Attributes, BasicNodes etc.).</li> 
-<li> Any inbound objects that are created by the Axis C++ Engine as a result of deserialization should be deallocated by a target handler or the client application. Axis C++ Engine deallocates only the headerblocks that will remain in the deserializer (headerblocks with no target handler).</li>
+<li>Any outbound objects created, either by a client application or by a handler, must be managed by the creator him(her)self. The Axis C++ engine does not delete any objects (HeaderBlocks, Attributes, BasicNodes etc.).</li>
+<li>Any inbound objects that are created by the Axis C++ Engine as a result of deserialization should be deallocated by a target handler or the client application. Axis C++ Engine deallocates only the headerblocks that will remain in the deserializer (headerblocks with no target handler).</li>
 </ol>
-
-<h3>Return Values</h3>
-<p> The values returned by the Axis C++ engine must be memory cleaned by the user written code.
-The C++ code generated by the WSDL2Ws tool does contain destructors. However, at the moment, it is not gauranteed that the destructor of a generated class would clean all  the pointer members (Some members are cleaned while others are not). Hence the users must have a look at the generated code to understand the semantics of memory cleaning. In case of C code, of course the user must take care of memory cleaning.
-<p> Please note that in case of arrays, both for C and C++, the Axis C++ engine returns a struct. Hence it is a must that the memory is cleaned properly. 
-<br> C++ Example:<br>
-<pre>
-        // testing echoIntegerArray
+<div class="h2">
+<h2>Return Values</h2>
+</div>
+<p>The values returned by the Axis C++ engine must be memory cleaned by the user written code. The C++ code generated by the WSDL2Ws tool does contain destructors. However, at the moment, it is not gauranteed that the destructor of a generated class would clean all the pointer members (Some members are cleaned while others are not). Hence the users must have a look at the generated code to understand the semantics of memory cleaning. In case of C code, of course the user must take care of memory cleaning.</p>
+<p>Please note that in case of arrays, both for C and C++, the Axis C++ engine returns a struct. Hence it is a must that the memory is cleaned properly.<br> C++ Example:<br>
+</p>
+<pre>        // testing echoIntegerArray
         xsd__int_Array arrint; // Parameter for method call
         arrint.m_Array = new int[ARRAYSIZE];
         arrint.m_Size = ARRAYSIZE;
         
-	for (x = 0; x < ARRAYSIZE; x++)
+    for (x = 0; x &lt; ARRAYSIZE; x++)
         {
             arrint.m_Array[x] = x;
         }
         
-	printf ("invoking echoIntegerArray...\n");
+    printf ("invoking echoIntegerArray...\n");
         
-	xsd__int_Array arrintResult = ws.echoIntegerArray (arrint);
+    xsd__int_Array arrintResult = ws.echoIntegerArray (arrint);
         
-	// Deal with the return value
-	if (arrintResult.m_Array != NULL)
+    // Deal with the return value
+    if (arrintResult.m_Array != NULL)
         {
             printf ("successful\n");
             // Clean memory of the returned array
@@ -76,39 +337,82 @@ The C++ code generated by the WSDL2Ws tool does contain destructors. However, at
         // Clean memory allocated for parameter
         delete [] arrint.m_Array;
 </pre>
-<br> Please have a look at the base sample ($AXIS_HOME/samples/client/interoptests/base/) for more information.
-
-<h2><a NAME="IHeaderBlock"></a>Dealing with SOAP Headers</h2>
-<h3>From Stubs</h3>
-<p> IHeaderBlock is a virtual class that defines the interface to deal with SOAP headers. You can create an IHeaderBlock at the client side using the API provided with Stub classes. <br>
-<pre>
-IHeaderBlock* Stub::createSOAPHeaderBlock(AxisChar * pachLocalName, AxisChar * pachUri);
-</pre>
-Here the Stub class will maintain a list of all the created Header Blocks, and in the destructor of the Stub class, it will clean up memory by deleting all those Header Blocks that were created by the user. 
-
-<p> <b>Note 1</b>: It is advisable that if a user wants to delete a Hheader Block, (s)he uses the API provided by the Stub class to do so.<br>
-<pre>
-void deleteCurrentSOAPHeaderBlock();
-</pre>
-Stub class is also equipped with iterator methods to traverse through the current list of Header Blocks created.
 <br>
-
-<p> <b>Note 2</b>: IHeaderBlock destructor will take care of the Header Block member variables and cleans them; BasicNodes (i.e its children) and the Attributes. <br>
-
-<h3>From Handlers</h3>
-<p> If the Header Blocks are created within a Handler then it is the responsibility of the Handler writer to clean those. For that the user can write the cleanup code either in the fini() method or in the destructor of the Handler, depending on the following situations
-<nl>
-<li> If it is a session handler which needs to maintain its state, then the cleanup has to be done in the destructor.</li>
-<li> If it is a request type handler the clean up can be done in the fini() mehtod of the Handler. Here the writer has to explicitly write the clean up code.</li>
-</nl>
-
-<p> If a target handler access a Header Block created by the deserializer then it is the responsibility of the Handler to delete it.
-
-<h2><a NAME="Open Issues"></a>Open Issues</h2>
-<p> As C++ is an object oriented language, one would ideally like to leverage constructors and destructors for memory management. However, the Axis C++ engine uses structs in some cases (e.g. Arrays) and uses <i>malloc()</i> to allocate memory. Hence the C++ programmer would be forced to use <i>free()</i> at times. When using <i>malloc()</i> and <i>free()</i> constructors and destructors are not called. However, as the Axis C++ engine currently supports both C and C++, it is not simple to replace all <i>malloc()</i> with <i>new</i> or <i>free()</i> with <i>delete</i>. At the same time, there are some places where <i>new</i> and <i>delete</i> are being used. They too cannot be replaced with <i>malloc()</i> and <i>free()</i> overnight. This memory management complexity is the price paid for dual support of C and C++. Efforts are under way to clean up the memory management mix-ups and still support both C and C++. Currently the proposed solution is to make the Axis C++ engine pure C++ and use a wrapper mechanism to support C. 
-
-<p> When an array is de-serialized it uses C style memory re-allocation mechanism in the present code. C++ does not support <i>realloc()</i> and if we use <i>new</i> instead we have to allocate fresh memory blocks each time we need to increase the array size. This can be more expensive than using <i>realloc()</i>. Again the price paid for efficiency is that one has to use <i>free()</i> and not <i>delete []</i>  from C++ code. 
-
+<div class="h4">
+<h4>Dealing with SOAP Headers</h4>
+</div>
+<div class="h2">
+<h2>From Stubs</h2>
+</div>
+<p>IHeaderBlock is a virtual class that defines the interface to deal with SOAP headers. You can create an IHeaderBlock at the client side using the API provided with Stub classes.<br>
+</p>
+<pre>IHeaderBlock* Stub::createSOAPHeaderBlock(AxisChar * pachLocalName, AxisChar * pachUri);
+</pre>
+<p>
+<strong>Note 1</strong>: It is advisable that if a user wants to delete a Hheader Block, (s)he uses the API provided by the Stub class to do so.<br>
+</p>
+<pre>void deleteCurrentSOAPHeaderBlock();
+</pre>
+<br>
+<p>
+<strong>Note 2</strong>: IHeaderBlock destructor will take care of the Header Block member variables and cleans them; BasicNodes (i.e its children) and the Attributes.<br>
+</p>
+<div class="h2">
+<h2>From Handlers</h2>
+</div>
+<p>If the Header Blocks are created within a Handler then it is the responsibility of the Handler writer to clean those. For that the user can write the cleanup code either in the fini() method or in the destructor of the Handler, depending on the following situations</p>
+<ul>
+<li>If it is a session handler which needs to maintain its state, then the cleanup has to be done in the destructor.</li>
+<li>If it is a request type handler the clean up can be done in the fini() mehtod of the Handler. Here the writer has to explicitly write the clean up code.</li>
+</ul>
+<p>If a target handler access a Header Block created by the deserializer then it is the responsibility of the Handler to delete it.</p>
+<div class="h4">
+<h4>Open Issues</h4>
+</div>
+<p>As C++ is an object oriented language, one would ideally like to leverage constructors and destructors for memory management. However, the Axis C++ engine uses structs in some cases (e.g. Arrays) and uses <em>malloc()</em> to allocate memory. Hence the C++ programmer would be forced to use <em>free()</em> at times. When using <em>malloc()</em> and <em>free()</em> constructors and destructors are not called. However, as the Axis C++ engine currently supports both C and C++, it is not simple to replace all <em>malloc()</em> with <em>new</em> or <em>free()</em> with <em>delete</em>. At the same time, there are some places where <em>new</em> and <em>delete</em> are being used. They too cannot be replaced with <em>malloc()</em> and <em>free()</em> overnight. This memory management complexity is the price paid for dual support of C and C++. Efforts are under way to clean up the memory management mix-ups and still support both C and C++. Currently the proposed solution is to make the Axis C++ engine pure C++ and use a wrapper mechanism to support C.</p>
+<p>When an array is de-serialized it uses C style memory re-allocation mechanism in the present code. C++ does not support <em>realloc()</em> and if we use <em>new</em> instead we have to allocate fresh memory blocks each time we need to increase the array size. This can be more expensive than using <em>realloc()</em>. Again the price paid for efficiency is that one has to use <em>free()</em> and not <em>delete []</em> from C++ code.</p>
+<div id="pdf" align="right">
+<a href="mem-management.pdf"><img alt="PDF" src="../../skin/images/pdfdoc.gif" class="skin"><br>
+          PDF</a>
+</div>
+</div>
+</div>
+</div>
+</td>
+<!--================= end Content ==================-->
+</tr>
+</tbody>
+</table>
+<!--================= end Main ==================-->
+<!--================= start Footer ==================-->
+<div id="footer">
+<table summary="footer" cellspacing="0" cellpadding="4" width="100%" border="0">
+<tbody>
+<tr>
+<!--================= start Copyright ==================-->
+<td colspan="2">
+<div align="center">
+<div class="copyright">
+              Copyright &copy; 2000-2004&nbsp;The Apache Software Foundation. All rights reserved.
+            </div>
+</div>
+</td>
+<!--================= end Copyright ==================-->
+</tr>
+<tr>
+<td align="left">
+<!--================= start Host ==================-->
+<!--================= end Host ==================--></td><td align="right">
+<!--================= start Credits ==================-->
+<div align="right">
+<div class="credit"></div>
+</div>
+<!--================= end Credits ==================-->
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!--================= end Footer ==================-->
 </body>
 </html>
-
