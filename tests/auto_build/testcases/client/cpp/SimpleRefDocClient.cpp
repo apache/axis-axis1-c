@@ -44,7 +44,7 @@ int main(int argc, char* argv[])
 		RefTestPortType ws(endpoint);
 
 		cout << "invoking echoInt.."<<endl;
-		IntType refint;
+		intType refint;
 		refint.intItem =56;
 
 		if ((ws.echoInt(&refint))->intItem == 56)

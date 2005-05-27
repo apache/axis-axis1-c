@@ -62,7 +62,7 @@ RETTYPE ThreadFunc(ARGTYPE Param)
         {
                 sprintf(endpoint, "%s", url);
 				RefTestPortType ws(endpoint);
-				IntType refint;
+				intType refint;
 				refint.intItem =56;
 				if ((ws.echoInt(&refint))->intItem == 56)
 				{
