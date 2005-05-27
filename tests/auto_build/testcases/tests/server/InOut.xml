@@ -1,0 +1,8 @@
+<service>
+    <name>InOut</name>
+    <description>InOutTest</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>InOut.cpp</serviceCode>
+    <wsdl>InOut.wsdl</wsdl>
+	<servicename></servicename>
+</service>
