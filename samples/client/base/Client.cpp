@@ -156,8 +156,10 @@ main (int argc, char *argv[])
 
 	    // testing echo Struct
 	    SOAPStruct stct;
-	    stct.varFloat = 12345.7346345;
-	    stct.varInt = 5000;
+		xsd__int integer = 5000;
+		xsd__float floatVal = 12345.7346345;
+	    stct.varFloat = &floatVal;
+	    stct.varInt = &integer;
 	    stct.varString = strdup ("This is string in SOAPStruct");
 	    printf ("invoking echoStruct...\n");
 	    ws.setTransportProperty ("SOAPAction", "InteropBase#echoStruct");
@@ -172,8 +174,10 @@ main (int argc, char *argv[])
 	    arrstct.m_Size = ARRAYSIZE;
 	    for (x = 0; x < ARRAYSIZE; x++)
 	    {
-		arrstct.m_Array[x].varFloat = 1.1111 * x;
-		arrstct.m_Array[x].varInt = x;
+			integer = x;
+			floatVal = 1.1111 * x;
+		arrstct.m_Array[x].varFloat = &floatVal;
+		arrstct.m_Array[x].varInt = &integer;
 		sprintf (buffer1,
 			 "varString of %dth element of SOAPStruct array", x);
 		arrstct.m_Array[x].varString = buffer1;
