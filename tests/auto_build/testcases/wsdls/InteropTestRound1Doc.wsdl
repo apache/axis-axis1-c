@@ -149,14 +149,14 @@
    <element name="echoBase64">
     <complexType>
      <sequence>
-      <element maxOccurs="unbounded" name="arg_0_9" type="xsd:byte"/>
+      <element name="arg_0_9" type="xsd:base64Binary"/>
      </sequence>
     </complexType>
    </element>
    <element name="echoBase64Response">
     <complexType>
      <sequence>
-      <element maxOccurs="unbounded" name="echoBase64Return" type="xsd:byte"/>
+      <element name="echoBase64Return" type="xsd:base64Binary"/>
      </sequence>
     </complexType>
    </element>
@@ -177,14 +177,14 @@
    <element name="echoHexBinary">
     <complexType>
      <sequence>
-      <element maxOccurs="unbounded" name="arg_0_11" type="xsd:byte"/>
+      <element name="arg_0_11" type="xsd:hexBinary"/>
      </sequence>
     </complexType>
    </element>
    <element name="echoHexBinaryResponse">
     <complexType>
      <sequence>
-      <element maxOccurs="unbounded" name="echoHexBinaryReturn" type="xsd:byte"/>
+      <element name="echoHexBinaryReturn" type="xsd:hexBinary"/>
      </sequence>
     </complexType>
    </element>
@@ -387,7 +387,7 @@
 
    </wsdl:message>
 
-   <wsdl:portType name="InteropTestPortType">
+   <wsdl:portType name="InteropTestPortTypeDoc">
 
       <wsdl:operation name="echoString">
 
@@ -503,7 +503,7 @@
 
    </wsdl:portType>
 
-   <wsdl:binding name="InteropBaseSoapBinding" type="impl:InteropTestPortType">
+   <wsdl:binding name="InteropBaseSoapBinding" type="impl:InteropTestPortTypeDoc">
 
       <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
 
@@ -761,11 +761,11 @@
 
    </wsdl:binding>
 
-   <wsdl:service name="InteropTestPortTypeService">
+   <wsdl:service name="InteropTestPortTypeDocService">
 
-      <wsdl:port binding="impl:InteropBaseSoapBinding" name="InteropBase">
+      <wsdl:port binding="impl:InteropBaseSoapBinding" name="InteropBaseDoc">
 
-         <wsdlsoap:address location="http://localhost/axis/InteropBase"/>
+         <wsdlsoap:address location="http://localhost/axis/InteropBaseDoc"/>
 
       </wsdl:port>
 
