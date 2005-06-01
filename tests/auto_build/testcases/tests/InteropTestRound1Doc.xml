@@ -9,5 +9,5 @@
             InteropTestRound1Doc.cpp.out
         </output>
     </expected>
-	<endpoint>http://localhost:80/axis/InteropBase</endpoint>
+	<endpoint>http://localhost:80/axis/InteropBaseDoc</endpoint>
 </test>

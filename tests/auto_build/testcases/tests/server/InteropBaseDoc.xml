@@ -2,7 +2,7 @@
     <name>InteropBaseDoc</name>
     <description>InteropBaseDoc</description>
     <serviceLang>cpp</serviceLang>
-    <serviceCode>InteropTestPortType.cpp</serviceCode>
+    <serviceCode>InteropTestPortTypeDoc.cpp</serviceCode>
     <wsdl>InteropTestRound1Doc.wsdl</wsdl>
 	<servicename></servicename>
 </service>
