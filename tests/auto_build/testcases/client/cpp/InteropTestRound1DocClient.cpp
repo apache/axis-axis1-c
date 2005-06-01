@@ -18,7 +18,7 @@
 #include <string>
 using namespace std;
 
-#include "InteropTestPortType.hpp" 
+#include "InteropTestPortTypeDoc.hpp" 
 
 #define ARRAYSIZE 2
 
@@ -29,7 +29,7 @@ int main(int argc, char* argv[])
 	char endpoint[256];
 	const char* server="localhost";
 	const char* port="80";
-	sprintf(endpoint, "http://%s:%s/axis/base", server, port);
+	sprintf(endpoint, "http://%s:%s/axis/InteropBaseDoc", server, port);
 		bool bSuccess = false;
 		int	iRetryIterationCount = 3;
 
@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
 		{
 	try
 	{
-	   InteropTestPortType ws(endpoint, APTHTTP1_1);
+	   InteropTestPortTypeDoc ws(endpoint, APTHTTP1_1);
 
 
 	ws.setTransportTimeout(5);
@@ -49,6 +49,8 @@ int main(int argc, char* argv[])
 	{
 		bigstring += "hello world ";
 	}
+	
+	ws.setTransportProperty("SOAPAction" , "InteropBaseDoc#echoString");
 	strcpy(buffer1, bigstring.c_str());
 	printf(ws.echoString(buffer1));
 	if (0 == strcmp(ws.echoString("hello world"), "hello world"))
@@ -67,25 +69,28 @@ int main(int argc, char* argv[])
 	}
 	//arrstr.m_Array[1] = buffer2;
 	printf("invoking echoStringArray...\n");
+	ws.setTransportProperty("SOAPAction" , "InteropBaseDoc#echoStringArray");
 	if (ws.echoStringArray(arrstr).m_Array != NULL)
 		printf("successful\n");
 	else
 		printf("failed\n");
 	// testing echoInteger 
 	printf("invoking echoInteger...\n");
+	ws.setTransportProperty("SOAPAction" , "InteropBaseDoc#echoInteger");
 	if (ws.echoInteger(56) == 56)
 		printf("successful\n");
 	else
 		printf("failed\n");
 	// testing echoIntegerArray 
 	xsd__int_Array arrint;
-	arrint.m_Array = new int[ARRAYSIZE];
+	arrint.m_Array = new int*[ARRAYSIZE];
 	arrint.m_Size = ARRAYSIZE;
 	for (x=0;x<ARRAYSIZE;x++)
 	{
-		arrint.m_Array[x] = x;
+		arrint.m_Array[x] = &x;
 	}
 	printf("invoking echoIntegerArray...\n");
+	ws.setTransportProperty("SOAPAction" , "InteropBaseDoc#echoIntegerArray");
 	if (ws.echoIntegerArray(arrint).m_Array != NULL)
 		printf("successful\n");
 	else
@@ -93,19 +98,21 @@ int main(int argc, char* argv[])
 	// testing echoFloat 
 	printf("invoking echoFloat...\n");
 	float fvalue = 1.4214;
+	ws.setTransportProperty("SOAPAction" , "InteropBaseDoc#echoFloat");
 	if (ws.echoFloat(fvalue) > 1.42)
 		printf("successful\n");
 	else
 		printf("failed\n");
 	// testing echoFloat 
 	xsd__float_Array arrfloat;
-	arrfloat.m_Array = new float[ARRAYSIZE];
+	arrfloat.m_Array = new float*[ARRAYSIZE];
 	arrfloat.m_Size = ARRAYSIZE;
 	for (x=0;x<ARRAYSIZE;x++)
 	{
-		arrfloat.m_Array[x] = 1.1111*x;
+		*(arrfloat.m_Array[x]) = 1.1111*x;
 	}
 	printf("invoking echoFloatArray...\n");
+	ws.setTransportProperty("SOAPAction" , "InteropBaseDoc#echoFloatArray");
 	if (ws.echoFloatArray(arrfloat).m_Array != NULL)
 		printf("successful\n");
 	else
@@ -116,29 +123,32 @@ int main(int argc, char* argv[])
 	stct.varInt = 5000;
 	stct.varString = strdup("This is string in SOAPStruct");
 	printf("invoking echoStruct...\n");
+	ws.setTransportProperty("SOAPAction" , "InteropBaseDoc#echoStruct");
 	if (ws.echoStruct(&stct) != NULL)
 		printf("successful\n");
 	else
 		printf("failed\n");
 	//testing echo Array of Struct
-	SOAPStruct_Array arrstct;
-	arrstct.m_Array = new SOAPStruct[ARRAYSIZE];
+	/*SOAPStruct_Array arrstct;
+	arrstct.m_Array = new SOAPStruct*[ARRAYSIZE];
 	arrstct.m_Size = ARRAYSIZE;
 	for (x=0;x<ARRAYSIZE;x++)
 	{
-		arrstct.m_Array[x].varFloat = 1.1111*x;
-		arrstct.m_Array[x].varInt = x;
+		arrstct.m_Array[x]->varFloat = 1.1111*x;
+		arrstct.m_Array[x]->varInt = x;
 		sprintf(buffer1, "varString of %dth element of SOAPStruct array", x);
-		arrstct.m_Array[x].varString = buffer1;
+		arrstct.m_Array[x]->varString = buffer1;
 	}
 	//testing echo Struct Array
-	printf("invoking echoStructArray...\n");
-	if (ws.echoStructArray(arrstct).m_Array != NULL)
-		printf("successful\n");
-	else
-		printf("failed\n");
+	//printf("invoking echoStructArray...\n");
+	//ws.setTransportProperty("SOAPAction" , "InteropBaseDoc#echoStructArray");
+	//if (ws.echoStructArray(arrstct).m_Array != NULL)
+	//	printf("successful\n");
+	//else
+	//	printf("failed\n");*/
 	//testing echo void
 	printf("invoking echoVoid...\n");
+	ws.setTransportProperty("SOAPAction" , "InteropBaseDoc#echoVoid");
 	ws.echoVoid();
 	printf("successful\n");
 	//testing echo base 64 binary
@@ -149,6 +159,7 @@ int main(int argc, char* argv[])
 	xsd__base64Binary bb;
 	bb.__ptr = (unsigned char*)strdup(bstr);
 	bb.__size = strlen(bstr);
+	ws.setTransportProperty("SOAPAction" , "InteropBaseDoc#echoBase64");
 	if (bb.__size == ws.echoBase64(bb).__size)
 	{
 		printf("successful\n");
@@ -161,7 +172,8 @@ int main(int argc, char* argv[])
 	time(&tim);
 	tm* lt = gmtime(&tim);
 	printf("invoking echoDate...\n");
-	if (memcmp(&ws.echoDate(*lt), lt, sizeof(tm)) == 0)
+	ws.setTransportProperty("SOAPAction" , "InteropBaseDoc#echoDate");
+	if (memcmp(ws.echoDate(lt), lt, sizeof(tm)) == 0)
 		printf("successful\n");
 	else
 		printf("failed\n");
@@ -171,6 +183,7 @@ int main(int argc, char* argv[])
 	xsd__hexBinary hb;
 	hb.__ptr = (unsigned char*)strdup(bstr);
 	hb.__size = strlen(bstr);
+	ws.setTransportProperty("SOAPAction" , "InteropBaseDoc#echoHexBinary");
 	if (hb.__size == ws.echoHexBinary(hb).__size)
 	{
 		printf("successful\n");
@@ -180,12 +193,15 @@ int main(int argc, char* argv[])
 		printf("failed\n");
 	//testing echo decimal
 	printf("invoking echoDecimal...\n");
-	if (ws.echoDecimal(1234.567890) > 1234.56)
+	xsd__decimal dd = 1234.567890;
+	ws.setTransportProperty("SOAPAction" , "InteropBaseDoc#echoDecimal");
+	if (*(ws.echoDecimal(&dd)) > 1234.56)
 		printf("successful\n");
 	else
 		printf("failed\n");
 	//testing echo boolean
 	printf("invoking echoBoolean...\n");
+	ws.setTransportProperty("SOAPAction" , "InteropBaseDoc#echoBoolean");
 	if (ws.echoBoolean(true_) == true_)
 		printf("successful\n");
 	else
