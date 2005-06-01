@@ -17,6 +17,9 @@
 
 AXIS_CPP_NAMESPACE_START
 
+PositiveInteger::PositiveInteger()
+{}
+
 PositiveInteger::PositiveInteger(const xsd__positiveInteger* value)
 {
     if (value)
@@ -31,9 +34,26 @@ XSDTYPE PositiveInteger::getType()
     return XSD_POSITIVEINTEGER;
 }
 
+xsd__positiveInteger* PositiveInteger::getPositiveInteger()
+{
+    if (isNil())
+    {
+        return NULL;
+    }
+    else
+    {
+        return deserializePositiveInteger(m_Buf);
+    }
+}
+
+void * PositiveInteger::getValue()
+{
+    return (void*) getPositiveInteger();
+}
+
 xsd__positiveInteger* PositiveInteger::deserializePositiveInteger(const AxisChar* valueAsChar) throw (AxisSoapException)
 {
-    return (xsd__positiveInteger*) deserialize(valueAsChar);
+    return (xsd__positiveInteger*) deserializeNonNegativeInteger(valueAsChar);
 }
 
 MinInclusive* PositiveInteger::getMinInclusive()

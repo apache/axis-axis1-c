@@ -17,11 +17,11 @@
 
 AXIS_CPP_NAMESPACE_START
 
-String::String():m_String(NULL)
+String::String()
 {
 }
 
-String::String(const xsd__string value):m_String(NULL)
+String::String(const xsd__string value)
 {
         if (value)
         {
@@ -35,9 +35,21 @@ XSDTYPE String::getType()
     return XSD_STRING;
 }
 
-void* String::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
+xsd__string String::getString()
 {
-	return (void*) deserializeString(valueAsChar);
+    if (isNil())
+    {
+        return NULL;
+    }
+    else
+    {
+        return deserializeString(m_Buf);
+    }
+}
+
+void * String::getValue()
+{
+    return (void*) getString();
 }
 
 AxisChar* String::serialize(const xsd__string value) throw (AxisSoapException)
@@ -117,14 +129,10 @@ AxisChar* String::serialize(const xsd__string value) throw (AxisSoapException)
 
 xsd__string String::deserializeString(const AxisChar* valueAsChar) throw (AxisSoapException)
 {
-    if (m_String)
-    {
-        delete [] m_String;
-        m_String = NULL;
-    }
-	m_String = new char[strlen (valueAsChar) + 1];
-	strcpy (m_String, valueAsChar);
-	return m_String;
+
+	xsd__string value = new char[strlen (valueAsChar) + 1];
+	strcpy (value, valueAsChar);
+	return value;
 }
 
 MinLength* String::getMinLength()

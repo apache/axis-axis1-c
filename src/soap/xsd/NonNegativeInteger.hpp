@@ -53,22 +53,27 @@ public:
      * @return the xsd type of this simple type
      */
     XSDTYPE getType();
+
+    /**
+     * Get the deserialized value.
+     * @return Deserialized value. Note: it is the responsibility of the calling code to delete this value!
+     */
+    xsd__nonNegativeInteger* getNonNegativeInteger();
+
+    /**
+     * Get the deserialized value
+     * @return the deserialized value. Note: it is the responsibility of the calling code to delete this value!
+     */
+    void* getValue();
+
+protected:
     
     /**
      * Deserialized NonNegativeInteger value from it's on-the-wire string form.
      * @param valueAsChar Serialized form of NonNegativeInteger value.
-     * @return Deserialized NonNegativeInteger value.
-     */
-     void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException);  
-
-    /**
-     * Deserialized NonNegativeInteger value from it's on-the-wire string form.
-     * @param valueAsChar Serialized form of NonNegativeInteger value.
-     * @return Deserialized NonNegativeInteger value.
+     * @return Deserialized NonNegativeInteger value. Note: it is the responsibility of the calling code to delete this value!
      */
      xsd__nonNegativeInteger* deserializeNonNegativeInteger(const AxisChar* valueAsChar) throw (AxisSoapException);
-
-protected:
 
     /**
      * Serialize NonNegativeInteger value to it's on-the-wire string form.
@@ -83,10 +88,6 @@ protected:
      * @return MinInclusive object
      */
     virtual MinInclusive* getMinInclusive();
-
-private:
-   xsd__nonNegativeInteger* m_NonNegativeInteger;
-
 };
 
 AXIS_CPP_NAMESPACE_END

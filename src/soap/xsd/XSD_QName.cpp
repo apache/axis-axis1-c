@@ -17,11 +17,11 @@
 
 AXIS_CPP_NAMESPACE_START
 
-    XSD_QName::XSD_QName():m_QName(NULL)
+    XSD_QName::XSD_QName()
     {
     }
 
-    XSD_QName::XSD_QName(const xsd__QName value):m_QName(NULL)
+    XSD_QName::XSD_QName(const xsd__QName value)
     {
         if (value)
         {
@@ -35,11 +35,23 @@ AXIS_CPP_NAMESPACE_START
         return XSD_QNAME;
     }
     
-    void* XSD_QName::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
+    xsd__QName XSD_QName::getQName()
     {
-    	return (void*) deserializeQName(valueAsChar);
+        if (isNil())
+        {
+            return NULL;
+        }
+        else
+        {
+            return deserializeQName(m_Buf);
+        }
     }
-	
+
+    void * XSD_QName::getValue()
+    {
+        return (void*) getQName();
+    }
+    
     AxisChar* XSD_QName::serialize(const xsd__QName value) throw (AxisSoapException)
     {
         MinLength* minLength= getMinLength();
@@ -117,9 +129,9 @@ AXIS_CPP_NAMESPACE_START
 	
     xsd__QName XSD_QName::deserializeQName(const AxisChar* valueAsChar) throw (AxisSoapException)
     {
-		m_QName = new char[strlen (valueAsChar) + 1];
-		strcpy (m_QName, valueAsChar);
-		return m_QName;
+		xsd__QName value = new char[strlen (valueAsChar) + 1];
+		strcpy (value, valueAsChar);
+		return value;
     }
 
     WhiteSpace* XSD_QName::getWhiteSpace()

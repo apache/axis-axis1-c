@@ -80,6 +80,12 @@ public:
     bool isNil();
 
     /**
+     * Get the deserialized value
+     * @return the deserialized value. Note: it is the responsibility of the calling code to delete this value!
+     */
+    virtual void* getValue() = 0;
+
+    /**
      * Get the xsd type of this simple type.
      * @return the xsd type of this simple type
      */
@@ -91,16 +97,25 @@ public:
      */
     AxisChar* serialize();
 
+    /**
+     * Takes the value in it's on-the-wire string form
+     * @param Serialized form of value
+     */
+    void deserialize(const AxisChar* value);
+
+protected:
 
     /**
      * Take partially serialized value, process WhiteSpace and validate Pattern.
-     * @param value
+     * @param value partially serialized value
      * @return Serialized form of value
      */
     AxisChar* serialize(const AxisChar* value) throw (AxisSoapException);
 
-protected:
-
+    /**
+     * Set whether or not value is nil
+     * @param nil
+     */
     void setNil(bool nil);
 
     /**
@@ -142,9 +157,11 @@ protected:
     };
 
     AxisChar* m_Buf;
-    bool m_isNil;
-    
+   
 private:
+
+    bool m_isNil;
+
     AxisString m_strReturnVal;
 };
 

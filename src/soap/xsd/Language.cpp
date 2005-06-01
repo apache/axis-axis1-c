@@ -17,6 +17,9 @@
 
 AXIS_CPP_NAMESPACE_START
 
+Language::Language()
+{}
+
 Language::Language(const xsd__language value)
 {
     if (value)
@@ -31,9 +34,26 @@ XSDTYPE Language::getType()
     return XSD_LANGUAGE;
 }
 
-AxisChar* Language::deserializeLanguage(const AxisChar* valueAsChar) throw (AxisSoapException)
+xsd__language Language::getLanguage()
 {
-    return (AxisChar*) deserialize(valueAsChar);
+    if (isNil())
+    {
+        return NULL;
+    }
+    else
+    {
+        return deserializeLanguage(m_Buf);
+    }
+}
+
+void * Language::getValue()
+{
+    return (void*) getLanguage();
+}
+
+xsd__language Language::deserializeLanguage(const AxisChar* valueAsChar) throw (AxisSoapException)
+{
+    return (xsd__language) deserializeToken(valueAsChar);
 }
 
 AXIS_CPP_NAMESPACE_END

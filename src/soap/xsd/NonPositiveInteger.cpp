@@ -17,11 +17,11 @@
 
 AXIS_CPP_NAMESPACE_START
 
-NonPositiveInteger::NonPositiveInteger():m_NonPositiveInteger(NULL)
+NonPositiveInteger::NonPositiveInteger()
 {
 }
 
-NonPositiveInteger::NonPositiveInteger(const xsd__nonPositiveInteger* value):m_NonPositiveInteger(NULL)
+NonPositiveInteger::NonPositiveInteger(const xsd__nonPositiveInteger* value)
 {
     if (value)
     {
@@ -40,11 +40,22 @@ XSDTYPE NonPositiveInteger::getType()
     return XSD_NONPOSITIVEINTEGER;
 }
 
-void* NonPositiveInteger::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
+xsd__nonPositiveInteger* NonPositiveInteger::getNonPositiveInteger()
 {
-   return (void*) deserializeNonPositiveInteger(valueAsChar);
+    if (isNil())
+    {
+        return NULL;
+    }
+    else
+    {
+        return deserializeNonPositiveInteger(m_Buf);
+    }
 }
 
+void * NonPositiveInteger::getValue()
+{
+    return (void*) getNonPositiveInteger();
+}
 
 AxisChar* NonPositiveInteger::serialize(const xsd__nonPositiveInteger* value) throw (AxisSoapException)
 {
@@ -172,25 +183,19 @@ unsigned LONGLONG* NonPositiveInteger::deserializeNonPositiveInteger(const AxisC
 {
     AxisChar* end;
     
-    if(m_NonPositiveInteger)
-    {
-        delete m_NonPositiveInteger;
-        m_NonPositiveInteger = NULL;
-    }
-    
-    m_NonPositiveInteger = new xsd__nonPositiveInteger;
+    xsd__nonPositiveInteger * value = new xsd__nonPositiveInteger;
     if (*valueAsChar == '-')
     {
         const AxisChar* tempVar = valueAsChar + 1;
-        *m_NonPositiveInteger = strtol (tempVar, &end, 10);
+        *value = strtol (tempVar, &end, 10);
     }
     else
     {
         
-        *m_NonPositiveInteger = strtol (valueAsChar, &end, 10);
+        *value = strtol (valueAsChar, &end, 10);
     }
   
-    return m_NonPositiveInteger;
+    return value;
 }
 
 MaxInclusive* NonPositiveInteger::getMaxInclusive()

@@ -56,20 +56,25 @@ public:
     XSDTYPE getType();
 
     /**
-     * Deserialize value from it's on-the-wire string form.
-     * @param valueAsChar Serialized form of value.
-     * @return Deserialized value.
+     * Get the deserialized value.
+     * @return Deserialized value. Note: it is the responsibility of the calling code to delete this value!
      */
-    void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException);
-    
+    xsd__integer* getInteger();
+
+    /**
+     * Get the deserialized value
+     * @return the deserialized value. Note: it is the responsibility of the calling code to delete this value!
+     */
+    void* getValue();
+
+protected:
+
     /**
      * Deserialized Integer value from it's on-the-wire string form.
      * @param valueAsChar Serialized form of Integer value.
-     * @return Deserialized Integer value.
+     * @return Deserialized Integer value. Note: it is the responsibility of the calling code to delete this value!
      */
     xsd__integer* deserializeInteger(const AxisChar* valueAsChar) throw (AxisSoapException);
-
-protected:
 
     /**
      * Serialize Integer value to it's on-the-wire string form.
@@ -83,9 +88,6 @@ protected:
      * @return FractionDigits object
      */
     FractionDigits* getFractionDigits();
-
-private:
-   xsd__integer* m_Integer;
 };
 
 AXIS_CPP_NAMESPACE_END

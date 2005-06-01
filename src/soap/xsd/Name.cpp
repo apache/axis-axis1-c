@@ -34,9 +34,26 @@ XSDTYPE Name::getType()
     return XSD_NAME;
 }
 
-AxisChar* Name::deserializeName(const AxisChar* valueAsChar) throw (AxisSoapException)
+xsd__Name Name::getName()
 {
-    return (AxisChar*) deserialize(valueAsChar);
+    if (isNil())
+    {
+        return NULL;
+    }
+    else
+    {
+        return deserializeName(m_Buf);
+    }
+}
+
+void * Name::getValue()
+{
+    return (void*) getName();
+}
+
+xsd__Name Name::deserializeName(const AxisChar* valueAsChar) throw (AxisSoapException)
+{
+    return (AxisChar*) deserializeToken(valueAsChar);
 }
 
 AXIS_CPP_NAMESPACE_END

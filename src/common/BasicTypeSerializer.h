@@ -29,30 +29,7 @@
 
 #include <axis/TypeMapping.hpp>
 #include <string>
-#include "../soap/xsd/Boolean.hpp"
-#include "../soap/xsd/AnyURI.hpp"
-#include "../soap/xsd/String.hpp"
-#include "../soap/xsd/XSD_QName.hpp"
-#include "../soap/xsd/NOTATION.hpp"
-#include "../soap/xsd/Base64Binary.hpp"
-#include "../soap/xsd/HexBinary.hpp"
-#include "../soap/xsd/Duration.hpp"
-#include "../soap/xsd/DateTime.hpp"
-#include "../soap/xsd/Date.hpp"
-#include "../soap/xsd/Time.hpp"
-#include "../soap/xsd/Float.hpp"
-#include "../soap/xsd/Double.hpp"
-#include "../soap/xsd/Decimal.hpp"
-#include "../soap/xsd/Integer.hpp"
-#include "../soap/xsd/Long.hpp"
-#include "../soap/xsd/Int.hpp"
-#include "../soap/xsd/Short.hpp"
-#include "../soap/xsd/Byte.hpp"
-#include "../soap/xsd/NonNegativeInteger.hpp"
-#include "../soap/xsd/UnsignedLong.hpp"
-#include "../soap/xsd/UnsignedInt.hpp"
-#include "../soap/xsd/UnsignedShort.hpp"
-#include "../soap/xsd/UnsignedByte.hpp"
+#include "AxisUtils.h"
 
 using namespace std;
 

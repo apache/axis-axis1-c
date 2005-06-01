@@ -17,11 +17,11 @@
 
 AXIS_CPP_NAMESPACE_START
 
-Float::Float():m_Float(NULL)
+Float::Float()
 {
 }
 
-Float::Float(const xsd__float* value):m_Float(NULL)
+Float::Float(const xsd__float* value)
 {
     if (value)
     {
@@ -39,11 +39,22 @@ XSDTYPE Float::getType()
     return XSD_FLOAT;
 }
 
-void* Float::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
+xsd__float* Float::getFloat()
 {
-	return (void*) deserializeFloat(valueAsChar);
+    if (isNil())
+    {
+        return NULL;
+    }
+    else
+    {
+        return deserializeFloat(m_Buf);
+    }
 }
 
+void * Float::getValue()
+{
+    return (void*) getFloat();
+}
 
 AxisChar* Float::serialize(const xsd__float* value) throw (AxisSoapException)
 {
@@ -147,15 +158,11 @@ AxisChar* Float::serialize(const xsd__float* value) throw (AxisSoapException)
 xsd__float* Float::deserializeFloat(const AxisChar* valueAsChar) throw (AxisSoapException)
 {
 	AxisChar* end;
-        if (m_Float)
-        {
-            delete m_Float;
-            m_Float = NULL;
-        }
-	m_Float = new xsd__float;
-	*m_Float = (float) strtod (valueAsChar, &end);
+
+	xsd__float * value = new xsd__float;
+	*value = (xsd__float) strtod (valueAsChar, &end);
 	
-	return m_Float;
+	return value;
 }
 
 WhiteSpace* Float::getWhiteSpace()

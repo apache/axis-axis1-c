@@ -17,11 +17,11 @@
 
 AXIS_CPP_NAMESPACE_START
 
-NOTATION::NOTATION():m_NOTATION(NULL)
+NOTATION::NOTATION()
 {
 }
 
-NOTATION::NOTATION(const xsd__notation value):m_NOTATION(NULL)
+NOTATION::NOTATION(const xsd__notation value)
 {
     if (value)
     {
@@ -35,9 +35,21 @@ XSDTYPE NOTATION::getType()
     return XSD_NOTATION;
 }
 
-void* NOTATION::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
+xsd__notation NOTATION::getNOTATION()
 {
-	return (void*) deserializeNOTATION(valueAsChar);
+    if (isNil())
+    {
+        return NULL;
+    }
+    else
+    {
+        return deserializeNOTATION(m_Buf);
+    }
+}
+
+void * NOTATION::getValue()
+{
+    return (void*) getNOTATION();
 }
 
 AxisChar* NOTATION::serialize(const xsd__notation value) throw (AxisSoapException)
@@ -117,14 +129,9 @@ AxisChar* NOTATION::serialize(const xsd__notation value) throw (AxisSoapExceptio
 
 xsd__notation NOTATION::deserializeNOTATION(const AxisChar* valueAsChar) throw (AxisSoapException)
 {
-    if (m_NOTATION)
-    {
-        delete [] m_NOTATION;
-        m_NOTATION = NULL;
-    }
-	m_NOTATION = new char[strlen (valueAsChar) + 1];
-	strcpy (m_NOTATION, valueAsChar);
-	return m_NOTATION;
+	xsd__notation value = new char[strlen (valueAsChar) + 1];
+	strcpy (value, valueAsChar);
+	return value;
 }
 
 WhiteSpace* NOTATION::getWhiteSpace()

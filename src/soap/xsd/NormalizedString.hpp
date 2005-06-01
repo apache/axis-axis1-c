@@ -50,13 +50,26 @@ public:
     XSDTYPE getType();
 
     /**
-     * Deserialized NormalizedString value from it's on-the-wire string form.
-     * @param valueAsChar Serialized form of NormalizedString value.
-     * @return Deserialized NormalizedString value.
+     * Get the deserialized value.
+     * @return Deserialized value. Note: it is the responsibility of the calling code to delete this value!
      */
- AxisChar* deserializeNormalizedString(const AxisChar* valueAsChar) throw (AxisSoapException);
+    xsd__normalizedString getNormalizedString();
+
+    /**
+     * Get the deserialized value
+     * @return the deserialized value. Note: it is the responsibility of the calling code to delete this value!
+     */
+    void* getValue();
 
 protected:
+
+    /**
+     * Deserialized NormalizedString value from it's on-the-wire string form.
+     * @param valueAsChar Serialized form of NormalizedString value.
+     * @return Deserialized NormalizedString value. Note: it is the responsibility of the calling code to delete this value!
+     */
+    xsd__normalizedString deserializeNormalizedString(const AxisChar* valueAsChar) throw (AxisSoapException);
+
     /**
      * Creates a WhiteSpace object to replace whitespace
      * @return WhiteSpace object set to replace whitespace

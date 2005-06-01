@@ -22,6 +22,52 @@
 #include <axis/GDefine.hpp>
 #include <string>
 
+#include "../soap/xsd/Boolean.hpp"
+#include "../soap/xsd/AnyURI.hpp"
+#include "../soap/xsd/String.hpp"
+#include "../soap/xsd/XSD_QName.hpp"
+#include "../soap/xsd/NOTATION.hpp"
+#include "../soap/xsd/Base64Binary.hpp"
+#include "../soap/xsd/HexBinary.hpp"
+#include "../soap/xsd/Duration.hpp"
+#include "../soap/xsd/DateTime.hpp"
+#include "../soap/xsd/Date.hpp"
+#include "../soap/xsd/Time.hpp"
+#include "../soap/xsd/Float.hpp"
+#include "../soap/xsd/Double.hpp"
+#include "../soap/xsd/Decimal.hpp"
+#include "../soap/xsd/Integer.hpp"
+#include "../soap/xsd/Long.hpp"
+#include "../soap/xsd/Int.hpp"
+#include "../soap/xsd/Short.hpp"
+#include "../soap/xsd/Byte.hpp"
+#include "../soap/xsd/NonNegativeInteger.hpp"
+#include "../soap/xsd/UnsignedLong.hpp"
+#include "../soap/xsd/UnsignedInt.hpp"
+#include "../soap/xsd/UnsignedShort.hpp"
+#include "../soap/xsd/UnsignedByte.hpp"
+#include "../soap/xsd/GYearMonth.hpp"
+#include "../soap/xsd/GYear.hpp"
+#include "../soap/xsd/GMonthDay.hpp"
+#include "../soap/xsd/GDay.hpp"
+#include "../soap/xsd/GMonth.hpp"
+#include "../soap/xsd/NonNegativeInteger.hpp"
+#include "../soap/xsd/PositiveInteger.hpp"
+#include "../soap/xsd/NonPositiveInteger.hpp"
+#include "../soap/xsd/NegativeInteger.hpp"
+#include "../soap/xsd/NormalizedString.hpp"
+#include "../soap/xsd/Token.hpp"
+#include "../soap/xsd/Language.hpp"
+#include "../soap/xsd/Name.hpp"
+#include "../soap/xsd/NCName.hpp"
+#include "../soap/xsd/ID.hpp"
+#include "../soap/xsd/IDREF.hpp"
+#include "../soap/xsd/IDREFS.hpp"
+#include "../soap/xsd/ENTITY.hpp"
+#include "../soap/xsd/ENTITIES.hpp"
+#include "../soap/xsd/NMTOKEN.hpp"
+#include "../soap/xsd/NMTOKENS.hpp"
+
 using namespace std;
 
 
@@ -48,6 +94,26 @@ class STORAGE_CLASS_INFO AxisUtils
     friend class TypeMapping;
     friend class URIMapping;
     public:
+
+    /**
+     * Creates an IAnySimpleType object based on the type provided.
+     * Initialized with provided value.
+     * 
+     * @param pValue The value to be serialized.
+     * @param type The xsd type of this value.
+     * @return IAnySimpleType matching the provided type.  Note: Is it the responsibility of the calling code to delete this!
+     */
+    static IAnySimpleType* createSimpleTypeObject(void * pValue, XSDTYPE type);
+
+    /**
+     * Creates an IAnySimpleType object based on the type provided.
+     * This is essentially the same as static IAnySimpleType* createSimpleTypeObject(void * pValue, XSDTYPE type);
+     * with pValue = NULL.
+     * 
+     * @param type The xsd type of this value.
+     * @return IAnySimpleType matching the provided type.  Note: Is it the responsibility of the calling code to delete this!
+     */
+    static IAnySimpleType* createSimpleTypeObject(XSDTYPE type);
 
         static bool isStringOnlyWithSpaces(const char* pchWord);
 

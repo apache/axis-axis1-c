@@ -34,9 +34,26 @@ XSDTYPE IDREFS::getType()
     return XSD_IDREFS;
 }
 
-AxisChar* IDREFS::deserializeIDREFS(const AxisChar* valueAsChar) throw (AxisSoapException)
+xsd__IDREFS IDREFS::getIDREFS()
 {
-    return (AxisChar*) deserialize(valueAsChar);
+    if (isNil())
+    {
+        return NULL;
+    }
+    else
+    {
+        return deserializeIDREFS(m_Buf);
+    }
+}
+
+void * IDREFS::getValue()
+{
+    return (void*) getIDREFS();
+}
+
+xsd__IDREFS IDREFS::deserializeIDREFS(const AxisChar* valueAsChar) throw (AxisSoapException)
+{
+    return (xsd__IDREFS) deserializeIDREF(valueAsChar);
 }
 
 AXIS_CPP_NAMESPACE_END

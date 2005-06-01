@@ -17,11 +17,11 @@
 
 AXIS_CPP_NAMESPACE_START
 
-    GYearMonth::GYearMonth():m_GYearMonth(NULL)
+    GYearMonth::GYearMonth()
     {
     }
 
-    GYearMonth::GYearMonth(const xsd__gYearMonth* value):m_GYearMonth(NULL)
+    GYearMonth::GYearMonth(const xsd__gYearMonth* value)
     {
         if (value)
         {
@@ -35,12 +35,24 @@ AXIS_CPP_NAMESPACE_START
         return XSD_YEARMONTH;
     }
 
-    void* GYearMonth::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
+    xsd__gYearMonth* GYearMonth::getGYearMonth()
     {
-       return (void*) deserializeGYearMonth(valueAsChar);
+        if (isNil())
+        {
+            return NULL;
+        }
+        else
+        {
+            return deserializeGYearMonth(m_Buf);
+        }
     }
-   
-    AxisChar* GYearMonth::serialize(const struct tm* value) throw (AxisSoapException)
+
+    void * GYearMonth::getValue()
+    {
+        return (void*) getGYearMonth();
+    }
+
+    AxisChar* GYearMonth::serialize(const xsd__gYearMonth* value) throw (AxisSoapException)
     {
         MinInclusive* minInclusive = getMinInclusive();
         if (minInclusive->isSet())
@@ -181,7 +193,7 @@ AXIS_CPP_NAMESPACE_START
         return m_Buf;
     }
   
-    struct tm* GYearMonth::deserializeGYearMonth(const AxisChar* valueAsChar) throw (AxisSoapException)
+    xsd__gYearMonth* GYearMonth::deserializeGYearMonth(const AxisChar* valueAsChar) throw (AxisSoapException)
     {
       struct tm value;
       struct tm *pTm;
@@ -304,14 +316,9 @@ AXIS_CPP_NAMESPACE_START
             pTm = localtime (&timeInSecs);
         }
         
-        if(m_GYearMonth)
-        {
-            delete m_GYearMonth;
-            m_GYearMonth = NULL;
-        }
-        m_GYearMonth = new struct tm;
-        memcpy (m_GYearMonth, pTm, sizeof (tm));
-        return m_GYearMonth;
+        xsd__gYearMonth * returnValue = new xsd__gYearMonth;
+        memcpy (returnValue, pTm, sizeof (tm));
+        return returnValue;
  }
 
     MinInclusive* GYearMonth::getMinInclusive()

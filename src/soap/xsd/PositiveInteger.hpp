@@ -33,6 +33,11 @@ class PositiveInteger : public NonNegativeInteger {
 public:
 
     /**
+     * Constructor
+     */
+    PositiveInteger();
+
+    /**
      * Constructor providing a value for later serialization
      * @param value The value to be serialized
      */
@@ -45,13 +50,25 @@ public:
     XSDTYPE getType();
 
     /**
-     * Deserialized PositiveInteger value from it's on-the-wire string form.
-     * @param valueAsChar Serialized form of PositiveInteger value.
-     * @return Deserialized PositiveInteger value.
+     * Get the deserialized value.
+     * @return Deserialized value. Note: it is the responsibility of the calling code to delete this value!
      */
-    xsd__positiveInteger* deserializePositiveInteger(const AxisChar* valueAsChar) throw (AxisSoapException);
+    xsd__positiveInteger* getPositiveInteger();
+
+    /**
+     * Get the deserialized value
+     * @return the deserialized value. Note: it is the responsibility of the calling code to delete this value!
+     */
+    void* getValue();
 
 protected:
+
+    /**
+     * Deserialized PositiveInteger value from it's on-the-wire string form.
+     * @param valueAsChar Serialized form of PositiveInteger value.
+     * @return Deserialized PositiveInteger value. Note: it is the responsibility of the calling code to delete this value!
+     */
+    xsd__positiveInteger* deserializePositiveInteger(const AxisChar* valueAsChar) throw (AxisSoapException);
 
     /**
      * Creates a MinInclusive object.  For the PositiveInteger type this is

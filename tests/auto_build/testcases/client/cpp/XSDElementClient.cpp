@@ -165,13 +165,20 @@ int main(int argc, char* argv[])
 		strResult = ws->setGetDataString("m");
 		cout << "small string=" << strResult << endl;
         strResult = ws->setGetDataString("");
-        if (&strResult != NULL && strResult == NULL)
+        if (strResult != NULL)
         {
-            cout << "empty string = <empty string>" << endl;
+            if ( *strResult == NULL)
+            {
+                cout << "empty string = <empty string>" << endl;
+            }
+            else
+            {
+                cout << "empty string = " << strResult << endl;
+            }
         }
         else
         {
-            cout << "empty string failed " << endl;
+            cout << "empty string = <NULL>" << endl;
         }
         
 		intResult = ws->setGetIntegerType(919191919);

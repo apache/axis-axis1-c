@@ -52,22 +52,27 @@ public:
      * @return the xsd type of this simple type
      */
     XSDTYPE getType();
- 	
-	/**
-	 * Deserialize value from it's on-the-wire string form.
-	 * @param valueAsChar Serialized form of value.
-	 * @return Deserialized value.
-	 */
-    void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException);
-	
-	/**
-	 * Deserialized Double value from it's on-the-wire string form.
-	 * @param valueAsChar Serialized form of Double value.
-	 * @return Deserialized Double value.
-	 */
-    xsd__double* deserializeDouble(const AxisChar* valueAsChar) throw (AxisSoapException);
 
+    /**
+     * Get the deserialized value.
+     * @return Deserialized value. Note: it is the responsibility of the calling code to delete this value!
+     */
+    xsd__double* getDouble();
+
+    /**
+     * Get the deserialized value
+     * @return the deserialized value. Note: it is the responsibility of the calling code to delete this value!
+     */
+    void* getValue();
+    
 protected:
+
+    /**
+     * Deserialized Double value from it's on-the-wire string form.
+     * @param valueAsChar Serialized form of Double value.
+     * @return Deserialized Double value. Note: it is the responsibility of the calling code to delete this value!
+     */
+    xsd__double* deserializeDouble(const AxisChar* valueAsChar) throw (AxisSoapException);
 
     /**
      * Serialize Double value to it's on-the-wire string form.
@@ -109,9 +114,6 @@ protected:
      * @return WhiteSpace object set to collapse whitespace
      */
     WhiteSpace* getWhiteSpace();
-
-private:
-	xsd__double* m_Double;
 };
 
 AXIS_CPP_NAMESPACE_END

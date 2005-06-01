@@ -17,7 +17,7 @@
 
 AXIS_CPP_NAMESPACE_START
 
-Short::Short():m_Short(NULL)
+Short::Short()
 {
 }
 
@@ -25,7 +25,7 @@ Short::~Short()
 {
 }
 
-Short::Short(const xsd__short* value):m_Short(NULL)
+Short::Short(const xsd__short* value)
 {
     if (value)
     {
@@ -39,9 +39,21 @@ XSDTYPE Short::getType()
     return XSD_SHORT;
 }
 
-void* Short::deserializer(const AxisChar* valueAsChar) throw (AxisSoapException)
+xsd__short* Short::getShort()
 {
-    return (void*) deserializeShort(valueAsChar);
+    if (isNil())
+    {
+        return NULL;
+    }
+    else
+    {
+        return deserializeShort(m_Buf);
+    }
+}
+
+void * Short::getValue()
+{
+    return (void*) getShort();
 }
 
 AxisChar* Short::serialize(const xsd__short* value) throw (AxisSoapException)
@@ -54,15 +66,10 @@ xsd__short* Short::deserializeShort(const AxisChar* valueAsChar) throw (AxisSoap
 {
     xsd__int* returnValue = Int::deserializeInt(valueAsChar);
  
-    if(m_Short)
-    {
-        delete m_Short;
-        m_Short = NULL;
-    }
-    m_Short = new xsd__short;
-    *m_Short = static_cast<xsd__short> (*returnValue);
+    xsd__short * value = new xsd__short;
+    *value = static_cast<xsd__short> (*returnValue);
     delete returnValue; // Samissa - need to clean this memory
-    return m_Short;
+    return value;
 }
 
 MinInclusive* Short::getMinInclusive()

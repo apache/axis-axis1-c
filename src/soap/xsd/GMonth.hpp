@@ -55,27 +55,32 @@ public:
     XSDTYPE getType();
 
     /**
-     * Deserialize value from it's on-the-wire string form.
-     * @param valueAsChar Serialized form of value.
-     * @return Deserialized value.
+     * Get the deserialized value.
+     * @return Deserialized value. Note: it is the responsibility of the calling code to delete this value!
      */
-    void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException);
-    
-  /**
-    * Deserialized GMonth value from it's on-the-wire string form.
-  * @param valueAsChar Serialized form of GMonth value.
-   * @return Deserialized GMonth value.
-    */
-    struct tm* deserializeGMonth(const AxisChar* valueAsChar) throw (AxisSoapException);
+    xsd__gMonth* getGMonth();
+
+    /**
+     * Get the deserialized value
+     * @return the deserialized value. Note: it is the responsibility of the calling code to delete this value!
+     */
+    void* getValue();
 
 protected:
+    
+    /**
+     * Deserialized GMonth value from it's on-the-wire string form.
+     * @param valueAsChar Serialized form of GMonth value.
+     * @return Deserialized GMonth value. Note: it is the responsibility of the calling code to delete this value!
+     */
+    xsd__gMonth* deserializeGMonth(const AxisChar* valueAsChar) throw (AxisSoapException);
 
     /**
      * Serialize GMonth value to it's on-the-wire string form.
      * @param value The GMonth value to be serialized.
      * @return Serialized form of GMonth value.
      */
-    AxisChar* serialize(const struct tm* value) throw (AxisSoapException);
+    AxisChar* serialize(const xsd__gMonth* value) throw (AxisSoapException);
 
     /**
      * Creates a MinInclusive object.  For the GMonth type this is undefined, 
@@ -110,9 +115,6 @@ protected:
      * @return WhiteSpace object set to collapse whitespace
      */
     WhiteSpace* getWhiteSpace();
-
-private:
-   struct tm* m_GMonth;
 };
 
 AXIS_CPP_NAMESPACE_END

@@ -17,7 +17,7 @@
 
 AXIS_CPP_NAMESPACE_START
 
-Byte::Byte():m_Byte(NULL)
+Byte::Byte()
 {
 }
 
@@ -25,7 +25,7 @@ Byte::~Byte()
 {
 }
 
-Byte::Byte(const xsd__byte* value):m_Byte(NULL)
+Byte::Byte(const xsd__byte* value)
 {
     if (value)
     {
@@ -39,9 +39,21 @@ XSDTYPE Byte::getType()
     return XSD_BYTE;
 }
 
-void* Byte::deserializer(const AxisChar* valueAsChar) throw (AxisSoapException)
+xsd__byte* Byte::getByte()
 {
-    return (void*) deserializeByte(valueAsChar);
+    if (isNil())
+    {
+        return NULL;
+    }
+    else
+    {
+        return deserializeByte(m_Buf);
+    }
+}
+
+void * Byte::getValue()
+{
+    return (void*) getByte();
 }
 
 AxisChar* Byte::serialize(const char* value) throw (AxisSoapException)
@@ -54,15 +66,10 @@ char* Byte::deserializeByte(const AxisChar* valueAsChar) throw (AxisSoapExceptio
 {
     xsd__short* returnValue = Short::deserializeShort(valueAsChar);
  
-    if(m_Byte)
-    {
-        delete m_Byte;
-        m_Byte = NULL;
-    }
-    m_Byte = new xsd__byte;
-    *m_Byte = static_cast<xsd__byte> (*returnValue);
+    xsd__byte * value = new xsd__byte;
+    *value = static_cast<xsd__byte> (*returnValue);
     delete returnValue; // Samissa - need to clean this memory
-    return m_Byte;
+    return value;
 }
 
 MinInclusive* Byte::getMinInclusive()

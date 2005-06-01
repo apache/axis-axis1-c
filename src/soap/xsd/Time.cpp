@@ -17,11 +17,11 @@
 
 AXIS_CPP_NAMESPACE_START
 
-    Time::Time():m_Time(NULL)
+    Time::Time()
     {
     }
 
-    Time::Time(const xsd__time* value):m_Time(NULL)
+    Time::Time(const xsd__time* value)
     {
         if (value)
         {
@@ -34,10 +34,22 @@ AXIS_CPP_NAMESPACE_START
     {
         return XSD_TIME;
     }
-	
-    void* Time::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
+
+    xsd__time* Time::getTime()
     {
-    	return (void*) deserializeTime(valueAsChar);
+        if (isNil())
+        {
+            return NULL;
+        }
+        else
+        {
+            return deserializeTime(m_Buf);
+        }
+    }
+
+    void * Time::getValue()
+    {
+        return (void*) getTime();
     }
 	
     AxisChar* Time::serialize(const xsd__time* value) throw (AxisSoapException)
@@ -312,15 +324,9 @@ AXIS_CPP_NAMESPACE_START
             pTm = localtime (&timeInSecs);
         }
 
-        if(m_Time)
-        {
-            delete m_Time;
-            m_Time = NULL;
-        }
-    	
-    	m_Time = new xsd__time;
-		memcpy (m_Time, pTm, sizeof (tm));
-    	return m_Time;
+    	xsd__time * returnValue = new xsd__time;
+		memcpy (returnValue, pTm, sizeof (tm));
+    	return returnValue;
     }
 
     MinInclusive* Time::getMinInclusive()

@@ -53,29 +53,34 @@ public:
      * @return the xsd type of this simple type
      */
     XSDTYPE getType();
-  
-  /**
-    * Deserialize value from it's on-the-wire string form.
-    * @param valueAsChar Serialized form of value.
-    * @return Deserialized value.
-     */
-    void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException);
-    
-  /**
-    * Deserialized GMonthDay value from it's on-the-wire string form.
-  * @param valueAsChar Serialized form of GMonthDay value.
-   * @return Deserialized GMonthDay value.
-    */
-    struct tm* deserializeGMonthDay(const AxisChar* valueAsChar) throw (AxisSoapException);
 
+    /**
+     * Get the deserialized value.
+     * @return Deserialized value. Note: it is the responsibility of the calling code to delete this value!
+     */
+    xsd__gMonthDay* getGMonthDay();
+
+    /**
+     * Get the deserialized value
+     * @return the deserialized value. Note: it is the responsibility of the calling code to delete this value!
+     */
+    void* getValue();
+  
 protected:
+
+    /**
+     * Deserialized GMonthDay value from it's on-the-wire string form.
+     * @param valueAsChar Serialized form of GMonthDay value.
+     * @return Deserialized GMonthDay value. Note: it is the responsibility of the calling code to delete this value!
+     */
+    xsd__gMonthDay* deserializeGMonthDay(const AxisChar* valueAsChar) throw (AxisSoapException);
 
     /**
      * Serialize GMonthDay value to it's on-the-wire string form.
      * @param value The GMonthDay value to be serialized.
      * @return Serialized form of GMonthDay value.
      */
-    AxisChar* serialize(const struct tm* value) throw (AxisSoapException);
+    AxisChar* serialize(const xsd__gMonthDay* value) throw (AxisSoapException);
 
     /**
      * Creates a MinInclusive object.  For the GMonthDay type this is undefined, 
@@ -110,9 +115,6 @@ protected:
      * @return WhiteSpace object set to collapse whitespace
      */
     WhiteSpace* getWhiteSpace();
-
-private:
-   struct tm* m_GMonthDay;
 };
 
 AXIS_CPP_NAMESPACE_END

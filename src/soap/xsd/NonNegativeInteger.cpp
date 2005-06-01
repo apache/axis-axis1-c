@@ -17,11 +17,11 @@
 
 AXIS_CPP_NAMESPACE_START
 
-NonNegativeInteger::NonNegativeInteger():m_NonNegativeInteger(NULL)
+NonNegativeInteger::NonNegativeInteger()
 {
 }
 
-NonNegativeInteger::NonNegativeInteger(const xsd__nonNegativeInteger* value):m_NonNegativeInteger(NULL)
+NonNegativeInteger::NonNegativeInteger(const xsd__nonNegativeInteger* value)
 {
     if (value)
     {
@@ -39,11 +39,22 @@ XSDTYPE NonNegativeInteger::getType()
     return XSD_NONNEGATIVEINTEGER;
 }
 
-void* NonNegativeInteger::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
+xsd__nonNegativeInteger* NonNegativeInteger::getNonNegativeInteger()
 {
-   return (void*) deserializeNonNegativeInteger(valueAsChar);
+    if (isNil())
+    {
+        return NULL;
+    }
+    else
+    {
+        return deserializeNonNegativeInteger(m_Buf);
+    }
 }
 
+void * NonNegativeInteger::getValue()
+{
+    return (void*) getNonNegativeInteger();
+}
 
 AxisChar* NonNegativeInteger::serialize(const xsd__nonNegativeInteger* value) throw (AxisSoapException)
 {
@@ -163,15 +174,10 @@ xsd__nonNegativeInteger* NonNegativeInteger::deserializeNonNegativeInteger(const
 {
     AxisChar* end;
     
-    if(m_NonNegativeInteger)
-    {
-        delete m_NonNegativeInteger;
-        m_NonNegativeInteger = NULL;
-    }
-    m_NonNegativeInteger = new xsd__nonNegativeInteger;
-    *m_NonNegativeInteger = strtol (valueAsChar, &end, 10);
+    xsd__nonNegativeInteger * value = new xsd__nonNegativeInteger;
+    *value = strtol (valueAsChar, &end, 10);
   
-    return m_NonNegativeInteger;
+    return value;
 }
 
 MinInclusive* NonNegativeInteger::getMinInclusive()

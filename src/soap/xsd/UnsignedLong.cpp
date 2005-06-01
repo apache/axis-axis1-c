@@ -17,11 +17,11 @@
 
 AXIS_CPP_NAMESPACE_START
 
-UnsignedLong::UnsignedLong():m_UnsignedLong(NULL)
+UnsignedLong::UnsignedLong()
 {
 }
 
-UnsignedLong::UnsignedLong(const xsd__unsignedLong* value):m_UnsignedLong(NULL)
+UnsignedLong::UnsignedLong(const xsd__unsignedLong* value)
 {
     if (value)
     {
@@ -39,9 +39,21 @@ XSDTYPE UnsignedLong::getType()
     return XSD_UNSIGNEDLONG;
 }
 
-void* UnsignedLong::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
+xsd__unsignedLong* UnsignedLong::getUnsignedLong()
 {
-    return (void*) deserializeUnsignedLong(valueAsChar);
+    if (isNil())
+    {
+        return NULL;
+    }
+    else
+    {
+        return deserializeUnsignedLong(m_Buf);
+    }
+}
+
+void * UnsignedLong::getValue()
+{
+    return (void*) getUnsignedLong();
 }
 
 AxisChar* UnsignedLong::serialize(const xsd__unsignedLong* value) throw (AxisSoapException)
@@ -52,16 +64,12 @@ AxisChar* UnsignedLong::serialize(const xsd__unsignedLong* value) throw (AxisSoa
 
 xsd__unsignedLong* UnsignedLong::deserializeUnsignedLong(const AxisChar* valueAsChar) throw (AxisSoapException)
 {
-    unsigned LONGLONG* returnValue = NonNegativeInteger::deserializeNonNegativeInteger(valueAsChar);
+    xsd__nonNegativeInteger* returnValue = NonNegativeInteger::deserializeNonNegativeInteger(valueAsChar);
  
-    if(m_UnsignedLong)
-    {
-        delete m_UnsignedLong;
-        m_UnsignedLong = NULL;
-    }
-    m_UnsignedLong = new xsd__unsignedLong;
-    *m_UnsignedLong = static_cast<xsd__unsignedLong> (*returnValue);
-    return m_UnsignedLong;
+    xsd__unsignedLong * value = new xsd__unsignedLong;
+    *value = static_cast<xsd__unsignedLong> (*returnValue);
+    delete returnValue;
+    return value;
 }
 
 MaxInclusive* UnsignedLong::getMaxInclusive()

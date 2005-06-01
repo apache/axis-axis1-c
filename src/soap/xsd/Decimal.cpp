@@ -17,7 +17,7 @@
 
 AXIS_CPP_NAMESPACE_START
 
-Decimal::Decimal():m_Decimal(NULL)
+Decimal::Decimal()
 {
 }
 
@@ -25,7 +25,7 @@ Decimal::~Decimal()
 {
 }
 
-Decimal::Decimal(const xsd__decimal* value):m_Decimal(NULL)
+Decimal::Decimal(const xsd__decimal* value)
 {
     if (value)
     {
@@ -39,11 +39,22 @@ XSDTYPE Decimal::getType()
     return XSD_DECIMAL;
 }
 
-void* Decimal::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
+xsd__decimal* Decimal::getDecimal()
 {
-	return (void*) deserializeDecimal(valueAsChar);
+    if (isNil())
+    {
+        return NULL;
+    }
+    else
+    {
+        return deserializeDecimal(m_Buf);
+    }
 }
 
+void * Decimal::getValue()
+{
+    return (void*) getDecimal();
+}
 
 AxisChar* Decimal::serialize(const xsd__decimal* value) throw (AxisSoapException)
 {
@@ -177,15 +188,10 @@ xsd__decimal* Decimal::deserializeDecimal(const AxisChar* valueAsChar) throw (Ax
 {
 	AxisChar* end;
    
-    if (m_Decimal)
-    {
-        delete m_Decimal;
-        m_Decimal = NULL;
-    }
-	m_Decimal = new xsd__decimal;
-	*m_Decimal = strtod (valueAsChar, &end);
+	xsd__decimal * value = new xsd__decimal;
+	*value = strtod (valueAsChar, &end);
 	
-	return m_Decimal;
+	return value;
 }
 
 WhiteSpace* Decimal::getWhiteSpace()

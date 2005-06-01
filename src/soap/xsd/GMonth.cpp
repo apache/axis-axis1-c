@@ -17,11 +17,11 @@
 
 AXIS_CPP_NAMESPACE_START
 
-    GMonth::GMonth():m_GMonth(NULL)
+    GMonth::GMonth()
     {
     }
 
-    GMonth::GMonth(const xsd__gMonth* value):m_GMonth(NULL)
+    GMonth::GMonth(const xsd__gMonth* value)
     {
         if (value)
         {
@@ -35,12 +35,24 @@ AXIS_CPP_NAMESPACE_START
         return XSD_MONTH;
     }
 
-    void* GMonth::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
+    xsd__gMonth* GMonth::getGMonth()
     {
-       return (void*) deserializeGMonth(valueAsChar);
+        if (isNil())
+        {
+            return NULL;
+        }
+        else
+        {
+            return deserializeGMonth(m_Buf);
+        }
     }
-   
-    AxisChar* GMonth::serialize(const struct tm* value) throw (AxisSoapException)
+
+    void * GMonth::getValue()
+    {
+        return (void*) getGMonth();
+    }
+
+    AxisChar* GMonth::serialize(const xsd__gMonth* value) throw (AxisSoapException)
     {
         MinInclusive* minInclusive = getMinInclusive();
         if (minInclusive->isSet())
@@ -182,13 +194,13 @@ AXIS_CPP_NAMESPACE_START
 
     }
   
-    struct tm* GMonth::deserializeGMonth(const AxisChar* valueAsChar) throw (AxisSoapException)
+    xsd__gMonth* GMonth::deserializeGMonth(const AxisChar* valueAsChar) throw (AxisSoapException)
     {
-      struct tm value;
-      struct tm *pTm;
+        struct tm value;
+        struct tm *pTm;
         AxisChar *cUtc;
-      AxisChar *cTemp;
-      AxisChar *cTemp2;
+        AxisChar *cTemp;
+        AxisChar *cTemp2;
 
         // Calculate local timezone offset
         time_t now = 0;
@@ -306,14 +318,10 @@ AXIS_CPP_NAMESPACE_START
         }
         
         pTm -= 70; // Take off the 70 offset we added initially
-        if(m_GMonth)
-        {
-            delete m_GMonth;
-            m_GMonth = NULL;
-        }
-        m_GMonth = new struct tm;
-        memcpy (m_GMonth, pTm, sizeof (tm));
-        return m_GMonth;
+
+        xsd__gMonth * returnValue = new xsd__gMonth;
+        memcpy (returnValue, pTm, sizeof (tm));
+        return returnValue;
  }
 
     MinInclusive* GMonth::getMinInclusive()

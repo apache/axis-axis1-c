@@ -56,20 +56,25 @@ public:
     XSDTYPE getType();
 
     /**
-     * Deserialize value from it's on-the-wire string form.
-     * @param valueAsChar Serialized form of value.
-     * @return Deserialized value.
-     */  
-    void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException);
+     * Get the deserialized value.
+     * @return Deserialized value. Note: it is the responsibility of the calling code to delete this value!
+     */
+    xsd__unsignedShort* getUnsignedShort();
 
-  /**
-   * Deserialized UnsignedShort value from it's on-the-wire string form.
-   * @param valueAsChar Serialized form of UnsignedShort value.
-   * @return Deserialized UnsignedShort value.
-   */
-    xsd__unsignedShort* deserializeUnsignedShort(const AxisChar* valueAsChar) throw (AxisSoapException);
+    /**
+     * Get the deserialized value
+     * @return the deserialized value. Note: it is the responsibility of the calling code to delete this value!
+     */
+    void* getValue();
 
 protected:
+
+    /**
+     * Deserialized UnsignedShort value from it's on-the-wire string form.
+     * @param valueAsChar Serialized form of UnsignedShort value.
+     * @return Deserialized UnsignedShort value. Note: it is the responsibility of the calling code to delete this value!
+     */
+    xsd__unsignedShort* deserializeUnsignedShort(const AxisChar* valueAsChar) throw (AxisSoapException);
 
     /**
      * Serialize UnsignedShort value to it's on-the-wire string form.
@@ -84,9 +89,6 @@ protected:
      * @return MaxInclusive object
      */
     virtual MaxInclusive* getMaxInclusive();
-    
-private:
-    xsd__unsignedShort *m_UnsignedShort;
 };
 
 AXIS_CPP_NAMESPACE_END

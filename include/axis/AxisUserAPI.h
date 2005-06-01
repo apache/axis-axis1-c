@@ -68,6 +68,12 @@ typedef AxisChar * xsdc__Name;
 typedef AxisChar * xsdc__NCName;
 
 /**
+ * @typedef xsd__notation
+ * Axis C++ defined type for xml basic type NOTATION
+ */
+typedef AxisChar * xsdc__notation;
+
+/**
  * @typedef xsdc__string
  * Axis C++ defined type for xml basic type ID
  */
@@ -363,26 +369,50 @@ typedef struct {
     int m_Size;
 } Axisc_Array;
 
-AXISC_DEFINED_POINTER_ARRAY(xsdc__string)
-AXISC_DEFINED_ARRAY(xsdc__integer)
-AXISC_DEFINED_ARRAY(xsdc__int)
-AXISC_DEFINED_ARRAY(xsdc__long)
-AXISC_DEFINED_ARRAY(xsdc__short)
-AXISC_DEFINED_ARRAY(xsdc__decimal)
-AXISC_DEFINED_ARRAY(xsdc__float)
-AXISC_DEFINED_ARRAY(xsdc__double)
-AXISC_DEFINED_ARRAY(xsdc__boolean)
-AXISC_DEFINED_POINTER_ARRAY(xsdc__QName)
-//AXISC_DEFINED_ARRAY(xsdc__NCName)
+AXISC_DEFINED_ARRAY(xsdc__duration) 
 AXISC_DEFINED_ARRAY(xsdc__dateTime)
-AXISC_DEFINED_ARRAY(xsdc__unsignedByte)
-AXISC_DEFINED_ARRAY(xsdc__unsignedInt)
-AXISC_DEFINED_ARRAY(xsdc__unsignedLong)
-AXISC_DEFINED_ARRAY(xsdc__unsignedShort)
-AXISC_DEFINED_ARRAY2(xsdc__base64Binary)
-AXISC_DEFINED_ARRAY2(xsdc__hexBinary)
-AXISC_DEFINED_POINTER_ARRAY(xsdc__anyURI)
+AXISC_DEFINED_ARRAY(xsdc__time)
+AXISC_DEFINED_ARRAY(xsdc__date)
+AXISC_DEFINED_ARRAY(xsdc__gYearMonth)
+AXISC_DEFINED_ARRAY(xsdc__gYear)
+AXISC_DEFINED_ARRAY(xsdc__gMonthDay)
+AXISC_DEFINED_ARRAY(xsdc__gDay)
+AXISC_DEFINED_ARRAY(xsdc__gMonth)
+AXISC_DEFINED_POINTER_ARRAY(xsdc__string)
+AXISC_DEFINED_POINTER_ARRAY(xsdc__normalizedString)
+AXISC_DEFINED_POINTER_ARRAY(xsdc__token)
+AXISC_DEFINED_POINTER_ARRAY(xsdc__language)
+AXISC_DEFINED_POINTER_ARRAY(xsdc__Name)
+AXISC_DEFINED_POINTER_ARRAY(xsdc__NCName)
+AXISC_DEFINED_POINTER_ARRAY(xsdc__ID)
+AXISC_DEFINED_POINTER_ARRAY(xsdc__IDREF)
+AXISC_DEFINED_POINTER_ARRAY(xsdc__IDREFS)
+AXISC_DEFINED_POINTER_ARRAY(xsdc__ENTITY)
+AXISC_DEFINED_POINTER_ARRAY(xsdc__ENTITIES)
 AXISC_DEFINED_POINTER_ARRAY(xsdc__NMTOKEN)
+AXISC_DEFINED_POINTER_ARRAY(xsdc__NMTOKENS)
+AXISC_DEFINED_ARRAY(xsdc__boolean)
+AXISC_DEFINED_ARRAY(xsdc__base64Binary)
+AXISC_DEFINED_ARRAY(xsdc__hexBinary)
+AXISC_DEFINED_ARRAY(xsdc__float)
+AXISC_DEFINED_ARRAY(xsdc__decimal)
+AXISC_DEFINED_ARRAY(xsdc__integer)
+AXISC_DEFINED_ARRAY(xsdc__nonPositiveInteger)
+AXISC_DEFINED_ARRAY(xsdc__negativeInteger)
+AXISC_DEFINED_ARRAY(xsdc__long)
+AXISC_DEFINED_ARRAY(xsdc__int)
+AXISC_DEFINED_ARRAY(xsdc__short)
+AXISC_DEFINED_ARRAY(xsdc__byte)
+AXISC_DEFINED_ARRAY(xsdc__nonNegativeInteger)
+AXISC_DEFINED_ARRAY(xsdc__unsignedLong)
+AXISC_DEFINED_ARRAY(xsdc__unsignedInt)
+AXISC_DEFINED_ARRAY(xsdc__unsignedByte)
+AXISC_DEFINED_ARRAY(xsdc__unsignedShort)
+AXISC_DEFINED_ARRAY(xsdc__positiveInteger)
+AXISC_DEFINED_ARRAY(xsdc__double)
+AXISC_DEFINED_POINTER_ARRAY(xsdc__anyURI)
+AXISC_DEFINED_POINTER_ARRAY(xsdc__QName)
+AXISC_DEFINED_POINTER_ARRAY(xsdc__notation)
  
 static const int xsdc_boolean_true = 1;
 static const int xsdc_boolean_false = 0;

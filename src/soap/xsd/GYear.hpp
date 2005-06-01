@@ -53,29 +53,34 @@ public:
      * @return the xsd type of this simple type
      */
     XSDTYPE getType();
-    
-  /**
-    * Deserialize value from it's on-the-wire string form.
-    * @param valueAsChar Serialized form of value.
-    * @return Deserialized value.
+
+    /**
+     * Get the deserialized value.
+     * @return Deserialized value. Note: it is the responsibility of the calling code to delete this value!
      */
-    void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException);
-    
-  /**
-    * Deserialized GYear value from it's on-the-wire string form.
-  * @param valueAsChar Serialized form of GYear value.
-   * @return Deserialized GYear value.
-    */
-    struct tm* deserializeGYear(const AxisChar* valueAsChar) throw (AxisSoapException);
+    xsd__gYear* getGYear();
+
+    /**
+     * Get the deserialized value
+     * @return the deserialized value. Note: it is the responsibility of the calling code to delete this value!
+     */
+    void* getValue();
 
 protected:
+    
+    /**
+     * Deserialized GYear value from it's on-the-wire string form.
+     * @param valueAsChar Serialized form of GYear value.
+     * @return Deserialized GYear value. Note: it is the responsibility of the calling code to delete this value!
+     */
+    xsd__gYear* deserializeGYear(const AxisChar* valueAsChar) throw (AxisSoapException);
 
     /**
      * Serialize GYear value to it's on-the-wire string form.
      * @param value The GYear value to be serialized.
      * @return Serialized form of GYear value.
      */
-    AxisChar* serialize(const struct tm* value) throw (AxisSoapException);
+    AxisChar* serialize(const xsd__gYear* value) throw (AxisSoapException);
 
     /**
      * Creates a MinInclusive object.  For the GYear type this is undefined, 
@@ -110,9 +115,6 @@ protected:
      * @return WhiteSpace object set to collapse whitespace
      */
     WhiteSpace* getWhiteSpace();
-
-private:
-   struct tm* m_GYear;
 };
 
 AXIS_CPP_NAMESPACE_END

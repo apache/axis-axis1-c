@@ -52,21 +52,26 @@ public:
      */
     XSDTYPE getType();
 
-	/**
-	 * Deserialize value from it's on-the-wire string form.
-	 * @param valueAsChar Serialized form of value.
-	 * @return Deserialized value.
-	 */
-    void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException);
+    /**
+     * Get the deserialized value.
+     * @return Deserialized value. Note: it is the responsibility of the calling code to delete this value!
+     */
+    xsd__QName getQName();
+
+    /**
+     * Get the deserialized value
+     * @return the deserialized value. Note: it is the responsibility of the calling code to delete this value!
+     */
+    void* getValue();
+
+protected:
 
 	/**
 	 * Deserialize QName from it's on-the-wire string form.
 	 * @param valueAsChar Serialized form of QName.
-	 * @return Deserialized QName.
+	 * @return Deserialized QName. Note: it is the responsibility of the calling code to delete this value!
 	 */
     xsd__QName deserializeQName(const AxisChar* valueAsChar) throw (AxisSoapException);
-
-protected:
 
     /**
      * Serialize QName to it's on-the-wire string form.
@@ -101,10 +106,6 @@ protected:
      * @return An unset Length object
      */
     Length* getLength();
-
-private:
-    xsd__QName m_QName;
-
 };
 
 AXIS_CPP_NAMESPACE_END

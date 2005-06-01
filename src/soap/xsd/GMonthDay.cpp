@@ -17,11 +17,11 @@
 
 AXIS_CPP_NAMESPACE_START
 
-    GMonthDay::GMonthDay():m_GMonthDay(NULL)
+    GMonthDay::GMonthDay()
     {
     }
 
-    GMonthDay::GMonthDay(const xsd__gMonthDay* value):m_GMonthDay(NULL)
+    GMonthDay::GMonthDay(const xsd__gMonthDay* value)
     {
         if (value)
         {
@@ -35,12 +35,24 @@ AXIS_CPP_NAMESPACE_START
         return XSD_MONTHDAY;
     }
 
-    void* GMonthDay::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
+    xsd__gMonthDay* GMonthDay::getGMonthDay()
     {
-       return (void*) deserializeGMonthDay(valueAsChar);
+        if(isNil())
+        {
+            return NULL;
+        }
+        else
+        {
+            return deserializeGMonthDay(m_Buf);
+        }
     }
-   
-    AxisChar* GMonthDay::serialize(const struct tm* value) throw (AxisSoapException)
+
+    void * GMonthDay::getValue()
+    {
+        return (void*) getGMonthDay();
+    }
+
+    AxisChar* GMonthDay::serialize(const xsd__gMonthDay* value) throw (AxisSoapException)
     {
         MinInclusive* minInclusive = getMinInclusive();
         if (minInclusive->isSet())
@@ -181,7 +193,7 @@ AXIS_CPP_NAMESPACE_START
         return m_Buf;        
     }
   
-    struct tm* GMonthDay::deserializeGMonthDay(const AxisChar* valueAsChar) throw (AxisSoapException)
+    xsd__gMonthDay* GMonthDay::deserializeGMonthDay(const AxisChar* valueAsChar) throw (AxisSoapException)
     {
       struct tm value;
       struct tm *pTm;
@@ -304,14 +316,10 @@ AXIS_CPP_NAMESPACE_START
         }
 
         pTm -= 70; // Take off the 70 offset we added initially        
-        if(m_GMonthDay)
-        {
-            delete m_GMonthDay;
-            m_GMonthDay = NULL;
-        }
-        m_GMonthDay = new struct tm;
-        memcpy (m_GMonthDay, pTm, sizeof (tm));
-        return m_GMonthDay;
+
+        xsd__gMonthDay * returnValue = new xsd__gMonthDay;
+        memcpy (returnValue, pTm, sizeof (tm));
+        return returnValue;
  }
 
     MinInclusive* GMonthDay::getMinInclusive()

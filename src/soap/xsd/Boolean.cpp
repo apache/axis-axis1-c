@@ -17,11 +17,11 @@
 
 AXIS_CPP_NAMESPACE_START
 
-Boolean::Boolean():m_Boolean(NULL)
+Boolean::Boolean()
 {
 }
 
-Boolean::Boolean(const xsd__boolean* value):m_Boolean(NULL)
+Boolean::Boolean(const xsd__boolean* value)
 {
     if (value)
     {
@@ -39,14 +39,21 @@ XSDTYPE Boolean::getType()
     return XSD_BOOLEAN;
 }
 
-/**
- * Deserialize value from it's on-the-wire string form.
- * @param valueAsChar Serialized form of value.
- * @return Deserialized value.
- */
-void* Boolean::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
+xsd__boolean* Boolean::getBoolean()
 {
-	return (void*) deserializeBoolean(valueAsChar);
+    if (isNil())
+    {
+        return NULL;
+    }
+    else
+    {
+        return deserializeBoolean(m_Buf);
+    }
+}
+
+void * Boolean::getValue()
+{
+    return (void*) getBoolean();
 }
 
 /**
@@ -72,23 +79,18 @@ AxisChar* Boolean::serialize(const xsd__boolean * value) throw (AxisSoapExceptio
  */
 xsd__boolean * Boolean::deserializeBoolean(const AxisChar* valueAsChar) throw (AxisSoapException)
 {
-    if(m_Boolean)
-    {
-        delete m_Boolean;
-        m_Boolean = NULL;
-    }
-    m_Boolean = new xsd__boolean;
+    xsd__boolean * value = new xsd__boolean;
  
 	if ( 0 == strcmp (valueAsChar, "true") || 0 == strcmp (valueAsChar, "1"))
 	{
-		*m_Boolean = true_;
+		*value = true_;
 	}
 	else
 	{
-		*m_Boolean =  false_;
+		*value =  false_;
 	}
     
-    return m_Boolean;
+    return value;
 }
 
 WhiteSpace* Boolean::getWhiteSpace()

@@ -17,7 +17,7 @@
 
 AXIS_CPP_NAMESPACE_START
 
-    DateTime::DateTime():m_DateTime(NULL)
+    DateTime::DateTime()
     {
     }
 
@@ -25,7 +25,7 @@ AXIS_CPP_NAMESPACE_START
     {
     }
 
-    DateTime::DateTime(const xsd__dateTime* value):m_DateTime(NULL)
+    DateTime::DateTime(const xsd__dateTime* value)
     {
         if (value)
         {
@@ -38,12 +38,24 @@ AXIS_CPP_NAMESPACE_START
     {
         return XSD_DATETIME;
     }
-    
-    void* DateTime::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
+
+    xsd__dateTime* DateTime::getDateTime()
     {
-    	return (void*) deserializeDateTime(valueAsChar);
+        if (isNil())
+        {
+            return NULL;
+        }
+        else
+        {
+            return deserializeDateTime(m_Buf);
+        }
     }
-	
+
+    void * DateTime::getValue()
+    {
+        return (void*) getDateTime();
+    }
+    
     AxisChar* DateTime::serialize(const xsd__dateTime* value) throw (AxisSoapException)
     {
         MinInclusive* minInclusive = getMinInclusive();
@@ -323,15 +335,10 @@ AXIS_CPP_NAMESPACE_START
             pTm = localtime (&timeInSecs);
         }
         
-        if(m_DateTime)
-        {
-            delete m_DateTime;
-            m_DateTime = NULL;
-        }
-        m_DateTime = new xsd__dateTime;
-        memcpy (m_DateTime, pTm, sizeof (tm));
+        xsd__dateTime * returnValue = new xsd__dateTime;
+        memcpy (returnValue, pTm, sizeof (tm));
         
-        return m_DateTime;
+        return returnValue;
     }
 
     MinInclusive* DateTime::getMinInclusive()

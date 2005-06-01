@@ -53,22 +53,28 @@ public:
      * @return the xsd type of this simple type
      */
     XSDTYPE getType();
-	
-	/**
-	 * Deserialize value from it's on-the-wire string form.
-	 * @param valueAsChar Serialized form of value.
-	 * @return Deserialized value.
-	 */
-    void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException);
-	
-	/**
-	 * Deserialized boolean value from it's on-the-wire string form.
-	 * @param valueAsChar Serialized form of boolean value.
-	 * @return Deserialized boolean value.
-	 */
+
+    /**
+     * Get the deserialized value.
+     * @return Deserialized value. Note: it is the responsibility of the calling code to delete this value!
+     */
+    xsd__boolean* getBoolean();
+
+    /**
+     * Get the deserialized value
+     * @return the deserialized value.  Note: it is the responsibility of the calling code to delete this value!
+     */
+    void* getValue();
+    	
+protected:
+
+    /**
+     * Deserialized boolean value from it's on-the-wire string form.
+     * @param valueAsChar Serialized form of boolean value.
+     * @return Deserialized boolean value. Note: it is the responsibility of the calling code to delete this value!
+     */
     xsd__boolean * deserializeBoolean(const AxisChar* valueAsChar) throw (AxisSoapException);
 
-protected:
 
     /**
      * Serialize boolean value to it's on-the-wire string form.
@@ -88,9 +94,6 @@ protected:
      * @return Enumeration object set to collapse whitespace
      */
     Enumeration* getEnumeration();
-   
-private:
-    xsd__boolean * m_Boolean;
 };
 
 AXIS_CPP_NAMESPACE_END

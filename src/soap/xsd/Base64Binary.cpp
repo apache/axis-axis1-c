@@ -17,7 +17,7 @@
 
 AXIS_CPP_NAMESPACE_START
 
-    Base64Binary::Base64Binary():m_Base64Binary(NULL)
+    Base64Binary::Base64Binary()
     {
     }
     
@@ -25,7 +25,7 @@ AXIS_CPP_NAMESPACE_START
     {
     }
 
-    Base64Binary::Base64Binary(const xsd__base64Binary* value):m_Base64Binary(NULL)
+    Base64Binary::Base64Binary(const xsd__base64Binary* value)
     {
         if (value)
         {
@@ -38,12 +38,24 @@ AXIS_CPP_NAMESPACE_START
     {
         return XSD_BASE64BINARY;
     }
-    
-    void* Base64Binary::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
+
+    xsd__base64Binary* Base64Binary::getBase64Binary()
     {
-    	return (void*) deserializeBase64Binary(valueAsChar);
+        if (isNil())
+        {
+            return NULL;
+        }
+        else
+        {
+            return deserializeBase64Binary(m_Buf);
+        }
     }
-	
+
+    void * Base64Binary::getValue()
+    {
+        return (void*) getBase64Binary();
+    }
+    
     AxisChar* Base64Binary::serialize(const xsd__base64Binary * value) throw (AxisSoapException)
     {
         MinLength* minLength= getMinLength();
@@ -125,21 +137,16 @@ AXIS_CPP_NAMESPACE_START
 	
     xsd__base64Binary * Base64Binary::deserializeBase64Binary(const AxisChar* valueAsChar) throw (AxisSoapException)
     {
-        if (m_Base64Binary)
-        {
-            delete  m_Base64Binary;
-            m_Base64Binary = NULL;
-        }
-    	m_Base64Binary = new xsd__base64Binary();
-	    m_Base64Binary->__size = apr_base64_decode_len (valueAsChar);
-	    m_Base64Binary->__ptr = new unsigned char[m_Base64Binary->__size + 1];
-	    m_Base64Binary->__size = apr_base64_decode_binary (m_Base64Binary->__ptr, valueAsChar);
+    	xsd__base64Binary * value = new xsd__base64Binary();
+	    value->__size = apr_base64_decode_len (valueAsChar);
+	    value->__ptr = new unsigned char[value->__size + 1];
+	    value->__size = apr_base64_decode_binary (value->__ptr, valueAsChar);
 	    /* put null at the end because it enables the decoded string to be used
 	     * as a string 
 	     */
-	    m_Base64Binary->__ptr[m_Base64Binary->__size] = 0;
+	    value->__ptr[value->__size] = 0;
 	
-	    return m_Base64Binary;
+	    return value;
     }
 
     MinLength* Base64Binary::getMinLength()

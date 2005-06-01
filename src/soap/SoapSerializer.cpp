@@ -763,150 +763,6 @@ int SoapSerializer::setOutputStreamForTesting(SOAPTransport* pStream)
 }
 #endif
 
-IAnySimpleType* SoapSerializer::createSimpleTypeObject(void * pValue, XSDTYPE type)
-{
-    IAnySimpleType* xsdValue = NULL;
-    switch (type)
-    {
-        case XSD_FLOAT:
-            xsdValue = new Float((xsd__float*) pValue);
-            break;
-        case XSD_BOOLEAN:
-            xsdValue = new Boolean((xsd__boolean*) pValue);
-            break;
-        case XSD_DOUBLE:
-            xsdValue = new Double((xsd__double*) pValue);
-            break;
-        case XSD_DURATION:
-            xsdValue = new Duration((xsd__duration*) pValue);
-            break;
-        case XSD_DATETIME:
-            xsdValue = new DateTime((xsd__dateTime*) pValue);
-            break;
-        case XSD_TIME:
-            xsdValue = new Time((xsd__time*) pValue);
-            break;
-        case XSD_DATE:
-            xsdValue = new Date((xsd__date*) pValue);
-            break;
-        case XSD_YEARMONTH:
-            xsdValue = new GYearMonth((xsd__gYearMonth*) pValue);
-            break;
-        case XSD_YEAR:
-            xsdValue = new GYear((xsd__gYear*) pValue);
-            break;
-        case XSD_MONTHDAY:
-            xsdValue = new GMonthDay((xsd__gMonthDay*) pValue);
-            break;
-        case XSD_DAY:
-            xsdValue = new GDay((xsd__gDay*) pValue);
-            break;
-        case XSD_MONTH:
-            xsdValue = new GMonth((xsd__gMonth*) pValue);
-            break;
-        case XSD_HEXBINARY:
-            xsdValue = new HexBinary((xsd__hexBinary*) pValue);
-            break;
-        case XSD_BASE64BINARY:
-            xsdValue = new Base64Binary((xsd__base64Binary*) pValue);
-            break;
-        case XSD_ANYURI:
-            xsdValue = new AnyURI((xsd__anyURI) pValue);
-            break;
-        case XSD_QNAME:
-            xsdValue = new XSD_QName((xsd__QName) pValue);
-            break;
-        case XSD_NOTATION:
-            xsdValue = new NOTATION((xsd__notation) pValue);
-            break;
-        case XSD_DECIMAL:
-            xsdValue = new Decimal((xsd__decimal*) pValue);
-            break;
-        case XSD_INTEGER:
-            xsdValue = new Integer((xsd__integer*) pValue);
-            break;
-        case XSD_LONG:
-            xsdValue = new Long((xsd__long*) pValue);
-            break;
-        case XSD_INT:
-            xsdValue = new Int((xsd__int*) pValue);
-            break;
-        case XSD_SHORT:
-            xsdValue = new Short((xsd__short*) pValue);
-            break;
-        case XSD_BYTE:
-            xsdValue = new Byte((xsd__byte*) pValue);
-            break;
-        case XSD_NONNEGATIVEINTEGER:
-            xsdValue = new NonNegativeInteger((xsd__nonNegativeInteger*) pValue);
-            break;
-        case XSD_UNSIGNEDLONG:
-            xsdValue = new UnsignedLong((xsd__unsignedLong*) pValue);
-            break;
-        case XSD_UNSIGNEDINT:
-            xsdValue = new UnsignedInt((xsd__unsignedInt*) pValue);
-            break;
-        case XSD_UNSIGNEDSHORT:
-            xsdValue = new UnsignedShort((xsd__unsignedShort*) pValue);
-            break;
-        case XSD_UNSIGNEDBYTE:
-            xsdValue = new UnsignedByte((xsd__unsignedByte*) pValue);
-            break;
-        case XSD_POSITIVEINTEGER:
-            xsdValue = new PositiveInteger((xsd__positiveInteger*) pValue);
-            break;
-        case XSD_NONPOSITIVEINTEGER:
-            xsdValue = new NonPositiveInteger((xsd__nonPositiveInteger*) pValue);
-            break;
-        case XSD_NEGATIVEINTEGER:
-            xsdValue = new NegativeInteger((xsd__negativeInteger*) pValue);
-            break;
-        case XSD_STRING:
-            xsdValue = new String((xsd__string) pValue);
-            break;
-        case XSD_NORMALIZEDSTRING:
-            xsdValue = new NormalizedString((xsd__normalizedString) pValue);
-            break;
-        case XSD_TOKEN:
-            xsdValue = new Token((xsd__token) pValue);
-            break;
-        case XSD_LANGUAGE:
-            xsdValue = new Language((xsd__language) pValue);
-            break;
-        case XSD_NAME:
-            xsdValue = new Name((xsd__Name) pValue);
-            break;
-        case XSD_NCNAME:
-            xsdValue = new NCName((xsd__NCName) pValue);
-            break;
-        case XSD_ID:
-            xsdValue = new ID((xsd__ID) pValue);
-            break;
-        case XSD_IDREF:
-            xsdValue = new IDREF((xsd__IDREF) pValue);
-            break;
-        case XSD_IDREFS:
-            xsdValue = new IDREFS((xsd__IDREFS) pValue);
-            break;
-        case XSD_ENTITY:
-            xsdValue = new ENTITY((xsd__ENTITY) pValue);
-            break;
-        case XSD_ENTITIES:
-            xsdValue = new ENTITIES((xsd__ENTITIES) pValue);
-            break;
-        case XSD_NMTOKEN:
-            xsdValue = new NMTOKEN((xsd__NMTOKEN) pValue);
-            break;
-        case XSD_NMTOKENS:
-            xsdValue = new NMTOKENS((xsd__NMTOKENS) pValue);
-            break;
-        default:
-            break;
-    }
-    
-    return xsdValue;
-}
-
 /*
  * Basic output parameter going to be serialized as an Element later
  */
@@ -914,7 +770,7 @@ int SoapSerializer::addOutputParam( const AxisChar * pchName,
 								    void * pValue, 
                                     XSDTYPE type)
 {
-    IAnySimpleType* xsdValue = createSimpleTypeObject(pValue, type);
+    IAnySimpleType* xsdValue = AxisUtils::createSimpleTypeObject(pValue, type);
     
     Param * pParam = new Param();
 
@@ -957,7 +813,7 @@ int SoapSerializer::serializeAsElement( const AxisChar * pName,
                                         void * pValue, 
                                         XSDTYPE type) 
 {
-    IAnySimpleType* pSimpleType = createSimpleTypeObject(pValue, type);
+    IAnySimpleType* pSimpleType = AxisUtils::createSimpleTypeObject(pValue, type);
     
     return serializeAsElement(pName, pNamespace, pSimpleType);
 }
@@ -1007,7 +863,7 @@ int SoapSerializer::serializeAsAttribute( const AxisChar * pName,
                                           void * pValue,
                                           XSDTYPE type)
 {
-    IAnySimpleType* pSimpleType = createSimpleTypeObject(pValue, type);
+    IAnySimpleType* pSimpleType = AxisUtils::createSimpleTypeObject(pValue, type);
     
     return serializeAsAttribute(pName, pNamespace, pSimpleType);
 }
@@ -1243,7 +1099,7 @@ int SoapSerializer::serializeAsChardata( void * pValue, XSDTYPE type)
 {
     char * pStr = m_Buf;
 
-    IAnySimpleType* pSimpleType = createSimpleTypeObject(pValue, type);
+    IAnySimpleType* pSimpleType = AxisUtils::createSimpleTypeObject(pValue, type);
     pStr = pSimpleType->serialize();
 
     *this << pStr;

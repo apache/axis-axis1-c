@@ -17,11 +17,11 @@
 
 AXIS_CPP_NAMESPACE_START
 
-    Duration::Duration():m_Duration(NULL)
+    Duration::Duration()
     {
     }
 
-    Duration::Duration(const xsd__duration* value):m_Duration(NULL)
+    Duration::Duration(const xsd__duration* value)
     {
         if (value)
         {
@@ -35,11 +35,23 @@ AXIS_CPP_NAMESPACE_START
         return XSD_DURATION;
     }
 
-    void* Duration::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
+    xsd__duration* Duration::getDuration()
     {
-    	return (void*) deserializeDuration(valueAsChar);
+        if (isNil())
+        {
+            return NULL;
+        }
+        else
+        {
+            return deserializeDuration(m_Buf);
+        }
     }
-	
+
+    void * Duration::getValue()
+    {
+        return (void*) getDuration();
+    }
+
     AxisChar* Duration::serialize(const xsd__duration* value) throw (AxisSoapException)
     {
      
@@ -201,53 +213,48 @@ AXIS_CPP_NAMESPACE_START
     	AxisString buff;
 	    unsigned int intPos1, intPos2, intPos3, intPos4, intPos5, intPos6;
 
-        if (m_Duration)
-        {
-            delete m_Duration;
-            m_Duration = NULL;
-        }
-        m_Duration = new xsd__duration;
+        xsd__duration* value = new xsd__duration;
 	
 	    /*XSD_DURATION is of the format PnYnMnDTnHnMnS */
 
 		// Deserialize Years
-		*m_Duration = 0;
+		*value = 0;
 	    intPos1 = valueAsString.find_first_of ("Y");
 	    buff = valueAsString.substr (1, intPos1 - 1);
 	    int years = atoi (buff.c_str ());
-	    *m_Duration += years * 365 * 24 * 3600;
+	    *value += years * 365 * 24 * 3600;
 
 		// Deserialize Months
 	    intPos2 = valueAsString.find_first_of ("M");
 	    buff = valueAsString.substr (intPos1 + 1, intPos2 - intPos1 - 1);
 	    int months = atoi (buff.c_str ());
-	    *m_Duration += months * 30 * 24 * 3600;
+	    *value += months * 30 * 24 * 3600;
 
 		// Deserialize Days
 	    intPos3 = valueAsString.find_first_of ("D");
 	    buff = valueAsString.substr (intPos2 + 1, intPos3 - intPos2 - 1);
 	    int days = atoi (buff.c_str ());
-	    *m_Duration += days * 24 * 3600;
+	    *value += days * 24 * 3600;
         
 		// Deserialize Hours
 	    intPos4 = valueAsString.find_first_of ("H");
 	    buff = valueAsString.substr (intPos3 + 2, intPos4 - intPos3 - 2);
 	    int hours = atoi (buff.c_str ());
-	    *m_Duration += hours * 3600;
+	    *value += hours * 3600;
 
 		// Deserialize Minutes
 	    intPos5 = valueAsString.find_last_of ("M");
 	    buff = valueAsString.substr (intPos4 + 1, intPos5 - intPos4 - 1);
 	    int mins = atoi (buff.c_str ());
-	    *m_Duration += mins * 60;
+	    *value += mins * 60;
 
 		// Deserialize Seconds
 	    intPos6 = valueAsString.find_first_of ("S");
 	    buff = valueAsString.substr (intPos5 + 1, intPos6 - intPos5 - 1);
 	    int secs = atoi (buff.c_str ());
-	    *m_Duration += secs;
+	    *value += secs;
 	    
-	    return m_Duration;
+	    return value;
     }
 
     WhiteSpace* Duration::getWhiteSpace()

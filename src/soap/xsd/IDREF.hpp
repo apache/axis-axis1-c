@@ -50,11 +50,25 @@ public:
     XSDTYPE getType();
 
     /**
+     * Get the deserialized value.
+     * @return Deserialized value. Note: it is the responsibility of the calling code to delete this value!
+     */
+    xsd__IDREF getIDREF();
+
+    /**
+     * Get the deserialized value
+     * @return the deserialized value. Note: it is the responsibility of the calling code to delete this value!
+     */
+    void* getValue();
+
+protected:
+
+    /**
      * Deserialized IDREF value from it's on-the-wire string form.
      * @param valueAsChar Serialized form of IDREF value.
-     * @return Deserialized IDREF value.
+     * @return Deserialized IDREF value. Note: it is the responsibility of the calling code to delete this value!
      */
- AxisChar* deserializeIDREF(const AxisChar* valueAsChar) throw (AxisSoapException);
+    xsd__IDREF deserializeIDREF(const AxisChar* valueAsChar) throw (AxisSoapException);
 };
 
 AXIS_CPP_NAMESPACE_END

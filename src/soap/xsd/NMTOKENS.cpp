@@ -34,9 +34,26 @@ XSDTYPE NMTOKENS::getType()
     return XSD_NMTOKENS;
 }
 
-AxisChar* NMTOKENS::deserializeNMTOKENS(const AxisChar* valueAsChar) throw (AxisSoapException)
+xsd__NMTOKENS NMTOKENS::getNMTOKENS()
 {
-    return (AxisChar*) deserialize(valueAsChar);
+    if (isNil())
+    {
+        return NULL;
+    }
+    else
+    {
+        return deserializeNMTOKENS(m_Buf);
+    }
+}
+
+void * NMTOKENS::getValue()
+{
+    return (void*) getNMTOKENS();
+}
+
+xsd__NMTOKENS NMTOKENS::deserializeNMTOKENS(const AxisChar* valueAsChar) throw (AxisSoapException)
+{
+    return (xsd__NMTOKENS) deserializeNMTOKEN(valueAsChar);
 }
 
 AXIS_CPP_NAMESPACE_END

@@ -653,6 +653,132 @@ xsd__duration * Call::getElementAsDuration (const AxisChar* pName,
     return m_pIWSDZ->getElementAsDuration (pName, pNamespace);
 }
 
+xsd__gYearMonth * Call::getElementAsGYearMonth (const AxisChar* pName, 
+    const AxisChar* pNamespace)
+{
+    return m_pIWSDZ->getElementAsGYearMonth (pName, pNamespace);
+}
+
+xsd__gYear * Call::getElementAsGYear (const AxisChar* pName, 
+    const AxisChar* pNamespace)
+{
+    return m_pIWSDZ->getElementAsGYear (pName, pNamespace);
+}
+
+xsd__gMonthDay * Call::getElementAsGMonthDay (const AxisChar* pName, 
+    const AxisChar* pNamespace)
+{
+    return m_pIWSDZ->getElementAsGMonthDay (pName, pNamespace);
+}
+
+xsd__gDay * Call::getElementAsGDay (const AxisChar* pName, 
+    const AxisChar* pNamespace)
+{
+    return m_pIWSDZ->getElementAsGDay (pName, pNamespace);
+}
+
+xsd__gMonth * Call::getElementAsGMonth (const AxisChar* pName, 
+    const AxisChar* pNamespace)
+{
+    return m_pIWSDZ->getElementAsGMonth (pName, pNamespace);
+}
+
+xsd__nonPositiveInteger * Call::getElementAsNonPositiveInteger (const AxisChar* pName, 
+    const AxisChar* pNamespace)
+{
+    return m_pIWSDZ->getElementAsNonPositiveInteger (pName, pNamespace);
+}
+
+xsd__negativeInteger * Call::getElementAsNegativeInteger (const AxisChar* pName, 
+    const AxisChar* pNamespace)
+{
+    return m_pIWSDZ->getElementAsNegativeInteger (pName, pNamespace);
+}
+
+xsd__nonNegativeInteger * Call::getElementAsNonNegativeInteger (const AxisChar* pName, 
+    const AxisChar* pNamespace)
+{
+    return m_pIWSDZ->getElementAsNonNegativeInteger (pName, pNamespace);
+}
+
+xsd__positiveInteger * Call::getElementAsPositiveInteger (const AxisChar* pName, 
+    const AxisChar* pNamespace)
+{
+    return m_pIWSDZ->getElementAsPositiveInteger (pName, pNamespace);
+}
+
+xsd__normalizedString Call::getElementAsNormalizedString (const AxisChar* pName, 
+    const AxisChar* pNamespace)
+{
+    return m_pIWSDZ->getElementAsNormalizedString (pName, pNamespace);
+}
+
+xsd__token Call::getElementAsToken (const AxisChar* pName, 
+    const AxisChar* pNamespace)
+{
+    return m_pIWSDZ->getElementAsToken (pName, pNamespace);
+}
+
+xsd__language Call::getElementAsLanguage (const AxisChar* pName, 
+    const AxisChar* pNamespace)
+{
+    return m_pIWSDZ->getElementAsLanguage (pName, pNamespace);
+}
+
+xsd__Name Call::getElementAsName (const AxisChar* pName, 
+    const AxisChar* pNamespace)
+{
+    return m_pIWSDZ->getElementAsName (pName, pNamespace);
+}
+
+xsd__NCName Call::getElementAsNCName (const AxisChar* pName, 
+    const AxisChar* pNamespace)
+{
+    return m_pIWSDZ->getElementAsNCName (pName, pNamespace);
+}
+
+xsd__ID Call::getElementAsID (const AxisChar* pName, 
+    const AxisChar* pNamespace)
+{
+    return m_pIWSDZ->getElementAsID (pName, pNamespace);
+}
+
+xsd__IDREF Call::getElementAsIDREF (const AxisChar* pName, 
+    const AxisChar* pNamespace)
+{
+    return m_pIWSDZ->getElementAsIDREF (pName, pNamespace);
+}
+
+xsd__IDREFS Call::getElementAsIDREFS (const AxisChar* pName, 
+    const AxisChar* pNamespace)
+{
+    return m_pIWSDZ->getElementAsIDREFS (pName, pNamespace);
+}
+
+xsd__ENTITY Call::getElementAsENTITY (const AxisChar* pName, 
+    const AxisChar* pNamespace)
+{
+    return m_pIWSDZ->getElementAsENTITY (pName, pNamespace);
+}
+
+xsd__ENTITIES Call::getElementAsENTITIES (const AxisChar* pName, 
+    const AxisChar* pNamespace)
+{
+    return m_pIWSDZ->getElementAsENTITIES (pName, pNamespace);
+}
+
+xsd__NMTOKEN Call::getElementAsNMTOKEN (const AxisChar* pName, 
+    const AxisChar* pNamespace)
+{
+    return m_pIWSDZ->getElementAsNMTOKEN (pName, pNamespace);
+}
+
+xsd__NMTOKENS Call::getElementAsNMTOKENS (const AxisChar* pName, 
+    const AxisChar* pNamespace)
+{
+    return m_pIWSDZ->getElementAsNMTOKENS (pName, pNamespace);
+}
+
 xsd__int * Call::getAttributeAsInt (const AxisChar* pName, const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsInt (pName, pNamespace);
@@ -782,6 +908,138 @@ xsd__duration * Call::getAttributeAsDuration (const AxisChar* pName,
     const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsDuration (pName, pNamespace);
+}
+
+xsd__gYearMonth * Call::getAttributeAsGYearMonth (const AxisChar* pName,
+    const AxisChar* pNamespace)
+{
+    return m_pIWSDZ->getAttributeAsGYearMonth (pName, pNamespace);
+}
+
+xsd__gYear * Call::getAttributeAsGYear (const AxisChar* pName,
+    const AxisChar* pNamespace)
+{
+    return m_pIWSDZ->getAttributeAsGYear (pName, pNamespace);
+}
+
+xsd__gMonthDay * Call::getAttributeAsGMonthDay (const AxisChar* pName,
+    const AxisChar* pNamespace)
+{
+    return m_pIWSDZ->getAttributeAsGMonthDay (pName, pNamespace);
+}
+
+xsd__gDay * Call::getAttributeAsGDay (const AxisChar* pName,
+    const AxisChar* pNamespace)
+{
+    return m_pIWSDZ->getAttributeAsGDay (pName, pNamespace);
+}
+
+xsd__gMonth * Call::getAttributeAsGMonth (const AxisChar* pName,
+    const AxisChar* pNamespace)
+{
+    return m_pIWSDZ->getAttributeAsGMonth (pName, pNamespace);
+}
+
+xsd__notation Call::getAttributeAsNOTATION (const AxisChar* pName,
+    const AxisChar* pNamespace)
+{
+    return m_pIWSDZ->getAttributeAsNOTATION (pName, pNamespace);
+}
+
+xsd__normalizedString Call::getAttributeAsNormalizedString (const AxisChar* pName,
+    const AxisChar* pNamespace)
+{
+    return m_pIWSDZ->getAttributeAsNormalizedString (pName, pNamespace);
+}
+
+xsd__token Call::getAttributeAsToken (const AxisChar* pName,
+    const AxisChar* pNamespace)
+{
+    return m_pIWSDZ->getAttributeAsToken (pName, pNamespace);
+}
+
+xsd__language Call::getAttributeAsLanguage (const AxisChar* pName,
+    const AxisChar* pNamespace)
+{
+    return m_pIWSDZ->getAttributeAsLanguage (pName, pNamespace);
+}
+
+xsd__Name Call::getAttributeAsName (const AxisChar* pName,
+    const AxisChar* pNamespace)
+{
+    return m_pIWSDZ->getAttributeAsName (pName, pNamespace);
+}
+
+xsd__NCName Call::getAttributeAsNCName (const AxisChar* pName,
+    const AxisChar* pNamespace)
+{
+    return m_pIWSDZ->getAttributeAsNCName (pName, pNamespace);
+}
+
+xsd__ID Call::getAttributeAsID (const AxisChar* pName,
+    const AxisChar* pNamespace)
+{
+    return m_pIWSDZ->getAttributeAsID (pName, pNamespace);
+}
+
+xsd__IDREF Call::getAttributeAsIDREF (const AxisChar* pName,
+    const AxisChar* pNamespace)
+{
+    return m_pIWSDZ->getAttributeAsIDREF (pName, pNamespace);
+}
+
+xsd__IDREFS Call::getAttributeAsIDREFS (const AxisChar* pName,
+    const AxisChar* pNamespace)
+{
+    return m_pIWSDZ->getAttributeAsIDREFS (pName, pNamespace);
+}
+
+xsd__ENTITY Call::getAttributeAsENTITY (const AxisChar* pName,
+    const AxisChar* pNamespace)
+{
+    return m_pIWSDZ->getAttributeAsENTITY (pName, pNamespace);
+}
+
+xsd__ENTITIES Call::getAttributeAsENTITIES (const AxisChar* pName,
+    const AxisChar* pNamespace)
+{
+    return m_pIWSDZ->getAttributeAsENTITIES (pName, pNamespace);
+}
+
+xsd__NMTOKEN Call::getAttributeAsNMTOKEN (const AxisChar* pName,
+    const AxisChar* pNamespace)
+{
+    return m_pIWSDZ->getAttributeAsNMTOKEN (pName, pNamespace);
+}
+
+xsd__NMTOKENS Call::getAttributeAsNMTOKENS (const AxisChar* pName,
+    const AxisChar* pNamespace)
+{
+    return m_pIWSDZ->getAttributeAsNMTOKENS (pName, pNamespace);
+}
+
+xsd__nonPositiveInteger * Call::getAttributeAsNonPositiveInteger (const AxisChar* pName,
+    const AxisChar* pNamespace)
+{
+    return m_pIWSDZ->getAttributeAsNonPositiveInteger (pName, pNamespace);
+}
+
+xsd__negativeInteger * Call::getAttributeAsNegativeInteger (const AxisChar* pName,
+    const AxisChar* pNamespace)
+{
+    return m_pIWSDZ->getAttributeAsNegativeInteger (pName, pNamespace);
+}
+
+xsd__nonNegativeInteger * Call::getAttributeAsNonNegativeInteger (const AxisChar* pName,
+    const AxisChar* pNamespace)
+{
+    return m_pIWSDZ->getAttributeAsNonNegativeInteger (pName, pNamespace);
+}
+
+xsd__positiveInteger * Call::getAttributeAsPositiveInteger (const AxisChar* pName,
+    const AxisChar* pNamespace)
+{
+    return m_pIWSDZ->getAttributeAsPositiveInteger (pName, pNamespace);
 }
 
 int Call::checkMessage (const AxisChar* pName, const AxisChar* pNamespace)

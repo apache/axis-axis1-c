@@ -34,9 +34,26 @@ XSDTYPE Token::getType()
     return XSD_TOKEN;
 }
 
-AxisChar* Token::deserializeToken(const AxisChar* valueAsChar) throw (AxisSoapException)
+xsd__token Token::getToken()
 {
-    return (AxisChar*) deserialize(valueAsChar);
+    if (isNil())
+    {
+        return NULL;
+    }
+    else
+    {
+        return deserializeToken(m_Buf);
+    }
+}
+
+void * Token::getValue()
+{
+    return (void*) getToken();
+}
+
+xsd__token Token::deserializeToken(const AxisChar* valueAsChar) throw (AxisSoapException)
+{
+    return (xsd__token) deserializeNormalizedString(valueAsChar);
 }
 
 WhiteSpace* Token::getWhiteSpace()

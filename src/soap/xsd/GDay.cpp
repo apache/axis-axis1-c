@@ -17,11 +17,11 @@
 
 AXIS_CPP_NAMESPACE_START
 
-    GDay::GDay():m_GDay(NULL)
+    GDay::GDay()
     {
     }
 
-    GDay::GDay(const xsd__gDay* value):m_GDay(NULL)
+    GDay::GDay(const xsd__gDay* value)
     {
         if (value)
         {
@@ -35,12 +35,24 @@ AXIS_CPP_NAMESPACE_START
         return XSD_DAY;
     }
 
-    void* GDay::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
+    xsd__gDay* GDay::getGDay()
     {
-       return (void*) deserializeGDay(valueAsChar);
+        if (isNil())
+        {
+            return NULL;
+        }
+        else
+        {
+            return deserializeGDay(m_Buf);
+        }
     }
-   
-    AxisChar* GDay::serialize(const struct tm* value) throw (AxisSoapException)
+
+    void * GDay::getValue()
+    {
+        return (void*) getGDay();
+    }
+
+    AxisChar* GDay::serialize(const xsd__gDay* value) throw (AxisSoapException)
     {
         MinInclusive* minInclusive = getMinInclusive();
         if (minInclusive->isSet())
@@ -180,7 +192,7 @@ AXIS_CPP_NAMESPACE_START
         return m_Buf;
     }
   
-    struct tm* GDay::deserializeGDay(const AxisChar* valueAsChar) throw (AxisSoapException)
+    xsd__gDay* GDay::deserializeGDay(const AxisChar* valueAsChar) throw (AxisSoapException)
     {
       struct tm value;
       struct tm *pTm;
@@ -303,14 +315,10 @@ AXIS_CPP_NAMESPACE_START
         }
 
         pTm -= 70; // Take off the 70 offset we added initially
-        if(m_GDay)
-        {
-            delete m_GDay;
-            m_GDay = NULL;
-        }
-        m_GDay = new struct tm;
-        memcpy (m_GDay, pTm, sizeof (tm));
-        return m_GDay;
+
+        xsd__gDay * returnValue = new struct tm;
+        memcpy (returnValue, pTm, sizeof (tm));
+        return returnValue;
  }
 
     MinInclusive* GDay::getMinInclusive()

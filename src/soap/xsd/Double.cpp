@@ -17,11 +17,11 @@
 
 AXIS_CPP_NAMESPACE_START
 
-Double::Double():m_Double(NULL)
+Double::Double()
 {
 }
 
-Double::Double(const xsd__double* value):m_Double(NULL)
+Double::Double(const xsd__double* value)
 {
     if (value)
     {
@@ -35,11 +35,22 @@ XSDTYPE Double::getType()
     return XSD_DOUBLE;
 }
 
-void* Double::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
+xsd__double* Double::getDouble()
 {
-	return (void*) deserializeDouble(valueAsChar);
+    if (isNil())
+    {
+        return NULL;
+    }
+    else
+    {
+        return deserializeDouble(m_Buf);
+    }
 }
 
+void * Double::getValue()
+{
+    return (void*) getDouble();
+}
 
 AxisChar* Double::serialize(const xsd__double* value) throw (AxisSoapException)
 {
@@ -145,15 +156,10 @@ xsd__double* Double::deserializeDouble(const AxisChar* valueAsChar) throw (AxisS
 {
 	AxisChar* end;
    
-    if (m_Double)
-    {
-        delete m_Double;
-        m_Double = NULL;
-    }
-	m_Double = new xsd__double;
-	*m_Double = strtod (valueAsChar, &end);
+	xsd__double * value = new xsd__double;
+	*value = strtod (valueAsChar, &end);
 	
-	return m_Double;
+	return value;
 }
 
 WhiteSpace* Double::getWhiteSpace()

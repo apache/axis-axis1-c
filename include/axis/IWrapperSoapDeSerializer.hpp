@@ -100,7 +100,48 @@ public:
         const AxisChar* pNamespace)=0;
     virtual xsd__duration * AXISCALL getElementAsDuration(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
-
+    virtual xsd__gYearMonth * AXISCALL getElementAsGYearMonth(const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
+    virtual xsd__gYear * AXISCALL getElementAsGYear(const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
+    virtual xsd__gMonthDay * AXISCALL getElementAsGMonthDay(const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
+    virtual xsd__gDay * AXISCALL getElementAsGDay(const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
+    virtual xsd__gMonth * AXISCALL getElementAsGMonth(const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
+    virtual xsd__nonPositiveInteger * AXISCALL getElementAsNonPositiveInteger(const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
+    virtual xsd__negativeInteger * AXISCALL getElementAsNegativeInteger(const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
+    virtual xsd__nonNegativeInteger * AXISCALL getElementAsNonNegativeInteger(const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
+    virtual xsd__positiveInteger * AXISCALL getElementAsPositiveInteger(const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
+    virtual xsd__normalizedString AXISCALL getElementAsNormalizedString(const AxisChar* pName,
+        const AxisChar* pNamespace)=0;
+    virtual xsd__token AXISCALL getElementAsToken(const AxisChar* pName,
+        const AxisChar* pNamespace)=0;
+    virtual xsd__language AXISCALL getElementAsLanguage(const AxisChar* pName,
+        const AxisChar* pNamespace)=0;
+    virtual xsd__Name AXISCALL getElementAsName(const AxisChar* pName,
+        const AxisChar* pNamespace)=0;
+    virtual xsd__NCName AXISCALL getElementAsNCName(const AxisChar* pName,
+        const AxisChar* pNamespace)=0;
+    virtual xsd__ID AXISCALL getElementAsID(const AxisChar* pName,
+        const AxisChar* pNamespace)=0;
+    virtual xsd__IDREF AXISCALL getElementAsIDREF(const AxisChar* pName,
+        const AxisChar* pNamespace)=0;
+    virtual xsd__IDREFS AXISCALL getElementAsIDREFS(const AxisChar* pName,
+        const AxisChar* pNamespace)=0;
+    virtual xsd__ENTITY AXISCALL getElementAsENTITY(const AxisChar* pName,
+        const AxisChar* pNamespace)=0;
+    virtual xsd__ENTITIES AXISCALL getElementAsENTITIES(const AxisChar* pName,
+        const AxisChar* pNamespace)=0;
+    virtual xsd__NMTOKEN AXISCALL getElementAsNMTOKEN(const AxisChar* pName,
+        const AxisChar* pNamespace)=0;
+    virtual xsd__NMTOKENS AXISCALL getElementAsNMTOKENS(const AxisChar* pName,
+        const AxisChar* pNamespace)=0;
 
     virtual xsd__int * AXISCALL getAttributeAsInt(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
@@ -120,6 +161,14 @@ public:
         const AxisChar* pNamespace)=0;
     virtual xsd__integer * AXISCALL getAttributeAsInteger(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
+    virtual xsd__nonPositiveInteger * AXISCALL getAttributeAsNonPositiveInteger(const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
+    virtual xsd__negativeInteger * AXISCALL getAttributeAsNegativeInteger(const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
+    virtual xsd__nonNegativeInteger * AXISCALL getAttributeAsNonNegativeInteger(const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
+    virtual xsd__positiveInteger * AXISCALL getAttributeAsPositiveInteger(const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
     virtual xsd__unsignedLong * AXISCALL getAttributeAsUnsignedLong(const AxisChar* 
         pName, const AxisChar* pNamespace)=0;
     virtual xsd__float * AXISCALL getAttributeAsFloat(const AxisChar* pName, 
@@ -128,7 +177,33 @@ public:
         const AxisChar* pNamespace)=0;
     virtual xsd__decimal * AXISCALL getAttributeAsDecimal(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
+    virtual xsd__notation AXISCALL getAttributeAsNOTATION(const AxisChar* pName,
+        const AxisChar* pNamespace)=0;
     virtual xsd__string AXISCALL getAttributeAsString(const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
+    virtual xsd__normalizedString AXISCALL getAttributeAsNormalizedString(const AxisChar* pName,
+        const AxisChar* pNamespace)=0;
+    virtual xsd__token AXISCALL getAttributeAsToken(const AxisChar* pName,
+        const AxisChar* pNamespace)=0;
+    virtual xsd__language AXISCALL getAttributeAsLanguage(const AxisChar* pName,
+        const AxisChar* pNamespace)=0;
+    virtual xsd__NMTOKEN AXISCALL getAttributeAsNMTOKEN(const AxisChar* pName,
+        const AxisChar* pNamespace)=0;
+    virtual xsd__NMTOKENS AXISCALL getAttributeAsNMTOKENS(const AxisChar* pName,
+        const AxisChar* pNamespace)=0;
+    virtual xsd__Name AXISCALL getAttributeAsName(const AxisChar* pName,
+        const AxisChar* pNamespace)=0;
+    virtual xsd__NCName AXISCALL getAttributeAsNCName(const AxisChar* pName,
+        const AxisChar* pNamespace)=0;
+    virtual xsd__ID AXISCALL getAttributeAsID(const AxisChar* pName,
+        const AxisChar* pNamespace)=0;
+    virtual xsd__IDREF AXISCALL getAttributeAsIDREF(const AxisChar* pName,
+        const AxisChar* pNamespace)=0;
+    virtual xsd__IDREFS AXISCALL getAttributeAsIDREFS(const AxisChar* pName,
+        const AxisChar* pNamespace)=0;
+    virtual xsd__ENTITY AXISCALL getAttributeAsENTITY(const AxisChar* pName,
+        const AxisChar* pNamespace)=0;
+    virtual xsd__ENTITIES AXISCALL getAttributeAsENTITIES(const AxisChar* pName,
         const AxisChar* pNamespace)=0;
     virtual xsd__anyURI AXISCALL getAttributeAsAnyURI(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
@@ -143,6 +218,16 @@ public:
     virtual xsd__date * AXISCALL getAttributeAsDate(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
     virtual xsd__time * AXISCALL getAttributeAsTime(const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
+    virtual xsd__gDay * AXISCALL getAttributeAsGDay(const AxisChar* pName,
+        const AxisChar* pNamespace)=0;
+    virtual xsd__gMonth * AXISCALL getAttributeAsGMonth(const AxisChar* pName,
+        const AxisChar* pNamespace)=0;
+    virtual xsd__gMonthDay * AXISCALL getAttributeAsGMonthDay(const AxisChar* pName,
+        const AxisChar* pNamespace)=0;
+    virtual xsd__gYear * AXISCALL getAttributeAsGYear(const AxisChar* pName,
+        const AxisChar* pNamespace)=0;
+    virtual xsd__gYearMonth * AXISCALL getAttributeAsGYearMonth(const AxisChar* pName,
         const AxisChar* pNamespace)=0;
     virtual xsd__duration * AXISCALL getAttributeAsDuration(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;

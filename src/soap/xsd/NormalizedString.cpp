@@ -34,9 +34,26 @@ XSDTYPE NormalizedString::getType()
     return XSD_NORMALIZEDSTRING;
 }
 
-AxisChar* NormalizedString::deserializeNormalizedString(const AxisChar* valueAsChar) throw (AxisSoapException)
+xsd__normalizedString NormalizedString::getNormalizedString()
 {
-    return (AxisChar*) deserialize(valueAsChar);
+    if (isNil())
+    {
+        return NULL;
+    }
+    else
+    {
+        return deserializeNormalizedString(m_Buf);
+    }
+}
+
+void * NormalizedString::getValue()
+{
+    return (void*) getNormalizedString();
+}
+
+xsd__normalizedString NormalizedString::deserializeNormalizedString(const AxisChar* valueAsChar) throw (AxisSoapException)
+{
+    return (xsd__normalizedString) deserializeString(valueAsChar);
 }
 
 WhiteSpace* NormalizedString::getWhiteSpace()

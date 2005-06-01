@@ -50,11 +50,25 @@ public:
     XSDTYPE getType();
 
     /**
+     * Get the deserialized value.
+     * @return Deserialized value. Note: it is the responsibility of the calling code to delete this value!
+     */
+    xsd__ID getID();
+
+    /**
+     * Get the deserialized value
+     * @return the deserialized value. Note: it is the responsibility of the calling code to delete this value!
+     */
+    void* getValue();
+
+protected:
+
+    /**
      * Deserialized ID value from it's on-the-wire string form.
      * @param valueAsChar Serialized form of ID value.
-     * @return Deserialized ID value.
+     * @return Deserialized ID value. Note: it is the responsibility of the calling code to delete this value!
      */
- AxisChar* deserializeID(const AxisChar* valueAsChar) throw (AxisSoapException);
+    xsd__ID deserializeID(const AxisChar* valueAsChar) throw (AxisSoapException);
 };
 
 AXIS_CPP_NAMESPACE_END

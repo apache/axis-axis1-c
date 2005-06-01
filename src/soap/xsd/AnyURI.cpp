@@ -17,11 +17,11 @@
 
 AXIS_CPP_NAMESPACE_START
 
-    AnyURI::AnyURI():m_AnyURI(NULL)
+    AnyURI::AnyURI()
     {
     }
 
-    AnyURI::AnyURI(const xsd__anyURI value):m_AnyURI(NULL)
+    AnyURI::AnyURI(const xsd__anyURI value)
     {
         if (value)
         {
@@ -35,11 +35,23 @@ AXIS_CPP_NAMESPACE_START
         return XSD_ANYURI;
     }
 
-    void* AnyURI::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
+    xsd__anyURI AnyURI::getAnyURI()
     {
-    	return (void*) deserializeAnyURI(valueAsChar);
+        if (isNil())
+        {
+            return NULL;
+        }
+        else
+        {
+            return deserializeAnyURI(m_Buf);
+        }
     }
-	
+
+    void * AnyURI::getValue()
+    {
+        return (void*) getAnyURI();
+    }
+
     AxisChar* AnyURI::serialize(const xsd__anyURI value) throw (AxisSoapException)
     {
         MinLength* minLength= getMinLength();
@@ -116,16 +128,11 @@ AXIS_CPP_NAMESPACE_START
 		return m_Buf;
     }
 	
-    AxisChar* AnyURI::deserializeAnyURI(const AxisChar* valueAsChar) throw (AxisSoapException)
+    xsd__anyURI AnyURI::deserializeAnyURI(const AxisChar* valueAsChar) throw (AxisSoapException)
     {
-        if (m_AnyURI)
-        {
-            delete [] m_AnyURI;
-            m_AnyURI = NULL;
-        }
-		m_AnyURI = new char[strlen (valueAsChar) + 1];
-		strcpy (m_AnyURI, valueAsChar);
-		return m_AnyURI;
+        xsd__anyURI value = new char[strlen (valueAsChar) + 1];
+		strcpy (value, valueAsChar);
+		return value;
     }
 
     WhiteSpace* AnyURI::getWhiteSpace()

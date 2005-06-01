@@ -48,13 +48,27 @@ public:
      * @return the xsd type of this simple type
      */
     XSDTYPE getType();
+
+    /**
+     * Get the deserialized value.
+     * @return Deserialized value. Note: it is the responsibility of the calling code to delete this value!
+     */
+    xsd__NMTOKEN getNMTOKEN();
+
+    /**
+     * Get the deserialized value
+     * @return the deserialized value. Note: it is the responsibility of the calling code to delete this value!
+     */
+    void* getValue();
+
+protected:
     
     /**
      * Deserialized NMTOKEN value from it's on-the-wire string form.
      * @param valueAsChar Serialized form of NMTOKEN value.
-     * @return Deserialized NMTOKEN value.
+     * @return Deserialized NMTOKEN value. Note: it is the responsibility of the calling code to delete this value!
      */
- AxisChar* deserializeNMTOKEN(const AxisChar* valueAsChar) throw (AxisSoapException);
+    xsd__NMTOKEN deserializeNMTOKEN(const AxisChar* valueAsChar) throw (AxisSoapException);
 };
 
 AXIS_CPP_NAMESPACE_END

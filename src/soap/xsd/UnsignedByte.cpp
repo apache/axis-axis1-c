@@ -17,11 +17,11 @@
 
 AXIS_CPP_NAMESPACE_START
 
-UnsignedByte::UnsignedByte():m_UnsignedByte(NULL)
+UnsignedByte::UnsignedByte()
 {
 }
 
-UnsignedByte::UnsignedByte(const xsd__unsignedByte* value):m_UnsignedByte(NULL)
+UnsignedByte::UnsignedByte(const xsd__unsignedByte* value)
 {
     if (value)
     {
@@ -39,9 +39,21 @@ XSDTYPE UnsignedByte::getType()
     return XSD_UNSIGNEDBYTE;
 }
 
-void* UnsignedByte::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
+xsd__unsignedByte* UnsignedByte::getUnsignedByte()
 {
-    return (void*) deserializeUnsignedByte(valueAsChar);
+    if (isNil())
+    {
+        return NULL;
+    }
+    else
+    {
+        return deserializeUnsignedByte(m_Buf);
+    }
+}
+
+void * UnsignedByte::getValue()
+{
+    return (void*) getUnsignedByte();
 }
 
 AxisChar* UnsignedByte::serialize(const xsd__unsignedByte* value) throw (AxisSoapException)
@@ -54,14 +66,10 @@ xsd__unsignedByte* UnsignedByte::deserializeUnsignedByte(const AxisChar* valueAs
 {
     xsd__unsignedShort* returnValue = UnsignedShort::deserializeUnsignedShort(valueAsChar);
  
-    if(m_UnsignedByte)
-    {
-        delete m_UnsignedByte;
-        m_UnsignedByte = NULL;
-    }
-    m_UnsignedByte = new xsd__unsignedByte;
-    *m_UnsignedByte = static_cast<xsd__unsignedByte> (*returnValue);
-    return m_UnsignedByte;
+    xsd__unsignedByte * value = new xsd__unsignedByte;
+    *value = static_cast<xsd__unsignedByte> (*returnValue);
+    delete returnValue;
+    return value;
 }
 
 MaxInclusive* UnsignedByte::getMaxInclusive()

@@ -33,6 +33,11 @@ class Language : public Token {
 public:
 
     /**
+     * Constructor
+     */
+    Language();
+
+    /**
      * Constructor providing a value for later serialization
      * @param value The value to be serialized
      */
@@ -45,11 +50,25 @@ public:
     XSDTYPE getType();
 
     /**
+     * Get the deserialized value.
+     * @return Deserialized value. Note: it is the responsibility of the calling code to delete this value!
+     */
+    xsd__language getLanguage();
+
+    /**
+     * Get the deserialized value
+     * @return the deserialized value. Note: it is the responsibility of the calling code to delete this value!
+     */
+    void* getValue();
+
+protected:
+
+    /**
      * Deserialized Language value from it's on-the-wire string form.
      * @param valueAsChar Serialized form of Language value.
-     * @return Deserialized Language value.
+     * @return Deserialized Language value. Note: it is the responsibility of the calling code to delete this value!
      */
- AxisChar* deserializeLanguage(const AxisChar* valueAsChar) throw (AxisSoapException);
+    xsd__language deserializeLanguage(const AxisChar* valueAsChar) throw (AxisSoapException);
 };
 
 AXIS_CPP_NAMESPACE_END

@@ -55,20 +55,25 @@ public:
     XSDTYPE getType();
 
     /**
-     * Deserialize value from it's on-the-wire string form.
-     * @param valueAsChar Serialized form of value.
-     * @return Deserialized value.
+     * Get the deserialized value.
+     * @return Deserialized value. Note: it is the responsibility of the calling code to delete this value!
      */
-    void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException);
-    
-  /**
-   * Deserialized NonPositiveInteger value from it's on-the-wire string form.
-   * @param valueAsChar Serialized form of NonPositiveInteger value.
-   * @return Deserialized NonPositiveInteger value.
-   */
-    xsd__nonPositiveInteger* deserializeNonPositiveInteger(const AxisChar* valueAsChar) throw (AxisSoapException);
+    xsd__nonPositiveInteger* getNonPositiveInteger();
+
+    /**
+     * Get the deserialized value
+     * @return the deserialized value. Note: it is the responsibility of the calling code to delete this value!
+     */
+    void* getValue();
 
 protected:
+
+    /**
+     * Deserialized NonPositiveInteger value from it's on-the-wire string form.
+     * @param valueAsChar Serialized form of NonPositiveInteger value.
+     * @return Deserialized NonPositiveInteger value. Note: it is the responsibility of the calling code to delete this value!
+     */
+    xsd__nonPositiveInteger* deserializeNonPositiveInteger(const AxisChar* valueAsChar) throw (AxisSoapException);
 
     /**
      * Serialize NonPositiveInteger value to it's on-the-wire string form.
@@ -83,10 +88,6 @@ protected:
      * @return MaxInclusive object
      */
     virtual MaxInclusive* getMaxInclusive();
-
-private:
-   xsd__nonPositiveInteger* m_NonPositiveInteger;
-
 };
 
 AXIS_CPP_NAMESPACE_END

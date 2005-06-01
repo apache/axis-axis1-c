@@ -51,22 +51,27 @@ public:
      * @return the xsd type of this simple type
      */
     XSDTYPE getType();
-    
-	/**
-	 * Deserialize value from it's on-the-wire string form.
-	 * @param valueAsChar Serialized form of value.
-	 * @return Deserialized value.
-	 */
-    void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException);
-	
-	/**
-	 * Deserialized AnyURI value from it's on-the-wire string form.
-	 * @param valueAsChar Serialized form of AnyURI value.
-	 * @return Deserialized AnyURI value.
-	 */
-    xsd__anyURI deserializeAnyURI(const AxisChar* valueAsChar) throw (AxisSoapException);
 
+    /**
+     * Get the deserialized value.
+     * @return Deserialized value. Note: it is the responsibility of the calling code to delete this value!
+     */
+    xsd__anyURI getAnyURI();
+
+    /**
+     * Get the deserialized value
+     * @return the deserialized value. Note: it is the responsibility of the calling code to delete this value!
+     */
+    void* getValue();
+    
 protected:
+
+    /**
+     * Deserialized AnyURI value from it's on-the-wire string form.
+     * @param valueAsChar Serialized form of AnyURI value.
+     * @return Deserialized AnyURI value. Note: it is the responsibility of the calling code to delete this value!
+     */
+    xsd__anyURI deserializeAnyURI(const AxisChar* valueAsChar) throw (AxisSoapException);
 
     /**
      * Serialize AnyURI value to it's on-the-wire string form.
@@ -101,9 +106,6 @@ protected:
      * @return An unset Length object
      */
     Length* getLength();
-    
-private:
-    xsd__anyURI m_AnyURI;
 };
 
 AXIS_CPP_NAMESPACE_END

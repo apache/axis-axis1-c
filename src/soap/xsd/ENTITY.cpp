@@ -34,9 +34,26 @@ XSDTYPE ENTITY::getType()
     return XSD_ENTITY;
 }
 
-AxisChar* ENTITY::deserializeENTITY(const AxisChar* valueAsChar) throw (AxisSoapException)
+xsd__ENTITY ENTITY::getENTITY()
 {
-    return (AxisChar*) deserialize(valueAsChar);
+    if (isNil())
+    {
+        return NULL;
+    }
+    else
+    {
+        return deserializeENTITY(m_Buf);
+    }
+}
+
+void * ENTITY::getValue()
+{
+    return (void*) getENTITY();
+}
+
+xsd__ENTITY ENTITY::deserializeENTITY(const AxisChar* valueAsChar) throw (AxisSoapException)
+{
+    return (xsd__ENTITY) deserializeNCName(valueAsChar);
 }
 
 AXIS_CPP_NAMESPACE_END

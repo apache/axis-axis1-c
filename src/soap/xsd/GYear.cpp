@@ -17,11 +17,11 @@
 
 AXIS_CPP_NAMESPACE_START
 
-    GYear::GYear():m_GYear(NULL)
+    GYear::GYear()
     {
     }
 
-    GYear::GYear(const xsd__gYear* value):m_GYear(NULL)
+    GYear::GYear(const xsd__gYear* value)
     {
         if (value)
         {
@@ -34,13 +34,25 @@ AXIS_CPP_NAMESPACE_START
     {
         return XSD_YEAR;
     }
-  
-    void* GYear::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
+
+    xsd__gYear* GYear::getGYear()
     {
-       return (void*) deserializeGYear(valueAsChar);
+        if (isNil())
+        {
+            return NULL;
+        }
+        else
+        {
+            return deserializeGYear(m_Buf);
+        }
     }
-   
-    AxisChar* GYear::serialize(const struct tm* value) throw (AxisSoapException)
+
+    void * GYear::getValue()
+    {
+        return (void*) getGYear();
+    }
+  
+    AxisChar* GYear::serialize(const xsd__gYear* value) throw (AxisSoapException)
     {
         MinInclusive* minInclusive = getMinInclusive();
         if (minInclusive->isSet())
@@ -181,7 +193,7 @@ AXIS_CPP_NAMESPACE_START
         return m_Buf;        
     }
   
-    struct tm* GYear::deserializeGYear(const AxisChar* valueAsChar) throw (AxisSoapException)
+    xsd__gYear* GYear::deserializeGYear(const AxisChar* valueAsChar) throw (AxisSoapException)
     {
       struct tm value;
       struct tm *pTm;
@@ -303,14 +315,9 @@ AXIS_CPP_NAMESPACE_START
             pTm = localtime (&timeInSecs);
         }
         
-        if(m_GYear)
-        {
-            delete m_GYear;
-            m_GYear = NULL;
-        }
-        m_GYear = new struct tm;
-        memcpy (m_GYear, pTm, sizeof (tm));
-        return m_GYear;
+        xsd__gYear * returnValue = new xsd__gYear;
+        memcpy (returnValue, pTm, sizeof (tm));
+        return returnValue;
  }
 
     MinInclusive* GYear::getMinInclusive()

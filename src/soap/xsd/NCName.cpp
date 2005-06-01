@@ -34,9 +34,26 @@ XSDTYPE NCName::getType()
     return XSD_NCNAME;
 }
 
-AxisChar* NCName::deserializeNCName(const AxisChar* valueAsChar) throw (AxisSoapException)
+xsd__NCName NCName::getNCName()
 {
-    return (AxisChar*) deserialize(valueAsChar);
+    if (isNil())
+    {
+        return NULL;
+    }
+    else
+    {
+        return deserializeNCName(m_Buf);
+    }
+}
+
+void * NCName::getValue()
+{
+    return (void*) getNCName();
+}
+
+xsd__NCName NCName::deserializeNCName(const AxisChar* valueAsChar) throw (AxisSoapException)
+{
+    return (xsd__NCName) deserializeName(valueAsChar);
 }
 
 AXIS_CPP_NAMESPACE_END

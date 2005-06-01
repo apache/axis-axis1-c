@@ -17,7 +17,7 @@
 
 AXIS_CPP_NAMESPACE_START
 
-    HexBinary::HexBinary():m_HexBinary(NULL)
+    HexBinary::HexBinary()
     {
     }
 
@@ -25,7 +25,7 @@ AXIS_CPP_NAMESPACE_START
     {
     }
 
-    HexBinary::HexBinary(const xsd__hexBinary* value):m_HexBinary(NULL)
+    HexBinary::HexBinary(const xsd__hexBinary* value)
     {
         if (value)
         {
@@ -38,12 +38,24 @@ AXIS_CPP_NAMESPACE_START
     {
         return XSD_HEXBINARY;
     }
-    
-    void* HexBinary::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
+
+    xsd__hexBinary* HexBinary::getHexBinary()
     {
-    	return (void*) deserializeHexBinary(valueAsChar);
+        if (isNil())
+        {
+            return NULL;
+        }
+        else
+        {
+            return deserializeHexBinary(m_Buf);
+        }
     }
-	
+
+    void * HexBinary::getValue()
+    {
+        return (void*) getHexBinary();
+    }    
+
     AxisChar* HexBinary::serialize(const xsd__hexBinary * value) throw (AxisSoapException)
     {
         MinLength* minLength= getMinLength();
@@ -123,22 +135,16 @@ AXIS_CPP_NAMESPACE_START
 	
     xsd__hexBinary * HexBinary::deserializeHexBinary(const AxisChar* valueAsChar) throw (AxisSoapException)
     {
-        if (m_HexBinary) // Samisa : memory management BP
-        {
-            delete [] m_HexBinary;
-            m_HexBinary = NULL;
-        }
-
-    	m_HexBinary = new xsd__hexBinary();    	
-	    m_HexBinary->__size = strlen (valueAsChar) / 2;
-	    m_HexBinary->__ptr = new unsigned char[m_HexBinary->__size + 1];
-	    Hex_Decode (m_HexBinary->__ptr, valueAsChar);
+    	xsd__hexBinary * value = new xsd__hexBinary();    	
+	    value->__size = strlen (valueAsChar) / 2;
+	    value->__ptr = new unsigned char[value->__size + 1];
+	    Hex_Decode (value->__ptr, valueAsChar);
 	    /* put null at the end because it enables the decoded string to be used
 	     * as a string 
 	     */
-	    m_HexBinary->__ptr[m_HexBinary->__size] = 0;
+	    value->__ptr[value->__size] = 0;
 
-	    return m_HexBinary;
+	    return value;
     }
 
     MinLength* HexBinary::getMinLength()

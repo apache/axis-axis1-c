@@ -59,21 +59,26 @@ public:
      */
     XSDTYPE getType();
 
-	/**
-	 * Deserialize value from it's on-the-wire string form.
-	 * @param valueAsChar Serialized form of value.
-	 * @return Deserialized value.
-	 */
-    void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException);
-	
+    /**
+     * Get the deserialized value.
+     * @return Deserialized value. Note: it is the responsibility of the calling code to delete this value!
+     */
+    xsd__hexBinary* getHexBinary();
+
+    /**
+     * Get the deserialized value
+     * @return the deserialized value. Note: it is the responsibility of the calling code to delete this value!
+     */
+    void* getValue();
+
+protected:
+    
 	/**
 	 * Deserialized HexBinary value from it's on-the-wire string form.
 	 * @param valueAsChar Serialized form of HexBinary value.
-	 * @return Deserialized HexBinary value.
+	 * @return Deserialized HexBinary value. Note: it is the responsibility of the calling code to delete this value!
 	 */
     xsd__hexBinary * deserializeHexBinary(const AxisChar* valueAsChar) throw (AxisSoapException);
-
-protected:
 
     /**
      * Serialize HexBinary value to it's on-the-wire string form.
@@ -102,9 +107,6 @@ protected:
      * @return An unset Length object
      */
     Length* getLength();
-
-private:
-	xsd__hexBinary * m_HexBinary;
 };
 
 AXIS_CPP_NAMESPACE_END

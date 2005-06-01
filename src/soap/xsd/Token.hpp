@@ -50,13 +50,26 @@ public:
     XSDTYPE getType();
 
     /**
-     * Deserialized Token value from it's on-the-wire string form.
-     * @param valueAsChar Serialized form of Token value.
-     * @return Deserialized Token value.
+     * Get the deserialized value
+     * @return the deserialized value. Note: it is the responsibility of the calling code to delete this value!
      */
- AxisChar* deserializeToken(const AxisChar* valueAsChar) throw (AxisSoapException);
+    void* getValue();
+
+    /**
+     * Get the deserialized value.
+     * @return Deserialized value. Note: it is the responsibility of the calling code to delete this value!
+     */
+    xsd__token getToken();
 
 protected:
+
+    /**
+     * Deserialized Token value from it's on-the-wire string form.
+     * @param valueAsChar Serialized form of Token value.
+     * @return Deserialized Token value. Note: it is the responsibility of the calling code to delete this value!
+     */
+    xsd__token deserializeToken(const AxisChar* valueAsChar) throw (AxisSoapException);
+
     /**
      * Creates a WhiteSpace object to replace whitespace
      * @return WhiteSpace object set to collapse whitespace

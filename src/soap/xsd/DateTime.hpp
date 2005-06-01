@@ -59,21 +59,27 @@ public:
      */
     XSDTYPE getType();
 
-	/**
-	 * Deserialize value from it's on-the-wire string form.
-	 * @param valueAsChar Serialized form of value.
-	 * @return Deserialized value.
-	 */
-    void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException);
-	
-	/**
-	 * Deserialized DateTime value from it's on-the-wire string form.
-	 * @param valueAsChar Serialized form of DateTime value.
-	 * @return Deserialized Date value.
-	 */
-    xsd__dateTime* deserializeDateTime(const AxisChar* valueAsChar) throw (AxisSoapException);
+    /**
+     * Get the deserialized value.
+     * @return Deserialized value. Note: it is the responsibility of the calling code to delete this value!
+     */
+    xsd__dateTime* getDateTime();
+
+    /**
+     * Get the deserialized value
+     * @return the deserialized value. Note: it is the responsibility of the calling code to delete this value!
+     */
+    void* getValue();
 
 protected:
+
+    /**
+     * Deserialized DateTime value from it's on-the-wire string form.
+     * @param valueAsChar Serialized form of DateTime value.
+     * @return Deserialized Date value. Note: it is the responsibility of the calling code to delete this value!
+     */
+    xsd__dateTime* deserializeDateTime(const AxisChar* valueAsChar) throw (AxisSoapException);
+
 
     /**
      * Serialize DateTime value to it's on-the-wire string form.
@@ -115,9 +121,6 @@ protected:
      * @return WhiteSpace object set to collapse whitespace
      */
     WhiteSpace* getWhiteSpace();
-
-private:
-	xsd__dateTime* m_DateTime;
 };
 
 AXIS_CPP_NAMESPACE_END

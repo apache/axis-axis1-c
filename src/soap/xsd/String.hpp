@@ -53,20 +53,25 @@ public:
     XSDTYPE getType();
 
     /**
-     * Deserialize value from it's on-the-wire string form.
-     * @param valueAsChar Serialized form of value.
-     * @return Deserialized value.
+     * Get the deserialized value.
+     * @return Deserialized value. Note: it is the responsibility of the calling code to delete this value!
      */
-	void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException);
+    xsd__string getString();
+
+    /**
+     * Get the deserialized value
+     * @return the deserialized value. Note: it is the responsibility of the calling code to delete this value!
+     */
+    void* getValue();
+
+protected:
 
     /**
      * Deserialized String value from it's on-the-wire string form.
      * @param valueAsChar Serialized form of String value.
-     * @return Deserialized String value.
+     * @return Deserialized String value. Note: it is the responsibility of the calling code to delete this value!
      */
 	xsd__string deserializeString(const AxisChar* valueAsChar) throw (AxisSoapException);
-
-protected:
 
     /**
      * Serialize String value to it's on-the-wire string form.
@@ -95,9 +100,6 @@ protected:
      * @return An unset Length object
      */
     Length* getLength();
-
-private:
-    xsd__string m_String;
 };
 
 AXIS_CPP_NAMESPACE_END

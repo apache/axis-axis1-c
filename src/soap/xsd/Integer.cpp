@@ -17,7 +17,7 @@
 
 AXIS_CPP_NAMESPACE_START
 
-Integer::Integer():m_Integer(NULL)
+Integer::Integer()
 {
 }
 
@@ -25,7 +25,7 @@ Integer::~Integer()
 {
 }
 
-Integer::Integer(const xsd__integer* value):m_Integer(NULL)
+Integer::Integer(const xsd__integer* value)
 {
     if (value)
     {
@@ -39,11 +39,22 @@ XSDTYPE Integer::getType()
     return XSD_INTEGER;
 }
 
-void* Integer::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
+xsd__integer* Integer::getInteger()
 {
-   return (void*) deserializeInteger(valueAsChar);
+    if (isNil())
+    {
+        return NULL;
+    }
+    else
+    {
+        return deserializeInteger(m_Buf);
+    }
 }
 
+void * Integer::getValue()
+{
+    return (void*) getInteger();
+}
 
 AxisChar* Integer::serialize(const xsd__integer* value) throw (AxisSoapException)
 {
@@ -163,15 +174,10 @@ xsd__integer* Integer::deserializeInteger(const AxisChar* valueAsChar) throw (Ax
 {
     AxisChar* end;
     
-    if(m_Integer)
-    {
-        delete m_Integer;
-        m_Integer = NULL;
-    }
-    m_Integer = new xsd__integer;
-    *m_Integer = strtol (valueAsChar, &end, 10);
+    xsd__integer * value = new xsd__integer;
+    *value = strtol (valueAsChar, &end, 10);
   
-    return m_Integer;
+    return value;
 }
 
 FractionDigits* Integer::getFractionDigits()

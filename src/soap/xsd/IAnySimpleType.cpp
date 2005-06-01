@@ -45,6 +45,26 @@ AxisChar* IAnySimpleType::serialize()
     return m_Buf;
 }
 
+void IAnySimpleType::deserialize(const AxisChar* value)
+{
+    if (m_Buf)
+    {
+        delete [] m_Buf;
+        m_Buf = NULL;
+    }
+ 
+    if (value)
+    {
+        setNil(false);        
+        m_Buf = new char[strlen (value) + 1];
+        strcpy (m_Buf, value);
+    }
+    else
+    {
+        setNil(true);
+    }
+}
+
 AxisChar* IAnySimpleType::serialize(const AxisChar* value) throw (AxisSoapException)
 {
     WhiteSpace* whiteSpace = getWhiteSpace();

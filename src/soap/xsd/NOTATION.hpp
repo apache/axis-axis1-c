@@ -53,27 +53,32 @@ public:
     XSDTYPE getType();
 
     /**
-     * Deserialize value from it's on-the-wire string form.
-     * @param valueAsChar Serialized form of value.
-     * @return Deserialized value.
+     * Get the deserialized value.
+     * @return Deserialized value. Note: it is the responsibility of the calling code to delete this value!
      */
-	void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException);
+    xsd__notation getNOTATION();
+
+    /**
+     * Get the deserialized value
+     * @return the deserialized value. Note: it is the responsibility of the calling code to delete this value!
+     */
+    void* getValue();
+
+protected:
 
     /**
      * Deserialized NOTATION value from it's on-the-wire string form.
      * @param valueAsChar Serialized form of NOTATION value.
-     * @return Deserialized NOTATION value.
+     * @return Deserialized NOTATION value. Note: it is the responsibility of the calling code to delete this value!
      */
 	xsd__notation deserializeNOTATION(const AxisChar* valueAsChar) throw (AxisSoapException);
-
-protected:
 
     /**
      * Serialize NOTATION value to it's on-the-wire string form.
      * @param value The NOTATION value to be serialized.
      * @return Serialized form of NOTATION value.
      */ 
-  AxisChar* serialize(const xsd__notation value) throw (AxisSoapException);
+    AxisChar* serialize(const xsd__notation value) throw (AxisSoapException);
 
     /**
      * Creates a WhiteSpace object to replace whitespace
@@ -101,9 +106,6 @@ protected:
      * @return An unset Length object
      */
     Length* getLength();
-
-private:
-    xsd__notation m_NOTATION;
 };
 
 AXIS_CPP_NAMESPACE_END
