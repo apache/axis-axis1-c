@@ -65,9 +65,59 @@ m_bCallInitialized(false)
     
     m_pTransport = NULL;
     m_nTransportType = APTHTTP1_1;
-    m_pTransport = SOAPTransportFactory::getTransportObject(m_nTransportType);
+    
     m_nStatus = AXIS_SUCCESS;
     m_pchSessionID = NULL;
+
+    try
+    {
+        if( !m_pTransport)
+		{
+            m_pTransport = SOAPTransportFactory::getTransportObject(m_nTransportType);
+
+			if( !m_pTransport)
+			{
+				m_nStatus = AXIS_FAIL;
+			}
+		}
+
+        char * pcSSLChannelInfo = g_pConfig->getAxisConfProperty( AXCONF_SECUREINFO);
+		if( pcSSLChannelInfo && strlen( pcSSLChannelInfo) > 0)
+		{
+			char *	pszArgPtr = NULL;
+			int		iArgIndex = 0;
+			string	sArguments[8];
+
+			pszArgPtr = strtok( pcSSLChannelInfo, ",");
+
+			while( pszArgPtr != NULL && iArgIndex < 8)
+			{
+				sArguments[iArgIndex] = pszArgPtr;
+
+				iArgIndex++;
+
+				pszArgPtr = strtok( NULL, ",");
+
+				while( pszArgPtr != NULL && *pszArgPtr == ' ' && *pszArgPtr != '\0')
+				{
+					pszArgPtr++;
+				}
+			}
+
+			m_nStatus = m_pTransport->setTransportProperty( SECURE_PROPERTIES, (const char *) &sArguments);
+		}
+    }
+    catch( AxisException& e)
+    {
+		char *	pszError = new char[strlen( e.what()) + 1];
+		strcpy( pszError, e.what());
+
+		throw AxisGenException( e.getExceptionCode(), const_cast<char*>(pszError));
+    }
+    catch(...)
+    {
+        throw;
+    }
 }
 
 Call::~Call ()
@@ -91,14 +141,16 @@ Call::~Call ()
 
 int Call::setEndpointURI (const char* pchEndpointURI)
 {
-    if (m_pcEndPointUri)
+    /*if (m_pcEndPointUri)
         delete [] m_pcEndPointUri;
     m_pcEndPointUri = NULL;
     if (pchEndpointURI)
     {
         m_pcEndPointUri = new char[strlen(pchEndpointURI)+1];
         strcpy(m_pcEndPointUri, pchEndpointURI);
-    }
+    }*/
+    m_pTransport->setEndpointUri(pchEndpointURI);
+
     return AXIS_SUCCESS;
 }
 
@@ -169,10 +221,10 @@ int Call::initialize(PROVIDERTYPE nStyle)
     {
         m_nStatus = AXIS_SUCCESS;
         // remove_headers(&m_Soap);
-        if (AXIS_SUCCESS != openConnection ()) {
+        /*if (AXIS_SUCCESS != openConnection ()) {
         	m_nStatus = AXIS_FAIL;
             return AXIS_FAIL;
-        }
+        }*/
         if (m_pAxisEngine)
             delete m_pAxisEngine;
         m_pAxisEngine = new ClientAxisEngine ();
@@ -382,7 +434,7 @@ int Call::setHandlerProperty(AxisChar* name, void* value, int len)
  */
 int Call::openConnection()
 {
-    try
+    /*try
     {
         if( !m_pTransport)
 		{
@@ -438,9 +490,9 @@ int Call::openConnection()
     catch(...)
     {
         throw;
-    }
+    }*/
 
-    return m_nStatus;
+    return m_nStatus = AXIS_SUCCESS;
 }
 
 /*

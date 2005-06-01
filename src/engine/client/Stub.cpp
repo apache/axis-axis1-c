@@ -34,8 +34,8 @@ m_pcPassword (NULL)
 {
     m_pCall = new Call ();
     m_pCall->setProtocol (eProtocol);
-    m_pCall->setEndpointURI (pcEndPointUri);
     m_pTransport = m_pCall->getTransport ();
+    m_pTransport->setEndpointUri( pcEndPointUri);
 
     // Initialise m_viCurrentSOAPMethodAttribute to something sensible 
     // in case getFirstSOAPMethodAttribute isn't called first.
@@ -69,7 +69,11 @@ Stub::~Stub ()
 void
 Stub::setEndPoint (const char *pcEndPoint)
 {
-    m_pCall->setEndpointURI (pcEndPoint);
+    if (m_pTransport)
+    {
+        m_pTransport->setEndpointUri( pcEndPoint);
+    }
+    //m_pCall->setEndpointURI (pcEndPoint);
 }
 
 void
@@ -295,6 +299,7 @@ Stub::applyUserPreferences ()
 void
 Stub::setProxy (const char *pcProxyHost, unsigned int uiProxyPort)
 {
+    //TODO - Samisa - This need to change in line with the changes to call open connection
     m_pCall->setProxy (pcProxyHost, uiProxyPort);
 }
 
