@@ -134,6 +134,16 @@ void HTTPTransport::setEndpointUri( const char * pcEndpointUri) throw (HTTPTrans
 {
     bool bUpdateURL = false;
 
+    if (!pcEndpointUri) // We have NULL so cannot proceed
+        return;
+
+    // Samisa:We have to have at lest "http://" in the URL
+    // We also need to handle passing " " as URL which 
+    // is done by some auto generated code
+    if ( strlen(pcEndpointUri) < strlen("http://") ) 
+        return;
+                                                  
+
     // Get the current channel URI
     if( m_pActiveChannel != NULL && m_pActiveChannel->getURL())
     {
