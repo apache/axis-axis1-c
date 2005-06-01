@@ -128,7 +128,7 @@ void URL::ParseURL(std::string url)
             {
                 if(pos == std::string::npos) /* only host name found */
                 {
-                    if(m_Host.empty())
+                    //if(m_Host.empty())
                         m_Host = url;
                     if (key == "?") /* found path */
                         m_Path = url.substr(begpos - 1);
@@ -140,7 +140,7 @@ void URL::ParseURL(std::string url)
                 switch(url.at(pos))
                 {
                     case ':': 
-                        if(m_Host.empty())
+                        //if(m_Host.empty())
                             m_Host = url.substr(begpos, pos - begpos);
                         pos++;
                         begpos = pos;
@@ -153,7 +153,7 @@ void URL::ParseURL(std::string url)
                         {
                             m_Port = atoi(url.substr(begpos, 
                                 pos - begpos + 1).c_str());
-                            if(m_Host.empty())
+                            //if(m_Host.empty())
                                 m_Host = url.substr(0, begpos - 1);
                         }
                         else
