@@ -610,16 +610,38 @@ public class ClientStubWriter extends CPPClassWriter
                 {
                     if (typeissimple)
                     {
-                        writer.write(
-                            "\t\t\t\t"
-                                + currentParamName
-                                + " = m_pCall->"
-                                + CUtils.getParameterGetValueMethodName(
-                                    currentParaType,
-                                    false)
-                                + "(\""
-                                + currentType.getParamName()
-                                + "\", 0);\n");
+                		//Chinthana:
+                		//Changes have done for handle AXIS_OUT_PARAM Types.
+                		if (currentParaType.equals ("xsd__string")
+                				|| currentParaType.equals ("xsd__anyURI")
+                				|| currentParaType.equals ("xsd__QName")
+                				|| currentParaType.equals ("xsd__notation"))
+                		{
+                            writer.write(
+                                "\t\t\t\t"
+                                    + currentParamName
+                                    + " = m_pCall->"
+                                    + CUtils.getParameterGetValueMethodName(
+                                        currentParaType,
+                                        false)
+                                    + "(\""
+                                    + currentType.getParamName()
+                                    + "\", 0);\n");
+                        }
+                		else
+	                    {
+	                        writer.write(
+	                            "\t\t\t\t"
+	                                + currentParamName
+	                                + " = *(m_pCall->"
+	                                + CUtils.getParameterGetValueMethodName(
+	                                    currentParaType,
+	                                    false)
+	                                + "(\""
+	                                + currentType.getParamName()
+	                                + "\", 0));\n");
+	                    }
+                		//02/06/2006.....................................................
                     }
                     else
                     {
