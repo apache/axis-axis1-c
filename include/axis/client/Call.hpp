@@ -619,7 +619,6 @@ public:
 	const xsd__string getFaultAsXMLString();
 
 private:
-    int openConnection();
     void closeConnection();
     int makeArray();
 
