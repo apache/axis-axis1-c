@@ -46,27 +46,27 @@
 				</complexContent>
 			</complexType>
 			<complexType name="SOAPStruct">
-				<all>
+				<sequence>
 					<element name="varString" type="string"/>
 					<element name="varInt" type="int"/>
 					<element name="varFloat" type="float"/>
-				</all>
+				</sequence>
 			</complexType>
 			<complexType name="SOAPStructStruct">
-				<all>
+				<sequence>
 					<element name="varString" type="string"/>
 					<element name="varInt" type="int"/>
 					<element name="varFloat" type="float"/>
 					<element name="varStruct" type="s:SOAPStruct"/>
-				</all>
+				</sequence>
 			</complexType>
 			<complexType name="SOAPArrayStruct">
-				<all>
+				<sequence>
 					<element name="varString" type="string"/>
 					<element name="varInt" type="int"/>
 					<element name="varFloat" type="float"/>
 					<element name="varArray" type="s:ArrayOfstring"/>
-				</all>
+				</sequence>
 			</complexType>
 		</schema>
 	</types>
@@ -75,7 +75,6 @@
 		<part name="inputStruct" type="s:SOAPStruct"/>
 	</message>
 	<message name="echoStructAsSimpleTypesResponse">
-		<part name="outputString" type="xsd:string"/>
 		<part name="outputInteger" type="xsd:int"/>
 		<part name="outputFloat" type="xsd:float"/>
 	</message>
