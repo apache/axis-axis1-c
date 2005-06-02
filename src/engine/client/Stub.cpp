@@ -73,7 +73,6 @@ Stub::setEndPoint (const char *pcEndPoint)
     {
         m_pTransport->setEndpointUri( pcEndPoint);
     }
-    //m_pCall->setEndpointURI (pcEndPoint);
 }
 
 void

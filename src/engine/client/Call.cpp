@@ -21,18 +21,6 @@
  *
  */
 
-/*
- * Revision 1.1  2004/05/31 samisa
- * Added setProxy
- */
-
-/*
- * Revision 1.2  2005/01/06 Roshan
- * Added IHeaderBlock* Call::createHeaderBlock(AxisChar* pachLocalName, 
- *                                      AxisChar* pachUri, AxisChar* pachPrefix)
- */
-
-
 #include <axis/client/Call.hpp>
 #include <axis/AxisException.hpp>
 #include "../../common/AxisConfig.h"
@@ -69,8 +57,10 @@ m_bCallInitialized(false)
     m_nStatus = AXIS_SUCCESS;
     m_pchSessionID = NULL;
 
+    // Setup Transport
     try
     {
+        // Get a transport object from factory
         if( !m_pTransport)
 		{
             m_pTransport = SOAPTransportFactory::getTransportObject(m_nTransportType);
@@ -81,6 +71,7 @@ m_bCallInitialized(false)
 			}
 		}
 
+        // SSL channel related initilizations
         char * pcSSLChannelInfo = g_pConfig->getAxisConfProperty( AXCONF_SECUREINFO);
 		if( pcSSLChannelInfo && strlen( pcSSLChannelInfo) > 0)
 		{
@@ -141,14 +132,6 @@ Call::~Call ()
 
 int Call::setEndpointURI (const char* pchEndpointURI)
 {
-    /*if (m_pcEndPointUri)
-        delete [] m_pcEndPointUri;
-    m_pcEndPointUri = NULL;
-    if (pchEndpointURI)
-    {
-        m_pcEndPointUri = new char[strlen(pchEndpointURI)+1];
-        strcpy(m_pcEndPointUri, pchEndpointURI);
-    }*/
     m_pTransport->setEndpointUri(pchEndpointURI);
 
     return AXIS_SUCCESS;
@@ -220,11 +203,7 @@ int Call::initialize(PROVIDERTYPE nStyle)
     try
     {
         m_nStatus = AXIS_SUCCESS;
-        // remove_headers(&m_Soap);
-        /*if (AXIS_SUCCESS != openConnection ()) {
-        	m_nStatus = AXIS_FAIL;
-            return AXIS_FAIL;
-        }*/
+        
         if (m_pAxisEngine)
             delete m_pAxisEngine;
         m_pAxisEngine = new ClientAxisEngine ();
@@ -422,77 +401,6 @@ int Call::setHandlerProperty(AxisChar* name, void* value, int len)
 	// web service is invoked.
 	m_handlerProperties.push_back(new HandlerProperty(name,value,len));
 	return AXIS_SUCCESS;
-}
-
-/*
- * This method takes a look at the m_Soap structure and open 
- * transport layer connection to the server. Then this adds the 
- * relevant function pointers and streams to the m_Soap structure, 
- * which is given to the AxisEngine. AxisEngine can use those 
- * functions with those streams at any time it wants to send/receive
- * bytes to/from the server.
- */
-int Call::openConnection()
-{
-    /*try
-    {
-        if( !m_pTransport)
-		{
-            m_pTransport = SOAPTransportFactory::getTransportObject(m_nTransportType);
-
-			if( !m_pTransport)
-			{
-				return AXIS_FAIL;
-			}
-		}
-
-        m_pTransport->setEndpointUri( m_pcEndPointUri);
-        char * pcSSLChannelInfo = g_pConfig->getAxisConfProperty( AXCONF_SECUREINFO);
-		if( pcSSLChannelInfo && strlen( pcSSLChannelInfo) > 0)
-		{
-			char *	pszArgPtr = NULL;
-			int		iArgIndex = 0;
-			string	sArguments[8];
-
-			pszArgPtr = strtok( pcSSLChannelInfo, ",");
-
-			while( pszArgPtr != NULL && iArgIndex < 8)
-			{
-				sArguments[iArgIndex] = pszArgPtr;
-
-				iArgIndex++;
-
-				pszArgPtr = strtok( NULL, ",");
-
-				while( pszArgPtr != NULL && *pszArgPtr == ' ' && *pszArgPtr != '\0')
-				{
-					pszArgPtr++;
-				}
-			}
-
-			m_nStatus = m_pTransport->setTransportProperty( SECURE_PROPERTIES, (const char *) &sArguments);
-		}
-
-        //if use proxy then set proxy
-        if( m_bUseProxy)
-		{
-    	    m_pTransport->setProxy(m_strProxyHost.c_str(), m_uiProxyPort);
-		}
-
-    }
-    catch( AxisException& e)
-    {
-		char *	pszError = new char[strlen( e.what()) + 1];
-		strcpy( pszError, e.what());
-
-		throw AxisGenException( e.getExceptionCode(), const_cast<char*>(pszError));
-    }
-    catch(...)
-    {
-        throw;
-    }*/
-
-    return m_nStatus = AXIS_SUCCESS;
 }
 
 /*
