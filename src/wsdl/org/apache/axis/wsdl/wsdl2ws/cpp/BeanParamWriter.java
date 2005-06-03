@@ -543,7 +543,20 @@ public class BeanParamWriter extends ParamCPPFileWriter
             return;
         }
         String arrayType = null;
-        
+		
+		/**
+		  *to handle simple type arrays
+		  */
+		  
+		for(int i = 0; i< attribs.length;i++)
+		{
+			
+			if(attribs[i].isArray()) 
+			{
+				writer.write("\tAxis_Array array;\n\n");
+				break;
+			}
+		}	
         
 		//Dushshantha:
 		//peekCalled boolean variable checks whether the Line 
@@ -614,18 +627,54 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     //if Array
                     if (attribs[i].isSimpleType())
                     {
-                        writer.write(
-                            "\tparam->"
-                                + attribs[i].getParamNameAsMember()
-                                + " = ("
-                                + CUtils.getBasicArrayNameforType(
-                                    attribs[i].getTypeName())
-                                + "&)pIWSDZ->getBasicArray("
-                                + CUtils.getXSDTypeForBasicType(
-                                    attribs[i].getTypeName())
-                                + ", \""
-                                + attribs[i].getParamName()
-                                + "\",0);\n");
+						writer.write("\tarray = pIWSDZ->getBasicArray("+CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+ ", \""+attribs[i].getParamNameAsSOAPElement()+"\",0);\n");
+						//					writer.write("\tparam->"+attribs[i].getParamNameAsMember()+" = ("+CUtils.getBasicArrayNameforType(attribs[i].getTypeName())+"&)array;\n");
+						String typename = attribs[i].getTypeName();
+						if (typename.equals("xsd__string")
+							|| typename.equals("xsd__anyURI")
+							|| typename.equals("xsd__QName")
+							|| typename.equals("xsd__notation")
+							|| typename.equals("xsd__NMTOKEN"))
+						{
+						
+							if(attribs[i].getChoiceElement())			
+								writer.write("\tparam->"+attribs[i].getParamNameAsMember()+"->m_Array = ("+attribs[i].getTypeName()+"*)new "+attribs[i].getTypeName()+"[array.m_Size];\n");
+							else
+								writer.write("\tparam->"+attribs[i].getParamNameAsMember()+".m_Array = ("+attribs[i].getTypeName()+"*)new "+attribs[i].getTypeName()+"[array.m_Size];\n");
+						}
+						else
+						{
+						
+							/**
+							 *Dushshantha:
+							 *If the element is a Choice,
+							 *It should be treated as a pointer to an array. 
+							 *Chinthana: This is the same in 'all' element
+							 */
+						
+							if(attribs[i].getChoiceElement() || attribs[i].getAllElement())
+								writer.write("\tparam->"+attribs[i].getParamNameAsMember()+"->m_Array = ("+attribs[i].getTypeName()+"**)new "+attribs[i].getTypeName()+"*[array.m_Size];\n");
+							else
+								writer.write("\tparam->"+attribs[i].getParamNameAsMember()+".m_Array = ("+attribs[i].getTypeName()+"**)new "+attribs[i].getTypeName()+"*[array.m_Size];\n");
+						}
+					
+						/**
+						 *Dushshantha:
+						 *If the element is a Choice,
+						 *It should be treated as a pointer to an array. 
+						 *Chinthana: This is the same in 'all' element
+						 */
+					
+						if(attribs[i].getChoiceElement() || attribs[i].getAllElement())
+						{
+							writer.write("\tparam->"+attribs[i].getParamNameAsMember()+"->m_Size = array.m_Size;\n\n");
+							writer.write("\tmemcpy( param->"+attribs[i].getParamNameAsMember()+"->m_Array, array.m_Array, sizeof( "+attribs[i].getTypeName()+" *) * array.m_Size);\n");
+						}
+						else
+						{
+							writer.write("\tparam->"+attribs[i].getParamNameAsMember()+".m_Size = array.m_Size;\n\n");
+							writer.write("\tmemcpy( param->"+attribs[i].getParamNameAsMember()+".m_Array, array.m_Array, sizeof( "+attribs[i].getTypeName()+" *) * array.m_Size);\n");
+						}
                     }
                     else
                     {
