@@ -262,11 +262,7 @@ public abstract class ParamWriter extends BasicFileWriter
             	if(attrib.getChoiceElement() || attrib.getAllElement())
             	{
             		String typename = attrib.getTypeName();
-            		if (typename.equals("xsd__string")
-							|| typename.equals("xsd__anyURI")
-							|| typename.equals("xsd__QName")
-							|| typename.equals("xsd__notation")
-							|| typename.equals("xsd__NMTOKEN"))
+            		if (CUtils.isPointerType(typename))
             			return attrib.getTypeName();
             		else
             			return attrib.getTypeName() + "*";

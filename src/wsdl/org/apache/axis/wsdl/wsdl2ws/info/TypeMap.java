@@ -61,156 +61,97 @@ public class TypeMap
 
     static {
         // c -> xml type mapping
+    	basicTypeClass2QNamemap.put("xsd__duration",			new QName(WrapperConstants.SCHEMA_NAMESPACE, "duration"));
+    	basicTypeClass2QNamemap.put("xsd__dateTime",			new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"));     
+        basicTypeClass2QNamemap.put("xsd__time",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "time"));
+        basicTypeClass2QNamemap.put("xsd__date",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "date"));
+        basicTypeClass2QNamemap.put("xsd__gYearMonth",			new QName(WrapperConstants.SCHEMA_NAMESPACE, "gYearMonth"));
+        basicTypeClass2QNamemap.put("xsd__gYear",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "gYear"));
+        basicTypeClass2QNamemap.put("xsd__gMonthDay",			new QName(WrapperConstants.SCHEMA_NAMESPACE, "gMonthDay"));
+        basicTypeClass2QNamemap.put("xsd__gDay",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "gDay"));
+        basicTypeClass2QNamemap.put("xsd__gMonth",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "gMonth"));
+        basicTypeClass2QNamemap.put("xsd__string",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "string"));
+        basicTypeClass2QNamemap.put("xsd__normalizedString",	new QName(WrapperConstants.SCHEMA_NAMESPACE, "normalizedString"));
+        basicTypeClass2QNamemap.put("xsd__token",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "token"));
+        basicTypeClass2QNamemap.put("xsd__language",			new QName(WrapperConstants.SCHEMA_NAMESPACE, "language"));
+        basicTypeClass2QNamemap.put("xsd__Name",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "Name"));
+        basicTypeClass2QNamemap.put("xsd__NCName",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "NCName"));
+        basicTypeClass2QNamemap.put("xsd__ID",					new QName(WrapperConstants.SCHEMA_NAMESPACE, "ID"));
+        basicTypeClass2QNamemap.put("xsd__IDREF",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "IDREF"));
+        basicTypeClass2QNamemap.put("xsd__IDREFS",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "IDREFS"));
+        basicTypeClass2QNamemap.put("xsd__ENTITY",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "ENTITY"));
+        basicTypeClass2QNamemap.put("xsd__ENTITES",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "ENTITIES"));
+        basicTypeClass2QNamemap.put("xsd__NMTOKEN",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "NMTOKEN"));
+        basicTypeClass2QNamemap.put("xsd__NMTOKENS",			new QName(WrapperConstants.SCHEMA_NAMESPACE, "NMTOKENS"));
+        basicTypeClass2QNamemap.put("xsd__boolean",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "boolean"));
+        basicTypeClass2QNamemap.put("xsd__base64Binary",		new QName(WrapperConstants.SCHEMA_NAMESPACE, "base64Binary"));
+        basicTypeClass2QNamemap.put("xsd__hexBinary",			new QName(WrapperConstants.SCHEMA_NAMESPACE, "hexBinary"));
+        basicTypeClass2QNamemap.put("xsd__float",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "float"));
+        basicTypeClass2QNamemap.put("xsd__decimal",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"));
+        basicTypeClass2QNamemap.put("xsd__integer",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "integer"));
+        basicTypeClass2QNamemap.put("xsd__nonPositiveInteger",	new QName(WrapperConstants.SCHEMA_NAMESPACE, "nonPositiveInteger"));
+        basicTypeClass2QNamemap.put("xsd__negativeInteger",		new QName(WrapperConstants.SCHEMA_NAMESPACE, "negativeInteger"));
+        basicTypeClass2QNamemap.put("xsd__long",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "long"));
+        basicTypeClass2QNamemap.put("xsd__int",					new QName(WrapperConstants.SCHEMA_NAMESPACE, "int"));
+        basicTypeClass2QNamemap.put("xsd__short",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "short"));
+        basicTypeClass2QNamemap.put("xsd__byte",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "byte"));
+        basicTypeClass2QNamemap.put("xsd__nonNegativeInteger",	new QName(WrapperConstants.SCHEMA_NAMESPACE, "nonNegativeInteger"));
+        basicTypeClass2QNamemap.put("xsd__unsignedLong",		new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedLong"));
+        basicTypeClass2QNamemap.put("xsd__unsignedInt",			new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedInt"));
+        basicTypeClass2QNamemap.put("xsd__unsignedShort",		new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedShort"));
+        basicTypeClass2QNamemap.put("xsd__unsignedByte",		new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedByte"));
+        basicTypeClass2QNamemap.put("xsd__positiveInteger",		new QName(WrapperConstants.SCHEMA_NAMESPACE, "positiveInteger"));
+        basicTypeClass2QNamemap.put("xsd__double",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "double"));
+        basicTypeClass2QNamemap.put("xsd__anyURI",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "anyURI"));
+        basicTypeClass2QNamemap.put("xsd__QName",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "QName"));
+        basicTypeClass2QNamemap.put("xsd__notation",			new QName(WrapperConstants.SCHEMA_NAMESPACE, "NOTATION"));
 
-        basicTypeClass2QNamemap.put(
-            "xsd__int",
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "int"));
-        basicTypeClass2QNamemap.put(
-            "xsd__byte",
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "byte"));
-        basicTypeClass2QNamemap.put(
-            "xsd__float",
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "float"));
-        basicTypeClass2QNamemap.put(
-            "xsd__long",
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "long"));
-        basicTypeClass2QNamemap.put(
-            "xsd__double",
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "double"));
-        basicTypeClass2QNamemap.put(
-            "xsd__boolean",
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "boolean"));
-        basicTypeClass2QNamemap.put(
-            "xsd__integer",
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "integer"));
-        basicTypeClass2QNamemap.put(
-            "xsd__short",
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "short"));
-        basicTypeClass2QNamemap.put(
-            "xsd__string",
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "string"));
-        basicTypeClass2QNamemap.put(
-            "xsd__decimal",
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"));
-        basicTypeClass2QNamemap.put(
-            "xsd__dateTime",
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"));     
-        basicTypeClass2QNamemap.put(
-            "xsd__time",
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "time"));
-        basicTypeClass2QNamemap.put(
-            "xsd__duration",
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "duration"));
-        basicTypeClass2QNamemap.put(
-            "xsd__QName",
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "QName"));
-/*        basicTypeClass2QNamemap.put(
-            "xsd__NCName",
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "NCName"));
-            */
-        basicTypeClass2QNamemap.put(
-            "xsd__date",
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "date"));
-        basicTypeClass2QNamemap.put(
-            "xsd__base64Binary",
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "base64Binary"));
-        basicTypeClass2QNamemap.put(
-            "xsd__hexBinary",
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "hexBinary"));
-        basicTypeClass2QNamemap.put(
-            "xsd__unsignedByte",
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedByte"));
-        basicTypeClass2QNamemap.put(
-            "xsd__unsignedInt",
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedInt"));
-        basicTypeClass2QNamemap.put(
-            "xsd__unsignedLong",
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedLong"));
-        basicTypeClass2QNamemap.put(
-            "xsd__unsignedShort",
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedShort"));
-        basicTypeClass2QNamemap.put(
-            "xsd__anyURI",
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "anyURI"));
-        basicTypeClass2QNamemap.put(
-            "xsd__NMTOKEN",
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "NMTOKEN"));
 
         // xml -> c type mapping 
-
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "integer"),
-            "xsd__integer");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "string"),
-            "xsd__string");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"),
-            "xsd__decimal");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "QName"),
-            "xsd__QName");
-/*        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "NCName"),
-            "xsd__NCName");
-            */
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"),
-            "xsd__dateTime");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "date"),
-            "xsd__date");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "time"),
-            "xsd__time");
-        basicTypeQname2classmap.put(
-                new QName(WrapperConstants.SCHEMA_NAMESPACE, "duration"),
-                "xsd__duration");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "base64Binary"),
-            "xsd__base64Binary");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "hexBinary"),
-            "xsd__hexBinary");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "int"),
-            "xsd__int");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "byte"),
-            "xsd__byte");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "float"),
-            "xsd__float");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "long"),
-            "xsd__long");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "double"),
-            "xsd__double");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "boolean"),
-            "xsd__boolean");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "short"),
-            "xsd__short");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedByte"),
-            "xsd__unsignedByte");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedInt"),
-            "xsd__unsignedInt");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedLong"),
-            "xsd__unsignedLong");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedShort"),
-            "xsd__unsignedShort");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "anyURI"),
-            "xsd__anyURI");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "NMTOKEN"),
-            "xsd__NMTOKEN");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "duration"),   		"xsd__duration");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"),   		"xsd__dateTime");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "time"),       		"xsd__time");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "date"),       		"xsd__date");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "gYearMonth"),       	"xsd__gYearMonth");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "gYear"),       		"xsd__gYear");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "gMonthDay"),       	"xsd__gMonthDay");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "gDay"),       		"xsd__gDay");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "gMonth"),       		"xsd__gMonth");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "string"),				"xsd__string");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "normalizedString"),	"xsd__normalizedString");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "token"),				"xsd__token");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "language"),			"xsd__language");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "Name"),				"xsd__Name");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "NCName"),				"xsd__NCName");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "ID"),					"xsd__ID");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "IDREF"),				"xsd__IDREF");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "IDREFS"),				"xsd__IDREFS");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "ENTITY"),				"xsd__ENTITY");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "ENTITIES"),			"xsd__ENTITIES");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "NMTOKEN"),			"xsd__NMTOKEN");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "NMTOKENS"),			"xsd__NMTOKENS");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "boolean"),			"xsd__boolean");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "base64Binary"),		"xsd__base64Binary");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "hexBinary"),			"xsd__hexBinary");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "float"),				"xsd__float");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"),			"xsd__decimal");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "integer"),			"xsd__integer");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "nonPositiveInteger"),	"xsd__nonPositiveInteger");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "negativeInteger"),	"xsd__negativeInteger");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "long"),				"xsd__long");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "int"),				"xsd__int");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "short"),				"xsd__short");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "byte"),				"xsd__byte");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "nonNegativeInteger"),	"xsd__nonNegativeInteger");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedLong"),		"xsd__unsignedLong");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedInt"),		"xsd__unsignedInt");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedShort"),		"xsd__unsignedShort");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedByte"),		"xsd__unsignedByte");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "positiveInteger"),	"xsd__positiveInteger");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "double"),				"xsd__double");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "anyURI"),				"xsd__anyURI");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "QName"),				"xsd__QName");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "NOTATION"),			"xsd__notation");
 
         /* TODO:
          *   Should be removed when the following issue will be fixed :

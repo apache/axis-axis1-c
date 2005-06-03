@@ -190,10 +190,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
             if (type != null && type.isSimpleType())
             { //schema defined simpleType possibly with restrictions
             	if (param.isNillable() && 
-            			!(type.getLanguageSpecificName().equals("xsd__string")
-            					|| type.getLanguageSpecificName().equals("xsd__anyURI")
-								|| type.getLanguageSpecificName().equals("xsd__QName")
-								|| type.getLanguageSpecificName().equals("xsd__notation")))
+            			!(CUtils.isPointerType(type.getLanguageSpecificName())))
             	{
                 writer.write(
                     "\t"
@@ -248,10 +245,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                     }
                     else
                     {
-                    	if (paraTypeName.equals("xsd__string")
-										|| paraTypeName.equals("xsd__anyURI")
-										|| paraTypeName.equals("xsd__QName")
-										|| paraTypeName.equals("xsd__notation"))
+                    	if (CUtils.isPointerType(paraTypeName))
                     	{
                     		writer.write("\t"
                                 + paraTypeName
@@ -442,10 +436,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
         		&& (!returntypeissimple
             		|| (returntypeissimple		//Chinthana:This has been changed because XSDElementNill Test failed.
         				&& returntype.isNillable()
-						&& !(retType.getLanguageSpecificName().equals("xsd__string")
-							|| retType.getLanguageSpecificName().equals("xsd__anyURI")
-							|| retType.getLanguageSpecificName().equals("xsd__QName")
-							|| retType.getLanguageSpecificName().equals("xsd__notation")))))
+						&& !(CUtils.isPointerType(retType.getLanguageSpecificName())))))
             {
             	writer.write(" *");
             }
@@ -480,10 +471,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                 {
                 	String returnParamTypeName = retType.getLanguageSpecificName();
                 	if (returntype.isNillable()
-                			|| returnParamTypeName.equals("xsd__string")
-                			|| returnParamTypeName.equals("xsd__anyURI")
-							|| returnParamTypeName.equals("xsd__QName")
-							|| returnParamTypeName.equals("xsd__notation"))
+                			|| CUtils.isPointerType(returnParamTypeName))
                 	{
 	                    writer.write(
 	                        "\treturn pIWSSZ->addOutputParam(\""
@@ -640,13 +628,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                         }
                         else
                         {
-                        	//Chinthana:
-                        	//changes have done to handle pointers.
-                        	String containedDataType = CUtils.getXSDTypeForBasicType(outparamType);
-                        	if (containedDataType.equals ("XSD_STRING")
-                    				|| containedDataType.equals ("XSD_ANYURI")
-                    				|| containedDataType.equals ("XSD_QNAME")
-                    				|| containedDataType.equals ("XSD_NOTATION"))
+                        	if (CUtils.isPointerType(outparamType))
                         	{
                         		writer.write(
                                         "\tpIWSSZ->addOutputParam(\""

@@ -160,10 +160,7 @@ public class ServiceWriter extends CPPClassWriter
                         String returnTypeName = returntype.getLangName(); 
                         if (CUtils.isSimpleType(returntype.getLangName())
                         		&& returntype.isNillable()
-								&& !(returnTypeName.equals("xsd__string")
-										|| returnTypeName.equals("xsd__anyURI")
-										|| returnTypeName.equals("xsd__QName")
-										|| returnTypeName.equals("xsd__notation")))
+								&& !(CUtils.isPointerType(returnTypeName)))
                         {
                         	writer.write(
     	                            WrapperUtils
@@ -197,10 +194,7 @@ public class ServiceWriter extends CPPClassWriter
                     String fparamTypeName = fparam.getLangName();
                     if (CUtils.isSimpleType(fparamTypeName)
 							&& fparam.isNillable()
-							&& !(fparamTypeName.equals("xsd__string")
-									|| fparamTypeName.equals("xsd__anyURI")
-									|| fparamTypeName.equals("xsd__QName")
-									|| fparamTypeName.equals("xsd__notation")))
+							&& !(CUtils.isPointerType(fparamTypeName)))
                     {
                     	writer.write(
     	                        WrapperUtils
@@ -227,10 +221,7 @@ public class ServiceWriter extends CPPClassWriter
                     String nparamTypeName = nparam.getLangName();
                     if (CUtils.isSimpleType(nparamTypeName)
 							&& nparam.isNillable()
-							&& !(nparamTypeName.equals("xsd__string")
-									|| nparamTypeName.equals("xsd__anyURI")
-									|| nparamTypeName.equals("xsd__QName")
-									|| nparamTypeName.equals("xsd__notation")))
+							&& !(CUtils.isPointerType(nparamTypeName)))
                     {
                     	writer.write(
     	                        ", "

@@ -83,10 +83,7 @@ public class ClientStubHeaderWriter
                         String outParamTypeName = WrapperUtils.getClassNameFromParamInfoConsideringArrays(returnParam, wscontext);
                         if (CUtils.isSimpleType(outParamTypeName)
 								&& returnParam.isNillable()
-								&& !(outParamTypeName.equals("xsd__string")
-										|| outParamTypeName.equals("xsd__anyURI")
-										|| outParamTypeName.equals("xsd__QName")
-										|| outParamTypeName.equals("xsd__notation")))
+								&& !(CUtils.isPointerType(outParamTypeName)))
                         {
                         	writer.write(
                                     "\tSTORAGE_CLASS_INFO "
@@ -117,10 +114,7 @@ public class ClientStubHeaderWriter
                     String paramTypeName = WrapperUtils.getClassNameFromParamInfoConsideringArrays(fparam, wscontext);
                     if (CUtils.isSimpleType(paramTypeName)
 							&& fparam.isNillable()
-							&& !(paramTypeName.equals("xsd__string")
-									|| paramTypeName.equals("xsd__anyURI")
-									|| paramTypeName.equals("xsd__QName")
-									|| paramTypeName.equals("xsd__string")))
+							&& !(CUtils.isPointerType(paramTypeName)))
                     {
                     	writer.write(
     	                        paramTypeName
@@ -141,10 +135,7 @@ public class ClientStubHeaderWriter
                     String paramTypeName = WrapperUtils.getClassNameFromParamInfoConsideringArrays(nparam, wscontext);
                     if (CUtils.isSimpleType(paramTypeName)
 							&& nparam.isNillable()
-							&& !(paramTypeName.equals("xsd__string")
-									|| paramTypeName.equals("xsd__anyURI")
-									|| paramTypeName.equals("xsd__QName")
-									|| paramTypeName.equals("xsd__string")))
+							&& !(CUtils.isPointerType(paramTypeName)))
                     {
                     	writer.write(", "
                     			+ paramTypeName

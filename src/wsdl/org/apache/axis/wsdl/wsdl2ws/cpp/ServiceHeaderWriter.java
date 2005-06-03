@@ -139,10 +139,7 @@ public class ServiceHeaderWriter extends HeaderFileWriter
                         String returnTypeName = returntype.getLangName();
                         if (CUtils.isSimpleType(returnTypeName)
 								&& returntype.isNillable()
-								& !(returnTypeName.equalsIgnoreCase("xsd__string")
-										|| returnTypeName.equalsIgnoreCase("xsd__anyURI")
-										|| returnTypeName.equalsIgnoreCase("xsd__QName")
-										|| returnTypeName.equalsIgnoreCase("xsd__notation")))
+								& !(CUtils.isPointerType(returnTypeName)))
                         {
                         	writer.write(
     	                            "\t\t"
@@ -179,10 +176,7 @@ public class ServiceHeaderWriter extends HeaderFileWriter
                     String paramTypeName = fparam.getLangName();
                     if (CUtils.isSimpleType(paramTypeName)
                     		&& fparam.isNillable()
-							&& !(paramTypeName.equalsIgnoreCase("xsd__string")
-									|| paramTypeName.equalsIgnoreCase("xsd__anyURI")
-									|| paramTypeName.equalsIgnoreCase("xsd__QName")
-									|| paramTypeName.equalsIgnoreCase("xsd__notation")))
+							&& !(CUtils.isPointerType(paramTypeName)))
                     {
                     	writer.write(
     	                        WrapperUtils
@@ -209,10 +203,7 @@ public class ServiceHeaderWriter extends HeaderFileWriter
                     String paramTypeName = nparam.getLangName();
                     if (CUtils.isSimpleType(paramTypeName)
                     		&& nparam.isNillable()
-							&& !(paramTypeName.equalsIgnoreCase("xsd__string")
-									|| paramTypeName.equalsIgnoreCase("xsd__anyURI")
-									|| paramTypeName.equalsIgnoreCase("xsd__QName")
-									|| paramTypeName.equalsIgnoreCase("xsd__notation")))
+							&& !(CUtils.isPointerType(paramTypeName)))
                     {
                     	writer.write(
     	                        ","

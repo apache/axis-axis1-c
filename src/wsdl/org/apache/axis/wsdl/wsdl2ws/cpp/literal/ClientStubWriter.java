@@ -260,10 +260,7 @@ public class ClientStubWriter
 	    if (returntypeisarray
 		|| (returntypeissimple
 		    && (!returntype.isNillable ()
-			|| outparamType.equals ("xsd__string")
-			|| outparamType.equals ("xsd__anyURI")
-			|| outparamType.equals ("xsd__QName")
-			|| outparamType.equals ("xsd__notation"))))
+			|| CUtils.isPointerType(outparamType))))
 	    {
 		writer.write (outparamType);
 	    }
@@ -318,10 +315,7 @@ public class ClientStubWriter
 	    if (typeisarray
 		|| (typeissimple
 		    && (!((ParameterInfo) paramsB.get (0)).isNillable ()
-			|| paraTypeName.equals ("xsd__string")
-			|| paraTypeName.equals ("xsd__anyURI")
-			|| paraTypeName.equals ("xsd__QName")
-			|| paraTypeName.equals ("xsd__notation"))))
+			|| CUtils.isPointerType(paraTypeName))))
 	    {
 		writer.write (paraTypeName + " Value0");
 	    }
@@ -375,10 +369,7 @@ public class ClientStubWriter
 		if (typeisarray
 		    || (typeissimple
 			&& (!((ParameterInfo) paramsB.get (i)).isNillable ()
-			    || paraTypeName.equals ("xsd__string")
-			    || paraTypeName.equals ("xsd__anyURI")
-			    || paraTypeName.equals ("xsd__QName")
-			    || paraTypeName.equals ("xsd__notation"))))
+			    || CUtils.isPointerType(paraTypeName))))
 		{
 		    writer.write (", " + paraTypeName + " Value" + i);
 		}
@@ -435,10 +426,7 @@ public class ClientStubWriter
 		{
 		    //for simple types
 		    if (returntype.isNillable ()
-			&& !(outparamType.equals ("xsd__string")
-			     || outparamType.equals ("xsd__anyURI")
-			     || outparamType.equals ("xsd__QName")
-			     || outparamType.equals ("xsd__notation")))
+			&& !(CUtils.isPointerType(outparamType)))
 		    {
 			writer.write (outparamType + "* Ret = NULL;\n");
 		    }
@@ -704,10 +692,7 @@ public class ClientStubWriter
 
 			    // Simple Type
 			    if (param.isNillable ()
-				|| paraTypeName.equals ("xsd__string")
-				|| paraTypeName.equals ("xsd__anyURI")
-				|| paraTypeName.equals ("xsd__QName")
-				|| paraTypeName.equals ("xsd__notation"))
+				|| CUtils.isPointerType(paraTypeName))
 			    {
 				writer.write ("\tm_pCall->addParameter(");
 				writer.write ("(void*)Value"
@@ -795,10 +780,7 @@ public class ClientStubWriter
 		
 		//Chinthana:
 		//Changes have done for handle AXIS_OUT_PARAM Types.
-		if (currentParaType.equals ("xsd__string")
-				|| currentParaType.equals ("xsd__anyURI")
-				|| currentParaType.equals ("xsd__QName")
-				|| currentParaType.equals ("xsd__notation"))
+		if (CUtils.isPointerType(currentParaType))
 			currentParamName = "*OutValue" + i;
 		else
 			currentParamName = "OutValue" + i;
@@ -1003,10 +985,7 @@ public class ClientStubWriter
 			}
 			else
 			{
-			    if (outparamType.equals ("xsd__string")
-				|| outparamType.equals ("xsd__anyURI")
-				|| outparamType.equals ("xsd__QName")
-				|| outparamType.equals ("xsd__notation"))
+			    if (CUtils.isPointerType(outparamType))
 			    {
 				writer.write ("\t\t\t" + outparamType +
 					      " pReturn = m_pCall->" +

@@ -327,10 +327,7 @@ public class WrapWriter extends CPPClassWriter
                 //for simple types	
             	if (param.isNillable())
             	{
-            		if (param.getLangName().equals("xsd__string")
-                			|| param.getLangName().equals("xsd__anyURI")
-							|| param.getLangName().equals("xsd__QName")
-							|| param.getLangName().equals("xsd__notation"))
+            		if (CUtils.isPointerType(param.getLangName()))
             		{
 
 		                writer.write("\t"
@@ -356,16 +353,16 @@ public class WrapWriter extends CPPClassWriter
             	}
             	else
             	{
-            		if (param.getLangName().equals("xsd__string"))
-				writer.write("\t"
-                                                        + paraTypeName
-                                                        + " v"
-                                                        + i
-                                                        + " = pIWSDZ->"
-                                                        + CUtils.getParameterGetValueMethodName(paraTypeName, false)
-                                                        + "(\""
-                                                        + parameterName + "\",0);\n");
-			else
+            		if (CUtils.isPointerType(param.getLangName()))
+            			writer.write("\t"
+                            + paraTypeName
+                            + " v"
+                            + i
+                            + " = pIWSDZ->"
+                            + CUtils.getParameterGetValueMethodName(paraTypeName, false)
+                            + "(\""
+                            + parameterName + "\",0);\n");
+            		else
 	            		writer.write("\t"
 							+ paraTypeName
 							+ " v"
@@ -479,10 +476,7 @@ public class WrapWriter extends CPPClassWriter
         	System.out.println(outparamTypeName);
         	if (returntypeissimple
         			&& returntype.isNillable()
-        			&&!(outparamTypeName.equals("xsd__string")
-        					|| outparamTypeName.equals("xsd__anyURI")
-							|| outparamTypeName.equals("xsd__QName")
-							|| outparamTypeName.equals("xsd__notation")))
+        			&&!(CUtils.isPointerType(outparamTypeName)))
         	{
         		writer.write(" *");
         	}
@@ -503,10 +497,7 @@ public class WrapWriter extends CPPClassWriter
             if (returntypeissimple)
             {
             	if (returntype.isNillable()
-            			|| (outparamTypeName.equals("xsd__string")
-            					|| outparamTypeName.equals("xsd__anyURI")
-								|| outparamTypeName.equals("xsd__QName")
-								|| outparamTypeName.equals("xsd__notation")))
+            			|| (CUtils.isPointerType(outparamTypeName)))
             	{
             		writer.write(
     	                    "\t\treturn pIWSSZ->addOutputParam(\""

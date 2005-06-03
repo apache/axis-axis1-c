@@ -391,10 +391,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                                     "\tif (0 != param->"
                                         + attribs[i].getParamNameAsMember()
                                         + ")\n");
-                                if (attribs[i].getTypeName().equals("xsd__string")
-                 						|| attribs[i].getTypeName().equals("xsd__anyURI")
-                						|| attribs[i].getTypeName().equals("xsd__QName")
-                						|| attribs[i].getTypeName().equals("xsd__notation"))
+                                if (CUtils.isPointerType(attribs[i].getTypeName()))
                                 {
 	                                writer.write(
 	                                    "\t\tpSZ->serializeAsAttribute(\""
@@ -434,10 +431,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                         }
                         else
                         {
-                        	if (attribs[i].getTypeName().equals("xsd__string")
-             						|| attribs[i].getTypeName().equals("xsd__anyURI")
-            						|| attribs[i].getTypeName().equals("xsd__QName")
-            						|| attribs[i].getTypeName().equals("xsd__notation"))
+                        	if (CUtils.isPointerType(attribs[i].getTypeName()))
                         	{
                         		writer.write(
                                         "\tpSZ->serializeAsElement(\""
@@ -630,11 +624,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
 						writer.write("\tarray = pIWSDZ->getBasicArray("+CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+ ", \""+attribs[i].getParamNameAsSOAPElement()+"\",0);\n");
 						//					writer.write("\tparam->"+attribs[i].getParamNameAsMember()+" = ("+CUtils.getBasicArrayNameforType(attribs[i].getTypeName())+"&)array;\n");
 						String typename = attribs[i].getTypeName();
-						if (typename.equals("xsd__string")
-							|| typename.equals("xsd__anyURI")
-							|| typename.equals("xsd__QName")
-							|| typename.equals("xsd__notation")
-							|| typename.equals("xsd__NMTOKEN"))
+						if (CUtils.isPointerType(typename))
 						{
 						
 							if(attribs[i].getChoiceElement())			
@@ -713,7 +703,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
 								|| attribs[i].getTypeName().equals("xsd__notation"))
                     	{
 	                        //TODO handle optional attributes
-				writer.write( "\t" + attribs[i].getTypeName() + "* p_" + attribs[i].getParamNameAsMember()
+                    			writer.write( "\t" + attribs[i].getTypeName() + "* p_" + attribs[i].getParamNameAsMember()
                                         + " = (pIWSDZ->"
                                         + CUtils.getParameterGetValueMethodName(
                                             attribs[i].getTypeName(),
@@ -728,8 +718,8 @@ public class BeanParamWriter extends ParamCPPFileWriter
                                 writer.write("\tdelete p_" + attribs[i].getParamNameAsMember() + ";\n");
                     	}
                     	else if(attribs[i].getTypeName().equals("xsd__string"))
-			{
-				writer.write(
+                		{
+                    		writer.write(
                                     "\tparam->"
                                         + attribs[i].getParamNameAsMember()
                                         + " = pIWSDZ->"
@@ -739,7 +729,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                                         + "(\""
                                         + attribs[i].getParamName()
                                         + "\",0);\n");
-			}
+                		}
                     	else
                     	{
 	                        //TODO handle optional attributes

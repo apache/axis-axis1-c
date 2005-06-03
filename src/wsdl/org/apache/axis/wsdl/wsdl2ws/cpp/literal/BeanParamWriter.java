@@ -231,10 +231,7 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 				if( soapTagName.charAt(0) == '_' )
 					soapTagName = soapTagName.substring(1, soapTagName.length() );
 				//end remove _Ref sufix and _ prefix in SOAP tag name
-				if (attribs[i].getTypeName().equals("xsd__string")
- 						|| attribs[i].getTypeName().equals("xsd__anyURI")
-						|| attribs[i].getTypeName().equals("xsd__QName")
-						|| attribs[i].getTypeName().equals("xsd__notation"))
+				if (CUtils.isPointerType(attribs[i].getTypeName()))
 				{
 					writer.write("\tif (0 != param->"+attribs[i].getParamNameAsMember()+")\n");
 					writer.write("\t\tpSZ->serializeAsAttribute(\""+ soapTagName +"\", 0, (void*)(param->"+attribs[i].getParamNameAsMember()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
@@ -391,10 +388,7 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 				//Samisa 22/08/2004
  				// writer.write("\tpSZ->serializeAsElement( \""+attribs[i].getElementNameAsString()+"\", (void*)&(param->"+attribs[i].getParamNameAsMember()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
  				// cblecken 17/01/2005
- 				if (attribs[i].getTypeName().equals("xsd__string")
- 						|| attribs[i].getTypeName().equals("xsd__anyURI")
-						|| attribs[i].getTypeName().equals("xsd__QName")
-						|| attribs[i].getTypeName().equals("xsd__notation"))
+ 				if (CUtils.isPointerType(attribs[i].getTypeName()))
  				{
  					writer.write("\tpSZ->serializeAsElement(\""+attribs[i].getSOAPElementNameAsString()+"\", Axis_URI_" + classname + ", (void*)(param->"+attribs[i].getParamNameWithoutSymbols()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");	
  				}
@@ -544,11 +538,7 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 					writer.write("\tarray = pIWSDZ->getBasicArray("+CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+ ", \""+attribs[i].getParamNameAsSOAPElement()+"\",0);\n");
 //					writer.write("\tparam->"+attribs[i].getParamNameAsMember()+" = ("+CUtils.getBasicArrayNameforType(attribs[i].getTypeName())+"&)array;\n");
 					String typename = attribs[i].getTypeName();
-					if (typename.equals("xsd__string")
-							|| typename.equals("xsd__anyURI")
-							|| typename.equals("xsd__QName")
-							|| typename.equals("xsd__notation")
-							|| typename.equals("xsd__NMTOKEN"))
+					if (CUtils.isPointerType(typename))
 					{
 						
 						if(attribs[i].getChoiceElement())			
@@ -648,11 +638,7 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 				}
 				//end remove _Ref sufix and _ prefix in SOAP tag name
 				if (attribs[i].isNillable()
-						|| attribs[i].getTypeName().equals("xsd__string")
-						|| attribs[i].getTypeName().equals("xsd__anyURI")
-						|| attribs[i].getTypeName().equals("xsd__QName")
-						|| attribs[i].getTypeName().equals("xsd__NMTOKEN")
-						|| attribs[i].getTypeName().equals("xsd__notation"))				{
+						|| CUtils.isPointerType(attribs[i].getTypeName()))				{
 					writer.write("\tparam->"+attribs[i].getParamNameAsMember()+" = pIWSDZ->"+CUtils.getParameterGetValueMethodName(attribs[i].getTypeName(), attribs[i].isAttribute())+"( \""+ soapTagName +"\",0);\n");
 					//Samisa
 				}

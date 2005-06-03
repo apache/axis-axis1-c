@@ -259,10 +259,7 @@ public class ClientStubWriter extends CPPClassWriter
         {
         	if (returntypeissimple
 					&& returntype.isNillable()
-					&& !(outparamTypeName.equals("xsd__string")
-							|| outparamTypeName.equals("xsd__anyURI")
-							|| outparamTypeName.equals("xsd__QName")
-							|| outparamTypeName.equals("xsd__notation")))
+					&& !(CUtils.isPointerType(outparamTypeName)))
         	{
         		writer.write(outparamTypeName + " *");        		
         	}
@@ -292,10 +289,7 @@ public class ClientStubWriter extends CPPClassWriter
             typeissimple = CUtils.isSimpleType(paramTypeName);
         	if (typeissimple
 					&& ((ParameterInfo) paramsB.get(i)).isNillable()
-					&& !(paramTypeName.equals("xsd__string")
-							|| paramTypeName.equals("xsd__anyURI")
-							|| paramTypeName.equals("xsd__QName")
-							|| paramTypeName.equals("xsd__notation")))
+					&& !(CUtils.isPointerType(paramTypeName)))
         	{
         		writer.write(paramTypeName + " * Value" + i);
         	}
@@ -344,18 +338,15 @@ public class ClientStubWriter extends CPPClassWriter
                 {
                     //for simple types
                 	if (returntype.isNillable()
-							&& !(outparamTypeName.equals("xsd__string")
-									|| outparamTypeName.equals("xsd__anyURI")
-									|| outparamTypeName.equals("xsd__QName")
-									|| outparamTypeName.equals("xsd__notation")))
+							&& !(CUtils.isPointerType(outparamTypeName)))
                 	{
                 		writer.write(outparamTypeName + "* Ret = NULL;\n");
                 	}
-			else if (outparamTypeName.equals("xsd__string"))
-			{
-                		writer.write(outparamTypeName + " Ret;\n");
-						writer.write("\tmemset(&Ret,0,sizeof(" + outparamTypeName + "));\n");
-			}
+					else if (outparamTypeName.equals("xsd__string"))
+					{
+		                		writer.write(outparamTypeName + " Ret;\n");
+								writer.write("\tmemset(&Ret,0,sizeof(" + outparamTypeName + "));\n");
+					}
                 	else
                 	{
 	                    String initValue = CUtils.getInitValue(outparamTypeName);
@@ -487,10 +478,7 @@ public class ClientStubWriter extends CPPClassWriter
                 	
                     //for simple types	
                 	if (((ParameterInfo) paramsB.get(i)).isNillable()
-                			|| paramTypeName.equals("xsd__string")
-							|| paramTypeName.equals("xsd__anyURI")
-							|| paramTypeName.equals("xsd__QName")
-							|| paramTypeName.equals("xsd__notation"))
+                			|| CUtils.isPointerType(paramTypeName))
                 	{
                 		writer.write("\t\tm_pCall->addParameter(");
 	                    writer.write(
@@ -612,10 +600,7 @@ public class ClientStubWriter extends CPPClassWriter
                     {
                 		//Chinthana:
                 		//Changes have done for handle AXIS_OUT_PARAM Types.
-                		if (currentParaType.equals ("xsd__string")
-                				|| currentParaType.equals ("xsd__anyURI")
-                				|| currentParaType.equals ("xsd__QName")
-                				|| currentParaType.equals ("xsd__notation"))
+                		if (CUtils.isPointerType(currentParaType))
                 		{
                             writer.write(
                                 "\t\t\t\t"
