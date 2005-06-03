@@ -28,7 +28,7 @@
 #define _BASICHANDLER_H__OF_AXIS_INCLUDED_
 
 #include <axis/IMessageData.hpp>
-#include "GDefine.hpp"
+#include <axis/GDefine.hpp>
 
 AXIS_CPP_NAMESPACE_START
 

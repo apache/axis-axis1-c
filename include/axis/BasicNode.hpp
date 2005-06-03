@@ -25,7 +25,7 @@
 #if !defined(_BASICNODE_H____OF_AXIS_INCLUDED_)
 #define _BASICNODE_H____OF_AXIS_INCLUDED_
 
-#include "GDefine.hpp"
+#include <axis/GDefine.hpp>
 #include <axis/IAttribute.hpp>
 #include <list>
 

@@ -20,9 +20,9 @@
 #if !defined(_AXISWRAPPERAPI_H____OF_AXIS_INCLUDED_)
 #define _AXISWRAPPERAPI_H____OF_AXIS_INCLUDED_
 
-#include "IWrapperSoapDeSerializer.hpp"
-#include "IWrapperSoapSerializer.hpp"
-#include "BasicHandler.hpp"
+#include <axis/IWrapperSoapDeSerializer.hpp>
+#include <axis/IWrapperSoapSerializer.hpp>
+#include <axis/BasicHandler.hpp>
 
 AXIS_CPP_NAMESPACE_START
 

@@ -18,11 +18,11 @@
 #if !defined(_IMESSAGEDATA_H___OF_AXIS_INCLUDED_)
 #define _IMESSAGEDATA_H___OF_AXIS_INCLUDED_
 
-#include "GDefine.hpp"
-#include "IHandlerSoapDeSerializer.hpp"
-#include "IHandlerSoapSerializer.hpp"
-#include "IWrapperSoapDeSerializer.hpp"
-#include "IWrapperSoapSerializer.hpp"
+#include <axis/GDefine.hpp>
+#include <axis/IHandlerSoapDeSerializer.hpp>
+#include <axis/IHandlerSoapSerializer.hpp>
+#include <axis/IWrapperSoapDeSerializer.hpp>
+#include <axis/IWrapperSoapSerializer.hpp>
 
 AXIS_CPP_NAMESPACE_START
 

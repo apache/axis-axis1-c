@@ -18,8 +18,8 @@
 #if !defined(_IHEADERBLOCK_H____OF_AXIS_INCLUDED_)
 #define _IHEADERBLOCK_H____OF_AXIS_INCLUDED_
 
-#include "BasicNode.hpp"
-#include "SoapEnvVersions.hpp"
+#include <axis/BasicNode.hpp>
+#include <axis/SoapEnvVersions.hpp>
 #include <axis/IAttribute.hpp>
 #include <axis/INamespace.hpp>
 

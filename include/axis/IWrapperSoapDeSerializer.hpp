@@ -18,10 +18,10 @@
 #if !defined(_IWRAPPERSOAPDESERIALIZER_H____OF_AXIS_INCLUDED_)
 #define _IWRAPPERSOAPDESERIALIZER_H____OF_AXIS_INCLUDED_
 
-#include "AxisUserAPI.hpp"
-#include "TypeMapping.hpp"
-#include "WSDDDefines.hpp"
-#include "ISoapAttachment.hpp"
+#include <axis/AxisUserAPI.hpp>
+#include <axis/TypeMapping.hpp>
+#include <axis/WSDDDefines.hpp>
+#include <axis/ISoapAttachment.hpp>
 /**
     @class IWrapperSoapDeSerializer
     @brief interface for the IWrapperSoapDeSerializer class.

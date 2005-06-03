@@ -21,7 +21,7 @@
 
 /* SoapEnvVersions.h:*/
 
-#include "GDefine.hpp"
+#include <axis/GDefine.hpp>
 
 #ifdef WIN32
 #pragma warning (disable : 4786)

@@ -23,7 +23,7 @@
 #if !defined(_TYPEMAPPING_H____OF_AXIS_INCLUDED_)
 #define _TYPEMAPPING_H____OF_AXIS_INCLUDED_
 
-#include "GDefine.hpp"
+#include <axis/GDefine.hpp>
 #include <map>
 #include <string>
 
