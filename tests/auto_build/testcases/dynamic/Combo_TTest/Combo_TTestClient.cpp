@@ -43,8 +43,9 @@
 
 //#define MACRO_NUM_THREADS 10
 //int NUM_THREADS = MACRO_NUM_THREADS;
-#define NUM_THREADS 10
-#define ARRAYSIZE 2
+#define NUM_THREADS		4
+#define ARRAYSIZE		2
+#define ARRAYSIZE_STT	100
 
 
 /* In windows the entry point function return type is DWORD WINAPI
@@ -73,6 +74,8 @@ RETTYPE calThreadFunc(ARGTYPE Param)
         }
         catch(exception& e)
         {
+			e = e;
+
             cout << "Unknown exception has occured" << endl;
         }
         catch(...)
@@ -87,49 +90,88 @@ RETTYPE calThreadFunc(ARGTYPE Param)
 
 
 
-RETTYPE arrayDocThreadFunc(ARGTYPE Param)
+RETTYPE arrayDocThreadFunc( ARGTYPE Param)
 {
-        /*Type casting the url to char * */
-        char *p=(char *)Param;
-        char endpoint[256];
-		int x;
-        const char* url="http://localhost:9060/SimpleArray/services/arrayTest";
-		if(p!=NULL)
-             url=p;
-        try
-        {
-				sprintf(endpoint, "%s", url);
-				ArrayTestPortType ws(endpoint);
-				//testing echoIntArray
-				IntArrayType arrin;
-				arrin.intItem.m_Array = new int*[ARRAYSIZE];
-				int * intArray = new int[ARRAYSIZE];
-				arrin.intItem.m_Size = ARRAYSIZE;
-				for (x=0;x<ARRAYSIZE;x++)
-				{
-					intArray[x] = x;
-					arrin.intItem.m_Array[x] = &intArray[x];
-				}
-				if (ws.echoIntArray(&arrin)->intItem.m_Array != NULL)
-					cout << "successful ";
-				else
-					cout << "failed "<<endl;		
-		}catch(AxisException& e)
-        {
-            cout << "Exception : " << e.what() << endl;
-        }
-        catch(exception& e)
-        {
-            cout << "Unknown exception has occured" << endl;
-        }
-        catch(...)
-        {
-            cout << "Unknown exception has occured" << endl;
-        }
-                #ifndef WIN32
-                        pthread_exit(0);
-                #endif
-        return 0;
+	/*Type casting the url to char * */
+	char *			p = (char *) Param;
+	char			endpoint[256];
+	int				x;
+	const char *	url = "http://localhost:9060/SimpleArray/services/arrayTest";
+
+	if( p != NULL)
+	{
+		url = p;
+	}
+
+	try
+	{
+		sprintf( endpoint, "%s", url);
+
+		ArrayTestPortType	ws( endpoint);
+
+		//testing echoIntArray
+		IntArrayType	arrin;
+
+		arrin.intItem.m_Size = ARRAYSIZE;			 // Set the array size.
+		arrin.intItem.m_Array = new int*[ARRAYSIZE]; // Create an array of integer pointers.
+/*
+		int * intArray = new int[ARRAYSIZE];		 // Create a pointer to an integer array.
+
+		// Fill the array with values from 0 to ARRAYSIZE and set the integer pointer to the
+		// pointer of the integer array.
+		for( x = 0; x < ARRAYSIZE; x++)
+		{
+			intArray[x] = x;
+			arrin.intItem.m_Array[x] = &intArray[x];
+		}
+*/
+
+		// Fill the array with values from 0 to ARRAYSIZE and set the integer pointer to the
+		// pointer of the integer array.
+		for( int y = 0; y < ARRAYSIZE; y++)
+		{
+			int * intArray = new int[ARRAYSIZE];		 // Create a pointer to an integer array.
+
+			for( x = 0; x < ARRAYSIZE; x++)
+			{
+				intArray[x] = x;
+			}
+
+			arrin.intItem.m_Array[y] = intArray;
+		}
+/**/
+		if( ws.echoIntArray( &arrin)->intItem.m_Array != NULL)
+		{
+			cout << "successful ";
+		}
+		else
+		{
+			cout << "failed " << endl;
+		}
+
+	}
+	catch( AxisException& e)
+	{
+		e = e;
+
+		cout << "Exception : " << e.what() << endl;
+	}
+	catch( exception& e)
+	{
+		e = e;
+
+		cout << "Unknown exception has occured" << endl;
+	}
+	catch(...)
+	{
+		cout << "Unknown exception has occured" << endl;
+	}
+
+	#ifndef WIN32
+	pthread_exit( 0);
+	#endif
+
+	return 0;
 }
 
 RETTYPE mathOpsThreadFunc(ARGTYPE Param)
@@ -165,10 +207,14 @@ RETTYPE mathOpsThreadFunc(ARGTYPE Param)
 				}
         }catch(AxisException& e)
         {
+		e = e;
+
             cout << "Exception : " << e.what() << endl;
         }
         catch(exception& e)
         {
+		e = e;
+
             cout << "Unknown exception has occured" << endl;
         }
         catch(...)
@@ -184,58 +230,77 @@ RETTYPE mathOpsThreadFunc(ARGTYPE Param)
 
 RETTYPE simpleTypeThreadFunc(ARGTYPE Param)
 {
-        /*Type casting the url to char * */
-        char *p=(char *)Param;
-        char endpoint[256];
-        const char* url="http://localhost:9060/SimpleTypeArray/services/sampleWS";
-        if(p!=NULL)
-             url=p;
-          SimpleTypeArrayWS *ws;
-        try
-        {
-                sprintf(endpoint, "%s", url);
-                ws=new SimpleTypeArrayWS(endpoint, APTHTTP1_1);
-                Type *input;
-				Type *output;
-				xsd__int_Array array_input;
-				int entries[100];
-				int i;
+	/*Type casting the url to char * */
+	char *			p = (char *) Param;
+	char			endpoint[256];
+	const char *	url = "http://localhost:9060/SimpleTypeArray/services/sampleWS";
 
-				array_input.m_Array = new int*[100];
-				array_input.m_Size  = 100;
+	if( p != NULL)
+	{
+		url = p;
+	}
 
-				 for ( i = 0; i < 100; i++ ) {
-					entries[i] = i;
-				 array_input.m_Array[i] = &entries[i];
-				}
+	SimpleTypeArrayWS *	ws;
 
-				 input = new Type();
-				input->item = array_input;
+	try
+	{
+		sprintf( endpoint, "%s", url);
 
-			
+		ws = new SimpleTypeArrayWS( endpoint, APTHTTP1_1);
 
-				output = ws->getInput(input);
-				i=0;
-				if(*(output->item.m_Array[i])== 0)
-					cout << "successful ";				
-				delete ws;
-        }
-        catch(AxisException& e)
-        {
-            cout << "Exception : " << e.what() << endl;
-        }
-        catch(exception& e)
-        {
-            cout << "Unknown exception has occured" << endl;
-        }
-        catch(...)
-        {
-            cout << "Unknown exception has occured" << endl;
-        }
-                #ifndef WIN32
-                        pthread_exit(0);
-                #endif
-        return 0;
+		Type *			input;
+		Type *			output;
+		xsd__int_Array	array_input;
+		int				i;
+
+		array_input.m_Array = new int*[ARRAYSIZE_STT];
+		array_input.m_Size  = ARRAYSIZE_STT;
+
+		for( int j = 0; j < ARRAYSIZE_STT; j++)
+		{
+			int * piEntries = new int[ARRAYSIZE_STT];
+
+			for( i = 0; i < ARRAYSIZE_STT; i++)
+			{
+				piEntries[i] = i;
+			}
+
+			array_input.m_Array[j] = piEntries;
+		}
+
+		input = new Type();
+		input->item = array_input;
+
+		output = ws->getInput( input);
+
+		i = 0;
+
+		if( *(output->item.m_Array[i]) == 0)
+		{
+			cout << "successful ";				
+		}
+
+		delete ws;
+	}
+	catch( AxisException& e)
+	{
+		cout << "Exception : " << e.what() << endl;
+	}
+	catch(exception& e)
+	{
+		e = e;
+		cout << "Unknown exception has occured" << endl;
+	}
+	catch(...)
+	{
+		cout << "Unknown exception has occured" << endl;
+	}
+
+	#ifndef WIN32
+	pthread_exit(0);
+	#endif
+
+	return 0;
 }
 
 
@@ -249,7 +314,7 @@ int main(int argc, char *argv[])
 		 /* Extracting endpoints for 4 stubs.*/				
 		
 		 if(argc>=7){
-			 for(i=0;i<4;i++){
+			 for(i=0;i<NUM_THREADS;i++){
 				char *temp=argv[3+i];
 				count=0;
 				endpoint_list[i]=new char[100];
@@ -269,30 +334,51 @@ int main(int argc, char *argv[])
 		 }
 
 		 #ifdef WIN32
-			/*Windows specific code comes here */
+		/*Windows specific code comes here */
 		   
-			HANDLE hThread[NUM_THREADS];
-			DWORD dwThreadId;
-			DWORD (_stdcall *fnptr[5])(LPVOID p)={calThreadFunc,arrayDocThreadFunc,mathOpsThreadFunc,simpleTypeThreadFunc};
-			//char endpoint[50];
-			for(i=0;i<NUM_THREADS;i++){				    
-					hThread[i] = CreateThread(
-											NULL,                        // no security attributes
-											0,                           // use default stack size
-											fnptr[i%4],                 // thread function
-											LPVOID(endpoint_list[i%4]),             // argument to thread function
-											0,   
-										    &dwThreadId);              // returns the thread identifier
+		HANDLE	hThread[NUM_THREADS] = { NULL, NULL, NULL, NULL};
+		DWORD	dwThreadId;
+		DWORD	(_stdcall *fnptr[NUM_THREADS]) (LPVOID p) = { calThreadFunc,
+															  arrayDocThreadFunc,
+															  mathOpsThreadFunc,
+															  simpleTypeThreadFunc};
+
+		for( i = 0; i < NUM_THREADS; i++)
+		{				    
+			hThread[i] = CreateThread( NULL,						// no security attributes
+									   0,							// use default stack size
+									   fnptr[i],					// thread function
+									   LPVOID( endpoint_list[i]),	// argument to thread function
+									   0,   
+									   &dwThreadId);				// returns the thread identifier
 					
-			if (hThread[i] == NULL)
+			if( hThread[i] == NULL)
 			{
-			cout<<"Thread creation Failed";
+				cout<<"Thread creation Failed";
 			}
+		}
+
+		/* Waiting for threads to terminate */
+		WaitForMultipleObjects( NUM_THREADS, hThread, true, INFINITE);
+
+		for( i = 0; i < NUM_THREADS; i++)
+		{
+			DWORD	dwExitCode;
+
+			GetExitCodeThread( hThread[i], &dwExitCode);
+
+			if( STILL_ACTIVE == dwExitCode)
+			{
+				cout<<"error - threads still active"<<endl;
 			}
-			/* Waiting for threads to terminate */
-			WaitForMultipleObjects(NUM_THREADS,hThread,true, INFINITE);
-			for(i=0;i<NUM_THREADS;i++)
-					CloseHandle( hThread[i] );
+			else
+			{
+				if( hThread[i])
+				{
+					CloseHandle( hThread[i]);
+				}
+			}
+		}
 
 		#else
 		    void *(*fnptr[5])(void * p)={calThreadFunc,arrayDocThreadFunc,mathOpsThreadFunc,simpleTypeThreadFunc};
