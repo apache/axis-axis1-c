@@ -31,15 +31,18 @@ public class StopTCPMonitor {
 	}
 
 	public void stopMonitor() {
+	    System.out.println( "StopTCPMonitor#stopMonitor(): Sending stop message to monitor");
 		Socket socket = null;
 		BufferedWriter dos = null;
 		try {
 		socket = new Socket(hostname, port);
 			dos = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 			dos.write(STOPTCPMON);
+			dos.flush();
 		} catch (UnknownHostException uhe) {
 			uhe.printStackTrace();
 		} catch (ConnectException ce) {
+		    ce.printStackTrace();
 		} catch (IOException ie) {
 			ie.printStackTrace();
 		} finally {
@@ -47,7 +50,7 @@ public class StopTCPMonitor {
 				dos.close();
 				socket.close();
 			} catch (Exception exe) {
-				;
+			    exe.printStackTrace();
 			}
 		}
 	}

@@ -21,230 +21,148 @@ import java.net.*;
 /**
  * TestClientListener runs as a thread of the
  * 
- * @see TestSingleton class and creates a ServerSocket object on port <b>6323
- *      <b>and from this creates a socket that accepts incoming requests. When a
- *      request is received new threads are created of type
+ * @see TestSingleton class and creates a ServerSocket object on a port and from
+ *      this creates a socket that accepts incoming requests. When a request is
+ *      received new threads are created of type
  * @see TestClientThread which do all the communication.
- * @author Andrew Perry
+ * @author Andrew Perry, hawkeye
  * @since 1.0
  */
 
 public class TestClientListener implements Runnable
 {
-    private int             CREATE_SOCKET_TO_SERVER_RETRY =5;
-    int                     listenPort                    =0;
-    int                     servicePort                   =0;
-    String                  serviceHost                   =null;
-    boolean                 stayAlive                     =false;
-    ServerSocket            server                        =null;
-    Thread                  thisThread                    =null;
+    private int     servicePort    =0;
+    private String  serviceHostNme =null;
+    private boolean stayAlive      =false;
+    ServerSocket    serverSocket   =null;
 
-    public static final int CAPTURE_REQUEST               =1;
-    public static final int CAPTURE_RESPONSE              =2;
-
-    public TestClientListener( )
-    {}
-
+    /**
+     * 
+     * @param listenPort the port to listen for clients requests on
+     * @param serviceHost the host that the service is on.
+     * @param servicePort the port that the service is on
+     * @throws IOException if we can't create a server socket listening for the
+     *             client to send us a request
+     */
     public TestClientListener(int listenPort, String serviceHost,
-            int servicePort)
+            int servicePort) throws IOException
     {
-        this.listenPort=listenPort;
-        this.serviceHost=serviceHost;
+        this.serviceHostNme=serviceHost;
         this.servicePort=servicePort;
-    }
 
-    public void startListener( )
-    {
-        if (thisThread!=null&&thisThread.isAlive( ))
-            throw new IllegalStateException("ServerManager already running");
-
-        try
-        {
-            server=new ServerSocket(listenPort);
-            thisThread=new Thread(this);
-            thisThread.start( );
-        }
-        catch (Exception ioe)
-        {
-            ioe.printStackTrace(System.err);
-        }
-    }
-
-    public void stopListener( )
-    {
-        stayAlive=false;
-        if (thisThread.isAlive( ))
-        {
-            try
-            {
-                thisThread.join( );
-            }
-            catch (InterruptedException interruptedException)
-            {
-                // this is fine
-                interruptedException.printStackTrace( );
-            }
-        }
+        // no point in carrying on if we can't listen to the client !
+        serverSocket=new ServerSocket(listenPort);
     }
 
     /**
-     * Implementation of
-     * 
-     * @see Runnable run method required for
+     *
+     * Sits waiting for a client thread and when one connects we start up a new TestClientThread to handle
+     * the request. This method then goes round again waiting for future requests.
+     *  
      * @see Thread
      */
     public void run( )
     {
         stayAlive=true;
         Socket clientSocket=null;
-        Socket serviceSocket=null;
-        try
-        {
-            TestClientThread requestReader=null;
-            TestClientThread responseReader=null;
-            while (stayAlive==true)
-            {
-                // server.setSoTimeout(500);
-                try
-                {
-                    clientSocket=server.accept( );
-                    serviceSocket = createSocketToServer();
-
-                    if (serviceSocket==null)
-                    {
-                        continue;
-                    }
-
-                    requestReader=new TestClientThread(clientSocket,
-                            serviceSocket, CAPTURE_REQUEST);
-                    
-                    responseReader=new TestClientThread(clientSocket,
-                            serviceSocket, CAPTURE_RESPONSE);
-                    requestReader.start( );
-                    // wait for it to receive a request before starting the responsereader
-                    int bytes =0;
-                    while((bytes=requestReader.getBytes())==0)
-                    {
-                        // sleep here while waiting for them to receive their first bytes.
-                        thisThread.sleep(100);
-                    }
-                    
-                    // OK so the requestreader has some bytes; Now see whether they have the number of
-                    // bytes that we expect them to get for a stoptcpmon request
-                    if(bytes==StopTCPMonitor.STOPTCPMON.length())
-                    {
-                        // probably means that they have got a stop request
-                        // yield to the other threads and see if they stop
-                        thisThread.yield();
-                        
-                        // now see if they are still alive
-                        // if they've been told to stop then we should stop listening for
-                        // new requests
-                        stayAlive = requestReader.continueToRun;
-                    }
-                    else
-                    {
-                        responseReader.start( );
-                    }
-                    
-                    try
-                    {
-                        // If the response reader is still running then
-                        // ask it to stop and wait for it.
-                        if (responseReader.isAlive( ))
-                        {
-                            responseReader.cease( );
-                            // Wait for upto another .5 secs for the request
-                            // reader to finish
-//                            responseReader.join(2000);
-                            responseReader.join();
-                        }
-                    }
-                    catch (Exception me)
-                    {
-                        me.printStackTrace(System.err);
-                    }
-                    finally
-                    {
-                        try
-                        {
-                            if (clientSocket!=null)
-                                clientSocket.close( );
-                            if (serviceSocket!=null)
-                                serviceSocket.close( );
-                        }
-                        catch (IOException mie)
-                        {
-                            mie.printStackTrace(System.err);
-                        }
-                    }
-                }
-                catch (SocketTimeoutException ste)
-                {
-                    ste.printStackTrace();
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            System.err.println("TestClientListener exception: "+e.getMessage( ));
-        }
-        if (server!=null)
-            try
-            {
-                if (clientSocket!=null)
-                    clientSocket.close( );
-                if (serviceSocket!=null)
-                    serviceSocket.close( );
-                server.close( );
-            }
-            catch (IOException ioe)
-            {
-                //ioe.printStackTrace(System.err);
-            }
-        server=null;
-        stayAlive=false;
-    }
-    
-    public Socket createSocketToServer()
-    {
-        Socket serviceSocket=null;
-        int retry=CREATE_SOCKET_TO_SERVER_RETRY;
-        do
+        //        try
+        //        {
+        //            //serverSocket.setSoTimeout(2000);
+        //        }
+        //        catch(SocketException exception)
+        //        {
+        //            exception.printStackTrace();
+        //        }
+        while (stayAlive==true)
         {
             try
             {
-                serviceSocket=new Socket(serviceHost, servicePort);
+//                System.out
+//                        .println("TestClientListener#run(): Waiting for a new client request");
+                clientSocket=serverSocket.accept( );
+//                System.out
+//                        .println("TestClientListener#run():Got a client new client request");
             }
-            catch (Exception se)
+            catch (SocketTimeoutException socketTimeoutException)
+            {
+                // System.out.println( "socket timedout");
+                // that's fine - this is what helps us get out of this loop
+            }
+            catch (IOException exception)
             {
                 System.err
-                        .println("Failed to open socket to service: "
-                                +se);
-                if (retry<=0)
+                        .println("IOException when accepting a connection from the client: "
+                                +exception);
+                throw new RuntimeException(
+                        "IOException when accepting a connection from the client: "
+                                +exception);
+            }
+
+            if (clientSocket!=null)
+            {
+                // Wait until we have received our first bytes from the
+                // client before we create the connection to the service.
+                TestClientThread connectionToServer=null;
+                try
                 {
-                    stayAlive=false;
-                    continue;
+
+                        connectionToServer=new TestClientThread(clientSocket,
+                                serviceHostNme, servicePort);
+                    connectionToServer.start( );
                 }
-                else
+                catch (StopRequestException stopRequestException)
                 {
-                    // go to sleep
-                    System.err.println("Going to sleep");
-                    try
-                    {
-                        Thread.currentThread( ).sleep(2500);
-                    }
-                    catch(InterruptedException interruptedException)
-                    {
-                        // don't this is an issue?
-                        System.out.println( "Got an interruptedxception sleeping on this thread "+interruptedException);
-                    }
-                    System.err.println("Woke up ");
+                    System.out
+                            .println("TestClientListener got a Stop monitor message");
+                    stayAlive=false;
+                }
+                catch (ConnectException connectException)
+                {
+                    // OK, well for whatever reasons the socket is closed so go
+                    // around and try and listen again !
+                    System.err
+                            .println("Connection exception when reading in bytes from the client : "
+                                    +connectException);
+                }
+                catch (IOException exception)
+                {
+                    System.err
+                            .println("IOException when creating the connection to the server or getting the connection stream back to the client: "
+                                    +exception);
+                    throw new RuntimeException(
+                            "IOException when creating the connection to the server or getting the connection stream back to the client: "
+                                    +exception);
                 }
             }
         }
-        while (serviceSocket==null&&retry-->0);
-        return serviceSocket;
+        System.out.println("Stopping monitor");
+        // We've been told to stop
+        // cleanup - hmm, well, we haven't created a connectionToServerThread
+        // because that's what returned the Stop exception
+        // therefore it hasn't created a thread either so nothing to do there
+        // Tell the Monitor to stop writing things out and to tidy itself up
+        try
+        {
+            TCPMonitor.stop( );
+        }
+        catch (IOException exception)
+        {
+            System.err
+                    .println("Caught an IOException when stopping the monitor: "
+                            +exception);
+        }
+
+        // release our server socket
+        try
+        {
+            serverSocket.close( );
+        }
+        catch (IOException exception)
+        {
+            System.err.println("IOException when closing serverSocket: "
+                    +exception);
+        }
     }
+
 }
 
