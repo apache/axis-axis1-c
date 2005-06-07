@@ -83,7 +83,7 @@
    <element name="echoFloatArrayResponse">
     <complexType>
      <sequence>
-      <element maxOccurs="unbounded" minOccurs="0" name="echoFloatArrayReturn" type="xsd:float"/>
+      <element maxOccurs="unbounded" minOccurs="0" nillable="true" name="echoFloatArrayReturn" type="xsd:float"/>
      </sequence>
     </complexType>
    </element>

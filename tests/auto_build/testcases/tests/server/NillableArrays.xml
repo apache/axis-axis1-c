@@ -1,0 +1,8 @@
+<service>
+    <name>NillableArrays</name>
+    <description>NillableArrays test</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>NillableArrays.cpp</serviceCode>
+    <wsdl>NillableArrays.wsdl</wsdl>
+	<servicename></servicename>
+</service>
