@@ -30,73 +30,98 @@
 #include <string.h>
 /* Defining platform specific constants  */
 #ifdef WIN32
-        #include <windows.h>
-        #define RETTYPE DWORD WINAPI
-        #define ARGTYPE LPVOID
+#include <windows.h>
+#define RETTYPE DWORD WINAPI
+#define ARGTYPE LPVOID
 #else
-        #include <pthread.h>
-        #include <unistd.h>
-        #define RETTYPE void*
-        #define ARGTYPE void*
+#include <pthread.h>
+#include <unistd.h>
+#define RETTYPE void*
+#define ARGTYPE void*
 #endif
 
 
 //#define MACRO_NUM_THREADS 10
 //int NUM_THREADS = MACRO_NUM_THREADS;
-#define NUM_THREADS		4
+#define NUM_TESTS		4
+#define NUM_THREADS		10
 #define ARRAYSIZE		2
 #define ARRAYSIZE_STT	100
 
 
 /* In windows the entry point function return type is DWORD WINAPI
    In linux it is void *                                          */
-RETTYPE calThreadFunc(ARGTYPE Param)
+RETTYPE calThreadFunc( ARGTYPE Param)
 {
-        /*Type casting the url to char * */
-        char *p=(char *)Param;
-        char endpoint[256];
-        const char* url="http://localhost:9060/Calculator/services/Calculator";
-        if(p!=NULL)
-             url=p;
-        int iResult;
-        try
-        {
-                sprintf(endpoint, "%s", url);
-                Calculator ws(endpoint);
-                iResult = ws.add(3,2);
-				if(iResult==5)					
-                  cout << "successful ";
+// Debug v Must be removed
+printf( "> calThreadFunc( %s)\n", (char *) Param);
+// Debug ^ Must be removed
 
-        }
-        catch(AxisException& e)
-        {
-            cout << "Exception : " << e.what() << endl;
-        }
-        catch(exception& e)
-        {
-			e = e;
+	/*Type casting the url to char * */
+	char *	p = (char *) Param;
+	char	endpoint[256];
+	char *	url = "http://localhost:9060/Calculator/services/Calculator";
 
-            cout << "Unknown exception has occured" << endl;
-        }
-        catch(...)
-        {
-            cout << "Unknown exception has occured" << endl;
-        }
-                #ifndef WIN32
-                        pthread_exit(0);
-                #endif
-        return 0;
+	if( p != NULL)
+	{
+		url = p;
+	}
+
+	int	iResult;
+
+	try
+	{
+		sprintf( endpoint, "%s", url);
+
+		Calculator	ws( endpoint);
+
+// Debug v Must be removed
+printf( "- Created Calculator web service\n");
+// Debug ^ Must be removed
+
+		iResult = ws.add( 3,2);
+	
+		if( iResult == 5)
+		{
+			cout << "successful ";
+		}
+	}
+	catch( AxisException& e)
+	{
+		cout << "Exception : " << e.what() << endl;
+	}
+	catch( exception& e)
+	{
+		e = e;
+
+		cout << "Unknown exception has occured" << endl;
+	}
+	catch( ...)
+	{
+		cout << "Unknown exception has occured" << endl;
+	}
+
+	#ifndef WIN32
+	pthread_exit( 0);
+	#endif
+
+// Debug v Must be removed
+printf( "< calThreadFunc\n");
+// Debug ^ Must be removed
+	return 0;
 }
-
-
 
 RETTYPE arrayDocThreadFunc( ARGTYPE Param)
 {
+// Debug v Must be removed
+printf( "> arrayDocThreadFunc( %s)\n", (char *) Param);
+// Debug ^ Must be removed
+
 	/*Type casting the url to char * */
-	char *			p = (char *) Param;
-	char			endpoint[256];
-	int				x;
-	const char *	url = "http://localhost:9060/SimpleArray/services/arrayTest";
+	char *	p = (char *) Param;
+	char	endpoint[256];
+	int		x;
+	char *	url = "http://localhost:9060/SimpleArray/services/arrayTest";
 
 	if( p != NULL)
 	{
@@ -108,6 +133,10 @@ RETTYPE arrayDocThreadFunc( ARGTYPE Param)
 		sprintf( endpoint, "%s", url);
 
 		ArrayTestPortType	ws( endpoint);
+
+// Debug v Must be removed
+printf( "- Created ArrayTestPortType web service\n");
+// Debug ^ Must be removed
 
 		//testing echoIntArray
 		IntArrayType	arrin;
@@ -171,79 +200,115 @@ RETTYPE arrayDocThreadFunc( ARGTYPE Param)
 	pthread_exit( 0);
 	#endif
 
+// Debug v Must be removed
+printf( "< arrayDocThreadFunc\n");
+// Debug ^ Must be removed
 	return 0;
 }
 
-RETTYPE mathOpsThreadFunc(ARGTYPE Param)
+RETTYPE mathOpsThreadFunc( ARGTYPE Param)
 {
-        /*Type casting the url to char * */
-        char *p=(char *)Param;
-        char endpoint[256];
-        const char* url="http://localhost:9060/MathOps/services/MathOps";
-        if(p!=NULL)
-             url=p;
-		const char* op = 0;
-		const char* p1 = 0;
-		const char* p2 = 0;
-		int i1=0, i2=0;
-		int iResult;
-        try
-        {
-                sprintf(endpoint, "%s", url);
-				MathOps ws(endpoint);
-				op = "div";/*Operation name*/
-				i1 = 10;/*First parameter*/
-				i2 = 5;/*Second parameter*/
+// Debug v Must be removed
+printf( "> mathOpsThreadFunc( %s)\n", (char *) Param);
+// Debug ^ Must be removed
 
-				if (strcmp(op, "div") == 0)
-				{
-					iResult = ws.div(i1, i2);		
-					if(iResult==2)
-						cout << "successful ";
-				}
-				else 
-				{
-					cout << "Invalid operation "<< op<< endl<<endl;
-				}
-        }catch(AxisException& e)
-        {
-		e = e;
-
-            cout << "Exception : " << e.what() << endl;
-        }
-        catch(exception& e)
-        {
-		e = e;
-
-            cout << "Unknown exception has occured" << endl;
-        }
-        catch(...)
-        {
-            cout << "Unknown exception has occured" << endl;
-        }
-        #ifndef WIN32
-                pthread_exit(0);
-        #endif
-        return 0;
-}
-
-
-RETTYPE simpleTypeThreadFunc(ARGTYPE Param)
-{
 	/*Type casting the url to char * */
-	char *			p = (char *) Param;
-	char			endpoint[256];
-	const char *	url = "http://localhost:9060/SimpleTypeArray/services/sampleWS";
+	char *	p = (char *) Param;
+	char	endpoint[256];
+	char *	url = "http://localhost:9060/MathOps/services/MathOps";
 
 	if( p != NULL)
 	{
 		url = p;
 	}
 
-	SimpleTypeArrayWS *	ws;
+	const char *	op = 0;
+	const char *	p1 = 0;
+	const char *	p2 = 0;
+	int				i1 = 0;
+	int				i2 = 0;
+	int				iResult;
 
 	try
 	{
+		sprintf( endpoint, "%s", url);
+
+		MathOps	ws( endpoint);
+
+// Debug v Must be removed
+printf( "- Created MathOps web service\n");
+// Debug ^ Must be removed
+
+		op = "div";	// Operation name
+		i1 = 10;	// First parameter
+		i2 = 5;		// Second parameter
+
+		if( strcmp( op, "div") == 0)
+		{
+			iResult = ws.div( i1, i2);
+
+			if( iResult == 2)
+			{
+				cout << "successful ";
+			}
+		}
+		else 
+		{
+			cout << "Invalid operation "<< op << endl << endl;
+		}
+	}
+	catch( AxisException& e)
+	{
+		e = e;
+
+		cout << "Exception : " << e.what() << endl;
+	}
+	catch( exception& e)
+	{
+		e = e;
+
+		cout << "Unknown exception has occured" << endl;
+	}
+	catch( ...)
+	{
+		cout << "Unknown exception has occured" << endl;
+	}
+
+	#ifndef WIN32
+	pthread_exit(0);
+	#endif
+
+// Debug v Must be removed
+printf( "< mathOpsThreadFunc\n");
+// Debug ^ Must be removed
+	return 0;
+}
+
+
+RETTYPE simpleTypeThreadFunc( ARGTYPE Param)
+{
+// Debug v Must be removed
+printf( "> simpleTypeThreadFunc( %s)\n", (char *) Param);
+// Debug ^ Must be removed
+
+	/*Type casting the url to char * */
+	char *	p = (char *) Param;
+	char	endpoint[256];
+	char *	url = "http://localhost:9060/SimpleTypeArray/services/sampleWS";
+
+	if( p != NULL)
+	{
+		url = p;
+	}
+
+	try
+	{
+		SimpleTypeArrayWS *	ws;
+
+// Debug v Must be removed
+printf( "- Created SimpleTypeArrayWS web service\n");
+// Debug ^ Must be removed
+
 		sprintf( endpoint, "%s", url);
 
 		ws = new SimpleTypeArrayWS( endpoint, APTHTTP1_1);
@@ -289,6 +354,7 @@ RETTYPE simpleTypeThreadFunc(ARGTYPE Param)
 	catch(exception& e)
 	{
 		e = e;
+
 		cout << "Unknown exception has occured" << endl;
 	}
 	catch(...)
@@ -300,58 +366,81 @@ RETTYPE simpleTypeThreadFunc(ARGTYPE Param)
 	pthread_exit(0);
 	#endif
 
+// Debug v Must be removed
+printf( "< simpleTypeThreadFunc()\n");
+// Debug ^ Must be removed
 	return 0;
 }
 
+//--------------------------------------------------------------------------------------
 
-int main(int argc, char *argv[])
+int main( int argc, char * argv[])
 {
-    Axis::initialize(false);
-	try{
-		 int i;	
-		 char *endpoint_list[4];
-		 int count=0;
-		 /* Extracting endpoints for 4 stubs.*/				
-		
-		 if(argc>=7){
-			 for(i=0;i<NUM_THREADS;i++){
-				char *temp=argv[3+i];
-				count=0;
-				endpoint_list[i]=new char[100];
-				for(int j=0;temp[j]!='\0';j++){
-					if(temp[j]=='/')
+	Axis::initialize( false);
+
+	try
+	{
+		int		i;	
+		char *	endpoint_list[NUM_TESTS];
+		int		count = 0;
+
+		/* Extracting endpoints for 4 stubs.*/				
+		if( argc >= 7)
+		{
+			for( i = 0; i < NUM_TESTS; i++)
+			{
+				char *	temp = argv[3 + i];
+
+				count = 0;
+				endpoint_list[i] = new char[100];
+
+				for( int j = 0; temp[j] != '\0'; j++)
+				{
+					if( temp[j] == '/')
+					{
 						count++;
-					if(count==3){
-						sprintf(endpoint_list[i],"%s%s:%s%s","http://",argv[1],argv[2],&temp[j]);
+					}
+
+					if( count == (NUM_TESTS - 1))
+					{
+						sprintf( endpoint_list[i], "%s%s:%s%s", "http://", argv[1], argv[2], &temp[j]);
 						break;
 					}
 				}
-				
-			 }		
-		 }else{
-			 cout<<"Endpoint details not set correctly"<<endl;
-			 exit(0);
-		 }
+			}
+		}
+		else
+		{
+			cout << "Endpoint details not set correctly" << endl;
+
+			exit(0);
+		}
 
 		 #ifdef WIN32
 		/*Windows specific code comes here */
 		   
-		HANDLE	hThread[NUM_THREADS] = { NULL, NULL, NULL, NULL};
+		HANDLE	hThread[NUM_THREADS] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 		DWORD	dwThreadId;
-		DWORD	(_stdcall *fnptr[NUM_THREADS]) (LPVOID p) = { calThreadFunc,
-															  arrayDocThreadFunc,
-															  mathOpsThreadFunc,
-															  simpleTypeThreadFunc};
+		DWORD	(_stdcall *fnptr[NUM_TESTS]) (LPVOID p) = {calThreadFunc,
+														   arrayDocThreadFunc,
+														   mathOpsThreadFunc,
+														   simpleTypeThreadFunc};
+		char *	pszThreadName[] = {"Calc", "ArrayDoc", "MathOps", "SimpleType"};
 
 		for( i = 0; i < NUM_THREADS; i++)
-		{				    
-			hThread[i] = CreateThread( NULL,						// no security attributes
-									   0,							// use default stack size
-									   fnptr[i],					// thread function
-									   LPVOID( endpoint_list[i]),	// argument to thread function
+		{
+			int	index = i % NUM_TESTS;
+
+			hThread[i] = CreateThread( NULL,							// no security attributes
+									   0,								// use default stack size
+									   fnptr[index],					// thread function
+									   LPVOID( endpoint_list[index]),	// argument to thread function
 									   0,   
-									   &dwThreadId);				// returns the thread identifier
-					
+									   &dwThreadId);					// returns the thread identifier
+// Debug v Must be removed
+printf( "Starting thread %d. %s with param %s. Thread handle %d\n", i, pszThreadName[index], endpoint_list[index], hThread[i]);
+// Debug ^ Must be removed
+
 			if( hThread[i] == NULL)
 			{
 				cout<<"Thread creation Failed";
