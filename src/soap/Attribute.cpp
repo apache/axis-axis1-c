@@ -109,7 +109,41 @@ int Attribute::setURI(const AxisChar* uri)
 	{
         uri="";
 	}
-    m_uri= uri;
+    
+	/**
+	 * sets the prefix according to the URI
+	 */
+	
+	if(m_prefix != "")
+	{
+
+		
+		printf("%s\n","not empty");
+		bool bPrefixFound = false;
+		list<Namespace*>::iterator	itCurrNamespaceDecl = m_namespaceDecls.begin();
+
+		while( itCurrNamespaceDecl != m_namespaceDecls.end() && !bPrefixFound)
+		{
+			if( !(bPrefixFound = !strcmp( (*itCurrNamespaceDecl)->getURI(), uri)))
+			{
+				itCurrNamespaceDecl++;
+			}
+		}    
+
+		
+		if( bPrefixFound)
+		{
+			printf("%s\n","prefix found");
+			setPrefix((*itCurrNamespaceDecl)->getPrefix());
+
+		}
+		else
+		{
+			setPrefix(NULL);
+		}
+	}
+		
+	m_uri= uri;
     return AXIS_SUCCESS;
 }
 
