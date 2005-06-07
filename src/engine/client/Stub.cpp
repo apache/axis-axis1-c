@@ -177,7 +177,7 @@ void
 Stub::deleteTransportProperty (char *pcKey, unsigned int uiOccurance)
 {
     if (m_pTransport)
-	m_pTransport->deleteTransportProperty (pcKey, uiOccurance);
+	    m_pTransport->deleteTransportProperty (pcKey, uiOccurance);
 }
 
 void
@@ -298,8 +298,10 @@ Stub::applyUserPreferences ()
 void
 Stub::setProxy (const char *pcProxyHost, unsigned int uiProxyPort)
 {
-    //TODO - Samisa - This need to change in line with the changes to call open connection
-    m_pCall->setProxy (pcProxyHost, uiProxyPort);
+    if (m_pTransport)
+    {
+        m_pTransport->setProxy (pcProxyHost, uiProxyPort);
+    }
 }
 
 void
@@ -307,7 +309,7 @@ Stub::setTransportTimeout (const long lSeconds)
 {
     if (m_pTransport)
     {
-	m_pTransport->setTimeout (lSeconds);
+        m_pTransport->setTimeout (lSeconds);
     }
 }
 
