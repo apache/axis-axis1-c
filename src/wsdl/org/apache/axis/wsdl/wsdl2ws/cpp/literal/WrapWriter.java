@@ -440,17 +440,45 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
             {
             	writer.write(" *");
             }
-            writer.write(" ret = "
-                    + "pWs->"
-                    + methodName
-                    + "(");
-            if (0 < paramsB.size())
+            //Chinthana:Add concept to handle nilable arrays.
+            if(returntypeisarray && returntypeissimple && returntype.isNillable() && outparamType != "xsd__string_Array")
             {
-                for (int i = 0; i < paramsB.size() - 1; i++)
+            	
+                writer.write(" ret = "
+                        + "*(pWs->"
+                        + methodName
+                        + "(");
+                if (0 < paramsB.size())
                 {
-                    writer.write("v" + i + ",");
+                    for (int i = 0; i < paramsB.size() - 1; i++)
+                    {
+                    	ParameterInfo param = (ParameterInfo) paramsB.get(i);
+                        if(param.isNillable())
+                        	writer.write("&");
+                        writer.write("v" + i + ",");
+                    }
+                    ParameterInfo param = (ParameterInfo) paramsB.get(0);
+                    if(param.isNillable())
+                    	writer.write("&");
+                    writer.write("v" + (paramsB.size() - 1));
                 }
-                writer.write("v" + (paramsB.size() - 1));
+                writer.write(")");
+            }
+            else
+            {
+            //06-06-2005...................................................................
+	            writer.write(" ret = "
+	                    + "pWs->"
+	                    + methodName
+	                    + "(");
+	            if (0 < paramsB.size())
+	            {
+	                for (int i = 0; i < paramsB.size() - 1; i++)
+	                {
+	                    writer.write("v" + i + ",");
+	                }
+	                writer.write("v" + (paramsB.size() - 1));
+	            }
             }
             writer.write(");\n");
             /* set the result */
