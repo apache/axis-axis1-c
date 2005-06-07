@@ -23,8 +23,11 @@ package it.
 xml files for the services AxisBench and Calculator have been committed.
 
 - now you can run ant in the following fashion from /c ... 
-ant -f services.xml -Ddir.release="D:\san\works\checkouts\obj\package\axis-c-1.5.0-Win32-bin"
+ant -f services.xml 
 (please change the dir.release property according to your system)
+
+or for build single service - 
+ - ant -f services.xml -Dservice.name=<server name> 
 
 - the services will be built and deployed in the selected server and the server started. (on windows it is not possible to "stop" apache2 and simpleaxisserver once they are started from ant. so if you want to redeploy the services you will 
 need to stop these servers manually before you re-run the serverside framework)
