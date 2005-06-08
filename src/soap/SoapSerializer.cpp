@@ -494,9 +494,17 @@ IWrapperSoapSerializer& SoapSerializer::operator << (const AxisChar * cSerialize
 int SoapSerializer::createSoapMethod( const AxisChar * sLocalName, 
                                       const AxisChar * sURI)
 {
-    SoapMethod * pMethod = new SoapMethod();
-
-    setSoapMethod( pMethod);
+    SoapMethod * pMethod = NULL;
+    if( !(m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod))
+    {
+        pMethod = new SoapMethod();
+        setSoapMethod( pMethod);
+    }
+    else
+    {
+        pMethod = m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod;
+        pMethod->clearOutParams();
+    }
 
     pMethod->setLocalName( sLocalName);
     pMethod->setPrefix( getNamespacePrefix( sURI));
