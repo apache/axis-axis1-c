@@ -1307,7 +1307,7 @@ void SoapSerializer::reset()
 {
     if( m_pSoapEnvelope && (m_pSoapEnvelope->m_pSoapBody) && (m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod))
     {
-        m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->reset();    
+        m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->clearOutParams();    
     }
 
     if( m_pSoapEnvelope && m_pSoapEnvelope->m_pSoapHeader )
