@@ -2,6 +2,7 @@
 <project name="buildMonitor" default="compileMonitorUtility" basedir="..">
 
 	<target name="compileMonitorUtility" unless="monitor.compiled">
+		<!-- run build.xml in the monitor directory -->
 		<ant dir="${basedir}/tests/utils/monitor" target="production"/>
 		<property name="monitor.compiled" value="true"/>
 	</target>

@@ -14,12 +14,29 @@
 	<!--
 	  Default target that set all the required framework to build, run and report on the tests
 	  -->
-	<target name="testSuite" depends="preInitializeTest, overrideTest, initialize, initializeTest, compileMonitorUtility, initializeLogFile, runTests, displayAllResults"
+	<target name="testSuite" depends="preInitializeTest, overrideTest, initialize, initializeTest, compileMonitorUtility, moveMonitorJar, initializeLogFile, runTests, displayAllResults"
 	 description="Build and Run all tests"/>
 
 	<target name="preInitializeTest" depends="pre-init">
 		<property file="${dir.properties}/test.${platform}.properties" />
 	</target>
+	
+	
+	<target name="moveMonitorJar" depends="initialize, compileMonitorUtility">
+		<description>
+		The monitor utility is built in its source directory. This is not good as when you do a cvs update this always comes back as a 
+	difference. So, as the monitor is only built when a test is run, this is the right place to move it from there to the 
+	obj directory so it does not interfere with the cvs update process.
+		</description>
+		<move todir="${dir.obj}/test/monitor">
+			<fileset dir="${basedir}/tests/utils/monitor">
+				<include name="**/*.class"/>
+				<include name="*.jar"/>
+			</fileset>
+		</move>
+	</target>
+	
+	
 
 	<!--
 	  Loop through all the test xml properties files in the tests
@@ -101,6 +118,7 @@
 		<property name="test.directory" value="${dir.test.generated}/${client.lang}/${testName}"/>
 		<property name="expected.file" value="${test.directory}/${testName}.expected"/>
 		<property name="r_expected.file" value="${test.directory}/${testName}Request.expected"/>
+		<property name="response_expected.file" value="${test.directory}/${testName}ServerResponse.expected"/>
 		<property name="results.stdout" value="${test.directory}/${testName}.out"/>
 		<property name="results.stderr" value="${test.directory}/${testName}.err"/>
 	</target>
