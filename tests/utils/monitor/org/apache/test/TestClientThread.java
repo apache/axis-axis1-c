@@ -153,8 +153,8 @@ public class TestClientThread extends Thread
                 //                System.out.println( "About to write some bytes to the
                 // server");
                 writeToServer(readBuffer, bytesRead);
-                System.out.println("Wrote some bytes to the server: "
-                        +new String(readBuffer, 0, bytesRead));
+                //System.out.println("Wrote some bytes to the server: "
+                  //      +new String(readBuffer, 0, bytesRead));
 
                 TCPMonitor.getInstance( ).writeRequest(readBuffer, bytesRead);
             }

@@ -18,62 +18,50 @@ package org.apache.test;
 import java.io.*;
 import java.net.*;
 
-
 /**
  * TestClientThread is a child thread of TestClientListener and handles all
  * communication between the original requestor and the TCPMonitor class.
  * 
- * @author Andrew Perry
+ * @author Andrew Perry, hawkeye
  * @since 1.0
  * @see TestClientListener
  */
 
 public class ClientReturner extends Thread
 {
-    boolean                 continueToRun    =true;
-    private static int number=0;
-    
-//    private char[] readBuffer=new char[READ_BUFFER_SIZE];
-    
+    boolean                  continueToRun        =true;
+    private static int       number               =0;
+
     // the response from the server
-    protected BufferedReader serverResponseStream = null;
-    
+    protected BufferedReader serverResponseStream =null;
+
     // the writer back to the client
-    protected BufferedWriter streamToClient=null;
+    protected BufferedWriter streamToClient       =null;
 
-    private static final int READ_BUFFER_SIZE=4091; // 4k
-    
-    
-    /**
-     * convenience constructor for ClientFileReturner
-     *
-     */
-    
-    protected ClientReturner()
+    private static final int READ_BUFFER_SIZE     =4091; // 4k
+
+    protected ClientReturner(Socket clientSocket) throws IOException
     {
         number++;
+        streamToClient=new BufferedWriter(new OutputStreamWriter(clientSocket
+                .getOutputStream( )));
     }
 
-    protected ClientReturner(Socket clientSocket)throws IOException
-    {
-        number++;
-        streamToClient = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
-    }
     /**
-     * 
      * @param clientSocket the socket to the client
      * @param serviceSocket the socket to the server (service)
      * @throws IOException
      */
-    public ClientReturner(Socket clientSocket, Socket serviceSocket) throws IOException
+    public ClientReturner(Socket clientSocket, Socket serviceSocket)
+            throws IOException
     {
         this(clientSocket);
-//        System.out.println( "ClientReturner(): entry");
+        //        System.out.println( "ClientReturner(): entry");
         // create the reader from the server
-        serverResponseStream = new BufferedReader(new InputStreamReader(serviceSocket.getInputStream()));
-        
-    }
+        serverResponseStream=new BufferedReader(new InputStreamReader(
+                serviceSocket.getInputStream( )));
 
+    }
 
     /**
      * Reads the request from the client and if of a valid format will extract
@@ -87,49 +75,55 @@ public class ClientReturner extends Thread
      */
     public void run( )
     {
-//        System.out.println( "ClientReturner#run("+number+"): entry");
+        //        System.out.println( "ClientReturner#run("+number+"): entry");
         int bytesRead=0;
-        char[] readBuffer= new char[READ_BUFFER_SIZE];
+        char[] readBuffer=new char[READ_BUFFER_SIZE];
 
-            while (continueToRun)
+        while (continueToRun)
+        {
+            try
             {
+                bytesRead=serverResponseStream.read(readBuffer, 0,
+                        READ_BUFFER_SIZE);
+                //                System.out.println( "Clientreturner got some bytes from the
+                // server "+bytesRead);
+            }
+            catch (IOException exception)
+            {
+                System.err
+                        .println("IOException when reading in response from server ");
+                exception.printStackTrace(System.err);
+            }
+            if (bytesRead!=-1)
+            {
+                //                    System.out.println( "ClientReturner#run("+number+"): Writing
+                // to client: "+new String(readBuffer, 0, bytesRead));
                 try
                 {
-                bytesRead = serverResponseStream.read(readBuffer, 0, READ_BUFFER_SIZE);
-//                System.out.println( "Clientreturner got some bytes from the server "+bytesRead);
-                }
-                catch(IOException exception)
-                {
-                    System.err.println( "IOException when reading in response from server ");
-                    exception.printStackTrace(System.err);
-                }
-                if(bytesRead!=-1)
-                {
-//                    System.out.println( "ClientReturner#run("+number+"): Writing to client: "+new String(readBuffer, 0, bytesRead));
-                    try
-                    {
                     streamToClient.write(readBuffer, 0, bytesRead);
-                    streamToClient.flush();
-                    }
-                    catch(IOException exception)
-                    {
-                        System.err.println( "IOException when writing server response back to client");
-                        exception.printStackTrace(System.err);
-                        
-                    }
-                    //System.out.println( "ClientReturner#run(): flushed");
-                    TCPMonitor.getInstance( ).writeResponse(readBuffer, bytesRead);
-//                    System.out.println( "About to go around again");
+                    streamToClient.flush( );
                 }
-                else
+                catch (IOException exception)
                 {
-//                    System.out.println( "ClientFileReturner#run(): bytesRead==-1 "+continueToRun);
-                    
-                    //continueToRun=false;
+                    System.err
+                            .println("IOException when writing server response back to client");
+                    exception.printStackTrace(System.err);
+
                 }
+                //System.out.println( "ClientReturner#run(): flushed");
+                TCPMonitor.getInstance( ).writeResponse(readBuffer, bytesRead);
+                //                    System.out.println( "About to go around again");
+            }
+            else
+            {
+                //                    System.out.println( "ClientFileReturner#run(): bytesRead==-1
+                // "+continueToRun);
+
+                //continueToRun=false;
             }
         }
-//        System.out.println( "ClientReturner#run(): exit");
+    }
+    //        System.out.println( "ClientReturner#run(): exit");
 
 }
 

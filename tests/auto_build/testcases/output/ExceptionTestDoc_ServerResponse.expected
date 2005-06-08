@@ -1,0 +1,33 @@
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+1a8
+<?xml version="1.0" encoding="utf-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header/><soapenv:Body><divResponse xmlns="http://soapinterop.org/wsdl"><divReturn>2</divReturn></divResponse></soapenv:Body></soapenv:Envelope>
+0
+
+HTTP/1.1 404 Not Found
+Server: WebSphere Application Server/5.1
+Content-Type: text/html;charset=UTF-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+21
+Error 404: File not found: null
+
+0
+
+HTTP/1.1 404 Not Found
+Server: WebSphere Application Server/5.1
+Content-Type: text/html;charset=UTF-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+21
+Error 404: File not found: null
+
+0
+

@@ -10,10 +10,10 @@
 	  -->
 	<target name="setLanguage">
 		<condition property="generated.lang" value="c++">
-			<equals arg1="${client.lang}" arg2="cpp"/>
+			<equals arg1="${test.clientLang}" arg2="cpp"/>
 		</condition>
 		<condition property="generated.lang" value="c">
-			<equals arg1="${client.lang}" arg2="c"/>
+			<equals arg1="${test.clientLang}" arg2="c"/>
 		</condition>
 	</target>
 
@@ -22,7 +22,7 @@
 	  -->
 	<target name="generateStubs" if="test.wsdl" unless="test.dynamicCode" depends="setLanguage">
 		<!-- Make directory in which all generated code shall be placed -->
-		<mkdir dir="${dir.test.generated}/${client.lang}/${testName}"/>
+		<mkdir dir="${dir.test.generated}/${test.clientLang}/${test.name}"/>
 		<!-- Setup classpath for WSDL2Ws -->
 		<path id ="cp">
 			<fileset dir="${dir.wsdl2ws}" includes="wsdl2ws.jar"/>
@@ -69,12 +69,12 @@
 		<antcall target="compileStaticClient" inheritall="true"/>
 	</target>
 	<target name="callCompileLinkedClient" if="test.stubAsLibrary">
-		<property name="libraryName" value="${testName}"/>
+		<property name="libraryName" value="${test.name}"/>
 		<antcall target="compileLinkedClient" inheritall="true"/>
 	</target>
 
 	<target name="compileStaticClient" depends="getClient">
-		<cc failonerror="false" incremental="false" outfile="${test.directory}/${testName}"
+		<cc failonerror="false" incremental="false" outfile="${test.directory}/${test.name}"
 		 objdir="${test.directory}" exceptions="true"
 		 outtype="executable" subsystem="console">
 		 	<!-- Compilers -->
@@ -97,14 +97,14 @@
 			<!-- Files to be compiled -->
 			<includepath path="${dir.include}"/>
 			<fileset dir="${test.directory}">
-				<include name="*.${client.lang}"/>
+				<include name="*.${test.clientLang}"/>
 			</fileset>
 		</cc>
 	</target>
 
 	<target name="compileLinkedClient" depends="generateStubs, compileLibrary, copyClientCode">
 		<basename file="${client.code}" property="client.source"/>
-		<cc failonerror="false" incremental="false" outfile="${test.directory}/${testName}"
+		<cc failonerror="false" incremental="false" outfile="${test.directory}/${test.name}"
 		 objdir="${test.directory}" exceptions="true"
 		 outtype="executable" subsystem="console">
 		 	<!-- Compilers -->

@@ -11,11 +11,11 @@
 	<target name="validateClientCompilationIfBuilding" unless="runOnly">
 		<condition property="clientCompilationStatus" value="FAILED">
 			<not>
-				<available file="${test.directory}/${testName}${executableSuffix}"/>
+				<available file="${test.directory}/${test.name}${executableSuffix}"/>
 			</not>
 		</condition>
 		<condition property="clientCompilationStatus" value="PASSED">
-			<available file="${test.directory}/${testName}${executableSuffix}"/>
+			<available file="${test.directory}/${test.name}${executableSuffix}"/>
 		</condition>
 		
 		<!-- Set a flag to show compilation was successful -->
@@ -25,8 +25,8 @@
 		
 		<!-- Display Client compilation status -->		
  		<echo file="${results.log}" append="true"
- 		 message="${testName} - Client Compilation - ${clientCompilationStatus}${line.separator}"/>
-		<echo message="${testName} - Client Compilation - ${clientCompilationStatus}"/>
+ 		 message="${test.name} - Client Compilation - ${clientCompilationStatus}${line.separator}"/>
+		<echo message="${test.name} - Client Compilation - ${clientCompilationStatus}"/>
 	</target>
 
 	<!--
@@ -72,8 +72,8 @@
 		
 		<!-- Display Client compilation status -->		
  		<echo file="${results.log}" append="true"
- 		 message="${testName} - Client Execution - ${clientRunStatus}${line.separator}"/>
-		<echo message="${testName} - Client Execution - ${clientRunStatus}"/>
+ 		 message="${test.name} - Client Execution - ${clientRunStatus}${line.separator}"/>
+		<echo message="${test.name} - Client Execution - ${clientRunStatus}"/>
 	</target>
 
 	<!--
@@ -96,8 +96,8 @@
 
 		<!-- Display Client message status -->		
  		<echo file="${results.log}" append="true"
- 		 message="${testName} - Client Execution (Message on Wire) - ${messageOnWireStatus}${line.separator}"/>
-		<echo message="${testName} - Client Execution (Message on Wire) - ${messageOnWireStatus}"/>
+ 		 message="${test.name} - Client Execution (Message on Wire) - ${messageOnWireStatus}${line.separator}"/>
+		<echo message="${test.name} - Client Execution (Message on Wire) - ${messageOnWireStatus}"/>
 	</target>
 
 	<!--
@@ -120,8 +120,8 @@
 		
 		<!-- Display Client compilation status -->		
  		<echo file="${results.log}" append="true"
- 		 message="${testName}(${handlerLibraryName}) - Handler Compilation - ${handlerCompilationStatus}${line.separator}"/>
-		<echo message="${testName} (${handlerLibraryName}) - Handler Compilation - ${handlerCompilationStatus}"/>
+ 		 message="${test.name}(${handlerLibraryName}) - Handler Compilation - ${handlerCompilationStatus}${line.separator}"/>
+		<echo message="${test.name} (${handlerLibraryName}) - Handler Compilation - ${handlerCompilationStatus}"/>
 	</target>
 
 </project>

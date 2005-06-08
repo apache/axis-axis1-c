@@ -4,15 +4,15 @@
 	  Compile Handler
 	  -->
 	<target name="compileTestHandler" if="isHandler">
-		<mkdir dir="${dir.test.generated}/${client.lang}/${testName}/handlers/${handlerLibraryName}"/>
+		<mkdir dir="${dir.test.generated}/${test.clientLang}/${test.name}/handlers/${handlerLibraryName}"/>
 		<if>
 			<not>
 				<isset property="aix"/>
 			</not>
 			<then>
 				<cc incremental="false"
-				 outfile="${dir.test.generated}/${client.lang}/${testName}/${handlerLibraryName}"
-				 objdir="${dir.test.generated}/${client.lang}/${testName}/handlers/${handlerLibraryName}" exceptions="true"
+				 outfile="${dir.test.generated}/${test.clientLang}/${test.name}/${handlerLibraryName}"
+				 objdir="${dir.test.generated}/${test.clientLang}/${test.name}/handlers/${handlerLibraryName}" exceptions="true"
 				 failonerror="false" outtype="shared" multithreaded="true">
 					<compiler refid="VisualC++"/>
 					<compiler refid="Linuxgcc"/>
@@ -33,8 +33,8 @@
 			</then>
 			<else>
 				<cc incremental="false"
-				 outfile="${dir.test.generated}/${client.lang}/${testName}/${libraryPrefix}${handlerLibraryName}${librarySuffix}"
-				 objdir="${dir.test.generated}/${client.lang}/${testName}/handlers/${handlerLibraryName}" exceptions="true"
+				 outfile="${dir.test.generated}/${test.clientLang}/${test.name}/${libraryPrefix}${handlerLibraryName}${librarySuffix}"
+				 objdir="${dir.test.generated}/${test.clientLang}/${test.name}/handlers/${handlerLibraryName}" exceptions="true"
 				 failonerror="false" multithreaded="true">
 					<compiler refid="AIXxlc"/>
 					<linker refid="AIXLinker"/>
@@ -51,7 +51,7 @@
 		<basename file="${handlerDir}" property="handlerLibraryName"/>
 		<condition property="isHandler">
 			<not>
-				<equals arg1="${handlerLibraryName}" arg2="${dir.handler.chain}"/>
+				<equals arg1="${handlerLibraryName}" arg2="${test.handler.directory}"/>
 			</not>
 		</condition>
 	</target>
@@ -79,13 +79,13 @@
 	  -->
 	<target name="compileTestHandlers" if="HandlersPresent" unless="runOnly">
 		<path id="serviceHandlers">
-			<dirset dir="${dir.autotests}/handlers/${dir.handler.chain}"/>
+			<dirset dir="${dir.autotests}/handlers/${test.handler.directory}"/>
 		</path>
 
 
 		<foreach target="buildTestHandler" param="handlerDir" inheritall="true">
 			<path refid="serviceHandlers"/>
-			<param name="testName" value="${testName}"/>
+			<param name="test.name" value="${test.name}"/>
 			<param name="client.wsdd" value="${client.wsdd}"/>
 		</foreach>
 	</target>
@@ -108,9 +108,9 @@
 	  Create start of WSDD File
 	  -->
 	<target name="createStartOfWSDDFile" if="HandlersPresent">
-		<property name="client.wsdd" value="${dir.test.generated}/${client.lang}/${testName}/client.wsdd"/>
+		<property name="client.wsdd" value="${dir.test.generated}/${test.clientLang}/${test.name}/client.wsdd"/>
 		<copy file="${dir.autotests}/handlers/templ_head.wsdd" tofile="${client.wsdd}" overwrite="true"/>
-		<replace file="${client.wsdd}" token="XXXX" value="${serviceName}"/>
+		<replace file="${client.wsdd}" token="XXXX" value="${test.handler.service}"/>
 	</target>
 
 	<!--
@@ -120,7 +120,7 @@
 		<concat destfile="${client.wsdd}" append="true">
 			<filelist dir="${dir.autotests}/handlers" files="templ_lib.wsdd"/>
 		</concat>
-		<replace file="${client.wsdd}" token="DDDD" value="${dir.test.generated}/${client.lang}/${testName}"/>
+		<replace file="${client.wsdd}" token="DDDD" value="${dir.test.generated}/${test.clientLang}/${test.name}"/>
 		<replace file="${client.wsdd}" token="LLLL" value="${handlerLibraryName}"/>
 		<replace file="${client.wsdd}" token="PPP" value="${libraryPrefix}"/>
 		<replace file="${client.wsdd}" token="SSS" value="${librarySuffix}"/>

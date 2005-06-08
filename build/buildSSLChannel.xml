@@ -1,4 +1,4 @@
-<project name="Axis C HTTP Transport SSL Channel" default="compileAxisHTTPSSLChannel" basedir="..">
+<project name="Axis C HTTP Transport SSL Channel" default="compileAxisHTTPTransportSSLChannel" basedir="..">
 
    <!--
     Compile the Axis HTTP Transport Channel Library

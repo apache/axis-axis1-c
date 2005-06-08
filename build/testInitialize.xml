@@ -30,13 +30,14 @@
 	<!--
 	  Load the xml properties file for test and derive required properties
 	  -->
-	<target name="setPropertiesForTest" depends="loadXMLProperties,setTestName,setTestDesc,setTestCode,setClientLang,setTestWsdl,setTestEndpoint,setTestExpected,setTestExpectedRequest,setHandlerDirectory,setHandlerService,setHandlersPresent,setTestPort"/>
+	<target name="setPropertiesForTest" depends="loadXMLProperties,setHandlersPresent"/>
+	<!--,setTestName,setTestDesc,setTestCode,setClientLang,setTestWsdl,setTestEndpoint,setTestExpected,setTestExpectedRequest,setHandlerDirectory,setHandlerService,setTestPort,setTestExpectedServerResponse"/> -->
 
 	<target name="loadXMLProperties">
 		<echo message="Loading XML file ${test_property}"/>
 		<xmlproperty file="${test_property}" keepRoot="true"/>
 	</target>
-	<target name="setTestName" if="test.name">
+<!--	<target name="setTestName" if="test.name">
 		<propertycopy property="testName" from="test.name"/>
 	</target>
 	<target name="setTestDesc" if="test.description">
@@ -60,6 +61,10 @@
 	<target name="setTestExpectedRequest" if="test.expected.request">
 		<propertycopy property="testExpectedRequest" from="test.expected.request"/>
 	</target>
+	<target name="setTestExpectedServerResponse" if="test.expected.serverResponse">
+		<propertycopy property="testExpectedServerResponse" from="test.expected.serverResponse"/>
+	</target>
+	
 	<target name="setHandlerDirectory" if="test.handler.directory">
 		<propertycopy property="dir.handler.chain" from="test.handler.directory"/>
 	</target>
@@ -69,14 +74,16 @@
 	<target name="setTestPort" if="test.port">
 		<propertycopy property="testPort" from="test.port" override="true"/>
 	</target>
+	-->
 	<!--
 	  Only set HandlersPresent if all info available
 	  -->
-	<target name="setHandlersPresent" if="dir.handler.chain">
+	<target name="setHandlersPresent" if="test.handler.directory">
 		<condition property="HandlersPresent" value="true">
-			<isset property="serviceName"/>
+			<isset property="test.handler.service"/>
 		</condition>
 	</target>
+	
 
 </project>
 

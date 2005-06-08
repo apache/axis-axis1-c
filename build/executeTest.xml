@@ -11,7 +11,7 @@
 	<target name="setResultExpectations" unless="buildOnly">
 		<basename file="${expected.file}"
 			property="expected.file.basename" />
-		<copy file="${dir.autotests}/output/${testExpected}"
+		<copy file="${dir.autotests}/output/${test.expected.output}"
 			tofile="${expected.file}" />
 		<!--
 			Convert to OS specific format
@@ -25,7 +25,7 @@
 		unless="buildOnly">
 		<basename file="${r_expected.file}"
 			property="r_expected.file.basename" />
-		<copy file="${dir.autotests}/output/${testExpectedRequest}"
+		<copy file="${dir.autotests}/output/${test.expected.request}"
 			tofile="${r_expected.file}" failonerror="false" />
 		<!--
 			Convert to OS specific format
@@ -46,14 +46,9 @@
 		unless="buildOnly">
 		<basename file="${response_expected.file}"
 			property="response_expected.file.basename" />
-		<echo>
-			test expected = ${response_expected.file}
-			testExpectedServerResponse = ${testExpectedServerResponse}
-
-		</echo>
-		<copy
-			file="${dir.autotests}/output/${testExpectedServerResponse}"
-			tofile="${response_expected.file}" failonerror="false" />
+			<copy
+				file="${dir.autotests}/output/${test.expected.serverResponse}"
+				tofile="${response_expected.file}" failonerror="true" />
 		<!--
 			Convert to OS specific format
 		-->
@@ -97,12 +92,12 @@
 			regexp="/(.*)" select="\1" />
 
 		<property name="clientArgs"
-			value="${protocol}://${testHost}:${testPort}/${context}" />
+			value="${protocol}://${testHost}:${test.port}/${context}" />
 	</target>
 
 	<target name="setVerbatim" if="test.verbatim">
 		<property name="clientArgs"
-			value="${testHost} ${testPort} ${test.endpoint}" />
+			value="${testHost} ${test.port} ${test.endpoint}" />
 	</target>
 
 	<target name="checkIfEndpointSet" depends="setVerbatim">
@@ -145,10 +140,10 @@
 
 	<target name="startMockServer">
 		<echo message="Starting mockserver" />
-		<echo message = "testport = ${testPort}"/>
+		<echo message = "testport = ${test.port}"/>
 		<java classname="org.apache.test.MockServer"
 			outputproperty="mockServer.out">
-<!--			<arg line="-p ${testPort}" /> -->
+<!--			<arg line="-p ${test.port}" /> -->
 				<arg line="-p 9081" />
 			<arg line="-r &quot;${response_expected.file}&quot;" />
 			<classpath>
@@ -166,18 +161,18 @@
 			<arg line="-h localhost" />
 			<classpath>
 				<pathelement
-					location="${basedir}/tests/utils/monitor/monitor.jar" />
+					location="${dir.obj}/test/monitor/monitor.jar" />
 			</classpath>
 		</java>
 	</target>
 
 	<target name="stopMockServer">
 		<java classname="org.apache.test.StopMockServer" outputproperty="stopMockServer.out">
-<!--			<arg line="-p ${testPort}" />			-->
+<!--			<arg line="-p ${test.port}" />			-->
 				<arg line="-p 9081" />
 			<classpath>
 				<pathelement
-					location="${basedir}/tests/utils/monitor/monitor.jar" />
+					location="${dir.obj}/test/monitor/monitor.jar" />
 			</classpath>
 		</java>
 		<echo message="StopMockServer output = ${stopMockServer.out}"/>
@@ -208,11 +203,11 @@
 				</if>
 
 				<antcall target="startMonitor" inheritall="true" />
-				<echo message="Running Test ${testName} ${clientArgs}" />
+				<echo message="Running Test ${test.name} ${clientArgs}" />
 				<!-- Run the client test -->
-				<stopwatch name="${testName}.timer" action="start" />
+				<stopwatch name="${test.name}.timer" action="start" />
 				<exec dir="${test.directory}"
-					executable="${test.directory}/${testName}"
+					executable="${test.directory}/${test.name}"
 					output="${results.stdout}" error="${results.stderr}"
 					failifexecutionfails="false" vmlauncher="false">
 					<arg line="${clientArgs}" />
@@ -225,13 +220,13 @@
 					<env key="AXISCPP_DEPLOY" value="${axiscpp_deploy}" />
 				</exec>
 
-				<stopwatch name="${testName}.timer" action="total" />
+				<stopwatch name="${test.name}.timer" action="total" />
 				<propertycopy property="timer1"
-					from="${testName}.timer" />
+					from="${test.name}.timer" />
 				<echo file="${results.log}" append="true"
-					message="${testName} - Execution Time - ${timer1}${line.separator}" />
+					message="${test.name} - Execution Time - ${timer1}${line.separator}" />
 				<echo
-					message="${testName} - Execution Time - ${timer1}" />
+					message="${test.name} - Execution Time - ${timer1}" />
 
 				<antcall target="stopMonitor" inheritall="true" />
 				<!-- if we are running in mockserver mode then we need to stop the MockServer -->
@@ -246,7 +241,7 @@
 			</try>
 			<catch>
 				<echo
-					message="Exception in monitor caught it in Ant try/catch block while trying to run test ${testName}" />
+					message="Exception in monitor caught it in Ant try/catch block while trying to run test ${test.name}" />
 				<antcall target="stopMonitor" inheritall="true" />
 			</catch>
 			<finally>
