@@ -118,7 +118,6 @@ int Attribute::setURI(const AxisChar* uri)
 	{
 
 		
-		printf("%s\n","not empty");
 		bool bPrefixFound = false;
 		list<Namespace*>::iterator	itCurrNamespaceDecl = m_namespaceDecls.begin();
 
@@ -133,7 +132,6 @@ int Attribute::setURI(const AxisChar* uri)
 		
 		if( bPrefixFound)
 		{
-			printf("%s\n","prefix found");
 			setPrefix((*itCurrNamespaceDecl)->getPrefix());
 
 		}
