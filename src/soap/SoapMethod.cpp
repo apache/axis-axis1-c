@@ -32,18 +32,13 @@ SoapMethod::SoapMethod()
 
 SoapMethod::~SoapMethod()
 {
-    list<Param*>::iterator itParam;
     for (list<Attribute*>::iterator it = m_attributes.begin();
-    it != m_attributes.end(); it++)
+         it != m_attributes.end(); it++)
     {
         delete (*it);
     }
-    for (itParam = m_OutputParams.begin(); 
-    itParam != m_OutputParams.end(); itParam++)
-    {
-        delete (*itParam);
-    }
-    m_OutputParams.clear();
+
+    clearOutParams();
 }
 
 void SoapMethod::setPrefix(const AxisChar* prefix)
@@ -141,59 +136,6 @@ int SoapMethod::serialize(SoapSerializer& pSZ)
     return iStatus;
 }
 
-/*
-comm on 11/7/2003 9.10am
-int SoapMethod::serialize(string& sSerialized)
-{    
-    
-    int iStatus= AXIS_SUCCESS;
-
-    do {
-        if(isSerializable()) {
-
-            sSerialized+= "<" + m_strPrefix+ ":"+ m_strLocalname+ " xmlns:"
-            + m_strPrefix+ "=\""+ m_strUri+ "\"";
-            
-//            if(m_strPrefix.length() != 0) {
-//                sSerialized+= m_strPrefix+ ":";
-//            }
-
-//            sSerialized+= m_strLocalname;
-
-//            if(m_strPrefix.length() != 0) {
-//                sSerialized+= " xmlns:"+ m_strPrefix+ "=\""+ m_strUri+ "\"";
-//            }
-
-            iStatus= serializeAttributes(sSerialized);
-            if(iStatus==AXIS_FAIL) {
-                break;
-            }
-
-            sSerialized+= ">";
-
-            iStatus= serializeOutputParam(sSerialized);
-            if(iStatus==AXIS_FAIL) {
-                break;
-            }
-
-            sSerialized+= "</";
-
-            if(m_strPrefix.length() != 0) {
-                sSerialized+= m_strPrefix+ ":";            
-            }
-
-            sSerialized+= m_strLocalname+ ">"+ "\n";
-
-            iStatus= AXIS_SUCCESS;
-        } else {
-            iStatus= AXIS_FAIL;
-        }
-    } while(0);
-            
-    return iStatus;
-}
-*/
-
 int SoapMethod::serializeOutputParam(SoapSerializer& pSZ)
 {    
     int nStatus;
@@ -207,14 +149,6 @@ int SoapMethod::serializeOutputParam(SoapSerializer& pSZ)
     }
     return AXIS_SUCCESS;
 }
-
-/*
-comm on 11/7/2003 9.10am
-int SoapMethod::serializeOutputParam(string& sSerialized)
-{    
-    return m_pOutputParam->serialize(sSerialized);
-}
-*/
 
 const AxisChar* SoapMethod::getMethodName()
 {
@@ -264,21 +198,6 @@ int SoapMethod::serializeAttributes(SoapSerializer& pSZ,
     return AXIS_SUCCESS;    
 }
 
-/*
-comm on 11/7/2003 9.10am
-int SoapMethod::serializeAttributes(string &sSerialized)
-{
-    list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
-
-    while(itCurrAttribute != m_attributes.end()) {        
-        (*itCurrAttribute)->serialize(sSerialized);
-        itCurrAttribute++;        
-    }    
-
-    return AXIS_SUCCESS;    
-}
-*/
-
 int SoapMethod::reset()
 {
     m_strUri = "";
@@ -290,25 +209,18 @@ int SoapMethod::reset()
     return AXIS_SUCCESS;
 }
 
-AXIS_CPP_NAMESPACE_END
-
-#ifdef UNIT_TESTING_ON
-int SoapMethod::initializeForTesting()
+void SoapMethod::clearOutParams()
 {
-    m_strPrefix = "mn";
-    m_strLocalname = "add";
-    m_strUri = "http://myurl.com";
-
-    Attribute* pAttribute = new Attribute();
-    pAttribute->initializeForTesting();
-    addAttribute(pAttribute);
-
-    /*
-     * Param* pParam = new Param(100);
-     * AddOutputParam(pParam);
-     */
-
-    return AXIS_SUCCESS;
+    if ( m_OutputParams.empty() )
+        return;
+    list<Param*>::iterator itParam;
+    for (itParam = m_OutputParams.begin(); 
+         itParam != m_OutputParams.end(); itParam++)
+    {
+        delete (*itParam);
+    }
+    m_OutputParams.clear();
 }
-#endif
+
+AXIS_CPP_NAMESPACE_END
 

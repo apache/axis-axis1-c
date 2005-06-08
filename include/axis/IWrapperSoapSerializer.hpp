@@ -175,6 +175,12 @@ public:
     *     
     */
 	virtual ISoapAttachment* createSoapAttachement()=0;
+
+  /**
+    * This methos will clear up all the current out params in preperation of a 
+    * new method call
+    */
+    virtual void reset() = 0;
 };
 
 AXIS_CPP_NAMESPACE_END

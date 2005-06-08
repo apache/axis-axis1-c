@@ -95,6 +95,12 @@ public:
     void setPrefix(const AxisChar* prefix);
     SoapMethod();
     virtual ~SoapMethod();
+
+  /**
+    * This methos will clear up all the current out params in preperation of a 
+    * new method call
+    */
+    void clearOutParams();
 };
 
 AXIS_CPP_NAMESPACE_END

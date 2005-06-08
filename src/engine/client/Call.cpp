@@ -97,6 +97,15 @@ m_bCallInitialized(false)
 
 			m_nStatus = m_pTransport->setTransportProperty( SECURE_PROPERTIES, (const char *) &sArguments);
 		}
+
+        // Engine initialization
+        m_pAxisEngine = new ClientAxisEngine ();
+        if (!m_pAxisEngine) 
+        {
+        	m_nStatus = AXIS_FAIL;
+        }
+        m_nStatus = m_pAxisEngine->initialize ();
+
     }
     catch( AxisException& e)
     {
@@ -203,7 +212,7 @@ int Call::initialize(PROVIDERTYPE nStyle)
     try
     {
         m_nStatus = AXIS_SUCCESS;
-        
+       /* 
         if (m_pAxisEngine)
             delete m_pAxisEngine;
         m_pAxisEngine = new ClientAxisEngine ();
@@ -212,7 +221,7 @@ int Call::initialize(PROVIDERTYPE nStyle)
             return AXIS_FAIL;
         }
         if (AXIS_SUCCESS == m_pAxisEngine->initialize ())
-        {
+        {*/
             MessageData *msgData = m_pAxisEngine->getMessageData ();
             if (msgData)
             {
@@ -234,6 +243,10 @@ int Call::initialize(PROVIDERTYPE nStyle)
                 {
                     m_pIWSSZ->setCurrentProviderType (nStyle);
                     m_pIWSDZ->setCurrentProviderType (nStyle);
+
+                    m_pIWSSZ->reset();
+                    m_pIWSDZ->init();
+                    
                     switch (nStyle)
                     {
                         case C_RPC_PROVIDER:
@@ -261,7 +274,7 @@ int Call::initialize(PROVIDERTYPE nStyle)
             }
             m_nStatus = AXIS_FAIL;
             return AXIS_FAIL;
-        }
+        //}
         m_nStatus = AXIS_FAIL;        
         return AXIS_FAIL;
     }
@@ -283,12 +296,12 @@ int Call::initialize(PROVIDERTYPE nStyle)
 int Call::unInitialize ()
 {
     m_bCallInitialized = false;
-    if (m_pAxisEngine)
+    /*if (m_pAxisEngine)
     {
-		/* Initialization,serialization, invokation or check message success */
+		//Initialization,serialization, invokation or check message success 
 		if ( m_nStatus == AXIS_SUCCESS &&  m_pIWSDZ != NULL ) 
 		{
-			/* Test if deserialization failed */
+			// Test if deserialization failed 
 			m_nStatus = m_pIWSDZ->getStatus();
 		}
 		MessageData *msgData = m_pAxisEngine->getMessageData();	
@@ -313,7 +326,7 @@ int Call::unInitialize ()
         m_pAxisEngine->unInitialize ();
         delete m_pAxisEngine;
         m_pAxisEngine = NULL;
-    }
+    }*/
     closeConnection ();
     return AXIS_SUCCESS;
 }

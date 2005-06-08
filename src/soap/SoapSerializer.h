@@ -229,6 +229,12 @@ public:
     int serializeAsChardata(void* pValue, XSDTYPE type);
 	AxisXMLString getNamespaceURL( string sNameSpace);
     int deleteHeaderBlock(const AxisChar* pName, const AxisChar* pNamespace);    
+
+  /**
+    * This methos will clear up all the current out params in preperation of a 
+    * new method call
+    */
+    void reset();
 };
 
 AXIS_CPP_NAMESPACE_END

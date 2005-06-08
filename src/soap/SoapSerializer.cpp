@@ -1303,4 +1303,17 @@ int SoapSerializer::deleteHeaderBlock( const AxisChar * pName,
     return iStatus; // Can it only be successful?
 }
 
+void SoapSerializer::reset()
+{
+    if( m_pSoapEnvelope && (m_pSoapEnvelope->m_pSoapBody) && (m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod))
+    {
+        m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->reset();    
+    }
+
+    if( m_pSoapEnvelope && m_pSoapEnvelope->m_pSoapHeader )
+    {
+        m_pSoapEnvelope->m_pSoapHeader->clear();
+    }
+}
+
 AXIS_CPP_NAMESPACE_END

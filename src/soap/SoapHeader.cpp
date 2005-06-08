@@ -310,5 +310,25 @@ int SoapHeader::deleteHeaderBlock(const AxisChar *pName,
     
     return iStatus;
 }
+void SoapHeader::clear()
+{
+    /*
+     * header blocks are not deleted here any more. Its the responsibility of
+     * either a handler or stub etc to delete any header block created by them
+     */
+    m_headerBlocks.clear();
+
+    /* deletion of attributes */
+    list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
+
+    while(itCurrAttribute != m_attributes.end())
+    {
+        delete *itCurrAttribute;
+        itCurrAttribute++;
+    }
+
+    m_attributes.clear();
+}
+
 
 AXIS_CPP_NAMESPACE_END

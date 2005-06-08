@@ -160,6 +160,8 @@ int deleteHeaderBlock(const AxisChar *pName,
       * The Destructor.
       */
     virtual ~SoapHeader();
+
+    void clear();
 };
 AXIS_CPP_NAMESPACE_END
 #endif 
