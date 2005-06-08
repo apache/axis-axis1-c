@@ -54,7 +54,7 @@
 RETTYPE calThreadFunc( ARGTYPE Param)
 {
 // Debug v Must be removed
-printf( "> calThreadFunc( %s)\n", (char *) Param);
+// printf( "> calThreadFunc( %s)\n", (char *) Param);
 // Debug ^ Must be removed
 
 	/*Type casting the url to char * */
@@ -76,7 +76,7 @@ printf( "> calThreadFunc( %s)\n", (char *) Param);
 		Calculator	ws( endpoint);
 
 // Debug v Must be removed
-printf( "- Created Calculator web service\n");
+// printf( "- Created Calculator web service\n");
 // Debug ^ Must be removed
 
 		iResult = ws.add( 3,2);
@@ -106,7 +106,7 @@ printf( "- Created Calculator web service\n");
 	#endif
 
 // Debug v Must be removed
-printf( "< calThreadFunc\n");
+// printf( "< calThreadFunc\n");
 // Debug ^ Must be removed
 	return 0;
 }
@@ -114,7 +114,7 @@ printf( "< calThreadFunc\n");
 RETTYPE arrayDocThreadFunc( ARGTYPE Param)
 {
 // Debug v Must be removed
-printf( "> arrayDocThreadFunc( %s)\n", (char *) Param);
+// printf( "> arrayDocThreadFunc( %s)\n", (char *) Param);
 // Debug ^ Must be removed
 
 	/*Type casting the url to char * */
@@ -135,7 +135,7 @@ printf( "> arrayDocThreadFunc( %s)\n", (char *) Param);
 		ArrayTestPortType	ws( endpoint);
 
 // Debug v Must be removed
-printf( "- Created ArrayTestPortType web service\n");
+// printf( "- Created ArrayTestPortType web service\n");
 // Debug ^ Must be removed
 
 		//testing echoIntArray
@@ -201,7 +201,7 @@ printf( "- Created ArrayTestPortType web service\n");
 	#endif
 
 // Debug v Must be removed
-printf( "< arrayDocThreadFunc\n");
+// printf( "< arrayDocThreadFunc\n");
 // Debug ^ Must be removed
 	return 0;
 }
@@ -209,7 +209,7 @@ printf( "< arrayDocThreadFunc\n");
 RETTYPE mathOpsThreadFunc( ARGTYPE Param)
 {
 // Debug v Must be removed
-printf( "> mathOpsThreadFunc( %s)\n", (char *) Param);
+// printf( "> mathOpsThreadFunc( %s)\n", (char *) Param);
 // Debug ^ Must be removed
 
 	/*Type casting the url to char * */
@@ -236,7 +236,7 @@ printf( "> mathOpsThreadFunc( %s)\n", (char *) Param);
 		MathOps	ws( endpoint);
 
 // Debug v Must be removed
-printf( "- Created MathOps web service\n");
+// printf( "- Created MathOps web service\n");
 // Debug ^ Must be removed
 
 		op = "div";	// Operation name
@@ -279,7 +279,7 @@ printf( "- Created MathOps web service\n");
 	#endif
 
 // Debug v Must be removed
-printf( "< mathOpsThreadFunc\n");
+// printf( "< mathOpsThreadFunc\n");
 // Debug ^ Must be removed
 	return 0;
 }
@@ -288,7 +288,7 @@ printf( "< mathOpsThreadFunc\n");
 RETTYPE simpleTypeThreadFunc( ARGTYPE Param)
 {
 // Debug v Must be removed
-printf( "> simpleTypeThreadFunc( %s)\n", (char *) Param);
+// printf( "> simpleTypeThreadFunc( %s)\n", (char *) Param);
 // Debug ^ Must be removed
 
 	/*Type casting the url to char * */
@@ -306,7 +306,7 @@ printf( "> simpleTypeThreadFunc( %s)\n", (char *) Param);
 		SimpleTypeArrayWS *	ws;
 
 // Debug v Must be removed
-printf( "- Created SimpleTypeArrayWS web service\n");
+// printf( "- Created SimpleTypeArrayWS web service\n");
 // Debug ^ Must be removed
 
 		sprintf( endpoint, "%s", url);
@@ -367,7 +367,7 @@ printf( "- Created SimpleTypeArrayWS web service\n");
 	#endif
 
 // Debug v Must be removed
-printf( "< simpleTypeThreadFunc()\n");
+// printf( "< simpleTypeThreadFunc()\n");
 // Debug ^ Must be removed
 	return 0;
 }
@@ -438,7 +438,7 @@ int main( int argc, char * argv[])
 									   0,   
 									   &dwThreadId);					// returns the thread identifier
 // Debug v Must be removed
-printf( "Starting thread %d. %s with param %s. Thread handle %d\n", i, pszThreadName[index], endpoint_list[index], hThread[i]);
+// printf( "Starting thread %d. %s with param %s. Thread handle %d\n", i, pszThreadName[index], endpoint_list[index], hThread[i]);
 // Debug ^ Must be removed
 
 			if( hThread[i] == NULL)
