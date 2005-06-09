@@ -487,7 +487,9 @@
 </div>
 <p>The AXIS community would greatly appreciate your input, if you're working on a platform not currently supported by the ANT scripts.<br>Below, are the steps required to add an additional platform;</p>
 <ol>
-<li>Add platform detection to <span class="codefrag">pre-init</span> target in <span class="codefrag">buildIntialize.xml</span>, eg: <pre>&lt;condition property="linux"&gt;<br>  &lt;os name="Linux"/&gt;<br>&lt;/condition&gt;</pre>
+<li>Add platform detection to <span class="codefrag">pre-init</span> target in <span class="codefrag">Intialize.xml</span>, eg: <pre>&lt;condition property="linux"&gt;<br>  &lt;os name="Linux"/&gt;<br>&lt;/condition&gt;</pre>
+</li>
+<li>Add unix platform category detection line to <span class="codefrag">pre-init</span> target in <span class="codefrag">Intialize.xml</span> within the "or" element for property "platformIsUnix", eg: <pre>&lt;isset property="linux"/&gt;</pre>
 </li>
 <li>Update platform property within <span class="codefrag">initialize</span> target in <span class="codefrag">buildIntialize.xml</span>, eg: <pre>&lt;condition property="platform" value="Linux"&gt;<br>  &lt;isset property="linux"/&gt;<br>&lt;/condition&gt;</pre>
 </li>
