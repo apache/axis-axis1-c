@@ -1,48 +1,63 @@
 
 <project name="Initialize" default="pre-init">
 
-	<!--
-	  Determine platform
-	  -->
-	<target name="pre-init">
-		<condition property="solaris">
-            	<os name="SunOS"/>
-		</condition>
-		<condition property="windows">
-			<os family="windows"/>
-		</condition>
-		<condition property="aix">
-            <os name="AIX"/>
+    <!--
+         Determine platform
+     -->
+
+    <target name="pre-init">
+        <condition property="solaris">
+           <os name="SunOS"/>
+        </condition>
+        <condition property="windows">
+           <os family="windows"/>
+        </condition>
+        <condition property="aix">
+           <os name="AIX"/>
         </condition>
         <condition property="linux">
-            <os name="Linux"/>
+           <os name="Linux"/>
         </condition>
         <condition property="os400">
-            <os name="OS/400"/>
+           <os name="OS/400"/>
         </condition>
 
-		<condition property="platform" value="SunOS">
-			<isset property="solaris"/>
-		</condition>
-		<condition property="platform" value="Win32">
-			<isset property="windows"/>
-		</condition>
-		<condition property="platform" value="Linux">
-			<isset property="linux"/>
-		</condition>
-		<condition property="platform" value="AIX">
-			<isset property="aix"/>
-		</condition>
-		<condition property="platform" value="OS400">
-			<isset property="os400"/>
-		</condition>
-		
- 		<!--
- 		  Load versioning information from version.properties
- 		  -->
- 		<property file="${dir.properties}/version.properties"/>
+        <condition property="platform" value="SunOS">
+           <isset property="solaris"/>
+        </condition>
+        <condition property="platform" value="Win32">
+           <isset property="windows"/>
+        </condition>
+        <condition property="platform" value="Linux">
+           <isset property="linux"/>
+        </condition>
+        <condition property="platform" value="AIX">
+           <isset property="aix"/>
+        </condition>
+        <condition property="platform" value="OS400">
+           <isset property="os400"/>
+        </condition>
 
-	</target>
+        <!--
+            Following is needed to distinguish unix variants from OS/400
+            since in some cases it is not simply a if="windows" vs. unless="windows".
+            Also note that <os family="unix"/> cannot be used since it considers
+            OS/400 to be a unix variant. 
+         -->
+        <condition property="platformIsUnix">
+           <or>
+              <isset property="solaris"/>
+              <isset property="aix"/>
+              <isset property="linux"/>
+           </or>
+        </condition>
+		
+        <!--
+            Load versioning information from version.properties
+         -->
+        <property file="${dir.properties}/version.properties"/>
+
+    </target>
 
 </project>
 
