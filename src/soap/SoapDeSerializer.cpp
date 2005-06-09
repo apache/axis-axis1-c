@@ -2076,9 +2076,9 @@ xsd__decimal *
     SoapDeSerializer::getElementAsDecimal (const AxisChar * pName,
                                            const AxisChar * pNamespace)
 {
-    Double simpleType;
+    Decimal simpleType;
     getElement(pName, pNamespace, &simpleType);
-    return simpleType.getDouble();
+    return simpleType.getDecimal();
 }
 
 xsd__string
