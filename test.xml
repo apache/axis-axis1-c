@@ -106,7 +106,7 @@
 	<target name="runTest" depends="setPropertiesForTest,cleanTest,buildTest,executeTestRun,validateTest"/>
 
 	<target name="cleanTest">
-		<delete dir="${dir.test.generated}/${client.lang}/${testName}"/>
+		<delete dir="${dir.test.generated}/${test.clientLang}/${test.name}"/>
 	</target>
 
 	<!--
@@ -115,28 +115,28 @@
 	<target name="buildTest" depends="setPropertiesForThisTest, compileTestClient, validateClientCompilation, createConfigurationFile, compileHandlers"/>
 
 	<target name="setPropertiesForThisTest" depends="checkIfRequestFile">
-		<property name="test.directory" value="${dir.test.generated}/${client.lang}/${testName}"/>
-		<property name="expected.file" value="${test.directory}/${testName}.expected"/>
-		<property name="r_expected.file" value="${test.directory}/${testName}Request.expected"/>
-		<property name="response_expected.file" value="${test.directory}/${testName}ServerResponse.expected"/>
-		<property name="results.stdout" value="${test.directory}/${testName}.out"/>
-		<property name="results.stderr" value="${test.directory}/${testName}.err"/>
+		<property name="test.directory" value="${dir.test.generated}/${test.clientLang}/${test.name}"/>
+		<property name="expected.file" value="${test.directory}/${test.name}.expected"/>
+		<property name="r_expected.file" value="${test.directory}/${test.name}Request.expected"/>
+		<property name="response_expected.file" value="${test.directory}/${test.name}ServerResponse.expected"/>
+		<property name="results.stdout" value="${test.directory}/${test.name}.out"/>
+		<property name="results.stderr" value="${test.directory}/${test.name}.err"/>
 	</target>
 
-	<target name="checkIfRequestFile" if="testExpectedRequest" unless="test.nomonitor">
-		<available file="${dir.autotests}/output/${testExpectedRequest}" property="requestFileExists"/>
+	<target name="checkIfRequestFile" if="test.expected.request" unless="test.nomonitor">
+		<available file="${dir.autotests}/output/${test.expected.request}" property="requestFileExists"/>
 	</target>
 
 	<target name="compileTestClient">
 		<antcall target="compileClient" inheritall="true">
-			<param name="wsdl.test" value="${dir.autotests}/wsdls/${testWsdl}"/>
-			<param name="client.code" value="${dir.autotests}/client/${client.lang}/${testCode}"/>
+			<param name="wsdl.test" value="${dir.autotests}/wsdls/${test.wsdl}"/>
+			<param name="client.code" value="${dir.autotests}/client/${test.clientLang}/${test.clientCode}"/>
 		</antcall>
 	</target>
 
 	<target name="executeTestRun">
 		<antcall target="executeTest" inheritall="true">
-			<param name="test.directory" value="${dir.test.generated}/${client.lang}/${testName}"/>
+			<param name="test.directory" value="${dir.test.generated}/${test.clientLang}/${test.name}"/>
 		</antcall>
 	</target>
 
