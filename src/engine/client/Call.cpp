@@ -122,15 +122,9 @@ m_bCallInitialized(false)
 
 Call::~Call ()
 {
-    // Samisa: we have to cover the case of initialize has been called
-    // but no matching unitialize. We have to ensure memory deallocation when
-    // there is an exception, after initialize has been called.
-    // could have been coverd though a matching call to uninitialize within 
-    // generated code, but it is easier to cover it here
-    // because it requires a lengthy conditional block to cover all cases
-    // in generated code
-     if (m_bCallInitialized) 
-        unInitialize();
+    m_pAxisEngine->unInitialize ();
+    delete m_pAxisEngine;
+    m_pAxisEngine = NULL;
 	SOAPTransportFactory::destroyTransportObject(m_pTransport);
 	m_pTransport = NULL;
     uninitialize_module();
@@ -212,16 +206,6 @@ int Call::initialize(PROVIDERTYPE nStyle)
     try
     {
         m_nStatus = AXIS_SUCCESS;
-       /* 
-        if (m_pAxisEngine)
-            delete m_pAxisEngine;
-        m_pAxisEngine = new ClientAxisEngine ();
-        if (!m_pAxisEngine) {
-        	m_nStatus = AXIS_FAIL;
-            return AXIS_FAIL;
-        }
-        if (AXIS_SUCCESS == m_pAxisEngine->initialize ())
-        {*/
             MessageData *msgData = m_pAxisEngine->getMessageData ();
             if (msgData)
             {
@@ -274,20 +258,17 @@ int Call::initialize(PROVIDERTYPE nStyle)
             }
             m_nStatus = AXIS_FAIL;
             return AXIS_FAIL;
-        //}
         m_nStatus = AXIS_FAIL;        
         return AXIS_FAIL;
     }
     catch (AxisException& e)
     {
         e = e;
-        /* printf(e.GetErr().c_str()); */
         m_nStatus = AXIS_FAIL;
         throw;
     }
     catch (...)
     {
-        /* printf("Unknown exception occured in the client"); */
         m_nStatus = AXIS_FAIL;        
         throw;
     }
@@ -296,7 +277,7 @@ int Call::initialize(PROVIDERTYPE nStyle)
 int Call::unInitialize ()
 {
     m_bCallInitialized = false;
-    /*if (m_pAxisEngine)
+    if (m_pAxisEngine)
     {
 		//Initialization,serialization, invokation or check message success 
 		if ( m_nStatus == AXIS_SUCCESS &&  m_pIWSDZ != NULL ) 
@@ -323,10 +304,7 @@ int Call::unInitialize ()
                 delete [] m_pchSessionID;
             m_pchSessionID = NULL;
         }
-        m_pAxisEngine->unInitialize ();
-        delete m_pAxisEngine;
-        m_pAxisEngine = NULL;
-    }*/
+    }
     closeConnection ();
     return AXIS_SUCCESS;
 }
