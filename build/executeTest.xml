@@ -42,18 +42,17 @@
 
 	</target>
 	<!-- Only copy server response file if it exists and we are in unit test mode (mockServer mode)-->
-	<target name="setServerResponse" if="mockServer"
-		unless="buildOnly">
-		<basename file="${response_expected.file}"
-			property="response_expected.file.basename" />
-			<copy
-				file="${dir.autotests}/output/${test.expected.serverResponse}"
-				tofile="${response_expected.file}" failonerror="true" />
-		<!--
-			Convert to OS specific format
-		-->
-		<fixcrlf srcdir="${test.directory}"
-			includes="${response_expected.file.basename}" />
+	<target name="setServerResponse" unless="buildOnly">
+		<if>
+			<equals arg1="${mockServer}" arg2="true" />
+			<then>
+				<basename file="${response_expected.file}"
+					property="response_expected.file.basename" />
+				<copy
+					file="${dir.autotests}/output/${test.expected.serverResponse}"
+					tofile="${response_expected.file}" failonerror="true" />
+			</then>
+		</if>
 	</target>
 
 
