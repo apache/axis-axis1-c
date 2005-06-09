@@ -26,6 +26,7 @@
  * @brief interface for the SoapEnvelope class.
  *
  * @author Roshan Weerasuriya (roshan@jkcs.slt.lk)
+ * @author Samisa Abeysinghe (samisa.abeysinghe@gmail.com)
  */
 
 AXIS_CPP_NAMESPACE_START
@@ -39,27 +40,36 @@ private:
     int addStandardNamespaceDecl(const Attribute* pAttribute);
     void clearStandardNamespaceDecl();
     int serializeNamespaceDecl(SoapSerializer& pSZ);
-    /* int serializeNamespaceDecl(string&); */
     int serializeAttributes(SoapSerializer& pSZ);
-    /* int serializeAttributes(string&); */
     SoapHeader *m_pSoapHeader;
     SoapBody *m_pSoapBody;
-    /* string m_strEnvelopSerialized; */
     list<Attribute*> m_attributes;
     list<Attribute*> m_namespaceDecls;
     list<const Attribute*> m_StandardNamespaceDecls;
     AxisString m_sPrefix;    
 
 public:    
-
-#ifdef UNIT_TESTING_ON
-    int initializeForTesting(SOAP_VERSION eSoapVersion);
-#endif
+  /**
+    * This method is needed in the situation where we create and fill a 
+    * SoapEnvelope object when deserializing a incoming soap request.
+    * But this method is not needed in serializing a soap request, because
+    * the version specific prefix is taken from the SoapEnvVersions.h at 
+    * that time.
+    */
     int setPrefix(const AxisChar* prefix);
+
+  /**
+    * The added NamespaceDecl will be deleted by the destructor of this 
+    * SoapEnvelope.
+    */
     int addNamespaceDecl(Attribute* pAttribute);
+
+  /**
+    * The added attrubute will be deleted by the destructor of this 
+    * SoapEnvelope.
+    */
     int addAttribute(Attribute* pAttribute);    
     int serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion);
-    /* int serialize(string &sSerialized, SOAP_VERSION eSoapVersion); */
     void setSoapBody(SoapBody* soapBody);
     void setSoapHeader(SoapHeader* soapHeader);
     SoapEnvelope();

@@ -20,27 +20,6 @@
  * @author Damitha Kumarage (damitha@opensource.lk, damitha@jkcsworld.com)
  */
 
-/*
- * Revision 1.1  2004/June/02 roshan
- * The following changes were done during correcting a Runtime error in the
- *  windows platform.
- * Added deletion of pointers to the Destrutor
- * Added "pParam->m_Value.pStrValue = strdup((char*)(pValue));" to the setParam
- *  method and removed the line
- *   "pParam->m_Value.pStrValue = *((char**)(pValue));".
- * Changed setFaultcode, setFaultstring, setFaultactor, setFaultDetail methods
- *  to send a char pointer to the setParam method.
- *  eg: In the setFaultcode method, changed passing of &sFaultcode to 
- *  sFaultcode.c_str()
- *  i.e Before change:
- *      setParam(m_pFaultcodeParam, "faultcode", &sFaultcode, XSD_STRING); 
- *      After change:
- *      setParam(m_pFaultcodeParam, "faultcode", sFaultcode.c_str(), XSD_STRING); 
- *
- * Changed. The "SOAP-ENV" prefix was hard-coded in the "serialize" method.
- *  Corrected it to serialize the correct prefix.
- */
-
 #include "SoapFault.h"
 #include "SoapSerializer.h"
 #include "SoapDeSerializer.h"
@@ -50,11 +29,10 @@
 #include "../common/AxisConfig.h"
 
 
-/*
- * This array of structure is used to store all the soap faults
- * which are used in Axis C++. Each time a fault object is needed it is
- * created using this array, in SoapFault class.
- */
+// This array of structure is used to store all the soap faults
+// which are used in Axis C++. Each time a fault object is needed it is
+// created using this array, in SoapFault class.
+
 static SoapFaultStruct* s_parrSoapFaultStruct;
 
 extern AxisConfig* g_pConfig;
@@ -82,7 +60,7 @@ SoapFault::~SoapFault()
 
 int SoapFault::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
 {
-    /* written according to SOAP Version 1.1 */
+    // written according to SOAP Version 1.1 
     int iStatus= AXIS_SUCCESS;
     if(m_bIsSimpleDetail)
     {
@@ -91,14 +69,11 @@ int SoapFault::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
         gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_FAULT], ">\n", NULL); 
 	
     m_pFaultcodeParam->serialize(pSZ);
-    //pSZ.serialize("<faultcode>", m_sFaultcode.c_str(), "</faultcode>", NULL);
     m_pFaultstringParam->serialize(pSZ);
-    //pSZ.serialize("<faultstring>", m_sFaultstring.c_str(), "</faultstring>", NULL);
 
     if(m_pFaultactorParam)
     {        
         m_pFaultactorParam->serialize(pSZ);
-        //pSZ.serialize("<faultactor>", m_sFaultactor.c_str(), "</faultactor>", NULL);
     } 
 
     if(m_pFaultDetail)
@@ -115,28 +90,18 @@ int SoapFault::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
         gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_FAULT], ">\n", NULL);
 
     m_pFaultcodeParam->serialize(pSZ);
-    //pSZ.serialize("<faultcode>", m_sFaultcode.c_str(), "</faultcode>", NULL);
     m_pFaultstringParam->serialize(pSZ);
-    //pSZ.serialize("<faultstring>", m_sFaultstring.c_str(), "</faultstring>", NULL);
 
     if(m_pFaultactorParam)
     {
         m_pFaultactorParam->serialize(pSZ);
-        //pSZ.serialize("<faultactor>", m_sFaultactor.c_str(), "</faultactor>", NULL);
     }
 
     if(m_pFaultDetail)
     {
-        /*if(m_bIsSimpleDetail)
-        {
-            m_pFaultDetail->serialize(pSZ);
-        }
-        else
-        {*/
-            pSZ.serialize("<detail>", NULL);
+         pSZ.serialize("<detail>", NULL);
             m_pFaultDetail->serialize(pSZ);
             pSZ.serialize("</detail>\n", NULL);
-        //}
     }
 
         pSZ.serialize("</", gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix, ":",
@@ -225,7 +190,7 @@ SoapFault* SoapFault::getSoapFault(int iFaultCode)
 {   
     SoapFault* pSoapFault= NULL;
 
-    /* fill the soap fault object */
+    // fill the soap fault object 
     pSoapFault= new SoapFault();
         
     /* TODO *********************************************** */
@@ -235,10 +200,7 @@ SoapFault* SoapFault::getSoapFault(int iFaultCode)
      string strFaultcode = s_parrSoapFaultStruct[iFaultCode].pcFaultcode;
      string strSoapEnvVerStruct = gs_SoapEnvVersionsStruct[SOAP_VER_1_1].pchPrefix;
      pSoapFault->setFaultcode((strSoapEnvVerStruct + ":" + strFaultcode).c_str());
-     //pSoapFault->setFaultcode(string(gs_SoapEnvVersionsStruct[SOAP_VER_1_1].pchPrefix) + 
-     //    ":" + s_parrSoapFaultStruct[iFaultCode].pcFaultcode);
      pSoapFault->setFaultstring(s_parrSoapFaultStruct[iFaultCode].pcFaultstring);
-     //pSoapFault->setFaultactor(s_parrSoapFaultStruct[iFaultCode].pcFaultactor);
      /* Fault actor should be set to the node url in which Axis C++ running.
       * Currently it is hardcoded to localhost
       */

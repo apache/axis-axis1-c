@@ -48,7 +48,6 @@ public:
     SoapKeywordMapping();
     virtual ~SoapKeywordMapping();
 private:
-    //static map<int, SoapKeywordStruct> m_Map;
     static SoapKeywordStruct m_Map[VERSION_LAST];
     static volatile bool m_bInit;
 public:

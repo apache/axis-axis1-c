@@ -20,21 +20,11 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  *
- *
- *
- *
  * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
  *
  */
 
 /* SoapBody.cpp: implementation of the SoapBody class. */
-
-/*
- * Revision 1.1  2004/June/02 roshan
- * Added the parameter "eSoapVersion" to the call of m_pSoapFault->serialize
- * method. The SoapFault class is expecting this parameter to determine the
- * SoapVersion.
- */
 
 #include "SoapBody.h"
 #include "SoapSerializer.h"
@@ -154,14 +144,3 @@ int SoapBody::serializeAttributes(SoapSerializer& pSZ)
 
 AXIS_CPP_NAMESPACE_END
 
-#ifdef UNIT_TESTING_ON
-int SoapBody::initializeForTesting()
-{
-    SoapMethod* pSoapMethod = new SoapMethod();
-    pSoapMethod->initializeForTesting();
-
-    setSoapMethod(pSoapMethod);
-
-    return AXIS_SUCCESS;
-}
-#endif

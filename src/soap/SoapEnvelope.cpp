@@ -16,6 +16,7 @@
  
 /*
  * @author Roshan Weerasuriya (roshan@jkcs.slt.lk)
+ * @author Samisa Abeysinghe (samisa.abeysinghe@gmail.com)
  */
 
 #ifdef WIN32
@@ -41,7 +42,7 @@ SoapEnvelope::SoapEnvelope()
 
 SoapEnvelope::~SoapEnvelope()
 {
-    /* deletion of attributes */
+    // deletion of attributes 
     list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
 
     while (itCurrAttribute != m_attributes.end())
@@ -52,7 +53,7 @@ SoapEnvelope::~SoapEnvelope()
 
     m_attributes.clear();
 
-    /* deletion of namespace declerations */
+    // deletion of namespace declerations 
     list<Attribute*>::iterator itCurrNamespaceDecls= m_namespaceDecls.begin();
 
     while (itCurrNamespaceDecls != m_namespaceDecls.end())
@@ -63,13 +64,13 @@ SoapEnvelope::~SoapEnvelope()
 
     m_namespaceDecls.clear();
 
-    /* deletion of soap header */
+    // deletion of soap header 
     if (m_pSoapHeader)
     {
         delete m_pSoapHeader;
     }
 
-    /* deletion of soap body */
+    // deletion of soap body 
     if (m_pSoapBody)
     {
         delete m_pSoapBody;
@@ -116,9 +117,7 @@ int SoapEnvelope::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
         }
         else
         {
-            /* throw exception
-             * iStatus = AXIS_FAIL;
-             */
+             iStatus = AXIS_FAIL;
         }
                 
         pSZ.serialize("</", gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix,
@@ -129,59 +128,6 @@ int SoapEnvelope::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
     return iStatus;
 }
 
-/*
-commented on 10Jul2003
-int SoapEnvelope::serialize(string &sSerialized, SOAP_VERSION eSoapVersion)
-{    
-    
-    int iStatus= AXIS_SUCCESS;
-
-    do
-    {
-        sSerialized= "<"+ string(gs_SoapEnvVersionsStruct
-        [eSoapVersion].pchPrefix) + ":"+ gs_SoapEnvVersionsStruct
-        [eSoapVersion].pchWords[SKW_ENVELOPE];
-
-        serializeNamespaceDecl(sSerialized);
-        serializeAttributes(sSerialized);
-
-        sSerialized= sSerialized + ">"+ "\n";
-
-        if (m_pSoapHeader!=NULL)
-        {
-            iStatus= m_pSoapHeader->serialize(sSerialized, eSoapVersion);
-            if(iStatus == AXIS_FAIL)
-            {
-                break;
-            }
-        }
-
-        if (m_pSoapBody!=NULL)
-        {
-            iStatus= m_pSoapBody->serialize(sSerialized, eSoapVersion);
-            if(iStatus == AXIS_FAIL)
-            {
-                break;
-            }
-        }
-        else
-        {
-            //throw exception
-            //iStatus = AXIS_FAIL;
-        }
-        
-        sSerialized+= "</"+ string(gs_SoapEnvVersionsStruct
-        [eSoapVersion].pchPrefix) + ":"+ gs_SoapEnvVersionsStruct
-        [eSoapVersion].pchWords[SKW_ENVELOPE]+ ">";    
-    } while (0);
-
-    return iStatus;
-}*/
-
-/*
- * The added attrubute will be deleted by the destructor of this 
- * SoapEnvelope.
- */
 int SoapEnvelope::addAttribute(Attribute *pAttribute)
 {
     m_attributes.push_back(pAttribute);
@@ -189,10 +135,6 @@ int SoapEnvelope::addAttribute(Attribute *pAttribute)
     return AXIS_SUCCESS;
 }
 
-/*
- * The added NamespaceDecl will be deleted by the destructor of this 
- * SoapEnvelope.
- */
 int SoapEnvelope::addNamespaceDecl(Attribute *pAttribute)
 {
     m_namespaceDecls.push_back(pAttribute);
@@ -213,22 +155,6 @@ int SoapEnvelope::serializeAttributes(SoapSerializer& pSZ)
     return AXIS_SUCCESS;    
 }
 
-/*
-commented on 10Jul2003 3.30 pm
-int SoapEnvelope::serializeAttributes(string& sSerialized)
-{    
-    list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
-
-    while (itCurrAttribute != m_attributes.end())
-    {        
-        (*itCurrAttribute)->serialize(sSerialized);
-        itCurrAttribute++;        
-    }    
-
-    return AXIS_SUCCESS;    
-}
-*/
-
 int SoapEnvelope::serializeNamespaceDecl(SoapSerializer& pSZ)
 {    
 
@@ -244,30 +170,6 @@ int SoapEnvelope::serializeNamespaceDecl(SoapSerializer& pSZ)
     return AXIS_SUCCESS;
 }
 
-/*
-commented on 10Jul2003 3.30 pm
-int SoapEnvelope::serializeNamespaceDecl(string& sSerialized)
-{    
-
-    list<Attribute*>::iterator itCurrNamespaceDecl= m_namespaceDecls.begin();
-
-    while (itCurrNamespaceDecl != m_namespaceDecls.end())
-    {            
-        (*itCurrNamespaceDecl)->serialize(sSerialized);
-        itCurrNamespaceDecl++;        
-    }    
-
-    return AXIS_SUCCESS;
-}
-*/
-
-/*
- * This method is needed in the situation where we create and fill a 
- * SoapEnvelope object when deserializing a incoming soap request.
- * But this method is not needed in serializing a soap request, because
- * the version specific prefix is taken from the SoapEnvVersions.h at 
- * that time.
- */
 int SoapEnvelope::setPrefix(const AxisChar* prefix)
 {
     m_sPrefix= prefix;
@@ -300,25 +202,3 @@ int SoapEnvelope::serializeStandardNamespaceDecl(SoapSerializer &pSZ)
 
 AXIS_CPP_NAMESPACE_END
 
-#ifdef UNIT_TESTING_ON
-int SoapEnvelope::initializeForTesting(SOAP_VERSION eSoapVersion)
-{
-    if (eSoapVersion == SOAP_VER_1_2)
-    {
-        setPrefix("env");
-
-        Attribute* pAttribute = new Attribute();
-        pAttribute->setPrefix("xmlns");
-        pAttribute->setLocalName("env");
-        pAttribute->setURI("http://www.w3.org/2003/05/soap-envelope");
-        addNamespaceDecl(pAttribute);
-
-        SoapBody* pSoapBody = new SoapBody();
-        pSoapBody->initializeForTesting();
-
-        setSoapBody(pSoapBody);
-    }
-
-    return AXIS_SUCCESS;
-}
-#endif

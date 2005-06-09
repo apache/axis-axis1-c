@@ -107,9 +107,6 @@ public:
         AxisChar *pachLocalName, AxisChar *pachPrefix, AxisChar *pachUri, 
         AxisChar* pachValue);
 
-#ifdef UNIT_TESTING_ON
-    int initializeForTesting();
-#endif
     BasicNode* createImmediateChild(NODE_TYPE eNODE_TYPE, 
         AxisChar *pachLocalName, AxisChar *pachPrefix, AxisChar *pachUri, 
         AxisChar* pachValue);

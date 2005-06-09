@@ -70,17 +70,11 @@ private:
     list<Attribute*> m_attributes;
     SoapMethod *m_pSoapMethod;
     SoapFault *m_pSoapFault;
-    /* string m_strBodySerialized; */
 
 public:    
 
-#ifdef UNIT_TESTING_ON
-    int initializeForTesting();
-#endif
     void addAttribute(Attribute* attr);
-    /* string& serialize(); */
     int serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion);
-    /* int serialize(string&, SOAP_VERSION eSoapVersion); */
     void setSoapFault(SoapFault* pSoapFault);
     void setSoapMethod(SoapMethod* ptrSoapMethod);
     SoapBody();

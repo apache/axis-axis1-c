@@ -64,11 +64,6 @@ void SoapMethod::addOutputParam(Param *param)
     }
 }
 
-/*
- * This method return AXIS_SUCCESS if it serialize the SoapMethod successfully.
- * If not it returns AXIS_FAIL. The caller of this method has to deal in a 
- * appropriate manner after calling this method.
- */
 int SoapMethod::serialize(SoapSerializer& pSZ)
 {    
     int iStatus= AXIS_SUCCESS;
@@ -114,9 +109,7 @@ int SoapMethod::serialize(SoapSerializer& pSZ)
             
             pSZ.serialize(m_strLocalname.c_str(), ">\n", NULL);
 
-			/*
-			 * Removing the namespace list of this SOAPMethod from the stack.
-			 */
+			// Removing the namespace list of this SOAPMethod from the stack.
 			list<AxisChar*>::iterator itCurrentNamespace = 
 				lstTmpNameSpaceStack.begin();
 			while (itCurrentNamespace != lstTmpNameSpaceStack.end())
@@ -159,7 +152,7 @@ bool SoapMethod::isSerializable()
 {
     bool bStatus= true;    
 
-    /* checking whether namespace qualified, if not return AXIS_FAIL */
+    // checking whether namespace qualified, if not return AXIS_FAIL 
     do
     {
         if(m_strPrefix.length() == 0)

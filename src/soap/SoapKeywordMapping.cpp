@@ -27,7 +27,6 @@ AXIS_CPP_NAMESPACE_START
 
 extern SoapEnvVersionsStruct gs_SoapEnvVersionsStruct[VERSION_LAST];
 
-//map<int, SoapKeywordStruct> SoapKeywordMapping::m_Map;
 SoapKeywordStruct SoapKeywordMapping::m_Map[VERSION_LAST];
 volatile bool SoapKeywordMapping::m_bInit = false;
 
@@ -60,14 +59,14 @@ void SoapKeywordMapping::initialize()
             }
         }
         std::list<Attribute*> attributeList;
-        /* soap 1.1 envelop attributes */
+        // soap 1.1 envelop attributes 
         m_Map[SOAP_VER_1_1].pEnv = new Attribute( attributeList, "SOAP-ENV","xmlns","",
             "http://schemas.xmlsoap.org/soap/envelope/");
         m_Map[SOAP_VER_1_1].pXsi = new Attribute( attributeList, "xsi","xmlns","",
             "http://www.w3.org/2001/XMLSchema-instance");
         m_Map[SOAP_VER_1_1].pXsd = new Attribute( attributeList, "xsd","xmlns","",
             "http://www.w3.org/2001/XMLSchema");
-        /* soap 1.2 envelop attributes */
+        // soap 1.2 envelop attributes 
         m_Map[SOAP_VER_1_2].pEnv = new Attribute( attributeList, "env","xmlns","",
             "http://www.w3.org/2003/05/soap-envelope");
         m_Map[SOAP_VER_1_2].pXsi = new Attribute( attributeList, "xsi","xmlns","",
@@ -82,7 +81,7 @@ void SoapKeywordMapping::uninitialize()
 {
     if (m_bInit)
     {
-        /* soap 1.1 envelop attributes */
+        // soap 1.1 envelop attributes 
         delete m_Map[SOAP_VER_1_1].pEnv;
         delete m_Map[SOAP_VER_1_1].pXsi;
         delete m_Map[SOAP_VER_1_1].pXsd;
@@ -98,3 +97,4 @@ const SoapKeywordStruct& SoapKeywordMapping::map(int nVersion)
     return m_Map[nVersion];
 }
 AXIS_CPP_NAMESPACE_END	
+

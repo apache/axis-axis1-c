@@ -44,16 +44,6 @@
 #include <list>
 using namespace std;
 
-/*
- * Revision 1.1  2004/06/13 roshan
- * Added doxygen comments to help autobuild API docs
- */
-
-/*
- * Revision 1.2  2004/07/01 roshan
- * Added doxygen comments to help autobuild API docs
- */
-
 typedef enum 
 { 
     HEADER_LEVEL=0, HEADER_BLOCK_LEVEL, HEADER_BLOCK_INSIDE_LEVEL
@@ -142,7 +132,7 @@ public:
       */
     void addHeaderBlock(IHeaderBlock* headerBlock);
 
-/**
+  /**
       * Deletes a header block.
       *
       * 

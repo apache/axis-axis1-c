@@ -48,16 +48,8 @@ typedef struct
  *  @class SoapFault
  *  @brief interface for the SoapFault class.
  *
- *
  *  @author Roshan Weerasuriya (roshan@jkcs.slt.lk)
  *  @author damitha kumarage (damitha@jkcsworld.com, damitha@opensource.lk)
- */
-
-/*
- * Revision 1.1  2004/June/02 roshan
- * Changed. The "SOAP-ENV" prefix was hard-coded in the "serialize" method.
- *  Corrected it to serialize the correct prefix. Added the parameter
- *  "SOAP_VERSION eSoapVersion" to the "serialize" method.
  */
 
 AXIS_CPP_NAMESPACE_START
@@ -86,8 +78,6 @@ public:
     int serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion);
 
     void setDeSerializer(SoapDeSerializer* pDZ);
-
-    /* int serialize(string&); */
 
     virtual ~SoapFault();
 
@@ -129,7 +119,6 @@ public:
     int setParam(Param* pParam, const AxisChar* pchName, const AxisChar* pValue, XSDTYPE type);
 
 private:
-    /* string m_sFaultSerialized; */
     string m_sFaultDetail;
     string m_sFaultactor;
     string m_sFaultstring;

@@ -30,25 +30,6 @@
 
 /* HeaderBlock.cpp: implementation of the HeaderBlock class. */
 
-/*
- * Revision 1.1  2004/07/01 roshan
- * Added code to "addChild" method to deal with a null child.
- * Added code to createImmediateChild(NODE_TYPE eNODE_TYPE,
- *                                            AxisChar *pachLocalName,
- *                                            AxisChar *pachPrefix,
- *                                            AxisChar *pachUri,
- *                                            AxisChar* pachValue)
- *  to deal with null localname and namespace uri.
- * Added code to addAttribute(Attribute* pAttr) to deal with null values.
- * Added code to createAttribute(const AxisChar *localname,
- *                                        const AxisChar *prefix,
- *                                       const AxisChar *value)
- *  to deal with null values.
- * Added code to addNamespaceDecl(Attribute *pAttribute) to deal with NULL
- *  null values.
- */
-
-
 #ifdef WIN32
 #pragma warning (disable : 4786)
 #endif
@@ -116,9 +97,7 @@ IHeaderBlock* HeaderBlock::clone()
 
 HeaderBlock::~HeaderBlock()
 {
-    /*
-     *Clear the Attributes
-     */
+    // Clear the Attributes
     list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
     while(itCurrAttribute != m_attributes.end())
     {        
@@ -127,9 +106,7 @@ HeaderBlock::~HeaderBlock()
     }
     m_attributes.clear();
 
-    /*
-     *Clear the Namespaces
-     */
+    // Clear the Namespaces
     list<Namespace*>::iterator itCurrNamespace= m_namespaceDecls.begin();
     while(itCurrNamespace != m_namespaceDecls.end())
     {        
@@ -138,9 +115,7 @@ HeaderBlock::~HeaderBlock()
     }
     m_namespaceDecls.clear();
 
-    /*
-     *Clear the children
-     */
+    // Clear the children
     list<BasicNode*>::iterator itCurrChild= m_children.begin();
     while(itCurrChild != m_children.end())
     {        
@@ -458,22 +433,6 @@ INamespace* HeaderBlock::createNamespaceDecl( const AxisChar * pPrefix, const Ax
 	}
 }
 
-/* TO DO: We need to remove this completely
-*
-int HeaderBlock::addNamespaceDecl(INamespace *pNamespace)
-{
-    if (pNamespace)
-    {
-        m_namespaceDecls.push_back((Namespace*)pNamespace);
-        return AXIS_SUCCESS;
-    }
-    else
-    {
-        return AXIS_FAIL;
-    }
-}
-*/
-
 int HeaderBlock::serializeNamespaceDecl(SoapSerializer &pSZ, std::list<AxisChar*>& lstTmpNameSpaceStack)
 {
     list<Namespace*>::iterator itCurrNamespaceDecl= m_namespaceDecls.begin();
@@ -545,44 +504,6 @@ BasicNode* HeaderBlock::createChild(NODE_TYPE eNODE_TYPE)
 
     return pBasicNode;
 }
-
-#ifdef UNIT_TESTING_ON
-int HeaderBlock::initializeForTesting()
-{
-    setPrefix("m");
-    setLocalName("reservation");
-    setURI("http://travelcompany.example.org/reservation");
-
-    Attribute* pAttribute2 = new Attribute(m_attributes);
-    pAttribute2->setPrefix("SOAP-ENV");
-    pAttribute2->setLocalName("role");
-    pAttribute2->setValue("http://www.w3.org/2003/05/soap-envelope/role/next");
-
-    Attribute* pAttribute3 = new Attribute(m_attributes);
-    pAttribute3->setPrefix("SOAP-ENV");
-    pAttribute3->setLocalName("mustUnderstand");
-    pAttribute3->setValue("true");
-
-    addAttribute(pAttribute2);
-    addAttribute(pAttribute3);
-
-    ComplexElement* pComplexElement = new ComplexElement();
-    pComplexElement->setPrefix("m");
-    pComplexElement->setLocalName("reference");
-    pComplexElement->addChild(new CharacterElement("abcdefgh"));
-
-    ComplexElement* pComplexElement2 = new ComplexElement();
-    pComplexElement2->setPrefix("m");
-    pComplexElement2->setLocalName("dateAndTime");
-    pComplexElement2->addChild(new 
-        CharacterElement("2001-11-29T13:20:00.000-05:00"));
-
-    addChild(pComplexElement);
-    addChild(pComplexElement2);
-
-    return AXIS_SUCCESS;    
-}
-#endif
 
 bool HeaderBlock::operator ==( const HeaderBlock &objHeaderBlock)
 {

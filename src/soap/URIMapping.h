@@ -42,9 +42,8 @@ class URIMapping
 {
 public:
     static void initialize();
-	static void uninitialize();
-    //static map<AxisXMLString, URITYPE> m_sURIMap;
-	static map<std::string, URITYPE> m_sURIMap;
+    static void uninitialize();
+    static map<std::string, URITYPE> m_sURIMap;
     static volatile bool m_bInit;
     URIMapping();
     virtual ~URIMapping();

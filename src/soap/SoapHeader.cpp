@@ -47,22 +47,12 @@ SoapHeader::SoapHeader()
 
 SoapHeader::~SoapHeader()
 {
-    /* 
-     * header blocks are not deleted here any more. Its the responsibility of
-     * either a handler or stub etc to delete any header block created by them
-     */
-    /*
-    list<IHeaderBlock*>::iterator itCurrHeaderBlock= m_headerBlocks.begin();
-
-    while(itCurrHeaderBlock != m_headerBlocks.end())
-    {        
-        delete *itCurrHeaderBlock;
-        itCurrHeaderBlock++;
-    }
-    */
+    // Header blocks are not deleted here any more. Its the responsibility of
+    // either a handler or stub etc to delete any header block created by them
+    // Here we will just clear the list of header block pointers
     m_headerBlocks.clear();
 
-    /* deletion of attributes */
+    // deletion of attributes 
     list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
 
     while(itCurrAttribute != m_attributes.end())
@@ -312,13 +302,12 @@ int SoapHeader::deleteHeaderBlock(const AxisChar *pName,
 }
 void SoapHeader::clear()
 {
-    /*
-     * header blocks are not deleted here any more. Its the responsibility of
-     * either a handler or stub etc to delete any header block created by them
-     */
+    // Header blocks are not deleted here. Its the responsibility of
+    // either a handler or stub etc to delete any header block created by them
+    // Here we will just clear the list of header block pointers
     m_headerBlocks.clear();
 
-    /* deletion of attributes */
+    // deletion of attributes 
     list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
 
     while(itCurrAttribute != m_attributes.end())

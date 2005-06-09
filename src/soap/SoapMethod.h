@@ -62,33 +62,25 @@ class SoapMethod : public ISoapMethod
 
 private:
     int serializeAttributes(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceStack);
-    /* int serializeAttributes(string& sSerialized); */
     list<Attribute*> m_attributes;
     bool isSerializable();    
     int serializeOutputParam(SoapSerializer& pSZ);
-    /* int serializeOutputParam(string&); */
     AxisString m_strPrefix;
     AxisString m_strLocalname;
     AxisString m_strUri;
     list<Param*> m_OutputParams;
-    /* string m_strMethodSerialized; */
-    /* test line */
 
 public:    
-    /*
-     * Initializes the member variables for testing.
-     * @return The status indicating success (AXIS_SUCCESS) or failure
-     * (AXIS_FAIL).
-     */
-
-#ifdef UNIT_TESTING_ON
-    int initializeForTesting();
-#endif
     int reset();
     int addAttribute(Attribute* pAttribute);
     const AxisChar* getMethodName();
+
+  /**
+    * This method return AXIS_SUCCESS if it serialize the SoapMethod successfully.
+    * If not it returns AXIS_FAIL. The caller of this method has to deal in a 
+    * appropriate manner after calling this method.
+    */
     int serialize(SoapSerializer& pSZ);
-    /* int serialize(string&); */
     void addOutputParam(Param *param);
     void setURI(const AxisChar* uri);
     void setLocalName(const AxisChar* localname);
