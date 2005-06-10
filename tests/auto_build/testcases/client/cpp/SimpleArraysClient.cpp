@@ -136,18 +136,21 @@ int main(int argc, char* argv[])
 		long_in.m_Array = new xsd__long*[ARRAYSIZE];
         xsd__long * longArray = new xsd__long[ARRAYSIZE];
 		long_in.m_Size = ARRAYSIZE;
-		for (x=0; x<ARRAYSIZE; x++)
+		for (xsd__long xx=0; xx<ARRAYSIZE; xx++)
 		{
-            longArray[x] = (xsd__long) x+ 200001;
-			long_in.m_Array[x] = &longArray[x];
+            longArray[xx] = xx + 10000000001I64;
+			long_in.m_Array[xx] = &longArray[xx];
 		}
 		cout << "invoking echoLongArray..."<<endl;
 		long_out = ws.echoLongArray(long_in);
 		if(long_out.m_Size > 0)
-			if(*(long_out.m_Array[0]) == (xsd__long)200001)
+		{
+			printf("long[0]=<%I64d>\n", *(long_out.m_Array[0]));
+			if(*(long_out.m_Array[0]) == 10000000001I64)
 				cout << "successful "<<endl;
 			else
 				cout << "failed "<<endl;		
+		}
 		else
 			cout << "failed "<<endl;		
 

@@ -1,0 +1,16 @@
+<test>
+    <name>MultiOut</name>
+    <description>MultiOut</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>MultiOutClient.cpp</clientCode>
+    <wsdl>MultiOut.wsdl</wsdl>
+    <expected>
+        <output>
+            MultiOut.cpp.out
+        </output>
+        <serverResponse>
+		MultiOutServerResponse.expected
+        </serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/MultiOut</endpoint>
+</test>

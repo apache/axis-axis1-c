@@ -55,6 +55,9 @@ In order to create a new test you must do the following 3 things:
 	
 3. Place the expected server response into the output directory
 	e.g. tests/auto_build/testcases/output/CalculatorDoc_serverResponse.expected
+	The server response file has a length after the HTTP headers but before the SOAP envelope. This is the
+	length in hex of the remainder of the message. Since this is awkward to calculate manually, it may 
+	be left as ### and the mock server will automatically calculate the length.
 	
 Please see the file tests/auto_build/testcases/output/ComplexLists_ServerResponse.expected for an example of 
 a test that calls a server multiple times.

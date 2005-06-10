@@ -259,6 +259,14 @@ public class MockServerThread implements Runnable
         for(int i=1; i<responseStrings.length; i++)
         {
             String tmpString="HTTP"+responseStrings[i];
+            int hash = tmpString.indexOf("###");
+            if (-1 != hash) 
+            {
+                String len = Integer.toHexString(tmpString.length() - hash - 3);
+                if (3 != len.length()) 
+                    throw new RuntimeException("Message length in hex was not 3 characters long "+len);
+                tmpString = tmpString.substring(0,hash) + len + tmpString.substring(hash+3);
+            }
             responses[i-1]=tmpString.toCharArray( );
         }
     }

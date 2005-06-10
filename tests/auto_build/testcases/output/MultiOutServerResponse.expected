@@ -1,0 +1,11 @@
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version="1.0" encoding="utf-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header/><soapenv:Body><get xmlns="http://localhost/axis/MultiOut"><out1>Hello Mark</out1><out14>23</out14><out15>23</out15><out16>23</out16><out17>23</out17><out18>23</out18><out19>23.1</out19><out20>23.1</out20><out21>1</out21><out22>23</out22></get></soapenv:Body></soapenv:Envelope>
+0
+
