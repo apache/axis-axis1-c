@@ -83,7 +83,7 @@
 				</parallel>
 			</try>
 			<catch>
-				<echo message="Exception in monitor caught it in Ant try/catch block while trying to run test ${testName}"/>
+				<echo message="Exception in monitor caught it in Ant try/catch block while trying to run test ${test.name}"/>
 			</catch>
 			<finally>
 				<sleep seconds="1"/>
