@@ -15,6 +15,8 @@
 
 /*
  * This client tests setProxy() method in Stub class.
+ * NOTE: To run this you must set all three input args -
+ * <endpoint> <proxy> <proxy port>
  * 
  */
 
@@ -25,11 +27,33 @@
 int main(int argc, char* argv[])
 {
         char endpoint[256];
+        char proxy[256];
+        int proxyPort;
         const char* url="http://localhost:80/axis/Calculator";
         int iResult;
         int rc=1;
 
         if(argc>1) url = argv[1];
+        if(argc>2)
+        { 
+            sprintf(proxy, "%s", argv[2]);
+        }
+        else
+        {
+            cerr << "this test needs to set a url, proxy host and proxy port: TestTransportProxy <url> <proxy hostname> <proxy port>"<<endl;
+            exit(-1);
+        }
+        if(argc>3)
+        {
+          proxyPort=atoi(argv[3]);
+        }
+        else
+        {
+            cerr << "this test needs to set a url, proxy host and proxy port: TestTransportProxy <url> <proxy hostname> <proxy port>"<<endl;
+            exit(-1);
+        }
+        
+        
 
 		bool bSuccess = false;
 		int	iRetryIterationCount = 3;
@@ -40,7 +64,7 @@ int main(int argc, char* argv[])
         {
                 sprintf(endpoint, "%s", url);
                 Calculator ws(endpoint);
-                ws.setProxy("proxy.in.ibm.com",80);
+                ws.setProxy(proxy, proxyPort);
                 iResult = ws.add(2,3);
                 cout<<  iResult << endl;
                 rc=0;
@@ -56,6 +80,7 @@ int main(int argc, char* argv[])
 				{
 					bSilent = true;
 				}
+				
 			}
 			else
 			{

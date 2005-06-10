@@ -58,7 +58,7 @@
 
 
 	<target name="setTestArgs"
-		depends="setEndpoint, setForMonitor, setForNoMonitor" />
+		depends="setEndpoint, setForMonitor, setForNoMonitor, setProxyArgs" />
 
 	<target name="setEndpoint" unless="test.endpoint">
 		<property name="clientArgs" value="" />
@@ -93,7 +93,15 @@
 		<property name="clientArgs"
 			value="${protocol}://${testHost}:${test.port}/${context}" />
 	</target>
-
+	<target name="setProxyArgs">
+		<if>
+			<equals arg1="${test.proxyRequired}" arg2="true"/>
+			<then>
+				<propertyregex property="clientArgs" regexp="(${clientArgs})(.*)" replace="\1 ${proxy.host} ${proxy.port}" input="${clientArgs}" override="true"/>
+			</then>
+		</if>
+	</target>
+	
 	<target name="setVerbatim" if="test.verbatim">
 		<property name="clientArgs"
 			value="${testHost} ${test.port} ${test.endpoint}" />
@@ -120,12 +128,12 @@
 		</if>
 
 		<echo
-			message="Starting monitor forwarding to ${actualTestHost}:${testPort}" />
+			message="Starting monitor forwarding to ${actualTestHost}:${test.port}" />
 		<!-- Run Monitor utility to allow validation of message across the wire -->
 		<java classname="org.apache.test.TCPMonitor"
 			outputproperty="mon.out">
 			<arg line="-l ${monitorPort}" />
-			<arg line="-p ${testPort}" />
+			<arg line="-p ${test.port}" />
 			<arg line="-h ${actualTestHost}" />
 			<arg line="-o &quot;${test.directory}/tcpm.req&quot;" />
 			<arg line="-r &quot;${test.directory}/tcpm.res&quot;" />

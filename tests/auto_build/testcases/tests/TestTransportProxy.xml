@@ -4,6 +4,7 @@
     <clientLang>cpp</clientLang>
     <clientCode>TestTransportProxyClient.cpp</clientCode>
     <wsdl>CalculatorDoc.wsdl</wsdl>
+	<proxyRequired>true</proxyRequired>
     <expected>
         <output>
             TestTransportProxy.expected
