@@ -24,9 +24,8 @@ int main(int argc, char* argv[])
 		{
 	try
         {
-	printf("Sending Requests to Server %s ........\n\n", url);
-	sprintf(endpoint, "%s", url);
-	ArrayTestPortType ws(endpoint);
+		sprintf(endpoint, "%s", url);
+		ArrayTestPortType ws(endpoint);
 	
 	//testing echoIntArray
          intArrayType arrin;

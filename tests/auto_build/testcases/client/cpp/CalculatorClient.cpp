@@ -40,7 +40,6 @@ int main(int argc, char* argv[])
 
 	try
         {
-		printf("Sending Requests to Server %s .......\n\n", url);
 		sprintf(endpoint, "%s", url);
 		Calculator ws(endpoint);
 

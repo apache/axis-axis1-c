@@ -39,8 +39,7 @@ int main(int argc, char* argv[])
 		{
 	try
         {
-	printf("Sending Requests to Server %s ........\n\n", url);
-	sprintf(endpoint, "%s", url);
+		sprintf(endpoint, "%s", url);
 	//endpoint for Axis Java sample
 	//sprintf(endpoint, "http://%s:%s/axis/services/echo", server, port);
 	
