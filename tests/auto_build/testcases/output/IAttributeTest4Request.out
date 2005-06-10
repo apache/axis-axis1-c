@@ -6,7 +6,7 @@ Content-Length: 620
 
 <?xml version='1.0' encoding='utf-8' ?>
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-<SOAP-ENV:Header><ns:TestHeader xmlns:ns="http://ws.apache.org/" nsp:Name="axis" xmlns:nsp="http://apache.com"><Project xmlns:ns2="http://axis.apache.com" ns2:TYPE="OPEN SOURCE"></Project></ns:TestHeader></SOAP-ENV:Header>
+<SOAP-ENV:Header><ns:TestHeader xmlns:ns="http://ws.apache.org/" xmlns:ns2="http://axis.apache.com" ns2:Name="axis" xmlns:nsp="http://apache.com"><Project ns2:TYPE="OPEN SOURCE"></Project></ns:TestHeader></SOAP-ENV:Header>
 <SOAP-ENV:Body>
 <ns1:add xmlns:ns1="http://localhost/axis/Calculator">
 <ns1:arg_0_0>2</ns1:arg_0_0>
