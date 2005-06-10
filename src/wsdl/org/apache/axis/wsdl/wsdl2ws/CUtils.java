@@ -699,7 +699,6 @@ public class CUtils {
 		isPointerBasedType.put("xsd__NCName", new Boolean(true));
 		isPointerBasedType.put("xsd__ID", new Boolean(true));
 		isPointerBasedType.put("xsd__IDREF", new Boolean(true));
-		isPointerBasedType.put("xsd__IDREF", new Boolean(true));
 		isPointerBasedType.put("xsd__IDREFS", new Boolean(true));
 		isPointerBasedType.put("xsd__ENTITY", new Boolean(true));
 		isPointerBasedType.put("xsd__ENTITIES", new Boolean(true));
@@ -728,7 +727,7 @@ public class CUtils {
 		isPointerBasedType.put("xsd__QName", new Boolean(true));
 		isPointerBasedType.put("xsd__notation", new Boolean(true));
 
-		isPointerBasedType.put("xsd__duration", new Boolean(false));
+		isPointerBasedType.put("xsdc__duration", new Boolean(false));
 		isPointerBasedType.put("xsdc__dateTime", new Boolean(false));
 		isPointerBasedType.put("xsdc__time", new Boolean(false));
 		isPointerBasedType.put("xsdc__date", new Boolean(false));
