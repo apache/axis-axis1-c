@@ -1313,6 +1313,8 @@ int SoapSerializer::deleteHeaderBlock( const AxisChar * pName,
 
 void SoapSerializer::reset()
 {
+    m_nCounter = 0; // reset namespace prifix counter 
+
     if( m_pSoapEnvelope && (m_pSoapEnvelope->m_pSoapBody) && (m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod))
     {
         m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->clearOutParams();    
