@@ -52,9 +52,10 @@ int main(int argc, char* argv[])
 				&OutValue8,
 				&OutValue9);
 
-			char sInteger[128], sLong[128];
+			char sInteger[128], sLong[128], *sBool;
 			sprintf(sInteger,"%I64d",OutValue1);
 			sprintf(sLong,"%I64d",OutValue3);
+			sBool = (OutValue8==false_)?"false":"true";
 
 			cout << OutValue0 << endl;
 			cout << sInteger << endl;
@@ -64,7 +65,7 @@ int main(int argc, char* argv[])
 			cout << OutValue5 << endl;
 			cout << OutValue6 << endl;
 			cout << OutValue7 << endl;
-			cout << OutValue8 << endl;
+			cout << sBool << endl;
 			cout << OutValue9 << endl;
 			bSuccess = true;
 		}

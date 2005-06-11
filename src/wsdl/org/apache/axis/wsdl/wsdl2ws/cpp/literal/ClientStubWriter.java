@@ -777,14 +777,7 @@ public class ClientStubWriter
 		    typeisarray = false;
 		}
 		typeissimple = CUtils.isSimpleType (currentParaType);
-		
-		//Chinthana:
-		//Changes have done for handle AXIS_OUT_PARAM Types.
-		if (CUtils.isPointerType(currentParaType))
-			currentParamName = "*OutValue" + i;
-		else
-			currentParamName = "OutValue" + i;
-		//10/05/2005.................................................
+		currentParamName = "*OutValue" + i;
 		
 		// Some code need to be merged as we have some duplicated in coding here.
 		if (typeisarray)
@@ -795,8 +788,10 @@ public class ClientStubWriter
 		    if (CUtils.isSimpleType (qname))
 		    {
 			containedType = CUtils.getclass4qname (qname);
-			writer.write ("\t\t\t" + currentParamName + " = (" + currentParaType + "&)m_pCall->getBasicArray(" + CUtils.getXSDTypeForBasicType (containedType) + ", \"" + currentType.getParamName ()	//getElementName().getLocalPart()
-				      + "\", 0);\n");
+			writer.write ("\t\t\t" + currentParamName + " = (" + currentParaType 
+				+ "&)m_pCall->getBasicArray(" + CUtils.getXSDTypeForBasicType (containedType) 
+				+ ", \"" + currentType.getParamName ()	//getElementName().getLocalPart()
+				+ "\", 0);\n");
 		    }
 		    else
 		    {
@@ -842,16 +837,24 @@ public class ClientStubWriter
 
 		    if (typeissimple)
 		    {
-			writer.write ("\t\t\t"
+			if (CUtils.isPointerType(currentParaType))
+			{
+				writer.write ("\t\t\t"
 				      + currentParamName
 				      + " = m_pCall->"
-				      +
-				      CUtils.
-				      getParameterGetValueMethodName
-				      (currentParaType,
-				       false) + "(\"" +
-				      currentType.getParamName () +
-				      "\", 0);\n");
+				      + CUtils.getParameterGetValueMethodName(currentParaType,false) 
+					+ "(\"" + currentType.getParamName () 
+					+ "\", 0);\n");
+			}
+			else 
+			{
+				writer.write ("\t\t\t"
+				      + currentParamName
+				      + " = *(m_pCall->"
+				      + CUtils.getParameterGetValueMethodName(currentParaType,false) 
+					+ "(\"" + currentType.getParamName () 
+					+ "\", 0));\n");
+			}
 		    }
 		    else
 		    {
@@ -861,7 +864,7 @@ public class ClientStubWriter
 			    //for anyTtype 
 			    writer.write ("\t\t\t"
 					  + currentParamName
-					  + " = ("
+					  + " = *("
 					  + currentParaType
 					  + "*)m_pCall->getAnyObject();\n");
 			}
@@ -874,7 +877,7 @@ public class ClientStubWriter
 			    {
 				writer.write ("\t\t\t"
 					      + currentParamName
-					      + " = ("
+					      + " = *("
 					      + currentParaType
 					      +
 					      ")m_pCall->getCmplxObject((void*) Axis_DeSerialize_"
@@ -891,7 +894,7 @@ public class ClientStubWriter
 			    else
 				writer.write ("\t\t\t"
 					      + currentParamName
-					      + " = ("
+					      + " = *("
 					      + currentParaType
 					      +
 					      "*)m_pCall->getCmplxObject((void*) Axis_DeSerialize_"
