@@ -95,7 +95,7 @@ const AxisChar* BasicTypeSerializer::serializeAsElement (const AxisChar* pName,
         {
             m_sSZ += " xmlns:";
             m_sSZ += pPrefix;
-            m_sSZ += "\"";
+            m_sSZ += "=\"";
             m_sSZ += pNamespace;
             m_sSZ += "\"";
         }
