@@ -150,8 +150,7 @@
 		<echo message = "testport = ${test.port}"/>
 		<java classname="org.apache.test.MockServer"
 			outputproperty="mockServer.out">
-<!--			<arg line="-p ${test.port}" /> -->
-				<arg line="-p 9080" />
+			<arg line="-p ${test.port}" /> 
 			<arg line="-r &quot;${response_expected.file}&quot;" />
 			<classpath>
 				<pathelement
@@ -176,7 +175,7 @@
 	<target name="stopMockServer">
 		<java classname="org.apache.test.StopMockServer" outputproperty="stopMockServer.out">
 <!--			<arg line="-p ${test.port}" />			-->
-				<arg line="-p 9080" />
+				<arg line="-p 9081" />
 			<classpath>
 				<pathelement
 					location="${dir.obj}/test/monitor/monitor.jar" />
