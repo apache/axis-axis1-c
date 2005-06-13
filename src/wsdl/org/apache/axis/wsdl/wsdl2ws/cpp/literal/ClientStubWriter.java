@@ -394,7 +394,9 @@ public class ClientStubWriter
 		    wscontext.getTypemap ().getType (((ParameterInfo) paramsC.
 						      get (i)).
 						     getSchemaName ());
-		writer.write (", AXIS_OUT_PARAM  " +
+            String comma = ", ";
+            if (paramsB.size()==0 && 0==i) comma = "";
+		writer.write (comma + "AXIS_OUT_PARAM  " +
 			      WrapperUtils.
 			      getClassNameFromParamInfoConsideringArrays ((ParameterInfo) paramsC.get (i), wscontext) + "* OutValue" + i);
 	    }

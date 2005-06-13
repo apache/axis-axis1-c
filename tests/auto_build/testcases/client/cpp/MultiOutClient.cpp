@@ -28,7 +28,6 @@ int main(int argc, char* argv[])
 		{
 			MultiOut ws(argv[1]);
 
-			xsd__int Value0 = 12;
 			xsd__string OutValue0 = NULL;
 			xsd__integer OutValue1 = 0;
 			xsd__int OutValue2 = 0;
@@ -40,8 +39,7 @@ int main(int argc, char* argv[])
 			xsd__boolean OutValue8 = false_;
 			xsd__byte OutValue9 = 0;
 
-			ws.get(Value0,
-				&OutValue0,
+			ws.get(&OutValue0,
 				&OutValue1,
 				&OutValue2,
 				&OutValue3,

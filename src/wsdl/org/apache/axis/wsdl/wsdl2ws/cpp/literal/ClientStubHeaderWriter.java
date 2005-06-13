@@ -107,9 +107,11 @@ public class ClientStubHeaderWriter
                 writer.write(minfo.getMethodname() + "(");
 
                 //write parameter names 
+                boolean hasInputParms = false;
                 Iterator params = minfo.getInputParameterTypes().iterator();
                 if (params.hasNext())
                 {
+                    hasInputParms = true;
                     ParameterInfo fparam = (ParameterInfo) params.next();
                     String paramTypeName = WrapperUtils.getClassNameFromParamInfoConsideringArrays(fparam, wscontext);
                     if (CUtils.isSimpleType(paramTypeName)
@@ -158,8 +160,10 @@ public class ClientStubHeaderWriter
                     for (int j = 0; params.hasNext(); j++)
                     {
                         ParameterInfo nparam = (ParameterInfo) params.next();
-                        writer.write(
-                            ", AXIS_OUT_PARAM "
+                        String comma = ", ";
+                        if (!hasInputParms && 0==j) comma = "";
+                        writer.write(comma
+                                + "AXIS_OUT_PARAM "
                                 + WrapperUtils
                                     .getClassNameFromParamInfoConsideringArrays(
                                     nparam,

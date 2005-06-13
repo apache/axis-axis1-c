@@ -33,7 +33,6 @@
    <element name="get0">
     <complexType>
      <sequence>
-      <element name="in" type="xsd:int"/>
      </sequence>
     </complexType>
    </element>
