@@ -1096,7 +1096,7 @@ int HTTPTransport::FindTransportPropertyIndex( string sKey)
     bool	bKeyFound = false;
     int		iIndex = 0;
 
-    do
+    while( (unsigned int) iIndex < m_vHTTPHeaders.size() && !bKeyFound)
     {
 		if (!m_vHTTPHeaders[iIndex].first.compare( sKey))
 		{
@@ -1106,7 +1106,7 @@ int HTTPTransport::FindTransportPropertyIndex( string sKey)
 		{
 			iIndex++;
 		}
-    } while( (unsigned int) iIndex < m_vHTTPHeaders.size() && !bKeyFound);
+    } 
 
     if( !bKeyFound)
     {
