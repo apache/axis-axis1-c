@@ -42,62 +42,62 @@ AXIS_CPP_NAMESPACE_START
  */
 typedef AxisChar * xsd__string;
 /**
- * @typedef xsd__string
+ * @typedef xsd__normalizedString
  * Axis C++ defined type for xml basic type normalizedString
  */
 typedef AxisChar * xsd__normalizedString;
 /**
- * @typedef xsd__string
+ * @typedef xsd__token
  * Axis C++ defined type for xml basic type token
  */
 typedef AxisChar * xsd__token;
 /**
- * @typedef xsd__string
+ * @typedef xsd__language
  * Axis C++ defined type for xml basic type language
  */
 typedef AxisChar * xsd__language;
 /**
- * @typedef xsd__string
+ * @typedef xsd__Name
  * Axis C++ defined type for xml basic type Name
  */
 typedef AxisChar * xsd__Name;
 /**
- * @typedef xsd__string
+ * @typedef xsd__NCName
  * Axis C++ defined type for xml basic type NCName
  */
 typedef AxisChar * xsd__NCName;
 /**
- * @typedef xsd__string
+ * @typedef xsd__ID
  * Axis C++ defined type for xml basic type ID
  */
 typedef AxisChar * xsd__ID;
 /**
- * @typedef xsd__string
+ * @typedef xsd__IDREF
  * Axis C++ defined type for xml basic type IDREF
  */
 typedef AxisChar * xsd__IDREF;
 /**
- * @typedef xsd__string
+ * @typedef xsd__IDREFS
  * Axis C++ defined type for xml basic type IDREFS
  */
 typedef AxisChar * xsd__IDREFS;
 /**
- * @typedef xsd__string
+ * @typedef xsd__ENTITY
  * Axis C++ defined type for xml basic type ENTITY
  */
 typedef AxisChar * xsd__ENTITY;
 /**
- * @typedef xsd__string
+ * @typedef xsd__ENTITIES
  * Axis C++ defined type for xml basic type ENTITIES
  */
 typedef AxisChar * xsd__ENTITIES;
 /**
- * @typedef xsd__string
+ * @typedef xsd__NMTOKEN
  * Axis C++ defined type for xml basic type NMTOKEN
  */
 typedef AxisChar * xsd__NMTOKEN;
 /**
- * @typedef xsd__string
+ * @typedef xsd__NMTOKENS
  * Axis C++ defined type for xml basic type NMTOKENS
  */
 typedef AxisChar * xsd__NMTOKENS;
@@ -167,11 +167,6 @@ typedef AxisChar * xsd__QName;
  */
 typedef AxisChar * xsd__notation;
 /**
- * @typedef xsd__NCName
- * Axis C++ defined type for xml basic type NCName
- */
-//typedef AxisChar * xsd__NCName;
-/**
  * @typedef xsd__dateTime
  * Axis C++ defined type for xml basic type dateTime
  */
@@ -187,28 +182,28 @@ typedef struct tm xsd__date;
  */
 typedef struct tm xsd__time;
 /**
- * @typedef xsd__time
- * Axis C++ defined type for xml basic type GYearMonth
+ * @typedef xsd__gYearMonth
+ * Axis C++ defined type for xml basic type gYearMonth
  */
 typedef struct tm xsd__gYearMonth;
 /**
- * @typedef xsd__time
- * Axis C++ defined type for xml basic type GYear
+ * @typedef xsd__gYear
+ * Axis C++ defined type for xml basic type gYear
  */
 typedef struct tm xsd__gYear;
 /**
- * @typedef xsd__time
- * Axis C++ defined type for xml basic type GMonthDay
+ * @typedef xsd__gMonthDay
+ * Axis C++ defined type for xml basic type gMonthDay
  */
 typedef struct tm xsd__gMonthDay;
 /**
- * @typedef xsd__time
- * Axis C++ defined type for xml basic type GDay
+ * @typedef xsd__gDay
+ * Axis C++ defined type for xml basic type gDay
  */
 typedef struct tm xsd__gDay;
 /**
- * @typedef xsd__time
- * Axis C++ defined type for xml basic type GMonth
+ * @typedef xsd__gMonth
+ * Axis C++ defined type for xml basic type gMonth
  */
 typedef struct tm xsd__gMonth;
 /**
@@ -301,11 +296,7 @@ public:
  * Axis C++ defined type for xml basic type anyURI
  */
 typedef AxisChar * xsd__anyURI;
-/**
- * @typedef xsd__NMTOKEN
- * Axis C++ defined type for xml basic type anyURI
- */
-typedef AxisChar * xsd__NMTOKEN;
+
 /**
  * @enum AXIS_BINDING_STYLE
  * Enumeration for the different wsdl styles. This is used by the Axis
