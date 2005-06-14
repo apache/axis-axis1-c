@@ -62,6 +62,7 @@ class SOAPTransport;
 class MessageData;
 class SoapDeSerializer;
 class SoapSerializer;
+class ISoapAttachment;
 
 class STORAGE_CLASS_INFO CallBase
 {
@@ -618,6 +619,9 @@ public:
 	 */
 	const xsd__string getFaultAsXMLString();
 
+    void addAttachment(ISoapAttachment* objAttach);
+	ISoapAttachment* createSoapAttachment();
+
 private:
     void closeConnection();
     int makeArray();
@@ -629,6 +633,7 @@ private:
   #pragma warning (disable : 4251)
 #endif
 	list<void*> m_handlerProperties;
+	list<ISoapAttachment*> m_attachments;
 
 #ifdef WIN32
   #pragma warning (default : 4251)

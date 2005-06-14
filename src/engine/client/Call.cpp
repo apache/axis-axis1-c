@@ -131,6 +131,14 @@ Call::~Call ()
     if (m_pcEndPointUri)
         delete [] m_pcEndPointUri;  
 	m_pcEndPointUri = NULL;
+
+	list<ISoapAttachment*>::iterator it = m_attachments.begin();
+	while (it != m_attachments.end())
+	{
+		delete *it;
+		it++;
+	}
+	m_attachments.clear();
 }
 
 int Call::setEndpointURI (const char* pchEndpointURI)
@@ -253,6 +261,14 @@ int Call::initialize(PROVIDERTYPE nStyle)
                     {
                         msgData->setProperty("sessionid", m_pchSessionID);
                     }
+
+					list<ISoapAttachment*>::iterator itAtt = m_attachments.begin();
+					while (itAtt != m_attachments.end())
+					{
+						m_pIWSSZ->addAttachment((*itAtt)->getHeader("Content-Id"),*itAtt);
+						itAtt++;
+					}
+					m_attachments.clear();
                     return AXIS_SUCCESS;
                 }
             }
@@ -1028,4 +1044,14 @@ void Call::setSOAPMethodAttribute(const AxisChar *pLocalname, const AxisChar *pP
 const xsd__string Call::getFaultAsXMLString()
 {
 	return m_pIWSDZ->getFaultAsXMLString();
+}
+
+void Call::addAttachment(ISoapAttachment* att)
+{
+	m_attachments.push_back(att);
+}
+
+ISoapAttachment* Call::createSoapAttachment()
+{
+	return new SoapAttachment();
 }
