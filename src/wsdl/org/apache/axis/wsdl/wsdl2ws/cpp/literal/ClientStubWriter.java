@@ -1014,7 +1014,10 @@ public class ClientStubWriter
 					      returntype.getParamName () +
 					      "\", 0);\n");
 				writer.write ("\t\t\tif(pReturn)\n");
+				writer.write ("\t\t\t{\n");
 				writer.write ("\t\t\t\tRet = *pReturn;\n");
+				writer.write ("\t\t\t\tdelete pReturn;\n");
+				writer.write ("\t\t\t}\n");
 			    }
 			    // TODO If we unexpectedly receive a nill value, when nillable="false" we should do something appropriate, perhaps as below:
 //                              writer.write("\t\t\telse");
