@@ -139,38 +139,6 @@ const AxisChar* BasicTypeSerializer::basicTypeStr (XSDTYPE type)
 {
     switch (type)
     {
-        case XSD_INT:
-            return "int";
-        case XSD_BOOLEAN:
-            return "boolean";
-        case XSD_UNSIGNEDINT:
-            return "unsignedInt";
-        case XSD_SHORT:
-            return "short";
-        case XSD_UNSIGNEDSHORT:
-            return "unsignedShort";
-        case XSD_BYTE:
-            return "byte";
-        case XSD_UNSIGNEDBYTE:
-            return "unsignedByte";
-        case XSD_LONG:
-            return "long";
-        case XSD_INTEGER:
-            return "integer";
-        case XSD_UNSIGNEDLONG:
-            return "unsignedLong";
-        case XSD_FLOAT:
-            return "float";
-        case XSD_DOUBLE:
-            return "double";
-        case XSD_DECIMAL:
-            return "decimal";
-        case XSD_STRING:
-            return "string";
-        case XSD_HEXBINARY:
-            return "hexBinary";
-        case XSD_BASE64BINARY:
-            return "base64Binary";
         case XSD_DURATION:
             return "duration";
         case XSD_DATETIME:
@@ -189,10 +157,52 @@ const AxisChar* BasicTypeSerializer::basicTypeStr (XSDTYPE type)
             return "gDay";
         case XSD_MONTH:
             return "gMonth";
+        case XSD_STRING:
+            return "string";
+        case XSD_BOOLEAN:
+            return "boolean";
+        case XSD_BASE64BINARY:
+            return "base64Binary";
+        case XSD_HEXBINARY:
+            return "hexBinary";
+        case XSD_FLOAT:
+            return "float";
+        case XSD_DECIMAL:
+            return "decimal";
+        case XSD_INTEGER:
+            return "integer";
+        case XSD_NONPOSITIVEINTEGER:
+            return "nonPositiveInteger";
+        case XSD_NEGATIVEINTEGER:
+            return "negativeInteger";
+        case XSD_LONG:
+            return "long";
+        case XSD_INT:
+            return "int";
+        case XSD_SHORT:
+            return "short";
+        case XSD_BYTE:
+            return "byte";
+        case XSD_NONNEGATIVEINTEGER:
+            return "nonNegativeInteger";
+        case XSD_UNSIGNEDLONG:
+            return "unsignedLong";
+        case XSD_UNSIGNEDINT:
+            return "unsignedInt";
+        case XSD_UNSIGNEDSHORT:
+            return "unsignedShort";
+        case XSD_UNSIGNEDBYTE:
+            return "unsignedByte";
+        case XSD_POSITIVEINTEGER:
+            return "positiveInteger";
+        case XSD_DOUBLE:
+            return "double";
         case XSD_ANYURI:
             return "anyURI";
         case XSD_QNAME:
             return "QName";
+        case XSD_NOTATION:
+            return "NOTATION";
         default:
             return " ";
     }
