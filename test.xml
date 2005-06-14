@@ -28,7 +28,8 @@
 	difference. So, as the monitor is only built when a test is run, this is the right place to move it from there to the 
 	obj directory so it does not interfere with the cvs update process.
 		</description>
-		<move todir="${dir.obj}/test/monitor">
+		<!-- moving the monitor fails if it's been used already so set "failonerror=false"-->
+		<move todir="${dir.obj}/test/monitor" failonerror="false">
 			<fileset dir="${basedir}/tests/utils/monitor">
 				<include name="**/*.class"/>
 				<include name="*.jar"/>
@@ -112,7 +113,7 @@
 	<!--
 	  Build test
 	  -->
-	<target name="buildTest" depends="setPropertiesForThisTest, compileTestClient, validateClientCompilation, createConfigurationFile, compileHandlers"/>
+	<target name="buildTest" depends="setPropertiesForThisTest, compileTestClient, validateClientCompilation, compileHandlers"/>
 
 	<target name="setPropertiesForThisTest" depends="checkIfRequestFile">
 		<property name="test.directory" value="${dir.test.generated}/${test.clientLang}/${test.name}"/>
