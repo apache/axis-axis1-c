@@ -26,7 +26,6 @@
 		<!-- ******************************************************************************************** -->
 		<!-- replace any previously set up mockserver with value true -->
 		<propertyregex property="mockServer" override="true" input="${mockServer}" regexp="false" replace="true" defaultValue="true"/>
-<echo message="mockServer = ${mockServer}"/>
 		<!-- now call the fv suite as usual -->
 		<antcall target="testSuite" inheritall="true"/>
 	</target>
