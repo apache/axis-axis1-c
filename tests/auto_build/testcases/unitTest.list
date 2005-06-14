@@ -2,10 +2,12 @@ AxisBench.xml
 ComplexLists.xml
 ComplexTypesAll.xml
 DynamicGet_AddAnyObjectTest.xml
+DynUnrefAttachmentTest.xml
 Enumeration.xml
 ExceptionTestDoc.xml
 HandlerTest6.xml
 LargeReturningString.xml
+MultiOut.xml
 SimpleArrays.xml
 TestSoapHeaderBlock2
 XSDElement.xml
