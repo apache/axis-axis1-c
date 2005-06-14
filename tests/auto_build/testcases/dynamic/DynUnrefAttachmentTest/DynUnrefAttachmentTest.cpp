@@ -15,6 +15,7 @@
 #include <axis/AxisException.hpp>
 #include <axis/client/Call.hpp>
 #include <axis/AxisWrapperAPI.hpp>
+#include <axis/ISoapAttachment.hpp>
 #include <iostream>
 #include <string>
 #include <exception>
@@ -27,6 +28,19 @@ int main(int argc, char* argv[])
 	{
 		Call call;
 		call.setEndpointURI(argv[1]);
+
+		ISoapAttachment *att = call.createSoapAttachment();
+		att->addHeader("Content-Id","HERES_MY_CONTENT_ID");
+		att->addHeader("Content-Type","text/plain");
+		
+		xsd__base64Binary b64b;
+		char *text = "This is the attachment body for the DynUnrefAttachmentTest";
+		b64b.__ptr = (xsd__unsignedByte*)text;
+		b64b.__size = strlen(text)+1;
+		att->addBody(&b64b);
+
+		call.addAttachment(att);
+
 		call.initialize(CPP_DOC_PROVIDER);
 		call.setSOAPVersion(SOAP_VER_1_1);
 		call.setTransportProperty(SOAPACTION_HEADER , "Trash");

@@ -33,6 +33,7 @@ public class MockServerThread implements Runnable
 {
     // NOTE: We read in this string plus two bytes (the end of the request)
     private static String   ENVELOPE_TAG    ="</SOAP-ENV:Envelope>";
+    private static String   MIME_BOUNDARY    ="MIME BOUNDARY";
 
     private static int      CHARBUFFER_SIZE =20000;
 
@@ -163,12 +164,12 @@ public class MockServerThread implements Runnable
                 if (bytesRead>ENVELOPE_TAG.length( )+2)
                 {
                     String envelopeString=new String(charBuffer, bytesRead
-                            -(ENVELOPE_TAG.length( )+2), ENVELOPE_TAG.length( ));
-                    //                    System.out
-                    //                            .println("MockServerThread#run():EnvelopeString = "
-                    //                                    +envelopeString);
+                            -(ENVELOPE_TAG.length( )+2), ENVELOPE_TAG.length( )+2);
+                                        System.out
+                                                .println("MockServerThread#run():EnvelopeString = "
+                                                        +envelopeString);
                     // Check whether this is an envelope or not
-                    if (envelopeString.startsWith(ENVELOPE_TAG))
+                    if (envelopeString.startsWith(ENVELOPE_TAG) || envelopeString.indexOf(MIME_BOUNDARY)!=-1)
                     {
                         System.out
                                 .println("MockServerThread#run():Got an envelope");

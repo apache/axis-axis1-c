@@ -301,27 +301,34 @@ int SoapSerializer::setOutputStream( SOAPTransport * pStream)
 		{
 			if( checkAttachmentAvailability())
 			{
-				string	asStartID;
-				string	asSOAPMimeHeaders;
+				char *pszSOAPMimeHeaders = pStream->getIncomingSOAPMimeHeaders();
+				if (NULL != pszSOAPMimeHeaders) 
+				{	// Server code
+					string asSOAPMimeHeaders = pszSOAPMimeHeaders;
+					int		start			= asSOAPMimeHeaders.find( "Content-Type");
+					int		startPosIdValue = asSOAPMimeHeaders.find( "<", start + strlen( "Content-Id:")) + 1;
+					int		endPosIdValue   = asSOAPMimeHeaders.find( ">", start + strlen( "Content-Type"));
+					int		length          = endPosIdValue - startPosIdValue ;	
 
-				asSOAPMimeHeaders = pStream->getIncomingSOAPMimeHeaders();
+					string asStartID = asSOAPMimeHeaders.substr (startPosIdValue,length); 
 
-				int		start			= asSOAPMimeHeaders.find( "Content-Type");
-				int		startPosIdValue = asSOAPMimeHeaders.find( "<", start + strlen( "Content-Id:")) + 1;
-				int		endPosIdValue   = asSOAPMimeHeaders.find( ">", start + strlen( "Content-Type"));
-				int		length          = endPosIdValue - startPosIdValue ;
+					string *	asContentType = new string( "multipart/related; type=\"text/xml\"; start=\"<");
 
-				asStartID = asSOAPMimeHeaders.substr (startPosIdValue,length); 
+					*asContentType = *asContentType + asStartID + ">\"";
+					*asContentType = *asContentType + ";  boundary=\"------=MIME BOUNDARY\"";
 
-				string *	asContentType = new string( "multipart/related; type=\"text/xml\"; start=\"<");
+					pStream->setTransportProperty( CONTENT_TYPE, (*asContentType).c_str()); 
 
-				*asContentType = *asContentType + asStartID + ">\"";
-				*asContentType = *asContentType + ";  boundary=\"------=MIME BOUNDARY\"";
-
-				pStream->setTransportProperty( CONTENT_TYPE, (*asContentType).c_str()); 
-
-				serialize( "\n------=MIME BOUNDARY\n", NULL);
-				serialize( pStream->getIncomingSOAPMimeHeaders(), "\n\n", NULL);
+					serialize( "\n------=MIME BOUNDARY\n", NULL);
+					serialize( pStream->getIncomingSOAPMimeHeaders(), "\n\n", NULL);
+				}
+				else
+				{	// Client code
+					#define MIME_BOUNDARY "----=MIME_BOUNDARY"
+					pStream->setTransportProperty( CONTENT_TYPE, 
+						"multipart/related; type=\"text/xml\"; boundary=\"" MIME_BOUNDARY "\"");
+					serialize("\n" MIME_BOUNDARY "\n", NULL);
+				}
 			}
 
 			serialize( "<?xml version='1.0' encoding='utf-8' ?>", NULL);
