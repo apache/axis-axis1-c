@@ -91,7 +91,7 @@
 			regexp="/(.*)" select="\1" />
 
 		<property name="clientArgs"
-			value="${protocol}://${testHost}:${test.port}/${context}" />
+			value="${protocol}://${testHost}:${testPort}/${context}" />
 	</target>
 	<target name="setProxyArgs">
 		<if>
@@ -104,7 +104,7 @@
 	
 	<target name="setVerbatim" if="test.verbatim">
 		<property name="clientArgs"
-			value="${testHost} ${test.port} ${test.endpoint}" />
+			value="${testHost} ${testPort} ${test.endpoint}" />
 	</target>
 
 	<target name="checkIfEndpointSet" depends="setVerbatim">
@@ -128,12 +128,12 @@
 		</if>
 
 		<echo
-			message="Starting monitor forwarding to ${actualTestHost}:${test.port}" />
+			message="Starting monitor forwarding to ${actualTestHost}:${testPort}" />
 		<!-- Run Monitor utility to allow validation of message across the wire -->
 		<java classname="org.apache.test.TCPMonitor"
 			outputproperty="mon.out">
 			<arg line="-l ${monitorPort}" />
-			<arg line="-p ${test.port}" />
+			<arg line="-p ${testPort}" />
 			<arg line="-h ${actualTestHost}" />
 			<arg line="-o &quot;${test.directory}/tcpm.req&quot;" />
 			<arg line="-r &quot;${test.directory}/tcpm.res&quot;" />
@@ -147,10 +147,10 @@
 
 	<target name="startMockServer">
 		<echo message="Starting mockserver" />
-		<echo message = "testport = ${test.port}"/>
+		<echo message = "testport = ${testPort}"/>
 		<java classname="org.apache.test.MockServer"
 			outputproperty="mockServer.out">
-			<arg line="-p ${test.port}" /> 
+			<arg line="-p ${testPort}" /> 
 			<arg line="-r &quot;${response_expected.file}&quot;" />
 			<classpath>
 				<pathelement
@@ -174,7 +174,7 @@
 
 	<target name="stopMockServer">
 		<java classname="org.apache.test.StopMockServer" outputproperty="stopMockServer.out">
-<!--			<arg line="-p ${test.port}" />			-->
+<!--			<arg line="-p ${testPort}" />			-->
 				<arg line="-p 9081" />
 			<classpath>
 				<pathelement
