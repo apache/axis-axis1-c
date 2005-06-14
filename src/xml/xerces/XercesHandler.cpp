@@ -113,13 +113,20 @@ void XercesHandler::characters(const XMLCh* const chars,
     if (cp_PreviousNameOrValue)
     {
         char* cp_CurrentNameOrValue = XMLString::transcode(chars);
-        char* cp_FullNameOrValue  = (char*) malloc(strlen(cp_PreviousNameOrValue) + strlen(cp_CurrentNameOrValue) + 1);
+        //char* cp_FullNameOrValue  = (char*) malloc(strlen(cp_PreviousNameOrValue) + strlen(cp_CurrentNameOrValue) + 1);
+		//Chinthana:Removed malloc
+		char* cp_FullNameOrValue  = new char[strlen(cp_PreviousNameOrValue) + strlen(cp_CurrentNameOrValue) + 1];
         cp_FullNameOrValue[0] = '\0'; 
         strcat(cp_FullNameOrValue, cp_PreviousNameOrValue);
         strcat(cp_FullNameOrValue, cp_CurrentNameOrValue);
         m_pNextElement->m_pchNameOrValue = (const char*)cp_FullNameOrValue;
-        free(const_cast <char*> (cp_PreviousNameOrValue));
-        free(cp_CurrentNameOrValue);
+        //free(const_cast <char*> (cp_PreviousNameOrValue));
+        //free(cp_CurrentNameOrValue);
+		//Chinthana:Removed free
+		delete (const_cast <char*> (cp_PreviousNameOrValue));
+		delete cp_CurrentNameOrValue;
+		//14/06/2005.............................................................
+
     }
     else
         m_pNextElement->m_pchNameOrValue = XMLString::transcode(chars);
