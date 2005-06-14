@@ -1,0 +1,36 @@
+<project name="unitTest" default="runUnitTests">
+	<import file="./test.xml"/>
+	
+	<target name="runUnitTests">
+		<antcall target="unitTestClient">
+			<param name="unit.test.list" value="${basedir}/tests/auto_build/testcases/unitTest.list"/>
+		</antcall>
+	</target>
+	
+	<target name="unitTestClient">
+		<description>
+			This target calls the fv suite as usual except for the fact that unit test flags
+				and properties are switched on.
+			This means that the client is being used against a fake server and the unitTest.list file is used
+				instead of any *test.list* property set by the user
+		</description>
+		<!-- ******************************************************************************************** -->
+		<!-- In order to run the system in mockserver (unittest) mode we have to override some properties -->
+		<!-- override the test.list if it's already been set -->
+		<!-- replace all of test.list's backslashes slashes as this ruins the proper regex -->
+		<propertyregex property="test.list" override="true" input="${test.list}" regexp="\\" replace="/"/>
+		<propertyregex property="test.list" override="true" input="${test.list}" regexp=".*" replace=""/>
+		<!-- have to replace all the single backslashes in unit.test.list so that the replace works OK -->
+		<propertyregex property="unit.test.list" override="true" input="${unit.test.list}" regexp="\\" replace="/"/>
+		<propertyregex property="test.list" override="true" input="${test.list}" regexp=".*" replace="${unit.test.list}" defaultValue="${unit.test.list}"/>
+		<!-- ******************************************************************************************** -->
+		<!-- replace any previously set up mockserver with value true -->
+		<propertyregex property="mockServer" override="true" input="${mockServer}" regexp="false" replace="true" defaultValue="true"/>
+<echo message="mockServer = ${mockServer}"/>
+		<!-- now call the fv suite as usual -->
+		<antcall target="testSuite" inheritall="true"/>
+	</target>
+	
+
+</project>
+
