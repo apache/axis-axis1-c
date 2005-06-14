@@ -174,8 +174,7 @@
 
 	<target name="stopMockServer">
 		<java classname="org.apache.test.StopMockServer" outputproperty="stopMockServer.out">
-<!--			<arg line="-p ${testPort}" />			-->
-				<arg line="-p 9081" />
+			<arg line="-p ${testPort}" />
 			<classpath>
 				<pathelement
 					location="${dir.obj}/test/monitor/monitor.jar" />
