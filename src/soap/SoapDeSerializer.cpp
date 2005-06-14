@@ -68,6 +68,7 @@
 
 #include <list>
 #include <iostream>
+AxisChar * pBodyContent;
 
 AXIS_CPP_NAMESPACE_START
 #define INITIAL_ARRAY_SIZE 1
@@ -91,6 +92,8 @@ SoapDeSerializer::~SoapDeSerializer ()
 	XMLParserFactory::destroyParserObject (m_pParser);
 	//delete m_pParser;
     }
+	if(pBodyContent)
+		delete pBodyContent;
 }
 
 int
@@ -2476,8 +2479,10 @@ xsd__base64Binary SoapDeSerializer::getBodyAsBase64Binary ()
 {
     /* TODO */
 
-    AxisChar *
-	pBodyContent = (AxisChar *) malloc (1000);
+    //AxisChar *
+	//pBodyContent = (AxisChar *) malloc (1000);
+	//Chinthana:Remove malloc
+	pBodyContent = new AxisChar[1000];
     pBodyContent[0] = '\0';
 
     m_pNode = m_pParser->next ();
@@ -2506,7 +2511,9 @@ xsd__base64Binary SoapDeSerializer::getBodyAsBase64Binary ()
 AxisChar *
 SoapDeSerializer::getBodyAsChar ()
 {
-    AxisChar *pBodyContent = (AxisChar *) malloc (1000);
+    //AxisChar *pBodyContent = (AxisChar *) malloc (1000);
+	//Chinthana:Remove malloc
+	pBodyContent = new AxisChar[1000];
     pBodyContent[0] = '\0';
 
     m_pNode = m_pParser->next ();
