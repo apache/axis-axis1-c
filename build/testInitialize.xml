@@ -36,6 +36,26 @@
 	<target name="loadXMLProperties">
 		<echo message="Loading XML file ${test_property}"/>
 		<xmlproperty file="${test_property}" keepRoot="true"/>
+		<!-- If we're in mockserver mode then change the test name to show that -->
+		<!-- also do some checks to ensure that the test is really a unit test and no one has got confused :-) -->
+		<if>
+			<equals arg1="${mockServer}" arg2="true"/>
+			<then>
+				<!-- check that the serverresponse file has been set -->
+				<if>
+					<not>
+						<isset property="test.expected.serverResponse"/>
+					</not>
+					<then>
+						<echo message="in unit test mode but not got a server response file set to return"/>
+						<throw message="in unit test mode but not got a server response file set to return"/>
+					</then>
+				</if>
+				<!-- make sure the name has "unit test" in it -->
+				<propertyregex property="test.name" override="true" input="${test.name}" regexp="${test.name}" replace="UnitTest_${test.name}"/>
+				
+			</then>
+		</if>
 	</target>
 <!--	<target name="setTestName" if="test.name">
 		<propertycopy property="testName" from="test.name"/>
