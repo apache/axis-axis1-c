@@ -108,7 +108,7 @@ AxisChar* Integer::serialize(const xsd__integer* value) throw (AxisSoapException
         if ( *value > maxInclusive->getMaxInclusiveAsLONGLONG() )
         {
             AxisString exceptionMessage =
-            "Value to be serialized is less than MaxInclusive specified for this type.  MaxInclusive = ";
+            "Value to be serialized is greater than MaxInclusive specified for this type.  MaxInclusive = ";
             AxisChar* length = new AxisChar[25];
             sprintf(length, PRINTF_LONGLONG_FORMAT_SPECIFIER, maxInclusive->getMaxInclusiveAsLONGLONG());
             exceptionMessage += length;
@@ -130,7 +130,7 @@ AxisChar* Integer::serialize(const xsd__integer* value) throw (AxisSoapException
         if ( *value >= maxExclusive->getMaxExclusiveAsLONGLONG() )
         {
             AxisString exceptionMessage =
-            "Value to be serialized is less than or equal to MaxExclusive specified for this type.  MaxExclusive = ";
+            "Value to be serialized is greater than or equal to MaxExclusive specified for this type.  MaxExclusive = ";
             AxisChar* length = new AxisChar[25];
             sprintf(length, PRINTF_LONGLONG_FORMAT_SPECIFIER, maxExclusive->getMaxExclusiveAsLONGLONG());
             exceptionMessage += length;
@@ -172,11 +172,35 @@ AxisChar* Integer::serialize(const xsd__integer* value) throw (AxisSoapException
 
 xsd__integer* Integer::deserializeInteger(const AxisChar* valueAsChar) throw (AxisSoapException)
 {
-    AxisChar* end;
-    
     xsd__integer * value = new xsd__integer;
-    *value = strtol (valueAsChar, &end, 10);
-  
+    *value = 0;
+	AxisChar currentNumber[] = {'\0', '\0'};
+    int stringLength = strlen(valueAsChar);
+    
+    if (stringLength > 0)
+    {
+        int count = 0;
+        
+        if (valueAsChar[0] == '-')
+        {
+            count = 1;
+        }
+        
+        for ( ; count < stringLength ;  count ++)
+        {
+            *value *= 10;
+    
+    		currentNumber[0] = valueAsChar[count];
+    
+            *value += atoi(currentNumber);
+        }
+        
+        if (valueAsChar[0] == '-')
+        {
+            *value *= -1;
+        }
+    }
+    
     return value;
 }
 

@@ -172,11 +172,11 @@ AxisChar* NonNegativeInteger::serialize(const xsd__nonNegativeInteger* value) th
 
 xsd__nonNegativeInteger* NonNegativeInteger::deserializeNonNegativeInteger(const AxisChar* valueAsChar) throw (AxisSoapException)
 {
-    AxisChar* end;
-    
-    xsd__nonNegativeInteger * value = new xsd__nonNegativeInteger;
-    *value = strtol (valueAsChar, &end, 10);
-  
+    xsd__integer* returnValue = Integer::deserializeInteger(valueAsChar);
+
+    xsd__nonNegativeInteger * value = new xsd__nonNegativeInteger; 
+    *value = static_cast<xsd__nonNegativeInteger> (*returnValue);
+    delete returnValue;
     return value;
 }
 

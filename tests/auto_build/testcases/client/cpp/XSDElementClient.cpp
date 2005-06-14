@@ -50,7 +50,7 @@
   // Cannot print an __int64 number with cout without this overloading
   std::ostream& operator<<(std::ostream& os, __int64 i )
   {
-    char buf[20];
+    char buf[40];
     sprintf(buf,"%I64d", i );
     os << buf;
     return os;
@@ -134,6 +134,22 @@ int main(int argc, char* argv[])
 
 		lResult = ws->setGetDataLong((xsd__long)35);
 	    cout << "long=" << lResult << endl;
+#ifdef WIN32
+        xsd__long longInput     =  10000000000I64;
+        xsd__long longMaxInput  =  9223372036854775807I64;
+        xsd__long longMinInput  = -9223372036854775808I64 ;
+#else
+        xsd__long longInput     =  10000000000LL;
+        xsd__long longMaxInput  =  9223372036854775807LL;
+        xsd__long longMinInput  = -9223372036854775808LL;
+#endif
+        lResult = ws->setGetDataLong((xsd__long) longInput);
+        cout << "long=" << lResult << endl;
+        lResult = ws->setGetDataLong((xsd__long) longMaxInput);
+        cout << "MaxInclusive long=" << lResult << endl;
+        lResult = ws->setGetDataLong((xsd__long) longMinInput);
+        cout << "MinInclusive long=" << lResult << endl;
+
 		ulResult = ws->setGetDataUnsignedLong((xsd__unsignedLong)42);
 		printf("unsigned long=%d\n", ulResult);
 

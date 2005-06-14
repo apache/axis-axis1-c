@@ -109,7 +109,7 @@ AxisChar* NonPositiveInteger::serialize(const xsd__nonPositiveInteger* value) th
         if ( *value < maxInclusive->getMaxInclusiveAsUnsignedLONGLONG() )
         {
             AxisString exceptionMessage =
-            "Value to be serialized is less than MaxInclusive specified for this type.  MaxInclusive = -";
+            "Value to be serialized is greater than MaxInclusive specified for this type.  MaxInclusive = -";
             AxisChar* length = new AxisChar[25];
             sprintf(length, PRINTF_LONGLONG_FORMAT_SPECIFIER, maxInclusive->getMaxInclusiveAsUnsignedLONGLONG());
             exceptionMessage += length;
@@ -131,7 +131,7 @@ AxisChar* NonPositiveInteger::serialize(const xsd__nonPositiveInteger* value) th
         if ( *value <= maxExclusive->getMaxExclusiveAsUnsignedLONGLONG() )
         {
             AxisString exceptionMessage =
-            "Value to be serialized is less than or equal to MaxExclusive specified for this type.  MaxExclusive = -";
+            "Value to be serialized is greater than or equal to MaxExclusive specified for this type.  MaxExclusive = -";
             AxisChar* length = new AxisChar[25];
             sprintf(length, PRINTF_LONGLONG_FORMAT_SPECIFIER, maxExclusive->getMaxExclusiveAsUnsignedLONGLONG());
             exceptionMessage += length;
@@ -181,20 +181,19 @@ AxisChar* NonPositiveInteger::serialize(const xsd__nonPositiveInteger* value) th
 
 unsigned LONGLONG* NonPositiveInteger::deserializeNonPositiveInteger(const AxisChar* valueAsChar) throw (AxisSoapException)
 {
-    AxisChar* end;
-    
-    xsd__nonPositiveInteger * value = new xsd__nonPositiveInteger;
+    xsd__integer* returnValue = NULL;
     if (*valueAsChar == '-')
     {
-        const AxisChar* tempVar = valueAsChar + 1;
-        *value = strtol (tempVar, &end, 10);
+        returnValue = Integer::deserializeInteger(valueAsChar + 1);
     }
     else
     {
-        
-        *value = strtol (valueAsChar, &end, 10);
+        returnValue = Integer::deserializeInteger(valueAsChar);
     }
   
+    xsd__nonPositiveInteger * value = new xsd__nonPositiveInteger;
+    *value = static_cast<xsd__nonPositiveInteger> (*returnValue);
+    delete returnValue;
     return value;
 }
 
