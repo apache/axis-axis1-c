@@ -368,7 +368,17 @@ const char * HTTPTransport::getHTTPHeaders()
     m_strHeaderBytesToSend += ":";
     m_strHeaderBytesToSend += buff;
     m_strHeaderBytesToSend += "\r\n";
-    m_strHeaderBytesToSend += "Content-Type: text/xml; charset=UTF-8\r\n";
+
+	bool foundCT = false;
+    for (unsigned int j = 0; j < m_vHTTPHeaders.size (); j++)
+    {
+		if (0==strcmp(AXIS_CONTENT_TYPE,m_vHTTPHeaders[j].first.c_str())) foundCT = true;
+    }
+
+	// The Content-Type must be set, but it may already be set in m_strHeaderBytesToSend
+	// if we're using attachments, for example.
+	if (!foundCT)
+		m_strHeaderBytesToSend += AXIS_CONTENT_TYPE ": text/xml; charset=UTF-8\r\n";
 
     // Set other HTTP headers
     for (unsigned int i = 0; i < m_vHTTPHeaders.size (); i++)

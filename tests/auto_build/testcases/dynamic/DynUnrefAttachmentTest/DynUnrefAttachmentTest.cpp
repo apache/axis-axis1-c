@@ -30,8 +30,9 @@ int main(int argc, char* argv[])
 		call.setEndpointURI(argv[1]);
 
 		ISoapAttachment *att = call.createSoapAttachment();
-		att->addHeader("Content-Id","HERES_MY_CONTENT_ID");
-		att->addHeader("Content-Type","text/plain");
+		att->addHeader(AXIS_CONTENT_ID,"HERES_MY_CONTENT_ID");
+		att->addHeader(AXIS_CONTENT_TYPE,"text/plain");
+		att->addHeader(AXIS_CONTENT_TRANSFER_ENCODING,"base64");
 		
 		xsd__base64Binary b64b;
 		char *text = "This is the attachment body for the DynUnrefAttachmentTest";

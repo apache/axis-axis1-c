@@ -33,7 +33,7 @@ public class MockServerThread implements Runnable
 {
     // NOTE: We read in this string plus two bytes (the end of the request)
     private static String   ENVELOPE_TAG    ="</SOAP-ENV:Envelope>";
-    private static String   MIME_BOUNDARY    ="MIME BOUNDARY";
+    private static String   MIME_BOUNDARY    ="MIME_BOUNDARY";
 
     private static int      CHARBUFFER_SIZE =20000;
 

@@ -42,6 +42,10 @@ typedef enum
     AXIS_BINARY = 1
 } AXIS_ATTACHMENT_ENCODING_TYPE;
 
+#define AXIS_CONTENT_ID					"Content-Id"
+#define AXIS_CONTENT_TYPE				"Content-Type"
+#define AXIS_CONTENT_TRANSFER_ENCODING	"Content-Transfer-Encoding"
+#define AXIS_CONTENT_LOCATION			"Content-Location"
 
 class STORAGE_CLASS_INFO ISoapAttachment  
 {

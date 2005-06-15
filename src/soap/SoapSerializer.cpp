@@ -46,6 +46,7 @@
 #include "../common/AxisConfig.h"
 
 extern AXIS_CPP_NAMESPACE_PREFIX AxisConfig* g_pConfig;
+#define MIMEBOUNDARY	"------=MIME_BOUNDARY"
 
 AXIS_CPP_NAMESPACE_START
 
@@ -305,9 +306,9 @@ int SoapSerializer::setOutputStream( SOAPTransport * pStream)
 				if (NULL != pszSOAPMimeHeaders) 
 				{	// Server code
 					string asSOAPMimeHeaders = pszSOAPMimeHeaders;
-					int		start			= asSOAPMimeHeaders.find( "Content-Type");
-					int		startPosIdValue = asSOAPMimeHeaders.find( "<", start + strlen( "Content-Id:")) + 1;
-					int		endPosIdValue   = asSOAPMimeHeaders.find( ">", start + strlen( "Content-Type"));
+					int		start			= asSOAPMimeHeaders.find( AXIS_CONTENT_TYPE);
+					int		startPosIdValue = asSOAPMimeHeaders.find( "<", start + strlen( AXIS_CONTENT_ID ":")) + 1;
+					int		endPosIdValue   = asSOAPMimeHeaders.find( ">", start + strlen( AXIS_CONTENT_TYPE));
 					int		length          = endPosIdValue - startPosIdValue ;	
 
 					string asStartID = asSOAPMimeHeaders.substr (startPosIdValue,length); 
@@ -315,19 +316,22 @@ int SoapSerializer::setOutputStream( SOAPTransport * pStream)
 					string *	asContentType = new string( "multipart/related; type=\"text/xml\"; start=\"<");
 
 					*asContentType = *asContentType + asStartID + ">\"";
-					*asContentType = *asContentType + ";  boundary=\"------=MIME BOUNDARY\"";
+					*asContentType = *asContentType + ";  boundary=\"" MIMEBOUNDARY "\"";
 
 					pStream->setTransportProperty( CONTENT_TYPE, (*asContentType).c_str()); 
 
-					serialize( "\n------=MIME BOUNDARY\n", NULL);
+					serialize( "\n" MIMEBOUNDARY "\n", NULL);
 					serialize( pStream->getIncomingSOAPMimeHeaders(), "\n\n", NULL);
 				}
 				else
 				{	// Client code
-					#define MIME_BOUNDARY "----=MIME_BOUNDARY"
-					pStream->setTransportProperty( CONTENT_TYPE, 
-						"multipart/related; type=\"text/xml\"; boundary=\"" MIME_BOUNDARY "\"");
-					serialize("\n" MIME_BOUNDARY "\n", NULL);
+					pStream->setTransportProperty( AXIS_CONTENT_TYPE, 
+						"multipart/related; type=\"text/xml\"; boundary=\"" MIMEBOUNDARY "\"");
+					serialize("\n" MIMEBOUNDARY "\n", NULL);
+                    serialize(AXIS_CONTENT_TYPE ": text/xml; charset=UTF-8\n", NULL);
+                    serialize(AXIS_CONTENT_TRANSFER_ENCODING ": binary\n", NULL);
+                    serialize(AXIS_CONTENT_ID ": <4E2B3048B540B4C3271D6A6726571E0F>\n", NULL);  // TODO: needs changing
+                    serialize("\n", NULL);  // Extra \n terminates headers
 				}
 			}
 
@@ -344,7 +348,7 @@ int SoapSerializer::setOutputStream( SOAPTransport * pStream)
 
 			if( checkAttachmentAvailability())
 			{
-				serialize( "\n------=MIME BOUNDARY\n", NULL);
+				serialize( "\n" MIMEBOUNDARY, NULL);
 				serializeAttachments( *this);
 			}
 		}
@@ -1132,7 +1136,7 @@ void SoapSerializer::serializeAttachments( SoapSerializer &pSZ)
     {        
         ((SoapAttachment *) ((*itCurrAttach).second))->serialize(pSZ);
 
-		pSZ.serialize("\n------=MIME BOUNDARY\n", NULL);
+		pSZ.serialize("\n" MIMEBOUNDARY "\n", NULL);
 
         itCurrAttach++;
     }
