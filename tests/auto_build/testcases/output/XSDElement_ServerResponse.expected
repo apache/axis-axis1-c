@@ -92,6 +92,39 @@ Content-Type: text/xml; charset=utf-8
 Content-Language: en-GB
 Transfer-Encoding: chunked
 
+1e4
+<?xml version="1.0" encoding="utf-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header/><soapenv:Body><setGetDataLongResponse xmlns="http://xsdelement.test.apache.org"><setGetDataLongReturn>10000000000</setGetDataLongReturn></setGetDataLongResponse></soapenv:Body></soapenv:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+1ec
+<?xml version="1.0" encoding="utf-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header/><soapenv:Body><setGetDataLongResponse xmlns="http://xsdelement.test.apache.org"><setGetDataLongReturn>9223372036854775807</setGetDataLongReturn></setGetDataLongResponse></soapenv:Body></soapenv:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+1ed
+<?xml version="1.0" encoding="utf-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header/><soapenv:Body><setGetDataLongResponse xmlns="http://xsdelement.test.apache.org"><setGetDataLongReturn>-9223372036854775808</setGetDataLongReturn></setGetDataLongResponse></soapenv:Body></soapenv:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
 1fb
 <?xml version="1.0" encoding="utf-8"?>
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header/><soapenv:Body><setGetDataUnsignedLongResponse xmlns="http://xsdelement.test.apache.org"><setGetDataUnsignedLongReturn>42</setGetDataUnsignedLongReturn></setGetDataUnsignedLongResponse></soapenv:Body></soapenv:Envelope>
