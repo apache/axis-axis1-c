@@ -8,6 +8,9 @@
         <output>
             XSDElementNil.expected
         </output>
+		<serverResponse>
+			XSDElementNil_ServerResponse.expected
+	    </serverResponse>
     </expected>
 	<endpoint>http://localhost:80/axis/XSDElementNil</endpoint>
 </test>

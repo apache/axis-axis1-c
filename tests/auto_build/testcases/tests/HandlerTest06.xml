@@ -8,6 +8,9 @@
         <output>
             CalculatorDoc.cpp.out
         </output>
+		<serverResponse>
+			HandlerTest6_ServerResponse.expected
+	    </serverResponse>
     </expected>
     <handler>
         <directory>

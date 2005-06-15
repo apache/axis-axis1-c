@@ -8,6 +8,9 @@
         <output>
             ExceptionTestDoc.cpp.out
         </output>
+		<serverResponse>
+			ExceptionTestDoc_ServerResponse.expected
+		</serverResponse>
     </expected>
 	<endpoint>http://localhost:80/axis/MathOpsDoc</endpoint>
 </test>

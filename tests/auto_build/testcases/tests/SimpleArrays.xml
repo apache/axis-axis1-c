@@ -9,7 +9,7 @@
             SimpleArrays.expected
         </output>
 		<serverResponse>
-			SimpleArraysServerResponse.expected
+			SimpleArrays_ServerResponse.expected
 		</serverResponse>
     </expected>
 	<endpoint>http://localhost:80/axis/SimpleArrays</endpoint>

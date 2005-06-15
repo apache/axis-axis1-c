@@ -8,6 +8,9 @@
         <output>
             Enumeration.cpp.out
         </output>
+		<serverResponse>
+			Enumeration_ServerResponse.expected
+		</serverResponse>
     </expected>
 	<endpoint>-e http://localhost:80/axis/EnumerationWSService</endpoint>
 </test>

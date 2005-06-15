@@ -9,6 +9,9 @@
         <output>
             DynamicGet_AddAnyObjectTest.expected
         </output>        	
+	<serverResponse>
+			DynamicGet_AddAnyObjectTestServerResponse.expected
+	</serverResponse>
     </expected>
 	<endpoint>http://localhost:80/axis/CalculatorDoc</endpoint>
 </test>

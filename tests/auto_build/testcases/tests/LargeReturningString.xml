@@ -8,6 +8,9 @@
         <output>
             LargeReturningString.cpp.out
         </output>
+		<serverResponse>
+			LargeReturningString_ServerResponse.expected
+	    </serverResponse>
     </expected>
 	<endpoint>-e http://localhost:80/axis/LargeReturningStringService</endpoint>
 </test>
