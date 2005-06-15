@@ -187,10 +187,13 @@ public class ServiceWriter extends CPPClassWriter
                 }
                 writer.write(classname + "::" + minfo.getMethodname() + "(");
                 //write parameter names 
+                
+                boolean hasInputParms = false;
                 Iterator params = minfo.getInputParameterTypes().iterator();
                 if (params.hasNext())
                 {
-                    ParameterInfo fparam = (ParameterInfo) params.next();
+                	hasInputParms = true;
+                	ParameterInfo fparam = (ParameterInfo) params.next();
                     String fparamTypeName = fparam.getLangName();
                     if (CUtils.isSimpleType(fparamTypeName)
 							&& fparam.isNillable()
@@ -250,8 +253,11 @@ public class ServiceWriter extends CPPClassWriter
                     for (int j = 0; params.hasNext(); j++)
                     {
                         ParameterInfo nparam = (ParameterInfo) params.next();
-                        writer.write(
-                            ", AXIS_OUT_PARAM "
+                        
+                        String comma = ", ";
+                        if (!hasInputParms && 0==j) comma = "";
+                        writer.write(comma
+                            + "AXIS_OUT_PARAM "
                                 + WrapperUtils
                                     .getClassNameFromParamInfoConsideringArrays(
                                     nparam,

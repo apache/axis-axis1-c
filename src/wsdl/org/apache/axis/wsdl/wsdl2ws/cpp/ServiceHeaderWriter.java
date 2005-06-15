@@ -169,10 +169,13 @@ public class ServiceHeaderWriter extends HeaderFileWriter
                 //write return type
                 writer.write(minfo.getMethodname() + "(");
                 //write parameter names 
+                
+                boolean hasInputParms = false;
                 Iterator params = minfo.getInputParameterTypes().iterator();
                 if (params.hasNext())
                 {
-                    ParameterInfo fparam = (ParameterInfo) params.next();
+                	hasInputParms = true;
+                	ParameterInfo fparam = (ParameterInfo) params.next();
                     String paramTypeName = fparam.getLangName();
                     if (CUtils.isSimpleType(paramTypeName)
                     		&& fparam.isNillable()
@@ -232,8 +235,10 @@ public class ServiceHeaderWriter extends HeaderFileWriter
                     for (int j = 0; params.hasNext(); j++)
                     {
                         ParameterInfo nparam = (ParameterInfo) params.next();
-                        writer.write(
-                            ", AXIS_OUT_PARAM "
+                        String comma = ", ";
+                        if (!hasInputParms && 0==j) comma = "";
+                        writer.write(comma
+                            + "AXIS_OUT_PARAM "
                                 + WrapperUtils
                                     .getClassNameFromParamInfoConsideringArrays(
                                     nparam,
