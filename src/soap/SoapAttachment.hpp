@@ -41,22 +41,28 @@
 #include <axis/AxisUserAPI.hpp>
 #include <axis/ISoapAttachment.hpp>
 #include "SoapAttachmentHeaders.hpp"
+#include "ContentIdSet.hpp"
 #include <string>
 
 using namespace std;
 
 AXIS_CPP_NAMESPACE_START
 
+#ifdef WIN32
+#pragma warning (disable : 4251)
+#endif
+
 class SoapSerializer;
 
 class STORAGE_CLASS_INFO SoapAttachment : public ISoapAttachment
 {
 private:	
-	SoapAttachmentHeaders* m_AttachmentHeaders;
+	SoapAttachmentHeaders *m_AttachmentHeaders;
 	xsd__base64Binary* m_AttachmentBody;
     char *m_binaryBody;
     int iEncodingStyle;
-    
+    ContentIdSet *m_pContentIdSet;
+
 public:	
     const char* getAttachmentId();
 	const char* getHeader(const char* pchName);
@@ -65,7 +71,7 @@ public:
 	void addBody(xsd__base64Binary* objBody);
     void addBody(char* pchBinaryBody);
 	void addHeader(const char* pchName, const char* pchValue);
-	SoapAttachment();
+	SoapAttachment(ContentIdSet *pContentIdSet);
 	virtual ~SoapAttachment();	
 };
 

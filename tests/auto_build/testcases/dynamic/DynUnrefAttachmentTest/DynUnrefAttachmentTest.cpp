@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
 		call.setEndpointURI(argv[1]);
 
 		ISoapAttachment *att = call.createSoapAttachment();
-		att->addHeader(AXIS_CONTENT_ID,"HERES_MY_CONTENT_ID");
+		// att->addHeader(AXIS_CONTENT_ID,"HERES_MY_CONTENT_ID");
 		att->addHeader(AXIS_CONTENT_TYPE,"text/plain");
 		att->addHeader(AXIS_CONTENT_TRANSFER_ENCODING,"base64");
 		

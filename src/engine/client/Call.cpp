@@ -56,6 +56,7 @@ m_bCallInitialized(false)
     
     m_nStatus = AXIS_SUCCESS;
     m_pchSessionID = NULL;
+	m_pContentIdSet = new ContentIdSet();
 
     // Setup Transport
     try
@@ -131,6 +132,8 @@ Call::~Call ()
     if (m_pcEndPointUri)
         delete [] m_pcEndPointUri;  
 	m_pcEndPointUri = NULL;
+	delete m_pContentIdSet;
+	m_pContentIdSet = NULL;
 
 	list<ISoapAttachment*>::iterator it = m_attachments.begin();
 	while (it != m_attachments.end())
@@ -262,10 +265,11 @@ int Call::initialize(PROVIDERTYPE nStyle)
                         msgData->setProperty("sessionid", m_pchSessionID);
                     }
 
+					m_pIWSSZ->setContentIdSet(m_pContentIdSet);
 					list<ISoapAttachment*>::iterator itAtt = m_attachments.begin();
 					while (itAtt != m_attachments.end())
 					{
-						m_pIWSSZ->addAttachment((*itAtt)->getHeader("Content-Id"),*itAtt);
+						m_pIWSSZ->addAttachment((*itAtt)->getHeader(AXIS_CONTENT_ID),*itAtt);
 						itAtt++;
 					}
 					m_attachments.clear();
@@ -1053,5 +1057,5 @@ void Call::addAttachment(ISoapAttachment* att)
 
 ISoapAttachment* Call::createSoapAttachment()
 {
-	return new SoapAttachment();
+	return new SoapAttachment(m_pContentIdSet);
 }

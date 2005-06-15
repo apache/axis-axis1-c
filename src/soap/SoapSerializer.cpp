@@ -56,6 +56,7 @@ SoapSerializer::SoapSerializer()
     m_iSoapVersion = SOAP_VER_1_1;
     m_pOutputStream = NULL;
 	m_pNamespace = NULL;
+	m_pContentIdSet = NULL;
 }
 
 SoapSerializer::~SoapSerializer()
@@ -1165,7 +1166,7 @@ void SoapSerializer::addAttachmentHeader(const AxisChar * achId,
 
 	if (m_SoapAttachments[achId] == NULL)
 	{
-		m_SoapAttachments[achId] = new SoapAttachment();		
+		m_SoapAttachments[achId] = new SoapAttachment(m_pContentIdSet);		
 	}
 
 	m_SoapAttachments[achId]->addHeader( achHeaderName, achHeaderValue);
@@ -1176,7 +1177,7 @@ void SoapSerializer::addAttachmentBody( const AxisChar * achId,
 {
 	if( m_SoapAttachments[achId] == NULL)
 	{
-		m_SoapAttachments[achId] = new SoapAttachment();		
+		m_SoapAttachments[achId] = new SoapAttachment(m_pContentIdSet);		
 	}
 
 	m_SoapAttachments[achId]->addBody( pAttchBody);
@@ -1204,9 +1205,12 @@ void SoapSerializer::addNamespaceToNamespaceList( const AxisChar * pachNamespace
 
 ISoapAttachment* SoapSerializer::createSoapAttachment()
 {
-	SoapAttachment * pSAttch = new SoapAttachment();
+	return new SoapAttachment(m_pContentIdSet);
+}
 
-	return pSAttch;
+void SoapSerializer::setContentIdSet(ContentIdSet *pContentIdSet) 
+{
+	m_pContentIdSet = pContentIdSet;
 }
 
 bool SoapSerializer::checkAttachmentAvailability()

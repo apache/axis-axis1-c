@@ -73,6 +73,7 @@ private:
     PROVIDERTYPE m_ProviderType;
 	/* the local namespace for this serializer */
     AxisChar* m_pNamespace;
+	ContentIdSet *m_pContentIdSet;
 
 public:
 	inline const AxisChar* AXISCALL getNamespace() const {return m_pNamespace;}; 
@@ -181,6 +182,7 @@ public:
 	void addAttachmentHeader(const AxisChar* achId, const AxisChar* achHeaderName, const AxisChar* achHeaderValue);
 	void addAttachment(const AxisChar* achId, ISoapAttachment* pAttach);
     void addAttachments(ISoapAttachment** pAttach, int iAttchArraySize);
+	void setContentIdSet(ContentIdSet *pContentIdSet);
 	IHeaderBlock* getHeaderBlock(const AxisChar* pcName, const AxisChar* pcNamespace);
 	/*
 	* TODO: Have to remove this method. Date logged 13Jan2005

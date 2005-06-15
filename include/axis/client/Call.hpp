@@ -63,6 +63,7 @@ class MessageData;
 class SoapDeSerializer;
 class SoapSerializer;
 class ISoapAttachment;
+class ContentIdSet;
 
 class STORAGE_CLASS_INFO CallBase
 {
@@ -676,6 +677,7 @@ private:
     // Samisa m_pchSessionID was misssing and there was a compile error due to this
     char* m_pchSessionID;
 
+	ContentIdSet *m_pContentIdSet;
 };
 AXIS_CPP_NAMESPACE_END
 

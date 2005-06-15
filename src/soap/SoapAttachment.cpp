@@ -41,23 +41,25 @@ AXIS_CPP_NAMESPACE_START
 
 //////////////////////////////////////////////////////////////////////
 
-SoapAttachment::SoapAttachment()
+SoapAttachment::SoapAttachment(ContentIdSet *pContentIdSet)
 {	
 	m_AttachmentHeaders = new SoapAttachmentHeaders();
 	m_AttachmentBody = 0;
+	m_pContentIdSet = pContentIdSet;
+	m_AttachmentHeaders->addHeader(AXIS_CONTENT_ID, pContentIdSet->generateId());
 }
 
 SoapAttachment::~SoapAttachment()
 {
 	delete m_AttachmentHeaders;
-	m_AttachmentHeaders =0;
-
-	delete m_AttachmentBody;
+	if (m_AttachmentBody) delete m_AttachmentBody;
 	m_AttachmentBody =0;
 }
 
 void SoapAttachment::addHeader(const char* pchName, const char* pchValue)
 {
+	// Registering the contentid here ensures that it is unique within the mime message.
+	if (0==strcmp(AXIS_CONTENT_ID,pchName)) m_pContentIdSet->registerId(pchValue);
 	m_AttachmentHeaders->addHeader(pchName, pchValue);
 }
 
@@ -127,7 +129,7 @@ const char* SoapAttachment::getHeader(const char *pchName)
 
 const char* SoapAttachment::getAttachmentId()
 {
-   return getHeader("Content-Id");
+   return getHeader(AXIS_CONTENT_ID);
 }
 
 AXIS_CPP_NAMESPACE_END

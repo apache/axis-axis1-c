@@ -121,6 +121,9 @@ const string AxisSoapException::getMessage (const int iExceptionCode)
         case CLIENT_SOAP_CONTENT_NOT_SOAP:
             m_sMessage = "AxisSoapException:Content is not a valid soap message";
             break;
+        case CLIENT_MIME_CONTENT_ID_NOT_UNIQUE:
+            m_sMessage = "AxisSoapException:Content is not unique within the MIME message";
+            break;
         default:
             m_sMessage = "AxisSoapException:Unknown Soap Exception";
     }
