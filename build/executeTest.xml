@@ -271,15 +271,6 @@
 			<istrue value="${testconf.client.parser.xerces}"/>
 		</condition>
 
-		<!-- Decide whether the Channel_HTTP_SSL directive should be 
-		commented according to build.PLATFORM.properties -->
-		<condition property="commentSSLDirective" value="#">
-			<isfalse value="${HTTP.SSLChannel}"/>
-		</condition>
-		<condition property="commentSSLDirective" value="">
-			<istrue value="${HTTP.SSLChannel}"/>
-		</condition>
-
 		<echo file="${axiscpp.conf}">#Available directives are as follows:
 #
 # ClientLogPath:	 The path to the client log
@@ -304,22 +295,16 @@ ClientLogPath:${test.directory}/ClientLog.taw
 		</if>
 		<echo file="${axiscpp.conf}" append="true">
 Transport_http:${dir.libraries}/${libraryPrefix}${transportLibraryName}${librarySuffix}
-#XMLParser:${dir.libraries}/${libraryPrefix}${xmlParserLibraryName}${librarySuffix}
 XMLParser:${dir.libraries}/${ClientParserLib}
 Channel_HTTP:${dir.libraries}/${libraryPrefix}${HTTP.ChannelLibraryName}${librarySuffix}
 </echo>
-<if>
-	<istrue value="${test.ssl}" />
-<then>
-   <echo file="${axiscpp.conf}" append="true">Channel_HTTP_SSL:${dir.libraries}/${libraryPrefix}${HTTP.SecureChannelLibraryName}${librarySuffix}
-   </echo>	
-</then>
-<else>  
-	<echo file="${axiscpp.conf}" append="true">
-${commentSSLDirective}Channel_HTTP_SSL:${dir.libraries}/${libraryPrefix}${HTTP.SecureChannelLibraryName}${librarySuffix}
-	</echo>
-</else>
-</if>
+        <if>
+            <istrue value="${test.ssl}" />
+            <then>
+                <echo file="${axiscpp.conf}" append="true">Channel_HTTP_SSL:${dir.libraries}/${libraryPrefix}${HTTP.SecureChannelLibraryName}${librarySuffix}
+</echo>	
+            </then>
+        </if>
 	</target>
 </project>
 
