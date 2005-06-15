@@ -6,7 +6,7 @@
     <wsdl>MultiOut.wsdl</wsdl>
     <expected>
         <output>
-            MultiOut.cpp.out
+            MultiOut.expected
         </output>
         <serverResponse>
 		MultiOutServerResponse.expected
