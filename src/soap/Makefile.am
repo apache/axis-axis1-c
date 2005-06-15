@@ -20,7 +20,7 @@ libsoap_la_SOURCES = Attribute.cpp \
         HexCoder.cpp \
         AxisSoapException.cpp \
         SoapAttachment.cpp \
-        SoapAttachementHeaders.cpp \
+        SoapAttachmentHeaders.cpp \
         SoapFaultException.cpp \
         OtherFaultException.cpp \
         xsd/Int.cpp \

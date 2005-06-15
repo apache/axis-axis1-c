@@ -174,7 +174,7 @@ public:
 	*  method of the IWrapperSoapSerializer interface
     *     
     */
-	virtual ISoapAttachment* createSoapAttachement()=0;
+	virtual ISoapAttachment* createSoapAttachment()=0;
 
   /**
     * This methos will clear up all the current out params in preperation of a 

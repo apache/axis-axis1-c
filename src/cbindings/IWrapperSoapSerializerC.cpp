@@ -183,9 +183,9 @@ AXISC_STORAGE_CLASS_INFO void axiscAddAttachmentHeader(AXISCHANDLE wrapperSoapSe
 	sz->addAttachmentHeader(achId,achHeaderName,achHeaderValue);
 }
 
-AXISC_STORAGE_CLASS_INFO AXISCHANDLE axiscCreateSoapAttachementSoapAttachment(AXISCHANDLE wrapperSoapSerializer) {
+AXISC_STORAGE_CLASS_INFO AXISCHANDLE axiscCreateSoapAttachmentSoapAttachment(AXISCHANDLE wrapperSoapSerializer) {
 	IWrapperSoapSerializer *sz = (IWrapperSoapSerializer*)wrapperSoapSerializer;
-	return (AXISCHANDLE)(sz->createSoapAttachement());
+	return (AXISCHANDLE)(sz->createSoapAttachment());
 }
 
 AXISC_STORAGE_CLASS_INFO void axiscSerializeIWrapperSoapSerializer(

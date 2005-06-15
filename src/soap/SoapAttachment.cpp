@@ -43,28 +43,28 @@ AXIS_CPP_NAMESPACE_START
 
 SoapAttachment::SoapAttachment()
 {	
-	m_AttachementHeaders = new SoapAttachementHeaders();
-	m_AttachementBody = 0;
+	m_AttachmentHeaders = new SoapAttachmentHeaders();
+	m_AttachmentBody = 0;
 }
 
 SoapAttachment::~SoapAttachment()
 {
-	delete m_AttachementHeaders;
-	m_AttachementHeaders =0;
+	delete m_AttachmentHeaders;
+	m_AttachmentHeaders =0;
 
-	delete m_AttachementBody;
-	m_AttachementBody =0;
+	delete m_AttachmentBody;
+	m_AttachmentBody =0;
 }
 
 void SoapAttachment::addHeader(const char* pchName, const char* pchValue)
 {
-	m_AttachementHeaders->addHeader(pchName, pchValue);
+	m_AttachmentHeaders->addHeader(pchName, pchValue);
 }
 
 void SoapAttachment::addBody(xsd__base64Binary* objBody)
 {
     iEncodingStyle = AXIS_BASE64;
-	m_AttachementBody = objBody;
+	m_AttachmentBody = objBody;
 }
 
 void SoapAttachment::addBody(char* pchBinaryBody)
@@ -79,14 +79,14 @@ void SoapAttachment::serialize(SoapSerializer &pSZ)
 {
 	/* Serialize the Attachment Headers */
 	pSZ.serialize("\n", NULL);
-	m_AttachementHeaders->serialize(pSZ);
+	m_AttachmentHeaders->serialize(pSZ);
 
 	/* Serialize the Attachment Body */
     if (iEncodingStyle == AXIS_BASE64)
     {
-	    if (m_AttachementBody) {
+	    if (m_AttachmentBody) {
 		    pSZ.serialize("\n", NULL);
-		    pSZ.serializeAsChardata(m_AttachementBody, XSD_BASE64BINARY);
+		    pSZ.serializeAsChardata(m_AttachmentBody, XSD_BASE64BINARY);
 	    }
     } 
     else if (iEncodingStyle == AXIS_BINARY)
@@ -114,15 +114,15 @@ void SoapAttachment::serialize(SoapSerializer &pSZ)
 
 xsd__base64Binary* SoapAttachment::getBody()
 {
-	return m_AttachementBody;
+	return m_AttachmentBody;
 }
 
 const char* SoapAttachment::getHeader(const char *pchName)
 {
-	if (m_AttachementHeaders->getHeader(pchName).empty())
+	if (m_AttachmentHeaders->getHeader(pchName).empty())
 		return "";
 	else
-		return m_AttachementHeaders->getHeader(pchName).c_str();
+		return m_AttachmentHeaders->getHeader(pchName).c_str();
 }
 
 const char* SoapAttachment::getAttachmentId()

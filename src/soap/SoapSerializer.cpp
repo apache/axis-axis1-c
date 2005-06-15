@@ -1128,7 +1128,7 @@ int SoapSerializer::serializeAsChardata( void * pValue, XSDTYPE type)
 
 void SoapSerializer::serializeAttachments( SoapSerializer &pSZ)
 {
-	/*serializing the attachements*/
+	/*serializing the attachments*/
 
 	map<AxisXMLString, ISoapAttachment*>::iterator itCurrAttach= m_SoapAttachments.begin();
 
@@ -1202,7 +1202,7 @@ void SoapSerializer::addNamespaceToNamespaceList( const AxisChar * pachNamespace
 	m_NsStack[pachNamespaceURI] = pachPrefix;
 }
 
-ISoapAttachment* SoapSerializer::createSoapAttachement()
+ISoapAttachment* SoapSerializer::createSoapAttachment()
 {
 	SoapAttachment * pSAttch = new SoapAttachment();
 

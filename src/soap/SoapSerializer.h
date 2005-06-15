@@ -174,7 +174,7 @@ private:
 
 public:
 	IHeaderBlock* getCurrentHeaderBlock();
-	ISoapAttachment* createSoapAttachement();
+	ISoapAttachment* createSoapAttachment();
 	void addNamespaceToNamespaceList(const AxisChar *pachNamespaceURI, const AxisChar* pachPrefix);
 	void addNamespaceToEnvelope(AxisChar *pachNamespaceURI, AxisChar* pachPrefix);
 	void addAttachmentBody(const AxisChar* achId, xsd__base64Binary* pAttchBody);

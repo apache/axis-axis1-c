@@ -69,7 +69,7 @@ public:
 	/**
 	  * Allows the user to get the required Attachment Header
 	  *
-	  * @param pchName The name of the required Attachement Header
+	  * @param pchName The name of the required Attachment Header
 	  */
 	virtual const char* getHeader(const char* pchName)=0;
 

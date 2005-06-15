@@ -21,15 +21,15 @@
  *
  */
 
-// SoapAttachementHeaders.h: interface for the SoapAttachementHeaders class.
+// SoapAttachmentHeaders.h: interface for the SoapAttachmentHeaders class.
 
 //
 
 //////////////////////////////////////////////////////////////////////
 
 
-#if !defined(AFX_SOAPATTACHEMENTHEADERS_H__88A54506_DC18_41D4_B484_AB877ADC42D4__INCLUDED_)
-#define AFX_SOAPATTACHEMENTHEADERS_H__88A54506_DC18_41D4_B484_AB877ADC42D4__INCLUDED_
+#if !defined(AFX_SOAPATTACHMENTHEADERS_H__88A54506_DC18_41D4_B484_AB877ADC42D4__INCLUDED_)
+#define AFX_SOAPATTACHMENTHEADERS_H__88A54506_DC18_41D4_B484_AB877ADC42D4__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
@@ -49,7 +49,7 @@ using namespace std;
 
 class SoapSerializer;
 
-class SoapAttachementHeaders  
+class SoapAttachmentHeaders  
 {
 private:	
 	vector < pair < AxisString, AxisString > > m_AttachHeaders;
@@ -58,11 +58,11 @@ public:
 	AxisString getHeader(AxisString sName);
 	void serialize(SoapSerializer& pSZ);
 	void addHeader(AxisString name, AxisString value);
-	SoapAttachementHeaders();
-	virtual ~SoapAttachementHeaders();
+	SoapAttachmentHeaders();
+	virtual ~SoapAttachmentHeaders();
 };
 
 AXIS_CPP_NAMESPACE_END
 
-#endif // !defined(AFX_SOAPATTACHEMENTHEADERS_H__88A54506_DC18_41D4_B484_AB877ADC42D4__INCLUDED_)
+#endif // !defined(AFX_SOAPATTACHMENTHEADERS_H__88A54506_DC18_41D4_B484_AB877ADC42D4__INCLUDED_)
 

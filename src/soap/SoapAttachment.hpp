@@ -40,7 +40,7 @@
 #include <axis/GDefine.hpp>
 #include <axis/AxisUserAPI.hpp>
 #include <axis/ISoapAttachment.hpp>
-#include "SoapAttachementHeaders.hpp"
+#include "SoapAttachmentHeaders.hpp"
 #include <string>
 
 using namespace std;
@@ -52,8 +52,8 @@ class SoapSerializer;
 class STORAGE_CLASS_INFO SoapAttachment : public ISoapAttachment
 {
 private:	
-	SoapAttachementHeaders* m_AttachementHeaders;
-	xsd__base64Binary* m_AttachementBody;
+	SoapAttachmentHeaders* m_AttachmentHeaders;
+	xsd__base64Binary* m_AttachmentBody;
     char *m_binaryBody;
     int iEncodingStyle;
     

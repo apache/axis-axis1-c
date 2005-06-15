@@ -21,13 +21,13 @@
  *
  */
 
-// SoapAttachementHeaders.cpp: implementation of the SoapAttachementHeaders class.
+// SoapAttachmentHeaders.cpp: implementation of the SoapAttachmentHeaders class.
 
 //
 
 //////////////////////////////////////////////////////////////////////
 
-#include "SoapAttachementHeaders.hpp"
+#include "SoapAttachmentHeaders.hpp"
 #include "SoapSerializer.h"
 
 AXIS_CPP_NAMESPACE_START
@@ -38,20 +38,20 @@ AXIS_CPP_NAMESPACE_START
 
 //////////////////////////////////////////////////////////////////////
 
-SoapAttachementHeaders::SoapAttachementHeaders()
+SoapAttachmentHeaders::SoapAttachmentHeaders()
 {
 }
 
-SoapAttachementHeaders::~SoapAttachementHeaders()
+SoapAttachmentHeaders::~SoapAttachmentHeaders()
 {
 }
 
-void SoapAttachementHeaders::addHeader(AxisString name, AxisString value)
+void SoapAttachmentHeaders::addHeader(AxisString name, AxisString value)
 {
 	m_AttachHeaders.push_back (make_pair (name, value));
 }
 
-void SoapAttachementHeaders::serialize(SoapSerializer &pSZ)
+void SoapAttachmentHeaders::serialize(SoapSerializer &pSZ)
 {
 
 	for (unsigned int i = 0; i < m_AttachHeaders.size (); i++)
@@ -67,7 +67,7 @@ void SoapAttachementHeaders::serialize(SoapSerializer &pSZ)
 	}
 }
 
-AxisString SoapAttachementHeaders::getHeader(AxisString sName)
+AxisString SoapAttachmentHeaders::getHeader(AxisString sName)
 {
 
 	for (unsigned int i = 0; i < m_AttachHeaders.size (); i++)
