@@ -326,13 +326,23 @@ int SoapSerializer::setOutputStream( SOAPTransport * pStream)
 				}
 				else
 				{	// Client code
-					pStream->setTransportProperty( AXIS_CONTENT_TYPE, 
-						"multipart/related; type=\"text/xml\"; boundary=\"" MIMEBOUNDARY "\"");
+					const char *id = m_pContentIdSet->generateId();
+					string ctype = "multipart/related; type=\"text/xml\"; boundary=\"";
+					ctype += MIMEBOUNDARY;
+					ctype += "\"; start=\"<";
+					ctype += id;
+					ctype += ">\"";
+					pStream->setTransportProperty( AXIS_CONTENT_TYPE, ctype.c_str());
+
 					serialize("\n" MIMEBOUNDARY "\n", NULL);
                     serialize(AXIS_CONTENT_TYPE ": text/xml; charset=UTF-8\n", NULL);
                     serialize(AXIS_CONTENT_TRANSFER_ENCODING ": binary\n", NULL);
-                    serialize(AXIS_CONTENT_ID ": <4E2B3048B540B4C3271D6A6726571E0F>\n", NULL);  // TODO: needs changing
-                    serialize("\n", NULL);  // Extra \n terminates headers
+
+					string cid = AXIS_CONTENT_ID;
+					cid += ": <";
+					cid += id;
+					cid += ">\n\n";		// Extra \n terminates headers
+                    serialize(cid.c_str(), NULL);
 				}
 			}
 
@@ -1130,17 +1140,14 @@ int SoapSerializer::serializeAsChardata( void * pValue, XSDTYPE type)
 void SoapSerializer::serializeAttachments( SoapSerializer &pSZ)
 {
 	/*serializing the attachments*/
-
 	map<AxisXMLString, ISoapAttachment*>::iterator itCurrAttach= m_SoapAttachments.begin();
-
 	while( itCurrAttach != m_SoapAttachments.end())
     {        
         ((SoapAttachment *) ((*itCurrAttach).second))->serialize(pSZ);
-
-		pSZ.serialize("\n" MIMEBOUNDARY "\n", NULL);
-
+		pSZ.serialize("\n" MIMEBOUNDARY, NULL);
         itCurrAttach++;
     }
+	pSZ.serialize("\n", NULL);
 }
 
 void SoapSerializer::addAttachment( const AxisChar * achId, ISoapAttachment * pAttach)

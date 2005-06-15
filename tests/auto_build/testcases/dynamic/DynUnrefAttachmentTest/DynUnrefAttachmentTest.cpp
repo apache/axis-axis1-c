@@ -29,24 +29,39 @@ int main(int argc, char* argv[])
 		Call call;
 		call.setEndpointURI(argv[1]);
 
-		ISoapAttachment *att = call.createSoapAttachment();
-		// att->addHeader(AXIS_CONTENT_ID,"HERES_MY_CONTENT_ID");
-		att->addHeader(AXIS_CONTENT_TYPE,"text/plain");
-		att->addHeader(AXIS_CONTENT_TRANSFER_ENCODING,"base64");
-		
-		xsd__base64Binary b64b;
-		char *text = "This is the attachment body for the DynUnrefAttachmentTest";
-		b64b.__ptr = (xsd__unsignedByte*)text;
-		b64b.__size = strlen(text)+1;
-		att->addBody(&b64b);
+		////////////////////////////////////////////////////////////////////////
 
-		call.addAttachment(att);
+		for (int i=0; i<5; i++) 
+		{
+			cout << "i=" << i << endl;
+			ISoapAttachment *att = call.createSoapAttachment();
+
+			try {
+				if (!(i%3)) att->addHeader(AXIS_CONTENT_ID,"HERES_MY_CONTENT_ID");
+			} catch (AxisException &ae) {
+				cout << ae.what() << endl;
+			}
+
+			att->addHeader(AXIS_CONTENT_TYPE,"text/plain");
+			att->addHeader(AXIS_CONTENT_TRANSFER_ENCODING,"base64");
+			
+			xsd__base64Binary b64b;
+			char *text = "This is the attachment body for the DynUnrefAttachmentTest";
+			b64b.__ptr = (xsd__unsignedByte*)text;
+			b64b.__size = strlen(text)+1;
+			att->addBody(&b64b);	
+
+			call.addAttachment(att);
+		}
+
+		////////////////////////////////////////////////////////////////////////
 
 		call.initialize(CPP_DOC_PROVIDER);
 		call.setSOAPVersion(SOAP_VER_1_1);
 		call.setTransportProperty(SOAPACTION_HEADER , "Trash");
 		call.setOperation("put", "http://localhost/axis/DynUnrefAttachment");
 
+		cout << "Invoking..." << endl;
 		if (AXIS_SUCCESS != call.invoke())
 		{
 			cout << "Invoke failed" << endl;

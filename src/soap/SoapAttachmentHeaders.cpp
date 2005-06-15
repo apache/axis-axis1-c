@@ -48,20 +48,34 @@ SoapAttachmentHeaders::~SoapAttachmentHeaders()
 
 void SoapAttachmentHeaders::addHeader(AxisString name, AxisString value)
 {
-	m_AttachHeaders.push_back (make_pair (name, value));
+	bool found = false;
+	if (name == AXIS_CONTENT_ID)
+	{
+		for (unsigned int i = 0; i < m_AttachHeaders.size (); i++)
+		{
+			if (m_AttachHeaders[i].first == name)
+			{
+				m_AttachHeaders[i] = make_pair(name, value);
+				found = true;
+				break;
+			}
+		}
+	}
+
+	if (!found)
+		m_AttachHeaders.push_back (make_pair (name, value));
 }
 
 void SoapAttachmentHeaders::serialize(SoapSerializer &pSZ)
 {
-
 	for (unsigned int i = 0; i < m_AttachHeaders.size (); i++)
 	{
-	    if (m_AttachHeaders[i].first == "Content-Id")
+	    if (m_AttachHeaders[i].first == AXIS_CONTENT_ID)
 	    {
 			pSZ.serialize((m_AttachHeaders[i].first).c_str(), ": <", NULL);
 			pSZ.serialize((m_AttachHeaders[i].second).c_str(), ">\n", NULL);
 		} else {
-			pSZ.serialize((m_AttachHeaders[i].first).c_str(), ":", NULL);
+			pSZ.serialize((m_AttachHeaders[i].first).c_str(), ": ", NULL);
 			pSZ.serialize((m_AttachHeaders[i].second).c_str(), "\n", NULL); 
 		}
 	}
@@ -72,7 +86,7 @@ AxisString SoapAttachmentHeaders::getHeader(AxisString sName)
 
 	for (unsigned int i = 0; i < m_AttachHeaders.size (); i++)
 	{
-		if (m_AttachHeaders[i].first == "Content-Id")
+		if (m_AttachHeaders[i].first == AXIS_CONTENT_ID)
 		{
 			return m_AttachHeaders[i].second;
 		}
