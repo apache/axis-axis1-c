@@ -1,4 +1,17 @@
 <project name="unitTest" default="runUnitTests">
+	<description>
+		This file runs what we have termed the "unit tests". They are not unit tests in a true sense of the word rather they run a set of 
+		tests against a "mock server". This is a Java program that given a request will return back a given response file. Thus this system is useful for
+		testing where we do not have an actual service written but have the tcp monitor request and response files. From these we can write a test quickly and easily and place it into
+		the unit test suite which avoids us having to create a large number of potentially complex services when time might not allow this.
+			
+		This system is essentially the same as the fv suite except for the fact that the endpoint is not
+		a server but the mock-server. In order to run this system several things have to be set up in advance e.g.
+		the response files. For more inforamtion about set up of a new test please read the document ws-axis/c/tests/auto_build/UnitTest_Readme.txt.
+		
+		In order to run the already created unit tests please run Ant against this build file giving the same properties as you do for 
+		the fv suite in order for the suite to find your libraries. NOTE: This system does not handle ssl tests.
+	</description>
 	<import file="./test.xml"/>
 	
 	<target name="runUnitTests">
