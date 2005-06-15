@@ -190,7 +190,7 @@
 	<!--
 		Execute the test
 	-->
-	<target name="executeTest" depends="setExpectations,setTestArgs"
+    <target name="executeTest" depends="setExpectations,setTestArgs, createConfigurationFile"
 		if="successfulClientCompilation" unless="buildOnly">
 
 		<trycatch>
