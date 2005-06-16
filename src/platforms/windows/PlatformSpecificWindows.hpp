@@ -23,6 +23,7 @@
 #define _WINSOCKAPI_ /* Prevent inclusion of winsock.h in windows.h */
 #include <windows.h>
 #include <string>
+#include <sys/timeb.h>
 
 // =============================================================
 // Default paths to shared library/DLLs and files
@@ -101,6 +102,16 @@
 #define PRINTF_LONGLONG_FORMAT_SPECIFIER "%I64d"
 #define PRINTF_LONGLONG_FORMAT_SPECIFIER_CHARS "I64d"
 
+/**
+ * Platform specific method to obtain current thread ID
+ */
+#define PLATFORM_GET_THREAD_ID GetCurrentThreadId()
+
+/**
+ * Platform specific method to obtain current time in milli seconds
+ */
+#define PLATFORM_GET_TIME_IN_MILLIS _ftime
+#define PLATFORM_TIMEB _timeb
 
 std::string* getPlatformErrorMessage(long errorNumber);
 

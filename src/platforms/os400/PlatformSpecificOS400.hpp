@@ -76,6 +76,7 @@ extern char *toUTF8(char *b, int len);
 // Miscellaneous
 // =============================================================
 #include <sys/time.h>
+#include <sys/timeb.h>
 #include <unistd.h>
 #include <errno.h>
 #define PLATFORM_SLEEP(x) sleep(0);
@@ -96,6 +97,17 @@ extern char *toUTF8(char *b, int len);
  */
 #include <string>
 #define PLATFORM_GET_ERROR_MESSAGE(errorNumber) new string(strerror(errorNumber));
+
+/**
+ * Platform specific method to obtain current thread ID
+ */
+#define PLATFORM_GET_THREAD_ID pthread_self()
+
+/**
+ * Platform specific method to obtain current time in milli seconds
+ */
+#define PLATFORM_GET_TIME_IN_MILLIS ftime
+#define PLATFORM_TIMEB timeb
 
 /**
  * type to be used for 64bit integers

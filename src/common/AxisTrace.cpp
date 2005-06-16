@@ -257,18 +257,28 @@ void AxisTrace::traceLineInternal(const char *type, const char *classname,
 {
 	if (!isTraceOn()) return;
 
-    time_t current = time(NULL);
-	struct tm *tm = localtime(&current);
+	
 
-	// TODO: Milliseconds
-	// Use %Y not %y because %y gives a compiler warning on Linux
+    PLATFORM_TIMEB timeBuffer;
+    PLATFORM_GET_TIME_IN_MILLIS( &timeBuffer );
+    struct tm *tm = localtime(&timeBuffer.time);
+
 	const int timelen=256;
 	char strtime[timelen];
 	memset(strtime,0,timelen);
-	strftime(strtime,timelen,"[%d/%m/%Y %H:%M:%S:000 %Z]",tm);
+	strftime(strtime,timelen,"[%d/%m/%Y %H:%M:%S:",tm);
+    string text = strtime;
+    
+    char millis[5];
+    sprintf(millis, "%03u", timeBuffer.millitm);
+    text += millis;
+    
+    strftime(strtime, timelen, " %Z]", tm);
+	text += strtime;
 
-	string text = strtime;
-	text += " 1 ";  // TODO: this should be the thread id
+    char threadID[20];
+    sprintf(threadID, " %lu ", PLATFORM_GET_THREAD_ID);
+	text += threadID;
 
 	if (NULL==classname) text += "-";
 	else text += classname;
