@@ -183,6 +183,7 @@ public:
 	void addAttachment(const AxisChar* achId, ISoapAttachment* pAttach);
     void addAttachments(ISoapAttachment** pAttach, int iAttchArraySize);
 	void setContentIdSet(ContentIdSet *pContentIdSet);
+	void addAttachmentParameter(ISoapAttachment* att, const char* pName);
 	IHeaderBlock* getHeaderBlock(const AxisChar* pcName, const AxisChar* pcNamespace);
 	/*
 	* TODO: Have to remove this method. Date logged 13Jan2005

@@ -1232,6 +1232,22 @@ bool SoapSerializer::checkAttachmentAvailability()
 	return false;
 }
 
+void SoapSerializer::addAttachmentParameter(ISoapAttachment* att, const char* pName)
+{
+    Param *pParam = new Param();
+    pParam->m_Value.pAttachment = static_cast<SoapAttachment*>(att);
+	pParam->m_Type = ATTACHMENT;
+	
+    if( m_pSoapEnvelope &&
+		(m_pSoapEnvelope->m_pSoapBody) &&
+		(m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod)) 
+    {
+        m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->addOutputParam(pParam);
+    }
+    pParam->setName(pName);
+	m_SoapAttachments[att->getAttachmentId()] = att;
+}
+
 IHeaderBlock * SoapSerializer::getCurrentHeaderBlock()
 {
 	return m_pSoapEnvelope->m_pSoapHeader->getCurrentHeaderBlock();

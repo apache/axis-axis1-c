@@ -1052,10 +1052,18 @@ const xsd__string Call::getFaultAsXMLString()
 
 void Call::addAttachment(ISoapAttachment* att)
 {
-	m_attachments.push_back(att);
+	if (NULL==m_pIWSSZ)
+		m_attachments.push_back(att);
+	else
+		m_pIWSSZ->addAttachment(att->getHeader(AXIS_CONTENT_ID),att);
 }
 
 ISoapAttachment* Call::createSoapAttachment()
 {
 	return new SoapAttachment(m_pContentIdSet);
+}
+
+void Call::addAttachmentParameter(ISoapAttachment* att, const char* pName)
+{
+	m_pIWSSZ->addAttachmentParameter(att,pName);
 }

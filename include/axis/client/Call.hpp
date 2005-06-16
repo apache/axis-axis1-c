@@ -96,6 +96,8 @@ public:
     /* Method for adding parameters of basic types */
     virtual void AXISCALL addParameter(void* pValue,const char* pName,
         XSDTYPE nType)=0;
+	/* Method for adding referenced attachments */
+	virtual void AXISCALL addAttachmentParameter(ISoapAttachment* att, const char* pName)=0;
 
     /* Methods used by stubs to get a deserialized value of an XML element
      * as basic types
@@ -376,6 +378,8 @@ public:
     /* Method for adding parameters of basic types */
     void AXISCALL addParameter(void* pValue,const char* pchName,
         XSDTYPE nType);
+	/* Method for adding referenced attachments */
+	void AXISCALL addAttachmentParameter(ISoapAttachment* att, const char* pName);
 
     /* Method that set the remote method name */
     void AXISCALL setOperation(const char* pchOperation,

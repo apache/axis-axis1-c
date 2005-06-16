@@ -173,6 +173,9 @@ int Param::serialize (SoapSerializer &pSZ)
       case XSD_ANY:
              pSZ.serializeAnyObject(m_Value.pAnyObject);
              break;
+      case ATTACHMENT:
+            m_Value.pAttachment->serializeReference(pSZ,m_sName.c_str());
+            break;
       default:
             pSZ.serializeAsElement((AxisChar*) m_sName.c_str (), (IAnySimpleType*) m_AnySimpleType);
             break;

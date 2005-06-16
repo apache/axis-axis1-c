@@ -29,6 +29,7 @@
 AXIS_CPP_NAMESPACE_START
 
 class ArrayBean;
+class SoapAttachment;
 
 class ParamValue
 {
@@ -39,6 +40,7 @@ public:
     };
     ComplexObjectHandler* pCplxObj;
     AnyType* pAnyObject; /* used to hold AnyType struct for xsd:any */
+	SoapAttachment* pAttachment;
 };
 
 /*

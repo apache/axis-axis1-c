@@ -73,6 +73,7 @@ public:
 	void addHeader(const char* pchName, const char* pchValue);
 	SoapAttachment(ContentIdSet *pContentIdSet=NULL);
 	virtual ~SoapAttachment();	
+	void serializeReference(SoapSerializer& pSZ, const char *name);
 };
 
 AXIS_CPP_NAMESPACE_END
