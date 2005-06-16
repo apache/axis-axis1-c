@@ -48,5 +48,16 @@ void MathOps::fini()
 }
 xsd__int MathOps::div(xsd__int Value0, xsd__int Value1)  
 {
+     if (Value1 == 0) 
+     {
+         DivByZeroStruct* pObjFault = new DivByZeroStruct();
+         if(pObjFault)
+         {
+             pObjFault->varString = "Division by zero exception";
+             pObjFault->varInt = 1;
+             pObjFault->varFloat = 10.52;
+             throw pObjFault;
+         }
+     }
 	return (Value0/Value1);
 }
