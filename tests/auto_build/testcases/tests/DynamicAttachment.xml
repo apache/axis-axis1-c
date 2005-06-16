@@ -1,0 +1,20 @@
+<test>
+    <name>DynamicAttachment</name>
+    <description>DynamicAttachment</description>
+	<dynamicCode>true</dynamicCode>
+	<dynamicCodeDirectory>DynamicAttachment</dynamicCodeDirectory>
+    <clientLang>cpp</clientLang>
+    <wsdl>CalculatorDoc.wsdl</wsdl>
+    <expected>
+        <output>
+            DynamicAttachment.expected
+        </output>	 
+        <request>
+		DynamicAttachmentRequest.out
+	  </request>	
+        <serverResponse>
+		DynamicAttachment_ServerResponse.expected
+        </serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/DynamicAttachment/services/DynamicAttachment</endpoint>
+</test>

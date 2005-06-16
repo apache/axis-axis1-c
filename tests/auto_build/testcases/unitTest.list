@@ -1,6 +1,7 @@
 AxisBench.xml
 ComplexLists.xml
 ComplexTypesAll.xml
+DynamicAttachment.xml
 DynamicGet_AddAnyObjectTest.xml
 DynUnrefAttachmentTest.xml
 Enumeration.xml

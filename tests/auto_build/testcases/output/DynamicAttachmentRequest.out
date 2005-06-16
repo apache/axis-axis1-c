@@ -1,0 +1,14 @@
+POST /DynamicAttachment/services/DynamicAttachment HTTP/1.1
+Host: localhost:13260
+Content-Type: text/xml; charset=UTF-8
+SOAPAction: "Trash"
+Content-Length: 346
+
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:put xmlns:ns1="http://localhost/axis/DynamicAttachment">
+</ns1:put>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+

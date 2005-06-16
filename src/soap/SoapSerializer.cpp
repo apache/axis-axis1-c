@@ -334,7 +334,7 @@ int SoapSerializer::setOutputStream( SOAPTransport * pStream)
 					ctype += ">\"";
 					pStream->setTransportProperty( AXIS_CONTENT_TYPE, ctype.c_str());
 
-					serialize("\n" MIMEBOUNDARY "\n", NULL);
+					serialize("\n--" MIMEBOUNDARY "\n", NULL);
                     serialize(AXIS_CONTENT_TYPE ": text/xml; charset=UTF-8\n", NULL);
                     serialize(AXIS_CONTENT_TRANSFER_ENCODING ": binary\n", NULL);
 
@@ -359,7 +359,6 @@ int SoapSerializer::setOutputStream( SOAPTransport * pStream)
 
 			if( checkAttachmentAvailability())
 			{
-				serialize( "\n" MIMEBOUNDARY, NULL);
 				serializeAttachments( *this);
 			}
 		}
@@ -1143,11 +1142,11 @@ void SoapSerializer::serializeAttachments( SoapSerializer &pSZ)
 	map<AxisXMLString, ISoapAttachment*>::iterator itCurrAttach= m_SoapAttachments.begin();
 	while( itCurrAttach != m_SoapAttachments.end())
     {        
+		serialize( "\n--" MIMEBOUNDARY, NULL);
         ((SoapAttachment *) ((*itCurrAttach).second))->serialize(pSZ);
-		pSZ.serialize("\n" MIMEBOUNDARY, NULL);
         itCurrAttach++;
     }
-	pSZ.serialize("\n", NULL);
+	pSZ.serialize("\n--" MIMEBOUNDARY "--\n", NULL);
 }
 
 void SoapSerializer::addAttachment( const AxisChar * achId, ISoapAttachment * pAttach)
