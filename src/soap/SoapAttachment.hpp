@@ -71,7 +71,7 @@ public:
 	void addBody(xsd__base64Binary* objBody);
     void addBody(char* pchBinaryBody);
 	void addHeader(const char* pchName, const char* pchValue);
-	SoapAttachment(ContentIdSet *pContentIdSet);
+	SoapAttachment(ContentIdSet *pContentIdSet=NULL);
 	virtual ~SoapAttachment();	
 };
 

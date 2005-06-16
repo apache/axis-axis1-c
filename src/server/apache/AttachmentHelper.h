@@ -56,7 +56,6 @@ class AttachmentHelper
 private:
 	map<string, ISoapAttachment*> mymap;
 	char* pMime;
-	ContentIdSet *m_pContentIdSet;
 public:
 	char* getIncomingSOAPMimeHeaders();
 	ISoapAttachment* getAttachment (const char* pcAttchId);
