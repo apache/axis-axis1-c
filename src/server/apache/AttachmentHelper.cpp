@@ -51,7 +51,8 @@ void AttachmentHelper::extract_Attachment(char *pBuffer)
 
 	while (blnContinue)
     {
-        SoapAttachment* pSoapAttachment= new SoapAttachment();
+	m_pContentIdSet = new ContentIdSet();
+        SoapAttachment* pSoapAttachment= new SoapAttachment(m_pContentIdSet );
 		int start =0;
 
 	if (blnFirstTime) {
