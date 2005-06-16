@@ -203,7 +203,16 @@ public class WrapperUtils
         Type type = wscontext.getTypemap().getType(param.getSchemaName());
         if (type.isSimpleType())
         {
-            return param.getLangName();
+            // FJP - Additional code for AXISCPP-697 vv
+            String name = param.getLangName();
+            
+            if( name.indexOf(">") != -1)
+            {
+                name = CUtils.getclass4qname (param.getType().getBaseType());
+            }
+            
+            return name;
+            // FJP - Additional code for AXISCPP-697 ^^
         }
         else
         {

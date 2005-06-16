@@ -477,13 +477,7 @@ public class ParmHeaderFileWriter extends ParamWriter
                 .getParamName());
         boolean bNillable = false;
 
-        if (ei != null
-                && !("xsd__string".equalsIgnoreCase(attribs[index]
-                        .getTypeName()))
-                || "xsd__anyURI".equalsIgnoreCase(attribs[index].getTypeName())
-                || "xsd__QName".equalsIgnoreCase(attribs[index].getTypeName())
-                || "xsd__notation".equalsIgnoreCase(attribs[index]
-                        .getTypeName()))
+        if (ei != null && attribs[index].isSimpleType() && !CUtils.isPointerType(attribs[index].getTypeName()))
         {
             bNillable = ei.getNillable() & ei.getType().isSimpleType();
         }
