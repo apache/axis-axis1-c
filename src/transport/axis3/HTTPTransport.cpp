@@ -943,27 +943,38 @@ int HTTPTransport::setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, c
 
 		case TRANSPORT_PROPERTIES:
 		{
-			m_pActiveChannel->setTransportProperty( type, value);
+			if( m_pActiveChannel != NULL)
+			{
+				m_pActiveChannel->setTransportProperty( type, value);
+			}
 
 			break;
 		}
 
 		case SECURE_PROPERTIES:
 		{
-			iSuccess = m_pActiveChannel->setSecureProperties( value);
-
+			if( m_pActiveChannel != NULL)
+			{
+				iSuccess = m_pActiveChannel->setSecureProperties( value);
+			}
 			break;
 		}
 
 		case CHANNEL_HTTP_DLL_NAME:
 		{
-			m_pNormalChannel = m_pChannelFactory->LoadChannelLibrary( UnsecureChannel, value);
+			if( m_pChannelFactory != NULL)
+			{
+				m_pNormalChannel = m_pChannelFactory->LoadChannelLibrary( UnsecureChannel, value);
+			}
 			break;
 		}
 
 		case CHANNEL_HTTP_SSL_DLL_NAME:
 		{
-			m_pSecureChannel = m_pChannelFactory->LoadChannelLibrary( SecureChannel, value);
+			if( m_pChannelFactory != NULL)
+			{
+				m_pSecureChannel = m_pChannelFactory->LoadChannelLibrary( SecureChannel, value);
+			}
 			break;
 		}
 
