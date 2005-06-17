@@ -34,6 +34,58 @@ int main(int argc, char* argv[])
 		call.setTransportProperty(SOAPACTION_HEADER , "Trash");
 		call.setOperation("put", "http://localhost/axis/DynamicAttachment");
 
+		ISoapAttachment *att = NULL;
+		char *text = "This is the attachment body for the DynamicAttachment test";
+
+		///////////////////////////////////////////////////////////////////
+		// Referenced attachment with a generated content id
+		///////////////////////////////////////////////////////////////////
+
+		att = call.createSoapAttachment();
+		att->addHeader(AXIS_CONTENT_TYPE,"text/plain");
+		att->addHeader(AXIS_CONTENT_TRANSFER_ENCODING,"base64");
+		
+		xsd__base64Binary b64b1;
+		b64b1.__ptr = (xsd__unsignedByte*)text;
+		b64b1.__size = strlen(text)+1;
+		att->addBody(&b64b1);	
+
+		call.addAttachmentParameter(att, "arg_attachment_1");
+
+		///////////////////////////////////////////////////////////////////
+		// Referenced attachment with a user defined content id
+		///////////////////////////////////////////////////////////////////
+
+		att = call.createSoapAttachment();
+		att->addHeader(AXIS_CONTENT_TYPE,"text/plain");
+		att->addHeader(AXIS_CONTENT_ID,"12");
+		att->addHeader(AXIS_CONTENT_TRANSFER_ENCODING,"base64");
+		
+		xsd__base64Binary b64b2;
+		b64b2.__ptr = (xsd__unsignedByte*)text;
+		b64b2.__size = strlen(text)+1;
+		att->addBody(&b64b2);	
+
+		call.addAttachmentParameter(att, "arg_attachment_2");
+
+		///////////////////////////////////////////////////////////////////
+		// Unreferenced attachment to make sure referenced and unreferenced 
+		// attachments mix OK
+		///////////////////////////////////////////////////////////////////
+
+		att = call.createSoapAttachment();
+		att->addHeader(AXIS_CONTENT_TYPE,"text/plain");
+		att->addHeader(AXIS_CONTENT_TRANSFER_ENCODING,"base64");
+		
+		xsd__base64Binary b64b3;
+		b64b3.__ptr = (xsd__unsignedByte*)text;
+		b64b3.__size = strlen(text)+1;
+		att->addBody(&b64b3);	
+
+		call.addAttachment(att);
+
+		///////////////////////////////////////////////////////////////////
+
 		cout << "Invoking..." << endl;
 		if (AXIS_SUCCESS != call.invoke())
 		{

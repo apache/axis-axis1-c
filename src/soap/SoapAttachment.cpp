@@ -141,7 +141,7 @@ void SoapAttachment::serializeReference(SoapSerializer& pSZ, const char *name)
 	data += " href=\"cid:";
 	data += m_AttachmentHeaders->getHeader(AXIS_CONTENT_ID);
 	data += "\" />";
-	pSZ.serialize(data.c_str());
+	pSZ.serialize(data.c_str(), NULL);
 }
 
 AXIS_CPP_NAMESPACE_END
