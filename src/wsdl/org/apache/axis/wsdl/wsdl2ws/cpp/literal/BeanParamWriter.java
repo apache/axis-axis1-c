@@ -1296,9 +1296,12 @@ public class BeanParamWriter extends ParamCPPFileWriter
         ElementInfo ei = type.getElementForElementName(attribs[index].getParamName());
         boolean bNillable = false;
 
-        if (ei != null && attribs[index].isSimpleType() && !CUtils.isPointerType(attribs[index].getTypeName()))
+        if (ei != null
+        		&& attribs[index].isSimpleType()
+        		&& !attribs[index].isArray()
+                && !CUtils.isPointerType(attribs[index].getTypeName()) )
         {
-            bNillable = ei.getNillable() & ei.getType().isSimpleType();
+            bNillable = ei.getNillable();
         }
 
         return bNillable;

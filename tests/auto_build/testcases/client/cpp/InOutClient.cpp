@@ -113,13 +113,16 @@ int main(int argc, char* argv[])
 		stringArray.m_Array[2]="Six";
 
 		ComplexNilType1 cnt;
-		cnt.ctLong = (xsd__long)87654321;
+        xsd__long * longValue = new xsd__long(87654321);
+		cnt.ctLong = longValue;
 		cnt.ctString = NULL;
 		cnt.ctIntArray = intArray;
 
 		cout << "multiComplexParametersNilIntReturn" << endl;
 		mcpir = ws.multiComplexParametersNilIntReturn(NULL, &cnt, NULL, NULL, stringArray);
 		cout << "multiComplexParametersNilIntReturn returned " << mcpir << endl;
+
+        delete longValue;
 
 		/* Commented out as there is a bug in WSDL2Ws.
 		 * AXISCPP-565 is the Jira against this problem.
