@@ -70,7 +70,6 @@
 #define _STUB_H____OF_AXIS_INCLUDED_
 
 #include <axis/client/Call.hpp>
-#include <axis/IAttribute.hpp>
 #include <vector>
 
 using namespace std;
@@ -670,12 +669,6 @@ class STORAGE_CLASS_INFO Stub
     void setSOAPHeaders();
     
   /**
-    * Set SOAP method attributes stored in m_vSOAPMethodAttributes vector.
-    * Called by applyUserPreferences for each and every method invocation. 
-    */
-    void setSOAPMethodAttributes();
-
-  /**
     * Set Authorization header for basic authentication
     */
     void setAuthorizationHeader();
@@ -694,15 +687,6 @@ class STORAGE_CLASS_INFO Stub
     */
     vector <IHeaderBlock *>::iterator m_viCurrentSOAPHeaderBlock;
 
-  /**
-    * List of SOAPMethod Attributes
-    */
-    vector <IAttribute*> m_vSOAPMethodAttributes;
-
-	/**
-    * Transport keys iterator
-    */
-    vector <IAttribute*>::iterator m_viCurrentSOAPMethodAttribute;
 #ifdef WIN32
   #pragma warning (default : 4251)
 #endif

@@ -23,7 +23,6 @@
 #include "../../transport/SOAPTransport.h"
 #include <axis/AxisWrapperAPI.hpp>
 #include "../../soap/SoapSerializer.h"
-#include "../../soap/Attribute.h"
 #include "../../common/AxisUtils.h"
 #include "../../soap/apr_base64.h"
 
@@ -36,10 +35,6 @@ m_pcPassword (NULL)
     m_pCall->setProtocol (eProtocol);
     m_pTransport = m_pCall->getTransport ();
     m_pTransport->setEndpointUri( pcEndPointUri);
-
-    // Initialise m_viCurrentSOAPMethodAttribute to something sensible 
-    // in case getFirstSOAPMethodAttribute isn't called first.
-    m_viCurrentSOAPMethodAttribute = m_vSOAPMethodAttributes.begin ();
 }
 
 Stub::~Stub ()
@@ -52,12 +47,6 @@ Stub::~Stub ()
     {
 	delete m_vSOAPHeaderBlocks[j];
 	m_vSOAPHeaderBlocks[j] = NULL;
-    }
-
-    for (j = 0; j < m_vSOAPMethodAttributes.size (); j++)
-    {
-	delete m_vSOAPMethodAttributes[j];
-	m_vSOAPMethodAttributes[j] = NULL;
     }
 
     if (m_pcUsername)
