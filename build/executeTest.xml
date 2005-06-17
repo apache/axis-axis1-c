@@ -157,7 +157,7 @@
 					location="${dir.obj}/test/monitor/monitor.jar" />
 			</classpath>
 		</java>
-		<echo message="MONITOR OUTPUT=${mockServer.out}" />
+		<echo message="MOCK-SERVER OUTPUT=${mockServer.out}" />
 	</target>
 
 
