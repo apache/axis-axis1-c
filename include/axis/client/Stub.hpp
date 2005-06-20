@@ -24,48 +24,6 @@
  * application some added functionality to manipulate the SOAP messages. 
  */
  
-/*
- * Revision 1.1  2004/05/31 samisa
- * Added setProxy
- */
-
-/*
- * Revision 1.2  2004/05/31 roshan
- * Added calling conventions
- */
-
-/*
- * Revision 1.3  2004/06/01 roshan
- * Added setSOAPMethodAttribute
- */
-
-/*
- * Revision 1.4  2004/06/08 samisa
- * Added setTransportTimeout
- */
-
-/*
- * Revision 1.5  2004/06/10 samisa
- * Added doxygen comments to help autobuild API docs
- */
-
-/*
- * Revision 1.6  2004/06/13 roshan
- * Added doxygen comments to help autobuild API docs
- */
-
-/*
- * Revision 1.7  2004/06/13 susantha
- * Added support for writing C web services and handlers
- */
-
-/*
- * Revision 1.8  2005/01/06 roshan
- * Added the method:
- *  IHeaderBlock* createSOAPHeaderBlock(AxisChar * pachLocalName,
- *   AxisChar * pachUri, AxisChar * pachPrefix);
- */
-
 #if !defined(_STUB_H____OF_AXIS_INCLUDED_)
 #define _STUB_H____OF_AXIS_INCLUDED_
 

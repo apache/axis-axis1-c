@@ -28,23 +28,6 @@
  * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
  */
  
-/*
- * Revision 1.1  2004/05/24 samisa
- * Added accesser to transport 
- */
- 
-/*
- * Revision 1.2  2004/05/25 samisa
- * Added accesser to SOAP serializer 
- */
-
-/*
- * Revision 1.3  2004/05/31 samisa
- * Added setProxy
- */
-
-/* Call.h: interface for the Call class.*/
-
 
 #if !defined(_CALL_H____OF_AXIS_INCLUDED_)
 #define _CALL_H____OF_AXIS_INCLUDED_
