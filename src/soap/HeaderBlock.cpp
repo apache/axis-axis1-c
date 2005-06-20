@@ -691,6 +691,24 @@ IAttribute* HeaderBlock::createStdAttribute(HEADER_BLOCK_STD_ATTR_TYPE
 
     if (blnStatus)
     {
+        // Samisa: AXISCPP-452 - got to check for duplicate attributes
+        list<Attribute*>::iterator itAttr = m_attributes.begin();
+        while (itAttr != m_attributes.end())
+        {
+                Attribute* pCurrentAttribute = *itAttr;
+                if (!strcmp(pCurrentAttribute->getLocalName(),pAttribute->getLocalName() ) &&
+                        !strcmp(pCurrentAttribute->getPrefix(), pAttribute->getPrefix() ) )
+                        {
+                            // we have the attribute set already, so only change the value
+                            pCurrentAttribute->setValue( pAttribute->getValue() );
+                            delete pAttribute;
+                            return pCurrentAttribute; // return the currently set attributes pointer
+                                                      // job done
+                        }
+                itAttr++;
+        }
+
+        // we do not have the attribute set already, hence add it
         m_attributes.push_back(pAttribute);
         return pAttribute;
     }
