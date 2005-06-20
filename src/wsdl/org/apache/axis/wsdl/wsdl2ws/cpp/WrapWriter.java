@@ -302,8 +302,12 @@ public class WrapWriter extends CPPClassWriter
                 + "\")) return AXIS_FAIL;\n");
         writer.write(
             "\tpIWSSZ->createSoapMethod(\""
-                + minfo.getMethodname()
-                + "Response\", \""
+        		//Chinthana:Fixed for AXISCPP-378 
+                //+ minfo.getMethodname()
+                //+ "Response\", \""
+        		+ minfo.getOutputMessage().getLocalPart()
+				+ "\", \""
+				//15/06/2005................................
                 + wscontext.getWrapInfo().getTargetNameSpaceOfWSDL()
                 + "\");\n");
         //create and populate variables for each parameter
