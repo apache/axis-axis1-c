@@ -1231,11 +1231,12 @@ bool SoapSerializer::checkAttachmentAvailability()
 	return false;
 }
 
-void SoapSerializer::addAttachmentParameter(ISoapAttachment* att, const char* pName)
+void SoapSerializer::addAttachmentParameter(ISoapAttachment* att, const char* pName, IAttribute **attributes, int nAttributes)
 {
     Param *pParam = new Param();
     pParam->m_Value.pAttachment = static_cast<SoapAttachment*>(att);
 	pParam->m_Type = ATTACHMENT;
+	if (attributes!=NULL && nAttributes>0) pParam->m_Value.pAttachment->addAttributes(attributes,nAttributes);
 	
     if( m_pSoapEnvelope &&
 		(m_pSoapEnvelope->m_pSoapBody) &&

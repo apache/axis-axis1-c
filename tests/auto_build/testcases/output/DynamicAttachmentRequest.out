@@ -1,20 +1,23 @@
 POST /DynamicAttachment/services/DynamicAttachment HTTP/1.1
 Host: localhost:13260
 SOAPAction: "Trash"
-Content-Type: multipart/related; type="text/xml"; boundary="------=MIME_BOUNDARY"; start="<4>"
-Content-Length: 1096
+Content-Type: multipart/related; type="text/xml"; boundary="------=MIME_BOUNDARY"; start="<5>"
+Content-Length: 1396
 
 
 --------=MIME_BOUNDARY
 Content-Type: text/xml; charset=UTF-8
 Content-Transfer-Encoding: binary
-Content-Id: <4>
+Content-Id: <5>
 
 <?xml version='1.0' encoding='utf-8' ?>
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <SOAP-ENV:Body>
 <ns1:put xmlns:ns1="http://localhost/axis/DynamicAttachment">
-<arg_attachment_1 href="cid:1" /><arg_attachment_2 href="cid:12" /></ns1:put>
+<arg_attachment_1 href="cid:1"/>
+<arg_attachment_2 href="cid:12"/>
+<arg_attachment_3 href="cid:3" mypfx1:myname1="http://dynamicattachment/test.axis.apache.org" xsi:myname2="myvalue2"/>
+</ns1:put>
 </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 
@@ -35,6 +38,13 @@ VGhpcyBpcyB0aGUgYXR0YWNobWVudCBib2R5IGZvciB0aGUgRHluYW1pY0F0dGFjaG1lbnQgdGVzdAA=
 
 --------=MIME_BOUNDARY
 Content-Id: <3>
+Content-Type: text/plain
+Content-Transfer-Encoding: base64
+
+VGhpcyBpcyB0aGUgYXR0YWNobWVudCBib2R5IGZvciB0aGUgRHluYW1pY0F0dGFjaG1lbnQgdGVzdAA=
+
+--------=MIME_BOUNDARY
+Content-Id: <4>
 Content-Type: text/plain
 Content-Transfer-Encoding: base64
 

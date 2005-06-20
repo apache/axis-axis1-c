@@ -40,6 +40,7 @@
 #include <axis/GDefine.hpp>
 #include <axis/AxisUserAPI.hpp>
 #include <axis/ISoapAttachment.hpp>
+#include <axis/IAttribute.hpp>
 #include "SoapAttachmentHeaders.hpp"
 #include "ContentIdSet.hpp"
 #include <string>
@@ -53,6 +54,7 @@ AXIS_CPP_NAMESPACE_START
 #endif
 
 class SoapSerializer;
+class Attribute;
 
 class STORAGE_CLASS_INFO SoapAttachment : public ISoapAttachment
 {
@@ -62,6 +64,7 @@ private:
     char *m_binaryBody;
     int iEncodingStyle;
     ContentIdSet *m_pContentIdSet;
+	list<Attribute*> m_attributes;
 
 public:	
     const char* getAttachmentId();
@@ -74,6 +77,7 @@ public:
 	SoapAttachment(ContentIdSet *pContentIdSet=NULL);
 	virtual ~SoapAttachment();	
 	void serializeReference(SoapSerializer& pSZ, const char *name);
+	void addAttributes(IAttribute **attributes, int nAttributes);
 };
 
 AXIS_CPP_NAMESPACE_END

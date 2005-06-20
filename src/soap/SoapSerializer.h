@@ -23,6 +23,7 @@
 
 #include "../common/BasicTypeSerializer.h"
 #include <axis/WSDDDefines.hpp>
+#include <axis/IAttribute.hpp>
 #include "SoapAttachment.hpp"
 #include <stdarg.h>
 #include <cctype>
@@ -183,7 +184,7 @@ public:
 	void addAttachment(const AxisChar* achId, ISoapAttachment* pAttach);
     void addAttachments(ISoapAttachment** pAttach, int iAttchArraySize);
 	void setContentIdSet(ContentIdSet *pContentIdSet);
-	void addAttachmentParameter(ISoapAttachment* att, const char* pName);
+	void addAttachmentParameter(ISoapAttachment* att, const char* pName, IAttribute **attributes, int nAttributes);
 	IHeaderBlock* getHeaderBlock(const AxisChar* pcName, const AxisChar* pcNamespace);
 	/*
 	* TODO: Have to remove this method. Date logged 13Jan2005

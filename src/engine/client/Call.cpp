@@ -1063,7 +1063,13 @@ ISoapAttachment* Call::createSoapAttachment()
 	return new SoapAttachment(m_pContentIdSet);
 }
 
-void Call::addAttachmentParameter(ISoapAttachment* att, const char* pName)
+void Call::addAttachmentParameter(ISoapAttachment* att, const char* pName, IAttribute **attributes, int nAttributes)
 {
-	m_pIWSSZ->addAttachmentParameter(att,pName);
+	m_pIWSSZ->addAttachmentParameter(att,pName,attributes,nAttributes);
+}
+
+IAttribute* Call::createAttribute(const AxisChar *pLocalname, const AxisChar *pPrefix, const AxisChar *pValue)
+{
+    std::list<Attribute*> attributeList;
+    return new Attribute(attributeList, pLocalname, pPrefix, pValue);
 }

@@ -33,6 +33,7 @@
 
 #include "SoapAttachment.hpp"
 #include "SoapSerializer.h"
+#include "Attribute.h"
 
 AXIS_CPP_NAMESPACE_START
 //////////////////////////////////////////////////////////////////////
@@ -55,6 +56,14 @@ SoapAttachment::~SoapAttachment()
 	delete m_AttachmentHeaders;
 	if (m_AttachmentBody) delete m_AttachmentBody;
 	m_AttachmentBody =0;
+
+	list<Attribute*>::iterator it = m_attributes.begin();
+	while (it != m_attributes.end())
+	{
+		delete (*it);
+		it++;
+	}
+	m_attributes.clear();
 }
 
 void SoapAttachment::addHeader(const char* pchName, const char* pchValue)
@@ -140,8 +149,27 @@ void SoapAttachment::serializeReference(SoapSerializer& pSZ, const char *name)
 	data += name;
 	data += " href=\"cid:";
 	data += m_AttachmentHeaders->getHeader(AXIS_CONTENT_ID);
-	data += "\" />";
+	data += "\"";
 	pSZ.serialize(data.c_str(), NULL);
+
+	list<Attribute*>::iterator it = m_attributes.begin();
+	while (it != m_attributes.end())
+	{
+		(*it)->serialize(pSZ);
+		it++;
+	}
+
+	pSZ.serialize("/>\n",NULL);
+}
+
+void SoapAttachment::addAttributes(IAttribute **attributes, int nAttributes)
+{
+	if (0==nAttributes || NULL==attributes) return;
+	for (int i=0; i<nAttributes; i++)
+		if (NULL!=attributes[i]) 
+			m_attributes.push_back(static_cast<Attribute*>(attributes[i]));
+
+	return;
 }
 
 AXIS_CPP_NAMESPACE_END

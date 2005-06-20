@@ -69,8 +69,7 @@ int main(int argc, char* argv[])
 		call.addAttachmentParameter(att, "arg_attachment_2");
 
 		///////////////////////////////////////////////////////////////////
-		// Unreferenced attachment to make sure referenced and unreferenced 
-		// attachments mix OK
+		// Referenced attachment with attributes
 		///////////////////////////////////////////////////////////////////
 
 		att = call.createSoapAttachment();
@@ -81,6 +80,25 @@ int main(int argc, char* argv[])
 		b64b3.__ptr = (xsd__unsignedByte*)text;
 		b64b3.__size = strlen(text)+1;
 		att->addBody(&b64b3);	
+
+		IAttribute *attrs[2];
+		attrs[0] = call.createAttribute("myname1","mypfx1","http://dynamicattachment/test.axis.apache.org");
+		attrs[1] = call.createAttribute("myname2","xsi","myvalue2");
+		call.addAttachmentParameter(att, "arg_attachment_3", attrs, 2);
+
+		///////////////////////////////////////////////////////////////////
+		// Unreferenced attachment to make sure referenced and unreferenced 
+		// attachments mix OK
+		///////////////////////////////////////////////////////////////////
+
+		att = call.createSoapAttachment();
+		att->addHeader(AXIS_CONTENT_TYPE,"text/plain");
+		att->addHeader(AXIS_CONTENT_TRANSFER_ENCODING,"base64");
+		
+		xsd__base64Binary b64b4;
+		b64b4.__ptr = (xsd__unsignedByte*)text;
+		b64b4.__size = strlen(text)+1;
+		att->addBody(&b64b4);	
 
 		call.addAttachment(att);
 
