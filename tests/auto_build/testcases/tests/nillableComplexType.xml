@@ -1,0 +1,14 @@
+<test>
+    <name>nillableComplexType</name>
+    <description>nillableComplexType</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>nillableComplexTypeClient.cpp</clientCode>
+    <wsdl>nillableComplexType.wsdl</wsdl>
+    <expected>
+        <output>
+            nillableComplexType.cpp.out
+        </output>
+		<serverResponse>nillableComplexType.expected</serverResponse>
+    </expected>
+	<endpoint>http://whaler.hursley.ibm.com:9090/nillableComplexType/services/nillableComplexType</endpoint>
+</test>
