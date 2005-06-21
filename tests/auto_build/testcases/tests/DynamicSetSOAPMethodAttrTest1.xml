@@ -1,0 +1,17 @@
+<test>
+    <name>DynamicSetSOAPMethodAttrTest1</name>
+    <description>DynamicSetSOAPMethodAttrTest1</description>
+	<dynamicCode>true</dynamicCode>
+	<dynamicCodeDirectory>DynamicSetSOAPMethodAttrTest1</dynamicCodeDirectory>
+    <clientLang>cpp</clientLang>
+    <wsdl>CalculatorDoc.wsdl</wsdl>
+    <expected>
+        <output>
+            DynamicSetSOAPMethodAttrTest1.expected
+        </output>	 
+        <request>
+		DynamicSetSOAPMethodAttrTest1Request.out
+	  </request>	
+    </expected>
+	<endpoint>http://localhost:80/axis/CalculatorDoc</endpoint>
+</test>
