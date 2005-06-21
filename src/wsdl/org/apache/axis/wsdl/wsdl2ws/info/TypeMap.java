@@ -105,6 +105,12 @@ public class TypeMap
         basicTypeClass2QNamemap.put("xsd__anyURI",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "anyURI"));
         basicTypeClass2QNamemap.put("xsd__QName",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "QName"));
         basicTypeClass2QNamemap.put("xsd__notation",			new QName(WrapperConstants.SCHEMA_NAMESPACE, "NOTATION"));
+        basicTypeClass2QNamemap.put("ISoapAttachment",		new QName(WrapperConstants.APACHE_XMLSOAP_NAMESPACE, "Image"));
+        basicTypeClass2QNamemap.put("ISoapAttachment",		new QName(WrapperConstants.APACHE_XMLSOAP_NAMESPACE, "PlainText"));
+        basicTypeClass2QNamemap.put("ISoapAttachment",		new QName(WrapperConstants.APACHE_XMLSOAP_NAMESPACE, "Multipart"));
+        basicTypeClass2QNamemap.put("ISoapAttachment",		new QName(WrapperConstants.APACHE_XMLSOAP_NAMESPACE, "Source"));
+        basicTypeClass2QNamemap.put("ISoapAttachment",		new QName(WrapperConstants.APACHE_XMLSOAP_NAMESPACE, "octet-stream"));
+        basicTypeClass2QNamemap.put("ISoapAttachment",		new QName(WrapperConstants.APACHE_XMLSOAP_NAMESPACE, "DataHandler"));
 
 
         // xml -> c type mapping 
@@ -152,6 +158,12 @@ public class TypeMap
         basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "anyURI"),				"xsd__anyURI");
         basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "QName"),				"xsd__QName");
         basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "NOTATION"),			"xsd__notation");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.APACHE_XMLSOAP_NAMESPACE, "Image"),		"ISoapAttachment");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.APACHE_XMLSOAP_NAMESPACE, "PlainText"),	"ISoapAttachment");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.APACHE_XMLSOAP_NAMESPACE, "Multipart"),	"ISoapAttachment");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.APACHE_XMLSOAP_NAMESPACE, "Source"),		"ISoapAttachment");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.APACHE_XMLSOAP_NAMESPACE, "octet-stream"),	"ISoapAttachment");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.APACHE_XMLSOAP_NAMESPACE, "DataHandler"),	"ISoapAttachment");
 
         /* TODO:
          *   Should be removed when the following issue will be fixed :

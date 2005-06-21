@@ -443,3 +443,10 @@ Stub::setAuthorizationHeader ()
     delete[]cpUsernamePassword;
     delete[]base64Value;
 }
+
+ISoapAttachment* Stub::createSoapAttachment()
+{
+	return m_pCall->createSoapAttachment();
+}
+
+

@@ -312,7 +312,11 @@ public class ClientStubWriter
 		typeisarray = false;
 	    }
 	    typeissimple = CUtils.isSimpleType (paraTypeName);
-	    if (typeisarray
+          if (paramtype.getType().isAttachment())
+          {
+         	writer.write("ISoapAttachment *Value0");
+          }
+          else if (typeisarray
 		|| (typeissimple
 		    && (!((ParameterInfo) paramsB.get (0)).isNillable ()
 			|| CUtils.isPointerType(paraTypeName))))
@@ -366,7 +370,11 @@ public class ClientStubWriter
 		    typeisarray = false;
 		}
 		typeissimple = CUtils.isSimpleType (paraTypeName);
-		if (typeisarray
+            if (paramtype.getType().isAttachment())
+            {
+           	    writer.write(", ISoapAttachment *Value" + i);
+            }
+            else if (typeisarray
 		    || (typeissimple
 			&& (!((ParameterInfo) paramsB.get (i)).isNillable ()
 			    || CUtils.isPointerType(paraTypeName))))
@@ -618,7 +626,11 @@ public class ClientStubWriter
 				      namespace + "\"));\n");
 		    }
 
-		    if (typeisarray)
+		    if (param.getType().isAttachment())
+		    {
+			writer.write ("\tm_pCall->addAttachmentParameter(Value" + i + ", cPrefixAndParamName" + i);
+		    }
+		    else if (typeisarray)
 		    {
 			// Array
 			Type arrayType = WrapperUtils.getArrayType (type);

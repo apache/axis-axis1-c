@@ -109,51 +109,28 @@ public class ClientStubHeaderWriter
                 //write parameter names 
                 boolean hasInputParms = false;
                 Iterator params = minfo.getInputParameterTypes().iterator();
-                if (params.hasNext())
+                for (int j = 0; params.hasNext(); j++)
                 {
+                    if (j>0) writer.write(", ");
                     hasInputParms = true;
-                    ParameterInfo fparam = (ParameterInfo) params.next();
-                    String paramTypeName = WrapperUtils.getClassNameFromParamInfoConsideringArrays(fparam, wscontext);
-                    if (CUtils.isSimpleType(paramTypeName)
-							&& fparam.isNillable()
-							&& !(CUtils.isPointerType(paramTypeName)))
-                    {
-                    	writer.write(
-    	                        paramTypeName
-    	                            + " * Value"
-    	                            + 0);
-                    }
-                    else
-                    {
-	                    writer.write(
-	                        paramTypeName
-	                            + " Value"
-	                            + 0);
-                    }
-                }
-                for (int j = 1; params.hasNext(); j++)
-                {
                     ParameterInfo nparam = (ParameterInfo) params.next();
                     String paramTypeName = WrapperUtils.getClassNameFromParamInfoConsideringArrays(nparam, wscontext);
-                    if (CUtils.isSimpleType(paramTypeName)
+                    if (nparam.getType().isAttachment())
+                    {
+                    	writer.write("ISoapAttachment *Value" + j);
+                    }
+                    else if (CUtils.isSimpleType(paramTypeName)
 							&& nparam.isNillable()
 							&& !(CUtils.isPointerType(paramTypeName)))
                     {
-                    	writer.write(", "
-                    			+ paramTypeName
-    	                        + " * Value"
-    	                        + j);
+                    	writer.write(paramTypeName + " * Value" + j);
                     }
                     else
                     {
-	                    writer.write(", "
-	                    		+ paramTypeName
-	                            + " Value"
-	                            + j);
+	                    writer.write(paramTypeName + " Value" + j);
                     }
-                    
-                    
                 }
+
                 if (isAllTreatedAsOutParams)
                 {
                     params = minfo.getOutputParameterTypes().iterator();
@@ -196,6 +173,7 @@ public class ClientStubHeaderWriter
         {
             writer.write("#include <axis/client/Stub.hpp>\n");
             writer.write("#include <axis/OtherFaultException.hpp>\n");
+            writer.write("#include <axis/ISoapAttachment.hpp>\n");
             writer.write("#include <axis/ISoapFault.hpp>\n");
             writer.write("AXIS_CPP_NAMESPACE_USE\n");
             Type atype;

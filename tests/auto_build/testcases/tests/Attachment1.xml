@@ -1,0 +1,16 @@
+<test>
+    <name>Attachment1</name>
+    <description>Attachment1</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>Attachment1Client.cpp</clientCode>
+    <wsdl>Attachment1.wsdl</wsdl>
+    <expected>
+        <output>
+            Attachment1.expected
+        </output>
+        <serverResponse>
+		Attachment1_ServerResponse.expected
+        </serverResponse>
+    </expected>
+    <endpoint>http://localhost:80/axis/Attachment1</endpoint>
+</test>

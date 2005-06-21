@@ -610,6 +610,13 @@ class STORAGE_CLASS_INFO Stub
     */
     Call *getCall() { return m_pCall; }
 
+	/**
+	 * Creates an ISoapAttachment which represents an attachment. The ISoapAttachment should be passed as 
+	 * an attachmment parameter to a web service. The storage associated with the ISoapAttachment will be 
+	 * automatically deleted by Axis C++ if it is passed as a parameter to a web service.
+	 */
+	ISoapAttachment* createSoapAttachment();
+
   protected:
   /**
     * Apply user set preferences to each call made on the Stub object.

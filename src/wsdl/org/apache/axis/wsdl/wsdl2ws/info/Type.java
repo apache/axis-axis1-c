@@ -91,6 +91,9 @@ public class Type
     /* is this type going to be thrown as a soap fault? */
     private boolean isFault = false;
 
+    /* Is this type an attachment under the http://xml.apache.org/xml-soap namespace? */
+    private boolean isAttachment = false;
+
     public Type(
         QName name,
         String languageSpecificName,
@@ -171,6 +174,18 @@ public class Type
             }
         }
         this.attribOrder = new Vector();
+
+        if (name.getNamespaceURI().equals(WrapperConstants.APACHE_XMLSOAP_NAMESPACE) && 
+            (name.getLocalPart().equals("DataHandler") ||
+             name.getLocalPart().equals("Image") ||
+             name.getLocalPart().equals("MimeMultipart") ||
+             name.getLocalPart().equals("Source") ||
+             name.getLocalPart().equals("octet-stream") ||
+             name.getLocalPart().equals("DataHandler") ||
+             name.getLocalPart().equals("PlainText")) )
+        {
+             isAttachment = true;
+        }
     }
 
     /**
@@ -581,5 +596,10 @@ public class Type
     public boolean isFault() 
     {
     	return isFault;
+    }
+
+    public boolean isAttachment() 
+    {
+    	return isAttachment;
     }
 }

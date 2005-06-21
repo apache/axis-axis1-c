@@ -24,6 +24,7 @@ public interface WrapperConstants {
     public static final String DEFAULT_SIMPLETYPE_PACKAGE = "lk.opensource.axis2.wrappers.simpleType.";
     public static final String SCHEMA_NAMESPACE = "http://www.w3.org/2001/XMLSchema";
 	public static final String SOAPENC_NAMESPACE = "http://schemas.xmlsoap.org/soap/encoding/";
+	public static final String APACHE_XMLSOAP_NAMESPACE = "http://xml.apache.org/xml-soap";
     //wsdl constants
     public static final String ELEMENT_COMPLEX_TYPE = "ComplexType";
     public static final String ELEMENT_SEQUENCE = "sequence";
