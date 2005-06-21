@@ -36,6 +36,7 @@ import java.util.Iterator;
 import javax.xml.namespace.QName;
 
 import org.apache.axis.wsdl.wsdl2ws.CUtils;
+import org.apache.axis.wsdl.wsdl2ws.WrapperConstants;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.FaultInfo;
@@ -628,7 +629,20 @@ public class ClientStubWriter
 
 		    if (param.getType().isAttachment())
 		    {
-			writer.write ("\tm_pCall->addAttachmentParameter(Value" + i + ", cPrefixAndParamName" + i);
+			String attchType = param.getType().getName().getLocalPart();
+                  writer.write("\n\tconst AxisChar *xmlSoapNsPfx" + i + 
+				" = m_pCall->getNamespacePrefix(\"" + 
+				WrapperConstants.APACHE_XMLSOAP_NAMESPACE + "\");\n");
+			writer.write("\tchar attchType" + i + "[64];\n");
+			writer.write("\tstrcpy(attchType" + i + ", xmlSoapNsPfx" + i + ");\n");
+			writer.write("\tstrcat(attchType" + i + ", \":" + attchType + "\");\n");
+			writer.write("\tIAttribute *attrs" + i + "[2];\n");
+			writer.write("\tattrs" + i + "[0] = m_pCall->createAttribute(\"type\", \"xsi\", attchType" + i + 
+				");\n");
+			writer.write("\tattrs" + i + "[1] = m_pCall->createAttribute(xmlSoapNsPfx" + i + 
+				", \"xmlns\", \"http://xml.apache.org/xml-soap\");\n");
+			writer.write("\tm_pCall->addAttachmentParameter(Value" + i + ", cPrefixAndParamName" + i + 
+				", attrs" + i + ", 2");
 		    }
 		    else if (typeisarray)
 		    {

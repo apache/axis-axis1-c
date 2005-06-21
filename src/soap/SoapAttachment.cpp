@@ -155,6 +155,7 @@ void SoapAttachment::serializeReference(SoapSerializer& pSZ, const char *name)
 	list<Attribute*>::iterator it = m_attributes.begin();
 	while (it != m_attributes.end())
 	{
+		pSZ.serialize("\n  ",NULL);
 		(*it)->serialize(pSZ);
 		it++;
 	}
