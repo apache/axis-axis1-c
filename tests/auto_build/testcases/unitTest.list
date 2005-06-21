@@ -9,6 +9,7 @@ ExceptionTestDoc.xml
 HandlerTest6.xml
 LargeReturningString.xml
 MultiOut.xml
+nillableComplexType.xml
 SimpleArrays.xml
 TestSoapHeaderBlock2
 XSDElement.xml
