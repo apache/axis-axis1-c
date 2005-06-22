@@ -76,10 +76,18 @@ int SoapFault::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
         m_pFaultactorParam->serialize(pSZ);
     } 
 
-    if(m_pFaultDetail)
+	//Chinthana:Changed the code to solved Issue AXISCPP-706.
+    /*if(m_pFaultDetail)
     {
             m_pFaultDetail->serialize(pSZ);
-    }
+    }*/
+	if(m_pFaultDetail) 
+	{ 
+		pSZ.serialize("<detail><appSpecific>", NULL); 
+		m_pFaultDetail->serialize(pSZ); 
+		pSZ.serialize("</appSpecific></detail>\n", NULL); 
+	} 
+	//22/06/2005.............................................
     
 	pSZ.serialize("</", gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix, ":",
 		gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_FAULT], ">\n", NULL); 
@@ -97,12 +105,20 @@ int SoapFault::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
         m_pFaultactorParam->serialize(pSZ);
     }
 
-    if(m_pFaultDetail)
+	//Chinthana:Changed the code to solved Issue AXISCPP-706. 
+    /*if(m_pFaultDetail)
     {
          pSZ.serialize("<detail>", NULL);
             m_pFaultDetail->serialize(pSZ);
             pSZ.serialize("</detail>\n", NULL);
-    }
+    }*/
+	if(m_pFaultDetail) 
+	{ 
+		pSZ.serialize("<detail><appSpecific>", NULL); 
+		m_pFaultDetail->serialize(pSZ); 
+		pSZ.serialize("</appSpecific></detail>\n", NULL); 
+	} 
+	//22/06/2005.........................................
 
         pSZ.serialize("</", gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix, ":",
                 gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_FAULT], ">\n", NULL);
