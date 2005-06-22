@@ -1141,9 +1141,13 @@ void SoapSerializer::serializeAttachments( SoapSerializer &pSZ)
 	/*serializing the attachments*/
 	map<AxisXMLString, ISoapAttachment*>::iterator itCurrAttach= m_SoapAttachments.begin();
 	while( itCurrAttach != m_SoapAttachments.end())
-    {        
-		serialize( "\n--" MIMEBOUNDARY, NULL);
-        ((SoapAttachment *) ((*itCurrAttach).second))->serialize(pSZ);
+    {
+		SoapAttachment *att = ((SoapAttachment *) ((*itCurrAttach).second));
+		if (NULL != att->getBody())
+		{
+			serialize( "\n--" MIMEBOUNDARY, NULL);
+			att->serialize(pSZ);
+		}
         itCurrAttach++;
     }
 	pSZ.serialize("\n--" MIMEBOUNDARY "--\n", NULL);
@@ -1233,18 +1237,23 @@ bool SoapSerializer::checkAttachmentAvailability()
 
 void SoapSerializer::addAttachmentParameter(ISoapAttachment* att, const char* pName, IAttribute **attributes, int nAttributes)
 {
+	if (NULL==att)
+		att = static_cast<ISoapAttachment*>(new SoapAttachment(m_pContentIdSet));
+
     Param *pParam = new Param();
     pParam->m_Value.pAttachment = static_cast<SoapAttachment*>(att);
 	pParam->m_Type = ATTACHMENT;
-	if (attributes!=NULL && nAttributes>0) pParam->m_Value.pAttachment->addAttributes(attributes,nAttributes);
+
+	if (NULL!=attributes && nAttributes>0) 
+		pParam->m_Value.pAttachment->addAttributes(attributes,nAttributes);
 	
-    if( m_pSoapEnvelope &&
+	if (m_pSoapEnvelope &&
 		(m_pSoapEnvelope->m_pSoapBody) &&
 		(m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod)) 
-    {
-        m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->addOutputParam(pParam);
-    }
-    pParam->setName(pName);
+	{
+		m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->addOutputParam(pParam);
+	}
+	pParam->setName(pName);
 	m_SoapAttachments[att->getAttachmentId()] = att;
 }
 

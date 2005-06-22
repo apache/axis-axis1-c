@@ -20,7 +20,14 @@
    <element name="put">
     <complexType>
      <sequence>
-      <element name="arg_0_0" type="tns2:DataHandler"/>
+      <element name="arg1" type="tns2:Image"/>
+      <element name="arg2" type="tns2:PlainText"/>
+      <element name="arg3" type="tns2:Source"/>
+      <element name="arg4" type="tns2:octet-stream"/>
+      <element name="arg5" type="tns2:DataHandler"/>
+      <!-- element name="arg6" type="tns2:MimeMultipart"/ -->
+      <element name="arg7" nillable="true" type="tns2:DataHandler"/>
+      <element name="arg8" nillable="true" type="tns2:DataHandler"/>
      </sequence>
     </complexType>
    </element>

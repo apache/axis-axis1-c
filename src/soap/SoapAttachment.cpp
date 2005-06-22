@@ -54,13 +54,12 @@ SoapAttachment::SoapAttachment(ContentIdSet *pContentIdSet)
 SoapAttachment::~SoapAttachment()
 {
 	delete m_AttachmentHeaders;
-	if (m_AttachmentBody) delete m_AttachmentBody;
-	m_AttachmentBody =0;
+	m_AttachmentHeaders =0;
 
 	list<Attribute*>::iterator it = m_attributes.begin();
 	while (it != m_attributes.end())
 	{
-		delete (*it);
+		 delete (*it);
 		it++;
 	}
 	m_attributes.clear();
@@ -147,9 +146,14 @@ void SoapAttachment::serializeReference(SoapSerializer& pSZ, const char *name)
 {
 	string data = "<";
 	data += name;
-	data += " href=\"cid:";
-	data += m_AttachmentHeaders->getHeader(AXIS_CONTENT_ID);
-	data += "\"";
+	if (NULL==m_AttachmentBody)
+		data += " xsi:nil=\"true\"";
+	else
+	{
+		data += " href=\"cid:";
+		data += m_AttachmentHeaders->getHeader(AXIS_CONTENT_ID);
+		data += "\"";
+	}
 	pSZ.serialize(data.c_str(), NULL);
 
 	list<Attribute*>::iterator it = m_attributes.begin();
@@ -159,7 +163,6 @@ void SoapAttachment::serializeReference(SoapSerializer& pSZ, const char *name)
 		(*it)->serialize(pSZ);
 		it++;
 	}
-
 	pSZ.serialize("/>\n",NULL);
 }
 

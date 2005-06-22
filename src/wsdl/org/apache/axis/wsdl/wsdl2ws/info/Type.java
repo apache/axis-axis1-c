@@ -181,7 +181,6 @@ public class Type
              name.getLocalPart().equals("MimeMultipart") ||
              name.getLocalPart().equals("Source") ||
              name.getLocalPart().equals("octet-stream") ||
-             name.getLocalPart().equals("DataHandler") ||
              name.getLocalPart().equals("PlainText")) )
         {
              isAttachment = true;

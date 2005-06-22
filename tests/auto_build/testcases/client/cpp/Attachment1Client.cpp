@@ -28,17 +28,24 @@ int main(int argc, char* argv[])
 		try
 		{
 			AttachmentBindingImpl ws(argv[1]);
-			ISoapAttachment *att = ws.createSoapAttachment();
-			att->addHeader(AXIS_CONTENT_TYPE,"text/plain");
-			att->addHeader(AXIS_CONTENT_TRANSFER_ENCODING,"base64");
-			
-			char *text="Some attachment text";
-			xsd__base64Binary b64b1;
-			b64b1.__ptr = (xsd__unsignedByte*)text;
-			b64b1.__size = strlen(text)+1;
-			att->addBody(&b64b1);	
 
-			xsd__int iResult = ws.put(att);
+			char *text="Some attachment text";
+			#define NUM_ATTS 6
+			ISoapAttachment *att[NUM_ATTS];
+			xsd__base64Binary b64b[NUM_ATTS];
+
+			for (int i=0; i<NUM_ATTS; i++)
+			{
+				att[i] = ws.createSoapAttachment();
+				att[i]->addHeader(AXIS_CONTENT_TYPE,"text/plain");
+				att[i]->addHeader(AXIS_CONTENT_TRANSFER_ENCODING,"base64");
+				
+				b64b[i].__ptr = (xsd__unsignedByte*)text;
+				b64b[i].__size = strlen(text)+1;
+				att[i]->addBody(&b64b[i]);	
+			}
+
+			xsd__int iResult = ws.put(att[0], att[1], att[2], att[3], att[4], att[5], NULL);
 			cout << iResult << endl;
 			bSuccess = true;
 		}
