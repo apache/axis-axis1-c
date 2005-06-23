@@ -93,13 +93,13 @@ xsd__int Calculator::div(xsd__int Value0, xsd__int Value1)
 				cout << any->_size<<endl;
 				cout << any->_array[0]<<endl;
 			}
-			any = (AnyType*)m_pCall->getAnyObject();
+			/*any = (AnyType*)m_pCall->getAnyObject();
 			any = (AnyType*)m_pCall->getAnyObject();
 			any = (AnyType*)m_pCall->getAnyObject();
 			if(any!=NULL){
 				cout << any->_size<<endl;
 				cout << any->_array[0]<<endl;
-			}			
+			}*/			
 		}
 
 	}
@@ -154,7 +154,6 @@ int main(int argc, char* argv[])
 	{
 		cout << "Unspecified exception has occured" << endl;
 	}
-	cout << "----------------------------TEST COMPLETE------------------------------------" << endl;
 	return 0;
 }
 
