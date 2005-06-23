@@ -36,9 +36,6 @@ attrlisterr* ComplexLists::multilist(m_list* Value0, attrlist* Value1)
 {
 	attrlisterr* ret=new attrlisterr();
 	ret->attrlist_Ref=Value1;
-	Value1->item.m_Size=1;
-	Value1->item.m_Array=new namepair*[Value1->item.m_Size];
-	Value1->item.m_Array[0]=new namepair();
 	Value1->item.m_Array[0]->m_list_Ref=Value0;
 	return ret;
 	
@@ -47,9 +44,6 @@ attrlisterr* ComplexLists::multilistnil(m_list* Value0, attrlist* Value1)
 {
 	attrlisterr* ret=new attrlisterr();
 	ret->attrlist_Ref=Value1;
-	Value1->item.m_Size=1;
-	Value1->item.m_Array=new namepair*[Value1->item.m_Size];
-	Value1->item.m_Array[0]=new namepair();
 	Value1->item.m_Array[0]->m_list_Ref=Value0;
 	return ret;
 }
