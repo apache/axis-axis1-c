@@ -8,6 +8,9 @@
         <output>
             Attachment1.expected
         </output>
+        <request>
+		Attachment1Request.out
+	  </request>	
         <serverResponse>
 		Attachment1_ServerResponse.expected
         </serverResponse>

@@ -49,6 +49,10 @@ SoapAttachment::SoapAttachment(ContentIdSet *pContentIdSet)
 	m_pContentIdSet = pContentIdSet;
 	if (NULL!=m_pContentIdSet)
 		m_AttachmentHeaders->addHeader(AXIS_CONTENT_ID, pContentIdSet->generateId());
+
+	// Set up some sensible default values for mandatory headers.
+	m_AttachmentHeaders->addHeader(AXIS_CONTENT_TYPE,"text/plain");
+	m_AttachmentHeaders->addHeader(AXIS_CONTENT_TRANSFER_ENCODING,"base64");
 }
 
 SoapAttachment::~SoapAttachment()

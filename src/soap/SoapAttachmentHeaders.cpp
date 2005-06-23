@@ -49,16 +49,13 @@ SoapAttachmentHeaders::~SoapAttachmentHeaders()
 void SoapAttachmentHeaders::addHeader(AxisString name, AxisString value)
 {
 	bool found = false;
-	if (name == AXIS_CONTENT_ID)
+	for (unsigned int i = 0; i < m_AttachHeaders.size (); i++)
 	{
-		for (unsigned int i = 0; i < m_AttachHeaders.size (); i++)
+		if (m_AttachHeaders[i].first == name)
 		{
-			if (m_AttachHeaders[i].first == name)
-			{
-				m_AttachHeaders[i] = make_pair(name, value);
-				found = true;
-				break;
-			}
+			m_AttachHeaders[i] = make_pair(name, value);
+			found = true;
+			break;
 		}
 	}
 

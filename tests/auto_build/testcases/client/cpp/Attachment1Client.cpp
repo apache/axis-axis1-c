@@ -37,8 +37,11 @@ int main(int argc, char* argv[])
 			for (int i=0; i<NUM_ATTS; i++)
 			{
 				att[i] = ws.createSoapAttachment();
-				att[i]->addHeader(AXIS_CONTENT_TYPE,"text/plain");
-				att[i]->addHeader(AXIS_CONTENT_TRANSFER_ENCODING,"base64");
+
+				if (1==i)
+					att[i]->addHeader(AXIS_CONTENT_TYPE,"image/jpeg");
+				else if (2==i)
+					att[i]->addHeader("Content-Disposition","checked");
 				
 				b64b[i].__ptr = (xsd__unsignedByte*)text;
 				b64b[i].__size = strlen(text)+1;
