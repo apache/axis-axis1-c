@@ -1,0 +1,8 @@
+<service>
+    <name>MinOccur</name>
+    <description>MinOccurTest</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>AllTestSoap.cpp</serviceCode>
+    <wsdl>MinOccurTest.wsdl</wsdl>
+	<servicename></servicename>
+</service>

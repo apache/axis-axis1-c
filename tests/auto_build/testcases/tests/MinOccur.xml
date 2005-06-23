@@ -1,0 +1,13 @@
+<test>
+    <name>MinOccur</name>
+    <description>MinOccurTest</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>MinOccurTestClient.cpp</clientCode>
+    <wsdl>MinOccurTest.wsdl</wsdl>
+    <expected>
+        <output>
+            MinOccur.expected
+        </output>
+    </expected>
+	<endpoint>http://localhost:80/axis/MinOccur</endpoint>
+</test>
