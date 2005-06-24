@@ -78,6 +78,7 @@ int SoapHeader::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
 
     do
     {
+		if (0 == m_headerBlocks.size()) break;
         
         pSZ.serialize("<", gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix,
             ":", gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_HEADER],
