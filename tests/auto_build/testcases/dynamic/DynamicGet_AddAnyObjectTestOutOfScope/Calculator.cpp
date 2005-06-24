@@ -154,6 +154,7 @@ int main(int argc, char* argv[])
 	{
 		cout << "Unspecified exception has occured" << endl;
 	}
+	cout << "----------------------------TEST COMPLETE------------------------------------" << endl;
 	return 0;
 }
 
