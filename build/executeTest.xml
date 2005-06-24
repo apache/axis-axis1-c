@@ -190,7 +190,7 @@
 	<!--
 		Execute the test
 	-->
-    <target name="executeTest" depends="setExpectations,setTestArgs, createConfigurationFile"
+    <target name="executeTest" depends="setExpectations,setTestArgs, createConfigurationFile, updateConfigurationWithClientWSDDEntry"
 		if="successfulClientCompilation" unless="buildOnly">
 
 		<trycatch>

@@ -135,14 +135,5 @@
 		</concat>
 	</target>
 
-	<!--
-	  If this client has associated handlers, update configuration file with
-	  an client.wsdd entry
-	  -->
-	<target name="updateConfigurationWithClientWSDDEntry" if="HandlersPresent" unless="runOnly"> 
-		<echo file="${axiscpp.conf}" append="true"
-		 message="ClientWSDDFilePath:${client.wsdd}"/>
-	</target>
-
 </project>
 
