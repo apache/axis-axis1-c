@@ -202,6 +202,10 @@ SOURCE=..\src\soap\ComplexElement.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\soap\ContentIdSet.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\soap\xsd\Date.cpp
 # End Source File
 # Begin Source File

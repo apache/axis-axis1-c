@@ -82,7 +82,7 @@ AXIS_CPP_NAMESPACE_START
         /* Find white space characters and returns the first any of chars find
          * position
          */ 
-        unsigned int nPos = value.find_first_of (WHITE_SPACE_CHARS);
+        unsigned long nPos = value.find_first_of (WHITE_SPACE_CHARS);
     
         /* Check for position validity */
         if (AxisString::npos == nPos)
@@ -90,7 +90,7 @@ AXIS_CPP_NAMESPACE_START
             return value;
         }
     
-        int nOldIdx = 0;            // Counter value
+        unsigned long nOldIdx = 0;            // Counter value
         while (AxisString::npos != nPos)
         {                         // Get pointered character
             m_strReturnVal.append (value.substr (nOldIdx, nPos - nOldIdx));
@@ -105,8 +105,8 @@ AXIS_CPP_NAMESPACE_START
             nPos = value.find_first_of (WHITE_SPACE_CHARS, nPos);
         }
     
-        int nDataLen = value.length ();    // Get the length of the field value
-        int nLen = nDataLen - nOldIdx;      // Get remaining number of characters   
+        unsigned long nDataLen = value.length ();    // Get the length of the field value
+        unsigned long nLen = nDataLen - nOldIdx;      // Get remaining number of characters   
         if (nLen > 0)
         {
             /*
@@ -149,7 +149,7 @@ AXIS_CPP_NAMESPACE_START
          * Find space character and returns the first any of chars find
          * position
          */ 
-        unsigned int nPos = replacedValue.find_first_of (' ');
+        unsigned long nPos = replacedValue.find_first_of (' ');
     
         /* Check for position validity */
         if (AxisString::npos == nPos)
@@ -158,7 +158,7 @@ AXIS_CPP_NAMESPACE_START
             return m_strReturnVal;
         }
     
-        int nOldIdx = 0;            // Counter value
+        unsigned long nOldIdx = 0;            // Counter value
         while (AxisString::npos != nPos)
         {
             m_strReturnVal.append (replacedValue.substr (nOldIdx, nPos - nOldIdx));
@@ -181,8 +181,8 @@ AXIS_CPP_NAMESPACE_START
             nPos = replacedValue.find_first_of (' ', nPos);
         }
     
-        int nDataLen = replacedValue.length ();    // Get the length of the field value
-        int nLen = nDataLen - nOldIdx;      // Get remaining number of characters   
+        unsigned long nDataLen = replacedValue.length ();    // Get the length of the field value
+        unsigned long nLen = nDataLen - nOldIdx;      // Get remaining number of characters   
         if (nLen > 0)
         {
             /*

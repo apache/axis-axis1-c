@@ -159,7 +159,7 @@ AXIS_CPP_NAMESPACE_START
             + (localTime.tm_hour * 60)
             + localTime.tm_min;
 
-        int timeOffsetInMinutes = localTimeInMinutes - utcTimeInMinutes;
+        int timeOffsetInMinutes = (int) (localTimeInMinutes - utcTimeInMinutes);
 
         if (timeOffsetInMinutes == 0)
         {
@@ -257,7 +257,7 @@ AXIS_CPP_NAMESPACE_START
         cTemp2 = const_cast<char*>(strpbrk (valueAsChar, "T"));
         cTemp3 = strrchr (cTemp2, ':');
         cTemp3[0] = '\0';
-        unsigned int len = strlen (cTemp2);
+        unsigned long len = strlen (cTemp2);
         cTemp3[0] = ':';
 
         /*if the timezone is represented adding 'Z' at the end */

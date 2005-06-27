@@ -221,7 +221,7 @@
 					<env key="LD_LIBRARY_PATH"
 						path="${dir.libraries}${path.separator}${dir.xmlParser}${path.separator}${HTTP.SSLChannel.dir}/lib${path.separator}${test.directory}" />
 					<env key="LIBPATH"
-						path="${dir.libraries}${path.separator}${dir.xmlParser}${path.separator}${HTTP.SSLChannel.dir}/lib${path.separator}${test.directory}" />
+						path="${dir.libraries}${path.separator}${dir.xmlParser}${path.separator}${HTTP.SSLChannel.dir}/lib${path.separator}${HTTP.SSLChannel.dir}/lib64${path.separator}${test.directory}" />
 					<env key="AXISCPP_DEPLOY" value="${axiscpp_deploy}" />
 				</exec>
 

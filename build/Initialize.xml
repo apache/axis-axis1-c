@@ -32,7 +32,18 @@
            <isset property="linux"/>
         </condition>
         <condition property="platform" value="AIX">
-           <isset property="aix"/>
+           <and>
+               <isset property="aix"/>
+               <not>
+                   <isset property="64bit"/>
+               </not>
+           </and>
+        </condition>
+        <condition property="platform" value="AIX64">
+           <and>
+               <isset property="aix"/>
+               <isset property="64bit"/>
+           </and>
         </condition>
         <condition property="platform" value="OS400">
            <isset property="os400"/>

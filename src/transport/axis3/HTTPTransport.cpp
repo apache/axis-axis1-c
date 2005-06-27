@@ -468,7 +468,7 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 
 		    if( !m_bReadPastHTTPHeaders)
 		    {
-				unsigned int	start = std::string::npos;
+				unsigned long	start = std::string::npos;
 
 				iIterationCountdown = 100;
 				
@@ -549,7 +549,7 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 		    		//now we have found the end of headers
 					m_bReadPastHTTPHeaders = true;
 
-				    unsigned int pos = 0;
+				    unsigned long pos = 0;
 
 		    		// Look for content lenght
 				    if( (pos = m_strReceived.find( ASCII_S_CONTENT_LENGTH )) != std::string::npos)
@@ -649,7 +649,7 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 		 */
 				// firstly read in the chunk size line.
 				//There might be chunk extensions in there too but we may not need them
-				unsigned int endOfChunkData = m_strReceived.find( ASCII_S_CRLF );
+				unsigned long endOfChunkData = m_strReceived.find( ASCII_S_CRLF );
 
 				// make sure we have read at least some part of the message
 				if( endOfChunkData == std::string::npos)
@@ -681,7 +681,7 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 												  "Timed out waiting for SOAP message (1).");
 				}
 
-				int endOfChunkSize = endOfChunkData;
+				unsigned long endOfChunkSize = endOfChunkData;
 
 				// now get the size of the chunk from the data
 				// look to see if there are any extensions - these are put in brackets so look for those
@@ -737,7 +737,7 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 		    		// The format we are expecting here is:
 		    		// <previous chunk>\r\n<chunk size>\r\n<next chunk>
 
-					unsigned int endOfChunkData = m_strReceived.find( ASCII_S_CRLF );
+					unsigned long endOfChunkData = m_strReceived.find( ASCII_S_CRLF );
 					
 					iIterationCountdown = 100;
 
@@ -797,7 +797,7 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 													  "Timed out waiting for SOAP message (3).");
 					}
 
-				    int endOfChunkSize = endOfChunkData;
+				    unsigned long endOfChunkSize = endOfChunkData;
 
 		    		// look to see if there are any extensions - these are put in brackets so look for those
 				    if (m_strReceived.substr (0, endOfChunkData).find ( ASCII_S_LEFTPAREN ) != string::npos)
@@ -1292,8 +1292,8 @@ int axtoi( char *pcHexStg)
  */
 void HTTPTransport::processResponseHTTPHeaders() throw (HTTPTransportException)
 {
-    unsigned int iPosition = std::string::npos;
-    unsigned int iStartPosition = iPosition;
+    unsigned long iPosition = std::string::npos;
+    unsigned long iStartPosition = iPosition;
 
     if( (iPosition = m_strResponseHTTPHeaders.find( ASCII_S_HTTP )) != std::string::npos)
     {
@@ -1339,7 +1339,7 @@ void HTTPTransport::processResponseHTTPHeaders() throw (HTTPTransportException)
 			}
 
 			std::string		strHeaderLine = m_strResponseHTTPHeaders.substr( 0, iPosition);
-			unsigned int	iSeperator = strHeaderLine.find( ASCII_S_COLON );
+			unsigned long	iSeperator = strHeaderLine.find( ASCII_S_COLON );
 
 		    if( iSeperator == std::string::npos)
 			{
@@ -1471,7 +1471,7 @@ void HTTPTransport::processRootMimeBody()
 		// which contain the soap message
 		m_strReceived = m_strReceived.substr( m_strReceived.find( ASCII_S_CRLFCRLF ) + 4);
 	
-		unsigned int intMimeTemp = m_strReceived.find( m_strMimeBoundary);
+		unsigned long intMimeTemp = m_strReceived.find( m_strMimeBoundary);
 
 		if (intMimeTemp != std::string::npos)
 		{
@@ -1485,7 +1485,7 @@ void HTTPTransport::processRootMimeBody()
     }
     else
     {
-		unsigned int intMimeTemp = m_strReceived.find( m_strMimeBoundary);
+		unsigned long intMimeTemp = m_strReceived.find( m_strMimeBoundary);
 		
 		if( intMimeTemp != std::string::npos)
 		{
@@ -1506,8 +1506,8 @@ void HTTPTransport::processRootMimeBody()
  */
 void HTTPTransport::processMimeHeader()
 {
-    unsigned int pos = 0;
-    unsigned int temppos = 0;
+    unsigned long pos = 0;
+    unsigned long temppos = 0;
 
     // Look for content lenght
     if( (pos = m_strMimeReceived.find( "Content-Type: ")) != std::string::npos)

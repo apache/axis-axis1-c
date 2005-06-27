@@ -112,7 +112,7 @@ void SoapAttachment::serialize(SoapSerializer &pSZ)
         
         string attachBody = m_binaryBody;
        
-        int boundary = attachBody.find("------=_Part_0_6349096.11054186923",0);
+        long boundary = attachBody.find("------=_Part_0_6349096.11054186923",0);
         if (boundary != -1)
         {
             string attachment = attachBody.substr(0,(boundary-1));

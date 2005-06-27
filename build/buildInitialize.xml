@@ -92,6 +92,8 @@
 		<compiler id="AIXxlc" name="xlC" if="aix">
 			<compilerarg value="-g" if="debug"/>
 			<compilerarg value="-V"/>
+            <compilerarg value="-q32" unless="64bit"/>
+            <compilerarg value="-q64" if="64bit"/>      
 			<compilerarg value="-qthreaded"/>
 			<compilerarg value="-qstaticinline"/>
 			<defineset>
@@ -163,11 +165,15 @@
 	      -->
 		<linker id="AIXExecutableLinker" name="xlC" libtool="false" if="aix">
 			<linkerarg value="-g" if="debug"/>
-			<syslibset libs="pthread"/>
+            <linkerarg value="-q64" if="64bit"/>
+            <linkerarg value="-q32" unless="64bit"/>      
+            <syslibset libs="pthread"/>
 		</linker>
 
 		<linker id="AIXLinker" extends="AIXExecutableLinker" name="xlC" libtool="false" if="aix">
 			<linkerarg value="-qmkshrobj"/>
+			<linkerarg value="-q64" if="64bit"/>
+            <linkerarg value="-q32" unless="64bit"/>
 			<linkerarg value="-L/usr/lib/threads"/>
 			<linkerarg value="-lpthreads"/>
 			<linkerarg value="-lm"/>
@@ -199,6 +205,7 @@
   		
   		<!-- Load properties from file -->
  		<property file="${dir.properties}/build.${platform}.properties"/>
+        <property file="${dir.properties}/build.common.properties"/>   
 	</target>
 
 	<!--

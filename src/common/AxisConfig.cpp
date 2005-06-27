@@ -70,7 +70,7 @@ int AxisConfig::readConfFile ()
     char *sConfPath = NULL;
     char sNewConfPath[CONFBUFFSIZE];
     char key[CONFBUFFSIZE];
-    int iValueLength = 0;
+    long iValueLength = 0;
     const char *pcSeparator = ":";
     const char pcComment = '#';
 
@@ -103,7 +103,7 @@ int AxisConfig::readConfFile ()
 
     while (AXIS_SUCCESS == fileConfig.fileGet (carrLine, CONFBUFFSIZE))
     {
-        int linesize = strlen (carrLine);
+        long linesize = strlen (carrLine);
         
         // Ignore lines starting with # and empty lines
         if (carrLine[0] == pcComment || carrLine[0] == '\0')
