@@ -1188,7 +1188,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
             			} else if (CUtils.isPointerType(attribs[i].getTypeName())) {
             				// found pointer type
             				// System.out.println("Pointer type found " + attribs[i].getTypeName() + " " + attribs[i].getParamNameAsMember());
-            				writer.write("\tdelete "+attribs[i].getParamNameAsMember()+";\n");
+            				writer.write("\tdelete [] "+attribs[i].getParamNameAsMember()+";\n");
             			}
             		}
             writer.write("}\n");
