@@ -955,10 +955,12 @@ public class BeanParamWriter extends ParamCPPFileWriter
                                 + " = pIWSDZ->"
                                 + CUtils.getParameterGetValueMethodName(
                                         attribs[i].getTypeName(), attribs[i].isAttribute()) + "( \""
-                                + soapTagName + "\",0)) != NULL)\n");
+                                + soapTagName + "\",0)) != NULL) {\n");
                         writer.write("\t\tparam->"
                                 + attribs[i].getParamNameAsMember() + " = *( "
                                 + attribs[i].getParamNameAsMember() + " );\n");
+                        writer.write("\t\tdelete " + attribs[i].getParamNameAsMember() + ";\n");
+                        writer.write("\t}\n");
                         //                                        writer.write("\t\tdelete " +
                         // attribs[i].getParamNameAsMember()+";\n");
                     }
@@ -1154,46 +1156,41 @@ public class BeanParamWriter extends ParamCPPFileWriter
             // Adrian - seeing problems of losing data when clearing up,
             // so temporarily remove this section, until such time as a better
             // solution is found
-            //		for(int i = 0; i< attribs.length;i++){
-            //			if(attribs[i].isArray()){
-            //				if ( attribs[i].isSimpleType())
-            //				{
-            //					writer.write("\tdelete []
-            // (("+attribs[i].getTypeName()+"*)"+attribs[i].getParamNameAsMember()+".m_Array);\n");
-            //				}
-            //				else
-            //				{
-            //					if( isNillable())
-            //					{
-            //						writer.write("\tdelete
-            // "+attribs[i].getParamNameAsMember()+".m_Array;\n");
-            //					}
-            //					else
-            //					{
-            //						writer.write("\tdelete []
-            // (("+attribs[i].getTypeName()+"*)"+attribs[i].getParamNameAsMember()+".m_Array);\n");
-            //					}
-            //				}
-            //			}
-            //			else if (attribs[i].isAnyType()){
-            //				writer.write("\tif ("+attribs[i].getParamNameAsMember()+") \n\t{
-            // \n");
-            //				writer.write("\t\tfor (int i=0;
-            // i<"+attribs[i].getParamNameAsMember()+"->_size; i++)\n\t\t{\n");
-            //				writer.write("\t\t\tif
-            // ("+attribs[i].getParamNameAsMember()+"->_array[i]) delete []
-            // "+attribs[i].getParamNameAsMember()+"->_array[i];\n");
-            //				writer.write("\t\t}\n");
-            //				writer.write("\t\tdelete
-            // "+attribs[i].getParamNameAsMember()+";\n");
-            //				writer.write("\t}\n");
-            //				
-            //			}
-            //			else if (!attribs[i].isSimpleType()){
-            //				writer.write("\tdelete
-            // "+attribs[i].getParamNameAsMember()+";\n");
-            //			}
-            //		}
+            for(int i = 0; i< attribs.length;i++){
+            	if(attribs[i].isArray()){
+            		if ( attribs[i].isSimpleType())
+            		{
+            			writer.write("\tdelete [] (("+attribs[i].getTypeName()+"*)"+attribs[i].getParamNameAsMember()+".m_Array);\n");
+            				}
+            				else
+            				{
+            					if( isNillable())
+            					{
+            						writer.write("\tdelete "+attribs[i].getParamNameAsMember()+".m_Array;\n");
+            					}
+            					else
+            					{
+            						writer.write("\tdelete [] (("+attribs[i].getTypeName()+"*)"+attribs[i].getParamNameAsMember()+".m_Array);\n");
+            					}
+            				}
+            			}
+            			else if (attribs[i].isAnyType()){
+            				writer.write("\tif ("+attribs[i].getParamNameAsMember()+") \n\t{\n");
+            				writer.write("\t\tfor (int i=0; i<"+attribs[i].getParamNameAsMember()+"->_size; i++)\n\t\t{\n");
+            				writer.write("\t\t\tif ("+attribs[i].getParamNameAsMember()+"->_array[i]) delete [] "+attribs[i].getParamNameAsMember()+"->_array[i];\n");
+            				writer.write("\t\t}\n");
+            				writer.write("\t\tdelete "+attribs[i].getParamNameAsMember()+";\n");
+            				writer.write("\t}\n");
+            				
+            			}
+            			else if (!attribs[i].isSimpleType()){
+            				writer.write("\tdelete "+attribs[i].getParamNameAsMember()+";\n");
+            			} else if (CUtils.isPointerType(attribs[i].getTypeName())) {
+            				// found pointer type
+            				// System.out.println("Pointer type found " + attribs[i].getTypeName() + " " + attribs[i].getParamNameAsMember());
+            				writer.write("\tdelete "+attribs[i].getParamNameAsMember()+";\n");
+            			}
+            		}
             writer.write("}\n");
         }
         catch (IOException e)
