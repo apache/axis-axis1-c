@@ -126,7 +126,18 @@ int SOAPTransportFactory::loadLib()
     if (!m_LibHandler)
     {
         AXISTRACE1("SERVER_ENGINE_LOADING_TRANSPORT_FAILED", CRITICAL);
-        throw AxisEngineException(SERVER_ENGINE_LOADING_TRANSPORT_FAILED, PLATFORM_LOADLIB_ERROR);
+        long dwError = GETLASTERROR
+        string *    message = PLATFORM_GET_ERROR_MESSAGE( dwError);
+        char        fullMessage[1024];
+        sprintf(fullMessage,
+                "Failed to load transport within server engine: \n \
+                Error Message='%s'\
+                Error Code='%d'\n",
+                message->c_str(), (int) dwError);
+
+        delete( message);
+
+        throw AxisEngineException(SERVER_ENGINE_LOADING_TRANSPORT_FAILED, fullMessage);
     }
     return AXIS_SUCCESS;
 }

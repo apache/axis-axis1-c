@@ -86,7 +86,19 @@ int HandlerLoader::loadLib (HandlerInformation* pHandlerInfo)
     if (!pHandlerInfo->m_Handler)
     {
         AXISTRACE1("SERVER_ENGINE_LIBRARY_LOADING_FAILED", CRITICAL);
-        throw AxisEngineException(SERVER_ENGINE_LIBRARY_LOADING_FAILED, PLATFORM_LOADLIB_ERROR);
+
+        long dwError = GETLASTERROR
+        string *    message = PLATFORM_GET_ERROR_MESSAGE( dwError);
+        char        fullMessage[1024];
+        sprintf(fullMessage,
+                "Failed to load handler within server engine: \n \
+                Error Message='%s'\
+                Error Code='%d'\n",
+                message->c_str(), (int) dwError);
+
+        delete( message);
+
+        throw AxisEngineException(SERVER_ENGINE_LIBRARY_LOADING_FAILED, fullMessage);
     }
 
     return AXIS_SUCCESS;

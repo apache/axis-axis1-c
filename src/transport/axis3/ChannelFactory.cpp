@@ -67,7 +67,18 @@ IChannel * ChannelFactory::LoadChannelLibrary( g_ChannelType eChannelType, const
 
 		if( !sLibHandler)
 		{
-			throw HTTPTransportException( SERVER_TRANSPORT_LOADING_CHANNEL_FAILED, PLATFORM_LOADLIB_ERROR);
+                        long dwError = GETLASTERROR
+                        string *    message = PLATFORM_GET_ERROR_MESSAGE( dwError);
+                        char        fullMessage[1024];
+                        sprintf(fullMessage,
+                                "Failed to load transport channel within server engine: \n \
+                                 Error Message='%s'\
+                                 Error Code='%d'\n",
+                                 message->c_str(), (int) dwError);
+
+                        delete( message);
+
+			throw HTTPTransportException( SERVER_TRANSPORT_LOADING_CHANNEL_FAILED, fullMessage);
 		}
 		else
 		{
@@ -190,7 +201,19 @@ void ChannelFactory::preloadChannel(g_ChannelType type, const char *pcLibraryNam
 	if( !pCh->m_Library)
 	{
 		delete pCh;
-		throw HTTPTransportException( SERVER_TRANSPORT_LOADING_CHANNEL_FAILED, PLATFORM_LOADLIB_ERROR);
+           
+                long dwError = GETLASTERROR
+                string *    message = PLATFORM_GET_ERROR_MESSAGE( dwError);
+                char        fullMessage[1024];
+                sprintf(fullMessage,
+                        "Failed to load transport channel within server engine: \n \
+                         Error Message='%s'\
+                         Error Code='%d'\n",
+                         message->c_str(), (int) dwError);
+
+                delete( message);
+
+		throw HTTPTransportException( SERVER_TRANSPORT_LOADING_CHANNEL_FAILED, fullMessage);
 	}
 
 	pCh->m_Create = (CREATE_OBJECT3) PLATFORM_GETPROCADDR( pCh->m_Library, CREATE_FUNCTION3);
