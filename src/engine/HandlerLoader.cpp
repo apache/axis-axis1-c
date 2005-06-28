@@ -93,8 +93,9 @@ int HandlerLoader::loadLib (HandlerInformation* pHandlerInfo)
         sprintf(fullMessage,
                 "Failed to load handler within server engine: \n \
                 Error Message='%s'\
-                Error Code='%d'\n",
-                message->c_str(), (int) dwError);
+                Error Code='%d'\n \
+                Load lib error='%s' \n",
+                message->c_str(), (int) dwError, PLATFORM_LOADLIB_ERROR);
 
         delete( message);
 
