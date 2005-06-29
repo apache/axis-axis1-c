@@ -68,12 +68,6 @@ typedef AxisChar * xsdc__Name;
 typedef AxisChar * xsdc__NCName;
 
 /**
- * @typedef xsd__notation
- * Axis C++ defined type for xml basic type NOTATION
- */
-typedef AxisChar * xsdc__notation;
-
-/**
  * @typedef xsdc__ID
  * Axis C++ defined type for xml basic type ID
  */
@@ -181,6 +175,12 @@ typedef char xsdc__byte;
  * Axis C++ defined type for xml basic type QName
  */
 typedef AxiscChar * xsdc__QName;
+
+/**
+ * @typedef xsd__notation
+ * Axis C++ defined type for xml basic type NOTATION
+ */
+typedef AxisChar * xsdc__notation;
 
 /**
  * @typedef xsdc__dateTime
@@ -305,7 +305,7 @@ typedef unsigned long long xsdc__negativeInteger;
  * Axis C++ defined type for xml basic type base64Binary
  */
 typedef struct {
-    xsdc__unsignedByte __ptr;
+    xsdc__unsignedByte * __ptr;
     xsdc__int __size;
 } xsdc__base64Binary;
 
@@ -314,7 +314,7 @@ typedef struct {
  * Axis C++ defined type for xml basic type hexBinary
  */
 typedef struct {
-    xsdc__unsignedByte __ptr;
+    xsdc__unsignedByte * __ptr;
     xsdc__int __size;
 } xsdc__hexBinary;
 /**
