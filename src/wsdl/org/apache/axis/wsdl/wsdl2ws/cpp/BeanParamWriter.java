@@ -727,7 +727,12 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 			writer.write("\t/*delete any pointer and array members here*/\n");
 			for (int i = 0; i < attribs.length; i++) {
 				if (attribs[i].isArray()) {
-					writer.write("\tdelete [] ((" + attribs[i].getTypeName()
+					if (attribs[i].getChoiceElement())
+						writer.write("\tdelete [] ((" + attribs[i].getTypeName()
+							+ "*)" + attribs[i].getParamNameAsMember()
+							+ "->m_Array);\n");
+					else
+						writer.write("\tdelete [] ((" + attribs[i].getTypeName()
 							+ "*)" + attribs[i].getParamNameAsMember()
 							+ ".m_Array);\n");
 				} else if (!attribs[i].isSimpleType()) {

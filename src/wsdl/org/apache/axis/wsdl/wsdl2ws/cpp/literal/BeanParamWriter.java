@@ -1160,10 +1160,13 @@ public class BeanParamWriter extends ParamCPPFileWriter
             	if(attribs[i].isArray()){
             		if ( attribs[i].isSimpleType())
             		{
-            			writer.write("\tdelete [] (("+attribs[i].getTypeName()+"*)"+attribs[i].getParamNameAsMember()+".m_Array);\n");
-            				}
-            				else
-            				{
+            			if (attribs[i].getChoiceElement())
+							writer.write("\tdelete [] (("+attribs[i].getTypeName()+"*)"+attribs[i].getParamNameAsMember()+"->m_Array);\n");
+						else	
+							writer.write("\tdelete [] (("+attribs[i].getTypeName()+"*)"+attribs[i].getParamNameAsMember()+".m_Array);\n");
+            		}
+            		else
+            		{
             					if( isNillable())
             					{
             						writer.write("\tdelete "+attribs[i].getParamNameAsMember()+".m_Array;\n");
