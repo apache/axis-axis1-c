@@ -32,13 +32,22 @@ SoapMethod::SoapMethod()
 
 SoapMethod::~SoapMethod()
 {
-    for (list<Attribute*>::iterator it = m_attributes.begin();
+    /*for (list<Attribute*>::iterator it = m_attributes.begin();
          it != m_attributes.end(); it++)
     {
         delete (*it);
+    }*/
+	list<Attribute*>::iterator it;
+	for (it = m_attributes.begin();
+    it != m_attributes.end(); it++)
+    {
+		if(*it)
+			delete (*it);
     }
 
     clearOutParams();
+	m_attributes.clear();
+
 }
 
 void SoapMethod::setPrefix(const AxisChar* prefix)
@@ -210,7 +219,8 @@ void SoapMethod::clearOutParams()
     for (itParam = m_OutputParams.begin(); 
          itParam != m_OutputParams.end(); itParam++)
     {
-        delete (*itParam);
+		if(*itParam)
+			delete (*itParam);
     }
     m_OutputParams.clear();
 }
