@@ -2,7 +2,7 @@ POST /axis/Attachment1 HTTP/1.1
 Host: localhost:13260
 SOAPAction: ""
 Content-Type: multipart/related; type="text/xml"; boundary="------=MIME_BOUNDARY"; start="<8>"
-Content-Length: 1964
+Content-Length: 2036
 
 
 --------=MIME_BOUNDARY

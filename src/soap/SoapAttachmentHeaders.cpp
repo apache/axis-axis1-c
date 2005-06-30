@@ -70,10 +70,10 @@ void SoapAttachmentHeaders::serialize(SoapSerializer &pSZ)
 	    if (m_AttachHeaders[i].first == AXIS_CONTENT_ID)
 	    {
 			pSZ.serialize((m_AttachHeaders[i].first).c_str(), ": <", NULL);
-			pSZ.serialize((m_AttachHeaders[i].second).c_str(), ">\n", NULL);
+			pSZ.serialize((m_AttachHeaders[i].second).c_str(), ">\r\n", NULL);
 		} else {
 			pSZ.serialize((m_AttachHeaders[i].first).c_str(), ": ", NULL);
-			pSZ.serialize((m_AttachHeaders[i].second).c_str(), "\n", NULL); 
+			pSZ.serialize((m_AttachHeaders[i].second).c_str(), "\r\n", NULL); 
 		}
 	}
 }

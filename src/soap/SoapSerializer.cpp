@@ -321,8 +321,8 @@ int SoapSerializer::setOutputStream( SOAPTransport * pStream)
 
 					pStream->setTransportProperty( CONTENT_TYPE, (*asContentType).c_str()); 
 
-					serialize( "\n" MIMEBOUNDARY "\n", NULL);
-					serialize( pStream->getIncomingSOAPMimeHeaders(), "\n\n", NULL);
+					serialize( "\r\n" MIMEBOUNDARY "\r\n", NULL);
+					serialize( pStream->getIncomingSOAPMimeHeaders(), "\r\n\r\n", NULL);
 				}
 				else
 				{	// Client code
@@ -334,14 +334,14 @@ int SoapSerializer::setOutputStream( SOAPTransport * pStream)
 					ctype += ">\"";
 					pStream->setTransportProperty( AXIS_CONTENT_TYPE, ctype.c_str());
 
-					serialize("\n--" MIMEBOUNDARY "\n", NULL);
-                    serialize(AXIS_CONTENT_TYPE ": text/xml; charset=UTF-8\n", NULL);
-                    serialize(AXIS_CONTENT_TRANSFER_ENCODING ": binary\n", NULL);
+					serialize("\r\n--" MIMEBOUNDARY "\r\n", NULL);
+                    serialize(AXIS_CONTENT_TYPE ": text/xml; charset=UTF-8\r\n", NULL);
+                    serialize(AXIS_CONTENT_TRANSFER_ENCODING ": binary\r\n", NULL);
 
 					string cid = AXIS_CONTENT_ID;
 					cid += ": <";
 					cid += id;
-					cid += ">\n\n";		// Extra \n terminates headers
+					cid += ">\r\n\r\n";		// Extra \r\n terminates headers
                     serialize(cid.c_str(), NULL);
 				}
 			}
@@ -1145,12 +1145,12 @@ void SoapSerializer::serializeAttachments( SoapSerializer &pSZ)
 		SoapAttachment *att = ((SoapAttachment *) ((*itCurrAttach).second));
 		if (NULL != att->getBody())
 		{
-			serialize( "\n--" MIMEBOUNDARY, NULL);
+			serialize( "\r\n--" MIMEBOUNDARY, NULL);
 			att->serialize(pSZ);
 		}
         itCurrAttach++;
     }
-	pSZ.serialize("\n--" MIMEBOUNDARY "--\n", NULL);
+	pSZ.serialize("\r\n--" MIMEBOUNDARY "--\r\n", NULL);
 }
 
 void SoapSerializer::addAttachment( const AxisChar * achId, ISoapAttachment * pAttach)

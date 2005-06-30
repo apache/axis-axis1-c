@@ -2,7 +2,7 @@ POST /DynamicAttachment/services/DynamicAttachment HTTP/1.1
 Host: localhost:13260
 SOAPAction: "Trash"
 Content-Type: multipart/related; type="text/xml"; boundary="------=MIME_BOUNDARY"; start="<5>"
-Content-Length: 1402
+Content-Length: 1443
 
 
 --------=MIME_BOUNDARY

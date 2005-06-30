@@ -2,7 +2,7 @@ POST /DynUnrefAttachment/services/DynUnrefAttachment HTTP/1.1
 Host: localhost:13260
 SOAPAction: "Trash"
 Content-Type: multipart/related; type="text/xml"; boundary="------=MIME_BOUNDARY"; start="<6>"
-Content-Length: 1409
+Content-Length: 1452
 
 
 --------=MIME_BOUNDARY

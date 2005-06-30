@@ -94,20 +94,20 @@ void SoapAttachment::addBody(char* pchBinaryBody)
 void SoapAttachment::serialize(SoapSerializer &pSZ)
 {
 	/* Serialize the Attachment Headers */
-	pSZ.serialize("\n", NULL);
+	pSZ.serialize("\r\n", NULL);
 	m_AttachmentHeaders->serialize(pSZ);
 
 	/* Serialize the Attachment Body */
     if (iEncodingStyle == AXIS_BASE64)
     {
 	    if (m_AttachmentBody) {
-		    pSZ.serialize("\n", NULL);
+		    pSZ.serialize("\r\n", NULL);
 		    pSZ.serializeAsChardata(m_AttachmentBody, XSD_BASE64BINARY);
 	    }
     } 
     else if (iEncodingStyle == AXIS_BINARY)
     {
-        pSZ.serialize("\n", NULL);
+        pSZ.serialize("\r\n", NULL);
         
         
         string attachBody = m_binaryBody;
@@ -125,7 +125,7 @@ void SoapAttachment::serialize(SoapSerializer &pSZ)
         pSZ.serialize(m_binaryBody, NULL);
     }
 
-	pSZ.serialize("\n", NULL);
+	pSZ.serialize("\r\n", NULL);
 }
 
 xsd__base64Binary* SoapAttachment::getBody()
@@ -163,11 +163,11 @@ void SoapAttachment::serializeReference(SoapSerializer& pSZ, const char *name)
 	list<Attribute*>::iterator it = m_attributes.begin();
 	while (it != m_attributes.end())
 	{
-		pSZ.serialize("\n  ",NULL);
+		pSZ.serialize("\r\n  ",NULL);
 		(*it)->serialize(pSZ);
 		it++;
 	}
-	pSZ.serialize("/>\n",NULL);
+	pSZ.serialize("/>\r\n",NULL);
 }
 
 void SoapAttachment::addAttributes(IAttribute **attributes, int nAttributes)
