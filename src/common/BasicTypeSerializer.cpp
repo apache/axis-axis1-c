@@ -147,15 +147,15 @@ const AxisChar* BasicTypeSerializer::basicTypeStr (XSDTYPE type)
             return "time";
         case XSD_DATE:
             return "date";
-        case XSD_YEARMONTH:
+        case XSD_GYEARMONTH:
             return "gYearMonth";
-        case XSD_YEAR:
+        case XSD_GYEAR:
             return "gYear";
-        case XSD_MONTHDAY:
+        case XSD_GMONTHDAY:
             return "gMonthDay";
-        case XSD_DAY:
+        case XSD_GDAY:
             return "gDay";
-        case XSD_MONTH:
+        case XSD_GMONTH:
             return "gMonth";
         case XSD_STRING:
             return "string";

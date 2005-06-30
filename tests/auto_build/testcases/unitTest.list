@@ -14,3 +14,12 @@ SimpleArrays.xml
 TestSoapHeaderBlock2
 XSDElement.xml
 XSDElementNil.xml
+XSD_duration.xml
+XSD_dateTime.xml
+XSD_time.xml
+XSD_date.xml
+XSD_gYear.xml
+XSD_gYearMonth.xml
+XSD_gMonth.xml
+XSD_gMonthDay.xml
+XSD_gDay.xml

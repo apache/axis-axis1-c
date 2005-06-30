@@ -1,0 +1,9 @@
+non-nillable element=Nov
+nillable element=Nov
+nil element=<nil>
+required attribute=Nov
+array of 2 elements
+  element[0]=Nov
+  element[1]=Nov
+within complex type=Nov
+---------------------- TEST COMPLETE -----------------------------

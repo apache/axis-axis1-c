@@ -143,11 +143,11 @@ ArrayBean::~ArrayBean()
             case XSD_DATETIME:
             case XSD_TIME:
             case XSD_DATE:
-            case XSD_YEARMONTH:
-            case XSD_YEAR:
-            case XSD_MONTHDAY:
-            case XSD_DAY:
-            case XSD_MONTH:
+            case XSD_GYEARMONTH:
+            case XSD_GYEAR:
+            case XSD_GMONTHDAY:
+            case XSD_GDAY:
+            case XSD_GMONTH:
             {
                 tm* a = (tm*)m_value.sta;
                 delete [] a;
@@ -294,11 +294,11 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
             case XSD_DATETIME:
             case XSD_TIME:
             case XSD_DATE:
-            case XSD_YEARMONTH:
-            case XSD_YEAR:
-            case XSD_MONTHDAY:
-            case XSD_DAY:
-            case XSD_MONTH:
+            case XSD_GYEARMONTH:
+            case XSD_GYEAR:
+            case XSD_GMONTHDAY:
+            case XSD_GDAY:
+            case XSD_GMONTH:
             {
                 tm** p = (tm**)m_value.sta;
                 for (int ix=0;ix<m_nSize;ix++)

@@ -32,7 +32,7 @@ AXIS_CPP_NAMESPACE_START
 
     XSDTYPE GMonthDay::getType()
     {
-        return XSD_MONTHDAY;
+        return XSD_GMONTHDAY;
     }
 
     xsd__gMonthDay* GMonthDay::getGMonthDay()
@@ -315,7 +315,7 @@ AXIS_CPP_NAMESPACE_START
             pTm = localtime (&timeInSecs);
         }
 
-        pTm -= 70; // Take off the 70 offset we added initially        
+        pTm->tm_year -= 70; // Take off the 70 offset we added initially        
 
         xsd__gMonthDay * returnValue = new xsd__gMonthDay;
         memcpy (returnValue, pTm, sizeof (tm));

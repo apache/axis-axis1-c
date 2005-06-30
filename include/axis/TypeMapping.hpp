@@ -37,8 +37,8 @@ typedef enum XSDTYPETag
                 XSD_UNSIGNEDBYTE, \
                 XSD_DOUBLE, XSD_DECIMAL, XSD_DURATION, \
                 XSD_DATETIME, XSD_TIME, XSD_DATE, \
-                XSD_YEARMONTH, XSD_YEAR, XSD_MONTHDAY, XSD_DAY, \
-                XSD_MONTH, XSD_HEXBINARY, \
+                XSD_GYEARMONTH, XSD_GYEAR, XSD_GMONTHDAY, XSD_GDAY, \
+                XSD_GMONTH, XSD_HEXBINARY, \
                 XSD_BASE64BINARY, XSD_ANYURI, XSD_QNAME,  XSD_NOTATION, \
                 XSD_INTEGER, \
                 XSD_ARRAY, USER_TYPE,  XSD_NMTOKEN, XSD_ANY, XSD_NONNEGATIVEINTEGER, \

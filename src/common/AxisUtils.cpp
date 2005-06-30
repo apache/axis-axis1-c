@@ -196,19 +196,19 @@ IAnySimpleType* AxisUtils::createSimpleTypeObject(void * pValue, XSDTYPE type)
         case XSD_DATE:
             xsdValue = new Date((xsd__date*) pValue);
             break;
-        case XSD_YEARMONTH:
+        case XSD_GYEARMONTH:
             xsdValue = new GYearMonth((xsd__gYearMonth*) pValue);
             break;
-        case XSD_YEAR:
+        case XSD_GYEAR:
             xsdValue = new GYear((xsd__gYear*) pValue);
             break;
-        case XSD_MONTHDAY:
+        case XSD_GMONTHDAY:
             xsdValue = new GMonthDay((xsd__gMonthDay*) pValue);
             break;
-        case XSD_DAY:
+        case XSD_GDAY:
             xsdValue = new GDay((xsd__gDay*) pValue);
             break;
-        case XSD_MONTH:
+        case XSD_GMONTH:
             xsdValue = new GMonth((xsd__gMonth*) pValue);
             break;
         case XSD_HEXBINARY:

@@ -72,11 +72,11 @@ void TypeMapping::initialize ()
         m_sTypeMap[std::string ("dateTime")] = XSD_DATETIME;
         m_sTypeMap[std::string ("date")] = XSD_DATE;
         m_sTypeMap[std::string ("time")] = XSD_TIME;
-        m_sTypeMap[std::string ("gYearMonth")] = XSD_YEARMONTH;
-        m_sTypeMap[std::string ("gYear")] = XSD_YEAR;
-        m_sTypeMap[std::string ("gMonthDay")] = XSD_MONTHDAY;
-        m_sTypeMap[std::string ("gDay")] = XSD_DAY;
-        m_sTypeMap[std::string ("gMonth")] = XSD_MONTH;
+        m_sTypeMap[std::string ("gYearMonth")] = XSD_GYEARMONTH;
+        m_sTypeMap[std::string ("gYear")] = XSD_GYEAR;
+        m_sTypeMap[std::string ("gMonthDay")] = XSD_GMONTHDAY;
+        m_sTypeMap[std::string ("gDay")] = XSD_GDAY;
+        m_sTypeMap[std::string ("gMonth")] = XSD_GMONTH;
         m_bInit = true;
     }
 }

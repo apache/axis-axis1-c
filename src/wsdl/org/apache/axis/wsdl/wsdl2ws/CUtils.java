@@ -325,7 +325,7 @@ public class CUtils {
 		type2getValueMethodNameCpp.put("xsd__date",					"Date");
 		type2getValueMethodNameCpp.put("xsd__gYearMonth",			"GYearMonth");
 		type2getValueMethodNameCpp.put("xsd__gYear",				"GYear");
-		type2getValueMethodNameCpp.put("xsd__GMonthDay",			"GMonthDay");
+		type2getValueMethodNameCpp.put("xsd__gMonthDay",			"GMonthDay");
 		type2getValueMethodNameCpp.put("xsd__gDay",					"GDay");
 		type2getValueMethodNameCpp.put("xsd__gMonth",				"GMonth");
 		type2getValueMethodNameCpp.put("xsd__string",				"String");
@@ -370,7 +370,7 @@ public class CUtils {
 		type2getValueMethodNameC.put("xsdc__date",					"Date");
 		type2getValueMethodNameC.put("xsdc__gYearMonth",			"GYearMonth");
 		type2getValueMethodNameC.put("xsdc__gYear",					"GYear");
-		type2getValueMethodNameC.put("xsdc__GMonthDay",				"GMonthDay");
+		type2getValueMethodNameC.put("xsdc__gMonthDay",				"GMonthDay");
 		type2getValueMethodNameC.put("xsdc__gDay",					"GDay");
 		type2getValueMethodNameC.put("xsdc__gMonth",				"GMonth");
 		type2getValueMethodNameC.put("xsdc__string",				"String");

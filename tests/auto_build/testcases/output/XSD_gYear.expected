@@ -1,0 +1,9 @@
+non-nillable element=2004
+nillable element=2004
+nil element=<nil>
+required attribute=2004
+array of 2 elements
+  element[0]=2004
+  element[1]=2004
+within complex type=2004
+---------------------- TEST COMPLETE -----------------------------

@@ -32,7 +32,7 @@ AXIS_CPP_NAMESPACE_START
 
     XSDTYPE GDay::getType()
     {
-        return XSD_DAY;
+        return XSD_GDAY;
     }
 
     xsd__gDay* GDay::getGDay()
@@ -226,14 +226,13 @@ AXIS_CPP_NAMESPACE_START
          * CCYY(-)MMZ OR
          * CCYY(-)MM+/-<UTC TIME DIFFERENCE>
          */
-        if (sscanf (valueAsChar, "---%d", &value.tm_mon) != 1)
+        if (sscanf (valueAsChar, "---%d", &value.tm_mday) != 1)
         {
          throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
         }
 
         value.tm_year = 70;
-        value.tm_mon--;
-        value.tm_mday = 0;
+        value.tm_mon = 0;
         value.tm_hour = 0;
         value.tm_min = 0;
         value.tm_sec = 0;
@@ -314,7 +313,7 @@ AXIS_CPP_NAMESPACE_START
             pTm = localtime (&timeInSecs);
         }
 
-        pTm -= 70; // Take off the 70 offset we added initially
+        pTm->tm_year -= 70; // Take off the 70 offset we added initially
 
         xsd__gDay * returnValue = new struct tm;
         memcpy (returnValue, pTm, sizeof (tm));

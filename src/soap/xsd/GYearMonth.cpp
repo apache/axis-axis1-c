@@ -32,7 +32,7 @@ AXIS_CPP_NAMESPACE_START
 
     XSDTYPE GYearMonth::getType()
     {
-        return XSD_YEARMONTH;
+        return XSD_GYEARMONTH;
     }
 
     xsd__gYearMonth* GYearMonth::getGYearMonth()
@@ -235,7 +235,7 @@ AXIS_CPP_NAMESPACE_START
 
         value.tm_year -= 1900;
         value.tm_mon--;
-        value.tm_mday = 0;
+        value.tm_mday = 1;
         value.tm_hour = 0;
         value.tm_min = 0;
         value.tm_sec = 0;
