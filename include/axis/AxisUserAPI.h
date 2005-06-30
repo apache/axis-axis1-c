@@ -41,73 +41,73 @@ typedef AxiscChar * xsdc__string;
  * @typedef xsdc__normalizedString
  * Axis C++ defined type for xml basic type normalizedString
  */
-typedef AxisChar * xsdc__normalizedString;
+typedef AxiscChar * xsdc__normalizedString;
 
 /**
  * @typedef xsdc__token
  * Axis C++ defined type for xml basic type token
  */
-typedef AxisChar * xsdc__token;
+typedef AxiscChar * xsdc__token;
 
 /**
  * @typedef xsdc__language
  * Axis C++ defined type for xml basic type language
  */
-typedef AxisChar * xsdc__language;
+typedef AxiscChar * xsdc__language;
 
 /**
  * @typedef xsdc__Name
  * Axis C++ defined type for xml basic type Name
  */
-typedef AxisChar * xsdc__Name;
+typedef AxiscChar * xsdc__Name;
 
 /**
  * @typedef xsdc__NCName
  * Axis C++ defined type for xml basic type NCName
  */
-typedef AxisChar * xsdc__NCName;
+typedef AxiscChar * xsdc__NCName;
 
 /**
  * @typedef xsdc__ID
  * Axis C++ defined type for xml basic type ID
  */
-typedef AxisChar * xsdc__ID;
+typedef AxiscChar * xsdc__ID;
 
 /**
  * @typedef xsdc__IDREF
  * Axis C++ defined type for xml basic type IDREF
  */
-typedef AxisChar * xsdc__IDREF;
+typedef AxiscChar * xsdc__IDREF;
 
 /**
  * @typedef xsdc__IDREFS
  * Axis C++ defined type for xml basic type IDREFS
  */
-typedef AxisChar * xsdc__IDREFS;
+typedef AxiscChar * xsdc__IDREFS;
 
 /**
  * @typedef xsdc__ENTITY
  * Axis C++ defined type for xml basic type ENTITY
  */
-typedef AxisChar * xsdc__ENTITY;
+typedef AxiscChar * xsdc__ENTITY;
 
 /**
  * @typedef xsdc__ENTITIES
  * Axis C++ defined type for xml basic type ENTITIES
  */
-typedef AxisChar * xsdc__ENTITIES;
+typedef AxiscChar * xsdc__ENTITIES;
 
 /**
  * @typedef xsdc__NMTOKEN
  * Axis C++ defined type for xml basic type NMTOKEN
  */
-typedef AxisChar * xsdc__NMTOKEN;
+typedef AxiscChar * xsdc__NMTOKEN;
 
 /**
  * @typedef xsdc__NMTOKENS
  * Axis C++ defined type for xml basic type NMTOKENS
  */
-typedef AxisChar * xsdc__NMTOKENS;
+typedef AxiscChar * xsdc__NMTOKENS;
 
 /**
  * @typedef xsdc__integer
@@ -180,7 +180,7 @@ typedef AxiscChar * xsdc__QName;
  * @typedef xsd__notation
  * Axis C++ defined type for xml basic type NOTATION
  */
-typedef AxisChar * xsdc__notation;
+typedef AxiscChar * xsdc__notation;
 
 /**
  * @typedef xsdc__dateTime
