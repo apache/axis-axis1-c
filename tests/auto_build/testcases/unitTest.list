@@ -28,3 +28,5 @@ XSD_base64Binary.xml
 XSD_hexBinary.xml
 XSD_float.xml
 XSD_double.xml
+XSD_decimal.xml
+XSD_integer.xml

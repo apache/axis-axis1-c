@@ -1,0 +1,13 @@
+non-nillable element=123456789.000000
+non-nillable element=123456789.123456
+non-nillable element=-123456789.000000
+non-nillable element=0.000000
+non-nillable element=-123456789.123456
+nillable element=123456789.000000
+nil element=<nil>
+required attribute=123456789.000000
+array of 2 elements
+  element[0]=123456789.000000
+  element[1]=123456789.000000
+within complex type=123456789.000000
+---------------------- TEST COMPLETE -----------------------------
