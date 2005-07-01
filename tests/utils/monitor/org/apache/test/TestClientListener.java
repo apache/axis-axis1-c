@@ -116,6 +116,12 @@ public class TestClientListener implements Runnable
                             .println("TestClientListener got a Stop monitor message");
                     stayAlive=false;
                 }
+                catch(ConnectionNotEstablishedException connectionNotEstablishedException)
+                {
+                    // this is thrown when we cannot connect to the server
+                    System.err.println( "Cannot connect to server");
+                    stayAlive=false;
+                }
                 catch (ConnectException connectException)
                 {
                     // OK, well for whatever reasons the socket is closed so go

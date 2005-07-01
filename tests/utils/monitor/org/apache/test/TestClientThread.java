@@ -23,6 +23,10 @@ public class TestClientThread extends Thread
     private boolean          continueToRun                 =true;
     // the responder back to the client
     private ClientReturner   clientReturner                =null;
+    // We need to keep hold of this so that we can tell what state it's in when
+    // the
+    // read fails
+    private Socket           clientSocket;
 
     // I didn't want to make this global but it has to be for the constructor
     // pattern to work :-(
@@ -30,7 +34,7 @@ public class TestClientThread extends Thread
     private static final int READ_BUFFER_SIZE              =10000;                     // 4096=4k
     private char[]           readBuffer                    =new char[READ_BUFFER_SIZE];
 
-    // the request from the client 
+    // the request from the client
     private BufferedReader   clientRequestStream           =null;
     // the connection to the server where we forwaard the clients request to.
     private BufferedWriter   streamToServer                =null;
@@ -52,9 +56,10 @@ public class TestClientThread extends Thread
      */
     public TestClientThread(Socket clientSocket, String serviceHostName,
             int servicePort) throws StopRequestException , IOException ,
-            ConnectException
+            ConnectException , ConnectionNotEstablishedException
     {
         //        System.out.println( "TestClientThread(3): entry");
+        this.clientSocket=clientSocket;
         IsStopMessage(clientSocket);
         Socket serviceSocket=createSocketToServer(serviceHostName, servicePort);
         writeToServer(readBuffer, bytesRead);
@@ -144,51 +149,70 @@ public class TestClientThread extends Thread
      */
     public void run( )
     {
-        try
+        while (continueToRun)
         {
-            while (continueToRun
-                    &&(bytesRead=clientRequestStream.read(readBuffer, 0,
-                            READ_BUFFER_SIZE))!=-1)
+            try
             {
-                //                System.out.println( "About to write some bytes to the
-                // server");
-                writeToServer(readBuffer, bytesRead);
-                //System.out.println("Wrote some bytes to the server: "
-                  //      +new String(readBuffer, 0, bytesRead));
+                bytesRead=clientRequestStream.read(readBuffer, 0,
+                        READ_BUFFER_SIZE);
+                if (bytesRead==-1)
+                {
+                    continueToRun=false;
+                }
+                else
+                {
 
-                TCPMonitor.getInstance( ).writeRequest(readBuffer, bytesRead);
+                    //                System.out.println( "About to write some bytes to the
+                    // server");
+                    try
+                    {
+                        writeToServer(readBuffer, bytesRead);
+                        TCPMonitor.getInstance( ).writeRequest(readBuffer,
+                                bytesRead);
+                    }
+                    catch (Exception exception)
+                    {
+                        System.err
+                                .println("TestClientThread#run(): IOException when forwarding the request to the server");
+                        exception.printStackTrace(System.err);
+                        continueToRun=false;
+                    }
+                }
             }
-            // so we've either got continueToRun=false or read =-1;
-            //            System.out.println( "TestClientThread#run(): TestClientThread
-            // bytesRead = "+bytesRead);
-            //            System.out.println( "TestClientThread#run(): continueToRun =
-            // "+continueToRun);
+            catch (SocketException socketException)
+            {
+                continueToRun=false;
+                if(socketException.getMessage()=="Connection reset")
+                {
+                    // tihs appears to happen when the client has stopped sending us data and we should close down gracefully
+                    // but when I check the socket for it's status it tells me that all is well but for 
+                    // the fact that the stream is not ready() but ready() returning false is not a reason to shut !
+                    // ah well - never mind - let's close gracefully.
+                    // no need to print this out as an exception
+                    System.out.println( "TestClientThread#run(): Connection reset when reading from client - closing gracefully");
+                }
+                else
+                {
+                    socketException.printStackTrace(System.err);
+                }
+            }
+            catch (IOException exception)
+            {
+                System.err
+                        .println("TestClientThread#run(): IOException when reading clients request: "
+                                +exception);
+                throw new RuntimeException(
+                        "TestClientThread#run(): IOException when reading clients request: "
+                                +exception);
+            }
         }
-        catch (SocketException socketException)
-        {
-            System.err
-                    .println("TestClientThread#run(): SocketException when reading client request:");
-            socketException.printStackTrace(System.err);
-        }
-        catch (IOException exception)
-        {
-            System.err
-                    .println("TestClientThread#run(): IOException when reading clients request: "
-                            +exception);
-            throw new RuntimeException(
-                    "TestClientThread#run(): IOException when reading clients request: "
-                            +exception);
-        }
-
-        // need to ensure we close down the clientFileReturner we created for
-        // this connection
         clientReturner.continueToRun=false;
 
         //        System.out.println( "TestClientThread#run(): exit");
     }
 
     public Socket createSocketToServer(String serviceHostName, int servicePort)
-            throws IOException
+            throws IOException, ConnectionNotEstablishedException
     {
         Socket serviceSocket=null;
         int retry=CREATE_SOCKET_TO_SERVER_RETRY;
@@ -202,6 +226,14 @@ public class TestClientThread extends Thread
             {
                 // oh dear !
                 throw unknownHostException;
+            }
+            catch (ConnectException connectException)
+            {
+                System.err
+                        .println("ConnectionException when Monitor connecting to server "
+                                +connectException.getMessage( ));
+                connectException.printStackTrace(System.err);
+                throw new ConnectionNotEstablishedException(connectException);
             }
             catch (Exception se)
             {
@@ -222,6 +254,10 @@ public class TestClientThread extends Thread
                                         +interruptedException);
                     }
                     System.err.println("Woke up ");
+                }
+                else
+                {
+                    throw new ConnectionNotEstablishedException(se);
                 }
             }
         }
