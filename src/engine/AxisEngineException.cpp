@@ -83,10 +83,18 @@ void AxisEngineException::processException(const int iExceptionCode)
 
 void AxisEngineException::processException(const int iExceptionCode, char* pcMessage)
 {
-    AxisString sMessage = pcMessage;
-    m_sMessage = getMessage(iExceptionCode) + " " + sMessage;
-    if(pcMessage)
-        delete[] pcMessage;
+
+	if (pcMessage) 
+	{
+		AxisString sMessage = pcMessage;
+		m_sMessage = getMessage(iExceptionCode) + " " + sMessage;
+	}
+	else
+	{
+		m_sMessage = getMessage(iExceptionCode);
+	}
+
+			
 }
 const string AxisEngineException::getMessage (const exception* objException)
 {
