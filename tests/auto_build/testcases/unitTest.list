@@ -30,3 +30,7 @@ XSD_float.xml
 XSD_double.xml
 XSD_decimal.xml
 XSD_integer.xml
+XSD_long.xml
+XSD_int.xml
+XSD_short.xml
+XSD_byte.xml
