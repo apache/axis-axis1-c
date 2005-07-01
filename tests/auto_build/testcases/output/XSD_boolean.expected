@@ -1,0 +1,14 @@
+non-nillable element, using 0=0
+non-nillable element, using 1=1
+non-nillable element, using false_=0
+non-nillable element, using true_=1
+non-nillable element, using xsd_boolean_false=0
+non-nillable element, using xsd_boolean_true=1
+nillable element=0
+nil element=<nil>
+required attribute=1
+array of 2 elements
+  element[0]=1
+  element[1]=1
+within complex type=0
+---------------------- TEST COMPLETE -----------------------------

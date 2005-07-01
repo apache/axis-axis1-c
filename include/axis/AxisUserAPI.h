@@ -402,8 +402,8 @@ AXISC_DEFINED_POINTER_ARRAY(xsdc__anyURI)
 AXISC_DEFINED_POINTER_ARRAY(xsdc__QName)
 AXISC_DEFINED_POINTER_ARRAY(xsdc__notation)
  
-static const int xsdc_boolean_true = 1;
-static const int xsdc_boolean_false = 0;
+static const xsdc__boolean xsdc_boolean_true = (xsdc__boolean) 1;
+static const xsdc__boolean xsdc_boolean_false = (xsdc__boolean) 0;
 
 typedef enum {
     AXISC_NORMAL_CHANNEL=0,

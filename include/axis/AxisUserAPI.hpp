@@ -375,8 +375,8 @@ AXIS_DEFINED_POINTER_ARRAY(xsd__notation)
 
 #define AXIS_OUT_PARAM 
 
-static const int xsd_boolean_true = 1;
-static const int xsd_boolean_false = 0;
+static const xsd__boolean xsd_boolean_true = (xsd__boolean) 1;
+static const xsd__boolean xsd_boolean_false = (xsd__boolean) 0;
 
 typedef enum {
     NORMAL_CHANNEL=0,
