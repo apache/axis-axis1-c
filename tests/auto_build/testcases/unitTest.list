@@ -24,3 +24,5 @@ XSD_gMonth.xml
 XSD_gMonthDay.xml
 XSD_gDay.xml
 XSD_boolean.xml
+XSD_base64Binary.xml
+XSD_hexBinary.xml
