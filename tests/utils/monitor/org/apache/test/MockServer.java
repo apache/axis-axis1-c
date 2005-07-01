@@ -186,6 +186,16 @@ public class MockServer implements Runnable
             }
         }
         while (continueToRun);
+        // clean up
+        try
+        {
+            serverSocket.close();
+        }
+        catch(IOException exception)
+        {
+            System.err.println( "MockServer#run(): IOException when closing the serverSocket: ");
+            exception.printStackTrace(System.err);
+        }
     }
 }
  

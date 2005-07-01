@@ -59,8 +59,14 @@ public class StopMockServer
         {
             try
             {
-                dos.close( );
-                socket.close( );
+                if(dos!=null)
+                {
+                    dos.close( );
+                }
+                if(socket!=null)
+                {
+                    socket.close( );
+                }
             }
             catch (Exception exe)
             {
