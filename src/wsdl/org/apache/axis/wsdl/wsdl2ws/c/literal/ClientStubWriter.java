@@ -249,62 +249,62 @@ public class ClientStubWriter
                 writer.write(outparamType + " RetArray = {NULL, 0};\n");
             }
             else
-	    {
-		if (!returntypeissimple)
-		{		//for AnyType too
-		    if (outparamType.lastIndexOf ("*") > 0)
-		    {
-			writer.write (outparamType + " pReturn = NULL;\n");
-		    }
-		    else
-			writer.write (outparamType + "* pReturn = NULL;\n");
-		    //for complex types
-		}
-		else
-		{
-		    //for simple types
-		    if (returntype.isNillable ()
-			&& !(CUtils.isPointerType(outparamType)))
-		    {
-			writer.write (outparamType + "* Ret = NULL;\n");
-		    }
-		    else
-		    {
-			String initValue = CUtils.getInitValue (outparamType);
-			if (initValue != null)
-			{
-			    writer.write (outparamType + " Ret = " +
-					  initValue + ";\n");
-			}
-			else
-			{
-			    if (outparamType.equals ("xsd__base64Binary")
-				|| outparamType.equals ("xsd__hexBinary"))
-			    {
-				writer.write (outparamType + " Ret;\n");
-				writer.write ("\tRet.__ptr = NULL;\n");
-				writer.write ("\tRet.__size = 0;\n");
-			    }
-			    else
-			    {
-				if (outparamType.equals ("xsd__dateTime")
-				    || outparamType.equals ("xsd__date")
-				    || outparamType.equals ("xsd__time"))
-				{
-				    writer.write (outparamType + " Ret;\n");
-				    writer.write ("\tmemset(&Ret,0,sizeof(" +
-						  outparamType + "));\n");
-				}
-				else
-				{
-				    writer.write (outparamType + " Ret;\n");
-				}
-			    }
-			}
-		    }
-		}
-		//TODO initialize return parameter appropriately.
-	    }
+            {
+               if (!returntypeissimple)
+               {		//for AnyType too
+                  if (outparamType.lastIndexOf ("*") > 0)
+                  {
+                     writer.write (outparamType + " pReturn = NULL;\n");
+                  }
+                  else
+                     writer.write (outparamType + "* pReturn = NULL;\n");
+                  //for complex types
+               }
+               else
+               {
+                  //for simple types
+                  if (returntype.isNillable ()
+                        && !(CUtils.isPointerType(outparamType)))
+                  {
+                     writer.write (outparamType + "* Ret = NULL;\n");
+                  }
+                  else
+                  {
+                     String initValue = CUtils.getInitValue (outparamType);
+                     if (initValue != null)
+                     {
+                        writer.write (outparamType + " Ret = " +
+                                      initValue + ";\n");
+                     }
+                     else
+                     {
+                        if (outparamType.equals ("xsd__base64Binary")
+                              || outparamType.equals ("xsd__hexBinary"))
+                        {
+                           writer.write (outparamType + " Ret;\n");
+                           writer.write ("\tRet.__ptr = NULL;\n");
+                           writer.write ("\tRet.__size = 0;\n");
+                        }
+                        else
+                        {
+                           if (outparamType.equals ("xsd__dateTime")
+                                 || outparamType.equals ("xsd__date")
+                                 || outparamType.equals ("xsd__time"))
+                           {
+                              writer.write (outparamType + " Ret;\n");
+                              writer.write ("\tmemset(&Ret,0,sizeof(" +
+                                            outparamType + "));\n");
+                           }
+                           else
+                           {
+                              writer.write (outparamType + " Ret;\n");
+                           }
+                        }
+                     }
+                  }
+               }
+               //TODO initialize return parameter appropriately.
+            }
         }
         writer.write ("\tconst char* pcCmplxFaultName;\n");
         writer.write ("\tpcCmplxFaultName = NULL;\n");
@@ -346,6 +346,7 @@ public class ClientStubWriter
 
 
         // TODO new calls from stub base
+    	writer.write ("\taxiscApplyUserPreferences(stub);\n");
           
         for (int i = 0; i < paramsB.size(); i++)
         {
