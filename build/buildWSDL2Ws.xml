@@ -15,6 +15,7 @@
 	<target name="buildWSDL2WsJARFile">
 		<jar jarfile="${dir.classes}/wsdl2ws.jar" basedir="${dir.classes}">
 			<include name="org/apache/axis/wsdl/**"/>
+			<include name="javax/**"/>
 			<manifest>
 				<attribute name="Main-Class"
 				 value="org.apache.axis.wsdl.wsdl2ws.WSDL2Ws"/>
