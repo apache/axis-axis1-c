@@ -58,7 +58,7 @@ void * UnsignedLong::getValue()
 
 AxisChar* UnsignedLong::serialize(const xsd__unsignedLong* value) throw (AxisSoapException)
 {
-    unsigned LONGLONG valueAsLong = static_cast<unsigned LONGLONG>(*value);
+    xsd__nonNegativeInteger valueAsLong = static_cast<xsd__nonNegativeInteger>(*value);
     return NonNegativeInteger::serialize(&valueAsLong);
 }
 
@@ -79,7 +79,7 @@ MaxInclusive* UnsignedLong::getMaxInclusive()
   * physical limit of an unsigned 64bit integer, we don't actually need to check
   * this.
   */
-    return new MaxInclusive();
+    return new MaxInclusive(UNSIGNED_LONGLONGVALUE(18446744073709551615));
 }
 
 AXIS_CPP_NAMESPACE_END

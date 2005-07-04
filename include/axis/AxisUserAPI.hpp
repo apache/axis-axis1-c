@@ -234,7 +234,11 @@ typedef unsigned int xsd__unsignedInt;
  * @typedef xsd__unsignedLong
  * Axis C++ defined type for xml basic type unsignedLong
  */
-typedef unsigned long xsd__unsignedLong;
+#ifdef WIN32
+typedef unsigned __int64 xsd__unsignedLong;
+#else
+typedef unsigned long long xsd__unsignedLong;
+#endif
 /**
  * @typedef xsd__unsignedShort
  * Axis C++ defined type for xml basic type unsignedShort

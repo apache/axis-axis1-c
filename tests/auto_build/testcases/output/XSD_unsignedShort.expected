@@ -1,0 +1,11 @@
+non-nillable element=65535
+non-nillable element=1
+non-nillable element=0
+nillable element=12345
+nil element=<nil>
+required attribute=12345
+array of 2 elements
+  element[0]=12345
+  element[1]=12345
+within complex type=12345
+---------------------- TEST COMPLETE -----------------------------

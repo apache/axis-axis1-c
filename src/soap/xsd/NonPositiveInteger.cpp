@@ -65,12 +65,20 @@ AxisChar* NonPositiveInteger::serialize(const xsd__nonPositiveInteger* value) th
         if ( *value > minInclusive->getMinInclusiveAsUnsignedLONGLONG() )
         {
             AxisString exceptionMessage =
-            "Value to be serialized is less than MinInclusive specified for this type.  MinInclusive = -";
+            "Value to be serialized is less than MinInclusive specified for this type.  MinInclusive = ";
+            if (minInclusive->getMinInclusiveAsUnsignedLONGLONG() != 0)
+            {
+                exceptionMessage += "-";
+            }
             AxisChar* length = new AxisChar[25];
-            sprintf(length, PRINTF_LONGLONG_FORMAT_SPECIFIER, minInclusive->getMinInclusiveAsUnsignedLONGLONG());
+            sprintf(length, PRINTF_UNSIGNED_LONGLONG_FORMAT_SPECIFIER, minInclusive->getMinInclusiveAsUnsignedLONGLONG());
             exceptionMessage += length;
-            exceptionMessage += ", Value = -";
-            sprintf(length, PRINTF_LONGLONG_FORMAT_SPECIFIER, *value);
+            exceptionMessage += ", Value = ";
+            if (*value != 0)
+            {
+                exceptionMessage += "-";
+            }
+            sprintf(length, PRINTF_UNSIGNED_LONGLONG_FORMAT_SPECIFIER, *value);
             exceptionMessage += length;
             exceptionMessage += ".";
             delete [] length;
@@ -87,12 +95,20 @@ AxisChar* NonPositiveInteger::serialize(const xsd__nonPositiveInteger* value) th
         if ( *value >= minExclusive->getMinExclusiveAsUnsignedLONGLONG() )
         {
             AxisString exceptionMessage =
-            "Value to be serialized is less than or equal to MinExclusive specified for this type.  MinExclusive = -";
+            "Value to be serialized is less than or equal to MinExclusive specified for this type.  MinExclusive = ";
+            if (minExclusive->getMinExclusiveAsUnsignedLONGLONG() != 0)
+            {
+                exceptionMessage += "-";
+            }
             AxisChar* length = new AxisChar[25];
-            sprintf(length, PRINTF_LONGLONG_FORMAT_SPECIFIER, minExclusive->getMinExclusiveAsUnsignedLONGLONG());
+            sprintf(length, PRINTF_UNSIGNED_LONGLONG_FORMAT_SPECIFIER, minExclusive->getMinExclusiveAsUnsignedLONGLONG());
             exceptionMessage += length;
-            exceptionMessage += ", Value = -";
-            sprintf(length, PRINTF_LONGLONG_FORMAT_SPECIFIER, *value);
+            exceptionMessage += ", Value = ";
+            if (*value != 0)
+            {
+                exceptionMessage += "-";
+            }
+            sprintf(length, PRINTF_UNSIGNED_LONGLONG_FORMAT_SPECIFIER, *value);
             exceptionMessage += length;
             exceptionMessage += ".";
             delete [] length;
@@ -109,12 +125,20 @@ AxisChar* NonPositiveInteger::serialize(const xsd__nonPositiveInteger* value) th
         if ( *value < maxInclusive->getMaxInclusiveAsUnsignedLONGLONG() )
         {
             AxisString exceptionMessage =
-            "Value to be serialized is greater than MaxInclusive specified for this type.  MaxInclusive = -";
+            "Value to be serialized is greater than MaxInclusive specified for this type.  MaxInclusive = ";
+            if (maxInclusive->getMaxInclusiveAsUnsignedLONGLONG() != 0)
+            {
+                exceptionMessage += "-";
+            }
             AxisChar* length = new AxisChar[25];
-            sprintf(length, PRINTF_LONGLONG_FORMAT_SPECIFIER, maxInclusive->getMaxInclusiveAsUnsignedLONGLONG());
+            sprintf(length, PRINTF_UNSIGNED_LONGLONG_FORMAT_SPECIFIER, maxInclusive->getMaxInclusiveAsUnsignedLONGLONG());
             exceptionMessage += length;
-            exceptionMessage += ", Value = -";
-            sprintf(length, PRINTF_LONGLONG_FORMAT_SPECIFIER, *value);
+            exceptionMessage += ", Value = ";
+            if (*value != 0)
+            {
+                exceptionMessage += "-";
+            }
+            sprintf(length, PRINTF_UNSIGNED_LONGLONG_FORMAT_SPECIFIER, *value);
             exceptionMessage += length;
             exceptionMessage += ".";
             delete [] length;
@@ -131,12 +155,20 @@ AxisChar* NonPositiveInteger::serialize(const xsd__nonPositiveInteger* value) th
         if ( *value <= maxExclusive->getMaxExclusiveAsUnsignedLONGLONG() )
         {
             AxisString exceptionMessage =
-            "Value to be serialized is greater than or equal to MaxExclusive specified for this type.  MaxExclusive = -";
+            "Value to be serialized is greater than or equal to MaxExclusive specified for this type.  MaxExclusive = ";
+            if (maxInclusive->getMaxInclusiveAsUnsignedLONGLONG() != 0)
+            {
+                exceptionMessage += "-";
+            }
             AxisChar* length = new AxisChar[25];
-            sprintf(length, PRINTF_LONGLONG_FORMAT_SPECIFIER, maxExclusive->getMaxExclusiveAsUnsignedLONGLONG());
+            sprintf(length, PRINTF_UNSIGNED_LONGLONG_FORMAT_SPECIFIER, maxExclusive->getMaxExclusiveAsUnsignedLONGLONG());
             exceptionMessage += length;
-            exceptionMessage += ", Value = -";
-            sprintf(length, PRINTF_LONGLONG_FORMAT_SPECIFIER, *value);
+            exceptionMessage += ", Value = ";
+            if (*value != 0)
+            {
+                exceptionMessage += "-";
+            }
+            sprintf(length, PRINTF_UNSIGNED_LONGLONG_FORMAT_SPECIFIER, *value);
             exceptionMessage += length;
             exceptionMessage += ".";
             delete [] length;
@@ -147,7 +179,7 @@ AxisChar* NonPositiveInteger::serialize(const xsd__nonPositiveInteger* value) th
     }
     delete maxExclusive;
 
-    AxisString formatSpecifier = "%";
+    AxisString formatSpecifier = "-%";
     
     int valueSize = 80;
     TotalDigits* totalDigits = getTotalDigits();
@@ -161,25 +193,24 @@ AxisChar* NonPositiveInteger::serialize(const xsd__nonPositiveInteger* value) th
     }
     delete totalDigits;
     
-    formatSpecifier += PRINTF_LONGLONG_FORMAT_SPECIFIER_CHARS;
+    formatSpecifier += PRINTF_UNSIGNED_LONGLONG_FORMAT_SPECIFIER_CHARS;
 
-    AxisChar* serializedValue = new char[valueSize];
-    AxisSprintf (serializedValue, valueSize, formatSpecifier.c_str(), *value);    
-
-    if(*value != 0)
+    AxisChar serializedValue[80];
+    if (*value == 0)
     {
-        AxisString serializingString = "-";
-        serializingString += serializedValue;
-        
-        serializedValue = const_cast<AxisChar*>(serializingString.c_str());
+        serializedValue[0] = '0';
+		serializedValue[1] = NULL;
     }
-  
+    else
+    {
+        AxisSprintf (serializedValue, valueSize, formatSpecifier.c_str(), *value);
+    }
+
     IAnySimpleType::serialize(serializedValue);
-    delete [] serializedValue;        
     return m_Buf;
 }
 
-unsigned LONGLONG* NonPositiveInteger::deserializeNonPositiveInteger(const AxisChar* valueAsChar) throw (AxisSoapException)
+xsd__nonPositiveInteger* NonPositiveInteger::deserializeNonPositiveInteger(const AxisChar* valueAsChar) throw (AxisSoapException)
 {
     xsd__integer* returnValue = NULL;
     if (*valueAsChar == '-')

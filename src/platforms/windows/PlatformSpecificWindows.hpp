@@ -95,12 +95,15 @@
  */
 #define LONGLONG __int64
 #define LONGLONGVALUE(value) value##I64
+#define UNSIGNED_LONGLONGVALUE(value) value##UI64
 
 /**
  * Format string to be used in printf for 64bit integers
  */
 #define PRINTF_LONGLONG_FORMAT_SPECIFIER "%I64d"
 #define PRINTF_LONGLONG_FORMAT_SPECIFIER_CHARS "I64d"
+#define PRINTF_UNSIGNED_LONGLONG_FORMAT_SPECIFIER "%I64u"
+#define PRINTF_UNSIGNED_LONGLONG_FORMAT_SPECIFIER_CHARS "I64u"
 
 /**
  * Platform specific method to obtain current thread ID

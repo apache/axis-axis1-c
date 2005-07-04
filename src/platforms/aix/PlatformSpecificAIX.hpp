@@ -115,12 +115,15 @@
  */
 #define LONGLONG long long
 #define LONGLONGVALUE(value) value##LL
+#define UNSIGNED_LONGLONGVALUE(value) value##ULL
 
 /**
  * Format string to be used in printf for 64bit integers
  */
 #define PRINTF_LONGLONG_FORMAT_SPECIFIER "%lld"
 #define PRINTF_LONGLONG_FORMAT_SPECIFIER_CHARS "lld"
+#define PRINTF_UNSIGNED_LONGLONG_FORMAT_SPECIFIER "%llu"
+#define PRINTF_UNSIGNED_LONGLONG_FORMAT_SPECIFIER_CHARS "llu"
 
 #endif
 

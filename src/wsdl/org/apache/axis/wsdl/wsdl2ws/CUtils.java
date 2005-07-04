@@ -98,7 +98,7 @@ public class CUtils {
 		class2QNamemapCpp.put("xsd__float",					new QName(WrapperConstants.SCHEMA_NAMESPACE, "float"));
 		class2QNamemapCpp.put("xsd__decimal",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"));
 		class2QNamemapCpp.put("xsd__integer",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "integer"));
-		class2QNamemapCpp.put("xsd__nonPositivieInteger",	new QName(WrapperConstants.SCHEMA_NAMESPACE, "nonPositiveInteger"));
+		class2QNamemapCpp.put("xsd__nonPositiveInteger",	new QName(WrapperConstants.SCHEMA_NAMESPACE, "nonPositiveInteger"));
 		class2QNamemapCpp.put("xsd__negativeInteger",		new QName(WrapperConstants.SCHEMA_NAMESPACE, "negativeInteger"));
 		class2QNamemapCpp.put("xsd__long",					new QName(WrapperConstants.SCHEMA_NAMESPACE, "long"));
 		class2QNamemapCpp.put("xsd__int",					new QName(WrapperConstants.SCHEMA_NAMESPACE, "int"));
@@ -143,7 +143,7 @@ public class CUtils {
 		class2QNamemapC.put("xsdc__float",					new QName(WrapperConstants.SCHEMA_NAMESPACE, "float"));
 		class2QNamemapC.put("xsdc__decimal",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"));
 		class2QNamemapC.put("xsdc__integer",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "integer"));
-		class2QNamemapC.put("xsdc__nonPositivieInteger",	new QName(WrapperConstants.SCHEMA_NAMESPACE, "nonPositiveInteger"));
+		class2QNamemapC.put("xsdc__nonPositiveInteger",	new QName(WrapperConstants.SCHEMA_NAMESPACE, "nonPositiveInteger"));
 		class2QNamemapC.put("xsdc__negativeInteger",		new QName(WrapperConstants.SCHEMA_NAMESPACE, "negativeInteger"));
 		class2QNamemapC.put("xsdc__long",					new QName(WrapperConstants.SCHEMA_NAMESPACE, "long"));
 		class2QNamemapC.put("xsdc__int",					new QName(WrapperConstants.SCHEMA_NAMESPACE, "int"));
@@ -539,7 +539,7 @@ public class CUtils {
 		basicType2EnumMapCpp.put("xsd__unsignedInt",		"XSD_UNSIGNEDINT");
 		basicType2EnumMapCpp.put("xsd__unsignedShort",		"XSD_UNSIGNEDSHORT");
 		basicType2EnumMapCpp.put("xsd__unsignedByte",		"XSD_UNSIGNEDBYTE");
-		basicType2EnumMapCpp.put("xsd__postiveInteger",		"XSD_POSITIVEINTEGER");
+		basicType2EnumMapCpp.put("xsd__positiveInteger",		"XSD_POSITIVEINTEGER");
 		basicType2EnumMapCpp.put("xsd__double",				"XSD_DOUBLE");
 		basicType2EnumMapCpp.put("xsd__anyURI",				"XSD_ANYURI");
 		basicType2EnumMapCpp.put("xsd__QName",				"XSD_QNAME");
@@ -584,7 +584,7 @@ public class CUtils {
 		basicType2EnumMapC.put("xsdc__unsignedInt",			"XSD_UNSIGNEDINT");
 		basicType2EnumMapC.put("xsdc__unsignedShort",		"XSD_UNSIGNEDSHORT");
 		basicType2EnumMapC.put("xsdc__unsignedByte",		"XSD_UNSIGNEDBYTE");
-		basicType2EnumMapC.put("xsdc__postiveInteger",		"XSD_POSITIVEINTEGER");
+		basicType2EnumMapC.put("xsdc__positiveInteger",		"XSD_POSITIVEINTEGER");
 		basicType2EnumMapC.put("xsdc__double",				"XSD_DOUBLE");
 		basicType2EnumMapC.put("xsdc__anyURI",				"XSD_ANYURI");
 		basicType2EnumMapC.put("xsdc__QName",				"XSD_QNAME");

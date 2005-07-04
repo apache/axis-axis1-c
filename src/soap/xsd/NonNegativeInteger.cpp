@@ -66,10 +66,10 @@ AxisChar* NonNegativeInteger::serialize(const xsd__nonNegativeInteger* value) th
             AxisString exceptionMessage =
             "Value to be serialized is less than MinInclusive specified for this type.  MinInclusive = ";
             AxisChar* length = new AxisChar[25];
-            sprintf(length, PRINTF_LONGLONG_FORMAT_SPECIFIER, minInclusive->getMinInclusiveAsUnsignedLONGLONG());
+            sprintf(length, PRINTF_UNSIGNED_LONGLONG_FORMAT_SPECIFIER, minInclusive->getMinInclusiveAsUnsignedLONGLONG());
             exceptionMessage += length;
             exceptionMessage += ", Value = ";
-            sprintf(length, PRINTF_LONGLONG_FORMAT_SPECIFIER, *value);
+            sprintf(length, PRINTF_UNSIGNED_LONGLONG_FORMAT_SPECIFIER, *value);
             exceptionMessage += length;
             exceptionMessage += ".";
             delete [] length;
@@ -88,10 +88,10 @@ AxisChar* NonNegativeInteger::serialize(const xsd__nonNegativeInteger* value) th
             AxisString exceptionMessage =
             "Value to be serialized is less than or equal to MinExclusive specified for this type.  MinExclusive = ";
             AxisChar* length = new AxisChar[25];
-            sprintf(length, PRINTF_LONGLONG_FORMAT_SPECIFIER, minExclusive->getMinExclusiveAsUnsignedLONGLONG());
+            sprintf(length, PRINTF_UNSIGNED_LONGLONG_FORMAT_SPECIFIER, minExclusive->getMinExclusiveAsUnsignedLONGLONG());
             exceptionMessage += length;
             exceptionMessage += ", Value = ";
-            sprintf(length, PRINTF_LONGLONG_FORMAT_SPECIFIER, *value);
+            sprintf(length, PRINTF_UNSIGNED_LONGLONG_FORMAT_SPECIFIER, *value);
             exceptionMessage += length;
             exceptionMessage += ".";
             delete [] length;
@@ -110,10 +110,10 @@ AxisChar* NonNegativeInteger::serialize(const xsd__nonNegativeInteger* value) th
             AxisString exceptionMessage =
             "Value to be serialized is less than MaxInclusive specified for this type.  MaxInclusive = ";
             AxisChar* length = new AxisChar[25];
-            sprintf(length, PRINTF_LONGLONG_FORMAT_SPECIFIER, maxInclusive->getMaxInclusiveAsUnsignedLONGLONG());
+            sprintf(length, PRINTF_UNSIGNED_LONGLONG_FORMAT_SPECIFIER, maxInclusive->getMaxInclusiveAsUnsignedLONGLONG());
             exceptionMessage += length;
             exceptionMessage += ", Value = ";
-            sprintf(length, PRINTF_LONGLONG_FORMAT_SPECIFIER, *value);
+            sprintf(length, PRINTF_UNSIGNED_LONGLONG_FORMAT_SPECIFIER, *value);
             exceptionMessage += length;
             exceptionMessage += ".";
             delete [] length;
@@ -132,10 +132,10 @@ AxisChar* NonNegativeInteger::serialize(const xsd__nonNegativeInteger* value) th
             AxisString exceptionMessage =
             "Value to be serialized is less than or equal to MaxExclusive specified for this type.  MaxExclusive = ";
             AxisChar* length = new AxisChar[25];
-            sprintf(length, PRINTF_LONGLONG_FORMAT_SPECIFIER, maxExclusive->getMaxExclusiveAsUnsignedLONGLONG());
+            sprintf(length, PRINTF_UNSIGNED_LONGLONG_FORMAT_SPECIFIER, maxExclusive->getMaxExclusiveAsUnsignedLONGLONG());
             exceptionMessage += length;
             exceptionMessage += ", Value = ";
-            sprintf(length, PRINTF_LONGLONG_FORMAT_SPECIFIER, *value);
+            sprintf(length, PRINTF_UNSIGNED_LONGLONG_FORMAT_SPECIFIER, *value);
             exceptionMessage += length;
             exceptionMessage += ".";
             delete [] length;
@@ -160,7 +160,7 @@ AxisChar* NonNegativeInteger::serialize(const xsd__nonNegativeInteger* value) th
     }
     delete totalDigits;
     
-    formatSpecifier += PRINTF_LONGLONG_FORMAT_SPECIFIER_CHARS;
+    formatSpecifier += PRINTF_UNSIGNED_LONGLONG_FORMAT_SPECIFIER_CHARS;
 
     AxisChar* serializedValue = new char[valueSize];
     AxisSprintf (serializedValue, valueSize, formatSpecifier.c_str(), *value);
