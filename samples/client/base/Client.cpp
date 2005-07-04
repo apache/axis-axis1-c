@@ -76,11 +76,14 @@ main (int argc, char *argv[])
 	    strcpy (buffer1, bigstring.c_str ());
 
 	    ws.setTransportProperty ("SOAPAction", "InteropBase#echoString");
-	    printf (ws.echoString (buffer1));
-	    if (0 == strcmp (ws.echoString ("hello world"), "hello world"))
+
+        char* cpResult = ws.echoString ("hello world");
+	    if (0 == strcmp (cpResult, "hello world"))
 		printf ("successful\n");
 	    else
 		printf ("failed\n");
+
+        delete [] cpResult;
 
 	    // testing echoStringArray 
 	    xsd__string_Array arrstr;
@@ -95,10 +98,16 @@ main (int argc, char *argv[])
 	    ws.setTransportProperty ("SOAPAction",
 				     "InteropBase#echoStringArray");
 	    printf ("invoking echoStringArray...\n");
-	    if (ws.echoStringArray (arrstr).m_Array != NULL)
+
+        char** arrstrResult = ws.echoStringArray (arrstr).m_Array;
+        
+	    if (arrstrResult != NULL)
 		printf ("successful\n");
 	    else
 		printf ("failed\n");
+
+        delete [] arrstr.m_Array;
+        delete [] arrstrResult;
 
 	    // testing echoInteger 
 	    ws.setTransportProperty ("SOAPAction", "InteropBase#echoInteger");
@@ -127,6 +136,8 @@ main (int argc, char *argv[])
 	    else
 		printf ("failed\n");
 
+        delete [] arrint.m_Array;
+
 	    // testing echoFloat 
 	    printf ("invoking echoFloat...\n");
 	    float fvalue = 1.4214;
@@ -154,6 +165,8 @@ main (int argc, char *argv[])
 	    else
 		printf ("failed\n");
 
+        delete [] arrfloat.m_Array;
+
 	    // testing echo Struct
 	    SOAPStruct stct;
 		xsd__int integer = 5000;
@@ -167,6 +180,8 @@ main (int argc, char *argv[])
 		printf ("successful\n");
 	    else
 		printf ("failed\n");
+
+        free(stct.varString);
 
 	    //testing echo Array of Struct
 	    SOAPStruct_Array arrstct;
@@ -187,10 +202,16 @@ main (int argc, char *argv[])
 	    ws.setTransportProperty ("SOAPAction",
 				     "InteropBase#echoStructArray");
 	    printf ("invoking echoStructArray...\n");
-	    if (ws.echoStructArray (arrstct).m_Array != NULL)
+	    SOAPStruct_Array arrstctResult = ws.echoStructArray (arrstct);
+	    if (arrstctResult.m_Array != NULL)
 		printf ("successful\n");
 	    else
 		printf ("failed\n");
+
+        delete [] arrstct.m_Array;
+        for( x = 0; x < arrstctResult.m_Size; x++)
+            delete [] arrstctResult.m_Array[x].varString;
+        delete [] arrstctResult.m_Array;
 
 	    //testing echo void
 	    printf ("invoking echoVoid...\n");
@@ -207,13 +228,17 @@ main (int argc, char *argv[])
 	    bb.__ptr = (unsigned char *) strdup (bstr);
 	    bb.__size = strlen (bstr);
 	    ws.setTransportProperty ("SOAPAction", "InteropBase#echoBase64");
-	    if (bb.__size == ws.echoBase64 (bb).__size)
+	    xsd__base64Binary bbResult = ws.echoBase64 (bb);
+	    if (bb.__size == bbResult.__size)
 	    {
 		printf ("successful\n");
-		printf ("Returned String :\n%s\n", bb.__ptr);
+		printf ("Returned String :\n%s\n", bbResult.__ptr);
 	    }
 	    else
 		printf ("failed\n");
+        
+        free(bb.__ptr);
+        delete [] bbResult.__ptr;
 
 	    time_t tim;
 	    time (&tim);
@@ -232,14 +257,17 @@ main (int argc, char *argv[])
 	    hb.__size = strlen (bstr);
 	    ws.setTransportProperty ("SOAPAction",
 				     "InteropBase#echoHexBinary");
-	    if (hb.__size == ws.echoHexBinary (hb).__size)
+	    xsd__hexBinary hbReturn = ws.echoHexBinary (hb);
+	    if (hb.__size == hbReturn.__size)
 	    {
 		printf ("successful\n");
-		printf ("Returned String :\n%s\n", hb.__ptr);
+		printf ("Returned String :\n%s\n", hbReturn.__ptr);
 	    }
 	    else
 		printf ("failed\n");
 
+        free(hb.__ptr);
+        delete [] hbReturn.__ptr;
 	    //testing echo decimal
 	    printf ("invoking echoDecimal...\n");
 	    ws.setTransportProperty ("SOAPAction", "InteropBase#echoDecimal");
