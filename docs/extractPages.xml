@@ -44,6 +44,11 @@ ant -f extractPages.xml -DuserId=bloggsf -Dpassword=Pa5sw6rd
 
  </description>
 
+<!-- * Include environment variables and the ant extensions in 'antcontrib'.
+ -->
+ <property name="env" value="env" environment="env"/>
+ <taskdef resource="net/sf/antcontrib/antlib.xml"/>
+
  <property name="ws-site.dir.download" value="${basedir}/.."/>
  <property name="ws-site.packageName"  value="ws-site"/>
  <property name="site.dir.download"    value="${basedir}/.."/>
