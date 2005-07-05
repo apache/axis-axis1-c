@@ -48,7 +48,6 @@ Notes:
 	<import file="${basedir}/build/buildWSDL2Ws.xml"/>
 	<import file="${basedir}/build/buildDocumentation.xml"/>
 
-
     <target name="buildVersionResource" if="windows">
         <delete>
             <fileset dir="${basedir}/build">
@@ -211,6 +210,43 @@ Notes:
 	<target name="build" depends="initialize"
 	 description="Build runtime libraries, WSDL2Ws tool and API Documentation">
 		<antcall target="buildAll" inheritall="true"/>
+	</target>
+
+	<target name="buildAndRunUnitTests" depends="initialize">
+		<description>
+			Calls the buildAll target and then runs the unit tests by calling the callRunUnitTests target.
+		</description>
+
+		<antcall target="buildAll" inheritall="true"/>
+
+		<antcall target="callRunUnitTests" inheritall="false">
+			<param name="dir.properties" value="${basedir}"/>
+			<param name="dir.obj" value="${dir.obj}"/>
+			<param name="dir.include" value="${dir.include}"/>
+		</antcall>
+	</target>
+	
+	
+	<target name="callRunUnitTests" depends="initialize">
+		<description>
+			This target calls the unit test.xml file with the correct properties that are 
+	a combination of whatever the build has been run with and a refresh from test properties and build properties.
+		</description>
+	
+		<!-- load platform specific test override properties -->
+		<property name="dir.release" value="${dir.obj}"/>
+		<property name="dir.wsdl2ws" value="${dir.release}/classes"/>
+		<property name="test.include" value="${dir.include}"/>
+		<property name="dir.xmlParser" value="${env.XERCES_HOME}/bin${path.separator}${env.XERCES_HOME}/lib"/>
+			
+		<property file="${dir.properties}/version.properties" />
+		<property file="${dir.properties}/test.${platform}.properties" />
+	
+		<!-- also need build.properties -->
+		<property file="${dir.properties}/build/build.${platform}.properties" />
+        <property file="${dir.properties}/build/build.common.properties" />
+
+		<ant dir="." antFile="unitTest.xml" inheritAll="true"/>
 	</target>
 
 	<target name="buildWithTrace" depends="initialize"
