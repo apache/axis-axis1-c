@@ -15,6 +15,7 @@
 
 #include "HTTPChannel.hpp"
 #include "../../../platforms/PlatformAutoSense.hpp"
+#include "../../../common/AxisTrace.h"
 
 /**
  * HTTPChannel::HTTPChannel()
@@ -242,6 +243,16 @@ const IChannel & HTTPChannel::operator >> (const char * msg)
         throw HTTPTransportException( SERVER_TRANSPORT_INPUT_STREAMING_ERROR, 
                                       (char *) m_LastError.c_str());
     }
+
+
+#ifdef ENABLE_AXISTRACE
+        if (axiscpp::AxisTrace::isTraceOn())
+        {
+            char traceBuffer[40];
+            sprintf(traceBuffer, "Bytes received: %i", nByteRecv);
+            AxisTrace::traceLine(traceBuffer);
+        }
+#endif
 
     if( nByteRecv)
     {
