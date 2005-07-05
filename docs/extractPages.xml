@@ -78,8 +78,8 @@ ant -f extractPages.xml -DuserId=bloggsf -Dpassword=Pa5sw6rd
     </if>
 
     <delete dir="${site.dir.download}/${site.packageName}"/>
-    <echo message="Warning: ${site.packageName} will take about 2 minutes to extract from CVS!"/>
-    <echo message="                                    ==="/>
+    <echo message="Warning: ${site.packageName} will take about 5 minutes to extract from CVS!"/>
+    <echo message="                                     ==="/>
     <echo message="About to download ${site.packageName} to ${site.dir.download}"/>
     <cvs cvsRoot=":ssh:${userId}@cvs.apache.org:/home/cvs"
          command="checkout"
@@ -88,8 +88,8 @@ ant -f extractPages.xml -DuserId=bloggsf -Dpassword=Pa5sw6rd
          reallyquiet="true"/>
 
     <delete dir="${ws-site.dir.download}/${ws-site.packageName}"/>
-    <echo message="Warning: ${ws-site.packageName} will take about 40 minutes to extract from CVS!"/>
-    <echo message="                               ===="/>
+    <echo message="Warning: ${ws-site.packageName} will take about 65 minutes to extract from CVS!"/>
+    <echo message="                                ===="/>
     <echo message="About to download ${ws-site.packageName} to ${ws-site.dir.download}"/>
     <cvs cvsRoot=":ssh:${userId}@cvs.apache.org:/home/cvs"
          command="checkout"

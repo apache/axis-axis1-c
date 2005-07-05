@@ -59,10 +59,10 @@ ant -f buildPages.xml -DuserId=bloggsj -Dpassword=P4s5w0rd buildSite
 <!-- * Set the script property values.
 -->
  <property name="ws-site.dir.download" value="${basedir}/../.."/>
- <property name="ws-site.dir.upload"   value="${basedir}/../../ws-site/targets/axis"/>
+ <property name="ws-site.dir.upload"   value="${basedir}/../../ws-site/targets/axis/cpp"/>
  <property name="ws-site.packageName"  value="ws-site"/>
  <property name="site.dir.download"    value="${basedir}/../.."/>
- <property name="site.dir.upload"      value="${basedir}/src"/>
+ <property name="site.dir.upload"      value="${basedir}/src/cpp"/>
  <property name="site.packageName"     value="ws-axis/site"/>
  <property name="dollar"               value="$"/>
  <property name="myJava.home"          value="${dollar}{env.JAVA_HOME}"/>
@@ -75,9 +75,9 @@ ant -f buildPages.xml -DuserId=bloggsj -Dpassword=P4s5w0rd buildSite
      * 'extractSite'can be run as 'buildSite' requires functions that are only
      * available in this script.
  -->
- <if> <available file="build.xml" property="Options" value="extractSite buildSite"/>
+ <if> <available file="${basedir}/src/cpp/build.xml" property="Options" value="extractSite buildSite"/>
   <then>
-   <import file="build.xml"/>
+   <import file="${basedir}/src/cpp/build.xml"/>
    <property name="Options" value="extractSite buildSite"/>
   </then>
   <else>
@@ -170,8 +170,10 @@ ant -f buildPages.xml -DuserId=bloggsj -Dpassword=P4s5w0rd buildSite
 
         <if> <equals arg1="${FoundForrestHomeInPath}" arg2="true"/>
          <then>
-          <antcall target="build-C-site-only">
-          </antcall>
+          <antcall target="clean"/>
+          <antcall target="forrest"/>
+          <move file="${basedir}/build/tmp" tofile="${basedir}/build/site"/>
+          <antcall target="replace"/>
          </then>
          <else>
           <echo message="FORREST_HOME was not found in the path environment varable."/>
