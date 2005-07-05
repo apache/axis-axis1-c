@@ -55,6 +55,14 @@
     os << buf;
     return os;
   }
+
+  std::ostream& operator<<(std::ostream& os, unsigned __int64 i )
+  {
+    char buf[20];
+    sprintf(buf,"%I64u", i );
+    os << buf;
+    return os;
+  }
 #endif
 
 int main(int argc, char* argv[])

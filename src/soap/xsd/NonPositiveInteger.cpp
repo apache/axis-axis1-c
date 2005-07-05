@@ -199,7 +199,7 @@ AxisChar* NonPositiveInteger::serialize(const xsd__nonPositiveInteger* value) th
     if (*value == 0)
     {
         serializedValue[0] = '0';
-		serializedValue[1] = NULL;
+		serializedValue[1] = 0;
     }
     else
     {

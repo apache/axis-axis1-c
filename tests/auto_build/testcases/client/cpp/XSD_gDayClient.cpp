@@ -22,18 +22,16 @@
 
 int main(int argc, char* argv[])
 {
-   char endpoint[256];
-   const char* url="http://localhost:80/axis/XSD_gDay";
+    char endpoint[256];
+    const char* url="http://localhost:80/axis/XSD_gDay";
 
     if(argc>1)
         url = argv[1];
 
-      // bool bSuccess = false;
-
-   try
-   {
-     sprintf(endpoint, "%s", url);
-     XSD_gDay* ws = new XSD_gDay(endpoint);
+    try
+    {
+        sprintf(endpoint, "%s", url);
+        XSD_gDay* ws = new XSD_gDay(endpoint);
 
         char returnString[50];
         
@@ -42,80 +40,81 @@ int main(int argc, char* argv[])
         struct tm time;
         memcpy(&time, temp, sizeof(struct tm));
 
-       // Test non-nillable element
-      xsd__gDay result = ws->asNonNillableElement(time);
+        // Test non-nillable element
+        xsd__gDay result = ws->asNonNillableElement(time);
         strftime(returnString, 50, "%d", &result);
-      cout << "non-nillable element=" << returnString << endl;
+        cout << "non-nillable element=" << returnString << endl;
 
         // Test nillable element, with a value
         xsd__gDay* nillableInput = new xsd__gDay();
-       *(nillableInput) = time;
-      xsd__gDay* nillableResult = ws->asNillableElement(nillableInput);
-     if (nillableResult)
-       {
+        *(nillableInput) = time;
+        xsd__gDay* nillableResult = ws->asNillableElement(nillableInput);
+        if (nillableResult)
+        {
             strftime(returnString, 50, "%d", nillableResult);
             cout << "nillable element=" << returnString << endl;
-          delete nillableResult;
+            delete nillableResult;
         }
-     else
-      {
-         cout << "nillable element=<nil>" << endl;
-     }
-       delete nillableInput;
+        else
+        {
+            cout << "nillable element=<nil>" << endl;
+        }
+        delete nillableInput;
 
-     // Test nillable element, with nil
+        // Test nillable element, with nil
         nillableResult = ws->asNillableElement(NULL);
-     if (nillableResult)
-       {
+        if (nillableResult)
+        {
             strftime(returnString, 50, "%d", nillableResult);
             cout << "nil element=" << returnString << endl;
-           delete nillableResult;
+            delete nillableResult;
         }
-     else
-      {
-         cout << "nil element=<nil>" << endl;
-      }
+        else
+        {
+            cout << "nil element=<nil>" << endl;
+        }
 
-       // Test required attribute
+        // Test required attribute
         RequiredAttributeElement requiredAttributeInput;
-      requiredAttributeInput.setrequiredAttribute(time);
+        requiredAttributeInput.setrequiredAttribute(time);
         RequiredAttributeElement* requiredAttributeResult = ws->asRequiredAttribute(&requiredAttributeInput);
-     strftime(returnString, 50, "%d", &(requiredAttributeResult->getrequiredAttribute()));
+        result = requiredAttributeResult->getrequiredAttribute();
+        strftime(returnString, 50, "%d", &result);
         cout << "required attribute=" << returnString << endl;
-       delete requiredAttributeResult;
+        delete requiredAttributeResult;
 
 /* Optional Attributes currently unsupported by WSDL2Ws
  * Exact coding of this section may change depending on chosen implementation
         // Test optional attribute, with a value
-      OptionalAttributeElement optionalAttributeInput;
-      optionalAttributeInput.setoptionalAttribute(time);
+        OptionalAttributeElement optionalAttributeInput;
+        optionalAttributeInput.setoptionalAttribute(time);
         OptionalAttributeElement* optionalAttributeResult = ws->asOptionalAttribute(&optionalAttributeInput);
-     if (optionalAttributeResult->getoptionalAttribute())
-      {
+        if (optionalAttributeResult->getoptionalAttribute())
+        {
             strftime(returnString, 50, "%d", optionalAttributeResult->getoptionalAttribute());
-           cout << "optional attribute, with data=" << returnString << endl;
-     }
-     else
-      {
-         cout << "optional attribute, with data=<not present>" << endl;
+            cout << "optional attribute, with data=" << returnString << endl;
         }
-     delete optionalAttributeResult;
+        else
+        {
+            cout << "optional attribute, with data=<not present>" << endl;
+        }
+        delete optionalAttributeResult;
 
-     // Test optional attribute, not present
-       //optionalAttributeInput.setattribute();
-      optionalAttributeResult = ws->asOptionalAttribute(&optionalAttributeInput);
-       if (optionalAttributeResult->getoptionalAttribute())
-      {
+        // Test optional attribute, not present
+        //optionalAttributeInput.setattribute();
+        optionalAttributeResult = ws->asOptionalAttribute(&optionalAttributeInput);
+        if (optionalAttributeResult->getoptionalAttribute())
+        {
             strftime(returnString, 50, "%d", optionalAttributeResult->getoptionalAttribute());
-           cout << "optional attribute, not present=" << returnString << endl;
-       }
-     else
-      {
-         cout << "optional attribute, not present=<not present>" << endl;
-      }
-     delete optionalAttributeResult;
+            cout << "optional attribute, not present=" << returnString << endl;
+        }
+        else
+        {
+            cout << "optional attribute, not present=<not present>" << endl;
+        }
+        delete optionalAttributeResult;
 */
-       // Test array
+        // Test array
         xsd__gDay_Array arrayInput;
         arrayInput.m_Array = new xsd__gDay*[2];
         xsd__gDay * array = new xsd__gDay[2];
@@ -125,10 +124,10 @@ int main(int argc, char* argv[])
             array[inputIndex] = time;
             arrayInput.m_Array[inputIndex] = &array[inputIndex];
         }
-     xsd__gDay_Array arrayResult = ws->asArray(arrayInput);
+        xsd__gDay_Array arrayResult = ws->asArray(arrayInput);
         cout << "array of " << arrayResult.m_Size << " elements" << endl;
-     for (int index = 0; index < arrayResult.m_Size ; index++)
-     {
+        for (int index = 0; index < arrayResult.m_Size ; index++)
+        {
             strftime(returnString, 50, "%d", arrayResult.m_Array[index]);
             cout << "  element[" << index << "]=" << returnString << endl;
             delete arrayResult.m_Array[index];
@@ -137,32 +136,33 @@ int main(int argc, char* argv[])
         delete [] arrayInput.m_Array;
         delete [] arrayResult.m_Array;
 
-      // Test complex type
-      SimpleComplexType complexTypeInput;
-       complexTypeInput.setcomplexTypeElement(time);
-     SimpleComplexType* complexTypeResult = ws->asComplexType(&complexTypeInput);
-        strftime(returnString, 50, "%d", &(complexTypeResult->getcomplexTypeElement()));
-      cout << "within complex type=" << returnString << endl;
-       delete complexTypeResult;
+        // Test complex type
+        SimpleComplexType complexTypeInput;
+        complexTypeInput.setcomplexTypeElement(time);
+        SimpleComplexType* complexTypeResult = ws->asComplexType(&complexTypeInput);
+        result = complexTypeResult->getcomplexTypeElement();
+        strftime(returnString, 50, "%d", &result);
+        cout << "within complex type=" << returnString << endl;
+        delete complexTypeResult;
 
-       // Tests now complete
+        // Tests now complete
 
-       delete ws;
+        delete ws;
     }
- catch(AxisException& e)
-   {
-     cout << "Exception : " << e.what() << endl;
-   }
- catch(exception& e)
-   {
-     cout << "Unknown exception has occured: " << e.what() << endl;
-    }
- catch(...)
+    catch(AxisException& e)
     {
-     cout << "Unknown exception has occured" << endl;
-  }
+        cout << "Exception : " << e.what() << endl;
+    }
+    catch(exception& e)
+    {
+        cout << "Unknown exception has occured: " << e.what() << endl;
+    }
+    catch(...)
+    {
+        cout << "Unknown exception has occured" << endl;
+    }
 
-   cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;
+    cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;
    
-  return 0;
+    return 0;
 }

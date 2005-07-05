@@ -80,7 +80,8 @@ int main(int argc, char* argv[])
 		RequiredAttributeElement requiredAttributeInput;
 		requiredAttributeInput.setrequiredAttribute(time);
 		RequiredAttributeElement* requiredAttributeResult = ws->asRequiredAttribute(&requiredAttributeInput);
-		strftime(returnString, 50, "%a %b %d %H:%M:%S %Y", &(requiredAttributeResult->getrequiredAttribute()));
+        result = requiredAttributeResult->getrequiredAttribute();
+		strftime(returnString, 50, "%a %b %d %H:%M:%S %Y", &result);
         cout << "required attribute=" << returnString << endl;
 		delete requiredAttributeResult;
 
@@ -141,7 +142,8 @@ int main(int argc, char* argv[])
 		SimpleComplexType complexTypeInput;
 		complexTypeInput.setcomplexTypeElement(time);
 		SimpleComplexType* complexTypeResult = ws->asComplexType(&complexTypeInput);
-        strftime(returnString, 50, "%a %b %d %H:%M:%S %Y", &(complexTypeResult->getcomplexTypeElement()));
+        result = complexTypeResult->getcomplexTypeElement();
+        strftime(returnString, 50, "%a %b %d %H:%M:%S %Y", &result);
 		cout << "within complex type=" << returnString << endl;
 		delete complexTypeResult;
 
