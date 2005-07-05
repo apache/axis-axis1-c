@@ -32,26 +32,13 @@ class STORAGE_CLASS_INFO AxisWsddException :public AxisException
 {
 
 public:
-    AxisWsddException();
-    AxisWsddException(const int iExceptionCode);
-    AxisWsddException(const int iExceptionCode, char* pcMessage);
-    AxisWsddException(const exception* e);
-    AxisWsddException(const exception* e, const int iExceptionCode);
+    AxisWsddException(const int iExceptionCode, char* pcMessage = NULL);
+    AxisWsddException(AxisWsddException& e);
     virtual ~AxisWsddException() throw();
-    const char* what() throw();
-    const int getExceptionCode();
-
+    
 private:
-    const string getMessage(const exception* e);
-    const string getMessage(const int iExceptionCode);
-    void processException(const exception* e);
-    void processException(const exception* e, const int iExceptionCode);
-	void processException (const exception* e, char* pcMessage);
-    void processException(const int iExceptionCode);
-    void processException(const int iExceptionCode, char* pcMessage);                                                                  
-                                                                                                                             
-    string m_sMessage;
-    int m_iExceptionCode;
+    const string getMessageForExceptionCode(const int iExceptionCode);
+    
 };
 
 AXIS_CPP_NAMESPACE_END

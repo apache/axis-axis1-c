@@ -176,9 +176,12 @@ typedef enum
 class STORAGE_CLASS_INFO AxisException :public exception
 {
 
+
+
+
 public:
     /** No parameter constructor*/
-    //AxisException(){};
+    AxisException(){};
 
     /** This can be used to throw an exception with the exception code
       * which is defined in the AxisException.h file, under AXISC_EXCEPTIONS
@@ -202,7 +205,13 @@ public:
       * @example throw AxisException(AXISC_NODE_VALUE_MISMATCH_EXCEPTION, 
             "Some additional exception info");
       */
-    //AxisException(const int iExceptionCode, char* pcMessage);
+    AxisException(const int iExceptionCode, const char* pcMessage = NULL):m_iExceptionCode(iExceptionCode)
+	{
+		if(pcMessage)
+			m_sMessage = std::string(pcMessage);
+		else
+			m_sMessage = "";
+	}
 
     /** This can be used to throw an exception with another exception as a
       * parameter. One situation in which this can be used is when we catch
@@ -212,7 +221,7 @@ public:
       *
       * @example throw AxisException(std::bad_alloc);
       */
-    //AxisException(const exception* e);
+    AxisException(const AxisException& e):m_iExceptionCode(e.m_iExceptionCode), m_sMessage(e.m_sMessage){};
 
     /** This accept two parameters, both an exception code an exception object
       * derived from std::exception
@@ -234,7 +243,7 @@ public:
     /** This method is defined in std::exception. AxisException and derived
       * classes will override this to print exception messages
       */
-    virtual const char* what() throw() = 0;
+    virtual const char* what() const throw() { return m_sMessage.c_str (); };
 
     /** This can be called to get the exception code which is passed
       * in the constructor. This returns -1 value when the 
@@ -245,8 +254,22 @@ public:
       *
       * @return exception message
       */
-    virtual const int getExceptionCode() = 0;
+    virtual const int getExceptionCode() const { return m_iExceptionCode; }
+	
+	const char* getMessage() const { return what(); }
+
+protected:
+	
+	/**
+	  *These 2 data members are common to all the inherited classes of this base class.
+	  *The string variable m_sMessage is used to store the Exception message
+	  *The integer variable m_iExceptionCode stores the Exception code
+      */
+
+	std::string m_sMessage;
+    int m_iExceptionCode;
 };
+
 
 AXIS_CPP_NAMESPACE_END
 

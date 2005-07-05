@@ -22,76 +22,23 @@
 
 #include "HTTPTransportException.hpp"
 
-/**
- *    Default when no parameter passed. When thrown with no parameter
- *    more general SERVER_TRANSPORT_EXCEPTION is assumed.
-*/
-HTTPTransportException::HTTPTransportException()
+HTTPTransportException::HTTPTransportException(const int iExceptionCode, char* pcMessage):AxisException(iExceptionCode)
 {
-    processException(SERVER_TRANSPORT_EXCEPTION);
+	AxisString sMessage = "";
+	if (pcMessage) 
+	{
+		sMessage = pcMessage;
+	}
+	m_sMessage = getMessageForExceptionCode(m_iExceptionCode) + " " + sMessage;
 }
 
-HTTPTransportException::HTTPTransportException (const int iExceptionCode)
-{
-    m_iExceptionCode = iExceptionCode;
-    processException (iExceptionCode);
-}
-
-HTTPTransportException::HTTPTransportException(const int iExceptionCode, char* pcMessage)
-{
-    m_iExceptionCode = iExceptionCode;
-    processException(iExceptionCode, pcMessage);
-}
-
-HTTPTransportException::HTTPTransportException (const exception* e)
-{
-    processException (e);
-}
-
-HTTPTransportException::HTTPTransportException (const exception* e, const int iExceptionCode)
-{
-    processException (e, iExceptionCode);
-}
+HTTPTransportException::HTTPTransportException (HTTPTransportException& e):AxisException(e)
+{}
 
 HTTPTransportException::~HTTPTransportException() throw ()
-{
+{}
 
-}
-
-void HTTPTransportException::processException (const exception* e, const int iExceptionCode)
-{
-    m_sMessage = getMessage (iExceptionCode) + ":" + getMessage(e);
-}
-
-void HTTPTransportException::processException (const exception* e, char* pcMessage)
-{
-    m_sMessage += "HTTPTransportException:" + string(pcMessage) + ":" + getMessage (e);
-}
-
-void HTTPTransportException::processException (const exception* e)
-{
-    m_sMessage += "HTTPTransportException:" + getMessage (e);
-}
-
-void HTTPTransportException::processException(const int iExceptionCode)
-{
-    m_sMessage = getMessage (iExceptionCode);
-}
-
-void HTTPTransportException::processException(const int iExceptionCode, char* pcMessage)
-{
-    AxisString sMessage = pcMessage;
-    m_sMessage = getMessage(iExceptionCode) + " " + sMessage;
-}
-
-const string HTTPTransportException::getMessage (const exception* objException)
-{
-	static string objExDetail = objException->what();
-
-    return objExDetail;
-}
-
-const string HTTPTransportException::getMessage (const int iExceptionCode)
+const string HTTPTransportException::getMessageForExceptionCode (const int iExceptionCode)
 {
     switch(iExceptionCode)
     {
@@ -214,15 +161,5 @@ const string HTTPTransportException::getMessage (const int iExceptionCode)
 		}
     }
     return m_sMessage;
-}
-
-const char* HTTPTransportException::what() throw ()
-{
-    return m_sMessage.c_str ();
-}
-
-const int HTTPTransportException::getExceptionCode()
-{
-    return m_iExceptionCode;
 }
 

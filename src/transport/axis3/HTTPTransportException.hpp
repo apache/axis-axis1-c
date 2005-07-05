@@ -33,25 +33,13 @@ class STORAGE_CLASS_INFO HTTPTransportException :public AxisException
 {
 
 public:
-    HTTPTransportException();
-    HTTPTransportException(const int iExceptionCode);
-    HTTPTransportException(const int iExceptionCode, char* pcMessage);
-    HTTPTransportException(const exception* e);
-    HTTPTransportException(const exception* e, const int iExceptionCode);
+    HTTPTransportException(const int iExceptionCode, char* pcMessage = NULL);
+    HTTPTransportException(HTTPTransportException& e);
     virtual ~HTTPTransportException() throw();
-    const char* what() throw();
-    const int getExceptionCode();
                                                                                                                              
 private:
-    const string getMessage(const exception* e);
-    const string getMessage(const int iExceptionCode);
-    void processException(const exception* e);
-    void processException(const exception* e, const int iExceptionCode);
-	void processException (const exception* e, char* pcMessage);
-    void processException(const int iExceptionCode);
-    void processException(const int iExceptionCode, char* pcMessage);                                                                                                                           
-    string m_sMessage;
-    int m_iExceptionCode;
+    const string getMessageForExceptionCode(const int iExceptionCode);
+    
 };
 
 #endif

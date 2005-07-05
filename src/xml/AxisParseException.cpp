@@ -21,77 +21,23 @@
 
 #include "AxisParseException.h"
 
-/**
- *    Default when no parameter passed. When thrown with no parameter
- *    more general SERVER_TRANSPORT_EXCEPTION is assumed.
-*/
-AxisParseException::AxisParseException()
+AxisParseException::AxisParseException(const int iExceptionCode, char* pcMessage):AxisException(iExceptionCode)
 {
-    processException(SERVER_TRANSPORT_EXCEPTION);
+	AxisString sMessage = "";
+	if (pcMessage) 
+	{
+		sMessage = pcMessage;
+	}
+	m_sMessage = getMessageForExceptionCode(m_iExceptionCode) + " " + sMessage;
 }
 
-AxisParseException::AxisParseException (const int iExceptionCode)
-{
-    m_iExceptionCode = iExceptionCode;
-    processException (iExceptionCode);
-}
-
-AxisParseException::AxisParseException(const int iExceptionCode, char* pcMessage)
-{
-    m_iExceptionCode = iExceptionCode;
-    processException(iExceptionCode, pcMessage);
-}
-
-AxisParseException::AxisParseException (const exception* e)
-{
-    processException (e);
-}
-
-AxisParseException::AxisParseException (const exception* e, const int iExceptionCode)
-{
-    processException (e, iExceptionCode);
-}
+AxisParseException::AxisParseException (AxisParseException& e):AxisException (e)
+{}
 
 AxisParseException::~AxisParseException() throw ()
-{
+{}
 
-}
-
-void AxisParseException::processException (const exception* e, const int iExceptionCode)
-{
-    m_sMessage = getMessage (iExceptionCode) + ":" + getMessage(e);
-}
-
-void AxisParseException::processException (const exception* e, char* pcMessage)
-{
-    m_sMessage += "AxisParseException:" + string(pcMessage) + ":" + getMessage (e);
-}
-
-void AxisParseException::processException (const exception* e)
-{
-    m_sMessage = "AxisParseException:" + getMessage (e);
-}
-
-void AxisParseException::processException(const int iExceptionCode)
-{
-    m_sMessage = getMessage (iExceptionCode);
-}
-
-void AxisParseException::processException(const int iExceptionCode, char* pcMessage)
-{
-    AxisString sMessage = pcMessage;
-    m_sMessage = getMessage(iExceptionCode) + " " + sMessage;
-    if(pcMessage)
-        delete pcMessage;
-}
-const string AxisParseException::getMessage (const exception* objException)
-{
-	static string objExDetail = objException->what();
-
-    return objExDetail;
-}
-
-const string AxisParseException::getMessage (const int iExceptionCode)
+const string AxisParseException::getMessageForExceptionCode (const int iExceptionCode)
 {
     switch(iExceptionCode)
     {
@@ -108,15 +54,5 @@ const string AxisParseException::getMessage (const int iExceptionCode)
             m_sMessage = "AxisParseException:Unknown Parse Exception"; 
     }
     return m_sMessage;
-}
-
-const char* AxisParseException::what() throw ()
-{
-    return m_sMessage.c_str ();
-}
-
-const int AxisParseException::getExceptionCode()
-{
-    return m_iExceptionCode;
 }
 

@@ -32,25 +32,14 @@ class STORAGE_CLASS_INFO AxisSoapException :public AxisException
 {
 
 public:
-    AxisSoapException();
-    AxisSoapException(const int iExceptionCode);
-    AxisSoapException(const int iExceptionCode, char* pcMessage);
-    AxisSoapException(const exception* e);
-    AxisSoapException(const exception* e, const int iExceptionCode);
+    AxisSoapException(const int iExceptionCode, char* pcMessage = NULL);
+    AxisSoapException(const AxisSoapException& e);
     virtual ~AxisSoapException() throw();
-    const char* what() throw();
-    const int getExceptionCode();
+    
 
 private:
-    const string getMessage(const exception* e);
-    const string getMessage(const int iExceptionCode);
-    void processException(const exception* e);
-    void processException(const exception* e, const int iExceptionCode);
-	void processException (const exception* e, char* pcMessage);
-    void processException(const int iExceptionCode);
-    void processException(const int iExceptionCode, char* pcMessage);                                                                                                                           
-    string m_sMessage;
-    int m_iExceptionCode;
+    const string getMessageForExceptionCode(const int iExceptionCode);
+    
 };
 
 AXIS_CPP_NAMESPACE_END

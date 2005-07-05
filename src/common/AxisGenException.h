@@ -34,70 +34,13 @@ class STORAGE_CLASS_INFO AxisGenException :public AxisException
 {
 
 public:
-    AxisGenException();
-
-    /** This can be used to throw an exception with the exception code
-      * which is defined in the AxisException.h file, under AXISC_EXCEPTIONS
-      * type. Axis C++ exception model heavily use this.
-      *
-      * @param Exception code which is defined in the AxisException.h file,
-      * under AXISC_EXCEPTIONS type.
-      *
-      * @example throw AxisGenException(AXISC_NODE_VALUE_MISMATCH_EXCEPTION);
-      */
-    AxisGenException(const int iExceptionCode);
-    /** This can be used to throw an exception with exception code which is
-      * is defined in the AxisException.h file, under AXISC_EXCEPTIONS type.
-      * An additional description of the exception could be appended.
-      *
-      * @param Exception code which is defined in the AxisException.h file,
-      *  under AXISC_EXCEPTIONS type.
-      * @param A char pointer that will point to an exception message.
-	  * @param Whether to delete[] the pcMessage that is passed in, once it is copied
-      *
-      * @example throw AxisGenException(AXISC_NODE_VALUE_MISMATCH_EXCEPTION,
-            "Some additional exception info");
-      */
-
-    AxisGenException(const int iExceptionCode, char* pcMessage, bool deleteInputMsg=true);
-
-    /** This can be used to throw an exception with another exception as a
-      * parameter. One situation in which this can be used is when we catch
-      * a standard exception like std::bad_alloc
-      *
-      * @param An exception class derived from std::exception
-      *
-      * @example throw AxisGenException(std::bad_alloc);
-      */
-    AxisGenException(const exception* e);
-
-    /** This accept two parameters, both an exception code an exception object
-      * derived from std::exception
-      *
-      * @param An exception class derived from std::exception
-      * @param An exception code
-      */
-    AxisGenException(const exception* e, const int iExceptionCode);
-
-    /** This accept an exception message
-      *
-      * @param An exception message
-      */
-    AxisGenException(const char* pcMessage);
+    AxisGenException(const int iExceptionCode, char* pcMessage = NULL);
+	AxisGenException(AxisGenException& e);
     virtual ~AxisGenException() throw();
-    const char* what() throw();
-    const int getExceptionCode();
-
+    
 private:
-    const string getMessage(const exception* e);
-    const string getMessage(const int iExceptionCode);
-    void processException(const exception* e);
-    void processException(const exception* e, const int iExceptionCode);
-    void processException (const exception* e, char* pcMessage);
-    void processException(const int iExceptionCode);
-    void processException(const int iExceptionCode, char* pcMessage, bool deleteInputMsg); 
-    string m_sMessage;
-    int m_iExceptionCode;
+    const string getMessageForExceptionCode(const int iExceptionCode);
+    
 };
 
 AXIS_CPP_NAMESPACE_END

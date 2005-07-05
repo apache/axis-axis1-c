@@ -32,24 +32,13 @@ class STORAGE_CLASS_INFO AxisConfigException :public AxisException
 {
 
 public:
-    AxisConfigException();
-    AxisConfigException(const int iExceptionCode);
-    AxisConfigException(const int iExceptionCode, char* pcMessage);
-    AxisConfigException(const exception* e);
-    AxisConfigException(const exception* e, const int iExceptionCode);
+    AxisConfigException(const int iExceptionCode, char* pcMessage = NULL);
+    AxisConfigException(const AxisConfigException& e);
     virtual ~AxisConfigException() throw();
-    const char* what() throw();
-    const int getExceptionCode();
-    const string& getMessage(const exception* e);
-    const string& getMessage(const int iExceptionCode);
+        
 private:
-    void processException(const exception* e);
-    void processException(const exception* e, const int iExceptionCode);
-    void processException (const exception* e, char* pcMessage);
-    void processException(const int iExceptionCode);
-    void processException(const int iExceptionCode, char* pcMessage); 
-    string m_sMessage;
-    int m_iExceptionCode;
+    const string getMessageForExceptionCode(const int iExceptionCode);
+	
 };
 
 AXIS_CPP_NAMESPACE_END

@@ -370,9 +370,9 @@ int initialize_module (int bServer)
                             status = AXIS_FAIL;
                         }
                     }
-                    catch (exception& e)
+                    catch (AxisException& e)
                     {
-                        throw AxisEngineException(&e);
+                        throw AxisEngineException(e.getExceptionCode(), e.what());
                     }
     
                 }

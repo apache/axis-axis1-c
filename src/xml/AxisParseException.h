@@ -31,25 +31,13 @@ class STORAGE_CLASS_INFO AxisParseException :public AxisException
 {
 
 public:
-    AxisParseException();
-    AxisParseException(const int iExceptionCode);
-    AxisParseException(const int iExceptionCode, char* pcMessage);
-    AxisParseException(const exception* e);
-    AxisParseException(const exception* e, const int iExceptionCode);
+    AxisParseException(const int iExceptionCode, char* pcMessage = NULL);
+    AxisParseException(AxisParseException& e);
     virtual ~AxisParseException() throw();
-    const char* what() throw();
-    const int getExceptionCode();
                                                                                                                              
 private:
-    const string getMessage(const exception* e);
-    const string getMessage(const int iExceptionCode);
-    void processException(const exception* e);
-    void processException(const exception* e, const int iExceptionCode);
-	void processException (const exception* e, char* pcMessage);
-    void processException(const int iExceptionCode);
-    void processException(const int iExceptionCode, char* pcMessage);                                                                                                                           
-    string m_sMessage;
-    int m_iExceptionCode;
+    const string getMessageForExceptionCode (const int iExceptionCode);
+    
 };
 
 #endif

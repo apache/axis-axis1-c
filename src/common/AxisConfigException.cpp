@@ -28,76 +28,24 @@
 
 AXIS_CPP_NAMESPACE_START
 
-AxisConfigException::AxisConfigException()
+AxisConfigException::AxisConfigException(const int iExceptionCode, char* pcMessage):AxisException(iExceptionCode)
 {
-    processException(SERVER_CONFIG_EXCEPTION);
+	AxisString sMessage = "";
+	if (pcMessage) 
+	{
+		sMessage = pcMessage;
+	}
+	m_sMessage = getMessageForExceptionCode(m_iExceptionCode) + " " + sMessage;
 }
 
-AxisConfigException::AxisConfigException (const int iExceptionCode)
-{
-    m_iExceptionCode = iExceptionCode;
-    processException (iExceptionCode);
-}
-
-AxisConfigException::AxisConfigException(const int iExceptionCode, char* pcMessage)
-{
-    m_iExceptionCode = iExceptionCode;
-    processException(iExceptionCode, pcMessage);
-}
-
-AxisConfigException::AxisConfigException (const exception* e)
-{
-    m_iExceptionCode = -1;
-    processException (e);
-}
-
-AxisConfigException::AxisConfigException (const exception* e, const int iExceptionCode)
-{
-    m_iExceptionCode = iExceptionCode;
-    processException (e, iExceptionCode);
-}
+AxisConfigException::AxisConfigException (const AxisConfigException& e):AxisException(e)
+{}
 
 AxisConfigException::~AxisConfigException() throw ()
-{
+{}
 
-}
 
-void AxisConfigException::processException (const exception* e, const int iExceptionCode)
-{
-    m_sMessage = getMessage(iExceptionCode) + ":" + getMessage (e);
-}
-
-void AxisConfigException::processException (const exception* e, char* pcMessage)
-{
-    m_sMessage += "AxisConfigException:" + string(pcMessage) + ":" + getMessage (e);
-}
-
-void AxisConfigException::processException (const exception* e)
-{
-    m_sMessage += "AxisConfigException:" + getMessage (e);
-}
-
-void AxisConfigException::processException(const int iExceptionCode)
-{
-    m_sMessage = getMessage (iExceptionCode);
-}
-
-void AxisConfigException::processException(const int iExceptionCode, char* pcMessage)
-{
-    AxisString sMessage = pcMessage;
-    m_sMessage = getMessage(iExceptionCode) + " " + sMessage;
-    if(pcMessage)
-        delete pcMessage;
-}
-
-const string& AxisConfigException::getMessage (const exception* objException)
-{
-    static string objExDetail = objException->what();
-
-    return objExDetail;
-}
-
-const string& AxisConfigException::getMessage (const int iExceptionCode)
+const string AxisConfigException::getMessageForExceptionCode(const int iExceptionCode)
 {
     switch(iExceptionCode)
     {
@@ -114,16 +62,6 @@ const string& AxisConfigException::getMessage (const int iExceptionCode)
                 " Configuration Exception";
     }
     return m_sMessage;
-}
-
-const char* AxisConfigException::what() throw ()
-{
-    return m_sMessage.c_str ();
-}
-
-const int AxisConfigException::getExceptionCode()
-{
-    return m_iExceptionCode;
 }
 
 AXIS_CPP_NAMESPACE_END

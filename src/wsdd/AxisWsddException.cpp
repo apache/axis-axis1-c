@@ -28,74 +28,23 @@
 
 AXIS_CPP_NAMESPACE_START
 
-AxisWsddException::AxisWsddException()
+AxisWsddException::AxisWsddException(const int iExceptionCode, char* pcMessage):AxisException(iExceptionCode)
 {
-    processException(SERVER_WSDD_EXCEPTION);
+	AxisString sMessage = "";
+	if (pcMessage) 
+	{
+		sMessage = pcMessage;
+	}
+	m_sMessage = getMessageForExceptionCode(m_iExceptionCode) + " " + sMessage;
 }
 
-AxisWsddException::AxisWsddException (const int iExceptionCode)
-{
-    m_iExceptionCode = iExceptionCode;
-    processException (iExceptionCode);
-}
-
-AxisWsddException::AxisWsddException(const int iExceptionCode, char* pcMessage)
-{
-    m_iExceptionCode = iExceptionCode;
-    processException(iExceptionCode, pcMessage);
-}
-
-AxisWsddException::AxisWsddException (const exception* e)
-{
-    processException (e);
-}
-
-AxisWsddException::AxisWsddException (const exception* e, const int iExceptionCode)
-{
-    m_iExceptionCode = iExceptionCode;
-    processException (e, iExceptionCode);
-}
+AxisWsddException::AxisWsddException (AxisWsddException& e):AxisException(e)
+{}
 
 AxisWsddException::~AxisWsddException() throw ()
-{
+{}
 
-}
-
-void AxisWsddException::processException (const exception* e, const int iExceptionCode)
-{
-    m_sMessage = getMessage(iExceptionCode) + ":" + getMessage (e);
-}
-
-void AxisWsddException::processException (const exception* e, char* pcMessage)
-{
-    m_sMessage += "AxisWsddException:" + string(pcMessage) + ":" + getMessage (e);
-}
-
-void AxisWsddException::processException (const exception* e)
-{
-    m_sMessage += "AxisWsddException:" + getMessage (e);
-}
-
-void AxisWsddException::processException(const int iExceptionCode)
-{
-    m_sMessage = getMessage (iExceptionCode);
-}
-
-void AxisWsddException::processException(const int iExceptionCode, char* pcMessage)
-{
-    AxisString sMessage = pcMessage;
-    m_sMessage = getMessage(iExceptionCode) + " " + sMessage;
-    if(pcMessage)
-        delete pcMessage;
-}
-const string AxisWsddException::getMessage (const exception* objException)
-{
-    static string objExDetail = objException->what();
-
-    return objExDetail;
-}
-
-const string AxisWsddException::getMessage (const int iExceptionCode)
+const string AxisWsddException::getMessageForExceptionCode (const int iExceptionCode)
 {
     switch(iExceptionCode)
     {
@@ -121,16 +70,6 @@ const string AxisWsddException::getMessage (const int iExceptionCode)
             m_sMessage = "AxisWsddException:Unknown Wsdd Exception";
     }
     return m_sMessage;
-}
-
-const char* AxisWsddException::what() throw ()
-{
-    return m_sMessage.c_str ();
-}
-
-const int AxisWsddException::getExceptionCode()
-{
-    return m_iExceptionCode;
 }
 
 AXIS_CPP_NAMESPACE_END

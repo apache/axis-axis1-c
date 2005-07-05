@@ -27,70 +27,23 @@ AXIS_CPP_NAMESPACE_START
 
 //using namespace std;
 
-AxisGenException::AxisGenException (const int iExceptionCode)
+AxisGenException::AxisGenException(const int iExceptionCode, char* pcMessage):AxisException(iExceptionCode)
 {
-    m_iExceptionCode = iExceptionCode;
-    processException (iExceptionCode);
+	AxisString sMessage = "";
+	if (pcMessage) 
+	{
+		sMessage = pcMessage;
+	}
+	m_sMessage = getMessageForExceptionCode(m_iExceptionCode) + " " + sMessage;
 }
 
-AxisGenException::AxisGenException(const int iExceptionCode, char* pcMessage, bool deleteInputMsg)
-{
-    m_iExceptionCode = iExceptionCode;
-    processException(iExceptionCode, pcMessage, deleteInputMsg);
-}
+AxisGenException::AxisGenException (AxisGenException& e):AxisException(e)
+{}
 
-AxisGenException::AxisGenException (const exception* e)
-{
-    m_iExceptionCode = -1;
-    processException (e);
-}
+AxisGenException::~AxisGenException() throw ()
+{}
 
-AxisGenException::AxisGenException (const exception* e, const int iExceptionCode)
-{
-    m_iExceptionCode = iExceptionCode;
-    processException (e, iExceptionCode);
-}
-
-AxisGenException::AxisGenException(const char* pcMessage)
-{
-    m_sMessage = pcMessage;
-/*  if(pcMessage) delete pcMessage; */
-}
-
-void AxisGenException::processException (const exception* e, const int iExceptionCode)
-{
-    m_sMessage = getMessage(iExceptionCode) + ":" + getMessage (e);
-}
-
-void AxisGenException::processException (const exception* e, char* pcMessage)
-{
-    m_sMessage += "AxisGenException:" + string(pcMessage) + ":" + getMessage (e);
-}
-
-void AxisGenException::processException (const exception* e)
-{
-    m_sMessage += "AxisGenException:" + getMessage (e);
-}
-
-void AxisGenException::processException(const int iExceptionCode)
-{
-    m_sMessage = getMessage (iExceptionCode);
-}
-
-void AxisGenException::processException(const int iExceptionCode, char* pcMessage, bool deleteInputMsg)
-{
-    AxisString sMessage = pcMessage;
-    m_sMessage = getMessage(iExceptionCode) + sMessage;
-    if(deleteInputMsg && pcMessage)
-        delete [] pcMessage;
-}
-
-const string AxisGenException::getMessage (const exception* objException)
-{
-    return objException->what();
-}
-
-const string AxisGenException::getMessage (const int iExceptionCode)
+const string AxisGenException::getMessageForExceptionCode (const int iExceptionCode)
 {
     switch(iExceptionCode)
     {
@@ -110,19 +63,6 @@ const string AxisGenException::getMessage (const int iExceptionCode)
     return m_sMessage;
 }
 
-AxisGenException::~AxisGenException() throw ()
-{
 
-}
-
-const char* AxisGenException::what() throw ()
-{
-    return m_sMessage.c_str ();
-}
-
-const int AxisGenException::getExceptionCode()
-{
-    return m_iExceptionCode; 
-}
 
 AXIS_CPP_NAMESPACE_END

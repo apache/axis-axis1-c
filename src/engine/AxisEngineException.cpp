@@ -28,82 +28,23 @@
 
 AXIS_CPP_NAMESPACE_START
 
-AxisEngineException::AxisEngineException()
+AxisEngineException::AxisEngineException(const int iExceptionCode, const char* pcMessage ):AxisException(iExceptionCode)
 {
-    processException(SERVER_ENGINE_EXCEPTION);
-}
-
-AxisEngineException::AxisEngineException (const int iExceptionCode)
-{
-    m_iExceptionCode = iExceptionCode;
-    processException (iExceptionCode);
-}
-
-AxisEngineException::AxisEngineException(const int iExceptionCode, char* pcMessage)
-{
-    m_iExceptionCode = iExceptionCode;
-    processException(iExceptionCode, pcMessage);
-}
-
-AxisEngineException::AxisEngineException (const exception* e)
-{
-    processException (e);
-}
-
-AxisEngineException::AxisEngineException (const exception* e, const int iExceptionCode)
-{
-    m_iExceptionCode = iExceptionCode;
-    processException (e, iExceptionCode);
-}
-
-AxisEngineException::~AxisEngineException() throw ()
-{
-
-}
-
-void AxisEngineException::processException (const exception* e, const int iExceptionCode)
-{
-    m_sMessage = getMessage (iExceptionCode) + ":" + getMessage(e);
-}
-
-void AxisEngineException::processException (const exception* e, char* pcMessage)
-{
-    m_sMessage += "AxisEngineException:" + string(pcMessage) + ":" + getMessage (e);
-}
-
-void AxisEngineException::processException (const exception* e)
-{
-    m_sMessage += "AxisEngineException:" + getMessage (e);
-}
-
-void AxisEngineException::processException(const int iExceptionCode)
-{
-    m_sMessage = getMessage (iExceptionCode);
-}
-
-void AxisEngineException::processException(const int iExceptionCode, char* pcMessage)
-{
-
+	AxisString sMessage = "";
 	if (pcMessage) 
 	{
-		AxisString sMessage = pcMessage;
-		m_sMessage = getMessage(iExceptionCode) + " " + sMessage;
+		sMessage = pcMessage;
 	}
-	else
-	{
-		m_sMessage = getMessage(iExceptionCode);
-	}
-
-			
-}
-const string AxisEngineException::getMessage (const exception* objException)
-{
-    static string objExDetail = objException->what();
-
-    return objExDetail;
+	m_sMessage = getMessageForExceptionCode(m_iExceptionCode) + " " + sMessage;
 }
 
-const string AxisEngineException::getMessage (const int iExceptionCode)
+AxisEngineException::AxisEngineException (const AxisEngineException& e):AxisException(e)
+{}
+
+AxisEngineException::~AxisEngineException() throw ()
+{}
+
+const string AxisEngineException::getMessageForExceptionCode (const int iExceptionCode)
 {
     switch(iExceptionCode)
     {
@@ -153,16 +94,6 @@ const string AxisEngineException::getMessage (const int iExceptionCode)
             m_sMessage = "AxisEngineException:Unknown Axis C++ Engine Exception";
     }
     return m_sMessage;
-}
-
-const char* AxisEngineException::what() throw ()
-{
-    return m_sMessage.c_str ();
-}
-
-const int AxisEngineException::getExceptionCode()
-{
-    return m_iExceptionCode;
 }
 
 AXIS_CPP_NAMESPACE_END

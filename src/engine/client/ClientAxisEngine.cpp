@@ -147,7 +147,7 @@ int ClientAxisEngine::process (SOAPTransport* pSoap)
 		 * storage, so the false as the last parameter tells AxisGenException not to try to 
 		 * delete it.
 		 */
-		throw AxisGenException(e.getExceptionCode(), const_cast<char*>(e.what()), false);
+		throw AxisGenException(e.getExceptionCode(), const_cast<char*>(e.what()));
     }
     return Status;
 }

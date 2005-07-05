@@ -28,74 +28,23 @@
 
 AXIS_CPP_NAMESPACE_START
 
-AxisSoapException::AxisSoapException()
+AxisSoapException::AxisSoapException(const int iExceptionCode, char* pcMessage):AxisException(iExceptionCode)
 {
-    processException(SERVER_SOAP_EXCEPTION);
+   AxisString sMessage = "";
+	if (pcMessage) 
+	{
+		sMessage = pcMessage;
+	}
+	m_sMessage = getMessageForExceptionCode(m_iExceptionCode) + " " + sMessage;
 }
 
-AxisSoapException::AxisSoapException (const int iExceptionCode)
-{
-    m_iExceptionCode = iExceptionCode;
-    processException (iExceptionCode);
-}
-
-AxisSoapException::AxisSoapException(const int iExceptionCode, char* pcMessage)
-{
-    m_iExceptionCode = iExceptionCode;
-    processException(iExceptionCode, pcMessage);
-}
-
-AxisSoapException::AxisSoapException (const exception* e)
-{
-    processException (e);
-}
-
-AxisSoapException::AxisSoapException (const exception* e, const int iExceptionCode)
-{
-    m_iExceptionCode = iExceptionCode;
-    processException (e, iExceptionCode);
-}
+AxisSoapException::AxisSoapException (const AxisSoapException& e):AxisException (e)
+{}
 
 AxisSoapException::~AxisSoapException() throw ()
-{
+{}
 
-}
-
-void AxisSoapException::processException (const exception* e, const int iExceptionCode)
-{
-    m_sMessage = getMessage(iExceptionCode) + ":" + getMessage (e);
-}
-
-void AxisSoapException::processException (const exception* e, char* pcMessage)
-{
-    m_sMessage += "AxisSoapException:" + string(pcMessage) + ":" + getMessage (e);
-}
-
-void AxisSoapException::processException (const exception* e)
-{
-    m_sMessage += "AxisSoapException:" + getMessage (e);
-}
-
-void AxisSoapException::processException(const int iExceptionCode)
-{
-    m_sMessage = getMessage (iExceptionCode);
-}
-
-void AxisSoapException::processException(const int iExceptionCode, char* pcMessage)
-{
-    AxisString sMessage = pcMessage;
-    m_sMessage = getMessage(iExceptionCode) + " " + sMessage;
-    if(pcMessage)
-        delete pcMessage;
-}
-const string AxisSoapException::getMessage (const exception* objException)
-{
-    static string objExDetail = objException->what();
-
-    return objExDetail;
-}
-
-const string AxisSoapException::getMessage (const int iExceptionCode)
+const string AxisSoapException::getMessageForExceptionCode (const int iExceptionCode)
 {
     switch(iExceptionCode)
     {
@@ -128,16 +77,6 @@ const string AxisSoapException::getMessage (const int iExceptionCode)
             m_sMessage = "AxisSoapException:Unknown Soap Exception";
     }
     return m_sMessage;
-}
-
-const char* AxisSoapException::what() throw ()
-{
-    return m_sMessage.c_str ();
-}
-
-const int AxisSoapException::getExceptionCode()
-{
-    return m_iExceptionCode;
 }
 
 AXIS_CPP_NAMESPACE_END
