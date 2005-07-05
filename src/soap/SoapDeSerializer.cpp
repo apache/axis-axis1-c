@@ -1831,30 +1831,101 @@ void SoapDeSerializer::getElement (const AxisChar * pName,
 
     if (RPC_ENCODED == m_nStyle)
     {
-        m_pNode = m_pParser->next ();
+		bool    bNillFound = false;
+		if (!m_pNode)
+			m_pNode = m_pParser->next ();
         /* wrapper node with type info  Ex: <i xsi:type="xsd:int"> */
         if (!m_pNode)
-            return;
+		{
+           return;
+		}
+		if (0 == strcmp (pName, m_pNode->m_pchNameOrValue))
+		{
+			for (int i = 0; m_pNode->m_pchAttributes[i] && !bNillFound; i += 3)
+			{
+				string sLocalName = m_pNode->m_pchAttributes[i];
+				string sValue = m_pNode->m_pchAttributes[i + 2];
+				
+				if( strcmp( "nil", sLocalName.c_str()) == 0 &&
+					strcmp( "true", sValue.c_str()) == 0)
+				{
+					bNillFound = true;
+				
+				}
+			}
+		}
 
-        if (pSimpleType->getType() == getXSDType (m_pNode))
+        if (bNillFound || (pSimpleType->getType() == getXSDType (m_pNode)))
         {
-            m_pNode = m_pParser->next (true);   /* charactor node */
-            if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
-            {
-                 pSimpleType->deserialize(m_pNode->m_pchNameOrValue);
-                 m_pNode = m_pParser->next ();   /* skip end element node too */
-                 return;
-            }
-            else if (END_ELEMENT == m_pNode->m_type)    // We have an empty string - Jira AXISCPP-93
-            {
-                pSimpleType->deserialize("");
-                return;
-            }
-            
+						
+				m_pNode = m_pParser->next (true);   /* charactor node */
+				if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+				{
+					const AxisChar* elementValue = m_pNode->m_pchNameOrValue;
+					// FJP Added this code for fault finding.  If detail is
+					//     followed by CR/LF or CR/LF then CR/LF then assume that
+					//     it is not a simple object.  As added protection against
+					//     false findings, the namespace has been set to an invalid
+					//     value of a single space character.
+					if (strlen (elementValue) < 3 && pNamespace != NULL)
+					{
+						if (*pNamespace == ' ')
+						{
+							bool bReturn = false;
+        
+							if (strlen (elementValue) == 0)
+							{
+								bReturn = true;
+							}
+							if (strlen (elementValue) == 1 && (*elementValue == '\n' || *elementValue == '\r'))
+							{
+								bReturn = true;
+							}
+							if (strlen (elementValue) == 2
+								&& ((*elementValue == '\n' || *elementValue == '\r')
+								&& (*(elementValue + 1) == '\n' || *(elementValue + 1) == '\r')))
+							{
+								bReturn = true;
+							}
+        
+							if (bReturn)
+							{
+								m_pNode = m_pParser->next ();   /* skip end element node too */
+								return;
+							}
+						}
+					}
+					pSimpleType->deserialize(elementValue);
+					m_pNode = m_pParser->next ();   /* skip end element node too */
+					m_pNode = NULL;
+					return;
+				}
+				else if (m_pNode && (END_ELEMENT == m_pNode->m_type) && bNillFound  ) //xsi:nil="true"
+				{
+					m_pNode = m_pParser->next();
+					return;
+				} 
+
+				else if (END_ELEMENT == m_pNode->m_type)    // We have an empty string - Jira AXISCPP-93
+				{
+					pSimpleType->deserialize("");
+					m_pNode = m_pParser->next();
+					return;
+				}
+		        else
+				{
+					/* simpleType may have xsi:nill="true" */
+					//m_pNode = NULL;
+					/* this is important when deserializing 
+					 * arrays
+					 */
+					return;
+				}
         }
         else
         {
-            /* it is an error if type is different or not present */
+			
+			/* it is an error if type is different or not present */
         }
     }
     else
@@ -1921,7 +1992,6 @@ void SoapDeSerializer::getElement (const AxisChar * pName,
                     }
                 }
             }
-
             pSimpleType->deserialize(elementValue);
             m_pNode = m_pParser->next ();   /* skip end element node too */
             m_pNode = NULL;
