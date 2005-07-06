@@ -221,7 +221,7 @@ public:
       *
       * @example throw AxisException(std::bad_alloc);
       */
-    AxisException(const AxisException& e):m_iExceptionCode(e.m_iExceptionCode), m_sMessage(e.m_sMessage){};
+    AxisException(const AxisException& e):m_sMessage(e.m_sMessage),m_iExceptionCode(e.m_iExceptionCode){};
 
     /** This accept two parameters, both an exception code an exception object
       * derived from std::exception
