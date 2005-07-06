@@ -172,8 +172,15 @@ ant -f buildPages.xml -DuserId=bloggsj -Dpassword=P4s5w0rd buildSite
          <then>
           <antcall target="clean"/>
           <antcall target="forrest"/>
-          <move file="${basedir}/build/tmp" tofile="${basedir}/build/site"/>
-          <antcall target="replace"/>
+          <if> <available file="${basedir}/build/tmp" property="ForrestBuiltSuccessfully"/>
+           <then>
+            <move file="${basedir}/build/tmp" tofile="${basedir}/build/site"/>
+            <antcall target="replace"/>
+           </then>
+           <else>
+            <echo message="FORREST did not run successfully, aborting the build (Expected ${basedir}/build/tmp)."/>
+           </else>
+          </if>
          </then>
          <else>
           <echo message="FORREST_HOME was not found in the path environment varable."/>
