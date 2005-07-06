@@ -851,7 +851,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                     + "\", Axis_URI_"
                     + langName
                     + ");\n");
-            writer.write("\t\tthrow AxisServiceException();\n");
+            writer.write("\t\tthrow AxisServiceException(AXISC_SERVICE_THROWN_EXCEPTION);\n");
             writer.write("\t\t}\n");
             writer.write("\t}\n");
             writer.write("\n");

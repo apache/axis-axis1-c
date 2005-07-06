@@ -756,7 +756,7 @@ public class WrapWriter extends CPPClassWriter
                     + "\", Axis_URI_"
                     + langName
                     + ");\n");
-            writer.write("\t\tthrow AxisServiceException();\n");
+            writer.write("\t\tthrow AxisServiceException(AXISC_SERVICE_THROWN_EXCEPTION);\n");
             writer.write("\t\t}\n");
             writer.write("\t}\n");
             writer.write("\n");
