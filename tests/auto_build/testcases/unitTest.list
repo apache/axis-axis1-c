@@ -25,6 +25,11 @@ XSD_gMonth.xml
 XSD_gMonthDay.xml
 XSD_gDay.xml
 XSD_string.xml
+XSD_normalizedString.xml
+XSD_token.xml
+XSD_language.xml
+XSD_Name.xml
+XSD_NCName.xml
 XSD_boolean.xml
 XSD_base64Binary.xml
 XSD_hexBinary.xml
