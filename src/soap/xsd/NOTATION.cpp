@@ -21,7 +21,7 @@ NOTATION::NOTATION()
 {
 }
 
-NOTATION::NOTATION(const xsd__notation value)
+NOTATION::NOTATION(const xsd__NOTATION value)
 {
     if (value)
     {
@@ -35,7 +35,7 @@ XSDTYPE NOTATION::getType()
     return XSD_NOTATION;
 }
 
-xsd__notation NOTATION::getNOTATION()
+xsd__NOTATION NOTATION::getNOTATION()
 {
     if (isNil())
     {
@@ -52,7 +52,7 @@ void * NOTATION::getValue()
     return (void*) getNOTATION();
 }
 
-AxisChar* NOTATION::serialize(const xsd__notation value) throw (AxisSoapException)
+AxisChar* NOTATION::serialize(const xsd__NOTATION value) throw (AxisSoapException)
 {
     MinLength* minLength= getMinLength();
     if (minLength->isSet())
@@ -127,9 +127,9 @@ AxisChar* NOTATION::serialize(const xsd__notation value) throw (AxisSoapExceptio
 	return m_Buf;
 }
 
-xsd__notation NOTATION::deserializeNOTATION(const AxisChar* valueAsChar) throw (AxisSoapException)
+xsd__NOTATION NOTATION::deserializeNOTATION(const AxisChar* valueAsChar) throw (AxisSoapException)
 {
-	xsd__notation value = new char[strlen (valueAsChar) + 1];
+	xsd__NOTATION value = new char[strlen (valueAsChar) + 1];
 	strcpy (value, valueAsChar);
 	return value;
 }

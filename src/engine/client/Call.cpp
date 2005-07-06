@@ -698,6 +698,12 @@ xsd__NMTOKENS Call::getElementAsNMTOKENS (const AxisChar* pName,
     return m_pIWSDZ->getElementAsNMTOKENS (pName, pNamespace);
 }
 
+xsd__NOTATION Call::getElementAsNOTATION (const AxisChar* pName, 
+    const AxisChar* pNamespace)
+{
+    return m_pIWSDZ->getElementAsNOTATION (pName, pNamespace);
+}
+
 xsd__int * Call::getAttributeAsInt (const AxisChar* pName, const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsInt (pName, pNamespace);
@@ -859,7 +865,7 @@ xsd__gMonth * Call::getAttributeAsGMonth (const AxisChar* pName,
     return m_pIWSDZ->getAttributeAsGMonth (pName, pNamespace);
 }
 
-xsd__notation Call::getAttributeAsNOTATION (const AxisChar* pName,
+xsd__NOTATION Call::getAttributeAsNOTATION (const AxisChar* pName,
     const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsNOTATION (pName, pNamespace);

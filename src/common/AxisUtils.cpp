@@ -224,7 +224,7 @@ IAnySimpleType* AxisUtils::createSimpleTypeObject(void * pValue, XSDTYPE type)
             xsdValue = new XSD_QName((xsd__QName) pValue);
             break;
         case XSD_NOTATION:
-            xsdValue = new NOTATION((xsd__notation) pValue);
+            xsdValue = new NOTATION((xsd__NOTATION) pValue);
             break;
         case XSD_DECIMAL:
             xsdValue = new Decimal((xsd__decimal*) pValue);

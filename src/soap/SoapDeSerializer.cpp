@@ -1577,7 +1577,7 @@ xsd__decimal *
     return simpleType.getDecimal();
 }
 
-xsd__notation
+xsd__NOTATION
     SoapDeSerializer::getAttributeAsNOTATION (const AxisChar * pName,
                                               const AxisChar * pNamespace)
 {
@@ -2422,6 +2422,15 @@ xsd__NMTOKENS
     NMTOKENS simpleType;
     getElement(pName, pNamespace, &simpleType);
     return simpleType.getNMTOKENS();
+}
+
+xsd__NOTATION
+    SoapDeSerializer::getElementAsNOTATION (const AxisChar * pName,
+                                          const AxisChar * pNamespace)
+{
+    NOTATION simpleType;
+    getElement(pName, pNamespace, &simpleType);
+    return simpleType.getNOTATION();
 }
 
 xsd__base64Binary

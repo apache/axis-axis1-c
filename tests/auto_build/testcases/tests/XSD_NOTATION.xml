@@ -1,0 +1,17 @@
+<test>
+    <name>XSD_NOTATION</name>
+    <description>Test serialization and deserialization of the XSD built-in simple type NOTATION</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>XSD_NOTATIONClient.cpp</clientCode>
+    <wsdl>XSD_NOTATION.wsdl</wsdl>
+    <expected>
+        <output>
+            XSD_NOTATION.expected
+        </output>
+		<serverResponse>
+			XSD_NOTATION_ServerResponse.expected
+	    </serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/XSD_NOTATION</endpoint>
+</test>
+

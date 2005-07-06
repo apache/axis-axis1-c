@@ -214,6 +214,8 @@ public:
         const AxisChar* pNamespace);
     xsd__NMTOKENS AXISCALL getElementAsNMTOKENS(const AxisChar* pName,
         const AxisChar* pNamespace);
+    xsd__NOTATION AXISCALL getElementAsNOTATION(const AxisChar* pName,
+        const AxisChar* pNamespace);
 
 	void getAttribute(const AxisChar* pName, const AxisChar* pNamespace,
         IAnySimpleType* pSimpleType);
@@ -251,7 +253,7 @@ public:
         const AxisChar* pNamespace);
     xsd__decimal * AXISCALL getAttributeAsDecimal(const AxisChar* pName, 
         const AxisChar* pNamespace);
-    xsd__notation AXISCALL getAttributeAsNOTATION(const AxisChar* pName,
+    xsd__NOTATION AXISCALL getAttributeAsNOTATION(const AxisChar* pName,
         const AxisChar* pNamespace);
     xsd__string AXISCALL getAttributeAsString(const AxisChar* pName, 
         const AxisChar* pNamespace);

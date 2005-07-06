@@ -113,7 +113,7 @@ public class CUtils {
 		class2QNamemapCpp.put("xsd__double",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "double"));
 		class2QNamemapCpp.put("xsd__anyURI",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "anyURI"));
 		class2QNamemapCpp.put("xsd__QName",					new QName(WrapperConstants.SCHEMA_NAMESPACE, "QName"));
-		class2QNamemapCpp.put("xsd__notation",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "NOTATION"));
+		class2QNamemapCpp.put("xsd__NOTATION",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "NOTATION"));
 
 		class2QNamemapC.put("xsdc__duration",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "duration"));
 		class2QNamemapC.put("xsdc__dateTime",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"));
@@ -158,7 +158,7 @@ public class CUtils {
 		class2QNamemapC.put("xsdc__double",					new QName(WrapperConstants.SCHEMA_NAMESPACE, "double"));
 		class2QNamemapC.put("xsdc__anyURI",					new QName(WrapperConstants.SCHEMA_NAMESPACE, "anyURI"));
 		class2QNamemapC.put("xsdc__QName",					new QName(WrapperConstants.SCHEMA_NAMESPACE, "QName"));
-		class2QNamemapC.put("xsdc__notation",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "NOTATION"));
+		class2QNamemapC.put("xsdc__NOTATION",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "NOTATION"));
 		
 		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "duration"),				"xsd__duration");
 		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"),				"xsd__dateTime");
@@ -203,7 +203,7 @@ public class CUtils {
 		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "double"),				"xsd__double");
 		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "QName"),				"xsd__QName");
 		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "anyURI"),				"xsd__anyURI");
-		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "notation"),				"xsd__notation");
+		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "NOTATION"),				"xsd__NOTATION");
 		
 		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "duration"),			"xsdc__duration");
 		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"),			"xsdc__dateTime");
@@ -248,7 +248,7 @@ public class CUtils {
 		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "double"),				"xsdc__double");
 		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "QName"),				"xsdc__QName");
 		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "anyURI"),				"xsdc__anyURI");
-		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "notation"),			"xsdc__notation");
+		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "NOTATION"),			"xsdc__NOTATION");
 		
 		/* TODO:
 		 *   Should be removed when the following issue will be fixed :
@@ -362,7 +362,7 @@ public class CUtils {
 		type2getValueMethodNameCpp.put("xsd__double",				"Double");
 		type2getValueMethodNameCpp.put("xsd__anyURI",				"AnyURI");
 		type2getValueMethodNameCpp.put("xsd__QName",				"QName");
-		type2getValueMethodNameCpp.put("xsd__notation",				"NOTATION");
+		type2getValueMethodNameCpp.put("xsd__NOTATION",				"NOTATION");
 		
 		type2getValueMethodNameC.put("xsdc__duration",				"Duration");
 		type2getValueMethodNameC.put("xsdc__dateTime",				"DateTime");
@@ -407,7 +407,7 @@ public class CUtils {
 		type2getValueMethodNameC.put("xsdc__double",				"Double");
 		type2getValueMethodNameC.put("xsdc__anyURI",				"AnyURI");
 		type2getValueMethodNameC.put("xsdc__QName",					"QName");
-		type2getValueMethodNameC.put("xsdc__notation",				"NOTATION");
+		type2getValueMethodNameC.put("xsdc__NOTATION",				"NOTATION");
 		
 		
 		type2BasicArrayNameCpp.put("xsd__duration",				"xsd__duration_Array");
@@ -453,7 +453,7 @@ public class CUtils {
 		type2BasicArrayNameCpp.put("xsd__double",				"xsd__double_Array");
 		type2BasicArrayNameCpp.put("xsd__anyURI",				"xsd__anyURI_Array");
 		type2BasicArrayNameCpp.put("xsd__QName",				"xsd__QName_Array");
-		type2BasicArrayNameCpp.put("xsd__notation",				"xsd__notation_Array");
+		type2BasicArrayNameCpp.put("xsd__NOTATION",				"xsd__NOTATION_Array");
 		
 		type2BasicArrayNameC.put("xsdc__duration",				"xsdc__duration_Array");
 		type2BasicArrayNameC.put("xsdc__dateTime",				"xsdc__dateTime_Array");
@@ -498,7 +498,7 @@ public class CUtils {
 		type2BasicArrayNameC.put("xsdc__double",				"xsdc__double_Array");
 		type2BasicArrayNameC.put("xsdc__anyURI",				"xsdc__anyURI_Array");
 		type2BasicArrayNameC.put("xsdc__QName",					"xsdc__QName_Array");
-		type2BasicArrayNameC.put("xsdc__notation",				"xsdc__notation_Array");
+		type2BasicArrayNameC.put("xsdc__NOTATION",				"xsdc__NOTATION_Array");
 		
 		basicType2EnumMapCpp.put("xsd__duration",			"XSD_DURATION");
 		basicType2EnumMapCpp.put("xsd__dateTime",			"XSD_DATETIME");
@@ -543,7 +543,7 @@ public class CUtils {
 		basicType2EnumMapCpp.put("xsd__double",				"XSD_DOUBLE");
 		basicType2EnumMapCpp.put("xsd__anyURI",				"XSD_ANYURI");
 		basicType2EnumMapCpp.put("xsd__QName",				"XSD_QNAME");
-		basicType2EnumMapCpp.put("xsd__notation",			"XSD_NOTATION");
+		basicType2EnumMapCpp.put("xsd__NOTATION",			"XSD_NOTATION");
 
 		basicType2EnumMapC.put("xsdc__duration",			"XSD_DURATION");
 		basicType2EnumMapC.put("xsdc__dateTime",			"XSD_DATETIME");
@@ -588,7 +588,7 @@ public class CUtils {
 		basicType2EnumMapC.put("xsdc__double",				"XSD_DOUBLE");
 		basicType2EnumMapC.put("xsdc__anyURI",				"XSD_ANYURI");
 		basicType2EnumMapC.put("xsdc__QName",				"XSD_QNAME");
-		basicType2EnumMapC.put("xsdc__notation",			"XSD_NOTATION");
+		basicType2EnumMapC.put("xsdc__NOTATION",			"XSD_NOTATION");
 
 
 		initValuesCpp.put("xsd__duration",				"0");
@@ -634,7 +634,7 @@ public class CUtils {
 		initValuesCpp.put("xsd__double",				"0.0");
 		initValuesCpp.put("xsd__anyURI",				"NULL");
 		initValuesCpp.put("xsd__QName",					"NULL");
-		initValuesCpp.put("xsd__notation",				"NULL");
+		initValuesCpp.put("xsd__NOTATION",				"NULL");
  
 		
 		initValuesC.put("xsdc__duration",				"{0, 0, 0, 0, 0, 0, 0, 0, 0}");
@@ -680,7 +680,7 @@ public class CUtils {
 		initValuesC.put("xsdc__double",					"0.0");
 		initValuesC.put("xsdc__anyURI",					"NULL");
 		initValuesC.put("xsdc__QName",					"NULL");
-		initValuesC.put("xsdc__notation",				"NULL");
+		initValuesC.put("xsdc__NOTATION",				"NULL");
 		
 		isPointerBasedType.put("xsd__duration", new Boolean(false));
 		isPointerBasedType.put("xsd__dateTime", new Boolean(false));
@@ -725,7 +725,7 @@ public class CUtils {
 		isPointerBasedType.put("xsd__double", new Boolean(false));
 		isPointerBasedType.put("xsd__anyURI", new Boolean(true));
 		isPointerBasedType.put("xsd__QName", new Boolean(true));
-		isPointerBasedType.put("xsd__notation", new Boolean(true));
+		isPointerBasedType.put("xsd__NOTATION", new Boolean(true));
 
 		isPointerBasedType.put("xsdc__duration", new Boolean(false));
 		isPointerBasedType.put("xsdc__dateTime", new Boolean(false));
@@ -771,7 +771,7 @@ public class CUtils {
 		isPointerBasedType.put("xsdc__double", new Boolean(false));
 		isPointerBasedType.put("xsdc__anyURI", new Boolean(true));
 		isPointerBasedType.put("xsdc__QName", new Boolean(true));
-		isPointerBasedType.put("xsdc__notation", new Boolean(true));
+		isPointerBasedType.put("xsdc__NOTATION", new Boolean(true));
 	
 	}
 	

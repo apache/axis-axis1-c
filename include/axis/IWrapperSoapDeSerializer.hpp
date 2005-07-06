@@ -142,6 +142,8 @@ public:
         const AxisChar* pNamespace)=0;
     virtual xsd__NMTOKENS AXISCALL getElementAsNMTOKENS(const AxisChar* pName,
         const AxisChar* pNamespace)=0;
+    virtual xsd__NOTATION AXISCALL getElementAsNOTATION(const AxisChar* pName,
+        const AxisChar* pNamespace)=0;
 
     virtual xsd__int * AXISCALL getAttributeAsInt(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
@@ -177,7 +179,7 @@ public:
         const AxisChar* pNamespace)=0;
     virtual xsd__decimal * AXISCALL getAttributeAsDecimal(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
-    virtual xsd__notation AXISCALL getAttributeAsNOTATION(const AxisChar* pName,
+    virtual xsd__NOTATION AXISCALL getAttributeAsNOTATION(const AxisChar* pName,
         const AxisChar* pNamespace)=0;
     virtual xsd__string AXISCALL getAttributeAsString(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;

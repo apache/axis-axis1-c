@@ -28,7 +28,7 @@
   * to the C language types.
   * 
   * The following xsd basic types are supported:
-  * - <tt> anyURI, base64Binary, boolean, byte, date, dateTime, decimal, double, duration, float, hexBinary, int, integer, long, NMTOKEN, notation, QName, short, string, time, unsignedByte, unsignedInt, unsignedLong</tt> and \c unsignedShort.
+  * - <tt> anyURI, base64Binary, boolean, byte, date, dateTime, decimal, double, duration, float, hexBinary, int, integer, long, NMTOKEN, NOTATION, QName, short, string, time, unsignedByte, unsignedInt, unsignedLong</tt> and \c unsignedShort.
   */
 
 /**
@@ -177,10 +177,10 @@ typedef char xsdc__byte;
 typedef AxiscChar * xsdc__QName;
 
 /**
- * @typedef xsd__notation
+ * @typedef xsd__NOTATION
  * Axis C++ defined type for xml basic type NOTATION
  */
-typedef AxiscChar * xsdc__notation;
+typedef AxiscChar * xsdc__NOTATION;
 
 /**
  * @typedef xsdc__dateTime
@@ -403,7 +403,7 @@ AXISC_DEFINED_ARRAY(xsdc__positiveInteger)
 AXISC_DEFINED_ARRAY(xsdc__double)
 AXISC_DEFINED_POINTER_ARRAY(xsdc__anyURI)
 AXISC_DEFINED_POINTER_ARRAY(xsdc__QName)
-AXISC_DEFINED_POINTER_ARRAY(xsdc__notation)
+AXISC_DEFINED_POINTER_ARRAY(xsdc__NOTATION)
  
 static const xsdc__boolean xsdc_boolean_true = (xsdc__boolean) 1;
 static const xsdc__boolean xsdc_boolean_false = (xsdc__boolean) 0;

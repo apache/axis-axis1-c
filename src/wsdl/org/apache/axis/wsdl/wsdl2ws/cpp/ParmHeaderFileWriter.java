@@ -287,7 +287,7 @@ public class ParmHeaderFileWriter extends ParamWriter {
 						.getTypeName()))
 				|| "xsd__anyURI".equalsIgnoreCase(attribs[index].getTypeName())
 				|| "xsd__QName".equalsIgnoreCase(attribs[index].getTypeName())
-				|| "xsd__notation".equalsIgnoreCase(attribs[index]
+				|| "xsd__NOTATION".equalsIgnoreCase(attribs[index]
 						.getTypeName())) {
 			bNillable = ei.getNillable();
 		}

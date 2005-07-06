@@ -31,7 +31,7 @@ AXIS_CPP_NAMESPACE_START
   * to the C language types.
   * 
   * The following xsd basic types are supported:
-  * - <tt> anyURI, base64Binary, boolean, byte, date, dateTime, decimal, double, duration, float, hexBinary, int, integer, long, NMTOKEN, notation, QName, short, string, time, unsignedByte, unsignedInt, unsignedLong</tt> and \c unsignedShort.
+  * - <tt> anyURI, base64Binary, boolean, byte, date, dateTime, decimal, double, duration, float, hexBinary, int, integer, long, NMTOKEN, NOTATION, QName, short, string, time, unsignedByte, unsignedInt, unsignedLong</tt> and \c unsignedShort.
   * 
   * @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
   */
@@ -162,10 +162,10 @@ typedef char xsd__byte;
  */
 typedef AxisChar * xsd__QName;
 /**
- * @typedef xsd__notation
+ * @typedef xsd__NOTATION
  * Axis C++ defined type for xml basic type NOTATION
  */
-typedef AxisChar * xsd__notation;
+typedef AxisChar * xsd__NOTATION;
 /**
  * @typedef xsd__dateTime
  * Axis C++ defined type for xml basic type dateTime
@@ -375,7 +375,7 @@ AXIS_DEFINED_ARRAY(xsd__positiveInteger)
 AXIS_DEFINED_ARRAY(xsd__double)
 AXIS_DEFINED_POINTER_ARRAY(xsd__anyURI)
 AXIS_DEFINED_POINTER_ARRAY(xsd__QName)
-AXIS_DEFINED_POINTER_ARRAY(xsd__notation)
+AXIS_DEFINED_POINTER_ARRAY(xsd__NOTATION)
 
 #define AXIS_OUT_PARAM 
 

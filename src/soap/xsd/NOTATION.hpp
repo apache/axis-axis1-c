@@ -44,7 +44,7 @@ public:
      * Constructor providing a value for later serialization
      * @param value The value to be serialized
      */
-    NOTATION(const xsd__notation value);
+    NOTATION(const xsd__NOTATION value);
 
     /**
      * Get the xsd type of this simple type.
@@ -56,7 +56,7 @@ public:
      * Get the deserialized value.
      * @return Deserialized value. Note: it is the responsibility of the calling code to delete this value!
      */
-    xsd__notation getNOTATION();
+    xsd__NOTATION getNOTATION();
 
     /**
      * Get the deserialized value
@@ -71,14 +71,14 @@ protected:
      * @param valueAsChar Serialized form of NOTATION value.
      * @return Deserialized NOTATION value. Note: it is the responsibility of the calling code to delete this value!
      */
-	xsd__notation deserializeNOTATION(const AxisChar* valueAsChar) throw (AxisSoapException);
+	xsd__NOTATION deserializeNOTATION(const AxisChar* valueAsChar) throw (AxisSoapException);
 
     /**
      * Serialize NOTATION value to it's on-the-wire string form.
      * @param value The NOTATION value to be serialized.
      * @return Serialized form of NOTATION value.
      */ 
-    AxisChar* serialize(const xsd__notation value) throw (AxisSoapException);
+    AxisChar* serialize(const xsd__NOTATION value) throw (AxisSoapException);
 
     /**
      * Creates a WhiteSpace object to replace whitespace

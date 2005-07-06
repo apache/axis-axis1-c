@@ -56,3 +56,6 @@ XSD_unsignedInt.xml
 XSD_unsignedShort.xml
 XSD_unsignedByte.xml
 XSD_positiveInteger.xml
+XSD_anyURI.xml
+XSD_QName.xml
+XSD_NOTATION.xml

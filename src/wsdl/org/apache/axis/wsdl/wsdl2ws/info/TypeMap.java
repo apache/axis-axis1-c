@@ -104,7 +104,7 @@ public class TypeMap
         basicTypeClass2QNamemap.put("xsd__double",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "double"));
         basicTypeClass2QNamemap.put("xsd__anyURI",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "anyURI"));
         basicTypeClass2QNamemap.put("xsd__QName",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "QName"));
-        basicTypeClass2QNamemap.put("xsd__notation",			new QName(WrapperConstants.SCHEMA_NAMESPACE, "NOTATION"));
+        basicTypeClass2QNamemap.put("xsd__NOTATION",			new QName(WrapperConstants.SCHEMA_NAMESPACE, "NOTATION"));
         basicTypeClass2QNamemap.put("ISoapAttachment",		new QName(WrapperConstants.APACHE_XMLSOAP_NAMESPACE, "Image"));
         basicTypeClass2QNamemap.put("ISoapAttachment",		new QName(WrapperConstants.APACHE_XMLSOAP_NAMESPACE, "PlainText"));
         basicTypeClass2QNamemap.put("ISoapAttachment",		new QName(WrapperConstants.APACHE_XMLSOAP_NAMESPACE, "Multipart"));
@@ -157,7 +157,7 @@ public class TypeMap
         basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "double"),				"xsd__double");
         basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "anyURI"),				"xsd__anyURI");
         basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "QName"),				"xsd__QName");
-        basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "NOTATION"),			"xsd__notation");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "NOTATION"),			"xsd__NOTATION");
         basicTypeQname2classmap.put(new QName(WrapperConstants.APACHE_XMLSOAP_NAMESPACE, "Image"),		"ISoapAttachment");
         basicTypeQname2classmap.put(new QName(WrapperConstants.APACHE_XMLSOAP_NAMESPACE, "PlainText"),	"ISoapAttachment");
         basicTypeQname2classmap.put(new QName(WrapperConstants.APACHE_XMLSOAP_NAMESPACE, "Multipart"),	"ISoapAttachment");

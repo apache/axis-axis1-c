@@ -341,7 +341,7 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 								|| attribs[i].getTypeName()
 										.equals("xsd__QName")
 								|| attribs[i].getTypeName().equals(
-										"xsd__notation")) {
+										"xsd__NOTATION")) {
 							writer.write("\t\tpSZ->serializeAsAttribute(\""
 									+ attribs[i].getParamName()
 									+ "\", 0, (void*)(param->"
@@ -371,7 +371,7 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 					if (attribs[i].getTypeName().equals("xsd__string")
 							|| attribs[i].getTypeName().equals("xsd__anyURI")
 							|| attribs[i].getTypeName().equals("xsd__QName")
-							|| attribs[i].getTypeName().equals("xsd__notation")
+							|| attribs[i].getTypeName().equals("xsd__NOTATION")
 							|| isElementNillable(i)) {
 						writer.write("\tpSZ->serializeAsElement(\""
 								+ attribs[i].getParamName()
@@ -543,7 +543,7 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 				if (attribs[i].isNillable()
 						|| attribs[i].getTypeName().equals("xsd__anyURI")
 						|| attribs[i].getTypeName().equals("xsd__QName")
-						|| attribs[i].getTypeName().equals("xsd__notation")) {
+						|| attribs[i].getTypeName().equals("xsd__NOTATION")) {
 					//TODO handle optional attributes
 					writer.write("\t"
 							+ attribs[i].getTypeName()
@@ -757,7 +757,7 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 						.getTypeName()))
 				|| "xsd__anyURI".equalsIgnoreCase(attribs[index].getTypeName())
 				|| "xsd__QName".equalsIgnoreCase(attribs[index].getTypeName())
-				|| "xsd__notation".equalsIgnoreCase(attribs[index]
+				|| "xsd__NOTATION".equalsIgnoreCase(attribs[index]
 						.getTypeName())) {
 			bNillable = ei.getNillable();
 		}

@@ -172,7 +172,8 @@ public:
         const AxisChar* pNamespace)=0;
     virtual xsd__NMTOKENS AXISCALL getElementAsNMTOKENS(const AxisChar* pName,
         const AxisChar* pNamespace)=0;
-
+    virtual xsd__NOTATION AXISCALL getElementAsNOTATION(const AxisChar* pName,
+        const AxisChar* pNamespace)=0;
     /* Methods used by stubs to get a deserialized value of XML attribute
      * as basic types
      */
@@ -230,7 +231,7 @@ public:
         const AxisChar* pNamespace)=0;
     virtual xsd__gMonth * AXISCALL getAttributeAsGMonth (const AxisChar* pName,
         const AxisChar* pNamespace)=0;
-    virtual xsd__notation AXISCALL getAttributeAsNOTATION (const AxisChar* pName,
+    virtual xsd__NOTATION AXISCALL getAttributeAsNOTATION (const AxisChar* pName,
         const AxisChar* pNamespace)=0;
     virtual xsd__normalizedString AXISCALL getAttributeAsNormalizedString (const AxisChar* pName,
         const AxisChar* pNamespace)=0;
@@ -487,6 +488,8 @@ public:
         const AxisChar* pNamespace);
     xsd__NMTOKENS AXISCALL getElementAsNMTOKENS(const AxisChar* pName,
         const AxisChar* pNamespace);
+    xsd__NOTATION AXISCALL getElementAsNOTATION(const AxisChar* pName,
+        const AxisChar* pNamespace);
 
     /* Methods used by stubs to get a deserialized value of a XML attribute
      * as basic types
@@ -545,7 +548,7 @@ public:
         const AxisChar* pNamespace);
     xsd__gMonth * AXISCALL getAttributeAsGMonth (const AxisChar* pName,
         const AxisChar* pNamespace);
-    xsd__notation AXISCALL getAttributeAsNOTATION (const AxisChar* pName,
+    xsd__NOTATION AXISCALL getAttributeAsNOTATION (const AxisChar* pName,
         const AxisChar* pNamespace);
     xsd__normalizedString AXISCALL getAttributeAsNormalizedString (const AxisChar* pName,
         const AxisChar* pNamespace);
