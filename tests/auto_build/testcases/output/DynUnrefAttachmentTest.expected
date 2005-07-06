@@ -2,7 +2,7 @@ i=0
 i=1
 i=2
 i=3
-AxisSoapException:Content is not unique within the MIME message
+AxisSoapException:Content is not unique within the MIME message 
 i=4
 Invoking...
 ----------------------------TEST COMPLETE--------------------------------
