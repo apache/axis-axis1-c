@@ -130,8 +130,6 @@ AXIS_CPP_NAMESPACE_START
      */
     const AxisString& WhiteSpace::collapseWhiteSpace(AxisString& value)
     {
-        m_strReturnVal = "";
-
         if (value.empty ())
         {
             return value;
@@ -145,6 +143,8 @@ AXIS_CPP_NAMESPACE_START
         AxisString leadingStripped = stripLeadingWhiteSpace(replacedValue);
         replacedValue = stripTrailingWhiteSpace(leadingStripped);
 
+        // Initialize return value to empty string
+        m_strReturnVal = "";
         /*
          * Find space character and returns the first any of chars find
          * position
