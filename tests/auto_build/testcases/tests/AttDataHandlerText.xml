@@ -1,0 +1,19 @@
+<test>
+    <name>AttDataHandlerText</name>
+    <description>AttDataHandlerText</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>AttDataHandlerText.cpp</clientCode>
+    <wsdl>DataHandlerService.wsdl</wsdl>
+    <expected>
+        <output>
+            AttDataHandlerText.expected
+        </output>
+	  <request>
+		 AttDataHandlerTextRequest.out
+	  </request>
+	   <serverResponse>
+		AttDataHandlerText_ServerResponse.expected
+        </serverResponse>
+    </expected>
+	<endpoint>http://localhost:9080/axis/DataHandlerService</endpoint>
+</test>
