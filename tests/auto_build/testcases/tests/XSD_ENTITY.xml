@@ -1,0 +1,17 @@
+<test>
+    <name>XSD_ENTITY</name>
+    <description>Test serialization and deserialization of the XSD built-in simple type ENTITY</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>XSD_ENTITYClient.cpp</clientCode>
+    <wsdl>XSD_ENTITY.wsdl</wsdl>
+    <expected>
+        <output>
+            XSD_ENTITY.expected
+        </output>
+		<serverResponse>
+			XSD_ENTITY_ServerResponse.expected
+	    </serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/XSD_ENTITY</endpoint>
+</test>
+

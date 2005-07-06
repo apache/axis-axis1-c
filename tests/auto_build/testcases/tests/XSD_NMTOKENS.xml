@@ -1,0 +1,17 @@
+<test>
+    <name>XSD_NMTOKENS</name>
+    <description>Test serialization and deserialization of the XSD built-in simple type NMTOKENS</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>XSD_NMTOKENSClient.cpp</clientCode>
+    <wsdl>XSD_NMTOKENS.wsdl</wsdl>
+    <expected>
+        <output>
+            XSD_NMTOKENS.expected
+        </output>
+		<serverResponse>
+			XSD_NMTOKENS_ServerResponse.expected
+	    </serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/XSD_NMTOKENS</endpoint>
+</test>
+

@@ -30,6 +30,13 @@ XSD_token.xml
 XSD_language.xml
 XSD_Name.xml
 XSD_NCName.xml
+XSD_ID.xml
+XSD_IDREF.xml
+XSD_IDREFS.xml
+XSD_ENTITY.xml
+XSD_ENTITIES.xml
+XSD_NMTOKEN.xml
+XSD_NMTOKENS.xml
 XSD_boolean.xml
 XSD_base64Binary.xml
 XSD_hexBinary.xml
