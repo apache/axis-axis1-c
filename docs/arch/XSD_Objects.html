@@ -78,9 +78,12 @@
 <H3>IAnySimpleType Interface</H3>
 <P>All the XSD type objects implement the IAnySimpleType interface, which provides the following methods, which must be implemented by all implementing classes</P>
 <UL>
-<code>AxisChar* serialize(const void* value) throw (AxisSoapException)</code><BR>
-<code>void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)</code>
+<code>AxisChar* serialize() throw (AxisSoapException)</code><BR>
+<code>void deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)</code><BR>
+<code>XSDTYPE getType()</code><BR>
+<code>void* getValue()</code>
 </UL>
+<P>In addition each implementation of this interface must provide a parameterized constructor, such that it can be constructed and will immediately serialize the provided value.</P>
 <P>The IAnySimpleType interface provides the following utility method, which should be called by all implementing classes when serializing data.</P>
 <UL>
 <code>AxisChar* serialize(const AxisChar* value) throw (AxisSoapException);</code>
@@ -117,17 +120,14 @@ WhiteSpace
 </UL>
 <HR>
 <H1>Current Limitations</H1>
-<H2>Support XSD Types</H2>
-<P>Currently, only some of the XSD built-in types are supported on the user API and the WSDL2Ws tooling. The following diagram highlights (within red boxes) those types not currently supported:</P>
 <H2>Function Limitation</H2>
-<P>Currently, the XSD objects are utility classes for the serialization and deserialization of the XSD built-in types. However, it is intended these will be converted to become fully functional data containers, which can be used to carry the data through the client engine. Doing this will allow earlier validation of content, and should allow for simplification of the serialization engine.</P>
+<P>Currently, the XSD objects are completely internal to the Axis engine. In the future we may wish to expose these on the external API, such that customers (via WSDL2Ws) will be able to derive additional simple types simply by refining one or more of the constraining facets, then simply re-using the serialization/deserialization logic we have already written.</P>
 <H2>Pattern Constraining Facet</H2>
 <P>The implementation of the pattern constraining facet is incomplete. It needs to validate against a given regular expression, following this, the pattern for each of data types needs to be updated with the regular expression to describe their particular data type.</P>
 <HR>
 <H1>References</H1>
 <P>XML Schema Part 2 : Datatypes - <A href="http://www.w3.org/TR/2001/REC-xmlschema-2-20010502/">http://www.w3.org/TR/2001/REC-xmlschema-2-20010502/</A></P>
 <H2>Outstanding Issues</H2>
-<A href="http://issues.apache.org/jira/browse/AXISCPP-291">AXISCPP-291</A> - dateTime unable to support dates prior to 1970.<BR>
-<A href="http://issues.apache.org/jira/browse/AXISCPP-416">AXISCPP-416</A> - support remaining XSD built-in types
+<A href="http://issues.apache.org/jira/browse/AXISCPP-291">AXISCPP-291</A> - dateTime unable to support dates prior to 1970.
 </BODY>
 </HTML>
