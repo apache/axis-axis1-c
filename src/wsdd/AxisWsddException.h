@@ -32,8 +32,8 @@ class STORAGE_CLASS_INFO AxisWsddException :public AxisException
 {
 
 public:
-    AxisWsddException(const int iExceptionCode, char* pcMessage = NULL);
-    AxisWsddException(AxisWsddException& e);
+    AxisWsddException(const int iExceptionCode,const char* pcMessage = NULL);
+    AxisWsddException(const AxisWsddException& e);
     virtual ~AxisWsddException() throw();
     
 private:

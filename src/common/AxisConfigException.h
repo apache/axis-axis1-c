@@ -32,7 +32,7 @@ class STORAGE_CLASS_INFO AxisConfigException :public AxisException
 {
 
 public:
-    AxisConfigException(const int iExceptionCode, char* pcMessage = NULL);
+    AxisConfigException(const int iExceptionCode, const char* pcMessage = NULL);
     AxisConfigException(const AxisConfigException& e);
     virtual ~AxisConfigException() throw();
         

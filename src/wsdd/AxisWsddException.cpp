@@ -28,7 +28,7 @@
 
 AXIS_CPP_NAMESPACE_START
 
-AxisWsddException::AxisWsddException(const int iExceptionCode, char* pcMessage):AxisException(iExceptionCode)
+AxisWsddException::AxisWsddException(const int iExceptionCode,const char* pcMessage):AxisException(iExceptionCode)
 {
 	AxisString sMessage = "";
 	if (pcMessage) 
@@ -38,7 +38,7 @@ AxisWsddException::AxisWsddException(const int iExceptionCode, char* pcMessage):
 	m_sMessage = getMessageForExceptionCode(m_iExceptionCode) + " " + sMessage;
 }
 
-AxisWsddException::AxisWsddException (AxisWsddException& e):AxisException(e)
+AxisWsddException::AxisWsddException (const AxisWsddException& e):AxisException(e)
 {}
 
 AxisWsddException::~AxisWsddException() throw ()

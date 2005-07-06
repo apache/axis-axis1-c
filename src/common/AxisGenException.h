@@ -34,8 +34,8 @@ class STORAGE_CLASS_INFO AxisGenException :public AxisException
 {
 
 public:
-    AxisGenException(const int iExceptionCode, char* pcMessage = NULL);
-	AxisGenException(AxisGenException& e);
+    AxisGenException(const int iExceptionCode, const char* pcMessage = NULL);
+	AxisGenException(const AxisGenException& e);
     virtual ~AxisGenException() throw();
     
 private:

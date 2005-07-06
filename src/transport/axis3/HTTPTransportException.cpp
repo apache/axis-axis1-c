@@ -32,7 +32,7 @@ HTTPTransportException::HTTPTransportException(const int iExceptionCode, char* p
 	m_sMessage = getMessageForExceptionCode(m_iExceptionCode) + " " + sMessage;
 }
 
-HTTPTransportException::HTTPTransportException (HTTPTransportException& e):AxisException(e)
+HTTPTransportException::HTTPTransportException (const HTTPTransportException& e):AxisException(e)
 {}
 
 HTTPTransportException::~HTTPTransportException() throw ()

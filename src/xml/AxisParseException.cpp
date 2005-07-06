@@ -21,7 +21,7 @@
 
 #include "AxisParseException.h"
 
-AxisParseException::AxisParseException(const int iExceptionCode, char* pcMessage):AxisException(iExceptionCode)
+AxisParseException::AxisParseException(const int iExceptionCode,const char* pcMessage):AxisException(iExceptionCode)
 {
 	AxisString sMessage = "";
 	if (pcMessage) 
@@ -31,7 +31,7 @@ AxisParseException::AxisParseException(const int iExceptionCode, char* pcMessage
 	m_sMessage = getMessageForExceptionCode(m_iExceptionCode) + " " + sMessage;
 }
 
-AxisParseException::AxisParseException (AxisParseException& e):AxisException (e)
+AxisParseException::AxisParseException (const AxisParseException& e):AxisException (e)
 {}
 
 AxisParseException::~AxisParseException() throw ()

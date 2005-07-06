@@ -28,7 +28,7 @@
 
 AXIS_CPP_NAMESPACE_START
 
-AxisSoapException::AxisSoapException(const int iExceptionCode, char* pcMessage):AxisException(iExceptionCode)
+AxisSoapException::AxisSoapException(const int iExceptionCode, const char* pcMessage):AxisException(iExceptionCode)
 {
    AxisString sMessage = "";
 	if (pcMessage) 

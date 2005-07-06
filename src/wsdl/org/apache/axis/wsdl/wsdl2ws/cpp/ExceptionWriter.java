@@ -200,7 +200,7 @@ public class ExceptionWriter extends BasicFileWriter
             writer.write("\tm_sMessage = getMessageForExceptionCode(m_iExceptionCode) + \" \" + sMessage;\n");
             writer.write("}\n\n");
 
-            writer.write(faultName + "::" + faultName + "(" + faultName + "& e):AxisException(e)\n");
+            writer.write(faultName + "::" + faultName + "(const " + faultName + "& e):AxisException(e)\n");
             writer.write("{}\n\n");
             
             

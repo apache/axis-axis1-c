@@ -27,7 +27,7 @@ AXIS_CPP_NAMESPACE_START
 
 //using namespace std;
 
-AxisGenException::AxisGenException(const int iExceptionCode, char* pcMessage):AxisException(iExceptionCode)
+AxisGenException::AxisGenException(const int iExceptionCode, const char* pcMessage):AxisException(iExceptionCode)
 {
 	AxisString sMessage = "";
 	if (pcMessage) 
@@ -37,7 +37,7 @@ AxisGenException::AxisGenException(const int iExceptionCode, char* pcMessage):Ax
 	m_sMessage = getMessageForExceptionCode(m_iExceptionCode) + " " + sMessage;
 }
 
-AxisGenException::AxisGenException (AxisGenException& e):AxisException(e)
+AxisGenException::AxisGenException (const AxisGenException& e):AxisException(e)
 {}
 
 AxisGenException::~AxisGenException() throw ()

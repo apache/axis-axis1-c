@@ -149,7 +149,7 @@ public class ExceptionHeaderWriter extends HeaderFileWriter
             writer.write("public:\n");
             writer.write("\tSTORAGE_CLASS_INFO " + faultName + "(ISoapFault* pFault);\n");
             writer.write("\tSTORAGE_CLASS_INFO " + faultName + "(const int iExceptionCode, const char* pcMessage = NULL );\n");
-            writer.write("\tSTORAGE_CLASS_INFO " + faultName + "(" + faultName + "& e);\n");
+            writer.write("\tSTORAGE_CLASS_INFO " + faultName + "(const " + faultName + "& e);\n");
             
         }
         catch (IOException e)

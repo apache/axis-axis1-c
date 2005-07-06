@@ -32,7 +32,7 @@ class STORAGE_CLASS_INFO AxisSoapException :public AxisException
 {
 
 public:
-    AxisSoapException(const int iExceptionCode, char* pcMessage = NULL);
+    AxisSoapException(const int iExceptionCode,const char* pcMessage = NULL);
     AxisSoapException(const AxisSoapException& e);
     virtual ~AxisSoapException() throw();
     

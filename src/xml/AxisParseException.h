@@ -31,8 +31,8 @@ class STORAGE_CLASS_INFO AxisParseException :public AxisException
 {
 
 public:
-    AxisParseException(const int iExceptionCode, char* pcMessage = NULL);
-    AxisParseException(AxisParseException& e);
+    AxisParseException(const int iExceptionCode,const char* pcMessage = NULL);
+    AxisParseException(const AxisParseException& e);
     virtual ~AxisParseException() throw();
                                                                                                                              
 private:

@@ -34,7 +34,7 @@ class STORAGE_CLASS_INFO HTTPTransportException :public AxisException
 
 public:
     HTTPTransportException(const int iExceptionCode, char* pcMessage = NULL);
-    HTTPTransportException(HTTPTransportException& e);
+    HTTPTransportException(const HTTPTransportException& e);
     virtual ~HTTPTransportException() throw();
                                                                                                                              
 private:
