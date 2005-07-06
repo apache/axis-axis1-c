@@ -1157,43 +1157,56 @@ public class BeanParamWriter extends ParamCPPFileWriter
             // so temporarily remove this section, until such time as a better
             // solution is found
             for(int i = 0; i< attribs.length;i++){
+			String name = attribs[i].getParamNameAsMember();
+			String typename = attribs[i].getTypeName();
             	if(attribs[i].isArray()){
             		if ( attribs[i].isSimpleType())
             		{
             			if (attribs[i].getChoiceElement())
-							writer.write("\tdelete [] (("+attribs[i].getTypeName()+"*)"+attribs[i].getParamNameAsMember()+"->m_Array);\n");
-						else	
-							writer.write("\tdelete [] (("+attribs[i].getTypeName()+"*)"+attribs[i].getParamNameAsMember()+".m_Array);\n");
+					{
+						writer.write("\tif (" + name + "->m_Array != NULL)\n");
+						writer.write("\t\tdelete [] (("+typename+"*)"+name+"->m_Array);\n");
+					}
+					else	
+					{
+						writer.write("\tif (" + name + ".m_Array != NULL)\n");
+						writer.write("\t\tdelete [] (("+typename+"*)"+name+".m_Array);\n");
+					}
             		}
             		else
             		{
-            					if( isNillable())
-            					{
-            						writer.write("\tdelete "+attribs[i].getParamNameAsMember()+".m_Array;\n");
-            					}
-            					else
-            					{
-            						writer.write("\tdelete [] (("+attribs[i].getTypeName()+"*)"+attribs[i].getParamNameAsMember()+".m_Array);\n");
-            					}
-            				}
+            			if( isNillable())
+            			{
+						writer.write("\tif (" + name + ".m_Array != NULL)\n");
+            				writer.write("\t\tdelete "+name+".m_Array;\n");
             			}
-            			else if (attribs[i].isAnyType()){
-            				writer.write("\tif ("+attribs[i].getParamNameAsMember()+") \n\t{\n");
-            				writer.write("\t\tfor (int i=0; i<"+attribs[i].getParamNameAsMember()+"->_size; i++)\n\t\t{\n");
-            				writer.write("\t\t\tif ("+attribs[i].getParamNameAsMember()+"->_array[i]) delete [] "+attribs[i].getParamNameAsMember()+"->_array[i];\n");
-            				writer.write("\t\t}\n");
-            				writer.write("\t\tdelete "+attribs[i].getParamNameAsMember()+";\n");
-            				writer.write("\t}\n");
-            				
-            			}
-            			else if (!attribs[i].isSimpleType()){
-            				writer.write("\tdelete "+attribs[i].getParamNameAsMember()+";\n");
-            			} else if (CUtils.isPointerType(attribs[i].getTypeName())) {
-            				// found pointer type
-            				// System.out.println("Pointer type found " + attribs[i].getTypeName() + " " + attribs[i].getParamNameAsMember());
-            				writer.write("\tdelete [] "+attribs[i].getParamNameAsMember()+";\n");
+            			else
+            			{
+						writer.write("\tif (" + name + ".m_Array != NULL)\n");
+            				writer.write("\t\tdelete [] (("+typename+"*)"+name+".m_Array);\n");
             			}
             		}
+            	}
+            	else if (attribs[i].isAnyType()){
+            		writer.write("\tif ("+name+") \n\t{\n");
+            		writer.write("\t\tfor (int i=0; i<"+name+"->_size; i++)\n\t\t{\n");
+            		writer.write("\t\t\tif ("+name+"->_array[i]) delete [] "+name+"->_array[i];\n");
+            		writer.write("\t\t}\n");
+            		writer.write("\t\tdelete "+name+";\n");
+            		writer.write("\t}\n");
+            		
+            	}
+            	else if (!attribs[i].isSimpleType())
+			{
+				writer.write("\tif (" + name + " != NULL)\n");
+            		writer.write("\t\tdelete "+name+";\n");
+            	} else if (CUtils.isPointerType(typename)) {
+            		// found pointer type
+            		// System.out.println("Pointer type found " + typename + " " + name);
+				writer.write("\tif (" + name + " != NULL)\n");
+            		writer.write("\t\tdelete [] "+name+";\n");
+            	}
+           	}
             writer.write("}\n");
         }
         catch (IOException e)
