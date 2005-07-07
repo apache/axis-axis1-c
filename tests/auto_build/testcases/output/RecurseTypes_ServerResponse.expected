@@ -1,0 +1,39 @@
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:getInputResponse xmlns:ns1="http://recursetypes.test.apache.org">
+<type att_kind="CHEQUE"><ns1:followings><ns1:kind>Sample</ns1:kind>
+<ns1:index>0</ns1:index>
+</ns1:followings><ns1:followings><ns1:kind>Sample</ns1:kind>
+<ns1:index>0</ns1:index>
+</ns1:followings><ns1:followings><ns1:kind>Sample</ns1:kind>
+<ns1:index>0</ns1:index>
+</ns1:followings><ns1:followings><ns1:kind>Sample</ns1:kind>
+<ns1:index>0</ns1:index>
+</ns1:followings><ns1:followings><ns1:kind>Sample</ns1:kind>
+<ns1:index>0</ns1:index>
+</ns1:followings><ns1:followings><ns1:kind>Sample</ns1:kind>
+<ns1:index>0</ns1:index>
+</ns1:followings><ns1:followings><ns1:kind>Sample</ns1:kind>
+<ns1:index>0</ns1:index>
+</ns1:followings><ns1:followings><ns1:kind>Sample</ns1:kind>
+<ns1:index>0</ns1:index>
+</ns1:followings><ns1:followings><ns1:kind>Sample</ns1:kind>
+<ns1:index>0</ns1:index>
+</ns1:followings><ns1:followings><ns1:kind>Sample</ns1:kind>
+<ns1:index>0</ns1:index>
+</ns1:followings><ns1:kind>Check In</ns1:kind>
+<ns1:index>0</ns1:index>
+</type>
+</ns1:getInputResponse>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+0
+

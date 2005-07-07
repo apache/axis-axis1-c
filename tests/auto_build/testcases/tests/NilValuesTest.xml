@@ -11,6 +11,7 @@
 		<request>
 			NilValuesTest.request
 		</request>
+		<serverResponse>NilValuesTest_ServerResponse.expected</serverResponse>
     </expected>
 	<endpoint>-e http://localhost:80/axis/ComplexTypeAll</endpoint>
 </test>

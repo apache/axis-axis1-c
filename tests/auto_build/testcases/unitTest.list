@@ -11,7 +11,9 @@ ExceptionTestDoc.xml
 HandlerTest6.xml
 LargeReturningString.xml
 MultiOut.xml
+NilValuesTest.xml
 nillableComplexType.xml
+RecurseTypes.xml
 SimpleArrays.xml
 TestSoapHeaderBlock2
 XSDElement.xml
