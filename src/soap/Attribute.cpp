@@ -185,7 +185,10 @@ Attribute::Attribute(list<Attribute*> attribute, const AxisChar* localname, cons
     m_localname= localname;
     m_prefix= prefix;
     m_uri= uri;
-    m_value= value;
+	if (NULL==value)
+		m_value = "";
+	else
+	    m_value= value;
 
 	if( (void *) &attribute != NULL && !attribute.empty())
 	{
@@ -211,7 +214,10 @@ Attribute::Attribute(list<Attribute*> attribute, const AxisChar *localname, cons
     m_localname= localname;
     m_prefix= prefix;
     m_uri= "";
-    m_value= value;
+	if (NULL==value)
+		m_value = "";
+	else
+	    m_value= value;
 
 	if( (void *) &attribute != NULL && !attribute.empty())
 	{

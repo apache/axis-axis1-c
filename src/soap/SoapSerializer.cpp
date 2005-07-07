@@ -1290,6 +1290,8 @@ AxisXMLString SoapSerializer::getNamespaceURL( string sNameSpace)
 		}
 	}
 
+	if (NULL==m_pSoapEnvelope->m_pSoapHeader) return "";
+
 // Couldn't find the namespace in the namespace list.  Try trawling through the
 // SOAP headers looking to see if any of their children have defined any
 // namespaces.

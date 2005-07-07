@@ -1038,6 +1038,7 @@ void Call::setSOAPMethodAttribute(const AxisChar *pLocalname, const AxisChar *pP
                                   const AxisChar *pUri, const AxisChar *pValue)
 {
     IAttribute* pAttribute;
+	if (pValue==NULL) pValue = "";
     if (NULL!=pUri)
     {
         std::list<Attribute*> attributeList;

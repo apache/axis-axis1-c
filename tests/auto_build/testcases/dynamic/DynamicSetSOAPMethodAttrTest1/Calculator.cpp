@@ -66,18 +66,18 @@ xsd__int Calculator::div(xsd__int Value0, xsd__int Value1)
 	m_pCall->setSOAPMethodAttribute("Name","ns1","Axis");
 
 	/* Checking whether API creates duplicate Attribute. An element cannot have two attributes with same name */ 
-	m_pCall->setSOAPMethodAttribute("Name","ns1","Hello");
+	// m_pCall->setSOAPMethodAttribute("Name","ns1","Hello");
 
 	/* Adding another SOAP Method Attribute - 'Type' without a prefix */
 
 	m_pCall->setSOAPMethodAttribute("Type","","Open Source");
 
 	/* Testing behaviour with NULL Values*/
-	//m_pCall->setSOAPMethodAttribute("NULLTest","ns1",NULL);
+	m_pCall->setSOAPMethodAttribute("NULLTest","ns1",NULL);
 
 
    /* Passing an undeclared namespace prefix as argument */
-	//m_pCall->setSOAPMethodAttribute("Test","ns10","","Undefined Prefix");
+	m_pCall->setSOAPMethodAttribute("Test","ns10","","Undefined Prefix");
 
 
 
