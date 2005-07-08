@@ -8,6 +8,7 @@
         <output>
             CombinedChoice.expected
         </output>
+		<serverResponse>CombinedChoice_ServerResponse.expected</serverResponse>
     </expected>
 	<endpoint>http://localhost:80/axis/CombinedChoice</endpoint>
 </test>
