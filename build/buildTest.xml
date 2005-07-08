@@ -12,7 +12,20 @@
 		<condition property="generated.lang" value="c++">
 			<equals arg1="${test.clientLang}" arg2="cpp"/>
 		</condition>
+		<condition property="generated.lang.allheaders" value="*.hpp">
+			<equals arg1="${test.clientLang}" arg2="cpp"/>
+		</condition>
+		<condition property="clientLibraryName.lang" value="${clientLibraryName}">
+			<equals arg1="${test.clientLang}" arg2="cpp"/>
+		</condition>
+
 		<condition property="generated.lang" value="c">
+			<equals arg1="${test.clientLang}" arg2="c"/>
+		</condition>
+		<condition property="generated.lang.allheaders" value="*.h">
+			<equals arg1="${test.clientLang}" arg2="c"/>
+		</condition>
+		<condition property="clientLibraryName.lang" value="${cClientLibraryName}">
 			<equals arg1="${test.clientLang}" arg2="c"/>
 		</condition>
 	</target>
@@ -54,8 +67,8 @@
 	<target name="copyDynamicClient" if="test.dynamicCode">
 		<copy todir="${test.directory}">
 			<fileset dir="${dir.autotests}/dynamic/${test.dynamicCodeDirectory}">
-				<include name="*.cpp"/>
-				<include name="*.hpp"/>
+				<include name="*.${test.clientLang}"/>
+				<include name="${generated.lang.allheaders}"/>
 			</fileset>
 		</copy>
 	</target>
@@ -89,11 +102,11 @@
 			<linker refid="LinuxLinker"/>
 			<linker refid="AIXExecutableLinker"/>
 		    <linker extends="OS400ExecutableLinker">
-  		         <linkerarg location="end" value="${dir.lib}/lib${clientLibraryName}.so"/>
+  		         <linkerarg location="end" value="${dir.lib}/lib${clientLibraryName.lang}.so"/>
 		    </linker>
 
 			<!-- Axis Client .lib file location, or UNIX shared object -->
-			<libset dir="${dir.lib}" libs="${clientLibraryName}" unless="os400"/>
+			<libset dir="${dir.lib}" libs="${clientLibraryName.lang}" unless="os400"/>
 			<!-- Files to be compiled -->
 			<includepath path="${dir.include}"/>
 			<fileset dir="${test.directory}">
@@ -117,10 +130,10 @@
 			<linker refid="LinuxLinker"/>
 			<linker refid="AIXExecutableLinker"/>
 		    <linker extends="OS400ExecutableLinker">
-  		         <linkerarg location="end" value="${dir.lib}/lib${clientLibraryName}.so"/>
+  		         <linkerarg location="end" value="${dir.lib}/lib${clientLibraryName.lang}.so"/>
 		    </linker>
 			<!-- Axis Client .lib file location, or UNIX shared object -->
-			<libset dir="${dir.lib}" libs="${clientLibraryName}" unless="os400"/>
+			<libset dir="${dir.lib}" libs="${clientLibraryName.lang}" unless="os400"/>
 			<libset dir="${test.directory}" libs="${libraryName}" unless="os400"/>
 			<!-- Files to be compiled -->
 			<includepath path="${dir.include}"/>
