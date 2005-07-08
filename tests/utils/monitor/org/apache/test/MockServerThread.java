@@ -1,4 +1,4 @@
-//Copyright 2003-2004 The Apache Software Foundation.
+// Copyright 2003-2004 The Apache Software Foundation.
 //(c) Copyright IBM Corp. 2004, 2005 All Rights Reserved
 //
 //Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,7 +12,7 @@
 //WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 //See the License for the specific language governing permissions and
 //limitations under the License./*
- 
+
 package org.apache.test;
 
 import java.io.BufferedReader;
@@ -24,16 +24,17 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
- * @author hawkeye 
+ * @author hawkeye
  */
 public class MockServerThread implements Runnable
 {
     // NOTE: We read in this string plus two bytes (the end of the request)
     private static String   ENVELOPE_TAG    ="</SOAP-ENV:Envelope>";
-    private static String   MIME_BOUNDARY    ="MIME_BOUNDARY";
+    private static String   MIME_BOUNDARY   ="MIME_BOUNDARY";
 
     private static int      CHARBUFFER_SIZE =20000;
 
@@ -164,12 +165,14 @@ public class MockServerThread implements Runnable
                 if (bytesRead>ENVELOPE_TAG.length( )+2)
                 {
                     String envelopeString=new String(charBuffer, bytesRead
-                            -(ENVELOPE_TAG.length( )+2), ENVELOPE_TAG.length( )+2);
-                                        System.out
-                                                .println("MockServerThread#run():EnvelopeString = "
-                                                        +envelopeString);
+                            -(ENVELOPE_TAG.length( )+2),
+                            ENVELOPE_TAG.length( )+2);
+                    System.out
+                            .println("MockServerThread#run():EnvelopeString = "
+                                    +envelopeString);
                     // Check whether this is an envelope or not
-                    if (envelopeString.startsWith(ENVELOPE_TAG) || envelopeString.indexOf(MIME_BOUNDARY)!=-1)
+                    if (envelopeString.startsWith(ENVELOPE_TAG)
+                            ||envelopeString.indexOf(MIME_BOUNDARY)!=-1)
                     {
                         System.out
                                 .println("MockServerThread#run():Got an envelope");
@@ -180,7 +183,8 @@ public class MockServerThread implements Runnable
                                 .println("-------------------------------MockServer new request---------------------------------");
                     }
                 }
-                System.out.println("MockServerThread#run(): Going round again "+inputStream);
+                System.out.println("MockServerThread#run(): Going round again "
+                        +inputStream);
             }
         }
         catch (IOException exception)
@@ -203,8 +207,8 @@ public class MockServerThread implements Runnable
         char[] responseMessage=getResponseMessage( );
         if (responseMessage!=null)
         {
-            ResponseSender responseSender=new ResponseSender(
-                    responseMessage, outputStream);
+            ResponseSender responseSender=new ResponseSender(responseMessage,
+                    outputStream);
             Thread responseSenderThread=new Thread(responseSender);
             responseSenderThread.start( );
         }
@@ -260,15 +264,53 @@ public class MockServerThread implements Runnable
         for(int i=1; i<responseStrings.length; i++)
         {
             String tmpString="HTTP"+responseStrings[i];
-            int hash = tmpString.indexOf("###");
-            if (-1 != hash) 
+            int hash=tmpString.indexOf("###");
+            if (-1!=hash)
             {
-                String len = Integer.toHexString(tmpString.length() - hash - 3);
-                if (3 != len.length()) 
-                    throw new RuntimeException("Message length in hex was not 3 characters long "+len);
-                tmpString = tmpString.substring(0,hash) + len + tmpString.substring(hash+3);
+                String len=Integer.toHexString(tmpString.length( )-hash-3);
+                if (3!=len.length( ))
+                    throw new RuntimeException(
+                            "Message length in hex was not 3 characters long "
+                                    +len);
+                tmpString=tmpString.substring(0, hash)+len
+                        +tmpString.substring(hash+3);
             }
             responses[i-1]=tmpString.toCharArray( );
+        }
+
+        setCRLF( );
+    }
+
+    /**
+     * Because the repositories we use accomodate the dos2unix conversion we
+     * have a problem. On unix the response files have the crlf converted to
+     * just cr. this method returns the crlf !
+     */
+    private static void setCRLF( )
+    {
+        if (System.getProperty("os.name").toLowerCase( ).startsWith("windows"))
+        {
+            System.out
+                    .println("Windows operating system - not converting crlf's");
+        }
+        else
+        {
+            System.out.println("Converting oa to od oa");
+            for(int i=0; i<responses.length; i++)
+            {
+                if (responses[i]!=null)
+                {
+                    String request=new String((char[]) responses[i]);
+                    // check the last two digits for CRLF - if they are LFLF
+                    // then this is wrong
+                    // e.g. 0a 0a converts to 0d0a 0d0a
+                    // I'm doing it using a matcher because this could get
+                    // complicated !
+                    Pattern pattern=Pattern.compile("[^\r]\n");
+                    Matcher matcher=pattern.matcher(request);
+                    responses[i]=matcher.replaceAll("\r\n").toCharArray( );
+                }
+            }
         }
     }
 
