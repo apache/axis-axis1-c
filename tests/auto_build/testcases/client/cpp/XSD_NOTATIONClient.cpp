@@ -36,7 +36,8 @@ int main(int argc, char* argv[])
         char emptyNOTATION[1] = "";
         xsd__NOTATION emptyInput = emptyNOTATION;
         char simpleNOTATION[25] = "A simple test message!";
-        xsd__NOTATION input = simpleNOTATION;
+        xsd__NOTATION input = new char[25];
+        strcpy (input, simpleNOTATION);
 
         // Test non-nillable element
         xsd__NOTATION result = ws->asNonNillableElement(input);

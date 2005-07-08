@@ -36,7 +36,8 @@ int main(int argc, char* argv[])
         char emptyIDREF[1] = "";
         xsd__IDREF emptyInput = emptyIDREF;
         char simpleIDREF[25] = "A simple test message!";
-        xsd__IDREF input = simpleIDREF;
+        xsd__IDREF input = new char[25];
+        strcpy (input, simpleIDREF);
 
         // Test non-nillable element
         xsd__IDREF result = ws->asNonNillableElement(input);

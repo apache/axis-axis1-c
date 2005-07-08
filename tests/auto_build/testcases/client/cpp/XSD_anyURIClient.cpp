@@ -36,7 +36,8 @@ int main(int argc, char* argv[])
         char emptyanyURI[1] = "";
         xsd__anyURI emptyInput = emptyanyURI;
         char simpleanyURI[25] = "A simple test message!";
-        xsd__anyURI input = simpleanyURI;
+        xsd__anyURI input = new char[25];
+        strcpy (input, simpleanyURI);
 
         // Test non-nillable element
         xsd__anyURI result = ws->asNonNillableElement(input);

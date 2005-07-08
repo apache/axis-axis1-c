@@ -36,7 +36,8 @@ int main(int argc, char* argv[])
         char emptyNMTOKEN[1] = "";
         xsd__NMTOKEN emptyInput = emptyNMTOKEN;
         char simpleNMTOKEN[25] = "A simple test message!";
-        xsd__NMTOKEN input = simpleNMTOKEN;
+        xsd__NMTOKEN input = new char[25];
+        strcpy (input, simpleNMTOKEN);
 
         // Test non-nillable element
         xsd__NMTOKEN result = ws->asNonNillableElement(input);

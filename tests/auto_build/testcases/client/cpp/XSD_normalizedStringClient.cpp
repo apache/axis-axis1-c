@@ -36,7 +36,8 @@ int main(int argc, char* argv[])
         char emptynormalizedString[1] = "";
         xsd__normalizedString emptyInput = emptynormalizedString;
         char simplenormalizedString[25] = "A simple test message!";
-        xsd__normalizedString input = simplenormalizedString;
+        xsd__normalizedString input = new char[25];
+        strcpy (input, simplenormalizedString);
 
         // Test non-nillable element
         xsd__normalizedString result = ws->asNonNillableElement(input);

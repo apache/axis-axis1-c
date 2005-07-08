@@ -36,7 +36,8 @@ int main(int argc, char* argv[])
         char emptyENTITY[1] = "";
         xsd__ENTITY emptyInput = emptyENTITY;
         char simpleENTITY[25] = "A simple test message!";
-        xsd__ENTITY input = simpleENTITY;
+        xsd__ENTITY input = new char[25];
+        strcpy (input, simpleENTITY);
 
         // Test non-nillable element
         xsd__ENTITY result = ws->asNonNillableElement(input);

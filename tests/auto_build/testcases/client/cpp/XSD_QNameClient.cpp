@@ -36,7 +36,8 @@ int main(int argc, char* argv[])
         char emptyQName[1] = "";
         xsd__QName emptyInput = emptyQName;
         char simpleQName[25] = "A simple test message!";
-        xsd__QName input = simpleQName;
+        xsd__QName input = new char[25];
+        strcpy (input, simpleQName);
 
         // Test non-nillable element
         xsd__QName result = ws->asNonNillableElement(input);

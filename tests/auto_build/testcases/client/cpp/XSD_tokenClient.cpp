@@ -36,7 +36,8 @@ int main(int argc, char* argv[])
         char emptytoken[1] = "";
         xsd__token emptyInput = emptytoken;
         char simpletoken[25] = "A simple test message!";
-        xsd__token input = simpletoken;
+        xsd__token input = new char[25];
+        strcpy (input, simpletoken);
 
         // Test non-nillable element
         xsd__token result = ws->asNonNillableElement(input);
