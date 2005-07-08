@@ -854,7 +854,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                                     + "\t\t\t\t\t\t\t\t  \""
                                     + attribs[i].getElementNameAsString()
                                     + "\", Axis_URI_" + arrayType + ");\n\n");
-                    writer.write("\t// Additional code to find is reference is pointer or pointer to a pointer\n");
+                    writer.write("\t// Additional code to find if reference is pointer or pointer to a pointer\n");
 
                     if (nillable)
                     {
@@ -873,9 +873,10 @@ public class BeanParamWriter extends ParamCPPFileWriter
                         writer.write("\t\tparam->" + attributeParamName
                                 + ".m_Array = pp" + i + ";\n");
                         writer.write("\t}\n\n");
-                        writer.write("\t" + attributeTypeName + " *	p" + i
+                        writer.write("\t" + attributeTypeName + " *p" + i
                                 + " = (" + attributeTypeName
-                                + " *) array.m_Array;\n\n");
+                                + " *) array.m_Array;\n");
+				writer.write("\t" + attributeTypeName + " default" + i + ";\n");
                         writer.write("\tfor( int iCount" + i + " = 0; iCount"
                                 + i + " < array.m_Size; iCount" + i + "++)\n");
                         writer.write("\t{\n");
@@ -883,8 +884,9 @@ public class BeanParamWriter extends ParamCPPFileWriter
                                 + attributeTypeName + "();\n");
                         writer.write("\t\t*(pp" + i + "[iCount" + i + "]) = p"
                                 + i + "[iCount" + i + "];\n");
+				writer.write("\t\t// Set the array to default values so that the delete does not delete subfields\n");
+				writer.write("\t\tp" + i + "[iCount" + i + "] = default" + i + ";\n");
                         writer.write("\t}\n");
-				writer.write("\tmemset(p" + i + ", 0, sizeof(" + attributeTypeName + ")*array.m_Size);\n");
                         writer.write("\tdelete [] p" + i + ";\n");
                     }
                     else
