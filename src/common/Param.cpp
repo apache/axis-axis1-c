@@ -28,6 +28,7 @@
 #include <stdio.h>
 #include "AxisUtils.h"
 #include <axis/AxisUserAPI.hpp>
+#include "AxisTrace.h"
 
 AXIS_CPP_NAMESPACE_START
 
@@ -158,7 +159,9 @@ int Param::serialize (SoapSerializer &pSZ)
 	case USER_TYPE:
             if (RPC_ENCODED == pSZ.getStyle ())
             {
-                m_Value.pCplxObj->pSZFunct (m_Value.pCplxObj->pObject, &pSZ, false);
+				TRACE_SERIALIZE_FUNCT_ENTRY(m_Value.pCplxObj->pSZFunct, m_Value.pCplxObj->pObject, &pSZ, false);
+                int stat = m_Value.pCplxObj->pSZFunct (m_Value.pCplxObj->pObject, &pSZ, false);
+				TRACE_SERIALIZE_FUNCT_EXIT(m_Value.pCplxObj->pSZFunct, stat);
             }
             else
             {
@@ -166,8 +169,11 @@ int Param::serialize (SoapSerializer &pSZ)
                 /* note : ">" is not serialized to enable the type's serializer
                  * to add attributes 
                  */
-                m_Value.pCplxObj->pSZFunct (m_Value.pCplxObj->pObject, &pSZ, false);
-                pSZ.serialize ("</", m_sName.c_str (), ">\n", NULL);
+				TRACE_SERIALIZE_FUNCT_ENTRY(m_Value.pCplxObj->pSZFunct, m_Value.pCplxObj->pObject, &pSZ, false);
+                int stat = m_Value.pCplxObj->pSZFunct (m_Value.pCplxObj->pObject, &pSZ, false);
+				TRACE_SERIALIZE_FUNCT_EXIT(m_Value.pCplxObj->pSZFunct, stat);
+
+				pSZ.serialize ("</", m_sName.c_str (), ">\n", NULL);
             }
             break;
       case XSD_ANY:
@@ -272,7 +278,11 @@ ComplexObjectHandler::~ComplexObjectHandler ()
     if (AxisEngine::m_bServer)
     {
         if (pObject && pDelFunct)
-            pDelFunct (pObject, false, 0);
+		{
+			TRACE_OBJECT_DELETE_FUNCT_ENTRY(pDelFunct, pObject, false, 0);
+			pDelFunct(pObject, false, 0);
+			TRACE_OBJECT_DELETE_FUNCT_EXIT(pDelFunct);
+		}
     }
 }
 

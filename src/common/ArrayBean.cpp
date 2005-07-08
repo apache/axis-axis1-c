@@ -25,6 +25,7 @@
 #include "ArrayBean.h"
 #include "BasicTypeSerializer.h"
 #include "../engine/AxisEngine.h"
+#include "AxisTrace.h"
 
 AXIS_CPP_NAMESPACE_START
 
@@ -45,7 +46,9 @@ ArrayBean::~ArrayBean()
             {
                 if (AxisEngine::m_bServer)
                 {
+					TRACE_OBJECT_DELETE_FUNCT_ENTRY(m_value.cta->pDelFunct, m_value.cta->pObject, true, m_nSize);
                     m_value.cta->pDelFunct(m_value.cta->pObject, true, m_nSize);
+					TRACE_OBJECT_DELETE_FUNCT_EXIT(m_value.cta->pDelFunct);
                 }
                 // make sure that the ComplexObjectHandler's destructor does 
                 // not try to delete the objects again 
@@ -170,7 +173,11 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
     {
         void* pItem;
         AXIS_BINDING_STYLE nStyle = pSZ.getStyle();
+
+		TRACE_OBJECT_SIZE_FUNCT_ENTRY(m_value.cta->pSizeFunct);
         int itemsize = m_value.cta->pSizeFunct();
+		TRACE_OBJECT_SIZE_FUNCT_EXIT(m_value.cta->pSizeFunct, itemsize);
+
         char *ptrval = (char *)m_value.cta->pObject;
         if (DOC_LITERAL == nStyle) 
         {
@@ -203,7 +210,11 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
 				
                 // note : ">" is not serialized to enable the type's serializer
                 // to add attributes 
-                m_value.cta->pSZFunct(pItem, &pSZ, true); 
+
+				TRACE_SERIALIZE_FUNCT_ENTRY(m_value.cta->pSZFunct, pItem, &pSZ, true);
+                int stat = m_value.cta->pSZFunct(pItem, &pSZ, true); 
+				TRACE_SERIALIZE_FUNCT_EXIT(m_value.cta->pSZFunct, stat);
+
                 // no matter true or false is passed
             	if (pPrefix != NULL)
                 	pSZ.serialize("</", pPrefix, ":", m_ItemName.c_str(), ">", NULL);
@@ -225,7 +236,9 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
             for (int x=0; x<m_nSize; x++)
             {
                 pItem = ptrval+x*itemsize;
-                m_value.cta->pSZFunct(pItem, &pSZ, true);
+				TRACE_SERIALIZE_FUNCT_ENTRY(m_value.cta->pSZFunct, pItem, &pSZ, true);
+                int stat = m_value.cta->pSZFunct(pItem, &pSZ, true); 
+				TRACE_SERIALIZE_FUNCT_EXIT(m_value.cta->pSZFunct, stat);
             }
         }
     }
