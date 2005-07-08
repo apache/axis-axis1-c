@@ -114,6 +114,7 @@ main (int argc, char *argv[])
 
 	}while (iRetryIterationCount > 0 && !bSuccess);
 
+    fflush(stdout); // Need to flush output from printf's before cout
     cout <<
 	"---------------------- TEST COMPLETE -----------------------------"
 	<< endl;
