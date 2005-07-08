@@ -57,13 +57,8 @@ Param::~Param ()
             delete m_Value.pCplxObj;
             break;
         case XSD_ANY:
-            pAny = (AnyType*)m_Value.pAnyObject;
-            for (i=0; i<pAny->_size; i++)
-            {
-                pStr = pAny->_array[i];
-                if (pStr) delete [] pStr;
-            }
-            delete [] pAny;
+			// Do not delete the m_Value.pAnyObject here because it is the
+			// application's storage. The AnyObject has never been cloned.
             break;
         default:;
     }

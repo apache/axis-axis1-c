@@ -28,15 +28,9 @@ Calculator::Calculator(const char* pcEndpointUri, AXIS_PROTOCOL_TYPE eProtocol)
 	m_pCall->setEndpointURI(pcEndpointUri);
 }
 
-Calculator::Calculator()
-{
-	m_pCall=new Call();
-	m_pCall->setEndpointURI("http://localhost/axis/Calculator");
-}
-
 Calculator::~Calculator()
 {
-	free(m_pCall);
+	delete m_pCall;
 	m_pCall=NULL;
 }
 
@@ -48,8 +42,6 @@ xsd__int Calculator::div(xsd__int Value0, xsd__int Value1)
 {
 	xsd__int Ret = 0;
 	const char* pcCmplxFaultName;
-	try
-	{	
 	m_pCall->initialize(CPP_DOC_PROVIDER);
 	m_pCall->setTransportProperty(SOAPACTION_HEADER , "Calculator#div");
 	m_pCall->setSOAPVersion(SOAP_VER_1_1);
@@ -67,18 +59,15 @@ xsd__int Calculator::div(xsd__int Value0, xsd__int Value1)
 	m_pCall->setSOAPMethodAttribute("Name","","http://localhost/axis/Calculator","Axis");
 
 	/* Checking whether API creates duplicate Attribute. An element cannot have two attributes with same name */ 
-	m_pCall->setSOAPMethodAttribute("Name","","http://localhost/axis/Calculator","Duplicate");
+	// m_pCall->setSOAPMethodAttribute("Name","","http://localhost/axis/Calculator","Duplicate");
 
 	/* Adding another SOAP Method Attribute - Type  */
-
 	m_pCall->setSOAPMethodAttribute("Type","ns1","http://axis.apache.org","Open Source");
 
    /* Adding another SOAP Method Attribute - Lang. API will create a namespace prefix  */
-
 	m_pCall->setSOAPMethodAttribute("Lang","","http://axis.apache.org","C++");
 
 	/* Adding another SOAP Method Attribute - Lang. API will create a namespace prefix  */
-
 	m_pCall->setSOAPMethodAttribute("Attr","","","withoutPrefix");
 
 	/* Passing NULL as argument */
@@ -96,11 +85,6 @@ xsd__int Calculator::div(xsd__int Value0, xsd__int Value1)
 	}
 	m_pCall->unInitialize();
 	return Ret;
-	}
-	catch(AxisException& e)
-	{
-		throw;
-	}
 }
 
 /*Methods for supporting SecureChannel*/
@@ -130,7 +114,6 @@ int main(int argc, char* argv[])
 {
 	char endpoint[256];
 	const char* url="http://localhost:9080/Calculator/services/Calculator";
-	const char* op = 0;
 	int i1=100, i2=20;
 	int iResult;
 	if(argc > 1){
@@ -145,11 +128,11 @@ int main(int argc, char* argv[])
 	}
 	catch(AxisException& e)
 	{
-	     cout << "Exception : " <<  e.what()<< endl;		
+	     cout << "AxisException : " <<  e.what()<< endl;		
 	}
 	catch(exception& e)
 	{
-	    cout << "Unknown exception has occured" << endl;
+	    cout << "Unknown exception has occured : " << e.what() << endl;
 	}
 	catch(...)
 	{

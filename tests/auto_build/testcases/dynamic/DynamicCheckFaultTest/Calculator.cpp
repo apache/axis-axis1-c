@@ -39,7 +39,7 @@ Calculator::Calculator()
 
 Calculator::~Calculator()
 {
-	free(m_pCall);
+	delete m_pCall;
 	m_pCall=NULL;
 }
 

@@ -43,7 +43,7 @@ Calculator::Calculator()
 
 Calculator::~Calculator()
 {
-	free(m_pCall);
+	delete m_pCall;
 	m_pCall=NULL;
 }
 
@@ -63,9 +63,7 @@ void Calculator::SetSecure( char * pszArguments, ...)
 
 xsd__int Calculator::div(xsd__int Value0, xsd__int Value1)
 {
-	xsd__int Ret = 0;
-	AnyType * any;
-	AnyType* pAny = new AnyType();
+	AnyType *pAny = new AnyType();
     pAny->_size = 2;
     pAny->_array = new char*[2];
 	char *p=new char[100];
@@ -74,7 +72,7 @@ xsd__int Calculator::div(xsd__int Value0, xsd__int Value1)
 	sprintf(p,"<ns1:arg_1_3>%d</ns1:arg_1_3>",Value1);
 	//pAny->_array[1]=strdup("<ns1:arg_1_3>0</ns1:arg_1_3>");
 	pAny->_array[1]=strdup(p);
-	const char* pcCmplxFaultName;
+
 	try
 	{	
 		m_pCall->initialize(CPP_DOC_PROVIDER);
@@ -82,36 +80,37 @@ xsd__int Calculator::div(xsd__int Value0, xsd__int Value1)
 		m_pCall->setSOAPVersion(SOAP_VER_1_1);
 		m_pCall->setOperation("div", "http://localhost/axis/Calculator");
 		includeSecure();
-		char cPrefixAndParamName0[17];	
-		cout<<endl<<m_pCall->addAnyObject(pAny)<<endl;	
-	if (AXIS_SUCCESS == m_pCall->invoke())
-	{
-		if(AXIS_SUCCESS == m_pCall->checkMessage("divResponse", "http://localhost/axis/Calculator"))
+		cout << endl << m_pCall->addAnyObject(pAny) << endl;	
+		if (AXIS_SUCCESS == m_pCall->invoke())
 		{
-			any = (AnyType*)m_pCall->getAnyObject();
-			if(any!=NULL){
-				cout << any->_size<<endl;
-				cout << any->_array[0]<<endl;
-			}			
+			if(AXIS_SUCCESS == m_pCall->checkMessage("divResponse", "http://localhost/axis/Calculator"))
+			{
+				AnyType *any = (AnyType*)m_pCall->getAnyObject();
+				if(any!=NULL)
+				{
+					cout << any->_size<<endl;
+					cout << any->_array[0]<<endl;
+				}			
+			}
 		}
-
-	}
-	
 	}
 	catch(AxisException& e)
 	{
-		any = (AnyType*)m_pCall->getAnyObject();
-		if(any!=NULL){
-				cout << any->_size<<endl;
-				cout << any->_array[0]<<endl;
+		AnyType *any = (AnyType*)m_pCall->getAnyObject();
+		if(any!=NULL)
+		{
+			cout << any->_size<<endl;
+			cout << any->_array[0]<<endl;
 		}
 		throw;
 	}
+
 	m_pCall->unInitialize();
+	free(pAny->_array[0]);
+	free(pAny->_array[1]);
 	delete pAny;
 	delete p;
-	return Ret;
-	
+	return 0;
 }
 
 
@@ -137,11 +136,11 @@ int main(int argc, char* argv[])
 	}
 	catch(AxisException& e)
 	{
-	    cout << "Exception : " << e.what() << endl;
+	    cout << "AxisException : " << e.what() << endl;
 	}
 	catch(exception& e)
 	{
-	    cout << "Unknown exception has occured" << endl;
+	    cout << "Unknown exception has occured : " << e.what() << endl;
 	}
 	catch(...)
 	{
