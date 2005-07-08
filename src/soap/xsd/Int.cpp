@@ -68,7 +68,9 @@ xsd__int* Int::deserializeInt(const AxisChar* valueAsChar) throw (AxisSoapExcept
  
     xsd__int * value = new xsd__int;
     *value = static_cast<xsd__int> (*returnValue);
-    delete returnValue; // Samissa - need to clean this memory
+ // cb 07/07/05 : delete here is inconsistent with other data types
+ // (which don't do it here), but maybe a good idea   
+ //   delete returnValue; // Samissa - need to clean this memory
     return value;
 }
 
