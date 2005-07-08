@@ -884,6 +884,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                         writer.write("\t\t*(pp" + i + "[iCount" + i + "]) = p"
                                 + i + "[iCount" + i + "];\n");
                         writer.write("\t}\n");
+				writer.write("\tmemset(p" + i + ", 0, sizeof(" + attributeTypeName + ")*array.m_Size);\n");
                         writer.write("\tdelete [] p" + i + ";\n");
                     }
                     else
