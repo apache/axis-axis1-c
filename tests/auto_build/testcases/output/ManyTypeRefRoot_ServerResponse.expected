@@ -1,0 +1,35 @@
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:getInputResponse xmlns:ns1="http://manytyperefroot.test.apache.org">
+<ns1:Type1><ns1:kind>Test type</ns1:kind>
+<ns1:index>0</ns1:index>
+</ns1:Type1><ns1:Type1><ns1:kind>Test type</ns1:kind>
+<ns1:index>1</ns1:index>
+</ns1:Type1><ns1:Type1><ns1:kind>Test type</ns1:kind>
+<ns1:index>2</ns1:index>
+</ns1:Type1><ns1:Type1><ns1:kind>Test type</ns1:kind>
+<ns1:index>3</ns1:index>
+</ns1:Type1><ns1:Type1><ns1:kind>Test type</ns1:kind>
+<ns1:index>4</ns1:index>
+</ns1:Type1><ns1:Type1><ns1:kind>Test type</ns1:kind>
+<ns1:index>5</ns1:index>
+</ns1:Type1><ns1:Type1><ns1:kind>Test type</ns1:kind>
+<ns1:index>6</ns1:index>
+</ns1:Type1><ns1:Type1><ns1:kind>Test type</ns1:kind>
+<ns1:index>7</ns1:index>
+</ns1:Type1><ns1:Type1><ns1:kind>Test type</ns1:kind>
+<ns1:index>8</ns1:index>
+</ns1:Type1><ns1:Type1><ns1:kind>Test type</ns1:kind>
+<ns1:index>9</ns1:index>
+</ns1:Type1></ns1:getInputResponse>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+0
