@@ -76,7 +76,7 @@ xsd__long* Long::deserializeLong(const AxisChar* valueAsChar) throw (AxisSoapExc
 
 MinInclusive* Long::getMinInclusive()
 {    
-    LONGLONG minInclusive = LONGLONGVALUE(-9223372036854775807);
+    LONGLONG minInclusive = (-LONGLONGVALUE(9223372036854775807) - LONGLONGVALUE(1));
     return new MinInclusive(minInclusive);
 }
 
