@@ -68,7 +68,9 @@ public class MockServer implements Runnable
         }
         catch (IOException ioException)
         {
-            ioException.printStackTrace( );
+            ioException.printStackTrace( System.err);
+            
+            throw new RuntimeException("Failed to start MockServer due to IOException: "+ioException);
         }
     }
 
