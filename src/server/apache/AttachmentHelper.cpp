@@ -52,7 +52,7 @@ void AttachmentHelper::extract_Attachment(char *pBuffer)
 	while (blnContinue)
     {
         SoapAttachment* pSoapAttachment= new SoapAttachment();
-		int start =0;
+	unsigned int start = 0;
 
 	if (blnFirstTime) {
 			start = Soap_Message.find("Content-Type", boundary3);

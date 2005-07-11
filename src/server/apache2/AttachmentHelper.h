@@ -29,7 +29,9 @@
 #endif
 #define strtoul strtoul
 
-#pragma warning( disable : 4786 )
+#ifdef WIN32
+#pragma warning( disable : 4786 ) 	// identifier was truncated to 'number' characters 
+#endif // WIN32
 
 #include <string>
 #include <map>

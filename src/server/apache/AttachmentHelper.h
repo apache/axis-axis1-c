@@ -29,7 +29,9 @@
 #endif
 #define strtoul strtoul
 
-#pragma warning( disable : 4786 )
+#ifdef WIN32
+#pragma warning( disable : 4786 ) 	// identifier was truncated to 'number' characters 
+#endif // WIN32
 
 #include <string>
 #include <map>
@@ -38,18 +40,6 @@
 
 using namespace std;
 AXIS_CPP_NAMESPACE_USE
-
-/*
-struct ltstr
-{
-         //bool operator()(const string* s1, const string* s2) const
-		 bool operator()(const char* s1, const char* s2) const
-         {
-          //return strcmp(s1->c_str() , s2->c_str()) < 0;
-		  return strcmp(s1 , s2) < 0;
-         }
-};
-*/
 
 class AttachmentHelper  
 {

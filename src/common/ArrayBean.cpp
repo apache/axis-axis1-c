@@ -212,7 +212,8 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
                 // to add attributes 
 
 				TRACE_SERIALIZE_FUNCT_ENTRY(m_value.cta->pSZFunct, pItem, &pSZ, true);
-                int stat = m_value.cta->pSZFunct(pItem, &pSZ, true); 
+                int stat = AXIS_FAIL;
+                stat = m_value.cta->pSZFunct(pItem, &pSZ, true); 
 				TRACE_SERIALIZE_FUNCT_EXIT(m_value.cta->pSZFunct, stat);
 
                 // no matter true or false is passed
@@ -237,7 +238,8 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
             {
                 pItem = ptrval+x*itemsize;
 				TRACE_SERIALIZE_FUNCT_ENTRY(m_value.cta->pSZFunct, pItem, &pSZ, true);
-                int stat = m_value.cta->pSZFunct(pItem, &pSZ, true); 
+                int stat = AXIS_FAIL;
+                stat = m_value.cta->pSZFunct(pItem, &pSZ, true); 
 				TRACE_SERIALIZE_FUNCT_EXIT(m_value.cta->pSZFunct, stat);
             }
         }

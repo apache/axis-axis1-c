@@ -75,16 +75,6 @@ static void module_init(apr_pool_t* p, server_rec* svr_rec)
     initialize_module(1);
 }
 
-/* Call initialize_process() [of Packet.h] from within this method */
-static void axis_Init(server_rec* svr_rec, apr_pool_t* p)
-{
-}
-
-/*Call finalize_process() [of Packet.h] from within this method*/
-static void axis_Fini(server_rec* svr_rec, apr_pool_t* p)
-{
-}
-
 static int axis_handler(request_rec* req_rec)
 {
 	return axis_handler_helper(req_rec);
@@ -93,10 +83,7 @@ static int axis_handler(request_rec* req_rec)
 static void mod_axis_register_hooks(apr_pool_t* p)
 {
     ap_hook_child_init(module_init, NULL, NULL, APR_HOOK_REALLY_FIRST);
-    /* ap_hook_pre_connection(axis_Init, NULL, NULL, APR_HOOK_FIRST); */
     ap_hook_handler(axis_handler, NULL, NULL, APR_HOOK_LAST);
-    /* ap_hook_process_connection(axis_Fini, NULL, NULL, APR_HOOK_REALLY_LAST);
-     */
 }
 
 module AP_MODULE_DECLARE_DATA axis_module = {

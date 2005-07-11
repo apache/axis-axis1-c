@@ -158,8 +158,8 @@ AXIS_TRANSPORT_STATUS Apache2Transport::getBytes(char* pBuffer, int* piSize)
 	
  	if (strstr(pBuffer, "Content-Id")) {
 		pAttachmentHelper = new AttachmentHelper();
-		char *pAttachBuffer = (char*)malloc(1000);
-		char *mimeBoundary = (char*)malloc(1000);		
+		//char *pAttachBuffer = (char*)malloc(1000);
+		//char *mimeBoundary = (char*)malloc(1000);		
 
 		pAttachmentHelper->extract_Attachment(pBuffer);		
 		pAttachmentHelper->extract_SOAPMimeHeaders(pBuffer);	

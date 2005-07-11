@@ -169,8 +169,8 @@ AXIS_TRANSPORT_STATUS ApacheTransport::getBytes(char* pBuffer, int* piSize)
 
     	if (strstr(pBuffer, "Content-Id")) {
 		pAttachmentHelper = new AttachmentHelper();
-		char *pAttachBuffer = (char*)malloc(1000);
-		char *mimeBoundary = (char*)malloc(1000);		
+		//char *pAttachBuffer = (char*)malloc(1000);
+		//char *mimeBoundary = (char*)malloc(1000);		
 
 		pAttachmentHelper->extract_Attachment(pBuffer);		
 		pAttachmentHelper->extract_SOAPMimeHeaders(pBuffer);	
@@ -302,7 +302,7 @@ int ApacheTransport::setProtocol(AXIS_PROTOCOL_TYPE eProtocol)
 
 int ApacheTransport::getSubProtocol()
 {
-    /*Determine the http method and assign it to the axis soap structure */
+    //Determine the http method and assign it to the axis soap structure 
     switch (((request_rec*)m_pContext)->method_number)
     {
         case M_GET:
@@ -318,18 +318,17 @@ ISoapAttachment*  ApacheTransport::getAttachment(const char* pcAttachmentid)
 {		
 	ISoapAttachment* pAttch = pAttachmentHelper->getAttachment(pcAttachmentid);
 	return pAttch;
-//	return NULL;
 };
 
 char* ApacheTransport::getIncomingSOAPMimeHeaders()
 {
 	return pAttachmentHelper->getIncomingSOAPMimeHeaders();
-//	return NULL;
 }
 
 ISoapAttachment**  ApacheTransport::getAllAttachments(int *pAttchArraySize)
 {		
 	ISoapAttachment** pAttachments = pAttachmentHelper->getAllAttachments(pAttchArraySize);
 	return pAttachments;
-//	return NULL;
-};
+}
+
+

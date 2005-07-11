@@ -70,13 +70,13 @@ xsd__long* Long::deserializeLong(const AxisChar* valueAsChar) throw (AxisSoapExc
  
     xsd__long * value = new xsd__long;
     *value = static_cast<xsd__long> (*returnValue);
-    delete returnValue; // Samissa - need to clean this memory
+    delete returnValue; // Samisa - need to clean this memory
     return value;
 }
 
 MinInclusive* Long::getMinInclusive()
 {    
-    LONGLONG minInclusive = LONGLONGVALUE(-9223372036854775808);
+    LONGLONG minInclusive = LONGLONGVALUE(-9223372036854775807);
     return new MinInclusive(minInclusive);
 }
 

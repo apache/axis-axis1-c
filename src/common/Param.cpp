@@ -37,10 +37,6 @@ int AxisEngine::m_bServer;
 
 Param::~Param ()
 {
-    int i;
-    XML_String pStr = 0;
-    AnyType* pAny = 0;
-    
     if (m_AnySimpleType)
     {
         delete m_AnySimpleType;
@@ -155,7 +151,8 @@ int Param::serialize (SoapSerializer &pSZ)
             if (RPC_ENCODED == pSZ.getStyle ())
             {
 				TRACE_SERIALIZE_FUNCT_ENTRY(m_Value.pCplxObj->pSZFunct, m_Value.pCplxObj->pObject, &pSZ, false);
-                int stat = m_Value.pCplxObj->pSZFunct (m_Value.pCplxObj->pObject, &pSZ, false);
+                int stat = AXIS_FAIL;
+                stat = m_Value.pCplxObj->pSZFunct (m_Value.pCplxObj->pObject, &pSZ, false);
 				TRACE_SERIALIZE_FUNCT_EXIT(m_Value.pCplxObj->pSZFunct, stat);
             }
             else
@@ -165,7 +162,8 @@ int Param::serialize (SoapSerializer &pSZ)
                  * to add attributes 
                  */
 				TRACE_SERIALIZE_FUNCT_ENTRY(m_Value.pCplxObj->pSZFunct, m_Value.pCplxObj->pObject, &pSZ, false);
-                int stat = m_Value.pCplxObj->pSZFunct (m_Value.pCplxObj->pObject, &pSZ, false);
+                int stat = AXIS_FAIL;
+                stat = m_Value.pCplxObj->pSZFunct (m_Value.pCplxObj->pObject, &pSZ, false);
 				TRACE_SERIALIZE_FUNCT_EXIT(m_Value.pCplxObj->pSZFunct, stat);
 
 				pSZ.serialize ("</", m_sName.c_str (), ">\n", NULL);

@@ -458,7 +458,7 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 {
     if (0 <= m_iBytesLeft)
     {
-		int	iIterationCountdown;
+		int	iIterationCountdown = 100;
 
 		try
 		{

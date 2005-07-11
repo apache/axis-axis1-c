@@ -480,17 +480,15 @@ IWrapperSoapSerializer& SoapSerializer::operator << (const AxisChar * cSerialize
 {
     if( AXIS_SUCCESS != m_nStatus) 
     {
-        /* some thing has gone wrong. So do nothing */
+        // some thing has gone wrong. So do nothing 
         return *this;
     }
 
     try
     {
-      /* send everything to transport layer, it should handle bufferization itself */
-      int nStatus = m_pOutputStream->sendBytes( cSerialized, 0);
+      // send everything to transport layer, it should handle bufferization itself 
+      m_nStatus = m_pOutputStream->sendBytes( cSerialized, 0);
 
-      // FIXME: should we process nStatus somehow?
-	  // Why are we not using m_nStatus?
     }
     catch(AxisSoapException& e)
     {
