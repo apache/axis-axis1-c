@@ -244,16 +244,6 @@ const IChannel & HTTPChannel::operator >> (const char * msg)
                                       (char *) m_LastError.c_str());
     }
 
-
-#ifdef ENABLE_AXISTRACE
-        if (axiscpp::AxisTrace::isTraceOn())
-        {
-            char traceBuffer[40];
-            sprintf(traceBuffer, "Bytes received: %i", nByteRecv);
-            AxisTrace::traceLine(traceBuffer);
-        }
-#endif
-
     if( nByteRecv)
     {
         buf[nByteRecv] = '\0';
