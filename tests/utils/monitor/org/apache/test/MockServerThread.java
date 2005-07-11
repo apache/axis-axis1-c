@@ -306,9 +306,17 @@ public class MockServerThread implements Runnable
                     // e.g. 0a 0a converts to 0d0a 0d0a
                     // I'm doing it using a matcher because this could get
                     // complicated !
-                    Pattern pattern=Pattern.compile("[^\r]\n");
+                    Pattern pattern=Pattern.compile("\n");
                     Matcher matcher=pattern.matcher(request);
-                    responses[i]=matcher.replaceAll("\r\n").toCharArray( );
+                    StringBuffer stringBuffer = new StringBuffer();
+                    while(matcher.find())
+                    {
+                        char[] tmpStr = matcher.group().toCharArray();
+                        matcher.appendReplacement(stringBuffer, "\r\n");
+                    }
+                    matcher.appendTail(stringBuffer);
+                    // Now put it back into the responses
+                    responses[i] = stringBuffer.toString().toCharArray();
                 }
             }
         }
