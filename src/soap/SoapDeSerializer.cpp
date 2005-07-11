@@ -1871,9 +1871,8 @@ void SoapDeSerializer::getElement (const AxisChar * pName,
     if (RPC_ENCODED == m_nStyle)
     {
 		bool    bNillFound = false;
-		if (!m_pNode)
-			m_pNode = m_pParser->next ();
-        /* wrapper node with type info  Ex: <i xsi:type="xsd:int"> */
+		m_pNode = m_pParser->next ();
+        // wrapper node with type info  Ex: <i xsi:type="xsd:int"> 
         if (!m_pNode)
 		{
            return;
@@ -1896,7 +1895,6 @@ void SoapDeSerializer::getElement (const AxisChar * pName,
 
         if (bNillFound || (pSimpleType->getType() == getXSDType (m_pNode)))
         {
-						
 				m_pNode = m_pParser->next (true);   /* charactor node */
 				if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 				{
@@ -1953,11 +1951,11 @@ void SoapDeSerializer::getElement (const AxisChar * pName,
 				}
 		        else
 				{
-					/* simpleType may have xsi:nill="true" */
+					// simpleType may have xsi:nill="true" */
 					//m_pNode = NULL;
-					/* this is important when deserializing 
-					 * arrays
-					 */
+					// this is important when deserializing 
+					// arrays
+					 
 					return;
 				}
         }
@@ -1969,6 +1967,8 @@ void SoapDeSerializer::getElement (const AxisChar * pName,
     }
     else
     {
+	 //DOC_LITERAL	
+
      if (!m_pNode)
         /* if there is an unprocessed node that may be one left from last 
          * array deserialization
