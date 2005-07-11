@@ -487,7 +487,7 @@ IWrapperSoapSerializer& SoapSerializer::operator << (const AxisChar * cSerialize
     try
     {
       // send everything to transport layer, it should handle bufferization itself 
-      m_nStatus = m_pOutputStream->sendBytes( cSerialized, 0);
+      m_pOutputStream->sendBytes( cSerialized, 0);
 
     }
     catch(AxisSoapException& e)
