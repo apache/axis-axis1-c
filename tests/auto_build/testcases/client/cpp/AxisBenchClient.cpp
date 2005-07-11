@@ -270,8 +270,6 @@ int main(int argc, char* argv[])
   try
   {
 	  delete ws; 
-	  for (int i = 0; i < input->infos.m_Size; i++)
-	      delete (BenchBasicDataType*)(input->infos.m_Array[i]);
 	  delete input;
 	  if (output)
 	  {

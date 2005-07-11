@@ -42,6 +42,7 @@
 #include <iostream>
 
 #define ARRAYSIZE 2
+#define NEWCOPY(ptr,str) {ptr=new char[strlen(str)+1]; strcpy(ptr,str);}
 
 int main(int argc, char* argv[])
 {
@@ -58,42 +59,41 @@ int main(int argc, char* argv[])
 
 		ComplexType2 complexType2;
 		ComplexType2* response;
-		xsd__string_Array strArray;
-		xsd__int_Array intArray;
-		SimpleArrays simpleArrays;
-		ComplexType1 complexType1_1;
-		ComplexType1 complexType1_2;
-		ComplexType1_Array complexType1Array;
+		SimpleArrays *simpleArrays1 = new SimpleArrays;
+		SimpleArrays *simpleArrays2 = new SimpleArrays;
+		SimpleArrays *simpleArrays[2] = {simpleArrays1, simpleArrays2};
+		ComplexType1 *complexType1_1 = new ComplexType1;
+		ComplexType1 *complexType1_2 = new ComplexType1;
 
-		strArray.m_Size = ARRAYSIZE;
-		strArray.m_Array = new xsd__string[ARRAYSIZE];
-		strArray.m_Array[0] = "Apache";
-		strArray.m_Array[1] = "Axis C++";
+		for (int i=0; i<2; i++)
+		{
+			xsd__string_Array *strArray = &(simpleArrays[i]->stringArray);
+			xsd__int_Array *intArray = &(simpleArrays[i]->intArray);
 
-        xsd__int * arrayOfInt = new xsd__int[ARRAYSIZE];
-		intArray.m_Size = ARRAYSIZE;
-		intArray.m_Array = new xsd__int*[ARRAYSIZE];
-        arrayOfInt[0] = 6;
-		intArray.m_Array[0] = &arrayOfInt[0];
-        arrayOfInt[1] = 7;
-		intArray.m_Array[1] = &arrayOfInt[1];
+			strArray->m_Size = ARRAYSIZE;
+			strArray->m_Array = new xsd__string[ARRAYSIZE];
+			NEWCOPY(strArray->m_Array[0], "Apache");
+			NEWCOPY(strArray->m_Array[1], "Axis C++");
 
-		simpleArrays.stringArray = strArray;
-		simpleArrays.intArray = intArray;
+			intArray->m_Size = ARRAYSIZE;
+			intArray->m_Array = new xsd__int*[ARRAYSIZE];
+			intArray->m_Array[0] = new int;
+			*(intArray->m_Array[0]) = 6;
+			intArray->m_Array[1] = new int;
+			*(intArray->m_Array[1]) = 7;
+		}
 
-		complexType1_1.simpleArrays = &simpleArrays;
-		complexType1_1.ct1_string = "Hello";
-		complexType1_1.ct1_int = 13;
-		complexType1_2.simpleArrays = &simpleArrays;
-		complexType1_2.ct1_string = "World";
-		complexType1_2.ct1_int = 27;
+		complexType1_1->simpleArrays = simpleArrays1;
+		NEWCOPY(complexType1_1->ct1_string, "Hello");
+		complexType1_1->ct1_int = 13;
+		complexType1_2->simpleArrays = simpleArrays2;
+		NEWCOPY(complexType1_2->ct1_string, "World");
+		complexType1_2->ct1_int = 27;
 
-		complexType1Array.m_Size = ARRAYSIZE;
-		complexType1Array.m_Array = new ComplexType1*[ARRAYSIZE];
-		complexType1Array.m_Array[0] = &complexType1_1;
-		complexType1Array.m_Array[1] = &complexType1_2;
-
-		complexType2.complexType1Array = complexType1Array;
+		complexType2.complexType1Array.m_Size = ARRAYSIZE;
+		complexType2.complexType1Array.m_Array = new ComplexType1*[ARRAYSIZE];
+		complexType2.complexType1Array.m_Array[0] = complexType1_1;
+		complexType2.complexType1Array.m_Array[1] = complexType1_2;
 
 		response = ws.echoNestedComplex(&complexType2);
 		cout << response->complexType1Array.m_Array[0]->ct1_string << endl;
