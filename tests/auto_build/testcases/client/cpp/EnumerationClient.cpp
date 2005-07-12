@@ -29,6 +29,8 @@ void setLogOptions(const char *output_filename);
 // If we re-direct cout it will be to this ofstream
 ofstream output_file;
 
+#define NEWCOPY(ptr,str) {ptr=new char[strlen(str)+1]; strcpy(ptr,str);}
+
 int main(int argc, char* argv[])
 {
   EnumerationWS *ws;
@@ -57,11 +59,11 @@ int main(int argc, char* argv[])
 
     input = new Type1();
 
-    input->enum_string="one";
-    input->att_enum_string="one";
+    NEWCOPY(input->enum_string,"one");
+    NEWCOPY(input->att_enum_string,"one");
     input->enum_int=ENUMTYPEINT_0;
     input->att_enum_int=ENUMTYPEINT_1;
-    input->att_enum_kind="CHEQUE";
+    NEWCOPY(input->att_enum_kind,"CHEQUE");
 
     result = ws->getInput(input);
 
