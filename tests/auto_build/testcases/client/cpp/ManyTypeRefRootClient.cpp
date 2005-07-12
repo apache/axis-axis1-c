@@ -28,6 +28,7 @@ bool parse_args_for_endpoint(int *argc, char *argv[], char **endpoint);
 void shift_args(int i, int *argc, char *argv[]);
 void setLogOptions(const char *output_filename);
 
+#define NEWCOPY(ptr,str) {ptr=new char[strlen(str)+1]; strcpy(ptr,str);}
 
 int main(int argc, char* argv[])
 {
@@ -60,7 +61,7 @@ int main(int argc, char* argv[])
 
         for ( i = 0; i < 10; i++ ) {
             current = new Type1 ();
-            current->kind = "Test type";
+            NEWCOPY(current->kind, "Test type");
             current->index = i;
             types[i] = *current;
         }
