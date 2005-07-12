@@ -1,0 +1,272 @@
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:echoStringResponse xmlns:ns1="http://soapinterop.org/">
+<echoStringReturn xsi:type="xsd:string">hello world hello world </echoStringReturn>
+</ns1:echoStringResponse>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:echoStringResponse xmlns:ns1="http://soapinterop.org/">
+<echoStringReturn xsi:type="xsd:string">hello world</echoStringReturn>
+</ns1:echoStringResponse>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:echoStringArrayResponse xmlns:ns1="http://soapinterop.org/">
+<echoStringArrayReturnArray xmlns:enc="http://www.w3.org/2001/06/soap-encoding" enc:arrayType="xsd:string[2]">
+<item>0th element of string array</item>
+<item>0th element of string array</item>
+</echoStringArrayReturnArray>
+</ns1:echoStringArrayResponse>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:echoIntegerResponse xmlns:ns1="http://soapinterop.org/">
+<echoIntegerReturn xsi:type="xsd:int">56</echoIntegerReturn>
+</ns1:echoIntegerResponse>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:echoIntegerArrayResponse xmlns:ns1="http://soapinterop.org/">
+<echoIntegerArrayReturnArray xmlns:enc="http://www.w3.org/2001/06/soap-encoding" enc:arrayType="xsd:int[2]">
+<item>0</item>
+<item>1</item>
+</echoIntegerArrayReturnArray>
+</ns1:echoIntegerArrayResponse>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:echoFloatResponse xmlns:ns1="http://soapinterop.org/">
+<echoFloatReturn xsi:type="xsd:float">1.421400</echoFloatReturn>
+</ns1:echoFloatResponse>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:echoFloatArrayResponse xmlns:ns1="http://soapinterop.org/">
+<echoFloatArrayReturnArray xmlns:enc="http://www.w3.org/2001/06/soap-encoding" enc:arrayType="xsd:float[2]">
+<item>0.000000</item>
+<item>1.111100</item>
+</echoFloatArrayReturnArray>
+</ns1:echoFloatArrayResponse>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:echoStructResponse xmlns:ns1="http://soapinterop.org/">
+<SOAPStruct xsi:type="ns2:SOAPStruct" xmlns:ns2="http://soapinterop.org/xsd"><varString xsi:type="xsd:string">This is string in SOAPStruct</varString>
+<varInt xsi:type="xsd:int">5000</varInt>
+<varFloat xsi:type="xsd:float">12345.734375</varFloat>
+</SOAPStruct></ns1:echoStructResponse>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:echoStructArrayResponse xmlns:ns1="http://soapinterop.org/">
+<echoStructArrayReturnArray xmlns:enc="http://www.w3.org/2001/06/soap-encoding" xmlns:ns2="http://soapinterop.org/xsd" enc:arrayType="ns2:echoStructArrayReturn[2]">
+<SOAPStruct><varString xsi:type="xsd:string">varString of 1th element of SOAPStruct array</varString>
+<varInt xsi:type="xsd:int">0</varInt>
+<varFloat xsi:type="xsd:float">0.000000</varFloat>
+</SOAPStruct><SOAPStruct><varString xsi:type="xsd:string">varString of 1th element of SOAPStruct array</varString>
+<varInt xsi:type="xsd:int">1</varInt>
+<varFloat xsi:type="xsd:float">1.111100</varFloat>
+</SOAPStruct></echoStructArrayReturnArray>
+</ns1:echoStructArrayResponse>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:echoVoidResponse xmlns:ns1="http://soapinterop.org/">
+</ns1:echoVoidResponse>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:echoBase64Response xmlns:ns1="http://soapinterop.org/">
+<echoBase64Return xsi:type="xsd:base64Binary">c29tZSBzdHJpbmcgdGhhdCBpcyBzZW50IGVuY29kZWQgdG8gZWl0aGVyIGJhc2U2NEJpbmFyeSBvciBoZXhCaW5hcnk=</echoBase64Return>
+</ns1:echoBase64Response>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:echoDateResponse xmlns:ns1="http://soapinterop.org/">
+<echoDateReturn xsi:type="xsd:dateTime">2005-07-12T15:39:12+06:00</echoDateReturn>
+</ns1:echoDateResponse>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:echoHexBinaryResponse xmlns:ns1="http://soapinterop.org/">
+<echoHexBinaryReturn xsi:type="xsd:hexBinary">736F6D6520737472696E6720746861742069732073656E7420656E636F64656420746F206569746865722062617365363442696E617279206F722068657842696E617279</echoHexBinaryReturn>
+</ns1:echoHexBinaryResponse>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:echoDecimalResponse xmlns:ns1="http://soapinterop.org/">
+<echoDecimalReturn xsi:type="xsd:decimal">1234.567890</echoDecimalReturn>
+</ns1:echoDecimalResponse>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:echoBooleanResponse xmlns:ns1="http://soapinterop.org/">
+<echoBooleanReturn xsi:type="xsd:boolean">true</echoBooleanReturn>
+</ns1:echoBooleanResponse>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+0
+

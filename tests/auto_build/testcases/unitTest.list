@@ -11,6 +11,7 @@ DynUnrefAttachmentTest.xml
 Enumeration.xml
 ExceptionTestDoc.xml
 HandlerTest6.xml
+InteropTestRound1.xml
 LargeReturningString.xml
 ManyTypeRefRoot.xml
 MultiOut.xml
