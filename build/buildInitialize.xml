@@ -53,6 +53,7 @@
 			<!-- Display all warnings -->
 			<compilerarg value="/W3"/>
 			<compilerarg value="/GX"/>
+			<compilerarg value="/w44290"/>
 			<compilerarg value="/Gm" if="debug"/>
 			<compilerarg value="/ZI" if="debug"/>
 			<compilerarg value="/Od"/>
