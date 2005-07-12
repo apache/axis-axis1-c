@@ -1,0 +1,39 @@
+POST /AttachmentService/services/AttachmentService HTTP/1.1
+Host: localhost:13260
+SOAPAction: ""
+Content-Type: multipart/related; type="text/xml"; boundary="------=MIME_BOUNDARY"; start="<4>"
+Content-Length: 1683
+
+
+--------=MIME_BOUNDARY
+Content-Type: text/xml; charset=UTF-8
+Content-Transfer-Encoding: binary
+Content-Id: <4>
+
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:nillableAttachment xmlns:ns1="http://attachment.test.org">
+<ns1:arg_0_1 href="cid:1"
+   xsi:type="ns2:DataHandler"
+   xmlns:ns2="http://xml.apache.org/xml-soap"/>
+<ns1:arg_1_1 xsi:nil="true"
+   xsi:type="ns2:Image"
+   xmlns:ns2="http://xml.apache.org/xml-soap"/>
+<ns1:arg_2_1 xsi:nil="true"
+   xsi:type="ns2:Source"
+   xmlns:ns2="http://xml.apache.org/xml-soap"/>
+<ns1:arg_3_1>hello</ns1:arg_3_1>
+</ns1:nillableAttachment>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+
+--------=MIME_BOUNDARY
+Content-Id: <1>
+Content-Type: text/xml
+Content-Transfer-Encoding: base64
+
+PD94bWwgdmVyc2lvbj0nMS4wJyBlbmNvZGluZz0ndXRmLTgnID8+PFNPQVAtRU5WOkVudmVsb3BlIHhtbG5zOlNPQVAtRU5WPSJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy9zb2FwL2VudmVsb3BlLyIgeG1sbnM6eHNkPSJodHRwOi8vd3d3LnczLm9yZy8yMDAxL1hNTFNjaGVtYSIgeG1sbnM6eHNpPSJodHRwOi8vd3d3LnczLm9yZy8yMDAxL1hNTFNjaGVtYS1pbnN0YW5jZSI+PFNPQVAtRU5WOkhlYWRlcj48bnM6VGVzdEhlYWRlciB4bWxuczpucz0iaHR0cDovL3dzLmFwYWNoZS5vcmcvIiBuczpOYW1lPSJBWElTIj48UHJvamVjdCBUWVBFPSJPcGVuIFNvdXJjZSI+PC9Qcm9qZWN0PjwvbnM6VGVzdEhlYWRlcj48L1NPQVAtRU5WOkhlYWRlcj48U09BUC1FTlY6Qm9keT48bnMxOmFkZCB4bWxuczpuczE9Imh0dHA6Ly9sb2NhbGhvc3QvYXhpcy9DYWxjdWxhdG9yIj48bnMxOmFyZ18wXzA+MjwvbnMxOmFyZ18wXzA+PG5zMTphcmdfMV8wPjM8L25zMTphcmdfMV8wPjwvbnMxOmFkZD48L1NPQVAtRU5WOkJvZHk+PC9TT0FQLUVOVjpFbnZlbG9wZT4=
+
+--------=MIME_BOUNDARY--

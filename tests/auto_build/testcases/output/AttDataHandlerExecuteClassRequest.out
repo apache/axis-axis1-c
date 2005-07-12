@@ -1,0 +1,33 @@
+POST /DataHandlerService/services/DataHandlerService HTTP/1.1
+Host: localhost:13260
+SOAPAction: ""
+Content-Type: multipart/related; type="text/xml"; boundary="------=MIME_BOUNDARY"; start="<2>"
+Content-Length: 1470
+
+
+--------=MIME_BOUNDARY
+Content-Type: text/xml; charset=UTF-8
+Content-Transfer-Encoding: binary
+Content-Id: <2>
+
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:executeClass xmlns:ns1="http://datahandler.attachment.test.org">
+<ns1:arg_0_4 href="cid:1"
+   xsi:type="ns2:DataHandler"
+   xmlns:ns2="http://xml.apache.org/xml-soap"/>
+<ns1:arg_1_4>TestClass</ns1:arg_1_4>
+</ns1:executeClass>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+
+--------=MIME_BOUNDARY
+Content-Id: <1>
+Content-Type: plain/text
+Content-Transfer-Encoding: base64
+
+yv66vgAAAC4AIgEACVRlc3RDbGFzcwcAAQEAEGphdmEvbGFuZy9PYmplY3QHAAMBAAY8aW5pdD4BAAMoKVYBAARDb2RlDAAFAAYKAAQACAEAD0xpbmVOdW1iZXJUYWJsZQEAEkxvY2FsVmFyaWFibGVUYWJsZQEABHRoaXMBAAtMVGVzdENsYXNzOwEABG1haW4BABYoW0xqYXZhL2xhbmcvU3RyaW5nOylWAQAQamF2YS9sYW5nL1N5c3RlbQcAEAEAA291dAEAFUxqYXZhL2lvL1ByaW50U3RyZWFtOwwAEgATCQARABQBAAtIZWxsbyBXb3JsZAgAFgEAE2phdmEvaW8vUHJpbnRTdHJlYW0HABgBAAdwcmludGxuAQAVKExqYXZhL2xhbmcvU3RyaW5nOylWDAAaABsKABkAHAEABGFyZ3MBABNbTGphdmEvbGFuZy9TdHJpbmc7AQAKU291cmNlRmlsZQEADlRlc3RDbGFzcy5qYXZhACEAAgAEAAAAAAACAAEABQAGAAEABwAAAC8AAQABAAAABSq3AAmxAAAAAgAKAAAABgABAAAAAgALAAAADAABAAAABQAMAA0AAAAJAA4ADwABAAcAAAA3AAIAAQAAAAmyABUSF7YAHbEAAAACAAoAAAAKAAIAAAAEAAgABQALAAAADAABAAAACQAeAB8AAAABACAAAAACACE=
+
+--------=MIME_BOUNDARY--

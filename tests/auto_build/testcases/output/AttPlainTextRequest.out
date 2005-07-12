@@ -1,0 +1,32 @@
+POST /PlainTextAttachment/services/PlainTextAttachment HTTP/1.1
+Host: localhost:13260
+SOAPAction: ""
+Content-Type: multipart/related; type="text/xml"; boundary="------=MIME_BOUNDARY"; start="<2>"
+Content-Length: 752
+
+
+--------=MIME_BOUNDARY
+Content-Type: text/xml; charset=UTF-8
+Content-Transfer-Encoding: binary
+Content-Id: <2>
+
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:echoText xmlns:ns1="http://PlainTextAttachment">
+<ns1:arg2 href="cid:1"
+   xsi:type="ns2:PlainText"
+   xmlns:ns2="http://xml.apache.org/xml-soap"/>
+</ns1:echoText>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+
+--------=MIME_BOUNDARY
+Content-Id: <1>
+Content-Type: text/plain
+Content-Transfer-Encoding: base64
+
+VGhpcyBpcyBhIHRlc3QgbWVzc2FnZSBmb3IgYXR0YWNobWVudA==
+
+--------=MIME_BOUNDARY--
