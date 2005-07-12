@@ -6,7 +6,7 @@
 		comparison later in this script works on all platforms.
 	-->
 	<target name="setExpectations"
-		depends="setResultExpectations, setRequestExpectations, setServerResponse" />
+		depends="setResultExpectations, setRequestExpectations, copyattachment, setServerResponse" />
 
 	<target name="setResultExpectations" unless="buildOnly">
 		<basename file="${expected.file}"
@@ -19,6 +19,17 @@
 		<fixcrlf srcdir="${test.directory}"
 			includes="${expected.file.basename}" />
 	</target>
+
+    <!--
+		Copy the required files for attachment test from the attachment directory
+	-->
+
+
+    <target name="copyattachment" if="test.attachment" unless="buildOnly">
+		<copy file="${dir.autotests}/attachment/${test.attachment}"
+			todir="${test.directory}" failonerror="false" />
+	</target>
+
 
 	<!-- Only copy expected request file if it exists -->
 	<target name="setRequestExpectations" if="requestFileExists"
