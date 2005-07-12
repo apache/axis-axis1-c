@@ -23,7 +23,7 @@
 int main(int argc, char* argv[])
 {
     char endpoint[256];
-    const char* url="http://localhost:80/axis/XSD_NMTOKEN";
+    const char* url="http://localhost:80/axis/XSD_NMTOKENPort";
 
     if(argc>1)
         url = argv[1];
@@ -34,7 +34,8 @@ int main(int argc, char* argv[])
         XSD_NMTOKENPort* ws = new XSD_NMTOKENPort(endpoint);
       
         char emptyNMTOKEN[1] = "";
-        xsd__NMTOKEN emptyInput = emptyNMTOKEN;
+        xsd__NMTOKEN emptyInput = new char[1];
+        strcpy (emptyInput, emptyNMTOKEN);
         char simpleNMTOKEN[25] = "A simple test message!";
         xsd__NMTOKEN input = new char[25];
         strcpy (input, simpleNMTOKEN);
@@ -56,6 +57,7 @@ int main(int argc, char* argv[])
         {
             cout << "non-nillable element=<nil>" << endl;
         }
+        delete [] input;
 
         // Test empty non-nillable element
         result = ws->asNonNillableElement(emptyInput);
@@ -74,6 +76,7 @@ int main(int argc, char* argv[])
         {
             cout << "empty non-nillable element=<nil>" << endl;
         }
+        delete [] emptyInput;
 
         // Test non-nillable element with XML reserved characters
         char reservedCharactersNMTOKEN[] = "<>&\"\'";
@@ -116,6 +119,8 @@ int main(int argc, char* argv[])
         }
 
         // Test nillable element, with a value
+        input = new char[25];
+        strcpy (input, simpleNMTOKEN);
         xsd__NMTOKEN nillableResult = ws->asNillableElement(input);
         if (nillableResult)
         {
@@ -133,8 +138,11 @@ int main(int argc, char* argv[])
         {
             cout << "nillable element=<nil>" << endl;
         }
+        delete [] input;
 
         // Test empty nillable element
+        emptyInput = new char[1];
+        strcpy (emptyInput, emptyNMTOKEN);
         nillableResult = ws->asNillableElement(emptyInput);
         if (nillableResult)
         {
@@ -152,6 +160,7 @@ int main(int argc, char* argv[])
         {
             cout << "empty nillable element=<nil>" << endl;
         }
+        delete [] emptyInput;
 
         // Test nillable element, with nil
         nillableResult = ws->asNillableElement(NULL);
@@ -173,6 +182,8 @@ int main(int argc, char* argv[])
         }
 
         // Test required attribute
+        input = new char[25];
+        strcpy (input, simpleNMTOKEN);
         RequiredAttributeElement requiredAttributeInput;
         requiredAttributeInput.setrequiredAttribute(input);
         RequiredAttributeElement* requiredAttributeResult = ws->asRequiredAttribute(&requiredAttributeInput);
@@ -191,9 +202,12 @@ int main(int argc, char* argv[])
         {
             cout << "required attribute=<nil>" << endl;
         }
+        delete [] input;
         delete requiredAttributeResult;
 
         // Test empty required attribute
+        emptyInput = new char[1];
+        strcpy (emptyInput, emptyNMTOKEN);
         requiredAttributeInput;
         requiredAttributeInput.setrequiredAttribute(emptyInput);
         requiredAttributeResult = ws->asRequiredAttribute(&requiredAttributeInput);
@@ -212,9 +226,12 @@ int main(int argc, char* argv[])
         {
             cout << "empty required attribute=<nil>" << endl;
         }
+        delete [] emptyInput;
         delete requiredAttributeResult;
 
         // Test optional attribute, with a value
+        input = new char[25];
+        strcpy (input, simpleNMTOKEN);
         OptionalAttributeElement optionalAttributeInput;
         optionalAttributeInput.setoptionalAttribute(input);
         OptionalAttributeElement* optionalAttributeResult = ws->asOptionalAttribute(&optionalAttributeInput);
@@ -233,9 +250,12 @@ int main(int argc, char* argv[])
         {
             cout << "optional attribute, with data=<not present>" << endl;
         }
+        delete [] input;
         delete optionalAttributeResult;
 
         // Test empty optional attribute
+        emptyInput = new char[1];
+        strcpy (emptyInput, emptyNMTOKEN);
         optionalAttributeInput.setoptionalAttribute(emptyInput);
         optionalAttributeResult = ws->asOptionalAttribute(&optionalAttributeInput);
         if (optionalAttributeResult->getoptionalAttribute())
@@ -253,6 +273,7 @@ int main(int argc, char* argv[])
         {
             cout << "empty optional attribute=<not present>" << endl;
         }
+        delete [] emptyInput;
         delete optionalAttributeResult;
 
         // Test optional attribute, not present
@@ -281,6 +302,8 @@ int main(int argc, char* argv[])
         arrayInput.m_Size = 2;
         for (int inputIndex=0 ; inputIndex < 2 ; inputIndex++)
         {
+            input = new char[25];
+            strcpy (input, simpleNMTOKEN);
             arrayInput.m_Array[inputIndex] = input;
         }
         xsd__NMTOKEN_Array arrayResult = ws->asArray(arrayInput);
@@ -308,6 +331,8 @@ int main(int argc, char* argv[])
         delete [] arrayResult.m_Array;
 
         // Test complex type
+        input = new char[25];
+        strcpy (input, simpleNMTOKEN);
         SimpleComplexType complexTypeInput;
         complexTypeInput.setcomplexTypeElement(input);
         SimpleComplexType* complexTypeResult = ws->asComplexType(&complexTypeInput);
