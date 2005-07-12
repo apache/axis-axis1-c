@@ -99,15 +99,20 @@ main (int argc, char *argv[])
 				     "InteropBase#echoStringArray");
 	    printf ("invoking echoStringArray...\n");
 
-        char** arrstrResult = ws.echoStringArray (arrstr).m_Array;
+            char** arrstrResult = ws.echoStringArray (arrstr).m_Array;
         
 	    if (arrstrResult != NULL)
 		printf ("successful\n");
 	    else
 		printf ("failed\n");
 
-        delete [] arrstr.m_Array;
-        delete [] arrstrResult;
+            delete [] arrstr.m_Array;
+            for (int i = 0; i < ARRAYSIZE; i++)
+            {
+                delete [] arrstrResult[i];
+            }
+
+            delete [] arrstrResult;
 
 	    // testing echoInteger 
 	    ws.setTransportProperty ("SOAPAction", "InteropBase#echoInteger");
@@ -131,12 +136,18 @@ main (int argc, char *argv[])
 	    ws.setTransportProperty ("SOAPAction",
 				     "InteropBase#echoIntegerArray");
 	    printf ("invoking echoIntegerArray...\n");
-	    if (ws.echoIntegerArray (arrint).m_Array != NULL)
+	    xsd__int_Array arrintResult = ws.echoIntegerArray (arrint);
+	    if (arrintResult.m_Array != NULL)
 		printf ("successful\n");
 	    else
 		printf ("failed\n");
 
-        delete [] arrint.m_Array;
+            delete [] arrint.m_Array;
+	    // Free memory for result
+	    for (x = 0; x < arrintResult.m_Size; x++)
+                delete arrintResult.m_Array[x];
+
+            delete [] arrintResult.m_Array;
 
 	    // testing echoFloat 
 	    printf ("invoking echoFloat...\n");
@@ -160,12 +171,17 @@ main (int argc, char *argv[])
 	    ws.setTransportProperty ("SOAPAction",
 				     "InteropBase#echoFloatArray");
 	    printf ("invoking echoFloatArray...\n");
-	    if (ws.echoFloatArray (arrfloat).m_Array != NULL)
+	    xsd__float_Array arrfloatResult = ws.echoFloatArray (arrfloat);
+	    if (arrfloatResult.m_Array != NULL)
 		printf ("successful\n");
 	    else
 		printf ("failed\n");
 
-        delete [] arrfloat.m_Array;
+            delete [] arrfloat.m_Array;
+            
+	    for (x = 0; x < arrfloatResult.m_Size; x++)
+                delete arrfloatResult.m_Array[x];
+            delete [] arrfloatResult.m_Array;
 
 	    // testing echo Struct
 	    SOAPStruct stct;
@@ -176,12 +192,20 @@ main (int argc, char *argv[])
 	    stct.varString = strdup ("This is string in SOAPStruct");
 	    printf ("invoking echoStruct...\n");
 	    ws.setTransportProperty ("SOAPAction", "InteropBase#echoStruct");
-	    if (ws.echoStruct (&stct) != NULL)
+	    SOAPStruct *stctResult = ws.echoStruct (&stct);
+	    if (stctResult != NULL)
 		printf ("successful\n");
 	    else
 		printf ("failed\n");
 
-        free(stct.varString);
+            // Free parameter memeory
+            free(stct.varString);
+
+            // Free result memory
+            delete [] stctResult->varString;
+            delete stctResult->varInt;
+            delete stctResult->varFloat;
+            delete stctResult;
 
 	    //testing echo Array of Struct
 	    SOAPStruct_Array arrstct;
@@ -210,7 +234,11 @@ main (int argc, char *argv[])
 
         delete [] arrstct.m_Array;
         for( x = 0; x < arrstctResult.m_Size; x++)
+        {
             delete [] arrstctResult.m_Array[x].varString;
+            delete arrstctResult.m_Array[x].varInt;
+            delete arrstctResult.m_Array[x].varFloat;
+        }
         delete [] arrstctResult.m_Array;
 
 	    //testing echo void
