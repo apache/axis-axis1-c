@@ -168,7 +168,7 @@ typedef enum { false_=0, true_ } xsdc__boolean;
  * @typedef xsdc__byte
  * Axis C++ defined type for xml basic type byte
  */
-typedef char xsdc__byte;
+typedef signed char xsdc__byte;
 
 /**
  * @typedef xsdc__QName

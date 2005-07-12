@@ -56,13 +56,13 @@ void * Byte::getValue()
     return (void*) getByte();
 }
 
-AxisChar* Byte::serialize(const char* value) throw (AxisSoapException)
+AxisChar* Byte::serialize(const xsd__byte* value) throw (AxisSoapException)
 {
     xsd__short valueAsShort = static_cast<xsd__short>(*value);
     return Short::serialize(&valueAsShort);
 }
 
-char* Byte::deserializeByte(const AxisChar* valueAsChar) throw (AxisSoapException)
+xsd__byte* Byte::deserializeByte(const AxisChar* valueAsChar) throw (AxisSoapException)
 {
     xsd__short* returnValue = Short::deserializeShort(valueAsChar);
  

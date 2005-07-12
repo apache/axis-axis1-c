@@ -155,7 +155,7 @@ typedef enum { false_=0, true_ } xsd__boolean;
  * @typedef xsd__byte
  * Axis C++ defined type for xml basic type byte
  */
-typedef char xsd__byte;
+typedef signed char xsd__byte;
 /**
  * @typedef xsd__QName
  * Axis C++ defined type for xml basic type QName
