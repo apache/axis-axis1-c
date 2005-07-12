@@ -842,7 +842,12 @@ int SoapSerializer::serializeAsElement( const AxisChar * pName,
 {
     IAnySimpleType* pSimpleType = AxisUtils::createSimpleTypeObject(pValue, type);
     
-    return serializeAsElement(pName, pNamespace, pSimpleType);
+    int ret = serializeAsElement(pName, pNamespace, pSimpleType);
+    
+    // Samisa: got to clen memory allocated in AxisUtils::createSimpleTypeObject
+    delete pSimpleType;
+
+    return ret;
 }
 int SoapSerializer::serializeAsElement( const AxisChar * pName,
 									    IAnySimpleType * pSimpleType)
