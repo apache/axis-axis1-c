@@ -55,6 +55,14 @@
     os << buf;
     return os;
   }
+  
+  std::ostream& operator<<(std::ostream& os, unsigned __int64 i )
+  {
+    char buf[20];
+    sprintf(buf,"%I64u", i );
+    os << buf;
+    return os;
+  }
 #endif
 
 int main(int argc, char* argv[])
@@ -151,7 +159,7 @@ int main(int argc, char* argv[])
         cout << "MinInclusive long=" << lResult << endl;
 
 		ulResult = ws->setGetDataUnsignedLong((xsd__unsignedLong)42);
-		printf("unsigned long=%d\n", ulResult);
+		cout << "unsigned long=" << ulResult << endl;
 
 		fResult = ws->setGetDataFloat((xsd__float)35.3535888888);
 		printf("float=%.5f\n", fResult); fflush(stdout);
