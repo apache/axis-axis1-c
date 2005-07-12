@@ -52,6 +52,7 @@ WSDDService::~WSDDService()
         {
             delete (*iter);
         }
+        delete m_ResponseHandlers;
     }
 }
 
@@ -142,7 +143,6 @@ void  WSDDService::addHandler(bool bRequestFlow, WSDDHandler* pHandler)
 {
     if (bRequestFlow)
     {
-        /* AXISTRACE1("WSDDService::AddHandler"); */
         if (!m_RequestHandlers) m_RequestHandlers = new WSDDHandlerList;
         m_RequestHandlers->push_back(pHandler);
     }
