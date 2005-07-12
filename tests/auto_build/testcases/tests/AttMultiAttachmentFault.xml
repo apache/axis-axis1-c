@@ -1,0 +1,19 @@
+<test>
+    <name>AttMultiAttachmentFault</name>
+    <description>AttMultiAttachmentFault</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>AttMultiAttachmentFault.cpp</clientCode>
+    <wsdl>AttachmentService.wsdl</wsdl>
+    <expected>
+        <output>
+            AttMultiAttachmentFault.expected
+        </output>
+	  <request>
+		 AttMultiAttachmentFaultRequest.out
+	  </request>
+	   <serverResponse>
+		AttMultiAttachmentFault_ServerResponse.expected
+        </serverResponse>
+    </expected>
+	<endpoint>http://localhost:9080/AttachmentService/services/AttachmentService</endpoint>
+</test>

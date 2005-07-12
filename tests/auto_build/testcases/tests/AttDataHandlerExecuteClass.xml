@@ -1,0 +1,20 @@
+<test>
+    <name>AttDataHandlerExecuteClass</name>
+    <description>AttDataHandlerExecuteClass</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>AttDataHandlerExecuteClass.cpp</clientCode>
+    <wsdl>DataHandlerService.wsdl</wsdl>
+    <attachment>TestClass.class</attachment>
+    <expected>
+        <output>
+            AttDataHandlerExecuteClass.expected
+        </output>
+	  <request>
+		 AttDataHandlerExecuteClassRequest.out
+	  </request>
+	   <serverResponse>
+		AttDataHandlerExecuteClass_ServerResponse.expected
+        </serverResponse>
+    </expected>
+	<endpoint>http://localhost:9080/DataHandlerService/services/DataHandlerService</endpoint>
+</test>

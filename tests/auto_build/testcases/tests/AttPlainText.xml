@@ -1,0 +1,19 @@
+<test>
+    <name>AttPlainText</name>
+    <description>AttPlainText</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>AttPlainText.cpp</clientCode>
+    <wsdl>PlainTextAttachment.wsdl</wsdl>
+    <expected>
+        <output>
+            AttPlainText.expected
+        </output>
+	  <request>
+		 AttPlainTextRequest.out
+	  </request>
+	   <serverResponse>
+		AttPlainText_ServerResponse.expected
+        </serverResponse>
+    </expected>
+	<endpoint>http://localhost:9080/PlainTextAttachment/services/PlainTextAttachment</endpoint>
+</test>

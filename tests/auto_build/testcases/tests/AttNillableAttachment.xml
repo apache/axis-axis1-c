@@ -1,0 +1,20 @@
+<test>
+    <name>AttNillableAttachment</name>
+    <description>AttNillableAttachment</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>AttNillableAttachment.cpp</clientCode>
+    <wsdl>AttachmentService.wsdl</wsdl>
+    <attachment>SOAPMessage.xml</attachment>
+    <expected>
+        <output>
+            AttNillableAttachment.expected
+        </output>
+	  <request>
+		 AttNillableAttachmentRequest.out
+	  </request>
+	   <serverResponse>
+		AttNillableAttachment_ServerResponse.expected
+        </serverResponse>
+    </expected>
+	<endpoint>http://localhost:9080/AttachmentService/services/AttachmentService</endpoint>
+</test>

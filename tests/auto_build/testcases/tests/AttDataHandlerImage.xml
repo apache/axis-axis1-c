@@ -1,0 +1,20 @@
+<test>
+    <name>AttDataHandlerImage</name>
+    <description>AttDataHandlerImage</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>AttDataHandlerImage.cpp</clientCode>
+    <wsdl>DataHandlerService.wsdl</wsdl>
+    <attachment>pic13290.gif</attachment>
+    <expected>
+        <output>
+            AttDataHandlerImage.expected
+        </output>
+	  <request>
+		 AttDataHandlerImageRequest.out
+	  </request>
+	   <serverResponse>
+		AttDataHandlerImage_ServerResponse.expected
+        </serverResponse>
+    </expected>
+	<endpoint>http://localhost:9080/DataHandlerService/services/DataHandlerService</endpoint>
+</test>
