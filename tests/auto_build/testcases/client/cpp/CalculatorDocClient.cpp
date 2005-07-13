@@ -17,7 +17,9 @@
 #include <axis/AxisException.hpp>
 #include <ctype.h>
 #include <iostream>
+#include <signal.h>
 
+void sig_handler(int);
 void PrintUsage();
 bool IsNumber(const char* p);
 
@@ -28,6 +30,13 @@ int main(int argc, char* argv[])
 	const char* op = 0;
 	int i1=0, i2=0;
 	int iResult;
+
+	signal(SIGILL, sig_handler);
+	signal(SIGABRT, sig_handler);
+	signal(SIGSEGV, sig_handler);
+	//signal(SIGQUIT, sig_handler);
+	//signal(SIGBUS, sig_handler);
+	signal(SIGFPE, sig_handler);
 
 	url = argv[1];
 
@@ -102,3 +111,10 @@ bool IsNumber(const char* p)
 	}
 	return true;
 }
+
+void sig_handler(int sig) {
+	signal(sig, sig_handler);
+    cout << "SIGNAL RECEIVED " << sig << endl;
+	exit(1);
+}
+
