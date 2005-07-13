@@ -1,0 +1,20 @@
+<test>
+    <name>AwkwardErrorResponse</name>
+    <description>
+This is a non-SOAP error that I once got back from WAS that was triggered by a bug in Axis C++. Axis C++ could
+not cope with this error since it is not XML. I've now fixed the bug in Axis C++ so I've added in this unit test
+to check that Axis C++ can continue to cope with such error responses.
+    </description>
+    <clientLang>cpp</clientLang>
+    <clientCode>CalculatorDocClient.cpp</clientCode>
+    <wsdl>CalculatorDoc.wsdl</wsdl>
+    <expected>
+        <output>
+            AwkwardErrorResponse.expected
+        </output>
+        <serverResponse>
+		AwkwardErrorResponse_ServerResponse.expected
+        </serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/CalculatorDoc</endpoint>
+</test>
