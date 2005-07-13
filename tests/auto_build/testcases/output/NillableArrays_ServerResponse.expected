@@ -1,0 +1,133 @@
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:echoBooleanArrayResponse xmlns:ns1="http://arrays.test.apache.org">
+<echoBooleanArrayReturn>false</echoBooleanArrayReturn>
+<echoBooleanArrayReturn xsi:nil="true"></echoBooleanArrayReturn>
+<echoBooleanArrayReturn>true</echoBooleanArrayReturn>
+</ns1:echoBooleanArrayResponse>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:echoShortArrayResponse xmlns:ns1="http://arrays.test.apache.org">
+<echoShortArrayReturn>252</echoShortArrayReturn>
+<echoShortArrayReturn xsi:nil="true"></echoShortArrayReturn>
+<echoShortArrayReturn>254</echoShortArrayReturn>
+</ns1:echoShortArrayResponse>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:echoIntArrayResponse xmlns:ns1="http://arrays.test.apache.org">
+<echoIntArrayReturn>1000000</echoIntArrayReturn>
+<echoIntArrayReturn xsi:nil="true"></echoIntArrayReturn>
+<echoIntArrayReturn>1000002</echoIntArrayReturn>
+</ns1:echoIntArrayResponse>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:echoLongArrayResponse xmlns:ns1="http://arrays.test.apache.org">
+<echoLongArrayReturn>200001</echoLongArrayReturn>
+<echoLongArrayReturn xsi:nil="true"></echoLongArrayReturn>
+<echoLongArrayReturn>200003</echoLongArrayReturn>
+</ns1:echoLongArrayResponse>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:echoFloatArrayResponse xmlns:ns1="http://arrays.test.apache.org">
+<echoFloatArrayReturn>11.111000</echoFloatArrayReturn>
+<echoFloatArrayReturn xsi:nil="true"></echoFloatArrayReturn>
+<echoFloatArrayReturn>33.111000</echoFloatArrayReturn>
+</ns1:echoFloatArrayResponse>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:echoDoubleArrayResponse xmlns:ns1="http://arrays.test.apache.org">
+<echoDoubleArrayReturn>71.156500</echoDoubleArrayReturn>
+<echoDoubleArrayReturn xsi:nil="true"></echoDoubleArrayReturn>
+<echoDoubleArrayReturn>73.156500</echoDoubleArrayReturn>
+</ns1:echoDoubleArrayResponse>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:echoStringArrayResponse xmlns:ns1="http://arrays.test.apache.org">
+<echoStringArrayReturn>Apache</echoStringArrayReturn>
+<echoStringArrayReturn xsi:nil="true"></echoStringArrayReturn>
+<echoStringArrayReturn>Axis C++</echoStringArrayReturn>
+</ns1:echoStringArrayResponse>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+0
+

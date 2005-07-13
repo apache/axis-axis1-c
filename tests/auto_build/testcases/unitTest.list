@@ -17,8 +17,10 @@ MathOpsDoc.xml
 ManyTypeRefRoot.xml
 MultiOut.xml
 NestedComplex.xml
+NillableArrays.xml
 NilValuesTest.xml
 nillableComplexType.xml
+PrimitiveAndArray.xml
 RecurseTypes.xml
 SimpleArrays.xml
 TestSoapHeaderBlock2

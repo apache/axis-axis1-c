@@ -1,0 +1,40 @@
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:sendPrimitiveAndArrayResponse xmlns:ns1="http://complexissues.test.apache.org">
+<sendPrimitiveAndArrayReturn><ns1:returnInt>37</ns1:returnInt>
+<ns1:returnArray>6</ns1:returnArray>
+<ns1:returnArray>7</ns1:returnArray>
+</sendPrimitiveAndArrayReturn>
+</ns1:sendPrimitiveAndArrayResponse>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:sendArrayAndPrimitiveResponse xmlns:ns1="http://complexissues.test.apache.org">
+<sendArrayAndPrimitiveReturn><ns1:returnInt>43</ns1:returnInt>
+<ns1:returnArray>13</ns1:returnArray>
+<ns1:returnArray>17</ns1:returnArray>
+</sendArrayAndPrimitiveReturn>
+</ns1:sendArrayAndPrimitiveResponse>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+0
+
