@@ -202,7 +202,6 @@ int main(int argc, char* argv[])
         {
             cout << "required attribute=<nil>" << endl;
         }
-        delete [] input;
         delete requiredAttributeResult;
 
         // Test empty required attribute
@@ -226,9 +225,10 @@ int main(int argc, char* argv[])
         {
             cout << "empty required attribute=<nil>" << endl;
         }
-        delete [] emptyInput;
         delete requiredAttributeResult;
 
+/* Optional Attributes currently unsupported by WSDL2Ws
+ * Exact coding of this section may change depending on chosen implementation
         // Test optional attribute, with a value
         input = new char[25];
         strcpy (input, simpleString);
@@ -250,7 +250,6 @@ int main(int argc, char* argv[])
         {
             cout << "optional attribute, with data=<not present>" << endl;
         }
-        delete [] input;
         delete optionalAttributeResult;
 
         // Test empty optional attribute
@@ -273,7 +272,6 @@ int main(int argc, char* argv[])
         {
             cout << "empty optional attribute=<not present>" << endl;
         }
-        delete [] emptyInput;
         delete optionalAttributeResult;
 
         // Test optional attribute, not present
@@ -295,6 +293,7 @@ int main(int argc, char* argv[])
             cout << "optional attribute, not present=<not present>" << endl;
         }
         delete optionalAttributeResult;
+*/
 
         // Test array
         xsd__string_Array arrayInput;

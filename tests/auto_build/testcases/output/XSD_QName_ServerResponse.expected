@@ -108,39 +108,6 @@ Transfer-Encoding: chunked
 
 ###
 <?xml version="1.0" encoding="utf-8"?>
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header /><soapenv:Body><asOptionalAttributeResponse xmlns="http://xsd_QName.test.apache.org"><OptionalAttributeElement optionalAttribute="A simple test message!" /></asOptionalAttributeResponse></soapenv:Body></soapenv:Envelope>
-0
-
-HTTP/1.1 200 OK
-Server: WebSphere Application Server/5.1
-Content-Type: text/xml; charset=utf-8
-Content-Language: en-GB
-Transfer-Encoding: chunked
-
-###
-<?xml version="1.0" encoding="utf-8"?>
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header /><soapenv:Body><asOptionalAttributeResponse xmlns="http://xsd_QName.test.apache.org"><OptionalAttributeElement optionalAttribute="" /></asOptionalAttributeResponse></soapenv:Body></soapenv:Envelope>
-0
-
-HTTP/1.1 200 OK
-Server: WebSphere Application Server/5.1
-Content-Type: text/xml; charset=utf-8
-Content-Language: en-GB
-Transfer-Encoding: chunked
-
-###
-<?xml version="1.0" encoding="utf-8"?>
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header /><soapenv:Body><asOptionalAttributeResponse xmlns="http://xsd_QName.test.apache.org"><OptionalAttributeElement /></asOptionalAttributeResponse></soapenv:Body></soapenv:Envelope>
-0
-
-HTTP/1.1 200 OK
-Server: WebSphere Application Server/5.1
-Content-Type: text/xml; charset=utf-8
-Content-Language: en-GB
-Transfer-Encoding: chunked
-
-###
-<?xml version="1.0" encoding="utf-8"?>
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header /><soapenv:Body><asArrayResponse xmlns="http://xsd_QName.test.apache.org"><arrayElement>A simple test message!</arrayElement><arrayElement>A simple test message!</arrayElement></asArrayResponse></soapenv:Body></soapenv:Envelope>
 0
 

@@ -10,9 +10,6 @@ empty nillable element=<empty>
 nil element=<nil>
 required attribute=A simple test message!
 empty required attribute=<empty>
-optional attribute, with data=A simple test message!
-empty optional attribute=<empty>
-optional attribute, not present=<not present>
 array of 2 elements
   element[0]=A simple test message!
   element[1]=A simple test message!
