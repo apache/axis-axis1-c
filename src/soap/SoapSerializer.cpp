@@ -332,7 +332,8 @@ int SoapSerializer::setOutputStream( SOAPTransport * pStream)
 					ctype += "\"; start=\"<";
 					ctype += id;
 					ctype += ">\"";
-					pStream->setTransportProperty( AXIS_CONTENT_TYPE, ctype.c_str());
+					pStream->deleteTransportProperty(AXIS_CONTENT_TYPE); // Never want 2 Content-Type HTTP headers
+					pStream->setTransportProperty(AXIS_CONTENT_TYPE, ctype.c_str());
 
 					serialize("\r\n--" MIMEBOUNDARY "\r\n", NULL);
                     serialize(AXIS_CONTENT_TYPE ": text/xml; charset=UTF-8\r\n", NULL);
