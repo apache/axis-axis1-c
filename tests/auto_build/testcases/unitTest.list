@@ -13,8 +13,10 @@ ExceptionTestDoc.xml
 HandlerTest6.xml
 InteropTestRound1.xml
 LargeReturningString.xml
+MathOpsDoc.xml
 ManyTypeRefRoot.xml
 MultiOut.xml
+NestedComplex.xml
 NilValuesTest.xml
 nillableComplexType.xml
 RecurseTypes.xml

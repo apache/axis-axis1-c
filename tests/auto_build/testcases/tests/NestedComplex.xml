@@ -8,6 +8,7 @@
         <output>
             NestedComplex.expected
         </output>
+		<serverResponse>NestedComplex_ServerResponse.expected</serverResponse>
     </expected>
 	<endpoint>http://localhost:80/axis/NestedComplex</endpoint>
 </test>

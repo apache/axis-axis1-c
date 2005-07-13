@@ -1,0 +1,28 @@
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:echoNestedComplexResponse xmlns:ns1="http://nestedcomplex.test.apache.org">
+<echoNestedComplexReturn><ns1:complexType1Array><ns1:simpleArrays><ns1:intArray>6</ns1:intArray>
+<ns1:intArray>7</ns1:intArray>
+<ns1:stringArray>Apache</ns1:stringArray>
+<ns1:stringArray>Axis C++</ns1:stringArray>
+</ns1:simpleArrays><ns1:ct1_string>Hello</ns1:ct1_string>
+<ns1:ct1_int>13</ns1:ct1_int>
+</ns1:complexType1Array><ns1:complexType1Array><ns1:simpleArrays><ns1:intArray>6</ns1:intArray>
+<ns1:intArray>7</ns1:intArray>
+<ns1:stringArray>Apache</ns1:stringArray>
+<ns1:stringArray>Axis C++</ns1:stringArray>
+</ns1:simpleArrays><ns1:ct1_string>World</ns1:ct1_string>
+<ns1:ct1_int>27</ns1:ct1_int>
+</ns1:complexType1Array></echoNestedComplexReturn>
+</ns1:echoNestedComplexResponse>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+0
