@@ -2,7 +2,7 @@ POST /AttachmentService/services/AttachmentService HTTP/1.1
 Host: localhost:13260
 SOAPAction: ""
 Content-Type: multipart/related; type="text/xml"; boundary="------=MIME_BOUNDARY"; start="<3>"
-Content-Length: 1714
+Content-Length: 1246
 
 
 --------=MIME_BOUNDARY
@@ -15,16 +15,16 @@ Content-Id: <3>
 <SOAP-ENV:Body>
 <ns1:multiAttachment xmlns:ns1="http://attachment.test.org">
 <ns1:arg_0_0 href="cid:1"
-   xsi:type="ns2:DataHandler"   
+   xsi:type="ns2:DataHandler"
    xmlns:ns2="http://xml.apache.org/xml-soap"/>
 <ns1:arg_1_0 href="cid:1"
-   xsi:type="ns2:DataHandler"   
+   xsi:type="ns2:DataHandler"
    xmlns:ns2="http://xml.apache.org/xml-soap"/>
 <ns1:arg_2_0 href="cid:5"
    xsi:type="ns2:Image"
    xmlns:ns2="http://xml.apache.org/xml-soap"/>
 <ns1:arg_3_0 href="cid:1"
-   xsi:type="ns2:DataHandler"   
+   xsi:type="ns2:DataHandler"
    xmlns:ns2="http://xml.apache.org/xml-soap"/>
 </ns1:multiAttachment>
 </SOAP-ENV:Body>
