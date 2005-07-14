@@ -27,6 +27,7 @@ SimpleArrays.xml
 SimpleRefDoc.xml
 TestSoapHeaderBlock2
 UnboundedChoice.xml
+UnboundedStringChoice.xml
 XSDElement.xml
 XSDElementNil.xml
 XSD_duration.xml

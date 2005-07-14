@@ -8,6 +8,7 @@
         <output>
             UnboundedStringChoice.expected
         </output>
+		<serverResponse>UnboundedStringChoice_ServerResponse.expected</serverResponse>
     </expected>
 	<endpoint>http://localhost:80/axis/UnboundedStringChoice</endpoint>
 </test>
