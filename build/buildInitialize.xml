@@ -26,6 +26,15 @@
 
 	<property environment="env"/>
 
+    <condition property="msvc7">
+        <and>
+            <isset property="windows" />
+            <not>
+                <isset property="env.MSDevDir" />
+            </not>
+        </and>
+    </condition>
+
 	<!--
 	  Compiler Definitions
 	  -->
@@ -53,16 +62,15 @@
 			<!-- Display all warnings -->
 			<compilerarg value="/W3"/>
 			<compilerarg value="/GX"/>
-			<compilerarg value="/w44290"/>
+        <compilerarg value="/w44290" if="msvc7" />
 			<compilerarg value="/Gm" if="debug"/>
-			<compilerarg value="/ZI" if="debug"/>
+        <compilerarg value="/Zi" if="debug"/>
 			<compilerarg value="/Od"/>
 			<includepath path="${dir.include}"/>
 			<defineset>
 				<define name="WIN32"/>
 				<define name="_DEBUG" if="debug"/>
 				<define name="NDEBUG" unless="debug"/>
-				<define name="_WINDOWS"/>
 				<define name="_MBCS"/>
 				<define name="_USRDLL"/>
 				<define name="ENABLE_AXIS_EXCEPTION"/>
@@ -149,7 +157,7 @@
 			<linkerarg value="/debug" if="debug"/>
 			<linkerarg value="/machine:I386"/>
 			<linkerarg value="/nologo"/>
-			<linkerarg value="/pdb:none"/>
+        <linkerarg value="/pdb:none" unless="msvc7" />
 		</linker>
 	
 		<!--
