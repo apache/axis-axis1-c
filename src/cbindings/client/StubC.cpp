@@ -61,7 +61,7 @@ AXISC_STORAGE_CLASS_INFO void axiscSetTransportPropertyStub(AXISCHANDLE stub, co
 AXISC_STORAGE_CLASS_INFO const char * axiscGetTransportPropertyStub(AXISCHANDLE stub, const char *key, 
 	AxiscBool response) {
 	Stub *s = (Stub*)stub;
-	return s->getTransportProperty(key, (bool) response);
+	return s->getTransportProperty(key, (bool)(response !=0 ));
 }
 
 AXISC_STORAGE_CLASS_INFO const char * axiscGetFirstTransportPropertyKey(AXISCHANDLE stub) {
