@@ -295,7 +295,6 @@ public class MockServerThread implements Runnable
         }
         else
         {
-            System.out.println("Converting oa to od oa");
             for(int i=0; i<responses.length; i++)
             {
                 if (responses[i]!=null)
@@ -308,18 +307,38 @@ public class MockServerThread implements Runnable
                     // complicated !
                     Pattern pattern=Pattern.compile("\n");
                     Matcher matcher=pattern.matcher(request);
-                    StringBuffer stringBuffer = new StringBuffer();
-                    while(matcher.find())
+                    StringBuffer stringBuffer=new StringBuffer( );
+                    while (matcher.find( ))
                     {
-                        char[] tmpStr = matcher.group().toCharArray();
+                        char[] tmpStr=matcher.group( ).toCharArray( );
                         matcher.appendReplacement(stringBuffer, "\r\n");
                     }
                     matcher.appendTail(stringBuffer);
                     // Now put it back into the responses
-                    responses[i] = stringBuffer.toString().toCharArray();
+                    responses[i]=stringBuffer.toString( ).toCharArray( );
                 }
             }
         }
-    }
 
+        // Irrespective of platform ensure that all responses end with \r\n\r\n
+        for(int i=0; i<responses.length; i++)
+        {
+            if (responses[i]!=null)
+            {
+                String request=new String((char[]) responses[i]);
+                Pattern pattern=Pattern.compile("([^\r\n])(\r\n)*$");
+                Matcher matcher=pattern.matcher(request);
+                StringBuffer stringBuffer=new StringBuffer(request);
+                while (matcher.find( ))
+                {
+                    char[] tmpStr=matcher.group( ).toCharArray( );
+                    // and replace them with the proper sentence !
+                    matcher.appendReplacement(stringBuffer, "$1\r\n\r\n");
+                }
+                matcher.appendTail(stringBuffer);
+                // Now put it back into the responses
+                responses[i]=stringBuffer.toString( ).toCharArray( );
+            }
+        }
+    }
 }
