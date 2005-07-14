@@ -31,13 +31,14 @@
 #pragma warning (disable : 4786)
 #endif
 
+#include <axis/GDefine.hpp>
 #include "SoapEnvelope.h"
 #include "SoapSerializer.h"
 #include "HeaderBlock.h"
-#include <axis/GDefine.hpp>
 #include "../common/ArrayBean.h"
 #include "../common/BasicTypeSerializer.h"
-#include "../soap/SoapKeywordMapping.h"
+#include "SoapKeywordMapping.h"
+#include "SoapAttachmentReference.hpp"
 #include "AxisSoapException.h"
 #include <stdio.h>
 #include <stdarg.h>
@@ -68,13 +69,20 @@ SoapSerializer::~SoapSerializer()
 
 	/* Cleaning the memory allocated to the SoapAttachments */       
 	map<AxisXMLString, ISoapAttachment*>::iterator itCurrAttach= m_SoapAttachments.begin();
-
 	while( itCurrAttach != m_SoapAttachments.end())
     {        
         delete( (SoapAttachment*)((*itCurrAttach).second));		
-
         itCurrAttach++;
     }
+	m_SoapAttachments.clear();
+
+	list<SoapAttachmentReference*>::iterator itAttRef= m_attachmentRefs.begin();
+	while(itAttRef != m_attachmentRefs.end())
+    {        
+        delete *itAttRef;
+        itAttRef++;
+    }
+	m_attachmentRefs.clear();
 }
 
 int SoapSerializer::setSoapEnvelope( SoapEnvelope * pSoapEnvelope)
@@ -1243,13 +1251,15 @@ void SoapSerializer::addAttachmentParameter(ISoapAttachment* att, const char* pN
 {
 	if (NULL==att)
 		att = static_cast<ISoapAttachment*>(new SoapAttachment(m_pContentIdSet));
+	SoapAttachmentReference *ref = new SoapAttachmentReference(static_cast<SoapAttachment*>(att));
+	m_attachmentRefs.push_back(ref);
 
     Param *pParam = new Param();
-    pParam->m_Value.pAttachment = static_cast<SoapAttachment*>(att);
+    pParam->m_Value.pAttachmentRef = ref;
 	pParam->m_Type = ATTACHMENT;
 
 	if (NULL!=attributes && nAttributes>0) 
-		pParam->m_Value.pAttachment->addAttributes(attributes,nAttributes);
+		ref->addAttributes(attributes,nAttributes);
 	
 	if (m_pSoapEnvelope &&
 		(m_pSoapEnvelope->m_pSoapBody) &&

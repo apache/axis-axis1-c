@@ -20,15 +20,16 @@
  *
  */
 
+#include <axis/AxisUserAPI.hpp>
 #include "../engine/AxisEngine.h"
 #include "Param.h"
 #include "ArrayBean.h"
 #include "BasicTypeSerializer.h"
+#include "AxisUtils.h"
+#include "AxisTrace.h"
+#include "../soap/SoapAttachmentReference.hpp"
 #include <stdlib.h>
 #include <stdio.h>
-#include "AxisUtils.h"
-#include <axis/AxisUserAPI.hpp>
-#include "AxisTrace.h"
 
 AXIS_CPP_NAMESPACE_START
 
@@ -173,7 +174,7 @@ int Param::serialize (SoapSerializer &pSZ)
              pSZ.serializeAnyObject(m_Value.pAnyObject);
              break;
       case ATTACHMENT:
-            m_Value.pAttachment->serializeReference(pSZ,m_sName.c_str());
+            m_Value.pAttachmentRef->serialize(pSZ,m_sName.c_str());
             break;
       default:
             pSZ.serializeAsElement((AxisChar*) m_sName.c_str (), (IAnySimpleType*) m_AnySimpleType);

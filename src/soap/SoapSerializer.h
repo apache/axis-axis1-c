@@ -41,6 +41,7 @@ class HeaderBlock;
 class IArrayBean;
 class Attribute;
 class ISoapAttachment;
+class SoapAttachmentReference;
 
 /**
  *  @class SoapSerializer
@@ -56,6 +57,7 @@ class SoapSerializer : public IHandlerSoapSerializer
 {
 private:
 	map<AxisString, ISoapAttachment*> m_SoapAttachments;
+	list<SoapAttachmentReference*> m_attachmentRefs;
     int m_nCounter;
     AxisChar m_Buf[BTS_BUFFSIZE];
     SoapEnvelope* m_pSoapEnvelope;    	

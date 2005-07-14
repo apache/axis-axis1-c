@@ -12,28 +12,16 @@
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
- */
-
-/*
+ *
  * @author Rangika Mendis (rangika@opensource.lk)
  * @author Nithyakala Thangarajah (nithya@opensource.lk)
  * @author Roshan Weerasuriya (roshan@opensource.lk, roshan@jkcsworld.com)
- *
  */
-
-
 
 // SoapAttachment.cpp: implementation of the SoapAttachment class.
 
-//
-
-//////////////////////////////////////////////////////////////////////
-
-
-
 #include "SoapAttachment.hpp"
 #include "SoapSerializer.h"
-#include "Attribute.h"
 
 AXIS_CPP_NAMESPACE_START
 //////////////////////////////////////////////////////////////////////
@@ -59,14 +47,6 @@ SoapAttachment::~SoapAttachment()
 {
 	delete m_AttachmentHeaders;
 	m_AttachmentHeaders =0;
-
-	list<Attribute*>::iterator it = m_attributes.begin();
-	while (it != m_attributes.end())
-	{
-		 delete (*it);
-		it++;
-	}
-	m_attributes.clear();
 }
 
 void SoapAttachment::addHeader(const char* pchName, const char* pchValue)
@@ -144,40 +124,6 @@ const char* SoapAttachment::getHeader(const char *pchName)
 const char* SoapAttachment::getAttachmentId()
 {
    return getHeader(AXIS_CONTENT_ID);
-}
-
-void SoapAttachment::serializeReference(SoapSerializer& pSZ, const char *name)
-{
-	string data = "<";
-	data += name;
-	if (NULL==m_AttachmentBody)
-		data += " xsi:nil=\"true\"";
-	else
-	{
-		data += " href=\"cid:";
-		data += m_AttachmentHeaders->getHeader(AXIS_CONTENT_ID);
-		data += "\"";
-	}
-	pSZ.serialize(data.c_str(), NULL);
-
-	list<Attribute*>::iterator it = m_attributes.begin();
-	while (it != m_attributes.end())
-	{
-		pSZ.serialize("\r\n  ",NULL);
-		(*it)->serialize(pSZ);
-		it++;
-	}
-	pSZ.serialize("/>\r\n",NULL);
-}
-
-void SoapAttachment::addAttributes(IAttribute **attributes, int nAttributes)
-{
-	if (0==nAttributes || NULL==attributes) return;
-	for (int i=0; i<nAttributes; i++)
-		if (NULL!=attributes[i]) 
-			m_attributes.push_back(static_cast<Attribute*>(attributes[i]));
-
-	return;
 }
 
 AXIS_CPP_NAMESPACE_END
