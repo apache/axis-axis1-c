@@ -91,7 +91,11 @@
 		 objdir="${test.directory}" exceptions="true"
 		 outtype="executable" subsystem="console">
 		 	<!-- Compilers -->
-			<compiler refid="VisualC++"/>
+			<compiler extends="VisualC++">
+                <defineset>         
+                    <define name="Q168440_WORKAROUND" unless="msvc7" />
+                </defineset>         
+            </compiler>         
 			<compiler refid="Linuxgcc"/>
 			<compiler refid="AIXxlc"/>
             <compiler extends="OS400icc"> 
@@ -121,7 +125,11 @@
 		 objdir="${test.directory}" exceptions="true"
 		 outtype="executable" subsystem="console">
 		 	<!-- Compilers -->
-			<compiler refid="VisualC++"/>
+			<compiler extends="VisualC++">
+                <defineset>
+                    <define name="Q168440_WORKAROUND" unless="msvc7" />
+                </defineset>
+            </compiler>      
 			<compiler refid="Linuxgcc"/>
 			<compiler refid="AIXxlc"/>
 			<compiler refid="OS400icc"/>
