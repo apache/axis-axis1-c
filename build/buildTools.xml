@@ -27,10 +27,14 @@
 		<path id ="tracecp">
 			<fileset dir="${dir.classes}" includes="buildtools.jar"/>
 		</path>
+
+		<!-- Allow caller to override the config filename -->
+		<property name="trace.config.file" value="${dir.tools}/org/apache/axis/tools/trace/tracetool.conf"/>
+
 		<java classname="org.apache.axis.tools.trace.TraceInstrumentor" fork="true" failonerror="true">
                   <classpath refid="tracecp"/>
 			<arg value="-config"/>
-			<arg value="${dir.tools}/org/apache/axis/tools/trace/tracetool.conf"/>
+			<arg value="${trace.config.file}"/>
 			<arg value="-include"/>
 			<arg value="${dir.src}"/>
 			<arg value="-include"/>
