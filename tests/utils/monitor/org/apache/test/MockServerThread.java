@@ -24,6 +24,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -252,6 +256,34 @@ public class MockServerThread implements Runnable
                 String tmpString=new String(charBuffer, 0, readInt);
                 completeFile=completeFile.concat(tmpString);
             }
+        }
+        
+        // Swap all time occurances to be correct for local time zone
+        int timePos = completeFile.indexOf("##TIME##");
+        while (timePos != -1)
+        {
+            String timeText = completeFile.substring(timePos - 8, timePos + 8);
+
+            // Parse time from response
+            ParsePosition position = new ParsePosition(0);
+            SimpleDateFormat format = new SimpleDateFormat();
+            format.applyPattern("HH:mm:ss'##TIME##'");
+            format.parse(timeText, position);
+
+            // Recalculate time for local offset
+            Calendar calendar = format.getCalendar();
+            Date date = calendar.getTime();
+            date.setTime(date.getTime() - calendar.getTimeZone().getRawOffset());
+
+            // Create new string to be placed in response
+            format.applyPattern("HH:mm:ss'Z'");
+            String gmText = format.format(date);
+            
+            // Replace in response
+            completeFile = completeFile.replaceFirst(timeText, gmText);
+            
+            // Check for further occurances
+            timePos = completeFile.indexOf("##TIME##");
         }
 
         // now split the file by "HTTP"

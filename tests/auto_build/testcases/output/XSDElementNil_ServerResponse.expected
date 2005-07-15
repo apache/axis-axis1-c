@@ -281,7 +281,7 @@ Transfer-Encoding: chunked
 
 201
 <?xml version="1.0" encoding="utf-8"?>
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header/><soapenv:Body><setGetDateTimeTypeResponse xmlns="http://xsdelement.test.apache.org"><setGetDateTimeTypeReturn>2004-11-12T07:58:43.000Z</setGetDateTimeTypeReturn></setGetDateTimeTypeResponse></soapenv:Body></soapenv:Envelope>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header/><soapenv:Body><setGetDateTimeTypeResponse xmlns="http://xsdelement.test.apache.org"><setGetDateTimeTypeReturn>2004-11-12T07:58:43##TIME##</setGetDateTimeTypeReturn></setGetDateTimeTypeResponse></soapenv:Body></soapenv:Envelope>
 0
 
 HTTP/1.1 200 OK

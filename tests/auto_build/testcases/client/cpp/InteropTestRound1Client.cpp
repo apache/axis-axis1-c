@@ -181,12 +181,14 @@ int main(int argc, char* argv[])
 	else
 		printf("failed\n");
 
-	time_t tim;
-	time(&tim);
-	tm* lt = gmtime(&tim);
+    time_t timeToTest = 1100246323;
+    struct tm *temp = gmtime(&timeToTest);
+    struct tm time;
+    memcpy(&time, temp, sizeof(struct tm));
+   
 	printf("invoking echoDate...\n");
 	ws.setTransportProperty("SOAPAction" , "InteropBase#echoDate");
-	if (memcmp(&ws.echoDate(*lt), lt, sizeof(tm)) == 0)
+	if (memcmp(&ws.echoDate(time), &time, sizeof(tm)) == 0)
 		printf("successful\n");
 	else
 		printf("failed\n");

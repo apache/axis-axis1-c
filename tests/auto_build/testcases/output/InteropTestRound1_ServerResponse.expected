@@ -213,7 +213,7 @@ Transfer-Encoding: chunked
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <SOAP-ENV:Body>
 <ns1:echoDateResponse xmlns:ns1="http://soapinterop.org/">
-<echoDateReturn xsi:type="xsd:dateTime">2005-07-12T15:39:12+06:00</echoDateReturn>
+<echoDateReturn xsi:type="xsd:dateTime">2004-11-12T07:58:43##TIME##</echoDateReturn>
 </ns1:echoDateResponse>
 </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
