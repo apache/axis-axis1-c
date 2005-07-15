@@ -240,7 +240,7 @@ AXIS_CPP_NAMESPACE_START
             const_cast<AxisChar*>(exceptionMessage.c_str()));
         }
 
-        value.tm_year = 70;
+        value.tm_year = 71;
         value.tm_mon = 0;
         value.tm_mday = 1;     /* Day of month (1 - 31) */
         value.tm_isdst = -1;
@@ -323,6 +323,8 @@ AXIS_CPP_NAMESPACE_START
             }
             pTm = localtime (&timeInSecs);
         }
+
+        pTm->tm_year = 70;
 
     	xsd__time * returnValue = new xsd__time;
 		memcpy (returnValue, pTm, sizeof (tm));
