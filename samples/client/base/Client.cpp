@@ -107,7 +107,7 @@ main (int argc, char *argv[])
 		printf ("failed\n");
 
             delete [] arrstr.m_Array;
-            for (int i = 0; i < ARRAYSIZE; i++)
+            for (i = 0; i < ARRAYSIZE; i++)
             {
                 delete [] arrstrResult[i];
             }
