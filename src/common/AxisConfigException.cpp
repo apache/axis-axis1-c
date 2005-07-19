@@ -30,12 +30,17 @@ AXIS_CPP_NAMESPACE_START
 
 AxisConfigException::AxisConfigException(const int iExceptionCode, const char* pcMessage):AxisException(iExceptionCode)
 {
-	AxisString sMessage = "";
+	std::string sMessage = "";
 	if (pcMessage) 
 	{
-		sMessage = pcMessage;
+		sMessage = string(pcMessage);
+		getMessageForExceptionCode(iExceptionCode);
+		m_sMessageForExceptionCode = getMessageForExceptionCode(iExceptionCode) + " " + sMessage;
+		setMessage(m_sMessageForExceptionCode.c_str());
+
 	}
-	m_sMessage = getMessageForExceptionCode(m_iExceptionCode) + " " + sMessage;
+	else
+		setMessage(getMessageForExceptionCode(iExceptionCode).c_str());
 }
 
 AxisConfigException::AxisConfigException (const AxisConfigException& e):AxisException(e)
@@ -45,23 +50,24 @@ AxisConfigException::~AxisConfigException() throw ()
 {}
 
 
-const string AxisConfigException::getMessageForExceptionCode(const int iExceptionCode)
+string AxisConfigException::getMessageForExceptionCode(const int iExceptionCode)
 {
-    switch(iExceptionCode)
+    
+	switch(iExceptionCode)
     {
         case SERVER_CONFIG_TRANSPORT_CONF_FAILED:
-            m_sMessage = "AxisConfigException:Transport layer is not" \
+            m_sMessageForExceptionCode = "AxisConfigException:Transport layer is not"\
                 " configured properly";
             break;
         case SERVER_CONFIG_LIBRARY_PATH_EMPTY:
-            m_sMessage = "AxisConfigException:Library path is empty(Not in" \
+            m_sMessageForExceptionCode = "AxisConfigException:Library path is empty(Not in" \
                 " server.wsdd file)";
             break;
         default:
-            m_sMessage = "AxisConfigException:Unknown Axis C++" \
+            m_sMessageForExceptionCode = "AxisConfigException:Unknown Axis C++" \
                 " Configuration Exception";
     }
-    return m_sMessage;
+    return m_sMessageForExceptionCode;
 }
 
 AXIS_CPP_NAMESPACE_END

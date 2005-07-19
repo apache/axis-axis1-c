@@ -43,24 +43,24 @@ AXIS_CPP_NAMESPACE_START
 SoapFaultException::SoapFaultException()
 {
 	m_code = NULL;
-	m_string = NULL;
+	m_sMessage = NULL;
 	m_actor = NULL;
-	m_exceptionCode = 0;
+	m_iExceptionCode = 0;
 }
 
 SoapFaultException::SoapFaultException(
 	const AxisChar *code, const AxisChar *string, const AxisChar *actor, int exceptionCode) 
 {
 	STRINGCOPY(m_code,code);
-	STRINGCOPY(m_string,string);
+	STRINGCOPY(m_sMessage,string);
 	STRINGCOPY(m_actor,actor);
-	m_exceptionCode = exceptionCode;
+	m_iExceptionCode = exceptionCode;
 }
 
 SoapFaultException::SoapFaultException(AxisException& ae)
 {
-	STRINGCOPY(m_string,ae.what());
-	m_exceptionCode = ae.getExceptionCode();
+	STRINGCOPY(m_sMessage,ae.what());
+	m_iExceptionCode = ae.getExceptionCode();
 	m_code = NULL;
 	m_actor = NULL;
 }
@@ -68,30 +68,30 @@ SoapFaultException::SoapFaultException(AxisException& ae)
 SoapFaultException::SoapFaultException(const SoapFaultException& copy)
 {
 	STRINGCOPY(m_code	,copy.m_code);
-	STRINGCOPY(m_string	,copy.m_string);
+	STRINGCOPY(m_sMessage	,copy.m_sMessage);
 	STRINGCOPY(m_actor	,copy.m_actor);
-	m_exceptionCode = copy.m_exceptionCode;
+	m_iExceptionCode = copy.m_iExceptionCode;
 }
 
 SoapFaultException& SoapFaultException::operator=(SoapFaultException copy)
 {
 	exception::operator=(copy);
 	STRINGREPLACE(m_code	,copy.m_code);
-	STRINGREPLACE(m_string	,copy.m_string);
+	STRINGREPLACE(m_sMessage	,copy.m_sMessage);
 	STRINGREPLACE(m_actor	,copy.m_actor);
-	m_exceptionCode = copy.m_exceptionCode;
+	m_iExceptionCode = copy.m_iExceptionCode;
 	return *this;
 }
 
 SoapFaultException::~SoapFaultException() throw()
 {
 	if (NULL != m_code) delete [] m_code;
-	if (NULL != m_string) delete [] m_string;
+	if (NULL != m_sMessage) delete [] m_sMessage;
 	if (NULL != m_actor) delete [] m_actor;
 	m_code = NULL;
-	m_string = NULL;
+	m_sMessage = NULL;
 	m_actor = NULL;
-	m_exceptionCode = 0;
+	m_iExceptionCode = 0;
 }
 
 
@@ -102,7 +102,7 @@ const AxisChar *SoapFaultException::getFaultCode() const
 
 const AxisChar *SoapFaultException::getFaultString() const
 {
-	return m_string;
+	return m_sMessage;
 }
 
 const AxisChar *SoapFaultException::getFaultActor() const 
@@ -117,7 +117,7 @@ void SoapFaultException::setFaultCode(const AxisChar *code)
 
 void SoapFaultException::setFaultString(const AxisChar *string)
 {
-	STRINGCOPY(m_string,string);
+	STRINGCOPY(m_sMessage,string);
 }
 
 void SoapFaultException::setFaultActor(const AxisChar *actor)
@@ -125,20 +125,6 @@ void SoapFaultException::setFaultActor(const AxisChar *actor)
 	STRINGCOPY(m_actor,actor);
 }
 
-void SoapFaultException::setExceptionCode(int code) 
-{
-	m_exceptionCode = code;
-}
-
-const char* SoapFaultException::what() throw()
-{
-	return m_string;
-}
-
-const int SoapFaultException::getExceptionCode()
-{
-	return m_exceptionCode;
-}
 
 AXIS_CPP_NAMESPACE_END
 

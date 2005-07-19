@@ -36,8 +36,8 @@ public:
     virtual ~AxisParseException() throw();
                                                                                                                              
 private:
-    const string getMessageForExceptionCode (const int iExceptionCode);
-    
+    string getMessageForExceptionCode (const int iExceptionCode);
+    string m_sMessageForExceptionCode;
 };
 
 #endif

@@ -180,11 +180,19 @@ class STORAGE_CLASS_INFO AxisException :public exception
 
 
 public:
-  /**
-    * Default constructor
-    */
-    AxisException() 
-    {};
+    /** No parameter constructor*/
+    AxisException():m_iExceptionCode(0), m_sMessage(NULL){};
+
+    /** This can be used to throw an exception with the exception code
+      * which is defined in the AxisException.h file, under AXISC_EXCEPTIONS
+      * type. Axis C++ exception model heavily use this.
+      *
+      * @param Exception code which is defined in the AxisException.h file, 
+      * under AXISC_EXCEPTIONS type.
+      * 
+      * @example throw AxisException(AXISC_NODE_VALUE_MISMATCH_EXCEPTION);
+      */
+    //AxisException(const int iExceptionCode);
 
     /** This can be used to throw an exception with exception code which is
       * is defined in the AxisException.h file, under AXISC_EXCEPTIONS type.
@@ -197,12 +205,12 @@ public:
       * @example throw AxisException(AXISC_NODE_VALUE_MISMATCH_EXCEPTION, 
             "Some additional exception info");
       */
-    AxisException(const int iExceptionCode, const char* pcMessage = NULL):m_iExceptionCode(iExceptionCode)
+    AxisException(const int iExceptionCode, const char* pcMessage = NULL):m_iExceptionCode(iExceptionCode), m_sMessage(NULL)
 	{
 		if(pcMessage)
-			m_sMessage = std::string(pcMessage);
-		else
-			m_sMessage = "";
+		{
+			setMessage(pcMessage);
+		}		
 	}
 
     /** This can be used to throw an exception with another exception as a
@@ -213,18 +221,39 @@ public:
       *
       * @example throw AxisException(std::bad_alloc);
       */
-    AxisException(const AxisException& e):m_sMessage(e.m_sMessage),m_iExceptionCode(e.m_iExceptionCode){};
+    AxisException(const AxisException& e):m_iExceptionCode(e.m_iExceptionCode), m_sMessage(NULL)
+	{
+		if(e.m_sMessage)
+		{
+			setMessage(e.m_sMessage);
+		}
+	};
 
-  /** 
-    * Destructor 
-    */
+    /** This accept two parameters, both an exception code an exception object
+      * derived from std::exception
+      *
+      * @param An exception class derived from std::exception
+      * @param An exception code
+      */
+    //AxisException(const exception* e, const int iExceptionCode);
+    
+    /** This accept an exception message
+      *
+      * @param An exception message
+      */
+    //AxisException(const char* pcMessage){m_sMessage = pcMessage;};
+    
+    /** Destructor */
     virtual ~AxisException() throw()
-    {};
+	{
+		if (m_sMessage)
+			delete [] m_sMessage;
+	};
 
     /** This method is defined in std::exception. AxisException and derived
       * classes will override this to print exception messages
       */
-    virtual const char* what() const throw() { return m_sMessage.c_str (); };
+    virtual const char* what() const throw() { return m_sMessage; };
 
     /** This can be called to get the exception code which is passed
       * in the constructor. This returns -1 value when the 
@@ -235,23 +264,58 @@ public:
       *
       * @return exception message
       */
-    virtual const int getExceptionCode() const { return m_iExceptionCode; }
-
-  /**
-    * getMessage() is just a wrapper to what().
-    */
+    
+	virtual const int getExceptionCode() const { return m_iExceptionCode; }
+	void setExceptionCode(int exceptionCode) { m_iExceptionCode = exceptionCode;}
+	
 	const char* getMessage() const { return what(); }
 
-protected:
-  /**
-    * The string variable m_sMessage is used to store the Exception message
-    */
-	std::string m_sMessage;
+	
 
-  /**
-    * The integer variable m_iExceptionCode stores the Exception code
-    */
-    int m_iExceptionCode;
+protected:
+	
+	/**
+	  *Dushshantha:
+	  *The method setMessage(std::string psMessage) uses to set the private data member m_sMessage
+	  *Please use this method whenever you need to set the m_sMessage variable in derived classes.
+	  */
+
+	void setMessage(const char* psMessage)
+	{
+		if (m_sMessage)
+		{
+			delete [] m_sMessage;
+			m_sMessage = NULL;
+		}
+
+		if (psMessage)
+		{
+			m_sMessage = new char[strlen(psMessage) + 1];
+			strcpy(m_sMessage,psMessage);
+		}
+		
+		
+		
+	}
+
+
+	/**
+	  *Dushshantha:
+	  *This data member is common to all the inherited classes of this base class.
+	  *The integer variable m_iExceptionCode stores the Exception code
+      */
+
+	int m_iExceptionCode;
+
+	/**
+	  *This data member is common to all the inherited classes of this base class.
+	  *The char* variable m_sMessage is used to store the Exception message
+	  *Whenever you want to set this variable Please use the method setMessage(std::string psMessage)
+	  */
+	char* m_sMessage;
+
+	
+
 };
 
 

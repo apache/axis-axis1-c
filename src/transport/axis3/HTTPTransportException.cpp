@@ -24,12 +24,17 @@
 
 HTTPTransportException::HTTPTransportException(const int iExceptionCode, char* pcMessage):AxisException(iExceptionCode)
 {
-	AxisString sMessage = "";
+	std::string sMessage = "";
 	if (pcMessage) 
 	{
-		sMessage = pcMessage;
+		sMessage = string(pcMessage);
+		getMessageForExceptionCode(iExceptionCode);
+		m_sMessageForExceptionCode = getMessageForExceptionCode(iExceptionCode) + " " + sMessage;
+		setMessage(m_sMessageForExceptionCode.c_str());
+
 	}
-	m_sMessage = getMessageForExceptionCode(m_iExceptionCode) + " " + sMessage;
+	else
+		setMessage(getMessageForExceptionCode(iExceptionCode).c_str());
 }
 
 HTTPTransportException::HTTPTransportException (const HTTPTransportException& e):AxisException(e)
@@ -38,47 +43,49 @@ HTTPTransportException::HTTPTransportException (const HTTPTransportException& e)
 HTTPTransportException::~HTTPTransportException() throw ()
 {}
 
-const string HTTPTransportException::getMessageForExceptionCode (const int iExceptionCode)
+string HTTPTransportException::getMessageForExceptionCode (const int iExceptionCode)
 {
-    switch(iExceptionCode)
+	
+    
+	switch(iExceptionCode)
     {
 		case SERVER_TRANSPORT_RECEPTION_EXCEPTION:
 		{
-            m_sMessage = "HTTPTransportException:Problem occured when" \
+            m_sMessageForExceptionCode = "HTTPTransportException:Problem occured when" \
                 " receiving the stream";
             break;
 		}
 
         case SERVER_TRANSPORT_SENDING_EXCEPTION:
 		{
-            m_sMessage = "HTTPTransportException:Problem occured when sending" \
+            m_sMessageForExceptionCode = "HTTPTransportException:Problem occured when sending" \
                 " the stream";
             break;
 		}
 
         case SERVER_TRANSPORT_HTTP_EXCEPTION:
 		{
-            m_sMessage = "HTTPTransportException:HTTP transport error";
+            m_sMessageForExceptionCode = "HTTPTransportException:HTTP transport error";
             break;
 		}
 
         case SERVER_TRANSPORT_PROCESS_EXCEPTION:
 		{
-            m_sMessage = "HTTPTransportException:HTTP Error, cannot process" \
+            m_sMessageForExceptionCode = "HTTPTransportException:HTTP Error, cannot process" \
                 " response message";
             break;
 		}
 
         case SERVER_TRANSPORT_UNKNOWN_HTTP_RESPONSE:
 		{
-            m_sMessage = "HTTPTransportException:Unknow HTTP response," \
+            m_sMessageForExceptionCode = "HTTPTransportException:Unknow HTTP response," \
                 " cannot process response message";
             break;
 		}
 
         case SERVER_TRANSPORT_UNEXPECTED_STRING:
 		{
-            m_sMessage = "HTTPTransportException:Unexpected string " \
+           m_sMessageForExceptionCode = "HTTPTransportException:Unexpected string " \
                 "received. Most probably server " \
                 "returned an empty stream";
             break;
@@ -86,80 +93,80 @@ const string HTTPTransportException::getMessageForExceptionCode (const int iExce
 
         case SERVER_TRANSPORT_CHANNEL_INIT_ERROR:
 		{
-            m_sMessage = "HTTPTransportException:Cannot initialize a " \
+            m_sMessageForExceptionCode = "HTTPTransportException:Cannot initialize a " \
                 "channel to the remote end";
             break;
 		}
 
         case SERVER_TRANSPORT_OUTPUT_STREAMING_ERROR:
 		{
-            m_sMessage = "HTTPTransportException:Output streaming error on" \
+            m_sMessageForExceptionCode = "HTTPTransportException:Output streaming error on" \
                 " Channel while writing data";
             break;
 		}
 
         case SERVER_TRANSPORT_INPUT_STREAMING_ERROR:
 		{
-            m_sMessage = "HTTPTransportException:Input streaming error while" \
+            m_sMessageForExceptionCode = "HTTPTransportException:Input streaming error while" \
                 " getting data";
             break;
 		}
 
         case SERVER_TRANSPORT_TIMEOUT_EXCEPTION:
 		{
-            m_sMessage = "HTTPTransportException:Channel error while waiting" \
+            m_sMessageForExceptionCode = "HTTPTransportException:Channel error while waiting" \
                  " for timeout";
             break;
 		}
 
         case SERVER_TRANSPORT_TIMEOUT_EXPIRED:
 		{
-            m_sMessage = "HTTPTransportException:Channel error connection " \
+            m_sMessageForExceptionCode = "HTTPTransportException:Channel error connection " \
                 "timeout before receving";
             break;
 		}
 
         case SERVER_TRANSPORT_BUFFER_EMPTY:
 		{
-            m_sMessage = "HTTPTransportException:Transport buffer is empty";
+            m_sMessageForExceptionCode = "HTTPTransportException:Transport buffer is empty";
             break;
 		}
 
 		case CLIENT_TRANSPORT_EXCEPTION:
 		{
-				m_sMessage = "HTTPTransportException:Generic client transport exception";
+			m_sMessageForExceptionCode = "HTTPTransportException:Generic client transport exception";
 				break;
 		}
 
 		case CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED:
 		{
-				m_sMessage = "HTTPTransportException:Client failed to open";
+			m_sMessageForExceptionCode = "HTTPTransportException:Client failed to open";
 			break;
 		}
 
 		case CLIENT_TRANSPORT_TYPE_MISMATCH:
 		{
-				m_sMessage = "HTTPTransportException:Client attempted to use SSL functions without the proper prerquistes";
+			m_sMessageForExceptionCode = "HTTPTransportException:Client attempted to use SSL functions without the proper prerquistes";
 			break;
 		}
 
 		case CLIENT_TRANSPORT_HAS_NO_SECURE_TRANSPORT_LAYER:
 		{
-				m_sMessage = "HTTPTransportException:Client attempted to use secure transport (https) without an SSL layer";
+			m_sMessageForExceptionCode = "HTTPTransportException:Client attempted to use secure transport (https) without an SSL layer";
 			break;
 		}
 
         case SERVER_TRANSPORT_LOADING_CHANNEL_FAILED:
         {
-            m_sMessage = "DLOPEN FAILED in loading channel library";
+            m_sMessageForExceptionCode = "DLOPEN FAILED in loading channel library";
             break;
         }
 
         default:
 		{
-            m_sMessage = "HTTPTransportException:Unknown Transport Exception"; 
+            m_sMessageForExceptionCode = "HTTPTransportException:Unknown Transport Exception"; 
 		}
     }
-    return m_sMessage;
+    return m_sMessageForExceptionCode;
 }
 

@@ -38,8 +38,8 @@ public:
     virtual ~HTTPTransportException() throw();
                                                                                                                              
 private:
-    const string getMessageForExceptionCode(const int iExceptionCode);
-    
+    string getMessageForExceptionCode(const int iExceptionCode);
+	std::string m_sMessageForExceptionCode;
 };
 
 #endif

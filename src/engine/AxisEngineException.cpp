@@ -30,13 +30,19 @@ AXIS_CPP_NAMESPACE_START
 
 AxisEngineException::AxisEngineException(const int iExceptionCode, const char* pcMessage ):AxisException(iExceptionCode)
 {
-	AxisString sMessage = "";
+	std::string sMessage = "";
 	if (pcMessage) 
 	{
-		sMessage = pcMessage;
+		sMessage = string(pcMessage);
+		getMessageForExceptionCode(iExceptionCode);
+		m_sMessageForExceptionCode = getMessageForExceptionCode(iExceptionCode) + " " + sMessage;
+		setMessage(m_sMessageForExceptionCode.c_str());
+
 	}
-	m_sMessage = getMessageForExceptionCode(m_iExceptionCode) + " " + sMessage;
+	else
+		setMessage(getMessageForExceptionCode(iExceptionCode).c_str());
 }
+	
 
 AxisEngineException::AxisEngineException (const AxisEngineException& e):AxisException(e)
 {}
@@ -44,56 +50,57 @@ AxisEngineException::AxisEngineException (const AxisEngineException& e):AxisExce
 AxisEngineException::~AxisEngineException() throw ()
 {}
 
-const string AxisEngineException::getMessageForExceptionCode (const int iExceptionCode)
+string AxisEngineException::getMessageForExceptionCode (const int iExceptionCode)
 {
-    switch(iExceptionCode)
+    
+	switch(iExceptionCode)
     {
         case SERVER_ENGINE_COULD_NOT_LOAD_SRV:
-            m_sMessage = "AxisEngineException:Could not load service";
+			m_sMessageForExceptionCode = "AxisEngineException:Could not load service";
             break;
         case SERVER_ENGINE_COULD_NOT_LOAD_HDL:
-            m_sMessage = "AxisEngineException:Could not load handler";
+            m_sMessageForExceptionCode = "AxisEngineException:Could not load handler";
             break;
         case SERVER_ENGINE_LOADING_TRANSPORT_FAILED:
-            m_sMessage = "DLOPEN FAILED in loading transport library";
+            m_sMessageForExceptionCode = "DLOPEN FAILED in loading transport library";
             break;
         case SERVER_ENGINE_LOADING_PARSER_FAILED:
-            m_sMessage = "DLOPEN FAILED in loading parser library";
+            m_sMessageForExceptionCode = "DLOPEN FAILED in loading parser library";
             break;
         case SERVER_ENGINE_HANDLER_FAILED:
-            m_sMessage = "AxisEngineException:Handler failed";
+            m_sMessageForExceptionCode = "AxisEngineException:Handler failed";
             break;
         case SERVER_ENGINE_WEBSERVICE_FAILED:
-            m_sMessage = "AxisEngineException:Web Service failed";
+            m_sMessageForExceptionCode = "AxisEngineException:Web Service failed";
             break;
         case SERVER_ENGINE_HANDLER_INIT_FAILED:
-            m_sMessage = "AxisEngineException:Handler initialization failed";
+            m_sMessageForExceptionCode = "AxisEngineException:Handler initialization failed";
             break;
         case SERVER_ENGINE_HANDLER_CREATION_FAILED:
-            m_sMessage = "AxisEngineException:Handler creation failed";
+            m_sMessageForExceptionCode = "AxisEngineException:Handler creation failed";
             break;
         case SERVER_ENGINE_LIBRARY_LOADING_FAILED:
-            m_sMessage = "AxisEngineException:Library loading failed";
+            m_sMessageForExceptionCode = "AxisEngineException:Library loading failed";
             break;
         case SERVER_ENGINE_HANDLER_NOT_LOADED:
-            m_sMessage = "AxisEngineException:Handler is not loaded";
+            m_sMessageForExceptionCode = "AxisEngineException:Handler is not loaded";
             break;
         case SERVER_ENGINE_HANDLER_BEING_USED:
-            m_sMessage = "AxisEngineException:Handler is being used";
+            m_sMessageForExceptionCode = "AxisEngineException:Handler is being used";
             break;
         case SERVER_ENGINE_GET_HANDLER_FAILED:
-            m_sMessage = "AxisEngineException:Get handler failed";
+            m_sMessageForExceptionCode = "AxisEngineException:Get handler failed";
             break;
         case SERVER_ENGINE_WRONG_HANDLER_TYPE:
-            m_sMessage = "AxisEngineException:Wrong handler type";
+            m_sMessageForExceptionCode = "AxisEngineException:Wrong handler type";
             break;
         case SERVER_CLIENT_ENGINE_MISMATCH:
-            m_sMessage = "AxisEngineException:Engine cannot be initialized as both client and server";
+            m_sMessageForExceptionCode = "AxisEngineException:Engine cannot be initialized as both client and server";
             break;
         default:
-            m_sMessage = "AxisEngineException:Unknown Axis C++ Engine Exception";
+            m_sMessageForExceptionCode = "AxisEngineException:Unknown Axis C++ Engine Exception";
     }
-    return m_sMessage;
+    return m_sMessageForExceptionCode;
 }
 
 AXIS_CPP_NAMESPACE_END

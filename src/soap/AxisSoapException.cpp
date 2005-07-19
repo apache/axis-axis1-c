@@ -30,12 +30,17 @@ AXIS_CPP_NAMESPACE_START
 
 AxisSoapException::AxisSoapException(const int iExceptionCode, const char* pcMessage):AxisException(iExceptionCode)
 {
-   AxisString sMessage = "";
+   std::string sMessage = "";
 	if (pcMessage) 
 	{
-		sMessage = pcMessage;
+		sMessage = string(pcMessage);
+		getMessageForExceptionCode(iExceptionCode);
+		m_sMessageForExceptionCode = getMessageForExceptionCode(iExceptionCode) + " " + sMessage;
+		setMessage(m_sMessageForExceptionCode.c_str());
+
 	}
-	m_sMessage = getMessageForExceptionCode(m_iExceptionCode) + " " + sMessage;
+	else
+		setMessage(getMessageForExceptionCode(iExceptionCode).c_str());
 }
 
 AxisSoapException::AxisSoapException (const AxisSoapException& e):AxisException (e)
@@ -44,39 +49,40 @@ AxisSoapException::AxisSoapException (const AxisSoapException& e):AxisException 
 AxisSoapException::~AxisSoapException() throw ()
 {}
 
-const string AxisSoapException::getMessageForExceptionCode (const int iExceptionCode)
+string AxisSoapException::getMessageForExceptionCode (const int iExceptionCode)
 {
-    switch(iExceptionCode)
+    
+	switch(iExceptionCode)
     {
 
         case SOAP_VERSION_MISMATCH :
-            m_sMessage = "AxisSoapException:Soap Version mismatch fault occured";
+            m_sMessageForExceptionCode = "AxisSoapException:Soap Version mismatch fault occured";
             break;
         case SOAP_MUST_UNDERSTAND:
-            m_sMessage = "AxisSoapException:Soap Must understand fault occured";
+			m_sMessageForExceptionCode = "AxisSoapException:Soap Must understand fault occured";
             break;
         case CLIENT_SOAP_MESSAGE_INCOMPLETE:
-            m_sMessage = "AxisSoapException:Received message is incomplete";
+			m_sMessageForExceptionCode = "AxisSoapException:Received message is incomplete";
             break;
         case CLIENT_SOAP_SOAP_ACTION_EMTPY:
-            m_sMessage = "AxisSoapException:Soap action is empty";
+			m_sMessageForExceptionCode = "AxisSoapException:Soap action is empty";
             break;
         case CLIENT_SOAP_SOAP_CONTENT_ERROR:
-            m_sMessage = "AxisSoapException:Received content is faulty";
+			m_sMessageForExceptionCode = "AxisSoapException:Received content is faulty";
             break;
         case CLIENT_SOAP_NO_SOAP_METHOD:
-            m_sMessage = "AxisSoapException:Request method is not a soap method";
+			m_sMessageForExceptionCode = "AxisSoapException:Request method is not a soap method";
             break;
         case CLIENT_SOAP_CONTENT_NOT_SOAP:
-            m_sMessage = "AxisSoapException:Content is not a valid soap message";
+			m_sMessageForExceptionCode = "AxisSoapException:Content is not a valid soap message";
             break;
         case CLIENT_MIME_CONTENT_ID_NOT_UNIQUE:
-            m_sMessage = "AxisSoapException:Content is not unique within the MIME message";
+			m_sMessageForExceptionCode = "AxisSoapException:Content is not unique within the MIME message";
             break;
         default:
-            m_sMessage = "AxisSoapException:Unknown Soap Exception";
+			m_sMessageForExceptionCode = "AxisSoapException:Unknown Soap Exception";
     }
-    return m_sMessage;
+    return m_sMessageForExceptionCode;
 }
 
 AXIS_CPP_NAMESPACE_END

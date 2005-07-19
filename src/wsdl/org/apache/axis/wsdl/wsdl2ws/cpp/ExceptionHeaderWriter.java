@@ -189,8 +189,9 @@ public class ExceptionHeaderWriter extends HeaderFileWriter
             
             writer.write("\tSTORAGE_CLASS_INFO const ISoapFault* getFault();\n\n");
             writer.write("private:\n");
-            writer.write("\tSTORAGE_CLASS_INFO const string getMessageForExceptionCode(int iExceptionCode);\n");
-            writer.write("\t ISoapFault* m_pISoapFault;\n\n");
+            writer.write("\tSTORAGE_CLASS_INFO string getMessageForExceptionCode(int iExceptionCode);\n");
+            writer.write("\t ISoapFault* m_pISoapFault;\n");
+            writer.write("\t string m_sMessageForExceptionCode;\n\n");
         }
         catch (Exception e)
         {

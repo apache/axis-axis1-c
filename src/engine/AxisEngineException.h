@@ -37,8 +37,8 @@ public:
     virtual ~AxisEngineException() throw();
 
 private:
-    const string getMessageForExceptionCode(const int iExceptionCode);
-	
+    string getMessageForExceptionCode(const int iExceptionCode);
+	string m_sMessageForExceptionCode;
 };
 
 AXIS_CPP_NAMESPACE_END

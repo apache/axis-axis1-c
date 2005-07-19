@@ -194,12 +194,16 @@ public class ExceptionWriter extends BasicFileWriter
             writer.write(
                 faultName + "::" + faultName + "(const int iExceptionCode, const char* pcMessage):AxisException(iExceptionCode)\n");
             writer.write("{\n\n");
-            writer.write("\tAxisString sMessage = \"\";\n");
+            writer.write("\tstring sMessage = \"\";\n");
             writer.write("\tif (pcMessage)\n\t{\n");
-            writer.write("\t\tsMessage = pcMessage;\n\t}\n");
-            writer.write("\tm_sMessage = getMessageForExceptionCode(m_iExceptionCode) + \" \" + sMessage;\n");
+            writer.write("\t\tsMessage = string(pcMessage);\n");
+            writer.write("\t\tgetMessageForExceptionCode(iExceptionCode);\n");
+            writer.write("\t\tm_sMessageForExceptionCode = getMessageForExceptionCode(iExceptionCode) + \" \" + sMessage;\n");
+            writer.write("\t\tsetMessage(m_sMessageForExceptionCode.c_str());\n");
+			writer.write("\t}\n\n");
+            writer.write("\telse\n");
+            writer.write("\t\tsetMessage(getMessageForExceptionCode(iExceptionCode).c_str());\n");
             writer.write("}\n\n");
-
             writer.write(faultName + "::" + faultName + "(const " + faultName + "& e):AxisException(e)\n");
             writer.write("{}\n\n");
             
@@ -228,7 +232,7 @@ public class ExceptionWriter extends BasicFileWriter
                 faultName
                     + "::~"
                     + faultName
-                    + "() throw () \n{\n\tm_sMessage =\"\";\n}\n\n");
+                    + "() throw () \n{}\n\n");
         }
         catch (IOException e)
         {
@@ -251,26 +255,25 @@ public class ExceptionWriter extends BasicFileWriter
             }
             
             writer.write(
-                "const string "
+                "string "
                     + faultName
                     + "::getMessageForExceptionCode (int iExceptionCode)\n");
             writer.write("{\n");
-            writer.write("\tstring sMessage;\n");
             writer.write("\tswitch(iExceptionCode)\n");
             writer.write("\t{\n");
             writer.write("\t\tcase AXISC_SERVICE_THROWN_EXCEPTION:\n");
             writer.write(
-                "\t\tsMessage = \"The "
+                "\t\t\tm_sMessageForExceptionCode = \"The "
                     + getServiceName()
                     + " service has thrown an exception. see details\";\n");
-            writer.write("\t\tbreak;\n");
+            writer.write("\t\t\tbreak;\n");
             writer.write("\t\tdefault:\n");
             writer.write(
-                "\t\tsMessage = \"Unknown Exception has occured in the "
+                "\t\t\tm_sMessageForExceptionCode = \"Unknown Exception has occured in the "
                     + getServiceName()
                     + " service\";\n");
             writer.write("\t}\n");
-            writer.write("return sMessage;\n");
+            writer.write("return m_sMessageForExceptionCode;\n");
             writer.write("}\n\n");
 
             writer.write("const ISoapFault* " + faultName + "::getFault()");

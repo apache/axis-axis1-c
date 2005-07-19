@@ -27,14 +27,19 @@ AXIS_CPP_NAMESPACE_START
 
 //using namespace std;
 
-AxisGenException::AxisGenException(const int iExceptionCode, const char* pcMessage):AxisException(iExceptionCode)
+AxisGenException::AxisGenException(const int iExceptionCode, const char* pcMessage):AxisException(iExceptionCode,pcMessage)
 {
-	AxisString sMessage = "";
+	std::string sMessage = "";
 	if (pcMessage) 
 	{
-		sMessage = pcMessage;
+		sMessage = string(pcMessage);
+		getMessageForExceptionCode(iExceptionCode);
+		m_sMessageForExceptionCode = getMessageForExceptionCode(iExceptionCode) + " " + sMessage;
+		setMessage(m_sMessageForExceptionCode.c_str());
+
 	}
-	m_sMessage = getMessageForExceptionCode(m_iExceptionCode) + " " + sMessage;
+	else
+		setMessage(getMessageForExceptionCode(iExceptionCode).c_str());
 }
 
 AxisGenException::AxisGenException (const AxisGenException& e):AxisException(e)
@@ -43,24 +48,28 @@ AxisGenException::AxisGenException (const AxisGenException& e):AxisException(e)
 AxisGenException::~AxisGenException() throw ()
 {}
 
-const string AxisGenException::getMessageForExceptionCode (const int iExceptionCode)
+string AxisGenException::getMessageForExceptionCode (const int iExceptionCode)
 {
-    switch(iExceptionCode)
+    
+	switch(iExceptionCode)
     {
         case AXISC_SERVICE_THROWN_EXCEPTION:
-            m_sMessage = "A service has thrown an exception. see detail ";
+            m_sMessageForExceptionCode = "A service has thrown an exception. see detail ";
             break;
+
         case SERVER_TEST_EXCEPTION:
-            m_sMessage = "This is a testing error ";
+            m_sMessageForExceptionCode = "This is a testing error ";
             break;
+
         case AXISC_NODE_VALUE_MISMATCH_EXCEPTION:
-            m_sMessage = "Cannot deserialize the requested element ";
+            m_sMessageForExceptionCode = "Cannot deserialize the requested element ";
             break;
+
         default:
-            m_sMessage = "";
+            m_sMessageForExceptionCode =  "";
 
     }
-    return m_sMessage;
+    return m_sMessageForExceptionCode;
 }
 
 

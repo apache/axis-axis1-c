@@ -56,16 +56,11 @@ public:
 	virtual void setFaultCode(const AxisChar *code);
 	virtual void setFaultString(const AxisChar *string);
 	virtual void setFaultActor(const AxisChar *actor);
-	virtual void setExceptionCode(int code);
-
-	/** @returns the fault string */
-    virtual const char* what() throw();
-    virtual const int getExceptionCode();
+	   
 private:
 	AxisChar *m_code;
-	AxisChar *m_string;
 	AxisChar *m_actor;
-	int m_exceptionCode;
+	
 };
 
 AXIS_CPP_NAMESPACE_END

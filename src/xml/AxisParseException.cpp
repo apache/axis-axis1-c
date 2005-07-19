@@ -23,12 +23,17 @@
 
 AxisParseException::AxisParseException(const int iExceptionCode,const char* pcMessage):AxisException(iExceptionCode)
 {
-	AxisString sMessage = "";
+	std::string sMessage = "";
 	if (pcMessage) 
 	{
-		sMessage = pcMessage;
+		sMessage = string(pcMessage);
+		getMessageForExceptionCode(iExceptionCode);
+		m_sMessageForExceptionCode = getMessageForExceptionCode(iExceptionCode) + " " + sMessage;
+		setMessage(m_sMessageForExceptionCode.c_str());
+
 	}
-	m_sMessage = getMessageForExceptionCode(m_iExceptionCode) + " " + sMessage;
+	else
+		setMessage(getMessageForExceptionCode(iExceptionCode).c_str());
 }
 
 AxisParseException::AxisParseException (const AxisParseException& e):AxisException (e)
@@ -37,22 +42,23 @@ AxisParseException::AxisParseException (const AxisParseException& e):AxisExcepti
 AxisParseException::~AxisParseException() throw ()
 {}
 
-const string AxisParseException::getMessageForExceptionCode (const int iExceptionCode)
+string AxisParseException::getMessageForExceptionCode (const int iExceptionCode)
 {
-    switch(iExceptionCode)
+    
+	switch(iExceptionCode)
     {
         case SERVER_PARSE_BUFFER_EMPTY:
-            m_sMessage = "AxisParseException:Buffer received from the parser is empty";
+            m_sMessageForExceptionCode = "AxisParseException:Buffer received from the parser is empty";
             break;
         case SERVER_PARSE_PARSER_FAILED:
-            m_sMessage = "AxisParseException:XML_STATUS_ERROR thrown from parser";
+            m_sMessageForExceptionCode = "AxisParseException:XML_STATUS_ERROR thrown from parser";
             break;
         case SERVER_PARSE_TRANSPORT_FAILED:
-            m_sMessage = "AxisParseException:Error when getting the byte stream from the transport";
+            m_sMessageForExceptionCode = "AxisParseException:Error when getting the byte stream from the transport";
             break;
         default:
-            m_sMessage = "AxisParseException:Unknown Parse Exception"; 
+			m_sMessageForExceptionCode = "AxisParseException:Unknown Parse Exception"; 
     }
-    return m_sMessage;
+    return m_sMessageForExceptionCode;
 }
 

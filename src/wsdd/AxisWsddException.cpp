@@ -30,12 +30,17 @@ AXIS_CPP_NAMESPACE_START
 
 AxisWsddException::AxisWsddException(const int iExceptionCode,const char* pcMessage):AxisException(iExceptionCode)
 {
-	AxisString sMessage = "";
+	std::string sMessage = "";
 	if (pcMessage) 
 	{
-		sMessage = pcMessage;
+		sMessage = string(pcMessage);
+		getMessageForExceptionCode(iExceptionCode);
+		m_sMessageForExceptionCode = getMessageForExceptionCode(iExceptionCode) + " " + sMessage;
+		setMessage(m_sMessageForExceptionCode.c_str());
+
 	}
-	m_sMessage = getMessageForExceptionCode(m_iExceptionCode) + " " + sMessage;
+	else
+		setMessage(getMessageForExceptionCode(iExceptionCode).c_str());
 }
 
 AxisWsddException::AxisWsddException (const AxisWsddException& e):AxisException(e)
@@ -44,32 +49,33 @@ AxisWsddException::AxisWsddException (const AxisWsddException& e):AxisException(
 AxisWsddException::~AxisWsddException() throw ()
 {}
 
-const string AxisWsddException::getMessageForExceptionCode (const int iExceptionCode)
+string AxisWsddException::getMessageForExceptionCode (const int iExceptionCode)
 {
-    switch(iExceptionCode)
+    
+	switch(iExceptionCode)
     {
         case CLIENT_WSDD_SERVICE_NOT_FOUND:
-            m_sMessage = "AxisWsddException:Requested service not found";
+            m_sMessageForExceptionCode = "AxisWsddException:Requested service not found";
             break;
         case CLIENT_WSDD_METHOD_NOT_ALLOWED:
-            m_sMessage = "AxisWsddException:Requested method is not allowed";
+            m_sMessageForExceptionCode = "AxisWsddException:Requested method is not allowed";
             break;
         case CLIENT_WSDD_PARA_TYPE_MISMATCH:
-            m_sMessage = "AxisWsddException:Parameter type mismatch";
+            m_sMessageForExceptionCode = "AxisWsddException:Parameter type mismatch";
             break;
 		case SERVER_WSDD_FILE_NOT_FOUND:
-			m_sMessage = "AxisWsddException:WSDD loading fail";
+			m_sMessageForExceptionCode = "AxisWsddException:WSDD loading fail";
 			break;
         case SERVER_WSDD_NO_HANDLERS_CONFIGURED:
-            m_sMessage = "AxisWsddException:No handlers configured in server.wsdd";
+            m_sMessageForExceptionCode = "AxisWsddException:No handlers configured in server.wsdd";
             break;
         case SERVER_WSDD_EXCEPTION:
-            m_sMessage = "AxisWsddException:Unknown wsdd exception";
+            m_sMessageForExceptionCode = "AxisWsddException:Unknown wsdd exception";
             break;
         default:
-            m_sMessage = "AxisWsddException:Unknown Wsdd Exception";
+            m_sMessageForExceptionCode = "AxisWsddException:Unknown Wsdd Exception";
     }
-    return m_sMessage;
+    return m_sMessageForExceptionCode;
 }
 
 AXIS_CPP_NAMESPACE_END

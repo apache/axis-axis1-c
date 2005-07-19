@@ -38,8 +38,8 @@ public:
     
 
 private:
-    const string getMessageForExceptionCode(const int iExceptionCode);
-    
+    string getMessageForExceptionCode(const int iExceptionCode);
+	std::string m_sMessageForExceptionCode;
 };
 
 AXIS_CPP_NAMESPACE_END
