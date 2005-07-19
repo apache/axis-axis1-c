@@ -38,7 +38,7 @@ class SoapMethod;
 class SoapBody;
 class SoapFault;
 class HeaderBlock;
-class IArrayBean;
+class ArrayBean;
 class Attribute;
 class ISoapAttachment;
 class SoapAttachmentReference;
@@ -160,8 +160,8 @@ public:
     void setCurrentProviderType(PROVIDERTYPE nType) { m_ProviderType = nType;};
 
 private:
-    IArrayBean* makeArrayBean(XSDTYPE nType, void* pArray);
-    IArrayBean* makeArrayBean(void* pObject, void* pSZFunct, void* pDelFunct, 
+    ArrayBean* makeArrayBean(XSDTYPE nType, void* pArray);
+    ArrayBean* makeArrayBean(void* pObject, void* pSZFunct, void* pDelFunct, 
         void* pSizeFunct);
     int setSoapHeader(SoapHeader* pSoapHeader);
 

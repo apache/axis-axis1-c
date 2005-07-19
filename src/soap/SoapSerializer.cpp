@@ -152,7 +152,7 @@ int SoapSerializer::addOutputBasicArrayParam( const Axis_Array * pArray,
 {
 	int	iSuccess = AXIS_SUCCESS;
 
-    IArrayBean * pAb = makeArrayBean( nType, (void*) (pArray->m_Array));
+    ArrayBean * pAb = makeArrayBean( nType, (void*) (pArray->m_Array));
 
     pAb->SetDimension(pArray->m_Size);
 
@@ -169,7 +169,7 @@ int SoapSerializer::addOutputBasicArrayParam( const Axis_Array * pArray,
         pParam->setName("array");        
     }
 
-    pParam->m_Value.pIArray = pAb;
+    pParam->m_Value.pArray = pAb;
     pParam->m_Type = XSD_ARRAY;
 
     if( m_pSoapEnvelope && (m_pSoapEnvelope->m_pSoapBody) && 
@@ -190,7 +190,7 @@ int SoapSerializer::addOutputCmplxArrayParam( const Axis_Array * pArray,
 {
 	int	iSuccess = AXIS_SUCCESS;
 
-    IArrayBean* pAb = makeArrayBean( (void*)(pArray->m_Array), pSZFunct,
+    ArrayBean* pAb = makeArrayBean( (void*)(pArray->m_Array), pSZFunct,
 									 pDelFunct,
 									 pSizeFunct);
 
@@ -217,7 +217,7 @@ int SoapSerializer::addOutputCmplxArrayParam( const Axis_Array * pArray,
         pParam->setName( "array");        
     }
 
-    pParam->m_Value.pIArray = pAb;
+    pParam->m_Value.pArray = pAb;
     pParam->m_Type = XSD_ARRAY;
 
     if( m_pSoapEnvelope &&
@@ -570,7 +570,7 @@ int SoapSerializer::createSoapFault( const AxisChar * sLocalName,
  * Used to create an ArrayBean when the return type of a method is an array
  * of basic types
  */
-IArrayBean * SoapSerializer::makeArrayBean( XSDTYPE nType, void * pArray)
+ArrayBean * SoapSerializer::makeArrayBean( XSDTYPE nType, void * pArray)
 {
     ArrayBean* pAb = new ArrayBean();
 
@@ -584,7 +584,7 @@ IArrayBean * SoapSerializer::makeArrayBean( XSDTYPE nType, void * pArray)
  * Used to create an ArrayBean when the return type of a method is an array
  * of complex types
  */
-IArrayBean * SoapSerializer::makeArrayBean(void * pObject,
+ArrayBean * SoapSerializer::makeArrayBean(void * pObject,
 										   void * pSZFunct, 
                                            void * pDelFunct,
 										   void * pSizeFunct)
@@ -680,7 +680,7 @@ int SoapSerializer::serializeCmplxArray( const Axis_Array * pArray,
         pParam->setName( "array");        
     }
 
-    pParam->m_Value.pIArray = pAb;
+    pParam->m_Value.pArray = pAb;
     pParam->m_Type = XSD_ARRAY;
 
 	if( pNamespace != NULL)
@@ -752,7 +752,7 @@ int SoapSerializer::serializeBasicArray(const Axis_Array* pArray,
         pParam->setName( "array");        
     }
 
-    pParam->m_Value.pIArray = pAb;
+    pParam->m_Value.pArray = pAb;
     pParam->m_Type = XSD_ARRAY;
     
     if( pNamespace != NULL)

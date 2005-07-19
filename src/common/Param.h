@@ -34,10 +34,7 @@ class SoapAttachmentReference;
 class ParamValue
 {
 public:
-    union {
-        class ArrayBean* pArray; /* this is used to hold arrays */
-        class IArrayBean* pIArray; /* used by wrapper classes */
-    };
+    ArrayBean* pArray; /* this is used to hold arrays */
     ComplexObjectHandler* pCplxObj;
     AnyType* pAnyObject; /* used to hold AnyType struct for xsd:any */
 	SoapAttachmentReference* pAttachmentRef;

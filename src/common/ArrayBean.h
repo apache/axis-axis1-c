@@ -19,7 +19,6 @@
 #if !defined(AXIS_ARRAYBEAN_H__OF_AXIS_INCLUDED_)
 #define AXIS_ARRAYBEAN_H__OF_AXIS_INCLUDED_
 
-#include "IArrayBean.h"
 #include "BasicTypeSerializer.h"
 #include "ComplexObjectHandler.h"
 
@@ -37,7 +36,7 @@ using namespace std;
 
     @author Susantha Kumara (skumara@virtusa.com)
 */
-class ArrayBean:public IArrayBean
+class ArrayBean
 {
     friend class Param;
     public:
