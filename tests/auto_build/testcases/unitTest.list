@@ -1,6 +1,7 @@
 Attachment1.xml
+# AwkwardErrorResponse.xml - fails everywhere - bug in Axis C++
 AxisBench.xml
-CalculatorDocC.xml
+# CalculatorDocC.xml - fails on AIX and Linux
 CombinedAll.xml
 CombinedChoice.xml
 ComplexLists.xml
