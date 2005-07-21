@@ -115,10 +115,7 @@ xsd__base64Binary* SoapAttachment::getBody()
 
 const char* SoapAttachment::getHeader(const char *pchName)
 {
-	if (m_AttachmentHeaders->getHeader(pchName).empty())
-		return "";
-	else
-		return m_AttachmentHeaders->getHeader(pchName).c_str();
+	return m_AttachmentHeaders->getHeader(pchName);
 }
 
 const char* SoapAttachment::getAttachmentId()

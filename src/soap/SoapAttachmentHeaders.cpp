@@ -78,14 +78,14 @@ void SoapAttachmentHeaders::serialize(SoapSerializer &pSZ)
 	}
 }
 
-AxisString SoapAttachmentHeaders::getHeader(AxisString sName)
+const char *SoapAttachmentHeaders::getHeader(AxisString sName)
 {
 
 	for (unsigned int i = 0; i < m_AttachHeaders.size (); i++)
 	{
 		if (m_AttachHeaders[i].first == AXIS_CONTENT_ID)
 		{
-			return m_AttachHeaders[i].second;
+			return m_AttachHeaders[i].second.c_str();
 		}
 	}
 

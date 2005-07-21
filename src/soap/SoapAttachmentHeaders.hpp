@@ -55,7 +55,7 @@ private:
 	vector < pair < AxisString, AxisString > > m_AttachHeaders;
 
 public:
-	AxisString getHeader(AxisString sName);
+	const char *getHeader(AxisString sName);
 	void serialize(SoapSerializer& pSZ);
 	void addHeader(AxisString name, AxisString value);
 	SoapAttachmentHeaders();
