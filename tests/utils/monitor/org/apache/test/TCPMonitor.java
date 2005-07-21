@@ -127,6 +127,10 @@ public class TCPMonitor
         {
             exception=ioException;
         }
+        catch(NullPointerException nullPointerException)
+        {
+            nullPointerException.printStackTrace(System.err);
+        }
         finally
         {
             singleton=null;
