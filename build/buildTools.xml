@@ -74,7 +74,7 @@
 	<!--
 	  Compile the Axis C Bindings Client Library
 	  -->
-	  <target name="compileCBindings">
+	  <target name="compileCBindings" if="buildCBindings">
 		<mkdir dir="${dir.objects}"/>
 		<mkdir dir="${dir.bin}"/>
         <antcall target="buildVersionResource" inheritall="true">
