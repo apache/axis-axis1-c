@@ -29,7 +29,9 @@
 AXIS_CPP_NAMESPACE_USE
     Stub::Stub (const char *pcEndPointUri, AXIS_PROTOCOL_TYPE eProtocol):
 m_pcUsername (NULL),
-m_pcPassword (NULL)
+m_pcPassword (NULL),
+m_proxyUsername (NULL),
+m_proxyPassword (NULL)
 {
     m_pCall = new Call ();
     m_pCall->setProtocol (eProtocol);
@@ -385,6 +387,27 @@ Stub::setUsername (const char *pcUsername)
 }
 
 void
+Stub::setProxyUsername (const char *pcProxyUsername)
+{
+    if (m_proxyUsername)
+    {
+	delete[]m_proxyUsername;
+	m_proxyUsername = NULL;
+    }
+
+    if (!pcProxyUsername)
+	return;
+
+    m_proxyUsername = new char[strlen (pcProxyUsername) + 1];
+    strcpy (m_proxyUsername, pcProxyUsername);
+
+    if (m_proxyPassword)
+    {
+	setProxyAuthorizationHeader ();
+    }
+}
+
+void
 Stub::setPassword (const char *pcPassword)
 {
     if (m_pcPassword)
@@ -405,6 +428,27 @@ Stub::setPassword (const char *pcPassword)
     }
 }
 
+void
+Stub::setProxyPassword (const char *pcProxyPassword)
+{
+    if (m_proxyPassword)
+    {
+	delete[]m_proxyPassword;
+	m_proxyPassword = NULL;
+    }
+
+    if (!pcProxyPassword)
+	return;
+
+    m_proxyPassword = new char[strlen (pcProxyPassword) + 1];
+    strcpy (m_proxyPassword, pcProxyPassword);
+
+    if (m_proxyUsername)
+    {
+	setProxyAuthorizationHeader ();
+    }
+}
+
 const char *
 Stub::getUsername ()
 {
@@ -412,9 +456,21 @@ Stub::getUsername ()
 }
 
 const char *
+Stub::getProxyUsername ()
+{
+    return m_proxyUsername;
+}
+
+const char *
 Stub::getPassword ()
 {
     return m_pcPassword;
+}
+
+const char *
+Stub::getProxyPassword ()
+{
+    return m_proxyPassword;
 }
 
 void
@@ -442,6 +498,28 @@ Stub::setAuthorizationHeader ()
 
     delete[]cpUsernamePassword;
     delete[]base64Value;
+}
+
+void 
+Stub::setProxyAuthorizationHeader ()
+{
+    char* cpUsernamePassword = new char[strlen( m_proxyUsername) + strlen( m_proxyPassword ) + 2];
+    strcpy( cpUsernamePassword, m_proxyUsername );
+    strcat( cpUsernamePassword, ":" );
+    strcat( cpUsernamePassword, m_proxyPassword );
+    int len = apr_base64_encode_len (strlen(cpUsernamePassword));
+     
+	AxisChar* base64Value = new AxisChar[len + 1];
+    len = apr_base64_encode_binary ( base64Value, (const unsigned char*)cpUsernamePassword, strlen
+                                                                                   (cpUsernamePassword));
+  
+	std::string strValue = "Basic ";
+    strValue += base64Value;
+  
+	this->setTransportProperty( "Proxy-Authorization", strValue.c_str());
+    delete [] cpUsernamePassword;
+    delete [] base64Value;
+
 }
 
 ISoapAttachment* Stub::createSoapAttachment()

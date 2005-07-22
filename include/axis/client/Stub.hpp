@@ -605,6 +605,26 @@ class STORAGE_CLASS_INFO Stub
     const char* getPassword();
 
   /**
+    * Sets the username to be used for Proxy authentication
+    */
+    void setProxyUsername(const char* pcProxyUsername);
+
+  /**
+    * Sets the password to be used for Proxy authentication
+    */
+    void setProxyPassword(const char* pcProxyPassword);
+
+  /**
+    * Gets the username used for Proxy authentication
+    */
+    const char* getProxyUsername();
+
+  /**
+    * Gets the password used for Proxy authentication
+    */
+    const char* getProxyPassword();
+
+  /**
     * Call object of the Stub. This is the point of access to the internals
     * of the Axis engine.
     */
@@ -637,6 +657,12 @@ class STORAGE_CLASS_INFO Stub
     * Set Authorization header for basic authentication
     */
     void setAuthorizationHeader();
+  
+  /**
+    * Set Authorization header for Proxy authentication
+    */
+    void setProxyAuthorizationHeader();
+
 
     Call *m_pCall;
 
@@ -671,6 +697,15 @@ class STORAGE_CLASS_INFO Stub
     * Password
     */
    char* m_pcPassword;
+  /**
+    * proxy Username
+    */
+   char* m_proxyUsername;
+
+  /**
+    * proxy Password
+    */
+   char* m_proxyPassword;
 };
 
 AXIS_CPP_NAMESPACE_END
