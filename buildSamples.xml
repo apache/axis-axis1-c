@@ -194,6 +194,7 @@ Notes:
 		
 		<!-- Load properties from file -->
 		<property file="${basedir}/build/version.properties"/>
+		<property file="${basedir}/build/build.common.properties"/>
 		<property file="${basedir}/build/build.${platform}.properties"/>
 		
 		<!-- Get directory to contain log file -->
@@ -269,7 +270,8 @@ Notes:
 			</antcall>
     			<!--Build server-->		
 			<echo>Building server ${serverSampleDir}/@{samplename}</echo>
-			<cc failonerror="false" incremental="false" outfile="${dir.obj}/samples/@{samplename}"
+          	<mkdir dir="${dir.obj}/samples/server/@{samplename}/"/>
+			<cc failonerror="false" incremental="false" outfile="${dir.obj}/samples/server/@{samplename}/@{samplename}"
 		 objdir="${dir.obj}/objects" exceptions="true"
 		 outtype="shared" subsystem="console" >
 		 	<!-- Compilers -->
@@ -295,7 +297,7 @@ Notes:
 	<!--
 	  Build samples
 	  -->
-	<target name="buildSamples" unless="runOnly" depends="initialize, compileSamples" description="Build all sampless"/>	 
+	<target name="buildSamples" unless="runOnly" depends="initialize, compileSamples" description="Build all samples"/>	 
 	<!--
 	  Remove all generated samples artifacts
 	  -->
