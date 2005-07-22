@@ -30,7 +30,7 @@
 #include "AxisUtils.h"
 #include <stdlib.h>
 #include <iostream>
-#include <string.h>
+#include <string>
 
 AXIS_CPP_NAMESPACE_START 
 

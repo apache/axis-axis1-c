@@ -25,7 +25,7 @@
 #define __AXIS_AXISFILE_H_OF_AXIS_INCLUDED__
 #include <axis/GDefine.hpp>
 #include <stdio.h>
-#include <string.h>
+#include <string>
 
 /**
  *   @class AxisFile

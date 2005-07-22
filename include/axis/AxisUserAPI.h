@@ -20,7 +20,7 @@
 
 #include <axis/GDefine.h>
 #include <time.h>
-#include <string.h>
+#include <string>
 
  /**
   * @file AxisUserAPI.h
