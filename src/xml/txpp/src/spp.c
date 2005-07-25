@@ -14,7 +14,7 @@
  *   limitations under the License.
  */
 
-#include <string>
+#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "internal.h"

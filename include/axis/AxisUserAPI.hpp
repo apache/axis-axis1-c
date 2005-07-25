@@ -21,7 +21,7 @@
 
 #include <axis/GDefine.hpp>
 #include <time.h>
-#include <string>
+#include <string.h>
 
 AXIS_CPP_NAMESPACE_START
 
