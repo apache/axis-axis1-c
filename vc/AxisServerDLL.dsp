@@ -202,6 +202,10 @@ SOURCE=..\src\soap\ComplexElement.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\soap\ContentIdSet.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\soap\xsd\Date.cpp
 # End Source File
 # Begin Source File
@@ -458,11 +462,15 @@ SOURCE=..\src\xml\SimpleAttribute.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\soap\SoapAttachment.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\soap\SoapAttachmentHeaders.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\soap\SoapAttachment.cpp
+SOURCE=..\src\soap\SoapAttachmentReference.cpp
 # End Source File
 # Begin Source File
 
@@ -614,11 +622,11 @@ SOURCE=..\include\axis\server\Packet.hpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\soap\SoapAttachmentHeaders.hpp
+SOURCE=..\src\soap\SoapAttachment.hpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\soap\SoapAttachment.hpp
+SOURCE=..\src\soap\SoapAttachmentHeaders.hpp
 # End Source File
 # Begin Source File
 

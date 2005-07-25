@@ -462,11 +462,15 @@ SOURCE=..\src\xml\SimpleAttribute.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\soap\SoapAttachment.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\soap\SoapAttachmentHeaders.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\soap\SoapAttachment.cpp
+SOURCE=..\src\soap\SoapAttachmentReference.cpp
 # End Source File
 # Begin Source File
 
