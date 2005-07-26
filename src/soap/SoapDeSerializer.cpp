@@ -467,6 +467,7 @@ SoapDeSerializer::checkForFault (const AxisChar * pName,
     char *pcFaultactor;
     if (0 == strcmp ("Fault", pName))
     {
+		
 	if (0 != strcmp (m_pNode->m_pchNameOrValue, pName))
 	{
 	    m_nStatus = AXIS_SUCCESS;
@@ -488,7 +489,7 @@ SoapDeSerializer::checkForFault (const AxisChar * pName,
 	pFault->setFaultcode (pcFaultCode == NULL ? "" : pcFaultCode);
         if ( pcFaultCode )
             delete [] pcFaultCode;
-
+	
 	pcFaultstring = getElementAsString ("faultstring", 0);
 	pFault->setFaultstring (pcFaultstring == NULL ? "" : pcFaultstring);
         if ( pcFaultstring )
@@ -502,23 +503,22 @@ SoapDeSerializer::checkForFault (const AxisChar * pName,
 	// FJP Changed the namespace from null to a single space (an impossible
 	//     value) to help method know that it is parsing a fault message.
 	pcDetail = getElementAsString ("detail", " ");
-
+	
 	if (pcDetail)
 	{
 	    pFault->setFaultDetail (pcDetail);
-            delete [] pcDetail;          
+			delete [] pcDetail;          
 	}
 	else
 	{
-	    pcCmplxFaultName = getCmplxFaultObjectName ();
-	    pFault->setCmplxFaultObjectName (pcCmplxFaultName == NULL ? "" : pcCmplxFaultName);
+		pcCmplxFaultName = getCmplxFaultObjectName ();
+	   	pFault->setCmplxFaultObjectName (pcCmplxFaultName == NULL ? "" : pcCmplxFaultName);
         /*    if ( pcCmplxFaultName )
                 delete [] (reinterpret_cast <char *> (pcCmplxFaultName) );
 		*/
 	}
 
 	setStyle (m_nStyle);
-
 	return pFault;
     }
     else
@@ -1253,34 +1253,51 @@ SoapDeSerializer::getCmplxObject (void *pDZFunct, void *pCreFunct,
 const char *
 SoapDeSerializer::getCmplxFaultObjectName ()
 {
-    /* if there is an unprocessed node that may be one left from
+    
+	if (m_pNode)
+	{
+		/*
+		 * Just to skip <appSpecific> tag
+		 */
+		m_pNode = m_pParser->next ();
+	}
+
+	/* if there is an unprocessed node that may be one left from
      * last array deserialization 
      */
-    if (!m_pNode)		// Skip the faultdetail tag
-	m_pParser->next ();
-    m_nStatus = AXIS_SUCCESS;
+    
+	else
+	{
+		// Skip the faultdetail tag
+		m_pParser->next ();
+	}
+		
+	m_nStatus = AXIS_SUCCESS;
 
     if (AXIS_SUCCESS != m_nStatus)
-	return NULL;
+		return NULL;
     /* if anything has gone wrong earlier just do nothing */
     if (RPC_ENCODED == m_nStyle)
     {
-
-	m_pNode = m_pParser->next ();
-	/* just skip wrapper node with type info
-	 * Ex: <tns:QuoteInfoType xmlns:tns="http://www.getquote.org/test"> */
-	if (!m_pNode)
-	    return NULL;
-	return m_pNode->m_pchNameOrValue;
+	
+		m_pParser->next ();
+		
+		/* just skip wrapper node with type info
+		 * Ex: <tns:QuoteInfoType xmlns:tns="http://www.getquote.org/test"> 
+		 */
+		if (!m_pNode)
+			return NULL;
+		return m_pNode->m_pchNameOrValue;
     }
     else
     {
-	if (!m_pNode)
-	    /* if there is an unprocessed node that may be one left from 
-	     * last array deserialization */
-	    m_pNode = m_pParser->next ();
-	/* wrapper node without type info  Ex: <result> */
-
+		if (!m_pNode)
+		{
+		    /* if there is an unprocessed node that may be one left from 
+			 * last array deserialization */
+			m_pNode = m_pParser->next ();
+		   	/* wrapper node without type info  Ex: <result> */
+	}
 	if (!m_pNode)
 	    return NULL;
 	return m_pNode->m_pchNameOrValue;
@@ -1332,75 +1349,76 @@ SoapDeSerializer::getCmplxFaultObject (void *pDZFunct, void *pCreFunct,
     }
     else
     {
-	if (0 == strcmp (pName, m_pNode->m_pchNameOrValue))
-	{
+			
+		if (0 == strcmp (pName, m_pNode->m_pchNameOrValue))
+		{
 	    /* if this node contain attributes let them be used by the complex
 	     * type's deserializer
 	     */
-	    if (0 != m_pNode->m_pchAttributes[0])
-	    {
-			m_pCurrNode = m_pNode;
-			xsd__boolean * isNill = getAttributeAsBoolean("nil", 0);
-            if (NULL != isNill)
-            {
-                if(true_ == *isNill)
-        		{
-        		    m_pParser->next ();
-        		    m_pNode = NULL;
-                    delete isNill;
-        		    return NULL;
-        		} else {
-        			delete isNill;
-        		}
-            }
-	    }
-	    m_pNode = NULL;	/* node identified and used */
+			if (0 != m_pNode->m_pchAttributes[0])
+			{
+				m_pCurrNode = m_pNode;
+				xsd__boolean * isNill = getAttributeAsBoolean("nil", 0);
+				if (NULL != isNill)
+				{
+					if(true_ == *isNill)
+        			{
+        				m_pParser->next ();
+        				m_pNode = NULL;
+						delete isNill;
+        				return NULL;
+        			} else {
+        				delete isNill;
+        			}
+				}
+			}
+			m_pNode = NULL;	/* node identified and used */
 
-		TRACE_OBJECT_CREATE_FUNCT_ENTRY(pCreFunct, NULL, false, 0);
-	    void *pObject = ((AXIS_OBJECT_CREATE_FUNCT) pCreFunct)(NULL, false, 0);
-		TRACE_OBJECT_CREATE_FUNCT_EXIT(pCreFunct, pObject);
+			TRACE_OBJECT_CREATE_FUNCT_ENTRY(pCreFunct, NULL, false, 0);
+			void *pObject = ((AXIS_OBJECT_CREATE_FUNCT) pCreFunct)(NULL, false, 0);
+			TRACE_OBJECT_CREATE_FUNCT_EXIT(pCreFunct, pObject);
 
-		if (pObject && pDZFunct)
-	    {
-		if (C_DOC_PROVIDER == getCurrentProviderType ())
-		{
-		    // Disable C support
-		    //IWrapperSoapDeSerializer_C cWSD;
-		    //cWSD._object = this;
-		    //cWSD._functions = &IWrapperSoapDeSerializer::ms_VFtable;
-		    //m_nStatus = ((AXIS_DESERIALIZE_FUNCT)pDZFunct)
-		    //    (pObject, &cWSD);
+			if (pObject && pDZFunct)
+			{
+				if (C_DOC_PROVIDER == getCurrentProviderType ())
+				{
+				// Disable C support
+				//IWrapperSoapDeSerializer_C cWSD;
+				//cWSD._object = this;
+				//cWSD._functions = &IWrapperSoapDeSerializer::ms_VFtable;
+				//m_nStatus = ((AXIS_DESERIALIZE_FUNCT)pDZFunct)
+				//    (pObject, &cWSD);
+				}
+				else
+				{
+					TRACE_DESERIALIZE_FUNCT_ENTRY(pDZFunct, pObject, this);
+					m_nStatus =	((AXIS_DESERIALIZE_FUNCT) pDZFunct) (pObject, this);
+					TRACE_DESERIALIZE_FUNCT_EXIT(pDZFunct, m_nStatus);
+				}
+				if (AXIS_SUCCESS == m_nStatus)
+				{
+					m_pParser->next ();	/* skip end node too */
+					return pObject;
+				}
+				else
+				{
+					TRACE_OBJECT_DELETE_FUNCT_ENTRY(pDelFunct, pObject, false, 0);
+					((AXIS_OBJECT_DELETE_FUNCT) pDelFunct) (pObject, false, 0);
+					TRACE_OBJECT_DELETE_FUNCT_EXIT(pDelFunct);
+				}
+			}
 		}
 		else
 		{
-			TRACE_DESERIALIZE_FUNCT_ENTRY(pDZFunct, pObject, this);
-		    m_nStatus =	((AXIS_DESERIALIZE_FUNCT) pDZFunct) (pObject, this);
-			TRACE_DESERIALIZE_FUNCT_EXIT(pDZFunct, m_nStatus);
-		}
-		if (AXIS_SUCCESS == m_nStatus)
-		{
-		    m_pParser->next ();	/* skip end node too */
-		    return pObject;
-		}
-		else
-		{
-			TRACE_OBJECT_DELETE_FUNCT_ENTRY(pDelFunct, pObject, false, 0);
-		    ((AXIS_OBJECT_DELETE_FUNCT) pDelFunct) (pObject, false, 0);
-			TRACE_OBJECT_DELETE_FUNCT_EXIT(pDelFunct);
-		}
-	    }
-	}
-	else
-	{
 	    /*
 	     * TODO: Need to verify what WS-I 1.0 say
 	     * about the mandatory of all the elements in the response in case of
 	     * null value or none filled value. Some Web services servers work
 	     * like this. This apply for all the rest of the deserializer.
 	     */
-	    return NULL;
+			return NULL;
+		}
 	}
-    }
     m_nStatus = AXIS_FAIL;	/* unexpected SOAP stream */
     return NULL;
 }
@@ -1979,9 +1997,10 @@ void SoapDeSerializer::getElement (const AxisChar * pName,
      if (!m_pNode)
         return;
 
-     if (0 == strcmp (pName, m_pNode->m_pchNameOrValue))
+	 if (0 == strcmp (pName, m_pNode->m_pchNameOrValue))
      {
-        bool    bNillFound = false;
+        
+		bool    bNillFound = false;
         for (int i = 0; m_pNode->m_pchAttributes[i] && !bNillFound; i += 3)
         {
             string sLocalName = m_pNode->m_pchAttributes[i];
@@ -1997,8 +2016,10 @@ void SoapDeSerializer::getElement (const AxisChar * pName,
         m_pNode = m_pParser->next (true);   /* charactor node */
         if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
         {
-            const AxisChar* elementValue = m_pNode->m_pchNameOrValue;
-            // FJP Added this code for fault finding.  If detail is
+            
+			const AxisChar* elementValue = m_pNode->m_pchNameOrValue;
+            
+			// FJP Added this code for fault finding.  If detail is
             //     followed by CR/LF or CR/LF then CR/LF then assume that
             //     it is not a simple object.  As added protection against
             //     false findings, the namespace has been set to an invalid
