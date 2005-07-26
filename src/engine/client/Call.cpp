@@ -72,33 +72,6 @@ m_bCallInitialized(false)
 			}
 		}
 
-        // SSL channel related initilizations
-        char * pcSSLChannelInfo = g_pConfig->getAxisConfProperty( AXCONF_SECUREINFO);
-		if( pcSSLChannelInfo && strlen( pcSSLChannelInfo) > 0)
-		{
-			char *	pszArgPtr = NULL;
-			int		iArgIndex = 0;
-			string	sArguments[8];
-
-			pszArgPtr = strtok( pcSSLChannelInfo, ",");
-
-			while( pszArgPtr != NULL && iArgIndex < 8)
-			{
-				sArguments[iArgIndex] = pszArgPtr;
-
-				iArgIndex++;
-
-				pszArgPtr = strtok( NULL, ",");
-
-				while( pszArgPtr != NULL && *pszArgPtr == ' ' && *pszArgPtr != '\0')
-				{
-					pszArgPtr++;
-				}
-			}
-
-			m_nStatus = m_pTransport->setTransportProperty( SECURE_PROPERTIES, (const char *) &sArguments);
-		}
-
         // Engine initialization
         m_pAxisEngine = new ClientAxisEngine ();
         if (!m_pAxisEngine) 

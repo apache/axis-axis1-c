@@ -97,44 +97,6 @@ public class ClientStubWriter
                 this.writeMethodInWrapper(minfo);
                 writer.write("\n");
             }
-
-            writer.write("/*Methods for supporting SecureChannel*/\n\n");
-            writer.write( "void " + classname + "::SetSecure( char * pszArguments, ...)\n");
-            writer.write("{\n");
-			writer.write("\tint\t\tiArgIndex = 0;\n");
-			writer.write("\tva_list\targs;\n");
-			writer.write("\tchar *\tpszArg = NULL;\n");
-			writer.write("\t\n");
-			writer.write("\tva_start( args, pszArguments);\n");
-			writer.write("\t\n");
-			writer.write("\tif( (pszArg = pszArguments) != NULL)\n");
-			writer.write("\t{\n");
-			writer.write("\t\tdo\n");
-			writer.write("\t\t{\n");
-			writer.write("\t\t\tif( pszArg == (char *) 1)\n");
-			writer.write("\t\t\t{\n");
-			writer.write("\t\t\t\tsArguments[iArgIndex] = \"true\";\n");
-			writer.write("\t\t\t}\n");
-			writer.write("\t\t\telse\n");
-			writer.write("\t\t\t{\n");
-			writer.write("\t\t\t\tsArguments[iArgIndex] = pszArg;\n");
-			writer.write("\t\t\t}\n");
-			writer.write("\n");
-			writer.write("\t\tiArgIndex++;\n");
-			writer.write("\t\t} while( (pszArg = va_arg( args, char *)) != NULL && iArgIndex < 8);\n");
-			writer.write("\n");
-			writer.write("\t\tif( iArgIndex == 6)\n");
-			writer.write("\t\t{\n");
-			writer.write("\t\t\tsArguments[iArgIndex] = \"false\";\n");
-			writer.write("\t\t}\n");
-			writer.write("\t}\n");
-			writer.write("\n");
-			writer.write("\tva_end( args);\n");
-            writer.write("}\n\n");
-            writer.write("void " + classname + "::includeSecure()\n");
-            writer.write("{\n");
-            writer.write("\tm_pCall->setTransportProperty( SECURE_PROPERTIES, (const char *) &sArguments);\n");
-            writer.write("}\n");
         }
 	catch (IOException e)
 	{

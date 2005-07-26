@@ -25,6 +25,10 @@
 #include "../../soap/SoapSerializer.h"
 #include "../../common/AxisUtils.h"
 #include "../../soap/apr_base64.h"
+#include "../../common/AxisConfig.h"
+#include "../../common/AxisGenException.h"
+
+extern AXIS_CPP_NAMESPACE_PREFIX AxisConfig* g_pConfig;
 
 AXIS_CPP_NAMESPACE_USE
     Stub::Stub (const char *pcEndPointUri, AXIS_PROTOCOL_TYPE eProtocol):
@@ -37,6 +41,30 @@ m_proxyPassword (NULL)
     m_pCall->setProtocol (eProtocol);
     m_pTransport = m_pCall->getTransport ();
     m_pTransport->setEndpointUri( pcEndPointUri);
+    
+    // SSL channel related initilizations
+    char * pcSSLChannelInfo = g_pConfig->getAxisConfProperty( AXCONF_SECUREINFO);
+    if( pcSSLChannelInfo && strlen( pcSSLChannelInfo) > 0)
+    {
+        char * pszArgPtr = NULL;
+        int iArgIndex = 0;
+
+        pszArgPtr = strtok( pcSSLChannelInfo, ",");
+
+        while( pszArgPtr != NULL && iArgIndex < 8)
+        {
+            m_sArguments[iArgIndex] = pszArgPtr;
+
+            iArgIndex++;
+
+            pszArgPtr = strtok( NULL, ",");
+
+            while( pszArgPtr != NULL && *pszArgPtr == ' ' && *pszArgPtr != '\0')
+            {
+                pszArgPtr++;
+            }
+        }
+    }
 }
 
 Stub::~Stub ()
@@ -527,4 +555,41 @@ ISoapAttachment* Stub::createSoapAttachment()
 	return m_pCall->createSoapAttachment();
 }
 
+/*Methods for supporting SecureChannel*/
+void Stub::SetSecure( char * pszArguments, ...)
+{
+    int iArgIndex = 0;
+    va_list args;
+    char *  pszArg = NULL;
+    
+    va_start( args, pszArguments);
+    
+    if( (pszArg = pszArguments) != NULL)
+    {
+        do
+        {
+            if( pszArg == (char *) 1)
+            {
+                m_sArguments[iArgIndex] = "true";
+            }
+            else
+            {
+                m_sArguments[iArgIndex] = pszArg;
+            }
 
+            iArgIndex++;
+        } while( (pszArg = va_arg( args, char *)) != NULL && iArgIndex < 8);
+
+        if( iArgIndex == 6)
+        {
+            m_sArguments[iArgIndex] = "false";
+        }
+    }
+
+    va_end( args);
+}
+
+void Stub::includeSecure()
+{
+    m_pCall->setTransportProperty( SECURE_PROPERTIES, (const char *) &m_sArguments);
+}

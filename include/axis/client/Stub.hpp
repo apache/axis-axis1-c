@@ -636,6 +636,11 @@ class STORAGE_CLASS_INFO Stub
 	 * automatically deleted by Axis C++ if it is passed as a parameter to a web service.
 	 */
 	ISoapAttachment* createSoapAttachment();
+ 
+    /**
+     * Set SSL configuration properties.
+     */
+    void AXISCALL SetSecure( char *, ...);
 
   protected:
   /**
@@ -646,6 +651,10 @@ class STORAGE_CLASS_INFO Stub
     */
     void applyUserPreferences();
 
+    /**
+     * Apply SSL configuration properties.
+     */
+    void includeSecure();
     
   /**
     * Set SOAP Headers stored in m_vSOAPHeaderBlock vector.
@@ -706,6 +715,12 @@ class STORAGE_CLASS_INFO Stub
     * proxy Password
     */
    char* m_proxyPassword;
+   
+private:
+    /**
+     * SSL configuration parameters
+     */
+    std::string m_sArguments[8];
 };
 
 AXIS_CPP_NAMESPACE_END

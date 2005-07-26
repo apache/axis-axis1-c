@@ -301,6 +301,7 @@
 			<then>
 				<echo file="${axiscpp.conf}" append="true">
 ClientLogPath:${test.directory}/ClientLog.taw
+SecureInfo:${env.SSL_KEYS_HOME}/myKeyRing.kdb,axis4all,AXIS,NONE,05,NONE,false
 </echo>
 			</then>
 		</if>

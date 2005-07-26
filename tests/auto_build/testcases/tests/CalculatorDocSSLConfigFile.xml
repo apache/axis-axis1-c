@@ -1,0 +1,17 @@
+<test>
+    <name>CalculatorDocSSLConfigFile</name>
+    <description>CalculatorDocSSL test using SSL properties in config file</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>CalculatorDocSSLConfigFileClient.cpp</clientCode>
+    <wsdl>CalculatorDoc.wsdl</wsdl>
+    <expected>
+        <output>
+           CalculatorDocSSL.expected
+        </output>
+    </expected>
+        <endpoint>https://localhost:80/axis/CalculatorDoc</endpoint>
+        <nomonitor>true</nomonitor>
+        <port>9443</port>
+	    <ssl>true</ssl>
+</test>
+

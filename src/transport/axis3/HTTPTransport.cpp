@@ -104,7 +104,7 @@ m_bMaintainSession (false)
 }
 
 /*
- * HTTPTransport destuctor
+ * HTTPTransport destructor
  */
 HTTPTransport::~HTTPTransport()
 {

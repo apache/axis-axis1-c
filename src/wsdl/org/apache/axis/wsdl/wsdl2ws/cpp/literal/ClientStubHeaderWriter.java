@@ -58,8 +58,6 @@ public class ClientStubHeaderWriter
         try
         {
             writer.write("public: \n");
-            writer.write("\tSTORAGE_CLASS_INFO void SetSecure( char *, ...);\n");
-            // FJP Secure Channel
 
             for (int i = 0; i < methods.size(); i++)
             {
@@ -151,11 +149,6 @@ public class ClientStubHeaderWriter
                 }
                 writer.write(");\n");
             }
-
-            writer.write("\nprivate:\n"); // FJP - SecureChannel
-            writer.write("\tvoid includeSecure();\n\n"); // FJP - SecureChannel
-            writer.write("protected:\n"); // FJP - SecureChannel
-            writer.write("\tstd::string sArguments[8];\n"); // FJP - SecureChannel
         }
         catch (Exception e)
         {

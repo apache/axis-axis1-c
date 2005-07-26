@@ -40,6 +40,7 @@ int main(int argc, char* argv[])
 	//signal(SIGQUIT, sig_handler);
 	//signal(SIGBUS, sig_handler);
 	signal(SIGFPE, sig_handler);
+    
     int iResult;
 
     url = argv[1];
@@ -52,21 +53,11 @@ int main(int argc, char* argv[])
         try
         {
             sprintf(endpoint, "%s", url);
+            
             Calculator ws(endpoint);
-                //ws.SetSecure("/home/axistest/ssl/myKeyRing.kdb", "axis4all", "AXIS", "NONE", "05", "NONE", false);
-            sslkeyhome=getenv("SSL_KEYS_HOME");
-
-            if (!sslkeyhome)
-            {
-                cout << "SSL_KEYS_HOME not set" << endl;	
-                return 1;
-            }
-
-            sprintf(keylocation,"%s/%s",sslkeyhome,"myKeyRing.kdb");
-            ws.SetSecure(keylocation, "axis4all", "AXIS", "NONE", "05", "NONE", false);
-
             iResult = ws.add(2,3);
             cout << iResult << endl;
+            
 			bSuccess = true;
         }
         catch(AxisException& e)
