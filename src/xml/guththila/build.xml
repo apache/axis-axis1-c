@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<project name="Axis Xml Parser Guththila" default="build" basedir=".">
+    <mkdir dir="${basedir}/build" />
+    <mkdir dir="${basedir}/lib"/>
+    <taskdef resource="cpptasks.tasks"/>
+    <typedef resource="cpptasks.types"/>
+    <target name="build">
+           <cc outfile="axis_guththila" link="shared" outtype="shared" objdir="build" libtool="true" runtime="dynamic">
+	        <compiler name="g++"/>
+		<fileset file="*.cpp"/>
+		<fileset file="../AxisParseException.cpp"/>
+		<includepath path="${basedir}/../../../include" />
+		<includepath path="${basedir}/../../../src/guththila/include"/>
+		<libset libs="guththila"/>
+		<linker name="g++"/>
+	   </cc>
+           <copy file="libaxis_guththila.so" todir="lib"/>
+           <move file="libaxis_guththila.so" todir="/usr/local/axiscpp_deploy/lib"/>
+     </target>
+</project>
