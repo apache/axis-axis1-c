@@ -76,18 +76,13 @@ int SoapFault::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
         m_pFaultactorParam->serialize(pSZ);
     } 
 
-	//Chinthana:Changed the code to solved Issue AXISCPP-706.
-    /*if(m_pFaultDetail)
-    {
-            m_pFaultDetail->serialize(pSZ);
-    }*/
+	
 	if(m_pFaultDetail) 
 	{ 
-		pSZ.serialize("<detail><appSpecific>", NULL); 
+		pSZ.serialize("<detail>", NULL); 
 		m_pFaultDetail->serialize(pSZ); 
-		pSZ.serialize("</appSpecific></detail>\n", NULL); 
+		pSZ.serialize("</detail>\n", NULL); 
 	} 
-	//22/06/2005.............................................
     
 	pSZ.serialize("</", gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix, ":",
 		gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_FAULT], ">\n", NULL); 
@@ -298,7 +293,7 @@ int SoapFault::setFaultactor(const AxisChar* sFaultactor)
 int SoapFault::setFaultDetail(const AxisChar* sFaultDetail)
 {
     m_pFaultDetail = new Param();
-    setParam(m_pFaultDetail, "detail", sFaultDetail, XSD_STRING);
+    setParam(m_pFaultDetail, "appSpecific", sFaultDetail, XSD_STRING);
     m_sFaultDetail = sFaultDetail;
     m_bIsSimpleDetail = true;
 
