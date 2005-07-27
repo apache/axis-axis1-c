@@ -1,0 +1,92 @@
+POST /XSD_duration/services/XSD_durationSOAP HTTP/1.1
+Host: localhost:13260
+Content-Type: text/xml; charset=UTF-8
+SOAPAction: "XSD_duration#asNonNillableElement"
+Content-Length: 449
+
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:AsNonNillableElementRequest xmlns:ns1="http://xsd_duration.test.apache.org">
+<nonNillableElement>P3Y11M3DT21H33M9S</nonNillableElement>
+</ns1:AsNonNillableElementRequest>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+POST /XSD_duration/services/XSD_durationSOAP HTTP/1.1
+Host: localhost:13260
+Content-Type: text/xml; charset=UTF-8
+SOAPAction: "XSD_duration#asNonNillableElement"
+Content-Length: 437
+
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:asNillableElementRequest xmlns:ns1="http://xsd_duration.test.apache.org">
+<nillableElement>P3Y11M3DT21H33M9S</nillableElement>
+</ns1:asNillableElementRequest>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+POST /XSD_duration/services/XSD_durationSOAP HTTP/1.1
+Host: localhost:13260
+Content-Type: text/xml; charset=UTF-8
+SOAPAction: "XSD_duration#asNonNillableElement"
+Content-Length: 435
+
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:asNillableElementRequest xmlns:ns1="http://xsd_duration.test.apache.org">
+<nillableElement xsi:nil="true"></nillableElement>
+</ns1:asNillableElementRequest>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+POST /XSD_duration/services/XSD_durationSOAP HTTP/1.1
+Host: localhost:13260
+Content-Type: text/xml; charset=UTF-8
+SOAPAction: "XSD_duration#asNonNillableElement"
+Content-Length: 480
+
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:asRequiredAttributeRequest xmlns:ns1="http://xsd_duration.test.apache.org">
+<RequiredAttributeElement requiredAttribute="P3Y11M3DT21H33M9S"></RequiredAttributeElement>
+</ns1:asRequiredAttributeRequest>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+POST /XSD_duration/services/XSD_durationSOAP HTTP/1.1
+Host: localhost:13260
+Content-Type: text/xml; charset=UTF-8
+SOAPAction: "XSD_duration#asNonNillableElement"
+Content-Length: 458
+
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:asArrayRequest xmlns:ns1="http://xsd_duration.test.apache.org">
+<arrayElement>P3Y11M3DT21H33M9S</arrayElement>
+<arrayElement>P3Y11M3DT21H33M9S</arrayElement>
+</ns1:asArrayRequest>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+POST /XSD_duration/services/XSD_durationSOAP HTTP/1.1
+Host: localhost:13260
+Content-Type: text/xml; charset=UTF-8
+SOAPAction: "XSD_duration#asNonNillableElement"
+Content-Length: 483
+
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:asComplexTypeRequest xmlns:ns1="http://xsd_duration.test.apache.org">
+<SimpleComplexType><ns1:complexTypeElement>P3Y11M3DT21H33M9S</ns1:complexTypeElement>
+</SimpleComplexType>
+</ns1:asComplexTypeRequest>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+

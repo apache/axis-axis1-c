@@ -1,0 +1,152 @@
+POST /XSD_integer/services/XSD_integerSOAP HTTP/1.1
+Host: localhost:13260
+Content-Type: text/xml; charset=UTF-8
+SOAPAction: "XSD_integer#asNonNillableElement"
+Content-Length: 450
+
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:AsNonNillableElementRequest xmlns:ns1="http://xsd_integer.test.apache.org">
+<nonNillableElement>9223372036854775807</nonNillableElement>
+</ns1:AsNonNillableElementRequest>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+POST /XSD_integer/services/XSD_integerSOAP HTTP/1.1
+Host: localhost:13260
+Content-Type: text/xml; charset=UTF-8
+SOAPAction: "XSD_integer#asNonNillableElement"
+Content-Length: 432
+
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:AsNonNillableElementRequest xmlns:ns1="http://xsd_integer.test.apache.org">
+<nonNillableElement>1</nonNillableElement>
+</ns1:AsNonNillableElementRequest>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+POST /XSD_integer/services/XSD_integerSOAP HTTP/1.1
+Host: localhost:13260
+Content-Type: text/xml; charset=UTF-8
+SOAPAction: "XSD_integer#asNonNillableElement"
+Content-Length: 451
+
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:AsNonNillableElementRequest xmlns:ns1="http://xsd_integer.test.apache.org">
+<nonNillableElement>-9223372036854775808</nonNillableElement>
+</ns1:AsNonNillableElementRequest>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+POST /XSD_integer/services/XSD_integerSOAP HTTP/1.1
+Host: localhost:13260
+Content-Type: text/xml; charset=UTF-8
+SOAPAction: "XSD_integer#asNonNillableElement"
+Content-Length: 433
+
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:AsNonNillableElementRequest xmlns:ns1="http://xsd_integer.test.apache.org">
+<nonNillableElement>-1</nonNillableElement>
+</ns1:AsNonNillableElementRequest>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+POST /XSD_integer/services/XSD_integerSOAP HTTP/1.1
+Host: localhost:13260
+Content-Type: text/xml; charset=UTF-8
+SOAPAction: "XSD_integer#asNonNillableElement"
+Content-Length: 432
+
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:AsNonNillableElementRequest xmlns:ns1="http://xsd_integer.test.apache.org">
+<nonNillableElement>0</nonNillableElement>
+</ns1:AsNonNillableElementRequest>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+POST /XSD_integer/services/XSD_integerSOAP HTTP/1.1
+Host: localhost:13260
+Content-Type: text/xml; charset=UTF-8
+SOAPAction: "XSD_integer#asNonNillableElement"
+Content-Length: 428
+
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:asNillableElementRequest xmlns:ns1="http://xsd_integer.test.apache.org">
+<nillableElement>123456789</nillableElement>
+</ns1:asNillableElementRequest>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+POST /XSD_integer/services/XSD_integerSOAP HTTP/1.1
+Host: localhost:13260
+Content-Type: text/xml; charset=UTF-8
+SOAPAction: "XSD_integer#asNonNillableElement"
+Content-Length: 434
+
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:asNillableElementRequest xmlns:ns1="http://xsd_integer.test.apache.org">
+<nillableElement xsi:nil="true"></nillableElement>
+</ns1:asNillableElementRequest>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+POST /XSD_integer/services/XSD_integerSOAP HTTP/1.1
+Host: localhost:13260
+Content-Type: text/xml; charset=UTF-8
+SOAPAction: "XSD_integer#asNonNillableElement"
+Content-Length: 471
+
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:asRequiredAttributeRequest xmlns:ns1="http://xsd_integer.test.apache.org">
+<RequiredAttributeElement requiredAttribute="123456789"></RequiredAttributeElement>
+</ns1:asRequiredAttributeRequest>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+POST /XSD_integer/services/XSD_integerSOAP HTTP/1.1
+Host: localhost:13260
+Content-Type: text/xml; charset=UTF-8
+SOAPAction: "XSD_integer#asNonNillableElement"
+Content-Length: 441
+
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:asArrayRequest xmlns:ns1="http://xsd_integer.test.apache.org">
+<arrayElement>123456789</arrayElement>
+<arrayElement>123456789</arrayElement>
+</ns1:asArrayRequest>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+POST /XSD_integer/services/XSD_integerSOAP HTTP/1.1
+Host: localhost:13260
+Content-Type: text/xml; charset=UTF-8
+SOAPAction: "XSD_integer#asNonNillableElement"
+Content-Length: 474
+
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:asComplexTypeRequest xmlns:ns1="http://xsd_integer.test.apache.org">
+<SimpleComplexType><ns1:complexTypeElement>123456789</ns1:complexTypeElement>
+</SimpleComplexType>
+</ns1:asComplexTypeRequest>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+

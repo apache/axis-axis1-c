@@ -1,0 +1,92 @@
+POST /XSD_gMonthDay/services/XSD_gMonthDaySOAP HTTP/1.1
+Host: localhost:13260
+Content-Type: text/xml; charset=UTF-8
+SOAPAction: "XSD_gMonthDay#asNonNillableElement"
+Content-Length: 441
+
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:AsNonNillableElementRequest xmlns:ns1="http://xsd_gMonthDay.test.apache.org">
+<nonNillableElement>--11-12Z</nonNillableElement>
+</ns1:AsNonNillableElementRequest>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+POST /XSD_gMonthDay/services/XSD_gMonthDaySOAP HTTP/1.1
+Host: localhost:13260
+Content-Type: text/xml; charset=UTF-8
+SOAPAction: "XSD_gMonthDay#asNonNillableElement"
+Content-Length: 429
+
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:asNillableElementRequest xmlns:ns1="http://xsd_gMonthDay.test.apache.org">
+<nillableElement>--11-12Z</nillableElement>
+</ns1:asNillableElementRequest>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+POST /XSD_gMonthDay/services/XSD_gMonthDaySOAP HTTP/1.1
+Host: localhost:13260
+Content-Type: text/xml; charset=UTF-8
+SOAPAction: "XSD_gMonthDay#asNonNillableElement"
+Content-Length: 436
+
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:asNillableElementRequest xmlns:ns1="http://xsd_gMonthDay.test.apache.org">
+<nillableElement xsi:nil="true"></nillableElement>
+</ns1:asNillableElementRequest>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+POST /XSD_gMonthDay/services/XSD_gMonthDaySOAP HTTP/1.1
+Host: localhost:13260
+Content-Type: text/xml; charset=UTF-8
+SOAPAction: "XSD_gMonthDay#asNonNillableElement"
+Content-Length: 472
+
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:asRequiredAttributeRequest xmlns:ns1="http://xsd_gMonthDay.test.apache.org">
+<RequiredAttributeElement requiredAttribute="--11-12Z"></RequiredAttributeElement>
+</ns1:asRequiredAttributeRequest>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+POST /XSD_gMonthDay/services/XSD_gMonthDaySOAP HTTP/1.1
+Host: localhost:13260
+Content-Type: text/xml; charset=UTF-8
+SOAPAction: "XSD_gMonthDay#asNonNillableElement"
+Content-Length: 441
+
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:asArrayRequest xmlns:ns1="http://xsd_gMonthDay.test.apache.org">
+<arrayElement>--11-12Z</arrayElement>
+<arrayElement>--11-12Z</arrayElement>
+</ns1:asArrayRequest>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+POST /XSD_gMonthDay/services/XSD_gMonthDaySOAP HTTP/1.1
+Host: localhost:13260
+Content-Type: text/xml; charset=UTF-8
+SOAPAction: "XSD_gMonthDay#asNonNillableElement"
+Content-Length: 475
+
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:asComplexTypeRequest xmlns:ns1="http://xsd_gMonthDay.test.apache.org">
+<SimpleComplexType><ns1:complexTypeElement>--11-12Z</ns1:complexTypeElement>
+</SimpleComplexType>
+</ns1:asComplexTypeRequest>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
