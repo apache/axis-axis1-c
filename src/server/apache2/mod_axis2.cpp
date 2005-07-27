@@ -46,6 +46,14 @@ int axis_handler_helper(request_rec* req_rec)
      * the moment. */
     req_rec->content_type = (M_POST == req_rec->method_number) ? 
 		"text/xml" : "text/html";
+
+    // Samisa : if it is a GET request with wsdl arg then content type should be text/xml
+    if (req_rec->args)
+    {
+        if( strcmp("wsdl", req_rec->args) == 0 )
+            req_rec->content_type = "text/xml";
+    }
+
 	 /* Set up the read policy from the client.*/
     if ((rc = ap_setup_client_block(req_rec, REQUEST_CHUNKED_ERROR)) != OK)
     {
