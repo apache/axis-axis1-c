@@ -1,10 +1,7 @@
 non-nillable element=A simple test message!
 empty non-nillable element=<empty>
 non-nillable element with XML reserved characters=<>&"'
-non-nillable element with whitespace characters="  	
-some text 	
-more text 	
-"
+non-nillable element with whitespace characters="some text more text"
 nillable element=A simple test message!
 empty nillable element=<empty>
 nil element=<nil>
