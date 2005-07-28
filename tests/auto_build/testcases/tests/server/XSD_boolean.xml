@@ -1,0 +1,8 @@
+<service>
+    <name>XSD_boolean</name>
+    <description>XSD_boolean Service</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>XSD_boolean.cpp</serviceCode>
+    <wsdl>XSD_boolean.wsdl</wsdl>
+	<servicename></servicename>
+</service>
