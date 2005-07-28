@@ -291,6 +291,9 @@ int SoapSerializer::setSoapFault( SoapFault * pSoapFault)
 
     if( m_pSoapEnvelope && (m_pSoapEnvelope->m_pSoapBody))
     {
+		if(m_pSoapEnvelope->m_pSoapBody->m_pSoapFault)
+			delete m_pSoapEnvelope->m_pSoapBody->m_pSoapFault;
+
         m_pSoapEnvelope->m_pSoapBody->m_pSoapFault = pSoapFault;
 
         intStatus = AXIS_SUCCESS;
