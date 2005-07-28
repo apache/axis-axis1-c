@@ -352,8 +352,23 @@ int initialize_module (int bServer)
                 status = g_pConfig->readConfFile (); 
                 if (status == AXIS_SUCCESS)
                 {
-                    XMLParserFactory::initialize();
-                    SOAPTransportFactory::initialize();
+					//chinthana:Axiscpp-104
+                    //XMLParserFactory::initialize();
+                    //SOAPTransportFactory::initialize();
+					try
+					{            
+						XMLParserFactory::initialize();
+						SOAPTransportFactory::initialize();
+					}
+					catch (exception& e)
+					{
+						cout<< e.what();
+						cout<< "\n";
+						cout<< "Axis c++: An exception occured while initializing the XML Parser and SOAP Transport\n";
+						exit(1);
+					}
+					//.........................................
+
                     char *pWsddPath = g_pConfig->getAxisConfProperty(AXCONF_WSDDFILEPATH);
 #if defined(ENABLE_AXISTRACE)
                     status = AxisTrace::openFile ();
