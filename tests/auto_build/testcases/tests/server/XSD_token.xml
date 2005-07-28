@@ -1,0 +1,8 @@
+<service>
+    <name>XSD_token</name>
+    <description>XSD_token Service</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>XSD_token.cpp</serviceCode>
+    <wsdl>XSD_token.wsdl</wsdl>
+	<servicename></servicename>
+</service>
