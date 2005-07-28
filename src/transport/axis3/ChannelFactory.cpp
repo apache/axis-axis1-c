@@ -158,11 +158,17 @@ bool ChannelFactory::UnLoadChannelLibrary( g_ChannelType eChannelType)
 // in turn calls the channel destructor.  On return from this call, the
 // m_pChannel[iLibIndex] object no longer exists.
 			DELETE_OBJECT3 sDelete = (DELETE_OBJECT3) PLATFORM_GETPROCADDR( m_LibHandler[iLibIndex], DELETE_FUNCTION3);
-
 			sDelete( m_pChannel[iLibIndex]);
 		}
+                else
+                {
+                    // Samisa: somehow, the above block does not seem to deallocate the channel
+                    // As a workaround, I delete the channel here and seems this logic is not having any side effects
+                    // More importantly I could get rid of the memory leak
+                    delete m_pChannel[iLibIndex];
+                }
 
-		m_pChannel[iLibIndex] = 0;
+		m_pChannel[iLibIndex] = NULL;
 	}
 
 // Delete library name from the library name list.
