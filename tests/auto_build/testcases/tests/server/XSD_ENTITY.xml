@@ -1,0 +1,8 @@
+<service>
+    <name>XSD_ENTITY</name>
+    <description>XSD_ENTITY Service</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>XSD_ENTITYPort.cpp</serviceCode>
+    <wsdl>XSD_ENTITY.wsdl</wsdl>
+	<servicename></servicename>
+</service>
