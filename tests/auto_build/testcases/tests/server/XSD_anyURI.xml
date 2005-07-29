@@ -1,0 +1,8 @@
+<service>
+    <name>XSD_anyURI</name>
+    <description>XSD_anyURI Service</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>XSD_anyURI.cpp</serviceCode>
+    <wsdl>XSD_anyURI.wsdl</wsdl>
+	<servicename></servicename>
+</service>

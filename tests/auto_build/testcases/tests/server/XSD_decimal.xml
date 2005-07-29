@@ -1,0 +1,8 @@
+<service>
+    <name>XSD_decimal</name>
+    <description>XSD_decimal Service</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>XSD_decimal.cpp</serviceCode>
+    <wsdl>XSD_decimal.wsdl</wsdl>
+	<servicename></servicename>
+</service>

@@ -1,0 +1,8 @@
+<service>
+    <name>XSD_duration</name>
+    <description>XSD_duration Service</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>XSD_duration.cpp</serviceCode>
+    <wsdl>XSD_duration.wsdl</wsdl>
+	<servicename></servicename>
+</service>
