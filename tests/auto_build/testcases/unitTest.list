@@ -72,5 +72,6 @@ XSD_unsignedShort.xml
 XSD_unsignedByte.xml
 XSD_positiveInteger.xml
 XSD_anyURI.xml
+XSD_anyURI2.xml
 XSD_QName.xml
 XSD_NOTATION.xml

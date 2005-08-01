@@ -1,0 +1,188 @@
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:asNonNillableElementResponse xmlns:ns1="http://xsd_anyURI.test.apache.org">
+<nonNillableElement>www.google.com</nonNillableElement>
+</ns1:asNonNillableElementResponse>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:asNonNillableElementResponse xmlns:ns1="http://xsd_anyURI.test.apache.org">
+<nonNillableElement></nonNillableElement>
+</ns1:asNonNillableElementResponse>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:asNonNillableElementResponse xmlns:ns1="http://xsd_anyURI.test.apache.org">
+<nonNillableElement>&lt;&gt;&amp;&quot;&apos;</nonNillableElement>
+</ns1:asNonNillableElementResponse>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:asNonNillableElementResponse xmlns:ns1="http://xsd_anyURI.test.apache.org">
+<nonNillableElement>     some text    more text    </nonNillableElement>
+</ns1:asNonNillableElementResponse>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:asNillableElementResponse xmlns:ns1="http://xsd_anyURI.test.apache.org">
+<nillableElement>www.google.com</nillableElement>
+</ns1:asNillableElementResponse>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:asNillableElementResponse xmlns:ns1="http://xsd_anyURI.test.apache.org">
+<nillableElement></nillableElement>
+</ns1:asNillableElementResponse>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:asNillableElementResponse xmlns:ns1="http://xsd_anyURI.test.apache.org">
+<nillableElement xsi:nil="true"></nillableElement>
+</ns1:asNillableElementResponse>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:asRequiredAttributeResponse xmlns:ns1="http://xsd_anyURI.test.apache.org">
+<RequiredAttributeElement requiredAttribute="www.google.com"></RequiredAttributeElement>
+</ns1:asRequiredAttributeResponse>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:asRequiredAttributeResponse xmlns:ns1="http://xsd_anyURI.test.apache.org">
+<RequiredAttributeElement requiredAttribute=""></RequiredAttributeElement>
+</ns1:asRequiredAttributeResponse>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:asArrayResponse xmlns:ns1="http://xsd_anyURI.test.apache.org">
+<arrayElement>www.google.com</arrayElement>
+<arrayElement>www.google.com</arrayElement>
+</ns1:asArrayResponse>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:asComplexTypeResponse xmlns:ns1="http://xsd_anyURI.test.apache.org">
+<SimpleComplexType><ns1:complexTypeElement>www.google.com</ns1:complexTypeElement>
+</SimpleComplexType>
+</ns1:asComplexTypeResponse>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+

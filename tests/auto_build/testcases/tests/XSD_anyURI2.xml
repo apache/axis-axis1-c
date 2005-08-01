@@ -1,0 +1,17 @@
+<test>
+    <name>XSD_anyURI2</name>
+    <description>Test serialization and deserialization of the XSD built-in simple type anyURI</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>XSD_anyURI2Client.cpp</clientCode>
+    <wsdl>XSD_anyURI.wsdl</wsdl>
+    <expected>
+        <output>
+            XSD_anyURI2.expected
+        </output>
+		<serverResponse>
+			XSD_anyURI2_ServerResponse.expected
+	    </serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/XSD_anyURI</endpoint>
+</test>
+

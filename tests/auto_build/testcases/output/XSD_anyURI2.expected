@@ -1,0 +1,14 @@
+non-nillable element=www.google.com
+empty non-nillable element=<empty>
+non-nillable element with XML reserved characters=<>&"'
+non-nillable element with whitespace characters="     some text    more text    "
+nillable element=www.google.com
+empty nillable element=<empty>
+nil element=<nil>
+required attribute=www.google.com
+empty required attribute=<empty>
+array of 2 elements
+  element[0]=www.google.com
+  element[1]=www.google.com
+within complex type=www.google.com
+---------------------- TEST COMPLETE -----------------------------
