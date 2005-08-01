@@ -1,0 +1,8 @@
+<service>
+    <name>XSD_hexBinary</name>
+    <description>XSD_hexBinary Service</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>XSD_hexBinary.cpp</serviceCode>
+    <wsdl>XSD_hexBinary.wsdl</wsdl>
+	<servicename></servicename>
+</service>

@@ -1,0 +1,8 @@
+<service>
+    <name>XSD_gMonthDay</name>
+    <description>XSD_gMonthDay Service</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>XSD_gMonthDay.cpp</serviceCode>
+    <wsdl>XSD_gMonthDay.wsdl</wsdl>
+	<servicename></servicename>
+</service>

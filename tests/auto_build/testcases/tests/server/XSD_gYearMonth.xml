@@ -1,0 +1,8 @@
+<service>
+    <name>XSD_gYearMonth</name>
+    <description>XSD_gYearMonth Service</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>XSD_gYearMonth.cpp</serviceCode>
+    <wsdl>XSD_gYearMonth.wsdl</wsdl>
+	<servicename></servicename>
+</service>
