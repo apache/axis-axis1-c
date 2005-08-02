@@ -407,6 +407,9 @@ SoapDeSerializer::getBody ()
 	    /* Set any attributes/namspaces to the SoapBody object */
 	    m_pNode = NULL;	/* This is to indicate that node is identified 
 				 * and used */
+
+            // peek for the method name
+            m_strMethodNameToInvoke = m_pParser->peek();
 	    return AXIS_SUCCESS;
 	}
     }
@@ -421,11 +424,11 @@ SoapDeSerializer::checkMessageBody (const AxisChar * pName,
 				    const AxisChar * pNamespace)
 {
     /* check and skip the soap body tag */
-    if (AXIS_SUCCESS != getBody ())
+    /*if (AXIS_SUCCESS != getBody ())
     {
 	//return AXIS_FAIL;    
 	throw AxisGenException (SERVER_UNKNOWN_ERROR);
-    }
+    }*/
 
     if (!m_pNode)
     {
@@ -2990,6 +2993,17 @@ ISoapAttachment* SoapDeSerializer::getAttachment(const char* pcAttachmentid)
 ISoapAttachment** SoapDeSerializer::getAllAttachments(int *pAttchArraySize)
 {
     return m_pInputStream->getAllAttachments(pAttchArraySize);
-}	
+}
+
+
+const char* SoapDeSerializer::getMethodNameToInvoke()
+{
+    return m_strMethodNameToInvoke.c_str();
+}
+
+void SoapDeSerializer::setMethodNameToInvoke(const char* methodName)
+{
+    m_strMethodNameToInvoke = methodName;
+}
 
 AXIS_CPP_NAMESPACE_END

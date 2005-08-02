@@ -66,14 +66,18 @@ private:
     PROVIDERTYPE m_ProviderType;
     SOAPTransport* m_pInputStream;
 
+    string m_strMethodNameToInvoke;
+
 private:
     int AXISCALL getArraySize(const AnyElement* pElement);
-    int getBody();
 public:
     int init();
     int getVersion();
     SoapEnvelope* getEnvelope();
     int getHeader();
+    int getBody();
+    const char* getMethodNameToInvoke();
+    void setMethodNameToInvoke(const char*);
 	/**
 	* This method allows to peek for the name of the next element in XML stream.
 	* Useful in supporting "all" & "choice" WSDL constructs.

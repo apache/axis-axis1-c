@@ -172,7 +172,21 @@ int ServerAxisEngine::process(SOAPTransport* pStream)
         /* Get the operation name from transport information Ex: from 
 	 * SOAPAction header 
 	 */
-        AxisString sOperation = pStream->getTransportProperty(OPERATION_NAME);
+        if (AXIS_SUCCESS != m_pDZ->getHeader ())
+        {
+            AXISTRACE1 ("CLIENT_SOAP_SOAP_CONTENT_ERROR", CRITICAL);
+            throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
+            break; // do .. while(0)                         
+        }
+        if (AXIS_SUCCESS != m_pDZ->getBody ())
+        {
+            AXISTRACE1 ("CLIENT_SOAP_SOAP_CONTENT_ERROR", CRITICAL);
+            throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
+            break; // do .. while(0)                         
+        }
+        //AxisString sOperation = pStream->getTransportProperty(OPERATION_NAME);
+        AxisString sOperation = m_pDZ->getMethodNameToInvoke();
+
         if (sOperation.empty ())
         {
             AXISTRACE1("CLIENT_SOAP_NO_SOAP_METHOD", CRITICAL);
@@ -272,13 +286,19 @@ int ServerAxisEngine::process(SOAPTransport* pStream)
 	 * header may be added to the Deserializer ONLY IF there is a CAN BE
 	 * a handler in this soap processor to handle it.
 	 */
-        if (AXIS_SUCCESS != m_pDZ->getHeader ())
+        /*if (AXIS_SUCCESS != m_pDZ->getHeader ())
         {
             AXISTRACE1 ("CLIENT_SOAP_SOAP_CONTENT_ERROR", CRITICAL);
             throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
-            //m_pSZ->setSoapFault (SoapFault::getSoapFault (CLIENT_SOAP_SOAPCONTENTERROR));
             break; // do .. while(0)                         
         }
+        if (AXIS_SUCCESS != m_pDZ->getBody ())
+        {
+            AXISTRACE1 ("CLIENT_SOAP_SOAP_CONTENT_ERROR", CRITICAL);
+            throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
+            break; // do .. while(0)                         
+        }
+*/
         /*
          * Invoke all handlers including the webservice
          * in case of failure coresponding stream fault message will be set

@@ -231,6 +231,7 @@ int ClientAxisEngine::invoke (MessageData* pMsg)
         }
 
         m_pDZ->getHeader ();
+        m_pDZ->getBody ();
 
     }
     while (0);
