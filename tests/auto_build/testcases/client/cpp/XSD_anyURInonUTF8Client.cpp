@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
         xsd__anyURI emptyInput = new char[1];
         strcpy (emptyInput, emptyanyURI);
 		char simpleanyURI[100] = "http://www.w3.org/People/Dürst/";
-        xsd__anyURI input = new char[25];
+        xsd__anyURI input = new char[100];
         strcpy (input, simpleanyURI);
 
         // Test non-nillable element
