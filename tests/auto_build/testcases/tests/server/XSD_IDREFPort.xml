@@ -1,0 +1,8 @@
+<service>
+    <name>XSD_IDREFPort</name>
+    <description>XSD_IDREF Service</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>XSD_IDREFPort.cpp</serviceCode>
+    <wsdl>XSD_IDREF.wsdl</wsdl>
+	<servicename></servicename>
+</service>
