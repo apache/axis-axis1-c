@@ -1,0 +1,8 @@
+<service>
+    <name>XSD_NCName</name>
+    <description>XSD_NCName Service</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>XSD_NCName.cpp</serviceCode>
+    <wsdl>XSD_NCName.wsdl</wsdl>
+	<servicename></servicename>
+</service>

@@ -1,0 +1,8 @@
+<service>
+    <name>XSD_negativeInteger</name>
+    <description>XSD_negativeInteger Service</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>XSD_negativeInteger.cpp</serviceCode>
+    <wsdl>XSD_negativeInteger.wsdl</wsdl>
+	<servicename></servicename>
+</service>
