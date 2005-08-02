@@ -37,7 +37,8 @@ usage (char *programName, char *defaultURL)
 int
 main (int argc, char *argv[])
 {
-    int x;
+    int x = 0;
+    int i = 0;
     char buffer1[100];
     char endpoint[256];
     const char *server = "localhost";
@@ -90,7 +91,7 @@ main (int argc, char *argv[])
 	    arrstr.m_Array = new char *[ARRAYSIZE];
 	    arrstr.m_Size = ARRAYSIZE;
 	    sprintf (buffer1, "%dth element of string array", 0);
-	    for (int i = 0; i < ARRAYSIZE; i++)
+	    for (i = 0; i < ARRAYSIZE; i++)
 	    {
 		arrstr.m_Array[i] = buffer1;
 	    }
