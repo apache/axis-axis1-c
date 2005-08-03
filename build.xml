@@ -195,6 +195,17 @@ Notes:
 				</antcall>
 			</then>
 		</if>
+                <if>
+                        <equals arg1="${xmlParser.guththila}" arg2="true"/>
+                        <then>
+                                <antcall target="compileAxisXMLParser" inheritall="true">
+                                        <param name="xmlParser" value="guththila"/>
+                                        <param name="dir.xmlParser" value="${guththila.dir.xmlParser}"/>
+                                        <param name="xmlParserLibrary" value="${guththila.xmlParserLibrary}"/>
+                                        <param name="xmlParserLibraryName" value="${guththila.xmlParserLibraryName}"/>
+                                </antcall>
+                        </then>
+                </if>
 	</target>
 
 	<target name="compile">
