@@ -20,7 +20,6 @@
 
 #include "XMLParserGuththila.hpp"
 #include "AxisInputStream.hpp"
-#include "ctype.h"
 
 XMLParserGuththila::XMLParserGuththila ()
 {
@@ -69,7 +68,7 @@ XMLParserGuththila::setInputStream (AxisIOStream* pInputStream)
   catch (XmlPullParserException* e)
     {
       delete e;
-      throw new AxisParseException ();
+      throw new AxisParseException (245, "set InputStream");
     }
 }
 
@@ -229,7 +228,7 @@ XMLParserGuththila::next (bool isCharData)
   catch (XmlPullParserException *e)
     {
       delete e;
-      throw new AxisParseException ();
+      throw new AxisParseException (245, "next Method XMLParserGuththila");
     }
 }
 
@@ -280,6 +279,19 @@ XMLParserGuththila::anyNext ()
   catch (XmlPullParserException *e)
     {
       delete e;
-      throw new AxisParseException ();
+      throw new AxisParseException (245, "any next method XMLParserGuththila");
     }
+}
+
+const char*
+XMLParserGuththila::peek ()
+{
+  int peekValue;
+  const char* peekName;
+  peekValue = parser->next ();
+  while ( peekValue == XmlPullParser::Content || peekValue == XmlPullParser::XMLDecl)
+      peekValue = parser->next ();
+    peekName = parser->getName ();
+    m_pchPeek = true;
+    return peekName;
 }

@@ -22,7 +22,7 @@
 #define __XMLPARSERGUTHTHILA_HPP_INCLUDE__
 #include "../XMLParser.h"
 #include "../AxisParseException.h"
-#include "../../../src/guththila/include/XmlPullParser.hpp"
+#include "../../../src/guththila/XmlPullParser.hpp"
 
 AXIS_CPP_NAMESPACE_USE
 
@@ -38,10 +38,12 @@ public:
   const AnyElement* next (bool bIsCharData = false);
   const AnyElement* anyNext ();
   const XML_Ch* getPrefix4NS (const XML_Ch* pcNS);
+  const char* peek ();
 private:
   XmlPullParser *parser;
   AnyElement element;
   InputStream *stream;
+  bool m_pchPeek;
   int isSpace (char *c);
   void setNamespace ();
   void setAttributes ();

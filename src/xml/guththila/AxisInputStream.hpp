@@ -20,7 +20,7 @@
 
 #ifndef __AXISINPUTSTREAM_HPP_INCLUDED__
 #define __AXISINPUTSTREAM_HPP_INCLUDED__
-#include "../../../src/guththila/include/InputStream.hpp"
+#include "../../../src/guththila/InputStream.hpp"
 #include "../../transport/SOAPTransport.h"
 
 AXIS_CPP_NAMESPACE_USE
