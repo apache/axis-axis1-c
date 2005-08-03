@@ -21,7 +21,7 @@
   *@author  Susantha Kumara  ( susantha@opensource.lk )
  */
 
-#include <XmlPullParser.hpp>
+#include "XmlPullParser.hpp"
 
 void
 XmlPullParser::relocateTokens (int offset)

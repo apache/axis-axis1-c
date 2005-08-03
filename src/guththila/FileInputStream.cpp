@@ -17,7 +17,7 @@
  *
  */
 
-#include <FileInputStream.hpp>
+#include "FileInputStream.hpp"
 
 FileInputStream::FileInputStream (FILE * s)
 {
