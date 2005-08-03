@@ -9,6 +9,83 @@
         <antcall target="buildVersionResource" inheritall="true">
             <param name="internalName" value="${xmlParserLibraryName}"/>
         </antcall>
+<!-- Before Using Guththila need to build it -->
+<!-- Starting Building Guththila -->
+    <if>
+        <equals arg1="${xmlParser.guththila}" arg2="true"/>
+	<then>
+	<mkdir dir="${dir.xmlParser}/lib"/>
+                <if>
+			<not>
+				<isset property="aix"/>
+			</not>
+			<then>
+				<!--
+				  Library name may have been change if windows debug build. Changed
+				  in buildInitialize.xml
+				  -->
+				<cc outfile="${dir.xmlParser}/lib/${xmlParserLibrary}" objdir="${dir.objects}"
+				 exceptions="true" outtype="shared" multithreaded="true">
+				 	<!-- Compilers -->
+					<compiler refid="SolarisCC"/>
+					<compiler refid="Linuxgcc"/>
+					<compiler refid="AIXxlc"/>
+					<compiler extends="VisualC++">
+						<defineset>
+							<define name="AXISXMLPARSERXERCES_EXPORTS"/>
+						</defineset>
+					</compiler>
+                              <compiler refid="OS400icc"/>
+			            <defineset>
+			                  <define name="ENABLE_AXISTRACE" if="trace"/>
+			                  <define name="AXISTRACE_LIBRARY"/>
+			            </defineset>
+
+					<!-- Additional include directory for XML Parser -->
+					<includepath path="${dir.xmlParser}"/>
+					<!-- Linkers -->
+					<linker refid="SolarisLinker"/>
+					<linker refid="VisualC++Linker"/>
+					<linker refid="LinuxLinker"/>
+					<linker refid="AIXLinker"/>
+			            <linker extends="OS400Linker">
+                                 <linkerarg value="-qDUPPROC"/>
+                                 <linkerarg value="-qDUPVAR"/>
+                                 <linkerarg location="end" value="${dir.xmlParser}/lib/${xmlParser}.so"/>
+                              </linker>
+
+					<!-- Additional library of XMLParser -->
+					<!-- Files to be compiled -->
+					<fileset dir="${dir.xmlParser}">
+						<include name="*.cpp"/>
+					</fileset>
+				</cc>
+			</then>
+			<else>
+				<cc outfile="${dir.xmlParser}/lib/${libraryPrefix}${xmlParserLibrary}${librarySuffix}" objdir="${dir.objects}"
+				 exceptions="true" multithreaded="true">
+				 	<!-- Compilers -->
+					<compiler refid="AIXxlc"/>
+			            <defineset>
+			                  <define name="ENABLE_AXISTRACE" if="trace"/>
+			                  <define name="AXISTRACE_LIBRARY"/>
+			            </defineset>
+
+					<!-- Additional include directory for XML Parser -->
+					<includepath path="${dir.xmlParser}"/>
+					<!-- Linkers -->
+					<linker refid="AIXLinker"/>
+					<!-- Additional library of XMLParser -->
+					<!-- Files to be compiled -->
+					<fileset dir="${dir.xmlParser}">
+						<include name="*.cpp"/>
+					</fileset>
+				</cc>
+			</else>
+		</if>
+         </then>
+	 </if>
+<!-- Finish Building Guththila -->
 		<if>
 			<not>
 				<isset property="aix"/>
@@ -36,8 +113,9 @@
 			            </defineset>
 
 					<!-- Additional include directory for XML Parser -->
-					<includepath path="${dir.xmlParser}/include"/>
-					<includepath path="${dir.xmlParser}/lib"/>
+					<includepath path="${dir.xmlParser}" if= "guththila.xmlParserLibrary"/>
+					<includepath path="${dir.xmlParser}/include" unless="guththila.xmlParserLibrary"/>
+					<includepath path="${dir.xmlParser}/lib" unless="guththila.xmlParserLibrary"/>
 					<!-- Linkers -->
 					<linker refid="SolarisLinker"/>
 					<linker refid="VisualC++Linker"/>
@@ -83,5 +161,13 @@
 				</cc>
 			</else>
 		</if>
+                <if>
+		      <equals arg1="${xmlParser.guththila}" arg2="true"/>
+		      <then>
+              	         <move file="${dir.xmlParser}/lib/libguththila.so" todir="${env.AXISCPP_DEPLOY}/lib"/>
+		         <delete dir="${dir.xmlParser}/lib"/>
+		      </then>
+		</if>
+ 
 	</target>
 </project>
