@@ -1,0 +1,8 @@
+<service>
+    <name>XSD_NMTOKENPort</name>
+    <description>XSD_NMTOKEN Service</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>XSD_NMTOKENPort.cpp</serviceCode>
+    <wsdl>XSD_NMTOKEN.wsdl</wsdl>
+	<servicename></servicename>
+</service>

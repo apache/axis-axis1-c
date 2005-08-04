@@ -1,0 +1,8 @@
+<service>
+    <name>XSD_normalizedString</name>
+    <description>XSD_normalizedString Service</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>XSD_normalizedString.cpp</serviceCode>
+    <wsdl>XSD_normalizedString.wsdl</wsdl>
+	<servicename></servicename>
+</service>
