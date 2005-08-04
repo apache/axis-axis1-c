@@ -31,6 +31,7 @@ extern const AxisXMLCh* kw_ns;
 extern const AxisXMLCh* kw_prv;
 extern const AxisXMLCh* kw_cn; /* must be changed to libname or so */
 extern const AxisXMLCh* kw_am;
+extern const AxisXMLCh* kw_operation_request_map; //To handle the mapping between operation name and request tag name
 extern const AxisXMLCh* kw_ar;
 extern const AxisXMLCh* kw_rqf;
 extern const AxisXMLCh* kw_rsf;

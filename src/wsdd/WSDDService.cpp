@@ -251,4 +251,28 @@ const char* WSDDService::getProviderString()
     return 0;
 }
 
+void WSDDService::addOperationRequestMapping(AxisString operation, AxisString request)
+{
+    operationRequestMap[operation] = request;
+}
+
+const char* WSDDService::getOperationForRequest(const char* request) const
+{
+    AxisString strRequest = request;
+    map<AxisString, AxisString>::const_iterator itr = operationRequestMap.find(strRequest);
+
+    if (itr != operationRequestMap.end() ) // handle the case where the tag name is the same as the operation name
+        return (*itr).first.c_str();
+
+    itr = operationRequestMap.begin();
+    
+    while (itr != operationRequestMap.end() && (*itr).second != strRequest)
+        ++itr;
+
+    if (itr != operationRequestMap.end())
+        return (*itr).first.c_str();
+    else 
+        return NULL;
+}
+
 AXIS_CPP_NAMESPACE_END

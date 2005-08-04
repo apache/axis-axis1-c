@@ -49,6 +49,14 @@ public class DeploymentWriter extends WsddWriter {
 				writer.write((String)it.next()+" ");
 			}
 			writer.write("\"/>\n");
+                        // operation and request tag name mapping
+			writer.write("\t\t<parameter name=\"operationRequestMap\" value=\"");
+			it = this.allowedmethods.iterator();
+                        Iterator it2 = this.requestNames.iterator();
+			while (it.hasNext()){
+				writer.write((String)it.next() + ":" + (String)it2.next() + " ");
+			}
+			writer.write("\"/>\n");
 			writer.write("\t</service>\n");
 			writer.write("</deployment>\n");
 			writer.flush();

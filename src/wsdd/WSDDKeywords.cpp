@@ -34,6 +34,7 @@ const AxisXMLCh* kw_ns;
 const AxisXMLCh* kw_prv;
 const AxisXMLCh* kw_cn; /* must be changed to libname or so */
 const AxisXMLCh* kw_am;
+const AxisXMLCh* kw_operation_request_map; //To handle the mapping between operation name and request tag name
 const AxisXMLCh* kw_ar;
 const AxisXMLCh* kw_rqf;
 const AxisXMLCh* kw_rsf;
@@ -76,6 +77,7 @@ void WSDDKeywords::initialize()
         kw_prv = __TRC("provider");
         kw_cn = __TRC("className"); /* must be changed to libname or so */
         kw_am = __TRC("allowedMethods");
+        kw_operation_request_map = __TRC("operationRequestMap");
         kw_ar = __TRC("allowedRoles");
         kw_rqf = __TRC("requestFlow");
         kw_rsf = __TRC("responseFlow");

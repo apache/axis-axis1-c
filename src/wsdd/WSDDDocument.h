@@ -39,6 +39,7 @@ enum WSDDLevels {WSDD_UNKNOWN=1, WSDD_DEPLOYMENT, WSDD_UNDEPLOYMENT,
 
 #define METHODNAME_SEPARATOR ' '
 #define ROLENAME_SEPARATOR ','
+#define TAG_NAME_SEPARATOR ':'
 #define TRANSCODE_BUFFER_SIZE 1024
 
 /*
@@ -91,6 +92,7 @@ private:
     void getParameters(WSDDLevels eElementType, const AnyElement* pEvent);
     void addAllowedRolesToService(const AxisXMLCh* pcValue);
     void addAllowedMethodsToService(const AxisXMLCh* pcValue);
+    void addOperationToRequestMappingsToService(const AxisXMLCh* pcValue);
     int parseDocument(const AxisChar* pcWSDDFileName);
 protected: 
     bool m_bFatalError;

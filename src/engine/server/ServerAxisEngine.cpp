@@ -200,9 +200,13 @@ int ServerAxisEngine::process(SOAPTransport* pStream)
             sOperation = sOperation.substr (0, sOperation.length () - 1);
         }
 
-        m_pMsgData->setOperationName (sOperation.c_str ());
+        AxisString operationToInvoke = m_pService->getOperationForRequest(sOperation.c_str());
 
-        if (m_pService->isAllowedMethod (sOperation.c_str ()))
+        printf("%s\n", operationToInvoke.c_str());
+
+        m_pMsgData->setOperationName (operationToInvoke.c_str ());
+
+        if (m_pService->isAllowedMethod (operationToInvoke.c_str ()))
         {
             /* load actual web service handler */
             if (AXIS_SUCCESS != g_pHandlerPool->getWebService (&m_pWebService, 
