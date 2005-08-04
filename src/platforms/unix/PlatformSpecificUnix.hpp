@@ -100,6 +100,7 @@
 /**
  * Platform specific method to obtain current thread ID
  */
+#include <pthread.h>
 #define PLATFORM_GET_THREAD_ID pthread_self()
 
 /**

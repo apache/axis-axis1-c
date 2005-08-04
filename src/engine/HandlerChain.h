@@ -37,6 +37,15 @@ private:
         BasicHandler* m_pHandler;
         int m_nScope;
         int m_nLibId;
+
+        bool operator==(const ChainItem& other) const {
+                return (*this) == other;
+        }
+
+        bool operator<(const ChainItem& other) const {
+                return (*this) < other;
+        }
+
     } ChainItem;
 public:
     int addHandler(BasicHandler* pHandler, int nScope, int nLibId);

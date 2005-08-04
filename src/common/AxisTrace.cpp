@@ -141,7 +141,7 @@ bool AxisTrace::isTraceOn()
 }
 
 int AxisTrace::logaxis (const char* sLog1, const char* sLog2, const char *type,
-    char* file, int line)
+    const char* file, int line)
 {
     if (isTraceOn()) return AXIS_FAIL;
 
@@ -185,7 +185,7 @@ void AxisTrace::traceHeader(enum AxisTraceState newState)
     text += ctime (&ltime);
     traceLine2(text.c_str());
 
-    char *envVars[]={"PATH","LIBPATH","LD_LIBRARY_PATH","AXISCPP_DEPLOY","PWD",
+    const char *envVars[]={"PATH","LIBPATH","LD_LIBRARY_PATH","AXISCPP_DEPLOY","PWD",
         "CLASSPATH","INCLUDE","LIB","NLSPATH","OS","COMPUTERNAME","USERNAME",
         "HOSTNAME","LANG","LOGIN","LOGNAME","MACHTYPE","OSTYPE","UID","USER"};
     for (unsigned i=0; i<(sizeof(envVars)/sizeof(char*)); i++) 
@@ -207,7 +207,7 @@ void AxisTrace::traceHeader(enum AxisTraceState newState)
 	traceLine("-------------- Config File settings START ----------------");
 	string confLine="";
 
-    char *confProps[]={
+    const char *confProps[]={
 		"AXCONF_WSDDFILEPATH",		//1
 		"AXCONF_LOGPATH",			//2
 		"AXCONF_CLIENTLOGPATH",		//3

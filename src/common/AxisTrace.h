@@ -153,7 +153,7 @@ public:
      * (AXIS_SUCCESS) or not     * (AXIS_FAIL).
      */
     static int logaxis(const char* sLog1, const char* sLog2, 
-		const char *type, char* file, int line);
+		const char *type, const char* file, int line);
 
     /**
      * Writes the given string to the standard console. 
