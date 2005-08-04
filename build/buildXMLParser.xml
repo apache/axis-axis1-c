@@ -113,9 +113,9 @@
 			            </defineset>
 
 					<!-- Additional include directory for XML Parser -->
-					<includepath path="${dir.xmlParser}" if= "guththila.xmlParserLibrary"/>
-					<includepath path="${dir.xmlParser}/include" unless="guththila.xmlParserLibrary"/>
-					<includepath path="${dir.xmlParser}/lib" unless="guththila.xmlParserLibrary"/>
+					<includepath path="${dir.xmlParser}"/>
+					<includepath path="${dir.xmlParser}/include"/>
+					<includepath path="${dir.xmlParser}/lib"/>
 					<!-- Linkers -->
 					<linker refid="SolarisLinker"/>
 					<linker refid="VisualC++Linker"/>
