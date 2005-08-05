@@ -8,54 +8,70 @@
 	</globalConfiguration>
 
 	
-	<service name="array" provider="CPP:DOCUMENT" description="This is an Axis C++ web service for Symple Type Array which return an array of elements. This is a DOCUMENT style service.">
-		<parameter name="className" value="C:\obj\samples\array.dll"/>
+	<service name="array" provider="CPP:DOCUMENT" description="This is an Axis C++ web service for Simple Type Array which return an array of elements. This is a DOCUMENT style service.">
+		<parameter name="className" value="C:\obj\samples\server\array\array.dll"/>
 		<parameter name="allowedMethods" value="getInput "/>
+		<parameter name="operationRequestMap" value="getInput:getInput "/>
 	</service>
 
 	<service name="calculator" provider="CPP:RPC" description="This is an Axis C++ Service to demonstrate Calculator. This will support addition (add) subtraction (sub) multiplication (mul) division (div). This is a RPC style service.">
 		<parameter name="allowedMethods" value="add sub mul div "/>
-		<parameter name="className" value="C:\obj\samples\calculator.dll" />
+		<parameter name="className" value="C:\obj\samples\server\calculator\calculator.dll" />
+		<parameter name="operationRequestMap" value="add:add sub:sub mul:mul div:div "/>
 	</service>
 
 	<service name="base" provider="CPP:RPC" description="This is an Axis C++ web service for Base which is use to demonstrate Complex data types. SOAPBuilders Interoperability Lab Round 2 base test suite described at http://www.whitemesa.com/interop/proposal2.html. This is a RPC style service.">
-		<parameter name="className" value="C:\obj\samples\base.dll"/>
+		<parameter name="className" value="C:\obj\samples\server\base\base.dll"/>
 		<parameter name="allowedMethods" value="echoString echoStringArray echoInteger echoIntegerArray echoFloat echoFloatArray echoStruct echoStructArray echoVoid echoBase64 echoDate echoHexBinary echoDecimal echoBoolean "/>
+		<parameter name="operationRequestMap" value="echoString:echoStringRequest echoStringArray:echoStringArrayRequest echoInteger:echoIntegerRequest echoIntegerArray:echoIntegerArrayRequest echoFloat:echoFloatRequest echoFloatArray:echoFloatArrayRequest echoStruct:echoStructRequest echoStructArray:echoStructArrayRequest echoVoid:echoVoidRequest echoBase64:echoBase64Request echoDate:echoDateRequest echoHexBinary:echoHexBinaryRequest echoDecimal:echoDecimalRequest echoBoolean:echoBooleanRequest "/>
 	</service>
 
 	<service name="transportProperties" provider="CPP:DOCUMENT" description="This is an Axis C++ web service for demonstrate transport property. This is a DOCUMENT style service.">
-		<parameter name="className" value="C:\obj\samples\transportProperties.dll"/>
+		<parameter name="className" value="C:\obj\samples\server\transportProperties\transportProperties.dll"/>
 		<parameter name="allowedMethods" value="add sub mul div "/>
+		<parameter name="operationRequestMap" value="add:add sub:sub mul:mul div:div "/>
 	</service>
 
 	<service name="bench" provider="CPP:DOCUMENT" description="This is an Axis C++ web service for demonstrate Axis Bench which is use to demonstrate Complex data types. This is a DOCUMENT style service.">
-		<parameter name="className" value="C:\obj\samples\bench.dll"/>
+		<parameter name="className" value="C:\obj\samples\server\bench\bench.dll"/>
 		<parameter name="allowedMethods" value="doBenchRequest "/>
+		<parameter name="operationRequestMap" value="doBenchRequest:doBenchRequest "/>
 	</service>
 
 	<service name="element" provider="CPP:DOCUMENT" description="This is an Axis C++ web service for demonstrate XSD Element which is use XSD data types. This is use setmethods to retrieve XSD data types. This is a DOCUMENT style service.">
-		<parameter name="className" value="C:\obj\samples\element.dll"/>
+		<parameter name="className" value="C:\obj\samples\server\element\element.dll"/>
 		<parameter name="allowedMethods" value="setGetDataInt setGetDataUnsignedInt setGetDataLong setGetDataUnsignedLong setGetDataDouble setGetDataFloat setGetDataByte setGetDataUnsignedByte setGetDataBoolean setGetDataString setGetDataShort setGetDataUnsignedShort setGetDateTimeType setGetDateType setGetDataDurationType setGetTimeType setGetBase64BinaryType setGetHexBinary setGetDecimalType setGetIntegerType setQNameType getQNameType setAnyURIType getAnyURIType "/>
+		<parameter name="operationRequestMap" value="setGetDataInt:setGetDataInt setGetDataUnsignedInt:setGetDataUnsignedInt setGetDataLong:setGetDataLong setGetDataUnsignedLong:setGetDataUnsignedLong setGetDataDouble:setGetDataDouble setGetDataFloat:setGetDataFloat setGetDataByte:setGetDataByte setGetDataUnsignedByte:setGetDataUnsignedByte setGetDataBoolean:setGetDataBoolean setGetDataString:setGetDataString setGetDataShort:setGetDataShort setGetDataUnsignedShort:setGetDataUnsignedShort setGetDateTimeType:setGetDateTimeType setGetDateType:setGetDateType setGetDataDurationType:setGetDataDurationType setGetTimeType:setGetTimeType setGetBase64BinaryType:setGetBase64BinaryType setGetHexBinary:setGetHexBinary setGetDecimalType:setGetDecimalType setGetIntegerType:setGetIntegerType setQNameType:setQNameType getQNameType:getQNameType setAnyURIType:setAnyURIType getAnyURIType:getAnyURIType "/>
 	</service>
 
 	<service name="enumeration" provider="CPP:DOCUMENT" description="This is an Axis C++ web service for Enumeration demonstrate enum data type. This is a DOCUMENT style service.">
-		<parameter name="className" value="C:\obj\samples\enumeration.dll"/>
+		<parameter name="className" value="C:\obj\samples\server\enumeration\enumeration.dll"/>
 		<parameter name="allowedMethods" value="getInput "/>
+		<parameter name="operationRequestMap" value="getInput:getInput "/>
 	</service>
 
 	<service name="doclitfault" provider="CPP:DOCUMENT" description="This is an Axis C++ web service for demonstrate fault value handling in DOCUMENT style service.">
-		<parameter name="className" value="C:\obj\samples\doclitfault.dll"/>
+		<parameter name="className" value="C:\obj\samples\server\doclitfault\doclitfault.dll"/>
 		<parameter name="allowedMethods" value="div "/>
+		<parameter name="operationRequestMap" value="div:div "/>
 	</service>
 
 	<service name="rpcfault" provider="CPP:RPC" description="This is an Axis C++ web service for demonstrate fault value handling in RPC style service">
-		<parameter name="className" value="C:\obj\samples\rpcfault.dll"/>
+		<parameter name="className" value="C:\obj\samples\server\rpcfault\rpcfault.dll"/>
 		<parameter name="allowedMethods" value="div "/>
+		<parameter name="operationRequestMap" value="div:div "/>
 	</service>
 
 	<service name="ref" provider="CPP:RPC" description="This is an Axis C++ web service for demonstrate Value Pass by Reference. This is a RPC style service. ">
-		<parameter name="className" value="C:\obj\samples\ref.dll"/>
+		<parameter name="className" value="C:\obj\samples\server\ref\ref.dll"/>
 		<parameter name="allowedMethods" value="echoInt "/>
+		<parameter name="operationRequestMap" value="echoInt:echoInt "/>
+	</service>
+
+	<service name="groupB" provider="CPP:RPC" description="This is an Axis C++ web service for demonstrate Interop test. This is a RPC style service. ">
+		<parameter name="className" value="C:\obj\samples\server\groupB\groupB.dll"/>
+		<parameter name="allowedMethods" value="echoNestedArray echoNestedStruct echoSimpleTypesAsStruct echoStructAsSimpleTypes "/>
+		<parameter name="operationRequestMap" value="echoStructAsSimpleTypes:echoStructAsSimpleTypesRequest echoSimpleTypesAsStruct:echoSimpleTypesAsStructRequest echoNestedStruct:echoNestedStructRequest echoNestedArray:echoNestedArrayRequest "/>
 	</service>
 
 </deployment>
