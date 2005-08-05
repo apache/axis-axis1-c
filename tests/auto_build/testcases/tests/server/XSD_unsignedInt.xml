@@ -1,0 +1,8 @@
+<service>
+    <name>XSD_unsignedInt</name>
+    <description>XSD_unsignedInt Service</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>XSD_unsignedInt.cpp</serviceCode>
+    <wsdl>XSD_unsignedInt.wsdl</wsdl>
+	<servicename></servicename>
+</service>

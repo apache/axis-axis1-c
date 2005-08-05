@@ -1,0 +1,8 @@
+<service>
+    <name>XSD_QName</name>
+    <description>XSD_QName Service</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>XSD_QName.cpp</serviceCode>
+    <wsdl>XSD_QName.wsdl</wsdl>
+	<servicename></servicename>
+</service>

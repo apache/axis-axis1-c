@@ -1,0 +1,8 @@
+<service>
+    <name>XSD_positiveInteger</name>
+    <description>XSD_positiveInteger Service</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>XSD_positiveInteger.cpp</serviceCode>
+    <wsdl>XSD_positiveInteger.wsdl</wsdl>
+	<servicename></servicename>
+</service>
