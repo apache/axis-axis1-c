@@ -1,0 +1,14 @@
+<test>
+    <name>SOAPActionTestDoc</name>
+    <description>Test whether setting SOAPAction is required</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>SOAPActionTestDocClient.cpp</clientCode>
+    <wsdl>XSD_anyURI.wsdl</wsdl>
+    <expected>
+        <output>
+            SOAPActionTestDoc.expected
+        </output>
+    </expected>
+	<endpoint>http://localhost:80/axis/XSD_anyURI</endpoint>
+</test>
+
