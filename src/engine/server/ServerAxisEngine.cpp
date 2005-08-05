@@ -202,8 +202,6 @@ int ServerAxisEngine::process(SOAPTransport* pStream)
 
         AxisString operationToInvoke = m_pService->getOperationForRequest(sOperation.c_str());
 
-        printf("%s\n", operationToInvoke.c_str());
-
         m_pMsgData->setOperationName (operationToInvoke.c_str ());
 
         if (m_pService->isAllowedMethod (operationToInvoke.c_str ()))
