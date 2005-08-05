@@ -435,23 +435,7 @@ public class MockServerThread implements Runnable
 	                    int	iChunkDataBlockBegin = iIndex;
 	                    int	iChunkDataBlockEnd = iIndex + iChunkSize;
 	                    int	iResponseSize = sResponse.length();
-/*	                    
-	                    sLine = "";
-	                    
-	                    for( int x = iChunkDataBlockBegin; x < iChunkDataBlockEnd; x++)
-	                    {
-	                        sLine += sResponse.substring( x, x + 1);
-	                        
-	                        if( sLine.length() > 100)
-	                        {
-	                            System.out.println( sLine);
-	                            
-	                            sLine = "";
-	                        }
-	                    }
 
-	                    System.out.println( sLine);
-*/
 	                    // If the chunk data block end is greater than the size
 	                    // of the file, then the size of the chunk is incorrect.
 	                    // If '###' was used, then the size of the chunk is
@@ -459,7 +443,10 @@ public class MockServerThread implements Runnable
 	                    // the chunk length. 
 	                    if( iChunkDataBlockEnd > iResponseSize)
 	                    {
-	                        System.out.println( "Warning - The chunk size is greater than the file size by " + (iChunkDataBlockEnd - iResponseSize) + " bytes.");
+	                        if( iChunkDataBlockEnd - iResponseSize > 1)
+	                        {
+	                            System.out.println( "Warning - The chunk size is greater than the file size by " + (iChunkDataBlockEnd - iResponseSize) + " bytes.");
+	                        }
 	                        
 	                        iChunkDataBlockEnd = sResponse.lastIndexOf( "0") - 1;
 	                        iChunkSize = iChunkDataBlockEnd - iIndex;
