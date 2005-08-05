@@ -371,31 +371,34 @@ public class MockServerThread implements Runnable
      */
     private static void setCRLF( )
     {
+	    String sLF = "\n";
+	    String sCR = "\r";
+	    String sCRLF = sCR + sLF;
+        String sContentLength = "Content-Length:";
+	    
         for( int i = 0; i < responses.length; i++)
         {
             if( responses[i] != null)
             {
                 String sResponse = new String((char[]) responses[i]);
                 String sModifiedResponse = "";
-                String sContentLength = "Content-Length:";
             	boolean bChunked = sResponse.indexOf( sContentLength) == -1;
             	
             	if( bChunked)
             	{
-            	    String sLF = "\n";
-            	    String sCR = "\r";
-            	    String sCRLF = sCR + sLF;
-            	    
                     System.out.println("Information - Response file is chunked.");
 
-                    // Find HTTP Header block.
+                    // Process HTTP header block.  At the end of each line in
+                    // the header block, if there is only a LF character,
+                    // prefix it with a CR.  The end of the HTTP header block
+                    // is denoted by an empty line (i.e. CR LF).
                     String sLine;
                     int	iIndex = 0;
                     int iEoL = sResponse.indexOf( sLF, iIndex) + 1;
                     
                     do
                     {
-                        sLine = getResponseLine(sResponse, sCRLF, iIndex, iEoL);
+                        sLine = getResponseLine( sResponse, sCRLF, iIndex, iEoL);
                         
                         sModifiedResponse += sLine;
 
@@ -405,7 +408,16 @@ public class MockServerThread implements Runnable
                         iEoL = sResponse.indexOf( sLF, iIndex) + 1;
                     } while( iEoL > 0 && !sLine.equals( sCRLF));
 
-                    // Find first chunk_size.
+                    // Immediately after the HTTP header block should be the
+                    // first chunk_size.  All chunk_sizes are in hex. A chunk
+                    // size gives the size in bytes of the data that follows
+                    // the value (i.e. CR LF 2 0 0 0 CR LF <---Data---> CR LF)
+                    // but any number of CR may be missing and need to be
+                    // accounted for if the response file is to be processed
+                    // correctly.
+                    // Do some 'first time' processing to initialise the loop
+                    // that will process the HTTP message until the chunk size
+                    // is zero (signifying the end of the message).
                     sLine = getResponseLine(sResponse, sCRLF, iIndex, iEoL);
 
                     sModifiedResponse += sLine;
@@ -414,7 +426,10 @@ public class MockServerThread implements Runnable
 
                     // Evaluate chunk_size value.
                     int iChunkSize = Integer.parseInt( sLine.trim(), 16);
-                    
+
+                    // On entry to the loop, iChunkSize is the size of the data
+                    // chunk and iIndex is the current location that is being
+                    // processed.
                     do
                     {
 	                    int	iChunkDataBlockBegin = iIndex;
@@ -430,9 +445,6 @@ public class MockServerThread implements Runnable
 	                    {
 	                        System.out.println("Warning - The chunk size is greater than the file size by " + (iChunkDataBlockEnd - iResponseSize) + " bytes.");
 	                        
-//	                        iChunkSize -= (sLine.length() + iChunkDataBlockEnd - iResponseSize - 1);
-// 		                    iChunkDataBlockEnd = iIndex + iChunkSize;
-   		                    
 	                        iChunkDataBlockEnd = sResponse.lastIndexOf( "0") - 1;
 	                        iChunkSize = iChunkDataBlockEnd - iIndex;
 	                    }
@@ -450,13 +462,13 @@ public class MockServerThread implements Runnable
                             // There are no more LF's in the file.  This is
                             // probably because there is no LF at the end of
                             // the file.  Assume so and make sLine = "0".
-	                        System.out.println("Warning - The response file chunk sizes appear to be wrong.");
+	                        System.out.println( "Warning - The response file chunk sizes appear to be wrong.");
 	                        
 	                        sLine = "";
                         }
                         else
                         {
-                            sLine = getResponseLine(sResponse, sCRLF, iIndex, iEoL);
+                            sLine = getResponseLine( sResponse, sCRLF, iIndex, iEoL);
 
                             sChunkDataBlock += sLine;
 
@@ -470,13 +482,13 @@ public class MockServerThread implements Runnable
 	                            // There are no more LF's in the file.  This is
 	                            // probably because there is no LF at the end of
 	                            // the file.  Assume so and make sLine = "0".
-		                        System.out.println("Warning - The response file does not end with a LF.");
+		                        System.out.println( "Warning - The response file does not end with a LF.");
 	                            
 	                            sLine = "0" + sLF;
 	                        }
 	                        else
 	                        {
-	                            sLine = getResponseLine(sResponse, sCRLF, iIndex, iEoL);
+	                            sLine = getResponseLine( sResponse, sCRLF, iIndex, iEoL);
 	                        }
 	                        
 		                    if( !isStringAHexNumber( sLine.trim()))
@@ -501,7 +513,7 @@ public class MockServerThread implements Runnable
 	                    }
 	                    else
 	                    {
-	                        System.out.println("Warning - The response file does not appear to end with a 0 and LF characters.");
+	                        System.out.println( "Warning - The response file does not appear to end with a 0 and LF characters.");
 	                        
 	                        iChunkSize = 0;
 	                    }
