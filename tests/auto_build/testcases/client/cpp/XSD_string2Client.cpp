@@ -14,7 +14,7 @@
 // limitations under the License.
 
 
-#include "XSD_anyURI.hpp"
+#include "XSD_string.hpp"
 #include <axis/AxisException.hpp>
 #include <ctype.h>
 #include <iostream>
@@ -22,8 +22,8 @@
 
 int main(int argc, char* argv[])
 {
-    char endpoint[256];
-    const char* url="http://localhost:80/axis/XSD_anyURI";
+    char endpoint[1006];
+    const char* url="http://localhost:80/axis/XSD_string";
 
     if(argc>1)
         url = argv[1];
@@ -31,17 +31,17 @@ int main(int argc, char* argv[])
     try
     {
         sprintf(endpoint, "%s", url);
-        XSD_anyURI* ws = new XSD_anyURI(endpoint);
+        XSD_string* ws = new XSD_string(endpoint);
       
-        char emptyanyURI[1] = "";
-        xsd__anyURI emptyInput = new char[1];
-        strcpy (emptyInput, emptyanyURI);
-		char simpleanyURI[25] = "http://www.xyz.com";
-        xsd__anyURI input = new char[25];
-        strcpy (input, simpleanyURI);
+        char emptyString[1] = "";
+        xsd__string emptyInput = new char[1];
+        strcpy (emptyInput, emptyString);
+        char simpleString[100] = "Lite svenska: blåbär på ö";
+        xsd__string input = new char[100];
+        strcpy (input, simpleString);
 
         // Test non-nillable element
-        xsd__anyURI result = ws->asNonNillableElement(input);
+        xsd__string result = ws->asNonNillableElement(input);
         if (result)
         {
             if (*result)
@@ -78,10 +78,112 @@ int main(int argc, char* argv[])
         }
         delete [] emptyInput;
 
+        // Test non-nillable element with XML reserved characters
+        char reservedCharactersString[] = "<>&\"\'";
+        xsd__string reservedCharactersInput = reservedCharactersString;
+        result = ws->asNonNillableElement(reservedCharactersInput);
+        if (result)
+        {
+            if (*result)
+            {
+                cout << "non-nillable element with XML reserved characters=" << result << endl;
+            }
+            else
+            {
+                cout << "non-nillable element with XML reserved characters=<empty>" << endl;
+            }
+        }
+        else
+        {
+            cout << "non-nillable element with XML reserved characters=<nil>" << endl;
+        }
+
+        // Test non-nillable element with XML reserved characters
+        char whitespaceString[] = "  \t\r\nsome text \t\r\nmore text \t\r\n";
+        xsd__string whitespaceInput = whitespaceString;
+        result = ws->asNonNillableElement(whitespaceInput);
+        if (result)
+        {
+            if (*result)
+            {
+                cout << "non-nillable element with whitespace characters=\"" << result << "\"" << endl;
+            }
+            else
+            {
+                cout << "non-nillable element with whitespace characters=<empty>" << endl;
+            }
+        }
+        else
+        {
+            cout << "non-nillable element with whitespace characters=<nil>" << endl;
+        }
+
+        // Test nillable element, with a value
+        input = new char[100];
+        strcpy (input, simpleString);
+        xsd__string nillableResult = ws->asNillableElement(input);
+        if (nillableResult)
+        {
+            if (*nillableResult)
+            {
+                cout << "nillable element=" << nillableResult << endl;
+            }
+            else
+            {
+                cout << "nillable element=<empty>" << endl;
+            }
+            delete nillableResult;
+        }
+        else
+        {
+            cout << "nillable element=<nil>" << endl;
+        }
+        delete [] input;
+
+        // Test empty nillable element
+        emptyInput = new char[1];
+        strcpy (emptyInput, emptyString);
+        nillableResult = ws->asNillableElement(emptyInput);
+        if (nillableResult)
+        {
+            if (*nillableResult)
+            {
+                cout << "empty nillable element=" << nillableResult << endl;
+            }
+            else
+            {
+                cout << "empty nillable element=<empty>" << endl;
+            }
+            delete nillableResult;
+        }
+        else
+        {
+            cout << "empty nillable element=<nil>" << endl;
+        }
+        delete [] emptyInput;
+
+        // Test nillable element, with nil
+        nillableResult = ws->asNillableElement(NULL);
+        if (nillableResult)
+        {
+            if (*nillableResult)
+            {
+                cout << "nil element=" << nillableResult << endl;
+            }
+            else
+            {
+                cout << "nil element=<empty>" << endl;
+            }
+            delete nillableResult;
+        }
+        else
+        {
+            cout << "nil element=<nil>" << endl;
+        }
 
         // Test required attribute
-        input = new char[25];
-        strcpy (input, simpleanyURI);
+        input = new char[100];
+        strcpy (input, simpleString);
         RequiredAttributeElement requiredAttributeInput;
         requiredAttributeInput.setrequiredAttribute(input);
         RequiredAttributeElement* requiredAttributeResult = ws->asRequiredAttribute(&requiredAttributeInput);
@@ -102,13 +204,34 @@ int main(int argc, char* argv[])
         }
         delete requiredAttributeResult;
 
- 
+        // Test empty required attribute
+        emptyInput = new char[1];
+        strcpy (emptyInput, emptyString);
+        requiredAttributeInput;
+        requiredAttributeInput.setrequiredAttribute(emptyInput);
+        requiredAttributeResult = ws->asRequiredAttribute(&requiredAttributeInput);
+        if (requiredAttributeResult->getrequiredAttribute())
+        {
+            if (*(requiredAttributeResult->getrequiredAttribute()))
+            {
+                cout << "empty required attribute=" << requiredAttributeResult->getrequiredAttribute() << endl;
+            }
+            else
+            {
+                cout << "empty required attribute=<empty>" << endl;
+            }
+        }
+        else
+        {
+            cout << "empty required attribute=<nil>" << endl;
+        }
+        delete requiredAttributeResult;
 
 /* Optional Attributes currently unsupported by WSDL2Ws
  * Exact coding of this section may change depending on chosen implementation
         // Test optional attribute, with a value
-        input = new char[25];
-        strcpy (input, simpleanyURI);
+        input = new char[100];
+        strcpy (input, simpleString);
         OptionalAttributeElement optionalAttributeInput;
         optionalAttributeInput.setoptionalAttribute(input);
         OptionalAttributeElement* optionalAttributeResult = ws->asOptionalAttribute(&optionalAttributeInput);
@@ -127,12 +250,11 @@ int main(int argc, char* argv[])
         {
             cout << "optional attribute, with data=<not present>" << endl;
         }
-        delete [] input;
         delete optionalAttributeResult;
 
         // Test empty optional attribute
         emptyInput = new char[1];
-        strcpy (emptyInput, emptyanyURI);
+        strcpy (emptyInput, emptyString);
         optionalAttributeInput.setoptionalAttribute(emptyInput);
         optionalAttributeResult = ws->asOptionalAttribute(&optionalAttributeInput);
         if (optionalAttributeResult->getoptionalAttribute())
@@ -150,7 +272,6 @@ int main(int argc, char* argv[])
         {
             cout << "empty optional attribute=<not present>" << endl;
         }
-        delete [] emptyInput;
         delete optionalAttributeResult;
 
         // Test optional attribute, not present
@@ -175,16 +296,16 @@ int main(int argc, char* argv[])
 */
 
         // Test array
-        xsd__anyURI_Array arrayInput;
-        arrayInput.m_Array = new xsd__anyURI[2];
+        xsd__string_Array arrayInput;
+        arrayInput.m_Array = new xsd__string[2];
         arrayInput.m_Size = 2;
         for (int inputIndex=0 ; inputIndex < 2 ; inputIndex++)
         {
-            input = new char[25];
-            strcpy (input, simpleanyURI);
+            input = new char[100];
+            strcpy (input, simpleString);
             arrayInput.m_Array[inputIndex] = input;
         }
-        xsd__anyURI_Array arrayResult = ws->asArray(arrayInput);
+        xsd__string_Array arrayResult = ws->asArray(arrayInput);
         cout << "array of " << arrayResult.m_Size << " elements" << endl;
         for (int index = 0; index < arrayResult.m_Size ; index++)
         {
@@ -209,8 +330,8 @@ int main(int argc, char* argv[])
         delete [] arrayResult.m_Array;
 
         // Test complex type
-        input = new char[25];
-        strcpy (input, simpleanyURI);
+        input = new char[100];
+        strcpy (input, simpleString);
         SimpleComplexType complexTypeInput;
         complexTypeInput.setcomplexTypeElement(input);
         SimpleComplexType* complexTypeResult = ws->asComplexType(&complexTypeInput);

@@ -1,0 +1,14 @@
+<test>
+    <name>XSD_string2</name>
+    <description>Test serialization and deserialization of the XSD built-in simple type string</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>XSD_string2Client.cpp</clientCode>
+    <wsdl>XSD_string.wsdl</wsdl>
+    <expected>
+        <output>
+            XSD_string2.expected
+        </output>
+    </expected>
+	<endpoint>http://localhost:80/axis/XSD_string</endpoint>
+</test>
+
