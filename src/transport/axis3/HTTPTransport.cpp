@@ -604,6 +604,7 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
                 if ( m_iResponseHTTPStatusCode != 500 &&
                     ( m_iResponseHTTPStatusCode < 200 || m_iResponseHTTPStatusCode >= 300 ))
 				{
+                                    m_strResponseHTTPStatusMessage = std::string("\n Server sent HTTP error: '") + m_strResponseHTTPStatusMessage + std::string("'\n");
 				    throw HTTPTransportException( SERVER_TRANSPORT_HTTP_EXCEPTION,
 												  const_cast <char *> (m_strResponseHTTPStatusMessage.c_str()));
 				}
