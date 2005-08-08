@@ -25,47 +25,77 @@
 ofstream output_file;
 
 // Prototype
-bool parse_args_for_endpoint(int *argc, char *argv[], char **endpoint);
-void shift_args(int i, int *argc, char *argv[]);
-void setLogOptions(const char *output_filename);
+bool parse_args_for_endpoint( int * argc, char * argv[], char ** endpoint);
+void shift_args( int i, int * argc, char * argv[]);
+void setLogOptions( const char * output_filename);
 
-int main(int argc, char* argv[])
+int main( int argc, char * argv[])
 {
-  LargeReturningString *ws;
+	LargeReturningString *	ws;
+	char *					endpoint = WSDL_DEFAULT_ENDPOINT;
+	bool					endpoint_set = false;
+	int						returnValue = 1; // Assume Failure
 
-  char *endpoint = WSDL_DEFAULT_ENDPOINT;
-  bool endpoint_set = false;
-  int returnValue = 1; // Assume Failure
+	endpoint_set = parse_args_for_endpoint( &argc, argv, &endpoint);
 
-  endpoint_set = parse_args_for_endpoint(&argc, argv, &endpoint);
+	bool	bSuccess = false;
+	int		iRetryIterationCount = 3;
 
-		bool bSuccess = false;
-		int	iRetryIterationCount = 3;
-
-		do
+	do
+	{
+		try
 		{
-  try {
-    if(endpoint_set) {
-      ws = new LargeReturningString(endpoint, APTHTTP1_1);
-      free(endpoint);
-      endpoint_set = false;
-    } else
-      ws = new LargeReturningString();
+			if( endpoint_set)
+			{
+				ws = new LargeReturningString( endpoint, APTHTTP1_1);
+				free( endpoint);
+				endpoint_set = false;
+			}
+			else
+			{
+				ws = new LargeReturningString();
+			}
 
-    int input = 2*1024*1024;
-    xsd__string result = "";
-    result = ws->getLargeString(input);
+			int			input = 2 * 1024 * 1024;
+			xsd__string	result = "";
 
-    cout << "Result" << endl;
-    if ( result == NULL ) {
-      cout << "NULL" << endl;
-    } else {
-      cout << strlen(result) << endl;
-      returnValue = 0; // Success
-    }
+			result = ws->getLargeString(input);
 
-	bSuccess = true;
-  } catch(AxisException &e) {
+			cout << "Result" << endl;
+
+			if ( result == NULL)
+			{
+				cout << "NULL" << endl;
+			}
+
+			if( strlen( result) == input)
+			{
+				cout << strlen( result) << endl;
+			}
+			else
+			{
+				int	iError = 0;
+
+				for( int x = 0; x < input; x++)
+				{
+					if( result[x] != 'a' + (x + iError) % 26)
+					{
+						cout << "Error. result[" << x << "] should have been " << (char) ('a' + x % 26) << " but was " << result[x] << endl;
+
+					iError++;
+					}
+				}
+
+				cout << "There where " << iError << " errors." << endl;
+				cout << "Requested " << input << " bytes.  Received " << strlen( result) << " bytes." << endl;
+		
+				returnValue = 0; // Success
+			}
+
+			bSuccess = true;
+		}
+		catch( AxisException &e)
+		{
 			bool bSilent = false;
 
 			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
@@ -82,30 +112,38 @@ int main(int argc, char* argv[])
 
             if( !bSilent)
 			{
-    cerr << e.what() << endl;
+			    cerr << e.what() << endl;
 			}
-  } catch(...) {
-    cerr << "Unknown Exception occured." << endl;
-  }
-  try
-  {
-  	delete ws;
-  }
-  catch(exception& exception)
-  {
-  	cout << "Exception on clean up of ws: " << exception.what()<<endl;
-  }
-  catch(...)
-  {
-  	cout << "Unknown exception on clean up of ws: " << endl;
-  }
+		}
+		catch( ...)
+		{
+			cerr << "Unknown Exception occured." << endl;
+		}
+
+		try
+		{
+			delete ws;
+		}
+		catch( exception& exception)
+		{
+			cout << "Exception on clean up of ws: " << exception.what() << endl;
+		}
+		catch( ...)
+		{
+			cout << "Unknown exception on clean up of ws: " << endl;
+		}
+
 		iRetryIterationCount--;
-		} while( iRetryIterationCount > 0 && !bSuccess);
-    if(endpoint_set)
-      free(endpoint);
-  cout << "---------------------- TEST COMPLETE -----------------------------"<< endl;
+	} while( iRetryIterationCount > 0 && !bSuccess);
+
+    if( endpoint_set)
+	{
+		free( endpoint);
+	}
+
+	cout << "---------------------- TEST COMPLETE -----------------------------" << endl;
   
-  return returnValue;
+	return returnValue;
 }
 
 /* Spin through args list and check for -e -p and -s options.
