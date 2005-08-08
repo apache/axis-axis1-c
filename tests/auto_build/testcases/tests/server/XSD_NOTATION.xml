@@ -1,0 +1,8 @@
+<service>
+    <name>XSD_NOTATION</name>
+    <description>XSD_NOTATION Service</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>XSD_NOTATIONPort.cpp</serviceCode>
+    <wsdl>XSD_NOTATION.wsdl</wsdl>
+	<servicename></servicename>
+</service>

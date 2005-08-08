@@ -1,0 +1,8 @@
+<service>
+    <name>MultiOut</name>
+    <description>MultiOut Test</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>MultiOut.cpp</serviceCode>
+    <wsdl>MultiOut.wsdl</wsdl>
+	<servicename></servicename>
+</service>
