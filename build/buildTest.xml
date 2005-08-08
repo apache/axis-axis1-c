@@ -96,6 +96,7 @@
                     <define name="Q168440_WORKAROUND" unless="msvc7" />
                 </defineset>         
             </compiler>         
+			<compiler refid="SolarisCC"/>
 			<compiler refid="Linuxgcc"/>
 			<compiler refid="AIXxlc"/>
             <compiler extends="OS400icc"> 
@@ -103,6 +104,7 @@
             </compiler>
 			<!-- Linkers -->
 			<linker refid="VisualC++Linker"/>
+			<linker refid="SolarisLinker"/>
 			<linker refid="LinuxLinker"/>
 			<linker refid="AIXExecutableLinker"/>
 		    <linker extends="OS400ExecutableLinker">
@@ -130,11 +132,13 @@
                     <define name="Q168440_WORKAROUND" unless="msvc7" />
                 </defineset>
             </compiler>      
+			<compiler refid="SolarisCC"/>
 			<compiler refid="Linuxgcc"/>
 			<compiler refid="AIXxlc"/>
 			<compiler refid="OS400icc"/>
 			<!-- Linkers -->
 			<linker refid="VisualC++Linker"/>
+			<linker refid="SolarisLinker"/>
 			<linker refid="LinuxLinker"/>
 			<linker refid="AIXExecutableLinker"/>
 		    <linker extends="OS400ExecutableLinker">
