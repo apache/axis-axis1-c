@@ -38,7 +38,7 @@ extern "C" {
 
 AXISC_STORAGE_CLASS_INFO AXISCHANDLE axiscCreateStub(const char * pcEndPointURI, 
 	AXISC_PROTOCOL_TYPE eProtocol) {
-	StubC *stub = new StubC(pcEndPointURI, static_cast<AXIS_PROTOCOL_TYPE>(eProtocol));
+	StubC *stub = new StubC(pcEndPointURI, (AXIS_PROTOCOL_TYPE)eProtocol);
 	return (AXISCHANDLE)stub;
 }
 
@@ -155,7 +155,7 @@ AXISC_STORAGE_CLASS_INFO void axiscSetMaintainSession(AXISCHANDLE stub, AxiscBoo
 
 AXISC_STORAGE_CLASS_INFO void axiscSetTransportProtocol(AXISCHANDLE stub, AXISC_PROTOCOL_TYPE eProtocol) {
 	Stub *s = (Stub*)stub;
-	s->setTransportProtocol(static_cast<AXIS_PROTOCOL_TYPE>(eProtocol));
+	s->setTransportProtocol((AXIS_PROTOCOL_TYPE)eProtocol);
 }
 
 AXISC_STORAGE_CLASS_INFO AXISC_PROTOCOL_TYPE axiscGetTransportProtocol(AXISCHANDLE stub) {
