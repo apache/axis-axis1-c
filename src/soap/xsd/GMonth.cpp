@@ -241,7 +241,7 @@ AXIS_CPP_NAMESPACE_START
         value.tm_min = 0;
         value.tm_sec = 0;
         value.tm_isdst = -1;
-#if !defined(WIN32) && !defined(AIX) && !defined( __OS400__ ) && !defined(__sun)
+#if !defined(WIN32) && !defined(AIX) && !defined( __OS400__ ) && !defined(__sun) && !defined(HPUX)
         value.tm_zone = NULL;
         value.tm_gmtoff = -1;
 #endif

@@ -21,6 +21,9 @@
         <condition property="os400">
            <os name="OS/400"/>
         </condition>
+        <condition property="hp-ux">
+           <os name="HP-UX"/>
+        </condition>
 
         <condition property="platform" value="SunOS">
            <isset property="solaris"/>
@@ -48,6 +51,9 @@
         <condition property="platform" value="OS400">
            <isset property="os400"/>
         </condition>
+        <condition property="platform" value="HP-UX">
+            <isset property="hp-ux"/>
+        </condition>
 
         <!--
             Following is needed to distinguish unix variants from OS/400
@@ -60,6 +66,7 @@
               <isset property="solaris"/>
               <isset property="aix"/>
               <isset property="linux"/>
+              <isset property="hp-ux"/>
            </or>
         </condition>
 		

@@ -185,9 +185,10 @@ void AxisTrace::traceHeader(enum AxisTraceState newState)
     text += ctime (&ltime);
     traceLine2(text.c_str());
 
-    const char *envVars[]={"PATH","LIBPATH","LD_LIBRARY_PATH","AXISCPP_DEPLOY","PWD",
-        "CLASSPATH","INCLUDE","LIB","NLSPATH","OS","COMPUTERNAME","USERNAME",
-        "HOSTNAME","LANG","LOGIN","LOGNAME","MACHTYPE","OSTYPE","UID","USER"};
+    char *envVars[]={"PATH","LIBPATH","LD_LIBRARY_PATH","SHLIB_PATH", 
+        "AXISCPP_DEPLOY","PWD","CLASSPATH","INCLUDE","LIB","NLSPATH","OS",
+        "COMPUTERNAME","USERNAME","HOSTNAME","LANG","LOGIN","LOGNAME",
+        "MACHTYPE","OSTYPE","UID","USER"};
     for (unsigned i=0; i<(sizeof(envVars)/sizeof(char*)); i++) 
 	{
         text = envVars[i];

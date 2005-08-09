@@ -77,14 +77,14 @@ xsd__int* Int::deserializeInt(const AxisChar* valueAsChar) throw (AxisSoapExcept
 
 MinInclusive* Int::getMinInclusive()
 {   
-    LONGLONG minInclusive = LONGLONGVALUE(-2147483648);
+    LONGLONG minInclusive = -LONGLONGVALUE(2147483648);
     
     return new MinInclusive(minInclusive);
 }
 
 MinExclusive* Int::getMinExclusive()
 {   
-    LONGLONG minExclusive = LONGLONGVALUE(-2147483649);
+    LONGLONG minExclusive = -LONGLONGVALUE(2147483649);
 
     return new MinExclusive(minExclusive);
 }

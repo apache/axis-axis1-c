@@ -22,6 +22,7 @@
 				  	<!-- Compilers -->
 					<compiler refid="SolarisCC"/>
 					<compiler refid="Linuxgcc"/>
+                    <compiler refid="HP-UXaC++"/>            
 					<compiler extends="VisualC++">
 						<defineset>
 							<define name="APACHE1_3_EXPORTS"/>
@@ -35,6 +36,7 @@
 					<!-- Linkers -->
 					<linker refid="SolarisLinker"/>
 					<linker refid="LinuxLinker"/>
+                    <linker refid="HP-UXLinker"/>            
 					<linker refid="VisualC++Linker"/>
 					<libset dir="${apache13.dir.server}/libexec" libs="ApacheCore" if="windows"/>
 					<libset dir="${dir.bin}" libs="${serverEngineLibraryName}"/>

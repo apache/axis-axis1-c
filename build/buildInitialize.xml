@@ -138,6 +138,23 @@
 			<includepath path="${dir.include}"/>
 		</compiler>
 
+	    <!--
+	      Definition of aC++ compile for HP-UX
+	      -->
+	    <compiler id="HP-UXaC++" name="aCC" if="hp-ux">
+	        <compilerarg value="-g" if="debug"/>
+            <compilerarg value="-AA"/>
+            <compilerarg value="+Z" location="mid"/>  
+            <compilerarg value="+W829"/>
+	    <compilerarg value="-DAportable"/> 
+	        <defineset>
+	            <define name="ENABLE_AXIS_EXCEPTION"/>
+	            <define name="HAVE_CONFIG_H"/>
+	            <define name="HPUX"/>
+	        </defineset>
+	        <includepath path="${dir.include}"/>
+	    </compiler>
+    
 	<!--
 	  Linker Definitions
 	  -->
@@ -200,6 +217,14 @@
 			<linkerarg value="-qSTGMDL=*INHERIT"/>
 		</linker>
 
+	    <!--
+	      Definition of HP-UX linker
+	      -->
+	    <linker id="HP-UXLinker" name="aCC" libtool="true" if="hp-ux">
+	        <linkerarg value="-g" if="debug"/>
+	        <syslibset libs="pthread, std_v2, Csup_v2"/>
+	    </linker>
+    
 	<!--
 	  pre-init target is now in Initialize.xml
 	  -->

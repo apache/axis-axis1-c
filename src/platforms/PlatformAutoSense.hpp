@@ -26,6 +26,8 @@
   #include "os400/PlatformSpecificOS400.hpp"
 #elif defined ( AIX )
   #include "aix/PlatformSpecificAIX.hpp"
+#elif defined ( HPUX )
+  #include "hp-ux/PlatformSpecificHP-UX.hpp"
 #else
   #include "unix/PlatformSpecificUnix.hpp"
 #endif

@@ -244,7 +244,7 @@ AXIS_CPP_NAMESPACE_START
         value.tm_mon = 0;
         value.tm_mday = 1;     /* Day of month (1 - 31) */
         value.tm_isdst = -1;
-#if !defined(WIN32) && !defined(AIX) && !defined( __OS400__ ) && !defined(__sun)
+#if !defined(WIN32) && !defined(AIX) && !defined( __OS400__ ) && !defined(__sun) && !defined(HPUX)
         value.tm_zone = NULL;
         value.tm_gmtoff = -1;
 #endif

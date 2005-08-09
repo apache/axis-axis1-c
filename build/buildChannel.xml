@@ -30,6 +30,7 @@
                <includepath path="${HTTP.transport.IPV6.dir}/include" if="windows"/>
                <compiler refid="SolarisCC"/>
                <compiler refid="Linuxgcc"/>
+               <compiler refid="HP-UXaC++"/>
                <compiler extends="VisualC++">
                   <defineset>
                      <define name="AXISTRANSPORTCHANNELDLL_EXPORTS"/>
@@ -44,6 +45,7 @@
                <!-- Linkers -->
                <linker refid="SolarisLinker"/>
                <linker refid="LinuxLinker"/>
+               <linker refid="HP-UXLinker"/>
                <linker extends="VisualC++Linker">
                   <syslibset libs="wsock32"/>
                </linker>

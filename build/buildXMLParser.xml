@@ -30,6 +30,7 @@
 					<compiler refid="SolarisCC"/>
 					<compiler refid="Linuxgcc"/>
 					<compiler refid="AIXxlc"/>
+                    <compiler refid="HP-UXaC++"/>            
 					<compiler extends="VisualC++">
 						<defineset>
 							<define name="AXISXMLPARSERXERCES_EXPORTS"/>
@@ -47,6 +48,7 @@
 					<linker refid="SolarisLinker"/>
 					<linker refid="VisualC++Linker"/>
 					<linker refid="LinuxLinker"/>
+                    <linker refid="HP-UXLinker"/>            
 					<linker refid="AIXLinker"/>
 			            <linker extends="OS400Linker">
                                  <linkerarg value="-qDUPPROC"/>
@@ -101,6 +103,7 @@
 					<compiler refid="SolarisCC"/>
 					<compiler refid="Linuxgcc"/>
 					<compiler refid="AIXxlc"/>
+                    <compiler refid="HP-UXaC++"/>            
 					<compiler extends="VisualC++">
 						<defineset>
 							<define name="AXISXMLPARSERXERCES_EXPORTS"/>
@@ -120,6 +123,7 @@
 					<linker refid="SolarisLinker"/>
 					<linker refid="VisualC++Linker"/>
 					<linker refid="LinuxLinker"/>
+                    <linker refid="HP-UXLinker"/>            
 					<linker refid="AIXLinker"/>
 			            <linker extends="OS400Linker">
                                  <linkerarg value="-qDUPPROC"/>

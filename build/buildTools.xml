@@ -95,6 +95,7 @@
 							<define name="AXISCLIENTCDLL_EXPORTS"/>
 						</defineset>
 					</compiler>
+                    <compiler refid="HP-UXaC++"/>            
 			            <compiler refid="OS400icc"/>
 					<!-- Additional compiler flag for Client library on all platforms -->
 					<defineset>
@@ -106,6 +107,7 @@
 					<linker refid="SolarisLinker"/>
 					<linker refid="LinuxLinker"/>
 					<linker refid="VisualC++Linker"/>
+                    <linker refid="HP-UXLinker"/>            
 			        <linker extends="OS400Linker">
                         <linkerarg value="-qDUPPROC"/>
                         <linkerarg value="-qDUPVAR"/>

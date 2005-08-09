@@ -16,11 +16,13 @@
 				 failonerror="false" outtype="shared" multithreaded="true">
 					<compiler refid="VisualC++"/>
 					<compiler refid="Linuxgcc"/>
+					<compiler refid="HP-UXaC++"/>
                     <compiler extends="OS400icc"> 
  			            <compilerarg value="-g"/>
                     </compiler>
 					<linker refid="VisualC++Linker"/>
 					<linker refid="LinuxLinker"/>
+					<linker refid="HP-UXLinker"/>
 		            <linker extends="OS400Linker">
   		                <linkerarg location="end" value="${dir.lib}/lib${clientLibraryName}.so"/>
 		            </linker>

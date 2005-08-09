@@ -23,6 +23,7 @@ will automatically determine the correct one to be used;
 	- build.AIX.properties
 	- build.SunOS.properties
 	- build.OS400.properties
+    - build.HP-UX.properties   
 Please use these to configure directories to suit the needs of your system.
 	</description>
 	<import file="${basedir}/build/buildInitialize.xml"/>
