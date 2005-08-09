@@ -471,6 +471,34 @@ public class MockServerThread implements Runnable
                         }
                         else
                         {
+                            // Check if the chunk data size is bigger than
+                            // expected.  If it is, then count up the number
+                            // of CR LF in the data chunk and iff this number
+                            // matches the difference is actual and expected
+                            // chunk size, then remove all CR within the data
+                            // chunk.
+                            if( iEoL - iIndex > 2)
+                            {
+                                int	iLFCount = 0;
+                                int	iLF = 0;
+                                
+                                while( (iLF = sChunkDataBlock.indexOf( sLF, iLF) + 1) > 0)
+                                {
+                                    iLFCount++;
+                                }
+                                
+                                if( iLFCount == (iEoL - iIndex - 2))
+                                {
+                                    System.out.println( "Warning - chunk data size is larger than expected.  Additional CR may have been added to LF within data chunk.  Fixed.");
+                                    
+                                    sChunkDataBlock = sChunkDataBlock.replaceAll( sCRLF, sLF);
+                                }
+                                else
+                                {
+                                    System.out.println( "Warning - chunk data size is larger than expected.  Additional CR may have been added to LF within data chunk.  Unable to fix.");
+                                }
+                            }
+                            
                             sLine = getResponseLine( sResponse, sCRLF, iIndex, iEoL);
 
                             sChunkDataBlock += sLine;
