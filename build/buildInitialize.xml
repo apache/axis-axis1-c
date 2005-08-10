@@ -164,6 +164,8 @@
 			<linkerarg value="-Qoption"/>
 			<linkerarg value="ld"/>
 			<linkerarg value="-zmuldefs"/>
+			<syslibset libs="Cstd"/>
+			<syslibset libs="socket"/>
 		</linker>
 
 		<!--
