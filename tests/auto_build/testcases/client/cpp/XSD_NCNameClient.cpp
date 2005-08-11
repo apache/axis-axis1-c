@@ -36,7 +36,7 @@ int main(int argc, char* argv[])
         char emptyNCName[1] = "";
         xsd__NCName emptyInput = new char[1];
         strcpy (emptyInput, emptyNCName);
-        char simpleNCName[25] = "A simple test message!";
+		char simpleNCName[25] = "xml.si-mple_name ";
         xsd__NCName input = new char[25];
         strcpy (input, simpleNCName);
 
@@ -78,46 +78,7 @@ int main(int argc, char* argv[])
         }
         delete [] emptyInput;
 
-        // Test non-nillable element with XML reserved characters
-        char reservedCharactersNCName[] = "<>&\"\'";
-        xsd__NCName reservedCharactersInput = reservedCharactersNCName;
-        result = ws->asNonNillableElement(reservedCharactersInput);
-        if (result)
-        {
-            if (*result)
-            {
-                cout << "non-nillable element with XML reserved characters=" << result << endl;
-            }
-            else
-            {
-                cout << "non-nillable element with XML reserved characters=<empty>" << endl;
-            }
-        }
-        else
-        {
-            cout << "non-nillable element with XML reserved characters=<nil>" << endl;
-        }
-
-        // Test non-nillable element with XML reserved characters
-        char whitespaceNCName[] = "  \t\r\nsome text \t\r\nmore text \t\r\n";
-        xsd__NCName whitespaceInput = whitespaceNCName;
-        result = ws->asNonNillableElement(whitespaceInput);
-        if (result)
-        {
-            if (*result)
-            {
-                cout << "non-nillable element with whitespace characters=\"" << result << "\"" << endl;
-            }
-            else
-            {
-                cout << "non-nillable element with whitespace characters=<empty>" << endl;
-            }
-        }
-        else
-        {
-            cout << "non-nillable element with whitespace characters=<nil>" << endl;
-        }
-
+        
         // Test nillable element, with a value
         input = new char[25];
         strcpy (input, simpleNCName);

@@ -1,12 +1,78 @@
 HTTP/1.1 200 OK
 Server: WebSphere Application Server/5.1
 Content-Type: text/xml; charset=utf-8
-Content-Language: en-GB
+Content-Language: en-US
 Transfer-Encoding: chunked
 
 ###
 <?xml version="1.0" encoding="utf-8"?>
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header /><soapenv:Body><asNonNillableElementResponse xmlns="http://xsd_NCName.test.apache.org"><nonNillableElement>A simple test message!</nonNillableElement></asNonNillableElementResponse></soapenv:Body></soapenv:Envelope>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header/><soapenv:Body><asNonNillableElementResponse xmlns="http://xsd_NCName.test.apache.org"><nonNillableElement xmlns="">xml.si-mple_name</nonNillableElement></asNonNillableElementResponse></soapenv:Body></soapenv:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-US
+Transfer-Encoding: chunked
+
+###
+<?xml version="1.0" encoding="utf-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header/><soapenv:Body><asNonNillableElementResponse xmlns="http://xsd_NCName.test.apache.org"><nonNillableElement xmlns=""/></asNonNillableElementResponse></soapenv:Body></soapenv:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-US
+Transfer-Encoding: chunked
+
+###
+<?xml version="1.0" encoding="utf-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header/><soapenv:Body><asNillableElementResponse xmlns="http://xsd_NCName.test.apache.org"><nillableElement xmlns="">xml.si-mple_name</nillableElement></asNillableElementResponse></soapenv:Body></soapenv:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-US
+Transfer-Encoding: chunked
+
+###
+<?xml version="1.0" encoding="utf-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header/><soapenv:Body><asNillableElementResponse xmlns="http://xsd_NCName.test.apache.org"><nillableElement xmlns=""/></asNillableElementResponse></soapenv:Body></soapenv:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-US
+Transfer-Encoding: chunked
+
+###
+<?xml version="1.0" encoding="utf-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header/><soapenv:Body><asNillableElementResponse xmlns="http://xsd_NCName.test.apache.org"><nillableElement xsi:nil="true" xmlns=""/></asNillableElementResponse></soapenv:Body></soapenv:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-US
+Transfer-Encoding: chunked
+
+###
+<?xml version="1.0" encoding="utf-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header/><soapenv:Body><asRequiredAttributeResponse xmlns="http://xsd_NCName.test.apache.org"><RequiredAttributeElement requiredAttribute="xml.si-mple_name" xmlns=""/></asRequiredAttributeResponse></soapenv:Body></soapenv:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-US
+Transfer-Encoding: chunked
+
+###
+<?xml version="1.0" encoding="utf-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header/><soapenv:Body><asRequiredAttributeResponse xmlns="http://xsd_NCName.test.apache.org"><RequiredAttributeElement requiredAttribute="" xmlns=""/></asRequiredAttributeResponse></soapenv:Body></soapenv:Envelope>
 0
 
 HTTP/1.1 200 OK
@@ -17,7 +83,7 @@ Transfer-Encoding: chunked
 
 ###
 <?xml version="1.0" encoding="utf-8"?>
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header /><soapenv:Body><asNonNillableElementResponse xmlns="http://xsd_NCName.test.apache.org"><nonNillableElement></nonNillableElement></asNonNillableElementResponse></soapenv:Body></soapenv:Envelope>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header /><soapenv:Body><asArrayResponse xmlns="http://xsd_NCName.test.apache.org"><arrayElement>xml.si-mple_name!</arrayElement><arrayElement>xml.si-mple_name!</arrayElement></asArrayResponse></soapenv:Body></soapenv:Envelope>
 0
 
 HTTP/1.1 200 OK
@@ -28,94 +94,5 @@ Transfer-Encoding: chunked
 
 ###
 <?xml version="1.0" encoding="utf-8"?>
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header /><soapenv:Body><asNonNillableElementResponse xmlns="http://xsd_NCName.test.apache.org"><nonNillableElement>&lt;&gt;&amp;&quot;&apos;</nonNillableElement></asNonNillableElementResponse></soapenv:Body></soapenv:Envelope>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header /><soapenv:Body><asComplexTypeResponse xmlns="http://xsd_NCName.test.apache.org"><SimpleComplexType><complexTypeElement>xml.si-mple_name!</complexTypeElement></SimpleComplexType></asComplexTypeResponse></soapenv:Body></soapenv:Envelope>
 0
-
-HTTP/1.1 200 OK
-Server: WebSphere Application Server/5.1
-Content-Type: text/xml; charset=utf-8
-Content-Language: en-GB
-Transfer-Encoding: chunked
-
-###
-<?xml version="1.0" encoding="utf-8"?>
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header /><soapenv:Body><asNonNillableElementResponse xmlns="http://xsd_NCName.test.apache.org"><nonNillableElement>some text more text</nonNillableElement></asNonNillableElementResponse></soapenv:Body></soapenv:Envelope>
-0
-
-HTTP/1.1 200 OK
-Server: WebSphere Application Server/5.1
-Content-Type: text/xml; charset=utf-8
-Content-Language: en-GB
-Transfer-Encoding: chunked
-
-###
-<?xml version="1.0" encoding="utf-8"?>
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header /><soapenv:Body><asNillableElementResponse xmlns="http://xsd_NCName.test.apache.org"><nillableElement>A simple test message!</nillableElement></asNillableElementResponse></soapenv:Body></soapenv:Envelope>
-0
-
-HTTP/1.1 200 OK
-Server: WebSphere Application Server/5.1
-Content-Type: text/xml; charset=utf-8
-Content-Language: en-GB
-Transfer-Encoding: chunked
-
-###
-<?xml version="1.0" encoding="utf-8"?>
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header /><soapenv:Body><asNillableElementResponse xmlns="http://xsd_NCName.test.apache.org"><nillableElement></nillableElement></asNillableElementResponse></soapenv:Body></soapenv:Envelope>
-0
-
-HTTP/1.1 200 OK
-Server: WebSphere Application Server/5.1
-Content-Type: text/xml; charset=utf-8
-Content-Language: en-GB
-Transfer-Encoding: chunked
-
-###
-<?xml version="1.0" encoding="utf-8"?>
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header /><soapenv:Body><asNillableElementResponse xmlns="http://xsd_NCName.test.apache.org"><nillableElement xsi:nil="true" /></asNillableElementResponse></soapenv:Body></soapenv:Envelope>
-0
-
-HTTP/1.1 200 OK
-Server: WebSphere Application Server/5.1
-Content-Type: text/xml; charset=utf-8
-Content-Language: en-GB
-Transfer-Encoding: chunked
-
-###
-<?xml version="1.0" encoding="utf-8"?>
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header /><soapenv:Body><asRequiredAttributeResponse xmlns="http://xsd_NCName.test.apache.org"><RequiredAttributeElement requiredAttribute="A simple test message!" /></asRequiredAttributeResponse></soapenv:Body></soapenv:Envelope>
-0
-
-HTTP/1.1 200 OK
-Server: WebSphere Application Server/5.1
-Content-Type: text/xml; charset=utf-8
-Content-Language: en-GB
-Transfer-Encoding: chunked
-
-###
-<?xml version="1.0" encoding="utf-8"?>
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header /><soapenv:Body><asRequiredAttributeResponse xmlns="http://xsd_NCName.test.apache.org"><RequiredAttributeElement requiredAttribute="" /></asRequiredAttributeResponse></soapenv:Body></soapenv:Envelope>
-0
-
-HTTP/1.1 200 OK
-Server: WebSphere Application Server/5.1
-Content-Type: text/xml; charset=utf-8
-Content-Language: en-GB
-Transfer-Encoding: chunked
-
-###
-<?xml version="1.0" encoding="utf-8"?>
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header /><soapenv:Body><asArrayResponse xmlns="http://xsd_NCName.test.apache.org"><arrayElement>A simple test message!</arrayElement><arrayElement>A simple test message!</arrayElement></asArrayResponse></soapenv:Body></soapenv:Envelope>
-0
-
-HTTP/1.1 200 OK
-Server: WebSphere Application Server/5.1
-Content-Type: text/xml; charset=utf-8
-Content-Language: en-GB
-Transfer-Encoding: chunked
-
-###
-<?xml version="1.0" encoding="utf-8"?>
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header /><soapenv:Body><asComplexTypeResponse xmlns="http://xsd_NCName.test.apache.org"><SimpleComplexType><complexTypeElement>A simple test message!</complexTypeElement></SimpleComplexType></asComplexTypeResponse></soapenv:Body></soapenv:Envelope>
-0
-

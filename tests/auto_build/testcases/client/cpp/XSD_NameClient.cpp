@@ -36,7 +36,8 @@ int main(int argc, char* argv[])
         char emptyName[1] = "";
         xsd__Name emptyInput = new char[1];
         strcpy (emptyInput, emptyName);
-        char simpleName[25] = "A simple test message!";
+        //char simpleName[25] = "A simple test message!";
+        char simpleName[25] = "xml.si-mple_nam:e";
         xsd__Name input = new char[25];
         strcpy (input, simpleName);
 
@@ -77,46 +78,6 @@ int main(int argc, char* argv[])
             cout << "empty non-nillable element=<nil>" << endl;
         }
         delete [] emptyInput;
-
-        // Test non-nillable element with XML reserved characters
-        char reservedCharactersName[] = "<>&\"\'";
-        xsd__Name reservedCharactersInput = reservedCharactersName;
-        result = ws->asNonNillableElement(reservedCharactersInput);
-        if (result)
-        {
-            if (*result)
-            {
-                cout << "non-nillable element with XML reserved characters=" << result << endl;
-            }
-            else
-            {
-                cout << "non-nillable element with XML reserved characters=<empty>" << endl;
-            }
-        }
-        else
-        {
-            cout << "non-nillable element with XML reserved characters=<nil>" << endl;
-        }
-
-        // Test non-nillable element with XML reserved characters
-        char whitespaceName[] = "  \t\r\nsome text \t\r\nmore text \t\r\n";
-        xsd__Name whitespaceInput = whitespaceName;
-        result = ws->asNonNillableElement(whitespaceInput);
-        if (result)
-        {
-            if (*result)
-            {
-                cout << "non-nillable element with whitespace characters=\"" << result << "\"" << endl;
-            }
-            else
-            {
-                cout << "non-nillable element with whitespace characters=<empty>" << endl;
-            }
-        }
-        else
-        {
-            cout << "non-nillable element with whitespace characters=<nil>" << endl;
-        }
 
         // Test nillable element, with a value
         input = new char[25];
@@ -227,7 +188,7 @@ int main(int argc, char* argv[])
         }
         delete requiredAttributeResult;
 
-/* Optional Attributes currently unsupported by WSDL2Ws
+/*  Optional Attributes currently unsupported by WSDL2Ws
  * Exact coding of this section may change depending on chosen implementation
         // Test optional attribute, with a value
         input = new char[25];
@@ -298,7 +259,7 @@ int main(int argc, char* argv[])
 */
 
         // Test array
-        xsd__Name_Array arrayInput;
+         xsd__Name_Array arrayInput;
         arrayInput.m_Array = new xsd__Name[2];
         arrayInput.m_Size = 2;
         for (int inputIndex=0 ; inputIndex < 2 ; inputIndex++)
@@ -329,7 +290,7 @@ int main(int argc, char* argv[])
             }
         }
         delete [] arrayInput.m_Array;
-        delete [] arrayResult.m_Array;
+        delete [] arrayResult.m_Array;  
 
         // Test complex type
         input = new char[25];
@@ -352,7 +313,7 @@ int main(int argc, char* argv[])
         {
             cout << "within complex type=<nil>" << endl;
         }
-        delete complexTypeResult;
+        delete complexTypeResult;  
 
         // Tests now complete
 

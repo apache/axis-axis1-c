@@ -1,14 +1,12 @@
-non-nillable element=A simple test message!
+non-nillable element=xml.si-mple_nam:e
 empty non-nillable element=<empty>
-non-nillable element with XML reserved characters=<>&"'
-non-nillable element with whitespace characters="some text more text"
-nillable element=A simple test message!
+nillable element=xml.si-mple_nam:e
 empty nillable element=<empty>
 nil element=<nil>
-required attribute=A simple test message!
+required attribute=xml.si-mple_nam:e
 empty required attribute=<empty>
 array of 2 elements
-  element[0]=A simple test message!
-  element[1]=A simple test message!
-within complex type=A simple test message!
+  element[0]=xml.si-mple_nam:e
+  element[1]=xml.si-mple_nam:e
+within complex type=xml.si-mple_nam:e
 ---------------------- TEST COMPLETE -----------------------------
