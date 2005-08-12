@@ -75,7 +75,7 @@ const string& AxisMessage::getMessage(int iExceptionCode)
             m_sMessage = "AxisWsddException:Requested method is not allowed";
             break;
         case CLIENT_WSDD_PARA_TYPE_MISMATCH:
-            m_sMessage = "AxisWsddException:Parameter type mismatch";
+            m_sMessage = "AxisWsddException: Missing or incorrect operationRequestMap entry in the wsdd file";
             break;
         case SERVER_WSDD_NO_HANDLERS_CONFIGURED:
             m_sMessage = "AxisWsddException:No handlers configured in" \
