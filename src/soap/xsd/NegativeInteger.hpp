@@ -41,7 +41,7 @@ public:
      * Constructor providing a value for later serialization
      * @param value The value to be serialized
      */
-    NegativeInteger(const xsd__negativeInteger* value);
+    NegativeInteger(const xsd__negativeInteger* value) throw (AxisSoapException);
 
     /**
      * Get the xsd type of this simple type.

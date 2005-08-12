@@ -35,13 +35,13 @@ public:
     /**
      * Constructor
      */
-    PositiveInteger() throw (AxisSoapException);
+    PositiveInteger();
 
     /**
      * Constructor providing a value for later serialization
      * @param value The value to be serialized
      */
-    PositiveInteger(const xsd__positiveInteger* value);
+    PositiveInteger(const xsd__positiveInteger* value) throw (AxisSoapException);
 
     /**
      * Get the xsd type of this simple type.
