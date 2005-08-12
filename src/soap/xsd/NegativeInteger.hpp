@@ -35,7 +35,7 @@ public:
     /**
      * Constructor
      */
-    NegativeInteger();
+    NegativeInteger() throw (AxisSoapException);
     
     /**
      * Constructor providing a value for later serialization

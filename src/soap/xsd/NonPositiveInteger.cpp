@@ -21,10 +21,12 @@ NonPositiveInteger::NonPositiveInteger()
 {
 }
 
-NonPositiveInteger::NonPositiveInteger(const xsd__nonPositiveInteger* value)
+NonPositiveInteger::NonPositiveInteger(const xsd__nonPositiveInteger* value) throw (AxisSoapException)
 {
     if (value)
     {
+        if((*value) > 0) // the value must be non positive, hence validate and fix
+            throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR, "NonPositiveInteger value must be non positive");
         setNil(false);
         serialize(value);
     }

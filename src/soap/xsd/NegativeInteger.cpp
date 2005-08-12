@@ -20,10 +20,12 @@ AXIS_CPP_NAMESPACE_START
 NegativeInteger::NegativeInteger()
 {}
 
-NegativeInteger::NegativeInteger(const xsd__negativeInteger* value)
+NegativeInteger::NegativeInteger(const xsd__negativeInteger* value) throw (AxisSoapException)
 {
     if (value)
     {
+        if((*value) > -1) // the value must be minus one or less, hence validate and fix
+            throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR, "PositiveInteger value must be minus one or less");
         setNil(false);
         serialize(value);
     }
