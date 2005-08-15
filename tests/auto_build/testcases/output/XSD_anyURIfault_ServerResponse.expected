@@ -1,0 +1,22 @@
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-US
+Transfer-Encoding: chunked
+
+###
+<?xml version="1.0" encoding="utf-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header/><soapenv:Body><asNonNillableElementResponse xmlns="http://xsd_anyURI.test.apache.org"><nonNillableElement xmlns="">http://www.xyz.com</nonNillableElement></asNonNillableElementResponse></soapenv:Body></soapenv:Envelope>
+0
+
+HTTP/1.1 500 Internal Server Error
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-US
+Transfer-Encoding: chunked
+
+###
+<?xml version="1.0" encoding="utf-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header/><soapenv:Body><soapenv:Fault><faultcode xmlns="">Server.generalException</faultcode><faultstring xmlns="">com.ibm.ws.webservices.engine.types.URI$MalformedURIException: Cannot initialize URI with empty parameters. To see the message containing the parsing error in the log, either enable web service engine tracing or set MessageContext.setHighFidelity(true).</faultstring><detail xmlns=""/></soapenv:Fault></soapenv:Body></soapenv:Envelope>
+0
+
