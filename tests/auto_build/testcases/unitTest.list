@@ -73,5 +73,6 @@ XSD_unsignedByte.xml
 XSD_positiveInteger.xml
 XSD_anyURI.xml
 XSD_anyURI2.xml
+# XSD_anyURIfault.xml not working at the moment
 XSD_QName.xml
 XSD_NOTATION.xml
