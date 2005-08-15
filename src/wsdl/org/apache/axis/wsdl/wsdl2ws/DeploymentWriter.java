@@ -38,11 +38,17 @@ public class DeploymentWriter extends WsddWriter {
 	public void writeSource() throws WrapperFault {
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(getFilePath(this.wscontext, "deploy"), false));
+			String os = java.lang.System.getProperty("os.name");
+			String lib = "";
+			if ((0 == os.compareTo("Windows")) || (0 == os.compareTo("Windows XP")))
+				lib = ".dll";
+			else
+				lib = ".so";
 			writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 			writer.write("<deployment xmlns=\"http://xml.apache.org/axis/wsdd/\""+
 				" xmlns:"+this.providerLang+"=\"http://xml.apache.org/axis/wsdd/providers/"+this.providerLang+"\">\n");
 			writer.write("\t<service name=\""+this.servicename+"\" provider=\""+this.providerLang+":"+this.providerStyle+"\" description=\""+this.description+"\">\n");
-			writer.write("\t\t<parameter name=\"className\" value=\"/user/local/apache/axis/"+this.servicename+".so\"/>\n");
+			writer.write("\t\t<parameter name=\"className\" value=\"/user/local/apache/axis/"+this.servicename + lib + "\"/>\n");
 			writer.write("\t\t<parameter name=\"allowedMethods\" value=\"");
 			Iterator it = this.allowedmethods.iterator();
 			while (it.hasNext()){
