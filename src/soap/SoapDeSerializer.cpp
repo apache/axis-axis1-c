@@ -1257,20 +1257,9 @@ const char *
 SoapDeSerializer::getCmplxFaultObjectName ()
 {
     
-	if (m_pNode)
+	if (!m_pNode)
 	{
-		/*
-		 * Just to skip <appSpecific> tag
-		 */
-		m_pNode = m_pParser->next ();
-	}
-
-	/* if there is an unprocessed node that may be one left from
-     * last array deserialization 
-     */
-    
-	else
-	{
+		
 		// Skip the faultdetail tag
 		m_pParser->next ();
 	}
@@ -1900,6 +1889,12 @@ void SoapDeSerializer::getElement (const AxisChar * pName,
 		}
 		if (0 == strcmp (pName, m_pNode->m_pchNameOrValue))
 		{
+			
+			if (0 == strcmp(pName,"detail") )
+			{
+				m_pNode = m_pParser->next ();
+			}
+			
 			for (int i = 0; m_pNode->m_pchAttributes[i] && !bNillFound; i += 3)
 			{
 				string sLocalName = m_pNode->m_pchAttributes[i];
@@ -1920,6 +1915,7 @@ void SoapDeSerializer::getElement (const AxisChar * pName,
 				if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 				{
 					const AxisChar* elementValue = m_pNode->m_pchNameOrValue;
+										
 					// FJP Added this code for fault finding.  If detail is
 					//     followed by CR/LF or CR/LF then CR/LF then assume that
 					//     it is not a simple object.  As added protection against
@@ -1990,7 +1986,7 @@ void SoapDeSerializer::getElement (const AxisChar * pName,
     {
 	 //DOC_LITERAL	
 
-     if (!m_pNode)
+    if (!m_pNode)
         /* if there is an unprocessed node that may be one left from last 
          * array deserialization
          */
@@ -2003,6 +1999,14 @@ void SoapDeSerializer::getElement (const AxisChar * pName,
 	 if (0 == strcmp (pName, m_pNode->m_pchNameOrValue))
      {
         
+	
+		
+		if (0 == strcmp(pName,"detail") )
+		{
+			m_pNode = m_pParser->next ();
+		}
+		
+			
 		bool    bNillFound = false;
         for (int i = 0; m_pNode->m_pchAttributes[i] && !bNillFound; i += 3)
         {
@@ -2021,8 +2025,7 @@ void SoapDeSerializer::getElement (const AxisChar * pName,
         {
             
 			const AxisChar* elementValue = m_pNode->m_pchNameOrValue;
-            
-			// FJP Added this code for fault finding.  If detail is
+           	// FJP Added this code for fault finding.  If detail is
             //     followed by CR/LF or CR/LF then CR/LF then assume that
             //     it is not a simple object.  As added protection against
             //     false findings, the namespace has been set to an invalid
@@ -2032,8 +2035,8 @@ void SoapDeSerializer::getElement (const AxisChar * pName,
                 if (*pNamespace == ' ')
                 {
                     bool bReturn = false;
-        
-                    if (strlen (elementValue) == 0)
+
+					if (strlen (elementValue) == 0)
                     {
                         bReturn = true;
                     }
@@ -2055,7 +2058,8 @@ void SoapDeSerializer::getElement (const AxisChar * pName,
                     }
                 }
             }
-            pSimpleType->deserialize(elementValue);
+            
+			pSimpleType->deserialize(elementValue);
             m_pNode = m_pParser->next ();   /* skip end element node too */
             m_pNode = NULL;
             /* this is important in doc/lit style when deserializing 
