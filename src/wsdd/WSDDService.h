@@ -37,8 +37,6 @@ public:
     const AxisChar* getServiceName() const;
     bool isAllowedMethod(const AxisChar* sMethodName) const;
     void addAllowedMethod(const AxisChar* sMethodName);
-    void addOperationRequestMapping(AxisString operation, AxisString request);
-    const char* getOperationForRequest(const char* request) const;
     const WSDDHandlerList* getResponseFlowHandlers() const;
     void addHandler(bool bRequestFlow, WSDDHandler* pHandler);
     int removeHandler(bool bRequestFlow, WSDDHandler* pHandler);
@@ -56,7 +54,6 @@ private:
     WSDDHandlerList* m_RequestHandlers;
     WSDDHandlerList* m_ResponseHandlers;
     list<AxisString> m_AllowedRoles;
-    map<AxisString, AxisString> operationRequestMap;
 };
 
 typedef map<AxisString, WSDDService*> WSDDServiceMap;

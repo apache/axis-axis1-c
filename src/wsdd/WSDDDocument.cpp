@@ -458,10 +458,6 @@ void WSDDDocument::getParameters(WSDDLevels eElementType,
         {
             addAllowedMethodsToService(pcValue);
         }
-        else if (0 == strcmp(pcName, kw_operation_request_map))
-        {
-            addOperationToRequestMappingsToService( pcValue );
-        }
         else if(0 == strcmp(pcName, kw_cn))
         {
             m_pService->setLibName(pcValue);
@@ -543,30 +539,6 @@ void WSDDDocument::addAllowedMethodsToService(const AxisXMLCh* pcValue)
         m_pService->addAllowedMethod("*");
     }
 }
-
-void WSDDDocument::addOperationToRequestMappingsToService(const AxisXMLCh* pcValue)
-{
-    AxisString sValue = pcValue;
-    unsigned int prepos = 0, pos = 0;
-        do
-        {
-            pos = sValue.find(METHODNAME_SEPARATOR, prepos);
-            if (AxisString::npos == pos) // Handle the case of no trailing space in AllowedMethods
-                pos = sValue.size();
-            if (pos <= prepos) break;
-            AxisString operationRequestPair = sValue.substr(prepos, pos - prepos);
-            unsigned int seperatorPoint = operationRequestPair.find(TAG_NAME_SEPARATOR, 0 );
-            if (AxisString::npos != seperatorPoint)
-            {
-                AxisString operationName = operationRequestPair.substr(0, seperatorPoint );
-                AxisString requestName = operationRequestPair.substr( seperatorPoint + 1, operationRequestPair.length() );
-                m_pService->addOperationRequestMapping(operationName, requestName);
-            }
-            prepos = pos + 1;
-        } while (true);
-}
-
-
 
 void WSDDDocument::startElement(const AnyElement* pEvent)
 {

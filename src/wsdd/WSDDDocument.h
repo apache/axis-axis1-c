@@ -92,7 +92,6 @@ private:
     void getParameters(WSDDLevels eElementType, const AnyElement* pEvent);
     void addAllowedRolesToService(const AxisXMLCh* pcValue);
     void addAllowedMethodsToService(const AxisXMLCh* pcValue);
-    void addOperationToRequestMappingsToService(const AxisXMLCh* pcValue);
     int parseDocument(const AxisChar* pcWSDDFileName);
 protected: 
     bool m_bFatalError;
