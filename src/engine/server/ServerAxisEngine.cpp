@@ -28,7 +28,8 @@
 extern AXIS_CPP_NAMESPACE_PREFIX HandlerPool *g_pHandlerPool;
 extern AXIS_CPP_NAMESPACE_PREFIX WSDDDeployment *g_pWSDDDeployment;
 
-AXIS_CPP_NAMESPACE_START ServerAxisEngine::ServerAxisEngine ()
+AXIS_CPP_NAMESPACE_START
+ServerAxisEngine::ServerAxisEngine ()
 {
     m_pWebService = NULL;
 }
@@ -204,18 +205,8 @@ ServerAxisEngine::process (SOAPTransport * pStream)
 		sOperation = sOperation.substr (0, sOperation.length () - 1);
 	    }
 
-	    const char *cpOperationName =
-		m_pService->getOperationForRequest (sOperation.c_str ());
-	    if (!cpOperationName)
-	    {
-		AXISTRACE1
-		    ("CLIENT_WSDD_PARA_TYPE_MISMATCH - Missing or incorrect operationRequestMap entry in the wsdd file",
-		     CRITICAL);
-		throw AxisWsddException (CLIENT_WSDD_PARA_TYPE_MISMATCH);
-		break;
-	    }
-
-	    AxisString operationToInvoke = cpOperationName;
+	    //AxisString operationToInvoke = cpOperationName;
+	    AxisString operationToInvoke = sOperation;
 
 	    m_pMsgData->setOperationName (operationToInvoke.c_str ());
 
