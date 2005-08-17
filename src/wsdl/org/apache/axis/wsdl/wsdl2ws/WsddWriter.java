@@ -39,8 +39,6 @@ public class WsddWriter implements SourceWriter
     protected String providerStyle = null;
     protected String description = null;
     protected Vector allowedmethods = new Vector();
-    protected Vector requestNames = new Vector();
-    protected Vector responseNames = new Vector();
     WebServiceContext wscontext = null;
     public WsddWriter(WebServiceContext wscontext) throws WrapperFault
     {
@@ -72,8 +70,6 @@ public class WsddWriter implements SourceWriter
         {
             minfo = (MethodInfo) methods.get(i);
             allowedmethods.add(minfo.getMethodname());
-            requestNames.add( minfo.getInputMessage().getLocalPart() );
-            responseNames.add( minfo.getOutputMessage().getLocalPart() );
         }
 
     }
