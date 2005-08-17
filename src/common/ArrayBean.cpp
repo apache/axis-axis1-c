@@ -287,7 +287,11 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
                 break;
 //FJP ^ Added
             case XSD_INTEGER:
-            case XSD_DURATION:		
+            case XSD_DURATION:
+			case XSD_NEGATIVEINTEGER:
+			case XSD_NONNEGATIVEINTEGER:
+			case XSD_NONPOSITIVEINTEGER:
+			case XSD_POSITIVEINTEGER:
             {
                 long** p = (long**)m_value.sta;
                 for (int ix=0;ix<m_nSize;ix++)
@@ -342,10 +346,22 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
                 }
             }
                 break;
+			case XSD_ENTITIES:
+			case XSD_ENTITY:
+			case XSD_ID:
+			case XSD_IDREF:
+			case XSD_IDREFS:
+			case XSD_NCNAME:
+			case XSD_NMTOKEN:
+			case XSD_NMTOKENS:
+			case XSD_NAME:
+			case XSD_TOKEN:
+			case XSD_LANGUAGE: 
             case XSD_STRING:
             case XSD_ANYURI:
             case XSD_QNAME:
-            case XSD_NOTATION:			
+            case XSD_NOTATION:
+			case XSD_NORMALIZEDSTRING:
             {
                 AxisChar** p = (AxisChar**)m_value.sta;
                 for (int ix=0;ix<m_nSize;ix++)
