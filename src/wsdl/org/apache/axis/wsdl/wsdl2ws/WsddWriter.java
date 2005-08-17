@@ -70,6 +70,7 @@ public class WsddWriter implements SourceWriter
         {
             minfo = (MethodInfo) methods.get(i);
             allowedmethods.add(minfo.getMethodname());
+            allowedmethods.add(minfo.getInputMessage().getLocalPart());
         }
 
     }
