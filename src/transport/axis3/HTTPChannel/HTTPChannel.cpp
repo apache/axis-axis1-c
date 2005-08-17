@@ -285,9 +285,9 @@ const IChannel & HTTPChannel::operator << (const char * msg)
     int nByteSent;
 
 #ifdef __OS400__
-    if( (nByteSent = send( m_Sock, (char *)msg, size, MSG_DONTROUTE)) == SOCKET_ERROR)
+    if( (nByteSent = send( m_Sock, (char *)msg, size, 0)) == SOCKET_ERROR)
 #else
-    if( (nByteSent = send( m_Sock, msg, size, MSG_DONTROUTE)) == SOCKET_ERROR)
+    if( (nByteSent = send( m_Sock, msg, size, 0)) == SOCKET_ERROR)
 #endif
     {
         // Output streaming error while writing data.  Close the channel and
