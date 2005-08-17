@@ -43,7 +43,6 @@ int
 ServerAxisEngine::process (SOAPTransport * pStream)
 {
     int Status = 0;
-    //const WSDDService* pService = NULL;
     int nSoapVersion;
     try
     {
@@ -72,7 +71,6 @@ ServerAxisEngine::process (SOAPTransport * pStream)
 		m_pSZ->setSoapVersion ((SOAP_VERSION) nSoapVersion);
 		AXISTRACE1 ("CLIENT_SOAP_SOAP_CONTENT_ERROR", CRITICAL);
 		throw AxisSoapException (CLIENT_SOAP_SOAP_CONTENT_ERROR);
-		//m_pSZ->setSoapFault (SoapFault::getSoapFault (CLIENT_SOAP_SOAPCONTENTERROR));
 		break;		// do .. while(0)
 	    }
 
@@ -82,7 +80,6 @@ ServerAxisEngine::process (SOAPTransport * pStream)
 	    {
 		AXISTRACE1 ("CLIENT_SOAP_SOAP_CONTENT_ERROR", CRITICAL);
 		throw AxisSoapException (CLIENT_SOAP_SOAP_CONTENT_ERROR);
-		//m_pSZ->setSoapFault (SoapFault::getSoapFault (CLIENT_SOAP_SOAPCONTENTERROR));
 		break;		// do .. while(0)
 	    }
 	    AxisString service = (cService == NULL) ? "" : cService;
@@ -96,16 +93,15 @@ ServerAxisEngine::process (SOAPTransport * pStream)
 		m_pSZ->setSoapVersion ((SOAP_VERSION) nSoapVersion);
 		AXISTRACE1 ("CLIENT_SOAP_SOAP_ACTION_EMTPY", CRITICAL);
 		throw AxisSoapException (CLIENT_SOAP_SOAP_ACTION_EMTPY);
-		//m_pSZ->setSoapFault (SoapFault::getSoapFault (CLIENT_SOAP_SOAPACTIONEMTPY));
 		break;		// do .. while(0)
 	    }
-	    /* if there are quotes remove them. */
+	    // if there are quotes remove them. 
 	    if (service.find ('\"') != string::npos)
 	    {
 		service = service.substr (1, service.length () - 2);
 	    }
 
-	    /* get service description object from the WSDD Deployment object */
+	    // get service description object from the WSDD Deployment object 
 	    m_pService = g_pWSDDDeployment->getService (service.c_str ());
 	    if (!m_pService)
 	    {
@@ -116,7 +112,6 @@ ServerAxisEngine::process (SOAPTransport * pStream)
 		m_pSZ->setSoapVersion ((SOAP_VERSION) nSoapVersion);
 		AXISTRACE1 ("CLIENT_WSDD_SERVICE_NOT_FOUND", CRITICAL);
 		throw AxisWsddException (CLIENT_WSDD_SERVICE_NOT_FOUND);
-		//m_pSZ->setSoapFault (SoapFault::getSoapFault (CLIENT_WSDD_SERVICENOTFOUND));
 		break;		// do .. while(0)
 	    }
 
@@ -151,16 +146,14 @@ ServerAxisEngine::process (SOAPTransport * pStream)
 	    {
 		AXISTRACE1 ("CLIENT_SOAP_MESSAGE_INCOMPLETE", CRITICAL);
 		throw AxisSoapException (CLIENT_SOAP_MESSAGE_INCOMPLETE);
-		//m_pSZ->setSoapFault (SoapFault::getSoapFault(CLIENT_SOAP_MESSAGEINCOMPLETE));
 		break;		// do .. while(0)
 	    }
 
-	    if (nSoapVersion == VERSION_LAST)	/* version not supported */
+	    if (nSoapVersion == VERSION_LAST)	// version not supported 
 	    {
 		m_pSZ->setSoapVersion (SOAP_VER_1_2);
 		AXISTRACE1 ("SOAP_VERSION_MISMATCH", CRITICAL);
 		throw AxisSoapException (SOAP_VERSION_MISMATCH);
-		//m_pSZ->setSoapFault (SoapFault::getSoapFault (SOAP_VERSIONMISMATCH));
 		break;		// do .. while(0)         
 	    }
 
@@ -170,7 +163,6 @@ ServerAxisEngine::process (SOAPTransport * pStream)
 	    {
 		AXISTRACE1 ("CLIENT_SOAP_SOAP_CONTENT_ERROR", CRITICAL);
 		throw AxisSoapException (CLIENT_SOAP_SOAP_CONTENT_ERROR);
-		//m_pSZ->setSoapFault (SoapFault::getSoapFault (CLIENT_SOAP_SOAPCONTENTERROR));
 		break;		// do .. while(0)
 	    }
 
@@ -189,14 +181,13 @@ ServerAxisEngine::process (SOAPTransport * pStream)
 		throw AxisSoapException (CLIENT_SOAP_SOAP_CONTENT_ERROR);
 		break;		// do .. while(0)                         
 	    }
-	    //AxisString sOperation = pStream->getTransportProperty(OPERATION_NAME);
+
 	    AxisString sOperation = m_pDZ->getMethodNameToInvoke ();
 
 	    if (sOperation.empty ())
 	    {
 		AXISTRACE1 ("CLIENT_SOAP_NO_SOAP_METHOD", CRITICAL);
 		throw AxisSoapException (CLIENT_SOAP_NO_SOAP_METHOD);
-		//m_pSZ->setSoapFault (SoapFault::getSoapFault (CLIENT_SOAP_NOSOAPMETHOD));
 		break;		// do .. while(0)
 	    }
 	    /* remove any quotes in the operation name */
@@ -205,7 +196,6 @@ ServerAxisEngine::process (SOAPTransport * pStream)
 		sOperation = sOperation.substr (0, sOperation.length () - 1);
 	    }
 
-	    //AxisString operationToInvoke = cpOperationName;
 	    AxisString operationToInvoke = sOperation;
 
 	    m_pMsgData->setOperationName (operationToInvoke.c_str ());
@@ -222,8 +212,6 @@ ServerAxisEngine::process (SOAPTransport * pStream)
 		    throw
 			AxisEngineException
 			(SERVER_ENGINE_COULD_NOT_LOAD_SRV);
-		    //m_pSZ->
-		    //    setSoapFault(SoapFault::getSoapFault(SERVER_ENGINE_COULDNOTLOADSRV));
 		    break;	// do .. while(0)
 		}
 
@@ -248,8 +236,6 @@ ServerAxisEngine::process (SOAPTransport * pStream)
 		{
 		    AXISTRACE1 ("CLIENT_SOAP_SOAP_CONTENT_ERROR", CRITICAL);
 		    throw AxisSoapException (CLIENT_SOAP_SOAP_CONTENT_ERROR);
-		    //m_pSZ->
-		    //    setSoapFault(SoapFault::getSoapFault(CLIENT_SOAP_SOAPCONTENTERROR));
 		    break;	// do .. while(0)
 		}
 	    }
@@ -257,7 +243,6 @@ ServerAxisEngine::process (SOAPTransport * pStream)
 	    {
 		AXISTRACE1 ("CLIENT_WSDD_METHOD_NOT_ALLOWED", CRITICAL);
 		throw AxisWsddException (CLIENT_WSDD_METHOD_NOT_ALLOWED);
-		//m_pSZ->setSoapFault (SoapFault::getSoapFault (CLIENT_WSDD_METHODNOTALLOWED));
 		// Method is not an exposed allowed method
 		break;		// do .. while(0)
 	    }
@@ -270,7 +255,6 @@ ServerAxisEngine::process (SOAPTransport * pStream)
 	    {
 		AXISTRACE1 ("SERVER_ENGINE_COULD_NOT_LOAD_HDL", CRITICAL);
 		throw AxisEngineException (SERVER_ENGINE_COULD_NOT_LOAD_HDL);
-		//m_pSZ->setSoapFault (SoapFault::getSoapFault (SERVER_ENGINE_COULDNOTLOADHDL));
 		break;		// do .. while(0)
 	    }
 	    // Get Service specific Handlers from the pool if configured any
@@ -282,7 +266,6 @@ ServerAxisEngine::process (SOAPTransport * pStream)
 	    {
 		AXISTRACE1 ("SERVER_ENGINE_COULD_NOT_LOAD_HDL", CRITICAL);
 		throw AxisEngineException (SERVER_ENGINE_COULD_NOT_LOAD_HDL);
-		//m_pSZ->setSoapFault (SoapFault::getSoapFault (SERVER_ENGINE_COULDNOTLOADHDL));
 		break;		// do .. while(0)
 	    }
 
@@ -294,7 +277,6 @@ ServerAxisEngine::process (SOAPTransport * pStream)
 	    {
 		AXISTRACE1 ("SERVER_ENGINE_COULD_NOT_LOAD_HDL", CRITICAL);
 		throw AxisEngineException (SERVER_ENGINE_COULD_NOT_LOAD_HDL);
-		//m_pSZ->setSoapFault (SoapFault::getSoapFault (SERVER_ENGINE_COULDNOTLOADHDL));
 		break;		// do .. while(0)
 	    }
 
@@ -344,7 +326,6 @@ ServerAxisEngine::process (SOAPTransport * pStream)
 	/*
 	 * An exception which is not handled will be handled here.
 	 */
-	//m_pSZ->setSoapFault (SoapFault::getSoapFault (CLIENT_SOAP_SOAPCONTENTERROR));
 	int iExceptionCode = e.getExceptionCode ();
 	//char* pcTempStr = (char*) e.what();
 	//AXISTRACE2("Exception:", pcTempStr, CRITICAL);
@@ -391,7 +372,6 @@ ServerAxisEngine::invoke (MessageData * pMsg)
 	    {
 		AXISTRACE1 ("SERVER_ENGINE_HANDLER_FAILED", CRITICAL);
 		throw AxisEngineException (SERVER_ENGINE_HANDLER_FAILED);
-		//m_pSZ->setSoapFault (SoapFault::getSoapFault(SERVER_ENGINE_HANDLERFAILED));
 		break;		// do .. while (0)
 	    }
 
@@ -404,7 +384,6 @@ ServerAxisEngine::invoke (MessageData * pMsg)
 	    {
 		AXISTRACE1 ("SERVER_ENGINE_HANDLER_FAILED", CRITICAL);
 		throw AxisEngineException (SERVER_ENGINE_HANDLER_FAILED);
-		//m_pSZ->setSoapFault (SoapFault::getSoapFault(SERVER_ENGINE_HANDLERFAILED));
 		break;		// do .. while (0)
 	    }
 	}
@@ -416,7 +395,6 @@ ServerAxisEngine::invoke (MessageData * pMsg)
 	    {
 		AXISTRACE1 ("SERVER_ENGINE_HANDLER_FAILED", CRITICAL);
 		throw AxisEngineException (SERVER_ENGINE_HANDLER_FAILED);
-		//m_pSZ->setSoapFault (SoapFault::getSoapFault(SERVER_ENGINE_HANDLERFAILED));
 		break;		// do .. while (0)
 	    }
 	}
@@ -430,7 +408,6 @@ ServerAxisEngine::invoke (MessageData * pMsg)
 	{
 	    AXISTRACE1 ("SOAP_MUSTUNDERSTAND", CRITICAL);
 	    throw AxisSoapException (SOAP_MUST_UNDERSTAND);
-	    //m_pSZ->setSoapFault (SoapFault::getSoapFault (SOAP_MUSTUNDERSTAND));
 	    break;		// do .. while (0)
 	}
 	// Call actual web service handler
@@ -457,8 +434,6 @@ ServerAxisEngine::invoke (MessageData * pMsg)
 	    {
 		AXISTRACE1 ("SERVER_ENGINE_WEBSERVICEFAILED", CRITICAL);
 		throw AxisEngineException (SERVER_ENGINE_WEBSERVICE_FAILED);
-		//m_pSZ->
-		//    setSoapFault(SoapFault::getSoapFault(SERVER_ENGINE_WEBSERVICEFAILED));
 		break;
 	    }
 	}
