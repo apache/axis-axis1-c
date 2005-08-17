@@ -200,7 +200,7 @@ public class WrapWriter extends CPPClassWriter
         MethodInfo minfo = (MethodInfo) methods.get(0);
         //if conditions (if parts)		
         writer.write(
-            "\tif (0 == strcmp(method, \"" + minfo.getMethodname() + "\"))\n");
+            "\tif( (0 == strcmp(method, \"" + minfo.getInputMessage().getLocalPart() + "\")) || (0 == strcmp(method, \"" + minfo.getMethodname() + "\")) )\n");
         writer.write("\t\treturn " + minfo.getMethodname() + "(mc);\n");
         //(else if parts)
         if (methods.size() > 1)
@@ -209,9 +209,7 @@ public class WrapWriter extends CPPClassWriter
             {
                 minfo = (MethodInfo) methods.get(i);
                 writer.write(
-                    "\telse if (0 == strcmp(method, \""
-                        + minfo.getMethodname()
-                        + "\"))\n");
+                    "\telse if ( (0 == strcmp(method, \"" + minfo.getInputMessage().getLocalPart() + "\")) || (0 == strcmp(method, \"" + minfo.getMethodname() + "\")) )\n");
                 writer.write("\t\treturn " + minfo.getMethodname() + "(mc);\n");
             }
         }
