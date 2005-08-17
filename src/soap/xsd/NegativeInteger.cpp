@@ -24,7 +24,8 @@ NegativeInteger::NegativeInteger(const xsd__negativeInteger* value) throw (AxisS
 {
     if (value)
     {
-        if((*value) > -1) // the value must be minus one or less, hence validate and fix
+        int vauleToCheck = (*value);
+        if(vauleToCheck > -1) // the value must be minus one or less, hence validate and fix
             throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR, "PositiveInteger value must be minus one or less");
         setNil(false);
         serialize(value);
