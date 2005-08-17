@@ -101,6 +101,9 @@ void WSDDService::addAllowedMethod(const AxisChar* sMethodName)
 
 bool WSDDService::isAllowedMethod(const AxisChar* sServiceName) const
 {
+    if (m_AllowedMethods.size() == 0) //no allowedMethods mentioned in wsdd, hence assume all are allowed
+        return true; // assume that the method is allowd if allowedMethods missing
+
     list<AxisString>::const_iterator iter;
     iter = m_AllowedMethods.begin();
 
