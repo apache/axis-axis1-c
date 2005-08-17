@@ -116,7 +116,7 @@ public:
 
     void setPrefix(const AxisChar* prefix);
 
-    int setParam(Param* pParam, const AxisChar* pchName, const AxisChar* pValue, XSDTYPE type);
+    int setParam(Param* pParam, const AxisChar* pchName, const void* pValue, XSDTYPE type);
 
 private:
     string m_sFaultDetail;

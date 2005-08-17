@@ -256,18 +256,18 @@ SoapFault::SoapFault(string sFaultcode, string sFaultstring, string sFaultactor,
     m_sFaultDetail= sDetail;    
 }
 
-int SoapFault::setParam(Param* pParam, const AxisChar* pchName, const AxisChar* pValue, XSDTYPE type)
+int SoapFault::setParam(Param* pParam, const AxisChar* pchName, const void* pValue, XSDTYPE type)
 {
     if (!pParam) return AXIS_FAIL;
     pParam->m_sName = pchName;
-    pParam->setValue(type, new String((xsd__string) pValue));
+    pParam->setValue( type , (IAnySimpleType*) pValue);
     return AXIS_SUCCESS;
 }
 
 int SoapFault::setFaultcode(const AxisChar* sFaultcode)
 {
     m_pFaultcodeParam = new Param();
-	setParam(m_pFaultcodeParam, "faultcode", sFaultcode, XSD_STRING); 
+	setParam(m_pFaultcodeParam, "faultcode", new String((xsd__string)sFaultcode), XSD_STRING); 
     m_sFaultcode= sFaultcode;
 
     return AXIS_SUCCESS;
@@ -276,7 +276,7 @@ int SoapFault::setFaultcode(const AxisChar* sFaultcode)
 int SoapFault::setFaultstring(const AxisChar* sFaultstring)
 {
     m_pFaultstringParam = new Param();
-    setParam(m_pFaultstringParam, "faultstring", sFaultstring, XSD_STRING); 
+    setParam(m_pFaultstringParam, "faultstring", new String((xsd__string)sFaultstring), XSD_STRING); 
     m_sFaultstring= sFaultstring;
 
     return AXIS_SUCCESS;
@@ -284,7 +284,7 @@ int SoapFault::setFaultstring(const AxisChar* sFaultstring)
 int SoapFault::setFaultactor(const AxisChar* sFaultactor)
 {
     m_pFaultactorParam = new Param();
-    setParam(m_pFaultactorParam, "faultactor", sFaultactor, XSD_STRING); 
+    setParam(m_pFaultactorParam, "faultactor", new String((xsd__string)sFaultactor), XSD_STRING); 
     m_sFaultactor = sFaultactor;
     
     return AXIS_SUCCESS;
@@ -293,7 +293,7 @@ int SoapFault::setFaultactor(const AxisChar* sFaultactor)
 int SoapFault::setFaultDetail(const AxisChar* sFaultDetail)
 {
     m_pFaultDetail = new Param();
-    setParam(m_pFaultDetail, "appSpecific", sFaultDetail, XSD_STRING);
+    setParam(m_pFaultDetail, "appSpecific", new String((xsd__string)sFaultDetail), XSD_STRING);
     m_sFaultDetail = sFaultDetail;
     m_bIsSimpleDetail = true;
 
