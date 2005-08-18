@@ -59,25 +59,6 @@ int main(int argc, char* argv[])
         }
         delete [] input;
 
-        // Test empty non-nillable element
-        result = ws->asNonNillableElement(emptyInput);
-        if (result)
-        {
-            if (*result)
-            {
-                cout << "empty non-nillable element=" << result << endl;
-            }
-            else
-            {
-                cout << "empty non-nillable element=<empty>" << endl;
-            }
-        }
-        else
-        {
-            cout << "empty non-nillable element=<nil>" << endl;
-        }
-        delete [] emptyInput;
-
         // Test non-nillable element with XML reserved characters
         char reservedCharacterstoken[] = "<>&\"\'";
         xsd__token reservedCharactersInput = reservedCharacterstoken;
@@ -140,28 +121,6 @@ int main(int argc, char* argv[])
         }
         delete [] input;
 
-        // Test empty nillable element
-        emptyInput = new char[1];
-        strcpy (emptyInput, emptytoken);
-        nillableResult = ws->asNillableElement(emptyInput);
-        if (nillableResult)
-        {
-            if (*nillableResult)
-            {
-                cout << "empty nillable element=" << nillableResult << endl;
-            }
-            else
-            {
-                cout << "empty nillable element=<empty>" << endl;
-            }
-            delete nillableResult;
-        }
-        else
-        {
-            cout << "empty nillable element=<nil>" << endl;
-        }
-        delete [] emptyInput;
-
         // Test nillable element, with nil
         nillableResult = ws->asNillableElement(NULL);
         if (nillableResult)
@@ -204,28 +163,6 @@ int main(int argc, char* argv[])
         }
         delete requiredAttributeResult;
 
-        // Test empty required attribute
-        emptyInput = new char[1];
-        strcpy (emptyInput, emptytoken);
-        requiredAttributeInput;
-        requiredAttributeInput.setrequiredAttribute(emptyInput);
-        requiredAttributeResult = ws->asRequiredAttribute(&requiredAttributeInput);
-        if (requiredAttributeResult->getrequiredAttribute())
-        {
-            if (*(requiredAttributeResult->getrequiredAttribute()))
-            {
-                cout << "empty required attribute=" << requiredAttributeResult->getrequiredAttribute() << endl;
-            }
-            else
-            {
-                cout << "empty required attribute=<empty>" << endl;
-            }
-        }
-        else
-        {
-            cout << "empty required attribute=<nil>" << endl;
-        }
-        delete requiredAttributeResult;
 
 /* Optional Attributes currently unsupported by WSDL2Ws
  * Exact coding of this section may change depending on chosen implementation
