@@ -41,7 +41,7 @@ int main(int argc, char* argv[])
         result = ws->asNonNillableElement((xsd__decimal)123456789.123456);
         printf("non-nillable element=%.6f\n", result);
         fflush(stdout);
-        result = ws->asNonNillableElement((xsd__decimal)-12345789);
+        result = ws->asNonNillableElement((xsd__decimal)-123456789);
         printf("non-nillable element=%.6f\n", result);
         fflush(stdout);
         result = ws->asNonNillableElement((xsd__decimal)-123456789.123456);

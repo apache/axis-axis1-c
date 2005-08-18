@@ -39,7 +39,7 @@ Transfer-Encoding: chunked
 
 ###
 <?xml version="1.0" encoding="utf-8"?>
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header /><soapenv:Body><asNonNillableElementResponse xmlns="http://xsd_decimal.test.apache.org"><nonNillableElement>0.000000</nonNillableElement></asNonNillableElementResponse></soapenv:Body></soapenv:Envelope>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header /><soapenv:Body><asNonNillableElementResponse xmlns="http://xsd_decimal.test.apache.org"><nonNillableElement>-123456789.123456</nonNillableElement></asNonNillableElementResponse></soapenv:Body></soapenv:Envelope>
 0
 
 HTTP/1.1 200 OK
@@ -50,7 +50,7 @@ Transfer-Encoding: chunked
 
 ###
 <?xml version="1.0" encoding="utf-8"?>
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header /><soapenv:Body><asNonNillableElementResponse xmlns="http://xsd_decimal.test.apache.org"><nonNillableElement>-123456789.123456</nonNillableElement></asNonNillableElementResponse></soapenv:Body></soapenv:Envelope>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header /><soapenv:Body><asNonNillableElementResponse xmlns="http://xsd_decimal.test.apache.org"><nonNillableElement>0.000000</nonNillableElement></asNonNillableElementResponse></soapenv:Body></soapenv:Envelope>
 0
 
 HTTP/1.1 200 OK

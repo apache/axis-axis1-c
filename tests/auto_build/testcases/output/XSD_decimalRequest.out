@@ -38,7 +38,7 @@ Content-Length: 447
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <SOAP-ENV:Body>
 <ns1:AsNonNillableElementRequest xmlns:ns1="http://xsd_decimal.test.apache.org">
-<nonNillableElement>-12345789.000000</nonNillableElement>
+<nonNillableElement>-123456789.000000</nonNillableElement>
 </ns1:AsNonNillableElementRequest>
 </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
