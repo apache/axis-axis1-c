@@ -1889,12 +1889,6 @@ void SoapDeSerializer::getElement (const AxisChar * pName,
 		}
 		if (0 == strcmp (pName, m_pNode->m_pchNameOrValue))
 		{
-			
-			if (0 == strcmp(pName,"detail") )
-			{
-				m_pNode = m_pParser->next ();
-			}
-			
 			for (int i = 0; m_pNode->m_pchAttributes[i] && !bNillFound; i += 3)
 			{
 				string sLocalName = m_pNode->m_pchAttributes[i];
@@ -1998,15 +1992,6 @@ void SoapDeSerializer::getElement (const AxisChar * pName,
 
 	 if (0 == strcmp (pName, m_pNode->m_pchNameOrValue))
      {
-        
-	
-		
-		if (0 == strcmp(pName,"detail") )
-		{
-			m_pNode = m_pParser->next ();
-		}
-		
-			
 		bool    bNillFound = false;
         for (int i = 0; m_pNode->m_pchAttributes[i] && !bNillFound; i += 3)
         {
