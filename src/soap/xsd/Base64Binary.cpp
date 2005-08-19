@@ -163,5 +163,10 @@ AXIS_CPP_NAMESPACE_START
     {
         return new Length();
     }
+    
+    WhiteSpace* Base64Binary::getWhiteSpace()
+    {
+        return new WhiteSpace(COLLAPSE);
+    }
 
 AXIS_CPP_NAMESPACE_END

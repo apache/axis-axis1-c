@@ -1,4 +1,4 @@
 non-nillable element
  size=100
- data=<test><xml>some dod&y string</xml></test>
+ data=  <test><xml>  some dod&y string </xml></test> 
 ---------------------- TEST COMPLETE -----------------------------

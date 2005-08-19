@@ -106,6 +106,12 @@ protected:
      * @return An unset Length object
      */
     Length* getLength();
+    
+    /**
+     * Creates a WhiteSpace object to collapse whitespace
+     * @return WhiteSpace object set to collapse whitespace
+     */
+    WhiteSpace* getWhiteSpace();
 };
 
 AXIS_CPP_NAMESPACE_END
