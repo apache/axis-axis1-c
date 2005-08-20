@@ -1,0 +1,16 @@
+<test>
+    <name>AttPlainTextSSL</name>
+    <description>AttPlainTextSSL</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>AttPlainTextSSL.cpp</clientCode>
+    <wsdl>PlainTextAttachment.wsdl</wsdl>
+    <expected>
+        <output>
+            AttPlainTextSSL.expected
+        </output>
+    </expected>
+	<endpoint>http://localhost:9443/PlainTextAttachment/services/PlainTextAttachment</endpoint>
+ 	<nomonitor>true</nomonitor>
+      <port>9443</port> 
+      <ssl>true</ssl>     
+</test>
