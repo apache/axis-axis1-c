@@ -1,5 +1,5 @@
 <service>
-    <name>XSD_NMTOKENPort</name>
+    <name>XSD_NMTOKEN</name>
     <description>XSD_NMTOKEN Service</description>
     <serviceLang>cpp</serviceLang>
     <serviceCode>XSD_NMTOKENPort.cpp</serviceCode>

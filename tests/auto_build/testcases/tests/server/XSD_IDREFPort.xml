@@ -1,5 +1,5 @@
 <service>
-    <name>XSD_IDREFPort</name>
+    <name>XSD_IDREF</name>
     <description>XSD_IDREF Service</description>
     <serviceLang>cpp</serviceLang>
     <serviceCode>XSD_IDREFPort.cpp</serviceCode>
