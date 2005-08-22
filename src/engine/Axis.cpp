@@ -464,7 +464,8 @@ int uninitialize_module ()
             {
                 TypeMapping::uninitialize();
                 URIMapping::uninitialize();
-                SOAPTransportFactory::uninitialize();
+                if (!AxisEngine::m_bServer) // we have to deal with transport factory only if it is the client
+                    SOAPTransportFactory::uninitialize();
                 ModuleUnInitialize();
                 SoapKeywordMapping::uninitialize();
                 XMLParserFactory::uninitialize();

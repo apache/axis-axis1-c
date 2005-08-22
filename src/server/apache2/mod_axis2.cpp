@@ -78,8 +78,17 @@ int axis_handler_helper(request_rec* req_rec)
 
 extern "C"
 { 
+
+static apr_status_t module_exit(void *data)
+{
+    uninitialize_module();
+
+    return APR_SUCCESS;
+}
+
 static void module_init(apr_pool_t* p, server_rec* svr_rec)
 {
+    apr_pool_cleanup_register(p, NULL, module_exit, apr_pool_cleanup_null);
     initialize_module(1);
 }
 
@@ -91,7 +100,7 @@ static int axis_handler(request_rec* req_rec)
 static void mod_axis_register_hooks(apr_pool_t* p)
 {
     ap_hook_child_init(module_init, NULL, NULL, APR_HOOK_REALLY_FIRST);
-    ap_hook_handler(axis_handler, NULL, NULL, APR_HOOK_LAST);
+    ap_hook_handler(axis_handler, NULL, NULL, APR_HOOK_LAST);    
 }
 
 module AP_MODULE_DECLARE_DATA axis_module = {
