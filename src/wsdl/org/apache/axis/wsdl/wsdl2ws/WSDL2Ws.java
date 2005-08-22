@@ -1092,7 +1092,7 @@ public class WSDL2Ws
                 + "-o<folder>             target output folder - default is current folder\n"
                 + "-l<c++|c>              target language (c++|c) - default is c++\n"
                 + "-s<server|client>      target side (server|client) - default is server\n"
-                + "-w<wrapped|nonwrapped> wrapping style of the WSDL (wrapped|nonwrapped) - default is wrapped\n"
+//                + "-w<wrapped|nonwrapped> wrapping style of the WSDL (wrapped|nonwrapped) - default is wrapped - nonwrapped is currently not implemented\n"
                 + "-verbose, -v           be verbose\n"
                 + "-m<none|gnu>           generate make files (none|gnu) - default is none\n");
 
@@ -1109,7 +1109,7 @@ public class WSDL2Ws
      * -help (later ???? not emplemented)
      * -h print usage()
      * -s (client|server|both)  
-     * -w wrapping style of the WSDL (wrapped|nonwrapped) - default is wrapped
+     * -w wrapping style of the WSDL (wrapped|nonwrapped) - default is wrapped - nonwrapped is currently not implemented so removed option for -wnonwrapped
      * -m create GNU make files
      * 
      * Note:  PP - pull parser
@@ -1132,6 +1132,13 @@ public class WSDL2Ws
                 WSDL2Ws.verbose = true;
 
             if (data.isSet("h"))
+            {
+                usage();
+                return;
+            }
+            
+            // ensure that only wrapped style is used. 
+            if(data.isSet("w") && ! "wrapped".equalsIgnoreCase(data.getOptionBykey("w")))
             {
                 usage();
                 return;
