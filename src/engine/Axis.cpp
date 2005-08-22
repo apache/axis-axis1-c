@@ -348,26 +348,18 @@ int initialize_module (int bServer)
             ModuleInitialize ();
             if (bServer) // no client side wsdd processing at the moment
             {
-    		    /* Read from the configuration file */
+    		    // Read from the configuration file
                 status = g_pConfig->readConfFile (); 
                 if (status == AXIS_SUCCESS)
-                {
-					//chinthana:Axiscpp-104
-                    //XMLParserFactory::initialize();
-                    //SOAPTransportFactory::initialize();
+                {					
 					try
 					{            
 						XMLParserFactory::initialize();
-						SOAPTransportFactory::initialize();
 					}
-					catch (exception& e)
-					{
-						cout<< e.what();
-						cout<< "\n";
-						cout<< "Axis c++: An exception occured while initializing the XML Parser and SOAP Transport\n";
-						exit(1);
-					}
-					//.........................................
+					catch (AxisException& e)
+                    {
+                        throw AxisEngineException(e.getExceptionCode(), e.what());
+                    }
 
                     char *pWsddPath = g_pConfig->getAxisConfProperty(AXCONF_WSDDFILEPATH);
 #if defined(ENABLE_AXISTRACE)
@@ -375,7 +367,7 @@ int initialize_module (int bServer)
                     if (status == AXIS_FAIL)
                     {
                         // Samisa - make sure that we start service, even if we cannot open log file
-                        //return AXIS_FAIL;
+                        // Hence do not return from here, may be we can log an error here
                     }
 #endif
                     try
@@ -398,22 +390,14 @@ int initialize_module (int bServer)
            }
            else if (bServer == 0)      // client side module initialization
            {
-                status = g_pConfig->readConfFile (); /* Read from the configuration
-                               * file 
-                                 */
+                status = g_pConfig->readConfFile (); //Read from the configuration file 
+
                 if (status == AXIS_SUCCESS)
                 {
 #if defined(ENABLE_AXISTRACE)
                     status = AxisTrace::openFileByClient ();
-                    /*  //Samisa: 01/09/2004
-                        //Fix for AXISCPP-127
-                        //Do not stop here merely because log file location ClientLogPath is incorrect
-                        if (status == AXIS_FAIL)
-                        {
-                            return AXIS_FAIL;
-                        }
-                   */
 #endif
+
                    XMLParserFactory::initialize();
                    SOAPTransportFactory::initialize();
                    char *pClientWsddPath =
