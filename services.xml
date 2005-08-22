@@ -249,48 +249,9 @@ Channel_HTTP:${basedir}${ps}..${ps}..${ps}..${ps}Axis${ps}lib${ps}${libraryPrefi
 <target name="generateWSDDService">
 <xmlproperty file="${dir.test.generated}/server/${serviceLang}/${serviceName}/deploy.wsdd" collapseAttributes="true"/>
 
-
-<propertyselector property="name.list"
-                  delimiter=","
-                  match="deployment.service.parameter.name"
-                  select="\0"
-                  casesensitive="false" />
-
-<propertyselector property="value.list"
-                  delimiter=","
-                  match="deployment.service.parameter.value"
-                  select="\0"
-                  casesensitive="false" />
-
-
-	<propertycopy property="nameslist" from="${name.list}"/>
-<var name="op1" value="0"/>
-	<for list="${nameslist}" param="letter" trim="false">
-		<sequential>
-		<math result="op1" operand1="${op1}" operation="+" operand2="1" datatype="int"/>
-		<property name="name.${op1}" value="@{letter}"/>
-		<condition property="amindex" value="${op1}">
-		<equals arg1="@{letter}" arg2="allowedMethods"/>
-		</condition>
-
-		</sequential>
-	</for>
-<var name="op1" value="0"/>
-
-	<propertycopy property="valuelist" from="${value.list}"/>
-	<for list="${valuelist}" param="letter" trim="false">
-		<sequential>
-		<math result="op1" operand1="${op1}" operation="+" operand2="1" datatype="int"/>
-		<property name="value.${op1}" value="@{letter}"/>
-		</sequential>
-	</for>
-
-	<propertycopy property="am.value" from="value.${amindex}"/>
-	
 <echo file="${basedir}/build/server.wsdd" append="true">
-&lt;service name="${deployment.service.name}" provider="${deployment.service.provider}" description="Axis C++ web service" &gt;
+&lt;service name="${serviceName}" provider="${deployment.service.provider}" description="Axis C++ web service" &gt;
 &lt;parameter name="className" value="${basedir}${ps}..${ps}..${ps}..${ps}Axis${ps}webservices${ps}${libraryPrefix}${serviceName}${librarySuffix}"/&gt;
-&lt;parameter name="allowedMethods" value="${am.value} "/&gt;
 &lt;/service&gt;
 </echo>
 </target>
