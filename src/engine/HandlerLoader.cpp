@@ -22,7 +22,9 @@
  */
 #ifdef WIN32
 #pragma warning (disable : 4390)        // empty controlled statement found;
+#pragma warning (disable : 4786)
 #endif
+
 
 #include "../platforms/PlatformAutoSense.hpp"
 
