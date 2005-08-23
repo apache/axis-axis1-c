@@ -285,6 +285,25 @@ void HTTPTransport::closeConnection()
  */
 AXIS_TRANSPORT_STATUS HTTPTransport::flushOutput() throw (AxisException, HTTPTransportException)
 {
+	//Chinthana:AXISCPP-558 - Gracefully handle server side close of persistant connection
+	if( m_bReopenConnection)
+	{
+		m_bReopenConnection = false;
+  
+ 		if( m_pActiveChannel->open() != AXIS_SUCCESS)
+ 		{
+ 		    int				iStringLength = m_pActiveChannel->GetLastErrorMsg().length() + 1;
+ 			const char *	pszLastError = new char[iStringLength];
+  
+ 		    memcpy( (void *) pszLastError,
+  					m_pActiveChannel->GetLastErrorMsg().c_str(),
+  					iStringLength);
+  
+ 		    throw HTTPTransportException( CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED,(char *) pszLastError);
+		}
+	}
+	//16-08-2005.................................................
+	
     // In preperation for sending the message, calculate the size of the message
     // by using the string length method.
     // NB: This calculation may not necessarily be correct when dealing with SSL
@@ -296,35 +315,78 @@ AXIS_TRANSPORT_STATUS HTTPTransport::flushOutput() throw (AxisException, HTTPTra
 
     this->setTransportProperty ("Content-Length", buff);
 
+	//Chinthana:AXISCPP-558 - Gracefully handle server side close of persistant connection
+	bool reopenConnection;
+ 	if (m_pActiveChannel->reopenRequired())
+	{
+ 		reopenConnection = true;
+ 	}
+ 	else 
+	{
+ 		reopenConnection = m_bReopenConnection;
+ 		m_bReopenConnection = false;
+ 	}
+ 
+ 	bool reopenConnectionOnFailure = true;
+ 	bool dataSent = false;
+ 
+ 	while (!dataSent) 
+	{
+ 		if( reopenConnection ) 
+		{
+ 			m_pActiveChannel->close();
+ 
+ 			if( m_pActiveChannel->open() != AXIS_SUCCESS)
+ 			{
+ 				int iStringLength = m_pActiveChannel->GetLastErrorMsg().length() + 1;
+ 				const char* pszLastError = new char[iStringLength];
+ 
+ 				memcpy( (void *) pszLastError,
+  					m_pActiveChannel->GetLastErrorMsg().c_str(),
+  					iStringLength);
+  
+ 				throw HTTPTransportException( CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED,
+ 							      (char *) pszLastError);
+  			}
+  
+ 			// Only attempt to reopen the connection one time
+ 			reopenConnectionOnFailure = false;
+ 		}
+	//16-08-2005.................................................
+
     // The header is now complete.  The message header and message can now be
     // transmitted.
-	try
-	{
-#ifndef __OS400__
-		*m_pActiveChannel << this->getHTTPHeaders ();
-		*m_pActiveChannel << this->m_strBytesToSend.c_str ();
-#else		
-        const char *buf = this->getHTTPHeaders ();
-        char *utf8Buf = toUTF8((char *)buf, strlen(buf)+1);
-		*m_pActiveChannel << utf8Buf;
-        free(utf8Buf);
-        buf     = this->m_strBytesToSend.c_str();
-        utf8Buf = toUTF8((char *)buf, strlen(buf)+1);
-		*m_pActiveChannel << utf8Buf;
-        free(utf8Buf);
-#endif
-	}
-	catch( HTTPTransportException & e)
-	{
-		throw;
-	}
-	catch( AxisException & e)
-	{
-		throw;
-	}
-	catch(...)
-	{
-		throw;
+		try
+		{
+			#ifndef __OS400__
+					*m_pActiveChannel << this->getHTTPHeaders ();
+					*m_pActiveChannel << this->m_strBytesToSend.c_str ();
+			#else		
+					const char *buf = this->getHTTPHeaders ();
+					char *utf8Buf = toUTF8((char *)buf, strlen(buf)+1);
+					*m_pActiveChannel << utf8Buf;
+					free(utf8Buf);
+					buf     = this->m_strBytesToSend.c_str();
+					utf8Buf = toUTF8((char *)buf, strlen(buf)+1);
+					*m_pActiveChannel << utf8Buf;
+					free(utf8Buf);
+			#endif
+			// Chinthana: We're done sending
+			dataSent = true;
+
+		}
+		catch( HTTPTransportException & e)
+		{
+			throw;
+		}
+		catch( AxisException & e)
+		{
+			throw;
+		}
+		catch(...)
+		{
+			throw;
+		}
 	}
 
     // Empty the bytes to send string.
