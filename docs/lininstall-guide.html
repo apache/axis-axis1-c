@@ -364,17 +364,9 @@
 <p>
 <strong>Note:</strong> The following steps are for Axis C++ source downloads.<br>
 <br>
-<strong>cd $AXISCPP_HOME</strong>
-<br>
-<br> 
-<strong>./configure --prefix=$AXISCPP_DEPLOY --with-apache2=/path/to/Apache2 \&nbsp;&nbsp;&nbsp;&nbsp;--with-xercesc=/path/to/xerces-c --enable-axis3=yes</strong>
-<br> 
-<strong>make</strong>
-<br> 
-<strong>make install</strong>
-<br>
-<br> The above set of instructions assume you have Apache 2.0.x web server and Xerces C++ parser.<br>For more information on build options run <strong><em>./configure --help</em></strong>.<br>
-<br>The libs created in build process are placed in $AXISCPP_DEPLOY/lib. (Provided that you used $AXISCPP_DEPLOY as --prefix option for configuring). Note that you need permission to install to the specified directory given in prefix option.<br> &nbsp;<br>
+Currently Ant build system is used to build Axis C++ source code.
+
+<a href="antbuild-guide.html">ANT Build Guide</a> explains how you can use Ant to build Axis C++.<br>
 </p>
 <p>
 <strong>Note:</strong> The following steps are common to both source and binary downloads.<br>
