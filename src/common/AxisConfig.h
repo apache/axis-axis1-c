@@ -85,12 +85,12 @@ class AxisConfig
      */
 
 	char* getAxisConfProperty(g_axconfig property);
+    void setValue(int valuelength, g_axconfig valueindex, char* value);
         
     private:         
 		std::string m_pcKeyArray [AXCONF_LAST];
 		std::string m_pcValueArray [AXCONF_LAST];
 
-		void setValue(int valuelength, g_axconfig valueindex, char* value);
 
 };
 

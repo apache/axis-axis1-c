@@ -60,6 +60,7 @@ AxisConfig::AxisConfig ()
     m_pcValueArray[AXCONF_SSLCHANNEL_HTTP]   = PLATFORM_SSLCHANNEL_PATH;
     m_pcValueArray[AXCONF_CHANNEL_HTTP]      = PLATFORM_CHANNEL_PATH;
     m_pcValueArray[AXCONF_SECUREINFO]        = PLATFORM_SECUREINFO;
+    m_pcValueArray[AXCONF_AXISHOME]          = PLATFORM_DEFAULT_DEPLOY_PATH;
 }
 
 int AxisConfig::readConfFile ()
@@ -78,13 +79,15 @@ int AxisConfig::readConfFile ()
     // default deployment path.  Note that default deployment path is the NULL
     // string unless it is modified.
     sConfPath = getenv ("AXISCPP_DEPLOY");
-    if (!sConfPath)
-        sConfPath = PLATFORM_DEFAULT_DEPLOY_PATH;
-    m_pcValueArray[AXCONF_AXISHOME] = sConfPath;
+    if (sConfPath)
+        setValue(0,AXCONF_AXISHOME,sConfPath);
+
+    // get the value of the path
+    sConfPath = getAxisConfProperty(AXCONF_AXISHOME);
     
     // If the AXIS deployment path is not set default values 
     // will be used. Therefore return AXIS_SUCCESS
-    if (!sConfPath || (sConfPath == '\0'))
+    if (!sConfPath || (*sConfPath == '\0'))
     {
         return AXIS_SUCCESS;
     }

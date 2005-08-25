@@ -63,6 +63,10 @@ string AxisConfigException::getMessageForExceptionCode(const int iExceptionCode)
             m_sMessageForExceptionCode = "AxisConfigException:Library path is empty(Not in" \
                 " server.wsdd file)";
             break;
+        case CONFIG_DEFAULTS_ALREADY_SET:
+            m_sMessageForExceptionCode = "AxisConfigException:configuration defaults "\
+                " have already been set";
+            break;
         default:
             m_sMessageForExceptionCode = "AxisConfigException:Unknown Axis C++" \
                 " Configuration Exception";

@@ -189,6 +189,9 @@ const string& AxisMessage::getMessage(int iExceptionCode)
             m_sMessage = "AxisParseException:Error when getting the byte" \
                 " stream from the transport";
             break;
+        case CONFIG_DEFAULTS_ALREADY_SET:
+            m_sMessage = "Configuration details have already ben set";
+            break;
         default:
             m_sMessage = "Unknown Exception has occured";
 

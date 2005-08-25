@@ -154,12 +154,16 @@ typedef enum
 /*72*/    AXISC_NODE_VALUE_MISMATCH_EXCEPTION,
 /*73*/    AXISC_READ_CONF_EXCEPTION,
 
+    /* CONFIG faults */
+    /*Following exceptions are releated to configuration faults
+     */
+/*74*/    CONFIG_DEFAULTS_ALREADY_SET,
     /*
      * This FAULT_LAST is not used as a fault code, but instead is used 
      * internaly in the code. Developers should not use this as a fault 
      * code.
      */
-/*74*/    FAULT_LAST 
+/*75*/    FAULT_LAST 
 } AXISC_EXCEPTIONS;
 
 /**
