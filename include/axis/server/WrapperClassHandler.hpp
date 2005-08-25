@@ -36,6 +36,8 @@ public:
     virtual ~WrapperClassHandler(){};
     virtual AXIS_BINDING_STYLE AXISCALL getBindingStyle()=0;
     int AXISCALL getType(){return WEBSERVICE_HANDLER;};
+    virtual int AXISCALL init() { return AXIS_SUCCESS; }; // We do not need init and fini for the service wrapper
+    virtual int AXISCALL fini() { return AXIS_SUCCESS; };
 };
 
 AXIS_CPP_NAMESPACE_END
