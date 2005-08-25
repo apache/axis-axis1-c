@@ -51,7 +51,7 @@ class HandlerPool:protected SharedObject
         int getHandler (BasicHandler** ppHandler, string &sSessionId,
             int nScope, int nLibId);
         int poolHandler (string &sSessionId, BasicHandler* pHandler, int nScope,
-            int nLibId);
+            int nLibId, bool bWebService = false);
         int getHandlerChain (string &sSessionId, HandlerChain** pChain,
             const WSDDHandlerList* pHandlerList);
     public:

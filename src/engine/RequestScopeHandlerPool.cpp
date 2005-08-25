@@ -94,7 +94,7 @@ int RequestScopeHandlerPool::getInstance (BasicHandler** pHandler, int nLibId)
     }
 }
 
-int RequestScopeHandlerPool::putInstance (BasicHandler* pHandler, int nLibId)
+int RequestScopeHandlerPool::putInstance (BasicHandler* pHandler, int nLibId, bool bWebService)
 {
     lock ();
 
@@ -104,7 +104,8 @@ int RequestScopeHandlerPool::putInstance (BasicHandler* pHandler, int nLibId)
     }
     else if (0 != pHandler->_object)
     {
-         ((HandlerBase *)(pHandler->_object))->fini();
+         if (!bWebService)
+             ((HandlerBase *)(pHandler->_object))->fini();
     }
 
     m_Handlers[nLibId].push_back (pHandler);

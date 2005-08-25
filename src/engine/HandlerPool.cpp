@@ -87,7 +87,7 @@ int HandlerPool::getHandler (BasicHandler** ppHandler, string & sSessionId,
 }
 
 int HandlerPool::poolHandler (string &sSessionId, BasicHandler* pHandler,
-    int nScope, int nLibId)
+    int nScope, int nLibId, bool bWebService)
 {
     switch (nScope)
     {
@@ -99,7 +99,7 @@ int HandlerPool::poolHandler (string &sSessionId, BasicHandler* pHandler,
                 nLibId);
             break;
         case AH_REQUEST:
-            g_pRequestScopeHandlerPool->putInstance (pHandler, nLibId);
+            g_pRequestScopeHandlerPool->putInstance (pHandler, nLibId, bWebService);
             break;
     }
     return AXIS_SUCCESS;
@@ -323,9 +323,9 @@ int HandlerPool::getWebService (BasicHandler** ppHandler, string &sSessionId,
         pService->getLibId ())) == AXIS_SUCCESS)
     {
         if (0 != (*ppHandler)->_functions)
-        /* C web service */
+        // C web service 
         {
-            if (AXIS_SUCCESS !=
+            /*if (AXIS_SUCCESS !=
                 (Status =
                 (*ppHandler)->_functions->init ((*ppHandler)->_object)))
             {
@@ -333,14 +333,14 @@ int HandlerPool::getWebService (BasicHandler** ppHandler, string &sSessionId,
                 poolHandler (sSessionId, *ppHandler, pService->getScope (),
                     pService->getLibId ());
                 *ppHandler = NULL;
-            }
+            }*/
         }
         else if (0 == (*ppHandler)->_object)
             return AXIS_FAIL;
         else
-        /* C++ web service */
+        // C++ web service 
         {
-            if (AXIS_SUCCESS !=
+            /*if (AXIS_SUCCESS !=
                 (Status =
                 ((HandlerBase *) (*ppHandler)->_object)->init ()))
             {
@@ -348,7 +348,7 @@ int HandlerPool::getWebService (BasicHandler** ppHandler, string &sSessionId,
                 poolHandler (sSessionId, *ppHandler, pService->getScope (),
                     pService->getLibId ());
                 *ppHandler = NULL;
-            }
+            }*/
         }
     }
     return Status;
@@ -357,8 +357,7 @@ int HandlerPool::getWebService (BasicHandler** ppHandler, string &sSessionId,
 void HandlerPool::poolWebService (string &sSessionId, BasicHandler* pHandler,
     const WSDDHandler * pHandlerInfo)
 {
-    poolHandler (sSessionId, pHandler, pHandlerInfo->getScope (),
-        pHandlerInfo->getLibId ());
+    poolHandler (sSessionId, pHandler, pHandlerInfo->getScope (), pHandlerInfo->getLibId (), true);
 }
 
 AXIS_CPP_NAMESPACE_END

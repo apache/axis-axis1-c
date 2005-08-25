@@ -45,7 +45,7 @@ class RequestScopeHandlerPool:protected SharedObject
         map < int, list <BasicHandler*> >m_Handlers;
     public:
         int getInstance (BasicHandler** pHandler, int nLibId);
-        int putInstance (BasicHandler* pHandler, int nLibId);
+        int putInstance (BasicHandler* pHandler, int nLibId, bool bWebService = false );
 };
 
 AXIS_CPP_NAMESPACE_END
