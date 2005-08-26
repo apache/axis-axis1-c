@@ -118,8 +118,8 @@ public class WrapHeaderWriter extends HeaderFileWriter
                 "public:/*implementation of WrapperClassHandler interface*/\n");
             writer.write("\tint AXISCALL invoke(void* pMsg);\n");
             writer.write("\tvoid AXISCALL onFault(void* pMsg);\n");
-            writer.write("\tint AXISCALL init();\n");
-            writer.write("\tint AXISCALL fini();\n");
+            //writer.write("\tint AXISCALL init();\n");
+            //writer.write("\tint AXISCALL fini();\n");
             writer.write(
                 "\tAXIS_BINDING_STYLE AXISCALL getBindingStyle(){return "
                     + bindingStyle

@@ -114,8 +114,8 @@ public class ServiceHeaderWriter extends HeaderFileWriter
         {
             writer.write("\tpublic: \n");
             writer.write("\t\tvoid onFault();\n");
-            writer.write("\t\tvoid init();\n");
-            writer.write("\t\tvoid fini();\n");
+            //writer.write("\t\tvoid init();\n");
+            //writer.write("\t\tvoid fini();\n");
             for (int i = 0; i < methods.size(); i++)
             {
                 minfo = (MethodInfo) this.methods.get(i);

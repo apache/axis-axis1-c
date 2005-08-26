@@ -131,7 +131,7 @@ public class WrapWriter extends CPPClassWriter
                     + classname
                     + "::onFault(void *pMsg)\n{"
                     + "\n\tpWs->onFault();\n}\n\n");
-            writer.write(
+            /*writer.write(
                 "int "
                     + classname
                     + "::init()\n{\n"
@@ -141,6 +141,7 @@ public class WrapWriter extends CPPClassWriter
                     + classname
                     + "::fini()\n{\n"
                     + "\tpWs->fini();\n\treturn AXIS_SUCCESS;\n}\n\n");
+					*/
             writeInvoke();
             writer.write(
                 "\n/*Methods corresponding to the web service methods*/\n");
