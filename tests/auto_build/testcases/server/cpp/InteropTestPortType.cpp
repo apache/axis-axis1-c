@@ -34,18 +34,7 @@ InteropTestPortType::~InteropTestPortType()
 void InteropTestPortType::onFault()
 {
 }
-/* This function is called by the AxisEngine when this web service
- library is first loaded. So here we can initialize any global/static
- data structures of this web service or open database connections */
-void InteropTestPortType::init()
-{
-}
-/* This function is called by the AxisEngine when this web service
- library is unloaded. So we can deallocate any global/static data structures
- and close database connections etc here. */
-void InteropTestPortType::fini()
-{
-}
+
 xsd__string InteropTestPortType::echoString(xsd__string Value0)  
 {	return Value0;
 }

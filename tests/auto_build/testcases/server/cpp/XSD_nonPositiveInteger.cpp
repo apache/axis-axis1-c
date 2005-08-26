@@ -35,18 +35,7 @@ XSD_nonPositiveInteger::~XSD_nonPositiveInteger()
 void XSD_nonPositiveInteger::onFault()
 {
 }
-/* This function is called by the AxisEngine when this web service
- library is first loaded. So here we can initialize any global/static
- data structures of this web service or open database connections */
-void XSD_nonPositiveInteger::init()
-{
-}
-/* This function is called by the AxisEngine when this web service
- library is unloaded. So we can deallocate any global/static data structures
- and close database connections etc here. */
-void XSD_nonPositiveInteger::fini()
-{
-}
+
 xsd__nonPositiveInteger XSD_nonPositiveInteger::asNonNillableElement(xsd__nonPositiveInteger Value0)  
 {
 	return Value0;

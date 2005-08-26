@@ -35,18 +35,7 @@ XSD_NOTATIONPort::~XSD_NOTATIONPort()
 void XSD_NOTATIONPort::onFault()
 {
 }
-/* This function is called by the AxisEngine when this web service
- library is first loaded. So here we can initialize any global/static
- data structures of this web service or open database connections */
-void XSD_NOTATIONPort::init()
-{
-}
-/* This function is called by the AxisEngine when this web service
- library is unloaded. So we can deallocate any global/static data structures
- and close database connections etc here. */
-void XSD_NOTATIONPort::fini()
-{
-}
+
 xsd__NOTATION XSD_NOTATIONPort::asNonNillableElement(xsd__NOTATION Value0)  
 {
 	return Value0;

@@ -35,18 +35,7 @@ FourLevelTestDocInterface::~FourLevelTestDocInterface()
 void FourLevelTestDocInterface::onFault()
 {
 }
-/* This function is called by the AxisEngine when this web service
- library is first loaded. So here we can initialize any global/static
- data structures of this web service or open database connections */
-void FourLevelTestDocInterface::init()
-{
-}
-/* This function is called by the AxisEngine when this web service
- library is unloaded. So we can deallocate any global/static data structures
- and close database connections etc here. */
-void FourLevelTestDocInterface::fini()
-{
-}
+
 SecondLevelElemType_Array FourLevelTestDocInterface::RetrieveTestDoc(SecondLevelElemType_Array Value0)  
 {
 	//if (NULL == Value0) 

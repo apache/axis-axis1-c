@@ -35,18 +35,7 @@ XSD_unsignedLong::~XSD_unsignedLong()
 void XSD_unsignedLong::onFault()
 {
 }
-/* This function is called by the AxisEngine when this web service
- library is first loaded. So here we can initialize any global/static
- data structures of this web service or open database connections */
-void XSD_unsignedLong::init()
-{
-}
-/* This function is called by the AxisEngine when this web service
- library is unloaded. So we can deallocate any global/static data structures
- and close database connections etc here. */
-void XSD_unsignedLong::fini()
-{
-}
+
 xsd__unsignedLong XSD_unsignedLong::asNonNillableElement(xsd__unsignedLong Value0)  
 {
 	return Value0;

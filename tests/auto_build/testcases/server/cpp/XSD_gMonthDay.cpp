@@ -35,18 +35,7 @@ XSD_gMonthDay::~XSD_gMonthDay()
 void XSD_gMonthDay::onFault()
 {
 }
-/* This function is called by the AxisEngine when this web service
- library is first loaded. So here we can initialize any global/static
- data structures of this web service or open database connections */
-void XSD_gMonthDay::init()
-{
-}
-/* This function is called by the AxisEngine when this web service
- library is unloaded. So we can deallocate any global/static data structures
- and close database connections etc here. */
-void XSD_gMonthDay::fini()
-{
-}
+
 xsd__gMonthDay XSD_gMonthDay::asNonNillableElement(xsd__gMonthDay Value0)  
 {
 	return Value0;

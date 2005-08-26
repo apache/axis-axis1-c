@@ -35,18 +35,7 @@ XSD_float::~XSD_float()
 void XSD_float::onFault()
 {
 }
-/* This function is called by the AxisEngine when this web service
- library is first loaded. So here we can initialize any global/static
- data structures of this web service or open database connections */
-void XSD_float::init()
-{
-}
-/* This function is called by the AxisEngine when this web service
- library is unloaded. So we can deallocate any global/static data structures
- and close database connections etc here. */
-void XSD_float::fini()
-{
-}
+
 xsd__float XSD_float::asNonNillableElement(xsd__float Value0)  
 {
 	return Value0;

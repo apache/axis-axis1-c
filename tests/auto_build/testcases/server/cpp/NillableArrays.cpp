@@ -35,18 +35,7 @@ NillableArrays::~NillableArrays()
 void NillableArrays::onFault()
 {
 }
-/* This function is called by the AxisEngine when this web service
- library is first loaded. So here we can initialize any global/static
- data structures of this web service or open database connections */
-void NillableArrays::init()
-{
-}
-/* This function is called by the AxisEngine when this web service
- library is unloaded. So we can deallocate any global/static data structures
- and close database connections etc here. */
-void NillableArrays::fini()
-{
-}
+
 xsd__boolean_Array * NillableArrays::echoBooleanArray(xsd__boolean_Array * Value0)  
 {
 	xsd__boolean_Array * outArray = new xsd__boolean_Array();

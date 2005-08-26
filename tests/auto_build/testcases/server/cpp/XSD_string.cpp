@@ -35,18 +35,7 @@ XSD_string::~XSD_string()
 void XSD_string::onFault()
 {
 }
-/* This function is called by the AxisEngine when this web service
- library is first loaded. So here we can initialize any global/static
- data structures of this web service or open database connections */
-void XSD_string::init()
-{
-}
-/* This function is called by the AxisEngine when this web service
- library is unloaded. So we can deallocate any global/static data structures
- and close database connections etc here. */
-void XSD_string::fini()
-{
-}
+
 xsd__string XSD_string::asNonNillableElement(xsd__string Value0)  
 {
 	return Value0;

@@ -35,18 +35,7 @@ XSD_token::~XSD_token()
 void XSD_token::onFault()
 {
 }
-/* This function is called by the AxisEngine when this web service
- library is first loaded. So here we can initialize any global/static
- data structures of this web service or open database connections */
-void XSD_token::init()
-{
-}
-/* This function is called by the AxisEngine when this web service
- library is unloaded. So we can deallocate any global/static data structures
- and close database connections etc here. */
-void XSD_token::fini()
-{
-}
+
 xsd__token XSD_token::asNonNillableElement(xsd__token Value0)  
 {
 	return Value0;

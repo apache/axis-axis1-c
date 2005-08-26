@@ -35,18 +35,7 @@ XSD_short::~XSD_short()
 void XSD_short::onFault()
 {
 }
-/* This function is called by the AxisEngine when this web service
- library is first loaded. So here we can initialize any global/static
- data structures of this web service or open database connections */
-void XSD_short::init()
-{
-}
-/* This function is called by the AxisEngine when this web service
- library is unloaded. So we can deallocate any global/static data structures
- and close database connections etc here. */
-void XSD_short::fini()
-{
-}
+
 xsd__short XSD_short::asNonNillableElement(xsd__short Value0)  
 {
 	return Value0;

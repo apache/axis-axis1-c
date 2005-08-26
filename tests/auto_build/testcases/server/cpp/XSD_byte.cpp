@@ -35,18 +35,7 @@ XSD_byte::~XSD_byte()
 void XSD_byte::onFault()
 {
 }
-/* This function is called by the AxisEngine when this web service
- library is first loaded. So here we can initialize any global/static
- data structures of this web service or open database connections */
-void XSD_byte::init()
-{
-}
-/* This function is called by the AxisEngine when this web service
- library is unloaded. So we can deallocate any global/static data structures
- and close database connections etc here. */
-void XSD_byte::fini()
-{
-}
+
 xsd__byte XSD_byte::asNonNillableElement(xsd__byte Value0)  
 {
 	return Value0;

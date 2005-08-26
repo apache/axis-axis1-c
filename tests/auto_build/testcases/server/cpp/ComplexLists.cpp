@@ -20,18 +20,7 @@ ComplexLists::~ComplexLists()
 void ComplexLists::onFault()
 {
 }
-/* This function is called by the AxisEngine when this web service
- library is first loaded. So here we can initialize any global/static
- data structures of this web service or open database connections */
-void ComplexLists::init()
-{
-}
-/* This function is called by the AxisEngine when this web service
- library is unloaded. So we can deallocate any global/static data structures
- and close database connections etc here. */
-void ComplexLists::fini()
-{
-}
+
 attrlisterr* ComplexLists::multilist(m_list* Value0, attrlist* Value1)  
 {
 	attrlisterr* ret=new attrlisterr();

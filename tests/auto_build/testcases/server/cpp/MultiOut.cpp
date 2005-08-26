@@ -35,18 +35,7 @@ MultiOut::~MultiOut()
 void MultiOut::onFault()
 {
 }
-/* This function is called by the AxisEngine when this web service
- library is first loaded. So here we can initialize any global/static
- data structures of this web service or open database connections */
-void MultiOut::init()
-{
-}
-/* This function is called by the AxisEngine when this web service
- library is unloaded. So we can deallocate any global/static data structures
- and close database connections etc here. */
-void MultiOut::fini()
-{
-}
+
 void MultiOut::get(AXIS_OUT_PARAM xsd__string *OutValue0, AXIS_OUT_PARAM xsd__integer *OutValue1, AXIS_OUT_PARAM xsd__int *OutValue2, AXIS_OUT_PARAM xsd__long *OutValue3, AXIS_OUT_PARAM xsd__short *OutValue4, AXIS_OUT_PARAM xsd__decimal *OutValue5, AXIS_OUT_PARAM xsd__float *OutValue6, AXIS_OUT_PARAM xsd__double *OutValue7, AXIS_OUT_PARAM xsd__boolean *OutValue8, AXIS_OUT_PARAM xsd__byte *OutValue9)  
 {
 	*OutValue0 = "Hello Mark";

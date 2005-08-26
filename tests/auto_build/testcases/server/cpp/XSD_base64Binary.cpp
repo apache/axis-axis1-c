@@ -35,18 +35,7 @@ XSD_base64Binary::~XSD_base64Binary()
 void XSD_base64Binary::onFault()
 {
 }
-/* This function is called by the AxisEngine when this web service
- library is first loaded. So here we can initialize any global/static
- data structures of this web service or open database connections */
-void XSD_base64Binary::init()
-{
-}
-/* This function is called by the AxisEngine when this web service
- library is unloaded. So we can deallocate any global/static data structures
- and close database connections etc here. */
-void XSD_base64Binary::fini()
-{
-}
+
 xsd__base64Binary XSD_base64Binary::asNonNillableElement(xsd__base64Binary Value0)  
 {
 	return Value0;

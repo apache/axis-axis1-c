@@ -35,18 +35,7 @@ NestedComplex::~NestedComplex()
 void NestedComplex::onFault()
 {
 }
-/* This function is called by the AxisEngine when this web service
- library is first loaded. So here we can initialize any global/static
- data structures of this web service or open database connections */
-void NestedComplex::init()
-{
-}
-/* This function is called by the AxisEngine when this web service
- library is unloaded. So we can deallocate any global/static data structures
- and close database connections etc here. */
-void NestedComplex::fini()
-{
-}
+
 ComplexType2* NestedComplex::echoNestedComplex(ComplexType2* Value0)  
 {
 	return Value0;

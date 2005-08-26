@@ -35,18 +35,7 @@ ADEC_MAST_Port::~ADEC_MAST_Port()
 void ADEC_MAST_Port::onFault()
 {
 }
-/* This function is called by the AxisEngine when this web service
- library is first loaded. So here we can initialize any global/static
- data structures of this web service or open database connections */
-void ADEC_MAST_Port::init()
-{
-}
-/* This function is called by the AxisEngine when this web service
- library is unloaded. So we can deallocate any global/static data structures
- and close database connections etc here. */
-void ADEC_MAST_Port::fini()
-{
-}
+
 SummaryResult* ADEC_MAST_Port::doGetSummary(xsd__string Value0, xsd__int Value1, xsd__double Value2, xsd__int Value3)  
 {
 	SummaryResult* outParam = new SummaryResult();
