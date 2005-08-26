@@ -325,12 +325,12 @@ int SoapSerializer::setOutputStream( SOAPTransport * pStream)
 
 					string asStartID = asSOAPMimeHeaders.substr (startPosIdValue,length); 
 
-					string *	asContentType = new string( "multipart/related; type=\"text/xml\"; start=\"<");
+					string asContentType( "multipart/related; type=\"text/xml\"; start=\"<");
 
-					*asContentType = *asContentType + asStartID + ">\"";
-					*asContentType = *asContentType + ";  boundary=\"" MIMEBOUNDARY "\"";
+					asContentType = asContentType + asStartID + ">\"";
+					asContentType = asContentType + ";  boundary=\"" MIMEBOUNDARY "\"";
 
-					pStream->setTransportProperty( CONTENT_TYPE, (*asContentType).c_str()); 
+					pStream->setTransportProperty( CONTENT_TYPE, asContentType.c_str()); 
 
 					serialize( "\r\n" MIMEBOUNDARY "\r\n", NULL);
 					serialize( pStream->getIncomingSOAPMimeHeaders(), "\r\n\r\n", NULL);
