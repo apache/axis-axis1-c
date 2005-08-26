@@ -34,18 +34,7 @@ EnumerationWS::~EnumerationWS()
 void EnumerationWS::onFault()
 {
 }
-/* This function is called by the AxisEngine when this web service
- library is first loaded. So here we can initialize any global/static
- data structures of this web service or open database connections */
-void EnumerationWS::init()
-{
-}
-/* This function is called by the AxisEngine when this web service
- library is unloaded. So we can deallocate any global/static data structures
- and close database connections etc here. */
-void EnumerationWS::fini()
-{
-}
+
 Type1* EnumerationWS::getInput(Type1* Value0)  
 {
 	return Value0;

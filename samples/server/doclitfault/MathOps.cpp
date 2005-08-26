@@ -35,18 +35,7 @@ MathOps::~MathOps()
 void MathOps::onFault()
 {
 }
-/* This function is called by the AxisEngine when this web service
- library is first loaded. So here we can initialize any global/static
- data structures of this web service or open database connections */
-void MathOps::init()
-{
-}
-/* This function is called by the AxisEngine when this web service
- library is unloaded. So we can deallocate any global/static data structures
- and close database connections etc here. */
-void MathOps::fini()
-{
-}
+
 xsd__int MathOps::div(xsd__int Value0, xsd__int Value1)  
 {
 	if (Value1 == 0)

@@ -36,18 +36,7 @@ InteropTestPortTypeB::~InteropTestPortTypeB()
 void InteropTestPortTypeB::onFault()
 {
 }
-/* This function is called by the AxisEngine when this web service
- library is first loaded. So here we can initialize any global/static
- data structures of this web service or open database connections */
-void InteropTestPortTypeB::init()
-{
-}
-/* This function is called by the AxisEngine when this web service
- library is unloaded. So we can deallocate any global/static data structures
- and close database connections etc here. */
-void InteropTestPortTypeB::fini()
-{
-}
+
 void InteropTestPortTypeB::echoStructAsSimpleTypes(SOAPStruct* Value0, AXIS_OUT_PARAM xsd__int *OutValue1, AXIS_OUT_PARAM xsd__float *OutValue2)  
 {
 	int Value1 = Value0->varInt;
