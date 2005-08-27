@@ -83,10 +83,7 @@ m_bCallInitialized(false)
     }
     catch( AxisException& e)
     {
-		char *	pszError = new char[strlen( e.what()) + 1];
-		strcpy( pszError, e.what());
-
-		throw AxisGenException( e.getExceptionCode(), const_cast<char*>(pszError));
+		throw AxisGenException( e.getExceptionCode(), e.what());
     }
     catch(...)
     {
@@ -353,19 +350,13 @@ int Call::setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char
 		}
 		catch( AxisException& e)
 		{
-			char *	pszError = new char[strlen( e.what()) + 1];
-			strcpy( pszError, e.what());
-
-			throw AxisGenException(e.getExceptionCode(), const_cast<char*>(pszError));
+			throw AxisGenException(e.getExceptionCode(), e.what());
 		}
 	}
 
 	if( iSuccess < 0)
 	{
-		string	sError = m_pTransport->getLastChannelError();
-		char *	pszError = new char[sError.length() + 1];
-		strcpy( pszError, sError.c_str());
-		throw AxisGenException( -iSuccess, const_cast<char*>(pszError));
+		throw AxisGenException( -iSuccess, m_pTransport->getLastChannelError());
 	}
 
     return iSuccess;
