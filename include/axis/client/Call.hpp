@@ -653,6 +653,7 @@ public:
 private:
     void closeConnection();
     int makeArray();
+    void cleanup(); // clean memeory in case of exceptions and destructor etc.
 
 private:
     ClientAxisEngine* m_pAxisEngine;

@@ -44,7 +44,7 @@ bool CallBase::bInitialized = false;
 
 Call::Call ()
 :m_pcEndPointUri(NULL), m_strProxyHost(""), m_uiProxyPort(0), m_bUseProxy(false),
-m_bCallInitialized(false)
+m_bCallInitialized(false), m_pContentIdSet(NULL)
 {
     m_pAxisEngine = NULL;
     m_pIWSSZ = NULL;
@@ -83,10 +83,12 @@ m_bCallInitialized(false)
     }
     catch( AxisException& e)
     {
+        cleanup();
 		throw AxisGenException( e.getExceptionCode(), e.what());
     }
     catch(...)
     {
+        cleanup();
         throw;
     }
 }
@@ -94,17 +96,11 @@ m_bCallInitialized(false)
 Call::~Call ()
 {
     m_pAxisEngine->unInitialize ();
-    delete m_pAxisEngine;
-    m_pAxisEngine = NULL;
-	SOAPTransportFactory::destroyTransportObject(m_pTransport);
-	m_pTransport = NULL;
-    uninitialize_module();
-    if (m_pcEndPointUri)
-        delete [] m_pcEndPointUri;  
-	m_pcEndPointUri = NULL;
-	delete m_pContentIdSet;
-	m_pContentIdSet = NULL;
+    
+    cleanup();
 
+    uninitialize_module();
+    
 	list<ISoapAttachment*>::iterator it = m_attachments.begin();
 	while (it != m_attachments.end())
 	{
@@ -112,6 +108,22 @@ Call::~Call ()
 		it++;
 	}
 	m_attachments.clear();
+}
+
+void Call::cleanup()
+{
+    if (m_pContentIdSet)
+        delete m_pContentIdSet;
+    m_pContentIdSet = NULL;
+    if (m_pTransport)
+        SOAPTransportFactory::destroyTransportObject(m_pTransport);
+    m_pTransport = NULL;
+    if (m_pAxisEngine)
+        delete m_pAxisEngine;
+    m_pAxisEngine = NULL;
+    if (m_pcEndPointUri)
+        delete [] m_pcEndPointUri;  
+	m_pcEndPointUri = NULL;
 }
 
 int Call::setEndpointURI (const char* pchEndpointURI)
