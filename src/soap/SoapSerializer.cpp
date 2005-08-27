@@ -362,11 +362,7 @@ int SoapSerializer::setOutputStream( SOAPTransport * pStream)
 
 			if( (iStatus = m_pSoapEnvelope->serialize( *this, (SOAP_VERSION) m_iSoapVersion)) == AXIS_FAIL)
 			{
-				char * pszMsg = new char[128];
-
-				strcpy( pszMsg, "The SOAP serialiser has detected errors in the header or envelope.  Transmission has been aborted.");
-
-				throw AxisSoapException( CLIENT_SOAP_MESSAGE_INCOMPLETE, pszMsg);
+				throw AxisSoapException( CLIENT_SOAP_MESSAGE_INCOMPLETE, "The SOAP serializer has detected errors in the header or envelope. Transmission has been aborted.");
 			}
 
 			if( checkAttachmentAvailability())
