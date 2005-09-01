@@ -3,5 +3,5 @@
 0
 Header Attribute Prefix = nsp
 Child Node Attribute Prefix = nd
-Exception :  AxisSoapException:Received message is incomplete The SOAP serialiser has detected errors in the header or envelope.  Transmission has been aborted.
+Exception :  AxisSoapException:Received message is incomplete The SOAP serializer has detected errors in the header or envelope.  Transmission has been aborted.
 ---------------------- TEST COMPLETE -----------------------------
