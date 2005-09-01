@@ -73,8 +73,6 @@
 HTTPTransport::HTTPTransport ():m_bReopenConnection (false),
 m_strHTTPProtocol ("HTTP/1.1"),
 m_strHTTPMethod ("POST"),
-m_bChunked (false),
-m_bReadPastHTTPHeaders (false),
 m_strProxyHost (""), m_uiProxyPort (0), m_bUseProxy (false),
 m_bMaintainSession (false)
 {
@@ -85,7 +83,6 @@ m_bMaintainSession (false)
     m_strHeaderBytesToSend = "";
     m_iBytesLeft = 0;
     m_iContentLength = 0;
-    m_pcReceived = 0;
 	m_bChannelSecure = false;
     m_pNormalChannel = 0;
     m_pSecureChannel = 0;
@@ -101,6 +98,8 @@ m_bMaintainSession (false)
 #endif
 	m_pNormalChannel = m_pChannelFactory->createChannel(UnsecureChannel);
 	m_pSecureChannel = m_pChannelFactory->createChannel(SecureChannel);
+
+	m_GetBytesState = eWaitingForHTTPHeader;
 }
 
 /*
@@ -261,7 +260,7 @@ int HTTPTransport::openConnection()
 void HTTPTransport::closeConnection()
 {
     // get ready for a new message.
-    m_bReadPastHTTPHeaders = false;
+	m_GetBytesState = eWaitingForHTTPHeader;
 
     //clear the message buffer in preperation of the next read.
     m_strReceived = "";
@@ -285,25 +284,6 @@ void HTTPTransport::closeConnection()
  */
 AXIS_TRANSPORT_STATUS HTTPTransport::flushOutput() throw (AxisException, HTTPTransportException)
 {
-	//Chinthana:AXISCPP-558 - Gracefully handle server side close of persistant connection
-	if( m_bReopenConnection)
-	{
-		m_bReopenConnection = false;
-  
- 		if( m_pActiveChannel->open() != AXIS_SUCCESS)
- 		{
- 		    int				iStringLength = m_pActiveChannel->GetLastErrorMsg().length() + 1;
- 			const char *	pszLastError = new char[iStringLength];
-  
- 		    memcpy( (void *) pszLastError,
-  					m_pActiveChannel->GetLastErrorMsg().c_str(),
-  					iStringLength);
-  
- 		    throw HTTPTransportException( CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED,(char *) pszLastError);
-		}
-	}
-	//16-08-2005.................................................
-	
     // In preperation for sending the message, calculate the size of the message
     // by using the string length method.
     // NB: This calculation may not necessarily be correct when dealing with SSL
@@ -315,78 +295,35 @@ AXIS_TRANSPORT_STATUS HTTPTransport::flushOutput() throw (AxisException, HTTPTra
 
     this->setTransportProperty ("Content-Length", buff);
 
-	//Chinthana:AXISCPP-558 - Gracefully handle server side close of persistant connection
-	bool reopenConnection;
- 	if (m_pActiveChannel->reopenRequired())
-	{
- 		reopenConnection = true;
- 	}
- 	else 
-	{
- 		reopenConnection = m_bReopenConnection;
- 		m_bReopenConnection = false;
- 	}
- 
- 	bool reopenConnectionOnFailure = true;
- 	bool dataSent = false;
- 
- 	while (!dataSent) 
-	{
- 		if( reopenConnection ) 
-		{
- 			m_pActiveChannel->close();
- 
- 			if( m_pActiveChannel->open() != AXIS_SUCCESS)
- 			{
- 				int iStringLength = m_pActiveChannel->GetLastErrorMsg().length() + 1;
- 				const char* pszLastError = new char[iStringLength];
- 
- 				memcpy( (void *) pszLastError,
-  					m_pActiveChannel->GetLastErrorMsg().c_str(),
-  					iStringLength);
-  
- 				throw HTTPTransportException( CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED,
- 							      (char *) pszLastError);
-  			}
-  
- 			// Only attempt to reopen the connection one time
- 			reopenConnectionOnFailure = false;
- 		}
-	//16-08-2005.................................................
-
     // The header is now complete.  The message header and message can now be
     // transmitted.
-		try
-		{
-			#ifndef __OS400__
-					*m_pActiveChannel << this->getHTTPHeaders ();
-					*m_pActiveChannel << this->m_strBytesToSend.c_str ();
-			#else		
-					const char *buf = this->getHTTPHeaders ();
-					char *utf8Buf = toUTF8((char *)buf, strlen(buf)+1);
-					*m_pActiveChannel << utf8Buf;
-					free(utf8Buf);
-					buf     = this->m_strBytesToSend.c_str();
-					utf8Buf = toUTF8((char *)buf, strlen(buf)+1);
-					*m_pActiveChannel << utf8Buf;
-					free(utf8Buf);
-			#endif
-			// Chinthana: We're done sending
-			dataSent = true;
-
-		}
-		catch( HTTPTransportException & e)
-		{
-			throw;
-		}
-		catch( AxisException & e)
-		{
-			throw;
-		}
-		catch(...)
-		{
-			throw;
-		}
+	try
+	{
+#ifndef __OS400__
+		*m_pActiveChannel << this->getHTTPHeaders ();
+		*m_pActiveChannel << this->m_strBytesToSend.c_str ();
+#else		
+        const char *buf = this->getHTTPHeaders ();
+        char *utf8Buf = toUTF8((char *)buf, strlen(buf)+1);
+		*m_pActiveChannel << utf8Buf;
+        free(utf8Buf);
+        buf     = this->m_strBytesToSend.c_str();
+        utf8Buf = toUTF8((char *)buf, strlen(buf)+1);
+		*m_pActiveChannel << utf8Buf;
+        free(utf8Buf);
+#endif
+	}
+	catch( HTTPTransportException & e)
+	{
+		throw;
+	}
+	catch( AxisException & e)
+	{
+		throw;
+	}
+	catch(...)
+	{
+		throw;
 	}
 
     // Empty the bytes to send string.
@@ -516,454 +453,172 @@ AXIS_TRANSPORT_STATUS HTTPTransport::sendBytes( const char *pcSendBuffer, const 
  * @return AXIS_TRANSPORT_STATUS Value to the status o message reception
  * (TRANSPORT_FINISHED or TRANSPORT_IN_PROGRESS).
  */
-AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw (AxisException, HTTPTransportException)
+AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char * pcBuffer, int * piSize) throw (AxisException, HTTPTransportException)
 {
-    if (0 <= m_iBytesLeft)
-    {
-		int	iIterationCountdown = 100;
+	std::string	nextChunk = "";
 
-		try
+// It is assumed that the constructor has initialised the following variables:-
+// Type			Label			Initial Value		Description
+// enum			m_eMsgState		eHTTP_Header		Message decode state.
+// int			m_iBytesLeft	0					Size of string held in m_strReceived.
+// char *		m_pszRxBuffer	new char [BUF_SIZE]	Local buffer with message read from channel.
+// std::string	m_strReceived   <uninitialised>		Contains the concatination of all unprocessed message string parts.
+
+// The method getBytes has three distinct states.  These are defined as
+// follows:-
+//   eWaitingForHTTPHeader    - Waiting for a 'valid' HTTP header.  A header is
+//                              is valid when a 'HTTP' string is found that is
+//                              subsequently followed by a CRLFCRLF sequence.
+//                              The HTTP header is then read and if the message
+//                              number is incorrect an exception is thrown.
+//                              The header also contains information on whether
+//                              the accompanying message is or is not chunked.
+//   eSOAPMessageIsChunked    - When a message is chunked, it has been broken
+//                              into a number of blocks.  Each block is
+//                              preceeded by a hex number.  The number is the
+//                              chunk length.  A zero length chunk represents
+//                              the end of the message.
+//                              NB: because AXIS uses a 'pull' parser, the last
+//                                  chunk size should never be read as the
+//                                  parser will return once it has encountered
+//                                  '</envelope>'.  If it does read the last
+//                                  '0', this could indicate that there is a
+//                                  problem in the message.
+//   eSOAPMessageIsNotChunked - The message is read until the number of message
+//                              bytes read equals the HTTP header content
+//                              length value.
+	switch( m_GetBytesState)
+	{
+		case eWaitingForHTTPHeader:
 		{
-			m_pszRxBuffer [0] = '\0';
-			*m_pActiveChannel >> m_pszRxBuffer;
-			m_strReceived = m_pszRxBuffer;
-
-		    if( !m_bReadPastHTTPHeaders)
-		    {
-				unsigned long	start = std::string::npos;
-
-				iIterationCountdown = 100;
-				
-				// getBytes needs to be able to exit any of the following loops if the expected
-				// character sequence is never detected.  This is done using a simple counter.
-				// If the loop has not exited on its own accord after say 100 tries, it is safe
-				// to assume that it never will...  To make the test less likely to cause
-				// problems with very long messages, the countdown is only decremented when no
-				// data has been received.
-
-				do
-				{
-					do
-					{
-						if (m_strReceived.find( ASCII_S_CRLFCRLF ) == std::string::npos)
-						{
-							m_pszRxBuffer [0] = '\0';
-							*m_pActiveChannel >> m_pszRxBuffer;
-
-							// If data has been received, then add the data to the received message buffer
-							// and reset the countdown.  Otherwise, decrement the countdown.
-							if( strlen( m_pszRxBuffer) > 0)
-							{
-							    m_strReceived += m_pszRxBuffer;
-								iIterationCountdown = 100;
-							}
-							else
-							{
-								iIterationCountdown--;
-							}
-						}
-					} while( m_strReceived.find( ASCII_S_CRLFCRLF ) == std::string::npos && iIterationCountdown > 0);
-
-					if( iIterationCountdown == 0)
-					{
-						throw HTTPTransportException( SERVER_TRANSPORT_INPUT_STREAMING_ERROR,
-													  "Timed out waiting for HTTP header message (1).");
-					}
-
-					if( m_strReceived.find( ASCII_S_HTTP ) == std::string::npos)
-					{
-						iIterationCountdown = 100;
-
-						// Most probably what we read was left overs from earlier reads
-						// Skip this \r\n\r\n
-						m_strReceived = m_strReceived.substr( m_strReceived.find( ASCII_S_CRLFCRLF ) + 4);
-
-						do
-						{
-							if( m_strReceived.find( ASCII_S_CRLFCRLF ) == std::string::npos)
-							{
-								m_pszRxBuffer [0] = '\0';
-								*m_pActiveChannel >> m_pszRxBuffer;
-
-								// If data has been received, then add the data to the received message buffer
-								// and reset the countdown.  Otherwise, decrement the countdown.
-								if( strlen( m_pszRxBuffer) > 0)
-								{
-									m_strReceived += m_pszRxBuffer;
-									iIterationCountdown = 100;
-								}
-								else
-								{
-									iIterationCountdown--;
-								}
-							}
-						} while( m_strReceived.find( ASCII_S_CRLFCRLF ) == std::string::npos && iIterationCountdown > 0);
-
-						if( iIterationCountdown == 0)
-						{
-							throw HTTPTransportException( SERVER_TRANSPORT_INPUT_STREAMING_ERROR,
-														  "Timed out waiting for HTTP header message (2).");
-						}
-
-						// now this must contain HTTP. Else there is a content error.
-					}
-
-		    		//now we have found the end of headers
-					m_bReadPastHTTPHeaders = true;
-
-				    unsigned long pos = 0;
-
-		    		// Look for content lenght
-				    if( (pos = m_strReceived.find( ASCII_S_CONTENT_LENGTH )) != std::string::npos)
-					{
-						m_iContentLength = atoi( m_strReceived.substr( pos + strlen( "Content-Length: "),
-																	   m_strReceived.find( ASCII_S_LF, pos)).c_str());
-				    }
-
-		   			 // Check if the message is chunked
-				    if( (pos = m_strReceived.find( ASCII_S_TRANSFERENCODING_CHUNKED )) != std::string::npos)
-					{
-						m_bChunked = true;
-					}
-					else
-					{
-						m_bChunked = false;
-					}
-
-		    		// check if there is HTTP header. If not, there must be an error and 
-		   			// will be detected by processResponseHTTPHeaders()
-		   			// However, must make sure that the left overs from eatlier reads
-		    		// do not appear before HTTP/1.x
-					start = m_strReceived.find( ASCII_S_HTTP );
-
-					if( start == std::string::npos)
-					{
-						start = 0;
-					}
-
-		   			// Extract HTTP headers and process them
-				    m_strResponseHTTPHeaders = m_strReceived.substr( start,
-											m_strReceived.find( ASCII_S_CRLFCRLF ) + 2 - start);
-				    processResponseHTTPHeaders();
-
-				    if( m_iResponseHTTPStatusCode == 100)
-				    {
-						// Samisa: We found Continue. Keep on reading and processing headers
-						// till we get a HTTP code other than 100
-						// Here it is assumed that the whole of the request is already sent
-						m_pszRxBuffer [0] = '\0';
-						*m_pActiveChannel >> m_pszRxBuffer;
-						m_strReceived = m_pszRxBuffer;
-					}
-				} while( m_iResponseHTTPStatusCode == 100 && iIterationCountdown > 0);
-
-				if( iIterationCountdown == 0)
-				{
-					throw HTTPTransportException( SERVER_TRANSPORT_INPUT_STREAMING_ERROR,
-												  "Timed out waiting for HTTP header message (3).");
-				}
-
-                if ( m_iResponseHTTPStatusCode != 500 &&
-                    ( m_iResponseHTTPStatusCode < 200 || m_iResponseHTTPStatusCode >= 300 ))
-				{
-                                    m_strResponseHTTPStatusMessage = std::string("\n Server sent HTTP error: '") + m_strResponseHTTPStatusMessage + std::string("'\n");
-				    throw HTTPTransportException( SERVER_TRANSPORT_HTTP_EXCEPTION,
-												  const_cast <char *> (m_strResponseHTTPStatusMessage.c_str()));
-				}
-
-				// Done with HTTP headers, get payload
-				m_strReceived = m_strReceived.substr( m_strReceived.find( ASCII_S_CRLFCRLF, start) + 4);
-		    }
-
-	   		 // Read past headers. Deal with payload
-
-	   		 // make sure we have a message with some content
-		    if( m_strReceived.length () == 0)
+// Wait for a HTTP header to be located on the input stream.
+			do
 			{
-				m_pszRxBuffer [0] = '\0';
-				*m_pActiveChannel >> m_pszRxBuffer;
-				m_strReceived = m_pszRxBuffer;
+// From the input stream, wait for a 'valid' HTTP header.
+				readHTTPHeader();
+
+// From the header,extract such things as chunking, message length, etc.
+				processHTTPHeader();
+
+			} while( m_iResponseHTTPStatusCode == 100);
+
+// Check that the HTTP status code is valid.
+			checkHTTPStatusCode();
+
+// Done with HTTP headers, get SOAP message.
+			int iHTTPStart = m_strReceived.find( ASCII_S_HTTP);
+			int iHTTPEnd = m_strReceived.find( ASCII_S_CRLFCRLF, iHTTPStart);
+
+			m_strReceived = m_strReceived.substr( iHTTPEnd + strlen( ASCII_S_CRLFCRLF));
+
+			m_iBytesLeft = m_strReceived.length();
+
+// This bit of code should not be necessary, but just in case...
+			if( m_GetBytesState == eWaitingForHTTPHeader)
+			{
+				break;
 			}
+		}
 
-		if( m_strReceived.length () > 0) 
+// At this point it is assumed that m_strReceived contains the block of
+// unprocessed data.  m_iBytesLeft is the length of text/data in m_strReceived
+// is a 'char *' type copy of the m_strReceived string.
+// NB: It is assumed that all of these variables ARE in sync at this point.
+	case eSOAPMessageIsChunked:
 		{
-
-		    if( m_bChunked && m_iContentLength < 1)	// Read first chunk
-		    {
-		/*
-		 *Chunked data looks like ->
-		 *      Chunked-Body   = *chunk
-		 *                       "0" CRLF
-		 *                       footer
-		 *                       CRLF
-		 *
-		 *      chunk          = chunk-size [ chunk-ext ] CRLF
-		 *                         chunk-data CRLF
-		 *
-		 *      hex-no-zero    = <HEX excluding "0">
-		 *
-		 *      chunk-size     = hex-no-zero *HEX
-		 *      chunk-ext      = *( ";" chunk-ext-name [ "=" chunk-ext-value ] )
-		 *      chunk-ext-name = token
-		 *      chunk-ext-val  = token | quoted-string
-		 *      chunk-data     = chunk-size(OCTET)
-		 *
-		 *      footer         = *entity-header
-		 */
-				// firstly read in the chunk size line.
-				//There might be chunk extensions in there too but we may not need them
-				unsigned long endOfChunkData = m_strReceived.find( ASCII_S_CRLF );
-
-				// make sure we have read at least some part of the message
-				if( endOfChunkData == std::string::npos)
+			if( m_GetBytesState == eSOAPMessageIsChunked)
+			{
+				if( m_iBytesLeft == 0)
 				{
-					iIterationCountdown = 100;
-
-					do
-					{
-						m_pszRxBuffer [0] = '\0';
-						*m_pActiveChannel >> m_pszRxBuffer;
-
-						if( strlen( m_pszRxBuffer) == 0)
-						{
-							iIterationCountdown--;
-						}
-						else
-						{
-							iIterationCountdown = 100;
-						}
-
-						m_strReceived = m_pszRxBuffer;
-						endOfChunkData = m_strReceived.find( ASCII_S_CRLF );
-					} while( endOfChunkData == std::string::npos && iIterationCountdown > 0);
+					getNextDataPacket( "No data available for next chunk size.");
 				}
 
-				if( iIterationCountdown == 0)
+				m_iContentLength = getChunkSize();
+
+// If the chunk size is larger than the available data, then read in more data
+// until all of the chunk has been read.
+				while( m_iContentLength > m_iBytesLeft)
 				{
-					throw HTTPTransportException( SERVER_TRANSPORT_INPUT_STREAMING_ERROR,
-												  "Timed out waiting for SOAP message (1).");
+					getNextDataPacket( "No data available for next chunk.");
 				}
 
-				unsigned long endOfChunkSize = endOfChunkData;
-
-				// now get the size of the chunk from the data
-				// look to see if there are any extensions - these are put in brackets so look for those
-				if( m_strReceived.substr( 0, endOfChunkData).find( ASCII_S_LEFTPAREN ) != string::npos)
+// If data read is longer than chunk size, then copy the extra data to a
+// temporary variable and process data just belonging to this chunk.
+				if( m_iBytesLeft > m_iContentLength)
 				{
-					endOfChunkSize = m_strReceived.find( ASCII_S_LEFTPAREN );
-				}
+					nextChunk = m_strReceived.substr( m_iContentLength + strlen( ASCII_S_CRLF));
+					m_strReceived = m_strReceived.substr( 0, m_iContentLength);
+					m_iBytesLeft = m_iContentLength;
 
-				// convert the hex String into the length of the chunk
-				m_iContentLength = axtoi( (char *) m_strReceived.substr( 0, endOfChunkSize).c_str());
-
-				// if the chunk size is zero then we have reached the footer
-				// If we have reached the footer then we can throw it away because we don't need it
-				if( m_iContentLength > 0)
-				{
-		 			// now get the chunk without the CRLF
-		    		// check if we have read past chunk length
-					if( m_strReceived.length() >= (endOfChunkData + 2 + m_iContentLength))
+// Check to see if the next chunk size is zero.  If it is then change the state.
+					if( peekChunkLength( nextChunk) == 0)
 					{
-						m_strReceived = m_strReceived.substr( endOfChunkData + 2, m_iContentLength);
-					}
-					else	// we have read lesser than chunk length
-					{
-						m_strReceived = m_strReceived.substr( endOfChunkData + 2);
-					}
-					
-		    		// We have received part of chunk data. If received payload
-		     		// is a mime struct, process it
-					if( m_bMimeTrue)
-					{
-						processRootMimeBody();
+						m_GetBytesState = eWaitingForHTTPHeader;
 					}
 				}
 				else
 				{
-					m_strReceived = "";
+					nextChunk = "";
+				}
+
+// Now have at least chunk size worth of data.  The chunk may contain Mime data
+// (this depends on information in the HTTP header).  If Mime data is expected,
+// process it first.
+				if( m_bMimeTrue)
+				{
+					processRootMimeBody();
+
+					m_iBytesLeft = m_strReceived.length();
+				}
+
+				break;
+			}
+		}
+
+	case eSOAPMessageIsNotChunked:
+		{
+// Check that there is more message to read.
+			if( m_iContentLength > 0)
+			{
+				getNextDataPacket( "No data available for message.");
+
+// Check for Mime header
+				if( m_bMimeTrue)
+				{
+					processRootMimeBody();
+
+					m_iBytesLeft = m_strReceived.length();
+				}
+
+// Subtract message length (so far) from expcted content length.
+				m_iContentLength -= m_iBytesLeft;
+
+// If all of the message has been received, then reset the process state.
+				if( m_iContentLength <= 0)
+				{
+					m_GetBytesState = eWaitingForHTTPHeader;
 				}
 			}
-			else if( m_bChunked)	// read continued portions of a chunk
+			else
 			{
-				// Samisa - NOTE: It looks as if there is some logic duplication
-				// in this block, where we read continued chunks and the block
-				// above, where we read the first chunk. However, there are slight
-				// logical differences here, and that is necessary to enable the
-				// pull model used by the parser - this logic makes pulling more
-				// efficient (30th Sept 2004)
-				if( m_strReceived.length () >= m_iContentLength)	// We have reached end of current chunk
-				{
-		    		// Get remainder of current chunk
-					std::string strTemp = m_strReceived.substr( 0, m_iContentLength);
-
-		    		// Start looking for the next chunk
-		    		// The format we are expecting here is:
-		    		// <previous chunk>\r\n<chunk size>\r\n<next chunk>
-
-					unsigned long endOfChunkData = m_strReceived.find( ASCII_S_CRLF );
-					
-					iIterationCountdown = 100;
-
-		    		// Make sure that we have the found the end of previous chunk
-					while( endOfChunkData == std::string::npos && iIterationCountdown > 0)
-					{
-						m_pszRxBuffer [0] = '\0';
-						*m_pActiveChannel >> m_pszRxBuffer;
-
-						if( strlen( m_pszRxBuffer) > 0)
-						{
-							iIterationCountdown = 100;
-						}
-						else
-						{
-							iIterationCountdown--;
-						}
-
-						m_strReceived += m_pszRxBuffer;
-						endOfChunkData = m_strReceived.find( ASCII_S_CRLF );
-					}
-
-					if( iIterationCountdown == 0)
-					{
-						throw HTTPTransportException( SERVER_TRANSPORT_INPUT_STREAMING_ERROR,
-													  "Timed out waiting for SOAP message (2).");
-					}
-
-				    m_strReceived = m_strReceived.substr( endOfChunkData + 2);	// Skip end of previous chunk
-
-				    endOfChunkData = m_strReceived.find( ASCII_S_CRLF );	// Locate the start of next chunk
-
-					iIterationCountdown = 100;
-
-		    		// Make sure that we have the starting line of next chunk
-					while( endOfChunkData == std::string::npos && iIterationCountdown > 0)
-					{
-						m_pszRxBuffer [0] = '\0';
-						*m_pActiveChannel >> m_pszRxBuffer;
-
-						if( strlen( m_pszRxBuffer) > 0)
-						{
-							iIterationCountdown = 100;
-						}
-						else
-						{
-							iIterationCountdown--;
-						}
-
-						m_strReceived += m_pszRxBuffer;
-						endOfChunkData = m_strReceived.find( ASCII_S_CRLF );
-					}
-
-					if( iIterationCountdown == 0)
-					{
-						throw HTTPTransportException( SERVER_TRANSPORT_INPUT_STREAMING_ERROR,
-													  "Timed out waiting for SOAP message (3).");
-					}
-
-				    unsigned long endOfChunkSize = endOfChunkData;
-
-		    		// look to see if there are any extensions - these are put in brackets so look for those
-				    if (m_strReceived.substr (0, endOfChunkData).find ( ASCII_S_LEFTPAREN ) != string::npos)
-				    {
-						endOfChunkSize = m_strReceived.find ( ASCII_S_LEFTPAREN );
-					}
-
-		    		// convert the hex String into the length of the chunk
-				    int iTempContentLength = axtoi( (char *) m_strReceived.substr( 0, endOfChunkSize).c_str());
-
-		    		// if the chunk size is zero then we have reached the footer
-		    		// If we have reached the footer then we can throw it away because we don't need it
-				    if( iTempContentLength > 0)
-				    {
-						// Update the content lenght to be remainde of previous chunk and lenght of new chunk
-						m_iContentLength += iTempContentLength;
-
-						// now get the chunk without the CRLF
-						// check if we have read past chunk length
-						if( m_strReceived.length() >= (endOfChunkData + 2 + iTempContentLength))
-						{
-							m_strReceived = m_strReceived.substr( endOfChunkData + 2, iTempContentLength);
-						}
-						else
-						{
-							m_strReceived = m_strReceived.substr( endOfChunkData + 2);
-						}
-
-						// We have received part of chunk data. If received payload
-						// is a mime struct, process it
-						if( m_bMimeTrue)
-						{
-							processRootMimeBody();
-						}
-					}
-					else
-					{
-						m_strReceived = "";
-					}
-
-		    		// Append the data of new chunk to data from previous chunk
-					m_strReceived = strTemp + m_strReceived;
-
-					}		// End of if (m_strReceived.length() >= m_iContentLength)
-					// If we have not reached end of current chunk, nothing to be done
-				}
-				else		// Not chunked
-				{
-					// We have received part of chunk data. If received payload
-		 			// is a mime struct, process it
-					if( m_bMimeTrue)
-					{
-						processRootMimeBody();
-					}
-				}
+// Reset the process state.
+				m_GetBytesState = eWaitingForHTTPHeader;
 			}
 
-		    m_pcReceived = m_strReceived.c_str();
-
-		    if( m_pcReceived)
-			{
-				m_iBytesLeft = strlen( m_pcReceived);
-		    }
-		    else
-			{
-				throw HTTPTransportException( SERVER_TRANSPORT_BUFFER_EMPTY, "Recieved null");
-		    }
-
-		    m_iContentLength -= m_iBytesLeft;
+			break;
 		}
-		catch( HTTPTransportException & e)
-		{
-			throw;
-		}
-		catch( AxisException & e)
-		{
-		    throw;
-		}
-		catch(...)
-		{
-		    throw;
-		}
-    }
+	}
 
-    if( (m_pcReceived) && (*m_pcReceived) )
-    {
-		int iToCopy = (*pSize < m_iBytesLeft) ? *pSize : m_iBytesLeft;
-
-		strncpy( pcBuffer, m_pcReceived, iToCopy);
-
-		m_iBytesLeft -= iToCopy;
-		m_pcReceived += iToCopy;
-		*pSize = iToCopy;
+// Copy as much of the message to the parser buffer as possible.
+	if( copyDataToParserBuffer( pcBuffer, piSize, m_iBytesLeft))
+	{
+		m_strReceived += nextChunk;
+		m_iBytesLeft = m_strReceived.length();
 
 		return TRANSPORT_IN_PROGRESS;
 	}
-	else
-	{
-		m_bReadPastHTTPHeaders = false;	// get ready for a new message
-		m_strReceived = "";	//clear the message buffer in preperation of the next read
 
-		return TRANSPORT_FINISHED;
-    }
+	return TRANSPORT_FINISHED;
 }
 
 /* HTTPTransport::setTransportProperty( Type, Value) Is an overloaded public
@@ -1780,4 +1435,284 @@ const char * HTTPTransport::getLastChannelError()
 	}
 
 	return NULL;
+}
+
+void HTTPTransport::readHTTPHeader()
+{
+// The parser is expecting a SOAP message.  Thus, the HTTP header must have
+// been read and processed before control is returned to the parser.  It can
+// not be assumed that the HTTP header will be read in one block, thus there
+// must be processing that first identifies the beginning of the HTTP header
+// block (i.e. looks for 'HTTP') and then additional processing that identifies
+// the end of the HTTP header block (i.e. looks for CR LF CR LF).  To stop the
+// search becoming 'stuck' because of an incomplete, corrupt or unexpected
+// message an iteration count has been added (this could become configurable if
+// the user needs to remove this feature if the server is particularily slow,
+// etc.).
+	bool	bHTTPHeaderFound = false;
+	int		iIterationCount = 100;
+
+	m_strReceived = "";
+
+	do
+	{
+// Read whatever part of the response message that has arrived at the active
+// channel socket.
+		m_pszRxBuffer[0] = '\0';
+		*m_pActiveChannel >> m_pszRxBuffer;
+
+// Add the new message part to the received string.
+		m_strReceived += m_pszRxBuffer;
+
+// Do iteration processing.
+		if( strlen( m_pszRxBuffer) > 0)
+		{
+			iIterationCount = 100;
+		}
+		else
+		{
+			iIterationCount--;
+		}
+
+// Check for beginning and end of HTTP header.
+		if( m_strReceived.find( ASCII_S_HTTP) != std::string::npos &&
+			m_strReceived.find( ASCII_S_CRLFCRLF) != std::string::npos)
+		{
+			bHTTPHeaderFound = true;
+		}
+	} while( !bHTTPHeaderFound && iIterationCount > 0);
+
+// If the HTTP header was not found in the given number of iterations then
+// throw an exception.
+	if( iIterationCount == 0)
+	{
+		throw HTTPTransportException( SERVER_TRANSPORT_INPUT_STREAMING_ERROR,
+									  "Timed out waiting for HTTP header message.");
+	}
+}
+
+void HTTPTransport::processHTTPHeader()
+{
+// At this point the HTTP header has been found.  It now needs to be processed.
+	int	iPosContentLength = m_strReceived.find( ASCII_S_CONTENT_LENGTH);
+
+	if( iPosContentLength != std::string::npos)
+	{
+		int	iEOL = m_strReceived.find( ASCII_S_LF, iPosContentLength);
+
+		iPosContentLength += strlen( ASCII_S_CONTENT_LENGTH);
+
+		m_iContentLength = atoi( m_strReceived.substr( iPosContentLength, iEOL).c_str());
+
+		m_GetBytesState = eSOAPMessageIsNotChunked;
+	}
+
+// Check if the message is chunked
+	int	iPosChunked = m_strReceived.find( ASCII_S_TRANSFERENCODING_CHUNKED);
+
+	if( iPosChunked != std::string::npos)
+	{
+//Chunked data looks like ->
+//      Chunked-Body   = *chunk
+//                       "0" CRLF
+//                       footer
+//                       CRLF
+//
+//      chunk          = chunk-size [ chunk-ext ] CRLF
+//                         chunk-data CRLF
+//
+//      hex-no-zero    = <HEX excluding "0">
+//
+//      chunk-size     = hex-no-zero *HEX
+//      chunk-ext      = *( ";" chunk-ext-name [ "=" chunk-ext-value ] )
+//      chunk-ext-name = token
+//      chunk-ext-val  = token | quoted-string
+//      chunk-data     = chunk-size(OCTET)
+//
+//      footer         = *entity-header
+
+		m_GetBytesState = eSOAPMessageIsChunked;
+	}
+	else
+	{
+		if( m_eProtocolType == APTHTTP1_0)
+		{
+			m_GetBytesState = eSOAPMessageIsNotChunked;
+			m_iContentLength = m_iBytesLeft;
+		}
+		else
+		{
+			m_GetBytesState = eWaitingForHTTPHeader;
+
+			throw HTTPTransportException( SERVER_TRANSPORT_INPUT_STREAMING_ERROR,
+										  "HTTP header message must be chunked or have a content length.");
+		}
+	}
+
+	int iHTTPStart = m_strReceived.find( ASCII_S_HTTP);
+	int iHTTPEnd = m_strReceived.find( ASCII_S_CRLFCRLF);
+
+// Extract HTTP header and process it
+	m_strResponseHTTPHeaders = m_strReceived.substr( iHTTPStart, iHTTPEnd + 2 - iHTTPStart);
+
+	processResponseHTTPHeaders();
+
+// If the HTTP message is a 'continue' message then remove the HTTP header and
+// then repeat HTTP header processing.
+	if( m_iResponseHTTPStatusCode == 100)
+	{
+		m_strReceived = m_strReceived.substr( iHTTPEnd + 2);
+	}
+}
+
+void HTTPTransport::checkHTTPStatusCode()
+{
+// Now have a valid HTTP header that is not 100.
+	if ( m_iResponseHTTPStatusCode != 500 &&
+		 (m_iResponseHTTPStatusCode < 200 ||
+		  m_iResponseHTTPStatusCode >= 300))
+	{
+		m_GetBytesState = eWaitingForHTTPHeader;
+
+		m_strResponseHTTPStatusMessage = std::string( "\n Server sent HTTP error: '") +
+										 m_strResponseHTTPStatusMessage +
+										 std::string("'\n");
+
+		throw HTTPTransportException( SERVER_TRANSPORT_HTTP_EXCEPTION,
+								  const_cast <char *> (m_strResponseHTTPStatusMessage.c_str()));
+	}
+}
+
+bool HTTPTransport::getNextDataPacket( const char * pcszExceptionMessage)
+{
+	int		iIterationCount = 100;
+	bool	bDataRead = false;
+
+	do
+	{
+// Read whatever part of the response message that has arrived at the active
+// channel socket.
+		m_pszRxBuffer[0] = '\0';
+		*m_pActiveChannel >> m_pszRxBuffer;
+
+// Do iteration processing.
+		if( strlen( m_pszRxBuffer) == 0)
+		{
+			iIterationCount--;
+		}
+		else
+		{
+			bDataRead = true;
+		}
+
+	} while( !bDataRead && iIterationCount > 0);
+
+	if( bDataRead)
+	{
+		m_strReceived += m_pszRxBuffer;
+
+		m_iBytesLeft = m_strReceived.length();
+	}
+	else
+	{
+		if( m_strReceived.length() == 0)
+		{
+			m_GetBytesState = eWaitingForHTTPHeader;
+
+			if( pcszExceptionMessage != NULL && strlen( pcszExceptionMessage) > 0)
+			{
+				int	iStringLength = strlen( pcszExceptionMessage) + 1;
+				const char * pszLastError = new char[iStringLength];
+
+				memcpy( (void *) pszLastError, pcszExceptionMessage, iStringLength);
+
+				throw HTTPTransportException( SERVER_TRANSPORT_HTTP_EXCEPTION,
+											  (char *) pszLastError);
+			}
+		}
+	}
+
+	return bDataRead;
+}
+
+int HTTPTransport::getChunkSize()
+{
+	int	iChunkSize;
+
+	while( m_strReceived.find( ASCII_S_CRLF) == std::string::npos)
+	{
+		getNextDataPacket( "Could not find delimiter for end of chunk size.");
+	}
+
+	int iEndOfChunkData = m_strReceived.find( ASCII_S_CRLF) + strlen( ASCII_S_CRLF);
+	int iEndOfChunkSize = m_strReceived.find( ASCII_S_CRLF);
+
+// Now get the size of the chunk from the data.  Look to see if there are any
+// extensions - these are put in brackets so look for those.
+	if( m_strReceived.substr( 0, iEndOfChunkSize).find( ASCII_S_LEFTPAREN) != string::npos)
+	{
+		iEndOfChunkSize = m_strReceived.find( ASCII_S_LEFTPAREN);
+	}
+
+// Convert the hex string into the length of the chunk.
+	iChunkSize = axtoi( (char *) m_strReceived.substr( 0, iEndOfChunkSize).c_str());
+
+	m_strReceived = m_strReceived.substr( iEndOfChunkData);
+
+	m_iBytesLeft = m_strReceived.length();
+
+	return iChunkSize;
+}
+
+bool HTTPTransport::copyDataToParserBuffer( char * pcBuffer, int * piSize, int iBytesToCopy)
+{
+	bool	bTransportInProgress = false;
+
+	if( iBytesToCopy > 0)
+	{
+		int iToCopy = (*piSize < iBytesToCopy) ? *piSize : iBytesToCopy;
+
+		strncpy( pcBuffer, m_strReceived.c_str(), iToCopy);
+
+		m_iBytesLeft -= iToCopy;
+		*piSize = iToCopy;
+
+		if( m_iBytesLeft > 0)
+		{
+			m_strReceived = m_strReceived.substr( iToCopy);
+		}
+		else
+		{
+			m_strReceived = "";
+		}
+
+		bTransportInProgress = true;
+	}
+
+	return bTransportInProgress;
+}
+
+int HTTPTransport::peekChunkLength( std::string& strNextChunk)
+{
+	if( strNextChunk.length() == 0)
+	{
+		return -1;
+	}
+
+	int iEndOfChunkSize = strNextChunk.find( ASCII_S_CRLF);
+
+	if( iEndOfChunkSize == std::string::npos)
+	{
+		return -1;
+	}
+
+// Now get the size of the chunk from the data.  Look to see if there are any
+// extensions - these are put in brackets so look for those.
+	if( strNextChunk.substr( iEndOfChunkSize).find( ASCII_S_LEFTPAREN) != std::string::npos)
+	{
+		iEndOfChunkSize = strNextChunk.find( ASCII_S_LEFTPAREN);
+	}
+
+// Convert the hex string into the length of the chunk.
+	return axtoi( (char *) strNextChunk.substr( 0, iEndOfChunkSize).c_str());
 }

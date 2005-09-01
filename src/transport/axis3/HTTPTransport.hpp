@@ -34,6 +34,13 @@ AXIS_CPP_NAMESPACE_USE using namespace std;
 
 int axtoi (char *hexStg);
 
+typedef enum
+{
+	eWaitingForHTTPHeader,
+	eSOAPMessageIsChunked,
+	eSOAPMessageIsNotChunked
+} EGETBYTESSTATE;
+
 class HTTPTransport:public SOAPTransport
 {
   public:
@@ -102,6 +109,13 @@ class HTTPTransport:public SOAPTransport
     void					processMimeBody();
     void					getAttachment( char* pStrAttachment, int* pIntSize, int intAttachmentId);
     int						FindTransportPropertyIndex( std::string);
+	void					readHTTPHeader();
+	void					processHTTPHeader();
+	void					checkHTTPStatusCode();
+	bool					getNextDataPacket( const char * pcszExceptionMessage);
+	int						getChunkSize();
+	bool					copyDataToParserBuffer( char * pcBuffer, int * piSize, int iBytesToCopy);
+	int						peekChunkLength( std::string& strNextChunk);
 
   /**
     * Keeps track of if we need to reopen connection.
@@ -150,25 +164,10 @@ class HTTPTransport:public SOAPTransport
     */
     unsigned int m_iContentLength;
 
-  /**
-    * Is the message chunked
-    */
-    int m_bChunked;
-
   /**  
     * String holding what we received over the channel
     */
     std::string m_strReceived;
-
-  /**
-    * Have we read past HTTP headers?
-    */
-    bool m_bReadPastHTTPHeaders;
-
-  /**
-    * Payload buffer
-    */
-    const char *m_pcReceived;
 
   /**
     * Proxy server name.
@@ -263,6 +262,13 @@ class HTTPTransport:public SOAPTransport
 	char *	m_pszRxBuffer;
 
 	long	m_lChannelTimeout;
+
+	std::string	m_strBuffered;
+
+  /**
+    * New getBytes variables
+	*/
+	EGETBYTESSTATE	m_GetBytesState;
 };
 
 #endif
