@@ -1,124 +1,92 @@
 <project>
-	<target name="decideserverproperties">
-	<if>
-		<isset property="windows"/>
-		<then>
-			<echo message="we are in windows"/>
-			<property name="ps" value="\"/>
-			<property name="parserliblocation" value="${env.XERCES_HOME}/bin/${xerces.xmlParserLibrary}${librarySuffix}"/>
-			<property name="serverwsddfile" value="${basedir}/build/server.wsdd.win32" />
-			<condition property="parserspecificlibname" value="${xml4c.xmlParserLibraryName}">
-				<equals arg1="${xmlParser.xml4c}" arg2="true" />
-			</condition>
-			<condition property="parserspecificlibname" value="${xerces.xmlParserLibraryName}" >
-				<equals arg1="${xmlParser.xerces}" arg2="true" />	
-			</condition>
+    <target name="decideserverproperties">
 
+        <property name="wsdd.file" value="${dir.test.generated}${file.separator}server${file.separator}server.wsdd" />
+        
+        <if>
+            <isset property="windows" />
+            <then>
+                <echo message="we are in windows" />
 
-			<!-- environment variables start from here in pairs -->
-			<property name="serverenv.env1" value="AXISCPP_DEPLOY" />
-			<property name="serverenv.env1.value" value="${basedir}\..\..\..\Axis"/>
-			<property name="serverenv.env2" value="PATH"/>
-			<property name="serverenv.env2.value" 
-				value="${java.library.path};${basedir}\..\..\..\Axis\lib"/>
+                <!-- environment variables start from here in pairs -->
+                <property name="serverenv.env" value="PATH" />
+                <property name="serverenv.env.value" value="${java.library.path};${dir.libraries}" />
 
-			<!-- The path to axiscpp.conf -->
-			<property name="axiscppconffile" value="${basedir}\..\..\..\Axis\axiscpp.conf" />
-			<property name="serverwsddpath" value="${basedir}\..\..\..\Axis\conf\server.wsdd"/>
-			<property name="deploymentconfdir" value="conf"/>
+                <!-- The path to axiscpp.conf -->
+                <!-- Set location of axiscpp.conf file -->
+                <condition property="axiscppconffile" value="${axiscpp_deploy}/server/axiscpp.conf">
+                    <isset property="windows" />
+                </condition>
+                <condition property="axiscppconffile" value="${axiscpp_deploy}/server/etc/axiscpp.conf">
+                    <not>
+                        <isset property="windows" />
+                    </not>
+                </condition>
 
-			<if>
-			<istrue value="${server.apache1}"/>
-				<then>
-					<property name="serverexecutable" value="${env.APACHE_HOME}\apache"/>
-					<property name="startargs" value="-k start"/>
-					<property name="stopargs" value=" -k stop"/>
+                <if>
+                    <istrue value="${server.apache1}" />
+                    <then>
+                        <property name="serverexecutable" value="${env.APACHE_HOME}\apache" />
+                        <property name="startargs" value="-k start" />
+                        <property name="stopargs" value=" -k stop" />
 
-				</then>
-				<else>
-					<if>
-					<istrue value="${server.apache2}"/>
-					<then>
-						<property name="serverexecutable" value="${env.APACHE2_HOME}\bin\apache"/>
-						<property name="startargs" value=" "/>
-					</then>
-					<elseif>
-						<istrue value="${server.simpleaxisserver}"/>
-						<then>
-						<property name="serverexecutable" 
-							value="${basedir}/../../../obj/bin/${simpleAxisServerExecutableName}${executableSuffix}"/>
-						<property name="startargs" value=" ${testPort}"/>
-						</then>
-					</elseif>
-					</if>
-				</else>
-			</if>
+                    </then>
+                    <else>
+                        <if>
+                            <istrue value="${server.apache2}" />
+                            <then>
+                                <property name="serverexecutable" value="${env.APACHE2_HOME}\bin\apache" />
+                                <property name="startargs" value=" " />
+                            </then>
+                            <elseif>
+                                <istrue value="${server.simpleaxisserver}" />
+                                <then>
+                                    <property name="serverexecutable" value="${dir.release}/bin/${simpleAxisServerExecutableName}${executableSuffix}" />
+                                    <property name="startargs" value=" ${testPort}" />
+                                </then>
+                            </elseif>
+                        </if>
+                    </else>
+                </if>
+            </then>
+            <elseif>
+                <isset property="linux" />
+                <then>
+                    <echo message="we are in linux" />
 
+                    <!-- environment variables start from here in pairs -->
+                    <property name="serverenv.env" value="LD_LIBRARY_PATH" />
+                    <property name="serverenv.env.value" value="${dir.libraries}:${basedir}/../../../Axis/webservices:${env.LD_LIBRARY_PATH}" />
+                    <!-- The path to axiscpp.conf -->
+                    <property name="axiscppconffile" value="${basedir}/../../../Axis/etc/axiscpp.conf" />
 
-		</then>
-		<elseif>
-		<isset property="linux"/>
-		<then>
-			<echo message="we are in linux" />
-			<property name="ps" value="/"/>
-			<property name="parserliblocation" value="${env.XERCES_HOME}/lib/lib${xerces.xmlParserLibrary}${librarySuffix}"/>
-			<property name="serverwsddfile" value="${basedir}/build/server.wsdd.linux" />
-
-
-
-			<condition property="parserspecificlibname" value="lib${xml4c.xmlParserLibraryName}">
-				<equals arg1="${xmlParser.xml4c}" arg2="true" />
-			</condition>
-			<condition property="parserspecificlibname" value="lib${xerces.xmlParserLibraryName}" >
-				<equals arg1="${xmlParser.xerces}" arg2="true" />	
-			</condition>
-
-
-
-
-
-
-			<!-- environment variables start from here in pairs -->
-			<property name="serverenv.env1" value="AXISCPP_DEPLOY" />
-			<property name="serverenv.env1.value" value="${basedir}/../../../Axis"/>
-			<property name="serverenv.env2" value="LD_LIBRARY_PATH"/>
-			<property name="serverenv.env2.value"
-				value="${basedir}/../../../Axis/lib:${basedir}/../../../Axis/webservices:${env.LD_LIBRARY_PATH}"/>
-			<!-- The path to axiscpp.conf -->
-			<property name="axiscppconffile" value="${basedir}/../../../Axis/etc/axiscpp.conf" />
-			<property name="serverwsddpath" value="${basedir}/../../../Axis/etc/server.wsdd"/>
-			<property name="deploymentconfdir" value="etc"/>
-
-			<if>
-			<istrue value="${server.apache1}"/>
-				<then>
-					<property name="serverexecutable" value="${env.APACHE_HOME}/bin/apachectl"/>
-					<property name="startargs" value=" start"/>
-					<property name="stopargs" value=" stop"/>
-
-				</then>
-				<else>
-					<if>
-					<istrue value="${server.apache2}"/>
-					<then>
-						<property name="serverexecutable" value="${env.APACHE2_HOME}/bin/apachectl"/>
-						<property name="startargs" value=" start"/>
-						<property name="stopargs" value=" stop"/>
-					</then>
-					<elseif>
-						<istrue value="${server.simpleaxisserver}"/>
-						<then>
-						<property name="serverexecutable" 
-							value="${basedir}/../../../obj/bin/${simpleAxisServerExecutableName}${executableSuffix}"/>
-						<property name="startargs" value=" ${testPort}"/>
-						</then>
-					</elseif>
-					</if>
-				</else>
-			</if>
-	</then>
-		</elseif>
-	</if>
-
-	</target>
+                    <if>
+                        <istrue value="${server.apache1}" />
+                        <then>
+                            <property name="serverexecutable" value="${env.APACHE_HOME}/bin/apachectl" />
+                            <property name="startargs" value=" start" />
+                            <property name="stopargs" value=" stop"/>
+                        </then>
+                        <else>
+                            <if>
+                                <istrue value="${server.apache2}"/>
+                                <then>
+                                    <property name="serverexecutable" value="${env.APACHE2_HOME}/bin/apachectl"/>
+                                    <property name="startargs" value=" start"/>
+                                    <property name="stopargs" value=" stop"/>
+                                </then>
+                                <elseif>
+                                    <istrue value="${server.simpleaxisserver}"/>
+                                    <then>
+                                        <property name="serverexecutable" value="${dir.release}/bin/${simpleAxisServerExecutableName}${executableSuffix}"/>
+                                        <property name="startargs" value=" ${testPort}"/>
+                                    </then>
+                                </elseif>
+                            </if>
+                        </else>
+                    </if>
+                </then>
+            </elseif>
+        </if>
+    </target>
 </project>
