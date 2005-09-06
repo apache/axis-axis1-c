@@ -4,7 +4,7 @@
     <import file="${basedir}/build/testInitialize.xml" />
     <import file="${basedir}/build/serviceInitialize.xml" />
 
-    <target name="createConfigurationFile" depends="initialize, decideserverproperties">
+    <target name="createServerConfigurationFile" depends="initialize, decideserverproperties">
         <!-- Select which parser library to use -->
         <condition property="ClientParserLib" value="${libraryPrefix}${xml4c.xmlParserLibraryName}${librarySuffix}">
             <istrue value="${testconf.client.parser.xml4c}"/>
@@ -67,7 +67,7 @@ XMLParser:${dir.libraries}/${ClientParserLib}
 
 
     <target name="deployServices"
-            depends="initialize, stopserver, createConfigurationFile, startWSDDFile, buildServices, endWSDDFile, runserver"
+            depends="initialize, stopserver, createServerConfigurationFile, startWSDDFile, buildServices, endWSDDFile, runserver"
             description="Build and deploy services for tests" />
 
 
@@ -146,14 +146,14 @@ XMLParser:${dir.libraries}/${ClientParserLib}
     </target>
 
     <target name="buildService"
-            depends="setPropertiesForService,generateStubs, compileService, generateWSDDService" />
+            depends="setPropertiesForService,generateServerStubs, compileService, generateWSDDService" />
 
 
     <target name="setPropertiesForService"
-            depends="loadXMLProperties,setServiceName,setServiceDesc,setServiceCode,setServiceLang,setServiceWsdl" />
+            depends="loadServerXMLProperties,setServiceName,setServiceDesc,setServiceCode,setServiceLang,setServiceWsdl" />
 
 
-    <target name="loadXMLProperties">
+    <target name="loadServerXMLProperties">
         <echo message="Loading XML file ${service_property}" />
         <xmlproperty file="${service_property}" keepRoot="true" />
     </target>
@@ -187,14 +187,14 @@ XMLParser:${dir.libraries}/${ClientParserLib}
     </target>
 
 
-    <target name="setLanguage">
+    <target name="setServiceLanguage">
         <condition property="generated.lang" value="c++">
             <equals arg1="${serviceLang}" arg2="cpp" />
         </condition>
     </target>
 
 
-    <target name="generateStubs" depends="setLanguage">
+    <target name="generateServerStubs" depends="setServiceLanguage">
         <!-- Make directory in which all generated code shall be placed -->
         <echo message="${dir.test.generated}/server/${serviceLang}/${serviceName}" />
         <mkdir dir="${dir.test.generated}/server/${serviceLang}/${serviceName}" />

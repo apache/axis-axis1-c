@@ -1,4 +1,4 @@
-<project>
+<project name="initializeServer" default="decideserverproperties">
     <target name="decideserverproperties">
 
         <property name="wsdd.file" value="${dir.test.generated}${file.separator}server${file.separator}server.wsdd" />
