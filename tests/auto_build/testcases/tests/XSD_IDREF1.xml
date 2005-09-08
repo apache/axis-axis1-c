@@ -1,0 +1,17 @@
+<test>
+    <name>XSD_IDREF</name>
+    <description>Test serialization and deserialization of the XSD built-in simple type IDREF</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>XSD_IDREF1Client.cpp</clientCode>
+    <wsdl>XSD_IDREF.wsdl</wsdl>
+    <expected>
+        <output>
+            XSD_IDREF1.expected
+        </output>		
+    </expected>
+	<request>
+		XSD_IDREF1Request.out
+	</request>
+	<endpoint>http://localhost:80/axis/XSD_IDREF</endpoint>
+</test>
+
