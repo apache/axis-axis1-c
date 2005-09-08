@@ -24,7 +24,7 @@
 # NodeName:           Node name
 # ListenPort:         Listening port
 #
-ClientLogPath:${dir.test.generated}/ServerLog.taw
+LogPath:${dir.test.generated}/server/ServerLog.taw
 WSDDFilePath:${wsdd.file}
 Transport_http:${dir.libraries}/${libraryPrefix}${HTTP.transportLibraryName}${librarySuffix}
 Channel_HTTP:${dir.libraries}/${libraryPrefix}${HTTP.ChannelLibraryName}${librarySuffix}
