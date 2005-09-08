@@ -1,0 +1,3 @@
+required attribute=A simple test message!
+empty required attribute=<empty>
+---------------------- TEST COMPLETE -----------------------------

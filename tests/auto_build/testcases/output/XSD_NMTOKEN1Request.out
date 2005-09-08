@@ -1,0 +1,30 @@
+POST /XSD_NMTOKEN/services/XSD_NMTOKENSOAP HTTP/1.1
+Host: localhost:13620
+Content-Type: text/xml; charset=UTF-8
+SOAPAction: "XSD_NMTOKENPort#asRequiredAttribute"
+Content-Length: 484
+
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:asRequiredAttributeRequest xmlns:ns1="http://xsd_NMTOKEN.test.apache.org">
+<RequiredAttributeElement requiredAttribute="A simple test message!"></RequiredAttributeElement>
+</ns1:asRequiredAttributeRequest>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+POST /XSD_NMTOKEN/services/XSD_NMTOKENSOAP HTTP/1.1
+Host: localhost:13620
+Content-Type: text/xml; charset=UTF-8
+SOAPAction: "XSD_NMTOKENPort#asRequiredAttribute"
+Content-Length: 462
+
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:asRequiredAttributeRequest xmlns:ns1="http://xsd_NMTOKEN.test.apache.org">
+<RequiredAttributeElement requiredAttribute=""></RequiredAttributeElement>
+</ns1:asRequiredAttributeRequest>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
