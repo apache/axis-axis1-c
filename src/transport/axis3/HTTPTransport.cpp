@@ -1535,7 +1535,7 @@ void HTTPTransport::processHTTPHeader()
 	}
 	else
 	{
-		if( m_eProtocolType == APTHTTP1_0)
+		if( (m_eProtocolType == APTHTTP1_0) || (m_eProtocolType == APTHTTP1_1) )
 		{
 			m_GetBytesState = eSOAPMessageIsNotChunked;
 			m_iContentLength = m_iBytesLeft;
