@@ -6,7 +6,7 @@ Transfer-Encoding: chunked
 
 ###
 <?xml version="1.0" encoding="utf-8"?>
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header /><soapenv:Body><asNonNillableElementResponse xmlns="http://xsd_nonPositiveInteger.test.apache.org"><nonNillableElement>-18446744073709551615</nonNillableElement></asNonNillableElementResponse></soapenv:Body></soapenv:Envelope>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header /><soapenv:Body><asNonNillableElementResponse xmlns="http://xsd_nonPositiveInteger.test.apache.org"><nonNillableElement>-9223372036854775808</nonNillableElement></asNonNillableElementResponse></soapenv:Body></soapenv:Envelope>
 0
 
 HTTP/1.1 200 OK
@@ -39,7 +39,7 @@ Transfer-Encoding: chunked
 
 ###
 <?xml version="1.0" encoding="utf-8"?>
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header /><soapenv:Body><asNonNillableElementResponse xmlns="http://xsd_nonPositiveInteger.test.apache.org"><nonNillableElement>123456789</nonNillableElement></asNonNillableElementResponse></soapenv:Body></soapenv:Envelope>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header /><soapenv:Body><asNonNillableElementResponse xmlns="http://xsd_nonPositiveInteger.test.apache.org"><nonNillableElement>-123456789</nonNillableElement></asNonNillableElementResponse></soapenv:Body></soapenv:Envelope>
 0
 
 HTTP/1.1 200 OK
@@ -50,7 +50,7 @@ Transfer-Encoding: chunked
 
 ###
 <?xml version="1.0" encoding="utf-8"?>
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header /><soapenv:Body><asNillableElementResponse xmlns="http://xsd_nonPositiveInteger.test.apache.org"><nillableElement>123456789</nillableElement></asNillableElementResponse></soapenv:Body></soapenv:Envelope>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header /><soapenv:Body><asNillableElementResponse xmlns="http://xsd_nonPositiveInteger.test.apache.org"><nillableElement>-123456789</nillableElement></asNillableElementResponse></soapenv:Body></soapenv:Envelope>
 0
 
 HTTP/1.1 200 OK
@@ -72,7 +72,7 @@ Transfer-Encoding: chunked
 
 ###
 <?xml version="1.0" encoding="utf-8"?>
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header /><soapenv:Body><asRequiredAttributeResponse xmlns="http://xsd_nonPositiveInteger.test.apache.org"><RequiredAttributeElement requiredAttribute="123456789" /></asRequiredAttributeResponse></soapenv:Body></soapenv:Envelope>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header /><soapenv:Body><asRequiredAttributeResponse xmlns="http://xsd_nonPositiveInteger.test.apache.org"><RequiredAttributeElement requiredAttribute="-123456789" /></asRequiredAttributeResponse></soapenv:Body></soapenv:Envelope>
 0
 
 HTTP/1.1 200 OK
@@ -83,7 +83,7 @@ Transfer-Encoding: chunked
 
 ###
 <?xml version="1.0" encoding="utf-8"?>
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header /><soapenv:Body><asArrayResponse xmlns="http://xsd_nonPositiveInteger.test.apache.org"><arrayElement>123456789</arrayElement><arrayElement>123456789</arrayElement></asArrayResponse></soapenv:Body></soapenv:Envelope>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header /><soapenv:Body><asArrayResponse xmlns="http://xsd_nonPositiveInteger.test.apache.org"><arrayElement>-123456789</arrayElement><arrayElement>-123456789</arrayElement></asArrayResponse></soapenv:Body></soapenv:Envelope>
 0
 
 HTTP/1.1 200 OK
@@ -94,6 +94,6 @@ Transfer-Encoding: chunked
 
 ###
 <?xml version="1.0" encoding="utf-8"?>
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header /><soapenv:Body><asComplexTypeResponse xmlns="http://xsd_nonPositiveInteger.test.apache.org"><SimpleComplexType><complexTypeElement>123456789</complexTypeElement></SimpleComplexType></asComplexTypeResponse></soapenv:Body></soapenv:Envelope>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header /><soapenv:Body><asComplexTypeResponse xmlns="http://xsd_nonPositiveInteger.test.apache.org"><SimpleComplexType><complexTypeElement>-123456789</complexTypeElement></SimpleComplexType></asComplexTypeResponse></soapenv:Body></soapenv:Envelope>
 0
 

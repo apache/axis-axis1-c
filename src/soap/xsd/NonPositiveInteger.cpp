@@ -25,8 +25,6 @@ NonPositiveInteger::NonPositiveInteger(const xsd__nonPositiveInteger* value) thr
 {
     if (value)
     {
-        if((*value) > 0) // the value must be non positive, hence validate and fix
-            throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR, "NonPositiveInteger value must be non positive");
         setNil(false);
         serialize(value);
     }
@@ -59,180 +57,14 @@ void * NonPositiveInteger::getValue()
     return (void*) getNonPositiveInteger();
 }
 
-AxisChar* NonPositiveInteger::serialize(const xsd__nonPositiveInteger* value) throw (AxisSoapException)
-{
-    MinInclusive* minInclusive = getMinInclusive();
-    if (minInclusive->isSet())
-    {
-        if ( *value > minInclusive->getMinInclusiveAsUnsignedLONGLONG() )
-        {
-            AxisString exceptionMessage =
-            "Value to be serialized is less than MinInclusive specified for this type.  MinInclusive = ";
-            if (minInclusive->getMinInclusiveAsUnsignedLONGLONG() != 0)
-            {
-                exceptionMessage += "-";
-            }
-            AxisChar* length = new AxisChar[25];
-            sprintf(length, PRINTF_UNSIGNED_LONGLONG_FORMAT_SPECIFIER, minInclusive->getMinInclusiveAsUnsignedLONGLONG());
-            exceptionMessage += length;
-            exceptionMessage += ", Value = ";
-            if (*value != 0)
-            {
-                exceptionMessage += "-";
-            }
-            sprintf(length, PRINTF_UNSIGNED_LONGLONG_FORMAT_SPECIFIER, *value);
-            exceptionMessage += length;
-            exceptionMessage += ".";
-            delete [] length;
-            
-            throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
-                const_cast<AxisChar*>(exceptionMessage.c_str()));
-        }
-    }
-    delete minInclusive;
-
-    MinExclusive* minExclusive = getMinExclusive();
-    if (minExclusive->isSet())
-    {
-        if ( *value >= minExclusive->getMinExclusiveAsUnsignedLONGLONG() )
-        {
-            AxisString exceptionMessage =
-            "Value to be serialized is less than or equal to MinExclusive specified for this type.  MinExclusive = ";
-            if (minExclusive->getMinExclusiveAsUnsignedLONGLONG() != 0)
-            {
-                exceptionMessage += "-";
-            }
-            AxisChar* length = new AxisChar[25];
-            sprintf(length, PRINTF_UNSIGNED_LONGLONG_FORMAT_SPECIFIER, minExclusive->getMinExclusiveAsUnsignedLONGLONG());
-            exceptionMessage += length;
-            exceptionMessage += ", Value = ";
-            if (*value != 0)
-            {
-                exceptionMessage += "-";
-            }
-            sprintf(length, PRINTF_UNSIGNED_LONGLONG_FORMAT_SPECIFIER, *value);
-            exceptionMessage += length;
-            exceptionMessage += ".";
-            delete [] length;
-            
-            throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
-                const_cast<AxisChar*>(exceptionMessage.c_str()));
-        }
-    }
-    delete minExclusive;
-
-    MaxInclusive* maxInclusive = getMaxInclusive();
-    if (maxInclusive->isSet())
-    {
-        if ( *value < maxInclusive->getMaxInclusiveAsUnsignedLONGLONG() )
-        {
-            AxisString exceptionMessage =
-            "Value to be serialized is greater than MaxInclusive specified for this type.  MaxInclusive = ";
-            if (maxInclusive->getMaxInclusiveAsUnsignedLONGLONG() != 0)
-            {
-                exceptionMessage += "-";
-            }
-            AxisChar* length = new AxisChar[25];
-            sprintf(length, PRINTF_UNSIGNED_LONGLONG_FORMAT_SPECIFIER, maxInclusive->getMaxInclusiveAsUnsignedLONGLONG());
-            exceptionMessage += length;
-            exceptionMessage += ", Value = ";
-            if (*value != 0)
-            {
-                exceptionMessage += "-";
-            }
-            sprintf(length, PRINTF_UNSIGNED_LONGLONG_FORMAT_SPECIFIER, *value);
-            exceptionMessage += length;
-            exceptionMessage += ".";
-            delete [] length;
-            
-            throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
-                const_cast<AxisChar*>(exceptionMessage.c_str()));
-        }
-    }
-    delete maxInclusive;
-
-    MaxExclusive* maxExclusive = getMaxExclusive();
-    if (maxExclusive->isSet())
-    {
-        if ( *value <= maxExclusive->getMaxExclusiveAsUnsignedLONGLONG() )
-        {
-            AxisString exceptionMessage =
-            "Value to be serialized is greater than or equal to MaxExclusive specified for this type.  MaxExclusive = ";
-            if (maxInclusive->getMaxInclusiveAsUnsignedLONGLONG() != 0)
-            {
-                exceptionMessage += "-";
-            }
-            AxisChar* length = new AxisChar[25];
-            sprintf(length, PRINTF_UNSIGNED_LONGLONG_FORMAT_SPECIFIER, maxExclusive->getMaxExclusiveAsUnsignedLONGLONG());
-            exceptionMessage += length;
-            exceptionMessage += ", Value = ";
-            if (*value != 0)
-            {
-                exceptionMessage += "-";
-            }
-            sprintf(length, PRINTF_UNSIGNED_LONGLONG_FORMAT_SPECIFIER, *value);
-            exceptionMessage += length;
-            exceptionMessage += ".";
-            delete [] length;
-            
-            throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
-                const_cast<AxisChar*>(exceptionMessage.c_str()));
-        }
-    }
-    delete maxExclusive;
-
-    AxisString formatSpecifier = "-%";
-    
-    int valueSize = 80;
-    TotalDigits* totalDigits = getTotalDigits();
-    if (totalDigits->isSet())
-    {
-        valueSize = totalDigits->getTotalDigits() + 1;
-        AxisChar* digits = new char[10];
-        AxisSprintf (digits, 10, "%i", totalDigits->getTotalDigits());
-        formatSpecifier += digits;
-        delete [] digits;
-    }
-    delete totalDigits;
-    
-    formatSpecifier += PRINTF_UNSIGNED_LONGLONG_FORMAT_SPECIFIER_CHARS;
-
-    AxisChar serializedValue[80];
-    if (*value == 0)
-    {
-        serializedValue[0] = '0';
-		serializedValue[1] = 0;
-    }
-    else
-    {
-        AxisSprintf (serializedValue, valueSize, formatSpecifier.c_str(), *value);
-    }
-
-    IAnySimpleType::serialize(serializedValue);
-    return m_Buf;
-}
-
 xsd__nonPositiveInteger* NonPositiveInteger::deserializeNonPositiveInteger(const AxisChar* valueAsChar) throw (AxisSoapException)
 {
-    xsd__integer* returnValue = NULL;
-    if (*valueAsChar == '-')
-    {
-        returnValue = Integer::deserializeInteger(valueAsChar + 1);
-    }
-    else
-    {
-        returnValue = Integer::deserializeInteger(valueAsChar);
-    }
-  
-    xsd__nonPositiveInteger * value = new xsd__nonPositiveInteger;
-    *value = static_cast<xsd__nonPositiveInteger> (*returnValue);
-    delete returnValue;
-    return value;
+    return (xsd__negativeInteger*) deserializeInteger(valueAsChar);
 }
 
 MaxInclusive* NonPositiveInteger::getMaxInclusive()
 {   
-    return new MaxInclusive((unsigned LONGLONG) 0);
+    return new MaxInclusive((LONGLONG) 0);
 }
 
 AXIS_CPP_NAMESPACE_END

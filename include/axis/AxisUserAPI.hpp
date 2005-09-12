@@ -249,9 +249,9 @@ typedef unsigned short xsd__unsignedShort;
  * Axis C++ defined type for xml basic type nonPositiveInteger
  */
 #ifdef WIN32
-typedef unsigned __int64 xsd__nonPositiveInteger;
+typedef __int64 xsd__nonPositiveInteger;
 #else
-typedef unsigned long long xsd__nonPositiveInteger;
+typedef long long xsd__nonPositiveInteger;
 #endif
 /**
  * @typedef xsd__positiveInteger
@@ -267,9 +267,9 @@ typedef unsigned long long xsd__positiveInteger;
  * Axis C++ defined type for xml basic type negativeInteger
  */
 #ifdef WIN32
-typedef unsigned __int64 xsd__negativeInteger;
+typedef __int64 xsd__negativeInteger;
 #else
-typedef unsigned long long xsd__negativeInteger;
+typedef long long xsd__negativeInteger;
 #endif
 /**
  * @class xsd__base64Binary

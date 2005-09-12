@@ -76,13 +76,6 @@ protected:
     xsd__nonPositiveInteger* deserializeNonPositiveInteger(const AxisChar* valueAsChar) throw (AxisSoapException);
 
     /**
-     * Serialize NonPositiveInteger value to it's on-the-wire string form.
-     * @param value The NonPositiveInteger value to be serialized.
-     * @return Serialized form of NonPositiveInteger value.
-     */
-    AxisChar* serialize(const xsd__nonPositiveInteger* value) throw (AxisSoapException);
-
-    /**
      * Creates a MaxInclusive object.  For the NonPositiveInteger type this is
      * defined as 0.
      * @return MaxInclusive object

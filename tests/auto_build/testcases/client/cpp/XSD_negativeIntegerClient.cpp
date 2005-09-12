@@ -23,10 +23,10 @@
 #ifdef Q168440_WORKAROUND
   // Bug in MS Visual C++ 6.0. Fixed in Visual C++ .Net version.
   // Cannot print an __int64 number with cout without this overloading
-  std::ostream& operator<<(std::ostream& os, unsigned __int64 i )
+  std::ostream& operator<<(std::ostream& os, __int64 i )
   {
     char buf[40];
-    sprintf(buf,"%I64u", i );
+    sprintf(buf,"%I64d", i );
     os << buf;
     return os;
   }
@@ -48,9 +48,9 @@ int main(int argc, char* argv[])
         sprintf(endpoint, "%s", url);
         XSD_negativeInteger* ws = new XSD_negativeInteger(endpoint);
 
-        xsd__negativeInteger result = ws->asNonNillableElement((xsd__negativeInteger)18446744073709551615);
+        xsd__negativeInteger result = ws->asNonNillableElement((xsd__negativeInteger)-9223372036854775808);
         cout << "non-nillable element=" << result << endl;
-        result = ws->asNonNillableElement((xsd__negativeInteger)1);
+        result = ws->asNonNillableElement((xsd__negativeInteger)-1);
         cout << "non-nillable element=" << result << endl;
         try
         {
@@ -65,13 +65,13 @@ int main(int argc, char* argv[])
          * Test client correctly handles server response data beginning with '-'
          * which is also permitted for nonPositiveInteger.
          */
-        result = ws->asNonNillableElement((xsd__negativeInteger)123456789);
+        result = ws->asNonNillableElement((xsd__negativeInteger)-123456789);
         cout << "non-nillable element=" << result << endl;
 
 
         // Test nillable element, with a value
         xsd__negativeInteger* nillableInput = new xsd__negativeInteger();
-        *(nillableInput) = (xsd__negativeInteger)123456789;
+        *(nillableInput) = (xsd__negativeInteger)-123456789;
         xsd__negativeInteger* nillableResult = ws->asNillableElement(nillableInput);
         if (nillableResult)
         {
@@ -98,7 +98,7 @@ int main(int argc, char* argv[])
 
         // Test required attribute
         RequiredAttributeElement requiredAttributeInput;
-        requiredAttributeInput.setrequiredAttribute(123456789);
+        requiredAttributeInput.setrequiredAttribute(-123456789);
         RequiredAttributeElement* requiredAttributeResult = ws->asRequiredAttribute(&requiredAttributeInput);
         cout << "required attribute=" << requiredAttributeResult->getrequiredAttribute() << endl;
         delete requiredAttributeResult;
@@ -107,7 +107,7 @@ int main(int argc, char* argv[])
  * Exact coding of this section may change depending on chosen implementation
         // Test optional attribute, with a value
         OptionalAttributeElement optionalAttributeInput;
-        optionalAttributeInput.setoptionalAttribute(123456789);
+        optionalAttributeInput.setoptionalAttribute(-123456789);
         OptionalAttributeElement* optionalAttributeResult = ws->asOptionalAttribute(&optionalAttributeInput);
         if (optionalAttributeResult->getoptionalAttribute())
         {
@@ -140,7 +140,7 @@ int main(int argc, char* argv[])
         arrayInput.m_Size = 2;
         for (int inputIndex=0 ; inputIndex < 2 ; inputIndex++)
         {
-            array[inputIndex] = 123456789;
+            array[inputIndex] = -123456789;
             arrayInput.m_Array[inputIndex] = &array[inputIndex];
         }
         xsd__negativeInteger_Array arrayResult = ws->asArray(arrayInput);
@@ -156,7 +156,7 @@ int main(int argc, char* argv[])
 
         // Test complex type
         SimpleComplexType complexTypeInput;
-        complexTypeInput.setcomplexTypeElement(123456789);
+        complexTypeInput.setcomplexTypeElement(-123456789);
         SimpleComplexType* complexTypeResult = ws->asComplexType(&complexTypeInput);
         cout << "within complex type=" << complexTypeResult->getcomplexTypeElement() << endl;
         delete complexTypeResult;

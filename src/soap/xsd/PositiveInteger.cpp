@@ -24,8 +24,6 @@ PositiveInteger::PositiveInteger(const xsd__positiveInteger* value) throw (AxisS
 {
     if (value)
     {
-        if((*value) < 1) // the value must be one or greater, hence validate and fix
-            throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR, "PositiveInteger value must be one or greater");
         setNil(false);
         serialize(value);
     }

@@ -24,9 +24,6 @@ NegativeInteger::NegativeInteger(const xsd__negativeInteger* value) throw (AxisS
 {
     if (value)
     {
-        int vauleToCheck = (*value);
-        if(vauleToCheck > -1) // the value must be minus one or less, hence validate and fix
-            throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR, "PositiveInteger value must be minus one or less");
         setNil(false);
         serialize(value);
     }
@@ -61,11 +58,7 @@ xsd__negativeInteger* NegativeInteger::deserializeNegativeInteger(const AxisChar
 
 MaxInclusive* NegativeInteger::getMaxInclusive()
 {   
-    return new MaxInclusive((unsigned LONGLONG) 1);
-    /* 
-     * Note: 
-     * Due to use of unsigned values all values are actually negative
-     */
+    return new MaxInclusive((LONGLONG) -1);
 }
 
 AXIS_CPP_NAMESPACE_END
