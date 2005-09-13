@@ -62,9 +62,11 @@
 
 	<target name="copyClientCode" unless="test.dynamicCode">
 		<copy file="${client.code}" todir="${test.directory}"/>
+		<copy file="${dir.autotests}/client/${test.clientLang}/CommonClientTestCode.hpp"  todir="${test.directory}"/>
 	</target>
 
 	<target name="copyDynamicClient" if="test.dynamicCode">
+		<copy file="${dir.autotests}/client/${test.clientLang}/CommonClientTestCode.hpp"  todir="${test.directory}"/>
 		<copy todir="${test.directory}">
 			<fileset dir="${dir.autotests}/dynamic/${test.dynamicCodeDirectory}">
 				<include name="*.${test.clientLang}"/>
@@ -130,9 +132,6 @@
 		 outtype="executable" subsystem="console">
 		 	<!-- Compilers -->
 			<compiler extends="VisualC++">
-                <defineset>
-                    <define name="Q168440_WORKAROUND" unless="msvc7" />
-                </defineset>
             </compiler>      
 			<compiler refid="SolarisCC"/>
 			<compiler refid="Linuxgcc"/>
