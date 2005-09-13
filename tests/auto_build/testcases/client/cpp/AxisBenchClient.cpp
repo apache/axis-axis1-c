@@ -17,23 +17,12 @@
 #include <iostream>
 #include <fstream>
 #include <time.h>
+#include "CommonClientTestCode.hpp"
 
 #ifndef WIN32
   #include "sys/time.h"
 #else
   #include "sys/timeb.h"
-
-#ifdef Q168440_WORKAROUND
-  // Bug in MS Visual C++ 6.0. Fixed in Visual C++ .Net version.
-  // Cannot print an __int64 number with cout without this overloading
-  std::ostream& operator<<(std::ostream& os, __int64 i )
-  {
-    char buf[20];
-    sprintf(buf,"%I64d", i );
-    os << buf;
-    return os;
-  }
-#endif
 #endif
 
 static bool verbose = false;

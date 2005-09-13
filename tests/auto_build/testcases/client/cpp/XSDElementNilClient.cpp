@@ -44,28 +44,7 @@
 #include <axis/AxisException.hpp>
 #include <ctype.h>
 #include <iostream>
-
-#ifdef WIN32
-#ifdef Q168440_WORKAROUND
-  // Bug in MS Visual C++ 6.0. Fixed in Visual C++ .Net version.
-  // Cannot print an __int64 number with cout without this overloading
-  std::ostream& operator<<(std::ostream& os, __int64 i )
-  {
-    char buf[20];
-    sprintf(buf,"%I64d", i );
-    os << buf;
-    return os;
-  }
-
-  std::ostream& operator<<(std::ostream& os, unsigned __int64 i )
-  {
-    char buf[20];
-    sprintf(buf,"%I64u", i );
-    os << buf;
-    return os;
-  }
-#endif
-#endif
+#include "CommonClientTestCode.hpp"
 
 int main(int argc, char* argv[])
 {

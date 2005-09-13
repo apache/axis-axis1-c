@@ -27,24 +27,13 @@
 #include <axis/Axis.hpp>
 /* Defining platform specific constants  */
 #include <time.h>
+#include "CommonClientTestCode.hpp"
 
 #ifdef WIN32
         #include <windows.h>
 		#include "sys/timeb.h"
         #define RETTYPE DWORD WINAPI
         #define ARGTYPE LPVOID
-
-#ifdef Q168440_WORKAROUND
-  // Bug in MS Visual C++ 6.0. Fixed in Visual C++ .Net version.
-  // Cannot print an __int64 number with cout without this overloading
- std::ostream& operator<<(std::ostream& os, __int64 i )
-  {
-    char buf[20];
-    sprintf(buf,"%I64d", i );
-    os << buf;
-    return os;
-  }
-#endif
 #else
         #include <pthread.h>
         #include <unistd.h>
