@@ -126,6 +126,8 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 		 * Dushshantha: writing getter
 		 */
 
+		int anyCounter = 0;
+		
 		if (type.isArray()) {
 			return;
 		}
@@ -137,6 +139,11 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 							.getParamNameWithoutSymbols();
 					String properParamName = getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]);
 
+					if (attribs[i].isAnyType()){                    	
+                    	anyCounter += 1;
+                    	parameterName = parameterName + Integer.toString(anyCounter);
+                    }
+					
 					writer.write("\n" + properParamName + " * " + classname
 							+ "::get" + parameterName + "()\n{\n");
 
@@ -166,33 +173,39 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 					 * Dushshantha: Write getter
 					 */
 
-					writer
-							.write("\n"
-									+ getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-									+ " " + classname + "::get"
-									+ attribs[i].getParamNameWithoutSymbols()
-									+ "()\n{\n");
+					String parameterName = attribs[i].getParamNameWithoutSymbols();
+                    String properParamName = getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]);
+                    
+                    if (attribs[i].isAnyType()){                    	
+                    	anyCounter += 1;
+                    	parameterName = parameterName + Integer.toString(anyCounter);
+                    }
 
-					writer.write("\t" + "return "
-							+ attribs[i].getParamNameWithoutSymbols()
-							+ " ; \n}\n");
+                    writer.write("\n"
+                                    + properParamName
+                                    + " " + classname + "::get"
+                                    + parameterName
+                                    + "()\n{\n");
+
+                    writer.write("\t" + "return "
+                            + parameterName
+                            + " ; \n}\n");
 
 					/**
 					 * Dushshantha: Write setter
 					 */
 
-					writer
-							.write("\n"
-									+ "void "
-									+ classname
-									+ "::set"
-									+ attribs[i].getParamNameWithoutSymbols()
-									+ "("
-									+ getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-									+ " InValue)\n{\n");
+                    writer.write("\n"
+                            + "void "
+                            + classname
+                            + "::set"
+                            + parameterName
+                            + "("
+                            + properParamName
+                            + " InValue)\n{\n");
 
-					writer.write("\t" + attribs[i].getParamNameWithoutSymbols()
-							+ " = InValue ; \n");
+            writer.write("\t" + parameterName
+                    + " = InValue ; \n");
 
 					if (attribs[i].getChoiceElement()) {
 						for (int j = 0; j < attribs.length; j++) {
@@ -271,6 +284,8 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 
 		String arrayType;
 		boolean firstIfWritten = false;
+		int anyCounter = 0;
+		
 		for (int i = 0; i < attribs.length; i++) {
 
 			//Dushshantha:
@@ -302,7 +317,8 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 			//17/05/2005........................................................................
 
 			if (attribs[i].isAnyType()) {
-				writer.write("\tpSZ->serializeAnyObject(param->any);\n");
+				anyCounter += 1;
+            	writer.write("\tpSZ->serializeAnyObject(param->any" + Integer.toString(anyCounter) +");\n");
 			} else if (attribs[i].isArray()) {
 				//if Array
 				if (attribs[i].isSimpleType()) {
@@ -456,7 +472,8 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 		boolean peekCalled = false;
 		boolean firstIfWritten = false;
 		boolean foundAll = false;
-
+		int anyCounter = 0; //counter for any types.
+		
 		for (int i = 0; i < attribs.length; i++) {
 			//Dushshantha:
 			//if the attribute is a choice
@@ -507,7 +524,8 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 			//17/05/2005...........................................................
 
 			if (attribs[i].isAnyType()) {
-				writer.write("\tparam->any = pIWSDZ->getAnyObject();\n");
+				anyCounter +=1;
+            	writer.write("\tparam->any" + Integer.toString(anyCounter)+ " = pIWSDZ->getAnyObject();\n");
 			} else if (attribs[i].isArray()) {
 				//if Array
 				if (attribs[i].isSimpleType()) {
@@ -681,6 +699,9 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 			writer.write("\n" + classname + "::" + classname + "()\n{\n");
 			writer
 					.write("\t/*do not allocate memory to any pointer members here\n\t because deserializer will allocate memory anyway. */\n");
+			
+			int anyCounter = 0;
+			
 			for (int i = 0; i < attribs.length; i++) {
 				if (attribs[i].isArray()) {
 					writer.write("\t" + attribs[i].getParamNameAsMember()
@@ -688,8 +709,16 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 					writer.write("\t" + attribs[i].getParamNameAsMember()
 							+ ".m_Size = 0;\n");
 				} else if (!attribs[i].isSimpleType()) {
-					writer.write("\t" + attribs[i].getParamNameAsMember()
+					if (attribs[i].isAnyType())
+                    {
+                    	anyCounter += 1;
+                    	writer.write("\t" + attribs[i].getParamNameAsMember() + Integer.toString(anyCounter)
+                                + "= 0;\n");
+                    }
+                	else{				
+                		writer.write("\t" + attribs[i].getParamNameAsMember()
 							+ " = 0;\n");
+                	}
 				}
 				// FJP Nillable vv
 				else if (isElementNillable(i)) {
@@ -725,6 +754,9 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 				writer.write("\n" + classname + "::~" + classname + "()\n{\n");
 			}
 			writer.write("\t/*delete any pointer and array members here*/\n");
+			
+			int anyCounter = 0;
+			
 			for (int i = 0; i < attribs.length; i++) {
 				if (attribs[i].isArray()) {
 					if (attribs[i].getChoiceElement())
@@ -735,7 +767,13 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 						writer.write("\tdelete [] ((" + attribs[i].getTypeName()
 							+ "*)" + attribs[i].getParamNameAsMember()
 							+ ".m_Array);\n");
-				} else if (!attribs[i].isSimpleType()) {
+				}
+				
+				else if (attribs[i].isAnyType()){
+            		anyCounter += 1;
+            		writer.write("\tdelete "
+							+ attribs[i].getParamNameAsMember() + Integer.toString(anyCounter) + ";\n");
+				}else if (!attribs[i].isSimpleType()) {
 					writer.write("\tdelete "
 							+ attribs[i].getParamNameAsMember() + ";\n");
 				}

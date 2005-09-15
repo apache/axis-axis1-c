@@ -82,6 +82,7 @@ public class ParmHeaderFileWriter extends ParamWriter {
 	}
 
 	protected void writeAttributes() throws WrapperFault {
+		int anyCounter = 0;
 		if (type.isArray())
 			return;
 		try {
@@ -93,17 +94,47 @@ public class ParmHeaderFileWriter extends ParamWriter {
 				}
 				// FJP Nillable vv
 				if (isElementNillable(i)) {
+					
+					if(attribs[i].isAnyType()){
+						anyCounter += 1;
+						writer
+						.write("\t"
+								+ getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+								+ " *\t" + attribs[i].getParamName()
+								+ Integer.toString(anyCounter)
+								+ ";\n");
+						
+					}
+						
+					else{
 					writer
 							.write("\t"
 									+ getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
 									+ " *\t" + attribs[i].getParamName()
 									+ ";\n");
+					}
+					
 				} else {
 					// FJP Nillable ^^
+					
+					if(attribs[i].isAnyType()){
+						anyCounter += 1;
+						writer
+						.write("\t"
+								+ getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+								+ " \t" + attribs[i].getParamName()
+								+ Integer.toString(anyCounter)
+								+ ";\n");
+						
+					}
+						
+					else{
+					
 					writer
 							.write("\t"
 									+ getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
 									+ "\t" + attribs[i].getParamName() + ";\n");
+					}
 				}
 			}
 		} catch (IOException e) {
@@ -115,6 +146,7 @@ public class ParmHeaderFileWriter extends ParamWriter {
 	 * Dushshantha: This method writes getters and setters of the attributes.
 	 */
 	protected void writeGetSetMethods() throws WrapperFault {
+		int anyCounter = 0; 
 		if (type.isArray()) {
 			return;
 		}
@@ -125,27 +157,74 @@ public class ParmHeaderFileWriter extends ParamWriter {
 					writer.write("\n");
 				}
 				if (isElementNillable(i)) {
-					writer
+					if ( attribs[i].isAnyType()){
+						anyCounter += 1;
+						writer
 							.write("\t"
 									+ getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
 									+ " * get"
 									+ attribs[i].getParamNameWithoutSymbols()
+									+ Integer.toString(anyCounter)
 									+ "();\n");
 
-					writer
+						writer
 							.write("\t"
 									+ "void set"
 									+ attribs[i].getParamNameWithoutSymbols()
+									+ Integer.toString(anyCounter)
 									+ "("
 									+ getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
 									+ " * pInValue);\n\n");
+					}
+					else {
+						writer
+						.write("\t"
+								+ getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+								+ " * get"
+								+ attribs[i].getParamNameWithoutSymbols()
+								+ "();\n");
+
+					    writer
+						.write("\t"
+								+ "void set"
+								+ attribs[i].getParamNameWithoutSymbols()
+								+ "("
+								+ getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+								+ " * pInValue);\n\n");
+						
+					}
+					
 				} else {
 					//                	 FJP Nillable ^^
+					
+					if ( attribs[i].isAnyType()){
+						anyCounter += 1;
+						writer
+							.write("\t"
+									+ getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+									+ " get"
+									+ attribs[i].getParamNameWithoutSymbols()
+									+ Integer.toString(anyCounter)
+									+ "();\n");
+
+						writer
+							.write("\t"
+									+ "void set"
+									+ attribs[i].getParamNameWithoutSymbols()
+									+ Integer.toString(anyCounter)
+									+ "("
+									+ getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+									+ " InValue);\n\n");
+					}
+					else {
+					
+					
+					
 					/**
 					 * Dushshantha: Write setter
 					 */
 
-					writer
+						writer
 							.write("\t"
 									+ getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
 									+ " get"
@@ -156,13 +235,14 @@ public class ParmHeaderFileWriter extends ParamWriter {
 					 * Dushshantha: Write getter
 					 */
 
-					writer
+						writer
 							.write("\t"
 									+ "void set"
 									+ attribs[i].getParamNameWithoutSymbols()
 									+ "("
 									+ getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
 									+ " InValue);\n\n");
+					}
 				}
 			}
 		} catch (IOException e) {

@@ -244,7 +244,9 @@ public class ParmHeaderFileWriter extends ParamWriter
 
     protected void writeAttributes() throws WrapperFault
     {
-        if (type.isArray())
+        int anyCounter = 0;
+    	
+    	if (type.isArray())
         {
             return;
         }
@@ -255,16 +257,42 @@ public class ParmHeaderFileWriter extends ParamWriter
             {
 				// FJP Nillable vv
 				if (isElementNillable(i)) {
+					if(attribs[i].isAnyType()){
+						anyCounter += 1;
+						writer
+						.write("\t"
+								+ getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+								+ " *\t" + attribs[i].getParamName()
+								+ Integer.toString(anyCounter)
+								+ ";\n");
+						
+					}
+						
+					else{
 					writer.write("\t"
 								 + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
 								 + " *\t" + attribs[i].getParamName()
 								 + ";\n");
+					}
 				} else {
 					// FJP Nillable ^^
+					if(attribs[i].isAnyType()){
+						anyCounter += 1;
+						writer
+						.write("\t"
+								+ getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+								+ "\t" + attribs[i].getParamName()
+								+ Integer.toString(anyCounter)
+								+ ";\n");
+						
+					}
+						
+					else{
 				    writer.write("\t"
                                 + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
                                 + "\t" + attribs[i].getParamNameWithoutSymbols()
                                 + ";\n");
+					}
 				}
             }
             
@@ -287,7 +315,9 @@ public class ParmHeaderFileWriter extends ParamWriter
      */
     protected void writeGetSetMethods() throws WrapperFault
     {
-        if (type.isArray())
+        int anyCounter = 0;
+    	
+    	if (type.isArray())
         {
             return;
         }
@@ -298,27 +328,73 @@ public class ParmHeaderFileWriter extends ParamWriter
 // FJP Nillable vv
                 if (isElementNillable(i))
                 {
-                    writer.write( "\n\t"
+                	if ( attribs[i].isAnyType()){
+                		anyCounter += 1;
+						writer
+							.write("\t"
+									+ getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+									+ " * get"
+									+ attribs[i].getParamNameWithoutSymbols()
+									+ Integer.toString(anyCounter)
+									+ "();\n");
+
+						writer
+							.write("\t"
+									+ "void set"
+									+ attribs[i].getParamNameWithoutSymbols()
+									+ Integer.toString(anyCounter)
+									+ "("
+									+ getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+									+ " * pInValue);\n\n");
+					}
+					else {
+                	
+                	
+						writer.write( "\n\t"
                                   + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
                                   + " * get"
                                   + attribs[i].getParamNameWithoutSymbols()
                                   + "();\n");
 
-                    writer.write( "\t"
+						writer.write( "\t"
                                   + "void set"
                                   + attribs[i].getParamNameWithoutSymbols()
                                   + "("
                                   + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
                                   + " * pInValue);\n");
+					}
                 }
                 else
                 {
 // FJP Nillable ^^
-                    /**
+                	if ( attribs[i].isAnyType()){
+                		anyCounter += 1;
+                		writer
+							.write("\t"
+									+ getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+									+ " get"
+									+ attribs[i].getParamNameWithoutSymbols()
+									+ Integer.toString(anyCounter)
+									+ "();\n");
+
+						writer
+							.write("\t"
+									+ "void set"
+									+ attribs[i].getParamNameWithoutSymbols()
+									+ Integer.toString(anyCounter)
+									+ "("
+									+ getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+									+ "  InValue);\n\n");
+					}
+					else {
+                	
+                	
+                	
+                	/**
                      * Dushshantha: Write setter
                      */
 
-                    writer.write("\n\t"
+						writer.write("\n\t"
                                     + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
                                     + " get"
                                     + attribs[i].getParamNameWithoutSymbols()
@@ -328,12 +404,13 @@ public class ParmHeaderFileWriter extends ParamWriter
                      * Dushshantha: Write getter
                      */
 
-                    writer.write("\t"
+						writer.write("\t"
                                     + "void set"
                                     + attribs[i].getParamNameWithoutSymbols()
                                     + "("
                                     + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
                                     + " InValue);\n");
+					}
                 }
             }
         } catch (IOException e)
