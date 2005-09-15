@@ -58,7 +58,8 @@ AppScopeHandlerPool::~AppScopeHandlerPool ()
 
 int AppScopeHandlerPool::getInstance (BasicHandler** pHandler, int nLibId)
 {
-    lock ();
+    //lock ();
+	Lock l(this);
     int Status;
     if (m_Handlers.find (nLibId) != m_Handlers.end ())
     {
@@ -68,14 +69,14 @@ int AppScopeHandlerPool::getInstance (BasicHandler** pHandler, int nLibId)
 	     * application scope object. So just return SERVER_ENGINE_HANDLERBEINGUSED
 	     */
         {
-            unlock ();
+            //unlock ();
              throw AxisEngineException(SERVER_ENGINE_HANDLER_BEING_USED);
         }
         else
         {
             *pHandler = m_Handlers[nLibId].front ();
             m_Handlers[nLibId].pop_front ();
-            unlock ();
+            //unlock ();
             return AXIS_SUCCESS;
         }
     }
@@ -89,16 +90,17 @@ int AppScopeHandlerPool::getInstance (BasicHandler** pHandler, int nLibId)
 	     */ 
             m_Handlers[nLibId].clear ();
         }
-        unlock ();
+        //unlock ();
         return Status;
     }
 }
 
 int AppScopeHandlerPool::putInstance (BasicHandler* pHandler, int nLibId)
 {
-    lock ();
+    //lock ();
+	Lock l(this);
     m_Handlers[nLibId].push_back (pHandler);
-    unlock ();
+    //unlock ();
     return AXIS_SUCCESS;
 }
 

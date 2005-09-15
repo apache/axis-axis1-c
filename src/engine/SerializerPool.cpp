@@ -42,7 +42,9 @@ SerializerPool::~SerializerPool ()
 // Pooling should be implemented
 int SerializerPool::getInstance (IWrapperSoapSerializer** ppSZ)
 {
-    lock ();
+    //lock ();
+	Lock l(this);
+
     if (!m_SZList.empty ())
     {
         *ppSZ = m_SZList.front ();
@@ -61,19 +63,21 @@ int SerializerPool::getInstance (IWrapperSoapSerializer** ppSZ)
     {
         delete *ppSZ;
         *ppSZ = NULL;
-        unlock ();
+        //unlock ();
         AXISTRACE1 ("Serializer pool could not be initialized", CRITICAL);
         return AXIS_FAIL;
     }
-    unlock ();
+    //unlock ();
     return AXIS_SUCCESS;
 }
 
 int SerializerPool::putInstance (IWrapperSoapSerializer* pSZ)
 {
-    lock ();
+    //lock ();
+	Lock l(this);
+
     m_SZList.push_back (pSZ);
-    unlock ();
+    //unlock ();
     return AXIS_SUCCESS;
 }
 

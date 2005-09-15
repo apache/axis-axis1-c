@@ -203,7 +203,8 @@ int HandlerPool::getResponseFlowHandlerChain (HandlerChain** ppChain,
 int HandlerPool::getHandlerChain (string &sSessionId, HandlerChain** ppChain,
     const WSDDHandlerList* pHandlerList)
 {
-    lock ();
+    //lock ();
+	Lock l(this);
     *ppChain = NULL;
     HandlerChain* pChain = NULL;
     // check m_ChainStore to get a HandlerChain
@@ -285,13 +286,13 @@ int HandlerPool::getHandlerChain (string &sSessionId, HandlerChain** ppChain,
         }
         pChain->fini ();
         m_ChainStore.push_back (pChain);
-        unlock ();
+        //unlock ();
         return Status;
     }
     else
     {
         *ppChain = pChain;
-        unlock ();
+        //unlock ();
         return Status;
     }
 }
@@ -310,9 +311,10 @@ void HandlerPool::poolHandlerChain (HandlerChain* pChain, string &sSessionId)
         }
     }
     pChain->fini ();
-    lock ();
+    //lock ();
+	Lock l(this);
     m_ChainStore.push_back (pChain);
-    unlock ();
+    //unlock ();
 }
 
 int HandlerPool::getWebService (BasicHandler** ppHandler, string &sSessionId,

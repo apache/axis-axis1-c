@@ -54,7 +54,8 @@ RequestScopeHandlerPool::~RequestScopeHandlerPool ()
 
 int RequestScopeHandlerPool::getInstance (BasicHandler** pHandler, int nLibId)
 {
-    lock ();
+    //lock ();
+	Lock l(this);
     int Status;
     if (m_Handlers.find (nLibId) != m_Handlers.end ())
     {
@@ -68,14 +69,14 @@ int RequestScopeHandlerPool::getInstance (BasicHandler** pHandler, int nLibId)
 		 */ 
                 m_Handlers[nLibId].clear ();
             }
-            unlock ();
+            //unlock ();
             return Status;
         }
         else
         {
             *pHandler = m_Handlers[nLibId].front ();
             m_Handlers[nLibId].pop_front ();
-            unlock ();
+            //unlock ();
             return AXIS_SUCCESS;
         }
     }
@@ -89,14 +90,15 @@ int RequestScopeHandlerPool::getInstance (BasicHandler** pHandler, int nLibId)
 	     */ 
             m_Handlers[nLibId].clear ();
         }
-        unlock ();
+        //unlock ();
         return Status;
     }
 }
 
 int RequestScopeHandlerPool::putInstance (BasicHandler* pHandler, int nLibId, bool bWebService)
 {
-    lock ();
+    //lock ();
+	Lock l(this);
 
     if (0 != pHandler->_functions)
     {
@@ -109,7 +111,7 @@ int RequestScopeHandlerPool::putInstance (BasicHandler* pHandler, int nLibId, bo
     }
 
     m_Handlers[nLibId].push_back (pHandler);
-    unlock ();
+    //unlock ();
     return AXIS_SUCCESS;
 }
 

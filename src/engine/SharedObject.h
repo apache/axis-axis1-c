@@ -46,10 +46,24 @@ class SharedObject
     public:
         SharedObject ();
         virtual ~ SharedObject ();
-    protected:
         int unlock ();
         int lock ();
-    private:
+
+    protected:
+		class Lock
+		{
+			public:
+				inline Lock();
+				inline Lock(SharedObject *obj);
+				inline ~Lock();
+				inline void unlock();
+
+			private:
+				SharedObject *m_locked;
+		};
+
+	
+	private:
         bool m_bLocked;
 #ifdef WIN32
     HANDLE          mut;
@@ -57,6 +71,30 @@ class SharedObject
     pthread_mutex_t *mut;
 #endif
 };
+
+// Inline functions
+SharedObject::Lock::Lock() : m_locked(NULL)
+{}
+
+SharedObject::Lock::Lock(SharedObject *obj) 
+{
+    obj->lock();
+    m_locked = obj;
+}
+
+SharedObject::Lock::~Lock()
+{ 
+    if (m_locked) m_locked->unlock(); 
+}
+
+void SharedObject::Lock::unlock()
+{ 
+    if (m_locked) 
+    { 
+        m_locked->unlock(); 
+        m_locked = NULL; 
+    } 
+}
 
 AXIS_CPP_NAMESPACE_END
 

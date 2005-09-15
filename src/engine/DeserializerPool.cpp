@@ -66,7 +66,8 @@ DeserializerPool::~DeserializerPool ()
 
 int DeserializerPool::getInstance (IWrapperSoapDeSerializer** ppDZ)
 {
-    lock ();
+    //lock ();
+	Lock l(this);
     if (!m_DZList.empty ())
     {
         *ppDZ = m_DZList.front ();
@@ -79,12 +80,12 @@ int DeserializerPool::getInstance (IWrapperSoapDeSerializer** ppDZ)
         {
             delete* ppDZ;
             *ppDZ = NULL;
-            unlock ();
+            //unlock ();
             AXISTRACE1 ("Deserializer could not be initialized", CRITICAL);
             return AXIS_FAIL;
         }
     }
-    unlock ();
+    //unlock ();
     return AXIS_SUCCESS;
 }
 
@@ -95,9 +96,10 @@ int DeserializerPool::putInstance (IWrapperSoapDeSerializer* pDZ)
         delete pDZ;
         return AXIS_FAIL;
     }
-    lock ();
+    //lock ();
+	Lock l(this);
     m_DZList.push_back (pDZ);
-    unlock ();
+    //unlock ();
     return AXIS_SUCCESS;
 }
 

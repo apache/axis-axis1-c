@@ -45,7 +45,8 @@ HandlerLoader::HandlerLoader ()
 
 HandlerLoader::~HandlerLoader ()
 {
-    lock ();
+    //lock ();
+	Lock l(this);
     HandlerInformation* pHandlerInfo = NULL;
     for (map < int, HandlerInformation* >::iterator it =
          m_HandlerInfoList.begin (); it != m_HandlerInfoList.end (); it++)
@@ -58,24 +59,26 @@ HandlerLoader::~HandlerLoader ()
             unloadLib (pHandlerInfo);
         delete pHandlerInfo;
     }
-    unlock ();
+    //unlock ();
+	l.unlock ();
     PLATFORM_LOADLIBEXIT()
 }
 
 int HandlerLoader::deleteHandler (BasicHandler* pHandler, int nLibId)
 {
-    lock ();
+    //lock ();
+	Lock l(this);
     if (m_HandlerInfoList.find (nLibId) != m_HandlerInfoList.end ())
     {
         HandlerInformation* pHandlerInfo = m_HandlerInfoList[nLibId];
         pHandlerInfo->m_nObjCount--;
         pHandlerInfo->m_Delete (pHandler);
-        if (pHandlerInfo->m_nObjCount == 0);  //time to unload the DLL
-            unlock ();
+        //if (pHandlerInfo->m_nObjCount == 0);  //time to unload the DLL
+          //  unlock ();
     }
     else
     {
-        unlock ();
+        //unlock ();
         throw AxisEngineException(SERVER_ENGINE_HANDLER_NOT_LOADED);
     }
     return AXIS_SUCCESS;
@@ -116,7 +119,8 @@ int HandlerLoader::unloadLib (HandlerInformation* pHandlerInfo)
 
 int HandlerLoader::createHandler (BasicHandler** pHandler, int nLibId)
 {
-    lock ();
+    //lock ();
+	Lock l(this);
     *pHandler = NULL;
     HandlerInformation* pHandlerInfo = NULL;
     if (m_HandlerInfoList.find (nLibId) == m_HandlerInfoList.end ())
@@ -126,7 +130,7 @@ int HandlerLoader::createHandler (BasicHandler** pHandler, int nLibId)
         if (pHandlerInfo->m_sLib.empty ())
         {
             delete pHandlerInfo;
-            unlock ();
+            //unlock ();
             AXISTRACE1("SERVER_CONFIG_LIBRARY_PATH_EMPTY", CRITICAL);
             throw AxisConfigException(SERVER_CONFIG_LIBRARY_PATH_EMPTY);
         }
@@ -144,7 +148,7 @@ int HandlerLoader::createHandler (BasicHandler** pHandler, int nLibId)
             {
                 unloadLib (pHandlerInfo);
                 delete pHandlerInfo;
-                unlock ();
+                //unlock ();
                 AXISTRACE1 ("Library loading failed", CRITICAL);
                 throw AxisEngineException(SERVER_ENGINE_LIBRARY_LOADING_FAILED);
             }
@@ -155,7 +159,7 @@ int HandlerLoader::createHandler (BasicHandler** pHandler, int nLibId)
         }
         else
         {
-            unlock ();
+            //unlock ();
             AXISTRACE1 ("Library loading failed", CRITICAL);
             throw AxisEngineException(SERVER_ENGINE_LIBRARY_LOADING_FAILED);
         }
@@ -178,7 +182,7 @@ int HandlerLoader::createHandler (BasicHandler** pHandler, int nLibId)
             {
                 pBH->_functions->fini (pBH->_object);
                 pHandlerInfo->m_Delete (pBH);
-                unlock ();
+                //unlock ();
                 AXISTRACE1("SERVER_ENGINE_HANDLER_INIT_FAILED", CRITICAL);
                 throw AxisEngineException(SERVER_ENGINE_HANDLER_INIT_FAILED);
             }
@@ -200,7 +204,7 @@ int HandlerLoader::createHandler (BasicHandler** pHandler, int nLibId)
             {
                 ((HandlerBase*) pBH->_object)->fini ();
                 pHandlerInfo->m_Delete (pBH);
-                unlock ();
+                //unlock ();
                 AXISTRACE1("SERVER_ENGINE_HANDLER_INIT_FAILED", CRITICAL);
                 throw AxisEngineException(SERVER_ENGINE_HANDLER_INIT_FAILED);
             }
@@ -208,7 +212,7 @@ int HandlerLoader::createHandler (BasicHandler** pHandler, int nLibId)
     }
     else
     {
-        unlock ();
+        //unlock ();
         AXISTRACE1("SERVER_ENGINE_HANDLER_CREATION_FAILED", CRITICAL);
         throw AxisEngineException(SERVER_ENGINE_HANDLER_CREATION_FAILED);
     }

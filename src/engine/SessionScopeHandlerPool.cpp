@@ -61,7 +61,9 @@ SessionScopeHandlerPool::~SessionScopeHandlerPool ()
 int SessionScopeHandlerPool::getInstance (string &sSessionId,
     BasicHandler** pHandler, int nLibId)
 {
-    lock ();
+    //lock ();
+	Lock l(this);
+
     int Status;
     if (m_Handlers.find (nLibId) != m_Handlers.end ())
     {
@@ -74,14 +76,15 @@ int SessionScopeHandlerPool::getInstance (string &sSessionId,
                 // check in the store for reuse
                 if ((*pSesHandlers)[SESSIONLESSHANDLERS].empty ())
                 {
-                    unlock ();
+                    //unlock ();
+					l.unlock ();
                     return g_pHandlerLoader->createHandler (pHandler, nLibId);
                 }
                 else
                 {
                     *pHandler = (*pSesHandlers)[SESSIONLESSHANDLERS].front ();
                     (*pSesHandlers)[SESSIONLESSHANDLERS].pop_front ();
-                    unlock ();
+                    //unlock ();
                     return AXIS_SUCCESS;
                 }
             }
@@ -89,10 +92,11 @@ int SessionScopeHandlerPool::getInstance (string &sSessionId,
             {
                 *pHandler = HandlerList.front ();
                 HandlerList.pop_front ();
-                unlock ();
+                //unlock ();
                 return AXIS_SUCCESS;
             }
-            unlock ();
+            //unlock ();
+			l.unlock ();
             return g_pHandlerLoader->createHandler (pHandler, nLibId);
         }
         else // No handler list for this session id
@@ -100,14 +104,15 @@ int SessionScopeHandlerPool::getInstance (string &sSessionId,
             // Check in the store for reuse
             if ((*pSesHandlers)[SESSIONLESSHANDLERS].empty ())
             {
-                unlock ();
+                //unlock ();
+				l.unlock ();
                 return g_pHandlerLoader->createHandler (pHandler, nLibId);
             }
             else
             {
                 *pHandler = (*pSesHandlers)[SESSIONLESSHANDLERS].front ();
                 (*pSesHandlers)[SESSIONLESSHANDLERS].pop_front ();
-                unlock ();
+                //unlock ();
                 return AXIS_SUCCESS;
             }
         }
@@ -124,7 +129,7 @@ int SessionScopeHandlerPool::getInstance (string &sSessionId,
             pNewSH->clear ();
             m_Handlers[nLibId] = pNewSH;
         }
-        unlock ();
+        //unlock ();
         return Status;
     }
 }
@@ -132,7 +137,8 @@ int SessionScopeHandlerPool::getInstance (string &sSessionId,
 int SessionScopeHandlerPool::putInstance (string &sSessionId,
     BasicHandler* pHandler, int nLibId)
 {
-    lock ();
+    //lock ();
+	Lock l(this);
     SessionHandlers* pSesHandlers;
     if (m_Handlers.find (nLibId) != m_Handlers.end ())
     {
@@ -146,7 +152,7 @@ int SessionScopeHandlerPool::putInstance (string &sSessionId,
     }
     list <BasicHandler*>&HandlerList = ((*pSesHandlers)[sSessionId]);
     HandlerList.push_back (pHandler);
-    unlock ();
+    //unlock ();
     return AXIS_SUCCESS;
 }
 
