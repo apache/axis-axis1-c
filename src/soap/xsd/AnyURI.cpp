@@ -124,7 +124,7 @@ AXIS_CPP_NAMESPACE_START
 		AxisChar* serializedValue = (AxisChar*) replaceReservedCharacters(valueAsString).c_str();
 		
         IAnySimpleType::serialize(serializedValue);
-        delete [] serializedValue;
+
 		return m_Buf;
     }
 	
