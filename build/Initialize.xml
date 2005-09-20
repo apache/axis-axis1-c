@@ -29,7 +29,18 @@
            <isset property="solaris"/>
         </condition>
         <condition property="platform" value="Win32">
-           <isset property="windows"/>
+           <and>
+	           <isset property="windows"/>
+               <not>
+                   <isset property="64bit"/>
+               </not>
+           </and>
+        </condition>
+        <condition property="platform" value="Win64">
+           <and>
+	           <isset property="windows"/>
+               <isset property="64bit"/>
+           </and>
         </condition>
         <condition property="platform" value="Linux">
            <isset property="linux"/>
