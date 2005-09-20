@@ -49,7 +49,7 @@
 		-->
 		<replaceregexp file="${r_expected.file}"
 			match="Host: localhost:[0-9]*"
-			replace="Host: localhost:${monitorPort}" byline="true" />
+			replace="Host: 127.0.0.1:${monitorPort}" byline="true" />
 
 	</target>
 	<!-- Only copy server response file if it exists and we are in unit test mode (mockServer mode)-->
@@ -87,7 +87,7 @@
 			regexp="/(.*)" select="\1" />
 
 		<property name="clientArgs"
-			value="${protocol}://localhost:${monitorPort}/${context}" />
+			value="${protocol}://127.0.0.1:${monitorPort}/${context}" />
 	</target>
 
 	<target name="setForNoMonitor" depends="checkIfEndpointSet"
