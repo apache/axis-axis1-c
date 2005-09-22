@@ -662,7 +662,17 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 				+ ")*nSize/2);\n");
 		writer.write("\t\t\tmemset(pObj, 0, sizeof(" + classname
 				+ ")*nSize/2);\n");
-		writer.write("\t\t\tdelete [] pObj;\n");
+		
+		/**
+         * Dushshantha:(Solution to the Jira AXISCPP-343
+         * After memsetting pObj to 0, deleting pObj will crash the program becouse the memory is already set to 0(NULL)
+         * So i commented out delete statement and made pObj NULL to avoid gabage referance.
+         * Thanks Samisa for the Tip.
+         * 
+         */
+        writer.write("\t\t\tpObj = NULL;\n");
+		//writer.write("\t\t\tdelete [] pObj;\n");
+        
 		writer.write("\t\t\treturn pNew;\n\t\t}\n\t\telse\n\t\t{\n");
 		writer
 				.write("\t\t\treturn new " + classname

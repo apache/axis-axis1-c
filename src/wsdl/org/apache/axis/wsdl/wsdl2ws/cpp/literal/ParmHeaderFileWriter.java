@@ -435,9 +435,9 @@ public class ParmHeaderFileWriter extends ParamWriter
         try
         {
             if (this.type.isFault())
-                writer.write("\t~" + classname + "() throw();\n");
+                writer.write("\tvirtual ~" + classname + "() throw();\n");
             else
-                writer.write("\t~" + classname + "();\n");
+                writer.write("\tvirtual ~" + classname + "();\n");
         } catch (IOException e)
         {
             throw new WrapperFault(e);
