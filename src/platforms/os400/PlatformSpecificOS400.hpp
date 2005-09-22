@@ -15,7 +15,6 @@
  *   limitations under the License.
  */
 
-
 #if !defined(_PLATFORM_SPECIFIC_OS400_HPP)
 #define _PLATFORM_SPECIFIC_OS400_HPP
 
