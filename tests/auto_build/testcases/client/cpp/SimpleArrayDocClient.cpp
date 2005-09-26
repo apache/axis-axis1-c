@@ -22,7 +22,7 @@ using namespace std;
 #include <axis/AxisException.hpp>
 #include <iostream>
 
-#define ARRAYSIZE 2
+#define ARRAYSIZE 100
 
 int main(int argc, char* argv[])
 {
@@ -44,20 +44,19 @@ int main(int argc, char* argv[])
 		ArrayTestPortType ws(endpoint);
 		//testing echoIntArray
 		intArrayType arrin;
+		intArrayType* arrout;
 		arrin.intItem.m_Array = new int*[ARRAYSIZE];
         int * intArray = new int[ARRAYSIZE];
 		arrin.intItem.m_Size = ARRAYSIZE;
 		for (x=0;x<ARRAYSIZE;x++)
 		{
-            intArray[x] = x;
+            intArray[x] = x + 1000;
 			arrin.intItem.m_Array[x] = &intArray[x];
 		}
 		cout << "invoking echoIntArray..."<<endl;
-		if (ws.echoIntArray(&arrin)->intItem.m_Array != NULL)
-			cout << "successful "<<endl;
-		else
-			cout << "failed "<<endl;		
-
+		arrout=ws.echoIntArray(&arrin);
+		for(x=0;x<ARRAYSIZE;x++)
+		   cout << *(arrout->intItem.m_Array[x])<<endl;
 		bSuccess = true;
 	}
 	catch(AxisException& e)
