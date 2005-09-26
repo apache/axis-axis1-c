@@ -89,6 +89,7 @@ XMLParser:${dir.libraries}/${ClientParserLib}
 
 
     <target name="buildServices" depends="initialize, setServiceList">
+    	<echo message="buildservice: ${service.list}"/>
         <foreach target="buildService"
                  param="service_property"
                  inheritall="true">
@@ -96,8 +97,8 @@ XMLParser:${dir.libraries}/${ClientParserLib}
         </foreach>
     </target>
     <target name="setServiceList"
-            depends="setListType,setIndividual,setFromList,setAll" />
-    <target name="setListType">
+            depends="setServiceListType,setIndividualService,setFromServiceList,setAllServices" />
+    <target name="setServiceListType">
         <condition property="allService">
             <and>
                 <not>
@@ -114,7 +115,7 @@ XMLParser:${dir.libraries}/${ClientParserLib}
     <!--
 	  Create a list of just 1 Service from command line parameter -Dservice.name=
 	  -->
-    <target name="setIndividual" if="service.name">
+    <target name="setIndividualService" if="service.name">
         <echo message="setIndividual ${service.name}" />
         <path id="service_properties">
             <fileset dir="${dir.autotests}/tests/server"
@@ -126,7 +127,7 @@ XMLParser:${dir.libraries}/${ClientParserLib}
     <!--
 	  Create a list of Services from a properties file unless an individual Service has been specified too
 	  -->
-    <target name="setFromList" if="service.list" unless="service.name">
+    <target name="setFromServiceList" if="service.list" unless="service.name">
         <echo message="setFromList ${service.list}" />
         <path id="service_properties">
             <fileset dir="${dir.autotests}/tests/server"
@@ -138,7 +139,7 @@ XMLParser:${dir.libraries}/${ClientParserLib}
     <!--
 	  Create a list of all the Services
 	  -->
-    <target name="setAll" if="allService">
+    <target name="setAllServices" if="allService">
         <echo message="setAll ${dir.autotests}/tests/server" />
         <path id="service_properties">
             <fileset dir="${dir.autotests}/tests/server" includes="*.xml" />
