@@ -79,48 +79,52 @@ public class ClientReturner extends Thread
         int bytesRead=0;
         char[] readBuffer=new char[READ_BUFFER_SIZE];
 
-        while (continueToRun)
+        try
         {
-            try
+            while (continueToRun)
             {
                 bytesRead=serverResponseStream.read(readBuffer, 0,
                         READ_BUFFER_SIZE);
                 //                System.out.println( "Clientreturner got some bytes from the
                 // server "+bytesRead);
-            }
-            catch (IOException exception)
-            {
-                System.err
-                        .println("IOException when reading in response from server ");
-                exception.printStackTrace(System.err);
-            }
-            if (bytesRead!=-1)
-            {
-                //                    System.out.println( "ClientReturner#run("+number+"): Writing
-                // to client: "+new String(readBuffer, 0, bytesRead));
-                try
+                if (bytesRead!=-1)
                 {
-                    streamToClient.write(readBuffer, 0, bytesRead);
-                    streamToClient.flush( );
+                    /*System.out.println("ClientReturner#run("+number
+                            +"): Writing to client: "
+                            +new String(readBuffer, 0, bytesRead));
+                            */
+                    try
+                    {
+                        streamToClient.write(readBuffer, 0, bytesRead);
+                        streamToClient.flush( );
+                    }
+                    catch (IOException exception)
+                    {
+                        System.err
+                                .println("IOException when writing server response back to client");
+                        exception.printStackTrace(System.err);
+
+                    }
+                    // System.out.println("ClientReturner#run(): flushed");
+                    TCPMonitor.getInstance( ).writeResponse(readBuffer,
+                            bytesRead);
+                    System.out.println("About to go around again");
                 }
-                catch (IOException exception)
+                else
                 {
-                    System.err
-                            .println("IOException when writing server response back to client");
-                    exception.printStackTrace(System.err);
+                    //                    System.out.println( "ClientFileReturner#run():
+                    // bytesRead==-1
+                    // "+continueToRun);
 
+                    //continueToRun=false;
                 }
-                //System.out.println( "ClientReturner#run(): flushed");
-                TCPMonitor.getInstance( ).writeResponse(readBuffer, bytesRead);
-                //                    System.out.println( "About to go around again");
             }
-            else
-            {
-                //                    System.out.println( "ClientFileReturner#run(): bytesRead==-1
-                // "+continueToRun);
-
-                //continueToRun=false;
-            }
+        }
+        catch (IOException exception)
+        {
+            System.err
+                    .println("IOException when reading in response from server ");
+            exception.printStackTrace(System.err);
         }
     }
     //        System.out.println( "ClientReturner#run(): exit");
