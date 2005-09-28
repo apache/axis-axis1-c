@@ -195,7 +195,13 @@ public class ServiceWriter extends CPPClassWriter
                 	hasInputParms = true;
                 	ParameterInfo fparam = (ParameterInfo) params.next();
                     String fparamTypeName = fparam.getLangName();
-                    if (CUtils.isSimpleType(fparamTypeName)
+                    
+                    if (fparam.getType().isAttachment())
+                    {
+                    	writer.write("ISoapAttachment *Value" + 0);
+                    }
+                    
+                    else if (CUtils.isSimpleType(fparamTypeName)
 							&& fparam.isNillable()
 							&& !(CUtils.isPointerType(fparamTypeName)))
                     {
@@ -220,25 +226,32 @@ public class ServiceWriter extends CPPClassWriter
                 }
                 for (int j = 1; params.hasNext(); j++)
                 {
-                    ParameterInfo nparam = (ParameterInfo) params.next();
-                    String nparamTypeName = nparam.getLangName();
-                    if (CUtils.isSimpleType(nparamTypeName)
-							&& nparam.isNillable()
-							&& !(CUtils.isPointerType(nparamTypeName)))
+                	ParameterInfo nparam = (ParameterInfo) params.next();
+                    String paramTypeName = nparam.getLangName();
+                    
+                    
+                    if (nparam.getType().isAttachment())
+                    {
+                    	writer.write(", ISoapAttachment *Value" + j);
+                    }
+                                        
+                    else if (CUtils.isSimpleType(paramTypeName)
+                    		&& nparam.isNillable()
+							&& !(CUtils.isPointerType(paramTypeName)))
                     {
                     	writer.write(
-    	                        ", "
+    	                        ","
     	                            + WrapperUtils
     	                                .getClassNameFromParamInfoConsideringArrays(
     	                                nparam,
     	                                wscontext)
-    	                            + " * Value"
+    	                            + " * Value hehe "
     	                            + j);
                     }
                     else
                     {
 	                    writer.write(
-	                        ", "
+	                        ","
 	                            + WrapperUtils
 	                                .getClassNameFromParamInfoConsideringArrays(
 	                                nparam,

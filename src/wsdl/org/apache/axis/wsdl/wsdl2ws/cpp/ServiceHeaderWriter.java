@@ -177,7 +177,13 @@ public class ServiceHeaderWriter extends HeaderFileWriter
                 	hasInputParms = true;
                 	ParameterInfo fparam = (ParameterInfo) params.next();
                     String paramTypeName = fparam.getLangName();
-                    if (CUtils.isSimpleType(paramTypeName)
+                    
+                    if (fparam.getType().isAttachment())
+                    {
+                    	writer.write("ISoapAttachment *Value" + 0);
+                    }
+                    
+                    else if (CUtils.isSimpleType(paramTypeName)
                     		&& fparam.isNillable()
 							&& !(CUtils.isPointerType(paramTypeName)))
                     {
@@ -202,9 +208,17 @@ public class ServiceHeaderWriter extends HeaderFileWriter
                 }
                 for (int j = 1; params.hasNext(); j++)
                 {
+                	
                     ParameterInfo nparam = (ParameterInfo) params.next();
                     String paramTypeName = nparam.getLangName();
-                    if (CUtils.isSimpleType(paramTypeName)
+                    
+                    
+                    if (nparam.getType().isAttachment())
+                    {
+                    	writer.write(", ISoapAttachment *Value" + j);
+                    }
+                                        
+                    else if (CUtils.isSimpleType(paramTypeName)
                     		&& nparam.isNillable()
 							&& !(CUtils.isPointerType(paramTypeName)))
                     {
@@ -214,7 +228,7 @@ public class ServiceHeaderWriter extends HeaderFileWriter
     	                                .getClassNameFromParamInfoConsideringArrays(
     	                                nparam,
     	                                wscontext)
-    	                            + " * Value"
+    	                            + " * Value hehe "
     	                            + j);
                     }
                     else
@@ -268,6 +282,7 @@ public class ServiceHeaderWriter extends HeaderFileWriter
             Iterator types = this.wscontext.getTypemap().getTypes().iterator();
             HashSet typeSet = new HashSet();
             writer.write("#include <axis/AxisUserAPI.hpp>\n");
+            writer.write("#include <axis/ISoapAttachment.hpp>\n");
             writer.write("#include \"AxisServiceException.hpp\" \n\n");
             String typeName = null;
             while (types.hasNext())
