@@ -75,7 +75,6 @@ extern char *toUTF8(char *b, int len);
 // Miscellaneous
 // =============================================================
 #include <sys/time.h>
-#include <sys/timeb.h>
 #include <pthread.h> 
 #include <unistd.h>
 #include <errno.h>
@@ -107,8 +106,24 @@ extern char *toUTF8(char *b, int len);
 /**
  * Platform specific method to obtain current time in milli seconds
  */
-#define PLATFORM_GET_TIME_IN_MILLIS ftime
-#define PLATFORM_TIMEB timeb
+struct os400_timeb                                                               
+{                                                                          
+     long  time;                       
+     long  millitm;                    
+};  
+
+static int os400_ftime(struct os400_timeb * tp)
+{
+    struct timeval t;
+    gettimeofday(&t, NULL);
+    tp->time    = t.tv_sec;
+    tp->millitm = t.tv_usec/1000;
+    return 0;
+}
+                                                                       
+#define PLATFORM_GET_TIME_IN_MILLIS  os400_ftime
+#define PLATFORM_TIMEB os400_timeb
+
 
 /**
  * type to be used for 64bit integers
