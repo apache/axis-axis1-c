@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<definitions targetNamespace="SimpleNonBaseType"
+                       xmlns="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:ns99="SimpleType"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                   xmlns:tns="SimpleNonBaseType"
+                   xmlns:wsi="http://ws-i.org/schemas/conformanceClaim/"
+                   xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="XMLSchema">
+
+ <types>
+  <xsd:schema   xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  	<xsd:import namespace="SimpleType"
+  	       schemaLocation="SimpleType.xsd"/>
+  	<xsd:import namespace="SimpleNonBaseType"
+  		   schemaLocation="SimpleNonBaseType.xsd"/>
+
+   <xsd:element name="anElement">
+    <xsd:complexType>
+     <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="1" name="Element" nillable="true" type="ns99:SampleBean"/>
+     </xsd:sequence>
+    </xsd:complexType>
+   </xsd:element>
+  </xsd:schema>
+ </types>
+
+ <message name="aBeanMessage">
+ 	<part name="aBeanMesage" element="tns:anElement"></part>
+ </message>
+
+ <portType name="TestServicePortType">  <operation name="aBeanPortType">
+   <input message="tns:aBeanMessage"/>
+  </operation> </portType>
+
+ <binding name="ServiceBinding" type="tns:TestServicePortType">
+  <documentation>
+   <wsi:Claim conformsTo="http://ws-i.org/profiles/basic/1.0"/>
+  </documentation>
+  <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+  <operation name="aBeanPortType">
+   <soap:operation soapAction="" style="document"/>
+   <input>
+    <soap:body use="literal"/>
+   </input>
+  </operation>
+ </binding>
+
+  <service name="SimpleService">
+    <port binding="tns:ServiceBinding" name="ServiceBinding">
+      <soap:address location="http://tempuri.org" /> 
+    </port>
+  </service>
+
+</definitions>
