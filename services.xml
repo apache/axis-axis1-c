@@ -34,7 +34,7 @@ XMLParser:${dir.libraries}/${ClientParserLib}
 
 
     <target name="runserver" depends="initialize, decideserverproperties">
-        <exec executable="${serverexecutable}" spawn="false">
+        <exec executable="${serverexecutable}" spawn="true">
             <arg line="${startargs}" />
             <env key="AXISCPP_DEPLOY" value="${axiscpp_deploy}/server" />
             <env key="${serverenv.env}" value="${serverenv.env.value}" />
