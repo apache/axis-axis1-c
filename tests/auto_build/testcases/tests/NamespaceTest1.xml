@@ -1,0 +1,13 @@
+<test>
+    <name>NamespaceTest1</name>
+    <description>NamespaceTest1</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>NamespaceTest1Client.cpp</clientCode>
+    <wsdl>NamespaceTest1.wsdl</wsdl>
+    <expected>
+        <output>
+            NamespaceTest1.cpp.out
+        </output>
+    </expected>
+	<endpoint>-e http://localhost:80/axis/AxisBench</endpoint>
+</test>
