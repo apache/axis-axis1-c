@@ -656,8 +656,14 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                         }
                         else
                         {
-                        	if (CUtils.isPointerType(outparamType))
-                        	{
+                        	/**
+                        	 * Dushshantha:
+                        	 * i commented out this code to correct wrong code generation for out params
+                        	 */
+                        	
+                        	
+                        	/*if (CUtils.isPointerType(outparamType))
+                        	{*/
                         		writer.write(
                                         "\tpIWSSZ->addOutputParam(\""
                                             + returnParamName.substring(returnParamName.lastIndexOf(">")+1)
@@ -666,7 +672,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                                             + ", "
                                             + CUtils.getXSDTypeForBasicType(outparamType)
                                             + ");\n");
-                        	}
+                        	/*}
                         	else
                         	{
                         		writer.write(
@@ -677,7 +683,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                                             + ", "
                                             + CUtils.getXSDTypeForBasicType(outparamType)
                                             + ");\n");
-                        	}
+                        	}*/
                             //10/05/2005..........................................................
                         }
                     }
