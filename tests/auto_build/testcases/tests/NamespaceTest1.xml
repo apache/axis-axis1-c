@@ -15,5 +15,5 @@
             NamespaceTest1ServerResponse.expected
         </serverResponse>
     </expected>
-	<endpoint>http://localhost:9090/axis/AxisBench</endpoint>
+	<endpoint>http://localhost:80/axis/NamespaceTest</endpoint>
 </test>
