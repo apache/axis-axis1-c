@@ -6,7 +6,7 @@
     <wsdl>NamespaceTest1.wsdl</wsdl>
     <expected>
         <output>
-            NamespaceTest1.expected
+            NamespaceTest1.cpp.out
         </output>
         <request>
             NamespaceTest1Request.expected
