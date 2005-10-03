@@ -25,7 +25,7 @@ int main( int argc, char * argv[])
 	{
 		try
 		{
-			const char *			pszURL = "http://localhost:9080/AxisBench/services/AxisBenchSoapImpl";
+			const char *			pszURL = "http://localhost:9090/AxisBench/services/AxisBenchSoapImpl";
 
 			pszURL = argv[1];
 
@@ -35,6 +35,8 @@ int main( int argc, char * argv[])
 			pWS->aBeanPortType( &sSB);
 
 			delete pWS;
+
+			printf( "Test completed without fault\n");
 
 			bSuccess = true;
 		}
