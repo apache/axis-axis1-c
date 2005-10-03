@@ -616,9 +616,11 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 						writer.write("\tparam->"
 								+ attribs[i].getParamNameAsMember() + " = *p_"
 								+ attribs[i].getParamNameAsMember() + ";\n");
-
-						writer.write("\tdelete p_"
-								+ attribs[i].getParamNameAsMember() + ";\n");
+						if (attribs[i].getTypeName().equals("xsd__hexBinary")
+									|| attribs[i].getTypeName().equals("xsd__base64Binary"))
+							writer.write("\n");
+						else
+							writer.write("\tdelete p_" + attribs[i].getParamNameAsMember() + ";\n");
 					}
 
 				}
