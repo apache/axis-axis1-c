@@ -53,6 +53,25 @@
      <sequence/>
     </complexType>
    </element>
+   <element name="multiParametersMultiReturn">
+    <complexType>
+     <sequence>
+      <element name="arg_0_2" nillable="true" type="xsd:string"/>
+      <element name="arg_1_2" type="xsd:int"/>
+      <element name="arg_2_2" type="xsd:double"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="multiParametersMultiReturnResponse">
+    <complexType>
+     <sequence>
+ 	<element name="arg_0_2" nillable="true" type="xsd:string"/>
+      <element name="arg_1_2" type="xsd:int"/>
+      <element name="arg_2_2" type="xsd:double"/>
+     </sequence>
+    </complexType>
+   </element>
+
    <element name="multiComplexParametersIntReturn">
     <complexType>
      <sequence>
@@ -64,6 +83,30 @@
      </sequence>
     </complexType>
    </element>
+
+   <element name="multiComplexParametersMultiComplexReturn">
+    <complexType>
+     <sequence>
+      <element name="arg_0_3" nillable="true" type="xsd:string"/>
+      <element name="arg_1_3" nillable="true" type="impl:ComplexType1"/>
+      <element name="arg_2_3" type="xsd:int"/>
+      <element name="arg_3_3" type="xsd:double"/>
+      <element maxOccurs="unbounded" name="arg_4_3" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="multiComplexParametersMultiComplexReturnResponse">
+    <complexType>
+     <sequence>
+      <element name="out1" nillable="true" type="xsd:string"/>
+      <element name="out2" nillable="true" type="impl:ComplexType1"/>
+      <element name="out3" type="xsd:int"/>
+      <element name="out4" type="xsd:double"/>
+     </sequence>
+    </complexType>
+   </element>
+
+
    <complexType name="ComplexType1">
     <sequence>
      <element name="ctLong" type="xsd:long"/>
@@ -174,17 +217,46 @@
 
    </wsdl:message>
 
+   <wsdl:message name="multiComplexParametersMultiComplexReturnResponse">
+
+      <wsdl:part element="impl:multiComplexParametersMultiComplexReturnResponse" name="parameters"/>
+
+   </wsdl:message>
+
+
    <wsdl:message name="noParametersNoReturnResponse">
 
       <wsdl:part element="impl:noParametersNoReturnResponse" name="parameters"/>
 
    </wsdl:message>
 
+   <wsdl:message name="multiParametersNoReturnResponse">
+
+      <wsdl:part element="impl:multiParametersNoReturnResponse" name="parameters"/>
+
+   </wsdl:message>
+
+
    <wsdl:message name="multiParametersNoReturnRequest">
 
       <wsdl:part element="impl:multiParametersNoReturn" name="parameters"/>
 
    </wsdl:message>
+
+   <wsdl:message name="multiParametersMultiReturnRequest">
+
+      <wsdl:part element="impl:multiParametersMultiReturn" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="multiParametersMultiReturnResponse">
+
+      <wsdl:part element="impl:multiParametersMultiReturnResponse" name="parameters"/>
+
+   </wsdl:message>
+
+
+
 
    <wsdl:message name="complexParameterComplexReturnRequest">
       <wsdl:part element="impl:complexParameterComplexReturn" name="parameters"/>
@@ -205,6 +277,12 @@
 
    </wsdl:message>
 
+   <wsdl:message name="multiComplexParametersMultiComplexReturnRequest">
+
+      <wsdl:part element="impl:multiComplexParametersMultiComplexReturn" name="parameters"/>
+
+   </wsdl:message>
+
    <wsdl:message name="multiComplexParametersNilIntReturnRequest">
 
       <wsdl:part element="impl:multiComplexParametersNilIntReturn" name="parameters"/>
@@ -217,11 +295,6 @@
 
    </wsdl:message>
 
-   <wsdl:message name="multiParametersNoReturnResponse">
-
-      <wsdl:part element="impl:multiParametersNoReturnResponse" name="parameters"/>
-
-   </wsdl:message>
 
    <wsdl:portType name="InOut">
 
@@ -249,6 +322,16 @@
 
       </wsdl:operation>
 
+      <wsdl:operation name="multiParametersMultiReturn">
+
+         <wsdl:input message="impl:multiParametersMultiReturnRequest" name="multiParametersMultiReturnRequest"/>
+
+         <wsdl:output message="impl:multiParametersMultiReturnResponse" name="multiParametersMultiReturnResponse"/>
+
+      </wsdl:operation>
+
+
+
       <wsdl:operation name="complexParameterComplexReturn">
 
          <wsdl:input message="impl:complexParameterComplexReturnRequest" name="complexParameterComplexReturnRequest"/>
@@ -264,6 +347,16 @@
          <wsdl:output message="impl:multiComplexParametersIntReturnResponse" name="multiComplexParametersIntReturnResponse"/>
 
       </wsdl:operation>
+
+
+      <wsdl:operation name="multiComplexParametersMultiComplexReturn">
+
+         <wsdl:input message="impl:multiComplexParametersMultiComplexReturnRequest" name="multiComplexParametersMultiComplexReturnRequest"/>
+
+         <wsdl:output message="impl:multiComplexParametersMultiComplexReturnResponse" name="multiComplexParametersMultiComplexReturnResponse"/>
+
+      </wsdl:operation>
+
 
       <wsdl:operation name="multiComplexParametersNilIntReturn">
 
@@ -341,6 +434,25 @@
 
       </wsdl:operation>
 
+      <wsdl:operation name="multiParametersMultiReturn">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="multiParametersMultiReturnRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="multiParametersMultiReturnResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+
       <wsdl:operation name="complexParameterComplexReturn">
 
          <wsdlsoap:operation soapAction=""/>
@@ -376,6 +488,26 @@
          </wsdl:output>
 
       </wsdl:operation>
+
+
+      <wsdl:operation name="multiComplexParametersMultiComplexReturn">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="multiComplexParametersMultiComplexReturnRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="multiComplexParametersMultiComplexReturnResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
 
       <wsdl:operation name="multiComplexParametersNilIntReturn">
 
