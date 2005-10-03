@@ -6,7 +6,7 @@
     <wsdl>NamespaceTest1.wsdl</wsdl>
     <expected>
         <output>
-            NamespaceTest1.cpp.out
+            NamespaceTest1.expected
         </output>
     </expected>
 	<endpoint>-e http://localhost:80/axis/AxisBench</endpoint>
