@@ -11,6 +11,9 @@
         <request>
             NamespaceTest1Request.expected
         </request> 
+        <serverResponse>
+            NamespaceTest1Response.expected
+        </serverResponse>
     </expected>
 	<endpoint>http://localhost:9090/axis/AxisBench</endpoint>
 </test>
