@@ -41,6 +41,11 @@ Apache2Transport::Apache2Transport(void* pContext)
 
 Apache2Transport::~Apache2Transport()
 {
+	if(m_pBuffers)
+	{
+		delete [] m_pBuffers;
+		m_pBuffers = NULL;
+	}
 
 }
 

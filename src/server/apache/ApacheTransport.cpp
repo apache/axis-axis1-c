@@ -47,7 +47,11 @@ ApacheTransport::ApacheTransport(void* pContext)
 
 ApacheTransport::~ApacheTransport()
 {
-
+		if(m_pBuffers)
+	{
+		delete [] m_pBuffers;
+		m_pBuffers = NULL;
+	}
 }
 
 AXIS_TRANSPORT_STATUS ApacheTransport::sendBytes(const char* pcSendBuffer, const void* pBufferId)
