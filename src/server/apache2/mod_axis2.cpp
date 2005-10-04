@@ -19,6 +19,8 @@
  */
 
 #include "Apache2Transport.h"
+#include <iostream>
+#include <axis/AxisException.hpp> 
 
 #define xxx ap_log_rerror(APLOG_MARK,APLOG_ERR, globr,"logged here");
 #define yyy ap_log_rerror(APLOG_MARK, APLOG_ERR, globr,"logged here");
@@ -88,13 +90,35 @@ static apr_status_t module_exit(void *data)
 
 static void module_init(apr_pool_t* p, server_rec* svr_rec)
 {
-    apr_pool_cleanup_register(p, NULL, module_exit, apr_pool_cleanup_null);
-    initialize_module(1);
+   try
+   {
+		apr_pool_cleanup_register(p, NULL, module_exit, apr_pool_cleanup_null);
+		initialize_module(1);
+   }
+   catch(AxisException& e) 
+   {
+		std::cerr << "An error occurred while Axis was initializing: " << e.what() << std::endl;
+   }
+   catch(...) 
+   {
+		std::cerr << "An unkown error occurred while Axis was initializing: " << std::endl;
+   }
 }
 
 static int axis_handler(request_rec* req_rec)
 {
-	return axis_handler_helper(req_rec);
+	try
+	{
+		return axis_handler_helper(req_rec);
+	}
+	catch(AxisException& e) 
+	{
+		std::cerr << "An error occurred while Axis was initializing: " << e.what() << std::endl;
+	}
+	catch(...) 
+	{
+		std::cerr << "An unkown error occurred while Axis was initializing: " << std::endl;
+	}
 }
 
 static void mod_axis_register_hooks(apr_pool_t* p)
