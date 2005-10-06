@@ -50,6 +50,16 @@
 		<replaceregexp file="${r_expected.file}"
 			match="Host: localhost:[0-9]*"
 			replace="Host: 127.0.0.1:${monitorPort}" byline="true" />
+		<propertyregex property="restOfURL" input="${test.endpoint}"
+			regexp="://(.*)" select="\1" />
+
+		<propertyregex property="context" input="${restOfURL}"
+			regexp="/(.*)" select="\1" />
+
+		<replaceregexp file="${r_expected.file}"
+			match="POST [0-9a-zA-Z/-_]*"
+			replace="POST /${context}" byline="true" />
+		
 
 	</target>
 	<!-- Only copy server response file if it exists and we are in unit test mode (mockServer mode)-->
