@@ -4,8 +4,12 @@ noParametersIntReturn
 noParametersIntReturn returned 27
 multiParametersNoReturn
 multiParametersNoReturn returned
+multiParametersMultiReturn
+multiParametersMultiReturn returned Hey dude , 69 , 17.19
 multiComplexParametersIntReturn
 multiComplexParametersIntReturn returned 41
+multiComplexParametersMultiComplexReturn
+multiComplexParametersMultiComplexReturn returned Hello , World
 multiComplexParametersNilIntReturn
 multiComplexParametersNilIntReturn returned 42
 multiArrayParametersIntReturn
