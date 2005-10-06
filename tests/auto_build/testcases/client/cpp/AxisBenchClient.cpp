@@ -90,9 +90,10 @@ int main(int argc, char* argv[])
     struct tm lt;
     memcpy(&lt, temp, sizeof(struct tm));
 
-      
+    char *letterA_String = stringToAscii("A");  
     buffer = (xsd__unsignedByte*)calloc (1, input->count + 2);
-    strcpy ( (char *)buffer, "A");
+
+    strcpy ( (char *)buffer, letterA_String);  
 
     for ( int i = 0; i < input->count ; i++ ) {
         BenchBasicDataType *type = new BenchBasicDataType();
@@ -136,7 +137,7 @@ int main(int argc, char* argv[])
 			ll += 10000;
 		}
 
-        strcat ( (char *)buffer, "A");
+        strcat ( (char *)buffer, letterA_String);
     }
 
     int t1,t2;
@@ -204,6 +205,12 @@ int main(int argc, char* argv[])
 // See XSDTime or XSDTimeNil testcases for full validation of the xsd:time type
 //            strftime(dateTime, 50, "%H:%M:%S", &output->infos.m_Array[i]->TimeType);
 //			  cout << " TimeType " << dateTime << endl;
+
+// Following check for os/400 - the mock server will return ascii char which needs to be converted
+#ifdef __OS400__
+                    if (output->infos.m_Array[i]->ByteType == 0x31) 
+                      output->infos.m_Array[i]->ByteType = '1';
+#endif
 			  cout << " ByteType " << output->infos.m_Array[i]->ByteType << endl;
 			  cout << " DecimalType " << output->infos.m_Array[i]->DecimalType << endl;
 			  cout << " FloatType " << output->infos.m_Array[i]->FloatType << endl;
@@ -214,13 +221,13 @@ int main(int argc, char* argv[])
 			  cout << " Base64BinaryType " << output->infos.m_Array[i]->Base64BinaryType.__size << endl;
 			  if( output->infos.m_Array[i]->Base64BinaryType.__size > 0)
 			  {
-				  cout << " Base64BinaryType " << output->infos.m_Array[i]->Base64BinaryType.__ptr << endl;
+				  cout << " Base64BinaryType " << asciiToString((char *)output->infos.m_Array[i]->Base64BinaryType.__ptr) << endl;
 			  }
 
 			  cout << " HexBinaryType " << output->infos.m_Array[i]->HexBinary.__size << endl;
 			  if( output->infos.m_Array[i]->HexBinary.__size > 0)
 			  {
-				cout << " HexBinaryType " << output->infos.m_Array[i]->HexBinary.__ptr << endl;
+				cout << " HexBinaryType " << asciiToString((char *)output->infos.m_Array[i]->HexBinary.__ptr) << endl;
 			  }
 		  }
 		  returnValue=0;
@@ -372,4 +379,3 @@ void setLogOptions(const char *output_filename) {
         cout.rdbuf( output_file.rdbuf() );
     }
 }
-

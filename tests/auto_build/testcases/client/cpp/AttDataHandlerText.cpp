@@ -23,6 +23,7 @@
 #include <fstream>
 #include <string.h>
 #include <signal.h>
+#include "CommonClientTestCode.hpp"
 
 void sig_handler(int);
 
@@ -48,8 +49,10 @@ int main(int argc, char* argv[])
 			{
 				sprintf(endpoint, "%s", url);
 				DataHandlerService ws(endpoint);
-				ISoapAttachment *att=ws.createSoapAttachment();				
-				char *text="This is a test message for attachment";
+				ISoapAttachment *att=ws.createSoapAttachment();	
+			
+				char *text=stringToAscii("This is a test message for attachment");
+
 				//Adding the content type as text/plain
 				att->addHeader(AXIS_CONTENT_TYPE,"text/plain");
 				xsd__base64Binary b64b1;

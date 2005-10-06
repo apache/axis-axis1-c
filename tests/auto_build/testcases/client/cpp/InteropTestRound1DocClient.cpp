@@ -19,6 +19,7 @@
 using namespace std;
 
 #include "InteropTestPortTypeDoc.hpp" 
+#include "CommonClientTestCode.hpp"
 
 #define ARRAYSIZE 2
 
@@ -153,7 +154,7 @@ int main(int argc, char* argv[])
 	printf("successful\n");
 	//testing echo base 64 binary
 
-	const char* bstr = "some string that is sent encoded to either base64Binary or hexBinary";
+	const char* bstr = stringToAscii("some string that is sent encoded to either base64Binary or hexBinary");
 
 	printf("invoking echoBase64...\n");
 	xsd__base64Binary bb;
@@ -163,7 +164,7 @@ int main(int argc, char* argv[])
 	if (bb.__size == ws.echoBase64(bb).__size)
 	{
 		printf("successful\n");
-		printf("Returned String :\n%s\n", bb.__ptr);
+		printf("Returned String :\n%s\n", asciiToString((char *)bb.__ptr));
 	}
 	else
 		printf("failed\n");
@@ -175,7 +176,9 @@ int main(int argc, char* argv[])
    
 	printf("invoking echoDate...\n");
 	ws.setTransportProperty("SOAPAction" , "InteropBaseDoc#echoDate");
-	if (memcmp(ws.echoDate(time), time, sizeof(tm)) == 0)
+
+      xsd__dateTime ed_temp = ws.echoDate(time);
+	if (memcmp(&ed_temp, &time, sizeof(tm)) == 0)
 		printf("successful\n");
 	else
 		printf("failed\n");
@@ -189,7 +192,7 @@ int main(int argc, char* argv[])
 	if (hb.__size == ws.echoHexBinary(hb).__size)
 	{
 		printf("successful\n");
-		printf("Returned String :\n%s\n", hb.__ptr);
+		printf("Returned String :\n%s\n", asciiToString((char *)hb.__ptr));
 	}
 	else
 		printf("failed\n");

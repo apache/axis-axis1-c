@@ -13,7 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
+ 
 /*
  * Supported types are
   1 <element name="getBoolean">
@@ -98,7 +98,9 @@ int main(int argc, char* argv[])
 	xsd__hexBinary hexTest;
 
 	//xsd__unsignedByte* testUB = (xsd__unsignedByte*)"never odd or even";
-	xsd__unsignedByte* testUB = (xsd__unsignedByte*)"<test><xml>some dod&y string</xml></test>";
+
+	xsd__unsignedByte* testUB = (xsd__unsignedByte*)stringToAscii("<test><xml>some dod&y string</xml></test>");
+
 
 	b64Test.__ptr=testUB;
 	b64Test.__size=41;
@@ -276,7 +278,7 @@ int main(int argc, char* argv[])
 		cout << "base64Binary size=" << b64Result->__size << endl;
 		if( b64Result->__size > 0)
 		{
-			cout << "base64Binary data=" << b64Result->__ptr << endl;
+			cout << "base64Binary data=" << asciiToString((char *)b64Result->__ptr) << endl;
 		}
 		b64Result = ws->setGetBase64BinaryType(NULL);
 		if(b64Result)
@@ -288,7 +290,7 @@ int main(int argc, char* argv[])
 		cout << "hexBinary size=" << hexResult->__size << endl;
 		if( hexResult->__size > 0)
 		{
-			cout << "hexBinary data=" << hexResult->__ptr << endl;
+			cout << "hexBinary data=" << asciiToString((char *)hexResult->__ptr) << endl;
 		}
 		hexResult = ws->setGetHexBinary(&hexTest);
 		if(hexResult)
@@ -334,4 +336,3 @@ int main(int argc, char* argv[])
 	
 	return 0;
 }
-

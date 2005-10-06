@@ -23,6 +23,7 @@
 #include <fstream>
 #include <string.h>
 #include <signal.h>
+#include "CommonClientTestCode.hpp"
 
 void sig_handler(int);
 
@@ -52,8 +53,10 @@ int main(int argc, char* argv[])
 				ISoapAttachment *att1=ws.createSoapAttachment();
 				ISoapAttachment *att2=ws.createSoapAttachment();
 				ISoapAttachment *att3=ws.createSoapAttachment();
-				char *text="This is a test message for attachment";
-				//Adding the content type as text/plain
+
+				char *text=stringToAscii("This is a test message for attachment");
+
+  			      //Adding the content type as text/plain
 				att->addHeader(AXIS_CONTENT_TYPE,"text/plain");
 				//Adding the content id
 				att2->addHeader(AXIS_CONTENT_ID,"5");
@@ -114,4 +117,5 @@ void sig_handler(int sig) {
     cout << "SIGNAL RECEIVED " << sig << endl;
 	exit(1);
 }
+
 

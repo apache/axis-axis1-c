@@ -17,6 +17,7 @@
 #include <axis/AxisException.hpp>
 #include <ctype.h>
 #include <iostream>
+#include "CommonClientTestCode.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -29,7 +30,8 @@ int main(int argc, char* argv[])
 		{
 			AttachmentBindingImpl ws(argv[1]);
 
-			char *text="Some attachment text";
+			char *text=stringToAscii("Some attachment text");
+
 			#define NUM_ATTS 6
 			ISoapAttachment *att[NUM_ATTS];
 			xsd__base64Binary b64b[NUM_ATTS];
@@ -101,3 +103,4 @@ bool IsNumber(const char* p)
 	}
 	return true;
 }
+

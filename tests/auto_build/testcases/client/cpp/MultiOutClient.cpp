@@ -69,6 +69,10 @@ int main(int argc, char* argv[])
 			cout << OutValue6 << endl;
 			cout << OutValue7 << endl;
 			cout << sBool << endl;
+#ifdef __OS400__
+                  if (OutValue9 == 0x41) // Ascii 'A'
+                     OutValue9 = 'A';    // Set to ebcdic A
+#endif
 			cout << OutValue9 << endl;
 			bSuccess = true;
 		}
@@ -105,4 +109,3 @@ int main(int argc, char* argv[])
 	cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;
 	return 0;
 }
-
