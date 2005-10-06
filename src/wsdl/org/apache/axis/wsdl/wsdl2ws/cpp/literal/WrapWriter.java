@@ -662,8 +662,8 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                         	 */
                         	
                         	
-                        	/*if (CUtils.isPointerType(outparamType))
-                        	{*/
+                        	if (CUtils.isPointerType(outparamType))
+                        	{
                         		writer.write(
                                         "\tpIWSSZ->addOutputParam(\""
                                             + returnParamName.substring(returnParamName.lastIndexOf(">")+1)
@@ -672,18 +672,18 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                                             + ", "
                                             + CUtils.getXSDTypeForBasicType(outparamType)
                                             + ");\n");
-                        	/*}
+                        	}
                         	else
                         	{
                         		writer.write(
                                         "\tpIWSSZ->addOutputParam(\""
-                                            + returnParamName
+                        				    + returnParamName.substring(returnParamName.lastIndexOf(">")+1)
                                             + "\", (void*)&out"
                                             + i
                                             + ", "
                                             + CUtils.getXSDTypeForBasicType(outparamType)
                                             + ");\n");
-                        	}*/
+                        	}
                             //10/05/2005..........................................................
                         }
                     }
@@ -767,7 +767,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                                         + ", (void*)Axis_Delete_"
                                         + outparamType
                                         + ", \""
-                                        + returnParamName
+                                        + returnParamName.substring(returnParamName.lastIndexOf(">")+1)
                                         + "\", Axis_URI_"
                                         + outparamType
                                         + ");\n");

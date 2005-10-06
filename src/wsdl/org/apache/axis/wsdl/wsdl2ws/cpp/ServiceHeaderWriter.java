@@ -228,7 +228,7 @@ public class ServiceHeaderWriter extends HeaderFileWriter
     	                                .getClassNameFromParamInfoConsideringArrays(
     	                                nparam,
     	                                wscontext)
-    	                            + " * Value hehe "
+    	                            + " * Value"
     	                            + j);
                     }
                     else

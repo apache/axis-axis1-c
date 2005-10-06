@@ -870,7 +870,7 @@ public class ClientStubWriter
 					      + " = *("
 					      + currentParaType
 					      +
-					      ")m_pCall->getCmplxObject((void*) Axis_DeSerialize_"
+					      "*)m_pCall->getCmplxObject((void*) Axis_DeSerialize_"
 					      + currentParaType +
 					      ", (void*) Axis_Create_" +
 					      currentParaType +
@@ -887,7 +887,7 @@ public class ClientStubWriter
 					      + " = *("
 					      + currentParaType
 					      +
-					      "*)m_pCall->getCmplxObject((void*) Axis_DeSerialize_"
+					      "**)m_pCall->getCmplxObject((void*) Axis_DeSerialize_"
 					      + currentParaType +
 					      ", (void*) Axis_Create_" +
 					      currentParaType +
