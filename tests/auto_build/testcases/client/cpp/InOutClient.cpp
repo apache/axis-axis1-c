@@ -70,6 +70,17 @@ int main(int argc, char* argv[])
 		ws.multiParametersNoReturn("Hey dude", 69, (xsd__double)17.19);
 		cout << "multiParametersNoReturn returned" << endl;
 
+		
+		// test multiParametersMultiReturn
+		xsd__string outValue0 = "";
+		xsd__int outValue1 = 0;
+		xsd__double outValue2 = 0;
+		
+		cout << "multiParametersMultiReturn" << endl;
+		ws.multiParametersMultiReturn("Hey dude", 69, (xsd__double)17.19, &outValue0, &outValue1, &outValue2);
+		cout << "multiParametersMultiReturn returned " << outValue0 << " , " << outValue1 << " , " << outValue2 <<endl;
+		//...........................................................
+
         xsd__int * arrayOfInt = new xsd__int[3];
 		xsd__int_Array intArray;
 		intArray.m_Array = new xsd__int*[3];
@@ -97,6 +108,19 @@ int main(int argc, char* argv[])
 		int mcpir = ws.multiComplexParametersIntReturn("Hello", &ct, 27, 13.31, stringArray);
 		cout << "multiComplexParametersIntReturn returned " << mcpir << endl;
 
+		//test multiComplexParametersMultiComplexReturn
+
+		xsd__string OutValue0 = "";
+		ComplexType1* OutValue1;
+		xsd__int OutValue2 = 0;
+		xsd__double OutValue3 = 0;
+
+		cout << "multiComplexParametersMultiComplexReturn" << endl;
+		ws.multiComplexParametersMultiComplexReturn("Hello", &ct, 27, 13.31, stringArray, &OutValue0, &OutValue1, &OutValue2, &OutValue3);
+		cout << "multiComplexParametersMultiComplexReturn returned " << OutValue0 << " , " << OutValue1->ctString << endl;
+
+		//..............................................................................
+		
 		stringArray.m_Array[0]="Four";
 		stringArray.m_Array[1]=NULL;
 		stringArray.m_Array[2]="Six";
