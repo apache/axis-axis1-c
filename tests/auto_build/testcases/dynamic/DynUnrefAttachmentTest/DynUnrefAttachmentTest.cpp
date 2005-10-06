@@ -19,6 +19,7 @@
 #include <iostream>
 #include <string>
 #include <exception>
+#include "CommonClientTestCode.hpp"
 using namespace std;
 AXIS_CPP_NAMESPACE_USE 
 
@@ -46,7 +47,9 @@ int main(int argc, char* argv[])
 			att->addHeader(AXIS_CONTENT_TRANSFER_ENCODING,"base64");
 			
 			xsd__base64Binary b64b;
-			char *text = "This is the attachment body for the DynUnrefAttachmentTest";
+
+			char *text = stringToAscii("This is the attachment body for the DynUnrefAttachmentTest");
+
 			b64b.__ptr = (xsd__unsignedByte*)text;
 			b64b.__size = strlen(text)+1;
 			att->addBody(&b64b);	
@@ -90,7 +93,4 @@ int main(int argc, char* argv[])
 	cout << "----------------------------TEST COMPLETE--------------------------------" << endl;
 	return 0;
 }
-
-
-
 

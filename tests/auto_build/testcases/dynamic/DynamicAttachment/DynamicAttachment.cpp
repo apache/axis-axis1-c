@@ -19,6 +19,9 @@
 #include <iostream>
 #include <string>
 #include <exception>
+
+#include "CommonClientTestCode.hpp"
+
 using namespace std;
 AXIS_CPP_NAMESPACE_USE 
 
@@ -35,7 +38,8 @@ int main(int argc, char* argv[])
 		call.setOperation("put", "http://localhost/axis/DynamicAttachment");
 
 		ISoapAttachment *att = NULL;
-		char *text = "This is the attachment body for the DynamicAttachment test";
+
+		char *text = stringToAscii("This is the attachment body for the DynamicAttachment test");
 
 		///////////////////////////////////////////////////////////////////
 		// Referenced attachment with a generated content id
@@ -133,7 +137,4 @@ int main(int argc, char* argv[])
 	cout << "----------------------------TEST COMPLETE--------------------------------" << endl;
 	return 0;
 }
-
-
-
 
