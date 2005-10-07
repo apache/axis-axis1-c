@@ -88,7 +88,7 @@ public abstract class ParamCPPFileWriter extends ParamWriter
     protected abstract void writeGlobalCodes() throws WrapperFault;
     protected File getFilePath() throws WrapperFault
     {
-        classname = sanitiseClassName( classname);
+        classname = CUtils.sanitiseClassName( classname);
 
         String targetOutputLocation =
             this.wscontext.getWrapInfo().getTargetOutputLocation();
@@ -123,35 +123,5 @@ public abstract class ParamCPPFileWriter extends ParamWriter
             e.printStackTrace();
             throw new WrapperFault(e);
         }
-    }
-    protected String sanitiseClassName( String name)
-    {
-        String sanitisedName = name;
-        String cRsrvdSymblLst = ".;-&*+/^%";
-
-        for( int iRSLCount = 0; iRSLCount < cRsrvdSymblLst.length(); iRSLCount++)
-        {
-            sanitisedName.replaceAll( cRsrvdSymblLst.substring( iRSLCount, iRSLCount), "_");
-        }
-        
-        return sanitisedName;
-    }
-
-    protected String sanitiseAttributeName( String name)
-    {
-        String sanitisedName = name;
-        String cRsrvdSymblLst = ".;-&*+/^%";
-
-        for( int iRSLCount = 0; iRSLCount < cRsrvdSymblLst.length(); iRSLCount++)
-        {
-            sanitisedName.replaceAll( cRsrvdSymblLst.substring( iRSLCount, iRSLCount), "_");
-        }
-        
-        if( classname.equals( sanitisedName))
-        {
-            sanitisedName += "_";
-        }
-        
-        return sanitisedName;
     }
 }

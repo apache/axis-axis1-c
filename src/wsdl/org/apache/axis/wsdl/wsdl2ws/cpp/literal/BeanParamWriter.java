@@ -144,7 +144,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
         {
             for (int i = 0; i < attribs.length; i++)
             {
-                attribs[i].setParamName( sanitiseAttributeName( attribs[i].getParamName()));
+                attribs[i].setParamName( CUtils.sanitiseAttributeName( classname, attribs[i].getParamName()));
 
                 // FJP Nillable vv
                 if (isElementNillable(i))
