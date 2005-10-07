@@ -867,10 +867,10 @@ public class ClientStubWriter
 			    {
 				writer.write ("\t\t\t"
 					      + currentParamName
-					      + " = *("
+					      + " = ("
 					      + currentParaType
 					      +
-					      "*)m_pCall->getCmplxObject((void*) Axis_DeSerialize_"
+					      ")m_pCall->getCmplxObject((void*) Axis_DeSerialize_"
 					      + currentParaType +
 					      ", (void*) Axis_Create_" +
 					      currentParaType +
@@ -884,10 +884,10 @@ public class ClientStubWriter
 			    else
 				writer.write ("\t\t\t"
 					      + currentParamName
-					      + " = *("
+					      + " = ("
 					      + currentParaType
 					      +
-					      "**)m_pCall->getCmplxObject((void*) Axis_DeSerialize_"
+					      "*)m_pCall->getCmplxObject((void*) Axis_DeSerialize_"
 					      + currentParaType +
 					      ", (void*) Axis_Create_" +
 					      currentParaType +
