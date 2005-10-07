@@ -155,21 +155,35 @@ public class ParmHeaderFileWriter extends ParamWriter {
 				if (i == 0) {
 					writer.write("\n");
 				}
+				
+				String methodName = attribs[i].getParamNameWithoutSymbols();
+				
+				if( methodName.endsWith( "_"))
+                {
+                    String localMethodName = methodName.substring( 0, methodName.length() - 1);
+                    
+                    if( localMethodName.equals( classname))
+                    {
+                        methodName = localMethodName; 
+                    }
+                }
+				
 				if (isElementNillable(i)) {
 					if ( attribs[i].isAnyType()){
 						anyCounter += 1;
+
 						writer
 							.write("\t"
 									+ getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
 									+ " * get"
-									+ attribs[i].getParamNameWithoutSymbols()
+									+ methodName
 									+ Integer.toString(anyCounter)
 									+ "();\n");
 
 						writer
 							.write("\t"
 									+ "void set"
-									+ attribs[i].getParamNameWithoutSymbols()
+									+ methodName
 									+ Integer.toString(anyCounter)
 									+ "("
 									+ getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
@@ -180,13 +194,13 @@ public class ParmHeaderFileWriter extends ParamWriter {
 						.write("\t"
 								+ getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
 								+ " * get"
-								+ attribs[i].getParamNameWithoutSymbols()
+								+ methodName
 								+ "();\n");
 
 					    writer
 						.write("\t"
 								+ "void set"
-								+ attribs[i].getParamNameWithoutSymbols()
+								+ methodName
 								+ "("
 								+ getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
 								+ " * pInValue);\n\n");
@@ -202,14 +216,14 @@ public class ParmHeaderFileWriter extends ParamWriter {
 							.write("\t"
 									+ getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
 									+ " get"
-									+ attribs[i].getParamNameWithoutSymbols()
+									+ methodName
 									+ Integer.toString(anyCounter)
 									+ "();\n");
 
 						writer
 							.write("\t"
 									+ "void set"
-									+ attribs[i].getParamNameWithoutSymbols()
+									+ methodName
 									+ Integer.toString(anyCounter)
 									+ "("
 									+ getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
@@ -227,7 +241,7 @@ public class ParmHeaderFileWriter extends ParamWriter {
 							.write("\t"
 									+ getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
 									+ " get"
-									+ attribs[i].getParamNameWithoutSymbols()
+									+ methodName
 									+ "();\n");
 
 					/**
@@ -237,7 +251,7 @@ public class ParmHeaderFileWriter extends ParamWriter {
 						writer
 							.write("\t"
 									+ "void set"
-									+ attribs[i].getParamNameWithoutSymbols()
+									+ methodName
 									+ "("
 									+ getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
 									+ " InValue);\n\n");
