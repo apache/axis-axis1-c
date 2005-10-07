@@ -68,6 +68,9 @@ public class ParmHeaderFileWriter extends ParamWriter
             } else
             {
                 writePreprocessorStatements();
+
+                classname = sanitiseClassName( classname);
+                
                 this.writer.write("class STORAGE_CLASS_INFO " + classname);
                 if (this.type.isFault())
                     this.writer.write(" : public SoapFaultException");
@@ -255,6 +258,8 @@ public class ParmHeaderFileWriter extends ParamWriter
             writer.write("public:\n");
             for (int i = 0; i < attribs.length; i++)
             {
+                attribs[i].setParamName( sanitiseAttributeName( attribs[i].getParamName()));
+                
 				// FJP Nillable vv
 				if (isElementNillable(i)) {
 					if(attribs[i].isAnyType()){
@@ -267,7 +272,6 @@ public class ParmHeaderFileWriter extends ParamWriter
 								+ ";\n");
 						
 					}
-						
 					else{
 					writer.write("\t"
 								 + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
@@ -565,4 +569,35 @@ public class ParmHeaderFileWriter extends ParamWriter
         return bNillable;
     }
     //	 FJP Nillable ^^
+
+    protected String sanitiseClassName( String name)
+    {
+        String sanitisedName = name;
+        String cRsrvdSymblLst = ".;-";
+
+        for( int iRSLCount = 0; iRSLCount < cRsrvdSymblLst.length(); iRSLCount++)
+        {
+            sanitisedName.replaceAll( cRsrvdSymblLst.substring( iRSLCount, iRSLCount), "_");
+        }
+        
+        return sanitisedName;
+    }
+
+    protected String sanitiseAttributeName( String name)
+    {
+        String sanitisedName = name;
+        String cRsrvdSymblLst = ".;-";
+
+        for( int iRSLCount = 0; iRSLCount < cRsrvdSymblLst.length(); iRSLCount++)
+        {
+            sanitisedName.replaceAll( cRsrvdSymblLst.substring( iRSLCount, iRSLCount), "_");
+        }
+        
+        if( classname.equals( sanitisedName))
+        {
+            sanitisedName += "_";
+        }
+        
+        return sanitisedName;
+    }
 }
