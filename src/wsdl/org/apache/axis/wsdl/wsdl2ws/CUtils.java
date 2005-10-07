@@ -50,6 +50,8 @@ public class CUtils {
 	public static final String C_FILE_SUFFIX = ".c";
 	// File suffix fr C Header files
 	public static final String C_HEADER_SUFFIX = ".h";
+	// Valid XML but invalid or reserved C/C++ characters 
+	public static final String VALID_XML_INVALID_C = ".;-&*+/^%";
 
 	/* This type mapping only maps simple types the mapping for
 	   complex types are done with in the type class */
@@ -1011,5 +1013,32 @@ public class CUtils {
 		return null;
 	}	
 	
-	
+    public static String sanitiseClassName( String name)
+    {
+        String sanitisedName = name;
+
+        for( int iRSLCount = 0; iRSLCount < VALID_XML_INVALID_C.length(); iRSLCount++)
+        {
+            sanitisedName.replaceAll( VALID_XML_INVALID_C.substring( iRSLCount, iRSLCount), "_");
+        }
+        
+        return sanitisedName;
+    }
+
+    public static String sanitiseAttributeName( String classname, String name)
+    {
+        String sanitisedName = name;
+
+        for( int iRSLCount = 0; iRSLCount < VALID_XML_INVALID_C.length(); iRSLCount++)
+        {
+            sanitisedName.replaceAll( VALID_XML_INVALID_C.substring( iRSLCount, iRSLCount), "_");
+        }
+        
+        if( classname.equals( sanitisedName))
+        {
+            sanitisedName += "_";
+        }
+        
+        return sanitisedName;
+    }
 }
