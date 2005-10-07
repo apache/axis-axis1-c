@@ -10,7 +10,7 @@
             Combo_TTest.expected
         </output>
     </expected>
-	<endpoint>http://localhost:80/axis/CalculatorDoc http://localhost:80/axis/ArrayDoc http://localhost:80/axis/MathOpsDoc http://localhost:80/axis/SimpleTypeArrayService</endpoint>
+	<endpoint>http://localhost:80/CalculatorDoc http://localhost:80/SimpleArrayDoc http://localhost:80/MathOpsDoc http://localhost:80/SimpleTypeArray</endpoint>
 	<nomonitor>true</nomonitor>
 	<verbatim>true</verbatim>
 </test>

@@ -10,5 +10,5 @@
             DynamicGetSOAPSerializerTest.expected
         </output>        	
     </expected>
-	<endpoint>http://localhost:80/axis/CalculatorDoc</endpoint>
+	<endpoint>http://localhost:80/CalculatorDoc</endpoint>
 </test>

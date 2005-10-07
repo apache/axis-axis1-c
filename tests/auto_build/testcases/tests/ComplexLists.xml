@@ -12,5 +12,5 @@
 			ComplexLists_ServerResponse.expected
 		</serverResponse>
     </expected>
-	<endpoint>http://localhost:80/axis/ComplexListsService</endpoint>
+	<endpoint>http://localhost:80/ComplexLists</endpoint>
 </test>
