@@ -127,7 +127,7 @@ public abstract class ParamCPPFileWriter extends ParamWriter
     protected String sanitiseClassName( String name)
     {
         String sanitisedName = name;
-        String cRsrvdSymblLst = ".;-";
+        String cRsrvdSymblLst = ".;-&*+/^%";
 
         for( int iRSLCount = 0; iRSLCount < cRsrvdSymblLst.length(); iRSLCount++)
         {
@@ -140,7 +140,7 @@ public abstract class ParamCPPFileWriter extends ParamWriter
     protected String sanitiseAttributeName( String name)
     {
         String sanitisedName = name;
-        String cRsrvdSymblLst = ".;-";
+        String cRsrvdSymblLst = ".;-&*+/^%";
 
         for( int iRSLCount = 0; iRSLCount < cRsrvdSymblLst.length(); iRSLCount++)
         {

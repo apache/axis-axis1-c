@@ -325,10 +325,23 @@ public class ParmHeaderFileWriter extends ParamWriter
         {
             return;
         }
+    	
         try
         {
             for (int i = 0; i < attribs.length; i++)
             {
+        		String methodName = attribs[i].getParamNameWithoutSymbols();
+        		
+        		if( methodName.endsWith( "_"))
+                {
+                    String localMethodName = methodName.substring( 0, methodName.length() - 1);
+                    
+                    if( localMethodName.equals( classname))
+                    {
+                        methodName = localMethodName; 
+                    }
+                }
+            	
 // FJP Nillable vv
                 if (isElementNillable(i))
                 {
@@ -338,14 +351,14 @@ public class ParmHeaderFileWriter extends ParamWriter
 							.write("\t"
 									+ getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
 									+ " * get"
-									+ attribs[i].getParamNameWithoutSymbols()
+									+ methodName
 									+ Integer.toString(anyCounter)
 									+ "();\n");
 
 						writer
 							.write("\t"
 									+ "void set"
-									+ attribs[i].getParamNameWithoutSymbols()
+									+ methodName
 									+ Integer.toString(anyCounter)
 									+ "("
 									+ getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
@@ -357,12 +370,12 @@ public class ParmHeaderFileWriter extends ParamWriter
 						writer.write( "\n\t"
                                   + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
                                   + " * get"
-                                  + attribs[i].getParamNameWithoutSymbols()
+                                  + methodName
                                   + "();\n");
 
 						writer.write( "\t"
                                   + "void set"
-                                  + attribs[i].getParamNameWithoutSymbols()
+                                  + methodName
                                   + "("
                                   + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
                                   + " * pInValue);\n");
@@ -377,14 +390,14 @@ public class ParmHeaderFileWriter extends ParamWriter
 							.write("\t"
 									+ getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
 									+ " get"
-									+ attribs[i].getParamNameWithoutSymbols()
+									+ methodName
 									+ Integer.toString(anyCounter)
 									+ "();\n");
 
 						writer
 							.write("\t"
 									+ "void set"
-									+ attribs[i].getParamNameWithoutSymbols()
+									+ methodName
 									+ Integer.toString(anyCounter)
 									+ "("
 									+ getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
@@ -401,7 +414,7 @@ public class ParmHeaderFileWriter extends ParamWriter
 						writer.write("\n\t"
                                     + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
                                     + " get"
-                                    + attribs[i].getParamNameWithoutSymbols()
+                                    + methodName
                                     + "();\n");
 
                     /**
@@ -410,7 +423,7 @@ public class ParmHeaderFileWriter extends ParamWriter
 
 						writer.write("\t"
                                     + "void set"
-                                    + attribs[i].getParamNameWithoutSymbols()
+                                    + methodName
                                     + "("
                                     + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
                                     + " InValue);\n");
@@ -573,7 +586,7 @@ public class ParmHeaderFileWriter extends ParamWriter
     protected String sanitiseClassName( String name)
     {
         String sanitisedName = name;
-        String cRsrvdSymblLst = ".;-";
+        String cRsrvdSymblLst = ".;-&*+/^%";
 
         for( int iRSLCount = 0; iRSLCount < cRsrvdSymblLst.length(); iRSLCount++)
         {
@@ -586,7 +599,7 @@ public class ParmHeaderFileWriter extends ParamWriter
     protected String sanitiseAttributeName( String name)
     {
         String sanitisedName = name;
-        String cRsrvdSymblLst = ".;-";
+        String cRsrvdSymblLst = ".;-&*+/^%";
 
         for( int iRSLCount = 0; iRSLCount < cRsrvdSymblLst.length(); iRSLCount++)
         {

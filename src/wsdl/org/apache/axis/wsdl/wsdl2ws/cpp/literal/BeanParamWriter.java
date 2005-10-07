@@ -189,8 +189,19 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     /**
                      * Dushshantha: Write getter
                      */
-                	String parameterName = attribs[i].getParamNameWithoutSymbols();
+                	String methodName = attribs[i].getParamNameWithoutSymbols();
+                	String parameterName = methodName;
                     String properParamName = getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]);
+
+                    if( methodName.endsWith( "_"))
+                    {
+                        String localMethodName = methodName.substring( 0, methodName.length() - 1);
+                        
+                        if( localMethodName.equals( classname))
+                        {
+                            methodName = localMethodName; 
+                        }
+                    }
                     
                     if (attribs[i].isAnyType()){                    	
                     	anyCounter += 1;
@@ -200,7 +211,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     writer.write("\n"
                                     + properParamName
                                     + " " + classname + "::get"
-                                    + parameterName
+                                    + methodName
                                     + "()\n{\n");
 
                     writer.write("\t" + "return "
@@ -215,7 +226,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                                     + "void "
                                     + classname
                                     + "::set"
-                                    + parameterName
+                                    + methodName
                                     + "("
                                     + properParamName
                                     + " InValue)\n{\n");
