@@ -12,6 +12,6 @@
 			XSD_NCName_ServerResponse.expected
 	    </serverResponse>
     </expected>
-	<endpoint>http://localhost:80/axis/XSD_NCName</endpoint>
+	<endpoint>http://localhost:80/XSD_NCName</endpoint>
 </test>
 

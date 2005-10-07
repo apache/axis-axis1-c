@@ -9,5 +9,5 @@
             SimpleArrayDoc.cpp.out
         </output>
     </expected>
-	<endpoint>http://localhost:80/axis/ArrayDoc</endpoint>
+	<endpoint>http://localhost:80/SimpleArrayDoc</endpoint>
 </test>

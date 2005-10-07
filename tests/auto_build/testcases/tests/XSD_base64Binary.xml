@@ -12,6 +12,6 @@
 			XSD_base64Binary_ServerResponse.expected
 	    </serverResponse>
     </expected>
-	<endpoint>http://localhost:80/axis/XSD_base64Binary</endpoint>
+	<endpoint>http://localhost:80/XSD_base64Binary</endpoint>
 </test>
 

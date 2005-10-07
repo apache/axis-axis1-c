@@ -12,6 +12,6 @@
             TestGetNamespacePrefixRequest.out
         </request>
     </expected>
-        <endpoint>http://localhost:80/axis/MathOpsDoc</endpoint>
+        <endpoint>http://localhost:80/MathOpsDoc</endpoint>
 </test>
 

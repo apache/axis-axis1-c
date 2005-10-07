@@ -9,5 +9,5 @@
             NestedArrays.expected
         </output>
     </expected>
-	<endpoint>http://localhost:80/axis/NestedArrays</endpoint>
+	<endpoint>http://localhost:80/NestedArrays</endpoint>
 </test>

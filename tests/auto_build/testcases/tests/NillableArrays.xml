@@ -13,6 +13,6 @@
         </request>
 		<serverResponse>NillableArrays_ServerResponse.expected</serverResponse>
     </expected>
-	<endpoint>http://localhost:80/axis/NillableArrays</endpoint>
+	<endpoint>http://localhost:80/NillableArrays</endpoint>
 </test>
 

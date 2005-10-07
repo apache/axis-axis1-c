@@ -9,6 +9,6 @@
             XSD_string2.expected
         </output>
     </expected>
-	<endpoint>http://localhost:80/axis/XSD_string</endpoint>
+	<endpoint>http://localhost:80/XSD_string</endpoint>
 </test>
 

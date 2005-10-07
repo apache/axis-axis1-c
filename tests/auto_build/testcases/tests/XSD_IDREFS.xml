@@ -12,6 +12,6 @@
 			XSD_IDREFS_ServerResponse.expected
 	    </serverResponse>
     </expected>
-	<endpoint>http://localhost:80/axis/XSD_IDREFS</endpoint>
+	<endpoint>http://localhost:80/XSD_IDREFS</endpoint>
 </test>
 

@@ -12,6 +12,6 @@
 			XSD_normalizedString_ServerResponse.expected
 	    </serverResponse>
     </expected>
-	<endpoint>http://localhost:80/axis/XSD_normalizedString</endpoint>
+	<endpoint>http://localhost:80/XSD_normalizedString</endpoint>
 </test>
 

@@ -12,6 +12,6 @@
 			XSD_duration_ServerResponse.expected
 	    </serverResponse>
     </expected>
-	<endpoint>http://localhost:80/axis/XSD_duration</endpoint>
+	<endpoint>http://localhost:80/XSD_duration</endpoint>
 </test>
 

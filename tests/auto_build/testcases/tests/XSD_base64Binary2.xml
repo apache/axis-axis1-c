@@ -9,6 +9,6 @@
             XSD_base64Binary2.expected
         </output>
     </expected>
-	<endpoint>http://localhost:80/axis/XSD_base64Binary</endpoint>
+	<endpoint>http://localhost:80/XSD_base64Binary</endpoint>
 </test>
 

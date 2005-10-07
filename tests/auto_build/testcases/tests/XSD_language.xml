@@ -12,6 +12,6 @@
 			XSD_language_ServerResponse.expected
 	    </serverResponse>
     </expected>
-	<endpoint>http://localhost:80/axis/XSD_language</endpoint>
+	<endpoint>http://localhost:80/XSD_language</endpoint>
 </test>
 

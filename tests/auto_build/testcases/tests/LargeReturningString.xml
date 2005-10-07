@@ -12,5 +12,5 @@
 			LargeReturningString_ServerResponse.expected
 	    </serverResponse>
     </expected>
-	<endpoint>-e http://localhost:80/axis/LargeReturningStringService</endpoint>
+	<endpoint>-e http://localhost:80/LargeReturningString</endpoint>
 </test>

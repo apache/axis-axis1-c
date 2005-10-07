@@ -10,5 +10,5 @@
         </output>
 		<serverResponse>SimpleRefDoc_ServerResponse.expected</serverResponse>
     </expected>
-	<endpoint>http://localhost:80/axis/RefDoc</endpoint>
+	<endpoint>http://localhost:80/SimpleRefDoc</endpoint>
 </test>
