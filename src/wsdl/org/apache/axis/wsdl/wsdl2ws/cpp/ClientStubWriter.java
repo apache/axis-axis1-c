@@ -667,21 +667,20 @@ public class ClientStubWriter extends CPPClassWriter
                     {
                         containedType = CUtils.getclass4qname(qname);
                         writer.write(
-                            "\t\t\t\tRetArray = ("
-                                + outparamTypeName
-                                + "&)m_pCall->getBasicArray("
+                            "\t\t\t\tAxis_Array RetAxisArray = "
+                                + "m_pCall->getBasicArray("
                                 + CUtils.getXSDTypeForBasicType(containedType)
                                 + ", \""
                                 + returntype.getParamName()
-                                + "\", 0);\n\t\t\t}\n");
+                                + "\", 0);\n");
+		            writer.write ("\t\t\t\tmemcpy(&RetArray,&RetAxisArray,sizeof(Axis_Array));\n\t\t\t}\n");
                     }
                     else
                     {
                         containedType = qname.getLocalPart();
                         writer.write(
-                            "\t\t\t\tRetArray = ("
-                                + outparamTypeName
-                                + "&)m_pCall->getCmplxArray((void*) Axis_DeSerialize_"
+                            "\t\t\t\tAxis_Array RetAxisArray = "
+                                + "m_pCall->getCmplxArray((void*) Axis_DeSerialize_"
                                 + containedType);
                         //damitha
                         writer.write(
@@ -695,7 +694,8 @@ public class ClientStubWriter extends CPPClassWriter
                                 + returntype.getParamName()
                                 + "\", Axis_URI_"
                                 + containedType
-                                + ");\n\t\t\t}\n");
+                                + ");\n");
+		            writer.write ("\t\t\t\tmemcpy(&RetArray,&RetAxisArray,sizeof(Axis_Array));\n\t\t\t}\n");
                     }
                     writer.write("\t\t}\n");
                     writer.write("\tm_pCall->unInitialize();\n");
