@@ -150,9 +150,13 @@
 
 		<echo
 			message="Starting monitor forwarding to ${actualTestHost}:${testPort}" />
-		<!-- Run Monitor utility to allow validation of message across the wire -->
-		<java classname="org.apache.test.TCPMonitor"
-			outputproperty="mon.out">
+		<!-- 
+                 Run Monitor utility to allow validation of message across the wire 
+                 Removed outputproperty="mon.out" - letting TCPMonitor write to 
+                 stdout/stderr directly since echoing the property on OS/400 results 
+                 in garbage because data is in ASCII, not EBCDIC.
+          -->
+		<java classname="org.apache.test.TCPMonitor" >
 			<arg line="-l ${monitorPort}" />
 			<arg line="-p ${testPort}" />
 			<arg line="-h ${actualTestHost}" />
@@ -163,14 +167,18 @@
 					location="${dir.obj}/test/monitor/monitor.jar" />
 			</classpath>
 		</java>
-		<echo message="MONITOR OUTPUT=${mon.out}" />
 	</target>
 
 	<target name="startMockServer">
 		<echo message="Starting mockserver" />
 		<echo message = "testport = ${testPort}"/>
-		<java classname="org.apache.test.MockServer"
-			outputproperty="mockServer.out">
+		<!-- 
+                 Run Mock server utility for running unit tests 
+                 Removed outputproperty="mockServer.out" - letting MockServer write 
+                 to stdout/stderr directly since echoing the property on OS/400 results 
+                 in garbage because data is in ASCII, not EBCDIC.
+          -->
+		<java classname="org.apache.test.MockServer">
 			<arg line="-p ${testPort}" /> 
 			<arg line="-r &quot;${response_expected.file}&quot;" />
 			<classpath>
@@ -178,12 +186,13 @@
 					location="${dir.obj}/test/monitor/monitor.jar" />
 			</classpath>
 		</java>
-		<echo message="MOCK-SERVER OUTPUT=${mockServer.out}" />
 	</target>
 
-
 	<target name="stopMonitor" unless="test.nomonitor">
-		<java classname="org.apache.test.StopTCPMonitor">
+		<!-- 
+		     Added fork="true" because on OS/400 this hangs without it.
+          -->
+		<java classname="org.apache.test.StopTCPMonitor" fork="true">
 			<arg line="-p ${monitorPort}" />
 			<arg line="-h localhost" />
 			<classpath>
@@ -194,14 +203,19 @@
 	</target>
 
 	<target name="stopMockServer">
-		<java classname="org.apache.test.StopMockServer" outputproperty="stopMockServer.out">
+		<!-- 
+		     Added fork="true" because on OS/400 this hangs without it.
+                 Removed outputproperty="stopMockServer.out" - letting stopMockServer write 
+                 to stdout/stderr directly since echoing the property on OS/400 results in 
+                 garbage because data is in ASCII, not EBCDIC.
+          -->
+		<java classname="org.apache.test.StopMockServer" fork="true">
 			<arg line="-p ${testPort}" />
 			<classpath>
 				<pathelement
 					location="${dir.obj}/test/monitor/monitor.jar" />
 			</classpath>
 		</java>
-		<echo message="StopMockServer output = ${stopMockServer.out}"/>
 	</target>
 
 
@@ -331,4 +345,3 @@ Channel_HTTP:${dir.libraries}/${libraryPrefix}${HTTP.ChannelLibraryName}${librar
         </if>
 	</target>
 </project>
-
