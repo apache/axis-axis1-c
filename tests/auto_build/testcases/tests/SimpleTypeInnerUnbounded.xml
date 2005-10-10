@@ -9,5 +9,5 @@
             SimpleTypeInnerUnbounded.cpp.out
         </output>
     </expected>
-	<endpoint>-e http://localhost:80/SimpleTypeInnerUnbounded</endpoint>
+	<endpoint>-e http://localhost:80/axis/SimpleTypeInnerUnbounded</endpoint>
 </test>
