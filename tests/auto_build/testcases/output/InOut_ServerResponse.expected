@@ -1,0 +1,192 @@
+HTTP/1.1 200 OK
+Date: Mon, 10 Oct 2005 08:10:11 GMT
+Server: Apache/2.0.54 (Win32)
+Content-Length: 393
+Content-Type: text/xml
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:noParametersNoReturnResponse xmlns:ns1="http://complexissues.test.apache.org">
+</ns1:noParametersNoReturnResponse>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+0
+
+HTTP/1.1 200 OK
+Date: Mon, 10 Oct 2005 08:10:18 GMT
+Server: Apache/2.0.54 (Win32)
+Content-Length: 457
+Content-Type: text/xml
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:noParametersIntReturnResponse xmlns:ns1="http://complexissues.test.apache.org">
+<noParametersIntReturnReturn>27</noParametersIntReturnReturn>
+</ns1:noParametersIntReturnResponse>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+0
+
+HTTP/1.1 200 OK
+Date: Mon, 10 Oct 2005 08:10:18 GMT
+Server: Apache/2.0.54 (Win32)
+Content-Length: 399
+Content-Type: text/xml
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:multiParametersNoReturnResponse xmlns:ns1="http://complexissues.test.apache.org">
+</ns1:multiParametersNoReturnResponse>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+0
+
+HTTP/1.1 200 OK
+Date: Mon, 10 Oct 2005 08:10:18 GMT
+Server: Apache/2.0.54 (Win32)
+Content-Length: 484
+Content-Type: text/xml
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:multiParametersMultiReturnResponse xmlns:ns1="http://complexissues.test.apache.org">
+<arg_0_2>Hey dude</arg_0_2>
+<arg_1_2>69</arg_1_2>
+<arg_2_2>17.190000</arg_2_2>
+</ns1:multiParametersMultiReturnResponse>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+0
+
+HTTP/1.1 200 OK
+Date: Mon, 10 Oct 2005 08:10:18 GMT
+Server: Apache/2.0.54 (Win32)
+Content-Length: 497
+Content-Type: text/xml
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:multiComplexParametersIntReturnResponse xmlns:ns1="http://complexissues.test.apache.org">
+<multiComplexParametersIntReturnReturn>41</multiComplexParametersIntReturnReturn>
+</ns1:multiComplexParametersIntReturnResponse>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+0
+
+HTTP/1.1 200 OK
+Date: Mon, 10 Oct 2005 08:10:18 GMT
+Server: Apache/2.0.54 (Win32)
+Content-Length: 681
+Content-Type: text/xml
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:multiComplexParametersMultiComplexReturnResponse xmlns:ns1="http://complexissues.test.apache.org">
+<out1>Hello</out1>
+<out2><ns1:ctLong>87654321</ns1:ctLong>
+<ns1:ctIntArray>37</ns1:ctIntArray>
+<ns1:ctIntArray>0</ns1:ctIntArray>
+<ns1:ctIntArray>43</ns1:ctIntArray>
+<ns1:ctString>World</ns1:ctString>
+</out2>
+<out3>27</out3>
+<out4>13.310000</out4>
+</ns1:multiComplexParametersMultiComplexReturnResponse>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+0
+
+HTTP/1.1 200 OK
+Date: Mon, 10 Oct 2005 08:10:19 GMT
+Server: Apache/2.0.54 (Win32)
+Content-Length: 509
+Content-Type: text/xml
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:multiComplexParametersNilIntReturnResponse xmlns:ns1="http://complexissues.test.apache.org">
+<multiComplexParametersNilIntReturnReturn>42</multiComplexParametersNilIntReturnReturn>
+</ns1:multiComplexParametersNilIntReturnResponse>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+0
+
+HTTP/1.1 200 OK
+Date: Mon, 10 Oct 2005 08:10:19 GMT
+Server: Apache/2.0.54 (Win32)
+Content-Length: 489
+Content-Type: text/xml
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:multiArrayParametersIntReturnResponse xmlns:ns1="http://complexissues.test.apache.org">
+<multiArrayParametersIntReturnReturn>43</multiArrayParametersIntReturnReturn>
+</ns1:multiArrayParametersIntReturnResponse>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+0
+
+HTTP/1.1 200 OK
+Date: Mon, 10 Oct 2005 08:10:19 GMT
+Server: Apache/2.0.54 (Win32)
+Content-Length: 833
+Content-Type: text/xml
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:complexParameterComplexReturnResponse xmlns:ns1="http://complexissues.test.apache.org">
+<complexResponse><ns1:ctLong>98765432</ns1:ctLong>
+<ns1:ctIntArray>37</ns1:ctIntArray>
+<ns1:ctIntArray>0</ns1:ctIntArray>
+<ns1:ctIntArray>43</ns1:ctIntArray>
+<ns1:ctString>Complex2</ns1:ctString>
+<ns1:ctComplex><ns1:ctLong>87654321</ns1:ctLong>
+<ns1:ctIntArray>37</ns1:ctIntArray>
+<ns1:ctIntArray>0</ns1:ctIntArray>
+<ns1:ctIntArray>43</ns1:ctIntArray>
+<ns1:ctString>World</ns1:ctString>
+</ns1:ctComplex></complexResponse>
+</ns1:complexParameterComplexReturnResponse>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+0
+
+HTTP/1.1 200 OK
+Date: Mon, 10 Oct 2005 08:10:19 GMT
+Server: Apache/2.0.54 (Win32)
+Content-Length: 679
+Content-Type: text/xml
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:complexParameterComplexReturnResponse xmlns:ns1="http://complexissues.test.apache.org">
+<complexResponse><ns1:ctLong>22222222</ns1:ctLong>
+<ns1:ctIntArray>37</ns1:ctIntArray>
+<ns1:ctIntArray>0</ns1:ctIntArray>
+<ns1:ctIntArray>43</ns1:ctIntArray>
+<ns1:ctString xsi:nil="true"></ns1:ctString>
+<ns1:ctComplex xsi:nil="true"></ns1:ctComplex></complexResponse>
+</ns1:complexParameterComplexReturnResponse>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+0
