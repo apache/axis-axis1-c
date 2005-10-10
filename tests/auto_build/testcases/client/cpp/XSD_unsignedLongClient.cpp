@@ -35,7 +35,11 @@ int main(int argc, char* argv[])
         sprintf(endpoint, "%s", url);
         XSD_unsignedLong* ws = new XSD_unsignedLong(endpoint);
 
+#ifdef __OS400__
+        xsd__unsignedLong result = ws->asNonNillableElement((xsd__unsignedLong)18446744073709551615ULL);
+#else
         xsd__unsignedLong result = ws->asNonNillableElement((xsd__unsignedLong)18446744073709551615);
+#endif
         cout << "non-nillable element=" << result << endl;
         result = ws->asNonNillableElement((xsd__unsignedLong)1);
         cout << "non-nillable element=" << result << endl;

@@ -34,8 +34,11 @@ int main(int argc, char* argv[])
     {
         sprintf(endpoint, "%s", url);
         XSD_nonNegativeInteger* ws = new XSD_nonNegativeInteger(endpoint);
-
+#ifdef __OS400__
+        xsd__nonNegativeInteger result = ws->asNonNillableElement((xsd__nonNegativeInteger)18446744073709551615ULL);
+#else
         xsd__nonNegativeInteger result = ws->asNonNillableElement((xsd__nonNegativeInteger)18446744073709551615);
+#endif
         cout << "non-nillable element=" << result << endl;
         result = ws->asNonNillableElement((xsd__nonNegativeInteger)1);
         cout << "non-nillable element=" << result << endl;
