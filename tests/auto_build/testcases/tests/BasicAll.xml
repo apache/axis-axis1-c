@@ -9,5 +9,5 @@
             BasicAll.expected
         </output>
     </expected>
-	<endpoint>http://localhost:80/BasicAll</endpoint>
+	<endpoint>http://localhost:80/axis/BasicAll</endpoint>
 </test>

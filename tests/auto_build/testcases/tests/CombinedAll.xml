@@ -10,5 +10,5 @@
         </output>
 	<serverResponse>CombinedAll_ServerResponse.expected</serverResponse>
     </expected>
-	<endpoint>http://localhost:80/CombinedAll</endpoint>
+	<endpoint>http://localhost:80/axis/CombinedAll</endpoint>
 </test>

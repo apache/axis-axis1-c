@@ -9,5 +9,5 @@
             BasicChoice.expected
         </output>
     </expected>
-	<endpoint>http://localhost:80/BasicChoice</endpoint>
+	<endpoint>http://localhost:80/axis/BasicChoice</endpoint>
 </test>
