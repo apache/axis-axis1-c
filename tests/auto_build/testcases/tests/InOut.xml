@@ -8,6 +8,9 @@
         <output>
             InOut.expected
         </output>
+	<serverResponse>
+	    InOut_ServerResponse.expected
+	</serverResponse>
     </expected>
 	<endpoint>http://localhost:80/InOut</endpoint>
 </test>
