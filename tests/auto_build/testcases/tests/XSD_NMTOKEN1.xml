@@ -9,6 +9,6 @@
             XSD_NMTOKEN1.expected
         </output>
     </expected>
-	<endpoint>http://localhost:80/XSD_NMTOKEN</endpoint>
+	<endpoint>http://localhost:80/axis/XSD_NMTOKEN</endpoint>
 </test>
 

@@ -12,6 +12,6 @@
 	<request>
 		XSD_IDREF1Request.out
 	</request>
-	<endpoint>http://localhost:80/XSD_IDREF</endpoint>
+	<endpoint>http://localhost:80/axis/XSD_IDREF</endpoint>
 </test>
 

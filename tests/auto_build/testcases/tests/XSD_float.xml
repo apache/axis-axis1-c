@@ -12,6 +12,6 @@
 			XSD_float_ServerResponse.expected
 	    </serverResponse>
     </expected>
-	<endpoint>http://localhost:80/XSD_float</endpoint>
+	<endpoint>http://localhost:80/axis/XSD_float</endpoint>
 </test>
 

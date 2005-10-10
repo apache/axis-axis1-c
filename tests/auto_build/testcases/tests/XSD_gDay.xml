@@ -12,6 +12,6 @@
 			XSD_gDay_ServerResponse.expected
 	    </serverResponse>
     </expected>
-	<endpoint>http://localhost:80/XSD_gDay</endpoint>
+	<endpoint>http://localhost:80/axis/XSD_gDay</endpoint>
 </test>
 

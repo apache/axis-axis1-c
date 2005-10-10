@@ -9,6 +9,6 @@
             XSDTime.expected
         </output>
     </expected>
-	<endpoint>http://localhost:80/XSDElement</endpoint>
+	<endpoint>http://localhost:80/axis/XSDElement</endpoint>
 </test>
 

@@ -12,6 +12,6 @@
 			XSD_token_ServerResponse.expected
 	    </serverResponse>
     </expected>
-	<endpoint>http://localhost:80/XSD_token</endpoint>
+	<endpoint>http://localhost:80/axis/XSD_token</endpoint>
 </test>
 

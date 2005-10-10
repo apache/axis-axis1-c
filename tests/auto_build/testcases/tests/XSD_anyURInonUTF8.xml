@@ -9,6 +9,6 @@
             XSD_anyURInonUTF8.expected
         </output>
     </expected>
-	<endpoint>http://localhost:80/XSD_anyURI</endpoint>
+	<endpoint>http://localhost:80/axis/XSD_anyURI</endpoint>
 </test>
 

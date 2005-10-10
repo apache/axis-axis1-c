@@ -12,6 +12,6 @@
 			XSD_double_ServerResponse.expected
 	    </serverResponse>
     </expected>
-	<endpoint>http://localhost:80/XSD_double</endpoint>
+	<endpoint>http://localhost:80/axis/XSD_double</endpoint>
 </test>
 

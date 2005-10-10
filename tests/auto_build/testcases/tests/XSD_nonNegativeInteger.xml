@@ -12,6 +12,6 @@
 			XSD_nonNegativeInteger_ServerResponse.expected
 	    </serverResponse>
     </expected>
-	<endpoint>http://localhost:80/XSD_nonNegativeInteger</endpoint>
+	<endpoint>http://localhost:80/axis/XSD_nonNegativeInteger</endpoint>
 </test>
 

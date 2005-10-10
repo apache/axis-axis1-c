@@ -12,6 +12,6 @@
 			XSD_boolean_ServerResponse.expected
 	    </serverResponse>
     </expected>
-	<endpoint>http://localhost:80/XSD_boolean</endpoint>
+	<endpoint>http://localhost:80/axis/XSD_boolean</endpoint>
 </test>
 
