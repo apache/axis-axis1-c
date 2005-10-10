@@ -12,5 +12,5 @@
 			Enumeration_ServerResponse.expected
 		</serverResponse>
     </expected>
-	<endpoint>-e http://localhost:80/Enumeration</endpoint>
+	<endpoint>-e http://localhost:80/axis/Enumeration</endpoint>
 </test>

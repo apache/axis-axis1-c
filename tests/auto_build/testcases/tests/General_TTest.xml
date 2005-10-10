@@ -9,6 +9,6 @@
             General_TTest.expected
         </output>	
     </expected>
-	<endpoint>http://localhost:80/CalculatorDoc</endpoint>
+	<endpoint>http://localhost:80/axis/CalculatorDoc</endpoint>
 	<nomonitor>true</nomonitor>
 </test>
