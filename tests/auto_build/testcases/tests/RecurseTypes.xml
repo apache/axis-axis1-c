@@ -10,5 +10,5 @@
         </output>
 		<serverResponse>RecurseTypes_ServerResponse.expected</serverResponse>
     </expected>
-	<endpoint>-e http://localhost:80/RecurseTypes</endpoint>
+	<endpoint>-e http://localhost:80/axis/RecurseTypes</endpoint>
 </test>
