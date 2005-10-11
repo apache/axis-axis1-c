@@ -1,0 +1,15 @@
+POST /AnyExample/services/OrderManager HTTP/1.1
+Host: 127.0.0.1:13260
+Content-Type: text/xml; charset=UTF-8
+SOAPAction: ""
+Content-Length: 397
+
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:getOrder xmlns:ns1="http://any.webservices.ibm.com">
+<ns1:searchCriteria>whatever</ns1:searchCriteria>
+</ns1:getOrder>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
