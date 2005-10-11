@@ -1,3 +1,6 @@
+#ifndef __COMMONHEADERFILE
+#define __COMMONHEADERFILE
+
 #ifdef WIN32
 	#if defined(_MSC_VER) && (_MSC_VER < 1300)
 	// Bug in MS Visual C++ 6.0. Fixed in Visual C++ .Net version.
@@ -24,6 +27,12 @@
 			return os;
 		}
 	#endif
+
+      #define LONGLONGVALUE(value) value##I64
+      #define UNSIGNED_LONGLONGVALUE(value) value##UI64
+#else
+      #define LONGLONGVALUE(value) value##LL
+      #define UNSIGNED_LONGLONGVALUE(value) value##ULL
 #endif
 
 // ==========================================================
@@ -111,5 +120,7 @@ char* asciiToString( char *string )
 
 #define asciiToString( x ) ( x )
 #define stringToAscii( x ) ( x )
+
+#endif
 
 #endif

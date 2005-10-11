@@ -35,11 +35,7 @@ int main(int argc, char* argv[])
         // Note:  All values are unsigned, but considered to be negative.
         sprintf(endpoint, "%s", url);
         XSD_nonPositiveInteger* ws = new XSD_nonPositiveInteger(endpoint);
-#ifdef __OS400__
-        xsd__nonPositiveInteger result = ws->asNonNillableElement((xsd__nonPositiveInteger)-9223372036854775808LL);
-#else
-        xsd__nonPositiveInteger result = ws->asNonNillableElement((xsd__nonPositiveInteger)-9223372036854775808);
-#endif
+        xsd__nonPositiveInteger result = ws->asNonNillableElement((xsd__nonPositiveInteger) LONGLONGVALUE(-9223372036854775808));
         cout << "non-nillable element=" << result << endl;
         result = ws->asNonNillableElement((xsd__nonPositiveInteger)-1);
         cout << "non-nillable element=" << result << endl;
