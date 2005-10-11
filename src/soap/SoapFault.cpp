@@ -139,7 +139,7 @@ void SoapFault::initialize()
         /*4*/    {"Client", "Soap content is not valid", "", ""},
         /*5*/    {"Client", "No method to invoke", "", ""},
         /*6*/    {"Client", "Content is not Soap", "", ""},
-        /*7*/    {"Client", "Requested service is not registerd at the server", "", ""},
+        /*7*/    {"Client", "Requested service is not registered at the server", "", ""},
         /*8*/    {"Client", "Soap method is not allowed to invoke", "", ""},
         /*9*/    {"Client", "Parameter type mismatch", "", ""},
         /*10*/    {"Client", "A client handler failed", "", ""},
