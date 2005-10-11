@@ -174,11 +174,23 @@ AxisChar* NonNegativeInteger::serialize(const xsd__nonNegativeInteger* value) th
 
 xsd__nonNegativeInteger* NonNegativeInteger::deserializeNonNegativeInteger(const AxisChar* valueAsChar) throw (AxisSoapException)
 {
-    xsd__integer* returnValue = Integer::deserializeInteger(valueAsChar);
+    xsd__nonNegativeInteger * value = new xsd__nonNegativeInteger;
+    *value = 0;
+    AxisChar currentNumber[] = {'\0', '\0'};
+    int stringLength = strlen(valueAsChar);
+    
+    if (stringLength > 0)
+    {
+        int count = 0;
+        
+        for ( ; count < stringLength ;  count ++)
+        {
+            *value *= 10;
+    		currentNumber[0] = valueAsChar[count];
+            *value += atoi(currentNumber);
+        }
+    }
 
-    xsd__nonNegativeInteger * value = new xsd__nonNegativeInteger; 
-    *value = static_cast<xsd__nonNegativeInteger> (*returnValue);
-    delete returnValue;
     return value;
 }
 
