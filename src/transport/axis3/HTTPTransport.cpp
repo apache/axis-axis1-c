@@ -487,131 +487,128 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char * pcBuffer, int * piSize) th
 //   eSOAPMessageIsNotChunked - The message is read until the number of message
 //                              bytes read equals the HTTP header content
 //                              length value.
-	if (m_iBytesLeft == 0)
+	switch( m_GetBytesState)
 	{
-		switch( m_GetBytesState)
+		case eWaitingForHTTPHeader:
 		{
-			case eWaitingForHTTPHeader:
-				{
 		// Wait for a HTTP header to be located on the input stream.
-					do
-					{
+			do
+			{
 		// From the input stream, wait for a 'valid' HTTP header.
-						readHTTPHeader();
+				readHTTPHeader();
 
 		// From the header,extract such things as chunking, message length, etc.
-						processHTTPHeader();
+				processHTTPHeader();
 
-					} while( m_iResponseHTTPStatusCode == 100);
+			} while( m_iResponseHTTPStatusCode == 100);
 
 		// Check that the HTTP status code is valid.
-					checkHTTPStatusCode();
+			checkHTTPStatusCode();
 
 		// Done with HTTP headers, get SOAP message.
-					int iHTTPStart = m_strReceived.find( ASCII_S_HTTP);
-					int iHTTPEnd = m_strReceived.find( ASCII_S_CRLFCRLF, iHTTPStart);
+			int iHTTPStart = m_strReceived.find( ASCII_S_HTTP);
+			int iHTTPEnd = m_strReceived.find( ASCII_S_CRLFCRLF, iHTTPStart);
 
-					m_strReceived = m_strReceived.substr( iHTTPEnd + strlen( ASCII_S_CRLFCRLF));
+			m_strReceived = m_strReceived.substr( iHTTPEnd + strlen( ASCII_S_CRLFCRLF));
 
-					m_iBytesLeft = m_strReceived.length();
+			m_iBytesLeft = m_strReceived.length();
 
 		// This bit of code should not be necessary, but just in case...
-					if( m_GetBytesState == eWaitingForHTTPHeader)
-					{
-						break;
-					}
-				}
+			if( m_GetBytesState == eWaitingForHTTPHeader)
+			{
+				break;
+			}
+		}
 
 		// At this point it is assumed that m_strReceived contains the block of
 		// unprocessed data.  m_iBytesLeft is the length of text/data in m_strReceived
 		// is a 'char *' type copy of the m_strReceived string.
 		// NB: It is assumed that all of these variables ARE in sync at this point.
-			case eSOAPMessageIsChunked:
+		case eSOAPMessageIsChunked:
+			{
+				if( m_GetBytesState == eSOAPMessageIsChunked)
 				{
-					if( m_GetBytesState == eSOAPMessageIsChunked)
+					if( m_iBytesLeft == 0)
 					{
-						if( m_iBytesLeft == 0)
-						{
-							getNextDataPacket( "No data available for next chunk size.");
-						}
+						getNextDataPacket( "No data available for next chunk size.");
+					}
 
-						m_iContentLength = getChunkSize();
+					m_iContentLength = getChunkSize();
 
 		// If the chunk size is larger than the available data, then read in more data
 		// until all of the chunk has been read.
-						while( m_iContentLength > m_iBytesLeft)
-						{
-							getNextDataPacket( "No data available for next chunk.");
-						}
+					while( m_iContentLength > m_iBytesLeft)
+					{
+						getNextDataPacket( "No data available for next chunk.");
+					}
 
 		// If data read is longer than chunk size, then copy the extra data to a
 		// temporary variable and process data just belonging to this chunk.
-						if( m_iBytesLeft > m_iContentLength)
-						{
-							nextChunk = m_strReceived.substr( m_iContentLength + strlen( ASCII_S_CRLF));
-							m_strReceived = m_strReceived.substr( 0, m_iContentLength);
-							m_iBytesLeft = m_iContentLength;
+					if( m_iBytesLeft > m_iContentLength)
+					{
+						nextChunk = m_strReceived.substr( m_iContentLength + strlen( ASCII_S_CRLF));
+						m_strReceived = m_strReceived.substr( 0, m_iContentLength);
+						m_iBytesLeft = m_iContentLength;
 
 		// Check to see if the next chunk size is zero.  If it is then change the state.
-							if( peekChunkLength( nextChunk) == 0)
-							{
-								m_GetBytesState = eWaitingForHTTPHeader;
-							}
-						}
-						else
-						{
-							nextChunk = "";
-						}
-
-		// Now have at least chunk size worth of data.  The chunk may contain Mime data
-		// (this depends on information in the HTTP header).  If Mime data is expected,
-		// process it first.
-						if( m_bMimeTrue)
-						{
-							processRootMimeBody();
-
-							m_iBytesLeft = m_strReceived.length();
-						}
-
-						break;
-					}
-				}
-
-			case eSOAPMessageIsNotChunked:
-				{
-		// Check that there is more message to read.
-					if( m_iContentLength > 0)
-					{
-						getNextDataPacket( "No data available for message.");
-
-		// Check for Mime header
-						if( m_bMimeTrue)
-						{
-							processRootMimeBody();
-
-							m_iBytesLeft = m_strReceived.length();
-						}
-
-		// Subtract message length (so far) from expcted content length.
-						m_iContentLength -= m_iBytesLeft;
-
-		// If all of the message has been received, then reset the process state.
-						if( m_iContentLength <= 0)
+						if( peekChunkLength( nextChunk) == 0)
 						{
 							m_GetBytesState = eWaitingForHTTPHeader;
 						}
 					}
 					else
 					{
-		// Reset the process state.
-						m_GetBytesState = eWaitingForHTTPHeader;
+						nextChunk = "";
+					}
+
+		// Now have at least chunk size worth of data.  The chunk may contain Mime data
+		// (this depends on information in the HTTP header).  If Mime data is expected,
+		// process it first.
+					if( m_bMimeTrue)
+					{
+						processRootMimeBody();
+
+						m_iBytesLeft = m_strReceived.length();
 					}
 
 					break;
 				}
+			}
+
+		case eSOAPMessageIsNotChunked:
+		{
+		// Check that there is more message to read.
+			if( m_iContentLength > 0)
+			{
+				getNextDataPacket( "No data available for message.");
+
+		// Check for Mime header
+				if( m_bMimeTrue)
+				{
+					processRootMimeBody();
+
+					m_iBytesLeft = m_strReceived.length();
+				}
+
+		// Subtract message length (so far) from expcted content length.
+				m_iContentLength -= m_iBytesLeft;
+
+		// If all of the message has been received, then reset the process state.
+				if( m_iContentLength <= 0)
+				{
+					m_GetBytesState = eWaitingForHTTPHeader;
+				}
+			}
+			else
+			{
+
+		// Reset the process state.
+				m_GetBytesState = eWaitingForHTTPHeader;
+			}
+
+		break;
 		}
 	}
-
 
 // Copy as much of the message to the parser buffer as possible.
 	if( copyDataToParserBuffer( pcBuffer, piSize, m_iBytesLeft))
@@ -1687,7 +1684,7 @@ bool HTTPTransport::copyDataToParserBuffer( char * pcBuffer, int * piSize, int i
 		}
 		else
 		{
-			m_strReceived = "";
+			m_strReceived.clear();
 		}
 
 		bTransportInProgress = true;
