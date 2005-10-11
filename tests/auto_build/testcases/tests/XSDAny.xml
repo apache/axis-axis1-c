@@ -1,0 +1,18 @@
+<test>
+    <name>XSDAny</name>
+    <description>XSDAny</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>XSDAnyClient.cpp</clientCode>
+    <wsdl>XSDAny.wsdl</wsdl>
+    <expected>
+        <output>
+            XSDAny.cpp.out
+        </output>
+		<request>
+			XSDAny.request
+		</request>
+    </expected>
+	<endpoint>-e http://localhost:80/axis/OrderManager</endpoint>
+</test>
+
+
