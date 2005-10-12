@@ -141,7 +141,7 @@ AXIS_CPP_NAMESPACE_START
         delete [] valueAsString;
 
         // Calculate local timezone offset
-        time_t now = 0;
+        time_t now = time(NULL);
         struct tm *temp = gmtime(&now);
         struct tm utcTime;
         memcpy(&utcTime, temp, sizeof(struct tm));
@@ -207,7 +207,7 @@ AXIS_CPP_NAMESPACE_START
 	    AxisChar *cTemp3;
 
         // Calculate local timezone offset
-        time_t now = 0;
+        time_t now = time(NULL);
         struct tm *temp = gmtime(&now);
         struct tm utcTime;
         memcpy(&utcTime, temp, sizeof(struct tm));
@@ -305,11 +305,11 @@ AXIS_CPP_NAMESPACE_START
             int secs = hours * 60 * 60 + minutes * 60;
             if ((cTemp = strpbrk ((cUtc), "+")) != NULL)
             {
-                timeInSecs += secs;
+                timeInSecs -= secs;
             }
             else
             {
-                timeInSecs -= secs;
+                timeInSecs += secs;
             }
 
             pTm = localtime (&timeInSecs);
