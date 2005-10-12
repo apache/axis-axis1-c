@@ -1684,7 +1684,7 @@ bool HTTPTransport::copyDataToParserBuffer( char * pcBuffer, int * piSize, int i
 		}
 		else
 		{
-			m_strReceived.clear();
+			m_strReceived = "";
 		}
 
 		bTransportInProgress = true;
