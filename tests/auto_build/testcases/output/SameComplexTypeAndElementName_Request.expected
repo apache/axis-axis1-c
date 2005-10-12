@@ -1,0 +1,32 @@
+POST /axis/SameComplexTypeAndElementName HTTP/1.1
+Host: 127.0.0.1:13260
+Content-Type: text/xml; charset=UTF-8
+SOAPAction: ""
+Content-Length: 466
+
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:anElementBase xmlns:ns1="SameComplexTypeAndElementName">
+<Element><ns2:SampleBeanBoolean xmlns:ns2="SameComplexTypeAsElement">false</ns2:SampleBeanBoolean>
+</Element>
+</ns1:anElementBase>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+POST /axis/SameComplexTypeAndElementName HTTP/1.1
+Host: 127.0.0.1:13260
+Content-Type: text/xml; charset=UTF-8
+SOAPAction: ""
+Content-Length: 452
+
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:anElementComplex xmlns:ns1="SameComplexTypeAndElementName">
+<Element><ns2:Boolean xmlns:ns2="SameComplexTypeAsElement">false</ns2:Boolean>
+</Element>
+</ns1:anElementComplex>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
