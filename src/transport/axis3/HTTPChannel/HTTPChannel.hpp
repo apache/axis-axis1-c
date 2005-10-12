@@ -53,7 +53,7 @@ inline int WS_VERSION_MINOR() {return LOBYTE(WS_VERSION_REQD);}
 #include <netinet/in.h>
 #include <arpa/inet.h>		// inet(3) functions
 
-const unsigned int INVALID_SOCKET =  0;
+const int          INVALID_SOCKET = -1;
 const int          SOCKET_ERROR   = -1;
 
 // Other OS specific stuff goes here
@@ -93,7 +93,10 @@ protected:
 private:
     URL				m_URL;				// URL
 	string			m_LastError;		// Last error
-    unsigned int	m_Sock;				// Socket descriptor
+#ifdef WIN32
+    unsigned 
+#endif
+    int	m_Sock;				      // Socket descriptor
     bool			m_bUseProxy;		// Use a Proxy?
     std::string		m_strProxyHost;		// Proxy server name.
     unsigned int	m_uiProxyPort;		// Proxy server port.
