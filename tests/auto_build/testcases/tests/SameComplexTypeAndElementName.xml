@@ -1,0 +1,19 @@
+<test>
+    <name>SameComplexTypeAndElementName</name>
+    <description>SameComplexTypeAndElementName</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>SameComplexTypeAndElementNameClient.cpp</clientCode>
+    <wsdl>SameComplexTypeAndElementName.wsdl</wsdl>
+    <expected>
+        <request>
+            SameComplexTypeAndElementName_Request.expected
+        </request>
+        <serverResponse>
+            SameComplexTypeAndElementName_ServerResponse.expected
+        </serverResponse>
+        <output>
+            SameComplexTypeAndElementName.expected
+        </output>
+    </expected>
+	<endpoint>http://localhost:80/axis/SameComplexTypeAndElementName</endpoint>
+</test>
