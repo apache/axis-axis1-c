@@ -76,3 +76,5 @@ XSD_anyURI2.xml
 XSD_anyURIfault.xml 
 XSD_QName.xml
 XSD_NOTATION.xml
+SameComplexTypeAndElementName.xml
+NamespaceTest1.xml
