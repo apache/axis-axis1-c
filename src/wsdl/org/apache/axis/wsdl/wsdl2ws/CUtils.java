@@ -51,7 +51,7 @@ public class CUtils {
 	// File suffix fr C Header files
 	public static final String C_HEADER_SUFFIX = ".h";
 	// Valid XML but invalid or reserved C/C++ characters 
-	public static final String VALID_XML_INVALID_C = ".;-&*+/^%";
+	public static final String VALID_XML_INVALID_C = "//!\"£#$%&'()*+,-./:;<=>?@\\^`{|}~[]";
 
 	/* This type mapping only maps simple types the mapping for
 	   complex types are done with in the type class */
@@ -1019,21 +1019,26 @@ public class CUtils {
 
         for( int iRSLCount = 0; iRSLCount < VALID_XML_INVALID_C.length(); iRSLCount++)
         {
-            sanitisedName.replaceAll( VALID_XML_INVALID_C.substring( iRSLCount, iRSLCount), "_");
+            int		iOffset;
+            String	sChar = VALID_XML_INVALID_C.substring( iRSLCount, iRSLCount + 1);
+            
+            while( (iOffset = sanitisedName.indexOf( sChar)) != -1)
+            {
+                String	sBefore = sanitisedName.substring( 0, iOffset);
+                String	sAfter = sanitisedName.substring( iOffset + 1);
+                sanitisedName = sBefore + "_" + sAfter; 
+            }
         }
+        
+        System.out.println("name=" + name + " sanitisedName=" + sanitisedName);
         
         return sanitisedName;
     }
 
     public static String sanitiseAttributeName( String classname, String name)
     {
-        String sanitisedName = name;
+        String sanitisedName = sanitiseClassName( name);
 
-        for( int iRSLCount = 0; iRSLCount < VALID_XML_INVALID_C.length(); iRSLCount++)
-        {
-            sanitisedName.replaceAll( VALID_XML_INVALID_C.substring( iRSLCount, iRSLCount), "_");
-        }
-        
         if( classname.equals( sanitisedName))
         {
             sanitisedName += "_";
