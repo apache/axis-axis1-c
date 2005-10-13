@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2003-2004 The Apache Software Foundation.                      -->
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved                   -->
+<!--                                                                          -->
+<!-- Licensed under the Apache License, Version 2.0 (the "License");          -->
+<!-- you may not use this file except in compliance with the License.         -->
+<!-- You may obtain a copy of the License at                                  -->
+<!--                                                                          -->
+<!--        http://www.apache.org/licenses/LICENSE-2.0                        -->
+<!--                                                                          -->
+<!-- Unless required by applicable law or agreed to in writing, software      -->
+<!-- distributed under the License is distributed on an "AS IS" BASIS,        -->
+<!-- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. -->
+<!-- See the License for the specific language governing permissions and      -->
+<!-- limitations under the License.                                           -->
+
+<wsdl:definitions targetNamespace="http://localhost/axis/ValidXMLCharIsInterpretedAsCPPCommand"
+                 xmlns:apachesoap="http://xml.apache.org/xml-soap"
+                       xmlns:impl="http://localhost/axis/ValidXMLCharIsInterpretedAsCPPCommand"
+                       xmlns:intf="http://localhost/axis/ValidXMLCharIsInterpretedAsCPPCommand"
+                       xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                   xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+                        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                       xmlns:ns99="ValidXMLCharIsInterpretedAsCPPCommandTypes">
+ <wsdl:types>
+  <schema elementFormDefault="qualified"
+             targetNamespace="http://localhost/axis/ValidXMLCharIsInterpretedAsCPPCommand"
+                       xmlns="http://www.w3.org/2001/XMLSchema"
+            xmlns:apachesoap="http://xml.apache.org/xml-soap"
+                  xmlns:impl="http://localhost/axis/ValidXMLCharIsInterpretedAsCPPCommand"
+                  xmlns:intf="http://localhost/axis/ValidXMLCharIsInterpretedAsCPPCommand"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+   <import namespace="ValidXMLCharIsInterpretedAsCPPCommandTypes"
+  	  schemaLocation="ValidXMLCharIsInterpretedAsCPPCommand.xsd"/>
+
+   <xsd:element name="test1Request">
+    <xsd:complexType>
+     <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="1" name="Element" nillable="true" type="ns99:test1Punctuation"/>
+     </xsd:sequence>
+    </xsd:complexType>
+   </xsd:element>
+
+   <element name="test1Response">
+    <complexType>
+     <sequence>
+      <element name="return" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+
+   <xsd:element name="test2Request">
+    <xsd:complexType>
+     <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="1" name="Element" nillable="true" type="ns99:test2Logical"/>
+     </xsd:sequence>
+    </xsd:complexType>
+   </xsd:element>
+
+   <element name="test2Response">
+    <complexType>
+     <sequence>
+      <element name="return" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+
+   <xsd:element name="test3Request">
+    <xsd:complexType>
+     <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="1" name="Element" nillable="true" type="ns99:test3Mathematical"/>
+     </xsd:sequence>
+    </xsd:complexType>
+   </xsd:element>
+
+   <element name="test3Response">
+    <complexType>
+     <sequence>
+      <element name="return" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+
+   <xsd:element name="test4Request">
+    <xsd:complexType>
+     <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="1" name="Element" nillable="true" type="ns99:test4Miscellaneous"/>
+     </xsd:sequence>
+    </xsd:complexType>
+   </xsd:element>
+
+   <element name="test4Response">
+    <complexType>
+     <sequence>
+      <element name="return" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+  </schema>
+ </wsdl:types>
+
+   <wsdl:message name="test1Response">
+      <wsdl:part element="impl:test1Response" name="parameters"/>
+   </wsdl:message>
+
+   <wsdl:message name="test2Response">
+      <wsdl:part element="impl:test2Response" name="parameters"/>
+   </wsdl:message>
+
+   <wsdl:message name="test3Response">
+      <wsdl:part element="impl:test3Response" name="parameters"/>
+   </wsdl:message>
+
+   <wsdl:message name="test4Response">
+      <wsdl:part element="impl:test4Response" name="parameters"/>
+   </wsdl:message>
+
+   <wsdl:message name="test1Request">
+      <wsdl:part element="impl:test1Request" name="parameters"/>
+   </wsdl:message>
+
+   <wsdl:message name="test2Request">
+      <wsdl:part element="impl:test2Request" name="parameters"/>
+   </wsdl:message>
+
+   <wsdl:message name="test3Request">
+      <wsdl:part element="impl:test3Request" name="parameters"/>
+   </wsdl:message>
+
+   <wsdl:message name="test4Request">
+      <wsdl:part element="impl:test4Request" name="parameters"/>
+   </wsdl:message>
+
+   <wsdl:portType name="ValidXMLCharIsInterpretedAsCPPCommand">
+      <wsdl:operation name="test1">
+         <wsdl:input message="impl:test1Request" name="test1Request"/>
+         <wsdl:output message="impl:test1Response" name="test1Response"/>
+      </wsdl:operation>
+
+      <wsdl:operation name="test2">
+         <wsdl:input message="impl:test2Request" name="test2Request"/>
+         <wsdl:output message="impl:test2Response" name="test2Response"/>
+      </wsdl:operation>
+
+      <wsdl:operation name="test3">
+         <wsdl:input message="impl:test3Request" name="test3Request"/>
+         <wsdl:output message="impl:test3Response" name="test3Response"/>
+      </wsdl:operation>
+
+      <wsdl:operation name="test4">
+         <wsdl:input message="impl:test4Request" name="test4Request"/>
+         <wsdl:output message="impl:test4Response" name="test4Response"/>
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="ValidXMLCharIsInterpretedAsCPPCommandSoapBinding" type="impl:ValidXMLCharIsInterpretedAsCPPCommand">
+      <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+      <wsdl:operation name="test1">
+         <wsdlsoap:operation soapAction="ValidXMLCharIsInterpretedAsCPPCommand#test1"/>
+         <wsdl:input name="test1Request">
+            <wsdlsoap:body use="literal"/>
+         </wsdl:input>
+         <wsdl:output name="test1Response">
+            <wsdlsoap:body use="literal"/>
+         </wsdl:output>
+      </wsdl:operation>
+
+      <wsdl:operation name="test2">
+         <wsdlsoap:operation soapAction="ValidXMLCharIsInterpretedAsCPPCommand#test2"/>
+         <wsdl:input name="test2Request">
+            <wsdlsoap:body use="literal"/>
+         </wsdl:input>
+         <wsdl:output name="test2Response">
+            <wsdlsoap:body use="literal"/>
+         </wsdl:output>
+      </wsdl:operation>
+
+      <wsdl:operation name="test3">
+         <wsdlsoap:operation soapAction="ValidXMLCharIsInterpretedAsCPPCommand#test3"/>
+         <wsdl:input name="test3Request">
+            <wsdlsoap:body use="literal"/>
+         </wsdl:input>
+         <wsdl:output name="test3Response">
+            <wsdlsoap:body use="literal"/>
+         </wsdl:output>
+      </wsdl:operation>
+
+      <wsdl:operation name="test4">
+         <wsdlsoap:operation soapAction="ValidXMLCharIsInterpretedAsCPPCommand#test4"/>
+         <wsdl:input name="test4Request">
+            <wsdlsoap:body use="literal"/>
+         </wsdl:input>
+         <wsdl:output name="test4Response">
+            <wsdlsoap:body use="literal"/>
+         </wsdl:output>
+      </wsdl:operation>
+   </wsdl:binding>
+
+   <wsdl:service name="ValidXMLCharIsInterpretedAsCPPCommand">
+      <wsdl:port binding="impl:ValidXMLCharIsInterpretedAsCPPCommandSoapBinding" name="ValidXMLCharIsInterpretedAsCPPCommand">
+         <wsdlsoap:address location="http://localhost/axis/ValidXMLCharIsInterpretedAsCPPCommand"/>
+      </wsdl:port>
+   </wsdl:service>
+</wsdl:definitions>
