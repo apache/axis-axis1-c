@@ -1000,7 +1000,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                                 + " = pIWSDZ->"
                                 + CUtils.getParameterGetValueMethodName(
                                         attribs[i].getTypeName(), attribs[i].isAttribute()) + "( \""
-                                + soapTagName + "\",0)) != NULL) {\n");
+                                + CUtils.sanitiseAttributeName( classname, soapTagName) + "\",0)) != NULL) {\n");
                         writer.write("\t\tparam->"
                                 + attribs[i].getParamNameAsMember() + " = *( "
                                 + attribs[i].getParamNameAsMember() + " );\n");
