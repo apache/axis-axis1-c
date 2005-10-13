@@ -588,7 +588,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 if (CUtils.isPointerType(attribs[i].getTypeName()))
                 {
                     writer.write("\tpSZ->serializeAsElement(\""
-                            + attribs[i].getSOAPElementNameAsString()
+                            + CUtils.sanitiseAttributeName( classname, attribs[i].getSOAPElementNameAsString())
                             + "\", Axis_URI_"
                             + classname
                             + ", (void*)(param->"
@@ -609,7 +609,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                             || attribs[i].getAllElement()
                             || isElementNillable(i))
                         writer.write("\tpSZ->serializeAsElement(\""
-                                + attribs[i].getSOAPElementNameAsString()
+                                + CUtils.sanitiseAttributeName( classname, attribs[i].getSOAPElementNameAsString())
                                 + "\", Axis_URI_"
                                 + classname
                                 + ", (void*)(param->"
@@ -618,7 +618,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                                 + CUtils.getXSDTypeForBasicType(attribs[i].getTypeName()) + ");\n");
                     else
                         writer.write("\tpSZ->serializeAsElement(\""
-                                + attribs[i].getSOAPElementNameAsString()
+                                + CUtils.sanitiseAttributeName( classname, attribs[i].getSOAPElementNameAsString())
                                 + "\", Axis_URI_"
                                 + classname
                                 + ", (void*)&(param->"
