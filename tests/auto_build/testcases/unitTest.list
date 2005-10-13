@@ -78,3 +78,4 @@ XSD_QName.xml
 XSD_NOTATION.xml
 SameComplexTypeAndElementName.xml
 NamespaceTest1.xml
+ValidXMLCharIsInterpretedAsCPPCommand.xml
