@@ -1,0 +1,19 @@
+<test>
+    <name>ValidXMLCharIsInterpretedAsCPPCommand</name>
+    <description>ValidXMLCharIsInterpretedAsCPPCommand</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>ValidXMLCharIsInterpretedAsCPPCommandClient.cpp</clientCode>
+    <wsdl>ValidXMLCharIsInterpretedAsCPPCommand.wsdl</wsdl>
+    <expected>
+        <request>
+            ValidXMLCharIsInterpretedAsCPPCommand_Request.expected
+        </request>
+        <serverResponse>
+            ValidXMLCharIsInterpretedAsCPPCommand_ServerResponse.expected
+        </serverResponse>
+        <output>
+            ValidXMLCharIsInterpretedAsCPPCommand_Out.expected
+        </output>
+    </expected>
+	<endpoint>http://localhost:80/axis/ValidXMLCharIsInterpretedAsCPPCommand</endpoint>
+</test>
