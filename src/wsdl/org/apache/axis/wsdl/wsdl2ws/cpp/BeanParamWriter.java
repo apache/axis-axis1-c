@@ -660,20 +660,20 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 				.write("\tif (bArray && (nSize > 0))\n\t{\n\t\tif (pObj)\n\t\t{\n");
 		writer.write("\t\t\t" + classname + "* pNew = new " + classname
 				+ "[nSize];\n");
-		writer.write("\t\t\tmemcpy(pNew, pObj, sizeof(" + classname
-				+ ")*nSize/2);\n");
-		writer.write("\t\t\tmemset(pObj, 0, sizeof(" + classname
-				+ ")*nSize/2);\n");
 		
-		/**
-         * Dushshantha:(Solution to the Jira AXISCPP-343
-         * After memsetting pObj to 0, deleting pObj will crash the program becouse the memory is already set to 0(NULL)
-         * So i commented out delete statement and made pObj NULL to avoid gabage referance.
-         * Thanks Samisa for the Tip.
-         * 
-         */
-        writer.write("\t\t\tpObj = NULL;\n");
-		//writer.write("\t\t\tdelete [] pObj;\n");
+		writer.write("\t\t\tlong *p1 = (long*)pObj;\n");
+        writer.write("\t\t\tlong *p2 = (long*)pNew;\n");
+        writer.write("\t\t\tsize_t i = nSize * sizeof(" + classname
+        		+ ")/ sizeof(long) / 2;\n");
+        writer.write("\t\t\twhile (i)\n\t\t\t{\n");
+        writer.write("\t\t\t\tlong c = *p1;\n");
+        writer.write("\t\t\t\t*p1 = *p2;\n");
+        writer.write("\t\t\t\t*p2 = c;\n");
+        writer.write("\t\t\t\t++p1;\n");
+        writer.write("\t\t\t\t++p2;\n");
+        writer.write("\t\t\t\t--i;\n\t\t\t}\n");
+		
+        writer.write("\t\t\tdelete [] pObj;\n");
         
 		writer.write("\t\t\treturn pNew;\n\t\t}\n\t\telse\n\t\t{\n");
 		writer
