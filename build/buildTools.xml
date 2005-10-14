@@ -49,7 +49,7 @@
 	<!--
 	  Compile, package and run the C binding generator
 	  -->
-	<target name="buildCBindings" depends="generateCHeaders, compileCBindings"
+	<target name="buildCBindings" depends="generateCHeaders, compileCBindings" if="buildCBindings"
 	  description="Generate the C bindings and compile and link the C bindings client library"/>
 
 	<target name="generateCHeaders" depends="buildTools"
