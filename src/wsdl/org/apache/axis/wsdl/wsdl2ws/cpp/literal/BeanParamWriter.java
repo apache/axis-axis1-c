@@ -206,6 +206,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     if (attribs[i].isAnyType()){                    	
                     	anyCounter += 1;
                     	parameterName = parameterName + Integer.toString(anyCounter);
+                    	methodName = methodName + Integer.toString(anyCounter);
                     }
 
                     writer.write("\n"
