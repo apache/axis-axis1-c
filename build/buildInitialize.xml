@@ -26,6 +26,15 @@
 
 	<property environment="env"/>
 
+    <condition property="msvc7">
+        <and>
+            <isset property="windows" />
+            <not>
+                <isset property="env.MSDevDir" />
+            </not>
+        </and>
+    </condition>
+
 	<!--
 	  Compiler Definitions
 	  -->
