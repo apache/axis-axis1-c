@@ -1030,7 +1030,7 @@ public class CUtils {
             }
         }
         
-        System.out.println("name=" + name + " sanitisedName=" + sanitisedName);
+        //System.out.println("name=" + name + " sanitisedName=" + sanitisedName);
         
         return sanitisedName;
     }
