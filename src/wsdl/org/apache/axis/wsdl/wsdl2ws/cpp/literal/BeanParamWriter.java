@@ -1086,18 +1086,14 @@ public class BeanParamWriter extends ParamCPPFileWriter
         writer.write("\tif (bArray && (nSize > 0))\n\t{\n\t\tif (pObj)\n\t\t{\n");
         writer.write("\t\t\t" + classname + "* pNew = new " + classname
                 + "[nSize];\n");
-        writer.write("\t\t\tlong *p1 = (long*)pObj;\n");
-        writer.write("\t\t\tlong *p2 = (long*)pNew;\n");
-        writer.write("\t\t\tsize_t i = nSize * sizeof(" + classname
-        		+ ")/ sizeof(long) / 2;\n");
-        writer.write("\t\t\twhile (i)\n\t\t\t{\n");
-        writer.write("\t\t\t\tlong c = *p1;\n");
-        writer.write("\t\t\t\t*p1 = *p2;\n");
-        writer.write("\t\t\t\t*p2 = c;\n");
-        writer.write("\t\t\t\t++p1;\n");
-        writer.write("\t\t\t\t++p2;\n");
-        writer.write("\t\t\t\t--i;\n\t\t\t}\n");
-        
+
+        writer.write("\t\t\tsize_t i = nSize/2;\n");
+        writer.write("\t\t\tfor (int ii=0; ii<i; ++ii)\n"); 
+        writer.write("\t\t\t{\n");
+        writer.write("\t\t\t\tpNew[ii] = pObj[ii];\n");
+        writer.write("\t\t\t\tpObj[ii].reset();\n");
+        writer.write("\t\t\t}\n");
+
         writer.write("\t\t\tdelete [] pObj;\n");
         writer.write("\t\t\treturn pNew;\n\t\t}\n\t\telse\n\t\t{\n");
         writer.write("\t\t\treturn new " + classname
@@ -1135,6 +1131,24 @@ public class BeanParamWriter extends ParamCPPFileWriter
         try
         {
             writer.write("\n" + classname + "::" + classname + "()\n{\n");
+		writer.write("\t reset();\n");
+		writer.write("}\n"); 
+
+            writeReset(); 
+	   } catch (IOException e) {
+			throw new WrapperFault(e);
+	     }    
+    }
+    /*
+     * (non-Javadoc)
+     * 
+     * @see 
+     */
+    protected void writeReset() throws WrapperFault
+    {
+        try
+        {
+		writer.write("\nvoid " + classname + "::reset()\n{\n");
             writer.write("\t/*do not allocate memory to any pointer members here\n\t because deserializer will allocate memory anyway. */\n");
             
             int anyCounter = 0;
@@ -1207,6 +1221,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
             throw new WrapperFault(e);
         }
     }
+
 
     /*
      * (non-Javadoc)
