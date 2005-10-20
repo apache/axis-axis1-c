@@ -266,10 +266,21 @@ public class ParmHeaderFileWriter extends ParamWriter {
 	protected void writeConstructors() throws WrapperFault {
 		try {
 			writer.write("\t" + classname + "();\n");
+                  writeReset();
 		} catch (IOException e) {
 			throw new WrapperFault(e);
 		}
 	}
+    protected void writeReset() throws WrapperFault
+    {
+        try
+        {
+            writer.write("\tvoid reset();\n");
+       } catch (IOException e)
+        {
+            throw new WrapperFault(e);
+        }
+    }
 
 	protected void writeDestructors() throws WrapperFault {
 		try {

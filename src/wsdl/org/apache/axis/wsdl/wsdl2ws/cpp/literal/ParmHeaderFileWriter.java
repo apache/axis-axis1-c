@@ -441,7 +441,18 @@ public class ParmHeaderFileWriter extends ParamWriter
         try
         {
             writer.write("\n\t" + classname + "();\n");
-        } catch (IOException e)
+            writeReset();
+       } catch (IOException e)
+        {
+            throw new WrapperFault(e);
+        }
+    }
+    protected void writeReset() throws WrapperFault
+    {
+        try
+        {
+            writer.write("\n\tvoid reset();\n");
+       } catch (IOException e)
         {
             throw new WrapperFault(e);
         }
