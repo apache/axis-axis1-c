@@ -450,19 +450,18 @@ public class BeanParamWriter extends ParamCPPFileWriter
                      * same in 'all' element
                      */
 
-                    if (attribs[i].getChoiceElement()
-                            || attribs[i].getAllElement())
-                    {
-                        writer.write("\tpSZ->serializeBasicArray((Axis_Array*)(param->"
-                                        + attribs[i].getParamName()
-                                        + "), Axis_URI_"
-                                        + classname
-                                        + ","
-                                        + CUtils.getXSDTypeForBasicType(attribs[i]
-                                                        .getTypeName())
-                                        + ", \""
-                                        + attribs[i].getParamNameAsSOAPElement()
-                                        + "\");\n");
+                    
+                    if(attribs[i].getChoiceElement()||attribs[i].getAllElement()){
+                    	writer.write("\tpSZ->serializeBasicArray((Axis_Array*)(param->"
+                                + attribs[i].getParamName()
+                                + "), Axis_URI_"
+                                + classname
+                                + ","
+                                + CUtils.getXSDTypeForBasicType(attribs[i]
+                                                .getTypeName())
+                                + ", \""
+                                + attribs[i].getParamNameAsSOAPElement()
+                                + "\");\n");
                     }
                     else
                     {
@@ -605,18 +604,34 @@ public class BeanParamWriter extends ParamCPPFileWriter
                      * as pointers in the header file. Chinthana: This is the
                      * same in 'all' element
                      */
-
-                    if (attribs[i].getChoiceElement()
+                	if (attribs[i].getChoiceElement()
                             || attribs[i].getAllElement()
-                            || isElementNillable(i))
-                        writer.write("\tpSZ->serializeAsElement(\""
-                                + CUtils.sanitiseAttributeName( classname, attribs[i].getSOAPElementNameAsString())
-                                + "\", Axis_URI_"
-                                + classname
-                                + ", (void*)(param->"
-                                + attribs[i].getParamNameWithoutSymbols()
-                                + "), "
-                                + CUtils.getXSDTypeForBasicType(attribs[i].getTypeName()) + ");\n");
+                            || isElementNillable(i)){
+                		
+                		if (((attribs[i].getChoiceElement())&&(isElementNillable(i)))&& !(attribs[i].getTypeName().equals("xsd__string")) ){
+                			writer.write("\tpSZ->serializeAsElement(\""
+                                    + CUtils.sanitiseAttributeName( classname, attribs[i].getSOAPElementNameAsString())
+                                    + "\", Axis_URI_"
+                                    + classname
+                                    + ", (void*)(*(param->"
+                                    + attribs[i].getParamNameWithoutSymbols()
+                                    + ")), "
+                                    + CUtils.getXSDTypeForBasicType(attribs[i].getTypeName()) + ");\n");
+                		}
+                    	
+                		else
+                    		writer.write("\tpSZ->serializeAsElement(\""
+                                    + CUtils.sanitiseAttributeName( classname, attribs[i].getSOAPElementNameAsString())
+                                    + "\", Axis_URI_"
+                                    + classname
+                                    + ", (void*)(param->"
+                                    + attribs[i].getParamNameWithoutSymbols()
+                                    + "), "
+                                    + CUtils.getXSDTypeForBasicType(attribs[i].getTypeName()) + ");\n");
+                        	
+                    		
+                    	}
+                    		
                     else
                         writer.write("\tpSZ->serializeAsElement(\""
                                 + CUtils.sanitiseAttributeName( classname, attribs[i].getSOAPElementNameAsString())
@@ -963,14 +978,36 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 //end remove _Ref sufix and _ prefix in SOAP tag name
                 if (attribs[i].isNillable() ||
                         isElementNillable(i) ||
-                        CUtils.isPointerType(attribs[i].getTypeName()))
-                {
-                    writer.write("\tparam->"
+                        CUtils.isPointerType(attribs[i].getTypeName())){
+                	if (attribs[i].getChoiceElement() && !attribs[i].getTypeName().equals("xsd__string")){
+                		writer.write("\tparam->"
+                				+ attribs[i].getParamNameAsMember()
+                				+ " = ("
+                				+ attribs[i].getTypeName()
+                				+ "**)("
+                				+ attribs[i].getTypeName()
+                				+"*)new "
+                				+attribs[i].getTypeName()
+                				+ ";\n");
+                				
+                		
+                		writer.write("\t\t*(param->"
+                                + attribs[i].getParamNameAsMember()
+                                + ") = pIWSDZ->"
+                                + CUtils.getParameterGetValueMethodName(
+                                        attribs[i].getTypeName(), attribs[i].isAttribute()) + "( \""
+                                + soapTagName + "\",0);\n");
+                    }
+                	else{
+                	
+                	writer.write("\tparam->"
                             + attribs[i].getParamNameAsMember()
                             + " = pIWSDZ->"
                             + CUtils.getParameterGetValueMethodName(attribs[i]
                                     .getTypeName(), attribs[i].isAttribute())
                             + "( \"" + soapTagName + "\",0);\n");
+                	}
+                	
                     //Samisa
                 } 
                 else
