@@ -1,0 +1,18 @@
+<test>
+    <name>SimpleChoiceNillable</name>
+    <description>SimpleChoiceNillable</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>SimpleChoiceNillableClient.cpp</clientCode>
+    <wsdl>SimpleChoiceNillable.wsdl</wsdl>
+    <expected>
+        <output>
+            SimpleChoiceNillable.expected
+        </output>
+	
+	<serverResponse>
+		SimpleChoiceNillable_ServerResponse.expected
+        </serverResponse>
+
+    </expected>
+	<endpoint>http://localhost:80/axis/SimpleChoiceNillable</endpoint>
+</test>
