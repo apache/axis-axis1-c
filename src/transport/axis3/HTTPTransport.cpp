@@ -1510,6 +1510,8 @@ void HTTPTransport::processHTTPHeader()
 
 // Check if the message is chunked
 	int	iPosChunked = m_strReceived.find( ASCII_S_TRANSFERENCODING_CHUNKED);
+	int iHTTPStart = m_strReceived.find( ASCII_S_HTTP);
+	int iHTTPEnd = m_strReceived.find( ASCII_S_CRLFCRLF);
 
 	if( iPosChunked != std::string::npos)
 	{
@@ -1539,7 +1541,19 @@ void HTTPTransport::processHTTPHeader()
 		if( (m_eProtocolType == APTHTTP1_0) || (m_eProtocolType == APTHTTP1_1) )
 		{
 			m_GetBytesState = eSOAPMessageIsNotChunked;
-			m_iContentLength = m_iBytesLeft;
+			m_iBytesLeft = m_strReceived.substr( iHTTPEnd + 2).length();
+
+// Check if all the message has already been recieved.  If not, then subtract
+// that bit that has been from the total length.  If so, then make the content
+// length equal to zero.
+			if( m_iContentLength >= m_iBytesLeft)
+			{
+				m_iContentLength -= m_iBytesLeft;
+			}
+			else
+			{
+				m_iContentLength = 0;
+			}
 		}
 		else
 		{
@@ -1549,9 +1563,6 @@ void HTTPTransport::processHTTPHeader()
 										  "HTTP header message must be chunked or have a content length.");
 		}
 	}
-
-	int iHTTPStart = m_strReceived.find( ASCII_S_HTTP);
-	int iHTTPEnd = m_strReceived.find( ASCII_S_CRLFCRLF);
 
 // Extract HTTP header and process it
 	m_strResponseHTTPHeaders = m_strReceived.substr( iHTTPStart, iHTTPEnd + 2 - iHTTPStart);
