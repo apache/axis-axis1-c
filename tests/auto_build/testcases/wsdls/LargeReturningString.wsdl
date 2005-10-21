@@ -14,82 +14,196 @@
 <!-- See the License for the specific language governing permissions and      -->
 <!-- limitations under the License.                                           -->
 
-<wsdl:definitions targetNamespace="http://largereturningstring.test.apache.org" xmlns:impl="http://largereturningstring.test.apache.org" xmlns:intf="http://largereturningstring.test.apache.org" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
- <wsdl:types>
-  <schema elementFormDefault="qualified" targetNamespace="http://largereturningstring.test.apache.org" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:impl="http://largereturningstring.test.apache.org" xmlns:intf="http://largereturningstring.test.apache.org" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-   <element name="getLargeString">
-    <complexType>
-     <sequence>
-      <element name="size" type="xsd:int"/>
-     </sequence>
-    </complexType>
-   </element>
-   <element name="getLargeStringResponse">
-    <complexType>
-     <sequence>
-      <element name="getLargeStringReturn" nillable="true" type="xsd:string"/>
-     </sequence>
-    </complexType>
-   </element>
-  </schema>
- </wsdl:types>
+<wsdl:definitions
+	targetNamespace="http://largereturningstring.test.apache.org"
+	xmlns:impl="http://largereturningstring.test.apache.org"
+	xmlns:intf="http://largereturningstring.test.apache.org"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/">
+	<wsdl:types>
+		<schema elementFormDefault="qualified"
+			targetNamespace="http://largereturningstring.test.apache.org"
+			xmlns="http://www.w3.org/2001/XMLSchema"
+			xmlns:impl="http://largereturningstring.test.apache.org"
+			xmlns:intf="http://largereturningstring.test.apache.org"
+			xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+			xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+			<element name="getLargeString">
+				<complexType>
+					<sequence>
+						<element name="size" type="xsd:int" />
+					</sequence>
+				</complexType>
+			</element>
+			<element name="getLargeStringResponse">
+				<complexType>
+					<sequence>
+						<element name="getLargeStringResponse"
+							nillable="true" type="xsd:string" />
+					</sequence>
+				</complexType>
+			</element>
+			<element name="setLargeString">
+				<complexType>
+					<sequence>
+						<element name="setLargeString" nillable="true"
+							type="xsd:string" />
+					</sequence>
+				</complexType>
+			</element>
+			<element name="setLargeStringResponse">
+				<complexType>
+					<sequence>
+						<element name="size" type="xsd:int" />
+					</sequence>
+				</complexType>
+			</element>
+			<element name="setRoundTripLargeStringRequest">
+				<complexType>
+					<sequence>
+						<element name="setLargeString" nillable="true"
+							type="xsd:string" />
+						<element name="size" type="xsd:int" />
+					</sequence>
+				</complexType>
+			</element>
+			<element name="setRoundTripLargeStringResponse">
+				<complexType>
+					<sequence>
+						<element name="getRoundTripLargeStringResponse"
+							nillable="true" type="xsd:string" />
+						<element name="size" type="xsd:int" />
+					</sequence>
+				</complexType>
+			</element>
+			<element name="setLargeStringResponse1" type="string"></element>
+			<element name="setLargeStringRequest1" type="string"></element>
+		</schema>
+	</wsdl:types>
 
-   <wsdl:message name="getLargeStringRequest">
+	<wsdl:message name="getLargeStringRequest">
+		<wsdl:part element="intf:getLargeString" name="parameters" />
+	</wsdl:message>
 
-      <wsdl:part element="intf:getLargeString" name="parameters"/>
+	<wsdl:message name="getLargeStringResponse">
+		<wsdl:part element="intf:getLargeStringResponse"
+			name="parameters" />
+	</wsdl:message>
 
-   </wsdl:message>
+	<wsdl:message name="setLargeStringRequest">
+		<wsdl:part name="setLargeStringRequest"
+			element="intf:setLargeString">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="setLargeStringResponse">
+		<wsdl:part name="setLargeStringResponse"
+			element="intf:setLargeStringResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="setRoundTripLargeStringRequest">
+		<wsdl:part name="setRoundTripLargeStringRequest"
+			element="intf:setRoundTripLargeStringRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="setRoundTripLargeStringResponse">
+		<wsdl:part name="setRoundTripLargeStringResponse"
+			element="intf:setRoundTripLargeStringResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:portType name="LargeReturningString">
 
-   <wsdl:message name="getLargeStringResponse">
+		<wsdl:operation name="getLargeString">
 
-      <wsdl:part element="intf:getLargeStringResponse" name="parameters"/>
+			<wsdl:input message="intf:getLargeStringRequest"
+				name="getLargeStringRequest" />
 
-   </wsdl:message>
+			<wsdl:output message="intf:getLargeStringResponse"
+				name="getLargeStringResponse" />
 
-   <wsdl:portType name="LargeReturningString">
+		</wsdl:operation>
 
-      <wsdl:operation name="getLargeString">
+		<wsdl:operation name="setLargeString">
+			<wsdl:input message="intf:setLargeStringRequest"
+				name="setLargeStringRequest">
+			</wsdl:input>
+			<wsdl:output message="intf:setLargeStringResponse"
+				name="setLargeStringResponse">
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="setRoundTripLargeString">
+			<wsdl:input name="setRoundTripLargeStringRequest"
+				message="intf:setRoundTripLargeStringRequest">
+			</wsdl:input>
+			<wsdl:output name="setRoundTripLargeStringResponse"
+				message="intf:setRoundTripLargeStringResponse">
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:portType>
 
-         <wsdl:input message="intf:getLargeStringRequest" name="getLargeStringRequest"/>
+	<wsdl:binding name="LargeReturningStringSoapBinding"
+		type="intf:LargeReturningString">
 
-         <wsdl:output message="intf:getLargeStringResponse" name="getLargeStringResponse"/>
+		<wsdlsoap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
 
-      </wsdl:operation>
+		<wsdl:operation name="getLargeString">
 
-   </wsdl:portType>
+			<wsdlsoap:operation soapAction="LargeReturningString#getLargeString" style="document" />
 
-   <wsdl:binding name="LargeReturningStringSoapBinding" type="intf:LargeReturningString">
+			<wsdl:input name="getLargeStringRequest">
 
-      <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+				<wsdlsoap:body use="literal" />
 
-      <wsdl:operation name="getLargeString">
+			</wsdl:input>
 
-         <wsdlsoap:operation soapAction=""/>
+			<wsdl:output name="getLargeStringResponse">
 
-         <wsdl:input name="getLargeStringRequest">
+				<wsdlsoap:body use="literal" />
 
-            <wsdlsoap:body use="literal"/>
+			</wsdl:output>
 
-         </wsdl:input>
+		</wsdl:operation>
 
-         <wsdl:output name="getLargeStringResponse">
+		<wsdl:operation name="setLargeString">
+			<wsdlsoap:operation style="document" soapAction="LargeReturningString#setLargeString"/>
+			<wsdl:input name="setLargeStringRequest">
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="setLargeStringResponse">
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="setRoundTripLargeString">
+			<wsdlsoap:operation style="document" soapAction="LargeReturningString#setRoundTripLargeString"/>
+			<wsdl:input name="setRoundTripLargeStringRequest">
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="setRoundTripLargeStringResponse">
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="LargeReturningStringService">
 
-            <wsdlsoap:body use="literal"/>
+		<wsdl:port binding="intf:LargeReturningStringSoapBinding"
+			name="getLargeReturningString">
 
-         </wsdl:output>
+			<wsdlsoap:address
+				location="http://localhost/axis/LargeReturningString" />
 
-      </wsdl:operation>
-
-   </wsdl:binding>
-
-   <wsdl:service name="LargeReturningStringService">
-
-      <wsdl:port binding="intf:LargeReturningStringSoapBinding" name="LargeReturningString">
-
-         <wsdlsoap:address location="http://localhost:9080/LargeReturningString/services/LargeReturningString"/>
-
-      </wsdl:port>
-
-   </wsdl:service>
+		</wsdl:port>
+		<wsdl:port name="roundTripLargeReturningString"
+			binding="intf:LargeReturningStringSoapBinding">
+			<wsdlsoap:address
+				location="http://localhost/axis/LargeReturningString" />
+		</wsdl:port>
+		<wsdl:port name="setLargeReturningString"
+			binding="intf:LargeReturningStringSoapBinding">
+			<wsdlsoap:address location="http://localhost/axis/LargeReturningString" />
+		</wsdl:port>
+	</wsdl:service>
 
 </wsdl:definitions>
