@@ -170,6 +170,12 @@ XMLParser:${dir.libraries}/${ClientParserLib}
 
     <target name="setServiceCode" if="service.serviceCode">
         <propertycopy property="serviceCode" from="service.serviceCode" />
+        <if>
+            <isset property="service.serviceHeader" />
+            <then>
+                <propertycopy property="serviceHeader" from="service.serviceHeader" />
+            </then>
+        </if>
     </target>
 
 
@@ -219,6 +225,15 @@ XMLParser:${dir.libraries}/${ClientParserLib}
         <copy file="${dir.autotests}/server/${serviceLang}/${serviceCode}"
               tofile="${dir.test.generated}/server/${serviceLang}/${serviceName}/${serviceCode}"
               overwrite="true" />
+        <propertycopy property="serviceCode" from="service.serviceCode" />
+        <if>
+            <isset property="service.serviceHeader"/>
+            <then>
+                <copy file="${dir.autotests}/server/${serviceLang}/${serviceHeader}"
+                      tofile="${dir.test.generated}/server/${serviceLang}/${serviceName}/${serviceHeader}"
+                      overwrite="true"/>
+            </then>
+        </if>
         <cc failonerror="false"
             incremental="false"
             outfile="${dir.test.generated}/server/${serviceLang}/${serviceName}/${serviceName}"
