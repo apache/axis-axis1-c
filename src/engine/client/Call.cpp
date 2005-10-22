@@ -40,8 +40,6 @@ extern "C" int uninitialize_module ();
 
 AXIS_CPP_NAMESPACE_USE
 
-bool CallBase::bInitialized = false;
-
 Call::Call ()
 :m_pcEndPointUri(NULL), m_strProxyHost(""), m_uiProxyPort(0), m_bUseProxy(false),
 m_bCallInitialized(false), m_pContentIdSet(NULL)

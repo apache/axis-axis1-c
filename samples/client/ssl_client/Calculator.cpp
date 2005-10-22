@@ -24,8 +24,6 @@
 
 AXIS_CPP_NAMESPACE_USE
 
-bool CallBase::bInitialized;
-//CallFunctions CallBase::ms_VFtable;
 Calculator::Calculator(const char* pchEndpointUri)
 {
 	m_pCall = new Call();

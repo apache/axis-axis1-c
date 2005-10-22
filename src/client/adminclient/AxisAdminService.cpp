@@ -24,8 +24,6 @@
 #include "AxisAdminService.h"
 #include <axis/AxisWrapperAPI.hpp>
 
-bool CallBase::bInitialized;
-CallFunctions CallBase::ms_VFtable;
 AxisAdminService::AxisAdminService (const char *pchUri)
 {
     m_pCall = new Call ();

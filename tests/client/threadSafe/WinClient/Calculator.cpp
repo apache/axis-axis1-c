@@ -24,8 +24,6 @@
 #include "Thread.h"
 #include <axis/server/AxisWrapperAPI.h>
 
-bool CallBase::bInitialized;
-CallFunctions CallBase::ms_VFtable;
 Calculator::Calculator(const char* pchEndpointUri)
 {
 	m_pCall = new Call();
