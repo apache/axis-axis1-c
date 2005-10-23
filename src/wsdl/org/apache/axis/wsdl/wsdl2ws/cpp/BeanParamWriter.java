@@ -38,9 +38,10 @@ import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
  * @author hemapani
  */
 
-public class BeanParamWriter extends ParamCPPFileWriter {
-	public BeanParamWriter(WebServiceContext wscontext, Type type)
-			throws WrapperFault {
+public class BeanParamWriter extends ParamCPPFileWriter 
+{
+	public BeanParamWriter(WebServiceContext wscontext, Type type) throws WrapperFault 
+    {
 		super(wscontext, type);
 	}
 
@@ -49,17 +50,22 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 	 * 
 	 * @see org.apache.axis.wsdl.wsdl2ws.cpp.ParamCPPFileWriter#writeGlobalCodes()
 	 */
-	protected void writeGlobalCodes() throws WrapperFault {
-		try {
+	protected void writeGlobalCodes() throws WrapperFault 
+    {
+		try 
+        {
 			HashSet typeSet = new HashSet();
 			String typeName;
-			for (int i = 0; i < attribs.length; i++) {
-				if (!attribs[i].isSimpleType()) {
+			for (int i = 0; i < attribs.length; i++) 
+            {
+				if (!attribs[i].isSimpleType()) 
+                {
 					typeSet.add(attribs[i].getTypeName());
 				}
 			}
 			Iterator itr = typeSet.iterator();
-			while (itr.hasNext()) {
+			while (itr.hasNext()) 
+            {
 				/*
 				 * Needed for self referenced array. <xsd:complexType
 				 * name="Type1"> <xsd:sequence> <xsd:element name="followings"
@@ -69,7 +75,8 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 				 * name="att_kind" type="tns:Kind" /> </xsd:complexType>
 				 */
 				typeName = itr.next().toString();
-				if (!typeName.equals(type.getName().getLocalPart())) {
+				if (!typeName.equals(type.getName().getLocalPart())) 
+                {
 					writer.write("extern int Axis_DeSerialize_" + typeName
 							+ "(" + typeName
 							+ "* param, IWrapperSoapDeSerializer* pDZ);\n");
@@ -87,7 +94,9 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 									+ "* param, IWrapperSoapSerializer* pSZ, bool bArray = false);\n");
 					writer.write("extern int Axis_GetSize_" + typeName
 							+ "();\n\n");
-				} else {
+				} 
+                else 
+                {
 					writer.write("int Axis_DeSerialize_" + typeName + "("
 							+ typeName
 							+ "* param, IWrapperSoapDeSerializer* pDZ);\n");
@@ -111,7 +120,9 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 			writeCreateGlobalMethod();
 			writeDeleteGlobalMethod();
 			writeGetSizeGlobalMethod();
-		} catch (IOException e) {
+		} 
+        catch (IOException e) 
+        {
 			throw new WrapperFault(e);
 		}
 	}
@@ -121,26 +132,32 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 	 * attributes
 	 */
 
-	private void writeGetSetMethods() throws WrapperFault {
+	private void writeGetSetMethods() throws WrapperFault 
+    {
 		/**
 		 * Dushshantha: writing getter
 		 */
 
 		int anyCounter = 0;
 		
-		if (type.isArray()) {
-			return;
-		}
-		try {
-			for (int i = 0; i < attribs.length; i++) {
-				// FJP Nillable vv
-				if (isElementNillable(i)) {
+		if (type.isArray())
+        {
+            return;
+        }
+        try
+        {
+			for (int i = 0; i < attribs.length; i++)
+            {
+                // FJP Nillable vv
+                if (isElementNillable(i))
+                {
 					String parameterName = attribs[i]
 							.getParamNameWithoutSymbols();
 					String properParamName = getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]);
 
-					if (attribs[i].isAnyType()){                    	
-                    	anyCounter += 1;
+					if (attribs[i].isAnyType())
+                    {
+                        anyCounter += 1;
                     	parameterName = parameterName + Integer.toString(anyCounter);
                     }
 					
@@ -155,9 +172,12 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 
 					writer.write("\t" + parameterName + " = pInValue ; \n");
 
-					if (attribs[i].getChoiceElement()) {
-						for (int j = 0; j < attribs.length; j++) {
-							if ((attribs[j].getChoiceElement()) && (j != i)) {
+					if (attribs[i].getChoiceElement())
+                    {
+                        for (int j = 0; j < attribs.length; j++)
+                        {
+                            if ((attribs[j].getChoiceElement()) && (j != i))
+                            {
 								writer.write("\t"
 										+ attribs[j]
 												.getParamNameWithoutSymbols()
@@ -167,7 +187,9 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 					}
 
 					writer.write("}\n");
-				} else {
+				} 
+                else 
+                {
 					// FJP Nillable ^^
 					/**
 					 * Dushshantha: Write getter
@@ -176,8 +198,9 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 					String parameterName = attribs[i].getParamNameWithoutSymbols();
                     String properParamName = getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]);
                     
-                    if (attribs[i].isAnyType()){                    	
-                    	anyCounter += 1;
+                    if (attribs[i].isAnyType())
+                    {
+                        anyCounter += 1;
                     	parameterName = parameterName + Integer.toString(anyCounter);
                     }
 
@@ -204,15 +227,17 @@ public class BeanParamWriter extends ParamCPPFileWriter {
                             + properParamName
                             + " InValue)\n{\n");
 
-            writer.write("\t" + parameterName
-                    + " = InValue ; \n");
+                    writer.write("\t" + parameterName
+                            + " = InValue ; \n");
 
-					if (attribs[i].getChoiceElement()) {
-						for (int j = 0; j < attribs.length; j++) {
-							if ((attribs[j].getChoiceElement()) && (j != i)) {
+					if (attribs[i].getChoiceElement())
+                    {
+                        for (int j = 0; j < attribs.length; j++)
+                        {
+                            if ((attribs[j].getChoiceElement()) && (j != i))
+                            {
 								writer.write("\t"
-										+ attribs[j]
-												.getParamNameWithoutSymbols()
+										+ attribs[j].getParamNameWithoutSymbols()
 										+ " = NULL ; \n");
 							}
 						}
@@ -221,13 +246,15 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 					writer.write("}\n");
 				}
 			}
-		} catch (IOException e) {
+		} 
+        catch (IOException e) 
+        {
 			throw new WrapperFault(e);
 		}
-
 	}
 
-	private void writeGetSizeGlobalMethod() throws IOException {
+	private void writeGetSizeGlobalMethod() throws IOException 
+    {
 		writer.write("/*\n");
 		writer.write(" * This static method gives the size of " + classname
 				+ " type of object\n");
@@ -236,19 +263,20 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 				+ "()\n{\n\treturn sizeof(" + classname + ");\n}\n");
 	}
 
-	private void writeSerializeGlobalMethod() throws IOException, WrapperFault {
+	private void writeSerializeGlobalMethod() throws IOException, WrapperFault 
+    {
 		writer.write("/*\n");
 		writer.write(" * This static method serialize a " + classname
 				+ " type of object\n");
 		writer.write(" */\n");
-		writer
-				.write("int Axis_Serialize_"
+		writer.write("int Axis_Serialize_"
 						+ classname
 						+ "("
 						+ classname
 						+ "* param, IWrapperSoapSerializer* pSZ, bool bArray = false)\n{\n");
 
-		if (attribs.length == 0) {
+		if (attribs.length == 0) 
+        {
 			System.out.println("Possible error in class " + classname
 					+ ": class with no attributes....................");
 			writer.write("\t}\n\n");
@@ -286,58 +314,66 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 		boolean firstIfWritten = false;
 		int anyCounter = 0;
 		
-		for (int i = 0; i < attribs.length; i++) {
-
+		for (int i = 0; i < attribs.length; i++) 
+        {
 			//Dushshantha:
-			//if the attribute is a choice
-			//following should do
+			//if the attribute is a choice following should do
 
-			if (attribs[i].getChoiceElement()) {
-				if (!firstIfWritten) {
-					writer.write("\tif");
-					firstIfWritten = true;
-				} else {
-					writer.write("\telse if");
-				}
+			if (attribs[i].getChoiceElement())
+            {
+                if (!firstIfWritten)
+                {
+                    writer.write("\tif");
+                    firstIfWritten = true;
+                }
+                else
+                {
+                    writer.write("\telse if");
+                }
 
 				writer.write("(param->" + attribs[i].getParamNameAsMember()
 						+ ")\n\t{\n\t");
 			}
-			//..............................................................................
 
 			//Chinthana:
 			//if the attribute is a 'all' following should do
 
-			if (attribs[i].getAllElement()) {
-				if (attribs[i].getMinOccurs() == 0) {
-					writer.write("\tif(param->"
-							+ attribs[i].getParamNameAsMember() + ")\n\t{\n\t");
-				}
-			}
-			//17/05/2005........................................................................
+			if (attribs[i].getAllElement())
+            {
+                if (attribs[i].getMinOccurs() == 0)
+                {
+                    writer.write("\tif(param->"
+                            + attribs[i].getParamNameAsMember() + ")\n\t{\n\t");
+                }
+            }
 
-			if (attribs[i].isAnyType()) {
+			if (attribs[i].isAnyType()) 
+            {
 				anyCounter += 1;
             	writer.write("\tpSZ->serializeAnyObject(param->any" + Integer.toString(anyCounter) +");\n");
-			} else if (attribs[i].isArray()) {
+			} 
+            else if (attribs[i].isArray()) 
+            {
 				//if Array
-				if (attribs[i].isSimpleType()) {
-					writer
-							.write("\tpSZ->serializeBasicArray((Axis_Array*)(&param->"
+				if (attribs[i].isSimpleType()) 
+                {
+					writer.write("\tpSZ->serializeBasicArray((Axis_Array*)(&param->"
 									+ attribs[i].getParamNameAsMember()
 									+ "),"
 									+ CUtils.getXSDTypeForBasicType(attribs[i]
 											.getTypeName())
 									+ ", \""
 									+ attribs[i].getParamName() + "\");\n");
-				} else {
-					String elm = attribs[i].getParamName();
-					if (attribs[i].isReference()) {
-						elm = attribs[i].getTypeName();
-					}
+				}
+                else
+                {
+                    String elm = attribs[i].getParamName();
+                    if (attribs[i].isReference())
+                    {
+                        elm = attribs[i].getTypeName();
+                    }
 					arrayType = attribs[i].getTypeName();
-					writer
-							.write("\tpSZ->serializeCmplxArray((Axis_Array*)(&param->"
+					writer.write("\tpSZ->serializeCmplxArray((Axis_Array*)(&param->"
 									+ attribs[i].getParamNameAsMember()
 									+ "),\n");
 					writer.write("\t\t(void*) Axis_Serialize_" + arrayType
@@ -346,18 +382,20 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 					writer.write("\t\t\"" + elm + "\", Axis_URI_" + arrayType
 							+ ");\n");
 				}
-			} else if (attribs[i].isSimpleType()) {
-				if (attribs[i].isAttribute()) {
-					if (attribs[i].isOptional()) {
+			}
+            else if (attribs[i].isSimpleType())
+            {
+                if (attribs[i].isAttribute())
+                {
+                    if (attribs[i].isOptional())
+                    {
 						writer.write("\tif (0 != param->"
 								+ attribs[i].getParamNameAsMember() + ")\n");
 						if (attribs[i].getTypeName().equals("xsd__string")
-								|| attribs[i].getTypeName().equals(
-										"xsd__anyURI")
-								|| attribs[i].getTypeName()
-										.equals("xsd__QName")
-								|| attribs[i].getTypeName().equals(
-										"xsd__NOTATION")) {
+								|| attribs[i].getTypeName().equals("xsd__anyURI")
+								|| attribs[i].getTypeName().equals("xsd__QName")
+								|| attribs[i].getTypeName().equals("xsd__NOTATION")) 
+                        {
 							writer.write("\t\tpSZ->serializeAsAttribute(\""
 									+ attribs[i].getParamName()
 									+ "\", 0, (void*)(param->"
@@ -365,7 +403,9 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 									+ "), "
 									+ CUtils.getXSDTypeForBasicType(attribs[i]
 											.getTypeName()) + ");\n");
-						} else {
+						} 
+                        else 
+                        {
 							writer.write("\t\tpSZ->serializeAsAttribute(\""
 									+ attribs[i].getParamName()
 									+ "\", 0, (void*)&(param->"
@@ -374,7 +414,9 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 									+ CUtils.getXSDTypeForBasicType(attribs[i]
 											.getTypeName()) + ");\n");
 						}
-					} else {
+					} 
+                    else 
+                    {
 						writer.write("\tpSZ->serializeAsAttribute(\""
 								+ attribs[i].getParamName()
 								+ "\", 0, (void*)&(param->"
@@ -383,12 +425,15 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 								+ CUtils.getXSDTypeForBasicType(attribs[i]
 										.getTypeName()) + ");\n");
 					}
-				} else {
+				} 
+                else 
+                {
 					if (attribs[i].getTypeName().equals("xsd__string")
 							|| attribs[i].getTypeName().equals("xsd__anyURI")
 							|| attribs[i].getTypeName().equals("xsd__QName")
 							|| attribs[i].getTypeName().equals("xsd__NOTATION")
-							|| isElementNillable(i)) {
+							|| isElementNillable(i)) 
+                    {
 						writer.write("\tpSZ->serializeAsElement(\""
 								+ attribs[i].getParamName()
 								+ "\", (void*)(param->"
@@ -396,13 +441,16 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 								+ "), "
 								+ CUtils.getXSDTypeForBasicType(attribs[i]
 										.getTypeName()) + ");\n");
-					} else {
+					} 
+                    else 
+                    {
 						/**
 						 * Dushshantha: if the element is a choice element, it
 						 * should be treated as a pointer
 						 */
 						if (attribs[i].getChoiceElement()
 								|| attribs[i].getAllElement())
+                        {
 							writer.write("\tpSZ->serializeAsElement(\""
 									+ attribs[i].getParamName()
 									+ "\", (void*)(param->"
@@ -410,7 +458,9 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 									+ "), "
 									+ CUtils.getXSDTypeForBasicType(attribs[i]
 											.getTypeName()) + ");\n");
+                        }
 						else
+                        {
 							writer.write("\tpSZ->serializeAsElement(\""
 									+ attribs[i].getParamName()
 									+ "\", (void*)&(param->"
@@ -418,9 +468,12 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 									+ "), "
 									+ CUtils.getXSDTypeForBasicType(attribs[i]
 											.getTypeName()) + ");\n");
+                        }
 					}
 				}
-			} else {
+			} 
+            else 
+            {
 				//if complex type
 				writer.write("\tAxis_Serialize_" + attribs[i].getTypeName()
 						+ "(param->" + attribs[i].getParamNameAsMember()
@@ -433,12 +486,11 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 				writer.write("\t}\n");
 
 			//Chinthana: end if
-			if (attribs[i].getAllElement()) {
-				if (attribs[i].getMinOccurs() == 0)
-					writer.write("\t}\n");
-			}
-			//17/05/2005.........................................
-
+			if (attribs[i].getAllElement())
+            {
+                if (attribs[i].getMinOccurs() == 0)
+                    writer.write("\t}\n");
+            }
 		}
 		writer.write("\n\tpSZ->serialize(\"</\", Axis_TypeName_" + classname
 				+ ", \">\", NULL);\n");
@@ -447,9 +499,8 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 
 	}
 
-	private void writeDeSerializeGlobalMethod() throws IOException,
-			WrapperFault {
-
+	private void writeDeSerializeGlobalMethod() throws IOException, WrapperFault 
+    {
 		writer.write("/*\n");
 		writer.write(" * This static method deserialize a " + classname
 				+ " type of object\n");
@@ -457,7 +508,8 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 		writer.write("int Axis_DeSerialize_" + classname + "(" + classname
 				+ "* param, IWrapperSoapDeSerializer* pIWSDZ)\n{\n");
 
-		if (attribs.length == 0) {
+		if (attribs.length == 0) 
+        {
 			System.out.println("Possible error in class " + classname
 					+ ": class with no attributes....................");
 			writer.write("\t}\n\n");
@@ -474,22 +526,26 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 		boolean foundAll = false;
 		int anyCounter = 0; //counter for any types.
 		
-		for (int i = 0; i < attribs.length; i++) {
+		for (int i = 0; i < attribs.length; i++) 
+        {
 			//Dushshantha:
-			//if the attribute is a choice
-			//following should do :-)
+			//if the attribute is a choice following should do :-)
 
-			if (attribs[i].getChoiceElement()) {
-				if (!peekCalled) {
-					writer
-							.write("\tconst char* choiceName=pIWSDZ->peekNextElementName();\n");
+			if (attribs[i].getChoiceElement()) 
+            {
+				if (!peekCalled) 
+                {
+					writer.write("\tconst char* choiceName=pIWSDZ->peekNextElementName();\n");
 					peekCalled = true;
 				}
 
-				if (!firstIfWritten) {
+				if (!firstIfWritten) 
+                {
 					writer.write("\tif");
 					firstIfWritten = true;
-				} else {
+				} 
+                else 
+                {
 					writer.write("\telse if");
 				}
 
@@ -498,14 +554,16 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 						+ "\")==0)\n\t{\n\t");
 
 			}
-			//.............................................
 
 			//Chinthana:
 			//if the attribute is a 'all' construct we have to check Min
 			// occures
-			if (attribs[i].getAllElement()) {
-				if (attribs[i].getMinOccurs() == 0) {
-					if (!foundAll) {
+			if (attribs[i].getAllElement()) 
+            {
+				if (attribs[i].getMinOccurs() == 0) 
+                {
+					if (!foundAll) 
+                    {
 						writer.write("\tconst char* allName = NULL;\n");
 						writer.write("\tbool peekCalled = false;\n");
 						foundAll = true;
@@ -521,14 +579,17 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 					writer.write("\tpeekCalled = false;\n\t");
 				}
 			}
-			//17/05/2005...........................................................
 
-			if (attribs[i].isAnyType()) {
+			if (attribs[i].isAnyType()) 
+            {
 				anyCounter +=1;
             	writer.write("\tparam->any" + Integer.toString(anyCounter)+ " = pIWSDZ->getAnyObject();\n");
-			} else if (attribs[i].isArray()) {
+			} 
+            else if (attribs[i].isArray()) 
+            {
 				//if Array
-				if (attribs[i].isSimpleType()) {
+				if (attribs[i].isSimpleType()) 
+                {
 					writer.write("\tparam->"
 							+ attribs[i].getParamNameAsMember()
 							+ " = ("
@@ -538,14 +599,16 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 							+ CUtils.getXSDTypeForBasicType(attribs[i]
 									.getTypeName()) + ", \""
 							+ attribs[i].getParamName() + "\",0);\n");
-				} else {
+				} 
+                else 
+                {
 					String elm = attribs[i].getParamName();
-					if (attribs[i].isReference()) {
+					if (attribs[i].isReference()) 
+                    {
 						elm = attribs[i].getTypeName();
 					}
 					arrayType = attribs[i].getTypeName();
-					writer
-							.write("\tparam->"
+					writer.write("\tparam->"
 									+ attribs[i].getParamNameAsMember()
 									+ " = ("
 									+ attribs[i].getTypeName()
@@ -557,11 +620,14 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 									+ arrayType + ", \"" + elm
 									+ "\", Axis_URI_" + arrayType + ");\n");
 				}
-			} else if (attribs[i].isSimpleType()) {
+			} 
+            else if (attribs[i].isSimpleType()) 
+            {
 				if (attribs[i].isNillable()
 						|| attribs[i].getTypeName().equals("xsd__anyURI")
 						|| attribs[i].getTypeName().equals("xsd__QName")
-						|| attribs[i].getTypeName().equals("xsd__NOTATION")) {
+						|| attribs[i].getTypeName().equals("xsd__NOTATION")) 
+                {
 					//TODO handle optional attributes
 					writer.write("\t"
 							+ attribs[i].getTypeName()
@@ -577,15 +643,19 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 
 					writer.write("\tdelete p_"
 							+ attribs[i].getParamNameAsMember() + ";\n");
-				} else if (attribs[i].getTypeName().equals("xsd__string")
-						|| isElementNillable(i)) {
+				} 
+                else if (attribs[i].getTypeName().equals("xsd__string")
+						|| isElementNillable(i)) 
+                {
 					writer.write("\tparam->"
 							+ attribs[i].getParamNameAsMember()
 							+ " = pIWSDZ->"
 							+ CUtils.getParameterGetValueMethodName(attribs[i]
 									.getTypeName(), attribs[i].isAttribute())
 							+ "(\"" + attribs[i].getParamName() + "\",0);\n");
-				} else {
+				} 
+                else 
+                {
 					//TODO handle optional attributes
 					/**
 					 * Dushshantha: if the element is a choice element, it
@@ -594,6 +664,7 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 
 					if (attribs[i].getChoiceElement()
 							|| attribs[i].getAllElement())
+                    {
 						writer.write("\tparam->"
 								+ attribs[i].getParamNameAsMember()
 								+ " = (pIWSDZ->"
@@ -601,9 +672,9 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 										attribs[i].getTypeName(), attribs[i]
 												.isAttribute()) + "(\""
 								+ attribs[i].getParamName() + "\",0));\n");
-
-					else {
-
+                    }
+					else 
+                    {
 						writer.write("\t"
 								+ attribs[i].getTypeName()
 								+ "* p_"
@@ -624,7 +695,9 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 					}
 
 				}
-			} else {
+			} 
+            else 
+            {
 				writer.write("\tparam->" + attribs[i].getParamNameAsMember()
 						+ " = (" + attribs[i].getTypeName()
 						+ "*)pIWSDZ->getCmplxObject((void*)Axis_DeSerialize_"
@@ -643,41 +716,41 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 				writer.write("\t}\n");
 
 			//Chinthana: end if
-			if (attribs[i].getAllElement()) {
+			if (attribs[i].getAllElement()) 
+            {
 				if (attribs[i].getMinOccurs() == 0)
 					writer.write("\t}\n");
 			}
-			//17/05/2005.........................................
 		}
 		writer.write("\treturn pIWSDZ->getStatus();\n");
 		writer.write("}\n");
 	}
 
-	private void writeCreateGlobalMethod() throws IOException {
+	private void writeCreateGlobalMethod() throws IOException 
+    {
 		writer.write("void* Axis_Create_" + classname + "(" + classname
 				+ "* pObj, bool bArray = false, int nSize=0)\n{\n");
-		writer
-				.write("\tif (bArray && (nSize > 0))\n\t{\n\t\tif (pObj)\n\t\t{\n");
+		writer.write("\tif (bArray && (nSize > 0))\n\t{\n\t\tif (pObj)\n\t\t{\n");
 		writer.write("\t\t\t" + classname + "* pNew = new " + classname
 				+ "[nSize];\n");
 		
-            writer.write("\t\t\tsize_t i = nSize/2;\n");
-            writer.write("\t\t\tfor (int ii=0; ii<i; ++ii)\n"); 
-            writer.write("\t\t\t{\n");
-            writer.write("\t\t\t\tpNew[ii] = pObj[ii];\n");
-            writer.write("\t\t\t\tpObj[ii].reset();\n");
-            writer.write("\t\t\t}\n");
-		
-            writer.write("\t\t\tdelete [] pObj;\n");
+        writer.write("\t\t\tsize_t i = nSize/2;\n");
+        writer.write("\t\t\tfor (int ii=0; ii<i; ++ii)\n");
+        writer.write("\t\t\t{\n");
+        writer.write("\t\t\t\tpNew[ii] = pObj[ii];\n");
+        writer.write("\t\t\t\tpObj[ii].reset();\n");
+        writer.write("\t\t\t}\n");
+
+        writer.write("\t\t\tdelete [] pObj;\n");
         
 		writer.write("\t\t\treturn pNew;\n\t\t}\n\t\telse\n\t\t{\n");
-		writer
-				.write("\t\t\treturn new " + classname
+		writer.write("\t\t\treturn new " + classname
 						+ "[nSize];\n\t\t}\n\t}\n");
 		writer.write("\telse\n\t\treturn new " + classname + ";\n}\n\n");
 	}
 
-	private void writeDeleteGlobalMethod() throws IOException {
+	private void writeDeleteGlobalMethod() throws IOException 
+    {
 		writer.write("/*\n");
 		writer.write(" * This static method delete a " + classname
 				+ " type of object\n");
@@ -701,56 +774,68 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 	 * 
 	 * @see org.apache.axis.wsdl.wsdl2ws.cpp.HeaderFileWriter#writeConstructors()
 	 */
-	protected void writeConstructors() throws WrapperFault {
-		try {
+	protected void writeConstructors() throws WrapperFault 
+    {
+		try 
+        {
 			writer.write("\n" + classname + "::" + classname + "()\n{\n");
-			writer.write("\t reset();\n");
-			writer.write("}\n");
+            writer.write("\t reset();\n");
+            writer.write("}\n");
 
-                  writeReset(); 
-
-		} catch (IOException e) {
+            writeReset(); 
+		} 
+        catch (IOException e) 
+        {
 			throw new WrapperFault(e);
 		}
 	}
+    
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see 
 	 */
-	protected void writeReset() throws WrapperFault {
-		try {
+	protected void writeReset() throws WrapperFault 
+    {
+		try 
+        {
 			writer.write("\nvoid " + classname + "::reset()\n{\n");
-			writer
-					.write("\t/*do not allocate memory to any pointer members here\n\t because deserializer will allocate memory anyway. */\n");
+			writer.write("\t/*do not allocate memory to any pointer members here\n\t because deserializer will allocate memory anyway. */\n");
 			
 			int anyCounter = 0;
 			
-			for (int i = 0; i < attribs.length; i++) {
-				if (attribs[i].isArray()) {
+			for (int i = 0; i < attribs.length; i++) 
+            {
+				if (attribs[i].isArray()) 
+                {
 					writer.write("\t" + attribs[i].getParamNameAsMember()
 							+ ".m_Array = 0;\n");
 					writer.write("\t" + attribs[i].getParamNameAsMember()
 							+ ".m_Size = 0;\n");
-				} else if (!attribs[i].isSimpleType()) {
+				} 
+                else if (!attribs[i].isSimpleType()) 
+                {
 					if (attribs[i].isAnyType())
                     {
                     	anyCounter += 1;
                     	writer.write("\t" + attribs[i].getParamNameAsMember() + Integer.toString(anyCounter)
                                 + "= 0;\n");
                     }
-                	else{				
+                	else
+                    {				
                 		writer.write("\t" + attribs[i].getParamNameAsMember()
 							+ " = 0;\n");
                 	}
 				}
 				// FJP Nillable vv
-				else if (isElementNillable(i)) {
+				else if (isElementNillable(i)) 
+                {
 					writer.write("\t" + attribs[i].getParamNameAsMember()
 							+ " = NULL;\n");
 				}
 				// FJP Nillable ^^
-				else {
+				else 
+                {
 					/* Needed for shared libraries */
 					writer.write("\tmemset( &"
 							+ attribs[i].getParamNameAsMember()
@@ -759,69 +844,85 @@ public class BeanParamWriter extends ParamCPPFileWriter {
 				}
 			}
 			writer.write("}\n");
-		} catch (IOException e) {
+		} 
+        catch (IOException e) 
+        {
 			throw new WrapperFault(e);
 		}
 	}
-
 
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see org.apache.axis.wsdl.wsdl2ws.cpp.HeaderFileWriter#writeDistructors()
 	 */
-	protected void writeDestructors() throws WrapperFault {
-		try {
-			if (type.isFault()) {
-				writer.write("\n" + classname + "::~" + classname
-						+ "() throw ()\n{\n");
-			} else {
-				writer.write("\n" + classname + "::~" + classname + "()\n{\n");
-			}
+	protected void writeDestructors() throws WrapperFault 
+    {
+		try 
+        {
+			if (type.isFault())
+            {
+                writer.write("\n" + classname + "::~" + classname
+                        + "() throw ()\n{\n");
+            }
+            else
+            {
+                writer.write("\n" + classname + "::~" + classname + "()\n{\n");
+            }
 			writer.write("\t/*delete any pointer and array members here*/\n");
 			
 			int anyCounter = 0;
 			
-			for (int i = 0; i < attribs.length; i++) {
-				if (attribs[i].isArray()) {
+			for (int i = 0; i < attribs.length; i++) 
+            {
+				if (attribs[i].isArray()) 
+                {
 					if (attribs[i].getChoiceElement())
+                    {
 						writer.write("\tdelete [] ((" + attribs[i].getTypeName()
 							+ "*)" + attribs[i].getParamNameAsMember()
 							+ "->m_Array);\n");
+                    }
 					else
+                    {
 						writer.write("\tdelete [] ((" + attribs[i].getTypeName()
 							+ "*)" + attribs[i].getParamNameAsMember()
 							+ ".m_Array);\n");
+                    }
 				}
 				
-				else if (attribs[i].isAnyType()){
+				else if (attribs[i].isAnyType())
+                {
             		anyCounter += 1;
             		writer.write("\tdelete "
 							+ attribs[i].getParamNameAsMember() + Integer.toString(anyCounter) + ";\n");
-				}else if (!attribs[i].isSimpleType()) {
+				}
+                else if (!attribs[i].isSimpleType()) 
+                {
 					writer.write("\tdelete "
 							+ attribs[i].getParamNameAsMember() + ";\n");
 				}
 			}
 			writer.write("}\n");
-		} catch (IOException e) {
+		} 
+        catch (IOException e) 
+        {
 			throw new WrapperFault(e);
 		}
 	}
 
 	//	 FJP Nillable vv
-	protected boolean isElementNillable(int index) {
-		ElementInfo ei = type.getElementForElementName(attribs[index]
-				.getParamName());
+	protected boolean isElementNillable(int index) 
+    {
+		ElementInfo ei = type.getElementForElementName(attribs[index].getParamName());
 		boolean bNillable = false;
 
 		if (ei != null
-				&& !("xsd__string".equalsIgnoreCase(attribs[index]
-						.getTypeName()))
+				&& !("xsd__string".equalsIgnoreCase(attribs[index].getTypeName()))
 				|| "xsd__anyURI".equalsIgnoreCase(attribs[index].getTypeName())
 				|| "xsd__QName".equalsIgnoreCase(attribs[index].getTypeName())
-				|| "xsd__NOTATION".equalsIgnoreCase(attribs[index]
-						.getTypeName())) {
+				|| "xsd__NOTATION".equalsIgnoreCase(attribs[index].getTypeName())) 
+        {
 			bNillable = ei.getNillable();
 		}
 
