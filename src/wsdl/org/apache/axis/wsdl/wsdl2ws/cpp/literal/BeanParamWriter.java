@@ -89,10 +89,10 @@ public class BeanParamWriter extends ParamCPPFileWriter
                             + typeName
                             + "* param, bool bArray = false, int nSize=0);\n");
                     writer.write("extern int Axis_Serialize_"
-                                    + typeName
-                                    + "("
-                                    + typeName
-                                    + "* param, IWrapperSoapSerializer* pSZ, bool bArray = false);\n");
+                            + typeName
+                            + "("
+                            + typeName
+                            + "* param, IWrapperSoapSerializer* pSZ, bool bArray = false);\n");
                     writer.write("extern int Axis_GetSize_" + typeName
                             + "();\n\n");
                 } 
@@ -137,7 +137,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
         /**
          * Dushshantha: writing getter
          */
-    	int anyCounter = 0;
+        int anyCounter = 0;
         if (type.isArray())
         {
             return;
@@ -194,7 +194,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                      * Dushshantha: Write getter
                      */
                 	String methodName = attribs[i].getParamNameWithoutSymbols();
-                	String parameterName = methodName;
+                    String parameterName = methodName;
                     String properParamName = getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]);
 
                     if( methodName.endsWith( "_"))
@@ -215,10 +215,10 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     }
 
                     writer.write("\n"
-                                    + properParamName
-                                    + " " + classname + "::get"
-                                    + methodName
-                                    + "()\n{\n");
+                            + properParamName
+                            + " " + classname + "::get"
+                            + methodName
+                            + "()\n{\n");
 
                     writer.write("\t" + "return "
                             + parameterName
@@ -229,13 +229,13 @@ public class BeanParamWriter extends ParamCPPFileWriter
                      */
 
                     writer.write("\n"
-                                    + "void "
-                                    + classname
-                                    + "::set"
-                                    + methodName
-                                    + "("
-                                    + properParamName
-                                    + " InValue)\n{\n");
+                            + "void "
+                            + classname
+                            + "::set"
+                            + methodName
+                            + "("
+                            + properParamName
+                            + " InValue)\n{\n");
 
                     writer.write("\t" + parameterName
                             + " = InValue ; \n");
@@ -404,7 +404,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
         for (int i = attributeParamCount; i < attribs.length; i++)
         {
             // Dushshantha:
-			// if the attribute is a choice following should do
+		    // if the attribute is a choice following should do
 
             if (attribs[i].getChoiceElement())
             {
@@ -412,7 +412,8 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 {
                     writer.write("\tif");
                     firstIfWritten = true;
-                } else
+                } 
+                else
                 {
                     writer.write("\telse if");
                 }
@@ -465,14 +466,14 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     else
                     {
                         writer.write("\tpSZ->serializeBasicArray((Axis_Array*)(&param->"
-                                        + attribs[i].getParamName()
-                                        + "), Axis_URI_"
-                                        + classname
-                                        + ","
-                                        + CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())
-                                        + ", \""
-                                        + attribs[i].getParamNameAsSOAPElement()
-                                        + "\");\n");
+                                + attribs[i].getParamName()
+                                + "), Axis_URI_"
+                                + classname
+                                + ","
+                                + CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())
+                                + ", \""
+                                + attribs[i].getParamNameAsSOAPElement()
+                                + "\");\n");
                     }
                 }
                 else
@@ -529,9 +530,9 @@ public class BeanParamWriter extends ParamCPPFileWriter
                         if (moreThanOne)
                         {
                             writer.write("\t\t\tsAA"
-                                            + i
-                                            + ".m_Array = (void **)param->infos.m_Array[iCount"
-                                            + i + "];\n");
+                                    + i
+                                    + ".m_Array = (void **)param->infos.m_Array[iCount"
+                                    + i + "];\n");
                         }
                         else
                         {
@@ -639,6 +640,15 @@ public class BeanParamWriter extends ParamCPPFileWriter
             {
                 //if complex type
                 String elm = attribs[i].getParamName();
+                if (elm.lastIndexOf("_Ref") > -1)
+                {
+                    elm = elm.substring(0, elm.lastIndexOf("_Ref"));
+                }
+
+                if (elm.charAt(0) == '_')
+                {
+                    elm = elm.substring(1, elm.length());
+                }
                 
                 if (attribs[i].isReference())
                 {
@@ -1171,7 +1181,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
             writer.write("\t/*do not allocate memory to any pointer members here\n\t because deserializer will allocate memory anyway. */\n");
             
             int anyCounter = 0;
-            
+
             for (int i = 0; i < attribs.length; i++)
             {
                 if (attribs[i].isArray())
@@ -1212,9 +1222,10 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     	writer.write("\t" + attribs[i].getParamNameAsMember() + Integer.toString(anyCounter)
                                 + "= 0;\n");
                     }
-                	else{
-                	writer.write("\t" + attribs[i].getParamNameAsMember()
-                            + "= 0;\n");
+                	else
+                    {
+                	    writer.write("\t" + attribs[i].getParamNameAsMember()
+                	            + "= 0;\n");
                 	}
                 }
                 else if (isElementNillable(i))
