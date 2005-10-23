@@ -284,15 +284,15 @@ void HTTPTransport::closeConnection()
  */
 AXIS_TRANSPORT_STATUS HTTPTransport::flushOutput() throw (AxisException, HTTPTransportException)
 {
+	char *utf8Buf = NULL; // buffer for ebcdic/utf8 conversions.
+	
     // In preperation for sending the message, calculate the size of the message
     // by using the string length method.
     // NB: This calculation may not necessarily be correct when dealing with SSL
     //     messages as the length of the encoded message is not necessarily the
     //         same as the length of the uncoded message.
-    char buff[8];
-
+    char buff[24];
 	sprintf( buff, "%d", m_strBytesToSend.length ());
-
     this->setTransportProperty ("Content-Length", buff);
 
     // The header is now complete.  The message header and message can now be
@@ -304,25 +304,29 @@ AXIS_TRANSPORT_STATUS HTTPTransport::flushOutput() throw (AxisException, HTTPTra
 		*m_pActiveChannel << this->m_strBytesToSend.c_str ();
 #else		
         const char *buf = this->getHTTPHeaders ();
-        char *utf8Buf = toUTF8((char *)buf, strlen(buf)+1);
-		*m_pActiveChannel << utf8Buf;
-        free(utf8Buf);
-        buf     = this->m_strBytesToSend.c_str();
         utf8Buf = toUTF8((char *)buf, strlen(buf)+1);
 		*m_pActiveChannel << utf8Buf;
         free(utf8Buf);
+        utf8Buf = NULL;
+        utf8Buf = toUTF8((char *)this->m_strBytesToSend.c_str(), this->m_strBytesToSend.length()+1);
+		*m_pActiveChannel << utf8Buf;
+        free(utf8Buf);
+        utf8Buf = NULL;
 #endif
 	}
 	catch( HTTPTransportException & e)
 	{
+		if (utf8Buf) free(utf8Buf);
 		throw;
 	}
 	catch( AxisException & e)
 	{
+		if (utf8Buf) free(utf8Buf);
 		throw;
 	}
 	catch(...)
 	{
+		if (utf8Buf) free(utf8Buf);
 		throw;
 	}
 
@@ -341,32 +345,33 @@ AXIS_TRANSPORT_STATUS HTTPTransport::flushOutput() throw (AxisException, HTTPTra
  */
 const char * HTTPTransport::getHTTPHeaders()
 {
-    URL &			url = m_pActiveChannel->getURLObject();
-    unsigned short	uiPort = url.getPort();
-    char			buff[8];
+    URL &           url = m_pActiveChannel->getURLObject(); 
+    unsigned short	uiPort;
+    char			buff[32];
 
     m_strHeaderBytesToSend = m_strHTTPMethod + " ";
-    if (m_bUseProxy)
-        m_strHeaderBytesToSend += std::string (url.getURL ()) + " ";
-    else
-		m_strHeaderBytesToSend += std::string (url.getResource ()) + " ";
-    m_strHeaderBytesToSend += m_strHTTPProtocol + "\r\n";
 
-	if (m_bUseProxy)
-        m_strHeaderBytesToSend += std::string ("Host: ") + m_strProxyHost;
-    else
-		m_strHeaderBytesToSend += std::string ("Host: ") + url.getHostName ();
-
-    	
     if (m_bUseProxy)
+    {
+        m_strHeaderBytesToSend += url.getURL ();
+        m_strHeaderBytesToSend += " ";
+        m_strHeaderBytesToSend += m_strHTTPProtocol;
+        m_strHeaderBytesToSend += "\r\nHost: ";
+        m_strHeaderBytesToSend += m_strProxyHost;
         uiPort = m_uiProxyPort;
-       
+    }
+    else
+    {
+		m_strHeaderBytesToSend += url.getResource ();
+        m_strHeaderBytesToSend += " ";
+        m_strHeaderBytesToSend += m_strHTTPProtocol;
+		m_strHeaderBytesToSend += "\r\nHost: ";
+		m_strHeaderBytesToSend += url.getHostName ();
+        uiPort = url.getPort();
+    }  
 
-	sprintf (buff, "%u", uiPort);
-
-    m_strHeaderBytesToSend += ":";
-    m_strHeaderBytesToSend += buff;
-    m_strHeaderBytesToSend += "\r\n";
+    sprintf(buff, ":%u\r\n", uiPort);
+    m_strHeaderBytesToSend += buff; 
 
 	bool foundCT = false;
     for (unsigned int j = 0; j < m_vHTTPHeaders.size (); j++)
