@@ -288,9 +288,6 @@ AXIS_TRANSPORT_STATUS HTTPTransport::flushOutput() throw (AxisException, HTTPTra
 	
     // In preperation for sending the message, calculate the size of the message
     // by using the string length method.
-    // NB: This calculation may not necessarily be correct when dealing with SSL
-    //     messages as the length of the encoded message is not necessarily the
-    //         same as the length of the uncoded message.
     char buff[24];
 	sprintf( buff, "%d", m_strBytesToSend.length ());
     this->setTransportProperty ("Content-Length", buff);
@@ -302,7 +299,9 @@ AXIS_TRANSPORT_STATUS HTTPTransport::flushOutput() throw (AxisException, HTTPTra
 #ifndef __OS400__
 		*m_pActiveChannel << this->getHTTPHeaders ();
 		*m_pActiveChannel << this->m_strBytesToSend.c_str ();
-#else		
+#else
+        // Ebcdic (OS/400) systems need to convert the data to UTF-8. Note that free() is 
+        // correctly used and should not be changed to delete().		
         const char *buf = this->getHTTPHeaders ();
         utf8Buf = toUTF8((char *)buf, strlen(buf)+1);
 		*m_pActiveChannel << utf8Buf;
@@ -317,16 +316,22 @@ AXIS_TRANSPORT_STATUS HTTPTransport::flushOutput() throw (AxisException, HTTPTra
 	catch( HTTPTransportException & e)
 	{
 		if (utf8Buf) free(utf8Buf);
+        m_strBytesToSend = "";
+        m_strHeaderBytesToSend = "";
 		throw;
 	}
 	catch( AxisException & e)
 	{
 		if (utf8Buf) free(utf8Buf);
+        m_strBytesToSend = "";
+        m_strHeaderBytesToSend = "";
 		throw;
 	}
 	catch(...)
 	{
 		if (utf8Buf) free(utf8Buf);
+        m_strBytesToSend = "";
+        m_strHeaderBytesToSend = "";
 		throw;
 	}
 
