@@ -9,8 +9,9 @@
 	<!-- <property name="dir.release" value="${dir.out}/package/wscc-1.0-Linux"/> -->
 	<property name="dir.autotests" value="../testcases"/>
 	<property name="test.list" value="${dir.autotests}/test.list"/>
-	<property name="dir.reports" value="${dir.out}/test/wsi/reports"/>
+	<property name="dir.reports" value="${dir.out}/test/wsi/reports/"/>	
 	<property name="dir.test.obj" value="${dir.out}/test/wsi/"/>
+	<property name="wsi-results.log" value="${dir.out}/test/wsi/reports/results/wsi-results.xml" />
 
 	<property environment="env"/>
 
@@ -36,15 +37,20 @@
 	<target name="cleanWSIReports">
 		<delete dir="${dir.reports}"/>
 		<mkdir dir="${dir.reports}"/>
+		<dirname file="${wsi-results.log}" property="${dir.reports}/results"/>
+		<mkdir dir="${dir.reports}/results" />		
 	</target>
 
 	<target name="wsi" depends="cleanWSIReports">
 		<path id="test_properties">
 			<fileset dir="${dir.autotests}/tests" includesfile="${test.list}"/>
 		</path>
+		<echo file="${wsi-results.log}" append="true" >&lt;WS-IResults &gt;</echo>
 		<foreach target="runWSI" param="test.property.path" inheritall="true">
 			<path refid="test_properties"/>
 		</foreach>
+		<echo file="${wsi-results.log}" append="true" >
+		       &lt;/WS-IResults&gt;</echo>
 	</target>
 
 	<target name="runWSI">
@@ -105,9 +111,16 @@
 		<exec executable="${wsi.home}/java/bin/Analyzer.${suffix}" dir="${wsi.home}/java" vmlauncher="false">
 			<env key="WSI_HOME" value="${wsi.home}"/>
 			<arg line="-config ${dir.reports}/ana_${test.name}.xml"/>
-			<arg line="-reportFile ${dir.reports}/${test.name}.xml"/>
+			<arg line="-reportFile ${dir.reports}/results/${test.name}.xml"/>
 			<arg line="-logFile ${dir.reports}/log_${test.name}.xml"/>
 		</exec>
+		<xmlproperty file="${dir.reports}/results/${test.name}.xml" collapseAttributes="true" />
+		<echo message="${report.summary.result}" />
+		<echo message="${wsi-results.log}" />
+		<echo file="${wsi-results.log}" append="true" >
+			&lt;test name='${test.name}' status='${report.summary.result}' /&gt;</echo>
+			
+		
 	</target>
 
 	<target name="modifyMonitorConfig">
