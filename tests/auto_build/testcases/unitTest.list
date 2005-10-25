@@ -13,6 +13,7 @@ Enumeration.xml
 ExceptionTestDoc.xml
 HandlerTest6.xml
 InteropTestRound1.xml
+InOut.xml
 LargeReturningString.xml
 ManyTypeRefRoot.xml
 MathOpsDoc.xml
