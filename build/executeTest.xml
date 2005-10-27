@@ -48,7 +48,7 @@
 			actually using
 		-->
 		<replaceregexp file="${r_expected.file}"
-			match="Host: localhost:[0-9]*"
+			match="Host: [0-9a-z\.]*:[0-9]*"
 			replace="Host: 127.0.0.1:${monitorPort}" byline="true" />
 		<propertyregex property="restOfURL" input="${test.endpoint}"
 			regexp="://(.*)" select="\1" />
