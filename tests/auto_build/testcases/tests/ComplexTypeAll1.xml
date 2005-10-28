@@ -2,7 +2,7 @@
     <name>ComplexTypeAll1</name>
     <description>ComplexTypeAll1</description>
     <clientLang>cpp</clientLang>
-    <clientCode>ComplexTypeAll1sClient.cpp</clientCode>
+    <clientCode>ComplexTypeAll1Client.cpp</clientCode>
     <wsdl>ComplexTypeAll1.wsdl</wsdl>
     <expected>
         <output>
