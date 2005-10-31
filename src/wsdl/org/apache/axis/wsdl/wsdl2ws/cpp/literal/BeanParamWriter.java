@@ -385,6 +385,15 @@ public class BeanParamWriter extends ParamCPPFileWriter
         	writer.write("Axis_URI_" + classname + ", \" " + " \\\"\"");
         	writer.write(", NULL);\n\t}\n");
         }               
+        else{
+        	
+        	writer.write("\tbool blnIsNewPrefix = false;\n");
+        	writer.write("\tconst AxisChar* sPrefix = pSZ->getNamespacePrefix(Axis_URI_"
+					+ classname + ", blnIsNewPrefix);\n");
+        	writer.write("\tif(blnIsNewPrefix)\n");
+        	writer.write("\t\tpSZ->serialize( \" xmlns:\", sPrefix , \"=\\\"\" , \" "+ type.getName().getNamespaceURI() + "\\\"\",0);\n");
+        }
+        
         writer.write("\tpSZ->serialize( \">\", 0);\n");
         if (extensionBaseAttrib != null
                 && extensionBaseAttrib.getTypeName() != null)
