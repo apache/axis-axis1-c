@@ -245,7 +245,7 @@ int main(int argc, char* argv[])
 
 			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
 			{
-				if( iRetryIterationCount > 0)
+				if( iRetryIterationCount > 1)
 				{
 					bSilent = true;
 				}
