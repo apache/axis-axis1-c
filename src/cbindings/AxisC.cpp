@@ -21,6 +21,7 @@ AXIS_CPP_NAMESPACE_USE
 extern "C" {
 #include <axis/GDefine.h>
 #include <axis/AxisUserAPI.h>
+#include <axis/TypeMapping.h>
 #include <axis/Axis.h>
 
 STORAGE_CLASS_INFO void axiscInitializeAxis(AxiscBool bIsServer) {
@@ -32,4 +33,7 @@ STORAGE_CLASS_INFO void axiscTerminate() {
 }
 }
 
-
+AXISC_STORAGE_CLASS_INFO void axiscAxisDelete(void * pValue,  AXISC_XSDTYPE type)
+{
+    Axis::AxisDelete(pValue, (XSDTYPE) type);
+}

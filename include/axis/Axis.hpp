@@ -25,7 +25,7 @@
 #if !defined(__AXIS_H_OF_AXIS_INCLUDED__)
 #define __AXIS_H_OF_AXIS_INCLUDED__
 
-#include <axis/GDefine.hpp>
+#include <axis/TypeMapping.hpp>
 
 AXIS_CPP_NAMESPACE_START
 
@@ -53,6 +53,15 @@ class STORAGE_CLASS_INFO Axis
 	 * Terminates the Axis runtime.
 	 */
     static void terminate();
+    
+    /**
+     * Deletes storage allocated by the Axis engine, that is no longer required
+     * by the customer application.
+     * 
+     * @param pValue
+     * @param type The XSDTYPE of the storage item to be deleted.
+     */
+    static void AxisDelete(void* pValue, XSDTYPE type);
 };
 
 AXIS_CPP_NAMESPACE_END

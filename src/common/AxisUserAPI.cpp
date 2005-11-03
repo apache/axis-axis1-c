@@ -40,7 +40,7 @@ xsd__base64Binary::xsd__base64Binary() {
   __size = 0;
 }
 
-xsd__base64Binary::~xsd__base64Binary() { 
+xsd__base64Binary::~xsd__base64Binary() {
 }
 
 xsd__hexBinary::xsd__hexBinary() { 
@@ -48,7 +48,7 @@ xsd__hexBinary::xsd__hexBinary() {
   __size = 0;
 }
 
-xsd__hexBinary::~xsd__hexBinary() { 
+xsd__hexBinary::~xsd__hexBinary() {
 }
 
 AnyType::AnyType() { 

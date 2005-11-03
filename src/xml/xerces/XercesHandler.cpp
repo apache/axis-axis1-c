@@ -101,37 +101,55 @@ const XML_Ch* XercesHandler::prefix4NS(const XML_Ch* pcNS)
 void XercesHandler::characters(const XMLCh* const chars, 
                                const unsigned int length)
 {
-    const char* cp_PreviousNameOrValue = NULL;
+    const char *	cp_PreviousNameOrValue = NULL;
+
     if( m_pCurrElement && m_pCurrElement->m_pchNameOrValue)
     {
         if (m_pCurrElement->m_type == CHARACTER_ELEMENT)
+		{
             cp_PreviousNameOrValue = m_pCurrElement->m_pchNameOrValue;
+		}
     }
+
     m_pCurrElement = m_pNextElement;
     m_pNextElement->m_type = CHARACTER_ELEMENT;
-    
+
+// The following code is necessary as it is important to get the correct heap
+// (i.e the one that XMLString is using!) when creating a memory object to put
+// back into 'm_pNextElement->m_pchNameOrValue'.  By using the XMLString
+// function, we can ensure that only the memory belonging to (and thus able to
+// destroy) the same segment as XMLString is used.  If you don't understand
+// what is going on, don't change it!
     if (cp_PreviousNameOrValue)
     {
-        char* cp_CurrentNameOrValue = XMLString::transcode(chars);
-        //char* cp_FullNameOrValue  = (char*) malloc(strlen(cp_PreviousNameOrValue) + strlen(cp_CurrentNameOrValue) + 1);
-		//Chinthana:Removed malloc
-		char* cp_FullNameOrValue  = new char[strlen(cp_PreviousNameOrValue) + strlen(cp_CurrentNameOrValue) + 1];
-        //cp_FullNameOrValue[0] = '\0'; 
-		strcpy(cp_FullNameOrValue, cp_PreviousNameOrValue); 
-        strcat(cp_FullNameOrValue, cp_CurrentNameOrValue);
-        m_pNextElement->m_pchNameOrValue = (const char*)cp_FullNameOrValue;
-        //free(const_cast <char*> (cp_PreviousNameOrValue));
-        //free(cp_CurrentNameOrValue);
-		//Chinthana:Removed free
-		delete[] (const_cast <char*> (cp_PreviousNameOrValue));
-		delete[] cp_CurrentNameOrValue;
-		//16/09/2005.............................................................
+		// Get a pointer to the transcoded character.
+		char *	pTransChar = XMLString::transcode( chars);
 
+		// Create a dummy string and populate.
+		char *	psDummy = new char[ strlen( m_pNextElement->m_pchNameOrValue) +
+									strlen( pTransChar) + 1];
+		strcpy( psDummy, m_pNextElement->m_pchNameOrValue);
+		strcat( psDummy, pTransChar);
+
+		// Create pointer to new Name or Value string.
+		char *	pNewNameOrValue = XMLString::replicate( psDummy);
+
+		// Delete the old Name and Value string.
+		XMLString::release( const_cast<char**> (&(m_pCurrElement->m_pchNameOrValue)));
+
+		// Assign the new value of Name or Value string.
+		m_pNextElement->m_pchNameOrValue = pNewNameOrValue;
+
+		// Clean up.
+		delete [] psDummy;
+		XMLString::release( &pTransChar);
     }
     else
-        m_pNextElement->m_pchNameOrValue = XMLString::transcode(chars);
-    
+	{
+        m_pNextElement->m_pchNameOrValue = XMLString::transcode( chars);
+	}
 }
+
 void XercesHandler::ignorableWhitespace(const XMLCh* const chars, 
                                         const unsigned int length)
 {}

@@ -46,6 +46,8 @@
 #include <map>
 #include <iostream>
 
+#include <axis/AxisUserAPI.hpp>
+
 #include "../soap/SoapFault.h"
 #include "../soap/URIMapping.h"
 #include "../soap/SoapKeywordMapping.h"
@@ -507,3 +509,426 @@ void Axis::terminate()
     uninitialize_module();
 }
 
+void Axis::AxisDelete(void *pValue, XSDTYPE type)
+{
+    switch (type)
+    {
+        case XSD_DURATION:
+        {
+            if (pValue != NULL)
+            {
+                delete (xsd__duration*) pValue;
+                pValue = NULL;
+            }
+			break;
+        }
+        case XSD_DATETIME:
+        {
+            if (pValue != NULL)
+            {
+                delete (xsd__dateTime*) pValue;
+                pValue = NULL;
+            }
+         break;
+        }
+        case XSD_TIME:
+        {
+            if (pValue != NULL)
+            {
+                delete (xsd__time*) pValue;
+                pValue = NULL;
+            }
+         break;
+        }
+        case XSD_DATE:
+        {
+            if (pValue != NULL)
+            {
+                delete (xsd__date*) pValue;
+                pValue = NULL;
+            }
+         break;
+        }
+        case XSD_GYEARMONTH:
+        {
+            if (pValue != NULL)
+            {
+                delete (xsd__gYearMonth*) pValue;
+                pValue = NULL;
+            }
+         break;
+        }
+        case XSD_GYEAR:
+        {
+            if (pValue != NULL)
+            {
+                delete (xsd__gYear*) pValue;
+                pValue = NULL;
+            }
+         break;
+        }
+        case XSD_GMONTHDAY:
+        {
+            if (pValue != NULL)
+            {
+                delete (xsd__gMonthDay*) pValue;
+                pValue = NULL;
+            }
+         break;
+        }
+        case XSD_GDAY:
+        {
+            if (pValue != NULL)
+            {
+                delete (xsd__gDay*) pValue;
+                pValue = NULL;
+            }
+         break;
+        }
+        case XSD_GMONTH:
+        {
+            if (pValue != NULL)
+            {
+                delete (xsd__gMonth*) pValue;
+                pValue = NULL;
+            }
+         break;
+        }
+        case XSD_STRING:
+        {
+            if (pValue != NULL)
+            {
+                delete [] (xsd__string) pValue;
+                pValue = NULL;
+            }
+         break;
+        }
+        case XSD_NORMALIZEDSTRING:
+        {
+            if (pValue != NULL)
+            {
+                delete [] (xsd__normalizedString) pValue;
+                pValue = NULL;
+            }
+         break;
+        }
+        case XSD_TOKEN:
+        {
+            if (pValue != NULL)
+            {
+                delete [] (xsd__token) pValue;
+                pValue = NULL;
+            }
+         break;
+        }
+        case XSD_LANGUAGE:
+        {
+            if (pValue != NULL)
+            {
+                delete [] (xsd__language) pValue;
+                pValue = NULL;
+            }
+         break;
+        }
+        case XSD_NAME:
+        {
+            if (pValue != NULL)
+            {
+                delete [] (xsd__Name) pValue;
+                pValue = NULL;
+            }
+         break;
+        }
+        case XSD_NCNAME:
+        {
+            if (pValue != NULL)
+            {
+                delete [] (xsd__NCName) pValue;
+                pValue = NULL;
+            }
+         break;
+        }
+        case XSD_ID:
+        {
+            if (pValue != NULL)
+            {
+                delete [] (xsd__ID) pValue;
+                pValue = NULL;
+            }
+         break;
+        }
+        case XSD_IDREF:
+        {
+            if (pValue != NULL)
+            {
+                delete [] (xsd__IDREF) pValue;
+                pValue = NULL;
+            }
+         break;
+        }
+        case XSD_IDREFS:
+        {
+            if (pValue != NULL)
+            {
+                delete [] (xsd__IDREFS) pValue;
+                pValue = NULL;
+            }
+         break;
+        }
+        case XSD_ENTITY:
+        {
+            if (pValue != NULL)
+            {
+                delete [] (xsd__ENTITY) pValue;
+                pValue = NULL;
+            }
+         break;
+        }
+        case XSD_ENTITIES:
+        {
+            if (pValue != NULL)
+            {
+                delete [] (xsd__ENTITIES) pValue;
+                pValue = NULL;
+            }
+         break;
+        }
+        case XSD_NMTOKEN:
+        {
+            if (pValue != NULL)
+            {
+                delete [] (xsd__NMTOKEN) pValue;
+                pValue = NULL;
+            }
+         break;
+        }
+        case XSD_NMTOKENS:
+        {
+            if (pValue != NULL)
+            {
+                delete [] (xsd__NMTOKENS) pValue;
+                pValue = NULL;
+            }
+         break;
+        }
+        case XSD_BOOLEAN:
+        {
+            if (pValue != NULL)
+            {
+                delete (xsd__boolean*) pValue;
+                pValue = NULL;
+            }
+         break;
+        }
+        case XSD_BASE64BINARY:
+        {
+            if (pValue != NULL)
+            {
+				if(	((xsd__base64Binary*) pValue)->__ptr != NULL)
+				{
+					delete [] ((xsd__base64Binary*) pValue)->__ptr;
+					((xsd__base64Binary*) pValue)->__ptr = NULL;
+				}
+
+                delete (xsd__base64Binary*) pValue;
+                pValue = NULL;
+            }
+         break;
+        }
+        case XSD_HEXBINARY:
+        {
+            if (pValue != NULL)
+            {
+				if(	((xsd__hexBinary*) pValue)->__ptr != NULL)
+				{
+					delete [] ((xsd__hexBinary*) pValue)->__ptr;
+					((xsd__hexBinary*) pValue)->__ptr = NULL;
+				}
+
+                delete (xsd__hexBinary*) pValue;
+                pValue = NULL;
+            }
+         break;
+        }
+        case XSD_FLOAT:
+        {
+            if (pValue != NULL)
+            {
+                delete (xsd__float*) pValue;
+                pValue = NULL;
+            }
+         break;
+        }
+        case XSD_DECIMAL:
+        {
+            if (pValue != NULL)
+            {
+                delete (xsd__decimal*) pValue;
+                pValue = NULL;
+            }
+         break;
+        }
+        case XSD_NONPOSITIVEINTEGER:
+        {
+            if (pValue != NULL)
+            {
+                delete (xsd__nonPositiveInteger*) pValue;
+                pValue = NULL;
+            }
+         break;
+        }
+        case XSD_NEGATIVEINTEGER:
+        {
+            if (pValue != NULL)
+            {
+                delete (xsd__negativeInteger*) pValue;
+                pValue = NULL;
+            }
+         break;
+        }
+        case XSD_INTEGER:
+        {
+            if (pValue != NULL)
+            {
+                delete (xsd__integer*) pValue;
+                pValue = NULL;
+            }
+         break;
+        }
+        case XSD_LONG:
+        {
+            if (pValue != NULL)
+            {
+                delete (xsd__long*) pValue;
+                pValue = NULL;
+            }
+         break;
+        }
+        case XSD_INT:
+        {
+            if (pValue != NULL)
+            {
+                delete (xsd__int*) pValue;
+                pValue = NULL;
+            }
+         break;
+        }
+        case XSD_SHORT:
+        {
+            if (pValue != NULL)
+            {
+                delete (xsd__short*) pValue;
+                pValue = NULL;
+            }
+         break;
+        }
+        case XSD_BYTE:
+        {
+            if (pValue != NULL)
+            {
+                delete (xsd__byte*) pValue;
+                pValue = NULL;
+            }
+         break;
+        }
+        case XSD_NONNEGATIVEINTEGER:
+        {
+            if (pValue != NULL)
+            {
+                delete (xsd__nonNegativeInteger*) pValue;
+                pValue = NULL;
+            }
+         break;
+        }
+        case XSD_UNSIGNEDLONG:
+        {
+            if (pValue != NULL)
+            {
+                delete (xsd__unsignedLong*) pValue;
+                pValue = NULL;
+            }
+         break;
+        }
+        case XSD_UNSIGNEDINT:
+        {
+            if (pValue != NULL)
+            {
+                delete (xsd__unsignedInt*) pValue;
+                pValue = NULL;
+            }
+         break;
+        }
+        case XSD_UNSIGNEDSHORT:
+        {
+            if (pValue != NULL)
+            {
+                delete (xsd__unsignedShort*) pValue;
+                pValue = NULL;
+            }
+         break;
+        }
+        case XSD_UNSIGNEDBYTE:
+        {
+            if (pValue != NULL)
+            {
+                delete (xsd__unsignedByte*) pValue;
+                pValue = NULL;
+            }
+         break;
+        }
+        case XSD_POSITIVEINTEGER:
+        {
+            if (pValue != NULL)
+            {
+                delete (xsd__positiveInteger*) pValue;
+                pValue = NULL;
+            }
+         break;
+        }
+        case XSD_DOUBLE:
+        {
+            if (pValue != NULL)
+            {
+                delete (xsd__double*) pValue;
+                pValue = NULL;
+            }
+         break;
+        }
+        case XSD_ANYURI:
+        {
+            if (pValue != NULL)
+            {
+                delete [] (xsd__anyURI) pValue;
+                pValue = NULL;
+            }
+         break;
+        }
+        case XSD_QNAME:
+        {
+            if (pValue != NULL)
+            {
+                delete [] (xsd__QName) pValue;
+                pValue = NULL;
+            }
+         break;
+        }
+        case XSD_NOTATION:
+        {
+            if (pValue != NULL)
+            {
+                delete [] (xsd__NOTATION) pValue;
+                pValue = NULL;
+            }
+         break;
+        }
+        case USER_TYPE:
+            // The USER_TYPE object should be cleared by the Application
+            break;
+        case XSD_ARRAY:
+        case XSD_ANY:
+        case ATTACHMENT:
+        case XSD_UNKNOWN:
+        default:
+			;
+    }
+}

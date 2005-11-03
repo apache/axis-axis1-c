@@ -290,7 +290,7 @@ public:
 class STORAGE_CLASS_INFO xsd__hexBinary {
 public:
     xsd__hexBinary();
-    ~xsd__hexBinary();
+	~xsd__hexBinary();
     xsd__unsignedByte * __ptr;
     xsd__int __size;
 };
