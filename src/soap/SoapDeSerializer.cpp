@@ -2802,99 +2802,105 @@ SoapDeSerializer::serializeTag (AxisString & xmlStr, const AnyElement * node,
 
     if (START_ELEMENT == node->m_type)
     {
-	xmlStr += "<";
-	/* why dont parser set null if there is no
-	 * namespace. Expat set null but not xerces.
-	 * TODO : will have to remove following strcmp s onece Xerces is 
-	 * corrected
-	 */
-	if (node->m_pchNamespace && (strcmp (node->m_pchNamespace, "") != 0))
-	{
-	    pchPrefix = m_pParser->getPrefix4NS (node->m_pchNamespace);
-	    /* why dont parser return null if there is no
-	     * prefix. Expat does but not xerces.
-	     * TODO : will have to remove following strcmp s onece Xerces is 
-	     * corrected
-	     */
-	    if (pchPrefix && (strcmp (pchPrefix, "") != 0))
-	    {
-		xmlStr += pchPrefix;
-		xmlStr += ":";
-	    }
-	}
+    	xmlStr += "<";
+    	/* why dont parser set null if there is no
+    	 * namespace. Expat set null but not xerces.
+    	 * TODO : will have to remove following strcmp s onece Xerces is 
+    	 * corrected
+    	 */
+    	if (node->m_pchNamespace && (strcmp (node->m_pchNamespace, "") != 0))
+    	{
+    	    pchPrefix = m_pParser->getPrefix4NS (node->m_pchNamespace);
+    	    /* why dont parser return null if there is no
+    	     * prefix. Expat does but not xerces.
+    	     * TODO : will have to remove following strcmp s onece Xerces is 
+    	     * corrected
+    	     */
+    	    if (pchPrefix && (strcmp (pchPrefix, "") != 0))
+    	    {
+        		xmlStr += pchPrefix;
+    	   	   xmlStr += ":";
+    	    }
+    	}
+    
+    	xmlStr += node->m_pchNameOrValue;
 
-	xmlStr += node->m_pchNameOrValue;
+    	if (!nsDecls.empty ())
+	       xmlStr += nsDecls.c_str ();
 
-	if (!nsDecls.empty ())
-	    xmlStr += nsDecls.c_str ();
+    	if (node->m_pchAttributes)
+    	{
+    	    int j;
+    
+    	    /* structure of the m_pchAttributes[] array is,
+    	     * sequence of (local_name, namespace_uri, value)
+    	     */
+    
+    	    for (j = 0; j < 300; j += 3)	/* MAX_NO_OF_ATTRIBUTES = 100 */
+    	    {
+        		if (node->m_pchAttributes[j])
+        		{
+        		    if (node->m_pchAttributes[j + 1])
+        		    {
+            			pchPrefix = m_pParser->getPrefix4NS (node->
+    						     m_pchAttributes[j + 1]);
+        		    }
+    	   	       else
+    		       {
+        	           pchPrefix = NULL;
+                    }
+        		    /* why dont parser return null if there is no
+        		     * prefix. Expat does but not xerces.
+        		     * TODO : will have to remove following strcmp s onece Xerces is 
+        		     * corrected
+        		     */
+        		    if (pchPrefix && (strcmp (pchPrefix, "") != 0))
+    	       	    {
+    	           		xmlStr += " ";
+        			    xmlStr += pchPrefix;
+            			xmlStr += ":";
+        		    }
+                   else
+                   {
+                      // if there is no prefix then we need to add a space
+                      xmlStr +=" ";
+                   }
+        		    xmlStr += node->m_pchAttributes[j];
+        		    xmlStr += "=\"";
+        		    xmlStr += node->m_pchAttributes[j + 2];
+        		    xmlStr += "\"";
+           		}
+        	   	else
+                {
+        		    break;
+                }
+        	 }
+	       }
 
-	if (node->m_pchAttributes)
-	{
-	    int j;
-
-	    /* structure of the m_pchAttributes[] array is,
-	     * sequence of (local_name, namespace_uri, value)
-	     */
-
-	    for (j = 0; j < 300; j += 3)	/* MAX_NO_OF_ATTRIBUTES = 100 */
-	    {
-		if (node->m_pchAttributes[j])
-		{
-		    if (node->m_pchAttributes[j + 1])
-		    {
-			pchPrefix =
-			    m_pParser->getPrefix4NS (node->
-						     m_pchAttributes[j + 1]);
-		    }
-		    else
-		    {
-			pchPrefix = NULL;
-		    }
-		    /* why dont parser return null if there is no
-		     * prefix. Expat does but not xerces.
-		     * TODO : will have to remove following strcmp s onece Xerces is 
-		     * corrected
-		     */
-		    if (pchPrefix && (strcmp (pchPrefix, "") != 0))
-		    {
-			xmlStr += " ";
-			xmlStr += pchPrefix;
-			xmlStr += ":";
-		    }
-		    xmlStr += node->m_pchAttributes[j];
-		    xmlStr += "=\"";
-		    xmlStr += node->m_pchAttributes[j + 2];
-		    xmlStr += "\"";
-		}
-		else
-		    break;
-	    }
-	}
-
-	xmlStr += ">";
+    	xmlStr += ">";
     }
     else if (END_ELEMENT == node->m_type)
     {
-	xmlStr += "</";
-	/* if (node->m_pchNamespace) why dont parser set null if there is no
-	 * namespace. Expat set null but not xerces.
-	 * TODO : will have to remove following strcmp s onece Xerces is 
-	 * corrected
-	 */
-	if (node->m_pchNamespace && (strcmp (node->m_pchNamespace, "") != 0))
-	{
-	    pchPrefix = m_pParser->getPrefix4NS (node->m_pchNamespace);
-	    /* why dont parser return null if there is no
-	     * prefix. Expat does but not xerces.
-	     * TODO : will have to remove following strcmp s onece Xerces is 
-	     * corrected
-	     */
-	    if (pchPrefix && (strcmp (pchPrefix, "") != 0))
-	    {
-		xmlStr += pchPrefix;
-		xmlStr += ":";
-	    }
-	}
+    	xmlStr += "</";
+    	/* if (node->m_pchNamespace) why dont parser set null if there is no
+    	 * namespace. Expat set null but not xerces.
+    	 * TODO : will have to remove following strcmp s onece Xerces is 
+    	 * corrected
+    	 */
+    	if (node->m_pchNamespace && (strcmp (node->m_pchNamespace, "") != 0))
+    	{
+    	    pchPrefix = m_pParser->getPrefix4NS (node->m_pchNamespace);
+    	    /* why dont parser return null if there is no
+    	     * prefix. Expat does but not xerces.
+    	     * TODO : will have to remove following strcmp s onece Xerces is 
+    	     * corrected
+    	     */
+    	    if (pchPrefix && (strcmp (pchPrefix, "") != 0))
+    	    {
+    		xmlStr += pchPrefix;
+    		xmlStr += ":";
+    	    }
+    	}
 
 	xmlStr += node->m_pchNameOrValue;
 	xmlStr += ">";
