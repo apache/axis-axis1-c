@@ -1023,13 +1023,13 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     {
                         writer.write("\t" + attribs[i].getTypeName() + " * "
                                 + attribs[i].getParamNameAsMember()
-                                + " = NULL;\n");
+                                + " = NULL;\n\n");
                         writer.write("\tif (("
                                 + attribs[i].getParamNameAsMember()
                                 + " = pIWSDZ->"
                                 + CUtils.getParameterGetValueMethodName(
                                         attribs[i].getTypeName(), attribs[i].isAttribute()) + "( \""
-                                + CUtils.sanitiseAttributeName( classname, soapTagName) + "\",0)) != NULL) {\n");
+                                + CUtils.sanitiseAttributeName( classname, soapTagName) + "\",0)) != NULL)\n\t{\n");
                         writer.write("\t\tparam->"
                                 + attribs[i].getParamNameAsMember() + " = *( "
                                 + attribs[i].getParamNameAsMember() + " );\n");
@@ -1041,7 +1041,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                         }
                         else
                         {
-                        	writer.write("\t\tdelete " + attribs[i].getParamNameAsMember() + ";\n");
+            				writer.write("\t\tAxis::AxisDelete( (void *) " + attribs[i].getParamNameAsMember() + ", " + CUtils.getXSDTypeForBasicType( attribs[i].getTypeName()) + ");\n");
                         	writer.write("\t}\n");
                         }                        	
                     }
