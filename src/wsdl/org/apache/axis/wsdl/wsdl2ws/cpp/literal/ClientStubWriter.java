@@ -995,7 +995,7 @@ public class ClientStubWriter
 						writer.write ("\t\t\t\t\tRet->__size = pReturn->__size;\n");
 						writer.write ("\t\t\t\t}\n");
 					}
-				    else if( "xsd__string".equals( outparamType))
+				    else if( CUtils.isPointerType(outparamType))
 					{
 		                writer.write( "\t\t\t\tRet = new char[strlen( pReturn) + 1];\n");
 		                writer.write( "\t\t\t\tstrcpy( Ret, pReturn);\n");
