@@ -90,9 +90,19 @@
 	  Create a list of tests from a properties file unless an individual test has been specified too
 	  -->
 	<target name="setFromList" if="test.list" unless="test.name">
-		<path id="test_properties">
-			<fileset dir="${dir.testproperties}" includesfile="${test.list}"/>
-		</path>
+		<if>
+			<isset property="test.exclude.list"/>
+			<then>
+				<path id="test_properties">
+					<fileset dir="${dir.testproperties}" includesfile="${test.list}" excludesfile="${test.exclude.list}"/>
+				</path>
+			</then>
+			<else>
+				<path id="test_properties">
+					<fileset dir="${dir.testproperties}" includesfile="${test.list}"/>
+				</path>
+			</else>
+		</if>
 	</target>
 
 	<!--
