@@ -66,7 +66,7 @@ public class ArrayParamWriter
             writer.write(
                 "\tstruct "
                     + attribs[0].getTypeName()
-                    + "Tag * m_Array;\n\tint m_Size;\n} "
+                    + "Tag * m_Array;\n\tint m_Size;\n\tAXISC_XSDTYPE m_Type;\n} "
                     + classname
                     + ";\n\n");
         }

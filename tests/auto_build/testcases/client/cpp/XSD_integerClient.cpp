@@ -110,26 +110,45 @@ int main(int argc, char* argv[])
         delete optionalAttributeResult;
 */
 
-        // Test array
-        xsd__integer_Array arrayInput;
-        arrayInput.m_Array = new xsd__integer*[2];
-        xsd__integer * array = new xsd__integer[2];
-        arrayInput.m_Size = 2;
-        for (int inputIndex=0 ; inputIndex < 2 ; inputIndex++)
+        // Test arrays
+        int arraySize = 2;
+        xsd__integer_Array inputArray;
+        xsd__integer** array = new xsd__integer*[arraySize]();
+        for (int count = 0 ; count < arraySize ; count++)
         {
-            array[inputIndex] = 123456789;
-            arrayInput.m_Array[inputIndex] = &array[inputIndex];
+            array[count] = new xsd__integer(123456789);
         }
-        xsd__integer_Array arrayResult = ws->asArray(arrayInput);
-        cout << "array of " << arrayResult.m_Size << " elements" << endl;
-        for (int index = 0; index < arrayResult.m_Size ; index++)
+        inputArray.set(array, arraySize);
+        
+        xsd__integer_Array outputArray = ws->asArray(inputArray);
+        int outputSize = 0;
+        const xsd__integer** output = outputArray.get(outputSize);
+        cout << "array of " << outputSize << " elements" << endl;
+        if (output != NULL)
         {
-            cout << "  element[" << index << "]=" << *((xsd__integer*)(arrayResult.m_Array[index])) << endl;
-            delete arrayResult.m_Array[index];
+            for (int count = 0 ; count < outputSize ; count++)
+            {
+                cout << "  element[" << count << "]=";
+                if (output[count] != NULL)
+                {
+                    cout << *output[count] << endl;
+                }
+                else
+                {
+                    cout << "NULL" << endl;
+                }
+            }
+        }
+        else
+        {
+            cout << "NULL array" << endl;
+        }
+        // Clear up input array        
+        for (int deleteIndex = 0 ; deleteIndex < arraySize ; deleteIndex++ )
+        {
+            delete array[deleteIndex];
         }
         delete [] array;
-        delete [] arrayInput.m_Array;
-        delete [] arrayResult.m_Array;
 
         // Test complex type
         SimpleComplexType complexTypeInput;

@@ -380,8 +380,8 @@ public class ClientStubWriter
 	    writer.write ("\t");
 	    if (returntypeisarray)
 	    {
-		//for arrays
-		writer.write (outparamType + " RetArray = {NULL, 0};\n");
+	        //for arrays
+		writer.write (outparamType + " RetArray;\n");
 	    }
 	    else
 	    {
@@ -954,7 +954,7 @@ public class ClientStubWriter
 				      + containedType
 				      + ");\n");
 		    }
-		    writer.write ("\t\t\tmemcpy(&RetArray,&RetAxisArray,sizeof(Axis_Array));\n");
+		    writer.write ("\t\t\tRetArray.clone(RetAxisArray);\n");
 		    writer.write ("\t\t}\n");
 		    writer.write ("\t}\n");
 		    writer.write ("\tm_pCall->unInitialize();\n");

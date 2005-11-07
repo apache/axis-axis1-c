@@ -30,10 +30,13 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include <axis/AxisUserAPI.hpp>
+#include <axis/GDefine.hpp>
 #include <axis/INamespace.hpp>
-#include <string>
 #include <list>
+#include <string>
+
+
+
 
 AXIS_CPP_NAMESPACE_START
 using namespace std;

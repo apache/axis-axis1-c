@@ -35,6 +35,7 @@
 #include <axis/GDefine.hpp>
 #include <axis/TypeMapping.hpp>
 #include <axis/AxisUserAPI.hpp>
+#include <axis/AxisUserAPIArrays.hpp>
 #include <axis/WSDDDefines.hpp>
 #include <axis/IHeaderBlock.hpp>
 

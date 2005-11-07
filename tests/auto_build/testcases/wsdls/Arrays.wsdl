@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:tns="http://org.apache.axis/Arrays/"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="Arrays"
+	targetNamespace="http://org.apache.axis/Arrays/">
+	<wsdl:types>
+		<xsd:schema targetNamespace="http://org.apache.axis/Arrays/"
+			xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+			<xsd:element name="SimpleArrayResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="simpleType" type="xsd:int"
+							maxOccurs="unbounded" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="SimpleArrayRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="simpleType" type="xsd:int"
+							maxOccurs="unbounded" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="SimpleArrayResponse">
+		<wsdl:part element="tns:SimpleArrayResponse"
+			name="SimpleArrayResponse" />
+	</wsdl:message>
+	<wsdl:message name="SimpleArrayRequest">
+		<wsdl:part element="tns:SimpleArrayRequest"
+			name="SimpleArrayRequest" />
+	</wsdl:message>
+	<wsdl:portType name="Arrays">
+		<wsdl:operation name="SimpleArray">
+			<wsdl:input message="tns:SimpleArrayRequest" />
+			<wsdl:output message="tns:SimpleArrayResponse" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="ArraysSOAP" type="tns:Arrays">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="SimpleArray">
+			<soap:operation
+				soapAction="http://org.apache.axis/Arrays/NewOperation" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="Arrays">
+		<wsdl:port binding="tns:ArraysSOAP" name="ArraysSOAP">
+			<soap:address location="http://localhost:80/axis/Arrays" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

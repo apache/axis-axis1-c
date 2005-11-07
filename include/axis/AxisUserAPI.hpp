@@ -20,6 +20,7 @@
 #define _AXISUSERAPI_H____OF_AXIS_INCLUDED_
 
 #include <axis/GDefine.hpp>
+#include <axis/TypeMapping.hpp>
 #include <time.h>
 #include <string.h>
 
@@ -29,9 +30,6 @@ AXIS_CPP_NAMESPACE_START
   * @file AxisUserAPI.hpp
   * This file contains types defined in Axis C++. The mapping of basic xsd types
   * to the C language types.
-  * 
-  * The following xsd basic types are supported:
-  * - <tt> anyURI, base64Binary, boolean, byte, date, dateTime, decimal, double, duration, float, hexBinary, int, integer, long, NMTOKEN, NOTATION, QName, short, string, time, unsignedByte, unsignedInt, unsignedLong</tt> and \c unsignedShort.
   * 
   * @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
   */
@@ -312,70 +310,66 @@ typedef enum {
     RPC_LITERAL
 } AXIS_BINDING_STYLE;
 
-#define AXIS_DEFINED_ARRAY(type) \
-    class type##_Array {\
-      public:\
-        type ** m_Array;\
-        int m_Size;\
-    };
-
-#define AXIS_DEFINED_POINTER_ARRAY(type) \
-    class type##_Array {\
-      public:\
-        type * m_Array;\
-        int m_Size;\
-    };
-
-class Axis_Array {
+/**
+ * @class Axis_Array
+ * 
+ * The parent storage class for arrays
+ */
+class STORAGE_CLASS_INFO Axis_Array {
   public:
-    void* m_Array;
-    int m_Size;
-};
+    /**
+     * Constructor
+     */
+    Axis_Array();
 
-AXIS_DEFINED_ARRAY(xsd__duration) 
-AXIS_DEFINED_ARRAY(xsd__dateTime)
-AXIS_DEFINED_ARRAY(xsd__time)
-AXIS_DEFINED_ARRAY(xsd__date)
-AXIS_DEFINED_ARRAY(xsd__gYearMonth)
-AXIS_DEFINED_ARRAY(xsd__gYear)
-AXIS_DEFINED_ARRAY(xsd__gMonthDay)
-AXIS_DEFINED_ARRAY(xsd__gDay)
-AXIS_DEFINED_ARRAY(xsd__gMonth)
-AXIS_DEFINED_POINTER_ARRAY(xsd__string)
-AXIS_DEFINED_POINTER_ARRAY(xsd__normalizedString)
-AXIS_DEFINED_POINTER_ARRAY(xsd__token)
-AXIS_DEFINED_POINTER_ARRAY(xsd__language)
-AXIS_DEFINED_POINTER_ARRAY(xsd__Name)
-AXIS_DEFINED_POINTER_ARRAY(xsd__NCName)
-AXIS_DEFINED_POINTER_ARRAY(xsd__ID)
-AXIS_DEFINED_POINTER_ARRAY(xsd__IDREF)
-AXIS_DEFINED_POINTER_ARRAY(xsd__IDREFS)
-AXIS_DEFINED_POINTER_ARRAY(xsd__ENTITY)
-AXIS_DEFINED_POINTER_ARRAY(xsd__ENTITIES)
-AXIS_DEFINED_POINTER_ARRAY(xsd__NMTOKEN)
-AXIS_DEFINED_POINTER_ARRAY(xsd__NMTOKENS)
-AXIS_DEFINED_ARRAY(xsd__boolean)
-AXIS_DEFINED_ARRAY(xsd__base64Binary)
-AXIS_DEFINED_ARRAY(xsd__hexBinary)
-AXIS_DEFINED_ARRAY(xsd__float)
-AXIS_DEFINED_ARRAY(xsd__decimal)
-AXIS_DEFINED_ARRAY(xsd__integer)
-AXIS_DEFINED_ARRAY(xsd__nonPositiveInteger)
-AXIS_DEFINED_ARRAY(xsd__negativeInteger)
-AXIS_DEFINED_ARRAY(xsd__long)
-AXIS_DEFINED_ARRAY(xsd__int)
-AXIS_DEFINED_ARRAY(xsd__short)
-AXIS_DEFINED_ARRAY(xsd__byte)
-AXIS_DEFINED_ARRAY(xsd__nonNegativeInteger)
-AXIS_DEFINED_ARRAY(xsd__unsignedLong)
-AXIS_DEFINED_ARRAY(xsd__unsignedInt)
-AXIS_DEFINED_ARRAY(xsd__unsignedByte)
-AXIS_DEFINED_ARRAY(xsd__unsignedShort)
-AXIS_DEFINED_ARRAY(xsd__positiveInteger)
-AXIS_DEFINED_ARRAY(xsd__double)
-AXIS_DEFINED_POINTER_ARRAY(xsd__anyURI)
-AXIS_DEFINED_POINTER_ARRAY(xsd__QName)
-AXIS_DEFINED_POINTER_ARRAY(xsd__NOTATION)
+    /**
+     * Copy constructor
+     * @param orginal Axis_Array to copy.
+     */
+    Axis_Array(Axis_Array & original);
+    
+    /**
+     * Destructor
+     */
+    virtual ~Axis_Array();
+    
+    /**
+     * Clone the content of an existing Axis_Array
+     * @param original array to be cloned into this array.
+     */
+    void clone(Axis_Array & original);
+    
+    /**
+     * Populate from a c-style array.
+     * 
+     * @param array is a c-style array of pointers to the array data.
+     * @param size of the array, including NULL entries.
+     * @param type of data.
+     */
+    void set(void* array, int size, const XSDTYPE type);
+    
+    /**
+     * Return a c-style array.
+     * 
+     * @param size, this will be updated with the size of the array returned.
+     * @param type, this will be updated with the type of the data returned.
+     * @return c-style array of pointers to the array data.
+     */
+    const void* get(int& size, XSDTYPE& type) const;
+    
+    /**
+     * Clear the array, and it's data
+     */
+    void clear();
+
+    friend class SoapDeSerializer;
+    friend class SoapSerializer;
+
+protected:
+    void* m_Array; // Array of pointers to array elements
+    int m_Size; // Size of array
+    XSDTYPE m_Type; // XSD datatype within this array
+};
 
 #define AXIS_OUT_PARAM 
 

@@ -309,7 +309,7 @@ public class ClientStubWriter extends CPPClassWriter
             if (returntypeisarray)
             {
                 //for arrays
-                writer.write(outparamTypeName + " RetArray = {NULL, 0};\n");
+                writer.write(outparamTypeName + " RetArray;\n");
             }
             else
             {
@@ -618,8 +618,7 @@ public class ClientStubWriter extends CPPClassWriter
                         + "m_pCall->getBasicArray("
                         + CUtils.getXSDTypeForBasicType(containedType) + ", \""
                         + returntype.getParamName() + "\", 0);\n");
-                writer
-                        .write("\t\t\t\tmemcpy(&RetArray,&RetAxisArray,sizeof(Axis_Array));\n\t\t\t}\n");
+	            writer.write ("\t\t\t\tRetArray.clone(RetAxisArray);\n\t\t\t}\n");
             }
             else
             {
@@ -633,8 +632,7 @@ public class ClientStubWriter extends CPPClassWriter
                         + ", (void*) Axis_GetSize_" + containedType + ", \""
                         + returntype.getParamName() + "\", Axis_URI_"
                         + containedType + ");\n");
-                writer
-                        .write("\t\t\t\tmemcpy(&RetArray,&RetAxisArray,sizeof(Axis_Array));\n\t\t\t}\n");
+	            writer.write ("\t\t\t\tRetArray.clone(RetAxisArray);\n\t\t\t}\n");
             }
             writer.write("\t\t}\n");
             writer.write("\tm_pCall->unInitialize();\n");

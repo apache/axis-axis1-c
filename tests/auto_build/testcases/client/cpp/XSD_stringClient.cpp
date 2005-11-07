@@ -295,39 +295,46 @@ int main(int argc, char* argv[])
         delete optionalAttributeResult;
 */
 
-        // Test array
-        xsd__string_Array arrayInput;
-        arrayInput.m_Array = new xsd__string[2];
-        arrayInput.m_Size = 2;
-        for (int inputIndex=0 ; inputIndex < 2 ; inputIndex++)
+        // Test arrays
+        int arraySize = 2;
+        xsd__string_Array inputArray;
+        xsd__string* array = new xsd__string[arraySize]();
+        for (int count = 0 ; count < arraySize ; count++)
         {
-            input = new char[25];
-            strcpy (input, simpleString);
-            arrayInput.m_Array[inputIndex] = input;
+            array[count] = new char[25];
+         strcpy (array[count], simpleString);
         }
-        xsd__string_Array arrayResult = ws->asArray(arrayInput);
-        cout << "array of " << arrayResult.m_Size << " elements" << endl;
-        for (int index = 0; index < arrayResult.m_Size ; index++)
+        inputArray.set(array, arraySize);
+        
+        xsd__string_Array outputArray = ws->asArray(inputArray);
+        int outputSize = 0;
+        const xsd__string* output = outputArray.get(outputSize);
+        cout << "array of " << outputSize << " elements" << endl;
+        if (output != NULL)
         {
-            if (arrayResult.m_Array[index])
+            for (int count = 0 ; count < outputSize ; count++)
             {
-                if (*(arrayResult.m_Array[index]))
+                cout << "  element[" << count << "]=";
+                if (output[count] != NULL)
                 {
-                    cout << "  element[" << index << "]=" << arrayResult.m_Array[index] << endl;
+                    cout << output[count] << endl;
                 }
                 else
                 {
-                    cout << "  element[" << index << "]=<empty>" << endl;
+                    cout << "NULL" << endl;
                 }
-                delete arrayResult.m_Array[index];
-            }
-            else
-            {
-                cout << "  element[" << index << "]=<nil>" << endl;
             }
         }
-        delete [] arrayInput.m_Array;
-        delete [] arrayResult.m_Array;
+        else
+        {
+            cout << "NULL array" << endl;
+        }
+        // Clear up input array        
+        for (int deleteIndex = 0 ; deleteIndex < arraySize ; deleteIndex++ )
+        {
+            delete [] array[deleteIndex];
+        }
+        delete [] array;
 
         // Test complex type
         input = new char[25];

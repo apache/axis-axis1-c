@@ -246,7 +246,7 @@ public class ClientStubWriter
             if (returntypeisarray)
             {
                 //for arrays
-                writer.write(outparamType + " RetArray = {NULL, 0};\n");
+                writer.write(outparamType + " RetArray = {NULL, 0, XSD_UNKNOWN};\n");
             }
             else
             {

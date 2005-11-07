@@ -588,7 +588,7 @@ SoapDeSerializer::getCmplxArray (void *pDZFunct, void *pCreFunct,
 				 const AxisChar * pName,
 				 const AxisChar * pNamespace)
 {
-    Axis_Array Array = { NULL, 0 };
+    Axis_Array Array;
     int nIndex = 0;
     void *pItem;
     int itemsize;
@@ -1046,7 +1046,8 @@ SoapDeSerializer::getBasicArray (XSDTYPE nType,
 				 const AxisChar * pName,
 				 const AxisChar * pNamespace)
 {
-    Axis_Array Array = { NULL, 0 };
+    Axis_Array Array;
+    Array.m_Type = nType;
 
     if (AXIS_SUCCESS != m_nStatus)
     {

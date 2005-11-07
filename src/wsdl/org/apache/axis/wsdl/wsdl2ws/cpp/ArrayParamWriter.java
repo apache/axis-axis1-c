@@ -192,7 +192,7 @@ public class ArrayParamWriter extends ParamWriter
             writer.write(
                 "\t"
                     + attribs[0].getTypeName()
-                    + stars + " m_Array;\n\tint m_Size;\n} "
+                    + stars + " m_Array;\n\tint m_Size;\n\tXSDTYPE m_Type;\n} "
                     + classname
                     + ";\n\n");
         }

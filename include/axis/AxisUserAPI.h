@@ -21,6 +21,7 @@
 #include <axis/GDefine.h>
 #include <time.h>
 #include <string.h>
+#include <axis/TypeMapping.h>
 
  /**
   * @file AxisUserAPI.h
@@ -341,23 +342,27 @@ typedef enum {
     typedef struct {\
         type ** m_Array;\
         int m_Size;\
+        AXISC_XSDTYPE m_Type; \
     } type##_Array;
 
 #define AXISC_DEFINED_POINTER_ARRAY(type) \
     typedef struct {\
         type * m_Array;\
         int m_Size;\
+        AXISC_XSDTYPE m_Type; \
     } type##_Array;
 
 #define AXISC_DEFINED_ARRAY2(type) \
     typedef struct {\
         AXISCHANDLE m_Array;\
         int m_Size;\
+        AXISC_XSDTYPE m_Type; \
     } type##_Array;
 
 typedef struct {
     void* m_Array;
     int m_Size;
+    AXISC_XSDTYPE m_Type; \
 } Axisc_Array;
 
 AXISC_DEFINED_ARRAY(xsdc__duration) 
