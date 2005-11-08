@@ -582,13 +582,13 @@ SoapDeSerializer::getVersion ()
  *    <points><x>7</x><y>8</y></points>
  *
  */
-Axis_Array
+Axis_Array*
 SoapDeSerializer::getCmplxArray (void *pDZFunct, void *pCreFunct,
 				 void *pDelFunct, void *pSizeFunct,
 				 const AxisChar * pName,
 				 const AxisChar * pNamespace)
 {
-    Axis_Array Array;
+    Axis_Array* Array = new Axis_Array();
     int nIndex = 0;
     void *pItem;
     int itemsize;
@@ -616,23 +616,23 @@ SoapDeSerializer::getCmplxArray (void *pDZFunct, void *pCreFunct,
 	    return Array;
 	}
 
-	Array.m_Size = getArraySize (m_pNode);
+	Array->m_Size = getArraySize (m_pNode);
 
-	if (Array.m_Size == 0)
+	if (Array->m_Size == 0)
 	{
 		m_pNode = m_pParser->next ();	/* skip end element node too */
 		return Array;
 	}
-	else if (Array.m_Size > 0)
+	else if (Array->m_Size > 0)
 	{
-		TRACE_OBJECT_CREATE_FUNCT_ENTRY(pCreFunct, Array.m_Array, true, Array.m_Size);
-		Array.m_Array =
-			((AXIS_OBJECT_CREATE_FUNCT) pCreFunct) (Array.m_Array, true, Array.m_Size);
-		TRACE_OBJECT_CREATE_FUNCT_EXIT(pCreFunct, Array.m_Array);
+		TRACE_OBJECT_CREATE_FUNCT_ENTRY(pCreFunct, Array->m_Array, true, Array->m_Size);
+		Array->m_Array = (void**)
+			((AXIS_OBJECT_CREATE_FUNCT) pCreFunct) (Array->m_Array, true, Array->m_Size);
+		TRACE_OBJECT_CREATE_FUNCT_EXIT(pCreFunct, Array->m_Array);
 
-	    if (!Array.m_Array)
+	    if (!Array->m_Array)
 	    {
-		Array.m_Size = 0;
+		Array->m_Size = 0;
 		m_nStatus = AXIS_FAIL;
 
 		return Array;
@@ -642,20 +642,20 @@ SoapDeSerializer::getCmplxArray (void *pDZFunct, void *pCreFunct,
 	    itemsize = ((AXIS_OBJECT_SIZE_FUNCT) pSizeFunct) ();
 		TRACE_OBJECT_SIZE_FUNCT_EXIT(pSizeFunct, itemsize);
 
-		ptrval = (char *)Array.m_Array;
+		ptrval = (char *)Array->m_Array;
 
-	    for (; nIndex < Array.m_Size; nIndex++)
+	    for (; nIndex < Array->m_Size; nIndex++)
 	    {
 		m_pNode = m_pParser->next ();
 		/* wrapper node without type info  Ex: <item> */
 		if (!m_pNode)
 		{
-			TRACE_OBJECT_DELETE_FUNCT_ENTRY(pDelFunct, Array.m_Array, true, Array.m_Size);
-		    ((AXIS_OBJECT_DELETE_FUNCT) pDelFunct) (Array.m_Array, true, Array.m_Size);
+			TRACE_OBJECT_DELETE_FUNCT_ENTRY(pDelFunct, Array->m_Array, true, Array->m_Size);
+		    ((AXIS_OBJECT_DELETE_FUNCT) pDelFunct) (Array->m_Array, true, Array->m_Size);
 			TRACE_OBJECT_DELETE_FUNCT_EXIT(pDelFunct);
 
-		    Array.m_Array = 0;
-		    Array.m_Size = 0;
+		    Array->m_Array = 0;
+		    Array->m_Size = 0;
 		    return Array;
 		}
 
@@ -680,12 +680,12 @@ SoapDeSerializer::getCmplxArray (void *pDZFunct, void *pCreFunct,
 
 		if (!m_pNode)
 		{
-			TRACE_OBJECT_DELETE_FUNCT_ENTRY(pDelFunct, Array.m_Array, true, Array.m_Size);
-		    ((AXIS_OBJECT_DELETE_FUNCT) pDelFunct) (Array.m_Array, true, Array.m_Size);
+			TRACE_OBJECT_DELETE_FUNCT_ENTRY(pDelFunct, Array->m_Array, true, Array->m_Size);
+		    ((AXIS_OBJECT_DELETE_FUNCT) pDelFunct) (Array->m_Array, true, Array->m_Size);
 			TRACE_OBJECT_DELETE_FUNCT_EXIT(pDelFunct);
 
-		    Array.m_Array = 0;
-		    Array.m_Size = 0;
+		    Array->m_Array = 0;
+		    Array->m_Size = 0;
 		    return Array;
 		}
 	    }
@@ -697,26 +697,26 @@ SoapDeSerializer::getCmplxArray (void *pDZFunct, void *pCreFunct,
     }
     else
     {
-		TRACE_OBJECT_CREATE_FUNCT_ENTRY(pCreFunct, Array.m_Array, true, INITIAL_ARRAY_SIZE);
-	Array.m_Array = ((AXIS_OBJECT_CREATE_FUNCT) pCreFunct) (Array.m_Array,
+		TRACE_OBJECT_CREATE_FUNCT_ENTRY(pCreFunct, Array->m_Array, true, INITIAL_ARRAY_SIZE);
+	Array->m_Array = (void**) ((AXIS_OBJECT_CREATE_FUNCT) pCreFunct) (Array->m_Array,
 								true,
 								INITIAL_ARRAY_SIZE);
-		TRACE_OBJECT_CREATE_FUNCT_EXIT(pCreFunct, Array.m_Array);
-	if (!Array.m_Array)
+		TRACE_OBJECT_CREATE_FUNCT_EXIT(pCreFunct, Array->m_Array);
+	if (!Array->m_Array)
 	{
 	    return Array;
 	}
 
-	Array.m_Size = INITIAL_ARRAY_SIZE;
+	Array->m_Size = INITIAL_ARRAY_SIZE;
 	TRACE_OBJECT_SIZE_FUNCT_ENTRY(pSizeFunct);
     itemsize = ((AXIS_OBJECT_SIZE_FUNCT) pSizeFunct) ();
 	TRACE_OBJECT_SIZE_FUNCT_EXIT(pSizeFunct, itemsize);
 
 	while (true)
 	{
-	    ptrval = (char *)Array.m_Array;
+	    ptrval = (char *)Array->m_Array;
 
-	    for (; nIndex < Array.m_Size; nIndex++)
+	    for (; nIndex < Array->m_Size; nIndex++)
 	    {
 		if (!m_pNode)
 		{		/* if there is an unprocessed node that may be
@@ -728,12 +728,12 @@ SoapDeSerializer::getCmplxArray (void *pDZFunct, void *pCreFunct,
 		/* wrapper node without type info  Ex: <phonenumbers> */
 		if (!m_pNode)
 		{
-			TRACE_OBJECT_DELETE_FUNCT_ENTRY(pDelFunct, Array.m_Array, true, Array.m_Size);
-		    ((AXIS_OBJECT_DELETE_FUNCT) pDelFunct) (Array.m_Array, true, Array.m_Size);
+			TRACE_OBJECT_DELETE_FUNCT_ENTRY(pDelFunct, Array->m_Array, true, Array->m_Size);
+		    ((AXIS_OBJECT_DELETE_FUNCT) pDelFunct) (Array->m_Array, true, Array->m_Size);
 			TRACE_OBJECT_DELETE_FUNCT_EXIT(pDelFunct);
 
-		    Array.m_Array = 0;
-		    Array.m_Size = 0;
+		    Array->m_Array = 0;
+		    Array->m_Size = 0;
 		    return Array;
 		}
 
@@ -793,7 +793,7 @@ SoapDeSerializer::getCmplxArray (void *pDZFunct, void *pCreFunct,
 		{
 		    if (nIndex > 0)
 		    {
-			Array.m_Size = nIndex;
+			Array->m_Size = nIndex;
 			/* put the actual deserialized item size
 			 * note we do not make m_pNode = NULL because this node
 			 * doesnot belong to this array 
@@ -815,12 +815,12 @@ SoapDeSerializer::getCmplxArray (void *pDZFunct, void *pCreFunct,
 		 *  </xsd:sequence>
 		 * </xsd:complexType>        
 		 */
-		TRACE_OBJECT_DELETE_FUNCT_ENTRY(pDelFunct, Array.m_Array, true, Array.m_Size);
-	    ((AXIS_OBJECT_DELETE_FUNCT) pDelFunct) (Array.m_Array, true, Array.m_Size);
+		TRACE_OBJECT_DELETE_FUNCT_ENTRY(pDelFunct, Array->m_Array, true, Array->m_Size);
+	    ((AXIS_OBJECT_DELETE_FUNCT) pDelFunct) (Array->m_Array, true, Array->m_Size);
 		TRACE_OBJECT_DELETE_FUNCT_EXIT(pDelFunct);
 
-		Array.m_Array = 0;
-		Array.m_Size = 0;
+		Array->m_Array = 0;
+		Array->m_Size = 0;
 
 		return Array;
 	    }
@@ -828,20 +828,20 @@ SoapDeSerializer::getCmplxArray (void *pDZFunct, void *pCreFunct,
 	     * So double it 
 	     */
 
-		TRACE_OBJECT_CREATE_FUNCT_ENTRY(pCreFunct, Array.m_Array, true, Array.m_Size*2);
-	    Array.m_Array =
-		((AXIS_OBJECT_CREATE_FUNCT) pCreFunct) (Array.m_Array, true,
-							Array.m_Size * 2);
-		TRACE_OBJECT_CREATE_FUNCT_EXIT(pCreFunct, Array.m_Array);
+		TRACE_OBJECT_CREATE_FUNCT_ENTRY(pCreFunct, Array->m_Array, true, Array->m_Size*2);
+	    Array->m_Array = (void**)
+		((AXIS_OBJECT_CREATE_FUNCT) pCreFunct) (Array->m_Array, true,
+							Array->m_Size * 2);
+		TRACE_OBJECT_CREATE_FUNCT_EXIT(pCreFunct, Array->m_Array);
 
-	    if (!Array.m_Array)
+	    if (!Array->m_Array)
 	    {
-		Array.m_Size = 0;
+		Array->m_Size = 0;
 
 		return Array;
 	    }
 
-	    Array.m_Size *= 2;
+	    Array->m_Size *= 2;
 	    /* Array.m_RealSize = Array.m_Size; */
 	}
     }
@@ -1041,13 +1041,13 @@ void SoapDeSerializer::deserializeLiteralArray (Axis_Array* pArray, IAnySimpleTy
     }
 }
 
-Axis_Array
+Axis_Array*
 SoapDeSerializer::getBasicArray (XSDTYPE nType,
 				 const AxisChar * pName,
 				 const AxisChar * pNamespace)
 {
-    Axis_Array Array;
-    Array.m_Type = nType;
+    Axis_Array* Array = new Axis_Array();
+    Array->m_Type = nType;
 
     if (AXIS_SUCCESS != m_nStatus)
     {
@@ -1067,17 +1067,17 @@ SoapDeSerializer::getBasicArray (XSDTYPE nType,
 		    return Array;
 		}
 	
-		Array.m_Size = getArraySize (m_pNode);
+		Array->m_Size = getArraySize (m_pNode);
 	
-		if (Array.m_Size == 0)
+		if (Array->m_Size == 0)
 		{
 			m_pNode = m_pParser->next ();	/* skip end element node too */
 			return Array;
 		}
-		else if (Array.m_Size > 0)
+		else if (Array->m_Size > 0)
         {
             IAnySimpleType* pSimpleType = AxisUtils::createSimpleTypeObject(nType);
-            deserializeEncodedArray(&Array, pSimpleType, pName, pNamespace);
+            deserializeEncodedArray(Array, pSimpleType, pName, pNamespace);
             delete pSimpleType;
             
             if ( m_nStatus != AXIS_FAIL)
@@ -1089,7 +1089,7 @@ SoapDeSerializer::getBasicArray (XSDTYPE nType,
     else
     {
         IAnySimpleType* pSimpleType = AxisUtils::createSimpleTypeObject(nType);
-        deserializeLiteralArray(&Array, pSimpleType, pName, pNamespace);
+        deserializeLiteralArray(Array, pSimpleType, pName, pNamespace);
         delete pSimpleType;
         
         if ( m_nStatus != AXIS_FAIL)

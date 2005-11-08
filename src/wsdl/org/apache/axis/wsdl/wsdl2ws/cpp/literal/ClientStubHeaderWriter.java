@@ -79,9 +79,10 @@ public class ClientStubHeaderWriter
                                 .iterator()
                                 .next();
                         String outParamTypeName = WrapperUtils.getClassNameFromParamInfoConsideringArrays(returnParam, wscontext);
-                        if (CUtils.isSimpleType(outParamTypeName)
+                        if ((outParamTypeName.lastIndexOf ("_Array") > 0) 
+                                || (CUtils.isSimpleType(outParamTypeName)
 								&& returnParam.isNillable()
-								&& !(CUtils.isPointerType(outParamTypeName)))
+								&& !(CUtils.isPointerType(outParamTypeName))))
                         {
                         	writer.write(
                                     "\tSTORAGE_CLASS_INFO "
@@ -117,9 +118,10 @@ public class ClientStubHeaderWriter
                     {
                     	writer.write("ISoapAttachment *Value" + j);
                     }
-                    else if (CUtils.isSimpleType(paramTypeName)
+                    else if ((paramTypeName.lastIndexOf ("_Array") > 0)
+                            || (CUtils.isSimpleType(paramTypeName)
 							&& nparam.isNillable()
-							&& !(CUtils.isPointerType(paramTypeName)))
+							&& !(CUtils.isPointerType(paramTypeName))))
                     {
                     	writer.write(paramTypeName + " * Value" + j);
                     }

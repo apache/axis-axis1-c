@@ -248,8 +248,8 @@ public class ClientStubWriter extends CPPClassWriter
         }
         else
         {
-            if (returntypeissimple && returntype.isNillable()
-                    && !(CUtils.isPointerType(outparamTypeName)))
+            if (returntypeisarray || (returntypeissimple && returntype.isNillable()
+                    && !(CUtils.isPointerType(outparamTypeName))))
             {
                 writer.write(outparamTypeName + " *");
             }
@@ -309,7 +309,7 @@ public class ClientStubWriter extends CPPClassWriter
             if (returntypeisarray)
             {
                 //for arrays
-                writer.write(outparamTypeName + " RetArray;\n");
+                writer.write(outparamTypeName + " * RetArray = new " + outparamTypeName + "();\n");
             }
             else
             {
@@ -614,16 +614,15 @@ public class ClientStubWriter extends CPPClassWriter
             if (CUtils.isSimpleType(qname))
             {
                 containedType = CUtils.getclass4qname(qname);
-                writer.write("\t\t\t\tAxis_Array RetAxisArray = "
+                writer.write("\t\t\t\tAxis_Array * RetAxisArray = "
                         + "m_pCall->getBasicArray("
                         + CUtils.getXSDTypeForBasicType(containedType) + ", \""
                         + returntype.getParamName() + "\", 0);\n");
-	            writer.write ("\t\t\t\tRetArray.clone(RetAxisArray);\n\t\t\t}\n");
             }
             else
             {
                 containedType = qname.getLocalPart();
-                writer.write("\t\t\t\tAxis_Array RetAxisArray = "
+                writer.write("\t\t\t\tAxis_Array * RetAxisArray = "
                         + "m_pCall->getCmplxArray((void*) Axis_DeSerialize_"
                         + containedType);
                 //damitha
@@ -632,8 +631,10 @@ public class ClientStubWriter extends CPPClassWriter
                         + ", (void*) Axis_GetSize_" + containedType + ", \""
                         + returntype.getParamName() + "\", Axis_URI_"
                         + containedType + ");\n");
-	            writer.write ("\t\t\t\tRetArray.clone(RetAxisArray);\n\t\t\t}\n");
+	            
             }
+            writer.write ("\t\t\t\tRetArray.clone(*RetAxisArray);\n\t\t\t}\n");
+            writer.write ("\t\t\t\tAxis::AxisDelete( (void *)RetAxisArray, XSD_ARRAY);\n\t\t\t}\n");
             writer.write("\t\t}\n");
             writer.write("\tm_pCall->unInitialize();\n");
             //        writer.write("\t\t}\n\t\tm_pCall->unInitialize();\n");

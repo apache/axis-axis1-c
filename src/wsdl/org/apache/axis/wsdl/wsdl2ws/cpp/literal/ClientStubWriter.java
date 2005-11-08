@@ -221,20 +221,19 @@ public class ClientStubWriter
 	}
 	else
 	{
-	    if (returntypeisarray
-		|| (returntypeissimple
-		    && (!returntype.isNillable ()
-			|| CUtils.isPointerType(outparamType))))
+	    if (returntypeissimple
+                    && (!returntype.isNillable() || CUtils
+                            .isPointerType(outparamType)))
 	    {
-		writer.write (outparamType);
+	        writer.write (outparamType);
 	    }
 	    else if (outparamType.lastIndexOf ("*") > 0)
 	    {
-		writer.write (outparamType);
+	        writer.write (outparamType);
 	    }
 	    else
 	    {			//for AnyType too
-		writer.write (outparamType + "*");
+	        writer.write (outparamType + "*");
 	    }
 	}
 	writer.write (" " + classname + "::" + methodName + "(");
@@ -280,10 +279,9 @@ public class ClientStubWriter
           {
          	writer.write("ISoapAttachment *Value0");
           }
-          else if (typeisarray
-		|| (typeissimple
+          else if (typeissimple
 		    && (!((ParameterInfo) paramsB.get (0)).isNillable ()
-			|| CUtils.isPointerType(paraTypeName))))
+			|| CUtils.isPointerType(paraTypeName)))
 	    {
 		writer.write (paraTypeName + " Value0");
 	    }
@@ -338,10 +336,9 @@ public class ClientStubWriter
             {
            	    writer.write(", ISoapAttachment *Value" + i);
             }
-            else if (typeisarray
-		    || (typeissimple
+            else if (typeissimple
 			&& (!((ParameterInfo) paramsB.get (i)).isNillable ()
-			    || CUtils.isPointerType(paraTypeName))))
+			    || CUtils.isPointerType(paraTypeName)))
 		{
 		    writer.write (", " + paraTypeName + " Value" + i);
 		}
@@ -381,7 +378,7 @@ public class ClientStubWriter
 	    if (returntypeisarray)
 	    {
 	        //for arrays
-		writer.write (outparamType + " RetArray;\n");
+	        writer.write (outparamType + " * RetArray = new " + outparamType + "();\n");
 	    }
 	    else
 	    {
@@ -624,7 +621,7 @@ public class ClientStubWriter
 				CUtils.getclass4qname (qname);
 			    writer.
 				write ("\tm_pCall->addBasicArrayParameter(");
-			    writer.write ("(Axis_Array*)(&Value" + i + "), " +
+			    writer.write ("Value" + i + ", " +
 					  CUtils.
 					  getXSDTypeForBasicType
 					  (containedType) +
@@ -642,8 +639,8 @@ public class ClientStubWriter
 				writer.
 				    write
 				    ("\tm_pCall->addBasicArrayParameter(");
-				writer.write ("(Axis_Array*)(&Value" + i +
-					      "), " +
+				writer.write ("Value" + i +
+					      ", " +
 					      CUtils.
 					      getXSDTypeForBasicType
 					      (containedType) +
@@ -933,14 +930,14 @@ public class ClientStubWriter
 		    if (CUtils.isSimpleType (qname))
 		    {
 			containedType = CUtils.getclass4qname (qname);
-			writer.write ("\t\t\tAxis_Array RetAxisArray = m_pCall->getBasicArray(" 
+			writer.write ("\t\t\tAxis_Array * RetAxisArray = m_pCall->getBasicArray(" 
 					+ CUtils.getXSDTypeForBasicType (containedType) 
 					+ ", \"" + returntype.getParamName () + "\", 0);\n");
 		    }
 		    else
 		    {
 			containedType = qname.getLocalPart ();
-			writer.write("\t\t\tAxis_Array RetAxisArray = m_pCall->getCmplxArray((void*) Axis_DeSerialize_"
+			writer.write("\t\t\tAxis_Array * RetAxisArray = m_pCall->getCmplxArray((void*) Axis_DeSerialize_"
 					+ containedType 
 					+ ", (void*) Axis_Create_"
 				      + containedType
@@ -954,7 +951,8 @@ public class ClientStubWriter
 				      + containedType
 				      + ");\n");
 		    }
-		    writer.write ("\t\t\tRetArray.clone(RetAxisArray);\n");
+		    writer.write ("\t\t\tRetArray->clone(*RetAxisArray);\n");
+		    writer.write ("\t\t\tAxis::AxisDelete( (void *)RetAxisArray, XSD_ARRAY);\n");
 		    writer.write ("\t\t}\n");
 		    writer.write ("\t}\n");
 		    writer.write ("\tm_pCall->unInitialize();\n");

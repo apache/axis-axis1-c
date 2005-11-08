@@ -43,22 +43,22 @@ AXISC_STORAGE_CLASS_INFO void * axiscCheckForFault(AXISCHANDLE wrapperSoapDeSeri
 	return dz->checkForFault(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO Axisc_Array axiscGetCmplxArrayIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, void * pDZFunct, 
+AXISC_STORAGE_CLASS_INFO Axisc_Array* axiscGetCmplxArrayIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, void * pDZFunct, 
 	void * pCreFunct, void * pDelFunct, void * pSizeFunct, 
 	const AxiscChar * pName, const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 	// TODO: not implemented
-	Axisc_Array aa;
-	memset(&aa,0,sizeof(aa));
+	Axisc_Array* aa;
+	memset(aa,0,sizeof(aa));
 	return aa;
 }
 
-AXISC_STORAGE_CLASS_INFO Axisc_Array axiscGetBasicArrayIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, AXISC_XSDTYPE nType, 
+AXISC_STORAGE_CLASS_INFO Axisc_Array* axiscGetBasicArrayIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, AXISC_XSDTYPE nType, 
 	const AxiscChar * pName, const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 	// TODO: not implemented
-	Axisc_Array aa;
-	memset(&aa,0,sizeof(aa));
+	Axisc_Array* aa;
+	memset(aa,0,sizeof(aa));
 	return aa;
 }
 

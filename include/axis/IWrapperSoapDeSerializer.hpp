@@ -43,11 +43,11 @@ public:
     virtual void* AXISCALL checkForFault(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
     /* Method used by wrappers to get a deserialized Array of complex types */
-    virtual Axis_Array AXISCALL getCmplxArray(void* pDZFunct, void* pCreFunct, 
+    virtual Axis_Array* AXISCALL getCmplxArray(void* pDZFunct, void* pCreFunct, 
         void* pDelFunct, void* pSizeFunct, const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
     /* Method used by wrappers to get a deserialized Array of basic types */
-    virtual Axis_Array AXISCALL getBasicArray(XSDTYPE nType, 
+    virtual Axis_Array* AXISCALL getBasicArray(XSDTYPE nType, 
         const AxisChar* pName, const AxisChar* pNamespace)=0;
     /* Method used by wrappers to get a deserialized single object of 
      * complex type 

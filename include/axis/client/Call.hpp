@@ -337,11 +337,11 @@ public:
     void* AXISCALL getCmplxObject(void* pDZFunct, void* pCreFunct,
         void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace);
     /* Method used by stubs to get a deserialized Array of complex types */
-    Axis_Array AXISCALL getCmplxArray(void* pDZFunct, void* pCreFunct,
+    Axis_Array* AXISCALL getCmplxArray(void* pDZFunct, void* pCreFunct,
         void* pDelFunct, void* pSizeFunct, const AxisChar* pName,
         const AxisChar* pNamespace);
     /* Method used by stubs to get a deserialized Array of basic types */
-    Axis_Array AXISCALL getBasicArray(XSDTYPE nType, const AxisChar* pName,
+    Axis_Array* AXISCALL getBasicArray(XSDTYPE nType, const AxisChar* pName,
         const AxisChar* pNamespace);
 
     int AXISCALL checkMessage(const AxisChar* pName,

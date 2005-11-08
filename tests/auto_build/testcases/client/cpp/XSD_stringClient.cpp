@@ -298,7 +298,7 @@ int main(int argc, char* argv[])
         // Test arrays
         int arraySize = 2;
         xsd__string_Array inputArray;
-        xsd__string* array = new xsd__string[arraySize]();
+        xsd__string* array = new xsd__string[arraySize];
         for (int count = 0 ; count < arraySize ; count++)
         {
             array[count] = new char[25];
@@ -306,9 +306,9 @@ int main(int argc, char* argv[])
         }
         inputArray.set(array, arraySize);
         
-        xsd__string_Array outputArray = ws->asArray(inputArray);
+        xsd__string_Array * outputArray = ws->asArray(&inputArray);
         int outputSize = 0;
-        const xsd__string* output = outputArray.get(outputSize);
+        const xsd__string* output = outputArray->get(outputSize);
         cout << "array of " << outputSize << " elements" << endl;
         if (output != NULL)
         {

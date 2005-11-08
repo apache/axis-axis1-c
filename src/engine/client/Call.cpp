@@ -403,13 +403,13 @@ void Call::setSOAPVersion (SOAP_VERSION version)
     m_pIWSSZ->setSoapVersion (version);
 }
 
-Axis_Array Call::getBasicArray (XSDTYPE nType, const AxisChar* pName,
+Axis_Array* Call::getBasicArray (XSDTYPE nType, const AxisChar* pName,
     const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getBasicArray (nType, pName, pNamespace);
 }
 
-Axis_Array Call::getCmplxArray (void* pDZFunct, void* pCreFunct, 
+Axis_Array* Call::getCmplxArray (void* pDZFunct, void* pCreFunct, 
     void* pDelFunct, void* pSizeFunct, const AxisChar* pName, 
     const AxisChar* pNamespace)
 {

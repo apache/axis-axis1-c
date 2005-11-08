@@ -56,16 +56,16 @@ int main(int argc, char* argv[])
 
             int arraySize = 3;
             xsd__int_Array inputArray;
-            xsd__int** array = new xsd__int*[arraySize]();
+            xsd__int** array = new xsd__int*[arraySize];
             for (int count = 0 ; count < arraySize ; count++)
             {
                 array[count] = new xsd__int(count);
             }
             inputArray.set(array, arraySize);
             
-            xsd__int_Array outputArray = ws.SimpleArray(inputArray);
+            xsd__int_Array * outputArray = ws.SimpleArray(&inputArray);
             int outputSize = 0;
-            const xsd__int** output = outputArray.get(outputSize);
+            const xsd__int** output = outputArray->get(outputSize);
             cout << "Array size = " << outputSize << endl;
             if (output != NULL)
             {
@@ -132,7 +132,7 @@ void PrintUsage()
 
 bool IsNumber(const char* p)
 {
-    for (int x=0; x < strlen(p); x++)
+    for (unsigned int x=0; x < strlen(p); x++)
  {
      if (!isdigit(p[x])) return false;
  }
@@ -147,12 +147,13 @@ void sig_handler(int sig) {
 
 void testAxis_Array()
 {
+    int count = 0;
     // Unit test the Axis_Array object for simple types (in this case xsd__int)
     // Initialize Array
     int unitTestInputSize = 3;
     xsd__int_Array unitTest_Axis_Array;
-    xsd__int** unitTestActualArray = new xsd__int*[unitTestInputSize]();
-    for (int count = 0 ; count < unitTestInputSize ; count++ )
+    xsd__int** unitTestActualArray = new xsd__int*[unitTestInputSize];
+    for (count = 0 ; count < unitTestInputSize ; count++ )
     {
         unitTestActualArray[count] = new xsd__int(count);
     }
@@ -164,7 +165,7 @@ void testAxis_Array()
     cout << "Array size = " << size << endl;
     if (unitTestOutputArray != NULL)
     {
-        for (int count = 0 ; count < size ; count++)
+        for (count = 0 ; count < size ; count++)
         {
             if (unitTestOutputArray[count] != NULL)
             {
@@ -192,7 +193,7 @@ void testAxis_Array()
     cout << "Array size = " << size << endl;
     if (unitTestOutputArray != NULL)
     {
-        for (int count = 0 ; count < size ; count++)
+        for (count = 0 ; count < size ; count++)
         {
             if (unitTestOutputArray[count] != NULL)
             {
@@ -221,7 +222,7 @@ void testAxis_Array()
     cout << "Array size = " << size << endl;
     if (unitTestOutputArray != NULL)
     {
-        for (int count = 0 ; count < size ; count++)
+        for (count = 0 ; count < size ; count++)
         {
             if (unitTestOutputArray[count] != NULL)
             {
@@ -245,7 +246,7 @@ void testAxis_ArrayWithNillElements()
     // Initialize Array
     int unitTestInputSize = 3;
     xsd__int_Array unitTest_Axis_Array;
-    xsd__int** unitTestActualArray = new xsd__int*[unitTestInputSize]();
+    xsd__int** unitTestActualArray = new xsd__int*[unitTestInputSize];
     unitTestActualArray[0] = new xsd__int(12345);
     unitTestActualArray[1] = NULL;
     unitTestActualArray[2] = new xsd__int(54321);
@@ -278,10 +279,11 @@ void testAxis_ArrayWithNillElements()
 
 void testAxis_ArrayCopying()
 {
+    int count = 0;
     int unitTestInputSize = 3;
     xsd__int_Array unitTest_Axis_Array;
-    xsd__int** unitTestActualArray = new xsd__int*[unitTestInputSize]();
-    for (int count = 0 ; count < unitTestInputSize ; count++ )
+    xsd__int** unitTestActualArray = new xsd__int*[unitTestInputSize];
+    for (count = 0 ; count < unitTestInputSize ; count++ )
     {
         unitTestActualArray[count] = new xsd__int(count);
     }
@@ -293,7 +295,7 @@ void testAxis_ArrayCopying()
     }
     unitTest_Axis_Array.set(unitTestActualArray, unitTestInputSize);
 
-    for (count = 0 ; count < unitTestInputSize ; count++);
+    for (count = 0 ; count < unitTestInputSize ; count++)
     {
         delete unitTestActualArray[count];
     }
@@ -304,7 +306,7 @@ void testAxis_ArrayCopying()
     cout << "Size is " << outputSize << endl;
     if (outputArray != NULL)
     {
-        for (int count = 0 ; count < outputSize ; count++)
+        for (count = 0 ; count < outputSize ; count++)
         {
             if (outputArray[count] != NULL)
             {
@@ -321,3 +323,4 @@ void testAxis_ArrayCopying()
         cout << "NULL" << endl;
     }
 }
+

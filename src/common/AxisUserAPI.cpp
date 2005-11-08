@@ -80,7 +80,7 @@ void Axis_Array::clone(Axis_Array & original)
     set(original.m_Array, original.m_Size, original.m_Type);
 }
  
-void Axis_Array::set(void* array, int size, XSDTYPE type)
+void Axis_Array::set(void** array, int size, XSDTYPE type)
 {
     clear();
     m_Size = size;
@@ -92,13 +92,13 @@ void Axis_Array::set(void* array, int size, XSDTYPE type)
     }
     else
     {
-        m_Array = new void*[m_Size]();
+        m_Array = new void*[m_Size];
     
         for (int count = 0 ; count < m_Size ; count++)
         {
-            if (((void**) array)[count] == NULL)
+            if ( array[count] == NULL)
             {
-                ((void**) m_Array)[count] = NULL;
+                m_Array[count] = NULL;
             }
             else
             {
@@ -160,79 +160,79 @@ void Axis_Array::set(void* array, int size, XSDTYPE type)
                     }
                     case XSD_STRING:
                     {
-                        ((xsd__string*) m_Array)[count] = new char[strlen(((xsd__string*) array)[count])+1]();
+                        ((xsd__string*) m_Array)[count] = new char[strlen(((xsd__string*) array)[count])+1];
                         strcpy(((xsd__string*) m_Array)[count], ((xsd__string*) array)[count]);
                         break;
                     }
                     case XSD_NORMALIZEDSTRING:
                     {
-                        ((xsd__normalizedString*) m_Array)[count] = new char[strlen(((xsd__normalizedString*) array)[count])+1]();
+                        ((xsd__normalizedString*) m_Array)[count] = new char[strlen(((xsd__normalizedString*) array)[count])+1];
                         strcpy(((xsd__normalizedString*) m_Array)[count], ((xsd__normalizedString*) array)[count]);
                         break;
                     }
                     case XSD_TOKEN:
                     {
-                        ((xsd__token*) m_Array)[count] = new char[strlen(((xsd__token*) array)[count])+1]();
+                        ((xsd__token*) m_Array)[count] = new char[strlen(((xsd__token*) array)[count])+1];
                         strcpy(((xsd__token*) m_Array)[count], ((xsd__token*) array)[count]);
                         break;
                     }
                     case XSD_LANGUAGE:
                     {
-                        ((xsd__language*) m_Array)[count] = new char[strlen(((xsd__language*) array)[count])+1]();
+                        ((xsd__language*) m_Array)[count] = new char[strlen(((xsd__language*) array)[count])+1];
                         strcpy(((xsd__language*) m_Array)[count], ((xsd__language*) array)[count]);
                         break;
                     }
                     case XSD_NAME:
                     {
-                        ((xsd__Name*) m_Array)[count] = new char[strlen(((xsd__Name*) array)[count])+1]();
+                        ((xsd__Name*) m_Array)[count] = new char[strlen(((xsd__Name*) array)[count])+1];
                         strcpy(((xsd__Name*) m_Array)[count], ((xsd__Name*) array)[count]);
                         break;
                     }
                     case XSD_NCNAME:
                     {
-                        ((xsd__NCName*) m_Array)[count] = new char[strlen(((xsd__NCName*) array)[count])+1]();
+                        ((xsd__NCName*) m_Array)[count] = new char[strlen(((xsd__NCName*) array)[count])+1];
                         strcpy(((xsd__NCName*) m_Array)[count], ((xsd__NCName*) array)[count]);
                         break;
                     }
                     case XSD_ID:
                     {
-                        ((xsd__ID*) m_Array)[count] = new char[strlen(((xsd__ID*) array)[count])+1]();
+                        ((xsd__ID*) m_Array)[count] = new char[strlen(((xsd__ID*) array)[count])+1];
                         strcpy(((xsd__ID*) m_Array)[count], ((xsd__ID*) array)[count]);
                         break;
                     }
                     case XSD_IDREF:
                     {
-                        ((xsd__IDREF*) m_Array)[count] = new char[strlen(((xsd__IDREF*) array)[count])+1]();
+                        ((xsd__IDREF*) m_Array)[count] = new char[strlen(((xsd__IDREF*) array)[count])+1];
                         strcpy(((xsd__IDREF*) m_Array)[count], ((xsd__IDREF*) array)[count]);
                         break;
                     }
                     case XSD_IDREFS:
                     {
-                        ((xsd__IDREFS*) m_Array)[count] = new char[strlen(((xsd__IDREFS*) array)[count])+1]();
+                        ((xsd__IDREFS*) m_Array)[count] = new char[strlen(((xsd__IDREFS*) array)[count])+1];
                         strcpy(((xsd__IDREFS*) m_Array)[count], ((xsd__IDREFS*) array)[count]);
                         break;
                     }
                     case XSD_ENTITY:
                     {
-                        ((xsd__ENTITY*) m_Array)[count] = new char[strlen(((xsd__ENTITY*) array)[count])+1]();
+                        ((xsd__ENTITY*) m_Array)[count] = new char[strlen(((xsd__ENTITY*) array)[count])+1];
                         strcpy(((xsd__ENTITY*) m_Array)[count], ((xsd__ENTITY*) array)[count]);
                         break;
                     }
                     case XSD_ENTITIES:
                     {
-                        ((xsd__ENTITIES*) m_Array)[count] = new char[strlen(((xsd__ENTITIES*) array)[count])+1]();
+                        ((xsd__ENTITIES*) m_Array)[count] = new char[strlen(((xsd__ENTITIES*) array)[count])+1];
                         strcpy(((xsd__ENTITIES*) m_Array)[count], ((xsd__ENTITIES*) array)[count]);
                         break;
                     }
                     case XSD_NMTOKEN:
                     {
-                        ((xsd__NMTOKEN*) m_Array)[count] = new char[strlen(((xsd__NMTOKEN*) array)[count])+1]();
+                        ((xsd__NMTOKEN*) m_Array)[count] = new char[strlen(((xsd__NMTOKEN*) array)[count])+1];
                         strcpy(((xsd__NMTOKEN*) m_Array)[count], ((xsd__NMTOKEN*) array)[count]);
                         break;
                     }
                     case XSD_NMTOKENS:
                     {
-                        ((xsd__NMTOKENS*) m_Array)[count] = new char[strlen(((xsd__NMTOKENS*) array)[count])+1]();
+                        ((xsd__NMTOKENS*) m_Array)[count] = new char[strlen(((xsd__NMTOKENS*) array)[count])+1];
                         strcpy(((xsd__NMTOKENS*) m_Array)[count], ((xsd__NMTOKENS*) array)[count]);
                         break;
                     }
@@ -362,19 +362,19 @@ void Axis_Array::set(void* array, int size, XSDTYPE type)
                     }
                     case XSD_ANYURI:
                     {
-                        ((xsd__anyURI*) m_Array)[count] = new char[strlen(((xsd__anyURI*) array)[count])+1]();
+                        ((xsd__anyURI*) m_Array)[count] = new char[strlen(((xsd__anyURI*) array)[count])+1];
                         strcpy(((xsd__anyURI*) m_Array)[count], ((xsd__anyURI*) array)[count]);
                         break;
                     }
                     case XSD_QNAME:
                     {
-                        ((xsd__QName*) m_Array)[count] = new char[strlen(((xsd__QName*) array)[count])+1]();
+                        ((xsd__QName*) m_Array)[count] = new char[strlen(((xsd__QName*) array)[count])+1];
                         strcpy(((xsd__QName*) m_Array)[count], ((xsd__QName*) array)[count]);
                         break;
                     }
                     case XSD_NOTATION:
                     {
-                        ((xsd__NOTATION*) m_Array)[count] = new char[strlen(((xsd__NOTATION*) array)[count])+1]();
+                        ((xsd__NOTATION*) m_Array)[count] = new char[strlen(((xsd__NOTATION*) array)[count])+1];
                         strcpy(((xsd__NOTATION*) m_Array)[count], ((xsd__NOTATION*) array)[count]);
                         break;
                     }
@@ -397,11 +397,11 @@ void Axis_Array::set(void* array, int size, XSDTYPE type)
     }
 }
 
-const void* Axis_Array::get(int& size, XSDTYPE& type) const
+const void** Axis_Array::get(int& size, XSDTYPE& type) const
 {
     size = m_Size;
     type = m_Type;
-    return m_Array;
+    return (const void**) m_Array;
 }
 
 
@@ -418,7 +418,7 @@ void Axis_Array::clear()
         {
             for (int count = 0 ; count < m_Size ; count++)
             {
-                if (((int*) m_Array)[count] != NULL)
+                if (m_Array[count] != NULL)
                 {
                     switch (m_Type)
                     {
@@ -678,7 +678,7 @@ xsd__duration_Array::xsd__duration_Array(xsd__duration_Array & original)
 
 void xsd__duration_Array::set(xsd__duration** array, int size)
 {
-	Axis_Array::set(array, size, XSD_DURATION);
+	Axis_Array::set((void**)array, size, XSD_DURATION);
 }
 
 const xsd__duration** xsd__duration_Array::get(int& size) const
@@ -702,7 +702,7 @@ xsd__dateTime_Array::xsd__dateTime_Array(xsd__dateTime_Array & original)
 
 void xsd__dateTime_Array::set(xsd__dateTime** array, int size)
 {
-   Axis_Array::set(array, size, XSD_DURATION);
+   Axis_Array::set((void**)array, size, XSD_DURATION);
 }
 
 const xsd__dateTime** xsd__dateTime_Array::get(int& size) const
@@ -726,7 +726,7 @@ xsd__time_Array::xsd__time_Array(xsd__time_Array & original)
 
 void xsd__time_Array::set(xsd__time** array, int size)
 {
-   Axis_Array::set(array, size, XSD_DURATION);
+   Axis_Array::set((void**)array, size, XSD_DURATION);
 }
 
 const xsd__time** xsd__time_Array::get(int& size) const
@@ -750,7 +750,7 @@ xsd__date_Array::xsd__date_Array(xsd__date_Array & original)
 
 void xsd__date_Array::set(xsd__date** array, int size)
 {
-   Axis_Array::set(array, size, XSD_DURATION);
+   Axis_Array::set((void**)array, size, XSD_DURATION);
 }
 
 const xsd__date** xsd__date_Array::get(int& size) const
@@ -774,7 +774,7 @@ xsd__gYearMonth_Array::xsd__gYearMonth_Array(xsd__gYearMonth_Array & original)
 
 void xsd__gYearMonth_Array::set(xsd__gYearMonth** array, int size)
 {
-   Axis_Array::set(array, size, XSD_DURATION);
+   Axis_Array::set((void**)array, size, XSD_DURATION);
 }
 
 const xsd__gYearMonth** xsd__gYearMonth_Array::get(int& size) const
@@ -798,7 +798,7 @@ xsd__gYear_Array::xsd__gYear_Array(xsd__gYear_Array & original)
 
 void xsd__gYear_Array::set(xsd__gYear** array, int size)
 {
-   Axis_Array::set(array, size, XSD_DURATION);
+   Axis_Array::set((void**)array, size, XSD_DURATION);
 }
 
 const xsd__gYear** xsd__gYear_Array::get(int& size) const
@@ -822,7 +822,7 @@ xsd__gMonthDay_Array::xsd__gMonthDay_Array(xsd__gMonthDay_Array & original)
 
 void xsd__gMonthDay_Array::set(xsd__gMonthDay** array, int size)
 {
-   Axis_Array::set(array, size, XSD_DURATION);
+   Axis_Array::set((void**)array, size, XSD_DURATION);
 }
 
 const xsd__gMonthDay** xsd__gMonthDay_Array::get(int& size) const
@@ -845,7 +845,7 @@ xsd__gMonth_Array::xsd__gMonth_Array(xsd__gMonth_Array & original)
 }
 void xsd__gMonth_Array::set(xsd__gMonth** array, int size)
 {
-   Axis_Array::set(array, size, XSD_DURATION);
+   Axis_Array::set((void**)array, size, XSD_DURATION);
 }
 
 const xsd__gMonth** xsd__gMonth_Array::get(int& size) const
@@ -869,7 +869,7 @@ xsd__gDay_Array::xsd__gDay_Array(xsd__gDay_Array & original)
 
 void xsd__gDay_Array::set(xsd__gDay** array, int size)
 {
-   Axis_Array::set(array, size, XSD_DURATION);
+   Axis_Array::set((void**)array, size, XSD_DURATION);
 }
 
 const xsd__gDay** xsd__gDay_Array::get(int& size) const
@@ -893,7 +893,7 @@ xsd__string_Array::xsd__string_Array(xsd__string_Array & original)
 
 void xsd__string_Array::set(xsd__string* array, int size)
 {
- Axis_Array::set(array, size, XSD_STRING);
+ Axis_Array::set((void**)array, size, XSD_STRING);
 }
 
 const xsd__string* xsd__string_Array::get(int& size) const
@@ -917,7 +917,7 @@ xsd__normalizedString_Array::xsd__normalizedString_Array(xsd__normalizedString_A
 
 void xsd__normalizedString_Array::set(xsd__normalizedString* array, int size)
 {
- Axis_Array::set(array, size, XSD_NORMALIZEDSTRING);
+ Axis_Array::set((void**)array, size, XSD_NORMALIZEDSTRING);
 }
 
 const xsd__normalizedString* xsd__normalizedString_Array::get(int& size) const
@@ -941,7 +941,7 @@ xsd__token_Array::xsd__token_Array(xsd__token_Array & original)
 
 void xsd__token_Array::set(xsd__token* array, int size)
 {
- Axis_Array::set(array, size, XSD_TOKEN);
+ Axis_Array::set((void**)array, size, XSD_TOKEN);
 }
 
 const xsd__token* xsd__token_Array::get(int& size) const
@@ -965,7 +965,7 @@ xsd__language_Array::xsd__language_Array(xsd__language_Array & original)
 
 void xsd__language_Array::set(xsd__language* array, int size)
 {
- Axis_Array::set(array, size, XSD_LANGUAGE);
+ Axis_Array::set((void**)array, size, XSD_LANGUAGE);
 }
 
 const xsd__language* xsd__language_Array::get(int& size) const
@@ -989,7 +989,7 @@ xsd__Name_Array::xsd__Name_Array(xsd__Name_Array & original)
 
 void xsd__Name_Array::set(xsd__Name* array, int size)
 {
- Axis_Array::set(array, size, XSD_NAME);
+ Axis_Array::set((void**)array, size, XSD_NAME);
 }
 
 const xsd__Name* xsd__Name_Array::get(int& size) const
@@ -1013,7 +1013,7 @@ xsd__NCName_Array::xsd__NCName_Array(xsd__NCName_Array & original)
 
 void xsd__NCName_Array::set(xsd__NCName* array, int size)
 {
- Axis_Array::set(array, size, XSD_NCNAME);
+ Axis_Array::set((void**)array, size, XSD_NCNAME);
 }
 
 const xsd__NCName* xsd__NCName_Array::get(int& size) const
@@ -1037,7 +1037,7 @@ xsd__ID_Array::xsd__ID_Array(xsd__ID_Array & original)
 
 void xsd__ID_Array::set(xsd__ID* array, int size)
 {
- Axis_Array::set(array, size, XSD_ID);
+ Axis_Array::set((void**)array, size, XSD_ID);
 }
 
 const xsd__ID* xsd__ID_Array::get(int& size) const
@@ -1061,7 +1061,7 @@ xsd__IDREF_Array::xsd__IDREF_Array(xsd__IDREF_Array & original)
 
 void xsd__IDREF_Array::set(xsd__IDREF* array, int size)
 {
- Axis_Array::set(array, size, XSD_IDREF);
+ Axis_Array::set((void**)array, size, XSD_IDREF);
 }
 
 const xsd__IDREF* xsd__IDREF_Array::get(int& size) const
@@ -1085,7 +1085,7 @@ xsd__IDREFS_Array::xsd__IDREFS_Array(xsd__IDREFS_Array & original)
 
 void xsd__IDREFS_Array::set(xsd__IDREFS* array, int size)
 {
- Axis_Array::set(array, size, XSD_IDREFS);
+ Axis_Array::set((void**)array, size, XSD_IDREFS);
 }
 
 const xsd__IDREFS* xsd__IDREFS_Array::get(int& size) const
@@ -1109,7 +1109,7 @@ xsd__ENTITY_Array::xsd__ENTITY_Array(xsd__ENTITY_Array & original)
 
 void xsd__ENTITY_Array::set(xsd__ENTITY* array, int size)
 {
- Axis_Array::set(array, size, XSD_ENTITY);
+ Axis_Array::set((void**)array, size, XSD_ENTITY);
 }
 
 const xsd__ENTITY* xsd__ENTITY_Array::get(int& size) const
@@ -1133,7 +1133,7 @@ xsd__ENTITIES_Array::xsd__ENTITIES_Array(xsd__ENTITIES_Array & original)
 
 void xsd__ENTITIES_Array::set(xsd__ENTITIES* array, int size)
 {
- Axis_Array::set(array, size, XSD_ENTITIES);
+ Axis_Array::set((void**)array, size, XSD_ENTITIES);
 }
 
 const xsd__ENTITIES* xsd__ENTITIES_Array::get(int& size) const
@@ -1157,7 +1157,7 @@ xsd__NMTOKEN_Array::xsd__NMTOKEN_Array(xsd__NMTOKEN_Array & original)
 
 void xsd__NMTOKEN_Array::set(xsd__NMTOKEN* array, int size)
 {
- Axis_Array::set(array, size, XSD_NMTOKEN);
+ Axis_Array::set((void**)array, size, XSD_NMTOKEN);
 }
 
 const xsd__NMTOKEN* xsd__NMTOKEN_Array::get(int& size) const
@@ -1181,7 +1181,7 @@ xsd__NMTOKENS_Array::xsd__NMTOKENS_Array(xsd__NMTOKENS_Array & original)
 
 void xsd__NMTOKENS_Array::set(xsd__NMTOKENS* array, int size)
 {
- Axis_Array::set(array, size, XSD_NMTOKEN);
+ Axis_Array::set((void**)array, size, XSD_NMTOKEN);
 }
 
 const xsd__NMTOKENS* xsd__NMTOKENS_Array::get(int& size) const
@@ -1205,7 +1205,7 @@ xsd__boolean_Array::xsd__boolean_Array(xsd__boolean_Array & original)
 
 void xsd__boolean_Array::set(xsd__boolean** array, int size)
 {
-	Axis_Array::set(array, size, XSD_BOOLEAN);
+	Axis_Array::set((void**)array, size, XSD_BOOLEAN);
 }
 
 const xsd__boolean** xsd__boolean_Array::get(int& size) const
@@ -1229,7 +1229,7 @@ xsd__base64Binary_Array::xsd__base64Binary_Array(xsd__base64Binary_Array & origi
 
 void xsd__base64Binary_Array::set(xsd__base64Binary** array, int size)
 {
-	Axis_Array::set(array, size, XSD_BASE64BINARY);
+	Axis_Array::set((void**)array, size, XSD_BASE64BINARY);
 }
 
 const xsd__base64Binary** xsd__base64Binary_Array::get(int& size) const
@@ -1253,7 +1253,7 @@ xsd__hexBinary_Array::xsd__hexBinary_Array(xsd__hexBinary_Array & original)
 
 void xsd__hexBinary_Array::set(xsd__hexBinary** array, int size)
 {
-	Axis_Array::set(array, size, XSD_HEXBINARY);
+	Axis_Array::set((void**)array, size, XSD_HEXBINARY);
 }
 
 const xsd__hexBinary** xsd__hexBinary_Array::get(int& size) const
@@ -1277,7 +1277,7 @@ xsd__float_Array::xsd__float_Array(xsd__float_Array & original)
 
 void xsd__float_Array::set(xsd__float** array, int size)
 {
-	Axis_Array::set(array, size, XSD_FLOAT);
+	Axis_Array::set((void**)array, size, XSD_FLOAT);
 }
 
 const xsd__float** xsd__float_Array::get(int& size) const
@@ -1301,7 +1301,7 @@ xsd__decimal_Array::xsd__decimal_Array(xsd__decimal_Array & original)
 
 void xsd__decimal_Array::set(xsd__decimal** array, int size)
 {
-	Axis_Array::set(array, size, XSD_DECIMAL);
+	Axis_Array::set((void**)array, size, XSD_DECIMAL);
 }
 
 const xsd__decimal** xsd__decimal_Array::get(int& size) const
@@ -1325,7 +1325,7 @@ xsd__integer_Array::xsd__integer_Array(xsd__integer_Array & original)
 
 void xsd__integer_Array::set(xsd__integer** array, int size)
 {
-	Axis_Array::set(array, size, XSD_INTEGER);
+	Axis_Array::set((void**)array, size, XSD_INTEGER);
 }
 
 const xsd__integer** xsd__integer_Array::get(int& size) const
@@ -1349,7 +1349,7 @@ xsd__nonPositiveInteger_Array::xsd__nonPositiveInteger_Array(xsd__nonPositiveInt
 
 void xsd__nonPositiveInteger_Array::set(xsd__nonPositiveInteger** array, int size)
 {
-	Axis_Array::set(array, size, XSD_NONPOSITIVEINTEGER);
+	Axis_Array::set((void**)array, size, XSD_NONPOSITIVEINTEGER);
 }
 
 const xsd__nonPositiveInteger** xsd__nonPositiveInteger_Array::get(int& size) const
@@ -1373,7 +1373,7 @@ xsd__negativeInteger_Array::xsd__negativeInteger_Array(xsd__negativeInteger_Arra
 
 void xsd__negativeInteger_Array::set(xsd__negativeInteger** array, int size)
 {
-	Axis_Array::set(array, size, XSD_NEGATIVEINTEGER);
+	Axis_Array::set((void**)array, size, XSD_NEGATIVEINTEGER);
 }
 
 const xsd__negativeInteger** xsd__negativeInteger_Array::get(int& size) const
@@ -1397,7 +1397,7 @@ xsd__long_Array::xsd__long_Array(xsd__long_Array & original)
 
 void xsd__long_Array::set(xsd__long** array, int size)
 {
-	Axis_Array::set(array, size, XSD_LONG);
+	Axis_Array::set((void**)array, size, XSD_LONG);
 }
 
 const xsd__long** xsd__long_Array::get(int& size) const
@@ -1421,7 +1421,7 @@ xsd__int_Array::xsd__int_Array(xsd__int_Array & original)
 
 void xsd__int_Array::set(xsd__int** array, int size)
 {
-	Axis_Array::set(array, size, XSD_INT);
+	Axis_Array::set((void**)array, size, XSD_INT);
 }
 
 const xsd__int** xsd__int_Array::get(int& size) const
@@ -1445,7 +1445,7 @@ xsd__short_Array::xsd__short_Array(xsd__short_Array & original)
 
 void xsd__short_Array::set(xsd__short** array, int size)
 {
-	Axis_Array::set(array, size, XSD_SHORT);
+	Axis_Array::set((void**)array, size, XSD_SHORT);
 }
 
 const xsd__short** xsd__short_Array::get(int& size) const
@@ -1469,7 +1469,7 @@ xsd__byte_Array::xsd__byte_Array(xsd__byte_Array & original)
 
 void xsd__byte_Array::set(xsd__byte** array, int size)
 {
-	Axis_Array::set(array, size, XSD_BYTE);
+	Axis_Array::set((void**)array, size, XSD_BYTE);
 }
 
 const xsd__byte** xsd__byte_Array::get(int& size) const
@@ -1493,7 +1493,7 @@ xsd__nonNegativeInteger_Array::xsd__nonNegativeInteger_Array(xsd__nonNegativeInt
 
 void xsd__nonNegativeInteger_Array::set(xsd__nonNegativeInteger** array, int size)
 {
-	Axis_Array::set(array, size, XSD_NONNEGATIVEINTEGER);
+	Axis_Array::set((void**)array, size, XSD_NONNEGATIVEINTEGER);
 }
 
 const xsd__nonNegativeInteger** xsd__nonNegativeInteger_Array::get(int& size) const
@@ -1517,7 +1517,7 @@ xsd__unsignedLong_Array::xsd__unsignedLong_Array(xsd__unsignedLong_Array & origi
 
 void xsd__unsignedLong_Array::set(xsd__unsignedLong** array, int size)
 {
-	Axis_Array::set(array, size, XSD_UNSIGNEDLONG);
+	Axis_Array::set((void**)array, size, XSD_UNSIGNEDLONG);
 }
 
 const xsd__unsignedLong** xsd__unsignedLong_Array::get(int& size) const
@@ -1541,7 +1541,7 @@ xsd__unsignedInt_Array::xsd__unsignedInt_Array(xsd__unsignedInt_Array & original
 
 void xsd__unsignedInt_Array::set(xsd__unsignedInt** array, int size)
 {
-	Axis_Array::set(array, size, XSD_UNSIGNEDINT);
+	Axis_Array::set((void**)array, size, XSD_UNSIGNEDINT);
 }
 
 const xsd__unsignedInt** xsd__unsignedInt_Array::get(int& size) const
@@ -1565,7 +1565,7 @@ xsd__unsignedShort_Array::xsd__unsignedShort_Array(xsd__unsignedShort_Array & or
 
 void xsd__unsignedShort_Array::set(xsd__unsignedShort** array, int size)
 {
-	Axis_Array::set(array, size, XSD_UNSIGNEDSHORT);
+	Axis_Array::set((void**)array, size, XSD_UNSIGNEDSHORT);
 }
 
 const xsd__unsignedShort** xsd__unsignedShort_Array::get(int& size) const
@@ -1589,7 +1589,7 @@ xsd__unsignedByte_Array::xsd__unsignedByte_Array(xsd__unsignedByte_Array & origi
 
 void xsd__unsignedByte_Array::set(xsd__unsignedByte** array, int size)
 {
-	Axis_Array::set(array, size, XSD_UNSIGNEDBYTE);
+	Axis_Array::set((void**)array, size, XSD_UNSIGNEDBYTE);
 }
 
 const xsd__unsignedByte** xsd__unsignedByte_Array::get(int& size) const
@@ -1613,7 +1613,7 @@ xsd__positiveInteger_Array::xsd__positiveInteger_Array(xsd__positiveInteger_Arra
 
 void xsd__positiveInteger_Array::set(xsd__positiveInteger** array, int size)
 {
-	Axis_Array::set(array, size, XSD_POSITIVEINTEGER);
+	Axis_Array::set((void**)array, size, XSD_POSITIVEINTEGER);
 }
 
 const xsd__positiveInteger** xsd__positiveInteger_Array::get(int& size) const
@@ -1637,7 +1637,7 @@ xsd__double_Array::xsd__double_Array(xsd__double_Array & original)
 
 void xsd__double_Array::set(xsd__double** array, int size)
 {
-	Axis_Array::set(array, size, XSD_DOUBLE);
+	Axis_Array::set((void**)array, size, XSD_DOUBLE);
 }
 
 const xsd__double** xsd__double_Array::get(int& size) const
@@ -1661,7 +1661,7 @@ xsd__anyURI_Array::xsd__anyURI_Array(xsd__anyURI_Array & original)
 
 void xsd__anyURI_Array::set(xsd__anyURI* array, int size)
 {
-    Axis_Array::set(array, size, XSD_ANYURI);
+    Axis_Array::set((void**)array, size, XSD_ANYURI);
 }
 
 const xsd__anyURI* xsd__anyURI_Array::get(int& size) const
@@ -1685,7 +1685,7 @@ xsd__QName_Array::xsd__QName_Array(xsd__QName_Array & original)
 
 void xsd__QName_Array::set(xsd__QName* array, int size)
 {
-    Axis_Array::set(array, size, XSD_QNAME);
+    Axis_Array::set((void**)array, size, XSD_QNAME);
 }
 
 const xsd__QName* xsd__QName_Array::get(int& size) const
@@ -1709,7 +1709,7 @@ xsd__NOTATION_Array::xsd__NOTATION_Array(xsd__NOTATION_Array & original)
 
 void xsd__NOTATION_Array::set(xsd__NOTATION* array, int size)
 {
-    Axis_Array::set(array, size, XSD_NOTATION);
+    Axis_Array::set((void**)array, size, XSD_NOTATION);
 }
 
 const xsd__NOTATION* xsd__NOTATION_Array::get(int& size) const

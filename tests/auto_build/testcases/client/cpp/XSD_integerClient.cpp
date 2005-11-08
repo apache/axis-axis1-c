@@ -113,16 +113,16 @@ int main(int argc, char* argv[])
         // Test arrays
         int arraySize = 2;
         xsd__integer_Array inputArray;
-        xsd__integer** array = new xsd__integer*[arraySize]();
+        xsd__integer** array = new xsd__integer*[arraySize];
         for (int count = 0 ; count < arraySize ; count++)
         {
             array[count] = new xsd__integer(123456789);
         }
         inputArray.set(array, arraySize);
         
-        xsd__integer_Array outputArray = ws->asArray(inputArray);
+        xsd__integer_Array * outputArray = ws->asArray(&inputArray);
         int outputSize = 0;
-        const xsd__integer** output = outputArray.get(outputSize);
+        const xsd__integer** output = outputArray->get(outputSize);
         cout << "array of " << outputSize << " elements" << endl;
         if (output != NULL)
         {

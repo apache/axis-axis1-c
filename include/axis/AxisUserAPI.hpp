@@ -331,7 +331,7 @@ class STORAGE_CLASS_INFO Axis_Array {
     /**
      * Destructor
      */
-    virtual ~Axis_Array();
+    ~Axis_Array();
     
     /**
      * Clone the content of an existing Axis_Array
@@ -346,7 +346,7 @@ class STORAGE_CLASS_INFO Axis_Array {
      * @param size of the array, including NULL entries.
      * @param type of data.
      */
-    void set(void* array, int size, const XSDTYPE type);
+    void set(void** array, int size, const XSDTYPE type);
     
     /**
      * Return a c-style array.
@@ -355,7 +355,7 @@ class STORAGE_CLASS_INFO Axis_Array {
      * @param type, this will be updated with the type of the data returned.
      * @return c-style array of pointers to the array data.
      */
-    const void* get(int& size, XSDTYPE& type) const;
+    const void** get(int& size, XSDTYPE& type) const;
     
     /**
      * Clear the array, and it's data
@@ -366,7 +366,7 @@ class STORAGE_CLASS_INFO Axis_Array {
     friend class SoapSerializer;
 
 protected:
-    void* m_Array; // Array of pointers to array elements
+    void** m_Array; // Array of pointers to array elements
     int m_Size; // Size of array
     XSDTYPE m_Type; // XSD datatype within this array
 };
