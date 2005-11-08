@@ -70,10 +70,12 @@ int main(int argc, char* argv[])
 				att3->addBody(&b64b1);
 				//Calling webservice with multiple attachments
 				xsd__string_Array ret=ws.multiAttachment(att,att1,att2,att3);
-				cout<<ret.m_Array[0]<<endl;
-				cout<<ret.m_Array[1]<<endl;
-				cout<<ret.m_Array[2]<<endl;
-				cout<<ret.m_Array[3]<<endl;			    			
+				int outputsize=0;
+				const xsd__string * array=ret.get(outputsize);
+				cout << array[0]<<endl;
+				cout << array[1]<<endl;
+				cout << array[2]<<endl;
+				cout << array[3]<<endl;		    			
 			    bSuccess = true;
 			}	
 	catch(AxisException& e)
