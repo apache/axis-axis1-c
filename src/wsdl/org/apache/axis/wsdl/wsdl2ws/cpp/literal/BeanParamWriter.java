@@ -993,12 +993,16 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     }
                 	else
                 	{
-                		writer.write("\tparam->"
-                            + attribs[i].getParamNameAsMember()
-                            + " = pIWSDZ->"
-                            + CUtils.getParameterGetValueMethodName(attribs[i]
-                                    .getTypeName(), attribs[i].isAttribute())
-                            + "( \"" + soapTagName + "\",0);\n");
+                		String typeName = attribs[i].getTypeName();
+                		String elementName = attribs[i].getParamNameAsMember();
+                		
+                		writer.write("\t" + typeName + " *	pValue = pIWSDZ->" +
+                		        	 CUtils.getParameterGetValueMethodName(typeName, attribs[i].isAttribute()) +
+                		        	 "( \"" + soapTagName + "\", 0);\n\n");
+                		writer.write("\tparam->" + elementName + " = new " + typeName + "();\n");
+                		writer.write("\t*param->" + elementName + " = *pValue;\n\n");
+                		writer.write("\tAxis::AxisDelete( (void *) pValue, " + CUtils.getXSDTypeForBasicType( typeName) + ");\n\n");
+
                 	}
                 } 
                 else
