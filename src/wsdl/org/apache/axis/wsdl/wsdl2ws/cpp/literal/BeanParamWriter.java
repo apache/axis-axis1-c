@@ -999,10 +999,28 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 		writer.write("\t" + typeName + " *	pValue = pIWSDZ->" +
                 		        	 CUtils.getParameterGetValueMethodName(typeName, attribs[i].isAttribute()) +
                 		        	 "( \"" + soapTagName + "\", 0);\n\n");
-                		writer.write("\tparam->" + elementName + " = new " + typeName + "();\n");
-                		writer.write("\t*param->" + elementName + " = *pValue;\n\n");
-                		writer.write("\tAxis::AxisDelete( (void *) pValue, " + CUtils.getXSDTypeForBasicType( typeName) + ");\n\n");
+                		
+                		writer.write( "\tif( pValue == NULL)\n");
+                		writer.write( "\t{\n");
+            		    writer.write("\t\tparam->" + elementName + " = NULL;\n");
+                		writer.write( "\t}\n");
+                		writer.write( "\telse\n");
+                		writer.write( "\t{\n");
+                		
+                		if( CUtils.isPointerType( typeName))
+                		{
+                		    writer.write("\t\tparam->" + elementName + " = new char[strlen( pValue) + 1];\n");
+                    		writer.write("\t\tstrcpy( param->" + elementName + ", pValue);\n\n");
+                		}
+                		else
+                		{
+                		    writer.write("\t\tparam->" + elementName + " = new " + typeName + "();\n");
+                    		writer.write("\t\t*param->" + elementName + " = *pValue;\n\n");
+                		}
+                		
+                		writer.write("\t\tAxis::AxisDelete( (void *) pValue, " + CUtils.getXSDTypeForBasicType( typeName) + ");\n\n");
 
+                		writer.write( "\t}\n");
                 	}
                 } 
                 else
