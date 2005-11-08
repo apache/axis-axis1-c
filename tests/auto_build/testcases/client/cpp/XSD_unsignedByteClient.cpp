@@ -107,24 +107,31 @@ int main(int argc, char* argv[])
 
         // Test array
         xsd__unsignedByte_Array arrayInput;
-        arrayInput.m_Array = new xsd__unsignedByte*[2];
-        xsd__unsignedByte * array = new xsd__unsignedByte[2];
-        arrayInput.m_Size = 2;
-        for (int inputIndex=0 ; inputIndex < 2 ; inputIndex++)
+		int arraySize=2;
+		xsd__unsignedByte ** array = new xsd__unsignedByte*[arraySize]();
+        
+        for (int inputIndex=0 ; inputIndex < arraySize ; inputIndex++)
         {
-            array[inputIndex] = 123;
-            arrayInput.m_Array[inputIndex] = &array[inputIndex];
+            array[inputIndex] = new xsd__unsignedByte(123);
+            
         }
+		arrayInput.set(array,arraySize);
         xsd__unsignedByte_Array arrayResult = ws->asArray(arrayInput);
-        cout << "array of " << arrayResult.m_Size << " elements" << endl;
-        for (int index = 0; index < arrayResult.m_Size ; index++)
+		int outputSize=0;
+		const xsd__unsignedByte ** output = arrayResult.get(outputSize);
+        cout << "array of " << outputSize << " elements" << endl;
+        for (int index = 0; index < outputSize ; index++)
         {
-            cout << "  element[" << index << "]=" << (int) *((xsd__unsignedByte*)(arrayResult.m_Array[index])) << endl;
-            delete arrayResult.m_Array[index];
+            cout << "  element[" << index << "]=" << (int) *((xsd__unsignedByte*)(output[index])) << endl;
+           
+        }
+        // Clear up input array        
+        for (int deleteIndex = 0 ; deleteIndex < arraySize ; deleteIndex++ )
+        {
+            delete array[deleteIndex];
         }
         delete [] array;
-        delete [] arrayInput.m_Array;
-        delete [] arrayResult.m_Array;
+
 
         // Test complex type
         SimpleComplexType complexTypeInput;
