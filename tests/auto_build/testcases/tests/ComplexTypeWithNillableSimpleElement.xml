@@ -1,0 +1,19 @@
+<test>
+    <name>ComplexTypeWithNillableSimpleElement</name>
+    <description>ComplexTypeWithNillableSimpleElement</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>ComplexTypeWithNillableSimpleElementClient.cpp</clientCode>
+    <wsdl>ComplexTypeWithNillableSimpleElement.wsdl</wsdl>
+    <expected>
+        <output>
+            ComplexTypeWithNillableSimpleElement_Output.expected
+        </output>
+        <request>
+            ComplexTypeWithNillableSimpleElement_Request.expected
+        </request> 
+        <serverResponse>
+            ComplexTypeWithNillableSimpleElement_Response.expected
+        </serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/ComplexTypeWithNillableSimpleElement</endpoint>
+</test>

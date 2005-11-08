@@ -1,0 +1,16 @@
+POST /axis/ComplexTypeWithNillableSimpleElement HTTP/1.1
+Host: 127.0.0.1:13260
+Content-Type: text/xml; charset=UTF-8
+SOAPAction: "ComplexTypeWithNillableSimpleElement#echo"
+Content-Length: 443
+
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:echo xmlns:ns1="http://localhost/axis/Calculator">
+<ns1:simpleComplexType><ns1:complexTypeElement>1738</ns1:complexTypeElement>
+</ns1:simpleComplexType>
+</ns1:echo>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
