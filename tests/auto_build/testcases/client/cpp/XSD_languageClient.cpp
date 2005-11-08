@@ -299,37 +299,42 @@ int main(int argc, char* argv[])
 
         // Test array
         xsd__language_Array arrayInput;
-        arrayInput.m_Array = new xsd__language[2];
-        arrayInput.m_Size = 2;
-        for (int inputIndex=0 ; inputIndex < 2 ; inputIndex++)
+		int arraySize=2;
+		xsd__language * array = new xsd__language[arraySize]();        
+        for (int inputIndex=0 ; inputIndex < arraySize ; inputIndex++)
         {
             input = new char[25];
             strcpy (input, simplelanguage);
-            arrayInput.m_Array[inputIndex] = input;
+            array[inputIndex] = input;
         }
+		arrayInput.set(array,arraySize);
         xsd__language_Array arrayResult = ws->asArray(arrayInput);
-        cout << "array of " << arrayResult.m_Size << " elements" << endl;
-        for (int index = 0; index < arrayResult.m_Size ; index++)
+		int outputSize=0;
+		const xsd__language *output = arrayResult.get(outputSize);
+        cout << "array of " << outputSize << " elements" << endl;
+        for (int index = 0; index < outputSize ; index++)
         {
-            if (arrayResult.m_Array[index])
+            if (output != NULL)
             {
-                if (*(arrayResult.m_Array[index]))
+                if (output[index]!=NULL)
                 {
-                    cout << "  element[" << index << "]=" << arrayResult.m_Array[index] << endl;
+                    cout << "  element[" << index << "]=" << output[index] << endl;
                 }
                 else
                 {
                     cout << "  element[" << index << "]=<empty>" << endl;
                 }
-                delete arrayResult.m_Array[index];
+                
             }
             else
             {
                 cout << "  element[" << index << "]=<nil>" << endl;
             }
         }
-        delete [] arrayInput.m_Array;
-        delete [] arrayResult.m_Array;
+        // Clear up input array      
+        
+        delete [] array;
+
 
         // Test complex type
         input = new char[25];
