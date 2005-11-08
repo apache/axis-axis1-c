@@ -111,25 +111,30 @@ int main(int argc, char* argv[])
 
 		// Test array
         xsd__float_Array arrayInput;
-        arrayInput.m_Array = new xsd__float*[2];
-        xsd__float * array = new xsd__float[2];
-        arrayInput.m_Size = 2;
-        for (int inputIndex=0 ; inputIndex < 2 ; inputIndex++)
+		int arraySize=2;
+		xsd__float ** array = new xsd__float*[arraySize]();
+        
+        for (int inputIndex=0 ; inputIndex < arraySize ; inputIndex++)
         {
-            array[inputIndex] = (xsd__float)35.353588;
-            arrayInput.m_Array[inputIndex] = &array[inputIndex];
+            array[inputIndex] = new xsd__float(35.353588);
         }
+		arrayInput.set(array,arraySize);
 		xsd__float_Array arrayResult = ws->asArray(arrayInput);
-        cout << "array of " << arrayResult.m_Size << " elements" << endl;
-		for (int index = 0; index < arrayResult.m_Size ; index++)
+		int outputSize=0;
+		const xsd__float ** output = arrayResult.get(outputSize);
+        cout << "array of " << outputSize << " elements" << endl;
+		for (int index = 0; index < outputSize ; index++)
 		{
-			printf("  element[%i]=%.5f\n", index,  *((arrayResult.m_Array[index])));
+			printf("  element[%i]=%.5f\n", index,  *(output[index]));
             fflush(stdout);
-			delete arrayResult.m_Array[index];
+			
 		}
+         // Clear up input array        
+        for (int deleteIndex = 0 ; deleteIndex < arraySize ; deleteIndex++ )
+        {
+            delete array[deleteIndex];
+        }
         delete [] array;
-        delete [] arrayInput.m_Array;
-		delete [] arrayResult.m_Array;
 
 		// Test complex type
 		SimpleComplexType complexTypeInput;
