@@ -123,26 +123,31 @@ int main(int argc, char* argv[])
 
         // Test array
         xsd__hexBinary_Array arrayInput;
-        arrayInput.m_Array = new xsd__hexBinary*[2];
-        xsd__hexBinary * array = new xsd__hexBinary[2];
-        arrayInput.m_Size = 2;
-        for (int inputIndex=0 ; inputIndex < 2 ; inputIndex++)
+		int arraySize = 2;
+        xsd__hexBinary ** array = new xsd__hexBinary*[arraySize]();
+        for (int inputIndex=0 ; inputIndex < arraySize ; inputIndex++)
         {
-            array[inputIndex] = input;
-            arrayInput.m_Array[inputIndex] = &array[inputIndex];
+            array[inputIndex] = new xsd__hexBinary(input);            
         }
+		arrayInput.set(array,arraySize);
         xsd__hexBinary_Array arrayResult = ws->asArray(arrayInput);
-        cout << "array of " << arrayResult.m_Size << " elements" << endl;
-        for (int index = 0; index < arrayResult.m_Size ; index++)
+		int outputSize=0;
+		const xsd__hexBinary ** output =arrayResult.get(outputSize);
+        cout << "array of " << outputSize << " elements" << endl;
+        for (int index = 0; index < outputSize; index++)
         {
             cout << " element[" << index << "]" << endl;
-            cout << "  size=" << arrayResult.m_Array[index]->__size << endl;
-            cout << "  data=" << asciiToString((char *)arrayResult.m_Array[index]->__ptr) << endl;
-            delete arrayResult.m_Array[index];
+            cout << "  size=" << output[index]->__size << endl;
+            cout << "  data=" << asciiToString((char *)output[index]->__ptr) << endl;
+            
+        }
+        // Clear up input array        
+        for (int deleteIndex = 0 ; deleteIndex < arraySize ; deleteIndex++ )
+        {
+            delete array[deleteIndex];
         }
         delete [] array;
-        delete [] arrayInput.m_Array;
-        delete [] arrayResult.m_Array;
+
 
         // Test complex type
         SimpleComplexType complexTypeInput;
