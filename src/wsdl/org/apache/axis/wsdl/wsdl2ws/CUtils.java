@@ -51,7 +51,7 @@ public class CUtils {
 	// File suffix fr C Header files
 	public static final String C_HEADER_SUFFIX = ".h";
 	// Valid XML but invalid or reserved C/C++ characters 
-	public static final String VALID_XML_INVALID_C = "//!\"£#$%&'()*+,-./:;<=>?@\\^`{|}~[]";
+	public static final String VALID_XML_INVALID_C = "//!\"#$%&'()*+,-./:;<=>?@\\^`{|}~[]";
 
 	/* This type mapping only maps simple types the mapping for
 	   complex types are done with in the type class */
