@@ -121,26 +121,30 @@ int main(int argc, char* argv[])
 */
 
 		// Test array
-        xsd__decimal_Array arrayInput;
-        arrayInput.m_Array = new xsd__decimal*[2];
-        xsd__decimal * array = new xsd__decimal[2];
-        arrayInput.m_Size = 2;
-        for (int inputIndex=0 ; inputIndex < 2 ; inputIndex++)
+         xsd__decimal_Array arrayInput;
+		int arraySize=2;
+		xsd__decimal **array = new xsd__decimal*[arraySize]();        
+        for (int inputIndex=0 ; inputIndex < arraySize ; inputIndex++)
         {
-            array[inputIndex] = 123456789;
-            arrayInput.m_Array[inputIndex] = &array[inputIndex];
+            array[inputIndex] = new xsd__decimal(123456789);
+          
         }
+		arrayInput.set(array,arraySize);
 		xsd__decimal_Array arrayResult = ws->asArray(arrayInput);
-        cout << "array of " << arrayResult.m_Size << " elements" << endl;
-		for (int index = 0; index < arrayResult.m_Size ; index++)
+		int outputSize=0;
+		const xsd__decimal ** output = arrayResult.get(outputSize);
+        cout << "array of " << outputSize << " elements" << endl;
+		for (int index = 0; index < outputSize ; index++)
 		{
-			printf("  element[%i]=%.6f\n", index, *((xsd__decimal*)(arrayResult.m_Array[index])));
-            fflush(stdout);
-			delete arrayResult.m_Array[index];
+			printf("  element[%i]=%.6f\n", index, *((xsd__decimal*)output[index]));
+            fflush(stdout);			
 		}
+         // Clear up input array        
+        for (int deleteIndex = 0 ; deleteIndex < arraySize ; deleteIndex++ )
+        {
+            delete array[deleteIndex];
+        }
         delete [] array;
-        delete [] arrayInput.m_Array;
-		delete [] arrayResult.m_Array;
 
 		// Test complex type
 		SimpleComplexType complexTypeInput;
