@@ -132,9 +132,9 @@ int main(int argc, char* argv[])
             array[inputIndex] =new xsd__base64Binary(input);            
         }
 		arrayInput.set(array,arraySize);
-		xsd__base64Binary_Array arrayResult = ws->asArray(arrayInput);
+		xsd__base64Binary_Array* arrayResult = ws->asArray(&arrayInput);
 		int outputSize=0;
-		const xsd__base64Binary **output=arrayResult.get(outputSize);
+		const xsd__base64Binary **output=arrayResult->get(outputSize);
         cout << "array of " << outputSize << " elements" << endl;
 		for (int index = 0; index < outputSize ; index++)
 		{
