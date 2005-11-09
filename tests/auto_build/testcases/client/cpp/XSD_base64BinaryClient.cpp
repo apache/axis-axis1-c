@@ -47,7 +47,7 @@ int main(int argc, char* argv[])
 	    xsd__base64Binary result = ws->asNonNillableElement(input);
 		cout << "non-nillable element" << endl;
         cout << " size=" << result.__size << endl;
-        cout << " data=" << asciiToString((char *)result.__ptr) << endl;
+        cout << " data=" << asciiToStringOfLength((char *)result.__ptr, result.__size) << endl;
 
 		// Test nillable element, with a value
 		xsd__base64Binary* nillableInput = new xsd__base64Binary();
@@ -57,7 +57,7 @@ int main(int argc, char* argv[])
 		{
 			cout << "nillable element" << endl;
             cout << " size=" << nillableResult->__size << endl;
-            cout << " data=" << asciiToString((char *)nillableResult->__ptr) << endl;
+            cout << " data=" << asciiToStringOfLength((char *)nillableResult->__ptr, nillableResult->__size) << endl;
             delete nillableResult;
 		}
 		else
@@ -72,7 +72,7 @@ int main(int argc, char* argv[])
 		{
 			cout << "nillable element=" << endl;
             cout << " size=" << nillableResult->__size << endl;
-            cout << " data=" << asciiToString((char *)nillableResult->__ptr) << endl;
+            cout << " data=" << asciiToStringOfLength((char *)nillableResult->__ptr, nillableResult->__size) << endl;
 			delete nillableResult;
 		}
 		else
@@ -86,7 +86,7 @@ int main(int argc, char* argv[])
 		RequiredAttributeElement* requiredAttributeResult = ws->asRequiredAttribute(&requiredAttributeInput);
 		cout << "required attribute" << endl;
         cout << " size=" << requiredAttributeResult->getrequiredAttribute().__size << endl;
-        cout << " data=" << asciiToString((char *)requiredAttributeResult->getrequiredAttribute().__ptr) << endl;
+        cout << " data=" << asciiToStringOfLength((char *)requiredAttributeResult->getrequiredAttribute().__ptr, requiredAttributeResult->getrequiredAttribute().__size) << endl;
 		delete requiredAttributeResult;
 
 /* Optional Attributes currently unsupported by WSDL2Ws
@@ -140,7 +140,7 @@ int main(int argc, char* argv[])
 		{
 			cout << " element[" << index << "]" << endl;
             cout << "  size=" << output[index]->__size << endl;
-            cout << "  data=" << asciiToString(*output[index]->__ptr) << endl;			
+            cout << "  data=" << asciiToStringOfLength(*output[index]->__ptr, output[index]->__size) << endl;
 		}
 
         for (int deleteIndex = 0 ; deleteIndex < arraySize ; deleteIndex++ )
@@ -155,7 +155,7 @@ int main(int argc, char* argv[])
 		SimpleComplexType* complexTypeResult = ws->asComplexType(&complexTypeInput);
 		cout << "within complex type" << endl;
         cout << " size=" << complexTypeResult->getcomplexTypeElement().__size << endl;
-        cout << " data=" << asciiToString((char *)complexTypeResult->getcomplexTypeElement().__ptr) << endl;
+        cout << " data=" << asciiToStringOfLength((char *)complexTypeResult->getcomplexTypeElement().__ptr, complexTypeResult->getcomplexTypeElement().__size) << endl;
 		delete complexTypeResult;
 
 		// Tests now complete
