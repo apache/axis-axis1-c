@@ -278,7 +278,7 @@ int main(int argc, char* argv[])
 		cout << "base64Binary size=" << b64Result->__size << endl;
 		if( b64Result->__size > 0)
 		{
-			cout << "base64Binary data=" << asciiToString((char *)b64Result->__ptr) << endl;
+			cout << "base64Binary data=" << asciiToStringOfLength((char *)b64Result->__ptr, b64Result->__size) << endl;
 		}
 		b64Result = ws->setGetBase64BinaryType(NULL);
 		if(b64Result)
@@ -290,7 +290,7 @@ int main(int argc, char* argv[])
 		cout << "hexBinary size=" << hexResult->__size << endl;
 		if( hexResult->__size > 0)
 		{
-			cout << "hexBinary data=" << asciiToString((char *)hexResult->__ptr) << endl;
+			cout << "hexBinary data=" << asciiToStringOfLength((char *)hexResult->__ptr, hexResult->__size) << endl;
 		}
 		hexResult = ws->setGetHexBinary(&hexTest);
 		if(hexResult)
