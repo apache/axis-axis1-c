@@ -113,7 +113,7 @@ int main(int argc, char* argv[])
         // Test array
         xsd__byte_Array arrayInput;
 		int arraySize=2;
-		xsd__byte **array = new xsd__byte*[arraySize]();
+		xsd__byte **array = new xsd__byte*[arraySize];
         
         for (int inputIndex=0 ; inputIndex < 2 ; inputIndex++)
         {
