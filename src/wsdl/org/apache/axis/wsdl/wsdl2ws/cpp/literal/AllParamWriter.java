@@ -155,10 +155,13 @@ public class AllParamWriter implements SourceWriter
                         {
                             /* TODO do some processing to this type before synthesizing to remove ">" charactors.
                              * And then it should also be synthesized if commandline option says to */
-                            System.out.println(
+                            if(WSDL2Ws.verbose)
+                            {
+                                System.out.println(
                                 "ignoring anonymous type "
                                     + type.getLanguageSpecificName()
                                     + "\n");
+                            }
                         }
                         else
                         {
