@@ -118,9 +118,9 @@ int main(int argc, char* argv[])
             array[inputIndex] =new xsd__double(70.7175888888);          
         }
 		arrayInput.set(array,arraySize);
-        xsd__double_Array arrayResult = ws->asArray(arrayInput);
+        xsd__double_Array* arrayResult = ws->asArray(&arrayInput);
 		int outputSize=0;
-		const xsd__double ** output=arrayResult.get(outputSize);
+		const xsd__double ** output=arrayResult->get(outputSize);
         cout << "array of " << outputSize << " elements" << endl;
         for (int index = 0; index < outputSize ; index++)
          {
