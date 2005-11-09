@@ -109,7 +109,7 @@ int main(int argc, char* argv[])
         // Test array
           xsd__nonNegativeInteger_Array arrayInput;
 		int arraySize=2;
-		xsd__nonNegativeInteger **array = new xsd__nonNegativeInteger*[arraySize]();
+		xsd__nonNegativeInteger **array = new xsd__nonNegativeInteger*[arraySize];
        
         for (int inputIndex=0 ; inputIndex < arraySize ; inputIndex++)
         {
@@ -117,9 +117,9 @@ int main(int argc, char* argv[])
            
         }
 		arrayInput.set(array,arraySize);
-        xsd__nonNegativeInteger_Array arrayResult = ws->asArray(arrayInput);
+        xsd__nonNegativeInteger_Array* arrayResult = ws->asArray(&arrayInput);
 		int outputSize=0;
-		const xsd__nonNegativeInteger ** output = arrayResult.get(outputSize);
+		const xsd__nonNegativeInteger ** output = arrayResult->get(outputSize);
         cout << "array of " << outputSize << " elements" << endl;
         for (int index = 0; index < outputSize ; index++)
         {
