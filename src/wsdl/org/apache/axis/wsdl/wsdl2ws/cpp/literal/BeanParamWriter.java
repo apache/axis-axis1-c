@@ -995,10 +995,19 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 	{
                 		String typeName = attribs[i].getTypeName();
                 		String elementName = attribs[i].getParamNameAsMember();
-                		
-                		writer.write("\t" + typeName + " *	pValue = pIWSDZ->" +
-                		        	 CUtils.getParameterGetValueMethodName(typeName, attribs[i].isAttribute()) +
-                		        	 "( \"" + soapTagName + "\", 0);\n\n");
+
+                		if( CUtils.isPointerType( typeName))
+                		{
+                    		writer.write("\t" + typeName + "	pValue = pIWSDZ->" +
+               		        	 CUtils.getParameterGetValueMethodName(typeName, attribs[i].isAttribute()) +
+               		        	 "( \"" + soapTagName + "\", 0);\n\n");
+                		}
+                		else
+                		{
+                    		writer.write("\t" + typeName + " *	pValue = pIWSDZ->" +
+               		        	 CUtils.getParameterGetValueMethodName(typeName, attribs[i].isAttribute()) +
+               		        	 "( \"" + soapTagName + "\", 0);\n\n");
+                		}
                 		
                 		writer.write( "\tif( pValue == NULL)\n");
                 		writer.write( "\t{\n");
