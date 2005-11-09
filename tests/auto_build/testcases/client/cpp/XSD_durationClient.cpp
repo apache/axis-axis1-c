@@ -112,9 +112,9 @@ int main(int argc, char* argv[])
             
         }
 		arrayInput.set(array,arraySize);
-		xsd__duration_Array arrayResult = ws->asArray(arrayInput);
+		xsd__duration_Array* arrayResult = ws->asArray(&arrayInput);
 		int outputSize=0;
-		const xsd__duration **output = arrayResult.get(outputSize);
+		const xsd__duration **output = arrayResult->get(outputSize);
         cout << "array of " << outputSize << " elements" << endl;
 		for (int index = 0; index < outputSize; index++)
 		{
