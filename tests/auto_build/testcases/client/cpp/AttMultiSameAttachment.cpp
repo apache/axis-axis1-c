@@ -64,9 +64,9 @@ int main(int argc, char* argv[])
 				att1->addBody(&b64b1);
 				att2->addBody(&b64b1);				
 				//Calling webservice with multiple attachments. Here same object is passed as argument
-				xsd__string_Array ret=ws.multiAttachment(att1,att1,att2,att1);
+				xsd__string_Array* ret=ws.multiAttachment(att1,att1,att2,att1);
 				int outputsize=0;
-				const xsd__string * array=ret.get(outputsize);
+				const xsd__string * array=ret->get(outputsize);
 				cout << array[0]<<endl;
 				cout << array[1]<<endl;
 				cout << array[2]<<endl;
