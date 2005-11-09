@@ -110,7 +110,7 @@ int main(int argc, char* argv[])
         // Test array
         xsd__unsignedLong_Array arrayInput;
 		int arraySize =2;
-		xsd__unsignedLong ** array = new xsd__unsignedLong*[arraySize]();
+		xsd__unsignedLong ** array = new xsd__unsignedLong*[arraySize];
         
         for (int inputIndex=0 ; inputIndex < arraySize ; inputIndex++)
         {
@@ -118,9 +118,9 @@ int main(int argc, char* argv[])
            
         }
 		arrayInput.set(array,arraySize);
-        xsd__unsignedLong_Array arrayResult = ws->asArray(arrayInput);
+        xsd__unsignedLong_Array* arrayResult = ws->asArray(&arrayInput);
 		int outputSize =0;
-		const xsd__unsignedLong ** output = arrayResult.get(outputSize);
+		const xsd__unsignedLong ** output = arrayResult->get(outputSize);
         cout << "array of " << outputSize << " elements" << endl;
         for (int index = 0; index < outputSize ; index++)
         {
