@@ -130,9 +130,9 @@ int main(int argc, char* argv[])
           
         }
 		arrayInput.set(array,arraySize);
-		xsd__decimal_Array arrayResult = ws->asArray(arrayInput);
+		xsd__decimal_Array* arrayResult = ws->asArray(&arrayInput);
 		int outputSize=0;
-		const xsd__decimal ** output = arrayResult.get(outputSize);
+		const xsd__decimal ** output = arrayResult->get(outputSize);
         cout << "array of " << outputSize << " elements" << endl;
 		for (int index = 0; index < outputSize ; index++)
 		{
