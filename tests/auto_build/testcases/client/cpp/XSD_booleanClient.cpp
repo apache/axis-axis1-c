@@ -119,15 +119,15 @@ int main(int argc, char* argv[])
 
         xsd__boolean_Array arrayInput;
 		int arraySize=2;
-		xsd__boolean ** array = new xsd__boolean*[arraySize]();        
+		xsd__boolean ** array = new xsd__boolean*[arraySize];        
         for (int inputIndex=0 ; inputIndex < arraySize ; inputIndex++)
         {
             array[inputIndex] = new xsd__boolean(true_);            
         }
 		arrayInput.set(array,arraySize);
-		xsd__boolean_Array arrayResult = ws->asArray(arrayInput);
+		xsd__boolean_Array* arrayResult = ws->asArray(&arrayInput);
 		int outputSize=2;
-		const xsd__boolean **output = arrayResult.get(outputSize);
+		const xsd__boolean **output = arrayResult->get(outputSize);
         cout << "array of " << outputSize << " elements" << endl;
 		for (int index = 0; index < outputSize; index++)
 		{
