@@ -73,9 +73,9 @@ int main(int argc, char* argv[])
 				att3->addBody(&b64b1);
 				//Calling webservice with multiple attachments.This call will results in a SOAP Fault 
 				//Server will send fault message..
-				xsd__string_Array ret=ws.multiAttachment(NULL,att1,att2,att3);
+				xsd__string_Array* ret=ws.multiAttachment(NULL,att1,att2,att3);
 				int outputsize=0;
-				const xsd__string * array=ret.get(outputsize);
+				const xsd__string * array=ret->get(outputsize);
 				cout << array[0]<<endl;
 				cout << array[1]<<endl;
 				cout << array[2]<<endl;
