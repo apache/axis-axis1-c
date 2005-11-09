@@ -114,27 +114,34 @@ int main(int argc, char* argv[])
         }
         delete optionalAttributeResult;
 */
+
         // Test array
         xsd__gDay_Array arrayInput;
-        arrayInput.m_Array = new xsd__gDay*[2];
-        xsd__gDay * array = new xsd__gDay[2];
-        arrayInput.m_Size = 2;
+		int arraySize=2;
+		xsd__gDay ** array = new xsd__gDay*[arraySize];
+        
         for (int inputIndex=0 ; inputIndex < 2 ; inputIndex++)
         {
-            array[inputIndex] = time;
-            arrayInput.m_Array[inputIndex] = &array[inputIndex];
+            array[inputIndex] = new xsd__gDay(time);
+           
         }
-        xsd__gDay_Array arrayResult = ws->asArray(arrayInput);
-        cout << "array of " << arrayResult.m_Size << " elements" << endl;
-        for (int index = 0; index < arrayResult.m_Size ; index++)
+		arrayInput.set(array,arraySize);
+        xsd__gDay_Array* arrayResult = ws->asArray(&arrayInput);
+		int outputSize=0;
+		const xsd__gDay ** output = arrayResult->get(outputSize);
+        cout << "array of " << outputSize << " elements" << endl;
+        for (int index = 0; index < outputSize ; index++)
         {
-            strftime(returnString, 50, "%d", arrayResult.m_Array[index]);
+            strftime(returnString, 50, "%d", output[index]);
             cout << "  element[" << index << "]=" << returnString << endl;
-            delete arrayResult.m_Array[index];
+           
+        }
+        // Clear up input array        
+        for (int deleteIndex = 0 ; deleteIndex < arraySize ; deleteIndex++ )
+        {
+            delete array[deleteIndex];
         }
         delete [] array;
-        delete [] arrayInput.m_Array;
-        delete [] arrayResult.m_Array;
 
         // Test complex type
         SimpleComplexType complexTypeInput;
