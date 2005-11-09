@@ -689,12 +689,12 @@ const xsd__duration** xsd__duration_Array::get(int& size) const
 
 xsd__dateTime_Array::xsd__dateTime_Array()
 {
-    m_Type = XSD_DURATION;
+    m_Type = XSD_DATETIME;
 }
 
 xsd__dateTime_Array::xsd__dateTime_Array(xsd__dateTime_Array & original)
 {
-    if (original.m_Type == XSD_DURATION)
+    if (original.m_Type == XSD_DATETIME)
     {
         clone(original);
     }
@@ -702,7 +702,7 @@ xsd__dateTime_Array::xsd__dateTime_Array(xsd__dateTime_Array & original)
 
 void xsd__dateTime_Array::set(xsd__dateTime** array, int size)
 {
-   Axis_Array::set((void**)array, size, XSD_DURATION);
+   Axis_Array::set((void**)array, size, XSD_DATETIME);
 }
 
 const xsd__dateTime** xsd__dateTime_Array::get(int& size) const
@@ -713,12 +713,12 @@ const xsd__dateTime** xsd__dateTime_Array::get(int& size) const
 
 xsd__time_Array::xsd__time_Array()
 {
-    m_Type = XSD_DURATION;
+    m_Type = XSD_TIME;
 }
 
 xsd__time_Array::xsd__time_Array(xsd__time_Array & original)
 {
-    if (original.m_Type == XSD_DURATION)
+    if (original.m_Type == XSD_TIME)
     {
         clone(original);
     }
@@ -726,7 +726,7 @@ xsd__time_Array::xsd__time_Array(xsd__time_Array & original)
 
 void xsd__time_Array::set(xsd__time** array, int size)
 {
-   Axis_Array::set((void**)array, size, XSD_DURATION);
+   Axis_Array::set((void**)array, size, XSD_TIME);
 }
 
 const xsd__time** xsd__time_Array::get(int& size) const
@@ -737,12 +737,12 @@ const xsd__time** xsd__time_Array::get(int& size) const
 
 xsd__date_Array::xsd__date_Array()
 {
-    m_Type = XSD_DURATION;
+    m_Type = XSD_DATE;
 }
 
 xsd__date_Array::xsd__date_Array(xsd__date_Array & original)
 {
-    if (original.m_Type == XSD_DURATION)
+    if (original.m_Type == XSD_DATE)
     {
         clone(original);
     }
@@ -750,7 +750,7 @@ xsd__date_Array::xsd__date_Array(xsd__date_Array & original)
 
 void xsd__date_Array::set(xsd__date** array, int size)
 {
-   Axis_Array::set((void**)array, size, XSD_DURATION);
+   Axis_Array::set((void**)array, size, XSD_DATE);
 }
 
 const xsd__date** xsd__date_Array::get(int& size) const
@@ -761,12 +761,12 @@ const xsd__date** xsd__date_Array::get(int& size) const
 
 xsd__gYearMonth_Array::xsd__gYearMonth_Array()
 {
-    m_Type = XSD_DURATION;
+    m_Type = XSD_GYEARMONTH;
 }
 
 xsd__gYearMonth_Array::xsd__gYearMonth_Array(xsd__gYearMonth_Array & original)
 {
-    if (original.m_Type == XSD_DURATION)
+    if (original.m_Type == XSD_GYEARMONTH)
     {
         clone(original);
     }
@@ -774,7 +774,7 @@ xsd__gYearMonth_Array::xsd__gYearMonth_Array(xsd__gYearMonth_Array & original)
 
 void xsd__gYearMonth_Array::set(xsd__gYearMonth** array, int size)
 {
-   Axis_Array::set((void**)array, size, XSD_DURATION);
+   Axis_Array::set((void**)array, size, XSD_GYEARMONTH);
 }
 
 const xsd__gYearMonth** xsd__gYearMonth_Array::get(int& size) const
@@ -785,12 +785,12 @@ const xsd__gYearMonth** xsd__gYearMonth_Array::get(int& size) const
 
 xsd__gYear_Array::xsd__gYear_Array()
 {
-    m_Type = XSD_DURATION;
+    m_Type = XSD_GYEAR;
 }
 
 xsd__gYear_Array::xsd__gYear_Array(xsd__gYear_Array & original)
 {
-    if (original.m_Type == XSD_DURATION)
+    if (original.m_Type == XSD_GYEAR)
     {
         clone(original);
     }
@@ -798,7 +798,7 @@ xsd__gYear_Array::xsd__gYear_Array(xsd__gYear_Array & original)
 
 void xsd__gYear_Array::set(xsd__gYear** array, int size)
 {
-   Axis_Array::set((void**)array, size, XSD_DURATION);
+   Axis_Array::set((void**)array, size, XSD_GYEAR);
 }
 
 const xsd__gYear** xsd__gYear_Array::get(int& size) const
@@ -809,12 +809,12 @@ const xsd__gYear** xsd__gYear_Array::get(int& size) const
 
 xsd__gMonthDay_Array::xsd__gMonthDay_Array()
 {
-    m_Type = XSD_DURATION;
+    m_Type = XSD_GMONTHDAY;
 }
 
 xsd__gMonthDay_Array::xsd__gMonthDay_Array(xsd__gMonthDay_Array & original)
 {
-    if (original.m_Type == XSD_DURATION)
+    if (original.m_Type == XSD_GMONTHDAY)
     {
         clone(original);
     }
@@ -822,7 +822,7 @@ xsd__gMonthDay_Array::xsd__gMonthDay_Array(xsd__gMonthDay_Array & original)
 
 void xsd__gMonthDay_Array::set(xsd__gMonthDay** array, int size)
 {
-   Axis_Array::set((void**)array, size, XSD_DURATION);
+   Axis_Array::set((void**)array, size, XSD_GMONTHDAY);
 }
 
 const xsd__gMonthDay** xsd__gMonthDay_Array::get(int& size) const
@@ -833,19 +833,19 @@ const xsd__gMonthDay** xsd__gMonthDay_Array::get(int& size) const
 
 xsd__gMonth_Array::xsd__gMonth_Array()
 {
-    m_Type = XSD_DURATION;
+    m_Type = XSD_GMONTH;
 }
 
 xsd__gMonth_Array::xsd__gMonth_Array(xsd__gMonth_Array & original)
 {
-    if (original.m_Type == XSD_DURATION)
+    if (original.m_Type == XSD_GMONTH)
     {
         clone(original);
     }
 }
 void xsd__gMonth_Array::set(xsd__gMonth** array, int size)
 {
-   Axis_Array::set((void**)array, size, XSD_DURATION);
+   Axis_Array::set((void**)array, size, XSD_GMONTH);
 }
 
 const xsd__gMonth** xsd__gMonth_Array::get(int& size) const
@@ -856,12 +856,12 @@ const xsd__gMonth** xsd__gMonth_Array::get(int& size) const
 
 xsd__gDay_Array::xsd__gDay_Array()
 {
-    m_Type = XSD_DURATION;
+    m_Type = XSD_GDAY;
 }
 
 xsd__gDay_Array::xsd__gDay_Array(xsd__gDay_Array & original)
 {
-    if (original.m_Type == XSD_DURATION)
+    if (original.m_Type == XSD_GDAY)
     {
         clone(original);
     }
@@ -869,7 +869,7 @@ xsd__gDay_Array::xsd__gDay_Array(xsd__gDay_Array & original)
 
 void xsd__gDay_Array::set(xsd__gDay** array, int size)
 {
-   Axis_Array::set((void**)array, size, XSD_DURATION);
+   Axis_Array::set((void**)array, size, XSD_GDAY);
 }
 
 const xsd__gDay** xsd__gDay_Array::get(int& size) const
