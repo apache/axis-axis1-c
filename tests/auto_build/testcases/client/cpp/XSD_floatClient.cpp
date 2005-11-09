@@ -112,16 +112,16 @@ int main(int argc, char* argv[])
 		// Test array
         xsd__float_Array arrayInput;
 		int arraySize=2;
-		xsd__float ** array = new xsd__float*[arraySize]();
+		xsd__float ** array = new xsd__float*[arraySize];
         
         for (int inputIndex=0 ; inputIndex < arraySize ; inputIndex++)
         {
             array[inputIndex] = new xsd__float(35.353588);
         }
 		arrayInput.set(array,arraySize);
-		xsd__float_Array arrayResult = ws->asArray(arrayInput);
+		xsd__float_Array* arrayResult = ws->asArray(&arrayInput);
 		int outputSize=0;
-		const xsd__float ** output = arrayResult.get(outputSize);
+		const xsd__float ** output = arrayResult->get(outputSize);
         cout << "array of " << outputSize << " elements" << endl;
 		for (int index = 0; index < outputSize ; index++)
 		{
