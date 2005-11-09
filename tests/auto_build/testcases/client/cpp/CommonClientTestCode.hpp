@@ -116,10 +116,46 @@ char* asciiToString( char *string )
    return string;
 }
 
+char * asciiToStringOfLength( char * pString, int iLength)
+{
+   char *	pch = pString;
+
+   if( pString == NULL)
+   {
+	   return NULL;
+   }
+ 
+   /* while not EOL... */
+   int iCount = 0;
+
+   while( *pch != '\0' && iCount < iLength)
+   {
+         *pch = ASCIItoEBCDIC[*pch];
+         pch++;
+		 iCount++;
+   }
+
+   *pch = '\0';
+
+   return pString;
+}
+
 #else
 
 #define asciiToString( x ) ( x )
 #define stringToAscii( x ) ( x )
+
+char * asciiToStringOfLength( char * pString, int iLength)
+{
+   if( pString == NULL)
+   {
+	   return NULL;
+   }
+ 
+   pString[iLength] = '\0';
+
+   return pString;
+}
 
 #endif
 
