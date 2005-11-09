@@ -71,11 +71,13 @@ import org.w3c.dom.Node;
  * 
  * @author hemapani@opensource.lk
  * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
+ * @author hawkeye (hawkinsj@uk.ibm.com)
  */
 public class WSDL2Ws
 {
     public static boolean verbose = false;
-    public static String makeSystem = null;
+    // we don't write out the make files anymore - 9th Nov 2005
+//    public static String makeSystem = null;
 
     private String language;
     private boolean wsdlWrappingStyle;
@@ -85,7 +87,6 @@ public class WSDL2Ws
 
     private String serviceStyle = null;
 
-    //private boolean verbose = true;
     private String targetEndpointURI = null;
     private String transportURI = null;
     private String targetNameSpaceOfWSDL = null;
@@ -1126,7 +1127,7 @@ public class WSDL2Ws
                             TypeEntry referencedType =defType.getRefType(); 
                             if(referencedType!=null && referencedType.getQName().getLocalPart().startsWith(">"))
                             {
-                                if(CopyOfWSDL2Ws.verbose)
+                                if(WSDL2Ws.verbose)
                                 {
                                     System.out.println( "got to expose "+defType.getQName().getLocalPart());
                                 }
@@ -1154,8 +1155,8 @@ public class WSDL2Ws
                 + "-l<c++|c>              target language (c++|c) - default is c++\n"
                 + "-s<server|client>      target side (server|client) - default is server\n"
 //                + "-w<wrapped|nonwrapped> wrapping style of the WSDL (wrapped|nonwrapped) - default is wrapped - nonwrapped is currently not implemented\n"
-                + "-verbose, -v           be verbose\n"
-                + "-m<none|gnu>           generate make files (none|gnu) - default is none\n");
+                + "-verbose, -v           be verbose\n");
+//                + "-m<none|gnu>           generate make files (none|gnu) - default is none\n");
 
     }
     /**
@@ -1167,11 +1168,11 @@ public class WSDL2Ws
      * ======= === ======
      * -o target output folder
      * -l target language(c|c++) default is c++
-     * -help (later ???? not emplemented)
+     * -help (later ???? not implemented)
      * -h print usage()
      * -s (client|server|both)  
-     * -w wrapping style of the WSDL (wrapped|nonwrapped) - default is wrapped - nonwrapped is currently not implemented so removed option for -wnonwrapped
-     * -m create GNU make files
+     * ****** removed *******-w wrapping style of the WSDL (wrapped|nonwrapped) - default is wrapped - nonwrapped is currently not implemented so removed option for -wnonwrapped
+     * ****** removed *******-m create GNU make files - this was failing and not supported so removed.
      * 
      * Note:  PP - pull parser
      * @param args
@@ -1198,14 +1199,8 @@ public class WSDL2Ws
                 return;
             }
             
-            // ensure that only wrapped style is used. 
-            if(data.isSet("w") && ! "wrapped".equalsIgnoreCase(data.getOptionBykey("w")))
-            {
-                usage();
-                return;
-            }
 
-            WSDL2Ws.makeSystem = data.getOptionBykey("m");
+            // WSDL2Ws.makeSystem = data.getOptionBykey("m");
             try
             {
 
@@ -1257,24 +1252,24 @@ public class WSDL2Ws
                     return false;
                 }
             }
-            
-            //wrapped
-            String wrapped=data.getOptionBykey("w");
-            if(wrapped!=null)
+
+            // ensure that only wrapped style is used. 
+            if(data.isSet("w") && !"wrapped".equalsIgnoreCase(data.getOptionBykey("w")))
             {
-                if(!wrapped.equals("wrapped") && !wrapped.equals("nonwrapped"))
-                {
-                    return false;
-                }
+                usage();
+                return false;
             }
+            
             // make file generation
             String makeFiles = data.getOptionBykey("m");
             if(makeFiles!=null)
             {
-                if(!makeFiles.equals("none") && !makeFiles.equals("gnu"))
-                {
-                    return false;
-                }
+                // hawkeye - makefiles are not supported as of Nov 2005.
+                return false;
+//                if(!makeFiles.equals("none") && !makeFiles.equals("gnu"))
+//                {
+//                    return false;
+//                }
             }
             
         }
