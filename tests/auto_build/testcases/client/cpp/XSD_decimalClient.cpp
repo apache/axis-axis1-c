@@ -123,7 +123,7 @@ int main(int argc, char* argv[])
 		// Test array
          xsd__decimal_Array arrayInput;
 		int arraySize=2;
-		xsd__decimal **array = new xsd__decimal*[arraySize]();        
+		xsd__decimal **array = new xsd__decimal*[arraySize];        
         for (int inputIndex=0 ; inputIndex < arraySize ; inputIndex++)
         {
             array[inputIndex] = new xsd__decimal(123456789);
