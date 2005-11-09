@@ -17,6 +17,8 @@
 
 package org.apache.axis.wsdl.wsdl2ws;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -32,12 +34,14 @@ import javax.xml.namespace.QName;
 import javax.xml.rpc.holders.IntHolder;
 
 import org.apache.axis.wsdl.gen.Parser;
+import org.apache.axis.wsdl.symbolTable.BaseType;
 import org.apache.axis.wsdl.symbolTable.BindingEntry;
 import org.apache.axis.wsdl.symbolTable.CElementDecl;
 import org.apache.axis.wsdl.symbolTable.CSchemaUtils;
 import org.apache.axis.wsdl.symbolTable.CollectionElement;
 import org.apache.axis.wsdl.symbolTable.CollectionType;
 import org.apache.axis.wsdl.symbolTable.DefinedElement;
+import org.apache.axis.wsdl.symbolTable.DefinedType;
 import org.apache.axis.wsdl.symbolTable.Element;
 import org.apache.axis.wsdl.symbolTable.PortTypeEntry;
 import org.apache.axis.wsdl.symbolTable.ServiceEntry;
@@ -654,11 +658,8 @@ public class WSDL2Ws
         this.getWebServiceInfo();
 
         //TODO	check whether the name at the WrapperConstant Doclit is right "doc"
-
-        WebServiceGenerator wsg =
-            WebServiceGeneratorFactory.createWebServiceGenerator(
-                new WebServiceContext(
-                    new WrapperInfo(
+        WebServiceContext wsContext =new WebServiceContext(
+                new WrapperInfo(
                         serviceStyle,
                         targetLanguage,
                         targetoutputLocation,
@@ -667,9 +668,14 @@ public class WSDL2Ws
                         targetEndpointURI,
                         targetNameSpaceOfWSDL),
                     new ServiceInfo(servicename, qualifiedServiceName, methods),
-                    typeMap));
+                    typeMap);  
+        WebServiceGenerator wsg =
+            WebServiceGeneratorFactory.createWebServiceGenerator(wsContext);
+        
         if (wsg == null)
-            throw new WrapperFault("does not support the option combination");
+            throw new WrapperFault("WSDL2Ws does not support the option combination");
+        exposeReferenceTypes(wsContext);
+        
         if (WSDL2Ws.verbose)
         {
             Iterator it = typeMap.getTypes().iterator();
@@ -1082,6 +1088,61 @@ public class WSDL2Ws
                 return (MethodInfo) methods.get(i);
         }
         throw new WrapperFault("binding and the port type do not match");
+    }
+    /**
+     * This method goes through the types and for any types that are referenced works out whether
+     * they need to be exposed as a seperate class.
+     * If they do require to be a seperate class then the name of the type will be changed from 
+     * ">nameoftype" to "nameoftype". This will then get picked up later on in the process and the
+     * type will be exposed as a seperate class. 
+     * 
+     * @param wsContext the webservice context.
+     */
+    private void exposeReferenceTypes(WebServiceContext wsContext)
+    {
+        // get the main types
+        Collection types = symbolTable.getTypeIndex().values();
+        Iterator typeIterator = types.iterator();   
+        while(typeIterator.hasNext())
+        {
+            Object highLevelType = typeIterator.next();
+            if(!(highLevelType instanceof BaseType))
+            {
+                DefinedType type = (DefinedType)highLevelType;
+                
+                if(!type.getQName().getLocalPart().toString().startsWith(">"))
+                {
+                    // It's not an "inner" type so look for the refs (this might not be valid logic and refs might be acceptable for these types too !)
+                    HashSet nestedTypes = type.getNestedTypes(symbolTable, true);
+                    Iterator nestTypeIter = nestedTypes.iterator();
+                    while(nestTypeIter.hasNext())
+                    {
+                        Object nestedType =nestTypeIter.next();
+                        if(!(nestedType instanceof BaseType))
+                        {
+                            TypeEntry defType = (TypeEntry)nestedType;
+                            // If there is a ref type and the ref type is not currently exposed because it's an "inner" type (marked by ">")then make sure the ref type is exposed to the user as a class
+                            // in order to expose it we simply change the name !                            
+                            TypeEntry referencedType =defType.getRefType(); 
+                            if(referencedType!=null && referencedType.getQName().getLocalPart().startsWith(">"))
+                            {
+                                if(CopyOfWSDL2Ws.verbose)
+                                {
+                                    System.out.println( "got to expose "+defType.getQName().getLocalPart());
+                                }
+                                Type innerClassType = wsContext.getTypemap().getType(defType.getRefType().getQName());
+                                innerClassType.setLanguageSpecificName(new QName(defType.getQName().getLocalPart()).toString());
+                                
+                                // also have to set the QName becuase this is used in generating the header info.
+                                innerClassType.setName(new QName(innerClassType.getName().getNamespaceURI(), innerClassType.getLanguageSpecificName()));
+                            }
+                        }
+                    }
+                    
+                }
+                
+            }
+        }
     }
 
     public static void usage()
