@@ -140,7 +140,7 @@ int main(int argc, char* argv[])
 		{
 			cout << " element[" << index << "]" << endl;
             cout << "  size=" << output[index]->__size << endl;
-            cout << "  data=" << asciiToStringOfLength((char *) *output[index]->__ptr, output[index]->__size) << endl;
+            cout << "  data=" << asciiToStringOfLength((char *) output[index]->__ptr, output[index]->__size) << endl;
 		}
 
         for (int deleteIndex = 0 ; deleteIndex < arraySize ; deleteIndex++ )
