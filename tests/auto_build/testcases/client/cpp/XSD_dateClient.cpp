@@ -124,7 +124,7 @@ int main(int argc, char* argv[])
             array[inputIndex] =new xsd__date(time);
             
         }
-		array.set(array,arraySize);
+		arrayInput.set(array,arraySize);
         xsd__date_Array* arrayResult = ws->asArray(&arrayInput);
 		int outputSize = 0;
 		const xsd__date **output = arrayResult.get(outputSize);
