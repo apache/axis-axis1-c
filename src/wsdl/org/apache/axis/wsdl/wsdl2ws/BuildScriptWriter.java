@@ -44,8 +44,8 @@ public class BuildScriptWriter implements SourceWriter {
             // Samisa - we write the gnu make system files only at the moment
             // hence check if user wanted gnu make files
    
-            if ( (WSDL2Ws.makeSystem == null) || (!WSDL2Ws.makeSystem.equals("gnu")) )
-                return;
+//            if ( (WSDL2Ws.makeSystem == null) || (!WSDL2Ws.makeSystem.equals("gnu")) )
+//                return;
 
 		try {
 			servicename = wscontext.getSerInfo().getServicename();
