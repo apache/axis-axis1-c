@@ -34,9 +34,9 @@ class LargeReturningString
 		virtual ~LargeReturningString();
 	public: 
 		void onFault();
-		xsd__string getLargeString(xsd__int Value0);
-		xsd__int setLargeString(xsd__string Value0);
-		void setRoundTripLargeString(xsd__string Value0,xsd__int Value1, AXIS_OUT_PARAM xsd__string *OutValue0, AXIS_OUT_PARAM xsd__int *OutValue1);
+		xsd__string getLargeString( xsd__int Value0);
+		xsd__int setLargeString( xsd__string Value0);
+		xsd__string setRoundTripLargeString( xsd__string Value0 ,xsd__int Value1);
 
 	public:
 		xsd__string	myString;

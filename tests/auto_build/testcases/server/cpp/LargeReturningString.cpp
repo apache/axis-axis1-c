@@ -79,7 +79,7 @@ xsd__int LargeReturningString::setLargeString(xsd__string Value0)
 	return iSize;
 }
 
-void LargeReturningString::setRoundTripLargeString(xsd__string Value0,xsd__int Value1, AXIS_OUT_PARAM xsd__string *OutValue0, AXIS_OUT_PARAM xsd__int *OutValue1)  
+xsd__string LargeReturningString::setRoundTripLargeString( xsd__string Value0, xsd__int Value1)
 {
 //	printf( "LargeReturningString::setRoundTripLargeString\n");
 
@@ -92,7 +92,6 @@ void LargeReturningString::setRoundTripLargeString(xsd__string Value0,xsd__int V
 
 	strcpy( myString, Value0);
 
-	*OutValue0 = myString;
-	*OutValue1 = strlen( myString);
+	return myString;
 }
 

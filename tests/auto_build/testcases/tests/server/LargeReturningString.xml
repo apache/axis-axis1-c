@@ -3,6 +3,7 @@
     <description>LargeReturningString Service</description>
     <serviceLang>cpp</serviceLang>
     <serviceCode>LargeReturningString.cpp</serviceCode>
+    <serviceHeader>LargeReturningString.hpp</serviceHeader>
     <wsdl>LargeReturningString.wsdl</wsdl>
 	<servicename></servicename>
 </service>
