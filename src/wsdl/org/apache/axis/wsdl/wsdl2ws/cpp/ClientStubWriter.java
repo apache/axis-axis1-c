@@ -437,8 +437,8 @@ public class ClientStubWriter extends CPPClassWriter
                 {
                     containedType = qname.getLocalPart();
                     writer.write("\tm_pCall->addCmplxArrayParameter(");
-                    writer.write("(Axis_Array*)(&Value" + i
-                            + "), (void*)Axis_Serialize_" + containedType
+                    writer.write("Value" + i
+                            + ", (void*)Axis_Serialize_" + containedType
                             + ", (void*)Axis_Delete_" + containedType
                             + ", (void*) Axis_GetSize_" + containedType
                             + ", \""

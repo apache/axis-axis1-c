@@ -44,7 +44,7 @@ public class ArrayParamWriter
     }
 
     /* (non-Javadoc)
-     * @see org.apache.axis.wsdl.wsdl2ws.c.ArrayParamWriter#writeArrayStruct()
+     * @see org.apache.axis.wsdl.wsdl2ws.c.ArrayParamHeaderWriter#writeArrayStruct()
      */
     protected void writeArrayStruct() throws WrapperFault
     {

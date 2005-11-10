@@ -152,7 +152,7 @@ int SoapSerializer::addOutputBasicArrayParam( const Axis_Array * pArray,
 {
 	int	iSuccess = AXIS_SUCCESS;
 
-    ArrayBean * pAb = makeArrayBean( nType, (void*) (pArray->m_Array));
+    ArrayBean * pAb = makeArrayBean( nType, (void**) (pArray->m_Array));
 
     pAb->SetDimension(pArray->m_Size);
 
@@ -190,7 +190,7 @@ int SoapSerializer::addOutputCmplxArrayParam( const Axis_Array * pArray,
 {
 	int	iSuccess = AXIS_SUCCESS;
 
-    ArrayBean* pAb = makeArrayBean( (void*)(pArray->m_Array), pSZFunct,
+    ArrayBean* pAb = makeArrayBean( pArray->m_Array, pSZFunct,
 									 pDelFunct,
 									 pSizeFunct);
 
@@ -569,7 +569,7 @@ int SoapSerializer::createSoapFault( const AxisChar * sLocalName,
  * Used to create an ArrayBean when the return type of a method is an array
  * of basic types
  */
-ArrayBean * SoapSerializer::makeArrayBean( XSDTYPE nType, void * pArray)
+ArrayBean * SoapSerializer::makeArrayBean( XSDTYPE nType, void ** pArray)
 {
     ArrayBean* pAb = new ArrayBean();
 
@@ -583,7 +583,7 @@ ArrayBean * SoapSerializer::makeArrayBean( XSDTYPE nType, void * pArray)
  * Used to create an ArrayBean when the return type of a method is an array
  * of complex types
  */
-ArrayBean * SoapSerializer::makeArrayBean(void * pObject,
+ArrayBean * SoapSerializer::makeArrayBean(void ** pObject,
 										   void * pSZFunct, 
                                            void * pDelFunct,
 										   void * pSizeFunct)
@@ -657,7 +657,7 @@ int SoapSerializer::serializeCmplxArray( const Axis_Array * pArray,
                                          const AxisChar * pName, 
                                          const AxisChar * pNamespace)
 {
-    ArrayBean * pAb = (ArrayBean*) makeArrayBean( (void*) (pArray->m_Array), 
+    ArrayBean * pAb = (ArrayBean*) makeArrayBean( pArray->m_Array, 
 											      pSZFunct,
 												  pDelFunct,
 												  pSizeFunct);
@@ -734,7 +734,7 @@ int SoapSerializer::serializeBasicArray(const Axis_Array* pArray,
 										const AxisChar* pNamespace, 
                                         XSDTYPE nType, const AxisChar* pName)
 {
-	ArrayBean * pAb = (ArrayBean *) makeArrayBean( nType, (void *) (pArray->m_Array));
+	ArrayBean * pAb = (ArrayBean *) makeArrayBean( nType, pArray->m_Array);
 
     pAb->SetDimension( pArray->m_Size);
 

@@ -35,6 +35,7 @@ import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.SourceWriter;
 import org.apache.axis.wsdl.wsdl2ws.WSDL2Ws;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
+import org.apache.axis.wsdl.wsdl2ws.cpp.ArrayParamHeaderWriter;
 import org.apache.axis.wsdl.wsdl2ws.cpp.ArrayParamWriter;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
@@ -94,11 +95,12 @@ public class AllParamWriter implements SourceWriter
                                     + "\n"
                                     + "It seems that some thing wrong with symbolTable population - Susantha");
                         }
-                        ArrayParamWriter writer =
-                            (new ArrayParamWriter(wscontext, type));
+                        ArrayParamHeaderWriter writer =
+                            (new ArrayParamHeaderWriter(wscontext, type));
                         if (!writer.isSimpleTypeArray())
                         {
                             writer.writeSource();
+                            (new ArrayParamWriter(wscontext, type)).writeSource();
                         }
                         else
                         {

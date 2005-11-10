@@ -72,11 +72,12 @@ public class AllParamWriter implements SourceWriter
                                     + "\n"
                                     + "It seems that some thing wrong with symbolTable population - Susantha");
                         }
-                        ArrayParamWriter writer =
-                            (new ArrayParamWriter(wscontext, type));
+                        ArrayParamHeaderWriter writer =
+                            (new ArrayParamHeaderWriter(wscontext, type));
                         if (!writer.isSimpleTypeArray())
                         {
                             writer.writeSource();
+                            (new ArrayParamWriter(wscontext, type)).writeSource();
                         }
                     }
                     else

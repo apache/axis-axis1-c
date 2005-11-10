@@ -160,8 +160,8 @@ public:
     void setCurrentProviderType(PROVIDERTYPE nType) { m_ProviderType = nType;};
 
 private:
-    ArrayBean* makeArrayBean(XSDTYPE nType, void* pArray);
-    ArrayBean* makeArrayBean(void* pObject, void* pSZFunct, void* pDelFunct, 
+    ArrayBean* makeArrayBean(XSDTYPE nType, void** pArray);
+    ArrayBean* makeArrayBean(void** pObject, void* pSZFunct, void* pDelFunct, 
         void* pSizeFunct);
     int setSoapHeader(SoapHeader* pSoapHeader);
 

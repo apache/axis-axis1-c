@@ -27,6 +27,7 @@ void testAxis_Array();
 void testAxis_ArrayWithNillElements();
 void testAxis_ArrayCopying();
 void testComplexTypeWithSimpleArray();
+void testArrayOfComplexType();
 
 int main(int argc, char* argv[])
 {
@@ -46,6 +47,7 @@ int main(int argc, char* argv[])
     testAxis_ArrayWithNillElements();
     testAxis_ArrayCopying();
 	testComplexTypeWithSimpleArray();
+	testArrayOfComplexType();
 
     bool bSuccess = false;
     int iRetryIterationCount = 3;
@@ -122,6 +124,40 @@ int main(int argc, char* argv[])
 
 			delete inputComplexType;
 			delete outputComplexType;
+
+			ComplexTypeWithSimpleElement_Array complexArray;
+			int inputSize = 3;
+			ComplexTypeWithSimpleElement** complexInputArray = new ComplexTypeWithSimpleElement*[inputSize];
+			for (count = 0 ; count < inputSize ; count++)
+			{
+				complexInputArray[count] = new ComplexTypeWithSimpleElement();
+				complexInputArray[count]->setsimpleType(count);
+			}
+			complexArray.set(complexInputArray, inputSize);
+
+			ComplexTypeWithSimpleElement_Array * complexOutputAxis_Array = ws.complexTypeArray(&complexArray);
+
+			outputSize = 0;
+			const ComplexTypeWithSimpleElement** complexOutputArray = complexOutputAxis_Array->get(outputSize);
+			cout << "Complex array size is " << outputSize << endl;
+			if (complexOutputArray != NULL)
+			{
+				for (count = 0 ; count < outputSize ; count++)
+				{
+					if (complexOutputArray[count] != NULL)
+					{
+						cout << ((ComplexTypeWithSimpleElement) *complexOutputArray[count]).getsimpleType() << endl;
+					}
+					else
+					{
+						cout << "NULL" << endl;
+					}
+				}
+			}
+			else
+			{
+				cout << "NULL array" << endl;
+			}
 
             bSuccess = 1;
         }
@@ -379,7 +415,7 @@ void testComplexTypeWithSimpleArray()
 	xsd__int_Array * outputArray = complexType.getsimpleType();
 	int outputSize = 0;
 	const xsd__int** output = outputArray->get(outputSize);
-    cout << "Size is " << outputSize << endl;
+	cout << "Size is " << outputSize << endl;
 	if (output != NULL)
 	{
 		for (count = 0 ; count < outputSize ; count++ )
@@ -401,5 +437,41 @@ void testComplexTypeWithSimpleArray()
 	}
 
 
+}
+
+void testArrayOfComplexType()
+{
+	ComplexTypeWithSimpleElement_Array array;
+	int count = 0;
+	int inputSize = 3;
+	ComplexTypeWithSimpleElement** inputArray = new ComplexTypeWithSimpleElement*[inputSize];
+	for (count = 0 ; count < inputSize ; count++)
+	{
+		inputArray[count] = new ComplexTypeWithSimpleElement();
+		inputArray[count]->setsimpleType(count);
+	}
+	array.set(inputArray, inputSize);
+
+	int outputSize = 0;
+	const ComplexTypeWithSimpleElement** outputArray = array.get(outputSize);
+	cout << "Size is " << outputSize << endl;
+	if (outputArray != NULL)
+	{
+		for (count = 0 ; count < outputSize ; count++)
+		{
+			if (outputArray[count] != NULL)
+			{
+				cout << ((ComplexTypeWithSimpleElement) *outputArray[count]).getsimpleType() << endl;
+			}
+			else
+			{
+				cout << "NULL" << endl;
+			}
+		}
+	}
+	else
+	{
+		cout << "NULL array" << endl;
+	}
 }
 

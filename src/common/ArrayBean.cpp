@@ -178,7 +178,7 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
         int itemsize = m_value.cta->pSizeFunct();
 		TRACE_OBJECT_SIZE_FUNCT_EXIT(m_value.cta->pSizeFunct, itemsize);
 
-        char *ptrval = (char *)m_value.cta->pObject;
+        void** ptrval = (void**) m_value.cta->pObject;
         if (DOC_LITERAL == nStyle) 
         {
             // Serialize functions for doc/lit services do not know the instance 
@@ -186,7 +186,7 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
       
             for (int x=0; x<m_nSize; x++)
             {
-                pItem = ptrval+x*itemsize;
+                pItem = ptrval[x];
 
 				// try to find the prefix - array prefix overrides the
 				// serializer prefix

@@ -14,39 +14,38 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-
-/**
- * @author Srinath Perera(hemapani@openource.lk)
- * @author Susantha Kumara(susantha@opensource.lk, skumara@virtusa.com)
- * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
- */
-
 package org.apache.axis.wsdl.wsdl2ws.cpp;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Iterator;
-
-import javax.xml.namespace.QName;
 
 import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.ParamWriter;
 import org.apache.axis.wsdl.wsdl2ws.WSDL2Ws;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
-import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
+/**
+ * @author dicka.new
+ *
+ * TODO To change the template for this generated type comment go to
+ * Window - Preferences - Java - Code Style - Code Templates
+ */
 public class ArrayParamWriter extends ParamWriter
 {
+    
+
     public ArrayParamWriter(WebServiceContext wscontext, Type type)
-        throws WrapperFault
+            throws WrapperFault
     {
         super(wscontext, type);
     }
-
+    /* (non-Javadoc)
+     * @see org.apache.axis.wsdl.wsdl2ws.SourceWriter#writeSource()
+     */
     public void writeSource() throws WrapperFault
     {
         try
@@ -54,49 +53,9 @@ public class ArrayParamWriter extends ParamWriter
             this.writer =
                 new BufferedWriter(new FileWriter(getFilePath(), false));
             writeClassComment();
-            // if this headerfile not defined define it 
-            this.writer.write(
-                "#if !defined(__"
-                    + classname.toUpperCase()
-                    + "_"
-                    + getFileType().toUpperCase()
-                    + "_H__INCLUDED_)\n");
-            this.writer.write(
-                "#define __"
-                    + classname.toUpperCase()
-                    + "_"
-                    + getFileType().toUpperCase()
-                    + "_H__INCLUDED_\n\n");
-            if (attribs.length != 1)
-            {
-                System.out.println(
-                    "Array "
-                        + classname
-                        + " contains unexpected no of variables");
-                throw new WrapperFault(
-                    "Array type "
-                        + classname
-                        + " contain unexpected no of types");
-            }
-            //include header file for the contained type
-            QName qname = WrapperUtils.getArrayType(type).getName();
-
-            if (!CUtils.isSimpleType(qname))
-            {
-                /* This is a must for complex schemas (includes cycle)*/
-                writer.write("class " + attribs[0].getTypeName() + ";\n\n");
-            }
-            else
-            {
-                writer.write("#include <axis/AxisUserAPI.hpp>\n\n");
-            }
-            writeArrayStruct();
-            this.writer.write(
-                "#endif /* !defined(__"
-                    + classname.toUpperCase()
-                    + "_"
-                    + getFileType().toUpperCase()
-                    + "_H__INCLUDED_)*/\n");
+            
+            writer.write("#include \"" + classname + ".hpp\"\n\n");
+            this.writeMethods();
             writer.flush();
             writer.close();
             if (WSDL2Ws.verbose)
@@ -112,17 +71,64 @@ public class ArrayParamWriter extends ParamWriter
         }
     }
 
-    public boolean isSimpleTypeArray() throws WrapperFault
+    /* (non-Javadoc)
+     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#writeMethods()
+     */
+    protected void writeMethods() throws WrapperFault
     {
-        QName qname = WrapperUtils.getArrayType(type).getName();
-        return CUtils.isSimpleType(qname);
+        this.writeConstructors();
+        
+        try
+        {
+            writer.write("void " + classname + "::" + "set(" + attribs[0].getTypeName() + "** array, const int size)\n");
+            writer.write("{\n");
+            writer.write("\tAxis_Array::set((void**)array, size, USER_TYPE);\n");
+            writer.write("}\n\n");
+            writer.write("const " + attribs[0].getTypeName() + "** " + classname + "::" + "get(int & size) const\n");
+            writer.write("{\n");
+            writer.write("\tXSDTYPE type;\n");
+            writer.write("\treturn (const " + attribs[0].getTypeName() + "**) Axis_Array::get(size, type);\n");
+            writer.write("}\n\n");
+        }
+        catch (IOException e)
+        {
+            throw new WrapperFault(e);
+        }
+
     }
 
+    
+    
+    protected void writeConstructors() throws WrapperFault
+    {
+        try
+        {
+            writer.write(classname + "::" + classname + "()\n");
+            writer.write("{\n");
+            writer.write("\tm_Type = USER_TYPE;\n");
+            writer.write("}\n\n");
+            writer.write(classname + "::" + classname + "(" + classname + " & original)\n");
+            writer.write("{\n");
+            writer.write("\tclone(original);\n");
+            writer.write("}\n\n");
+        }
+        catch (IOException e)
+        {
+            throw new WrapperFault(e);
+        }
+        
+    }
+    /* (non-Javadoc)
+     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#getFilePath()
+     */
     protected File getFilePath() throws WrapperFault
     {
         return this.getFilePath(false);
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#getFilePath(boolean)
+     */
     protected File getFilePath(boolean useServiceName) throws WrapperFault
     {
         String targetOutputLocation =
@@ -137,7 +143,7 @@ public class ArrayParamWriter extends ParamWriter
         new File(targetOutputLocation).mkdirs();
 
         String fileName =
-            targetOutputLocation + "/" + classname + CUtils.CPP_HEADER_SUFFIX;
+            targetOutputLocation + "/" + classname + CUtils.CPP_CLASS_SUFFIX;
 
         if (useServiceName)
         {
@@ -153,66 +159,4 @@ public class ArrayParamWriter extends ParamWriter
         return new File(fileName);
     }
 
-    protected void writeArrayStruct() throws WrapperFault
-    {
-        try
-        {
-        	Iterator	itForTypes = wscontext.getTypemap().getTypes().iterator();
-        	boolean		nillable = false;
-        	
-        	while( itForTypes.hasNext())
-        	{
-        		Type aType = (Type) itForTypes.next();
-        		
-        		if( aType.getLanguageSpecificName().indexOf( ">") > -1)
-        		{
-					Iterator	itForElemName = aType.getElementnames();
-					
-        			while( itForElemName.hasNext() && !nillable)
-        			{
-        				String key = (String) itForElemName.next();
-        				
-        				if( aType.getElementForElementName( key).getNillable())
-        				{
-							nillable = true;
-        				}
-        			}
-        		}
-        	}
-        	
-            writer.write("typedef struct " + classname + "Tag\n{\n");
-            
-            String stars = "*";
-            
-            if( nillable)
-            {
-            	stars = "**";
-            }
-            
-            writer.write(
-                "\t"
-                    + attribs[0].getTypeName()
-                    + stars + " m_Array;\n\tint m_Size;\n\tXSDTYPE m_Type;\n} "
-                    + classname
-                    + ";\n\n");
-        }
-        catch (IOException e)
-        {
-            throw new WrapperFault(e);
-        }
-    }
-
-    protected void writeConstructors() throws WrapperFault
-    {}
-
-    protected void writeDestructors() throws WrapperFault
-    {}
-
-    protected void writeMethods() throws WrapperFault
-    {}
-
-    protected String getFileType()
-    {
-        return "Array";
-    }
 }

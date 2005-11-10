@@ -653,8 +653,8 @@ public class ClientStubWriter
 				writer.
 				    write
 				    ("\tm_pCall->addCmplxArrayParameter(");
-				writer.write ("(Axis_Array*)(&Value" + i +
-					      "), (void*)Axis_Serialize_" +
+				writer.write ("Value" + i +
+					      ", (void*)Axis_Serialize_" +
 					      containedType +
 					      ", (void*)Axis_Delete_" +
 					      containedType +
