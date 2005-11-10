@@ -127,7 +127,7 @@ int main(int argc, char* argv[])
 		arrayInput.set(array,arraySize);
         xsd__date_Array* arrayResult = ws->asArray(&arrayInput);
 		int outputSize = 0;
-		const xsd__date **output = arrayResult.get(outputSize);
+		const xsd__date **output = arrayResult->get(outputSize);
         cout << "array of " << outputSize << " elements" << endl;
         for (int index = 0; index < outputSize ; index++)
         {
