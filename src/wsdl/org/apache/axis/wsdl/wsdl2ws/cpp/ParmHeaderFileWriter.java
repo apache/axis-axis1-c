@@ -92,7 +92,7 @@ public class ParmHeaderFileWriter extends ParamWriter {
 					attribs[i].setParamName("m_" + attribs[i].getParamName());
 				}
 				// FJP Nillable vv
-				if (isElementNillable(i)) {
+				if (isElementNillable(i) || attribs[i].isArray()) {
 					
 					if(attribs[i].isAnyType()){
 						anyCounter += 1;
@@ -168,7 +168,7 @@ public class ParmHeaderFileWriter extends ParamWriter {
                     }
                 }
 				
-				if (isElementNillable(i)) {
+				if (isElementNillable(i) || attribs[i].isArray()) {
 					if ( attribs[i].isAnyType()){
 						anyCounter += 1;
 
@@ -330,6 +330,7 @@ public class ParmHeaderFileWriter extends ParamWriter {
 	protected void writePreprocessorStatements() throws WrapperFault {
 		try {
 			writer.write("#include <axis/AxisUserAPI.hpp>\n");
+			writer.write("#include <axis/AxisUserAPIArrays.hpp>\n");
 			if (this.type.isFault()) {
 				writer.write("#include <axis/SoapFaultException.hpp>\n");
 				writer.write("using namespace std;\n");

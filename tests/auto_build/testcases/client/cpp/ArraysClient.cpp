@@ -26,6 +26,7 @@ bool IsNumber(const char* p);
 void testAxis_Array();
 void testAxis_ArrayWithNillElements();
 void testAxis_ArrayCopying();
+void testComplexTypeWithSimpleArray();
 
 int main(int argc, char* argv[])
 {
@@ -44,6 +45,7 @@ int main(int argc, char* argv[])
     testAxis_Array();
     testAxis_ArrayWithNillElements();
     testAxis_ArrayCopying();
+	testComplexTypeWithSimpleArray();
 
     bool bSuccess = false;
     int iRetryIterationCount = 3;
@@ -63,7 +65,7 @@ int main(int argc, char* argv[])
             }
             inputArray.set(array, arraySize);
             
-            xsd__int_Array * outputArray = ws.SimpleArray(&inputArray);
+            xsd__int_Array * outputArray = ws.simpleArray(&inputArray);
             int outputSize = 0;
             const xsd__int** output = outputArray->get(outputSize);
             cout << "Array size = " << outputSize << endl;
@@ -86,6 +88,41 @@ int main(int argc, char* argv[])
                 cout << "NULL array" << endl;
             }
             
+
+			ComplexTypeWithSimpleArray * inputComplexType = new ComplexTypeWithSimpleArray;
+			inputComplexType->setsimpleType(&inputArray);
+			ComplexTypeWithSimpleArray * outputComplexType = ws.complexTypeWithSimpleArray(inputComplexType);
+			if (outputComplexType != NULL)
+			{
+				output = outputArray->get(outputSize);
+				cout << "Array size = " << outputSize << endl;
+				if (output != NULL)
+				{
+					for (int count = 0 ; count < outputSize ; count++)
+					{
+						if (output[count] != NULL)
+						{
+							cout << *output[count] << endl;
+						}
+						else
+						{
+							cout << "NULL" << endl;
+						}
+					}
+				}
+				else
+				{
+					cout << "NULL array" << endl;
+				}
+			}
+			else
+			{
+				cout << "NULL complex type" << endl;
+			}
+
+			delete inputComplexType;
+			delete outputComplexType;
+
             bSuccess = 1;
         }
         catch(AxisException& e)
@@ -322,5 +359,47 @@ void testAxis_ArrayCopying()
     {
         cout << "NULL" << endl;
     }
+}
+
+void testComplexTypeWithSimpleArray()
+{
+	ComplexTypeWithSimpleArray complexType;
+	int count = 0;
+	int inputSize = 3;
+	xsd__int_Array inputArray;
+	xsd__int** array = new xsd__int*[inputSize];
+	for (count = 0 ; count < inputSize ; count++ )
+	{
+		array[count] = new xsd__int(count);
+	}
+	inputArray.set(array, inputSize);
+
+	complexType.setsimpleType(&inputArray);
+
+	xsd__int_Array * outputArray = complexType.getsimpleType();
+	int outputSize = 0;
+	const xsd__int** output = outputArray->get(outputSize);
+    cout << "Size is " << outputSize << endl;
+	if (output != NULL)
+	{
+		for (count = 0 ; count < outputSize ; count++ )
+		{	
+			if (output[count] != NULL)
+			{
+				cout << *output[count] << endl;
+			}
+			else
+			{
+				cout << "NULL" << endl;
+			}
+
+		}
+	}
+	else
+	{
+		cout << "NULL array" << endl;
+	}
+
+
 }
 

@@ -261,13 +261,13 @@ public class ParmHeaderFileWriter extends ParamWriter
                 attribs[i].setParamName( CUtils.sanitiseAttributeName( classname, attribs[i].getParamName()));
                 
 				// FJP Nillable vv
-				if (isElementNillable(i)) {
+				if (isElementNillable(i)  || attribs[i].isArray()) {
 					if(attribs[i].isAnyType()){
 						anyCounter += 1;
 						writer
 						.write("\t"
 								+ getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-								+ " *\t" + attribs[i].getParamName()
+								+ " * " + attribs[i].getParamName()
 								+ Integer.toString(anyCounter)
 								+ ";\n");
 						
@@ -275,7 +275,7 @@ public class ParmHeaderFileWriter extends ParamWriter
 					else{
 					writer.write("\t"
 								 + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-								 + " *\t" + attribs[i].getParamName()
+								 + " * " + attribs[i].getParamName()
 								 + ";\n");
 					}
 				} else {
@@ -285,7 +285,7 @@ public class ParmHeaderFileWriter extends ParamWriter
 						writer
 						.write("\t"
 								+ getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-								+ "\t" + attribs[i].getParamName()
+								+ " " + attribs[i].getParamName()
 								+ Integer.toString(anyCounter)
 								+ ";\n");
 						
@@ -294,7 +294,7 @@ public class ParmHeaderFileWriter extends ParamWriter
 					else{
 				    writer.write("\t"
                                 + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-                                + "\t" + attribs[i].getParamNameWithoutSymbols()
+                                + " " + attribs[i].getParamNameWithoutSymbols()
                                 + ";\n");
 					}
 				}
@@ -343,7 +343,7 @@ public class ParmHeaderFileWriter extends ParamWriter
                 }
             	
 // FJP Nillable vv
-                if (isElementNillable(i))
+                if (isElementNillable(i)  || attribs[i].isArray())
                 {
                 	if ( attribs[i].isAnyType()){
                 		anyCounter += 1;
@@ -515,6 +515,7 @@ public class ParmHeaderFileWriter extends ParamWriter
         try
         {
             writer.write("#include <axis/AxisUserAPI.hpp>\n");
+            writer.write("#include <axis/AxisUserAPIArrays.hpp>\n");
             if (this.type.isFault())
             {
                 writer.write("#include <axis/SoapFaultException.hpp>\n");

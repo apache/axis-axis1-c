@@ -148,18 +148,12 @@ public class BeanParamWriter extends ParamCPPFileWriter
             {
                 attribs[i].setParamName( CUtils.sanitiseAttributeName( classname, attribs[i].getParamName()));
 
-                // FJP Nillable vv
-                if (isElementNillable(i))
+            	String methodName = attribs[i].getParamNameWithoutSymbols();
+                String parameterName = methodName;
+                String properParamName = getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]);
+
+                if (attribs[i].isArray())
                 {
-                    String parameterName = attribs[i].getParamNameWithoutSymbols();
-                    String properParamName = getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]);
-                    
-                    if (attribs[i].isAnyType())
-                    {                    	
-                    	anyCounter += 1;
-                    	parameterName = parameterName + Integer.toString(anyCounter);
-                    }
-                    
                     writer.write("\n" + properParamName + " * " + classname
                             + "::get" + parameterName + "()\n{\n");
 
@@ -169,91 +163,119 @@ public class BeanParamWriter extends ParamCPPFileWriter
                             + parameterName + "(" + properParamName
                             + " * pInValue)\n{\n");
 
-                    writer.write("\t" + parameterName + " = pInValue ; \n");
-
-                    if (attribs[i].getChoiceElement())
-                    {
-                        for (int j = 0; j < attribs.length; j++)
-                        {
-                            if ((attribs[j].getChoiceElement()) && (j != i))
-                            {
-                                writer.write("\t"
-                                        + attribs[j].getParamNameWithoutSymbols()
-                                        + " = NULL ; \n");
-                            }
-                        }
-                    }
-
+                    writer.write("\tif(" + parameterName + " == NULL)\n");
+                    writer.write("\t{\n");
+                    writer.write("\t\t" + parameterName + " = new " + properParamName + "();\n");
+                    writer.write("\t}\n");
+                    writer.write("\t" + parameterName + "->clone(*pInValue); \n");
                     writer.write("}\n");
-                } 
+                }
                 else
                 {
-                    // FJP Nillable ^^
-
-                    /**
-                     * Dushshantha: Write getter
-                     */
-                	String methodName = attribs[i].getParamNameWithoutSymbols();
-                    String parameterName = methodName;
-                    String properParamName = getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]);
-
-                    if( methodName.endsWith( "_"))
-                    {
-                        String localMethodName = methodName.substring( 0, methodName.length() - 1);
-                        
-                        if( localMethodName.equals( classname))
-                        {
-                            methodName = localMethodName; 
-                        }
-                    }
-                    
-                    if (attribs[i].isAnyType())
-                    {                    	
-                    	anyCounter += 1;
-                    	parameterName = parameterName + Integer.toString(anyCounter);
-                    	methodName = methodName + Integer.toString(anyCounter);
-                    }
-
-                    writer.write("\n"
-                            + properParamName
-                            + " " + classname + "::get"
-                            + methodName
-                            + "()\n{\n");
-
-                    writer.write("\t" + "return "
-                            + parameterName
-                            + " ; \n}\n");
-
-                    /**
-                     * Dushshantha: Write setter
-                     */
-
-                    writer.write("\n"
-                            + "void "
-                            + classname
-                            + "::set"
-                            + methodName
-                            + "("
-                            + properParamName
-                            + " InValue)\n{\n");
-
-                    writer.write("\t" + parameterName
-                            + " = InValue ; \n");
-
-                    if (attribs[i].getChoiceElement())
-                    {
-                        for (int j = 0; j < attribs.length; j++)
-                        {
-                            if ((attribs[j].getChoiceElement()) && (j != i))
-                            {
-                                writer.write("\t"
-                                        + attribs[j].getParamNameWithoutSymbols()
-                                        + " = NULL ; \n");
-                            }
-                        }
-                    }
-
-                    writer.write("}\n");
+	                // FJP Nillable vv
+	                if (isElementNillable(i))
+	                {
+	                    
+	                    
+	                    if (attribs[i].isAnyType())
+	                    {                    	
+	                    	anyCounter += 1;
+	                    	parameterName = parameterName + Integer.toString(anyCounter);
+	                    }
+	                    
+	                    writer.write("\n" + properParamName + " * " + classname
+	                            + "::get" + parameterName + "()\n{\n");
+	
+	                    writer.write("\t" + "return " + parameterName + " ; \n}\n");
+	
+	                    writer.write("\n" + "void " + classname + "::set"
+	                            + parameterName + "(" + properParamName
+	                            + " * pInValue)\n{\n");
+	
+	                    writer.write("\t" + parameterName + " = pInValue ; \n");
+	
+	                    if (attribs[i].getChoiceElement())
+	                    {
+	                        for (int j = 0; j < attribs.length; j++)
+	                        {
+	                            if ((attribs[j].getChoiceElement()) && (j != i))
+	                            {
+	                                writer.write("\t"
+	                                        + attribs[j].getParamNameWithoutSymbols()
+	                                        + " = NULL ; \n");
+	                            }
+	                        }
+	                    }
+	
+	                    writer.write("}\n");
+	                } 
+	                else
+	                {
+	                    // FJP Nillable ^^
+	
+	                    /**
+	                     * Dushshantha: Write getter
+	                     */
+	
+	
+	                    if( methodName.endsWith( "_"))
+	                    {
+	                        String localMethodName = methodName.substring( 0, methodName.length() - 1);
+	                        
+	                        if( localMethodName.equals( classname))
+	                        {
+	                            methodName = localMethodName; 
+	                        }
+	                    }
+	                    
+	                    if (attribs[i].isAnyType())
+	                    {                    	
+	                    	anyCounter += 1;
+	                    	parameterName = parameterName + Integer.toString(anyCounter);
+	                    	methodName = methodName + Integer.toString(anyCounter);
+	                    }
+	
+	                    writer.write("\n"
+	                            + properParamName
+	                            + " " + classname + "::get"
+	                            + methodName
+	                            + "()\n{\n");
+	
+	                    writer.write("\t" + "return "
+	                            + parameterName
+	                            + " ; \n}\n");
+	
+	                    /**
+	                     * Dushshantha: Write setter
+	                     */
+	
+	                    writer.write("\n"
+	                            + "void "
+	                            + classname
+	                            + "::set"
+	                            + methodName
+	                            + "("
+	                            + properParamName
+	                            + " InValue)\n{\n");
+	
+	                    writer.write("\t" + parameterName
+	                            + " = InValue ; \n");
+	
+	                    if (attribs[i].getChoiceElement())
+	                    {
+	                        for (int j = 0; j < attribs.length; j++)
+	                        {
+	                            if ((attribs[j].getChoiceElement()) && (j != i))
+	                            {
+	                                writer.write("\t"
+	                                        + attribs[j].getParamNameWithoutSymbols()
+	                                        + " = NULL ; \n");
+	                            }
+	                        }
+	                    }
+	
+	                    writer.write("}\n");
+	                }
                 }
             }
         } 
@@ -445,37 +467,16 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 //if Array
                 if (attribs[i].isSimpleType())
                 {
-                	/**
-                     * Dushshantha: If the element is a Choice, It should be
-                     * treated as a pointer to an array. Chinthana: This is the
-                     * same in 'all' element
-                     */
-
-                    if(attribs[i].getChoiceElement()||attribs[i].getAllElement())
-                    {
-                    	writer.write("\tpSZ->serializeBasicArray((Axis_Array*)(param->"
-                                + attribs[i].getParamName()
-                                + "), Axis_URI_"
-                                + classname
-                                + ","
-                                + CUtils.getXSDTypeForBasicType(attribs[i]
-                                                .getTypeName())
-                                + ", \""
-                                + attribs[i].getParamNameAsSOAPElement()
-                                + "\");\n");
-                    }
-                    else
-                    {
-                        writer.write("\tpSZ->serializeBasicArray((Axis_Array*)(&param->"
-                                + attribs[i].getParamName()
-                                + "), Axis_URI_"
-                                + classname
-                                + ","
-                                + CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())
-                                + ", \""
-                                + attribs[i].getParamNameAsSOAPElement()
-                                + "\");\n");
-                    }
+                	writer.write("\tpSZ->serializeBasicArray(param->"
+                            + attribs[i].getParamName()
+                            + ", Axis_URI_"
+                            + classname
+                            + ","
+                            + CUtils.getXSDTypeForBasicType(attribs[i]
+                                            .getTypeName())
+                            + ", \""
+                            + attribs[i].getParamNameAsSOAPElement()
+                            + "\");\n");
                 }
                 else
                 {
@@ -723,7 +724,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
         {
             if (attribs[i].isArray())
             {
-                writer.write("\tAxis_Array array;\n\n");
+                writer.write("\tAxis_Array * array;\n\n");
                 break;
             }
         }
@@ -801,86 +802,12 @@ public class BeanParamWriter extends ParamCPPFileWriter
                             + CUtils.getXSDTypeForBasicType(attribs[i].getTypeName()) + ", \""
                             + attribs[i].getParamNameAsSOAPElement()
                             + "\",0);\n");
-
-                    String typename = attribs[i].getTypeName();
-                    
-                    if (CUtils.isPointerType(typename))
-                    {
-                        if (attribs[i].getChoiceElement())
-                        {
-                            writer.write("\tparam->"
-                                    + attribs[i].getParamNameAsMember()
-                                    + "->m_Array = ("
-                                    + attribs[i].getTypeName() + "*)new "
-                                    + attribs[i].getTypeName()
-                                    + "[array.m_Size];\n");
-                        }
-                        else
-                        {
-                            writer.write("\tparam->"
-                                    + attribs[i].getParamNameAsMember()
-                                    + ".m_Array = (" + attribs[i].getTypeName()
-                                    + "*)new " + attribs[i].getTypeName()
-                                    + "[array.m_Size];\n");
-                        }
-                    }
-                    else
-                    {
-                        /**
-                         * Dushshantha: If the element is a Choice, It should be
-                         * treated as a pointer to an array. Chinthana: This is
-                         * the same in 'all' element
-                         */
-
-                        if (attribs[i].getChoiceElement()
-                                || attribs[i].getAllElement())
-                        {
-                            writer.write("\tparam->"
-                                    + attribs[i].getParamNameAsMember()
-                                    + "->m_Array = ("
-                                    + attribs[i].getTypeName() + "**)new "
-                                    + attribs[i].getTypeName()
-                                    + "*[array.m_Size];\n");
-                        }
-                        else
-                        {
-                            writer.write("\tparam->"
-                                    + attribs[i].getParamNameAsMember()
-                                    + ".m_Array = (" + attribs[i].getTypeName()
-                                    + "**)new " + attribs[i].getTypeName()
-                                    + "*[array.m_Size];\n");
-                        }
-                    }
-
-                    /**
-                     * Dushshantha: If the element is a Choice, It should be
-                     * treated as a pointer to an array. Chinthana: This is the
-                     * same in 'all' element
-                     */
-
-                    if (attribs[i].getChoiceElement()
-                            || attribs[i].getAllElement())
-                    {
-                        writer.write("\tparam->"
-                                + attribs[i].getParamNameAsMember()
-                                + "->m_Size = array.m_Size;\n\n");
-                        writer.write("\tmemcpy( param->"
-                                + attribs[i].getParamNameAsMember()
-                                + "->m_Array, array.m_Array, sizeof( "
-                                + attribs[i].getTypeName()
-                                + " *) * array.m_Size);\n");
-                    }
-                    else
-                    {
-                        writer.write("\tparam->"
-                                + attribs[i].getParamNameAsMember()
-                                + ".m_Size = array.m_Size;\n\n");
-                        writer.write("\tmemcpy( param->"
-                                + attribs[i].getParamNameAsMember()
-                                + ".m_Array, array.m_Array, sizeof( "
-                                + attribs[i].getTypeName()
-                                + " *) * array.m_Size);\n");
-                    }
+                    writer.write("\tif(param->" + attribs[i].getParamNameAsMember() + " == NULL)\n");
+                    writer.write("\t{\n");
+                    writer.write("\t\tparam->" + attribs[i].getParamNameAsMember() + " = new " + attribs[i].getTypeName() + "_Array();\n");
+                    writer.write("\t}\n");
+                    writer.write("\tparam->" + attribs[i].getParamNameAsMember() + "->clone( *array);\n");
+                    writer.write("\tAxis::AxisDelete((void*) array, XSD_ARRAY);\n\n");
                 }
                 else
                 {
@@ -1189,7 +1116,14 @@ public class BeanParamWriter extends ParamCPPFileWriter
         try
         {
             writer.write("\n" + classname + "::" + classname + "()\n{\n");
-            writer.write("\t reset();\n");
+            for (int i = 0 ; i < attribs.length ; i++)
+            {
+                if (attribs[i].isArray())
+                {
+                    writer.write("\t" + attribs[i].getParamNameAsMember() + " = NULL;\n");
+                }
+            }
+            writer.write("\treset();\n");
             writer.write("}\n");
 
             writeReset();
@@ -1218,33 +1152,10 @@ public class BeanParamWriter extends ParamCPPFileWriter
             {
                 if (attribs[i].isArray())
                 {
-                    /**
-                     * Dushshantha: If the element is a Choice, it sould be
-                     * treated as a pointer to an array. Memory should be
-                     * allocated for that. Chinthana: This is the same in 'all'
-                     * element
-                     */
-
-                    if (attribs[i].getChoiceElement()
-                            || attribs[i].getAllElement())
-                    {
-                        writer.write("\t"
-                                + attribs[i].getParamNameAsMember()
-                                + " = new "
-                                + CUtils.getBasicArrayNameforType(attribs[i]
-                                        .getTypeName()) + "();\n");
-                        writer.write("\t" + attribs[i].getParamNameAsMember()
-                                + "->m_Array = 0;\n");
-                        writer.write("\t" + attribs[i].getParamNameAsMember()
-                                + "->m_Size = 0;\n");
-                    }
-                    else
-                    {
-                        writer.write("\t" + attribs[i].getParamNameAsMember()
-                                + ".m_Array = 0;\n");
-                        writer.write("\t" + attribs[i].getParamNameAsMember()
-                                + ".m_Size = 0;\n");
-                    }
+                    writer.write("\tif ( " + attribs[i].getParamNameAsMember() + " != NULL)\n");
+                    writer.write("\t{\n");
+                    writer.write("\t\t" + attribs[i].getParamNameAsMember() + "->clear();\n");
+                    writer.write("\t}\n");
                 }
                 else if (!attribs[i].isSimpleType())
                 {
@@ -1309,39 +1220,8 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 String typename = attribs[i].getTypeName();
             	if(attribs[i].isArray())
                 {
-            		if (attribs[i].isSimpleType())
-                    {
-                        if (attribs[i].getChoiceElement())
-                        {
-                            writer.write("\tif (" + name
-                                    + "->m_Array != NULL)\n");
-                            writer.write("\t\tdelete [] ((" + typename + "*)"
-                                    + name + "->m_Array);\n");
-                        }
-                        else
-                        {
-                            writer.write("\tif (" + name
-                                    + ".m_Array != NULL)\n");
-                            writer.write("\t\tdelete [] ((" + typename + "*)"
-                                    + name + ".m_Array);\n");
-                        }
-                    }
-            		else
-            		{
-            			if (isNillable())
-                        {
-                            writer.write("\tif (" + name
-                                    + ".m_Array != NULL)\n");
-                            writer.write("\t\tdelete " + name + ".m_Array;\n");
-                        }
-                        else
-                        {
-                            writer.write("\tif (" + name
-                                    + ".m_Array != NULL)\n");
-                            writer.write("\t\tdelete [] ((" + typename + "*)"
-                                    + name + ".m_Array);\n");
-                        }
-            		}
+                    writer.write("\tif (" + name + "!= NULL)\n");
+                    writer.write("\t\tdelete " + name + ";\n");
             	}
             	else if (attribs[i].isAnyType())
                 {

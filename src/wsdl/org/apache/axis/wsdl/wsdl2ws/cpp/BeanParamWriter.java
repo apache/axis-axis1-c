@@ -148,102 +148,122 @@ public class BeanParamWriter extends ParamCPPFileWriter
         {
 			for (int i = 0; i < attribs.length; i++)
             {
-                // FJP Nillable vv
-                if (isElementNillable(i))
-                {
-					String parameterName = attribs[i]
-							.getParamNameWithoutSymbols();
-					String properParamName = getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]);
+			    String parameterName = attribs[i]
+			       							.getParamNameWithoutSymbols();
+				String properParamName = getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]);
+				
+				if (attribs[i].isArray())
+				{
+                    writer.write("\n" + properParamName + " * " + classname
+                            + "::get" + parameterName + "()\n{\n");
 
-					if (attribs[i].isAnyType())
-                    {
-                        anyCounter += 1;
-                    	parameterName = parameterName + Integer.toString(anyCounter);
-                    }
-					
-					writer.write("\n" + properParamName + " * " + classname
-							+ "::get" + parameterName + "()\n{\n");
+                    writer.write("\t" + "return " + parameterName + " ; \n}\n");
 
-					writer.write("\t" + "return " + parameterName + " ; \n}\n");
+                    writer.write("\n" + "void " + classname + "::set"
+                            + parameterName + "(" + properParamName
+                            + " * pInValue)\n{\n");
 
-					writer.write("\n" + "void " + classname + "::set"
-							+ parameterName + "(" + properParamName
-							+ " * pInValue)\n{\n");
-
-					writer.write("\t" + parameterName + " = pInValue ; \n");
-
-					if (attribs[i].getChoiceElement())
-                    {
-                        for (int j = 0; j < attribs.length; j++)
-                        {
-                            if ((attribs[j].getChoiceElement()) && (j != i))
-                            {
-								writer.write("\t"
-										+ attribs[j]
-												.getParamNameWithoutSymbols()
-										+ " = NULL ; \n");
+                    writer.write("\tif(" + parameterName + " == NULL)\n");
+                    writer.write("\t{\n");
+                    writer.write("\t\t" + parameterName + " = new " + properParamName + "();\n");
+                    writer.write("\t}\n");
+                    writer.write("\t" + parameterName + "->clone(*pInValue); \n");
+                    writer.write("}\n");
+                }
+				else
+				{
+	                // FJP Nillable vv
+	                if (isElementNillable(i))
+	                {
+						
+	
+						if (attribs[i].isAnyType())
+	                    {
+	                        anyCounter += 1;
+	                    	parameterName = parameterName + Integer.toString(anyCounter);
+	                    }
+						
+						writer.write("\n" + properParamName + " * " + classname
+								+ "::get" + parameterName + "()\n{\n");
+	
+						writer.write("\t" + "return " + parameterName + " ; \n}\n");
+	
+						writer.write("\n" + "void " + classname + "::set"
+								+ parameterName + "(" + properParamName
+								+ " * pInValue)\n{\n");
+	
+						writer.write("\t" + parameterName + " = pInValue ; \n");
+	
+						if (attribs[i].getChoiceElement())
+	                    {
+	                        for (int j = 0; j < attribs.length; j++)
+	                        {
+	                            if ((attribs[j].getChoiceElement()) && (j != i))
+	                            {
+									writer.write("\t"
+											+ attribs[j]
+													.getParamNameWithoutSymbols()
+											+ " = NULL ; \n");
+								}
 							}
 						}
-					}
-
-					writer.write("}\n");
-				} 
-                else 
-                {
-					// FJP Nillable ^^
-					/**
-					 * Dushshantha: Write getter
-					 */
-
-					String parameterName = attribs[i].getParamNameWithoutSymbols();
-                    String properParamName = getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]);
-                    
-                    if (attribs[i].isAnyType())
-                    {
-                        anyCounter += 1;
-                    	parameterName = parameterName + Integer.toString(anyCounter);
-                    }
-
-                    writer.write("\n"
-                                    + properParamName
-                                    + " " + classname + "::get"
-                                    + parameterName
-                                    + "()\n{\n");
-
-                    writer.write("\t" + "return "
-                            + parameterName
-                            + " ; \n}\n");
-
-					/**
-					 * Dushshantha: Write setter
-					 */
-
-                    writer.write("\n"
-                            + "void "
-                            + classname
-                            + "::set"
-                            + parameterName
-                            + "("
-                            + properParamName
-                            + " InValue)\n{\n");
-
-                    writer.write("\t" + parameterName
-                            + " = InValue ; \n");
-
-					if (attribs[i].getChoiceElement())
-                    {
-                        for (int j = 0; j < attribs.length; j++)
-                        {
-                            if ((attribs[j].getChoiceElement()) && (j != i))
-                            {
-								writer.write("\t"
-										+ attribs[j].getParamNameWithoutSymbols()
-										+ " = NULL ; \n");
+	
+						writer.write("}\n");
+					} 
+	                else 
+	                {
+						// FJP Nillable ^^
+						/**
+						 * Dushshantha: Write getter
+						 */
+	                    
+	                    if (attribs[i].isAnyType())
+	                    {
+	                        anyCounter += 1;
+	                    	parameterName = parameterName + Integer.toString(anyCounter);
+	                    }
+	
+	                    writer.write("\n"
+	                                    + properParamName
+	                                    + " " + classname + "::get"
+	                                    + parameterName
+	                                    + "()\n{\n");
+	
+	                    writer.write("\t" + "return "
+	                            + parameterName
+	                            + " ; \n}\n");
+	
+						/**
+						 * Dushshantha: Write setter
+						 */
+	
+	                    writer.write("\n"
+	                            + "void "
+	                            + classname
+	                            + "::set"
+	                            + parameterName
+	                            + "("
+	                            + properParamName
+	                            + " InValue)\n{\n");
+	
+	                    writer.write("\t" + parameterName
+	                            + " = InValue ; \n");
+	
+						if (attribs[i].getChoiceElement())
+	                    {
+	                        for (int j = 0; j < attribs.length; j++)
+	                        {
+	                            if ((attribs[j].getChoiceElement()) && (j != i))
+	                            {
+									writer.write("\t"
+											+ attribs[j].getParamNameWithoutSymbols()
+											+ " = NULL ; \n");
+								}
 							}
 						}
+	
+						writer.write("}\n");
 					}
-
-					writer.write("}\n");
 				}
 			}
 		} 
@@ -357,9 +377,9 @@ public class BeanParamWriter extends ParamCPPFileWriter
 				//if Array
 				if (attribs[i].isSimpleType()) 
                 {
-					writer.write("\tpSZ->serializeBasicArray((Axis_Array*)(&param->"
+					writer.write("\tpSZ->serializeBasicArray(param->"
 									+ attribs[i].getParamNameAsMember()
-									+ "),"
+									+ ","
 									+ CUtils.getXSDTypeForBasicType(attribs[i]
 											.getTypeName())
 									+ ", \""
@@ -779,6 +799,13 @@ public class BeanParamWriter extends ParamCPPFileWriter
 		try 
         {
 			writer.write("\n" + classname + "::" + classname + "()\n{\n");
+			for (int i = 0 ; i < attribs.length ; i++)
+			{
+			    if (attribs[i].isArray())
+			    {
+			        writer.write("\t" + attribs[i].getParamNameAsMember() + " = NULL;\n");
+			    }
+			}
             writer.write("\t reset();\n");
             writer.write("}\n");
 
@@ -808,10 +835,10 @@ public class BeanParamWriter extends ParamCPPFileWriter
             {
 				if (attribs[i].isArray()) 
                 {
-					writer.write("\t" + attribs[i].getParamNameAsMember()
-							+ ".m_Array = 0;\n");
-					writer.write("\t" + attribs[i].getParamNameAsMember()
-							+ ".m_Size = 0;\n");
+                    writer.write("\tif ( " + attribs[i].getParamNameAsMember() + " != NULL)\n");
+                    writer.write("\t{\n");
+                    writer.write("\t\t" + attribs[i].getParamNameAsMember() + "->clear();\n");
+                    writer.write("\t}\n");
 				} 
                 else if (!attribs[i].isSimpleType()) 
                 {
@@ -877,18 +904,8 @@ public class BeanParamWriter extends ParamCPPFileWriter
             {
 				if (attribs[i].isArray()) 
                 {
-					if (attribs[i].getChoiceElement())
-                    {
-						writer.write("\tdelete [] ((" + attribs[i].getTypeName()
-							+ "*)" + attribs[i].getParamNameAsMember()
-							+ "->m_Array);\n");
-                    }
-					else
-                    {
-						writer.write("\tdelete [] ((" + attribs[i].getTypeName()
-							+ "*)" + attribs[i].getParamNameAsMember()
-							+ ".m_Array);\n");
-                    }
+					writer.write("\tdelete " + attribs[i].getParamNameAsMember()
+						+ ";\n");
 				}
 				
 				else if (attribs[i].isAnyType())

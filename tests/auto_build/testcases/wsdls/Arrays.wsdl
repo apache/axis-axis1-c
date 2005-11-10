@@ -7,7 +7,7 @@
 	<wsdl:types>
 		<xsd:schema targetNamespace="http://org.apache.axis/Arrays/"
 			xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-			<xsd:element name="SimpleArrayResponse">
+			<xsd:element name="simpleArrayResponse">
 				<xsd:complexType>
 					<xsd:sequence>
 						<xsd:element name="simpleType" type="xsd:int"
@@ -15,7 +15,7 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
-			<xsd:element name="SimpleArrayRequest">
+			<xsd:element name="simpleArrayRequest">
 				<xsd:complexType>
 					<xsd:sequence>
 						<xsd:element name="simpleType" type="xsd:int"
@@ -23,26 +23,69 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
+
+			<xsd:complexType name="ComplexTypeWithSimpleArray">
+				<xsd:sequence>
+					<xsd:element name="simpleType" type="xsd:int" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:complexType>
+
+            <xsd:element name="complexTypeWithSimpleArrayResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="ComplexTypeWithSimpleArray"
+							type="tns:ComplexTypeWithSimpleArray">
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+            </xsd:element>
+            <xsd:element name="complexTypeWithSimpleArrayRequest">
+            	<xsd:complexType>
+            		<xsd:sequence>
+            			<xsd:element name="complexTypeWithSimpleArray"
+            				type="tns:ComplexTypeWithSimpleArray">
+            			</xsd:element>
+            		</xsd:sequence>
+            	</xsd:complexType>
+            </xsd:element>
 		</xsd:schema>
 	</wsdl:types>
-	<wsdl:message name="SimpleArrayResponse">
-		<wsdl:part element="tns:SimpleArrayResponse"
-			name="SimpleArrayResponse" />
+	<wsdl:message name="simpleArrayResponse">
+		<wsdl:part element="tns:simpleArrayResponse"
+			name="simpleArrayResponse" />
 	</wsdl:message>
-	<wsdl:message name="SimpleArrayRequest">
-		<wsdl:part element="tns:SimpleArrayRequest"
-			name="SimpleArrayRequest" />
+	<wsdl:message name="simpleArrayRequest">
+		<wsdl:part element="tns:simpleArrayRequest"
+			name="simpleArrayRequest" />
+	</wsdl:message>
+	<wsdl:message name="complexTypeWithSimpleArrayResponse">
+		<wsdl:part name="complexTypeWithSimpleArrayResponse"
+			element="tns:complexTypeWithSimpleArrayResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="complexTypeWithSimpleArrayRequest">
+		<wsdl:part name="complexTypeWithSimpleArrayRequest"
+			element="tns:complexTypeWithSimpleArrayRequest">
+		</wsdl:part>
 	</wsdl:message>
 	<wsdl:portType name="Arrays">
-		<wsdl:operation name="SimpleArray">
-			<wsdl:input message="tns:SimpleArrayRequest" />
-			<wsdl:output message="tns:SimpleArrayResponse" />
+		<wsdl:operation name="simpleArray">
+			<wsdl:input message="tns:simpleArrayRequest" />
+			<wsdl:output message="tns:simpleArrayResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="complexTypeWithSimpleArray">
+			<wsdl:input
+				message="tns:complexTypeWithSimpleArrayRequest">
+			</wsdl:input>
+			<wsdl:output
+				message="tns:complexTypeWithSimpleArrayResponse">
+			</wsdl:output>
 		</wsdl:operation>
 	</wsdl:portType>
 	<wsdl:binding name="ArraysSOAP" type="tns:Arrays">
 		<soap:binding style="document"
 			transport="http://schemas.xmlsoap.org/soap/http" />
-		<wsdl:operation name="SimpleArray">
+		<wsdl:operation name="simpleArray">
 			<soap:operation
 				soapAction="http://org.apache.axis/Arrays/NewOperation" />
 			<wsdl:input>
@@ -51,6 +94,10 @@
 			<wsdl:output>
 				<soap:body use="literal" />
 			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="complexTypeWithSimpleArray">
+			<wsdl:input></wsdl:input>
+			<wsdl:output></wsdl:output>
 		</wsdl:operation>
 	</wsdl:binding>
 	<wsdl:service name="Arrays">

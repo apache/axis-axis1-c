@@ -6,6 +6,17 @@ Transfer-Encoding: chunked
 
 ###
 <?xml version="1.0" encoding="utf-8"?>
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header/><soapenv:Body><SimpleArrayResponse xmlns="http://org.apache.axis/Arrays/"><simpleType>0</simpleType><simpleType>1</simpleType><simpleType>2</simpleType></SimpleArrayResponse></soapenv:Body></soapenv:Envelope>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header/><soapenv:Body><simpleArrayResponse xmlns="http://org.apache.axis/Arrays/"><simpleType>0</simpleType><simpleType>1</simpleType><simpleType>2</simpleType></simpleArrayResponse></soapenv:Body></soapenv:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version="1.0" encoding="utf-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header/><soapenv:Body><complexTypeWithSimpleArrayResponse xmlns="http://org.apache.axis/Arrays/"><ComplexTypeWithSimpleArray><simpleType>0</simpleType><simpleType>1</simpleType><simpleType>2</simpleType></ComplexTypeWithSimpleArray></complexTypeWithSimpleArrayResponse></soapenv:Body></soapenv:Envelope>
 0
 
