@@ -117,26 +117,32 @@ int main(int argc, char* argv[])
 		delete optionalAttributeResult;
 */
 		// Test array
-        xsd__dateTime_Array arrayInput;
-        arrayInput.m_Array = new xsd__dateTime*[2];
-        xsd__dateTime * array = new xsd__dateTime[2];
-        arrayInput.m_Size = 2;
-        for (int inputIndex=0 ; inputIndex < 2 ; inputIndex++)
+        xsd__date_Array arrayInput;
+		int arraySize = 2;
+		xsd__date ** array = new xsd__date*[arraySize];
+        
+        for (int inputIndex=0 ; inputIndex < arraySize ; inputIndex++)
         {
-            array[inputIndex] = time;
-            arrayInput.m_Array[inputIndex] = &array[inputIndex];
+            array[inputIndex] =new xsd__date(time);
+            
         }
-		xsd__dateTime_Array arrayResult = ws->asArray(arrayInput);
-        cout << "array of " << arrayResult.m_Size << " elements" << endl;
-		for (int index = 0; index < arrayResult.m_Size ; index++)
-		{
-            strftime(returnString, 50, "%a %b %d %H:%M:%S %Y", arrayResult.m_Array[index]);
-			cout << "  element[" << index << "]=" << returnString << endl;
-			delete arrayResult.m_Array[index];
-		}
+		arrayInput.set(array,arraySize);
+        xsd__date_Array* arrayResult = ws->asArray(&arrayInput);
+		int outputSize = 0;
+		const xsd__date **output = arrayResult->get(outputSize);
+        cout << "array of " << outputSize << " elements" << endl;
+        for (int index = 0; index < outputSize ; index++)
+        {
+            strftime(returnString, 50, "%a %b %d %Y", output[index]);
+            cout << "  element[" << index << "]=" << returnString << endl;
+            
+        }
+         // Clear up input array        
+        for (int deleteIndex = 0 ; deleteIndex < arraySize ; deleteIndex++ )
+        {
+            delete array[deleteIndex];
+        }
         delete [] array;
-        delete [] arrayInput.m_Array;
-		delete [] arrayResult.m_Array;
 
 		// Test complex type
 		SimpleComplexType complexTypeInput;
