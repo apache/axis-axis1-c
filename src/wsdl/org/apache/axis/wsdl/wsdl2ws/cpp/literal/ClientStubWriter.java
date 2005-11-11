@@ -929,29 +929,32 @@ public class ClientStubWriter
 		    String containedType = null;
 		    if (CUtils.isSimpleType (qname))
 		    {
-			containedType = CUtils.getclass4qname (qname);
-			writer.write ("\t\t\tAxis_Array * RetAxisArray = m_pCall->getBasicArray(" 
-					+ CUtils.getXSDTypeForBasicType (containedType) 
-					+ ", \"" + returntype.getParamName () + "\", 0);\n");
+				containedType = CUtils.getclass4qname (qname);
+				writer.write ("\t\t\tAxis_Array * RetAxisArray = m_pCall->getBasicArray(" 
+						+ CUtils.getXSDTypeForBasicType (containedType) 
+						+ ", \"" + returntype.getParamName () + "\", 0);\n");
+				writer.write ("\t\t\tRetArray->clone(*RetAxisArray);\n");
 		    }
 		    else
 		    {
-			containedType = qname.getLocalPart ();
-			writer.write("\t\t\tAxis_Array * RetAxisArray = m_pCall->getCmplxArray((void*) Axis_DeSerialize_"
-					+ containedType 
-					+ ", (void*) Axis_Create_"
-				      + containedType
-				      + ", (void*) Axis_Delete_"
-				      + containedType
-				      + ", (void*) Axis_GetSize_"
-				      + containedType
-				      + ", \""
-				      + returntype.getElementNameAsString ()
-				      + "\", Axis_URI_"
-				      + containedType
-				      + ");\n");
+				containedType = qname.getLocalPart ();
+				writer.write("\t\t\tAxis_Array * RetAxisArray = m_pCall->getCmplxArray((void*) Axis_DeSerialize_"
+						+ containedType 
+						+ ", (void*) Axis_Create_"
+					      + containedType
+					      + ", (void*) Axis_Delete_"
+					      + containedType
+					      + ", (void*) Axis_GetSize_"
+					      + containedType
+					      + ", \""
+					      + returntype.getElementNameAsString ()
+					      + "\", Axis_URI_"
+					      + containedType
+					      + ");\n");
+				writer.write("\t\t\tRetArray->clone(*(" + containedType + "_Array *)RetAxisArray);\n");
+				writer.write("\t\t\t((" + containedType + "_Array *)RetAxisArray)->clear();\n"); 
+				
 		    }
-		    writer.write ("\t\t\tRetArray->clone(*RetAxisArray);\n");
 		    writer.write ("\t\t\tAxis::AxisDelete( (void *)RetAxisArray, XSD_ARRAY);\n");
 		    writer.write ("\t\t}\n");
 		    writer.write ("\t}\n");

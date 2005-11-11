@@ -77,13 +77,84 @@ public class ArrayParamWriter extends ParamWriter
     protected void writeMethods() throws WrapperFault
     {
         this.writeConstructors();
+        this.writeDestructors();
         
+            this.writeSetMethod();
+            this.writeGetMethod();
+            this.writeCloneMethod();
+            this.writeClearMethod();
+    }
+
+    
+    
+    /**
+     * @throws WrapperFault
+     * 
+     */
+    protected void writeClearMethod() throws WrapperFault
+    {
         try
         {
-            writer.write("void " + classname + "::" + "set(" + attribs[0].getTypeName() + "** array, const int size)\n");
+            writer.write("void " + classname + "::clear()\n");
             writer.write("{\n");
-            writer.write("\tAxis_Array::set((void**)array, size, USER_TYPE);\n");
+            writer.write("\tif (m_Array != NULL)\n");
+            writer.write("\t{\n");
+            writer.write("\t\tif (m_Size > 0)\n");
+            writer.write("\t\t{\n");
+            writer.write("\t\t\tfor (int count = 0 ; count < m_Size ; count++)\n");
+            writer.write("\t\t\t{\n");
+            writer.write("\t\t\t\tif (m_Array[count] != NULL)\n");
+            writer.write("\t\t\t\t{\n");
+            writer.write("\t\t\t\t\tdelete ((" + attribs[0].getTypeName() + "**) m_Array)[count];\n");
+            writer.write("\t\t\t\t\tm_Array[count] = NULL;\n");
+            writer.write("\t\t\t\t}\n");
+            writer.write("\t\t\t}\n");
+            writer.write("\t\t}\n");
+            writer.write("\t\tif (m_belongsToAxisEngine == false)\n");
+            writer.write("\t\t{\n");
+            writer.write("\t\t\tdelete [] m_Array;\n");
+            writer.write("\t\t\tm_Array = NULL;\n");
+            writer.write("\t\t\tm_Size = 0;\n");
+            writer.write("\t\t}\n");
+            writer.write("\t\telse\n");
+            writer.write("\t\t{\n");
+            writer.write("\t\t\t// Allow the engine to clear up it's memory\n");
+            writer.write("\t\t\tAxis_Array::clear();\n");
+            writer.write("\t\t}\n");
+            writer.write("\t\tm_belongsToAxisEngine = false;\n");
+            writer.write("\t}\n");
             writer.write("}\n\n");
+        }
+        catch (IOException e)
+        {
+            throw new WrapperFault(e);
+        }        
+    }
+    /**
+     * @throws IOException
+     */
+    protected void writeCloneMethod() throws WrapperFault
+    {
+        // Write clone method
+        try
+        {
+            writer.write("void " + classname + "::clone(" + classname + " & original)\n");
+            writer.write("{\n");
+            writer.write("\tset((" + attribs[0].getTypeName() + "**) original.m_Array, original.m_Size);\n");
+            writer.write("}\n\n");
+        }
+        catch (IOException e)
+        {
+            throw new WrapperFault(e);
+        }
+    }
+    /**
+     * @throws IOException
+     */
+    protected void writeGetMethod() throws WrapperFault
+    {
+        try
+        {
             writer.write("const " + attribs[0].getTypeName() + "** " + classname + "::" + "get(int & size) const\n");
             writer.write("{\n");
             writer.write("\tXSDTYPE type;\n");
@@ -94,11 +165,46 @@ public class ArrayParamWriter extends ParamWriter
         {
             throw new WrapperFault(e);
         }
-
     }
-
-    
-    
+    /**
+     * @throws IOException
+     */
+    protected void writeSetMethod() throws WrapperFault
+    {
+        try
+        {
+            writer.write("void " + classname + "::" + "set(" + attribs[0].getTypeName() + "** array, const int size)\n");
+            writer.write("{\n");
+            writer.write("\tclear();\n");
+            writer.write("\tm_Size = size;\n");
+            writer.write("\tm_Type = USER_TYPE;\n\n");
+            writer.write("\tif (m_Size == 0)\n");
+            writer.write("\t{\n");
+            writer.write("\t\tm_Array = NULL;\n");
+            writer.write("\t}\n");
+            writer.write("\telse\n");
+            writer.write("\t{\n");
+            writer.write("\t\tm_Array = new void*[m_Size];\n");
+            writer.write("\t\tfor (int count = 0 ; count < m_Size ; count++ )\n");
+            writer.write("\t\t{\n");
+            writer.write("\t\t\tif (array[count] == NULL)\n");
+            writer.write("\t\t\t{\n");
+            writer.write("\t\t\t\tm_Array[count] = NULL;\n");
+            writer.write("\t\t\t}\n");
+            writer.write("\t\t\telse\n");
+            writer.write("\t\t\t{\n");
+            writer.write("\t\t\t\t((" + attribs[0].getTypeName() + "**) m_Array)[count] =\n");
+            writer.write("\t\t\t\t\tnew " + attribs[0].getTypeName() + "(*((" + attribs[0].getTypeName() + "**) array)[count]);\n");
+            writer.write("\t\t\t}\n");
+            writer.write("\t\t}\n");
+            writer.write("\t}\n");
+            writer.write("}\n\n");
+        }
+        catch (IOException e)
+        {
+            throw new WrapperFault(e);
+        }
+    }
     protected void writeConstructors() throws WrapperFault
     {
         try
@@ -106,9 +212,12 @@ public class ArrayParamWriter extends ParamWriter
             writer.write(classname + "::" + classname + "()\n");
             writer.write("{\n");
             writer.write("\tm_Type = USER_TYPE;\n");
+            writer.write("\tm_belongsToAxisEngine = false;\n");
             writer.write("}\n\n");
             writer.write(classname + "::" + classname + "(" + classname + " & original)\n");
             writer.write("{\n");
+            writer.write("\tm_Type = USER_TYPE;\n");
+            writer.write("\tm_belongsToAxisEngine = false;\n");
             writer.write("\tclone(original);\n");
             writer.write("}\n\n");
         }
@@ -118,6 +227,22 @@ public class ArrayParamWriter extends ParamWriter
         }
         
     }
+    
+    protected void writeDestructors() throws WrapperFault
+    {
+        try
+        {
+            writer.write(classname + "::~" + classname + "()\n");
+            writer.write("{\n");
+            writer.write("\tclear();\n");
+            writer.write("}\n\n");
+        }
+        catch (IOException e)
+        {
+            throw new WrapperFault(e);
+        }
+    }
+    
     /* (non-Javadoc)
      * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#getFilePath()
      */

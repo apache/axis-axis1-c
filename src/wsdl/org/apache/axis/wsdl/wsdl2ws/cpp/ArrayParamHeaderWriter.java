@@ -180,10 +180,9 @@ public class ArrayParamHeaderWriter extends ParamWriter
         	writer.write("class " + classname + " : public Axis_Array\n");
         	writer.write("{\n");
         	writer.write("\tpublic:\n");
-        	writer.write("\t\t" + classname +"();\n");
-        	writer.write("\t\t" + classname + "(" + classname + " & original);\n");
-        	writer.write("\t\tvoid set(" + attribs[0].getTypeName() + "** array, const int size);\n");
-        	writer.write("\t\tconst "+ attribs[0].getTypeName() + "** get(int & size) const;\n");
+        	this.writeConstructors();
+        	this.writeDestructors();
+        	this.writeMethods();
             writer.write("};\n\n");
         }
         catch (IOException e)
@@ -193,13 +192,44 @@ public class ArrayParamHeaderWriter extends ParamWriter
     }
 
     protected void writeConstructors() throws WrapperFault
-    {}
+    {
+        try
+        {
+            writer.write("\t\t" + classname +"();\n");
+            writer.write("\t\t" + classname + "(" + classname + " & original);\n");
+        }
+        catch (IOException e)
+        {
+            throw new WrapperFault(e);
+        }
+    }
 
     protected void writeDestructors() throws WrapperFault
-    {}
+    {
+        try
+        {
+            writer.write("\t\t~" + classname + "();\n");
+        }
+        catch (IOException e)
+        {
+            throw new WrapperFault(e);
+        }
+    }
 
     protected void writeMethods() throws WrapperFault
-    {}
+    {
+        try
+        {
+            writer.write("\t\tvoid set(" + attribs[0].getTypeName() + "** array, const int size);\n");
+            writer.write("\t\tconst "+ attribs[0].getTypeName() + "** get(int & size) const;\n");
+            writer.write("\t\tvoid clone(" + classname + " & original);\n");
+            writer.write("\t\tvoid clear();\n");
+        }
+        catch (IOException e)
+        {
+            throw new WrapperFault(e);
+        }
+    }
 
     protected String getFileType()
     {

@@ -369,6 +369,7 @@ protected:
     void** m_Array; // Array of pointers to array elements
     int m_Size; // Size of array
     XSDTYPE m_Type; // XSD datatype within this array
+    bool m_belongsToAxisEngine;
 };
 
 #define AXIS_OUT_PARAM 

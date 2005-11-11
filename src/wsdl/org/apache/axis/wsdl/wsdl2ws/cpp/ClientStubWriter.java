@@ -618,6 +618,7 @@ public class ClientStubWriter extends CPPClassWriter
                         + "m_pCall->getBasicArray("
                         + CUtils.getXSDTypeForBasicType(containedType) + ", \""
                         + returntype.getParamName() + "\", 0);\n");
+                writer.write ("\t\t\t\tRetArray.clone(*RetAxisArray);\n\t\t\t}\n");
             }
             else
             {
@@ -631,9 +632,10 @@ public class ClientStubWriter extends CPPClassWriter
                         + ", (void*) Axis_GetSize_" + containedType + ", \""
                         + returntype.getParamName() + "\", Axis_URI_"
                         + containedType + ");\n");
-	            
+                writer.write("\t\t\tRetArray->clone(*(" + containedType + "_Array *)RetAxisArray);\n");
+				writer.write("\t\t\t((" + containedType + "_Array *)RetAxisArray)->clear();\n");
             }
-            writer.write ("\t\t\t\tRetArray.clone(*RetAxisArray);\n\t\t\t}\n");
+            
             writer.write ("\t\t\t\tAxis::AxisDelete( (void *)RetAxisArray, XSD_ARRAY);\n\t\t\t}\n");
             writer.write("\t\t}\n");
             writer.write("\tm_pCall->unInitialize();\n");

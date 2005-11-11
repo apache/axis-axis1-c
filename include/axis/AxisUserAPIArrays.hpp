@@ -51,6 +51,11 @@ class STORAGE_CLASS_INFO xsd__duration_Array : public Axis_Array {
     xsd__duration_Array(xsd__duration_Array & original);
     
     /**
+     * Destructor
+     */
+    ~xsd__duration_Array();
+    
+    /**
      * Populate the array from a c-style array
      * 
      * @param array is a c-style array of pointers to the xsd_duration data.
@@ -81,6 +86,11 @@ class STORAGE_CLASS_INFO xsd__dateTime_Array : public Axis_Array {
     xsd__dateTime_Array(xsd__dateTime_Array & original);
     
     /**
+     * Destructor
+     */
+    ~xsd__dateTime_Array();
+    
+    /**
      * Populate the array from a c-style array
      * 
      * @param array is a c-style array of pointers to the xsd_duration data.
@@ -109,6 +119,11 @@ class STORAGE_CLASS_INFO xsd__time_Array : public Axis_Array {
      * @param orginal Axis_Array to copy.
      */
     xsd__time_Array(xsd__time_Array & original);
+        
+    /**
+     * Destructor
+     */
+    ~xsd__time_Array();
     
     /**
      * Populate the array from a c-style array
@@ -139,6 +154,11 @@ class STORAGE_CLASS_INFO xsd__date_Array : public Axis_Array {
      * @param orginal Axis_Array to copy.
      */
     xsd__date_Array(xsd__date_Array & original);
+        
+    /**
+     * Destructor
+     */
+    ~xsd__date_Array();
     
     /**
      * Populate the array from a c-style array
@@ -169,6 +189,12 @@ class STORAGE_CLASS_INFO xsd__gYearMonth_Array : public Axis_Array {
      * @param orginal Axis_Array to copy.
      */
     xsd__gYearMonth_Array(xsd__gYearMonth_Array & original);
+        
+    /**
+     * Destructor
+     */
+    ~xsd__gYearMonth_Array();
+    
     
     /**
      * Populate the array from a c-style array
@@ -199,6 +225,11 @@ class STORAGE_CLASS_INFO xsd__gYear_Array : public Axis_Array {
      * @param orginal Axis_Array to copy.
      */
     xsd__gYear_Array(xsd__gYear_Array & original);
+        
+    /**
+     * Destructor
+     */
+    ~xsd__gYear_Array();
     
     /**
      * Populate the array from a c-style array
@@ -229,6 +260,11 @@ class STORAGE_CLASS_INFO xsd__gMonthDay_Array : public Axis_Array {
      * @param orginal Axis_Array to copy.
      */
     xsd__gMonthDay_Array(xsd__gMonthDay_Array & original);
+        
+    /**
+     * Destructor
+     */
+    ~xsd__gMonthDay_Array();
     
     /**
      * Populate the array from a c-style array
@@ -259,6 +295,11 @@ class STORAGE_CLASS_INFO xsd__gDay_Array : public Axis_Array {
      * @param orginal Axis_Array to copy.
      */
     xsd__gDay_Array(xsd__gDay_Array & original);
+        
+    /**
+     * Destructor
+     */
+    ~xsd__gDay_Array();
     
     /**
      * Populate the array from a c-style array
@@ -289,6 +330,11 @@ class STORAGE_CLASS_INFO xsd__gMonth_Array : public Axis_Array {
      * @param orginal Axis_Array to copy.
      */
     xsd__gMonth_Array(xsd__gMonth_Array & original);
+        
+    /**
+     * Destructor
+     */
+    ~xsd__gMonth_Array();
     
     /**
      * Populate the array from a c-style array
@@ -319,6 +365,11 @@ class STORAGE_CLASS_INFO xsd__string_Array : public Axis_Array {
      * @param original xsd__string_Array to copy.
      */
     xsd__string_Array(xsd__string_Array & original);
+        
+    /**
+     * Destructor
+     */
+    ~xsd__string_Array();
     
     /**
      * Populate the array from a c-style array
@@ -349,6 +400,11 @@ class STORAGE_CLASS_INFO xsd__normalizedString_Array : public Axis_Array {
      * @param original xsd__normalizedString_Array to copy.
      */
     xsd__normalizedString_Array(xsd__normalizedString_Array & original);
+        
+    /**
+     * Destructor
+     */
+    ~xsd__normalizedString_Array();
     
     /**
      * Populate the array from a c-style array
@@ -379,6 +435,11 @@ class STORAGE_CLASS_INFO xsd__token_Array : public Axis_Array {
      * @param original xsd__token_Array to copy.
      */
     xsd__token_Array(xsd__token_Array & original);
+        
+    /**
+     * Destructor
+     */
+    ~xsd__token_Array();
     
     /**
      * Populate the array from a c-style array
@@ -410,6 +471,12 @@ class STORAGE_CLASS_INFO xsd__language_Array : public Axis_Array {
      */
     xsd__language_Array(xsd__language_Array & original);
     
+        
+    /**
+     * Destructor
+     */
+    ~xsd__language_Array();
+    
     /**
      * Populate the array from a c-style array
      * 
@@ -439,6 +506,11 @@ class STORAGE_CLASS_INFO xsd__Name_Array : public Axis_Array {
      * @param original xsd__Name_Array to copy.
      */
     xsd__Name_Array(xsd__Name_Array & original);
+        
+    /**
+     * Destructor
+     */
+    ~xsd__Name_Array();
     
     /**
      * Populate the array from a c-style array
@@ -469,6 +541,11 @@ class STORAGE_CLASS_INFO xsd__NCName_Array : public Axis_Array {
      * @param original xsd__NCName_Array to copy.
      */
     xsd__NCName_Array(xsd__NCName_Array & original);
+        
+    /**
+     * Destructor
+     */
+    ~xsd__NCName_Array();
     
     /**
      * Populate the array from a c-style array
@@ -499,6 +576,11 @@ class STORAGE_CLASS_INFO xsd__ID_Array : public Axis_Array {
      * @param original xsd__ID_Array to copy.
      */
     xsd__ID_Array(xsd__ID_Array & original);
+        
+    /**
+     * Destructor
+     */
+    ~xsd__ID_Array();
     
     /**
      * Populate the array from a c-style array
@@ -529,6 +611,11 @@ class STORAGE_CLASS_INFO xsd__IDREF_Array : public Axis_Array {
      * @param original xsd__IDREF_Array to copy.
      */
     xsd__IDREF_Array(xsd__IDREF_Array & original);
+        
+    /**
+     * Destructor
+     */
+    ~xsd__IDREF_Array();
     
     /**
      * Populate the array from a c-style array
@@ -559,6 +646,11 @@ class STORAGE_CLASS_INFO xsd__IDREFS_Array : public Axis_Array {
      * @param original xsd__IDREFS_Array to copy.
      */
     xsd__IDREFS_Array(xsd__IDREFS_Array & original);
+        
+    /**
+     * Destructor
+     */
+    ~xsd__IDREFS_Array();
     
     /**
      * Populate the array from a c-style array
@@ -589,6 +681,11 @@ class STORAGE_CLASS_INFO xsd__ENTITY_Array : public Axis_Array {
      * @param original xsd__ENTITY_Array to copy.
      */
     xsd__ENTITY_Array(xsd__ENTITY_Array & original);
+        
+    /**
+     * Destructor
+     */
+    ~xsd__ENTITY_Array();
     
     /**
      * Populate the array from a c-style array
@@ -619,6 +716,11 @@ class STORAGE_CLASS_INFO xsd__ENTITIES_Array : public Axis_Array {
      * @param original xsd__ENTITIES_Array to copy.
      */
     xsd__ENTITIES_Array(xsd__ENTITIES_Array & original);
+        
+    /**
+     * Destructor
+     */
+    ~xsd__ENTITIES_Array();
     
     /**
      * Populate the array from a c-style array
@@ -649,6 +751,11 @@ class STORAGE_CLASS_INFO xsd__NMTOKEN_Array : public Axis_Array {
      * @param original xsd__NMTOKEN_Array to copy.
      */
     xsd__NMTOKEN_Array(xsd__NMTOKEN_Array & original);
+        
+    /**
+     * Destructor
+     */
+    ~xsd__NMTOKEN_Array();
     
     /**
      * Populate the array from a c-style array
@@ -679,6 +786,12 @@ class STORAGE_CLASS_INFO xsd__NMTOKENS_Array : public Axis_Array {
      * @param original xsd__NMTOKENS_Array to copy.
      */
     xsd__NMTOKENS_Array(xsd__NMTOKENS_Array & original);
+        
+    /**
+     * Destructor
+     */
+    ~xsd__NMTOKENS_Array();
+    
     /**
      * Populate the array from a c-style array
      * 
@@ -708,6 +821,11 @@ class STORAGE_CLASS_INFO xsd__boolean_Array : public Axis_Array {
      * @param original xsd__boolean_Array to copy.
      */
     xsd__boolean_Array(xsd__boolean_Array & original);
+        
+    /**
+     * Destructor
+     */
+    ~xsd__boolean_Array();
     
     /**
      * Populate the array from a c-style array
@@ -738,6 +856,11 @@ class STORAGE_CLASS_INFO xsd__base64Binary_Array : public Axis_Array {
      * @param original xsd__base64Binary_Array to copy.
      */
     xsd__base64Binary_Array(xsd__base64Binary_Array & original);
+        
+    /**
+     * Destructor
+     */
+    ~xsd__base64Binary_Array();
     
     /**
      * Populate the array from a c-style array
@@ -768,6 +891,11 @@ class STORAGE_CLASS_INFO xsd__hexBinary_Array : public Axis_Array {
      * @param original xsd__hexBinary_Array to copy.
      */
     xsd__hexBinary_Array(xsd__hexBinary_Array & original);
+        
+    /**
+     * Destructor
+     */
+    ~xsd__hexBinary_Array();
     
     /**
      * Populate the array from a c-style array
@@ -798,6 +926,11 @@ class STORAGE_CLASS_INFO xsd__float_Array : public Axis_Array {
      * @param original xsd__float_Array to copy.
      */
     xsd__float_Array(xsd__float_Array & original);
+        
+    /**
+     * Destructor
+     */
+    ~xsd__float_Array();
     
     /**
      * Populate the array from a c-style array
@@ -830,6 +963,11 @@ class STORAGE_CLASS_INFO xsd__decimal_Array : public Axis_Array {
     xsd__decimal_Array(xsd__decimal_Array & original);
     
     /**
+     * Destructor
+     */
+    ~xsd__decimal_Array();
+    
+    /**
      * Populate the array from a c-style array
      * 
      * @param array is a c-style array of pointers to the xsd__decimal data.
@@ -858,6 +996,11 @@ class STORAGE_CLASS_INFO xsd__integer_Array : public Axis_Array {
      * @param original xsd__integer_Array to copy.
      */
     xsd__integer_Array(xsd__integer_Array & original);
+        
+    /**
+     * Destructor
+     */
+    ~xsd__integer_Array();
     
     /**
      * Populate the array from a c-style array
@@ -888,6 +1031,11 @@ class STORAGE_CLASS_INFO xsd__nonPositiveInteger_Array : public Axis_Array {
      * @param original xsd__nonPositiveInteger_Array to copy.
      */
     xsd__nonPositiveInteger_Array(xsd__nonPositiveInteger_Array & original);
+        
+    /**
+     * Destructor
+     */
+    ~xsd__nonPositiveInteger_Array();
     
     /**
      * Populate the array from a c-style array
@@ -918,6 +1066,11 @@ class STORAGE_CLASS_INFO xsd__negativeInteger_Array : public Axis_Array {
      * @param original xsd__negativeInteger_Array to copy.
      */
     xsd__negativeInteger_Array(xsd__negativeInteger_Array & original);
+        
+    /**
+     * Destructor
+     */
+    ~xsd__negativeInteger_Array();
     
     /**
      * Populate the array from a c-style array
@@ -948,6 +1101,11 @@ class STORAGE_CLASS_INFO xsd__long_Array : public Axis_Array {
      * @param original xsd__long_Array to copy.
      */
     xsd__long_Array(xsd__long_Array & original);
+        
+    /**
+     * Destructor
+     */
+    ~xsd__long_Array();
     
     /**
      * Populate the array from a c-style array
@@ -978,6 +1136,11 @@ class STORAGE_CLASS_INFO xsd__int_Array : public Axis_Array {
      * @param original xsd__int_Array to copy.
      */
     xsd__int_Array(xsd__int_Array & original);
+        
+    /**
+     * Destructor
+     */
+    ~xsd__int_Array();
     
     /**
      * Populate the array from a c-style array
@@ -1008,6 +1171,11 @@ class STORAGE_CLASS_INFO xsd__short_Array : public Axis_Array {
      * @param original xsd__short_Array to copy.
      */
     xsd__short_Array(xsd__short_Array & original);
+        
+    /**
+     * Destructor
+     */
+    ~xsd__short_Array();
     
     /**
      * Populate the array from a c-style array
@@ -1038,6 +1206,11 @@ class STORAGE_CLASS_INFO xsd__byte_Array : public Axis_Array {
      * @param original xsd__byte_Array to copy.
      */
     xsd__byte_Array(xsd__byte_Array & original);
+        
+    /**
+     * Destructor
+     */
+    ~xsd__byte_Array();
     
     /**
      * Populate the array from a c-style array
@@ -1068,6 +1241,11 @@ class STORAGE_CLASS_INFO xsd__nonNegativeInteger_Array : public Axis_Array {
      * @param original xsd__nonNegativeInteger_Array to copy.
      */
     xsd__nonNegativeInteger_Array(xsd__nonNegativeInteger_Array & original);
+        
+    /**
+     * Destructor
+     */
+    ~xsd__nonNegativeInteger_Array();
     
     /**
      * Populate the array from a c-style array
@@ -1098,6 +1276,11 @@ class STORAGE_CLASS_INFO xsd__unsignedLong_Array : public Axis_Array {
      * @param original xsd__unsignedLong_Array to copy.
      */
     xsd__unsignedLong_Array(xsd__unsignedLong_Array & original);
+        
+    /**
+     * Destructor
+     */
+    ~xsd__unsignedLong_Array();
     
     /**
      * Populate the array from a c-style array
@@ -1128,6 +1311,11 @@ class STORAGE_CLASS_INFO xsd__unsignedInt_Array : public Axis_Array {
      * @param original xsd__unsignedInt_Array to copy.
      */
     xsd__unsignedInt_Array(xsd__unsignedInt_Array & original);
+        
+    /**
+     * Destructor
+     */
+    ~xsd__unsignedInt_Array();
     
     /**
      * Populate the array from a c-style array
@@ -1158,6 +1346,11 @@ class STORAGE_CLASS_INFO xsd__unsignedByte_Array : public Axis_Array {
      * @param original xsd__unsignedByte_Array to copy.
      */
     xsd__unsignedByte_Array(xsd__unsignedByte_Array & original);
+        
+    /**
+     * Destructor
+     */
+    ~xsd__unsignedByte_Array();
     
     /**
      * Populate the array from a c-style array
@@ -1188,6 +1381,11 @@ class STORAGE_CLASS_INFO xsd__unsignedShort_Array : public Axis_Array {
      * @param original xsd__unsignedShort_Array to copy.
      */
     xsd__unsignedShort_Array(xsd__unsignedShort_Array & original);
+        
+    /**
+     * Destructor
+     */
+    ~xsd__unsignedShort_Array();
     
     /**
      * Populate the array from a c-style array
@@ -1218,6 +1416,11 @@ class STORAGE_CLASS_INFO xsd__positiveInteger_Array : public Axis_Array {
      * @param original xsd__positiveInteger_Array to copy.
      */
     xsd__positiveInteger_Array(xsd__positiveInteger_Array & original);
+        
+    /**
+     * Destructor
+     */
+    ~xsd__positiveInteger_Array();
     
     /**
      * Populate the array from a c-style array
@@ -1248,6 +1451,11 @@ class STORAGE_CLASS_INFO xsd__double_Array : public Axis_Array {
      * @param original xsd__double_Array to copy.
      */
     xsd__double_Array(xsd__double_Array & original);
+        
+    /**
+     * Destructor
+     */
+    ~xsd__double_Array();
     
     /**
      * Populate the array from a c-style array
@@ -1278,6 +1486,11 @@ class STORAGE_CLASS_INFO xsd__anyURI_Array : public Axis_Array {
      * @param original xsd__anyURI_Array to copy.
      */
     xsd__anyURI_Array(xsd__anyURI_Array & original);
+        
+    /**
+     * Destructor
+     */
+    ~xsd__anyURI_Array();
     
     /**
      * Populate the array from a c-style array
@@ -1308,6 +1521,11 @@ class STORAGE_CLASS_INFO xsd__QName_Array : public Axis_Array {
      * @param original xsd__QName_Array to copy.
      */
     xsd__QName_Array(xsd__QName_Array & original);
+        
+    /**
+     * Destructor
+     */
+    ~xsd__QName_Array();
     
     /**
      * Populate the array from a c-style array
@@ -1338,6 +1556,11 @@ class STORAGE_CLASS_INFO xsd__NOTATION_Array : public Axis_Array {
      * @param original xsd__NOTATION_Array to copy.
      */
     xsd__NOTATION_Array(xsd__NOTATION_Array & original);
+        
+    /**
+     * Destructor
+     */
+    ~xsd__NOTATION_Array();
     
     /**
      * Populate the array from a c-style array

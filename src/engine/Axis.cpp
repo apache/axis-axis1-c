@@ -511,218 +511,149 @@ void Axis::terminate()
 
 void Axis::AxisDelete(void *pValue, XSDTYPE type)
 {
-    switch (type)
+    if (pValue != NULL)
     {
-        case XSD_DURATION:
+        switch (type)
         {
-            if (pValue != NULL)
+            case XSD_DURATION:
             {
                 delete (xsd__duration*) pValue;
                 pValue = NULL;
+    			break;
             }
-			break;
-        }
-        case XSD_DATETIME:
-        {
-            if (pValue != NULL)
+            case XSD_DATETIME:
             {
                 delete (xsd__dateTime*) pValue;
                 pValue = NULL;
+                break;
             }
-         break;
-        }
-        case XSD_TIME:
-        {
-            if (pValue != NULL)
+            case XSD_TIME:
             {
                 delete (xsd__time*) pValue;
                 pValue = NULL;
+                break;
             }
-         break;
-        }
-        case XSD_DATE:
-        {
-            if (pValue != NULL)
+            case XSD_DATE:
             {
                 delete (xsd__date*) pValue;
                 pValue = NULL;
+                break;
             }
-         break;
-        }
-        case XSD_GYEARMONTH:
-        {
-            if (pValue != NULL)
+            case XSD_GYEARMONTH:
             {
                 delete (xsd__gYearMonth*) pValue;
                 pValue = NULL;
+                break;
             }
-         break;
-        }
-        case XSD_GYEAR:
-        {
-            if (pValue != NULL)
+            case XSD_GYEAR:
             {
                 delete (xsd__gYear*) pValue;
                 pValue = NULL;
+                break;
             }
-         break;
-        }
-        case XSD_GMONTHDAY:
-        {
-            if (pValue != NULL)
+            case XSD_GMONTHDAY:
             {
                 delete (xsd__gMonthDay*) pValue;
                 pValue = NULL;
+                break;
             }
-         break;
-        }
-        case XSD_GDAY:
-        {
-            if (pValue != NULL)
+            case XSD_GDAY:
             {
                 delete (xsd__gDay*) pValue;
                 pValue = NULL;
+                break;
             }
-         break;
-        }
-        case XSD_GMONTH:
-        {
-            if (pValue != NULL)
+            case XSD_GMONTH:
             {
                 delete (xsd__gMonth*) pValue;
                 pValue = NULL;
+                break;
             }
-         break;
-        }
-        case XSD_STRING:
-        {
-            if (pValue != NULL)
+            case XSD_STRING:
             {
                 delete [] (xsd__string) pValue;
                 pValue = NULL;
+                break;
             }
-         break;
-        }
-        case XSD_NORMALIZEDSTRING:
-        {
-            if (pValue != NULL)
+            case XSD_NORMALIZEDSTRING:
             {
                 delete [] (xsd__normalizedString) pValue;
                 pValue = NULL;
+                break;
             }
-         break;
-        }
-        case XSD_TOKEN:
-        {
-            if (pValue != NULL)
+            case XSD_TOKEN:
             {
                 delete [] (xsd__token) pValue;
                 pValue = NULL;
+                break;
             }
-         break;
-        }
-        case XSD_LANGUAGE:
-        {
-            if (pValue != NULL)
+            case XSD_LANGUAGE:
             {
                 delete [] (xsd__language) pValue;
                 pValue = NULL;
+                break;
             }
-         break;
-        }
-        case XSD_NAME:
-        {
-            if (pValue != NULL)
+            case XSD_NAME:
             {
                 delete [] (xsd__Name) pValue;
                 pValue = NULL;
+                break;
             }
-         break;
-        }
-        case XSD_NCNAME:
-        {
-            if (pValue != NULL)
+            case XSD_NCNAME:
             {
                 delete [] (xsd__NCName) pValue;
                 pValue = NULL;
+                break;
             }
-         break;
-        }
-        case XSD_ID:
-        {
-            if (pValue != NULL)
+            case XSD_ID:
             {
                 delete [] (xsd__ID) pValue;
                 pValue = NULL;
+                break;
             }
-         break;
-        }
-        case XSD_IDREF:
-        {
-            if (pValue != NULL)
+            case XSD_IDREF:
             {
                 delete [] (xsd__IDREF) pValue;
                 pValue = NULL;
+                break;
             }
-         break;
-        }
-        case XSD_IDREFS:
-        {
-            if (pValue != NULL)
+            case XSD_IDREFS:
             {
                 delete [] (xsd__IDREFS) pValue;
                 pValue = NULL;
+                break;
             }
-         break;
-        }
-        case XSD_ENTITY:
-        {
-            if (pValue != NULL)
+            case XSD_ENTITY:
             {
                 delete [] (xsd__ENTITY) pValue;
                 pValue = NULL;
+                break;
             }
-         break;
-        }
-        case XSD_ENTITIES:
-        {
-            if (pValue != NULL)
+            case XSD_ENTITIES:
             {
                 delete [] (xsd__ENTITIES) pValue;
                 pValue = NULL;
+                break;
             }
-         break;
-        }
-        case XSD_NMTOKEN:
-        {
-            if (pValue != NULL)
+            case XSD_NMTOKEN:
             {
                 delete [] (xsd__NMTOKEN) pValue;
                 pValue = NULL;
+                break;
             }
-         break;
-        }
-        case XSD_NMTOKENS:
-        {
-            if (pValue != NULL)
+            case XSD_NMTOKENS:
             {
                 delete [] (xsd__NMTOKENS) pValue;
                 pValue = NULL;
+                break;
             }
-         break;
-        }
-        case XSD_BOOLEAN:
-        {
-            if (pValue != NULL)
+            case XSD_BOOLEAN:
             {
                 delete (xsd__boolean*) pValue;
                 pValue = NULL;
+                break;
             }
-         break;
-        }
-        case XSD_BASE64BINARY:
-        {
-            if (pValue != NULL)
+            case XSD_BASE64BINARY:
             {
 				if(	((xsd__base64Binary*) pValue)->__ptr != NULL)
 				{
@@ -732,12 +663,9 @@ void Axis::AxisDelete(void *pValue, XSDTYPE type)
 
                 delete (xsd__base64Binary*) pValue;
                 pValue = NULL;
+                break;
             }
-         break;
-        }
-        case XSD_HEXBINARY:
-        {
-            if (pValue != NULL)
+            case XSD_HEXBINARY:
             {
 				if(	((xsd__hexBinary*) pValue)->__ptr != NULL)
 				{
@@ -747,188 +675,136 @@ void Axis::AxisDelete(void *pValue, XSDTYPE type)
 
                 delete (xsd__hexBinary*) pValue;
                 pValue = NULL;
+                break;
             }
-         break;
-        }
-        case XSD_FLOAT:
-        {
-            if (pValue != NULL)
+            case XSD_FLOAT:
             {
                 delete (xsd__float*) pValue;
                 pValue = NULL;
+                break;
             }
-         break;
-        }
-        case XSD_DECIMAL:
-        {
-            if (pValue != NULL)
+            case XSD_DECIMAL:
             {
                 delete (xsd__decimal*) pValue;
                 pValue = NULL;
+                break;
             }
-         break;
-        }
-        case XSD_NONPOSITIVEINTEGER:
-        {
-            if (pValue != NULL)
+            case XSD_NONPOSITIVEINTEGER:
             {
                 delete (xsd__nonPositiveInteger*) pValue;
                 pValue = NULL;
+                break;
             }
-         break;
-        }
-        case XSD_NEGATIVEINTEGER:
-        {
-            if (pValue != NULL)
+            case XSD_NEGATIVEINTEGER:
             {
                 delete (xsd__negativeInteger*) pValue;
                 pValue = NULL;
+                break;
             }
-         break;
-        }
-        case XSD_INTEGER:
-        {
-            if (pValue != NULL)
+            case XSD_INTEGER:
             {
                 delete (xsd__integer*) pValue;
                 pValue = NULL;
+                break;
             }
-         break;
-        }
-        case XSD_LONG:
-        {
-            if (pValue != NULL)
+            case XSD_LONG:
             {
                 delete (xsd__long*) pValue;
                 pValue = NULL;
+                break;
             }
-         break;
-        }
-        case XSD_INT:
-        {
-            if (pValue != NULL)
+            case XSD_INT:
             {
                 delete (xsd__int*) pValue;
                 pValue = NULL;
+                break;
             }
-         break;
-        }
-        case XSD_SHORT:
-        {
-            if (pValue != NULL)
+            case XSD_SHORT:
             {
                 delete (xsd__short*) pValue;
                 pValue = NULL;
+                break;
             }
-         break;
-        }
-        case XSD_BYTE:
-        {
-            if (pValue != NULL)
+            case XSD_BYTE:
             {
                 delete (xsd__byte*) pValue;
                 pValue = NULL;
+                break;
             }
-         break;
-        }
-        case XSD_NONNEGATIVEINTEGER:
-        {
-            if (pValue != NULL)
+            case XSD_NONNEGATIVEINTEGER:
             {
                 delete (xsd__nonNegativeInteger*) pValue;
                 pValue = NULL;
+                break;
             }
-         break;
-        }
-        case XSD_UNSIGNEDLONG:
-        {
-            if (pValue != NULL)
+            case XSD_UNSIGNEDLONG:
             {
                 delete (xsd__unsignedLong*) pValue;
                 pValue = NULL;
+                break;
             }
-         break;
-        }
-        case XSD_UNSIGNEDINT:
-        {
-            if (pValue != NULL)
+            case XSD_UNSIGNEDINT:
             {
                 delete (xsd__unsignedInt*) pValue;
                 pValue = NULL;
+                break;
             }
-         break;
-        }
-        case XSD_UNSIGNEDSHORT:
-        {
-            if (pValue != NULL)
+            case XSD_UNSIGNEDSHORT:
             {
                 delete (xsd__unsignedShort*) pValue;
                 pValue = NULL;
+                break;
             }
-         break;
-        }
-        case XSD_UNSIGNEDBYTE:
-        {
-            if (pValue != NULL)
+            case XSD_UNSIGNEDBYTE:
             {
                 delete (xsd__unsignedByte*) pValue;
                 pValue = NULL;
+                break;
             }
-         break;
-        }
-        case XSD_POSITIVEINTEGER:
-        {
-            if (pValue != NULL)
+            case XSD_POSITIVEINTEGER:
             {
                 delete (xsd__positiveInteger*) pValue;
                 pValue = NULL;
+                break;
             }
-         break;
-        }
-        case XSD_DOUBLE:
-        {
-            if (pValue != NULL)
+            case XSD_DOUBLE:
             {
                 delete (xsd__double*) pValue;
                 pValue = NULL;
+                break;
             }
-         break;
-        }
-        case XSD_ANYURI:
-        {
-            if (pValue != NULL)
+            case XSD_ANYURI:
             {
                 delete [] (xsd__anyURI) pValue;
                 pValue = NULL;
+                break;
             }
-         break;
-        }
-        case XSD_QNAME:
-        {
-            if (pValue != NULL)
+            case XSD_QNAME:
             {
                 delete [] (xsd__QName) pValue;
                 pValue = NULL;
+                break;
             }
-         break;
-        }
-        case XSD_NOTATION:
-        {
-            if (pValue != NULL)
+            case XSD_NOTATION:
             {
                 delete [] (xsd__NOTATION) pValue;
                 pValue = NULL;
+                break;
             }
-         break;
+            case USER_TYPE:
+                // The USER_TYPE object should be cleared by the Application
+                break;
+            case XSD_ARRAY:
+            {
+                delete (Axis_Array*) pValue;
+                pValue = NULL;
+                break;
+            }
+            case XSD_ANY:
+            case ATTACHMENT:
+            case XSD_UNKNOWN:
+            default:
+    			;
         }
-        case USER_TYPE:
-            // The USER_TYPE object should be cleared by the Application
-            break;
-        case XSD_ARRAY:
-        case XSD_ANY:
-        case ATTACHMENT:
-        case XSD_UNKNOWN:
-        default:
-			;
     }
 }

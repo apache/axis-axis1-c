@@ -65,6 +65,7 @@ Axis_Array::Axis_Array()
     m_Array = NULL;
     m_Size = 0;
     m_Type = XSD_UNKNOWN;
+    m_belongsToAxisEngine = true;
 }
 
 Axis_Array::Axis_Array(Axis_Array & original)
@@ -72,6 +73,7 @@ Axis_Array::Axis_Array(Axis_Array & original)
     m_Array = NULL;
     m_Size = 0;
     m_Type = XSD_UNKNOWN;
+    m_belongsToAxisEngine = true;
     clone(original);
 }
 
@@ -85,6 +87,7 @@ void Axis_Array::set(void** array, int size, XSDTYPE type)
     clear();
     m_Size = size;
     m_Type = type;
+    m_belongsToAxisEngine = true;
     
     if (size == 0)
     {
@@ -658,8 +661,15 @@ void Axis_Array::clear()
 			}
             m_Size = 0;
         }
-        delete [] m_Array;
-        m_Array = NULL;
+        if (m_belongsToAxisEngine == true)
+        {
+            delete [] m_Array;
+        }
+        else
+        {   // Warning!!  This could introduce memory leaks if used incorrectly!!!
+            m_Array = NULL;
+            m_belongsToAxisEngine = true;
+        }
     }
 }
 
@@ -674,6 +684,11 @@ xsd__duration_Array::xsd__duration_Array(xsd__duration_Array & original)
     {
         clone(original);
     }
+}
+
+xsd__duration_Array::~xsd__duration_Array()
+{
+    // Parent Axis_Array will carry out full clear up
 }
 
 void xsd__duration_Array::set(xsd__duration** array, int size)
@@ -700,6 +715,11 @@ xsd__dateTime_Array::xsd__dateTime_Array(xsd__dateTime_Array & original)
     }
 }
 
+xsd__dateTime_Array::~xsd__dateTime_Array()
+{
+    // Parent Axis_Array will carry out full clear up
+}
+
 void xsd__dateTime_Array::set(xsd__dateTime** array, int size)
 {
    Axis_Array::set((void**)array, size, XSD_DATETIME);
@@ -722,6 +742,11 @@ xsd__time_Array::xsd__time_Array(xsd__time_Array & original)
     {
         clone(original);
     }
+}
+
+xsd__time_Array::~xsd__time_Array()
+{
+    // Parent Axis_Array will carry out full clear up
 }
 
 void xsd__time_Array::set(xsd__time** array, int size)
@@ -748,6 +773,11 @@ xsd__date_Array::xsd__date_Array(xsd__date_Array & original)
     }
 }
 
+xsd__date_Array::~xsd__date_Array()
+{
+    // Parent Axis_Array will carry out full clear up
+}
+
 void xsd__date_Array::set(xsd__date** array, int size)
 {
    Axis_Array::set((void**)array, size, XSD_DATE);
@@ -770,6 +800,11 @@ xsd__gYearMonth_Array::xsd__gYearMonth_Array(xsd__gYearMonth_Array & original)
     {
         clone(original);
     }
+}
+
+xsd__gYearMonth_Array::~xsd__gYearMonth_Array()
+{
+    // Parent Axis_Array will carry out full clear up
 }
 
 void xsd__gYearMonth_Array::set(xsd__gYearMonth** array, int size)
@@ -796,6 +831,11 @@ xsd__gYear_Array::xsd__gYear_Array(xsd__gYear_Array & original)
     }
 }
 
+xsd__gYear_Array::~xsd__gYear_Array()
+{
+    // Parent Axis_Array will carry out full clear up
+}
+
 void xsd__gYear_Array::set(xsd__gYear** array, int size)
 {
    Axis_Array::set((void**)array, size, XSD_GYEAR);
@@ -818,6 +858,11 @@ xsd__gMonthDay_Array::xsd__gMonthDay_Array(xsd__gMonthDay_Array & original)
     {
         clone(original);
     }
+}
+
+xsd__gMonthDay_Array::~xsd__gMonthDay_Array()
+{
+    // Parent Axis_Array will carry out full clear up
 }
 
 void xsd__gMonthDay_Array::set(xsd__gMonthDay** array, int size)
@@ -843,6 +888,12 @@ xsd__gMonth_Array::xsd__gMonth_Array(xsd__gMonth_Array & original)
         clone(original);
     }
 }
+
+xsd__gMonth_Array::~xsd__gMonth_Array()
+{
+    // Parent Axis_Array will carry out full clear up
+}
+
 void xsd__gMonth_Array::set(xsd__gMonth** array, int size)
 {
    Axis_Array::set((void**)array, size, XSD_GMONTH);
@@ -865,6 +916,11 @@ xsd__gDay_Array::xsd__gDay_Array(xsd__gDay_Array & original)
     {
         clone(original);
     }
+}
+
+xsd__gDay_Array::~xsd__gDay_Array()
+{
+    // Parent Axis_Array will carry out full clear up
 }
 
 void xsd__gDay_Array::set(xsd__gDay** array, int size)
@@ -891,6 +947,11 @@ xsd__string_Array::xsd__string_Array(xsd__string_Array & original)
     }
 }
 
+xsd__string_Array::~xsd__string_Array()
+{
+    // Parent Axis_Array will carry out full clear up
+}
+
 void xsd__string_Array::set(xsd__string* array, int size)
 {
  Axis_Array::set((void**)array, size, XSD_STRING);
@@ -913,6 +974,11 @@ xsd__normalizedString_Array::xsd__normalizedString_Array(xsd__normalizedString_A
     {
         clone(original);
     }
+}
+
+xsd__normalizedString_Array::~xsd__normalizedString_Array()
+{
+    // Parent Axis_Array will carry out full clear up
 }
 
 void xsd__normalizedString_Array::set(xsd__normalizedString* array, int size)
@@ -939,6 +1005,11 @@ xsd__token_Array::xsd__token_Array(xsd__token_Array & original)
     }
 }
 
+xsd__token_Array::~xsd__token_Array()
+{
+    // Parent Axis_Array will carry out full clear up
+}
+
 void xsd__token_Array::set(xsd__token* array, int size)
 {
  Axis_Array::set((void**)array, size, XSD_TOKEN);
@@ -961,6 +1032,11 @@ xsd__language_Array::xsd__language_Array(xsd__language_Array & original)
     {
         clone(original);
     }
+}
+
+xsd__language_Array::~xsd__language_Array()
+{
+    // Parent Axis_Array will carry out full clear up
 }
 
 void xsd__language_Array::set(xsd__language* array, int size)
@@ -987,6 +1063,11 @@ xsd__Name_Array::xsd__Name_Array(xsd__Name_Array & original)
     }
 }
 
+xsd__Name_Array::~xsd__Name_Array()
+{
+    // Parent Axis_Array will carry out full clear up
+}
+
 void xsd__Name_Array::set(xsd__Name* array, int size)
 {
  Axis_Array::set((void**)array, size, XSD_NAME);
@@ -1009,6 +1090,11 @@ xsd__NCName_Array::xsd__NCName_Array(xsd__NCName_Array & original)
     {
         clone(original);
     }
+}
+
+xsd__NCName_Array::~xsd__NCName_Array()
+{
+    // Parent Axis_Array will carry out full clear up
 }
 
 void xsd__NCName_Array::set(xsd__NCName* array, int size)
@@ -1035,6 +1121,11 @@ xsd__ID_Array::xsd__ID_Array(xsd__ID_Array & original)
     }
 }
 
+xsd__ID_Array::~xsd__ID_Array()
+{
+    // Parent Axis_Array will carry out full clear up
+}
+
 void xsd__ID_Array::set(xsd__ID* array, int size)
 {
  Axis_Array::set((void**)array, size, XSD_ID);
@@ -1057,6 +1148,11 @@ xsd__IDREF_Array::xsd__IDREF_Array(xsd__IDREF_Array & original)
     {
         clone(original);
     }
+}
+
+xsd__IDREF_Array::~xsd__IDREF_Array()
+{
+    // Parent Axis_Array will carry out full clear up
 }
 
 void xsd__IDREF_Array::set(xsd__IDREF* array, int size)
@@ -1083,6 +1179,11 @@ xsd__IDREFS_Array::xsd__IDREFS_Array(xsd__IDREFS_Array & original)
     }
 }
 
+xsd__IDREFS_Array::~xsd__IDREFS_Array()
+{
+    // Parent Axis_Array will carry out full clear up
+}
+
 void xsd__IDREFS_Array::set(xsd__IDREFS* array, int size)
 {
  Axis_Array::set((void**)array, size, XSD_IDREFS);
@@ -1105,6 +1206,11 @@ xsd__ENTITY_Array::xsd__ENTITY_Array(xsd__ENTITY_Array & original)
     {
         clone(original);
     }
+}
+
+xsd__ENTITY_Array::~xsd__ENTITY_Array()
+{
+    // Parent Axis_Array will carry out full clear up
 }
 
 void xsd__ENTITY_Array::set(xsd__ENTITY* array, int size)
@@ -1131,6 +1237,11 @@ xsd__ENTITIES_Array::xsd__ENTITIES_Array(xsd__ENTITIES_Array & original)
     }
 }
 
+xsd__ENTITIES_Array::~xsd__ENTITIES_Array()
+{
+    // Parent Axis_Array will carry out full clear up
+}
+
 void xsd__ENTITIES_Array::set(xsd__ENTITIES* array, int size)
 {
  Axis_Array::set((void**)array, size, XSD_ENTITIES);
@@ -1153,6 +1264,11 @@ xsd__NMTOKEN_Array::xsd__NMTOKEN_Array(xsd__NMTOKEN_Array & original)
     {
         clone(original);
     }
+}
+
+xsd__NMTOKEN_Array::~xsd__NMTOKEN_Array()
+{
+    // Parent Axis_Array will carry out full clear up
 }
 
 void xsd__NMTOKEN_Array::set(xsd__NMTOKEN* array, int size)
@@ -1179,6 +1295,11 @@ xsd__NMTOKENS_Array::xsd__NMTOKENS_Array(xsd__NMTOKENS_Array & original)
     }
 }
 
+xsd__NMTOKENS_Array::~xsd__NMTOKENS_Array()
+{
+    // Parent Axis_Array will carry out full clear up
+}
+
 void xsd__NMTOKENS_Array::set(xsd__NMTOKENS* array, int size)
 {
  Axis_Array::set((void**)array, size, XSD_NMTOKEN);
@@ -1201,6 +1322,11 @@ xsd__boolean_Array::xsd__boolean_Array(xsd__boolean_Array & original)
     {
         clone(original);
     }
+}
+
+xsd__boolean_Array::~xsd__boolean_Array()
+{
+    // Parent Axis_Array will carry out full clear up
 }
 
 void xsd__boolean_Array::set(xsd__boolean** array, int size)
@@ -1227,6 +1353,11 @@ xsd__base64Binary_Array::xsd__base64Binary_Array(xsd__base64Binary_Array & origi
     }
 }
 
+xsd__base64Binary_Array::~xsd__base64Binary_Array()
+{
+    // Parent Axis_Array will carry out full clear up
+}
+
 void xsd__base64Binary_Array::set(xsd__base64Binary** array, int size)
 {
 	Axis_Array::set((void**)array, size, XSD_BASE64BINARY);
@@ -1249,6 +1380,11 @@ xsd__hexBinary_Array::xsd__hexBinary_Array(xsd__hexBinary_Array & original)
     {
         clone(original);
     }
+}
+
+xsd__hexBinary_Array::~xsd__hexBinary_Array()
+{
+    // Parent Axis_Array will carry out full clear up
 }
 
 void xsd__hexBinary_Array::set(xsd__hexBinary** array, int size)
@@ -1275,6 +1411,11 @@ xsd__float_Array::xsd__float_Array(xsd__float_Array & original)
     }
 }
 
+xsd__float_Array::~xsd__float_Array()
+{
+    // Parent Axis_Array will carry out full clear up
+}
+
 void xsd__float_Array::set(xsd__float** array, int size)
 {
 	Axis_Array::set((void**)array, size, XSD_FLOAT);
@@ -1297,6 +1438,11 @@ xsd__decimal_Array::xsd__decimal_Array(xsd__decimal_Array & original)
     {
         clone(original);
     }
+}
+
+xsd__decimal_Array::~xsd__decimal_Array()
+{
+    // Parent Axis_Array will carry out full clear up
 }
 
 void xsd__decimal_Array::set(xsd__decimal** array, int size)
@@ -1323,6 +1469,11 @@ xsd__integer_Array::xsd__integer_Array(xsd__integer_Array & original)
     }
 }
 
+xsd__integer_Array::~xsd__integer_Array()
+{
+    // Parent Axis_Array will carry out full clear up
+}
+
 void xsd__integer_Array::set(xsd__integer** array, int size)
 {
 	Axis_Array::set((void**)array, size, XSD_INTEGER);
@@ -1345,6 +1496,11 @@ xsd__nonPositiveInteger_Array::xsd__nonPositiveInteger_Array(xsd__nonPositiveInt
     {
         clone(original);
     }
+}
+
+xsd__nonPositiveInteger_Array::~xsd__nonPositiveInteger_Array()
+{
+    // Parent Axis_Array will carry out full clear up
 }
 
 void xsd__nonPositiveInteger_Array::set(xsd__nonPositiveInteger** array, int size)
@@ -1371,6 +1527,11 @@ xsd__negativeInteger_Array::xsd__negativeInteger_Array(xsd__negativeInteger_Arra
     }
 }
 
+xsd__negativeInteger_Array::~xsd__negativeInteger_Array()
+{
+    // Parent Axis_Array will carry out full clear up
+}
+
 void xsd__negativeInteger_Array::set(xsd__negativeInteger** array, int size)
 {
 	Axis_Array::set((void**)array, size, XSD_NEGATIVEINTEGER);
@@ -1393,6 +1554,11 @@ xsd__long_Array::xsd__long_Array(xsd__long_Array & original)
     {
         clone(original);
     }
+}
+
+xsd__long_Array::~xsd__long_Array()
+{
+    // Parent Axis_Array will carry out full clear up
 }
 
 void xsd__long_Array::set(xsd__long** array, int size)
@@ -1419,6 +1585,11 @@ xsd__int_Array::xsd__int_Array(xsd__int_Array & original)
     }
 }
 
+xsd__int_Array::~xsd__int_Array()
+{
+    // Parent Axis_Array will carry out full clear up
+}
+
 void xsd__int_Array::set(xsd__int** array, int size)
 {
 	Axis_Array::set((void**)array, size, XSD_INT);
@@ -1441,6 +1612,11 @@ xsd__short_Array::xsd__short_Array(xsd__short_Array & original)
     {
         clone(original);
     }
+}
+
+xsd__short_Array::~xsd__short_Array()
+{
+    // Parent Axis_Array will carry out full clear up
 }
 
 void xsd__short_Array::set(xsd__short** array, int size)
@@ -1467,6 +1643,11 @@ xsd__byte_Array::xsd__byte_Array(xsd__byte_Array & original)
     }
 }
 
+xsd__byte_Array::~xsd__byte_Array()
+{
+    // Parent Axis_Array will carry out full clear up
+}
+
 void xsd__byte_Array::set(xsd__byte** array, int size)
 {
 	Axis_Array::set((void**)array, size, XSD_BYTE);
@@ -1489,6 +1670,11 @@ xsd__nonNegativeInteger_Array::xsd__nonNegativeInteger_Array(xsd__nonNegativeInt
     {
         clone(original);
     }
+}
+
+xsd__nonNegativeInteger_Array::~xsd__nonNegativeInteger_Array()
+{
+    // Parent Axis_Array will carry out full clear up
 }
 
 void xsd__nonNegativeInteger_Array::set(xsd__nonNegativeInteger** array, int size)
@@ -1515,6 +1701,11 @@ xsd__unsignedLong_Array::xsd__unsignedLong_Array(xsd__unsignedLong_Array & origi
     }
 }
 
+xsd__unsignedLong_Array::~xsd__unsignedLong_Array()
+{
+    // Parent Axis_Array will carry out full clear up
+}
+
 void xsd__unsignedLong_Array::set(xsd__unsignedLong** array, int size)
 {
 	Axis_Array::set((void**)array, size, XSD_UNSIGNEDLONG);
@@ -1537,6 +1728,11 @@ xsd__unsignedInt_Array::xsd__unsignedInt_Array(xsd__unsignedInt_Array & original
     {
         clone(original);
     }
+}
+
+xsd__unsignedInt_Array::~xsd__unsignedInt_Array()
+{
+    // Parent Axis_Array will carry out full clear up
 }
 
 void xsd__unsignedInt_Array::set(xsd__unsignedInt** array, int size)
@@ -1563,6 +1759,11 @@ xsd__unsignedShort_Array::xsd__unsignedShort_Array(xsd__unsignedShort_Array & or
     }
 }
 
+xsd__unsignedShort_Array::~xsd__unsignedShort_Array()
+{
+    // Parent Axis_Array will carry out full clear up
+}
+
 void xsd__unsignedShort_Array::set(xsd__unsignedShort** array, int size)
 {
 	Axis_Array::set((void**)array, size, XSD_UNSIGNEDSHORT);
@@ -1585,6 +1786,11 @@ xsd__unsignedByte_Array::xsd__unsignedByte_Array(xsd__unsignedByte_Array & origi
     {
         clone(original);
     }
+}
+
+xsd__unsignedByte_Array::~xsd__unsignedByte_Array()
+{
+    // Parent Axis_Array will carry out full clear up
 }
 
 void xsd__unsignedByte_Array::set(xsd__unsignedByte** array, int size)
@@ -1611,6 +1817,11 @@ xsd__positiveInteger_Array::xsd__positiveInteger_Array(xsd__positiveInteger_Arra
     }
 }
 
+xsd__positiveInteger_Array::~xsd__positiveInteger_Array()
+{
+    // Parent Axis_Array will carry out full clear up
+}
+
 void xsd__positiveInteger_Array::set(xsd__positiveInteger** array, int size)
 {
 	Axis_Array::set((void**)array, size, XSD_POSITIVEINTEGER);
@@ -1633,6 +1844,11 @@ xsd__double_Array::xsd__double_Array(xsd__double_Array & original)
     {
         clone(original);
     }
+}
+
+xsd__double_Array::~xsd__double_Array()
+{
+    // Parent Axis_Array will carry out full clear up
 }
 
 void xsd__double_Array::set(xsd__double** array, int size)
@@ -1659,6 +1875,11 @@ xsd__anyURI_Array::xsd__anyURI_Array(xsd__anyURI_Array & original)
     }
 }
 
+xsd__anyURI_Array::~xsd__anyURI_Array()
+{
+    // Parent Axis_Array will carry out full clear up
+}
+
 void xsd__anyURI_Array::set(xsd__anyURI* array, int size)
 {
     Axis_Array::set((void**)array, size, XSD_ANYURI);
@@ -1683,6 +1904,11 @@ xsd__QName_Array::xsd__QName_Array(xsd__QName_Array & original)
     }
 }
 
+xsd__QName_Array::~xsd__QName_Array()
+{
+    // Parent Axis_Array will carry out full clear up
+}
+
 void xsd__QName_Array::set(xsd__QName* array, int size)
 {
     Axis_Array::set((void**)array, size, XSD_QNAME);
@@ -1705,6 +1931,11 @@ xsd__NOTATION_Array::xsd__NOTATION_Array(xsd__NOTATION_Array & original)
     {
         clone(original);
     }
+}
+
+xsd__NOTATION_Array::~xsd__NOTATION_Array()
+{
+    // Parent Axis_Array will carry out full clear up
 }
 
 void xsd__NOTATION_Array::set(xsd__NOTATION* array, int size)
