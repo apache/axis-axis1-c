@@ -1358,3 +1358,4 @@ class STORAGE_CLASS_INFO xsd__NOTATION_Array : public Axis_Array {
 
 AXIS_CPP_NAMESPACE_END
 #endif
+
