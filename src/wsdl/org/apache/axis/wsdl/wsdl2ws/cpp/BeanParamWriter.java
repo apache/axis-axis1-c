@@ -393,9 +393,9 @@ public class BeanParamWriter extends ParamCPPFileWriter
                         elm = attribs[i].getTypeName();
                     }
 					arrayType = attribs[i].getTypeName();
-					writer.write("\tpSZ->serializeCmplxArray((Axis_Array*)(&param->"
+					writer.write("\tpSZ->serializeCmplxArray(param->"
 									+ attribs[i].getParamNameAsMember()
-									+ "),\n");
+									+ ",\n");
 					writer.write("\t\t(void*) Axis_Serialize_" + arrayType
 							+ ", (void*) Axis_Delete_" + arrayType
 							+ ", (void*) Axis_GetSize_" + arrayType + ",\n");

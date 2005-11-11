@@ -172,6 +172,35 @@ int main(int argc, char* argv[])
 			}
 			delete complexOutputAxis_Array;
 
+			ComplexTypeWithComplexArray complexTypeWithComplexArray;
+			complexTypeWithComplexArray.setcomplexTypeWithSimpleElement(&complexArray);
+
+			ComplexTypeWithComplexArray * outputComplexTypeWithComplexArray = ws.complexTypeWithComplexArray(&complexTypeWithComplexArray);
+
+			complexOutputAxis_Array = outputComplexTypeWithComplexArray->getcomplexTypeWithSimpleElement();
+			outputSize = 0;
+			complexOutputArray = complexOutputAxis_Array->get(outputSize);
+			cout << "Complex array size is " << outputSize << endl;
+			if (complexOutputArray != NULL)
+			{
+				for (count = 0 ; count < outputSize ; count++)
+				{
+					if (complexOutputArray[count] != NULL)
+					{
+						cout << ((ComplexTypeWithSimpleElement) *complexOutputArray[count]).getsimpleType() << endl;
+					}
+					else
+					{
+						cout << "NULL" << endl;
+					}
+				}
+			}
+			else
+			{
+				cout << "NULL array" << endl;
+			}
+			delete outputComplexTypeWithComplexArray;
+
 			// Clean up complex input array
 			for (count = 0 ; count < inputSize ; count++)
 			{

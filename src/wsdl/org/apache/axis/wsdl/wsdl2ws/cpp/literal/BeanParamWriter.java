@@ -559,9 +559,9 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     }
                     else
                     {
-                        writer.write("\tpSZ->serializeCmplxArray((Axis_Array*)(&param->"
+                        writer.write("\tpSZ->serializeCmplxArray(param->"
                                         + attribs[i].getParamNameAsMember()
-                                        + "),\n");
+                                        + ",\n");
                         writer.write("\t\t\t\t\t\t (void*) Axis_Serialize_"
                                 + arrayType + ",\n");
                         writer.write("\t\t\t\t\t\t (void*) Axis_Delete_"
@@ -831,50 +831,10 @@ public class BeanParamWriter extends ParamCPPFileWriter
                                     + "\t\t\t\t\t\t\t\t  \""
                                     + attribs[i].getElementNameAsString()
                                     + "\", Axis_URI_" + arrayType + ");\n\n");
-                    writer.write("\t// Additional code to find if reference is pointer or pointer to a pointer\n");
-
-                    if (nillable)
-                    {
-                        String attributeParamName = attribs[i].getParamName();
-                        String attributeTypeName = attribs[i].getTypeName();
-                        writer.write("\t" + attributeTypeName + " **	pp" + i
-                                + " = param->" + attributeParamName
-                                + ".m_Array;\n\n");
-                        writer.write("\tparam->" + attributeParamName
-                                + ".m_Size = array.m_Size;\n\n");
-                        writer.write("\tif( param->" + attributeParamName
-                                + ".m_Array == NULL)\n");
-                        writer.write("\t{\n");
-                        writer.write("\t\tpp" + i + " = new "
-                                + attributeTypeName + "*[array.m_Size];\n");
-                        writer.write("\t\tparam->" + attributeParamName
-                                + ".m_Array = pp" + i + ";\n");
-                        writer.write("\t}\n\n");
-                        writer.write("\t" + attributeTypeName + " *p" + i
-                                + " = (" + attributeTypeName
-                                + " *) array.m_Array;\n");
-                        writer.write("\t" + attributeTypeName + " default" + i + ";\n");
-                        writer.write("\tfor( int iCount" + i + " = 0; iCount"
-                                + i + " < array.m_Size; iCount" + i + "++)\n");
-                        writer.write("\t{\n");
-                        writer.write("\t\tpp" + i + "[iCount" + i + "] = new "
-                                + attributeTypeName + "();\n");
-                        writer.write("\t\t*(pp" + i + "[iCount" + i + "]) = p"
-                                + i + "[iCount" + i + "];\n");
-                        writer.write("\t\t// Set the array to default values so that the delete does not delete subfields\n");
-                        writer.write("\t\tp" + i + "[iCount" + i + "] = default" + i + ";\n");
-                        writer.write("\t}\n");
-                        writer.write("\tdelete [] p" + i + ";\n");
-                    }
-                    else
-                    {
-                        writer.write("\tparam->"
-                                        + attribs[i].getParamNameAsMember()
-                                        + " = (" + attribs[i].getTypeName()
-                                        + "_Array&)array;\n");
-                    }
-
-                    writer.write("\t// End\n");
+                    writer.write("\tparam->" + attribs[i].getElementNameAsString() + " = new " + arrayType + "_Array();\n");
+                    writer.write("\tparam->" + attribs[i].getElementNameAsString() + "->clone(*(" + arrayType + "_Array *) array);\n");
+                	writer.write("\t((" + arrayType + "_Array*) array)->clear();\n");
+                	writer.write("\tAxis::AxisDelete((void *) array, XSD_ARRAY);\n");
                 }
             }
             else if (attribs[i].isSimpleType())
