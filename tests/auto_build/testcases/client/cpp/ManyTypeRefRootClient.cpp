@@ -54,29 +54,35 @@ int main(int argc, char* argv[])
             ws = new ManyTypeRefRoot();
 
         Type1_Array input;
-        Type1_Array result;
-        Type1 types[10];
-        Type1* current;
+        Type1_Array* result;
+        Type1 ** types = new Type1*[10];
+        
         int i;
 
         for ( i = 0; i < 10; i++ ) {
-            current = new Type1 ();
-            NEWCOPY(current->kind, "Test type");
-            current->index = i;
-            types[i] = *current;
+            types[i] = new Type1 ();
+            NEWCOPY(types[i]->kind, "Test type");
+            types[i]->index = i;           
         }
 
-        input.m_Array = types;
-        input.m_Size = 10;
+        input.set(types,10);     
 
-        result = ws->getInput(input);
-
+        result = ws->getInput(&input);
         cout << "Success " << endl;
-        Type1 *arrayResult = result.m_Array;
-        for ( i = 0; i < 10; i++, arrayResult++ ) {
-            cout << " Result " << arrayResult->index << " : " << arrayResult->kind << endl;
+		int outputSize=0;
+        const Type1 **arrayResult = result->get(outputSize);
+        for ( i = 0; i < 10; i++) {
+            cout << " Result " << arrayResult[i]->index << " : " << arrayResult[i]->kind << endl;
         }
         returnValue = 0; // Success
+
+		 // Clear up input array        
+        for (int deleteIndex = 0 ; deleteIndex < 10 ; deleteIndex++ )
+        {
+            delete types[deleteIndex];
+        }
+        delete [] types;
+
 
 		bSuccess = true;
 
