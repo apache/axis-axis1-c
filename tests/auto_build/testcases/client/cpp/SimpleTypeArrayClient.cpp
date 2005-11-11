@@ -53,29 +53,32 @@ int main(int argc, char* argv[])
 
     Type *input;
     Type *output;
-    xsd__int_Array array_input;
-    int entries[100];
+    xsd__int_Array array_input;   
     int i;
-
-    array_input.m_Array = new int*[100];
-    array_input.m_Size  = 100;
-
-    for ( i = 0; i < 100; i++ ) {
-      entries[i] = i;
-      array_input.m_Array[i] = &entries[i];
+	xsd__int ** array = new xsd__int*[100];
+    for ( i = 0; i < 100; i++ ) {      
+      array[i] = new xsd__int(i);
     }
-
+	array_input.set(array,100);
     input = new Type();
-    input->item = array_input;
-
+    input->setitem(&array_input);
     output = ws->getInput(input);
-
+	xsd__int_Array * outputArray = output->getitem();
+	int outputSize=0;
+	const xsd__int ** outarray = outputArray->get(outputSize);
     for ( i = 0; i < 100; i++ ) {
-      cout << "item [" << i << "] = " << *(output->item.m_Array[i]) << endl;
+      cout << "item [" << i << "] = " << *(outarray[i]) << endl;
     }
     returnValue = 0; // Success
-
-				bSuccess = true;
+	
+	// Clear up input array        
+        for (int deleteIndex = 0 ; deleteIndex < 100 ; deleteIndex++ )
+        {
+            delete array[deleteIndex];
+        }
+        delete [] array;
+		delete input;
+	bSuccess = true;
   } catch(AxisException &e) {
 			bool bSilent = false;
 
