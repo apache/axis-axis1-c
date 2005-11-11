@@ -38,23 +38,26 @@ int main(int argc, char* argv[])
 
 		single=37;
 
-        xsd__int * arrayOfInt = new xsd__int[ARRAYSIZE];
-		intArray.m_Size = ARRAYSIZE;
-		intArray.m_Array = new xsd__int*[ARRAYSIZE];
-		arrayOfInt[0] = 6;
-        intArray.m_Array[0] = &arrayOfInt[0];
-        arrayOfInt[1] = 7;
-		intArray.m_Array[1] = &arrayOfInt[1];
+        xsd__int ** arrayOfInt = new xsd__int*[ARRAYSIZE];
+		arrayOfInt[0] = new xsd__int(6);        
+        arrayOfInt[1] = new xsd__int(7);		
+		intArray.set(arrayOfInt,ARRAYSIZE);
 
-		response = ws->sendPrimitiveAndArray(single, intArray);
-		cout << response->returnInt << " " << *(response->returnArray.m_Array[0]) << " " << *(response->returnArray.m_Array[1]) << endl;
-
+		response = ws->sendPrimitiveAndArray(single, &intArray);
+		int outputSize = 0;
+		const xsd__int **output = response->getreturnArray()->get(outputSize);
+		cout << response->returnInt << " " << *(output[0]) << " " << *(output[1]) << endl;
 		single=43;
-        arrayOfInt[0] = 13;
-        arrayOfInt[1] = 17;
-		response = ws->sendArrayAndPrimitive(intArray, single);
-		cout << response->returnInt << " " << *(response->returnArray.m_Array[0]) << " " << *(response->returnArray.m_Array[1]) << endl;
-
+        *arrayOfInt[0] = 13;
+        *arrayOfInt[1] = 17;
+		intArray.set(arrayOfInt,ARRAYSIZE);
+		response = ws->sendArrayAndPrimitive(&intArray, single);
+		outputSize = 0;
+		output = response->getreturnArray()->get(outputSize);
+		cout << response->returnInt << " " << *(output[0]) << " " << *(output[1]) << endl;
+		delete arrayOfInt[0];
+		delete arrayOfInt[1];
+		delete [] arrayOfInt;
 		delete ws;
 	}
 	catch(AxisException& e)
