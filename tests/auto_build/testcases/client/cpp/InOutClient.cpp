@@ -51,9 +51,9 @@ int main(int argc, char* argv[])
 		xsd__int_Array int_in;
 		xsd__double_Array double_in; 
 		xsd__string_Array string_in;
-		xsd__double* moDouble;
-		xsd__int* moInt;
-		xsd__string moString;
+		//xsd__double* moDouble;
+		//xsd__int* moInt;
+		//xsd__string moString;
 
         static char* str1 = "Apache";
         static char* str2 = "Axis C++";
@@ -81,31 +81,27 @@ int main(int argc, char* argv[])
 		cout << "multiParametersMultiReturn returned " << outValue0 << " , " << outValue1 << " , " << outValue2 <<endl;
 		//...........................................................
 
-        xsd__int * arrayOfInt = new xsd__int[3];
-		xsd__int_Array intArray;
-		intArray.m_Array = new xsd__int*[3];
-		intArray.m_Size = 3;
-        arrayOfInt[0] = 37;
-		intArray.m_Array[0] = &arrayOfInt[0];
-        arrayOfInt[1] = 0;
-		intArray.m_Array[1]=&arrayOfInt[1];
-        arrayOfInt[2] = 43;
-		intArray.m_Array[2]=&arrayOfInt[2];
+        xsd__int ** arrayOfInt = new xsd__int*[3];
+		xsd__int_Array intArray;		
+        arrayOfInt[0] = new xsd__int(37);		
+        arrayOfInt[1] = new xsd__int(0);		
+        arrayOfInt[2] = new xsd__int(43);
+		intArray.set(arrayOfInt,3);
 
 		xsd__string_Array stringArray;
-		stringArray.m_Array = new xsd__string[3];
-		stringArray.m_Size = 3;
-		stringArray.m_Array[0]="One";
-		stringArray.m_Array[1]="Two";
-		stringArray.m_Array[2]="Three";
+		xsd__string * arrayOfString =new xsd__string[3];		
+		arrayOfString[0]="One";
+		arrayOfString[1]="Two";
+		arrayOfString[2]="Three";
+		stringArray.set(arrayOfString,3);
 
 		ComplexType1 ct;
 		ct.ctLong = (xsd__long)87654321;
 		ct.ctString = "World";
-		ct.ctIntArray = intArray;
+		ct.setctIntArray(&intArray);
 
 		cout << "multiComplexParametersIntReturn" << endl;
-		int mcpir = ws.multiComplexParametersIntReturn("Hello", &ct, 27, 13.31, stringArray);
+		int mcpir = ws.multiComplexParametersIntReturn("Hello", &ct, 27, 13.31, &stringArray);
 		cout << "multiComplexParametersIntReturn returned " << mcpir << endl;
 
 		//test multiComplexParametersMultiComplexReturn
@@ -116,23 +112,26 @@ int main(int argc, char* argv[])
 		xsd__double OutValue3 = 0;
 
 		cout << "multiComplexParametersMultiComplexReturn" << endl;
-		ws.multiComplexParametersMultiComplexReturn("Hello", &ct, 27, 13.31, stringArray, &OutValue0, &OutValue1, &OutValue2, &OutValue3);
+		ws.multiComplexParametersMultiComplexReturn("Hello", &ct, 27, 13.31, &stringArray, &OutValue0, &OutValue1, &OutValue2, &OutValue3);
 		cout << "multiComplexParametersMultiComplexReturn returned " << OutValue0 << " , " << OutValue1->ctString << endl;
 
 		//..............................................................................
 		
-		stringArray.m_Array[0]="Four";
-		stringArray.m_Array[1]=NULL;
-		stringArray.m_Array[2]="Six";
+		
+		arrayOfString[0]="Four";
+		arrayOfString[1]=NULL;
+		arrayOfString[2]="Six";
+		stringArray.set(arrayOfString,3);
+
 
 		ComplexNilType1 cnt;
         xsd__long * longValue = new xsd__long(87654321);
 		cnt.ctLong = longValue;
 		cnt.ctString = NULL;
-		cnt.ctIntArray = intArray;
+		cnt.setctIntArray(&intArray);
 
 		cout << "multiComplexParametersNilIntReturn" << endl;
-		mcpir = ws.multiComplexParametersNilIntReturn(NULL, &cnt, NULL, NULL, stringArray);
+		mcpir = ws.multiComplexParametersNilIntReturn(NULL, &cnt, NULL, NULL, &stringArray);
 		cout << "multiComplexParametersNilIntReturn returned " << mcpir << endl;
 
         delete longValue;
@@ -147,37 +146,35 @@ int main(int argc, char* argv[])
 		 * Removed from WSDL for time being.
 		 */
 
-        xsd__int * arrayOfInt2 = new xsd__int[ARRAYSIZE];
-        int_in.m_Array = new xsd__int*[ARRAYSIZE];
-        int_in.m_Size = ARRAYSIZE;
+        xsd__int ** arrayOfInt2 = new xsd__int*[ARRAYSIZE];        
         int x = 0;
         for (x=0; x<ARRAYSIZE; x++)
         {
-            arrayOfInt2[x] = x+1;
-            int_in.m_Array[x] = &arrayOfInt2[x];
+            arrayOfInt2[x] = new xsd__int(x+1);
+            
         }
+		int_in.set(arrayOfInt2,ARRAYSIZE);
 
-        xsd__double * arrayOfDouble = new xsd__double[ARRAYSIZE];
-        double_in.m_Array = new xsd__double*[ARRAYSIZE];
-        double_in.m_Size = ARRAYSIZE;
+        xsd__double ** arrayOfDouble = new xsd__double*[ARRAYSIZE];
+        
         for (x=0; x<ARRAYSIZE; x++)
         {
-            arrayOfDouble[x] = (xsd__double)x+71.15656;
-            double_in.m_Array[x] = &arrayOfDouble[x];
+            arrayOfDouble[x] = new xsd__double((xsd__double)x+71.15656);
+            
         }
-
-        string_in.m_Array = new xsd__string[ARRAYSIZE];
-        string_in.m_Size = ARRAYSIZE;
-        string_in.m_Array[0] = str1;
-        string_in.m_Array[1] = str2;
-
+		double_in.set(arrayOfDouble,ARRAYSIZE);
+        xsd__string * arrayOfString2 = new xsd__string[ARRAYSIZE];
+        
+        arrayOfString2[0] = str1;
+        arrayOfString2[1] = str2;
+		string_in.set(arrayOfString2,ARRAYSIZE);
 		cout << "multiArrayParametersIntReturn" << endl;
-		int mapir = ws.multiArrayParametersIntReturn(int_in, double_in, string_in);
+		int mapir = ws.multiArrayParametersIntReturn(&int_in, &double_in, &string_in);
 		cout << "multiArrayParametersIntReturn returned " << mapir << endl;
 
 		ComplexType2 ct2;
 		ct2.ctLong = (xsd__long)98765432;
-		ct2.ctIntArray = intArray;
+		ct2.setctIntArray(&intArray);
 		ct2.ctString = "Complex2";
 		ct2.ctComplex = &ct;
 
