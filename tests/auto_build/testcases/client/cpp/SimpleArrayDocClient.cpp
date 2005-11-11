@@ -45,18 +45,26 @@ int main(int argc, char* argv[])
 		//testing echoIntArray
 		intArrayType arrin;
 		intArrayType* arrout;
-		arrin.intItem.m_Array = new int*[ARRAYSIZE];
-        int * intArray = new int[ARRAYSIZE];
-		arrin.intItem.m_Size = ARRAYSIZE;
+		xsd__int_Array arrayInput;		
+        int ** array= new int*[ARRAYSIZE];		
 		for (x=0;x<ARRAYSIZE;x++)
 		{
-            intArray[x] = x + 1000;
-			arrin.intItem.m_Array[x] = &intArray[x];
+            array[x] = new int(x + 1000);
+			//arrin.intItem.m_Array[x] = &intArray[x];
 		}
+		arrayInput.set(array,ARRAYSIZE);
+		arrin.setintItem(&arrayInput);		
 		cout << "invoking echoIntArray..."<<endl;
+		int outputSize=0;
 		arrout=ws.echoIntArray(&arrin);
 		for(x=0;x<ARRAYSIZE;x++)
-		   cout << *(arrout->intItem.m_Array[x])<<endl;
+		   cout << *(arrout->intItem->get(outputSize)[x])<<endl;		
+		 // Clear up input array        
+        for (int deleteIndex = 0 ; deleteIndex < ARRAYSIZE ; deleteIndex++ )
+        {
+            delete array[deleteIndex];
+        }
+        delete [] array;
 		bSuccess = true;
 	}
 	catch(AxisException& e)
