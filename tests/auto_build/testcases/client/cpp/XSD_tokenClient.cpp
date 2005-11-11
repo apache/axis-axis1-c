@@ -237,18 +237,16 @@ int main(int argc, char* argv[])
         // Test array
         xsd__token_Array arrayInput;
 		int arraySize=2;
-		xsd__token * array = new xsd__token[arraySize]();
-        
+		xsd__token * array = new xsd__token[arraySize];        
         for (int inputIndex=0 ; inputIndex < arraySize ; inputIndex++)
         {
-            input = new char[25];
-            strcpy (input, simpletoken);
-            array[inputIndex] = input;
+            array[inputIndex]= new char[25];
+            strcpy (array[inputIndex], simpletoken);           
         }
 		arrayInput.set(array,arraySize);
-        xsd__token_Array arrayResult = ws->asArray(arrayInput);
+        xsd__token_Array* arrayResult = ws->asArray(&arrayInput);
 		int outputSize=0;
-		const xsd__token * output = arrayResult.get(outputSize);
+		const xsd__token * output = arrayResult->get(outputSize);
         cout << "array of " << outputSize << " elements" << endl;
         for (int index = 0; index < outputSize ; index++)
         {
@@ -269,8 +267,11 @@ int main(int argc, char* argv[])
                 cout << "  element[" << index << "]=<nil>" << endl;
             }
         }
-        // Clear up input array        
-        
+         // Clear up input array        
+        for (int deleteIndex = 0 ; deleteIndex < arraySize ; deleteIndex++ )
+        {
+            delete [] array[deleteIndex];
+        }
         delete [] array;
 
         // Test complex type
