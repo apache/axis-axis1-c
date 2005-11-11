@@ -261,17 +261,17 @@ int main(int argc, char* argv[])
         // Test array
           xsd__Name_Array arrayInput;
 		 int arraySize=2;
-		 xsd__Name *array = new xsd__Name[arraySize]();        
+		 xsd__Name *array = new xsd__Name[arraySize];        
         for (int inputIndex=0 ; inputIndex <arraySize ; inputIndex++)
         {
-            input = new char[25];
-            strcpy (input, simpleName);
-            array[inputIndex] = input;
+            array[inputIndex] = new char[25];
+            strcpy (array[inputIndex], simpleName);
+           
         }
 		arrayInput.set(array,arraySize);
-        xsd__Name_Array arrayResult = ws->asArray(arrayInput);
+        xsd__Name_Array* arrayResult = ws->asArray(&arrayInput);
 		int outputSize=0;
-		const xsd__Name *output = arrayResult.get(outputSize);
+		const xsd__Name *output = arrayResult->get(outputSize);
         cout << "array of " << outputSize << " elements" << endl;
         for (int index = 0; index < outputSize ; index++)
         {
@@ -297,6 +297,7 @@ int main(int argc, char* argv[])
             delete array[deleteIndex];
         }
         delete [] array;
+
 
         // Test complex type
         input = new char[25];
