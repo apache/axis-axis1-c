@@ -134,7 +134,7 @@ int main(int argc, char* argv[])
         cout << "array of " << outputSize << " elements" << endl;
         for (int index = 0; index < outputSize ; index++)
         {
-            strftime(returnString, 50, "%a %b %d %Y", output[index]);
+            strftime(returnString, 50, "%a %b %d %H:%M:%S %Y", output[index]);
             cout << "  element[" << index << "]=" << returnString << endl;
             
         }
