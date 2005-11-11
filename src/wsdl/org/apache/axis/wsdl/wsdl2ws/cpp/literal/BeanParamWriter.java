@@ -925,18 +925,18 @@ public class BeanParamWriter extends ParamCPPFileWriter
 
                 		if( CUtils.isPointerType( typeName))
                 		{
-                    		writer.write("\t" + typeName + "	pValue = pIWSDZ->" +
+                    		writer.write("\t" + typeName + "	pValue" + i + " = pIWSDZ->" +
                		        	 CUtils.getParameterGetValueMethodName(typeName, attribs[i].isAttribute()) +
                		        	 "( \"" + soapTagName + "\", 0);\n\n");
                 		}
                 		else
                 		{
-                    		writer.write("\t" + typeName + " *	pValue = pIWSDZ->" +
+                    		writer.write("\t" + typeName + " *	pValue" + i + " = pIWSDZ->" +
                		        	 CUtils.getParameterGetValueMethodName(typeName, attribs[i].isAttribute()) +
                		        	 "( \"" + soapTagName + "\", 0);\n\n");
                 		}
                 		
-                		writer.write( "\tif( pValue == NULL)\n");
+                		writer.write( "\tif( pValue" + i + " == NULL)\n");
                 		writer.write( "\t{\n");
             		    writer.write("\t\tparam->" + elementName + " = NULL;\n");
                 		writer.write( "\t}\n");
@@ -945,16 +945,16 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 		
                 		if( CUtils.isPointerType( typeName))
                 		{
-                		    writer.write("\t\tparam->" + elementName + " = new char[strlen( pValue) + 1];\n");
-                    		writer.write("\t\tstrcpy( param->" + elementName + ", pValue);\n\n");
+                		    writer.write("\t\tparam->" + elementName + " = new char[strlen( pValue" + i + ") + 1];\n");
+                    		writer.write("\t\tstrcpy( param->" + elementName + ", pValue" + i + ");\n\n");
                 		}
                 		else
                 		{
                 		    writer.write("\t\tparam->" + elementName + " = new " + typeName + "();\n");
-                    		writer.write("\t\t*param->" + elementName + " = *pValue;\n\n");
+                    		writer.write("\t\t*param->" + elementName + " = *pValue" + i + ";\n\n");
                 		}
                 		
-                		writer.write("\t\tAxis::AxisDelete( (void *) pValue, " + CUtils.getXSDTypeForBasicType( typeName) + ");\n\n");
+                		writer.write("\t\tAxis::AxisDelete( (void *) pValue" + i + ", " + CUtils.getXSDTypeForBasicType( typeName) + ");\n\n");
 
                 		writer.write( "\t}\n");
                 	}
