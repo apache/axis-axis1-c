@@ -1094,13 +1094,13 @@ void HTTPTransport::processResponseHTTPHeaders() throw (HTTPTransportException)
 	    	// if HTTP/1.1 we have to assume persistant connection by default
 
 	    	// We need to close the connection and open a new one if we have 'Connection: close'
-			if( key == "Connection" && value == " close")
+			if( key == "Connection" && (value == " close" || value == " Close"))
 			{
 				m_bReopenConnection = true;
 			}
 
             // We need to close the connection and open a new one if we have 'Proxy-Connection: close'
-            if (key == "Proxy-Connection" && value == " close")
+            if (key == "Proxy-Connection" && (value == " close" || value == " Close"))
                 m_bReopenConnection = true;
 
 	    	// For both HTTP/1.0 and HTTP/1.1,

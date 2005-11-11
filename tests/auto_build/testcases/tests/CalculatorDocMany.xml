@@ -1,0 +1,13 @@
+<test>
+    <name>CalculatorDocMany</name>
+    <description>CalculatorDocMany</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>CalculatorDocManyClient.cpp</clientCode>
+    <wsdl>CalculatorDoc.wsdl</wsdl>
+    <expected>
+        <output>
+            CalculatorDocMany.cpp.out
+        </output>
+    </expected>
+	<endpoint>http://localhost:80/axis/CalculatorDoc</endpoint>
+</test>
