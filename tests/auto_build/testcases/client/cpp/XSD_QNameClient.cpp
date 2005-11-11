@@ -298,19 +298,18 @@ int main(int argc, char* argv[])
 */
 
         // Test array
-          xsd__QName_Array arrayInput;
+       xsd__QName_Array arrayInput;
 		int arraySize=2;
-		xsd__QName *array = new xsd__QName[arraySize]();
+		xsd__QName *array = new xsd__QName[arraySize];
         for (int inputIndex=0 ; inputIndex < arraySize ; inputIndex++)
         {
-            input = new char[25];
-            strcpy (input, simpleQName);
-            array[inputIndex] = input;
+            array[inputIndex] = new char[25];
+            strcpy (array[inputIndex], simpleQName);            
         }
 		arrayInput.set(array,arraySize);
-        xsd__QName_Array arrayResult = ws->asArray(arrayInput);
+        xsd__QName_Array* arrayResult = ws->asArray(&arrayInput);
 		int outputSize=0;
-		const xsd__QName *output = arrayResult.get(outputSize);
+		const xsd__QName *output = arrayResult->get(outputSize);
         cout << "array of " << outputSize << " elements" << endl;
         for (int index = 0; index < outputSize ; index++)
         {
