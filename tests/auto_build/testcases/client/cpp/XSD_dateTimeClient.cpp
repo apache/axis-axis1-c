@@ -117,19 +117,20 @@ int main(int argc, char* argv[])
 		delete optionalAttributeResult;
 */
 		// Test array
-        xsd__date_Array arrayInput;
+
+        xsd__dateTime_Array arrayInput;
 		int arraySize = 2;
-		xsd__date ** array = new xsd__date*[arraySize];
+		xsd__dateTime ** array = new xsd__dateTime*[arraySize];
         
         for (int inputIndex=0 ; inputIndex < arraySize ; inputIndex++)
         {
-            array[inputIndex] =new xsd__date(time);
+            array[inputIndex] =new xsd__dateTime(time);
             
         }
 		arrayInput.set(array,arraySize);
-        xsd__date_Array* arrayResult = ws->asArray(&arrayInput);
+        xsd__dateTime_Array* arrayResult = ws->asArray(&arrayInput);
 		int outputSize = 0;
-		const xsd__date **output = arrayResult->get(outputSize);
+		const xsd__dateTime **output = arrayResult->get(outputSize);
         cout << "array of " << outputSize << " elements" << endl;
         for (int index = 0; index < outputSize ; index++)
         {
@@ -143,6 +144,7 @@ int main(int argc, char* argv[])
             delete array[deleteIndex];
         }
         delete [] array;
+
 
 		// Test complex type
 		SimpleComplexType complexTypeInput;
