@@ -25,14 +25,18 @@ import java.io.IOException;
  */
 public class ResponseSender implements Runnable
 {
-    private char[] response;
+    private Response response;
     private BufferedWriter writer;
+    // we need to keep a hold of the parent that created us so we can tell them if we closed the connection
+    private MockServerThread parent;
     
     
-    ResponseSender (char[] responseToSend, BufferedWriter writerToClient)
+    ResponseSender (Response responseToSend, BufferedWriter writerToClient, MockServerThread mockServerThread)
     {
+//        System.out.println( "NEW RESPONDER");
         response = responseToSend;
         writer = writerToClient;
+        parent = mockServerThread;
     }
     
 
@@ -44,8 +48,7 @@ public class ResponseSender implements Runnable
         // send the response message back to the client !
         try
         {
-            System.out.println( "response = "+response);
-            System.out.println( "nulls? "+response+", "+writer+", "+response.length);
+//            System.out.println( "nulls? "+response+", "+writer+", "+response.length);
             // send it in chunks
 //            int chunkSize=300;
 //            int lastPosition=0;
@@ -53,10 +56,9 @@ public class ResponseSender implements Runnable
 //            {
 //                System.out.println( "HERE ");
 //               writer.write(response, lastPosition, chunkSize);
-            //System.out.println( "Response = "+new String(response));
             
-            	writer.write(response);
-               writer.flush();
+            writer.write(response.getMessage());
+            writer.flush();
 //               lastPosition+=chunkSize;
 //               System.out.println( "HERE "+lastPosition);
 //            }
@@ -66,6 +68,21 @@ public class ResponseSender implements Runnable
             exception.printStackTrace(System.err);
         }
         System.out.println( "ResponseSender: Sent response To Client");
+        
+        if(response.hasCloseConnectionHeader())
+        {
+            // Then we need to close the connection
+            System.out.println( "ResponseSender: Closing connection now");
+            parent.setClosedConnection(true);
+            try
+            {
+                writer.close();
+            }
+            catch(IOException exception)
+            {
+                exception.printStackTrace(System.err);
+            }
+        }
     }
 
 }

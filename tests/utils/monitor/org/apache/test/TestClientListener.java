@@ -77,11 +77,11 @@ public class TestClientListener implements Runnable
         {
             try
             {
-//                System.out
-//                        .println("TestClientListener#run(): Waiting for a new client request");
+                System.out
+                        .println("TestClientListener#run(): Waiting for a new client request");
                 clientSocket=serverSocket.accept( );
-//                System.out
-//                        .println("TestClientListener#run():Got a client new client request");
+                System.out
+                        .println("TestClientListener#run():Got a client new client request");
             }
             catch (SocketTimeoutException socketTimeoutException)
             {

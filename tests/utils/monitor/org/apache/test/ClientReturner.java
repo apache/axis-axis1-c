@@ -103,7 +103,6 @@ public class ClientReturner extends Thread
                         System.err
                                 .println("IOException when writing server response back to client");
                         exception.printStackTrace(System.err);
-
                     }
                     // System.out.println("ClientReturner#run(): flushed");
                     TCPMonitor.getInstance( ).writeResponse(readBuffer,
@@ -123,11 +122,11 @@ public class ClientReturner extends Thread
         catch (IOException exception)
         {
             System.err
-                    .println("IOException when reading in response from server ");
+                    .println("ClientReturner#run(): IOException when reading in response from server ");
             exception.printStackTrace(System.err);
         }
+        System.out.println( "ClientReturner#run(): exit");
     }
-    //        System.out.println( "ClientReturner#run(): exit");
 
 }
 
