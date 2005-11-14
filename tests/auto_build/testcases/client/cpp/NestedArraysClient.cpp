@@ -46,59 +46,60 @@ int main(int argc, char* argv[])
 		ArrayOfArrayOf_xsd_int_Array parentArray;
 
 		/* Set xsd__int_Array into ArrayOf_xsd_int */
-        xsd__int * baseArray1Vales = new xsd__int[ARRAYSIZE];
-		baseArray1.item.m_Array = new xsd__int*[ARRAYSIZE];
-		baseArray1.item.m_Size = ARRAYSIZE;
-        baseArray1Vales[0] = 1;
-		baseArray1.item.m_Array[0] = &baseArray1Vales[0];
-        baseArray1Vales[1] = 2;
-		baseArray1.item.m_Array[1] = &baseArray1Vales[1];
+		xsd__int_Array baseArray1In;
+        xsd__int ** baseArray1Vales = new xsd__int*[ARRAYSIZE];		
+		baseArray1Vales[0] = new xsd__int(1);
+        baseArray1Vales[1] = new xsd__int(2);
+		baseArray1In.set(baseArray1Vales,ARRAYSIZE);
+		baseArray1.item= &baseArray1In;
 
-        xsd__int * baseArray2Vales = new xsd__int[ARRAYSIZE];
-		baseArray2.item.m_Array = new xsd__int*[ARRAYSIZE];
-		baseArray2.item.m_Size = ARRAYSIZE;
-        baseArray2Vales[0] = 3;
-		baseArray2.item.m_Array[0] = &baseArray2Vales[0];
-        baseArray2Vales[1] = 4;
-		baseArray2.item.m_Array[1] = &baseArray2Vales[1];
-
-        xsd__int * baseArray3Vales = new xsd__int[ARRAYSIZE];
-		baseArray3.item.m_Array = new xsd__int*[ARRAYSIZE];
-		baseArray3.item.m_Size = ARRAYSIZE;
-        baseArray3Vales[0] = 5;
-		baseArray3.item.m_Array[0] = &baseArray3Vales[0];
-        baseArray3Vales[1] = 6;
-		baseArray3.item.m_Array[1] = &baseArray3Vales[1];
-
-        xsd__int * baseArray4Vales = new xsd__int[ARRAYSIZE];
-		baseArray4.item.m_Array = new xsd__int*[ARRAYSIZE];
-		baseArray4.item.m_Size = ARRAYSIZE;
-        baseArray4Vales[0] = 7;
-		baseArray4.item.m_Array[0] = &baseArray4Vales[0];
-        baseArray4Vales[1] = 8;
-		baseArray4.item.m_Array[1] = &baseArray4Vales[1];
+		xsd__int_Array baseArray2In;
+        xsd__int ** baseArray2Vales = new xsd__int*[ARRAYSIZE];		
+        baseArray2Vales[0] =new xsd__int(3);		
+        baseArray2Vales[1] =new xsd__int(4);
+		baseArray2In.set(baseArray2Vales,ARRAYSIZE);
+		baseArray2.setitem(&baseArray2In);
+		
+		xsd__int_Array baseArray3In;
+        xsd__int ** baseArray3Vales = new xsd__int*[ARRAYSIZE];		
+        baseArray3Vales[0] = new xsd__int(5);		
+        baseArray3Vales[1] = new xsd__int(6);
+		baseArray3In.set(baseArray3Vales,ARRAYSIZE);
+		baseArray3.setitem(&baseArray3In);
+		
+		xsd__int_Array baseArray4In;
+        xsd__int ** baseArray4Vales = new xsd__int*[ARRAYSIZE];		
+        baseArray4Vales[0] = new xsd__int(7);		
+        baseArray4Vales[1] = new xsd__int(8);
+		baseArray4In.set(baseArray4Vales,ARRAYSIZE);
+		baseArray4.setitem(&baseArray4In);
+		
 
 		/* Set ArrayOf_xsd_int_Array into ArrayOfArrayOf_xsd_int */
-		subArray1.item.m_Array = new ArrayOf_xsd_int[ARRAYSIZE];
-		subArray1.item.m_Size = ARRAYSIZE;
-		subArray1.item.m_Array[0] = baseArray1;
-		subArray1.item.m_Array[1] = baseArray2;
-
-		subArray2.item.m_Array = new ArrayOf_xsd_int[ARRAYSIZE];
-		subArray2.item.m_Size = ARRAYSIZE;
-		subArray2.item.m_Array[0] = baseArray3;
-		subArray2.item.m_Array[1] = baseArray4;
-
+		ArrayOf_xsd_int_Array sarray1;
+		ArrayOf_xsd_int ** array1 = new ArrayOf_xsd_int*[ARRAYSIZE];		
+		array1[0] = &baseArray1;
+		array1[1] = &baseArray2;
+		sarray1.set(array1,ARRAYSIZE);
+		subArray1.setitem(&sarray1);
+		
+		ArrayOf_xsd_int_Array sarray2;
+		ArrayOf_xsd_int ** array2 = new ArrayOf_xsd_int*[ARRAYSIZE];		
+		array2[0] = &baseArray3;
+		array2[1] = &baseArray4;
+		sarray2.set(array2,ARRAYSIZE);
+		subArray2.setitem(&sarray2);
+		
 		/* Set ArrayOfArrayOf_xsd_int into an Array of them */
-		parentArray.m_Array = new ArrayOfArrayOf_xsd_int[ARRAYSIZE];
-		parentArray.m_Size = ARRAYSIZE;
-		parentArray.m_Array[0] = subArray1;
-		parentArray.m_Array[1] = subArray2;
-
-		xsd__int_Array response = ws->sendNestedArrays(parentArray);
-
-		cout << *(response.m_Array[0]) << " " << *(response.m_Array[1]) << endl;
-
+		
+		ArrayOfArrayOf_xsd_int ** pArray= new ArrayOfArrayOf_xsd_int*[ARRAYSIZE];		
+		pArray[0]=&subArray1;
+		pArray[1]=&subArray2;		
+		parentArray.set(pArray,ARRAYSIZE);
+		xsd__int_Array* response = ws->sendNestedArrays(&parentArray);
+		int outputSize = 0;
+		const xsd__int ** output = response->get(outputSize);		
+		cout << *(output[0]) << " " << *(output[1]) << endl;		
 		delete ws;
 	}
 	catch(AxisException& e)
