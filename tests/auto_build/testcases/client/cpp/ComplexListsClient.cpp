@@ -58,23 +58,28 @@ void printResponse(attrlisterr* ale)
         
 		if (ale->attrlist_Ref != NULL)
 		{
-			if (ale->attrlist_Ref->item.m_Array[0] != NULL)
+			int outputSize =0;
+			const namepair ** output =ale->attrlist_Ref->getitem()->get(outputSize);
+			//if (ale->attrlist_Ref->item.m_Array[0] != NULL)
+			if (output[0] != NULL)
 			{
-				if (ale->attrlist_Ref->item.m_Array[0]->name != NULL)
+				if (output[0]->name != NULL)
 				{
-					cout << ale->attrlist_Ref->item.m_Array[0]->name << endl;
+					cout << output[0]->name << endl;
 				}
 				else
 				{
 					cout << "ale->attrlist_Ref->item.m_Array[0]->name is NULL" << endl;
 				}
 
-				if (ale->attrlist_Ref->item.m_Array[0]->m_list_Ref != NULL)
+				if (output[0]->m_list_Ref != NULL)
 				{
-					if (ale->attrlist_Ref->item.m_Array[0]->m_list_Ref->item.m_Array[0]
-						&& *(ale->attrlist_Ref->item.m_Array[0]->m_list_Ref->item.m_Array[0]))
+					outputSize = 0;
+					const xsd__string * outString = output[0]->m_list_Ref->item->get(outputSize);
+					if (outString[0]
+						&& *(outString[0]))
 					{
-						cout << ale->attrlist_Ref->item.m_Array[0]->m_list_Ref->item.m_Array[0] << endl;
+						cout << outString[0] << endl;
 					}
 					else
 					{
@@ -116,22 +121,22 @@ int main(int argc, char* argv[])
 		namepair_Array npArr;
 
 		// m_list arg to numtilist
-		ml.item.m_Array = new char*[ARRAYSIZE];   // make storage for array
-		ml.item.m_Size = ARRAYSIZE;               // tell it how big it is
-		NEWCOPY(ml.item.m_Array[0], "never odd or even"); // should be returned in errortext element of attrlisterr
-		NEWCOPY(ml.item.m_Array[1], "any data string");   // add data
+		xsd__string * array = new xsd__string[ARRAYSIZE];		
+		NEWCOPY(array[0], "never odd or even"); // should be returned in errortext element of attrlisterr
+		NEWCOPY(array[1], "any data string");   // add data
+		ml.item->set(array,ARRAYSIZE);
 
 		// To set into namepair item of namepair array of attrlist arg of multilist
-		mlnp->item.m_Array = new char*[ARRAYSIZE];
-		mlnp->item.m_Size = ARRAYSIZE;
-		NEWCOPY(mlnp->item.m_Array[0], "Apache");
-		NEWCOPY(mlnp->item.m_Array[1], "Axis C++");
+		xsd__string * array1 = new xsd__string[ARRAYSIZE];		
+		NEWCOPY(array1[0], "Apache");
+		NEWCOPY(array1[1], "Axis C++");
+		mlnp->item->set(array1,ARRAYSIZE);
 
 		// To set into namepair item of namepair array of attrlist arg of multilist
-		mlnp2->item.m_Array = new char*[ARRAYSIZE];
-		mlnp2->item.m_Size = ARRAYSIZE;
-		NEWCOPY(mlnp2->item.m_Array[0], "Test");
-		NEWCOPY(mlnp2->item.m_Array[1], "Complex");
+		xsd__string * array2 = new xsd__string[ARRAYSIZE];		
+		NEWCOPY(array2[0], "Test");
+		NEWCOPY(array2[1], "Complex");
+		mlnp2->item->set(array2,ARRAYSIZE);
 
 		// set first namepair item to put into array
 		np1->m_list_Ref = mlnp;
@@ -142,13 +147,13 @@ int main(int argc, char* argv[])
 		NEWCOPY(np2->name, "namepair2");
 
 		// create a namepair array to add into attrlist
-		npArr.m_Size=ARRAYSIZE;
-		npArr.m_Array = new namepair*[ARRAYSIZE];
-		npArr.m_Array[0]=np1;
-		npArr.m_Array[1]=np2;
+		namepair ** nArray = new namepair *[ARRAYSIZE];
+		nArray[0]=np1;
+		nArray[1]=np2;
+		npArr.set(nArray,ARRAYSIZE);
 
 		// set attrlist argument
-		al.item = npArr;
+		al.setitem(&npArr);
 
 		attrlisterr* ale = ws->multilist(&ml, &al);
         printResponse(ale);
