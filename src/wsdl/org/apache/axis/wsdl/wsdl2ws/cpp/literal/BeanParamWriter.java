@@ -762,7 +762,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 }
 
                 writer.write("(strcmp(choiceName,\""
-                        + attribs[i].getParamNameAsMember()
+                        + attribs[i].getElementNameAsString()
                         + "\")==0)\n\t{\n\t");
             }
 
