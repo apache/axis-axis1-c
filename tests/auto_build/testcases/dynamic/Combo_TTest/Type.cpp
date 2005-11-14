@@ -19,8 +19,23 @@
  */
 
 #include <axis/AxisWrapperAPI.hpp>
+#include <axis/Axis.hpp>
 
 #include "Type.hpp"
+
+xsd__int_Array * Type::getitem()
+{
+	return item ; 
+}
+
+void Type::setitem(xsd__int_Array * pInValue)
+{
+	if(item == NULL)
+	{
+		item = new xsd__int_Array();
+	}
+	item->clone(*pInValue); 
+}
 /*
  * This static method serialize a Type type of object
  */
@@ -38,7 +53,7 @@ int Axis_Serialize_Type(Type* param, IWrapperSoapSerializer* pSZ, bool bArray = 
 	pSZ->serialize( ">", 0);
 
 	/* then serialize elements if any*/
-	pSZ->serializeBasicArray((Axis_Array*)(&param->item), Axis_URI_Type,XSD_INT, "item");
+	pSZ->serializeBasicArray(param->item, Axis_URI_Type,XSD_INT, "item");
 	return AXIS_SUCCESS;
 }
 
@@ -47,13 +62,16 @@ int Axis_Serialize_Type(Type* param, IWrapperSoapSerializer* pSZ, bool bArray = 
  */
 int Axis_DeSerialize_Type(Type* param, IWrapperSoapDeSerializer* pIWSDZ)
 {
-	Axis_Array array;
+	Axis_Array * array;
 
 	array = pIWSDZ->getBasicArray(XSD_INT, "item",0);
-	param->item.m_Array = (xsd__int**)new xsd__int*[array.m_Size];
-	param->item.m_Size = array.m_Size;
+	if(param->item == NULL)
+	{
+		param->item = new xsd__int_Array();
+	}
+	param->item->clone( *array);
+	Axis::AxisDelete((void*) array, XSD_ARRAY);
 
-	memcpy( param->item.m_Array, array.m_Array, sizeof( xsd__int) * array.m_Size);
 	return pIWSDZ->getStatus();
 }
 void* Axis_Create_Type(Type* pObj, bool bArray = false, int nSize=0)
@@ -63,8 +81,12 @@ void* Axis_Create_Type(Type* pObj, bool bArray = false, int nSize=0)
 		if (pObj)
 		{
 			Type* pNew = new Type[nSize];
-			memcpy(pNew, pObj, sizeof(Type)*nSize/2);
-			memset(pObj, 0, sizeof(Type)*nSize/2);
+			size_t i = nSize/2;
+			for (int ii=0; ii<i; ++ii)
+			{
+				pNew[ii] = pObj[ii];
+				pObj[ii].reset();
+			}
 			delete [] pObj;
 			return pNew;
 		}
@@ -101,13 +123,23 @@ int Axis_GetSize_Type()
 
 Type::Type()
 {
+	item = NULL;
+	reset();
+}
+
+void Type::reset()
+{
 	/*do not allocate memory to any pointer members here
 	 because deserializer will allocate memory anyway. */
-	item.m_Array = 0;
-	item.m_Size = 0;
+	if ( item != NULL)
+	{
+		item->clear();
+	}
 }
 
 Type::~Type()
 {
 	/*delete any pointer and array members here*/
+	if (item!= NULL)
+		delete item;
 }
