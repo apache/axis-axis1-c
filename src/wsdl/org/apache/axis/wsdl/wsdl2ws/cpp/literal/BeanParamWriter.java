@@ -27,6 +27,9 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
 
+import javax.xml.namespace.QName;
+
+import org.apache.axis.wsdl.symbolTable.BaseType;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.ElementInfo;
@@ -1221,9 +1224,75 @@ public class BeanParamWriter extends ParamCPPFileWriter
         {
             writer.write("int Check_Restrictions_" + classname + "("
                     + classname + " value)\n");
+            
+            //TODO write code to check the restrictions.  FJP - Begun, but untested.
+            
             writer.write("{\n");
-            writer.write("\treturn 0;\n");
-            //TODO write code to check the restrictions
+            
+            if( CUtils.isPointerType( CUtils.getclass4qname( type.getBaseType())))
+            {
+                writer.write( "// String type\n");
+                writer.write( "// Number of " + classname + " elements = " + (type.getEnumerationdata().size() - 1) + "\n");
+                
+                Iterator i = type.getEnumerationdata().iterator();
+                int iIndex = 0;
+                BaseType baseTypeForArray = (BaseType) i.next();
+                
+                while( i.hasNext())
+                {
+                    if( iIndex == 0)
+                    {
+                        writer.write( "//\tif( ");
+                    }
+                    else
+                    {
+                        writer.write( " ||\n//\t    ");
+                    }
+                    
+                    QName qnElement = (QName) i.next();
+                    
+                    writer.write( "!strcmp( value, " + classname+ "_" + qnElement.getNamespaceURI() + ")");
+                    
+                    iIndex++;
+                }
+                
+                writer.write( ")\n//\t{\n");
+                writer.write( "//\t\treturn 1;\n");
+                writer.write( "//\t}\n");
+            }
+            else
+            {
+                writer.write( "// Non-string type\n");
+                writer.write( "// Number of " + classname + " enums = " + (type.getEnumerationdata().size() - 1) + "\n");
+                
+                Iterator i = type.getEnumerationdata().iterator();
+                int iIndex = 0;
+                BaseType baseTypeForArray = (BaseType) i.next();
+                
+                while( i.hasNext())
+                {
+                    if( iIndex == 0)
+                    {
+                        writer.write( "//\tif( ");
+                    }
+                    else
+                    {
+                        writer.write( " ||\n//\t    ");
+                    }
+                    
+                    QName qnElement = (QName) i.next();
+                    
+                    writer.write( "value == ENUM" + classname.toUpperCase()+ "_" + qnElement.getNamespaceURI());
+                    
+                    iIndex++;
+                }
+                
+                writer.write( ")\n//\t{\n");
+                writer.write( "//\t\treturn 1;\n");
+                writer.write( "//\t}\n");
+            }
+            
+            writer.write( "\n\treturn 0;\n");
             writer.write("}\n");
         }
         catch (IOException e)
