@@ -22,6 +22,7 @@
 #define __TYPE_PARAM_H__INCLUDED_
 
 #include <axis/AxisUserAPI.hpp>
+#include <axis/AxisUserAPIArrays.hpp>
 AXIS_CPP_NAMESPACE_USE 
 
 /*Local name and the URI for the type*/
@@ -31,9 +32,15 @@ static const char* Axis_TypeName_Type = "Type";
 class STORAGE_CLASS_INFO Type
 {
 public:
-	xsd__int_Array item;
+	xsd__int_Array * item;
+
+	xsd__int_Array * getitem();
+	void setitem(xsd__int_Array * pInValue);
+
 	Type();
-	~Type();
+
+	void reset();
+	virtual ~Type();
 };
 
 #endif /* !defined(__TYPE_PARAM_H__INCLUDED_)*/
