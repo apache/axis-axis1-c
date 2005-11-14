@@ -299,37 +299,44 @@ int main(int argc, char* argv[])
 
         // Test array
         xsd__IDREFS_Array arrayInput;
-        arrayInput.m_Array = new xsd__IDREFS[2];
-        arrayInput.m_Size = 2;
-        for (int inputIndex=0 ; inputIndex < 2 ; inputIndex++)
+		int arraySize =0;
+		xsd__IDREFS * array = new xsd__IDREFS[arraySize];
+        
+        for (int inputIndex=0 ; inputIndex < arraySize ; inputIndex++)
         {
-            input = new char[25];
-            strcpy (input, simpleIDREFS);
-            arrayInput.m_Array[inputIndex] = input;
+            array[inputIndex] = new char[25];
+            strcpy (array[inputIndex], simpleIDREFS);           
         }
-        xsd__IDREFS_Array arrayResult = ws->asArray(arrayInput);
-        cout << "array of " << arrayResult.m_Size << " elements" << endl;
-        for (int index = 0; index < arrayResult.m_Size ; index++)
+		arrayInput.set(array,arraySize);
+        xsd__IDREFS_Array* arrayResult = ws->asArray(&arrayInput);
+		int outputSize = 0;
+		const xsd__IDREFS *output = arrayResult->get(outputSize);
+        cout << "array of " << outputSize << " elements" << endl;
+        for (int index = 0; index < outputSize ; index++)
         {
-            if (arrayResult.m_Array[index])
+            if (output[index])
             {
-                if (*(arrayResult.m_Array[index]))
+                if (*(output[index]))
                 {
-                    cout << "  element[" << index << "]=" << arrayResult.m_Array[index] << endl;
+                    cout << "  element[" << index << "]=" << output[index] << endl;
                 }
                 else
                 {
                     cout << "  element[" << index << "]=<empty>" << endl;
                 }
-                delete arrayResult.m_Array[index];
+                
             }
             else
             {
                 cout << "  element[" << index << "]=<nil>" << endl;
             }
         }
-        delete [] arrayInput.m_Array;
-        delete [] arrayResult.m_Array;
+        // Clear up input array        
+        for (int deleteIndex = 0 ; deleteIndex < arraySize ; deleteIndex++ )
+        {
+            delete array[deleteIndex];
+        }
+        delete [] array;
 
         // Test complex type
         input = new char[25];
