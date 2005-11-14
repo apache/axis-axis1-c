@@ -1141,10 +1141,10 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 }
                 else
                 {
-                    writer.write("\tmemset( &"
-                            + attribs[i].getParamNameAsMember()
-                            + ", 0, sizeof( " + attribs[i].getTypeName()
-                            + "));\n");
+                    if(CUtils.isPointerType(attribs[i].getTypeName()))
+                    {
+                        writer.write("\t"+ attribs[i].getParamNameAsMember() + "=0;\n");
+                    }
                 }
             }
             writer.write("}\n");

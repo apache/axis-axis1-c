@@ -329,8 +329,7 @@ public class ClientStubWriter extends CPPClassWriter
                     else if (outparamTypeName.equals("xsd__string"))
                     {
                         writer.write(outparamTypeName + " Ret;\n");
-                        writer.write("\tmemset(&Ret,0,sizeof("
-                                + outparamTypeName + "));\n");
+                        writer.write("\t"+ outparamTypeName + "=0;\n");
                     }
                     else
                     {
