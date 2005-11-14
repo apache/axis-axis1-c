@@ -19,8 +19,39 @@
  */
 
 #include <axis/AxisWrapperAPI.hpp>
+#include <axis/Axis.hpp>
 
 #include "DivByZeroStruct.hpp"
+
+xsd__string DivByZeroStruct::getvarString()
+{
+	return varString ; 
+}
+
+void DivByZeroStruct::setvarString(xsd__string InValue)
+{
+	varString = InValue ; 
+}
+
+xsd__int DivByZeroStruct::getvarInt()
+{
+	return varInt ; 
+}
+
+void DivByZeroStruct::setvarInt(xsd__int InValue)
+{
+	varInt = InValue ; 
+}
+
+xsd__float DivByZeroStruct::getvarFloat()
+{
+	return varFloat ; 
+}
+
+void DivByZeroStruct::setvarFloat(xsd__float InValue)
+{
+	varFloat = InValue ; 
+}
 /*
  * This static method serialize a DivByZeroStruct type of object
  */
@@ -35,6 +66,12 @@ int Axis_Serialize_DivByZeroStruct(DivByZeroStruct* param, IWrapperSoapSerialize
 	}
 
 	/* first serialize attributes if any*/
+	if(Axis_URI_DivByZeroStruct)
+	{
+		bool blnIsNewPrefix = false;
+		const AxisChar* sPrefix = pSZ->getNamespacePrefix(Axis_URI_DivByZeroStruct, blnIsNewPrefix);
+		pSZ->serialize(" xmlns:", sPrefix, "=\"",Axis_URI_DivByZeroStruct, "  \"", NULL);
+	}
 	pSZ->serialize( ">", 0);
 
 	/* then serialize elements if any*/
@@ -49,13 +86,34 @@ int Axis_Serialize_DivByZeroStruct(DivByZeroStruct* param, IWrapperSoapSerialize
  */
 int Axis_DeSerialize_DivByZeroStruct(DivByZeroStruct* param, IWrapperSoapDeSerializer* pIWSDZ)
 {
-	param->varString = pIWSDZ->getElementAsString( "varString",0);
+	xsd__string	pValue0 = pIWSDZ->getElementAsString( "varString", 0);
+
+	if( pValue0 == NULL)
+	{
+		param->varString = NULL;
+	}
+	else
+	{
+		param->varString = new char[strlen( pValue0) + 1];
+		strcpy( param->varString, pValue0);
+
+		Axis::AxisDelete( (void *) pValue0, XSD_STRING);
+
+	}
 	xsd__int * varInt = NULL;
+
 	if ((varInt = pIWSDZ->getElementAsInt( "varInt",0)) != NULL)
+	{
 		param->varInt = *( varInt );
+		Axis::AxisDelete( (void *) varInt, XSD_INT);
+	}
 	xsd__float * varFloat = NULL;
+
 	if ((varFloat = pIWSDZ->getElementAsFloat( "varFloat",0)) != NULL)
+	{
 		param->varFloat = *( varFloat );
+		Axis::AxisDelete( (void *) varFloat, XSD_FLOAT);
+	}
 	return pIWSDZ->getStatus();
 }
 void* Axis_Create_DivByZeroStruct(DivByZeroStruct* pObj, bool bArray = false, int nSize=0)
@@ -65,8 +123,12 @@ void* Axis_Create_DivByZeroStruct(DivByZeroStruct* pObj, bool bArray = false, in
 		if (pObj)
 		{
 			DivByZeroStruct* pNew = new DivByZeroStruct[nSize];
-			memcpy(pNew, pObj, sizeof(DivByZeroStruct)*nSize/2);
-			memset(pObj, 0, sizeof(DivByZeroStruct)*nSize/2);
+			size_t i = nSize/2;
+			for (int ii=0; ii<i; ++ii)
+			{
+				pNew[ii] = pObj[ii];
+				pObj[ii].reset();
+			}
 			delete [] pObj;
 			return pNew;
 		}
@@ -103,6 +165,11 @@ int Axis_GetSize_DivByZeroStruct()
 
 DivByZeroStruct::DivByZeroStruct()
 {
+	reset();
+}
+
+void DivByZeroStruct::reset()
+{
 	/*do not allocate memory to any pointer members here
 	 because deserializer will allocate memory anyway. */
 	memset( &varString, 0, sizeof( xsd__string));
@@ -113,4 +180,6 @@ DivByZeroStruct::DivByZeroStruct()
 DivByZeroStruct::~DivByZeroStruct() throw ()
 {
 	/*delete any pointer and array members here*/
+	if (varString != NULL)
+		delete [] varString;
 }
