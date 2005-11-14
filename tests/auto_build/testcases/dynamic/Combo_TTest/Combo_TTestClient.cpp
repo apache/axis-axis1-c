@@ -139,10 +139,12 @@ RETTYPE arrayDocThreadFunc( ARGTYPE Param)
 // Debug ^ Must be removed
 
 		//testing echoIntArray
-		IntArrayType	arrin;
+		intArrayType arrin;
+		xsd__int_Array arrayIn;
+		xsd__int ** array = new xsd__int*[ARRAYSIZE];
 
-		arrin.intItem.m_Size = ARRAYSIZE;			 // Set the array size.
-		arrin.intItem.m_Array = new int*[ARRAYSIZE]; // Create an array of integer pointers.
+		//arrin.intItem.m_Size = ARRAYSIZE;			 // Set the array size.
+		//arrin.intItem.m_Array = new int*[ARRAYSIZE]; // Create an array of integer pointers.
 /*
 		int * intArray = new int[ARRAYSIZE];		 // Create a pointer to an integer array.
 
@@ -159,17 +161,19 @@ RETTYPE arrayDocThreadFunc( ARGTYPE Param)
 		// pointer of the integer array.
 		for( int y = 0; y < ARRAYSIZE; y++)
 		{
-			int * intArray = new int[ARRAYSIZE];		 // Create a pointer to an integer array.
+			//int * intArray = new int[ARRAYSIZE];		 // Create a pointer to an integer array.
 
 			for( x = 0; x < ARRAYSIZE; x++)
 			{
-				intArray[x] = x;
+				array[x] =new xsd__int(x);
 			}
 
-			arrin.intItem.m_Array[y] = intArray;
+			//arrin.intItem.m_Array[y] = intArray;
 		}
-/**/
-		if( ws.echoIntArray( &arrin)->intItem.m_Array != NULL)
+		arrayIn.set(array,ARRAYSIZE);
+		arrin.setintItem(&arrayIn);
+/**/    int outputSize =0;
+		if( ws.echoIntArray( &arrin)->intItem->get(outputSize) != NULL)
 		{
 			cout << "successful ";
 		}
@@ -177,6 +181,12 @@ RETTYPE arrayDocThreadFunc( ARGTYPE Param)
 		{
 			cout << "failed " << endl;
 		}
+		// Clear up input array        
+        for (int deleteIndex = 0 ; deleteIndex < ARRAYSIZE ; deleteIndex++ )
+        {
+            delete array[deleteIndex];
+        }
+        delete [] array;
 
 	}
 	catch( AxisException& e)
@@ -317,33 +327,39 @@ RETTYPE simpleTypeThreadFunc( ARGTYPE Param)
 		Type *			output;
 		xsd__int_Array	array_input;
 		int				i;
-
-		array_input.m_Array = new int*[ARRAYSIZE_STT];
-		array_input.m_Size  = ARRAYSIZE_STT;
+        xsd__int ** array = new xsd__int*[ARRAYSIZE_STT];
+		//array_input.m_Array = new int*[ARRAYSIZE_STT];
+		//array_input.m_Size  = ARRAYSIZE_STT;
 
 		for( int j = 0; j < ARRAYSIZE_STT; j++)
 		{
-			int * piEntries = new int[ARRAYSIZE_STT];
+			//int * piEntries = new int[ARRAYSIZE_STT];
 
 			for( i = 0; i < ARRAYSIZE_STT; i++)
 			{
-				piEntries[i] = i;
+				array[i] = new xsd__int(i);
 			}
 
-			array_input.m_Array[j] = piEntries;
+			//array_input.m_Array[j] = piEntries;
 		}
-
+		array_input.set(array,ARRAYSIZE_STT);
 		input = new Type();
-		input->item = array_input;
+		input->setitem(&array_input);
 
 		output = ws->getInput( input);
 
 		i = 0;
-
-		if( *(output->item.m_Array[i]) == 0)
+        int outputSize = 0;
+		if( *(output->item->get(outputSize)[0]) == 0)
 		{
 			cout << "successful ";				
 		}
+		// Clear up input array        
+        for (int deleteIndex = 0 ; deleteIndex < ARRAYSIZE_STT ; deleteIndex++ )
+        {
+            delete array[deleteIndex];
+        }
+        delete [] array;
 
 		delete ws;
 	}
