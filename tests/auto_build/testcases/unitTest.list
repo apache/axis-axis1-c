@@ -6,6 +6,7 @@ CombinedAll.xml
 CombinedChoice.xml
 ComplexLists.xml
 ComplexTypesAll.xml
+ConnectionCloseTest.xml
 DynamicAttachment.xml
 DynamicGet_AddAnyObjectTest.xml
 DynUnrefAttachmentTest.xml

@@ -42,13 +42,13 @@ int main(int argc, char* argv[])
 
 		bool bSuccess = false;
 		int	iRetryIterationCount = 3;
+        sprintf(endpoint, "%s", url);
+     Calculator ws(endpoint);
 
 		do
 		{
 	try
 	{
-		sprintf(endpoint, "%s", url);
-		Calculator ws(endpoint);
 
 		op = "add";
 		i1 = 2;
@@ -74,7 +74,7 @@ int main(int argc, char* argv[])
 	    cout << "Unknown exception has occured" << endl;
 	}
 		iRetryIterationCount--;
-		} while( iRetryIterationCount > 0 && !bSuccess);
+		} while( iRetryIterationCount > 0);
   cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;
 	
 	return 0;
