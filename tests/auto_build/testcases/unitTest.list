@@ -26,6 +26,7 @@ NillableArrays.xml
 nillableComplexType.xml
 PrimitiveAndArray.xml
 RecurseTypes.xml
+RefTestDoc.xml
 SimpleArrays.xml
 SimpleRefDoc.xml
 TestSoapHeaderBlock2

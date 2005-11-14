@@ -1,0 +1,18 @@
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:Record2 xmlns:ns1="http://tempuri.org/">
+<ns1:elem><ns1:SetResourceProperties><ns1:b>102</ns1:b>
+</ns1:SetResourceProperties></ns1:elem>
+</ns1:Record2>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+0
+
