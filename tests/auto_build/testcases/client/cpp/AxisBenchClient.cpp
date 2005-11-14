@@ -72,6 +72,7 @@ int main(int argc, char* argv[])
     input->count = 100;
       
 //    input->infos.m_Array = new BenchBasicDataType[input->count];
+	BenchBasicDataType_Array arrayIn;
 	BenchBasicDataType **	ppBBDT = (BenchBasicDataType **) new BenchBasicDataType *[input->count];
 
 #ifdef WIN32
@@ -79,10 +80,8 @@ int main(int argc, char* argv[])
 #else
 	long long				ll = 10000;
 #endif
-
-	input->infos.m_Array = ppBBDT;
-
-    input->infos.m_Size = input->count;
+	arrayIn.set(ppBBDT,100);
+	input->setinfos(&arrayIn);    
       
     time_t tim;
     tim = 1100246323;
@@ -153,8 +152,10 @@ int main(int argc, char* argv[])
 
     for ( int ii = 0; ii < request ; ii++ ) {
         if (output) { // Samisa: memory management BP
-            for (int i = 0; i < output->infos.m_Size; i++)
-                delete (BenchBasicDataType*)(output->infos.m_Array[i]);
+			int outputSize =0;
+			const BenchBasicDataType ** outArray =output->infos->get(outputSize); 
+            for (int i = 0; i < outputSize; i++)
+                delete outArray[i];
             delete output;
             output = NULL;
         }
@@ -187,19 +188,21 @@ int main(int argc, char* argv[])
 
       cout << "Input Count : " << input->count << endl;
       cout << "Count : " << output->count << endl;
+	  int outputSize = 0;
+	  const BenchBasicDataType ** outArray =output->infos->get(outputSize); 
       for ( ; i < output->count ; i++ ) 
       {
-		  if( output->infos.m_Array[i] != (BenchBasicDataType *) 0xcdcdcdcd)
+		  if( outArray[i] != (BenchBasicDataType *) 0xcdcdcdcd)
 		  {
 			  cout << " ----------------------------------------------" << endl;
-			  cout << " StringType " << output->infos.m_Array[i]->StringType << endl;
-			  cout << " IntType " << output->infos.m_Array[i]->IntType << endl;
-			  cout << " IntegerType " << output->infos.m_Array[i]->IntegerType << endl;
-			  cout << " DoubleType " << output->infos.m_Array[i]->DoubleType << endl;
-			  cout << " BooleanType " << output->infos.m_Array[i]->BooleanType << endl;
-  			  strftime(dateTime, 50, "%a %b %d %H:%M:%S %Y", &output->infos.m_Array[i]->DateTimeType);
+			  cout << " StringType " << outArray[i]->StringType << endl;
+			  cout << " IntType " << outArray[i]->IntType << endl;
+			  cout << " IntegerType " << outArray[i]->IntegerType << endl;
+			  cout << " DoubleType " << outArray[i]->DoubleType << endl;
+			  cout << " BooleanType " << outArray[i]->BooleanType << endl;
+  			  strftime(dateTime, 50, "%a %b %d %H:%M:%S %Y", &outArray[i]->DateTimeType);
 			  cout << " DateTimeType " << dateTime << endl;
-  			  strftime(dateTime, 50, "%a %b %d %Y", &output->infos.m_Array[i]->DateType);
+  			  strftime(dateTime, 50, "%a %b %d %Y", &outArray[i]->DateType);
 			  cout << " DateType " << dateTime << endl;
 // This is being removed due to problem in some servers.
 // See XSDTime or XSDTimeNil testcases for full validation of the xsd:time type
@@ -208,26 +211,26 @@ int main(int argc, char* argv[])
 
 // Following check for os/400 - the mock server will return ascii char which needs to be converted
 #ifdef __OS400__
-                    if (output->infos.m_Array[i]->ByteType == 0x31) 
-                      output->infos.m_Array[i]->ByteType = '1';
+                    if (outArray[i]->ByteType == 0x31) 
+                      outArray[i]->ByteType = '1';
 #endif
-			  cout << " ByteType " << output->infos.m_Array[i]->ByteType << endl;
-			  cout << " DecimalType " << output->infos.m_Array[i]->DecimalType << endl;
-			  cout << " FloatType " << output->infos.m_Array[i]->FloatType << endl;
-			  cout << " LongType " << output->infos.m_Array[i]->LongType << endl;
-			  cout << " QNameType " << output->infos.m_Array[i]->QNameType << endl;
-			  cout << " ShortType " << output->infos.m_Array[i]->ShortType << endl;
+			  cout << " ByteType " << outArray[i]->ByteType << endl;
+			  cout << " DecimalType " << outArray[i]->DecimalType << endl;
+			  cout << " FloatType " << outArray[i]->FloatType << endl;
+			  cout << " LongType " << outArray[i]->LongType << endl;
+			  cout << " QNameType " << outArray[i]->QNameType << endl;
+			  cout << " ShortType " << outArray[i]->ShortType << endl;
 
-			  cout << " Base64BinaryType " << output->infos.m_Array[i]->Base64BinaryType.__size << endl;
-			  if( output->infos.m_Array[i]->Base64BinaryType.__size > 0)
+			  cout << " Base64BinaryType " << outArray[i]->Base64BinaryType.__size << endl;
+			  if( outArray[i]->Base64BinaryType.__size > 0)
 			  {
-				  cout << " Base64BinaryType " << asciiToString((char *)output->infos.m_Array[i]->Base64BinaryType.__ptr) << endl;
+				  cout << " Base64BinaryType " << asciiToString((char *)outArray[i]->Base64BinaryType.__ptr) << endl;
 			  }
 
-			  cout << " HexBinaryType " << output->infos.m_Array[i]->HexBinary.__size << endl;
-			  if( output->infos.m_Array[i]->HexBinary.__size > 0)
+			  cout << " HexBinaryType " << outArray[i]->HexBinary.__size << endl;
+			  if( outArray[i]->HexBinary.__size > 0)
 			  {
-				cout << " HexBinaryType " << asciiToString((char *)output->infos.m_Array[i]->HexBinary.__ptr) << endl;
+				cout << " HexBinaryType " << asciiToString((char *)outArray[i]->HexBinary.__ptr) << endl;
 			  }
 		  }
 		  returnValue=0;
@@ -270,8 +273,10 @@ int main(int argc, char* argv[])
 	  delete input;
 	  if (output)
 	  {
-	    for (int i = 0; i < output->infos.m_Size; i++)
-	      delete (BenchBasicDataType*)(output->infos.m_Array[i]);
+        int outputSize = 0;
+		const BenchBasicDataType ** outArray =output->infos->get(outputSize); 
+	    for (int i = 0; i < outputSize; i++)
+	      delete (BenchBasicDataType*)(outArray[i]);
 	    delete output;
 	  }
   }
