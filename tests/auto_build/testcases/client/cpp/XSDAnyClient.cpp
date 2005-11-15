@@ -56,7 +56,8 @@ int main(int argc, char* argv[])
      // ws = new OrderManager();
 
 	Order* order = ws->getOrder("whatever");
-	LineItem* lineitemarray = order->lineItems.m_Array[0];
+	int outputSize = 0;
+	LineItem* lineitemarray = (LineItem*)(order->lineItems->get(outputSize)[0]);
 	cout << "lineitem number =" << lineitemarray->getitemNumber()<< endl ;
 	cout << "lineitem description =" << lineitemarray->getitemDesc()<< endl ;
 
