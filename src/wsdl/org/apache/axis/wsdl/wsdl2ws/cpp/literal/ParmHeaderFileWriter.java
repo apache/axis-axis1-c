@@ -106,6 +106,7 @@ public class ParmHeaderFileWriter extends ParamWriter
         try
         {
             writer.write("#include <axis/AxisUserAPI.hpp>\n");
+            writer.write("#include <axis/AxisUserAPIArrays.hpp>\n");
             writer.write("AXIS_CPP_NAMESPACE_USE \n\n");
 
             Vector restrictionData = type.getEnumerationdata();
