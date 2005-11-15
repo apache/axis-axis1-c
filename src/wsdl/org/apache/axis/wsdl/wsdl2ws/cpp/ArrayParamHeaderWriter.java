@@ -220,8 +220,8 @@ public class ArrayParamHeaderWriter extends ParamWriter
     {
         try
         {
-            writer.write("\t\tvoid set(" + attribs[0].getTypeName() + "** array, const int size);\n");
-            writer.write("\t\tconst "+ attribs[0].getTypeName() + "** get(int & size) const;\n");
+            writer.write("\t\tvoid set( class " + attribs[0].getTypeName() + "** array, const int size);\n");
+            writer.write("\t\tconst class "+ attribs[0].getTypeName() + "** get(int & size) const;\n");
             writer.write("\t\tvoid clone(" + classname + " & original);\n");
             writer.write("\t\tvoid clear();\n");
         }

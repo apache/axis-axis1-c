@@ -262,22 +262,33 @@ public class ParmHeaderFileWriter extends ParamWriter
                 attribs[i].setParamName( CUtils.sanitiseAttributeName( classname, attribs[i].getParamName()));
                 
 				// FJP Nillable vv
-				if (isElementNillable(i)  || attribs[i].isArray()) {
+				if (isElementNillable(i) || attribs[i].isArray()) {
 					if(attribs[i].isAnyType()){
 						anyCounter += 1;
-						writer
+						    writer
 						.write("\t"
 								+ getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
 								+ " * " + attribs[i].getParamName()
 								+ Integer.toString(anyCounter)
 								+ ";\n");
-						
 					}
 					else{
-					writer.write("\t"
-								 + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-								 + " * " + attribs[i].getParamName()
-								 + ";\n");
+					    if( attribs[i].isArray())
+					    {
+							writer.write("\tclass "
+									 + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+									 + " * " + attribs[i].getParamName()
+									 + ";\n");
+					        
+					    }
+					    else
+					    {
+							writer.write("\t"
+									 + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+									 + " * " + attribs[i].getParamName()
+									 + ";\n");
+					        
+					    }
 					}
 				} else {
 					// FJP Nillable ^^
