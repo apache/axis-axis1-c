@@ -492,36 +492,17 @@ public class BeanParamWriter extends ParamCPPFileWriter
 
                     if (nillable)
                     {
-                        writer.write("\tAxis_Array\tsAA" + i + ";\n\n");
-                        writer.write("\tsAA" + i + ".m_Size = 1;\n\n");
+                        String typeName = attribs[i].getTypeName();
+                        String countName = "iCount" + i;
+                        
+                        writer.write( "\tint\t\t\t\tiSize = 0;\n");
+                        writer.write( "\tconst " + typeName + " **	pp" + typeName + " = param->" + attribs[i].getParamName() + "->get( (int&) iSize);\n\n");
 
-                        if (moreThanOne)
-                        {
-                            writer.write("\tfor( int iCount" + i
-                                    + " = 0; iCount" + i
-                                    + " < param->count; iCount" + i + "++)\n");
-                        }
-                        else
-                        {
-                            writer.write("\tfor( int iCount" + i
-                                    + " = 0; iCount" + i + " < param->"
-                                    + attribs[i].getParamName()
-                                    + ".m_Size; iCount" + i + "++)\n");
-                        }
+                        writer.write("\tfor( int " + countName + " = 0; " + countName + " < iSize; " + countName + "++)\n");
 
                         writer.write("\t{\n");
 
-                        if (moreThanOne)
-                        {
-                            writer.write("\t\tif( param->infos.m_Array[iCount"
-                                    + i + "] == NULL)\n");
-                        }
-                        else
-                        {
-                            writer.write("\t\tif( param->"
-                                    + attribs[i].getParamName()
-                                    + ".m_Array[iCount" + i + "] == NULL)\n");
-                        }
+                        writer.write("\t\tif( pp" + typeName + "[" + countName + "] == NULL)\n");
 
                         writer.write("\t\t{\n");
                         writer.write("\t\t\tpSZ->serializeAsAttribute( \"<"
@@ -532,31 +513,11 @@ public class BeanParamWriter extends ParamCPPFileWriter
                         writer.write("\t\telse\n");
                         writer.write("\t\t{\n");
 
-                        if (moreThanOne)
-                        {
-                            writer.write("\t\t\tsAA"
-                                    + i
-                                    + ".m_Array = (void **)param->infos.m_Array[iCount"
-                                    + i + "];\n");
-                        }
-                        else
-                        {
-                            writer.write("\t\t\tsAA" + i + ".m_Array = param->"
-                                    + attribs[i].getParamName()
-                                    + ".m_Array[iCount" + i + "];\n\n");
-                        }
-
-                        writer.write("\t\t\tpSZ->serializeCmplxArray( &sAA" + i
-                                + ",\n");
-                        writer.write("\t\t\t\t\t\t\t\t\t (void*) Axis_Serialize_"
-                                        + arrayType + ",\n");
-                        writer.write("\t\t\t\t\t\t\t\t\t (void*) Axis_Delete_"
-                                + arrayType + ",\n");
-                        writer.write("\t\t\t\t\t\t\t\t\t (void*) Axis_GetSize_"
-                                + arrayType + ",\n");
-                        writer.write("\t\t\t\t\t\t\t\t\t \""
-                                + attribs[i].getParamName() + "\", Axis_URI_"
-                                + arrayType + ");\n");
+                        writer.write("\t\t\tpSZ->serializeCmplxArray( (Axis_Array *) &pp" + typeName + "[" + countName + "],\n");
+                        writer.write("\t\t\t\t\t\t\t\t\t (void*) Axis_Serialize_"+ arrayType + ",\n");
+                        writer.write("\t\t\t\t\t\t\t\t\t (void*) Axis_Delete_"+ arrayType + ",\n");
+                        writer.write("\t\t\t\t\t\t\t\t\t (void*) Axis_GetSize_"+ arrayType + ",\n");
+                        writer.write("\t\t\t\t\t\t\t\t\t \""+ attribs[i].getParamName() + "\", Axis_URI_" + arrayType + ");\n");
                         writer.write("\t\t}\n");
                         writer.write("\t}\n");
                     }
@@ -834,10 +795,16 @@ public class BeanParamWriter extends ParamCPPFileWriter
                                     + "\t\t\t\t\t\t\t\t  \""
                                     + attribs[i].getElementNameAsString()
                                     + "\", Axis_URI_" + arrayType + ");\n\n");
-                    writer.write("\tparam->" + attribs[i].getElementNameAsString() + " = new " + arrayType + "_Array();\n");
-                    writer.write("\tparam->" + attribs[i].getElementNameAsString() + "->clone(*(" + arrayType + "_Array *) array);\n");
-                	writer.write("\t((" + arrayType + "_Array*) array)->clear();\n");
-                	writer.write("\tAxis::AxisDelete((void *) array, XSD_ARRAY);\n");
+                    
+                    String typeName = attribs[i].getParamNameAsMember();
+                    String typeNamePointer = "p" + attribs[i].getElementNameAsString();
+                    String typeNameArray = arrayType + "_Array";
+                    
+                    writer.write("\t" + typeNameArray + " * " + typeNamePointer + " = new " + typeNameArray + "();\n");
+                    writer.write("\t" + typeNamePointer + "->clone(*(" + typeNameArray + " *) array);\n\n");
+                	writer.write("\t((" + typeNameArray + "*) array)->clear();\n\n");
+                	writer.write("\tparam->set" + typeName + "( " + typeNamePointer + ");\n\n");
+                	writer.write("\tAxis::AxisDelete((void *) array, XSD_ARRAY);\n\n");
                 }
             }
             else if (attribs[i].isSimpleType())
@@ -1036,7 +1003,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 + "[nSize];\n");
 
         writer.write("\t\t\tsize_t i = nSize/2;\n");
-        writer.write("\t\t\tfor (int ii=0; ii<i; ++ii)\n"); 
+        writer.write("\t\t\tfor (int ii = 0; ii < (int) i; ++ii)\n"); 
         writer.write("\t\t\t{\n");
         writer.write("\t\t\t\tpNew[ii] = pObj[ii];\n");
         writer.write("\t\t\t\tpObj[ii].reset();\n");
