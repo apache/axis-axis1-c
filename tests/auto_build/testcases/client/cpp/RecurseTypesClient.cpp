@@ -60,14 +60,19 @@ int main(int argc, char* argv[])
     input = new Type1 ();
     input->att_kind = Kind_CHEQUE;
     input->kind = "Check In";
-    input->followings.m_Array = new Type1[10];
-    input->followings.m_Size = 10;
-    pTemp = input->followings.m_Array;
-    for ( i = 0; i < 10; i++ ) {
-      pTemp->kind = "Sample";
-      pTemp++;
-    }
 
+	Type1_Array arrayIn;
+	Type1 ** array = new Type1*[10];
+
+    //input->followings.m_Array = new Type1[10];
+    //input->followings.m_Size = 10;
+    //pTemp = input->followings.m_Array;
+    for ( i = 0; i < 10; i++ ) {
+		array[i]=new Type1();
+        array[i]->kind = "Sample";     
+    }
+	arrayIn.set(array,10);
+	input->setfollowings(&arrayIn);
     output = ws->getInput(input);
 
     cout << "Result" << endl;
@@ -76,11 +81,17 @@ int main(int argc, char* argv[])
     else {
       cout << "\tAtt_kind = " << output->att_kind << endl;
       cout << "\tKind = " << output->kind << endl;
-      pTemp = output->followings.m_Array;
-      for ( i = 0; i < output->followings.m_Size; i++ ) {
-        cout << "\tKind [" << i << "] = " << pTemp->kind << endl;
-        pTemp++;
+	  array=NULL;
+	  int outputSize = 0;
+      const Type1 ** outArray = output->followings->get(outputSize);;
+      for ( i = 0; i < outputSize; i++ ) {
+        cout << "\tKind [" << i << "] = " << outArray[i]->kind << endl;        
       }
+	    // Clear up input array        
+        for (int deleteIndex = 0 ; deleteIndex < 10 ; deleteIndex++ )
+        {
+            delete [] array[deleteIndex];
+        }
       returnValue = 0; // Success
 
 	  bSuccess = true;
