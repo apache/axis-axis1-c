@@ -37,6 +37,7 @@ int main(int argc, char* argv[])
 		{
 	try
 	{
+        int deleteIndex = 0;
 		sprintf(endpoint, "%s", url);
 		SimpleArrays ws(endpoint);
 
@@ -79,7 +80,7 @@ int main(int argc, char* argv[])
 			cout << "failed "<<endl;
 
 		 // Clear up input array        
-        for (int deleteIndex = 0 ; deleteIndex < ARRAYSIZE ; deleteIndex++ )
+        for (deleteIndex = 0 ; deleteIndex < ARRAYSIZE ; deleteIndex++ )
         {
             delete booleanInArray[deleteIndex];
         }
@@ -140,7 +141,7 @@ int main(int argc, char* argv[])
 		else
 			cout << "failed "<<endl;
 
-		for (int deleteIndex = 0 ; deleteIndex < ARRAYSIZE ; deleteIndex++ )
+		for (deleteIndex = 0 ; deleteIndex < ARRAYSIZE ; deleteIndex++ )
         {
             delete intInArray[deleteIndex];
         }
@@ -168,7 +169,7 @@ int main(int argc, char* argv[])
 			cout << "failed "<<endl;		
 
 		// Clear up input array        
-        for (int deleteIndex = 0 ; deleteIndex < ARRAYSIZE ; deleteIndex++ )
+        for (deleteIndex = 0 ; deleteIndex < ARRAYSIZE ; deleteIndex++ )
         {
             delete longInArray[deleteIndex];
         }
@@ -196,7 +197,7 @@ int main(int argc, char* argv[])
 			cout << "failed "<<endl;	
 
 		// Clear up input array        
-        for (int deleteIndex = 0 ; deleteIndex < ARRAYSIZE ; deleteIndex++ )
+        for (deleteIndex = 0 ; deleteIndex < ARRAYSIZE ; deleteIndex++ )
         {
             delete floatInArray[deleteIndex];
         }
@@ -225,7 +226,7 @@ int main(int argc, char* argv[])
 			cout << "failed "<<endl;	
 
 		// Clear up input array        
-        for (int deleteIndex = 0 ; deleteIndex < ARRAYSIZE ; deleteIndex++ )
+        for (deleteIndex = 0 ; deleteIndex < ARRAYSIZE ; deleteIndex++ )
         {
             delete doubleInArray[deleteIndex];
         }
