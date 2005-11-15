@@ -53,7 +53,6 @@ int main(int argc, char* argv[])
 
     Type1 *input =  new Type1();
     Type1* result;
-    char *idents[10];
     int i;
 
     input->enum_int = ENUMTYPEINT_1;
@@ -62,11 +61,24 @@ int main(int argc, char* argv[])
     input->att_enum_string = strdup("one");
     input->att_enum_int = ENUMTYPEINT_1;
 
-    input->ident.m_Array = idents;
-    input->ident.m_Size = 10;
-    for ( i = 0; i < 10; i++ ) {
-      idents[i] = strdup ("Hello world");
+    int identSize = 10;
+    xsd__string* idents = new xsd__string[identSize];
+    char message[12] = "Hello world";
+    for (i = 0 ; i < identSize ; i++)
+    {
+        idents[i] = new char[12];
+        strcpy(idents[i], message);
     }
+    xsd__string_Array ident;
+    ident.set(idents, identSize);
+    input->setident(&ident);
+    
+    // clear up input array
+    for (i = 0 ; i < identSize ; i++)
+    {
+        delete idents[i];
+    }
+    delete [] idents;
 
     result = ws->getInput(input);
 

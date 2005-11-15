@@ -1125,7 +1125,7 @@ public class WSDL2Ws
                             // If there is a ref type and the ref type is not currently exposed because it's an "inner" type (marked by ">")then make sure the ref type is exposed to the user as a class
                             // in order to expose it we simply change the name !                            
                             TypeEntry referencedType =defType.getRefType(); 
-                            if(referencedType!=null && referencedType.getQName().getLocalPart().startsWith(">"))
+                            if(referencedType!=null && referencedType.getQName().getLocalPart().startsWith(">") && referencedType.getQName().getLocalPart().lastIndexOf(">") == 0)
                             {
                                 if(WSDL2Ws.verbose)
                                 {

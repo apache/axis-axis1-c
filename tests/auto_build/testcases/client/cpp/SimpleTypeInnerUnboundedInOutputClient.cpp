@@ -59,11 +59,30 @@ int main(int argc, char* argv[])
 
     if ( result == NULL )
       cout << "NULL" << endl;
-    else {
-      char **pTemp = result->ident.m_Array;
-      for ( i = 0; i < result->ident.m_Size; i++ ) {
-        cout << "Result [" << i << "] : " << pTemp[i] << endl;
-      }
+    else
+    {
+        
+        xsd__string_Array * output = result->getident();
+        int size = 0;
+        const xsd__string* array = output->get(size);
+        if (array != NULL)
+        {
+            if (size > 0)
+            {
+                for ( i = 0 ; i < size ; i++)
+                {
+                    cout << "Result [" << i << "] : " << array[i] << endl;
+                }
+            }
+            else
+            {
+                cout << "empty array" << endl;
+            }
+        }
+        else
+        {
+            cout << "NULL array" << endl;
+        }
       returnValue = 0; // Success
     }
 	bSuccess = true;
