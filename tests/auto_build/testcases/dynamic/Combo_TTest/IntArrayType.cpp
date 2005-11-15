@@ -21,7 +21,7 @@
 #include <axis/AxisWrapperAPI.hpp>
 #include <axis/Axis.hpp>
 
-#include "intArrayType.hpp"
+#include "IntArrayType.hpp"
 
 xsd__int_Array * intArrayType::getintItem()
 {
