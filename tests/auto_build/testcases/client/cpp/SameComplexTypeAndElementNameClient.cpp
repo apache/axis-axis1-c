@@ -33,18 +33,19 @@ void main( int argc, char * argv[])
 			SampleBeanBoolean *		pSBB = new SampleBeanBoolean();
 			SampleBeanComplex *		pSBC = new SampleBeanComplex();
 
-			pSBB->SampleBean.m_Array = NULL;
-			pSBB->SampleBean.m_Size = 0;
-			pSBB->SampleBeanBoolean_ = false_;
-
-			pWS->aBeanPortTypeBase( pSBB);
-
+			SampleBeanComplex_Array BBArrayIn;
+			SampleBeanComplex ** BBArray = NULL;			
+			BBArrayIn.set(BBArray,0);
+			pSBB->setSampleBean(&BBArrayIn);
+	
+			pWS->aBeanPortTypeBase( pSBB);	
 			cout << "Called aBeanPortTypeBase()" << endl;
 
-			pSBC->SampleBeanComplex_Ref.m_Array = NULL;
-			pSBC->SampleBeanComplex_Ref.m_Size = 0;
-			pSBC->Boolean = false_;
-
+			SampleBeanComplex_Array BCArrayIn;
+			SampleBeanComplex ** BCArray = NULL;			
+			BCArrayIn.set(BCArray,0);
+			
+			pSBC->setSampleBeanComplex_Ref(&BCArrayIn);
 			pWS->aBeanPortTypeComplex( pSBC);
 
 			cout << "Called aBeanPortTypeComplex()" << endl;
