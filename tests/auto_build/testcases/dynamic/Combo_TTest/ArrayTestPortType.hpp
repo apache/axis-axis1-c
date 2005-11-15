@@ -11,7 +11,7 @@
 #include <axis/ISoapAttachment.hpp>
 #include <axis/ISoapFault.hpp>
 AXIS_CPP_NAMESPACE_USE
-#include "intArrayType.hpp"
+#include "IntArrayType.hpp"
 
 class ArrayTestPortType :public Stub
 {
