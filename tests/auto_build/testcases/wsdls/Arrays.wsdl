@@ -163,7 +163,7 @@
 			transport="http://schemas.xmlsoap.org/soap/http" />
 		<wsdl:operation name="simpleArray">
 			<soap:operation
-				soapAction="http://org.apache.axis/Arrays/NewOperation" />
+				soapAction="Arrays#simpleArray" style="document"/>
 			<wsdl:input>
 				<soap:body use="literal" />
 			</wsdl:input>
@@ -172,16 +172,31 @@
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="complexTypeWithSimpleArray">
-			<wsdl:input></wsdl:input>
-			<wsdl:output></wsdl:output>
+			<soap:operation style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="complexTypeArray">
-			<wsdl:input></wsdl:input>
-			<wsdl:output></wsdl:output>
+			<soap:operation style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="complexTypeWithComplexArray">
-			<wsdl:input></wsdl:input>
-			<wsdl:output></wsdl:output>
+			<soap:operation style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
 		</wsdl:operation>
 	</wsdl:binding>
 	<wsdl:service name="Arrays">
