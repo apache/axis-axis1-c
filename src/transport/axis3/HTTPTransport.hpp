@@ -157,10 +157,10 @@ class HTTPTransport:public SOAPTransport
   /**
     * Bytes left in the payload buffer to be read
     */
-    int m_iBytesLeft;
+    unsigned int m_iBytesLeft;
 
   /**
-    * Payload lenght
+    * Payload length
     */
     unsigned int m_iContentLength;
 
