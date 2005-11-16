@@ -80,8 +80,7 @@ int main(int argc, char* argv[])
 #else
 	long long				ll = 10000;
 #endif
-	arrayIn.set(ppBBDT,100);
-	input->setinfos(&arrayIn);    
+	
       
     time_t tim;
     tim = 1100246323;
@@ -150,6 +149,8 @@ int main(int argc, char* argv[])
     ftime(&mstart);
 #endif
 
+	arrayIn.set(ppBBDT,100);
+	input->setinfos(&arrayIn);    
     for ( int ii = 0; ii < request ; ii++ ) {
         if (output) { // Samisa: memory management BP
 			int outputSize =0;
