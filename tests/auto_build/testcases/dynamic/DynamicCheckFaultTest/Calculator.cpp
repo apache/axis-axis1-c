@@ -43,17 +43,6 @@ Calculator::~Calculator()
 	m_pCall=NULL;
 }
 
-void Calculator::checkFault(const AxisChar* pName, const AxisChar* pNamespace){
-	try{ 
-       ISoapFault * sf=(ISoapFault *)m_pCall->checkFault(pName,pNamespace);
-	   string s=sf->getFaultcode();
-	   string str=sf->getFaultstring();
-       cout << "Fault Code = " << s.c_str() << endl;
-	   cout << "Fault String = " << str.c_str()<< endl;	  
-	}catch(AxisException &e){
-       cout << e.what();
-	}
-}
 
 /*
  * This method wrap the service methoddiv
@@ -66,7 +55,7 @@ xsd__int Calculator::div(xsd__int Value0, xsd__int Value1)
 	{	
 	m_pCall->initialize(CPP_DOC_PROVIDER);
 	m_pCall->setTransportProperty(SOAPACTION_HEADER , "Calculator#div");
-	m_pCall->setSOAPVersion(SOAP_VER_1_2);
+	m_pCall->setSOAPVersion(SOAP_VER_1_1);
 	m_pCall->setOperation("div", "http://localhost/axis/Calculator");
 	includeSecure();
 	char cPrefixAndParamName0[17];
@@ -88,7 +77,19 @@ xsd__int Calculator::div(xsd__int Value0, xsd__int Value1)
 	}
 	catch(AxisException& e)
 	{
-		throw;
+		cout << "Exception : " << e.what()<< endl;
+		try{ 
+			ISoapFault * sf=(ISoapFault *)m_pCall->checkFault("Fault","");
+			string s=sf->getFaultcode();
+			string str=sf->getFaultstring();
+			cout << "Fault Code = " << s.c_str() << endl;
+			cout << "Fault String = " << str.c_str()<< endl;	  
+		}catch(exception &e){
+			cout << e.what();
+		}catch(...){
+			cout << "Unspecified exception has occured" << endl;
+		}
+		
 	}
 }
 
@@ -133,12 +134,12 @@ int main(int argc, char* argv[])
 	}
 	catch(AxisException& e)
 	{
-	    cout << "Exception : " << e.what()<< endl;
-		ws.checkFault("Fault","");
+	   cout << "Exception : " << e.what()<< endl;
+		
 	}
 	catch(exception& e)
 	{
-	    cout << "Unknown exception has occured" << endl;
+	   cout << "Unknown exception has occured" << endl;
 	}
 	catch(...)
 	{
