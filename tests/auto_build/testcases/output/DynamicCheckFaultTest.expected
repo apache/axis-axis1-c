@@ -1,4 +1,4 @@
 Exception : Cannot deserialize the requested element 
 Fault Code = Server.generalException
-Fault String = org.xml.sax.SAXException: WSWS3052E: Error: Bad envelope namespace:  http://www.w3.org/2003/05/soap-envelope To see the message containing the parsing error in the log, either enable web service engine tracing or set MessageContext.setHighFidelity(true).
+Fault String = java.lang.ArithmeticException: / by zero
 ------------------------TEST COMPLETE----------------------------------
