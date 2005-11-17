@@ -35,8 +35,7 @@ public:
 	STORAGE_CLASS_INFO virtual ~Calculator();
 public: 
 	STORAGE_CLASS_INFO void SetSecure( char *, ...);
-	STORAGE_CLASS_INFO xsd__int div(xsd__int Value0,xsd__int Value1);
-	STORAGE_CLASS_INFO void checkFault(const AxisChar* pName, const AxisChar* pNamespace);
+	STORAGE_CLASS_INFO xsd__int div(xsd__int Value0,xsd__int Value1);	
 
 private:
 	void includeSecure();
