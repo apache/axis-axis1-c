@@ -83,7 +83,7 @@ int main(int argc, char* argv[])
       cout << "\tKind = " << output->kind << endl;
 	  array=NULL;
 	  int outputSize = 0;
-      const Type1 ** outArray = output->followings->get(outputSize);;
+      Type1 ** outArray = output->followings->get(outputSize);;
       for ( i = 0; i < outputSize; i++ ) {
         cout << "\tKind [" << i << "] = " << outArray[i]->kind << endl;        
       }

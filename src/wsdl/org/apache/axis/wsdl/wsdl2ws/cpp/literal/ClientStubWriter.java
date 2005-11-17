@@ -934,11 +934,12 @@ public class ClientStubWriter
 						+ CUtils.getXSDTypeForBasicType (containedType) 
 						+ ", \"" + returntype.getParamName () + "\", 0);\n");
 				writer.write ("\t\t\tRetArray->clone(*RetAxisArray);\n");
+				writer.write ("\t\t\tAxis::AxisDelete( (void *)RetAxisArray, XSD_ARRAY);\n");
 		    }
 		    else
 		    {
 				containedType = qname.getLocalPart ();
-				writer.write("\t\t\tAxis_Array * RetAxisArray = m_pCall->getCmplxArray((void*) Axis_DeSerialize_"
+				writer.write("\t\t\tRetArray = (" + containedType + "_Array *) m_pCall->getCmplxArray(RetArray, (void*) Axis_DeSerialize_"
 						+ containedType 
 						+ ", (void*) Axis_Create_"
 					      + containedType
@@ -951,11 +952,7 @@ public class ClientStubWriter
 					      + "\", Axis_URI_"
 					      + containedType
 					      + ");\n");
-				writer.write("\t\t\tRetArray->clone(*(" + containedType + "_Array *)RetAxisArray);\n");
-				writer.write("\t\t\t((" + containedType + "_Array *)RetAxisArray)->clear();\n"); 
-				
 		    }
-		    writer.write ("\t\t\tAxis::AxisDelete( (void *)RetAxisArray, XSD_ARRAY);\n");
 		    writer.write ("\t\t}\n");
 		    writer.write ("\t}\n");
 		    writer.write ("\tm_pCall->unInitialize();\n");

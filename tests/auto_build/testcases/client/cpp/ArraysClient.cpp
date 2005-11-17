@@ -150,7 +150,7 @@ int main(int argc, char* argv[])
 			ComplexTypeWithSimpleElement_Array * complexOutputAxis_Array = ws.complexTypeArray(&complexArray);
 
 			outputSize = 0;
-			const ComplexTypeWithSimpleElement** complexOutputArray = complexOutputAxis_Array->get(outputSize);
+			ComplexTypeWithSimpleElement** complexOutputArray = complexOutputAxis_Array->get(outputSize);
 			cout << "Complex array size is " << outputSize << endl;
 			if (complexOutputArray != NULL)
 			{
@@ -187,7 +187,7 @@ int main(int argc, char* argv[])
 				{
 					if (complexOutputArray[count] != NULL)
 					{
-						cout << ((ComplexTypeWithSimpleElement) *complexOutputArray[count]).getsimpleType() << endl;
+						cout << complexOutputArray[count]->getsimpleType() << endl;
 					}
 					else
 					{
@@ -207,6 +207,48 @@ int main(int argc, char* argv[])
 				delete complexInputArray[count];
 			}
 			delete [] complexInputArray;
+
+			MoreComplexType_Array moreComplexTypeArray;
+			MoreComplexType** arrayOfMoreComplexType = new MoreComplexType*[inputSize];
+			for (count = 0 ; count < inputSize ; count++ )
+			{
+				xsd__string temp = new char[strlen("Hello World!") + 1];
+				strcpy(temp, "Hello World!");
+				arrayOfMoreComplexType[count] = new MoreComplexType();
+				arrayOfMoreComplexType[count]->setsimpleString(temp);
+			}
+			moreComplexTypeArray.set(arrayOfMoreComplexType, inputSize);
+			MoreComplexType_Array * outputMoreComplexTypeArray  = ws.moreComplexTypeArray(&moreComplexTypeArray);
+			outputSize = 0;
+			MoreComplexType** outputArrayOfMoreComplexType = outputMoreComplexTypeArray->get(outputSize);
+			cout <<"Complex array size is " << outputSize << endl;
+			if (outputArrayOfMoreComplexType != NULL)
+			{
+				for (count = 0 ; count < outputSize ; count++)
+				{
+					if (outputArrayOfMoreComplexType[count] != NULL)
+					{
+						cout << outputArrayOfMoreComplexType[count]->getsimpleString() << endl;
+					}
+					else
+					{
+						cout << "NULL" << endl;
+					}
+				}
+			}
+			else
+			{
+				cout << "NULL" << endl;
+			}
+
+			//Clean up more complex input array
+			for (count = 0 ; count < inputSize ; count++)
+			{
+				delete arrayOfMoreComplexType[count];
+			}
+			delete [] arrayOfMoreComplexType;
+			delete outputMoreComplexTypeArray;
+
 
             bSuccess = 1;
         }
@@ -514,7 +556,7 @@ void testArrayOfComplexType()
 	array.set(inputArray, inputSize);
 
 	int outputSize = 0;
-	const ComplexTypeWithSimpleElement** outputArray = array.get(outputSize);
+	ComplexTypeWithSimpleElement** outputArray = array.get(outputSize);
 	cout << "Size is " << outputSize << endl;
 	if (outputArray != NULL)
 	{

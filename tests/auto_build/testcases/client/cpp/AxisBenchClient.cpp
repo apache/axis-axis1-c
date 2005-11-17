@@ -73,7 +73,7 @@ int main(int argc, char* argv[])
       
 //    input->infos.m_Array = new BenchBasicDataType[input->count];
 	BenchBasicDataType_Array arrayIn;
-	BenchBasicDataType **	ppBBDT = (BenchBasicDataType **) new BenchBasicDataType *[input->count];
+	BenchBasicDataType **	ppBBDT = new BenchBasicDataType *[input->count];
 
 #ifdef WIN32
 	__int64					ll = 10000;
@@ -114,17 +114,7 @@ int main(int argc, char* argv[])
         type->HexBinary.__size=i;
         type->HexBinary.__ptr=buffer;
 
-		if( i == 90)
-		{
-			*ppBBDT = type;
-//			*ppBBDT = NULL;
-		}
-		else
-		{
-			*ppBBDT = type;
-		}
-
-		ppBBDT++;
+		ppBBDT[i] = type;
 
 		if( ll == 0)
 		{
@@ -154,7 +144,7 @@ int main(int argc, char* argv[])
     for ( int ii = 0; ii < request ; ii++ ) {
         if (output) { // Samisa: memory management BP
 			int outputSize =0;
-			const BenchBasicDataType ** outArray =output->infos->get(outputSize); 
+			BenchBasicDataType ** outArray =output->infos->get(outputSize); 
             for (int i = 0; i < outputSize; i++)
                 delete outArray[i];
             delete output;
@@ -190,7 +180,7 @@ int main(int argc, char* argv[])
       cout << "Input Count : " << input->count << endl;
       cout << "Count : " << output->count << endl;
 	  int outputSize = 0;
-	  const BenchBasicDataType ** outArray =output->infos->get(outputSize); 
+	  BenchBasicDataType ** outArray =output->infos->get(outputSize); 
       for ( ; i < output->count ; i++ ) 
       {
 		  if( outArray[i] != (BenchBasicDataType *) 0xcdcdcdcd)
@@ -274,10 +264,6 @@ int main(int argc, char* argv[])
 	  delete input;
 	  if (output)
 	  {
-        int outputSize = 0;
-		const BenchBasicDataType ** outArray =output->infos->get(outputSize); 
-	    for (int i = 0; i < outputSize; i++)
-	      delete (BenchBasicDataType*)(outArray[i]);
 	    delete output;
 	  }
   }

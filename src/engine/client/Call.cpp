@@ -409,11 +409,11 @@ Axis_Array* Call::getBasicArray (XSDTYPE nType, const AxisChar* pName,
     return m_pIWSDZ->getBasicArray (nType, pName, pNamespace);
 }
 
-Axis_Array* Call::getCmplxArray (void* pDZFunct, void* pCreFunct, 
+Axis_Array* Call::getCmplxArray (Axis_Array * pArray, void* pDZFunct, void* pCreFunct, 
     void* pDelFunct, void* pSizeFunct, const AxisChar* pName, 
     const AxisChar* pNamespace)
 {
-    return m_pIWSDZ->getCmplxArray (pDZFunct, pCreFunct, pDelFunct, pSizeFunct,
+    return m_pIWSDZ->getCmplxArray (pArray, pDZFunct, pCreFunct, pDelFunct, pSizeFunct,
         pName, pNamespace);
 }
 

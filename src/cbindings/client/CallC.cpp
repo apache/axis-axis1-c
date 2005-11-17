@@ -412,7 +412,7 @@ AXISC_STORAGE_CLASS_INFO void * axiscGetCmplxObjectCall(AXISCHANDLE call, void *
 	return c->getCmplxObject(pDZFunct,pCreFunct,pDelFunct,pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO Axisc_Array* axiscGetCmplxArrayCall(AXISCHANDLE call, void * pDZFunct, 
+AXISC_STORAGE_CLASS_INFO Axisc_Array* axiscGetCmplxArrayCall(AXISCHANDLE call, Axisc_Array* pArray, void * pDZFunct, 
 	void * pCreFunct, void * pDelFunct, void * pSizeFunct, 
 	const AxiscChar * pName, const AxiscChar * pNamespace) {
 	//TODO: Unimplemented

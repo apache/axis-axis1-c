@@ -105,7 +105,7 @@ int main(int argc, char* argv[])
 		delete []array;
 		response = ws.echoNestedComplex(&complexType2);
 		int outputSize =0;
-		const ComplexType1 ** output = response->getcomplexType1Array()->get(outputSize);
+		ComplexType1 ** output = response->getcomplexType1Array()->get(outputSize);
 		cout << output[0]->ct1_string << endl;
 		cout << output[0]->ct1_int << endl;
 		cout << output[0]->simpleArrays->stringArray->get(outputSize)[0] << " ";

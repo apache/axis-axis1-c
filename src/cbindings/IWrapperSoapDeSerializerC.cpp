@@ -43,7 +43,7 @@ AXISC_STORAGE_CLASS_INFO void * axiscCheckForFault(AXISCHANDLE wrapperSoapDeSeri
 	return dz->checkForFault(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO Axisc_Array* axiscGetCmplxArrayIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, void * pDZFunct, 
+AXISC_STORAGE_CLASS_INFO Axisc_Array* axiscGetCmplxArrayIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, Axisc_Array * pArray, void * pDZFunct, 
 	void * pCreFunct, void * pDelFunct, void * pSizeFunct, 
 	const AxiscChar * pName, const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;

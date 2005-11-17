@@ -70,7 +70,7 @@ int main(int argc, char* argv[])
         result = ws->getInput(&input);
         cout << "Success " << endl;
 		int outputSize=0;
-        const Type1 **arrayResult = result->get(outputSize);
+        Type1 **arrayResult = result->get(outputSize);
         for ( i = 0; i < 10; i++) {
             cout << " Result " << arrayResult[i]->index << " : " << arrayResult[i]->kind << endl;
         }

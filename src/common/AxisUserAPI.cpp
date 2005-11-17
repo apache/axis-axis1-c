@@ -400,13 +400,327 @@ void Axis_Array::set(void** array, int size, XSDTYPE type)
     }
 }
 
-const void** Axis_Array::get(int& size, XSDTYPE& type) const
+void** Axis_Array::get(int& size, XSDTYPE& type) const
 {
     size = m_Size;
     type = m_Type;
-    return (const void**) m_Array;
+    return m_Array;
 }
 
+
+void Axis_Array::addElement(void* element)
+{
+    void** temp = new void*[m_Size+1];
+    for (int count = 0 ; count < m_Size ; count++ )
+    {
+        temp[count] = m_Array[count];
+    }
+    if (m_Array != NULL)
+    {
+        delete [] m_Array;
+    }
+    m_Array = temp;
+    m_belongsToAxisEngine = true;
+ 
+    if ( element == NULL)
+    {
+        m_Array[m_Size] = NULL;
+    }
+    else
+    {
+        switch (m_Type)
+        {
+            case XSD_DURATION:
+            {
+                ((xsd__duration**) m_Array)[m_Size] = new xsd__duration();
+                *((xsd__duration**)m_Array)[m_Size] = *(xsd__duration*) element;
+                break;
+            }
+            case XSD_DATETIME:
+            {
+                ((xsd__dateTime**) m_Array)[m_Size] = new xsd__dateTime();
+                *((xsd__dateTime**)m_Array)[m_Size] = *(xsd__dateTime*) element;
+                break;
+            }
+            case XSD_TIME:
+            {
+                ((xsd__time**) m_Array)[m_Size] = new xsd__time();
+                *((xsd__time**)m_Array)[m_Size] = *(xsd__time*) element;
+                break;
+            }
+            case XSD_DATE:
+            {
+                ((xsd__date**) m_Array)[m_Size] = new xsd__date();
+                *((xsd__date**)m_Array)[m_Size] = *(xsd__date*) element;
+                break;
+            }
+            case XSD_GYEARMONTH:
+            {
+                ((xsd__gYearMonth**) m_Array)[m_Size] = new xsd__gYearMonth();
+                *((xsd__gYearMonth**)m_Array)[m_Size] = *(xsd__gYearMonth*) element;
+                break;
+            }           
+            case XSD_GYEAR:
+            {
+                ((xsd__gYear**) m_Array)[m_Size] = new xsd__gYear();
+                *((xsd__gYear**)m_Array)[m_Size] = *(xsd__gYear*) element;
+                break;
+            }
+            case XSD_GMONTHDAY:
+            {
+                ((xsd__gMonthDay**) m_Array)[m_Size] = new xsd__gMonthDay();
+                *((xsd__gMonthDay**)m_Array)[m_Size] = *(xsd__gMonthDay*) element;
+                break;
+            }
+            case XSD_GDAY:
+            {
+                ((xsd__gDay**) m_Array)[m_Size] = new xsd__gDay();
+                *((xsd__gDay**)m_Array)[m_Size] = *(xsd__gDay*) element;
+                break;
+            }
+            case XSD_GMONTH:
+            {
+                ((xsd__gMonth**) m_Array)[m_Size] = new xsd__gMonth();
+                *((xsd__gMonth**)m_Array)[m_Size] = *(xsd__gMonth*) element;
+                break;
+            }
+            case XSD_STRING:
+            {
+                ((xsd__string*) m_Array)[m_Size] = new char[strlen((xsd__string) element)+1];
+                strcpy(((xsd__string*) m_Array)[m_Size], (xsd__string) element);
+                break;
+            }
+            case XSD_NORMALIZEDSTRING:
+            {
+                ((xsd__normalizedString*) m_Array)[m_Size] = new char[strlen((xsd__normalizedString) element)+1];
+                strcpy(((xsd__normalizedString*) m_Array)[m_Size], (xsd__normalizedString) element);
+                break;
+            }
+            case XSD_TOKEN:
+            {
+                ((xsd__token*) m_Array)[m_Size] = new char[strlen((xsd__token) element)+1];
+                strcpy(((xsd__token*) m_Array)[m_Size], (xsd__token) element);
+                break;
+            }
+            case XSD_LANGUAGE:
+            {
+                ((xsd__language*) m_Array)[m_Size] = new char[strlen((xsd__language) element)+1];
+                strcpy(((xsd__language*) m_Array)[m_Size], (xsd__language) element);
+                break;
+            }
+            case XSD_NAME:
+            {
+                ((xsd__Name*) m_Array)[m_Size] = new char[strlen((xsd__Name) element)+1];
+                strcpy(((xsd__Name*) m_Array)[m_Size], (xsd__Name) element);
+                break;
+            }
+            case XSD_NCNAME:
+            {
+                ((xsd__NCName*) m_Array)[m_Size] = new char[strlen((xsd__NCName) element)+1];
+                strcpy(((xsd__NCName*) m_Array)[m_Size], (xsd__NCName) element);
+                break;
+            }
+            case XSD_ID:
+            {
+                ((xsd__ID*) m_Array)[m_Size] = new char[strlen((xsd__ID) element)+1];
+                strcpy(((xsd__ID*) m_Array)[m_Size], (xsd__ID) element);
+                break;
+            }
+            case XSD_IDREF:
+            {
+                ((xsd__IDREF*) m_Array)[m_Size] = new char[strlen((xsd__IDREF) element)+1];
+                strcpy(((xsd__IDREF*) m_Array)[m_Size], (xsd__IDREF) element);
+                break;
+            }
+            case XSD_IDREFS:
+            {
+                ((xsd__IDREFS*) m_Array)[m_Size] = new char[strlen((xsd__IDREFS) element)+1];
+                strcpy(((xsd__IDREFS*) m_Array)[m_Size], (xsd__IDREFS) element);
+                break;
+            }
+            case XSD_ENTITY:
+            {
+                ((xsd__ENTITY*) m_Array)[m_Size] = new char[strlen((xsd__ENTITY) element)+1];
+                strcpy(((xsd__ENTITY*) m_Array)[m_Size], (xsd__ENTITY) element);
+                break;
+            }
+            case XSD_ENTITIES:
+            {
+                ((xsd__ENTITIES*) m_Array)[m_Size] = new char[strlen((xsd__ENTITIES) element)+1];
+                strcpy(((xsd__ENTITIES*) m_Array)[m_Size], (xsd__ENTITIES) element);
+                break;
+            }
+            case XSD_NMTOKEN:
+            {
+                ((xsd__NMTOKEN*) m_Array)[m_Size] = new char[strlen((xsd__NMTOKEN) element)+1];
+                strcpy(((xsd__NMTOKEN*) m_Array)[m_Size], (xsd__NMTOKEN) element);
+                break;
+            }
+            case XSD_NMTOKENS:
+            {
+                ((xsd__NMTOKENS*) m_Array)[m_Size] = new char[strlen((xsd__NMTOKENS) element)+1];
+                strcpy(((xsd__NMTOKENS*) m_Array)[m_Size], (xsd__NMTOKENS) element);
+                break;
+            }
+            case XSD_BOOLEAN:
+            {
+                ((xsd__boolean**) m_Array)[m_Size] = new xsd__boolean();
+                *((xsd__boolean**)m_Array)[m_Size] = *(xsd__boolean*) element;
+                break;
+            }
+            case XSD_BASE64BINARY:
+            {
+                xsd__base64Binary* pCloneTemp = new xsd__base64Binary();
+                xsd__base64Binary* pOriginalTemp = (xsd__base64Binary*) element;
+        
+                pCloneTemp->__size = pOriginalTemp->__size;
+                pCloneTemp->__ptr = new unsigned char[pCloneTemp->__size];
+                memcpy( pCloneTemp->__ptr, pOriginalTemp->__ptr, pCloneTemp->__size);
+                ((xsd__base64Binary**) m_Array)[m_Size] = pCloneTemp;
+                break;
+            }
+            case XSD_HEXBINARY:
+            {
+                xsd__hexBinary* pCloneTemp = new xsd__hexBinary();
+                xsd__hexBinary* pOriginalTemp = (xsd__hexBinary*) element;
+    
+                pCloneTemp->__size = pOriginalTemp->__size;
+                pCloneTemp->__ptr = new unsigned char[pCloneTemp->__size];
+                memcpy( pCloneTemp->__ptr, pOriginalTemp->__ptr, pCloneTemp->__size);
+                ((xsd__hexBinary**) m_Array)[m_Size] = pCloneTemp;
+                break;
+            }
+            case XSD_FLOAT:
+            {
+                ((xsd__float**) m_Array)[m_Size] = new xsd__float();
+                *((xsd__float**)m_Array)[m_Size] = *(xsd__float*) element;
+                break;
+            }
+            case XSD_DECIMAL:
+            {
+                ((xsd__decimal**) m_Array)[m_Size] = new xsd__decimal();
+                *((xsd__decimal**)m_Array)[m_Size] = *(xsd__decimal*) element;
+                break;
+            }
+            case XSD_INTEGER:
+            {
+                ((xsd__integer**) m_Array)[m_Size] = new xsd__integer();
+                *((xsd__integer**)m_Array)[m_Size] = *(xsd__integer*) element;
+                break;
+            }
+            case XSD_NONPOSITIVEINTEGER:
+            {
+                ((xsd__nonPositiveInteger**) m_Array)[m_Size] = new xsd__nonPositiveInteger();
+                *((xsd__nonPositiveInteger**)m_Array)[m_Size] = *(xsd__nonPositiveInteger*) element;
+                break;
+            }
+            case XSD_NEGATIVEINTEGER:
+            {
+                ((xsd__negativeInteger**) m_Array)[m_Size] = new xsd__negativeInteger();
+                *((xsd__negativeInteger**)m_Array)[m_Size] = *(xsd__negativeInteger*) element;
+                break;
+            }
+            case XSD_LONG:
+            {
+                ((xsd__long**) m_Array)[m_Size] = new xsd__long();
+                *((xsd__long**)m_Array)[m_Size] = *(xsd__long*) element;
+                break;
+            }
+            case XSD_INT:
+            {
+                ((xsd__int**) m_Array)[m_Size] = new xsd__int();
+                *((xsd__int**)m_Array)[m_Size] = *(xsd__int*) element;
+                break;
+            }
+            case XSD_SHORT:
+            {
+                ((xsd__short**) m_Array)[m_Size] = new xsd__short();
+                *((xsd__short**)m_Array)[m_Size] = *(xsd__short*) element;
+                break;
+            }
+            case XSD_BYTE:
+            {
+                ((xsd__byte**) m_Array)[m_Size] = new xsd__byte();
+                *((xsd__byte**)m_Array)[m_Size] = *(xsd__byte*) element;
+                break;
+            }
+            case XSD_NONNEGATIVEINTEGER:
+            {
+                ((xsd__nonNegativeInteger**) m_Array)[m_Size] = new xsd__nonNegativeInteger();
+                *((xsd__nonNegativeInteger**)m_Array)[m_Size] = *(xsd__nonNegativeInteger*) element;
+                break;
+            }
+            case XSD_UNSIGNEDLONG:
+            {
+                ((xsd__unsignedLong**) m_Array)[m_Size] = new xsd__unsignedLong();
+                *((xsd__unsignedLong**)m_Array)[m_Size] = *(xsd__unsignedLong*) element;
+                break;
+            }
+            case XSD_UNSIGNEDINT:
+            {
+                ((xsd__unsignedInt**) m_Array)[m_Size] = new xsd__unsignedInt();
+                *((xsd__unsignedInt**)m_Array)[m_Size] = *(xsd__unsignedInt*) element;
+                break;
+            }
+            case XSD_UNSIGNEDSHORT:
+            {
+                ((xsd__unsignedShort**) m_Array)[m_Size] = new xsd__unsignedShort();
+                *((xsd__unsignedShort**)m_Array)[m_Size] = *(xsd__unsignedShort*) element;
+                break;
+            }
+            case XSD_UNSIGNEDBYTE:
+            {
+                ((xsd__unsignedByte**) m_Array)[m_Size] = new xsd__unsignedByte();
+                *((xsd__unsignedByte**)m_Array)[m_Size] = *(xsd__unsignedByte*) element;
+                break;
+            }
+            case XSD_POSITIVEINTEGER:
+            {
+                ((xsd__positiveInteger**) m_Array)[m_Size] = new xsd__positiveInteger();
+                *((xsd__positiveInteger**)m_Array)[m_Size] = *(xsd__positiveInteger*) element;
+                break;
+            }
+            case XSD_DOUBLE:
+            {
+                ((xsd__double**) m_Array)[m_Size] = new xsd__double();
+                *((xsd__double**)m_Array)[m_Size] = *(xsd__double*) element;
+                break;
+            }
+            case XSD_ANYURI:
+            {
+                ((xsd__anyURI*) m_Array)[m_Size] = new char[strlen((xsd__anyURI) element)+1];
+                strcpy(((xsd__anyURI*) m_Array)[m_Size], (xsd__anyURI) element);
+                break;
+            }
+            case XSD_QNAME:
+            {
+                ((xsd__QName*) m_Array)[m_Size] = new char[strlen((xsd__QName) element)+1];
+                strcpy(((xsd__QName*) m_Array)[m_Size], (xsd__QName) element);
+                break;
+            }
+            case XSD_NOTATION:
+            {
+                ((xsd__NOTATION*) m_Array)[m_Size] = new char[strlen((xsd__NOTATION) element)+1];
+                strcpy(((xsd__NOTATION*) m_Array)[m_Size], (xsd__NOTATION) element);
+                break;
+            }
+            case XSD_ARRAY:
+            {
+                ((Axis_Array**) m_Array)[m_Size] = new Axis_Array(*(Axis_Array*) element);
+            }
+            case USER_TYPE:
+            {
+                m_Array[m_Size] = element;
+            }
+            case XSD_UNKNOWN:
+            case XSD_ANY:
+            case ATTACHMENT:
+            default:
+                break;
+        }
+    }
+    m_Size++;
+}
 
 Axis_Array::~Axis_Array()
 {

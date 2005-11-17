@@ -112,8 +112,10 @@ public:
     int setInputStream(SOAPTransport* pInputStream);
     SoapDeSerializer();
     virtual ~SoapDeSerializer();
-    /* Method used by wrappers to get a deserialized Array of complex types */
-    Axis_Array* AXISCALL getCmplxArray(void* pDZFunct, void* pCreFunct, 
+    /* Method used by wrappers to get a deserialized Array of complex types 
+     * Note:  returned Axis_Array object is the same object as passed in to this
+     * method. */
+    Axis_Array* AXISCALL getCmplxArray(Axis_Array* pArray, void* pDZFunct, void* pCreFunct, 
         void* pDelFunct, void* pSizeFunct, const AxisChar* pName, 
         const AxisChar* pNamespace);
     /* Method used by wrappers to get a deserialized Array of basic types */

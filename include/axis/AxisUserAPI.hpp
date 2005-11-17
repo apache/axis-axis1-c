@@ -355,12 +355,19 @@ class STORAGE_CLASS_INFO Axis_Array {
      * @param type, this will be updated with the type of the data returned.
      * @return c-style array of pointers to the array data.
      */
-    const void** get(int& size, XSDTYPE& type) const;
+    void** get(int& size, XSDTYPE& type) const;
     
     /**
      * Clear the array, and it's data
      */
     void clear();
+
+    /**
+     * Add an additional element to the array.
+     * @param element to be added to the array. This will be appended to the
+     * end of the existing array.
+     */
+    void addElement(void* element);
 
     friend class SoapDeSerializer;
     friend class SoapSerializer;

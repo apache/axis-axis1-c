@@ -155,10 +155,10 @@ public class ArrayParamWriter extends ParamWriter
     {
         try
         {
-            writer.write("const " + attribs[0].getTypeName() + "** " + classname + "::" + "get(int & size) const\n");
+            writer.write(attribs[0].getTypeName() + "** " + classname + "::" + "get(int & size) const\n");
             writer.write("{\n");
             writer.write("\tXSDTYPE type;\n");
-            writer.write("\treturn (const " + attribs[0].getTypeName() + "**) Axis_Array::get(size, type);\n");
+            writer.write("\treturn (" + attribs[0].getTypeName() + "**) Axis_Array::get(size, type);\n");
             writer.write("}\n\n");
         }
         catch (IOException e)

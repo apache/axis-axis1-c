@@ -59,7 +59,7 @@ void printResponse(attrlisterr* ale)
 		if (ale->attrlist_Ref != NULL)
 		{
 			int outputSize =0;
-			const namepair ** output =ale->attrlist_Ref->getitem()->get(outputSize);
+			namepair ** output =ale->attrlist_Ref->getitem()->get(outputSize);
 			//if (ale->attrlist_Ref->item.m_Array[0] != NULL)
 			if (output[0] != NULL)
 			{
@@ -194,7 +194,7 @@ int main(int argc, char* argv[])
 	}
 	catch(exception& e)
 	{
-	    cout << "Unknown exception has occured" << endl;
+	    cout << "Unknown exception has occured : " << e.what() << endl;
 	}
 	catch(...)
 	{
