@@ -1019,7 +1019,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
             for (int i = 0 ; i < attribs.length ; i++)
             {
                 if (attribs[i].isArray())
-                {
+                {	
                     writer.write("\t" + attribs[i].getParamName() + " = new " + attribs[i].getTypeName() + "_Array(*original." + attribs[i].getParamName() + ");\n");
                 }
                 else
@@ -1038,7 +1038,21 @@ public class BeanParamWriter extends ParamCPPFileWriter
 	                }
 	                else
 	                {
-                        writer.write("\t" + attribs[i].getParamName() + " = original." + attribs[i].getParamName() + ";\n");
+	                    if (attribs[i].isSimpleType())
+	                    {
+	                        writer.write("\t" + attribs[i].getParamName() + " = original." + attribs[i].getParamName() + ";\n");
+	                    }
+	                    else
+	                    {
+		                	writer.write("\tif (original." + attribs[i].getParamName() + " != NULL)\n");
+		                	writer.write("\t{\n");
+		                	writer.write("\t\t" + attribs[i].getParamName() + " = new " + attribs[i].getTypeName() + "(*(original." + attribs[i].getParamName() + "));\n");
+		                	writer.write("\t}\n");
+		                	writer.write("\telse\n");
+		                	writer.write("\t{\n");
+		                	writer.write("\t\t" + attribs[i].getParamName() + " = NULL;\n");
+		                	writer.write("\t}\n");
+	                    }
                     }
                 }
             }
@@ -1077,12 +1091,12 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     {
                     	anyCounter += 1;
                     	writer.write("\t" + attribs[i].getParamNameAsMember() + Integer.toString(anyCounter)
-                                + "= 0;\n");
+                                + "= NULL;\n");
                     }
                 	else
                     {
                 	    writer.write("\t" + attribs[i].getParamNameAsMember()
-                	            + "= 0;\n");
+                	            + "= NULL;\n");
                 	}
                 }
                 else if (isElementNillable(i))
@@ -1135,7 +1149,10 @@ public class BeanParamWriter extends ParamCPPFileWriter
             	if(attribs[i].isArray())
                 {
                     writer.write("\tif (" + name + "!= NULL)\n");
+                    writer.write("\t{\n");
                     writer.write("\t\tdelete " + name + ";\n");
+                    writer.write("\t\t" + name + " = NULL;\n");
+                    writer.write("\t}\n");
             	}
             	else if (attribs[i].isAnyType())
                 {
@@ -1151,14 +1168,20 @@ public class BeanParamWriter extends ParamCPPFileWriter
             	}
             	else if (!attribs[i].isSimpleType())
                 {
-                    writer.write("\tif (" + name + " != NULL)\n");
+                    writer.write("\tif (" + name + "!= NULL)\n");
+                    writer.write("\t{\n");
                     writer.write("\t\tdelete " + name + ";\n");
+                    writer.write("\t\t" + name + " = NULL;\n");
+                    writer.write("\t}\n");
                 }
                 else if (CUtils.isPointerType(typename))
                 {
                     // found pointer type
-                    writer.write("\tif (" + name + " != NULL)\n");
+                    writer.write("\tif (" + name + "!= NULL)\n");
+                    writer.write("\t{\n");
                     writer.write("\t\tdelete [] " + name + ";\n");
+                    writer.write("\t\t" + name + " = NULL;\n");
+                    writer.write("\t}\n");
                 }
             }
             writer.write("}\n");
