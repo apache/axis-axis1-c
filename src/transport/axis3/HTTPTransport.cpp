@@ -1589,10 +1589,9 @@ void HTTPTransport::processHTTPHeader()
 
 void HTTPTransport::checkHTTPStatusCode()
 {
-// Now have a valid HTTP header that is not 100.  Check that the status
-// returned by the HTTP response status code indicates a valid message.  If some
-// type of fault message (i.e. 404, 500, etc.), then throw an exception.
-	if ( (m_iResponseHTTPStatusCode < 200 ||
+// Now have a valid HTTP header that is not 100.
+	if ( m_iResponseHTTPStatusCode != 500 &&
+		 (m_iResponseHTTPStatusCode < 200 ||
 		  m_iResponseHTTPStatusCode >= 300))
 	{
 		m_GetBytesState = eWaitingForHTTPHeader;
