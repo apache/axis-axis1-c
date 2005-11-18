@@ -2,7 +2,7 @@
     <name>ComplexTypeOptionalAll</name>
     <description>ComplexTypeOptionalAll</description>
     <clientLang>cpp</clientLang>
-    <clientCode>ComplexTypeOptionalAllsClient.cpp</clientCode>
+    <clientCode>ComplexTypeOptionalAllClient.cpp</clientCode>
     <wsdl>ComplexTypeOptionalAll.wsdl</wsdl>
     <expected>
         <output>
