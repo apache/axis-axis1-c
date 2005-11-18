@@ -126,7 +126,7 @@ int main(int argc, char* argv[])
 	}
 	catch(exception& e)
 	{
-	    cout << "Unknown exception has occured" << endl;
+	    cout << "Unknown exception has occured : " << e.what() << endl;
 	}
 	catch(...)
 	{

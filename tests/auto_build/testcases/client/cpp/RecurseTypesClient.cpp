@@ -53,23 +53,24 @@ int main(int argc, char* argv[])
     } else
       ws = new RecurseTypesWS();
 
-    Kind inputAtt,*outputAtt;
-    Type1 *input,*output,*pTemp;
+    Type1 *input,*output;
     int i;
 
     input = new Type1 ();
-    input->att_kind = Kind_CHEQUE;
-    input->kind = "Check In";
+    input->att_kind = new char[strlen(Kind_CHEQUE) + 1];
+	strcpy(input->att_kind, Kind_CHEQUE);
+    input->kind = new char[strlen("Check In") + 1];
+	strcpy(input->kind, "Check In");
 
 	Type1_Array arrayIn;
 	Type1 ** array = new Type1*[10];
 
-    //input->followings.m_Array = new Type1[10];
-    //input->followings.m_Size = 10;
-    //pTemp = input->followings.m_Array;
-    for ( i = 0; i < 10; i++ ) {
+    for ( i = 0; i < 10; i++ )
+	{
 		array[i]=new Type1();
-        array[i]->kind = "Sample";     
+        array[i]->kind = new char[strlen("Sample") + 1];
+		strcpy(array[i]->kind, "Sample");
+		array[i]->index = 0;
     }
 	arrayIn.set(array,10);
 	input->setfollowings(&arrayIn);
@@ -81,7 +82,6 @@ int main(int argc, char* argv[])
     else {
       cout << "\tAtt_kind = " << output->att_kind << endl;
       cout << "\tKind = " << output->kind << endl;
-	  array=NULL;
 	  int outputSize = 0;
       Type1 ** outArray = output->followings->get(outputSize);;
       for ( i = 0; i < outputSize; i++ ) {
@@ -90,8 +90,11 @@ int main(int argc, char* argv[])
 	    // Clear up input array        
         for (int deleteIndex = 0 ; deleteIndex < 10 ; deleteIndex++ )
         {
-            delete [] array[deleteIndex];
+            delete array[deleteIndex];
         }
+		delete [] array;
+		delete input;
+		delete output;
       returnValue = 0; // Success
 
 	  bSuccess = true;

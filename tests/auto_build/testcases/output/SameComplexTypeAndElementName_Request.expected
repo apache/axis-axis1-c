@@ -8,7 +8,7 @@ Content-Length: 468
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <SOAP-ENV:Body>
 <ns1:anElementBase xmlns:ns1="SameComplexTypeAndElementName">
-<Element><ns2:SampleBeanBoolean_ xmlns:ns2="SameComplexTypeAsElement">false</ns2:SampleBeanBoolean_>
+<Element><ns3:SampleBeanBoolean_ xmlns:ns3="SameComplexTypeAsElement">false</ns3:SampleBeanBoolean_>
 </Element>
 </ns1:anElementBase>
 </SOAP-ENV:Body>
@@ -24,7 +24,7 @@ Content-Length: 452
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <SOAP-ENV:Body>
 <ns1:anElementComplex xmlns:ns1="SameComplexTypeAndElementName">
-<Element><ns2:Boolean xmlns:ns2="SameComplexTypeAsElement">false</ns2:Boolean>
+<Element><ns3:Boolean xmlns:ns3="SameComplexTypeAsElement">false</ns3:Boolean>
 </Element>
 </ns1:anElementComplex>
 </SOAP-ENV:Body>

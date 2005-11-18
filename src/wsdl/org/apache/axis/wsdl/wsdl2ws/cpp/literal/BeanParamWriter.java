@@ -484,24 +484,6 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 else
                 {
                     arrayType = attribs[i].getTypeName();
-                    if (isNillable())
-                    {
-                        writer.write("\tif(param->" + attribs[i].getParamNameAsMember() + " == NULL)\n");
-                        writer.write("\t{\n");
-                        writer.write("\t\tpSZ->serializeAsAttribute( \"<"
-                                        + attribs[i].getParamName()
-                                        + " xsi:nil\", 0, (void*)&(xsd_boolean_true), XSD_BOOLEAN);\n");
-                        writer.write("\t\tpSZ->serialize( \"/>\", NULL);\n");
-                        writer.write("\t}\n");
-                        writer.write("\telse\n\t");
-                    }
-                    else
-                    {
-                        if (attribs[i].isOptional())
-                        {
-                            writer.write("\tif(param->" + attribs[i].getParamNameAsMember() + " != NULL)\n\t");
-                        }
-                    }
                     writer.write("\tpSZ->serializeCmplxArray(param->"
                                     + attribs[i].getParamNameAsMember()
                                     + ",\n");
@@ -1026,7 +1008,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
             {
                 if (attribs[i].isArray())
                 {
-                    writer.write("\t" + attribs[i].getParamNameAsMember() + " = NULL;\n");
+                    writer.write("\t" + attribs[i].getParamNameAsMember() + " = new " + attribs[i].getTypeName() +"_Array();\n");
                 }
             }
             writer.write("\treset();\n");
@@ -1036,21 +1018,28 @@ public class BeanParamWriter extends ParamCPPFileWriter
             writer.write("\n" + classname + "::" + classname + "(" + classname + " & original)\n{\n");
             for (int i = 0 ; i < attribs.length ; i++)
             {
-                if (attribs[i].isSimpleType() && CUtils.isPointerType(attribs[i].getTypeName()))
+                if (attribs[i].isArray())
                 {
-                    writer.write("\tif(original." + attribs[i].getParamName() + " != NULL)\n");
-                    writer.write("\t{\n");
-                    writer.write("\t\t" + attribs[i].getParamName() + " = new char[strlen(original." + attribs[i].getParamName() + ") + 1];\n");
-                    writer.write("\t\tstrcpy(" + attribs[i].getParamName() + ", original." + attribs[i].getParamName() + ");\n");
-                    writer.write("\t}\n");
-                    writer.write("\telse\n");
-                    writer.write("\t{\n");
-                    writer.write("\t\t" + attribs[i].getParamName() + " = NULL;\n");
-                    writer.write("\t}\n");
+                    writer.write("\t" + attribs[i].getParamName() + " = new " + attribs[i].getTypeName() + "_Array(*original." + attribs[i].getParamName() + ");\n");
                 }
                 else
                 {
-                    writer.write("\t" + attribs[i].getParamName() + " = original." + attribs[i].getParamName() + ";\n");
+	                if (attribs[i].isSimpleType() && CUtils.isPointerType(attribs[i].getTypeName()))
+	                {
+	                    writer.write("\tif(original." + attribs[i].getParamName() + " != NULL)\n");
+	                    writer.write("\t{\n");
+	                    writer.write("\t\t" + attribs[i].getParamName() + " = new char[strlen(original." + attribs[i].getParamName() + ") + 1];\n");
+	                    writer.write("\t\tstrcpy(" + attribs[i].getParamName() + ", original." + attribs[i].getParamName() + ");\n");
+	                    writer.write("\t}\n");
+	                    writer.write("\telse\n");
+	                    writer.write("\t{\n");
+	                    writer.write("\t\t" + attribs[i].getParamName() + " = NULL;\n");
+	                    writer.write("\t}\n");
+	                }
+	                else
+	                {
+                        writer.write("\t" + attribs[i].getParamName() + " = original." + attribs[i].getParamName() + ";\n");
+                    }
                 }
             }
             writer.write("}\n");
@@ -1080,10 +1069,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
             {
                 if (attribs[i].isArray())
                 {
-                    writer.write("\tif ( " + attribs[i].getParamNameAsMember() + " != NULL)\n");
-                    writer.write("\t{\n");
-                    writer.write("\t\t" + attribs[i].getParamNameAsMember() + "->clear();\n");
-                    writer.write("\t}\n");
+                    writer.write("\t" + attribs[i].getParamNameAsMember() + "->clear();\n");
                 }
                 else if (!attribs[i].isSimpleType())
                 {
@@ -1108,7 +1094,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 {
                     if(CUtils.isPointerType(attribs[i].getTypeName()))
                     {
-                        writer.write("\t"+ attribs[i].getParamNameAsMember() + "=0;\n");
+                        writer.write("\t"+ attribs[i].getParamNameAsMember() + " = NULL;\n");
                     }
                 }
             }
