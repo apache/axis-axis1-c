@@ -1,0 +1,16 @@
+<test>
+    <name>ComplexTypeAllComplexChild</name>
+    <description>ComplexTypeAllComplexChild</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>ComplexTypeAllComplexChildsClient.cpp</clientCode>
+    <wsdl>ComplexTypeAllComplexChild.wsdl</wsdl>
+    <expected>
+        <output>
+            ComplexTypeAllComplexChild.cpp.out
+        </output>
+		<request>
+			ComplexTypeAllComplexChild.request
+		</request>
+    </expected>
+	<endpoint>-e http://localhost:80/axis/ComplexTypeAllComplexChild</endpoint>
+</test>

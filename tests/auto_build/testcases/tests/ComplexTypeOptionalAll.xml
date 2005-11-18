@@ -1,0 +1,16 @@
+<test>
+    <name>ComplexTypeOptionalAll</name>
+    <description>ComplexTypeOptionalAll</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>ComplexTypeOptionalAllsClient.cpp</clientCode>
+    <wsdl>ComplexTypeOptionalAll.wsdl</wsdl>
+    <expected>
+        <output>
+            ComplexTypeOptionalAll.cpp.out
+        </output>
+		<request>
+			ComplexTypeOptionalAll.request
+		</request>
+    </expected>
+	<endpoint>-e http://localhost:80/axis/ComplexTypeOptionalAll</endpoint>
+</test>
