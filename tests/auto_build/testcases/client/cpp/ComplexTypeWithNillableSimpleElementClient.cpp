@@ -16,7 +16,7 @@
 #include <iostream>
 #include "ComplexTypeWithNillableSimpleElement.hpp"
 
-void main( int argc, char* argv[])
+int main( int argc, char* argv[])
 {
 	char *	pszEndpoint = "http://localhost:9080/ComplexTypeWithNillableSimpleElement";
 
@@ -65,5 +65,5 @@ void main( int argc, char* argv[])
 
     cout << "---------------------- TEST COMPLETE -----------------------------" << endl;
 
-	return;
+	return 0;
 }
