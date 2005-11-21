@@ -16,7 +16,7 @@
 #include <iostream>
 #include "TestServicePortType.hpp"
 
-void main( int argc, char * argv[])
+int main( int argc, char * argv[])
 {
 	bool	bSuccess = false;
 	int		iRetryIterationCount = 3;
@@ -97,4 +97,5 @@ void main( int argc, char * argv[])
 	{
 		cout << "---------------------- TEST FAILED -----------------------------" << endl;
 	}
+	return 0;
 }
