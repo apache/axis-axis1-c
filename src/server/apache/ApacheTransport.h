@@ -27,6 +27,8 @@
 #if !defined(AXIS_APACHETRANSPORT_H__OF_AXIS_INCLUDED_)
 #define AXIS_APACHETRANSPORT_H__OF_AXIS_INCLUDED_
 
+#include <string>
+
 #ifdef WIN32
 #include <apache1_3/httpd.h>
 #include <apache1_3/http_config.h>
@@ -44,7 +46,7 @@
 #endif
 
 #include "../../transport/SOAPTransport.h"
-#include <string.h>
+//#include <string.h>
 #include "AttachmentHelper.h"
 #include <axis/ISoapAttachment.hpp>
 
