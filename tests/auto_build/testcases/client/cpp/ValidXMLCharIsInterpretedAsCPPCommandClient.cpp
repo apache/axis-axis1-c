@@ -16,7 +16,7 @@
 #include <iostream>
 #include "ValidXMLCharIsInterpretedAsCPPCommand.hpp"
 
-void main( int argc, char * argv[])
+int main( int argc, char * argv[])
 {
 	bool	bSuccess = false;
 	int		iRetryIterationCount = 3;
@@ -132,4 +132,5 @@ void main( int argc, char * argv[])
 	{
 		cout << "---------------------- TEST DID NOT COMPLETE -----------------------------" << endl;
 	}
+	return 0;
 }
