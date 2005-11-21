@@ -89,6 +89,7 @@ xsd__int Calculator::div(xsd__int Value0, xsd__int Value1)
 		}catch(...){
 			cout << "Unspecified exception has occured" << endl;
 		}
+		throw;
 		
 	}
 }
@@ -134,7 +135,8 @@ int main(int argc, char* argv[])
 	}
 	catch(AxisException& e)
 	{
-	   cout << "Exception : " << e.what()<< endl;
+	     /* We already printed this error message */
+	     //cout << "Exception : " << e.what()<< endl;
 		
 	}
 	catch(exception& e)
