@@ -59,79 +59,94 @@ main(int argc, char *argv[])
         sprintf(buffer, "UUID:39B8F710-F088-11D6-8F10-000629DC0A7B");
 
         tModelKey_Array arrtModelKeys;
-        arrtModelKeys.m_Array = new char *[ARRAYSIZE];
-        arrtModelKeys.m_Size = ARRAYSIZE;
+		tModelKey * array = new tModelKey [ARRAYSIZE];        
         int i = 0;
         for (i = 0; i < ARRAYSIZE; i++)
         {
-            arrtModelKeys.m_Array[i] = buffer;
+            array[i] = new char[100];
+			strcpy(array[i],buffer);
+
         }
+		arrtModelKeys.set(array,ARRAYSIZE);
         char* cpname = "2.0";
         
         printf("invoking get_tModelDetail...\n");
-        tModel_Array result = ws->get_tModelDetail(arrtModelKeys, cpname);
-        printf("tModel_Array size = %d\n", result.m_Size);
-        for( i = 0; i < result.m_Size; i++ ) 
+        tModel_Array *result = ws->get_tModelDetail(&arrtModelKeys, cpname);
+		int outputSize=0;
+		tModel ** arrayOut = result->get(outputSize);
+        printf("tModel_Array size = %d\n", outputSize);
+        for( i = 0; i < outputSize; i++ ) 
         {
             printf("tModel %d...\n", i + 1 );
-            printf("\t tModel Key Ref = %s\n", result.m_Array[i].tModelKey_Ref);
-            printf("\t Operator = %s\n", result.m_Array[i]._operator);
-            printf("\t Authorized Name = %s\n", result.m_Array[i].authorizedName);
-            if(result.m_Array[i].name_Ref)
-                printf("\t Name = %s\n", result.m_Array[i].name_Ref->name_value);
-            for( int j = 0; j < result.m_Array[i].description_Ref.m_Size; j++)
+            printf("\t tModel Key Ref = %s\n", arrayOut[i]->tModelKey_Ref);
+            printf("\t Operator = %s\n", arrayOut[i]->_operator);
+            printf("\t Authorized Name = %s\n", arrayOut[i]->authorizedName);
+            if(arrayOut[i]->name_Ref)
+                printf("\t Name = %s\n", arrayOut[i]->name_Ref->name_value);
+				int outputSizeDesc = 0;
+			    description ** arrayDesc= arrayOut[i]->description_Ref->get(outputSizeDesc);  
+            for( int j = 0; j < outputSizeDesc; j++)
             {
-                printf("\t Description %d = %s\n", j + 1,  result.m_Array[i].description_Ref.m_Array[j].description_value);
+                printf("\t Description %d = %s\n", j + 1,  arrayDesc[j]->description_value);
             }
 
-            if( result.m_Array[i].overviewDoc_Ref )
-                printf("\t Overview URL = %s\n", result.m_Array[i].overviewDoc_Ref->overviewURL);
+            if( arrayOut[i]->overviewDoc_Ref )
+                printf("\t Overview URL = %s\n", arrayOut[i]->overviewDoc_Ref->overviewURL);
         }
 
         sprintf(buffer, "D368F080-8423-11D6-9FFC-000C0E00ACDD" );
         businessKey_Array arrBusinessKeys;
-        arrBusinessKeys.m_Array = new char *[ARRAYSIZE];
-        arrBusinessKeys.m_Size = ARRAYSIZE;
+		businessKey * arrayBusiness = new businessKey[ARRAYSIZE];        
         for (i = 0; i < ARRAYSIZE; i++)
         {
-            arrBusinessKeys.m_Array[i] = buffer;
+            arrayBusiness[i] = new char[100];
+			strcpy(arrayBusiness[i],buffer);
         }
+		arrBusinessKeys.set(arrayBusiness,ARRAYSIZE);
 
         printf("invoking get_businessDetail ...\n");
         //printf("businessEntity_Array size = %d\n", ws->get_businessDetail(arrBusinessKeys, cpname).m_Size);
-        businessEntity_Array businessEntities = ws->get_businessDetail(arrBusinessKeys, cpname);
+        businessEntity_Array* businessEntities = ws->get_businessDetail(&arrBusinessKeys, cpname);
+		outputSize = 0;
+		businessEntity ** arrayOutB = businessEntities->get(outputSize);
         //businessEntity_Array get_businessDetail(businessKey_Array Value0,xsd__string Value1);
-        printf("businessEntity_Array size = %d\n", businessEntities.m_Size);
-        for( i = 0; i < businessEntities.m_Size; i++ ) 
+        printf("businessEntity_Array size = %d\n", outputSize);
+        for( i = 0; i < outputSize; i++ ) 
         {
             printf( "Business Entity %d\n", i + 1 );
-            printf("\t Business Key Ref = %s\n", businessEntities.m_Array[i].businessKey_Ref);
-            printf("\t Operator = %s\n", businessEntities.m_Array[i]._operator);
-            printf("\t Authorized Name = %s\n", businessEntities.m_Array[i].authorizedName);
+            printf("\t Business Key Ref = %s\n", arrayOutB[i]->businessKey_Ref);
+            printf("\t Operator = %s\n", arrayOutB[i]->_operator);
+            printf("\t Authorized Name = %s\n", arrayOutB[i]->authorizedName);
             printf( "\t Names... \n" );
-            for( int j = 0; j < businessEntities.m_Array[i].name_Ref.m_Size; j++)
+			int outputSizeBE = 0;
+			 name** arrayBE = arrayOutB[i]->name_Ref->get(outputSizeBE);
+            for( int j = 0; j < outputSizeBE; j++)
             {
-                printf("\t\t Description %d = %s\n", j + 1,  businessEntities.m_Array[i].name_Ref.m_Array[j].name_value);
+                printf("\t\t Description %d = %s\n", j + 1,  arrayBE[j]->name_value);
             }
-            
-            if( businessEntities.m_Array[i].businessServices_Ref )
+           
+            if( arrayOutB[i]->businessServices_Ref )
             {
                 printf( "\t Business Services...\n" );
-                for( int j = 0; j < businessEntities.m_Array[i].businessServices_Ref->businessService_Ref.m_Size; j++ )
+				int outputSizeBS = 0;
+				businessService ** arrayOutBS = arrayOutB[i]->businessServices_Ref->businessService_Ref->get(outputSizeBS);
+                for( int j = 0; j < outputSizeBS; j++ )
                 {
                     printf( "\t\t Business Service %d...\n", j + 1 );
-                    printf( "\t\t\t service key referance = %s\n", businessEntities.m_Array[i].businessServices_Ref->businessService_Ref.m_Array[j].serviceKey_Ref );
-                    printf( "\t\t\t business key referance = %s\n", businessEntities.m_Array[i].businessServices_Ref->businessService_Ref.m_Array[j].serviceKey_Ref );
-                    if( businessEntities.m_Array[i].businessServices_Ref->businessService_Ref.m_Array[j].bindingTemplates_Ref )
+                    printf( "\t\t\t service key referance = %s\n", arrayOutBS[j]->serviceKey_Ref );
+                    printf( "\t\t\t business key referance = %s\n", arrayOutBS[j]->serviceKey_Ref );
+                    if( arrayOutBS[j]->bindingTemplates_Ref )
                     {
                          printf( "\t\t\t Binding Templates...\n" );
-                         for( int k = 0; k < businessEntities.m_Array[i].businessServices_Ref->businessService_Ref.m_Array[j].bindingTemplates_Ref->bindingTemplate_Ref.m_Size; k++ )
+						 int outputSizeBT=0;
+						 bindingTemplate ** arrayOutBT = arrayOutBS[j]->bindingTemplates_Ref->bindingTemplate_Ref->get(outputSizeBT);
+                         for( int k = 0; k < outputSizeBT; k++ )
                          {
                             printf( "\t\t\t\t Access Point %d...\n", k + 1 );
-                            if( businessEntities.m_Array[i].businessServices_Ref->businessService_Ref.m_Array[j].bindingTemplates_Ref->bindingTemplate_Ref.m_Array[k].accessPoint_Ref )
+                            if( arrayOutBT[k]->accessPoint_Ref )
                             {
-                                printf( "\t\t\t\t\t Point = %s\n", businessEntities.m_Array[i].businessServices_Ref->businessService_Ref.m_Array[j].bindingTemplates_Ref->bindingTemplate_Ref.m_Array[k].accessPoint_Ref->accessPoint_value );
-                                printf( "\t\t\t\t\t URL Type = %s\n\n", businessEntities.m_Array[i].businessServices_Ref->businessService_Ref.m_Array[j].bindingTemplates_Ref->bindingTemplate_Ref.m_Array[k].accessPoint_Ref->URLType_Ref );
+                                printf( "\t\t\t\t\t Point = %s\n", arrayOutBT[k]->accessPoint_Ref->accessPoint_value );
+                                printf( "\t\t\t\t\t URL Type = %s\n\n", arrayOutBT[k]->accessPoint_Ref->URLType_Ref );
                             }
                          }
                     }
