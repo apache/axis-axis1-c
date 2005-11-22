@@ -1,0 +1,17 @@
+<test>
+    <name>XSD_base64BinaryAttribute</name>
+    <description>Test serialization and deserialization of the XSD built-in simple type base64Binary Attribute</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>XSD_base64BinaryAttributeClient.cpp</clientCode>
+    <wsdl>XSD_base64Binary.wsdl</wsdl>
+    <expected>
+        <output>
+            XSD_base64BinaryAttribute.expected
+        </output>
+		<serverResponse>
+			XSD_base64Binary_ServerAttributeResponse.expected
+	    </serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/XSD_base64Binary</endpoint>
+</test>
+

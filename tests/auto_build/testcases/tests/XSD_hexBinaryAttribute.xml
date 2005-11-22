@@ -1,0 +1,17 @@
+<test>
+    <name>XSD_hexBinaryAttribute</name>
+    <description>Test serialization and deserialization of the XSD built-in simple type hexBinary</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>XSD_hexBinaryAttributeClient.cpp</clientCode>
+    <wsdl>XSD_hexBinary.wsdl</wsdl>
+    <expected>
+        <output>
+            XSD_hexBinaryAttribute.expected
+        </output>
+		<serverResponse>
+			XSD_hexBinaryAttribute_ServerResponse.expected
+	    </serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/XSD_hexBinary</endpoint>
+</test>
+
