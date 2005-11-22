@@ -345,6 +345,16 @@ public class BeanParamWriter extends ParamCPPFileWriter
         writer.write("\t\treturn AXIS_SUCCESS;\n");
         writer.write("\t}\n\n");
 
+        writer.write("\t\tif (!bArray)\n\t\t{\n");
+        writer.write("\t\t\tbool blnIsNewPrefix = false;\n");
+        writer.write("\t\t\tconst AxisChar* sPrefix = pSZ->getNamespacePrefix(Axis_URI_" + classname + ", blnIsNewPrefix);\n");
+        writer.write("\t\t\t//if (blnIsNewPrefix)\n\t\t\t//{\n");
+        writer.write("\t\t\t\tpSZ->serialize(\" xmlns:\", sPrefix, \"=\\\"\",\n");
+        writer.write("\t\t\t\t\tAxis_URI_" + classname + ", \"\\\"\", NULL );\n");
+        writer.write("\t\t\t//}\n");
+        writer.write("\t\t}\n");
+        
+        
         writer.write("\t/* first serialize attributes if any*/\n");
         for (int i = 0; i < attributeParamCount; i++)
         {
