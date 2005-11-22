@@ -5,9 +5,6 @@ nillable element
  size=41
  data=<test><xml>some dod&y string</xml></test>
 nil element=<nil>
-required attribute
- size=41
- data=<test><xml>some dod&y string</xml></test>
 array of 2 elements
  element[0]
   size=41
