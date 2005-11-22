@@ -1,0 +1,4 @@
+required attribute
+ size=41
+ data=<test><xml>some dod&y string</xml></test>
+---------------------- TEST COMPLETE -----------------------------
