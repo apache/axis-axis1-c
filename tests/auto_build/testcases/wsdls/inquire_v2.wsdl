@@ -28,7 +28,7 @@
 	</documentation>
 	<types>
 		<xsd:schema targetNamespace="urn:uddi-org:inquiry_v2" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-			<xsd:import namespace="urn:uddi-org:api_v2" schemaLocation="http://www.uddi.org/schema/uddi_v2.xsd"/>
+			<xsd:import namespace="urn:uddi-org:api_v2" schemaLocation="uddi_v2.xsd"/>
 		</xsd:schema>
 	</types>
 	<message name="bindingDetail">
@@ -271,5 +271,6 @@
 				<soap:fault name="error" use="literal"/>
 			</fault>
 		</operation>
-	</binding>
+	</binding>	
+
 </definitions>
