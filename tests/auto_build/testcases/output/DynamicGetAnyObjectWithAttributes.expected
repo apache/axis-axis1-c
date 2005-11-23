@@ -1,2 +1,2 @@
-<RequiredAttributeElement xmlns="http://complextype.test.apache.org" requiredAttribute="true" anotherAttribute="false"></asRequiredAttributeResponse></soapenv:Body>
+<asRequiredAttributeResponse><RequiredAttributeElement xmlns="http://complextype.test.apache.org" requiredAttribute="true" anotherAttribute="false"></asRequiredAttributeResponse>
 ----------------------------TEST COMPLETE------------------------------------

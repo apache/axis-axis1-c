@@ -6,6 +6,12 @@ Transfer-Encoding: chunked
 
 ###
 <?xml version="1.0" encoding="utf-8"?>
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header /><soapenv:Body><asRequiredAttributeResponse xmlns="http://xsd_boolean.test.apache.org"><RequiredAttributeElement xmlns="http://complextype.test.apache.org" requiredAttribute="true" anotherAttribute="false"/></asRequiredAttributeResponse></soapenv:Body></soapenv:Envelope>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header /><soapenv:Body>
+<asRequiredAttributeResponse xmlns="http://xsd_boolean.test.apache.org">
+<RequiredAttributeElement xmlns="http://complextype.test.apache.org" requiredAttribute="true" anotherAttribute="false">
+</RequiredAttributeElement>
+</asRequiredAttributeResponse>
+</soapenv:Body>
+</soapenv:Envelope>
 0
 
