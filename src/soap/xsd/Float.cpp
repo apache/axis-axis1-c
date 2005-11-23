@@ -148,7 +148,7 @@ AxisChar* Float::serialize(const xsd__float* value) throw (AxisSoapException)
     delete maxExclusive;
 
     AxisChar* serializedValue = new char[80];
-    AxisSprintf (serializedValue, 80, "%f", *value);
+    AxisSprintf (serializedValue, 80, "%.6g", *value);
   
     IAnySimpleType::serialize(serializedValue);
     delete [] serializedValue;        
@@ -161,7 +161,7 @@ xsd__float* Float::deserializeFloat(const AxisChar* valueAsChar) throw (AxisSoap
 
 	xsd__float * value = new xsd__float;
 	*value = (xsd__float) strtod (valueAsChar, &end);
-	
+
 	return value;
 }
 

@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
 
 		// Test non-nillable element
        	        xsd__float result = ws->asNonNillableElement((xsd__float)555.555);
-		printf("non-nillable element=%.5f\n", result);
+		printf("non-nillable element=%.6g\n", result);
         	fflush(stdout);
 
 		// Tests now complete

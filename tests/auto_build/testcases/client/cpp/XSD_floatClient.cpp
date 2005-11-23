@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
 
 		// Test non-nillable element
 	    xsd__float result = ws->asNonNillableElement((xsd__float)35.353588);
-		printf("non-nillable element=%.5f\n", result);
+		printf("non-nillable element=%.6g\n", result);
         fflush(stdout);
 
 		// Test nillable element, with a value
@@ -46,7 +46,7 @@ int main(int argc, char* argv[])
 		xsd__float* nillableResult = ws->asNillableElement(nillableInput);
 		if (nillableResult)
 		{
-			printf("nillable element=%.5f\n", *(nillableResult));
+			printf("nillable element=%.6g\n", *(nillableResult));
             fflush(stdout);
 			delete nillableResult;
 		}
@@ -60,7 +60,7 @@ int main(int argc, char* argv[])
         nillableResult = ws->asNillableElement(NULL);
 		if (nillableResult)
 		{
-			printf("nil element=%.5f\n", *(nillableResult));
+			printf("nil element=%.6g\n", *(nillableResult));
             fflush(stdout);
 			delete nillableResult;
 		}
@@ -73,7 +73,7 @@ int main(int argc, char* argv[])
 		RequiredAttributeElement requiredAttributeInput;
 		requiredAttributeInput.setrequiredAttribute((xsd__float)35.353588);
 		RequiredAttributeElement* requiredAttributeResult = ws->asRequiredAttribute(&requiredAttributeInput);
-		printf("required attribute=%.5f\n", requiredAttributeResult->getrequiredAttribute());
+		printf("required attribute=%.6g\n", requiredAttributeResult->getrequiredAttribute());
         fflush(stdout);
 		delete requiredAttributeResult;
 
@@ -85,7 +85,7 @@ int main(int argc, char* argv[])
 		OptionalAttributeElement* optionalAttributeResult = ws->asOptionalAttribute(&optionalAttributeInput);
 		if (optionalAttributeResult->getoptionalAttribute())
 		{
-			printf("optional attribute, with data=%.5f\n", *(optionalAttributeResult->getoptionalAttribute()));
+			printf("optional attribute, with data=%.6g\n", *(optionalAttributeResult->getoptionalAttribute()));
             fflush(stdout);
 		}
 		else
@@ -99,7 +99,7 @@ int main(int argc, char* argv[])
 		optionalAttributeResult = ws->asOptionalAttribute(&optionalAttributeInput);
 		if (optionalAttributeResult->getoptionalAttribute())
 		{
-			printf("optional attribute, not present=%.5f\n", *(optionalAttributeResult->getoptionalAttribute()));
+			printf("optional attribute, not present=%.6g\n", *(optionalAttributeResult->getoptionalAttribute()));
             fflush(stdout);
 		}
 		else
@@ -125,7 +125,7 @@ int main(int argc, char* argv[])
         cout << "array of " << outputSize << " elements" << endl;
 		for (int index = 0; index < outputSize ; index++)
 		{
-			printf("  element[%i]=%.5f\n", index,  *(output[index]));
+			printf("  element[%i]=%.6g\n", index,  *(output[index]));
             fflush(stdout);
 			
 		}
@@ -140,7 +140,7 @@ int main(int argc, char* argv[])
 		SimpleComplexType complexTypeInput;
 		complexTypeInput.setcomplexTypeElement((xsd__float) 35.353588);
 		SimpleComplexType* complexTypeResult = ws->asComplexType(&complexTypeInput);
-		printf("within complex type=%.5f\n", complexTypeResult->getcomplexTypeElement());
+		printf("within complex type=%.6g\n", complexTypeResult->getcomplexTypeElement());
         fflush(stdout);
 		delete complexTypeResult;
 

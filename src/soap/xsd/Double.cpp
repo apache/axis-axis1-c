@@ -153,7 +153,7 @@ AxisChar* Double::serialize(const xsd__double* value) throw (AxisSoapException)
 
  
     AxisChar serializedValue[80];
-    AxisSprintf (serializedValue, 80, "%f", *value);
+    AxisSprintf (serializedValue, 80, "%.10g", *value);
 	
 	IAnySimpleType::serialize(serializedValue);
     return m_Buf;
