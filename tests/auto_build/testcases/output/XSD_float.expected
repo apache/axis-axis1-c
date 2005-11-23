@@ -1,9 +1,9 @@
-non-nillable element=35.35359
-nillable element=35.35359
+non-nillable element=35.3536
+nillable element=35.3536
 nil element=<nil>
-required attribute=35.35359
+required attribute=35.3536
 array of 2 elements
-  element[0]=35.35359
-  element[1]=35.35359
-within complex type=35.35359
+  element[0]=35.3536
+  element[1]=35.3536
+within complex type=35.3536
 ---------------------- TEST COMPLETE -----------------------------
