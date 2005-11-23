@@ -170,19 +170,36 @@ const AnyElement* XMLParserXerces::anyNext()
             m_bFirstParsed = true;
         }
 
-        m_Xhandler.freeElement();
-        while (true)
+		if(!m_bPeeked) 
+		{
+			m_Xhandler.freeElement();
+		}
+
+		while (true)
         {
             AnyElement* elem = m_Xhandler.getAnyElement();
             if (!elem)
             {
-                bCanParseMore = m_pParser->parseNext(m_ScanToken);
+                if(!m_bPeeked) 
+				{
+					bCanParseMore = m_pParser->parseNext(m_ScanToken);
+				}
+				else
+				{
+					m_bPeeked = false;
+					bCanParseMore = true;
+				}
+
                 elem = m_Xhandler.getAnyElement();
             }
             if (elem)
             {
 				m_Xhandler.setGetPrefixMappings(false);
-                return elem;
+
+				if( m_bPeeked )
+					m_bPeeked = false;
+
+				return elem;
             }
             else if (AXIS_FAIL == m_Xhandler.getStatus()) return NULL;
             else if (!bCanParseMore) return NULL;
