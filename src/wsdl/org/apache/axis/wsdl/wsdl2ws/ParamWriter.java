@@ -184,6 +184,11 @@ public abstract class ParamWriter extends BasicFileWriter
             //setting the all element availability.
             this.attribs[i].setAllElement(elem.getAllElement());
             //04/05/2005..................................................
+            
+            //Dushshantha:
+            //states whether the atribute is namespace qualified
+            this.attribs[i].setNsQualified(elem.getNsQualified());
+            
             //setting the minoccures
             this.attribs[i].setMinOccurs(elem.getMinOccurs());
             //12/05/2005..................................................

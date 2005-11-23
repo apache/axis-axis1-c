@@ -1030,6 +1030,11 @@ public class WSDL2Ws
                                 eleinfo.setAllElement(elem.getAllElement());
                                 //04/05/2005.................................................
                                 
+                                //Dushshantha:
+                                //states whether the element must be namespace qualified.
+                                eleinfo.setNsQualified(elem.getNsQualified());
+                                
+                                
                                 typedata.setTypeNameForElementName(eleinfo);
                             }
                         }

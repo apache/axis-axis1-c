@@ -58,6 +58,12 @@ public class CElementDecl //extends ElementDecl
     private boolean allElement = false;
     //04/05/2005
     
+    //Dushshantha:
+    //This field is set to true if the element is elementFormDefault qualified.
+    //This specifies whether the element must be namespace qualified or not in the SOAP message.
+    private boolean nsQualified = false;
+    
+    
     /** Field documentation */
     private String documentation;
 
@@ -136,6 +142,19 @@ public class CElementDecl //extends ElementDecl
         this.allElement = allElement;
     }
     //04/05/2005
+    
+    /**
+     * Dushshantha:
+     * Getter and setter for the field nsQualified 
+     */
+    public boolean getNsQualified(){
+    	return nsQualified;
+    }
+    
+    public void setNsQualified(boolean nsQual){
+    	nsQualified = nsQual;
+    }
+    
     
     /**
      * @return

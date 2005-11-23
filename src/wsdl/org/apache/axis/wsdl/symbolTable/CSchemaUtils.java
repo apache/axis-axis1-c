@@ -869,7 +869,13 @@ public class CSchemaUtils extends SchemaUtils
         // used to retrieve the proper java name of the type.
         QName nodeType = Utils.getTypeQName(elementNode, forElement, false);
         TypeEntry type = symbolTable.getTypeEntry(nodeType, forElement.value);
-
+        
+        //Dushshantha:
+        //The boolean field 'qualified' is set to true 
+        //if the element is namespace qualified.
+        //The default value is unqualified.
+        boolean qualified = false;
+        
         // An element inside a complex type is either qualified or unqualified.
         // If the ref= attribute is used, the name of the ref'd element is used
         // (which must be a root element).  If the ref= attribute is not
@@ -880,12 +886,20 @@ public class CSchemaUtils extends SchemaUtils
             // check the Form (or elementFormDefault) attribute of this node to
             // determine if it should be namespace quailfied or not.
             String form = Utils.getAttribute(elementNode, "form");
-
+                        
             if ((form != null) && form.equals("unqualified"))
             {
 
                 // Unqualified nodeName
                 nodeName = Utils.findQName("", nodeName.getLocalPart());
+            }
+            else if ((form != null) && form.equals("qualified")){ 
+            	/**
+            	 * Dushshantha:
+            	 * qualified nodename
+            	 */            	
+            	qualified = true;
+            	nodeName = Utils.findQName("", nodeName.getLocalPart());
             }
             else
                 if (form == null)
@@ -903,6 +917,16 @@ public class CSchemaUtils extends SchemaUtils
                         // Unqualified nodeName
                         nodeName = Utils.findQName("", nodeName.getLocalPart());
                     }
+                    else if ((def == null) || def.equals("qualified")){
+                    	
+                    	/**
+                    	 * Dushshantha:
+                    	 * qualified nodename
+                    	 */
+                    	qualified = true;
+                    	nodeName = Utils.findQName("", nodeName.getLocalPart());
+                    }
+                    
                 }
         }
 
@@ -939,6 +963,8 @@ public class CSchemaUtils extends SchemaUtils
             if (nillable != null && "true".equals(nillable))
                 elem.setNillable(true);
 
+            elem.setNsQualified(qualified);
+            
             return elem;
 
             /*elem.setNillable(

@@ -49,6 +49,11 @@ public class AttributeInfo extends ParameterInfo
     private boolean allElement = false;
     //04/05/2005...............................................
     
+    //  Dushshantha:
+    //This field is set to true if the element is elementFormDefault qualified.
+    //This specifies whether the element must be namespace qualified or not in the SOAP message.
+    private boolean nsQualified = false;
+    
     /**
      * @param type
      * @param attribName
@@ -197,6 +202,21 @@ public class AttributeInfo extends ParameterInfo
     }
     //04/05/2005.................................................
     //Chinthana: Changes to do modification for handle Min and Max occures
+    
+    /**
+     * Dushshantha:
+     * Getter and setter for the field nsQualified 
+     */
+    public boolean getNsQualified(){
+    	return nsQualified;
+    }
+    
+    public void setNsQualified(boolean nsQual){
+    	nsQualified = nsQual;
+    }
+    
+    
+    
     /**
      * @return int
      */

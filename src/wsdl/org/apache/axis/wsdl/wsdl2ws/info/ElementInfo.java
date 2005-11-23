@@ -41,6 +41,13 @@ public class ElementInfo
     private boolean allElement = false;
     //............................................
     
+    
+    //  Dushshantha:
+    //This field is set to true if the element is elementFormDefault qualified.
+    //This specifies whether the element must be namespace qualified or not in the SOAP message.
+    private boolean nsQualified = false;
+    
+    
     public ElementInfo(QName name, Type type)
     {
         this.name = name;
@@ -181,6 +188,20 @@ public class ElementInfo
 		this.allElement = newAllElement;
 	}
 	//04/05/2005.................................................
+	
+	
+	/**
+     * Dushshantha:
+     * Getter and setter for the field nsQualified 
+     */
+    public boolean getNsQualified(){
+    	return nsQualified;
+    }
+    
+    public void setNsQualified(boolean nsQual){
+    	nsQualified = nsQual;
+    }
+    
 
 
 }
