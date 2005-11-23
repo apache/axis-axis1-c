@@ -885,8 +885,7 @@ public class CSchemaUtils extends SchemaUtils
 
             // check the Form (or elementFormDefault) attribute of this node to
             // determine if it should be namespace quailfied or not.
-            String form = Utils.getAttribute(elementNode, "form");
-                        
+            String form = getAttributeRecursivly( elementNode, "form");
             if ((form != null) && form.equals("unqualified"))
             {
 
@@ -899,7 +898,6 @@ public class CSchemaUtils extends SchemaUtils
             	 * qualified nodename
             	 */            	
             	qualified = true;
-            	nodeName = Utils.findQName("", nodeName.getLocalPart());
             }
             else
                 if (form == null)
@@ -924,7 +922,6 @@ public class CSchemaUtils extends SchemaUtils
                     	 * qualified nodename
                     	 */
                     	qualified = true;
-                    	nodeName = Utils.findQName("", nodeName.getLocalPart());
                     }
                     
                 }
@@ -977,6 +974,31 @@ public class CSchemaUtils extends SchemaUtils
         }
 
         return null;
+    }
+
+    /**
+     * @param elementNode
+     * @param string
+     * @return
+     */
+    private static String getAttributeRecursivly(Node elementNode, String string)
+    {
+        String form = Utils.getAttribute(elementNode, "form");
+        
+        if (form == null)
+        {
+            Node parentNode = elementNode.getParentNode();
+            if (parentNode != null)
+            {
+                form = getAttributeRecursivly(parentNode, string);
+            }
+            else
+            {
+                
+            }
+        }
+        
+        return form;
     }
 
     /**
