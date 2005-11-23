@@ -623,6 +623,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
 
     private void writeDeSerializeGlobalMethod() throws IOException, WrapperFault
     {
+        int arrayCount = 0;
         writer.write("/*\n");
         writer.write(" * This static method deserialize a " + classname
                 + " type of object\n");
@@ -650,23 +651,23 @@ public class BeanParamWriter extends ParamCPPFileWriter
         }
         String arrayType = null;
 
-        /* Needed for Aix xlc */
-
-        for (int i = 0; i < attribs.length; i++)
-        {
-            if (attribs[i].isArray())
-            {
-                if (attribs[i].isSimpleType())
-                {
-                    writer.write("\tAxis_Array * array;\n\n");
-                }
-                else
-                {
-                    writer.write("\t" + attribs[i].getTypeName() + "_Array * array = new " + attribs[i].getTypeName() + "_Array();\n\n");
-                }
-                break;
-            }
-        }
+//        /* Needed for Aix xlc */
+//
+//        for (int i = 0; i < attribs.length; i++)
+//        {
+//            if (attribs[i].isArray())
+//            {
+//                if (attribs[i].isSimpleType())
+//                {
+//                    writer.write("\tAxis_Array * array;\n\n");
+//                }
+//                else
+//                {
+//                    writer.write("\t" + attribs[i].getTypeName() + "_Array * array = new " + attribs[i].getTypeName() + "_Array();\n\n");
+//                }
+//                break;
+//            }
+//        }
 
         boolean peekCalled = false;
         boolean firstIfWritten = false;
@@ -734,10 +735,11 @@ public class BeanParamWriter extends ParamCPPFileWriter
             }
             else if (attribs[i].isArray())
             {
+                arrayCount++;
                 //if Array
                 if (attribs[i].isSimpleType())
                 {
-                    writer.write("\tarray = pIWSDZ->getBasicArray("
+                    writer.write("\tAxis_Array * array" + arrayCount + " = pIWSDZ->getBasicArray("
                             + CUtils.getXSDTypeForBasicType(attribs[i].getTypeName()) + ", \""
                             + attribs[i].getParamNameAsSOAPElement()
                             + "\",0);\n");
@@ -745,17 +747,14 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     writer.write("\t{\n");
                     writer.write("\t\tparam->" + attribs[i].getParamNameAsMember() + " = new " + attribs[i].getTypeName() + "_Array();\n");
                     writer.write("\t}\n");
-                    writer.write("\tparam->" + attribs[i].getParamNameAsMember() + "->clone( *array);\n");
-                    writer.write("\tAxis::AxisDelete((void*) array, XSD_ARRAY);\n\n");
+                    writer.write("\tparam->" + attribs[i].getParamNameAsMember() + "->clone( *array" + arrayCount + ");\n");
+                    writer.write("\tAxis::AxisDelete((void*) array" + arrayCount + ", XSD_ARRAY);\n\n");
                 }
                 else
                 {
-                    Iterator itForTypes = wscontext.getTypemap().getTypes().iterator();
-                    boolean nillable = isNillable();
-                    boolean moreThanOne = isMoreThanOne();
-
                     arrayType = attribs[i].getTypeName();
-                    writer.write("\tarray = (" + arrayType + "_Array *) pIWSDZ->getCmplxArray(array, (void*)Axis_DeSerialize_"
+                    writer.write("\t" + arrayType + "_Array * array" + arrayCount + " = new " + arrayType + "_Array();\n");
+                    writer.write("\tarray" + arrayCount + " = (" + arrayType + "_Array *) pIWSDZ->getCmplxArray(array" + arrayCount + ", (void*)Axis_DeSerialize_"
                                     + arrayType
                                     + ",\n"
                                     + "\t\t\t\t\t\t\t\t  (void*)Axis_Create_"
@@ -771,7 +770,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                                     + attribs[i].getElementNameAsString()
                                     + "\", Axis_URI_" + arrayType + ");\n\n");
                     
-                	writer.write("\tparam->" + attribs[i].getParamNameAsMember() + " = array;\n\n");
+                	writer.write("\tparam->" + attribs[i].getParamNameAsMember() + " = array" + arrayCount + ";\n\n");
                 }
             }
             else if (attribs[i].isSimpleType())
@@ -1026,11 +1025,24 @@ public class BeanParamWriter extends ParamCPPFileWriter
 
             //write copy constructor
             writer.write("\n" + classname + "::" + classname + "(" + classname + " & original)\n{\n");
+            int anyCounter = 0;
             for (int i = 0 ; i < attribs.length ; i++)
             {
                 if (attribs[i].isArray())
                 {	
                     writer.write("\t" + attribs[i].getParamName() + " = new " + attribs[i].getTypeName() + "_Array(*original." + attribs[i].getParamName() + ");\n");
+                }
+                else if (attribs[i].isAnyType())
+                {
+                    anyCounter++;
+                    writer.write("\tif (original." + attribs[i].getParamName() + anyCounter + " != NULL)\n");
+                	writer.write("\t{\n");
+                	writer.write("\t\t" + attribs[i].getParamName() + anyCounter + " = new " + attribs[i].getTypeName() + "(*(original." + attribs[i].getParamName() + anyCounter + "));\n");
+                	writer.write("\t}\n");
+                	writer.write("\telse\n");
+                	writer.write("\t{\n");
+                	writer.write("\t\t" + attribs[i].getParamName() + anyCounter + " = NULL;\n");
+                	writer.write("\t}\n");
                 }
                 else
                 {
@@ -1240,7 +1252,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     iIndex++;
                 }
                 
-                writer.write( ")\n//\t{\n");
+                writer.write( "//)\n//\t{\n");
                 writer.write( "//\t\treturn 1;\n");
                 writer.write( "//\t}\n");
             }
@@ -1271,7 +1283,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     iIndex++;
                 }
                 
-                writer.write( ")\n//\t{\n");
+                writer.write( "//)\n//\t{\n");
                 writer.write( "//\t\treturn 1;\n");
                 writer.write( "//\t}\n");
             }
