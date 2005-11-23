@@ -1,0 +1,17 @@
+<test>
+    <name>DynamicGetAnyObjectWithAttributes</name>
+    <description>Gets Any object from the response. This test verifies that attributes have spaces between them</description>
+	<dynamicCode>true</dynamicCode>
+	<dynamicCodeDirectory>DynamicGetAnyObjectWithAttributesTest</dynamicCodeDirectory>
+    <clientLang>cpp</clientLang>
+    <wsdl>CalculatorDoc.wsdl</wsdl>
+    <expected>
+        <output>
+            DynamicGetAnyObjectWithAttributes.expected
+        </output>        	
+	<serverResponse>
+			DynamicGetAnyObjectWithAttributes_ServerResponse.expected
+	</serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/CalculatorDoc</endpoint>
+</test>
