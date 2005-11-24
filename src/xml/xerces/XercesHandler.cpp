@@ -183,6 +183,11 @@ void XercesHandler::endElement (const XMLCh *const uri,
     }
     m_pCurrElement = m_pNextElement;
     m_pNextElement->m_type = END_ELEMENT;
+
+	if( m_pNextElement->m_type2 == START_END_ELEMENT)
+	{
+	    m_pNextElement->m_type2 = END_ELEMENT;
+	}
     m_pNextElement->m_pchNameOrValue = XMLString::transcode(localname);
     m_pNextElement->m_pchNamespace = XMLString::transcode(uri);
     m_pNextElement->m_pchAttributes[0] = NULL;
