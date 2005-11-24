@@ -70,15 +70,15 @@ POST /NillableArrays/services/NillableArraysPort HTTP/1.1
 Host: localhost:13260
 Content-Type: text/xml; charset=UTF-8
 SOAPAction: ""
-Content-Length: 475
+Content-Length: 469
 
 <?xml version='1.0' encoding='utf-8' ?>
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <SOAP-ENV:Body>
 <ns1:echoFloatArray xmlns:ns1="http://arrays.test.apache.org">
-<ns1:arg_0_5>11.111000</ns1:arg_0_5>
+<ns1:arg_0_5>11.111</ns1:arg_0_5>
 <ns1:arg_0_5 xsi:nil="true"></ns1:arg_0_5>
-<ns1:arg_0_5>33.111000</ns1:arg_0_5>
+<ns1:arg_0_5>33.111</ns1:arg_0_5>
 </ns1:echoFloatArray>
 </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
@@ -87,15 +87,15 @@ POST /NillableArrays/services/NillableArraysPort HTTP/1.1
 Host: localhost:13260
 Content-Type: text/xml; charset=UTF-8
 SOAPAction: ""
-Content-Length: 477
+Content-Length: 473
 
 <?xml version='1.0' encoding='utf-8' ?>
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <SOAP-ENV:Body>
 <ns1:echoDoubleArray xmlns:ns1="http://arrays.test.apache.org">
-<ns1:arg_0_6>71.156500</ns1:arg_0_6>
+<ns1:arg_0_6>71.1565</ns1:arg_0_6>
 <ns1:arg_0_6 xsi:nil="true"></ns1:arg_0_6>
-<ns1:arg_0_6>73.156500</ns1:arg_0_6>
+<ns1:arg_0_6>73.1565</ns1:arg_0_6>
 </ns1:echoDoubleArray>
 </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
