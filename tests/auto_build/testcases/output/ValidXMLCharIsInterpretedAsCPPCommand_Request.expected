@@ -2,17 +2,17 @@ POST /axis/ValidXMLCharIsInterpretedAsCPPCommand HTTP/1.1
 Host: 127.0.0.1:13260
 Content-Type: text/xml; charset=UTF-8
 SOAPAction: "ValidXMLCharIsInterpretedAsCPPCommand#test1"
-Content-Length: 852
+Content-Length: 632
 
 <?xml version='1.0' encoding='utf-8' ?>
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <SOAP-ENV:Body>
 <ns1:test1Request xmlns:ns1="http://localhost/axis/ValidXMLCharIsInterpretedAsCPPCommand">
-<ns1:Element><ns2:arg_name1 xmlns:ns2="ValidXMLCharIsInterpretedAsCPPCommandTypes">1</ns2:arg_name1>
-<ns3:arg_name2 xmlns:ns3="ValidXMLCharIsInterpretedAsCPPCommandTypes">2</ns3:arg_name2>
-<ns4:arg_name3 xmlns:ns4="ValidXMLCharIsInterpretedAsCPPCommandTypes">3</ns4:arg_name3>
-<ns5:arg_name4 xmlns:ns5="ValidXMLCharIsInterpretedAsCPPCommandTypes">4</ns5:arg_name4>
-<ns6:arg_name5 xmlns:ns6="ValidXMLCharIsInterpretedAsCPPCommandTypes">5</ns6:arg_name5>
+<ns1:Element xmlns:ns2="ValidXMLCharIsInterpretedAsCPPCommandTypes"><ns2:arg_name1>1</ns2:arg_name1>
+<ns2:arg_name2>2</ns2:arg_name2>
+<ns2:arg_name3>3</ns2:arg_name3>
+<ns2:arg_name4>4</ns2:arg_name4>
+<ns2:arg_name5>5</ns2:arg_name5>
 </ns1:Element>
 </ns1:test1Request>
 </SOAP-ENV:Body>
@@ -28,7 +28,7 @@ Content-Length: 500
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <SOAP-ENV:Body>
 <ns1:test2Request xmlns:ns1="http://localhost/axis/ValidXMLCharIsInterpretedAsCPPCommand">
-<ns1:Element><ns2:arg_name1 xmlns:ns2="ValidXMLCharIsInterpretedAsCPPCommandTypes">6</ns2:arg_name1>
+<ns1:Element xmlns:ns2="ValidXMLCharIsInterpretedAsCPPCommandTypes"><ns2:arg_name1>6</ns2:arg_name1>
 </ns1:Element>
 </ns1:test2Request>
 </SOAP-ENV:Body>
@@ -38,18 +38,18 @@ POST /axis/ValidXMLCharIsInterpretedAsCPPCommand HTTP/1.1
 Host: 127.0.0.1:13260
 Content-Type: text/xml; charset=UTF-8
 SOAPAction: "ValidXMLCharIsInterpretedAsCPPCommand#test1"
-Content-Length: 943
+Content-Length: 668
 
 <?xml version='1.0' encoding='utf-8' ?>
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <SOAP-ENV:Body>
 <ns1:test3Request xmlns:ns1="http://localhost/axis/ValidXMLCharIsInterpretedAsCPPCommand">
-<ns1:Element><ns2:arg_name1 xmlns:ns2="ValidXMLCharIsInterpretedAsCPPCommandTypes">7</ns2:arg_name1>
-<ns3:arg_name2 xmlns:ns3="ValidXMLCharIsInterpretedAsCPPCommandTypes">8</ns3:arg_name2>
-<ns4:arg_name3 xmlns:ns4="ValidXMLCharIsInterpretedAsCPPCommandTypes">9</ns4:arg_name3>
-<ns5:arg_name4 xmlns:ns5="ValidXMLCharIsInterpretedAsCPPCommandTypes">10</ns5:arg_name4>
-<ns6:arg_name5 xmlns:ns6="ValidXMLCharIsInterpretedAsCPPCommandTypes">11</ns6:arg_name5>
-<ns7:arg_name6 xmlns:ns7="ValidXMLCharIsInterpretedAsCPPCommandTypes">12</ns7:arg_name6>
+<ns1:Element xmlns:ns2="ValidXMLCharIsInterpretedAsCPPCommandTypes"><ns2:arg_name1>7</ns2:arg_name1>
+<ns2:arg_name2>8</ns2:arg_name2>
+<ns2:arg_name3>9</ns2:arg_name3>
+<ns2:arg_name4>10</ns2:arg_name4>
+<ns2:arg_name5>11</ns2:arg_name5>
+<ns2:arg_name6>12</ns2:arg_name6>
 </ns1:Element>
 </ns1:test3Request>
 </SOAP-ENV:Body>
@@ -59,18 +59,18 @@ POST /axis/ValidXMLCharIsInterpretedAsCPPCommand HTTP/1.1
 Host: 127.0.0.1:13260
 Content-Type: text/xml; charset=UTF-8
 SOAPAction: "ValidXMLCharIsInterpretedAsCPPCommand#test1"
-Content-Length: 952
+Content-Length: 677
 
 <?xml version='1.0' encoding='utf-8' ?>
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <SOAP-ENV:Body>
 <ns1:test4Request xmlns:ns1="http://localhost/axis/ValidXMLCharIsInterpretedAsCPPCommand">
-<ns1:Element><ns2:arg_name1_ xmlns:ns2="ValidXMLCharIsInterpretedAsCPPCommandTypes">13</ns2:arg_name1_>
-<ns3:arg_name2_ xmlns:ns3="ValidXMLCharIsInterpretedAsCPPCommandTypes">14</ns3:arg_name2_>
-<ns4:arg_name3_ xmlns:ns4="ValidXMLCharIsInterpretedAsCPPCommandTypes">15</ns4:arg_name3_>
-<ns5:arg_name4 xmlns:ns5="ValidXMLCharIsInterpretedAsCPPCommandTypes">16</ns5:arg_name4>
-<ns6:arg_name5 xmlns:ns6="ValidXMLCharIsInterpretedAsCPPCommandTypes">17</ns6:arg_name5>
-<ns7:arg_name6 xmlns:ns7="ValidXMLCharIsInterpretedAsCPPCommandTypes">18</ns7:arg_name6>
+<ns1:Element xmlns:ns2="ValidXMLCharIsInterpretedAsCPPCommandTypes"><ns2:arg_name1_>13</ns2:arg_name1_>
+<ns2:arg_name2_>14</ns2:arg_name2_>
+<ns2:arg_name3_>15</ns2:arg_name3_>
+<ns2:arg_name4>16</ns2:arg_name4>
+<ns2:arg_name5>17</ns2:arg_name5>
+<ns2:arg_name6>18</ns2:arg_name6>
 </ns1:Element>
 </ns1:test4Request>
 </SOAP-ENV:Body>
