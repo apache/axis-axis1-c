@@ -57,6 +57,7 @@ void XercesHandler::startElement(const XMLCh *const uri,const XMLCh *const
 {
     m_pCurrElement = m_pNextElement;
     m_pNextElement->m_type = START_ELEMENT;
+    m_pNextElement->m_type2 = END_ELEMENT;
     m_pNextElement->m_pchNameOrValue = XMLString::transcode(localname);
     m_pNextElement->m_pchNamespace = XMLString::transcode(uri);
     
@@ -173,10 +174,10 @@ void XercesHandler::endElement (const XMLCh *const uri,
                                 const XMLCh *const qname)
 {
     if (m_pCurrElement && (START_ELEMENT == m_pCurrElement->m_type))
-    /* it seems that both startElement and endElemen events fired within a
+    /* it seems that both startElement and endElement events fired within a
     single parseNext call */
     {
-        m_pCurrElement->m_type2 = END_ELEMENT;
+        m_pCurrElement->m_type2 = START_END_ELEMENT;
         m_bEndElementFollows = true;
         return;
     }

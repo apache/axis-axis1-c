@@ -51,7 +51,7 @@ using namespace std;
  * Enumeration that defines the SAX events that the AnyElement may contain
  */
 typedef enum { START_ELEMENT=0, CHARACTER_ELEMENT, END_ELEMENT, 
-    START_PREFIX, END_PREFIX} XML_NODE_TYPE;
+    START_PREFIX, END_PREFIX, START_END_ELEMENT} XML_NODE_TYPE;
 
 /**
  * @struct AnyElement
