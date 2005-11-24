@@ -2665,8 +2665,14 @@ SoapDeSerializer::getAnyObject ()
     list < AxisString > lstXML;
 
     if (!m_pNode)
-    	m_pNode = m_pParser->anyNext ();
-    tagCount++;
+	{
+    	m_pNode = m_pParser->anyNext();
+	}
+
+	if( END_ELEMENT != m_pNode->m_type)
+	{
+		tagCount++;
+	}
 
     while ((END_ELEMENT != m_pNode->m_type) || (tagCount >= 0))
     {

@@ -93,13 +93,23 @@ xsd__int Calculator::div(xsd__int Value0, xsd__int Value1)
 				cout << any->_size<<endl;
 				cout << any->_array[0]<<endl;
 			}
-			any = (AnyType*)m_pCall->getAnyObject();
-			any = (AnyType*)m_pCall->getAnyObject();
-			any = (AnyType*)m_pCall->getAnyObject();
-			if(any!=NULL){
-				cout << any->_size<<endl;
-				cout << any->_array[0]<<endl;
-			}		
+			any = (AnyType*)m_pCall->getAnyObject();	// Skip past </divResponse> tag
+//			any = (AnyType*)m_pCall->getAnyObject();	// Skip past </Body> tag
+//			any = (AnyType*)m_pCall->getAnyObject();	// Skip past </Envelope> tag
+
+			if( any != NULL)
+			{
+				if( any->_size > 0 && strcmp( any->_array[0], "</divResponse>"))
+				{
+					cout << "Error - Unexpected tag in buffer." << endl;
+					cout << any->_size << endl;
+					cout << any->_array[0] << endl;
+				}
+			}
+			else
+			{
+				cout << "Error - No tags left in buffer." << endl;
+			}
 		}
 
 	}
