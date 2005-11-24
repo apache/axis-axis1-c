@@ -2720,7 +2720,7 @@ SoapDeSerializer::getAnyObject ()
     	{
     	    tagCount--;
     	}
-    	else if (START_ELEMENT == m_pNode->m_type)
+    	else if (START_ELEMENT == m_pNode->m_type && START_END_ELEMENT != m_pNode->m_type2)
     	{
     	    tagCount++;
     	}
@@ -2831,7 +2831,14 @@ SoapDeSerializer::serializeTag (AxisString & xmlStr, const AnyElement * node,
         	 }
 	       }
 
+    if (START_END_ELEMENT == node->m_type2)
+	{
+    	xmlStr += "/>";
+	}
+	else
+	{
     	xmlStr += ">";
+	}
     }
     else if (END_ELEMENT == node->m_type)
     {
@@ -2857,7 +2864,14 @@ SoapDeSerializer::serializeTag (AxisString & xmlStr, const AnyElement * node,
     	}
 
 	xmlStr += node->m_pchNameOrValue;
-	xmlStr += ">";
+    if (START_END_ELEMENT == node->m_type2)
+	{
+    	xmlStr += "/>";
+	}
+	else
+	{
+    	xmlStr += ">";
+	}
     }
 }
 
