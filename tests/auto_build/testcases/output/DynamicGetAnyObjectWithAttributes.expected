@@ -1,2 +1,5 @@
-<asRequiredAttributeResponse><RequiredAttributeElement xmlns="http://complextype.test.apache.org" requiredAttribute="true" anotherAttribute="false"></asRequiredAttributeResponse>
+<asRequiredAttributeResponse>
+<RequiredAttributeElement xmlns="http://complextype.test.apache.org" requiredAttribute="true" anotherAttribute="false">
+</RequiredAttributeElement>
+</asRequiredAttributeResponse>
 ----------------------------TEST COMPLETE------------------------------------
