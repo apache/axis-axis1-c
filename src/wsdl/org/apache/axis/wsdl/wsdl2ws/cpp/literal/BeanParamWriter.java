@@ -344,15 +344,15 @@ public class BeanParamWriter extends ParamCPPFileWriter
         writer.write("\t\tpSZ->serialize( \">\", NULL);\n");
         writer.write("\t\treturn AXIS_SUCCESS;\n");
         writer.write("\t}\n\n");
-
-        writer.write("\t\tif (!bArray)\n\t\t{\n");
-        writer.write("\t\t\tbool blnIsNewPrefix = false;\n");
-        writer.write("\t\t\tconst AxisChar* sPrefix = pSZ->getNamespacePrefix(Axis_URI_" + classname + ", blnIsNewPrefix);\n");
-        writer.write("\t\t\t//if (blnIsNewPrefix)\n\t\t\t//{\n");
-        writer.write("\t\t\t\tpSZ->serialize(\" xmlns:\", sPrefix, \"=\\\"\",\n");
-        writer.write("\t\t\t\t\tAxis_URI_" + classname + ", \"\\\"\", NULL );\n");
-        writer.write("\t\t\t//}\n");
+        
+        writer.write("\tbool blnIsNewPrefix = false;\n");
+        writer.write("\tif (!bArray)\n\t{\n");
+        writer.write("\t\tconst AxisChar* sPrefix = pSZ->getNamespacePrefix(Axis_URI_" + classname + ", blnIsNewPrefix);\n");
+        writer.write("\t\tif (blnIsNewPrefix)\n\t\t{\n");
+        writer.write("\t\t\tpSZ->serialize(\" xmlns:\", sPrefix, \"=\\\"\",\n");
+        writer.write("\t\t\t\tAxis_URI_" + classname + ", \"\\\"\", NULL );\n");
         writer.write("\t\t}\n");
+        writer.write("\t}\n");
         
         
         writer.write("\t/* first serialize attributes if any*/\n");
@@ -616,6 +616,13 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 }
             }
         }
+
+    	writer.write("\n\tif (!bArray && blnIsNewPrefix)\n");
+        writer.write("\t{\n");
+        writer.write("\t\tpSZ->removeNamespacePrefix(Axis_URI_"
+						+ classname + ");\n");
+        writer.write("\t}\n\n");
+
         
         writer.write("\treturn AXIS_SUCCESS;\n");
         writer.write("}\n\n");
