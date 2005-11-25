@@ -1,0 +1,16 @@
+<test>
+    <name>ComplexTypeChoiceSimple</name>
+    <description>ComplexTypeChoiceSimple</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>ComplexTypeChoiceSimpleClient.cpp</clientCode>
+    <wsdl>ComplexTypeChoiceSimple.wsdl</wsdl>
+    <expected>
+        <output>
+            ComplexTypeChoiceSimple.cpp.out
+        </output>
+		<request>
+			ComplexTypeChoiceSimple.request
+		</request>
+    </expected>
+	<endpoint>-e http://localhost:80/axis/ComplexTypeChoiceSimple</endpoint>
+</test>

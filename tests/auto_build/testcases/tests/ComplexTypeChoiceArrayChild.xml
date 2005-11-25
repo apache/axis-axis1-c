@@ -1,0 +1,16 @@
+<test>
+    <name>ComplexTypeChoiceArrayChild</name>
+    <description>ComplexTypeChoiceArrayChild</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>ComplexTypeChoiceArrayChildClient.cpp</clientCode>
+    <wsdl>ComplexTypeChoiceArrayChild.wsdl</wsdl>
+    <expected>
+        <output>
+            ComplexTypeChoiceArrayChild.cpp.out
+        </output>
+		<request>
+			ComplexTypeChoiceArrayChild.request
+		</request>
+    </expected>
+	<endpoint>-e http://localhost:80/axis/ComplexTypeChoiceArrayChild</endpoint>
+</test>
