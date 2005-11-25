@@ -236,7 +236,8 @@ int SoapSerializer::addOutputCmplxParam( void * pObject,
 										 void * pSZFunct, 
                                          void * pDelFunct,
 										 const AxisChar * pName,
-                                         const AxisChar * pNamespace)
+                                         const AxisChar * pNamespace,
+                                         bool nsQualified)
 { 
 	int	iSuccess = AXIS_SUCCESS;
 
@@ -246,7 +247,7 @@ int SoapSerializer::addOutputCmplxParam( void * pObject,
     pParam->m_Value.pCplxObj->pObject = pObject;
     pParam->m_Value.pCplxObj->pSZFunct = (AXIS_SERIALIZE_FUNCT) pSZFunct;
     pParam->m_Value.pCplxObj->pDelFunct = (AXIS_OBJECT_DELETE_FUNCT) pDelFunct;
-	
+	pParam->setNsQualified(nsQualified);
     if( m_pSoapEnvelope &&
 		(m_pSoapEnvelope->m_pSoapBody) &&
 		(m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod)) 
@@ -255,6 +256,7 @@ int SoapSerializer::addOutputCmplxParam( void * pObject,
     }
 
     pParam->setName( pName);
+    
 
     return iSuccess;  // Can it only be successful?
 }
@@ -846,13 +848,22 @@ int SoapSerializer::serializeAsElement( const AxisChar * pName,
 int SoapSerializer::serializeAsElement( const AxisChar * pName, 
                                         const AxisChar * pNamespace,
                                         void * pValue, 
-                                        XSDTYPE type) 
+                                        XSDTYPE type,
+                                        bool nsQualified) 
 {
     IAnySimpleType* pSimpleType = AxisUtils::createSimpleTypeObject(pValue, type);
+    int ret;
+    if (nsQualified)
+    {
+    	ret = serializeAsElement(pName, pNamespace, pSimpleType);
+    }
+    else
+    {
+    	ret = serializeAsElement(pName, NULL, pSimpleType);
+    }
     
-    int ret = serializeAsElement(pName, pNamespace, pSimpleType);
     
-    // Samisa: got to clen memory allocated in AxisUtils::createSimpleTypeObject
+    // Samisa: got to clean memory allocated in AxisUtils::createSimpleTypeObject
     delete pSimpleType;
 
     return ret;

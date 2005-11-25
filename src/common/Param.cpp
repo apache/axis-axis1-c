@@ -153,7 +153,7 @@ int Param::serialize (SoapSerializer &pSZ)
             {
 				TRACE_SERIALIZE_FUNCT_ENTRY(m_Value.pCplxObj->pSZFunct, m_Value.pCplxObj->pObject, &pSZ, false);
                 int stat = AXIS_FAIL;
-                stat = m_Value.pCplxObj->pSZFunct (m_Value.pCplxObj->pObject, &pSZ, false);
+                stat = m_Value.pCplxObj->pSZFunct (m_Value.pCplxObj->pObject, &pSZ, false, nsQualified);
 				TRACE_SERIALIZE_FUNCT_EXIT(m_Value.pCplxObj->pSZFunct, stat);
             }
             else
@@ -164,7 +164,7 @@ int Param::serialize (SoapSerializer &pSZ)
                  */
 				TRACE_SERIALIZE_FUNCT_ENTRY(m_Value.pCplxObj->pSZFunct, m_Value.pCplxObj->pObject, &pSZ, false);
                 int stat = AXIS_FAIL;
-                stat = m_Value.pCplxObj->pSZFunct (m_Value.pCplxObj->pObject, &pSZ, false);
+                stat = m_Value.pCplxObj->pSZFunct (m_Value.pCplxObj->pObject, &pSZ, false, nsQualified);
 				TRACE_SERIALIZE_FUNCT_EXIT(m_Value.pCplxObj->pSZFunct, stat);
 
 				pSZ.serialize ("</", m_sName.c_str (), ">\n", NULL);
@@ -258,6 +258,16 @@ int Param::setArrayElements (void* pObject, AXIS_DESERIALIZE_FUNCT pDZFunct,
 void Param::setName (const AxisChar* sName)
 {
     m_sName = sName;
+}
+
+bool Param::getNsQualified()
+{
+	return nsQualified;
+}
+
+void Param::setNsQualified(bool nsq)
+{
+	nsQualified = nsq;
 }
 
 // ComplexObjectHandler functions
