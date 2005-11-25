@@ -155,15 +155,25 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 String parameterName = methodName;
                 String properParamName = getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]);
 
+                if( methodName.endsWith( "_"))
+                {
+                    String localMethodName = methodName.substring( 0, methodName.length() - 1);
+                    
+                    if( localMethodName.equals( classname))
+                    {
+                        methodName = localMethodName; 
+                    }
+                }
+                
                 if (attribs[i].isArray())
                 {
                     writer.write("\n" + properParamName + " * " + classname
-                            + "::get" + parameterName + "()\n{\n");
+                            + "::get" + methodName + "()\n{\n");
 
                     writer.write("\t" + "return " + parameterName + " ; \n}\n");
 
                     writer.write("\n" + "void " + classname + "::set"
-                            + parameterName + "(" + properParamName
+                            + methodName + "(" + properParamName
                             + " * pInValue)\n{\n");
 
                     writer.write("\tif(" + parameterName + " == NULL)\n");
@@ -187,12 +197,12 @@ public class BeanParamWriter extends ParamCPPFileWriter
 	                    }
 	                    
 	                    writer.write("\n" + properParamName + " * " + classname
-	                            + "::get" + parameterName + "()\n{\n");
+	                            + "::get" + methodName + "()\n{\n");
 	
 	                    writer.write("\t" + "return " + parameterName + " ; \n}\n");
 	
 	                    writer.write("\n" + "void " + classname + "::set"
-	                            + parameterName + "(" + properParamName
+	                            + methodName + "(" + properParamName
 	                            + " * pInValue)\n{\n");
 	
 	                    writer.write("\t" + parameterName + " = pInValue ; \n");
@@ -220,7 +230,6 @@ public class BeanParamWriter extends ParamCPPFileWriter
 	                     * Dushshantha: Write getter
 	                     */
 	
-	
 	                    if( methodName.endsWith( "_"))
 	                    {
 	                        String localMethodName = methodName.substring( 0, methodName.length() - 1);
@@ -230,7 +239,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
 	                            methodName = localMethodName; 
 	                        }
 	                    }
-	                    
+                    
 	                    if (attribs[i].isAnyType())
 	                    {                    	
 	                    	anyCounter += 1;
@@ -1378,15 +1387,16 @@ public class BeanParamWriter extends ParamCPPFileWriter
     //	 FJP Nillable vv
     protected boolean isElementNillable(int index)
     {
-        ElementInfo ei = type.getElementForElementName(attribs[index].getParamName());
+        //ElementInfo ei = type.getElementForElementName(attribs[index].getParamName());
         boolean bNillable = false;
 
-        if (ei != null
-        		&& attribs[index].isSimpleType()
+        if (//ei != null
+        		// && 
+        		attribs[index].isSimpleType()
         		&& !attribs[index].isArray()
                 && !CUtils.isPointerType(attribs[index].getTypeName()) )
         {
-            bNillable = ei.getNillable();
+            bNillable = attribs[index].isNillable();
         }
 
         return bNillable;
