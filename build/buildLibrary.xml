@@ -7,7 +7,8 @@
 			<isset property="aix"/>
 		</not>
 		<then>
-			<cc outfile="${test.directory}/${libraryName}" objdir="${test.directory}"
+		<echo message="test.directory = ${test.directory}"/>
+			<cc failonerror="false" outfile="${test.directory}/${libraryName}" objdir="${test.directory}"
 				exceptions="true" outtype="shared" multithreaded="true">
 				<!-- Compilers -->
 				<compiler refid="SolarisCC"/>
@@ -33,7 +34,7 @@
 			</cc>
 		</then>
 		<else>
-			<cc outfile="${test.directory}/${libraryPrefix}${libraryName}${librarySuffix}" objdir="${test.directory}"
+			<cc failonerror="false" outfile="${test.directory}/${libraryPrefix}${libraryName}${librarySuffix}" objdir="${test.directory}"
 				exceptions="true" multithreaded="true">
 				<!-- Compilers -->
 				<compiler refid="AIXxlc"/>

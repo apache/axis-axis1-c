@@ -1,6 +1,7 @@
 
 <project name="buildTest" default="compileClient" basedir="..">
-
+	<import file="buildLibrary.xml"/>
+	
 	<target name="buildClient" unless="runOnly">
 		<antcall target="compileClient" inheritAll="true"/>
 	</target>
@@ -125,7 +126,7 @@
 		</cc>
 	</target>
 
-	<target name="compileLinkedClient" depends="generateStubs, compileLibrary, copyClientCode">
+	<target name="compileLinkedClient" depends="getClient, generateStubs, compileLibrary, copyClientCode">
 		<basename file="${client.code}" property="client.source"/>
 		<cc failonerror="false" incremental="false" outfile="${test.directory}/${test.name}"
 		 objdir="${test.directory}" exceptions="true"
