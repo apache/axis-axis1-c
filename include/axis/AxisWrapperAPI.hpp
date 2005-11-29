@@ -59,7 +59,7 @@ typedef void (* AXIS_OBJECT_DELETE_FUNCT)(void*, bool bArray, int nSize);
  * Function that serializes a custom type. bArray indicates that the object 
  * in void is an element of an array (note that void* is not itself an array).
  */
-typedef int (* AXIS_SERIALIZE_FUNCT)(void*, void*, bool bArray, bool nsQualified = false);
+typedef int (* AXIS_SERIALIZE_FUNCT)(void*, void*, bool bArray);
 
 /**
  * @fn AXIS_OBJECT_SIZE_FUNCT

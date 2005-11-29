@@ -101,7 +101,7 @@ public:
 
     /* Method for adding complex parameters */
     void AXISCALL addCmplxParameter(void* pObject, void* pSZFunct,
-        void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace, bool nsQualified = false);
+        void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace);
     /* Method for adding complex type array parameters */
     void AXISCALL addCmplxArrayParameter(Axis_Array* pArray, void* pSZFunct,
         void* pDelFunct, void* pSizeFunct, const AxisChar* pName,
