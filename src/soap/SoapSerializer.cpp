@@ -236,8 +236,7 @@ int SoapSerializer::addOutputCmplxParam( void * pObject,
 										 void * pSZFunct, 
                                          void * pDelFunct,
 										 const AxisChar * pName,
-                                         const AxisChar * pNamespace,
-                                         bool nsQualified)
+                                         const AxisChar * pNamespace)
 { 
 	int	iSuccess = AXIS_SUCCESS;
 
@@ -247,8 +246,7 @@ int SoapSerializer::addOutputCmplxParam( void * pObject,
     pParam->m_Value.pCplxObj->pObject = pObject;
     pParam->m_Value.pCplxObj->pSZFunct = (AXIS_SERIALIZE_FUNCT) pSZFunct;
     pParam->m_Value.pCplxObj->pDelFunct = (AXIS_OBJECT_DELETE_FUNCT) pDelFunct;
-	pParam->setNsQualified(nsQualified);
-    if( m_pSoapEnvelope &&
+	if( m_pSoapEnvelope &&
 		(m_pSoapEnvelope->m_pSoapBody) &&
 		(m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod)) 
     {
@@ -848,21 +846,11 @@ int SoapSerializer::serializeAsElement( const AxisChar * pName,
 int SoapSerializer::serializeAsElement( const AxisChar * pName, 
                                         const AxisChar * pNamespace,
                                         void * pValue, 
-                                        XSDTYPE type,
-                                        bool nsQualified) 
+                                        XSDTYPE type) 
 {
     IAnySimpleType* pSimpleType = AxisUtils::createSimpleTypeObject(pValue, type);
     int ret;
-    if (nsQualified)
-    {
-    	ret = serializeAsElement(pName, pNamespace, pSimpleType);
-    }
-    else
-    {
-    	ret = serializeAsElement(pName, NULL, pSimpleType);
-    }
-    
-    
+    ret = serializeAsElement(pName, pNamespace, pSimpleType);
     // Samisa: got to clean memory allocated in AxisUtils::createSimpleTypeObject
     delete pSimpleType;
 

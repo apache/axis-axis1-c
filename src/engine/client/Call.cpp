@@ -160,10 +160,10 @@ void Call::addCmplxArrayParameter (Axis_Array* pArray, void* pSZFunct,
 }
 
 void Call::addCmplxParameter (void* pObject, void* pSZFunct, void* pDelFunct,
-    const AxisChar* pName, const AxisChar* pNamespace, bool nsQualified)
+    const AxisChar* pName, const AxisChar* pNamespace)
 {
      m_nStatus = m_pIWSSZ->addOutputCmplxParam (pObject, pSZFunct, pDelFunct, pName,
-        pNamespace, nsQualified);
+        pNamespace);
 }
 
 int Call::invoke ()

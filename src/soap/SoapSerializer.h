@@ -134,7 +134,7 @@ public:
 
     /* for complex types */
     int AXISCALL addOutputCmplxParam(void* pObject, void* pSZFunct, 
-        void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace, bool nsQualified = false);
+        void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace);
 
     int AXISCALL addFaultDetail(void* pObject, void* pSZFunct,
         void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace );
@@ -209,8 +209,7 @@ public:
     int AXISCALL serializeAsElement(const AxisChar* pchName,
                                     const AxisChar* pNamespace,
                                     void* pValue,
-                                    XSDTYPE type,
-                                    bool nsQualified = false);
+                                    XSDTYPE type);
     int AXISCALL serializeAsElement(const AxisChar* pchName,
                                     IAnySimpleType* pSimpleType);
 	int AXISCALL serializeAsElement(const AxisChar* pchName,

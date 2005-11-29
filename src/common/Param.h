@@ -63,8 +63,7 @@ private:
     AxisString m_strPrefix; /* needed in serialization only */
     AxisString m_strUri; /* needed in serialization only */
     IAnySimpleType* m_AnySimpleType;
-    bool nsQualified;
-
+    
 public: 
     void setValue(XSDTYPE nType, IAnySimpleType* value);
     int serialize(SoapSerializer& pSZ);
@@ -76,8 +75,6 @@ public:
     int setUserType(void* pObject, AXIS_DESERIALIZE_FUNCT pDZFunct, 
         AXIS_OBJECT_DELETE_FUNCT pDelFunct);
     void setName(const AxisChar* sName);
-    bool getNsQualified();
-    void setNsQualified(bool nsq);
 };
 
 AXIS_CPP_NAMESPACE_END
