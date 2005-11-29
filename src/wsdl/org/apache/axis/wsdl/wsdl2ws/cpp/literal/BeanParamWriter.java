@@ -30,9 +30,8 @@ import java.util.Iterator;
 import javax.xml.namespace.QName;
 
 import org.apache.axis.wsdl.symbolTable.BaseType;
-import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.CUtils;
-import org.apache.axis.wsdl.wsdl2ws.info.ElementInfo;
+import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
@@ -230,15 +229,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
 	                     * Dushshantha: Write getter
 	                     */
 	
-	                    if( methodName.endsWith( "_"))
-	                    {
-	                        String localMethodName = methodName.substring( 0, methodName.length() - 1);
-	                        
-	                        if( localMethodName.equals( classname))
-	                        {
-	                            methodName = localMethodName; 
-	                        }
-	                    }
+
                     
 	                    if (attribs[i].isAnyType())
 	                    {                    	
@@ -448,6 +439,16 @@ public class BeanParamWriter extends ParamCPPFileWriter
         
         for (int i = attributeParamCount; i < attribs.length; i++)
         {
+            String namespace = "";
+            if (attribs[i].getNsQualified())
+            {
+                namespace = "Axis_URI_" + classname;
+            }
+            else
+            {
+                namespace = "NULL";
+            }
+            
             // Dushshantha:
 		    // if the attribute is a choice following should do
 
@@ -491,8 +492,8 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 {
                 	writer.write("\tpSZ->serializeBasicArray(param->"
                             + attribs[i].getParamName()
-                            + ", Axis_URI_"
-                            + classname
+                            + ", "
+                            + namespace
                             + ","
                             + CUtils.getXSDTypeForBasicType(attribs[i]
                                             .getTypeName())
@@ -503,6 +504,14 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 else
                 {
                     arrayType = attribs[i].getTypeName();
+                    if (attribs[i].getNsQualified())
+                    {
+                        namespace = "Axis_URI_" + arrayType;
+                    }
+                    else
+                    {
+                        namespace = "NULL";
+                    }
                     writer.write("\tpSZ->serializeCmplxArray(param->"
                                     + attribs[i].getParamNameAsMember()
                                     + ",\n");
@@ -513,8 +522,8 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     writer.write("\t\t\t\t\t\t (void*) Axis_GetSize_"
                             + arrayType + ",\n");
                     writer.write("\t\t\t\t\t\t \""
-                            + attribs[i].getParamName() + "\", Axis_URI_"
-                            + arrayType + ");\n");
+                            + attribs[i].getParamName() + "\", "
+                            + namespace + ");\n");
                 }
             }
             else if (attribs[i].isSimpleType())
@@ -522,9 +531,9 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 if (CUtils.isPointerType(attribs[i].getTypeName()))
                 {
                     writer.write("\tpSZ->serializeAsElement(\""
-                            + CUtils.sanitiseAttributeName( classname, attribs[i].getSOAPElementNameAsString())
-                            + "\", Axis_URI_"
-                            + classname
+                            + attribs[i].getSOAPElementNameAsString()
+                            + "\", "
+                            + namespace
                             + ", (void*)(param->"
                             + attribs[i].getParamNameWithoutSymbols()
                             + "), "
@@ -546,9 +555,9 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 		if (((attribs[i].getChoiceElement())&&(isElementNillable(i)))&& !(attribs[i].getTypeName().equals("xsd__string")) )
                 		{
                 			writer.write("\tpSZ->serializeAsElement(\""
-                                    + CUtils.sanitiseAttributeName( classname, attribs[i].getSOAPElementNameAsString())
-                                    + "\", Axis_URI_"
-                                    + classname
+                                    + attribs[i].getSOAPElementNameAsString()
+                                    + "\", "
+                                    + namespace
                                     + ", (void*)(*(param->"
                                     + attribs[i].getParamNameWithoutSymbols()
                                     + ")), "
@@ -557,9 +566,9 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 		else
                 		{
                     		writer.write("\tpSZ->serializeAsElement(\""
-                                    + CUtils.sanitiseAttributeName( classname, attribs[i].getSOAPElementNameAsString())
-                                    + "\", Axis_URI_"
-                                    + classname
+                                    + attribs[i].getSOAPElementNameAsString()
+                                    + "\", "
+                                    + namespace
                                     + ", (void*)(param->"
                                     + attribs[i].getParamNameWithoutSymbols()
                                     + "), "
@@ -569,9 +578,9 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     else
                     {
                         writer.write("\tpSZ->serializeAsElement(\""
-                                + CUtils.sanitiseAttributeName( classname, attribs[i].getSOAPElementNameAsString())
-                                + "\", Axis_URI_"
-                                + classname
+                                + attribs[i].getSOAPElementNameAsString()
+                                + "\", "
+                                + namespace
                                 + ", (void*)&(param->"
                                 + attribs[i].getParamNameWithoutSymbols()
                                 + "), "
@@ -597,15 +606,25 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 {
                     elm = attribs[i].getTypeName();
                 }
- 
-                writer.write("\tpSZ->serialize(\"<\", pSZ->getNamespacePrefix(\""
-                                + type.getName().getNamespaceURI()
-                                + "\"), \":\", \"" + elm + "\", 0);\n");
-                writer.write("\tAxis_Serialize_" + attribs[i].getTypeName()
-                        + "(param->" + attribs[i].getParamName() + ", pSZ);\n");
-                writer.write("\tpSZ->serialize(\"</\", pSZ->getNamespacePrefix(\""
-                                + type.getName().getNamespaceURI()
-                                + "\"), \":\", \"" + elm + "\", \">\", 0);\n");
+                
+                if (attribs[i].getNsQualified())
+                {
+                    writer.write("\tpSZ->serialize(\"<\", pSZ->getNamespacePrefix(\""
+	                                + type.getName().getNamespaceURI()
+	                                + "\"), \":\", \"" + elm + "\", 0);\n");
+	                writer.write("\tAxis_Serialize_" + attribs[i].getTypeName()
+	                        + "(param->" + attribs[i].getParamName() + ", pSZ);\n");
+	                writer.write("\tpSZ->serialize(\"</\", pSZ->getNamespacePrefix(\""
+	                                + type.getName().getNamespaceURI()
+	                                + "\"), \":\", \"" + elm + "\", \">\", 0);\n");
+                }
+                else
+                {
+                    writer.write("\tpSZ->serialize(\"<" + elm + "\", 0);\n");
+		            writer.write("\tAxis_Serialize_" + attribs[i].getTypeName()
+		                    + "(param->" + attribs[i].getParamName() + ", pSZ);\n");
+		            writer.write("\tpSZ->serialize(\"</" + elm + "\", \">\", 0);\n");
+                }
 
             }
             //Dushshantha:

@@ -885,7 +885,7 @@ public class CSchemaUtils extends SchemaUtils
 
             // check the Form (or elementFormDefault) attribute of this node to
             // determine if it should be namespace quailfied or not.
-            String form = getAttributeRecursivly( elementNode, "form");
+            String form = Utils.getAttribute(elementNode, "form");
             if ((form != null) && form.equals("unqualified"))
             {
 
