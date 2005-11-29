@@ -592,16 +592,13 @@ public class ParmHeaderFileWriter extends ParamWriter
     //	 FJP Nillable vv
     protected boolean isElementNillable(int index)
     {
-        ElementInfo ei = type.getElementForElementName(attribs[index]
-                .getParamName());
         boolean bNillable = false;
 
-        if (ei != null
-        		&& attribs[index].isSimpleType()
+        if (attribs[index].isSimpleType()
         		&& !attribs[index].isArray()
         		&& !CUtils.isPointerType(attribs[index].getTypeName()))
         {
-            bNillable = ei.getNillable();
+            bNillable = attribs[index].isNillable();
         }
 
         return bNillable;

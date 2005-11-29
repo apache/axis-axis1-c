@@ -223,6 +223,7 @@ public abstract class ParamWriter extends BasicFileWriter
                 }
             if (elem.getMinOccurs() == 0)
                 this.attribs[i].setOptional(true);
+            this.attribs[i].setNillable(elem.getNillable());
         }
     }
 
