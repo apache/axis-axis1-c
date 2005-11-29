@@ -58,13 +58,13 @@
 	<message name="response">
 		<part name="parameters" element="tns:myOperationResponse" />
 	</message>
-	<portType name="operations">
+	<portType name="ComplexTypeChoice">
 		<operation name="myOperation">
 			<input message="tns:request" />
 			<output message="tns:response" />
 		</operation>
 	</portType>
-	<binding name="operationsBinding" type="tns:operations">
+	<binding name="operationsBinding" type="tns:ComplexTypeChoice">
 		<soap:binding transport="http://schemas.xmlsoap.org/soap/http"
 			style="document" />
 		<operation name="myOperation">
