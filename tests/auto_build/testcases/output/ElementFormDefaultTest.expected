@@ -1,0 +1,49 @@
+Use of form="unqualified"
+String element = Hello!
+Integer element = 123
+Array of integer elements
+ element[0] = 0
+ element[1] = 1
+Optional integer element = 234
+Nillable integer element = NULL
+SimpleComplexType->someData = 345
+Array of complex elements
+ element[0] = 0
+ element[1] = 1
+Use of form="qualified"
+String element = Hello!
+Integer element = 123
+Array of integer elements
+ element[0] = 0
+ element[1] = 1
+Optional integer element = 234
+Nillable integer element = NULL
+SimpleComplexType->someData = 345
+Array of complex elements
+ element[0] = 0
+ element[1] = 1
+Use of form="unqualified" nested within a complex type
+String element = Hello!
+Integer element = 123
+Array of integer elements
+ element[0] = 0
+ element[1] = 1
+Optional integer element = 234
+Nillable integer element = NULL
+SimpleComplexType->someData = 345
+Array of complex elements
+ element[0] = 0
+ element[1] = 1
+Use of form="qualified" nested within a complex type
+String element = Hello!
+Integer element = 123
+Array of integer elements
+ element[0] = 0
+ element[1] = 1
+Optional integer element = 234
+Nillable integer element = NULL
+SimpleComplexType->someData = 345
+Array of complex elements
+ element[0] = 0
+ element[1] = 1
+---------------------- TEST COMPLETE -----------------------------

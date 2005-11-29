@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://tempuri.org/ElementFormDefaultTest/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="ElementFormDefaultTest" targetNamespace="http://tempuri.org/ElementFormDefaultTest/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/ElementFormDefaultTest/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:element name="elementFormDefaultIsUnqualifiedResponse">
+      	<xsd:complexType>
+      		<xsd:sequence>
+        		<xsd:element name="aStringType" type="xsd:string"
+        			minOccurs="1" maxOccurs="1" form="unqualified">
+        		</xsd:element>
+        		<xsd:element name="anIntegerType" type="xsd:integer"
+        			minOccurs="1" maxOccurs="1" form="unqualified">
+        		</xsd:element>
+        		<xsd:element name="anIntegerArray" type="xsd:integer"
+        			minOccurs="1" maxOccurs="unbounded" form="unqualified">
+        		</xsd:element>
+        		<xsd:element name="anOptionalIntegerType"
+        			type="xsd:integer" minOccurs="0" maxOccurs="1"
+        			form="unqualified">
+        		</xsd:element>
+        		<xsd:element name="aNillableIntegerType"
+        			type="xsd:integer" minOccurs="1" maxOccurs="1"
+        			nillable="true" form="unqualified">
+        		</xsd:element>
+        		<xsd:element name="SimpleComplexType"
+        			type="tns:UnqualifiedSimpleComplexType" minOccurs="1"
+        			maxOccurs="1" form="unqualified">
+        		</xsd:element>
+        		<xsd:element name="arrayOfSimpleComplexType"
+        			type="tns:UnqualifiedSimpleComplexType" minOccurs="1"
+        			maxOccurs="unbounded" form="unqualified">
+        		</xsd:element>
+        	</xsd:sequence>
+      	</xsd:complexType>
+      </xsd:element>
+      <xsd:element name="elementFormDefaultIsUnqualifiedRequest">
+      	<xsd:complexType>
+      		<xsd:sequence>
+        		<xsd:element name="aStringType" type="xsd:string"
+        			minOccurs="1" maxOccurs="1" form="unqualified">
+        		</xsd:element>
+        		<xsd:element name="anIntegerType" type="xsd:integer"
+        			minOccurs="1" maxOccurs="1" form="unqualified">
+        		</xsd:element>
+        		<xsd:element name="anIntegerArray" type="xsd:integer"
+        			minOccurs="1" maxOccurs="unbounded" form="unqualified">
+        		</xsd:element>
+        		<xsd:element name="anOptionalIntegerType"
+        			type="xsd:integer" minOccurs="0" maxOccurs="1"
+        			form="unqualified">
+        		</xsd:element>
+        		<xsd:element name="aNillableIntegerType"
+        			type="xsd:integer" minOccurs="1" maxOccurs="1"
+        			nillable="true" form="unqualified">
+        		</xsd:element>
+        		<xsd:element name="SimpleComplexType"
+        			type="tns:UnqualifiedSimpleComplexType" minOccurs="1"
+        			maxOccurs="1" form="unqualified">
+        		</xsd:element>
+        		<xsd:element name="arrayOfSimpleComplexType"
+        			type="tns:UnqualifiedSimpleComplexType" minOccurs="1"
+        			maxOccurs="unbounded" form="unqualified">
+        		</xsd:element>
+        	</xsd:sequence>
+      	</xsd:complexType>
+      </xsd:element>
+      <xsd:element name="elementFormDefaultIsQualifiedResponse">
+      	<xsd:complexType>
+      		<xsd:sequence>
+        		<xsd:element name="aStringType" type="xsd:string"
+        			minOccurs="1" maxOccurs="1" form="qualified">
+        		</xsd:element>
+        		<xsd:element name="anIntegerType" type="xsd:integer"
+        			minOccurs="1" maxOccurs="1" form="qualified">
+        		</xsd:element>
+        		<xsd:element name="anIntegerArray" type="xsd:integer"
+        			minOccurs="1" maxOccurs="unbounded" form="qualified">
+        		</xsd:element>
+        		<xsd:element name="anOptionalIntegerType"
+        			type="xsd:integer" minOccurs="0" maxOccurs="1"
+        			form="qualified">
+        		</xsd:element>
+        		<xsd:element name="aNillableIntegerType"
+        			type="xsd:integer" minOccurs="1" maxOccurs="1"
+        			nillable="true" form="qualified">
+        		</xsd:element>
+        		<xsd:element name="SimpleComplexType"
+        			type="tns:QualifiedSimpleComplexType" minOccurs="1"
+        			maxOccurs="1" form="qualified">
+        		</xsd:element>
+        		<xsd:element name="arrayOfSimpleComplexType"
+        			type="tns:QualifiedSimpleComplexType" minOccurs="1"
+        			maxOccurs="unbounded" form="qualified">
+        		</xsd:element>
+        	</xsd:sequence>
+      	</xsd:complexType>
+      </xsd:element>
+      <xsd:element name="elementFormDefaultIsQualifiedRequest">
+      	<xsd:complexType>
+      		<xsd:sequence>
+        		<xsd:element name="aStringType" type="xsd:string"
+        			minOccurs="1" maxOccurs="1" form="qualified">
+        		</xsd:element>
+        		<xsd:element name="anIntegerType" type="xsd:integer"
+        			minOccurs="1" maxOccurs="1" form="qualified">
+        		</xsd:element>
+        		<xsd:element name="anIntegerArray" type="xsd:integer"
+        			minOccurs="1" maxOccurs="unbounded" form="qualified">
+        		</xsd:element>
+        		<xsd:element name="anOptionalIntegerType"
+        			type="xsd:integer" minOccurs="0" maxOccurs="1"
+        			form="qualified">
+        		</xsd:element>
+        		<xsd:element name="aNillableIntegerType"
+        			type="xsd:integer" minOccurs="1" maxOccurs="1"
+        			nillable="true" form="qualified">
+        		</xsd:element>
+        		<xsd:element name="SimpleComplexType"
+        			type="tns:QualifiedSimpleComplexType" minOccurs="1"
+        			maxOccurs="1" form="qualified">
+        		</xsd:element>
+        		<xsd:element name="arrayOfSimpleComplexType"
+        			type="tns:QualifiedSimpleComplexType" minOccurs="1"
+        			maxOccurs="unbounded" form="qualified">
+        		</xsd:element>
+        	</xsd:sequence>
+      	</xsd:complexType>
+      </xsd:element>
+		<xsd:element name="nestedElementFormDefaultIsQualifiedResponse">
+			<xsd:complexType>
+				<xsd:sequence>
+					<xsd:element name="ElementFormDefaultIsQualified" type="tns:ElementFormDefaultIsQualified" form="qualified"/>
+				</xsd:sequence>
+			</xsd:complexType>
+		</xsd:element>
+        <xsd:element name="nestedElementFormDefaultIsQualifiedRequest">
+			<xsd:complexType>
+				<xsd:sequence>
+					<xsd:element name="ElementFormDefaultIsQualified" type="tns:ElementFormDefaultIsQualified" form="qualified"/>
+				</xsd:sequence>
+			</xsd:complexType>
+		</xsd:element>
+        <xsd:element name="nestedElementFormDefaultIsUnqualifiedResponse">
+			<xsd:complexType>
+				<xsd:sequence>
+					<xsd:element name="ElementFormDefaultIsUnqualified" type="tns:ElementFormDefaultIsUnqualified" form="unqualified"/>
+				</xsd:sequence>
+			</xsd:complexType>
+		</xsd:element>
+        <xsd:element name="nestedElementFormDefaultIsUnqualifiedRequest">
+			<xsd:complexType>
+				<xsd:sequence>
+					<xsd:element name="ElementFormDefaultIsUnqualified" type="tns:ElementFormDefaultIsUnqualified" form="unqualified"/>
+				</xsd:sequence>
+			</xsd:complexType>
+		</xsd:element>
+        <xsd:complexType name="ElementFormDefaultIsQualified">
+        	<xsd:sequence>
+        		<xsd:element name="aStringType" type="xsd:string"
+        			minOccurs="1" maxOccurs="1" form="qualified">
+        		</xsd:element>
+        		<xsd:element name="anIntegerType" type="xsd:integer"
+        			minOccurs="1" maxOccurs="1" form="qualified">
+        		</xsd:element>
+        		<xsd:element name="anIntegerArray" type="xsd:integer"
+        			minOccurs="1" maxOccurs="unbounded" form="qualified">
+        		</xsd:element>
+        		<xsd:element name="anOptionalIntegerType"
+        			type="xsd:integer" minOccurs="0" maxOccurs="1"
+        			form="qualified">
+        		</xsd:element>
+        		<xsd:element name="aNillableIntegerType"
+        			type="xsd:integer" minOccurs="1" maxOccurs="1"
+        			nillable="true" form="qualified">
+        		</xsd:element>
+        		<xsd:element name="SimpleComplexType"
+        			type="tns:QualifiedSimpleComplexType" minOccurs="1"
+        			maxOccurs="1" form="qualified">
+        		</xsd:element>
+        		<xsd:element name="arrayOfSimpleComplexType"
+        			type="tns:QualifiedSimpleComplexType" minOccurs="1"
+        			maxOccurs="unbounded" form="qualified">
+        		</xsd:element>
+        	</xsd:sequence>
+        </xsd:complexType>
+        <xsd:complexType name="QualifiedSimpleComplexType">
+        	<xsd:sequence>
+        		<xsd:element name="someData" type="xsd:integer"
+        			minOccurs="1" maxOccurs="1" form="qualified" />
+        	</xsd:sequence>
+        </xsd:complexType>
+        <xsd:complexType name="ElementFormDefaultIsUnqualified">
+        	<xsd:sequence>
+        		<xsd:element name="aStringType" type="xsd:string"
+        			minOccurs="1" maxOccurs="1" form="unqualified">
+        		</xsd:element>
+        		<xsd:element name="anIntegerType" type="xsd:integer"
+        			minOccurs="1" maxOccurs="1" form="unqualified">
+        		</xsd:element>
+        		<xsd:element name="anIntegerArray" type="xsd:integer"
+        			minOccurs="1" maxOccurs="unbounded" form="unqualified">
+        		</xsd:element>
+        		<xsd:element name="anOptionalIntegerType"
+        			type="xsd:integer" minOccurs="0" maxOccurs="1"
+        			form="unqualified">
+        		</xsd:element>
+        		<xsd:element name="aNillableIntegerType"
+        			type="xsd:integer" minOccurs="1" maxOccurs="1"
+        			nillable="true" form="unqualified">
+        		</xsd:element>
+        		<xsd:element name="SimpleComplexType"
+        			type="tns:UnqualifiedSimpleComplexType" minOccurs="1"
+        			maxOccurs="1" form="unqualified">
+        		</xsd:element>
+        		<xsd:element name="arrayOfSimpleComplexType"
+        			type="tns:UnqualifiedSimpleComplexType" minOccurs="1"
+        			maxOccurs="unbounded" form="unqualified">
+        		</xsd:element>
+        	</xsd:sequence>
+        </xsd:complexType>
+        <xsd:complexType name="UnqualifiedSimpleComplexType">
+        	<xsd:sequence>
+        		<xsd:element name="someData" type="xsd:integer"
+        			minOccurs="1" maxOccurs="1" form="unqualified" />
+        	</xsd:sequence>
+        </xsd:complexType>
+
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="elementFormDefaultIsUnqualifiedResponse">
+    <wsdl:part element="tns:elementFormDefaultIsUnqualifiedResponse" name="elementFormDefaultIsUnqualifiedResponse"/>
+  </wsdl:message>
+  <wsdl:message name="elementFormDefaultIsUnqualifiedRequest">
+    <wsdl:part element="tns:elementFormDefaultIsUnqualifiedRequest" name="elementFormDefaultIsUnqualifiedRequest"/>
+  </wsdl:message>
+  <wsdl:message name="elementFormDefaultIsQualifiedResponse">
+  	<wsdl:part name="elementFormDefaultIsQualifiedResponse"
+  		element="tns:elementFormDefaultIsQualifiedResponse">
+  	</wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="elementFormDefaultIsQualifiedRequest">
+  	<wsdl:part name="elementFormDefaultIsQualifiedRequest"
+  		element="tns:elementFormDefaultIsQualifiedRequest">
+  	</wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="nestedElementFormDefaultIsQualifiedResponse">
+  	<wsdl:part name="nestedElementFormDefaultIsQualifiedResponse"
+  		element="tns:nestedElementFormDefaultIsQualifiedResponse">
+  	</wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="nestedElementFormDefaultIsQualifiedRequest">
+  	<wsdl:part name="nestedElementFormDefaultIsQualifiedRequest"
+  		element="tns:nestedElementFormDefaultIsQualifiedRequest">
+  	</wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="nestedElementFormDefaultIsUnqualifiedResponse">
+  	<wsdl:part name="nestedElementFormDefaultIsUnqualifiedResponse"
+  		element="tns:nestedElementFormDefaultIsUnqualifiedResponse">
+  	</wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="nestedElementFormDefaultIsUnqualifiedRequest">
+  	<wsdl:part name="nestedElementFormDefaultIsUnqualifiedRequest"
+  		element="tns:nestedElementFormDefaultIsUnqualifiedRequest">
+  	</wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="ElementFormDefaultTest">
+    <wsdl:operation name="elementFormDefaultIsUnqualified">
+      <wsdl:input message="tns:elementFormDefaultIsUnqualifiedRequest"/>
+      <wsdl:output message="tns:elementFormDefaultIsUnqualifiedResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="elementFormDefaultIsQualified">
+    	<wsdl:input
+    		message="tns:elementFormDefaultIsQualifiedRequest">
+    	</wsdl:input>
+    	<wsdl:output
+    		message="tns:elementFormDefaultIsQualifiedResponse">
+    	</wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="nestedElementFormDefaultIsQualified">
+    	<wsdl:input
+    		message="tns:nestedElementFormDefaultIsQualifiedRequest">
+    	</wsdl:input>
+    	<wsdl:output
+    		message="tns:nestedElementFormDefaultIsQualifiedResponse">
+    	</wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="nestedElementFormDefaultIsUnqualified">
+    	<wsdl:input
+    		message="tns:nestedElementFormDefaultIsUnqualifiedRequest">
+    	</wsdl:input>
+    	<wsdl:output
+    		message="tns:nestedElementFormDefaultIsUnqualifiedResponse">
+    	</wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ElementFormDefaultTestSOAP" type="tns:ElementFormDefaultTest">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="elementFormDefaultIsUnqualified">
+      <soap:operation soapAction="http://tempuri.org/ElementFormDefaultTest/NewOperation"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="elementFormDefaultIsQualified">
+    	<soap:operation style="document"/>
+    	<wsdl:input>
+    		<soap:body use="literal"/>
+    	</wsdl:input>
+    	<wsdl:output>
+    		<soap:body use="literal"/>
+    	</wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="nestedElementFormDefaultIsQualified">
+    	<soap:operation style="document"/>
+    	<wsdl:input>
+    		<soap:body use="literal"/>
+    	</wsdl:input>
+    	<wsdl:output>
+    		<soap:body use="literal"/>
+    	</wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="nestedElementFormDefaultIsUnqualified">
+    	<soap:operation style="document"/>
+    	<wsdl:input>
+    		<soap:body use="literal"/>
+    	</wsdl:input>
+    	<wsdl:output>
+    		<soap:body use="literal"/>
+    	</wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ElementFormDefaultTest">
+    <wsdl:port binding="tns:ElementFormDefaultTestSOAP" name="ElementFormDefaultTestSOAP">
+      <soap:address location="http://tempuri.org"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

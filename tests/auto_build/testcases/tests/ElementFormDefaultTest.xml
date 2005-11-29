@@ -1,0 +1,20 @@
+<test>
+    <name>ElementFormDefaultTest</name>
+    <description>Test correct serialization when the attribute form is qualified or unqualified</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>ElementFormDefaultTestClient.cpp</clientCode>
+    <wsdl>ElementFormDefaultTest.wsdl</wsdl>
+    <expected>
+        <output>
+            ElementFormDefaultTest.expected
+        </output>
+		<request>
+			ElementFormDefaultTestRequest.out
+		</request>
+		<serverResponse>
+			ElementFormDefaultTest_ServerResponse.expected
+	    </serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/ElementFormDefaultTest</endpoint>
+</test>
+

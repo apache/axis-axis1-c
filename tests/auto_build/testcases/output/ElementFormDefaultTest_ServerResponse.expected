@@ -1,0 +1,44 @@
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version="1.0" encoding="utf-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><SOAP-ENV:Body><ns1:elementFormDefaultIsUnqualifiedResponse xmlns:ns1="http://tempuri.org/ElementFormDefaultTest/"><aStringType>Hello!</aStringType><anIntegerType>123</anIntegerType><anIntegerArray>0</anIntegerArray><anIntegerArray>1</anIntegerArray><anOptionalIntegerType>234</anOptionalIntegerType><aNillableIntegerType xsi:nil="true"></aNillableIntegerType><SimpleComplexType><someData>345</someData></SimpleComplexType><arrayOfSimpleComplexType><someData>0</someData></arrayOfSimpleComplexType><arrayOfSimpleComplexType><someData>1</someData></arrayOfSimpleComplexType></ns1:elementFormDefaultIsUnqualifiedResponse></SOAP-ENV:Body></SOAP-ENV:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version="1.0" encoding="utf-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><SOAP-ENV:Body><ns1:elementFormDefaultIsQualifiedResponse xmlns:ns1="http://tempuri.org/ElementFormDefaultTest/"><ns1:aStringType>Hello!</ns1:aStringType><ns1:anIntegerType>123</ns1:anIntegerType><ns1:anIntegerArray>0</ns1:anIntegerArray><ns1:anIntegerArray>1</ns1:anIntegerArray><ns1:anOptionalIntegerType>234</ns1:anOptionalIntegerType><ns1:aNillableIntegerType xsi:nil="true"></ns1:aNillableIntegerType><ns1:SimpleComplexType><ns1:someData>345</ns1:someData></ns1:SimpleComplexType><ns1:arrayOfSimpleComplexType><ns1:someData>0</ns1:someData></ns1:arrayOfSimpleComplexType><ns1:arrayOfSimpleComplexType><ns1:someData>1</ns1:someData></ns1:arrayOfSimpleComplexType></ns1:elementFormDefaultIsQualifiedResponse></SOAP-ENV:Body></SOAP-ENV:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version="1.0" encoding="utf-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><SOAP-ENV:Body><ns1:nestedElementFormDefaultIsUnqualifiedResponse xmlns:ns1="http://tempuri.org/ElementFormDefaultTest/"><ElementFormDefaultIsUnqualified><aStringType>Hello!</aStringType><anIntegerType>123</anIntegerType><anIntegerArray>0</anIntegerArray><anIntegerArray>1</anIntegerArray><anOptionalIntegerType>234</anOptionalIntegerType><aNillableIntegerType xsi:nil="true"></aNillableIntegerType><SimpleComplexType><someData>345</someData></SimpleComplexType><arrayOfSimpleComplexType><someData>0</someData></arrayOfSimpleComplexType><arrayOfSimpleComplexType><someData>1</someData></arrayOfSimpleComplexType></ElementFormDefaultIsUnqualified></ns1:nestedElementFormDefaultIsUnqualifiedResponse></SOAP-ENV:Body></SOAP-ENV:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version="1.0" encoding="utf-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><SOAP-ENV:Body><ns1:nestedElementFormDefaultIsQualifiedResponse xmlns:ns1="http://tempuri.org/ElementFormDefaultTest/"><ns1:ElementFormDefaultIsQualified><ns1:aStringType>Hello!</ns1:aStringType><ns1:anIntegerType>123</ns1:anIntegerType><ns1:anIntegerArray>0</ns1:anIntegerArray><ns1:anIntegerArray>1</ns1:anIntegerArray><ns1:anOptionalIntegerType>234</ns1:anOptionalIntegerType><ns1:aNillableIntegerType xsi:nil="true"></ns1:aNillableIntegerType><ns1:SimpleComplexType><ns1:someData>345</ns1:someData></ns1:SimpleComplexType><ns1:arrayOfSimpleComplexType><ns1:someData>0</ns1:someData></ns1:arrayOfSimpleComplexType><ns1:arrayOfSimpleComplexType><ns1:someData>1</ns1:someData></ns1:arrayOfSimpleComplexType></ns1:ElementFormDefaultIsQualified></ns1:nestedElementFormDefaultIsQualifiedResponse></SOAP-ENV:Body></SOAP-ENV:Envelope>
+0
+
