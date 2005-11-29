@@ -84,7 +84,7 @@
 		<antcall target="compileStaticClient" inheritall="true"/>
 	</target>
 	<target name="callCompileLinkedClient" if="test.stubAsLibrary">
-		<property name="libraryName" value="${test.name}"/>
+		<property name="libraryName" value="${test.name}_Library"/>
 		<antcall target="compileLinkedClient" inheritall="true"/>
 	</target>
 

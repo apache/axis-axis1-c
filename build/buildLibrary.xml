@@ -25,7 +25,7 @@
 				<linker refid="HP-UXLinker"/>
 				<linker refid="VisualC++Linker"/>
 				<linker refid="OS400Linker"/>
-
+				<libset dir="${dir.lib}" libs="${clientLibraryName.lang}" unless="os400"/>
 				<!-- Files to compile -->
 				<fileset dir="${test.directory}">
 					<include name="*.cpp"/>
@@ -44,6 +44,7 @@
 
 				<!-- Linkers -->
 				<linker refid="AIXLinker"/>
+				<libset dir="${dir.lib}" libs="${clientLibraryName.lang}"/>
 				<!-- Files to compile -->
 				<fileset dir="${test.directory}">
 					<include name="*.cpp"/>
