@@ -45,38 +45,38 @@ public class BuildScriptWriter implements SourceWriter {
             // hence check if user wanted gnu make files
    
 //            if ( (WSDL2Ws.makeSystem == null) || (!WSDL2Ws.makeSystem.equals("gnu")) )
-//                return;
+                return;
 
-		try {
-			servicename = wscontext.getSerInfo().getServicename();
-			Iterator filelist = wscontext.getGeneratedFileList().iterator();
-			BufferedWriter writer = new BufferedWriter(new FileWriter(getFilePath(), false));
-			if(WrapperConstants.SERVER.equals(wscontext.getWrapInfo().getTargetEngine())){
-				writer.write("lib_LTLIBRARIES = lib"+servicename+".la\n");
-				writer.write("SUBDIRS =\n");
-				writer.write("lib"+servicename+"_la_SOURCES =");
-				while (filelist.hasNext()){
-					writer.write(" "+(String)filelist.next());
-				}
-				writer.write("\nlib"+servicename+"_la_LIBADD = $(LDFLAGS)\n");
-				writer.write("INCLUDES = -I$(AXISCPP_HOME)/include\n");			
-			}
-			else{
-				writer.write("bin_PROGRAMS = "+servicename+"\n");
-				writer.write("SUBDIRS =\n");
-				writer.write("AM_CPPFLAGS = $(CPPFLAGS)\n");
-				writer.write(servicename+"_SOURCES = ");
-				while(filelist.hasNext()){
-					writer.write(" "+(String)filelist.next());
-				}
-				writer.write("\n"+servicename+"_LDADD = $(LDFLAGS)\n");
-				writer.write("INCLUDES = -I$(AXISCPP_HOME)/include\n");			
-			}
-			writer.flush();
-			writer.close();
-		}catch(IOException e){
-			throw new WrapperFault(e);
-		}
+//		try {
+//			servicename = wscontext.getSerInfo().getServicename();
+//			Iterator filelist = wscontext.getGeneratedFileList().iterator();
+//			BufferedWriter writer = new BufferedWriter(new FileWriter(getFilePath(), false));
+//			if(WrapperConstants.SERVER.equals(wscontext.getWrapInfo().getTargetEngine())){
+//				writer.write("lib_LTLIBRARIES = lib"+servicename+".la\n");
+//				writer.write("SUBDIRS =\n");
+//				writer.write("lib"+servicename+"_la_SOURCES =");
+//				while (filelist.hasNext()){
+//					writer.write(" "+(String)filelist.next());
+//				}
+//				writer.write("\nlib"+servicename+"_la_LIBADD = $(LDFLAGS)\n");
+//				writer.write("INCLUDES = -I$(AXISCPP_HOME)/include\n");			
+//			}
+//			else{
+//				writer.write("bin_PROGRAMS = "+servicename+"\n");
+//				writer.write("SUBDIRS =\n");
+//				writer.write("AM_CPPFLAGS = $(CPPFLAGS)\n");
+//				writer.write(servicename+"_SOURCES = ");
+//				while(filelist.hasNext()){
+//					writer.write(" "+(String)filelist.next());
+//				}
+//				writer.write("\n"+servicename+"_LDADD = $(LDFLAGS)\n");
+//				writer.write("INCLUDES = -I$(AXISCPP_HOME)/include\n");			
+//			}
+//			writer.flush();
+//			writer.close();
+//		}catch(IOException e){
+//			throw new WrapperFault(e);
+//		}
 	}
 
 	private File getFilePath() throws WrapperFault {
