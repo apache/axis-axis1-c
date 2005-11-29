@@ -2,13 +2,13 @@ POST /axis/SameComplexTypeAndElementName HTTP/1.1
 Host: 127.0.0.1:13260
 Content-Type: text/xml; charset=UTF-8
 SOAPAction: ""
-Content-Length: 468
+Content-Length: 466
 
 <?xml version='1.0' encoding='utf-8' ?>
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <SOAP-ENV:Body>
 <ns1:anElementBase xmlns:ns1="SameComplexTypeAndElementName">
-<Element xmlns:ns2="SameComplexTypeAsElement"><ns2:SampleBeanBoolean_>false</ns2:SampleBeanBoolean_>
+<Element xmlns:ns2="SameComplexTypeAsElement"><ns2:SampleBeanBoolean>false</ns2:SampleBeanBoolean>
 </Element>
 </ns1:anElementBase>
 </SOAP-ENV:Body>
