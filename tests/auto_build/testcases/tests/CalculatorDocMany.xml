@@ -1,6 +1,6 @@
 <test>
     <name>CalculatorDocMany</name>
-    <description>CalculatorDocMany</description>
+    <description>Calls calculator many times. This ensures that we keep connections alive and memory doesn't completely go off the scale. However it can't test for memory leaks.</description>
     <clientLang>cpp</clientLang>
     <clientCode>CalculatorDocManyClient.cpp</clientCode>
     <wsdl>CalculatorDoc.wsdl</wsdl>
@@ -11,4 +11,5 @@
     </expected>
 	<endpoint>http://localhost:80/axis/CalculatorDoc</endpoint>
 	<nomonitor>true</nomonitor>
+	<timeout>2400000</timeout>
 </test>
