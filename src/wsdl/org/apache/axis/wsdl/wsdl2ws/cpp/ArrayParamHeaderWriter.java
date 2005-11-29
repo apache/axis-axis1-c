@@ -177,7 +177,7 @@ public class ArrayParamHeaderWriter extends ParamWriter
         		}
         	}
         	
-        	writer.write("class " + classname + " : public Axis_Array\n");
+        	writer.write("class STORAGE_CLASS_INFO " + classname + " : public Axis_Array\n");
         	writer.write("{\n");
         	writer.write("\tpublic:\n");
         	this.writeConstructors();
