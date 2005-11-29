@@ -70,17 +70,14 @@ int main(int argc, char* argv[])
 					result = ws->myOperation(input);
 					if ( result == NULL )
 						cout << "result object is null" << endl;
-					else 
-						cout << "result object is not null" << endl;
 					
 					if ( result->field1 == NULL )
 						cout << "result field is null" << endl;
-					else 
-						cout << "result field is not null" << endl;
-					//cout << "Result field1 is = " << *(result->field1) << endl;
+					else
+						cout << "Result is = " << *(result->field1) << endl;
 
-					/*cout << "Result field2 is = " << result->field2 << endl;
-					cout << "Result field3 is = " << result->field3 << endl; */ 
+					//cout << "Result field2 is = " << result->field2 << endl;
+					//cout << "Result field3 is = " << result->field3 << endl;  
 
 					bSuccess = true;
 
