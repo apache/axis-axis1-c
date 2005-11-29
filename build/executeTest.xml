@@ -246,10 +246,18 @@
 				<echo message="Running Test ${test.name} ${clientArgs}" />
 				<!-- Run the client test -->
 				<stopwatch name="${test.name}.timer" action="start" />
+				<if>
+					<not>
+						<isset property="test.timeout"/>
+					</not>
+					<then>
+						<property name="test.timeout" value="120000"/>
+					</then>
+				</if>
 				<exec dir="${test.directory}"
 					executable="${test.directory}/${test.name}"
 					output="${results.stdout}" error="${results.stderr}"
-					failifexecutionfails="false" timeout="120000">
+					failifexecutionfails="false" timeout="${test.timeout}">
 					<arg line="${clientArgs}" />
 					<env key="PATH"
 						path="${java.library.path}${path.separator}${dir.libraries}${path.separator}${dir.xmlParser}${path.separator}${HTTP.SSLChannel.eay.dir}${path.separator}${test.directory}" />
