@@ -1,0 +1,19 @@
+<test>
+    <name>SameComplexTypeAndNillableElementName</name>
+    <description>SameComplexTypeAndNillableElementName</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>SameComplexTypeAndNillableElementNameClient.cpp</clientCode>
+    <wsdl>SameComplexTypeAndNillableElementName.wsdl</wsdl>
+    <expected>
+        <request>
+            SameComplexTypeAndNillableElementName_Request.expected
+        </request>
+        <serverResponse>
+            SameComplexTypeAndNillableElementName_ServerResponse.expected
+        </serverResponse>
+        <output>
+            SameComplexTypeAndNillableElementName.expected
+        </output>
+    </expected>
+	<endpoint>http://localhost:80/axis/SameComplexTypeAndNillableElementName</endpoint>
+</test>

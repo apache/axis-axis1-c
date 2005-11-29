@@ -85,3 +85,4 @@ NamespaceTest1.xml
 ValidXMLCharIsInterpretedAsCPPCommand.xml
 ComplexTypeWithNillableSimpleElement.xml
 Arrays.xml
+SameComplexTypeAndNillableElementName.xml
