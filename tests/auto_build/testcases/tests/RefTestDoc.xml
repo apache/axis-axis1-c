@@ -1,0 +1,14 @@
+<test>
+    <name>RefTestDoc</name>
+    <description>Tests a very simple case of referenced types.</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>RefTestDocClient.cpp</clientCode>
+    <wsdl>RefTestDoc.wsdl</wsdl>
+    <expected>
+        <output>
+            RefTestDoc.cpp.out
+        </output>
+ 		<serverResponse>RefTestDoc_ServerResponse.expected</serverResponse>
+    </expected>
+	<endpoint>-e http://localhost:80/services/RefTest</endpoint>
+</test>
