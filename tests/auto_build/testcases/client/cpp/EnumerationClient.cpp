@@ -61,7 +61,7 @@ int main(int argc, char* argv[])
 
     NEWCOPY(input->enum_string,"one");
     NEWCOPY(input->att_enum_string,"one");
-    input->enum_int=ENUMTYPEINT_0;
+    input->enum_int=new xsd__int(ENUMTYPEINT_0);
     input->att_enum_int=ENUMTYPEINT_1;
     NEWCOPY(input->att_enum_kind,"CHEQUE");
 
@@ -73,7 +73,7 @@ int main(int argc, char* argv[])
     } else {
       cout << "att_enum_int " << result->att_enum_int << endl;
       cout << "att_enum_string " << result->att_enum_string << endl;
-      cout << "enum_int " << result->enum_int << endl;
+      cout << "enum_int " << *result->enum_int << endl;
       cout << "enum_string " << result->enum_string << endl;
       cout << "enum_kind " << result->att_enum_kind << endl;
       returnValue = 0; // Success

@@ -411,6 +411,14 @@ public class WSDL2Ws
                 pinfo.setArray(true);
             }
             pinfo.setNillable(eleinfo.getNillable());
+            if (eleinfo.getMinOccurs() == 0)
+            {
+                pinfo.setOptional(true);
+            }
+            else
+            {
+                pinfo.setOptional(false);
+            }
             pinfo.setElementName(
                 type.getElementForElementName(elementname).getName());
             if (innerType.getName().equals(CUtils.anyTypeQname))
@@ -594,6 +602,14 @@ public class WSDL2Ws
             if (innerType.getName().equals(CUtils.anyTypeQname))
                 pinfo.setAnyType(true);
             pinfo.setNillable(eleinfo.getNillable());
+            if (eleinfo.getMinOccurs() == 0)
+            {
+                pinfo.setOptional(true);
+            }
+            else
+            {
+                pinfo.setOptional(false);
+            }
             minfo.addInputParameter(pinfo);
         }
     }

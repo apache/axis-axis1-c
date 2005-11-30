@@ -62,7 +62,7 @@ int main(int argc, char* argv[])
         for ( i = 0; i < 10; i++ ) {
             types[i] = new Type1 ();
             NEWCOPY(types[i]->kind, "Test type");
-            types[i]->index = i;           
+            types[i]->index = new xsd__int(i);           
         }
 
         input.set(types,10);     
@@ -72,7 +72,7 @@ int main(int argc, char* argv[])
 		int outputSize=0;
         Type1 **arrayResult = result->get(outputSize);
         for ( i = 0; i < 10; i++) {
-            cout << " Result " << arrayResult[i]->index << " : " << arrayResult[i]->kind << endl;
+            cout << " Result " << *arrayResult[i]->index << " : " << arrayResult[i]->kind << endl;
         }
         returnValue = 0; // Success
 

@@ -55,7 +55,7 @@ int main(int argc, char* argv[])
     Type1* result;
     int i;
 
-    input->enum_int = ENUMTYPEINT_1;
+    input->enum_int = new xsd__int(ENUMTYPEINT_1);
     input->enum_string = strdup("one");
     input->att_enum_kind = strdup("CHEQUE");
     input->att_enum_string = strdup("one");
@@ -88,7 +88,7 @@ int main(int argc, char* argv[])
     else {
       cout << "att_enum_int " << result->att_enum_int << endl;
       cout << "att_enum_string " << result->att_enum_string << endl;
-      cout << "enum_int " << result->enum_int << endl;
+      cout << "enum_int " << *result->enum_int << endl;
       cout << "enum_string " << result->enum_string << endl;
       cout << "enum_kind " << result->att_enum_kind << endl;
       returnValue = 0; // Success

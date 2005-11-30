@@ -222,7 +222,7 @@ public class ClientStubWriter
 	else
 	{
 	    if (returntypeissimple
-                    && (!returntype.isNillable() || CUtils
+                    && (!(returntype.isNillable() || returntype.isOptional()) || CUtils
                             .isPointerType(outparamType)))
 	    {
 	        writer.write (outparamType);
@@ -280,7 +280,7 @@ public class ClientStubWriter
          	writer.write("ISoapAttachment *Value0");
           }
           else if (typeissimple
-		    && (!((ParameterInfo) paramsB.get (0)).isNillable ()
+		    && (!(((ParameterInfo) paramsB.get (0)).isNillable () || ((ParameterInfo) paramsB.get (0)).isOptional())
 			|| CUtils.isPointerType(paraTypeName)))
 	    {
 		writer.write (paraTypeName + " Value0");
@@ -337,7 +337,7 @@ public class ClientStubWriter
            	    writer.write(", ISoapAttachment *Value" + i);
             }
             else if (typeissimple
-			&& (!((ParameterInfo) paramsB.get (i)).isNillable ()
+			&& (!(((ParameterInfo) paramsB.get (i)).isNillable () || ((ParameterInfo) paramsB.get (i)).isOptional())
 			    || CUtils.isPointerType(paraTypeName)))
 		{
 		    writer.write (", " + paraTypeName + " Value" + i);
@@ -409,7 +409,7 @@ public class ClientStubWriter
 		else
 		{
 		    //for simple types
-		    if (returntype.isNillable ()
+		    if ((returntype.isNillable () || returntype.isOptional())
 			&& !(CUtils.isPointerType(outparamType)))
 		    {
 			writer.write (outparamType + "* Ret = NULL;\n");
@@ -581,6 +581,11 @@ public class ClientStubWriter
 			((ParameterInfo) paramsB.get (i)).getElementName ().
 			getNamespaceURI ();
 
+		    if (((ParameterInfo)paramsB.get(i)).isOptional())
+		    {
+		        writer.write("\tif (Value" + i + " != NULL)\n\t{\n");
+		    }
+		    
 		    if (namespace.length () == 0)
 		    {
 			writer.write ("\tchar cPrefixAndParamName"
@@ -692,7 +697,7 @@ public class ClientStubWriter
 			{
 
 			    // Simple Type
-			    if (param.isNillable ()
+			    if (param.isNillable () || param.isOptional()
 				|| CUtils.isPointerType(paraTypeName))
 			    {
 				writer.write ("\tm_pCall->addParameter(");
@@ -734,9 +739,14 @@ public class ClientStubWriter
 					  + i + ", Axis_URI_" + paraTypeName);
 			}
 		    }
+		    
 		}
 		// Adrian - end of namespace correction
 		writer.write (");\n");
+		if (((ParameterInfo)paramsB.get(i)).isOptional())
+	    {
+	        writer.write("\t}\n");
+	    }
 	    }
 	}
 	writer.write ("\tif (AXIS_SUCCESS == m_pCall->invoke())\n\t{\n");

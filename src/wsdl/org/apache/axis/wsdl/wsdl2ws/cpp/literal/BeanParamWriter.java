@@ -185,7 +185,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 else
                 {
 	                // FJP Nillable vv
-	                if (isElementNillable(i))
+	                if (isElementNillable(i)  || isElementOptional(i))
 	                {
 	                    
 	                    
@@ -528,6 +528,11 @@ public class BeanParamWriter extends ParamCPPFileWriter
             }
             else if (attribs[i].isSimpleType())
             {
+                if (attribs[i].isOptional())
+                {
+                    writer.write("\tif (param->" + attribs[i].getParamNameWithoutSymbols() + " != NULL)\n\t{\n\t");
+                }
+                
                 if (CUtils.isPointerType(attribs[i].getTypeName()))
                 {
                     writer.write("\tpSZ->serializeAsElement(\""
@@ -549,7 +554,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                      */
                 	if (attribs[i].getChoiceElement()
                             || attribs[i].getAllElement()
-                            || isElementNillable(i))
+                            || isElementNillable(i) || isElementOptional(i))
                 	{
                 		
                 		if (((attribs[i].getChoiceElement())&&(isElementNillable(i)))&& !(attribs[i].getTypeName().equals("xsd__string")) )
@@ -587,6 +592,11 @@ public class BeanParamWriter extends ParamCPPFileWriter
                                 + CUtils.getXSDTypeForBasicType(attribs[i].getTypeName()) + ");\n");
                     }
                 }
+                
+                if (attribs[i].isOptional())
+                {
+                    writer.write("\t}\n");
+                }
             }
             else
             {
@@ -607,6 +617,11 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     elm = attribs[i].getTypeName();
                 }
                 
+                if (attribs[i].isOptional())
+                {
+                    writer.write("\tif (param->" + attribs[i].getParamName() + " != NULL)\n\t{\n");
+                }
+                
                 if (attribs[i].getNsQualified())
                 {
                     writer.write("\tpSZ->serialize(\"<\", pSZ->getNamespacePrefix(\""
@@ -624,6 +639,11 @@ public class BeanParamWriter extends ParamCPPFileWriter
 		            writer.write("\tAxis_Serialize_" + attribs[i].getTypeName()
 		                    + "(param->" + attribs[i].getParamName() + ", pSZ);\n");
 		            writer.write("\tpSZ->serialize(\"</" + elm + "\", \">\", 0);\n");
+                }
+                
+                if (attribs[i].isOptional())
+                {
+                    writer.write("\t}\n");
                 }
 
             }
@@ -826,8 +846,17 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 }
                 
                 //end remove _Ref sufix and _ prefix in SOAP tag name
+                
+                if (attribs[i].isOptional())
+                {
+                    writer.write("\tconst char* elementName" + i + " = pIWSDZ->peekNextElementName();\n");
+                    writer.write("\tif(strcmp(elementName" + i + ", \"" + soapTagName + "\") == 0)\n");
+                    writer.write("\t{\n");
+                }
+                
                 if (attribs[i].isNillable() ||
                         isElementNillable(i) ||
+                        isElementOptional(i) ||
                         CUtils.isPointerType(attribs[i].getTypeName()))
                 {
                 	if (attribs[i].getChoiceElement() && !attribs[i].getTypeName().equals("xsd__string"))
@@ -935,6 +964,14 @@ public class BeanParamWriter extends ParamCPPFileWriter
                         }                        	
                     }
                 }
+                if (attribs[i].isOptional())
+                {
+                    writer.write("\t}\n");
+                    writer.write("\telse\n");
+                    writer.write("\t{\n");
+                    writer.write("\t\tparam->" + attribs[i].getParamNameAsMember() + " = NULL;\n");
+                    writer.write("\t}\n\n");
+                }
             }
             else
             {
@@ -952,6 +989,13 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 {
                     soapTagName = soapTagName.substring(1, soapTagName.length());
                 }
+                
+                if (attribs[i].isOptional())
+                {
+                    writer.write("\tconst char* elementName" + i + " = pIWSDZ->peekNextElementName();\n");
+                    writer.write("\tif(strcmp(elementName" + i + ", \"" + soapTagName + "\") == 0)\n");
+                    writer.write("\t{\n");
+                }
 
                 //end remove _Ref sufix and _ prefix in SOAP tag name
                 writer.write("\tparam->" + attribs[i].getParamNameAsMember()
@@ -962,6 +1006,15 @@ public class BeanParamWriter extends ParamCPPFileWriter
                         + attribs[i].getTypeName() + ", (void*)Axis_Delete_"
                         + attribs[i].getTypeName() + "\n\t\t, \"" + soapTagName
                         + "\", Axis_URI_" + attribs[i].getTypeName() + ");\n");
+                
+                if (attribs[i].isOptional())
+                {
+                    writer.write("\t}\n");
+                    writer.write("\telse\n");
+                    writer.write("\t{\n");
+                    writer.write("\t\tparam->" + attribs[i].getParamNameAsMember() + " = NULL;\n");
+                    writer.write("\t}\n\n");
+                }
             }
 
             //Dushshantha:
@@ -1421,4 +1474,21 @@ public class BeanParamWriter extends ParamCPPFileWriter
         return bNillable;
     }
     //	 FJP Nillable ^^
+    
+    protected boolean isElementOptional(int index)
+    {
+        //ElementInfo ei = type.getElementForElementName(attribs[index].getParamName());
+        boolean bOptional = false;
+
+        if (//ei != null
+        		// && 
+        		attribs[index].isSimpleType()
+        		&& !attribs[index].isArray()
+                && !CUtils.isPointerType(attribs[index].getTypeName()) )
+        {
+            bOptional = attribs[index].isOptional();
+        }
+
+        return bOptional;
+    }
 }

@@ -29,7 +29,7 @@ int main(int argc, char* argv[])
 			MultiOut ws(argv[1]);
 
 			xsd__string OutValue0 = NULL;
-			xsd__integer OutValue1 = 0;
+			xsd__integer * OutValue1 = NULL;
 			xsd__int OutValue2 = 0;
 			xsd__long OutValue3 = 0;
 			xsd__short OutValue4 = 0;
@@ -52,7 +52,7 @@ int main(int argc, char* argv[])
 
 			char sInteger[128], sLong[128];
 #ifdef WIN32
-			sprintf(sInteger,"%I64d",OutValue1);
+			sprintf(sInteger,"%I64d",*OutValue1);
 			sprintf(sLong,"%I64d",OutValue3);
 #else
 			sprintf(sInteger,"%lld",OutValue1);

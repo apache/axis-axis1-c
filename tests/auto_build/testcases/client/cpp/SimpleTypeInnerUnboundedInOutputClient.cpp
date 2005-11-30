@@ -53,7 +53,7 @@ int main(int argc, char* argv[])
 
     Type1* result;
     int i;
-    int size = 10;
+    xsd__int * size = new xsd__int(10);
 
     result = ws->getInput(size);
 

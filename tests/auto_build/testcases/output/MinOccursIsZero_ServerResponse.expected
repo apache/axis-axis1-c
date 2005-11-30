@@ -1,0 +1,33 @@
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version="1.0" encoding="utf-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><SOAP-ENV:Body><ns1:optionalElementsResponse xmlns:ns1="http://tempuri.org/MinOccursIsZero/"><stringElement>Hello!</stringElement><integerElement>123</integerElement><complexType><stringElement>Goodbye!</stringElement><integerElement>234</integerElement><complexType><stringElement>Welcome!</stringElement><integerElement>345</integerElement></complexType></complexType></ns1:optionalElementsResponse></SOAP-ENV:Body></SOAP-ENV:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version="1.0" encoding="utf-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><SOAP-ENV:Body><ns1:optionalElementsResponse xmlns:ns1="http://tempuri.org/MinOccursIsZero/"><stringElement>Hello!</stringElement><integerElement>123</integerElement><complexType></complexType></ns1:optionalElementsResponse></SOAP-ENV:Body></SOAP-ENV:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version="1.0" encoding="utf-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><SOAP-ENV:Body><ns1:optionalElementsResponse xmlns:ns1="http://tempuri.org/MinOccursIsZero/"></ns1:optionalElementsResponse></SOAP-ENV:Body></SOAP-ENV:Envelope>
+0
+

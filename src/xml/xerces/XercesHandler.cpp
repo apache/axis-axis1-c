@@ -304,6 +304,19 @@ const char* XercesHandler::peekNextElementName()
 	else 
 		return NULL;
 }
+
+
+const XML_NODE_TYPE XercesHandler::peekNextElementType()
+{
+	if (m_pCurrElement)
+	{
+		return (const XML_NODE_TYPE) m_pCurrElement->m_type;
+	}
+	else
+	{
+		return UNKNOWN;
+	}
+}
 //28/04/2005
 
 void XercesHandler::setGetPrefixMappings(bool bValue)

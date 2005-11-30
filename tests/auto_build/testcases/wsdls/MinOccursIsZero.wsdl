@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://tempuri.org/MinOccursIsZero/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MinOccursIsZero" targetNamespace="http://tempuri.org/MinOccursIsZero/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/MinOccursIsZero/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:element name="optionalElementsResponse">
+      	<xsd:complexType>
+      		<xsd:sequence>
+      			<xsd:element name="stringElement" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="false"></xsd:element>
+      			<xsd:element name="integerElement" type="xsd:integer" minOccurs="0" maxOccurs="1" nillable="false"></xsd:element>
+      			<xsd:element name="complexType" type="tns:SimpleComplexType" minOccurs="0" maxOccurs="1" nillable="false"></xsd:element>
+      		</xsd:sequence>
+      	</xsd:complexType>
+      </xsd:element>
+      <xsd:element name="optionalElementsRequest">
+      	<xsd:complexType>
+      		<xsd:sequence>
+      			<xsd:element name="stringElement" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="false"></xsd:element>
+      			<xsd:element name="integerElement" type="xsd:integer" minOccurs="0" maxOccurs="1" nillable="false"></xsd:element>
+      			<xsd:element name="complexType" type="tns:SimpleComplexType" minOccurs="0" maxOccurs="1" nillable="false"></xsd:element>
+      		</xsd:sequence>
+      	</xsd:complexType>
+      </xsd:element>
+	  <xsd:complexType name="SimpleComplexType">
+		<xsd:sequence>
+			<xsd:element name="stringElement" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="false"/>
+  			<xsd:element name="integerElement" type="xsd:integer" minOccurs="0" maxOccurs="1" nillable="false"/>
+			<xsd:element name="complexType" type="tns:BasicComplexType" minOccurs="0" maxOccurs="1" nillable="false"/>
+		</xsd:sequence>
+	  </xsd:complexType>
+	  <xsd:complexType name="BasicComplexType">
+		<xsd:sequence>
+			<xsd:element name="stringElement" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="false"></xsd:element>
+  			<xsd:element name="integerElement" type="xsd:integer" minOccurs="0" maxOccurs="1" nillable="false"></xsd:element>
+		</xsd:sequence>
+	  </xsd:complexType>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="optionalElementsResponse">
+    <wsdl:part element="tns:optionalElementsResponse" name="optionalElementsResponse"/>
+  </wsdl:message>
+  <wsdl:message name="optionalElementsRequest">
+    <wsdl:part element="tns:optionalElementsRequest" name="optionalElementsRequest"/>
+  </wsdl:message>
+  <wsdl:portType name="MinOccursIsZero">
+    <wsdl:operation name="optionalElements">
+      <wsdl:input message="tns:optionalElementsRequest"/>
+      <wsdl:output message="tns:optionalElementsResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="MinOccursIsZeroSOAP" type="tns:MinOccursIsZero">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="optionalElements">
+      <soap:operation soapAction="http://tempuri.org/MinOccursIsZero/NewOperation"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="MinOccursIsZero">
+    <wsdl:port binding="tns:MinOccursIsZeroSOAP" name="MinOccursIsZeroSOAP">
+      <soap:address location="http://tempuri.org"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

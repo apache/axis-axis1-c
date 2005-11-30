@@ -81,7 +81,7 @@ public class ClientStubHeaderWriter
                         String outParamTypeName = WrapperUtils.getClassNameFromParamInfoConsideringArrays(returnParam, wscontext);
                         if ((outParamTypeName.lastIndexOf ("_Array") > 0) 
                                 || (CUtils.isSimpleType(outParamTypeName)
-								&& returnParam.isNillable()
+								&& (returnParam.isNillable() || returnParam.isOptional())
 								&& !(CUtils.isPointerType(outParamTypeName))))
                         {
                         	writer.write(
@@ -120,7 +120,7 @@ public class ClientStubHeaderWriter
                     }
                     else if ((paramTypeName.lastIndexOf ("_Array") > 0)
                             || (CUtils.isSimpleType(paramTypeName)
-							&& nparam.isNillable()
+							&& (nparam.isNillable() || nparam.isOptional())
 							&& !(CUtils.isPointerType(paramTypeName))))
                     {
                     	writer.write(paramTypeName + " * Value" + j);

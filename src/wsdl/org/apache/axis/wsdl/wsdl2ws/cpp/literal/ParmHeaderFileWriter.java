@@ -262,7 +262,8 @@ public class ParmHeaderFileWriter extends ParamWriter
                 attribs[i].setParamName( CUtils.sanitiseAttributeName( classname, attribs[i].getParamName()));
                 
 				// FJP Nillable vv
-				if (isElementNillable(i) || attribs[i].isArray()) {
+				if (isElementNillable(i) || attribs[i].isArray() || isElementOptional(i))
+				{
 					if(attribs[i].isAnyType()){
 						anyCounter += 1;
 						    writer
@@ -272,7 +273,8 @@ public class ParmHeaderFileWriter extends ParamWriter
 								+ Integer.toString(anyCounter)
 								+ ";\n");
 					}
-					else{
+					else
+					{
 					    if( attribs[i].isArray())
 					    {
 							writer.write("\tclass "
@@ -355,7 +357,7 @@ public class ParmHeaderFileWriter extends ParamWriter
                 }
             	
 // FJP Nillable vv
-                if (isElementNillable(i)  || attribs[i].isArray())
+                if (isElementNillable(i)  || attribs[i].isArray() || isElementOptional(i))
                 {
                 	if ( attribs[i].isAnyType()){
                 		anyCounter += 1;
@@ -604,4 +606,17 @@ public class ParmHeaderFileWriter extends ParamWriter
         return bNillable;
     }
     //	 FJP Nillable ^^
+    protected boolean isElementOptional(int index)
+    {
+        boolean bOptional = false;
+
+        if (attribs[index].isSimpleType()
+        		&& !attribs[index].isArray()
+        		&& !CUtils.isPointerType(attribs[index].getTypeName()))
+        {
+            bOptional = attribs[index].isOptional();
+        }
+
+        return bOptional;
+    }
 }

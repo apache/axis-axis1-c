@@ -1,0 +1,20 @@
+<test>
+    <name>MinOccursIsZero</name>
+    <description>Test correct serialization, deserialization and detection of optional elements</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>MinOccursIsZeroClient.cpp</clientCode>
+    <wsdl>MinOccursIsZero.wsdl</wsdl>
+    <expected>
+        <output>
+            MinOccursIsZero.expected
+        </output>
+		<request>
+			MinOccursIsZeroRequest.out
+		</request>
+		<serverResponse>
+			MinOccursIsZero_ServerResponse.expected
+	    </serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/MinOccursIsZero</endpoint>
+</test>
+

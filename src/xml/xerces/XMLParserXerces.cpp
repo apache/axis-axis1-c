@@ -130,28 +130,41 @@ const AnyElement* XMLParserXerces::next(bool isCharData)
 //Here always Peek() will call after the first pase done
 const char* XMLParserXerces::peek()
 {
-	if(!m_bFirstParsed)
+    if (!m_bPeeked)
     {
-		m_pParser->parseFirst(*m_pInputSource, m_ScanToken);
-        m_bFirstParsed = true;
+    	if(!m_bFirstParsed)
+        {
+    		m_pParser->parseFirst(*m_pInputSource, m_ScanToken);
+            m_bFirstParsed = true;
+        }
+    	 
+    	bool bCanParseMore = true;
+    	
+    	m_Xhandler.freeElement();
+    	bCanParseMore = m_pParser->parseNext(m_ScanToken);
+    	AnyElement* elem = m_Xhandler.getAnyElement();
+    	while (CHARACTER_ELEMENT == elem->m_type) // we never peek for char data
+    											  //hence this is a white space
+        { /* ignorable white space */
+            m_Xhandler.freeElement();
+    		bCanParseMore = m_pParser->parseNext(m_ScanToken);
+    		elem = m_Xhandler.getAnyElement();
+         }
     }
-	 
-	bool bCanParseMore = true;
-	
-	m_Xhandler.freeElement();
-	bCanParseMore = m_pParser->parseNext(m_ScanToken);
-	AnyElement* elem = m_Xhandler.getAnyElement();
-	while (CHARACTER_ELEMENT == elem->m_type) // we never peek for char data
-											  //hence this is a white space
-    { /* ignorable white space */
-        m_Xhandler.freeElement();
-		bCanParseMore = m_pParser->parseNext(m_ScanToken);
-		elem = m_Xhandler.getAnyElement();
-     }
 
-	const char* name = m_Xhandler.peekNextElementName();
 	m_bPeeked = true;
-	return name;
+	
+	const XML_NODE_TYPE type = m_Xhandler.peekNextElementType();
+	if(type != END_ELEMENT && type != END_PREFIX && type != UNKNOWN)
+    {
+		const char* name = m_Xhandler.peekNextElementName();
+		return name;
+	}
+	else
+	{
+		return "";
+	}
+
 	
 }
 //27/04/2005

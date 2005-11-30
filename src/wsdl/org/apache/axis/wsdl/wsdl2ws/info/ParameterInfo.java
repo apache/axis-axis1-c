@@ -34,6 +34,7 @@ public class ParameterInfo
     protected boolean isArray = false;
     private boolean isAttribute = false;
 	private boolean isNillable = false;
+    private boolean isOptional;
 
 	
 	public boolean isNillable()
@@ -271,4 +272,17 @@ public class ParameterInfo
         isAnyType = b;
     }
 
+    /**
+     * @param b
+     */
+    public void setOptional(boolean b)
+    {
+        this.isOptional = b;
+        
+    }
+
+    public boolean isOptional()
+    {
+        return isOptional;
+    }
 }

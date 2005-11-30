@@ -89,3 +89,4 @@ SameComplexTypeAndNillableElementName.xml
 MixedFalseWithMixedTextMessage.xml
 MixedTrueWithTextMessage.xml
 MixedTrueWithMixedTextMessage.xml
+MinOccursIsZero.xml

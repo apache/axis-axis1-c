@@ -1,0 +1,21 @@
+Optional parameters with values
+String element = Hello!
+Integer element = 123
+ComplexType
+ String element = Goodbye!
+ Integer element = 234
+ ComplexType
+  String element = Welcome!
+  Integer element = 345
+Optional parameters with no values in complex type
+String element = Hello!
+Integer element = 123
+ComplexType
+ String element = NULL
+ Integer element = NULL
+ ComplexType = NULL
+Optional parameters with no values
+String element = NULL
+Integer element = NULL
+ComplexType = NULL
+---------------------- TEST COMPLETE -----------------------------
