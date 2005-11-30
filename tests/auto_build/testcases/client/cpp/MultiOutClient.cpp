@@ -40,15 +40,15 @@ int main(int argc, char* argv[])
 			xsd__byte OutValue9 = 0;
 
 			ws.get(&OutValue0,
-				&OutValue1,
-				&OutValue2,
-				&OutValue3,
-				&OutValue4,
-				&OutValue5,
-				&OutValue6,
-				&OutValue7,
-				&OutValue8,
-				&OutValue9);
+				(xsd__integer**)&OutValue1,
+				(xsd__int**)&OutValue2,
+				(xsd__long**)&OutValue3,
+				(xsd__short**)&OutValue4,
+				(xsd__decimal**)&OutValue5,
+				(xsd__float**)&OutValue6,
+				(xsd__double**)&OutValue7,
+				(xsd__boolean**)&OutValue8,
+				(xsd__byte**)&OutValue9);
 
 			char sInteger[128], sLong[128];
 #ifdef WIN32

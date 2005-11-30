@@ -804,9 +804,17 @@ public class CUtils {
 	} 
 	public static boolean isPointerType(String name)
 	{
-		return ((Boolean) isPointerBasedType.get(name)).booleanValue();
-	}
+		Object o = isPointerBasedType.get(name);
+		boolean	b = false;
 		
+		if( o != null)
+		{
+		    b = ((Boolean) isPointerBasedType.get(name)).booleanValue();
+		}
+		
+		return b;
+	}
+	
 	public static boolean isAnyType(QName name){
 			return name.equals(anyTypeQname);
 	}

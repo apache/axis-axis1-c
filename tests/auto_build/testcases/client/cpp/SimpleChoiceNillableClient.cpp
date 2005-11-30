@@ -1,4 +1,4 @@
-#include <iostream.h>
+#include <iostream>
 #include "ChoiceTestSoap.hpp"
 
 using namespace std;

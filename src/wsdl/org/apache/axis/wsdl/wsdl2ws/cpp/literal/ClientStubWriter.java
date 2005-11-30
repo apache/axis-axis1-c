@@ -359,22 +359,36 @@ public class ClientStubWriter
 	{
 	    for (int i = 0; i < paramsC.size (); i++)
 	    {
-		type =
+	        type =
 		    wscontext.getTypemap ().getType (((ParameterInfo) paramsC.
 						      get (i)).
 						     getSchemaName ());
             String comma = ", ";
-            if (paramsB.size()==0 && 0==i) comma = "";
-		writer.write (comma + "AXIS_OUT_PARAM  " +
-			      WrapperUtils.
-			      getClassNameFromParamInfoConsideringArrays ((ParameterInfo) paramsC.get (i), wscontext) + "* OutValue" + i);
+            if (paramsB.size()==0 && 0==i)
+                {
+                comma = "";
+                }
+            
+            String	xsdType = WrapperUtils.getClassNameFromParamInfoConsideringArrays ((ParameterInfo) paramsC.get (i), wscontext);
+            
+            if( CUtils.isPointerType( xsdType) || xsdType.endsWith( "*"))
+            {
+        		writer.write (comma + "AXIS_OUT_PARAM  " + xsdType + " * OutValue" + i);
+            }
+            else
+            {
+        		writer.write (comma + "AXIS_OUT_PARAM  " + xsdType + " ** OutValue" + i);
+            }
+
 	    }
 	}
 
 	writer.write (")\n{\n");
+	
 	if (returntype != null)
 	{
 	    writer.write ("\t");
+	    
 	    if (returntypeisarray)
 	    {
 	        //for arrays
@@ -382,7 +396,6 @@ public class ClientStubWriter
 	    }
 	    else
 	    {
-
 		if (!returntypeissimple)
 		{		//for AnyType too
 		    if (outparamType.lastIndexOf ("*") > 0)
@@ -825,24 +838,78 @@ public class ClientStubWriter
 
 		    if (typeissimple)
 		    {
-			if (CUtils.isPointerType(currentParaType))
-			{
-				writer.write ("\t\t\t"
-				      + currentParamName
-				      + " = m_pCall->"
-				      + CUtils.getParameterGetValueMethodName(currentParaType,false) 
-					+ "(\"" + currentType.getParamName () 
-					+ "\", 0);\n");
-			}
-			else 
-			{
-				writer.write ("\t\t\t"
-				      + currentParamName
-				      + " = *(m_pCall->"
-				      + CUtils.getParameterGetValueMethodName(currentParaType,false) 
-					+ "(\"" + currentType.getParamName () 
-					+ "\", 0));\n");
-			}
+		        if( i > 0)
+		        {
+				    writer.write( "\n");
+		        }
+		        
+				if (CUtils.isPointerType(currentParaType))
+				{
+/*					writer.write ("\t\t\t"
+					      + currentParamName
+					      + " = m_pCall->"
+					      + CUtils.getParameterGetValueMethodName(currentParaType,false) 
+						+ "(\"" + currentType.getParamName () 
+						+ "\", 0);\n");
+*/
+				    String xsdType =  WrapperUtils.getClassNameFromParamInfoConsideringArrays ((ParameterInfo) paramsC.get (i), wscontext);
+				    
+				    if( !CUtils.isPointerType(xsdType))
+				    {
+				        xsdType += " *";
+				    }
+				    
+				    writer.write( "\t\t\t" + currentParaType + " pReturn" + i + " = m_pCall->" + CUtils.getParameterGetValueMethodName( currentParaType, false) + "( \"" + currentType.getParamName() + "\", 0);\n");
+				    writer.write( "\n");
+				    writer.write( "\t\t\tif( OutValue" + i + " != NULL)\n");
+				    writer.write( "\t\t\t\t{\n");
+				    writer.write( "\t\t\t\tif( *OutValue" + i + " != NULL)\n");
+				    writer.write( "\t\t\t\t{\n");
+				    writer.write( "\t\t\t\t\tint\tiStringSize" + i + " = strlen( (char *) *OutValue" + i + ");\n");
+				    writer.write( "\t\t\t\t\tint\tiStrLenValue" + i + " = strlen( pReturn" + i + ");\n");
+				    writer.write( "\n");
+				    writer.write( "\t\t\t\t\tif( iStrLenValue" + i + " > iStringSize" + i + ")\n");
+				    writer.write( "\t\t\t\t\t{\n");
+				    writer.write( "\t\t\t\t\t\t*OutValue" + i + " =(" + xsdType + ") new char[iStrLenValue" + i + " + 1];\n");
+				    writer.write( "\t\t\t\t\t\tstrcpy( (char *) *OutValue" + i + ", pReturn" + i + ");\n");
+				    writer.write( "\t\t\t\t\t}\n");
+				    writer.write( "\t\t\t\t\telse\n");
+				    writer.write( "\t\t\t\t\t{\n");
+				    writer.write( "\t\t\t\t\t\tstrcpy( (char *) *OutValue" + i + ", pReturn" + i + ");\n");
+				    writer.write( "\t\t\t\t\t}\n");
+				    writer.write( "\t\t\t\t}\n");
+				    writer.write( "\t\t\t\telse\n");
+				    writer.write( "\t\t\t\t{\n");
+				    writer.write( "\t\t\t\t\t*OutValue" + i + " = (" + xsdType + ") new char[strlen( pReturn" + i + ") + 1];\n");
+				    writer.write( "\t\t\t\t\tstrcpy( (char *) *OutValue" + i + ", pReturn" + i + ");\n");
+				    writer.write( "\t\t\t\t}\n");
+				    writer.write( "\t\t\t}\n");
+				    writer.write( "\n");
+				    writer.write( "\t\t\tAxis::AxisDelete( (void *) pReturn" + i + ", " + CUtils.getXSDTypeForBasicType( currentParaType) + ");\n");
+				}
+				else 
+				{
+/*					writer.write ("\t\t\t"
+					      + currentParamName
+					      + " = *(m_pCall->"
+					      + CUtils.getParameterGetValueMethodName(currentParaType,false) 
+						+ "(\"" + currentType.getParamName () 
+						+ "\", 0));\n");
+*/
+				    writer.write( "\t\t\t" + currentParaType + " * pReturn" + i + " = m_pCall->" + CUtils.getParameterGetValueMethodName( currentParaType, false) + "( \"" + currentType.getParamName() + "\", 0);\n");
+				    writer.write( "\n");
+				    writer.write( "\t\t\tif( OutValue" + i + " != NULL)\n");
+				    writer.write( "\t\t\t{\n");
+				    writer.write( "\t\t\t\tif( *OutValue" + i + " == NULL)\n");
+				    writer.write( "\t\t\t\t{\n");
+				    writer.write( "\t\t\t\t\t*OutValue" + i + " = new " + currentParaType + "();\n");
+				    writer.write( "\t\t\t\t}\n");
+				    writer.write( "\n");
+				    writer.write( "\t\t\t**OutValue" + i + " = *pReturn" + i + ";\n");
+				    writer.write( "\t\t\t}\n");
+				    writer.write( "\n");
+				    writer.write( "\t\t\tAxis::AxisDelete( (void *) pReturn" + i + ", " + CUtils.getXSDTypeForBasicType( currentParaType) + ");\n");
+				}
 		    }
 		    else
 		    {

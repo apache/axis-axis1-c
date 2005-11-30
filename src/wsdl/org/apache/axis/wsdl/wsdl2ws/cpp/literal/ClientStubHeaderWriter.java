@@ -138,15 +138,30 @@ public class ClientStubHeaderWriter
                     {
                         ParameterInfo nparam = (ParameterInfo) params.next();
                         String comma = ", ";
-                        if (!hasInputParms && 0==j) comma = "";
+                        String paramType = WrapperUtils.getClassNameFromParamInfoConsideringArrays( nparam, wscontext);
+                        boolean bTypeHasStar = paramType.endsWith( "*");
+                        
+                        if (!hasInputParms && 0==j)
+                            {
+                            comma = "";
+                            }
+                        
+                        if( CUtils.isPointerType( paramType) || bTypeHasStar)
+                        {
                         writer.write(comma
                                 + "AXIS_OUT_PARAM "
-                                + WrapperUtils
-                                    .getClassNameFromParamInfoConsideringArrays(
-                                    nparam,
-                                    wscontext)
-                                + " *OutValue"
+                                + paramType
+                                + " * OutValue"
                                 + j);
+                        }
+                        else
+                        {
+                            writer.write(comma
+                                    + "AXIS_OUT_PARAM "
+                                    + paramType
+                                    + " ** OutValue"
+                                    + j);
+                        }
                     }
                 }
                 writer.write(");\n");
