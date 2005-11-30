@@ -1,0 +1,14 @@
+<test>
+    <name>MixedTrueWithTextMessage</name>
+    <description>MixedTrueWithTextMessage</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>MixedTextMessageClient.cpp</clientCode>
+    <wsdl>MixedTrueWithMixedTextMessage.wsdl</wsdl>
+    <expected>
+        <output>
+            MixedTextMessage.expected
+        </output>
+		<serverResponse>MixedTrueWithMixedTextMessageResponse.expected</serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/MixedTrueWithTextMessage/axis/MixedTrueWithTextMessage</endpoint>
+</test>

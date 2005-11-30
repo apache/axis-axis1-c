@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+				   xmlns:tns="MixedFalseWithMixedTextMessage"
+				  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+				   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+				        name="MixedFalseWithMixedTextMessage"
+			 targetNamespace="MixedFalseWithMixedTextMessage">
+  <wsdl:types>
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+          targetNamespace="MixedFalseWithMixedTextMessage">
+        
+      <xsd:element name="myLetterRequest">
+		<xsd:complexType>
+		  <xsd:sequence>
+            <xsd:element name="LetterId" type="xsd:string" nillable="false" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <xsd:element name="myLetterResponse">
+		<xsd:complexType mixed="true">
+		  <xsd:sequence>
+            <xsd:element name="To" type="xsd:string" nillable="false" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="Date" type="xsd:date" nillable="false" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="OrderNumber" type="xsd:int" nillable="false" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      
+    </xsd:schema>
+  </wsdl:types>
+    
+  <wsdl:message name="LetterRequest">
+    <wsdl:part element="tns:myLetterRequest" name="parameters"/>
+  </wsdl:message>
+
+  <wsdl:message name="LetterResponse">
+    <wsdl:part element="tns:myLetterResponse" name="parameters"/>
+  </wsdl:message>
+
+  <wsdl:portType name="MixedFalseWithMixedTextMessage">
+    <wsdl:operation name="GetLetter">
+      <wsdl:input message="tns:LetterRequest" name="getLetterRequest"/>
+      <wsdl:output message="tns:LetterResponse" name="getLetterResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+
+  <wsdl:binding name="MixedFalseWithMixedTextMessageSOAP" type="tns:MixedFalseWithMixedTextMessage">
+    <wsdl:documentation>This is to test what happens when the WSDL does not define mixed=true, but the response message does have mixed text within the elements.</wsdl:documentation>
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="GetLetter">
+      <soap:operation soapAction="MixedFalseWithMixedTextMessage#GetLetter" style="document"/>
+      <wsdl:input name="getLetterRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getLetterResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  
+  <wsdl:service name="MixedFalseWithMixedTextMessage">
+    <wsdl:port binding="tns:MixedFalseWithMixedTextMessageSOAP" name="MixedFalseWithMixedTextMessageSOAP">
+      <soap:address location="http://localhost:9080/MixedFalseWithMixedTextMessage/services/MixedFalseWithMixedTextMessageSOAP"/>
+    </wsdl:port>
+  </wsdl:service>
+  
+</wsdl:definitions>

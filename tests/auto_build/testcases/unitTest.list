@@ -86,3 +86,6 @@ ValidXMLCharIsInterpretedAsCPPCommand.xml
 ComplexTypeWithNillableSimpleElement.xml
 Arrays.xml
 SameComplexTypeAndNillableElementName.xml
+MixedFalseWithMixedTextMessage.xml
+MixedTrueWithTextMessage.xml
+MixedTrueWithMixedTextMessage.xml
