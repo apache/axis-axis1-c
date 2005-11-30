@@ -821,9 +821,17 @@ public class ClientStubWriter
 			else
 			{
 			    containedType = qname.getLocalPart ();
+			    writer.write("\t\t\tif (" + currentParamName + " == NULL)\n");
+			    writer.write("\t\t\t{\n");
+			    writer.write("\t\t\t\t" + currentParamName + " = new " + containedType + "_Array();\n");
+			    writer.write("\t\t\t}\n");
+			    writer.write("\t\t\telse\n");
+			    writer.write("\t\t\t{\n");
+			    writer.write("\t\t\t\t(" + currentParamName + ")->clear();\n");
+			    writer.write("\t\t\t}\n");
 			    writer.
 				write
-				("\t\t\tAxis_Array arr2 = m_pCall->getCmplxArray((void*) Axis_DeSerialize_"
+				("\t\t\tm_pCall->getCmplxArray(" + currentParamName + ", (void*) Axis_DeSerialize_"
 				 + containedType);
 			    //writer.write(", (void*) Axis_Create_"+containedType+", (void*) Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", \""+currentType.getElementName().getLocalPart()+"\", Axis_URI_"+containedType+");\n");
 			    writer.write (", (void*) Axis_Create_"
@@ -837,9 +845,7 @@ public class ClientStubWriter
 					  currentType.
 					  getElementNameAsString () +
 					  "\", Axis_URI_" + containedType +
-					  ");\n\t\t\t" + currentParamName +
-					  " = (" + currentParaType +
-					  "&)arr2;\n");
+					  ");\n");
 			}
 		    }
 		}
