@@ -68,7 +68,7 @@ Content-Length: 677
 <ns1:Element xmlns:ns2="ValidXMLCharIsInterpretedAsCPPCommandTypes"><ns2:arg[name1]>13</ns2:arg[name1]>
 <ns2:arg{name2}>14</ns2:arg{name2}>
 <ns2:arg(name3)>15</ns2:arg(name3)>
-<ns2:arg£name4>16</ns2:arg£name4>
+<ns2:arg_name4>16</ns2:arg_name4>
 <ns2:arg#name5>17</ns2:arg#name5>
 <ns2:arg@name6>18</ns2:arg@name6>
 </ns1:Element>
