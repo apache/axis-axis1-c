@@ -855,13 +855,6 @@ public class ClientStubWriter
 		        
 				if (CUtils.isPointerType(currentParaType))
 				{
-/*					writer.write ("\t\t\t"
-					      + currentParamName
-					      + " = m_pCall->"
-					      + CUtils.getParameterGetValueMethodName(currentParaType,false) 
-						+ "(\"" + currentType.getParamName () 
-						+ "\", 0);\n");
-*/
 				    String xsdType =  WrapperUtils.getClassNameFromParamInfoConsideringArrays ((ParameterInfo) paramsC.get (i), wscontext);
 				    
 				    if( !CUtils.isPointerType(xsdType))
@@ -871,7 +864,7 @@ public class ClientStubWriter
 				    
 				    writer.write( "\t\t\t" + currentParaType + " pReturn" + i + " = m_pCall->" + CUtils.getParameterGetValueMethodName( currentParaType, false) + "( \"" + currentType.getParamName() + "\", 0);\n");
 				    writer.write( "\n");
-				    writer.write( "\t\t\tif( OutValue" + i + " != NULL)\n");
+				    writer.write( "\t\t\tif( pReturn" + i + " != NULL && OutValue" + i + " != NULL)\n");
 				    writer.write( "\t\t\t\t{\n");
 				    writer.write( "\t\t\t\tif( *OutValue" + i + " != NULL)\n");
 				    writer.write( "\t\t\t\t{\n");
@@ -899,16 +892,9 @@ public class ClientStubWriter
 				}
 				else 
 				{
-/*					writer.write ("\t\t\t"
-					      + currentParamName
-					      + " = *(m_pCall->"
-					      + CUtils.getParameterGetValueMethodName(currentParaType,false) 
-						+ "(\"" + currentType.getParamName () 
-						+ "\", 0));\n");
-*/
 				    writer.write( "\t\t\t" + currentParaType + " * pReturn" + i + " = m_pCall->" + CUtils.getParameterGetValueMethodName( currentParaType, false) + "( \"" + currentType.getParamName() + "\", 0);\n");
 				    writer.write( "\n");
-				    writer.write( "\t\t\tif( OutValue" + i + " != NULL)\n");
+				    writer.write( "\t\t\tif( pReturn" + i + " != NULL && OutValue" + i + " != NULL)\n");
 				    writer.write( "\t\t\t{\n");
 				    writer.write( "\t\t\t\tif( *OutValue" + i + " == NULL)\n");
 				    writer.write( "\t\t\t\t{\n");
