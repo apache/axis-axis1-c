@@ -98,16 +98,16 @@ int main(int argc, char* argv[])
 					complexType,
 					arrayOfComplexType,
 					&outStringElement,
-					outIntegerElement,
-					outIntegerArrayElement, 
-					outOptionalIntegerElement, 
-					outNillableIntegerElement, 
+					&outIntegerElement,
+					&outIntegerArrayElement, 
+					&outOptionalIntegerElement, 
+					&outNillableIntegerElement, 
 					&outComplexType, 
-					outArrayOfComplexType);
+					&outArrayOfComplexType);
 
 				// Print output values
 				cout << "String element = " << outStringElement << endl;
-				cout << "Integer element = " << outIntegerElement << endl;
+				cout << "Integer element = " << *outIntegerElement << endl;
 				cout << "Array of integer elements" << endl;
 				outputSize = 0;
 				const xsd__integer** outArrayOfIntegers = outIntegerArrayElement->get(outputSize);
@@ -203,16 +203,16 @@ int main(int argc, char* argv[])
 					complexType,
 					arrayOfComplexType,
 					&outStringElement,
-					outIntegerElement,
-					outIntegerArrayElement, 
-					outOptionalIntegerElement, 
-					outNillableIntegerElement, 
+					&outIntegerElement,
+					&outIntegerArrayElement, 
+					&outOptionalIntegerElement, 
+					&outNillableIntegerElement, 
 					&outComplexType, 
-					outArrayOfComplexType);
+					&outArrayOfComplexType);
 
 				// Print output values
 				cout << "String element = " << outStringElement << endl;
-				cout << "Integer element = " << outIntegerElement << endl;
+				cout << "Integer element = " << *outIntegerElement << endl;
 				cout << "Array of integer elements" << endl;
 				outputSize = 0;
 				const xsd__integer** outArrayOfIntegers = outIntegerArrayElement->get(outputSize);
