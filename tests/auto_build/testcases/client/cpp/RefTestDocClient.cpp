@@ -15,9 +15,9 @@
 
 
 #include "ChoiceServiceSoap.hpp" 
-#include <stdlib.h> // For malloc(), calloc(), strdup() and free()
 #include <iostream>
-#include <fstream>
+
+using namespace std;
 
 #define WSDL_DEFAULT_ENDPOINT "http://bora.hursley.ibm.com:9080/LargeReturningString/services/LargeReturningString"
 
@@ -77,7 +77,7 @@ int main( int argc, char * argv[])
                 {
                  cout <<"Got a result Properties"<<endl;
                  
-                    cout << "b="<<resultResProps->getb()<<endl;
+                    cout << "b="<<*resultResProps->getb()<<endl;
                 }
                 else
                 {
