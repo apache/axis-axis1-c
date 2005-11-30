@@ -29,51 +29,51 @@ int main(int argc, char* argv[])
 			MultiOut ws(argv[1]);
 
 			xsd__string OutValue0 = NULL;
-			xsd__integer * OutValue1 = NULL;
-			xsd__int OutValue2 = 0;
-			xsd__long OutValue3 = 0;
-			xsd__short OutValue4 = 0;
-			xsd__decimal OutValue5 = 0;
-			xsd__float OutValue6 = 0;
-			xsd__double OutValue7 = 0;
-			xsd__boolean OutValue8 = false_;
-			xsd__byte OutValue9 = 0;
+			xsd__integer * pOutValue1 = NULL;
+			xsd__int * pOutValue2 = NULL;
+			xsd__long * pOutValue3 = NULL;
+			xsd__short * pOutValue4 = NULL;
+			xsd__decimal * pOutValue5 = NULL;
+			xsd__float * pOutValue6 = NULL;
+			xsd__double * pOutValue7 = NULL;
+			xsd__boolean * pOutValue8 = NULL;
+			xsd__byte * pOutValue9 = NULL;
 
 			ws.get(&OutValue0,
-				(xsd__integer**)&OutValue1,
-				(xsd__int**)&OutValue2,
-				(xsd__long**)&OutValue3,
-				(xsd__short**)&OutValue4,
-				(xsd__decimal**)&OutValue5,
-				(xsd__float**)&OutValue6,
-				(xsd__double**)&OutValue7,
-				(xsd__boolean**)&OutValue8,
-				(xsd__byte**)&OutValue9);
+				&pOutValue1,
+				&pOutValue2,
+				&pOutValue3,
+				&pOutValue4,
+				&pOutValue5,
+				&pOutValue6,
+				&pOutValue7,
+				&pOutValue8,
+				&pOutValue9);
 
 			char sInteger[128], sLong[128];
 #ifdef WIN32
-			sprintf(sInteger,"%I64d",*OutValue1);
-			sprintf(sLong,"%I64d",OutValue3);
+			sprintf(sInteger,"%I64d",*pOutValue1);
+			sprintf(sLong,"%I64d",*pOutValue3);
 #else
-			sprintf(sInteger,"%lld",OutValue1);
-			sprintf(sLong,"%lld",OutValue3);
+			sprintf(sInteger,"%lld",*pOutValue1);
+			sprintf(sLong,"%lld",*pOutValue3);
 #endif
-			const char *sBool = (OutValue8==false_)?"false":"true";
+			const char *sBool = (*pOutValue8==false_)?"false":"true";
 
 			cout << OutValue0 << endl;
 			cout << sInteger << endl;
-			cout << OutValue2 << endl;
+			cout << *pOutValue2 << endl;
 			cout << sLong << endl;
-			cout << OutValue4 << endl;
-			cout << OutValue5 << endl;
-			cout << OutValue6 << endl;
-			cout << OutValue7 << endl;
+			cout << *pOutValue4 << endl;
+			cout << *pOutValue5 << endl;
+			cout << *pOutValue6 << endl;
+			cout << *pOutValue7 << endl;
 			cout << sBool << endl;
 #ifdef __OS400__
-                  if (OutValue9 == 0x41) // Ascii 'A'
-                     OutValue9 = 'A';    // Set to ebcdic A
+                  if (*pOutValue9 == 0x41) // Ascii 'A'
+                     *pOutValue9 = 'A';    // Set to ebcdic A
 #endif
-			cout << OutValue9 << endl;
+			cout << *pOutValue9 << endl;
 			bSuccess = true;
 		}
 		catch(AxisException& e)
@@ -98,7 +98,7 @@ int main(int argc, char* argv[])
 		}
 		catch(exception& e)
 		{
-		    cout << "Unknown exception has occured" << endl;
+		    cout << "Unknown exception has occured" << e.what() << endl;
 		}
 		catch(...)
 		{
