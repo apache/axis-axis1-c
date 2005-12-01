@@ -62,7 +62,7 @@ int main(int argc, char* argv[])
 				xsd__integer * integerElement2 = new xsd__integer(234);
 				complexType->setintegerElement(integerElement2);
 				BasicComplexType * basicComplexType = new BasicComplexType();
-				xsd__string stringElement3 = new char[8];
+				xsd__string stringElement3 = new char[9];
 				strcpy(stringElement3, "Welcome!");
 				basicComplexType->setstringElement(stringElement3);
 				xsd__integer * integerElement3 = new xsd__integer(345);
