@@ -1,170 +1,52 @@
 POST /XSD_string/services/XSD_stringSOAP HTTP/1.1
 Host: localhost:13260
 Content-Type: text/xml; charset=UTF-8
-SOAPAction: "XSD_string#asNonNillableElement"
-Content-Length: 452
+SOAPAction: "http://tempuri.org/MinOccursIsZero/NewOperation"
+Content-Length: 666
 
 <?xml version='1.0' encoding='utf-8' ?>
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <SOAP-ENV:Body>
-<ns1:AsNonNillableElementRequest xmlns:ns1="http://xsd_string.test.apache.org">
-<nonNillableElement>A simple test message!</nonNillableElement>
-</ns1:AsNonNillableElementRequest>
+<ns1:optionalElementsRequest xmlns:ns1="http://tempuri.org/MinOccursIsZero/">
+<stringElement>Hello!</stringElement>
+<integerElement>123</integerElement>
+<complexType><stringElement>Goodbye!</stringElement>
+<integerElement>234</integerElement>
+<complexType><stringElement>Welcome!</stringElement>
+<integerElement>345</integerElement>
+</complexType></complexType>
+</ns1:optionalElementsRequest>
 </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 
 POST /XSD_string/services/XSD_stringSOAP HTTP/1.1
 Host: localhost:13260
 Content-Type: text/xml; charset=UTF-8
-SOAPAction: "XSD_string#asNonNillableElement"
-Content-Length: 430
+SOAPAction: "http://tempuri.org/MinOccursIsZero/NewOperation"
+Content-Length: 485
 
 <?xml version='1.0' encoding='utf-8' ?>
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <SOAP-ENV:Body>
-<ns1:AsNonNillableElementRequest xmlns:ns1="http://xsd_string.test.apache.org">
-<nonNillableElement></nonNillableElement>
-</ns1:AsNonNillableElementRequest>
+<ns1:optionalElementsRequest xmlns:ns1="http://tempuri.org/MinOccursIsZero/">
+<stringElement>Hello!</stringElement>
+<integerElement>123</integerElement>
+<complexType></complexType>
+</ns1:optionalElementsRequest>
 </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 
 POST /XSD_string/services/XSD_stringSOAP HTTP/1.1
 Host: localhost:13260
 Content-Type: text/xml; charset=UTF-8
-SOAPAction: "XSD_string#asNonNillableElement"
-Content-Length: 455
+SOAPAction: "http://tempuri.org/MinOccursIsZero/NewOperation"
+Content-Length: 382
 
 <?xml version='1.0' encoding='utf-8' ?>
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <SOAP-ENV:Body>
-<ns1:AsNonNillableElementRequest xmlns:ns1="http://xsd_string.test.apache.org">
-<nonNillableElement>&lt;&gt;&amp;&quot;&apos;</nonNillableElement>
-</ns1:AsNonNillableElementRequest>
-</SOAP-ENV:Body>
-</SOAP-ENV:Envelope>
-
-POST /XSD_string/services/XSD_stringSOAP HTTP/1.1
-Host: localhost:13260
-Content-Type: text/xml; charset=UTF-8
-SOAPAction: "XSD_string#asNonNillableElement"
-Content-Length: 461
-
-<?xml version='1.0' encoding='utf-8' ?>
-<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-<SOAP-ENV:Body>
-<ns1:AsNonNillableElementRequest xmlns:ns1="http://xsd_string.test.apache.org">
-<nonNillableElement>  	
-some text 	
-more text 	
-</nonNillableElement>
-</ns1:AsNonNillableElementRequest>
-</SOAP-ENV:Body>
-</SOAP-ENV:Envelope>
-
-POST /XSD_string/services/XSD_stringSOAP HTTP/1.1
-Host: localhost:13260
-Content-Type: text/xml; charset=UTF-8
-SOAPAction: "XSD_string#asNonNillableElement"
-Content-Length: 440
-
-<?xml version='1.0' encoding='utf-8' ?>
-<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-<SOAP-ENV:Body>
-<ns1:asNillableElementRequest xmlns:ns1="http://xsd_string.test.apache.org">
-<nillableElement>A simple test message!</nillableElement>
-</ns1:asNillableElementRequest>
-</SOAP-ENV:Body>
-</SOAP-ENV:Envelope>
-
-POST /XSD_string/services/XSD_stringSOAP HTTP/1.1
-Host: localhost:13260
-Content-Type: text/xml; charset=UTF-8
-SOAPAction: "XSD_string#asNonNillableElement"
-Content-Length: 418
-
-<?xml version='1.0' encoding='utf-8' ?>
-<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-<SOAP-ENV:Body>
-<ns1:asNillableElementRequest xmlns:ns1="http://xsd_string.test.apache.org">
-<nillableElement></nillableElement>
-</ns1:asNillableElementRequest>
-</SOAP-ENV:Body>
-</SOAP-ENV:Envelope>
-
-POST /XSD_string/services/XSD_stringSOAP HTTP/1.1
-Host: localhost:13260
-Content-Type: text/xml; charset=UTF-8
-SOAPAction: "XSD_string#asNonNillableElement"
-Content-Length: 433
-
-<?xml version='1.0' encoding='utf-8' ?>
-<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-<SOAP-ENV:Body>
-<ns1:asNillableElementRequest xmlns:ns1="http://xsd_string.test.apache.org">
-<nillableElement xsi:nil="true"></nillableElement>
-</ns1:asNillableElementRequest>
-</SOAP-ENV:Body>
-</SOAP-ENV:Envelope>
-
-POST /XSD_string/services/XSD_stringSOAP HTTP/1.1
-Host: localhost:13260
-Content-Type: text/xml; charset=UTF-8
-SOAPAction: "XSD_string#asNonNillableElement"
-Content-Length: 483
-
-<?xml version='1.0' encoding='utf-8' ?>
-<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-<SOAP-ENV:Body>
-<ns1:asRequiredAttributeRequest xmlns:ns1="http://xsd_string.test.apache.org">
-<RequiredAttributeElement requiredAttribute="A simple test message!"></RequiredAttributeElement>
-</ns1:asRequiredAttributeRequest>
-</SOAP-ENV:Body>
-</SOAP-ENV:Envelope>
-
-POST /XSD_string/services/XSD_stringSOAP HTTP/1.1
-Host: localhost:13260
-Content-Type: text/xml; charset=UTF-8
-SOAPAction: "XSD_string#asNonNillableElement"
-Content-Length: 461
-
-<?xml version='1.0' encoding='utf-8' ?>
-<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-<SOAP-ENV:Body>
-<ns1:asRequiredAttributeRequest xmlns:ns1="http://xsd_string.test.apache.org">
-<RequiredAttributeElement requiredAttribute=""></RequiredAttributeElement>
-</ns1:asRequiredAttributeRequest>
-</SOAP-ENV:Body>
-</SOAP-ENV:Envelope>
-
-POST /XSD_string/services/XSD_stringSOAP HTTP/1.1
-Host: localhost:13260
-Content-Type: text/xml; charset=UTF-8
-SOAPAction: "XSD_string#asNonNillableElement"
-Content-Length: 466
-
-<?xml version='1.0' encoding='utf-8' ?>
-<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-<SOAP-ENV:Body>
-<ns1:asArrayRequest xmlns:ns1="http://xsd_string.test.apache.org">
-<arrayElement>A simple test message!</arrayElement>
-<arrayElement>A simple test message!</arrayElement>
-</ns1:asArrayRequest>
-</SOAP-ENV:Body>
-</SOAP-ENV:Envelope>
-
-POST /XSD_string/services/XSD_stringSOAP HTTP/1.1
-Host: localhost:13260
-Content-Type: text/xml; charset=UTF-8
-SOAPAction: "XSD_string#asNonNillableElement"
-Content-Length: 486
-
-<?xml version='1.0' encoding='utf-8' ?>
-<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-<SOAP-ENV:Body>
-<ns1:asComplexTypeRequest xmlns:ns1="http://xsd_string.test.apache.org">
-<SimpleComplexType><ns1:complexTypeElement>A simple test message!</ns1:complexTypeElement>
-</SimpleComplexType>
-</ns1:asComplexTypeRequest>
+<ns1:optionalElementsRequest xmlns:ns1="http://tempuri.org/MinOccursIsZero/">
+</ns1:optionalElementsRequest>
 </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 
