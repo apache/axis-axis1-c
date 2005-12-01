@@ -49,11 +49,27 @@ int Axis_Serialize_Type(Type* param, IWrapperSoapSerializer* pSZ, bool bArray = 
 		return AXIS_SUCCESS;
 	}
 
+	bool blnIsNewPrefix = false;
+	if (!bArray)
+	{
+		const AxisChar* sPrefix = pSZ->getNamespacePrefix(Axis_URI_Type, blnIsNewPrefix);
+		if (blnIsNewPrefix)
+		{
+			pSZ->serialize(" xmlns:", sPrefix, "=\"",
+				Axis_URI_Type, "\"", NULL );
+		}
+	}
 	/* first serialize attributes if any*/
 	pSZ->serialize( ">", 0);
 
 	/* then serialize elements if any*/
-	pSZ->serializeBasicArray(param->item, Axis_URI_Type,XSD_INT, "item");
+	pSZ->serializeBasicArray(param->item, NULL,XSD_INT, "item");
+
+	if (!bArray && blnIsNewPrefix)
+	{
+		pSZ->removeNamespacePrefix(Axis_URI_Type);
+	}
+
 	return AXIS_SUCCESS;
 }
 
@@ -62,15 +78,13 @@ int Axis_Serialize_Type(Type* param, IWrapperSoapSerializer* pSZ, bool bArray = 
  */
 int Axis_DeSerialize_Type(Type* param, IWrapperSoapDeSerializer* pIWSDZ)
 {
-	Axis_Array * array;
-
-	array = pIWSDZ->getBasicArray(XSD_INT, "item",0);
+	Axis_Array * array1 = pIWSDZ->getBasicArray(XSD_INT, "item",0);
 	if(param->item == NULL)
 	{
 		param->item = new xsd__int_Array();
 	}
-	param->item->clone( *array);
-	Axis::AxisDelete((void*) array, XSD_ARRAY);
+	param->item->clone( *array1);
+	Axis::AxisDelete((void*) array1, XSD_ARRAY);
 
 	return pIWSDZ->getStatus();
 }
@@ -82,7 +96,7 @@ void* Axis_Create_Type(Type* pObj, bool bArray = false, int nSize=0)
 		{
 			Type* pNew = new Type[nSize];
 			size_t i = nSize/2;
-			for (int ii=0; ii<i; ++ii)
+			for (int ii = 0; ii < (int) i; ++ii)
 			{
 				pNew[ii] = pObj[ii];
 				pObj[ii].reset();
@@ -123,23 +137,28 @@ int Axis_GetSize_Type()
 
 Type::Type()
 {
-	item = NULL;
+	item = new xsd__int_Array();
 	reset();
+}
+
+Type::Type(Type & original)
+{
+	item = new xsd__int_Array(*original.item);
 }
 
 void Type::reset()
 {
 	/*do not allocate memory to any pointer members here
 	 because deserializer will allocate memory anyway. */
-	if ( item != NULL)
-	{
-		item->clear();
-	}
+	item->clear();
 }
 
 Type::~Type()
 {
 	/*delete any pointer and array members here*/
 	if (item!= NULL)
+	{
 		delete item;
+		item = NULL;
+	}
 }

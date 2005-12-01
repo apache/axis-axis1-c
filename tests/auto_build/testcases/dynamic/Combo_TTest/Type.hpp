@@ -32,12 +32,13 @@ static const char* Axis_TypeName_Type = "Type";
 class STORAGE_CLASS_INFO Type
 {
 public:
-	xsd__int_Array * item;
+	class xsd__int_Array * item;
 
 	xsd__int_Array * getitem();
 	void setitem(xsd__int_Array * pInValue);
 
 	Type();
+	Type(Type & original);
 
 	void reset();
 	virtual ~Type();
