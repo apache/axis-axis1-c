@@ -79,13 +79,13 @@ int main(int argc, char* argv[])
         }
 
         // Test required attribute
-        RequiredAttributeElement requiredAttributeInput;
+        /* RequiredAttributeElement requiredAttributeInput;
         requiredAttributeInput.setrequiredAttribute(input);
         RequiredAttributeElement* requiredAttributeResult = ws->asRequiredAttribute(&requiredAttributeInput);
         cout << "required attribute" << endl;
         cout << " size=" << requiredAttributeResult->getrequiredAttribute().__size << endl;
         cout << " data=" << asciiToStringOfLength((char *)requiredAttributeResult->getrequiredAttribute().__ptr, requiredAttributeResult->getrequiredAttribute().__size) << endl;
-        delete requiredAttributeResult;
+        delete requiredAttributeResult; */ 
 
 /* Optional Attributes currently unsupported by WSDL2Ws
  * Exact coding of this section may change depending on chosen implementation
