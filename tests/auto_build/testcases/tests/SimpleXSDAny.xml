@@ -1,0 +1,16 @@
+<test>
+    <name>SimpleXSDAny</name>
+    <description>SimpleXSDAny</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>SimpleXSDAnyClient.cpp</clientCode>
+    <wsdl>SimpleXSDAny.wsdl</wsdl>
+    <expected>
+        <output>
+            SimpleXSDAny.cpp.out
+        </output>
+		<request>
+			SimpleXSDAny.request
+		</request>
+    </expected>
+	<endpoint>-e http://localhost:9080/SimpleXSDAny/services/Service</endpoint>
+</test>
