@@ -320,6 +320,7 @@ public class MockServerThread implements Runnable
             }
             responses[i-1]=new Response(tmpString);
         }
+        System.out.println("MockServer got "+(responses.length-1)+" responses");
     }
 
 //        /**

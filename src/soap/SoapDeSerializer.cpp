@@ -1686,7 +1686,7 @@ void SoapDeSerializer::getElement (const AxisChar * pName,
 				else if (m_pNode && (END_ELEMENT == m_pNode->m_type) && bNillFound  ) //xsi:nil="true"
 				{
                     pSimpleType->deserialize(NULL);
-					m_pNode = NULL
+					m_pNode = NULL;
 					return;
 				} 
 

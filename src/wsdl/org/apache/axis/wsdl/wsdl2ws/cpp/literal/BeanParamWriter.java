@@ -939,6 +939,8 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     }
                     else
                     {
+                        String elementNameToSearchFor = attribs[i].isAttribute()? attribs[i].getParamNameAsMember():attribs[i].getSOAPElementNameAsString();
+                        
                         writer.write("\t" + attribs[i].getTypeName() + " * "
                                 + attribs[i].getParamNameAsMember()
                                 + " = NULL;\n\n");
@@ -947,7 +949,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                                 + " = pIWSDZ->"
                                 + CUtils.getParameterGetValueMethodName(
                                         attribs[i].getTypeName(), attribs[i].isAttribute()) + "( \""
-                                + CUtils.sanitiseAttributeName( classname, soapTagName) + "\",0)) != NULL)\n\t{\n");
+                                + elementNameToSearchFor + "\",0)) != NULL)\n\t{\n");
                         writer.write("\t\tparam->"
                                 + attribs[i].getParamNameAsMember() + " = *( "
                                 + attribs[i].getParamNameAsMember() + " );\n");
