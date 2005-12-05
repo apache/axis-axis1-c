@@ -66,6 +66,7 @@
 #include "AxisSoapException.h"
 #include "../common/AxisGenException.h"
 #include "../common/AxisTrace.h"
+#include <axis/Axis.hpp>
 
 #include <list>
 #include <iostream>
@@ -582,10 +583,47 @@ SoapDeSerializer::getVersion ()
  *    <points><x>7</x><y>8</y></points>
  *
  */
+ 
+void SoapDeSerializer::deserializeLiteralComplexArray(Axis_Array * pArray, void *pDZFunct,
+                void *pCreFunct, void *pDelFunct, void* pSizeFunct,
+                const AxisChar * pName, const AxisChar * pNamespace)
+{
+    while(true)
+    {
+        const char* elementName = peekNextElementName();
+        if(strcmp(elementName, pName) == 0)
+        {
+            pArray->addElement(getCmplxObject(pDZFunct, pCreFunct, pDelFunct, pName, pNamespace));
+        }
+        else
+        {
+            return;
+        }
+    }
+}
+
+void SoapDeSerializer::deserializeEncodedComplexArray(Axis_Array * pArray, void *pDZFunct,
+                void *pCreFunct, void *pDelFunct, void* pSizeFunct,
+                const AxisChar * pName, const AxisChar * pNamespace, int size)
+{
+    for (int count = 0 ; count < size; count++)
+    {
+        const char* elementName = peekNextElementName();
+        if(strcmp(elementName, pName) == 0)
+        {
+            pArray->addElement(getCmplxObject(pDZFunct, pCreFunct, pDelFunct, pName, pNamespace));
+        }
+        else
+        {
+            return;
+        }
+    }
+}
+
 Axis_Array*
 SoapDeSerializer::getCmplxArray ( Axis_Array* pArray, void *pDZFunct,
                 void *pCreFunct, void *pDelFunct, void *pSizeFunct,
-				 const AxisChar * pName, const AxisChar * pNamespace)
+                const AxisChar * pName, const AxisChar * pNamespace)
 {
     int nIndex = 0;
     void *pItem;
@@ -594,215 +632,61 @@ SoapDeSerializer::getCmplxArray ( Axis_Array* pArray, void *pDZFunct,
 
     if (AXIS_SUCCESS != m_nStatus)
     {
-	   return pArray;		/* if anything has gone wrong
-				 * earlier just do nothing */
+        return pArray;
+        /* if anything has gone wrong
+         * earlier just do nothing */
     }
 
     if (RPC_ENCODED == m_nStyle)
     {
-    	m_pNode = m_pParser->next ();
-    	/* just skip wrapper node with type info
-    	 * Ex:<tns:QuoteInfoTypeArray xmlns:tns="http://www.getquote.org/test">
-    	 */
-    	if (!m_pNode)
-    	{
-    	    return pArray;
-    	}
+        m_pNode = m_pParser->next ();
+        /* just skip wrapper node with type info
+         * Ex:<tns:QuoteInfoTypeArray xmlns:tns="http://www.getquote.org/test">
+         */
+        if (!m_pNode)
+        {
+            return pArray;
+        }
     
-            if (END_ELEMENT == m_pNode->m_type2)
-    	{
-    	    return pArray;
-    	}
+        if (END_ELEMENT == m_pNode->m_type2)
+        {
+            return pArray;
+        }
     
-    	int arraySize = getArraySize (m_pNode);
+        int arraySize = getArraySize (m_pNode);
     
-    	if (arraySize == 0)
-    	{
-    		m_pNode = m_pParser->next ();	/* skip end element node too */
-    		return pArray;
-    	}
-    	else if (arraySize > 0)
-    	{
-    	    for (; nIndex < arraySize; nIndex++)
-    	    {
-        		m_pNode = m_pParser->next ();
-        		/* wrapper node without type info  Ex: <item> */
-        		if (!m_pNode)
-        		{
-        			for (int deleteCount = 0 ; deleteCount < nIndex ; deleteCount++)
-					{
-        				TRACE_OBJECT_DELETE_FUNCT_ENTRY(pDelFunct, pArray->m_Array[deleteCount], false, 0);
-        				((AXIS_OBJECT_DELETE_FUNCT) pDelFunct) (pArray->m_Array[deleteCount], false, 0);
-        				TRACE_OBJECT_DELETE_FUNCT_EXIT(pDelFunct);
-					}
-					delete [] pArray->m_Array;
-        
-        		    pArray->m_Array = NULL;
-        		    pArray->m_Size = 0;
-        		    return pArray;
-        		}
-        
-        		if (C_RPC_PROVIDER == getCurrentProviderType ())
-        		{
-        		    // Disable C support
-        		    //IWrapperSoapDeSerializer_C cWSD;
-        		    //cWSD._object = this;
-        		    //cWSD._functions = &IWrapperSoapDeSerializer::ms_VFtable;
-        		    //((AXIS_DESERIALIZE_FUNCT)pDZFunct)(pItem, &cWSD);
-        		}
-        		else
-        		{
-					TRACE_OBJECT_CREATE_FUNCT_ENTRY(pCreFunct, NULL, false, 0);
-    				pArray->addElement(((AXIS_OBJECT_CREATE_FUNCT) pCreFunct) (NULL, false, 0));
-    				TRACE_OBJECT_CREATE_FUNCT_EXIT(pCreFunct, pArray->m_Array[nIndex]);
-
-        			TRACE_DESERIALIZE_FUNCT_ENTRY(pDZFunct, pArray->m_Array[nIndex], this);
-        		    m_nStatus =	((AXIS_DESERIALIZE_FUNCT) pDZFunct) (pArray->m_Array[nIndex], this);
-        			TRACE_DESERIALIZE_FUNCT_EXIT(pDZFunct, m_nStatus);
-        		}
-        
-        		m_pNode = m_pParser->next ();	/* skip end element node too */
-        
-        		if (!m_pNode)
-        		{
-        			for (int deleteCount = 0 ; deleteCount < nIndex ; deleteCount++)
-					{
-        				TRACE_OBJECT_DELETE_FUNCT_ENTRY(pDelFunct, pArray->m_Array[deleteCount], false, 0);
-        				((AXIS_OBJECT_DELETE_FUNCT) pDelFunct) (pArray->m_Array[deleteCount], false, 0);
-        				TRACE_OBJECT_DELETE_FUNCT_EXIT(pDelFunct);
-					}
-					delete [] pArray->m_Array;
-        
-        		    pArray->m_Array = NULL;
-        		    pArray->m_Size = 0;
-        		    return pArray;
-        		}
-    	    }
-    
-    	    m_pNode = m_pParser->next ();	/* skip end element node too */
-    
-    	    return pArray;
-    	}
+        if (arraySize == 0)
+        {
+            m_pNode = m_pParser->next ();   /* skip end element node too */
+            return pArray;
+        }
+        else if (arraySize > 0)
+        {
+            deserializeEncodedComplexArray(pArray, pDZFunct, pCreFunct, pDelFunct,
+                pSizeFunct, pName, pNamespace, arraySize);
+            
+            if (m_nStatus != AXIS_FAIL)
+            {
+                return pArray;
+            }
+        }
     }
     else
-    {   // doc/literal
-        while (true)
-        {
-    		if (!m_pNode)
-    		{
-               /* if there is an unprocessed node that may be
-                * one left from last array deserialization 
-                */
-    		    m_pNode = m_pParser->next ();
-    		}
-    
-    		/* wrapper node without type info  Ex: <phonenumbers> */
-    		if (!m_pNode)
-    		{
-				for (int deleteCount = 0 ; deleteCount < pArray->m_Size ; deleteCount++)
-				{
-    				TRACE_OBJECT_DELETE_FUNCT_ENTRY(pDelFunct, pArray->m_Array[deleteCount], false, 0);
-    				((AXIS_OBJECT_DELETE_FUNCT) pDelFunct) (pArray->m_Array[deleteCount], false, 0);
-    				TRACE_OBJECT_DELETE_FUNCT_EXIT(pDelFunct);
-				}
-				delete [] pArray->m_Array;
-    		    pArray->m_Array = NULL;
-    		    pArray->m_Size = 0;
-    		    return pArray;
-    		}
-    
-    		if (0 == strcmp (pName, m_pNode->m_pchNameOrValue))
-    		{
-    		    /* if this node contain attributes let them be used by the
-    		     * complex type's deserializer
-    		     */
-    		    if (0 != m_pNode->m_pchAttributes[0])
-    		    {
-    			     m_pCurrNode = m_pNode;
-    		    }
-    
-    		    m_pNode = NULL;	/* recognized and used the node */
-    
-    		    if (C_DOC_PROVIDER == getCurrentProviderType ())
-    		    {
-    			// Disable C support
-    			//IWrapperSoapDeSerializer_C cWSD;
-    			//cWSD._object = this;
-    			//cWSD._functions = &IWrapperSoapDeSerializer::ms_VFtable;
-    			//m_nStatus = ((AXIS_DESERIALIZE_FUNCT)pDZFunct)
-    			//   (pItem, &cWSD);
-    		    }
-    		    else
-    		    {
-					TRACE_OBJECT_CREATE_FUNCT_ENTRY(pCreFunct, NULL, false, INITIAL_ARRAY_SIZE);
-					void* object = ((AXIS_OBJECT_CREATE_FUNCT) pCreFunct) (NULL,
-							false,
-							INITIAL_ARRAY_SIZE);
-					TRACE_OBJECT_CREATE_FUNCT_EXIT(pCreFunct, object);
+    {
+        deserializeLiteralComplexArray(pArray, pDZFunct, pCreFunct, pDelFunct,
+            pSizeFunct, pName, pNamespace);
 
-    				TRACE_DESERIALIZE_FUNCT_ENTRY(pDZFunct, object, this);
-    			    m_nStatus =	((AXIS_DESERIALIZE_FUNCT) pDZFunct) (object, this);
-    				TRACE_DESERIALIZE_FUNCT_EXIT(pDZFunct, m_nStatus);
-                    pArray->addElement(object);
-    		    }
-    
-    		    if (AXIS_SUCCESS == m_nStatus)
-    		    {
-                    /* skip end element of the array item */
-                    m_pNode = m_pParser->next ();
-    
-                    if (m_pNode->m_type == END_ELEMENT)
-                    {
-                        //Skip past end of item
-                        //m_pNode = m_pParser->next ();
-    
-                        if (0 == strcmp (pName, m_pNode->m_pchNameOrValue))
-                        {
-                            if (m_pNode->m_type != START_ELEMENT)
-                            {
-                                m_pNode = NULL;
-                            }
-                        }
-                    }
-    // < FJP
-                    continue;
-                }
-    		}
-    		else
-    		{
-    		    return pArray;
-    		}
-    		/* if we come here it is an error situation */
-    		/*
-    		 * not an  error for self referenced array or empty array
-    		 * TODO: Need to verify what WS-I 1.0 say
-    		 * <xsd:complexType name="Type1">
-    		 *  <xsd:sequence>
-    		 *    <xsd:element name="types" maxOccurs="unbounded" minOccurs="0"
-    		 *         type="tns:Type1"/>
-    		 *    <xsd:element name="type" minOccurs="0" type="xsd:string"/>
-    		 *  </xsd:sequence>
-    		 * </xsd:complexType>        
-    		 */
-			for (int deleteCount = 0 ; deleteCount < pArray->m_Size ; deleteCount++)
-			{
-    			TRACE_OBJECT_DELETE_FUNCT_ENTRY(pDelFunct, pArray->m_Array[deleteCount], false, 0);
-    			((AXIS_OBJECT_DELETE_FUNCT) pDelFunct) (pArray->m_Array[deleteCount], false, 0);
-    			TRACE_OBJECT_DELETE_FUNCT_EXIT(pDelFunct);
-			}
-			delete [] pArray->m_Array;
-    
-    		pArray->m_Array = 0;
-    		pArray->m_Size = 0;
-    
-    		return pArray;
-    	}
+        if (m_nStatus != AXIS_FAIL)
+        {
+            return pArray;
+        }
     }
     m_nStatus = AXIS_FAIL;
     m_pNode = NULL;
 
     return pArray;
 }
+
 
 /*
  * Get Size of the single dimension array from arrayType attribute
@@ -853,144 +737,41 @@ SoapDeSerializer::getArraySize (const AnyElement * pElement)
  *
  *
  */
-
-void SoapDeSerializer::deserializeEncodedArray (Axis_Array* pArray, IAnySimpleType* pSimpleType, const AxisChar* pName, const AxisChar* pNamespace)
+void SoapDeSerializer::deserializeEncodedArray (Axis_Array* pArray, IAnySimpleType* pSimpleType, const AxisChar* pName, const AxisChar* pNamespace, int size)
 {
-    pArray->m_Array = new void*[pArray->m_Size];
-    if (!pArray->m_Array)
+    for (int count = 0 ; count < size; count++)
     {
-        pArray->m_Size = 0;
-        m_nStatus = AXIS_FAIL;
-        return;
-    }
-    for (int nIndex = 0; nIndex < pArray->m_Size; nIndex++)
-    {
-        /* wrapper node without type info  Ex: <item>*/
-        m_pNode = m_pParser->next();
-        m_pNode = m_pParser->next(true); /* charactor node */
-        if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+        const char* elementName = peekNextElementName();
+        if(strcmp(elementName, pName) == 0)
         {
-            pSimpleType->deserialize(m_pNode->m_pchNameOrValue);
-            pArray->m_Array[nIndex] = pSimpleType->getValue();
-            m_pNode = m_pParser->next(); /* skip end element node too */
-            continue;
+            getElement(pName, pNamespace, pSimpleType);
+            void * pValue = pSimpleType->getValue();
+            pArray->addElement(pValue);
+            Axis::AxisDelete(pValue, pSimpleType->getType());
         }
-        else if (m_pNode && (END_ELEMENT == m_pNode->m_type))
+        else
         {
-            pSimpleType->deserialize("");
-            pArray->m_Array[nIndex] = pSimpleType->getValue();
-            continue;
+            return;
         }
-        /* error : unexpected element type or end of stream */
-        m_nStatus = AXIS_FAIL;
-        delete [] pArray->m_Array;
-        pArray->m_Array = 0;
-        pArray->m_Size = 0;
-        return;
     }
-    m_pNode = m_pParser->next(); /* skip end element node too */
-    return;
 }
 
 void SoapDeSerializer::deserializeLiteralArray (Axis_Array* pArray, IAnySimpleType* pSimpleType, const AxisChar* pName, const AxisChar* pNamespace)
 {
-    pArray->m_Array = new void*[INITIAL_ARRAY_SIZE];
-    if (!pArray->m_Array)
-        return;
-    pArray->m_Size = INITIAL_ARRAY_SIZE;
-    int nIndex = 0;
     while(true)
     {
-        for (; nIndex < pArray->m_Size ; nIndex++)
+        const char* elementName = peekNextElementName();
+        if(strcmp(elementName, pName) == 0)
         {
-            if (!m_pNode)
-                /* if there is an unprocessed node that may be one left */
-                /* from last array deserialization */
-                m_pNode = m_pParser->next();
-                /* wrapper node without type info Ex: <phonenumbers>*/
-            if (!m_pNode)
-            {
-                m_nStatus = AXIS_FAIL;
-                delete [] pArray->m_Array;
-                pArray->m_Array = 0;
-                pArray->m_Size = 0;
-                return;
-            }
-            if (0 == strcmp(pName, m_pNode->m_pchNameOrValue))
-            {
-                bool    bNillFound = false;
-                for (int i = 0; m_pNode->m_pchAttributes[i] && !bNillFound; i += 3)
-                {
-                    string sLocalName = m_pNode->m_pchAttributes[i];
-                    string sValue = m_pNode->m_pchAttributes[i + 2];
-        
-                    if( strcmp( "nil", sLocalName.c_str()) == 0 &&
-                        strcmp( "true", sValue.c_str()) == 0)
-                    {
-                        bNillFound = true;
-                    }
-                }
-                
-                m_pNode = m_pParser->next(true); /* charactor node */
-                if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
-                {
-                    pSimpleType->deserialize(m_pNode->m_pchNameOrValue);
-                    pArray->m_Array[nIndex] =  pSimpleType->getValue();
-                    m_pNode = m_pParser->next();
-                    /* skip end element node too */
-                    m_pNode = NULL;
-                    /* this is important in doc/lit style when */
-                    /* deserializing arrays */
-                    continue;
-                }
-                else if (m_pNode && (END_ELEMENT == m_pNode->m_type) && bNillFound)
-                {
-                    pArray->m_Array[nIndex] = NULL;
-                    m_pNode = NULL;
-                    continue;
-                }
-                else if (m_pNode && (END_ELEMENT == m_pNode->m_type))
-                {
-                    pSimpleType->deserialize("");
-                    pArray->m_Array[nIndex] = pSimpleType->getValue();
-                    m_pNode = NULL;
-                    continue;
-                }
-                /* error : unexpected element type or */
-                /* end of the stream */
-            }
-            else
-            {
-                if (nIndex > 0)
-                {
-                    pArray->m_Size = nIndex; 
-                    /* put the actual deserialized item size */
-                    /* note we do not make m_pNode = NULL because */
-                    /* this node doesnot belong to this array */
-                    return;
-                }
-                /* error : no elements deserialized */
-            }
-            /* if we come here it is an error situation */
-            m_nStatus = AXIS_FAIL;
-            m_pNode = NULL;
-            delete [] pArray->m_Array;
-            pArray->m_Array = 0;
-            pArray->m_Size = 0;
+    		getElement(pName, pNamespace, pSimpleType);
+            void * pValue = pSimpleType->getValue();
+            pArray->addElement(pValue);
+            Axis::AxisDelete(pValue, pSimpleType->getType());
+        }
+        else
+        {
             return;
         }
-        /* if we come here that means the array allocated is */
-        /* not enough. So double it */
-        void** tmp = pArray->m_Array;
-        pArray->m_Array = new void*[pArray->m_Size*2];
-        if (!pArray->m_Array) 
-        {
-            pArray->m_Size = 0;
-            return;
-        }
-        memcpy(pArray->m_Array,tmp,pArray->m_Size*sizeof(void*));
-        delete [] tmp;
-        pArray->m_Size *= 2;
     }
 }
 
@@ -1020,17 +801,17 @@ SoapDeSerializer::getBasicArray (XSDTYPE nType,
 		    return Array;
 		}
 	
-		Array->m_Size = getArraySize (m_pNode);
+		int size = getArraySize (m_pNode);
 	
-		if (Array->m_Size == 0)
+		if (size == 0)
 		{
 			m_pNode = m_pParser->next ();	/* skip end element node too */
 			return Array;
 		}
-		else if (Array->m_Size > 0)
+		else if (size > 0)
         {
             IAnySimpleType* pSimpleType = AxisUtils::createSimpleTypeObject(nType);
-            deserializeEncodedArray(Array, pSimpleType, pName, pNamespace);
+            deserializeEncodedArray(Array, pSimpleType, pName, pNamespace, size);
             delete pSimpleType;
             
             if ( m_nStatus != AXIS_FAIL)
@@ -1904,7 +1685,8 @@ void SoapDeSerializer::getElement (const AxisChar * pName,
 				}
 				else if (m_pNode && (END_ELEMENT == m_pNode->m_type) && bNillFound  ) //xsi:nil="true"
 				{
-					m_pNode = m_pParser->next();
+                    pSimpleType->deserialize(NULL);
+					m_pNode = NULL
 					return;
 				} 
 
@@ -2008,7 +1790,8 @@ void SoapDeSerializer::getElement (const AxisChar * pName,
         }
         else if (m_pNode && (END_ELEMENT == m_pNode->m_type) && bNillFound ) //xsi:nil="true"
         {
-            m_pNode = m_pParser->next();
+            pSimpleType->deserialize(NULL);
+            m_pNode = NULL;
             return;
         }        
         else if (m_pNode && (END_ELEMENT == m_pNode->m_type) ) // empty tag case <tag/>

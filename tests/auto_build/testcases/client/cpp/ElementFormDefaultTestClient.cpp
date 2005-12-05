@@ -72,7 +72,7 @@ int main(int argc, char* argv[])
 				complexType->setsomeData(345);
 
 				UnqualifiedSimpleComplexType_Array * arrayOfComplexType = new UnqualifiedSimpleComplexType_Array();
-				UnqualifiedSimpleComplexType** complexTypeArray = new UnqualifiedSimpleComplexType*();
+				UnqualifiedSimpleComplexType** complexTypeArray = new UnqualifiedSimpleComplexType*[arraySize];
 				for (count = 0 ; count < arraySize ; count++ )
 				{
 					complexTypeArray[count] = new UnqualifiedSimpleComplexType();
@@ -105,9 +105,29 @@ int main(int argc, char* argv[])
 					&outComplexType, 
 					&outArrayOfComplexType);
 
+				// Clean up inputs
+				delete [] stringElement;
+				for (count = 0 ; count < arraySize ; count++ )
+				{
+					delete arrayOfInteger[count];
+				}
+				delete [] arrayOfInteger;
+				delete integerArrayElement;
+				delete optionalInteger;
+				delete complexType;
+				for (count = 0 ; count < arraySize ; count++ )
+				{
+					delete complexTypeArray[count];
+				}
+				delete [] complexTypeArray;
+				delete arrayOfComplexType;
+				
+
 				// Print output values
 				cout << "String element = " << outStringElement << endl;
+				delete [] outStringElement;
 				cout << "Integer element = " << *outIntegerElement << endl;
+				delete outIntegerElement;
 				cout << "Array of integer elements" << endl;
 				outputSize = 0;
 				const xsd__integer** outArrayOfIntegers = outIntegerArrayElement->get(outputSize);
@@ -122,9 +142,11 @@ int main(int argc, char* argv[])
 						cout << " element[" << count << "] = NULL" << endl;
 					}
 				}
+				delete outIntegerArrayElement;
 				if (outOptionalIntegerElement != NULL)
 				{
 					cout << "Optional integer element = " << *outOptionalIntegerElement << endl;
+					delete outOptionalIntegerElement;
 				}
 				else
 				{
@@ -133,12 +155,14 @@ int main(int argc, char* argv[])
 				if (outNillableIntegerElement != NULL)
 				{
 					cout << "Nillable integer element = " << *outNillableIntegerElement << endl;
+					delete outNillableIntegerElement;
 				}
 				else
 				{
 					cout << "Nillable integer element = NULL" << endl;
 				}
 				cout << "SimpleComplexType->someData = " << outComplexType->someData << endl;
+				delete outComplexType;
 				cout << "Array of complex elements" << endl;
 				outputSize = 0;
 				UnqualifiedSimpleComplexType** outComplexArray = outArrayOfComplexType->get(outputSize);
@@ -153,6 +177,7 @@ int main(int argc, char* argv[])
 						cout << " element[" << count << "] = NULL" << endl;
 					}
 				}
+				delete outArrayOfComplexType;
 			}
 
 
@@ -177,7 +202,7 @@ int main(int argc, char* argv[])
 				complexType->setsomeData(345);
 
 				QualifiedSimpleComplexType_Array * arrayOfComplexType = new QualifiedSimpleComplexType_Array();
-				QualifiedSimpleComplexType** complexTypeArray = new QualifiedSimpleComplexType*();
+				QualifiedSimpleComplexType** complexTypeArray = new QualifiedSimpleComplexType*[arraySize];
 				for (count = 0 ; count < arraySize ; count++ )
 				{
 					complexTypeArray[count] = new QualifiedSimpleComplexType();
@@ -210,9 +235,28 @@ int main(int argc, char* argv[])
 					&outComplexType, 
 					&outArrayOfComplexType);
 
+				// Clean up inputs
+				delete [] stringElement;
+				for (count = 0 ; count < arraySize ; count++ )
+				{
+					delete arrayOfInteger[count];
+				}
+				delete [] arrayOfInteger;
+				delete integerArrayElement;
+				delete optionalInteger;
+				delete complexType;
+				for (count = 0 ; count < arraySize ; count++ )
+				{
+					delete complexTypeArray[count];
+				}
+				delete [] complexTypeArray;
+				delete arrayOfComplexType;
+
 				// Print output values
 				cout << "String element = " << outStringElement << endl;
+				delete [] outStringElement;
 				cout << "Integer element = " << *outIntegerElement << endl;
+				delete outIntegerElement;
 				cout << "Array of integer elements" << endl;
 				outputSize = 0;
 				const xsd__integer** outArrayOfIntegers = outIntegerArrayElement->get(outputSize);
@@ -227,9 +271,11 @@ int main(int argc, char* argv[])
 						cout << " element[" << count << "] = NULL" << endl;
 					}
 				}
+				delete outIntegerArrayElement;
 				if (outOptionalIntegerElement != NULL)
 				{
 					cout << "Optional integer element = " << *outOptionalIntegerElement << endl;
+					delete outOptionalIntegerElement;
 				}
 				else
 				{
@@ -238,12 +284,14 @@ int main(int argc, char* argv[])
 				if (outNillableIntegerElement != NULL)
 				{
 					cout << "Nillable integer element = " << *outNillableIntegerElement << endl;
+					delete outNillableIntegerElement;
 				}
 				else
 				{
 					cout << "Nillable integer element = NULL" << endl;
 				}
 				cout << "SimpleComplexType->someData = " << outComplexType->someData << endl;
+				delete outComplexType;
 				cout << "Array of complex elements" << endl;
 				outputSize = 0;
 				QualifiedSimpleComplexType** outComplexArray = outArrayOfComplexType->get(outputSize);
@@ -258,6 +306,7 @@ int main(int argc, char* argv[])
 						cout << " element[" << count << "] = NULL" << endl;
 					}
 				}
+				delete outArrayOfComplexType;
 			}
 
 			// Nested within a Complex Type
@@ -282,7 +331,7 @@ int main(int argc, char* argv[])
 				complexType->setsomeData(345);
 
 				UnqualifiedSimpleComplexType_Array * arrayOfComplexType = new UnqualifiedSimpleComplexType_Array();
-				UnqualifiedSimpleComplexType** complexTypeArray = new UnqualifiedSimpleComplexType*();
+				UnqualifiedSimpleComplexType** complexTypeArray = new UnqualifiedSimpleComplexType*[arraySize];
 				for (count = 0 ; count < arraySize ; count++ )
 				{
 					complexTypeArray[count] = new UnqualifiedSimpleComplexType();
@@ -301,7 +350,20 @@ int main(int argc, char* argv[])
 
 				// Call method on web service
 				ElementFormDefaultIsUnqualified * output = ws.nestedElementFormDefaultIsUnqualified(&input);
-				
+
+				// Clean up inputs
+				for (count = 0 ; count < arraySize ; count++ )
+				{
+					delete arrayOfInteger[count];
+				}
+				delete [] arrayOfInteger;
+				delete integerArrayElement;
+				for (count = 0 ; count < arraySize ; count++ )
+				{
+					delete complexTypeArray[count];
+				}
+				delete [] complexTypeArray;
+				delete arrayOfComplexType;
 
 				// Print output values
 				cout << "String element = " << output->aStringType << endl;
@@ -351,6 +413,7 @@ int main(int argc, char* argv[])
 						cout << " element[" << count << "] = NULL" << endl;
 					}
 				}
+				delete output;
 			}
 
 			// form="qualified"
@@ -374,7 +437,7 @@ int main(int argc, char* argv[])
 				complexType->setsomeData(345);
 
 				QualifiedSimpleComplexType_Array * arrayOfComplexType = new QualifiedSimpleComplexType_Array();
-				QualifiedSimpleComplexType** complexTypeArray = new QualifiedSimpleComplexType*();
+				QualifiedSimpleComplexType** complexTypeArray = new QualifiedSimpleComplexType*[arraySize];
 				for (count = 0 ; count < arraySize ; count++ )
 				{
 					complexTypeArray[count] = new QualifiedSimpleComplexType();
@@ -393,7 +456,20 @@ int main(int argc, char* argv[])
 
 				// Call method on web service
 				ElementFormDefaultIsQualified * output = ws.nestedElementFormDefaultIsQualified(&input);
-				
+
+				// Clean up inputs
+				for (count = 0 ; count < arraySize ; count++ )
+				{
+					delete arrayOfInteger[count];
+				}
+				delete [] arrayOfInteger;
+				delete integerArrayElement;
+				for (count = 0 ; count < arraySize ; count++ )
+				{
+					delete complexTypeArray[count];
+				}
+				delete [] complexTypeArray;
+				delete arrayOfComplexType;
 
 				// Print output values
 				cout << "String element = " << output->aStringType << endl;
@@ -443,6 +519,7 @@ int main(int argc, char* argv[])
 						cout << " element[" << count << "] = NULL" << endl;
 					}
 				}
+				delete output;
 			}
 
 

@@ -37,6 +37,7 @@ int main(int argc, char* argv[])
 
 	try
 	{
+		int outputSize = 0;
 		sprintf(endpoint, "%s", url);
 		NillableArrays ws(endpoint);
 
@@ -66,18 +67,28 @@ int main(int argc, char* argv[])
 		boolean_in.set(booleanInArray,ARRAYSIZE);
 		cout << "invoking echoBooleanArray..."<<endl;
 		boolean_out = ws.echoBooleanArray(&boolean_in);
-				cout << "successful "<<endl;
-/* The response is not being checked at present
-		if(boolean_out.m_Size == ARRAYSIZE) {
-			if(boolean_out.m_Array[1])
+
+		outputSize = 0;
+		const xsd__boolean ** booleanArray = boolean_out->get(outputSize);
+		if(outputSize ==ARRAYSIZE)
+		{
+			if(booleanArray[1])
+			{
 				cout << "failed "<<endl;		
-			else if(*(boolean_out.m_Array[0]) == (xsd__boolean)0 && *(boolean_out.m_Array[2]) == (xsd__boolean)1)
+			}
+			else if( (*booleanArray[0] == b1) && (*booleanArray[2] == b3) )
+			{
 				cout << "successful "<<endl;
+			}
 			else
-				cout << "failed "<<endl;		
-		} else
-			cout << "failed "<<endl;		
-*/
+			{
+				cout << "failed "<<endl;
+			}
+		}
+		else
+		{
+			cout << "failed "<<endl;
+		}
 
 		/* Test an short array */
 		xsd__short s1 = (xsd__short)252;
@@ -89,18 +100,29 @@ int main(int argc, char* argv[])
 		short_in.set(shortInArray,ARRAYSIZE);
 		cout << "invoking echoShortArray..."<<endl;
 		short_out = ws.echoShortArray(&short_in);
-				cout << "successful "<<endl;
-/* The response is not being checked at present
-		if(short_out.m_Size == ARRAYSIZE) {
-			if(short_out.m_Array[1])
+
+		outputSize = 0;
+		const xsd__short ** shortArray = short_out->get(outputSize);
+		if(outputSize ==ARRAYSIZE)
+		{
+			if(shortArray[1])
+			{
 				cout << "failed "<<endl;		
-			else if(*(short_out.m_Array[0]) == 252 && *(short_out.m_Array[2]) == 254)
+			}
+			else if( (*shortArray[0] == s1) && (*shortArray[2] == s3) )
+			{
 				cout << "successful "<<endl;
+			}
 			else
-				cout << "failed "<<endl;		
-		} else
-			cout << "failed "<<endl;		
-*/
+			{
+				cout << "failed "<<endl;
+			}
+		}
+		else
+		{
+			cout << "failed "<<endl;
+		}
+
 		/* Test an int array */
 		xsd__int val1 = 1000000;
 		xsd__int val3 = 1000002;
@@ -111,18 +133,29 @@ int main(int argc, char* argv[])
 		int_in.set(intInArray,ARRAYSIZE);
 		cout << "invoking echoIntArray..."<<endl;
 		int_out = ws.echoIntArray(&int_in);
-				cout << "successful "<<endl;
-/* The response is not being checked at present
-		if(int_out.m_Size ==ARRAYSIZE) {
-			if(int_out.m_Array[1])
+
+		outputSize = 0;
+		const xsd__int ** intArray = int_out->get(outputSize);
+		if(outputSize ==ARRAYSIZE)
+		{
+			if(intArray[1])
+			{
 				cout << "failed "<<endl;		
-			else if(*(int_out.m_Array[0]) == val1 && *(int_out.m_Array[2]) == val3)
+			}
+			else if( (*intArray[0] == val1) && (*intArray[2] == val3) )
+			{
 				cout << "successful "<<endl;
+			}
 			else
-				cout << "failed "<<endl;		
-		} else
+			{
+				cout << "failed "<<endl;
+			}
+		}
+		else
+		{
 			cout << "failed "<<endl;
-*/
+		}
+
 
 		/* Test a long array */
 		xsd__long l1 = (xsd__long)200001;
@@ -134,18 +167,28 @@ int main(int argc, char* argv[])
 		long_in.set(longInArray,ARRAYSIZE);
 		cout << "invoking echoLongArray..."<<endl;
 		long_out = ws.echoLongArray(&long_in);
-				cout << "successful "<<endl;
-/* The response is not being checked at present
-		if(long_out.m_Size == ARRAYSIZE) {
-			if(long_out.m_Array[1])
+
+		outputSize = 0;
+		const xsd__long ** longArray = long_out->get(outputSize);
+		if(outputSize ==ARRAYSIZE)
+		{
+			if(longArray[1])
+			{
 				cout << "failed "<<endl;		
-			else if(*(long_out.m_Array[0]) == (xsd__long)200001 && *(long_out.m_Array[2]) == (xsd__long)200003)
+			}
+			else if( (*longArray[0] == l1) && (*longArray[2] == l3) )
+			{
 				cout << "successful "<<endl;
+			}
 			else
-				cout << "failed "<<endl;		
-		} else
-			cout << "failed "<<endl;		
-*/
+			{
+				cout << "failed "<<endl;
+			}
+		}
+		else
+		{
+			cout << "failed "<<endl;
+		}
 
 		/* Test a float array */
 		xsd__float f1 = (xsd__float)11.111;
@@ -157,18 +200,28 @@ int main(int argc, char* argv[])
 		float_in.set(floatInArray,ARRAYSIZE);
 		cout << "invoking echoFloatArray..."<<endl;
 		float_out = ws.echoFloatArray(&float_in);
-				cout << "successful "<<endl;
-/* The response is not being checked at present
-		if(float_out.m_Size ==ARRAYSIZE) {
-			if(float_out.m_Array[1])
+
+		outputSize = 0;
+		const xsd__float ** floatArray = float_out->get(outputSize);
+		if(outputSize ==ARRAYSIZE)
+		{
+			if(floatArray[1])
+			{
 				cout << "failed "<<endl;		
-			else if(*(float_out.m_Array[0]) == (xsd__float)11.111 && *(float_out.m_Array[2]) == (xsd__float)33.111)
+			}
+			else if( (*floatArray[0] == f1) && (*floatArray[2] == f3) )
+			{
 				cout << "successful "<<endl;
+			}
 			else
-				cout << "failed "<<endl;		
-		} else
-			cout << "failed "<<endl;		
-*/
+			{
+				cout << "failed "<<endl;
+			}
+		}
+		else
+		{
+			cout << "failed "<<endl;
+		}
 
 		/* Test a double array */
 		xsd__double d1 = (xsd__double)71.1565;
@@ -181,18 +234,28 @@ int main(int argc, char* argv[])
 		double_in.set(doubleInArray,ARRAYSIZE);
 		cout << "invoking echoDoubleArray..."<<endl;
 		double_out = ws.echoDoubleArray(&double_in);
-				cout << "successful "<<endl;
-/* The response is not being checked at present
-		if(double_out.m_Size ==ARRAYSIZE) {
-			if(double_out.m_Array[1])
+
+		outputSize = 0;
+		const xsd__double ** doubleArray = double_out->get(outputSize);
+		if(outputSize ==ARRAYSIZE)
+		{
+			if(doubleArray[1])
+			{
 				cout << "failed "<<endl;		
-			else if(*(double_out.m_Array[0]) == (xsd__double)71.1565 && *(double_out.m_Array[2]) == (xsd__double)73.1565)
+			}
+			else if( (*doubleArray[0] == d1) && (*doubleArray[2] == d3) )
+			{
 				cout << "successful "<<endl;
+			}
 			else
-				cout << "failed "<<endl;		
-		} else
-			cout << "failed "<<endl;		
-*/
+			{
+				cout << "failed "<<endl;
+			}
+		}
+		else
+		{
+			cout << "failed "<<endl;
+		}
 
 		/* Test a string array */
 		static char* str1 = "Apache";
@@ -204,17 +267,27 @@ int main(int argc, char* argv[])
 		string_in.set(stringInArray,ARRAYSIZE);
 		cout << "invoking echoStringArray..."<<endl;
 		string_out = ws.echoStringArray(&string_in);
-		int outputSize =0;
+		outputSize =0;
 		const xsd__string *output = string_out->get(outputSize);
-		if(outputSize ==ARRAYSIZE) {
+		if(outputSize ==ARRAYSIZE)
+		{
 			if(output[1])
+			{
 				cout << "failed "<<endl;		
+			}
 			else if( (strcmp(output[0], str1) == 0) && (strcmp(output[2], str2) == 0) )
+			{
 				cout << "successful "<<endl;
+			}
 			else
-				cout << "failed "<<endl;		
-		} else
-			cout << "failed "<<endl;		
+			{
+				cout << "failed "<<endl;
+			}
+		}
+		else
+		{
+			cout << "failed "<<endl;
+		}
 
 	}
 	catch(AxisException& e)

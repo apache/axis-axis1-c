@@ -1,5 +1,5 @@
-POST /XSD_decimal/services/XSD_decimalSOAP HTTP/1.1
-Host: localhost:13260
+POST /axis/ElementFormDefaultTest HTTP/1.1
+Host: 127.0.0.1:13260
 Content-Type: text/xml; charset=UTF-8
 SOAPAction: "null"
 Content-Length: 887
@@ -22,8 +22,8 @@ Content-Length: 887
 </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 
-POST /XSD_decimal/services/XSD_decimalSOAP HTTP/1.1
-Host: localhost:13260
+POST /axis/ElementFormDefaultTest HTTP/1.1
+Host: 127.0.0.1:13260
 Content-Type: text/xml; charset=UTF-8
 SOAPAction: "null"
 Content-Length: 979
@@ -46,12 +46,13 @@ Content-Length: 979
 </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 
-POST /XSD_decimal/services/XSD_decimalSOAP HTTP/1.1
-Host: localhost:13260
+POST /axis/ElementFormDefaultTest HTTP/1.1
+Host: 127.0.0.1:13260
 Content-Type: text/xml; charset=UTF-8
 SOAPAction: "null"
 Content-Length: 966
 
+<?xml version='1.0' encoding='utf-8' ?>
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <SOAP-ENV:Body>
 <ns1:nestedElementFormDefaultIsUnqualifiedRequest xmlns:ns1="http://tempuri.org/ElementFormDefaultTest/">
@@ -69,8 +70,8 @@ Content-Length: 966
 </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 
-POST /XSD_decimal/services/XSD_decimalSOAP HTTP/1.1
-Host: localhost:13260
+POST /axis/ElementFormDefaultTest HTTP/1.1
+Host: 127.0.0.1:13260
 Content-Type: text/xml; charset=UTF-8
 SOAPAction: "null"
 Content-Length: 1062

@@ -296,7 +296,7 @@
   <wsdl:binding name="ElementFormDefaultTestSOAP" type="tns:ElementFormDefaultTest">
     <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
     <wsdl:operation name="elementFormDefaultIsUnqualified">
-      <soap:operation soapAction="http://tempuri.org/ElementFormDefaultTest/NewOperation"/>
+      <soap:operation style="document"/>
       <wsdl:input>
         <soap:body use="literal"/>
       </wsdl:input>
