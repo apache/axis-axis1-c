@@ -48,8 +48,9 @@
      </sequence>
     </complexType>
    </element>
+   
 
-   <xsd:element name="test2Request">
+<!--     <xsd:element name="test2Request">
     <xsd:complexType>
      <xsd:sequence>
       <xsd:element maxOccurs="1" minOccurs="1" name="Element" nillable="true" type="ns99:test2Logical"/>
@@ -96,6 +97,7 @@
      </sequence>
     </complexType>
    </element>
+-->
   </schema>
  </wsdl:types>
 
@@ -103,7 +105,7 @@
       <wsdl:part element="impl:test1Response" name="parameters"/>
    </wsdl:message>
 
-   <wsdl:message name="test2Response">
+<!--      <wsdl:message name="test2Response">
       <wsdl:part element="impl:test2Response" name="parameters"/>
    </wsdl:message>
 
@@ -114,12 +116,12 @@
    <wsdl:message name="test4Response">
       <wsdl:part element="impl:test4Response" name="parameters"/>
    </wsdl:message>
-
+-->
    <wsdl:message name="test1Request">
       <wsdl:part element="impl:test1Request" name="parameters"/>
    </wsdl:message>
 
-   <wsdl:message name="test2Request">
+<!--   <wsdl:message name="test2Request">
       <wsdl:part element="impl:test2Request" name="parameters"/>
    </wsdl:message>
 
@@ -130,19 +132,19 @@
    <wsdl:message name="test4Request">
       <wsdl:part element="impl:test4Request" name="parameters"/>
    </wsdl:message>
-
+-->
    <wsdl:portType name="ValidXMLCharIsInterpretedAsCPPCommand">
       <wsdl:operation name="test1">
          <wsdl:input message="impl:test1Request" name="test1Request"/>
          <wsdl:output message="impl:test1Response" name="test1Response"/>
       </wsdl:operation>
 
-      <wsdl:operation name="test2">
-         <wsdl:input message="impl:test2Request" name="test2Request"/>
-         <wsdl:output message="impl:test2Response" name="test2Response"/>
+       <wsdl:operation name="Test1WithComplexResponse">
+         <wsdl:input message="impl:test1Request" name="test1Request"/>
+         <wsdl:output message="impl:test1Request" name="test1Request"/>
       </wsdl:operation>
 
-      <wsdl:operation name="test3">
+<!--      <wsdl:operation name="test3">
          <wsdl:input message="impl:test3Request" name="test3Request"/>
          <wsdl:output message="impl:test3Response" name="test3Response"/>
       </wsdl:operation>
@@ -151,7 +153,7 @@
          <wsdl:input message="impl:test4Request" name="test4Request"/>
          <wsdl:output message="impl:test4Response" name="test4Response"/>
       </wsdl:operation>
-
+-->
    </wsdl:portType>
 
    <wsdl:binding name="ValidXMLCharIsInterpretedAsCPPCommandSoapBinding" type="impl:ValidXMLCharIsInterpretedAsCPPCommand">
@@ -166,17 +168,17 @@
          </wsdl:output>
       </wsdl:operation>
 
-      <wsdl:operation name="test2">
-         <wsdlsoap:operation soapAction="ValidXMLCharIsInterpretedAsCPPCommand#test2"/>
-         <wsdl:input name="test2Request">
+      <wsdl:operation name="Test1WithComplexResponse">
+         <wsdlsoap:operation soapAction="ValidXMLCharIsInterpretedAsCPPCommand#Test1WithComplexResponse"/>
+         <wsdl:input name="test1Request">
             <wsdlsoap:body use="literal"/>
          </wsdl:input>
-         <wsdl:output name="test2Response">
+         <wsdl:output name="test1Request">
             <wsdlsoap:body use="literal"/>
          </wsdl:output>
       </wsdl:operation>
 
-      <wsdl:operation name="test3">
+<!--       <wsdl:operation name="test3">
          <wsdlsoap:operation soapAction="ValidXMLCharIsInterpretedAsCPPCommand#test3"/>
          <wsdl:input name="test3Request">
             <wsdlsoap:body use="literal"/>
@@ -195,6 +197,7 @@
             <wsdlsoap:body use="literal"/>
          </wsdl:output>
       </wsdl:operation>
+-->
    </wsdl:binding>
 
    <wsdl:service name="ValidXMLCharIsInterpretedAsCPPCommand">

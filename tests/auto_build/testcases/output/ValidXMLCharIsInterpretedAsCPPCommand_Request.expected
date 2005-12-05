@@ -2,17 +2,19 @@ POST /axis/ValidXMLCharIsInterpretedAsCPPCommand HTTP/1.1
 Host: 127.0.0.1:13260
 Content-Type: text/xml; charset=UTF-8
 SOAPAction: "ValidXMLCharIsInterpretedAsCPPCommand#test1"
-Content-Length: 632
+Content-Length: 816
 
 <?xml version='1.0' encoding='utf-8' ?>
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <SOAP-ENV:Body>
 <ns1:test1Request xmlns:ns1="http://localhost/axis/ValidXMLCharIsInterpretedAsCPPCommand">
-<ns1:Element xmlns:ns2="ValidXMLCharIsInterpretedAsCPPCommandTypes"><ns2:arg.name1>1</ns2:arg.name1>
-<ns2:arg;name2>2</ns2:arg;name2>
-<ns2:arg?name3>3</ns2:arg?name3>
-<ns2:arg!name4>4</ns2:arg!name4>
-<ns2:arg:name5>5</ns2:arg:name5>
+<ns1:Element xmlns:ns2="ValidXMLCharIsInterpretedAsCPPCommandTypes"><ns2:arg.WithADot>1</ns2:arg.WithADot>
+<ns2:arg_WithAnUnderscore>2</ns2:arg_WithAnUnderscore>
+<ns2:arg-WithAHyphen>3</ns2:arg-WithAHyphen>
+<ns2:arg:WithAColon>4</ns2:arg:WithAColon>
+<ns2:arg__WithTwoUnderscores>5</ns2:arg__WithTwoUnderscores>
+<ns2:arg.With.TwoDots>6</ns2:arg.With.TwoDots>
+<ns2:arg..WithTwoDotsInline>7</ns2:arg..WithTwoDotsInline>
 </ns1:Element>
 </ns1:test1Request>
 </SOAP-ENV:Body>
@@ -22,57 +24,21 @@ POST /axis/ValidXMLCharIsInterpretedAsCPPCommand HTTP/1.1
 Host: 127.0.0.1:13260
 Content-Type: text/xml; charset=UTF-8
 SOAPAction: "ValidXMLCharIsInterpretedAsCPPCommand#test1"
-Content-Length: 500
+Content-Length: 816
 
 <?xml version='1.0' encoding='utf-8' ?>
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <SOAP-ENV:Body>
-<ns1:test2Request xmlns:ns1="http://localhost/axis/ValidXMLCharIsInterpretedAsCPPCommand">
-<ns1:Element xmlns:ns2="ValidXMLCharIsInterpretedAsCPPCommandTypes"><ns2:arg|name1>6</ns2:arg|name1>
+<ns1:test1Request xmlns:ns1="http://localhost/axis/ValidXMLCharIsInterpretedAsCPPCommand">
+<ns1:Element xmlns:ns2="ValidXMLCharIsInterpretedAsCPPCommandTypes"><ns2:arg.WithADot>1</ns2:arg.WithADot>
+<ns2:arg_WithAnUnderscore>2</ns2:arg_WithAnUnderscore>
+<ns2:arg-WithAHyphen>3</ns2:arg-WithAHyphen>
+<ns2:arg:WithAColon>4</ns2:arg:WithAColon>
+<ns2:arg__WithTwoUnderscores>5</ns2:arg__WithTwoUnderscores>
+<ns2:arg.With.TwoDots>6</ns2:arg.With.TwoDots>
+<ns2:arg..WithTwoDotsInline>7</ns2:arg..WithTwoDotsInline>
 </ns1:Element>
-</ns1:test2Request>
-</SOAP-ENV:Body>
-</SOAP-ENV:Envelope>
-
-POST /axis/ValidXMLCharIsInterpretedAsCPPCommand HTTP/1.1
-Host: 127.0.0.1:13260
-Content-Type: text/xml; charset=UTF-8
-SOAPAction: "ValidXMLCharIsInterpretedAsCPPCommand#test1"
-Content-Length: 668
-
-<?xml version='1.0' encoding='utf-8' ?>
-<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-<SOAP-ENV:Body>
-<ns1:test3Request xmlns:ns1="http://localhost/axis/ValidXMLCharIsInterpretedAsCPPCommand">
-<ns1:Element xmlns:ns2="ValidXMLCharIsInterpretedAsCPPCommandTypes"><ns2:arg*name1>7</ns2:arg*name1>
-<ns2:arg/name2>8</ns2:arg/name2>
-<ns2:arg-name3>9</ns2:arg-name3>
-<ns2:arg+name4>10</ns2:arg+name4>
-<ns2:arg%name5>11</ns2:arg%name5>
-<ns2:arg^name6>12</ns2:arg^name6>
-</ns1:Element>
-</ns1:test3Request>
-</SOAP-ENV:Body>
-</SOAP-ENV:Envelope>
-
-POST /axis/ValidXMLCharIsInterpretedAsCPPCommand HTTP/1.1
-Host: 127.0.0.1:13260
-Content-Type: text/xml; charset=UTF-8
-SOAPAction: "ValidXMLCharIsInterpretedAsCPPCommand#test1"
-Content-Length: 677
-
-<?xml version='1.0' encoding='utf-8' ?>
-<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-<SOAP-ENV:Body>
-<ns1:test4Request xmlns:ns1="http://localhost/axis/ValidXMLCharIsInterpretedAsCPPCommand">
-<ns1:Element xmlns:ns2="ValidXMLCharIsInterpretedAsCPPCommandTypes"><ns2:arg[name1]>13</ns2:arg[name1]>
-<ns2:arg{name2}>14</ns2:arg{name2}>
-<ns2:arg(name3)>15</ns2:arg(name3)>
-<ns2:arg_name4>16</ns2:arg_name4>
-<ns2:arg#name5>17</ns2:arg#name5>
-<ns2:arg@name6>18</ns2:arg@name6>
-</ns1:Element>
-</ns1:test4Request>
+</ns1:test1Request>
 </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 

@@ -1,1 +1,12 @@
+About to invoke test1
+Got result from test1 28
+About to invoke Test1WithComplexResponse
+Done invoke now getting the result
+argWithADot=8
+argWithAnUnderscore=9
+argWithAHyphen=10
+argWithAColon=11
+argWithTwoUnderscores=12
+argWithTwoDots=13
+argWithTwoDotsInline=14
 ---------------------- TEST COMPLETED SUCCESSFULLY -----------------------------

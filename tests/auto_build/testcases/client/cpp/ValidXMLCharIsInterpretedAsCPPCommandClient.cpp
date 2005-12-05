@@ -31,19 +31,46 @@ int main( int argc, char * argv[])
 
 			ValidXMLCharIsInterpretedAsCPPCommand *	pWS = new ValidXMLCharIsInterpretedAsCPPCommand( pszURL, APTHTTP1_1);
 			test1Punctuation *						pTest1Punctuation = new test1Punctuation();
-			test2Logical *							pTest2Logical = new test2Logical();
-			test3Mathematical *						pTest3Mathematical = new test3Mathematical();
-			test4Miscellaneous *					pTest4Miscellaneous = new test4Miscellaneous();
+//			test2Logical *							pTest2Logical = new test2Logical();
+//			test3Mathematical *						pTest3Mathematical = new test3Mathematical();
+//			test4Miscellaneous *					pTest4Miscellaneous = new test4Miscellaneous();
 
-			pTest1Punctuation->setarg_name1( 1);
-			pTest1Punctuation->setarg_name2( 2);
-			pTest1Punctuation->setarg_name3( 3);
-			pTest1Punctuation->setarg_name4( 4);
-			pTest1Punctuation->setarg_name5( 5);
-			
+			pTest1Punctuation->setarg_WithADot( 1);
+			pTest1Punctuation->setarg_WithAnUnderscore( 2);
+			pTest1Punctuation->setarg_WithAHyphen( 3);
+			pTest1Punctuation->setarg_WithAColon( 4);
+            pTest1Punctuation->setarg__WithTwoUnderscores( 5);
+            pTest1Punctuation->setarg_With_TwoDots( 6);
+            pTest1Punctuation->setarg__WithTwoDotsInline( 7);
+           
+//			pTest1Punctuation->setarg_name5( 5);
+
+            cout <<"About to invoke test1"<<endl;			
 			xsd__int iResult1 = pWS->test1( pTest1Punctuation);
+            if( iResult1 == 1 + 2 + 3 + 4 + 5+6+7)
+            {
+              cout <<"Got result from test1 "<<iResult1<<endl;
+              // don't print anything
+              // just do the next test
+              cout <<"About to invoke Test1WithComplexResponse"<<endl;
+              test1Punctuation* pTest1PunctuationResponse = pWS->Test1WithComplexResponse(pTest1Punctuation);
+              cout << "Done invoke now getting the result"<<endl;
+              cout << "argWithADot="<<pTest1PunctuationResponse->getarg_WithADot()<<endl;
+              cout << "argWithAnUnderscore="<<pTest1PunctuationResponse->getarg_WithAnUnderscore()<<endl;
+              cout << "argWithAHyphen="<<pTest1PunctuationResponse->getarg_WithAHyphen()<<endl;
+              cout << "argWithAColon="<<pTest1PunctuationResponse->getarg_WithAColon()<<endl;
+              cout << "argWithTwoUnderscores="<<pTest1PunctuationResponse->getarg__WithTwoUnderscores()<<endl;
+              cout << "argWithTwoDots="<<pTest1PunctuationResponse->getarg_With_TwoDots()<<endl;
+              cout << "argWithTwoDotsInline="<<pTest1PunctuationResponse->getarg__WithTwoDotsInline()<<endl;
+        
+                bSuccess=true;
+            }
+            else
+            {
+              cout << "Results should have been 1+2+3+4+5+6+7="<<(1+2+3+4+5+6+7)<<" but was "<<iResult1<<endl;
+            }
 
-			if( iResult1 == 1 + 2 + 3 + 4 + 5)
+/*			if( iResult1 == 1 + 2 + 3 + 4 + 5)
 			{
 				pTest2Logical->setarg_name1( 6);
 
@@ -78,16 +105,16 @@ int main( int argc, char * argv[])
 					}
 				}
 			}
-			
+	*/		
 			if( !bSuccess)
 			{
 				cout << "Unexpected result." << endl;
 			}
 
 			delete pTest1Punctuation;
-			delete pTest2Logical;
-			delete pTest3Mathematical;
-			delete pTest4Miscellaneous;
+//			delete pTest2Logical;
+//			delete pTest3Mathematical;
+//			delete pTest4Miscellaneous;
 
 			delete pWS;
 		}

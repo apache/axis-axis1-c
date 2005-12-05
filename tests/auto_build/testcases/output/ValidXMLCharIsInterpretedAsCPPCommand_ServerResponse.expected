@@ -9,7 +9,7 @@ Transfer-Encoding: chunked
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <soapenv:Body>
 <test1Response>
-<_return>15</_return>
+<return>28</return>
 </test1Response>
 </soapenv:Body>
 </soapenv:Envelope>
@@ -22,47 +22,21 @@ Content-Type: text/xml; charset=utf-8
 Content-Language: en-GB
 Transfer-Encoding: chunked
 
-17f
+###
 <?xml version="1.0" encoding="UTF-8"?>
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <soapenv:Body>
-<test2Response>
-<_return>6</_return>
-</test2Response>
-</soapenv:Body>
-</soapenv:Envelope>
-0
-
-HTTP/1.1 200 OK
-Server: WebSphere Application Server/5.1
-Content-Type: text/xml; charset=utf-8
-Content-Language: en-GB
-Transfer-Encoding: chunked
-
-180
-<?xml version="1.0" encoding="UTF-8"?>
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-<soapenv:Body>
-<test3Response>
-<_return>57</_return>
-</test3Response>
-</soapenv:Body>
-</soapenv:Envelope>
-0
-
-HTTP/1.1 200 OK
-Server: WebSphere Application Server/5.1
-Content-Type: text/xml; charset=utf-8
-Content-Language: en-GB
-Transfer-Encoding: chunked
-
-180
-<?xml version="1.0" encoding="UTF-8"?>
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-<soapenv:Body>
-<test4Response>
-<_return>93</_return>
-</test4Response>
+<ns1:test1Request xmlns:ns1="http://localhost/axis/ValidXMLCharIsInterpretedAsCPPCommand">
+<ns1:Element xmlns:ns2="ValidXMLCharIsInterpretedAsCPPCommandTypes">
+<ns2:arg.WithADot>8</ns2:arg.WithADot>
+<ns2:arg_WithAnUnderscore>9</ns2:arg_WithAnUnderscore>
+<ns2:arg-WithAHyphen>10</ns2:arg-WithAHyphen>
+<ns2:arg:WithAColon>11</ns2:arg:WithAColon>
+<ns2:arg__WithTwoUnderscores>12</ns2:arg__WithTwoUnderscores>
+<ns2:arg.With.TwoDots>13</ns2:arg.With.TwoDots>
+<ns2:arg..WithTwoDotsInline>14</ns2:arg..WithTwoDotsInline>
+</ns1:Element>
+</ns1:test1Request>
 </soapenv:Body>
 </soapenv:Envelope>
 0
