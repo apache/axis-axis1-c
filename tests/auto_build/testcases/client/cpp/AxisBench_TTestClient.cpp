@@ -64,7 +64,7 @@ RETTYPE ThreadFunc(ARGTYPE Param)
              url=p;
         int iResult;
 		bool bSuccess = false;
-		int	iRetryIterationCount = 3;
+		int	iRetryIterationCount = 1;
 
 		do
 		{
@@ -75,123 +75,106 @@ RETTYPE ThreadFunc(ARGTYPE Param)
                 int request = 1;
       
 				input = new BenchDataType();
-				input->count = 100;
+				input->count = 1;
+
 			      
-			//    input->infos.m_Array = new BenchBasicDataType[input->count];
-				BenchBasicDataType **	ppBBDT = (BenchBasicDataType **) new BenchBasicDataType *[input->count];
+    			BenchBasicDataType_Array arrayIn;
+//              cout <<" About to create BenchBasicDataType"<<endl;
+                BenchBasicDataType **   ppBBDT = new BenchBasicDataType *[input->count];
 
-			#ifdef WIN32
-				__int64					ll = 10000;
-			#else
-				long long				ll = 10000;
-			#endif
+    			#ifdef WIN32
+	   		  	   __int64					ll = 10000;
+    		  	#else
+	       			long long				ll = 10000;
+			    #endif
 
-				input->infos.m_Array = ppBBDT;
+				// input->infos.m_Array = ppBBDT;
 
-				input->infos.m_Size = input->count;
+				// input->infos.m_Size = input->count;
 			      
 				time_t tim;
 				tim = 1100246323;
 				struct tm *temp = gmtime(&tim);
 				struct tm lt;
 				memcpy(&lt, temp, sizeof(struct tm));
+                
+                char *letterA_String = stringToAscii("A");  
+                buffer = (xsd__unsignedByte*)calloc (1, input->count + 2);
+
+                strcpy ( (char *)buffer, letterA_String);  
 
 			      
-				buffer = (xsd__unsignedByte*)calloc (1, input->count + 2);
-				strcpy ( (char *)buffer, "A");
+//                cout <<" input->count = "<<input->count<<endl;
+    for ( int i = 0; i < input->count ; i++ ) {
+        BenchBasicDataType *type = new BenchBasicDataType();
+        type->StringType = "StringType";
+        type->IntegerType = 10*(i+1);
+        type->DoubleType = 11.111 * (i+1);
+        type->BooleanType = true_;
+        type->DateTimeType = lt ;
+        type->TimeType = lt ;
+        type->DateType = lt ;
+        type->IntType = (i+1);
+        type->ByteType = '1';
+        type->DecimalType = 10*(i+1);
+        type->FloatType = (float)((float)(11*(i+1))/(float)2.0);
+        type->LongType = ll;
+        type->QNameType = "toto";
+        type->ShortType = (i+1);
+        type->Base64BinaryType.__size=i;
+        type->Base64BinaryType.__ptr=buffer;
+        type->HexBinary.__size=i;
+        type->HexBinary.__ptr=buffer;
 
-				for ( int i = 0; i < input->count ; i++ ) {
-					BenchBasicDataType *type = new BenchBasicDataType();
-					type->StringType = "StringType";
-					type->IntegerType = 10*(i+1);
-					type->DoubleType = 11.111 * (i+1);
-					type->BooleanType = true_;
-					type->DateTimeType = lt ;
-					type->TimeType = lt ;
-					type->DateType = lt ;
-					type->IntType = (i+1);
-					type->ByteType = '1';
-					type->DecimalType = 10*(i+1);
-					type->FloatType = (float)((float)(11*(i+1))/(float)2.0);
-					type->LongType = ll;
-					type->QNameType = "toto";
-					type->ShortType = (i+1);
-					type->Base64BinaryType.__size=i;
-					type->Base64BinaryType.__ptr=buffer;
-					type->HexBinary.__size=i;
-					type->HexBinary.__ptr=buffer;
+        ppBBDT[i] = type;
 
-					if( i == 90)
-					{
-						*ppBBDT = type;
-			//			*ppBBDT = NULL;
-					}
-					else
-					{
-						*ppBBDT = type;
-					}
+       if( ll == 0)
+      {
+         ll = 1;
+       }
+     else
+      {
+         ll += 10000;
+      }
 
-					ppBBDT++;
+        strcat ( (char *)buffer, letterA_String);
+    }
 
-					if( ll == 0)
-					{
-						ll = 1;
-					}
-					else
-					{
-						ll += 10000;
-					}
-
-					strcat ( (char *)buffer, "A");
-				}
-
-				int t1,t2;
-			#ifndef WIN32  
-				struct timeval mstart;
-				struct timeval mstop;
-				gettimeofday( &mstart, NULL );
-			#else
-				struct timeb mstart;
-				struct timeb mstop;
-				ftime(&mstart);
-			#endif
-
-				for ( int ii = 0; ii < request ; ii++ ) {
-					if (output) { // Samisa: memory management BP
-						for (int i = 0; i < output->infos.m_Size; i++)
-							delete (BenchBasicDataType*)(output->infos.m_Array[i]);
-						delete output;
-						output = NULL;
-					}
-				output = ws->doBenchRequest(input);
+				arrayIn.set(ppBBDT,input->count);
+                input->setinfos(&arrayIn);    
+//                cout << "About to delete the output prior to calling the service"<<endl;
+    for ( int ii = 0; ii < request ; ii++ ) {
+        if (output) { // Samisa: memory management BP
+          int outputSize =0;
+            BenchBasicDataType ** outArray =output->infos->get(outputSize); 
+            for (int i = 0; i < outputSize; i++)
+                delete outArray[i];
+            delete output;
+            output = NULL;
+        }
+//                    cout << "About to do bench request"<<endl;
+				    output = ws->doBenchRequest(input);
+//                    cout << "Done bench request"<<endl;
 				}
 
 				free(buffer);
 
-			#ifndef WIN32
-				gettimeofday( &mstop, NULL );
-				t1 = mstart.tv_sec*1000 + mstart.tv_usec/1000;
-				t2 = mstop.tv_sec*1000 + mstop.tv_usec/1000;
-			#else
-				ftime(&mstop);
-				t1 = mstart.time*1000 + mstart.millitm;
-				t2 = mstop.time*1000 + mstop.millitm;
-			#endif
-
-				int total = t2-t1;
-			      
 				if ( ws->getStatus() == AXIS_FAIL )
 					cout << "Failed" << endl;
 				else 
 				{
 					bSuccess = true;
-   				char dateTime[50];
-				int i = 0;
-			    
-					if( output->infos.m_Array[i] != (BenchBasicDataType *) 0xcdcdcdcd)
-					{
-						cout << " StringType " << output->infos.m_Array[i]->StringType << endl;
-					}	
+   	    			char dateTime[50];
+    				int i = 0;
+    			    int outputSize = 0;
+                    BenchBasicDataType ** outArray =output->infos->get(outputSize);
+                    for ( ; i < output->count ; i++ ) 
+                    {
+            		  if( outArray[i] != (BenchBasicDataType *) 0xcdcdcdcd)
+    				  {
+    					cout << " StringType " << outArray[i]->StringType << endl;
+    				  }	
+                    }
 				 
 					// returnValue=0;
 				}
@@ -227,13 +210,13 @@ RETTYPE ThreadFunc(ARGTYPE Param)
   try
   {
 	  delete ws; 
-	  for (int i = 0; i < input->infos.m_Size; i++)
-	      delete (BenchBasicDataType*)(input->infos.m_Array[i]);
+//	  for (int i = 0; i < input->infos.m_Size; i++)
+//	      delete (BenchBasicDataType*)(input->infos.m_Array[i]);
 	  delete input;
 	  if (output)
 	  {
-	    for (int i = 0; i < output->infos.m_Size; i++)
-	      delete (BenchBasicDataType*)(output->infos.m_Array[i]);
+//	    for (int i = 0; i < output->infos.m_Size; i++)
+//	      delete (BenchBasicDataType*)(output->infos.m_Array[i]);
 	    delete output;
 	  }
   }
@@ -246,7 +229,7 @@ RETTYPE ThreadFunc(ARGTYPE Param)
   	cout << "Unknown exception on clean up: " << endl;
   }
 		iRetryIterationCount--;
-		} while( iRetryIterationCount > 0 && !bSuccess);
+		} while( iRetryIterationCount > 1 && !bSuccess);
                 #ifndef WIN32
                         pthread_exit(0);
                 #endif
@@ -277,7 +260,7 @@ int main(int argc, char *argv[])
 
 			if (hThread[i] == NULL)
 			{
-			cout<<"Thread creation Failed";
+			     cout<<"Thread creation Failed";
 			}
 			}
 			/* Waiting for threads to terminate */
