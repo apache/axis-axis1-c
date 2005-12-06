@@ -237,11 +237,11 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                                 + i
                                 + " = ("
                                 + CUtils.getBasicArrayNameforType(containedType)
-                                + "&)pIWSDZ->getBasicArray("
+                                + "&)*(pIWSDZ->getBasicArray("
                                 + CUtils.getXSDTypeForBasicType(containedType)
                                 + ", \""
                                 + elementName
-                                + "\",0);\n");
+                                + "\",0));\n");
                     }
                     else
                     {
@@ -310,12 +310,12 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                                     + " = ("
                                     + CUtils.getBasicArrayNameforType(
                                         containedType)
-                                    + "&)pIWSDZ->getBasicArray("
+                                    + "&)*(pIWSDZ->getBasicArray("
                                     + CUtils.getXSDTypeForBasicType(
                                         containedType)
                                     + ", \""
                                     + elementName
-                                    + "\",0);\n");
+                                    + "\",0));\n");
                         }
                         else
                         {
@@ -332,12 +332,12 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                                         + " = ("
                                         + CUtils.getBasicArrayNameforType(
                                             containedType)
-                                        + "&)pIWSDZ->getBasicArray("
+                                        + "&)*(pIWSDZ->getBasicArray("
                                         + CUtils.getXSDTypeForBasicType(
                                             containedType)
                                         + ", \""
                                         + elementName
-                                        + "\",0);\n");
+                                        + "\",0));\n");
                             }
                             else
                             {
