@@ -37,6 +37,7 @@ int main( int argc, char * argv[])
 			SampleBeanComplex ** BBArray = NULL;			
 			BBArrayIn.set(BBArray,0);
 			pSBB->setSampleBean(&BBArrayIn);
+			pSBB->setSampleBeanBoolean(false_);
 	
 			pWS->aBeanPortTypeBase( pSBB);	
 			cout << "Called aBeanPortTypeBase()" << endl;
@@ -46,6 +47,7 @@ int main( int argc, char * argv[])
 			BCArrayIn.set(BCArray,0);
 			
 			pSBC->setSampleBeanComplex_Ref(&BCArrayIn);
+			pSBC->setBoolean(false_);
 			pWS->aBeanPortTypeComplex( pSBC);
 
 			cout << "Called aBeanPortTypeComplex()" << endl;
