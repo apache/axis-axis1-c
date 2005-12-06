@@ -177,8 +177,7 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
     	                        paramTypeName
     	                            + " * Value"
     	                            + 0);
-                    	System.out.println("Case 2");
-                    }
+                     }
                     else
                     {
 	                    writer.write(
