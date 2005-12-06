@@ -1120,7 +1120,7 @@ public class ClientStubWriter
 					      getParameterGetValueMethodName
 					      (outparamType,
 					       false) + "(\"" +
-					      returntype.getParamName () +
+					      returntype.getSOAPElementNameAsString() +
 					      "\", 0);\n");
 				writer.write ("\t\t\tif(pReturn)\n");
 				writer.write ("\t\t\t{\n");
