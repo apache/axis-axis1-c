@@ -31,12 +31,22 @@ int main( int argc, char * argv[])
 
 			TestServicePortType *	pWS = new TestServicePortType( pszURL, APTHTTP1_1);
 			SampleBean				sSB;
+			sSB.setBoolean(false_);
+			sSB.setByte(0);
+			sSB.setCalendar(NULL);
+			sSB.setDouble(0.000000000);
+			sSB.setFloat(0.00000);
+			sSB.setInt(0);
+			sSB.setLong(0);
+			sSB.setShort(0);
+			sSB.setString(NULL);
+			sSB.setTime(NULL);
 
 			pWS->aBeanPortType( &sSB);
 
 			delete pWS;
 
-			printf( "Test completed without fault\n");
+			cout << "Test completed without fault" << endl;
 
 			bSuccess = true;
 		}

@@ -2,7 +2,7 @@ POST /axis/NamespaceTest HTTP/1.1
 Host: 127.0.0.1:13260
 Content-Type: text/xml; charset=UTF-8
 SOAPAction: ""
-Content-Length: 669
+Content-Length: 678
 
 <?xml version='1.0' encoding='utf-8' ?>
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -11,8 +11,8 @@ Content-Length: 669
 <Element xmlns:ns2="SimpleType"><ns2:Time xsi:nil="true"></ns2:Time><ns2:Boolean>false</ns2:Boolean>
 <ns2:Byte>0</ns2:Byte>
 <ns2:Calendar xsi:nil="true"></ns2:Calendar>
-<ns2:Double>0.000000</ns2:Double>
-<ns2:Float>0.000000</ns2:Float>
+<ns2:Double>0</ns2:Double>
+<ns2:Float>0</ns2:Float>
 <ns2:Int>0</ns2:Int>
 <ns2:Long>0</ns2:Long>
 <ns2:Short>0</ns2:Short>
