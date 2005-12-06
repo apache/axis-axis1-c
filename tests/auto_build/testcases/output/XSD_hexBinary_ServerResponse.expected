@@ -39,17 +39,6 @@ Transfer-Encoding: chunked
 
 ###
 <?xml version="1.0" encoding="utf-8"?>
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header /><soapenv:Body><asRequiredAttributeResponse xmlns="http://xsd_hexBinary.test.apache.org"><RequiredAttributeElement requiredAttribute="3C746573743E3C786D6C3E736F6D6520646F64267920737472696E673C2F786D6C3E3C2F746573743E" /></asRequiredAttributeResponse></soapenv:Body></soapenv:Envelope>
-0
-
-HTTP/1.1 200 OK
-Server: WebSphere Application Server/5.1
-Content-Type: text/xml; charset=utf-8
-Content-Language: en-GB
-Transfer-Encoding: chunked
-
-###
-<?xml version="1.0" encoding="utf-8"?>
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header /><soapenv:Body><asArrayResponse xmlns="http://xsd_hexBinary.test.apache.org"><arrayElement>3C746573743E3C786D6C3E736F6D6520646F64267920737472696E673C2F786D6C3E3C2F746573743E</arrayElement><arrayElement>3C746573743E3C786D6C3E736F6D6520646F64267920737472696E673C2F786D6C3E3C2F746573743E</arrayElement></asArrayResponse></soapenv:Body></soapenv:Envelope>
 0
 
