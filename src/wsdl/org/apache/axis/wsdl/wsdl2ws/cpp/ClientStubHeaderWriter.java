@@ -134,19 +134,21 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
                                 .iterator()
                                 .next();
                         String outParamTypeName = WrapperUtils.getClassNameFromParamInfoConsideringArrays(returnParam, wscontext);
-                        if (CUtils.isSimpleType(outParamTypeName)
-								&& returnParam.isNillable()
-								&& !(CUtils.isPointerType(outParamTypeName)))
+                        if ((outParamTypeName.lastIndexOf ("_Array") > 0)
+                        		||(CUtils.isSimpleType(outParamTypeName)
+								&& (returnParam.isNillable() || returnParam.isOptional())
+								&& !(CUtils.isPointerType(outParamTypeName))))
                         {
                         	writer.write(
                                     "\tSTORAGE_CLASS_INFO "
                                         + outParamTypeName
                                         + " * ");
                         }
-                        writer.write(
-                            "\tSTORAGE_CLASS_INFO "
-                                + outParamTypeName
-                                + " ");
+                        else
+                        	writer.write(
+                        			"\tSTORAGE_CLASS_INFO "
+                        			+ outParamTypeName
+                        			+ " ");
                     }
                     else
                     {
@@ -166,14 +168,16 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
                     .getClassNameFromParamInfoConsideringArrays(
                             fparam,
                             wscontext);
-                    if (CUtils.isSimpleType(paramTypeName)
+                    if ((paramTypeName.lastIndexOf ("_Array") > 0)
+                    		||(CUtils.isSimpleType(paramTypeName)
 							&& fparam.isNillable()
-							&& !(CUtils.isPointerType(paramTypeName)))
+							&& !(CUtils.isPointerType(paramTypeName))))
                     {
                     	writer.write(
     	                        paramTypeName
     	                            + " * Value"
     	                            + 0);
+                    	System.out.println("Case 2");
                     }
                     else
                     {

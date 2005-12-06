@@ -521,6 +521,8 @@ public class BeanParamWriter extends ParamCPPFileWriter
 
 	private void writeDeSerializeGlobalMethod() throws IOException, WrapperFault 
     {
+		int arrayCount = 0;
+		
 		writer.write("/*\n");
 		writer.write(" * This static method deserialize a " + classname
 				+ " type of object\n");
@@ -610,15 +612,18 @@ public class BeanParamWriter extends ParamCPPFileWriter
 				//if Array
 				if (attribs[i].isSimpleType()) 
                 {
-					writer.write("\tparam->"
-							+ attribs[i].getParamNameAsMember()
-							+ " = ("
-							+ CUtils.getBasicArrayNameforType(attribs[i]
-									.getTypeName())
-							+ "&)pIWSDZ->getBasicArray("
-							+ CUtils.getXSDTypeForBasicType(attribs[i]
-									.getTypeName()) + ", \""
-							+ attribs[i].getParamName() + "\",0);\n");
+					//new array memory model.					
+					 writer.write("\tAxis_Array * array" + arrayCount + " = pIWSDZ->getBasicArray("
+	                            + CUtils.getXSDTypeForBasicType(attribs[i].getTypeName()) + ", \""
+	                            + attribs[i].getParamNameAsSOAPElement()
+	                            + "\",0);\n");
+	                    writer.write("\tif(param->" + attribs[i].getParamNameAsMember() + " == NULL)\n");
+	                    writer.write("\t{\n");
+	                    writer.write("\t\tparam->" + attribs[i].getParamNameAsMember() + " = new " + attribs[i].getTypeName() + "_Array();\n");
+	                    writer.write("\t}\n");
+	                    writer.write("\tparam->" + attribs[i].getParamNameAsMember() + "->clone( *array" + arrayCount + ");\n");
+	                    writer.write("\tAxis::AxisDelete((void*) array" + arrayCount + ", XSD_ARRAY);\n\n");
+	                    //end of new array memory model.
 				} 
                 else 
                 {
@@ -628,17 +633,27 @@ public class BeanParamWriter extends ParamCPPFileWriter
 						elm = attribs[i].getTypeName();
 					}
 					arrayType = attribs[i].getTypeName();
-					writer.write("\tparam->"
-									+ attribs[i].getParamNameAsMember()
-									+ " = ("
-									+ attribs[i].getTypeName()
-									+ "_Array&)pIWSDZ->getCmplxArray((void*)Axis_DeSerialize_"
-									+ arrayType + "\n\t\t, (void*)Axis_Create_"
-									+ arrayType + ", (void*)Axis_Delete_"
-									+ arrayType
-									+ "\n\t\t, (void*)Axis_GetSize_"
-									+ arrayType + ", \"" + elm
-									+ "\", Axis_URI_" + arrayType + ");\n");
+					
+					//new array memory model.
+					writer.write("\t" + arrayType + "_Array * array" + arrayCount + " = new " + arrayType + "_Array();\n");
+                    writer.write("\tarray" + arrayCount + " = (" + arrayType + "_Array *) pIWSDZ->getCmplxArray(array" + arrayCount + ", (void*)Axis_DeSerialize_"
+                                    + arrayType
+                                    + ",\n"
+                                    + "\t\t\t\t\t\t\t\t  (void*)Axis_Create_"
+                                    + arrayType
+                                    + ",\n"
+                                    + "\t\t\t\t\t\t\t\t  (void*)Axis_Delete_"
+                                    + arrayType
+                                    + ",\n"
+                                    + "\t\t\t\t\t\t\t\t  (void*)Axis_GetSize_"
+                                    + arrayType
+                                    + ",\n"
+                                    + "\t\t\t\t\t\t\t\t  \""
+                                    + attribs[i].getElementNameAsString()
+                                    + "\", Axis_URI_" + arrayType + ");\n\n");
+                    
+                	writer.write("\tparam->" + attribs[i].getParamNameAsMember() + " = array" + arrayCount + ";\n\n");
+                	//end of new array memory model.
 				}
 			} 
             else if (attribs[i].isSimpleType()) 

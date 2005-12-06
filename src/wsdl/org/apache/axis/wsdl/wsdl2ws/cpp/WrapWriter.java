@@ -395,11 +395,11 @@ public class WrapWriter extends CPPClassWriter
                                 + i
                                 + " = ("
                                 + CUtils.getBasicArrayNameforType(containedType)
-                                + "&)pIWSDZ->getBasicArray("
+                                + "&)*(pIWSDZ->getBasicArray("
                                 + CUtils.getXSDTypeForBasicType(containedType)
                                 + ", \""
                                 + parameterName
-                                + "\",0);\n");
+                                + "\",0));\n");
                     }
                     else
                     {
