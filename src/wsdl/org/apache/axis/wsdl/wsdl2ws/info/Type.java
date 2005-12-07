@@ -60,7 +60,7 @@ public class Type
       * Subsequent elements are values(QNames) if any.
       */
     private Vector enumerationdata;
-
+    
     /* This can be null */
     private String languageSpecificName;
     /* element names and the type of the elements (QName,ElementInfo)*/
@@ -93,6 +93,12 @@ public class Type
 
     /* Is this type an attachment under the http://xml.apache.org/xml-soap namespace? */
     private boolean isAttachment = false;
+
+    /* Should this type be generated or not */
+    /* this value is currently only used in limited places. usually we use the ">" symbol */
+    private boolean generated;
+
+
 
     public Type(
         QName name,
@@ -185,6 +191,9 @@ public class Type
         {
              isAttachment = true;
         }
+        
+        // generated is always true by default so as not to break any other logic prior to this value being put in
+        generated=true;
     }
 
     /**
@@ -600,5 +609,22 @@ public class Type
     public boolean isAttachment() 
     {
     	return isAttachment;
+    }
+
+    /**
+     * @param b
+     */
+    public void setGenerated(boolean b)
+    {
+       generated=b;
+    }
+    
+    /**
+     * Whether this type will be generated or not. NOT This is not always valid. Be sure that this is being set properly for your instance
+     * @return
+     */
+    public boolean isGenerated()
+    {
+        return generated; 
     }
 }

@@ -790,18 +790,23 @@ public class WSDL2Ws
                 throw new WrapperFault("Array type found without a Ref type");
             if (CUtils.isBasicType(qn))
                 return null;
+            
             QName newqn =
                 new QName(
                     type.getQName().getNamespaceURI(),
                     qn.getLocalPart() + "_Array");
             typedata =
                 new Type(newqn, newqn.getLocalPart(), true, targetLanguage);
+            
             if (type.getRefType().getRefType() != null)
                 typedata.setElementType(
                     type.getRefType().getRefType().getQName().getLocalPart());
             else
                 typedata.setElementType(
                     type.getRefType().getQName().getLocalPart());
+            
+            
+
             typeMap.addType(newqn, typedata);
         }
         else
@@ -814,6 +819,9 @@ public class WSDL2Ws
                     targetLanguage);
             typeMap.addType(type.getQName(), typedata);
         }
+        
+        // work out whether this type will be generated or not 
+        typedata.setGenerated(isTypeGenerated(type));
 
         Node node = type.getNode();
 
@@ -1294,6 +1302,33 @@ public class WSDL2Ws
             }
             
         }
+        return true;
+    }
+    
+    /**
+     * Work out the various conditions that dictate whether this type will be generated into a new
+     * file or not.
+     * This method is only very partically implemented and will usually default to true. This is becuase we have 
+     * this kind of logic already dispersed around the code (it usually just looks for a ">" in the name).
+     * But it's much better to encapsulate here.
+     *   
+     * @param type
+     * @return true if the type will not be generated. False otherwise
+     * 
+     */
+    private boolean isTypeGenerated(TypeEntry type)
+    {
+        // If the referenced type is actually a type that will not get generated because it's
+        // 	a base type array then tell other people of this case. Do this to two levels of indirection
+        
+        if(type.getRefType()!=null)
+        {
+            if(type.getRefType().getRefType()!=null && type.getRefType().getRefType().isBaseType())
+            {
+                return false;
+            }
+        }
+            
         return true;
     }
 }

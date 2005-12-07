@@ -102,52 +102,6 @@ public class AllParamWriter implements SourceWriter
                             writer.writeSource();
                             (new ArrayParamWriter(wscontext, type)).writeSource();
                         }
-                        else
-                        {
-                            // FJP If the object is a simple type array, then there is no need to create a
-                            //     header file for it.  Unfortunately, a header file has already be
-                            //     declared in the base class so when the project is built, the compiler
-                            //     will complain because the <name>.h file will not be found.  There are
-                            //     at least three solutions this problem:-
-                            //     1. Rewrite the application to only create the class once all of the
-                            //        associated objects have been resolved.
-                            //     2. Go back and modify the class to remove the #include lines that
-                            //        contain the unnecessary types.
-                            //     3. Add empty files with the same filenames as the expected includes so
-                            //        that the compiler will not complain.
-                            if (qname.getLocalPart().indexOf(">") == -1)
-                            {
-                                System.out.println(
-                                    "Creating an empty "
-                                        + qname.getLocalPart()
-                                        + CUtils.CPP_HEADER_SUFFIX
-                                        + " file\n");
-
-                                BufferedWriter bw = null;
-
-                                try
-                                {
-                                    bw =
-                                        new BufferedWriter(
-                                            new FileWriter(
-                                                getFilePath(
-                                                    qname.getLocalPart()),
-                                                false));
-                                    bw.write(
-                                        "// Header file for "
-                                            + qname.getLocalPart()
-                                            + CUtils.CPP_HEADER_SUFFIX
-                                            + "\n");
-                                    bw.flush();
-                                    bw.close();
-                                }
-                                catch (IOException e)
-                                {
-                                    e.printStackTrace();
-                                    throw new WrapperFault(e);
-                                }
-                            }
-                        }
                     }
                     else
                     {

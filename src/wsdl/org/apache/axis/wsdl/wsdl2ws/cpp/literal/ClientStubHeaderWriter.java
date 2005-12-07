@@ -205,26 +205,29 @@ public class ClientStubHeaderWriter
             while (types.hasNext())
             {
                 atype = (Type) types.next();
-                if (atype.isArray())
+                if(atype.isGenerated())
                 {
-                    if (atype.getElementType().equals("string"))
+                    if (atype.isArray())
                     {
-                        removeSet.add(atype.getLanguageSpecificName());
+                        if (atype.getElementType().equals("string"))
+                        {
+                            removeSet.add(atype.getLanguageSpecificName());
+                        }
                     }
-                }
-                if (atype.getBaseType() != null)
-                {
-                    if (atype.getBaseType().getLocalPart().equals("string"))
+                    if (atype.getBaseType() != null)
                     {
-                        removeSet.add(
-                            atype.getLanguageSpecificName() + "_Array");
+                        if (atype.getBaseType().getLocalPart().equals("string"))
+                        {
+                            removeSet.add(
+                                    atype.getLanguageSpecificName() + "_Array");
+                        }
                     }
+                    if (atype.getLanguageSpecificName().startsWith(">"))
+                    {
+                        continue;
+                    }
+                    typeSet.add(atype.getLanguageSpecificName());
                 }
-                if (atype.getLanguageSpecificName().startsWith(">"))
-                {
-                    continue;
-                }
-                typeSet.add(atype.getLanguageSpecificName());
             }
             Iterator ritr = removeSet.iterator();
             while (ritr.hasNext())
