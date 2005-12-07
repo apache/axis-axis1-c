@@ -202,9 +202,34 @@ public class BeanParamWriter extends ParamCPPFileWriter
 	
 	                    writer.write("\n" + "void " + classname + "::set"
 	                            + methodName + "(" + properParamName
-	                            + " * pInValue)\n{\n");
+	                            + " * pInValue, bool deep)\n{\n");
 	
-	                    writer.write("\t" + parameterName + " = pInValue ; \n");
+	                    writer.write("\tif (" + parameterName + " != NULL)\n");
+                        writer.write("\t{\n");
+                        writer.write("\t\tif (__axis_deepcopy_" + parameterName + ")\n");
+                        writer.write("\t\t{\n");
+                        writer.write("\t\t\tdelete " + parameterName + ";\n");
+                        writer.write("\t\t}\n");
+                        writer.write("\t\t" + parameterName + " = NULL;\n");
+                        writer.write("\t}\n");
+                        writer.write("\tif (pInValue != NULL)\n");
+                        writer.write("\t{\n");
+                        writer.write("\t\tif (deep)\n");
+                        writer.write("\t\t{\n");
+                        writer.write("\t\t\t" + parameterName + " = new " + properParamName + "();\n");
+                        writer.write("\t\t\t*" + parameterName + " = *pInValue;\n");
+                        writer.write("\t\t}\n");
+                        writer.write("\t\telse\n");
+                        writer.write("\t\t{\n");
+                        writer.write("\t\t\t" + parameterName + " = pInValue;\n");
+                        writer.write("\t\t}\n");
+                        writer.write("\t}\n");
+                        writer.write("\telse\n");
+                        writer.write("\t{\n");
+                        writer.write("\t\t" + parameterName + " = NULL;\n");
+                        writer.write("\t}\n");
+                        writer.write("\t__axis_deepcopy_" + parameterName + " = deep;\n");
+
 	
 	                    if (attribs[i].getChoiceElement())
 	                    {
@@ -259,10 +284,46 @@ public class BeanParamWriter extends ParamCPPFileWriter
 	                            + methodName
 	                            + "("
 	                            + properParamName
-	                            + " InValue)\n{\n");
-	
-	                    writer.write("\t" + parameterName
-	                            + " = InValue ; \n");
+	                            + " InValue");
+	                    if(CUtils.isPointerType(properParamName))
+	                    {
+	                        writer.write(", bool deep");
+	                    }
+	                    writer.write(")\n{\n");
+	                    
+	                    if(CUtils.isPointerType(properParamName))
+	                    {
+	                        writer.write("\tif (" + parameterName + " != NULL)\n");
+	                        writer.write("\t{\n");
+	                        writer.write("\t\tif (__axis_deepcopy_" + parameterName + ")\n");
+	                        writer.write("\t\t{\n");
+	                        writer.write("\t\t\tdelete [] " + parameterName + ";\n");
+	                        writer.write("\t\t}\n");
+	                        writer.write("\t\t" + parameterName + " = NULL;\n");
+	                        writer.write("\t}\n\n");
+	                        writer.write("\tif(InValue != NULL)\n");
+	                        writer.write("\t{\n");
+	                        writer.write("\t\tif (deep)\n");
+	                        writer.write("\t\t{\n");
+	                        writer.write("\t\t\t" + parameterName + " = new char[strlen(InValue) + 1];\n");
+	                        writer.write("\t\t\tstrcpy(" + parameterName + ", InValue);\n");
+	                        writer.write("\t\t}\n");
+	                        writer.write("\t\telse\n");
+	                        writer.write("\t\t{\n");
+	                        writer.write("\t\t\t" + parameterName + " = InValue;\n");
+	                        writer.write("\t\t}\n");
+	                        writer.write("\t}\n");
+	                        writer.write("\telse\n");
+	                        writer.write("\t{\n");
+	                        writer.write("\t\t" + parameterName + " = NULL;\n");
+	                        writer.write("\t}\n");
+	                        writer.write("\t__axis_deepcopy_" + parameterName + " = deep;\n");
+	                    }
+	                    else
+	                    {
+			                writer.write("\t" + parameterName
+		                            + " = InValue ; \n");
+	                    }
 	
 	                    if (attribs[i].getChoiceElement())
 	                    {
@@ -1136,17 +1197,20 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 }
                 else
                 {
-	                if (attribs[i].isSimpleType() && CUtils.isPointerType(attribs[i].getTypeName()))
+	                if (attribs[i].isSimpleType() && (CUtils.isPointerType(attribs[i].getTypeName()) || attribs[i].isOptional() || attribs[i].isNillable()))
 	                {
-	                    writer.write("\tif(original." + attribs[i].getParamName() + " != NULL)\n");
-	                    writer.write("\t{\n");
-	                    writer.write("\t\t" + attribs[i].getParamName() + " = new char[strlen(original." + attribs[i].getParamName() + ") + 1];\n");
-	                    writer.write("\t\tstrcpy(" + attribs[i].getParamName() + ", original." + attribs[i].getParamName() + ");\n");
-	                    writer.write("\t}\n");
-	                    writer.write("\telse\n");
-	                    writer.write("\t{\n");
-	                    writer.write("\t\t" + attribs[i].getParamName() + " = NULL;\n");
-	                    writer.write("\t}\n");
+	                    writer.write("\t" + attribs[i].getParamName() + " = NULL;\n");
+	                    String methodName = attribs[i].getParamNameWithoutSymbols();
+	                    if( methodName.endsWith( "_"))
+	                    {
+	                        String localMethodName = methodName.substring( 0, methodName.length() - 1);
+	                        
+	                        if( localMethodName.equals( classname))
+	                        {
+	                            methodName = localMethodName; 
+	                        }
+	                    }
+	                    writer.write("\tset" + methodName + "(original." + attribs[i].getParamName() + ", original.__axis_deepcopy_" + attribs[i].getParamName() + ");\n\n");
 	                }
 	                else
 	                {
@@ -1211,7 +1275,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 	            + "= NULL;\n");
                 	}
                 }
-                else if (isElementNillable(i))
+                else if (isElementNillable(i) || isElementOptional(i))
                 {
                     writer.write("\t" + attribs[i].getParamNameAsMember()
                             + " = NULL;\n");
@@ -1286,12 +1350,20 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     writer.write("\t\t" + name + " = NULL;\n");
                     writer.write("\t}\n");
                 }
-                else if (CUtils.isPointerType(typename))
+                else if (CUtils.isPointerType(typename) || isElementNillable(i) || isElementOptional(i))
                 {
                     // found pointer type
-                    writer.write("\tif (" + name + "!= NULL)\n");
+                    writer.write("\tif (" + name + " != NULL)\n");
                     writer.write("\t{\n");
-                    writer.write("\t\tdelete [] " + name + ";\n");
+                    writer.write("\t\tif(__axis_deepcopy_" + name + ")\n");
+                    writer.write("\t\t{\n");
+                    writer.write("\t\t\tdelete ");
+                    if (CUtils.isPointerType(typename))
+                    {
+                        writer.write("[] ");
+                    }
+                    writer.write(name + ";\n");
+                    writer.write("\t\t}\n");
                     writer.write("\t\t" + name + " = NULL;\n");
                     writer.write("\t}\n");
                 }

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://tempuri.org/ShallowAndDeepCopyOfSimpleTypesWithinComplexTypes/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="ShallowAndDeepCopyOfSimpleTypesWithinComplexTypes" targetNamespace="http://tempuri.org/ShallowAndDeepCopyOfSimpleTypesWithinComplexTypes/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/ShallowAndDeepCopyOfSimpleTypesWithinComplexTypes/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	  <xsd:complexType name="ComplexType>
+		<xsd:sequence>
+		  <xsd:element name="stringType" type="xsd:string"/>
+          <xsd:element name="intType" type="xsd:int"/>
+          <xsd:element name="optionalIntType" type="xsd
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:element name="NewOperationResponse">
+      	<xsd:complexType>
+      		<xsd:sequence></xsd:sequence>
+      	</xsd:complexType>
+      </xsd:element>
+      <xsd:element name="NewOperationRequest">
+      	<xsd:complexType>
+      		<xsd:sequence></xsd:sequence>
+      	</xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="NewOperationResponse">
+    <wsdl:part element="tns:NewOperationResponse" name="NewOperationResponse"/>
+  </wsdl:message>
+  <wsdl:message name="NewOperationRequest">
+    <wsdl:part element="tns:NewOperationRequest" name="NewOperationRequest"/>
+  </wsdl:message>
+  <wsdl:portType name="ShallowAndDeepCopyOfSimpleTypesWithinComplexTypes">
+    <wsdl:operation name="NewOperation">
+      <wsdl:input message="tns:NewOperationRequest"/>
+      <wsdl:output message="tns:NewOperationResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ShallowAndDeepCopyOfSimpleTypesWithinComplexTypesSOAP" type="tns:ShallowAndDeepCopyOfSimpleTypesWithinComplexTypes">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="NewOperation">
+      <soap:operation soapAction="http://tempuri.org/ShallowAndDeepCopyOfSimpleTypesWithinComplexTypes/NewOperation"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ShallowAndDeepCopyOfSimpleTypesWithinComplexTypes">
+    <wsdl:port binding="tns:ShallowAndDeepCopyOfSimpleTypesWithinComplexTypesSOAP" name="ShallowAndDeepCopyOfSimpleTypesWithinComplexTypesSOAP">
+      <soap:address location="http://tempuri.org"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

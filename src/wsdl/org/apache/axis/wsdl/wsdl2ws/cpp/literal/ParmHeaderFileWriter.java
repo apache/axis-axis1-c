@@ -85,6 +85,7 @@ public class ParmHeaderFileWriter extends ParamWriter
                 //..................................
                 writeConstructors();
                 writeDestructors();
+                writeDeepCopyFlags();
                 this.writer.write("};\n\n");
             }
             this.writer.write("#endif /* !defined(__" + classname.toUpperCase()
@@ -97,6 +98,43 @@ public class ParmHeaderFileWriter extends ParamWriter
         } catch (IOException e)
         {
             e.printStackTrace();
+            throw new WrapperFault(e);
+        }
+    }
+
+    /**
+     * 
+     */
+    private void writeDeepCopyFlags() throws WrapperFault
+    {
+        if (type.isArray())
+        {
+            return;
+        }
+        
+        if (attribs.length == 0)
+        {
+            return;
+        }
+        
+        try
+        {
+            boolean foundDeepCopyType = false;
+        	for (int i = 0 ; i < attribs.length ; i++)
+        	{
+        	    if (CUtils.isSimpleType(getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])) && !attribs[i].isArray() &&(isElementNillable(i) || isElementOptional(i) || CUtils.isPointerType(getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]))))
+        	    {
+        	        if (!foundDeepCopyType)
+        	        {
+        	            writer.write("\nprivate:\n");
+        	            foundDeepCopyType = true;
+        	        }
+        	        writer.write("\tbool __axis_deepcopy_" + attribs[i].getParamNameWithoutSymbols() + ";\n");
+        	    }
+        	}
+        }
+        catch (IOException e)
+        {
             throw new WrapperFault(e);
         }
     }
@@ -392,7 +430,12 @@ public class ParmHeaderFileWriter extends ParamWriter
                                   + methodName
                                   + "("
                                   + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-                                  + " * pInValue);\n");
+                                  + " * pInValue");
+						if (isElementNillable(i) || isElementOptional(i))
+						{
+						    writer.write(", bool deep = true");
+						}
+						writer.write(");\n");
 					}
                 }
                 else
@@ -440,7 +483,12 @@ public class ParmHeaderFileWriter extends ParamWriter
                                     + methodName
                                     + "("
                                     + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-                                    + " InValue);\n");
+                                    + " InValue");
+						if (CUtils.isPointerType(getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])))
+						{
+						    writer.write(", bool deep = true");
+						}
+						writer.write(");\n");
 					}
                 }
             }

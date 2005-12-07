@@ -91,3 +91,4 @@ MixedTrueWithTextMessage.xml
 MixedTrueWithMixedTextMessage.xml
 MinOccursIsZero.xml
 ElementFormDefaultTest.xml
+ShallowAndDeepCopyingInComplexTypeOfSimpleTypes.xml

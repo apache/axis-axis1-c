@@ -1,0 +1,17 @@
+<test>
+    <name>ShallowAndDeepCopyingInComplexTypeOfSimpleTypes</name>
+    <description>Test correct behaviour of deep and shallow copying of simple types within generated complex types</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>ShallowAndDeepCopyingInComplexTypeOfSimpleTypesClient.cpp</clientCode>
+    <wsdl>ElementFormDefaultTest.wsdl</wsdl>
+    <expected>
+        <output>
+            ShallowAndDeepCopyingInComplexTypeOfSimpleTypes.expected
+        </output>
+		<serverResponse>
+			ShallowAndDeepCopyingInComplexTypeOfSimpleTypes_ServerResponse.expected
+	    </serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/ElementFormDefaultTest</endpoint>
+</test>
+
