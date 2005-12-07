@@ -73,15 +73,12 @@ int main(int argc, char* argv[])
 		
 		// test multiParametersMultiReturn
 		xsd__string outValue0 = "";
-		xsd__int * pOutValue1 = 0;
-		xsd__double * pOutValue2 = 0;
+		xsd__int outValue1 = 0;
+		xsd__double outValue2 = 0;
 		
 		cout << "multiParametersMultiReturn" << endl;
-		ws.multiParametersMultiReturn("Hey dude", 69, (xsd__double)17.19, &outValue0, &pOutValue1, &pOutValue2);
-		cout << "multiParametersMultiReturn returned " << outValue0 << " , " << *pOutValue1 << " , " << *pOutValue2 <<endl;
-
-		delete pOutValue1;
-		delete pOutValue2;
+		ws.multiParametersMultiReturn("Hey dude", 69, (xsd__double)17.19, &outValue0, &outValue1, &outValue2);
+		cout << "multiParametersMultiReturn returned " << outValue0 << " , " << outValue1 << " , " << outValue2 <<endl;
 
 		//...........................................................
 
@@ -112,15 +109,12 @@ int main(int argc, char* argv[])
 
 		xsd__string OutValue0 = "";
 		ComplexType1* OutValue1;
-		xsd__int * pOutValue22 = 0;
-		xsd__double * pOutValue33 = 0;
+		xsd__int outValue22 = 0;
+		xsd__double outValue33 = 0;
 
 		cout << "multiComplexParametersMultiComplexReturn" << endl;
-		ws.multiComplexParametersMultiComplexReturn("Hello", &ct, 27, 13.31, &stringArray, &OutValue0, &OutValue1, &pOutValue22, &pOutValue33);
+		ws.multiComplexParametersMultiComplexReturn("Hello", &ct, 27, 13.31, &stringArray, &OutValue0, &OutValue1, &outValue22, &outValue33);
 		cout << "multiComplexParametersMultiComplexReturn returned " << OutValue0 << " , " << OutValue1->ctString << endl;
-
-		delete pOutValue22;
-		delete pOutValue33;
 
 		//..............................................................................
 		
@@ -197,8 +191,6 @@ int main(int argc, char* argv[])
 		ctr = ws.complexParameterComplexReturn(&ct2);
 		cout << "complexParameterComplexReturn with nil parameters returned " << ctr->ctLong << endl;
 
-		delete pOutValue1;
-		delete pOutValue2;
 	}
 	catch(AxisException& e)
 	{

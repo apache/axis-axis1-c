@@ -363,23 +363,46 @@ public class ClientStubWriter
 		    wscontext.getTypemap ().getType (((ParameterInfo) paramsC.
 						      get (i)).
 						     getSchemaName ());
-            String comma = ", ";
-            if (paramsB.size()==0 && 0==i)
-                {
-                comma = "";
-                }
+	        ParameterInfo param = (ParameterInfo) paramsC.get (i);
+            String	paramType = WrapperUtils.getClassNameFromParamInfoConsideringArrays (param, wscontext);
             
-            String	xsdType = WrapperUtils.getClassNameFromParamInfoConsideringArrays ((ParameterInfo) paramsC.get (i), wscontext);
+            boolean bTypeHasStar = paramType.endsWith("*");
             
-            if( CUtils.isPointerType( xsdType) || xsdType.endsWith( "*"))
+            if (paramsB.size()!=0 || 0!=i)
             {
-        		writer.write (comma + "AXIS_OUT_PARAM  " + xsdType + " * OutValue" + i);
+                writer.write(", ");
+            }
+            
+            writer.write("AXIS_OUT_PARAM " + paramType);
+            if (CUtils.isSimpleType(paramType))
+            {
+                if ((param.isOptional() || param.isNillable()) && !CUtils.isPointerType(paramType))
+                {
+                    if (bTypeHasStar)
+                    {
+                        writer.write(" *");
+                    }
+                    else
+                    {
+                        writer.write(" **");
+                    }
+                }
+                else if (CUtils.isPointerType(paramType) || !bTypeHasStar)
+                {
+                    writer.write(" *");
+                }
+                // Else we don't need to anymore '*'
+            }
+            else if(bTypeHasStar)
+            {
+                writer.write(" *");
             }
             else
             {
-        		writer.write (comma + "AXIS_OUT_PARAM  " + xsdType + " ** OutValue" + i);
+                writer.write(" **");
             }
-
+            writer.write(" OutValue" + i);
+            
 	    }
 	}
 
@@ -933,12 +956,20 @@ public class ClientStubWriter
 				    writer.write( "\n");
 				    writer.write( "\t\t\tif( pReturn" + i + " != NULL && OutValue" + i + " != NULL)\n");
 				    writer.write( "\t\t\t{\n");
-				    writer.write( "\t\t\t\tif( *OutValue" + i + " == NULL)\n");
-				    writer.write( "\t\t\t\t{\n");
-				    writer.write( "\t\t\t\t\t*OutValue" + i + " = new " + currentParaType + "();\n");
-				    writer.write( "\t\t\t\t}\n");
-				    writer.write( "\n");
-				    writer.write( "\t\t\t**OutValue" + i + " = *pReturn" + i + ";\n");
+				    if (currentType.isNillable() || currentType.isOptional())
+				    {
+					    writer.write( "\t\t\t\tif( *OutValue" + i + " == NULL)\n");
+					    writer.write( "\t\t\t\t{\n");
+					    writer.write( "\t\t\t\t\t*OutValue" + i + " = new " + currentParaType + "();\n");
+					    writer.write( "\t\t\t\t}\n");
+					    writer.write( "\n");
+					    writer.write( "\t\t\t\t*");
+				    }
+				    else
+				    {
+				        writer.write( "\t\t\t\t");
+				    }
+				    writer.write( "*OutValue" + i + " = *pReturn" + i + ";\n");
 				    writer.write( "\t\t\t}\n");
 				    writer.write( "\n");
 				    writer.write( "\t\t\tAxis::AxisDelete( (void *) pReturn" + i + ", " + CUtils.getXSDTypeForBasicType( currentParaType) + ");\n");

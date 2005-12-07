@@ -137,31 +137,43 @@ public class ClientStubHeaderWriter
                     for (int j = 0; params.hasNext(); j++)
                     {
                         ParameterInfo nparam = (ParameterInfo) params.next();
-                        String comma = ", ";
                         String paramType = WrapperUtils.getClassNameFromParamInfoConsideringArrays( nparam, wscontext);
                         boolean bTypeHasStar = paramType.endsWith( "*");
                         
-                        if (!hasInputParms && 0==j)
-                            {
-                            comma = "";
-                            }
-                        
-                        if( CUtils.isPointerType( paramType) || bTypeHasStar)
+                        if (hasInputParms || 0!=j)
                         {
-                        writer.write(comma
-                                + "AXIS_OUT_PARAM "
-                                + paramType
-                                + " * OutValue"
-                                + j);
+                            writer.write(", ");
+                        }
+                        
+                        writer.write("AXIS_OUT_PARAM " + paramType);
+                        if (CUtils.isSimpleType(paramType))
+                        {
+	                        if ((nparam.isOptional() || nparam.isNillable()) && !CUtils.isPointerType(paramType))
+	                        {
+	                            if (bTypeHasStar)
+	                            {
+	                                writer.write(" *");
+	                            }
+	                            else
+	                            {
+	                                writer.write(" **");
+	                            }
+	                        }
+	                        else if (CUtils.isPointerType(paramType) || !bTypeHasStar)
+	                        {
+	                            writer.write(" *");
+	                        }
+	                        // Else we don't need to anymore '*'
+                        }
+                        else if(bTypeHasStar)
+                        {
+                            writer.write(" *");
                         }
                         else
                         {
-                            writer.write(comma
-                                    + "AXIS_OUT_PARAM "
-                                    + paramType
-                                    + " ** OutValue"
-                                    + j);
+                            writer.write(" **");
                         }
+                        writer.write(" OutValue" + j);
                     }
                 }
                 writer.write(");\n");

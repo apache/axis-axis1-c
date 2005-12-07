@@ -14,6 +14,7 @@
 // limitations under the License.
 
 #include "MultiOut.hpp"
+#include "CommonClientTestCode.hpp"
 #include <axis/AxisException.hpp>
 #include <ctype.h>
 #include <iostream>
@@ -30,50 +31,48 @@ int main(int argc, char* argv[])
 
 			xsd__string OutValue0 = NULL;
 			xsd__integer * pOutValue1 = NULL;
-			xsd__int * pOutValue2 = NULL;
-			xsd__long * pOutValue3 = NULL;
-			xsd__short * pOutValue4 = NULL;
-			xsd__decimal * pOutValue5 = NULL;
-			xsd__float * pOutValue6 = NULL;
-			xsd__double * pOutValue7 = NULL;
-			xsd__boolean * pOutValue8 = NULL;
-			xsd__byte * pOutValue9 = NULL;
+			xsd__int outValue2;
+			xsd__long outValue3;
+			xsd__short outValue4;
+			xsd__decimal outValue5;
+			xsd__float outValue6;
+			xsd__double outValue7;
+			xsd__boolean outValue8;
+			xsd__byte outValue9;
 
 			ws.get(&OutValue0,
 				&pOutValue1,
-				&pOutValue2,
-				&pOutValue3,
-				&pOutValue4,
-				&pOutValue5,
-				&pOutValue6,
-				&pOutValue7,
-				&pOutValue8,
-				&pOutValue9);
+				&outValue2,
+				&outValue3,
+				&outValue4,
+				&outValue5,
+				&outValue6,
+				&outValue7,
+				&outValue8,
+				&outValue9);
 
 			char sInteger[128], sLong[128];
-#ifdef WIN32
-			sprintf(sInteger,"%I64d",*pOutValue1);
-			sprintf(sLong,"%I64d",*pOutValue3);
-#else
-			sprintf(sInteger,"%lld",*pOutValue1);
-			sprintf(sLong,"%lld",*pOutValue3);
-#endif
-			const char *sBool = (*pOutValue8==false_)?"false":"true";
+
+			const char *sBool = (outValue8==false_)?"false":"true";
 
 			cout << OutValue0 << endl;
-			cout << sInteger << endl;
-			cout << *pOutValue2 << endl;
-			cout << sLong << endl;
-			cout << *pOutValue4 << endl;
-			cout << *pOutValue5 << endl;
-			cout << *pOutValue6 << endl;
-			cout << *pOutValue7 << endl;
+			cout << *pOutValue1 << endl;
+			cout << outValue2 << endl;
+			cout << outValue3 << endl;
+			cout << outValue4 << endl;
+			cout << outValue5 << endl;
+			cout << outValue6 << endl;
+			cout << outValue7 << endl;
 			cout << sBool << endl;
 #ifdef __OS400__
-                  if (*pOutValue9 == 0x41) // Ascii 'A'
-                     *pOutValue9 = 'A';    // Set to ebcdic A
+                  if (outValue9 == 0x41) // Ascii 'A'
+                     outValue9 = 'A';    // Set to ebcdic A
 #endif
-			cout << *pOutValue9 << endl;
+			cout << outValue9 << endl;
+
+			delete [] OutValue0;
+			delete pOutValue1;
+
 			bSuccess = true;
 		}
 		catch(AxisException& e)

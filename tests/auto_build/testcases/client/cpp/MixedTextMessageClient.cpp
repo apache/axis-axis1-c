@@ -43,31 +43,29 @@ int main( int iArgC, char * pArgV[])
 			xsd__int *	pxiOrderNumber = NULL;
 
 			xsd__string *	psTo = &xsTo;
-			xsd__date **	ppdDate = &pxdDate;
-			xsd__int **		ppiOrderNumber = &pxiOrderNumber;
+			xsd__date * pdDate = new xsd__date();
+			xsd__int * piOrderNumber = new xsd__int();
 
-			pWS->GetLetter( sLetterId, psTo, ppdDate, ppiOrderNumber);
+			pWS->GetLetter( sLetterId, psTo, pdDate, piOrderNumber);
 
 			cout << "The letter information for: " << sLetterId << endl;
 			cout << "To:      " << *psTo << endl;
-			cout << "Date:    " << asctime( *ppdDate);
-			cout << "OrderNo: " << **ppiOrderNumber << endl << endl;
+			cout << "Date:    " << asctime( pdDate);
+			cout << "OrderNo: " << *piOrderNumber << endl << endl;
 
 			delete *psTo;
-			delete *ppdDate;
-			delete *ppiOrderNumber;
 
 	// Demonstrating references to pointers.
 			xsd__string	sTo = NULL;
-			xsd__date *	pdDate = NULL;
-			xsd__int *	piOrderNumber = NULL;
+			xsd__date dDate;
+			xsd__int iOrderNumber;
 
-			pWS->GetLetter( sLetterId, &sTo, &pdDate, &piOrderNumber);
+			pWS->GetLetter( sLetterId, &sTo, &dDate, &iOrderNumber);
 
 			cout << "The letter information for: " << sLetterId << endl;
 			cout << "To:      " << sTo << endl;
-			cout << "Date:    " << asctime( pdDate);
-			cout << "OrderNo: " << *piOrderNumber << endl;
+			cout << "Date:    " << asctime( &dDate);
+			cout << "OrderNo: " << iOrderNumber << endl;
 
 			delete sLetterId;
 			delete sTo;

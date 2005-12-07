@@ -82,7 +82,7 @@ int main(int argc, char* argv[])
 
 				// Prepare output parameters
 				xsd__string outStringElement = NULL;
-				xsd__integer * outIntegerElement = NULL;
+				xsd__integer outIntegerElement;
 				xsd__integer_Array * outIntegerArrayElement = NULL;
 				xsd__integer * outOptionalIntegerElement = NULL;
 				xsd__integer * outNillableIntegerElement = NULL;
@@ -126,8 +126,7 @@ int main(int argc, char* argv[])
 				// Print output values
 				cout << "String element = " << outStringElement << endl;
 				delete [] outStringElement;
-				cout << "Integer element = " << *outIntegerElement << endl;
-				delete outIntegerElement;
+				cout << "Integer element = " << outIntegerElement << endl;
 				cout << "Array of integer elements" << endl;
 				outputSize = 0;
 				const xsd__integer** outArrayOfIntegers = outIntegerArrayElement->get(outputSize);
@@ -212,7 +211,7 @@ int main(int argc, char* argv[])
 
 				// Prepare output parameters
 				xsd__string outStringElement = NULL;
-				xsd__integer * outIntegerElement = NULL;
+				xsd__integer outIntegerElement;
 				xsd__integer_Array * outIntegerArrayElement = NULL;
 				xsd__integer * outOptionalIntegerElement = NULL;
 				xsd__integer * outNillableIntegerElement = NULL;
@@ -255,8 +254,7 @@ int main(int argc, char* argv[])
 				// Print output values
 				cout << "String element = " << outStringElement << endl;
 				delete [] outStringElement;
-				cout << "Integer element = " << *outIntegerElement << endl;
-				delete outIntegerElement;
+				cout << "Integer element = " << outIntegerElement << endl;
 				cout << "Array of integer elements" << endl;
 				outputSize = 0;
 				const xsd__integer** outArrayOfIntegers = outIntegerArrayElement->get(outputSize);
