@@ -1,38 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright 2003-2004 The Apache Software Foundation.                      -->
-<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved                   -->
-<!--                                                                          -->
-<!-- Licensed under the Apache License, Version 2.0 (the "License");          -->
-<!-- you may not use this file except in compliance with the License.         -->
-<!-- You may obtain a copy of the License at                                  -->
-<!--                                                                          -->
-<!--        http://www.apache.org/licenses/LICENSE-2.0                        -->
-<!--                                                                          -->
-<!-- Unless required by applicable law or agreed to in writing, software      -->
-<!-- distributed under the License is distributed on an "AS IS" BASIS,        -->
-<!-- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. -->
-<!-- See the License for the specific language governing permissions and      -->
-<!-- limitations under the License.                                           -->
-
-<definitions name="Service"
-             targetNamespace="http://complextype.test.apache.org"
-             xmlns:tns="http://complextype.test.apache.org"
-             xmlns="http://schemas.xmlsoap.org/wsdl/"
-             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
-             xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-	<types>
-		<xsd:schema elementFormDefault="qualified" 
-		            targetNamespace="http://complextype.test.apache.org"
-		            xmlns:tns="http://complextype.test.apache.org">
-			<xsd:element name="myOperation">
-  				<xsd:complexType>
-					<xsd:sequence>
-				    	<xsd:element name="aType" type="tns:aRecord"/>
-				    </xsd:sequence>
-				</xsd:complexType>
-			</xsd:element>
-
-			<xsd:complexType name="aRecord">
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:tns="http://xsd_byte.test.apache.org"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="XSD_byte"
+	targetNamespace="http://xsd_byte.test.apache.org">
+	<wsdl:types>
+		<xsd:schema
+			targetNamespace="http://xsd_byte.test.apache.org"
+			xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+						
+			<xsd:complexType name="SimpleComplexType1">
 				<xsd:choice>
 					<xsd:choice>
 					<xsd:element name="field1" type="xsd:string" nillable="false"/>
@@ -41,44 +18,63 @@
 					<xsd:element name="field3" type="xsd:string" nillable="false"/>
 					<xsd:element name="field4" type="xsd:string" nillable="false"/>
 				</xsd:choice>
-			</xsd:complexType>
-			
-			<xsd:element name="myOperationResponse">
-			  <xsd:complexType>
-			    <xsd:sequence>
-			      <xsd:element name="result" type="tns:aRecord"/>
-			    </xsd:sequence>
-			  </xsd:complexType>
+			</xsd:complexType>										
+
+			<xsd:element name="asComplexTypeResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="SimpleComplexType1" type="tns:SimpleComplexType1" nillable="false" minOccurs="1" maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="asComplexTypeRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="SimpleComplexType1" type="tns:SimpleComplexType1" nillable="false" minOccurs="1" maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
 			</xsd:element>
 		</xsd:schema>
-	</types>
-	<message name="request">
-		<part name="parameters" element="tns:myOperation"/>
-	</message>
-	<message name="response">
-		<part name="parameters" element="tns:myOperationResponse"/>
-	</message>
-	<portType name="operations">
-		<operation name="myOperation">
-			<input message="tns:request"/>
-			<output message="tns:response"/>
-		</operation>
-	</portType>
-	<binding name="operationsBinding" type="tns:operations">
-		<soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
-		<operation name="myOperation">
-			<soap:operation soapAction="http://complextype.test.apache.org"/>
-			<input>
-				<soap:body use="literal"/>
-			</input>
-			<output>
-				<soap:body use="literal"/>
-			</output>
-		</operation>
-	</binding>
-	<service name="TestServices">
-		<port name="Service" binding="tns:operationsBinding">
-			<soap:address location="http://localhost:9080/ComplexTypeOptionalChoice/services/Service"/>
-		</port>
-	</service>
-</definitions>
+	</wsdl:types>
+	
+	<wsdl:message name="asComplexTypeResponse">
+		<wsdl:part name="asComplexTypeResponse"
+			element="tns:asComplexTypeResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="asComplexTypeRequest">
+		<wsdl:part name="asComplexTypeRequest"
+			element="tns:asComplexTypeRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:portType name="XSD_byte">
+		<wsdl:operation name="asComplexType">
+			<wsdl:input message="tns:asComplexTypeRequest"></wsdl:input>
+			<wsdl:output message="tns:asComplexTypeResponse"></wsdl:output>
+		</wsdl:operation>
+	</wsdl:portType>
+	
+	<wsdl:binding name="ComplexTypeChoiceNestedChoiceSOAP" type="tns:XSD_byte">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		
+		
+		<wsdl:operation name="asComplexType">
+			<soap:operation soapAction="XSD_byte#asComplexType"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="XSD_byte">
+		<wsdl:port binding="tns:ComplexTypeChoiceNestedChoiceSOAP"
+			name="Service">
+			<soap:address
+				location="http://localhost:9080/ComplexTypeChoiceNestedChoiceSOAP/services/Service" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>
