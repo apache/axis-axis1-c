@@ -21,12 +21,12 @@
     *
     * After you are happy with all your changes you need to manually
     * commit your updates to the following three places -
-    * 'ws-axis/site/src'    - your ihtml changes
-    * 'ws-site/target/axis' - the html output and the pdf files will be changed in here
-    * 'ws-axis/c/docs'      - A copy of the c tree is kept here.
+    * 'ws-axis/site/src'    - your ihtml changes that you made.
+    * 'ws-site/target/axis' - the actual html output and the pdf files that will be viewed on the web-site will be changed in here
+    * 'ws-axis/c/docs'      - A copy of ws-site/targets/axis/cpp is put here.
 -->
 
-<project name="BuildAxisCSite" default="build-C-site" basedir="../../site">
+<project name="BuildAxisCSite" default="build-C-site" basedir="../../site/src/cpp">
 	<!-- include the if task from ant-contrib -->
     <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
 
@@ -36,17 +36,14 @@
   
   <property name="IEPath" location="C:\Program Files\Internet Explorer"/>
   
-  <!-- Where the ws-site root directory is on your machine -->
-  <property name="dir.root.ws-site" value="${basedir}/../../ws-site"/>
-  
   <!--                                                                        -->
   <!-- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ -->
 
   <!-- Where the ws-axis root directory is on your machine. We can derive this from the basedir -->
-  <property name="dir.root.ws-axis" value="${basedir}/.."/>
+  <property name="dir.root.ws-axis" value="${basedir}\..\..\.."/>
 
-  <!-- need to import the main build.xml file from ws-axis/site -->
-  <import file="${dir.root.ws-axis}/site/build.xml"/>
+  <!-- need to import the main build.xml file from ws-axis/site/src/cpp -->
+  <import file="${basedir}/build.xml"/>
   
   <description>
     *=======================================================*
@@ -59,11 +56,6 @@
   
   <target name="build-C-site" depends="checkConfiguration">
   	<antcall target="build-site"/>
-  	<antcall target="copyIntoAxisCDocs" />
-  </target>
-
-  <target name="build-C-site-only" depends="checkConfiguration">
-  	<antcall target="build-site-only"/>
   	<antcall target="copyIntoAxisCDocs" />
   </target>
 
@@ -110,7 +102,7 @@
 	   <echo message="ws-site set correctly" />
 	 </then>
 	<else>
-	   <fail message="ws-site does not have axis under it '${dir.root.ws-site}' is not correct?" />
+	   <fail message="You need to set ws-site to the root of where you have extracted ws-site. Underneath this directory will be /targets/axis. You have - '${dir.root.ws-site}'" />
 	</else>
 	</if>
     
@@ -141,4 +133,11 @@
       'ws-axis/site/src', 'ws-axis/c/docs' and 'ws-site/target/axis' !!
     </echo>
   </target>
+	
+	<!-- we override the one in the imported build.xml because it starts an explorer window which we don't want -->
+	<target name="build-site">
+	    <antcall target="forrest"/>
+		<antcall target="replace"/>
+	</target>
+	
 </project>
