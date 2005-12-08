@@ -137,28 +137,25 @@ public class ServiceHeaderWriter extends HeaderFileWriter
                                 .iterator()
                                 .next();
                         String returnTypeName = returntype.getLangName();
-                        if (CUtils.isSimpleType(returnTypeName)
-								&& returntype.isNillable()
-								& !(CUtils.isPointerType(returnTypeName)))
+                        String returnType = WrapperUtils.getClassNameFromParamInfoConsideringArrays(returntype,wscontext);
+                        
+                        if ((returnType.lastIndexOf ("_Array") > 0)
+                                || (CUtils.isSimpleType(returnTypeName)
+    							&& (returntype.isNillable() || returntype.isOptional())
+    							&& !(CUtils.isPointerType(returnTypeName))))
                         {
                         	writer.write(
     	                            "\t\t"
-    	                                + WrapperUtils
-    	                                    .getClassNameFromParamInfoConsideringArrays(
-    	                                    returntype,
-    	                                    wscontext)
+    	                                + returnType
     	                                + " * ");
                         }
                         else
                         {
 	                        writer.write(
 	                            "\t\t"
-	                                + WrapperUtils
-	                                    .getClassNameFromParamInfoConsideringArrays(
-	                                    returntype,
-	                                    wscontext)
+	                                + returnType
 	                                + " ");
-                        }
+	                    }
                     }
                     else
                     {
@@ -177,21 +174,19 @@ public class ServiceHeaderWriter extends HeaderFileWriter
                 	hasInputParms = true;
                 	ParameterInfo fparam = (ParameterInfo) params.next();
                     String paramTypeName = fparam.getLangName();
+                    String paramType = WrapperUtils.getClassNameFromParamInfoConsideringArrays(fparam,wscontext);
                     
                     if (fparam.getType().isAttachment())
                     {
                     	writer.write("ISoapAttachment *Value" + 0);
                     }
                     
-                    else if (CUtils.isSimpleType(paramTypeName)
-                    		&& fparam.isNillable()
-							&& !(CUtils.isPointerType(paramTypeName)))
+                    else if ((paramType.lastIndexOf ("_Array") > 0)||(CUtils.isSimpleType(paramTypeName)
+                    		&& (fparam.isNillable() || fparam.isOptional())
+							&& !(CUtils.isPointerType(paramTypeName))))
                     {
                     	writer.write(
-    	                        WrapperUtils
-    	                            .getClassNameFromParamInfoConsideringArrays(
-    	                            fparam,
-    	                            wscontext)
+                    			paramType
     	                            + " * Value"
     	                            + 0);
                     }
@@ -204,30 +199,27 @@ public class ServiceHeaderWriter extends HeaderFileWriter
 	                            wscontext)
 	                            + " Value"
 	                            + 0);
-                    }
+	                }
                 }
                 for (int j = 1; params.hasNext(); j++)
                 {
                 	
                     ParameterInfo nparam = (ParameterInfo) params.next();
                     String paramTypeName = nparam.getLangName();
-                    
+                    String typeName = WrapperUtils.getClassNameFromParamInfoConsideringArrays(nparam,wscontext);
                     
                     if (nparam.getType().isAttachment())
                     {
                     	writer.write(", ISoapAttachment *Value" + j);
                     }
                                         
-                    else if (CUtils.isSimpleType(paramTypeName)
-                    		&& nparam.isNillable()
-							&& !(CUtils.isPointerType(paramTypeName)))
+                    else if ((paramTypeName.lastIndexOf ("_Array") > 0)||(CUtils.isSimpleType(paramTypeName)
+                    		&& (nparam.isNillable()|| nparam.isOptional())
+							&& !(CUtils.isPointerType(paramTypeName))))
                     {
                     	writer.write(
     	                        ","
-    	                            + WrapperUtils
-    	                                .getClassNameFromParamInfoConsideringArrays(
-    	                                nparam,
-    	                                wscontext)
+    	                            + typeName
     	                            + " * Value"
     	                            + j);
                     }
@@ -235,13 +227,10 @@ public class ServiceHeaderWriter extends HeaderFileWriter
                     {
 	                    writer.write(
 	                        ","
-	                            + WrapperUtils
-	                                .getClassNameFromParamInfoConsideringArrays(
-	                                nparam,
-	                                wscontext)
+	                            + typeName
 	                            + " Value"
 	                            + j);
-                    }
+	                }
                 }
                 if (isAllTreatedAsOutParams)
                 {

@@ -230,18 +230,19 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                     { /*parameters that are declared as arrays in the wrapping element.*/
                         String containedType =
                             CUtils.getclass4qname(type.getName());
+                        
+                        writer.write("\t" + outparamType + " * v" + i +" = new " + outparamType + "();\n");
                         writer.write(
                             "\t"
-                                + paraTypeName
-                                + " v"
+                        		+ "Axis_Array * RetArray"
                                 + i
-                                + " = ("
-                                + CUtils.getBasicArrayNameforType(containedType)
-                                + "&)*(pIWSDZ->getBasicArray("
+                                + " = pIWSDZ->getBasicArray("
                                 + CUtils.getXSDTypeForBasicType(containedType)
                                 + ", \""
                                 + elementName
-                                + "\",0));\n");
+                                + "\",0);\n");
+                        writer.write ("\tv" + i + "->clone(*RetArray"+ i + ");\n");
+                        writer.write ("\tAxis::AxisDelete( (void *)RetArray" + i + ", XSD_ARRAY);\n\n");
                     }
                     else
                     {
@@ -302,20 +303,20 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                         if (CUtils.isSimpleType(qname))
                         {
                             containedType = CUtils.getclass4qname(qname);
+                            
+                            writer.write("\t" + outparamType + " * v" + i +" = new " + outparamType + "();\n");
                             writer.write(
                                 "\t"
-                                    + paraTypeName
-                                    + " v"
+                            		+ "Axis_Array * RetArray"
                                     + i
-                                    + " = ("
-                                    + CUtils.getBasicArrayNameforType(
-                                        containedType)
-                                    + "&)*(pIWSDZ->getBasicArray("
+                                    + " = pIWSDZ->getBasicArray("
                                     + CUtils.getXSDTypeForBasicType(
                                         containedType)
                                     + ", \""
                                     + elementName
-                                    + "\",0));\n");
+                                    + "\",0);\n");
+                            writer.write ("\tv" + i + "->clone(*RetArray"+ i + ");\n");
+                            writer.write ("\tAxis::AxisDelete( (void *)RetArray" + i + ", XSD_ARRAY);\n\n");
                         }
                         else
                         {
@@ -324,32 +325,29 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                                 containedType =
                                     CUtils.getclass4qname(
                                         arrayType.getBaseType());
+                                writer.write("\t" + outparamType + " * v" + i +" = new " + outparamType + "();\n");
                                 writer.write(
                                     "\t"
-                                        + paraTypeName
-                                        + " v"
+                                		+ "Axis_Array * RetArray"
                                         + i
-                                        + " = ("
-                                        + CUtils.getBasicArrayNameforType(
-                                            containedType)
-                                        + "&)*(pIWSDZ->getBasicArray("
+                                        + " = pIWSDZ->getBasicArray("
                                         + CUtils.getXSDTypeForBasicType(
                                             containedType)
                                         + ", \""
                                         + elementName
-                                        + "\",0));\n");
+                                        + "\",0);\n");
+                                writer.write ("\tv" + i + "->clone(*RetArray"+ i + ");\n");
+                                writer.write ("\tAxis::AxisDelete( (void *)RetArray" + i + ", XSD_ARRAY);\n\n");
                             }
                             else
                             {
                                 containedType = qname.getLocalPart();
+                                writer.write("\t" + paraTypeName + " * v" + i +" = new " + paraTypeName + "();\n");
                                 writer.write(
                                     "\t"
-                                        + paraTypeName
-                                        + " v"
+                                		+ "Axis_Array * RetArray"
                                         + i
-                                        + " = ("
-                                        + paraTypeName
-                                        + "&)pIWSDZ->getCmplxArray((void*)Axis_DeSerialize_"
+                                        + " = pIWSDZ->getCmplxArray(v" + i + ",(void*)Axis_DeSerialize_"
                                         + containedType
                                         + "\n\t\t, (void*)Axis_Create_"
                                         + containedType
@@ -432,11 +430,11 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
         { /* Invoke the service when return type not void */
             returnParamName = returntype.getElementNameAsString();
             writer.write("\t" + outparamType);
-            if (!returntypeisarray 
+            if ((outparamType.lastIndexOf ("_Array") > 0)||(!returntypeisarray 
         		&& (!returntypeissimple
             		|| (returntypeissimple		//Chinthana:This has been changed because XSDElementNill Test failed.
         				&& returntype.isNillable()
-						&& !(CUtils.isPointerType(retType.getLanguageSpecificName())))))
+						&& !(CUtils.isPointerType(retType.getLanguageSpecificName()))))))
             {
             	writer.write(" *");
             }
@@ -489,7 +487,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                     String containedType =
                         CUtils.getclass4qname(retType.getName());
                     writer.write(
-                        "\treturn pIWSSZ->addOutputBasicArrayParam((Axis_Array*)(&ret),"
+                        "\treturn pIWSSZ->addOutputBasicArrayParam(ret,"
                             + CUtils.getXSDTypeForBasicType(containedType)
                             + ", \""
                             + returnParamName
@@ -530,7 +528,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                     {
                         containedType = CUtils.getclass4qname(qname);
                         writer.write(
-                            "\treturn pIWSSZ->addOutputBasicArrayParam((Axis_Array*)(&ret),"
+                            "\treturn pIWSSZ->addOutputBasicArrayParam(ret,"
                                 + CUtils.getXSDTypeForBasicType(containedType)
                                 + ", \""
                                 + returnParamName
@@ -543,7 +541,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                             containedType =
                                 CUtils.getclass4qname(arrayType.getBaseType());
                             writer.write(
-                                "\treturn pIWSSZ->addOutputBasicArrayParam((Axis_Array*)(&ret),"
+                                "\treturn pIWSSZ->addOutputBasicArrayParam(ret,"
                                     + CUtils.getXSDTypeForBasicType(
                                         containedType)
                                     + ", \""
@@ -554,7 +552,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                         {
                             containedType = qname.getLocalPart();
                             writer.write(
-                                "\treturn pIWSSZ->addOutputCmplxArrayParam((Axis_Array*)(&ret),"
+                                "\treturn pIWSSZ->addOutputCmplxArrayParam(ret,"
                                     + "(void*) Axis_Serialize_"
                                     + containedType
                                     + ", (void*) Axis_Delete_"

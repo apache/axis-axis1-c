@@ -388,30 +388,29 @@ public class WrapWriter extends CPPClassWriter
                     if (CUtils.isSimpleType(qname))
                     {
                         containedType = CUtils.getclass4qname(qname);
+                        
+                        writer.write("\t" + outparamTypeName + " * v" + i +" = new " + outparamTypeName + "();\n");
                         writer.write(
                             "\t"
-                                + paramType
-                                + " v"
+                                + "Axis_Array * RetArray"
                                 + i
-                                + " = ("
-                                + CUtils.getBasicArrayNameforType(containedType)
-                                + "&)*(pIWSDZ->getBasicArray("
+                                + " = pIWSDZ->getBasicArray("
                                 + CUtils.getXSDTypeForBasicType(containedType)
                                 + ", \""
                                 + parameterName
-                                + "\",0));\n");
+                                + "\",0);\n");
+                        writer.write ("\tv" + i + "->clone(*RetArray"+ i + ");\n");
+                        writer.write ("\tAxis::AxisDelete( (void *)RetArray" + i + ", XSD_ARRAY);\n\n");
                     }
                     else
                     {
                         containedType = qname.getLocalPart();
+                        writer.write("\t" + outparamTypeName + " * v" + i +" = new " + outparamTypeName + "();\n");
                         writer.write(
                             "\t"
-                                + paramType
-                                + " v"
+                                + "Axis_Array * RetArray"
                                 + i
-                                + " = ("
-                                + paramType
-                                + "&)pIWSDZ->getCmplxArray((void*)Axis_DeSerialize_"
+                                + " = pIWSDZ->getCmplxArray(v" + i + ", (void*)Axis_DeSerialize_"
                                 + containedType
                                 + "\n\t\t, (void*)Axis_Create_"
                                 + containedType
@@ -424,6 +423,8 @@ public class WrapWriter extends CPPClassWriter
                                 + "\", Axis_URI_"
                                 + containedType
                                 + ");\n");
+                        writer.write("\tv" + i + "->clone(*(" + outparamTypeName + " *)RetArray" + i + ");\n");
+                        writer.write ("\tAxis::AxisDelete( (void *)RetArray" + i + ", XSD_ARRAY);\n\n");
                     }
                 }
                 else
@@ -477,9 +478,10 @@ public class WrapWriter extends CPPClassWriter
         	/* Invoke the service when return type not void */
         	writer.write("\t\t" + outparamTypeName);
         	System.out.println(outparamTypeName);
-        	if (returntypeissimple
+        	if ((outparamTypeName.lastIndexOf ("_Array") > 0)
+        		||(returntypeissimple
         			&& returntype.isNillable()
-        			&&!(CUtils.isPointerType(outparamTypeName)))
+        			&&!(CUtils.isPointerType(outparamTypeName))))
         	{
         		writer.write(" *");
         	}
@@ -528,7 +530,7 @@ public class WrapWriter extends CPPClassWriter
                     {
                         containedType = CUtils.getclass4qname(qname);
                         writer.write(
-                            "\t\treturn pIWSSZ->addOutputBasicArrayParam((Axis_Array*)(&ret),"
+                            "\t\treturn pIWSSZ->addOutputBasicArrayParam(ret,"
                                 + CUtils.getXSDTypeForBasicType(containedType)
                                 + ", \""
                                 + methodName
@@ -538,7 +540,7 @@ public class WrapWriter extends CPPClassWriter
                     {
                         containedType = qname.getLocalPart();
                         writer.write(
-                            "\t\treturn pIWSSZ->addOutputCmplxArrayParam((Axis_Array*)(&ret),"
+                            "\t\treturn pIWSSZ->addOutputCmplxArrayParam(ret,"
                                 + "(void*) Axis_Serialize_"
                                 + containedType
                                 + ", (void*) Axis_Delete_"
