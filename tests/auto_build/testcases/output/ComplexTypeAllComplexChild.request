@@ -2,15 +2,15 @@ POST /ComplexTypeAllComplexChild/services/Service HTTP/1.1
 Host: 127.0.0.1:13260
 Content-Type: text/xml; charset=UTF-8
 SOAPAction: "XSD_byte#asComplexType"
-Content-Length: 594
+Content-Length: 562
 
 <?xml version='1.0' encoding='utf-8' ?>
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <SOAP-ENV:Body>
 <ns1:asComplexTypeRequest xmlns:ns1="http://xsd_byte.test.apache.org">
-<SimpleComplexType><ns1:complexTypeElement><ns1:onecomplexTypeElement>65</ns1:onecomplexTypeElement>
-</ns1:complexTypeElement><ns1:field2>I&apos;m still here!</ns1:field2>
-<ns1:field3>123</ns1:field3>
+<SimpleComplexType><complexTypeElement><onecomplexTypeElement>65</onecomplexTypeElement>
+</complexTypeElement><field2>I&apos;m still here!</field2>
+<field3>123</field3>
 </SimpleComplexType>
 </ns1:asComplexTypeRequest>
 </SOAP-ENV:Body>
