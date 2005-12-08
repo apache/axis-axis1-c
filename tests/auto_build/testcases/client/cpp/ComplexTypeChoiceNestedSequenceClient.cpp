@@ -14,7 +14,7 @@
 // limitations under the License.
 
 #include <axis/AxisException.hpp>
-#include "operations.hpp" 
+#include "XSD_byte.hpp" 
 
 #include <stdlib.h> // For malloc(), calloc(), strdup() and free()
 #include <iostream>
@@ -33,7 +33,7 @@ void setLogOptions(const char *output_filename);
 int main(int argc, char* argv[])
 { 
 	
-  operations *ws;
+  XSD_byte *ws;
 
   char *endpoint = WSDL_DEFAULT_ENDPOINT;
   bool endpoint_set = false;
@@ -49,29 +49,29 @@ int main(int argc, char* argv[])
 			try {
 	  
 					if(endpoint_set) {
-					ws = new operations(endpoint, APTHTTP1_1);
+					ws = new XSD_byte(endpoint, APTHTTP1_1);
 					free(endpoint);
 					endpoint_set = false;
 					} else
-						ws = new operations();
+						ws = new XSD_byte();
 
-					aRecord* input=new aRecord(); 
+					SimpleComplexType1* input=new SimpleComplexType1(); 
 				
 					
 					input->field1 = "hello";
 					input->field2 = "world";
-
 					input->field3 = "I am still here!";
-					input->field4 = "Bye";
+					
 
 			
-					aRecord* result = NULL;
-					result = ws->myOperation(input);
+					SimpleComplexType1* result = NULL;
+					result = ws->asComplexType(input);
 					if ( result == NULL )
 						cout << "result object is null" << endl;
 					cout << "Result field1 is = " << result->field1 << endl;
 					cout << "Result field2 is = " << result->field2 << endl;
 					cout << "Result field3 is = " << result->field3 << endl; 
+					
 
 					bSuccess = true;
 
