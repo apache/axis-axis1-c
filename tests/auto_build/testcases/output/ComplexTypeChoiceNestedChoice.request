@@ -1,16 +1,16 @@
 POST /ComplexTypeChoice2/services/Service HTTP/1.1
 Host: 127.0.0.1:13260
 Content-Type: text/xml; charset=UTF-8
-SOAPAction: "http://complextype.test.apache.org"
-Content-Length: 412
+SOAPAction: "XSD_byte#asComplexType"
+Content-Length: 437
 
 <?xml version='1.0' encoding='utf-8' ?>
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <SOAP-ENV:Body>
-<ns1:myOperation xmlns:ns1="http://complextype.test.apache.org">
-<ns1:aType><ns1:field1>hello</ns1:field1>
-</ns1:aType>
-</ns1:myOperation>
+<ns1:asComplexTypeRequest xmlns:ns1="http://xsd_byte.test.apache.org">
+<SimpleComplexType1><field1>hello</field1>
+</SimpleComplexType1>
+</ns1:asComplexTypeRequest>
 </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 
