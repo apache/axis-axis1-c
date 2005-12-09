@@ -400,7 +400,6 @@ public class BeanParamWriter extends ParamCPPFileWriter
          * this may not be the appropriate place to do this
          */
         writer.write("\tif ( param == NULL )\n\t{\n");
-        writer.write("\t /* TODO : may need to check nillable value - Now done*/\n");
         writer.write("\t\tpSZ->serializeAsAttribute( \"xsi:nil\", 0, (void*)&(xsd_boolean_true), XSD_BOOLEAN);\n");
         writer.write("\t\tpSZ->serialize( \">\", NULL);\n");
         writer.write("\t\treturn AXIS_SUCCESS;\n");
@@ -416,7 +415,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
         writer.write("\t}\n");
         
         
-        writer.write("\t/* first serialize attributes if any*/\n");
+        writer.write("\t/* If there are any attributes serialize them. If there aren't then close the tag */\n");
         for (int i = 0; i < attributeParamCount; i++)
         {
             if (attribs[i].isArray() || !(attribs[i].isSimpleType()))
@@ -512,7 +511,6 @@ public class BeanParamWriter extends ParamCPPFileWriter
             
             // Dushshantha:
 		    // if the attribute is a choice following should do
-
             if (attribs[i].getChoiceElement())
             {
                 if (!firstIfWritten)
@@ -583,7 +581,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     writer.write("\t\t\t\t\t\t (void*) Axis_GetSize_"
                             + arrayType + ",\n");
                     writer.write("\t\t\t\t\t\t \""
-                            + attribs[i].getParamName() + "\", "
+                            + attribs[i].getElementNameAsString() + "\", "
                             + namespace + ");\n");
                 }
             }
