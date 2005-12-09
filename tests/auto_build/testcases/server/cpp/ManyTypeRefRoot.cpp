@@ -35,7 +35,7 @@ void ManyTypeRefRoot::onFault()
 {
 }
 
-Type1_Array ManyTypeRefRoot::getInput(Type1_Array Value0)  
+Type1_Array * ManyTypeRefRoot::getInput(Type1_Array * Value0)  
 {
 	return Value0;
 }

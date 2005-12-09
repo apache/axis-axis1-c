@@ -40,7 +40,7 @@ ComplexType2* NestedComplex::echoNestedComplex(ComplexType2* Value0)
 {
 	return Value0;
 }
-ComplexType1_Array NestedComplex::echoNestedComplexArray(ComplexType1_Array Value0)  
+ComplexType1_Array * NestedComplex::echoNestedComplexArray(ComplexType1_Array * Value0)  
 {
 	return Value0;
 }
