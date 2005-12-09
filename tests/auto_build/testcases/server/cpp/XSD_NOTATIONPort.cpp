@@ -52,7 +52,7 @@ OptionalAttributeElement* XSD_NOTATIONPort::asOptionalAttribute(OptionalAttribut
 {
 	return Value0;
 }
-xsd__NOTATION_Array XSD_NOTATIONPort::asArray(xsd__NOTATION_Array Value0)  
+xsd__NOTATION_Array * XSD_NOTATIONPort::asArray(xsd__NOTATION_Array * Value0)  
 {
 	return Value0;
 }

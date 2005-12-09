@@ -52,7 +52,7 @@ OptionalAttributeElement* XSD_anyURI::asOptionalAttribute(OptionalAttributeEleme
 {
 	return Value0;
 }
-xsd__anyURI_Array XSD_anyURI::asArray(xsd__anyURI_Array Value0)  
+xsd__anyURI_Array * XSD_anyURI::asArray(xsd__anyURI_Array * Value0)  
 {
 	return Value0;
 }

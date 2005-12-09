@@ -52,7 +52,7 @@ OptionalAttributeElement* XSD_IDREFPort::asOptionalAttribute(OptionalAttributeEl
 {
 	return Value0;
 }
-xsd__IDREF_Array XSD_IDREFPort::asArray(xsd__IDREF_Array Value0)  
+xsd__IDREF_Array * XSD_IDREFPort::asArray(xsd__IDREF_Array * Value0)  
 {
 	return Value0;
 }

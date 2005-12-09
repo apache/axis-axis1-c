@@ -52,7 +52,7 @@ OptionalAttributeElement* XSD_gMonth::asOptionalAttribute(OptionalAttributeEleme
 {
 	return Value0;
 }
-xsd__gMonth_Array XSD_gMonth::asArray(xsd__gMonth_Array Value0)  
+xsd__gMonth_Array * XSD_gMonth::asArray(xsd__gMonth_Array * Value0)  
 {
 	return Value0;
 }

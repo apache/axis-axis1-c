@@ -52,7 +52,7 @@ OptionalAttributeElement* XSD_ENTITIESPort::asOptionalAttribute(OptionalAttribut
 {
 	return Value0;
 }
-xsd__ENTITIES_Array XSD_ENTITIESPort::asArray(xsd__ENTITIES_Array Value0)  
+xsd__ENTITIES_Array * XSD_ENTITIESPort::asArray(xsd__ENTITIES_Array * Value0)  
 {
 	return Value0;
 }

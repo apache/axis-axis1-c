@@ -52,7 +52,7 @@ OptionalAttributeElement* XSD_long::asOptionalAttribute(OptionalAttributeElement
 {
 	return Value0;
 }
-xsd__long_Array XSD_long::asArray(xsd__long_Array Value0)  
+xsd__long_Array * XSD_long::asArray(xsd__long_Array * Value0)  
 {
 	return Value0;
 }

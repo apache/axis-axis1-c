@@ -52,7 +52,7 @@ OptionalAttributeElement* XSD_positiveInteger::asOptionalAttribute(OptionalAttri
 {
 	return Value0;
 }
-xsd__positiveInteger_Array XSD_positiveInteger::asArray(xsd__positiveInteger_Array Value0)  
+xsd__positiveInteger_Array * XSD_positiveInteger::asArray(xsd__positiveInteger_Array * Value0)  
 {
 	return Value0;
 }

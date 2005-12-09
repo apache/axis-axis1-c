@@ -52,7 +52,7 @@ OptionalAttributeElement* XSD_base64Binary::asOptionalAttribute(OptionalAttribut
 {
 	return Value0;
 }
-xsd__base64Binary_Array XSD_base64Binary::asArray(xsd__base64Binary_Array Value0)  
+xsd__base64Binary_Array * XSD_base64Binary::asArray(xsd__base64Binary_Array * Value0)  
 {
 	return Value0;
 }

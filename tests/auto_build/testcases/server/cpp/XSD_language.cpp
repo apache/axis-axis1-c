@@ -52,7 +52,7 @@ OptionalAttributeElement* XSD_language::asOptionalAttribute(OptionalAttributeEle
 {
 	return Value0;
 }
-xsd__language_Array XSD_language::asArray(xsd__language_Array Value0)  
+xsd__language_Array * XSD_language::asArray(xsd__language_Array * Value0)  
 {
 	return Value0;
 }

@@ -52,7 +52,7 @@ OptionalAttributeElement* XSD_double::asOptionalAttribute(OptionalAttributeEleme
 {
 	return Value0;
 }
-xsd__double_Array XSD_double::asArray(xsd__double_Array Value0)  
+xsd__double_Array * XSD_double::asArray(xsd__double_Array * Value0)  
 {
 	return Value0;
 }

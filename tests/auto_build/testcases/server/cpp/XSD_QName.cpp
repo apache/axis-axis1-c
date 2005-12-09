@@ -52,7 +52,7 @@ OptionalAttributeElement* XSD_QName::asOptionalAttribute(OptionalAttributeElemen
 {
 	return Value0;
 }
-xsd__QName_Array XSD_QName::asArray(xsd__QName_Array Value0)  
+xsd__QName_Array * XSD_QName::asArray(xsd__QName_Array * Value0)  
 {
 	return Value0;
 }

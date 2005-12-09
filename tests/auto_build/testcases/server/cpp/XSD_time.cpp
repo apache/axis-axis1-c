@@ -52,7 +52,7 @@ OptionalAttributeElement* XSD_time::asOptionalAttribute(OptionalAttributeElement
 {
 	return Value0;
 }
-xsd__time_Array XSD_time::asArray(xsd__time_Array Value0)  
+xsd__time_Array * XSD_time::asArray(xsd__time_Array * Value0)  
 {
 	return Value0;
 }

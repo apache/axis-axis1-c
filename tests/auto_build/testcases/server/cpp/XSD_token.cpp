@@ -52,7 +52,7 @@ OptionalAttributeElement* XSD_token::asOptionalAttribute(OptionalAttributeElemen
 {
 	return Value0;
 }
-xsd__token_Array XSD_token::asArray(xsd__token_Array Value0)  
+xsd__token_Array * XSD_token::asArray(xsd__token_Array * Value0)  
 {
 	return Value0;
 }

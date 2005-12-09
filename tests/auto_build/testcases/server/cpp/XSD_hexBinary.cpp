@@ -52,7 +52,7 @@ OptionalAttributeElement* XSD_hexBinary::asOptionalAttribute(OptionalAttributeEl
 {
 	return Value0;
 }
-xsd__hexBinary_Array XSD_hexBinary::asArray(xsd__hexBinary_Array Value0)  
+xsd__hexBinary_Array * XSD_hexBinary::asArray(xsd__hexBinary_Array * Value0)  
 {
 	return Value0;
 }

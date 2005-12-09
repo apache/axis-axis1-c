@@ -52,7 +52,7 @@ OptionalAttributeElement* XSD_float::asOptionalAttribute(OptionalAttributeElemen
 {
 	return Value0;
 }
-xsd__float_Array XSD_float::asArray(xsd__float_Array Value0)  
+xsd__float_Array * XSD_float::asArray(xsd__float_Array * Value0)  
 {
 	return Value0;
 }

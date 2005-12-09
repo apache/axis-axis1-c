@@ -52,7 +52,7 @@ OptionalAttributeElement* XSD_int::asOptionalAttribute(OptionalAttributeElement*
 {
 	return Value0;
 }
-xsd__int_Array XSD_int::asArray(xsd__int_Array Value0)  
+xsd__int_Array * XSD_int::asArray(xsd__int_Array * Value0)  
 {
 	return Value0;
 }

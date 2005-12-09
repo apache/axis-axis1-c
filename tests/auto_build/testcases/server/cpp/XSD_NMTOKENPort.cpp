@@ -52,7 +52,7 @@ OptionalAttributeElement* XSD_NMTOKENPort::asOptionalAttribute(OptionalAttribute
 {
 	return Value0;
 }
-xsd__NMTOKEN_Array XSD_NMTOKENPort::asArray(xsd__NMTOKEN_Array Value0)  
+xsd__NMTOKEN_Array * XSD_NMTOKENPort::asArray(xsd__NMTOKEN_Array * Value0)  
 {
 	return Value0;
 }

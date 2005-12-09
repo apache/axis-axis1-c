@@ -52,7 +52,7 @@ OptionalAttributeElement* XSD_gYear::asOptionalAttribute(OptionalAttributeElemen
 {
 	return Value0;
 }
-xsd__gYear_Array XSD_gYear::asArray(xsd__gYear_Array Value0)  
+xsd__gYear_Array * XSD_gYear::asArray(xsd__gYear_Array * Value0)  
 {
 	return Value0;
 }

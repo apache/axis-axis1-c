@@ -52,7 +52,7 @@ OptionalAttributeElement* XSD_boolean::asOptionalAttribute(OptionalAttributeElem
 {
 	return Value0;
 }
-xsd__boolean_Array XSD_boolean::asArray(xsd__boolean_Array Value0)  
+xsd__boolean_Array * XSD_boolean::asArray(xsd__boolean_Array * Value0)  
 {
 	return Value0;
 }

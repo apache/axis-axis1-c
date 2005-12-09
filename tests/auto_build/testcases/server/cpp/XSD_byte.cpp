@@ -52,7 +52,7 @@ OptionalAttributeElement* XSD_byte::asOptionalAttribute(OptionalAttributeElement
 {
 	return Value0;
 }
-xsd__byte_Array XSD_byte::asArray(xsd__byte_Array Value0)  
+xsd__byte_Array * XSD_byte::asArray(xsd__byte_Array * Value0)  
 {
 	return Value0;
 }

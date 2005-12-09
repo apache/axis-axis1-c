@@ -52,7 +52,7 @@ OptionalAttributeElement* XSD_unsignedShort::asOptionalAttribute(OptionalAttribu
 {
 	return Value0;
 }
-xsd__unsignedShort_Array XSD_unsignedShort::asArray(xsd__unsignedShort_Array Value0)  
+xsd__unsignedShort_Array * XSD_unsignedShort::asArray(xsd__unsignedShort_Array * Value0)  
 {
 	return Value0;
 }

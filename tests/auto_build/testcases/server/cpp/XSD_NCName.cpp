@@ -52,7 +52,7 @@ OptionalAttributeElement* XSD_NCName::asOptionalAttribute(OptionalAttributeEleme
 {
 	return Value0;
 }
-xsd__NCName_Array XSD_NCName::asArray(xsd__NCName_Array Value0)  
+xsd__NCName_Array * XSD_NCName::asArray(xsd__NCName_Array * Value0)  
 {
 	return Value0;
 }

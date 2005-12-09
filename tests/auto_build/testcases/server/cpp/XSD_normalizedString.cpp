@@ -52,7 +52,7 @@ OptionalAttributeElement* XSD_normalizedString::asOptionalAttribute(OptionalAttr
 {
 	return Value0;
 }
-xsd__normalizedString_Array XSD_normalizedString::asArray(xsd__normalizedString_Array Value0)  
+xsd__normalizedString_Array * XSD_normalizedString::asArray(xsd__normalizedString_Array * Value0)  
 {
 	return Value0;
 }

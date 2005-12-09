@@ -52,7 +52,7 @@ OptionalAttributeElement* XSD_Name::asOptionalAttribute(OptionalAttributeElement
 {
 	return Value0;
 }
-xsd__Name_Array XSD_Name::asArray(xsd__Name_Array Value0)  
+xsd__Name_Array * XSD_Name::asArray(xsd__Name_Array * Value0)  
 {
 	return Value0;
 }

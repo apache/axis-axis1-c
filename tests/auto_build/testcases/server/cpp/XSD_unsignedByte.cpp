@@ -52,7 +52,7 @@ OptionalAttributeElement* XSD_unsignedByte::asOptionalAttribute(OptionalAttribut
 {
 	return Value0;
 }
-xsd__unsignedByte_Array XSD_unsignedByte::asArray(xsd__unsignedByte_Array Value0)  
+xsd__unsignedByte_Array * XSD_unsignedByte::asArray(xsd__unsignedByte_Array * Value0)  
 {
 	return Value0;
 }

@@ -52,7 +52,7 @@ OptionalAttributeElement* XSD_date::asOptionalAttribute(OptionalAttributeElement
 {
 	return Value0;
 }
-xsd__date_Array XSD_date::asArray(xsd__date_Array Value0)  
+xsd__date_Array * XSD_date::asArray(xsd__date_Array * Value0)  
 {
 	return Value0;
 }

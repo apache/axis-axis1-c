@@ -52,7 +52,7 @@ OptionalAttributeElement* XSD_decimal::asOptionalAttribute(OptionalAttributeElem
 {
 	return Value0;
 }
-xsd__decimal_Array XSD_decimal::asArray(xsd__decimal_Array Value0)  
+xsd__decimal_Array * XSD_decimal::asArray(xsd__decimal_Array * Value0)  
 {
 	return Value0;
 }

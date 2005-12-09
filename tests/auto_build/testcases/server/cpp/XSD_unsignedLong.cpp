@@ -52,7 +52,7 @@ OptionalAttributeElement* XSD_unsignedLong::asOptionalAttribute(OptionalAttribut
 {
 	return Value0;
 }
-xsd__unsignedLong_Array XSD_unsignedLong::asArray(xsd__unsignedLong_Array Value0)  
+xsd__unsignedLong_Array * XSD_unsignedLong::asArray(xsd__unsignedLong_Array * Value0)  
 {
 	return Value0;
 }

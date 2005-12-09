@@ -52,7 +52,7 @@ OptionalAttributeElement* XSD_gDay::asOptionalAttribute(OptionalAttributeElement
 {
 	return Value0;
 }
-xsd__gDay_Array XSD_gDay::asArray(xsd__gDay_Array Value0)  
+xsd__gDay_Array * XSD_gDay::asArray(xsd__gDay_Array * Value0)  
 {
 	return Value0;
 }

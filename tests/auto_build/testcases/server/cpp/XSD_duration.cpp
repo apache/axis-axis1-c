@@ -52,7 +52,7 @@ OptionalAttributeElement* XSD_duration::asOptionalAttribute(OptionalAttributeEle
 {
 	return Value0;
 }
-xsd__duration_Array XSD_duration::asArray(xsd__duration_Array Value0)  
+xsd__duration_Array * XSD_duration::asArray(xsd__duration_Array * Value0)  
 {
 	return Value0;
 }
