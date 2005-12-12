@@ -438,7 +438,7 @@ public class ClientStubWriter extends CPPClassWriter
                 {
                     containedType = CUtils.getclass4qname(qname);
                     writer.write("\tm_pCall->addBasicArrayParameter(");
-                    writer.write("(Axis_Array*)(&Value" + i + "), "
+                    writer.write("Value" + i + ", "
                             + CUtils.getXSDTypeForBasicType(containedType)
                             + ", \""
                             + ((ParameterInfo) paramsB.get(i)).getParamName()
