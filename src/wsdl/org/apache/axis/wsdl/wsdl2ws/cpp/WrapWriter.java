@@ -389,7 +389,7 @@ public class WrapWriter extends CPPClassWriter
                     {
                         containedType = CUtils.getclass4qname(qname);
                         
-                        writer.write("\t" + outparamTypeName + " * v" + i +" = new " + outparamTypeName + "();\n");
+                        writer.write("\t" + containedType + "_Array * v" + i +" = new " + containedType + "_Array();\n");
                         writer.write(
                             "\t"
                                 + "Axis_Array * RetArray"
@@ -405,7 +405,7 @@ public class WrapWriter extends CPPClassWriter
                     else
                     {
                         containedType = qname.getLocalPart();
-                        writer.write("\t" + outparamTypeName + " * v" + i +" = new " + outparamTypeName + "();\n");
+                        writer.write("\t" + containedType + "_Array * v" + i +" = new " + containedType + "_Array();\n");
                         writer.write(
                             "\t"
                                 + "Axis_Array * RetArray"
