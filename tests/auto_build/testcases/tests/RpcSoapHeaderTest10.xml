@@ -8,6 +8,7 @@
         <output>
             RpcSoapHeaderTest10.cpp.out
         </output>
+    <serverResponse>RpcSoapHeaderTest10_ServerResponse.expected</serverResponse>
     </expected>
 	<endpoint>http://localhost:80/axis/InteropBase</endpoint>
 </test>
