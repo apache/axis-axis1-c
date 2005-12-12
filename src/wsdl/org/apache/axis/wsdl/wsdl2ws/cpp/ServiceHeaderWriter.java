@@ -213,7 +213,7 @@ public class ServiceHeaderWriter extends HeaderFileWriter
                     	writer.write(", ISoapAttachment *Value" + j);
                     }
                                         
-                    else if ((paramTypeName.lastIndexOf ("_Array") > 0)||(CUtils.isSimpleType(paramTypeName)
+                    else if ((typeName.lastIndexOf ("_Array") > 0)||(CUtils.isSimpleType(paramTypeName)
                     		&& (nparam.isNillable()|| nparam.isOptional())
 							&& !(CUtils.isPointerType(paramTypeName))))
                     {
