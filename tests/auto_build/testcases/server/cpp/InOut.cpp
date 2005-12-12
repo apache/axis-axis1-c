@@ -59,12 +59,12 @@ ComplexType2* InOut::complexParameterComplexReturn(ComplexType2* Value0)
 	outParam = Value0;
 	return outParam;
 }
-xsd__int InOut::multiComplexParametersIntReturn(xsd__string Value0, ComplexType1* Value1, xsd__int Value2, xsd__double Value3, xsd__string_Array Value4)  
+xsd__int InOut::multiComplexParametersIntReturn(xsd__string Value0, ComplexType1* Value1, xsd__int Value2, xsd__double Value3, xsd__string_Array * Value4)  
 {
 	return (Value3 + Value2 +1);
 }
 
-void InOut::multiComplexParametersMultiComplexReturn(xsd__string Value0,ComplexType1* Value1,xsd__int Value2,xsd__double Value3,xsd__string_Array Value4, AXIS_OUT_PARAM xsd__string *OutValue0, AXIS_OUT_PARAM ComplexType1* *OutValue1, AXIS_OUT_PARAM xsd__int *OutValue2, AXIS_OUT_PARAM xsd__double *OutValue3)  
+void InOut::multiComplexParametersMultiComplexReturn(xsd__string Value0,ComplexType1* Value1,xsd__int Value2,xsd__double Value3,xsd__string_Array * Value4, AXIS_OUT_PARAM xsd__string *OutValue0, AXIS_OUT_PARAM ComplexType1* *OutValue1, AXIS_OUT_PARAM xsd__int *OutValue2, AXIS_OUT_PARAM xsd__double *OutValue3)  
 {
 	*OutValue0 = Value0;
 	*OutValue1 = Value1;
@@ -73,11 +73,11 @@ void InOut::multiComplexParametersMultiComplexReturn(xsd__string Value0,ComplexT
 
 }
 
-xsd__int InOut::multiComplexParametersNilIntReturn(xsd__string Value0, ComplexNilType1* Value1, xsd__int * Value2, xsd__double * Value3, xsd__string_Array Value4)  
+xsd__int InOut::multiComplexParametersNilIntReturn(xsd__string Value0, ComplexNilType1* Value1, xsd__int * Value2, xsd__double * Value3, xsd__string_Array * Value4)  
 {
 	return 42;
 }
-xsd__int InOut::multiArrayParametersIntReturn(xsd__int_Array Value0, xsd__double_Array Value1, xsd__string_Array Value2)  
+xsd__int InOut::multiArrayParametersIntReturn(xsd__int_Array * Value0, xsd__double_Array * Value1, xsd__string_Array * Value2)  
 {
 	return 43;
 }
