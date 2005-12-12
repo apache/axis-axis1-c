@@ -287,15 +287,15 @@ public class ClientStubWriter extends CPPClassWriter
         		    && (!(((ParameterInfo) paramsB.get (0)).isNillable () || ((ParameterInfo) paramsB.get (0)).isOptional())
         			|| CUtils.isPointerType(paramTypeName)))
         	{
-        		writer.write (paramTypeName + " Value0");
+        		writer.write (paramTypeName + " Value" + i);
         	}
         	else if (paramTypeName.lastIndexOf ("*") > 0)
         	{
-        		writer.write (paramTypeName + " Value0");
+        		writer.write (paramTypeName + " Value" + i);
         	}
         	else
         	{			//for AnyType too
-        		writer.write (paramTypeName + "* Value0");
+        		writer.write (paramTypeName + "* Value" + i);
         	}
         }
         // Multiples parameters so fill the methods prototype
