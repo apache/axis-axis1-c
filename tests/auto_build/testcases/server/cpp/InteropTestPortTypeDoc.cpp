@@ -40,7 +40,7 @@ xsd__string InteropTestPortTypeDoc::echoString(xsd__string Value0)
 {
 	return Value0;
 }
-xsd__string_Array InteropTestPortTypeDoc::echoStringArray(xsd__string_Array Value0)  
+xsd__string_Array * InteropTestPortTypeDoc::echoStringArray(xsd__string_Array * Value0)  
 {
 	return Value0;
 }
@@ -48,7 +48,7 @@ xsd__int InteropTestPortTypeDoc::echoInteger(xsd__int Value0)
 {
 	return Value0;
 }
-xsd__int_Array InteropTestPortTypeDoc::echoIntegerArray(xsd__int_Array Value0)  
+xsd__int_Array * InteropTestPortTypeDoc::echoIntegerArray(xsd__int_Array * Value0)  
 {
 	return Value0;
 }
@@ -56,7 +56,7 @@ xsd__float InteropTestPortTypeDoc::echoFloat(xsd__float Value0)
 {
 	return Value0;
 }
-xsd__float_Array InteropTestPortTypeDoc::echoFloatArray(xsd__float_Array Value0)  
+xsd__float_Array * InteropTestPortTypeDoc::echoFloatArray(xsd__float_Array * Value0)  
 {
 	return Value0;
 }
@@ -64,7 +64,7 @@ SOAPStruct* InteropTestPortTypeDoc::echoStruct(SOAPStruct* Value0)
 {
 	return Value0;
 }
-SOAPStruct_Array InteropTestPortTypeDoc::echoStructArray(SOAPStruct_Array Value0)  
+SOAPStruct_Array * InteropTestPortTypeDoc::echoStructArray(SOAPStruct_Array * Value0)  
 {
 	return Value0;
 }
