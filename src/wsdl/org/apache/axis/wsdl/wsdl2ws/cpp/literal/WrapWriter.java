@@ -231,7 +231,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                         String containedType =
                             CUtils.getclass4qname(type.getName());
                         
-                        writer.write("\t" + outparamType + " * v" + i +" = new " + outparamType + "();\n");
+                        writer.write("\t" + containedType + "_Array * v" + i +" = new " + containedType + "_Array();\n");
                         writer.write(
                             "\t"
                         		+ "Axis_Array * RetArray"
@@ -304,7 +304,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                         {
                             containedType = CUtils.getclass4qname(qname);
                             
-                            writer.write("\t" + outparamType + " * v" + i +" = new " + outparamType + "();\n");
+                            writer.write("\t" + outparamType + "_Array * v" + i +" = new " + outparamType + "_Array();\n");
                             writer.write(
                                 "\t"
                             		+ "Axis_Array * RetArray"
