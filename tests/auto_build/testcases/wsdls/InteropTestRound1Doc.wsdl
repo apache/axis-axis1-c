@@ -163,14 +163,14 @@
    <element name="echoDate">
     <complexType>
      <sequence>
-      <element name="arg_0_10" nillable="true" type="xsd:dateTime"/>
+      <element name="arg_0_10" type="xsd:dateTime"/>
      </sequence>
     </complexType>
    </element>
    <element name="echoDateResponse">
     <complexType>
      <sequence>
-      <element name="echoDateReturn" nillable="true" type="xsd:dateTime"/>
+      <element name="echoDateReturn" type="xsd:dateTime"/>
      </sequence>
     </complexType>
    </element>
