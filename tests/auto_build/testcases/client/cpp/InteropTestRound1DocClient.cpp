@@ -189,13 +189,13 @@ int main(int argc, char* argv[])
 	printf("invoking echoDate...\n");
 	ws.setTransportProperty("SOAPAction" , "InteropBase#echoDate");
       
-//      xsd__dateTime* ed_temp = ws.echoDate(time);
-//	if (memcmp(&ed_temp, &time, sizeof(tm)) == 0)
-//   
-//	if (memcmp(&ed_temp, &time, sizeof(tm)) == 0)
-//		printf("successful\n");
-//	else
-//		printf("failed\n");
+      xsd__dateTime ed_temp = ws.echoDate(time);
+	if (memcmp(&ed_temp, &time, sizeof(tm)) == 0)
+   
+	if (memcmp(&ed_temp, &time, sizeof(tm)) == 0)
+		printf("successful\n");
+	else
+		printf("failed\n");
 	//testing echo hex binary
 
 	printf("invoking echoHexBinary...\n");
