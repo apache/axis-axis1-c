@@ -61,7 +61,7 @@ class STORAGE_CLASS_INFO xsd__duration_Array : public Axis_Array {
      * @param array is a c-style array of pointers to the xsd_duration data.
      * @param size of the array, including NULL entries.
      */
-     void set(xsd__duration** array, const int size);
+     void set(xsd__duration** array, int size);
 
     /**
      * Return a c-style array.
@@ -96,7 +96,7 @@ class STORAGE_CLASS_INFO xsd__dateTime_Array : public Axis_Array {
      * @param array is a c-style array of pointers to the xsd_duration data.
      * @param size of the array, including NULL entries.
      */
-     void set(xsd__dateTime** array, const int size);
+     void set(xsd__dateTime** array, int size);
 
     /**
      * Return a c-style array.
@@ -131,7 +131,7 @@ class STORAGE_CLASS_INFO xsd__time_Array : public Axis_Array {
      * @param array is a c-style array of pointers to the xsd_duration data.
      * @param size of the array, including NULL entries.
      */
-     void set(xsd__time** array, const int size);
+     void set(xsd__time** array, int size);
 
     /**
      * Return a c-style array.
@@ -166,7 +166,7 @@ class STORAGE_CLASS_INFO xsd__date_Array : public Axis_Array {
      * @param array is a c-style array of pointers to the xsd_duration data.
      * @param size of the array, including NULL entries.
      */
-     void set(xsd__date** array, const int size);
+     void set(xsd__date** array, int size);
 
     /**
      * Return a c-style array.
@@ -202,7 +202,7 @@ class STORAGE_CLASS_INFO xsd__gYearMonth_Array : public Axis_Array {
      * @param array is a c-style array of pointers to the xsd_duration data.
      * @param size of the array, including NULL entries.
      */
-     void set(xsd__gYearMonth** array, const int size);
+     void set(xsd__gYearMonth** array, int size);
 
     /**
      * Return a c-style array.
@@ -237,7 +237,7 @@ class STORAGE_CLASS_INFO xsd__gYear_Array : public Axis_Array {
      * @param array is a c-style array of pointers to the xsd_duration data.
      * @param size of the array, including NULL entries.
      */
-     void set(xsd__gYear** array, const int size);
+     void set(xsd__gYear** array, int size);
 
     /**
      * Return a c-style array.
@@ -272,7 +272,7 @@ class STORAGE_CLASS_INFO xsd__gMonthDay_Array : public Axis_Array {
      * @param array is a c-style array of pointers to the xsd_duration data.
      * @param size of the array, including NULL entries.
      */
-     void set(xsd__gMonthDay** array, const int size);
+     void set(xsd__gMonthDay** array, int size);
 
     /**
      * Return a c-style array.
@@ -307,7 +307,7 @@ class STORAGE_CLASS_INFO xsd__gDay_Array : public Axis_Array {
      * @param array is a c-style array of pointers to the xsd_duration data.
      * @param size of the array, including NULL entries.
      */
-     void set(xsd__gDay** array, const int size);
+     void set(xsd__gDay** array, int size);
 
     /**
      * Return a c-style array.
@@ -342,7 +342,7 @@ class STORAGE_CLASS_INFO xsd__gMonth_Array : public Axis_Array {
      * @param array is a c-style array of pointers to the xsd_duration data.
      * @param size of the array, including NULL entries.
      */
-     void set(xsd__gMonth** array, const int size);
+     void set(xsd__gMonth** array, int size);
 
     /**
      * Return a c-style array.
@@ -377,7 +377,7 @@ class STORAGE_CLASS_INFO xsd__string_Array : public Axis_Array {
      * @param array is a c-style array of pointers to the xsd__string data.
      * @param size of the array, including NULL entries.
      */
-     void set(xsd__string* array, const int size);
+     void set(xsd__string* array, int size);
 
     /**
      * Return a c-style array.
@@ -412,7 +412,7 @@ class STORAGE_CLASS_INFO xsd__normalizedString_Array : public Axis_Array {
      * @param array is a c-style array of pointers to the xsd__normalizedString data.
      * @param size of the array, including NULL entries.
      */
-     void set(xsd__normalizedString* array, const int size);
+     void set(xsd__normalizedString* array, int size);
 
     /**
      * Return a c-style array.
@@ -447,7 +447,7 @@ class STORAGE_CLASS_INFO xsd__token_Array : public Axis_Array {
      * @param array is a c-style array of pointers to the xsd__token data.
      * @param size of the array, including NULL entries.
      */
-     void set(xsd__token* array, const int size);
+     void set(xsd__token* array, int size);
 
     /**
      * Return a c-style array.
@@ -483,7 +483,7 @@ class STORAGE_CLASS_INFO xsd__language_Array : public Axis_Array {
      * @param array is a c-style array of pointers to the xsd__language data.
      * @param size of the array, including NULL entries.
      */
-     void set(xsd__language* array, const int size);
+     void set(xsd__language* array, int size);
 
     /**
      * Return a c-style array.
@@ -518,7 +518,7 @@ class STORAGE_CLASS_INFO xsd__Name_Array : public Axis_Array {
      * @param array is a c-style array of pointers to the xsd__Name data.
      * @param size of the array, including NULL entries.
      */
-     void set(xsd__Name* array, const int size);
+     void set(xsd__Name* array, int size);
 
     /**
      * Return a c-style array.
@@ -553,7 +553,7 @@ class STORAGE_CLASS_INFO xsd__NCName_Array : public Axis_Array {
      * @param array is a c-style array of pointers to the xsd__NCName data.
      * @param size of the array, including NULL entries.
      */
-     void set(xsd__NCName* array, const int size);
+     void set(xsd__NCName* array, int size);
 
     /**
      * Return a c-style array.
@@ -588,7 +588,7 @@ class STORAGE_CLASS_INFO xsd__ID_Array : public Axis_Array {
      * @param array is a c-style array of pointers to the xsd__ID data.
      * @param size of the array, including NULL entries.
      */
-     void set(xsd__ID* array, const int size);
+     void set(xsd__ID* array, int size);
 
     /**
      * Return a c-style array.
@@ -623,7 +623,7 @@ class STORAGE_CLASS_INFO xsd__IDREF_Array : public Axis_Array {
      * @param array is a c-style array of pointers to the xsd__IDREF data.
      * @param size of the array, including NULL entries.
      */
-     void set(xsd__IDREF* array, const int size);
+     void set(xsd__IDREF* array, int size);
 
     /**
      * Return a c-style array.
@@ -658,7 +658,7 @@ class STORAGE_CLASS_INFO xsd__IDREFS_Array : public Axis_Array {
      * @param array is a c-style array of pointers to the xsd__IDREFS data.
      * @param size of the array, including NULL entries.
      */
-     void set(xsd__IDREFS* array, const int size);
+     void set(xsd__IDREFS* array, int size);
 
     /**
      * Return a c-style array.
@@ -693,7 +693,7 @@ class STORAGE_CLASS_INFO xsd__ENTITY_Array : public Axis_Array {
      * @param array is a c-style array of pointers to the xsd__ENTITY data.
      * @param size of the array, including NULL entries.
      */
-     void set(xsd__ENTITY* array, const int size);
+     void set(xsd__ENTITY* array, int size);
 
     /**
      * Return a c-style array.
@@ -728,7 +728,7 @@ class STORAGE_CLASS_INFO xsd__ENTITIES_Array : public Axis_Array {
      * @param array is a c-style array of pointers to the xsd__ENTITIES data.
      * @param size of the array, including NULL entries.
      */
-     void set(xsd__ENTITIES* array, const int size);
+     void set(xsd__ENTITIES* array, int size);
 
     /**
      * Return a c-style array.
@@ -763,7 +763,7 @@ class STORAGE_CLASS_INFO xsd__NMTOKEN_Array : public Axis_Array {
      * @param array is a c-style array of pointers to the xsd__NMTOKEN data.
      * @param size of the array, including NULL entries.
      */
-     void set(xsd__NMTOKEN* array, const int size);
+     void set(xsd__NMTOKEN* array, int size);
 
     /**
      * Return a c-style array.
@@ -798,7 +798,7 @@ class STORAGE_CLASS_INFO xsd__NMTOKENS_Array : public Axis_Array {
      * @param array is a c-style array of pointers to the xsd__NMTOKENS data.
      * @param size of the array, including NULL entries.
      */
-     void set(xsd__NMTOKENS* array, const int size);
+     void set(xsd__NMTOKENS* array, int size);
 
     /**
      * Return a c-style array.
@@ -833,7 +833,7 @@ class STORAGE_CLASS_INFO xsd__boolean_Array : public Axis_Array {
      * @param array is a c-style array of pointers to the xsd__boolean data.
      * @param size of the array, including NULL entries.
      */
-     void set(xsd__boolean** array, const int size);
+     void set(xsd__boolean** array, int size);
 
     /**
      * Return a c-style array.
@@ -868,7 +868,7 @@ class STORAGE_CLASS_INFO xsd__base64Binary_Array : public Axis_Array {
      * @param array is a c-style array of pointers to the xsd__base64Binary data.
      * @param size of the array, including NULL entries.
      */
-     void set(xsd__base64Binary** array, const int size);
+     void set(xsd__base64Binary** array, int size);
 
     /**
      * Return a c-style array.
@@ -903,7 +903,7 @@ class STORAGE_CLASS_INFO xsd__hexBinary_Array : public Axis_Array {
      * @param array is a c-style array of pointers to the xsd__hexBinary data.
      * @param size of the array, including NULL entries.
      */
-     void set(xsd__hexBinary** array, const int size);
+     void set(xsd__hexBinary** array, int size);
 
     /**
      * Return a c-style array.
@@ -938,7 +938,7 @@ class STORAGE_CLASS_INFO xsd__float_Array : public Axis_Array {
      * @param array is a c-style array of pointers to the xsd__float data.
      * @param size of the array, including NULL entries.
      */
-     void set(xsd__float** array, const int size);
+     void set(xsd__float** array, int size);
 
     /**
      * Return a c-style array.
@@ -973,7 +973,7 @@ class STORAGE_CLASS_INFO xsd__decimal_Array : public Axis_Array {
      * @param array is a c-style array of pointers to the xsd__decimal data.
      * @param size of the array, including NULL entries.
      */
-     void set(xsd__decimal** array, const int size);
+     void set(xsd__decimal** array, int size);
 
     /**
      * Return a c-style array.
@@ -1008,7 +1008,7 @@ class STORAGE_CLASS_INFO xsd__integer_Array : public Axis_Array {
      * @param array is a c-style array of pointers to the xsd__integer data.
      * @param size of the array, including NULL entries.
      */
-     void set(xsd__integer** array, const int size);
+     void set(xsd__integer** array, int size);
 
     /**
      * Return a c-style array.
@@ -1043,7 +1043,7 @@ class STORAGE_CLASS_INFO xsd__nonPositiveInteger_Array : public Axis_Array {
      * @param array is a c-style array of pointers to the xsd__nonPositiveInteger data.
      * @param size of the array, including NULL entries.
      */
-     void set(xsd__nonPositiveInteger** array, const int size);
+     void set(xsd__nonPositiveInteger** array, int size);
 
     /**
      * Return a c-style array.
@@ -1078,7 +1078,7 @@ class STORAGE_CLASS_INFO xsd__negativeInteger_Array : public Axis_Array {
      * @param array is a c-style array of pointers to the xsd__negativeInteger data.
      * @param size of the array, including NULL entries.
      */
-     void set(xsd__negativeInteger** array, const int size);
+     void set(xsd__negativeInteger** array, int size);
 
     /**
      * Return a c-style array.
@@ -1113,7 +1113,7 @@ class STORAGE_CLASS_INFO xsd__long_Array : public Axis_Array {
      * @param array is a c-style array of pointers to the xsd__long data.
      * @param size of the array, including NULL entries.
      */
-     void set(xsd__long** array, const int size);
+     void set(xsd__long** array, int size);
 
     /**
      * Return a c-style array.
@@ -1148,7 +1148,7 @@ class STORAGE_CLASS_INFO xsd__int_Array : public Axis_Array {
      * @param array is a c-style array of pointers to the xsd__int data.
      * @param size of the array, including NULL entries.
      */
-     void set(xsd__int** array, const int size);
+     void set(xsd__int** array, int size);
 
     /**
      * Return a c-style array.
@@ -1183,7 +1183,7 @@ class STORAGE_CLASS_INFO xsd__short_Array : public Axis_Array {
      * @param array is a c-style array of pointers to the xsd__short data.
      * @param size of the array, including NULL entries.
      */
-     void set(xsd__short** array, const int size);
+     void set(xsd__short** array, int size);
 
     /**
      * Return a c-style array.
@@ -1218,7 +1218,7 @@ class STORAGE_CLASS_INFO xsd__byte_Array : public Axis_Array {
      * @param array is a c-style array of pointers to the xsd__byte data.
      * @param size of the array, including NULL entries.
      */
-     void set(xsd__byte** array, const int size);
+     void set(xsd__byte** array, int size);
 
     /**
      * Return a c-style array.
@@ -1253,7 +1253,7 @@ class STORAGE_CLASS_INFO xsd__nonNegativeInteger_Array : public Axis_Array {
      * @param array is a c-style array of pointers to the xsd__nonNegativeInteger data.
      * @param size of the array, including NULL entries.
      */
-     void set(xsd__nonNegativeInteger** array, const int size);
+     void set(xsd__nonNegativeInteger** array, int size);
 
     /**
      * Return a c-style array.
@@ -1288,7 +1288,7 @@ class STORAGE_CLASS_INFO xsd__unsignedLong_Array : public Axis_Array {
      * @param array is a c-style array of pointers to the xsd__unsignedLong data.
      * @param size of the array, including NULL entries.
      */
-     void set(xsd__unsignedLong** array, const int size);
+     void set(xsd__unsignedLong** array, int size);
 
     /**
      * Return a c-style array.
@@ -1323,7 +1323,7 @@ class STORAGE_CLASS_INFO xsd__unsignedInt_Array : public Axis_Array {
      * @param array is a c-style array of pointers to the xsd__unsignedInt data.
      * @param size of the array, including NULL entries.
      */
-     void set(xsd__unsignedInt** array, const int size);
+     void set(xsd__unsignedInt** array, int size);
 
     /**
      * Return a c-style array.
@@ -1358,7 +1358,7 @@ class STORAGE_CLASS_INFO xsd__unsignedByte_Array : public Axis_Array {
      * @param array is a c-style array of pointers to the xsd__unsignedByte data.
      * @param size of the array, including NULL entries.
      */
-     void set(xsd__unsignedByte** array, const int size);
+     void set(xsd__unsignedByte** array, int size);
 
     /**
      * Return a c-style array.
@@ -1393,7 +1393,7 @@ class STORAGE_CLASS_INFO xsd__unsignedShort_Array : public Axis_Array {
      * @param array is a c-style array of pointers to the xsd__unsignedShort data.
      * @param size of the array, including NULL entries.
      */
-     void set(xsd__unsignedShort** array, const int size);
+     void set(xsd__unsignedShort** array, int size);
 
     /**
      * Return a c-style array.
@@ -1428,7 +1428,7 @@ class STORAGE_CLASS_INFO xsd__positiveInteger_Array : public Axis_Array {
      * @param array is a c-style array of pointers to the xsd__positiveInteger data.
      * @param size of the array, including NULL entries.
      */
-     void set(xsd__positiveInteger** array, const int size);
+     void set(xsd__positiveInteger** array, int size);
 
     /**
      * Return a c-style array.
@@ -1463,7 +1463,7 @@ class STORAGE_CLASS_INFO xsd__double_Array : public Axis_Array {
      * @param array is a c-style array of pointers to the xsd__double data.
      * @param size of the array, including NULL entries.
      */
-     void set(xsd__double** array, const int size);
+     void set(xsd__double** array, int size);
 
     /**
      * Return a c-style array.
@@ -1498,7 +1498,7 @@ class STORAGE_CLASS_INFO xsd__anyURI_Array : public Axis_Array {
      * @param array is a c-style array of pointers to the xsd__anyURI data.
      * @param size of the array, including NULL entries.
      */
-     void set(xsd__anyURI* array, const int size);
+     void set(xsd__anyURI* array, int size);
 
     /**
      * Return a c-style array.
@@ -1533,7 +1533,7 @@ class STORAGE_CLASS_INFO xsd__QName_Array : public Axis_Array {
      * @param array is a c-style array of pointers to the xsd__QName data.
      * @param size of the array, including NULL entries.
      */
-     void set(xsd__QName* array, const int size);
+     void set(xsd__QName* array, int size);
 
     /**
      * Return a c-style array.
@@ -1568,7 +1568,7 @@ class STORAGE_CLASS_INFO xsd__NOTATION_Array : public Axis_Array {
      * @param array is a c-style array of pointers to the xsd__NOTATION data.
      * @param size of the array, including NULL entries.
      */
-     void set(xsd__NOTATION* array, const int size);
+     void set(xsd__NOTATION* array, int size);
 
     /**
      * Return a c-style array.
