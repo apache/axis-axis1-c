@@ -19,6 +19,7 @@
  * @author Srinath Perera(hemapani@openource.lk)
  * @author Susantha Kumara(susantha@opensource.lk, skumara@virtusa.com)
  * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
+ * @author Chinthana Dinapala(cdinapala@virtusa.com)
  */
 
 package org.apache.axis.wsdl.wsdl2ws.cpp.literal;
@@ -122,7 +123,7 @@ public class ParmHeaderFileWriter extends ParamWriter
             boolean foundDeepCopyType = false;
         	for (int i = 0 ; i < attribs.length ; i++)
         	{
-        	    if (CUtils.isSimpleType(getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])) && !attribs[i].isArray() &&(isElementNillable(i) || isElementOptional(i) || CUtils.isPointerType(getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]))))
+        	    if (CUtils.isSimpleType(getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])) || attribs[i].getChoiceElement() || attribs[i].getAllElement() && !attribs[i].isArray() &&(isElementNillable(i) || isElementOptional(i) || CUtils.isPointerType(getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]))))
         	    {
         	        if (!foundDeepCopyType)
         	        {

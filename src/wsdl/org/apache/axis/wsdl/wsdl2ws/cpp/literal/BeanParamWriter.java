@@ -18,6 +18,7 @@
 /**
  * @author Srinath Perera(hemapani@openource.lk)
  * @author Susantha Kumara(susantha@opensource.lk, skumara@virtusa.com)
+ * @author Chinthana Dinapala(cdinapala@virtusa.com)
  */
 
 package org.apache.axis.wsdl.wsdl2ws.cpp.literal;
@@ -236,6 +237,18 @@ public class BeanParamWriter extends ParamCPPFileWriter
 	                        for (int j = 0; j < attribs.length; j++)
 	                        {
 	                            if ((attribs[j].getChoiceElement()) && (j != i))
+	                            {
+	                                writer.write("\t"
+	                                        + attribs[j].getParamNameWithoutSymbols()
+	                                        + " = NULL ; \n");
+	                            }
+	                        }
+	                    }
+	                    if (attribs[i].getAllElement())
+	                    {
+	                        for (int j = 0; j < attribs.length; j++)
+	                        {
+	                            if ((attribs[j].getAllElement()) && (j != i))
 	                            {
 	                                writer.write("\t"
 	                                        + attribs[j].getParamNameWithoutSymbols()
@@ -1195,7 +1208,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 }
                 else
                 {
-	                if (attribs[i].isSimpleType() && (CUtils.isPointerType(attribs[i].getTypeName()) || attribs[i].isOptional() || attribs[i].isNillable()))
+	                if (attribs[i].isSimpleType() && (CUtils.isPointerType(attribs[i].getTypeName()) || attribs[i].isOptional() || attribs[i].isNillable() || attribs[i].getChoiceElement() || attribs[i].getAllElement()))
 	                {
 	                    writer.write("\t" + attribs[i].getParamName() + " = NULL;\n");
 	                    String methodName = attribs[i].getParamNameWithoutSymbols();
@@ -1273,7 +1286,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 	            + "= NULL;\n");
                 	}
                 }
-                else if (isElementNillable(i) || isElementOptional(i))
+                else if (isElementNillable(i) || isElementOptional(i) || attribs[i].getChoiceElement() || attribs[i].getAllElement())
                 {
                     writer.write("\t" + attribs[i].getParamNameAsMember()
                             + " = NULL;\n");
@@ -1348,7 +1361,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     writer.write("\t\t" + name + " = NULL;\n");
                     writer.write("\t}\n");
                 }
-                else if (CUtils.isPointerType(typename) || isElementNillable(i) || isElementOptional(i))
+                else if (CUtils.isPointerType(typename) || isElementNillable(i) || isElementOptional(i) || attribs[i].getChoiceElement() || attribs[i].getAllElement())
                 {
                     // found pointer type
                     writer.write("\tif (" + name + " != NULL)\n");
