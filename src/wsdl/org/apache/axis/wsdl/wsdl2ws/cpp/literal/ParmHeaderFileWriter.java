@@ -123,7 +123,7 @@ public class ParmHeaderFileWriter extends ParamWriter
             boolean foundDeepCopyType = false;
         	for (int i = 0 ; i < attribs.length ; i++)
         	{
-        	    if (CUtils.isSimpleType(getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])) || attribs[i].getChoiceElement() || attribs[i].getAllElement() && !attribs[i].isArray() &&(isElementNillable(i) || isElementOptional(i) || CUtils.isPointerType(getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]))))
+        	    if (attribs[i].isSimpleType() && !attribs[i].isArray() &&(isElementNillable(i) || isElementOptional(i) || CUtils.isPointerType(getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])) || attribs[i].getChoiceElement() || attribs[i].getAllElement()))
         	    {
         	        if (!foundDeepCopyType)
         	        {
@@ -460,7 +460,7 @@ public class ParmHeaderFileWriter extends ParamWriter
 	                                  + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
 	                                  + " * pInValue");
 						}
-						if (isElementNillable(i) || isElementOptional(i))
+						if ((isElementNillable(i) || isElementOptional(i) || attribs[i].getAllElement() || attribs[i].getChoiceElement() ) && !attribs[i].isArray())
 						{
 						    writer.write(", bool deep = true");
 						}
@@ -513,7 +513,7 @@ public class ParmHeaderFileWriter extends ParamWriter
                                     + "("
                                     + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
                                     + " InValue");
-						if (CUtils.isPointerType(getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])))
+						if ( (attribs[i].getAllElement() || attribs[i].getChoiceElement() || CUtils.isPointerType(getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]))) && attribs[i].isSimpleType())
 						{
 						    writer.write(", bool deep = true");
 						}

@@ -323,7 +323,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
 	                            + "("
 	                            + properParamName
 	                            + " InValue");
-	                    if(CUtils.isPointerType(properParamName))
+	                    if(attribs[i].isSimpleType() && (CUtils.isPointerType(properParamName) || attribs[i].getAllElement() || attribs[i].getChoiceElement()))
 	                    {
 	                        writer.write(", bool deep");
 	                    }
@@ -357,6 +357,34 @@ public class BeanParamWriter extends ParamCPPFileWriter
 	                        writer.write("\t}\n");
 	                        writer.write("\t__axis_deepcopy_" + parameterName + " = deep;\n");
 	                    }
+	                    else if (attribs[i].isSimpleType() && (attribs[i].getAllElement() || attribs[i].getChoiceElement()))
+	                    {
+                            writer.write("\tif (" + parameterName + " != NULL)\n");
+                            writer.write("\t{\n");
+                            writer.write("\t\tif (__axis_deepcopy_" + parameterName + ")\n");
+                            writer.write("\t\t{\n");
+                            writer.write("\t\t\tdelete " + parameterName + ";\n");
+                            writer.write("\t\t}\n");
+                            writer.write("\t\t" + parameterName + " = NULL;\n");
+                            writer.write("\t}\n");
+                            writer.write("\tif (InValue != NULL)\n");
+                            writer.write("\t{\n");
+                            writer.write("\t\tif (deep)\n");
+                            writer.write("\t\t{\n");
+                        	writer.write("\t\t\t" + parameterName + " = new " + type + "();\n");
+                            writer.write("\t\t\t*" + parameterName + " = *InValue;\n");
+                            writer.write("\t\t}\n");
+                            writer.write("\t\telse\n");
+                            writer.write("\t\t{\n");
+                            writer.write("\t\t\t" + parameterName + " = InValue;\n");
+                            writer.write("\t\t}\n");
+                            writer.write("\t}\n");
+                            writer.write("\telse\n");
+                            writer.write("\t{\n");
+                            writer.write("\t\t" + parameterName + " = NULL;\n");
+                            writer.write("\t}\n");
+                            writer.write("\t__axis_deepcopy_" + parameterName + " = deep;\n");
+	                    }
 	                    else
 	                    {
 			                writer.write("\t" + parameterName
@@ -367,6 +395,9 @@ public class BeanParamWriter extends ParamCPPFileWriter
 	                    {
 	                        for (int j = 0; j < attribs.length; j++)
 	                        {
+
+	                            
+	                            
 	                            if ((attribs[j].getChoiceElement()) && (j != i))
 	                            {
 	                                writer.write("\t"
