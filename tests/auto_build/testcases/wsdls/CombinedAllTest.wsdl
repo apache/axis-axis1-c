@@ -34,7 +34,7 @@
 			<s:element minOccurs="1" maxOccurs="1" name="NonAllIntValue" type="s:int" />
 		</s:sequence>
         <s:all>
-            <s:element name="Value0" type="s:int" />
+            <s:element minOccurs="0" name="Value0" type="s:int" />
             <s:element minOccurs="0" name="Value1" type="s:int" />
             <s:element minOccurs="0" name="Value2" type="s:string" />
         </s:all>

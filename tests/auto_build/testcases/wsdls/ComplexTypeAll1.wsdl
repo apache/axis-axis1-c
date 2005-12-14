@@ -19,9 +19,9 @@
 
 			<xsd:complexType name="aRecord">
 				<xsd:all>
-					<xsd:element name="field1" type="xsd:int" nillable="false"/>
+					<xsd:element minOccurs="0" name="field1" type="xsd:int" nillable="false"/>
 					<xsd:element name="field2" type="xsd:string" fixed="field2Value"/>
-					<xsd:element name="field3" type="xsd:byte" nillable="false"/>
+					<xsd:element minOccurs="0" name="field3" type="xsd:byte" nillable="false"/>
 				</xsd:all>
 			</xsd:complexType>
 			

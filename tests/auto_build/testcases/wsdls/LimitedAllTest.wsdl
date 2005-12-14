@@ -31,7 +31,7 @@
 
     <s:complexType name="AllComplexType">
           <s:all>
-            <s:element name="Value0" type="s:int" />
+            <s:element minOccurs="0" name="Value0" type="s:int" />
             <s:element minOccurs="0" name="Value1" type="s:int" />
             <s:element minOccurs="0" name="Value2" type="s:string" />
           </s:all>
