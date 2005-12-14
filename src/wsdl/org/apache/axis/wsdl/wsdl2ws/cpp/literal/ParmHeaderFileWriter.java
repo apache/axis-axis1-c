@@ -301,7 +301,7 @@ public class ParmHeaderFileWriter extends ParamWriter
                 attribs[i].setParamName( CUtils.sanitiseAttributeName( classname, attribs[i].getParamName()));
                 
 				// FJP Nillable vv
-				if (isElementNillable(i) || attribs[i].isArray() || isElementOptional(i))
+				if (isElementNillable(i) || attribs[i].isArray() || isElementOptional(i) && !attribs[i].getAllElement())
 				{
 					if(attribs[i].isAnyType()){
 						anyCounter += 1;
@@ -331,26 +331,37 @@ public class ParmHeaderFileWriter extends ParamWriter
 					        
 					    }
 					}
-				} else {
-					// FJP Nillable ^^
-					if(attribs[i].isAnyType()){
-						anyCounter += 1;
-						writer
-						.write("\t"
-								+ getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-								+ " " + attribs[i].getParamName()
-								+ Integer.toString(anyCounter)
-								+ ";\n");
-						
+				} else 
+					{
+						if(attribs[i].getAllElement())
+						{
+							writer.write("\t"
+									 + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+									 + " " + attribs[i].getParamName()
+									 + ";\n");
+						}
+						else 
+						{
+							// FJP Nillable ^^
+							if(attribs[i].isAnyType()){
+								anyCounter += 1;
+								writer
+								.write("\t"
+										+ getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+										+ " " + attribs[i].getParamName()
+										+ Integer.toString(anyCounter)
+										+ ";\n");
+								
+							}
+								
+							else{
+						    writer.write("\t"
+		                                + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+		                                + " " + attribs[i].getParamNameWithoutSymbols()
+		                                + ";\n");
+							}
+						}
 					}
-						
-					else{
-				    writer.write("\t"
-                                + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-                                + " " + attribs[i].getParamNameWithoutSymbols()
-                                + ";\n");
-					}
-				}
             }
             
             if (extensionBaseAttrib != null &&
@@ -417,21 +428,38 @@ public class ParmHeaderFileWriter extends ParamWriter
 									+ getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
 									+ " * pInValue);\n\n");
 					}
-					else {
-                	
-                	
-						writer.write( "\n\t"
-                                  + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-                                  + " * get"
-                                  + methodName
-                                  + "();\n");
+					else 
+					{
+						if(attribs[i].getAllElement())
+						{
+							writer.write( "\n\t"
+	                                  + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+	                                  + " get"
+	                                  + methodName
+	                                  + "();\n");
 
-						writer.write( "\t"
-                                  + "void set"
-                                  + methodName
-                                  + "("
-                                  + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-                                  + " * pInValue");
+							writer.write( "\t"
+	                                  + "void set"
+	                                  + methodName
+	                                  + "("
+	                                  + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+	                                  + " pInValue");
+						}
+						else
+						{
+							writer.write( "\n\t"
+	                                  + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+	                                  + " * get"
+	                                  + methodName
+	                                  + "();\n");
+	
+							writer.write( "\t"
+	                                  + "void set"
+	                                  + methodName
+	                                  + "("
+	                                  + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+	                                  + " * pInValue");
+						}
 						if (isElementNillable(i) || isElementOptional(i))
 						{
 						    writer.write(", bool deep = true");

@@ -154,6 +154,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
             	String methodName = attribs[i].getParamNameWithoutSymbols();
                 String parameterName = methodName;
                 String properParamName = getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]);
+                String type = attribs[i].getTypeName();
 
                 if( methodName.endsWith( "_"))
                 {
@@ -195,15 +196,32 @@ public class BeanParamWriter extends ParamCPPFileWriter
 	                    	anyCounter += 1;
 	                    	parameterName = parameterName + Integer.toString(anyCounter);
 	                    }
+	                    if(attribs[i].getAllElement())
+	                    {
+	                    	writer.write("\n" + properParamName + " " + classname
+		                            + "::get" + methodName + "()\n{\n");
+	                    }
+	                    else
+	                    {
+		                    writer.write("\n" + properParamName + " * " + classname
+		                            + "::get" + methodName + "()\n{\n");
+	                    }
 	                    
-	                    writer.write("\n" + properParamName + " * " + classname
-	                            + "::get" + methodName + "()\n{\n");
-	
 	                    writer.write("\t" + "return " + parameterName + " ; \n}\n");
 	
-	                    writer.write("\n" + "void " + classname + "::set"
-	                            + methodName + "(" + properParamName
-	                            + " * pInValue, bool deep)\n{\n");
+	                    if(attribs[i].getAllElement())
+	                    {
+	                    	writer.write("\n" + "void " + classname + "::set"
+		                            + methodName + "(" + properParamName
+		                            + " pInValue, bool deep)\n{\n");
+	                    }
+	                    else
+	                    {
+	                    	writer.write("\n" + "void " + classname + "::set"
+		                            + methodName + "(" + properParamName
+		                            + " * pInValue, bool deep)\n{\n");
+	                    }
+	                    
 	
 	                    writer.write("\tif (" + parameterName + " != NULL)\n");
                         writer.write("\t{\n");
@@ -217,7 +235,14 @@ public class BeanParamWriter extends ParamCPPFileWriter
                         writer.write("\t{\n");
                         writer.write("\t\tif (deep)\n");
                         writer.write("\t\t{\n");
-                        writer.write("\t\t\t" + parameterName + " = new " + properParamName + "();\n");
+                        if(attribs[i].getAllElement())
+                        {
+                        	writer.write("\t\t\t" + parameterName + " = new " + type + "();\n");
+                        }
+                        else
+                        {
+                        	writer.write("\t\t\t" + parameterName + " = new " + properParamName + "();\n");
+                        }
                         writer.write("\t\t\t*" + parameterName + " = *pInValue;\n");
                         writer.write("\t\t}\n");
                         writer.write("\t\telse\n");
