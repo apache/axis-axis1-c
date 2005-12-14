@@ -58,14 +58,14 @@ int main(int argc, char* argv[])
 	xsd__int **array = new xsd__int*[3];
 	array[0]=new xsd__int(5);
 	array[1]=new xsd__int(6);
-	array[3]=new xsd__int(7);
+	array[2]=new xsd__int(7);
 	arrayIn.set(array,3);
 	simpleArray1->setintArray(&arrayIn);	
     SimpleComplexType1* input = new SimpleComplexType1();
 
     input->arrayElement = simpleArray1;
-   // input->field2 = "I'm still here!";
-   // input->field3 = new xsd__int(123);
+    //input->field2 = "I'm still here!";
+    //input->field3 = new xsd__int(123);
 
     SimpleComplexType1* result = NULL;
     result = ws->asComplexType(input);
@@ -74,7 +74,9 @@ int main(int argc, char* argv[])
 
 	cout << "Array Size = " << outputSize << endl; 
 
-	cout << "First element in Array =" << *arrayOut[0] << endl;
+	cout << "First element in Array = " << *arrayOut[0] << endl;
+	cout << "Second element in Array = " << *arrayOut[1] << endl;
+	cout << "Third element in Array = " << *arrayOut[2] << endl;
 	
 	bSuccess = true;
 
