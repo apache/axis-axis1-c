@@ -2226,28 +2226,24 @@ xsd__base64Binary
     SoapDeSerializer::decodeFromBase64Binary (const AxisChar * pValue)
 {
     xsd__base64Binary value;
-    value.__size = apr_base64_decode_len (pValue);
-    value.__ptr = new unsigned char[value.__size + 1];
-    value.__size = apr_base64_decode_binary (value.__ptr, pValue);
-    /* put null at the end because it enables the decoded string to be used
-     * as a string 
-     */
-    value.__ptr[value.__size] = 0;
-
+	xsd__int size = apr_base64_decode_len (pValue);
+	xsd__unsignedByte * pTemp = new xsd__unsignedByte[size + 1];
+    size = apr_base64_decode_binary (pTemp, pValue);
+    pTemp[size] = 0; // Null terminate so it could used as a string
+	value.set(pTemp, size);
+	delete [] pTemp;
     return value;
 }
 
 xsd__hexBinary SoapDeSerializer::decodeFromHexBinary (const AxisChar * pValue)
 {
-    xsd__hexBinary
-    value;
-    value.__size = strlen (pValue) / 2;
-    value.__ptr = new unsigned char[value.__size + 1];
-    Hex_Decode (value.__ptr, pValue);
-    /* put null at the end because it enables the decoded string to be used
-     * as a string 
-     */
-    value.__ptr[value.__size] = 0;
+    xsd__hexBinary value;
+    xsd__int size = strlen (pValue) / 2;
+	xsd__unsignedByte * pTemp = new xsd__unsignedByte[size + 1];
+    Hex_Decode (pTemp, pValue);
+	pTemp[size] = 0; // Null terminate so it could be used as a string
+	value.set(pTemp, size);
+    delete [] pTemp;
     return value;
 }
 

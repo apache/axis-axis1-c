@@ -57,8 +57,7 @@ int main(int argc, char* argv[])
 				//Adding the content type as text/plain
 				att->addHeader(AXIS_CONTENT_TYPE,"text/plain");
 				xsd__base64Binary b64b1;
-				b64b1.__ptr = (xsd__unsignedByte*)text;
-				b64b1.__size = strlen(text);				
+                b64b1.set((xsd__unsignedByte *) text, strlen(text));
 				att->addBody(&b64b1);
 				sslkeyhome=getenv("SSL_KEYS_HOME");
             if (!sslkeyhome)

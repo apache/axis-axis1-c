@@ -73,8 +73,7 @@ int main(int argc, char* argv[])
 				//Adding the content type as image/jpeg
 				att->addHeader(AXIS_CONTENT_TYPE,"image/jpeg");
 				xsd__base64Binary b64b1;
-				b64b1.__ptr = (xsd__unsignedByte*)buffer;
-				b64b1.__size = length;				
+                b64b1.set((xsd__unsignedByte *) buffer, length);
 				att->addBody(&b64b1);
 				
 				//Calling the dataHandlerService, service will return number of bytes send

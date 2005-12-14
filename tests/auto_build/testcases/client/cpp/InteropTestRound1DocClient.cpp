@@ -170,13 +170,15 @@ int main(int argc, char* argv[])
 
 	printf("invoking echoBase64...\n");
 	xsd__base64Binary bb;
-	bb.__ptr = (unsigned char*)strdup(bstr);
-	bb.__size = strlen(bstr);
+    bb.set((unsigned char*)strdup(bstr), strlen(bstr));
 	ws.setTransportProperty("SOAPAction" , "InteropBaseDoc#echoBase64");
-	if (bb.__size == ws.echoBase64(bb).__size)
+    xsd__base64Binary bbResult = ws.echoBase64(bb);
+    int size = 0;
+    xsd__unsignedByte * data = bbResult.get(size);
+	if (bb.getSize() == size)
 	{
 		printf("successful\n");
-		printf("Returned String :\n%s\n", asciiToString((char *)bb.__ptr));
+		printf("Returned String :\n%s\n", asciiToString((char *)data));
 	}
 	else
 		printf("failed\n");
@@ -200,13 +202,15 @@ int main(int argc, char* argv[])
 
 	printf("invoking echoHexBinary...\n");
 	xsd__hexBinary hb;
-	hb.__ptr = (unsigned char*)strdup(bstr);
-	hb.__size = strlen(bstr);
+    hb.set((unsigned char*)strdup(bstr), strlen(bstr));
 	ws.setTransportProperty("SOAPAction" , "InteropBaseDoc#echoHexBinary");
-	if (hb.__size == ws.echoHexBinary(hb).__size)
+    xsd__hexBinary hbResult = ws.echoHexBinary(hb);
+    size = 0;
+    data = hbResult.get(size);
+	if (hb.getSize() == size)
 	{
 		printf("successful\n");
-		printf("Returned String :\n%s\n", asciiToString((char *)hb.__ptr));
+		printf("Returned String :\n%s\n", asciiToString((char *)data));
 	}
 	else
 		printf("failed\n");

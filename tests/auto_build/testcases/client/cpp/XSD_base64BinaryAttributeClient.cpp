@@ -40,16 +40,17 @@ int main(int argc, char* argv[])
 
         xsd__unsignedByte* testUB = (xsd__unsignedByte*)stringToAscii("<test><xml>some dod&y string</xml></test>");
 
-        input.__ptr=testUB;
-        input.__size=41;
-
+        int.set(testUB, 41);
+        
 		// Test required attribute
 		RequiredAttributeElement requiredAttributeInput;
 		requiredAttributeInput.setrequiredAttribute(input);
 		RequiredAttributeElement* requiredAttributeResult = ws->asRequiredAttribute(&requiredAttributeInput);
 		cout << "required attribute" << endl;
-        cout << " size=" << requiredAttributeResult->getrequiredAttribute().__size << endl;
-        cout << " data=" << asciiToStringOfLength((char *)requiredAttributeResult->getrequiredAttribute().__ptr, requiredAttributeResult->getrequiredAttribute().__size) << endl;
+        int size = 0;
+        const xsd__unsignedByte * base64BinaryData = requiredAttributeResult->getrequiredAttribute().get(size);
+        cout << " size=" << size << endl;
+        cout << " data=" << asciiToStringOfLength((char *)base64BinaryData, size) << endl;
 		delete requiredAttributeResult;
 
 		// Test now complete

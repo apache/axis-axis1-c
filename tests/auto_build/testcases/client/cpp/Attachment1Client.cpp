@@ -45,8 +45,7 @@ int main(int argc, char* argv[])
 				else if (2==i)
 					att[i]->addHeader("Content-Disposition","checked");
 				
-				b64b[i].__ptr = (xsd__unsignedByte*)text;
-				b64b[i].__size = strlen(text)+1;
+				b64b[i].set((unsigned char *)text, strlen(text)+1);
 				att[i]->addBody(&b64b[i]);	
 			}
 

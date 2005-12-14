@@ -59,8 +59,7 @@ int main(int argc, char* argv[])
 				att2->addHeader(AXIS_CONTENT_ID,"5");
 				att2->addHeader(AXIS_CONTENT_TYPE,"image/jpeg");
 				xsd__base64Binary b64b1;
-				b64b1.__ptr = (xsd__unsignedByte*)text;
-				b64b1.__size = strlen(text);				
+                b64b1.set((xsd__unsignedByte *) text, strlen(text));
 				att1->addBody(&b64b1);
 				att2->addBody(&b64b1);				
 				//Calling webservice with multiple attachments. Here same object is passed as argument

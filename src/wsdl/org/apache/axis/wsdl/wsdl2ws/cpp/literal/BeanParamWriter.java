@@ -1050,17 +1050,8 @@ public class BeanParamWriter extends ParamCPPFileWriter
                         writer.write("\t\tparam->"
                                 + attribs[i].getParamNameAsMember() + " = *( "
                                 + attribs[i].getParamNameAsMember() + " );\n");
-
-                        if (attribs[i].getTypeName().equals("xsd__hexBinary")
-    								|| attribs[i].getTypeName().equals("xsd__base64Binary"))
-                        {
-                        	writer.write("\t}\n");
-                        }
-                        else
-                        {
-            				writer.write("\t\tAxis::AxisDelete( (void *) " + attribs[i].getParamNameAsMember() + ", " + CUtils.getXSDTypeForBasicType( attribs[i].getTypeName()) + ");\n");
-                        	writer.write("\t}\n");
-                        }                        	
+        				writer.write("\t\tAxis::AxisDelete( (void *) " + attribs[i].getParamNameAsMember() + ", " + CUtils.getXSDTypeForBasicType( attribs[i].getTypeName()) + ");\n");
+                    	writer.write("\t}\n");                    	
                     }
                 }
                 if (attribs[i].isOptional())

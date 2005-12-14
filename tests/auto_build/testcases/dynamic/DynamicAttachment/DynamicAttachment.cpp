@@ -50,8 +50,7 @@ int main(int argc, char* argv[])
 		att->addHeader(AXIS_CONTENT_TRANSFER_ENCODING,"base64");
 		
 		xsd__base64Binary b64b1;
-		b64b1.__ptr = (xsd__unsignedByte*)text;
-		b64b1.__size = strlen(text)+1;
+        b64b1.set((xsd__unsignedByte *) text, strlen(text) + 1);
 		att->addBody(&b64b1);	
 
 		call.addAttachmentParameter(att, "arg_attachment_1");
@@ -66,8 +65,7 @@ int main(int argc, char* argv[])
 		att->addHeader(AXIS_CONTENT_TRANSFER_ENCODING,"base64");
 		
 		xsd__base64Binary b64b2;
-		b64b2.__ptr = (xsd__unsignedByte*)text;
-		b64b2.__size = strlen(text)+1;
+        b64b2.set((xsd__unsignedByte *) text, strlen(text) + 1);
 		att->addBody(&b64b2);	
 
 		call.addAttachmentParameter(att, "arg_attachment_2");
@@ -81,8 +79,7 @@ int main(int argc, char* argv[])
 		att->addHeader(AXIS_CONTENT_TRANSFER_ENCODING,"base64");
 		
 		xsd__base64Binary b64b3;
-		b64b3.__ptr = (xsd__unsignedByte*)text;
-		b64b3.__size = strlen(text)+1;
+        b64b3.set((xsd__unsignedByte*)text, strlen(text)+1);
 		att->addBody(&b64b3);	
 
 		IAttribute *attrs[2];
@@ -100,8 +97,7 @@ int main(int argc, char* argv[])
 		att->addHeader(AXIS_CONTENT_TRANSFER_ENCODING,"base64");
 		
 		xsd__base64Binary b64b4;
-		b64b4.__ptr = (xsd__unsignedByte*)text;
-		b64b4.__size = strlen(text)+1;
+        b64b4.set((xsd__unsignedByte*)text, strlen(text)+1);
 		att->addBody(&b64b4);	
 
 		call.addAttachment(att);

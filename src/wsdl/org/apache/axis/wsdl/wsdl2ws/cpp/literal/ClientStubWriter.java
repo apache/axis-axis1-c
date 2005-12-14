@@ -447,16 +447,6 @@ public class ClientStubWriter
 			}
 			else
 			{
-
-			    if (outparamType.equals ("xsd__base64Binary")
-				|| outparamType.equals ("xsd__hexBinary"))
-			    {
-				writer.write (outparamType + " Ret;\n");
-				writer.write ("\tRet.__ptr = NULL;\n");
-				writer.write ("\tRet.__size = 0;\n");
-			    }
-			    else
-			    {
 				if (outparamType.equals ("xsd__dateTime")
 				    || outparamType.equals ("xsd__date")
 				    || outparamType.equals ("xsd__time"))
@@ -469,7 +459,6 @@ public class ClientStubWriter
 				{
 				    writer.write (outparamType + " Ret;\n");
 				}
-			    }
 			}
 		    }
 		}
@@ -1094,32 +1083,16 @@ public class ClientStubWriter
 	            writer.write( "\n");
                 writer.write( "\t\t\tif( pReturn != NULL)\n");
                 writer.write( "\t\t\t{\n");
-				if( "xsd__base64Binary".equals( outparamType) ||
-					    "xsd__hexBinary".equals( outparamType))
-					{
-				    	writer.write( "\t\t\t\tRet = new " + outparamType + "();\n");
-					    writer.write ("\t\t\t\tif( pReturn->__ptr != NULL)\n");
-						writer.write ("\t\t\t\t{\n");
-						writer.write ("\t\t\t\t\tRet->__ptr = new xsd__unsignedByte [pReturn->__size + 1];\n");
-						writer.write ("\t\t\t\t\tRet->__size = pReturn->__size;\n");
-						writer.write ("\t\t\t\t\tmemcpy( Ret->__ptr, pReturn->__ptr, pReturn->__size);\n");
-						writer.write ("\t\t\t\t}\n");
-						writer.write ("\t\t\t\telse\n");
-						writer.write ("\t\t\t\t{\n");
-						writer.write ("\t\t\t\t\tRet->__ptr = NULL;\n");
-						writer.write ("\t\t\t\t\tRet->__size = pReturn->__size;\n");
-						writer.write ("\t\t\t\t}\n");
-					}
-				    else if( CUtils.isPointerType(outparamType))
-					{
-		                writer.write( "\t\t\t\tRet = new char[strlen( pReturn) + 1];\n");
-		                writer.write( "\t\t\t\tstrcpy( Ret, pReturn);\n");
-					}
-					else
-					{
-		                writer.write( "\t\t\t\tRet = new " + outparamType + "();\n");
-		                writer.write( "\t\t\t\t*Ret = *pReturn;\n");
-					}
+				if( CUtils.isPointerType(outparamType))
+				{
+	                writer.write( "\t\t\t\tRet = new char[strlen( pReturn) + 1];\n");
+	                writer.write( "\t\t\t\tstrcpy( Ret, pReturn);\n");
+				}
+				else
+				{
+	                writer.write( "\t\t\t\tRet = new " + outparamType + "();\n");
+	                writer.write( "\t\t\t\t*Ret = *pReturn;\n");
+				}
 				writer.write( "\t\t\t\tAxis::AxisDelete( (void *) pReturn, " + CUtils.getXSDTypeForBasicType( outparamType) + ");\n");
                 writer.write( "\t\t\t}\n");
                 writer.write( "\t\t}\n");
@@ -1156,22 +1129,7 @@ public class ClientStubWriter
 				writer.write ("\t\t\tif(pReturn)\n");
 				writer.write ("\t\t\t{\n");
 				
-				if( "xsd__base64Binary".equals( outparamType) ||
-				    "xsd__hexBinary".equals( outparamType))
-				{
-				    writer.write ("\t\t\t\tif( pReturn->__ptr != NULL)\n");
-					writer.write ("\t\t\t\t{\n");
-					writer.write ("\t\t\t\t\tRet.__ptr = new xsd__unsignedByte [pReturn->__size + 1];\n");
-					writer.write ("\t\t\t\t\tRet.__size = pReturn->__size;\n");
-					writer.write ("\t\t\t\t\tmemcpy( Ret.__ptr, pReturn->__ptr, pReturn->__size);\n");
-					writer.write ("\t\t\t\t}\n");
-					writer.write ("\t\t\t\telse\n");
-					writer.write ("\t\t\t\t{\n");
-					writer.write ("\t\t\t\t\tRet.__ptr = NULL;\n");
-					writer.write ("\t\t\t\t\tRet.__size = pReturn->__size;\n");
-					writer.write ("\t\t\t\t}\n");
-				}
-			    else if( CUtils.isPointerType( outparamType))
+				if( CUtils.isPointerType( outparamType))
 				{
 				    writer.write ("\t\t\t\tRet = *pReturn;\n");
 				}

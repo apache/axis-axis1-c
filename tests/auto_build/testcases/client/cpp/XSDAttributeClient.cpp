@@ -74,10 +74,8 @@ int main(int argc, char* argv[])
 	xsd__hexBinary hexTest;
 	xsd__unsignedByte* testUB = (xsd__unsignedByte*)"<test><xml>some dod&y string</xml></test>";
 
-	b64Test.__ptr=testUB;
-	b64Test.__size=41;
-	hexTest.__ptr=testUB;
-	hexTest.__size=41;
+    b64Test.set(testUB, 41);
+    hexTest.set(testUB, 41);
 
     time_t timeToTest;
     timeToTest = 1100246323;
@@ -174,18 +172,22 @@ int main(int argc, char* argv[])
 
 		b64Type->base64BinaryType = b64Test;
 		b64TypeReturn = ws->getDataBase64Binary(b64Type);
-		cout << "base64Binary size=" << b64TypeReturn->base64BinaryType.__size << endl;
-		if( b64TypeReturn->base64BinaryType.__size > 0)
+        int size = 0;
+        const xsd__unsignedByte * base64BinaryData = b64TypeReturn->base64BinaryType.get(size);
+		cout << "base64Binary size=" << size << endl;
+		if( size > 0)
 		{
-			cout << "base64Binary data=" << b64TypeReturn->base64BinaryType.__ptr << endl;
+			cout << "base64Binary data=" << base64BinaryData << endl;
 		}
 
 		hexType->hexBinaryType = hexTest;
 		hexTypeReturn = ws->getDataHexBinary(hexType);
-		cout << "hexBinary size=" << hexTypeReturn->hexBinaryType.__size << endl;
-		if( hexTypeReturn->hexBinaryType.__size > 0)
+        size = 0;
+        const xsd__unsignedByte * hexBinaryData = hexTypeReturn->hexBinaryType.get(size);
+		cout << "hexBinary size=" << size << endl;
+		if( size > 0)
 		{
-			cout << "hexBinary data=" << hexTypeReturn->hexBinaryType.__ptr << endl;
+			cout << "hexBinary data=" << hexBinaryData << endl;
 		}
 */
 		bSuccess = true;

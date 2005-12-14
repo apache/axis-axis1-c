@@ -36,20 +36,138 @@ AXIS_CPP_NAMESPACE_START
  * which they both inherit from. Maybe these classes could have private data
  * and overload the [] operator and size() methods.
  */
-xsd__base64Binary::xsd__base64Binary() { 
-  __ptr = 0;
+xsd__base64Binary::xsd__base64Binary()
+{ 
+  __ptr = NULL;
   __size = 0;
 }
 
-xsd__base64Binary::~xsd__base64Binary() {
+xsd__base64Binary::xsd__base64Binary(xsd__base64Binary & original)
+{
+	__ptr = NULL;
+	__size = 0;
+	*this = original;
 }
 
-xsd__hexBinary::xsd__hexBinary() { 
-  __ptr = 0;
-  __size = 0;
+void xsd__base64Binary::set(xsd__unsignedByte * data, int size)
+{
+	if (__ptr != NULL)
+	{
+		delete [] __ptr;
+	}
+	if (size > 0)
+	{
+		__ptr = new xsd__unsignedByte[size + 1];
+		memcpy(__ptr, data, size * sizeof(xsd__unsignedByte));
+		__ptr[size] = '\0';
+	}
+	else
+	{
+		__ptr = NULL;
+	}
+	__size = size;
 }
 
-xsd__hexBinary::~xsd__hexBinary() {
+xsd__int xsd__base64Binary::getSize() const
+{
+	return __size;
+}
+
+xsd__unsignedByte * xsd__base64Binary::get(xsd__int & size) const
+{
+	size = __size;
+	xsd__unsignedByte * pReturn = NULL;
+
+	if (size > 0)
+	{
+		pReturn = new xsd__unsignedByte[size + 1];
+		memcpy(pReturn, __ptr, size * sizeof(xsd__unsignedByte));
+		pReturn[size] = '\0';
+	}
+	return pReturn;
+}
+
+xsd__base64Binary & xsd__base64Binary::operator=(xsd__base64Binary & original)
+{
+	this->set(original.__ptr, original.__size);
+    return *this;
+}
+
+xsd__base64Binary::~xsd__base64Binary()
+{
+    if (__ptr != NULL)
+    {
+        delete [] __ptr;
+    }
+    __ptr = NULL;
+    __size = 0;
+}
+
+xsd__hexBinary::xsd__hexBinary()
+{ 
+    __ptr = NULL;
+    __size = 0;
+}
+
+xsd__hexBinary::xsd__hexBinary(xsd__hexBinary & original)
+{
+    __ptr = NULL;
+    __size = 0;
+    *this = original;
+}
+
+void xsd__hexBinary::set(xsd__unsignedByte * data, int size)
+{
+    if (__ptr != NULL)
+    {
+        delete [] __ptr;
+    }
+    if (size > 0)
+    {
+        __ptr = new xsd__unsignedByte[size + 1];
+        memcpy(__ptr, data, size * sizeof(xsd__unsignedByte));
+		__ptr[size] = '\0';
+    }
+    else
+    {
+        __ptr = NULL;
+    }
+    __size = size;
+}
+
+xsd__int xsd__hexBinary::getSize() const
+{
+    return __size;
+}
+
+xsd__unsignedByte * xsd__hexBinary::get(xsd__int & size) const
+{
+    size = __size;
+	xsd__unsignedByte * pReturn = NULL;
+
+	if (size > 0)
+	{
+		pReturn = new xsd__unsignedByte[size + 1];
+		memcpy(pReturn, __ptr, size * sizeof(xsd__unsignedByte));
+		pReturn[size] = '\0';
+	}
+	return pReturn;
+}
+
+xsd__hexBinary & xsd__hexBinary::operator=(xsd__hexBinary & original)
+{
+    this->set(original.__ptr, original.__size);
+    return *this;
+}
+
+xsd__hexBinary::~xsd__hexBinary()
+{
+    if (__ptr != NULL)
+    {
+        delete [] __ptr;
+    }
+    __ptr = NULL;
+    __size = 0;
 }
 
 AnyType::AnyType() { 
@@ -247,24 +365,14 @@ void Axis_Array::set(void** array, int size, XSDTYPE type)
                     }
                     case XSD_BASE64BINARY:
                     {
-                        xsd__base64Binary* pCloneTemp = new xsd__base64Binary();
-                        xsd__base64Binary* pOriginalTemp = ((xsd__base64Binary**) array)[count];
-                
-                        pCloneTemp->__size = pOriginalTemp->__size;
-                        pCloneTemp->__ptr = new unsigned char[pCloneTemp->__size];
-                        memcpy( pCloneTemp->__ptr, pOriginalTemp->__ptr, pCloneTemp->__size);
-                        ((xsd__base64Binary**) m_Array)[count] = pCloneTemp;
+						((xsd__base64Binary**) m_Array)[count] = new xsd__base64Binary();
+						*((xsd__base64Binary**)m_Array)[count] = *((xsd__base64Binary**) array)[count];
                         break;
                     }
                     case XSD_HEXBINARY:
                     {
-                        xsd__hexBinary* pCloneTemp = new xsd__hexBinary();
-                        xsd__hexBinary* pOriginalTemp = ((xsd__hexBinary**) array)[count];
-            
-                        pCloneTemp->__size = pOriginalTemp->__size;
-                        pCloneTemp->__ptr = new unsigned char[pCloneTemp->__size];
-                        memcpy( pCloneTemp->__ptr, pOriginalTemp->__ptr, pCloneTemp->__size);
-                        ((xsd__hexBinary**) m_Array)[count] = pCloneTemp;
+						((xsd__hexBinary**) m_Array)[count] = new xsd__hexBinary();
+						*((xsd__hexBinary**)m_Array)[count] = *((xsd__hexBinary**) array)[count];
                         break;
                     }
                     case XSD_FLOAT:
@@ -570,24 +678,14 @@ void Axis_Array::addElement(void* element)
             }
             case XSD_BASE64BINARY:
             {
-                xsd__base64Binary* pCloneTemp = new xsd__base64Binary();
-                xsd__base64Binary* pOriginalTemp = (xsd__base64Binary*) element;
-        
-                pCloneTemp->__size = pOriginalTemp->__size;
-                pCloneTemp->__ptr = new unsigned char[pCloneTemp->__size];
-                memcpy( pCloneTemp->__ptr, pOriginalTemp->__ptr, pCloneTemp->__size);
-                ((xsd__base64Binary**) m_Array)[m_Size] = pCloneTemp;
+				((xsd__base64Binary**) m_Array)[m_Size] = new xsd__base64Binary();
+				*((xsd__base64Binary**)m_Array)[m_Size] = *(xsd__base64Binary*) element;
                 break;
             }
             case XSD_HEXBINARY:
             {
-                xsd__hexBinary* pCloneTemp = new xsd__hexBinary();
-                xsd__hexBinary* pOriginalTemp = (xsd__hexBinary*) element;
-    
-                pCloneTemp->__size = pOriginalTemp->__size;
-                pCloneTemp->__ptr = new unsigned char[pCloneTemp->__size];
-                memcpy( pCloneTemp->__ptr, pOriginalTemp->__ptr, pCloneTemp->__size);
-                ((xsd__hexBinary**) m_Array)[m_Size] = pCloneTemp;
+				((xsd__hexBinary**) m_Array)[m_Size] = new xsd__hexBinary();
+				*((xsd__hexBinary**)m_Array)[m_Size] = *(xsd__hexBinary*) element;
                 break;
             }
             case XSD_FLOAT:

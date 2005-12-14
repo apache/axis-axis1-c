@@ -126,20 +126,12 @@ ArrayBean::~ArrayBean()
             case XSD_HEXBINARY:
             {
                 xsd__hexBinary* a = (xsd__hexBinary*)m_value.sta;
-                for (int ix=0;ix<m_nSize;ix++)
-                {
-                    delete [] a[ix].__ptr;
-                }
                 delete [] a;
             }
                 break;
             case XSD_BASE64BINARY:
             {
                 xsd__base64Binary* a = (xsd__base64Binary*)m_value.sta;
-                for (int ix=0;ix<m_nSize;ix++)
-                {
-                    delete [] a[ix].__ptr;
-                }
                 delete [] a;
             }
                 break;

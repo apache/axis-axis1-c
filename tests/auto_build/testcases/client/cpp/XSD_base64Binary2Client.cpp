@@ -35,16 +35,17 @@ int main(int argc, char* argv[])
 		sprintf(endpoint, "%s", url);
 		XSD_base64Binary* ws = new XSD_base64Binary(endpoint);
 
-        	xsd__base64Binary input;
-        	xsd__unsignedByte* testUB = (xsd__unsignedByte*)"  <test><xml>  some dod&y string </xml></test> ";
-        	input.__ptr=testUB;
-        	input.__size=100;
+    	xsd__base64Binary input;
+    	xsd__unsignedByte* testUB = (xsd__unsignedByte*)"  <test><xml>  some dod&y string </xml></test> ";
+        input.set(testUB, 100);
 
 		// Test non-nillable element
-	    	xsd__base64Binary result = ws->asNonNillableElement(input);
+    	xsd__base64Binary result = ws->asNonNillableElement(input);
+        int size = 0;
+        const xsd__unsignedByte * data = result.get(size);
 		cout << "non-nillable element" << endl;
-        	cout << " size=" << result.__size << endl;
-        	cout << " data=" << result.__ptr << endl;
+    	cout << " size=" << size << endl;
+    	cout << " data=" << data << endl;
 
 		delete ws;
 	}

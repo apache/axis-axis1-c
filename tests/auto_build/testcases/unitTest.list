@@ -98,3 +98,4 @@ MixedTrueWithMixedTextMessage.xml
 MinOccursIsZero.xml
 ElementFormDefaultTest.xml
 ShallowAndDeepCopyingInComplexTypeOfSimpleTypes.xml
+XSD_base64BinaryTestValidData.xml

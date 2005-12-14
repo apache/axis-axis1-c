@@ -1,0 +1,18 @@
+<test>
+    <name>XSD_base64BinaryTestValidData</name>
+    <description>Test serialization and deserialization of the XSD built-in simple type base64Binary</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>XSD_base64BinaryTestValidDataClient.cpp</clientCode>
+	<stubAsLibrary>true</stubAsLibrary>
+    <wsdl>XSD_base64Binary.wsdl</wsdl>
+    <expected>
+        <output>
+            XSD_base64BinaryTestValidData.expected
+        </output>
+		<serverResponse>
+			XSD_base64BinaryTestValidData_ServerResponse.expected
+	    </serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/XSD_base64Binary</endpoint>
+</test>
+

@@ -1,0 +1,10 @@
+within received complex type
+ size = 6
+ data = { 255, 1, 254, 2, 127, 0 }
+within received complex type after deleting web service
+ size = 6
+ data = { 255, 1, 254, 2, 127, 0 }
+within received complex type after re-creating and invoking web service
+ size = 6
+ data = { 255, 1, 254, 2, 127, 0 }
+---------------------- TEST COMPLETE -----------------------------

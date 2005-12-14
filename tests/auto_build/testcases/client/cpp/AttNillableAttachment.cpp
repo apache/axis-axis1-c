@@ -72,8 +72,7 @@ int main(int argc, char* argv[])
 				//Adding the content type as text/xml
 				att->addHeader(AXIS_CONTENT_TYPE,"text/xml");
 				xsd__base64Binary b64b1;
-				b64b1.__ptr = (xsd__unsignedByte*)buffer;
-				b64b1.__size = length;				
+                b64b1.set((xsd__unsignedByte *) buffer, length);
 				att->addBody(&b64b1);
 				//Calling the service. Here passing NULL as argument
 				//Service will return the content of 'att' ie content of first argument

@@ -61,7 +61,7 @@ AXIS_CPP_NAMESPACE_START
         MinLength* minLength= getMinLength();
         if (minLength->isSet())
         {
-            if (value->__size < minLength->getMinLength())
+            if (value->getSize() < minLength->getMinLength())
             {
                 AxisString exceptionMessage =
                 "Length of value to be serialized is shorter than MinLength specified for this type.  Minlength = ";
@@ -69,7 +69,7 @@ AXIS_CPP_NAMESPACE_START
                 sprintf(length, "%d", minLength->getMinLength());
                 exceptionMessage += length;
                 exceptionMessage += ", Length of value = ";
-                sprintf(length, "%d", value->__size);
+                sprintf(length, "%d", value->getSize());
                 exceptionMessage += length;
                 exceptionMessage += ".";
                 delete [] length;
@@ -84,7 +84,7 @@ AXIS_CPP_NAMESPACE_START
         MaxLength* maxLength = getMaxLength();
         if (maxLength->isSet())
         {
-            if (value->__size > maxLength->getMaxLength())
+            if (value->getSize() > maxLength->getMaxLength())
             {
                 AxisString exceptionMessage =
                 "Length of value to be serialized is longer than MaxLength specified for this type.  Maxlength = ";
@@ -92,7 +92,7 @@ AXIS_CPP_NAMESPACE_START
                 sprintf(length, "%d", maxLength->getMaxLength());
                 exceptionMessage += length;
                 exceptionMessage += ", Length of value = ";
-                sprintf(length, "%d", value->__size);
+                sprintf(length, "%d", value->getSize());
                 exceptionMessage += length;
                 exceptionMessage += ".";
                 delete [] length;
@@ -106,7 +106,7 @@ AXIS_CPP_NAMESPACE_START
         Length* length= getLength();
         if (length->isSet())
         {
-            if (value->__size != length->getLength())
+            if (value->getSize() != length->getLength())
             {
                 AxisString exceptionMessage =
                 "Length of value to be serialized is not the same as Length specified for this type.  Length = ";
@@ -114,7 +114,7 @@ AXIS_CPP_NAMESPACE_START
                 sprintf(lengthAsString, "%d", length->getLength());
                 exceptionMessage += lengthAsString;
                 exceptionMessage += ", Length of value = ";
-                sprintf(lengthAsString, "%d", value->__size);
+                sprintf(lengthAsString, "%d", value->getSize());
                 exceptionMessage += lengthAsString;
                 exceptionMessage += ".";
                 delete [] lengthAsString;
@@ -125,9 +125,12 @@ AXIS_CPP_NAMESPACE_START
         }
         delete length;
      
-	    int len = apr_base64_encode_len (value->__size);	    
+	    int len = apr_base64_encode_len (value->getSize());	    
 	    AxisChar* serializedValue = new AxisChar[len + 1];
-	    len = apr_base64_encode_binary (serializedValue, value->__ptr, value->__size);
+		int size = 0;
+		xsd__unsignedByte * pTemp = value->get(size);
+	    len = apr_base64_encode_binary (serializedValue, pTemp, size);
+		delete [] pTemp;
 	    serializedValue[len] = 0;
 	    	    
         IAnySimpleType::serialize(serializedValue);
@@ -138,14 +141,12 @@ AXIS_CPP_NAMESPACE_START
     xsd__base64Binary * Base64Binary::deserializeBase64Binary(const AxisChar* valueAsChar) throw (AxisSoapException)
     {
     	xsd__base64Binary * value = new xsd__base64Binary();
-	    value->__size = apr_base64_decode_len (valueAsChar);
-	    value->__ptr = new unsigned char[value->__size + 1];
-	    value->__size = apr_base64_decode_binary (value->__ptr, valueAsChar);
-	    /* put null at the end because it enables the decoded string to be used
-	     * as a string 
-	     */
-	    value->__ptr[value->__size] = 0;
-	
+	    xsd__int size = apr_base64_decode_len (valueAsChar);
+	    xsd__unsignedByte * pTemp = new xsd__unsignedByte[size + 1];
+	    size = apr_base64_decode_binary (pTemp, valueAsChar);
+	    pTemp[size] = 0; // Null terminate so it could be used as a string
+		value->set(pTemp, size);
+		delete [] pTemp;
 	    return value;
     }
 

@@ -50,8 +50,7 @@ int main(int argc, char* argv[])
 
 			char *text = stringToAscii("This is the attachment body for the DynUnrefAttachmentTest");
 
-			b64b.__ptr = (xsd__unsignedByte*)text;
-			b64b.__size = strlen(text)+1;
+            b64b.set((xsd__unsignedByte *) text, strlen(text) + 1);
 			att->addBody(&b64b);	
 
 			call.addAttachment(att);

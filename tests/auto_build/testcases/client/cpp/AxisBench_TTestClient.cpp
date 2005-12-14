@@ -121,10 +121,8 @@ RETTYPE ThreadFunc(ARGTYPE Param)
         type->LongType = ll;
         type->QNameType = "toto";
         type->ShortType = (i+1);
-        type->Base64BinaryType.__size=i;
-        type->Base64BinaryType.__ptr=buffer;
-        type->HexBinary.__size=i;
-        type->HexBinary.__ptr=buffer;
+        type->Base64BinaryType.set(buffer, i);
+        type->HexBinary.set(buffer, i);
 
         ppBBDT[i] = type;
 

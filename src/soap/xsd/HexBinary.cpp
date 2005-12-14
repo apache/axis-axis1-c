@@ -61,7 +61,7 @@ AXIS_CPP_NAMESPACE_START
         MinLength* minLength= getMinLength();
         if (minLength->isSet())
         {
-            if (value->__size < minLength->getMinLength())
+            if (value->getSize() < minLength->getMinLength())
             {
                 AxisString exceptionMessage =
                 "Length of value to be serialized is shorter than MinLength specified for this type.  Minlength = ";
@@ -69,7 +69,7 @@ AXIS_CPP_NAMESPACE_START
                 sprintf(length, "%d", minLength->getMinLength());
                 exceptionMessage += length;
                 exceptionMessage += ", Length of value = ";
-                sprintf(length, "%d", value->__size);
+                sprintf(length, "%d", value->getSize());
                 exceptionMessage += length;
                 exceptionMessage += ".";
                 delete [] length;
@@ -83,7 +83,7 @@ AXIS_CPP_NAMESPACE_START
         MaxLength* maxLength = getMaxLength();
         if (maxLength->isSet())
         {
-            if (value->__size > maxLength->getMaxLength())
+            if (value->getSize() > maxLength->getMaxLength())
             {
                 AxisString exceptionMessage =
                 "Length of value to be serialized is longer than MaxLength specified for this type.  Maxlength = ";
@@ -91,7 +91,7 @@ AXIS_CPP_NAMESPACE_START
                 sprintf(length, "%d", maxLength->getMaxLength());
                 exceptionMessage += length;
                 exceptionMessage += ", Length of value = ";
-                sprintf(length, "%d", value->__size);
+                sprintf(length, "%d", value->getSize());
                 exceptionMessage += length;
                 exceptionMessage += ".";
                 delete [] length;
@@ -105,7 +105,7 @@ AXIS_CPP_NAMESPACE_START
         Length* length= getLength();
         if (length->isSet())
         {
-            if (value->__size != length->getLength())
+            if (value->getSize() != length->getLength())
             {
                 AxisString exceptionMessage =
                 "Length of value to be serialized is not the same as Length specified for this type.  Length = ";
@@ -113,7 +113,7 @@ AXIS_CPP_NAMESPACE_START
                 sprintf(lengthAsString, "%d", length->getLength());
                 exceptionMessage += lengthAsString;
                 exceptionMessage += ", Length of value = ";
-                sprintf(lengthAsString, "%d", value->__size);
+                sprintf(lengthAsString, "%d", value->getSize());
                 exceptionMessage += lengthAsString;
                 exceptionMessage += ".";
                 delete [] lengthAsString;
@@ -124,9 +124,12 @@ AXIS_CPP_NAMESPACE_START
         }
         delete length;
      
-		char* serializedValue = new char[value->__size * 2 + 1];
-	    Hex_Encode (serializedValue, value->__ptr, value->__size);
-	    serializedValue[value->__size * 2] = 0;
+		char* serializedValue = new char[value->getSize() * 2 + 1];
+		int size = 0;
+		xsd__unsignedByte * pTemp = value->get(size);
+	    Hex_Encode (serializedValue, pTemp, size);
+		delete [] pTemp;
+	    serializedValue[value->getSize() * 2] = 0;
 	    
         IAnySimpleType::serialize(serializedValue);
         delete [] serializedValue;
@@ -136,13 +139,12 @@ AXIS_CPP_NAMESPACE_START
     xsd__hexBinary * HexBinary::deserializeHexBinary(const AxisChar* valueAsChar) throw (AxisSoapException)
     {
     	xsd__hexBinary * value = new xsd__hexBinary();    	
-	    value->__size = strlen (valueAsChar) / 2;
-	    value->__ptr = new unsigned char[value->__size + 1];
-	    Hex_Decode (value->__ptr, valueAsChar);
-	    /* put null at the end because it enables the decoded string to be used
-	     * as a string 
-	     */
-	    value->__ptr[value->__size] = 0;
+	    int size = strlen (valueAsChar) / 2;
+		xsd__unsignedByte * pTemp = new xsd__unsignedByte[size + 1];
+	    Hex_Decode (pTemp, valueAsChar);
+	    pTemp[size] = 0; // Null terminate so it could be used as a string
+		value->set(pTemp, size);
+		delete [] pTemp;
 
 	    return value;
     }

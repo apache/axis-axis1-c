@@ -19,8 +19,7 @@ int main(int argc, char* argv[])
 		xsd__NMTOKEN		nmValue = 0;
 		char *				psz64BitValue = "FRED";
 
-	    pb64Value->__ptr = (unsigned char *) psz64BitValue;
-	    pb64Value->__size = strlen (psz64BitValue);
+        pb64Value->set((unsigned char *) psz64BitValue, strlen(psz64BitValue));
 
 		xsd__string  sResult = pwsnillableComplexType->Report( sValue, pb64Value, nmValue);
 

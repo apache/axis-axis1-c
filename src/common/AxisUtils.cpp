@@ -138,14 +138,12 @@ char* AxisUtils::toLowerCase (const char* pchWord)
 xsd__base64Binary * AxisUtils::decodeFromBase64Binary(const AxisChar *pValue)
 {
     xsd__base64Binary* value = new xsd__base64Binary();
-    value->__size = apr_base64_decode_len (pValue);
-    value->__ptr = new unsigned char[value->__size + 1];
-    value->__size = apr_base64_decode_binary (value->__ptr, pValue);
-    /* put null at the end because it enables the decoded string to be used
-     * as a string 
-     */
-    value->__ptr[value->__size] = 0;
-
+	int size = apr_base64_decode_len (pValue);
+	xsd__unsignedByte * pTemp = new unsigned char[size + 1];
+	size = apr_base64_decode_binary (pTemp, pValue);
+	pTemp[size] = 0; // Null terminate so it could be used as a string
+	value->set(pTemp, size);
+	delete [] pTemp;
     return value;
 }
 

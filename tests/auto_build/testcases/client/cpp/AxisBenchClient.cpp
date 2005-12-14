@@ -40,252 +40,275 @@ ofstream output_file;
 
 int main(int argc, char* argv[])
 { 
-  AxisBench *ws;
+    AxisBench *ws;
 
-  BenchDataType *input = NULL;
-  BenchDataType *output = NULL;
-  xsd__unsignedByte* buffer = NULL;
+    BenchDataType *input = NULL;
+    BenchDataType *output = NULL;
+    xsd__unsignedByte* buffer = NULL;
 
-  char *endpoint = WSDL_DEFAULT_ENDPOINT;
-  bool endpoint_set = false;
-  int returnValue = 1; // Assume Failure
+    char *endpoint = WSDL_DEFAULT_ENDPOINT;
+    bool endpoint_set = false;
+    int returnValue = 1; // Assume Failure
 
-  endpoint_set = parse_args_for_endpoint(&argc, argv, &endpoint);
+    endpoint_set = parse_args_for_endpoint(&argc, argv, &endpoint);
 
-		bool bSuccess = false;
-		int	iRetryIterationCount = 3;
+    bool bSuccess = false;
+    int	iRetryIterationCount = 3;
 
-		do
-		{
-  try {
-    if(endpoint_set) {
-      ws = new AxisBench(endpoint, APTHTTP1_1);
-      free(endpoint);
-      endpoint_set = false;
-    } else
-      ws = new AxisBench();
+    do
+    {
+        try
+        {
+            if(endpoint_set)
+            {
+                ws = new AxisBench(endpoint, APTHTTP1_1);
+                free(endpoint);
+                endpoint_set = false;
+            }
+            else
+                ws = new AxisBench();
 
-    
-    int request = 1;
+            int request = 1;
       
-    input = new BenchDataType();
-    input->count = 100;
+            input = new BenchDataType();
+            input->count = 100;
       
-//    input->infos.m_Array = new BenchBasicDataType[input->count];
-	BenchBasicDataType_Array arrayIn;
-	BenchBasicDataType **	ppBBDT = new BenchBasicDataType *[input->count];
+            BenchBasicDataType_Array arrayIn;
+            BenchBasicDataType **	ppBBDT = new BenchBasicDataType *[input->count];
 
-#ifdef WIN32
-	__int64					ll = 10000;
-#else
-	long long				ll = 10000;
-#endif
-	
-      
-    time_t tim;
-    tim = 1100246323;
-    struct tm *temp = gmtime(&tim);
-    struct tm lt;
-    memcpy(&lt, temp, sizeof(struct tm));
+            xsd__long ll = 10000;
 
-    char *letterA_String = stringToAscii("A");  
-    buffer = (xsd__unsignedByte*)calloc (1, input->count + 2);
+            time_t tim;
+            tim = 1100246323;
+            struct tm *temp = gmtime(&tim);
+            struct tm lt;
+            memcpy(&lt, temp, sizeof(struct tm));
+            
+            char *letterA_String = stringToAscii("A");
+            buffer = (xsd__unsignedByte*)calloc (1, input->count + 2);
+            
+            strcpy ( (char *)buffer, letterA_String);  
 
-    strcpy ( (char *)buffer, letterA_String);  
+            for ( int i = 0; i < input->count ; i++ )
+            {
+                BenchBasicDataType *type = new BenchBasicDataType();
+                type->StringType = "StringType";
+                type->IntegerType = 10*(i+1);
+                type->DoubleType = 11.111 * (i+1);
+                type->BooleanType = true_;
+                type->DateTimeType = lt ;
+                type->TimeType = lt ;
+                type->DateType = lt ;
+                type->IntType = (i+1);
+                type->ByteType = '1';
+                type->DecimalType = 10*(i+1);
+                type->FloatType = (float)((float)(11*(i+1))/(float)2.0);
+                type->LongType = ll;
+                type->QNameType = "toto";
+                type->ShortType = (i+1);
+                type->Base64BinaryType.set(buffer, i);
+                type->HexBinary.set(buffer, i);
+            
+                ppBBDT[i] = type;
 
-    for ( int i = 0; i < input->count ; i++ ) {
-        BenchBasicDataType *type = new BenchBasicDataType();
-        type->StringType = "StringType";
-        type->IntegerType = 10*(i+1);
-        type->DoubleType = 11.111 * (i+1);
-        type->BooleanType = true_;
-        type->DateTimeType = lt ;
-        type->TimeType = lt ;
-        type->DateType = lt ;
-        type->IntType = (i+1);
-        type->ByteType = '1';
-        type->DecimalType = 10*(i+1);
-        type->FloatType = (float)((float)(11*(i+1))/(float)2.0);
-        type->LongType = ll;
-        type->QNameType = "toto";
-        type->ShortType = (i+1);
-        type->Base64BinaryType.__size=i;
-        type->Base64BinaryType.__ptr=buffer;
-        type->HexBinary.__size=i;
-        type->HexBinary.__ptr=buffer;
+                if( ll == 0)
+                {
+                    ll = 1;
+                }
+                else
+                {
+                    ll += 10000;
+                }
 
-		ppBBDT[i] = type;
+                strcat ( (char *)buffer, letterA_String);
+            }
 
-		if( ll == 0)
-		{
-			ll = 1;
-		}
-		else
-		{
-			ll += 10000;
-		}
-
-        strcat ( (char *)buffer, letterA_String);
-    }
-
-    int t1,t2;
+            int t1,t2;
 #ifndef WIN32  
-    struct timeval mstart;
-    struct timeval mstop;
-    gettimeofday( &mstart, NULL );
+            struct timeval mstart;
+            struct timeval mstop;
+            gettimeofday( &mstart, NULL );
 #else
-    struct timeb mstart;
-    struct timeb mstop;
-    ftime(&mstart);
+            struct timeb mstart;
+            struct timeb mstop;
+            ftime(&mstart);
 #endif
 
-	arrayIn.set(ppBBDT,100);
-	input->setinfos(&arrayIn);    
-    for ( int ii = 0; ii < request ; ii++ ) {
-        if (output) { // Samisa: memory management BP
-			int outputSize =0;
-			BenchBasicDataType ** outArray =output->infos->get(outputSize); 
-            for (int i = 0; i < outputSize; i++)
-                delete outArray[i];
-            delete output;
-            output = NULL;
-        }
-      output = ws->doBenchRequest(input);
-    }
+            arrayIn.set(ppBBDT, input->count);
+            input->setinfos(&arrayIn);    
+            for ( int ii = 0; ii < request ; ii++ )
+            {
+                if (output)
+                { // Samisa: memory management BP
+                    int outputSize =0;
+                    BenchBasicDataType ** outArray =output->infos->get(outputSize); 
+                    for (int i = 0; i < outputSize; i++)
+                        delete outArray[i];
+                    delete output;
+                    output = NULL;
+                }
+                output = ws->doBenchRequest(input);
+            }
 
-    free(buffer);
+            for (int count = 0 ; count < input->count ; count++ )
+            {
+                delete ppBBDT[count];
+            }
+            delete [] ppBBDT;
+            free(buffer);
 
 #ifndef WIN32
-    gettimeofday( &mstop, NULL );
-    t1 = mstart.tv_sec*1000 + mstart.tv_usec/1000;
-    t2 = mstop.tv_sec*1000 + mstop.tv_usec/1000;
+            gettimeofday( &mstop, NULL );
+            t1 = mstart.tv_sec*1000 + mstart.tv_usec/1000;
+            t2 = mstop.tv_sec*1000 + mstop.tv_usec/1000;
 #else
-    ftime(&mstop);
-    t1 = mstart.time*1000 + mstart.millitm;
-    t2 = mstop.time*1000 + mstop.millitm;
+            ftime(&mstop);
+            t1 = mstart.time*1000 + mstart.millitm;
+            t2 = mstop.time*1000 + mstop.millitm;
 #endif
 
-    int total = t2-t1;
-      
-    if ( ws->getStatus() == AXIS_FAIL )
-        cout << "Failed" << endl;
-    else 
-    {
-   	  bSuccess = true;
-	  char dateTime[50];
-      int i = 0;
-      if ( argc > 1 )
-          i = output->count -1;
+            int total = t2-t1;
 
-      cout << "Input Count : " << input->count << endl;
-      cout << "Count : " << output->count << endl;
-	  int outputSize = 0;
-	  BenchBasicDataType ** outArray =output->infos->get(outputSize); 
-      for ( ; i < output->count ; i++ ) 
-      {
-		  if( outArray[i] != (BenchBasicDataType *) 0xcdcdcdcd)
-		  {
-			  cout << " ----------------------------------------------" << endl;
-			  cout << " StringType " << outArray[i]->StringType << endl;
-			  cout << " IntType " << outArray[i]->IntType << endl;
-			  cout << " IntegerType " << outArray[i]->IntegerType << endl;
-			  cout << " DoubleType " << outArray[i]->DoubleType << endl;
-			  cout << " BooleanType " << outArray[i]->BooleanType << endl;
-  			  strftime(dateTime, 50, "%a %b %d %H:%M:%S %Y", &outArray[i]->DateTimeType);
-			  cout << " DateTimeType " << dateTime << endl;
-  			  strftime(dateTime, 50, "%a %b %d %Y", &outArray[i]->DateType);
-			  cout << " DateType " << dateTime << endl;
+            if ( ws->getStatus() == AXIS_FAIL )
+                cout << "Failed" << endl;
+            else 
+            {
+                bSuccess = true;
+                char dateTime[50];
+                int i = 0;
+                if ( argc > 1 )
+                    i = output->count -1;
+                
+                cout << "Input Count : " << input->count << endl;
+                cout << "Count : " << output->count << endl;
+                int outputSize = 0;
+                BenchBasicDataType ** outArray =output->infos->get(outputSize); 
+                for ( ; i < output->count ; i++ ) 
+                {
+                    if( outArray[i] != (BenchBasicDataType *) 0xcdcdcdcd)
+                    {
+                        cout << " ----------------------------------------------" << endl;
+                        cout << " StringType " << outArray[i]->StringType << endl;
+                        cout << " IntType " << outArray[i]->IntType << endl;
+                        cout << " IntegerType " << outArray[i]->IntegerType << endl;
+                        cout << " DoubleType " << outArray[i]->DoubleType << endl;
+                        cout << " BooleanType " << outArray[i]->BooleanType << endl;
+                        strftime(dateTime, 50, "%a %b %d %H:%M:%S %Y", &outArray[i]->DateTimeType);
+                        cout << " DateTimeType " << dateTime << endl;
+                        strftime(dateTime, 50, "%a %b %d %Y", &outArray[i]->DateType);
+                        cout << " DateType " << dateTime << endl;
 // This is being removed due to problem in some servers.
 // See XSDTime or XSDTimeNil testcases for full validation of the xsd:time type
-//            strftime(dateTime, 50, "%H:%M:%S", &output->infos.m_Array[i]->TimeType);
-//			  cout << " TimeType " << dateTime << endl;
+//                      strftime(dateTime, 50, "%H:%M:%S", &output->infos.m_Array[i]->TimeType);
+//                      cout << " TimeType " << dateTime << endl;
 
 // Following check for os/400 - the mock server will return ascii char which needs to be converted
 #ifdef __OS400__
-                    if (outArray[i]->ByteType == 0x31) 
-                      outArray[i]->ByteType = '1';
+                        if (outArray[i]->ByteType == 0x31) 
+                            outArray[i]->ByteType = '1';
 #endif
-			  cout << " ByteType " << outArray[i]->ByteType << endl;
-			  cout << " DecimalType " << outArray[i]->DecimalType << endl;
-			  cout << " FloatType " << outArray[i]->FloatType << endl;
-			  cout << " LongType " << outArray[i]->LongType << endl;
-			  cout << " QNameType " << outArray[i]->QNameType << endl;
-			  cout << " ShortType " << outArray[i]->ShortType << endl;
+                        cout << " ByteType " << outArray[i]->ByteType << endl;
+                        cout << " DecimalType " << outArray[i]->DecimalType << endl;
+                        cout << " FloatType " << outArray[i]->FloatType << endl;
+                        cout << " LongType " << outArray[i]->LongType << endl;
+                        cout << " QNameType " << outArray[i]->QNameType << endl;
+                        cout << " ShortType " << outArray[i]->ShortType << endl;
 
-			  cout << " Base64BinaryType " << outArray[i]->Base64BinaryType.__size << endl;
-			  if( outArray[i]->Base64BinaryType.__size > 0)
-			  {
-				  cout << " Base64BinaryType " << asciiToString((char *)outArray[i]->Base64BinaryType.__ptr) << endl;
-			  }
+                        int size = 0;
+                        xsd__unsignedByte * base64BinaryData = outArray[i]->Base64BinaryType.get(size);
+                        cout << " Base64BinaryType " << size << endl;
+                        if( size > 0)
+                        {
+                            cout << " Base64BinaryType " << asciiToString(base64BinaryData, size) << endl;
+                        }
+                        if (base64BinaryData != NULL)
+                        {
+                            delete [] base64BinaryData;
+                            base64BinaryData = NULL;
+                        }
 
-			  cout << " HexBinaryType " << outArray[i]->HexBinary.__size << endl;
-			  if( outArray[i]->HexBinary.__size > 0)
-			  {
-				cout << " HexBinaryType " << asciiToString((char *)outArray[i]->HexBinary.__ptr) << endl;
-			  }
-		  }
-		  returnValue=0;
-      }
-    }
+                        size = 0;
+                        xsd__unsignedByte * hexBinaryData = outArray[i]->HexBinary.get(size);
+                        cout << " HexBinaryType " << size << endl;
+                        if( size > 0)
+                        {
+                            cout << " HexBinaryType " << asciiToString((char *)hexBinaryData) << endl;
+                        }
+                        if (hexBinaryData != NULL)
+                        {
+                            delete [] hexBinaryData;
+                            hexBinaryData = NULL;
+                        }
+                    }
+                    returnValue=0;
+                }
+            }
 
-    if(verbose) {
-        cout << " ----------------------------------------------" << endl;
-        cout << input->count << " input paramters, and " << request << " requests" << endl;
-        cout << "Total time = " << total << " ms" << endl;
-        cout << "Average time = " << total/request << " ms" << endl;
-    }
-  } catch(AxisException &e) {
-			bool bSilent = false;
+            if(verbose)
+            {
+                cout << " ----------------------------------------------" << endl;
+                cout << input->count << " input paramters, and " << request << " requests" << endl;
+                cout << "Total time = " << total << " ms" << endl;
+                cout << "Average time = " << total/request << " ms" << endl;
+            }
+        }
+        catch(AxisException &e)
+        {
+            bool bSilent = false;
 
-			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-			{
-				if( iRetryIterationCount > 1)
-				{
-					bSilent = true;
-				}
-			}
-			else
-			{
-				iRetryIterationCount = 0;
-			}
+            if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+            {
+                if( iRetryIterationCount > 1)
+                {
+                    bSilent = true;
+                }
+            }
+            else
+            {
+                iRetryIterationCount = 0;
+            }
 
             if( !bSilent)
-			{
-				cout << "Exception : " << e.what() << endl;
-			}
-  } catch(...) {
-    cerr << "Unknown Exception occured." << endl;
-  }
+            {
+                cout << "Exception : " << e.what() << endl;
+            }
+        }
+        catch(...)
+        {
+            cerr << "Unknown Exception occured." << endl;
+        }
 
-  // Samisa: make sure we clean up memory allocated
-  try
-  {
-	  delete ws; 
-	  delete input;
-	  if (output)
-	  {
-	    delete output;
-	  }
-  }
-  catch(AxisException& e)
-  {
-    cerr << e.what() << endl;
-  }
-  catch(exception& e)
-  {
-				cout << "Exception : " << e.what() << endl;
-  }
-  catch(...)
-  {
-  	cout << "Unknown exception on clean up: " << endl;
-  }
-		iRetryIterationCount--;
-		} while( iRetryIterationCount > 0 && !bSuccess);
+        // Samisa: make sure we clean up memory allocated
+        try
+        {
+            delete ws; 
+            delete input;
+            if (output)
+            {
+                delete output;
+            }
+        }
+        catch(AxisException& e)
+        {
+            cerr << e.what() << endl;
+        }
+        catch(exception& e)
+        {
+            cout << "Exception : " << e.what() << endl;
+        }
+        catch(...)
+        {
+            cout << "Unknown exception on clean up: " << endl;
+        }
+        iRetryIterationCount--;
+    }
+    while( iRetryIterationCount > 0 && !bSuccess);
+
     if(endpoint_set)
-      free(endpoint);
-		cout << "---------------------- TEST COMPLETE -----------------------------"<< endl;
-  return returnValue;
+        free(endpoint);
 
+    cout << "---------------------- TEST COMPLETE -----------------------------"<< endl;
+    return returnValue;
 }
 
 /* Spin through args list and check for -e -p and -s options.
@@ -334,7 +357,7 @@ bool parse_args_for_endpoint(int *argc, char *argv[], char **endpoint) {
                 i--;
                 break;
             case 'v':
-				verbose=true;
+                verbose=true;
                 break;
             default:
                 break;

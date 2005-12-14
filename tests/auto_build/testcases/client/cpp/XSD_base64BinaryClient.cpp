@@ -40,14 +40,15 @@ int main(int argc, char* argv[])
 
         xsd__unsignedByte* testUB = (xsd__unsignedByte*)stringToAscii("<test><xml>some dod&y string</xml></test>");
 
-        input.__ptr=testUB;
-        input.__size=41;
+        input.set(testUB, 41);
 
 		// Test non-nillable element
 	    xsd__base64Binary result = ws->asNonNillableElement(input);
+        int size = 0;
+        const xsd__unsignedByte * resultData = result.get(size);
 		cout << "non-nillable element" << endl;
-        cout << " size=" << result.__size << endl;
-        cout << " data=" << asciiToStringOfLength((char *)result.__ptr, result.__size) << endl;
+        cout << " size=" << size << endl;
+        cout << " data=" << asciiToStringOfLength((char *)resultData, size) << endl;
 
 		// Test nillable element, with a value
 		xsd__base64Binary* nillableInput = new xsd__base64Binary();
@@ -56,8 +57,10 @@ int main(int argc, char* argv[])
 		if (nillableResult)
 		{
 			cout << "nillable element" << endl;
-            cout << " size=" << nillableResult->__size << endl;
-            cout << " data=" << asciiToStringOfLength((char *)nillableResult->__ptr, nillableResult->__size) << endl;
+            size = 0;
+            const xsd__unsignedByte * data = nillableResult->get(size);
+            cout << " size=" << size << endl;
+            cout << " data=" << asciiToStringOfLength((char *)data, size) << endl;
             delete nillableResult;
 		}
 		else
@@ -70,59 +73,17 @@ int main(int argc, char* argv[])
         nillableResult = ws->asNillableElement(NULL);
 		if (nillableResult)
 		{
-			cout << "nillable element=" << endl;
-            cout << " size=" << nillableResult->__size << endl;
-            cout << " data=" << asciiToStringOfLength((char *)nillableResult->__ptr, nillableResult->__size) << endl;
-			delete nillableResult;
-		}
+            cout << "nillable element" << endl;
+            size = 0;
+            const xsd__unsignedByte * data = nillableResult->get(size);
+            cout << " size=" << size << endl;
+            cout << " data=" << asciiToStringOfLength((char *)data, size) << endl;
+            delete nillableResult;
+        }
 		else
 		{
 			cout << "nil element=<nil>" << endl;
 		}
-
-		// Test required attribute
-		/* RequiredAttributeElement requiredAttributeInput;
-
-		requiredAttributeInput.setrequiredAttribute(input);
-		RequiredAttributeElement* requiredAttributeResult = ws->asRequiredAttribute(&requiredAttributeInput);
-		cout << "required attribute" << endl;
-        cout << " size=" << requiredAttributeResult->getrequiredAttribute().__size << endl;
-        cout << " data=" << asciiToStringOfLength((char *)requiredAttributeResult->getrequiredAttribute().__ptr, requiredAttributeResult->getrequiredAttribute().__size) << endl;
-		delete requiredAttributeResult; */ 
-
-/* Optional Attributes currently unsupported by WSDL2Ws
- * Exact coding of this section may change depending on chosen implementation
-		// Test optional attribute, with a value
-		OptionalAttributeElement optionalAttributeInput;
-		optionalAttributeInput.setoptionalAttribute(input);
-		OptionalAttributeElement* optionalAttributeResult = ws->asOptionalAttribute(&optionalAttributeInput);
-		if (optionalAttributeResult->getoptionalAttribute())
-		{
-			cout << "optional attribute, with data" << endl;
-            cout << " size=" << optionalAttributeResult->getoptionalAttribute()->__size << endl;
-            cout << " data=" << optionalAttributeResult->getoptionalAttribute()->__ptr << endl;
-		}
-		else
-		{
-			cout << "optional attribute, with data=<not present>" << endl;
-		}
-		delete optionalAttributeResult;
-
-		// Test optional attribute, not present
-		optionalAttributeInput.setattribute();
-		optionalAttributeResult = ws->asOptionalAttribute(&optionalAttributeInput);
-		if (optionalAttributeResult->getoptionalAttribute())
-		{
-	         cout << "optional attribute, not present" << endl;
-             cout << " size=" << optionalAttributeResult->getoptionalAttribute()->__size << endl;
-             cout << " data=" << optionalAttributeResult->getoptionalAttribute()->__ptr << endl;
-		}
-		else
-		{
-			cout << "optional attribute, not present=<not present>" << endl;
-		}
-		delete optionalAttributeResult;
-*/
 
 		// Test array
         xsd__base64Binary_Array arrayInput;
@@ -139,9 +100,11 @@ int main(int argc, char* argv[])
         cout << "array of " << outputSize << " elements" << endl;
 		for (int index = 0; index < outputSize ; index++)
 		{
+            size = 0;
+            const xsd__unsignedByte * data = output[index]->get(size);
 			cout << " element[" << index << "]" << endl;
-            cout << "  size=" << output[index]->__size << endl;
-            cout << "  data=" << asciiToStringOfLength((char *) output[index]->__ptr, output[index]->__size) << endl;
+            cout << "  size=" << size << endl;
+            cout << "  data=" << asciiToStringOfLength((char *) data, size) << endl;
 		}
 
         for (int deleteIndex = 0 ; deleteIndex < arraySize ; deleteIndex++ )
@@ -154,9 +117,11 @@ int main(int argc, char* argv[])
 		SimpleComplexType complexTypeInput;
 		complexTypeInput.setcomplexTypeElement(input);
 		SimpleComplexType* complexTypeResult = ws->asComplexType(&complexTypeInput);
+        size = 0;
+        const xsd__unsignedByte * data = complexTypeResult->getcomplexTypeElement().get(size);
 		cout << "within complex type" << endl;
-        cout << " size=" << complexTypeResult->getcomplexTypeElement().__size << endl;
-        cout << " data=" << asciiToStringOfLength((char *)complexTypeResult->getcomplexTypeElement().__ptr, complexTypeResult->getcomplexTypeElement().__size) << endl;
+        cout << " size=" << size << endl;
+        cout << " data=" << asciiToStringOfLength((char *)data, size) << endl;
 		delete complexTypeResult;
 
 		// Tests now complete
