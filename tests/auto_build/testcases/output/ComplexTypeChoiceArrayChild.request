@@ -2,7 +2,7 @@ POST /ComplexTypeChoiceArrayChild/services/Service HTTP/1.1
 Host: 127.0.0.1:13260
 Content-Type: text/xml; charset=UTF-8
 SOAPAction: "XSD_byte#asComplexType"
-Content-Length: 526
+Content-Length: 512
 
 <?xml version='1.0' encoding='utf-8' ?>
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -10,7 +10,7 @@ Content-Length: 526
 <ns1:asComplexTypeRequest xmlns:ns1="http://xsd_byte.test.apache.org">
 <SimpleComplexType1><arrayElement><intArray>5</intArray>
 <intArray>6</intArray>
-<intArray xsi:nil="true"></intArray>
+<intArray>7</intArray>
 </arrayElement></SimpleComplexType1>
 </ns1:asComplexTypeRequest>
 </SOAP-ENV:Body>
