@@ -129,6 +129,10 @@ void ModuleUnInitialize ()
     // unsynchronized read-only global variables.
     delete g_pWSDDDeployment;
     delete g_pConfig;
+
+	g_pConfig = NULL;
+	g_pWSDDDeployment = NULL;
+
     AxisTrace::terminate();
 }
 
@@ -661,12 +665,24 @@ void Axis::AxisDelete(void *pValue, XSDTYPE type)
             }
             case XSD_BASE64BINARY:
             {
+				if(	((xsd__base64Binary*) pValue)->__ptr != NULL)
+				{
+					delete [] ((xsd__base64Binary*) pValue)->__ptr;
+					((xsd__base64Binary*) pValue)->__ptr = NULL;
+				}
+
                 delete (xsd__base64Binary*) pValue;
                 pValue = NULL;
                 break;
             }
             case XSD_HEXBINARY:
             {
+				if(	((xsd__hexBinary*) pValue)->__ptr != NULL)
+				{
+					delete [] ((xsd__hexBinary*) pValue)->__ptr;
+					((xsd__hexBinary*) pValue)->__ptr = NULL;
+				}
+
                 delete (xsd__hexBinary*) pValue;
                 pValue = NULL;
                 break;
