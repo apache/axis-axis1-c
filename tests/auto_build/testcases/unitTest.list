@@ -1,3 +1,5 @@
+# This is the sample we ship to customers
+Calculator.xml
 Attachment1.xml
 # AwkwardErrorResponse.xml - fails everywhere - bug in Axis C++
 AxisBench.xml

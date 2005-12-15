@@ -8,6 +8,9 @@
         <output>
             Calculator.cpp.out
         </output>
+		<serverResponse>
+			Calculator_ServerResponse.expected
+		</serverResponse>
     </expected>
 	<endpoint>http://localhost:80/axis/Calculator</endpoint>
 </test>
