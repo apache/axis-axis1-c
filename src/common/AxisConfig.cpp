@@ -34,7 +34,7 @@
 
 AXIS_CPP_NAMESPACE_START 
 
-AxisConfig::AxisConfig ()
+AxisConfig::AxisConfig()
 {
     m_pcKeyArray[AXCONF_WSDDFILEPATH]       = "WSDDFilePath";
     m_pcKeyArray[AXCONF_LOGPATH]            = "LogPath";
@@ -61,6 +61,67 @@ AxisConfig::AxisConfig ()
     m_pcValueArray[AXCONF_CHANNEL_HTTP]      = PLATFORM_CHANNEL_PATH;
     m_pcValueArray[AXCONF_SECUREINFO]        = PLATFORM_SECUREINFO;
     m_pcValueArray[AXCONF_AXISHOME]          = PLATFORM_DEFAULT_DEPLOY_PATH;
+}
+
+//AxisConfig::AxisConfig( bool bDefaultsOnly)
+AxisConfig::AxisConfig( AxisConfig * pOrgAxisConfig)
+{
+    m_pcKeyArray[AXCONF_WSDDFILEPATH]       = "WSDDFilePath";
+    m_pcKeyArray[AXCONF_LOGPATH]            = "LogPath";
+    m_pcKeyArray[AXCONF_CLIENTLOGPATH]      = "ClientLogPath";
+    m_pcKeyArray[AXCONF_CLIENTWSDDFILEPATH] = "ClientWSDDFilePath";
+  
+    m_pcKeyArray[AXCONF_AXISHOME]       = "\0"; // will be obtained dynamically.
+    m_pcKeyArray[AXCONF_TRANSPORTHTTP]  = "Transport_http";
+    m_pcKeyArray[AXCONF_SSLCHANNEL_HTTP]= "Channel_HTTP_SSL";
+    m_pcKeyArray[AXCONF_CHANNEL_HTTP]   = "Channel_HTTP";
+    m_pcKeyArray[AXCONF_TRANSPORTSMTP]  = "Transport_smtp";
+    m_pcKeyArray[AXCONF_XMLPARSER]      = "XMLParser";
+    m_pcKeyArray[AXCONF_NODENAME]       = "NodeName";
+    m_pcKeyArray[AXCONF_LISTENPORT]     = "ListenPort";
+    m_pcKeyArray[AXCONF_SECUREINFO]     = "SecureInfo";
+
+	char *	pszDefaultValues[] = {"",							// (AXCONF_WSDDFILEPATH) Server WSDD File Path
+								  PLATFORM_LOG_PATH,			// (AXCONF_LOGPATH) Server log path
+								  PLATFORM_CLIENTLOG_PATH,		// (AXCONF_CLIENTLOGPATH) Client log path
+								  "",							// (AXCONF_CLIENTWSDDFILEPATH) Client WSDD File Path
+								  PLATFORM_DEFAULT_DEPLOY_PATH,	// (AXCONF_AXISHOME) Axis home
+								  PLATFORM_TRANSPORTHTTP_PATH,	// (AXCONF_TRANSPORTHTTP) Transport HTTP path
+								  "",							// (AXCONF_TRANSPORTSMTP) Transport SMTP path
+								  PLATFORM_XMLPARSER_PATH,		// (AXCONF_XMLPARSER) XML Parser path
+								  "server name",				// (AXCONF_NODENAME) Node name
+								  "listen port",				// (AXCONF_LISTENPORT) Listener port
+								  PLATFORM_SSLCHANNEL_PATH,		// (AXCONF_SSLCHANNEL_HTTP) HTTP SSL Channel
+								  PLATFORM_CHANNEL_PATH,		// (AXCONF_CHANNEL_HTTP) HTTP Channel
+								  PLATFORM_SECUREINFO};			// (AXCONF_SECUREINFO) HTTP SSL secure information
+
+	for( int iPropertyCount = 0; iPropertyCount < AXCONF_LAST; iPropertyCount++)
+	{
+		char *	pszValue = pOrgAxisConfig->getAxisConfProperty( (g_axconfig) iPropertyCount);
+
+		if( pszValue == NULL)
+		{
+			m_pcValueArray[iPropertyCount] = pszDefaultValues[iPropertyCount];
+		}
+		else
+		{
+			m_pcValueArray[iPropertyCount] = pszValue;
+		}
+	}
+
+	delete pOrgAxisConfig;
+/*
+	m_pcValueArray[AXCONF_NODENAME]			 = "server name";
+    m_pcValueArray[AXCONF_LISTENPORT]        = "listen port";
+    m_pcValueArray[AXCONF_XMLPARSER]         = PLATFORM_XMLPARSER_PATH;
+    m_pcValueArray[AXCONF_TRANSPORTHTTP]     = PLATFORM_TRANSPORTHTTP_PATH;
+    m_pcValueArray[AXCONF_LOGPATH]           = PLATFORM_LOG_PATH;
+    m_pcValueArray[AXCONF_CLIENTLOGPATH]     = PLATFORM_CLIENTLOG_PATH;
+    m_pcValueArray[AXCONF_SSLCHANNEL_HTTP]   = PLATFORM_SSLCHANNEL_PATH;
+    m_pcValueArray[AXCONF_CHANNEL_HTTP]      = PLATFORM_CHANNEL_PATH;
+    m_pcValueArray[AXCONF_SECUREINFO]        = PLATFORM_SECUREINFO;
+    m_pcValueArray[AXCONF_AXISHOME]          = PLATFORM_DEFAULT_DEPLOY_PATH;
+*/
 }
 
 int AxisConfig::readConfFile ()
@@ -166,7 +227,6 @@ void AxisConfig::setValue (int valuelength, g_axconfig valueindex, char *value)
     // no need to copy the value into our own storage here.
     m_pcValueArray[valueindex] = value;
 }
-
 
 char* AxisConfig::getAxisConfProperty (g_axconfig property)
 {

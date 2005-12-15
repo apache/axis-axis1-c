@@ -67,6 +67,8 @@ class AxisConfig
 {
     public:
     AxisConfig();
+//    AxisConfig( bool bDefaultsOnly);
+    AxisConfig( AxisConfig * pOrgAxisConfig);
 
     /**
      * This method will read from the configuration file called axiscpp.conf
@@ -87,11 +89,9 @@ class AxisConfig
 	char* getAxisConfProperty(g_axconfig property);
     void setValue(int valuelength, g_axconfig valueindex, char* value);
         
-    private:         
+    private:
 		std::string m_pcKeyArray [AXCONF_LAST];
 		std::string m_pcValueArray [AXCONF_LAST];
-
-
 };
 
 AXIS_CPP_NAMESPACE_END

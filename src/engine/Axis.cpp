@@ -105,7 +105,15 @@ void ModuleInitialize ()
     g_pHandlerPool = new HandlerPool ();
     // unsynchronized read-only global variables.
     g_pWSDDDeployment = new WSDDDeployment ();
-    g_pConfig = new AxisConfig ();
+
+	if( g_pConfig != NULL)
+	{
+		g_pConfig = new AxisConfig( g_pConfig);
+	}
+	else
+	{
+		g_pConfig = new AxisConfig();
+	}
 }
 
 void ModuleUnInitialize ()
@@ -348,10 +356,12 @@ int initialize_module (int bServer)
             URIMapping::initialize ();
             SoapFault::initialize ();
             ModuleInitialize ();
+
             if (bServer) // no client side wsdd processing at the moment
             {
     		    // Read from the configuration file
                 status = g_pConfig->readConfFile (); 
+
                 if (status == AXIS_SUCCESS)
                 {					
 					try
@@ -383,7 +393,6 @@ int initialize_module (int bServer)
                     {
                         throw AxisEngineException(e.getExceptionCode(), e.what());
                     }
-    
                 }
                 else
                 {
@@ -399,15 +408,12 @@ int initialize_module (int bServer)
 #if defined(ENABLE_AXISTRACE)
                     status = AxisTrace::openFileByClient ();
 #endif
-
                    XMLParserFactory::initialize();
                    SOAPTransportFactory::initialize();
-                   char *pClientWsddPath =
-                   g_pConfig->getAxisConfProperty(AXCONF_CLIENTWSDDFILEPATH);
+
+                   char *	pClientWsddPath = g_pConfig->getAxisConfProperty(AXCONF_CLIENTWSDDFILEPATH);
     
-                   /* May be there is no client side handlers configured. So may not 
-                    * have CLIENTWSDDFILEPATH entry in axiscpp.conf 
-                    */
+// May be there is no client side handlers configured. So may not have CLIENTWSDDFILEPATH entry in axiscpp.conf 
                    if (pClientWsddPath)
                    {
                        if (AXIS_SUCCESS != g_pWSDDDeployment->loadWSDD (pClientWsddPath))
@@ -418,9 +424,9 @@ int initialize_module (int bServer)
                 }
                 else
                 {
-                    AXISTRACE3("Reading from the configuration file failed. \
-                    Check for error in the configuration file. \n\
-                 Handlers and logging are not working");
+                    AXISTRACE3( "Reading from the configuration file failed. \
+								Check for error in the configuration file.\n\
+								Handlers and logging are not working");
                     /* TODO:Improve the AxisTrace so that it will log these kind of 
                      * messages into a log file according to the critical level 
                      * specified.
@@ -435,7 +441,7 @@ int initialize_module (int bServer)
        }
        else if (AxisEngine::m_bServer != bServer)
        {
-           throw AxisEngineException(SERVER_ENGINE_EXCEPTION);
+		   throw AxisEngineException(SERVER_ENGINE_EXCEPTION);
        }
     }
     catch (...)
@@ -795,5 +801,9 @@ void Axis::AxisDelete(void *pValue, XSDTYPE type)
     			;
         }
     }
+<<<<<<< .mine
+}
+=======
 }
 
+>>>>>>> .r357010
