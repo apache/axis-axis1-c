@@ -104,27 +104,32 @@ typedef struct
  */
 class AnyElemntUtils
 {
-	public:
-		static string toString(const AnyElement* pNode) {
-        		string sTmpVal;              			                                                                                                                                                  
-        		switch(pNode->m_type) {
-                		case CHARACTER_ELEMENT:
-                        		sTmpVal = string(pNode->m_pchNameOrValue);
-                        		break;
-				case END_ELEMENT:
-					//sTmpVal = "<" + pNode->m_pchNameOrValue + ;
-                                        break;
-				case START_ELEMENT:
-					//TODO.
-					break;
+    public:
+        static string toString(const AnyElement* pNode)
+        {
+            string sTmpVal;              			                                                                                                                                                  
+            switch(pNode->m_type)
+            {
+                case CHARACTER_ELEMENT:
+                    sTmpVal = string(pNode->m_pchNameOrValue);
+                    break;
+                case END_ELEMENT:
+                    //sTmpVal = "<" + pNode->m_pchNameOrValue + ;
+                    break;
+                case START_ELEMENT:
+                    //TODO.
+                    break;
                 case START_PREFIX:
                     break;
                 case END_PREFIX:
                     break;
-        		}
-
-			return sTmpVal;
-		}
+                case START_END_ELEMENT:
+                    break;
+                case UNKNOWN:
+                    break;
+            }
+            return sTmpVal;
+        }
 };
 
 #endif

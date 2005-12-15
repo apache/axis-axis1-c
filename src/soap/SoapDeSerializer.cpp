@@ -625,11 +625,6 @@ SoapDeSerializer::getCmplxArray ( Axis_Array* pArray, void *pDZFunct,
                 void *pCreFunct, void *pDelFunct, void *pSizeFunct,
                 const AxisChar * pName, const AxisChar * pNamespace)
 {
-    int nIndex = 0;
-    void *pItem;
-    int itemsize;
-    void** ptrval;
-
     if (AXIS_SUCCESS != m_nStatus)
     {
         return pArray;

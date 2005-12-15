@@ -63,7 +63,7 @@ private:
     AxisString m_strPrefix; /* needed in serialization only */
     AxisString m_strUri; /* needed in serialization only */
     IAnySimpleType* m_AnySimpleType;
-    
+
 public: 
     void setValue(XSDTYPE nType, IAnySimpleType* value);
     int serialize(SoapSerializer& pSZ);

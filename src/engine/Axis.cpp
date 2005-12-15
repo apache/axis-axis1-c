@@ -796,3 +796,4 @@ void Axis::AxisDelete(void *pValue, XSDTYPE type)
         }
     }
 }
+

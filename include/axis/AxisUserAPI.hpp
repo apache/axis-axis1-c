@@ -276,12 +276,12 @@ typedef long long xsd__negativeInteger;
 class STORAGE_CLASS_INFO xsd__base64Binary {
 public:
     xsd__base64Binary();
-	xsd__base64Binary(xsd__base64Binary & original);
+	xsd__base64Binary(const xsd__base64Binary & original);
     ~xsd__base64Binary();
 	void set(xsd__unsignedByte * data, xsd__int size);
 	xsd__unsignedByte * get(xsd__int & size) const;
 	xsd__int getSize(void) const;
-	xsd__base64Binary & operator=(xsd__base64Binary & original);
+	xsd__base64Binary & operator=(const xsd__base64Binary & original);
 private:
     xsd__unsignedByte * __ptr;
     xsd__int __size;
@@ -294,12 +294,12 @@ private:
 class STORAGE_CLASS_INFO xsd__hexBinary {
 public:
     xsd__hexBinary();
-    xsd__hexBinary(xsd__hexBinary & original);
+    xsd__hexBinary(const xsd__hexBinary & original);
 	~xsd__hexBinary();
     void set(xsd__unsignedByte * data, xsd__int size);
     xsd__unsignedByte * get(xsd__int & size) const;
     xsd__int getSize(void) const;
-    xsd__hexBinary & operator=(xsd__hexBinary & original);
+    xsd__hexBinary & operator=(const xsd__hexBinary & original);
 private:
     xsd__unsignedByte * __ptr;
     xsd__int __size;

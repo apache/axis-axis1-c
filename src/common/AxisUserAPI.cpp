@@ -42,7 +42,7 @@ xsd__base64Binary::xsd__base64Binary()
   __size = 0;
 }
 
-xsd__base64Binary::xsd__base64Binary(xsd__base64Binary & original)
+xsd__base64Binary::xsd__base64Binary(const xsd__base64Binary & original)
 {
 	__ptr = NULL;
 	__size = 0;
@@ -87,7 +87,7 @@ xsd__unsignedByte * xsd__base64Binary::get(xsd__int & size) const
 	return pReturn;
 }
 
-xsd__base64Binary & xsd__base64Binary::operator=(xsd__base64Binary & original)
+xsd__base64Binary & xsd__base64Binary::operator=(const xsd__base64Binary & original)
 {
 	this->set(original.__ptr, original.__size);
     return *this;
@@ -109,7 +109,7 @@ xsd__hexBinary::xsd__hexBinary()
     __size = 0;
 }
 
-xsd__hexBinary::xsd__hexBinary(xsd__hexBinary & original)
+xsd__hexBinary::xsd__hexBinary(const xsd__hexBinary & original)
 {
     __ptr = NULL;
     __size = 0;
@@ -154,7 +154,7 @@ xsd__unsignedByte * xsd__hexBinary::get(xsd__int & size) const
 	return pReturn;
 }
 
-xsd__hexBinary & xsd__hexBinary::operator=(xsd__hexBinary & original)
+xsd__hexBinary & xsd__hexBinary::operator=(const xsd__hexBinary & original)
 {
     this->set(original.__ptr, original.__size);
     return *this;
