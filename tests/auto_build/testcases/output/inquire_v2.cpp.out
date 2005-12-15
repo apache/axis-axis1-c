@@ -1,24 +1,26 @@
 invoking get_tModelDetail...
 tModel_Array size = 1
 tModel 1...
-	 tModel Key Ref = UUID:39B8F710-F088-11D6-8F10-000629DC0A7B
+	 tModel Key Ref = uuid:2524c425-656e-4eb2-8b13-080cfb081382
 	 Operator = www.ibm.com/services/uddi
-	 Authorized Name = 100000EPEE
-	 Name = (null)
+	 Authorized Name = UNAUTHENTICATED
+	 Name = TestTModel1
+	 Description 1 = This is Technical Model1
+	 Overview URL = http://localhost:9080/Calculator/services/Calculator?wsdl
 invoking get_businessDetail ...
 businessEntity_Array size = 1
 Business Entity 1
-	 Business Key Ref = D368F080-8423-11D6-9FFC-000C0E00ACDD
+	 Business Key Ref = aea80cae-6cde-4eac-9feb-19ac9719ebb9
 	 Operator = www.ibm.com/services/uddi
-	 Authorized Name = 1000009Q76
+	 Authorized Name = UNAUTHENTICATED
 	 Names... 
-		 Description 1 = businessService
+		 Name 1 = TestBusiness3
 	 Business Services...
 		 Business Service 1...
-			 service key referance = 51B5CF80-842E-11D6-9FFC-000C0E00ACDD
-			 business key referance = 51B5CF80-842E-11D6-9FFC-000C0E00ACDD
+			 service key referance = 90757090-956e-4e13-82c0-4e85904ec076
+			 business key referance = aea80cae-6cde-4eac-9feb-19ac9719ebb9
 			 Binding Templates...
 				 Access Point 1...
-					 Point = //localhost/test/test.asmx
-					 URL Type = http
+					 Point = http://localhost:9080/Calculator/services/Calculator
+					 URL Type = other
 
