@@ -801,9 +801,4 @@ void Axis::AxisDelete(void *pValue, XSDTYPE type)
     			;
         }
     }
-<<<<<<< .mine
 }
-=======
-}
-
->>>>>>> .r357010
