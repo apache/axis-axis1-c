@@ -56,7 +56,7 @@ main(int argc, char *argv[])
     try 
     {
         char buffer[100];
-        sprintf(buffer, "UUID:39B8F710-F088-11D6-8F10-000629DC0A7B");
+        sprintf(buffer, "UUID:2524c425-656e-4eb2-8b13-080cfb081382");
 
         tModelKey_Array arrtModelKeys;
 		tModelKey * array = new tModelKey [ARRAYSIZE];        
@@ -94,7 +94,7 @@ main(int argc, char *argv[])
                 printf("\t Overview URL = %s\n", arrayOut[i]->overviewDoc_Ref->overviewURL);
         }
 
-        sprintf(buffer, "D368F080-8423-11D6-9FFC-000C0E00ACDD" );
+        sprintf(buffer, "aea80cae-6cde-4eac-9feb-19ac9719ebb9");
         businessKey_Array arrBusinessKeys;
 		businessKey * arrayBusiness = new businessKey[ARRAYSIZE];        
         for (i = 0; i < ARRAYSIZE; i++)
@@ -103,9 +103,8 @@ main(int argc, char *argv[])
 			strcpy(arrayBusiness[i],buffer);
         }
 		arrBusinessKeys.set(arrayBusiness,ARRAYSIZE);
-
         printf("invoking get_businessDetail ...\n");
-        //printf("businessEntity_Array size = %d\n", ws->get_businessDetail(arrBusinessKeys, cpname).m_Size);
+        //printf("businessEntity_Array size = %d\n", ws->get_businessDetail(arrBusinessKeys, cpname).m_Size);		
         businessEntity_Array* businessEntities = ws->get_businessDetail(&arrBusinessKeys, cpname);
 		outputSize = 0;
 		businessEntity ** arrayOutB = businessEntities->get(outputSize);
@@ -122,7 +121,7 @@ main(int argc, char *argv[])
 			 name** arrayBE = arrayOutB[i]->name_Ref->get(outputSizeBE);
             for( int j = 0; j < outputSizeBE; j++)
             {
-                printf("\t\t Description %d = %s\n", j + 1,  arrayBE[j]->name_value);
+                printf("\t\t Name %d = %s\n", j + 1,  arrayBE[j]->name_value);
             }
            
             if( arrayOutB[i]->businessServices_Ref )
