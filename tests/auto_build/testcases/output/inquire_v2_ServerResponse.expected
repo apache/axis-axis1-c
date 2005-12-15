@@ -1,0 +1,20 @@
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-US
+Transfer-Encoding: chunked
+
+###
+<?xml version="1.0" encoding="UTF-8" ?><Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/"><Body><tModelDetail generic="2.0" xmlns="urn:uddi-org:api_v2" operator="www.ibm.com/services/uddi" truncated="false"><tModel tModelKey="uuid:2524c425-656e-4eb2-8b13-080cfb081382" operator="www.ibm.com/services/uddi" authorizedName="UNAUTHENTICATED"><name>TestTModel1</name><description xml:lang="en">This is Technical Model1</description><overviewDoc><description xml:lang="en">This is the wsdl for Technical Model1</description><overviewURL>http://localhost:9080/Calculator/services/Calculator?wsdl</overviewURL></overviewDoc><categoryBag><keyedReference tModelKey="uuid:c1acf26d-9672-4404-9d70-39b756e62ab4" keyName="Description Type" keyValue="wsdlSpec"></keyedReference><keyedReference tModelKey="uuid:48eb2518-c1bd-354f-92c9-21a53b0ff2b1" keyName="Location" keyValue="Sri Lanka"></keyedReference></categoryBag></tModel></tModelDetail></Body></Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-US
+Transfer-Encoding: chunked
+
+###
+<?xml version="1.0" encoding="UTF-8" ?><Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/"><Body><businessDetail generic="2.0" xmlns="urn:uddi-org:api_v2" operator="www.ibm.com/services/uddi" truncated="false"><businessEntity businessKey="aea80cae-6cde-4eac-9feb-19ac9719ebb9" operator="www.ibm.com/services/uddi" authorizedName="UNAUTHENTICATED"><name xml:lang="en">TestBusiness3</name><description xml:lang="en">This is Test Business3</description><contacts><contact useType="phone"><description xml:lang="en">Pls contact me</description><personName>hai</personName><phone useType="Phone">987654321</phone><email useType="mail">hai@hello.com</email></contact></contacts><businessServices><businessService serviceKey="90757090-956e-4e13-82c0-4e85904ec076" businessKey="aea80cae-6cde-4eac-9feb-19ac9719ebb9"><name xml:lang="en">TestService13</name><description xml:lang="en">This is my Calculator Service</description><bindingTemplates><bindingTemplate bindingKey="585e9258-c7b7-4701-986e-1646f7166ed1" serviceKey="90757090-956e-4e13-82c0-4e85904ec076"><description xml:lang="en">This is my Calculator Service</description><accessPoint URLType="other">http://localhost:9080/Calculator/services/Calculator</accessPoint><tModelInstanceDetails><tModelInstanceInfo tModelKey="uuid:2524c425-656e-4eb2-8b13-080cfb081382"></tModelInstanceInfo></tModelInstanceDetails></bindingTemplate></bindingTemplates></businessService></businessServices><categoryBag><keyedReference tModelKey="uuid:48eb2518-c1bd-354f-92c9-21a53b0ff2b1" keyName="Location" keyValue="Colombo"></keyedReference></categoryBag></businessEntity></businessDetail></Body></Envelope>
+0
+
