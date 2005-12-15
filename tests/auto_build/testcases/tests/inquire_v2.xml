@@ -8,6 +8,7 @@
         <output>
             inquire_v2.cpp.out
         </output>
+	<serverResponse>inquire_v2_ServerResponse.expected</serverResponse>
     </expected>
-	<endpoint>http://www-3.ibm.com/services/uddi/testregistry/inquiryapi</endpoint>
+	<endpoint>http://localhost:9080/uddisoap/inquiryapi</endpoint>
 </test>
