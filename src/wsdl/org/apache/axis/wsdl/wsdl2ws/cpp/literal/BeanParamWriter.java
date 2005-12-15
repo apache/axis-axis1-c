@@ -1233,7 +1233,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
             writer.write("}\n");
 
             //write copy constructor
-            writer.write("\n" + classname + "::" + classname + "(" + classname + " & original)\n{\n");
+            writer.write("\n" + classname + "::" + classname + "(const " + classname + " & original)\n{\n");
             int anyCounter = 0;
             for (int i = 0 ; i < attribs.length ; i++)
             {

@@ -138,7 +138,7 @@ public class ArrayParamWriter extends ParamWriter
         // Write clone method
         try
         {
-            writer.write("void " + classname + "::clone(" + classname + " & original)\n");
+            writer.write("void " + classname + "::clone(const " + classname + " & original)\n");
             writer.write("{\n");
             writer.write("\tset((" + attribs[0].getTypeName() + "**) original.m_Array, original.m_Size);\n");
             writer.write("}\n\n");
@@ -214,7 +214,7 @@ public class ArrayParamWriter extends ParamWriter
             writer.write("\tm_Type = USER_TYPE;\n");
             writer.write("\tm_belongsToAxisEngine = false;\n");
             writer.write("}\n\n");
-            writer.write(classname + "::" + classname + "(" + classname + " & original)\n");
+            writer.write(classname + "::" + classname + "(const " + classname + " & original)\n");
             writer.write("{\n");
             writer.write("\tm_Type = USER_TYPE;\n");
             writer.write("\tm_belongsToAxisEngine = false;\n");

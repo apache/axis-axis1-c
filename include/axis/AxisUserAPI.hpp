@@ -338,7 +338,7 @@ class STORAGE_CLASS_INFO Axis_Array {
      * Copy constructor
      * @param orginal Axis_Array to copy.
      */
-    Axis_Array(Axis_Array & original);
+    Axis_Array(const Axis_Array & original);
     
     /**
      * Destructor
@@ -349,7 +349,7 @@ class STORAGE_CLASS_INFO Axis_Array {
      * Clone the content of an existing Axis_Array
      * @param original array to be cloned into this array.
      */
-    void clone(Axis_Array & original);
+    void clone(const Axis_Array & original);
     
     /**
      * Populate from a c-style array.
@@ -358,7 +358,7 @@ class STORAGE_CLASS_INFO Axis_Array {
      * @param size of the array, including NULL entries.
      * @param type of data.
      */
-    void set(void** array, int size, const XSDTYPE type);
+    void set(void** array, int size, XSDTYPE type);
     
     /**
      * Return a c-style array.

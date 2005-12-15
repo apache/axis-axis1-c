@@ -186,7 +186,7 @@ Axis_Array::Axis_Array()
     m_belongsToAxisEngine = true;
 }
 
-Axis_Array::Axis_Array(Axis_Array & original)
+Axis_Array::Axis_Array(const Axis_Array & original)
 {
     m_Array = NULL;
     m_Size = 0;
@@ -195,7 +195,7 @@ Axis_Array::Axis_Array(Axis_Array & original)
     clone(original);
 }
 
-void Axis_Array::clone(Axis_Array & original)
+void Axis_Array::clone(const Axis_Array & original)
 {
     set(original.m_Array, original.m_Size, original.m_Type);
 }
@@ -1090,7 +1090,7 @@ xsd__duration_Array::xsd__duration_Array()
     m_Type = XSD_DURATION;
 }
 
-xsd__duration_Array::xsd__duration_Array(xsd__duration_Array & original)
+xsd__duration_Array::xsd__duration_Array(const xsd__duration_Array & original)
 {
     if (original.m_Type == XSD_DURATION)
     {
@@ -1119,7 +1119,7 @@ xsd__dateTime_Array::xsd__dateTime_Array()
     m_Type = XSD_DATETIME;
 }
 
-xsd__dateTime_Array::xsd__dateTime_Array(xsd__dateTime_Array & original)
+xsd__dateTime_Array::xsd__dateTime_Array(const xsd__dateTime_Array & original)
 {
     if (original.m_Type == XSD_DATETIME)
     {
@@ -1148,7 +1148,7 @@ xsd__time_Array::xsd__time_Array()
     m_Type = XSD_TIME;
 }
 
-xsd__time_Array::xsd__time_Array(xsd__time_Array & original)
+xsd__time_Array::xsd__time_Array(const xsd__time_Array & original)
 {
     if (original.m_Type == XSD_TIME)
     {
@@ -1177,7 +1177,7 @@ xsd__date_Array::xsd__date_Array()
     m_Type = XSD_DATE;
 }
 
-xsd__date_Array::xsd__date_Array(xsd__date_Array & original)
+xsd__date_Array::xsd__date_Array(const xsd__date_Array & original)
 {
     if (original.m_Type == XSD_DATE)
     {
@@ -1206,7 +1206,7 @@ xsd__gYearMonth_Array::xsd__gYearMonth_Array()
     m_Type = XSD_GYEARMONTH;
 }
 
-xsd__gYearMonth_Array::xsd__gYearMonth_Array(xsd__gYearMonth_Array & original)
+xsd__gYearMonth_Array::xsd__gYearMonth_Array(const xsd__gYearMonth_Array & original)
 {
     if (original.m_Type == XSD_GYEARMONTH)
     {
@@ -1235,7 +1235,7 @@ xsd__gYear_Array::xsd__gYear_Array()
     m_Type = XSD_GYEAR;
 }
 
-xsd__gYear_Array::xsd__gYear_Array(xsd__gYear_Array & original)
+xsd__gYear_Array::xsd__gYear_Array(const xsd__gYear_Array & original)
 {
     if (original.m_Type == XSD_GYEAR)
     {
@@ -1264,7 +1264,7 @@ xsd__gMonthDay_Array::xsd__gMonthDay_Array()
     m_Type = XSD_GMONTHDAY;
 }
 
-xsd__gMonthDay_Array::xsd__gMonthDay_Array(xsd__gMonthDay_Array & original)
+xsd__gMonthDay_Array::xsd__gMonthDay_Array(const xsd__gMonthDay_Array & original)
 {
     if (original.m_Type == XSD_GMONTHDAY)
     {
@@ -1293,7 +1293,7 @@ xsd__gMonth_Array::xsd__gMonth_Array()
     m_Type = XSD_GMONTH;
 }
 
-xsd__gMonth_Array::xsd__gMonth_Array(xsd__gMonth_Array & original)
+xsd__gMonth_Array::xsd__gMonth_Array(const xsd__gMonth_Array & original)
 {
     if (original.m_Type == XSD_GMONTH)
     {
@@ -1322,7 +1322,7 @@ xsd__gDay_Array::xsd__gDay_Array()
     m_Type = XSD_GDAY;
 }
 
-xsd__gDay_Array::xsd__gDay_Array(xsd__gDay_Array & original)
+xsd__gDay_Array::xsd__gDay_Array(const xsd__gDay_Array & original)
 {
     if (original.m_Type == XSD_GDAY)
     {
@@ -1351,7 +1351,7 @@ xsd__string_Array::xsd__string_Array()
     m_Type = XSD_STRING;
 }
 
-xsd__string_Array::xsd__string_Array(xsd__string_Array & original)
+xsd__string_Array::xsd__string_Array(const xsd__string_Array & original)
 {
     if (original.m_Type == XSD_STRING)
     {
@@ -1380,7 +1380,7 @@ xsd__normalizedString_Array::xsd__normalizedString_Array()
     m_Type = XSD_NORMALIZEDSTRING;
 }
 
-xsd__normalizedString_Array::xsd__normalizedString_Array(xsd__normalizedString_Array & original)
+xsd__normalizedString_Array::xsd__normalizedString_Array(const xsd__normalizedString_Array & original)
 {
     if (original.m_Type == XSD_NORMALIZEDSTRING)
     {
@@ -1409,7 +1409,7 @@ xsd__token_Array::xsd__token_Array()
     m_Type = XSD_TOKEN;
 }
 
-xsd__token_Array::xsd__token_Array(xsd__token_Array & original)
+xsd__token_Array::xsd__token_Array(const xsd__token_Array & original)
 {
     if (original.m_Type == XSD_TOKEN)
     {
@@ -1438,7 +1438,7 @@ xsd__language_Array::xsd__language_Array()
     m_Type = XSD_LANGUAGE;
 }
 
-xsd__language_Array::xsd__language_Array(xsd__language_Array & original)
+xsd__language_Array::xsd__language_Array(const xsd__language_Array & original)
 {
     if (original.m_Type == XSD_LANGUAGE)
     {
@@ -1467,7 +1467,7 @@ xsd__Name_Array::xsd__Name_Array()
     m_Type = XSD_NAME;
 }
 
-xsd__Name_Array::xsd__Name_Array(xsd__Name_Array & original)
+xsd__Name_Array::xsd__Name_Array(const xsd__Name_Array & original)
 {
     if (original.m_Type == XSD_NAME)
     {
@@ -1496,7 +1496,7 @@ xsd__NCName_Array::xsd__NCName_Array()
     m_Type = XSD_NCNAME;
 }
 
-xsd__NCName_Array::xsd__NCName_Array(xsd__NCName_Array & original)
+xsd__NCName_Array::xsd__NCName_Array(const xsd__NCName_Array & original)
 {
     if (original.m_Type == XSD_NCNAME)
     {
@@ -1525,7 +1525,7 @@ xsd__ID_Array::xsd__ID_Array()
     m_Type = XSD_ID;
 }
 
-xsd__ID_Array::xsd__ID_Array(xsd__ID_Array & original)
+xsd__ID_Array::xsd__ID_Array(const xsd__ID_Array & original)
 {
     if (original.m_Type == XSD_ID)
     {
@@ -1554,7 +1554,7 @@ xsd__IDREF_Array::xsd__IDREF_Array()
     m_Type = XSD_IDREF;
 }
 
-xsd__IDREF_Array::xsd__IDREF_Array(xsd__IDREF_Array & original)
+xsd__IDREF_Array::xsd__IDREF_Array(const xsd__IDREF_Array & original)
 {
     if (original.m_Type == XSD_IDREF)
     {
@@ -1583,7 +1583,7 @@ xsd__IDREFS_Array::xsd__IDREFS_Array()
     m_Type = XSD_IDREFS;
 }
 
-xsd__IDREFS_Array::xsd__IDREFS_Array(xsd__IDREFS_Array & original)
+xsd__IDREFS_Array::xsd__IDREFS_Array(const xsd__IDREFS_Array & original)
 {
     if (original.m_Type == XSD_IDREFS)
     {
@@ -1612,7 +1612,7 @@ xsd__ENTITY_Array::xsd__ENTITY_Array()
     m_Type = XSD_ENTITY;
 }
 
-xsd__ENTITY_Array::xsd__ENTITY_Array(xsd__ENTITY_Array & original)
+xsd__ENTITY_Array::xsd__ENTITY_Array(const xsd__ENTITY_Array & original)
 {
     if (original.m_Type == XSD_ENTITY)
     {
@@ -1641,7 +1641,7 @@ xsd__ENTITIES_Array::xsd__ENTITIES_Array()
     m_Type = XSD_ENTITIES;
 }
 
-xsd__ENTITIES_Array::xsd__ENTITIES_Array(xsd__ENTITIES_Array & original)
+xsd__ENTITIES_Array::xsd__ENTITIES_Array(const xsd__ENTITIES_Array & original)
 {
     if (original.m_Type == XSD_ENTITIES)
     {
@@ -1670,7 +1670,7 @@ xsd__NMTOKEN_Array::xsd__NMTOKEN_Array()
     m_Type = XSD_NMTOKEN;
 }
 
-xsd__NMTOKEN_Array::xsd__NMTOKEN_Array(xsd__NMTOKEN_Array & original)
+xsd__NMTOKEN_Array::xsd__NMTOKEN_Array(const xsd__NMTOKEN_Array & original)
 {
     if (original.m_Type == XSD_NMTOKEN)
     {
@@ -1699,7 +1699,7 @@ xsd__NMTOKENS_Array::xsd__NMTOKENS_Array()
     m_Type = XSD_NMTOKEN;
 }
 
-xsd__NMTOKENS_Array::xsd__NMTOKENS_Array(xsd__NMTOKENS_Array & original)
+xsd__NMTOKENS_Array::xsd__NMTOKENS_Array(const xsd__NMTOKENS_Array & original)
 {
     if (original.m_Type == XSD_NMTOKEN)
     {
@@ -1728,7 +1728,7 @@ xsd__boolean_Array::xsd__boolean_Array()
     m_Type = XSD_BOOLEAN;
 }
 
-xsd__boolean_Array::xsd__boolean_Array(xsd__boolean_Array & original)
+xsd__boolean_Array::xsd__boolean_Array(const xsd__boolean_Array & original)
 {
     if (original.m_Type == XSD_BOOLEAN)
     {
@@ -1757,7 +1757,7 @@ xsd__base64Binary_Array::xsd__base64Binary_Array()
     m_Type = XSD_BASE64BINARY;
 }
 
-xsd__base64Binary_Array::xsd__base64Binary_Array(xsd__base64Binary_Array & original)
+xsd__base64Binary_Array::xsd__base64Binary_Array(const xsd__base64Binary_Array & original)
 {
     if (original.m_Type == XSD_BASE64BINARY)
     {
@@ -1786,7 +1786,7 @@ xsd__hexBinary_Array::xsd__hexBinary_Array()
     m_Type = XSD_HEXBINARY;
 }
 
-xsd__hexBinary_Array::xsd__hexBinary_Array(xsd__hexBinary_Array & original)
+xsd__hexBinary_Array::xsd__hexBinary_Array(const xsd__hexBinary_Array & original)
 {
     if (original.m_Type == XSD_HEXBINARY)
     {
@@ -1815,7 +1815,7 @@ xsd__float_Array::xsd__float_Array()
     m_Type = XSD_FLOAT;
 }
 
-xsd__float_Array::xsd__float_Array(xsd__float_Array & original)
+xsd__float_Array::xsd__float_Array(const xsd__float_Array & original)
 {
     if (original.m_Type == XSD_FLOAT)
     {
@@ -1844,7 +1844,7 @@ xsd__decimal_Array::xsd__decimal_Array()
     m_Type = XSD_DECIMAL;
 }
 
-xsd__decimal_Array::xsd__decimal_Array(xsd__decimal_Array & original)
+xsd__decimal_Array::xsd__decimal_Array(const xsd__decimal_Array & original)
 {
     if (original.m_Type == XSD_DECIMAL)
     {
@@ -1873,7 +1873,7 @@ xsd__integer_Array::xsd__integer_Array()
     m_Type = XSD_INTEGER;
 }
 
-xsd__integer_Array::xsd__integer_Array(xsd__integer_Array & original)
+xsd__integer_Array::xsd__integer_Array(const xsd__integer_Array & original)
 {
     if (original.m_Type == XSD_INTEGER)
     {
@@ -1902,7 +1902,7 @@ xsd__nonPositiveInteger_Array::xsd__nonPositiveInteger_Array()
     m_Type = XSD_NONPOSITIVEINTEGER;
 }
 
-xsd__nonPositiveInteger_Array::xsd__nonPositiveInteger_Array(xsd__nonPositiveInteger_Array & original)
+xsd__nonPositiveInteger_Array::xsd__nonPositiveInteger_Array(const xsd__nonPositiveInteger_Array & original)
 {
     if (original.m_Type == XSD_NONPOSITIVEINTEGER)
     {
@@ -1931,7 +1931,7 @@ xsd__negativeInteger_Array::xsd__negativeInteger_Array()
     m_Type = XSD_NEGATIVEINTEGER;
 }
 
-xsd__negativeInteger_Array::xsd__negativeInteger_Array(xsd__negativeInteger_Array & original)
+xsd__negativeInteger_Array::xsd__negativeInteger_Array(const xsd__negativeInteger_Array & original)
 {
     if (original.m_Type == XSD_NEGATIVEINTEGER)
     {
@@ -1960,7 +1960,7 @@ xsd__long_Array::xsd__long_Array()
     m_Type = XSD_LONG;
 }
 
-xsd__long_Array::xsd__long_Array(xsd__long_Array & original)
+xsd__long_Array::xsd__long_Array(const xsd__long_Array & original)
 {
     if (original.m_Type == XSD_LONG)
     {
@@ -1989,7 +1989,7 @@ xsd__int_Array::xsd__int_Array()
     m_Type = XSD_INT;
 }
 
-xsd__int_Array::xsd__int_Array(xsd__int_Array & original)
+xsd__int_Array::xsd__int_Array(const xsd__int_Array & original)
 {
     if (original.m_Type == XSD_INT)
     {
@@ -2018,7 +2018,7 @@ xsd__short_Array::xsd__short_Array()
     m_Type = XSD_SHORT;
 }
 
-xsd__short_Array::xsd__short_Array(xsd__short_Array & original)
+xsd__short_Array::xsd__short_Array(const xsd__short_Array & original)
 {
     if (original.m_Type == XSD_SHORT)
     {
@@ -2047,7 +2047,7 @@ xsd__byte_Array::xsd__byte_Array()
     m_Type = XSD_BYTE;
 }
 
-xsd__byte_Array::xsd__byte_Array(xsd__byte_Array & original)
+xsd__byte_Array::xsd__byte_Array(const xsd__byte_Array & original)
 {
     if (original.m_Type == XSD_BYTE)
     {
@@ -2076,7 +2076,7 @@ xsd__nonNegativeInteger_Array::xsd__nonNegativeInteger_Array()
     m_Type = XSD_NONNEGATIVEINTEGER;
 }
 
-xsd__nonNegativeInteger_Array::xsd__nonNegativeInteger_Array(xsd__nonNegativeInteger_Array & original)
+xsd__nonNegativeInteger_Array::xsd__nonNegativeInteger_Array(const xsd__nonNegativeInteger_Array & original)
 {
     if (original.m_Type == XSD_NONNEGATIVEINTEGER)
     {
@@ -2105,7 +2105,7 @@ xsd__unsignedLong_Array::xsd__unsignedLong_Array()
     m_Type = XSD_UNSIGNEDLONG;
 }
 
-xsd__unsignedLong_Array::xsd__unsignedLong_Array(xsd__unsignedLong_Array & original)
+xsd__unsignedLong_Array::xsd__unsignedLong_Array(const xsd__unsignedLong_Array & original)
 {
     if (original.m_Type == XSD_UNSIGNEDLONG)
     {
@@ -2134,7 +2134,7 @@ xsd__unsignedInt_Array::xsd__unsignedInt_Array()
     m_Type = XSD_UNSIGNEDINT;
 }
 
-xsd__unsignedInt_Array::xsd__unsignedInt_Array(xsd__unsignedInt_Array & original)
+xsd__unsignedInt_Array::xsd__unsignedInt_Array(const xsd__unsignedInt_Array & original)
 {
     if (original.m_Type == XSD_UNSIGNEDINT)
     {
@@ -2163,7 +2163,7 @@ xsd__unsignedShort_Array::xsd__unsignedShort_Array()
     m_Type = XSD_UNSIGNEDSHORT;
 }
 
-xsd__unsignedShort_Array::xsd__unsignedShort_Array(xsd__unsignedShort_Array & original)
+xsd__unsignedShort_Array::xsd__unsignedShort_Array(const xsd__unsignedShort_Array & original)
 {
     if (original.m_Type == XSD_UNSIGNEDSHORT)
     {
@@ -2192,7 +2192,7 @@ xsd__unsignedByte_Array::xsd__unsignedByte_Array()
     m_Type = XSD_UNSIGNEDBYTE;
 }
 
-xsd__unsignedByte_Array::xsd__unsignedByte_Array(xsd__unsignedByte_Array & original)
+xsd__unsignedByte_Array::xsd__unsignedByte_Array(const xsd__unsignedByte_Array & original)
 {
     if (original.m_Type == XSD_UNSIGNEDBYTE)
     {
@@ -2221,7 +2221,7 @@ xsd__positiveInteger_Array::xsd__positiveInteger_Array()
     m_Type = XSD_POSITIVEINTEGER;
 }
 
-xsd__positiveInteger_Array::xsd__positiveInteger_Array(xsd__positiveInteger_Array & original)
+xsd__positiveInteger_Array::xsd__positiveInteger_Array(const xsd__positiveInteger_Array & original)
 {
     if (original.m_Type == XSD_POSITIVEINTEGER)
     {
@@ -2250,7 +2250,7 @@ xsd__double_Array::xsd__double_Array()
     m_Type = XSD_DOUBLE;
 }
 
-xsd__double_Array::xsd__double_Array(xsd__double_Array & original)
+xsd__double_Array::xsd__double_Array(const xsd__double_Array & original)
 {
     if (original.m_Type == XSD_DOUBLE)
     {
@@ -2279,7 +2279,7 @@ xsd__anyURI_Array::xsd__anyURI_Array()
     m_Type = XSD_ANYURI;
 }
 
-xsd__anyURI_Array::xsd__anyURI_Array(xsd__anyURI_Array & original)
+xsd__anyURI_Array::xsd__anyURI_Array(const xsd__anyURI_Array & original)
 {
     if (original.m_Type == XSD_ANYURI)
     {
@@ -2308,7 +2308,7 @@ xsd__QName_Array::xsd__QName_Array()
     m_Type = XSD_QNAME;
 }
 
-xsd__QName_Array::xsd__QName_Array(xsd__QName_Array & original)
+xsd__QName_Array::xsd__QName_Array(const xsd__QName_Array & original)
 {
     if (original.m_Type == XSD_QNAME)
     {
@@ -2337,7 +2337,7 @@ xsd__NOTATION_Array::xsd__NOTATION_Array()
     m_Type = XSD_NOTATION;
 }
 
-xsd__NOTATION_Array::xsd__NOTATION_Array(xsd__NOTATION_Array & original)
+xsd__NOTATION_Array::xsd__NOTATION_Array(const xsd__NOTATION_Array & original)
 {
     if (original.m_Type == XSD_NOTATION)
     {

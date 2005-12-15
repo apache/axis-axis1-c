@@ -196,7 +196,7 @@ public class ArrayParamHeaderWriter extends ParamWriter
         try
         {
             writer.write("\t\t" + classname +"();\n");
-            writer.write("\t\t" + classname + "(" + classname + " & original);\n");
+            writer.write("\t\t" + classname + "(const " + classname + " & original);\n");
         }
         catch (IOException e)
         {
@@ -222,7 +222,7 @@ public class ArrayParamHeaderWriter extends ParamWriter
         {
             writer.write("\t\tvoid set( class " + attribs[0].getTypeName() + "** array, const int size);\n");
             writer.write("\t\tclass "+ attribs[0].getTypeName() + "** get(int & size) const;\n");
-            writer.write("\t\tvoid clone(" + classname + " & original);\n");
+            writer.write("\t\tvoid clone(const " + classname + " & original);\n");
             writer.write("\t\tvoid clear();\n");
         }
         catch (IOException e)

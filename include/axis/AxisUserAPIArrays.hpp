@@ -48,7 +48,7 @@ class STORAGE_CLASS_INFO xsd__duration_Array : public Axis_Array {
      * Copy constructor
      * @param orginal Axis_Array to copy.
      */
-    xsd__duration_Array(xsd__duration_Array & original);
+    xsd__duration_Array(const xsd__duration_Array & original);
     
     /**
      * Destructor
@@ -83,7 +83,7 @@ class STORAGE_CLASS_INFO xsd__dateTime_Array : public Axis_Array {
      * Copy constructor
      * @param orginal Axis_Array to copy.
      */
-    xsd__dateTime_Array(xsd__dateTime_Array & original);
+    xsd__dateTime_Array(const xsd__dateTime_Array & original);
     
     /**
      * Destructor
@@ -118,7 +118,7 @@ class STORAGE_CLASS_INFO xsd__time_Array : public Axis_Array {
      * Copy constructor
      * @param orginal Axis_Array to copy.
      */
-    xsd__time_Array(xsd__time_Array & original);
+    xsd__time_Array(const xsd__time_Array & original);
         
     /**
      * Destructor
@@ -153,7 +153,7 @@ class STORAGE_CLASS_INFO xsd__date_Array : public Axis_Array {
      * Copy constructor
      * @param orginal Axis_Array to copy.
      */
-    xsd__date_Array(xsd__date_Array & original);
+    xsd__date_Array(const xsd__date_Array & original);
         
     /**
      * Destructor
@@ -188,7 +188,7 @@ class STORAGE_CLASS_INFO xsd__gYearMonth_Array : public Axis_Array {
      * Copy constructor
      * @param orginal Axis_Array to copy.
      */
-    xsd__gYearMonth_Array(xsd__gYearMonth_Array & original);
+    xsd__gYearMonth_Array(const xsd__gYearMonth_Array & original);
         
     /**
      * Destructor
@@ -224,7 +224,7 @@ class STORAGE_CLASS_INFO xsd__gYear_Array : public Axis_Array {
      * Copy constructor
      * @param orginal Axis_Array to copy.
      */
-    xsd__gYear_Array(xsd__gYear_Array & original);
+    xsd__gYear_Array(const xsd__gYear_Array & original);
         
     /**
      * Destructor
@@ -259,7 +259,7 @@ class STORAGE_CLASS_INFO xsd__gMonthDay_Array : public Axis_Array {
      * Copy constructor
      * @param orginal Axis_Array to copy.
      */
-    xsd__gMonthDay_Array(xsd__gMonthDay_Array & original);
+    xsd__gMonthDay_Array(const xsd__gMonthDay_Array & original);
         
     /**
      * Destructor
@@ -294,7 +294,7 @@ class STORAGE_CLASS_INFO xsd__gDay_Array : public Axis_Array {
      * Copy constructor
      * @param orginal Axis_Array to copy.
      */
-    xsd__gDay_Array(xsd__gDay_Array & original);
+    xsd__gDay_Array(const xsd__gDay_Array & original);
         
     /**
      * Destructor
@@ -329,7 +329,7 @@ class STORAGE_CLASS_INFO xsd__gMonth_Array : public Axis_Array {
      * Copy constructor
      * @param orginal Axis_Array to copy.
      */
-    xsd__gMonth_Array(xsd__gMonth_Array & original);
+    xsd__gMonth_Array(const xsd__gMonth_Array & original);
         
     /**
      * Destructor
@@ -364,7 +364,7 @@ class STORAGE_CLASS_INFO xsd__string_Array : public Axis_Array {
      * Copy constructor
      * @param original xsd__string_Array to copy.
      */
-    xsd__string_Array(xsd__string_Array & original);
+    xsd__string_Array(const xsd__string_Array & original);
         
     /**
      * Destructor
@@ -399,7 +399,7 @@ class STORAGE_CLASS_INFO xsd__normalizedString_Array : public Axis_Array {
      * Copy constructor
      * @param original xsd__normalizedString_Array to copy.
      */
-    xsd__normalizedString_Array(xsd__normalizedString_Array & original);
+    xsd__normalizedString_Array(const xsd__normalizedString_Array & original);
         
     /**
      * Destructor
@@ -434,7 +434,7 @@ class STORAGE_CLASS_INFO xsd__token_Array : public Axis_Array {
      * Copy constructor
      * @param original xsd__token_Array to copy.
      */
-    xsd__token_Array(xsd__token_Array & original);
+    xsd__token_Array(const xsd__token_Array & original);
         
     /**
      * Destructor
@@ -469,7 +469,7 @@ class STORAGE_CLASS_INFO xsd__language_Array : public Axis_Array {
      * Copy constructor
      * @param original xsd__language_Array to copy.
      */
-    xsd__language_Array(xsd__language_Array & original);
+    xsd__language_Array(const xsd__language_Array & original);
     
         
     /**
@@ -505,7 +505,7 @@ class STORAGE_CLASS_INFO xsd__Name_Array : public Axis_Array {
      * Copy constructor
      * @param original xsd__Name_Array to copy.
      */
-    xsd__Name_Array(xsd__Name_Array & original);
+    xsd__Name_Array(const xsd__Name_Array & original);
         
     /**
      * Destructor
@@ -540,7 +540,7 @@ class STORAGE_CLASS_INFO xsd__NCName_Array : public Axis_Array {
      * Copy constructor
      * @param original xsd__NCName_Array to copy.
      */
-    xsd__NCName_Array(xsd__NCName_Array & original);
+    xsd__NCName_Array(const xsd__NCName_Array & original);
         
     /**
      * Destructor
@@ -575,7 +575,7 @@ class STORAGE_CLASS_INFO xsd__ID_Array : public Axis_Array {
      * Copy constructor
      * @param original xsd__ID_Array to copy.
      */
-    xsd__ID_Array(xsd__ID_Array & original);
+    xsd__ID_Array(const xsd__ID_Array & original);
         
     /**
      * Destructor
@@ -610,7 +610,7 @@ class STORAGE_CLASS_INFO xsd__IDREF_Array : public Axis_Array {
      * Copy constructor
      * @param original xsd__IDREF_Array to copy.
      */
-    xsd__IDREF_Array(xsd__IDREF_Array & original);
+    xsd__IDREF_Array(const xsd__IDREF_Array & original);
         
     /**
      * Destructor
@@ -645,7 +645,7 @@ class STORAGE_CLASS_INFO xsd__IDREFS_Array : public Axis_Array {
      * Copy constructor
      * @param original xsd__IDREFS_Array to copy.
      */
-    xsd__IDREFS_Array(xsd__IDREFS_Array & original);
+    xsd__IDREFS_Array(const xsd__IDREFS_Array & original);
         
     /**
      * Destructor
@@ -680,7 +680,7 @@ class STORAGE_CLASS_INFO xsd__ENTITY_Array : public Axis_Array {
      * Copy constructor
      * @param original xsd__ENTITY_Array to copy.
      */
-    xsd__ENTITY_Array(xsd__ENTITY_Array & original);
+    xsd__ENTITY_Array(const xsd__ENTITY_Array & original);
         
     /**
      * Destructor
@@ -715,7 +715,7 @@ class STORAGE_CLASS_INFO xsd__ENTITIES_Array : public Axis_Array {
      * Copy constructor
      * @param original xsd__ENTITIES_Array to copy.
      */
-    xsd__ENTITIES_Array(xsd__ENTITIES_Array & original);
+    xsd__ENTITIES_Array(const xsd__ENTITIES_Array & original);
         
     /**
      * Destructor
@@ -750,7 +750,7 @@ class STORAGE_CLASS_INFO xsd__NMTOKEN_Array : public Axis_Array {
      * Copy constructor
      * @param original xsd__NMTOKEN_Array to copy.
      */
-    xsd__NMTOKEN_Array(xsd__NMTOKEN_Array & original);
+    xsd__NMTOKEN_Array(const xsd__NMTOKEN_Array & original);
         
     /**
      * Destructor
@@ -785,7 +785,7 @@ class STORAGE_CLASS_INFO xsd__NMTOKENS_Array : public Axis_Array {
      * Copy constructor
      * @param original xsd__NMTOKENS_Array to copy.
      */
-    xsd__NMTOKENS_Array(xsd__NMTOKENS_Array & original);
+    xsd__NMTOKENS_Array(const xsd__NMTOKENS_Array & original);
         
     /**
      * Destructor
@@ -820,7 +820,7 @@ class STORAGE_CLASS_INFO xsd__boolean_Array : public Axis_Array {
      * Copy constructor
      * @param original xsd__boolean_Array to copy.
      */
-    xsd__boolean_Array(xsd__boolean_Array & original);
+    xsd__boolean_Array(const xsd__boolean_Array & original);
         
     /**
      * Destructor
@@ -855,7 +855,7 @@ class STORAGE_CLASS_INFO xsd__base64Binary_Array : public Axis_Array {
      * Copy constructor
      * @param original xsd__base64Binary_Array to copy.
      */
-    xsd__base64Binary_Array(xsd__base64Binary_Array & original);
+    xsd__base64Binary_Array(const xsd__base64Binary_Array & original);
         
     /**
      * Destructor
@@ -890,7 +890,7 @@ class STORAGE_CLASS_INFO xsd__hexBinary_Array : public Axis_Array {
      * Copy constructor
      * @param original xsd__hexBinary_Array to copy.
      */
-    xsd__hexBinary_Array(xsd__hexBinary_Array & original);
+    xsd__hexBinary_Array(const xsd__hexBinary_Array & original);
         
     /**
      * Destructor
@@ -925,7 +925,7 @@ class STORAGE_CLASS_INFO xsd__float_Array : public Axis_Array {
      * Copy constructor
      * @param original xsd__float_Array to copy.
      */
-    xsd__float_Array(xsd__float_Array & original);
+    xsd__float_Array(const xsd__float_Array & original);
         
     /**
      * Destructor
@@ -960,7 +960,7 @@ class STORAGE_CLASS_INFO xsd__decimal_Array : public Axis_Array {
      * Copy constructor
      * @param original xsd__decimal_Array to copy.
      */
-    xsd__decimal_Array(xsd__decimal_Array & original);
+    xsd__decimal_Array(const xsd__decimal_Array & original);
     
     /**
      * Destructor
@@ -995,7 +995,7 @@ class STORAGE_CLASS_INFO xsd__integer_Array : public Axis_Array {
      * Copy constructor
      * @param original xsd__integer_Array to copy.
      */
-    xsd__integer_Array(xsd__integer_Array & original);
+    xsd__integer_Array(const xsd__integer_Array & original);
         
     /**
      * Destructor
@@ -1030,7 +1030,7 @@ class STORAGE_CLASS_INFO xsd__nonPositiveInteger_Array : public Axis_Array {
      * Copy constructor
      * @param original xsd__nonPositiveInteger_Array to copy.
      */
-    xsd__nonPositiveInteger_Array(xsd__nonPositiveInteger_Array & original);
+    xsd__nonPositiveInteger_Array(const xsd__nonPositiveInteger_Array & original);
         
     /**
      * Destructor
@@ -1065,7 +1065,7 @@ class STORAGE_CLASS_INFO xsd__negativeInteger_Array : public Axis_Array {
      * Copy constructor
      * @param original xsd__negativeInteger_Array to copy.
      */
-    xsd__negativeInteger_Array(xsd__negativeInteger_Array & original);
+    xsd__negativeInteger_Array(const xsd__negativeInteger_Array & original);
         
     /**
      * Destructor
@@ -1100,7 +1100,7 @@ class STORAGE_CLASS_INFO xsd__long_Array : public Axis_Array {
      * Copy constructor
      * @param original xsd__long_Array to copy.
      */
-    xsd__long_Array(xsd__long_Array & original);
+    xsd__long_Array(const xsd__long_Array & original);
         
     /**
      * Destructor
@@ -1135,7 +1135,7 @@ class STORAGE_CLASS_INFO xsd__int_Array : public Axis_Array {
      * Copy constructor
      * @param original xsd__int_Array to copy.
      */
-    xsd__int_Array(xsd__int_Array & original);
+    xsd__int_Array(const xsd__int_Array & original);
         
     /**
      * Destructor
@@ -1170,7 +1170,7 @@ class STORAGE_CLASS_INFO xsd__short_Array : public Axis_Array {
      * Copy constructor
      * @param original xsd__short_Array to copy.
      */
-    xsd__short_Array(xsd__short_Array & original);
+    xsd__short_Array(const xsd__short_Array & original);
         
     /**
      * Destructor
@@ -1205,7 +1205,7 @@ class STORAGE_CLASS_INFO xsd__byte_Array : public Axis_Array {
      * Copy constructor
      * @param original xsd__byte_Array to copy.
      */
-    xsd__byte_Array(xsd__byte_Array & original);
+    xsd__byte_Array(const xsd__byte_Array & original);
         
     /**
      * Destructor
@@ -1240,7 +1240,7 @@ class STORAGE_CLASS_INFO xsd__nonNegativeInteger_Array : public Axis_Array {
      * Copy constructor
      * @param original xsd__nonNegativeInteger_Array to copy.
      */
-    xsd__nonNegativeInteger_Array(xsd__nonNegativeInteger_Array & original);
+    xsd__nonNegativeInteger_Array(const xsd__nonNegativeInteger_Array & original);
         
     /**
      * Destructor
@@ -1275,7 +1275,7 @@ class STORAGE_CLASS_INFO xsd__unsignedLong_Array : public Axis_Array {
      * Copy constructor
      * @param original xsd__unsignedLong_Array to copy.
      */
-    xsd__unsignedLong_Array(xsd__unsignedLong_Array & original);
+    xsd__unsignedLong_Array(const xsd__unsignedLong_Array & original);
         
     /**
      * Destructor
@@ -1310,7 +1310,7 @@ class STORAGE_CLASS_INFO xsd__unsignedInt_Array : public Axis_Array {
      * Copy constructor
      * @param original xsd__unsignedInt_Array to copy.
      */
-    xsd__unsignedInt_Array(xsd__unsignedInt_Array & original);
+    xsd__unsignedInt_Array(const xsd__unsignedInt_Array & original);
         
     /**
      * Destructor
@@ -1345,7 +1345,7 @@ class STORAGE_CLASS_INFO xsd__unsignedByte_Array : public Axis_Array {
      * Copy constructor
      * @param original xsd__unsignedByte_Array to copy.
      */
-    xsd__unsignedByte_Array(xsd__unsignedByte_Array & original);
+    xsd__unsignedByte_Array(const xsd__unsignedByte_Array & original);
         
     /**
      * Destructor
@@ -1380,7 +1380,7 @@ class STORAGE_CLASS_INFO xsd__unsignedShort_Array : public Axis_Array {
      * Copy constructor
      * @param original xsd__unsignedShort_Array to copy.
      */
-    xsd__unsignedShort_Array(xsd__unsignedShort_Array & original);
+    xsd__unsignedShort_Array(const xsd__unsignedShort_Array & original);
         
     /**
      * Destructor
@@ -1415,7 +1415,7 @@ class STORAGE_CLASS_INFO xsd__positiveInteger_Array : public Axis_Array {
      * Copy constructor
      * @param original xsd__positiveInteger_Array to copy.
      */
-    xsd__positiveInteger_Array(xsd__positiveInteger_Array & original);
+    xsd__positiveInteger_Array(const xsd__positiveInteger_Array & original);
         
     /**
      * Destructor
@@ -1450,7 +1450,7 @@ class STORAGE_CLASS_INFO xsd__double_Array : public Axis_Array {
      * Copy constructor
      * @param original xsd__double_Array to copy.
      */
-    xsd__double_Array(xsd__double_Array & original);
+    xsd__double_Array(const xsd__double_Array & original);
         
     /**
      * Destructor
@@ -1485,7 +1485,7 @@ class STORAGE_CLASS_INFO xsd__anyURI_Array : public Axis_Array {
      * Copy constructor
      * @param original xsd__anyURI_Array to copy.
      */
-    xsd__anyURI_Array(xsd__anyURI_Array & original);
+    xsd__anyURI_Array(const xsd__anyURI_Array & original);
         
     /**
      * Destructor
@@ -1520,7 +1520,7 @@ class STORAGE_CLASS_INFO xsd__QName_Array : public Axis_Array {
      * Copy constructor
      * @param original xsd__QName_Array to copy.
      */
-    xsd__QName_Array(xsd__QName_Array & original);
+    xsd__QName_Array(const xsd__QName_Array & original);
         
     /**
      * Destructor
@@ -1555,7 +1555,7 @@ class STORAGE_CLASS_INFO xsd__NOTATION_Array : public Axis_Array {
      * Copy constructor
      * @param original xsd__NOTATION_Array to copy.
      */
-    xsd__NOTATION_Array(xsd__NOTATION_Array & original);
+    xsd__NOTATION_Array(const xsd__NOTATION_Array & original);
         
     /**
      * Destructor

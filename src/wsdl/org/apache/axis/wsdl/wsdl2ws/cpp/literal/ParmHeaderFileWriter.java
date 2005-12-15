@@ -532,7 +532,7 @@ public class ParmHeaderFileWriter extends ParamWriter
         try
         {
             writer.write("\n\t" + classname + "();\n");
-            writer.write("\t" + classname + "(" + classname + " & original);\n");
+            writer.write("\t" + classname + "(const " + classname + " & original);\n");
             writeReset();
        } catch (IOException e)
         {
