@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xsd:schema targetNamespace="Infra.tst" xmlns:ns1="Infra" xmlns:ns2="IAllTypesTestServiceReplica" xmlns:tns="Infra.tst" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+ <xsd:import namespace="Infra" schemaLocation="Replica_Infra.xsd"/>
+ <xsd:import namespace="IAllTypesTestServiceReplica" schemaLocation="Replica_IAllTypesTestServiceReplica.xsd"/>
+ <xsd:complexType name="BeanBArrayType">
+  <xsd:sequence>
+   <xsd:element form="qualified" maxOccurs="unbounded" name="Item" nillable="true" type="tns:BeanB"/>
+  </xsd:sequence>
+ </xsd:complexType>
+ <xsd:complexType name="SampleBeanArrayType">
+  <xsd:sequence>
+   <xsd:element form="qualified" maxOccurs="unbounded" name="Item" nillable="true" type="tns:SampleBean"/>
+  </xsd:sequence>
+ </xsd:complexType>
+ <xsd:complexType name="BeanA">
+  <xsd:annotation>
+   <xsd:documentation>A bean graph object</xsd:documentation>
+  </xsd:annotation>
+  <xsd:sequence>
+   <xsd:element form="qualified" maxOccurs="1" minOccurs="1" name="B" nillable="true" type="tns:BeanB">
+    <xsd:annotation>
+     <xsd:documentation>a reference to another node</xsd:documentation>
+    </xsd:annotation>
+   </xsd:element>
+   <xsd:element form="qualified" maxOccurs="1" minOccurs="1" name="BArray" nillable="true" type="tns:BeanBArrayType">
+    <xsd:annotation>
+     <xsd:documentation>a reference to an array of other nodes</xsd:documentation>
+    </xsd:annotation>
+   </xsd:element>
+   <xsd:element form="qualified" maxOccurs="1" minOccurs="1" name="StringValue" nillable="true" type="xsd:string">
+    <xsd:annotation>
+     <xsd:documentation>the string identifying the node</xsd:documentation>
+    </xsd:annotation>
+   </xsd:element>
+  </xsd:sequence>
+ </xsd:complexType>
+ <xsd:complexType name="BeanB">
+  <xsd:sequence>
+   <xsd:element form="qualified" maxOccurs="1" minOccurs="1" name="StringValue" nillable="true" type="xsd:string"/>
+  </xsd:sequence>
+ </xsd:complexType>
+ <xsd:complexType name="SampleBean">
+  <xsd:sequence>
+   <xsd:element form="qualified" maxOccurs="1" minOccurs="1" name="Bean" nillable="true" type="tns:SampleBean"/>
+   <xsd:element form="qualified" maxOccurs="1" minOccurs="1" name="BeanArray" nillable="true" type="tns:SampleBeanArrayType"/>
+   <xsd:element form="qualified" maxOccurs="1" minOccurs="1" name="Boolean" nillable="false" type="xsd:boolean"/>
+   <xsd:element form="qualified" maxOccurs="1" minOccurs="1" name="BooleanArray" nillable="true" type="ns1:booleanArrayType"/>
+   <xsd:element form="qualified" maxOccurs="1" minOccurs="1" name="Byte" nillable="false" type="xsd:byte"/>
+   <xsd:element form="qualified" maxOccurs="1" minOccurs="1" name="ByteArray" nillable="true" type="xsd:base64Binary"/>
+   <xsd:element form="qualified" maxOccurs="1" minOccurs="1" name="Calendar" nillable="true" type="xsd:dateTime"/>
+   <xsd:element form="qualified" maxOccurs="1" minOccurs="1" name="CalendarArray" nillable="true" type="ns1:dateTimeArrayType"/>
+   <xsd:element form="qualified" maxOccurs="1" minOccurs="1" name="Double" nillable="false" type="xsd:double"/>
+   <xsd:element form="qualified" maxOccurs="1" minOccurs="1" name="DoubleArray" nillable="true" type="ns1:doubleArrayType"/>
+   <xsd:element form="qualified" maxOccurs="1" minOccurs="1" name="Float" nillable="false" type="xsd:float"/>
+   <xsd:element form="qualified" maxOccurs="1" minOccurs="1" name="FloatArray" nillable="true" type="ns1:floatArrayType"/>
+   <xsd:element form="qualified" maxOccurs="1" minOccurs="1" name="Int" nillable="false" type="xsd:int"/>
+   <xsd:element form="qualified" maxOccurs="1" minOccurs="1" name="IntArray" nillable="true" type="ns1:intArrayType"/>
+   <xsd:element form="qualified" maxOccurs="1" minOccurs="1" name="Long" nillable="false" type="xsd:long"/>
+   <xsd:element form="qualified" maxOccurs="1" minOccurs="1" name="LongArray" nillable="true" type="ns1:longArrayType"/>
+   <xsd:element form="qualified" maxOccurs="1" minOccurs="1" name="Replica" nillable="true" type="ns2:IAllTypesTestServiceReplica"/>
+   <xsd:element form="qualified" maxOccurs="1" minOccurs="1" name="Short" nillable="false" type="xsd:short"/>
+   <xsd:element form="qualified" maxOccurs="1" minOccurs="1" name="ShortArray" nillable="true" type="ns1:shortArrayType"/>
+   <xsd:element form="qualified" maxOccurs="1" minOccurs="1" name="String" nillable="true" type="xsd:string"/>
+   <xsd:element form="qualified" maxOccurs="1" minOccurs="1" name="StringArray" nillable="true" type="ns1:stringArrayType"/>
+  </xsd:sequence>
+ </xsd:complexType>
+</xsd:schema>

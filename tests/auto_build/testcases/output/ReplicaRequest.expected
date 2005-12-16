@@ -1,0 +1,17 @@
+POST /Replica/services/ReplicaImpl HTTP/1.1
+Host: 9.20.98.177:9090
+Content-Type: text/xml; charset=UTF-8
+SOAPAction: ""
+Content-Length: 484
+
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:miReplica xmlns:ns1="IAllTypesTestService">
+<iReplica xmlns:ns2="IAllTypesTestServiceReplica"><MyClass id="1612"><Name>Tester</Name>
+<Values>AAoUHigyPEZQWg==</Values>
+</MyClass></iReplica>
+</ns1:miReplica>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+

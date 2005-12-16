@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<definitions targetNamespace="IAllTypesTestService"
+                       xmlns="http://schemas.xmlsoap.org/wsdl/"
+                   xmlns:ns1="Infra"
+                   xmlns:ns2="Infra.tst"
+                   xmlns:ns3="IAllTypesTestServiceReplica"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                   xmlns:tns="IAllTypesTestService"
+                   xmlns:wsi="http://ws-i.org/schemas/conformanceClaim/"
+                   xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+ <types>
+  <xsd:schema targetNamespace="IAllTypesTestService">
+   <xsd:import namespace="Infra.tst" schemaLocation="Replica_Infra.tst.xsd"/>
+   <xsd:import namespace="Infra" schemaLocation="Replica_Infra.xsd"/>
+   <xsd:import namespace="IAllTypesTestServiceReplica" schemaLocation="Replica_IAllTypesTestServiceReplica.xsd"/>
+   <xsd:element name="miReplica">
+    <xsd:complexType>
+     <xsd:sequence>
+      <xsd:element maxOccurs="1" minOccurs="1" name="iReplica" nillable="true" type="ns3:IAllTypesTestServiceReplica"/>
+     </xsd:sequence>
+    </xsd:complexType>
+   </xsd:element>
+   <xsd:element name="miReplicaResponse">
+    <xsd:complexType/>
+   </xsd:element>
+  </xsd:schema>
+ </types>
+ <message name="miReplicaFault">
+  <part element="ns1:ServiceException" name="error"/>
+ </message>
+ <message name="miReplicaInput">
+  <part element="tns:miReplica" name="parameters"/>
+ </message>
+ <message name="miReplicaOutput">
+  <part element="tns:miReplicaResponse" name="parameters"/>
+ </message>
+ <portType name="IAllTypesTestService">
+  <operation name="miReplica">
+   <input message="tns:miReplicaInput"/>
+   <output message="tns:miReplicaOutput"/>
+   <fault message="tns:miReplicaFault" name="miReplicaFault"/>
+  </operation>
+ </portType>
+ <binding name="IAllTypesTestServiceBinding" type="tns:IAllTypesTestService">
+  <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+  <operation name="miReplica">
+   <soap:operation soapAction="" style="document"/>
+   <input>
+    <soap:body use="literal"/>
+   </input>
+   <output>
+    <soap:body use="literal"/>
+   </output>
+   <fault name="miReplicaFault">
+    <soap:fault name="miReplicaFault" use="literal"/>
+   </fault>
+  </operation>
+ </binding>
+ <service name="myService">
+ 	<port name="myPort" binding="tns:IAllTypesTestServiceBinding">
+ 		<soap:address location="http://tempuri.org/" />
+ 	</port>
+ </service>
+</definitions>

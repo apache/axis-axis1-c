@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+			xmlns:tns="Infra" 
+			targetNamespace="Infra">
+
+<!-- define a complex type for array of boolean -->   
+<xsd:element name="booleanItem" type="xsd:boolean" />	
+<xsd:complexType name="booleanArrayType">	  
+ <xsd:sequence>	    
+  <xsd:element ref="tns:booleanItem" minOccurs="0" maxOccurs="unbounded" />	  
+ </xsd:sequence>   
+</xsd:complexType>
+
+<!-- define a complex type for array of short -->
+<xsd:element name="shortItem" type="xsd:short" />	
+<xsd:complexType name="shortArrayType">
+ <xsd:sequence>
+  <xsd:element ref="tns:shortItem" minOccurs="0" maxOccurs="unbounded" /> 
+ </xsd:sequence>
+</xsd:complexType>
+
+<!-- define a complex type for array of int -->
+<xsd:element name="intItem" type="xsd:int" />	
+<xsd:complexType name="intArrayType">
+ <xsd:sequence>
+  <xsd:element ref="tns:intItem" minOccurs="0" maxOccurs="unbounded" /> 
+ </xsd:sequence>
+</xsd:complexType>
+
+<!-- define a complex type for array of long -->
+<xsd:element name="longItem" type="xsd:long" />	
+<xsd:complexType name="longArrayType">
+ <xsd:sequence>
+  <xsd:element ref="tns:longItem" minOccurs="0" maxOccurs="unbounded" /> 
+ </xsd:sequence>
+</xsd:complexType>
+
+<!-- define a complex type for array of float -->
+<xsd:element name="floatItem" type="xsd:float" />	
+<xsd:complexType name="floatArrayType">
+ <xsd:sequence>
+  <xsd:element ref="tns:floatItem" minOccurs="0" maxOccurs="unbounded" /> 
+ </xsd:sequence>
+</xsd:complexType>
+
+<!-- define a complex type for array of double -->
+<xsd:element name="doubleItem" type="xsd:double" />	
+<xsd:complexType name="doubleArrayType">
+ <xsd:sequence>
+  <xsd:element ref="tns:doubleItem" minOccurs="0" maxOccurs="unbounded" /> 
+ </xsd:sequence>
+</xsd:complexType>
+
+<!-- define a complex type for array of string -->
+<xsd:element name="stringItem" type="xsd:string" nillable="true"/>	
+<xsd:complexType name="stringArrayType">
+ <xsd:sequence>
+  <xsd:element ref="tns:stringItem" minOccurs="0" maxOccurs="unbounded"/> 
+ </xsd:sequence>
+</xsd:complexType>
+
+<!-- define a complex type for array of dateTime -->
+<xsd:element name="dateTimeItem" type="xsd:dateTime" nillable="true"/>	
+<xsd:complexType name="dateTimeArrayType">
+ <xsd:sequence>
+  <xsd:element ref="tns:dateTimeItem" minOccurs="0" maxOccurs="unbounded"/> 
+ </xsd:sequence>
+</xsd:complexType>
+
+<xsd:complexType name="SessionToken">
+ <xsd:sequence>
+  <xsd:element name="SessionId" type="xsd:string" form="qualified" minOccurs="1" maxOccurs="1" nillable="true"/>
+ </xsd:sequence>
+</xsd:complexType>
+
+<xsd:complexType name="replicaType">
+  <xsd:sequence>
+  <xsd:any minOccurs="1" maxOccurs="1"/>
+ </xsd:sequence>
+</xsd:complexType>
+
+<xsd:complexType name="replica2Type">
+  <xsd:sequence>
+  <xsd:any minOccurs="1" maxOccurs="1"/>
+ </xsd:sequence>
+</xsd:complexType>
+
+<xsd:complexType name="ServiceExceptionType">
+ <xsd:sequence>
+    <xsd:element name="localizedMessage" nillable="true" type="xsd:string" />
+    <xsd:element name="message" nillable="true" type="xsd:string" /> 
+    <xsd:element name="code" nillable="false" type="xsd:int" />
+    <xsd:element name="errorArguments" nillable="true" type="tns:stringArrayType" />
+ </xsd:sequence>
+</xsd:complexType>
+<xsd:element name="ServiceException" type="tns:ServiceExceptionType"/>
+
+</xsd:schema>
+

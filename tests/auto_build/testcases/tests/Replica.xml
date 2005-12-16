@@ -1,0 +1,19 @@
+<test>
+    <name>Replica</name>
+    <description>Replica</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>ReplicaClient.cpp</clientCode>
+    <wsdl>Replica_IAllTypesTestService.wsdl</wsdl>
+    <expected>
+        <output>
+            ReplicaRequest.out
+        </output>
+        <request>
+            ReplicaRequest.expected
+        </request> 
+        <serverResponse>
+            ReplicaResponse.expected
+        </serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/ReplicaTest</endpoint>
+</test>

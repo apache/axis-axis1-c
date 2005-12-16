@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema    id="IAllTypesTestServiceReplica"
+           xmlns="IAllTypesTestServiceReplica"
+ targetNamespace="IAllTypesTestServiceReplica"
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ds="plmdataset-properties"
+ attributeFormDefault="qualified"
+   elementFormDefault="qualified">
+	<xs:element name="IAllTypesTestServiceReplica" type="IAllTypesTestServiceReplica">
+		<xs:key name="MyClass">
+			<xs:selector xpath="MyClass" />
+			<xs:field xpath="@id" />
+		</xs:key>
+	</xs:element>
+	<xs:complexType name="IAllTypesTestServiceReplica">
+		<xs:sequence maxOccurs="unbounded">
+			<xs:element name="MyClass" type="MyClass" minOccurs="0" maxOccurs="unbounded" form="unqualified"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="MyClass" mixed="true">
+		<xs:sequence>
+			<xs:element name="Name" form="unqualified" nillable="true" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="20"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Values" form="unqualified" nillable="true" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:base64Binary">
+						<xs:maxLength value="3"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="id" type="xs:NMTOKEN" use="optional" form="unqualified"/>
+	</xs:complexType>
+</xs:schema>
