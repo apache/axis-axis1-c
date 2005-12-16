@@ -14,13 +14,13 @@
 	</description>
 	<import file="./test.xml"/>
 	
-	<target name="runUnitTests">
+	<target name="runUnitTests" depends="checkEnvironment">
 		<antcall target="unitTestClient">
 			<param name="unit.test.list" value="${basedir}/tests/auto_build/testcases/unitTest.list"/>
 		</antcall>
 	</target>
 	
-	<target name="unitTestClient">
+	<target name="unitTestClient" depends="addSamplesToUnitTests">
 		<description>
 			This target calls the fv suite as usual except for the fact that unit test flags
 				and properties are switched on.
@@ -36,11 +36,35 @@
 		<!-- have to replace all the single backslashes in unit.test.list so that the replace works OK -->
 		<propertyregex property="unit.test.list" override="true" input="${unit.test.list}" regexp="\\" replace="/"/>
 		<propertyregex property="test.list" override="true" input="${test.list}" regexp=".*" replace="${unit.test.list}" defaultValue="${unit.test.list}"/>
+		
+		<!--  dir.testproperties must be set to the correct tree -->
+		<!-- replace all of dir.testproperties backslashes slashes as this ruins the proper regex -->
+		<propertyregex property="dir.testproperties" override="true" input="${dir.testproperties}" regexp="\\" replace="/"/>
+		<propertyregex property="dir.testproperties" override="true" input="${dir.testproperties}" regexp=".*" replace=""/>
+		<!-- have to replace all the single backslashes in unit.test.list so that the replace works OK -->
+<!-- 	<propertyregex property="unit.test.list" override="true" input="${unit.test.list}" regexp="\\" replace="/"/> -->
+		<propertyregex property="dir.testproperties" override="true" input="never find this" regexp="a" replace="${basedir}/tests/auto_build/testcases/tests" defaultValue="${basedir}/tests/auto_build/testcases/tests"/>
+		<echo message="${dir.testproperties} DIRTESTPROPS"/>
+
+
 		<!-- ******************************************************************************************** -->
 		<!-- replace any previously set up mockserver with value true -->
 		<propertyregex property="mockServer" override="true" input="${mockServer}" regexp="false" replace="true" defaultValue="true"/>
 		<!-- now call the fv suite as usual -->
 		<antcall target="testSuite" inheritall="true"/>
+	</target>
+	
+	<target name="addSamplesToUnitTests">
+		<description>
+			We expose several samples but three in particular. Calculator, testHandler and echoStringHeaderHandler. However, we should make sure that these are
+			tested on a daily basis. This target copies those tests from the source tree into the samples tree ready for unit test to run. I have added these to the unit tests here but they should also be run as services too.
+		</description>
+		<!-- copy over the calculator sample client to the clients test directory -->
+		<copy file="${basedir}/samples/client/calculator/Client.cpp" tofile="${dir.autotests}/client/cpp/CalculatorClient.cpp"/>
+	</target>
+	
+	<target name="checkEnvironment" depends="initialize">
+		<echo message="Please ensure that you have set xmlParserLibraryName = ${xerces.xmlParserLibraryName} an XMLParser home depending on what your parser is"/>
 	</target>
 	
 
