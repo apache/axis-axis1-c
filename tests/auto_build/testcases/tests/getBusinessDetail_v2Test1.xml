@@ -1,0 +1,13 @@
+<test>
+    <name>getBusinessDetail_v2Test1</name>
+    <description>getBusinessDetail_v2Test1</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>getBusinessDetail_v2Test1Client.cpp</clientCode>
+    <wsdl>UDDI.wsdl</wsdl>
+    <expected>
+        <output>
+            getBusinessDetail_v2Test1.cpp.out
+        </output>
+    </expected>
+	<endpoint>http://localhost:9080/uddisoap/inquiryapi</endpoint>
+</test>
