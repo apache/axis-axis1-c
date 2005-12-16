@@ -1,0 +1,62 @@
+invoking get_businessDetail ...
+businessEntity_Array size = 1
+Business Entity 1
+	 Business Key Ref = aea80cae-6cde-4eac-9feb-19ac9719ebb9
+	 Authorized Name = UNAUTHENTICATED
+	 Names... 
+		 Name 1 = TestBusiness3
+	 Description ... 
+		 Description 1 = This is Test Business3
+	 Contact Information ... 
+		 Contact Information 1
+    			Person Name 1 = hai
+			Use Type 1 = phone
+			Description = Pls contact me
+			Phone useType = Phone
+			Phone Value = 987654321
+			email useType = mail
+			email Value = hai@hello.com
+	 Business Services...
+		Business Service 1
+			service key referance = 90757090-956e-4e13-82c0-4e85904ec076
+			business key referance = aea80cae-6cde-4eac-9feb-19ac9719ebb9
+			Binding Templates...
+				Point = http://localhost:9080/Calculator/services/Calculator
+				URL Type = other
+	 Category Bag Array Size .. 1
+		Category Bag 1
+			tModelKey_Ref = uuid:48eb2518-c1bd-354f-92c9-21a53b0ff2b1
+			keyName = Location
+			keyValue = Colombo
+		
+
+invoking get_businessDetail ...
+businessEntity_Array size = 2
+Business Entity 1
+	 Business Key Ref = aea80cae-6cde-4eac-9feb-19ac9719ebb9
+	 Authorized Name = UNAUTHENTICATED
+	 Names... 
+		 Name 1 = TestBusiness3
+	 Business Services...
+		Business Service 1
+			service key referance = 90757090-956e-4e13-82c0-4e85904ec076
+			business key referance = aea80cae-6cde-4eac-9feb-19ac9719ebb9
+			Binding Templates...
+				Point = http://localhost:9080/Calculator/services/Calculator
+				URL Type = other
+Business Entity 2
+	 Business Key Ref = 05e39405-6216-46bd-8f4c-dad67cda4c72
+	 Authorized Name = UNAUTHENTICATED
+	 Names... 
+		 Name 1 = TestBusiness1
+	 Business Services...
+		Business Service 1
+			service key referance = bb8560bb-98bb-4b15-8de2-e27a74e2e299
+			business key referance = 05e39405-6216-46bd-8f4c-dad67cda4c72
+			Binding Templates...
+				Point = http://localhost:9080/Calculator/services/Calculator
+				URL Type = other
+	 
+
+invoking get_businessDetail ...
+Exception caught : Client Error
