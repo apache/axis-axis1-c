@@ -219,7 +219,7 @@ int main(int argc, char* argv[])
                         cout << " Base64BinaryType " << size << endl;
                         if( size > 0)
                         {
-                            cout << " Base64BinaryType " << asciiToString(base64BinaryData) << endl;
+                            cout << " Base64BinaryType " << asciiToString((char *)base64BinaryData) << endl;
                         }
                         if (base64BinaryData != NULL)
                         {
