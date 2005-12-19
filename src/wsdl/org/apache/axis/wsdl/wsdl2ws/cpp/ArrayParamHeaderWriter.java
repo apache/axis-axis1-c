@@ -208,7 +208,7 @@ public class ArrayParamHeaderWriter extends ParamWriter
     {
         try
         {
-            writer.write("\t\t~" + classname + "();\n");
+            writer.write("\t\tvirtual ~" + classname + "();\n");
         }
         catch (IOException e)
         {

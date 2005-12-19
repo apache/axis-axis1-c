@@ -53,7 +53,7 @@ class STORAGE_CLASS_INFO xsd__duration_Array : public Axis_Array {
     /**
      * Destructor
      */
-    ~xsd__duration_Array();
+    virtual ~xsd__duration_Array();
     
     /**
      * Populate the array from a c-style array
@@ -88,7 +88,7 @@ class STORAGE_CLASS_INFO xsd__dateTime_Array : public Axis_Array {
     /**
      * Destructor
      */
-    ~xsd__dateTime_Array();
+    virtual ~xsd__dateTime_Array();
     
     /**
      * Populate the array from a c-style array
@@ -123,7 +123,7 @@ class STORAGE_CLASS_INFO xsd__time_Array : public Axis_Array {
     /**
      * Destructor
      */
-    ~xsd__time_Array();
+    virtual ~xsd__time_Array();
     
     /**
      * Populate the array from a c-style array
@@ -158,7 +158,7 @@ class STORAGE_CLASS_INFO xsd__date_Array : public Axis_Array {
     /**
      * Destructor
      */
-    ~xsd__date_Array();
+    virtual ~xsd__date_Array();
     
     /**
      * Populate the array from a c-style array
@@ -193,7 +193,7 @@ class STORAGE_CLASS_INFO xsd__gYearMonth_Array : public Axis_Array {
     /**
      * Destructor
      */
-    ~xsd__gYearMonth_Array();
+    virtual ~xsd__gYearMonth_Array();
     
     
     /**
@@ -229,7 +229,7 @@ class STORAGE_CLASS_INFO xsd__gYear_Array : public Axis_Array {
     /**
      * Destructor
      */
-    ~xsd__gYear_Array();
+    virtual ~xsd__gYear_Array();
     
     /**
      * Populate the array from a c-style array
@@ -264,7 +264,7 @@ class STORAGE_CLASS_INFO xsd__gMonthDay_Array : public Axis_Array {
     /**
      * Destructor
      */
-    ~xsd__gMonthDay_Array();
+    virtual ~xsd__gMonthDay_Array();
     
     /**
      * Populate the array from a c-style array
@@ -299,7 +299,7 @@ class STORAGE_CLASS_INFO xsd__gDay_Array : public Axis_Array {
     /**
      * Destructor
      */
-    ~xsd__gDay_Array();
+    virtual ~xsd__gDay_Array();
     
     /**
      * Populate the array from a c-style array
@@ -334,7 +334,7 @@ class STORAGE_CLASS_INFO xsd__gMonth_Array : public Axis_Array {
     /**
      * Destructor
      */
-    ~xsd__gMonth_Array();
+    virtual ~xsd__gMonth_Array();
     
     /**
      * Populate the array from a c-style array
@@ -369,7 +369,7 @@ class STORAGE_CLASS_INFO xsd__string_Array : public Axis_Array {
     /**
      * Destructor
      */
-    ~xsd__string_Array();
+    virtual ~xsd__string_Array();
     
     /**
      * Populate the array from a c-style array
@@ -404,7 +404,7 @@ class STORAGE_CLASS_INFO xsd__normalizedString_Array : public Axis_Array {
     /**
      * Destructor
      */
-    ~xsd__normalizedString_Array();
+    virtual ~xsd__normalizedString_Array();
     
     /**
      * Populate the array from a c-style array
@@ -439,7 +439,7 @@ class STORAGE_CLASS_INFO xsd__token_Array : public Axis_Array {
     /**
      * Destructor
      */
-    ~xsd__token_Array();
+    virtual ~xsd__token_Array();
     
     /**
      * Populate the array from a c-style array
@@ -475,7 +475,7 @@ class STORAGE_CLASS_INFO xsd__language_Array : public Axis_Array {
     /**
      * Destructor
      */
-    ~xsd__language_Array();
+    virtual ~xsd__language_Array();
     
     /**
      * Populate the array from a c-style array
@@ -510,7 +510,7 @@ class STORAGE_CLASS_INFO xsd__Name_Array : public Axis_Array {
     /**
      * Destructor
      */
-    ~xsd__Name_Array();
+    virtual ~xsd__Name_Array();
     
     /**
      * Populate the array from a c-style array
@@ -545,7 +545,7 @@ class STORAGE_CLASS_INFO xsd__NCName_Array : public Axis_Array {
     /**
      * Destructor
      */
-    ~xsd__NCName_Array();
+    virtual ~xsd__NCName_Array();
     
     /**
      * Populate the array from a c-style array
@@ -580,7 +580,7 @@ class STORAGE_CLASS_INFO xsd__ID_Array : public Axis_Array {
     /**
      * Destructor
      */
-    ~xsd__ID_Array();
+    virtual ~xsd__ID_Array();
     
     /**
      * Populate the array from a c-style array
@@ -615,7 +615,7 @@ class STORAGE_CLASS_INFO xsd__IDREF_Array : public Axis_Array {
     /**
      * Destructor
      */
-    ~xsd__IDREF_Array();
+    virtual ~xsd__IDREF_Array();
     
     /**
      * Populate the array from a c-style array
@@ -650,7 +650,7 @@ class STORAGE_CLASS_INFO xsd__IDREFS_Array : public Axis_Array {
     /**
      * Destructor
      */
-    ~xsd__IDREFS_Array();
+    virtual ~xsd__IDREFS_Array();
     
     /**
      * Populate the array from a c-style array
@@ -685,7 +685,7 @@ class STORAGE_CLASS_INFO xsd__ENTITY_Array : public Axis_Array {
     /**
      * Destructor
      */
-    ~xsd__ENTITY_Array();
+    virtual ~xsd__ENTITY_Array();
     
     /**
      * Populate the array from a c-style array
@@ -720,7 +720,7 @@ class STORAGE_CLASS_INFO xsd__ENTITIES_Array : public Axis_Array {
     /**
      * Destructor
      */
-    ~xsd__ENTITIES_Array();
+    virtual ~xsd__ENTITIES_Array();
     
     /**
      * Populate the array from a c-style array
@@ -755,7 +755,7 @@ class STORAGE_CLASS_INFO xsd__NMTOKEN_Array : public Axis_Array {
     /**
      * Destructor
      */
-    ~xsd__NMTOKEN_Array();
+    virtual ~xsd__NMTOKEN_Array();
     
     /**
      * Populate the array from a c-style array
@@ -790,7 +790,7 @@ class STORAGE_CLASS_INFO xsd__NMTOKENS_Array : public Axis_Array {
     /**
      * Destructor
      */
-    ~xsd__NMTOKENS_Array();
+    virtual ~xsd__NMTOKENS_Array();
     
     /**
      * Populate the array from a c-style array
@@ -825,7 +825,7 @@ class STORAGE_CLASS_INFO xsd__boolean_Array : public Axis_Array {
     /**
      * Destructor
      */
-    ~xsd__boolean_Array();
+    virtual ~xsd__boolean_Array();
     
     /**
      * Populate the array from a c-style array
@@ -860,7 +860,7 @@ class STORAGE_CLASS_INFO xsd__base64Binary_Array : public Axis_Array {
     /**
      * Destructor
      */
-    ~xsd__base64Binary_Array();
+    virtual ~xsd__base64Binary_Array();
     
     /**
      * Populate the array from a c-style array
@@ -895,7 +895,7 @@ class STORAGE_CLASS_INFO xsd__hexBinary_Array : public Axis_Array {
     /**
      * Destructor
      */
-    ~xsd__hexBinary_Array();
+    virtual ~xsd__hexBinary_Array();
     
     /**
      * Populate the array from a c-style array
@@ -930,7 +930,7 @@ class STORAGE_CLASS_INFO xsd__float_Array : public Axis_Array {
     /**
      * Destructor
      */
-    ~xsd__float_Array();
+    virtual ~xsd__float_Array();
     
     /**
      * Populate the array from a c-style array
@@ -965,7 +965,7 @@ class STORAGE_CLASS_INFO xsd__decimal_Array : public Axis_Array {
     /**
      * Destructor
      */
-    ~xsd__decimal_Array();
+    virtual ~xsd__decimal_Array();
     
     /**
      * Populate the array from a c-style array
@@ -1000,7 +1000,7 @@ class STORAGE_CLASS_INFO xsd__integer_Array : public Axis_Array {
     /**
      * Destructor
      */
-    ~xsd__integer_Array();
+    virtual ~xsd__integer_Array();
     
     /**
      * Populate the array from a c-style array
@@ -1035,7 +1035,7 @@ class STORAGE_CLASS_INFO xsd__nonPositiveInteger_Array : public Axis_Array {
     /**
      * Destructor
      */
-    ~xsd__nonPositiveInteger_Array();
+    virtual ~xsd__nonPositiveInteger_Array();
     
     /**
      * Populate the array from a c-style array
@@ -1070,7 +1070,7 @@ class STORAGE_CLASS_INFO xsd__negativeInteger_Array : public Axis_Array {
     /**
      * Destructor
      */
-    ~xsd__negativeInteger_Array();
+    virtual ~xsd__negativeInteger_Array();
     
     /**
      * Populate the array from a c-style array
@@ -1105,7 +1105,7 @@ class STORAGE_CLASS_INFO xsd__long_Array : public Axis_Array {
     /**
      * Destructor
      */
-    ~xsd__long_Array();
+    virtual ~xsd__long_Array();
     
     /**
      * Populate the array from a c-style array
@@ -1140,7 +1140,7 @@ class STORAGE_CLASS_INFO xsd__int_Array : public Axis_Array {
     /**
      * Destructor
      */
-    ~xsd__int_Array();
+    virtual ~xsd__int_Array();
     
     /**
      * Populate the array from a c-style array
@@ -1175,7 +1175,7 @@ class STORAGE_CLASS_INFO xsd__short_Array : public Axis_Array {
     /**
      * Destructor
      */
-    ~xsd__short_Array();
+    virtual ~xsd__short_Array();
     
     /**
      * Populate the array from a c-style array
@@ -1210,7 +1210,7 @@ class STORAGE_CLASS_INFO xsd__byte_Array : public Axis_Array {
     /**
      * Destructor
      */
-    ~xsd__byte_Array();
+    virtual ~xsd__byte_Array();
     
     /**
      * Populate the array from a c-style array
@@ -1245,7 +1245,7 @@ class STORAGE_CLASS_INFO xsd__nonNegativeInteger_Array : public Axis_Array {
     /**
      * Destructor
      */
-    ~xsd__nonNegativeInteger_Array();
+    virtual ~xsd__nonNegativeInteger_Array();
     
     /**
      * Populate the array from a c-style array
@@ -1280,7 +1280,7 @@ class STORAGE_CLASS_INFO xsd__unsignedLong_Array : public Axis_Array {
     /**
      * Destructor
      */
-    ~xsd__unsignedLong_Array();
+    virtual ~xsd__unsignedLong_Array();
     
     /**
      * Populate the array from a c-style array
@@ -1315,7 +1315,7 @@ class STORAGE_CLASS_INFO xsd__unsignedInt_Array : public Axis_Array {
     /**
      * Destructor
      */
-    ~xsd__unsignedInt_Array();
+    virtual ~xsd__unsignedInt_Array();
     
     /**
      * Populate the array from a c-style array
@@ -1350,7 +1350,7 @@ class STORAGE_CLASS_INFO xsd__unsignedByte_Array : public Axis_Array {
     /**
      * Destructor
      */
-    ~xsd__unsignedByte_Array();
+    virtual ~xsd__unsignedByte_Array();
     
     /**
      * Populate the array from a c-style array
@@ -1385,7 +1385,7 @@ class STORAGE_CLASS_INFO xsd__unsignedShort_Array : public Axis_Array {
     /**
      * Destructor
      */
-    ~xsd__unsignedShort_Array();
+    virtual ~xsd__unsignedShort_Array();
     
     /**
      * Populate the array from a c-style array
@@ -1420,7 +1420,7 @@ class STORAGE_CLASS_INFO xsd__positiveInteger_Array : public Axis_Array {
     /**
      * Destructor
      */
-    ~xsd__positiveInteger_Array();
+    virtual ~xsd__positiveInteger_Array();
     
     /**
      * Populate the array from a c-style array
@@ -1455,7 +1455,7 @@ class STORAGE_CLASS_INFO xsd__double_Array : public Axis_Array {
     /**
      * Destructor
      */
-    ~xsd__double_Array();
+    virtual ~xsd__double_Array();
     
     /**
      * Populate the array from a c-style array
@@ -1490,7 +1490,7 @@ class STORAGE_CLASS_INFO xsd__anyURI_Array : public Axis_Array {
     /**
      * Destructor
      */
-    ~xsd__anyURI_Array();
+    virtual ~xsd__anyURI_Array();
     
     /**
      * Populate the array from a c-style array
@@ -1525,7 +1525,7 @@ class STORAGE_CLASS_INFO xsd__QName_Array : public Axis_Array {
     /**
      * Destructor
      */
-    ~xsd__QName_Array();
+    virtual ~xsd__QName_Array();
     
     /**
      * Populate the array from a c-style array
@@ -1560,7 +1560,7 @@ class STORAGE_CLASS_INFO xsd__NOTATION_Array : public Axis_Array {
     /**
      * Destructor
      */
-    ~xsd__NOTATION_Array();
+    virtual ~xsd__NOTATION_Array();
     
     /**
      * Populate the array from a c-style array

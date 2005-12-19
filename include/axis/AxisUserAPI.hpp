@@ -343,7 +343,7 @@ class STORAGE_CLASS_INFO Axis_Array {
     /**
      * Destructor
      */
-    ~Axis_Array();
+    virtual ~Axis_Array();
     
     /**
      * Clone the content of an existing Axis_Array
