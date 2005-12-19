@@ -12,5 +12,5 @@
 			Calculator_ServerResponse.expected
 		</serverResponse>
     </expected>
-	<endpoint>http://localhost:80/axis/Calculator</endpoint>
+	<endpoint>add 2 3 http://localhost:80/axis/Calculator</endpoint>
 </test>
