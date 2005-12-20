@@ -58,7 +58,10 @@ Please use these to configure directories to suit the needs of your system.
 		<!-- Copy documentation into release package -->
 		<mkdir dir="${dir.release}/docs"/>
 		<copy todir="${dir.release}/docs">
-			<fileset dir="${basedir}/docs" includes="**"/>
+			<fileset dir="${basedir}/docs">
+				<include name="**/*.pdf"/>
+				<include name="**/*.html"/>
+			</fileset>
 		</copy>	
 	</target>
 
