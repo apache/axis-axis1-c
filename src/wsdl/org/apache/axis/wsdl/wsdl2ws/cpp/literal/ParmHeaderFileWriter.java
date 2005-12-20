@@ -303,6 +303,7 @@ public class ParmHeaderFileWriter extends ParamWriter
 				// FJP Nillable vv
 				if (isElementNillable(i) || attribs[i].isArray() || isElementOptional(i) && !attribs[i].getAllElement())
 				{
+										
 					if(attribs[i].isAnyType()){
 						anyCounter += 1;
 						    writer
@@ -324,16 +325,22 @@ public class ParmHeaderFileWriter extends ParamWriter
 					    }
 					    else
 					    {
-							writer.write("\t"
+					    	if(attribs[i].getChoiceElement()&& !isElementNillable(i))
+					    		writer.write("\t"
 									 + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-									 + " * " + attribs[i].getParamName()
+									 + " " + attribs[i].getParamName()
 									 + ";\n");
+					    	else
+					    		writer.write("\t"
+										 + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+										 + " * " + attribs[i].getParamName()
+										 + ";\n");
 					        
 					    }
 					}
 				} else 
 					{
-						if(attribs[i].getAllElement())
+						if(attribs[i].getAllElement() || attribs[i].getChoiceElement() )
 						{
 							writer.write("\t"
 									 + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
@@ -430,7 +437,7 @@ public class ParmHeaderFileWriter extends ParamWriter
 					}
 					else 
 					{
-						if(attribs[i].getAllElement())
+						if(attribs[i].getAllElement() || attribs[i].getChoiceElement())
 						{
 							writer.write( "\n\t"
 	                                  + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])

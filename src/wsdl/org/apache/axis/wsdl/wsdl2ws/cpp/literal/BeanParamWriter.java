@@ -196,11 +196,12 @@ public class BeanParamWriter extends ParamCPPFileWriter
 	                    	anyCounter += 1;
 	                    	parameterName = parameterName + Integer.toString(anyCounter);
 	                    }
-	                    if(attribs[i].getAllElement())
+	                    if(attribs[i].getAllElement() || attribs[i].getChoiceElement() )
 	                    {
 	                    	writer.write("\n" + properParamName + " " + classname
 		                            + "::get" + methodName + "()\n{\n");
 	                    }
+	                    
 	                    else
 	                    {
 		                    writer.write("\n" + properParamName + " * " + classname
@@ -209,7 +210,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
 	                    
 	                    writer.write("\t" + "return " + parameterName + " ; \n}\n");
 	
-	                    if(attribs[i].getAllElement())
+	                    if(attribs[i].getAllElement() || attribs[i].getChoiceElement())
 	                    {
 	                    	writer.write("\n" + "void " + classname + "::set"
 		                            + methodName + "(" + properParamName
@@ -235,7 +236,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                         writer.write("\t{\n");
                         writer.write("\t\tif (deep)\n");
                         writer.write("\t\t{\n");
-                        if(attribs[i].getAllElement())
+                        if(attribs[i].getAllElement() || attribs[i].getChoiceElement())
                         {
                         	writer.write("\t\t\t" + parameterName + " = new " + type + "();\n");
                         }
@@ -658,12 +659,12 @@ public class BeanParamWriter extends ParamCPPFileWriter
             {
                 if (attribs[i].isOptional())
                 {
-                    writer.write("\tif (param->" + attribs[i].getParamNameWithoutSymbols() + " != NULL)\n\t{\n\t");
+                    writer.write("\tif (param->" + attribs[i].getParamNameWithoutSymbols() + " != NULL)\n\t\t{\n\t");
                 }
                 
                 if (CUtils.isPointerType(attribs[i].getTypeName()))
                 {
-                    writer.write("\tpSZ->serializeAsElement(\""
+                    writer.write("\t\tpSZ->serializeAsElement(\""
                             + attribs[i].getSOAPElementNameAsString()
                             + "\", "
                             + namespace
@@ -687,7 +688,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 		
                 		if (((attribs[i].getChoiceElement())&&(isElementNillable(i)))&& !(attribs[i].getTypeName().equals("xsd__string")) )
                 		{
-                			writer.write("\tpSZ->serializeAsElement(\""
+                			writer.write("\t\tpSZ->serializeAsElement(\""
                                     + attribs[i].getSOAPElementNameAsString()
                                     + "\", "
                                     + namespace
@@ -698,7 +699,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 		}
                 		else
                 		{
-                    		writer.write("\tpSZ->serializeAsElement(\""
+                    		writer.write("\t\tpSZ->serializeAsElement(\""
                                     + attribs[i].getSOAPElementNameAsString()
                                     + "\", "
                                     + namespace
@@ -723,7 +724,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 
                 if (attribs[i].isOptional())
                 {
-                    writer.write("\t}\n");
+                    writer.write("\t\t}\n");
                 }
             }
             else
@@ -978,8 +979,8 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 if (attribs[i].isOptional())
                 {
                     writer.write("\tconst char* elementName" + i + " = pIWSDZ->peekNextElementName();\n");
-                    writer.write("\tif(strcmp(elementName" + i + ", \"" + soapTagName + "\") == 0)\n");
-                    writer.write("\t{\n");
+                    writer.write("\t\tif(strcmp(elementName" + i + ", \"" + soapTagName + "\") == 0)\n");
+                    writer.write("\t\t{\n");
                 }
                 
                 if (attribs[i].isNillable() ||
@@ -987,7 +988,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                         isElementOptional(i) ||
                         CUtils.isPointerType(attribs[i].getTypeName()))
                 {
-                	if (attribs[i].getChoiceElement() && !attribs[i].getTypeName().equals("xsd__string"))
+                	if (attribs[i].getChoiceElement() && isElementNillable(i) && !attribs[i].getTypeName().equals("xsd__string"))
                 	{
                 		writer.write("\tparam->"
                 				+ attribs[i].getParamNameAsMember()
@@ -1019,32 +1020,32 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 		}
                 		else
                 		{
-                    		writer.write("\t" + typeName + " *	pValue" + i + " = pIWSDZ->" +
+                    		writer.write("\t\t\t" + typeName + " *	pValue" + i + " = pIWSDZ->" +
                		        	 CUtils.getParameterGetValueMethodName(typeName, attribs[i].isAttribute()) +
                		        	 "( \"" + soapTagName + "\", 0);\n\n");
                 		}
                 		
-                		writer.write( "\tif( pValue" + i + " == NULL)\n");
-                		writer.write( "\t{\n");
-            		    writer.write("\t\tparam->" + elementName + " = NULL;\n");
-                		writer.write( "\t}\n");
-                		writer.write( "\telse\n");
-                		writer.write( "\t{\n");
+                		writer.write( "\t\t\tif( pValue" + i + " == NULL)\n");
+                		writer.write( "\t\t\t{\n");
+            		    writer.write("\t\t\t\tparam->" + elementName + " = NULL;\n");
+                		writer.write( "\t\t\t}\n");
+                		writer.write( "\t\t\telse\n");
+                		writer.write( "\t\t\t{\n");
                 		
                 		if( CUtils.isPointerType( typeName))
                 		{
-                		    writer.write("\t\tparam->" + elementName + " = new char[strlen( pValue" + i + ") + 1];\n");
-                    		writer.write("\t\tstrcpy( param->" + elementName + ", pValue" + i + ");\n\n");
+                		    writer.write("\t\t\t\tparam->" + elementName + " = new char[strlen( pValue" + i + ") + 1];\n");
+                    		writer.write("\t\t\t\tstrcpy( param->" + elementName + ", pValue" + i + ");\n\n");
                 		}
                 		else
                 		{
-                		    writer.write("\t\tparam->" + elementName + " = new " + typeName + "();\n");
-                    		writer.write("\t\t*param->" + elementName + " = *pValue" + i + ";\n\n");
+                		    writer.write("\t\t\t\tparam->" + elementName + " = new " + typeName + "();\n");
+                    		writer.write("\t\t\t\t*param->" + elementName + " = *pValue" + i + ";\n\n");
                 		}
                 		
-                		writer.write("\t\tAxis::AxisDelete( (void *) pValue" + i + ", " + CUtils.getXSDTypeForBasicType( typeName) + ");\n\n");
+                		writer.write("\t\t\t\tAxis::AxisDelete( (void *) pValue" + i + ", " + CUtils.getXSDTypeForBasicType( typeName) + ");\n\n");
 
-                		writer.write( "\t}\n");
+                		writer.write( "\t\t\t}\n");
                 	}
                 } 
                 else
@@ -1052,7 +1053,8 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     /**
                      * Dushshantha: If the simple type is a choice it is handled
                      * as a pointer variable. These variables should be defined
-                     * as pointers in the header file. Chinthana: This is the
+                     * as pointers in the header file. 
+                     * Chinthana: This is the
                      * same in 'all' element
                      */
                     if (attribs[i].getChoiceElement()
@@ -1087,11 +1089,11 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 }
                 if (attribs[i].isOptional())
                 {
-                    writer.write("\t}\n");
-                    writer.write("\telse\n");
-                    writer.write("\t{\n");
-                    writer.write("\t\tparam->" + attribs[i].getParamNameAsMember() + " = NULL;\n");
-                    writer.write("\t}\n\n");
+                    writer.write("\t\t\t}\n");
+                    writer.write("\t\telse\n");
+                    writer.write("\t\t{\n");
+                    writer.write("\t\t\tparam->" + attribs[i].getParamNameAsMember() + " = NULL;\n");
+                    writer.write("\t\t}\n\n");
                 }
             }
             else
@@ -1258,6 +1260,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
 	                if (attribs[i].isSimpleType() && (CUtils.isPointerType(attribs[i].getTypeName()) || attribs[i].isOptional() || attribs[i].isNillable() || attribs[i].getChoiceElement() || attribs[i].getAllElement()))
 	                {
 	                    writer.write("\t" + attribs[i].getParamName() + " = NULL;\n");
+	                    writer.write("\t__axis_deepcopy_" + attribs[i].getParamName() + " = false;\n");
 	                    String methodName = attribs[i].getParamNameWithoutSymbols();
 	                    if( methodName.endsWith( "_"))
 	                    {
@@ -1337,6 +1340,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 {
                     writer.write("\t" + attribs[i].getParamNameAsMember()
                             + " = NULL;\n");
+                    writer.write("\t__axis_deepcopy_" + attribs[i].getParamName() + " = false;\n");
                 }
                 else
                 {
