@@ -1039,8 +1039,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 		}
                 		else
                 		{
-                		    writer.write("\t\t\t\tparam->" + elementName + " = new " + typeName + "();\n");
-                    		writer.write("\t\t\t\t*param->" + elementName + " = *pValue" + i + ";\n\n");
+                		    writer.write("\t\t\t\tparam->set" + elementName + " (pValue" + i + ");\n");
                 		}
                 		
                 		writer.write("\t\t\t\tAxis::AxisDelete( (void *) pValue" + i + ", " + CUtils.getXSDTypeForBasicType( typeName) + ");\n\n");
@@ -1080,8 +1079,8 @@ public class BeanParamWriter extends ParamCPPFileWriter
                                 + CUtils.getParameterGetValueMethodName(
                                         attribs[i].getTypeName(), attribs[i].isAttribute()) + "( \""
                                 + elementNameToSearchFor + "\",0)) != NULL)\n\t{\n");
-                        writer.write("\t\tparam->"
-                                + attribs[i].getParamNameAsMember() + " = *( "
+                        writer.write("\t\tparam->set"
+                                + attribs[i].getParamNameAsMember() + "(* "
                                 + attribs[i].getParamNameAsMember() + " );\n");
         				writer.write("\t\tAxis::AxisDelete( (void *) " + attribs[i].getParamNameAsMember() + ", " + CUtils.getXSDTypeForBasicType( attribs[i].getTypeName()) + ");\n");
                     	writer.write("\t}\n");                    	
