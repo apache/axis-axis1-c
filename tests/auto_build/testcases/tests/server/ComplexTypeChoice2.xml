@@ -2,7 +2,7 @@
     <name>ComplexTypeChoice2</name>
     <description>ComplexTypeChoice2</description>
     <serviceLang>cpp</serviceLang>
-    <serviceCode>ComplexTypeChoice.cpp</serviceCode>
+    <serviceCode>XSD_bite.cpp</serviceCode>
     <wsdl>ComplexTypeChoice2.wsdl</wsdl>
 	<servicename></servicename>
 </service>
