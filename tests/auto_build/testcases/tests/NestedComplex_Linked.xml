@@ -1,0 +1,15 @@
+<test>
+    <name>NestedComplex_Linked</name>
+    <description>NestedComplex</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>NestedComplexClient.cpp</clientCode>
+    <wsdl>NestedComplex.wsdl</wsdl>
+    <expected>
+        <output>
+            NestedComplex.expected
+        </output>
+		<serverResponse>NestedComplex_ServerResponse.expected</serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/NestedComplex</endpoint>
+	<stubAsLibrary>true</stubAsLibrary>
+</test>

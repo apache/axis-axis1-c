@@ -1,0 +1,17 @@
+<test>
+    <name>InOut_Linked</name>
+    <description>InOut</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>InOutClient.cpp</clientCode>
+    <wsdl>InOut.wsdl</wsdl>
+    <expected>
+        <output>
+            InOut.expected
+        </output>
+	<serverResponse>
+	    InOut_ServerResponse.expected
+	</serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/InOut</endpoint>
+	<stubAsLibrary>true</stubAsLibrary>
+</test>

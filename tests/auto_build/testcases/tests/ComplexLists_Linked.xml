@@ -1,0 +1,17 @@
+<test>
+    <name>ComplexLists_Linked</name>
+    <description>ComplexLists</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>ComplexListsClient.cpp</clientCode>
+    <wsdl>ComplexLists.wsdl</wsdl>
+    <expected>
+        <output>
+            ComplexLists.expected
+        </output>
+		<serverResponse>
+			ComplexLists_ServerResponse.expected
+		</serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/ComplexLists</endpoint>
+	<stubAsLibrary>true</stubAsLibrary>
+</test>

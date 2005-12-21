@@ -1,0 +1,15 @@
+<test>
+    <name>RecurseTypes_Linked</name>
+    <description>RecurseTypes</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>RecurseTypesClient.cpp</clientCode>
+    <wsdl>RecurseTypes.wsdl</wsdl>
+    <expected>
+        <output>
+            RecurseTypes.cpp.out
+        </output>
+		<serverResponse>RecurseTypes_ServerResponse.expected</serverResponse>
+    </expected>
+	<endpoint>-e http://localhost:80/axis/RecurseTypes</endpoint>
+	<stubAsLibrary>true</stubAsLibrary>
+</test>

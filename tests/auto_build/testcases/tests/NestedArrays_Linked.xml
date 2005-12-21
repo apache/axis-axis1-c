@@ -1,0 +1,14 @@
+<test>
+    <name>NestedArrays_Linked</name>
+    <description>NestedArrays</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>NestedArraysClient.cpp</clientCode>
+    <wsdl>NestedArrays.wsdl</wsdl>
+    <expected>
+        <output>
+            NestedArrays.expected
+        </output>
+    </expected>
+	<endpoint>http://localhost:80/axis/NestedArrays</endpoint>
+	<stubAsLibrary>true</stubAsLibrary>
+</test>

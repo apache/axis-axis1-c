@@ -1,0 +1,18 @@
+<test>
+    <name>XSD_int_Linked</name>
+    <description>Test serialization and deserialization of the XSD built-in simple type int</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>XSD_intClient.cpp</clientCode>
+    <wsdl>XSD_int.wsdl</wsdl>
+    <expected>
+        <output>
+            XSD_int.expected
+        </output>
+		<serverResponse>
+			XSD_int_ServerResponse.expected
+	    </serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/XSD_int</endpoint>
+	<stubAsLibrary>true</stubAsLibrary>
+</test>
+

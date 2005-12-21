@@ -1,0 +1,14 @@
+<test>
+    <name>SimpleTypeArray_Linked</name>
+    <description>SimpleTypeArray</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>SimpleTypeArrayClient.cpp</clientCode>
+    <wsdl>SimpleTypeArray.wsdl</wsdl>
+    <expected>
+        <output>
+            SimpleTypeArray.cpp.out
+        </output>
+    </expected>
+	<endpoint>-e http://localhost:80/axis/SimpleTypeArray</endpoint>
+	<stubAsLibrary>true</stubAsLibrary>
+</test>

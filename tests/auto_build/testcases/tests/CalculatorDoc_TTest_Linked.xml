@@ -1,0 +1,16 @@
+<test>
+    <name>CalculatorDoc_TTest_Linked</name>
+    <description>CalculatorDoc_TTest</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>CalculatorDoc_TTestClient.cpp</clientCode>
+    <wsdl>CalculatorDoc.wsdl</wsdl>
+    <expected>
+        <output>
+            CalculatorDoc_TTest.expected
+        </output>	
+    </expected>
+	<endpoint>http://localhost:80/axis/CalculatorDoc</endpoint>
+	<nomonitor>true</nomonitor>
+	<notrace>true</notrace>
+	<stubAsLibrary>true</stubAsLibrary>
+</test>

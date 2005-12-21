@@ -1,0 +1,13 @@
+<test>
+    <name>Arrays_Linked</name>
+    <description>Test arrays</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>ArraysClient.cpp</clientCode>
+    <wsdl>Arrays.wsdl</wsdl>
+    <expected>
+        <output>Arrays.cpp.out</output>
+		<serverResponse>Arrays_ServerResponse.expected</serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/Arrays</endpoint>
+	<stubAsLibrary>true</stubAsLibrary>
+</test>
