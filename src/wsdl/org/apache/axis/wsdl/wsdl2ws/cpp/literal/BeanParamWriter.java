@@ -180,8 +180,13 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     writer.write("\tif(" + parameterName + " == NULL)\n");
                     writer.write("\t{\n");
                     writer.write("\t\t" + parameterName + " = new " + properParamName + "();\n");
+                    if (attribs[i].getChoiceElement()||attribs[i].getAllElement())
+                    	writer.write("\t\t*" + parameterName + " = new " + type + "_Array();\n");
                     writer.write("\t}\n");
-                    writer.write("\t" + parameterName + "->clone(*pInValue); \n");
+                    if (attribs[i].getChoiceElement()||attribs[i].getAllElement())
+                    	writer.write("\t(*" + parameterName + ")->clone(*(*pInValue)); \n");
+                    else
+                    	writer.write("\t" + parameterName + "->clone(*pInValue); \n");
                     writer.write("}\n");
                 }
                 else
@@ -619,7 +624,19 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 //if Array
                 if (attribs[i].isSimpleType())
                 {
-                	writer.write("\tpSZ->serializeBasicArray(param->"
+                	if (attribs[i].getChoiceElement()||attribs[i].getAllElement())
+                		writer.write("\tpSZ->serializeBasicArray(*(param->"
+                                + attribs[i].getParamName()
+                                + "), "
+                                + namespace
+                                + ","
+                                + CUtils.getXSDTypeForBasicType(attribs[i]
+                                                .getTypeName())
+                                + ", \""
+                                + attribs[i].getParamNameAsSOAPElement()
+                                + "\");\n");
+                	else
+                		writer.write("\tpSZ->serializeBasicArray(param->"
                             + attribs[i].getParamName()
                             + ", "
                             + namespace
@@ -929,9 +946,15 @@ public class BeanParamWriter extends ParamCPPFileWriter
                             + "\",0);\n");
                     writer.write("\tif(param->" + attribs[i].getParamNameAsMember() + " == NULL)\n");
                     writer.write("\t{\n");
-                    writer.write("\t\tparam->" + attribs[i].getParamNameAsMember() + " = new " + attribs[i].getTypeName() + "_Array();\n");
+                    if (attribs[i].getChoiceElement()||attribs[i].getAllElement())
+                    	writer.write("\t\tparam->" + attribs[i].getParamNameAsMember() + " = new " + attribs[i].getTypeName() + "_Array*();\n");
+                    else
+                    	writer.write("\t\tparam->" + attribs[i].getParamNameAsMember() + " = new " + attribs[i].getTypeName() + "_Array();\n");
                     writer.write("\t}\n");
-                    writer.write("\tparam->" + attribs[i].getParamNameAsMember() + "->clone( *array" + arrayCount + ");\n");
+                    if (attribs[i].getChoiceElement()||attribs[i].getAllElement())
+                    	writer.write("\t(*(param->" + attribs[i].getParamNameAsMember() + "))->clone(*array" + arrayCount + ");\n");
+                    else
+                    	writer.write("\tparam->" + attribs[i].getParamNameAsMember() + "->clone( *array" + arrayCount + ");\n");
                     writer.write("\tAxis::AxisDelete((void*) array" + arrayCount + ", XSD_ARRAY);\n\n");
                 }
                 else
@@ -1227,7 +1250,12 @@ public class BeanParamWriter extends ParamCPPFileWriter
             {
                 if (attribs[i].isArray())
                 {
-                    writer.write("\t" + attribs[i].getParamNameAsMember() + " = new " + attribs[i].getTypeName() +"_Array();\n");
+                	if (attribs[i].getChoiceElement()||attribs[i].getAllElement()){
+                		writer.write("\t" + attribs[i].getParamNameAsMember() + " = new " + attribs[i].getTypeName() +"_Array*();\n");
+                		writer.write("\t*" + attribs[i].getParamNameAsMember() + " = new " + attribs[i].getTypeName() +"_Array();\n");
+                	}
+                	else
+                		writer.write("\t" + attribs[i].getParamNameAsMember() + " = new " + attribs[i].getTypeName() +"_Array();\n");
                 }
             }
             writer.write("\treset();\n");
@@ -1240,7 +1268,10 @@ public class BeanParamWriter extends ParamCPPFileWriter
             {
                 if (attribs[i].isArray())
                 {	
-                    writer.write("\t" + attribs[i].getParamName() + " = new " + attribs[i].getTypeName() + "_Array(*original." + attribs[i].getParamName() + ");\n");
+                	if (attribs[i].getChoiceElement()||attribs[i].getAllElement())
+                		writer.write("\t" + attribs[i].getParamName() + " = new " + attribs[i].getTypeName() + "_Array*(*original." + attribs[i].getParamName() + ");\n");
+                	else
+                		writer.write("\t" + attribs[i].getParamName() + " = new " + attribs[i].getTypeName() + "_Array(*original." + attribs[i].getParamName() + ");\n");
                 }
                 else if (attribs[i].isAnyType())
                 {
@@ -1319,7 +1350,10 @@ public class BeanParamWriter extends ParamCPPFileWriter
             {
                 if (attribs[i].isArray())
                 {
-                    writer.write("\t" + attribs[i].getParamNameAsMember() + "->clear();\n");
+                	if (attribs[i].getChoiceElement()||attribs[i].getAllElement())
+                		writer.write("\t(*" + attribs[i].getParamNameAsMember() + ")->clear();\n");
+                	else
+                		writer.write("\t" + attribs[i].getParamNameAsMember() + "->clear();\n");
                 }
                 else if (!attribs[i].isSimpleType())
                 {

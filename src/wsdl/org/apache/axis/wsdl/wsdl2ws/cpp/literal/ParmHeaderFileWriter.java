@@ -439,18 +439,34 @@ public class ParmHeaderFileWriter extends ParamWriter
 					{
 						if(attribs[i].getAllElement() || attribs[i].getChoiceElement())
 						{
-							writer.write( "\n\t"
+							if (attribs[i].isArray()){
+								writer.write( "\n\t"
+		                                  + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+		                                  + " * get"
+		                                  + methodName
+		                                  + "();\n");
+
+								writer.write( "\t"
+		                                  + "void set"
+		                                  + methodName
+		                                  + "("
+		                                  + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+		                                  + " * pInValue");
+							}
+							else{
+								writer.write( "\n\t"
 	                                  + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
 	                                  + " get"
 	                                  + methodName
 	                                  + "();\n");
 
-							writer.write( "\t"
+								writer.write( "\t"
 	                                  + "void set"
 	                                  + methodName
 	                                  + "("
 	                                  + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
 	                                  + " pInValue");
+							}
 						}
 						else
 						{
