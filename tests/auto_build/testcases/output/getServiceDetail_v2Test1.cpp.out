@@ -1,0 +1,45 @@
+invoking get_serviceDetail ...
+businessService_Array size = 1
+Business Service 1
+	 Business Key Ref = aea80cae-6cde-4eac-9feb-19ac9719ebb9
+	 Service Key Ref = f0aa27f0-88e7-4750-808a-a4d038a48ae7
+	 Names... 
+		 Name 1 = TestService11
+	 Description ... 
+		 Description 1 = This is my service1	 
+	 Binding Templates...
+	 	 Point = http://localhost:9080/Calculator/services/Calculator
+		 URL Type = other
+	 Category Bag Array Size .. 1
+		Category Bag 1
+			tModelKey_Ref = uuid:c1acf26d-9672-4404-9d70-39b756e62ab4
+			keyName = Description Type
+			keyValue = wsdlSpec
+		
+
+invoking get_serviceDetail ...
+businessService_Array size = 2
+Business Service 1
+	 Business Key Ref = aea80cae-6cde-4eac-9feb-19ac9719ebb9
+	 Service Key Ref = 90757090-956e-4e13-82c0-4e85904ec076
+	 Names... 
+		 Name 1 = TestService11
+	 Description ... 
+		 Description 1 = This is my service1	 
+	 Binding Templates...
+	 	 Point = http://localhost:9080/Calculator/services/Calculator
+		 URL Type = other
+Business Service 2
+	 Business Key Ref = aea80cae-6cde-4eac-9feb-19ac9719ebb9
+	 Service Key Ref = 90757090-956e-4e13-82c0-4e85904ec076
+	 Names... 
+		 Name 1 = TestService13
+	 Description ... 
+		 Description 1 = This is my service1	 
+	 Binding Templates...
+	 	 Point = http://localhost:9080/Calculator/services/Calculator
+		 URL Type = other 
+	 
+
+invoking get_serviceDetail ...
+Exception caught : Client Error

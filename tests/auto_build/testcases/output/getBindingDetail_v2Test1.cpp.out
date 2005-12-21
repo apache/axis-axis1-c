@@ -1,0 +1,41 @@
+invoking get_bindingDetail ...
+bindingTemplate_Array size = 1
+Binding Template 1
+	 Binding Key Ref = 585e9258-c7b7-4701-986e-1646f7166ed1
+	 Service Key Ref = 90757090-956e-4e13-82c0-4e85904ec076
+	 Description ... 
+		 Description 1 = This is my Calculator Service
+	 accessPoint
+		 Point = http://localhost:9080/Calculator/services/Calculator
+		 URL Type = other
+	 tModelInstanceInfo...
+		 tModelKey Value = uuid:2524c425-656e-4eb2-8b13-080cfb081382
+
+
+invoking get_bindingDetail ...
+bindingTemplate_Array size = 2
+Binding Template 1
+	 Binding Key Ref = 585e9258-c7b7-4701-986e-1646f7166ed1
+	 Service Key Ref = 90757090-956e-4e13-82c0-4e85904ec076
+	 Description ... 
+		 Description 1 = This is my Calculator Service
+	 accessPoint
+		 Point = http://localhost:9080/Calculator/services/Calculator
+		 URL Type = other
+	 tModelInstanceInfo...
+		 tModelKey Value = uuid:2524c425-656e-4eb2-8b13-080cfb081382
+Binding Template 2
+	 Binding Key Ref = 2ebf3e2e-58c0-4022-83a6-eed8b1eea6e8
+	 Service Key Ref = bb8560bb-98bb-4b15-8de2-e27a74e2e299
+	 Description ... 
+		 Description 1 = This is my Calculator Service
+	 accessPoint
+		 Point = http://localhost:9080/Calculator/services/Calculator
+		 URL Type = other
+	 tModelInstanceInfo...
+		 tModelKey Value = uuid:2524c425-656e-4eb2-8b13-080cfb081382
+
+
+invoking get_bindingDetail ...
+Exception caught : Client Error
+

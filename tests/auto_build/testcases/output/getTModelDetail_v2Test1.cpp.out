@@ -1,0 +1,62 @@
+invoking get_tModelDetail ...
+tModel_Array size = 1
+tModel 1
+	 tModel Key Ref = uuid:2524c425-656e-4eb2-8b13-080cfb081382
+	 authorizedName = UNAUTHENTICATED
+	 Name = TestTModel1
+	 Description ... 
+		 Description 1 = This is Technical Model1
+	 overviewDoc ...
+		 Description 1 = This is the wsdl for Technical Model1
+		 overviewURL = http://localhost:9080/Calculator/services/Calculator?wsdl		
+	 Category Bag Array Size = 2
+		 Category Bag 1
+			 tModelKey_Ref = uuid:c1acf26d-9672-4404-9d70-39b756e62ab4
+			 keyName = Description Type
+			 keyValue = wsdlSpec
+		 Category Bag 2
+			 tModelKey_Ref = uuid:48eb2518-c1bd-354f-92c9-21a53b0ff2b1
+			 keyName = Location
+			 keyValue = Sri Lanka
+
+
+invoking get_bindingDetail ...
+tModel_Array size = 1
+tModel 1
+	 tModel Key Ref = uuid:2524c425-656e-4eb2-8b13-080cfb081382
+	 authorizedName = UNAUTHENTICATED
+	 Name = TestTModel1
+	 Description ... 
+		 Description 1 = This is Technical Model1
+	 overviewDoc ...
+		 Description 1 = This is the wsdl for Technical Model1
+		 overviewURL = http://localhost:9080/Calculator/services/Calculator?wsdl		
+	 Category Bag Array Size = 2
+		 Category Bag 1
+			 tModelKey_Ref = uuid:c1acf26d-9672-4404-9d70-39b756e62ab4
+			 keyName = Description Type
+			 keyValue = wsdlSpec
+		 Category Bag 2
+			 tModelKey_Ref = uuid:48eb2518-c1bd-354f-92c9-21a53b0ff2b1
+			 keyName = Location
+			 keyValue = Sri Lanka
+tModel 2
+	 tModel Key Ref = uuid:52ed8652-e2f8-4816-bc71-f48748f471bf
+	 authorizedName = UNAUTHENTICATED
+	 Name = TestTModel2
+	 Description ... 
+		 Description 1 = This is Technical Model2
+	 overviewDoc ...
+		 Description 1 = This is the wsdl for Technical Model2
+		 overviewURL = http://localhost:9080/MathOps/services/MathOps?wsdl
+	 Category Bag Array Size = 1
+		 Category Bag 1
+			 tModelKey_Ref = uuid:c1acf26d-9672-4404-9d70-39b756e62ab4
+			 keyName = Description Type
+			 keyValue = wsdlSpec 
+
+
+
+invoking get_bindingDetail ...
+Exception caught : Client Error
+
