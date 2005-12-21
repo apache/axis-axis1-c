@@ -1,0 +1,13 @@
+<test>
+    <name>getTModelDetail_v2Test1</name>
+    <description>getTModelDetail_v2Test1</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>getTModelDetail_v2Test1Client.cpp</clientCode>
+    <wsdl>UDDI.wsdl</wsdl>
+    <expected>
+        <output>
+            getTModelDetail_v2Test1.cpp.out
+        </output>
+    </expected>
+	<endpoint>http://localhost:9080/uddisoap/inquiryapi</endpoint>
+</test>
