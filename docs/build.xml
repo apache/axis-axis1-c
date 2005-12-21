@@ -24,6 +24,10 @@
     * 'ws-axis/site/src'    - your ihtml changes that you made.
     * 'ws-site/target/axis' - the actual html output and the pdf files that will be viewed on the web-site will be changed in here
     * 'ws-axis/c/docs'      - A copy of ws-site/targets/axis/cpp is put here.
+    * In theory there is a script that runs on minotaur to upload the files to the actual
+    * website server (Minotaur) however if this is not working or you want your changes to appear immediately ->
+	*  ssh into minotaur,
+	* cd to /www/ws.apache.org/axis and run "svn up" there.
 -->
 
 <project name="BuildAxisCSite" default="build-C-site" basedir="../../site/src/cpp">
