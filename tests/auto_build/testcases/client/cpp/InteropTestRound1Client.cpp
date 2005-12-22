@@ -206,7 +206,7 @@ int main(int argc, char* argv[])
     xsd__hexBinary hbResult = ws.echoHexBinary(hb);
     size = 0;
     data = hbResult.get(size);
-	if (hb.getSize == size)
+	if (hb.getSize() == size)
 	{
 		printf("successful\n");
 		printf("Returned String :\n%s\n", asciiToString((char *)data));
