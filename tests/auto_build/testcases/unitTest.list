@@ -88,12 +88,10 @@ XSD_anyURI2.xml
 XSD_anyURIfault.xml 
 XSD_QName.xml
 XSD_NOTATION.xml
-SameComplexTypeAndElementName.xml
 NamespaceTest1.xml
 ValidXMLCharIsInterpretedAsCPPCommand.xml
 ComplexTypeWithNillableSimpleElement.xml
 Arrays.xml
-SameComplexTypeAndNillableElementName.xml
 MixedFalseWithMixedTextMessage.xml
 MixedTrueWithTextMessage.xml
 MixedTrueWithMixedTextMessage.xml
@@ -102,3 +100,8 @@ ElementFormDefaultTest.xml
 ShallowAndDeepCopyingInComplexTypeOfSimpleTypes.xml
 XSD_base64BinaryTestValidData.xml
 Replica.xml
+
+
+# these two tests started failing on the 20th of Dec 2005.
+SameComplexTypeAndElementName.xml
+SameComplexTypeAndNillableElementName.xml
