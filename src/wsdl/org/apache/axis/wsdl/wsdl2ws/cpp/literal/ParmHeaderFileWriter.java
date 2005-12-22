@@ -454,18 +454,34 @@ public class ParmHeaderFileWriter extends ParamWriter
 		                                  + " * pInValue");
 							}
 							else{
-								writer.write( "\n\t"
+								if (isElementNillable(i)){
+									writer.write( "\n\t"
 	                                  + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-	                                  + " get"
+	                                  + " * get"
 	                                  + methodName
 	                                  + "();\n");
 
-								writer.write( "\t"
+									writer.write( "\t"
 	                                  + "void set"
 	                                  + methodName
 	                                  + "("
 	                                  + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-	                                  + " pInValue");
+	                                  + " * pInValue");
+								}
+								else{
+									writer.write( "\n\t"
+			                                  + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+			                                  + " get"
+			                                  + methodName
+			                                  + "();\n");
+
+										writer.write( "\t"
+			                                  + "void set"
+			                                  + methodName
+			                                  + "("
+			                                  + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+			                                  + " pInValue");
+								}
 							}
 						}
 						else

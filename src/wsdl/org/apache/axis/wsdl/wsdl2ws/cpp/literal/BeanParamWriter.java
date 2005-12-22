@@ -203,8 +203,12 @@ public class BeanParamWriter extends ParamCPPFileWriter
 	                    }
 	                    if(attribs[i].getAllElement() || attribs[i].getChoiceElement() )
 	                    {
-	                    	writer.write("\n" + properParamName + " " + classname
+	                    	if (isElementNillable(i))
+	                    		writer.write("\n" + properParamName + " * " + classname
 		                            + "::get" + methodName + "()\n{\n");
+	                    	else 
+	                    		writer.write("\n" + properParamName + " " + classname
+			                            + "::get" + methodName + "()\n{\n");
 	                    }
 	                    
 	                    else
@@ -217,7 +221,12 @@ public class BeanParamWriter extends ParamCPPFileWriter
 	
 	                    if(attribs[i].getAllElement() || attribs[i].getChoiceElement())
 	                    {
-	                    	writer.write("\n" + "void " + classname + "::set"
+	                    	if (isElementNillable(i))
+	                    		writer.write("\n" + "void " + classname + "::set"
+			                            + methodName + "(" + properParamName
+			                            + " * pInValue, bool deep)\n{\n");
+	                    	else
+	                    		writer.write("\n" + "void " + classname + "::set"
 		                            + methodName + "(" + properParamName
 		                            + " pInValue, bool deep)\n{\n");
 	                    }
@@ -243,7 +252,10 @@ public class BeanParamWriter extends ParamCPPFileWriter
                         writer.write("\t\t{\n");
                         if(attribs[i].getAllElement() || attribs[i].getChoiceElement())
                         {
-                        	writer.write("\t\t\t" + parameterName + " = new " + type + "();\n");
+                        	if (isElementNillable(i))
+                        		writer.write("\t\t\t" + parameterName + " = new " + type + "*();\n");
+                        	else
+                        		writer.write("\t\t\t" + parameterName + " = new " + type + "();\n");
                         }
                         else
                         {
