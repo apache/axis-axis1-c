@@ -44,20 +44,20 @@
 			element="tns:asComplexTypeRequest">
 		</wsdl:part>
 	</wsdl:message>
-	<wsdl:portType name="XSD_byte">
+	<wsdl:portType name="ComplexTypeChoice2">
 		<wsdl:operation name="asComplexType">
 			<wsdl:input message="tns:asComplexTypeRequest"></wsdl:input>
 			<wsdl:output message="tns:asComplexTypeResponse"></wsdl:output>
 		</wsdl:operation>
 	</wsdl:portType>
 	
-	<wsdl:binding name="ComplexTypeChoice2SOAP" type="tns:XSD_byte">
+	<wsdl:binding name="ComplexTypeChoice2SOAP" type="tns:ComplexTypeChoice2">
 		<soap:binding style="document"
 			transport="http://schemas.xmlsoap.org/soap/http" />
 		
 		
 		<wsdl:operation name="asComplexType">
-			<soap:operation soapAction="XSD_byte#asComplexType"
+			<soap:operation soapAction="ComplexTypeChoice2#asComplexType"
 				style="document" />
 			<wsdl:input>
 				<soap:body use="literal" />
@@ -67,7 +67,7 @@
 			</wsdl:output>
 		</wsdl:operation>
 	</wsdl:binding>
-	<wsdl:service name="XSD_byte">
+	<wsdl:service name="ComplexTypeChoice2">
 		<wsdl:port binding="tns:ComplexTypeChoice2SOAP"
 			name="Service">
 			<soap:address
