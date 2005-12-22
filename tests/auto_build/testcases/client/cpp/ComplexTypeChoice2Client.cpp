@@ -14,7 +14,7 @@
 // limitations under the License.
 
 #include <axis/AxisException.hpp>
-#include "XSD_byte.hpp" 
+#include "ComplexTypeChoice2.hpp" 
 
 #include <stdlib.h> // For malloc(), calloc(), strdup() and free()
 #include <iostream>
@@ -33,7 +33,7 @@ void setLogOptions(const char *output_filename);
 int main(int argc, char* argv[])
 { 
 	
-  XSD_byte* ws;
+  ComplexTypeChoice2* ws;
 
   char *endpoint = WSDL_DEFAULT_ENDPOINT;
   bool endpoint_set = false;
@@ -49,11 +49,11 @@ int main(int argc, char* argv[])
 			try {
 	  
 					if(endpoint_set) {
-					ws = new XSD_byte(endpoint, APTHTTP1_1);
+					ws = new ComplexTypeChoice2(endpoint, APTHTTP1_1);
 					free(endpoint);
 					endpoint_set = false;
 					} else
-						ws = new XSD_byte();
+						ws = new ComplexTypeChoice2();
 
 					SimpleComplexType1* input=new SimpleComplexType1(); 
 					xsd__int* fieldone=new xsd__int();
