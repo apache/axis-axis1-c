@@ -1,0 +1,14 @@
+<test>
+    <name>HiddenMessageParts_RPC</name>
+    <description>Fixes AXISCPP-753 where message parts were using anonymous types.</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>HiddenMessageParts.cpp</clientCode>
+    <wsdl>HiddenMessageParts_RPC.wsdl</wsdl>
+    <expected>
+        <output>
+            HiddenMessageParts_RPC.cpp.out
+        </output>
+		<serverResponse>HiddenMessageParts_RPC_ServerResponse.expected</serverResponse>
+    </expected>
+	<endpoint>-e http://localhost:80/axis/UNIT_TEST_ONLY</endpoint>
+</test>

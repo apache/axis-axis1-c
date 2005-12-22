@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions
+    name="PruebasBug"
+    targetNamespace="http://www.abysal.com/soap/PruebasBug.wsdl"
+    xmlns="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:tns="http://www.abysal.com/soap/PruebasBug.wsdl"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <types>
+      <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+         <xs:element name="PruebaDatosCabecera">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element name="IdenOrgNac" type="xsd:string"/>
+                  <xs:element name="NumSec" type="xsd:string"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+      </xs:schema>
+   </types>
+   <message name="PruebasBugInput">
+      <part name="PruebasBugId" element="tns:PruebaDatosCabecera"></part>
+   </message>
+   <message name="PruebasBugResponse">
+      <part name="PruebasBugReturn" type="xsd:int"></part>
+   </message>
+   <portType name="PruebasBugPortType">
+      <operation name="AbySend" parameterOrder="PruebasBugId">
+         <input message="tns:PruebasBugInput"/>
+         <output message="tns:PruebasBugResponse"/>
+      </operation>
+   </portType>
+   <binding name="PruebasBugBinding" type="tns:PruebasBugPortType">
+        <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="AbySend">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body
+                    encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                    namespace="http://www.abysal.com/Abysal-webDTP"
+                    use="encoded"/>
+            </input>
+            <output>
+                <soap:body
+                    encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                    namespace="http://www.abysal.com/Abysal-webDTP"
+                    use="encoded"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="PruebasBugService">
+        <port binding="tns:PruebasBugBinding" name="PruebasBugPort">
+            <soap:address location="http://aries:8080/axis/services/PruebasBug"/>
+        </port>
+    </service>
+</definitions> 
