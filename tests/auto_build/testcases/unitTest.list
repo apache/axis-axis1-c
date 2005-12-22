@@ -16,6 +16,7 @@ DynamicGetAnyObjectWithAttributesTest.xml
 Enumeration.xml
 ExceptionTestDoc.xml
 HandlerTest6.xml
+HiddenMessageParts.xml
 InteropTestRound1.xml
 InOut.xml
 LargeReturningString.xml
