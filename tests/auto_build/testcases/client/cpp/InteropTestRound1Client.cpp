@@ -76,11 +76,11 @@ int main(int argc, char* argv[])
 	ws.setTransportProperty("SOAPAction" , "InteropBase#echoStringArray");
 	printf("invoking echoStringArray...\n");
 	int outputSize = 0;
-	xsd__string_Array * outPutStrArray = ws.echoStringArray(&arrstr);
-	if (outPutStrArray->get(outputSize) != NULL)
+	xsd__string_Array* outPutStrArray = ws.echoStringArray(&arrstr);
+	if (outPutStrArray != NULL && outPutStrArray->get(outputSize) != NULL && outputSize == ARRAYSIZE)
 		printf("successful\n");
 	else
-		printf("failed\n");
+		printf("failed: outputsize=%d\n", outputSize);
 	// testing echoInteger 
 	ws.setTransportProperty("SOAPAction" , "InteropBase#echoInteger");
 	printf("invoking echoInteger...\n");
@@ -91,21 +91,22 @@ int main(int argc, char* argv[])
 	// testing echoIntegerArray 
 	xsd__int_Array arrint;
 	xsd__int ** iToSend = new xsd__int*[ARRAYSIZE];
-    
+
 	for (x=0;x<ARRAYSIZE;x++)
 	{
 		iToSend[x] = new xsd__int(x);
 	}
 	arrint.set(iToSend,ARRAYSIZE);
-	
+
 	ws.setTransportProperty("SOAPAction" , "InteropBase#echoIntegerArray");
 	printf("invoking echoIntegerArray...\n");
 	outputSize = 0;
-	xsd__int_Array * outPutIntArray = ws.echoIntegerArray(&arrint);
-	if (outPutIntArray->get(outputSize)!= NULL)
+	xsd__int_Array* outPutIntArray = ws.echoIntegerArray(&arrint);
+	if (outPutIntArray != NULL && outPutIntArray->get(outputSize) != NULL && outputSize == ARRAYSIZE)
 		printf("successful\n");
 	else
-		printf("failed\n");
+		printf("failed: outputsize=%d\n", outputSize);
+
 	// testing echoFloat 
 	printf("invoking echoFloat...\n");
 	float fvalue = 1.4214;
@@ -125,10 +126,12 @@ int main(int argc, char* argv[])
 	ws.setTransportProperty("SOAPAction" , "InteropBase#echoFloatArray");
 	printf("invoking echoFloatArray...\n");
 	outputSize = 0;
-	if (ws.echoFloatArray(&arrfloat)->get(outputSize)!= NULL)
+	xsd__float_Array* outPutFloatArray = ws.echoFloatArray(&arrfloat);
+	if (outPutFloatArray != NULL && outPutFloatArray->get(outputSize) != NULL && outputSize == ARRAYSIZE)	
 		printf("successful\n");
 	else
-		printf("failed\n");
+		printf("failed: outputsize=%d\n", outputSize);
+
 	// testing echo Struct
 	SOAPStruct stct;
 	stct.varFloat = new float;
@@ -143,25 +146,33 @@ int main(int argc, char* argv[])
 	else
 		printf("failed\n");
 	//testing echo Array of Struct
-//	SOAPStruct_Array arrstct;
-//	arrstct.m_Array = new SOAPStruct[ARRAYSIZE];
-//	arrstct.m_Size = ARRAYSIZE;
-//	for (x=0;x<ARRAYSIZE;x++)
-//	{
-//		arrstct.m_Array[x].varFloat = new float;
-//		arrstct.m_Array[x].varInt = new int;
-//		*(arrstct.m_Array[x].varFloat) = 1.1111*x;
-//		*(arrstct.m_Array[x].varInt) = x;
-//		sprintf(buffer1, "varString of %dth element of SOAPStruct array", x);
-//		arrstct.m_Array[x].varString = buffer1;
-//	}
-//	//testing echo Struct Array
-//	ws.setTransportProperty("SOAPAction" , "InteropBase#echoStructArray");
-//	printf("invoking echoStructArray...\n");
-//	if (ws.echoStructArray(arrstct).m_Array != NULL)
-//		printf("successful\n");
-//	else
-//		printf("failed\n");
+	SOAPStruct_Array arrstct;
+	SOAPStruct** m_Array4 = new SOAPStruct *[ARRAYSIZE];
+
+	SOAPStruct ssToSend[ARRAYSIZE];
+	for (x=0;x<ARRAYSIZE;x++)
+	{
+		ssToSend[x].varFloat = new float;
+		ssToSend[x].varInt = new int;
+		*(ssToSend[x].varFloat) = 1.1111*x;
+		*(ssToSend[x].varInt) = x;
+		sprintf(buffer1, "varString of %dth element of SOAPStruct array", x);
+		ssToSend[x].varString = buffer1;
+
+		m_Array4[x] = &ssToSend[x];
+	}
+
+	arrstct.set(m_Array4, ARRAYSIZE);
+	//testing echo Struct Array
+	ws.setTransportProperty("SOAPAction" , "InteropBase#echoStructArray");
+	printf("invoking echoStructArray...\n");
+	outputSize = 0;
+	SOAPStruct_Array* outPutStructArray = ws.echoStructArray(&arrstct);
+	if (outPutStructArray != NULL && outPutStructArray->get(outputSize) != NULL && outputSize == ARRAYSIZE)	
+		printf("successful\n");
+	else
+		printf("failed: outputsize=%d\n", outputSize);
+
 	//testing echo void
 	printf("invoking echoVoid...\n");
 	ws.setTransportProperty("SOAPAction" , "InteropBase#echoVoid");
