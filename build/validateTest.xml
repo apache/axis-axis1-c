@@ -43,13 +43,13 @@
 	  -->
 	<target name="OS400ConvertOutputFiles" if="os400">
          <move file="${results.stdout}" tofile="${results.stdout}.tmp" overwrite="true"/>
-         <exec executable="setccsid" failonerror="true">
+         <exec executable="setccsid" failonerror="false">
             <arg line="37 ${results.stdout}.tmp"/>
          </exec>
-         <exec executable="touch" failonerror="true">
+         <exec executable="touch" failonerror="false">
             <arg line="-C 819 ${results.stdout}"/>
          </exec>
-         <exec executable="cp" failonerror="true">
+         <exec executable="cp" failonerror="false">
               <arg line="-tf ${results.stdout}.tmp ${results.stdout}"/>
          </exec>
          <delete file="${results.stdout}.tmp"/>
