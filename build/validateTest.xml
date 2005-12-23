@@ -42,7 +42,7 @@
 	  Validate the test
 	  -->
 	<target name="OS400ConvertOutputFiles" if="os400">
-         <move file="${results.stdout}" tofile="${results.stdout}.tmp" overwrite="true"/>
+         <move file="${results.stdout}" tofile="${results.stdout}.tmp" overwrite="true" failonerror="false"/>
          <exec executable="setccsid" failonerror="false">
             <arg line="37 ${results.stdout}.tmp"/>
          </exec>
@@ -52,7 +52,7 @@
          <exec executable="cp" failonerror="false">
               <arg line="-tf ${results.stdout}.tmp ${results.stdout}"/>
          </exec>
-         <delete file="${results.stdout}.tmp"/>
+         <delete file="${results.stdout}.tmp" failonerror="false"/>
       </target>
 
 	<target name="validateTestClient" if="successfulClientCompilation" unless="buildOnly" depends="OS400ConvertOutputFiles">
