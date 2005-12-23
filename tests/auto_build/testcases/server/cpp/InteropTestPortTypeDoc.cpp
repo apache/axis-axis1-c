@@ -75,7 +75,7 @@ xsd__base64Binary InteropTestPortTypeDoc::echoBase64(xsd__base64Binary Value0)
 {
 	return Value0;
 }
-xsd__dateTime * InteropTestPortTypeDoc::echoDate(xsd__dateTime * Value0)  
+xsd__dateTime InteropTestPortTypeDoc::echoDate(xsd__dateTime Value0)  
 {
 	return Value0;
 }
