@@ -146,7 +146,9 @@
 			<linker refid="AIXExecutableLinker"/>
             <linker refid="HP-UXLinker"/>      
 		    <linker extends="OS400ExecutableLinker">
-  		         <linkerarg location="end" value="${dir.lib}/lib${clientLibraryName.lang}.so"/>
+                <linkerarg value="-qOPTION=*DUPPROC"/>
+		        <linkerarg location="end" value="${dir.lib}/lib${clientLibraryName.lang}.so"/>
+		        <linkerarg location="end" value="${test.directory}/lib${libraryName}.so"/>
 		    </linker>
 			<!-- Axis Client .lib file location, or UNIX shared object -->
 			<libset dir="${dir.lib}" libs="${clientLibraryName.lang}" unless="os400"/>

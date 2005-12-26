@@ -25,7 +25,10 @@
 				<linker refid="LinuxLinker"/>
 				<linker refid="HP-UXLinker"/>
 				<linker refid="VisualC++Linker"/>
-				<linker refid="OS400Linker"/>
+	            <linker extends="OS400Linker">
+		              <linkerarg location="end" value="${dir.lib}/lib${clientLibraryName.lang}.so"/>
+	            </linker>
+				
 				<libset dir="${dir.lib}" libs="${clientLibraryName.lang}" unless="os400"/>
 				<!-- Files to compile -->
 				<fileset dir="${test.directory}">
