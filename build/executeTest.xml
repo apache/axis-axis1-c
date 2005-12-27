@@ -335,7 +335,6 @@
 			<then>
 				<echo file="${axiscpp.conf}" append="true">
 ClientLogPath:${test.directory}/ClientLog.taw
-SecureInfo:${env.SSL_KEYS_HOME}/myKeyRing.kdb,axis4all,AXIS,NONE,05,NONE,false
 </echo>
 			</then>
 		</if>
@@ -343,6 +342,7 @@ SecureInfo:${env.SSL_KEYS_HOME}/myKeyRing.kdb,axis4all,AXIS,NONE,05,NONE,false
 Transport_http:${dir.libraries}/${libraryPrefix}${transportLibraryName}${librarySuffix}
 XMLParser:${dir.libraries}/${ClientParserLib}
 Channel_HTTP:${dir.libraries}/${libraryPrefix}${HTTP.ChannelLibraryName}${librarySuffix}
+SecureInfo:${env.SSL_KEYS_HOME}/myKeyRing.kdb,axis4all,AXIS,NONE,05,NONE,false
 </echo>
         <if>
             <istrue value="${test.ssl}" />
