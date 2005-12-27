@@ -91,7 +91,7 @@ public class AllParamWriter
             catch (Exception e)
             {
                 System.out.println(
-                    "Error occured yet we continue to genarate other classes ... you should check the error");
+                    "Error occurred yet we continue to genarate other classes ... you should check the error");
                 e.printStackTrace();
             }
         }

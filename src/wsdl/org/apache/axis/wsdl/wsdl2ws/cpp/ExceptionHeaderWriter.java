@@ -242,7 +242,7 @@ public class ExceptionHeaderWriter extends HeaderFileWriter
         catch (Exception e)
         {
             System.out.println(
-                "Error occured yet we continue to generate other classes ... you should check the error");
+                "Error occurred yet we continue to generate other classes ... you should check the error");
             e.printStackTrace();
         }
     }

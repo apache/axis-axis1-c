@@ -155,7 +155,7 @@ main (int argc, char *argv[])
 
     if (argc < 2)
     {
-   printf ("Problem occured.\nUsage: %s <Server Port>", argv[0]);
+   printf ("Problem occurred.\nUsage: %s <Server Port>", argv[0]);
    exit (1);
     }
 
@@ -172,7 +172,7 @@ main (int argc, char *argv[])
     iServerPort = atoi (argv[1]);
     if (iServerPort == 0)
     {
-   printf ("Problem occured. Error in specified server port");
+   printf ("Problem occurred. Error in specified server port");
    exit (1);
     }
     else

@@ -45,11 +45,11 @@ const string& AxisMessage::getMessage(int iExceptionCode)
             break; 
         case SOAP_VERSION_MISMATCH :
             m_sMessage = "AxisSoapException:Soap Version mismatch fault" \
-                " occured";
+                " occurred";
             break;
         case SOAP_MUST_UNDERSTAND:
             m_sMessage = "AxisSoapException:Soap Must understand fault" \
-                " occured";
+                " occurred";
             break;
         case CLIENT_SOAP_MESSAGE_INCOMPLETE:
             m_sMessage = "AxisSoapException:Received message is incomplete";
@@ -121,11 +121,11 @@ const string& AxisMessage::getMessage(int iExceptionCode)
             m_sMessage = "AxisEngineException:Wrong handler type";
             break;
         case SERVER_TRANSPORT_RECEPTION_EXCEPTION:
-            m_sMessage = "AxisTransportException:Problem occured when" \
+            m_sMessage = "AxisTransportException:Problem occurred when" \
                 " receiving the stream";
             break;
         case SERVER_TRANSPORT_SENDING_EXCEPTION:
-            m_sMessage = "AxisTransportException:Problem occured when" \
+            m_sMessage = "AxisTransportException:Problem occurred when" \
                 " sending the stream";
             break;
         case SERVER_TRANSPORT_HTTP_EXCEPTION:
@@ -193,7 +193,7 @@ const string& AxisMessage::getMessage(int iExceptionCode)
             m_sMessage = "Configuration details have already ben set";
             break;
         default:
-            m_sMessage = "Unknown Exception has occured";
+            m_sMessage = "Unknown Exception has occurred";
 
     }
     return m_sMessage;

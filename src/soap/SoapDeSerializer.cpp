@@ -445,7 +445,7 @@ SoapDeSerializer::checkMessageBody (const AxisChar * pName,
     //if (0 != strcmp(m_pNode->m_pchNameOrValue, pName)) return AXIS_FAIL;
     if (0 != strcmp (m_pNode->m_pchNameOrValue, pName))
     {
-	/* A soap fault has occured. we will deserialize it as doc literal
+	/* A soap fault has occurred. we will deserialize it as doc literal
 	 * So we set the style as doc literal. This way of doing things
 	 * is not so nice. I'll rectify this asap
 	 */

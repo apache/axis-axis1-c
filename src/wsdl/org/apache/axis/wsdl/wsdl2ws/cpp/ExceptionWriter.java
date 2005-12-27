@@ -269,7 +269,7 @@ public class ExceptionWriter extends BasicFileWriter
             writer.write("\t\t\tbreak;\n");
             writer.write("\t\tdefault:\n");
             writer.write(
-                "\t\t\tm_sMessageForExceptionCode = \"Unknown Exception has occured in the "
+                "\t\t\tm_sMessageForExceptionCode = \"Unknown Exception has occurred in the "
                     + getServiceName()
                     + " service\";\n");
             writer.write("\t}\n");

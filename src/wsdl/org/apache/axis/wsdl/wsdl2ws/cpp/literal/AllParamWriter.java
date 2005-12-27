@@ -136,7 +136,7 @@ public class AllParamWriter implements SourceWriter
             catch (Exception e)
             {
                 System.out.println(
-                    "Error occured generating code for "
+                    "Error occurred generating code for "
                         + type.getLanguageSpecificName()
                         + ". Yet we continue to genarate other classes ... You should check the error");
                 e.printStackTrace();

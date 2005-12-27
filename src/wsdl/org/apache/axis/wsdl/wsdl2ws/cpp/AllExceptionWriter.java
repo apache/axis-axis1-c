@@ -58,7 +58,7 @@ private String strFlag="";
 		 }			
 		 catch(Exception e)
 		{
-				System.out.println("Error occured yet we continue to genarate other classes ... you should check the error");
+				System.out.println("Error occurred yet we continue to genarate other classes ... you should check the error");
 				e.printStackTrace();
 		}	
      }

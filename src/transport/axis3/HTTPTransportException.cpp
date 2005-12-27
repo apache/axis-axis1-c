@@ -51,14 +51,14 @@ string HTTPTransportException::getMessageForExceptionCode (const int iExceptionC
     {
 		case SERVER_TRANSPORT_RECEPTION_EXCEPTION:
 		{
-            m_sMessageForExceptionCode = "HTTPTransportException:Problem occured when" \
+            m_sMessageForExceptionCode = "HTTPTransportException:Problem occurred when" \
                 " receiving the stream";
             break;
 		}
 
         case SERVER_TRANSPORT_SENDING_EXCEPTION:
 		{
-            m_sMessageForExceptionCode = "HTTPTransportException:Problem occured when sending" \
+            m_sMessageForExceptionCode = "HTTPTransportException:Problem occurred when sending" \
                 " the stream";
             break;
 		}

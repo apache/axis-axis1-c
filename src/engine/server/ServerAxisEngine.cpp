@@ -337,7 +337,7 @@ ServerAxisEngine::process (SOAPTransport * pStream)
 	    return AXIS_SUCCESS;	//Service created fault is written to the stream. 
 	    //so return success.
 	}
-	else			/* An exception has occured inside Axis C++ engine.(not in a
+	else			/* An exception has occurred inside Axis C++ engine.(not in a
 				 * webservice or handler). Later we handle this according to the
 				 * exception code returned.
 				 */

@@ -95,7 +95,7 @@ public class AllParamWriter implements SourceWriter
             catch (Exception e)
             {
                 System.out.println(
-                    "Error occured yet we continue to genarate other classes ... you should check the error");
+                    "Error occurred yet we continue to genarate other classes ... you should check the error");
                 e.printStackTrace();
             }
         }

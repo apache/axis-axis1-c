@@ -833,7 +833,7 @@ public class WSDL2Ws
                 throw new WrapperFault(
                     "["
                         + typename
-                        + "]unexpected condition occured "
+                        + "]unexpected condition occurred "
                         + ".. please inform the axis-dev@apache.org mailing list ASAP");
             }
             type.getRefType();

@@ -56,10 +56,10 @@ string AxisSoapException::getMessageForExceptionCode (const int iExceptionCode)
     {
 
         case SOAP_VERSION_MISMATCH :
-            m_sMessageForExceptionCode = "AxisSoapException:Soap Version mismatch fault occured";
+            m_sMessageForExceptionCode = "AxisSoapException:Soap Version mismatch fault occurred";
             break;
         case SOAP_MUST_UNDERSTAND:
-			m_sMessageForExceptionCode = "AxisSoapException:Soap Must understand fault occured";
+			m_sMessageForExceptionCode = "AxisSoapException:Soap Must understand fault occurred";
             break;
         case CLIENT_SOAP_MESSAGE_INCOMPLETE:
 			m_sMessageForExceptionCode = "AxisSoapException:Received message is incomplete";
