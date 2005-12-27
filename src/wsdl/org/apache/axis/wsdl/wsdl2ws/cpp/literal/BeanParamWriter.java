@@ -1046,7 +1046,9 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 	{
                 		String typeName = attribs[i].getTypeName();
                 		String elementName = attribs[i].getParamNameAsMember();
-
+                		
+                		
+                		
                 		if( CUtils.isPointerType( typeName))
                 		{
                     		writer.write("\t" + typeName + "	pValue" + i + " = pIWSDZ->" +
@@ -1074,7 +1076,14 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 		}
                 		else
                 		{
-                		    writer.write("\t\t\t\tparam->set" + elementName + " (pValue" + i + ");\n");
+                			String localElemName = elementName;
+                			if( elementName.endsWith( "_"))
+                            {
+                                localElemName = elementName.substring( 0, elementName.length() - 1);
+                                                                
+                            }
+                			
+                			writer.write("\t\t\t\tparam->set" + localElemName + " (pValue" + i + ");\n");
                 		}
                 		
                 		writer.write("\t\t\t\tAxis::AxisDelete( (void *) pValue" + i + ", " + CUtils.getXSDTypeForBasicType( typeName) + ");\n\n");
@@ -1114,8 +1123,15 @@ public class BeanParamWriter extends ParamCPPFileWriter
                                 + CUtils.getParameterGetValueMethodName(
                                         attribs[i].getTypeName(), attribs[i].isAttribute()) + "( \""
                                 + elementNameToSearchFor + "\",0)) != NULL)\n\t{\n");
+                        
+                        String localElemName = attribs[i].getParamNameAsMember();
+            			if( localElemName.endsWith( "_"))
+                        {
+            				localElemName = localElemName.substring( 0, localElemName.length() - 1);
+                                                            
+                        }
                         writer.write("\t\tparam->set"
-                                + attribs[i].getParamNameAsMember() + "(* "
+                                + localElemName + "(* "
                                 + attribs[i].getParamNameAsMember() + " );\n");
         				writer.write("\t\tAxis::AxisDelete( (void *) " + attribs[i].getParamNameAsMember() + ", " + CUtils.getXSDTypeForBasicType( attribs[i].getTypeName()) + ");\n");
                     	writer.write("\t}\n");                    	
