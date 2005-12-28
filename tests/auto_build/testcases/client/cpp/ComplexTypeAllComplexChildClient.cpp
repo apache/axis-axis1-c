@@ -65,8 +65,13 @@ int main(int argc, char* argv[])
 
     SimpleComplexType* result = NULL;
     result = ws->asComplexType(input);
-
-    cout << "Result field1 is = " << result->complexTypeElement->onecomplexTypeElement << endl;
+    
+    // for OS/400, dump ebcdic equivalent of hex 41 (ascii 'A'). 
+    xsd__byte theByte = result->complexTypeElement->onecomplexTypeElement;  
+ #ifdef __OS400__    
+    if (theByte == 0x41) theByte = 'A';
+ #endif
+    cout << "Result field1 is = " << theByte << endl;
 	cout << "Result field2 is = " << result->field2 << endl;
 	cout << "Result field3 is = " << *(result->field3) << endl;
 
