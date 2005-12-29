@@ -12,5 +12,5 @@
 	<endpoint>http://localhost:80/axis/CalculatorDoc</endpoint>
 	<nomonitor>true</nomonitor>
 	<notrace>true</notrace>
-	<timeout>2400000</timeout>
+	<timeout>3200000</timeout>
 </test>

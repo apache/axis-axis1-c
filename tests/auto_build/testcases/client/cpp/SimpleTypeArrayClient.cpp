@@ -26,7 +26,7 @@ void shift_args(int i, int *argc, char *argv[]);
 void setLogOptions(const char *output_filename);
 
 // If we re-direct cout it will be to this ofstream
-ofstream output_file;
+static ofstream output_file;
 
 int main(int argc, char* argv[])
 {

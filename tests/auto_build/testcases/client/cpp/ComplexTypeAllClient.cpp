@@ -23,7 +23,7 @@
 #define WSDL_DEFAULT_ENDPOINT "http://localhost:9080/ComplexTypeAll/services/Service"
 
 // If we re-direct cout it will be to this ofstream
-ofstream output_file;
+static ofstream output_file;
 
 // Prototype
 bool parse_args_for_endpoint(int *argc, char *argv[], char **endpoint);

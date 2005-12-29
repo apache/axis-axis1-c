@@ -92,7 +92,7 @@ const char ASCIItoEBCDIC[256] = {
  140,  73, 205, 206, 203, 207, 204, 225, 112, 221, 222, 219, 220, 141, 142, 223   
 };
 
-char* stringToAscii( char *string )
+static char* stringToAscii( char *string )
 {
    char* pch = string;
    if( string == NULL ) return NULL;
@@ -106,7 +106,7 @@ char* stringToAscii( char *string )
    return string;
 }
 
-char* asciiToString( char *string )
+static char* asciiToString( char *string )
 {
    char* pch = string;
    if( string == NULL ) return NULL;
@@ -120,7 +120,7 @@ char* asciiToString( char *string )
    return string;
 }
 
-char * asciiToStringOfLength( char * pString, int iLength)
+static char * asciiToStringOfLength( char * pString, int iLength)
 {
    char *	pch = pString;
 
