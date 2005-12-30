@@ -55,7 +55,7 @@ main (int argc, char *argv[])
 		}	
 		catch (...)
 		{
-			cerr << "Unknown Exception occured." << endl;
+			cout << "Unknown Exception occured." << endl;
 		}
 
 

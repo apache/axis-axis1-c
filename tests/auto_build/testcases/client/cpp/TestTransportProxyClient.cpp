@@ -40,7 +40,7 @@ int main(int argc, char* argv[])
         }
         else
         {
-            cerr << "this test needs to set a url, proxy host and proxy port: TestTransportProxy <url> <proxy hostname> <proxy port>"<<endl;
+            cout << "this test needs to set a url, proxy host and proxy port: TestTransportProxy <url> <proxy hostname> <proxy port>"<<endl;
             exit(-1);
         }
         if(argc>3)
@@ -49,7 +49,7 @@ int main(int argc, char* argv[])
         }
         else
         {
-            cerr << "this test needs to set a url, proxy host and proxy port: TestTransportProxy <url> <proxy hostname> <proxy port>"<<endl;
+            cout << "this test needs to set a url, proxy host and proxy port: TestTransportProxy <url> <proxy hostname> <proxy port>"<<endl;
             exit(-1);
         }
         

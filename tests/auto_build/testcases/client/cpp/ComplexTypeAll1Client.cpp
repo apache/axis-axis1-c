@@ -96,7 +96,7 @@ int main(int argc, char* argv[])
 
 				if( !bSilent)
 				{
-					cerr << e.what() << endl;
+					cout << e.what() << endl;
 				}
 		} catch(exception& exception){
 
@@ -104,7 +104,7 @@ int main(int argc, char* argv[])
 		
 		} catch(...) {
 			
-				cerr << "Unknown Exception occured" << endl;
+				cout << "Unknown Exception occured" << endl;
 		}  
   
   // Samisa : clean up memory allocated for stub

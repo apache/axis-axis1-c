@@ -112,12 +112,12 @@ int main( int argc, char * argv[])
 
             if( !bSilent)
 			{
-			    cerr << e.what() << endl;
+			    cout << e.what() << endl;
 			}
 		}
 		catch( ...)
 		{
-			cerr << "Unknown Exception occured." << endl;
+			cout << "Unknown Exception occured." << endl;
 		}
 
 		try

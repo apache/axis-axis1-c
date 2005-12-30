@@ -96,12 +96,12 @@ int main(int argc, char* argv[])
 
             if( !bSilent)
 			{
-    cerr << e.what() << endl;
+    cout << e.what() << endl;
 			}
     if(endpoint_set)
       free(endpoint);
   } catch(...) {
-    cerr << "Unknown Exception occured." << endl;
+    cout << "Unknown Exception occured." << endl;
     if(endpoint_set)
       free(endpoint);
   }
@@ -113,11 +113,11 @@ int main(int argc, char* argv[])
   }
   catch(exception& exception)
   {
-  	cerr << "Exception on clean up of ws : " << exception.what()<<endl;
+  	cout << "Exception on clean up of ws : " << exception.what()<<endl;
   }
   catch(...)
   {
-  	cerr << "Unknown exception on clean up of ws : " << endl;
+  	cout << "Unknown exception on clean up of ws : " << endl;
   }
 		iRetryIterationCount--;
 		} while( iRetryIterationCount > 0 && !bSuccess);
