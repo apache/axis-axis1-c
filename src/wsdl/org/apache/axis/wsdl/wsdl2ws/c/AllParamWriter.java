@@ -52,7 +52,7 @@ public class AllParamWriter implements SourceWriter
     public void writeSource() throws WrapperFault
     {
         Iterator enu = wscontext.getTypemap().getTypes().iterator();
-        Type type;
+        Type type = null;
         while (enu.hasNext())
         {
             try
@@ -95,7 +95,9 @@ public class AllParamWriter implements SourceWriter
             catch (Exception e)
             {
                 System.out.println(
-                    "Error occurred yet we continue to genarate other classes ... you should check the error");
+                        "Error occurred generating code for "
+                            + type.getLanguageSpecificName()
+                            + ". Other classes will continue to be generated.");
                 e.printStackTrace();
             }
         }

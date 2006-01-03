@@ -138,7 +138,7 @@ public class AllParamWriter implements SourceWriter
                 System.out.println(
                     "Error occurred generating code for "
                         + type.getLanguageSpecificName()
-                        + ". Yet we continue to genarate other classes ... You should check the error");
+                            + ". Other classes will continue to be generated.");                
                 e.printStackTrace();
             }
         }

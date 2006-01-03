@@ -51,7 +51,7 @@ public class AllParamWriter
     public void writeSource() throws WrapperFault
     {
         Iterator enu = wscontext.getTypemap().getTypes().iterator();
-        Type type;
+        Type type = null;
         while (enu.hasNext())
         {
             try
@@ -71,10 +71,13 @@ public class AllParamWriter
                         {
                             /* TODO do some processing to this type before synthesizing to remove ">" charactors.
                              * And then it should also be synthesized if commandline option says to */
-                            System.out.println(
+                            if(WSDL2Ws.verbose)
+                            {                          
+                                System.out.println(
                                 "ignoring anonymous type "
                                     + type.getLanguageSpecificName()
                                     + "\n");
+                            }
                         }
                         else
                         {
@@ -91,7 +94,9 @@ public class AllParamWriter
             catch (Exception e)
             {
                 System.out.println(
-                    "Error occurred yet we continue to genarate other classes ... you should check the error");
+                        "Error occurred generating code for "
+                            + type.getLanguageSpecificName()
+                            + ". Other classes will continue to be generated.");
                 e.printStackTrace();
             }
         }
