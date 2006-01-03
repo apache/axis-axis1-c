@@ -63,7 +63,7 @@ void AxisCPPConfigDefaultsImpl::apply ()
       //todo set each value, if set
       pszValue = getClientLog();
       if(pszValue)
-          g_pConfig->setValue(0,AXCONF_LOGPATH, pszValue);
+          g_pConfig->setValue(0,AXCONF_CLIENTLOGPATH, pszValue);
 
       pszValue = getClientWSDDFile();
       if(pszValue)
