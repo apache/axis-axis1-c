@@ -15,9 +15,9 @@ import java.util.regex.Pattern;
 // We cache the entire output file in an array of char[]
 public class Response
 {
-    private static final String CR             ="\r";
-    private static final String LF             ="\n";
-    private static final String CRLF           =CR+LF;
+    private static final char CR             ='\r';
+    private static final char LF             ='\n';
+    private static final String CRLF          =""+CR+LF;
     private static final String DOUBLE_CRLF    =CRLF+CRLF;
     private static final String CONTENT_LENGTH ="Content-Length:";
 
@@ -103,7 +103,7 @@ public class Response
         
         if(matcher.find())
         {
-           msgString = matcher.replaceAll(LF);
+           msgString = matcher.replaceAll(""+LF);
         }
         message = msgString.toCharArray();
         
@@ -163,7 +163,7 @@ public class Response
                 // I'm doing it using a matcher because this
                 // could get
                 // complicated !
-                Pattern pattern=Pattern.compile(LF);
+                Pattern pattern=Pattern.compile(""+LF);
                 Matcher matcher=pattern.matcher(request);
                 StringBuffer stringBuffer=new StringBuffer( );
 
@@ -233,12 +233,13 @@ private String correctChunkedData(String request)
     // A chunk Is defined by 
     // <hexnumber><potentially CR><LF><any data><potentially CR><LF><hexnumber>
     StringBuffer theCorrectedResponse = new StringBuffer();
-    String thePattern = "(\\p{XDigit}+)("+CR+"?"+LF+")";
-    String theNextChunkSizeREGEX ="("+CR+"?"+LF+")"+thePattern; 
-    Pattern pattern=Pattern.compile(thePattern);
+    String theChunkStartPatternREGEX = "(\\p{XDigit}+)("+CR+"?"+LF+")";
+    String theNextChunkSizeREGEX ="("+CR+"?"+LF+")"+theChunkStartPatternREGEX;
+    
+    Pattern chunkStartPattern=Pattern.compile(theChunkStartPatternREGEX);
     Pattern theNextChunkSizePattern = Pattern.compile(theNextChunkSizeREGEX);
     
-    Matcher matcher = pattern.matcher(request);
+    Matcher chunkStartMatcher = chunkStartPattern.matcher(request);
     Matcher theNextChunkSizeMatcher = theNextChunkSizePattern.matcher(request);    
     
     int chunkStart = 0;
@@ -249,15 +250,15 @@ private String correctChunkedData(String request)
     int nextChunkEnd= -1;
     
     String nextChunkSizeString="";
-    while(matcher.find() && nextChunkSize!=0)
+    while(chunkStartMatcher.find() && nextChunkSize!=0)
     {
         String chunkSizeString=""; 
         if(nextChunkSize==-1)
         {
             // means this is the first time round the loop so work it out
-            chunkSizeString = request.substring(matcher.start(), matcher.end());
+            chunkSizeString = request.substring(chunkStartMatcher.start(), chunkStartMatcher.end());
             chunkSize = Integer.parseInt(chunkSizeString.trim(), 16);
-            chunkStart = matcher.end();
+            chunkStart = chunkStartMatcher.end();
             // ensure the string has the correct crlf on it
             chunkSizeString = chunkSizeString.trim()+CRLF;
         }
@@ -294,17 +295,28 @@ private String correctChunkedData(String request)
             chunkFromSize = request.substring(chunkStart, chunkStart+chunkSize);
         }
         
+        String chunk=""; 
+        int endOfThisChunk;
         // Now find the end of the chunk (and while we do that we actually find the next chunk size too !
-        theNextChunkSizeMatcher.find();
-        chunkEnd = theNextChunkSizeMatcher.start();
-        // get the nextchunkSize while we're here!
-        nextChunkSizeString = request.substring(theNextChunkSizeMatcher.start(), theNextChunkSizeMatcher.end());
-        nextChunkStart = theNextChunkSizeMatcher.end();
-        int endOfThisChunk = theNextChunkSizeMatcher.start();
-        nextChunkSize = Integer.parseInt(nextChunkSizeString.trim(), 16);
         
+        if(!theNextChunkSizeMatcher.find())
+        {
+            // if there isn't one then it means that this is the last chunk
+            endOfThisChunk = request.length()-1;
+        }
+        else
+        {
+            chunkEnd = theNextChunkSizeMatcher.start();
+            
+            // get the nextchunkSize while we're here!
+            nextChunkSizeString = request.substring(theNextChunkSizeMatcher.start(), theNextChunkSizeMatcher.end());
+            nextChunkStart = theNextChunkSizeMatcher.end();
+            nextChunkSize = Integer.parseInt(nextChunkSizeString.trim(), 16);
+            
+            endOfThisChunk = theNextChunkSizeMatcher.start();
         
-        String chunk = request.substring(chunkStart, endOfThisChunk);
+        }
+        chunk = request.substring(chunkStart, endOfThisChunk);
         if(chunkFromSize==null)
         {
             // we need to set this value now we have probably worked out what it is
@@ -315,7 +327,7 @@ private String correctChunkedData(String request)
             // we now also have to take into account the chunkSize and it's \r\n
             // test it again to see whether we made it right or not
             // make sure we set the chunksize string
-            if(!chunkSizeString.startsWith(CR))
+            if(!chunkSizeString.startsWith(""+CR))
             {
                 // Then it's the beginning of the message
                 chunkSizeString = ""+Integer.toHexString(chunk.length())+CRLF;
@@ -341,12 +353,12 @@ private String correctChunkedData(String request)
             }
             else
             {
-            System.out.println( "Warning: Chunksize is not correct. Attempting to correct with additional \\r\\n");
-            String newChunk = chunk.replaceAll(LF, CRLF);
-            if(newChunk.length()+chunkSizeString.trim().length()+2 !=chunkSize)
-            {
-                System.err.println( "Attempt to correct the chunksize failed");
-            }
+                System.out.println( "Warning: Chunksize is not correct. Attempting to correct with additional \\r\\n");
+            	String newChunk = chunk.replaceAll(""+LF, CRLF);
+            	if(newChunk.length()+chunkSizeString.trim().length()+2 !=chunkSize)
+            	{
+            	    System.err.println( "Attempt to correct the chunksize failed");
+            	}
             }
         }
         theCorrectedResponse.append(chunkSizeString);
@@ -355,6 +367,11 @@ private String correctChunkedData(String request)
         
     }
     // append the last chunk on 
+    // sometimes the chunk already has a \n on it so we need to remove it
+    if(theCorrectedResponse.charAt(theCorrectedResponse.length()-1) == LF)
+    {
+        theCorrectedResponse.deleteCharAt(theCorrectedResponse.length()-1);
+    }
     theCorrectedResponse.append(CRLF+"0"+DOUBLE_CRLF);
     return theCorrectedResponse.toString();
 }
