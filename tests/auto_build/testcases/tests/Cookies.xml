@@ -1,0 +1,18 @@
+<test>
+    <name>Cookies</name>
+    <description>Test cookie support</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>CookiesClient.cpp</clientCode>
+    <wsdl>CalculatorDoc.wsdl</wsdl>
+    <expected>
+        <output>
+            Cookies.cpp.out
+        </output>
+		<request>
+			Cookies.request
+		</request>
+        <serverResponse>Cookies_ServerResponse.expected</serverResponse>
+        
+    </expected>
+	<endpoint>http://localhost:80/axis/CalculatorDoc</endpoint>
+</test>
