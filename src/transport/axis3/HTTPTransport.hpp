@@ -17,8 +17,14 @@
 
 /*
  * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
+ * @author hawkeye (hawkinsj@uk.ibm.com) - improved cookie support
+ * 
+ * KNOWN LIMITATIONS: 
+ * Cookie support: 
+ * 1) Cookies are maintained over the life time of a connection only and are not persisted.
+ * 2) We ignore expires, path, domain, secure attributes
+ * 
  */
-
 
 #if !defined(_AXIS_AXIS_TRANSPORT_HPP)
 #define _AXIS_AXIS_TRANSPORT_HPP
@@ -116,7 +122,22 @@ class HTTPTransport:public SOAPTransport
 	int						getChunkSize();
 	bool					copyDataToParserBuffer( char * pcBuffer, int * piSize, int iBytesToCopy);
 	int						peekChunkLength( std::string& strNextChunk);
-
+    /**
+     * Adds a cookie to the http header. 
+     * 
+     * @param name name of the cookie
+     * @param value value of the cookie
+     * @return true if the cookie was added succesfully. False otherwise
+     */
+    bool                    addCookie(const string name, const string Value);
+    
+    /**
+     * Adds the name value pair to the cookie list
+     * @param nameValuepair in the format name=value
+     * @return true if the cookie was added succesfully false otherwise.
+     */
+    bool addCookie(const string nameValuePair);
+    
   /**
     * Keeps track of if we need to reopen connection.
     * Set true by setEndpointUri.
@@ -225,6 +246,11 @@ class HTTPTransport:public SOAPTransport
     * Session key sent by service 
     */
     std::string m_strSessionKey;
+
+  /**
+   * Cookies set and to be sent to the server.
+   */
+  std::vector < std::pair < std::string, std::string > >m_vCookies;
   
   /** 
     * Content-Type holder

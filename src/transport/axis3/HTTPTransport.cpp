@@ -398,13 +398,22 @@ const char * HTTPTransport::getHTTPHeaders()
 		m_strHeaderBytesToSend += "\r\n";
     }
 
-    // Set session cookie
-    if (m_bMaintainSession && (m_strSessionKey.size () > 0))
+    // Set cookies
+    if (m_bMaintainSession && (m_vCookies.size () > 0))
     {
 		m_strHeaderBytesToSend += "Cookie";
 		m_strHeaderBytesToSend += ": ";
-		m_strHeaderBytesToSend += m_strSessionKey;
-		m_strHeaderBytesToSend += "\r\n";
+
+        for (unsigned int var = 0; var < m_vCookies.size(); var++) 
+        {
+            m_strHeaderBytesToSend += m_vCookies[var].first;
+            m_strHeaderBytesToSend += "=";
+            m_strHeaderBytesToSend += m_vCookies[var].second;
+            m_strHeaderBytesToSend += ";";
+        }
+        // remove the last ';'
+        m_strHeaderBytesToSend = m_strHeaderBytesToSend.substr(0, m_strHeaderBytesToSend.length()-1);
+        m_strHeaderBytesToSend += "\r\n";
     }
 
     m_strHeaderBytesToSend += "\r\n";
@@ -1111,23 +1120,10 @@ void HTTPTransport::processResponseHTTPHeaders() throw (HTTPTransportException)
 			}
 
 	    	// Look for cookies
-			if( m_bMaintainSession && !(m_strSessionKey.size() > 0))
+			if( m_bMaintainSession )
 		    {
 				if( key == "Set-Cookie")
-				{
-					m_strSessionKey = value;
-
-		    		// Spec syntax : Set-Cookie: NAME=VALUE; expires=DATE; path=PATH; domain=DOMAIN_NAME; secure
-		    		// This code assumes it to be : Set-Cookie: NAME=VALUE; Anything_else
-		    		// And discards stuff after first ';'
-		    		// This is the same assumption used in Axis Java
-					unsigned long ulKeyEndsAt = m_strSessionKey.find( ";");
-		    
-					if( ulKeyEndsAt != std::string::npos)
-				    {
-						m_strSessionKey = m_strSessionKey.substr( 0, ulKeyEndsAt);
-				    }
-				}
+                  addCookie(value);
 		    }
 
 	    	/* If Content-Type: Multipart/Related; boundary=<MIME_boundary>; type=text/xml;
@@ -1712,6 +1708,29 @@ bool HTTPTransport::copyDataToParserBuffer( char * pcBuffer, int * piSize, int i
 	}
 
 	return bTransportInProgress;
+}
+
+bool HTTPTransport::addCookie(const string name, const string value)
+{
+ m_vCookies.push_back( std::make_pair( name, value));
+ return true;
+}
+bool HTTPTransport::addCookie(const string nameValuePair)
+{
+    // Spec syntax : Set-Cookie: NAME=VALUE; expires=DATE; path=PATH; domain=DOMAIN_NAME; secure
+    // This code assumes it to be : Set-Cookie: NAME=VALUE; Anything_else
+    // And discards stuff after first ';'
+    // This is the same assumption used in Axis Java
+    unsigned long ulKeyEndsAt = nameValuePair.find( ";");
+           
+    string nameValue;
+    if( ulKeyEndsAt != std::string::npos)
+    {
+       nameValue = nameValuePair.substr( 0, ulKeyEndsAt);
+    }
+    // Now split the nameValue up
+    unsigned long nameEndsAt = nameValue.find("=");
+    return addCookie(nameValue.substr(0, nameEndsAt), nameValue.substr(nameEndsAt+1));
 }
 
 int HTTPTransport::peekChunkLength( std::string& strNextChunk)
