@@ -36,6 +36,7 @@ enum g_ChannelType
 class IChannel
 {
 public:
+    virtual                     ~IChannel() {};
 	virtual const char*			getURL()=0;
 	virtual void				setURL( const char* cpURL)=0;
     virtual URL &				getURLObject()=0;
