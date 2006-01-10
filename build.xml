@@ -179,6 +179,7 @@ Notes:
 			<then>
 				<antcall target="compileAxisXMLParser" inheritall="true">
 					<!-- We can re-use the Xerces parser layer for XML4C -->
+                    <param name="isXML4C" value="true"/>
 					<param name="xmlParser" value="xerces"/>
 					<param name="dir.xmlParser" value="${xml4c.dir.xmlParser}"/>
 					<param name="xmlParserLibrary" value="${xml4c.xmlParserLibrary}"/>
@@ -197,17 +198,17 @@ Notes:
 				</antcall>
 			</then>
 		</if>
-                <if>
-                        <equals arg1="${xmlParser.guththila}" arg2="true"/>
-                        <then>
-                                <antcall target="compileAxisXMLParser" inheritall="true">
-                                        <param name="xmlParser" value="guththila"/>
-                                        <param name="dir.xmlParser" value="${guththila.dir.xmlParser}"/>
-                                        <param name="xmlParserLibrary" value="${guththila.xmlParserLibrary}"/>
-                                        <param name="xmlParserLibraryName" value="${guththila.xmlParserLibraryName}"/>
-                                </antcall>
-                        </then>
-                </if>
+        <if>
+            <equals arg1="${xmlParser.guththila}" arg2="true"/>
+            <then>
+                <antcall target="compileAxisXMLParser" inheritall="true">
+                    <param name="xmlParser" value="guththila"/>
+                    <param name="dir.xmlParser" value="${guththila.dir.xmlParser}"/>
+                    <param name="xmlParserLibrary" value="${guththila.xmlParserLibrary}"/>
+                    <param name="xmlParserLibraryName" value="${guththila.xmlParserLibraryName}"/>
+                </antcall>
+            </then>
+        </if>
 	</target>
 
 	<target name="compile">

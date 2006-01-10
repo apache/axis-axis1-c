@@ -26,6 +26,10 @@
 #include "XMLParserXerces.h"
 #include <xercesc/util/PlatformUtils.hpp>
 
+#ifdef AXIS_XML4C
+#include <unicode/uclean.h>
+#endif
+
 extern "C" {
 STORAGE_CLASS_INFO
 int CreateInstance(XMLParser **inst)
@@ -49,6 +53,9 @@ int DestroyInstance(XMLParser *inst)
 	/* TODO : Following uninitialization should be done within a function
 	          called by the library loader at unloading time */
 		XMLPlatformUtils::Terminate ();
+#ifdef AXIS_XML4C
+		u_cleanup();
+#endif
 		return AXIS_SUCCESS;
 	}
 	return AXIS_FAIL;

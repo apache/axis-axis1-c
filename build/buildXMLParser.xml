@@ -9,13 +9,13 @@
         <antcall target="buildVersionResource" inheritall="true">
             <param name="internalName" value="${xmlParserLibraryName}"/>
         </antcall>
-<!-- Before Using Guththila need to build it -->
-<!-- Starting Building Guththila -->
+	<!-- Before Using Guththila need to build it -->
+	<!-- Starting Building Guththila -->
     <if>
         <equals arg1="${xmlParser.guththila}" arg2="true"/>
 	<then>
 	<mkdir dir="${dir.xmlParser}/lib"/>
-                <if>
+        <if>
 			<not>
 				<isset property="aix"/>
 			</not>
@@ -36,11 +36,11 @@
 							<define name="AXISXMLPARSERXERCES_EXPORTS"/>
 						</defineset>
 					</compiler>
-                              <compiler refid="OS400icc"/>
-			            <defineset>
-			                  <define name="ENABLE_AXISTRACE" if="trace"/>
-			                  <define name="AXISTRACE_LIBRARY"/>
-			            </defineset>
+                    <compiler refid="OS400icc"/>
+		            <defineset>
+		                <define name="ENABLE_AXISTRACE" if="trace"/>
+		                <define name="AXISTRACE_LIBRARY"/>
+		            </defineset>
 
 					<!-- Additional include directory for XML Parser -->
 					<includepath path="${dir.xmlParser}"/>
@@ -50,12 +50,12 @@
 					<linker refid="LinuxLinker"/>
                     <linker refid="HP-UXLinker"/>            
 					<linker refid="AIXLinker"/>
-			            <linker extends="OS400Linker">
-                                 <linkerarg value="-qDUPPROC"/>
-                                 <linkerarg value="-qDUPVAR"/>
-                                 <linkerarg location="end" value="${dir.xmlParser}/lib/${xmlParser}.so"/>
-                              </linker>
-
+		            <linker extends="OS400Linker">
+					    <linkerarg value="-qDUPPROC"/>
+					    <linkerarg value="-qDUPVAR"/>
+					    <linkerarg location="end" value="${dir.xmlParser}/lib/${xmlParser}.so"/>
+					</linker>
+            
 					<!-- Additional library of XMLParser -->
 					<!-- Files to be compiled -->
 					<fileset dir="${dir.xmlParser}">
@@ -109,11 +109,12 @@
 							<define name="AXISXMLPARSERXERCES_EXPORTS"/>
 						</defineset>
 					</compiler>
-                              <compiler refid="OS400icc"/>
-			            <defineset>
-			                  <define name="ENABLE_AXISTRACE" if="trace"/>
-			                  <define name="AXISTRACE_LIBRARY"/>
-			            </defineset>
+                    <compiler refid="OS400icc"/>
+		            <defineset>
+	                   <define name="ENABLE_AXISTRACE" if="trace"/>
+	                   <define name="AXISTRACE_LIBRARY"/>
+                       <define name="AXIS_XML4C" if="isXML4C"/>
+		            </defineset>
 
 					<!-- Additional include directory for XML Parser -->
 					<includepath path="${dir.xmlParser}"/>
@@ -133,6 +134,7 @@
 
 					<!-- Additional library of XMLParser -->
 					<libset dir="${dir.xmlParser}/lib" libs="${xmlParserLibrary}" unless="os400"/>
+                    <libset dir="${dir.xmlParser}/lib" libs="icuuc" unless="os400" if="isXML4C"/>
 					<!-- Files to be compiled -->
 					<fileset dir="${dir.src}">
 						<include name="xml/${xmlParser}/*.cpp"/>
@@ -146,8 +148,9 @@
 				 	<!-- Compilers -->
 					<compiler refid="AIXxlc"/>
 			            <defineset>
-			                  <define name="ENABLE_AXISTRACE" if="trace"/>
-			                  <define name="AXISTRACE_LIBRARY"/>
+			                <define name="ENABLE_AXISTRACE" if="trace"/>
+			                <define name="AXISTRACE_LIBRARY"/>
+                            <define name="AXIS_XML4C" if="isXML4C"/>         
 			            </defineset>
 
 					<!-- Additional include directory for XML Parser -->
@@ -157,6 +160,7 @@
 					<linker refid="AIXLinker"/>
 					<!-- Additional library of XMLParser -->
 					<libset dir="${dir.xmlParser}/lib" libs="${xmlParserLibrary}"/>
+                    <libset dir="${dir.xmlParser}/lib" libs="icuuc" if="isXML4C"/>            
 					<!-- Files to be compiled -->
 					<fileset dir="${dir.src}">
 						<include name="xml/${xmlParser}/*.cpp"/>
