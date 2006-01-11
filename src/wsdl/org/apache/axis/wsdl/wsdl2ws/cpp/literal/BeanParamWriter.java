@@ -863,25 +863,6 @@ public class BeanParamWriter extends ParamCPPFileWriter
             return;
         }
         String arrayType = null;
-
-//        /* Needed for Aix xlc */
-//
-//        for (int i = 0; i < attribs.length; i++)
-//        {
-//            if (attribs[i].isArray())
-//            {
-//                if (attribs[i].isSimpleType())
-//                {
-//                    writer.write("\tAxis_Array * array;\n\n");
-//                }
-//                else
-//                {
-//                    writer.write("\t" + attribs[i].getTypeName() + "_Array * array = new " + attribs[i].getTypeName() + "_Array();\n\n");
-//                }
-//                break;
-//            }
-//        }
-
         boolean peekCalled = false;
         boolean firstIfWritten = false;
         boolean foundAll = false;
@@ -972,8 +953,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 else
                 {
                     arrayType = attribs[i].getTypeName();
-                    writer.write("\t" + arrayType + "_Array * array" + arrayCount + " = new " + arrayType + "_Array();\n");
-                    writer.write("\tarray" + arrayCount + " = (" + arrayType + "_Array *) pIWSDZ->getCmplxArray(array" + arrayCount + ", (void*)Axis_DeSerialize_"
+                    writer.write("\tpIWSDZ->getCmplxArray(param->" + attribs[i].getParamNameAsMember() + ", (void*)Axis_DeSerialize_"
                                     + arrayType
                                     + ",\n"
                                     + "\t\t\t\t\t\t\t\t  (void*)Axis_Create_"
@@ -989,7 +969,6 @@ public class BeanParamWriter extends ParamCPPFileWriter
                                     + attribs[i].getElementNameAsString()
                                     + "\", Axis_URI_" + arrayType + ");\n\n");
                     
-                	writer.write("\tparam->" + attribs[i].getParamNameAsMember() + " = array" + arrayCount + ";\n\n");
                 }
             }
             else if (attribs[i].isSimpleType())
@@ -1069,13 +1048,6 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 		writer.write( "\t\t\telse\n");
                 		writer.write( "\t\t\t{\n");
                 		
-                		if( CUtils.isPointerType( typeName))
-                		{
-                		    writer.write("\t\t\t\tparam->" + elementName + " = new char[strlen( pValue" + i + ") + 1];\n");
-                    		writer.write("\t\t\t\tstrcpy( param->" + elementName + ", pValue" + i + ");\n\n");
-                		}
-                		else
-                		{
                 			String localElemName = elementName;
                 			if( elementName.endsWith( "_"))
                             {
@@ -1084,7 +1056,6 @@ public class BeanParamWriter extends ParamCPPFileWriter
                             }
                 			
                 			writer.write("\t\t\t\tparam->set" + localElemName + " (pValue" + i + ");\n");
-                		}
                 		
                 		writer.write("\t\t\t\tAxis::AxisDelete( (void *) pValue" + i + ", " + CUtils.getXSDTypeForBasicType( typeName) + ");\n\n");
 
@@ -1408,6 +1379,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     if(CUtils.isPointerType(attribs[i].getTypeName()))
                     {
                         writer.write("\t"+ attribs[i].getParamNameAsMember() + " = NULL;\n");
+                        writer.write("\t__axis_deepcopy_" + attribs[i].getParamName() + " = false;\n");
                     }
                 }
             }
