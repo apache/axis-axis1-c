@@ -1,4 +1,96 @@
-5
-5
-5
+Calling calculator for the first time and expecting Set-Cookie back
+----------------------------------------------------------
+Properties that were sent out
+SOAPAction="Calculator#add"
+Content-Length=397
+----------------------------------------------------------
+Properties that were received
+Server= WebSphere Application Server/5.1
+Content-Type= text/xml; charset=utf-8
+Content-Language= en-GB
+Set-Cookie= LtpaToken2=1234567890abcdefghijklmnopqrstuvwxyz; Path=/ 
+Set-Cookie= LtpaToken==+yOkBBuvLtTaiuBDkfgy3W6mZraGn7V5Dzp; Path=/ 
+Set-Cookie= JSESSIONID=0000EyvJyGOS-2e9nlRijFiwKSR:-1; Path=/ 
+Transfer-Encoding= chunked
+----------------------------------------------------------
+Storing the cookies so I can give them to the next web service
+Calling calculator for the second time and expecting to send the cookies back
+----------------------------------------------------------
+Properties that were sent out
+SOAPAction="Calculator#add"
+Content-Length=397
+Cookie=LtpaToken2=1234567890abcdefghijklmnopqrstuvwxyz;LtpaToken==+yOkBBuvLtTaiuBDkfgy3W6mZraGn7V5Dzp;JSESSIONID=0000EyvJyGOS-2e9nlRijFiwKSR:-1
+----------------------------------------------------------
+Properties that were received
+Server= WebSphere Application Server/5.1
+Content-Type= text/xml; charset=utf-8
+Content-Language= en-GB
+Transfer-Encoding= chunked
+----------------------------------------------------------
+Use a new instance of calculator and ensure that the old cookies are lost
+----------------------------------------------------------
+Properties that were sent out
+SOAPAction="Calculator#add"
+Content-Length=397
+----------------------------------------------------------
+Properties that were received
+Server= WebSphere Application Server/5.1
+Content-Type= text/xml; charset=utf-8
+Content-Language= en-GB
+Transfer-Encoding= chunked
+----------------------------------------------------------
+Add the cookies from the previous web service to the new web service
+Completed adding cookies
+Call the calculator service twice and ensure that the cookies remain
+----------------------------------------------------------
+Properties that were sent out
+SOAPAction="Calculator#add"
+Content-Length=397
+Cookie=LtpaToken2=1234567890abcdefghijklmnopqrstuvwxyz;LtpaToken==+yOkBBuvLtTaiuBDkfgy3W6mZraGn7V5Dzp;JSESSIONID=0000EyvJyGOS-2e9nlRijFiwKSR:-1
+----------------------------------------------------------
+Properties that were received
+Server= WebSphere Application Server/5.1
+Content-Type= text/xml; charset=utf-8
+Content-Language= en-GB
+Transfer-Encoding= chunked
+----------------------------------------------------------
+----------------------------------------------------------
+Properties that were sent out
+SOAPAction="Calculator#add"
+Content-Length=397
+Cookie=LtpaToken2=1234567890abcdefghijklmnopqrstuvwxyz;LtpaToken==+yOkBBuvLtTaiuBDkfgy3W6mZraGn7V5Dzp;JSESSIONID=0000EyvJyGOS-2e9nlRijFiwKSR:-1
+----------------------------------------------------------
+Properties that were received
+Server= WebSphere Application Server/5.1
+Content-Type= text/xml; charset=utf-8
+Content-Language= en-GB
+Transfer-Encoding= chunked
+----------------------------------------------------------
+Deleting the LtpaToken2 cookie
+Calling the service and not expecting the LtpaToken2 in the cookie header
+----------------------------------------------------------
+Properties that were sent out
+SOAPAction="Calculator#add"
+Content-Length=397
+Cookie=LtpaToken==+yOkBBuvLtTaiuBDkfgy3W6mZraGn7V5Dzp;JSESSIONID=0000EyvJyGOS-2e9nlRijFiwKSR:-1
+----------------------------------------------------------
+Properties that were received
+Server= WebSphere Application Server/5.1
+Content-Type= text/xml; charset=utf-8
+Content-Language= en-GB
+Transfer-Encoding= chunked
+----------------------------------------------------------
+Removing all the cookies by using the 'deleteTransportProperty(Cookie)' method
+Calling the service and expecting no cookies to be there
+----------------------------------------------------------
+Properties that were sent out
+SOAPAction="Calculator#add"
+Content-Length=397
+----------------------------------------------------------
+Properties that were received
+Server= WebSphere Application Server/5.1
+Content-Type= text/xml; charset=utf-8
+Content-Language= en-GB
+Transfer-Encoding= chunked
+----------------------------------------------------------
 ---------------------- TEST COMPLETE -----------------------------
