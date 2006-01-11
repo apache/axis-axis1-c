@@ -297,6 +297,7 @@ int main(int argc, char* argv[])
             delete array[deleteIndex];
         }
         delete [] array;
+        delete arrayResult;
 
 
         // Test complex type
