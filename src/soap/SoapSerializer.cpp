@@ -904,7 +904,10 @@ int SoapSerializer::serializeAsAttribute( const AxisChar * pName,
 {
     IAnySimpleType* pSimpleType = AxisUtils::createSimpleTypeObject(pValue, type);
     
-    return serializeAsAttribute(pName, pNamespace, pSimpleType);
+    int status = serializeAsAttribute(pName, pNamespace, pSimpleType);
+    delete pSimpleType;
+    
+    return status;
 }
 
 int SoapSerializer::serializeAsAttribute( const AxisChar * pName, 
