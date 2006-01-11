@@ -1403,7 +1403,18 @@ public class ClientStubWriter
 		("\t\t\t\tpFaultDetail->setExceptionCode(e.getExceptionCode());\n");
 	    writer.write ("\t\t\t\tm_pCall->unInitialize();\n");
 	    writer.write ("\t\t\t\tdelete pSoapFault;\n");
-	    writer.write ("\t\t\t\tthrow *pFaultDetail;\n");
+	    String faultTypeName;
+	    if (faulttype.lastIndexOf('*') != -1)
+	    {
+	        faultTypeName = faulttype.substring(0, faulttype.lastIndexOf('*'));
+	    }
+	    else
+	    {
+	        faultTypeName = faulttype;
+	    }
+	    writer.write ("\t\t\t\t" + faultTypeName + " fault = *pFaultDetail;\n");
+	    writer.write ("\t\t\t\tdelete pFaultDetail;\n");
+	    writer.write ("\t\t\t\tthrow fault;\n");
 	    writer.write ("\t\t\t}\n");
 	}
 	catch (IOException e)
