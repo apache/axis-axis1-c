@@ -350,7 +350,11 @@ int Call::setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char
         char* tempvalue = new char[strlen(value) + 3];
         sprintf( tempvalue, "\"%s\"", value);
         m_pTransport->setTransportProperty(type, tempvalue);
+		if( tempvalue != NULL)
+		{
         delete [] tempvalue;
+			tempvalue = NULL;
+		}
     }
     else
 	{

@@ -32,7 +32,6 @@ using namespace std;
 URL::URL()
     : m_Protocol(unknown), m_Port(0), m_URL("")
 {
-   /* cout << "inside URL constructor" << endl;  */
     m_Host = "";
     m_Path = "";
     m_Query = "";
