@@ -120,7 +120,10 @@ HTTPTransport::~HTTPTransport()
 		m_pChannelFactory = 0;
 	}
 
-	delete [] m_pszRxBuffer;
+	if( m_pszRxBuffer)
+	{
+		delete [] m_pszRxBuffer;
+	}
 }
 
 /*
