@@ -64,14 +64,14 @@ AXISC_STORAGE_CLASS_INFO const char * axiscGetTransportPropertyStub(AXISCHANDLE 
 	return s->getTransportProperty(key, (bool)(response !=0 ));
 }
 
-AXISC_STORAGE_CLASS_INFO const char * axiscGetFirstTransportPropertyKey(AXISCHANDLE stub) {
+AXISC_STORAGE_CLASS_INFO const char * axiscGetFirstTransportPropertyKey(AXISCHANDLE stub, AxiscBool response) {
 	Stub *s = (Stub*)stub;
-	return s->getFirstTransportPropertyKey();
+	return s->getFirstTransportPropertyKey( (bool)(response!=0));
 }
 
-AXISC_STORAGE_CLASS_INFO const char * axiscGetNextTransportPropertyKey(AXISCHANDLE stub) {
+AXISC_STORAGE_CLASS_INFO const char * axiscGetNextTransportPropertyKey(AXISCHANDLE stub, AxiscBool response) {
 	Stub *s = (Stub*)stub;
-	return s->getNextTransportPropertyKey();
+	return s->getNextTransportPropertyKey((bool)(response!=0));
 }
 
 AXISC_STORAGE_CLASS_INFO const char * axiscGetCurrentTransportPropertyKey(AXISCHANDLE stub) {
@@ -79,14 +79,14 @@ AXISC_STORAGE_CLASS_INFO const char * axiscGetCurrentTransportPropertyKey(AXISCH
 	return s->getCurrentTransportPropertyKey();
 }
 
-AXISC_STORAGE_CLASS_INFO const char * axiscGetCurrentTransportPropertyValue(AXISCHANDLE stub) {
+AXISC_STORAGE_CLASS_INFO const char * axiscGetCurrentTransportPropertyValue(AXISCHANDLE stub, AxiscBool response) {
 	Stub *s = (Stub*)stub;
-	return s->getCurrentTransportPropertyValue();
+	return s->getCurrentTransportPropertyValue((bool)(response!=0));
 }
 
-AXISC_STORAGE_CLASS_INFO void axiscDeleteCurrentTransportProperty(AXISCHANDLE stub) {
+AXISC_STORAGE_CLASS_INFO void axiscDeleteCurrentTransportProperty(AXISCHANDLE stub, AxiscBool response) {
 	Stub *s = (Stub*)stub;
-	s->deleteCurrentTransportProperty();
+	s->deleteCurrentTransportProperty((bool)(response!=0));
 }
 
 AXISC_STORAGE_CLASS_INFO void axiscDeleteTransportProperty(AXISCHANDLE stub, char * pcKey, 

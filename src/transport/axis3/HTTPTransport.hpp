@@ -94,11 +94,11 @@ class HTTPTransport:public SOAPTransport
     void					setHTTPMethod( const char *);
     const char *			getHTTPHeaders();
     void					setSocket( unsigned int);
-    const char *			getFirstTransportPropertyKey();
-    const char *			getNextTransportPropertyKey();
+    const char *			getFirstTransportPropertyKey(bool response);
+    const char *			getNextTransportPropertyKey(bool response);
     const char *			getCurrentTransportPropertyKey();
-    const char *			getCurrentTransportPropertyValue();
-    void					deleteCurrentTransportProperty();
+    const char *			getCurrentTransportPropertyValue(bool response);
+    void					deleteCurrentTransportProperty(bool response=true);
     void					deleteTransportProperty( char* pcKey, unsigned int uiOccurance = 1);
     virtual void			setMaintainSession( bool bSession);
 
@@ -127,16 +127,35 @@ class HTTPTransport:public SOAPTransport
      * 
      * @param name name of the cookie
      * @param value value of the cookie
-     * @return true if the cookie was added succesfully. False otherwise
+     * @return AXIS_SUCCESS if the cookie was added succesfully. False otherwise
      */
-    bool                    addCookie(const string name, const string Value);
+    int                    addCookie(const string name, const string Value);
     
     /**
      * Adds the name value pair to the cookie list
      * @param nameValuepair in the format name=value
-     * @return true if the cookie was added succesfully false otherwise.
+     * @return AXIS_SUCCESS if the cookie was added succesfully false otherwise.
      */
-    bool addCookie(const string nameValuePair);
+    int addCookie(const string nameValuePair);
+    
+    /**
+     * removes the known cookie
+     * @param name - the name of the cookie to be removed
+     * @return AXIS_SUCCESS if the cookie and was there and was removed AXIS_FAIL otherwise
+     */
+     int removeCookie(const string name);
+     
+     /**
+      * If the user passes "Cookie" into deleteTransportProperty() then we remove all cookies
+      * This is a convenient internal method to do that.
+      * @return AXIS_SUCCESS if all cookies were removed or AXIS_FAIL otherwise
+      */
+     int removeAllCookies();
+     /**
+      * Utility function - Removes whitespace from around the given string
+      */            
+     void trim(string& str);
+     
     
   /**
     * Keeps track of if we need to reopen connection.
@@ -162,9 +181,14 @@ class HTTPTransport:public SOAPTransport
     std::vector < std::pair < std::string, std::string > >m_vHTTPHeaders;
     
   /**
-    * Transport header iterator
+    * Transport header iterator for the request headers
     */
     vector <std::pair < std::string, std::string > >::iterator m_viCurrentHeader;
+
+  /**
+    * Transport header iterator for the reply headers
+    */
+    vector <std::pair < std::string, std::string > >::iterator m_viCurrentResponseHeader;
     
   /**
     * HTTP protocol (1.1 or 1.0). Default is HTTP/1.1

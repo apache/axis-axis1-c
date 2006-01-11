@@ -257,12 +257,15 @@ public:
      * @brief Gets any transport property in the arrived message
      *
      * @param pcKey The key of the transport property to get.
-	 * @param response gets a property from the response message when true and
-	 *                 from the send message when false
+   * @param response gets a property from the response message when true and
+     *                 from the send message when false
      * @return Value of the transport property if available. Returns null
      *         if unavailable.
+     * NOTE: If there are multiple properties with the same name then only the first one in the message
+     * will be returned - please use getTransportProperties if you want all properties.
      */
     virtual const char* getTransportProperty(const char* pcKey, bool response=true)=0;
+
     /**
      * Sets a SOAP attachment to be sent with outgoing message. This
      * attachment is usually the base64 or hex encoded character buffer
@@ -401,11 +404,12 @@ public:
     *
     * This method must be called first to initiate access to the list of 
     * transport property keys.
-    *
+    * 
+    * @param response - whether this is the response headers or not
     * @return First transport property key. If there are no transport 
     * properties set, returns NULL.
     */
-    virtual const char* getFirstTransportPropertyKey() { return 0; };
+    virtual const char* getFirstTransportPropertyKey(bool response=true) { return 0; };
 
   /**
     * Iterator for transport property keys
@@ -416,10 +420,11 @@ public:
     * This method advances the iterator by one position.
     * Repeated calls always retuen the next value.
     *
+    * @param response get the response message property or the sent message property
     * @return Next transport property key. If there are no transport 
     * properties set or if iterator is at the end of the list, returns NULL.
     */
-    virtual const char* getNextTransportPropertyKey() { return 0; };
+    virtual const char* getNextTransportPropertyKey(bool response=true) { return 0; };
 
   /**
     * Accessor for transport property keys.
@@ -454,16 +459,18 @@ public:
     * Repeated calls always retuen the same value unless 
     * getNextTransportPropertyKey() is called in between.
     *
+    * @param response whether to get the property value from the response or outgoing message
     * @return Current transport property value. If there are no transport 
     * properties set or if iterator is at the end of the list, returns NULL.
     */
-    virtual const char* getCurrentTransportPropertyValue() { return 0; };
+    virtual const char* getCurrentTransportPropertyValue(bool response=true) { return 0; };
 
   /**
     * Deletes the transport property key:value pair currently pointed to by 
     * the iterator.
+    * @param response whether to delete the response property or request property.
     */
-    virtual void deleteCurrentTransportProperty() {};
+    virtual void deleteCurrentTransportProperty(bool response=true) {};
 
   /**
     * Deletes the given occerance of the transport property key:value pair

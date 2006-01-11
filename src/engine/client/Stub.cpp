@@ -150,19 +150,19 @@ Stub::getTransportProperty (const char *key, bool response)
 }
 
 const char *
-Stub::getFirstTransportPropertyKey ()
+Stub::getFirstTransportPropertyKey (bool response)
 {
     if (m_pTransport)
-	return m_pTransport->getFirstTransportPropertyKey ();
+	return m_pTransport->getFirstTransportPropertyKey (response);
     else
 	return NULL;
 }
 
 const char *
-Stub::getNextTransportPropertyKey ()
+Stub::getNextTransportPropertyKey (bool response)
 {
     if (m_pTransport)
-	return m_pTransport->getNextTransportPropertyKey ();
+	return m_pTransport->getNextTransportPropertyKey (response);
     else
 	return NULL;
 }
@@ -177,19 +177,19 @@ Stub::getCurrentTransportPropertyKey ()
 }
 
 const char *
-Stub::getCurrentTransportPropertyValue ()
+Stub::getCurrentTransportPropertyValue (bool response)
 {
     if (m_pTransport)
-	return m_pTransport->getCurrentTransportPropertyValue ();
+	return m_pTransport->getCurrentTransportPropertyValue (response);
     else
 	return NULL;
 }
 
 void
-Stub::deleteCurrentTransportProperty ()
+Stub::deleteCurrentTransportProperty (bool response)
 {
     if (m_pTransport)
-	m_pTransport->deleteCurrentTransportProperty ();
+	m_pTransport->deleteCurrentTransportProperty (response);
 }
 
 void

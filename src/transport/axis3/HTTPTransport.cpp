@@ -29,7 +29,8 @@
 #include "../../platforms/PlatformAutoSense.hpp"
 
 #include <stdio.h>
-#include <iostream>
+// You can uncommment thisl line if you want any debug putting to stdio but PLEASE ensure you comment it out again before releasing.
+// #include <iostream>
 
 // =================================================================
 // In order to parse the HTTP protocol data on an ebcdic system, we
@@ -90,6 +91,7 @@ m_bMaintainSession (false)
     m_pChannelFactory = new ChannelFactory();
     m_bMimeTrue = false;
     m_viCurrentHeader = m_vHTTPHeaders.begin();
+    m_viCurrentResponseHeader = m_vResponseHTTPHeaders.begin();
 	m_pszRxBuffer = new char [BUF_SIZE];
 #ifdef WIN32
 	m_lChannelTimeout = 10;
@@ -338,11 +340,16 @@ AXIS_TRANSPORT_STATUS HTTPTransport::flushOutput() throw (AxisException, HTTPTra
     // Empty the bytes to send string.
 	m_strBytesToSend = "";
 	m_strHeaderBytesToSend = "";
+ 
+    // Also empty the response headers as there aren't any yet until the response comes back !
+    m_vResponseHTTPHeaders.clear();
+    // TODO: Possible memory leak here - does the clear op clean out the memory too?
+    
 
 	return TRANSPORT_FINISHED;
 }
 
-/* HTTPTransport::getHTTPHeaders() Called to retreive the current HTTP header
+/* HTTPTransport::getHTTPHeaders() Called to retrieve the current HTTP header
  * information block that will preceed the SOAP message.
  *
  * @return const char* Pointer to a NULL terminated character string containing
@@ -389,31 +396,58 @@ const char * HTTPTransport::getHTTPHeaders()
 	if (!foundCT)
 		m_strHeaderBytesToSend += AXIS_CONTENT_TYPE ": text/xml; charset=UTF-8\r\n";
 
-    // Set other HTTP headers
+    // Set other HTTP headers but not cookies as they are put in afterwards.
     for (unsigned int i = 0; i < m_vHTTPHeaders.size (); i++)
     {
-		m_strHeaderBytesToSend += m_vHTTPHeaders[i].first;
-		m_strHeaderBytesToSend += ": ";
-		m_strHeaderBytesToSend += m_vHTTPHeaders[i].second;
-		m_strHeaderBytesToSend += "\r\n";
+        if( strcmp(m_vHTTPHeaders[i].first.c_str(), "Cookie")!=0)
+        {
+          m_strHeaderBytesToSend += m_vHTTPHeaders[i].first;
+		  m_strHeaderBytesToSend += ": ";
+		  m_strHeaderBytesToSend += m_vHTTPHeaders[i].second;
+		  m_strHeaderBytesToSend += "\r\n";
+        }
     }
 
     // Set cookies
     if (m_bMaintainSession && (m_vCookies.size () > 0))
     {
-		m_strHeaderBytesToSend += "Cookie";
-		m_strHeaderBytesToSend += ": ";
-
-        for (unsigned int var = 0; var < m_vCookies.size(); var++) 
+        string cookieHeader="";
+        
+        // Add in all the cookies ar the last one because that shouldn't have a ';' on it
+        for (unsigned int var = 0; var < m_vCookies.size()-1; var++) 
         {
-            m_strHeaderBytesToSend += m_vCookies[var].first;
-            m_strHeaderBytesToSend += "=";
-            m_strHeaderBytesToSend += m_vCookies[var].second;
-            m_strHeaderBytesToSend += ";";
+            cookieHeader += m_vCookies[var].first;
+            cookieHeader += "=";
+            cookieHeader += m_vCookies[var].second;
+            cookieHeader += ";";
         }
-        // remove the last ';'
-        m_strHeaderBytesToSend = m_strHeaderBytesToSend.substr(0, m_strHeaderBytesToSend.length()-1);
+        // add on the last cookie
+        cookieHeader += m_vCookies[m_vCookies.size()-1].first;
+        cookieHeader += "=";
+        cookieHeader += m_vCookies[m_vCookies.size()-1].second;
+        
+        
+        m_strHeaderBytesToSend += "Cookie: ";
+        m_strHeaderBytesToSend += cookieHeader;
         m_strHeaderBytesToSend += "\r\n";
+        
+        // Now add this header in to the list of sent headers
+        // if it's not already been set ! If it has been then override it
+        bool b_keyFound=false;
+        for (unsigned int i = 0; i < m_vHTTPHeaders.size(); i++)
+        {
+            if (m_vHTTPHeaders[i].first == (string)"Cookie")
+            {
+                m_vHTTPHeaders[i].second = (string) cookieHeader;
+                b_keyFound = true;
+
+                break;
+            }
+        }
+        if(!b_keyFound)
+        {
+            m_vHTTPHeaders.push_back( std::make_pair( (string) "Cookie", (string) cookieHeader));
+        }
     }
 
     m_strHeaderBytesToSend += "\r\n";
@@ -748,6 +782,7 @@ int HTTPTransport::setTransportProperty( const char *pcKey, const char *pcValue)
 
     bool b_KeyFound = false;
 
+    // Check for well known headers that we add on in every iteration
     if( strcmp( pcKey, "SOAPAction") == 0 || strcmp( pcKey, "Content-Length") == 0)
     {
 		std::string strKeyToFind = std::string( pcKey);
@@ -757,19 +792,24 @@ int HTTPTransport::setTransportProperty( const char *pcKey, const char *pcValue)
 		    if (m_vHTTPHeaders[i].first == strKeyToFind)
 			{
 				m_vHTTPHeaders[i].second = (string) pcValue;
-
 				b_KeyFound = true;
 
 				break;
 		    }
 		}
     }
+    else
+    {
+        if(strcmp(pcKey, "Cookie")==0)
+        {
+        return addCookie(pcValue);
+        }
+    }
 
     if( !b_KeyFound)
     {
-		m_vHTTPHeaders.push_back( std::make_pair( (string) pcKey, (string) pcValue));
+  		m_vHTTPHeaders.push_back( std::make_pair( (string) pcKey, (string) pcValue));
     }
-
 	return AXIS_SUCCESS;
 }
 
@@ -1330,38 +1370,77 @@ const char * HTTPTransport::getTransportProperty( const char * pcKey, bool respo
     return NULL;
 }
 
-const char * HTTPTransport::getFirstTransportPropertyKey()
+const char * HTTPTransport::getFirstTransportPropertyKey(bool response)
 {
-    m_viCurrentHeader = m_vHTTPHeaders.begin ();
-
-    if( m_viCurrentHeader == m_vHTTPHeaders.end())
-	{
-		return NULL;
-	}
+    if(response)
+    {
+        m_viCurrentResponseHeader = m_vResponseHTTPHeaders.begin ();
+    
+        if( m_viCurrentResponseHeader == m_vResponseHTTPHeaders.end())
+        {
+         return NULL;
+        }
+        else
+        {
+         return (*m_viCurrentResponseHeader).first.c_str();
+        }
+    }
     else
-	{
-		return (*m_viCurrentHeader).first.c_str();
-	}
+    {
+        m_viCurrentHeader = m_vHTTPHeaders.begin ();
+    
+        if( m_viCurrentHeader == m_vHTTPHeaders.end())
+    	{
+    		return NULL;
+    	}
+        else
+    	{
+    		return (*m_viCurrentHeader).first.c_str();
+    	}
+    }
 }
 
-const char * HTTPTransport::getNextTransportPropertyKey()
+const char * HTTPTransport::getNextTransportPropertyKey(bool response)
 {
-    //already at the end?
-    if( m_viCurrentHeader == m_vHTTPHeaders.end())
-	{
-		return NULL;
-	}
+    if(response)
+    {
+        //already at the end?
+        if( m_viCurrentResponseHeader == m_vResponseHTTPHeaders.end())
+        {
+            return NULL;
+        }
 
-    m_viCurrentHeader++;
+        m_viCurrentResponseHeader++;
 
-    if( m_viCurrentHeader == m_vHTTPHeaders.end())
-	{
-		return NULL;
-	}
+        if( m_viCurrentResponseHeader == m_vResponseHTTPHeaders.end())
+        {
+            return NULL;
+        }
+        else
+        {
+            return (*m_viCurrentResponseHeader).first.c_str();
+        }
+    }
     else
-	{
-		return (*m_viCurrentHeader).first.c_str();
-	}
+    {
+    
+        //already at the end?
+        if( m_viCurrentHeader == m_vResponseHTTPHeaders.end())
+    	{
+    		return NULL;
+    	}
+    
+        m_viCurrentHeader++;
+    
+        if( m_viCurrentHeader == m_vHTTPHeaders.end())
+    	{
+    		return NULL;
+    	}
+        else
+    	{
+    		return (*m_viCurrentHeader).first.c_str();
+    	}
+    }
 }
 
 const char * HTTPTransport::getCurrentTransportPropertyKey()
@@ -1376,8 +1455,22 @@ const char * HTTPTransport::getCurrentTransportPropertyKey()
 	}
 }
 
-const char * HTTPTransport::getCurrentTransportPropertyValue()
+const char * HTTPTransport::getCurrentTransportPropertyValue(bool response)
 {
+ if(response)
+ {
+    if( m_viCurrentResponseHeader == m_vResponseHTTPHeaders.end())
+    {
+     return NULL;
+  }
+    else
+   {
+     return (*m_viCurrentResponseHeader).second.c_str();
+   }
+    
+ }
+ else
+ {
     if( m_viCurrentHeader == m_vHTTPHeaders.end())
 	{
 		return NULL;
@@ -1386,14 +1479,27 @@ const char * HTTPTransport::getCurrentTransportPropertyValue()
 	{
 		return (*m_viCurrentHeader).second.c_str();
 	}
+ }
 }
 
-void HTTPTransport::deleteCurrentTransportProperty()
+void HTTPTransport::deleteCurrentTransportProperty(bool response)
 {
-    if( m_viCurrentHeader != m_vHTTPHeaders.end())
+    // response=true by default
+    std::vector < std::pair < std::string, std::string > >* headers = &m_vResponseHTTPHeaders;
+    vector <std::pair < std::string, std::string > >::iterator* currentHeader = &m_viCurrentResponseHeader;
+    if(!response)
     {
-		m_vHTTPHeaders.erase( m_viCurrentHeader);
+        headers = &m_vHTTPHeaders;
+        currentHeader = &m_viCurrentHeader;
     }
+    if( *currentHeader != headers->end())
+    {
+       headers->erase( *currentHeader);
+    }
+//    if( m_viCurrentHeader != m_vHTTPHeaders.end())
+//    {
+//		m_vHTTPHeaders.erase( m_viCurrentHeader);
+//    }
 }
 
 void HTTPTransport::deleteTransportProperty (char *pcKey, unsigned int uiOccurance)
@@ -1401,7 +1507,7 @@ void HTTPTransport::deleteTransportProperty (char *pcKey, unsigned int uiOccuran
     vector < std::pair < std::string,
 	std::string > >::iterator currentHeader = m_vHTTPHeaders.begin();
     unsigned int uiCount = 1;
-
+    bool found=false;
     while( currentHeader != m_vHTTPHeaders.end() && uiCount <= uiOccurance)
     {
 		if( strcmp( pcKey, (*currentHeader).first.c_str()) == 0)
@@ -1409,6 +1515,12 @@ void HTTPTransport::deleteTransportProperty (char *pcKey, unsigned int uiOccuran
 			if( uiCount == uiOccurance)
 			{
 				m_vHTTPHeaders.erase( currentHeader);
+                // if this is the special case of cookies then delete them all
+                if(strcmp(pcKey, "Cookie")==0)
+                {
+                 removeAllCookies();
+                }
+                found=true;
 				break;
 			}
 	    
@@ -1416,6 +1528,11 @@ void HTTPTransport::deleteTransportProperty (char *pcKey, unsigned int uiOccuran
 		}
 	
 		currentHeader++;
+    }
+    // if the property has not been found then it might be a cookie
+    if(!found)
+    {
+        removeCookie(pcKey);
     }
 }
 
@@ -1710,17 +1827,40 @@ bool HTTPTransport::copyDataToParserBuffer( char * pcBuffer, int * piSize, int i
 	return bTransportInProgress;
 }
 
-bool HTTPTransport::addCookie(const string name, const string value)
+int HTTPTransport::addCookie(const string name, const string value)
 {
- m_vCookies.push_back( std::make_pair( name, value));
- return true;
+    // trim the name
+    string theName(name);
+    trim(theName);
+    // Make sure that the cookie is not duplicated.
+    // This cookie might be replacing one that's already there
+    bool b_keyFound=false;
+    for (unsigned int i = 0; i < m_vCookies.size(); i++)
+    {
+        if (m_vCookies[i].first == theName)
+        {
+            m_vCookies[i].second = (string) value;
+            b_keyFound = true;
+
+            break;
+        }
+     }
+ 
+ 
+    if(!b_keyFound)
+    {
+     // cookie has not already been found
+     m_vCookies.push_back( std::make_pair( theName, value));
+    }
+    return true;
 }
-bool HTTPTransport::addCookie(const string nameValuePair)
+int HTTPTransport::addCookie(const string nameValuePair)
 {
     // Spec syntax : Set-Cookie: NAME=VALUE; expires=DATE; path=PATH; domain=DOMAIN_NAME; secure
     // This code assumes it to be : Set-Cookie: NAME=VALUE; Anything_else
     // And discards stuff after first ';'
     // This is the same assumption used in Axis Java
+    
     unsigned long ulKeyEndsAt = nameValuePair.find( ";");
            
     string nameValue;
@@ -1733,6 +1873,31 @@ bool HTTPTransport::addCookie(const string nameValuePair)
     return addCookie(nameValue.substr(0, nameEndsAt), nameValue.substr(nameEndsAt+1));
 }
 
+int HTTPTransport::removeCookie(const string name)
+{
+     vector < std::pair < std::string,
+     std::string > >::iterator currentCookie = m_vCookies.begin();
+
+    while( currentCookie != m_vCookies.end())
+    {
+        if( strcmp( name.c_str(), (*currentCookie).first.c_str()) == 0)
+        {
+            m_vCookies.erase( currentCookie);
+            return AXIS_SUCCESS;
+        }
+        currentCookie++;
+    }
+    
+    return AXIS_FAIL;
+}
+
+int HTTPTransport::removeAllCookies()
+{
+    m_vCookies.clear();
+    // we also need to remove it from the header properties that we send.
+    // This is done from the deleteTransportMethod before this one is called.
+    return AXIS_SUCCESS;
+}
 int HTTPTransport::peekChunkLength( std::string& strNextChunk)
 {
 	if( strNextChunk.length() == 0)
@@ -1757,3 +1922,21 @@ int HTTPTransport::peekChunkLength( std::string& strNextChunk)
 // Convert the hex string into the length of the chunk.
 	return axtoi( (char *) strNextChunk.substr( 0, iEndOfChunkSize).c_str());
 }
+void HTTPTransport::trim(string& str)
+{
+    string::size_type pos = str.find_last_not_of(' ');
+    if(pos != string::npos) 
+    {
+        str.erase(pos + 1);
+        pos = str.find_first_not_of(' ');
+        if(pos != string::npos) 
+        {
+            str.erase(0, pos);
+        }
+    }
+    else 
+    {
+        str.erase(str.begin(), str.end());
+    }
+}
+
