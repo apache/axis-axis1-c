@@ -1446,43 +1446,56 @@ const char * HTTPTransport::getNextTransportPropertyKey(bool response)
     }
 }
 
-const char * HTTPTransport::getCurrentTransportPropertyKey()
+const char * HTTPTransport::getCurrentTransportPropertyKey(bool response)
 {
-    if( m_viCurrentHeader == m_vHTTPHeaders.end())
-	{
-		return NULL;
-	}
+    if (response)
+    {
+        if( !m_viCurrentResponseHeader || m_viCurrentResponseHeader == m_vResponseHTTPHeaders.end())
+        {
+            return NULL;
+        }
+        else
+        {
+            return (*m_viCurrentResponseHeader).first.c_str();
+        }
+    }
     else
-	{
-		return (*m_viCurrentHeader).first.c_str();
-	}
+    {
+        if( !m_viCurrentHeader || m_viCurrentHeader == m_vHTTPHeaders.end())
+        {
+            return NULL;
+        }
+        else
+        {
+            return (*m_viCurrentHeader).first.c_str();
+        }
+    }
 }
 
 const char * HTTPTransport::getCurrentTransportPropertyValue(bool response)
 {
- if(response)
- {
-    if( m_viCurrentResponseHeader == m_vResponseHTTPHeaders.end())
+    if(response)
     {
-     return NULL;
-  }
+        if( !m_viCurrentResponseHeader || m_viCurrentResponseHeader == m_vResponseHTTPHeaders.end())
+        {
+            return NULL;
+        }
+        else
+        {
+            return (*m_viCurrentResponseHeader).second.c_str();
+        }
+    }
     else
-   {
-     return (*m_viCurrentResponseHeader).second.c_str();
-   }
-    
- }
- else
- {
-    if( m_viCurrentHeader == m_vHTTPHeaders.end())
-	{
-		return NULL;
-	}
-    else
-	{
-		return (*m_viCurrentHeader).second.c_str();
-	}
- }
+    {
+        if( !m_viCurrentHeader || m_viCurrentHeader == m_vHTTPHeaders.end())
+        {
+            return NULL;
+        }
+        else
+        {
+            return (*m_viCurrentHeader).second.c_str();
+        }
+    }
 }
 
 void HTTPTransport::deleteCurrentTransportProperty(bool response)

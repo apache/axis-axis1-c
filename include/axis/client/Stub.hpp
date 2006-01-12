@@ -166,10 +166,11 @@ class STORAGE_CLASS_INFO Stub
     * Repeated calls always retuen the same key unless 
     * getNextTransportPropertyKey() is called in between.
     *
+    * @param response  whether the response or outgoing message is being used.
     * @return Current transport property key. If there are no transport 
     * properties set or if iterator is at the end of the list, returns NULL.
     */
-    const char* getCurrentTransportPropertyKey();
+    const char* getCurrentTransportPropertyKey(bool response=true);
     
   /**
     * Accessor for transport property values.
@@ -201,7 +202,7 @@ class STORAGE_CLASS_INFO Stub
     void deleteCurrentTransportProperty(bool response=true);
 
   /**
-    * Deletes the given occerance of the transport property key:value pair
+    * Deletes the given occurance of the transport property key:value pair
     * corresponding to the given key.
     *
     * This method does not advance the iterator in line with the deletes done.
@@ -453,8 +454,8 @@ class STORAGE_CLASS_INFO Stub
        int getStatus();
 
   /**
-    * Set whether to Maitain session with service ot not.
-    * @param bSession - true is session should be maintained. False otherwise.
+    * Set whether to Maintain session with service ot not.
+    * @param bSession - true if session should be maintained. False otherwise.
     */
     void setMaintainSession(bool bSession);
 
@@ -562,7 +563,7 @@ class STORAGE_CLASS_INFO Stub
     Call *m_pCall;
 
   /**
-    * Vector of Header Blok pointers
+    * Vector of Header Block pointers
     */
 #ifdef WIN32
   #pragma warning (disable : 4251)

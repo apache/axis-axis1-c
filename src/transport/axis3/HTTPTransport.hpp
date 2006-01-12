@@ -96,7 +96,7 @@ class HTTPTransport:public SOAPTransport
     void					setSocket( unsigned int);
     const char *			getFirstTransportPropertyKey(bool response);
     const char *			getNextTransportPropertyKey(bool response);
-    const char *			getCurrentTransportPropertyKey();
+    const char *			getCurrentTransportPropertyKey(bool response);
     const char *			getCurrentTransportPropertyValue(bool response);
     void					deleteCurrentTransportProperty(bool response=true);
     void					deleteTransportProperty( char* pcKey, unsigned int uiOccurance = 1);

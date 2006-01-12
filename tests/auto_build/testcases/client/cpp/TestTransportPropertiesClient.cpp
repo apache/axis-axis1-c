@@ -22,6 +22,7 @@
 #include <stdio.h>
 #include <iostream>
 
+void printProperties(Calculator *obj, bool response);
 void printProperties(Calculator *obj);
 
 int main(int argc, char* argv[])
@@ -58,10 +59,10 @@ int main(int argc, char* argv[])
 		printProperties(&ws);
 
 		//Go to the last property and delete
-		ws.getFirstTransportPropertyKey();
-		ws.getNextTransportPropertyKey();
-		ws.getNextTransportPropertyKey();
-		ws.deleteCurrentTransportProperty();
+		ws.getFirstTransportPropertyKey(false);
+		ws.getNextTransportPropertyKey(false);
+		ws.getNextTransportPropertyKey(false);
+		ws.deleteCurrentTransportProperty(false);
 		cout << "After deleteCurrentProperty method " << endl;
 		printProperties(&ws);
 		
@@ -93,7 +94,7 @@ int main(int argc, char* argv[])
 	}
 	catch(exception& e)
 	{
-		cout << "Unknown exception has occured" << endl;
+		cout << "Unknown exception has occured: "<< e.what() << endl;
 	}
 	catch(...)
 	{
@@ -104,18 +105,46 @@ int main(int argc, char* argv[])
   cout << "---------------------- TEST COMPLETE -----------------------------"<< endl;	
 	return rc;
 }
+
 void printProperties(Calculator *obj)
 {
+	cout << " ** Request Properties **" << endl;
+	printProperties(obj, false);
+
+	cout << " ** Response Properties **" << endl;
+	printProperties(obj, true);
+	cout << " ****************************************************** " << endl;
+}
+
+void printProperties(Calculator *obj, bool response)
+{
 	const char* transprop1;
-	transprop1 = obj->getFirstTransportPropertyKey();
+	transprop1 = obj->getFirstTransportPropertyKey(response);
 	do
 	{
-		transprop1 = obj->getCurrentTransportPropertyKey();
-		cout << "current transport property key = " << transprop1 ;
-		transprop1 = obj->getCurrentTransportPropertyValue();
-		cout << " value = " << transprop1 << endl;
+		transprop1 = obj->getCurrentTransportPropertyKey(response);
+		cout << "     current transport property key = ";
+		if (transprop1)
+		{
+			cout  << transprop1 ;
+		}
+		else
+		{
+			cout << "<NULL>";
+		}
+
+		transprop1 = obj->getCurrentTransportPropertyValue(response);
+		cout << " value = ";
+		if (transprop1)
+		{
+			cout << transprop1;
+		}
+		else
+		{
+			cout << "<NULL>";
+		}
+		cout << endl;
 	}
-	while ( (transprop1 = obj->getNextTransportPropertyKey()) != NULL);
-	cout << "****************************************************** " << endl;
+	while ( (transprop1 = obj->getNextTransportPropertyKey(response)) != NULL);
 	return ;	
 }

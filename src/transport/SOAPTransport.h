@@ -439,10 +439,11 @@ public:
     * Repeated calls always retuen the same key unless 
     * getNextTransportPropertyKey() is called in between.
     *
+    * @param response get the response message property or the sent message property
     * @return Current transport property key. If there are no transport 
     * properties set or if iterator is at the end of the list, returns NULL.
     */
-    virtual const char* getCurrentTransportPropertyKey() { return 0; };
+    virtual const char* getCurrentTransportPropertyKey(bool response=true) { return 0; };
     
   /**
     * Accessor for transport property values.

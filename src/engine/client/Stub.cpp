@@ -168,12 +168,12 @@ Stub::getNextTransportPropertyKey (bool response)
 }
 
 const char *
-Stub::getCurrentTransportPropertyKey ()
+Stub::getCurrentTransportPropertyKey (bool response)
 {
     if (m_pTransport)
-	return m_pTransport->getCurrentTransportPropertyKey ();
+	   return m_pTransport->getCurrentTransportPropertyKey (response);
     else
-	return NULL;
+	   return NULL;
 }
 
 const char *

@@ -74,9 +74,9 @@ AXISC_STORAGE_CLASS_INFO const char * axiscGetNextTransportPropertyKey(AXISCHAND
 	return s->getNextTransportPropertyKey((bool)(response!=0));
 }
 
-AXISC_STORAGE_CLASS_INFO const char * axiscGetCurrentTransportPropertyKey(AXISCHANDLE stub) {
+AXISC_STORAGE_CLASS_INFO const char * axiscGetCurrentTransportPropertyKey(AXISCHANDLE stub, AxiscBool response) {
 	Stub *s = (Stub*)stub;
-	return s->getCurrentTransportPropertyKey();
+	return s->getCurrentTransportPropertyKey((bool)(response!=0));
 }
 
 AXISC_STORAGE_CLASS_INFO const char * axiscGetCurrentTransportPropertyValue(AXISCHANDLE stub, AxiscBool response) {
