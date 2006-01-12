@@ -306,9 +306,9 @@ int main(int argc, char* argv[])
         }
         inputArray.set(array, arraySize);
         
-        xsd__string_Array * outputArray = ws->asArray(&inputArray);
+        xsd__string_Array * arrayResult = ws->asArray(&inputArray);
         int outputSize = 0;
-        const xsd__string* output = outputArray->get(outputSize);
+        const xsd__string* output = arrayResult->get(outputSize);
         cout << "array of " << outputSize << " elements" << endl;
         if (output != NULL)
         {

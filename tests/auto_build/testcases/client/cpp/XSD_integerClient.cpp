@@ -120,9 +120,9 @@ int main(int argc, char* argv[])
         }
         inputArray.set(array, arraySize);
         
-        xsd__integer_Array * outputArray = ws->asArray(&inputArray);
+        xsd__integer_Array * arrayResult = ws->asArray(&inputArray);
         int outputSize = 0;
-        const xsd__integer** output = outputArray->get(outputSize);
+        const xsd__integer** output = arrayResult->get(outputSize);
         cout << "array of " << outputSize << " elements" << endl;
         if (output != NULL)
         {
