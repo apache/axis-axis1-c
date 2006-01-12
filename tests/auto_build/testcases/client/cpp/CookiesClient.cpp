@@ -31,7 +31,6 @@ int main(int argc, char* argv[])
 	const char* url="http://localhost:80/axis/Calculator";
 	const char* op = 0;
 	int i1=0, i2=0;
-	int iResult;
 
 	signal(SIGILL, sig_handler);
 	signal(SIGABRT, sig_handler);
@@ -117,7 +116,7 @@ int main(int argc, char* argv[])
 	}
 	catch(exception& e)
 	{
-	    cout << "Unknown exception has occured" << endl;
+	    cout << "Unknown exception has occured : " << e.what() << endl;
 	}
 	catch(...)
 	{
@@ -175,7 +174,7 @@ void PrintUsage()
 
 bool IsNumber(const char* p)
 {
-	for (int x=0; x < strlen(p); x++)
+	for (int x=0; x < (int) strlen(p); x++)
 	{
 		if (!isdigit(p[x])) return false;
 	}
