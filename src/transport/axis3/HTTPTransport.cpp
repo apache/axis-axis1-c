@@ -1450,7 +1450,7 @@ const char * HTTPTransport::getCurrentTransportPropertyKey(bool response)
 {
     if (response)
     {
-        if( !m_viCurrentResponseHeader || m_viCurrentResponseHeader == m_vResponseHTTPHeaders.end())
+        if( m_viCurrentResponseHeader == m_vResponseHTTPHeaders.end())
         {
             return NULL;
         }
@@ -1461,7 +1461,7 @@ const char * HTTPTransport::getCurrentTransportPropertyKey(bool response)
     }
     else
     {
-        if( !m_viCurrentHeader || m_viCurrentHeader == m_vHTTPHeaders.end())
+        if( m_viCurrentHeader == m_vHTTPHeaders.end())
         {
             return NULL;
         }
@@ -1476,7 +1476,7 @@ const char * HTTPTransport::getCurrentTransportPropertyValue(bool response)
 {
     if(response)
     {
-        if( !m_viCurrentResponseHeader || m_viCurrentResponseHeader == m_vResponseHTTPHeaders.end())
+        if( m_viCurrentResponseHeader == m_vResponseHTTPHeaders.end())
         {
             return NULL;
         }
@@ -1487,7 +1487,7 @@ const char * HTTPTransport::getCurrentTransportPropertyValue(bool response)
     }
     else
     {
-        if( !m_viCurrentHeader || m_viCurrentHeader == m_vHTTPHeaders.end())
+        if( m_viCurrentHeader == m_vHTTPHeaders.end())
         {
             return NULL;
         }
