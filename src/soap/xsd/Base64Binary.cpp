@@ -130,7 +130,6 @@ AXIS_CPP_NAMESPACE_START
 		int size = 0;
 		xsd__unsignedByte * pTemp = value->get(size);
 	    len = apr_base64_encode_binary (serializedValue, pTemp, size);
-		delete [] pTemp;
 	    serializedValue[len] = 0;
 	    	    
         IAnySimpleType::serialize(serializedValue);

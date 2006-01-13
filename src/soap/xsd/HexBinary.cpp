@@ -128,7 +128,6 @@ AXIS_CPP_NAMESPACE_START
 		int size = 0;
 		xsd__unsignedByte * pTemp = value->get(size);
 	    Hex_Encode (serializedValue, pTemp, size);
-		delete [] pTemp;
 	    serializedValue[value->getSize() * 2] = 0;
 	    
         IAnySimpleType::serialize(serializedValue);

@@ -76,15 +76,7 @@ xsd__int xsd__base64Binary::getSize() const
 xsd__unsignedByte * xsd__base64Binary::get(xsd__int & size) const
 {
 	size = __size;
-	xsd__unsignedByte * pReturn = NULL;
-
-	if (size > 0)
-	{
-		pReturn = new xsd__unsignedByte[size + 1];
-		memcpy(pReturn, __ptr, size * sizeof(xsd__unsignedByte));
-		pReturn[size] = '\0';
-	}
-	return pReturn;
+    return __ptr;
 }
 
 xsd__base64Binary & xsd__base64Binary::operator=(const xsd__base64Binary & original)
@@ -143,15 +135,7 @@ xsd__int xsd__hexBinary::getSize() const
 xsd__unsignedByte * xsd__hexBinary::get(xsd__int & size) const
 {
     size = __size;
-	xsd__unsignedByte * pReturn = NULL;
-
-	if (size > 0)
-	{
-		pReturn = new xsd__unsignedByte[size + 1];
-		memcpy(pReturn, __ptr, size * sizeof(xsd__unsignedByte));
-		pReturn[size] = '\0';
-	}
-	return pReturn;
+    return __ptr;
 }
 
 xsd__hexBinary & xsd__hexBinary::operator=(const xsd__hexBinary & original)
