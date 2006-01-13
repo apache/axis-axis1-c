@@ -15,10 +15,14 @@
 
 #include "MathOps.hpp"
 #include <axis/AxisException.hpp>
+#include <axis/Axis.hpp>
 #include <ctype.h>
+#include <iostream>
+#include <signal.h>
+
+void sig_handler(int);
 
 void PrintUsage();
-bool IsNumber(const char* p);
 
 int main(int argc, char* argv[])
 {
@@ -29,12 +33,18 @@ int main(int argc, char* argv[])
 	const char* op = 0;
 	char* p1 = 0;
 	const char* p2 = 0;
-        int p3 = 0;
+	int p3 = 0;
 	int i1=0, i2=0;
-        int iResult;
-        char* pcDetail;
+	int iResult;
+	char* pcDetail;
 
-	url = argv[1];
+	signal(SIGILL, sig_handler);
+	signal(SIGABRT, sig_handler);
+	signal(SIGSEGV, sig_handler);
+	signal(SIGFPE, sig_handler);
+
+	if(argc>1)
+		url = argv[1];
 
 	op = "div";
 	
@@ -43,79 +53,78 @@ int main(int argc, char* argv[])
 
 	if (strcmp(op, "div") == 0)
 	{
-            for(p3 = 0; p3 < 3; p3++)
-            {
+	    for(p3 = 0; p3 < 3; p3++)
+	    {
 		bool bSuccess = false;
 		int	iRetryIterationCount = 3;
 
 		do
 		{
-                try
-                {     
-                    switch(p3)
-                    {
-                        case 0:
-                            /* Sends a normal request. the result should be the division of
-                             *  two numbers the user has provided
-                             */
-	                    //sprintf(endpoint, "http://%s:%s/axis/MathOps", server, port);
-	                    sprintf(endpoint, "%s", url);
-                            break;
-            
-                        case 1:
-                            /* Service name is missing. The message
-                             *  Exception : AxisSoapException:Soap action is empty
-                             *  should be returned to the user.
-                             */
-	                    //sprintf(endpoint, "http://%s:%s/axis", server, port);
-	                    sprintf(endpoint, "%s", url);
-	                    p1 = strrchr(endpoint, '/');
-	                    *p1 = (char)NULL; // Set a NULL at the last '/' char to strip the service endpoint interface
-                            break;
-          
-                       case 2: 
-                           /* Service name is wrong. The message
-                            * Exception : AxisWsddException:Requested service not found
-                            * should be returned to the user.
-                            */
-	                    //sprintf(endpoint, "http://%s:%s/axis/Math", server, port);
-	                    sprintf(endpoint, "%s", url);
-	                    p1 = endpoint + (strlen(endpoint) - 3);
-	                    *p1 = (char)NULL; // Set a NULL to strip the last 3 chars
-                            break;
+		try
+		{     
+		    switch(p3)
+		    {
+			case 0:
+			    /* Sends a normal request. the result should be the division of
+			     *  two numbers the user has provided
+			     */
+			    //sprintf(endpoint, "http://%s:%s/axis/MathOps", server, port);
+			    sprintf(endpoint, "%s", url);
+			    break;
+	    
+			case 1:
+			    /* Service name is missing. The message
+			     *  Exception : AxisSoapException:Soap action is empty
+			     *  should be returned to the user.
+			     */
+			    //sprintf(endpoint, "http://%s:%s/axis", server, port);
+			    sprintf(endpoint, "%s", url);
+			    p1 = strrchr(endpoint, '/');
+			    *p1 = (char)NULL; // Set a NULL at the last '/' char to strip the service endpoint interface
+			    break;
+	  
+		       case 2: 
+			   /* Service name is wrong. The message
+			    * Exception : AxisWsddException:Requested service not found
+			    * should be returned to the user.
+			    */
+			    //sprintf(endpoint, "http://%s:%s/axis/Math", server, port);
+			    sprintf(endpoint, "%s", url);
+			    p1 = endpoint + (strlen(endpoint) - 3);
+			    *p1 = (char)NULL; // Set a NULL to strip the last 3 chars
+			    break;
 
-                       case 3:
-                             /* Service path is empty. The message  
-                              * The corresponding http fail message
-                              * should be returned to the user.
-                              */
-	                    /*sprintf(endpoint, "http://%s:%s/", server, port);*/
-                            printf("This test has been temporarily terminated" \
-                            " due to an unresolved bug\n");
-                            exit(0); /* This is temporary code*/
-                            break;
+		       case 3:
+			     /* Service path is empty. The message  
+			      * The corresponding http fail message
+			      * should be returned to the user.
+			      */
+			    /*sprintf(endpoint, "http://%s:%s/", server, port);*/
+			    cout << "This test has been temporarily terminated"  
+			    << " due to an unresolved bug"<< endl;
+			    exit(0); /* This is temporary code*/
+			    break;
 
-                       case 4:
-                            /* Exception : AxisTransportException:Unexpected string
-                             * received. Most probably server returned an empty stream
-                             */
-	                    sprintf(endpoint, "", server, port);
-	                    //sprintf(endpoint, "http://%s:%s", server, port);
-                            break;
-                 
-                       default:
-                            printf("Invalid option for the last parameter\n\n");
-                            return 0;
-                    }
-	            //sprintf(endpoint, "http://%s:%s/axis/MathOps", server, port);
-	            MathOps ws(endpoint);
+		       case 4:
+			    /* Exception : AxisTransportException:Unexpected string
+			     * received. Most probably server returned an empty stream
+			     */
+			    sprintf(endpoint, "", server, port);
+			    //sprintf(endpoint, "http://%s:%s", server, port);
+			    break;
+		 
+		       default:
+			    cout << "Invalid option for the last parameter"<<endl<<endl;
+			    return 0;
+		    }
+		    //sprintf(endpoint, "http://%s:%s/axis/MathOps", server, port);
+		    MathOps ws(endpoint);
 		    iResult = ws.div(i1, i2);		
-                    printf("Result is:%d\n", iResult);
-						bSuccess = true;
-
-                }
-                catch(AxisException& e)
-                {
+		    cout << "Result is:" << iResult << endl;
+			bSuccess = true;
+		}
+		catch(AxisException& e)
+		{
 			bool bSilent = false;
 
 			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
@@ -132,40 +141,40 @@ int main(int argc, char* argv[])
 
             if( !bSilent)
 			{
-                    printf("%s\n", e.what());
+				cout << "AxisException has occured: " << e.what() << endl;
 			}
-                }
-                catch(exception& e)
-                {
-		    printf("Unknown exception has occured\n");
-                }
-                catch(...)
-                {
-		    printf("Unknown exception has occured\n");
-                }
+		}
+		catch(exception& e)
+		{
+		    cout << "Unknown exception has occured"<< endl;
+		}
+		catch(...)
+		{
+		    cout << "Unspecified exception has occured" << endl;
+		}
 		iRetryIterationCount--;
 		} while( iRetryIterationCount > 0 && !bSuccess);
-            }
+	    }
 	}
 	else 
 	{
-		printf("Invalid operation %s\n\n", op);
+		cout << "Invalid operation " << op <<endl<<endl;
 		PrintUsage();
 	}
+
+	cout << "---------------------- TEST COMPLETE -----------------------------" << endl;
 	return 0;
 }
 
 void PrintUsage()
 {
-	printf("Usage :\n MathOps <server> <port> <operation> <parameter> <parameter> <parameter>\n\n");
+	printf("Usage :\n MathOps <url>\n\n");
 	exit(1);
 }
 
-bool IsNumber(const char* p)
-{
-	for (int x=1; x < strlen(p); x++)
-	{
-		if (!isdigit(p[x])) return false;
-	}
-	return true;
+void sig_handler(int sig) {
+	signal(sig, sig_handler);
+	cout << "SIGNAL RECEIVED " << sig << endl;
+	exit(1);
 }
+
