@@ -5,8 +5,10 @@ using namespace std;
 
 #include "ArrayTestPortType.hpp"
 #include <axis/AxisException.hpp>
+#include <iostream>
 
-#define ARRAYSIZE 2
+
+#define ARRAYSIZE 100
 
 int main(int argc, char* argv[])
 {
@@ -26,23 +28,30 @@ int main(int argc, char* argv[])
         {
 		sprintf(endpoint, "%s", url);
 		ArrayTestPortType ws(endpoint);
-	
-	//testing echoIntArray
-         intArrayType arrin;
-         arrin.intItem.m_Array = new int*[ARRAYSIZE];
-         arrin.intItem.m_Size = ARRAYSIZE;
-         for (x=0;x<ARRAYSIZE;x++)
-         {
-			 arrin.intItem.m_Array[x] = new int;
-			 *(arrin.intItem.m_Array[x]) = x;
-         }
-         printf("invoking echoIntArray...\n");
-         if (ws.echoIntArray(&arrin)->intItem.m_Array != NULL)
-	          printf("successful \n");
-      else
-	          printf("failed \n");		
-
-	  bSuccess = true;
+		//testing echoIntArray
+		intArrayType arrin;
+		intArrayType* arrout;
+		xsd__int_Array arrayInput;		
+        int ** array= new int*[ARRAYSIZE];		
+		for (x=0;x<ARRAYSIZE;x++)
+		{
+            array[x] = new int(x + 1000);
+			//arrin.intItem.m_Array[x] = &intArray[x];
+		}
+		arrayInput.set(array,ARRAYSIZE);
+		arrin.setintItem(&arrayInput);		
+		cout << "invoking echoIntArray..."<<endl;
+		int outputSize=0;
+		arrout=ws.echoIntArray(&arrin);
+		for(x=0;x<ARRAYSIZE;x++)
+		   cout << *(arrout->intItem->get(outputSize)[x])<<endl;		
+		 // Clear up input array        
+        for (int deleteIndex = 0 ; deleteIndex < ARRAYSIZE ; deleteIndex++ )
+        {
+            delete array[deleteIndex];
+        }
+        delete [] array;
+		bSuccess = true;
 	}
         catch(AxisException& e)
         {
@@ -75,5 +84,6 @@ int main(int argc, char* argv[])
         }
 		iRetryIterationCount--;
 		} while( iRetryIterationCount > 0 && !bSuccess);
+	cout << "---------------------- TEST COMPLETE -----------------------------"<< endl;
 	return 0;
 }
