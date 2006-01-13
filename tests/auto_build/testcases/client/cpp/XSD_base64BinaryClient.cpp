@@ -118,8 +118,9 @@ int main(int argc, char* argv[])
 		SimpleComplexType complexTypeInput;
 		complexTypeInput.setcomplexTypeElement(input);
 		SimpleComplexType* complexTypeResult = ws->asComplexType(&complexTypeInput);
+        xsd__base64Binary binaryObject = complexTypeResult->getcomplexTypeElement();
         size = 0;
-        const xsd__unsignedByte * data = complexTypeResult->getcomplexTypeElement().get(size);
+        const xsd__unsignedByte * data = binaryObject.get(size);
 		cout << "within complex type" << endl;
         cout << " size=" << size << endl;
         cout << " data=" << asciiToStringOfLength((char *)data, size) << endl;

@@ -119,8 +119,9 @@ int main(int argc, char* argv[])
         complexTypeInput.setcomplexTypeElement(input);
         SimpleComplexType* complexTypeResult = ws->asComplexType(&complexTypeInput);
         cout << "within complex type" << endl;
+        xsd__hexBinary binaryObject = complexTypeResult->getcomplexTypeElement();
         size = 0;
-        data = complexTypeResult->getcomplexTypeElement().get(size);
+        data = binaryObject.get(size);
         cout << " size=" << size << endl;
         cout << " data=" << asciiToStringOfLength((char *)data, size) << endl;
         delete complexTypeResult;
