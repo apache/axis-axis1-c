@@ -216,29 +216,37 @@ int main(int argc, char* argv[])
 
                         int size = 0;
                         xsd__unsignedByte * base64BinaryData = outArray[i]->Base64BinaryType.get(size);
+
                         cout << " Base64BinaryType " << size << endl;
+
                         if( size > 0)
                         {
                             cout << " Base64BinaryType " << asciiToString((char *)base64BinaryData) << endl;
                         }
+/* Not Required
                         if (base64BinaryData != NULL)
                         {
                             delete [] base64BinaryData;
                             base64BinaryData = NULL;
                         }
-
+*/
                         size = 0;
                         xsd__unsignedByte * hexBinaryData = outArray[i]->HexBinary.get(size);
+
                         cout << " HexBinaryType " << size << endl;
+
                         if( size > 0)
                         {
                             cout << " HexBinaryType " << asciiToString((char *)hexBinaryData) << endl;
                         }
+
+/* Not Required
                         if (hexBinaryData != NULL)
                         {
                             delete [] hexBinaryData;
                             hexBinaryData = NULL;
                         }
+*/
                     }
                     returnValue=0;
                 }
