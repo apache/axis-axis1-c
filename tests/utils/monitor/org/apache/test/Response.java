@@ -85,7 +85,7 @@ public class Response
         deriveIsChunked( );
         
         // emulate None OS machines when you want to test out the CRLF method
-        emulateNoneWinmachines();
+        //emulateNoneWinmachines();
 
         // check and correct CRLF's
         CheckAndCorrectCRLF( );
