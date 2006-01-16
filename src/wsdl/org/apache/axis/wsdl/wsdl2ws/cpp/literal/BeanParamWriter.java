@@ -179,14 +179,29 @@ public class BeanParamWriter extends ParamCPPFileWriter
 
                     writer.write("\tif(" + parameterName + " == NULL)\n");
                     writer.write("\t{\n");
-                    writer.write("\t\t" + parameterName + " = new " + properParamName + "();\n");
                     if (attribs[i].getChoiceElement()||attribs[i].getAllElement())
-                    	writer.write("\t\t*" + parameterName + " = new " + type + "_Array();\n");
+                    {
+                        // This is the 'choice' or 'all' route in the code
+                    	writer.write("\t\t// This object is a 'choice' or 'all', so need to ensure that any\n");
+                    	writer.write("\t\t// other objects belonging to this union of elements are empty.\n");
+                    	writer.write("\t\t// NB: Hasn't been implemented yet!\n");
+                    	writer.write("\t\t" + parameterName + " = new " + type + "_Array();\n");
+                    }
+                    else
+                    {
+                        writer.write("\t\t" + parameterName + " = new " + properParamName + "();\n");
+                    }
+                    
                     writer.write("\t}\n");
                     if (attribs[i].getChoiceElement()||attribs[i].getAllElement())
-                    	writer.write("\t(*" + parameterName + ")->clone(*(*pInValue)); \n");
+                    {
+                        // This is the 'choice' or 'all' route in the code
+                    	writer.write("\t" + parameterName + "->clone( *pInValue);\n");
+                    }
                     else
-                    	writer.write("\t" + parameterName + "->clone(*pInValue); \n");
+                    {
+                    	writer.write("\t" + parameterName + "->clone( *pInValue);\n");
+                    }
                     writer.write("}\n");
                 }
                 else
@@ -194,8 +209,6 @@ public class BeanParamWriter extends ParamCPPFileWriter
 	                // FJP Nillable vv
 	                if (isElementNillable(i)  || isElementOptional(i))
 	                {
-	                    
-	                    
 	                    if (attribs[i].isAnyType())
 	                    {                    	
 	                    	anyCounter += 1;
@@ -1249,12 +1262,18 @@ public class BeanParamWriter extends ParamCPPFileWriter
             {
                 if (attribs[i].isArray())
                 {
-                	if (attribs[i].getChoiceElement()||attribs[i].getAllElement()){
-                		writer.write("\t" + attribs[i].getParamNameAsMember() + " = new " + attribs[i].getTypeName() +"_Array*();\n");
-                		writer.write("\t*" + attribs[i].getParamNameAsMember() + " = new " + attribs[i].getTypeName() +"_Array();\n");
+                	if (attribs[i].getChoiceElement()||attribs[i].getAllElement())
+                	{
+                        // This is the 'choice' or 'all' route in the code
+                    	writer.write("\t\t// This object is a 'choice' or 'all', so need to ensure that any\n");
+                    	writer.write("\t\t// other objects belonging to this union of elements are empty.\n");
+                    	writer.write("\t\t// NB: Hasn't been implemented yet!\n");
+                		writer.write("\t" + attribs[i].getParamNameAsMember() + " = new " + attribs[i].getTypeName() +"_Array();\n");
                 	}
                 	else
+                	{
                 		writer.write("\t" + attribs[i].getParamNameAsMember() + " = new " + attribs[i].getTypeName() +"_Array();\n");
+                	}
                 }
             }
             writer.write("\treset();\n");
@@ -1268,9 +1287,17 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 if (attribs[i].isArray())
                 {	
                 	if (attribs[i].getChoiceElement()||attribs[i].getAllElement())
-                		writer.write("\t" + attribs[i].getParamName() + " = new " + attribs[i].getTypeName() + "_Array*(*original." + attribs[i].getParamName() + ");\n");
+                	{
+                        // This is the 'choice' or 'all' route in the code
+                    	writer.write("\t\t// This object is a 'choice' or 'all', so need to ensure that any\n");
+                    	writer.write("\t\t// other objects belonging to this union of elements are empty.\n");
+                    	writer.write("\t\t// NB: Hasn't been implemented yet!\n");
+                		writer.write("\t" + attribs[i].getParamName() + " = new " + attribs[i].getTypeName() + "_Array( *original." + attribs[i].getParamName() + ");\n");
+                	}
                 	else
+                	{
                 		writer.write("\t" + attribs[i].getParamName() + " = new " + attribs[i].getTypeName() + "_Array(*original." + attribs[i].getParamName() + ");\n");
+                	}
                 }
                 else if (attribs[i].isAnyType())
                 {
@@ -1350,9 +1377,17 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 if (attribs[i].isArray())
                 {
                 	if (attribs[i].getChoiceElement()||attribs[i].getAllElement())
-                		writer.write("\t(*" + attribs[i].getParamNameAsMember() + ")->clear();\n");
+                	{
+                	    writer.write( "\t// This object is a 'choice' or 'all', so need to ensure that any\n");
+                	    writer.write( "\t// other objects belonging to this union of elements are empty.\n");
+                	    writer.write( "\t// NB: Hasn't been implemented yet!\n");
+
+                	    writer.write("\t" + attribs[i].getParamNameAsMember() + "->clear();\n");
+                	}
                 	else
+                	{
                 		writer.write("\t" + attribs[i].getParamNameAsMember() + "->clear();\n");
+                	}
                 }
                 else if (!attribs[i].isSimpleType())
                 {
