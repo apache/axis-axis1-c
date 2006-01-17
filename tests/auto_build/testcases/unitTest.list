@@ -102,7 +102,7 @@ ElementFormDefaultTest.xml
 ShallowAndDeepCopyingInComplexTypeOfSimpleTypes.xml
 XSD_base64BinaryTestValidData.xml
 Replica.xml
-
+SimpleXSDAny.xml
 
 # these two tests started failing on the 20th of Dec 2005.
 SameComplexTypeAndElementName.xml

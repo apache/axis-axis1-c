@@ -11,6 +11,9 @@
 		<request>
 			SimpleXSDAny.request
 		</request>
+		<serverResponse>
+			SimpleXSDAny_ServerResponse.expected
+	    </serverResponse>
     </expected>
 	<endpoint>-e http://localhost:9080/SimpleXSDAny/services/Service</endpoint>
 </test>

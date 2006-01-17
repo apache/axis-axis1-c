@@ -2433,6 +2433,7 @@ SoapDeSerializer::getAnyObject ()
 
     int tagCount = 0;
     int lstSize = 0;
+    bool bContinue = false;
 
     AxisString xmlStr = "";
     AxisString nsDecls = "";
@@ -2444,13 +2445,30 @@ SoapDeSerializer::getAnyObject ()
     	m_pNode = m_pParser->anyNext();
 	}
 
-	if( END_ELEMENT != m_pNode->m_type)
-	{
-		tagCount++;
-	}
-
-    while ((END_ELEMENT != m_pNode->m_type) || (tagCount >= 0))
+    while ((END_ELEMENT != m_pNode->m_type) || (tagCount >= 0) || bContinue)
     {
+        // Continue if processing start prefix,
+        // as we haven't yet found the true start of the tag
+        if (START_PREFIX == m_pNode->m_type)
+        {
+            bContinue = true;
+        }
+        else
+        {
+            bContinue = false;
+        }
+        
+        // Increment counter if entering new tag
+        if (START_ELEMENT == m_pNode->m_type && START_END_ELEMENT != m_pNode->m_type2)
+        {
+            tagCount++;
+        }
+        // Decrement counter if exiting tag
+        else if (END_ELEMENT == m_pNode->m_type)
+        {
+            tagCount--;
+        }
+        
     	if (START_PREFIX == m_pNode->m_type)
     	{
     	    nsDecls += " xmlns";
@@ -2479,10 +2497,12 @@ SoapDeSerializer::getAnyObject ()
     	    xmlStr += m_pNode->m_pchNameOrValue;
     	}
     
-    	if (tagCount == 0 && (!xmlStr.empty ()))	/* copying the First level element into the list */
+    	if ( !bContinue && tagCount == 0 && (!xmlStr.empty ()))	/* copying the First level element into the list */
     	{
     	    lstXML.push_back (xmlStr);
     	    xmlStr = "";
+            m_pNode = NULL;
+            break;
     	}
     
     	m_pNode = m_pParser->anyNext ();
@@ -2496,15 +2516,6 @@ SoapDeSerializer::getAnyObject ()
                 }
                 break;
             }
-    
-    	if (END_ELEMENT == m_pNode->m_type)
-    	{
-    	    tagCount--;
-    	}
-    	else if (START_ELEMENT == m_pNode->m_type && START_END_ELEMENT != m_pNode->m_type2)
-    	{
-    	    tagCount++;
-    	}
     }
 
     lstSize = lstXML.size ();
@@ -2560,8 +2571,10 @@ SoapDeSerializer::serializeTag (AxisString & xmlStr, const AnyElement * node,
     
     	xmlStr += node->m_pchNameOrValue;
 
-    	if (!nsDecls.empty ())
-	       xmlStr += nsDecls.c_str ();
+        if (!nsDecls.empty ())
+        {
+            xmlStr += nsDecls.c_str ();
+        }
 
     	if (node->m_pchAttributes)
     	{
@@ -2579,10 +2592,10 @@ SoapDeSerializer::serializeTag (AxisString & xmlStr, const AnyElement * node,
         		    {
             			pchPrefix = m_pParser->getPrefix4NS (node->
     						     m_pchAttributes[j + 1]);
-        		    }
-    	   	       else
-    		       {
-        	           pchPrefix = NULL;
+                    }
+                    else
+                    {
+                        pchPrefix = NULL;
                     }
         		    /* why dont parser return null if there is no
         		     * prefix. Expat does but not xerces.
@@ -2595,31 +2608,31 @@ SoapDeSerializer::serializeTag (AxisString & xmlStr, const AnyElement * node,
         			    xmlStr += pchPrefix;
             			xmlStr += ":";
         		    }
-                   else
-                   {
-                      // if there is no prefix then we need to add a space
-                      xmlStr +=" ";
-                   }
+                    else
+                    {
+                        // if there is no prefix then we need to add a space
+                        xmlStr +=" ";
+                    }
         		    xmlStr += node->m_pchAttributes[j];
         		    xmlStr += "=\"";
         		    xmlStr += node->m_pchAttributes[j + 2];
         		    xmlStr += "\"";
-           		}
+                }
         	   	else
                 {
         		    break;
                 }
-        	 }
-	       }
+            }
+        }
 
-    if (START_END_ELEMENT == node->m_type2)
-	{
-    	xmlStr += "/>";
-	}
-	else
-	{
-    	xmlStr += ">";
-	}
+        if (START_END_ELEMENT == node->m_type2)
+        {
+            xmlStr += "/>";
+        }
+        else
+        {
+            xmlStr += ">";
+        }
     }
     else if (END_ELEMENT == node->m_type)
     {
@@ -2644,15 +2657,15 @@ SoapDeSerializer::serializeTag (AxisString & xmlStr, const AnyElement * node,
     	    }
     	}
 
-	xmlStr += node->m_pchNameOrValue;
-    if (START_END_ELEMENT == node->m_type2)
-	{
-    	xmlStr += "/>";
-	}
-	else
-	{
-    	xmlStr += ">";
-	}
+        xmlStr += node->m_pchNameOrValue;
+        if (START_END_ELEMENT == node->m_type2)
+        {
+            xmlStr += "/>";
+        }
+        else
+        {
+            xmlStr += ">";
+        }
     }
 }
 
