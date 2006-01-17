@@ -308,17 +308,16 @@ STORAGE_CLASS_INFO int process_request(SOAPTransport* pStream)
 
 #ifdef WIN32
 
-static volatile long g_uModuleInitializing = 0; 
-static void start_initializing() 
-{ 
-    while (InterlockedIncrement((LONG*)&g_uModuleInitializing) != 1) { 
-        InterlockedDecrement((LONG*)&g_uModuleInitializing); 
-    } 
-} 
-static void done_initializing() 
-{ 
-    InterlockedDecrement((LONG*)&g_uModuleInitializing); 
-} 
+static CRITICAL_SECTION g_initializationCriticalSection;
+static BOOL g_bCSInitialized = (InitializeCriticalSection(&g_initializationCriticalSection), TRUE);
+static void start_initializing()
+{
+    EnterCriticalSection(&g_initializationCriticalSection);
+}
+static void done_initializing()
+{
+    LeaveCriticalSection(&g_initializationCriticalSection);
+}
 
 #else
 
