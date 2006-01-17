@@ -1792,7 +1792,8 @@ void SoapDeSerializer::getElement (const AxisChar * pName,
         else if (m_pNode && (END_ELEMENT == m_pNode->m_type) ) // empty tag case <tag/>
         {
             pSimpleType->deserialize("");
-            m_pNode = m_pParser->next();
+//            m_pNode = m_pParser->next();
+            m_pNode = NULL;
             return;
         }
         else
