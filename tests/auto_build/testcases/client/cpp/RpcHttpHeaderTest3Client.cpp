@@ -25,6 +25,7 @@
  */
 
 #include <string>
+#include <iostream>
 using namespace std;
 
 #include "InteropTestPortType.hpp"
@@ -40,16 +41,18 @@ main(int argc, char *argv[])
     char endpoint[256];
     const char *server = "localhost";
     const char *port = "80";
-    
+
     //endpoint for Axis CPP sample
     sprintf(endpoint, "http://%s:%s/axis/base", server, port);
-    
-	// Set the endpoint from command line argument if set
-	if (argc > 1)
-		strcpy(endpoint, argv[1]);
 
-	
-	/*Set for HTTP transport */
+    // Set the endpoint from command line argument if set
+    if (argc > 1)
+    {
+        strcpy(endpoint, argv[1]);
+    }
+
+
+    /*Set for HTTP transport */
     InteropTestPortType ws(endpoint, APTHTTP1_1);
 
     //set HTTP headers
@@ -57,113 +60,131 @@ main(int argc, char *argv[])
     ws.setTransportProperty("Accept-Language", "lang2");
     ws.setTransportProperty("Accept-Language", "lang3");
 
-    printf("invoking echoString...\n");
+    cout << "invoking echoString..." << endl;
     //testing echoString 
-		bool bSuccess = false;
-		int	iRetryIterationCount = 3;
+    bool bSuccess = false;
+    int	iRetryIterationCount = 3;
 
-		do
-		{
-    try {
-    if (0 == strcmp(ws.echoString("hello world"), "hello world"))
-	printf("successful\n");
-    else
-	printf("failed\n");
-
-				bSuccess = true;
-    }
-    catch(AxisException& e) 
+    do
     {
-			bool bSilent = false;
+        try
+        {
+            if (0 == strcmp(ws.echoString("hello world"), "hello world"))
+            {
+                cout << "successful" << endl;
+            }
+            else
+            {
+                cout << "failed" << endl;
+            }
 
-			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-			{
-				if( iRetryIterationCount > 0)
-				{
-					bSilent = true;
-				}
-			}
-			else
-			{
-				iRetryIterationCount = 0;
-			}
+            bSuccess = true;
+        }
+        catch(AxisException& e) 
+        {
+            bool bSilent = false;
+
+            if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+            {
+                if( iRetryIterationCount > 0)
+                {
+                    bSilent = true;
+                }
+            }
+            else
+            {
+                iRetryIterationCount = 0;
+            }
 
             if( !bSilent)
-			{
-        printf("%s\n", e.what());
-			}
-    }
-    catch(...)
-    {
-        printf("Unknown exception\n");
-    }
-		iRetryIterationCount--;
-		} while( iRetryIterationCount > 0 && !bSuccess);
+            {
+                cout << "AxisException : " << e.what() << endl;
+            }
+        }
+        catch(exception& e)
+        {
+            cout << "Unexpected exception : " << e.what() << endl;
+        }
+        catch(...)
+        {
+            cout << "Unknown exception" << endl;
+        }
+        iRetryIterationCount--;
+    } while( iRetryIterationCount > 0 && !bSuccess);
 
-    printf("Test transport property accessors\n");
-    printf("First transport key = %s\n", ws.getFirstTransportPropertyKey());
-    printf("First transport value = %s\n",
-           ws.getCurrentTransportPropertyValue()); 
+    cout << "Test transport property accessors" << endl;
+    cout << "First transport key = " << ws.getFirstTransportPropertyKey(false) << endl;
+    cout << "First transport value = ";
+    cout << ws.getCurrentTransportPropertyValue(false) <<endl; 
     const char *key = NULL;
     int count = 1;
-    while (key = ws.getNextTransportPropertyKey())
+    while (key = ws.getNextTransportPropertyKey(false))
     {
-        printf("Next transport key = %s\n", key);
-        printf("Next transport value = %s\n",
-               ws.getCurrentTransportPropertyValue());
+        cout << "Next transport key = " << key << endl;
+        cout << "Next transport value = ";
+        cout << ws.getCurrentTransportPropertyValue(false) << endl;
         count++;
         //test removal of last transport property
         if (count == 3)
-            ws.deleteCurrentTransportProperty();
+        {
+            ws.deleteCurrentTransportProperty(false);
+        }
     }
 
     //test removing HTTP headers
     ws.deleteTransportProperty("Accept-Language", 1);
 
     //now the request should not have these removed headers
-		bSuccess = false;
-		iRetryIterationCount = 3;
+    bSuccess = false;
+    iRetryIterationCount = 3;
 
-		do
-		{
-    try
+    do
     {
-    if (0 == strcmp(ws.echoString("hello world"), "hello world"))
-        printf("successful\n");
-    else
-        printf("failed\n");
+        try
+        {
+            if (0 == strcmp(ws.echoString("hello world"), "hello world"))
+            {
+                cout << "successful" << endl;
+            }
+            else
+            {
+                cout << "failed" << endl;
+            }
 
-				bSuccess = true;
-    }
-    catch(AxisException& e)
-    {
-			bool bSilent = false;
+            bSuccess = true;
+        }
+        catch(AxisException& e)
+        {
+            bool bSilent = false;
 
-			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-			{
-				if( iRetryIterationCount > 0)
-				{
-					bSilent = true;
-				}
-			}
-			else
-			{
-				iRetryIterationCount = 0;
-			}
+            if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+            {
+                if( iRetryIterationCount > 0)
+                {
+                    bSilent = true;
+                }
+            }
+            else
+            {
+                iRetryIterationCount = 0;
+            }
 
             if( !bSilent)
-			{
-        printf("%s\n", e.what());
+            {
+                cout << "AxisException : " << e.what() << endl;
 			}
-    }
-    catch(...)
-    {
-        printf("Unknown exception\n");
-    }
-		iRetryIterationCount--;
-		} while( iRetryIterationCount > 0 && !bSuccess);
+        }
+        catch (exception& e)
+        {
+            cout << "Unexpected exception : " << e.what() << endl;
+        }
+        catch(...)
+        {
+            cout << "Unknown exception" << endl;
+        }
+        iRetryIterationCount--;
+    } while( iRetryIterationCount > 0 && !bSuccess);
 
-
-    printf("HTTP Header test end\n");
+    cout << "HTTP Header test end" << endl;
     return 0;
 }

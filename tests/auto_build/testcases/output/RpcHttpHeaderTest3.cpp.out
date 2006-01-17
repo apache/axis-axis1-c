@@ -7,5 +7,7 @@ Next transport key = Accept-Language
 Next transport value = lang2
 Next transport key = Accept-Language
 Next transport value = lang3
+Next transport key = Content-Length
+Next transport value = 405
 successful
 HTTP Header test end
