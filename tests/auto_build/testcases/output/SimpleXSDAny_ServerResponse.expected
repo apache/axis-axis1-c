@@ -1,0 +1,7 @@
+HTTP/1.1 200 OK
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-US
+Content-Length: 709
+Date: Mon, 16 Jan 2006 06:22:07 GMT
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header/><soapenv:Body><p38:asComplexTypeResponse xmlns:p38="http://xsd_byte.test.apache.org"><SimpleComplexType1><mybook xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns1="http://xsd_byte.test.apache.org">WSCC</mybook><field2>WebServices</field2><field3>123</field3></SimpleComplexType1></p38:asComplexTypeResponse></soapenv:Body></soapenv:Envelope>
