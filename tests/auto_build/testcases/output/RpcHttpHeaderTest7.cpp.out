@@ -1,7 +1,9 @@
 invoking echoString...
 successful
 Test transport property accessors
-First transport key = (null)
-First transport value = (null)
+First transport key = SOAPAction
+First transport value = "InteropBase#echoString"
+Next transport key = Content-Length
+Next transport value = 405
 successful
 HTTP Header test end
