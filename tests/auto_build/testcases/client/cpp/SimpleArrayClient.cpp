@@ -13,7 +13,6 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	int x;
-	char buffer1[100];
 	char endpoint[256];
 	const char* url="http://localhost:80/axis/MathOps";
 	const char* server="localhost";
@@ -76,7 +75,7 @@ int main(int argc, char* argv[])
         }
         catch(exception& e)
         {
-            printf("Unknown exception has occured\n");
+            printf("Unknown exception has occured : %s\n", e.what());
         }
         catch(...)
         {
