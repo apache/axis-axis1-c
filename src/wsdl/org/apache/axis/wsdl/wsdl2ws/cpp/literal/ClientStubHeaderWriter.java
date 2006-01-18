@@ -114,14 +114,24 @@ public class ClientStubHeaderWriter
                     hasInputParms = true;
                     ParameterInfo nparam = (ParameterInfo) params.next();
                     String paramTypeName = WrapperUtils.getClassNameFromParamInfoConsideringArrays(nparam, wscontext);
+                    Type type = nparam.getType();
+                    String baseTypeName = null;
+                    if (type.isSimpleType())
+                    {
+                        baseTypeName = CUtils.getclass4qname (type.getBaseType ());
+                    }
+                    else
+                    {
+                        baseTypeName = paramTypeName;
+                    }
                     if (nparam.getType().isAttachment())
                     {
                     	writer.write("ISoapAttachment *Value" + j);
                     }
                     else if ((paramTypeName.lastIndexOf ("_Array") > 0)
-                            || (CUtils.isSimpleType(paramTypeName)
+                            || (CUtils.isSimpleType(baseTypeName)
 							&& (nparam.isNillable() || nparam.isOptional())
-							&& !(CUtils.isPointerType(paramTypeName))))
+							&& !(CUtils.isPointerType(baseTypeName))))
                     {
                     	writer.write(paramTypeName + " * Value" + j);
                     }
@@ -138,6 +148,16 @@ public class ClientStubHeaderWriter
                     {
                         ParameterInfo nparam = (ParameterInfo) params.next();
                         String paramType = WrapperUtils.getClassNameFromParamInfoConsideringArrays( nparam, wscontext);
+                        Type type = nparam.getType();
+                        String baseTypeName = null;
+                        if (type.isSimpleType())
+                        {
+                            baseTypeName = CUtils.getclass4qname (type.getBaseType ());;
+                        }
+                        else
+                        {
+                            baseTypeName = paramType;
+                        }
                         boolean bTypeHasStar = paramType.endsWith( "*");
                         
                         if (hasInputParms || 0!=j)
@@ -146,9 +166,9 @@ public class ClientStubHeaderWriter
                         }
                         
                         writer.write("AXIS_OUT_PARAM " + paramType);
-                        if (CUtils.isSimpleType(paramType))
+                        if (CUtils.isSimpleType(baseTypeName))
                         {
-	                        if ((nparam.isOptional() || nparam.isNillable()) && !CUtils.isPointerType(paramType))
+	                        if ((nparam.isOptional() || nparam.isNillable()) && !CUtils.isPointerType(baseTypeName))
 	                        {
 	                            if (bTypeHasStar)
 	                            {
@@ -159,7 +179,7 @@ public class ClientStubHeaderWriter
 	                                writer.write(" **");
 	                            }
 	                        }
-	                        else if (CUtils.isPointerType(paramType) || !bTypeHasStar)
+	                        else if (CUtils.isPointerType(baseTypeName) || !bTypeHasStar)
 	                        {
 	                            writer.write(" *");
 	                        }
