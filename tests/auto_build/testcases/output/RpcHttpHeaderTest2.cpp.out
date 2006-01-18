@@ -9,5 +9,7 @@ Next transport key = Accept-Language
 Next transport value = lang3
 Next transport key = Date
 Next transport value = Sat, 26 Jun 2004 13:32:19 GMT
+Next transport key = Content-Length
+Next transport value = 405
 successful
 HTTP Header test end

@@ -31,7 +31,11 @@ nillableComplexType.xml
 PrimitiveAndArray.xml
 RecurseTypes.xml
 RefTestDoc.xml
+RpcHttpHeaderTest1.xml
+RpcHttpHeaderTest2.xml
 RpcHttpHeaderTest3.xml
+RpcHttpHeaderTest4.xml
+RpcHttpHeaderTest5.xml
 RpcHttpHeaderTest7.xml
 RpcHttpHeaderTest8.xml
 RpcSoapHeaderTest2.xml
