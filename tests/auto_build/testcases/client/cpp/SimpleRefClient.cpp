@@ -23,70 +23,96 @@ using namespace std;
 
 #define ARRAYSIZE 2
 
-int main(int argc, char* argv[])
+int main( int argc, char * argv[])
 {
-	int x;
-	char buffer1[100];
-	char endpoint[256];
-	const char* url="http://localhost:80/axis/MathOps";
-	const char* server="localhost";
-	const char* port="80";
+	char *	url = "http://localhost:80/axis/MathOps";
+	bool	bSuccess = false;
+	int		iRetryIterationCount = 3;
+
 	url = argv[1];
-		bool bSuccess = false;
-		int	iRetryIterationCount = 3;
 
 		do
 		{
-	try
-        {
-		sprintf(endpoint, "%s", url);
-	//endpoint for Axis Java sample
-	//sprintf(endpoint, "http://%s:%s/axis/services/echo", server, port);
-	
-	RefTestPortType ws(endpoint);
-
-	printf("invoking echoInt..\n");
-	intType refint;
-  	refint.intItem =56;
-
-        if ((ws.echoInt(&refint))->intItem == 56)
-        printf("successful\n");
-        else
-        printf("failed \n");
-
-
-		bSuccess = true;
-		}
-        catch(AxisException& e)
-        {
-			bool bSilent = false;
-
-			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+			try
 			{
-				if( iRetryIterationCount > 0)
+				RefTestPortType	ws( url);
+
+				printf( "invoking echoInt..\n");
+
+				intType	refint;
+
+				refint.intItem = 56;
+
+// The webservice call returns the following message (NB: The use of the
+// unsupported 'multiRef' tag):-
+// HTTP/1.1 200 OK
+// Server: WebSphere Application Server/5.1
+// Content-Type: text/xml; charset=utf-8
+// Content-Language: en-GB
+// Transfer-Encoding: chunked
+// 
+// 2fc
+// <?xml version="1.0" encoding="utf-8"?>
+// <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+//                   xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+//                       xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+//                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+// <soapenv:Header/>
+// <soapenv:Body soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+// <echoIntResponse xmlns="http://soapinterop.org/">
+// <return href="#id0" xmlns=""/>
+// </echoIntResponse>
+// <multiRef id="id0" soapenc:root="0" soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+//                                                  xsi:type="ns-73742416:intType"
+//                                         xmlns:ns-73742416="http://soapinterop.org/xsd"
+//                                                     xmlns="">
+// <ns-73742416:intItem xsi:type="xsd:int">56</ns-73742416:intItem>
+// </multiRef>
+// </soapenv:Body>
+// </soapenv:Envelope>
+				if( (ws.echoInt( &refint))->intItem == 56)
 				{
-					bSilent = true;
+					printf( "successful\n");
 				}
+				else
+				{
+					printf( "failed \n");
+				}
+
+				bSuccess = true;
 			}
-			else
+			catch( AxisException& e)
 			{
-				iRetryIterationCount = 0;
+				bool	bSilent = false;
+
+				if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+				{
+					if( iRetryIterationCount > 0)
+					{
+						bSilent = true;
+					}
+				}
+				else
+				{
+					iRetryIterationCount = 0;
+				}
+
+				if( !bSilent)
+				{
+					printf( "Exception : %s\n", e.what());
+				}
+	        }
+			catch( exception& e)
+			{
+				printf( "Unknown exception has occured : %s\n", e.what());
+			}
+			catch( ...)
+			{
+				printf( "Unknown exception has occured\n");
 			}
 
-            if( !bSilent)
-			{
-            printf("Exception : %s\n", e.what());
-			}
-        }
-        catch(exception& e)
-        {
-            printf("Unknown exception has occured\n");
-        }
-        catch(...)
-        {
-            printf("Unknown exception has occured\n");
-        }
-		iRetryIterationCount--;
+			iRetryIterationCount--;
 		} while( iRetryIterationCount > 0 && !bSuccess);
+
 	return 0;
 }
