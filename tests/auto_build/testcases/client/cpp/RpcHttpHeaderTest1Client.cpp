@@ -99,9 +99,9 @@ main(int argc, char *argv[])
 		} while( iRetryIterationCount > 0 && !bSuccess);
 
     printf("Test transport property accessors\n");
-    printf("First transport key = %s\n", ws.getFirstTransportPropertyKey());
+    printf("First transport key = %s\n", ws.getFirstTransportPropertyKey(false));
     printf("First transport value = %s\n",
-           ws.getCurrentTransportPropertyValue());
+           ws.getCurrentTransportPropertyValue(false));
 
     //test removing HTTP headers
     ws.deleteTransportProperty("Accept-Language");
