@@ -1,0 +1,11 @@
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-US
+Transfer-Encoding: chunked
+
+214
+<?xml version="1.0" encoding="utf-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header/><soapenv:Body><myOperationResponse xmlns="http://complextype.test.apache.org"><result><field1>Hello World!</field1><field2>I&apos;m still here!</field2><field3>Now I go!</field3></result></myOperationResponse></soapenv:Body></soapenv:Envelope>
+0
+

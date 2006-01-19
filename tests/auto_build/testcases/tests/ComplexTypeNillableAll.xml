@@ -11,6 +11,9 @@
 		<request>
 			ComplexTypeNillableAll.request
 		</request>
+		<serverReponse>
+			ComplexTypeNillableAll_ServerResponse.expected
+		</serverReponse>
     </expected>
 	<endpoint>-e http://localhost:80/axis/ComplexTypeNillableAll</endpoint>
 </test>

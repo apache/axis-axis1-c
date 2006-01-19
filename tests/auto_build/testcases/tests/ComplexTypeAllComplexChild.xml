@@ -11,6 +11,9 @@
 		<request>
 			ComplexTypeAllComplexChild.request
 		</request>
+		<serverResponse>
+			ComplexTypeAllComplexChild_ServerResponse.expected
+		</serverResponse>
     </expected>
 	<endpoint>-e http://localhost:80/axis/ComplexTypeAllComplexChild</endpoint>
 </test>

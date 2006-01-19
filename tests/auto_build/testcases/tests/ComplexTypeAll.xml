@@ -11,6 +11,9 @@
 		<request>
 			ComplexTypeAll.request
 		</request>
+		<serverResponse>
+			ComplexTypeAll_ServerResponse.expected
+		</serverResponse>
     </expected>
 	<endpoint>-e http://localhost:80/axis/ComplexTypeAll</endpoint>
 </test>

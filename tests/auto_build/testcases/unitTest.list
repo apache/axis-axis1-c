@@ -116,6 +116,12 @@ ComplexTypeChoiceNestedChoice.xml
 ComplexTypeChoiceSimple.xml
 ComplexTypeOptionalChoice.xml
 SimpleChoiceNillable.xml
+ComplexTypeAll.xml
+ComplexTypeAll1.xml
+ComplexTypeAll2.xml
+ComplexTypeAllComplexChild.xml
+# ComplexTypeNillableAll.xml
+ComplexTypeOptionalAll.xml
 
 # these two tests started failing on the 20th of Dec 2005.
 SameComplexTypeAndElementName.xml
