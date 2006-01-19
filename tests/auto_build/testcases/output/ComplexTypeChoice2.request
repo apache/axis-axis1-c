@@ -1,7 +1,7 @@
 POST /ComplexTypeChoice2/services/Service HTTP/1.1
-Host: 127.0.0.1:13260
+Host: 127.0.0.1:13267
 Content-Type: text/xml; charset=UTF-8
-SOAPAction: "XSD_byte#asComplexType"
+SOAPAction: "ComplexTypeChoice2#asComplexType"
 Content-Length: 437
 
 <?xml version='1.0' encoding='utf-8' ?>
