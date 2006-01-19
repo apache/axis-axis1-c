@@ -11,6 +11,9 @@
 		<request>
 			ComplexTypeChoiceSimple.request
 		</request>
+		<serverResponse>
+			ComplexTypeChoiceSimple_ServerResponse.expected
+		</serverResponse>
     </expected>
 	<endpoint>-e http://localhost:80/axis/ComplexTypeChoiceSimple</endpoint>
 </test>

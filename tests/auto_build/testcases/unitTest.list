@@ -107,6 +107,15 @@ ShallowAndDeepCopyingInComplexTypeOfSimpleTypes.xml
 XSD_base64BinaryTestValidData.xml
 Replica.xml
 SimpleXSDAny.xml
+ComplexTypeChoice1.xml
+ComplexTypeChoice2.xml
+ComplexTypeChoiceArrayChild.xml
+ComplexTypeChoiceComplexChild.xml
+ComplexTypeChoiceNestedChoice.xml
+# ComplexTypeChoiceNestedSequence.xml
+ComplexTypeChoiceSimple.xml
+ComplexTypeOptionalChoice.xml
+SimpleChoiceNillable.xml
 
 # these two tests started failing on the 20th of Dec 2005.
 SameComplexTypeAndElementName.xml

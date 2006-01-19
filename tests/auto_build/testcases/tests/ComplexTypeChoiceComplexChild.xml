@@ -11,6 +11,9 @@
 		<request>
 			ComplexTypeChoiceComplexChild.request
 		</request>
+		<serverResponse>
+			ComplexTypeChoiceComplexChild_ServerResponse.expected
+		</serverResponse>
     </expected>
 	<endpoint>-e http://localhost:80/axis/ComplexTypeChoiceComplexChild</endpoint>
 </test>

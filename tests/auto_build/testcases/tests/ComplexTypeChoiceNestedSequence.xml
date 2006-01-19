@@ -11,6 +11,9 @@
 		<request>
 			ComplexTypeChoiceNestedSequence.request
 		</request>
+		<serverResponse>
+			ComplexTypeChoiceNestedSequence_ServerResponse.expected
+		</serverResponse>
     </expected>
 	<endpoint>-e http://localhost:80/axis/ComplexTypeChoiceNestedSequence</endpoint>
 </test>
