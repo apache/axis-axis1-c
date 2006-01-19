@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
             array[x] = new xsd__int(x+1);			
 		}
 		arrayIn->set(array,5);
-		Value0->setIntValue(&arrayIn);
+		Value0->setIntValue(arrayIn);
 		url = argv[1];
 		ChoiceTestSoap ws(url);
 
@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
 		int outputSize=0;
 		
 		for(int i=0;i<5;i++)
-			cout<<"Value1->IntValue->m_Array["<<i<<"] = "<<*((*(Value1->IntValue))->get(outputSize)[i])<<endl;
+			cout << "Value1->IntValue->m_Array[" << i << "] = " << *(Value1->IntValue->get(outputSize)[i]) << endl;
 		  // Clear up input array        
         for (int deleteIndex = 0 ; deleteIndex < 5 ; deleteIndex++ )
         {

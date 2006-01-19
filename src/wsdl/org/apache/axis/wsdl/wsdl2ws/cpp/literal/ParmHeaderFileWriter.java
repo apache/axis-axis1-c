@@ -317,9 +317,14 @@ public class ParmHeaderFileWriter extends ParamWriter
 					{
 					    if( attribs[i].isArray())
 					    {
+					        String paramName = getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]);
+					        if (!paramName.endsWith("*"))
+					        {
+					            paramName += " *";
+					        }
 							writer.write("\tclass "
-									 + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-									 + " * " + attribs[i].getParamName()
+									 + paramName
+									 + " " + attribs[i].getParamName()
 									 + ";\n");
 					        
 					    }
@@ -439,10 +444,15 @@ public class ParmHeaderFileWriter extends ParamWriter
 					{
 						if(attribs[i].getAllElement() || attribs[i].getChoiceElement())
 						{
+						    String paramName = getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]);
+						    if (!paramName.endsWith("*"))
+						    {
+						        paramName += " *";
+						    }
 							if (attribs[i].isArray()){
 								writer.write( "\n\t"
-		                                  + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-		                                  + " * get"
+		                                  + paramName
+		                                  + " get"
 		                                  + methodName
 		                                  + "();\n");
 
@@ -450,8 +460,8 @@ public class ParmHeaderFileWriter extends ParamWriter
 		                                  + "void set"
 		                                  + methodName
 		                                  + "("
-		                                  + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-		                                  + " * pInValue");
+		                                  + paramName
+		                                  + " pInValue");
 							}
 							else{
 								if (isElementNillable(i)){

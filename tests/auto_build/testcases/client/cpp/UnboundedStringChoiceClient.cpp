@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
 		array[3] = "d";
 		array[4] = "e";		
 		arrayIn->set(array,5);
-		Value0->setStringValue(&arrayIn);
+		Value0->setStringValue(arrayIn);
 	
 		if ( argc > 1 )
             url = argv[1];
@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
 		int outputSize =0;
 		
 		for (int i=0;i<5;i++)
-			cout<<"Value1->StringValue->m_Array["<<i<<"] = "<<*((*(Value1->StringValue))->get(outputSize)[i])<<endl;
+			cout << "Value1->StringValue->m_Array[" << i << "] = " << *(Value1->StringValue->get(outputSize)[i]) << endl;
 
 		  // Clear up input array        
         for (int deleteIndex = 0 ; deleteIndex < 5 ; deleteIndex++ )
