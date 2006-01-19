@@ -61,6 +61,7 @@ int main(int argc, char* argv[])
 					input->field1 = "hello";
 					input->field2 = "world";
 					input->field3 = "I am still here!";
+                        // As the final choice element this should be the only one present in serialized message
 					
 
 			
@@ -68,9 +69,22 @@ int main(int argc, char* argv[])
 					result = ws->asComplexType(input);
 					if ( result == NULL )
 						cout << "result object is null" << endl;
-					cout << "Result field1 is = " << result->field1 << endl;
-					cout << "Result field2 is = " << result->field2 << endl;
-					cout << "Result field3 is = " << result->field3 << endl; 
+                    if (result->field1)
+                    {
+					   cout << "Result field1 is = " << result->field1 << endl;
+                    }
+                    if (result->field2)
+                    {
+					   cout << "Result field2 is = " << result->field2 << endl;
+                    }
+                    if (result->field3)
+                    {
+					   cout << "Result field3 is = " << result->field3 << endl; 
+                    }
+                    if (result->field4)
+                    {
+                        cout << "Result field4 is = " << result->field4 << endl;
+                    }
 					
 
 					bSuccess = true;
