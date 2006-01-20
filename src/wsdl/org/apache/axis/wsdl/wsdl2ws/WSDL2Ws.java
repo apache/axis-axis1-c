@@ -1420,7 +1420,9 @@ public class WSDL2Ws
                 + "-l<c++|c>              target language (c++|c) - default is c++\n"
                 + "-s<server|client>      target side (server|client) - default is server\n"
 //                + "-w<wrapped|nonwrapped> wrapping style of the WSDL (wrapped|nonwrapped) - default is wrapped - nonwrapped is currently not implemented\n"
-                + "-verbose, -v           be verbose\n");
+                + "-verbose, -v           be verbose\n"
+                + "-t timeout			  timeout wehen trying to get resolve uri's"
+                );
 //                + "-m<none|gnu>           generate make files (none|gnu) - default is none\n");
 
     }
@@ -1436,6 +1438,7 @@ public class WSDL2Ws
      * -help (later ???? not implemented)
      * -h print usage()
      * -s (client|server|both)  
+     * -t timeout
      * ****** removed *******-w wrapping style of the WSDL (wrapped|nonwrapped) - default is wrapped - nonwrapped is currently not implemented so removed option for -wnonwrapped
      * ****** removed *******-m create GNU make files - this was failing and not supported so removed.
      * 
