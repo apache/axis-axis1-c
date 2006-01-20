@@ -9,11 +9,11 @@
             ComplexTypeNillableAll.cpp.out
         </output>
 		<request>
-			ComplexTypeNillableAll.request
+			ComplexTypeNillableAll_Request.expected
 		</request>
-		<serverReponse>
+		<serverResponse>
 			ComplexTypeNillableAll_ServerResponse.expected
-		</serverReponse>
+		</serverResponse>
     </expected>
 	<endpoint>-e http://localhost:80/axis/ComplexTypeNillableAll</endpoint>
 </test>
