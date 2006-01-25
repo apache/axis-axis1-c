@@ -36,7 +36,7 @@ main (int argc, char *argv[])
             data->setIdenOrgNac("23");
             data->setNumSec("12");
             
-            printf("Sending.................\n");
+            cout <<"Sending................." << endl;
             xsd__int returnVal = ws->AbySend(data);
             cout << "result = "<<returnVal<<endl;
 			
@@ -47,11 +47,11 @@ main (int argc, char *argv[])
 		{
 			bool bSilent = false;
 
-			printf ("%s\n", e.what ());
+			cout << "AxisException : " << e.what() << endl;
 		}
 		catch (exception & e)
 		{
-			printf ("%s\n", e.what ());
+			cout << "Unexpected exception : " << e.what() << endl;
 		}	
 		catch (...)
 		{
@@ -64,5 +64,4 @@ main (int argc, char *argv[])
 	<< endl;
 
     return returnValue;
-
 }
