@@ -133,7 +133,7 @@ public:
 
     /* Methods used by wrappers to get a deserialized value of basic types */
     void getElement (const AxisChar* pName, const AxisChar* pNamespace, 
-        IAnySimpleType* pSimpleType);
+        IAnySimpleType* pSimpleType, bool isArrayElement = false);
     xsd__int * AXISCALL getElementAsInt(const AxisChar* pName, 
         const AxisChar* pNamespace);
     xsd__boolean * AXISCALL getElementAsBoolean(const AxisChar* pName, 

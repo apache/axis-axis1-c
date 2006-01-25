@@ -739,7 +739,7 @@ void SoapDeSerializer::deserializeEncodedArray (Axis_Array* pArray, IAnySimpleTy
         const char* elementName = peekNextElementName();
         if(strcmp(elementName, pName) == 0)
         {
-            getElement(pName, pNamespace, pSimpleType);
+            getElement(pName, pNamespace, pSimpleType, true);
             void * pValue = pSimpleType->getValue();
             pArray->addElement(pValue);
             Axis::AxisDelete(pValue, pSimpleType->getType());
@@ -1603,7 +1603,8 @@ xsd__duration *
 
 void SoapDeSerializer::getElement (const AxisChar * pName,
                               const AxisChar * pNamespace,
-                              IAnySimpleType * pSimpleType)
+                              IAnySimpleType * pSimpleType,
+							  bool isArrayElement)
 {
     if (AXIS_SUCCESS != m_nStatus)
         return;
@@ -1633,7 +1634,7 @@ void SoapDeSerializer::getElement (const AxisChar * pName,
 			}
 		}
 
-        if (bNillFound || (pSimpleType->getType() == getXSDType (m_pNode)))
+        if (bNillFound || isArrayElement || (pSimpleType->getType() == getXSDType (m_pNode)))
         {
 				m_pNode = m_pParser->next (true);   /* charactor node */
 				if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
