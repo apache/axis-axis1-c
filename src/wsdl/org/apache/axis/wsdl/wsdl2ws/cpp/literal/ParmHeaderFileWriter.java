@@ -123,7 +123,17 @@ public class ParmHeaderFileWriter extends ParamWriter
             boolean foundDeepCopyType = false;
         	for (int i = 0 ; i < attribs.length ; i++)
         	{
-        	    if (attribs[i].isSimpleType() && !attribs[i].isArray() &&(isElementNillable(i) || isElementOptional(i) || CUtils.isPointerType(getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])) || attribs[i].getChoiceElement() || attribs[i].getAllElement()))
+        	    Type type = attribs[i].getType();
+				boolean isPointerType = false;
+				if (type.isSimpleType())
+				{
+				    isPointerType = CUtils.isPointerType(CUtils.getclass4qname(type.getBaseType())); 
+				}
+				else
+				{
+				    isPointerType = CUtils.isPointerType(getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]));
+				}
+        	    if ((attribs[i].isSimpleType() || attribs[i].getType().isSimpleType()) && !attribs[i].isArray() &&(isElementNillable(i) || isElementOptional(i) || isPointerType || attribs[i].getChoiceElement() || attribs[i].getAllElement()))
         	    {
         	        if (!foundDeepCopyType)
         	        {
@@ -161,8 +171,7 @@ public class ParmHeaderFileWriter extends ParamWriter
             }
             String langTypeName = CUtils.getclass4qname(baseType);
             writer.write("typedef ");
-            if ("string".equals(baseType.getLocalPart())
-                    || "NMTOKEN".equals(baseType.getLocalPart()))
+            if (CUtils.isPointerType(CUtils.getclass4qname(baseType)) || "xsd__base64Binary".equals(CUtils.getclass4qname(baseType)) || "xsd__hexBinary".equals(CUtils.getclass4qname(baseType)))
             {
                 writer.write(langTypeName + " " + classname + ";\n");
                 writer.write("typedef " + langTypeName + "_Array " + classname
@@ -322,8 +331,16 @@ public class ParmHeaderFileWriter extends ParamWriter
 					        {
 					            paramName += " *";
 					        }
-							writer.write("\tclass "
-									 + paramName
+					        
+					        if (!attribs[i].isSimpleType() && attribs[i].getType().isSimpleType())
+					        {
+					            writer.write("\t");
+					        }
+					        else
+					        {
+					            writer.write("\tclass ");
+					        }
+							writer.write(paramName
 									 + " " + attribs[i].getParamName()
 									 + ";\n");
 					        
@@ -562,7 +579,18 @@ public class ParmHeaderFileWriter extends ParamWriter
                                     + "("
                                     + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
                                     + " InValue");
-						if ( (attribs[i].getAllElement() || attribs[i].getChoiceElement() || CUtils.isPointerType(getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]))) && attribs[i].isSimpleType())
+						Type type = attribs[i].getType();
+						boolean isPointerType = false;
+						if (type.isSimpleType())
+						{
+						    isPointerType = CUtils.isPointerType(CUtils.getclass4qname(type.getBaseType())); 
+						}
+						else
+						{
+						    isPointerType = CUtils.isPointerType(getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]));
+						}
+						
+						if ( (attribs[i].getAllElement() || attribs[i].getChoiceElement() || isPointerType) && (attribs[i].isSimpleType() || attribs[i].getType().isSimpleType()))
 						{
 						    writer.write(", bool deep = true");
 						}
@@ -666,7 +694,7 @@ public class ParmHeaderFileWriter extends ParamWriter
             HashSet typeSet = new HashSet();
             for (int i = 0; i < attribs.length; i++)
             {
-                if ((attribs[i].isArray()) && (!attribs[i].isSimpleType()))
+                if ((attribs[i].isArray()) && !(attribs[i].isSimpleType() || attribs[i].getType().isSimpleType()))
                 {
                     typeSet.add(attribs[i].getTypeName() + "_Array");
                 }
@@ -694,7 +722,7 @@ public class ParmHeaderFileWriter extends ParamWriter
             typeSet = new HashSet();
             for (int i = 0; i < attribs.length; i++)
             {
-                if (!attribs[i].isArray() && !attribs[i].isSimpleType()
+                if (!attribs[i].isArray() && !(attribs[i].isSimpleType() || attribs[i].getType().isSimpleType())
                         && !attribs[i].isAnyType())
                 {
                     typeSet.add(attribs[i].getTypeName());
@@ -715,34 +743,5 @@ public class ParmHeaderFileWriter extends ParamWriter
     protected String getFileType()
     {
         return "Param";
-    }
-
-    //	 FJP Nillable vv
-    protected boolean isElementNillable(int index)
-    {
-        boolean bNillable = false;
-
-        if (attribs[index].isSimpleType()
-        		&& !attribs[index].isArray()
-        		&& !CUtils.isPointerType(attribs[index].getTypeName()))
-        {
-            bNillable = attribs[index].isNillable();
-        }
-
-        return bNillable;
-    }
-    //	 FJP Nillable ^^
-    protected boolean isElementOptional(int index)
-    {
-        boolean bOptional = false;
-
-        if (attribs[index].isSimpleType()
-        		&& !attribs[index].isArray()
-        		&& !CUtils.isPointerType(attribs[index].getTypeName()))
-        {
-            bOptional = attribs[index].isOptional();
-        }
-
-        return bOptional;
     }
 }

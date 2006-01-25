@@ -86,6 +86,20 @@ public class AllParamWriter implements SourceWriter
                             System.out.println("Array writer called ......");
                         }
                         QName qname = type.getName();
+
+                        
+                        String elementType = type.getElementType();
+                        elementType = elementType.replace('>', '_');
+                        QName elementQname = new QName(qname.getNamespaceURI(), elementType);
+                        Type currentType = wscontext.getTypemap().getType(elementQname);
+                        if (currentType != null)
+                        {
+	                        if ( currentType.isSimpleType())
+	                        {
+	                            continue;
+	                        }
+                        }
+                        
                         if (CUtils.isSimpleType(qname)
                             && !CUtils.isDefinedSimpleType(qname))
                         {

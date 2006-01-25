@@ -253,7 +253,7 @@ public abstract class ParamWriter extends BasicFileWriter
         }
         else
         {
-            if (!attrib.isSimpleType())
+            if (!(attrib.isSimpleType() || attrib.getType().isSimpleType()))
             {
                 return attrib.getTypeName() + "*";
             }
@@ -322,5 +322,53 @@ public abstract class ParamWriter extends BasicFileWriter
                 }
             }
         }
+    }
+
+    protected boolean isElementNillable(int index)
+    {
+        boolean bNillable = false;
+        
+        if (!attribs[index].isArray())
+        {
+            if (attribs[index].isSimpleType())
+            {
+                if (!CUtils.isPointerType(attribs[index].getTypeName()))
+                {
+                    bNillable = attribs[index].isNillable();
+                }
+            }
+            else if (attribs[index].getType().isSimpleType())
+            {
+                if (!CUtils.isPointerType(CUtils.getclass4qname(attribs[index].getType().getBaseType())))
+                {
+                    bNillable = attribs[index].isNillable();
+                }
+            }
+        }
+        return bNillable;
+    }
+
+    protected boolean isElementOptional(int index)
+    {
+        boolean bOptional = false;
+        
+        if (!attribs[index].isArray())
+        {
+            if (attribs[index].isSimpleType())
+            {
+                if (!CUtils.isPointerType(attribs[index].getTypeName()))
+                {
+                    bOptional = attribs[index].isOptional();
+                }
+            }
+            else if (attribs[index].getType().isSimpleType())
+            {
+                if (!CUtils.isPointerType(CUtils.getclass4qname(attribs[index].getType().getBaseType())))
+                {
+                    bOptional = attribs[index].isOptional();
+                }
+            }
+        }
+        return bOptional;
     }
 }

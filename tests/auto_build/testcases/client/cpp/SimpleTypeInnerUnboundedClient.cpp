@@ -18,6 +18,8 @@
 #include <iostream>
 #include <fstream>
 
+using namespace std;
+
 #define WSDL_DEFAULT_ENDPOINT "http://localhost:9080/SimpleTypeInnerUnbounded/services/sampleWS"
 
 // Prototype

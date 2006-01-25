@@ -942,23 +942,4 @@ public class BeanParamWriter extends ParamCPPFileWriter
 			throw new WrapperFault(e);
 		}
 	}
-
-	//	 FJP Nillable vv
-	protected boolean isElementNillable(int index) 
-    {
-		ElementInfo ei = type.getElementForElementName(attribs[index].getParamName());
-		boolean bNillable = false;
-
-		if (ei != null
-				&& !("xsd__string".equalsIgnoreCase(attribs[index].getTypeName()))
-				|| "xsd__anyURI".equalsIgnoreCase(attribs[index].getTypeName())
-				|| "xsd__QName".equalsIgnoreCase(attribs[index].getTypeName())
-				|| "xsd__NOTATION".equalsIgnoreCase(attribs[index].getTypeName())) 
-        {
-			bNillable = ei.getNillable();
-		}
-
-		return bNillable;
-	}
-	//	 FJP Nillable ^^
 }
