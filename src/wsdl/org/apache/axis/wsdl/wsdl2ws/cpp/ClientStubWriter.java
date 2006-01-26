@@ -333,48 +333,26 @@ public class ClientStubWriter extends CPPClassWriter
                 else
                 {
                     //for simple types
-                    if (returntype.isNillable()
-                            && !(CUtils.isPointerType(outparamTypeName)))
+                    if (returntype.isNillable() || returntype.isOptional()
+                            || CUtils.isPointerType(outparamTypeName))
                     {
-                        writer.write(outparamTypeName + "* Ret = NULL;\n");
-                    }
-                    else if (outparamTypeName.equals("xsd__string"))
-                    {
-                        writer.write(outparamTypeName + " Ret;\n");
-                        writer.write("\tRet = 0;\n");
+                        writer.write(outparamTypeName);
+                        if (!CUtils.isPointerType(outparamTypeName))
+                        {
+                            writer.write(" *");
+                        }
+                        writer.write(" Ret = NULL;\n");
                     }
                     else
                     {
-                        String initValue = CUtils
-                                .getInitValue(outparamTypeName);
-                        if (initValue != null)
+                        if ("xsd__base64Binary".equals(outparamTypeName) || "xsd__hexBinary".equals(outparamTypeName))
                         {
-                            writer.write(outparamTypeName + "* Ret = NULL;\n");//" +
-                                                                               // initValue
-                                                                               // +
-                                                                               // ";\n");
+                            writer.write(outparamTypeName + " Ret;\n");
                         }
                         else
                         {
-                            if (outparamTypeName.equals("xsd__base64Binary")
-                                    || outparamTypeName
-                                            .equals("xsd__hexBinary"))
-                            {
-                                writer
-                                        .write(outparamTypeName
-                                                + "* Ret=NULL;\n");
-                                //writer.write("\tRet->__ptr = NULL;\n");
-                                //writer.write("\tRet->__size = 0;\n");
-                            }
-
-                            else
-                            {
-                                writer
-                                        .write(outparamTypeName
-                                                + "* Ret=NULL;\n");
-                            }
+                            writer.write(outparamTypeName + " Ret = " + CUtils.getInitValue(outparamTypeName) + ";\n");
                         }
-                        //TODO initialize return parameter appropriately.
                     }
                 }
             }
@@ -383,7 +361,7 @@ public class ClientStubWriter extends CPPClassWriter
         //writer.write("\tchar* cFaultcode;\n");
         //writer.write("\tchar* cFaultstring;\n");
         //writer.write("\tchar* cFaultactor;\n");
-        writer.write("\tconst char* pcCmplxFaultName;\n");
+        writer.write("\tconst char* pcCmplxFaultName = NULL;\n");
         writer.write("\ttry\n\t{");
         writer
                 .write("\n\t\tif (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER"
@@ -391,12 +369,24 @@ public class ClientStubWriter extends CPPClassWriter
         //damitha
         if (returntype != null)
         {
-            if (outparamTypeName.equals("xsd__string") && returntypeissimple)
-                writer.write("Ret;\n");
+            if (returntypeisarray)
+            {
+                writer.write("RetArray;\n");
+            }
             else
-                writer.write((returntypeisarray ? "RetArray"
-                        : returntypeissimple ? "*Ret" : "pReturn")
-                        + ";\n");
+                if (CUtils.isPointerType(outparamTypeName) || (returntypeissimple && !(returntype.isNillable() || returntype.isOptional())))
+	            {
+	                writer.write("Ret;\n");
+	            }
+	            else
+	                if (returntypeissimple)
+		            {
+		                writer.write("*Ret;\n");
+		            }
+		            else
+		            {
+		                writer.write("pReturn;\n");
+		            }
         }
         else
         {
@@ -710,48 +700,60 @@ public class ClientStubWriter extends CPPClassWriter
                         + CUtils.getXSDTypeForBasicType(containedType) + ", \""
                         + returntype.getParamName() + "\", 0);\n");
                 writer.write ("\t\t\t\tRetArray->clone(*RetAxisArray);\n");
+                writer.write ("\t\t\t\tAxis::AxisDelete( (void *)RetAxisArray, XSD_ARRAY);\n");
             }
             else
             {
                 containedType = qname.getLocalPart();
-                writer.write("\t\t\t\tAxis_Array * RetAxisArray = "
-                        + "m_pCall->getCmplxArray(RetArray, (void*) Axis_DeSerialize_"
+                writer.write("\t\t\t\tRetArray = (" + containedType 
+                        + "_Array *) m_pCall->getCmplxArray(RetArray, (void*) Axis_DeSerialize_"
                         + containedType);
                 //damitha
                 writer.write(", (void*) Axis_Create_" + containedType
                         + ", (void*) Axis_Delete_" + containedType
                         + ", (void*) Axis_GetSize_" + containedType + ", \""
                         + returntype.getParamName() + "\", Axis_URI_"
-                        + containedType + ");\n");
-                writer.write("\t\t\tRetArray->clone(*(" + containedType + "_Array *)RetAxisArray);\n");
-				
+                        + containedType + ");\n");			
             }
-            
-            writer.write ("\t\t\t\tAxis::AxisDelete( (void *)RetAxisArray, XSD_ARRAY);\n\t\t\t}\n");
-            writer.write("\t\t}\n");
+            writer.write("\t\t\t}\n\t\t}\n");
             writer.write("\tm_pCall->unInitialize();\n");
             //        writer.write("\t\t}\n\t\tm_pCall->unInitialize();\n");
-            writer.write("\t\treturn RetArray;\n");
+            writer.write("\treturn RetArray;\n");
         }
         else if (returntypeissimple)
         {
-            writer.write("\t\t\t\tRet = m_pCall->"
+            writer.write("\t\t\t\t" + outparamTypeName);
+            if (!CUtils.isPointerType(outparamTypeName))
+            {
+                writer.write(" *");
+            }
+            
+            writer.write(" pReturn = m_pCall->"
                     + CUtils.getParameterGetValueMethodName(outparamTypeName,
                             false) + "(\"" + returntype.getParamName()
-                    + "\", 0);\n\t\t\t}\n");
+                    + "\", 0);\n");
+            writer.write("\t\t\t\tif (pReturn)\n");
+            writer.write("\t\t\t\t{\n");
+            if (CUtils.isPointerType(outparamTypeName))
+            {
+                writer.write("\t\t\t\t\tRet = new char[strlen( pReturn) + 1];\n");
+                writer.write("\t\t\t\t\tstrcpy( Ret, pReturn);\n");
+            }
+            else
+                if (returntype.isOptional() || returntype.isNillable())
+                {
+                    writer.write("\t\t\t\t\tRet = new " + outparamTypeName + "(*pReturn);\n");
+                }
+                else
+                {
+                    writer.write("\t\t\t\t\tRet = *pReturn;\n");
+                }
+            writer.write("\t\t\t\t\tAxis::AxisDelete( (void *) pReturn, " + CUtils.getXSDTypeForBasicType(outparamTypeName) + ");\n");
+            writer.write("\t\t\t\t}\n");
+            writer.write("\t\t\t}\n");
             writer.write("\t\t}\n");
             writer.write("\tm_pCall->unInitialize();\n");
-            //            writer.write("\t\t}\n\t\tm_pCall->unInitialize();\n");
-            if (outparamTypeName.equals("xsd__string"))
-                writer.write("\t\treturn Ret;\n");
-            else
-            {
-                writer.write("\t\t" + outparamTypeName + " r = *Ret;\n"); // make // This does not do a deep
-                                                                          // deep // copy! This will only copy 
-                                                                          // copy // pointers not content!
-                writer.write("\t\tdelete Ret;\n"); // delete pointer
-                writer.write("\t\treturn r;\n");
-            }
+            writer.write("\treturn Ret;\n");
         }
         else
         {
@@ -766,7 +768,7 @@ public class ClientStubWriter extends CPPClassWriter
             writer.write("\t\t}\n");
             writer.write("\tm_pCall->unInitialize();\n");
             //            writer.write("\t\t}\n\t\tm_pCall->unInitialize();\n");
-            writer.write("\t\treturn pReturn;\n");
+            writer.write("\treturn pReturn;\n");
 
         }
         //added by nithya
