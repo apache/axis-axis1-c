@@ -991,9 +991,9 @@ void HTTPTransport::setProxy( const char *pcProxyHost, unsigned int uiProxyPort)
  * current maximum timeout period between that can elapse between receiving
  * message parts.
  *
- * @param const long Timeout is a long value in seconds.
+ * @param long Timeout is a long value in seconds.
  */
-void HTTPTransport::setTimeout( const long lSeconds)
+void HTTPTransport::setTimeout( long lSeconds)
 {
 	if( m_pActiveChannel != NULL)
 	{

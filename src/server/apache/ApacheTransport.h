@@ -101,7 +101,7 @@ public:
     *
     * @param lSeconds Timeout in seconds
     */
-    void setTimeout(const long lSeconds) {};
+    void setTimeout(long lSeconds) {};
 
 private:
     AttachmentHelper* pAttachmentHelper;

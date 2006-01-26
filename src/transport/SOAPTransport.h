@@ -397,7 +397,7 @@ public:
     *
     * @param lSeconds Timeout in seconds
     */
-    virtual void setTimeout(const long lSeconds) = 0;
+    virtual void setTimeout(long lSeconds) = 0;
     
   /**    
     * Iterator initiatior for transport property keys

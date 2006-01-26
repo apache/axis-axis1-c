@@ -47,7 +47,7 @@ public:
     virtual const IChannel&		operator << (const char * msg)=0;
 	virtual int					setSecureProperties( const char *) {return true;};
 	virtual const char *		getSecureProperties() {return NULL;};
-    virtual void				setTimeout( const long lSeconds)=0;
+    virtual void				setTimeout( long lSeconds)=0;
     virtual void				setSocket( unsigned int uiNewSocket)=0;
 	virtual bool				setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char* value)=0;
 	virtual const char *		getTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type)=0;

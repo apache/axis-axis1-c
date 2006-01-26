@@ -447,7 +447,7 @@ class STORAGE_CLASS_INFO Stub
     *                 timeout. Hence you want to reset a timeout already set
     *                 use 0.
     */
-    void setTransportTimeout(const long lSeconds);
+    void setTransportTimeout(long lSeconds);
   /**
     * Get the status of the stub to see any error situation
     */

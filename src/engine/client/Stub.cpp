@@ -324,7 +324,7 @@ Stub::setProxy (const char *pcProxyHost, unsigned int uiProxyPort)
 }
 
 void
-Stub::setTransportTimeout (const long lSeconds)
+Stub::setTransportTimeout (long lSeconds)
 {
     if (m_pTransport)
     {

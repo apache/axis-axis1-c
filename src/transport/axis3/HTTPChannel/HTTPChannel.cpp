@@ -311,7 +311,7 @@ const IChannel & HTTPChannel::operator << (const char * msg)
  * @param long containing timeout value in seconds
  */
 
-void HTTPChannel::setTimeout( const long lSeconds)
+void HTTPChannel::setTimeout( long lSeconds)
 {
     m_lTimeoutSeconds = lSeconds;
 }

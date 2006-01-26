@@ -88,7 +88,7 @@ class HTTPTransport:public SOAPTransport
     int						getSubProtocol();
     AXIS_TRANSPORT_STATUS	flushOutput() throw (AxisException, HTTPTransportException);
     void					setProxy( const char *pcProxyHost, unsigned int uiProxyPort);
-    void					setTimeout( const long lSeconds);
+    void					setTimeout( long lSeconds);
     const char *			getHTTPProtocol();
     const char *			getHTTPMethod();
     void					setHTTPMethod( const char *);

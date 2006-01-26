@@ -270,7 +270,7 @@ const IChannel & HTTPSSLChannel::operator << (const char * msg)
  * @param long containing timeout value in seconds
  */
 
-void HTTPSSLChannel::setTimeout( const long lSeconds)
+void HTTPSSLChannel::setTimeout( long lSeconds)
 {
     m_lTimeoutSeconds = lSeconds;
 }

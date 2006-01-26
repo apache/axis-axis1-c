@@ -75,7 +75,7 @@ public:
     const std::string &	GetLastErrorMsg();
     const IChannel &	operator >> (const char * msg);
     const IChannel &	operator << (const char * msg);
-    void				setTimeout( const long lSeconds);
+    void				setTimeout( long lSeconds);
     void				setSocket( unsigned int uiNewSocket);
 	bool				setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char * value);
 	const char *		getTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type);

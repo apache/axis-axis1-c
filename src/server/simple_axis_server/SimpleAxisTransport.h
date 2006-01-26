@@ -90,7 +90,7 @@ AXIS_CPP_NAMESPACE_USE class SimpleAxisTransport:public SOAPTransport
     *
     * @param lSeconds Timeout in seconds
     */
-    void setTimeout (const long lSeconds)
+    void setTimeout (long lSeconds)
     {
     };
 
