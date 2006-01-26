@@ -1,16 +1,18 @@
 HTTP/1.1 200 OK
-Date: Thu, 20 Oct 2005 04:38:49 GMT
-Server: Apache/2.0.54 (Win32)
-Content-Length: 464
-Content-Type: text/xml
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
 ###
 <?xml version='1.0' encoding='utf-8' ?>
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <SOAP-ENV:Body>
 <ns1:echoChoiceResponse xmlns:ns1="http://soapinterop.org/">
-<_return><ns2:IntValue xmlns:ns2="http://soapinterop.org/xsd" xsi:nil="true"></ns2:IntValue>
-</_return>
+<return><ns2:IntValue xmlns:ns2="http://soapinterop.org/xsd" xsi:nil="true"></ns2:IntValue>
+</return>
 </ns1:echoChoiceResponse>
 </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 0
+
