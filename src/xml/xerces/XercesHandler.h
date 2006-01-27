@@ -45,7 +45,7 @@ public :
     * //Chinthana:This is the method use by XercesPaser to peek ahead next element name
 	*/
 	const char* peekNextElementName();
-	const XML_NODE_TYPE XercesHandler::peekNextElementType();
+	const XML_NODE_TYPE peekNextElementType();
 	void setGetPrefixMappings(bool bValue);
 	void reset();
 
