@@ -602,7 +602,15 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char * pcBuffer, int * piSize) th
 		// temporary variable and process data just belonging to this chunk.
 					if( m_iBytesLeft > m_iContentLength)
 					{
-						nextChunk = m_strReceived.substr( m_iContentLength + strlen( ASCII_S_CRLF));
+						if( m_strReceived.length() > (m_iContentLength + strlen( ASCII_S_CRLF) + 1))
+						{
+							nextChunk = m_strReceived.substr( m_iContentLength + strlen( ASCII_S_CRLF));
+						}
+						else
+						{
+							nextChunk = "";
+						}
+
 						m_strReceived = m_strReceived.substr( 0, m_iContentLength);
 						m_iBytesLeft = m_iContentLength;
 
@@ -1936,6 +1944,8 @@ int HTTPTransport::peekChunkLength( std::string& strNextChunk)
 	}
 
 // Convert the hex string into the length of the chunk.
+	char *	pszValue = (char *) strNextChunk.c_str();
+
 	return axtoi( (char *) strNextChunk.substr( 0, iEndOfChunkSize).c_str());
 }
 void HTTPTransport::trim(string& str)
