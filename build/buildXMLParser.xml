@@ -113,7 +113,7 @@
 		            <defineset>
 	                   <define name="ENABLE_AXISTRACE" if="trace"/>
 	                   <define name="AXISTRACE_LIBRARY"/>
-                       <define name="AXIS_XML4C" if="isXML4C"/>
+                       <define name="AXIS_XML4C" if="isXML4C" unless="os400"/>
 		            </defineset>
 
 					<!-- Additional include directory for XML Parser -->
