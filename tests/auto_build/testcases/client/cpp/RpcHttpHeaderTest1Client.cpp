@@ -101,7 +101,7 @@ main(int argc, char *argv[])
         }
         catch(exception& e)
         {
-            cout << "Unexpected exception : " << e.what << endl;
+            cout << "Unexpected exception : " << e.what() << endl;
         }
         catch(...)
         {
