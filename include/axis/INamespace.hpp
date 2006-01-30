@@ -16,7 +16,7 @@
  */
 
  /**
- * @file INamespace.h
+ * @file INamespace.hpp
  *
  *
  */

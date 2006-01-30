@@ -16,7 +16,7 @@
  */
 
 /**
- * @file ISoapFault.h
+ * @file ISoapFault.hpp
  *
  * @author Damitha Kumarage (damitha@opensource.lk, damitha@jkcsworld.com)
  *

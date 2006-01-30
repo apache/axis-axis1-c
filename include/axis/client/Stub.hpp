@@ -17,7 +17,7 @@
  */
 
  /**
- * @file Stub.h
+ * @file Stub.hpp
  *
  * Contains the Stub base class that all C++ web service stubs inherit
  * from. The functions in this Stub base class provides the client
@@ -147,7 +147,7 @@ class STORAGE_CLASS_INFO Stub
     * This method advances the iterator by one position.
     * Repeated calls always retuen the next value.
     *
-    * @param whether the response or outgoing message should be used
+    * @param response whether the response or outgoing message should be used
     * @return Next transport property key. If there are no transport 
     * properties set or if iterator is at the end of the list, returns NULL.
     */
@@ -188,7 +188,7 @@ class STORAGE_CLASS_INFO Stub
     * Repeated calls always retuen the same value unless 
     * getNextTransportPropertyKey() is called in between.
     *
-    * @param whether the response or outgoing message should be used
+    * @param response whether the response or outgoing message should be used
     * @return Current transport property value. If there are no transport 
     * properties set or if iterator is at the end of the list, returns NULL.
     */
@@ -197,7 +197,7 @@ class STORAGE_CLASS_INFO Stub
   /**
     * Deletes the transport property key:value pair currently pointed to by 
     * the iterator.
-    * @param true if it's the response property or false for the request
+    * @param response true if it's the response property or false for the request
     */
     void deleteCurrentTransportProperty(bool response=true);
 
@@ -239,53 +239,75 @@ class STORAGE_CLASS_INFO Stub
     * 
     * This will create a header block that would look like the following when 
     * serialized:
-    * <PRE>
-    *   <th:TestHeader xmlns:th="http://ws.apache.org/axisCppTest/">
-    *   </th:TestHeader>
-    * </PRE>
+    * \verbatim
+<th:TestHeader xmlns:th="http://ws.apache.org/axisCppTest/">
+</th:TestHeader>
+\endverbatim
     *
     * User must use the IHeaderBlock pointer returned and fill in the header structure.
     * e.g. To make the SOAP header look like
-    * <PRE>
-    * <SOAP-ENV:Header>
-    *   <th:TestHeader xmlns:th="http://ws.apache.org/axisCppTest/">
-    *       <Credentials>
-    *            <username>Test User</username>
-    *            <password>Test Password</password>
-    *       </Credentials>
-    *   </th:TestHeader>
-    * </SOAP-ENV:Header>
-    * </PRE>
-    * the following code segment coule be used
-    * <PRE>
+    * \verbatim
+<SOAP-ENV:Header>
+    <th:TestHeader xmlns:th="http://ws.apache.org/axisCppTest/">
+        <Credentials>
+            <username>Test User</username>
+            <password>Test Password</password>
+        </Credentials>
+        </th:TestHeader>
+</SOAP-ENV:Header>
+\endverbatim
+    * the following code segment could be used
+    * <code>
+    * 
     *  IHeaderBlock *phb = ws.createSOAPHeaderBlock("TestHeader",
     *                                   "http://ws.apache.org/axisCppTest/");
+    * 
     *  //Note: The prefix will be added automaticaly.
+    * 
     *  //create parent node
+    * 
     *  BasicNode *parentNode = phb->createChild(ELEMENT_NODE);
+    * 
     *  parentNode->setLocalName("Credentials");
+    * 
+    * 
     *  //create child node
+    * 
     *  BasicNode *childNode = phb->createChild(ELEMENT_NODE);
+    * 
     *  childNode->setLocalName("username");
+    * 
+    * 
     *  //create char node for value
+    * 
     *  BasicNode *valueNode = phb->createChild(CHARACTER_NODE);
+    * 
     *  valueNode->setValue("Test User");
+    * 
+    * 
     *  //buld node tree
+    * 
     *  childNode->addChild(valueNode);
+    * 
     *  parentNode->addChild(childNode);
     *
+    * 
     *  //add another node set
+    * 
     *  childNode = phb->createChild(ELEMENT_NODE);
+    * 
     *  childNode->setLocalName("password");
     *
     *  valueNode = phb->createChild(CHARACTER_NODE);
+    * 
     *  valueNode->setValue("Test Password");
     *
     *  childNode->addChild(valueNode);
+    * 
     *  parentNode->addChild(childNode);
     *
     *  phb->addChild(parentNode);
-    * </PRE>
+    * </code>
     *
     * @param pachLocalName Local tag name of the SOAP header. e.g. TestHeader    
     * @param pachUri Namespace URI to be used in SOAP header.
@@ -301,53 +323,78 @@ class STORAGE_CLASS_INFO Stub
     * 
     * This will create a header block that would look like the following when 
     * serialized:
-    * <PRE>
-    *   <th:TestHeader xmlns:th="http://ws.apache.org/axisCppTest/">
-    *   </th:TestHeader>
-    * </PRE>
+    * \verbatim
+<th:TestHeader xmlns:th="http://ws.apache.org/axisCppTest/">
+</th:TestHeader>
+\endverbatim
     *
     * User must use the IHeaderBlock pointer returned and fill in the header structure.
     * e.g. To make the SOAP header look like
-    * <PRE>
-    * <SOAP-ENV:Header>
-    *   <th:TestHeader xmlns:th="http://ws.apache.org/axisCppTest/">
-    *       <Credentials>
-    *            <username>Test User</username>
-    *            <password>Test Password</password>
-    *       </Credentials>
-    *   </th:TestHeader>
-    * </SOAP-ENV:Header>
-    * </PRE>
-    * the following code segment coule be used
-    * <PRE>
-    *  IHeaderBlock *phb = ws.createSOAPHeaderBlock("TestHeader", 
+    * \verbatim
+<SOAP-ENV:Header>
+    <th:TestHeader xmlns:th="http://ws.apache.org/axisCppTest/">
+        <Credentials>
+            <username>Test User</username>
+            <password>Test Password</password>
+        </Credentials>
+    </th:TestHeader>
+</SOAP-ENV:Header>
+\endverbatim
+    * the following code segment could be used
+    * <code>
+    * 
+    * IHeaderBlock *phb = ws.createSOAPHeaderBlock("TestHeader", 
     *                                   "http://ws.apache.org/axisCppTest/",
     *                                   "th");
+    * 
+    * 
     *  //create parent node
+    * 
     *  BasicNode *parentNode = phb->createChild(ELEMENT_NODE);
+    * 
     *  parentNode->setLocalName("Credentials");
+    * 
+    * 
     *  //create child node
+    * 
     *  BasicNode *childNode = phb->createChild(ELEMENT_NODE);
+    * 
     *  childNode->setLocalName("username");
+    * 
+    * 
     *  //create char node for value
+    * 
     *  BasicNode *valueNode = phb->createChild(CHARACTER_NODE);
+    * 
     *  valueNode->setValue("Test User");
+    *
+    *  
     *  //buld node tree
+    * 
     *  childNode->addChild(valueNode);
+    * 
     *  parentNode->addChild(childNode);
+    * 
     *
     *  //add another node set
+    * 
     *  childNode = phb->createChild(ELEMENT_NODE);
+    * 
     *  childNode->setLocalName("password");
+    * 
     *
     *  valueNode = phb->createChild(CHARACTER_NODE);
+    * 
     *  valueNode->setValue("Test Password");
+    * 
     *
     *  childNode->addChild(valueNode);
+    * 
     *  parentNode->addChild(childNode);
+    * 
     *
     *  phb->addChild(parentNode);
-    * </PRE>
+    * </code>
     *
     * @param pachLocalName Local tag name of the SOAP header. e.g. TestHeader
     * @param pachPrefix Prefix to be used in XML represenation of SOAP header
@@ -560,6 +607,9 @@ class STORAGE_CLASS_INFO Stub
     void setProxyAuthorizationHeader();
 
 
+    /**
+     * Call object
+     */
     Call *m_pCall;
 
   /**
