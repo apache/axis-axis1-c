@@ -641,8 +641,11 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char * pcBuffer, int * piSize) th
 
 		case eSOAPMessageIsNotChunked:
 		{
-		// Check that there is more message to read.
-			if( m_iContentLength > 0)
+		// Check that there is more message to read.  Or, if the message has no
+		// length defined, keep reading until the connection is closed by the
+		// server.
+			if( m_iContentLength > 0 ||
+				(m_bReopenConnection && m_pActiveChannel->getSocket()))
 			{
 				getNextDataPacket( "No data available for message.");
 
@@ -660,7 +663,18 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char * pcBuffer, int * piSize) th
 		// If all of the message has been received, then reset the process state.
 				if( m_iContentLength <= 0)
 				{
-					m_GetBytesState = eWaitingForHTTPHeader;
+		// The content length is <= 0, BUT the m_bReopenConnection is true
+		// (because a 'Connection: close' has been found) the socket has been
+		// closed by the server, then wait for the next HTTP message, otherwise
+		// keep reading!
+					if( m_bReopenConnection && m_pActiveChannel->getSocket())
+					{
+						m_iContentLength = 0;
+					}
+					else
+					{
+						m_GetBytesState = eWaitingForHTTPHeader;
+					}
 				}
 			}
 			else
@@ -1157,11 +1171,15 @@ void HTTPTransport::processResponseHTTPHeaders() throw (HTTPTransportException)
 			if( key == "Connection" && (value == " close" || value == " Close"))
 			{
 				m_bReopenConnection = true;
+
+				m_pActiveChannel->closeQuietly( true);
 			}
 
             // We need to close the connection and open a new one if we have 'Proxy-Connection: close'
             if (key == "Proxy-Connection" && (value == " close" || value == " Close"))
+			{
                 m_bReopenConnection = true;
+			}
 
 	    	// For both HTTP/1.0 and HTTP/1.1,
 	    	// We need to keep the connection if we have 'Connection: Keep-Alive'
@@ -1602,6 +1620,8 @@ void HTTPTransport::readHTTPHeader()
 
 	m_strReceived = "";
 
+	m_pActiveChannel->closeQuietly( false);
+
 	do
 	{
 // Read whatever part of the response message that has arrived at the active
@@ -1690,7 +1710,7 @@ void HTTPTransport::processHTTPHeader()
 			m_GetBytesState = eSOAPMessageIsNotChunked;
 			m_iBytesLeft = m_strReceived.substr( iHTTPEnd + 2).length();
 
-// Check if all the message has already been recieved.  If not, then subtract
+// Check if all the message has already been received.  If not, then subtract
 // that bit that has been from the total length.  If so, then make the content
 // length equal to zero.
 			if( m_iContentLength >= m_iBytesLeft)

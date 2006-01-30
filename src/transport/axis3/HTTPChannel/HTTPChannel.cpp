@@ -39,6 +39,8 @@ HTTPChannel::HTTPChannel()
     m_lTimeoutSeconds = 0;
 #endif
 
+	bNoExceptionOnForceClose = false;
+
     if( !StartSockets())
     {
         throw HTTPTransportException( SERVER_TRANSPORT_CHANNEL_INIT_ERROR);
@@ -240,8 +242,11 @@ const IChannel & HTTPChannel::operator >> (const char * msg)
 
         CloseChannel();
 
-        throw HTTPTransportException( SERVER_TRANSPORT_INPUT_STREAMING_ERROR, 
-                                      (char *) m_LastError.c_str());
+		if( !bNoExceptionOnForceClose)
+		{
+	        throw HTTPTransportException( SERVER_TRANSPORT_INPUT_STREAMING_ERROR, 
+		                                  (char *) m_LastError.c_str());
+		}
     }
 
     if( nByteRecv)
@@ -753,4 +758,9 @@ void HTTPChannel::ReportError( char * szText1, char * szText2)
     sprintf( szMsg, "%s %d %s: '%s'\n", szText1, (int) dwMsg, szText2, sMsg->c_str());
 
     m_LastError = szMsg;
+}
+
+void HTTPChannel::closeQuietly( bool bNoExceptionOnForceClose_Update)
+{
+	bNoExceptionOnForceClose = bNoExceptionOnForceClose_Update;
 }

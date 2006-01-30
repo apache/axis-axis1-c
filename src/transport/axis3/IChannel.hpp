@@ -49,10 +49,12 @@ public:
 	virtual const char *		getSecureProperties() {return NULL;};
     virtual void				setTimeout( long lSeconds)=0;
     virtual void				setSocket( unsigned int uiNewSocket)=0;
+    virtual int					getSocket()=0;
 	virtual bool				setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char* value)=0;
 	virtual const char *		getTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type)=0;
 	virtual void                setProxy(const char *pcProxyHost,unsigned int uiProxyPort) = 0;
 	virtual bool				reopenRequired() throw() = 0;
+	virtual void				closeQuietly( bool bNoExceptionOnForceClose) = 0;
 };
 
 #endif

@@ -57,6 +57,8 @@ HTTPSSLChannel::HTTPSSLChannel()
 	m_lTimeoutSeconds = 0;
 #endif
 
+	bNoExceptionOnForceClose = false;
+
 	if( !StartSockets())
 	{
 		throw HTTPTransportException( SERVER_TRANSPORT_CHANNEL_INIT_ERROR);
@@ -709,9 +711,16 @@ int HTTPSSLChannel::ReadFromSocket( const char * pszRxBuffer)
     if(nByteRecv < 0)
     {
 // failed SSL_read
-        OpenSSL_SetSecureError( SSL_get_error( m_sslHandle, nByteRecv));
+		if( !bNoExceptionOnForceClose)
+		{
+	        OpenSSL_SetSecureError( SSL_get_error( m_sslHandle, nByteRecv));
+		}
 
         OpenSSL_Close();
+
+		::close();
+
+		m_Sock = INVALID_SOCKET; // fix for AXISCPP-185
     }
 	else
     {
@@ -927,4 +936,9 @@ void HTTPSSLChannel::OpenSSL_SetSecureError( int iError)
             throw HTTPTransportException( CLIENT_SSLCHANNEL_ERROR, error_buffer);
         }
     }
+}
+
+void HTTPSSLChannel::closeQuietly( bool bNoExceptionOnForceClose_Update)
+{
+	bNoExceptionOnForceClose = bNoExceptionOnForceClose_Update;
 }

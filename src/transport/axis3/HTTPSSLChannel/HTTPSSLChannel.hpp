@@ -79,10 +79,12 @@ public:
     const IChannel &	operator << (const char * msg);
     void				setTimeout( long lSeconds);
     void				setSocket( unsigned int uiNewSocket);
+	int					getSocket() {return m_Sock};
 	bool				setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char* value);
 	const char *		getTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type);
     void				setProxy( const char * pcProxyHost, unsigned int uiProxyPort);
 	virtual bool		reopenRequired() throw() { return false; }
+	void				closeQuietly( bool bNoExceptionOnForceClose);
 
 protected:
 	bool				OpenChannel();
@@ -103,13 +105,16 @@ private:
 #ifdef WIN32
     unsigned 
 #endif
-    int	m_Sock;				// Socket descriptor
-    bool			m_bUseProxy;		// Use a Proxy?
-    string			m_strProxyHost;		// Proxy server name.
-    unsigned int	m_uiProxyPort;		// Proxy server port.
-    long			m_lTimeoutSeconds;	// Timeout in seconds
 	SSL_CTX *		m_sslContext;
 	SSL *			m_sslHandle;
+    int				m_Sock;						// Socket descriptor
+    bool			m_bUseProxy;				// Use a Proxy?
+    std::string		m_strProxyHost;				// Proxy server name.
+    unsigned int	m_uiProxyPort;				// Proxy server port.
+    long			m_lTimeoutSeconds;			// Timeout in seconds
+	bool			bNoExceptionOnForceClose;	// If the socket is forcably closed, usually an
+												// exception is thrown.  When this flag is set,
+												// nothing happens (but the m_Sock is set to 0).
 };
 
 #endif
