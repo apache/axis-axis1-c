@@ -79,7 +79,7 @@ public:
     const IChannel &	operator << (const char * msg);
     void				setTimeout( long lSeconds);
     void				setSocket( unsigned int uiNewSocket);
-	int					getSocket() {return m_Sock};
+	int					getSocket() {return m_Sock;}
 	bool				setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char* value);
 	const char *		getTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type);
     void				setProxy( const char * pcProxyHost, unsigned int uiProxyPort);
@@ -105,9 +105,9 @@ private:
 #ifdef WIN32
     unsigned 
 #endif
+    int				m_Sock;						// Socket descriptor
 	SSL_CTX *		m_sslContext;
 	SSL *			m_sslHandle;
-    int				m_Sock;						// Socket descriptor
     bool			m_bUseProxy;				// Use a Proxy?
     std::string		m_strProxyHost;				// Proxy server name.
     unsigned int	m_uiProxyPort;				// Proxy server port.

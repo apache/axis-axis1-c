@@ -718,7 +718,7 @@ int HTTPSSLChannel::ReadFromSocket( const char * pszRxBuffer)
 
         OpenSSL_Close();
 
-		::close();
+		close();
 
 		m_Sock = INVALID_SOCKET; // fix for AXISCPP-185
     }
