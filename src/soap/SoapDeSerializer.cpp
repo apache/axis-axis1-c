@@ -609,7 +609,7 @@ void SoapDeSerializer::deserializeEncodedComplexArray(Axis_Array * pArray, void 
     for (int count = 0 ; count < size; count++)
     {
         const char* elementName = peekNextElementName();
-        if(strcmp(elementName, pName) == 0)
+        if(strcmp(elementName, pName) != 0)
         {
             pArray->addElement(getCmplxObject(pDZFunct, pCreFunct, pDelFunct, pName, pNamespace));
         }
@@ -643,7 +643,8 @@ SoapDeSerializer::getCmplxArray ( Axis_Array* pArray, void *pDZFunct,
             return pArray;
         }
     
-        if (END_ELEMENT == m_pNode->m_type2)
+// Look for an empty array
+        if (END_ELEMENT == m_pNode->m_type)
         {
             return pArray;
         }
@@ -737,7 +738,7 @@ void SoapDeSerializer::deserializeEncodedArray (Axis_Array* pArray, IAnySimpleTy
     for (int count = 0 ; count < size; count++)
     {
         const char* elementName = peekNextElementName();
-        if(strcmp(elementName, pName) == 0)
+        if(strcmp(elementName, pName) != 0)
         {
             getElement(pName, pNamespace, pSimpleType, true);
             void * pValue = pSimpleType->getValue();

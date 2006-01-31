@@ -1341,7 +1341,7 @@ public class WSDL2Ws
 
         Type type = this.typeMap.getType(qname);
         if (type == null)
-            throw new WrapperFault("unregisterd type " + qname + " refered");
+            throw new WrapperFault("unregistered type " + qname + " referred");
         ParameterInfo parainfo = new ParameterInfo(type, part.getName());
         parainfo.setElementName(part.getElementName());
         return parainfo;
