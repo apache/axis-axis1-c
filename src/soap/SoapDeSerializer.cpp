@@ -2261,8 +2261,9 @@ SoapDeSerializer::getFaultAsXMLString()
     for (i=0; i<any->_size; i++) if (any->_array[i]) 
     {
         strcat(ret,any->_array[i]);
-        delete any->_array[i];
+        delete [] any->_array[i];
     }
+    delete any->_array;
     delete any;
     return ret;
 }
