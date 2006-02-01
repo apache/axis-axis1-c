@@ -226,9 +226,10 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
             // outer element for the type. Also the type information is not 
             // added to the outer element as this object is part of an array 
             // (serialize function knows that when the 3rd parameter is 'true'. 
-            for (int x=0; x<m_nSize; x++)
+            for( int x = 0; x < m_nSize; x++)
             {
-                pItem = ptrval+x*itemsize;
+                pItem = ptrval[x];
+
 				TRACE_SERIALIZE_FUNCT_ENTRY(m_value.cta->pSZFunct, pItem, &pSZ, true);
                 int stat = AXIS_FAIL;
                 stat = m_value.cta->pSZFunct(pItem, &pSZ, true); 

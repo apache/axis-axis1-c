@@ -137,10 +137,12 @@ Transfer-Encoding: chunked
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <SOAP-ENV:Body>
 <ns1:echoStructResponse xmlns:ns1="http://soapinterop.org/">
-<SOAPStruct xsi:type="ns2:SOAPStruct" xmlns:ns2="http://soapinterop.org/xsd"><varString xsi:type="xsd:string">This is string in SOAPStruct</varString>
+<return xsi:type="ns2:SOAPStruct" xmlns:ns2="http://soapinterop.org/xsd">
+<varString xsi:type="xsd:string">This is string in SOAPStruct</varString>
 <varInt xsi:type="xsd:int">5000</varInt>
 <varFloat xsi:type="xsd:float">12345.734375</varFloat>
-</SOAPStruct></ns1:echoStructResponse>
+</return>
+</ns1:echoStructResponse>
 </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 0
@@ -156,14 +158,18 @@ Transfer-Encoding: chunked
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <SOAP-ENV:Body>
 <ns1:echoStructArrayResponse xmlns:ns1="http://soapinterop.org/">
-<echoStructArrayReturnArray xmlns:enc="http://www.w3.org/2001/06/soap-encoding" xmlns:ns2="http://soapinterop.org/xsd" enc:arrayType="ns2:echoStructArrayReturn[2]">
-<SOAPStruct><varString xsi:type="xsd:string">varString of 1th element of SOAPStruct array</varString>
+<return xmlns:enc="http://www.w3.org/2001/06/soap-encoding" xmlns:ns2="http://soapinterop.org/xsd" enc:arrayType="ns2:echoStructArrayReturn[2]">
+<SOAPStruct>
+<varString xsi:type="xsd:string">varString of 1th element of SOAPStruct array</varString>
 <varInt xsi:type="xsd:int">0</varInt>
 <varFloat xsi:type="xsd:float">0.000000</varFloat>
-</SOAPStruct><SOAPStruct><varString xsi:type="xsd:string">varString of 1th element of SOAPStruct array</varString>
+</SOAPStruct>
+<SOAPStruct>
+<varString xsi:type="xsd:string">varString of 1th element of SOAPStruct array</varString>
 <varInt xsi:type="xsd:int">1</varInt>
 <varFloat xsi:type="xsd:float">1.111100</varFloat>
-</SOAPStruct></echoStructArrayReturnArray>
+</SOAPStruct>
+</return>
 </ns1:echoStructArrayResponse>
 </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
