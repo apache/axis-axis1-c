@@ -1,4 +1,4 @@
-Result field1 is = <mybook xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns1="http://xsd_byte.test.apache.org">WSCC</mybook>
+Result field1 is = <mybook xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns1="http://xsd_byte.test.apache.org" xmlns="">WSCC</mybook>
 Result field2 is = WebServices
 Result field3 is = 123
 ---------------------- TEST COMPLETE -----------------------------
