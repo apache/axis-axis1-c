@@ -23,9 +23,10 @@ void ComplexLists::onFault()
 
 attrlisterr* ComplexLists::multilist(m_list* Value0, attrlist* Value1)  
 {
-	attrlisterr* ret=new attrlisterr();
+	attrlisterr* ret=new attrlisterr();	
 	ret->attrlist_Ref=Value1;
-	Value1->item.m_Array[0]->m_list_Ref=Value0;
+	int size=0;	
+	Value1->getitem()->get(size)[0]->setm_list_Ref(Value0);	
 	return ret;
 	
 }
@@ -33,16 +34,16 @@ attrlisterr* ComplexLists::multilistnil(m_list* Value0, attrlist* Value1)
 {
 	attrlisterr* ret=new attrlisterr();
 	ret->attrlist_Ref=Value1;
-	Value1->item.m_Array[0]->m_list_Ref=Value0;
+	int size = 0;
+	Value1->getitem()->get(size)[0]->setm_list_Ref(Value0);	
 	return ret;
 }
 attrlisterr* ComplexLists::complexlist(attrlist* Value0, xsd__string Value1, attrlist* Value2)  
 {
 	attrlisterr* ret=new attrlisterr();
-	ret->attrlist_Ref=Value0;
-	Value0->item.m_Size=1;
-	Value0->item.m_Array=new namepair*[Value0->item.m_Size];
-	Value0->item.m_Array[0]=new namepair();
-
+	ret->attrlist_Ref=Value0;	
+	namepair **np=new namepair*[1];
+	np[0]=new namepair();
+	Value0->item->set(np,1);
 	return ret;
 }
