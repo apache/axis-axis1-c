@@ -763,25 +763,25 @@ public class BeanParamWriter extends ParamCPPFileWriter
 
 	private void writeCreateGlobalMethod() throws IOException 
     {
-		writer.write("void* Axis_Create_" + classname + "(" + classname
-				+ "* pObj, bool bArray = false, int nSize=0)\n{\n");
-		writer.write("\tif (bArray && (nSize > 0))\n\t{\n\t\tif (pObj)\n\t\t{\n");
-		writer.write("\t\t\t" + classname + "* pNew = new " + classname
-				+ "[nSize];\n");
+		writer.write("void * Axis_Create_" + classname + "( " + classname
+				+ " * pObj, bool bArray = false, int nSize = 0)\n{\n");
+		writer.write("\tif( bArray && (nSize > 0))\n\t{\n\t\tif( pObj)\n\t\t{\n");
+		writer.write("\t\t\t" + classname + " * pNew = new " + classname
+				+ "[nSize];\n\n");
 		
-        writer.write("\t\t\tsize_t i = nSize/2;\n");
-        writer.write("\t\t\tfor (int ii=0; ii<i; ++ii)\n");
+        writer.write("\t\t\tsize_t i = nSize / 2;\n\n");
+        writer.write("\t\t\tfor( int ii = 0; ii < (int) i; ++ii)\n");
         writer.write("\t\t\t{\n");
         writer.write("\t\t\t\tpNew[ii] = pObj[ii];\n");
         writer.write("\t\t\t\tpObj[ii].reset();\n");
-        writer.write("\t\t\t}\n");
+        writer.write("\t\t\t}\n\n");
 
-        writer.write("\t\t\tdelete [] pObj;\n");
+        writer.write("\t\t\tdelete [] pObj;\n\n");
         
 		writer.write("\t\t\treturn pNew;\n\t\t}\n\t\telse\n\t\t{\n");
 		writer.write("\t\t\treturn new " + classname
 						+ "[nSize];\n\t\t}\n\t}\n");
-		writer.write("\telse\n\t\treturn new " + classname + ";\n}\n\n");
+		writer.write("\telse\n\t{\n\t\treturn new " + classname + ";\n\t}\n}\n\n");
 	}
 
 	private void writeDeleteGlobalMethod() throws IOException 
