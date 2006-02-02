@@ -426,37 +426,39 @@ int main( int argc, char * argv[])
 
 	bSuccess = true;
 	}
-	catch(AxisException& e)
+	catch( AxisException& e)
 	{
-			bool bSilent = false;
+		bool bSilent = false;
 
-			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+		if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+		{
+			if( iRetryIterationCount > 1)
 			{
-				if( iRetryIterationCount > 1)
-				{
-					bSilent = true;
-				}
+				bSilent = true;
 			}
-			else
-			{
-				iRetryIterationCount = 0;
-			}
+		}
+		else
+		{
+			iRetryIterationCount = 0;
+		}
 
-            if( !bSilent)
-			{
-		printf("%s\n", e.what());
-			}
+        if( !bSilent)
+		{
+			cout << "Exception: " << e.what() << " has occured." << endl;
+		}
 	}
-	catch(exception& e)
+	catch( exception& e)
 	{
-		printf("%s\n", e.what());
+		cout  << "Exception: " << e.what() << " has occured." <<  endl;
 	}
-	catch(...)
+	catch( ...)
 	{
-		printf("Unknown exception has occured\n");
+		cout << "An unknown exception has occured." << endl;
 	}
-		iRetryIterationCount--;
-		} while( iRetryIterationCount > 0 && !bSuccess);
-	//getchar();
+
+	iRetryIterationCount--;
+
+	} while( iRetryIterationCount > 0 && !bSuccess);
+
 	return 0;
 }
