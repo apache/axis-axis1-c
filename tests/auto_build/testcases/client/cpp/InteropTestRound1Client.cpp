@@ -22,7 +22,9 @@ using namespace std;
 #include "InteropTestPortType.hpp" 
 #include "CommonClientTestCode.hpp"
 
-#define ARRAYSIZE 2
+#define ARRAYSIZE							2
+#define macro_ToTwoDecPlaces( value, type)	(type)(((int)(value * (type) 100.0))) / ((type) 100.0)
+#define macro_BoolToString( value)			(value == true_ ? "true" : "false")
 
 int main( int argc, char * argv[])
 {
@@ -70,13 +72,16 @@ int main( int argc, char * argv[])
 
 			cout << ws.echoString( buffer1) << endl;
 
-			if( 0 == strcmp( ws.echoString( "hello world"), "hello world"))
+			xsd__string	retString = ws.echoString( "hello world");
+			xsd__string	expString = "hello world";
+
+			if( 0 == strcmp( retString, expString))
 			{
 				cout << "successful" << endl;
 			}
 			else
 			{
-				cout << "failed" << endl;
+				cout << "Failed.  The returned string (" << retString << ") was not the same as the expected string(" << expString << ")." << endl;
 			}
 
 // testing echoStringArray 
@@ -106,7 +111,7 @@ int main( int argc, char * argv[])
 			}
 			else
 			{
-				cout << "failed: outputsize=" << outputSize << endl;
+				cout << "Failed. outputsize=" << outputSize << endl;
 			}
 
 // testing echoInteger 
@@ -114,13 +119,17 @@ int main( int argc, char * argv[])
 
 			cout << "invoking echoInteger..." << endl;
 
-			if( ws.echoInteger( 56) == 56)
+			xsd__int		expInt = 56;
+			xsd__integer	retInt = ws.echoInteger( expInt);
+
+
+			if( retInt == expInt)
 			{
 				cout << "successful" << endl;
 			}
 			else
 			{
-				cout << "failed" << endl;
+				cout << "Failed.  The returned integer (" << retInt << ") was not the same as the expected integer (" << expInt << ")." << endl;
 			}
 
 	// testing echoIntegerArray 
@@ -150,23 +159,26 @@ int main( int argc, char * argv[])
 			}
 			else
 			{
-				cout << "failed: outputsize=" << outputSize << endl;
+				cout << "Failed.  outputsize=" << outputSize << endl;
 			}
 
 	// testing echoFloat 
 			cout << "invoking echoFloat..." << endl;
 
-			float	fvalue = (float) 1.4214;
+			float		fvalue = (float) 1.4214;
 
 			ws.setTransportProperty( "SOAPAction", "InteropBase#echoFloat");
 
-			if( ws.echoFloat( fvalue) > (xsd__float) 1.42)
+			xsd__float	retFloat = ws.echoFloat( fvalue);
+			xsd__float	expFloat = macro_ToTwoDecPlaces( fvalue, float);
+
+			if( retFloat > expFloat)
 			{
 				cout << "successful" << endl;
 			}
 			else
 			{
-				cout << "failed" << endl;
+				cout << "Failed.  The returned float (" << retFloat << ") was not the same as the expected float (" << expFloat << ")." << endl;
 			}
 
 	// testing echoFloatArray 
@@ -196,7 +208,7 @@ int main( int argc, char * argv[])
 			}
 			else
 			{
-				cout << "failed: outputsize=" << outputSize << endl;
+				cout << "Failed.  outputsize=" << outputSize << endl;
 			}
 
 	// testing echo Struct
@@ -220,7 +232,7 @@ int main( int argc, char * argv[])
 			}
 			else
 			{
-				cout << "failed" << endl;
+				cout << "Failed.  The deserialised structure was null." << endl;
 			}
 
 	//testing echo Array of Struct
@@ -250,19 +262,31 @@ int main( int argc, char * argv[])
 
 			cout << "invoking echoStructArray..." << endl;
 
-			outputSize = 0;
-
 			SOAPStruct_Array *	outPutStructArray = ws.echoStructArray( &arrstct);
 
-			if( outPutStructArray != NULL &&
-				outPutStructArray->get( outputSize) != NULL &&
-				outputSize == ARRAYSIZE)
+			if( outPutStructArray != NULL)
 			{
-				cout << "successful" << endl;
+				outputSize = 0;
+
+				SOAPStruct ** ppSOAPStruct = outPutStructArray->get( outputSize);
+
+				if( ppSOAPStruct != NULL && outputSize == ARRAYSIZE)
+				{
+					cout << "successful" << endl;
+				}
+				else
+				{
+					cout << "Failed.  outputsize = " << outputSize << endl;
+
+					for( int iIndex = 0; iIndex < outputSize; iIndex++)
+					{
+						cout << "Failed(" << iIndex << ") varString = \"" << ppSOAPStruct[iIndex]->getvarString() << "\", varInt = " << *ppSOAPStruct[iIndex]->getvarInt() << ", varFloat = " << *ppSOAPStruct[iIndex]->getvarFloat() << endl;
+					}
+				}
 			}
 			else
 			{
-                cout << "failed: outputsize=" << outputSize << endl;
+				cout << "Failed.  outPutStructArray = NULL" << endl;
 			}
 
 	//testing echo void
@@ -294,7 +318,7 @@ int main( int argc, char * argv[])
 			}
 			else
 			{
-				cout << "failed" << endl;
+				cout << "Failed.  The returned base 64 binary size (" << size << ") was not the same as the expected size (" << bb.getSize() << ")." << endl;
 			}
 
 			time_t		timeToTest = 1100246323;
@@ -315,7 +339,30 @@ int main( int argc, char * argv[])
 			}
 			else
 			{
-				cout << "failed" << endl;
+				char *	pExpectedTime = asctime( &ed_temp);
+				int		iETLength = (int) strlen( pExpectedTime);
+				char *	pReturnedTime = asctime( temp);
+				int		iRTLength = (int) strlen( pReturnedTime);
+
+				if( iETLength > 0)
+				{
+					pExpectedTime[iETLength - 1] = '\0';
+				}
+				else
+				{
+					pExpectedTime = "NULL";
+				}
+
+				if( iRTLength > 0)
+				{
+					pReturnedTime[iRTLength - 1] = '\0';
+				}
+				else
+				{
+					pReturnedTime = "NULL";
+				}
+
+				cout << "Failed.  The expected time (" << pExpectedTime << ") was not the same as the returned time (" << pReturnedTime << ")." << endl;
 			}
 
 	//testing echo hex binary
@@ -339,7 +386,7 @@ int main( int argc, char * argv[])
 			}
 			else
 			{
-				cout << "failed" << endl;
+				cout << "Failed.  The returned hex64Binary size (" << size << ") was not the same as the expected hex64Binary size (" << hb.getSize() << ")." << endl;
 			}
 
 	//testing echo decimal
@@ -347,13 +394,17 @@ int main( int argc, char * argv[])
 
 			ws.setTransportProperty( "SOAPAction", "InteropBase#echoDecimal");
 
-			if( ws.echoDecimal( 1234.567890) > 1234.56)
+			xsd__decimal decimalValue = 1234.567890;
+			xsd__decimal decimalExpected = macro_ToTwoDecPlaces( decimalValue, xsd__decimal);
+			xsd__decimal decimalReturn = ws.echoDecimal( decimalValue);
+
+			if( decimalReturn > decimalExpected)
 			{
 				cout << "successful" << endl;
 			}
 			else
 			{
-				cout << "failed" << endl;
+				cout << "Failed.  The returned value (" << decimalReturn << ") was not the same as the expected value (" << decimalExpected << ")." << endl;
 			}
 
 	//testing echo boolean
@@ -361,13 +412,16 @@ int main( int argc, char * argv[])
 
 			ws.setTransportProperty( "SOAPAction", "InteropBase#echoBoolean");
 
-			if( ws.echoBoolean(true_) == true_)
+			xsd__boolean	bExpected = true_;
+			xsd__boolean	bReturned = ws.echoBoolean( bExpected);
+
+			if( bReturned == bExpected)
 			{
 				cout << "successful" << endl;
 			}
 			else
 			{
-				cout << "failed" << endl;
+				cout << "Failed.  The returned value (" << macro_BoolToString( bReturned) << ") was not the same as the expected value (" << macro_BoolToString( bExpected) << ")." << endl;
 			}
 
 	bSuccess = true;
