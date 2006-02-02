@@ -444,16 +444,16 @@ int main( int argc, char * argv[])
 
         if( !bSilent)
 		{
-			cout << "Exception: " << e.what() << " has occured." << endl;
+			cout << "Exception: " << e.what() << " has occurred." << endl;
 		}
 	}
 	catch( exception& e)
 	{
-		cout  << "Exception: " << e.what() << " has occured." <<  endl;
+		cout  << "Exception: " << e.what() << " has occurred." <<  endl;
 	}
 	catch( ...)
 	{
-		cout << "An unknown exception has occured." << endl;
+		cout << "An unknown exception has occurred." << endl;
 	}
 
 	iRetryIterationCount--;
