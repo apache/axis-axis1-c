@@ -35,7 +35,7 @@ void SimpleTypeInnerUnboundedInOutputWS::onFault()
 {
 }
 
-Type1* SimpleTypeInnerUnboundedInOutputWS::getInput(xsd__int Value0)  
+Type1* SimpleTypeInnerUnboundedInOutputWS::getInput(xsd__int *Value0)  
 {
 	Type1* ret=new Type1();
 	return ret;
