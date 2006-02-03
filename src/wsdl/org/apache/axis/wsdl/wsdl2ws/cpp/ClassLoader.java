@@ -103,7 +103,6 @@ public class ClassLoader implements SourceWriter
                 "\t\tWrapperClassHandler* pWCH = reinterpret_cast<WrapperClassHandler*>(inst);\n");
             writer.write("\t\tpWCH->fini();\n");
             writer.write("\t\tdelete pWCH;\n");
-            writer.write("\t\tdelete inst;\n");
             writer.write("\t\treturn AXIS_SUCCESS;\n");
             writer.write("\t}\n");
             writer.write("\treturn AXIS_FAIL;\n");
