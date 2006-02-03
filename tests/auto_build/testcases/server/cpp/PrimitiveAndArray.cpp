@@ -36,14 +36,14 @@ void PrimitiveAndArray::onFault()
 {
 }
 
-ComplexReturn* PrimitiveAndArray::sendPrimitiveAndArray(xsd__int Value0, xsd__int_Array Value1)  
+ComplexReturn* PrimitiveAndArray::sendPrimitiveAndArray(xsd__int Value0, xsd__int_Array *Value1)  
 {
 	ComplexReturn *ret=new ComplexReturn();
 	ret->returnInt=Value0;
 	ret->returnArray=Value1;
 	return ret;
 }
-ComplexReturn* PrimitiveAndArray::sendArrayAndPrimitive(xsd__int_Array Value0, xsd__int Value1)  
+ComplexReturn* PrimitiveAndArray::sendArrayAndPrimitive(xsd__int_Array *Value0, xsd__int Value1)  
 {
 	ComplexReturn *ret=new ComplexReturn();
 	ret->returnInt=Value1;
