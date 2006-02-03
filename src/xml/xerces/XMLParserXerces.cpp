@@ -80,51 +80,88 @@ int XMLParserXerces::getStatus()
 const AnyElement* XMLParserXerces::next(bool isCharData)
 {
 	bool bCanParseMore = false;
-        if(!m_bFirstParsed)
-        {
-            m_pParser->parseFirst(*m_pInputSource, m_ScanToken);
-            m_bFirstParsed = true;
-        }
 
-		if(!m_bPeeked) 
+    if( !m_bFirstParsed)
+    {
+		try
 		{
-			m_Xhandler.freeElement();
+			m_pParser->parseFirst(*m_pInputSource, m_ScanToken);
 		}
-        while (true)
-        {
-            AnyElement* elem = m_Xhandler.getAnyElement();
-            if (!elem)
-            {
-				//Chinthana:check the peek is called or not
-				if(!m_bPeeked) 
-				{
-					bCanParseMore = m_pParser->parseNext(m_ScanToken);
-				}
-				else
-				{
-					m_bPeeked = false;
-					bCanParseMore = true;
-				}
-				elem = m_Xhandler.getAnyElement();
-				
-				//27/04/2005
-            }
-            if (elem)
-            {
-                if (!isCharData && (CHARACTER_ELEMENT == elem->m_type))
-                { /* ignorable white space */
-                    m_Xhandler.freeElement();
-                    continue;
-                }
+		catch( const XMLException& toCatch)
+		{
+			char *	message = XMLString::transcode( toCatch.getMessage());
 
-				if( m_bPeeked )
-					m_bPeeked = false;
-                
-				return elem;
-            }
-            else if (AXIS_FAIL == m_Xhandler.getStatus()) return NULL;
-            else if (!bCanParseMore) return NULL;
+// Clone the error message before deleting it.
+			char *	pErrorMsg = new char[strlen( message + 1)];
+
+			strcpy( pErrorMsg, message);
+
+			XMLString::release( &message);
+
+			throw AxisParseException( CLIENT_SOAP_CONTENT_NOT_SOAP, pErrorMsg);
+		}
+		catch( const SAXParseException& toCatch)
+		{
+			char *	message = XMLString::transcode( toCatch.getMessage());
+
+// Clone the error message before deleting it.
+			char *	pErrorMsg = new char[strlen( message + 1)];
+
+			strcpy( pErrorMsg, message);
+
+			XMLString::release( &message);
+
+			throw AxisParseException( CLIENT_SOAP_CONTENT_NOT_SOAP, pErrorMsg);
+		}
+		catch (...)
+		{
+			char *	pErrorMsg = "Unexpected Exception in SAX parser.  Probably no message or the message is not recognised as XML.";
+
+			throw AxisParseException( CLIENT_SOAP_CONTENT_NOT_SOAP, pErrorMsg);
+		}
+
+        m_bFirstParsed = true;
+    }
+
+	if(!m_bPeeked) 
+	{
+		m_Xhandler.freeElement();
+	}
+    while (true)
+    {
+        AnyElement* elem = m_Xhandler.getAnyElement();
+        if (!elem)
+        {
+			//Chinthana:check the peek is called or not
+			if(!m_bPeeked) 
+			{
+				bCanParseMore = m_pParser->parseNext(m_ScanToken);
+			}
+			else
+			{
+				m_bPeeked = false;
+				bCanParseMore = true;
+			}
+			elem = m_Xhandler.getAnyElement();
+			
+			//27/04/2005
         }
+        if (elem)
+        {
+            if (!isCharData && (CHARACTER_ELEMENT == elem->m_type))
+            { /* ignorable white space */
+                m_Xhandler.freeElement();
+                continue;
+            }
+
+			if( m_bPeeked )
+				m_bPeeked = false;
+            
+			return elem;
+        }
+        else if (AXIS_FAIL == m_Xhandler.getStatus()) return NULL;
+        else if (!bCanParseMore) return NULL;
+    }
 }
 //Chinthana:New method which peek a head next element 
 //Here always Peek() will call after the first pase done
@@ -223,4 +260,3 @@ const XML_Ch* XMLParserXerces::getPrefix4NS(const XML_Ch* pcNS)
 {
     return m_Xhandler.prefix4NS(pcNS);
 }
-

@@ -27,7 +27,6 @@ AxisParseException::AxisParseException(const int iExceptionCode,const char* pcMe
 	if (pcMessage) 
 	{
 		sMessage = string(pcMessage);
-		getMessageForExceptionCode(iExceptionCode);
 		m_sMessageForExceptionCode = getMessageForExceptionCode(iExceptionCode) + " " + sMessage;
 		setMessage(m_sMessageForExceptionCode.c_str());
 
@@ -48,16 +47,19 @@ string AxisParseException::getMessageForExceptionCode (const int iExceptionCode)
 	switch(iExceptionCode)
     {
         case SERVER_PARSE_BUFFER_EMPTY:
-            m_sMessageForExceptionCode = "AxisParseException:Buffer received from the parser is empty";
+            m_sMessageForExceptionCode = "AxisParseException:Buffer received from the parser is empty.  ";
             break;
         case SERVER_PARSE_PARSER_FAILED:
-            m_sMessageForExceptionCode = "AxisParseException:XML_STATUS_ERROR thrown from parser";
+            m_sMessageForExceptionCode = "AxisParseException:XML_STATUS_ERROR thrown from parser.  ";
             break;
         case SERVER_PARSE_TRANSPORT_FAILED:
-            m_sMessageForExceptionCode = "AxisParseException:Error when getting the byte stream from the transport";
+            m_sMessageForExceptionCode = "AxisParseException:Error when getting the byte stream from the transport.  ";
+            break;
+		case CLIENT_SOAP_CONTENT_NOT_SOAP:
+            m_sMessageForExceptionCode = "AxisParseException:SAXParser has failed.  ";
             break;
         default:
-			m_sMessageForExceptionCode = "AxisParseException:Unknown Parse Exception"; 
+			m_sMessageForExceptionCode = "AxisParseException:Unknown Parser Exception.  "; 
     }
     return m_sMessageForExceptionCode;
 }
