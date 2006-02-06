@@ -113,7 +113,11 @@ const AnyElement* XMLParserXerces::next(bool isCharData)
 
 			throw AxisParseException( CLIENT_SOAP_CONTENT_NOT_SOAP, pErrorMsg);
 		}
-		catch (...)
+		catch( HTTPTransportException & e)
+		{
+			throw;
+		}
+		catch( ...)
 		{
 			char *	pErrorMsg = "Unexpected Exception in SAX parser.  Probably no message or the message is not recognised as XML.";
 
