@@ -28,7 +28,7 @@ LogPath:${dir.test.generated}/server/ServerLog.taw
 WSDDFilePath:${wsdd.file}
 Transport_http:${dir.libraries}/${libraryPrefix}${HTTP.transportLibraryName}${librarySuffix}
 Channel_HTTP:${dir.libraries}/${libraryPrefix}${HTTP.ChannelLibraryName}${librarySuffix}
-XMLParser:${dir.libraries}/${ClientParserLib}
+XMLParser:${dir.libraries}/${libraryPrefix}${ClientParserLib}${librarySuffix}
 </echo>
     </target>
 
@@ -38,6 +38,7 @@ XMLParser:${dir.libraries}/${ClientParserLib}
             <arg line="${startargs}" />
             <env key="AXISCPP_DEPLOY" value="${axiscpp_deploy}/server" />
             <env key="${serverenv.env}" value="${serverenv.env.value}" />
+            <env key="AXISCPP_STARTUP_TRACE" value="${dir.test.generated}/server/StartupTrace.taw"/>
         </exec>
     </target>
 
@@ -234,6 +235,7 @@ XMLParser:${dir.libraries}/${ClientParserLib}
                       overwrite="true"/>
             </then>
         </if>
+
         <cc failonerror="false"
             incremental="false"
             outfile="${dir.test.generated}/server/${serviceLang}/${serviceName}/${serviceName}"
