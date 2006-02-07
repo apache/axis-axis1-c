@@ -83,9 +83,13 @@ const AnyElement* XMLParserXerces::next(bool isCharData)
 
     if( !m_bFirstParsed)
     {
+		m_pParser->parseFirst( *m_pInputSource, m_ScanToken);
+/*
+	Try this again at some point in the future.  At the moment it works on
+	Windows, but Linux as a problem...
 		try
 		{
-			m_pParser->parseFirst(*m_pInputSource, m_ScanToken);
+			m_pParser->parseFirst( *m_pInputSource, m_ScanToken);
 		}
 		catch( const XMLException& toCatch)
 		{
@@ -123,7 +127,7 @@ const AnyElement* XMLParserXerces::next(bool isCharData)
 
 			throw AxisParseException( CLIENT_SOAP_CONTENT_NOT_SOAP, pErrorMsg);
 		}
-
+*/
         m_bFirstParsed = true;
     }
 
