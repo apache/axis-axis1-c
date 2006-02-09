@@ -130,6 +130,14 @@ SOURCE=..\src\common\AxisConfigException.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\common\AxisCPPConfigDefaults.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\common\AxisCPPConfigDefaultsImpl.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\engine\AxisEngine.cpp
 # End Source File
 # Begin Source File
@@ -607,6 +615,10 @@ SOURCE=..\src\soap\xsd\XSD_QName.cpp
 # Begin Source File
 
 SOURCE=..\include\axis\Axis.hpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\axis\AxisCPPConfigDefaults.hpp
 # End Source File
 # Begin Source File
 
