@@ -245,6 +245,8 @@ int main (int argc, char *argv[])
     //uninitializing Axis
     uninitialize_module ();
 
+    delete [] hostname;
+
     /* Close sockets */
     for (iPort = 0; iPort < noPorts; iPort++)
     {
