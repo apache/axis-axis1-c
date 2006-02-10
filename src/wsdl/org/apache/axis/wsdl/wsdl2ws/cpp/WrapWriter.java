@@ -288,17 +288,26 @@ public class WrapWriter extends CPPClassWriter
         writer.write("\tint nStatus;\n");
         writer.write("\tIWrapperSoapSerializer* pIWSSZ = NULL;\n");
         writer.write("\tmc->getSoapSerializer(&pIWSSZ);\n");
-        writer.write("\tif (!pIWSSZ) return AXIS_FAIL;\n");
+        writer.write("\tif (!pIWSSZ)\n");
+        writer.write("\t{\n");
+        writer.write("\t\treturn AXIS_FAIL;\n");
+        writer.write("\t}\n");
         writer.write("\tIWrapperSoapDeSerializer* pIWSDZ = NULL;\n");
         writer.write("\tmc->getSoapDeSerializer(&pIWSDZ);\n");
-        writer.write("\tif (!pIWSDZ) return AXIS_FAIL;\n");
+        writer.write("\tif (!pIWSDZ)\n");
+        writer.write("\t{\n");
+        writer.write("\t\treturn AXIS_FAIL;\n");
+        writer.write("\t}\n");
         writer.write("\t/* check whether we have got correct message */\n");
         writer.write(
             "\tif (AXIS_SUCCESS != pIWSDZ->checkMessageBody(\""
                 + minfo.getMethodname()
                 + "\", \""
                 + wscontext.getWrapInfo().getTargetNameSpaceOfWSDL()
-                + "\")) return AXIS_FAIL;\n");
+                + "\"))\n");
+        writer.write("\t{\n");
+        writer.write("\t\treturn AXIS_FAIL;\n");
+        writer.write("\t}\n");
         writer.write(
             "\tpIWSSZ->createSoapMethod(\""
         		//Chinthana:Fixed for AXISCPP-378 
@@ -332,48 +341,83 @@ public class WrapWriter extends CPPClassWriter
             	{
             		if (CUtils.isPointerType(param.getLangName()))
             		{
-
-		                writer.write("\t"
-								+ paraTypeName
-								+ " v"
-								+ i
-								+ " = pIWSDZ->"
-								+ CUtils.getParameterGetValueMethodName(paraTypeName, false)
-								+ "(\""
-								+ parameterName + "\",0);\n");
-            		}
+            		    writer.write("\n\t" + paraTypeName + " v" + i + " = NULL;\n");
+	        			writer.write("\t"
+	                            + paraTypeName
+	                            + " value"
+	                            + i
+	                            + " = pIWSDZ->"
+	                            + CUtils.getParameterGetValueMethodName(paraTypeName, false)
+	                            + "(\""
+	                            + parameterName + "\",0);\n");
+            			writer.write("\tif (value" + i + ")\n");
+            			writer.write("\t{\n");
+            			writer.write("\t\tv" + i + " = new char[ strlen( value" + i + " ) + 1 ];\n");
+            			writer.write("\t\tstrcpy( v" + i + ", value" + i + " );\n");
+            			writer.write("\t\tAxis::AxisDelete( (void *) value" + i + ", " + CUtils.getXSDTypeForBasicType(paraTypeName) + ");\n");
+            			writer.write("\t}\n");
+        			}
             		else
             		{
+            		    writer.write("\n\t" + paraTypeName + " * v" + i + " = NULL;\n");
             			writer.write("\t"
 								+ paraTypeName
-								+ "* v"
+								+ "* pValue"
 								+ i
 								+ " = pIWSDZ->"
 								+ CUtils.getParameterGetValueMethodName(paraTypeName, false)
 								+ "(\""
 								+ parameterName + "\",0);\n");
+            			writer.write("\tif (pValue" + i + ")\n");
+            			writer.write("\t{\n");
+            			writer.write("\t\tv" + i + " = new " + paraTypeName + "();");
+            			writer.write("\t\t*v" + i + " = *pValue" + i + ";\n");
+            			writer.write("\t\tAxis::AxisDelete( (void *) pValue" + i + ", " + CUtils.getXSDTypeForBasicType(paraTypeName) + ");\n");
+            			writer.write("\t}\n");
             		}
             	}
             	else
             	{
             		if (CUtils.isPointerType(param.getLangName()))
+            		{
+            		    writer.write("\n\t" + paraTypeName + " v" + i + " = NULL;\n");
             			writer.write("\t"
                             + paraTypeName
-                            + " v"
+                            + " value"
                             + i
                             + " = pIWSDZ->"
                             + CUtils.getParameterGetValueMethodName(paraTypeName, false)
                             + "(\""
                             + parameterName + "\",0);\n");
+            			writer.write("\tif (value" + i + ")\n");
+            			writer.write("\t{\n");
+            			writer.write("\t\tv" + i + " = new char[ strlen( value" + i + " ) + 1 ];\n");
+            			writer.write("\t\tstrcpy( v" + i + ", value" + i + " );\n");
+            			writer.write("\t\tAxis::AxisDelete( (void *) value" + i + ", " + CUtils.getXSDTypeForBasicType(paraTypeName) + ");\n");
+            			writer.write("\t}\n");
+            		}
             		else
+            		{
+            		    writer.write("\n\t" + paraTypeName + " v" + i);
+            		    if (!"xsd__base64Binary".equals(paraTypeName) && !"xsd__hexBinary".equals(paraTypeName) )
+            		    {
+            		        writer.write(" = " + CUtils.getInitValue(paraTypeName));
+            		    }
+            		    writer.write(";\n");
 	            		writer.write("\t"
 							+ paraTypeName
-							+ " v"
+							+ " * pValue"
 							+ i
-							+ " = *(pIWSDZ->"
+							+ " = pIWSDZ->"
 							+ CUtils.getParameterGetValueMethodName(paraTypeName, false)
 							+ "(\""
-							+ parameterName + "\",0));\n");
+							+ parameterName + "\",0);\n");
+	            		writer.write("\tif (pValue" + i + ")\n");
+	            		writer.write("\t{\n");
+	            		writer.write("\t\tv" + i + " = *pValue" + i + ";\n");
+	            		writer.write("\t\tAxis::AxisDelete( (void *) pValue" + i + ", " + CUtils.getXSDTypeForBasicType(paraTypeName) + " );\n");
+	            		writer.write("\t}\n");
+            		}
             	}
             }
             else
@@ -389,7 +433,7 @@ public class WrapWriter extends CPPClassWriter
                     {
                         containedType = CUtils.getclass4qname(qname);
                         
-                        writer.write("\t" + containedType + "_Array * v" + i +" = new " + containedType + "_Array();\n");
+                        writer.write("\n\t" + containedType + "_Array * v" + i +" = new " + containedType + "_Array();\n");
                         writer.write(
                             "\t"
                                 + "Axis_Array * RetArray"
@@ -427,7 +471,7 @@ public class WrapWriter extends CPPClassWriter
                 {
                     //for complex types 
                     writer.write(
-                        "\t"
+                        "\n\t"
                             + paraTypeName
                             + " *v"
                             + i
@@ -446,8 +490,10 @@ public class WrapWriter extends CPPClassWriter
                             + ");\n");
                 }
         }
-        writer.write(
-            "\tif (AXIS_SUCCESS != (nStatus = pIWSDZ->getStatus())) return nStatus;\n");
+        writer.write("\tif (AXIS_SUCCESS != (nStatus = pIWSDZ->getStatus()))\n");
+        writer.write("\t{\n");
+        writer.write("\t\treturn nStatus;\n");
+        writer.write("\t}\n");
         // Multiples parameters so fill the methods prototype
         if (isAllTreatedAsOutParams)
         {
@@ -712,8 +758,10 @@ public class WrapWriter extends CPPClassWriter
                 writeExceptions(faultType, faultInfoName, paramName, langName);
             }
         }
-        writer.write("\tcatch(...){\n"); //nithya
-        writer.write("\t}\n"); //nithya
+        writer.write("\tcatch(...)\n");
+        writer.write("\t{\n");
+        writer.write("\t\treturn AXIS_FAIL;\n");
+        writer.write("\t}\n");
         //write end of method
         writer.write("}\n");
     }
@@ -755,6 +803,7 @@ public class WrapWriter extends CPPClassWriter
                     + ");\n");
             writer.write("\t\tthrow AxisServiceException(AXISC_SERVICE_THROWN_EXCEPTION);\n");
             writer.write("\t\t}\n");
+            writer.write("\t\treturn AXIS_FAIL;\n");
             writer.write("\t}\n");
             writer.write("\n");
         }
