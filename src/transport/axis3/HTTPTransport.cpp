@@ -647,7 +647,14 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char * pcBuffer, int * piSize) th
 			if( m_iContentLength > 0 ||
 				(m_bReopenConnection && m_pActiveChannel->getSocket()))
 			{
-				getNextDataPacket( "No data available for message.");
+				if( m_iContentLength > 0)
+				{
+					getNextDataPacket( "No data available for message.");
+				}
+				else
+				{
+					getNextDataPacket( "Expecting server connection to close.");
+				}
 
 		// Check for Mime header
 				if( m_bMimeTrue)

@@ -317,14 +317,13 @@ void HandlerPool::poolHandlerChain (HandlerChain* pChain, string &sSessionId)
     //unlock ();
 }
 
-int HandlerPool::getWebService (BasicHandler** ppHandler, string &sSessionId,
-    const WSDDHandler* pService)
+int HandlerPool::getWebService( BasicHandler ** ppHandler, string & sSessionId, const WSDDHandler * pService)
 {
-    int Status;
-    if ((Status = getHandler (ppHandler, sSessionId, pService->getScope (),
-        pService->getLibId ())) == AXIS_SUCCESS)
+    int Status = getHandler( ppHandler, sSessionId, pService->getScope(), pService->getLibId());
+
+    if( Status == AXIS_SUCCESS)
     {
-        if (0 != (*ppHandler)->_functions)
+        if( NULL != (*ppHandler)->_functions)
         // C web service 
         {
             /*if (AXIS_SUCCESS !=
@@ -337,8 +336,10 @@ int HandlerPool::getWebService (BasicHandler** ppHandler, string &sSessionId,
                 *ppHandler = NULL;
             }*/
         }
-        else if (0 == (*ppHandler)->_object)
-            return AXIS_FAIL;
+        else if( NULL == (*ppHandler)->_object)
+		{
+            Status = AXIS_FAIL;
+		}
         else
         // C++ web service 
         {

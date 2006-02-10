@@ -32,9 +32,9 @@
 #include <sys/time.h>
 #endif
 
+#include "SimpleAxisTransport.h"
 
 #include <axis/AxisCPPConfigDefaults.hpp>
-#include "SimpleAxisTransport.h"
 
 extern "C" int initialize_module (int bServer);
 extern "C" int uninitialize_module ();
@@ -58,11 +58,11 @@ extern int process_request (SOAPTransport * str);
 int
 createTCPServerSocket (unsigned short port)
 {
-    int sock;         /* socket to create */
-    struct sockaddr_in echoServAddr;   /* Local address */
+	int					sock;         /* socket to create */
+	struct sockaddr_in	echoServAddr;   /* Local address */
 
     /* Create socket for incoming connections */
-    if ((sock = socket (PF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0)
+    if ((sock = (int) socket (PF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0)
    printf ("%s\n", "socket() failed");
 
     /* Construct local address structure */
@@ -102,7 +102,7 @@ acceptTCPConnection (int servSock)
     clntLen = sizeof (echoClntAddr);
 
     /* Wait for a client to connect */
-    if ((clntSock = accept (servSock, (struct sockaddr *) &echoClntAddr,
+    if ((clntSock = (int) accept (servSock, (struct sockaddr *) &echoClntAddr,
              &clntLen)) < 0)
     {
    printf ("%s\n", "accept() failed");
@@ -130,112 +130,116 @@ handleTCPClient (int clntSocket)
 
 }
 
-int
-main (int argc, char *argv[])
+int main (int argc, char *argv[])
 {
-
-    int *servSock;      /* Socket descriptors for server */
-
 #ifdef WIN32
     WSADATA wsaData;      /* Structure for WinSock setup communication */
 #else //Linux
 #endif
 
-    fd_set sockSet;      /* Set of socket descriptors for select() */
-    int maxDescriptor;      /* Maximum socket descriptor value */
-    struct timeval selTimeout;   /* Timeout for select() */
-    long timeout = 1000;   /* Timeout value given on command-line */
-    int running = 1;
-    int iServerPort;
+    fd_set			sockSet;						// Set of socket descriptors for select()
+    int				maxDescriptor = -1;				// Maximum socket descriptor value
+    struct timeval	selTimeout;						// Timeout for select()
+    long			timeout = 1000;					// Timeout value given on command-line
+    int				running = 1;
+    int				iServerPort;
+    int				iPort;
+    int				noPorts = 1;					// Number of ports is argument count minus 2
+    int *			servSock = new int[noPorts];	// Socket descriptors for server
 
-    int iPort;
-    int noPorts = 1;      /* Number of ports is argument count minus 2 */
-    servSock = new int[noPorts];
-    /* Initialize maxDescriptor for use by select() */
-    maxDescriptor = -1;
-
-
-    if (argc < 2)
+    if( argc < 2)
     {
-        printf ("Problem occurred.\nUsage: %s <Server Port>", argv[0]);
-        exit (1);
+		printf( "Problem occurred.\nUsage: %s <Server Port>", argv[0]);
+
+		exit( 1);
     }
 
 #ifdef WIN32
-    if (WSAStartup (MAKEWORD (2, 0), &wsaData) != 0)   /* Load Winsock 2.0 DLL */
+    if( WSAStartup( MAKEWORD( 2, 0), &wsaData) != 0)   /* Load Winsock 2.0 DLL */
     {
-        fprintf (stderr, "WSAStartup() failed");
-        exit (1);
+		fprintf( stderr, "WSAStartup() failed");
+
+		exit( 1);
     }
 #else //Linux
 #endif
 
     /////////////
-    iServerPort = atoi (argv[1]);
-    if (iServerPort == 0)
-    {
-        printf ("Problem occurred. Error in specified server port");
-        exit (1);
-    }
-    else
-    {
-        servSock[0] = createTCPServerSocket (iServerPort);
-        /* Determine if new descriptor is the largest */
-        if (servSock[0] > maxDescriptor)
-        {
-            maxDescriptor = servSock[0];
-        }
-    }
-    ///////////////
+	iServerPort = atoi( argv[1]);
+
+	if( iServerPort == 0)
+	{
+		printf( "Problem occurred. Error in specified server port");
+		exit( 1);
+	}
+	else
+	{
+		servSock[0] = createTCPServerSocket( iServerPort);
+
+	// Determine if new descriptor is the largest
+		if( servSock[0] > maxDescriptor)
+		{
+			maxDescriptor = servSock[0];
+		}
+	}
+
+    // Ensure that configuration has the correct hostname
+
+    AxisCPPConfigDefaults	config;
+
+	config.setListenPort( argv[1]);
+
+    int		namelen = 128;
+	char *	hostname = new char[namelen];
+
+	if( gethostname( hostname, namelen) == 0)
+	{
+		if( hostname!= NULL)
+		{
+			config.setNodeName( hostname);
+		}
+	}
+
+	config.apply();
 
     //initializing Axis
-    AxisCPPConfigDefaults config;
-    config.setListenPort(argv[1]);
-    int namelen = 128;
-    char* hostname = new char[namelen];
-    if (gethostname(hostname, namelen) == 0)
-    {
-        if (hostname!= NULL)
-        {
-            config.setNodeName( hostname );
-        }
-    }
-    config.apply();		
-    initialize_module (1);
+
+    initialize_module( 1);
 
     while (running)
     {
-        FD_ZERO (&sockSet);
-        FD_SET (servSock[0], &sockSet);
+   FD_ZERO (&sockSet);
+   FD_SET (servSock[0], &sockSet);
 
 
-        /* Timeout specification */
-        /* This must be reset every time select() is called */
-        selTimeout.tv_sec = timeout;   /* timeout (secs.) */
-        selTimeout.tv_usec = 0;   /* 0 microseconds */
+   /* Timeout specification */
+   /* This must be reset every time select() is called */
+   selTimeout.tv_sec = timeout;   /* timeout (secs.) */
+   selTimeout.tv_usec = 0;   /* 0 microseconds */
 
-        if (select (maxDescriptor + 1, &sockSet, NULL, NULL, &selTimeout) == 0)
-        {
-            /*
-             * DEBUG line
-             * printf("No echo requests for %ld secs...Server still alive\n", 
-             * timeout);
-             */
-        }
-        else
-        {
-            if (FD_ISSET (servSock[0], &sockSet))
-            {
-                //initializeStuff ();
-                /*
-                 * DEBUG line
-                 * printf("Request on port %d (cmd-line position): \n", 0);
-                 */
-                handleTCPClient (acceptTCPConnection (servSock[0]));
-            }
-        }
+   if (select (maxDescriptor + 1, &sockSet, NULL, NULL, &selTimeout) ==
+       0)
+   {
+       /*
+        * DEBUG line
+        * printf("No echo requests for %ld secs...Server still alive\n", 
+        * timeout);
+        */
+   }
+   else
+   {
+       if (FD_ISSET (servSock[0], &sockSet))
+       {
+      //initializeStuff ();
+      /*
+       * DEBUG line
+       * printf("Request on port %d (cmd-line position): \n", 0);
+       */
+      handleTCPClient (acceptTCPConnection (servSock[0]));
+       }
+   }
 
-        // AXISTRACE3("end of main while");
+   // AXISTRACE3("end of main while");
     }
 
     //uninitializing Axis
@@ -245,9 +249,9 @@ main (int argc, char *argv[])
     for (iPort = 0; iPort < noPorts; iPort++)
     {
 #ifdef WIN32
-        closesocket (servSock[iPort]);
+   closesocket (servSock[iPort]);
 #else //Linux
-        close (servSock[iPort]);
+   close (servSock[iPort]);
 #endif
     }
 

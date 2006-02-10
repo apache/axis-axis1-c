@@ -103,18 +103,24 @@ int WSDDDeployment::updateWSDD(const AxisChar* sWSDD)
     return AXIS_SUCCESS;        
 }
 
-int WSDDDeployment::loadWSDD(const AxisChar* sWSDD)
+int WSDDDeployment::loadWSDD( const AxisChar * sWSDD)
 {
-    m_sWSDDPath = std::string(sWSDD);
-    WSDDDocument* doc = new WSDDDocument(m_pLibNameIdMap);
-    if (AXIS_SUCCESS != doc->getDeployment(sWSDD, this))
+    m_sWSDDPath = std::string( sWSDD);
+
+    WSDDDocument *	doc = new WSDDDocument( m_pLibNameIdMap);
+
+    if( AXIS_SUCCESS != doc->getDeployment( sWSDD, this))
     {
         //printf("wsdd loading failed\n");
+
         delete doc;
+
         //return AXIS_FAIL;
-        throw AxisWsddException(SERVER_WSDD_FILE_NOT_FOUND);
+        throw AxisWsddException( SERVER_WSDD_FILE_NOT_FOUND);
     }
+
     delete doc;
+
     return AXIS_SUCCESS;
 }
 

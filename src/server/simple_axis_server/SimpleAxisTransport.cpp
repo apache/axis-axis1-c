@@ -27,7 +27,7 @@
  */
 #define SOAPACTION_METHODNAME_SEPARATOR "#"
 
-SimpleAxisTransport::SimpleAxisTransport (int iSocket)
+SimpleAxisTransport::SimpleAxisTransport( int iSocket)
 {
     m_eProtocolType = APTHTTP1_1;
     m_iSocket = iSocket;
@@ -38,21 +38,28 @@ SimpleAxisTransport::SimpleAxisTransport (int iSocket)
     m_strSOAPAction = "";
 }
 
-SimpleAxisTransport::~SimpleAxisTransport ()
+SimpleAxisTransport::~SimpleAxisTransport()
 {
+	int	iShutDownRes = shutdown( m_iSocket, SD_BOTH);
 
+	int iCloseSockRes = 0;
+
+#ifdef WIN32
+	iCloseSockRes = closesocket( m_iSocket);
+#else //Linux
+	iCloseSockRes = close( m_iSocket);
+#endif
 }
 
-AXIS_TRANSPORT_STATUS
-SimpleAxisTransport::sendBytes (const char *pcSendBuffer,
-				const void *pBufferId)
+AXIS_TRANSPORT_STATUS SimpleAxisTransport::sendBytes( const char *pcSendBuffer, const void *pBufferId)
 {
     m_strPayloadToSend += pcSendBuffer;
-    return TRANSPORT_FINISHED;
 
+    return TRANSPORT_FINISHED;
+/*
     if (!pBufferId)		// temporary buffers should always sent immediately 
     {
-	if ((send (m_iSocket, pcSendBuffer, strlen (pcSendBuffer), MSG_DONTROUTE)) == -1)
+	if ((send (m_iSocket, pcSendBuffer, (int) strlen( pcSendBuffer), MSG_DONTROUTE)) == -1)
 	    return TRANSPORT_FAILED;
 	return TRANSPORT_FINISHED;
     }
@@ -67,253 +74,296 @@ SimpleAxisTransport::sendBytes (const char *pcSendBuffer,
 	}
     }
     return TRANSPORT_IN_PROGRESS;
+*/
 }
 
-int
-SimpleAxisTransport::
-setTransportProperty (AXIS_TRANSPORT_INFORMATION_TYPE type, const char *value)
+int SimpleAxisTransport::setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char * value)
 {
-    const char *key = NULL;
-    switch (type)
-    {
-    case SOAPACTION_HEADER:	/* needed only in the client side ? */
-	break;
-    case SERVICE_URI:		/* need to set ? */
-	break;
-    case OPERATION_NAME:	/* need to set ? */
-	break;
-    case SOAP_MESSAGE_LENGTH:
-	/* This is apache module and transport is http so the key */
-	key = "Content-Length";
-	break;
-    default:;
-    }
-    if (key)
-    {
-	setTransportProperty (key, value);
-    }
-    return 0;
+	const char *	key = NULL;
+	int				iSuccess = AXIS_FAIL;
+
+	switch( type)
+	{
+		case SOAPACTION_HEADER:	/* needed only in the client side ? */
+			break;
+	
+		case SERVICE_URI:		/* need to set ? */
+			break;
+
+		case OPERATION_NAME:	/* need to set ? */
+			break;
+
+		case SOAP_MESSAGE_LENGTH: /* This is apache module and transport is http so the key */
+			key = "Content-Length";
+			break;
+
+		default:
+			;
+	}
+
+	if( key)
+	{
+		iSuccess = setTransportProperty( key, value);
+	}
+
+	return AXIS_SUCCESS;
 }
 
-AXIS_TRANSPORT_STATUS
-SimpleAxisTransport::flushOutput ()
+AXIS_TRANSPORT_STATUS SimpleAxisTransport::flushOutput()
 {
-    int contentLength = 0;
-    char strtonum[8];
-    contentLength = m_strPayloadToSend.length ();
-    if (contentLength != 0)	// do only if the http body is not empty. 
-    {
-	sprintf (strtonum, "%d", contentLength);
-	setTransportProperty (SOAP_MESSAGE_LENGTH, strtonum);
-	m_strHTTPHeaders = std::string ("HTTP/1.1 200 OK\r\n") +
-	    std::string ("Server: Apache Axis C++/1.6\r\n") +
-	    std::string ("Connection: close\r\n") +
-	    m_strHTTPHeaders + std::string ("Content-Type: text/xml\r\n\r\n");
+    int		contentLength = (int) m_strPayloadToSend.length();
+    char	strtonum[8];
 
-	if ((send
-	     (m_iSocket, m_strHTTPHeaders.c_str (), m_strHTTPHeaders.size (),
-	      MSG_DONTROUTE)) == -1)
-	    return TRANSPORT_FAILED;
-	if ((send
-	     (m_iSocket, m_strPayloadToSend.c_str (),
-	      m_strPayloadToSend.length (), MSG_DONTROUTE)) == -1)
-	    return TRANSPORT_FAILED;
+	if( contentLength != 0)	// do only if the http body is not empty. 
+    {
+		sprintf( strtonum, "%d", contentLength); // This assumes that the content length will be less that 8 digits (9,999,999 bytes).
+
+		setTransportProperty( SOAP_MESSAGE_LENGTH, strtonum);
+
+		m_strHTTPHeaders = std::string( "HTTP/1.1 200 OK\r\n") +
+						   std::string( "Server: Apache Axis C++/1.6.a\r\n") +
+						   std::string( "Connection: close\r\n") +
+						   m_strHTTPHeaders +
+						   std::string( "Content-Type: text/xml\r\n\r\n");
+
+		if( (send( m_iSocket,
+				   m_strHTTPHeaders.c_str(),
+				   (int) m_strHTTPHeaders.size(),
+				   MSG_DONTROUTE)) == -1)
+		{
+			return TRANSPORT_FAILED;
+		}
+
+        if( (send( m_iSocket,
+				   m_strPayloadToSend.c_str(),
+				   (int) m_strPayloadToSend.length(),
+				   MSG_DONTROUTE)) == -1)
+		{
+			return TRANSPORT_FAILED;
+		}
     }
-    return TRANSPORT_FINISHED;
-}
 
-AXIS_TRANSPORT_STATUS
-SimpleAxisTransport::getBytes (char *pBuffer, int *piSize)
-{
-    if (m_strReceived.length () <= 0)
-    {
-	pBuffer[0] = '\0';
-	(*piSize) = 0;
+
 	return TRANSPORT_FINISHED;
-    }
-    if ((int) m_strReceived.length () < (*piSize))
+}
+
+AXIS_TRANSPORT_STATUS SimpleAxisTransport::getBytes( char * pBuffer, int * piSize)
+{
+    if( m_strReceived.length () <= 0)
     {
-	pBuffer[0] = '\0';
-	strcat (pBuffer, m_strReceived.c_str ());
-	(*piSize) = m_strReceived.length ();
-	m_strReceived = "";
-	return TRANSPORT_FINISHED;
+		pBuffer[0] = '\0';
+		*piSize = 0;
+
+		return TRANSPORT_FINISHED;
+    }
+
+    if( (int) m_strReceived.length() < *piSize)
+    {
+		pBuffer[0] = '\0';
+
+		strcat( pBuffer, m_strReceived.c_str());
+
+		*piSize = (int) m_strReceived.length();
+
+		m_strReceived = "";
+
+		return TRANSPORT_FINISHED;
     }
     else
     {
-	pBuffer[0] = '\0';
-	std::string strToSend = m_strReceived.substr ((*piSize) - 1);
-	strcat (pBuffer, strToSend.c_str ());
-	(*piSize) = strToSend.length ();
+		pBuffer[0] = '\0';
 
-	m_strReceived =
-	    m_strReceived.substr ((*piSize),
-				  m_strReceived.length () - (*piSize));
-	return TRANSPORT_IN_PROGRESS;
+		std::string strToSend = m_strReceived.substr( *piSize - 1);
+
+		strcat( pBuffer, strToSend.c_str());
+
+		*piSize = (int) strToSend.length();
+
+		m_strReceived = m_strReceived.substr( (*piSize),
+											  m_strReceived.length() - *piSize);
+
+		return TRANSPORT_IN_PROGRESS;
     }
 }
 
-void
-SimpleAxisTransport::readFromClient ()
+void SimpleAxisTransport::readFromClient()
 {
-    int len_read = 0;
-    const unsigned int BUF_SIZE = 48000;
-    char arr[BUF_SIZE];
+    int					len_read = 0;
+    const unsigned int	BUF_SIZE = 48000;
+    char				arr[BUF_SIZE];
+    unsigned int		iStartPos = (int) std::string::npos;
 
     std::string strReceived = "";
-    unsigned int iStartPos = std::string::npos;
+
     do
     {
-	len_read = recv (m_iSocket, arr, BUF_SIZE - 1, 0);
-	if (len_read < 0)
-	    return;
-	arr[len_read] = '\0';
-	strReceived = arr;
-	iStartPos = strReceived.find ("\r\n\r\n");
-    }
-    while (iStartPos == std::string::npos);
+		len_read = recv( m_iSocket, arr, BUF_SIZE - 1, 0);
+
+		if( len_read < 0)
+		{
+			return;
+		}
+
+		arr[len_read] = '\0';
+
+		strReceived += arr;
+
+		iStartPos = (int) strReceived.find( "\r\n\r\n");
+	} while( iStartPos == std::string::npos);
 
     iStartPos += 4;
 
-    unsigned int uiServiceStartPos =
-	strReceived.find ("POST ") + strlen ("POST ");
-    unsigned int uiServiceEndPos = strReceived.find (" ", uiServiceStartPos);
-    m_strServiceURI =
-	strReceived.substr (uiServiceStartPos,
-			    uiServiceEndPos - uiServiceStartPos);
+	unsigned int uiServiceStartPos = (unsigned int) (strReceived.find( "POST ") + strlen( "POST "));
+    unsigned int uiServiceEndPos = (unsigned int) strReceived.find( " ", uiServiceStartPos);
 
-    unsigned int uiActionStartPos =
-	strReceived.find ("SOAPAction: \"") + strlen ("SOAPAction: \"");
-    unsigned int uiActionEndPos = strReceived.find ("\"", uiActionStartPos);
-    m_strSOAPAction =
-	strReceived.substr (uiActionStartPos,
-			    uiActionEndPos - uiActionStartPos);
+    m_strServiceURI = strReceived.substr( uiServiceStartPos, uiServiceEndPos - uiServiceStartPos);
 
-    unsigned int uiEnvelopePos = strReceived.find ("Envelope");
-    while (uiEnvelopePos == std::string::npos)
+	unsigned int uiActionStartPos =(unsigned int) (strReceived.find( "SOAPAction: \"") + strlen( "SOAPAction: \""));
+    unsigned int uiActionEndPos = (unsigned int) strReceived.find( "\"", uiActionStartPos);
+
+	m_strSOAPAction = strReceived.substr (uiActionStartPos, uiActionEndPos - uiActionStartPos);
+
+    unsigned int uiEnvelopePos = (unsigned int) strReceived.find( "Envelope");
+
+	// Find the beginning of the SOAP message by finding the opening 'Envelope' tag.
+	while( uiEnvelopePos == std::string::npos)
+	{
+		len_read = recv (m_iSocket, arr, BUF_SIZE - 1, 0);
+
+		arr[len_read] = '\0';
+
+		strReceived += arr;
+
+		uiEnvelopePos = (unsigned int) strReceived.find( "Envelope");
+	}
+
+    uiEnvelopePos += (unsigned int) strlen( "Envelope");
+
+    unsigned int uiEnvelopeEndPos = (unsigned int) strReceived.find( "Envelope", uiEnvelopePos);
+
+	// Find the end of the SOAP message by finding the matching closing 'Envelope' tag.
+    while( uiEnvelopeEndPos == std::string::npos)
     {
-	len_read = recv (m_iSocket, arr, BUF_SIZE - 1, 0);
-	arr[len_read] = '\0';
-	strReceived += arr;
-	uiEnvelopePos = strReceived.find ("Envelope");
+		len_read = recv( m_iSocket, arr, BUF_SIZE - 1, 0);
+
+		arr[len_read] = '\0';
+
+		strReceived += arr;
+
+		uiEnvelopeEndPos = (unsigned int) strReceived.find( "Envelope", uiEnvelopePos);
     }
 
-    uiEnvelopePos += strlen ("Envelope");
-    unsigned int uiEnvelopeEndPos =
-	strReceived.find ("Envelope", uiEnvelopePos);
-    while (uiEnvelopeEndPos == std::string::npos)
-    {
-	len_read = recv (m_iSocket, arr, BUF_SIZE - 1, 0);
-	arr[len_read] = '\0';
-	strReceived += arr;
-	uiEnvelopeEndPos = strReceived.find ("Envelope", uiEnvelopePos);
-    }
-    m_strReceived =
-	strReceived.substr (iStartPos, strReceived.length () - iStartPos);
+    m_strReceived = strReceived.substr( iStartPos, strReceived.length () - iStartPos);
+
 }
 
-const char *
-SimpleAxisTransport::
-getTransportProperty (AXIS_TRANSPORT_INFORMATION_TYPE eType)
+const char * SimpleAxisTransport::getTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE eType)
 {
-    switch (eType)
-    {
-    case SOAPACTION_HEADER:
-	return getTransportProperty ("SOAPAction");
-    case SERVICE_URI:
-	readFromClient ();
-	if (m_strServiceURI.find (AXIS_URI_EXTENSION) != std::string::npos)
+	switch( eType)
 	{
-	    unsigned int uiStartPos =
-		m_strServiceURI.find (AXIS_URI_EXTENSION) +
-		strlen (AXIS_URI_EXTENSION) + 1;
-                m_strTransportPropertyURI =
-		m_strServiceURI.substr (uiStartPos,
-					m_strServiceURI.length () -
-					uiStartPos);
-	    return m_strTransportPropertyURI.c_str();
+		case SOAPACTION_HEADER:
+		{
+			return getTransportProperty( "SOAPAction");
+		}
+
+		case SERVICE_URI:
+		{
+			readFromClient();
+
+			if( m_strServiceURI.find( AXIS_URI_EXTENSION) != std::string::npos)
+			{
+				unsigned int uiStartPos = (unsigned int) (m_strServiceURI.find( AXIS_URI_EXTENSION) +
+														  strlen( AXIS_URI_EXTENSION) +
+														  1);
+
+				m_strTransportPropertyURI = m_strServiceURI.substr( uiStartPos,
+																	m_strServiceURI.length() - uiStartPos);
+
+				return m_strTransportPropertyURI.c_str();
+			}
+
+			return m_strServiceURI.c_str();
+		}
+
+		case OPERATION_NAME:
+		{
+			unsigned int uiOpStart = (unsigned int) m_strSOAPAction.find( SOAPACTION_METHODNAME_SEPARATOR);
+
+			if( uiOpStart != std::string::npos)
+			{
+				uiOpStart += (unsigned int) strlen( SOAPACTION_METHODNAME_SEPARATOR);
+
+				m_strTransportPropertyOperation = m_strSOAPAction.substr( uiOpStart,
+																		  m_strSOAPAction.length() - uiOpStart);
+
+				return m_strTransportPropertyOperation.c_str();
+			}
+
+			return m_strSOAPAction.c_str();
+		}
+
+		case SOAP_MESSAGE_LENGTH:
+		{
+			return getTransportProperty( "Content-Length");
+		}
+
+		default:
+		{
+			;
+		}
 	}
-	else
-	{
-	    return m_strServiceURI.c_str ();
-	}
-    case OPERATION_NAME:
-	{
-	    unsigned int uiOpStart =
-		m_strSOAPAction.find (SOAPACTION_METHODNAME_SEPARATOR);
-	    if (uiOpStart != std::string::npos)
-	    {
-		uiOpStart += strlen (SOAPACTION_METHODNAME_SEPARATOR);
-		m_strTransportPropertyOperation = m_strSOAPAction.substr (uiOpStart,
-					       m_strSOAPAction.length () -
-					       uiOpStart);
-                return m_strTransportPropertyOperation.c_str();
-	    }
-	    else
-	    {
-		return m_strSOAPAction.c_str ();
-	    }
-	}
-    case SOAP_MESSAGE_LENGTH:
-	return getTransportProperty ("Content-Length");
-    default:;
-    }
-    return NULL;
+    
+	return NULL;
 }
 
-int
-SimpleAxisTransport::setTransportProperty (const char *pcKey,
-					   const char *pcValue)
+int SimpleAxisTransport::setTransportProperty( const char * pcKey, const char * pcValue)
 {
-    m_strHTTPHeaders +=
-	std::string (pcKey) + std::string (": ") + std::string (pcValue) +
-	std::string ("\r\n");
+    m_strHTTPHeaders += std::string( pcKey) +
+						std::string( ": ") +
+						std::string( pcValue) +
+						std::string( "\r\n");
+
     return 0;
 }
 
-const char *
-SimpleAxisTransport::getTransportProperty (const char *pcKey, bool response)
+const char * SimpleAxisTransport::getTransportProperty( const char * pcKey, bool response)
 {
     return 0;
 }
 
-void
-SimpleAxisTransport::setSessionId (const char *pcSessionId)
+void SimpleAxisTransport::setSessionId( const char * pcSessionId)
 {
 }
 
-const char *
-SimpleAxisTransport::getSessionId ()
+const char * SimpleAxisTransport::getSessionId()
 {
     return "this is temporary session id";	//TODO
 }
 
-const char *
-SimpleAxisTransport::getServiceName ()
+const char * SimpleAxisTransport::getServiceName()
 {
     return 0;			//TODO
 }
 
-AXIS_PROTOCOL_TYPE
-SimpleAxisTransport::getProtocol ()
+AXIS_PROTOCOL_TYPE SimpleAxisTransport::getProtocol()
 {
     return APTHTTP1_1;
 }
 
 int SimpleAxisTransport::setProtocol(AXIS_PROTOCOL_TYPE eProtocol)
 {
-    if( eProtocol == APTHTTP1_1 || eProtocol == APTHTTP1_0 )
+    if( eProtocol == APTHTTP1_1 || eProtocol == APTHTTP1_0)
     {
        m_eProtocolType = eProtocol;
+
        return AXIS_SUCCESS;
     }
-    else
-        return AXIS_FAIL;
+
+	return AXIS_FAIL;
 }
 
 
-int
-SimpleAxisTransport::getSubProtocol ()
+int SimpleAxisTransport::getSubProtocol()
 {
     return AXIS_HTTP_POST;
 }
