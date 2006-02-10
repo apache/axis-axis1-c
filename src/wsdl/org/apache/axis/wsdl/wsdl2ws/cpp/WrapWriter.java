@@ -56,7 +56,7 @@ public class WrapWriter extends CPPClassWriter
         try
         {
             writer.write("/*\n");
-			writer.write(" * Copyright 2003-2004 The Apache Software Foundation.\n\n");
+			writer.write(" * Copyright 2003-2006 The Apache Software Foundation.\n\n");
 			writer.write(" *\n");
 			writer.write(" * Licensed under the Apache License, Version 2.0 (the \"License\");\n");
 			writer.write(" * you may not use this file except in compliance with the License.\n");
@@ -408,23 +408,19 @@ public class WrapWriter extends CPPClassWriter
                         writer.write("\t" + containedType + "_Array * v" + i +" = new " + containedType + "_Array();\n");
                         writer.write(
                             "\t"
-                                + "Axis_Array * RetArray"
-                                + i
-                                + " = pIWSDZ->getCmplxArray(v" + i + ", (void*)Axis_DeSerialize_"
+                                + "pIWSDZ->getCmplxArray(v" + i + ", (void*)Axis_DeSerialize_"
                                 + containedType
-                                + "\n\t\t, (void*)Axis_Create_"
+                                + ",\n\t\t(void*)Axis_Create_"
                                 + containedType
                                 + ", (void*)Axis_Delete_"
                                 + containedType
-                                + "\n\t\t, (void*)Axis_GetSize_"
+                                + ",\n\t\t(void*)Axis_GetSize_"
                                 + containedType
                                 + ", \""
                                 + parameterName
                                 + "\", Axis_URI_"
                                 + containedType
                                 + ");\n");
-                        writer.write("\tv" + i + "->clone(*(" + outparamTypeName + " *)RetArray" + i + ");\n");
-                        writer.write ("\tAxis::AxisDelete( (void *)RetArray" + i + ", XSD_ARRAY);\n\n");
                     }
                 }
                 else
