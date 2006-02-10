@@ -1,0 +1,8 @@
+<service>
+    <name>Arrays</name>
+    <description>Arrays Service</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>Arrays.cpp</serviceCode>
+    <wsdl>Arrays.wsdl</wsdl>
+	<servicename></servicename>
+</service>
