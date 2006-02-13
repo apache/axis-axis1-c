@@ -1,5 +1,5 @@
-// Copyright 2003-2004 The Apache Software Foundation.
-// (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved
+// Copyright 2003-2006 The Apache Software Foundation.
+// (c) Copyright IBM Corp. 2004, 2006 All Rights Reserved
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -36,39 +36,75 @@ void FourLevelTestDocInterface::onFault()
 {
 }
 
-SecondLevelElemType_Array FourLevelTestDocInterface::RetrieveTestDoc(SecondLevelElemType_Array Value0)  
+SecondLevelElemType_Array * FourLevelTestDocInterface::RetrieveTestDoc(SecondLevelElemType_Array * Value0)  
 {
-	//if (NULL == Value0) 
-	//	return 0;
+    if (Value0)
+    {
+        int size = 0;
+        SecondLevelElemType ** arrayOfSecondLevelElemType = Value0->get(size);
+        if (size > 0)
+        {
+            ThirdLevelElemType_Array * thirdArray =
+                arrayOfSecondLevelElemType[0]->getThirdLevelElem();
+            ThirdLevelElemType ** arrayOfThirdLevelElemType =
+                thirdArray->get(size);
+            if (size > 0)
+            {
+                FourthLevelElemType_Array * fourthArray =
+                    arrayOfThirdLevelElemType[0]->getFourthLevelElem();
+                FourthLevelElemType ** arrayOfFourthLevelElemType =
+                    fourthArray->get(size);
+                if (size > 0)
+                {
+                    char * type = arrayOfFourthLevelElemType[0]->SampleString;
+                    if (type != NULL)
+                    {
+                        if (strcmp( type, "abc" ))
+                        {
+                            delete Value0;
+                            throw AxisServiceException(33);
+                        }
+                    }
+                }
+            }
+        }
+        delete Value0;
+    }
 
-	char* type = Value0.m_Array[0].ThirdLevelElem.m_Array[0].FourthLevelElem.m_Array[0].SampleString;
-	if (type != NULL) {
-		if (strcmp(type, "abc")) {
-			throw new AxisServiceException(33);
-		}
-	}
+    FourthLevelElemType ** arrayOfFourthLevelElemType = new FourthLevelElemType * [1];
+    arrayOfFourthLevelElemType[0] = new FourthLevelElemType();
+    arrayOfFourthLevelElemType[0]->setSampleString("def");
+    arrayOfFourthLevelElemType[0]->setSampleInt(1);
 
-	FourthLevelElemType* fourth = new FourthLevelElemType();
-	fourth->SampleString = strdup("def");
-	fourth->SampleInt = 1;
+    FourthLevelElemType_Array * fourthArray = new FourthLevelElemType_Array();
+    fourthArray->set(arrayOfFourthLevelElemType, 1);
 
-	FourthLevelElemType_Array* fourth_array = new FourthLevelElemType_Array();
-	fourth_array->m_Array = fourth;
-	fourth_array->m_Size = 1;
+    delete arrayOfFourthLevelElemType[0];
+    delete [] arrayOfFourthLevelElemType;
 
-	ThirdLevelElemType* third = new ThirdLevelElemType();
-	third->FourthLevelElem = *fourth_array;
+    ThirdLevelElemType ** arrayOfThirdLevelElemType = new ThirdLevelElemType * [1];
+    arrayOfThirdLevelElemType[0] = new ThirdLevelElemType();
+    arrayOfThirdLevelElemType[0]->setFourthLevelElem(fourthArray);
 
-	ThirdLevelElemType_Array* third_array = new ThirdLevelElemType_Array();
-	third_array->m_Array = third;
-	third_array->m_Size = 1;
+    delete fourthArray;
 
-	SecondLevelElemType* second = new SecondLevelElemType();
-	second->ThirdLevelElem = *third_array;
+    ThirdLevelElemType_Array * thirdArray = new ThirdLevelElemType_Array();
+    thirdArray->set(arrayOfThirdLevelElemType, 1);
 
-	SecondLevelElemType_Array* second_array = new SecondLevelElemType_Array();
-	second_array->m_Array = second;
-	second_array->m_Size = 1;
+    delete arrayOfThirdLevelElemType[0];
+    delete [] arrayOfThirdLevelElemType;
 
-	return *second_array;
+    SecondLevelElemType ** arrayOfSecondLevelElemType = new SecondLevelElemType * [1];
+    arrayOfSecondLevelElemType[0] = new SecondLevelElemType();
+    arrayOfSecondLevelElemType[0]->setThirdLevelElem(thirdArray);
+
+    delete thirdArray;
+
+    SecondLevelElemType_Array * secondArray = new SecondLevelElemType_Array();
+    secondArray->set(arrayOfSecondLevelElemType, 1);
+
+    delete arrayOfSecondLevelElemType[0];
+    delete [] arrayOfSecondLevelElemType;
+
+    return secondArray;
 }
