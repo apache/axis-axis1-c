@@ -57,7 +57,7 @@ public class ClassLoader implements SourceWriter
             this.writer =
                 new BufferedWriter(new FileWriter(getFilePath(), false));
             writer.write("/*\n");
-			writer.write(" * Copyright 2003-2004 The Apache Software Foundation.\n\n");
+			writer.write(" * Copyright 2003-2006 The Apache Software Foundation.\n\n");
 			writer.write(" *\n");
 			writer.write(" * Licensed under the Apache License, Version 2.0 (the \"License\");\n");
 			writer.write(" * you may not use this file except in compliance with the License.\n");
