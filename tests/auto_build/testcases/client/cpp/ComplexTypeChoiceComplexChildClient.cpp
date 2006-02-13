@@ -67,10 +67,16 @@ int main(int argc, char* argv[])
     result = ws->asComplexType(input);
 
 	if ( result == NULL )
+	{
 			cout << "Returned result object is NULL" << endl;
+			return -1;
+	}
 
-    cout << "Result field1 is = " << result->complexTypeElement->onecomplexTypeElement << endl;
-	
+	// For ebcdic-based platforms, need to convert ascii 'A' (decimal 65) to ebcdic before
+	// writing to stdout. Following assignment statement will do just that.
+    xsd__byte resultField1 = result->complexTypeElement->onecomplexTypeElement;
+    if (resultField1 == 65) resultField1 = 'A';
+    cout << "Result field1 is = " << resultField1 << endl;
 
 	bSuccess = true;
 
