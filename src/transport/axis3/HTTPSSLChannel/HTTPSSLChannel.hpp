@@ -75,7 +75,7 @@ public:
     bool				open() throw (HTTPTransportException&);
     bool				close();
     const std::string &	GetLastErrorMsg();
-    const IChannel &	operator >> (const char * msg);
+    const IChannel &	operator >> (char * msg);
     const IChannel &	operator << (const char * msg);
     void				setTimeout( long lSeconds);
     void				setSocket( unsigned int uiNewSocket);
@@ -92,7 +92,7 @@ protected:
 	bool				StartSockets();
 	void				StopSockets();
 	int					applyTimeout();
-	int					ReadFromSocket( const char * pszRxBuffer);
+	int					ReadFromSocket( char * pszRxBuffer);
 	int					WriteToSocket( const char * psTxBuffer, int iSize);
 	void				OpenSSL_Initialise();
 	bool				OpenSSL_Open();

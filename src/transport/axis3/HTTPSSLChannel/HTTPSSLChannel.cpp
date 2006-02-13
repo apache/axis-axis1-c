@@ -199,7 +199,7 @@ const std::string & HTTPSSLChannel::GetLastErrorMsg()
 }
 
 /**
- * HTTPSSLChannel::operator >> (const char * msg)
+ * HTTPSSLChannel::operator >> (char * msg)
  *
  * This method attempts to read a message from the curently open channel.  If
  * there is no currently open channel, then the method throws an exception.  If
@@ -213,14 +213,11 @@ const std::string & HTTPSSLChannel::GetLastErrorMsg()
  * recieved message.
  */
 
-const IChannel & HTTPSSLChannel::operator >> (const char * msg)
+const IChannel & HTTPSSLChannel::operator >> (char * msg)
 {
     if (INVALID_SOCKET == m_Sock)
     {
-// Error - Reading cannot be done without having a open socket Input
-//         streaming error on undefined channel; please open the
-//		   channel first
-
+    	// Socket not opened!
 		m_LastError = "No open socket to read from.";
 
 		throw HTTPTransportException( SERVER_TRANSPORT_INVALID_SOCKET,
@@ -702,29 +699,27 @@ int HTTPSSLChannel::applyTimeout()
  * @return int 
  */
 
-int HTTPSSLChannel::ReadFromSocket( const char * pszRxBuffer)
+int HTTPSSLChannel::ReadFromSocket( char * pszRxBuffer)
 {
     int nByteRecv = 0;
 
-    nByteRecv = SSL_read( m_sslHandle, (void *) pszRxBuffer, BUF_SIZE - 1);
+    nByteRecv = SSL_read( m_sslHandle, pszRxBuffer, BUF_SIZE - 1);
 
     if(nByteRecv < 0)
     {
-// failed SSL_read
+        // failed SSL_read
 		if( !bNoExceptionOnForceClose)
 		{
 	        OpenSSL_SetSecureError( SSL_get_error( m_sslHandle, nByteRecv));
 		}
 
         OpenSSL_Close();
-
 		close();
-
 		m_Sock = INVALID_SOCKET; // fix for AXISCPP-185
     }
 	else
     {
-       *(((char *)pszRxBuffer) + nByteRecv) = '\0';  
+       *(pszRxBuffer + nByteRecv) = '\0';  
     }
 
 	return nByteRecv;

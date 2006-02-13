@@ -172,7 +172,7 @@ const std::string & HTTPChannel::GetLastErrorMsg()
 }
 
 /**
- * HTTPChannel::operator >> (const char * msg)
+ * HTTPChannel::operator >> (char * msg)
  *
  * This method attempts to read a message from the curently open channel.  If
  * there is no currently open channel, then the method throws an exception.  If
@@ -186,7 +186,7 @@ const std::string & HTTPChannel::GetLastErrorMsg()
  * recieved message.
  */
 
-const IChannel & HTTPChannel::operator >> (const char * msg)
+const IChannel & HTTPChannel::operator >> (char * msg)
 {
     if (INVALID_SOCKET == m_Sock)
     {
@@ -253,7 +253,7 @@ const IChannel & HTTPChannel::operator >> (const char * msg)
     {
         buf[nByteRecv] = '\0';
         // got a part of the message, so add to form
-        memcpy( (void *) msg, buf, nByteRecv + 1);
+        memcpy(msg, buf, nByteRecv + 1);
     }
 
     return *this;
