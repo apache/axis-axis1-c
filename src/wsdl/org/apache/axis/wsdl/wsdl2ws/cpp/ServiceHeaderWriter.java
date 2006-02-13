@@ -238,16 +238,29 @@ public class ServiceHeaderWriter extends HeaderFileWriter
                     for (int j = 0; params.hasNext(); j++)
                     {
                         ParameterInfo nparam = (ParameterInfo) params.next();
-                        String comma = ", ";
-                        if (!hasInputParms && 0==j) comma = "";
-                        writer.write(comma
-                            + "AXIS_OUT_PARAM "
-                                + WrapperUtils
-                                    .getClassNameFromParamInfoConsideringArrays(
-                                    nparam,
-                                    wscontext)
-                                + " *OutValue"
-                                + j);
+                        
+                        if (0 != j || hasInputParms)
+                        {
+                            writer.write(",");
+                        }
+                        
+                        String typeName = WrapperUtils.getClassNameFromParamInfoConsideringArrays(
+                                        	nparam, wscontext);
+                        
+                        writer.write(" AXIS_OUT_PARAM "
+                                + typeName + " ");
+                        
+                        
+                        
+                        if (( nparam.isOptional() || nparam.isNillable())
+                                && CUtils.isSimpleType(typeName)
+                                && !CUtils.isPointerType(typeName)
+                                && !nparam.isArray())
+                        {
+                            writer.write("*");
+                        }
+                        
+                        writer.write("* OutValue" + j);
                     }
                 }
                 writer.write(");\n");

@@ -258,11 +258,18 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                     {
                     	if (CUtils.isPointerType(paraTypeName))
                     	{
+
                     		writer.write("\n\t"
                                 + paraTypeName
                                 + " v"
                                 + i
                                 + " = NULL;\n");
+                    	    if (param.isOptional())
+                    	    {
+                    	        writer.write("\tconst char * elementName" + i + " = pIWSDZ->peekNextElementName();\n");
+                    	        writer.write("\tif ( strcmp( elementName" + i + ", \"" + elementName + "\" ) == 0)\n");
+                    	        writer.write("\t{\n");
+                    	    }
                     		writer.write("\t" + paraTypeName + " value" + i + " = pIWSDZ->"
                                 + CUtils.getParameterGetValueMethodName(
                                     paraTypeName,
@@ -276,12 +283,22 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                     		writer.write("\t\tstrcpy( v" + i + ", value" + i + ");\n");
                     		writer.write("\t\tAxis::AxisDelete( (void *) value" + i + ", " + CUtils.getXSDTypeForBasicType(paraTypeName) + " );\n");
                     		writer.write("\t}\n");
+                    		if (param.isOptional())
+                    		{
+                    		    writer.write("\t}\n");
+                    		}
                     	}
                     	else
                     	{
-                    		if (param.isNillable())
+                    		if (param.isNillable()  || param.isOptional())
                     		{
                     		    writer.write("\n\t" + paraTypeName + " * v" + i + " = NULL;\n");
+                    		    if (param.isOptional())
+                    		    {
+                    		        writer.write("\tconst char * elementName" + i + " = pIWSDZ->peekNextElementName();\n");
+                    		        writer.write("\tif (strcmp( elementName" + i + ", \"" + elementName + "\" ) == 0)\n");
+                    		        writer.write("\t{\n");
+                    		    }
                     		    writer.write("\t" + paraTypeName + " * pValue" + i
                                         + " = pIWSDZ->"
                                         + CUtils.getParameterGetValueMethodName(
@@ -296,6 +313,10 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                     		    writer.write("\t\t*v" + i + " = *pValue" + i + ";\n");
                     		    writer.write("\t\tAxis::AxisDelete( (void *) pValue" + i + ", " + CUtils.getXSDTypeForBasicType(paraTypeName) + ");\n");
                     		    writer.write("\t}\n");
+                    		    if (param.isOptional())
+                    		    {
+                    		        writer.write("\t}\n");
+                    		    }
                     		}
                     		else
                     		{
@@ -447,18 +468,16 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
             ArrayList paramsC = (ArrayList) minfo.getOutputParameterTypes();
             for (int i = 0; i < paramsC.size(); i++)
             {
-                type =
-                    wscontext.getTypemap().getType(
-                        ((ParameterInfo) paramsC.get(i)).getSchemaName());
-                writer.write(
-                    "\t"
-                        + WrapperUtils
-                            .getClassNameFromParamInfoConsideringArrays(
-                            (ParameterInfo) paramsC.get(i),
-                            wscontext)
-                        + " out"
-                        + i
-                        + ";\n");
+                ParameterInfo param = (ParameterInfo) paramsC.get(i);
+                String typeName = WrapperUtils.getClassNameFromParamInfoConsideringArrays(
+                        			(ParameterInfo) paramsC.get(i), wscontext);
+                writer.write("\t" + typeName);
+                
+                if ( (param.isOptional() || param.isNillable()) && CUtils.isSimpleType(typeName) && !CUtils.isPointerType(typeName) && !param.isArray())
+                {
+                    writer.write(" *");
+                }
+                writer.write(" out" + i + ";\n");
             }
         }
         writer.write("\ttry\n\t{\n"); //nithya
@@ -696,8 +715,14 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                         	 */
                         	
                         	
-                        	if (CUtils.isPointerType(outparamType))
+                        	if (CUtils.isPointerType(outparamType) || param.isOptional() || param.isNillable())
                         	{
+                                if (param.isOptional())
+                                {
+                                    writer.write("\tif (out" + i + ")\n");
+                                    writer.write("\t{\n");
+                                    writer.write("\t");
+                                }
                         		writer.write(
                                         "\tpIWSSZ->addOutputParam(\""
                                             + returnParamName.substring(returnParamName.lastIndexOf(">")+1)
@@ -706,6 +731,10 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                                             + ", "
                                             + CUtils.getXSDTypeForBasicType(outparamType)
                                             + ");\n");
+                        		if (param.isOptional())
+                        		{
+                        		    writer.write("\t}\n");
+                        		}
                         	}
                         	else
                         	{
@@ -792,6 +821,12 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                             }
                             else
                             {
+                                if (param.isOptional())
+                                {
+                                    writer.write("\tif (out" + i + ")\n");
+                                    writer.write("\t{\n");
+                                    writer.write("\t");
+                                }
                                 //complex type
                                 writer.write(
                                     "\tpIWSSZ->addOutputCmplxParam(out"
@@ -805,6 +840,10 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                                         + "\", Axis_URI_"
                                         + outparamType
                                         + ");\n");
+                                if (param.isOptional())
+                                {
+                                    writer.write("\t}\n");
+                                }
                             }
                         }
                     }

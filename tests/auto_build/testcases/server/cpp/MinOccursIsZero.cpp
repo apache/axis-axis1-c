@@ -18,34 +18,28 @@
  * This file contains definitions of the web service
  */
 
-#include "MultiOut.hpp"
+#include "MinOccursIsZero.hpp"
 
 
-MultiOut::MultiOut()
+MinOccursIsZero::MinOccursIsZero()
 {
 }
 
-MultiOut::~MultiOut()
+MinOccursIsZero::~MinOccursIsZero()
 {
 }
 
 /* This function is called by the AxisEngine when something went wrong
  with the current web service request processing. Appropriate actions should
  be taken here.*/
-void MultiOut::onFault()
+void MinOccursIsZero::onFault()
 {
 }
 
-void MultiOut::get(AXIS_OUT_PARAM xsd__string *OutValue0, AXIS_OUT_PARAM xsd__integer **OutValue1, AXIS_OUT_PARAM xsd__int *OutValue2, AXIS_OUT_PARAM xsd__long *OutValue3, AXIS_OUT_PARAM xsd__short *OutValue4, AXIS_OUT_PARAM xsd__decimal *OutValue5, AXIS_OUT_PARAM xsd__float *OutValue6, AXIS_OUT_PARAM xsd__double *OutValue7, AXIS_OUT_PARAM xsd__boolean *OutValue8, AXIS_OUT_PARAM xsd__byte *OutValue9)  
+void MinOccursIsZero::optionalElements(xsd__string Value0, xsd__integer * Value1, SimpleComplexType * Value2, AXIS_OUT_PARAM xsd__string * OutValue0, AXIS_OUT_PARAM xsd__integer ** OutValue1, AXIS_OUT_PARAM SimpleComplexType ** OutValue2)  
 {
-	*OutValue0 = "Hello Mark";
-	*OutValue1 = new xsd__integer(23);
-	*OutValue2 = 23;
-	*OutValue3 = 23;
-	*OutValue4 = 23;
-	*OutValue5 = 23;
-	*OutValue6 = (float) 23.1;
-	*OutValue7 = 23.1;
-	*OutValue8 = true_;
-	*OutValue9 = 'A';
+	OutValue0 = &Value0;
+	OutValue1 = &Value1;
+	OutValue2 = &Value2;
 }
+

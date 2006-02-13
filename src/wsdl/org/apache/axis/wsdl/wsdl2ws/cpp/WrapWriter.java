@@ -500,18 +500,16 @@ public class WrapWriter extends CPPClassWriter
             ArrayList paramsC = (ArrayList) minfo.getOutputParameterTypes();
             for (int i = 0; i < paramsC.size(); i++)
             {
-                type =
-                    wscontext.getTypemap().getType(
-                        ((ParameterInfo) paramsC.get(i)).getSchemaName());
-                writer.write(
-                    "\t"
-                        + WrapperUtils
-                            .getClassNameFromParamInfoConsideringArrays(
-                            (ParameterInfo) paramsC.get(i),
-                            wscontext)
-                        + " out"
-                        + i
-                        + ";\n");
+                ParameterInfo param = (ParameterInfo) paramsC.get(i);
+                String typeName = WrapperUtils.getClassNameFromParamInfoConsideringArrays(
+                        			(ParameterInfo) paramsC.get(i), wscontext);
+                writer.write("\t" + typeName);
+                
+                if ( (param.isOptional() || param.isNillable()) && CUtils.isSimpleType(typeName) && !CUtils.isPointerType(typeName) && !param.isArray())
+                {
+                    writer.write(" *");
+                }
+                writer.write(" out" + i + ";\n");
             }
         }
         writer.write("\ttry\n\t{\n");
@@ -635,6 +633,7 @@ public class WrapWriter extends CPPClassWriter
                 paramsC = (ArrayList) minfo.getOutputParameterTypes();
                 for (int i = 0; i < paramsC.size(); i++)
                 {
+                    ParameterInfo param = (ParameterInfo) paramsC.get(i);
                     retType =
                         wscontext.getTypemap().getType(
                             ((ParameterInfo) paramsC.get(i)).getSchemaName());
@@ -652,14 +651,39 @@ public class WrapWriter extends CPPClassWriter
                         ((ParameterInfo) paramsC.get(i)).getParamName();
                     if (returntypeissimple)
                     {
-                        writer.write(
-                            "\t\tpIWSSZ->addOutputParam(\""
-                                + returnParamName
-                                + "\", (void*)&out"
-                                + i
-                                + ", "
-                                + CUtils.getXSDTypeForBasicType(outparamType)
-                                + ");\n");
+                        
+                        if (CUtils.isPointerType(outparamType) || param.isOptional() || param.isNillable())
+                    	{
+                            if (param.isOptional())
+                            {
+                                writer.write("\tif (out" + i + ")\n");
+                                writer.write("\t{\n");
+                                writer.write("\t");
+                            }
+                    		writer.write(
+                                    "\tpIWSSZ->addOutputParam(\""
+                                        + returnParamName.substring(returnParamName.lastIndexOf(">")+1)
+                                        + "\", (void*)out"
+                                        + i
+                                        + ", "
+                                        + CUtils.getXSDTypeForBasicType(outparamType)
+                                        + ");\n");
+                    		if (param.isOptional())
+                    		{
+                    		    writer.write("\t}\n");
+                    		}
+                    	}
+                    	else
+                    	{
+                    		writer.write(
+                                    "\tpIWSSZ->addOutputParam(\""
+                    				    + returnParamName.substring(returnParamName.lastIndexOf(">")+1)
+                                        + "\", (void*)&out"
+                                        + i
+                                        + ", "
+                                        + CUtils.getXSDTypeForBasicType(outparamType)
+                                        + ");\n");
+                    	}
                     }
                     else
                         if (returntypeisarray)
@@ -703,6 +727,12 @@ public class WrapWriter extends CPPClassWriter
                         else
                         {
                             //complex type
+                            if (param.isOptional())
+                            {
+                                writer.write("\tif (out" + i + ")\n");
+                                writer.write("\t{\n");
+                                writer.write("\t");
+                            }
                             writer.write(
                                 "\t\tpIWSSZ->addOutputCmplxParam(out"
                                     + i
@@ -715,6 +745,10 @@ public class WrapWriter extends CPPClassWriter
                                     + "\", Axis_URI_"
                                     + outparamType
                                     + ");\n");
+                            if (param.isOptional())
+                            {
+                                writer.write("\t}\n");
+                            }
                         }
                 }
                 writer.write("\treturn AXIS_SUCCESS;\n");
