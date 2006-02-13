@@ -44,7 +44,7 @@ xsd__int MathOps::div(xsd__int Value0, xsd__int Value1)
          {
              pObjFault->varString = "Division by zero exception";
              pObjFault->varInt = 1;
-             pObjFault->varFloat = 10.52;
+             pObjFault->varFloat = (float) 10.52;
              throw pObjFault;
          }
      }
