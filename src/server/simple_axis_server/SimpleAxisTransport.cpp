@@ -40,14 +40,12 @@ SimpleAxisTransport::SimpleAxisTransport( int iSocket)
 
 SimpleAxisTransport::~SimpleAxisTransport()
 {
-	int	iShutDownRes = shutdown( m_iSocket, SD_BOTH);
-
-	int iCloseSockRes = 0;
-
 #ifdef WIN32
-	iCloseSockRes = closesocket( m_iSocket);
+    shutdown( m_iSocket, SD_BOTH);
+	closesocket( m_iSocket);
 #else //Linux
-	iCloseSockRes = close( m_iSocket);
+    shutdown( m_iSocket, SHUT_RDWR);	
+    close( m_iSocket);
 #endif
 }
 
