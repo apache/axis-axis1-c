@@ -88,6 +88,7 @@ public class ServiceHeaderWriter
             Iterator types = this.wscontext.getTypemap().getTypes().iterator();
             HashSet typeSet = new HashSet();
             writer.write("#include <axis/AxisUserAPI.hpp>\n");
+            writer.write("#include <axis/AxisUserAPIArrays.hpp>\n");
             writer.write("#include <axis/ISoapAttachment.hpp>\n");
             writer.write("#include \"AxisServiceException.hpp\" \n\n");
             while (types.hasNext())
