@@ -38,42 +38,35 @@ void NillableArrays::onFault()
 
 xsd__boolean_Array * NillableArrays::echoBooleanArray(xsd__boolean_Array * Value0)  
 {
-	xsd__boolean_Array * outArray = new xsd__boolean_Array();
-	outArray = Value0;
-	return outArray;
+	return Value0;
 }
+
 xsd__short_Array * NillableArrays::echoShortArray(xsd__short_Array * Value0)  
 {
-	xsd__short_Array * outArray = new xsd__short_Array();
-	outArray = Value0;
-	return outArray;
+	return Value0;
 }
+
 xsd__int_Array * NillableArrays::echoIntArray(xsd__int_Array * Value0)  
 {
-	xsd__int_Array * outArray = new xsd__int_Array();
-	outArray = Value0;
-	return outArray;
+	return Value0;
 }
+
 xsd__long_Array * NillableArrays::echoLongArray(xsd__long_Array * Value0)  
 {
-	xsd__long_Array * outArray = new xsd__long_Array();
-	outArray = Value0;
-	return outArray;
+	return Value0;
 }
+
 xsd__float_Array * NillableArrays::echoFloatArray(xsd__float_Array * Value0)  
 {
-	xsd__float_Array * outArray = new xsd__float_Array();
-	outArray = Value0;
-	return outArray;
+	return Value0;
 }
+
 xsd__double_Array * NillableArrays::echoDoubleArray(xsd__double_Array * Value0)  
 {
-	xsd__double_Array * outArray = new xsd__double_Array();
-	outArray = Value0;
-	return outArray;
+	return Value0;
 }
-xsd__string_Array NillableArrays::echoStringArray(xsd__string_Array Value0)  
+
+xsd__string_Array * NillableArrays::echoStringArray(xsd__string_Array * Value0)  
 {
-	xsd__string_Array  outArray = Value0;
-	return outArray;
+	return Value0;
 }
