@@ -136,9 +136,10 @@ int main( int argc, char * argv[])
 			xsd__int_Array	arrint;
 			xsd__int **		iToSend = new xsd__int*[ARRAYSIZE];
 
-			for( int x = 0; x < ARRAYSIZE; x++)
+            int count;
+			for( count = 0; count < ARRAYSIZE; count++)
 			{
-				iToSend[x] = new xsd__int(x);
+				iToSend[count] = new xsd__int(count);
 			}
 
 			arrint.set( iToSend, ARRAYSIZE);
@@ -185,9 +186,9 @@ int main( int argc, char * argv[])
 			xsd__float_Array	arrfloat;
 			xsd__float **		fToSend = new xsd__float*[ARRAYSIZE];
 
-			for( int x = 0; x < ARRAYSIZE; x++)
+			for( count = 0; count < ARRAYSIZE; count++)
 			{
-				fToSend[x] = new xsd__float( (xsd__float) 1.1111 * (xsd__float) x);
+				fToSend[count] = new xsd__float( (xsd__float) 1.1111 * (xsd__float) count);
 			}
 
 			arrfloat.set( fToSend, ARRAYSIZE);
@@ -241,18 +242,18 @@ int main( int argc, char * argv[])
 			SOAPStruct			ssToSend[ARRAYSIZE];
 			xsd__float			myFloat;
 
-			for( int x = 0; x < ARRAYSIZE; x++)
+			for( count = 0; count < ARRAYSIZE; count++)
 			{
-				myFloat = (xsd__float) (1.1111 * x);
+				myFloat = (xsd__float) (1.1111 * count);
 
-				ssToSend[x].setvarFloat( &myFloat);
-				ssToSend[x].setvarInt( &x);
+				ssToSend[count].setvarFloat( &myFloat);
+				ssToSend[count].setvarInt( &count);
 
-				sprintf( buffer1, "varString of %dth element of SOAPStruct array", x);
+				sprintf( buffer1, "varString of %dth element of SOAPStruct array", count);
 
-				ssToSend[x].setvarString( buffer1);
+				ssToSend[count].setvarString( buffer1);
 
-				m_Array4[x] = &ssToSend[x];
+				m_Array4[count] = &ssToSend[count];
 			}
 
 			arrstct.set( m_Array4, ARRAYSIZE);
