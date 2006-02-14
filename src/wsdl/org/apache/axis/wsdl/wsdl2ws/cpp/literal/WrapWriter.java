@@ -279,7 +279,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                                 + "\",0);\n");
                     		writer.write("\tif ( value" + i + " )\n");
                     		writer.write("\t{\n");
-                    		writer.write("\t\tv0 = new char[ strlen( value" + i + ") + 1 ];\n");
+                    		writer.write("\t\tv" + i + " = new char[ strlen( value" + i + ") + 1 ];\n");
                     		writer.write("\t\tstrcpy( v" + i + ", value" + i + ");\n");
                     		writer.write("\t\tAxis::AxisDelete( (void *) value" + i + ", " + CUtils.getXSDTypeForBasicType(paraTypeName) + " );\n");
                     		writer.write("\t}\n");
