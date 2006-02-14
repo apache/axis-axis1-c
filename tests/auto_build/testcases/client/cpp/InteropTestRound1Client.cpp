@@ -332,37 +332,38 @@ int main( int argc, char * argv[])
 			ws.setTransportProperty( "SOAPAction", "InteropBase#echoDate");
 
 			xsd__dateTime	ed_temp = ws.echoDate( time);
+			
+			// A simple memcmp of ed_temp and time will not work because
+			// it does not take into account timezone, so we need to 
+			// compare results of asctime()
+			char ExpectedTime[1024];
+			char ReturnedTime[1024];
+			
+			char *	pExpectedTime = asctime( &time );
+			int	 iETLength = (pExpectedTime != NULL) ? (int) strlen(pExpectedTime) : 0;
+			if (iETLength > 0)
+				strcpy(ExpectedTime, pExpectedTime);
+			
+			char *	pReturnedTime = asctime( &ed_temp );
+			int		iRTLength = (pReturnedTime != NULL) ? (int) strlen(pReturnedTime) : 0;
+			if( iRTLength > 0)
+				strcpy(ReturnedTime, pReturnedTime);
 
-			if( memcmp( &ed_temp, &time, sizeof( struct tm)) == 0)
+			if( iETLength > 0 && 
+				iRTLength > 0 &&
+				strcmp(ExpectedTime, ReturnedTime) == 0)
 			{
 				cout << "successful" << endl;
 			}
 			else
 			{
-				char *	pExpectedTime = asctime( &ed_temp);
-				int		iETLength = (int) strlen( pExpectedTime);
-				char *	pReturnedTime = asctime( temp);
-				int		iRTLength = (int) strlen( pReturnedTime);
+				if( iETLength == 0)
+					strcpy(ExpectedTime,"NULL");
 
-				if( iETLength > 0)
-				{
-					pExpectedTime[iETLength - 1] = '\0';
-				}
-				else
-				{
-					pExpectedTime = "NULL";
-				}
-
-				if( iRTLength > 0)
-				{
-					pReturnedTime[iRTLength - 1] = '\0';
-				}
-				else
-				{
-					pReturnedTime = "NULL";
-				}
-
-				cout << "Failed.  The expected time (" << pExpectedTime << ") was not the same as the returned time (" << pReturnedTime << ")." << endl;
+				if( iRTLength == 0)
+					strcpy(ReturnedTime,"NULL");
+	
+				cout << "Failed.  The expected time (" << ExpectedTime << ") was not the same as the returned time (" << ReturnedTime << ")." << endl;
 			}
 
 	//testing echo hex binary
