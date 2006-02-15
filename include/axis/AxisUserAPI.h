@@ -308,8 +308,16 @@ typedef long long xsdc__negativeInteger;
  * @struct xsdc__base64Binary
  * Axis C++ defined type for xml basic type base64Binary
  */
-typedef struct {
+typedef struct
+{
+    /**
+     * Binary data
+     */
     xsdc__unsignedByte * __ptr;
+    
+    /**
+     * Length, in bytes, of binary data
+     */
     xsdc__int __size;
 } xsdc__base64Binary;
 
@@ -317,8 +325,16 @@ typedef struct {
  * @struct xsdc__hexBinary
  * Axis C++ defined type for xml basic type hexBinary
  */
-typedef struct {
+typedef struct
+{
+    /**
+     * Binary data
+     */
     xsdc__unsignedByte * __ptr;
+    
+    /**
+     * Length, in bytes, of binary data
+     */
     xsdc__int __size;
 } xsdc__hexBinary;
 /**

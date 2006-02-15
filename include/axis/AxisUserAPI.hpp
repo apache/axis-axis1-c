@@ -319,7 +319,14 @@ public:
      */
 	xsd__base64Binary & operator=(const xsd__base64Binary & original);
 private:
+    /**
+     * Binary data
+     */
     xsd__unsignedByte * __ptr;
+
+    /**
+     * Length, in bytes, of binary data
+     */
     xsd__int __size;
 };
 
@@ -329,15 +336,57 @@ private:
  */
 class STORAGE_CLASS_INFO xsd__hexBinary {
 public:
+    /**
+     * Default constructor
+     */
     xsd__hexBinary();
+    
+    /**
+     * Copy Constructor
+     * @param original xsd__hexBinary object to be copied.
+     */
     xsd__hexBinary(const xsd__hexBinary & original);
+
+   /**
+    * Destructor
+    */    
 	~xsd__hexBinary();
+
+    /**
+     * Set binary data into xsd__hexBinary object.
+     * @param data binary data
+     * @param size length, in bytes, of binary data
+     */
     void set(xsd__unsignedByte * data, xsd__int size);
+
+    /**
+     * Get binary data from xsd__hexBinary object.
+     * @param size is updated with length, in bytes, of binary data
+     * @return binary data
+     */
     xsd__unsignedByte * get(xsd__int & size) const;
+
+    /**
+     * Get length, in bytes, of binary data.
+     * @return length, in bytes, of binary data
+     */
     xsd__int getSize(void) const;
+
+    /**
+     * Assignment operator
+     * @param original xsd__hexBinary object from which data is to be assigned
+     * @return reference to this
+     */
     xsd__hexBinary & operator=(const xsd__hexBinary & original);
 private:
+    /**
+     * Binary data
+     */
     xsd__unsignedByte * __ptr;
+    
+    /**
+     * Length, in bytes, of binary data
+     */
     xsd__int __size;
 };
 
@@ -421,9 +470,25 @@ class STORAGE_CLASS_INFO Axis_Array {
     friend class SoapSerializer;
 
 protected:
-    void** m_Array; // Array of pointers to array elements
-    int m_Size; // Size of array
-    XSDTYPE m_Type; // XSD datatype within this array
+    /**
+     * Array of pointers to array elements
+     */
+    void** m_Array;
+
+    /**
+     * Size of array
+     */
+    int m_Size;
+
+    /**
+     * XSD datatype within this array
+     */
+    XSDTYPE m_Type;
+
+    /**
+     * Indicates if array was created by the engine and therefore needs to be
+     * destroyed by the engine.
+     */
     bool m_belongsToAxisEngine;
 };
 

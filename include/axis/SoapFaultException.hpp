@@ -21,6 +21,10 @@
 #include <axis/GDefine.hpp>
 #include <axis/AxisException.hpp>
 
+/**
+ * @file SoapFaultException.hpp
+ */
+
 AXIS_CPP_NAMESPACE_START
 
 /**
@@ -42,25 +46,100 @@ AXIS_CPP_NAMESPACE_START
 class STORAGE_CLASS_INFO SoapFaultException :public AxisException
 {
 public:
+    /**
+     * Default constructor
+     */
 	SoapFaultException();
+    
+    /**
+     * SoapFaultException constructor
+     * 
+     * @param code is the SOAP faultcode 
+     * @param string is the SOAP faultstring
+     * @param actor is the SOAP faultactor
+     * @param exceptionCode is the axis exception code
+     */
 	SoapFaultException(const AxisChar *code, const AxisChar *string, const AxisChar *actor, int exceptionCode);
+  
+    /**
+     * Copy constructor
+     * 
+     * @param ae is the AxisException to be copied
+     */
 	SoapFaultException(AxisException& ae);
+   
+    /**
+     * Copy constructor
+     * 
+     * @param copy is the SoapFaultException to be copied
+     */
 	SoapFaultException(const SoapFaultException& copy);
+
+    /**
+     * Assignment operator
+     * 
+     * @param other is the SOAPFaultException to be copied
+     * @return reference to this
+     */
 	virtual SoapFaultException& operator=(SoapFaultException other);
+
+    /**
+     * Destructor
+     */
 	virtual ~SoapFaultException() throw();
 
+    /**
+     * Returns the SOAP faultcode
+     * 
+     * @return faultCode
+     */
 	virtual const AxisChar *getFaultCode() const;
+
+    /**
+     * Returns the SOAP faultstring
+     * 
+     * @return faultString
+     */
 	virtual const AxisChar *getFaultString() const;
+
+    /**
+     * Returns the SOAP faultactor
+     * 
+     * @return faultActor
+     */
 	virtual const AxisChar *getFaultActor() const;
 
+    /**
+     * Set the SOAP faultcode
+     * 
+     * @param code is the SOAP faultcode
+     */
 	virtual void setFaultCode(const AxisChar *code);
+
+    /**
+     * Set the SOAP faultstring
+     * 
+     * @param string is the SOAP faultstring
+     */
 	virtual void setFaultString(const AxisChar *string);
+
+    /**
+     * Set the SOAP faultactor
+     * 
+     * @param actor is the SOAP faultactor
+     */
 	virtual void setFaultActor(const AxisChar *actor);
 	   
 private:
+    /**
+     * SOAP faultcode
+     */
 	AxisChar *m_code;
+
+    /**
+     * SOAP faultactor
+     */
 	AxisChar *m_actor;
-	
 };
 
 AXIS_CPP_NAMESPACE_END
