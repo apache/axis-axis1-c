@@ -1,0 +1,8 @@
+<service>
+    <name>SameComplexTypeAndNillableElementName</name>
+    <description>SameComplexTypeAndNillableElementName Service</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>SameComplexTypeAndNillableElementName.cpp</serviceCode>
+    <wsdl>SameComplexTypeAndNillableElementName.wsdl</wsdl>
+	<servicename></servicename>
+</service>
