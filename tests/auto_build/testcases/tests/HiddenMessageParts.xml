@@ -10,5 +10,5 @@
         </output>
 		<serverResponse>HiddenMessageParts_RPC_ServerResponse.expected</serverResponse>
     </expected>
-	<endpoint>-e http://localhost:80/axis/UNIT_TEST_ONLY</endpoint>
+	<endpoint>-e http://localhost:80/axis/HiddenMessageParts</endpoint>
 </test>
