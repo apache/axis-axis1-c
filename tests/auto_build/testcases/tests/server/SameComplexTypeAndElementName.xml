@@ -1,0 +1,8 @@
+<service>
+    <name>SameComplexTypeAndElementName</name>
+    <description>SameComplexTypeAndElementName Service</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>TestServicePortType.cpp</serviceCode>
+    <wsdl>SameComplexTypeAndElementName.wsdl</wsdl>
+	<servicename></servicename>
+</service>
