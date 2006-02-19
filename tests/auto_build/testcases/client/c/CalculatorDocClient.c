@@ -27,8 +27,10 @@ int main(int argc, char ** argv) {
 
 	stub = get_Calculator_stub(uri);
 	ret = add(stub,3,2);
+	if (get_Calculator_Status(stub) != AXISC_FAIL)
+		printf("%i\n",ret);
+		
 	destroy_Calculator_stub(stub);
-	printf("%i\n",ret);
 
 	printf("---------------------- TEST COMPLETE -----------------------------\n");
 }
