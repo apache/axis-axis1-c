@@ -90,7 +90,7 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
         try
         {
             writer.write(
-                "extern void* get_"
+                "extern AXISCHANDLE get_"
                     + classname
                     + "_stub(const char* pchEndPointUri);\n");
             writer.write(
