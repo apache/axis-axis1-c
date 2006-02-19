@@ -14,6 +14,7 @@
 // limitations under the License.
 
 #include "Calculator.h"
+
 #include <stdio.h>
 
 int main(int argc, char ** argv) {
@@ -26,6 +27,7 @@ int main(int argc, char ** argv) {
 
 	stub = get_Calculator_stub(uri);
 	ret = add(stub,3,2);
+	destroy_Calculator_stub(stub);
 	printf("%i\n",ret);
 
 	printf("---------------------- TEST COMPLETE -----------------------------\n");

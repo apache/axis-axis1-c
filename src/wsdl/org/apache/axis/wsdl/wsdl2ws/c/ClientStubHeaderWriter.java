@@ -94,10 +94,10 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
                     + classname
                     + "_stub(const char* pchEndPointUri);\n");
             writer.write(
-                "extern void destroy_" + classname + "_stub(void* p);\n");
+                "extern void destroy_" + classname + "_stub(AXISCHANDLE pStub);\n");
 
             writer.write(
-                "extern int get_" + classname + "_Status(void* pStub);\n");
+                "extern int get_" + classname + "_Status(AXISCHANDLE pStub);\n");
 
             for (int i = 0; i < methods.size(); i++)
             {
@@ -131,7 +131,7 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
                         isAllTreatedAsOutParams = true;
                         writer.write("extern void ");
                     }
-                writer.write(minfo.getMethodname() + "(void* pStub");
+                writer.write(minfo.getMethodname() + "(AXISCHANDLE pStub");
 
                 //write parameter names 
                 Iterator params = minfo.getInputParameterTypes().iterator();
