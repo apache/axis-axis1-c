@@ -66,7 +66,7 @@ int main( int argc, char * argv[])
 			}
 		}
 
-		cout << endl << " Using service at " << pszURL << endl << endl;
+//		cout << endl << " Using service at " << pszURL << endl << endl;
 	
 		Calculator ws( pszURL);
 
