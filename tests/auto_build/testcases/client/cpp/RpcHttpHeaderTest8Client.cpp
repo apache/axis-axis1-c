@@ -99,9 +99,25 @@ main(int argc, char *argv[])
 		} while( iRetryIterationCount > 0 && !bSuccess);
 
     printf("Test transport property accessors\n");
-    printf("First transport key = %s\n", ws.getFirstTransportPropertyKey());
-    printf("First transport value = %s\n",
-           ws.getCurrentTransportPropertyValue()); 
+
+// Extra lines added because printf in AIX dos not output (null) when the
+// parameter is NULL.  This just forces the printf to output (null) when it is.
+	char *	pszPropertyKey = ws.getFirstTransportPropertyKey();
+	char *	pszPropertyValue = ws.getCurrentTransportPropertyValue();
+
+	if( pszPropertyKey == NULL)
+	{
+		pszPropertyKey = "(null)";
+	}
+
+	if( pszPropertyValue == NULL)
+	{
+		pszPropertyValue = "(null)";
+	}
+
+	printf( "First transport key = %s\n", pszPropertyKey);
+    printf( "First transport value = %s\n", pszPropertyValue);
+
     const char *key = NULL;
     int count = 1;
     while (key = ws.getNextTransportPropertyKey())
