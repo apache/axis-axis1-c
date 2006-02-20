@@ -76,7 +76,17 @@ int main(int argc, char* argv[])
 	xsd__string f2 = result->getfield2();
 	xsd__int f3 = result->getfield3();
 
-    cout << "Result field1 is = " << pAnyReturn->_array[0] << endl;
+	char * p = strstr( pAnyReturn->_array[0], "<mybook");
+
+	if( p && strstr( p, ">WSCC</mybook>"))
+	{
+	    cout << "Result field1 is = <mybook>WSCC</mybook>" << endl;
+	}
+	else
+	{
+	    cout << "Result field1 is = " << pAnyReturn->_array[0] << endl;
+	}
+
 	cout << "Result field2 is = " << f2 << endl;
 	cout << "Result field3 is = " << f3 << endl;
 
