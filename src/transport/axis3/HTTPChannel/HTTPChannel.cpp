@@ -227,8 +227,8 @@ const IChannel & HTTPChannel::operator >> (char * msg)
     if( iTimeoutStatus == 0)
     {
         // Timeout expired - select timeout expired.
-        // Channel error connection timeout before receving
-        m_LastError = "Channel error: connection timed out before receving";
+        // Channel error connection timeout before receiving
+        m_LastError = "Channel error: connection timed out before receiving";
 
         throw HTTPTransportException( SERVER_TRANSPORT_TIMEOUT_EXPIRED, 
                                       (char *) m_LastError.c_str());

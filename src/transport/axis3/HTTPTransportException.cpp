@@ -122,7 +122,7 @@ string HTTPTransportException::getMessageForExceptionCode (const int iExceptionC
         case SERVER_TRANSPORT_TIMEOUT_EXPIRED:
 		{
             m_sMessageForExceptionCode = "HTTPTransportException:Channel error connection " \
-                "timeout before receving";
+                "timeout before receiving";
             break;
 		}
 
