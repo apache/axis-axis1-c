@@ -112,17 +112,22 @@ HTTPTransport::~HTTPTransport()
     if( m_pcEndpointUri)
     {
 		delete[] m_pcEndpointUri;
+
+		m_pcEndpointUri = NULL;
     }
 
     if( m_pChannelFactory)
 	{
 		delete m_pChannelFactory;
-		m_pChannelFactory = 0;
+
+		m_pChannelFactory = NULL;
 	}
 
 	if( m_pszRxBuffer)
 	{
 		delete [] m_pszRxBuffer;
+
+		m_pszRxBuffer = NULL;
 	}
 }
 
