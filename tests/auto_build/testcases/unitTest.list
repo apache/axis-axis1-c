@@ -12,7 +12,10 @@ ConnectionClose.xml
 Cookies.xml
 DynamicAttachment.xml
 DynamicGet_AddAnyObjectTest.xml
-DynUnrefAttachmentTest.xml
+
+# Commented this test out because is currently not supported.
+#DynUnrefAttachmentTest.xml
+
 DynamicGetAnyObjectWithAttributesTest.xml
 Enumeration.xml
 ExceptionTestDoc.xml

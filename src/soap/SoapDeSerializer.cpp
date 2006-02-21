@@ -2655,9 +2655,65 @@ SoapDeSerializer::serializeTag (AxisString & xmlStr, const AnyElement * node,
     	     */
     	    if (pchPrefix && (strcmp (pchPrefix, "") != 0))
     	    {
-    		xmlStr += pchPrefix;
-    		xmlStr += ":";
+    			xmlStr += pchPrefix;
+    			xmlStr += ":";
     	    }
+			else
+			{
+// This code is required because the namespace for the closing tag may have
+// been deleted before it can be checked (m_pParser->getPrefix4NS).  If it has
+// been deleted, then the code needs to look at the opening tag and use that
+// namespace for the closing tag.
+// This is because:-
+// [2511] m_pNode = m_pParser->anyNext() calls
+//   XercesHandler::endPrefixMapping() and this deletes the namespace before it
+//                                     can be looked up by m_pParser->getPrefix4NS!
+// Check if NameOrValue is the same as the tag name at the beginning of the XML
+// string.  If it is, check if it has a namespace.  If it has, then add the
+// same namespace to the XML string.  This test needs to be done because the
+// namespace is being deleted before it can be checked.
+//
+// There has got to be a better way of doing this, but it was not obvious at
+// the time!
+				const char *	pszXML = xmlStr.c_str();
+				char *			pNSEnd = strchr( pszXML, ':');
+				char *			pTagEnd = strchr( pszXML, '>');
+
+				if( pNSEnd && (pNSEnd < pTagEnd))
+				{
+					int				iNSStart = 1;
+					int				iNSEnd = (int) (strchr( pszXML, ':') - pszXML) - iNSStart;
+					string			sNamespace = xmlStr.substr( iNSStart, iNSEnd);
+					int				iTagEnd = 0;
+					char *			pSpace = strchr( pszXML, ' ');
+					char *			pBrace = strchr( pszXML, '>');
+
+					if( pSpace == NULL)
+					{
+						iTagEnd = pSpace - pszXML;
+					}
+					else if( pBrace == NULL)
+					{
+						iTagEnd = pBrace - pszXML;
+					}
+					else if( pBrace < pSpace)
+					{
+						iTagEnd = pBrace - pszXML;
+					}
+					else if( pSpace <= pBrace)
+					{
+						iTagEnd = pSpace - pszXML;
+					}
+
+					string	sTag = xmlStr.substr( iNSEnd + iNSStart + 1, iTagEnd - (iNSEnd + iNSStart + 1));
+
+					if( !sTag.compare( node->m_pchNameOrValue))
+					{
+	    				xmlStr += sNamespace;
+						xmlStr += ":";
+					}
+				}
+			}
     	}
 
         xmlStr += node->m_pchNameOrValue;

@@ -59,6 +59,9 @@ int main( int argc, char * argv[])
 			int			input = 2 * 1024 * 1024;
 			xsd__string	result = "";
 
+// Extend transport timeout to 60 seconds (default is 10).
+			ws->setTransportTimeout( 60);
+
 			result = ws->getLargeString(input);
 
 			cout << "Result" << endl;
@@ -70,7 +73,7 @@ int main( int argc, char * argv[])
 
 			if( strlen( result) == input)
 			{
-				cout << strlen( result) << endl;
+				cout << (int) strlen( result) << endl;
 			}
 			else
 			{
@@ -87,7 +90,7 @@ int main( int argc, char * argv[])
 				}
 
 				cout << "There where " << iError << " errors." << endl;
-				cout << "Requested " << input << " bytes.  Received " << strlen( result) << " bytes." << endl;
+				cout << "Requested " << input << " bytes.  Received " << (int) strlen( result) << " bytes." << endl;
 		
 				returnValue = 0; // Success
 			}
