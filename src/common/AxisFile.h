@@ -120,7 +120,10 @@ public:
     ~AxisFile()
     {
         if(pFILEFile)
+        {
             fclose(pFILEFile);
+            pFILEFile = NULL;
+        }
     }
 
 private:
