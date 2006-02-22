@@ -96,6 +96,7 @@ int AxisTrace::initialise(const char *filename, AxisTraceState newState)
 			traceLineInternal("Closing the startup trace file");
 		}
 		delete m_fileTrace;
+		m_fileTrace = NULL;
 	}
 	m_bLoggingOn = STATE_OFF;
 
