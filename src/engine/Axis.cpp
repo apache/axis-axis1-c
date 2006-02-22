@@ -122,10 +122,10 @@ void ModuleUnInitialize ()
     delete g_pAppScopeHandlerPool;
     delete g_pRequestScopeHandlerPool;
     delete g_pSessionScopeHandlerPool;
-    delete g_pHandlerLoader;
     delete g_pDeserializerPool;
     delete g_pSerializerPool;
     delete g_pHandlerPool;
+    delete g_pHandlerLoader;
     // unsynchronized read-only global variables.
     delete g_pWSDDDeployment;
     delete g_pConfig;
