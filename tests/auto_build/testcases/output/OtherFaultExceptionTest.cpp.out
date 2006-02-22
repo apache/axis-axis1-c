@@ -1,20 +1,20 @@
 
 
 Trying to div 10 by 0
-Fault Detail - <p717:DivByZeroStruct><p717:varString>Division by zero exception</p717:varString><p717:varInt>1</p717:varInt><p717:varFloat>10.52</p717:varFloat></p717:DivByZeroStruct>
+Fault Detail - <DivByZeroStruct><varString>Division by zero exception</varString><varInt>1</varInt><varFloat>10.52</varFloat></DivByZeroStruct>
 Fault String - org.soapinterop.DivByZeroStruct
-Fault code   - p717:DivByZeroStruct
+Fault code   - DivByZeroStruct
 
 
 Trying to div 1000 by 5
-Fault Detail - <p717:SpecialDetailStruct><p717:varString>You have entered 1000 for the first parameter. 1000 is reserved. Please do not use it</p717:varString></p717:SpecialDetailStruct>
+Fault Detail - <SpecialDetailStruct><varString>You have entered 1000 for the first parameter. 1000 is reserved. Please do not use it</varString></SpecialDetailStruct>
 Fault String - org.soapinterop.SpecialDetailStruct
-Fault code   - p717:SpecialDetailStruct
+Fault code   - SpecialDetailStruct
 
 
 Trying to div 10 by -5
-Fault Detail - <p717:OutOfBoundStruct><p717:varString>Out of bounds exception</p717:varString><p717:varInt>2</p717:varInt><p717:specialDetail><p717:varString>This bounds exception is a forced exception</p717:varString></p717:specialDetail></p717:OutOfBoundStruct>
+Fault Detail - <OutOfBoundStruct><varString>Out of bounds exception</varString><varInt>2</varInt><specialDetail><varString>This bounds exception is a forced exception</varString></specialDetail></OutOfBoundStruct>
 Fault String - org.soapinterop.OutOfBoundStruct
-Fault code   - p717:OutOfBoundStruct
+Fault code   - OutOfBoundStruct
 ---------------------- TEST COMPLETE -----------------------------
 

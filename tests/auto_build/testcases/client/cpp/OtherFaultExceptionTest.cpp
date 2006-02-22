@@ -125,14 +125,32 @@ int main( int argc, char * argv[])
 						int	iNSEnd = (int) (pNSEnd - pszDetail) - iNSStart;
 
 						string	sNamespace = ((string) pszDetail).substr( iNSStart, iNSEnd);
-						int		iNSPos = (int) sDetail.find( sNamespace);
 
-						while( iNSPos != std::string::npos)
+						if( sExpectedNS.compare( sNamespace))
 						{
-							sDetail.replace( iNSPos, sNamespace.length(), sExpectedNS);
+							int		iNSPos = (int) sDetail.find( sNamespace);
 
-							iNSPos = (int) sDetail.find( sNamespace);
+							while( iNSPos != std::string::npos)
+							{
+								sDetail.replace( iNSPos, sNamespace.length(), sExpectedNS);
+
+								iNSPos = (int) sDetail.find( sNamespace);
+							}
 						}
+					}
+
+// Because there is not always a namespace used (depends on server) I have now
+// had to remove any namespace from the Detail string.
+
+					sExpectedNS += ":";
+
+					int		iNSPos = (int) sDetail.find( sExpectedNS);
+
+					while( iNSPos != std::string::npos)
+					{
+						sDetail.replace( iNSPos, sExpectedNS.length(), "");
+
+						iNSPos = (int) sDetail.find( sExpectedNS);
 					}
 
 // This is the expected 'Fault code'.  But, the namespace is not necessarily 717 so the test fails...  Need to replace the given namespace with the expected one.
@@ -146,6 +164,16 @@ int main( int argc, char * argv[])
 					if( iNSEnd > 0)
 					{
 						sCode.replace( 0, iNSEnd, sExpectedNS);
+					}
+
+// Because there is not always a namespace used (depends on server) I have now
+// had to remove any namespace from the Code string.
+
+					char * pEndOfNamespace = strchr( pszCode, ':');
+
+					if( pEndOfNamespace != NULL)
+					{
+						sCode = pEndOfNamespace + 1;
 					}
 
 					cout << "Fault Detail - "<< sDetail << endl;
