@@ -46,7 +46,7 @@ RpcSoapHeaderTest8.xml
 RpcSoapHeaderTest10.xml
 SimpleArrays.xml
 SimpleRefDoc.xml
-TestSoapHeaderBlock2
+TestSoapHeaderBlock2.xml
 UnboundedChoice.xml
 UnboundedStringChoice.xml
 XSDElement.xml
