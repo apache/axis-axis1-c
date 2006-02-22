@@ -11,5 +11,4 @@
 		<serverResponse>AxisBench_ServerResponse.expected</serverResponse>
     </expected>
 	<endpoint>-e http://localhost:80/axis/AxisBench</endpoint>
-	<timeout>60</timeout>
 </test>
