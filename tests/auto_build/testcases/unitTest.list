@@ -22,7 +22,10 @@ DynamicGet_AddAnyObjectTest.xml
 DynamicGetAnyObjectWithAttributesTest.xml
 Enumeration.xml
 ExceptionTestDoc.xml
-HandlerTest6.xml
+
+# This test does not exist!
+#HandlerTest6.xml
+
 HiddenMessageParts.xml
 InteropTestRound1.xml
 InOut.xml
