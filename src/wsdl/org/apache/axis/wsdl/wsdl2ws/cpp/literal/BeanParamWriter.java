@@ -1307,12 +1307,24 @@ public class BeanParamWriter extends ParamCPPFileWriter
         writer.write("{\n");
         writer.write("\tif (bArray)\n");
         writer.write("\t{\n");
-        writer.write("\t\tdelete [] param;\n");
+        writer.write("\t\tif (nSize > 0)\n");
+        writer.write("\t\t{\n");
+        writer.write("\t\t\tfor (int count = 0 ; count < nSize ; count++ )\n");
+        writer.write("\t\t\t{\n");
+        writer.write("\t\t\t\tif ( (( " + classname + " ** ) param)[count])\n");
+        writer.write("\t\t\t\t{\n");
+        writer.write("\t\t\t\t\tdelete (( " + classname + " ** ) param)[count];\n");
+        writer.write("\t\t\t\t\t(( " + classname + " ** ) param)[count] = NULL;\n");
+        writer.write("\t\t\t\t}\n");
+        writer.write("\t\t\t}\n");
+        writer.write("\t\t\tdelete [] ( " + classname + " ** ) param;\n");
+        writer.write("\t\t}\n");
         writer.write("\t}\n");
         writer.write("\telse\n");
         writer.write("\t{\n");
         writer.write("\t\tdelete param;\n");
         writer.write("\t}\n");
+        writer.write("\tparam = NULL;\n");
         writer.write("}\n");
     }
 
