@@ -493,11 +493,16 @@ public class BeanParamWriter extends ParamCPPFileWriter
 
             if (extensionBaseAttrib != null)
             {
-                writer.write("\tpSZ->serializeAsChardata((void*)&(param->"
+                String typeName = extensionBaseAttrib.getTypeName();
+                writer.write("\tpSZ->serializeAsChardata((void*)");
+                if (!CUtils.isPointerType(typeName))
+                {
+                    writer.write("&");
+                }
+                writer.write("(param->"
                         + extensionBaseAttrib.getParamNameAsMember()
                         + "), "
-                        + CUtils.getXSDTypeForBasicType(extensionBaseAttrib
-                                .getTypeName()) + ");\n");
+                        + CUtils.getXSDTypeForBasicType(typeName) + ");\n");
             } 
             else
             {
@@ -609,13 +614,21 @@ public class BeanParamWriter extends ParamCPPFileWriter
         }               
         
         writer.write("\tpSZ->serialize( \">\", 0);\n");
-        if (extensionBaseAttrib != null
-                && extensionBaseAttrib.getTypeName() != null)
+        if (extensionBaseAttrib != null)
         {
-            writer.write("\tpSZ->serializeAsChardata((void*)&(param->"
-                    + extensionBaseAttrib.getParamNameAsMember()
-                    + "), "
-                    + CUtils.getXSDTypeForBasicType(extensionBaseAttrib.getTypeName()) + ");\n");
+            String typeName = extensionBaseAttrib.getTypeName(); 
+            if( typeName != null)
+	        {
+	            writer.write("\tpSZ->serializeAsChardata((void*)");
+	            if (!CUtils.isPointerType(typeName))
+	            {
+	                writer.write("&");
+	            }
+	            writer.write("(param->"
+	                    + extensionBaseAttrib.getParamNameAsMember()
+	                    + "), "
+	                    + CUtils.getXSDTypeForBasicType(typeName) + ");\n");
+	        }
         }
 
         writer.write("\n\t/* then serialize elements if any*/\n");
