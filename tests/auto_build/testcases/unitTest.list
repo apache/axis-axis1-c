@@ -100,7 +100,10 @@ XSD_unsignedByte.xml
 XSD_positiveInteger.xml
 XSD_anyURI.xml
 XSD_anyURI2.xml
-XSD_anyURIfault.xml 
+
+# Should not be in the list as test is incorrect
+#XSD_anyURIfault.xml
+
 XSD_QName.xml
 XSD_NOTATION.xml
 NamespaceTest1.xml
