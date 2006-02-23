@@ -17,4 +17,3 @@ Fault Detail - <OutOfBoundStruct><varString>Out of bounds exception</varString><
 Fault String - org.soapinterop.OutOfBoundStruct
 Fault code   - OutOfBoundStruct
 ---------------------- TEST COMPLETE -----------------------------
-
