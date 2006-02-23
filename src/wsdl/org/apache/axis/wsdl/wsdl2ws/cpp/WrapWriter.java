@@ -570,17 +570,19 @@ public class WrapWriter extends CPPClassWriter
                     {
                         containedType = CUtils.getclass4qname(qname);
                         writer.write(
-                            "\t\treturn pIWSSZ->addOutputBasicArrayParam(ret,"
+                            "\t\tnStatus = pIWSSZ->addOutputBasicArrayParam(ret,"
                                 + CUtils.getXSDTypeForBasicType(containedType)
                                 + ", \""
                                 + methodName
                                 + "Return\");\n");
+                        writer.write("\t\tdelete ret;\n");
+                        writer.write("\t\t return nStatus;\n");
                     }
                     else
                     {
                         containedType = qname.getLocalPart();
                         writer.write(
-                            "\t\treturn pIWSSZ->addOutputCmplxArrayParam(ret,"
+                            "\t\tnStatus = pIWSSZ->addOutputCmplxArrayParam(ret,"
                                 + "(void*) Axis_Serialize_"
                                 + containedType
                                 + ", (void*) Axis_Delete_"
@@ -592,6 +594,8 @@ public class WrapWriter extends CPPClassWriter
                                 + "Return\", Axis_URI_"
                                 + containedType
                                 + ");\n");
+                        writer.write("\t\tdelete ret;\n");
+                        writer.write("\t\treturn nStatus;\n");
                     }
                 }
                 else
@@ -703,6 +707,7 @@ public class WrapWriter extends CPPClassWriter
                                         + ", \""
                                         + returnParamName
                                         + "\");\n");
+                                writer.write("\t\tdelete out" + i + ";\n");
                             }
                             else
                             {
@@ -722,6 +727,7 @@ public class WrapWriter extends CPPClassWriter
                                         + "\", Axis_URI_"
                                         + containedType
                                         + ");\n");
+                                writer.write("delete out" + i + ";\n");
                             }
                         }
                         else

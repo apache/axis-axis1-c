@@ -223,6 +223,7 @@ public class ArrayParamHeaderWriter extends ParamWriter
             writer.write("\t\tvoid set( class " + attribs[0].getTypeName() + "** array, const int size);\n");
             writer.write("\t\tclass "+ attribs[0].getTypeName() + "** get(int & size) const;\n");
             writer.write("\t\tvoid clone(const " + classname + " & original);\n");
+            writer.write("\t\tvirtual Axis_Array * clone() const;\n");
             writer.write("\t\tvoid clear();\n");
         }
         catch (IOException e)

@@ -183,6 +183,11 @@ void Axis_Array::clone(const Axis_Array & original)
 {
     set(original.m_Array, original.m_Size, original.m_Type);
 }
+
+Axis_Array * Axis_Array::clone() const
+{
+    return new Axis_Array(*this);
+}
  
 void Axis_Array::set(void** array, int size, XSDTYPE type)
 {

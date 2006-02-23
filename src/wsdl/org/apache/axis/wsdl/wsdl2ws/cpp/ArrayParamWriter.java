@@ -142,6 +142,11 @@ public class ArrayParamWriter extends ParamWriter
             writer.write("{\n");
             writer.write("\tset((" + attribs[0].getTypeName() + "**) original.m_Array, original.m_Size);\n");
             writer.write("}\n\n");
+            
+            writer.write("Axis_Array * " + classname + "::clone() const\n");
+            writer.write("{\n");
+            writer.write("\treturn new " + classname + "(*this);\n");
+            writer.write("}\n\n");
         }
         catch (IOException e)
         {

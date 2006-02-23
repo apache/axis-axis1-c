@@ -152,9 +152,22 @@ int SoapSerializer::addOutputBasicArrayParam( const Axis_Array * pArray,
 {
 	int	iSuccess = AXIS_SUCCESS;
 
-    ArrayBean * pAb = makeArrayBean( nType, (void**) (pArray->m_Array));
+    Axis_Array * pLocalArray = pArray->clone();
 
-    pAb->SetDimension(pArray->m_Size);
+    ArrayBean * pAb = makeArrayBean( nType, (void**) (pLocalArray->m_Array));
+
+    pAb->SetDimension(pLocalArray->m_Size);
+
+    /*
+     * We're now finished with the local array object, so it can be deleted
+     * However, we need to de-couple from the internal array, which is now owned
+     * by the ArrayBean.
+     */
+    pLocalArray->m_Array = NULL;
+    pLocalArray->m_Size = 0;
+    delete pLocalArray;
+    pLocalArray = NULL;
+
 
     Param* pParam = new Param();
 
@@ -190,11 +203,23 @@ int SoapSerializer::addOutputCmplxArrayParam( const Axis_Array * pArray,
 {
 	int	iSuccess = AXIS_SUCCESS;
 
-    ArrayBean* pAb = makeArrayBean( pArray->m_Array, pSZFunct,
+    Axis_Array * pLocalArray = pArray->clone();
+
+    ArrayBean* pAb = makeArrayBean( pLocalArray->m_Array, pSZFunct,
 									 pDelFunct,
 									 pSizeFunct);
 
-    pAb->SetDimension( pArray->m_Size);
+    pAb->SetDimension( pLocalArray->m_Size);
+    
+    /*
+     * We're now finished with the local array object, so it can be deleted
+     * However, we need to de-couple from the internal array, which is now owned
+     * by the ArrayBean.
+     */
+    pLocalArray->m_Array = NULL;
+    pLocalArray->m_Size = 0;
+    delete pLocalArray;
+    pLocalArray = NULL;
 
     Param * pParam = new Param();
 

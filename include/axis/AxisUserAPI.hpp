@@ -435,6 +435,13 @@ class STORAGE_CLASS_INFO Axis_Array {
      * @param original array to be cloned into this array.
      */
     void clone(const Axis_Array & original);
+
+    /**
+     * Create a new clone of the current Axis_Array
+     * @return New clone of the current Axis_Array.
+     */
+    virtual Axis_Array * clone() const;
+
     
     /**
      * Populate from a c-style array.
