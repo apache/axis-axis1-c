@@ -1050,32 +1050,39 @@ const char * HTTPTransport::getHTTPProtocol()
 
 /* axtoi( Hex) Is a private method to convert an ascii hex string to an integer.
  */
-int axtoi( char *pcHexStg)
+int axtoi( char *pcHexStringIn)
 {
     int		iN = 0;			// position in string
     int		iM = 0;			// position in digit[] to shift
     int		iCount;			// loop index
     int		intValue = 0;	// integer value of hex string
     int		iDigit[32];		// hold values to convert
+	char *	pcHexString = pcHexStringIn;
+
+	// Remove and whitespace characters from string before processing.
+	while( *pcHexString == ' ' || *pcHexString == '\r' || *pcHexString == '\n' || *pcHexString == '\t') 
+	{
+		pcHexString++;
+	}
 
     while( iN < 32)
     {
-		if( pcHexStg[iN] == '\0')
+		if( pcHexString[iN] == '\0')
 		{
 			break;
 		}
 	
-		if( pcHexStg[iN] >= ASCII_C_ZERO && 
-			pcHexStg[iN] <= ASCII_C_NINE)
+		if( pcHexString[iN] >= ASCII_C_ZERO && 
+			pcHexString[iN] <= ASCII_C_NINE)
 		{
-			iDigit[iN] = pcHexStg[iN] & 0x0f;	//convert to int
+			iDigit[iN] = pcHexString[iN] & 0x0f;	//convert to int
 		}
-		else if ((pcHexStg[iN] >= ASCII_C_LOWERCASEA && 
-		          pcHexStg[iN] <= ASCII_C_LOWERCASEF) ||
-		         (pcHexStg[iN] >= ASCII_C_UPPERCASEA && 
-		          pcHexStg[iN] <= ASCII_C_UPPERCASEF))
+		else if ((pcHexString[iN] >= ASCII_C_LOWERCASEA && 
+		          pcHexString[iN] <= ASCII_C_LOWERCASEF) ||
+		         (pcHexString[iN] >= ASCII_C_UPPERCASEA && 
+		          pcHexString[iN] <= ASCII_C_UPPERCASEF))
 		{
-			iDigit[iN] = (pcHexStg[iN] & 0x0f) + 9;	//convert to int
+			iDigit[iN] = (pcHexString[iN] & 0x0f) + 9;	//convert to int
 		}
 		else
 		{
