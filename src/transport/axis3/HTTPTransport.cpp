@@ -1050,21 +1050,22 @@ const char * HTTPTransport::getHTTPProtocol()
 
 /* axtoi( Hex) Is a private method to convert an ascii hex string to an integer.
  */
-int axtoi( char *pcHexStringIn)
+int axtoi( char *pcHexString)
 {
     int		iN = 0;			// position in string
     int		iM = 0;			// position in digit[] to shift
     int		iCount;			// loop index
     int		intValue = 0;	// integer value of hex string
     int		iDigit[32];		// hold values to convert
+/*
 	char *	pcHexString = pcHexStringIn;
 
-	// Remove and whitespace characters from string before processing.
+	// Remove whitespace characters from string before processing.
 	while( *pcHexString == ' ' || *pcHexString == '\r' || *pcHexString == '\n' || *pcHexString == '\t') 
 	{
 		pcHexString++;
 	}
-
+*/
     while( iN < 32)
     {
 		if( pcHexString[iN] == '\0')
