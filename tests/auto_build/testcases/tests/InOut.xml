@@ -12,5 +12,5 @@
 	    InOut_ServerResponse.expected
 	</serverResponse>
     </expected>
-	<endpoint>http://localhost:80/InOut</endpoint>
+	<endpoint>http://localhost:80/axis/InOut</endpoint>
 </test>
