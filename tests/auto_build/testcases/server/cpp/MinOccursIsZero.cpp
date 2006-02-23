@@ -38,8 +38,8 @@ void MinOccursIsZero::onFault()
 
 void MinOccursIsZero::optionalElements(xsd__string Value0, xsd__integer * Value1, SimpleComplexType * Value2, AXIS_OUT_PARAM xsd__string * OutValue0, AXIS_OUT_PARAM xsd__integer ** OutValue1, AXIS_OUT_PARAM SimpleComplexType ** OutValue2)  
 {
-	OutValue0 = &Value0;
-	OutValue1 = &Value1;
-	OutValue2 = &Value2;
+  *OutValue0 = Value0;
+  *OutValue1 = Value1;
+  *OutValue2 = Value2;
 }
 
