@@ -2277,27 +2277,27 @@ XSDTYPE SoapDeSerializer::getXSDType (const AnyElement * pElement)
 {
     /* first check whether this is a start element node */
     if (START_ELEMENT != pElement->m_type)
-	return XSD_UNKNOWN;
+    {
+        return XSD_UNKNOWN;
+    }
     for (int i = 0; pElement->m_pchAttributes[i]; i += 3)
     {
-	if (URI_XSI == URIMapping::getURI (pElement->m_pchAttributes[i + 1]))
-	{
-	    ::QName qn;
-	    XSDTYPE
-		type = XSD_UNKNOWN;
-	    qn.splitQNameString (pElement->m_pchAttributes[i + 2], ':');
-	    const char *
-		pNS = m_pParser->getNS4Prefix (qn.uri);
-	    if (pNS)
-	    {
-		if (URI_XSD == URIMapping::getURI (pNS))
-		{
-		    type = TypeMapping::map (qn.localname);
-		}
-	    }
-	    qn.mergeQNameString (':');
-	    return type;
-	}
+        if (URI_XSI == URIMapping::getURI (pElement->m_pchAttributes[i + 1]))
+        {
+            ::QName qn;
+            XSDTYPE type = XSD_UNKNOWN;
+            qn.splitQNameString (pElement->m_pchAttributes[i + 2], ':');
+            const char * pNS = m_pParser->getNS4Prefix (qn.uri);
+            if (pNS)
+            {
+                if (URI_XSD == URIMapping::getURI (pNS) || URI_ENC == URIMapping::getURI (pNS))
+                {
+                    type = TypeMapping::map (qn.localname);
+                }
+            }
+            qn.mergeQNameString (':');
+            return type;
+        }
     }
 
     return XSD_UNKNOWN;
