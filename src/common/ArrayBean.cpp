@@ -397,145 +397,15 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
 	   	const AxisChar* pNamespace = pSZ.getNamespace();
        	        
        	if (RPC_ENCODED == nStyle) pSZ.setStyle(RPC_LITERAL); 
-        switch (m_type)
+
+        void ** p = (void **) m_value.sta;
+        for (int ix = 0 ; ix < m_nSize ; ix++ )
         {
-            case XSD_BYTE:
-            case XSD_UNSIGNEDBYTE:
-            {
-                char** p = (char**)m_value.sta;
-                for (int ix=0;ix<m_nSize;ix++)
-                {
-                    pSZ.serializeAsElement(m_ItemName.c_str(), pNamespace, (void*)p[ix], m_type);
-                }
-            }
-                break;
-            case XSD_SHORT:
-            case XSD_UNSIGNEDSHORT:
-            {
-                short** p = (short**)m_value.sta;
-                for (int ix=0;ix<m_nSize;ix++)
-                {
-                    pSZ.serializeAsElement(m_ItemName.c_str(), pNamespace, (void*)p[ix], m_type);
-                }
-            }
-                break;
-            case XSD_LONG:
-            case XSD_UNSIGNEDLONG:
-			{
-                LONGLONG** p = (LONGLONG**)m_value.sta;
-                for (int ix=0;ix<m_nSize;ix++)
-                {
-                    pSZ.serializeAsElement(m_ItemName.c_str(), pNamespace, (void*)p[ix], m_type);
-                }
-            }
-                break;
-//FJP ^ Added
-            case XSD_INTEGER:
-            case XSD_DURATION:
-			case XSD_NEGATIVEINTEGER:
-			case XSD_NONNEGATIVEINTEGER:
-			case XSD_NONPOSITIVEINTEGER:
-			case XSD_POSITIVEINTEGER:
-            {
-                long** p = (long**)m_value.sta;
-                for (int ix=0;ix<m_nSize;ix++)
-                {
-                    pSZ.serializeAsElement(m_ItemName.c_str(), pNamespace, (void*)p[ix], m_type);
-                }
-            }
-                break;
-            case XSD_DOUBLE:
-            case XSD_DECIMAL:
-            {
-                double** p = (double**)m_value.sta;
-                for (int ix=0;ix<m_nSize;ix++)
-                {
-                    pSZ.serializeAsElement(m_ItemName.c_str(), pNamespace, (void*)p[ix], m_type);
-                }
-            }
-                break;
-            case XSD_DATETIME:
-            case XSD_TIME:
-            case XSD_DATE:
-            case XSD_GYEARMONTH:
-            case XSD_GYEAR:
-            case XSD_GMONTHDAY:
-            case XSD_GDAY:
-            case XSD_GMONTH:
-            {
-                tm** p = (tm**)m_value.sta;
-                for (int ix=0;ix<m_nSize;ix++)
-                {
-                    pSZ.serializeAsElement(m_ItemName.c_str(), pNamespace, (void*)p[ix], m_type);
-                }
-            }
-                break;
-            case XSD_INT:
-            case XSD_UNSIGNEDINT:
-            case XSD_BOOLEAN:
-            {
-                int** p = (int**)m_value.sta;
-                for (int ix=0;ix<m_nSize;ix++)
-                {
-                    pSZ.serializeAsElement(m_ItemName.c_str(), pNamespace, (void*)p[ix], m_type);
-                }
-            }
-                break;
-            case XSD_FLOAT:
-            {
-                float** p = (float**)m_value.sta;
-                for (int ix=0;ix<m_nSize;ix++)
-                {
-                    pSZ.serializeAsElement(m_ItemName.c_str(), pNamespace, (void*)p[ix], m_type);
-                }
-            }
-                break;
-			case XSD_ENTITIES:
-			case XSD_ENTITY:
-			case XSD_ID:
-			case XSD_IDREF:
-			case XSD_IDREFS:
-			case XSD_NCNAME:
-			case XSD_NMTOKEN:
-			case XSD_NMTOKENS:
-			case XSD_NAME:
-			case XSD_TOKEN:
-			case XSD_LANGUAGE: 
-            case XSD_STRING:
-            case XSD_ANYURI:
-            case XSD_QNAME:
-            case XSD_NOTATION:
-			case XSD_NORMALIZEDSTRING:
-            {
-                AxisChar** p = (AxisChar**)m_value.sta;
-                for (int ix=0;ix<m_nSize;ix++)
-                {
-                    pSZ.serializeAsElement(m_ItemName.c_str(), pNamespace, (void*)p[ix], m_type);
-                }
-            }
-                break;
-            case XSD_HEXBINARY:
-            {
-                xsd__hexBinary** p = (xsd__hexBinary**)m_value.sta;
-                for (int ix=0;ix<m_nSize;ix++)
-                {
-                    pSZ.serializeAsElement(m_ItemName.c_str(), pNamespace, (void*)p[ix], m_type);
-                }
-            }
-                break;
-            case XSD_BASE64BINARY:
-            {
-                xsd__base64Binary** p = (xsd__base64Binary**)m_value.sta;
-                for (int ix=0;ix<m_nSize;ix++)
-                {
-                    pSZ.serializeAsElement(m_ItemName.c_str(), pNamespace, (void*)p[ix], m_type);
-                }
-            }
-            default:
-                break;
+            pSZ.serializeAsElement(m_ItemName.c_str(), pNamespace, p[ix], m_type);
         }
-	// restore Serializer's style after array serialization is finished
-	if (RPC_ENCODED == nStyle) pSZ.setStyle(RPC_ENCODED);
+
+    	// restore Serializer's style after array serialization is finished
+    	if (RPC_ENCODED == nStyle) pSZ.setStyle(RPC_ENCODED);
     }
     return AXIS_SUCCESS;
 }
