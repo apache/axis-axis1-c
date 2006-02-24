@@ -332,9 +332,19 @@ public class MockServerThread implements Runnable
 					    eom = true;
 				    }
 	
-					int chunkLength = hashPos - 4; // Take into account the CR LF that surround the chunk size, so subtract 4.
+					int chunkLength;
+					
+		            if( System.getProperty( "os.name").toLowerCase().startsWith( "windows"))
+		            {
+		                chunkLength = hashPos - 4; // Take into account the CR+LF's that surround the chunk size, so subtract 4.
+		            }
+		            else
+		            {
+		                chunkLength = hashPos - 2; // Take into account the LF's that surround the chunk size, so subtract 2.
+		            }
 	
 					// Add the next chunk length and data from the original to the new response.
+		                
 				    newResponse += Integer.toHexString( chunkLength) + orgResponse.substring( 0, hashPos);
 	
 				    // Remove the old chunk from the original response message.
