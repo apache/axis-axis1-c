@@ -53,7 +53,7 @@ AXIS_CPP_NAMESPACE_START
 class STORAGE_CLASS_INFO Stub
 {
   public:
-	  
+      
   /**
     * Constructor.
     * 
@@ -112,15 +112,15 @@ class STORAGE_CLASS_INFO Stub
 
   /**
     * Get a transport property.
-	* 
-	* Returns the value of a transport property based on a key.
-	*
-	* @param key the property's name to search for
-	* @param response set to true searches the response message for the property
-	*                 set to false searches the send message for the property
-	* @return the value of the property or NULL if it was not found.
-	*/
-	const char* AXISCALL getTransportProperty(const char *key, bool response=true);
+    * 
+    * Returns the value of a transport property based on a key.
+    *
+    * @param key the property's name to search for
+    * @param response set to true searches the response message for the property
+    *                 set to false searches the send message for the property
+    * @return the value of the property or NULL if it was not found.
+    */
+    const char* AXISCALL getTransportProperty(const char *key, bool response=true);
 
   /**
     * Iterator initiatior for transport property keys
@@ -227,11 +227,11 @@ class STORAGE_CLASS_INFO Stub
     
   /**
     * Sets a property that can be accessed from a handler.
-	*
-	* @param name The name of the property
-	* @param value The value of the property
-	* @param len The length of the value
-	*/
+    *
+    * @param name The name of the property
+    * @param value The value of the property
+    * @param len The length of the value
+    */
     void setHandlerProperty(AxisChar* name, void* value, int len);
 
   /**
@@ -564,12 +564,12 @@ class STORAGE_CLASS_INFO Stub
     */
     Call *getCall() { return m_pCall; }
 
-	/**
-	 * Creates an ISoapAttachment which represents an attachment. The ISoapAttachment should be passed as 
-	 * an attachmment parameter to a web service. The storage associated with the ISoapAttachment will be 
-	 * automatically deleted by Axis C++ if it is passed as a parameter to a web service.
-	 */
-	ISoapAttachment* createSoapAttachment();
+    /**
+     * Creates an ISoapAttachment which represents an attachment. The ISoapAttachment should be passed as 
+     * an attachmment parameter to a web service. The storage associated with the ISoapAttachment will be 
+     * automatically deleted by Axis C++ if it is passed as a parameter to a web service.
+     */
+    ISoapAttachment* createSoapAttachment();
  
     /**
      * Set SSL configuration properties.

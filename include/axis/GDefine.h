@@ -19,6 +19,20 @@
 #if !defined(__GDEFINE_H_OF_AXIS_INCLUDED__)
 #define __GDEFINE_H_OF_AXIS_INCLUDED__
 
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* ----------------------------------------------------------------   */
+/* THIS HEADER FILE PATTERNED AFTER CORRESPONDING hpp HEADER FILE.    */
+/* CHANGES TO hpp HEADER FILE MAY NEED TO BE PROPAGATED HERE AND IN   */
+/* THE IMPLEMEMTATION OF THE APIS.                                    */
+/* ----------------------------------------------------------------   */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+
+#ifdef __cplusplus
+  extern "C" {
+#endif
+
 /*
  * This file contains all global definitions that are valid across whole
  * Axis C++ project.
@@ -82,6 +96,10 @@ typedef enum
 
 typedef int AxiscBool;
 typedef void* AXISCHANDLE;
+
+#ifdef __cplusplus
+  }
+#endif
 
 #endif 
 

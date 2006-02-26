@@ -58,15 +58,15 @@ public:
     void AXISCALL setSOAPVersion(SOAP_VERSION version);
     int AXISCALL setTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE type,
         const char* value);
-	const char* AXISCALL getTransportProperty(const char *key, bool response=true);
-	int AXISCALL setHandlerProperty(AxisChar* name, void* value, int len);
-	/**
-	 * set the protocol that the underlying transport will use. 
-	 * If there is not transport set then the transport protocol is stored locally until there is a transport.
-	 * 
-	 * @param protocol the protocol that you want. Allowed values are  defined in GDefine.hpp AXIS_PROTOCOL_TYPE
-	 * @return AXIS_SUCCESS if the protocol was set correctly in the underlying transport or, if there is no transport then the value was stored safely.
-	 */
+    const char* AXISCALL getTransportProperty(const char *key, bool response=true);
+    int AXISCALL setHandlerProperty(AxisChar* name, void* value, int len);
+    /**
+     * set the protocol that the underlying transport will use. 
+     * If there is not transport set then the transport protocol is stored locally until there is a transport.
+     * 
+     * @param protocol the protocol that you want. Allowed values are  defined in GDefine.hpp AXIS_PROTOCOL_TYPE
+     * @return AXIS_SUCCESS if the protocol was set correctly in the underlying transport or, if there is no transport then the value was stored safely.
+     */
     int AXISCALL setProtocol(AXIS_PROTOCOL_TYPE protocol);
     /**
      * Get the protocol that the transport is or will use.
@@ -113,30 +113,30 @@ public:
     void AXISCALL addParameter(void* pValue,const char* pchName,
         XSDTYPE nType);
 
-	/**
-	 * Adds an attachment and references it from a parameter in the SOAP body. Axis C++ will delete the storage for
-	 * the ISoapAttachment and IAttributes passed to this method during ~Call.
-	 * 
-	 * @param attachment The attachment to add to the MIME message, referenced from the SOAP body (mandatory)
-	 * @param pName The name of the parameter (mandatory)
-	 * @param attributes An array of pointers to attributes that will be added to the attachment reference in the 
-	 * SOAP body (optional)
-	 * @param nAttributes The number of elements in the attributes array
-	 */
-	void AXISCALL addAttachmentParameter(ISoapAttachment* attachment, const char* pName, 
-		IAttribute **attributes=NULL, int nAttributes=0);
+    /**
+     * Adds an attachment and references it from a parameter in the SOAP body. Axis C++ will delete the storage for
+     * the ISoapAttachment and IAttributes passed to this method during ~Call.
+     * 
+     * @param attachment The attachment to add to the MIME message, referenced from the SOAP body (mandatory)
+     * @param pName The name of the parameter (mandatory)
+     * @param attributes An array of pointers to attributes that will be added to the attachment reference in the 
+     * SOAP body (optional)
+     * @param nAttributes The number of elements in the attributes array
+     */
+    void AXISCALL addAttachmentParameter(ISoapAttachment* attachment, const char* pName, 
+        IAttribute **attributes=NULL, int nAttributes=0);
 
-	/**
-	 * Creates an IAttribute that can be used on an attachment reference on Call::addAttachmentParameter.
-	 * If this IAttribute is subsequently passed to Call::addAttachmentParameter, Axis C++ will delete the storage 
-	 * associated with the IAttribute during ~Call.
+    /**
+     * Creates an IAttribute that can be used on an attachment reference on Call::addAttachmentParameter.
+     * If this IAttribute is subsequently passed to Call::addAttachmentParameter, Axis C++ will delete the storage 
+     * associated with the IAttribute during ~Call.
      * You must ensure the prefix has a valid namespace declared, otherwise an invalid SOAP message will be produced.
      * 
      * @param pLocalname The local name of the Attribute.
      * @param pPrefix The prefix of the Attribute.
      * @param pValue The value of the Attribute.
      */
-	IAttribute *createAttribute(const AxisChar *pLocalname, const AxisChar *pPrefix, const AxisChar *pValue);
+    IAttribute *createAttribute(const AxisChar *pLocalname, const AxisChar *pPrefix, const AxisChar *pValue);
 
     /* Method that set the remote method name */
     void AXISCALL setOperation(const char* pchOperation,
@@ -366,38 +366,38 @@ public:
     AnyType* AXISCALL getAnyObject();
     int AXISCALL addAnyObject(AnyType* pAnyObject);
 
-	/**
-	 * Returns the prefix for a previously defined namespace. If the 
-	 * namespace has not previously been associated with a prefix, it
-	 * creates a new prefix, which is unique and returns that. It will
-	 * only return prefixes for user-defined namespaces, so passing a 
-	 * standard namespace will cause a new prefix to be created.
-	 * 
-	 * @param pNamespace the namespace to look for
-	 * @return the prefix for this namespace
-	 */
+    /**
+     * Returns the prefix for a previously defined namespace. If the 
+     * namespace has not previously been associated with a prefix, it
+     * creates a new prefix, which is unique and returns that. It will
+     * only return prefixes for user-defined namespaces, so passing a 
+     * standard namespace will cause a new prefix to be created.
+     * 
+     * @param pNamespace the namespace to look for
+     * @return the prefix for this namespace
+     */
     const AxisChar* AXISCALL getNamespacePrefix(const AxisChar* pNamespace);
-	
-	/**
-	 * Returns a complex fault as an XML string 
-	 */
-	const xsd__string getFaultAsXMLString();
+    
+    /**
+     * Returns a complex fault as an XML string 
+     */
+    const xsd__string getFaultAsXMLString();
 
-	/**
-	 * Adds an attachment to the MIME message. This attachment will not be referenced from the SOAP body. The storage
-	 * associated with the ISoapAttachment will be deleted during ~Call.
-	 * 
-	 * @param objAttach the attachment to add to the message.
-	 */
+    /**
+     * Adds an attachment to the MIME message. This attachment will not be referenced from the SOAP body. The storage
+     * associated with the ISoapAttachment will be deleted during ~Call.
+     * 
+     * @param objAttach the attachment to add to the message.
+     */
     void addAttachment(ISoapAttachment* objAttach);
 
-	/**
-	 * Creates an ISoapAttachment which represents an attachment. The ISoapAttachment can be passed to addAttachment
-	 * or addAttachmentParameter. The attachment will not be added to the message unless it is subsequently passed to
-	 * addAttachment or addAttachmentParameter. The storage associated with the ISoapAttachment will not be 
-	 * automatically deleted by Axis C++ unless it is passed to addAttachment or addAttachmentParamater.
-	 */
-	ISoapAttachment* createSoapAttachment();
+    /**
+     * Creates an ISoapAttachment which represents an attachment. The ISoapAttachment can be passed to addAttachment
+     * or addAttachmentParameter. The attachment will not be added to the message unless it is subsequently passed to
+     * addAttachment or addAttachmentParameter. The storage associated with the ISoapAttachment will not be 
+     * automatically deleted by Axis C++ unless it is passed to addAttachment or addAttachmentParamater.
+     */
+    ISoapAttachment* createSoapAttachment();
 
 private:
     void closeConnection();
@@ -410,8 +410,8 @@ private:
 #ifdef WIN32
   #pragma warning (disable : 4251)
 #endif
-	list<void*> m_handlerProperties;
-	list<ISoapAttachment*> m_attachments;
+    list<void*> m_handlerProperties;
+    list<ISoapAttachment*> m_attachments;
 
 #ifdef WIN32
   #pragma warning (default : 4251)
@@ -454,7 +454,7 @@ private:
     // Samisa m_pchSessionID was misssing and there was a compile error due to this
     char* m_pchSessionID;
 
-	ContentIdSet *m_pContentIdSet;
+    ContentIdSet *m_pContentIdSet;
 };
 AXIS_CPP_NAMESPACE_END
 

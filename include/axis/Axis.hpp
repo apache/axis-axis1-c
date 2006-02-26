@@ -43,15 +43,15 @@ AXIS_CPP_NAMESPACE_START
 class STORAGE_CLASS_INFO Axis
 {
   public:
-	/**
-	 * Initializes the Axis runtime.
-	 * @param bIsServer should be set to false for client applications.
-	 */
+    /**
+     * Initializes the Axis runtime.
+     * @param bIsServer should be set to false for client applications.
+     */
     static void initialize(bool bIsServer);
 
-	/**
-	 * Terminates the Axis runtime.
-	 */
+    /**
+     * Terminates the Axis runtime.
+     */
     static void terminate();
     
     /**

@@ -101,32 +101,32 @@ class STORAGE_CLASS_INFO AxisCPPConfigDefaults
       AxisCPPConfigDefaults();      
       ~AxisCPPConfigDefaults();
  
-	  char* getClientLog();
-	  char* getClientWSDDFile();
-	  char* getXMLParserLibrary();
-	  char* getHTTPTransportLibrary();
-	  char* getHTTPChannelLibrary();
-	  char* getHTTPSSLChannelLibrary(); 
+      char* getClientLog();
+      char* getClientWSDDFile();
+      char* getXMLParserLibrary();
+      char* getHTTPTransportLibrary();
+      char* getHTTPChannelLibrary();
+      char* getHTTPSSLChannelLibrary(); 
       char* getNodeName();
       char* getListenPort();
-	  char* getSecureInfo();
-	  char* getAxisHome();
+      char* getSecureInfo();
+      char* getAxisHome();
         
-	  void setClientLog(char*);
-	  void setClientWSDDFile(char*);
-	  void setXMLParserLibrary(char*);
-	  void setHTTPTransportLibrary(char*);
-	  void setHTTPChannelLibrary(char*);
-	  void setHTTPSSLChannelLibrary(char*);
+      void setClientLog(char*);
+      void setClientWSDDFile(char*);
+      void setXMLParserLibrary(char*);
+      void setHTTPTransportLibrary(char*);
+      void setHTTPChannelLibrary(char*);
+      void setHTTPSSLChannelLibrary(char*);
       void setNodeName(char*);
       void setListenPort(char*);
-	  void setSecureInfo(char*);
-	  void setAxisHome(char*);                    
+      void setSecureInfo(char*);
+      void setAxisHome(char*);                    
 
       void apply();                                
 
     protected:         
-		AxisCPPConfigDefaultsImpl *m_pImpl;
+        AxisCPPConfigDefaultsImpl *m_pImpl;
 
 };
 

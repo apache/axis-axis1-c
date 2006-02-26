@@ -18,6 +18,20 @@
 #if !defined(_AXISUSERAPI_H_OF_AXIS_INCLUDED_)
 #define _AXISUSERAPI_H_OF_AXIS_INCLUDED_
 
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* ----------------------------------------------------------------   */
+/* THIS HEADER FILE PATTERNED AFTER CORRESPONDING hpp HEADER FILE.    */
+/* CHANGES TO hpp HEADER FILE MAY NEED TO BE PROPAGATED HERE AND IN   */
+/* THE IMPLEMEMTATION OF THE APIS.                                    */
+/* ----------------------------------------------------------------   */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+
+#ifdef __cplusplus
+  extern "C" {
+#endif
+
 #include <axis/GDefine.h>
 #include <time.h>
 #include <string.h>
@@ -456,5 +470,9 @@ typedef struct
      */
     int _size;
 } AxiscAnyType;
+
+#ifdef __cplusplus
+  }
+#endif
 
 #endif

@@ -42,14 +42,14 @@ using namespace std;
  * The following enumeration is used to serve the Axis C++ codes for 
  * faults.
  */
-#define CLIENT_FAULT_OFFSET		0x0
-#define SERVER_FAULT_OFFSET		0x1000
-#define SOAP_FAULT_OFFSET		0x2000
-#define ENGINE_FAULT_OFFSET		0x3000
-#define WSDD_FAULT_OFFSET		0x4000
-#define TRANSPORT_FAULT_OFFSET	0x5000
-#define CONFIG_FAULT_OFFSET		0x6000
-#define AXISC_FAULT_OFFSET		0x7000
+#define CLIENT_FAULT_OFFSET      0x0
+#define SERVER_FAULT_OFFSET      0x1000
+#define SOAP_FAULT_OFFSET        0x2000
+#define ENGINE_FAULT_OFFSET      0x3000
+#define WSDD_FAULT_OFFSET        0x4000
+#define TRANSPORT_FAULT_OFFSET   0x5000
+#define CONFIG_FAULT_OFFSET      0x6000
+#define AXISC_FAULT_OFFSET       0x7000
 
 typedef enum 
 {
@@ -68,11 +68,11 @@ typedef enum
      *    exception
      *CONFIG that comes next to CLIENT/SERVER means this is a axisc++ configuration
      *    related exception
-	 *AXISC ?
+     *AXISC ?
      */
-	/* SOAP faults */
+    /* SOAP faults */
 /*0*/    SOAP_VERSION_MISMATCH, /* VersionMismatch faults */
-/*1*/    SOAP_MUST_UNDERSTAND,	/* MustUnderstand faults */
+/*1*/    SOAP_MUST_UNDERSTAND,    /* MustUnderstand faults */
 
     /* Client faults */
 /*2*/    CLIENT_SOAP_MESSAGE_INCOMPLETE,
@@ -84,7 +84,7 @@ typedef enum
 /*8*/    CLIENT_WSDD_METHOD_NOT_ALLOWED,
 /*9*/    CLIENT_WSDD_PARA_TYPE_MISMATCH,
 /*10*/   CLIENT_ENGINE_CLIENT_HANDLER_FAILED,
-/*11*/	 CLIENT_TRANSPORT_EXCEPTION,
+/*11*/   CLIENT_TRANSPORT_EXCEPTION,
 /*12*/   CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED,
 /*13*/   CLIENT_TRANSPORT_TYPE_MISMATCH,
 /*14*/   CLIENT_TRANSPORT_HAS_NO_UNSECURE_TRANSPORT_LAYER,
@@ -137,7 +137,7 @@ typedef enum
 /*59*/    SERVER_TRANSPORT_TIMEOUT_EXCEPTION,
 /*60*/    SERVER_TRANSPORT_TIMEOUT_EXPIRED,
 /*61*/    SERVER_TRANSPORT_LOADING_SSLCHANNEL_FAILED,
-/*62*/	  SERVER_TRANSPORT_LOADING_CHANNEL_FAILED,
+/*62*/    SERVER_TRANSPORT_LOADING_CHANNEL_FAILED,
 /*63*/    SERVER_TRANSPORT_BUFFER_EMPTY,
 /*64*/    SERVER_PARSE_BUFFER_EMPTY,
 /*65*/    SERVER_PARSE_PARSER_FAILED, 
@@ -179,24 +179,9 @@ typedef enum
  */
 class STORAGE_CLASS_INFO AxisException :public exception
 {
-
-
-
-
 public:
     /** No parameter constructor*/
     AxisException():m_iExceptionCode(0), m_sMessage(NULL){};
-
-    /** This can be used to throw an exception with the exception code
-      * which is defined in the AxisException.h file, under AXISC_EXCEPTIONS
-      * type. Axis C++ exception model heavily use this.
-      *
-      * @param Exception code which is defined in the AxisException.h file, 
-      * under AXISC_EXCEPTIONS type.
-      * 
-      * @example throw AxisException(AXISC_NODE_VALUE_MISMATCH_EXCEPTION);
-      */
-    //AxisException(const int iExceptionCode);
 
     /** This can be used to throw an exception with exception code which is
       * is defined in the AxisException.h file, under AXISC_EXCEPTIONS type.
@@ -210,12 +195,9 @@ public:
             "Some additional exception info");
       */
     AxisException(const int iExceptionCode, const char* pcMessage = NULL):m_iExceptionCode(iExceptionCode), m_sMessage(NULL)
-	{
-		if(pcMessage)
-		{
-			setMessage(pcMessage);
-		}		
-	}
+    {
+        setMessage(pcMessage);    
+    }
 
     /** This can be used to throw an exception with another exception as a
       * parameter. One situation in which this can be used is when we catch
@@ -226,102 +208,81 @@ public:
       * @example throw AxisException(std::bad_alloc);
       */
     AxisException(const AxisException& e):m_iExceptionCode(e.m_iExceptionCode), m_sMessage(NULL)
-	{
-		if(e.m_sMessage)
-		{
-			setMessage(e.m_sMessage);
-		}
-	};
-
-    /** This accept two parameters, both an exception code an exception object
-      * derived from std::exception
-      *
-      * @param An exception class derived from std::exception
-      * @param An exception code
-      */
-    //AxisException(const exception* e, const int iExceptionCode);
-    
-    /** This accept an exception message
-      *
-      * @param An exception message
-      */
-    //AxisException(const char* pcMessage){m_sMessage = pcMessage;};
+    {
+        setMessage(e.m_sMessage);
+    };
     
     /** Destructor */
     virtual ~AxisException() throw()
-	{
-		if (m_sMessage)
-			delete [] m_sMessage;
-	};
+    {
+        if (m_sMessage)
+            delete [] m_sMessage;
+    };
 
     /** This method is defined in std::exception. AxisException and derived
       * classes will override this to print exception messages
       */
     virtual const char* what() const throw() { return m_sMessage; };
 
-    /** This can be called to get the exception code which is passed
-      * in the constructor. This returns -1 value when the 
-      * constructor does not have a exception code parameter
-      * 
-      * @return the exception code if the construct have a exception code
-      * int parameter. Else return -1.
-      *
-      * @return exception message
-      */
-    
-	virtual const int getExceptionCode() const { return m_iExceptionCode; }
-	void setExceptionCode(int exceptionCode) { m_iExceptionCode = exceptionCode;}
-	
-	const char* getMessage() const { return what(); }
+    /** This can be called to get the exception code. */
+    virtual const int getExceptionCode() const { return m_iExceptionCode; }
 
-	
+    /** This can be called to set the exception code */
+    void setExceptionCode(int exceptionCode) { m_iExceptionCode = exceptionCode;}
+
+    /** Get error message text - deprecated, use what() */
+    const char* getMessage() const { return what(); }
+    
+    /**
+      * The method setMessage(std::string psMessage) uses to set the private data member m_sMessage
+      * This method should be used to set the m_sMessage variable in derived classes.
+      */
+    void setMessage(const char* psMessage)
+    {
+        if (m_sMessage)
+        {
+            delete [] m_sMessage;
+            m_sMessage = NULL;
+        }
+
+        if (psMessage)
+        {
+            m_sMessage = new char[strlen(psMessage) + 1];
+            strcpy(m_sMessage,psMessage);
+        }        
+    }
+    
+    /** The method will set exception data from another exception */
+    void setExceptionFromException(const AxisException& e)
+    {
+        m_iExceptionCode = e.m_iExceptionCode;
+        setMessage(e.m_sMessage);
+    }
+
+    /**
+      * The method will reset exception object as if no parameters
+      * where passed to constructor
+      */
+    void resetException()
+    {
+        m_iExceptionCode = 0;
+        setMessage((const char *)NULL);
+    }
 
 protected:
-	
-	/**
-	  *Dushshantha:
-	  *The method setMessage(std::string psMessage) uses to set the private data member m_sMessage
-	  *Please use this method whenever you need to set the m_sMessage variable in derived classes.
-	  */
-
-	void setMessage(const char* psMessage)
-	{
-		if (m_sMessage)
-		{
-			delete [] m_sMessage;
-			m_sMessage = NULL;
-		}
-
-		if (psMessage)
-		{
-			m_sMessage = new char[strlen(psMessage) + 1];
-			strcpy(m_sMessage,psMessage);
-		}
-		
-		
-		
-	}
-
-
-	/**
-	  *Dushshantha:
-	  *This data member is common to all the inherited classes of this base class.
-	  *The integer variable m_iExceptionCode stores the Exception code
+    /**
+      * This data member is common to all the inherited classes of this base class.
+      * The integer variable m_iExceptionCode stores the Exception code
       */
+    int m_iExceptionCode;
 
-	int m_iExceptionCode;
-
-	/**
-	  *This data member is common to all the inherited classes of this base class.
-	  *The char* variable m_sMessage is used to store the Exception message
-	  *Whenever you want to set this variable Please use the method setMessage(std::string psMessage)
-	  */
-	char* m_sMessage;
-
-	
-
+    /**
+      * This data member is common to all the inherited classes of this base class.
+      * The char* variable m_sMessage is used to store the Exception message
+      * Whenever you want to set this variable use method setMessage(std::string psMessage)
+      */
+    char* m_sMessage;
 };
-
 
 AXIS_CPP_NAMESPACE_END
 
