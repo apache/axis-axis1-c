@@ -1,0 +1,16 @@
+<test>
+    <name>LargeReturningString2</name>
+    <description>LargeReturningString with very large chunk</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>LargeReturningStringClient.cpp</clientCode>
+    <wsdl>LargeReturningString.wsdl</wsdl>
+    <expected>
+        <output>
+            LargeReturningString.cpp.out
+        </output>
+		<serverResponse>
+			LargeReturningString2_ServerResponse.expected
+	    </serverResponse>
+    </expected>
+	<endpoint>-e http://localhost:80/axis/LargeReturningString</endpoint>
+</test>

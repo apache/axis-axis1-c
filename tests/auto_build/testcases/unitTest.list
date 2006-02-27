@@ -144,3 +144,6 @@ ComplexTypeOptionalAll.xml
 # these two tests started failing on the 20th of Dec 2005.
 SameComplexTypeAndElementName.xml
 SameComplexTypeAndNillableElementName.xml
+
+# There seem to be problems with very large chunk sizes
+LargeReturningString2.xml
