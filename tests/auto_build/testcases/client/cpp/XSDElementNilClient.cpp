@@ -200,18 +200,18 @@ int main(int argc, char* argv[])
 			cout << "unsigned long nil=NULL" << endl;
 
 		fResult = ws->setGetDataFloat(&fInput);
-		printf("float=%.5f\n", *fResult); fflush(stdout);
+		printf("float=%.6g\n", *fResult); fflush(stdout);
 		fResult = ws->setGetDataFloat(NULL);
 		if(fResult) {
-			printf("float nil=%.5f\n", *fResult); fflush(stdout);
+			printf("float nil=%.6g\n", *fResult); fflush(stdout);
 		} else
 			cout << "float nil=NULL" << endl;
 
 		dResult = ws->setGetDataDouble(&dInput);
-		printf("double=%.5f\n", *dResult); fflush(stdout);
+		printf("double=%.10g\n", *dResult); fflush(stdout);
 		dResult = ws->setGetDataDouble(NULL);
 		if(dResult) {
-			printf("double nil=%.5f\n", *dResult); fflush(stdout);
+			printf("double nil=%.10g\n", *dResult); fflush(stdout);
 		} else
 			cout << "double nil=NULL" << endl;
 

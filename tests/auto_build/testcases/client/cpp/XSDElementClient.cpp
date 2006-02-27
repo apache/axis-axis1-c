@@ -142,10 +142,10 @@ int main(int argc, char* argv[])
 		cout << "unsigned long=" << ulResult << endl;
 
 		fResult = ws->setGetDataFloat((xsd__float)35.3535888888);
-		printf("float=%.5f\n", fResult); fflush(stdout);
+		printf("float=%.6g\n", fResult); fflush(stdout);
 
 		dResult = ws->setGetDataDouble((xsd__double)70.7175888888);
-		printf("double=%.5f\n", dResult); fflush(stdout);
+		printf("double=%.10g\n", dResult); fflush(stdout);
 
         durationResult = ws->setGetDataDurationType((xsd__duration)123456789);
         cout << "duration=" << durationResult << endl;
