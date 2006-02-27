@@ -136,7 +136,7 @@ xsd__NOTATION NOTATION::deserializeNOTATION(const AxisChar* valueAsChar) throw (
 
 WhiteSpace* NOTATION::getWhiteSpace()
 {
-    return new WhiteSpace(REPLACE);
+    return new WhiteSpace(PRESERVE);
 }
 
 MinLength* NOTATION::getMinLength()
