@@ -299,7 +299,7 @@ int main(int argc, char* argv[])
 
         // Test array
         xsd__IDREF_Array arrayInput;
-		int arraySize =0;
+		int arraySize = 2;
 		xsd__IDREF * array = new xsd__IDREF[arraySize];
         
         for (int inputIndex=0 ; inputIndex < arraySize ; inputIndex++)

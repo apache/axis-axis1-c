@@ -299,7 +299,7 @@ int main(int argc, char* argv[])
 
         // Test array
         xsd__NOTATION_Array arrayInput;
-		int arraySize = 0;
+		int arraySize = 2;
 		xsd__NOTATION * array = new xsd__NOTATION[arraySize];
         
         for (int inputIndex=0 ; inputIndex < arraySize ; inputIndex++)
