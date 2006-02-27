@@ -54,14 +54,14 @@
   * @return AXISC_SUCCESS or AXISC_FAIL to indicate success or fail
   */
 AXISC_STORAGE_CLASS_INFO 
-int axiscInitializeAxis(AxiscBool bIsServer);
+void axiscInitializeAxis(AxiscBool bIsServer);
 
 /** 
   * Terminates the Axis runtime. 
   * @return AXISC_SUCCESS or AXISC_FAIL to indicate success or fail
   */
 AXISC_STORAGE_CLASS_INFO 
-int axiscTerminate();
+void axiscTerminate();
 
 /**
   * Deletes storage allocated by the Axis engine, that is no longer required
@@ -72,7 +72,7 @@ int axiscTerminate();
   * @return AXISC_SUCCESS or AXISC_FAIL to indicate success or fail
   */
 AXISC_STORAGE_CLASS_INFO 
-int axiscAxisDelete(void * pValue, AXISC_XSDTYPE type);
+void axiscAxisDelete(void * pValue, AXISC_XSDTYPE type);
 
 #ifdef __cplusplus
   }
