@@ -53,7 +53,7 @@ xsd__string LargeReturningString::getLargeString(xsd__int Value0)
 
 	for( int iCount = 0; iCount < Value0; iCount++)
 	{
-		myString[iCount] = iCount % 26 + 'A';
+		myString[iCount] = iCount % 26 + 'a';
 	}
 
 	myString[Value0] = '\0';
