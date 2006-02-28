@@ -274,6 +274,7 @@ void HTTPTransport::closeConnection()
 
     //clear the message buffer in preperation of the next read.
     m_strReceived = "";
+    m_iBytesLeft = 0;
 
     m_iContentLength = 0;
 
@@ -552,6 +553,12 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char * pcBuffer, int * piSize) th
 	{
 		case eWaitingForHTTPHeader:
 		{
+			// If there is still data to be sent, then drop out of the switch statement and send more data!
+			if( m_iBytesLeft > 0)
+			{
+				break;
+			}
+
 		// Wait for a HTTP header to be located on the input stream.
 			do
 			{
