@@ -204,7 +204,7 @@ Transfer-Encoding: chunked
 
 1e5
 <?xml version="1.0" encoding="utf-8"?>
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header/><soapenv:Body><setGetDataFloatResponse xmlns="http://xsdelement.test.apache.org"><setGetDataFloatReturn>35.35359</setGetDataFloatReturn></setGetDataFloatResponse></soapenv:Body></soapenv:Envelope>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header/><soapenv:Body><setGetDataFloatResponse xmlns="http://xsdelement.test.apache.org"><setGetDataFloatReturn>35.3536</setGetDataFloatReturn></setGetDataFloatResponse></soapenv:Body></soapenv:Envelope>
 0
 
 HTTP/1.1 200 OK
@@ -226,7 +226,7 @@ Transfer-Encoding: chunked
 
 1ea
 <?xml version="1.0" encoding="utf-8"?>
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header/><soapenv:Body><setGetDataDoubleResponse xmlns="http://xsdelement.test.apache.org"><setGetDataDoubleReturn>70.717589</setGetDataDoubleReturn></setGetDataDoubleResponse></soapenv:Body></soapenv:Envelope>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header/><soapenv:Body><setGetDataDoubleResponse xmlns="http://xsdelement.test.apache.org"><setGetDataDoubleReturn>70.71758889</setGetDataDoubleReturn></setGetDataDoubleResponse></soapenv:Body></soapenv:Envelope>
 0
 
 HTTP/1.1 200 OK
