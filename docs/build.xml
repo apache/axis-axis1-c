@@ -122,7 +122,7 @@
     	to ws-axis/c/docs
     </echo>
     <copy todir="${dir.root.ws-axis}/c/docs">
-      <fileset dir="${dir.root.ws-site}/targets/axis/cpp">
+      <fileset dir="${dir.root.ws-site}/cpp">
         <different targetdir="${dir.root.ws-axis}/c/docs" ignoreFileTimes="true"/>
       </fileset>
     </copy>

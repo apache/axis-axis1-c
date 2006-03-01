@@ -304,29 +304,48 @@
 <div class="h2">
 <h2>Linux</h2>
 </div>
-<pre class="code">The build files are available at</pre>
-<pre class="code">&lt;Axis install directory&gt;/samples/server/echoStringHeaderHandler Change your current directory to this directory and then execute the following... makemake install</pre>
-<pre class="code">The handler libeshhandler.so file will be created at &lt;Axis install directory&gt;/lib directory</pre>
+<p>The build files are available at:</p>
+<pre class="code">&lt;Axis install directory&gt;/samples/server/echoStringHeaderHandler</pre>
+<p>Change your current directory to this directory and then execute the following...</p>
+<ul>
+<li>make</li>
+<li>make install</li>
+</ul>
+<p>The handler <strong>libeshhandler.so</strong> file will be created at</p>
+<pre class="code">&lt;Axis install directory&gt;/lib directory</pre>
 <div class="h2">
 <h2>Windows</h2>
 </div>
-<pre class="code">The VC dsw file (ServerHandlers.dsw) is available at</pre>
-<pre class="code">&lt;Axis Install directory&gt;/vc/samples/server/ ServerHandlers.dsw.</pre>
-<pre class="code">Open this file and build the project echoStringHeaderHandler. Once the build is successful you will find the DLL ( echoStringHeaderHandler.dll) at&lt;Axis install directory&gt;/bin</pre>
+<p>The VC dsw file (ServerHandlers.dsw) is available at</p>
+<pre class="code">&lt;Axis Install directory&gt;/vc/samples/server/ServerHandlers.dsw.</pre>
+<p>Open this file and build the project <strong>echoStringHeaderHandler</strong>. Once the build is successful you will find the DLL ( <strong>echoStringHeaderHandler.dll</strong>) at:</p>
+<pre class="code">&lt;Axis install directory&gt;/bin</pre>
 <div class="h4">
 <h4>Configuring the echoStringHeader Handler</h4>
 </div>
-<p>Edit the server.wsdd file <a href="../install-guide.html#Server installation and configuration">(as created when you configured your server</a> <a href="../serveruser-guide.html">)</a> to include the handler for a particular service.<br>In this instance we are using the Calculator server example that we have used in both the client and server setup examples. The example below shows how a linux file would look e.g. libeshhandler.so is used please vary the file according to the libraries you have created. This example shows the handler being deployed on both the incoming and outgoing message.</p>
-<p>&lt;service name="Calculator" provider="CPP:RPC" description="Simple Calculator Axis C++ Service "&gt;<br> 
-<strong> &lt;requestFlow name="CalculatorHandlers"&gt; &lt;handler name="ESHHandler" type="&lt;Axis installation directory&gt;/handlers/custom/echoStringHeaderHandler/libeshhandler.so"&gt; &lt;/handler&gt; &lt;/requestFlow&gt; &lt;responseFlow name="CalculatorHandlers"&gt; &lt;handler name="ESHHandler" type="&lt;Axis installation directory&gt;AXISCPP_DEPLOY/lib/libeshhandler.so"&gt; &lt;/handler&gt; &lt;/responseFlow&gt;</strong>
+<p>Edit the server.wsdd file <a href="../serveruser-guide.html#Deploy_the_service">(as created when you configured your server</a> <a href="../serveruser-guide.html">)</a> to include the handler for a particular service.<br>In this instance we are using the Calculator server example that we have used in both the client and server setup examples. The example below shows how a linux file would look e.g. libeshhandler.so is used please vary the file according to the libraries you have created. This example shows the same handler being deployed on both the incoming and outgoing message.</p>
+<pre>&lt;service name="Calculator" provider="CPP:RPC" description="Simple Calculator Axis C++ Service"&gt;
+  <strong>&lt;requestFlow name="CalculatorHandlers"&gt;
+    &lt;handler name="ESHHandler" type="&lt;Axis installation directory&gt;/handlers/custom/echoStringHeaderHandler/libeshhandler.so"&gt;
+    &lt;/handler&gt;
+  &lt;/requestFlow&gt;
+  &lt;responseFlow name="CalculatorHandlers"&gt;
+    &lt;handler name="ESHHandler" type="&lt;Axis installation directory&gt;/handlers/custom/echoStringHeaderHandler/libeshhandler.so"&gt;
+    &lt;/handler&gt;
+  &lt;/responseFlow&gt;</strong>
+  &lt;parameter name="allowedMethods" value="add sub mul div"/&gt;
+  &lt;parameter name="className" value="&lt;Axis installation directory&gt;/webservices/libcalculator.so" /&gt;
+&lt;/service&gt;</pre>
+<strong>Note:</strong>
 <br>
-<br> &lt;parameter name="allowedMethods" value="add sub mul div "/&gt;<br> &lt;parameter name="className" value="&lt;Axis installation directory&gt;/webservices/libcalculator.so" /&gt;<br> &lt;/service&gt;<br> 
-<strong>Note:</strong> Make sure you specify the correct path of the handler so in the server.wsdd file.<br>
-<br> Now you are almost ready to run your server-side handler.<br> You have to restart the Apache server so that it picks up its new configuration and then that's it !</p>
+<br>
+<br>
+<br>
+<br>
 <div class="h4">
 <h4>Running the echoStringHeader Handler</h4>
 </div>
-<p>Since this Handler is configured to the Calculator web service in the above step, this Handler will be executed when a client sends a SOAP request to the Calculator web service. Use the <a href="clientuser-guide.html#Generating and using client stubs">calculator client</a> you created earlier.</p>
+<p>Since this Handler is configured to the Calculator web service in the above step, this Handler will be executed when a client sends a SOAP request to the Calculator web service. Use the <a href="../clientuser-guide.html#Generating and using client stubs">calculator client</a> you created earlier.</p>
 <br>
 <br>
 <br>
@@ -340,38 +359,49 @@
 <div class="h4">
 <h4>Building the testHandler</h4>
 </div>
-<p>The build files are available at <strong>&lt;Axis installation directory&gt;/samples/client/testHandler</strong>. Change your current directory to this direcotory and then you could execute the following.</p>
+<p>The build files are available at <strong>&lt;Axis installation directory&gt;/samples/client/testHandler</strong>. Change your current directory to this directory and then you can execute the following.</p>
 <div class="h2">
-<h2>linux</h2>
+<h2>Linux</h2>
 </div>
-<pre class="code">makemake install</pre>
-<pre class="code">The handler so file will be created at &lt;Axis installation directory&gt;/lib/</pre>
+<ul>
+<li>make</li>
+<li>make install</li>
+</ul>
+<p>The handler so file will be created at</p>
+<pre class="code">&lt;Axis installation directory&gt;/lib/</pre>
 <div class="h2">
-<h2>windows</h2>
+<h2>Windows</h2>
 </div>
-<pre class="code">The VC dsw file (ClientHandlers.dsw) is available at &lt;Axis Installation directory&gt;/vc/samples/client/ClientHandlers.dsw.Open this file and build the project TestHandler.</pre>
-<pre class="code">Once the build is successful you will find the DLL testHandler.dll) at &lt;Axis Installation directory&gt;/bin. If you see this DLL at the above location you are done with the first step.</pre>
-<br>
-<br>
+<p>The VC dsw file (ClientHandlers.dsw) is available at:</p>
+<pre class="code">&lt;Axis Installation directory&gt;/vc/samples/client/ClientHandlers.dsw</pre>
+<p>Open this file and build the project TestHandler.</p>
+<p>Once the build is successful you will find the DLL (<strong>testHandler.dll</strong>) at:</p>
+<pre class="code">&lt;Axis Installation directory&gt;/bin</pre>
+<p>If you see this DLL at the above location you are done with the first step.</p>
 <div class="h4">
 <h4>Configuring the testHandler</h4>
 </div>
 <p>Now edit the <strong>&lt;Axis installation directory&gt;/etc/client.wsdd</strong> to include the handler for a particular service.</p>
 <p>In this example we will continue to use the Calculator service. The sample wsdd file outlined below shows a linux directory system - for other operating systems please use the correct path symbols.<br> 
 <strong>Note:</strong> Up until this point you did not need a client wsdd file the client only requires a wsdd file when it has handlers.</p>
-<p>
-<strong>&lt;service name="Calculator" provider="CPP:RPC" description="Calculator web service"&gt; &lt;requestFlow name="CalculatorHandlers"&gt; &lt;handler name="TestHandler" type="&lt;Axis Installation directory&gt;/lib/libtest_client_handler.so"&gt; &lt;/handler&gt; &lt;/requestFlow&gt; &lt;/service&gt;</strong>
-</p>
+<pre>
+<strong>&lt;service name="Calculator" provider="CPP:RPC" description="Calculator web service"&gt;
+  &lt;requestFlow name="CalculatorHandlers"&gt;
+    &lt;handler name="TestHandler" type="&lt;Axis Installation directory&gt;/lib/libtest_client_handler.so"&gt;
+    &lt;/handler&gt;
+  &lt;/requestFlow&gt;
+&lt;/service&gt;</strong>
+</pre>
 <p>Now you are almost ready to run your client side handler.<br>
 <br> 
-<strong>Note:</strong> If you are using Client side Handlers you need to enter the <strong>ClientWSDDFilePath</strong> entry in your <a href="install-guide#Installing Client">axiscpp.conf</a> configuration file.<br>
+<strong>Note:</strong> If you are using Client side Handlers you need to enter the <strong>ClientWSDDFilePath</strong> entry in your <a href="../install-guide.html#Installing_Client">axiscpp.conf</a> configuration file.<br>
 </p>
 <br>
 <br>
 <div class="h4">
 <h4>Running the testHandler</h4>
 </div>
-<p>Since this Handler is configured to the Calculator web service in the above step, this Handler will be executed when you run the <a href="clientuser-guide.html#Generating and using client stubs">calculator web service client</a>..</p>
+<p>Since this Handler is configured to the Calculator web service in the above step, this Handler will be executed when you run the <a href="../clientuser-guide.html#Generating_and_using_client_stubs">calculator web service client</a>..</p>
 <div class="h3">
 <h3>The Handler API's</h3>
 </div>

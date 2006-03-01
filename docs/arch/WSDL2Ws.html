@@ -384,7 +384,7 @@
 <ul>
 <li>Wrapper classes for complex types with data members and constructors/destructors</li>
 <li>Helper functions for serializing/deserializing complex types</li>
-<li>Wrapper structs to handle arrays of complex types</li>
+<li>Wrapper classes to handle arrays of complex types</li>
 </ul>
 <p>
 <a name="usage"></a>
@@ -399,7 +399,7 @@
 <h4>2.1 Dependencies on Axis Java tool</h4>
 </div>
 <p>Apache Axis C++ uses WSDL processing tools from Axis Java project and extends those for C/C++ code generation.</p>
-<p>The following jar files that comes with (or used by) Axis Java are required to run Axis C++ WSDL2Ws tool:</p>
+<p>The following jar files that come with (or used by) Axis Java are required to run Axis C++ WSDL2Ws tool:</p>
 <ul>
 <li>axis.jar</li>
 <li>wsdl4j.jar</li>
@@ -409,16 +409,15 @@
 <li>jaxrpc.jar</li>
 <li>saaj.jar</li>
 </ul>
-<p>"SchemaUtils" (SchemaUtils.java) and "ElementDecl" (ElementDecl.java) classes of Axis Java tools have been overridden by Axis C++ WSDL2Ws implementation.</p>
+<p>"SchemaUtils" and "ElementDecl" classes of Axis Java tools have been extended by Axis C++ WSDL2Ws implementation.</p>
 <p>Other than the two classes mentioned above, no other class from Axis Java WSDL tool implementation has been overridden or extended at present by Axis C++ WSDL2Ws tool; hence all other classes in Axis Java tool are used as they are.</p>
-<p>Except for "SchemaUtils" and "ElementDecl" classes, the rest of the classes of Axis C++ WSDL2Ws are unique to Axis C++ and they use functionality form Axis Java jars.</p>
 <p>
 <a name="building"></a>
 </p>
 <div class="h4">
 <h4>2.2 Building the Tool</h4>
 </div>
-<p>If you want to build the WSDL2Ws tool form source, there is an Apache Ant build script to help you. Assuming that you have <a href="http://ant.apache.org/manual/install.html">installed Ant</a> properly, what you have to do is to set the CLASSPATH to include <a href="http://www.apache.org/dyn/closer.cgi/ws/axis/1_2beta/">Axis Java jar files</a> mentioned in the previous section and run ant command in $AXISCPP_HOME/src/wsdl folder. Once you build the tool the generated wsdl2ws.jar file would be placed in $AXISCPP_HOME/lib/axis/ folder.</p>
+<p>If you want to build the WSDL2Ws tool from source, there is an Apache Ant build script to help you. Assuming that you have <a href="http://ant.apache.org/manual/install.html">installed Ant</a> properly, what you have to do is to set the CLASSPATH to include <a href="http://www.apache.org/dyn/closer.cgi/ws/axis/1_2beta/">Axis Java jar files</a> mentioned in the previous section and run ant command in $AXISCPP_HOME/src/wsdl folder. Once you build the tool the generated wsdl2ws.jar file would be placed in $AXISCPP_HOME/lib/axis/ folder.</p>
 <p>
 <a name="synopsis"></a>
 </p>
@@ -431,7 +430,7 @@
 <p>
 <strong>Options</strong>
 </p>
-<pre>-help, -h              print a short help message<br>-o(folder)             target output folder - default is current folder<br>-l(c++|c)              target language (c++|c) - default is c++<br>-s(server|client)      generate server skeletons or client stubs? (serve|client) - default is server<br>-w(wrapped|nonwrapped) wrapping style of the WSDL (wrapped|nonwrapped) - default is wrapped<br>-verbose, -v           be verbose<br>-m(none|gnu)           generate make files (none|gnu) - default is none<br>
+<pre>-help, -h              print a short help message<br>-o(folder)             target output folder - default is current folder<br>-l(c++|c)              target language (c++|c) - default is c++<br>-s(server|client)      generate server skeletons or client stubs? (server|client) - default is server<br>-w(wrapped|nonwrapped) wrapping style of the WSDL (wrapped|nonwrapped) - default is wrapped<br>-verbose, -v           be verbose<br>
 </pre>
 <p>
 <a name="classpath"></a>
@@ -448,8 +447,6 @@ export CLASSPATH
 <pre>set CLASSPATH=%AXISCPP_HOME%\lib\axis\wsdl2ws.jar;%CLASSPATH%
 </pre>
 <p>Alternatively, you can use the -classpath option of java command to specify the CLASSPATH.</p>
-<p>
-<strong>NOTE: It is a MUST that that you have wsdl2ws.jar from Axis C++ appearing before all the jar files form Axis Java on the CLASSPATH.</strong> If not you will run into trouble when generating code. This is a known problem and happens because the two classes, "SchemaUtils" and "ElementDecl", of Axis C++ that overides Axis Java classes with the same name have identical package names to that of Axis Java classes.</p>
 <p>
 <a name="runtool"></a>
 </p>
