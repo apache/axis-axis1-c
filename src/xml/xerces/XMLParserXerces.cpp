@@ -84,8 +84,6 @@ const AnyElement* XMLParserXerces::next(bool isCharData)
 
     if( !m_bFirstParsed)
     {
-        m_pParser->parseFirst( *m_pInputSource, m_ScanToken);
-
         try
         {
             m_pParser->parseFirst( *m_pInputSource, m_ScanToken);
