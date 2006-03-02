@@ -416,7 +416,7 @@ AXISC_STORAGE_CLASS_INFO Axisc_Array* axiscGetCmplxArrayCall(AXISCHANDLE call, A
 	void * pCreFunct, void * pDelFunct, void * pSizeFunct, 
 	const AxiscChar * pName, const AxiscChar * pNamespace) {
 	//TODO: Unimplemented
-	Axisc_Array* aa;
+	Axisc_Array* aa = new Axisc_Array();
 	memset(aa,0,sizeof(aa));
 	return aa;
 }
@@ -424,7 +424,7 @@ AXISC_STORAGE_CLASS_INFO Axisc_Array* axiscGetCmplxArrayCall(AXISCHANDLE call, A
 AXISC_STORAGE_CLASS_INFO Axisc_Array* axiscGetBasicArrayCall(AXISCHANDLE call, AXISC_XSDTYPE nType, 
 	const AxiscChar * pName, const AxiscChar * pNamespace) {
 	//TODO: Unimplemented
-	Axisc_Array* aa;
+	Axisc_Array* aa = new Axisc_Array();
 	memset(aa,0,sizeof(aa));
 	return aa;
 }

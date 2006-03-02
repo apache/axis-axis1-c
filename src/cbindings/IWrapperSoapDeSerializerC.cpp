@@ -48,7 +48,7 @@ AXISC_STORAGE_CLASS_INFO Axisc_Array* axiscGetCmplxArrayIWrapperSoapDeSerializer
 	const AxiscChar * pName, const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 	// TODO: not implemented
-	Axisc_Array* aa;
+	Axisc_Array* aa = new Axisc_Array();
 	memset(aa,0,sizeof(aa));
 	return aa;
 }
@@ -57,7 +57,7 @@ AXISC_STORAGE_CLASS_INFO Axisc_Array* axiscGetBasicArrayIWrapperSoapDeSerializer
 	const AxiscChar * pName, const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 	// TODO: not implemented
-	Axisc_Array* aa;
+	Axisc_Array* aa = new Axisc_Array();
 	memset(aa,0,sizeof(aa));
 	return aa;
 }
