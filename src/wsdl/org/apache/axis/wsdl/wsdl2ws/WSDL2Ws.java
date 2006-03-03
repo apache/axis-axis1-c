@@ -59,8 +59,6 @@ import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 import org.apache.axis.wsdl.wsdl2ws.info.WrapperInfo;
 import org.w3c.dom.Node;
 
-import sun.security.action.GetLongAction;
-
 /**
  * This this the main class for the WSDL2Ws Tool. This class reuses the code in the 
  * Axis java implementations to parse the WSDL file.
@@ -505,52 +503,63 @@ public class WSDL2Ws
         Iterator paramlist;
 
         paramlist = op.getInput().getMessage().getParts().values().iterator();
-        Part part = (Part) paramlist.next();
-        QName minfoqname;
-        element = symbolTable.getElement(part.getElementName());
-        if (element == null)
+        
+        Part part = null;
+        
+        if( paramlist.hasNext())
         {
-            // the part reference a type.
-            qname = symbolTable.getType(part.getTypeName()).getQName();
-            minfoqname = symbolTable.getType(part.getTypeName()).getQName();
+            part = (Part) paramlist.next();
         }
-        else
+        
+        if( part != null)
         {
-            qname = element.getRefType().getQName();
-            minfoqname = element.getQName();
+            QName minfoqname;
+            element = symbolTable.getElement(part.getElementName());
+            
+	        if (element == null)
+	        {
+	            // the part reference a type.
+	            qname = symbolTable.getType(part.getTypeName()).getQName();
+	            minfoqname = symbolTable.getType(part.getTypeName()).getQName();
+	        }
+	        else
+	        {
+	            qname = element.getRefType().getQName();
+	            minfoqname = element.getQName();
+	        }
+	        
+	        minfo.setInputMessage(minfoqname);
+	
+	        if (qname != null)
+	        {
+	            type = this.typeMap.getType(qname);
+	            boolean wrapped = wsdlWrappingStyle;
+	
+	            if (type == null)
+	            {
+	                throw new WrapperFault(
+	                    "unregistered type " + qname + " referred");
+	            }
+	
+	            if (wrapped)
+	            {
+	                //get inner attributes and elements and add them as parameters
+	                addInputElementsToMethodInfo(minfo, type);
+	                addInputAttributesToMethodInfo(minfo, type);
+	            }
+	            else
+	            { // for non-wrapped style wsdl's
+	                String elementName = (String) element.getQName().getLocalPart();
+	                pinfo = new ParameterInfo(type, elementName);
+	                pinfo.setElementName(type.getName());
+	                if (type.getName().equals(CUtils.anyTypeQname))
+	                {
+	                    pinfo.setAnyType(true);
+	                }
+	                minfo.addInputParameter(pinfo);
+	            }
+	        }
         }
-        minfo.setInputMessage(minfoqname);
-
-        if (qname != null)
-        {
-            type = this.typeMap.getType(qname);
-            boolean wrapped = wsdlWrappingStyle;
-
-            if (type == null)
-            {
-                throw new WrapperFault(
-                    "unregistered type " + qname + " referred");
-            }
-
-            if (wrapped)
-            {
-                //get inner attributes and elements and add them as parameters
-                addInputElementsToMethodInfo(minfo, type);
-                addInputAttributesToMethodInfo(minfo, type);
-            }
-            else
-            { // for non-wrapped style wsdl's
-                String elementName = (String) element.getQName().getLocalPart();
-                pinfo = new ParameterInfo(type, elementName);
-                pinfo.setElementName(type.getName());
-                if (type.getName().equals(CUtils.anyTypeQname))
-                {
-                    pinfo.setAnyType(true);
-                }
-                minfo.addInputParameter(pinfo);
-            }
-        }
-
     }
 
     /**

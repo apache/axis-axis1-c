@@ -524,12 +524,16 @@ public class ClientStubWriter
 	writer.write ("\t}\n");
 	writer.write ("\tm_pCall->setSOAPVersion(SOAP_VER_1_1);\n");
 	//TODO check which version is it really.
-	writer.write ("\tm_pCall->setOperation(\""
-		      + minfo.getInputMessage ().getLocalPart ()
-		      + "\", \""
-		      + minfo.getInputMessage ().getNamespaceURI ()
-		      + "\");\n");
-
+	
+	if( minfo.getInputMessage() != null)
+	{
+		writer.write( "\tm_pCall->setOperation(\"" +
+			      	  minfo.getInputMessage().getLocalPart() +
+			      	  "\", \"" + 
+			      	  minfo.getInputMessage().getNamespaceURI() +
+			      	  "\");\n");
+	}
+	
 	// Add attributes to soap method
 	for (int i = 0; i < paramsB.size (); i++)
 	{
