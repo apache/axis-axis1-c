@@ -1,0 +1,16 @@
+<test>
+    <name>LargeReturningStringSSL</name>
+    <description>LargeReturningStringSSL</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>LargeReturningStringSSLClient.cpp</clientCode>
+    <wsdl>LargeReturningString.wsdl</wsdl>
+    <expected>
+        <output>
+            LargeReturningStringSSL.cpp.out
+        </output>		
+    </expected>
+	<endpoint>-e https://localhost:9080/LargeReturningString/services/LargeReturningString</endpoint>
+ 	<nomonitor>true</nomonitor>
+        <port>9443</port>
+        <ssl>true</ssl>
+</test>
