@@ -95,7 +95,7 @@ public abstract class ParamCFileWriter
     {
         try
         {
-            writer.write("#include <malloc.h>\n");
+            writer.write("#include <stdlib.h>\n");
             writer.write("#include <memory.h>\n");
             writer.write("#include <axis/server/AxisWrapperAPI.h>\n\n");
             writer.write(

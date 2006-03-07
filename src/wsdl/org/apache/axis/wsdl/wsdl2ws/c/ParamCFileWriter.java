@@ -115,7 +115,7 @@ public abstract class ParamCFileWriter extends ParamWriter
     {
         try
         {
-            writer.write("#include <malloc.h>\n");
+            writer.write("#include <stdlib.h>\n");
             writer.write(
                 "#include \""
                     + this.classname
