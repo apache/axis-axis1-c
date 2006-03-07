@@ -38,9 +38,11 @@
 #include "../AxisParseException.h"
 /*
 Try this again at some point in the future.  At the moment it works on
-Windows, but Linux as a problem...
-#include "../../transport/axis3/HTTPTransportException.hpp"
+Windows, but Linux as a problem...will keep for OS/400.
 */
+#ifdef __OS400__
+#include "../../transport/axis3/HTTPTransportException.hpp"
+#endif
 
 XERCES_CPP_NAMESPACE_USE
 

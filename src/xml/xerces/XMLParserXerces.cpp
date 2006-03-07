@@ -84,13 +84,14 @@ const AnyElement* XMLParserXerces::next(bool isCharData)
 
     if( !m_bFirstParsed)
     {
+//    Try this again at some point in the future.  At the moment it works on
+//    Windows, but Linux has a problem...will keep for OS/400
+#ifndef __OS400__           
+        m_pParser->parseFirst( *m_pInputSource, m_ScanToken);
+#else
+        try
+        {
             m_pParser->parseFirst( *m_pInputSource, m_ScanToken);
-/*
-	Try this again at some point in the future.  At the moment it works on
-	Windows, but Linux as a problem...
-		try
-		{
-			m_pParser->parseFirst( *m_pInputSource, m_ScanToken);
         }
         catch( const XMLException& toCatch)
         {
@@ -121,10 +122,10 @@ const AnyElement* XMLParserXerces::next(bool isCharData)
         catch( ...)
         {
             char *pErrorMsg = "Unexpected Exception in SAX parser.  Probably no message or the message is not recognised as XML.";
-
+            
             throw AxisParseException( CLIENT_SOAP_CONTENT_NOT_SOAP, pErrorMsg);
         }
-*/
+#endif
         m_bFirstParsed = true;
     }
 
