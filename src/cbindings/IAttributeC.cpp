@@ -22,72 +22,94 @@ extern "C" {
 #include <axis/GDefine.h>
 #include <axis/IAttribute.h>
 
-AXISC_STORAGE_CLASS_INFO void axiscDestroyIAttribute(AXISCHANDLE attribute) {
-	IAttribute *attr = (IAttribute*)attribute;
-	delete attr;
+AXISC_STORAGE_CLASS_INFO 
+void axiscDestroyIAttribute(AXISCHANDLE attribute) 
+{
+    IAttribute *attr = (IAttribute*)attribute;
+    delete attr;
 }
 
-AXISC_STORAGE_CLASS_INFO int axiscSetValueIAttribute(AXISCHANDLE attribute, const AxiscChar * value) {
-	if(!value)
-	{
-		return AXIS_FAIL;
-	}
-	IAttribute *attr = (IAttribute*)attribute;
-	attr->setValue(value);
-	
-	return AXIS_SUCCESS;
+AXISC_STORAGE_CLASS_INFO 
+int axiscSetValueIAttribute(AXISCHANDLE attribute, 
+                            const AxiscChar * value) 
+{
+    if(!value)
+    {
+        return AXIS_FAIL;
+    }
+    IAttribute *attr = (IAttribute*)attribute;
+    attr->setValue(value);
+    
+    return AXIS_SUCCESS;
 }
 
-AXISC_STORAGE_CLASS_INFO int axiscSetUriIAttribute(AXISCHANDLE attribute, const AxiscChar * uri) {
-	if(!uri)
-	{
-		return AXIS_FAIL;
-	}
-	IAttribute *attr = (IAttribute*)attribute;
-	attr->setURI(uri);
-	return AXIS_SUCCESS;
+AXISC_STORAGE_CLASS_INFO 
+int axiscSetUriIAttribute(AXISCHANDLE attribute, 
+                          const AxiscChar * uri) 
+{
+    if(!uri)
+    {
+        return AXIS_FAIL;
+    }
+    IAttribute *attr = (IAttribute*)attribute;
+    attr->setURI(uri);
+    return AXIS_SUCCESS;
 }
 
 
-AXISC_STORAGE_CLASS_INFO int axiscSetPrefixIAttribute(AXISCHANDLE attribute, const AxiscChar * prefix) {
-	if(!prefix)
-	{
-		return AXIS_FAIL;
-	}
-	
-	IAttribute *attr = (IAttribute*)attribute;
-	attr->setPrefix(prefix);
-	return AXIS_SUCCESS;
+AXISC_STORAGE_CLASS_INFO 
+int axiscSetPrefixIAttribute(AXISCHANDLE attribute, 
+                             const AxiscChar * prefix) 
+{
+    if(!prefix)
+    {
+        return AXIS_FAIL;
+    }
+    
+    IAttribute *attr = (IAttribute*)attribute;
+    attr->setPrefix(prefix);
+    return AXIS_SUCCESS;
 }
 
-AXISC_STORAGE_CLASS_INFO int axiscSetLocalNameIAttribute(AXISCHANDLE attribute, const AxiscChar * localname) {
-	if(!localname)
-	{
-		return AXIS_FAIL;
-	}
-	IAttribute *attr = (IAttribute*)attribute;
-	attr->setLocalName(localname);
-	return AXIS_SUCCESS;
+AXISC_STORAGE_CLASS_INFO 
+int axiscSetLocalNameIAttribute(AXISCHANDLE attribute, 
+                                const AxiscChar * localname) 
+{
+    if(!localname)
+    {
+        return AXIS_FAIL;
+    }
+    IAttribute *attr = (IAttribute*)attribute;
+    attr->setLocalName(localname);
+    return AXIS_SUCCESS;
 }
 
-AXISC_STORAGE_CLASS_INFO const AxiscChar * axiscGetValueIAttribute(AXISCHANDLE attribute) {
-	IAttribute *attr = (IAttribute*)attribute;
-	return attr->getValue();
+AXISC_STORAGE_CLASS_INFO 
+const AxiscChar * axiscGetValueIAttribute(AXISCHANDLE attribute) 
+{
+    IAttribute *attr = (IAttribute*)attribute;
+    return attr->getValue();
 }
 
-AXISC_STORAGE_CLASS_INFO const AxiscChar * axiscGetUri(AXISCHANDLE attribute) {
-	IAttribute *attr = (IAttribute*)attribute;
-	return attr->getURI();
+AXISC_STORAGE_CLASS_INFO 
+const AxiscChar * axiscGetUri(AXISCHANDLE attribute) 
+{
+    IAttribute *attr = (IAttribute*)attribute;
+    return attr->getURI();
 }
 
-AXISC_STORAGE_CLASS_INFO const AxiscChar * axiscGetPrefixIAttribute(AXISCHANDLE attribute) {
-	IAttribute *attr = (IAttribute*)attribute;
-	return attr->getPrefix();
+AXISC_STORAGE_CLASS_INFO 
+const AxiscChar * axiscGetPrefixIAttribute(AXISCHANDLE attribute) 
+{
+    IAttribute *attr = (IAttribute*)attribute;
+    return attr->getPrefix();
 }
 
-AXISC_STORAGE_CLASS_INFO const AxiscChar * axiscGetLocalNameIAttribute(AXISCHANDLE attribute) {
-	IAttribute *attr = (IAttribute*)attribute;
-	return attr->getLocalName();
+AXISC_STORAGE_CLASS_INFO 
+const AxiscChar * axiscGetLocalNameIAttribute(AXISCHANDLE attribute) 
+{
+    IAttribute *attr = (IAttribute*)attribute;
+    return attr->getLocalName();
 }
 
 }

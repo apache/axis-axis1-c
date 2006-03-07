@@ -24,66 +24,98 @@ extern "C" {
 #include <axis/AxisUserAPI.h>
 #include <axis/ISoapFault.h>
 
-AXISC_STORAGE_CLASS_INFO void axiscDestroyISoapFault(AXISCHANDLE soapFault) {
-	ISoapFault *sf = (ISoapFault*)soapFault;
-	delete sf;
+AXISC_STORAGE_CLASS_INFO 
+void axiscDestroyISoapFault(AXISCHANDLE soapFault) 
+{
+    ISoapFault *sf = (ISoapFault*)soapFault;
+    delete sf;
 }
 
-AXISC_STORAGE_CLASS_INFO const AxiscChar* axiscGetCmplxFaultObjectName(AXISCHANDLE soapFault) {
-	ISoapFault *sf = (ISoapFault*)soapFault;
-	return sf->getCmplxFaultObjectName();
+AXISC_STORAGE_CLASS_INFO 
+const AxiscChar* axiscGetCmplxFaultObjectName(AXISCHANDLE soapFault) 
+{
+    ISoapFault *sf = (ISoapFault*)soapFault;
+    return sf->getCmplxFaultObjectName();
 }
 
-AXISC_STORAGE_CLASS_INFO void * axiscGetCmplxFaultObject(AXISCHANDLE soapFault, void * pDZFunct, 
-	void * pCreFunct, void * pDelFunct, const AxiscChar * pName, 
-	const AxiscChar * pNamespace) {
-	ISoapFault *sf = (ISoapFault*)soapFault;
-	return sf->getCmplxFaultObject(pDZFunct,pCreFunct,pDelFunct,pName,pNamespace);
+AXISC_STORAGE_CLASS_INFO 
+void * axiscGetCmplxFaultObject(AXISCHANDLE soapFault, 
+                                void * pDZFunct, 
+                                void * pCreFunct, 
+                                void * pDelFunct, 
+                                const AxiscChar * pName, 
+                                const AxiscChar * pNamespace) 
+{
+    ISoapFault *sf = (ISoapFault*)soapFault;
+    return sf->getCmplxFaultObject(pDZFunct,pCreFunct,pDelFunct,pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO const AxisChar* axiscGetSimpleFaultDetail(AXISCHANDLE soapFault) {
-	ISoapFault *sf = (ISoapFault*)soapFault;
-	return sf->getSimpleFaultDetail();
+AXISC_STORAGE_CLASS_INFO 
+const AxisChar* axiscGetSimpleFaultDetail(AXISCHANDLE soapFault) 
+{
+    ISoapFault *sf = (ISoapFault*)soapFault;
+    return sf->getSimpleFaultDetail();
 }
 
-AXISC_STORAGE_CLASS_INFO const AxisChar* axiscGetFaultcode(AXISCHANDLE soapFault) {
-	ISoapFault *sf = (ISoapFault*)soapFault;
-	return sf->getFaultcode();
+AXISC_STORAGE_CLASS_INFO 
+const AxisChar* axiscGetFaultcode(AXISCHANDLE soapFault) 
+{
+    ISoapFault *sf = (ISoapFault*)soapFault;
+    return sf->getFaultcode();
 }
 
-AXISC_STORAGE_CLASS_INFO const AxisChar* axiscGetFaultstring(AXISCHANDLE soapFault) {
-	ISoapFault *sf = (ISoapFault*)soapFault;
-	return sf->getFaultstring();
+AXISC_STORAGE_CLASS_INFO 
+const AxisChar* axiscGetFaultstring(AXISCHANDLE soapFault) 
+{
+    ISoapFault *sf = (ISoapFault*)soapFault;
+    return sf->getFaultstring();
 }
 
-AXISC_STORAGE_CLASS_INFO const AxisChar* axiscGetFaultactor(AXISCHANDLE soapFault) {
-	ISoapFault *sf = (ISoapFault*)soapFault;
-	return sf->getFaultactor();
+AXISC_STORAGE_CLASS_INFO 
+const AxisChar* axiscGetFaultactor(AXISCHANDLE soapFault) 
+{
+    ISoapFault *sf = (ISoapFault*)soapFault;
+    return sf->getFaultactor();
 }
 
-AXISC_STORAGE_CLASS_INFO int axiscSetFaultcode(AXISCHANDLE soapFault, const AxisChar*  sFaultcode) {
-	ISoapFault *sf = (ISoapFault*)soapFault;
-	return sf->setFaultcode(sFaultcode);
+AXISC_STORAGE_CLASS_INFO 
+int axiscSetFaultcode(AXISCHANDLE soapFault, 
+                      const AxisChar*  sFaultcode) 
+{
+    ISoapFault *sf = (ISoapFault*)soapFault;
+    return sf->setFaultcode(sFaultcode);
 }
 
-AXISC_STORAGE_CLASS_INFO int axiscSetFaultstring(AXISCHANDLE soapFault, const AxisChar*  sFaultstring) {
-	ISoapFault *sf = (ISoapFault*)soapFault;
-	return sf->setFaultstring(sFaultstring);
+AXISC_STORAGE_CLASS_INFO 
+int axiscSetFaultstring(AXISCHANDLE soapFault, 
+                        const AxisChar*  sFaultstring) 
+{
+    ISoapFault *sf = (ISoapFault*)soapFault;
+    return sf->setFaultstring(sFaultstring);
 }
 
-AXISC_STORAGE_CLASS_INFO int axiscSetFaultactor(AXISCHANDLE soapFault, const AxisChar*  sFaultactor) {
-	ISoapFault *sf = (ISoapFault*)soapFault;
-	return sf->setFaultactor(sFaultactor);
+AXISC_STORAGE_CLASS_INFO 
+int axiscSetFaultactor(AXISCHANDLE soapFault, 
+                       const AxisChar*  sFaultactor) 
+{
+    ISoapFault *sf = (ISoapFault*)soapFault;
+    return sf->setFaultactor(sFaultactor);
 }
 
-AXISC_STORAGE_CLASS_INFO int axiscSetFaultDetail(AXISCHANDLE soapFault, const AxisChar*  sFaultdetail) {
-	ISoapFault *sf = (ISoapFault*)soapFault;
-	return sf->setFaultDetail(sFaultdetail);
+AXISC_STORAGE_CLASS_INFO 
+int axiscSetFaultDetail(AXISCHANDLE soapFault, 
+                        const AxisChar*  sFaultdetail) 
+{
+    ISoapFault *sf = (ISoapFault*)soapFault;
+    return sf->setFaultDetail(sFaultdetail);
 }
 
-AXISC_STORAGE_CLASS_INFO int axiscSetCmplxFaultObject(AXISCHANDLE soapFault, const void * pCmplxFaultObject) {
-	ISoapFault *sf = (ISoapFault*)soapFault;
-	return sf->setCmplxFaultObject(pCmplxFaultObject);
+AXISC_STORAGE_CLASS_INFO 
+int axiscSetCmplxFaultObject(AXISCHANDLE soapFault, 
+                             const void * pCmplxFaultObject) 
+{
+    ISoapFault *sf = (ISoapFault*)soapFault;
+    return sf->setCmplxFaultObject(pCmplxFaultObject);
 }
 
 }
