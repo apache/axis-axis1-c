@@ -14,8 +14,12 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
+ 
+#include <iostream>
 
 #include <axis/Axis.hpp>
+#include <axis/AxisException.hpp>
+
 AXIS_CPP_NAMESPACE_USE
 
 extern "C" {
@@ -24,16 +28,89 @@ extern "C" {
 #include <axis/TypeMapping.h>
 #include <axis/Axis.h>
 
-STORAGE_CLASS_INFO void axiscInitializeAxis(AxiscBool bIsServer) {
-	Axis::initialize(0==bIsServer);
+static void (*global_exceptionHandler)(int errorCode, const char *errorString) = NULL;
+
+STORAGE_CLASS_INFO 
+int axiscInitializeAxis(AxiscBool bIsServer) 
+{
+    int rc = AXISC_SUCCESS;
+    
+    try 
+    {
+        Axis::initialize(0==bIsServer);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        rc = AXISC_FAIL;    
+    }
+    catch ( ... )
+    {
+        rc = AXISC_FAIL;
+    }
+    
+    return rc;
 } 
 
-STORAGE_CLASS_INFO void axiscTerminate() {
-	Axis::terminate();
-}
+STORAGE_CLASS_INFO 
+int axiscTerminate() 
+{
+    int rc = AXISC_SUCCESS;
+    
+    try 
+    {
+        Axis::terminate();
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        rc = AXISC_FAIL;    
+    }
+    catch ( ... )
+    {
+        rc = AXISC_FAIL;
+    }
+    
+    return rc;
 }
 
-AXISC_STORAGE_CLASS_INFO void axiscAxisDelete(void * pValue,  AXISC_XSDTYPE type)
+AXISC_STORAGE_CLASS_INFO 
+int axiscAxisDelete(void * pValue,  
+                    AXISC_XSDTYPE type)
 {
-    Axis::AxisDelete(pValue, (XSDTYPE) type);
+    int rc = AXISC_SUCCESS;
+    
+    try 
+    {
+        Axis::AxisDelete(pValue, (XSDTYPE) type);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        rc = AXISC_FAIL;    
+    }
+    catch ( ... )
+    {
+        rc = AXISC_FAIL;
+    }    
+    
+    return rc;
+}
+
+AXISC_STORAGE_CLASS_INFO 
+void axiscRegisterExceptionHandler(void (*fp)(int errorCode, const char *errorString))
+{
+    global_exceptionHandler = fp;
+}
+
+
+AXISC_STORAGE_CLASS_INFO 
+void axiscInvokeExceptionHandler(int errorCode, const char *errorString)
+{
+    if (global_exceptionHandler)
+        global_exceptionHandler(errorCode, errorString);
+    else
+        cerr <<  "AXIS EXCEPTION: (" << errorCode << ") " << errorString << endl;
+}
+
 }

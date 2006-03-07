@@ -54,14 +54,14 @@
   * @return AXISC_SUCCESS or AXISC_FAIL to indicate success or fail
   */
 AXISC_STORAGE_CLASS_INFO 
-void axiscInitializeAxis(AxiscBool bIsServer);
+int axiscInitializeAxis(AxiscBool bIsServer);
 
 /** 
   * Terminates the Axis runtime. 
   * @return AXISC_SUCCESS or AXISC_FAIL to indicate success or fail
   */
 AXISC_STORAGE_CLASS_INFO 
-void axiscTerminate();
+int axiscTerminate();
 
 /**
   * Deletes storage allocated by the Axis engine, that is no longer required
@@ -72,7 +72,28 @@ void axiscTerminate();
   * @return AXISC_SUCCESS or AXISC_FAIL to indicate success or fail
   */
 AXISC_STORAGE_CLASS_INFO 
-void axiscAxisDelete(void * pValue, AXISC_XSDTYPE type);
+int axiscAxisDelete(void * pValue, AXISC_XSDTYPE type);
+
+/**
+  * Registers a function that will be invoked to handle Axis engine
+  * exceptions.  The function will be called with two parameters, 
+  * the error code and the error message, if any. 
+  * 
+  * @param fp - pointer to exception handler function.
+  */
+AXISC_STORAGE_CLASS_INFO 
+void axiscRegisterExceptionHandler(void (*fp)(int errorCode, const char *errorString));
+
+/**
+  * Invokes the registered exception handler. If an exception handler was not
+  * registered, the errorCode and errorString are printed to stderr. 
+  * 
+  * @param errorCode - error code.
+  * @param errorString - error string.
+  */
+
+AXISC_STORAGE_CLASS_INFO 
+void axiscInvokeExceptionHandler(int errorCode, const char *errorString);
 
 #ifdef __cplusplus
   }
