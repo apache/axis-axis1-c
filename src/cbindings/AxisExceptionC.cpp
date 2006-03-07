@@ -22,20 +22,27 @@ extern "C" {
 #include <axis/AxisUserAPI.h>
 #include <axis/AxisException.h>
 
-AXISC_STORAGE_CLASS_INFO void axiscDestroyAxisException(AXISCHANDLE axisException) {
+AXISC_STORAGE_CLASS_INFO 
+void axiscDestroyAxisException(AXISCHANDLE axisException) 
+{
 	AxisException *ae = (AxisException*)axisException;
 	delete ae;
 }
 
-AXISC_STORAGE_CLASS_INFO const char * axiscWhat(AXISCHANDLE axisException) {
+AXISC_STORAGE_CLASS_INFO 
+const char * axiscWhat(AXISCHANDLE axisException) 
+{
 	AxisException *ae = (AxisException*)axisException;
 	return ae->what();
 }
 
-AXISC_STORAGE_CLASS_INFO const int axiscGetExceptionCode(AXISCHANDLE axisException) {
+AXISC_STORAGE_CLASS_INFO 
+const int axiscGetExceptionCode(AXISCHANDLE axisException) 
+{
 	AxisException *ae = (AxisException*)axisException;
 	return ae->getExceptionCode();
 }
+
 }
 
 
