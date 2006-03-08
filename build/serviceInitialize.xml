@@ -58,7 +58,14 @@
                     <property name="serverenv.env" value="LD_LIBRARY_PATH" />
                     <property name="serverenv.env.value" value="${dir.libraries}:${basedir}/../../../Axis/webservices:${env.LD_LIBRARY_PATH}" />
                     <!-- The path to axiscpp.conf -->
-                    <property name="axiscppconffile" value="${basedir}/../../../Axis/etc/axiscpp.conf" />
+                  <!--  <property name="axiscppconffile" value="${basedir}/../../../Axis/etc/axiscpp.conf" /> -->
+				
+			   <condition property="axiscppconffile" value="${axiscpp_deploy}/server/etc/axiscpp.conf">
+                    <not>
+                        <isset property="windows" />
+                    </not>
+                    </condition>
+
 
                     <if>
                         <istrue value="${server.apache1}" />
