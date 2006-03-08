@@ -2,7 +2,6 @@
 #define __COMMONCHEADERFILE
 
 #include <stdio.h>
-#include <stdlib.h>
 
 #define C_BOOL  int
 #define C_FALSE (int)0
@@ -143,77 +142,12 @@ char * asciiToStringOfLength( char * pString, int iLength)
 }
 
 #endif
-/* Spin through args list and check for -e -p and -s options.
-   Option values are expected to follow the option letter as the next
-   argument.
- 
-   These options and values are removed from the arg list.
-   If both -e and -s and or -p, then -e takes priority
-*/
-C_BOOL parse_args(int *argc, char *argv[], char **endpoint) {
-	int i;
-    char *server = "localhost";
-    int  port = 80;
-    C_BOOL ep_set = C_FALSE;
-    C_BOOL server_set = C_FALSE;
-    C_BOOL port_set = C_FALSE;
 
-    // We need at least 2 extra arg after program name
-    if(*argc < 3)
-        return C_FALSE;
 
-    for(i=1; i<*argc; i++) 
-    {
-        if(*argv[i] == '-') 
-        {
-            switch(*(argv[i]+1)) 
-            {
-            case 'e':
-                *endpoint = c_strdup(argv[i+1]);
-                ep_set = C_TRUE;
-                shift_args_up(i, argc, argv);
-                i--;
-                break;
-            case 's':
-                server = c_strdup(argv[i+1]);
-                server_set = C_TRUE;
-                shift_args_up(i, argc, argv);
-                i--;
-                break;
-            case 'p':
-                port = atoi(argv[i+1]);
-                if(port >80) port_set = C_TRUE;
-                shift_args_up(i, argc, argv);
-                i--;
-                break;
-            default:
-                break;
-            }
-        }
-    }
-
-    // use the supplied server and/or port to build the endpoint
-    if(ep_set == C_FALSE && (server_set || port_set)) {
-        // Set p to the location of the first '/' after the http:// (7 chars)
-        // e.g. from http://localhost:80/axis/base gets /axis/base
-        char *ep_context = strpbrk(&(*endpoint)[7], "/");
-
-        // http://:/ is 9 characters + terminating NULL character so add 10.
-        // Allow space for port number upto 999999 6 chars
-        *endpoint = (char *)calloc(1, 10 + strlen(ep_context) + strlen(server) + 6);
-        sprintf(*endpoint, "http://%s:%d/%s", server, port, ep_context+1);
-        if(server_set) free(server);
-        ep_set = C_TRUE;
-    }
-
-    return ep_set;
-}
-void shift_args_up(int i, int *argc, char *argv[]) 
+void exceptionHandler(int errorCode, const char *errorString)
 {
-	int j,k;
-    for(j=i, k=i+2; j<*(argc)-2; j++, k++)
-        argv[j]=argv[k];
-    *argc-=2;
+	printf("TEST EXCEPTION HANDLER: ERROR-CODE=%d, ERROR-STRING=%s\n", 
+	       errorCode, errorString);
 }
 
 #endif
