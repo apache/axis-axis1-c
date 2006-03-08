@@ -6,10 +6,10 @@
 
     <target name="createServerConfigurationFile" depends="initialize, decideserverproperties">
         <!-- Select which parser library to use -->
-        <condition property="ClientParserLib" value="${libraryPrefix}${xml4c.xmlParserLibraryName}${librarySuffix}">
+        <condition property="ClientParserLib" value="${xml4c.xmlParserLibraryName}">
             <istrue value="${testconf.client.parser.xml4c}"/>
         </condition>
-        <condition property="ClientParserLib" value="${libraryPrefix}${xerces.xmlParserLibraryName}${librarySuffix}">
+        <condition property="ClientParserLib" value="${xerces.xmlParserLibraryName}">
             <istrue value="${testconf.client.parser.xerces}"/>
         </condition>
 
@@ -223,6 +223,15 @@ XMLParser:${dir.libraries}/${libraryPrefix}${ClientParserLib}${librarySuffix}
 
 
     <target name="compileService">
+
+	<!-- Fix to have different service implementaion file  AXISCPP-948  -->
+	<if>
+		<isset property="service.removeFile" />
+         <then>
+	  	<delete file="${dir.test.generated}/server/${serviceLang}/${serviceName}/${service.removeFile}" failonerror="false" />
+	   </then>
+	  </if>	
+
         <copy file="${dir.autotests}/server/${serviceLang}/${serviceCode}"
               tofile="${dir.test.generated}/server/${serviceLang}/${serviceName}/${serviceCode}"
               overwrite="true" />
