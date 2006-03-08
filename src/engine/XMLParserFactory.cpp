@@ -61,9 +61,9 @@ int XMLParserFactory::initialize()
         if (!m_Create || !m_Delete)
         {
             unloadLib();
-            AXISTRACE1("SERVER_ENGINE_LOADING_PARSER_FAILED" , CRITICAL);
             char *s = new char[strlen(m_pcLibraryPath)+1];
             strcpy(s,m_pcLibraryPath);
+            AxisTrace::traceLine("Server engine failed to load XML Parser");
             throw AxisEngineException(SERVER_ENGINE_LOADING_PARSER_FAILED, s);
         } 
 	  else
@@ -80,9 +80,11 @@ int XMLParserFactory::initialize()
 	}
 	else
 	{
-        AXISTRACE1("SERVER_ENGINE_LOADING_PARSER_FAILED" , CRITICAL);
         char *s = new char[strlen(m_pcLibraryPath)+1];
         strcpy(s,m_pcLibraryPath);
+        AxisTrace::traceLine("Server engine failed to load XML Parser: ");
+        AxisTrace::traceLine(s);
+        
         throw AxisEngineException(SERVER_ENGINE_LOADING_PARSER_FAILED, s);
 	}
    return AXIS_SUCCESS;
@@ -121,20 +123,19 @@ int XMLParserFactory::loadLib()
 
     if (!m_LibHandler)
     {
-        AXISTRACE1("SERVER_ENGINE_LOADING_PARSER_FAILED" , CRITICAL);
-
         long dwError = GETLASTERROR
         string *    message = PLATFORM_GET_ERROR_MESSAGE( dwError);
-        char        fullMessage[1024];
+        char        fullMessage[5024];
         sprintf(fullMessage,
-                "Failed to load parser within server engine: \n \
-                Error Message='%s'\
+                "Failed to load parser '%s' within server engine: \n \
+                Error Message='%s'\n\
                 Error Code='%d'\n \
                 Load lib error='%s' \n",
-                message->c_str(), (int) dwError, PLATFORM_LOADLIB_ERROR);
+                m_pcLibraryPath, message->c_str(), (int) dwError, PLATFORM_LOADLIB_ERROR);
 
         delete( message);
 
+        AxisTrace::traceLine(fullMessage);
         throw AxisEngineException(SERVER_ENGINE_LOADING_PARSER_FAILED, fullMessage);
     }
 
