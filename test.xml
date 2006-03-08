@@ -19,6 +19,7 @@
 
 	<target name="preInitializeTest" depends="pre-init">
 		<property file="${dir.properties}/test.${platform}.properties" />
+		<property file="${dir.properties}/test.common.properties" />
 	</target>
 	
 	

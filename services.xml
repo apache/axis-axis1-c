@@ -95,6 +95,7 @@ XMLParser:${dir.libraries}/${libraryPrefix}${ClientParserLib}${librarySuffix}
                  param="service_property"
                  inheritall="true">
             <path refid="service_properties" />
+			<param name="dir.release" value="${dir.release}"/>
         </foreach>
     </target>
     <target name="setServiceList"
