@@ -283,4 +283,64 @@ Please use these to configure directories to suit the needs of your system.
 			<fileset dir="${dir.zips}" includes="${release}**"/>
 		</delete>
 	</target>
+
+<!-- ApacheRelease is used to add md5 files to all zip/tar files created by the packaging scripts.
+     +==> (D) initialize
+     +==> md5Checksums
+           +==> (D) packageWindowsDeliverableName
+           +==> (D) packageUnixDeliverableName
+           +==> md5Checksum
+ -->
+
+  <target name="ApacheRelease" depends="initialize" description="Once the Apache Client has been packaged, two additional files need to be created for both the source and binary zip/tar files.  These are the 'md5' and 'asc' files.">
+    <antcall target="md5Checksums">
+      <param name="dir.properties" value="${basedir}/../.."/>
+    </antcall>
+  </target>
+
+  <target name="md5Checksums" depends="packageWindowsDeliverableName, packageUnixDeliverableName">
+    <antcall target="md5Checksum">
+      <param name="zipName" value="${zipNameBin}"/>
+    </antcall>
+    <antcall target="md5Checksum">
+      <param name="zipName" value="${zipNameSrc}"/>
+    </antcall>
+    <antcall target="md5Checksum">
+      <param name="zipName" value="${zipNameTraceBin}"/>
+    </antcall>
+    <antcall target="md5Checksum">
+      <param name="zipName" value="${zipNameTraceSrc}"/>
+    </antcall>
+  </target>
+
+  <target name="md5Checksum">
+    <echo message="zipName=${zipName}"/>
+    <if>
+      <available file="${zipName}"/>
+      <then>
+        <checksum forceOverwrite="yes" fileext=".md5" file="${zipName}"/>
+      </then>
+      <else>
+        <echo message="Skipping ${zipName}, as it does not exist."/>
+      </else>
+    </if>
+  </target>
+
+  <target name="packageWindowsDeliverableName" if="windows">
+    <property name="zipNameBin" value="${dir.zips}/${release}-bin.zip"/>
+    <property name="zipNameSrc" value="${dir.zips}/${release}-src.zip"/>
+    <property name="zipNameTraceBin" value="${dir.zips}/${release}-trace-bin.zip"/>
+    <property name="zipNameTraceSrc" value="${dir.zips}/${release}-trace-src.zip"/>
+  </target>
+	
+  <target name="packageUnixDeliverableName" unless="windows">
+    <property name="zipNameBin" value="${dir.zips}/${release}-bin.tar"/>
+    <property name="zipNameSrc" value="${dir.zips}/${release}-src.tar"/>
+    <property name="zipNameTraceBin" value="${dir.zips}/${release}-trace-bin.tar"/>
+    <property name="zipNameTraceSrc" value="${dir.zips}/${release}-trace-src.tar"/>
+  </target>
+
+  <target name="ascFiles">
+  </target>
+
 </project>
