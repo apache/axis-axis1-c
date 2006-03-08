@@ -31,15 +31,10 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-#if defined(ENABLE_AXISTRACE)  
+// Trace only gets traced if the runtime flag is on
   #define AXISTRACE1(X, L) AxisTrace::logaxis(X,NULL,"W",__FILE__,__LINE__);
   #define AXISTRACE2(X, Y, L) AxisTrace::logaxis(X,Y,"W",__FILE__,__LINE__);
   #define AXISTRACE3(X) AxisTrace::trace(X);
-#else
-  #define AXISTRACE1(X,L)
-  #define AXISTRACE2(X,Y,L)
-  #define AXISTRACE3(X)
-#endif
 
 /**
  * @class AxisTrace
