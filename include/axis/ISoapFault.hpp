@@ -29,6 +29,8 @@
 #if !defined(_ISOAPFAULT_H____OF_AXIS_INCLUDED_)
 #define _ISOAPFAULT_H____OF_AXIS_INCLUDED_
 
+#include <axis/GDefine.hpp>
+
 AXIS_CPP_NAMESPACE_START
 
 using namespace std;
