@@ -81,8 +81,12 @@ int axiscAxisDelete(void * pValue, AXISC_XSDTYPE type);
   * 
   * @param fp - pointer to exception handler function.
   */
-AXISC_STORAGE_CLASS_INFO 
-void axiscRegisterExceptionHandler(void (*fp)(int errorCode, const char *errorString));
+
+// Create prototype for globalExceptionHandler.  This is to get round the
+// problems introduced by trace which cannot handle in-line prototyping.
+typedef void * __stdcall GlobalExceptionHandlerPrototype( int errorCode, const char * errorString);
+
+AXISC_STORAGE_CLASS_INFO void axiscRegisterExceptionHandler( void * fp);
 
 /**
   * Invokes the registered exception handler. If an exception handler was not

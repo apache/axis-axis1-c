@@ -16,104 +16,101 @@
  */
  
 #include <iostream>
-
 #include <axis/Axis.hpp>
 #include <axis/AxisException.hpp>
 
 AXIS_CPP_NAMESPACE_USE
 
 extern "C" {
-#include <axis/GDefine.h>
-#include <axis/AxisUserAPI.h>
-#include <axis/TypeMapping.h>
-#include <axis/Axis.h>
+	#include <axis/GDefine.h>
+	#include <axis/AxisUserAPI.h>
+	#include <axis/TypeMapping.h>
+	#include <axis/Axis.h>
 
-static void (*global_exceptionHandler)(int errorCode, const char *errorString) = NULL;
+// Create an object using the GlobalExceptionHandlerPrototype prototype.
+	static GlobalExceptionHandlerPrototype * global_exceptionHandler = NULL;
 
-STORAGE_CLASS_INFO 
-int axiscInitializeAxis(AxiscBool bIsServer) 
-{
-    int rc = AXISC_SUCCESS;
-    
-    try 
-    {
-        Axis::initialize(0==bIsServer);
-    }
-    catch ( AxisException& e  )
-    {
-        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
-        rc = AXISC_FAIL;    
-    }
-    catch ( ... )
-    {
-        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
-        rc = AXISC_FAIL;
-    }
-    
-    return rc;
-} 
+	STORAGE_CLASS_INFO int axiscInitializeAxis( AxiscBool bIsServer) 
+	{
+		int rc = AXISC_SUCCESS;
+	    
+		try 
+		{
+			Axis::initialize( 0 == bIsServer);
+		}
+		catch( AxisException& e)
+		{
+			axiscInvokeExceptionHandler( e.getExceptionCode(), e.what());
 
-STORAGE_CLASS_INFO 
-int axiscTerminate() 
-{
-    int rc = AXISC_SUCCESS;
-    
-    try 
-    {
-        Axis::terminate();
-    }
-    catch ( AxisException& e  )
-    {
-        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
-        rc = AXISC_FAIL;    
-    }
-    catch ( ... )
-    {
-        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
-        rc = AXISC_FAIL;
-    }
-    
-    return rc;
-}
+			rc = AXISC_FAIL;    
+		}
+		catch( ...)
+		{
+			rc = AXISC_FAIL;
+		}
+	    
+		return rc;
+	} 
 
-AXISC_STORAGE_CLASS_INFO 
-int axiscAxisDelete(void * pValue,  
-                    AXISC_XSDTYPE type)
-{
-    int rc = AXISC_SUCCESS;
-    
-    try 
-    {
-        Axis::AxisDelete(pValue, (XSDTYPE) type);
-    }
-    catch ( AxisException& e  )
-    {
-        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
-        rc = AXISC_FAIL;    
-    }
-    catch ( ... )
-    {
-        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
-        rc = AXISC_FAIL;
-    }    
-    
-    return rc;
-}
+	STORAGE_CLASS_INFO int axiscTerminate() 
+	{
+		int rc = AXISC_SUCCESS;
+	    
+		try 
+		{
+			Axis::terminate();
+		}
+		catch( AxisException& e)
+		{
+			axiscInvokeExceptionHandler( e.getExceptionCode(), e.what());
 
-AXISC_STORAGE_CLASS_INFO 
-void axiscRegisterExceptionHandler(void (*fp)(int errorCode, const char *errorString))
-{
-    global_exceptionHandler = fp;
-}
+			rc = AXISC_FAIL;    
+		}
+		catch( ...)
+		{
+			rc = AXISC_FAIL;
+		}
+	    
+		return rc;
+	}
 
+	AXISC_STORAGE_CLASS_INFO int axiscAxisDelete( void * pValue, AXISC_XSDTYPE type)
+	{
+		int rc = AXISC_SUCCESS;
+	    
+		try 
+		{
+			Axis::AxisDelete(pValue, (XSDTYPE) type);
+		}
+		catch( AxisException& e)
+		{
+			axiscInvokeExceptionHandler( e.getExceptionCode(), e.what());
 
-AXISC_STORAGE_CLASS_INFO 
-void axiscInvokeExceptionHandler(int errorCode, const char *errorString)
-{
-    if (global_exceptionHandler)
-        global_exceptionHandler(errorCode, errorString);
-    else
-        cerr <<  "AXIS EXCEPTION: (" << errorCode << ") " << errorString << endl;
-}
+			rc = AXISC_FAIL;    
+		}
+		catch( ...)
+		{
+			rc = AXISC_FAIL;
+		}    
+	    
+		return rc;
+	}
 
+	AXISC_STORAGE_CLASS_INFO void axiscRegisterExceptionHandler( void * fp)
+	{
+		global_exceptionHandler = (GlobalExceptionHandlerPrototype *) fp;
+	}
+
+	AXISC_STORAGE_CLASS_INFO void axiscInvokeExceptionHandler( int errorCode, const char * errorString)
+	{
+		if( global_exceptionHandler)
+		{
+			(global_exceptionHandler) (errorCode, errorString);
+// Try?			(*global_exceptionHandler) (errorCode, errorString);
+		}
+		else
+		{
+			cerr <<  "AXIS EXCEPTION: (" << errorCode << ") " << errorString << endl;
+		}
+	}
 }
