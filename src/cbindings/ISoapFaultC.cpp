@@ -15,11 +15,15 @@
  *   limitations under the License.
  */
 
-#include <axis/AxisException.hpp>
 #include <axis/ISoapFault.hpp>
+#include <axis/AxisException.hpp>
+
+#include "AxisObjectContainer.hpp"
+
 AXIS_CPP_NAMESPACE_USE
 
 extern "C" {
+#include <axis/Axis.h>
 #include <axis/GDefine.h>
 #include <axis/AxisUserAPI.h>
 #include <axis/ISoapFault.h>
@@ -28,14 +32,40 @@ AXISC_STORAGE_CLASS_INFO
 void axiscDestroyISoapFault(AXISCHANDLE soapFault) 
 {
     ISoapFault *sf = (ISoapFault*)soapFault;
-    delete sf;
+
+    try
+    {
+        delete sf;
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
 }
 
 AXISC_STORAGE_CLASS_INFO 
 const AxiscChar* axiscGetCmplxFaultObjectName(AXISCHANDLE soapFault) 
 {
     ISoapFault *sf = (ISoapFault*)soapFault;
-    return sf->getCmplxFaultObjectName();
+
+    try
+    {
+        return sf->getCmplxFaultObjectName();
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+    
+    return (const AxiscChar*)NULL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
@@ -47,35 +77,105 @@ void * axiscGetCmplxFaultObject(AXISCHANDLE soapFault,
                                 const AxiscChar * pNamespace) 
 {
     ISoapFault *sf = (ISoapFault*)soapFault;
-    return sf->getCmplxFaultObject(pDZFunct,pCreFunct,pDelFunct,pName,pNamespace);
+
+    try
+    {
+        return sf->getCmplxFaultObject(pDZFunct,pCreFunct,pDelFunct,pName,pNamespace);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+    
+    return (void *)NULL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
-const AxisChar* axiscGetSimpleFaultDetail(AXISCHANDLE soapFault) 
+const AxiscChar* axiscGetSimpleFaultDetail(AXISCHANDLE soapFault) 
 {
     ISoapFault *sf = (ISoapFault*)soapFault;
-    return sf->getSimpleFaultDetail();
+
+    try
+    {
+        return sf->getSimpleFaultDetail();
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (const AxiscChar*)NULL;    
 }
 
 AXISC_STORAGE_CLASS_INFO 
-const AxisChar* axiscGetFaultcode(AXISCHANDLE soapFault) 
+const AxiscChar* axiscGetFaultcode(AXISCHANDLE soapFault) 
 {
     ISoapFault *sf = (ISoapFault*)soapFault;
-    return sf->getFaultcode();
+
+    try
+    {
+        return sf->getFaultcode();
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (const AxiscChar*)NULL;    
 }
 
 AXISC_STORAGE_CLASS_INFO 
-const AxisChar* axiscGetFaultstring(AXISCHANDLE soapFault) 
+const AxiscChar* axiscGetFaultstring(AXISCHANDLE soapFault) 
 {
     ISoapFault *sf = (ISoapFault*)soapFault;
-    return sf->getFaultstring();
+
+    try
+    {
+        return sf->getFaultstring();
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (const AxiscChar*)NULL;    
 }
 
 AXISC_STORAGE_CLASS_INFO 
-const AxisChar* axiscGetFaultactor(AXISCHANDLE soapFault) 
+const AxiscChar* axiscGetFaultactor(AXISCHANDLE soapFault) 
 {
     ISoapFault *sf = (ISoapFault*)soapFault;
-    return sf->getFaultactor();
+
+    try
+    {
+        return sf->getFaultactor();
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (const AxiscChar*)NULL;    
 }
 
 AXISC_STORAGE_CLASS_INFO 
@@ -83,7 +183,21 @@ int axiscSetFaultcode(AXISCHANDLE soapFault,
                       const AxisChar*  sFaultcode) 
 {
     ISoapFault *sf = (ISoapFault*)soapFault;
-    return sf->setFaultcode(sFaultcode);
+
+    try
+    {
+        return sf->setFaultcode(sFaultcode);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+    
+    return AXISC_FAIL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
@@ -91,7 +205,21 @@ int axiscSetFaultstring(AXISCHANDLE soapFault,
                         const AxisChar*  sFaultstring) 
 {
     ISoapFault *sf = (ISoapFault*)soapFault;
-    return sf->setFaultstring(sFaultstring);
+
+    try
+    {
+        return sf->setFaultstring(sFaultstring);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return AXISC_FAIL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
@@ -99,7 +227,21 @@ int axiscSetFaultactor(AXISCHANDLE soapFault,
                        const AxisChar*  sFaultactor) 
 {
     ISoapFault *sf = (ISoapFault*)soapFault;
-    return sf->setFaultactor(sFaultactor);
+
+    try
+    {
+        return sf->setFaultactor(sFaultactor);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return AXISC_FAIL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
@@ -107,7 +249,21 @@ int axiscSetFaultDetail(AXISCHANDLE soapFault,
                         const AxisChar*  sFaultdetail) 
 {
     ISoapFault *sf = (ISoapFault*)soapFault;
-    return sf->setFaultDetail(sFaultdetail);
+
+    try
+    {
+        return sf->setFaultDetail(sFaultdetail);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return AXISC_FAIL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
@@ -115,7 +271,21 @@ int axiscSetCmplxFaultObject(AXISCHANDLE soapFault,
                              const void * pCmplxFaultObject) 
 {
     ISoapFault *sf = (ISoapFault*)soapFault;
-    return sf->setCmplxFaultObject(pCmplxFaultObject);
+
+    try
+    {
+        return sf->setCmplxFaultObject(pCmplxFaultObject);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return AXISC_FAIL;
 }
 
 }

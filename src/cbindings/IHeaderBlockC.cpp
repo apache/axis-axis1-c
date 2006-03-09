@@ -16,9 +16,14 @@
  */
 
 #include <axis/IHeaderBlock.hpp>
+#include <axis/AxisException.hpp>
+
+#include "AxisObjectContainer.hpp"
+
 AXIS_CPP_NAMESPACE_USE
 
 extern "C" {
+#include <axis/Axis.h>
 #include <axis/GDefine.h>
 #include <axis/AxisUserAPI.h>
 #include <axis/BasicNode.h>
@@ -31,21 +36,63 @@ AXISCHANDLE axiscCreateNamespaceDeclINamespace(AXISCHANDLE headerBlock,
                                                const AxiscChar * uri) 
 {
     IHeaderBlock *hdr = (IHeaderBlock*)headerBlock;
-    return (AXISCHANDLE)(hdr->createNamespaceDecl(prefix,uri));
+
+    try
+    {
+        return (AXISCHANDLE)(hdr->createNamespaceDecl(prefix,uri));
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+    
+    return (AXISCHANDLE)NULL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
 AXISCHANDLE axiscGetFirstChildBasicNodeIHeaderBlock(AXISCHANDLE headerBlock) 
 {
     IHeaderBlock *hdr = (IHeaderBlock*)headerBlock;
-    return (AXISCHANDLE)(hdr->getFirstChild());
+
+    try
+    {
+        return (AXISCHANDLE)(hdr->getFirstChild());
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+    
+    return (AXISCHANDLE)NULL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
 int axiscGetNoOfChildrenIHeaderBlock(AXISCHANDLE headerBlock) 
 {
     IHeaderBlock *hdr = (IHeaderBlock*)headerBlock;
-    return hdr->getNoOfChildren();
+
+    try
+    {
+        return hdr->getNoOfChildren();
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+    
+    return -1;
 }
 
 AXISC_STORAGE_CLASS_INFO 
@@ -57,7 +104,22 @@ AXISCHANDLE axiscCreateChildBasicNode(AXISCHANDLE headerBlock,
                                       AxiscChar * pachValue) 
 {
     IHeaderBlock *hdr = (IHeaderBlock*)headerBlock;
-    return (AXISCHANDLE)(hdr->createChild((NODE_TYPE)eNODE_TYPE,pachLocalName,pachPrefix,pachUri,pachValue));
+
+    try
+    {
+           return (AXISCHANDLE)(hdr->createChild((NODE_TYPE)eNODE_TYPE,pachLocalName,
+                                              pachPrefix,pachUri,pachValue));
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+    
+    return (AXISCHANDLE)NULL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
@@ -69,7 +131,23 @@ AXISCHANDLE axiscCreateImmediateChildBasicNode(AXISCHANDLE headerBlock,
                                                AxiscChar * pachValue) 
 {
     IHeaderBlock *hdr = (IHeaderBlock*)headerBlock;
-    return (AXISCHANDLE)(hdr->createImmediateChild((NODE_TYPE)eNODE_TYPE,pachLocalName,pachPrefix,pachUri,pachValue));
+
+    try
+    {
+        return (AXISCHANDLE)(hdr->createImmediateChild((NODE_TYPE)eNODE_TYPE,pachLocalName,
+                                                        pachPrefix,pachUri,pachValue));
+
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+    
+    return (AXISCHANDLE)NULL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
@@ -78,7 +156,22 @@ AXISCHANDLE axiscCreateStdAttribute(AXISCHANDLE headerBlock,
                                     AXISC_SOAP_VERSION eSOAP_VERSION) 
 {
     IHeaderBlock *hdr = (IHeaderBlock*)headerBlock;
-    return (AXISCHANDLE)(hdr->createStdAttribute((HEADER_BLOCK_STD_ATTR_TYPE)eStdAttrType, (SOAP_VERSION)eSOAP_VERSION));
+
+    try
+    {
+        return (AXISCHANDLE)(hdr->createStdAttribute((HEADER_BLOCK_STD_ATTR_TYPE)eStdAttrType, 
+                                                     (SOAP_VERSION)eSOAP_VERSION));
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (AXISCHANDLE)NULL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
@@ -89,7 +182,21 @@ AXISCHANDLE axiscCreateAttributeIHeaderBlock(AXISCHANDLE headerBlock,
                                              const AxiscChar * value) 
 {
     IHeaderBlock *hdr = (IHeaderBlock*)headerBlock;
-    return (AXISCHANDLE)(hdr->createAttribute(localname, prefix, uri, value));
+
+    try
+    {
+        return (AXISCHANDLE)(hdr->createAttribute(localname, prefix, uri, value));
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (AXISCHANDLE)NULL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
@@ -98,14 +205,42 @@ const AxiscChar * axiscGetAttributeValue(AXISCHANDLE headerBlock,
                                          const AxiscChar * prefix) 
 {
     IHeaderBlock *hdr = (IHeaderBlock*)headerBlock;
-    return hdr->getAttributeValue(localname, prefix);
+
+    try
+    {
+        return hdr->getAttributeValue(localname, prefix);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (const AxiscChar *)NULL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
 AXISCHANDLE axiscGetLastChildBasicNodeIHeaderBlock(AXISCHANDLE headerBlock) 
 {
     IHeaderBlock *hdr = (IHeaderBlock*)headerBlock;
-    return (AXISCHANDLE)(hdr->getLastChild());
+
+    try
+    {
+        return (AXISCHANDLE)(hdr->getLastChild());
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (AXISCHANDLE)NULL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
@@ -113,7 +248,21 @@ AXISCHANDLE axiscGetChildBasicNodeIHeaderBlock(AXISCHANDLE headerBlock,
                                                int iChildPosition) 
 {
     IHeaderBlock *hdr = (IHeaderBlock*)headerBlock;
-    return (AXISCHANDLE)(hdr->getChild(iChildPosition));
+
+    try
+    {
+        return (AXISCHANDLE)(hdr->getChild(iChildPosition));
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (AXISCHANDLE)NULL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
@@ -121,62 +270,148 @@ int axiscAddChildIHeaderBlock(AXISCHANDLE headerBlock,
                               AXISCHANDLE pBasicNode) 
 {
     IHeaderBlock *hdr = (IHeaderBlock*)headerBlock;
-    return hdr->addChild((BasicNode*)pBasicNode);
+
+    try
+    {
+        return hdr->addChild((BasicNode*)pBasicNode);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+    
+    return AXISC_FAIL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
 int axiscSetLocalNameIHeaderBlock(AXISCHANDLE headerBlock, 
                                   const AxiscChar * localname) 
 {
-    if(0==localname)
-    {
-        return AXIS_FAIL;
-    }
     IHeaderBlock *hdr = (IHeaderBlock*)headerBlock;
-    hdr->setLocalName(localname);
-    return AXIS_SUCCESS;
+
+    try
+    {
+        return hdr->setLocalName(localname);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return AXISC_FAIL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
 const AxiscChar * axiscGetLocalNameIHeaderBlock(AXISCHANDLE headerBlock) 
 {
     IHeaderBlock *hdr = (IHeaderBlock*)headerBlock;
-    return hdr->getLocalName();
+
+    try
+    {
+        return hdr->getLocalName();
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (const AxiscChar *)NULL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
-void axiscSetUriIHeaderBlock(AXISCHANDLE headerBlock, 
+int axiscSetUriIHeaderBlock(AXISCHANDLE headerBlock, 
                              const AxiscChar * uri) 
 {
     IHeaderBlock *hdr = (IHeaderBlock*)headerBlock;
-    hdr->setURI(uri);
+
+    try
+    {
+        return hdr->setURI(uri);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+    
+    return AXISC_FAIL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
 int axiscSetPrefixIHeaderBlock(AXISCHANDLE headerBlock, 
                                const AxiscChar * prefix) 
 {
-    if(0==prefix)
-    {
-        return AXIS_FAIL;
-    }
     IHeaderBlock *hdr = (IHeaderBlock*)headerBlock;
-    hdr->setPrefix(prefix);
-    return AXIS_SUCCESS;
+
+    try
+    {
+        return hdr->setPrefix(prefix);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return AXISC_FAIL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
 AXISCHANDLE axiscCloneHeaderBlockIHeaderBlock(AXISCHANDLE headerBlock) 
 {
     IHeaderBlock *hdr = (IHeaderBlock*)headerBlock;
-    return (AXISCHANDLE)(hdr->clone());
+
+    try
+    {
+        return (AXISCHANDLE)(hdr->clone());
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (AXISCHANDLE)NULL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
 void axiscDestroyIHeaderBlock(AXISCHANDLE headerBlock) 
 {
     IHeaderBlock *hdr = (IHeaderBlock*)headerBlock;
-    delete hdr;
+
+    try
+    {
+        delete hdr;
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
 }
 
 }

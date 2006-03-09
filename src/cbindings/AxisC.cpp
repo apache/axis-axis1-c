@@ -46,6 +46,7 @@ int axiscInitializeAxis(AxiscBool bIsServer)
     }
     catch ( ... )
     {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
         rc = AXISC_FAIL;
     }
     
@@ -68,6 +69,7 @@ int axiscTerminate()
     }
     catch ( ... )
     {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
         rc = AXISC_FAIL;
     }
     
@@ -91,6 +93,7 @@ int axiscAxisDelete(void * pValue,
     }
     catch ( ... )
     {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
         rc = AXISC_FAIL;
     }    
     

@@ -16,9 +16,14 @@
  */
 
 #include <axis/IAttribute.hpp>
+#include <axis/AxisException.hpp>
+
+#include "AxisObjectContainer.hpp"
+
 AXIS_CPP_NAMESPACE_USE
 
 extern "C" {
+#include <axis/Axis.h>
 #include <axis/GDefine.h>
 #include <axis/IAttribute.h>
 
@@ -26,34 +31,63 @@ AXISC_STORAGE_CLASS_INFO
 void axiscDestroyIAttribute(AXISCHANDLE attribute) 
 {
     IAttribute *attr = (IAttribute*)attribute;
-    delete attr;
+    
+    try
+    {
+        delete attr;
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
 }
 
 AXISC_STORAGE_CLASS_INFO 
 int axiscSetValueIAttribute(AXISCHANDLE attribute, 
                             const AxiscChar * value) 
 {
-    if(!value)
-    {
-        return AXIS_FAIL;
-    }
     IAttribute *attr = (IAttribute*)attribute;
-    attr->setValue(value);
-    
-    return AXIS_SUCCESS;
+
+    try
+    {
+        return attr->setValue(value);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+ 
+    return AXISC_FAIL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
 int axiscSetUriIAttribute(AXISCHANDLE attribute, 
                           const AxiscChar * uri) 
 {
-    if(!uri)
-    {
-        return AXIS_FAIL;
-    }
     IAttribute *attr = (IAttribute*)attribute;
-    attr->setURI(uri);
-    return AXIS_SUCCESS;
+
+    try
+    {
+        return attr->setURI(uri);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+    
+    return AXISC_FAIL;
 }
 
 
@@ -61,55 +95,128 @@ AXISC_STORAGE_CLASS_INFO
 int axiscSetPrefixIAttribute(AXISCHANDLE attribute, 
                              const AxiscChar * prefix) 
 {
-    if(!prefix)
+    IAttribute *attr = (IAttribute*)attribute;
+
+    try
     {
-        return AXIS_FAIL;
+        return attr->setPrefix(prefix);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
     }
     
-    IAttribute *attr = (IAttribute*)attribute;
-    attr->setPrefix(prefix);
-    return AXIS_SUCCESS;
+    return AXISC_FAIL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
 int axiscSetLocalNameIAttribute(AXISCHANDLE attribute, 
                                 const AxiscChar * localname) 
 {
-    if(!localname)
-    {
-        return AXIS_FAIL;
-    }
     IAttribute *attr = (IAttribute*)attribute;
-    attr->setLocalName(localname);
-    return AXIS_SUCCESS;
+
+    try
+    {
+        return attr->setLocalName(localname);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+    
+    return AXISC_FAIL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
 const AxiscChar * axiscGetValueIAttribute(AXISCHANDLE attribute) 
 {
     IAttribute *attr = (IAttribute*)attribute;
-    return attr->getValue();
+
+    try
+    {
+        return attr->getValue();
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+    
+    return (const AxiscChar *)NULL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
 const AxiscChar * axiscGetUri(AXISCHANDLE attribute) 
 {
     IAttribute *attr = (IAttribute*)attribute;
-    return attr->getURI();
+
+    try
+    {
+        return attr->getURI();
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (const AxiscChar *)NULL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
 const AxiscChar * axiscGetPrefixIAttribute(AXISCHANDLE attribute) 
 {
     IAttribute *attr = (IAttribute*)attribute;
-    return attr->getPrefix();
+
+    try
+    {
+        return attr->getPrefix();
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (const AxiscChar *)NULL;    
 }
 
 AXISC_STORAGE_CLASS_INFO 
 const AxiscChar * axiscGetLocalNameIAttribute(AXISCHANDLE attribute) 
 {
     IAttribute *attr = (IAttribute*)attribute;
-    return attr->getLocalName();
+
+    try
+    {
+        return attr->getLocalName();
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (const AxiscChar *)NULL;    
 }
 
 }

@@ -15,9 +15,14 @@
  *   limitations under the License.
  */
 #include <axis/BasicNode.hpp>
+#include <axis/AxisException.hpp>
+
+#include "AxisObjectContainer.hpp"
+
 AXIS_CPP_NAMESPACE_USE
 
 extern "C" {
+#include <axis/Axis.h>
 #include <axis/GDefine.h>
 #include <axis/AxisUserAPI.h>
 #include <axis/BasicNode.h>
@@ -29,35 +34,105 @@ AXISCHANDLE axiscGetAttribute(AXISCHANDLE basicNode,
                               AxiscChar * pachLocalname) 
 {
     BasicNode *bn = (BasicNode*)basicNode;
-    return bn->getAttribute(pachPrefix,pachURI,pachLocalname);
+    
+    try
+    {
+        return bn->getAttribute(pachPrefix,pachURI,pachLocalname);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+    
+    return (AXISCHANDLE)NULL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
 AXISCHANDLE axiscGetFirstAttribute(AXISCHANDLE basicNode) 
 {
     BasicNode *bn = (BasicNode*)basicNode;
-    return bn->getFirstAttribute();
+
+    try
+    {
+        return bn->getFirstAttribute();
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+    
+    return (AXISCHANDLE)NULL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
 AXISCHANDLE axiscGetLastAttribute(AXISCHANDLE basicNode) 
 {
     BasicNode *bn = (BasicNode*)basicNode;
-    return bn->getLastAttribute();
+    
+    try
+    {
+        return bn->getLastAttribute();
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+    
+    return (AXISCHANDLE)NULL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
 AXISCHANDLE axiscGetNextAttribute(AXISCHANDLE basicNode) 
 {
     BasicNode *bn = (BasicNode*)basicNode;
-    return bn->getNextAttribute();
+    
+    try
+    {
+        return bn->getNextAttribute();
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+    
+    return (AXISCHANDLE)NULL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
 AXISCHANDLE axiscGetCurrentAttribute(AXISCHANDLE basicNode) 
 {
     BasicNode *bn = (BasicNode*)basicNode;
-    return bn->getCurrentAttribute();
+    
+    try
+    {
+        return bn->getCurrentAttribute();
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+    
+    return (AXISCHANDLE)NULL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
@@ -68,35 +143,105 @@ AXISCHANDLE axiscCreateAttributeBasicNode(AXISCHANDLE basicNode,
                                           const AxiscChar * value) 
 {
     BasicNode *bn = (BasicNode*)basicNode;
-    return bn->createAttribute(localname,prefix,uri,value);
+    
+    try
+    {
+        return bn->createAttribute(localname,prefix,uri,value);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+    
+    return (AXISCHANDLE)NULL;    
 }
 
 AXISC_STORAGE_CLASS_INFO 
 const AxiscChar * axiscGetLocalNameBasicNode(AXISCHANDLE basicNode) 
 {
     BasicNode *bn = (BasicNode*)basicNode;
-    return bn->getLocalName();
+    
+    try
+    {
+        return bn->getLocalName();
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+    
+    return (const AxiscChar *)NULL;    
 }
 
 AXISC_STORAGE_CLASS_INFO 
 int axiscGetNoOfChildrenBasicNode(AXISCHANDLE basicNode) 
 {
     BasicNode *bn = (BasicNode*)basicNode;
-    return bn->getNoOfChildren();
+    
+    try
+    {
+        return bn->getNoOfChildren();
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+    
+    return -1;
 }
 
 AXISC_STORAGE_CLASS_INFO 
 AXISCHANDLE axiscGetFirstChildBasicNodeBasicNode(AXISCHANDLE basicNode) 
 {
     BasicNode *bn = (BasicNode*)basicNode;
-    return bn->getFirstChild();
+    
+    try
+    {
+        return bn->getFirstChild();
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+    
+    return (AXISCHANDLE)NULL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
 AXISCHANDLE axiscGetLastChildBasicNodeBasicNode(AXISCHANDLE basicNode) 
 {
     BasicNode *bn = (BasicNode*)basicNode;
-    return bn->getLastChild();
+    
+    try
+    {
+        return bn->getLastChild();
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+    
+    return (AXISCHANDLE)NULL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
@@ -104,7 +249,21 @@ AXISCHANDLE axiscGetChildBasicNodeBasicNode(AXISCHANDLE basicNode,
                                             int iChildPosition) 
 {
     BasicNode *bn = (BasicNode*)basicNode;
-    return bn->getChild(iChildPosition);
+    
+    try
+    {
+        return bn->getChild(iChildPosition);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+    
+    return (AXISCHANDLE)NULL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
@@ -112,21 +271,64 @@ int axiscAddChildBasicNode(AXISCHANDLE basicNode,
                            AXISCHANDLE pBasicNode) 
 {
     BasicNode *bn = (BasicNode*)basicNode;
-    return bn->addChild((BasicNode*)pBasicNode);
+    
+    try
+    {
+        return bn->addChild((BasicNode*)pBasicNode);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+    
+    return AXISC_FAIL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
 AXISC_NODE_TYPE axiscGetNodeType(AXISCHANDLE basicNode) 
 {
     BasicNode *bn = (BasicNode*)basicNode;
-    return (AXISC_NODE_TYPE)bn->getNodeType();
+    
+    try
+    {
+        return (AXISC_NODE_TYPE)bn->getNodeType();
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+    
+    // Kind of screwed up that we need to give a real element type.
+    return ::ELEMENT_NODE;
 }
 
 AXISC_STORAGE_CLASS_INFO 
 const AxiscChar * axiscGetValueBasicNode(AXISCHANDLE basicNode) 
 {
     BasicNode *bn = (BasicNode*)basicNode;
-    return bn->getValue();
+    
+    try
+    {
+        return bn->getValue();
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+    
+    return (const AxiscChar *)NULL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
@@ -134,7 +336,21 @@ int axiscSetValueBasicNode(AXISCHANDLE basicNode,
                            const AxiscChar * pachValue) 
 {
     BasicNode *bn = (BasicNode*)basicNode;
-    return bn->setValue(pachValue);
+    
+    try
+    {
+        return bn->setValue(pachValue);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+    
+    return AXISC_FAIL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
@@ -142,7 +358,21 @@ int axiscSetURIBasicNode(AXISCHANDLE basicNode,
                          const AxiscChar * sURI) 
 {
     BasicNode *bn = (BasicNode*)basicNode;
-    return bn->setURI(sURI);
+    
+    try
+    {
+        return bn->setURI(sURI);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+    
+    return AXISC_FAIL;    
 }
 
 AXISC_STORAGE_CLASS_INFO 
@@ -150,7 +380,21 @@ int axiscSetLocalNameBasicNode(AXISCHANDLE basicNode,
                                const AxiscChar * sLocalName) 
 {
     BasicNode *bn = (BasicNode*)basicNode;
-    return bn->setLocalName(sLocalName);
+    
+    try
+    {
+        return bn->setLocalName(sLocalName);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+    
+    return AXISC_FAIL;           
 }
 
 AXISC_STORAGE_CLASS_INFO 
@@ -158,35 +402,103 @@ int axiscSetPrefixBasicNode(AXISCHANDLE basicNode,
                             const AxiscChar * sPrefix) 
 {
     BasicNode *bn = (BasicNode*)basicNode;
-    return bn->setPrefix(sPrefix);
+    
+    try
+    {
+        return bn->setPrefix(sPrefix);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+    
+    return AXISC_FAIL;    
 }
 
 AXISC_STORAGE_CLASS_INFO 
 const AxiscChar * axiscGetURIBasicNode(AXISCHANDLE basicNode) 
 {
     BasicNode *bn = (BasicNode*)basicNode;
-    return bn->getURI();
+    
+    try
+    {
+        return bn->getURI();
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+    
+    return (const AxiscChar *)NULL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
 const AxiscChar * axiscGetPrefixBasicNode(AXISCHANDLE basicNode) 
 {
     BasicNode *bn = (BasicNode*)basicNode;
-    return bn->getPrefix();
+    
+    try
+    {
+        return bn->getPrefix();
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+    
+    return (const AxiscChar *)NULL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
 AXISCHANDLE axiscCloneBasicNodeBasicNode(AXISCHANDLE basicNode) 
 {
     BasicNode *bn = (BasicNode*)basicNode;
-    return bn->clone();
+    
+    try
+    {
+        return bn->clone();
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+    
+    return (AXISCHANDLE)NULL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
 void axiscDestroyBasicNode(AXISCHANDLE basicNode) 
 {
     BasicNode *bn = (BasicNode*)basicNode;
-    delete bn;
+    
+    try
+    {
+        delete bn;
+    }
+    catch ( AxisException& e  )
+    {
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }    
 }
 
 }
