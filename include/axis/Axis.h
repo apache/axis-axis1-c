@@ -84,7 +84,7 @@ int axiscAxisDelete(void * pValue, AXISC_XSDTYPE type);
 
 // Create prototype for globalExceptionHandler.  This is to get round the
 // problems introduced by trace which cannot handle in-line prototyping.
-typedef void * __stdcall GlobalExceptionHandlerPrototype( int errorCode, const char * errorString);
+typedef void * AXISCALL GlobalExceptionHandlerPrototype( int errorCode, const char * errorString);
 
 AXISC_STORAGE_CLASS_INFO void axiscRegisterExceptionHandler( void * fp);
 
