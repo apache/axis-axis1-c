@@ -1,4 +1,3 @@
-
 <project name="buildTest" default="compileClient" basedir="..">
 	<import file="buildLibrary.xml"/>
 	
@@ -19,6 +18,9 @@
 		<condition property="clientLibraryName.lang" value="${clientLibraryName}">
 			<equals arg1="${test.clientLang}" arg2="cpp"/>
 		</condition>
+		<condition property="CommonClientTestCode.header" value="CommonClientTestCode.hpp">
+			<equals arg1="${test.clientLang}" arg2="cpp"/>
+		</condition>
 
 		<condition property="generated.lang" value="c">
 			<equals arg1="${test.clientLang}" arg2="c"/>
@@ -27,6 +29,9 @@
 			<equals arg1="${test.clientLang}" arg2="c"/>
 		</condition>
 		<condition property="clientLibraryName.lang" value="${cClientLibraryName}">
+			<equals arg1="${test.clientLang}" arg2="c"/>
+		</condition>
+		<condition property="CommonClientTestCode.header" value="CommonClientTestCode.h">
 			<equals arg1="${test.clientLang}" arg2="c"/>
 		</condition>
 	</target>
@@ -63,11 +68,11 @@
 
 	<target name="copyClientCode" unless="test.dynamicCode">
 		<copy file="${client.code}" todir="${test.directory}"/>
-		<copy file="${dir.autotests}/client/${test.clientLang}/CommonClientTestCode.hpp"  todir="${test.directory}"/>
+		<copy file="${dir.autotests}/client/${test.clientLang}/${CommonClientTestCode.header}"  todir="${test.directory}"/>
 	</target>
 
 	<target name="copyDynamicClient" if="test.dynamicCode">
-		<copy file="${dir.autotests}/client/${test.clientLang}/CommonClientTestCode.hpp"  todir="${test.directory}"/>
+		<copy file="${dir.autotests}/client/${test.clientLang}/${CommonClientTestCode.header}"  todir="${test.directory}"/>
 		<copy todir="${test.directory}">
 			<fileset dir="${dir.autotests}/dynamic/${test.dynamicCodeDirectory}">
 				<include name="*.${test.clientLang}"/>
@@ -162,4 +167,3 @@
 	</target>
 
 </project>
-
