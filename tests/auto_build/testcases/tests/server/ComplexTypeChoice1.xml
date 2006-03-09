@@ -1,0 +1,9 @@
+<service>
+    <name>ComplexTypeChoice1</name>
+    <description>ComplexTypeChoice1</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>ComplexTypeChoice1.cpp</serviceCode>
+    <wsdl>ComplexTypeChoice1.wsdl</wsdl>
+    <removeFile>operations.cpp</removeFile>
+    <servicename></servicename>
+</service>

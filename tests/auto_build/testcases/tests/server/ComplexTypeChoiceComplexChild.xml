@@ -1,0 +1,9 @@
+<service>
+    <name>ComplexTypeChoiceComplexChild</name>
+    <description>ComplexTypeChoiceComplexChild</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>ComplexTypeChoiceComplexChild.cpp</serviceCode>
+    <wsdl>ComplexTypeChoiceComplexChild.wsdl</wsdl>
+    <removeFile>XSD_byte.cpp</removeFile>
+    <servicename></servicename>
+</service>

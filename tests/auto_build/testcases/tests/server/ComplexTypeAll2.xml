@@ -1,0 +1,9 @@
+<service>
+    <name>ComplexTypeAll2</name>
+    <description>ComplexTypeAll2</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>ComplexTypeAll2.cpp</serviceCode>
+    <wsdl>ComplexTypeAll2.wsdl</wsdl>
+    <removeFile>operations.cpp</removeFile>	
+	<servicename></servicename>
+</service>
