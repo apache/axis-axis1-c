@@ -1,0 +1,9 @@
+<service>
+    <name>ComplexTypeChoiceNestedChoice</name>
+    <description>ComplexTypeChoiceNestedChoice</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>ComplexTypeChoiceNestedChoice.cpp</serviceCode>
+    <wsdl>ComplexTypeChoiceNestedChoice.wsdl</wsdl>
+     <removeFile>XSD_byte.cpp</removeFile>
+	<servicename></servicename>
+</service>
