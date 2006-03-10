@@ -24,10 +24,12 @@
 #include "AxisAdminService.h"
 #include <axis/AxisWrapperAPI.hpp>
 
+AXIS_CPP_NAMESPACE_START
+
 AxisAdminService::AxisAdminService (const char *pchUri)
 {
     m_pCall = new Call ();
-    m_pCall->setProtocol (APTHTTP);
+    m_pCall->setProtocol (APTHTTP1_1);
     m_pCall->setEndpointURI (pchUri);
 }
 
@@ -44,8 +46,8 @@ AxisAdminService::~AxisAdminService ()
  */
 xsd__boolean AxisAdminService::updateWSDD (xsd__base64Binary Value0)
 {
-    xsd__boolean Ret;
-    if (AXIS_SUCCESS != m_pCall->initialize (CPP_DOC_PROVIDER, NORMAL_CHANNEL))
+    xsd__boolean Ret = false_;
+    if (AXIS_SUCCESS != m_pCall->initialize (CPP_DOC_PROVIDER))
         return Ret;
     m_pCall->setTransportProperty (SOAPACTION_HEADER, "AxisAdmin#updateWSDD");
     m_pCall->setSOAPVersion (SOAP_VER_1_1);
@@ -56,9 +58,10 @@ xsd__boolean AxisAdminService::updateWSDD (xsd__base64Binary Value0)
         if (AXIS_SUCCESS == m_pCall->checkMessage ("updateWSDDResponse",
             "http://www.opensource.lk/xsd"))
         {
-            Ret = m_pCall->getElementAsBoolean ("return", 0);
+            Ret = *m_pCall->getElementAsBoolean ("return", 0);
         }
     }
     m_pCall->unInitialize ();
     return Ret;
 }
+AXIS_CPP_NAMESPACE_END

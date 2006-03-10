@@ -25,17 +25,20 @@
 #define __AXISADMINSERVICE_CLIENTSTUB_H__OF_AXIS_INCLUDED_
 
 #include <axis/client/Call.hpp>
+#include <axis/AxisUserAPI.hpp>
+
+AXIS_CPP_NAMESPACE_START
 
 class AxisAdminService
 {
-    private:
-        Call * m_pCall;
     public:
         AxisAdminService (const char *pchUri);
-    public:
         virtual ~ AxisAdminService ();
-    public:
         xsd__boolean updateWSDD (xsd__base64Binary Value0);
+
+	private:
+        Call * m_pCall;
 };
 
+AXIS_CPP_NAMESPACE_END
 #endif 

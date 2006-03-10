@@ -17,65 +17,94 @@
 
 #include "AxisAdminService.h"
 #include <string>
+#include <axis/AxisException.hpp>
+#include <iostream>
+
 using namespace std;
 
 #define FILEBUFFSIZE 256
 
-int main (int argc, char *argv[])
+int main( int argc, char *argv[])
 {
-    int done;
-    int len;
-    char Buff[FILEBUFFSIZE];
-    string Uri = "http://";
-    string wsdd;
-    if (argc < 3)
+    int		done = 0;
+    int		len;
+    char	Buff[FILEBUFFSIZE];
+    string	Uri = "http://";
+    string	wsdd;
+
+    if( argc < 3)
     {
-        printf ("Usage: %s <server> <port> <wsdd file>\n", argv[0]);
-        exit (1);
+        printf( "Usage: %s <server> <port> <wsdd file>\n", argv[0]);
+        exit( 1);
     }
+
     Uri += argv[1];
     Uri += ":";
     Uri += argv[2];
     Uri += "/axis/AxisAdmin";
     wsdd = argv[3];
 
-    FILE *file = fopen (wsdd.c_str (), "r");
+    FILE *	file = fopen( wsdd.c_str(), "r");
+
     if (NULL == file)
     {
-        printf ("WSDD file %s cannot be opened\n", wsdd.c_str ());
-        printf ("Usage: %s <server> <port> <wsdd file>\n", argv[0]);
-        exit (1);
+        printf( "WSDD file %s cannot be opened\n", wsdd.c_str ());
+        printf( "Usage: %s <server> <port> <wsdd file>\n", argv[0]);
+        exit( 1);
     }
-    wsdd = "";
-    while (true)
-    {
-        len = fread (Buff, 1, FILEBUFFSIZE, file);
-        Buff[len] = 0;
-        if (ferror (file))
-        {
-            fclose (file);
-            printf ("WSDD file %s cannot be read\n", wsdd.c_str ());
-            printf ("Usage: %s <server> <port> <wsdd file>\n", argv[0]);
-            exit (1);
-        }
-        done = feof (file);
-        wsdd += Buff;
-        if (done)
-            break;
-    }
-    fclose (file);
 
-    AxisAdminService ws (Uri.c_str ());
-    xsd__base64Binary v;
-    v.__ptr = (unsigned char *) wsdd.c_str ();
-    v.__size = wsdd.length ();
-    if (true_ == ws.updateWSDD (v))
+    wsdd = "";
+    
+	while( !done)
     {
-        printf ("server wsdd at %s updated successfully\n", Uri.c_str ());
+        len = fread( Buff, 1, FILEBUFFSIZE - 1, file);
+
+        Buff[len] = 0;
+
+        if( ferror( file))
+        {
+            fclose( file);
+
+            printf( "WSDD file %s cannot be read\n", wsdd.c_str());
+            printf( "Usage: %s <server> <port> <wsdd file>\n", argv[0]);
+            exit( 1);
+        }
+
+        done = feof( file);
+
+        wsdd += Buff;
     }
-    else
-    {
-        printf ("wsdd update at %s failed\n", Uri.c_str ());
-    }
+
+    fclose( file);
+
+	try
+	{
+		axiscpp::AxisAdminService	ws( Uri.c_str());
+		axiscpp::xsd__base64Binary	v;
+
+		v.set( (axiscpp::xsd__unsignedByte *) wsdd.c_str(), wsdd.length());
+
+		if( axiscpp::true_ == ws.updateWSDD( v))
+		{
+			printf( "server wsdd at %s updated successfully\n", Uri.c_str());
+		}
+		else
+		{
+			printf( "wsdd update at %s failed\n", Uri.c_str());
+		}
+	}
+	catch( axiscpp::AxisException& e)
+	{
+		cout << "Exception : " << e.what() << endl;
+	}
+	catch( exception& e)
+	{
+	    cout << "Unknown exception has occured : " << e.what() << endl;
+	}
+	catch( ...)
+	{
+	    cout << "Unknown exception has occured" << endl;
+	}
+
     return 0;
 }
