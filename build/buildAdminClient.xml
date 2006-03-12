@@ -30,7 +30,7 @@
           <compiler refid="OS400icc"/>
 
           <!-- required libraries -->
-          <syslibset libs="${clientLibraryName}" dir="${dir.bin}"/>
+          <syslibset libs="${clientLibraryName}" dir="${dir.bin}" unless="os400"/>
 
           <!-- Additional compiler flag for Client library on all platforms -->
           <defineset>
@@ -42,7 +42,11 @@
           <linker refid="LinuxLinker"/>
           <linker refid="HP-UXLinker"/>            
           <linker refid="VisualC++Linker"/>
-          <linker refid="OS400Linker"/>
+		  <linker extends="OS400Linker">
+  		         <linkerarg location="end" value="${dir.bin}/lib${clientLibraryName}.so"/>
+                 <linkerarg value="-qOPTION=*DUPPROC"/>
+                 <linkerarg value="-qOPTION=*DUPVAR"/>
+		  </linker>
 
           <!-- Files to be compiled -->
           <fileset dir="${dir.src}">
