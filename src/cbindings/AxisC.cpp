@@ -28,7 +28,7 @@ extern "C" {
 #include <axis/TypeMapping.h>
 #include <axis/Axis.h>
 
-static void (*global_exceptionHandler)(int errorCode, const char *errorString) = NULL;
+static AXIS_EXCEPTION_HANDLER_FUNCT global_exceptionHandler = NULL;
 
 STORAGE_CLASS_INFO 
 int axiscInitializeAxis(AxiscBool bIsServer) 
