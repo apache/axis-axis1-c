@@ -200,7 +200,7 @@ Please use these to configure directories to suit the needs of your system.
             <available file="${dir.bin}/${adminClientExecutableName}${executableSuffix}"/>
             <then>
                 <mkdir dir="${dir.release}/bin"/>
-                <copy todir="$Pdir.release}/bin">
+                <copy todir="${dir.release}/bin">
                     <fileset dir="${dir.bin}" includes="${adminClientExecutableName}${executableSuffix}"/>
                 </copy>
             </then>
