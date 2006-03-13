@@ -196,6 +196,15 @@ Please use these to configure directories to suit the needs of your system.
 				</copy>				
 			</then>
 		</if>
+        <if>
+            <available file="${dir.bin}/${adminClientExecutableName}${executableSuffix}"/>
+            <then>
+                <mkdir dir="${dir.release}/bin"/>
+                <copy todir="$Pdir.release}/bin">
+                    <fileset dir="${dir.bin}" includes="${adminClientExecutableName}${executableSuffix}"/>
+                </copy>
+            </then>
+        </if>
 	</target>
 
 	<target name="copyLibraries" depends="copyWindowsLibraries, copyUnixLibraries"/>
