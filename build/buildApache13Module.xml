@@ -58,7 +58,7 @@
 					</defineset>
 					<!-- Linkers -->
 					<linker extends="AIXLinker">
-						<linkerarg value="-r"/>
+						<linkerarg value="-G"/>
 					</linker>
 					<libset dir="${dir.bin}" libs="${serverEngineLibraryName}"/>
 					<!-- Files to be compiled -->
