@@ -2,7 +2,7 @@
     <target name="decideserverproperties">
 
         <property name="wsdd.file" value="${dir.test.generated}${file.separator}server${file.separator}server.wsdd" />
-        
+
         <if>
             <isset property="windows" />
             <then>
@@ -14,15 +14,8 @@
 
                 <!-- The path to axiscpp.conf -->
                 <!-- Set location of axiscpp.conf file -->
-                <condition property="axiscppconffile" value="${axiscpp_deploy}/server/axiscpp.conf">
-                    <isset property="windows" />
-                </condition>
-                <condition property="axiscppconffile" value="${axiscpp_deploy}/server/etc/axiscpp.conf">
-                    <not>
-                        <isset property="windows" />
-                    </not>
-                </condition>
-
+                <property name="axiscppconffile" value="${axiscpp_deploy}/server/axiscpp.conf" />
+                  
                 <if>
                     <istrue value="${server.apache1}" />
                     <then>
@@ -46,26 +39,38 @@
                                 </then>
                             </elseif>
                         </if>
-                    </else>
+   </else>
                 </if>
             </then>
-            <elseif>
+            <else>
+                 <if>
                 <isset property="linux" />
                 <then>
                     <echo message="we are in linux" />
 
                     <!-- environment variables start from here in pairs -->
                     <property name="serverenv.env" value="LD_LIBRARY_PATH" />
-                    <property name="serverenv.env.value" value="${dir.libraries}:${basedir}/../../../Axis/webservices:${env.LD_LIBRARY_PATH}" />
-                    <!-- The path to axiscpp.conf -->
-                  <!--  <property name="axiscppconffile" value="${basedir}/../../../Axis/etc/axiscpp.conf" /> -->
-				
-			   <condition property="axiscppconffile" value="${axiscpp_deploy}/server/etc/axiscpp.conf">
-                    <not>
-                        <isset property="windows" />
-                    </not>
-                    </condition>
+                    <property name="serverenv.env.value" value="${dir.libraries}:${basedir}/../../../Axis/webservices:${env.LD_LIBRARY_PATH}"
+/>
+                  
 
+               </then>
+               <elseif>
+                 <isset property="aix" />
+                <then>
+
+<echo  message="we are in AIX" />
+
+
+                    <!-- environment variables start from here in pairs -->
+                    <property name="serverenv.env" value="LIBPATH" />
+                    <property name="serverenv.env.value" value="${dir.libraries}:${basedir}/../../../Axis/webservices:${env.LIBPATH}"
+/>
+                </then>
+                </elseif>
+                </if>
+	  <!-- The path to axiscpp.conf -->
+   <property name="axiscppconffile" value="${axiscpp_deploy}/server/etc/axiscpp.conf" />   
 
                     <if>
                         <istrue value="${server.apache1}" />
@@ -78,7 +83,7 @@
                             <if>
                                 <istrue value="${server.apache2}"/>
                                 <then>
-                                    <property name="serverexecutable" value="${env.APACHE2_HOME}/bin/apachectl"/>
+   <property name="serverexecutable" value="${env.APACHE2_HOME}/bin/apachectl"/>
                                     <property name="startargs" value=" start"/>
                                     <property name="stopargs" value=" stop"/>
                                 </then>
@@ -92,8 +97,7 @@
                             </if>
                         </else>
                     </if>
-                </then>
-            </elseif>
+            </else>
         </if>
     </target>
 </project>
