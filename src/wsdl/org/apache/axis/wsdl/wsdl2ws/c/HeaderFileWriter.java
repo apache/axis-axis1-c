@@ -53,14 +53,11 @@ public abstract class HeaderFileWriter extends BasicFileWriter
     {
         try
         {
-            this.writer =
-                new BufferedWriter(new FileWriter(getFilePath(), false));
+            this.writer = new BufferedWriter(new FileWriter(getFilePath(), false));
             writeClassComment();
             // if this headerfile not defined define it 
             this.writer.write(
-                "#if !defined(__"
-                    + classname.toUpperCase()
-                    + "_H__INCLUDED_)\n");
+                "#if !defined(__" + classname.toUpperCase() + "_H__INCLUDED_)\n");
             this.writer.write(
                 "#define __" + classname.toUpperCase() + "_H__INCLUDED_\n\n");
             //includes
@@ -70,16 +67,12 @@ public abstract class HeaderFileWriter extends BasicFileWriter
             writeMethods();
             this.writer.write("\n\n");
             this.writer.write(
-                "#endif /* !defined(__"
-                    + classname.toUpperCase()
-                    + "_H__INCLUDED_) */\n");
+                "#endif /* !defined(__" + classname.toUpperCase() + "_H__INCLUDED_) */\n");
             //cleanup
             writer.flush();
             writer.close();
             if (WSDL2Ws.verbose)
-                System.out.println(
-                    getFilePath().getAbsolutePath() + " created.....");
-
+                System.out.println(getFilePath().getAbsolutePath() + " created.....");
         }
         catch (IOException e)
         {
@@ -102,14 +95,11 @@ public abstract class HeaderFileWriter extends BasicFileWriter
      */
     protected File getFilePath(boolean useServiceName) throws WrapperFault
     {
-        String targetOutputLocation =
-            this.wscontext.getWrapInfo().getTargetOutputLocation();
+        String targetOutputLocation = this.wscontext.getWrapInfo().getTargetOutputLocation();
         if (targetOutputLocation.endsWith("/"))
         {
             targetOutputLocation =
-                targetOutputLocation.substring(
-                    0,
-                    targetOutputLocation.length() - 1);
+                targetOutputLocation.substring(0,targetOutputLocation.length() - 1);
         }
         new File(targetOutputLocation).mkdirs();
 
