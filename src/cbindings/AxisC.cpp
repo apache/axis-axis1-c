@@ -113,7 +113,7 @@ void axiscInvokeExceptionHandler(int errorCode, const char *errorString)
     if (global_exceptionHandler)
         global_exceptionHandler(errorCode, errorString);
     else
-        cerr <<  "AXIS EXCEPTION: (" << errorCode << ") " << errorString << endl;
+        std::cerr <<  "AXIS EXCEPTION: (" << errorCode << ") " << errorString << std::endl;
 }
 
 }
