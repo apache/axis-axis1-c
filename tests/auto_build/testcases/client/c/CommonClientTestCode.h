@@ -9,14 +9,10 @@
 
 char *c_strdup(char *s)
 {
-	char * ret = (char *)malloc(strlen(s)+1);
-	strcpy(ret, s);
-	return ret;
+    char * ret = (char *)malloc(strlen(s)+1);
+    strcpy(ret, s);
+    return ret;
 }
-
-// Prototype
-C_BOOL parse_args(int *argc, char *argv[], char **endpoint);
-void shift_args_up(int i, int *argc, char *argv[]);
 
 #ifdef WIN32
       #define LONGLONGVALUE(value) value##I64
@@ -113,14 +109,14 @@ static char * asciiToStringOfLength( char * pString, int iLength)
    char * pch = pString;
 
    if( pString == NULL)
-	   return NULL;
+       return NULL;
  
    /* while not EOL... */
    while( *pch != '\0' && iCount < iLength)
    {
          *pch = ASCIItoEBCDIC[*pch];
          pch++;
-		 iCount++;
+         iCount++;
    }
 
    *pch = '\0';
@@ -135,7 +131,7 @@ static char * asciiToStringOfLength( char * pString, int iLength)
 char * asciiToStringOfLength( char * pString, int iLength)
 {
    if( pString == NULL)
-	   return NULL;
+       return NULL;
  
    pString[iLength] = '\0';
    return pString;
@@ -143,11 +139,12 @@ char * asciiToStringOfLength( char * pString, int iLength)
 
 #endif
 
-
+static C_BOOL exceptionOccurred = C_FALSE;
 void exceptionHandler(int errorCode, const char *errorString)
 {
-	printf("TEST EXCEPTION HANDLER: ERROR-CODE=%d, ERROR-STRING=%s\n", 
-	       errorCode, errorString);
+    exceptionOccurred = C_TRUE;    
+    printf("TEST EXCEPTION HANDLER: ERROR-CODE=%d, ERROR-STRING=%s\n", 
+           errorCode, errorString);
 }
 
 #endif

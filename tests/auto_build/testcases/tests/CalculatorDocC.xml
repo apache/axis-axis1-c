@@ -1,15 +1,15 @@
 <test>
     <name>CalculatorDocC</name>
-    <description>CalculatorDoc</description>
+    <description>CalculatorDocC</description>
     <clientLang>c</clientLang>
     <clientCode>CalculatorDocClient.c</clientCode>
     <wsdl>CalculatorDoc.wsdl</wsdl>
     <expected>
         <output>
-            CalculatorDoc.cpp.out
+            CalculatorDocC.c.out
         </output>
         <serverResponse>
-		CalculatorDoc_ServerResponse.expected
+		CalculatorDocC_ServerResponse.expected
         </serverResponse>
     </expected>
 	<endpoint>http://localhost:80/axis/CalculatorDoc</endpoint>

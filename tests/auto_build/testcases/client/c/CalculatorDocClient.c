@@ -13,25 +13,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <axis/Axis.h>
+#include "CommonClientTestCode.h"
+
 #include "Calculator.h"
 
 #include <stdio.h>
 
-int main(int argc, char ** argv) {
-	AXISCHANDLE stub;
-	int ret = 0;
-	char *uri = "http://localhost:80/axis/Calculator";
+int main(int argc, char ** argv) 
+{
+    AXISCHANDLE stub;
+    int ret = 0;
+    char *uri = "http://localhost:80/axis/Calculator";
 
-	if (argc>1) 
-		uri = argv[1];
+    axiscRegisterExceptionHandler(exceptionHandler);
 
-	stub = get_Calculator_stub(uri);
-	ret = add(stub,3,2);
-	if (get_Calculator_Status(stub) != AXISC_FAIL)
-		printf("%i\n",ret);
-		
-	destroy_Calculator_stub(stub);
+    if (argc>1) 
+        uri = argv[1];
 
-	printf("---------------------- TEST COMPLETE -----------------------------\n");
+    stub = get_Calculator_stub(uri);
+    ret = add(stub,3,2);
+    if (exceptionOccurred == C_TRUE ||
+        get_Calculator_Status(stub) == AXISC_FAIL)
+       printf("FAILED\n");
+    else
+       printf("%i\n",ret);
+        
+    destroy_Calculator_stub(stub);
+
+    printf("---------------------- TEST COMPLETE -----------------------------\n");
 }
 
