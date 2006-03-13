@@ -19,7 +19,7 @@
 # Available directives are as follows
 #
 # WSDDFilePath:       The path to the server wsdd
-# LogPath:            The path to the axis log 
+# LogPath:            The path to the axis log
 # XMLParser:          The xml parser library
 # NodeName:           Node name
 # ListenPort:         Listening port
@@ -44,8 +44,8 @@ XMLParser:${dir.libraries}/${libraryPrefix}${ClientParserLib}${librarySuffix}
 
 
     <target name="stopserver" depends="initialize, decideserverproperties">
-        <!-- This is necessary since stoppping apache2 is a problem sometimes. 
-			The user will have to manually stop the server in this case.-->
+        <!-- This is necessary since stoppping apache2 is a problem sometimes.
+                        The user will have to manually stop the server in this case.-->
         <if>
             <isset property="stopargs" />
             <then>
@@ -60,8 +60,8 @@ XMLParser:${dir.libraries}/${libraryPrefix}${ClientParserLib}${librarySuffix}
             </then>
             <else>
                 <echo message="WARNING!" />
-                <echo message="this script can't stop this server (${serverexecutable}). 
-				If the server is started stop it yourself and then run ant again" />
+                <echo message="this script can't stop this server (${serverexecutable}).
+                                If the server is started stop it yourself and then run ant again" />
             </else>
         </if>
     </target>
@@ -77,26 +77,24 @@ XMLParser:${dir.libraries}/${libraryPrefix}${ClientParserLib}${librarySuffix}
         <mkdir dir="${WSDDFilePath}"/>
         <echo file="${wsdd.file}">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:C="http://xml.apache.org/axis/wsdd/providers/C" xmlns:CPP="http://xml.apache.org/axis/wsdd/providers/CPP"&gt;
-
 &lt;globalConfiguration&gt;
 &lt;/globalConfiguration&gt;
 </echo>
     </target>
 
-
-    <target name="endWSDDFile">
+   <target name="endWSDDFile">
         <echo file="${wsdd.file}" append="true">&lt;/deployment&gt;</echo>
     </target>
 
 
     <target name="buildServices" depends="initialize, setServiceList">
-    	<echo message="buildservice: ${service.list}"/>
+        <echo message="buildservice: ${service.list}"/>
         <foreach target="buildService"
                  param="service_property"
                  inheritall="true">
             <path refid="service_properties" />
 			<param name="dir.release" value="${dir.release}"/>
-        </foreach>
+	  </foreach>
     </target>
     <target name="setServiceList"
             depends="setServiceListType,setIndividualService,setFromServiceList,setAllServices" />
@@ -115,8 +113,8 @@ XMLParser:${dir.libraries}/${libraryPrefix}${ClientParserLib}${librarySuffix}
 
 
     <!--
-	  Create a list of just 1 Service from command line parameter -Dservice.name=
-	  -->
+          Create a list of just 1 Service from command line parameter -Dservice.name=
+          -->
     <target name="setIndividualService" if="service.name">
         <echo message="setIndividual ${service.name}" />
         <path id="service_properties">
@@ -125,10 +123,9 @@ XMLParser:${dir.libraries}/${libraryPrefix}${ClientParserLib}${librarySuffix}
         </path>
     </target>
 
-
-    <!--
-	  Create a list of Services from a properties file unless an individual Service has been specified too
-	  -->
+  <!--
+          Create a list of Services from a properties file unless an individual Service has been specified too
+          -->
     <target name="setFromServiceList" if="service.list" unless="service.name">
         <echo message="setFromList ${service.list}" />
         <path id="service_properties">
@@ -139,8 +136,8 @@ XMLParser:${dir.libraries}/${libraryPrefix}${ClientParserLib}${librarySuffix}
 
 
     <!--
-	  Create a list of all the Services
-	  -->
+          Create a list of all the Services
+          -->
     <target name="setAllServices" if="allService">
         <echo message="setAll ${dir.autotests}/tests/server" />
         <path id="service_properties">
@@ -168,7 +165,6 @@ XMLParser:${dir.libraries}/${libraryPrefix}${ClientParserLib}${librarySuffix}
     <target name="setServiceDesc" if="service.description">
         <propertycopy property="serviceDesc" from="service.description" />
     </target>
-
 
     <target name="setServiceCode" if="service.serviceCode">
         <propertycopy property="serviceCode" from="service.serviceCode" />
@@ -202,7 +198,6 @@ XMLParser:${dir.libraries}/${libraryPrefix}${ClientParserLib}${librarySuffix}
         </condition>
     </target>
 
-
     <target name="generateServerStubs" depends="setServiceLanguage">
         <!-- Make directory in which all generated code shall be placed -->
         <echo message="${dir.test.generated}/server/${serviceLang}/${serviceName}" />
@@ -224,14 +219,13 @@ XMLParser:${dir.libraries}/${libraryPrefix}${ClientParserLib}${librarySuffix}
 
 
     <target name="compileService">
-
-	<!-- Fix to have different service implementaion file  AXISCPP-948  -->
-	<if>
-		<isset property="service.removeFile" />
+           <!-- Deleting the service template generated by WSDL2Ws if service.removeFile property is set - AXISCPP-948 -->
+           <if>
+                <isset property="service.removeFile" />
          <then>
-	  	<delete file="${dir.test.generated}/server/${serviceLang}/${serviceName}/${service.removeFile}" failonerror="false" />
-	   </then>
-	  </if>	
+                <delete file="${dir.test.generated}/server/${serviceLang}/${serviceName}/${service.removeFile}" failonerror="false" />
+           </then>
+          </if>
 
         <copy file="${dir.autotests}/server/${serviceLang}/${serviceCode}"
               tofile="${dir.test.generated}/server/${serviceLang}/${serviceName}/${serviceCode}"
@@ -246,22 +240,34 @@ XMLParser:${dir.libraries}/${libraryPrefix}${ClientParserLib}${librarySuffix}
             </then>
         </if>
 
-        <cc failonerror="false"
+	<if>
+		<not>
+			<isset property="aix" />
+		</not>
+		<then>
+
+       <cc failonerror="false"
             incremental="false"
             outfile="${dir.test.generated}/server/${serviceLang}/${serviceName}/${serviceName}"
             objdir="${dir.test.generated}/server/${serviceLang}/${serviceName}"
             exceptions="true"
-            outtype="shared"
+		outtype="shared"
             subsystem="console">
 
             <!-- Compilers -->
-            <compiler refid="VisualC++" />
+            		<compiler refid="VisualC++" />
+				<compiler refid="SolarisCC"/>
+                        <compiler refid="Linuxgcc"/>                  
 
             <!-- Linkers -->
-            <linker refid="VisualC++Linker" />
+            		<linker refid="VisualC++Linker" />
+				<linker refid="SolarisLinker"/>
+                        <linker refid="LinuxLinker"/>
+                       
+
             <!-- Axis Client .lib file location, or UNIX shared object -->
-            <!-- This lib is needed when building a service on windows where 
-				AxisUserAPI implementation is needed -->
+            <!-- This lib is needed when building a service on windows where
+                                AxisUserAPI implementation is needed -->
             <libset dir="${dir.lib}" libs="${serverEngineLibraryName}" />
 
             <!-- Files to be compiled -->
@@ -271,6 +277,32 @@ XMLParser:${dir.libraries}/${libraryPrefix}${ClientParserLib}${librarySuffix}
                 <include name="*.cpp" />
             </fileset>
         </cc>
+</then>
+<else>
+ <cc failonerror="false"
+            incremental="false"
+            outfile="${dir.test.generated}/server/${serviceLang}/${serviceName}/${libraryPrefix}${serviceName}${librarySuffix}"
+            objdir="${dir.test.generated}/server/${serviceLang}/${serviceName}"
+            exceptions="true"
+            subsystem="console">
+
+            <!-- Compilers -->
+                <compiler refid="AIXxlc"/>
+
+            <!-- Linkers -->
+                <linker refid="AIXLinker"/>
+          
+            <libset dir="${dir.lib}" libs="${serverEngineLibraryName}" />
+
+            <!-- Files to be compiled -->
+            <includepath path="${dir.include}" />
+            <fileset dir="${dir.test.generated}/server/${serviceLang}/${serviceName}">
+                <include name="*.cpp" />
+            </fileset>
+        </cc>
+	</else>
+</if>
+	
     </target>
 
 
@@ -279,8 +311,8 @@ XMLParser:${dir.libraries}/${libraryPrefix}${ClientParserLib}${librarySuffix}
                      collapseAttributes="true" />
         <echo file="${wsdd.file}" append="true">
 &lt;service name="${serviceName}" provider="${deployment.service.provider}" description="Axis C++ web service" &gt;
-&lt;parameter name="className" value="${dir.test.generated}/server/${serviceLang}/${serviceName}/${libraryPrefix}${serviceName}${librarySuffix}"/&gt;
-&lt;/service&gt;
+&lt;parameter name="className" value="${dir.test.generated}/server/${serviceLang}/${serviceName}/${libraryPrefix}${serviceName}${librarySuffix}"/&gt;&lt;/service&gt;
 </echo>
     </target>
 </project>
+
