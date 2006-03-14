@@ -38,7 +38,7 @@ public class StopMockServer
         try
         {
             System.out.println( "Going to send a stop message to "+hostname+":"+port);
-            socket=new Socket(hostname, port);
+            socket=TCPMonitor.getClientSocket(hostname, port);
             dos=new BufferedWriter(new OutputStreamWriter(socket
                     .getOutputStream( )));
             dos.write(STOPMOCKSERVER_STRING);
@@ -98,6 +98,7 @@ public class StopMockServer
 
         StopMockServer stop=new StopMockServer(monitorHost, monitorPort);
         stop.stopMonitor( );
+        System.gc();
     }
 }
 

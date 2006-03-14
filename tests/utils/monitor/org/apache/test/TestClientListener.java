@@ -29,12 +29,12 @@ import java.net.*;
  * @since 1.0
  */
 
-public class TestClientListener implements Runnable
+public class TestClientListener extends ChildHandler implements Runnable
 {
     private int     servicePort    =0;
     private String  serviceHostNme =null;
     private boolean stayAlive      =false;
-    ServerSocket    serverSocket   =null;
+    private ServerSocket    serverSocket   =null;
 
     /**
      * 
@@ -51,7 +51,7 @@ public class TestClientListener implements Runnable
         this.servicePort=servicePort;
 
         // no point in carrying on if we can't listen to the client !
-        serverSocket=new ServerSocket(listenPort);
+        serverSocket=TCPMonitor.getServerSocket(listenPort);
     }
 
     /**
@@ -105,10 +105,11 @@ public class TestClientListener implements Runnable
                 TestClientThread connectionToServer=null;
                 try
                 {
-
                         connectionToServer=new TestClientThread(clientSocket,
                                 serviceHostNme, servicePort);
-                    connectionToServer.start( );
+                        addChild(connectionToServer);
+                        Thread connectionToServerThread = new Thread(connectionToServer);
+                        connectionToServerThread.start( );
                 }
                 catch (StopRequestException stopRequestException)
                 {
@@ -141,34 +142,22 @@ public class TestClientListener implements Runnable
                 }
             }
         }
-        System.out.println("Stopping monitor");
         // We've been told to stop
-        // cleanup - hmm, well, we haven't created a connectionToServerThread
-        // because that's what returned the Stop exception
-        // therefore it hasn't created a thread either so nothing to do there
         // Tell the Monitor to stop writing things out and to tidy itself up
-        try
-        {
-            TCPMonitor.stop( );
-        }
-        catch (IOException exception)
-        {
-            System.err
-                    .println("Caught an IOException when stopping the monitor: "
-                            +exception);
-        }
-
-        // release our server socket
-        try
-        {
-            serverSocket.close( );
-        }
-        catch (IOException exception)
-        {
-            System.err.println("IOException when closing serverSocket: "
-                    +exception);
-        }
+        // the tcpmon will call our close method in a second
+        TCPMonitor.getInstance().close( );
     }
-
+    protected void close()
+    {
+        try
+        {
+            serverSocket.close();
+        }
+        catch(IOException exception)
+        {
+            exception.printStackTrace(System.err);
+        }
+        super.close();
+    }
 }
 

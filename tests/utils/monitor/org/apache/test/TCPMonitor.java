@@ -18,6 +18,10 @@ package org.apache.test;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketException;
 
 /**
  * @author perryan,hawkeye 
@@ -26,14 +30,22 @@ import java.io.IOException;
  * is meant to be used in a test suite scenario. where an instance of
  * this class is created per call to a test.
  */
-public class TCPMonitor
+public class TCPMonitor extends ChildHandler
 {
 
     private static TCPMonitor         singleton              =null;
     private static BufferedWriter     requestFileWriter;
     private static BufferedWriter     responseFileWriter;
     private static boolean            responseFileWriterOpen =false;
-    private static TestClientListener testClientListener     =null;
+  //  private static TestClientListener testClientListener     =null;
+    
+    
+    public static final int OPENING_STATE=0;
+    public static final int OPENED_STATE=0;
+    public static final int CLOSING_STATE=0;
+    public static final int CLOSED_STATE=0;
+    
+    public static int state;
 
     
     /**
@@ -47,6 +59,7 @@ public class TCPMonitor
     private TCPMonitor(int listenerPort, String serviceHost, int servicePort,
             String requestFile, String responseFile) throws IOException
     {
+        state = OPENING_STATE;
       try
       {
           requestFileWriter=new BufferedWriter(new FileWriter(requestFile));
@@ -77,10 +90,12 @@ public class TCPMonitor
         /*
          * Create a thread which listens for incoming requests
          */
-        testClientListener=new TestClientListener(listenerPort, serviceHost,
+        TestClientListener testClientListener=new TestClientListener(listenerPort, serviceHost,
                 servicePort);
+        addChild(testClientListener);
         Thread testClientListenerThread=new Thread(testClientListener);
         testClientListenerThread.start( );
+        state = OPENED_STATE;
     }
 
 
@@ -106,40 +121,6 @@ public class TCPMonitor
     }
     
     
-
-    /**
-     * We've been told to stop by an incoming Stop request so clean up.
-     */
-    public static void stop( ) throws IOException
-    {
-        // close() should flush() the streams but let's just be sure !
-        System.out.println( "TCPMonitor#stop(): Flushing and closing the output files");
-        IOException exception=null;
-        try
-        {
-            requestFileWriter.flush( );
-            requestFileWriter.close( );
-
-            responseFileWriter.flush( );
-            responseFileWriter.close( );
-        }
-        catch (IOException ioException)
-        {
-            exception=ioException;
-        }
-        catch(NullPointerException nullPointerException)
-        {
-            nullPointerException.printStackTrace(System.err);
-        }
-        finally
-        {
-            singleton=null;
-        }
-        if (exception!=null)
-        {
-            throw exception;
-        }
-    }
 
     public void writeRequest(char[] buffer, int howManyChars)
     {
@@ -227,6 +208,74 @@ public class TCPMonitor
         {
             exception.printStackTrace( );
         }
+    }
+    
+    protected void close()
+    {
+        // close() should flush() the streams but let's just be sure !
+        System.out.println( "TCPMonitor#close(): Flushing and closing the output files");
+        state = CLOSING_STATE;
+        IOException exception=null;
+        try
+        {
+            requestFileWriter.flush( );
+            requestFileWriter.close( );
+
+            responseFileWriter.flush( );
+            responseFileWriter.close( );
+        }
+        catch (IOException ioException)
+        {
+            exception=ioException;
+        }
+        catch(NullPointerException nullPointerException)
+        {
+            nullPointerException.printStackTrace(System.err);
+        }
+        finally
+        {
+            singleton=null;
+        }
+        if (exception!=null)
+        {
+            exception.printStackTrace(System.err);
+        }
+        System.out.println( "About to call super.close");
+        super.close();
+        System.out.println( "called super.close");
+        state = CLOSED_STATE;
+    }
+
+
+    /**
+     * @param hostname
+     * @param port
+     * @return a connected socket
+     */
+    public static Socket getClientSocket(String hostname, int port)throws SocketException, IOException
+    {
+		Socket socket = new Socket();
+		InetSocketAddress remoteAddress = new InetSocketAddress(hostname, port);
+		socket.setKeepAlive(false);
+		socket.setReuseAddress(true);
+		socket.connect(remoteAddress);
+		
+		return socket;
+		
+    }
+
+
+    /**
+     * @param port
+     * @return
+     */
+    public static ServerSocket getServerSocket(int port)throws IOException
+    {
+        ServerSocket socket = new ServerSocket();
+        socket.setReuseAddress(true);
+        InetSocketAddress sockAddress = new InetSocketAddress(port);
+        socket.bind(sockAddress);
+        return socket;
     }
     
     

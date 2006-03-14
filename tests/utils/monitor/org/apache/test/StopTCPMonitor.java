@@ -35,7 +35,7 @@ public class StopTCPMonitor {
 		Socket socket = null;
 		BufferedWriter dos = null;
 		try {
-		socket = new Socket(hostname, port);
+		    socket = TCPMonitor.getClientSocket(hostname, port);
 			dos = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 			dos.write(STOPTCPMON);
 			dos.flush();
@@ -77,6 +77,7 @@ public class StopTCPMonitor {
 
 		StopTCPMonitor stop = new StopTCPMonitor(monitorHost, monitorPort);
 		stop.stopMonitor();
+		System.gc();
 	}
 }
 

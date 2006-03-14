@@ -18,14 +18,22 @@ package org.apache.test;
 import java.io.*;
 import java.net.*;
 
-public class TestClientThread extends Thread
+/**  
+ * @author hawkeye
+ *
+ * Handles the connection from a client to the server
+ * this class is responsible for cleaning up the socket 
+ * 
+ */
+public class TestClientThread extends ChildHandler implements Runnable
 {
     private boolean          continueToRun                 =true;
     // the responder back to the client
-    private ClientReturner   clientReturner                =null;
+//    private ClientReturner   clientReturner                =null;
     // We need to keep hold of this so that we can tell what state it's in when
     // the
     // read fails
+    // and also to close it.
     private Socket           clientSocket;
 
     // I didn't want to make this global but it has to be for the constructor
@@ -60,15 +68,24 @@ public class TestClientThread extends Thread
     {
         //        System.out.println( "TestClientThread(3): entry");
         this.clientSocket=clientSocket;
-        IsStopMessage(clientSocket);
+        try
+        {
+            IsStopMessage(clientSocket);
+        }
+        catch(StopRequestException stopRequestException)
+        {
+            // have to close anything we've created
+            close();
+            throw stopRequestException;
+        }
         Socket serviceSocket=createSocketToServer(serviceHostName, servicePort);
         writeToServer(readBuffer, bytesRead);
 
         // OK, now we've done that we can create the new thread to stream
         // the result back to the client
-        clientReturner=new ClientReturner(clientSocket, serviceSocket);
-        clientReturner.start( );
-
+        ClientReturner clientReturner=new ClientReturner(clientSocket, serviceSocket);
+        addChild(clientReturner);
+        new Thread(clientReturner).start( );
     }
 
     private void IsStopMessage(Socket clientSocket) throws IOException,
@@ -206,7 +223,7 @@ public class TestClientThread extends Thread
                                 +exception);
             }
         }
-        clientReturner.continueToRun=false;
+        // clientReturner.continueToRun=false;
 
         //        System.out.println( "TestClientThread#run(): exit");
     }
@@ -220,7 +237,7 @@ public class TestClientThread extends Thread
         {
             try
             {
-                serviceSocket=new Socket(serviceHostName, servicePort);
+                serviceSocket=TCPMonitor.getClientSocket(serviceHostName, servicePort);
             }
             catch (UnknownHostException unknownHostException)
             {
@@ -287,6 +304,19 @@ public class TestClientThread extends Thread
         streamToServer.write(request, 0, bytesToWrite);
         streamToServer.flush( );
     }
-
+    
+    protected void close()
+    {
+        try
+        {
+            clientSocket.close();
+        }
+        catch(IOException exception)
+        {
+            exception.printStackTrace(System.err);
+        }
+        super.close();
+    }
+    
 }
 

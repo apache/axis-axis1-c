@@ -23,6 +23,10 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
+import java.rmi.server.SocketSecurityException;
+import java.util.Vector;
+
+import javax.net.SocketFactory;
 
 /**
  * This class sits listening on a port. When a client connects to it it returns a predefined response
@@ -30,17 +34,16 @@ import java.net.SocketTimeoutException;
  * @see printUsage() for further details
  */
 
-public class MockServer implements Runnable
+public class MockServer extends ChildHandler implements Runnable 
 {
     private static int SOCKET_TIMEOUT = 700000;
     // The port that we will listen on for the client to connect to
     private int           port;
     // File that contains the http responses that the client is expecting back.
     private File          responseFile;
-
-    private ServerSocket  serverSocket;
     private boolean       continueToRun =true;
-
+    ServerSocket serverSocket;
+    
     public static final void printUsage( )
     {
         System.out
@@ -117,8 +120,8 @@ public class MockServer implements Runnable
         MockServerThread.cacheResponseFile(responseFile);
 
         // no point in going on if we can;'t create a server socket
-        serverSocket=new ServerSocket(port);
-        
+        serverSocket = TCPMonitor.getServerSocket(port);
+        serverSocket.setReuseAddress(true);
     }
 
 
@@ -134,15 +137,6 @@ public class MockServer implements Runnable
         System.out.println("MockServer listening on port: "+port);
         System.out.println("Returning Output file: "+responseFile);
         Socket incoming=null;
-//        try
-//        {
-//            serverSocket.setSoTimeout(SOCKET_TIMEOUT);
-//        }
-//        catch (SocketException e)
-//        {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace( );
-//        }
 
         do
         {
@@ -173,6 +167,7 @@ public class MockServer implements Runnable
                 {
                     MockServerThread mockServer;
                     mockServer=new MockServerThread(incoming, responseFile);
+                    addChild(mockServer);
                     Thread mockServerThread = new Thread(mockServer);
                     mockServerThread.start( );
                 }
@@ -188,6 +183,12 @@ public class MockServer implements Runnable
             }
         }
         while (continueToRun);
+        
+        close();
+    }
+    
+    protected void close()
+    {
         // clean up
         try
         {
@@ -198,6 +199,8 @@ public class MockServer implements Runnable
             System.err.println( "MockServer#run(): IOException when closing the serverSocket: ");
             exception.printStackTrace(System.err);
         }
+        
+        super.close();
     }
 }
  

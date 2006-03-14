@@ -21,14 +21,17 @@ import java.net.*;
 /**
  * TestClientThread is a child thread of TestClientListener and handles all
  * communication between the original requestor and the TCPMonitor class.
+ * This class is responsible for the serviceSocket that is given to it.
  * 
  * @author Andrew Perry, hawkeye
  * @since 1.0
  * @see TestClientListener
  */
 
-public class ClientReturner extends Thread
+public class ClientReturner extends ChildHandler implements Runnable
 {
+    // socket to the service;
+    private Socket serviceSocket;
     boolean                  continueToRun        =true;
     private static int       number               =0;
 
@@ -58,6 +61,7 @@ public class ClientReturner extends Thread
         this(clientSocket);
         //        System.out.println( "ClientReturner(): entry");
         // create the reader from the server
+        this.serviceSocket = serviceSocket;
         serverResponseStream=new BufferedReader(new InputStreamReader(
                 serviceSocket.getInputStream( )));
 
@@ -121,11 +125,49 @@ public class ClientReturner extends Thread
         }
         catch (IOException exception)
         {
-            System.err
-                    .println("ClientReturner#run(): IOException when reading in response from server ");
-            exception.printStackTrace(System.err);
+            if(TCPMonitor.state<TCPMonitor.CLOSING_STATE)
+            {
+                System.err
+                	.println("ClientReturner#run(): IOException when reading in response from server ");
+                exception.printStackTrace(System.err);
+            }
+            else
+            {
+                // the tcpmon is closing so it's all fine - ignore.
+            }
         }
         System.out.println( "ClientReturner#run(): exit");
+    }
+    
+    protected void close()
+    {
+        continueToRun=false;
+        try
+        {
+            serviceSocket.close();
+        }
+        catch(IOException exception)
+        {
+            exception.printStackTrace(System.err);
+        }
+        try
+        {
+            serverResponseStream.close();
+        }
+        catch(IOException exception)
+        {
+            exception.printStackTrace(System.err);
+        }
+        
+        try
+        {
+            streamToClient.close();
+        }
+        catch(IOException exception)
+        {
+            exception.printStackTrace(System.err);
+        }
+        super.close();
     }
 
 }

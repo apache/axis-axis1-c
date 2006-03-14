@@ -23,7 +23,7 @@ import java.io.IOException;
  * TODO To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
-public class ResponseSender implements Runnable
+public class ResponseSender extends ChildHandler implements Runnable
 {
     private Response response;
     private BufferedWriter writer;
@@ -38,7 +38,6 @@ public class ResponseSender implements Runnable
         writer = writerToClient;
         parent = mockServerThread;
     }
-    
 
     /* (non-Javadoc)
      * @see java.lang.Runnable#run()
@@ -83,6 +82,22 @@ public class ResponseSender implements Runnable
                 exception.printStackTrace(System.err);
             }
         }
+    }
+    
+    protected void close()
+    {
+        try
+        {
+            writer.close();
+        }
+        catch(IOException exception)
+        {
+            exception.printStackTrace(System.err);
+        }
+        
+        // we have not created anything so no need for super.close();
+        // however, we do it to get the debug message printed out 
+         super.close();
     }
 
 }
