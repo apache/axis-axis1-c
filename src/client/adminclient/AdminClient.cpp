@@ -32,7 +32,7 @@ int main( int argc, char *argv[])
     string	Uri = "http://";
     string	wsdd;
 
-    if( argc < 3)
+    if( argc < 4)
     {
         printf( "Usage: %s <server> <port> <wsdd file>\n", argv[0]);
         exit( 1);
