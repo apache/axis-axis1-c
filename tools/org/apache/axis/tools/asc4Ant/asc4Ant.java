@@ -27,25 +27,30 @@ public class asc4Ant
         
 	        try
 	        {
-	            String osName = System.getProperty("os.name");
-	            String cmdPrefix = "";
-	
-	            if( osName.startsWith( "Windows"))
-	            {
-	                cmdPrefix = "cmd /C ";
-	            }
-	            else
-	            {
-	                System.out.println( "Oh oh, haven't done that yet!");
-	            }
-	            
 	            if( new File( filename).exists())
 	            {
-		            String cmdLine = cmdPrefix + "gpg --no-secmem-warning --yes --armor --passphrase-fd 0 --output " + filename + ".asc --detach-sig " + filename + " < " + passwordFile;
-		            Runtime rt = Runtime.getRuntime();
-		            Process proc = rt.exec( cmdLine);
+    	                String osName = System.getProperty("os.name");
+	                String gpgCommand = "gpg --no-secmem-warning --yes --armor --passphrase-fd 0 --output " + filename + ".asc --detach-sig " + filename + " < " + passwordFile;
+	                Runtime rt = Runtime.getRuntime();
+                        Process proc = null;
+	
+	                if( osName.startsWith( "Windows"))
+	                {
+                            String cmdLine = "cmd /C " + gpgCommand;
+
+	                    proc = rt.exec( cmdLine);
+	                }
+                        else
+                        {
+	                    String [] cmdLine = {"/bin/sh", "-c", gpgCommand};
+
+	                    proc = rt.exec( cmdLine);
+	                }
+	            
 		            
-	                proc.waitFor();
+                        proc.waitFor();
+
+                        System.out.println( "Done");
 	            }
 	        }
 	        catch( Throwable t)
