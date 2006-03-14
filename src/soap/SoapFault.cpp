@@ -194,7 +194,7 @@ void SoapFault::initialize()
         /*57*/    {"Server", "Output streaming error on Channel while writing data", "", ""},
         /*58*/    {"Server", "Input streaming error while getting data", "", ""},
         /*59*/    {"Server", "Channel error while waiting for timeout", "", ""},
-        /*60*/    {"Server", "Channel error connection timeout before receving", "", ""},
+        /*60*/    {"Server", "Channel error connection timeout before receiving", "", ""},
         /*61*/    {"Server", "Loading SSL channel failed", "", ""},
         /*62*/    {"Server", "Loading channel failed", "", ""},
         /*63*/    {"Server", "Transport buffer is empty", "", ""},

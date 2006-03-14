@@ -172,7 +172,7 @@ const string& AxisMessage::getMessage(int iExceptionCode)
             break;
         case SERVER_TRANSPORT_TIMEOUT_EXPIRED:
             m_sMessage = "AxisTransportException:Channel error connection" \
-                " timeout before receving";
+                " timeout before receiving";
             break;
         case SERVER_TRANSPORT_BUFFER_EMPTY:
             m_sMessage = "AxisTransportException:Transport buffer is empty";
