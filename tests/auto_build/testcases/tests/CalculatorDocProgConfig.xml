@@ -1,0 +1,14 @@
+<test>
+    <name>CalculatorDocProgConfig</name>
+    <description>CalculatorDocProgConfig</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>CalculatorDocProgConfigClient.cpp</clientCode>
+    <wsdl>CalculatorDoc.wsdl</wsdl>
+    <expected>
+        <output>
+            CalculatorDocProgConfig.cpp.out
+        </output>
+    </expected>
+	<prgConfig>true</prgConfig>
+	<endpoint>http://localhost:80/Calculator/services/Calculator</endpoint>
+</test>
