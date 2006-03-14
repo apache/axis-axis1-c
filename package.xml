@@ -321,7 +321,6 @@ Please use these to configure directories to suit the needs of your system.
   </target>
 
   <target name="md5Checksum">
-    <echo message="zipName=${zipName}"/>
     <if>
       <available file="${zipName}"/>
       <then>
