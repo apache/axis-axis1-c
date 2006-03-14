@@ -27,6 +27,7 @@ will automatically determine the correct one to be used;
 Please use these to configure directories to suit the needs of your system.
 	</description>
 	<import file="${basedir}/build/buildInitialize.xml"/>
+	<import file="${basedir}/build/buildTools.xml"/>
 
 	<target name="copySource">
 		<mkdir dir="${dir.release}"/>
@@ -301,10 +302,7 @@ Please use these to configure directories to suit the needs of your system.
            +==> md5Checksum
  -->
 
-  <target name="ApacheRelease" depends="initialize" description="Once the Apache Client has been packaged, two additional files need to be created for both the source and binary zip/tar files.  These are the 'md5' and 'asc' files.">
-    <antcall target="md5Checksums">
-      <param name="dir.properties" value="${basedir}/../.."/>
-    </antcall>
+  <target name="ApacheRelease" depends="initialize, md5Checksums, ascFiles" description="Once the Apache Client has been packaged, two additional files need to be created for both the source and binary zip/tar files.  These are the 'md5' and 'asc' files.">
   </target>
 
   <target name="md5Checksums" depends="packageWindowsDeliverableName, packageUnixDeliverableName">
@@ -343,13 +341,47 @@ Please use these to configure directories to suit the needs of your system.
   </target>
 	
   <target name="packageUnixDeliverableName" unless="windows">
-    <property name="zipNameBin" value="${dir.zips}/${release}-bin.tar"/>
-    <property name="zipNameSrc" value="${dir.zips}/${release}-src.tar"/>
-    <property name="zipNameTraceBin" value="${dir.zips}/${release}-trace-bin.tar"/>
-    <property name="zipNameTraceSrc" value="${dir.zips}/${release}-trace-src.tar"/>
+    <property name="zipNameBin" value="${dir.zips}/${release}-bin.tar.gz"/>
+    <property name="zipNameSrc" value="${dir.zips}/${release}-src.tar.gz"/>
+    <property name="zipNameTraceBin" value="${dir.zips}/${release}-trace-bin.tar.gz"/>
+    <property name="zipNameTraceSrc" value="${dir.zips}/${release}-trace-src.tar.gz"/>
   </target>
 
-  <target name="ascFiles">
+  <target name="ascFiles" depends="initialize, packageWindowsDeliverableName, packageUnixDeliverableName, buildTools">
+    <if>
+      <available file="${basedir}/../../SecurityKeys/Apache_1_6/gpg/KEYS"/>
+      <then>
+        <copy file="${basedir}/../../SecurityKeys/Apache_1_6/gpg/KEYS" tofile="${basedir}/KEYS"/>
+        <copy file="${basedir}/../../SecurityKeys/Apache_1_6/gpg/password_gpg" tofile="${basedir}/password_gpg"/>
+        <mkdir dir="${gpgdir}"/>
+        <copy todir="${gpgdir}">
+          <fileset dir="${basedir}/../../SecurityKeys/Apache_1_6/gpg">
+            <exclude name="KEYS"/>
+            <exclude name="password_gpg"/>
+          </fileset>
+        </copy>
+        <java classname="org.apache.axis.tools.asc4Ant.asc4Ant" fork="true" failonerror="true">
+          <classpath refid="tracecp"/>
+          <arg value="${zipNameTraceBin}"/>
+          <arg value="${basedir}/password_gpg"/>
+        </java>
+        <java classname="org.apache.axis.tools.asc4Ant.asc4Ant" fork="true" failonerror="true">
+          <classpath refid="tracecp"/>
+          <arg value="${zipNameTraceSrc}"/>
+          <arg value="${basedir}/password_gpg"/>
+        </java>
+        <java classname="org.apache.axis.tools.asc4Ant.asc4Ant" fork="true" failonerror="true">
+          <classpath refid="tracecp"/>
+          <arg value="${zipNameBin}"/>
+          <arg value="${basedir}/password_gpg"/>
+        </java>
+        <java classname="org.apache.axis.tools.asc4Ant.asc4Ant" fork="true" failonerror="true">
+          <classpath refid="tracecp"/>
+          <arg value="${zipNameSrc}"/>
+          <arg value="${basedir}/password_gpg"/>
+        </java>
+      </then>
+    </if>
   </target>
 
 </project>
