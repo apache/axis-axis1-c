@@ -28,6 +28,7 @@ public :
     virtual ~StubC() {}
     Call* getCallStubC() { return getCall(); }
     void applyUserPreferencesStubC() { applyUserPreferences(); }
+    void includeSecureStubC() { includeSecure(); }
     void setSOAPHeadersStubC() { setSOAPHeaders(); }
 };
 AXIS_CPP_NAMESPACE_END
@@ -695,6 +696,29 @@ void axiscApplyUserPreferences(AXISCHANDLE stub)
     try
     {
         s->applyUserPreferencesStubC();
+    }
+    catch ( AxisException& e  )
+    {
+        h->_exception.setExceptionFromException(e);
+        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        h->_exception.setExceptionCode(-1);  
+        h->_exception.setMessage("Unrecognized exception thrown.");  
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+}
+AXISC_STORAGE_CLASS_INFO 
+void axiscIncludeSecure(AXISCHANDLE stub)
+{ 
+    AxisObjectContainer *h = (AxisObjectContainer *)stub;
+    h->_exception.resetException();
+    StubC *s = (StubC*)h->_objHandle;
+    
+    try
+    {
+        s->includeSecureStubC();
     }
     catch ( AxisException& e  )
     {
