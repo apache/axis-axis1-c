@@ -85,11 +85,11 @@ public class ClientStubWriter
           writer.write("\n/*Methods corresponding to the web service methods*/\n");
           MethodInfo minfo;
           for (int i = 0; i < methods.size(); i++)
-            {
-              minfo = (MethodInfo) methods.get(i);
-              this.writeMethodInWrapper(minfo);
-              writer.write("\n");
-            }
+          {
+                minfo = (MethodInfo) methods.get(i);
+                this.writeMethodInWrapper(minfo);
+                writer.write("\n");
+          }
         }
       catch (IOException e)
         {
@@ -133,7 +133,7 @@ public class ClientStubWriter
         String outparamType = null;
         if (returntype != null)
             retType = wscontext.getTypemap().getType(returntype.getSchemaName());
-	
+    
         if (retType != null)
         {
            if (retType.isSimpleType())
@@ -185,7 +185,7 @@ public class ClientStubWriter
             writer.write (outparamType);
           }
         else
-          {			//for AnyType too
+          {            //for AnyType too
             writer.write (outparamType + "*");
           }
    
@@ -251,7 +251,7 @@ public class ClientStubWriter
             else
             {
                if (!returntypeissimple)
-               {		//for AnyType too
+               {        //for AnyType too
                   if (outparamType.lastIndexOf ("*") > 0)
                   {
                      writer.write (outparamType + " pReturn = NULL;\n");
@@ -329,7 +329,9 @@ public class ClientStubWriter
             writer.write(";\n");
         }
         writer.write(
-            "\taxiscSetTransportPropertyCall(call,AXISC_SOAPACTION_HEADER , \""
+            "\tif (NULL==axiscGetTransportPropertyCall(call,\"SOAPAction\",0))\n");
+        writer.write(
+            "\t\taxiscSetTransportPropertyCall(call,AXISC_SOAPACTION_HEADER , \""
                 + minfo.getSoapAction()
                 + "\");\n");
         writer.write(
@@ -345,12 +347,15 @@ public class ClientStubWriter
         // TODO add attributes to soap method
 
 
-        // TODO new calls from stub base
-    	writer.write ("\taxiscApplyUserPreferences(stub);\n");
+        // new calls from stub base
+        writer.write ("\taxiscIncludeSecure(stub);\n");  
+        writer.write ("\taxiscApplyUserPreferences(stub);\n");
           
         for (int i = 0; i < paramsB.size(); i++)
         {
             ParameterInfo param = (ParameterInfo) paramsB.get(i);
+            
+            // Ignore attributes, while adding elements
             type = wscontext.getTypemap().getType(param.getSchemaName());
             if (type != null)
             {
@@ -360,18 +365,18 @@ public class ClientStubWriter
                 }
                 else
                 {
-			paraTypeName = type.getLanguageSpecificName ();
-			if (CUtils.isSimpleType (paraTypeName))
-			    paraTypeName =
-				WrapperUtils.
-				getClassNameFromParamInfoConsideringArrays
-				(param,
-				 //returntype,
-				 wscontext);
-			typeisarray =
-			    (paraTypeName.lastIndexOf ("_Array") > 0);
-			if (!typeisarray)
-			    paraTypeName = type.getLanguageSpecificName ();
+            paraTypeName = type.getLanguageSpecificName ();
+            if (CUtils.isSimpleType (paraTypeName))
+                paraTypeName =
+                WrapperUtils.
+                getClassNameFromParamInfoConsideringArrays
+                (param,
+                 //returntype,
+                 wscontext);
+            typeisarray =
+                (paraTypeName.lastIndexOf ("_Array") > 0);
+            if (!typeisarray)
+                paraTypeName = type.getLanguageSpecificName ();
                 }
                 typeisarray |= type.isArray();
             }
@@ -420,7 +425,7 @@ public class ClientStubWriter
             }
             else if (typeissimple)
               {
-                //for simple types	
+                //for simple types    
                 if (param.isNillable ()
                     || CUtils.isPointerType(paraTypeName))
                   {
