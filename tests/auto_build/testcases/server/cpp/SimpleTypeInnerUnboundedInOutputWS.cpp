@@ -35,8 +35,18 @@ void SimpleTypeInnerUnboundedInOutputWS::onFault()
 {
 }
 
-Type1* SimpleTypeInnerUnboundedInOutputWS::getInput(xsd__int *Value0)  
+Type1* SimpleTypeInnerUnboundedInOutputWS::getInput(xsd__int * Value0)  
 {
-	Type1* ret=new Type1();
-	return ret;
+	Type1 *retValue=new Type1();
+	_Type1_ident_Array ident;
+	_Type1_ident * array=new _Type1_ident[*Value0];
+	char *buff=new char[4];
+	for(int i=0;i<*Value0;i++){
+		array[i]=new char[4];
+		sprintf(buff,"%d",i);
+	    strcpy(array[i],buff);
+	}
+	ident.set(array,*Value0);
+	retValue->setident(&ident);
+	return retValue;
 }
