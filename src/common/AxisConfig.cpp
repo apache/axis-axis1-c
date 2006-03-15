@@ -36,20 +36,20 @@ AXIS_CPP_NAMESPACE_START
 
 AxisConfig::AxisConfig()
 {
-    m_pcKeyArray[AXCONF_WSDDFILEPATH]       = "WSDDFilePath";
-    m_pcKeyArray[AXCONF_LOGPATH]            = "LogPath";
-    m_pcKeyArray[AXCONF_CLIENTLOGPATH]      = "ClientLogPath";
-    m_pcKeyArray[AXCONF_CLIENTWSDDFILEPATH] = "ClientWSDDFilePath";
+    m_pcKeyArray[AXCONF_WSDDFILEPATH]       = AXCONF_WSDDFILEPATH_TAGNAME;
+    m_pcKeyArray[AXCONF_LOGPATH]            = AXCONF_LOGPATH_TAGNAME;
+    m_pcKeyArray[AXCONF_CLIENTLOGPATH]      = AXCONF_CLIENTLOGPATH_TAGNAME;
+    m_pcKeyArray[AXCONF_CLIENTWSDDFILEPATH] = AXCONF_CLIENTWSDDFILEPATH_TAGNAME;
   
     m_pcKeyArray[AXCONF_AXISHOME]       = "\0"; // will be obtained dynamically.
-    m_pcKeyArray[AXCONF_TRANSPORTHTTP]  = "Transport_http";
-    m_pcKeyArray[AXCONF_SSLCHANNEL_HTTP]= "Channel_HTTP_SSL";
-    m_pcKeyArray[AXCONF_CHANNEL_HTTP]   = "Channel_HTTP";
-    m_pcKeyArray[AXCONF_TRANSPORTSMTP]  = "Transport_smtp";
-    m_pcKeyArray[AXCONF_XMLPARSER]      = "XMLParser";
-    m_pcKeyArray[AXCONF_NODENAME]       = "NodeName";
-    m_pcKeyArray[AXCONF_LISTENPORT]     = "ListenPort";
-    m_pcKeyArray[AXCONF_SECUREINFO]     = "SecureInfo";
+    m_pcKeyArray[AXCONF_TRANSPORTHTTP]  = AXCONF_TRANSPORTHTTP_TAGNAME;
+    m_pcKeyArray[AXCONF_SSLCHANNEL_HTTP]= AXCONF_SSLCHANNEL_HTTP_TAGNAME;
+    m_pcKeyArray[AXCONF_CHANNEL_HTTP]   = AXCONF_CHANNEL_HTTP_TAGNAME;
+    m_pcKeyArray[AXCONF_TRANSPORTSMTP]  = AXCONF_TRANSPORTSMTP_TAGNAME;
+    m_pcKeyArray[AXCONF_XMLPARSER]      = AXCONF_XMLPARSER_TAGNAME;
+    m_pcKeyArray[AXCONF_NODENAME]       = AXCONF_NODENAME_TAGNAME;
+    m_pcKeyArray[AXCONF_LISTENPORT]     = AXCONF_LISTENPORT_TAGNAME;
+    m_pcKeyArray[AXCONF_SECUREINFO]     = AXCONF_SECUREINFO_TAGNAME;
 
     m_pcValueArray[AXCONF_NODENAME]          = "server name";
     m_pcValueArray[AXCONF_LISTENPORT]        = "listen port";
@@ -66,20 +66,20 @@ AxisConfig::AxisConfig()
 //AxisConfig::AxisConfig( bool bDefaultsOnly)
 AxisConfig::AxisConfig( AxisConfig * pOrgAxisConfig)
 {
-    m_pcKeyArray[AXCONF_WSDDFILEPATH]       = "WSDDFilePath";
-    m_pcKeyArray[AXCONF_LOGPATH]            = "LogPath";
-    m_pcKeyArray[AXCONF_CLIENTLOGPATH]      = "ClientLogPath";
-    m_pcKeyArray[AXCONF_CLIENTWSDDFILEPATH] = "ClientWSDDFilePath";
+    m_pcKeyArray[AXCONF_WSDDFILEPATH]       = AXCONF_WSDDFILEPATH_TAGNAME;
+    m_pcKeyArray[AXCONF_LOGPATH]            = AXCONF_LOGPATH_TAGNAME;
+    m_pcKeyArray[AXCONF_CLIENTLOGPATH]      = AXCONF_CLIENTLOGPATH_TAGNAME;
+    m_pcKeyArray[AXCONF_CLIENTWSDDFILEPATH] = AXCONF_CLIENTWSDDFILEPATH_TAGNAME;
   
     m_pcKeyArray[AXCONF_AXISHOME]       = "\0"; // will be obtained dynamically.
-    m_pcKeyArray[AXCONF_TRANSPORTHTTP]  = "Transport_http";
-    m_pcKeyArray[AXCONF_SSLCHANNEL_HTTP]= "Channel_HTTP_SSL";
-    m_pcKeyArray[AXCONF_CHANNEL_HTTP]   = "Channel_HTTP";
-    m_pcKeyArray[AXCONF_TRANSPORTSMTP]  = "Transport_smtp";
-    m_pcKeyArray[AXCONF_XMLPARSER]      = "XMLParser";
-    m_pcKeyArray[AXCONF_NODENAME]       = "NodeName";
-    m_pcKeyArray[AXCONF_LISTENPORT]     = "ListenPort";
-    m_pcKeyArray[AXCONF_SECUREINFO]     = "SecureInfo";
+    m_pcKeyArray[AXCONF_TRANSPORTHTTP]  = AXCONF_TRANSPORTHTTP_TAGNAME;
+    m_pcKeyArray[AXCONF_SSLCHANNEL_HTTP]= AXCONF_SSLCHANNEL_HTTP_TAGNAME;
+    m_pcKeyArray[AXCONF_CHANNEL_HTTP]   = AXCONF_CHANNEL_HTTP_TAGNAME;
+    m_pcKeyArray[AXCONF_TRANSPORTSMTP]  = AXCONF_TRANSPORTSMTP_TAGNAME;
+    m_pcKeyArray[AXCONF_XMLPARSER]      = AXCONF_XMLPARSER_TAGNAME;
+    m_pcKeyArray[AXCONF_NODENAME]       = AXCONF_NODENAME_TAGNAME;
+    m_pcKeyArray[AXCONF_LISTENPORT]     = AXCONF_LISTENPORT_TAGNAME;
+    m_pcKeyArray[AXCONF_SECUREINFO]     = AXCONF_SECUREINFO_TAGNAME;
 
 	char *	pszDefaultValues[] = {"",							// (AXCONF_WSDDFILEPATH) Server WSDD File Path
 								  PLATFORM_LOG_PATH,			// (AXCONF_LOGPATH) Server log path

@@ -26,7 +26,20 @@
 #if !defined(__AXIS_AXISCONFIG_H_OF_AXIS_INCLUDED__)
 #define __AXIS_AXISCONFIG_H_OF_AXIS_INCLUDED__
 
-#define CONFBUFFSIZE 256
+#define CONFBUFFSIZE						256
+#define AXCONF_WSDDFILEPATH_TAGNAME			"WSDDFilePath"
+#define AXCONF_LOGPATH_TAGNAME				"LogPath"
+#define AXCONF_CLIENTLOGPATH_TAGNAME		"ClientLogPath"
+#define AXCONF_CLIENTWSDDFILEPATH_TAGNAME	"ClientWSDDFilePath"
+#define AXCONF_TRANSPORTHTTP_TAGNAME		"Transport_http"
+#define AXCONF_SSLCHANNEL_HTTP_TAGNAME		"Channel_HTTP_SSL"
+#define AXCONF_CHANNEL_HTTP_TAGNAME			"Channel_HTTP"
+#define AXCONF_TRANSPORTSMTP_TAGNAME		"Transport_smtp"
+#define AXCONF_XMLPARSER_TAGNAME			"XMLParser"
+#define AXCONF_NODENAME_TAGNAME				"NodeName"
+#define AXCONF_LISTENPORT_TAGNAME			"ListenPort"
+#define AXCONF_SECUREINFO_TAGNAME			"SecureInfo"
+
 #include <axis/GDefine.hpp>
 #include <string>
 /**
