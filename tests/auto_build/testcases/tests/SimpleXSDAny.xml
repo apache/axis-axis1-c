@@ -15,5 +15,5 @@
 			SimpleXSDAny_ServerResponse.expected
 	    </serverResponse>
     </expected>
-	<endpoint>-e http://localhost:9080/SimpleXSDAny/services/Service</endpoint>
+	<endpoint>-e http://localhost:9080/axis/SimpleXSDAny</endpoint>
 </test>
