@@ -9,5 +9,5 @@
             MathOps.out
         </output>
     </expected>
-	<endpoint>http://localhost:80/axis/MathOpsService</endpoint>
+	<endpoint>http://localhost:80/axis/MathOps</endpoint>
 </test>
