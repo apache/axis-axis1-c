@@ -50,6 +50,7 @@ Notes:
 	<import file="${basedir}/build/buildWSDL2Ws.xml"/>
 	<import file="${basedir}/build/buildDocumentation.xml"/>
 	<import file="${basedir}/build/buildAdminClient.xml"/>
+    <import file="${basedir}/build/buildAdminService.xml"/>
 
     <target name="buildVersionResource" if="windows">
         <delete>
@@ -128,6 +129,21 @@ Notes:
 						<antcall target="compileSimpleAxisServer" inheritall="true"/>
 					</then>
 				</if>
+                <if>
+                    <equals arg1="${server.adminService}" arg2="true"/>
+                    <then>
+                        <antcall target="compileAdminService" inheritall="true"/>
+                    </then>
+                </if>
+                <if>
+                    <and>
+                        <equals arg1="${server.adminClient}" arg2="true"/>
+                        <equals arg1="${client}" arg2="true"/>
+                    </and>
+                    <then>
+                        <antcall target="compileAdminClient" inheritall="true"/>
+                    </then>
+                </if>         
 			</then>
 		</if>
 	</target>
@@ -219,7 +235,7 @@ Notes:
 		<antcall target="compileServer" inheritall="true"/>
 	</target>
 
-	<target name="buildAll" depends="compile, compileWSDL2Ws, buildWSDL2WsJARFile, buildCBindings, buildDocumentation, buildAdminClient"/>
+	<target name="buildAll" depends="compile, compileWSDL2Ws, buildWSDL2WsJARFile, buildCBindings, buildDocumentation"/>
 
 
 	<target name="build" depends="initialize"
@@ -305,10 +321,4 @@ Notes:
 		<delete dir="${basedir}/docs/apidocs/html"/>
 		<delete dir="${basedir}/docs/apidocs/latex"/>
 	</target>
-
-	<target name="buildAdminClient" depends="initialize"
-	 description="Build AdminClient runtime">
-		<antcall target="createAdminClient" inheritall="true"/>
-	</target>
-
 </project>

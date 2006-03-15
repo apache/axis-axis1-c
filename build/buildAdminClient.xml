@@ -4,7 +4,7 @@
        Compile the Admin Client Library
   -->
 
-  <target name="createAdminClient">
+  <target name="compileAdminClient">
     <mkdir dir="${dir.objects}"/>
     <mkdir dir="${dir.bin}"/>
 

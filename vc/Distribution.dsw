@@ -3,6 +3,36 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 
 ###############################################################################
 
+Project: "AdminClient"=".\client\admin_client\AdminClient.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name AxisClient
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "AdminService"=".\server\admin_web_service\AdminService.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name AxisServer
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "Apache1_3Module"=".\server\apache1_3\Apache1_3Module.dsp" - Package Owner=<4>
 
 Package=<5>

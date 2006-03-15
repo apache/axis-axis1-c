@@ -38,12 +38,18 @@ class IAdminUtils;
 class IMessageData
 {
     /* Allow AxisAdminService access to the private methods */
-    friend class AxisAdminServiceWrapper; 
 public:
     virtual ~IMessageData(){};
-private:
+
+/**
+ * This method provides access to the AdminUtils, providing a mechanism for
+ * deploying and undeploying services.
+ * 
+ * It is intended that only the AdminService will make use of this API.
+ * 
+ * @param pIAdminUtils will be updated with an IAdminUtils object
+ */
     virtual void getAdminUtils(IAdminUtils** pIAdminUtils)=0;
-public: 
     
 /**
  *  This method stores the given property value with the key, inside the 
