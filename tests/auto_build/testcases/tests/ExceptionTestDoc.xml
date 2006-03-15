@@ -12,5 +12,5 @@
 			ExceptionTestDoc_ServerResponse.expected
 		</serverResponse>
     </expected>
-	<endpoint>http://localhost:80/axis/MathOpsDoc</endpoint>
+	<endpoint>http://localhost:80/axis/FaultMappingDoc</endpoint>
 </test>
