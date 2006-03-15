@@ -80,7 +80,7 @@ XMLParser:${dir.libraries}/${libraryPrefix}${ClientParserLib}${librarySuffix}
 &lt;globalConfiguration&gt;
 &lt;/globalConfiguration&gt;
 </echo>
-        
+       <!-- 
         <condition property="dir.adminService" value="${dir.release}/bin">
             <or>
                 <equals arg1="${platform}" arg2="Win32"/>
@@ -95,15 +95,13 @@ XMLParser:${dir.libraries}/${libraryPrefix}${ClientParserLib}${librarySuffix}
 	                <equals arg1="${platform}" arg2="Win64"/>
 	            </or>
             </not>
-        </condition>
+        </condition> -->
 
         <!--  Insert entry for Admin Service -->
-        <echo file="${wsdd.file}" append="true">&lt;!-- Entry for Axis Admin Service -- Do not remove --&gt;
-&lt;service name="AxisAdmin" provider="CPP:DOCUMENT" description="Axis C++ Admin Service"&gt;
+<!--        <echo file="${wsdd.file}" append="true">&lt;service name="AxisAdmin" provider="CPP:DOCUMENT" description="Axis C++ Admin Service"&gt;
 &lt;parameter name="className" value="${dir.adminService}/${libraryPrefix}${adminServiceLibraryName}${librarySuffix}"/&gt;
 &lt;/service&gt;
-&lt;-- End of entry for Axis Admin Service --&gt;
-</echo>
+</echo> -->
     </target>
 
    <target name="endWSDDFile">
