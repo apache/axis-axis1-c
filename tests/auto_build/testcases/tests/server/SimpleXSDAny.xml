@@ -1,0 +1,9 @@
+<service>
+    <name>SimpleXSDAny</name>
+    <description>SimpleXSDAny</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>SimpleXSDAny.cpp</serviceCode>
+    <wsdl>SimpleXSDAny.wsdl</wsdl>
+     <removeFile>XSD_byte.cpp</removeFile>
+	<servicename></servicename>
+</service>
