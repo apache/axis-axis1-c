@@ -29,28 +29,31 @@ public class asc4Ant
 	        {
 	            if( new File( filename).exists())
 	            {
-    	                String osName = System.getProperty("os.name");
-	                String gpgCommand = "gpg --no-secmem-warning --yes --armor --passphrase-fd 0 --output " + filename + ".asc --detach-sig " + filename + " < " + passwordFile;
+                    String osName = System.getProperty("os.name");
+	                String gpgCommand = "gpg --no-secmem-warning" +           // No Memory Warnings.
+                                           " --yes --quiet" +                 // Answer 'yes' to questions and keep it quiet!
+                                           " --armor" +                       // Armour required.
+                                           " --passphrase-fd 0" +             // Pick-up an input from the input pipe (option '0').
+                                           " --output " + filename + ".asc" + // Output filename.
+                                           " --detach-sig " + filename +      // Input filename.
+                                           " < " + passwordFile;              // Piped input file.
 	                Runtime rt = Runtime.getRuntime();
-                        Process proc = null;
+                    Process proc = null;
 	
 	                if( osName.startsWith( "Windows"))
 	                {
-                            String cmdLine = "cmd /C " + gpgCommand;
+                        String cmdLine = "cmd /C " + gpgCommand;
 
 	                    proc = rt.exec( cmdLine);
 	                }
-                        else
-                        {
+                    else
+                    {
 	                    String [] cmdLine = {"/bin/sh", "-c", gpgCommand};
 
 	                    proc = rt.exec( cmdLine);
 	                }
-	            
 		            
-                        proc.waitFor();
-
-                        System.out.println( "Done");
+                    proc.waitFor();
 	            }
 	        }
 	        catch( Throwable t)
