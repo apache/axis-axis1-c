@@ -54,14 +54,12 @@ public abstract class ParamCPPFileWriter extends ParamWriter
     {
         try
         {
-            this.writer =
-                new BufferedWriter(new FileWriter(getFilePath(), false));
+            this.writer = new BufferedWriter(new FileWriter(getFilePath(), false));
             writeClassComment();
             writePreprocessorStatements();
+            
             if (type.isSimpleType())
-            {
                 writeRestrictionCheckerFunction();
-            }
             else
             {
                 writeGlobalCodes();
@@ -70,11 +68,11 @@ public abstract class ParamCPPFileWriter extends ParamWriter
                 writeDestructors();
                 writeMethods();
             }
+            
             writer.flush();
             writer.close();
             if (WSDL2Ws.verbose)
-                System.out.println(
-                    getFilePath().getAbsolutePath() + " created.....");
+                System.out.println(getFilePath().getAbsolutePath() + " created.....");
         }
         catch (IOException e)
         {
@@ -90,19 +88,11 @@ public abstract class ParamCPPFileWriter extends ParamWriter
     {
         classname = CUtils.sanitiseClassName( classname);
 
-        String targetOutputLocation =
-            this.wscontext.getWrapInfo().getTargetOutputLocation();
+        String targetOutputLocation = this.wscontext.getWrapInfo().getTargetOutputLocation();
         if (targetOutputLocation.endsWith("/"))
-            targetOutputLocation =
-                targetOutputLocation.substring(
-                    0,
-                    targetOutputLocation.length() - 1);
+            targetOutputLocation = targetOutputLocation.substring(0,targetOutputLocation.length() - 1);
         new File(targetOutputLocation).mkdirs();
-        String fileName =
-            targetOutputLocation
-                + "/"
-                + this.classname
-                + CUtils.CPP_CLASS_SUFFIX;
+        String fileName = targetOutputLocation + "/" + this.classname + CUtils.CPP_CLASS_SUFFIX;
         this.wscontext.addGeneratedFile(classname + CUtils.CPP_CLASS_SUFFIX);
         return new File(fileName);
     }
@@ -113,11 +103,7 @@ public abstract class ParamCPPFileWriter extends ParamWriter
         {
             writer.write("#include <axis/AxisWrapperAPI.hpp>\n");
             writer.write("#include <axis/Axis.hpp>\n\n");
-            writer.write(
-                "#include \""
-                    + this.classname
-                    + CUtils.CPP_HEADER_SUFFIX
-                    + "\"\n");
+            writer.write("#include \"" + this.classname + CUtils.CPP_HEADER_SUFFIX + "\"\n");
         }
         catch (IOException e)
         {

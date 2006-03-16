@@ -95,19 +95,16 @@ public class ServiceHeaderWriter
             {
                 atype = (Type) types.next();
                 if (atype.getLanguageSpecificName().startsWith(">"))
-                {
                     continue;
-                }
+
                 typeSet.add(atype.getLanguageSpecificName());
             }
+            
             Iterator itr = typeSet.iterator();
             while (itr.hasNext())
             {
                 writer.write(
-                    "#include \""
-                        + itr.next().toString()
-                        + CUtils.CPP_HEADER_SUFFIX
-                        + "\"\n");
+                    "#include \"" + itr.next().toString() + CUtils.CPP_HEADER_SUFFIX + "\"\n");
             }
 
             //writeFaultHeaders();            

@@ -51,18 +51,11 @@ public class AllParamWriter implements SourceWriter
 
     private File getFilePath(String filename) throws WrapperFault
     {
-        String targetOutputLocation =
-            this.wscontext.getWrapInfo().getTargetOutputLocation();
+        String targetOutputLocation = this.wscontext.getWrapInfo().getTargetOutputLocation();
         if (targetOutputLocation.endsWith("/"))
-        {
-            targetOutputLocation =
-                targetOutputLocation.substring(
-                    0,
-                    targetOutputLocation.length() - 1);
-        }
+            targetOutputLocation = targetOutputLocation.substring(0,targetOutputLocation.length() - 1);
         new File(targetOutputLocation).mkdirs();
-        String fileName =
-            targetOutputLocation + "/" + filename + CUtils.CPP_HEADER_SUFFIX;
+        String fileName = targetOutputLocation + "/" + filename + CUtils.CPP_HEADER_SUFFIX;
         return new File(fileName);
     }
 
@@ -79,73 +72,56 @@ public class AllParamWriter implements SourceWriter
             try
             {
                 type = (Type) enu.next();
-                    if (type.isArray())
-                    {
-                        if (WSDL2Ws.verbose)
-                        {
-                            System.out.println("Array writer called ......");
-                        }
-                        QName qname = type.getName();
+                if (type.isArray())
+                {
+                    if (WSDL2Ws.verbose)
+                        System.out.println("Array writer called ......");
 
-                        
-                        String elementType = type.getElementType();
-                        elementType = elementType.replace('>', '_');
-                        QName elementQname = new QName(qname.getNamespaceURI(), elementType);
-                        Type currentType = wscontext.getTypemap().getType(elementQname);
-                        if (currentType != null)
-                        {
-                            if ( currentType.isSimpleType())
-                            {
-                                continue;
-                            }
-                        }
-                        
-                        if (CUtils.isSimpleType(qname)
-                            && !CUtils.isDefinedSimpleType(qname))
-                        {
-                            throw new WrapperFault(
-                                "No need to create an Array for simple type "
-                                    + qname
-                                    + "\n"
-                                    + "It seems that some thing wrong with symbolTable population - Susantha");
-                        }
-                        ArrayParamHeaderWriter writer =
-                            (new ArrayParamHeaderWriter(wscontext, type));
-                        if (!writer.isSimpleTypeArray())
-                        {
-                            writer.writeSource();
-                            (new ArrayParamWriter(wscontext, type)).writeSource();
-                        }
-                    }
-                    else
+                    QName qname = type.getName();
+                    
+                    String elementType = type.getElementType();
+                    elementType = elementType.replace('>', '_');
+                    QName elementQname = new QName(qname.getNamespaceURI(), elementType);
+                    
+                    Type currentType = wscontext.getTypemap().getType(elementQname);
+                    if (currentType != null)
+                        if ( currentType.isSimpleType())
+                            continue;
+                    
+                    if (CUtils.isSimpleType(qname)
+                        && !CUtils.isDefinedSimpleType(qname))
                     {
-                        /* TODO check whether this type is referenced or not. Synthesize only if  reference
-                         * But of cause that depends on the commandline option too  */
-                        if (type.getLanguageSpecificName().startsWith(">"))
-                        {
-                            /* TODO do some processing to this type before synthesizing to remove ">" charactors.
-                             * And then it should also be synthesized if commandline option says to */
-                            if(WSDL2Ws.verbose)
-                            {
-                                System.out.println(
-                                "ignoring anonymous type "
-                                    + type.getLanguageSpecificName()
-                                    + "\n");
-                            }
-                        }
-                        else
-                        {
-                            if (WSDL2Ws.verbose)
-                            {
-                                System.out.println(
-                                    "struct writer called ......");
-                            }
-                            (new BeanParamWriter(wscontext, type))
-                                .writeSource();
-                            (new ParmHeaderFileWriter(wscontext, type))
-                                .writeSource();
-                        }
+                        throw new WrapperFault(
+                            "No need to create an Array for simple type "
+                                + qname
+                                + ". It seems that some thing wrong with symbolTable population");
                     }
+                    
+                    ArrayParamHeaderWriter writer = (new ArrayParamHeaderWriter(wscontext, type));
+                    if (!writer.isSimpleTypeArray())
+                    {
+                        writer.writeSource();
+                        (new ArrayParamWriter(wscontext, type)).writeSource();
+                    }
+                }
+                /* TODO check whether this type is referenced or not. Synthesize only if  reference
+                 * But of course that depends on the commandline option too  */
+                else if (type.getLanguageSpecificName().startsWith(">"))
+                {
+                    /* TODO do some processing to this type before synthesizing to remove ">" charactors.
+                     * And then it should also be synthesized if commandline option says to */
+                    if(WSDL2Ws.verbose)
+                        System.out.println(
+                                "ignoring anonymous type " + type.getLanguageSpecificName() + "\n");
+                }
+                else
+                {
+                    if (WSDL2Ws.verbose)
+                        System.out.println("struct writer called ......");
+
+                    (new BeanParamWriter(wscontext, type)).writeSource();
+                    (new ParmHeaderFileWriter(wscontext, type)).writeSource();
+                }
             }
             catch (Exception e)
             {
