@@ -37,8 +37,7 @@ public class ArrayParamWriter
      * @param type
      * @throws WrapperFault
      */
-    public ArrayParamWriter(WebServiceContext wscontext, Type type)
-        throws WrapperFault
+    public ArrayParamWriter(WebServiceContext wscontext, Type type) throws WrapperFault
     {
         super(wscontext, type);
     }
@@ -62,7 +61,7 @@ public class ArrayParamWriter
              *    <xsd:attribute name="att_kind" type="tns:Kind" />
              * </xsd:complexType>
              */
-            //writer.write("\t"+attribs[0].getTypeName()+"* m_Array;\n\tint m_Size;\n} "+classname+";\n\n");
+
             writer.write(
                 "\tstruct "
                     + attribs[0].getTypeName()

@@ -41,8 +41,7 @@ public abstract class ParamCFileWriter
      * @param type
      * @throws WrapperFault
      */
-    public ParamCFileWriter(WebServiceContext wscontext, Type type)
-        throws WrapperFault
+    public ParamCFileWriter(WebServiceContext wscontext, Type type) throws WrapperFault
     {
         super(wscontext, type);
     }
@@ -60,14 +59,11 @@ public abstract class ParamCFileWriter
     {
         try
         {
-            this.writer =
-                new BufferedWriter(new FileWriter(getFilePath(), false));
+            this.writer = new BufferedWriter(new FileWriter(getFilePath(), false));
             writeClassComment();
             writePreprocessorStatements();
             if (type.isSimpleType())
-            {
                 writeRestrictionCheckerFunction();
-            }
             else
             {
                 writeGlobalCodes();
@@ -78,8 +74,7 @@ public abstract class ParamCFileWriter
             writer.flush();
             writer.close();
             if (WSDL2Ws.verbose)
-                System.out.println(
-                    getFilePath().getAbsolutePath() + " created.....");
+                System.out.println(getFilePath().getAbsolutePath() + " created.....");
         }
         catch (IOException e)
         {

@@ -57,39 +57,32 @@ public class AllParamWriter
             try
             {
                 type = (Type) enu.next();
-                    if (type.isArray())
-                    {
-                        if (WSDL2Ws.verbose)
-                            System.out.println("Array writer called ......");
-                        (new ArrayParamWriter(wscontext, type)).writeSource();
+                if (type.isArray())
+                {
+                    if (WSDL2Ws.verbose)
+                        System.out.println("Array writer called ......");
+                    (new ArrayParamWriter(wscontext, type)).writeSource();
+                }
+                /* TODO check whether this type is referenced or not. Synthesize only if  reference
+                 * But of course that depends on the commandline option too  */
+                else if (type.getLanguageSpecificName().startsWith(">"))
+                {
+                    /* TODO do some processing to this type before synthesizing to remove ">" charactors.
+                     * And then it should also be synthesized if commandline option says to */
+                    if(WSDL2Ws.verbose)
+                    {                          
+                        System.out.println(
+                                "ignoring anonymous type " + type.getLanguageSpecificName() + "\n");
                     }
-                    else
-                    {
-                        /* TODO check whether this type is referenced or not. Synthesize only if  reference
-                         * But of cause that depends on the commandline option too  */
-                        if (type.getLanguageSpecificName().startsWith(">"))
-                        {
-                            /* TODO do some processing to this type before synthesizing to remove ">" charactors.
-                             * And then it should also be synthesized if commandline option says to */
-                            if(WSDL2Ws.verbose)
-                            {                          
-                                System.out.println(
-                                "ignoring anonymous type "
-                                    + type.getLanguageSpecificName()
-                                    + "\n");
-                            }
-                        }
-                        else
-                        {
-                            if (WSDL2Ws.verbose)
-                                System.out.println(
-                                    "struct writer called ......");
-                            (new BeanParamWriter(wscontext, type))
-                                .writeSource();
-                            (new ParmHeaderFileWriter(wscontext, type))
-                                .writeSource();
-                        }
-                    }
+                }
+                else
+                {
+                    if (WSDL2Ws.verbose)
+                        System.out.println("struct writer called ......");
+                    
+                    (new BeanParamWriter(wscontext, type)).writeSource();
+                    (new ParmHeaderFileWriter(wscontext, type)).writeSource();
+                }
             }
             catch (Exception e)
             {

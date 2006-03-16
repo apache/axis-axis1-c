@@ -60,15 +60,13 @@ public class ServiceWriter extends org.apache.axis.wsdl.wsdl2ws.c.ServiceWriter
                     continue;
                 typeSet.add(atype.getLanguageSpecificName());
             }
+            
             Iterator itr = typeSet.iterator();
             while (itr.hasNext())
             {
-                writer.write(
-                    "#include \""
-                        + itr.next().toString()
-                        + CUtils.C_HEADER_SUFFIX
-                        + "\"\n");
+                writer.write("#include \"" + itr.next().toString() + CUtils.C_HEADER_SUFFIX + "\"\n");
             }
+
             writer.write("\n");
         }
         catch (IOException e)
@@ -77,5 +75,4 @@ public class ServiceWriter extends org.apache.axis.wsdl.wsdl2ws.c.ServiceWriter
             throw new WrapperFault(e);
         }
     }
-
 }
