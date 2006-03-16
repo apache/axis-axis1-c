@@ -121,28 +121,28 @@ public class ParmHeaderFileWriter extends ParamWriter
         try
         {
             boolean foundDeepCopyType = false;
-        	for (int i = 0 ; i < attribs.length ; i++)
-        	{
-        	    Type type = attribs[i].getType();
-				boolean isPointerType = false;
-				if (type.isSimpleType())
-				{
-				    isPointerType = CUtils.isPointerType(CUtils.getclass4qname(type.getBaseType())); 
-				}
-				else
-				{
-				    isPointerType = CUtils.isPointerType(getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]));
-				}
-        	    if ((attribs[i].isSimpleType() || attribs[i].getType().isSimpleType()) && !attribs[i].isArray() &&(isElementNillable(i) || isElementOptional(i) || isPointerType || attribs[i].getChoiceElement() || attribs[i].getAllElement()))
-        	    {
-        	        if (!foundDeepCopyType)
-        	        {
-        	            writer.write("\nprivate:\n");
-        	            foundDeepCopyType = true;
-        	        }
-        	        writer.write("\tbool __axis_deepcopy_" + attribs[i].getParamNameWithoutSymbols() + ";\n");
-        	    }
-        	}
+            for (int i = 0 ; i < attribs.length ; i++)
+            {
+                Type type = attribs[i].getType();
+                boolean isPointerType = false;
+                if (type.isSimpleType())
+                {
+                    isPointerType = CUtils.isPointerType(CUtils.getclass4qname(type.getBaseType())); 
+                }
+                else
+                {
+                    isPointerType = CUtils.isPointerType(getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]));
+                }
+                if ((attribs[i].isSimpleType() || attribs[i].getType().isSimpleType()) && !attribs[i].isArray() &&(isElementNillable(i) || isElementOptional(i) || isPointerType || attribs[i].getChoiceElement() || attribs[i].getAllElement()))
+                {
+                    if (!foundDeepCopyType)
+                    {
+                        writer.write("\nprivate:\n");
+                        foundDeepCopyType = true;
+                    }
+                    writer.write("\tbool __axis_deepcopy_" + attribs[i].getParamNameWithoutSymbols() + ";\n");
+                }
+            }
         }
         catch (IOException e)
         {
@@ -297,8 +297,8 @@ public class ParmHeaderFileWriter extends ParamWriter
     protected void writeAttributes() throws WrapperFault
     {
         int anyCounter = 0;
-    	
-    	if (type.isArray())
+        
+        if (type.isArray())
         {
             return;
         }
@@ -309,94 +309,94 @@ public class ParmHeaderFileWriter extends ParamWriter
             {
                 attribs[i].setParamName( CUtils.sanitiseAttributeName( classname, attribs[i].getParamName()));
                 
-				// FJP Nillable vv
-				if (isElementNillable(i) || attribs[i].isArray() || isElementOptional(i) && !attribs[i].getAllElement())
-				{
-										
-					if(attribs[i].isAnyType()){
-						anyCounter += 1;
-						    writer
-						.write("\t"
-								+ getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-								+ " * " + attribs[i].getParamName()
-								+ Integer.toString(anyCounter)
-								+ ";\n");
-					}
-					else
-					{
-					    if( attribs[i].isArray())
-					    {
-					        String paramName = getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]);
-					        if (!paramName.endsWith("*"))
-					        {
-					            paramName += " *";
-					        }
-					        
-					        if (!attribs[i].isSimpleType() && attribs[i].getType().isSimpleType())
-					        {
-					            writer.write("\t");
-					        }
-					        else
-					        {
-					            writer.write("\tclass ");
-					        }
-							writer.write(paramName
-									 + " " + attribs[i].getParamName()
-									 + ";\n");
-					        
-					    }
-					    else
-					    {
-					    	if(attribs[i].getChoiceElement()&& !isElementNillable(i))
-					    		writer.write("\t"
-									 + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-									 + " " + attribs[i].getParamName()
-									 + ";\n");
-					    	else
-					    		writer.write("\t"
-										 + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-										 + " * " + attribs[i].getParamName()
-										 + ";\n");
-					        
-					    }
-					}
-				} else 
-					{
-						if(attribs[i].getAllElement() || attribs[i].getChoiceElement() )
-						{
-							writer.write("\t"
-									 + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-									 + " " + attribs[i].getParamName()
-									 + ";\n");
-						}
-						else 
-						{
-							// FJP Nillable ^^
-							if(attribs[i].isAnyType()){
-								anyCounter += 1;
-								writer
-								.write("\t"
-										+ getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-										+ " " + attribs[i].getParamName()
-										+ Integer.toString(anyCounter)
-										+ ";\n");
-								
-							}
-								
-							else{
-						    writer.write("\t"
-		                                + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-		                                + " " + attribs[i].getParamNameWithoutSymbols()
-		                                + ";\n");
-							}
-						}
-					}
+                // FJP Nillable vv
+                if (isElementNillable(i) || attribs[i].isArray() || isElementOptional(i) && !attribs[i].getAllElement())
+                {
+                                        
+                    if(attribs[i].isAnyType()){
+                        anyCounter += 1;
+                            writer
+                        .write("\t"
+                                + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+                                + " * " + attribs[i].getParamName()
+                                + Integer.toString(anyCounter)
+                                + ";\n");
+                    }
+                    else
+                    {
+                        if( attribs[i].isArray())
+                        {
+                            String paramName = getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]);
+                            if (!paramName.endsWith("*"))
+                            {
+                                paramName += " *";
+                            }
+                            
+                            if (!attribs[i].isSimpleType() && attribs[i].getType().isSimpleType())
+                            {
+                                writer.write("\t");
+                            }
+                            else
+                            {
+                                writer.write("\tclass ");
+                            }
+                            writer.write(paramName
+                                     + " " + attribs[i].getParamName()
+                                     + ";\n");
+                            
+                        }
+                        else
+                        {
+                            if(attribs[i].getChoiceElement()&& !isElementNillable(i))
+                                writer.write("\t"
+                                     + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+                                     + " " + attribs[i].getParamName()
+                                     + ";\n");
+                            else
+                                writer.write("\t"
+                                         + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+                                         + " * " + attribs[i].getParamName()
+                                         + ";\n");
+                            
+                        }
+                    }
+                } else 
+                    {
+                        if(attribs[i].getAllElement() || attribs[i].getChoiceElement() )
+                        {
+                            writer.write("\t"
+                                     + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+                                     + " " + attribs[i].getParamName()
+                                     + ";\n");
+                        }
+                        else 
+                        {
+                            // FJP Nillable ^^
+                            if(attribs[i].isAnyType()){
+                                anyCounter += 1;
+                                writer
+                                .write("\t"
+                                        + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+                                        + " " + attribs[i].getParamName()
+                                        + Integer.toString(anyCounter)
+                                        + ";\n");
+                                
+                            }
+                                
+                            else{
+                            writer.write("\t"
+                                        + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+                                        + " " + attribs[i].getParamNameWithoutSymbols()
+                                        + ";\n");
+                            }
+                        }
+                    }
             }
             
             if (extensionBaseAttrib != null &&
                 getCorrectParmNameConsideringArraysAndComplexTypes(extensionBaseAttrib) != null)
             {
-				writer.write("\t"
+                writer.write("\t"
                              + getCorrectParmNameConsideringArraysAndComplexTypes(extensionBaseAttrib)
                              + " "
                              + extensionBaseAttrib.getParamNameWithoutSymbols() + ";\n");
@@ -413,19 +413,19 @@ public class ParmHeaderFileWriter extends ParamWriter
     protected void writeGetSetMethods() throws WrapperFault
     {
         int anyCounter = 0;
-    	
-    	if (type.isArray())
+        
+        if (type.isArray())
         {
             return;
         }
-    	
+        
         try
         {
             for (int i = 0; i < attribs.length; i++)
             {
-        		String methodName = attribs[i].getParamNameWithoutSymbols();
-        		
-        		if( methodName.endsWith( "_"))
+                String methodName = attribs[i].getParamNameWithoutSymbols();
+                
+                if( methodName.endsWith( "_"))
                 {
                     String localMethodName = methodName.substring( 0, methodName.length() - 1);
                     
@@ -434,136 +434,136 @@ public class ParmHeaderFileWriter extends ParamWriter
                         methodName = localMethodName; 
                     }
                 }
-            	
+                
 // FJP Nillable vv
                 if (isElementNillable(i)  || attribs[i].isArray() || isElementOptional(i))
                 {
-                	if ( attribs[i].isAnyType()){
-                		anyCounter += 1;
-						writer
-							.write("\t"
-									+ getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-									+ " * get"
-									+ methodName
-									+ Integer.toString(anyCounter)
-									+ "();\n");
+                    if ( attribs[i].isAnyType()){
+                        anyCounter += 1;
+                        writer
+                            .write("\t"
+                                    + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+                                    + " * get"
+                                    + methodName
+                                    + Integer.toString(anyCounter)
+                                    + "();\n");
 
-						writer
-							.write("\t"
-									+ "void set"
-									+ methodName
-									+ Integer.toString(anyCounter)
-									+ "("
-									+ getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-									+ " * pInValue);\n\n");
-					}
-					else 
-					{
-						if(attribs[i].getAllElement() || attribs[i].getChoiceElement())
-						{
-						    String paramName = getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]);
-						    if (!paramName.endsWith("*"))
-						    {
-						        paramName += " *";
-						    }
-							if (attribs[i].isArray()){
-								writer.write( "\n\t"
-		                                  + paramName
-		                                  + " get"
-		                                  + methodName
-		                                  + "();\n");
+                        writer
+                            .write("\t"
+                                    + "void set"
+                                    + methodName
+                                    + Integer.toString(anyCounter)
+                                    + "("
+                                    + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+                                    + " * pInValue);\n\n");
+                    }
+                    else 
+                    {
+                        if(attribs[i].getAllElement() || attribs[i].getChoiceElement())
+                        {
+                            String paramName = getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]);
+                            if (!paramName.endsWith("*"))
+                            {
+                                paramName += " *";
+                            }
+                            if (attribs[i].isArray()){
+                                writer.write( "\n\t"
+                                          + paramName
+                                          + " get"
+                                          + methodName
+                                          + "();\n");
 
-								writer.write( "\t"
-		                                  + "void set"
-		                                  + methodName
-		                                  + "("
-		                                  + paramName
-		                                  + " pInValue");
-							}
-							else{
-								if (isElementNillable(i)){
-									writer.write( "\n\t"
-	                                  + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-	                                  + " * get"
-	                                  + methodName
-	                                  + "();\n");
+                                writer.write( "\t"
+                                          + "void set"
+                                          + methodName
+                                          + "("
+                                          + paramName
+                                          + " pInValue");
+                            }
+                            else{
+                                if (isElementNillable(i)){
+                                    writer.write( "\n\t"
+                                      + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+                                      + " * get"
+                                      + methodName
+                                      + "();\n");
 
-									writer.write( "\t"
-	                                  + "void set"
-	                                  + methodName
-	                                  + "("
-	                                  + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-	                                  + " * pInValue");
-								}
-								else{
-									writer.write( "\n\t"
-			                                  + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-			                                  + " get"
-			                                  + methodName
-			                                  + "();\n");
+                                    writer.write( "\t"
+                                      + "void set"
+                                      + methodName
+                                      + "("
+                                      + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+                                      + " * pInValue");
+                                }
+                                else{
+                                    writer.write( "\n\t"
+                                              + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+                                              + " get"
+                                              + methodName
+                                              + "();\n");
 
-										writer.write( "\t"
-			                                  + "void set"
-			                                  + methodName
-			                                  + "("
-			                                  + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-			                                  + " pInValue");
-								}
-							}
-						}
-						else
-						{
-							writer.write( "\n\t"
-	                                  + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-	                                  + " * get"
-	                                  + methodName
-	                                  + "();\n");
-	
-							writer.write( "\t"
-	                                  + "void set"
-	                                  + methodName
-	                                  + "("
-	                                  + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-	                                  + " * pInValue");
-						}
-						if ((isElementNillable(i) || isElementOptional(i) || attribs[i].getAllElement() || attribs[i].getChoiceElement() ) && !attribs[i].isArray())
-						{
-						    writer.write(", bool deep = true");
-						}
-						writer.write(");\n");
-					}
+                                        writer.write( "\t"
+                                              + "void set"
+                                              + methodName
+                                              + "("
+                                              + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+                                              + " pInValue");
+                                }
+                            }
+                        }
+                        else
+                        {
+                            writer.write( "\n\t"
+                                      + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+                                      + " * get"
+                                      + methodName
+                                      + "();\n");
+    
+                            writer.write( "\t"
+                                      + "void set"
+                                      + methodName
+                                      + "("
+                                      + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+                                      + " * pInValue");
+                        }
+                        if ((isElementNillable(i) || isElementOptional(i) || attribs[i].getAllElement() || attribs[i].getChoiceElement() ) && !attribs[i].isArray())
+                        {
+                            writer.write(", bool deep = true");
+                        }
+                        writer.write(");\n");
+                    }
                 }
                 else
                 {
 // FJP Nillable ^^
-                	if ( attribs[i].isAnyType()){
-                		anyCounter += 1;
-                		writer
-							.write("\t"
-									+ getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-									+ " get"
-									+ methodName
-									+ Integer.toString(anyCounter)
-									+ "();\n");
+                    if ( attribs[i].isAnyType()){
+                        anyCounter += 1;
+                        writer
+                            .write("\t"
+                                    + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+                                    + " get"
+                                    + methodName
+                                    + Integer.toString(anyCounter)
+                                    + "();\n");
 
-						writer
-							.write("\t"
-									+ "void set"
-									+ methodName
-									+ Integer.toString(anyCounter)
-									+ "("
-									+ getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-									+ "  InValue);\n\n");
-					}
-					else {
-                	
-                	
-                	
-                	/**
+                        writer
+                            .write("\t"
+                                    + "void set"
+                                    + methodName
+                                    + Integer.toString(anyCounter)
+                                    + "("
+                                    + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+                                    + "  InValue);\n\n");
+                    }
+                    else {
+                    
+                    
+                    
+                    /**
                      * Dushshantha: Write setter
                      */
 
-						writer.write("\n\t"
+                        writer.write("\n\t"
                                     + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
                                     + " get"
                                     + methodName
@@ -573,29 +573,29 @@ public class ParmHeaderFileWriter extends ParamWriter
                      * Dushshantha: Write getter
                      */
 
-						writer.write("\t"
+                        writer.write("\t"
                                     + "void set"
                                     + methodName
                                     + "("
                                     + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
                                     + " InValue");
-						Type type = attribs[i].getType();
-						boolean isPointerType = false;
-						if (type.isSimpleType())
-						{
-						    isPointerType = CUtils.isPointerType(CUtils.getclass4qname(type.getBaseType())); 
-						}
-						else
-						{
-						    isPointerType = CUtils.isPointerType(getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]));
-						}
-						
-						if ( (attribs[i].getAllElement() || attribs[i].getChoiceElement() || isPointerType) && (attribs[i].isSimpleType() || attribs[i].getType().isSimpleType()))
-						{
-						    writer.write(", bool deep = true");
-						}
-						writer.write(");\n");
-					}
+                        Type type = attribs[i].getType();
+                        boolean isPointerType = false;
+                        if (type.isSimpleType())
+                        {
+                            isPointerType = CUtils.isPointerType(CUtils.getclass4qname(type.getBaseType())); 
+                        }
+                        else
+                        {
+                            isPointerType = CUtils.isPointerType(getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]));
+                        }
+                        
+                        if ( (attribs[i].getAllElement() || attribs[i].getChoiceElement() || isPointerType) && (attribs[i].isSimpleType() || attribs[i].getType().isSimpleType()))
+                        {
+                            writer.write(", bool deep = true");
+                        }
+                        writer.write(");\n");
+                    }
                 }
             }
         } catch (IOException e)

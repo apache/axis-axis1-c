@@ -94,10 +94,10 @@ public class AllParamWriter implements SourceWriter
                         Type currentType = wscontext.getTypemap().getType(elementQname);
                         if (currentType != null)
                         {
-	                        if ( currentType.isSimpleType())
-	                        {
-	                            continue;
-	                        }
+                            if ( currentType.isSimpleType())
+                            {
+                                continue;
+                            }
                         }
                         
                         if (CUtils.isSimpleType(qname)

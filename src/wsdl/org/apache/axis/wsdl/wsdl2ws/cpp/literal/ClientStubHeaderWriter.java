@@ -81,10 +81,10 @@ public class ClientStubHeaderWriter
                         String outParamTypeName = WrapperUtils.getClassNameFromParamInfoConsideringArrays(returnParam, wscontext);
                         if ((outParamTypeName.lastIndexOf ("_Array") > 0) 
                                 || (CUtils.isSimpleType(outParamTypeName)
-								&& (returnParam.isNillable() || returnParam.isOptional())
-								&& !(CUtils.isPointerType(outParamTypeName))))
+                                && (returnParam.isNillable() || returnParam.isOptional())
+                                && !(CUtils.isPointerType(outParamTypeName))))
                         {
-                        	writer.write(
+                            writer.write(
                                     "\tSTORAGE_CLASS_INFO "
                                         + outParamTypeName
                                         + " * ");
@@ -126,18 +126,18 @@ public class ClientStubHeaderWriter
                     }
                     if (nparam.getType().isAttachment())
                     {
-                    	writer.write("ISoapAttachment *Value" + j);
+                        writer.write("ISoapAttachment *Value" + j);
                     }
                     else if ((paramTypeName.lastIndexOf ("_Array") > 0)
                             || (CUtils.isSimpleType(baseTypeName)
-							&& (nparam.isNillable() || nparam.isOptional())
-							&& !(CUtils.isPointerType(baseTypeName))))
+                            && (nparam.isNillable() || nparam.isOptional())
+                            && !(CUtils.isPointerType(baseTypeName))))
                     {
-                    	writer.write(paramTypeName + " * Value" + j);
+                        writer.write(paramTypeName + " * Value" + j);
                     }
                     else
                     {
-	                    writer.write(paramTypeName + " Value" + j);
+                        writer.write(paramTypeName + " Value" + j);
                     }
                 }
 
@@ -168,22 +168,22 @@ public class ClientStubHeaderWriter
                         writer.write("AXIS_OUT_PARAM " + paramType);
                         if (CUtils.isSimpleType(baseTypeName))
                         {
-	                        if ((nparam.isOptional() || nparam.isNillable()) && !CUtils.isPointerType(baseTypeName))
-	                        {
-	                            if (bTypeHasStar)
-	                            {
-	                                writer.write(" *");
-	                            }
-	                            else
-	                            {
-	                                writer.write(" **");
-	                            }
-	                        }
-	                        else if (CUtils.isPointerType(baseTypeName) || !bTypeHasStar)
-	                        {
-	                            writer.write(" *");
-	                        }
-	                        // Else we don't need to anymore '*'
+                            if ((nparam.isOptional() || nparam.isNillable()) && !CUtils.isPointerType(baseTypeName))
+                            {
+                                if (bTypeHasStar)
+                                {
+                                    writer.write(" *");
+                                }
+                                else
+                                {
+                                    writer.write(" **");
+                                }
+                            }
+                            else if (CUtils.isPointerType(baseTypeName) || !bTypeHasStar)
+                            {
+                                writer.write(" *");
+                            }
+                            // Else we don't need to anymore '*'
                         }
                         else if(bTypeHasStar)
                         {
@@ -262,7 +262,7 @@ public class ClientStubHeaderWriter
                         + CUtils.CPP_HEADER_SUFFIX
                         + "\"\n");
             }
-            //	Method to print the Fault Exception headers
+            //    Method to print the Fault Exception headers
             //writeFaultHeaders();
             writer.write("\n");
         }
