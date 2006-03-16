@@ -173,7 +173,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.c.WrapWriter
             if ((CUtils.isSimpleType(paraTypeName))
                 || (type != null && type.isSimpleType()))
             {
-                //for simple types	
+                //for simple types    
                 writer.write(paraTypeName);
             }
             else
@@ -225,7 +225,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.c.WrapWriter
             if ((CUtils.isSimpleType(paraTypeName))
                 || (type != null && type.isSimpleType()))
             {
-                //for simple types	
+                //for simple types    
                 writer.write("\t" + paraTypeName + " v" + i + ";\n");
             }
             else
@@ -316,7 +316,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.c.WrapWriter
             else
                 if ((CUtils.isSimpleType(param.getLangName())))
                 {
-                    //for simple types	
+                    //for simple types    
                     writer.write(
                         "\tv"
                             + i

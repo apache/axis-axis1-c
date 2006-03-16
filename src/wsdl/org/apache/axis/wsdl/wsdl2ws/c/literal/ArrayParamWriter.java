@@ -54,12 +54,12 @@ public class ArrayParamWriter
             /*
              * Needed for self referenced  array else compilation failed.
              * <xsd:complexType name="Type1">
-             *	<xsd:sequence>
-             *		<xsd:element name="followings" maxOccurs="unbounded" minOccurs="0" type="tns:Type1" />
-             *		<xsd:element name="kind" type="xsd:string" />
-             *		<xsd:element name="index" type="xsd:int" />
-             *	</xsd:sequence>
-             *	<xsd:attribute name="att_kind" type="tns:Kind" />
+             *    <xsd:sequence>
+             *        <xsd:element name="followings" maxOccurs="unbounded" minOccurs="0" type="tns:Type1" />
+             *        <xsd:element name="kind" type="xsd:string" />
+             *        <xsd:element name="index" type="xsd:int" />
+             *    </xsd:sequence>
+             *    <xsd:attribute name="att_kind" type="tns:Kind" />
              * </xsd:complexType>
              */
             //writer.write("\t"+attribs[0].getTypeName()+"* m_Array;\n\tint m_Size;\n} "+classname+";\n\n");
