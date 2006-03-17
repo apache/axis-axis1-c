@@ -1,5 +1,11 @@
-<project name="initializeServer" default="decideserverproperties">
-    <target name="decideserverproperties">
+<project name="initializeServer" default="decideserverproperties" basedir="..">
+	<import file="${basedir}/build/Initialize.xml"/>
+	<import file="${basedir}/build/buildInitialize.xml"/>
+	<import file="${basedir}/build/testInitialize.xml"/>
+
+	<property file="${basedir}/build/deploy.properties"/>
+	
+    <target name="decideserverproperties" depends="initialize, initializeTest, initializeTest">
 
         <property name="wsdd.file" value="${dir.test.generated}${file.separator}server${file.separator}server.wsdd" />
 
@@ -100,4 +106,5 @@
             </else>
         </if>
     </target>
+	
 </project>
