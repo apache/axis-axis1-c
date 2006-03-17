@@ -7,8 +7,8 @@
 #endif
 
 #include <iostream>
-#include "platforms\PlatformAutoSense.hpp"
-#include "common\AxisConfig.h"
+#include "platforms/PlatformAutoSense.hpp"
+#include "common/AxisConfig.h"
 
 #undef _DEBUG
 
@@ -34,6 +34,8 @@ typedef enum
 	eClientWSDD,
 	eServerLog,
 	eServerWSDD,
+	eRootDirectory,
+	eOffsetToLibs,
 	eConfigMax
 } ECONFIGTYPE;
 
@@ -67,13 +69,23 @@ typedef struct
 	char **			ppszListArray;
 } FILENAMELIST;
 
-ECONFIG	ReadConfigOptions( int iParamCount, char * pszParamArray[]);
+typedef struct
+{
+	ECONFIGTYPE		eConfType;
+	char *			pszOption;
+} OPTIONLIST;
+
+ECONFIG	ReadConfigOptions( int iParamCount, char * pszParamArray[], char ** ppsDefaultParamList);
 bool CheckAxisBinDirectoryExists( char * pszAxisCpp_Deploy, char * pszAxis_Bin, char * pszAxis_Bin_Default, DLLNAMES * psDLLNames, FILENAMELIST * psFileNameList);
 const char * CreateConfigElement( DLLNAMES * psDLLNames, int * piConfigInfoArray, CHOICELIST * psChoiceList, ECONFIGTYPE eConfigType);
-void GetHomeAndLibrary( DLLNAMES * psDLLNames, char * pszAxisCpp_Deploy, char * pszAxis_Bin, char * pszAxis_Bin_Default, FILENAMELIST * psFileNameList);
-void Initialise( DLLNAMES * psDLLNames, int * piConfigInfoArray, FILENAMELIST * psFileNameList);
-void SelectFileFromList( CHOICELIST * psChoiceList, int iChoiceCount, DLLNAMES * psDLLNames, int * piConfigInfoArray);
+void GetHomeAndLibrary( DLLNAMES * psDLLNames, char * pszAxisCpp_Deploy, char * pszAxis_Bin, char * pszAxis_Bin_Default, FILENAMELIST * psFileNameList, char ** ppsDefaultParamList);
+void Initialise( DLLNAMES * psDLLNames, int * piConfigInfoArray, FILENAMELIST * psFileNameList, char ** ppsDefaultParamList);
+void SelectFileFromList( CHOICELIST * psChoiceList, int iChoiceCount, DLLNAMES * psDLLNames, int * piConfigInfoArray, char ** ppsDefaultParamList);
 void WriteAxisConfigFile( DLLNAMES * psDLLNames, int * piConfigInfoArray, CHOICELIST * psChoiceList);
 bool ReadFilenamesInaDirectory( char * pszDirName, FILENAMELIST * psFileNameList);
 void AddFilenameToList( FILENAMELIST * psFileNameList, char * pszFilename);
-void Destroy( DLLNAMES * psDLLNames, FILENAMELIST * psFileNameList);
+void Destroy( DLLNAMES * psDLLNames, FILENAMELIST * psFileNameList, char * psDefaultParamList);
+bool StringCompare( char * pszString1, char * pszString2);
+void StringToUpper( char * pszString);
+void CreateNewDLLNamesElement( DLLNAMES * psDLLNames, FILENAMELIST * psFileNameList);
+
