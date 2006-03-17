@@ -1,23 +1,25 @@
 #include "AxisConfiguration.hpp"
 
-void main( int argc, char * argv[])
+int main( int argc, char * argv[])
 {
-	DLLNAMES	sDLLNames;
-	int			iConfigInfoArray[eConfigMax];
-	CHOICELIST	sChoiceList[] = { {PLATFORM_TRANSPORTHTTP_PATH,	"HTTP Transport library",											AXCONF_TRANSPORTHTTP_TAGNAME,		eHTTPTransport,		eClientAndServer},
-								  {PLATFORM_CHANNEL_PATH,		"HTTP Channel library",												AXCONF_CHANNEL_HTTP_TAGNAME,		eHTTPChannel,		eClientAndServer},
-								  {"HTTPSSLCHANNEL",			"HTTP SSL Channel library",											AXCONF_SSLCHANNEL_HTTP_TAGNAME,		eHTTPSSLChannel,	eClientAndServer},
-								  {PLATFORM_XMLPARSER_PATH,		"Axis XML Parser library",											AXCONF_XMLPARSER_TAGNAME,			eXMLParser,			eClientAndServer},
-								  {"SMTPTRANSPORT",				"SMTP Transport library",											AXCONF_TRANSPORTSMTP_TAGNAME,		eSMTPTransport,		eClientAndServer},
-								  {"LOG",						"client trace log path (only required if you want client trace)",	AXCONF_CLIENTLOGPATH_TAGNAME,		eClientLog,			eClient},
-								  {"WSDD",						"client WSDD path",													AXCONF_CLIENTWSDDFILEPATH_TAGNAME,	eClientWSDD,		eClient},
-								  {"LOG",						"server trace log path (only required if you want server trace)",	AXCONF_LOGPATH_TAGNAME,				eServerLog,			eServer},
-								  {"WSDD",						"server WSDD path",													AXCONF_WSDDFILEPATH_TAGNAME,		eServerWSDD,		eServer},
-								  {"",							"",																	AXCONF_NODENAME_TAGNAME,			eUnknown,			eServer},
-								  {"",							"",																	AXCONF_LISTENPORT_TAGNAME,			eUnknown,			eServer},
-								  {"",							"",																	AXCONF_SECUREINFO_TAGNAME,			eUnknown,			eClientAndServer}};
+	DLLNAMES		sDLLNames;
+	int				iConfigInfoArray[eConfigMax];
+	CHOICELIST		sChoiceList[] = { {PLATFORM_TRANSPORTHTTP_PATH,	"HTTP Transport library",											AXCONF_TRANSPORTHTTP_TAGNAME,		eHTTPTransport,		eClientAndServer},
+									  {PLATFORM_CHANNEL_PATH,		"HTTP Channel library",												AXCONF_CHANNEL_HTTP_TAGNAME,		eHTTPChannel,		eClientAndServer},
+									  {"HTTPSSLCHANNEL",			"HTTP SSL Channel library",											AXCONF_SSLCHANNEL_HTTP_TAGNAME,		eHTTPSSLChannel,	eClientAndServer},
+									  {PLATFORM_XMLPARSER_PATH,		"Axis XML Parser library",											AXCONF_XMLPARSER_TAGNAME,			eXMLParser,			eClientAndServer},
+									  {"SMTPTRANSPORT",				"SMTP Transport library",											AXCONF_TRANSPORTSMTP_TAGNAME,		eSMTPTransport,		eClientAndServer},
+									  {"LOG",						"client trace log path (only required if you want client trace)",	AXCONF_CLIENTLOGPATH_TAGNAME,		eClientLog,			eClient},
+									  {"WSDD",						"client WSDD path",													AXCONF_CLIENTWSDDFILEPATH_TAGNAME,	eClientWSDD,		eClient},
+									  {"LOG",						"server trace log path (only required if you want server trace)",	AXCONF_LOGPATH_TAGNAME,				eServerLog,			eServer},
+									  {"WSDD",						"server WSDD path",													AXCONF_WSDDFILEPATH_TAGNAME,		eServerWSDD,		eServer},
+									  {"",							"",																	AXCONF_NODENAME_TAGNAME,			eUnknown,			eServer},
+									  {"",							"",																	AXCONF_LISTENPORT_TAGNAME,			eUnknown,			eServer},
+									  {"",							"",																	AXCONF_SECUREINFO_TAGNAME,			eUnknown,			eClientAndServer}};
+	bool			bSuccess = false;
+	FILENAMELIST	sFileNameList;
 
-	Initialise( &sDLLNames, iConfigInfoArray);
+	Initialise( &sDLLNames, iConfigInfoArray, &sFileNameList);
 
 	switch( ReadConfigOptions( argc, argv))
 	{
@@ -39,7 +41,7 @@ void main( int argc, char * argv[])
 			cout << "Axis Client Configuration" << endl;
 			cout << "=========================" << endl;
 
-			GetHomeAndLibrary( &sDLLNames, szAxisCpp_Deploy, szAxis_Bin, szAxis_Bin_Default);
+			GetHomeAndLibrary( &sDLLNames, szAxisCpp_Deploy, szAxis_Bin, szAxis_Bin_Default, &sFileNameList);
 
 			int	iChoiceCount = 0;
 
@@ -76,6 +78,8 @@ void main( int argc, char * argv[])
 				iChoiceCount++;
 			}
 
+			bSuccess = true;
+
 			break;
 		}
 
@@ -88,7 +92,9 @@ void main( int argc, char * argv[])
 			cout << "Axis Server Configuration" << endl;
 			cout << "=========================" << endl;
 
-			GetHomeAndLibrary( &sDLLNames, szAxisCpp_Deploy, szAxis_Bin, szAxis_Bin_Default);
+			GetHomeAndLibrary( &sDLLNames, szAxisCpp_Deploy, szAxis_Bin, szAxis_Bin_Default, &sFileNameList);
+
+			bSuccess = true;
 
 			break;
 		}
@@ -96,32 +102,20 @@ void main( int argc, char * argv[])
 		case eClientAndServer:
 		{
 			cout << "Axis Client and Server Configuration" << endl;
+
+			bSuccess = true;
 			break;
 		}
 	}
 
-	cout << "DLL selection complete" << endl << endl;
+	if( bSuccess)
+	{
+		WriteAxisConfigFile( &sDLLNames, iConfigInfoArray, sChoiceList);
+	}
 
-	cout << "AxisCPP.conf file now has the following information:-" << endl;
+	Destroy( &sDLLNames, &sFileNameList);
 
-	cout << "# The comment character is '#'" << endl;
-	cout << "#Available directives are as follows" << endl;
-	cout << "#(Some of these directives may not be implemented yet)" << endl;
-	cout << "#" << endl;
-	cout << CreateConfigElement( &sDLLNames, (int *) iConfigInfoArray, sChoiceList, eServerLog) << endl;
-	cout << CreateConfigElement( &sDLLNames, (int *) iConfigInfoArray, sChoiceList, eServerWSDD) << endl;
-	cout << CreateConfigElement( &sDLLNames, (int *) iConfigInfoArray, sChoiceList, eClientLog) << endl;
-	cout << CreateConfigElement( &sDLLNames, (int *) iConfigInfoArray, sChoiceList, eClientWSDD) << endl;
-	cout << "#Node name." << endl;
-	cout << "#NodeName: <not set>" << endl << endl;
-	cout << "#Listening port." << endl;
-	cout << "#ListenPort: <not set>" << endl << endl;
-	cout << CreateConfigElement( &sDLLNames, (int *) iConfigInfoArray, sChoiceList, eHTTPTransport) << endl;
-	cout << CreateConfigElement( &sDLLNames, (int *) iConfigInfoArray, sChoiceList, eSMTPTransport) << endl;
-	cout << CreateConfigElement( &sDLLNames, (int *) iConfigInfoArray, sChoiceList, eXMLParser) << endl;
-	cout << CreateConfigElement( &sDLLNames, (int *) iConfigInfoArray, sChoiceList, eHTTPChannel) << endl;
-	cout << CreateConfigElement( &sDLLNames, (int *) iConfigInfoArray, sChoiceList, eHTTPSSLChannel) << endl;
-	cout << endl;
+	return (int) bSuccess;
 }
 
 ECONFIG	ReadConfigOptions( int iParamCount, char * pParamArray[])
@@ -146,7 +140,7 @@ ECONFIG	ReadConfigOptions( int iParamCount, char * pParamArray[])
 
 	return eConfig;
 }
-bool CheckAxisBinDirectoryExists( char * pszAxisCpp_Deploy, char * pszAxis_Bin, char * pszAxis_Bin_Default, DLLNAMES * psDLLNames)
+bool CheckAxisBinDirectoryExists( char * pszAxisCpp_Deploy, char * pszAxis_Bin, char * pszAxis_Bin_Default, DLLNAMES * psDLLNames, FILENAMELIST * psFileNameList)
 {
 	bool	bFound = false;
 
@@ -155,85 +149,75 @@ bool CheckAxisBinDirectoryExists( char * pszAxisCpp_Deploy, char * pszAxis_Bin, 
 		strcpy( pszAxis_Bin, pszAxis_Bin_Default);
 	}
 
-	intptr_t			lFindFile;
-	struct _finddata_t	sFindData;
-	char				szFilename[512];
-	char				szFileDirAndName[512];
+	char	szFilename[512];
+	char	szFileDirAndName[512];
 
 	sprintf( szFilename, "%s\\%s\\*.*", pszAxisCpp_Deploy, pszAxis_Bin);
 
-	if( (lFindFile = _findfirst( szFilename, &sFindData)) != -1)
+	bFound = ReadFilenamesInaDirectory( szFilename, psFileNameList);
+
+	int		iIndex = 0;
+
+	do
 	{
-		if( sFindData.name[0] == '.' && sFindData.attrib & _A_SUBDIR)
-		{
-			bFound = true;
-		}
+		char *	pExtn = psFileNameList->ppszListArray[iIndex];
 
 		do
 		{
-			if( !(sFindData.attrib & _A_SUBDIR))
+			if( (pExtn = strchr( pExtn, '.')) != NULL)
 			{
-				char *	pExtn = sFindData.name;
+				pExtn++;
 
-				do
+#if WIN32
+				if( !stricmp( pExtn, "DLL"))
+#else
+				if( !stricmp( pExtn, "SO"))
+#endif
 				{
-					if( (pExtn = strchr( pExtn, '.')) != NULL)
+					if( psDLLNames->iIndex >= psDLLNames->iMaxCount)
 					{
-						pExtn++;
+						psDLLNames->iMaxCount = psDLLNames->iMaxCount * 2 + 1;
 
-						if( !stricmp( pExtn, "DLL"))
+						if( psDLLNames->ppsDLLName == NULL)
 						{
-							if( psDLLNames->iIndex >= psDLLNames->iMaxCount)
-							{
-								psDLLNames->iMaxCount = psDLLNames->iMaxCount * 2 + 1;
+							psDLLNames->ppsDLLName = (DLLNAMEINFO **) malloc( sizeof( void *) * psDLLNames->iMaxCount);
+						}
+						else
+						{
+							psDLLNames->ppsDLLName = (DLLNAMEINFO **) realloc( psDLLNames->ppsDLLName, sizeof( void *) * psDLLNames->iMaxCount);
+						}
 
-								if( psDLLNames->ppsDLLName == NULL)
-								{
-									psDLLNames->ppsDLLName = (DLLNAMEINFO **) malloc( sizeof( void *) * psDLLNames->iMaxCount);
-								}
-								else
-								{
-									psDLLNames->ppsDLLName = (DLLNAMEINFO **) realloc( psDLLNames->ppsDLLName, sizeof( void *) * psDLLNames->iMaxCount);
-								}
-
-								for( int iNewIndex = psDLLNames->iIndex; iNewIndex < psDLLNames->iMaxCount; iNewIndex++)
-								{
-									psDLLNames->ppsDLLName[iNewIndex] = NULL;
-								}
-							}
-
-							psDLLNames->ppsDLLName[psDLLNames->iIndex] = (DLLNAMEINFO *) malloc( sizeof( DLLNAMEINFO));
-
-							memset( psDLLNames->ppsDLLName[psDLLNames->iIndex], 0, sizeof( DLLNAMEINFO));
-
-							psDLLNames->ppsDLLName[psDLLNames->iIndex]->pszDLLName = (char *) malloc( strlen( sFindData.name) + 1);
-
-							strcpy( psDLLNames->ppsDLLName[psDLLNames->iIndex]->pszDLLName, sFindData.name);
-
-							strupr( psDLLNames->ppsDLLName[psDLLNames->iIndex]->pszDLLName);
-
-							sprintf( szFileDirAndName, "%s\\%s\\%s", pszAxisCpp_Deploy, pszAxis_Bin, sFindData.name);
-
-							psDLLNames->ppsDLLName[psDLLNames->iIndex]->pszDLLFilename = (char *) malloc( strlen( szFileDirAndName) + 1);
-
-							strcpy( psDLLNames->ppsDLLName[psDLLNames->iIndex]->pszDLLFilename, szFileDirAndName);
-
-							psDLLNames->iIndex++;
-
-							break;
+						for( int iNewIndex = psDLLNames->iIndex; iNewIndex < psDLLNames->iMaxCount; iNewIndex++)
+						{
+							psDLLNames->ppsDLLName[iNewIndex] = NULL;
 						}
 					}
-				} while( pExtn != NULL);
-			}
-			else if( strcmp( sFindData.name, ".") && strcmp( sFindData.name, ".."))
-			{
-				break;
-			}
 
-		} while( _findnext( lFindFile, &sFindData) == 0);
+					psDLLNames->ppsDLLName[psDLLNames->iIndex] = (DLLNAMEINFO *) malloc( sizeof( DLLNAMEINFO));
 
-		_findclose( lFindFile);
-	}
+					memset( psDLLNames->ppsDLLName[psDLLNames->iIndex], 0, sizeof( DLLNAMEINFO));
+
+					psDLLNames->ppsDLLName[psDLLNames->iIndex]->pszDLLName = (char *) malloc( strlen( psFileNameList->ppszListArray[iIndex]) + 1);
+
+					strcpy( psDLLNames->ppsDLLName[psDLLNames->iIndex]->pszDLLName, psFileNameList->ppszListArray[iIndex]);
+
+					strupr( psDLLNames->ppsDLLName[psDLLNames->iIndex]->pszDLLName);
+
+					sprintf( szFileDirAndName, "%s\\%s\\%s", pszAxisCpp_Deploy, pszAxis_Bin, psFileNameList->ppszListArray[iIndex]);
+
+					psDLLNames->ppsDLLName[psDLLNames->iIndex]->pszDLLFilename = (char *) malloc( strlen( szFileDirAndName) + 1);
+
+					strcpy( psDLLNames->ppsDLLName[psDLLNames->iIndex]->pszDLLFilename, szFileDirAndName);
+
+					psDLLNames->iIndex++;
+
+					break;
+				}
+			}
+		} while( pExtn != NULL);
+
+		iIndex++;
+	} while( iIndex < psFileNameList->iListCount);
 
 	if( !bFound)
 	{
@@ -291,7 +275,7 @@ const char * CreateConfigElement( DLLNAMES * psDLLNames, int * piConfigInfoArray
 	return sReturn.c_str();
 }
 
-void GetHomeAndLibrary( DLLNAMES * psDLLNames, char * pszAxisCpp_Deploy, char * pszAxis_Bin, char * pszAxis_Bin_Default)
+void GetHomeAndLibrary( DLLNAMES * psDLLNames, char * pszAxisCpp_Deploy, char * pszAxis_Bin, char * pszAxis_Bin_Default, FILENAMELIST * psFileNameList)
 {
 #if WIN32
 	cout << "Type in full qualified directory path into which you downloaded Axis." << endl
@@ -337,15 +321,16 @@ void GetHomeAndLibrary( DLLNAMES * psDLLNames, char * pszAxisCpp_Deploy, char * 
 		cout << "Axis binaries directory = ";
 		cin >> pszAxis_Bin;
 	}
-	while( !CheckAxisBinDirectoryExists( pszAxisCpp_Deploy, pszAxis_Bin, pszAxis_Bin_Default, psDLLNames));
+	while( !CheckAxisBinDirectoryExists( pszAxisCpp_Deploy, pszAxis_Bin, pszAxis_Bin_Default, psDLLNames, psFileNameList));
 
 	cout << endl << "Begin to configure the AXISCPP.CONF file." << endl;
 }
 
-void Initialise( DLLNAMES * psDLLNames, int * piConfigInfoArray)
+void Initialise( DLLNAMES * psDLLNames, int * piConfigInfoArray, FILENAMELIST * psFileNameList)
 {
 	memset( psDLLNames, 0, sizeof( DLLNAMES));
-	
+	memset( psFileNameList, 0, sizeof( FILENAMELIST));
+
 	for( int iCount = 0; iCount < eConfigMax; iCount++)
 	{
 		piConfigInfoArray[iCount] = -1;
@@ -419,4 +404,125 @@ void SelectFileFromList( CHOICELIST * psChoiceList, int iChoiceCount, DLLNAMES *
 			bHTTPTransportFound = true;
 		}
 	} while( !bHTTPTransportFound);
+}
+
+void WriteAxisConfigFile( DLLNAMES * psDLLNames, int * piConfigInfoArray, CHOICELIST * psChoiceList)
+{
+	cout << "DLL selection complete" << endl << endl;
+
+	cout << "AxisCPP.conf file now has the following information:-" << endl;
+
+	cout << "# The comment character is '#'" << endl;
+	cout << "#Available directives are as follows" << endl;
+	cout << "#(Some of these directives may not be implemented yet)" << endl;
+	cout << "#" << endl;
+	cout << CreateConfigElement( psDLLNames, piConfigInfoArray, psChoiceList, eServerLog) << endl;
+	cout << CreateConfigElement( psDLLNames, piConfigInfoArray, psChoiceList, eServerWSDD) << endl;
+	cout << CreateConfigElement( psDLLNames, piConfigInfoArray, psChoiceList, eClientLog) << endl;
+	cout << CreateConfigElement( psDLLNames, piConfigInfoArray, psChoiceList, eClientWSDD) << endl;
+	cout << "#Node name." << endl;
+	cout << "#NodeName: <not set>" << endl << endl;
+	cout << "#Listening port." << endl;
+	cout << "#ListenPort: <not set>" << endl << endl;
+	cout << CreateConfigElement( psDLLNames, piConfigInfoArray, psChoiceList, eHTTPTransport) << endl;
+	cout << CreateConfigElement( psDLLNames, piConfigInfoArray, psChoiceList, eSMTPTransport) << endl;
+	cout << CreateConfigElement( psDLLNames, piConfigInfoArray, psChoiceList, eXMLParser) << endl;
+	cout << CreateConfigElement( psDLLNames, piConfigInfoArray, psChoiceList, eHTTPChannel) << endl;
+	cout << CreateConfigElement( psDLLNames, piConfigInfoArray, psChoiceList, eHTTPSSLChannel) << endl;
+	cout << endl;
+}
+
+bool ReadFilenamesInaDirectory( char * pszDirName, FILENAMELIST * psFileNameList)
+{
+	bool				bSuccess = false;
+
+#if WIN32
+	intptr_t			lFindFile;
+	struct _finddata_t	sFindData;
+
+	if( (lFindFile = _findfirst( pszDirName, &sFindData)) != -1)
+	{
+		if( sFindData.name[0] == '.' && sFindData.attrib & _A_SUBDIR)
+		{
+			bSuccess = true;
+		}
+
+		do
+		{
+			if( !(sFindData.attrib & _A_SUBDIR))
+			{
+				AddFilenameToList( psFileNameList, sFindData.name);
+			}
+		} while( _findnext( lFindFile, &sFindData) == 0);
+
+		_findclose( lFindFile);
+	}
+#else
+	DIR *				psDIR;
+	struct dirent*		pDirEnt;
+	int					iFilenameCount = 0;
+
+	if( (pDir = opendir( pszDirName)) == NULL)
+	{
+		return bSuccess;
+	}
+
+	while( (pDirEnt = readdir( pDir)) != NULL)
+	{
+		AddFilenameToList( psFileNameList, pDirEnt->d_name);
+	}
+
+	if( closedir( pDir) == -1)
+	{
+		return bSuccess;
+	}
+	else
+	{
+		bSuccess = true;
+	}
+#endif
+
+	return bSuccess;
+}
+
+void AddFilenameToList( FILENAMELIST * psFileNameList, char * pszFilename)
+{
+	if( psFileNameList->iListMax == 0)
+	{
+		psFileNameList->iListMax = 1;
+
+		psFileNameList->ppszListArray = (char **) malloc( sizeof( char *));
+	}
+	else if( psFileNameList->iListCount >= psFileNameList->iListMax)
+	{
+		psFileNameList->iListMax *= 2;
+
+		psFileNameList->ppszListArray = (char **) realloc( psFileNameList->ppszListArray, sizeof( char *) * psFileNameList->iListMax);
+	}
+
+	psFileNameList->ppszListArray[psFileNameList->iListCount] = (char *) malloc( strlen( pszFilename) + 1);
+
+	strcpy( psFileNameList->ppszListArray[psFileNameList->iListCount], pszFilename);
+
+	psFileNameList->iListCount++;
+}
+
+void Destroy( DLLNAMES * psDLLNames, FILENAMELIST * psFileNameList)
+{
+	int iCount;
+
+	for( iCount = 0; iCount < psDLLNames->iIndex; iCount++)
+	{
+		delete [] psDLLNames->ppsDLLName[iCount]->pszDLLFilename;
+		delete [] psDLLNames->ppsDLLName[iCount]->pszDLLName;
+		delete [] psDLLNames->ppsDLLName[iCount];
+	}
+
+	for( iCount = 0; iCount < psFileNameList->iListCount; iCount++)
+	{
+		delete [] psFileNameList->ppszListArray[iCount];
+	}
+
+	delete [] psDLLNames->ppsDLLName;
+	delete [] psFileNameList->ppszListArray;
 }

@@ -1,4 +1,11 @@
+#if WIN32
 #include <io.h>
+#else
+#include <stdio.h>
+#include <sys/types.h>
+#include <dirent.h>
+#endif
+
 #include <iostream>
 #include "platforms\PlatformAutoSense.hpp"
 #include "common\AxisConfig.h"
@@ -53,9 +60,20 @@ typedef struct
 	ECONFIG			eConfig;
 } CHOICELIST;
 
+typedef struct
+{
+	int				iListCount;
+	int				iListMax;
+	char **			ppszListArray;
+} FILENAMELIST;
+
 ECONFIG	ReadConfigOptions( int iParamCount, char * pszParamArray[]);
-bool CheckAxisBinDirectoryExists( char * pszAxisCpp_Deploy, char * pszAxis_Bin, char * pszAxis_Bin_Default, DLLNAMES * psDLLNames);
+bool CheckAxisBinDirectoryExists( char * pszAxisCpp_Deploy, char * pszAxis_Bin, char * pszAxis_Bin_Default, DLLNAMES * psDLLNames, FILENAMELIST * psFileNameList);
 const char * CreateConfigElement( DLLNAMES * psDLLNames, int * piConfigInfoArray, CHOICELIST * psChoiceList, ECONFIGTYPE eConfigType);
-void GetHomeAndLibrary( DLLNAMES * psDLLNames, char * pszAxisCpp_Deploy, char * pszAxis_Bin, char * pszAxis_Bin_Default);
-void Initialise( DLLNAMES * psDLLNames, int * piConfigInfoArray);
+void GetHomeAndLibrary( DLLNAMES * psDLLNames, char * pszAxisCpp_Deploy, char * pszAxis_Bin, char * pszAxis_Bin_Default, FILENAMELIST * psFileNameList);
+void Initialise( DLLNAMES * psDLLNames, int * piConfigInfoArray, FILENAMELIST * psFileNameList);
 void SelectFileFromList( CHOICELIST * psChoiceList, int iChoiceCount, DLLNAMES * psDLLNames, int * piConfigInfoArray);
+void WriteAxisConfigFile( DLLNAMES * psDLLNames, int * piConfigInfoArray, CHOICELIST * psChoiceList);
+bool ReadFilenamesInaDirectory( char * pszDirName, FILENAMELIST * psFileNameList);
+void AddFilenameToList( FILENAMELIST * psFileNameList, char * pszFilename);
+void Destroy( DLLNAMES * psDLLNames, FILENAMELIST * psFileNameList);
