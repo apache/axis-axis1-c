@@ -104,7 +104,7 @@ int main( int argc, char * argv[])
 					}
 					else
 					{
-						SelectFileFromList( sChoiceList, iChoiceCount, &sDLLNames, iConfigInfoArray, (char **) psDefaultParamList);
+						SelectFileFromList( sChoiceList, iChoiceCount, &sDLLNames, iConfigInfoArray, (char **) psDefaultParamList, &sFileNameList, szAxisCpp_Deploy);
 					}
 				}
 
@@ -146,7 +146,7 @@ int main( int argc, char * argv[])
 		WriteAxisConfigFile( &sDLLNames, iConfigInfoArray, sChoiceList);
 	}
 
-	Destroy( &sDLLNames, &sFileNameList, (char *) psDefaultParamList);
+	Destroy( &sDLLNames, &sFileNameList, (char **) psDefaultParamList);
 
 	return (int) bSuccess;
 }
@@ -192,7 +192,7 @@ ECONFIG	ReadConfigOptions( int iParamCount, char * pParamArray[], char ** ppsDef
 				{
 					iIndex++;
 				}
-			} while( iIndex < eConfigMax && !bOptionFound);
+			} while( iIndex < (eConfigMax - 1) && !bOptionFound);
 
 			if( bOptionFound)
 			{
@@ -420,7 +420,7 @@ void Initialise( DLLNAMES * psDLLNames, int * piConfigInfoArray, FILENAMELIST * 
 	}
 }
 
-void SelectFileFromList( CHOICELIST * psChoiceList, int iChoiceCount, DLLNAMES * psDLLNames, int * piConfigInfoArray, char ** ppsDefaultParamList)
+void SelectFileFromList( CHOICELIST * psChoiceList, int iChoiceCount, DLLNAMES * psDLLNames, int * piConfigInfoArray, char ** ppsDefaultParamList, FILENAMELIST * psFileNameList, char * pszAxisCpp_Deploy)
 {
 	cout << endl << "Select the filename for the " << psChoiceList[iChoiceCount].pszElementDescription << "." << endl;
 
@@ -431,15 +431,16 @@ void SelectFileFromList( CHOICELIST * psChoiceList, int iChoiceCount, DLLNAMES *
 
 	do
 	{
+		char *	pszUpper = new char[strlen( psChoiceList[iChoiceCount].pszElement) + 1];
+
+		strcpy( pszUpper, psChoiceList[iChoiceCount].pszElement);
+
+		StringToUpper( pszUpper);
+
 		while( iDLLCount < psDLLNames->iIndex)
 		{
-			char *	pszUpper = new char[strlen( psChoiceList[iChoiceCount].pszElement) + 1];
 
-			strcpy( pszUpper, psChoiceList[iChoiceCount].pszElement);
-
-			StringToUpper( pszUpper);
-
-			if( strstr( psDLLNames->ppsDLLName[iDLLCount]->pszDLLName, pszUpper) != NULL)
+			if( psDLLNames->ppsDLLName[iDLLCount]->pszDLLName != NULL && strstr( psDLLNames->ppsDLLName[iDLLCount]->pszDLLName, pszUpper) != NULL)
 			{
 				iDLLOffsetList[iDLLListCount] = iDLLCount;
 
@@ -447,57 +448,63 @@ void SelectFileFromList( CHOICELIST * psChoiceList, int iChoiceCount, DLLNAMES *
 			}
 
 			iDLLCount++;
-
-			free( pszUpper);
 		}
 
-		if( ppsDefaultParamList[iChoiceCount] != NULL)
+		free( pszUpper);
+
+		if( ppsDefaultParamList[psChoiceList[iChoiceCount].eConfigType] != NULL)
+		{
+			CreateNewDLLNamesElement( psDLLNames, psFileNameList);
+			psDLLNames->ppsDLLName[psDLLNames->iIndex]->bAddToClientConfig = true;
+			piConfigInfoArray[psChoiceList[iChoiceCount].eConfigType] = psDLLNames->iIndex;
+			psDLLNames->ppsDLLName[psDLLNames->iIndex]->pszDLLFilename = (char *) malloc( strlen( ppsDefaultParamList[psChoiceList[iChoiceCount].eConfigType]) + 1);
+
+			strcpy( psDLLNames->ppsDLLName[psDLLNames->iIndex]->pszDLLFilename, ppsDefaultParamList[psChoiceList[iChoiceCount].eConfigType]);
+
+			psDLLNames->iIndex++;
+
+			bHTTPTransportFound = true;
+
+			cout << "Choices have been overridden by input parameter." << endl;
+		}
+		else
 		{
 			if( iDLLListCount > 0)
 			{
-			}
-			else
-			{
-//				psDLLNames->ppsDLLName[iDLLOffsetList[iChoice - 1]]->bAddToClientConfig = true;
-//				piConfigInfoArray[psChoiceList[iChoiceCount].eConfigType] = iDLLOffsetList[iChoice - 1];
-			}
-		}
-
-		if( iDLLListCount > 0)
-		{
-			if( iDLLListCount > 1)
-			{
-				cout << "Select an index between 1 and " << iDLLListCount << " : ";
-
-				int	iChoice;
-
-				cin >> iChoice;
-
-				if( iChoice < 1 || iChoice > iDLLListCount)
+				if( iDLLListCount > 1)
 				{
-					cout << "Number was out of range." << endl;
+					cout << "Select an index between 1 and " << iDLLListCount << " : ";
+
+					int	iChoice;
+
+					cin >> iChoice;
+
+					if( iChoice < 1 || iChoice > iDLLListCount)
+					{
+						cout << "Number was out of range." << endl;
+					}
+					else
+					{
+						psDLLNames->ppsDLLName[iDLLOffsetList[iChoice - 1]]->bAddToClientConfig = true;
+						piConfigInfoArray[psChoiceList[iChoiceCount].eConfigType] = iDLLOffsetList[iChoice - 1];
+						bHTTPTransportFound = true;
+					}
 				}
 				else
 				{
-					psDLLNames->ppsDLLName[iDLLOffsetList[iChoice - 1]]->bAddToClientConfig = true;
-					piConfigInfoArray[psChoiceList[iChoiceCount].eConfigType] = iDLLOffsetList[iChoice - 1];
+					cout << "Automatically selected " << psDLLNames->ppsDLLName[iDLLOffsetList[0]]->pszDLLFilename << endl;
+
+					psDLLNames->ppsDLLName[iDLLOffsetList[0]]->bAddToClientConfig = true;
+					piConfigInfoArray[psChoiceList[iChoiceCount].eConfigType] = iDLLOffsetList[0];
 					bHTTPTransportFound = true;
 				}
 			}
 			else
 			{
-				cout << "Automatically selected " << psDLLNames->ppsDLLName[iDLLOffsetList[0]]->pszDLLFilename << endl;
+				cout << "There are no recognised file names for the type of DLL." << endl << "You will have to modify the configuration file namually." << endl << endl;
 
-				psDLLNames->ppsDLLName[iDLLOffsetList[0]]->bAddToClientConfig = true;
-				piConfigInfoArray[psChoiceList[iChoiceCount].eConfigType] = iDLLOffsetList[0];
 				bHTTPTransportFound = true;
 			}
-		}
-		else
-		{
-			cout << "There are no recognised file names for the type of DLL." << endl << "You will have to modify the configuration file namually." << endl << endl;
-
-			bHTTPTransportFound = true;
 		}
 	} while( !bHTTPTransportFound);
 }
@@ -603,7 +610,7 @@ void AddFilenameToList( FILENAMELIST * psFileNameList, char * pszFilename)
 	psFileNameList->iListCount++;
 }
 
-void Destroy( DLLNAMES * psDLLNames, FILENAMELIST * psFileNameList, char * psDefaultParamList)
+void Destroy( DLLNAMES * psDLLNames, FILENAMELIST * psFileNameList, char ** ppsDefaultParamList)
 {
 	int iCount;
 
@@ -624,9 +631,9 @@ void Destroy( DLLNAMES * psDLLNames, FILENAMELIST * psFileNameList, char * psDef
 
 	for( iCount = 0; iCount < eConfigMax; iCount++)
 	{
-		if( psDefaultParamList[iCount] != NULL)
+		if( ppsDefaultParamList[iCount] != NULL)
 		{
-			free( (void *) psDefaultParamList[iCount]);
+			free( (void *) ppsDefaultParamList[iCount]);
 		}
 	}
 }

@@ -80,11 +80,11 @@ bool CheckAxisBinDirectoryExists( char * pszAxisCpp_Deploy, char * pszAxis_Bin, 
 const char * CreateConfigElement( DLLNAMES * psDLLNames, int * piConfigInfoArray, CHOICELIST * psChoiceList, ECONFIGTYPE eConfigType);
 void GetHomeAndLibrary( DLLNAMES * psDLLNames, char * pszAxisCpp_Deploy, char * pszAxis_Bin, char * pszAxis_Bin_Default, FILENAMELIST * psFileNameList, char ** ppsDefaultParamList);
 void Initialise( DLLNAMES * psDLLNames, int * piConfigInfoArray, FILENAMELIST * psFileNameList, char ** ppsDefaultParamList);
-void SelectFileFromList( CHOICELIST * psChoiceList, int iChoiceCount, DLLNAMES * psDLLNames, int * piConfigInfoArray, char ** ppsDefaultParamList);
+void SelectFileFromList( CHOICELIST * psChoiceList, int iChoiceCount, DLLNAMES * psDLLNames, int * piConfigInfoArray, char ** ppsDefaultParamList, FILENAMELIST * psFileNameList, char * pszAxisCpp_Deploy);
 void WriteAxisConfigFile( DLLNAMES * psDLLNames, int * piConfigInfoArray, CHOICELIST * psChoiceList);
 bool ReadFilenamesInaDirectory( char * pszDirName, FILENAMELIST * psFileNameList);
 void AddFilenameToList( FILENAMELIST * psFileNameList, char * pszFilename);
-void Destroy( DLLNAMES * psDLLNames, FILENAMELIST * psFileNameList, char * psDefaultParamList);
+void Destroy( DLLNAMES * psDLLNames, FILENAMELIST * psFileNameList, char ** psDefaultParamList);
 bool StringCompare( char * pszString1, char * pszString2);
 void StringToUpper( char * pszString);
 void CreateNewDLLNamesElement( DLLNAMES * psDLLNames, FILENAMELIST * psFileNameList);
