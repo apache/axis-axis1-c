@@ -28,6 +28,7 @@ import java.net.*;
 public class TestClientThread extends ChildHandler implements Runnable
 {
     private boolean          continueToRun                 =true;
+    private boolean serverClosedSocket;
     // the responder back to the client
 //    private ClientReturner   clientReturner                =null;
     // We need to keep hold of this so that we can tell what state it's in when
@@ -68,6 +69,7 @@ public class TestClientThread extends ChildHandler implements Runnable
     {
         //        System.out.println( "TestClientThread(3): entry");
         this.clientSocket=clientSocket;
+        serverClosedSocket=false;
         try
         {
             IsStopMessage(clientSocket);
@@ -83,7 +85,7 @@ public class TestClientThread extends ChildHandler implements Runnable
 
         // OK, now we've done that we can create the new thread to stream
         // the result back to the client
-        ClientReturner clientReturner=new ClientReturner(clientSocket, serviceSocket);
+        ClientReturner clientReturner=new ClientReturner(clientSocket, serviceSocket, this);
         addChild(clientReturner);
         new Thread(clientReturner).start( );
     }
@@ -199,18 +201,29 @@ public class TestClientThread extends ChildHandler implements Runnable
             catch (SocketException socketException)
             {
                 continueToRun=false;
-                if(socketException.getMessage()=="Connection reset")
+                if (!serverClosedSocket)
                 {
-                    // tihs appears to happen when the client has stopped sending us data and we should close down gracefully
-                    // but when I check the socket for it's status it tells me that all is well but for 
-                    // the fact that the stream is not ready() but ready() returning false is not a reason to shut !
-                    // ah well - never mind - let's close gracefully.
-                    // no need to print this out as an exception
-                    System.out.println( "TestClientThread#run(): Connection reset when reading from client - closing gracefully");
+                    if (socketException.getMessage( )=="Connection reset")
+                    {
+                        // tihs appears to happen when the client has stopped
+                        // sending us data and we should close down gracefully
+                        // but when I check the socket for it's status it tells
+                        // me that all is well but for
+                        // the fact that the stream is not ready() but ready()
+                        // returning false is not a reason to shut !
+                        // ah well - never mind - let's close gracefully.
+                        // no need to print this out as an exception
+                        System.out
+                                .println("TestClientThread#run(): Connection reset when reading from client - closing gracefully");
+                    }
+                    else
+                    {
+                        socketException.printStackTrace(System.err);
+                    }
                 }
                 else
                 {
-                    socketException.printStackTrace(System.err);
+                    // the server has closed the socket so ignore any errors !
                 }
             }
             catch (IOException exception)
@@ -223,8 +236,6 @@ public class TestClientThread extends ChildHandler implements Runnable
                                 +exception);
             }
         }
-        // clientReturner.continueToRun=false;
-
         //        System.out.println( "TestClientThread#run(): exit");
     }
 
@@ -303,6 +314,15 @@ public class TestClientThread extends ChildHandler implements Runnable
         // bytesToWrite));
         streamToServer.write(request, 0, bytesToWrite);
         streamToServer.flush( );
+    }
+    
+    /**
+     * This method is called when the socket from the server is closed
+     *
+     */
+    public void notifyOfServerClosingSocket()
+    {
+        serverClosedSocket=true;
     }
     
     protected void close()

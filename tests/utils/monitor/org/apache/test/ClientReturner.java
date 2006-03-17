@@ -19,8 +19,8 @@ import java.io.*;
 import java.net.*;
 
 /**
- * TestClientThread is a child thread of TestClientListener and handles all
- * communication between the original requestor and the TCPMonitor class.
+ * ClientReturner handles the response 
+ * from the server to the original requestor.
  * This class is responsible for the serviceSocket that is given to it.
  * 
  * @author Andrew Perry, hawkeye
@@ -32,6 +32,8 @@ public class ClientReturner extends ChildHandler implements Runnable
 {
     // socket to the service;
     private Socket serviceSocket;
+    // We hold on to our parent so we can tell it that the server has closed the socket and not to be alarmed when we close the socket to the client
+    private TestClientThread parent;
     boolean                  continueToRun        =true;
     private static int       number               =0;
 
@@ -55,10 +57,11 @@ public class ClientReturner extends ChildHandler implements Runnable
      * @param serviceSocket the socket to the server (service)
      * @throws IOException
      */
-    public ClientReturner(Socket clientSocket, Socket serviceSocket)
+    public ClientReturner(Socket clientSocket, Socket serviceSocket, TestClientThread ourParent)
             throws IOException
     {
         this(clientSocket);
+        parent = ourParent;
         //        System.out.println( "ClientReturner(): entry");
         // create the reader from the server
         this.serviceSocket = serviceSocket;
@@ -115,16 +118,27 @@ public class ClientReturner extends ChildHandler implements Runnable
                 }
                 else
                 {
-                    //                    System.out.println( "ClientFileReturner#run():
-                    // bytesRead==-1
-                    // "+continueToRun);
-
-                    //continueToRun=false;
+                    // the socket from the server to the client has been closed by the server
+                    // so stop
+                    continueToRun=false;
                 }
+            }
+            // we've closed because the socket from the server closed so we need to reciprocate to the client
+            // before we do this we need to tell our parent who is listening from the
+            // client otherwise it won't know that the socket being closed by the client is OK.
+            parent.notifyOfServerClosingSocket();
+            try
+            {
+                streamToClient.close();
+            }
+            catch(IOException exception)
+            {
+                exception.printStackTrace();
             }
         }
         catch (IOException exception)
         {
+            exception.printStackTrace();
             if(TCPMonitor.state<TCPMonitor.CLOSING_STATE)
             {
                 System.err
