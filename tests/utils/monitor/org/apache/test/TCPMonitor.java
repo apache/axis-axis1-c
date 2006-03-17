@@ -256,8 +256,15 @@ public class TCPMonitor extends ChildHandler
     {
 		Socket socket = new Socket();
 		InetSocketAddress remoteAddress = new InetSocketAddress(hostname, port);
-		socket.setKeepAlive(false);
-		socket.setReuseAddress(true);
+        
+        // Set keep-alive option to ensure that if server crashes we do not 
+        // hang waiting on TCP/IP response.
+		socket.setKeepAlive(true);
+        
+        // No reason to set reuse-address since client sockets are not binding to 
+        // some explicit address.  Also, setting this to true causes problems on OS/400.
+		// socket.setReuseAddress(true);
+                
 		socket.connect(remoteAddress);
 		
 		return socket;

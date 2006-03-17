@@ -80,6 +80,11 @@ public class TestClientListener extends ChildHandler implements Runnable
                 System.out
                         .println("TestClientListener#run(): Waiting for a new client request");
                 clientSocket=serverSocket.accept( );
+                
+                // Set keep-alive option to ensure that if client crashes we do not 
+                // hang waiting on TCP/IP response.
+                clientSocket.setKeepAlive(true);
+                
                 System.out
                         .println("TestClientListener#run():Got a client new client request");
             }

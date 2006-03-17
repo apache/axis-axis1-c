@@ -145,6 +145,11 @@ public class MockServer extends ChildHandler implements Runnable
                 System.out
                         .println("Mockserver#run(): About to wait for incoming client request");
                 incoming=serverSocket.accept( );
+
+                // Set keep-alive option to ensure that if server crashes we do not 
+                // hang waiting on TCP/IP response.
+                incoming.setKeepAlive(true);
+                
                 System.out.println("Mockserver#run(): Got a new client request");
             }
             catch (SocketTimeoutException socketTimeoutException)
