@@ -163,7 +163,6 @@ int AxisTrace::trace (const char *pchLog)
 {
     if (pchLog != NULL) {
         traceLine(pchLog);
-        printf ("DEBUG LINE :\n%s\n", pchLog);
     }
     return AXIS_SUCCESS;
 }
