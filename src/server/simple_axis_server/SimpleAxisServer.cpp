@@ -33,6 +33,7 @@
 #endif
 
 #include "SimpleAxisTransport.h"
+#include <iostream>
 
 #include <axis/AxisCPPConfigDefaults.hpp>
 
@@ -124,7 +125,7 @@ handleTCPClient (int clntSocket)
 
     if (0 != process_request (pTransport))
     {
-   printf ("process_request FAILED\n");
+        cout << "process_request FAILED";
     }
     delete pTransport;
 

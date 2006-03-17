@@ -47,7 +47,8 @@ AXIS_CPP_NAMESPACE_START class ServerAxisEngine:public AxisEngine
          *  called within the process_request method of Axis.cpp
          */
     int setFaultOutputStream (int iFaultCode, SOAPTransport * pSoap);
-
+    int setFaultOutputStream (AxisException iFault, SOAPTransport * pSoap);
+                  
 	/** When finished with handlers and webservices release them
          *  back to the pool
          */

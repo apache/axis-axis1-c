@@ -120,7 +120,11 @@ int WSDDDocument::parseDocument(const AxisChar* pcWSDDFileName)
 	if (!pcWSDDFileName) return AXIS_FAIL;
 	WSDDFileInputStream stream(pcWSDDFileName);
 	XMLParser* pParser = XMLParserFactory::getParserObject();
-	if (!pParser) return AXIS_FAIL;
+	if (!pParser)
+    {
+        AxisTrace::trace("Failed to getXMLParser to load WSDDDocument with");
+        return AXIS_FAIL;
+    }
 	pParser->setInputStream(&stream);
 	const AnyElement* pNode;
 

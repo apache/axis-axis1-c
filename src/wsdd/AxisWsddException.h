@@ -38,6 +38,7 @@ public:
     
 private:
     string getMessageForExceptionCode(const int iExceptionCode);
+    const char* what() const throw(){ return m_sMessage; };
     string m_sMessageForExceptionCode;
 };
 

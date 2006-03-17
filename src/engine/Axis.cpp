@@ -165,8 +165,10 @@ STORAGE_CLASS_INFO int process_request(SOAPTransport* pStream)
                 {
                     if (AXIS_SUCCESS == engine->initialize ())
                     {
+                     try
+                     {
                         Status = engine->process(pStream);
-						if (AXIS_SUCCESS == Status)
+					   if (AXIS_SUCCESS == Status)
 						{
 							pStream->flushOutput();
 						}
@@ -178,6 +180,15 @@ STORAGE_CLASS_INFO int process_request(SOAPTransport* pStream)
                             pObjTempServer = NULL;
                             Status = AXIS_SUCCESS;
                         }
+                     }
+                     catch(AxisException& e)
+                     {
+                            ServerAxisEngine* pObjTempServer = (ServerAxisEngine*) engine;
+                            pObjTempServer->setFaultOutputStream(e, pStream);
+                            pStream->flushOutput();
+                            pObjTempServer = NULL;
+                            Status = AXIS_SUCCESS;
+                     }
                     }
                     delete engine;
                 }
