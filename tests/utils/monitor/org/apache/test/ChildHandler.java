@@ -28,13 +28,21 @@ public abstract class ChildHandler
     protected void close()
     {
         System.out.println( "Closing "+this);
-        for(int i=0; i<children.size(); i++)
+        try 
         {
-            ChildHandler child = (ChildHandler)children.remove(i);
-            child.close();
+            for(int i=0; i<children.size(); i++)
+            {
+                ChildHandler child = (ChildHandler)children.remove(i);
+                child.close();
+            }
+            children=null;
+            System.out.println( "Closed "+this);
         }
-        children=null;
-        System.out.println( "Closed "+this);
+        catch (Throwable exception)
+        {
+            System.out.println( "Exception in ChildHandler.close()...");            
+            exception.printStackTrace( );
+        }
     }
     protected void addChild(ChildHandler handler)
     {
