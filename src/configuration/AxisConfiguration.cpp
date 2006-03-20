@@ -1,8 +1,13 @@
+#include "FileFunctions.hpp"
 #include "AxisConfiguration.hpp"
+#include "MissingCFunctions.hpp"
+#include "AxisConfigurationLibraries.hpp"
+
+// Client -a c:\wscc -o obj\bin -th transport.dll -c channel.dll -cs sslChannel.dll -x xerces.dll -cl client.log
 
 int main( int argc, char * argv[])
 {
-	DLLNAMES		sDLLNames;
+	LIST			sDLLNames;
 	int				iConfigInfoArray[eConfigMax];
 	CHOICELIST		sChoiceList[] = { {PLATFORM_TRANSPORTHTTP_PATH,	"HTTP Transport library",											AXCONF_TRANSPORTHTTP_TAGNAME,		eHTTPTransport,		eClientAndServer},
 									  {PLATFORM_CHANNEL_PATH,		"HTTP Channel library",												AXCONF_CHANNEL_HTTP_TAGNAME,		eHTTPChannel,		eClientAndServer},
@@ -19,7 +24,7 @@ int main( int argc, char * argv[])
 									  {"",							"Root directory",													0,									eUnknown,			eEmpty},
 									  {"",							"library offset directory",											0,									eUnknown,			eEmpty}};
 	bool			bSuccess = false;
-	FILENAMELIST	sFileNameList;
+	LIST			sFileNameList;
 	char *			psDefaultParamList[eConfigMax];
 
 	Initialise( &sDLLNames, iConfigInfoArray, &sFileNameList, (char **) psDefaultParamList);
@@ -36,7 +41,7 @@ int main( int argc, char * argv[])
 			cout << "Client" << endl;
 			cout << "-a  root directory of Axis download (AXISCPP_HOME)" << endl;
 			cout << "-o  offset from AXISCPP_HOME to object files" << endl;
-			cout << "-t  transport library name" << endl;
+			cout << "-th transport library name" << endl;
 			cout << "-c  channel library name" << endl;
 			cout << "-cs ssl channel library name" << endl;
 			cout << "-x  xerces library name" << endl;
@@ -69,38 +74,43 @@ int main( int argc, char * argv[])
 					if( sChoiceList[iChoiceCount].eConfigType == eClientLog ||
 						sChoiceList[iChoiceCount].eConfigType == eServerLog)
 					{
-						if(sChoiceList[iChoiceCount].eConfigType == eClientLog)
+						char	szLog[256];
+
+						szLog[0] = '\0';
+
+						if( sChoiceList[iChoiceCount].eConfigType == eClientLog)
 						{
-							cout << "Enter name of client trace/log file: ";
+							if( psDefaultParamList[eClientLog] == NULL)
+							{
+								cout << "Enter name of client trace/log file: ";
+							}
+							else
+							{
+								strcpy( szLog, psDefaultParamList[eClientLog]);
+							}
 						}
 						else
 						{
-							cout << "Enter name of server trace/log file: ";
+							if( psDefaultParamList[eServerLog] == NULL)
+							{
+								cout << "Enter name of server trace/log file: ";
+							}
+							else
+							{
+								strcpy( szLog, psDefaultParamList[eServerLog]);
+							}
 						}
 
-						CreateNewDLLNamesElement( &sDLLNames, &sFileNameList);
+						char			szFilename[512];
 
-						char 	szLog[256];
-						char	szFilename[512];
-
-						cin >> szLog;
-						
-						sDLLNames.ppsDLLName[sDLLNames.iIndex]->pszDLLName = (char *) malloc( strlen( szLog) + 1);
-
-						strcpy( sDLLNames.ppsDLLName[sDLLNames.iIndex]->pszDLLName, szLog);
+						if( szLog[0] == '\0')
+						{
+							cin >> szLog;
+						}
 
 						sprintf( szFilename, "%s\\%s", szAxisCpp_Deploy, szLog);
 
-						sDLLNames.ppsDLLName[sDLLNames.iIndex]->pszDLLFilename = (char *) malloc( strlen( szFilename) + 1);
-
-						strcpy( sDLLNames.ppsDLLName[sDLLNames.iIndex]->pszDLLFilename, szFilename);
-
-						iConfigInfoArray[sChoiceList[iChoiceCount].eConfigType] = sDLLNames.iIndex;
-
-						sDLLNames.ppsDLLName[iChoiceCount]->bAddToClientConfig = true;
-
-						sDLLNames.iIndex++;
-
+						iConfigInfoArray[sChoiceList[iChoiceCount].eConfigType] = PopulateNewDLLNameInfo( &sDLLNames, szLog, szFilename, true);
 					}
 					else
 					{
@@ -154,17 +164,17 @@ int main( int argc, char * argv[])
 ECONFIG	ReadConfigOptions( int iParamCount, char * pParamArray[], char ** ppsDefaultParamList)
 {
 	ECONFIG		eConfig = eEmpty;
-	OPTIONLIST	sOptions[] = {{eHTTPTransport, "TH"},
-							  {eHTTPChannel, "C"},
-							  {eHTTPSSLChannel, "CS"},
-							  {eXMLParser, "X"},
-							  {eSMTPTransport, "TS"},
-							  {eClientLog, "CL"},
-							  {eClientWSDD, "CW"},
-							  {eServerLog, "SL"},
-							  {eRootDirectory, "A"},
-							  {eOffsetToLibs, "O"},
-							  {eServerWSDD, "SW"}};
+	OPTIONLIST	sOptions[] = {{eHTTPTransport,	"TH"},
+							  {eHTTPChannel,	"C"},
+							  {eHTTPSSLChannel,	"CS"},
+							  {eXMLParser,		"X"},
+							  {eSMTPTransport,	"TS"},
+							  {eClientLog,		"CL"},
+							  {eClientWSDD,		"CW"},
+							  {eServerLog,		"SL"},
+							  {eRootDirectory,	"A"},
+							  {eOffsetToLibs,	"O"},
+							  {eServerWSDD,		"SW"}};
 
 	for( int iCount = 0; iCount < iParamCount; iCount++)
 	{
@@ -205,9 +215,27 @@ ECONFIG	ReadConfigOptions( int iParamCount, char * pParamArray[], char ** ppsDef
 
 				if( iCount < iParamCount)
 				{
-					ppsDefaultParamList[sOptions[iIndex].eConfType] = (char *) malloc( strlen( pParamArray[iCount]) + 1);
+					if( ppsDefaultParamList[eOffsetToLibs] != NULL &&
+						ppsDefaultParamList[eRootDirectory] != NULL)
+					{
+						char	szLocation[512];
+						char	cSlash = '/';
 
-					strcpy( ppsDefaultParamList[sOptions[iIndex].eConfType], pParamArray[iCount]);
+#if WIN32
+						cSlash = '\\';
+#endif
+						sprintf( szLocation, "%s%c%s%c%s", ppsDefaultParamList[eRootDirectory], cSlash, ppsDefaultParamList[eOffsetToLibs], cSlash, pParamArray[iCount]);
+
+						ppsDefaultParamList[sOptions[iIndex].eConfType] = (char *) malloc( strlen( szLocation) + 1);
+
+						strcpy( ppsDefaultParamList[sOptions[iIndex].eConfType], szLocation);
+					}
+					else
+					{
+						ppsDefaultParamList[sOptions[iIndex].eConfType] = (char *) malloc( strlen( pParamArray[iCount]) + 1);
+
+						strcpy( ppsDefaultParamList[sOptions[iIndex].eConfType], pParamArray[iCount]);
+					}
 				}
 			}
 			else
@@ -219,134 +247,20 @@ ECONFIG	ReadConfigOptions( int iParamCount, char * pParamArray[], char ** ppsDef
 
 	return eConfig;
 }
-bool CheckAxisBinDirectoryExists( char * pszAxisCpp_Deploy, char * pszAxis_Bin, char * pszAxis_Bin_Default, DLLNAMES * psDLLNames, FILENAMELIST * psFileNameList)
-{
-	bool	bFound = false;
 
-	if( strlen( pszAxis_Bin) < 2)
-	{
-		strcpy( pszAxis_Bin, pszAxis_Bin_Default);
-	}
 
-	char	szFilename[512];
-	char	szFileDirAndName[512];
-
-	sprintf( szFilename, "%s\\%s\\*.*", pszAxisCpp_Deploy, pszAxis_Bin);
-
-	bFound = ReadFilenamesInaDirectory( szFilename, psFileNameList);
-
-	int		iIndex = 0;
-
-	do
-	{
-		char *	pExtn = psFileNameList->ppszListArray[iIndex];
-
-		do
-		{
-			if( (pExtn = strchr( pExtn, '.')) != NULL)
-			{
-				pExtn++;
-
-#if WIN32
-				if( StringCompare( pExtn, "DLL"))
-#else
-				if( StringCompare( pExtn, "SO"))
-#endif
-				{
-					CreateNewDLLNamesElement( psDLLNames, psFileNameList);
-
-					psDLLNames->ppsDLLName[psDLLNames->iIndex]->pszDLLName = (char *) malloc( strlen( psFileNameList->ppszListArray[iIndex]) + 1);
-
-					strcpy( psDLLNames->ppsDLLName[psDLLNames->iIndex]->pszDLLName, psFileNameList->ppszListArray[iIndex]);
-
-					StringToUpper( psDLLNames->ppsDLLName[psDLLNames->iIndex]->pszDLLName);
-
-					sprintf( szFileDirAndName, "%s\\%s\\%s", pszAxisCpp_Deploy, pszAxis_Bin, psFileNameList->ppszListArray[iIndex]);
-
-					psDLLNames->ppsDLLName[psDLLNames->iIndex]->pszDLLFilename = (char *) malloc( strlen( szFileDirAndName) + 1);
-
-					strcpy( psDLLNames->ppsDLLName[psDLLNames->iIndex]->pszDLLFilename, szFileDirAndName);
-
-					psDLLNames->iIndex++;
-
-					break;
-				}
-			}
-		} while( pExtn != NULL);
-
-		iIndex++;
-	} while( iIndex < psFileNameList->iListCount);
-
-	if( !bFound)
-	{
-		cout << "The directory " << pszAxis_Bin << " was not found." << endl;
-	}
-
-	return bFound;
-}
-
-const char * CreateConfigElement( DLLNAMES * psDLLNames, int * piConfigInfoArray, CHOICELIST * psChoiceList, ECONFIGTYPE eConfigType)
-{
-	int					iIndex = 0;
-	bool				bFound = false;
-	char *				pszConfigName = "<unknown name>";
-	static std::string	sReturn;
-
-	while( iIndex < eConfigMax && !bFound)
-	{
-		if( psChoiceList[iIndex].eConfigType == eConfigType)
-		{
-			bFound = true;
-
-			pszConfigName = psChoiceList[iIndex].pszConfigName;
-		}
-		else
-		{
-			iIndex++;
-		}
-	}
-
-	if( bFound)
-	{
-		sReturn = "#Path to ";
-		sReturn += psChoiceList[iIndex].pszElementDescription;
-		sReturn += "\n";
-	}
-	else
-	{
-		sReturn = "#Path to an unknown element\n";
-	}
-
-	char	szReturn[256];
-
-	if( piConfigInfoArray[eConfigType] != -1)
-	{
-		sprintf( szReturn, "%s:%s\n", pszConfigName, psDLLNames->ppsDLLName[piConfigInfoArray[eConfigType]]->pszDLLFilename);
-	}
-	else
-	{
-		sprintf( szReturn, "#%s:<not set>\n", pszConfigName);
-	}
-
-	sReturn += szReturn;
-
-	return sReturn.c_str();
-}
-
-void GetHomeAndLibrary( DLLNAMES * psDLLNames, char * pszAxisCpp_Deploy, char * pszAxis_Bin, char * pszAxis_Bin_Default, FILENAMELIST * psFileNameList, char ** ppsDefaultParamList)
+void GetHomeAndLibrary( LIST * psDLLNames, char * pszAxisCpp_Deploy, char * pszAxis_Bin, char * pszAxis_Bin_Default, LIST * psFileNameList, char ** ppsDefaultParamList)
 {
 	if( ppsDefaultParamList[eRootDirectory] == NULL)
 	{
 #if WIN32
-		cout << "Type in full qualified directory path into which you downloaded Axis." << endl
-			<< "(e.g. C:\\Axis).  Where C:\\Axis\\axis-c-1.6-Win32-trace-bin is the" << endl
-			<< "directory created when Axis was unzipped (this directory must also" << endl
-			<< "contain the axiscpp.conf file)." << endl;
+		cout << "Type in the Axis fully qualified directory path (e.g. C:\\Axis)" << endl
+			<< "used when Axis was unzipped (NB: this directory must also contain the" << endl
+			<< "axiscpp.conf file)." << endl;
 #else
-		cout << "Type in full qualified directory path into which you downloaded Axis." << endl
-			<< "(e.g. /home/Axis).  Where /home/Axis/axis-c-1.6-Linux-trace-bin is the" << endl
-			<< "directory created when Axis was untared (this directory must also" << endl
-			<< "contain the etc/axiscpp.conf file)." << endl;
+		cout << "Type in the Axis fully qualified directory path (e.g. /home/Axis)" << endl
+			<< "used when Axis was unzipped (NB: this directory must also contain the" << endl
+			<< "etc/axiscpp.conf file)." << endl;
 #endif
 		cout << "AXISCPP_DEPLOY = ";
 		cin >> pszAxisCpp_Deploy;
@@ -370,10 +284,12 @@ void GetHomeAndLibrary( DLLNAMES * psDLLNames, char * pszAxisCpp_Deploy, char * 
 		}
 	}
 
+	strcpy( pszAxis_Bin_Default, pszAxisCpp_Deploy);
+
 #if WIN32
-	strcpy( pszAxis_Bin_Default, "\\axis-c-1.6-Win32-trace-bin\\bin");
+	strcat( pszAxis_Bin_Default, "\\axis-c-1.6-Win32-trace-bin\\bin");
 #else
-	strcpy( pszAxis_Bin_Default, "/axis-c-1.6-Linux-trace-bin/bin");
+	strcat( pszAxis_Bin_Default, "/axis-c-1.6-Linux-trace-bin/bin");
 #endif
 
 	if( ppsDefaultParamList[eOffsetToLibs] == NULL)
@@ -388,19 +304,22 @@ void GetHomeAndLibrary( DLLNAMES * psDLLNames, char * pszAxisCpp_Deploy, char * 
 			 << "EXPORT AXISCPP_DEPLOY=" << pszAxisCpp_Deploy << endl << endl;
 #endif
 
-		strcpy( pszAxis_Bin_Default, pszAxisCpp_Deploy);
-
 		do
 		{
 #if WIN32
 			cout << "Type in the directory where the Axis libraries (e.g. axis_client.dll) can be" << endl
-					<< "found.  (The default directory is " << pszAxisCpp_Deploy << "\\axis-c-1.6-Win32-trace-bin\\bin)." << endl;
+					<< "found.  (If you type '*', it will use the default '" << pszAxis_Bin_Default << "')." << endl;
 #else
 			cout << "Type in the directory where the Axis libraries (e.g. axis_client.so) can be" << endl
-					<< "found.  (The default directory is " << pszAxisCpp_Deploy << "/axis-c-1.6-Linux-trace-bin/bin)." << endl;
+					<< "found.  (If you type '*', it will use the default '" << pszAxis_Bin_Default << "')." << endl;
 #endif
 			cout << "Axis binaries directory = ";
 			cin >> pszAxis_Bin;
+
+			if( !strcmp( pszAxis_Bin, "*"))
+			{
+				strcpy( pszAxis_Bin, pszAxis_Bin_Default);
+			}
 		}
 		while( !CheckAxisBinDirectoryExists( pszAxisCpp_Deploy, pszAxis_Bin, pszAxis_Bin_Default, psDLLNames, psFileNameList));
 	}
@@ -408,26 +327,15 @@ void GetHomeAndLibrary( DLLNAMES * psDLLNames, char * pszAxisCpp_Deploy, char * 
 	cout << endl << "Begin to configure the AXISCPP.CONF file." << endl;
 }
 
-void Initialise( DLLNAMES * psDLLNames, int * piConfigInfoArray, FILENAMELIST * psFileNameList, char ** ppsDefaultParamList)
-{
-	memset( psDLLNames, 0, sizeof( DLLNAMES));
-	memset( psFileNameList, 0, sizeof( FILENAMELIST));
-
-	for( int iCount = 0; iCount < eConfigMax; iCount++)
-	{
-		piConfigInfoArray[iCount] = -1;
-		ppsDefaultParamList[iCount] = NULL;
-	}
-}
-
-void SelectFileFromList( CHOICELIST * psChoiceList, int iChoiceCount, DLLNAMES * psDLLNames, int * piConfigInfoArray, char ** ppsDefaultParamList, FILENAMELIST * psFileNameList, char * pszAxisCpp_Deploy)
+void SelectFileFromList( CHOICELIST * psChoiceList, int iChoiceCount, LIST * psDLLNames, int * piConfigInfoArray, char ** ppsDefaultParamList, LIST * psFileNameList, char * pszAxisCpp_Deploy)
 {
 	cout << endl << "Select the filename for the " << psChoiceList[iChoiceCount].pszElementDescription << "." << endl;
 
 	int		iDLLCount = 0;
-	int		iDLLListCount = 0;
-	int		iDLLOffsetList[8];
+	LIST	sDLLOffsetList;
 	bool	bHTTPTransportFound = false;
+
+	memset( &sDLLOffsetList, 0, sizeof( LIST));
 
 	do
 	{
@@ -437,14 +345,16 @@ void SelectFileFromList( CHOICELIST * psChoiceList, int iChoiceCount, DLLNAMES *
 
 		StringToUpper( pszUpper);
 
-		while( iDLLCount < psDLLNames->iIndex)
+		while( iDLLCount < psDLLNames->iCount)
 		{
 
-			if( psDLLNames->ppsDLLName[iDLLCount]->pszDLLName != NULL && strstr( psDLLNames->ppsDLLName[iDLLCount]->pszDLLName, pszUpper) != NULL)
+			if( ((DLLNAMEINFO *) psDLLNames->ppArray[iDLLCount])->pszDLLName != NULL && strstr( ((DLLNAMEINFO *) psDLLNames->ppArray[iDLLCount])->pszDLLName, pszUpper) != NULL)
 			{
-				iDLLOffsetList[iDLLListCount] = iDLLCount;
+				int *	piDLLOffset = (int *) GetNextListElement( &sDLLOffsetList, sizeof( int));
 
-				cout << ++iDLLListCount << ".\t" << psDLLNames->ppsDLLName[iDLLCount]->pszDLLFilename << endl;
+				*piDLLOffset = iDLLCount;
+
+				cout << sDLLOffsetList.iCount << ".\t" << ((DLLNAMEINFO *) psDLLNames->ppArray[iDLLCount])->pszDLLFilename << endl;
 			}
 
 			iDLLCount++;
@@ -452,16 +362,10 @@ void SelectFileFromList( CHOICELIST * psChoiceList, int iChoiceCount, DLLNAMES *
 
 		free( pszUpper);
 
-		if( ppsDefaultParamList[psChoiceList[iChoiceCount].eConfigType] != NULL)
+		if( ppsDefaultParamList[psChoiceList[iChoiceCount].eConfigType] != NULL &&
+			FileExists( ppsDefaultParamList[psChoiceList[iChoiceCount].eConfigType]))
 		{
-			CreateNewDLLNamesElement( psDLLNames, psFileNameList);
-			psDLLNames->ppsDLLName[psDLLNames->iIndex]->bAddToClientConfig = true;
-			piConfigInfoArray[psChoiceList[iChoiceCount].eConfigType] = psDLLNames->iIndex;
-			psDLLNames->ppsDLLName[psDLLNames->iIndex]->pszDLLFilename = (char *) malloc( strlen( ppsDefaultParamList[psChoiceList[iChoiceCount].eConfigType]) + 1);
-
-			strcpy( psDLLNames->ppsDLLName[psDLLNames->iIndex]->pszDLLFilename, ppsDefaultParamList[psChoiceList[iChoiceCount].eConfigType]);
-
-			psDLLNames->iIndex++;
+			piConfigInfoArray[psChoiceList[iChoiceCount].eConfigType] = PopulateNewDLLNameInfo( psDLLNames, NULL, ppsDefaultParamList[psChoiceList[iChoiceCount].eConfigType], true);
 
 			bHTTPTransportFound = true;
 
@@ -469,33 +373,33 @@ void SelectFileFromList( CHOICELIST * psChoiceList, int iChoiceCount, DLLNAMES *
 		}
 		else
 		{
-			if( iDLLListCount > 0)
+			if( sDLLOffsetList.iCount > 0)
 			{
-				if( iDLLListCount > 1)
+				if( sDLLOffsetList.iCount > 1)
 				{
-					cout << "Select an index between 1 and " << iDLLListCount << " : ";
+					cout << "Select an index between 1 and " << sDLLOffsetList.iCount << " : ";
 
 					int	iChoice;
 
 					cin >> iChoice;
 
-					if( iChoice < 1 || iChoice > iDLLListCount)
+					if( iChoice < 1 || iChoice > sDLLOffsetList.iCount)
 					{
 						cout << "Number was out of range." << endl;
 					}
 					else
 					{
-						psDLLNames->ppsDLLName[iDLLOffsetList[iChoice - 1]]->bAddToClientConfig = true;
-						piConfigInfoArray[psChoiceList[iChoiceCount].eConfigType] = iDLLOffsetList[iChoice - 1];
+						((DLLNAMEINFO *) psDLLNames->ppArray[*((int *) sDLLOffsetList.ppArray[iChoice - 1])])->bAddToClientConfig = true;
+						piConfigInfoArray[psChoiceList[iChoiceCount].eConfigType] = *((int *) sDLLOffsetList.ppArray[iChoice - 1]);
 						bHTTPTransportFound = true;
 					}
 				}
 				else
 				{
-					cout << "Automatically selected " << psDLLNames->ppsDLLName[iDLLOffsetList[0]]->pszDLLFilename << endl;
+					cout << "Automatically selected " << ((DLLNAMEINFO *) psDLLNames->ppArray[*((int *) sDLLOffsetList.ppArray[0])])->pszDLLFilename << endl;
 
-					psDLLNames->ppsDLLName[iDLLOffsetList[0]]->bAddToClientConfig = true;
-					piConfigInfoArray[psChoiceList[iChoiceCount].eConfigType] = iDLLOffsetList[0];
+					((DLLNAMEINFO *) psDLLNames->ppArray[*((int *) sDLLOffsetList.ppArray[0])])->bAddToClientConfig = true;
+					piConfigInfoArray[psChoiceList[iChoiceCount].eConfigType] = *((int *) sDLLOffsetList.ppArray[0]);
 					bHTTPTransportFound = true;
 				}
 			}
@@ -507,206 +411,31 @@ void SelectFileFromList( CHOICELIST * psChoiceList, int iChoiceCount, DLLNAMES *
 			}
 		}
 	} while( !bHTTPTransportFound);
+
+	for( int iCount = 0; iCount < sDLLOffsetList.iCount; iCount++)
+	{
+		free( sDLLOffsetList.ppArray[iCount]);
+	}
 }
 
-void WriteAxisConfigFile( DLLNAMES * psDLLNames, int * piConfigInfoArray, CHOICELIST * psChoiceList)
+void AddFilenameToList( LIST * psFileNameList, char * pszFilename)
 {
-	cout << "DLL selection complete" << endl << endl;
+	char *	psList = (char *) GetNextListElement( psFileNameList, (int) strlen( pszFilename) + 1);
 
-	cout << "AxisCPP.conf file now has the following information:-" << endl;
-
-	cout << "# The comment character is '#'" << endl;
-	cout << "#Available directives are as follows" << endl;
-	cout << "#(Some of these directives may not be implemented yet)" << endl;
-	cout << "#" << endl;
-	cout << CreateConfigElement( psDLLNames, piConfigInfoArray, psChoiceList, eServerLog) << endl;
-	cout << CreateConfigElement( psDLLNames, piConfigInfoArray, psChoiceList, eServerWSDD) << endl;
-	cout << CreateConfigElement( psDLLNames, piConfigInfoArray, psChoiceList, eClientLog) << endl;
-	cout << CreateConfigElement( psDLLNames, piConfigInfoArray, psChoiceList, eClientWSDD) << endl;
-	cout << "#Node name." << endl;
-	cout << "#NodeName: <not set>" << endl << endl;
-	cout << "#Listening port." << endl;
-	cout << "#ListenPort: <not set>" << endl << endl;
-	cout << CreateConfigElement( psDLLNames, piConfigInfoArray, psChoiceList, eHTTPTransport) << endl;
-	cout << CreateConfigElement( psDLLNames, piConfigInfoArray, psChoiceList, eSMTPTransport) << endl;
-	cout << CreateConfigElement( psDLLNames, piConfigInfoArray, psChoiceList, eXMLParser) << endl;
-	cout << CreateConfigElement( psDLLNames, piConfigInfoArray, psChoiceList, eHTTPChannel) << endl;
-	cout << CreateConfigElement( psDLLNames, piConfigInfoArray, psChoiceList, eHTTPSSLChannel) << endl;
-	cout << endl;
+	strcpy( psList, pszFilename);
 }
 
-bool ReadFilenamesInaDirectory( char * pszDirName, FILENAMELIST * psFileNameList)
+bool FileExists( char * pszFilename)
 {
-	bool				bSuccess = false;
+	FILE *	fp = fopen( pszFilename, "r");
+	bool	bSuccess = false;
 
-#if WIN32
-	intptr_t			lFindFile;
-	struct _finddata_t	sFindData;
-
-	if( (lFindFile = _findfirst( pszDirName, &sFindData)) != -1)
+	if( fp != NULL)
 	{
-		if( sFindData.name[0] == '.' && sFindData.attrib & _A_SUBDIR)
-		{
-			bSuccess = true;
-		}
+		fclose( fp);
 
-		do
-		{
-			if( !(sFindData.attrib & _A_SUBDIR))
-			{
-				AddFilenameToList( psFileNameList, sFindData.name);
-			}
-		} while( _findnext( lFindFile, &sFindData) == 0);
-
-		_findclose( lFindFile);
-	}
-#else
-	DIR *				psDIR;
-	struct dirent*		pDirEnt;
-	int					iFilenameCount = 0;
-
-	if( (psDIR = opendir( pszDirName)) == NULL)
-	{
-		return bSuccess;
-	}
-
-	while( (pDirEnt = readdir( psDIR)) != NULL)
-	{
-		AddFilenameToList( psFileNameList, pDirEnt->d_name);
-	}
-
-	if( closedir( psDIR) == -1)
-	{
-		return bSuccess;
-	}
-	else
-	{
 		bSuccess = true;
 	}
-#endif
-
+	
 	return bSuccess;
-}
-
-void AddFilenameToList( FILENAMELIST * psFileNameList, char * pszFilename)
-{
-	if( psFileNameList->iListMax == 0)
-	{
-		psFileNameList->iListMax = 1;
-
-		psFileNameList->ppszListArray = (char **) malloc( sizeof( char *));
-	}
-	else if( psFileNameList->iListCount >= psFileNameList->iListMax)
-	{
-		psFileNameList->iListMax *= 2;
-
-		psFileNameList->ppszListArray = (char **) realloc( psFileNameList->ppszListArray, sizeof( char *) * psFileNameList->iListMax);
-	}
-
-	psFileNameList->ppszListArray[psFileNameList->iListCount] = (char *) malloc( strlen( pszFilename) + 1);
-
-	strcpy( psFileNameList->ppszListArray[psFileNameList->iListCount], pszFilename);
-
-	psFileNameList->iListCount++;
-}
-
-void Destroy( DLLNAMES * psDLLNames, FILENAMELIST * psFileNameList, char ** ppsDefaultParamList)
-{
-	int iCount;
-
-	for( iCount = 0; iCount < psDLLNames->iIndex; iCount++)
-	{
-		free( psDLLNames->ppsDLLName[iCount]->pszDLLFilename);
-		free( psDLLNames->ppsDLLName[iCount]->pszDLLName);
-		free( psDLLNames->ppsDLLName[iCount]);
-	}
-
-	for( iCount = 0; iCount < psFileNameList->iListCount; iCount++)
-	{
-		free( psFileNameList->ppszListArray[iCount]);
-	}
-
-	free( psDLLNames->ppsDLLName);
-	free( psFileNameList->ppszListArray);
-
-	for( iCount = 0; iCount < eConfigMax; iCount++)
-	{
-		if( ppsDefaultParamList[iCount] != NULL)
-		{
-			free( (void *) ppsDefaultParamList[iCount]);
-		}
-	}
-}
-
-bool StringCompare( char * pszString1, char * pszString2)
-{
-	bool	bSame = false;
-
-	if( pszString1 == NULL || pszString2 == NULL)
-	{
-		return bSame;
-	}
-
-	if( strlen( pszString1) != strlen( pszString2))
-	{
-		return bSame;
-	}
-
-	if( strlen( pszString1) == 0)
-	{
-		bSame = true;
-	}
-	else
-	{
-		char *	psString1 = pszString1;
-		char *	psString2 = pszString2;
-
-		do
-		{
-			bSame = (toupper( *psString1++) == toupper( *psString2++));
-		} while( bSame && *psString1 != '\0');
-	}
-
-	return bSame;
-}
-
-void StringToUpper( char * pszString)
-{
-	if( pszString != NULL)
-	{
-		char *	pc = pszString;
-
-		while( *pc != '\0')
-		{
-			*pc = toupper( *pc);
-
-			pc++;
-		}
-	}
-}
-
-void CreateNewDLLNamesElement( DLLNAMES * psDLLNames, FILENAMELIST * psFileNameList)
-{
-	if( psDLLNames->iIndex >= psDLLNames->iMaxCount)
-	{
-		psDLLNames->iMaxCount = psDLLNames->iMaxCount * 2 + 1;
-
-		if( psDLLNames->ppsDLLName == NULL)
-		{
-			psDLLNames->ppsDLLName = (DLLNAMEINFO **) malloc( sizeof( void *) * psDLLNames->iMaxCount);
-		}
-		else
-		{
-			psDLLNames->ppsDLLName = (DLLNAMEINFO **) realloc( psDLLNames->ppsDLLName, sizeof( void *) * psDLLNames->iMaxCount);
-		}
-
-		for( int iNewIndex = psDLLNames->iIndex; iNewIndex < psDLLNames->iMaxCount; iNewIndex++)
-		{
-			psDLLNames->ppsDLLName[iNewIndex] = NULL;
-		}
-	}
-
-	psDLLNames->ppsDLLName[psDLLNames->iIndex] = (DLLNAMEINFO *) malloc( sizeof( DLLNAMEINFO));
-
-	memset( psDLLNames->ppsDLLName[psDLLNames->iIndex], 0, sizeof( DLLNAMEINFO));
 }
