@@ -11,7 +11,11 @@ int main( int argc, char * argv[])
 	int				iConfigInfoArray[eConfigMax];
 	CHOICELIST		sChoiceList[] = { {PLATFORM_TRANSPORTHTTP_PATH,	"HTTP Transport library",											AXCONF_TRANSPORTHTTP_TAGNAME,		eHTTPTransport,		eClientAndServer},
 									  {PLATFORM_CHANNEL_PATH,		"HTTP Channel library",												AXCONF_CHANNEL_HTTP_TAGNAME,		eHTTPChannel,		eClientAndServer},
-									  {"HTTPSSLCHANNEL",			"HTTP SSL Channel library",											AXCONF_SSLCHANNEL_HTTP_TAGNAME,		eHTTPSSLChannel,	eClientAndServer},
+#if WIN32
+									  {"HTTPSSLChannel.dll",		"HTTP SSL Channel library",											AXCONF_SSLCHANNEL_HTTP_TAGNAME,		eHTTPSSLChannel,	eClientAndServer},
+#else
+									  {"libhttp_channelssl.so",		"HTTP SSL Channel library",											AXCONF_SSLCHANNEL_HTTP_TAGNAME,		eHTTPSSLChannel,	eClientAndServer},
+#endif
 									  {PLATFORM_XMLPARSER_PATH,		"Axis XML Parser library",											AXCONF_XMLPARSER_TAGNAME,			eXMLParser,			eClientAndServer},
 									  {"SMTPTRANSPORT",				"SMTP Transport library",											AXCONF_TRANSPORTSMTP_TAGNAME,		eSMTPTransport,		eClientAndServer},
 									  {"LOG",						"client trace log path (only required if you want client trace)",	AXCONF_CLIENTLOGPATH_TAGNAME,		eClientLog,			eClient},
@@ -26,12 +30,6 @@ int main( int argc, char * argv[])
 	bool			bSuccess = false;
 	LIST			sFileNameList;
 	char *			psDefaultParamList[eConfigMax];
-
-#if WIN32
-	sChoiceList[2].pszElement = "HTTPSSLChannel.dll";
-#else
-	sChoiceList[2].pszElement = "libhttp_channelssl.so";
-#endif
 
 	Initialise( &sDLLNames, iConfigInfoArray, &sFileNameList, (char **) psDefaultParamList);
 
@@ -113,7 +111,11 @@ int main( int argc, char * argv[])
 							cin >> szLog;
 						}
 
+#if WIN32
 						sprintf( szFilename, "%s\\%s", szAxisCpp_Deploy, szLog);
+#else
+						sprintf( szFilename, "%s/%s", szAxisCpp_Deploy, szLog);
+#endif
 
 						iConfigInfoArray[sChoiceList[iChoiceCount].eConfigType] = PopulateNewDLLNameInfo( &sDLLNames, szLog, szFilename, true);
 					}

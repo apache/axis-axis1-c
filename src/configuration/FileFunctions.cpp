@@ -106,8 +106,11 @@ bool CheckAxisBinDirectoryExists( char * pszAxisCpp_Deploy, char * pszAxis_Bin, 
 
 						StringToUpper( psDLLNameInfo->pszDLLName);
 
+#if WIN32
 						sprintf( szFileDirAndName, "%s\\%s\\%s", pszAxisCpp_Deploy, pszAxis_Bin, (char *) psFileNameList->ppArray[iIndex]);
-
+#else
+						sprintf( szFileDirAndName, "%s/%s/%s", pszAxisCpp_Deploy, pszAxis_Bin, (char *) psFileNameList->ppArray[iIndex]);
+#endif
 						psDLLNameInfo->pszDLLFilename = (char *) malloc( strlen( szFileDirAndName) + 1);
 
 						strcpy( psDLLNameInfo->pszDLLFilename, szFileDirAndName);
