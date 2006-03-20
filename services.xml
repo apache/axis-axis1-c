@@ -1,4 +1,4 @@
-<project name="services" default="deployServices">
+<project name="services" default="deployServer">
 
     <import file="${basedir}/build/buildInitialize.xml" />
     <import file="${basedir}/build/testInitialize.xml" />
@@ -26,8 +26,6 @@
 #
 LogPath:${dir.test.generated}/server/ServerLog.taw
 WSDDFilePath:${wsdd.file}
-Transport_http:${dir.libraries}/${libraryPrefix}${HTTP.transportLibraryName}${librarySuffix}
-Channel_HTTP:${dir.libraries}/${libraryPrefix}${HTTP.ChannelLibraryName}${librarySuffix}
 XMLParser:${dir.libraries}/${libraryPrefix}${ClientParserLib}${librarySuffix}
 </echo>
     </target>
@@ -67,20 +65,18 @@ XMLParser:${dir.libraries}/${libraryPrefix}${ClientParserLib}${librarySuffix}
     </target>
 
 
-    <target name="deployServices"
-            depends="initialize, stopserver, createServerConfigurationFile, startWSDDFile, buildServices, endWSDDFile, runserver"
+    <target name="deployServer"
+            depends="initialize, stopserver, createServerConfigurationFile, createServerWSDDFile, runserver, deployServices"
             description="Build and deploy services for tests" />
 
+    <target name="undeployServer"
+            depends="initialize, undeployServices, stopserver"
+            description="Undeploy services and stop server"/>
 
-    <target name="startWSDDFile">
+    <target name="createServerWSDDFile">
         <dirname file="${wsdd.file}" property="WSDDFilePath"/>
         <mkdir dir="${WSDDFilePath}"/>
-        <echo file="${wsdd.file}">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:C="http://xml.apache.org/axis/wsdd/providers/C" xmlns:CPP="http://xml.apache.org/axis/wsdd/providers/CPP"&gt;
-&lt;globalConfiguration&gt;
-&lt;/globalConfiguration&gt;
-</echo>
-       <!-- 
+        
         <condition property="dir.adminService" value="${dir.release}/bin">
             <or>
                 <equals arg1="${platform}" arg2="Win32"/>
@@ -95,29 +91,38 @@ XMLParser:${dir.libraries}/${libraryPrefix}${ClientParserLib}${librarySuffix}
 	                <equals arg1="${platform}" arg2="Win64"/>
 	            </or>
             </not>
-        </condition> -->
+        </condition>
 
-        <!--  Insert entry for Admin Service -->
-<!--        <echo file="${wsdd.file}" append="true">&lt;service name="AxisAdmin" provider="CPP:DOCUMENT" description="Axis C++ Admin Service"&gt;
+        <echo file="${wsdd.file}">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:C="http://xml.apache.org/axis/wsdd/providers/C" xmlns:CPP="http://xml.apache.org/axis/wsdd/providers/CPP"&gt;
+&lt;globalConfiguration&gt;
+&lt;/globalConfiguration&gt;
+&lt;service name="AxisAdmin" provider="CPP:DOCUMENT" description="Axis C++ Admin Service"&gt;
 &lt;parameter name="className" value="${dir.adminService}/${libraryPrefix}${adminServiceLibraryName}${librarySuffix}"/&gt;
 &lt;/service&gt;
-</echo> -->
+</echo>
     </target>
 
-   <target name="endWSDDFile">
-        <echo file="${wsdd.file}" append="true">&lt;/deployment&gt;</echo>
-    </target>
-
-
-    <target name="buildServices" depends="initialize, setServiceList">
+    <target name="deployServices" depends="initialize, setServiceList">
         <echo message="buildservice: ${service.list}"/>
-        <foreach target="buildService"
+        <foreach target="deployService"
                  param="service_property"
                  inheritall="true">
             <path refid="service_properties" />
 			<param name="dir.release" value="${dir.release}"/>
 	  </foreach>
     </target>
+
+    <target name="undeployServices" depends="initialize, setServiceList">
+        <echo message="buildservice: ${service.list}"/>
+        <foreach target="undeployService"
+                 param="service_property"
+                 inheritall="true">
+            <path refid="service_properties" />
+            <param name="dir.release" value="${dir.release}"/>
+      </foreach>
+    </target>
+    
     <target name="setServiceList"
             depends="setServiceListType,setIndividualService,setFromServiceList,setAllServices" />
     <target name="setServiceListType">
@@ -167,9 +172,72 @@ XMLParser:${dir.libraries}/${libraryPrefix}${ClientParserLib}${librarySuffix}
         </path>
     </target>
 
-    <target name="buildService"
-            depends="setPropertiesForService,generateServerStubs, compileService, generateWSDDService" />
+    <target name="prepareAdminClient">
+        <mkdir dir="${dir.test.generated}/AdminClient"/>
+        
+	    <!-- Select which parser library to use -->
+	    <condition property="ClientParserLib" value="${xml4c.xmlParserLibraryName}">
+	        <istrue value="${testconf.client.parser.xml4c}"/>
+	    </condition>
+	    <condition property="ClientParserLib" value="${xerces.xmlParserLibraryName}">
+	        <istrue value="${testconf.client.parser.xerces}"/>
+	    </condition>
 
+        <condition property="adminconffile" value="${dir.test.generated}/AdminClient/axiscpp.conf">
+            <isset property="windows"/>
+        </condition>
+	    <condition property="adminconffile" value="${dir.test.generated}/AdminClient/etc/axiscpp.conf">
+            <not>   
+	           <isset property="windows"/>
+            </not>
+	    </condition>    
+	    <dirname file="${adminconffile}" property="adminconffilePath"/>
+	    <mkdir dir="${adminconffilePath}"/>
+	    <echo file="${adminconffile}"># The comment character is '#'
+# Available directives are as follows
+#
+# ClientLogPath:    The path to the axis log
+# XMLParser:        The xml parser library
+# Transport_http:   The HTTP Transport library   
+# Channel_HTTP:     The HTTP (non-SSL) Channel library   
+#
+ClientLogPath:${dir.test.generated}/server/${serviceLang}/${serviceName}/AdminClientLog.taw
+XMLParser:${dir.libraries}/${libraryPrefix}${ClientParserLib}${librarySuffix}
+Transport_http:${dir.libraries}/${libraryPrefix}${transportLibraryName}${librarySuffix}
+Channel_HTTP:${dir.libraries}/${libraryPrefix}${HTTP.ChannelLibraryName}${librarySuffix}
+</echo>
+    </target>
+
+    <target name="deployService"
+            depends="setPropertiesForService, generateServerStubs, compileService, generateWSDDService, prepareAdminClient">
+        <antcall target="runAdminClient" inheritall="true">
+            <param name="wsddFile" value="${dir.test.generated}/server/${serviceLang}/${serviceName}/deploy.wsdd"/>
+        </antcall>
+    </target>
+
+    <target name="runAdminClient">
+        <exec executable="${dir.release}/bin/${adminClientExecutableName}${executableSuffix}"
+            failifexecutionfails="true">
+            <arg line="localhost ${testPort} ${wsddFile}" />
+            <env key="PATH"
+                path="${java.library.path}${path.separator}${dir.libraries}" />
+            <env key="LD_LIBRARY_PATH"
+                path="${dir.libraries}" />
+            <env key="LIBPATH"
+                path="${dir.libraries}" />
+            <env key="SHLIB_PATH"
+                path="${dir.libraries}" />
+            <env key="AXISCPP_DEPLOY" value="${dir.test.generated}/AdminClient" />
+        </exec>
+    </target>
+
+    <target name="undeployService"
+            depends="setPropertiesForService, prepareAdminClient">
+        <antcall target="runAdminClient" inheritall="true">
+                    <param name="wsddFile" value="${dir.test.generated}/server/${serviceLang}/${serviceName}/undeploy.wsdd" />
+        </antcall>
+    </target>
+    
 
     <target name="setPropertiesForService"
             depends="loadServerXMLProperties,setServiceName,setServiceDesc,setServiceCode,setServiceLang,setServiceWsdl" />
@@ -179,6 +247,7 @@ XMLParser:${dir.libraries}/${libraryPrefix}${ClientParserLib}${librarySuffix}
         <echo message="Loading XML file ${service_property}" />
         <xmlproperty file="${service_property}" keepRoot="true" />
     </target>
+    
     <target name="setServiceName" if="service.name">
         <propertycopy property="serviceName" from="service.name" />
     </target>
@@ -331,9 +400,17 @@ XMLParser:${dir.libraries}/${libraryPrefix}${ClientParserLib}${librarySuffix}
     <target name="generateWSDDService">
         <xmlproperty file="${dir.test.generated}/server/${serviceLang}/${serviceName}/deploy.wsdd"
                      collapseAttributes="true" />
-        <echo file="${wsdd.file}" append="true">
-&lt;service name="${serviceName}" provider="${deployment.service.provider}" description="Axis C++ web service" &gt;
-&lt;parameter name="className" value="${dir.test.generated}/server/${serviceLang}/${serviceName}/${libraryPrefix}${serviceName}${librarySuffix}"/&gt;&lt;/service&gt;
+        <echo file="${dir.test.generated}/server/${serviceLang}/${serviceName}/deploy.wsdd">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:CPP="http://xml.apache.org/axis/wsdd/providers/CPP"&gt;
+    &lt;service name="${serviceName}" provider="${deployment.service.provider}" description="Axis C++ web service" &gt;
+        &lt;parameter name="className" value="${dir.test.generated}/server/${serviceLang}/${serviceName}/${libraryPrefix}${serviceName}${librarySuffix}"/&gt;
+    &lt;/service&gt;
+&lt;/deployment&gt;
+</echo>
+        <echo file="${dir.test.generated}/server/${serviceLang}/${serviceName}/undeploy.wsdd">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;undeployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:CPP="http://xml.apache.org/axis/wsdd/providers/CPP"&gt;
+    &lt;service name="${serviceName}"/&gt;
+&lt;/undeployment&gt;
 </echo>
     </target>
 </project>
