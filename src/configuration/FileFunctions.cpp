@@ -12,6 +12,7 @@ bool ReadFilenamesInaDirectory( char * pszDirName, LIST * psFileNameList)
 #else										// Else !(MSVC verison number > 7.0)
 	long				lFindFile;
 #endif										// End MSVC verison number
+
 	struct _finddata_t	sFindData;
 
 	if( (lFindFile = _findfirst( pszDirName, &sFindData)) != -1)
@@ -36,19 +37,13 @@ bool ReadFilenamesInaDirectory( char * pszDirName, LIST * psFileNameList)
 	struct dirent*		pDirEnt;
 	int					iFilenameCount = 0;
 
-	cout << "pszDirName=" << pszDirName << endl;
-
 	if( (psDIR = opendir( pszDirName)) == NULL)
 	{
 		return bSuccess;
 	}
 
-	cout << "2" << endl;
-
 	while( (pDirEnt = readdir( psDIR)) != NULL)
 	{
-		cout << "pDirEnt->d_name=" << pDirEnt->d_name << endl;
-
 		AddFilenameToList( psFileNameList, pDirEnt->d_name);
 	}
 
@@ -77,7 +72,11 @@ bool CheckAxisBinDirectoryExists( char * pszAxisCpp_Deploy, char * pszAxis_Bin, 
 	char	szFilename[512];
 	char	szFileDirAndName[512];
 
+#if WIN32
 	sprintf( szFilename, "%s\\%s\\*.*", pszAxisCpp_Deploy, pszAxis_Bin);
+#else
+	sprintf( szFilename, "%s/%s/.", pszAxisCpp_Deploy, pszAxis_Bin);
+#endif
 
 	if( (bFound = ReadFilenamesInaDirectory( szFilename, psFileNameList)) == true)
 	{

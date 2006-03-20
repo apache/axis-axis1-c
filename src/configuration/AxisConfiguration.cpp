@@ -27,6 +27,12 @@ int main( int argc, char * argv[])
 	LIST			sFileNameList;
 	char *			psDefaultParamList[eConfigMax];
 
+#if WIN32
+	sChoiceList[2].pszElement = "HTTPSSLChannel.dll";
+#else
+	sChoiceList[2].pszElement = "libhttp_channelssl.so";
+#endif
+
 	Initialise( &sDLLNames, iConfigInfoArray, &sFileNameList, (char **) psDefaultParamList);
 
 	switch( ReadConfigOptions( argc, argv, (char **) psDefaultParamList))
@@ -38,19 +44,18 @@ int main( int argc, char * argv[])
 			cout << "AxisConfiguration Server [params2]\tConfigure the server side." << endl;
 			cout << "AxisConfiguration Both [params3]\tConfigure the client and server side." << endl << endl;
 			cout << "The param list is as follows:-" << endl;
-			cout << "Client" << endl;
 			cout << "-a  root directory of Axis download (AXISCPP_HOME)" << endl;
 			cout << "-o  offset from AXISCPP_HOME to object files" << endl;
 			cout << "-th transport library name" << endl;
 			cout << "-c  channel library name" << endl;
 			cout << "-cs ssl channel library name" << endl;
 			cout << "-x  xerces library name" << endl;
+			cout << "Client Specific" << endl;
 			cout << "-cl client log filename" << endl;
 			cout << "-cw client WSDD filename" << endl;
-			cout << "Server" << endl;
-			cout << "" << endl;
-			cout << "Both" << endl;
-			cout << "" << endl;
+			cout << "Server Specific" << endl;
+			cout << "-sl server log filename" << endl;
+			cout << "-sw server WSDD filename" << endl;
 			break;
 		}
 
