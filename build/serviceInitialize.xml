@@ -16,7 +16,7 @@
 
                 <!-- environment variables start from here in pairs -->
                 <property name="serverenv.env" value="PATH" />
-                <property name="serverenv.env.value" value="${java.library.path};${dir.libraries}" />
+                <property name="serverenv.env.value" value="${java.library.path};${dir.libraries};${dir.xmlParser}" />
 
                 <!-- The path to axiscpp.conf -->
                 <!-- Set location of axiscpp.conf file -->
@@ -56,8 +56,7 @@
 
                     <!-- environment variables start from here in pairs -->
                     <property name="serverenv.env" value="LD_LIBRARY_PATH" />
-                    <property name="serverenv.env.value" value="${dir.libraries}:${basedir}/../../../Axis/webservices:${env.LD_LIBRARY_PATH}"
-/>
+                    <property name="serverenv.env.value" value="${dir.libraries}:${dir.xmlParser}" />
                   
 
                </then>
@@ -70,8 +69,7 @@
 
                     <!-- environment variables start from here in pairs -->
                     <property name="serverenv.env" value="LIBPATH" />
-                    <property name="serverenv.env.value" value="${dir.libraries}:${basedir}/../../../Axis/webservices:${env.LIBPATH}"
-/>
+                    <property name="serverenv.env.value" value="${dir.libraries}:${dir.xmlParser}" />
                 </then>
                 </elseif>
                 </if>
