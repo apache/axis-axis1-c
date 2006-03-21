@@ -220,13 +220,13 @@ Channel_HTTP:${dir.libraries}/${libraryPrefix}${HTTP.ChannelLibraryName}${librar
             failifexecutionfails="true">
             <arg line="localhost ${testPort} ${wsddFile}" />
             <env key="PATH"
-                path="${java.library.path}${path.separator}${dir.libraries}" />
+                path="${java.library.path}${path.separator}${dir.libraries}${path.separator}${dir.xmlParser}" />
             <env key="LD_LIBRARY_PATH"
-                path="${dir.libraries}" />
+                path="${dir.libraries}${path.separator}${dir.xmlParser}" />
             <env key="LIBPATH"
-                path="${dir.libraries}" />
+                path="${dir.libraries}${path.separator}${dir.xmlParser}" />
             <env key="SHLIB_PATH"
-                path="${dir.libraries}" />
+                path="${dir.libraries}${path.separator}${dir.xmlParser}" />
             <env key="AXISCPP_DEPLOY" value="${dir.test.generated}/AdminClient" />
         </exec>
     </target>
