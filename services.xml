@@ -26,16 +26,24 @@
 #
 LogPath:${dir.test.generated}/server/ServerLog.taw
 WSDDFilePath:${wsdd.file}
+Transport_http:${dir.libraries}/${libraryPrefix}${HTTP.transportLibraryName}${librarySuffix}
+Channel_HTTP:${dir.libraries}/${libraryPrefix}${HTTP.ChannelLibraryName}${librarySuffix}
 XMLParser:${dir.libraries}/${libraryPrefix}${ClientParserLib}${librarySuffix}
 </echo>
     </target>
 
 
     <target name="runserver" depends="initialize, decideserverproperties">
+	<echo>
+    line="${startargs}"
+    key="AXISCPP_DEPLOY" value="${axiscpp_deploy}/server"
+    key="${serverenv.env}" value="${dir.xmlParser}/bin${path.separator}${dir.xmlParser}/lib${path.separator}${serverenv.env.value}"
+    key="AXISCPP_STARTUP_TRACE" value="${dir.test.generated}/server/StartupTrace.taw"
+    	</echo>
         <exec executable="${serverexecutable}" spawn="true">
             <arg line="${startargs}" />
             <env key="AXISCPP_DEPLOY" value="${axiscpp_deploy}/server" />
-            <env key="${serverenv.env}" value="${serverenv.env.value}" />
+            <env key="${serverenv.env}" value="${dir.xmlParser}/bin${path.separator}${dir.xmlParser}/lib${path.separator}${serverenv.env.value}" />
             <env key="AXISCPP_STARTUP_TRACE" value="${dir.test.generated}/server/StartupTrace.taw"/>
         </exec>
     </target>
@@ -43,9 +51,9 @@ XMLParser:${dir.libraries}/${libraryPrefix}${ClientParserLib}${librarySuffix}
 
     <target name="stopserver" depends="initialize, decideserverproperties">
         <!-- This is necessary since stoppping apache2 is a problem sometimes.
-                        The user will have to manually stop the server in this case.-->
+                      The user will have to manually stop the server in this case.-->
         <if>
-            <isset property="stopargs" />
+			<isset property="stopargs" />
             <then>
                 <exec executable="${serverexecutable}">
                     <arg line="${stopargs}" />
@@ -413,5 +421,28 @@ Channel_HTTP:${dir.libraries}/${libraryPrefix}${HTTP.ChannelLibraryName}${librar
 &lt;/undeployment&gt;
 </echo>
     </target>
+	
+	<target name="checkParameters">
+		<description> This target checks that the user has put in the right params to run the default target with no errors.
+		If you find things out that leave you with a bad error message then put them in here to help out future users
+		</description>
+		<if>
+			<not>
+			<available file="${dir.xmlParser}"/>
+			</not>
+			<then>
+				<throw message="dir.xmlparser is not available. It is currently set to '${dir.xmlParser}'"/>
+			</then>
+		</if>
+		<if>
+			<not>
+			<available file="${env.AXISJAVA_LIB}"/>
+			</not>
+			<then>
+				<throw message="AXISJAVA_LIB must be set to where the prereq axis java libs are installed"/>
+			</then>
+		</if>
+		
+	</target>
 </project>
 
