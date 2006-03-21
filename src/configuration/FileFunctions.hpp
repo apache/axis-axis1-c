@@ -7,7 +7,6 @@
 #endif
 
 #include "AxisConfiguration.hpp"
-#include <time.h>
 
 bool ReadFilenamesInaDirectory( char * pszDirName, LIST * psFileNameList);
 void WriteAxisConfigFile( LIST * psDLLNames, int * piConfigInfoArray, CHOICELIST * psChoiceList, bool bMerge, char * pszAxisCpp_Deploy, char cSlash);

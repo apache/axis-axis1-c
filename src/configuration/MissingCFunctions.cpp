@@ -47,3 +47,27 @@ void StringToUpper( char * pszString)
 	}
 }
 
+char * TimeNow()
+{
+#if WIN32
+#if defined(_MSC_VER) && _MSC_VER >= 1300	// Start MSVC verison number > 7.0
+	__time64_t	ltime;
+
+	_time64( &ltime);
+
+	return _ctime64( &ltime);
+#else										// Else !(MSVC verison number > 7.0)
+	time_t sTimeNow;
+
+    sTimeNow = time( NULL);
+
+	return asctime( localtime( &sTimeNow));
+#endif										// End MSVC verison number
+#else
+	time_t	sTimeNow;
+
+	sTimeNow = time( NULL);
+
+	return asctime( localtime( &sTimeNow));
+#endif
+}

@@ -153,27 +153,9 @@ void WriteAxisConfigFile( LIST * psDLLNames, int * piConfigInfoArray, CHOICELIST
 			if( lFileLength < 5)
 			{
 				char		szConfigData[512];
-#if WIN32
-#if defined(_MSC_VER) && _MSC_VER >= 1300	// Start MSVC verison number > 7.0
-				__time64_t	ltime;
 
-				_time64( &ltime);
+				sprintf( szConfigData, "# This header file was created by AxisConfiguration on %s", TimeNow());
 
-				sprintf( szConfigData, "# This header file was created by AxisConfiguration on %s", _ctime64( &ltime));
-#else										// Else !(MSVC verison number > 7.0)
-				time_t sTimeNow;
-
-			    sTimeNow = time( NULL);
-
-				sprintf( szConfigData, "# This header file was created by AxisConfiguration on %s", asctime( localtime( &sTimeNow)));
-#endif										// End MSVC verison number
-#else
-				time_t sTimeNow;
-
-			    sTimeNow = time( NULL);
-
-				sprintf( szConfigData, "# This header file was created by AxisConfiguration on %s", asctime( localtime( &sTimeNow)));
-#endif
 				WriteLineToFile( pFile, szConfigData);
 
 				WriteLineToFile( pFile, "# The comment character is '#'\n");
@@ -283,27 +265,7 @@ void WriteAxisConfigFile( LIST * psDLLNames, int * piConfigInfoArray, CHOICELIST
 		FILE *		pFile = fopen( szFilename, "w");
 		char		szConfigData[512];
 
-#if WIN32
-#if defined(_MSC_VER) && _MSC_VER >= 1300	// Start MSVC verison number > 7.0
-				__time64_t	ltime;
-
-				_time64( &ltime);
-
-				sprintf( szConfigData, "# This header file was created by AxisConfiguration on %s", _ctime64( &ltime));
-#else										// Else !(MSVC verison number > 7.0)
-				time_t sTimeNow;
-
-			    sTimeNow = time( NULL);
-
-				sprintf( szConfigData, "# This header file was created by AxisConfiguration on %s", asctime( localtime( &sTimeNow)));
-#endif										// End MSVC verison number
-#else
-		time_t sTimeNow;
-
-		sTimeNow = time( NULL);
-
-		sprintf( szConfigData, "# This header file was created by AxisConfiguration on %s", asctime( localtime( &sTimeNow)));
-#endif
+		sprintf( szConfigData, "# This header file was created by AxisConfiguration on %s", TimeNow());
 
 		WriteLineToFile( pFile, szConfigData);
 
@@ -352,27 +314,8 @@ bool BackUpExistingConfigFile( char * pszAxisCpp_Deploy, char * pszFilename, cha
 		{
 			long		lFileLength = GetFileLength( pFileFrom);
 			char		szBackupHeader[256];
-#if WIN32
-#if defined(_MSC_VER) && _MSC_VER >= 1300	// Start MSVC verison number > 7.0
-			__time64_t	ltime;
 
-			_time64( &ltime);
-
-			sprintf( szBackupHeader, "# This header file was automatically backed up by AxisConfiguration on %s", _ctime64( &ltime));
-#else										// Else !(MSVC verison number > 7.0)
-			time_t sTimeNow;
-
-		    sTimeNow = time( NULL);
-
-			sprintf( szBackupHeader, "# This header file was automatically backed up by AxisConfiguration on %s", asctime( localtime( &sTimeNow)));
-#endif										// End MSVC verison number
-#else
-			time_t	sTimeNow;
-
-			sTimeNow = time( NULL);
-
-			sprintf( szBackupHeader, "# This header file was automatically backed up by AxisConfiguration on %s", asctime( localtime( &sTimeNow)));
-#endif
+			sprintf( szBackupHeader, "# This header file was automatically backed up by AxisConfiguration on %s", TimeNow());
 
 			char *	pFileContent = (char *) malloc( lFileLength + strlen( szBackupHeader) + 2);
 
