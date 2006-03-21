@@ -42,7 +42,7 @@ main (int argc, char *argv[])
     int iResult;
 
     // Set default service URL
-    sprintf (endpoint, "http://localhost/axis/calculator");
+    sprintf (endpoint, "http://localhost/axis/Calculator");
     sprintf (original, endpoint);
 
     try
