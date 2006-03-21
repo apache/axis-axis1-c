@@ -3,7 +3,7 @@
 #include "MissingCFunctions.hpp"
 #include "AxisConfigurationLibraries.hpp"
 
-// Client -a c:\wscc -o obj\bin -th transport.dll -c channel.dll -cs sslChannel.dll -x xerces.dll -cl client.log
+// Client -a c:\wscc -o obj\bin -m on -th transport.dll -c channel.dll -cs sslChannel.dll -x xerces.dll -cl client.log
 
 int main( int argc, char * argv[])
 {
@@ -30,10 +30,19 @@ int main( int argc, char * argv[])
 	bool			bSuccess = false;
 	LIST			sFileNameList;
 	char *			psDefaultParamList[eConfigMax];
+#if WIN32
+	char			cSlash = '\\';
+	char *			pszPackageName = "axis-c-1.6-Win32-bin\\bin";
+#else
+	char			cSlash = '/';
+	char *			pszPackageName = "axis-c-1.6-Linux-bin/bin";
+#endif
+	char			szAxisCpp_Deploy[256];
+
 
 	Initialise( &sDLLNames, iConfigInfoArray, &sFileNameList, (char **) psDefaultParamList);
 
-	switch( ReadConfigOptions( argc, argv, (char **) psDefaultParamList))
+	switch( ReadConfigOptions( argc, argv, (char **) psDefaultParamList, cSlash))
 	{
 		case eEmpty:
 		{
@@ -43,30 +52,145 @@ int main( int argc, char * argv[])
 			cout << "AxisConfiguration Both [params3]\tConfigure the client and server side." << endl << endl;
 			cout << "The param list is as follows:-" << endl;
 			cout << "-a  root directory of Axis download (AXISCPP_HOME)" << endl;
-			cout << "-o  offset from AXISCPP_HOME to object files" << endl;
+#if WIN32
+			cout << "    example: -a c:\\Axis" << endl;
+#else
+			cout << "    example: -a /home/userid/Axis" << endl;
+#endif
+			cout << "-o  directory offset from AXISCPP_HOME to object files" << endl;
+#if WIN32
+			cout << "    example: -o " << pszPackageName << endl;
+#else
+			cout << "    example: -o " << pszPackageName << endl;
+#endif
 			cout << "-th transport library name" << endl;
+			cout << "    if -a and -o have both already been defined, then only the" << endl;
+			cout << "    filename is required.  Otherwise the fully qualified path will" << endl;
+			cout << "    be required (NB: You can still override the -a and -o definitions" << endl;
+			cout << "    by using a fully qulified path)." << endl;
+			cout << "    example (with -a and -o defined): " << endl;
+#if WIN32
+			cout << "    -th HTTPTransport.dll" << endl;
+			cout << "    example (without -a and -o defined): " << endl;
+			cout << "    -th c:\\Axis\\" << pszPackageName << "\\HTTPTransport.dll" << endl;
+#else
+			cout << "    -th libhttp_transport.so" << endl;
+			cout << "    example (without -a and -o defined): " << endl;
+			cout << "    -th /home/userid/Axis/" << pszPackageName << "/libhttp_transport.so" << endl;
+#endif
 			cout << "-c  channel library name" << endl;
+			cout << "    if -a and -o have both already been defined, then only the" << endl;
+			cout << "    filename is required.  Otherwise the fully qualified path will" << endl;
+			cout << "    be required (NB: You can still override the -a and -o definitions" << endl;
+			cout << "    by using a fully qulified path)." << endl;
+			cout << "    example (with -a and -o defined): " << endl;
+#if WIN32
+			cout << "    -c HTTPChannel.dll" << endl;
+			cout << "    example (without -a and -o defined): " << endl;
+			cout << "    -c c:\\Axis\\" << pszPackageName << "\\HTTPChannel.dll" << endl;
+#else
+			cout << "    -c libhttp_channel.so" << endl;
+			cout << "    example (without -a and -o defined): " << endl;
+			cout << "    -c /home/userid/Axis/" << pszPackageName << "/libhttp_channel.so" << endl;
+#endif
 			cout << "-cs ssl channel library name" << endl;
+			cout << "    if -a and -o have both already been defined, then only the" << endl;
+			cout << "    filename is required.  Otherwise the fully qualified path will" << endl;
+			cout << "    be required (NB: You can still override the -a and -o definitions" << endl;
+			cout << "    by using a fully qulified path)." << endl;
+			cout << "    example (with -a and -o defined): " << endl;
+#if WIN32
+			cout << "    -cs HTTPSSLChannel.dll" << endl;
+			cout << "    example (without -a and -o defined): " << endl;
+			cout << "    -cs c:\\Axis\\" << pszPackageName << "\\HTTPSSLChannel.dll" << endl;
+#else
+			cout << "    -cs libhttp_channelssl.so" << endl;
+			cout << "    example (without -a and -o defined): " << endl;
+			cout << "    -cs /home/userid/Axis/" << pszPackageName << "/libhttp_channelssl.so" << endl;
+#endif
 			cout << "-x  xerces library name" << endl;
+			cout << "    if -a and -o have both already been defined, then only the" << endl;
+			cout << "    filename is required.  Otherwise the fully qualified path will" << endl;
+			cout << "    be required (NB: You can still override the -a and -o definitions" << endl;
+			cout << "    by using a fully qulified path)." << endl;
+			cout << "    example (with -a and -o defined): " << endl;
+#if WIN32
+			cout << "    -x AxisXMLParserXerces.dll" << endl;
+			cout << "    example (without -a and -o defined): " << endl;
+			cout << "    -x c:\\Axis\\" << pszPackageName << "\\AxisXMLParserXerces.dll" << endl;
+#else
+			cout << "    -x libaxis_xerces.so" << endl;
+			cout << "    example (without -a and -o defined): " << endl;
+			cout << "    -x /home/userid/Axis/" << pszPackageName << "/libaxis_xerces.so" << endl;
+#endif
+			cout << "-m  merge with existing configuration file" << endl;
+			cout << "    example: -m on|off (the default is 'off' meaning 'overwrite')" << endl;
 			cout << "Client Specific" << endl;
 			cout << "-cl client log filename" << endl;
+			cout << "    if -a has been defined, then only the filename is required." << endl;
+			cout << "    Otherwise the fully qualified path will be required." << endl;
+			cout << "    (NB: You can still override the -a and -o definitions by using" << endl;
+			cout << "    a fully qulified path)." << endl;
+			cout << "    example (with -a defined): " << endl;
+			cout << "    -cl client.log" << endl;
+			cout << "    example (without -a defined): " << endl;
+#if WIN32
+			cout << "    -cl c:\\Axis\\client.log" << endl;
+#else
+			cout << "    -cl /home/userid/Axis/client.log" << endl;
+#endif
 			cout << "-cw client WSDD filename" << endl;
+			cout << "    if -a and -o have both already been defined, then only the" << endl;
+			cout << "    filename is required.  Otherwise the fully qualified path will" << endl;
+			cout << "    be required (NB: You can still override the -a and -o definitions" << endl;
+			cout << "    by using a fully qulified path)." << endl;
+			cout << "    example (with -a and -o defined): " << endl;
+			cout << "    -cw client.wsdd" << endl;
+			cout << "    example (without -a and -o defined): " << endl;
+#if WIN32
+			cout << "    -cw c:\\Axis\\WSDD\\client.wsdd" << endl;
+#else
+			cout << "    -cw /home/userid/Axis/WSDD/client.wsdd" << endl;
+#endif
 			cout << "Server Specific" << endl;
 			cout << "-sl server log filename" << endl;
+			cout << "    if -a has been defined, then only the filename is required." << endl;
+			cout << "    Otherwise the fully qualified path will be required." << endl;
+			cout << "    (NB: You can still override the -a and -o definitions by using" << endl;
+			cout << "    a fully qulified path)." << endl;
+			cout << "    example (with -a defined): " << endl;
+			cout << "    -sl server.log" << endl;
+			cout << "    example (without -a defined): " << endl;
+#if WIN32
+			cout << "    -sl c:\\Axis\\server.log" << endl;
+#else
+			cout << "    -sl /home/userid/Axis/server.log" << endl;
+#endif
 			cout << "-sw server WSDD filename" << endl;
+			cout << "    if -a and -o have both already been defined, then only the" << endl;
+			cout << "    filename is required.  Otherwise the fully qualified path will" << endl;
+			cout << "    be required (NB: You can still override the -a and -o definitions" << endl;
+			cout << "    by using a fully qulified path)." << endl;
+			cout << "    example (with -a and -o defined): " << endl;
+			cout << "    -sw server.wsdd" << endl;
+			cout << "    example (without -a and -o defined): " << endl;
+#if WIN32
+			cout << "    -sw c:\\Axis\\WSDD\\server.wsdd" << endl;
+#else
+			cout << "    -sw /home/userid/Axis/WSDD/server.wsdd" << endl;
+#endif
 			break;
 		}
 
 		case eClient:
 		{
-			char	szAxisCpp_Deploy[256];
 			char	szAxis_Bin[256];
 			char	szAxis_Bin_Default[256];
 
 			cout << "Axis Client Configuration" << endl;
 			cout << "=========================" << endl;
 
-			GetHomeAndLibrary( &sDLLNames, szAxisCpp_Deploy, szAxis_Bin, szAxis_Bin_Default, &sFileNameList, (char **) psDefaultParamList);
+			GetHomeAndLibrary( &sDLLNames, szAxisCpp_Deploy, szAxis_Bin, szAxis_Bin_Default, &sFileNameList, (char **) psDefaultParamList, pszPackageName);
 
 			int	iChoiceCount = 0;
 
@@ -104,7 +228,7 @@ int main( int argc, char * argv[])
 							}
 						}
 
-						char			szFilename[512];
+						char	szFilename[512];
 
 						if( szLog[0] == '\0')
 						{
@@ -135,14 +259,13 @@ int main( int argc, char * argv[])
 
 		case eServer:
 		{
-			char	szAxisCpp_Deploy[256];
 			char	szAxis_Bin[256];
 			char	szAxis_Bin_Default[256];
 
 			cout << "Axis Server Configuration" << endl;
 			cout << "=========================" << endl;
 
-			GetHomeAndLibrary( &sDLLNames, szAxisCpp_Deploy, szAxis_Bin, szAxis_Bin_Default, &sFileNameList, (char **) psDefaultParamList);
+			GetHomeAndLibrary( &sDLLNames, szAxisCpp_Deploy, szAxis_Bin, szAxis_Bin_Default, &sFileNameList, (char **) psDefaultParamList, pszPackageName);
 
 			bSuccess = true;
 
@@ -160,7 +283,7 @@ int main( int argc, char * argv[])
 
 	if( bSuccess)
 	{
-		WriteAxisConfigFile( &sDLLNames, iConfigInfoArray, sChoiceList);
+		WriteAxisConfigFile( &sDLLNames, iConfigInfoArray, sChoiceList, StringCompare( psDefaultParamList[eMerge], "on"), szAxisCpp_Deploy, cSlash);
 	}
 
 	Destroy( &sDLLNames, &sFileNameList, (char **) psDefaultParamList);
@@ -168,7 +291,7 @@ int main( int argc, char * argv[])
 	return (int) bSuccess;
 }
 
-ECONFIG	ReadConfigOptions( int iParamCount, char * pParamArray[], char ** ppsDefaultParamList)
+ECONFIG	ReadConfigOptions( int iParamCount, char * pParamArray[], char ** ppsDefaultParamList, char cSlash)
 {
 	ECONFIG		eConfig = eEmpty;
 	OPTIONLIST	sOptions[] = {{eHTTPTransport,	"TH"},
@@ -181,7 +304,12 @@ ECONFIG	ReadConfigOptions( int iParamCount, char * pParamArray[], char ** ppsDef
 							  {eServerLog,		"SL"},
 							  {eRootDirectory,	"A"},
 							  {eOffsetToLibs,	"O"},
-							  {eServerWSDD,		"SW"}};
+							  {eServerWSDD,		"SW"},
+							  {eMerge,			"M"}};
+
+	ppsDefaultParamList[eMerge] = (char *) malloc( strlen( "off "));
+
+	strcpy( ppsDefaultParamList[eMerge], "off");
 
 	for( int iCount = 0; iCount < iParamCount; iCount++)
 	{
@@ -223,14 +351,13 @@ ECONFIG	ReadConfigOptions( int iParamCount, char * pParamArray[], char ** ppsDef
 				if( iCount < iParamCount)
 				{
 					if( ppsDefaultParamList[eOffsetToLibs] != NULL &&
-						ppsDefaultParamList[eRootDirectory] != NULL)
+						ppsDefaultParamList[eRootDirectory] != NULL &&
+						!(sOptions[iIndex].eConfType == eClientLog || 
+						  sOptions[iIndex].eConfType == eServerLog) &&
+						strchr( pParamArray[iCount], cSlash) == NULL)
 					{
 						char	szLocation[512];
-						char	cSlash = '/';
 
-#if WIN32
-						cSlash = '\\';
-#endif
 						sprintf( szLocation, "%s%c%s%c%s", ppsDefaultParamList[eRootDirectory], cSlash, ppsDefaultParamList[eOffsetToLibs], cSlash, pParamArray[iCount]);
 
 						ppsDefaultParamList[sOptions[iIndex].eConfType] = (char *) malloc( strlen( szLocation) + 1);
@@ -256,21 +383,34 @@ ECONFIG	ReadConfigOptions( int iParamCount, char * pParamArray[], char ** ppsDef
 }
 
 
-void GetHomeAndLibrary( LIST * psDLLNames, char * pszAxisCpp_Deploy, char * pszAxis_Bin, char * pszAxis_Bin_Default, LIST * psFileNameList, char ** ppsDefaultParamList)
+void GetHomeAndLibrary( LIST * psDLLNames, char * pszAxisCpp_Deploy, char * pszAxis_Bin, char * pszAxis_Bin_Default, LIST * psFileNameList, char ** ppsDefaultParamList, char * pszPackageName)
 {
+	char *	pszCurrentAxisCppDeployEnv = getenv( "AXISCPP_DEPLOY");
+
 	if( ppsDefaultParamList[eRootDirectory] == NULL)
 	{
 #if WIN32
 		cout << "Type in the Axis fully qualified directory path (e.g. C:\\Axis)" << endl
 			<< "used when Axis was unzipped (NB: this directory must also contain the" << endl
-			<< "axiscpp.conf file)." << endl;
+			<< "axiscpp.conf file).";
 #else
 		cout << "Type in the Axis fully qualified directory path (e.g. /home/Axis)" << endl
 			<< "used when Axis was unzipped (NB: this directory must also contain the" << endl
-			<< "etc/axiscpp.conf file)." << endl;
+			<< "etc/axiscpp.conf file).";
 #endif
-		cout << "AXISCPP_DEPLOY = ";
+		if( pszCurrentAxisCppDeployEnv != NULL)
+		{
+			cout << "  Type '*' to used the existing value of the environment" << endl;
+			cout << "variable (i.e. '" << pszCurrentAxisCppDeployEnv << "').";
+		}
+
+		cout << endl << "AXISCPP_DEPLOY = ";
 		cin >> pszAxisCpp_Deploy;
+
+		if( *pszAxisCpp_Deploy == '*' && pszCurrentAxisCppDeployEnv != NULL)
+		{
+			strcpy( pszAxisCpp_Deploy, pszCurrentAxisCppDeployEnv);
+		}
 	}
 	else
 	{
@@ -291,25 +431,32 @@ void GetHomeAndLibrary( LIST * psDLLNames, char * pszAxisCpp_Deploy, char * pszA
 		}
 	}
 
-	strcpy( pszAxis_Bin_Default, pszAxisCpp_Deploy);
-
-#if WIN32
-	strcat( pszAxis_Bin_Default, "\\axis-c-1.6-Win32-trace-bin\\bin");
-#else
-	strcat( pszAxis_Bin_Default, "/axis-c-1.6-Linux-trace-bin/bin");
-#endif
+//	strcpy( pszAxis_Bin_Default, pszAxisCpp_Deploy);
+//
+//#if WIN32
+//	strcat( pszAxis_Bin_Default, "\\");
+//#else
+//	strcat( pszAxis_Bin_Default, "/");
+//#endif
+//
+	strcpy( pszAxis_Bin_Default, pszPackageName);
 
 	if( ppsDefaultParamList[eOffsetToLibs] == NULL)
 	{
-		cout << endl << "Instruction:" << endl
-			<< "You will need to create an environment variable called " << endl
-			<< "\"AXISCPP_DEPLOY\" and set it to " << pszAxisCpp_Deploy << "." << endl
-			<< "On the command line this would be:-" << endl
+		if( pszCurrentAxisCppDeployEnv == NULL)
+		{
+			cout << endl << "Instruction:" << endl
+				 << "You will need to create an environment variable called " << endl
+				 << "\"AXISCPP_DEPLOY\" and set it to " << pszAxisCpp_Deploy << "." << endl
+				 << "On the command line this would be:-" << endl
 #if WIN32
-			 << "SET AXISCPP_DEPLOY=" << pszAxisCpp_Deploy << endl << endl;
+				 << "SET AXISCPP_DEPLOY=" << pszAxisCpp_Deploy << endl;
 #else
-			 << "EXPORT AXISCPP_DEPLOY=" << pszAxisCpp_Deploy << endl << endl;
+				 << "EXPORT AXISCPP_DEPLOY=" << pszAxisCpp_Deploy << endl;
 #endif
+		}
+
+		cout << endl;
 
 		do
 		{
@@ -352,16 +499,25 @@ void SelectFileFromList( CHOICELIST * psChoiceList, int iChoiceCount, LIST * psD
 
 		StringToUpper( pszUpper);
 
+		char *	pszExtn = strchr( pszUpper, '.');
+
+		if( pszExtn != NULL)
+		{
+			*pszExtn = '\0';
+		}
+
 		while( iDLLCount < psDLLNames->iCount)
 		{
+			DLLNAMEINFO *	pszDLLNameInfo = ((DLLNAMEINFO *) psDLLNames->ppArray[iDLLCount]);
 
-			if( ((DLLNAMEINFO *) psDLLNames->ppArray[iDLLCount])->pszDLLName != NULL && strstr( ((DLLNAMEINFO *) psDLLNames->ppArray[iDLLCount])->pszDLLName, pszUpper) != NULL)
+			if( pszDLLNameInfo->pszDLLName != NULL &&
+				strstr( pszDLLNameInfo->pszDLLName, pszUpper) != NULL)
 			{
 				int *	piDLLOffset = (int *) GetNextListElement( &sDLLOffsetList, sizeof( int));
 
 				*piDLLOffset = iDLLCount;
 
-				cout << sDLLOffsetList.iCount << ".\t" << ((DLLNAMEINFO *) psDLLNames->ppArray[iDLLCount])->pszDLLFilename << endl;
+				cout << sDLLOffsetList.iCount << ".\t" << pszDLLNameInfo->pszDLLFilename << endl;
 			}
 
 			iDLLCount++;
@@ -412,7 +568,7 @@ void SelectFileFromList( CHOICELIST * psChoiceList, int iChoiceCount, LIST * psD
 			}
 			else
 			{
-				cout << "There are no recognised file names for the type of DLL." << endl << "You will have to modify the configuration file namually." << endl << endl;
+				cout << "There are no recognised file names for the type of file/library." << endl << "You will have to modify the configuration file namually." << endl << endl;
 
 				bHTTPTransportFound = true;
 			}

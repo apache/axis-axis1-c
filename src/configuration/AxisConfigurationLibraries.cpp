@@ -1,6 +1,6 @@
 #include "AxisConfigurationLibraries.hpp"
 
-const char * CreateConfigElement( LIST * psDLLNames, int * piConfigInfoArray, CHOICELIST * psChoiceList, ECONFIGTYPE eConfigType)
+char * CreateConfigElement( LIST * psDLLNames, int * piConfigInfoArray, CHOICELIST * psChoiceList, ECONFIGTYPE eConfigType)
 {
 	int					iIndex = 0;
 	bool				bFound = false;
@@ -36,16 +36,28 @@ const char * CreateConfigElement( LIST * psDLLNames, int * piConfigInfoArray, CH
 
 	if( piConfigInfoArray[eConfigType] != -1)
 	{
-		sprintf( szReturn, "%s:%s\n", pszConfigName, ((DLLNAMEINFO *)(psDLLNames->ppArray[piConfigInfoArray[eConfigType]]))->pszDLLFilename);
+		sprintf( szReturn, "%s:%s\n\n", pszConfigName, ((DLLNAMEINFO *)(psDLLNames->ppArray[piConfigInfoArray[eConfigType]]))->pszDLLFilename);
 	}
 	else
 	{
-		sprintf( szReturn, "#%s:<not set>\n", pszConfigName);
+		sprintf( szReturn, "#%s:<not set>\n\n", pszConfigName);
 	}
 
 	sReturn += szReturn;
 
-	return sReturn.c_str();
+	return (char *) sReturn.c_str();
+}
+
+char * GetTagValue( LIST * psDLLNames, int * piConfigInfoArray, ECONFIGTYPE eConfigType)
+{
+	char *	pszTagValue = NULL;
+
+	if( piConfigInfoArray[eConfigType] != -1)
+	{
+		pszTagValue = ((DLLNAMEINFO *)(psDLLNames->ppArray[piConfigInfoArray[eConfigType]]))->pszDLLFilename;
+	}
+
+	return pszTagValue;
 }
 
 void Initialise( LIST * psDLLNames, int * piConfigInfoArray, LIST * psFileNameList, char ** ppsDefaultParamList)
@@ -109,4 +121,29 @@ int PopulateNewDLLNameInfo( LIST * psDLLNames, char * pszName, char * pszFilenam
 	psDLLNameInfo->bAddToClientConfig = bAddToClientConfig;
 
 	return psDLLNames->iCount - 1;
+}
+
+int GetChoiceIndexForConfigType( CHOICELIST * psChoiceList, ECONFIGTYPE eConfigType)
+{
+	int					iIndex = 0;
+	bool				bFound = false;
+
+	while( iIndex < eConfigMax && !bFound)
+	{
+		if( psChoiceList[iIndex].eConfigType == eConfigType)
+		{
+			bFound = true;
+		}
+		else
+		{
+			iIndex++;
+		}
+	}
+
+	if( !bFound)
+	{
+		iIndex = -1;
+	}
+
+	return iIndex;
 }

@@ -2,12 +2,12 @@
 
 #define __AXIS_CONFIG__
 
+#undef _DEBUG
+
 #include <iostream>
 #include "platforms/PlatformAutoSense.hpp"
 #include "common/AxisConfig.h"
 #include "ListMethods.hpp"
-
-#undef _DEBUG
 
 using namespace std;
 
@@ -33,6 +33,7 @@ typedef enum
 	eServerWSDD,
 	eRootDirectory,
 	eOffsetToLibs,
+	eMerge,
 	eConfigMax
 } ECONFIGTYPE;
 
@@ -58,9 +59,9 @@ typedef struct
 	char *			pszOption;
 } OPTIONLIST;
 
-ECONFIG	ReadConfigOptions( int iParamCount, char * pszParamArray[], char ** ppsDefaultParamList);
+ECONFIG	ReadConfigOptions( int iParamCount, char * pszParamArray[], char ** ppsDefaultParamList, char cSlash);
 bool CheckAxisBinDirectoryExists( char * pszAxisCpp_Deploy, char * pszAxis_Bin, char * pszAxis_Bin_Default, LIST * psLIST, LIST * psFileNameList);
-void GetHomeAndLibrary( LIST * psLIST, char * pszAxisCpp_Deploy, char * pszAxis_Bin, char * pszAxis_Bin_Default, LIST * psFileNameList, char ** ppsDefaultParamList);
+void GetHomeAndLibrary( LIST * psLIST, char * pszAxisCpp_Deploy, char * pszAxis_Bin, char * pszAxis_Bin_Default, LIST * psFileNameList, char ** ppsDefaultParamList, char * pszPackageName);
 void SelectFileFromList( CHOICELIST * psChoiceList, int iChoiceCount, LIST * psLIST, int * piConfigInfoArray, char ** ppsDefaultParamList, LIST * psFileNameList, char * pszAxisCpp_Deploy);
 void AddFilenameToList( LIST * psFileNameList, char * pszFilename);
 bool FileExists( char * pszFilename);
