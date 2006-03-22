@@ -76,11 +76,8 @@ public class Response
         this.message=message.toCharArray( );
         // parse the message to see if it has a Connection: Close in it
         if (message.toLowerCase( ).indexOf("connection: close")>-1)
-        {
             hasCloseConnectionHeader=true;
-        }
-
-        
+       
         // Find out if the message is chunked
         deriveIsChunked( );
         
@@ -102,11 +99,8 @@ public class Response
         Matcher matcher=pattern.matcher(msgString);
         
         if(matcher.find())
-        {
            msgString = matcher.replaceAll(""+LF);
-        }
         message = msgString.toCharArray();
-        
     }
 
     private void deriveIsChunked( )
@@ -146,12 +140,8 @@ public class Response
         }
         else
         {
-            if (System.getProperty("os.name").toLowerCase( ).startsWith(
-                    "windows"))
-            {
-                System.out
-                        .println("Windows operating system - not converting crlf's");
-            }
+            if (System.getProperty("os.name").toLowerCase( ).startsWith("windows"))
+                System.out.println("Windows operating system - not converting crlf's");
             else
             {
                 String request=new String(getMessage( ));
@@ -217,9 +207,7 @@ public class Response
         Matcher matcher = pattern.matcher(response);
         
         if(!matcher.find())
-        {
             System.err.println( "ERROR: Response message does not contain a correctly formatted HTTP header:" +response);
-        }
         
         return matcher.replaceAll("$3");
     }
@@ -291,19 +279,14 @@ private String correctChunkedData(String request)
             // chunkFromSize is null so we can see later on that we need to guess
         }
         else
-        {
             chunkFromSize = request.substring(chunkStart, chunkStart+chunkSize);
-        }
         
         String chunk=""; 
         int endOfThisChunk;
         // Now find the end of the chunk (and while we do that we actually find the next chunk size too !
         
         if(!theNextChunkSizeMatcher.find())
-        {
-            // if there isn't one then it means that this is the last chunk
             endOfThisChunk = request.length()-1;
-        }
         else
         {
             chunkEnd = theNextChunkSizeMatcher.start();
@@ -333,9 +316,7 @@ private String correctChunkedData(String request)
                 chunkSizeString = ""+Integer.toHexString(chunk.length())+CRLF;
             }
             else
-            {
                 chunkSizeString = CRLF+Integer.toHexString(chunk.length())+CRLF;
-            }
         }
         
         // Check that the chunk size really is the same size as it should be.

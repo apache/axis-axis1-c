@@ -46,11 +46,9 @@ public class MockServer extends ChildHandler implements Runnable
     
     public static final void printUsage( )
     {
-        System.out
-                .println("Usage: java MockServer -p <port> -r <responseFile>");
+        System.out.println("Usage: java MockServer -p <port> -r <responseFile>");
         System.out.println("port: the port to listen for requests on");
-        System.out
-                .println("responseFile: The file to write out when a request is received");
+        System.out.println("responseFile: The file to write out when a request is received");
     }
 
     public static void main(String[] args)
@@ -99,8 +97,7 @@ public class MockServer extends ChildHandler implements Runnable
                 catch (NumberFormatException numberFormatException)
                 {
                     printUsage( );
-                    throw new NumberFormatException("port is not an integer "
-                            +portString);
+                    throw new NumberFormatException("port is not an integer " +portString);
                 }
             }
             if (arguments[i].equals("-r"))
@@ -142,8 +139,7 @@ public class MockServer extends ChildHandler implements Runnable
         {
             try
             {
-                System.out
-                        .println("Mockserver#run(): About to wait for incoming client request");
+                System.out.println("Mockserver#run(): About to wait for incoming client request");
                 incoming=serverSocket.accept( );
 
                 // Set keep-alive option to ensure that if server crashes we do not 
@@ -166,6 +162,7 @@ public class MockServer extends ChildHandler implements Runnable
                 exception.printStackTrace(System.err);
                 continueToRun=false;
             }
+            
             if (incoming!=null)
             {
                 try

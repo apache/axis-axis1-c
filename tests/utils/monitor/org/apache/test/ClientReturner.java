@@ -48,8 +48,7 @@ public class ClientReturner extends ChildHandler implements Runnable
     protected ClientReturner(Socket clientSocket) throws IOException
     {
         number++;
-        streamToClient=new BufferedWriter(new OutputStreamWriter(clientSocket
-                .getOutputStream( )));
+        streamToClient=new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream( )));
     }
 
     /**
@@ -65,9 +64,7 @@ public class ClientReturner extends ChildHandler implements Runnable
         //        System.out.println( "ClientReturner(): entry");
         // create the reader from the server
         this.serviceSocket = serviceSocket;
-        serverResponseStream=new BufferedReader(new InputStreamReader(
-                serviceSocket.getInputStream( )));
-
+        serverResponseStream=new BufferedReader(new InputStreamReader(serviceSocket.getInputStream( )));
     }
 
     /**
@@ -90,8 +87,7 @@ public class ClientReturner extends ChildHandler implements Runnable
         {
             while (continueToRun)
             {
-                bytesRead=serverResponseStream.read(readBuffer, 0,
-                        READ_BUFFER_SIZE);
+                bytesRead=serverResponseStream.read(readBuffer, 0, READ_BUFFER_SIZE);
                 //                System.out.println( "Clientreturner got some bytes from the
                 // server "+bytesRead);
                 if (bytesRead!=-1)
@@ -107,13 +103,11 @@ public class ClientReturner extends ChildHandler implements Runnable
                     }
                     catch (IOException exception)
                     {
-                        System.err
-                                .println("IOException when writing server response back to client");
+                        System.err.println("IOException when writing server response back to client");
                         exception.printStackTrace(System.err);
                     }
                     // System.out.println("ClientReturner#run(): flushed");
-                    TCPMonitor.getInstance( ).writeResponse(readBuffer,
-                            bytesRead);
+                    TCPMonitor.getInstance( ).writeResponse(readBuffer,bytesRead);
                     System.out.println("About to go around again");
                 }
                 else
@@ -141,8 +135,7 @@ public class ClientReturner extends ChildHandler implements Runnable
             exception.printStackTrace();
             if(TCPMonitor.state<TCPMonitor.CLOSING_STATE)
             {
-                System.err
-                	.println("ClientReturner#run(): IOException when reading in response from server ");
+                System.err.println("ClientReturner#run(): IOException when reading in response from server ");
                 exception.printStackTrace(System.err);
             }
             else

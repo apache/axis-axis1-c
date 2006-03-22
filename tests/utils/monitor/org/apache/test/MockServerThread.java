@@ -57,13 +57,15 @@ public class MockServerThread extends ChildHandler implements Runnable
             throws IOException , StopRequestException
     {
         System.out.println("MockServerThread(): entry");
+        
+        inputStream = null;
+        outputStream = null;
         this.socket = socket; 
         setSocketTimeouts();
+        
         try
         {
-            // get the input and outputstreams
-            inputStream=new BufferedReader(new InputStreamReader(socket
-                    .getInputStream( )));
+            inputStream=new BufferedReader(new InputStreamReader(socket.getInputStream( )));
         }
         catch (IOException e)
         {
@@ -72,8 +74,7 @@ public class MockServerThread extends ChildHandler implements Runnable
         }
         try
         {
-            outputStream=new BufferedWriter(new OutputStreamWriter(socket
-                    .getOutputStream( )));
+            outputStream=new BufferedWriter(new OutputStreamWriter(socket.getOutputStream( )));
         }
         catch (IOException e1)
         {
@@ -107,29 +108,26 @@ public class MockServerThread extends ChildHandler implements Runnable
     {
         // Read in the first few bytes of the message to see if it's a stop
         // message
-        char[] charBuffer=new char[StopMockServer.STOPMOCKSERVER_STRING
-                .length( )];
+        char[] charBuffer=new char[StopMockServer.STOPMOCKSERVER_STRING.length( )];
         int totalBytesRead=0;
         String message="";
         int bytesRead=0;
         System.out.println("MockServerThread#run():About to wait for stop msg");
-        System.out
-                .println("----------------------------------MockServer Thread new Request------------------------");
+        System.out.println("----------------------------------MockServer Thread new Request------------------------");
 
         while (totalBytesRead<StopMockServer.STOPMOCKSERVER_STRING.length( ))
         {
             try
             {
-                bytesRead=inputStream.read(charBuffer, 0,
-                        StopMockServer.STOPMOCKSERVER_STRING.length( ));
-                System.out.println("MockServerThread#run(): Got some bytes: "
-                        +bytesRead);
+                bytesRead=inputStream.read(charBuffer, 0, StopMockServer.STOPMOCKSERVER_STRING.length( ));
+                System.out.println("MockServerThread#run(): Got some bytes: " +bytesRead);
             }
             catch (IOException exception)
             {
                 exception.printStackTrace(System.err);
                 throw exception;
             }
+            
             if (bytesRead>-1)
             {
                 message+=new String(charBuffer, 0, bytesRead);
@@ -139,17 +137,13 @@ public class MockServerThread extends ChildHandler implements Runnable
             {
                 System.out.println("got -1 but Got message "+message);
                 return message;
-                //                throw new IOException(
-                //                        "read in -1 bytes when trying to read the initial few bytes
-                // from the client");
             }
         }
 
         if (message.equals(StopMockServer.STOPMOCKSERVER_STRING))
         {
             // we've been told to stop
-            System.out
-                    .println("--------------------------------------------------------------------");
+            System.out.println("--------------------------------------------------------------------");
             throw new StopRequestException("MockServer has been told to stop");
         }
         else
@@ -170,50 +164,36 @@ public class MockServerThread extends ChildHandler implements Runnable
         char[] charBuffer=new char[CHARBUFFER_SIZE];
         try
         {
-            System.out
-                    .println("MockServerThread#run(): About to wait on the inputstream");
+            System.out.println("MockServerThread#run(): About to wait on the inputstream");
             while ((bytesRead=inputStream.read(charBuffer))!=-1)
             {
-                System.out
-                        .println("MockServerThread#run(): Got some more bytes "
-                                +bytesRead);
+                System.out.println("MockServerThread#run(): Got some more bytes " +bytesRead);
 
                 // See whether this ends with an envelope
                 if (bytesRead>ENVELOPE_TAG.length( )+2)
                 {
                     String envelopeString=new String(charBuffer, bytesRead
-                            -(ENVELOPE_TAG.length( )+2),
-                            ENVELOPE_TAG.length( )+2);
-                    System.out
-                            .println("MockServerThread#run():EnvelopeString = "
-                                    +envelopeString);
+                            -(ENVELOPE_TAG.length( )+2), ENVELOPE_TAG.length( )+2);
+                    System.out.println("MockServerThread#run():EnvelopeString = " +envelopeString);
                     // Check whether this is an envelope or not
                     if (envelopeString.startsWith(ENVELOPE_TAG)
                             ||envelopeString.indexOf(MIME_BOUNDARY)!=-1)
                     {
-                        System.out
-                                .println("MockServerThread#run():Got an envelope");
-                        // OK, so now output the response message to the
-                        // client
+                        System.out.println("MockServerThread#run():Got an envelope");
+
                         sendResponseToClient( );
-                        System.out
-                                .println("-------------------------------MockServer new request---------------------------------");
+                        System.out.println("-------------------------------MockServer new request---------------------------------");
                     }
                 }
-                System.out.println("MockServerThread#run(): Going round again "
-                        +inputStream);
+                System.out.println("MockServerThread#run(): Going round again " +inputStream);
             }
         }
         catch (IOException exception)
         {
             if(!closedConnection)
-            {
                 exception.printStackTrace(System.err);
-            }
             else
-            {
                 System.out.println( "MockServerThread#run(): Connection Has Been Closed");
-            }
         }
         System.out.println("MockServerThread#run(): exit");
     }
@@ -230,20 +210,17 @@ public class MockServerThread extends ChildHandler implements Runnable
     {
         // Create a seperate thread and return
         Response responseMessage=getResponseMessage( );
-//        System.out.println( "responsemessage ======="+responseMessage);
-//        System.out.println( "===================================================");
+
         if (responseMessage!=null)
         {
-            ResponseSender responseSender=new ResponseSender(responseMessage,
-                    outputStream, this);
+            ResponseSender responseSender=new ResponseSender(responseMessage,outputStream, this);
             addChild(responseSender);
             Thread responseSenderThread=new Thread(responseSender);
             responseSenderThread.start( );
         }
         else
         {
-            System.err
-                    .println("We've run out of responses to send back to the client");
+            System.err.println("We've run out of responses to send back to the client");
             throw new IOException("No more responses to send to clients");
         }
     }
@@ -341,20 +318,15 @@ public class MockServerThread extends ChildHandler implements Runnable
 					if( hashPos == -1)
 				    {
 					    hashPos = orgResponse.lastIndexOf( "0");
-					    
 					    eom = true;
 				    }
 	
 					int chunkLength;
 					
 		            if( System.getProperty( "os.name").toLowerCase().startsWith( "windows"))
-		            {
 		                chunkLength = hashPos - 4; // Take into account the CR+LF's that surround the chunk size, so subtract 4.
-		            }
 		            else
-		            {
 		                chunkLength = hashPos - 2; // Take into account the LF's that surround the chunk size, so subtract 2.
-		            }
 	
 					// Add the next chunk length and data from the original to the new response.
 		                
@@ -367,9 +339,7 @@ public class MockServerThread extends ChildHandler implements Runnable
 					    orgResponse = "";
 				    }
 				    else
-				    {
 					    orgResponse = orgResponse.substring( hashPos + hash.length());
-				    }
 				}
             }
 
