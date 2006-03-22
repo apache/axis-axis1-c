@@ -194,7 +194,8 @@ Please use these to configure directories to suit the needs of your system.
 				<mkdir dir="${dir.release}/bin"/>
 				<copy todir="${dir.release}/bin">
 					<fileset dir="${dir.bin}" includes="${simpleAxisServerExecutableName}"/>
-				</copy>				
+				</copy>
+			    <chmod perm="ugo+x" file="${dir.release}/bin/${simpleAxisServerExecutableName}"/>
 			</then>
 		</if>
         <if>
@@ -204,6 +205,7 @@ Please use these to configure directories to suit the needs of your system.
                 <copy todir="${dir.release}/bin">
                     <fileset dir="${dir.bin}" includes="${adminClientExecutableName}${executableSuffix}"/>
                 </copy>
+                <chmod perm="ugo+x" file="${dir.release}/bin/${adminClientExecutableName}${executableSuffix}"/>
             </then>
         </if>
 	</target>
