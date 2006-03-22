@@ -52,7 +52,7 @@
 	<target name="buildCBindings" depends="generateCHeaders, compileCBindings" if="buildCBindings"
 	  description="Generate the C bindings and compile and link the C bindings client library"/>
 
-	<target name="generateCHeaders" depends="buildTools"
+	<target name="generateCHeaders" depends="buildTools"  if="buildCBindings"
 	  description="Run the C binding generator tool">
 		<!--  make sure we've got a clean output directory structure -->
 		<delete dir="${dir.obj}/include"/>
