@@ -75,7 +75,6 @@ main (int argc, char *argv[])
 	    }
 	}
 
-	cout << endl << " Using service at " << endpoint << endl << endl;
 	Calculator ws (endpoint);
 
 	op = argv[1];
