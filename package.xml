@@ -72,7 +72,9 @@ Please use these to configure directories to suit the needs of your system.
 		<copy todir="${dir.release}/include">
 			<fileset dir="${basedir}/include" includes="**"/>
 		</copy>
-		<copy todir="${dir.release}/include">
+		<!-- copy over the c include files which have been generated. the failonerror is the easiest way to do this
+		otherwise I have to load in common.properties and that could end in tears ! -->
+		<copy todir="${dir.release}/include" failonerror="false">
 			<fileset dir="${dir.obj}/include" includes="**"/>
 		</copy>
 	</target>
