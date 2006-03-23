@@ -67,6 +67,9 @@ AXISCHANDLE axiscCreateStub(const char * pcEndPointURI,
 AXISC_STORAGE_CLASS_INFO 
 void axiscDestroyStub(AXISCHANDLE stub) 
 {
+	if ((AXISCHANDLE)NULL == stub)
+		return;
+			
     AxisObjectContainer *h = (AxisObjectContainer *)stub;
     StubC *s = (StubC*)h->_objHandle;
     

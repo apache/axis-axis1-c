@@ -20,7 +20,6 @@
 
 #include "../AxisObjectContainer.hpp"
 
-
 AXIS_CPP_NAMESPACE_USE
 
 extern "C" {
@@ -56,6 +55,9 @@ AXISCHANDLE axiscCreateCall()
 AXISC_STORAGE_CLASS_INFO 
 void axiscDestroyCall(AXISCHANDLE call) 
 {
+	if ((AXISCHANDLE)NULL == call)
+		return;
+
     AxisObjectContainer *h = (AxisObjectContainer *)call;
     Call *c = (Call*)h->_objHandle;
     
@@ -93,6 +95,8 @@ void axiscSetSOAPVersionCall(AXISCHANDLE call,
     }
     catch ( ... )
     {
+        h->_exception.setExceptionCode(-1);  
+        h->_exception.setMessage("Unrecognized exception thrown.");  
         axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
     }
 }
@@ -101,7 +105,7 @@ AXISC_STORAGE_CLASS_INFO
 int axiscSetTransportPropertyCall(AXISCHANDLE call, 
                                   AXISC_TRANSPORT_INFORMATION_TYPE type, 
                                   const char * value) 
-{
+{   
     AxisObjectContainer *h = (AxisObjectContainer *)call;
     h->_exception.resetException();
     Call *c = (Call*)h->_objHandle;
