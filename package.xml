@@ -200,16 +200,26 @@ Please use these to configure directories to suit the needs of your system.
 			    <chmod perm="ugo+x" file="${dir.release}/bin/${simpleAxisServerExecutableName}"/>
 			</then>
 		</if>
-        <if>
-            <available file="${dir.bin}/${adminClientExecutableName}${executableSuffix}"/>
-            <then>
-                <mkdir dir="${dir.release}/bin"/>
-                <copy todir="${dir.release}/bin">
-                    <fileset dir="${dir.bin}" includes="${adminClientExecutableName}${executableSuffix}"/>
-                </copy>
-                <chmod perm="ugo+x" file="${dir.release}/bin/${adminClientExecutableName}${executableSuffix}"/>
-            </then>
-        </if>
+		<if>
+			<available file="${dir.bin}/${adminClientExecutableName}${executableSuffix}"/>
+			<then>
+				<mkdir dir="${dir.release}/bin"/>
+				<copy todir="${dir.release}/bin">
+					<fileset dir="${dir.bin}" includes="${adminClientExecutableName}${executableSuffix}"/>
+				</copy>
+				<chmod perm="ugo+x" file="${dir.release}/bin/${adminClientExecutableName}${executableSuffix}"/>
+			</then>
+		</if>
+		<if>
+			<available file="${dir.bin}/${axisConfigurationExecutableName}${executableSuffix}"/>
+			<then>
+				<mkdir dir="${dir.release}/bin"/>
+				<copy todir="${dir.release}/bin">
+					<fileset dir="${dir.bin}" includes="${axisConfigurationExecutableName}${executableSuffix}"/>
+				</copy>
+				<chmod perm="ugo+x" file="${dir.release}/bin/${axisConfigurationExecutableName}${executableSuffix}"/>
+			</then>
+		</if>
 	</target>
 
 	<target name="copyLibraries" depends="copyWindowsLibraries, copyUnixLibraries"/>
