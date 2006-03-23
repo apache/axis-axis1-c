@@ -23,13 +23,22 @@ char * CreateConfigElement( LIST * psDLLNames, int * piConfigInfoArray, CHOICELI
 
 	if( bFound)
 	{
-		sReturn = "#Path to ";
-		sReturn += psChoiceList[iIndex].pszElementDescription;
-		sReturn += "\n";
+		if( eConfigType == eSSLOptions)
+		{
+			sReturn = "# ";
+			sReturn += psChoiceList[iIndex].pszElementDescription;
+			sReturn += "\n";
+		}
+		else
+		{
+			sReturn = "# Path to ";
+			sReturn += psChoiceList[iIndex].pszElementDescription;
+			sReturn += "\n";
+		}
 	}
 	else
 	{
-		sReturn = "#Path to an unknown element\n";
+		sReturn = "# Path to an unknown element\n";
 	}
 
 	char	szReturn[256];

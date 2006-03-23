@@ -316,6 +316,33 @@
 			<istrue value="${testconf.client.parser.xerces}"/>
 		</condition>
 
+		<exec dir="${dir.bin}" executable="${axisConfigurationExecutableName}${executableSuffix}">
+			<arg line="Client -acd  ${confFileDirectory}
+						-th ${dir.libraries}/${libraryPrefix}${transportLibraryName}${librarySuffix}
+						-c  ${dir.libraries}/${libraryPrefix}${HTTP.ChannelLibraryName}${librarySuffix}
+						-cs ${dir.libraries}/${libraryPrefix}${HTTP.SecureChannelLibraryName}${librarySuffix}
+						-x  ${dir.libraries}/${ClientParserLib}
+						-cl ignore
+						-so ${env.SSL_KEYS_HOME}/myKeyRing.kdb,axis4all,AXIS,NONE,05,NONE,false
+						-b  false
+						-v  quiet"
+			/>
+		</exec>
+	</target>
+
+	<target name="createConfigurationFileOld" depends="checkIfDebug" if="successfulClientCompilation">
+		<dirname file="${axiscpp.conf}" property="confFileDirectory"/>
+
+		<mkdir dir="${confFileDirectory}"/>
+
+		<!-- Select which parser library to use -->
+		<condition property="ClientParserLib" value="${libraryPrefix}${xml4c.xmlParserLibraryName}${librarySuffix}">
+			<istrue value="${testconf.client.parser.xml4c}"/>
+		</condition>
+		<condition property="ClientParserLib" value="${libraryPrefix}${xerces.xmlParserLibraryName}${librarySuffix}">
+			<istrue value="${testconf.client.parser.xerces}"/>
+		</condition>
+
 		<echo file="${axiscpp.conf}">#Available directives are as follows:
 #
 # ClientLogPath:	 The path to the client log

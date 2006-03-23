@@ -131,7 +131,7 @@ bool CheckAxisBinDirectoryExists( char * pszAxisCpp_Deploy, char * pszAxis_Bin, 
 	return bFound;
 }
 
-void WriteAxisConfigFile( LIST * psDLLNames, int * piConfigInfoArray, CHOICELIST * psChoiceList, bool bMerge, char * pszAxisCpp_Deploy, char cSlash)
+void WriteAxisConfigFile( LIST * psDLLNames, int * piConfigInfoArray, CHOICELIST * psChoiceList, bool bMerge, char * pszAxisCpp_Deploy, char cSlash, bool bBackup)
 {
 	char	szFilename[256];
 
@@ -139,7 +139,10 @@ void WriteAxisConfigFile( LIST * psDLLNames, int * piConfigInfoArray, CHOICELIST
 
 	cout << endl << "Configuration complete." << endl << endl;
 
-	BackUpExistingConfigFile( pszAxisCpp_Deploy, szFilename, cSlash);
+	if( bBackup)
+	{
+		BackUpExistingConfigFile( pszAxisCpp_Deploy, szFilename, cSlash);
+	}
 
 	if( bMerge)
 	{
@@ -286,6 +289,7 @@ void WriteAxisConfigFile( LIST * psDLLNames, int * piConfigInfoArray, CHOICELIST
 		WriteLineToFile( pFile, CreateConfigElement( psDLLNames, piConfigInfoArray, psChoiceList, eXMLParser));
 		WriteLineToFile( pFile, CreateConfigElement( psDLLNames, piConfigInfoArray, psChoiceList, eHTTPChannel));
 		WriteLineToFile( pFile, CreateConfigElement( psDLLNames, piConfigInfoArray, psChoiceList, eHTTPSSLChannel));
+		WriteLineToFile( pFile, CreateConfigElement( psDLLNames, piConfigInfoArray, psChoiceList, eSSLOptions));
 
 		fclose( pFile);
 	}

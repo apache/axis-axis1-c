@@ -33,7 +33,11 @@ typedef enum
 	eServerWSDD,
 	eRootDirectory,
 	eOffsetToLibs,
+	eSSLOptions,
+	eVolume,
 	eMerge,
+	eAxisConfigDir,
+	eBackup,
 	eConfigMax
 } ECONFIGTYPE;
 

@@ -24,9 +24,10 @@ int main( int argc, char * argv[])
 									  {"WSDD",						"server WSDD path",													AXCONF_WSDDFILEPATH_TAGNAME,		eServerWSDD,		eServer},
 									  {"",							"",																	AXCONF_NODENAME_TAGNAME,			eUnknown,			eServer},
 									  {"",							"",																	AXCONF_LISTENPORT_TAGNAME,			eUnknown,			eServer},
-									  {"",							"",																	AXCONF_SECUREINFO_TAGNAME,			eUnknown,			eClientAndServer},
+									  {"",							"SSL Options",														AXCONF_SECUREINFO_TAGNAME,			eSSLOptions,		eClientAndServer},
 									  {"",							"Root directory",													0,									eUnknown,			eEmpty},
-									  {"",							"library offset directory",											0,									eUnknown,			eEmpty}};
+									  {"",							"library offset directory",											0,									eUnknown,			eEmpty},
+									  {"",							"volume of output",													0,									eUnknown,			eClientAndServer}};
 	bool			bSuccess = false;
 	LIST			sFileNameList;
 	char *			psDefaultParamList[eConfigMax];
@@ -130,8 +131,8 @@ int main( int argc, char * argv[])
 			cout << "    if -a has been defined, then only the filename is required." << endl;
 			cout << "    Otherwise the fully qualified path will be required." << endl;
 			cout << "    (NB: You can still override the -a and -o definitions by using" << endl;
-			cout << "    a fully qulified path)." << endl;
-			cout << "    example (with -a defined): " << endl;
+			cout << "    a fully qulified path).  To ignore the client log, using 'ignore'" << endl;
+			cout << "    instead of a filename.  Example (with -a defined): " << endl;
 			cout << "    -cl client.log" << endl;
 			cout << "    example (without -a defined): " << endl;
 #if WIN32
@@ -235,13 +236,19 @@ int main( int argc, char * argv[])
 							cin >> szLog;
 						}
 
+						if( StringCompare( "IGNORE", szLog))
+						{
+							iConfigInfoArray[sChoiceList[iChoiceCount].eConfigType] = PopulateNewDLLNameInfo( &sDLLNames, NULL, NULL, true);
+						}
+						else
+						{
 #if WIN32
-						sprintf( szFilename, "%s\\%s", szAxisCpp_Deploy, szLog);
+							sprintf( szFilename, "%s\\%s", szAxisCpp_Deploy, szLog);
 #else
-						sprintf( szFilename, "%s/%s", szAxisCpp_Deploy, szLog);
+							sprintf( szFilename, "%s/%s", szAxisCpp_Deploy, szLog);
 #endif
-
-						iConfigInfoArray[sChoiceList[iChoiceCount].eConfigType] = PopulateNewDLLNameInfo( &sDLLNames, szLog, szFilename, true);
+							iConfigInfoArray[sChoiceList[iChoiceCount].eConfigType] = PopulateNewDLLNameInfo( &sDLLNames, szLog, szFilename, true);
+						}
 					}
 					else
 					{
@@ -250,6 +257,16 @@ int main( int argc, char * argv[])
 				}
 
 				iChoiceCount++;
+			}
+
+			if( psDefaultParamList[eSSLOptions] != NULL)
+			{
+				iConfigInfoArray[eSSLOptions] = PopulateNewDLLNameInfo( &sDLLNames, NULL, psDefaultParamList[eSSLOptions], true);
+			}
+
+			if( psDefaultParamList[eAxisConfigDir] != NULL)
+			{
+				iConfigInfoArray[eAxisConfigDir] = PopulateNewDLLNameInfo( &sDLLNames, NULL, psDefaultParamList[eAxisConfigDir], true);
 			}
 
 			bSuccess = true;
@@ -283,7 +300,14 @@ int main( int argc, char * argv[])
 
 	if( bSuccess)
 	{
-		WriteAxisConfigFile( &sDLLNames, iConfigInfoArray, sChoiceList, StringCompare( psDefaultParamList[eMerge], "on"), szAxisCpp_Deploy, cSlash);
+		if( psDefaultParamList[eAxisConfigDir] == NULL)
+		{
+			WriteAxisConfigFile( &sDLLNames, iConfigInfoArray, sChoiceList, StringCompare( psDefaultParamList[eMerge], "on"), szAxisCpp_Deploy, cSlash, StringCompare( psDefaultParamList[eBackup], "true"));
+		}
+		else
+		{
+			WriteAxisConfigFile( &sDLLNames, iConfigInfoArray, sChoiceList, StringCompare( psDefaultParamList[eMerge], "on"), psDefaultParamList[eAxisConfigDir], cSlash, StringCompare( psDefaultParamList[eBackup], "true"));
+		}
 	}
 
 	Destroy( &sDLLNames, &sFileNameList, (char **) psDefaultParamList);
@@ -305,11 +329,19 @@ ECONFIG	ReadConfigOptions( int iParamCount, char * pParamArray[], char ** ppsDef
 							  {eRootDirectory,	"A"},
 							  {eOffsetToLibs,	"O"},
 							  {eServerWSDD,		"SW"},
+							  {eSSLOptions,		"SO"},
+							  {eVolume,			"V"},
+							  {eAxisConfigDir,	"ACD"},
+							  {eBackup,			"B"},
 							  {eMerge,			"M"}};
 
 	ppsDefaultParamList[eMerge] = (char *) malloc( strlen( "off "));
+	ppsDefaultParamList[eVolume] = (char *) malloc( strlen( "normal "));
+	ppsDefaultParamList[eBackup] = (char *) malloc( strlen( "true "));
 
 	strcpy( ppsDefaultParamList[eMerge], "off");
+	strcpy( ppsDefaultParamList[eVolume], "normal");
+	strcpy( ppsDefaultParamList[eBackup], "true");
 
 	for( int iCount = 0; iCount < iParamCount; iCount++)
 	{
@@ -353,7 +385,9 @@ ECONFIG	ReadConfigOptions( int iParamCount, char * pParamArray[], char ** ppsDef
 					if( ppsDefaultParamList[eOffsetToLibs] != NULL &&
 						ppsDefaultParamList[eRootDirectory] != NULL &&
 						!(sOptions[iIndex].eConfType == eClientLog || 
-						  sOptions[iIndex].eConfType == eServerLog) &&
+						  sOptions[iIndex].eConfType == eServerLog ||
+						  sOptions[iIndex].eConfType == eBackup ||
+						  sOptions[iIndex].eConfType == eSSLOptions) &&
 						strchr( pParamArray[iCount], cSlash) == NULL)
 					{
 						char	szLocation[512];
@@ -387,95 +421,89 @@ void GetHomeAndLibrary( LIST * psDLLNames, char * pszAxisCpp_Deploy, char * pszA
 {
 	char *	pszCurrentAxisCppDeployEnv = getenv( "AXISCPP_DEPLOY");
 
-	if( ppsDefaultParamList[eRootDirectory] == NULL)
+	if( ppsDefaultParamList[eAxisConfigDir] == NULL)
 	{
-#if WIN32
-		cout << "Type in the Axis fully qualified directory path (e.g. C:\\Axis)" << endl
-			<< "used when Axis was unzipped (NB: this directory must also contain the" << endl
-			<< "axiscpp.conf file).";
-#else
-		cout << "Type in the Axis fully qualified directory path (e.g. /home/Axis)" << endl
-			<< "used when Axis was unzipped (NB: this directory must also contain the" << endl
-			<< "etc/axiscpp.conf file).";
-#endif
-		if( pszCurrentAxisCppDeployEnv != NULL)
-		{
-			cout << "  Type '*' to used the existing value of the environment" << endl;
-			cout << "variable (i.e. '" << pszCurrentAxisCppDeployEnv << "').";
-		}
-
-		cout << endl << "AXISCPP_DEPLOY = ";
-		cin >> pszAxisCpp_Deploy;
-
-		if( *pszAxisCpp_Deploy == '*' && pszCurrentAxisCppDeployEnv != NULL)
-		{
-			strcpy( pszAxisCpp_Deploy, pszCurrentAxisCppDeployEnv);
-		}
-	}
-	else
-	{
-		strcpy( pszAxisCpp_Deploy, ppsDefaultParamList[eRootDirectory]);
-	}
-
-	if( ppsDefaultParamList[eOffsetToLibs] != NULL)
-	{
-		strcpy( pszAxis_Bin, ppsDefaultParamList[eOffsetToLibs]);
-
-		if( !CheckAxisBinDirectoryExists( pszAxisCpp_Deploy, pszAxis_Bin, pszAxis_Bin_Default, psDLLNames, psFileNameList))
-		{
-			cout << "Axis binaries directory not found." << endl;
-
-			free( (void *) ppsDefaultParamList[eOffsetToLibs]);
-
-			ppsDefaultParamList[eOffsetToLibs] = NULL;
-		}
-	}
-
-//	strcpy( pszAxis_Bin_Default, pszAxisCpp_Deploy);
-//
-//#if WIN32
-//	strcat( pszAxis_Bin_Default, "\\");
-//#else
-//	strcat( pszAxis_Bin_Default, "/");
-//#endif
-//
-	strcpy( pszAxis_Bin_Default, pszPackageName);
-
-	if( ppsDefaultParamList[eOffsetToLibs] == NULL)
-	{
-		if( pszCurrentAxisCppDeployEnv == NULL)
-		{
-			cout << endl << "Instruction:" << endl
-				 << "You will need to create an environment variable called " << endl
-				 << "\"AXISCPP_DEPLOY\" and set it to " << pszAxisCpp_Deploy << "." << endl
-				 << "On the command line this would be:-" << endl
-#if WIN32
-				 << "SET AXISCPP_DEPLOY=" << pszAxisCpp_Deploy << endl;
-#else
-				 << "EXPORT AXISCPP_DEPLOY=" << pszAxisCpp_Deploy << endl;
-#endif
-		}
-
-		cout << endl;
-
-		do
+		if( ppsDefaultParamList[eRootDirectory] == NULL)
 		{
 #if WIN32
-			cout << "Type in the directory where the Axis libraries (e.g. axis_client.dll) can be" << endl
-					<< "found.  (If you type '*', it will use the default '" << pszAxis_Bin_Default << "')." << endl;
+			cout << "Type in the Axis fully qualified directory path (e.g. C:\\Axis)" << endl
+				<< "used when Axis was unzipped (NB: this directory must also contain the" << endl
+				<< "axiscpp.conf file).";
 #else
-			cout << "Type in the directory where the Axis libraries (e.g. axis_client.so) can be" << endl
-					<< "found.  (If you type '*', it will use the default '" << pszAxis_Bin_Default << "')." << endl;
+			cout << "Type in the Axis fully qualified directory path (e.g. /home/Axis)" << endl
+				<< "used when Axis was unzipped (NB: this directory must also contain the" << endl
+				<< "etc/axiscpp.conf file).";
 #endif
-			cout << "Axis binaries directory = ";
-			cin >> pszAxis_Bin;
-
-			if( !strcmp( pszAxis_Bin, "*"))
+			if( pszCurrentAxisCppDeployEnv != NULL)
 			{
-				strcpy( pszAxis_Bin, pszAxis_Bin_Default);
+				cout << "  Type '*' to used the existing value of the environment" << endl;
+				cout << "variable (i.e. '" << pszCurrentAxisCppDeployEnv << "').";
+			}
+
+			cout << endl << "AXISCPP_DEPLOY = ";
+			cin >> pszAxisCpp_Deploy;
+
+			if( *pszAxisCpp_Deploy == '*' && pszCurrentAxisCppDeployEnv != NULL)
+			{
+				strcpy( pszAxisCpp_Deploy, pszCurrentAxisCppDeployEnv);
 			}
 		}
-		while( !CheckAxisBinDirectoryExists( pszAxisCpp_Deploy, pszAxis_Bin, pszAxis_Bin_Default, psDLLNames, psFileNameList));
+		else
+		{
+			strcpy( pszAxisCpp_Deploy, ppsDefaultParamList[eRootDirectory]);
+		}
+
+		if( ppsDefaultParamList[eOffsetToLibs] != NULL)
+		{
+			strcpy( pszAxis_Bin, ppsDefaultParamList[eOffsetToLibs]);
+
+			if( !CheckAxisBinDirectoryExists( pszAxisCpp_Deploy, pszAxis_Bin, pszAxis_Bin_Default, psDLLNames, psFileNameList))
+			{
+				cout << "Axis binaries directory not found." << endl;
+
+				free( (void *) ppsDefaultParamList[eOffsetToLibs]);
+
+				ppsDefaultParamList[eOffsetToLibs] = NULL;
+			}
+		}
+
+		strcpy( pszAxis_Bin_Default, pszPackageName);
+
+		if( ppsDefaultParamList[eOffsetToLibs] == NULL)
+		{
+			if( pszCurrentAxisCppDeployEnv == NULL)
+			{
+				cout << endl << "Instruction:" << endl
+					 << "You will need to create an environment variable called " << endl
+					 << "\"AXISCPP_DEPLOY\" and set it to " << pszAxisCpp_Deploy << "." << endl
+					 << "On the command line this would be:-" << endl
+#if WIN32
+					 << "SET AXISCPP_DEPLOY=" << pszAxisCpp_Deploy << endl;
+#else
+					 << "EXPORT AXISCPP_DEPLOY=" << pszAxisCpp_Deploy << endl;
+#endif
+			}
+
+			cout << endl;
+
+			do
+			{
+#if WIN32
+				cout << "Type in the directory where the Axis libraries (e.g. axis_client.dll) can be" << endl
+					<< "found.  (If you type '*', it will use the default '" << pszAxis_Bin_Default << "')." << endl;
+#else
+				cout << "Type in the directory where the Axis libraries (e.g. axis_client.so) can be" << endl
+					<< "found.  (If you type '*', it will use the default '" << pszAxis_Bin_Default << "')." << endl;
+#endif
+				cout << "Axis binaries directory = ";
+				cin >> pszAxis_Bin;
+
+				if( !strcmp( pszAxis_Bin, "*"))
+				{
+					strcpy( pszAxis_Bin, pszAxis_Bin_Default);
+				}
+			} while( !CheckAxisBinDirectoryExists( pszAxisCpp_Deploy, pszAxis_Bin, pszAxis_Bin_Default, psDLLNames, psFileNameList));
+		}
 	}
 
 	cout << endl << "Begin to configure the AXISCPP.CONF file." << endl;
