@@ -57,30 +57,27 @@ public class ClientStubWriter
   {
       try
         {
-          writer.write("AXISCHANDLE get_" + classname + "_stub(const char* pchEndPointUri)\n{");
+          // get_xxx_stub() routine
+          writer.write("AXISCHANDLE get_" + classname + "_stub(const char* pchEndPointUri)\n{\n");
           writer.write("\tif(pchEndPointUri)\n");
-          writer.write("\t{\n");
           writer.write("\t\treturn axiscCreateStub(pchEndPointUri, AXISC_PTHTTP1_1);\n");
-          writer.write("\t}\n");
           writer.write("\telse\n");
-          writer.write("\t{\n");
-          writer.write("\t\treturn axiscCreateStub(\""
-                       + wscontext.getWrapInfo().getTargetEndpointURI()
-                       + "\", AXISC_PTHTTP1_1);\n");
-          writer.write("\t}\n");
-          writer.write("}\n");
-          writer.write("void destroy_" + classname + "_stub(AXISCHANDLE p){\n");
-          writer.write("\taxiscDestroyStub(p);\n}\n");
+          writer.write("\t\treturn axiscCreateStub(\"" 
+                  + wscontext.getWrapInfo().getTargetEndpointURI() 
+                  + "\", AXISC_PTHTTP1_1);\n");
+          writer.write("}\n\n");
+          
+          // destroy_xxxx_stub()
+          writer.write("void destroy_" + classname + "_stub(AXISCHANDLE p)\n{\n");
+          writer.write("\taxiscDestroyStub(p);\n}\n\n");
 
-          writer.write("int get_" + classname + "_Status(AXISCHANDLE stub){\n");
+          // get_xxxx_Status() routine
+          writer.write("int get_" + classname + "_Status(AXISCHANDLE stub)\n{\n");
           writer.write("\tAXISCHANDLE call = axiscGetCall(stub);\n");
-          writer.write("\tif ( stub == NULL )\n");
-          writer.write("\t\treturn AXISC_FAIL;\n");
-          writer.write("\telse\n");
-          writer.write("\t\treturn axiscGetStatusCall(call);\n");
-          writer.write("}\n");
+          writer.write("\treturn axiscGetStatusCall(call);\n");
+          writer.write("}\n\n");
 
-          writer.write("\n/*Methods corresponding to the web service methods*/\n");
+          writer.write("/* Functions corresponding to the web service methods*/\n");
           MethodInfo minfo;
           for (int i = 0; i < methods.size(); i++)
           {
@@ -146,7 +143,7 @@ public class ClientStubWriter
             returntypeissimple = CUtils.isSimpleType(outparamType);
 
         writer.write("\n/*\n");
-        writer.write(" * This method wrap the service method " + methodName + "\n");
+        writer.write(" * This function wraps the service method " + methodName + "\n");
         writer.write(" */\n");
         //method signature
         String paraTypeName;
