@@ -316,7 +316,7 @@
 			<istrue value="${testconf.client.parser.xerces}"/>
 		</condition>
 
-		<exec dir="${dir.bin}" executable="${axisConfigurationExecutableName}${executableSuffix}">
+		<exec dir="${dir.libraries}" executable="${axisConfigurationExecutableName}${executableSuffix}">
 			<arg line="Client -acd  ${confFileDirectory}
 						-th ${dir.libraries}/${libraryPrefix}${transportLibraryName}${librarySuffix}
 						-c  ${dir.libraries}/${libraryPrefix}${HTTP.ChannelLibraryName}${librarySuffix}
