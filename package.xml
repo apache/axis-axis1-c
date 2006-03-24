@@ -32,7 +32,7 @@ Please use these to configure directories to suit the needs of your system.
 	<target name="copySource">
 		<mkdir dir="${dir.release}"/>
 		<copy todir="${dir.release}">
-			<fileset dir="${basedir}" includes="**"/>
+			<fileset dir="${basedir}" includes="**" excludes="include/apache*/**"/>
 		</copy>
 	</target>
 
@@ -70,12 +70,12 @@ Please use these to configure directories to suit the needs of your system.
 		<!-- Copy include files into release package -->
 		<mkdir dir="${dir.release}/include"/>
 		<copy todir="${dir.release}/include">
-			<fileset dir="${basedir}/include" includes="**"/>
+			<fileset dir="${basedir}/include" includes="axis/**"/>
 		</copy>
 		<!-- copy over the c include files which have been generated. the failonerror is the easiest way to do this
 		otherwise I have to load in common.properties and that could end in tears ! -->
 		<copy todir="${dir.release}/include" failonerror="false">
-			<fileset dir="${dir.obj}/include" includes="**"/>
+			<fileset dir="${dir.obj}/include" includes="axis/**"/>
 		</copy>
 	</target>
 
