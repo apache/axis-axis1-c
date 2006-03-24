@@ -52,133 +52,140 @@ int main( int argc, char * argv[])
 			cout << "AxisConfiguration Server [params2]\tConfigure the server side." << endl;
 			cout << "AxisConfiguration Both [params3]\tConfigure the client and server side." << endl << endl;
 			cout << "The param list is as follows:-" << endl;
-			cout << "-a  root directory of Axis download (AXISCPP_HOME)" << endl;
+			cout << "-acd directory to write axiscpp.conf once it has been configured." << endl <<
+				    "     This overrides the -a value." << endl;
 #if WIN32
-			cout << "    example: -a c:\\Axis" << endl;
+			cout << "     example: -acd c:\\Axis\\Different" << endl;
 #else
-			cout << "    example: -a /home/userid/Axis" << endl;
+			cout << "     example: -a /home/userid/Axis/Different" << endl;
 #endif
-			cout << "-o  directory offset from AXISCPP_HOME to object files" << endl;
+			cout << "-a   root directory of Axis download (AXISCPP_HOME)" << endl;
 #if WIN32
-			cout << "    example: -o " << pszPackageName << endl;
+			cout << "     example: -a c:\\Axis" << endl;
 #else
-			cout << "    example: -o " << pszPackageName << endl;
+			cout << "     example: -a /home/userid/Axis" << endl;
 #endif
-			cout << "-th transport library name" << endl;
-			cout << "    if -a and -o have both already been defined, then only the" << endl;
-			cout << "    filename is required.  Otherwise the fully qualified path will" << endl;
-			cout << "    be required (NB: You can still override the -a and -o definitions" << endl;
-			cout << "    by using a fully qulified path)." << endl;
-			cout << "    example (with -a and -o defined): " << endl;
+			cout << "-o   directory offset from AXISCPP_HOME to object files" << endl;
 #if WIN32
-			cout << "    -th HTTPTransport.dll" << endl;
-			cout << "    example (without -a and -o defined): " << endl;
-			cout << "    -th c:\\Axis\\" << pszPackageName << "\\HTTPTransport.dll" << endl;
+			cout << "     example: -o " << pszPackageName << endl;
 #else
-			cout << "    -th libhttp_transport.so" << endl;
-			cout << "    example (without -a and -o defined): " << endl;
-			cout << "    -th /home/userid/Axis/" << pszPackageName << "/libhttp_transport.so" << endl;
+			cout << "     example: -o " << pszPackageName << endl;
 #endif
-			cout << "-c  channel library name" << endl;
-			cout << "    if -a and -o have both already been defined, then only the" << endl;
-			cout << "    filename is required.  Otherwise the fully qualified path will" << endl;
-			cout << "    be required (NB: You can still override the -a and -o definitions" << endl;
-			cout << "    by using a fully qulified path)." << endl;
-			cout << "    example (with -a and -o defined): " << endl;
+			cout << "-th  transport library name" << endl;
+			cout << "     if -a and -o have both already been defined, then only the" << endl;
+			cout << "     filename is required.  Otherwise the fully qualified path will" << endl;
+			cout << "     be required (NB: You can still override the -a and -o definitions" << endl;
+			cout << "     by using a fully qulified path)." << endl;
+			cout << "     example (with -a and -o defined): " << endl;
 #if WIN32
-			cout << "    -c HTTPChannel.dll" << endl;
-			cout << "    example (without -a and -o defined): " << endl;
-			cout << "    -c c:\\Axis\\" << pszPackageName << "\\HTTPChannel.dll" << endl;
+			cout << "     -th HTTPTransport.dll" << endl;
+			cout << "     example (without -a and -o defined): " << endl;
+			cout << "     -th c:\\Axis\\" << pszPackageName << "\\HTTPTransport.dll" << endl;
 #else
-			cout << "    -c libhttp_channel.so" << endl;
-			cout << "    example (without -a and -o defined): " << endl;
-			cout << "    -c /home/userid/Axis/" << pszPackageName << "/libhttp_channel.so" << endl;
+			cout << "     -th libhttp_transport.so" << endl;
+			cout << "     example (without -a and -o defined): " << endl;
+			cout << "     -th /home/userid/Axis/" << pszPackageName << "/libhttp_transport.so" << endl;
 #endif
-			cout << "-cs ssl channel library name" << endl;
-			cout << "    if -a and -o have both already been defined, then only the" << endl;
-			cout << "    filename is required.  Otherwise the fully qualified path will" << endl;
-			cout << "    be required (NB: You can still override the -a and -o definitions" << endl;
-			cout << "    by using a fully qulified path)." << endl;
-			cout << "    example (with -a and -o defined): " << endl;
+			cout << "-c   channel library name" << endl;
+			cout << "     if -a and -o have both already been defined, then only the" << endl;
+			cout << "     filename is required.  Otherwise the fully qualified path will" << endl;
+			cout << "     be required (NB: You can still override the -a and -o definitions" << endl;
+			cout << "     by using a fully qulified path)." << endl;
+			cout << "     example (with -a and -o defined): " << endl;
 #if WIN32
-			cout << "    -cs HTTPSSLChannel.dll" << endl;
-			cout << "    example (without -a and -o defined): " << endl;
-			cout << "    -cs c:\\Axis\\" << pszPackageName << "\\HTTPSSLChannel.dll" << endl;
+			cout << "     -c HTTPChannel.dll" << endl;
+			cout << "     example (without -a and -o defined): " << endl;
+			cout << "     -c c:\\Axis\\" << pszPackageName << "\\HTTPChannel.dll" << endl;
 #else
-			cout << "    -cs libhttp_channelssl.so" << endl;
-			cout << "    example (without -a and -o defined): " << endl;
-			cout << "    -cs /home/userid/Axis/" << pszPackageName << "/libhttp_channelssl.so" << endl;
+			cout << "     -c libhttp_channel.so" << endl;
+			cout << "     example (without -a and -o defined): " << endl;
+			cout << "     -c /home/userid/Axis/" << pszPackageName << "/libhttp_channel.so" << endl;
 #endif
-			cout << "-x  xerces library name" << endl;
-			cout << "    if -a and -o have both already been defined, then only the" << endl;
-			cout << "    filename is required.  Otherwise the fully qualified path will" << endl;
-			cout << "    be required (NB: You can still override the -a and -o definitions" << endl;
-			cout << "    by using a fully qulified path)." << endl;
-			cout << "    example (with -a and -o defined): " << endl;
+			cout << "-cs  ssl channel library name" << endl;
+			cout << "     if -a and -o have both already been defined, then only the" << endl;
+			cout << "     filename is required.  Otherwise the fully qualified path will" << endl;
+			cout << "     be required (NB: You can still override the -a and -o definitions" << endl;
+			cout << "     by using a fully qulified path)." << endl;
+			cout << "     example (with -a and -o defined): " << endl;
 #if WIN32
-			cout << "    -x AxisXMLParserXerces.dll" << endl;
-			cout << "    example (without -a and -o defined): " << endl;
-			cout << "    -x c:\\Axis\\" << pszPackageName << "\\AxisXMLParserXerces.dll" << endl;
+			cout << "     -cs HTTPSSLChannel.dll" << endl;
+			cout << "     example (without -a and -o defined): " << endl;
+			cout << "     -cs c:\\Axis\\" << pszPackageName << "\\HTTPSSLChannel.dll" << endl;
 #else
-			cout << "    -x libaxis_xerces.so" << endl;
-			cout << "    example (without -a and -o defined): " << endl;
-			cout << "    -x /home/userid/Axis/" << pszPackageName << "/libaxis_xerces.so" << endl;
+			cout << "     -cs libhttp_channelssl.so" << endl;
+			cout << "     example (without -a and -o defined): " << endl;
+			cout << "     -cs /home/userid/Axis/" << pszPackageName << "/libhttp_channelssl.so" << endl;
 #endif
-			cout << "-m  merge with existing configuration file" << endl;
-			cout << "    example: -m on|off (the default is 'off' meaning 'overwrite')" << endl;
+			cout << "-x   xerces library name" << endl;
+			cout << "     if -a and -o have both already been defined, then only the" << endl;
+			cout << "     filename is required.  Otherwise the fully qualified path will" << endl;
+			cout << "     be required (NB: You can still override the -a and -o definitions" << endl;
+			cout << "     by using a fully qulified path)." << endl;
+			cout << "     example (with -a and -o defined): " << endl;
+#if WIN32
+			cout << "     -x AxisXMLParserXerces.dll" << endl;
+			cout << "     example (without -a and -o defined): " << endl;
+			cout << "     -x c:\\Axis\\" << pszPackageName << "\\AxisXMLParserXerces.dll" << endl;
+#else
+			cout << "     -x libaxis_xerces.so" << endl;
+			cout << "     example (without -a and -o defined): " << endl;
+			cout << "     -x /home/userid/Axis/" << pszPackageName << "/libaxis_xerces.so" << endl;
+#endif
+			cout << "-m   merge with existing configuration file" << endl;
+			cout << "     example: -m on|off (the default is 'off' meaning 'overwrite')" << endl;
 			cout << "Client Specific" << endl;
-			cout << "-cl client log filename" << endl;
-			cout << "    if -a has been defined, then only the filename is required." << endl;
-			cout << "    Otherwise the fully qualified path will be required." << endl;
-			cout << "    (NB: You can still override the -a and -o definitions by using" << endl;
-			cout << "    a fully qulified path).  To ignore the client log, using 'ignore'" << endl;
-			cout << "    instead of a filename.  Example (with -a defined): " << endl;
-			cout << "    -cl client.log" << endl;
-			cout << "    example (without -a defined): " << endl;
+			cout << "-cl  client log filename" << endl;
+			cout << "     if -a has been defined, then only the filename is required." << endl;
+			cout << "     Otherwise the fully qualified path will be required." << endl;
+			cout << "     (NB: You can still override the -a and -o definitions by using" << endl;
+			cout << "     a fully qulified path).  To ignore the client log, using 'ignore'" << endl;
+			cout << "     instead of a filename.  Example (with -a defined): " << endl;
+			cout << "     -cl client.log" << endl;
+			cout << "     example (without -a defined): " << endl;
 #if WIN32
-			cout << "    -cl c:\\Axis\\client.log" << endl;
+			cout << "     -cl c:\\Axis\\client.log" << endl;
 #else
-			cout << "    -cl /home/userid/Axis/client.log" << endl;
+			cout << "     -cl /home/userid/Axis/client.log" << endl;
 #endif
-			cout << "-cw client WSDD filename" << endl;
-			cout << "    if -a and -o have both already been defined, then only the" << endl;
-			cout << "    filename is required.  Otherwise the fully qualified path will" << endl;
-			cout << "    be required (NB: You can still override the -a and -o definitions" << endl;
-			cout << "    by using a fully qulified path)." << endl;
-			cout << "    example (with -a and -o defined): " << endl;
-			cout << "    -cw client.wsdd" << endl;
-			cout << "    example (without -a and -o defined): " << endl;
+			cout << "-cw  client WSDD filename" << endl;
+			cout << "     if -a and -o have both already been defined, then only the" << endl;
+			cout << "     filename is required.  Otherwise the fully qualified path will" << endl;
+			cout << "     be required (NB: You can still override the -a and -o definitions" << endl;
+			cout << "     by using a fully qulified path)." << endl;
+			cout << "     example (with -a and -o defined): " << endl;
+			cout << "     -cw client.wsdd" << endl;
+			cout << "     example (without -a and -o defined): " << endl;
 #if WIN32
-			cout << "    -cw c:\\Axis\\WSDD\\client.wsdd" << endl;
+			cout << "     -cw c:\\Axis\\WSDD\\client.wsdd" << endl;
 #else
-			cout << "    -cw /home/userid/Axis/WSDD/client.wsdd" << endl;
+			cout << "     -cw /home/userid/Axis/WSDD/client.wsdd" << endl;
 #endif
 			cout << "Server Specific" << endl;
-			cout << "-sl server log filename" << endl;
-			cout << "    if -a has been defined, then only the filename is required." << endl;
-			cout << "    Otherwise the fully qualified path will be required." << endl;
-			cout << "    (NB: You can still override the -a and -o definitions by using" << endl;
-			cout << "    a fully qulified path)." << endl;
-			cout << "    example (with -a defined): " << endl;
-			cout << "    -sl server.log" << endl;
-			cout << "    example (without -a defined): " << endl;
+			cout << "-sl  server log filename" << endl;
+			cout << "     if -a has been defined, then only the filename is required." << endl;
+			cout << "     Otherwise the fully qualified path will be required." << endl;
+			cout << "     (NB: You can still override the -a and -o definitions by using" << endl;
+			cout << "     a fully qulified path)." << endl;
+			cout << "     example (with -a defined): " << endl;
+			cout << "     -sl server.log" << endl;
+			cout << "     example (without -a defined): " << endl;
 #if WIN32
-			cout << "    -sl c:\\Axis\\server.log" << endl;
+			cout << "     -sl c:\\Axis\\server.log" << endl;
 #else
-			cout << "    -sl /home/userid/Axis/server.log" << endl;
+			cout << "     -sl /home/userid/Axis/server.log" << endl;
 #endif
-			cout << "-sw server WSDD filename" << endl;
-			cout << "    if -a and -o have both already been defined, then only the" << endl;
-			cout << "    filename is required.  Otherwise the fully qualified path will" << endl;
-			cout << "    be required (NB: You can still override the -a and -o definitions" << endl;
-			cout << "    by using a fully qulified path)." << endl;
-			cout << "    example (with -a and -o defined): " << endl;
-			cout << "    -sw server.wsdd" << endl;
-			cout << "    example (without -a and -o defined): " << endl;
+			cout << "-sw  server WSDD filename" << endl;
+			cout << "     if -a and -o have both already been defined, then only the" << endl;
+			cout << "     filename is required.  Otherwise the fully qualified path will" << endl;
+			cout << "     be required (NB: You can still override the -a and -o definitions" << endl;
+			cout << "     by using a fully qulified path)." << endl;
+			cout << "     example (with -a and -o defined): " << endl;
+			cout << "     -sw server.wsdd" << endl;
+			cout << "     example (without -a and -o defined): " << endl;
 #if WIN32
-			cout << "    -sw c:\\Axis\\WSDD\\server.wsdd" << endl;
+			cout << "     -sw c:\\Axis\\WSDD\\server.wsdd" << endl;
 #else
-			cout << "    -sw /home/userid/Axis/WSDD/server.wsdd" << endl;
+			cout << "     -sw /home/userid/Axis/WSDD/server.wsdd" << endl;
 #endif
 			break;
 		}
@@ -199,8 +206,9 @@ int main( int argc, char * argv[])
 			{
 				if( sChoiceList[iChoiceCount].eConfig & eClient)
 				{
-					if( sChoiceList[iChoiceCount].eConfigType == eClientLog ||
-						sChoiceList[iChoiceCount].eConfigType == eServerLog)
+					if( (sChoiceList[iChoiceCount].eConfigType == eClientLog ||
+						sChoiceList[iChoiceCount].eConfigType == eServerLog) &&
+						StringCompare( psDefaultParamList[eQueryMissingFiles], "ON"))
 					{
 						char	szLog[256];
 
@@ -318,30 +326,33 @@ int main( int argc, char * argv[])
 ECONFIG	ReadConfigOptions( int iParamCount, char * pParamArray[], char ** ppsDefaultParamList, char cSlash)
 {
 	ECONFIG		eConfig = eEmpty;
-	OPTIONLIST	sOptions[] = {{eHTTPTransport,	"TH"},
-							  {eHTTPChannel,	"C"},
-							  {eHTTPSSLChannel,	"CS"},
-							  {eXMLParser,		"X"},
-							  {eSMTPTransport,	"TS"},
-							  {eClientLog,		"CL"},
-							  {eClientWSDD,		"CW"},
-							  {eServerLog,		"SL"},
-							  {eRootDirectory,	"A"},
-							  {eOffsetToLibs,	"O"},
-							  {eServerWSDD,		"SW"},
-							  {eSSLOptions,		"SO"},
-							  {eVolume,			"V"},
-							  {eAxisConfigDir,	"ACD"},
-							  {eBackup,			"B"},
-							  {eMerge,			"M"}};
+	OPTIONLIST	sOptions[] = {{eHTTPTransport,		"TH"},
+							  {eHTTPChannel,		"C"},
+							  {eHTTPSSLChannel,		"CS"},
+							  {eXMLParser,			"X"},
+							  {eSMTPTransport,		"TS"},
+							  {eClientLog,			"CL"},
+							  {eClientWSDD,			"CW"},
+							  {eServerLog,			"SL"},
+							  {eRootDirectory,		"A"},
+							  {eOffsetToLibs,		"O"},
+							  {eServerWSDD,			"SW"},
+							  {eSSLOptions,			"SO"},
+							  {eProgressInfo,		"PI"},
+							  {eAxisConfigDir,		"ACD"},
+							  {eBackup,				"B"},
+							  {eQueryMissingFiles,	"QMF"},
+							  {eMerge,				"M"}};
 
 	ppsDefaultParamList[eMerge] = (char *) malloc( strlen( "off "));
-	ppsDefaultParamList[eVolume] = (char *) malloc( strlen( "normal "));
+	ppsDefaultParamList[eProgressInfo] = (char *) malloc( strlen( "normal "));
 	ppsDefaultParamList[eBackup] = (char *) malloc( strlen( "true "));
+	ppsDefaultParamList[eQueryMissingFiles] = (char *) malloc( strlen( "on "));
 
 	strcpy( ppsDefaultParamList[eMerge], "off");
-	strcpy( ppsDefaultParamList[eVolume], "normal");
+	strcpy( ppsDefaultParamList[eProgressInfo], "normal");
 	strcpy( ppsDefaultParamList[eBackup], "true");
+	strcpy( ppsDefaultParamList[eQueryMissingFiles], "on");
 
 	for( int iCount = 0; iCount < iParamCount; iCount++)
 	{
@@ -387,6 +398,7 @@ ECONFIG	ReadConfigOptions( int iParamCount, char * pParamArray[], char ** ppsDef
 						!(sOptions[iIndex].eConfType == eClientLog || 
 						  sOptions[iIndex].eConfType == eServerLog ||
 						  sOptions[iIndex].eConfType == eBackup ||
+						  sOptions[iIndex].eConfType == eQueryMissingFiles ||
 						  sOptions[iIndex].eConfType == eSSLOptions) &&
 						strchr( pParamArray[iCount], cSlash) == NULL)
 					{
@@ -564,40 +576,47 @@ void SelectFileFromList( CHOICELIST * psChoiceList, int iChoiceCount, LIST * psD
 		}
 		else
 		{
-			if( sDLLOffsetList.iCount > 0)
+			if( StringCompare( ppsDefaultParamList[eQueryMissingFiles], "ON"))
 			{
-				if( sDLLOffsetList.iCount > 1)
+				if( sDLLOffsetList.iCount > 0)
 				{
-					cout << "Select an index between 1 and " << sDLLOffsetList.iCount << " : ";
-
-					int	iChoice;
-
-					cin >> iChoice;
-
-					if( iChoice < 1 || iChoice > sDLLOffsetList.iCount)
+					if( sDLLOffsetList.iCount > 1)
 					{
-						cout << "Number was out of range." << endl;
+						cout << "Select an index between 1 and " << sDLLOffsetList.iCount << " : ";
+
+						int	iChoice;
+
+						cin >> iChoice;
+
+						if( iChoice < 1 || iChoice > sDLLOffsetList.iCount)
+						{
+							cout << "Number was out of range." << endl;
+						}
+						else
+						{
+							((DLLNAMEINFO *) psDLLNames->ppArray[*((int *) sDLLOffsetList.ppArray[iChoice - 1])])->bAddToClientConfig = true;
+							piConfigInfoArray[psChoiceList[iChoiceCount].eConfigType] = *((int *) sDLLOffsetList.ppArray[iChoice - 1]);
+							bHTTPTransportFound = true;
+						}
 					}
 					else
 					{
-						((DLLNAMEINFO *) psDLLNames->ppArray[*((int *) sDLLOffsetList.ppArray[iChoice - 1])])->bAddToClientConfig = true;
-						piConfigInfoArray[psChoiceList[iChoiceCount].eConfigType] = *((int *) sDLLOffsetList.ppArray[iChoice - 1]);
+						cout << "Automatically selected " << ((DLLNAMEINFO *) psDLLNames->ppArray[*((int *) sDLLOffsetList.ppArray[0])])->pszDLLFilename << endl;
+
+						((DLLNAMEINFO *) psDLLNames->ppArray[*((int *) sDLLOffsetList.ppArray[0])])->bAddToClientConfig = true;
+						piConfigInfoArray[psChoiceList[iChoiceCount].eConfigType] = *((int *) sDLLOffsetList.ppArray[0]);
 						bHTTPTransportFound = true;
 					}
 				}
 				else
 				{
-					cout << "Automatically selected " << ((DLLNAMEINFO *) psDLLNames->ppArray[*((int *) sDLLOffsetList.ppArray[0])])->pszDLLFilename << endl;
+					cout << "There are no recognised file names for the type of file/library." << endl << "You will have to modify the configuration file namually." << endl << endl;
 
-					((DLLNAMEINFO *) psDLLNames->ppArray[*((int *) sDLLOffsetList.ppArray[0])])->bAddToClientConfig = true;
-					piConfigInfoArray[psChoiceList[iChoiceCount].eConfigType] = *((int *) sDLLOffsetList.ppArray[0]);
 					bHTTPTransportFound = true;
 				}
 			}
 			else
 			{
-				cout << "There are no recognised file names for the type of file/library." << endl << "You will have to modify the configuration file namually." << endl << endl;
-
 				bHTTPTransportFound = true;
 			}
 		}

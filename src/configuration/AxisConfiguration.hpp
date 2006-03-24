@@ -34,10 +34,11 @@ typedef enum
 	eRootDirectory,
 	eOffsetToLibs,
 	eSSLOptions,
-	eVolume,
+	eProgressInfo,
 	eMerge,
 	eAxisConfigDir,
 	eBackup,
+	eQueryMissingFiles,
 	eConfigMax
 } ECONFIGTYPE;
 

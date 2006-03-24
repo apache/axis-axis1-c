@@ -316,18 +316,106 @@
 			<istrue value="${testconf.client.parser.xerces}"/>
 		</condition>
 
-		<exec dir="${dir.libraries}" executable="${axisConfigurationExecutableName}${executableSuffix}">
-			<arg line="Client -acd  ${confFileDirectory}
-						-th ${dir.libraries}/${libraryPrefix}${transportLibraryName}${librarySuffix}
-						-c  ${dir.libraries}/${libraryPrefix}${HTTP.ChannelLibraryName}${librarySuffix}
-						-cs ${dir.libraries}/${libraryPrefix}${HTTP.SecureChannelLibraryName}${librarySuffix}
-						-x  ${dir.libraries}/${ClientParserLib}
-						-cl ignore
-						-so ${env.SSL_KEYS_HOME}/myKeyRing.kdb,axis4all,AXIS,NONE,05,NONE,false
-						-b  false
-						-v  quiet"
-			/>
-		</exec>
+		<if>
+		    <and>
+				<not>
+					<isset property="test.notrace"/>
+				</not>
+				<not>
+					<istrue value="${test.ssl}"/>
+				</not>
+		    </and>
+			<then>
+
+<!-- No Client Log, No SSL Library -->
+				<echo message="No Client log or SSL library."/>
+				<exec dir="${dir.libraries}" executable="${axisConfigurationExecutableName}${executableSuffix}">
+					<arg line="Client -acd  ${confFileDirectory}
+								-th  ${dir.libraries}/${libraryPrefix}${transportLibraryName}${librarySuffix}
+								-c   ${dir.libraries}/${libraryPrefix}${HTTP.ChannelLibraryName}${librarySuffix}
+								-x   ${dir.libraries}/${ClientParserLib}
+								-so  ${env.SSL_KEYS_HOME}/myKeyRing.kdb,axis4all,AXIS,NONE,05,NONE,false
+								-b   false
+								-pi  quiet
+								-qmf off"
+					/>
+				</exec>
+			</then>
+		</if>
+
+		<if>
+		    <and>
+				<not>
+					<istrue value="${test.ssl}"/>
+				</not>
+				<isset property="test.notrace"/>
+		    </and>
+			<then>
+<!-- Client Log, No SSL Library -->
+				<echo message="Client log, but no SSL library."/>
+				<exec dir="${dir.libraries}" executable="${axisConfigurationExecutableName}${executableSuffix}">
+					<arg line="Client -acd  ${confFileDirectory}
+								-th  ${dir.libraries}/${libraryPrefix}${transportLibraryName}${librarySuffix}
+								-c   ${dir.libraries}/${libraryPrefix}${HTTP.ChannelLibraryName}${librarySuffix}
+								-x   ${dir.libraries}/${ClientParserLib}
+								-cl  ${test.directory}/ClientLog.taw
+								-so  ${env.SSL_KEYS_HOME}/myKeyRing.kdb,axis4all,AXIS,NONE,05,NONE,false
+								-b   false
+								-pi  quiet
+								-qmf off"
+					/>
+				</exec>
+			</then>
+		</if>
+
+		<if>
+		    <and>
+				<not>
+					<isset property="test.notrace"/>
+				</not>
+				<istrue value="${test.ssl}"/>
+		    </and>
+			<then>
+<!-- No Client Log, SSL Library -->
+				<echo message="No Client log but SSL library."/>
+				<exec dir="${dir.libraries}" executable="${axisConfigurationExecutableName}${executableSuffix}">
+					<arg line="Client -acd  ${confFileDirectory}
+								-th  ${dir.libraries}/${libraryPrefix}${transportLibraryName}${librarySuffix}
+								-c   ${dir.libraries}/${libraryPrefix}${HTTP.ChannelLibraryName}${librarySuffix}
+								-cs  ${dir.libraries}/${libraryPrefix}${HTTP.SecureChannelLibraryName}${librarySuffix}
+								-x   ${dir.libraries}/${ClientParserLib}
+								-so  ${env.SSL_KEYS_HOME}/myKeyRing.kdb,axis4all,AXIS,NONE,05,NONE,false
+								-b   false
+								-pi  quiet
+								-qmf off"
+					/>
+				</exec>
+			</then>
+		</if>
+
+		<if>
+		    <and>
+				<isset property="test.notrace"/>
+		        <istrue value="${test.ssl}"/>
+		    </and>
+			<then>
+<!-- Client Log, SSL Library -->
+				<echo message="Client log and SSL library."/>
+				<exec dir="${dir.libraries}" executable="${axisConfigurationExecutableName}${executableSuffix}">
+					<arg line="Client -acd  ${confFileDirectory}
+								-th  ${dir.libraries}/${libraryPrefix}${transportLibraryName}${librarySuffix}
+								-c   ${dir.libraries}/${libraryPrefix}${HTTP.ChannelLibraryName}${librarySuffix}
+								-cs  ${dir.libraries}/${libraryPrefix}${HTTP.SecureChannelLibraryName}${librarySuffix}
+								-x   ${dir.libraries}/${ClientParserLib}
+								-cl  ${test.directory}/ClientLog.taw
+								-so  ${env.SSL_KEYS_HOME}/myKeyRing.kdb,axis4all,AXIS,NONE,05,NONE,false
+								-b   false
+								-pi  quiet
+								-qmf off"
+					/>
+				</exec>
+			</then>
+		</if>
 	</target>
 
 	<target name="createConfigurationFileOld" depends="checkIfDebug" if="successfulClientCompilation">
