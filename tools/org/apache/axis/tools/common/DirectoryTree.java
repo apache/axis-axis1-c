@@ -53,7 +53,7 @@ public class DirectoryTree
         {
             // we only want to look at this directory if it's not a .svn directory.
             // If it is then let's call this the end of the branch and return.
-            if(source.toString().indexOf(".svn")==-1)
+            if(source.toString().indexOf(".svn")==-1 && source.toString().indexOf("apache1_3")==-1 && source.toString().indexOf("apache2_0")==-1)
             {
             File[] filesInDirectory=source.listFiles( );
             for(int i=0; i<filesInDirectory.length; i++)
@@ -65,7 +65,7 @@ public class DirectoryTree
                 if (-1!=dot)
                     ext=name.substring(dot+1);
 
-                if (file.isDirectory( ))
+                if (file.isDirectory( ) && !name.equals(".svn") && !name.equals("apache1_3") && !name.equals("apache2_0"))
                 {
                     File newTarget=null;
                     if (!noTarget)
