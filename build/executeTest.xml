@@ -334,7 +334,7 @@
 								-th  ${dir.libraries}/${libraryPrefix}${transportLibraryName}${librarySuffix}
 								-c   ${dir.libraries}/${libraryPrefix}${HTTP.ChannelLibraryName}${librarySuffix}
 								-x   ${dir.libraries}/${ClientParserLib}
-								-so  ${env.SSL_KEYS_HOME}/myKeyRing.kdb,axis4all,AXIS,NONE,05,NONE,false
+							    -so  &quot;${env.SSL_KEYS_HOME}/myKeyRing.kdb,axis4all,AXIS,NONE,05,NONE,false&quot;
 								-b   false
 								-pi  quiet
 								-qmf off"
@@ -354,15 +354,16 @@
 <!-- Client Log, No SSL Library -->
 				<echo message="Client log, but no SSL library."/>
 				<exec dir="${dir.libraries}" executable="${axisConfigurationExecutableName}${executableSuffix}">
-					<arg line="Client -acd  ${confFileDirectory}
-								-th  ${dir.libraries}/${libraryPrefix}${transportLibraryName}${librarySuffix}
-								-c   ${dir.libraries}/${libraryPrefix}${HTTP.ChannelLibraryName}${librarySuffix}
-								-x   ${dir.libraries}/${ClientParserLib}
-								-cl  ${test.directory}/ClientLog.taw
-								-so  ${env.SSL_KEYS_HOME}/myKeyRing.kdb,axis4all,AXIS,NONE,05,NONE,false
-								-b   false
-								-pi  quiet
-								-qmf off"
+					<arg line="Client
+							   -acd ${confFileDirectory}
+							   -th  ${dir.libraries}/${libraryPrefix}${transportLibraryName}${librarySuffix}
+							   -c   ${dir.libraries}/${libraryPrefix}${HTTP.ChannelLibraryName}${librarySuffix}
+							   -x   ${dir.libraries}/${ClientParserLib}
+							   -cl  ${test.directory}/ClientLog.taw
+							   -so  &quot;${env.SSL_KEYS_HOME}/myKeyRing.kdb,axis4all,AXIS,NONE,05,NONE,false&quot;
+							   -b   false
+							   -pi  quiet
+							   -qmf off"
 					/>
 				</exec>
 			</then>
@@ -384,7 +385,7 @@
 								-c   ${dir.libraries}/${libraryPrefix}${HTTP.ChannelLibraryName}${librarySuffix}
 								-cs  ${dir.libraries}/${libraryPrefix}${HTTP.SecureChannelLibraryName}${librarySuffix}
 								-x   ${dir.libraries}/${ClientParserLib}
-								-so  ${env.SSL_KEYS_HOME}/myKeyRing.kdb,axis4all,AXIS,NONE,05,NONE,false
+							    -so  &quot;${env.SSL_KEYS_HOME}/myKeyRing.kdb,axis4all,AXIS,NONE,05,NONE,false&quot;
 								-b   false
 								-pi  quiet
 								-qmf off"
@@ -408,7 +409,7 @@
 								-cs  ${dir.libraries}/${libraryPrefix}${HTTP.SecureChannelLibraryName}${librarySuffix}
 								-x   ${dir.libraries}/${ClientParserLib}
 								-cl  ${test.directory}/ClientLog.taw
-								-so  ${env.SSL_KEYS_HOME}/myKeyRing.kdb,axis4all,AXIS,NONE,05,NONE,false
+							    -so  &quot;${env.SSL_KEYS_HOME}/myKeyRing.kdb,axis4all,AXIS,NONE,05,NONE,false&quot;
 								-b   false
 								-pi  quiet
 								-qmf off"
