@@ -51,6 +51,7 @@ public class ClientStubHeaderWriter
     {
         try
         {
+            writer.write("#include <axis/Axis.h>\n");
             writer.write("#include <axis/GDefine.h>\n");
             writer.write("#include <axis/AxisUserAPI.h>\n");
             writer.write("#include <axis/SoapEnvVersions.h>\n");
@@ -76,10 +77,7 @@ public class ClientStubHeaderWriter
             while (itr.hasNext())
             {
                 writer.write(
-                    "#include \""
-                        + itr.next().toString()
-                        + CUtils.C_HEADER_SUFFIX
-                        + "\"\n");
+                    "#include \"" + itr.next().toString() + CUtils.C_HEADER_SUFFIX + "\"\n");
             }
             writer.write("\n");
         }
