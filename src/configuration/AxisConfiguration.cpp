@@ -22,12 +22,14 @@ int main( int argc, char * argv[])
 									  {"WSDD",						"client WSDD path",													AXCONF_CLIENTWSDDFILEPATH_TAGNAME,	eClientWSDD,		eClient},
 									  {"LOG",						"server trace log path (only required if you want server trace)",	AXCONF_LOGPATH_TAGNAME,				eServerLog,			eServer},
 									  {"WSDD",						"server WSDD path",													AXCONF_WSDDFILEPATH_TAGNAME,		eServerWSDD,		eServer},
-									  {"",							"",																	AXCONF_NODENAME_TAGNAME,			eUnknown,			eServer},
-									  {"",							"",																	AXCONF_LISTENPORT_TAGNAME,			eUnknown,			eServer},
+									  {"",							"root directory",													AXCONF_NODENAME_TAGNAME,			eUnknown,			eServer},
+									  {"",							"offset to libraries",												AXCONF_LISTENPORT_TAGNAME,			eUnknown,			eServer},
 									  {"",							"SSL Options",														AXCONF_SECUREINFO_TAGNAME,			eSSLOptions,		eClientAndServer},
-									  {"",							"Root directory",													0,									eUnknown,			eEmpty},
-									  {"",							"library offset directory",											0,									eUnknown,			eEmpty},
-									  {"",							"volume of output",													0,									eUnknown,			eClientAndServer}};
+									  {"",							"progress information",												0,									eUnknown,			eEmpty},
+									  {"",							"merge",															0,									eUnknown,			eEmpty},
+									  {"",							"Axis configuration directory",										0,									eUnknown,			eEmpty},
+									  {"",							"backup existing axiscpp.conf file",								0,									eUnknown,			eEmpty},
+									  {"",							"query missing files",												0,									eUnknown,			eEmpty}};
 	bool			bSuccess = false;
 	LIST			sFileNameList;
 	char *			psDefaultParamList[eConfigMax];
@@ -68,10 +70,10 @@ int main( int argc, char * argv[])
 				if( sChoiceList[iChoiceCount].eConfig & eClient)
 				{
 					if( (sChoiceList[iChoiceCount].eConfigType == eClientLog ||
-						sChoiceList[iChoiceCount].eConfigType == eServerLog) &&
-						StringCompare( psDefaultParamList[eQueryMissingFiles], "ON"))
+						sChoiceList[iChoiceCount].eConfigType == eServerLog))
 					{
 						char	szLog[256];
+						bool	bAskForFilename = false;
 
 						szLog[0] = '\0';
 
@@ -79,11 +81,23 @@ int main( int argc, char * argv[])
 						{
 							if( psDefaultParamList[eClientLog] == NULL)
 							{
-								cout << "Enter name of client trace/log file: ";
+								if( StringCompare( psDefaultParamList[eQueryMissingFiles], "ON"))
+								{
+									cout << "Enter name of client trace/log file: ";
+									
+									bAskForFilename = true;
+								}
 							}
 							else
 							{
-								strcpy( szLog, psDefaultParamList[eClientLog]);
+								if( psDefaultParamList[eClientLog] != NULL)
+								{
+									strcpy( szLog, psDefaultParamList[eClientLog]);
+								}
+								else
+								{
+									strcpy( szLog, "IGNORE");
+								}
 							}
 						}
 						else
@@ -91,6 +105,8 @@ int main( int argc, char * argv[])
 							if( psDefaultParamList[eServerLog] == NULL)
 							{
 								cout << "Enter name of server trace/log file: ";
+									
+								bAskForFilename = true;
 							}
 							else
 							{
@@ -171,11 +187,23 @@ int main( int argc, char * argv[])
 	{
 		if( psDefaultParamList[eAxisConfigDir] == NULL)
 		{
-			WriteAxisConfigFile( &sDLLNames, iConfigInfoArray, sChoiceList, StringCompare( psDefaultParamList[eMerge], "on"), szAxisCpp_Deploy, cSlash, StringCompare( psDefaultParamList[eBackup], "true"));
+			WriteAxisConfigFile( &sDLLNames,
+								 iConfigInfoArray,
+								 sChoiceList,
+								 StringCompare( psDefaultParamList[eMerge], "on"),
+								 szAxisCpp_Deploy,
+								 cSlash,
+								 StringCompare( psDefaultParamList[eBackup], "true"));
 		}
 		else
 		{
-			WriteAxisConfigFile( &sDLLNames, iConfigInfoArray, sChoiceList, StringCompare( psDefaultParamList[eMerge], "on"), psDefaultParamList[eAxisConfigDir], cSlash, StringCompare( psDefaultParamList[eBackup], "true"));
+			WriteAxisConfigFile( &sDLLNames,
+								 iConfigInfoArray,
+								 sChoiceList,
+								 StringCompare( psDefaultParamList[eMerge], "on"),
+								 psDefaultParamList[eAxisConfigDir],
+								 cSlash,
+								 StringCompare( psDefaultParamList[eBackup], "true"));
 		}
 	}
 
@@ -259,6 +287,7 @@ ECONFIG	ReadConfigOptions( int iParamCount, char * pParamArray[], char ** ppsDef
 						!(sOptions[iIndex].eConfType == eClientLog || 
 						  sOptions[iIndex].eConfType == eServerLog ||
 						  sOptions[iIndex].eConfType == eBackup ||
+						  sOptions[iIndex].eConfType == eMerge ||
 						  sOptions[iIndex].eConfType == eQueryMissingFiles ||
 						  sOptions[iIndex].eConfType == eSSLOptions) &&
 						strchr( pParamArray[iCount], cSlash) == NULL)
