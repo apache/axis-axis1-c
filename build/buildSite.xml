@@ -1,7 +1,44 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-
 <project name="BuildAxisCSite" default="buildCsite" basedir="..">
-	<!-- include the if task from ant-contrib -->
+    <description>
+        ==================  [AXIS CPP SITE BUILDER]  ==================
+
+        * This is an ant build-file for building the C web-site and ensuring that
+        * all the files are copied into the correct places.
+        * This version supports only Windows platforms.
+        * 
+        *   Here is how to run this build file
+        * 
+        * Extract Axis C sources
+        * SVN checkout of https://svn.apache.org/repos/asf/webservices/axis/trunk/c. This will be refered to as [ws-axis/c] - basedir
+        * Extract documentation sources
+        * SVN checkout of:  https://svn.apache.org/repos/asf/webservices/axis/trunk/site/. This will be refered to as [ws-axis/site] - dir.root.axis.site
+        * Extract web site
+        * SVN checkout of https://svn.apache.org/repos/asf/webservices/axis/site/. This will be refered to as [ws-site] - dir.root.site
+        * Make updates to documentation within [ws-axis/site]/src/cpp/src/documentation/content/xdocs/cpp
+        *
+        * Set environment variables: (using -D when running this script)
+        *
+        * dir.root.axis.site
+        * dir.root.site
+        * env.FORREST_HOME   - install location of Forrest
+        *
+        * run this script
+        * Check output
+        *   Found within [ws-axis/site]/src/cpp/build/site/cpp
+        *
+        * This script has already copied the output for you 
+        * [ws-axis/site]/src/cpp/build/site/cpp/*.* to  [ws-site]/cpp
+        * AND
+        * [ws-axis/site]/src/cpp/build/site/cpp/*.* to  [ws-axis/c]/docs
+        * Now you must Commit changes to Axis C sources, documentation sources and web site (be sure to do an SVN add on any new files or SVN delete on unwanted files)
+        *
+        * In theory there is a script that runs on minotaur to upload the files to the actual
+        * website server (Minotaur) however if this is not working or you want your changes to appear immediately ->
+        *  ssh into minotaur,
+        * cd to /www/ws.apache.org/axis and run "svn up" there.
+        
+      </description>
+    <!-- include the if task from ant-contrib -->
     <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
 
   <property name="version" value="0.1"/>
@@ -16,45 +53,7 @@
 
   <!-- need to import the main build.xml file from ws-site/trunk/ -->
   <import file="${env.FORREST_HOME}/main/forrest.build.xml"/>  
-  <description>
-	    ==================  [AXIS CPP SITE BUILDER]  ==================
 
-	    * This is an ant build-file for building the C web-site and ensuring that
-	    * all the files are copied into the correct places.
-	    * This version supports only Windows platforms.
-    	* 
-	    *	Here is how to run this build file
-    	* 
-	    * Extract Axis C sources
-	    * SVN checkout of https://svn.apache.org/repos/asf/webservices/axis/trunk/c. This will be refered to as [ws-axis/c] - basedir
-	    * Extract documentation sources
-	    * SVN checkout of:  https://svn.apache.org/repos/asf/webservices/axis/trunk/site/. This will be refered to as [ws-axis/site] - dir.root.axis.site
-	    * Extract web site
-	    * SVN checkout of https://svn.apache.org/repos/asf/webservices/axis/site/. This will be refered to as [ws-site] - dir.root.site
-	    * Make updates to documentation within [ws-axis/site]/src/cpp/src/documentation/content/xdocs/cpp
-    	*
-	    * Set environment variables: (using -D when running this script)
-    	*
-	    * dir.root.axis.site
-    	* dir.root.site
-	    * FORREST_HOME	 - install location of Forrest
-    	*
-    	* run this script
-	    * Check output
-	    * 	Found within [ws-axis/site]/src/cpp/build/site/cpp
-    	*
-    	* This script has already copied the output for you 
-	    * [ws-axis/site]/src/cpp/build/site/cpp/*.*	to	[ws-site]/cpp
-	    * AND
-	    * [ws-axis/site]/src/cpp/build/site/cpp/*.*	to	[ws-axis/c]/docs
-    	* Now you must Commit changes to Axis C sources, documentation sources and web site (be sure to do an SVN add on any new files or SVN delete on unwanted files)
-    	*
-	    * In theory there is a script that runs on minotaur to upload the files to the actual
-	    * website server (Minotaur) however if this is not working or you want your changes to appear immediately ->
-		*  ssh into minotaur,
-		* cd to /www/ws.apache.org/axis and run "svn up" there.
-		
-    </description>
 	
   
   <target name="buildCsite" depends="checkConfiguration">
