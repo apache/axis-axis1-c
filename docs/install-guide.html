@@ -339,7 +339,129 @@
 <div class="h5">
 <h5>4. Set Engine Wide Settings in Configuration File</h5>
 </div>
-<p>Axis C++ uses a configuration file to let the user specify preferences such as log file locations, transport and parser libs to be used and location of deployment descriptor files.<br>A sample configuration file is installed in $AXISCPP_DEPLOY/etc on linux or %AXISCPP_DEPLOY% on windows systems. Edit this file to match your systems settings and copy it to axiscpp.conf<br>
+<p>The axiscpp.conf file contains all of the user defined setting for the location of specific libraries, definition and log files and can be configured manually or by using the AxisConfiguration executable.<br>If the user requires a non-standard environment or needs additional information to be supplied (i.e. the location of the client wsdd file) this has to be defined in the axiscpp.conf file.<br>
+</p>
+<div class="h5">
+<h5>4.1 Using AxisConfiguration to create the axiscpp.conf file</h5>
+</div>
+<p>The AxisConfiguration executable is a simple user interface that allows the user to generate an axiscpp.conf file by first asking a few simple questions about where the package was unzipped to and then allowing the user to pick which file should be associated with configuration tag. Below is an example of a typical conversation between AxisConfiguration and a user (the normal, larger text represents user input).<br>
+<br>
+</p>
+<pre>C:\Axis\axis-c-1.6-Win32-bin\bin&gt;AxisConfiguration Client<br>Axis Client Configuration<br>=========================<br>Type in the Axis fully qualified directory path (e.g. C:\Axis)
+used when Axis was unzipped (NB: this directory must also contain the
+axiscpp.conf file).  Type '*' to used the existing value of the environment
+variable (i.e. 'C:\Axis').<br>AXISCPP_DEPLOY = <strong>c:\Axis</strong>
+<br>
+<br>Type in the directory where the Axis libraries (e.g. axis_client.dll) can be
+found.  (If you type '*', it will use the default 'axis-c-1.6-Win32-bin\bin').<br>Axis binaries directory = <strong>axis-c-1.6-Win32-bin\bin</strong>
+<br>
+<br>Begin to configure the AXISCPP.CONF file.<br>
+<br>Select the filename for the HTTP Transport library.<br>1.      c:\Axis\axis-c-1.6-Win32-bin\bin\HTTPTransport.dll<br>Automatically selected c:\Axis\axis-c-1.6-Win32-bin\bin\HTTPTransport.dll<br>
+<br>Select the filename for the HTTP Channel library.<br>1.      C:\Axis\axis-c-1.6-Win32-bin\bin\HTTPChannel.dll<br>Automatically selected c:\Axis\axis-c-1.6-Win32-bin\bin\HTTPChannel.dll<br>
+<br>Select the filename for the HTTP SSL Channel library.<br>1.      C:\Axis\axis-c-1.6-Win32-bin\bin\HTTPSSLChannel.dll<br>Automatically selected c:\Axis\axis-c-1.6-Win32-bin\bin\HTTPSSLChannel.dll<br>
+<br>Select the filename for the Axis XML Parser library.<br>1.      C:\Axis\axis-c-1.6-Win32-bin\bin\AxisXMLParserXerces.dll<br>Automatically selected C:\Axis\axis-c-1.6-Win32-bin\bin\AxisXMLParserXerces.dll<br>
+<br>Select the filename for the SMTP Transport library.<br>There are no recognised file names for the type of file/library.<br>You will have to modify the configuration file namually.<br>
+<br>Enter name of client trace/log file: <strong>client.log</strong>
+<br>
+<br>Select the filename for the client WSDD path.<br>There are no recognised file names for the type of file/library.<br>You will have to modify the configuration file namually.<br>
+<br>
+<br>Configuration complete.</pre>
+<br>
+<br>
+<p>The configuration file has now been created in %AXISCPP_DEPLOY%\axiscpp.conf. The contents of the file is as follows:-<br>
+</p>
+<pre>
+<br>C:\Axis\axis-c-1.6-Win32-bin\bin&gt;type %AXISCPP_DEPLOY%\axiscpp.conf<br># This header file was created by AxisConfiguration on Mon Mar 27 13:50:57 2006<br># The comment character is '#'<br># Available directives are as follows<br>#(Some of these directives may not be implemented yet)<br>#<br># Path to server trace log path (only required if you want server trace)<br>#LogPath:&lt;not set&gt;<br>
+<br># Path to server WSDD path<br>#WSDDFilePath:&lt;not set&gt;<br>
+<br># Path to client trace log path (only required if you want client trace)<br>ClientLogPath:c:\Axis\client.log<br>
+<br># Path to client WSDD path<br>#ClientWSDDFilePath:&lt;not set&gt;<br>
+<br>#Node name.<br>#NodeName: &lt;not set&gt;<br>
+<br>#Listening port.<br>#ListenPort: &lt;not set&gt;<br>
+<br># Path to HTTP Transport library<br>Transport_http:C:\Axis\axis-c-1.6-Win32-bin\bin\HTTPTransport.dll<br>
+<br># Path to SMTP Transport library<br>#Transport_smtp:&lt;not set&gt;<br>
+<br># Path to Axis XML Parser library<br>XMLParser:C:\Axis\axis-c-1.6-Win32-bin\bin\AxisXMLParserXerces.dll<br>
+<br># Path to HTTP Channel library<br>Channel_HTTP:C:\Axis\axis-c-1.6-Win32-bin\bin\HTTPChannel.dll<br>
+<br># Path to HTTP SSL Channel library<br>Channel_HTTP_SSL:C:\Axis\axis-c-1.6-Win32-bin\bin\HTTPSSLChannel.dll<br>
+<br># SSL Options<br>#SecureInfo:&lt;not set&gt;
+</pre>
+<br>
+<br>
+<p>The AxisConfiguration executable can also be run with a number of command line options to aid automated configuration (an example of this can be found in the ant script axis-c-1.6-Win32-bin\build\executeBuild.xml, target name 'createConfigurationFile'). The available options are listed below.<br>
+<br>
+</p>
+<table class="ForrestTable" cellspacing="1" cellpadding="4">
+<tr class="b">
+<td>command</td><td>Description</td><td>Example</td>
+</tr>
+<tr class="a">
+<td>-acd</td><td>Directory to write axiscpp.conf once it has been configured. This overrides the '-a' value (which defines where axiscpp.conf would normally reside).</td><td>-acd c:\Axis\Different</td>
+</tr>
+<tr class="b">
+<td>-a</td><td>Root directory of Axis download (AXISCPP_HOME).</td><td>-a c:\Axis</td>
+</tr>
+<tr class="a">
+<td>-o</td><td>Directory offset from AXISCPP_HOME to object files.</td><td>-o axis-c-1.6-Win32-bin\bin</td>
+</tr>
+<tr class="b">
+<td>-th</td><td>Transport library name. If -a and -o have both already been defined, then only the filename is required. Otherwise the fully qualified path will be required (NB: You can still override the -a and -o definitions by using a fully qualified path).</td><td>(with -a and -o defined): -th HTTPTransport.dll, (without -a and -o defined): -th c:\Axis\axis-c-1.6-Win32-bin\bin\HTTPTransport.dll</td>
+</tr>
+<tr class="a">
+<td>-c</td><td>Channel library name. If -a and -o have both already been defined, then only the filename is required. Otherwise the fully qualified path will be required (NB: You can still override the -a and -o definitions by using a fully qualified path).</td><td>(with -a and -o defined): -c HTTPChannel.dll, (without -a and -o defined): -c c:\Axis\axis-c-1.6-Win32-bin\bin\HTTPChannel.dll</td>
+</tr>
+<tr class="b">
+<td>-cs</td><td>SSL channel library name. If -a and -o have both already been defined, then only the filename is required. Otherwise the fully qualified path will be required (NB: You can still override the -a and -o definitions by using a fully qualified path).</td><td>(with -a and -o defined): -cs HTTPSSLChannel.dll, (without -a and -o defined): -cs c:\Axis\axis-c-1.6-Win32-bin\bin\HTTPSSLChannel.dll</td>
+</tr>
+<tr class="a">
+<td>-x</td><td>Xerces library name. If -a and -o have both already been defined, then only the filename is required. Otherwise the fully qualified path will be required (NB: You can still override the -a and -o definitions by using a fully qualified path).</td><td>(with -a and -o defined): -x AxisXMLParserXerces.dll, (without -a and -o defined): -x c:\Axis\axis-c-1.6-Win32-bin\bin\AxisXMLParserXerces.dll</td>
+</tr>
+<tr class="b">
+<td>-m</td><td>Merge with existing configuration file.</td><td>-m on|off (the default is 'off' meaning 'overwrite')</td>
+</tr>
+<tr class="a">
+<td>-pi</td><td>Change the progress information output during the construction of the configuration file.</td><td>-pi normal|quiet (the default is 'normal' meaning "give full descriptions").</td>
+</tr>
+<tr class="b">
+<td>-b</td><td>Backup the existing configuration file before creating the new one.</td><td>-b true|false (the default is 'true').</td>
+</tr>
+<tr class="a">
+<td>-qmf</td><td>Query for missing files. When no parameter for a filename is provided on the command line, the application will list the file options and the user then selects which file to use in the configuration file. This can be turned off using this parameter.</td><td>-qmf on|off (the default is 'on' meaning "list and then ask for file to include").</td>
+</tr>
+<tr class="b">
+<td>-so</td><td>SSL options. Used to add a string of parameters (if) required by the version SSL.</td><td>-so "...parameter list..."</td>
+</tr>
+</table>
+<p>Client Specific<br>---------------<br>
+</p>
+<table class="ForrestTable" cellspacing="1" cellpadding="4">
+<tr class="b">
+<td>command</td><td>Description</td><td>Example</td>
+</tr>
+<tr class="a">
+<td>-cl</td><td>Client log filename. If -a has been defined, then only the filename is required. Otherwise the fully qualified path will be required. (NB: You can still override the -a and -o definitions by using a fully qulified path). To ignore the client log, using 'ignore' instead of a filename.</td><td>(without -a defined): -cl c:\Axis\client.log.</td>
+</tr>
+<tr class="b">
+<td>-cw</td><td>Client WSDD filename. If -a and -o have both already been defined, then only the filename is required. Otherwise the fully qualified path will be required (NB: You can still override the -a and -o definitions by using a fully qulified path).</td><td>(with -a and -o defined): -cw client.wsdd, (without -a and -o defined): -cw c:\Axis\WSDD\client.wsdd</td>
+</tr>
+</table>
+<p>Server Specific<br>---------------<br>
+</p>
+<table class="ForrestTable" cellspacing="1" cellpadding="4">
+<tr class="b">
+<td>command</td><td>Description</td><td>Example</td>
+</tr>
+<tr class="a">
+<td>-sl</td><td>Server log filename. If -a has been defined, then only the filename is required. Otherwise the fully qualified path will be required. (NB: You can still override the -a and -o definitions by using a fully qulified path).</td><td>(with -a defined): -sl server.log, (without -a defined): -sl c:\Axis\server.log</td>
+</tr>
+<tr class="b">
+<td>-sw</td><td>Server WSDD filename. If -a and -o have both already been defined, then only the filename is required. Otherwise the fully qualified path will be required (NB: You can still override the -a and -o definitions by using a fully qulified path).</td><td>(with -a and -o defined): -sw server.wsdd, (without -a and -o defined): -sw c:\Axis\WSDD\server.wsdd</td>
+</tr>
+</table>
+<br>
+<br>
+<div class="h5">
+<h5>4.2 Manually create the axiscpp.conf file</h5>
+</div>
+<p>A sample configuration file is installed in $AXISCPP_DEPLOY/etc on linux or %AXISCPP_DEPLOY% on windows systems. Edit this file to match your systems settings and copy it to axiscpp.conf<br>
 <br> Configuration file has the following syntax on the client-side:</p>
 <p>The comment character is '#'<br>Transport_http - HTTP transport library: Required<br>Channel_HTTP - Channel transport library: Required<br>Channel_HTTP_SSL - SSL channel transport library: Optional - only required is you are going to use ssl<br>XMLParser - The Axis XML parser library that comes with your configuration: Required<br>SecureInfo: SSL configuration information: Optional - only required if you are going to use ssl<br>ClientWSDDFilePath - Path to the client wsdd: Optional - only required if you are using client-side handlers<br>ClientLogPath - Path to the Axis C++ client log: Optional - only required if you want engine trace for debugging purposes</p>
 <p>A sample <strong>axiscpp.conf</strong> file for a client (linux)</p>
