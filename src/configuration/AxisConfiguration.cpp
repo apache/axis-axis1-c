@@ -250,12 +250,8 @@ ECONFIG	ReadConfigOptions( int iParamCount, char * pParamArray[], char ** ppsDef
 	strcpy( ppsDefaultParamList[eBackup], "true");
 	strcpy( ppsDefaultParamList[eQueryMissingFiles], "on");
 
-cout << "iParamCount=" << iParamCount << endl;
-
 	for( int iCount = 0; iCount < iParamCount; iCount++)
 	{
-cout << iCount << "=[" << pParamArray[iCount] << "]"<< endl;
-
 		if( StringCompare( pParamArray[iCount], "Client"))
 		{
 			eConfig = (ECONFIG)((int) eConfig | eClient);
@@ -290,7 +286,6 @@ cout << iCount << "=[" << pParamArray[iCount] << "]"<< endl;
 				}
 
 				iCount++;
-cout << sOptions[iIndex].eConfType << "." << iCount << "=[" << pParamArray[iCount] << "]"<< endl;
 
 				if( iCount < iParamCount)
 				{
