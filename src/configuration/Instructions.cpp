@@ -56,8 +56,8 @@ void Instructions( char * pszPackageName)
 			"     example (without -a and -o defined):" << endl <<
 			"     -c c:\\Axis\\" << pszPackageName << "\\HTTPChannel.dll" << endl << endl;
 #else
-			"     -c libhttp_channel.so" << endl;
-			"     example (without -a and -o defined):" << endl;
+			"     -c libhttp_channel.so" << endl <<
+			"     example (without -a and -o defined):" << endl <<
 			"     -c /home/userid/Axis/" << pszPackageName << "/libhttp_channel.so" << endl << endl;
 #endif
 	cout << "-cs  ssl channel library name" << endl <<
