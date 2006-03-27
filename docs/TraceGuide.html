@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="../skin/mysite.css" type="text/css">
 <link rel="stylesheet" href="../skin/site.css" type="text/css">
 <link media="print" rel="stylesheet" href="../skin/print.css" type="text/css">
-<title>The Axis C++ team</title>
+<title>The Axis C++ Trace Guide</title>
 </head>
 <body bgcolor="white" class="composite">
 <div id="banner">
@@ -170,7 +170,7 @@
 </div>
   
 <div class="menuItem">
-<span class="menuSelected">Who we are</span>
+<a href="../cpp/who.html">Who we are</a>
 </div>
   
 </div>
@@ -251,52 +251,143 @@
 <div id="bodycol">
 <div class="app">
 <div align="center">
-<h1>The Axis C++ team</h1>
+<h1>The Axis C++ Trace Guide</h1>
 </div>
 <div class="h3">
 <div class="h3">
-<h3>The Axis C++ team</h3>
+<h3>Introducion</h3>
 </div>
+<p>This documents describes the trace facilities within Axis C++, how to enable them and how to make use of the produced trace.</p>
+<div class="h3">
+<h3>Contents</h3>
+</div>
+<ul>
+<li>
+<a href="#RuntimeTrace">Runtime Trace</a> 
+<ul>
+<li>
+<a href="#enablingRuntimeTrace">Enabling runtime trace</a>
+</li>
+<li>
+<a href="#readingRuntimeTrace">Reading runtime trace</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#StartupTrace">Startup Trace</a> 
+<ul>
+<li>
+<a href="#enablingStartupTrace">Enabling startup trace</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#InterestingTraceEntries">Interesting Trace Entries</a>
+</li>
+</ul>
+<p>
+<a name="RuntimeTrace"></a>
+</p>
+<div class="h3">
+<h3>Runtime Trace</h3>
+</div>
+<p>To aid the development team in understanding the problems of users, the Axis C++ engine has been instrumented with trace.</p>
+<p>
+<a name="enablingRuntimeTrace"></a>
+</p>
 <div class="h4">
-<h4>Active Contributors</h4>
+<h4>Enabling runtime trace</h4>
 </div>
-<p>John Hawkins &lt;HAWKINSJ@uk.ibm.com&gt;,</p>
-<p>Fred Preston &lt;PRESTONF@uk.ibm.com&gt;,</p>
-<p>Adrian Dick &lt;adrian.dick@uk.ibm.com&gt;</p>
-<p>Nadir Amra &lt;amra@us.ibm.com&gt;</p>
+<p>Trace is enabled at runtime by adding the following to <span class="codefrag">axiscpp.conf</span>:</p>
+<p>
+<span class="codefrag">ClientLogPath:&lt;path to log file&gt;</span>
+</p>
+<p>
+<a name="readingRuntimeTrace"></a>
+</p>
 <div class="h4">
-<h4>Additional Contributors</h4>
+<h4>Reading runtime trace</h4>
 </div>
-<p>Samisa Abeysinghe &lt;samisa_abeysinghe@yahoo.com&gt;,</p>
-<p>Mark Whitlock &lt;mark_whitlock@uk.ibm.com&gt;,</p>
-<p>Andrew Perry &lt;PERRYAN@uk.ibm.com&gt;,</p>
-<p>Sanjiva Weerawarana &lt;sanjiva@opensource.lk&gt;,</p>
-<p>Farhaan Mohideen &lt;farhaan@opensource.lk&gt;,</p>
-<p>Nithyakala Thangarajah &lt;nithya@opensource.lk&gt;,</p>
-<p>Rangika Mendis &lt;rangika@opensource.lk&gt;,</p>
-<p>Sharanka Perera &lt;sharanka@opensource.lk&gt;,</p>
-<p>M.F.Rinzad Ahamed &lt;rinzad@opensource.lk&gt;,</p>
-<p>Susantha Kumara &lt;susantha@virtusa.com, susantha@opensource.lk&gt;,</p>
-<p>Damitha Kumarage &lt;damitha@beyondm.net, damitha@opensource.lk&gt;,</p>
-<p>Roshan Weerasuriya &lt;roshan@jkcsworld.com, roshan@opensource.lk&gt;,</p>
-<p>Sanjaya Singharage &lt;sanjayas@jkcsworld.com,sanjayas@opensource.lk&gt;,</p>
-<p>Chaminda Divitotawela &lt;cdivitotawela@virtusa.com, chadiv@opensource.lk&gt;,</p>
-<p>Nuwan Gurusinghe &lt;nuwan@beyondm.net, nuwan@opensource.lk&gt;,</p>
-<p>Chamindra de Silva &lt;chamindra@virtusa.com&gt;,</p>
-<p>Kanchana Welagedara &lt;kanchana@opensource.lk&gt;,</p>
-<p>Srinath Perera &lt;hemapani@cse.mrt.ac.lk, hemapani@opensource.lk&gt;,</p>
-<p>Thushantha Ravipriya De Alwis &lt;thushantha@beyondm.net, ravi@opensource.lk&gt;,</p>
-<p>Dimuthu Leelarathne &lt;muthulee@cse.mrt.ac.lk, muthulee@opensource.lk&gt;,</p>
-<p>Jeyakumaran.C &lt;jkumaran@opensource.lk&gt;,</p>
-<p>Vairamuthu Thayapavan &lt;vtpavan@opensource.lk&gt;,</p>
-<p>Satheesh Thurairajah</p>
-<p>Piranavam ThiruChelvan &lt;chelvan@opensource.lk&gt;,</p>
-<p>Dharmarajeswaran Dharmeehan &lt;dhar@opensource.lk&gt;,</p>
-<p>Selvarajah Selvendra &lt;selva@opensource.lk&gt;,</p>
-<p>Lilantha Darshana &lt;Lilantha@virtusa.com&gt;,</p>
-<p>Nadika Ranasinghe &lt;nranasinghe@virtusa.com, nadika@opensource.lk&gt;,</p>
+<p>The Axis C++ runtime trace is produced in a format compatible with the Trace Analyzer for WebSphere Application Server, which is available from here:</p>
+<p>
+<a href="http://www.alphaworks.ibm.com/tech/ta4was">Trace Analyzer for WebSphere Application Server</a>
+</p>
+<p>However, it is also possible to use any text editor. Each line is made up of the following columns:</p>
+<ul>
+<li>date/time</li>
+<li>thread ID</li>
+<li>Class name, a - indicates a c-style gloval function</li>
+<li>Trace type: <ul>
+<li>&gt; (entry)</li>
+<li>&lt; (exit)</li>
+<li>X (exception)</li>
+<li>I (information)</li>
+</ul>
+</li>
+<li>Method name</li>
+<li>
+<span class="codefrag">this</span> pointer for instance methods</li>
+<li>comma seperated list of parameters <ul>
+<li>[nnnnnnnn] Data in hex</li>
+<li>&lt;...&gt; Data in ascii</li>
+<li>For pointers address is given before data</li>
+<li>For void*, only 1st byte of data is given, as there is no way of knowing size of data.</li>
+</ul>
+</li>
+</ul>
+<p>So, a typical entry would be:</p>
+<p>
+<span class="codefrag">[27/03/2006 16:21:48:945 Time] 4220 AxisConfig &gt; getAxisConfProperty @00376358,[00000000] &lt;....&gt;</span>
+</p>
+<p>Some other things to watch for are:</p>
+<ul>
+<li>An entry containing: <span class="codefrag">------------&gt;</span> indicates that it is a multiline entry</li>
+<li>
+<span class="codefrag">&lt;BADPOINTER&gt;</span> means the trace attempted to dereference a pointer causing a SIGSEGV which the trace has caught.</li>
+<li>
+<span class="codefrag">&lt;UNKNOWNTYPE&gt;</span> means the trace tool and runtime have got out of step. You have found a bug!</li>
+<li>
+<span class="codefrag">&lt;ANONYMOUS&gt;</span> means that it is unnamed in the method signature.</li>
+</ul>
+<p>
+<a name="StartUpTrace"></a>
+</p>
+<div class="h3">
+<h3>Startup Trace</h3>
+</div>
+<p>One shortcoming of the runtime trace is that it only begins tracing after the configuration file has been loaded and the <span class="codefrag">ClientLogPath</span> entry read. This means any problems that occur before this, for example while reading the configuration file, are missed. To overcome this the Axis C++ engine has also been instrumented with startup trace, this starts tracing at the first call into the Axis engine and everything up to the point at which runtime trace starts.</p>
+<p>Startup trace uses the same formatting as the runtime trace.</p>
+<p>
+<a name="enablingStartupTrace"></a>
+</p>
+<div class="h4">
+<h4>Enabling startup trace</h4>
+</div>
+<p>Startup trace is enabled by setting the following environment variable:</p>
+<p>
+<span class="codefrag">AXISCPP_STARTUP_TRACE=&lt;path to startup log file&gt;</span>
+</p>
+<p>
+<a name="InterestingTraceEntries"></a>
+</p>
+<div class="h3">
+<h3>Interesting Trace Entries</h3>
+</div>
+<p>Here are a few entries well worth looking for when you first receive a trace file.</p>
+<div class="h4">
+<h4>Stub Destructor</h4>
+</div>
+<p>Check lines in the trace file immediately preceding the entry for ~Stub, as this is typically the first method run following a <span class="codefrag">SIGSEGV</span>.</p>
+<div class="h4">
+<h4>Exception Entries</h4>
+</div>
+<p>Check any exception entries, which is indicated by an X in the 3rd column. These actually indicate that an exception has been caught. If you see <span class="codefrag">@&lt;number&gt;</span> this indicates which catch block, if more than one present in the current method. You can use this, along with the trace lines immediately preceding, to determine fairly closely exactly where the trace was thrown. You will also see trace entries for the exception constructor if it is an Axis C++ exception.</p>
+<div class="h4">
+<h4>HTTPChannel::operator&lt;&lt;</h4>
+</div>
+<p>The entry trace for <span class="codefrag">operator&lt;&lt;</span> on <span class="codefrag">HTTPChannel</span>shows the message that will sent on the wire. Although the HTTP Header and SOAP message tend to be in seperate calls to this method. This allows for diagnosis of some problems with the message, without requiring the use of a tcp/ip monitoring tool.</p>
 <div id="pdf" align="right">
-<a href="who.pdf"><img alt="PDF" src="../skin/images/pdfdoc.gif" class="skin"><br>
+<a href="TraceGuide.pdf"><img alt="PDF" src="../skin/images/pdfdoc.gif" class="skin"><br>
           PDF</a>
 </div>
 </div>
