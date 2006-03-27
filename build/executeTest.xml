@@ -329,7 +329,7 @@
 
 <!-- No Client Log, No SSL Library -->
 				<echo message="No Client log or SSL library."/>  
-				<exec executable="${dir.libraries}\${axisConfigurationExecutableName}${executableSuffix}">
+				<exec executable="${dir.release}/bin/${axisConfigurationExecutableName}${executableSuffix}">
 					<arg line="Client"/>
                     <arg line="-acd  ${confFileDirectory}"/>
                     <arg line="-th  ${dir.libraries}/${libraryPrefix}${transportLibraryName}${librarySuffix}"/>
@@ -353,7 +353,7 @@
 			<then>
 <!-- Client Log, No SSL Library -->
 				<echo message="Client log, but no SSL library."/>
-				<exec dir="${dir.libraries}" executable="${axisConfigurationExecutableName}${executableSuffix}">
+				<exec executable="${dir.release}/bin/${axisConfigurationExecutableName}${executableSuffix}">
 					<arg line="Client
 							   -acd ${confFileDirectory}
 							   -th  ${dir.libraries}/${libraryPrefix}${transportLibraryName}${librarySuffix}
@@ -379,7 +379,7 @@
 			<then>
 <!-- No Client Log, SSL Library -->
 				<echo message="No Client log but SSL library."/>
-				<exec dir="${dir.libraries}" executable="${axisConfigurationExecutableName}${executableSuffix}">
+				<exec executable="${dir.release}/bin/${axisConfigurationExecutableName}${executableSuffix}">
 					<arg line="Client -acd  ${confFileDirectory}
 								-th  ${dir.libraries}/${libraryPrefix}${transportLibraryName}${librarySuffix}
 								-c   ${dir.libraries}/${libraryPrefix}${HTTP.ChannelLibraryName}${librarySuffix}
@@ -402,7 +402,7 @@
 			<then>
 <!-- Client Log, SSL Library -->
 				<echo message="Client log and SSL library."/>
-				<exec dir="${dir.libraries}" executable="${axisConfigurationExecutableName}${executableSuffix}">
+				<exec executable="${dir.release}/bin/${axisConfigurationExecutableName}${executableSuffix}">
 					<arg line="Client -acd  ${confFileDirectory}
 								-th  ${dir.libraries}/${libraryPrefix}${transportLibraryName}${librarySuffix}
 								-c   ${dir.libraries}/${libraryPrefix}${HTTP.ChannelLibraryName}${librarySuffix}
