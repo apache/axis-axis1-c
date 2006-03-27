@@ -151,7 +151,7 @@
 			<linker refid="AIXExecutableLinker"/>
             <linker refid="HP-UXLinker"/>      
 		    <linker extends="OS400ExecutableLinker">
-                <linkerarg value="-qOPTION=*DUPPROC"/>
+                <linkerarg value="-qDUPPROC"/>
 		        <linkerarg location="end" value="${dir.lib}/lib${clientLibraryName.lang}.so"/>
 		        <linkerarg location="end" value="${test.directory}/lib${libraryName}.so"/>
 		    </linker>

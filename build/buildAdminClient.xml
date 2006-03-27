@@ -36,8 +36,8 @@
       <linker refid="AIXExecutableLinker"/>
 	  <linker extends="OS400ExecutableLinker">
   		    <linkerarg location="end" value="${dir.bin}/lib${clientLibraryName}.so"/>
-            <linkerarg value="-qOPTION=*DUPPROC"/>
-			<linkerarg value="-qOPTION=*DUPVAR"/>
+            <linkerarg value="-qDUPPROC"/>
+			<linkerarg value="-qDUPVAR"/>
 	  </linker>
 
           <!-- Files to be compiled -->
