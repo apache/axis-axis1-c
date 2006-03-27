@@ -107,6 +107,8 @@ void Destroy( LIST * psDLLNames, LIST * psFileNameList, char ** ppsDefaultParamL
 			free( (void *) ppsDefaultParamList[iCount]);
 		}
 	}
+
+	fcloseall();
 }
 
 int PopulateNewDLLNameInfo( LIST * psDLLNames, char * pszName, char * pszFilename, bool bAddToClientConfig)

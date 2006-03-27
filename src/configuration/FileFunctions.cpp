@@ -146,8 +146,8 @@ void WriteAxisConfigFile( LIST * psDLLNames, int * piConfigInfoArray, CHOICELIST
 
 	if( bMerge)
 	{
-		char *		pszData = NULL;
-		long		lFileLength = 0;
+		char *	pszData = NULL;
+		long	lFileLength = 0;
 		
 		if( (lFileLength = ReadFileContents( szFilename, &pszData)) > -1)
 		{
@@ -155,7 +155,7 @@ void WriteAxisConfigFile( LIST * psDLLNames, int * piConfigInfoArray, CHOICELIST
 
 			if( lFileLength < 5)
 			{
-				char		szConfigData[512];
+				char	szConfigData[512];
 
 				sprintf( szConfigData, "# This header file was created by AxisConfiguration on %s", TimeNow());
 
@@ -169,7 +169,7 @@ void WriteAxisConfigFile( LIST * psDLLNames, int * piConfigInfoArray, CHOICELIST
 
 			for( int ieConfigType = eHTTPTransport; ieConfigType < eConfigMax; ieConfigType++)
 			{
-				int		iChoiceIndex = GetChoiceIndexForConfigType( psChoiceList, (ECONFIGTYPE) ieConfigType);
+				int	iChoiceIndex = GetChoiceIndexForConfigType( psChoiceList, (ECONFIGTYPE) ieConfigType);
 
 				if( iChoiceIndex != -1)
 				{
@@ -185,9 +185,9 @@ void WriteAxisConfigFile( LIST * psDLLNames, int * piConfigInfoArray, CHOICELIST
 							psTagLineStart++;
 
 							while( *psTagLineEnd != '\n' &&
-								*psTagLineEnd != '\r' &&
-								*psTagLineEnd != '\0' &&
-								psTagLineEnd - pszData < lFileLength)
+								   *psTagLineEnd != '\r' &&
+								   *psTagLineEnd != '\0' &&
+								   psTagLineEnd - pszData < lFileLength)
 							{
 								psTagLineEnd++;
 							}
@@ -333,9 +333,22 @@ bool BackUpExistingConfigFile( char * pszAxisCpp_Deploy, char * pszFilename, cha
 			fclose( pFileFrom);
 			fclose( pFileTo);
 
+			pFileTo = NULL;
+			pFileFrom = NULL;
+
 			free( pFileContent);
 
 			bSuccess = true;
+		}
+
+		if( pFileTo != NULL)
+		{
+			fclose( pFileTo);
+		}
+
+		if( pFileFrom != NULL)
+		{
+			fclose( pFileFrom);
 		}
 	}
 

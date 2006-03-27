@@ -8,6 +8,7 @@
 #include "platforms/PlatformAutoSense.hpp"
 #include "common/AxisConfig.h"
 #include "ListMethods.hpp"
+#include "Instructions.hpp"
 
 using namespace std;
 
