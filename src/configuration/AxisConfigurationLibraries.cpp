@@ -69,10 +69,11 @@ char * GetTagValue( LIST * psDLLNames, int * piConfigInfoArray, ECONFIGTYPE eCon
 	return pszTagValue;
 }
 
-void Initialise( LIST * psDLLNames, int * piConfigInfoArray, LIST * psFileNameList, char ** ppsDefaultParamList)
+void Initialise( LIST * psDLLNames, int * piConfigInfoArray, LIST * psFileNameList, char ** ppsDefaultParamList, char * pszAxisCpp_Deploy, int iAxisCpp_Deploy)
 {
 	memset( psDLLNames, 0, sizeof( LIST));
 	memset( psFileNameList, 0, sizeof( LIST));
+	memset( pszAxisCpp_Deploy, 0, iAxisCpp_Deploy);
 
 	for( int iCount = 0; iCount < eConfigMax; iCount++)
 	{

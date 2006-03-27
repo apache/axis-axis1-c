@@ -9,12 +9,12 @@ int main( int argc, char * argv[])
 {
 	LIST			sDLLNames;
 	int				iConfigInfoArray[eConfigMax];
-	CHOICELIST		sChoiceList[] = { {PLATFORM_TRANSPORTHTTP_PATH,	"HTTP Transport library",											AXCONF_TRANSPORTHTTP_TAGNAME,		eHTTPTransport,		eClientAndServer},
-									  {PLATFORM_CHANNEL_PATH,		"HTTP Channel library",												AXCONF_CHANNEL_HTTP_TAGNAME,		eHTTPChannel,		eClientAndServer},
+	CHOICELIST		sChoiceList[] = { {PLATFORM_TRANSPORTHTTP_PATH,	"HTTP Transport library",											AXCONF_TRANSPORTHTTP_TAGNAME,		eHTTPTransport,		eClient},
+									  {PLATFORM_CHANNEL_PATH,		"HTTP Channel library",												AXCONF_CHANNEL_HTTP_TAGNAME,		eHTTPChannel,		eClient},
 #if WIN32
-									  {"HTTPSSLChannel.dll",		"HTTP SSL Channel library",											AXCONF_SSLCHANNEL_HTTP_TAGNAME,		eHTTPSSLChannel,	eClientAndServer},
+									  {"HTTPSSLChannel.dll",		"HTTP SSL Channel library",											AXCONF_SSLCHANNEL_HTTP_TAGNAME,		eHTTPSSLChannel,	eClient},
 #else
-									  {"libhttp_channelssl.so",		"HTTP SSL Channel library",											AXCONF_SSLCHANNEL_HTTP_TAGNAME,		eHTTPSSLChannel,	eClientAndServer},
+									  {"libhttp_channelssl.so",		"HTTP SSL Channel library",											AXCONF_SSLCHANNEL_HTTP_TAGNAME,		eHTTPSSLChannel,	eClient},
 #endif
 									  {PLATFORM_XMLPARSER_PATH,		"Axis XML Parser library",											AXCONF_XMLPARSER_TAGNAME,			eXMLParser,			eClientAndServer},
 									  {"SMTPTRANSPORT",				"SMTP Transport library",											AXCONF_TRANSPORTSMTP_TAGNAME,		eSMTPTransport,		eClientAndServer},
@@ -42,8 +42,7 @@ int main( int argc, char * argv[])
 #endif
 	char			szAxisCpp_Deploy[256];
 
-
-	Initialise( &sDLLNames, iConfigInfoArray, &sFileNameList, (char **) psDefaultParamList);
+	Initialise( &sDLLNames, iConfigInfoArray, &sFileNameList, (char **) psDefaultParamList, szAxisCpp_Deploy, (int) sizeof( szAxisCpp_Deploy));
 
 	switch( ReadConfigOptions( argc, argv, (char **) psDefaultParamList, cSlash))
 	{
@@ -127,11 +126,19 @@ int main( int argc, char * argv[])
 						}
 						else
 						{
+							if( strlen( szAxisCpp_Deploy) > 0)
+							{
 #if WIN32
-							sprintf( szFilename, "%s\\%s", szAxisCpp_Deploy, szLog);
+								sprintf( szFilename, "%s\\%s", szAxisCpp_Deploy, szLog);
 #else
-							sprintf( szFilename, "%s/%s", szAxisCpp_Deploy, szLog);
+								sprintf( szFilename, "%s/%s", szAxisCpp_Deploy, szLog);
 #endif
+							}
+							else
+							{
+								sprintf( szFilename, "%s", szLog);
+							}
+
 							iConfigInfoArray[sChoiceList[iChoiceCount].eConfigType] = PopulateNewDLLNameInfo( &sDLLNames, szLog, szFilename, true);
 						}
 					}
@@ -243,8 +250,12 @@ ECONFIG	ReadConfigOptions( int iParamCount, char * pParamArray[], char ** ppsDef
 	strcpy( ppsDefaultParamList[eBackup], "true");
 	strcpy( ppsDefaultParamList[eQueryMissingFiles], "on");
 
+cout << "iParamCount=" << iParamCount << endl;
+
 	for( int iCount = 0; iCount < iParamCount; iCount++)
 	{
+cout << iCount << "=[" << pParamArray[iCount] << "]"<< endl;
+
 		if( StringCompare( pParamArray[iCount], "Client"))
 		{
 			eConfig = (ECONFIG)((int) eConfig | eClient);
@@ -279,6 +290,7 @@ ECONFIG	ReadConfigOptions( int iParamCount, char * pParamArray[], char ** ppsDef
 				}
 
 				iCount++;
+cout << sOptions[iIndex].eConfType << "." << iCount << "=[" << pParamArray[iCount] << "]"<< endl;
 
 				if( iCount < iParamCount)
 				{
@@ -292,13 +304,17 @@ ECONFIG	ReadConfigOptions( int iParamCount, char * pParamArray[], char ** ppsDef
 						  sOptions[iIndex].eConfType == eSSLOptions) &&
 						strchr( pParamArray[iCount], cSlash) == NULL)
 					{
-						char	szLocation[512];
+						std::string	sLocation;
 
-						sprintf( szLocation, "%s%c%s%c%s", ppsDefaultParamList[eRootDirectory], cSlash, ppsDefaultParamList[eOffsetToLibs], cSlash, pParamArray[iCount]);
+						sLocation = ppsDefaultParamList[eRootDirectory];
+						sLocation += cSlash;
+						sLocation += ppsDefaultParamList[eOffsetToLibs];
+						sLocation += cSlash;
+						sLocation += pParamArray[iCount];
 
-						ppsDefaultParamList[sOptions[iIndex].eConfType] = (char *) malloc( strlen( szLocation) + 1);
+						ppsDefaultParamList[sOptions[iIndex].eConfType] = (char *) malloc( sLocation.length() + 1);
 
-						strcpy( ppsDefaultParamList[sOptions[iIndex].eConfType], szLocation);
+						strcpy( ppsDefaultParamList[sOptions[iIndex].eConfType], sLocation.c_str());
 					}
 					else
 					{
