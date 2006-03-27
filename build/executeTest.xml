@@ -328,17 +328,17 @@
 			<then>
 
 <!-- No Client Log, No SSL Library -->
-				<echo message="No Client log or SSL library."/>
-				<exec dir="${dir.libraries}" executable="${axisConfigurationExecutableName}${executableSuffix}">
-					<arg line="Client -acd  ${confFileDirectory}
-								-th  ${dir.libraries}/${libraryPrefix}${transportLibraryName}${librarySuffix}
-								-c   ${dir.libraries}/${libraryPrefix}${HTTP.ChannelLibraryName}${librarySuffix}
-								-x   ${dir.libraries}/${ClientParserLib}
-							    -so  &quot;${env.SSL_KEYS_HOME}/myKeyRing.kdb,axis4all,AXIS,NONE,05,NONE,false&quot;
-								-b   false
-								-pi  quiet
-								-qmf off"
-					/>
+				<echo message="No Client log or SSL library."/>  
+				<exec executable="${dir.libraries}\${axisConfigurationExecutableName}${executableSuffix}">
+					<arg line="Client"/>
+                    <arg line="-acd  ${confFileDirectory}"/>
+                    <arg line="-th  ${dir.libraries}/${libraryPrefix}${transportLibraryName}${librarySuffix}"/>
+                    <arg line="-c   ${dir.libraries}/${libraryPrefix}${HTTP.ChannelLibraryName}${librarySuffix}"/>
+                    <arg line="-x   ${dir.libraries}/${ClientParserLib}"/>
+                    <arg line="-so  &quot;${env.SSL_KEYS_HOME}/myKeyRing.kdb,axis4all,AXIS,NONE,05,NONE,false&quot;"/>
+                    <arg line="-b   false"/>
+                    <arg line="-pi  quiet"/>
+                    <arg line="-qmf off"/>
 				</exec>
 			</then>
 		</if>
