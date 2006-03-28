@@ -54,20 +54,23 @@ public abstract class HeaderFileWriter extends BasicFileWriter
         try
         {
             this.writer = new BufferedWriter(new FileWriter(getFilePath(), false));
+            
             writeClassComment();
+            
             // if this headerfile not defined define it 
-            this.writer.write(
-                "#if !defined(__" + classname.toUpperCase() + "_H__INCLUDED_)\n");
-            this.writer.write(
-                "#define __" + classname.toUpperCase() + "_H__INCLUDED_\n\n");
+            this.writer.write("#if !defined(__" + classname.toUpperCase() + "_H__INCLUDED_)\n");
+            this.writer.write("#define __" + classname.toUpperCase() + "_H__INCLUDED_\n\n");
+            
             //includes
             writePreprocessorStatements();
+            
             //class
             writeAttributes();
             writeMethods();
             this.writer.write("\n\n");
-            this.writer.write(
-                "#endif /* !defined(__" + classname.toUpperCase() + "_H__INCLUDED_) */\n");
+            
+            this.writer.write("#endif /* !defined(__" + classname.toUpperCase() + "_H__INCLUDED_) */\n");
+            
             //cleanup
             writer.flush();
             writer.close();
@@ -97,24 +100,14 @@ public abstract class HeaderFileWriter extends BasicFileWriter
     {
         String targetOutputLocation = this.wscontext.getWrapInfo().getTargetOutputLocation();
         if (targetOutputLocation.endsWith("/"))
-        {
-            targetOutputLocation =
-                targetOutputLocation.substring(0,targetOutputLocation.length() - 1);
-        }
+            targetOutputLocation = targetOutputLocation.substring(0,targetOutputLocation.length() - 1);
+
         new File(targetOutputLocation).mkdirs();
 
         String fileName = targetOutputLocation + "/" + classname + ".h";
 
         if (useServiceName)
-        {
-            fileName =
-                targetOutputLocation
-                    + "/"
-                    + this.getServiceName()
-                    + "_"
-                    + classname
-                    + ".h";
-        }
+            fileName = targetOutputLocation + "/" + this.getServiceName() + "_" + classname + ".h";
 
         return new File(fileName);
     }

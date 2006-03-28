@@ -58,29 +58,20 @@ public class ParmHeaderFileWriter extends ParamWriter
     {
         try
         {
-            this.writer =
-                new BufferedWriter(new FileWriter(getFilePath(), false));
+            this.writer = new BufferedWriter(new FileWriter(getFilePath(), false));
             writeClassComment();
             // if this headerfile not defined define it 
-            this.writer.write(
-                "#if !defined(__"
-                    + classname.toUpperCase()
-                    + "_H__INCLUDED_)\n");
-            this.writer.write(
-                "#define __" + classname.toUpperCase() + "_H__INCLUDED_\n\n");
+            this.writer.write("#if !defined(__" + classname.toUpperCase() + "_H__INCLUDED_)\n");
+            this.writer.write("#define __" + classname.toUpperCase() + "_H__INCLUDED_\n\n");
             writePreprocessorStatements();
             this.writer.write("typedef struct " + classname + "Tag {\n");
             writeAttributes();
             this.writer.write("} " + classname + ";\n\n");
-            this.writer.write(
-                "#endif /* !defined(__"
-                    + classname.toUpperCase()
-                    + "_H__INCLUDED_)*/\n");
+            this.writer.write("#endif /* !defined(__" + classname.toUpperCase() + "_H__INCLUDED_)*/\n");
             writer.flush();
             writer.close();
             if (WSDL2Ws.verbose)
-                System.out.println(
-                    getFilePath().getAbsolutePath() + " created.....");
+                System.out.println(getFilePath().getAbsolutePath() + " created.....");
         }
         catch (IOException e)
         {
@@ -105,14 +96,8 @@ public class ParmHeaderFileWriter extends ParamWriter
             }
             for (int i = 0; i < attribs.length; i++)
             {
-                //if((t = wscontext.getTypemap().getType(new QName(attribs[i][2],attribs[i][3])))!= null && t.isArray()) continue;
-                writer.write(
-                    "\t"
-                        + getCHeaderFileCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-                        + " "
-                        + attribs[i].getParamName()
-                        + ";\n");
-
+                writer.write("\t" + getCHeaderFileCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+                        + " " + attribs[i].getParamName() + ";\n");
             }
         }
         catch (IOException e)
@@ -155,24 +140,16 @@ public class ParmHeaderFileWriter extends ParamWriter
         String targetOutputLocation =
             this.wscontext.getWrapInfo().getTargetOutputLocation();
         if (targetOutputLocation.endsWith("/"))
-            targetOutputLocation =
-                targetOutputLocation.substring(
-                    0,
-                    targetOutputLocation.length() - 1);
+            targetOutputLocation = targetOutputLocation.substring(0,targetOutputLocation.length() - 1);
         new File(targetOutputLocation).mkdirs();
 
-        String fileName =
-            targetOutputLocation + "/" + classname + CUtils.C_HEADER_SUFFIX;
+        String fileName = targetOutputLocation + "/" + classname + CUtils.C_HEADER_SUFFIX;
 
         if (useServiceName)
         {
-            fileName =
-                targetOutputLocation
-                    + "/"
-                    + this.wscontext.getSerInfo().getServicename()
-                    + "_"
-                    + classname
-                    + CUtils.C_HEADER_SUFFIX;
+            fileName = targetOutputLocation + "/"
+                    + this.wscontext.getSerInfo().getServicename() + "_"
+                    + classname + CUtils.C_HEADER_SUFFIX;
         }
 
         return new File(fileName);
@@ -190,42 +167,29 @@ public class ParmHeaderFileWriter extends ParamWriter
             writer.write("#include <axis/server/AxisUserAPI.h>\n\n");
             HashSet typeSet = new HashSet();
             String typeName = null;
+            
             while (types.hasNext())
             {
                 atype = (Type) types.next();
                 if (!(atype.equals(this.type)))
-                {
                     if (this.type.isContainedType(atype))
                     {
                         typeName = WrapperUtils.getLanguageTypeName4Type(atype);
                         if (null != typeName)
                             typeSet.add(typeName);
                     }
-                }
             }
+            
             Iterator itr = typeSet.iterator();
             while (itr.hasNext())
             {
-                writer.write(
-                    "#include \""
-                        + itr.next().toString()
-                        + CUtils.C_HEADER_SUFFIX
-                        + "\"\n");
+                writer.write("#include \"" + itr.next().toString() + CUtils.C_HEADER_SUFFIX + "\"\n");
             }
             writer.write("/*Local name and the URI for the type*/\n");
-            writer.write(
-                "static const char* Axis_URI_"
-                    + classname
-                    + " = \""
-                    + type.getName().getNamespaceURI()
-                    + "\";\n");
-            writer.write(
-                "static const char* Axis_TypeName_"
-                    + classname
-                    + " = \""
-                    + type.getName().getLocalPart()
-                    + "\";\n\n");
-
+            writer.write("static const char* Axis_URI_" + classname
+                    + " = \"" + type.getName().getNamespaceURI() + "\";\n");
+            writer.write("static const char* Axis_TypeName_" + classname
+                    + " = \"" + type.getName().getLocalPart()+ "\";\n\n");
         }
         catch (IOException e)
         {

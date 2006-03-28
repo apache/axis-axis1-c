@@ -68,59 +68,33 @@ public class ArrayParamWriter extends ParamWriter
     {
         try
         {
-            this.writer =
-                new BufferedWriter(new FileWriter(getFilePath(), false));
+            this.writer = new BufferedWriter(new FileWriter(getFilePath(), false));
             writeClassComment();
             // if this headerfile not defined define it 
-            this.writer.write(
-                "#if !defined(__"
-                    + classname.toUpperCase()
-                    + "_"
-                    + getFileType().toUpperCase()
-                    + "_H__INCLUDED_)\n");
-            this.writer.write(
-                "#define __"
-                    + classname.toUpperCase()
-                    + "_"
-                    + getFileType().toUpperCase()
-                    + "_H__INCLUDED_\n\n");
+            this.writer.write("#if !defined(__"  + classname.toUpperCase() + "_"
+                    + getFileType().toUpperCase() + "_H__INCLUDED_)\n");
+            this.writer.write("#define __" + classname.toUpperCase() + "_"
+                    + getFileType().toUpperCase() + "_H__INCLUDED_\n\n");
             if (attribs.length != 1)
             {
-                System.out.println(
-                    "Array "
-                        + classname
-                        + " contains unexpected no of variables");
-                throw new WrapperFault(
-                    "Array type "
-                        + classname
-                        + " contain unexpected no of types");
+                System.out.println("Array " + classname + " contains unexpected no of variables");
+                throw new WrapperFault("Array type " + classname + " contain unexpected no of types");
             }
+            
             //include header file for the contained type
             QName qname = WrapperUtils.getArrayType(type).getName();
             if (!CUtils.isSimpleType(qname))
-            {
-                writer.write(
-                    "#include \""
-                        + attribs[0].getTypeName()
-                        + CUtils.C_HEADER_SUFFIX
-                        + "\"\n\n");
-            }
+                writer.write("#include \"" + attribs[0].getTypeName() + CUtils.C_HEADER_SUFFIX + "\"\n\n");
             else
-            {
                 writer.write("#include <axis/server/AxisUserAPI.h>\n\n");
-            }
+
             writeArrayStruct();
-            this.writer.write(
-                "#endif /* !defined(__"
-                    + classname.toUpperCase()
-                    + "_"
-                    + getFileType().toUpperCase()
-                    + "_H__INCLUDED_)*/\n");
+            this.writer.write("#endif /* !defined(__" + classname.toUpperCase() + "_"
+                    + getFileType().toUpperCase() + "_H__INCLUDED_)*/\n");
             writer.flush();
             writer.close();
             if (WSDL2Ws.verbose)
-                System.out.println(
-                    getFilePath().getAbsolutePath() + " created.....");
+                System.out.println(getFilePath().getAbsolutePath() + " created.....");
         }
         catch (IOException e)
         {
@@ -145,26 +119,16 @@ public class ArrayParamWriter extends ParamWriter
         String targetOutputLocation =
             this.wscontext.getWrapInfo().getTargetOutputLocation();
         if (targetOutputLocation.endsWith("/"))
-        {
-            targetOutputLocation =
-                targetOutputLocation.substring(
-                    0,
-                    targetOutputLocation.length() - 1);
-        }
+            targetOutputLocation = targetOutputLocation.substring(0,targetOutputLocation.length() - 1);
+
         new File(targetOutputLocation).mkdirs();
 
-        String fileName =
-            targetOutputLocation + "/" + classname + CUtils.C_HEADER_SUFFIX;
+        String fileName = targetOutputLocation + "/" + classname + CUtils.C_HEADER_SUFFIX;
 
         if (useServiceName)
         {
-            fileName =
-                targetOutputLocation
-                    + "/"
-                    + this.wscontext.getSerInfo().getServicename()
-                    + "_"
-                    + classname
-                    + CUtils.C_HEADER_SUFFIX;
+            fileName = targetOutputLocation + "/" + this.wscontext.getSerInfo().getServicename()
+                    + "_" + classname + CUtils.C_HEADER_SUFFIX;
         }
 
         return new File(fileName);
@@ -181,12 +145,12 @@ public class ArrayParamWriter extends ParamWriter
             /*
              * Needed for self referenced  array else compilation failed.
              * <xsd:complexType name="Type1">
-             *	<xsd:sequence>
-             *		<xsd:element name="followings" maxOccurs="unbounded" minOccurs="0" type="tns:Type1" />
-             *		<xsd:element name="kind" type="xsd:string" />
-             *		<xsd:element name="index" type="xsd:int" />
-             *	</xsd:sequence>
-             *	<xsd:attribute name="att_kind" type="tns:Kind" />
+             *    <xsd:sequence>
+             *        <xsd:element name="followings" maxOccurs="unbounded" minOccurs="0" type="tns:Type1" />
+             *        <xsd:element name="kind" type="xsd:string" />
+             *        <xsd:element name="index" type="xsd:int" />
+             *    </xsd:sequence>
+             *    <xsd:attribute name="att_kind" type="tns:Kind" />
              * </xsd:complexType>
              */
             //writer.write("\t"+attribs[0].getTypeName()+"* m_Array;\n\tint m_Size;\n} "+classname+";\n\n");
@@ -196,12 +160,9 @@ public class ArrayParamWriter extends ParamWriter
             }
             else
             {
-                writer.write(
-                    "\tstruct "
-                        + attribs[0].getTypeName()
+                writer.write("\tstruct " + attribs[0].getTypeName()
                         + "Tag * m_Array;\n\tint m_Size;\n\tAXISC_XSD_TYPE m_Type;\n} "
-                        + classname
-                        + ";\n\n");
+                        + classname + ";\n\n");
             }
         }
         catch (IOException e)

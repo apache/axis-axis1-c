@@ -58,45 +58,33 @@ public class AllParamWriter implements SourceWriter
             try
             {
                 type = (Type) enu.next();
-                    if (type.isArray())
-                    {
-                        if (WSDL2Ws.verbose)
-                            System.out.println("Array writer called ......");
-                        ArrayParamWriter writer =
-                            (new ArrayParamWriter(wscontext, type));
-                        if (!writer.isSimpleTypeArray())
-                            writer.writeSource();
-                    }
-                    else
-                    {
-                        /* TODO check whether this type is referenced or not. Synthesize only if  reference
-                         * But of cause that depends on the commandline option too  */
-                        if (type.getLanguageSpecificName().startsWith(">"))
-                        {
-                            /* TODO do some processing to this type before synthesizing to remove ">" charactors.
-                             * And then it should also be synthesized if commandline option says to */
-                            System.out.println(
-                                "ignoring anonymous type "
-                                    + type.getLanguageSpecificName()
-                                    + "\n");
-                        }
-                        else
-                        {
-                            if (WSDL2Ws.verbose)
-                                System.out.println(
-                                    "struct writer called ......");
-                            (new BeanParamWriter(wscontext, type))
-                                .writeSource();
-                            (new ParmHeaderFileWriter(wscontext, type))
-                                .writeSource();
-                        }
-                    }
+                if (type.isArray())
+                {
+                    if (WSDL2Ws.verbose)
+                        System.out.println("Array writer called ......");
+                    ArrayParamWriter writer = (new ArrayParamWriter(wscontext, type));
+                    if (!writer.isSimpleTypeArray())
+                        writer.writeSource();
+                }
+                /* TODO check whether this type is referenced or not. Synthesize only if  reference
+                 * But of cause that depends on the commandline option too  */
+                else if (type.getLanguageSpecificName().startsWith(">"))
+                {
+                    /* TODO do some processing to this type before synthesizing to remove ">" charactors.
+                     * And then it should also be synthesized if commandline option says to */
+                    System.out.println("ignoring anonymous type " + type.getLanguageSpecificName() + "\n");
+                }
+                else
+                {
+                    if (WSDL2Ws.verbose)
+                        System.out.println("struct writer called ......");
+                    (new BeanParamWriter(wscontext, type)).writeSource();
+                    (new ParmHeaderFileWriter(wscontext, type)).writeSource();
+                }
             }
             catch (Exception e)
             {
-                System.out.println(
-                        "Error occurred generating code for "
-                            + type.getLanguageSpecificName()
+                System.out.println("Error occurred generating code for " + type.getLanguageSpecificName()
                             + ". Other classes will continue to be generated.");
                 e.printStackTrace();
             }
