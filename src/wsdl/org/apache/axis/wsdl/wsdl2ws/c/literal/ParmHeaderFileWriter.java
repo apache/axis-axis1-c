@@ -254,20 +254,14 @@ public class ParmHeaderFileWriter
             Iterator itr = typeSet.iterator();
             while (itr.hasNext())
             {
-                writer.write(
-                    "#include \"" + itr.next().toString() + CUtils.C_HEADER_SUFFIX + "\"\n");
+                writer.write("#include \"" + itr.next().toString() + CUtils.C_HEADER_SUFFIX + "\"\n");
             }
             
             writer.write("/*Local name and the URI for the type*/\n");
-            writer.write(
-                "static const char* Axis_URI_"
-                    + classname + " = \""
+            writer.write("static const char* Axis_URI_" + classname + " = \""
                     + type.getName().getNamespaceURI() + "\";\n");
-            writer.write(
-                "static const char* Axis_TypeName_"
-                    + classname + " = \""
+            writer.write("static const char* Axis_TypeName_" + classname + " = \""
                     + type.getName().getLocalPart() + "\";\n\n");
-
         }
         catch (IOException e)
         {

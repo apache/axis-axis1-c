@@ -234,108 +234,261 @@ public class BeanParamWriter
      * @throws IOException
      * @throws WrapperFault
      */
-    private void writeDeSerializeGlobalMethod()
-        throws IOException, WrapperFault
+    private void writeDeSerializeGlobalMethod() throws IOException, WrapperFault
     {
         writer.write("/**\n");
         writer.write(" * This static method deserializes a " + classname + " type of object\n");
         writer.write(" */\n");
-
         writer.write("int Axis_DeSerialize_" + classname
                 + "(" + classname + "* param, AXISCHANDLE pDZ)\n{\n");
+
+        for (int i = 0; i < attribs.length; i++)
+        {
+            if (attribs[i].isArray())
+                writer.write("\tAxisc_Array array" + i + ";\n");
+            else if (attribs[i].isOptional())
+                writer.write("\tconst char* elementName" + i + ";\n");
+        }
         
         if (attribs.length == 0)
         {
-            //nothing to print if this is simple type we have inbuild types
-            System.out.println("Possible error in class " + classname
-                    + ": class with no attributes....................");
-            // compilation issue;
+            if (extensionBaseAttrib != null)
+            {
+                writer.write("\taxiscGetChardataAs(pDZ, (void*)&(param->"
+                        + extensionBaseAttrib.getParamNameAsMember() + "), "
+                        + CUtils.getXSDTypeForBasicType(extensionBaseAttrib.getTypeName()) + ");\n");
+            }
+            else
+            {
+                System.out.println("Possible error in class " + classname
+                        + ": class with no attributes....................");
+            }
+
             writer.write("\treturn AXISC_SUCCESS;\n");
             writer.write("}\n\n");
             return;
-        }
+        }  
+
+        String arrayType = null;
+        boolean peekCalled = false;
+        boolean firstIfWritten = false;
+        boolean foundAll = false;
+        int anyCounter = 0; //counter for any types.
+        int arrayCount = 0;
         
-        boolean aretherearrayparams = false;
         for (int i = 0; i < attribs.length; i++)
-            if (attribs[i].isArray())
-            {
-                aretherearrayparams = true;
-                break;
-            }
-        
-        if (aretherearrayparams)
-            writer.write("\tAxisc_Array array;\n");
-        
-        writer.write("\t/* first deserialize attributes if any*/\n");
-        for (int i = 0; i < attribs.length; i++)
-        {
-            if (i == attributeParamCount)
-                writer.write("\t/* then deserialize elements if any*/\n");
+        {       
+            //if the attribute is a 'choice' construct we have to peek and make
+            // the choice - TODO
+
+            //if the attribute is a 'all' construct we have to check Min
+            // occures TODO
+
             
             if (attribs[i].isAnyType())
-                writer.write("\tparam->any = axiscGetAnyObject(pDZ);\n");
+            {
+                anyCounter +=1;
+                writer.write("\tparam->any" + anyCounter + " = axiscGetAnyObject(pDZ);\n");
+            }
             else if (attribs[i].isArray())
             {
+                arrayCount++;
                 String containedType = attribs[i].getTypeName();
                 
-                if (attribs[i].isSimpleType())
+                if (attribs[i].isSimpleType() || attribs[i].getType().isSimpleType())
                 {
-                    writer.write("\tarray = axiscGetBasicArray(pDZ, "
-                            + CUtils.getXSDTypeForBasicType(containedType)
-                            + ", \"" + attribs[i].getElementName().getLocalPart()
+                    String baseTypeName = null;
+                    if (!attribs[i].isSimpleType() && attribs[i].getType().isSimpleType())
+                        baseTypeName = CUtils.getclass4qname(attribs[i].getType().getBaseType());
+                    else
+                        baseTypeName = attribs[i].getTypeName();
+                    
+                    writer.write("\tarray" + arrayCount + "= axiscGetBasicArray(pDZ, " 
+                            + CUtils.getXSDTypeForBasicType(baseTypeName) + ", \"" 
+                            + attribs[i].getParamNameAsSOAPElement()
                             + "\",0);\n");
+                    
+                    // TODO MEMORY MANAGEMENT
                 }
                 else
                 {
-                    writer.write("\tarray = axiscGetCmplxArray(pDZ, (void*)Axis_DeSerialize_"
-                            + containedType
-                            + "\n\t\t, (void*)Axis_Create_" + containedType
-                            + ", (void*)Axis_Delete_" + containedType
-                            + "\n\t\t, (void*)Axis_GetSize_" + containedType
-                            + ", \""
-                            + attribs[i].getElementName().getLocalPart()
-                            + "\", Axis_URI_" + containedType
-                            + ");\n");
+                    arrayType = attribs[i].getTypeName();
+                    writer.write("\tarray" + arrayCount + " = axiscGetCmplxArray(pDZ, (void*)Axis_DeSerialize_"
+                            + arrayType
+                            + "\n\t\t, (void*)Axis_Create_" + arrayType
+                            + ", (void*)Axis_Delete_" + arrayType
+                            + "\n\t\t, (void*)Axis_GetSize_" + arrayType
+                            + ", \""  + attribs[i].getElementNameAsString()
+                            + "\", Axis_URI_" + arrayType + ");\n");
                 }
                 
                 writer.write("\tmemcpy(&(param->" + attribs[i].getParamName()
-                        + "), &array, sizeof(Axisc_Array));\n");
+                        + "), &array" + arrayCount + ", sizeof(Axisc_Array));\n");
             }
-            else if (attribs[i].isSimpleType())
+            else if ((attribs[i].isSimpleType() || attribs[i].getType().isSimpleType()))
             {
-                if (attribs[i].isAttribute())
+                String soapTagName = (attribs[i].isAttribute() ? attribs[i].getParamName() : attribs[i].getElementNameAsString());
+                if (soapTagName.lastIndexOf("_Ref") > -1)
+                    soapTagName = soapTagName.substring(0, soapTagName.lastIndexOf("_Ref"));
+
+                if (soapTagName.charAt(0) == '_')
+                    soapTagName = soapTagName.substring(1, soapTagName.length());
+                
+                if (attribs[i].isOptional())
                 {
-                    if (attribs[i].isOptional())
+                    writer.write("\telementName" + i + " = axiscPeekNextElementName(pDZ);\n");
+                    writer.write("\t\tif(strcmp(elementName" + i + ", \"" + soapTagName + "\") == 0)\n");
+                    writer.write("\t\t{\n");
+                }
+                
+                Type type = attribs[i].getType();
+                boolean isPointerType = false;
+                if (type.isSimpleType())
+                    isPointerType = CUtils.isPointerType(CUtils.getclass4qname(type.getBaseType())); 
+                else
+                    isPointerType = CUtils.isPointerType(attribs[i].getTypeName());
+                
+                if (attribs[i].isNillable() ||
+                        isElementNillable(i) ||
+                        isElementOptional(i) ||
+                        isPointerType)
+                {
+                    if (attribs[i].getChoiceElement() && isElementNillable(i) && !isPointerType)
                     {
-                        //TODO
+                        // TODO
+                        writer.write("\tparam->"
+                                + attribs[i].getParamNameAsMember()
+                                + " = (" + attribs[i].getTypeName()
+                                + "**)(" + attribs[i].getTypeName()
+                                +"*)malloc(sizeof(" +attribs[i].getTypeName() + ");\n");
+                        
+                        writer.write("\t\t*(param->"
+                                + attribs[i].getParamNameAsMember() + ") = "
+                                + CUtils.getParameterGetValueMethodName(
+                                        attribs[i].getTypeName(), attribs[i].isAttribute()) + "(pDZ, \""
+                                + soapTagName + "\",0);\n");
                     }
                     else
                     {
-                        writer.write("\tparam->" + attribs[i].getParamName() + " = "
-                                + CUtils.getParameterGetValueMethodName(attribs[i].getTypeName(),true)
-                                + "(pDZ, \"" + attribs[i].getParamName() + "\", 0);\n");
+                        String typeName = attribs[i].getTypeName();
+                        String baseTypeName = null;
+                        if (type.isSimpleType())
+                            baseTypeName = CUtils.getclass4qname (type.getBaseType ());
+                        else
+                            baseTypeName = typeName;
+
+                        String elementName = attribs[i].getParamNameAsMember();
+
+                        writer.write("\t{\n");
+                        if( isPointerType)
+                        {
+                            writer.write("\t" + typeName + "    pValue" + i + " = " +
+                                    CUtils.getParameterGetValueMethodName(baseTypeName, attribs[i].isAttribute()) +
+                                    "(pDZ,\"" + soapTagName + "\", 0);\n\n");
+                        }
+                        else
+                        {
+                            writer.write("\t" + typeName + " *  pValue" + i + " = " +
+                                    CUtils.getParameterGetValueMethodName(baseTypeName, attribs[i].isAttribute()) +
+                                    "(pDZ, \"" + soapTagName + "\", 0);\n\n");
+                        }
+                        
+                        writer.write( "\tparam->" + elementName + "= pValue" + i + ";\n");
+                        writer.write( "\tif( pValue" + i + " != NULL)\n");
+                        writer.write("\t\taxiscAxisDelete( (void *) pValue" + i + ", " 
+                                + CUtils.getXSDTypeForBasicType( baseTypeName) + ");\n\n");
+                        writer.write("\t}\n");
                     }
+                } 
+                else if (attribs[i].getChoiceElement() || attribs[i].getAllElement())
+                {
+                    writer.write("\tparam->"
+                            + attribs[i].getParamNameAsMember() + " = "
+                            + CUtils.getParameterGetValueMethodName(
+                                    attribs[i].getTypeName(), attribs[i].isAttribute()) + "(pDZ, \""
+                            + soapTagName + "\",0);\n");
                 }
                 else
                 {
-                    writer.write("\tparam->" + attribs[i].getParamName() + " = "
-                            + CUtils.getParameterGetValueMethodName(attribs[i].getTypeName(), false)
-                            + "(pDZ, \"" + attribs[i].getElementName().getLocalPart() + "\", 0);\n");
+                    String elementNameToSearchFor = attribs[i].isAttribute()? attribs[i].getParamNameAsMember():attribs[i].getSOAPElementNameAsString();
+                    
+                    writer.write("\t{\n");
+                    writer.write("\t" + attribs[i].getTypeName() + " * "
+                        + attribs[i].getParamNameAsMember() + " = " 
+                        + CUtils.getParameterGetValueMethodName(attribs[i].getTypeName(), attribs[i].isAttribute()) 
+                        + "(pDZ, \"" + elementNameToSearchFor + "\",0);\n");
+                    
+                    writer.write("\tif (" + attribs[i].getParamNameAsMember() + " != NULL)\n\t{\n");
+                    writer.write("\t\tparam->" + attribs[i].getParamName() + " = *"
+                            + attribs[i].getParamNameAsMember() + ";\n");
+                    writer.write("\t\taxiscAxisDelete( (void *) " + attribs[i].getParamNameAsMember() 
+                            + ", " + CUtils.getXSDTypeForBasicType( attribs[i].getTypeName()) + ");\n");
+                    writer.write("\t}\n");  
+                    writer.write("\t}\n");                    
                 }
+                
+                if (attribs[i].isOptional())
+                {
+                    writer.write("\t\t\t}\n");
+                    writer.write("\t\telse\n");
+                    writer.write("\t\t{\n");
+                    writer.write("\t\t\tparam->" + attribs[i].getParamNameAsMember() + " = NULL;\n");
+                    writer.write("\t\t}\n\n");
+                }              
             }
             else
             {
                 //if complex type
-                writer.write("\tparam->" + attribs[i].getParamName() + " = ("
+                //remove _Ref sufix and _ prefix in SOAP tag name
+                String soapTagName = attribs[i].getParamName();
+
+                if (soapTagName.lastIndexOf("_Ref") > -1)
+                    soapTagName = soapTagName.substring(0, soapTagName.lastIndexOf("_Ref"));
+
+                if (soapTagName.charAt(0) == '_')
+                    soapTagName = soapTagName.substring(1, soapTagName.length());
+                
+                if (attribs[i].isOptional())
+                {
+                    writer.write("\tconst char* elementName" + i + " = axiscPeekNextElementName(pDZ);\n");
+                    writer.write("\tif(strcmp(elementName" + i + ", \"" + soapTagName + "\") == 0)\n");
+                    writer.write("\t{\n");
+                }
+
+                writer.write("\tparam->" + attribs[i].getParamNameAsMember() 
+                        + " = ("  + attribs[i].getTypeName()
+                        + "*)axiscGetCmplxObject(pDZ,(void*)Axis_DeSerialize_"
                         + attribs[i].getTypeName()
-                        + "*)axiscGetCmplxObject(pDZ, (void*)Axis_DeSerialize_" + attribs[i].getTypeName()
-                        + "\n\t\t, (void*)Axis_Create_" + attribs[i].getTypeName()
-                        + ", (void*)Axis_Delete_" + attribs[i].getTypeName()
-                        + "\n\t\t, \""
-                        + attribs[i].getElementName().getLocalPart()
-                        + "\", Axis_URI_" + attribs[i].getTypeName()
-                        + ");\n");
+                        + "\n\t\t, (void*)Axis_Create_"
+                        + attribs[i].getTypeName() + ", (void*)Axis_Delete_"
+                        + attribs[i].getTypeName() + "\n\t\t, \"" + soapTagName
+                        + "\", Axis_URI_" + attribs[i].getTypeName() + ");\n");
+                
+                if (attribs[i].isOptional())
+                {
+                    writer.write("\t}\n");
+                    writer.write("\telse\n");
+                    writer.write("\t{\n");
+                    writer.write("\t\tparam->" + attribs[i].getParamNameAsMember() + " = NULL;\n");
+                    writer.write("\t}\n\n");
+                }                
             }
+
+            if (attribs[i].getChoiceElement())
+                writer.write("\t}\n");
+            
+            if (attribs[i].getAllElement())
+                if (attribs[i].getMinOccurs() == 0)
+                    writer.write("\t}\n");
+            
+        }
+        
+        if (extensionBaseAttrib != null
+                && extensionBaseAttrib.getTypeName() != null)
+        {
+            writer.write("\taxiscGetChardataAs(pDZ, (void*)&(param->"
+                    + extensionBaseAttrib.getParamNameAsMember() + "), "
+                    + CUtils.getXSDTypeForBasicType(extensionBaseAttrib.getTypeName()) + ");\n");
         }
         
         writer.write("\treturn axiscGetStatusIWrapperSoapDeSerializer(pDZ);\n");
@@ -426,23 +579,16 @@ public class BeanParamWriter
                     if (attribs[i].isSimpleType())
                     {
                         writer.write(
-                            "\t\t\tif (pTemp->"
-                                + attribs[i].getParamName()
-                                + ".m_Array) free(pTemp->"
-                                + attribs[i].getParamName()
-                                + ".m_Array);\n");
+                            "\t\t\tif (pTemp->" + attribs[i].getParamName() + ".m_Array) free(pTemp->"
+                                + attribs[i].getParamName() + ".m_Array);\n");
                     }
                     else
                     {
                         writer.write(
-                            "\t\t\tif (pTemp->"
-                                + attribs[i].getParamName()
-                                + ".m_Array) Axis_Delete_"
-                                + attribs[i].getTypeName()
-                                + "(pTemp->"
-                                + attribs[i].getParamName()
-                                + ".m_Array, true, pTemp->"
-                                + attribs[i].getParamName()
+                            "\t\t\tif (pTemp->"  + attribs[i].getParamName()
+                                + ".m_Array) Axis_Delete_" + attribs[i].getTypeName()
+                                + "(pTemp->" + attribs[i].getParamName()
+                                + ".m_Array, true, pTemp->" + attribs[i].getParamName()
                                 + ".m_Size);\n");
                     }
                 }

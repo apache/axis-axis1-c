@@ -76,8 +76,7 @@ public class ClientStubHeaderWriter
             Iterator itr = typeSet.iterator();
             while (itr.hasNext())
             {
-                writer.write(
-                    "#include \"" + itr.next().toString() + CUtils.C_HEADER_SUFFIX + "\"\n");
+                writer.write("#include \"" + itr.next().toString() + CUtils.C_HEADER_SUFFIX + "\"\n");
             }
             writer.write("\n");
         }
