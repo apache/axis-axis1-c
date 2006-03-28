@@ -225,7 +225,7 @@
 	<!--
 		Execute the test
 	-->
-    <target name="executeTest" depends="setExpectations,setTestArgs, createConfigurationFile, updateConfigurationWithClientWSDDEntry"
+    <target name="executeTest" depends="setExpectations,setTestArgs, createConfigurationFile, createConfigurationFileOld, updateConfigurationWithClientWSDDEntry"
 		if="successfulClientCompilation" unless="buildOnly">
 
 		<trycatch>
@@ -303,7 +303,7 @@
 	<!--
 		Create configuration file to use when running test
 	-->
-	<target name="createConfigurationFile" depends="checkIfDebug" if="successfulClientCompilation">
+	<target name="createConfigurationFile" depends="checkIfDebug" if="successfulClientCompilation" unless="os400">
 		<dirname file="${axiscpp.conf}" property="confFileDirectory"/>
 
 		<mkdir dir="${confFileDirectory}"/>
@@ -418,7 +418,7 @@
 		</if>
 	</target>
 
-	<target name="createConfigurationFileOld" depends="checkIfDebug" if="successfulClientCompilation">
+	<target name="createConfigurationFileOld" depends="checkIfDebug" if="os400">
 		<dirname file="${axiscpp.conf}" property="confFileDirectory"/>
 
 		<mkdir dir="${confFileDirectory}"/>
