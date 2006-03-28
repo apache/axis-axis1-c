@@ -391,7 +391,7 @@ found.  (If you type '*', it will use the default 'axis-c-1.6-Win32-bin\bin').<b
 </p>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
 <tr class="b">
-<td>command</td><td>Description</td><td>Example</td>
+<td>Command</td><td>Description</td><td>Example</td>
 </tr>
 <tr class="a">
 <td>-acd</td><td>Directory to write axiscpp.conf once it has been configured. This overrides the '-a' value (which defines where axiscpp.conf would normally reside).</td><td>-acd c:\Axis\Different</td>
@@ -403,30 +403,21 @@ found.  (If you type '*', it will use the default 'axis-c-1.6-Win32-bin\bin').<b
 <td>-o</td><td>Directory offset from AXISCPP_HOME to object files.</td><td>-o axis-c-1.6-Win32-bin\bin</td>
 </tr>
 <tr class="b">
-<td>-th</td><td>Transport library name. If -a and -o have both already been defined, then only the filename is required. Otherwise the fully qualified path will be required (NB: You can still override the -a and -o definitions by using a fully qualified path).</td><td>(with -a and -o defined): -th HTTPTransport.dll, (without -a and -o defined): -th c:\Axis\axis-c-1.6-Win32-bin\bin\HTTPTransport.dll</td>
-</tr>
-<tr class="a">
-<td>-c</td><td>Channel library name. If -a and -o have both already been defined, then only the filename is required. Otherwise the fully qualified path will be required (NB: You can still override the -a and -o definitions by using a fully qualified path).</td><td>(with -a and -o defined): -c HTTPChannel.dll, (without -a and -o defined): -c c:\Axis\axis-c-1.6-Win32-bin\bin\HTTPChannel.dll</td>
-</tr>
-<tr class="b">
-<td>-cs</td><td>SSL channel library name. If -a and -o have both already been defined, then only the filename is required. Otherwise the fully qualified path will be required (NB: You can still override the -a and -o definitions by using a fully qualified path).</td><td>(with -a and -o defined): -cs HTTPSSLChannel.dll, (without -a and -o defined): -cs c:\Axis\axis-c-1.6-Win32-bin\bin\HTTPSSLChannel.dll</td>
-</tr>
-<tr class="a">
 <td>-x</td><td>Xerces library name. If -a and -o have both already been defined, then only the filename is required. Otherwise the fully qualified path will be required (NB: You can still override the -a and -o definitions by using a fully qualified path).</td><td>(with -a and -o defined): -x AxisXMLParserXerces.dll, (without -a and -o defined): -x c:\Axis\axis-c-1.6-Win32-bin\bin\AxisXMLParserXerces.dll</td>
 </tr>
-<tr class="b">
+<tr class="a">
 <td>-m</td><td>Merge with existing configuration file.</td><td>-m on|off (the default is 'off' meaning 'overwrite')</td>
 </tr>
-<tr class="a">
+<tr class="b">
 <td>-pi</td><td>Change the progress information output during the construction of the configuration file.</td><td>-pi normal|quiet (the default is 'normal' meaning "give full descriptions").</td>
 </tr>
-<tr class="b">
+<tr class="a">
 <td>-b</td><td>Backup the existing configuration file before creating the new one.</td><td>-b true|false (the default is 'true').</td>
 </tr>
-<tr class="a">
+<tr class="b">
 <td>-qmf</td><td>Query for missing files. When no parameter for a filename is provided on the command line, the application will list the file options and the user then selects which file to use in the configuration file. This can be turned off using this parameter.</td><td>-qmf on|off (the default is 'on' meaning "list and then ask for file to include").</td>
 </tr>
-<tr class="b">
+<tr class="a">
 <td>-so</td><td>SSL options. Used to add a string of parameters (if) required by the version SSL.</td><td>-so "...parameter list..."</td>
 </tr>
 </table>
@@ -434,12 +425,21 @@ found.  (If you type '*', it will use the default 'axis-c-1.6-Win32-bin\bin').<b
 </p>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
 <tr class="b">
-<td>command</td><td>Description</td><td>Example</td>
+<td>Command</td><td>Description</td><td>Example</td>
 </tr>
 <tr class="a">
-<td>-cl</td><td>Client log filename. If -a has been defined, then only the filename is required. Otherwise the fully qualified path will be required. (NB: You can still override the -a and -o definitions by using a fully qulified path). To ignore the client log, using 'ignore' instead of a filename.</td><td>(without -a defined): -cl c:\Axis\client.log.</td>
+<td>-th</td><td>Transport library name. If -a and -o have both already been defined, then only the filename is required. Otherwise the fully qualified path will be required (NB: You can still override the -a and -o definitions by using a fully qualified path).</td><td>(with -a and -o defined): -th HTTPTransport.dll, (without -a and -o defined): -th c:\Axis\axis-c-1.6-Win32-bin\bin\HTTPTransport.dll</td>
 </tr>
 <tr class="b">
+<td>-c</td><td>Channel library name. If -a and -o have both already been defined, then only the filename is required. Otherwise the fully qualified path will be required (NB: You can still override the -a and -o definitions by using a fully qualified path).</td><td>(with -a and -o defined): -c HTTPChannel.dll, (without -a and -o defined): -c c:\Axis\axis-c-1.6-Win32-bin\bin\HTTPChannel.dll</td>
+</tr>
+<tr class="a">
+<td>-cs</td><td>SSL channel library name. If -a and -o have both already been defined, then only the filename is required. Otherwise the fully qualified path will be required (NB: You can still override the -a and -o definitions by using a fully qualified path).</td><td>(with -a and -o defined): -cs HTTPSSLChannel.dll, (without -a and -o defined): -cs c:\Axis\axis-c-1.6-Win32-bin\bin\HTTPSSLChannel.dll</td>
+</tr>
+<tr class="b">
+<td>-cl</td><td>Client log filename. If -a has been defined, then only the filename is required. Otherwise the fully qualified path will be required. (NB: You can still override the -a and -o definitions by using a fully qulified path). To ignore the client log, using 'ignore' instead of a filename.</td><td>(without -a defined): -cl c:\Axis\client.log.</td>
+</tr>
+<tr class="a">
 <td>-cw</td><td>Client WSDD filename. If -a and -o have both already been defined, then only the filename is required. Otherwise the fully qualified path will be required (NB: You can still override the -a and -o definitions by using a fully qulified path).</td><td>(with -a and -o defined): -cw client.wsdd, (without -a and -o defined): -cw c:\Axis\WSDD\client.wsdd</td>
 </tr>
 </table>
@@ -447,7 +447,7 @@ found.  (If you type '*', it will use the default 'axis-c-1.6-Win32-bin\bin').<b
 </p>
 <table class="ForrestTable" cellspacing="1" cellpadding="4">
 <tr class="b">
-<td>command</td><td>Description</td><td>Example</td>
+<td>Command</td><td>Description</td><td>Example</td>
 </tr>
 <tr class="a">
 <td>-sl</td><td>Server log filename. If -a has been defined, then only the filename is required. Otherwise the fully qualified path will be required. (NB: You can still override the -a and -o definitions by using a fully qulified path).</td><td>(with -a defined): -sl server.log, (without -a defined): -sl c:\Axis\server.log</td>
