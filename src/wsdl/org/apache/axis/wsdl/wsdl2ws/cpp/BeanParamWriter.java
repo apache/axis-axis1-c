@@ -655,6 +655,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 	writer.write("\tparam->" + attribs[i].getParamNameAsMember() + " = array" + arrayCount + ";\n\n");
                 	//end of new array memory model.
 				}
+                arrayCount++;
 			} 
             else if (attribs[i].isSimpleType()) 
             {
