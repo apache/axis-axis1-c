@@ -28,7 +28,7 @@
       <linker refid="LinuxLinker"/>
       <linker refid="HP-UXLinker"/>            
       <linker refid="VisualC++Linker"/>
-      <linker refid="AIXLinker"/>
+      <linker refid="AIXExecutableLinker"/>
       <linker extends="OS400ExecutableLinker">
         <linkerarg location="end" value="${dir.bin}/lib${clientLibraryName}.so"/>
         <linkerarg value="-qDUPPROC"/>
