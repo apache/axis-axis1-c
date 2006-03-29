@@ -42,107 +42,59 @@ public class WebServiceGeneratorImpl implements WebServiceGenerator
 
         if (WrapperConstants.LANGUAGE_JAVA.equalsIgnoreCase(language))
         {
-            (new Generator(WrapperConstants.GENERATOR_WRAPPER_JAVA, wscontext))
-                .generate();
-            (new Generator(WrapperConstants.GENERATOR_SERVICE_JAVA, wscontext))
-                .generate();
-            (new Generator(WrapperConstants.GENERATOR_PARAM_JAVA, wscontext))
-                .generate();
+            (new Generator(WrapperConstants.GENERATOR_WRAPPER_JAVA, wscontext)).generate();
+            (new Generator(WrapperConstants.GENERATOR_SERVICE_JAVA, wscontext)).generate();
+            (new Generator(WrapperConstants.GENERATOR_PARAM_JAVA, wscontext)).generate();
         }
         else
         {
-
             if (WrapperConstants.LANGUAGE_CPP.equalsIgnoreCase(language))
             {
-                if (WrapperConstants
-                    .SERVER
-                    .equals(wscontext.getWrapInfo().getTargetEngine()))
+                if (WrapperConstants.SERVER.equals(wscontext.getWrapInfo().getTargetEngine()))
                 {
                     // Generate Server objects
-                    (new Generator(WrapperConstants.GENERATOR_WRAPPER_CPP,
-                        wscontext))
-                        .generate();
-                    (new Generator(WrapperConstants.GENERATOR_WRAPPER_HPP,
-                        wscontext))
-                        .generate();
-                    (new Generator(WrapperConstants.GENERATOR_SERVICE_CPP,
-                        wscontext))
-                        .generate();
-                    (new Generator(WrapperConstants.GENERATOR_SERVICE_HPP,
-                        wscontext))
-                        .generate();
-                    (new Generator(WrapperConstants.GENERATOR_CLASSLOADER_CPP,
-                        wscontext))
-                        .generate();
-                    (new Generator(WrapperConstants.GENERATOR_DEPLOYMENT,
-                        wscontext))
-                        .generate();
-                    (new Generator(WrapperConstants.GENERATOR_SERVER_EXCEPTION,
-                        wscontext))
-                        .generate();
-                    (new Generator(WrapperConstants.GENERATOR_UNDEPLOYMENT,
-                        wscontext))
-                        .generate();
+                    (new Generator(WrapperConstants.GENERATOR_WRAPPER_CPP,wscontext)).generate();
+                    (new Generator(WrapperConstants.GENERATOR_WRAPPER_HPP,wscontext)).generate();
+                    (new Generator(WrapperConstants.GENERATOR_SERVICE_CPP,wscontext)).generate();
+                    (new Generator(WrapperConstants.GENERATOR_SERVICE_HPP,wscontext)).generate();
+                    (new Generator(WrapperConstants.GENERATOR_CLASSLOADER_CPP,wscontext)).generate();
+                    (new Generator(WrapperConstants.GENERATOR_DEPLOYMENT,wscontext)).generate();
+                    (new Generator(WrapperConstants.GENERATOR_SERVER_EXCEPTION,wscontext)).generate();
+                    (new Generator(WrapperConstants.GENERATOR_UNDEPLOYMENT,wscontext)).generate();
                 }
                 else
                 {
                     // Generate Client objects
-                    (new Generator(WrapperConstants.GENERATOR_CLIENT_STUB_CPP,
-                        wscontext))
-                        .generate();
-                    (new Generator(WrapperConstants.GENERATOR_CLIENT_STUB_HPP,
-                        wscontext))
-                        .generate();
+                    (new Generator(WrapperConstants.GENERATOR_CLIENT_STUB_CPP,wscontext)).generate();
+                    (new Generator(WrapperConstants.GENERATOR_CLIENT_STUB_HPP,wscontext)).generate();
                 }
+                
                 // Generate objects common to Client and Server
-                (new Generator(WrapperConstants.GENERATOR_PARAM_CPP_ALL,
-                    wscontext))
-                    .generate();
+                (new Generator(WrapperConstants.GENERATOR_PARAM_CPP_ALL,wscontext)).generate();
             }
             else
             {
-
                 if (WrapperConstants.LANGUAGE_C.equalsIgnoreCase(language))
                 {
-                    if (WrapperConstants
-                        .SERVER
-                        .equals(wscontext.getWrapInfo().getTargetEngine()))
+                    if (WrapperConstants.SERVER.equals(wscontext.getWrapInfo().getTargetEngine()))
                     {
                         // Generate Server objects
-                        (new Generator(WrapperConstants.GENERATOR_WRAPPER_C,
-                            wscontext))
-                            .generate();
-                        (new Generator(WrapperConstants.GENERATOR_WRAPPER_H,
-                            wscontext))
-                            .generate();
-                        (new Generator(WrapperConstants.GENERATOR_SERVICE_C,
-                            wscontext))
-                            .generate();
-                        (new Generator(WrapperConstants.GENERATOR_CLASSLOADER_C,
-                            wscontext))
-                            .generate();
-                        (new Generator(WrapperConstants.GENERATOR_DEPLOYMENT,
-                            wscontext))
-                            .generate();
-                        (new Generator(WrapperConstants.GENERATOR_UNDEPLOYMENT,
-                            wscontext))
-                            .generate();
+                        (new Generator(WrapperConstants.GENERATOR_WRAPPER_C,wscontext)).generate();
+                        (new Generator(WrapperConstants.GENERATOR_WRAPPER_H,wscontext)).generate();
+                        (new Generator(WrapperConstants.GENERATOR_SERVICE_C,wscontext)).generate();
+                        (new Generator(WrapperConstants.GENERATOR_CLASSLOADER_C,wscontext)).generate();
+                        (new Generator(WrapperConstants.GENERATOR_DEPLOYMENT,wscontext)).generate();
+                        (new Generator(WrapperConstants.GENERATOR_UNDEPLOYMENT,wscontext)).generate();
                     }
                     else
                     {
                         // Generate Client Objects
-                        (new Generator(WrapperConstants.GENERATOR_CLIENT_STUB_C,
-                            wscontext))
-                            .generate();
-                        (new Generator(WrapperConstants.GENERATOR_CLIENT_STUB_H,
-                            wscontext))
-                            .generate();
+                        (new Generator(WrapperConstants.GENERATOR_CLIENT_STUB_C,wscontext)).generate();
+                        (new Generator(WrapperConstants.GENERATOR_CLIENT_STUB_H,wscontext)).generate();
 
                     }
                     // Generate objects common to Client and Server
-                    (new Generator(WrapperConstants.GENERATOR_PARAM_C_ALL,
-                        wscontext))
-                        .generate();
+                    (new Generator(WrapperConstants.GENERATOR_PARAM_C_ALL,wscontext)).generate();
                 }
                 else
                 {
@@ -154,8 +106,7 @@ public class WebServiceGeneratorImpl implements WebServiceGenerator
             * If called earlier not all files will be added
             * to the build script(Ex : to Makefile.am).
             */ 
-            (new Generator(WrapperConstants.GENERATOR_BUILDSCRIPT, wscontext))
-                .generate();
+            (new Generator(WrapperConstants.GENERATOR_BUILDSCRIPT, wscontext)).generate();
         }
     }
 }
