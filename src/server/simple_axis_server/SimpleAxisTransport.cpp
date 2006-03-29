@@ -171,7 +171,7 @@ AXIS_TRANSPORT_STATUS SimpleAxisTransport::getBytes( char * pBuffer, int * piSiz
     {
 		pBuffer[0] = '\0';
 
-		std::string strToSend = m_strReceived.substr( *piSize - 1);
+		std::string strToSend = m_strReceived.substr(0, *piSize - 1);
 
 		strcat( pBuffer, strToSend.c_str());
 
