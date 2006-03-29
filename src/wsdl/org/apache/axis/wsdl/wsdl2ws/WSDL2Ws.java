@@ -63,7 +63,7 @@ import org.w3c.dom.Node;
  * This this the main class for the WSDL2Ws Tool. This class reuses the code in the 
  * Axis java implementations to parse the WSDL file.
  * the functinality of the class can be discribed as follows 
- * 	1) create a Symbol table
+ *     1) create a Symbol table
  *  2) create WrapperInfo class parsing the commandline arguments and the SymbolTable
  *  3) create TypeMap parsing the  Symbol Table
  *  4) create Service Info parsing the Symbol table
@@ -137,9 +137,9 @@ public class WSDL2Ws
             this.serviceentry.getService().getPorts().values().iterator();
 
         //TODO  resolve this
-        //		this code support only the service with onebindings it will not care about the
-        //		second binding if exists.. if the NO binding specified it will failed
-        //		this should be resolved by let user specify which binding to use.
+        //        this code support only the service with onebindings it will not care about the
+        //        second binding if exists.. if the NO binding specified it will failed
+        //        this should be resolved by let user specify which binding to use.
 
         Binding binding = null;
         if (ports.hasNext())
@@ -516,49 +516,49 @@ public class WSDL2Ws
             QName minfoqname;
             element = symbolTable.getElement(part.getElementName());
             
-	        if (element == null)
-	        {
-	            // the part reference a type.
-	            qname = symbolTable.getType(part.getTypeName()).getQName();
-	            minfoqname = symbolTable.getType(part.getTypeName()).getQName();
-	        }
-	        else
-	        {
-	            qname = element.getRefType().getQName();
-	            minfoqname = element.getQName();
-	        }
-	        
-	        minfo.setInputMessage(minfoqname);
-	
-	        if (qname != null)
-	        {
-	            type = this.typeMap.getType(qname);
-	            boolean wrapped = wsdlWrappingStyle;
-	
-	            if (type == null)
-	            {
-	                throw new WrapperFault(
-	                    "unregistered type " + qname + " referred");
-	            }
-	
-	            if (wrapped)
-	            {
-	                //get inner attributes and elements and add them as parameters
-	                addInputElementsToMethodInfo(minfo, type);
-	                addInputAttributesToMethodInfo(minfo, type);
-	            }
-	            else
-	            { // for non-wrapped style wsdl's
-	                String elementName = (String) element.getQName().getLocalPart();
-	                pinfo = new ParameterInfo(type, elementName);
-	                pinfo.setElementName(type.getName());
-	                if (type.getName().equals(CUtils.anyTypeQname))
-	                {
-	                    pinfo.setAnyType(true);
-	                }
-	                minfo.addInputParameter(pinfo);
-	            }
-	        }
+            if (element == null)
+            {
+                // the part reference a type.
+                qname = symbolTable.getType(part.getTypeName()).getQName();
+                minfoqname = symbolTable.getType(part.getTypeName()).getQName();
+            }
+            else
+            {
+                qname = element.getRefType().getQName();
+                minfoqname = element.getQName();
+            }
+            
+            minfo.setInputMessage(minfoqname);
+    
+            if (qname != null)
+            {
+                type = this.typeMap.getType(qname);
+                boolean wrapped = wsdlWrappingStyle;
+    
+                if (type == null)
+                {
+                    throw new WrapperFault(
+                        "unregistered type " + qname + " referred");
+                }
+    
+                if (wrapped)
+                {
+                    //get inner attributes and elements and add them as parameters
+                    addInputElementsToMethodInfo(minfo, type);
+                    addInputAttributesToMethodInfo(minfo, type);
+                }
+                else
+                { // for non-wrapped style wsdl's
+                    String elementName = (String) element.getQName().getLocalPart();
+                    pinfo = new ParameterInfo(type, elementName);
+                    pinfo.setElementName(type.getName());
+                    if (type.getName().equals(CUtils.anyTypeQname))
+                    {
+                        pinfo.setAnyType(true);
+                    }
+                    minfo.addInputParameter(pinfo);
+                }
+            }
         }
     }
 
@@ -690,7 +690,7 @@ public class WSDL2Ws
         methods = this.getServiceInfo(this.portTypeEntry.getPortType());
         this.getWebServiceInfo();
 
-        //TODO	check whether the name at the WrapperConstant Doclit is right "doc"
+        //TODO    check whether the name at the WrapperConstant Doclit is right "doc"
         WebServiceContext wsContext =new WebServiceContext(
                 new WrapperInfo(
                         serviceStyle,
@@ -852,12 +852,12 @@ public class WSDL2Ws
                                   Type innerClassType =  wsContext.getTypemap().getType(oldName);
                                   if(innerClassType!=null)
                                   {
-                                      // 	First thing to do is to expose the type so it gets created.
+                                      //     First thing to do is to expose the type so it gets created.
                                       innerClassType.setLanguageSpecificName(newTypeName.getLocalPart().toString());
                                   
-                                      // 	also have to set the QName because this is used in generating the header info.
+                                      //     also have to set the QName because this is used in generating the header info.
                                       innerClassType.setName(newTypeName);
-                                      // 	The typemap we get back is a copy of the actual typemap so we have to set the new value explicitly
+                                      //     The typemap we get back is a copy of the actual typemap so we have to set the new value explicitly
                                       // firstly remove the old version
                                       wsContext.getTypemap().removeType(oldName);
                                       wsContext.getTypemap().addType(newTypeName, innerClassType);
@@ -1134,7 +1134,7 @@ public class WSDL2Ws
             }
             else
             {
-                //is this a SOAPEnc array type	
+                //is this a SOAPEnc array type    
                 QName arrayType =
                     CSchemaUtils.getArrayComponentQName(
                         node,
@@ -1191,9 +1191,9 @@ public class WSDL2Ws
                         // in case they interfere with local parms.
                         // String mangle = "";
                         //if (i > 0) {
-                        //	mangle = "_" +
-                        //		Utils.xmlNameToJava(te.getQName().getLocalPart()) +
-                        //		"_";
+                        //    mangle = "_" +
+                        //        Utils.xmlNameToJava(te.getQName().getLocalPart()) +
+                        //        "_";
                         //}
 
                         // Process the attributes
@@ -1430,7 +1430,7 @@ public class WSDL2Ws
                 + "-s<server|client>      target side (server|client) - default is server\n"
 //                + "-w<wrapped|nonwrapped> wrapping style of the WSDL (wrapped|nonwrapped) - default is wrapped - nonwrapped is currently not implemented\n"
                 + "-verbose, -v           be verbose\n"
-                + "-t timeout			  timeout wehen trying to get resolve uri's"
+                + "-t timeout              timeout wehen trying to get resolve uri's"
                 );
 //                + "-m<none|gnu>           generate make files (none|gnu) - default is none\n");
 
@@ -1569,7 +1569,7 @@ public class WSDL2Ws
     private boolean isTypeGenerated(TypeEntry type)
     {
         // If the referenced type is actually a type that will not get generated because it's
-        // 	a base type array then tell other people of this case. Do this to two levels of indirection
+        //     a base type array then tell other people of this case. Do this to two levels of indirection
         
         if(type.getRefType()!=null)
         {
