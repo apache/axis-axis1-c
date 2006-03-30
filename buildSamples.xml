@@ -26,185 +26,236 @@ Notes:
 	- AIX     = Visual Age
 </description>
 
-    <import file="${basedir}/build/buildInitialize.xml"/>
+  <import file="${basedir}/build/buildInitialize.xml"/>
     
-	<!--
+  <!--
 	  Load definition of C/C++ Tasks and Types
 	  To allow the compilation and linking of C/C++ code
-	  -->
-	<taskdef resource="cpptasks.tasks"/>
-	<typedef resource="cpptasks.types"/>
+  -->
+  <taskdef resource="cpptasks.tasks"/>
+  <typedef resource="cpptasks.types"/>
 
-	<property environment="env"/>
+  <property environment="env"/>
 
-	<!--
+  <!--
 	  Load definition of Additional Tasks and Types
-	  -->
-	<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+  -->
+  <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+  <taskdef resource="net/sf/antcontrib/antlib.xml"/>
 
-	<!--
+  <!--
 	  These properties should be the same for all environments, so have not been
 	  included within the property files
-	  -->
-	<property name="dir.samples" value="${basedir}/samples"/>
-	<property name="dir.include" value="${basedir}/include"/>
-	<property name="dir.wsdls" value="${basedir}/deploy/wsdls"/>
+  -->
+  <property name="dir.samples" value="${basedir}/samples"/>
+  <property name="dir.include" value="${basedir}/include"/>
+  <property name="dir.wsdls" value="${basedir}/deploy/wsdls"/>
 	
-	<!--property name="sampleName" value="base"/-->
-
-	<!--
+  <!--
+	  property name="sampleName" value="base"/-->
+  <!--
 	  Check if an individual samples name has been specified
-	  -->
-	<target name="checkIfIndividualTest">
-		<condition property="individualTest">
-			<isset property="samples.name"/>
-		</condition>
-	</target>
+  -->
+  <target name="checkIfIndividualTest">
+    <condition property="individualTest">
+      <isset property="samples.name"/>
+    </condition>
+  </target>
 	
-	<!--
+  <!--
 	  Initialize properties
-      -->
-	<target name="initialize" depends="pre-init, checkIfIndividualTest">
-		<condition property="platform" value="Win32">
-			<isset property="windows"/>
-		</condition>
-		<condition property="platform" value="Linux">
-			<isset property="linux"/>
-		</condition>
-		<condition property="platform" value="AIX">
-			<isset property="aix"/>
-		</condition>
+  -->
+  <target name="initialize" depends="pre-init, checkIfIndividualTest">
+    <condition property="platform" value="Win32">
+      <isset property="windows"/>
+    </condition>
+    <condition property="platform" value="Linux">
+      <isset property="linux"/>
+    </condition>
+    <condition property="platform" value="AIX">
+      <isset property="aix"/>
+    </condition>
 
-		<condition property="dir.xmlParser" value="${env.XERCES_HOME}/bin">
-			<and>
-				<not>
-					<isset property="dir.xmlParser"/>
-				</not>
-				<isset property="windows"/>
-			</and>
-		</condition>
-		<condition property="dir.xmlParser" value="${env.XERCES_HOME}/lib">
-			<and>
-				<not>
-					<isset property="dir.xmlParser"/>
-				</not>
-				<not>
-					<isset property="windows"/>
-				</not>
-			</and>
-		</condition>
+    <condition property="dir.xmlParser" value="${env.XERCES_HOME}/bin">
+      <and>
+        <not>
+          <isset property="dir.xmlParser"/>
+        </not>
+        <isset property="windows"/>
+      </and>
+    </condition>
+    
+    <condition property="dir.xmlParser" value="${env.XERCES_HOME}/lib">
+      <and>
+        <not>
+          <isset property="dir.xmlParser"/>
+        </not>
+        <not>
+          <isset property="windows"/>
+        </not>
+      </and>
+    </condition>
 		
-		<!-- Load properties from file -->
-		<property file="${basedir}/build/version.properties"/>
-		<property file="${basedir}/build/build.common.properties"/>
-		<property file="${basedir}/build/build.${platform}.properties"/>
+    <!--
+        Load properties from file
+    -->
+    <property file="${basedir}/build/version.properties"/>
+    <property file="${basedir}/build/build.common.properties"/>
+    <property file="${basedir}/build/build.${platform}.properties"/>
 		
-		<!-- Get directory to contain log file -->
-		<dirname file="${results.log}" property="dir.results"/>
+	<!--
+	    Get directory to contain log file
+    -->
+    <dirname file="${results.log}" property="dir.results"/>
 		
-		<mkdir dir="${dir.obj}/objects"/>
-		<mkdir dir="${dir.obj}/samples"/>
-	</target>
+    <mkdir dir="${dir.obj}/objects"/>
+    <mkdir dir="${dir.obj}/samples"/>
+  </target>
+
+  <!--
+      Use WSDL2Ws to generate stubs from WSDL files
+  -->
+  <target name="generateStubs" >
+    <!--
+        Setup classpath for WSDL2Ws
+    -->
+    <path id ="classPath">
+      <fileset dir="${dir.release}-bin/lib/axis" includes="wsdl2ws.jar"/>
+      <fileset dir="${dir.axisJARs}" includes="*.jar"/>
+    </path>
+
+    <!--
+        Run WSDL2Ws
+    -->
+    <!--java jar="${dir.wsdl2ws}/wsdl2ws.jar" fork="true"-->
+    <java classname="org.apache.axis.wsdl.wsdl2ws.WSDL2Ws" fork="true">
+      <classpath refid="classPath"/>
+      <arg value="${sample.wsdl}"/>
+      <arg value="-o${sample.directory}"/>
+      <arg value="-l${generated.lang}"/>
+      <arg value="-s${client.or.server}"/>
+    </java>
+  </target>
+
+  <target name="compileSamples">
+<!--    <for list="array,base,bench,calculator,doclitfault,element,enumeration,groupB,ref,rpcfault,transportProperties" param="samplename">
+-->
+    <for list="calculator" param="samplename">
+      <sequential>
+        <property name="clientSampleDir" value="client"/>		
 
         <!--
-          Use WSDL2Ws to generate stubs from WSDL files
-          -->
-        <target name="generateStubs" >
-                <!-- Setup classpath for WSDL2Ws -->
-                <path id ="cp">
-                        <fileset dir="${dir.wsdl2ws}" includes="wsdl2ws.jar"/>
-                        <fileset dir="${dir.axisJARs}" includes="*.jar"/>
-                </path>
-                <!-- Run WSDL2Ws -->
-                <!--java jar="${dir.wsdl2ws}/wsdl2ws.jar" fork="true"-->
-                <java classname="org.apache.axis.wsdl.wsdl2ws.WSDL2Ws" fork="true">
-                        <classpath refid="cp"/>
-                        <arg value="${sample.wsdl}"/>
-                        <arg value="-o${sample.directory}"/>
-                        <arg value="-l${generated.lang}"/>
-                        <arg value="-s${client.or.server}"/>
-                </java>
-        </target>
+            Generate Client
+        -->
+        <echo>Generating client code for  ${dir.wsdls}/@{samplename}.wsdl</echo>
+        <antcall target="generateStubs" inheritall="true">
+          <param name="sample.wsdl" value="${dir.wsdls}/@{samplename}.wsdl"/>
+          <param name="sample.directory" value="${dir.samples}/${clientSampleDir}/@{samplename}"/>
+          <param name="generated.lang" value="c++"/>
+          <param name="client.or.server" value="client"/>
+        </antcall>
 
+        <!--
+            Build client
+        -->
+        <echo>Building client ${clientSampleDir}/@{samplename}</echo>
+        <cc failonerror="false" incremental="false"
+            outfile="${dir.obj}/samples/@{samplename}"
+            objdir="${dir.obj}/objects" exceptions="true"
+            outtype="executable" subsystem="console">
 
-	<target name="compileSamples">
-		
-                <for list="array,base,bench,doclitfault,calculator,element,enumeration,groupB,ref,rpcfault,transportProperties" param="samplename">
-                    <sequential>
-			<property name="clientSampleDir" value="client"/>		
-                        <!--Generate Client-->
-			<echo>Generating client code for  ${dir.wsdls}/@{samplename}.wsdl</echo>
-			<antcall target="generateStubs" inheritall="true">
-	                        <param name="sample.wsdl" value="${dir.wsdls}/@{samplename}.wsdl"/>
-	                        <param name="sample.directory" value="${dir.samples}/${clientSampleDir}/@{samplename}"/>
-	                        <param name="generated.lang" value="c++"/>
-	                        <param name="client.or.server" value="client"/>
-			</antcall>
-    			<!--Build client-->
-			<echo>Building client ${clientSampleDir}/@{samplename}</echo>
-			<cc failonerror="false" incremental="false" outfile="${dir.obj}/samples/@{samplename}"
-		 objdir="${dir.obj}/objects" exceptions="true"
-		 outtype="executable" subsystem="console">
-		 	<!-- Compilers -->
-			<compiler refid="VisualC++"/>
-			<compiler refid="Linuxgcc"/>
-			<compiler refid="AIXxlc"/>
-			<!-- Linkers -->
-			<linker refid="VisualC++Linker"/>
-			<linker refid="LinuxLinker"/>
-			<linker refid="AIXLinker"/>
-			<!-- Additional library of Axis Client -->
-			<libset dir="${dir.obj}/bin" libs="${clientLibraryName}"/>
-			<!-- Files to be compiled -->
-			<includepath path="${dir.include}"/>
-			<fileset dir="${dir.samples}/${clientSampleDir}/@{samplename}">
-				<include name="*.cpp"/>
-			</fileset>
-		</cc>
-			<property name="serverSampleDir" value="server"/>		
-                        <!--Generate Client-->
-			<echo>Generating server code for  ${dir.wsdls}/@{samplename}.wsdl</echo>
-			<antcall target="generateStubs" inheritall="true">
-	                        <param name="sample.wsdl" value="${dir.wsdls}/@{samplename}.wsdl"/>
-	                        <param name="sample.directory" value="${dir.samples}/${serverSampleDir}/@{samplename}"/>
-	                        <param name="generated.lang" value="c++"/>
-	                        <param name="client.or.server" value="server"/>
-			</antcall>
-    			<!--Build server-->		
-			<echo>Building server ${serverSampleDir}/@{samplename}</echo>
-          	<mkdir dir="${dir.obj}/samples/server/@{samplename}/"/>
-			<cc failonerror="false" incremental="false" outfile="${dir.obj}/samples/server/@{samplename}/@{samplename}"
-		 objdir="${dir.obj}/objects" exceptions="true"
-		 outtype="shared" subsystem="console" >
-		 	<!-- Compilers -->
-			<compiler refid="VisualC++"/>
-			<compiler refid="Linuxgcc"/>
-			<compiler refid="AIXxlc"/>
-			<!-- Linkers -->
-			<linker refid="VisualC++Linker"/>
-			<linker refid="LinuxLinker"/>
-			<linker refid="AIXLinker"/>
-			<!-- Additional library of Axis Client -->
-			<libset dir="${dir.obj}/bin" libs="${serverEngineLibraryName}"/>
-			<!-- Files to be compiled -->
-			<includepath path="${dir.include}"/>
-			<fileset dir="${dir.samples}/${serverSampleDir}/@{samplename}">
-				<include name="*.cpp"/>
-			</fileset>
-		</cc>
-  		    </sequential>
-</for>
-	</target>
+        <!--
+            Compilers
+        -->
+        <compiler refid="VisualC++"/>
+        <compiler refid="Linuxgcc"/>
+        <compiler refid="AIXxlc"/>
+
+        <!--
+            Linkers
+        -->
+        <linker refid="VisualC++Linker"/>
+        <linker refid="LinuxLinker"/>
+        <linker refid="AIXLinker"/>
+
+        <!--
+            Additional library of Axis Client
+        -->
+        <libset dir="${dir.obj}/bin" libs="${clientLibraryName}"/>
+
+        <!--
+            Files to be compiled
+        -->
+        <includepath path="${dir.include}"/>
+        <fileset dir="${dir.samples}/${clientSampleDir}/@{samplename}">
+          <include name="*.cpp"/>
+        </fileset>
+      </cc>
+      <property name="serverSampleDir" value="server"/>		
+
+      <!--
+          Generate Client
+      -->
+      <echo>Generating server code for  ${dir.wsdls}/@{samplename}.wsdl</echo>
+      <antcall target="generateStubs" inheritall="true">
+        <param name="sample.wsdl" value="${dir.wsdls}/@{samplename}.wsdl"/>
+        <param name="sample.directory" value="${dir.samples}/${serverSampleDir}/@{samplename}"/>
+        <param name="generated.lang" value="c++"/>
+        <param name="client.or.server" value="server"/>
+      </antcall>
+
+      <!--
+          Build server
+      -->		
+      <echo>Building server ${serverSampleDir}/@{samplename}</echo>
+      <mkdir dir="${dir.obj}/samples/server/@{samplename}/"/>
+      <cc failonerror="false" incremental="false"
+          outfile="${dir.obj}/samples/server/@{samplename}/@{samplename}"
+          objdir="${dir.obj}/objects" exceptions="true"
+          outtype="shared" subsystem="console">
+
+         <!--
+             Compilers
+         -->
+         <compiler refid="VisualC++"/>
+         <compiler refid="Linuxgcc"/>
+         <compiler refid="AIXxlc"/>
+
+         <!--
+             Linkers
+         -->
+         <linker refid="VisualC++Linker"/>
+         <linker refid="LinuxLinker"/>
+         <linker refid="AIXLinker"/>
+
+         <!--
+             Additional library of Axis Client
+         -->
+         <libset dir="${dir.obj}/bin" libs="${serverEngineLibraryName}"/>
+
+         <!--
+             Files to be compiled
+         -->
+         <includepath path="${dir.include}"/>
+         <fileset dir="${dir.samples}/${serverSampleDir}/@{samplename}">
+           <include name="*.cpp"/>
+         </fileset>
+       </cc>
+     </sequential>
+   </for>
+  </target>
 	
-	<!--
-	  Build samples
-	  -->
-	<target name="buildSamples" unless="runOnly" depends="initialize, compileSamples" description="Build all samples"/>	 
-	<!--
-	  Remove all generated samples artifacts
-	  -->
-	<target name="clean" depends="initialize" description="Remove all generated samples artifacts">
-		<delete dir="${dir.samples.generated}"/>
-		<delete dir="${dir.results}"></delete>
-	</target>
+  <!--
+      Build samples
+  -->
+  <target name="buildSamples" unless="runOnly" depends="initialize, compileSamples"
+          description="Build all samples"/>	 
+  <!--
+      Remove all generated samples artifacts
+  -->
+  <target name="clean" depends="initialize"
+          description="Remove all generated samples artifacts">
+    <delete dir="${dir.samples.generated}"/>
+    <delete dir="${dir.results}"/>
+  </target>
 </project>
