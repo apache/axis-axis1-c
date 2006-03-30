@@ -29,20 +29,24 @@ Calculator::~Calculator()
 {
 }
 
-int Calculator::add(int Value0, int Value1)
+xsd__int Calculator::add( xsd__int Value0, xsd__int Value1)
 {
-	return Value0+Value1;
+	return Value0 + Value1;
 }
-int Calculator::sub(int Value0, int Value1)
+xsd__int Calculator::sub( xsd__int Value0, xsd__int Value1)
 {
-	return Value0-Value1;
+	return Value0 - Value1;
 }
-int Calculator::mul(int Value0, int Value1)
+xsd__int Calculator::mul( xsd__int Value0, xsd__int Value1)
 {
-	return Value0*Value1;
+	return Value0 * Value1;
 }
-int Calculator::div(int Value0, int Value1)
+xsd__int Calculator::div( xsd__int Value0, xsd__int Value1)
 {
-	if (Value1 == 0) return -1; /* :)) */
-	return Value0/Value1;
+	if( Value1 == 0)
+	{
+		return (xsd__int) -1;
+	}
+
+	return Value0 / Value1;
 }

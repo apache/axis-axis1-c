@@ -16,136 +16,147 @@
 #include <axis/AxisException.hpp>
 #include <iostream>
 
-bool IsNumber (const char *p);
+void usage( char * pszProgramName, char * pszDefaultURL);
+int findMyEndpoint( int argc, char * argv[], char * pszEndpoint);
+bool IsNumber( const char * pszNumber);
 
-static void
-usage (char *programName, char *defaultURL)
+int main (int argc, char *argv[])
 {
-    cout << "\nUsage:\n"
-	<< programName << " [-? | div number1 number2 [service_url]] " << endl
-	<< "    -?             Show this help.\n"
-	<< "    service_url    URL of the service.\n"
-	<< "    Default service URL is assumed to be " << defaultURL << endl;
-}
-
-int
-main (int argc, char *argv[])
-{
-    char endpoint[256];
-    char original[256];
-    const char *server = "localhost";
-    const char *port = "80";
-    const char *op = 0;
-    const char *p1 = 0;
-    const char *p2 = 0;
-    int i1 = 0, i2 = 0;
-    int iResult;
+    char	pszEndpoint[256];
+    char *	pszServer = "localhost";
+    int		iPort = 9080;
+	int		iReturnValue = 1;
 
     // Set default service URL
-    sprintf (endpoint, "http://localhost/axis/Calculator");
-    sprintf (original, endpoint);
+	sprintf( pszEndpoint, "http://%s:%d/axis/Calculator", pszServer, iPort);
 
     try
     {
-	if (argc == 1)
-	{
-	    usage (argv[0], endpoint);
-	    return 2;
-	}
+		if( (iReturnValue = findMyEndpoint( argc, argv, pszEndpoint)) == 2)
+		{
+			return iReturnValue;
+		}
 
-	if (argc > 1)
-	{
-	    if (!strncmp (argv[1], "-", 1))
-	    {
-		// Check for - only so that it works for 
-		//-?, -h or --help; -anything 
+		Calculator		ws( pszEndpoint);
+		const char *	pszOperation = argv[1];
+		const char *	pszNumber1 = argv[2];
+		const char *	pszNumber2 = argv[3];
+		int				iNumber1 = 0;
+		int				iNumber2 = 0;
+		int				iResult;
+		int				iExpectedResult;
 
-		usage (argv[0], endpoint);
-		return 2;
-	    }
-	    //less than minimum number of args OR greater than maximum number of args
-	    else if (argc < 4 || argc > 5)
-	    {
-		usage (argv[0], endpoint);
-		return 2;
-	    }
-	    else if (argc == 5)
-	    {
-		sprintf (endpoint, argv[4]);
-	    }
-	}
+		if( !IsNumber( pszNumber1))
+		{
+			cout << "Invalid value for first <parameter> " << pszNumber1 << endl;
 
-	Calculator ws (endpoint);
+			usage (argv[0], pszEndpoint);
 
-	op = argv[1];
-	p1 = argv[2];
-	p2 = argv[3];
+			return 2;
+		}
 
-	if (!IsNumber (p1))
-	{
-	    printf ("Invalid value for first <parameter> %s\n\n", p1);
-	    usage (argv[0], original);
-	    return 2;
-	}
-	if (!IsNumber (p2))
-	{
-	    printf ("Invalid value for second <parameter> %s\n\n", p2);
-	    usage (argv[0], original);
-	    return 2;
-	}
+		if( !IsNumber( pszNumber2))
+		{
+			cout << "Invalid value for second <parameter> " << pszNumber2 << endl;
 
-	i1 = atoi (p1);
-	i2 = atoi (p2);
+			usage (argv[0], pszEndpoint);
 
-	if (strcmp (op, "add") == 0)
-	{
-	    iResult = ws.add (i1, i2);
-	    printf ("%d\n", iResult);
-	}
-	else if (strcmp (op, "sub") == 0)
-	{
-	    iResult = ws.sub (i1, i2);
-	    printf ("%d\n", iResult);
-	}
-	else if (strcmp (op, "mul") == 0)
-	{
-	    iResult = ws.mul (i1, i2);
-	    printf ("%d\n", iResult);
-	}
-	else if (strcmp (op, "div") == 0)
-	{
-	    iResult = ws.div (i1, i2);
-	    printf ("%d\n", iResult);
-	}
-	else
-	{
-	    printf ("Invalid operation %s\n\n", op);
-	    usage (argv[0], original);
-	    return 2;
-	}
+			return 2;
+		}
+
+		iNumber1 = atoi( pszNumber1);
+		iNumber2 = atoi( pszNumber2);
+
+		if( !strcmp( pszOperation, "add"))
+		{
+			iResult = ws.add( iNumber1, iNumber2);
+
+			iExpectedResult = iNumber1 + iNumber2;
+		}
+		else if( !strcmp( pszOperation, "sub"))
+		{
+			iResult = ws.sub( iNumber1, iNumber2);
+
+			iExpectedResult = iNumber1 - iNumber2;
+		}
+		else if( !strcmp( pszOperation, "mul"))
+		{
+			iResult = ws.mul( iNumber1, iNumber2);
+
+			iExpectedResult = iNumber1 * iNumber2;
+		}
+		else if( !strcmp( pszOperation, "div"))
+		{
+			iResult = ws.div( iNumber1, iNumber2);
+
+			iExpectedResult = iNumber1 / iNumber2;
+		}
+		else
+		{
+			cout << "Invalid operation " << pszOperation << endl << endl;
+
+			usage (argv[0], pszEndpoint);
+
+			return 2;
+		}
+		
+		cout << iResult << endl;
+
+		if( iResult == iExpectedResult)
+		{
+			iReturnValue = 0;
+		}
     }
-    catch (AxisException & e)
+    catch( AxisException & e)
     {
-	printf ("Exception : %s\n", e.what ());
+		cout << "Exception : " << e.what() << endl;
     }
-    catch (exception & e)
+    catch( exception & e)
     {
-	printf ("Unknown exception has occured\n");
+		cout << "Unknown exception has occurred : " << e.what() << endl;
     }
-    catch (...)
+    catch( ...)
     {
-	printf ("Unknown exception has occured\n");
+		cout << "Unknown exception has occurred" << endl;
     }
-    return 0;
+
+	return iReturnValue;
 }
 
-bool
-IsNumber (const char *p)
+void usage( char * pszProgramName, char * pszDefaultURL)
 {
-    for (int x = 0; x < strlen (p); x++)
+    cout << endl << "Usage:" << endl
+		 << pszProgramName << " [-? | operator number1 number2 [service_url]] " << endl
+		 << "\t-?              Show this help." << endl
+		 << "\tservice_url     URL of the service." << endl
+		 << "\tDefault service URL is assumed to be " << pszDefaultURL << endl;
+}
+
+bool IsNumber( const char * pszNumber)
+{
+    for( int iDigitCount = 0; iDigitCount < (int) strlen( pszNumber); iDigitCount++)
     {
-	if (!isdigit (p[x]))
-	    return false;
+		if( !isdigit( pszNumber[iDigitCount]))
+		{
+			return false;
+		}
     }
+
     return true;
+}
+
+int findMyEndpoint( int argc, char * argv[], char * pszEndpoint)
+{
+    if( argc == 0 ||
+		argc != 5 ||
+		(argc > 0 && *argv[1] == '-'))		// Watch for special case help request
+		{									// Check for - only so that it works for
+		    usage( argv[0], pszEndpoint);	// -?, -h or --help; -anything
+	    
+			return 2;
+		}
+
+	sprintf( pszEndpoint, argv[4]);
+	    
+	return 1;
 }
