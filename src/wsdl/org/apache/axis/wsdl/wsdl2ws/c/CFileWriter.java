@@ -53,21 +53,16 @@ public abstract class CFileWriter extends BasicFileWriter
     {
         try
         {
-            this.writer =
-                new BufferedWriter(new FileWriter(getFilePath(), false));
+            this.writer = new BufferedWriter(new FileWriter(getFilePath(), false));
             writeClassComment();
             writePreprocessorStatements();
             writeGlobalCodes();
-            // this.writer.write("public class "+servicename+getExtendsPart()+"{\n");
             writeAttributes();
             writeMethods();
-            //this.writer.write("}\n");
-            //cleanup
             writer.flush();
             writer.close();
             if (WSDL2Ws.verbose)
-                System.out.println(
-                    getFilePath().getAbsolutePath() + " created.....");
+                System.out.println(getFilePath().getAbsolutePath() + " created.....");
         }
         catch (IOException e)
         {
@@ -96,37 +91,21 @@ public abstract class CFileWriter extends BasicFileWriter
      */
     protected File getFilePath(boolean useServiceName) throws WrapperFault
     {
-        String targetOutputLocation =
-            this.wscontext.getWrapInfo().getTargetOutputLocation();
+        String targetOutputLocation = this.wscontext.getWrapInfo().getTargetOutputLocation();
         if (targetOutputLocation.endsWith("/"))
-        {
-            targetOutputLocation =
-                targetOutputLocation.substring(
-                    0,
-                    targetOutputLocation.length() - 1);
-        }
-        new File(targetOutputLocation).mkdirs();
+            targetOutputLocation = targetOutputLocation.substring(0,targetOutputLocation.length() - 1);
 
-        String fileName =
-            targetOutputLocation + "/" + classname + CUtils.C_FILE_SUFFIX;
+        new File(targetOutputLocation).mkdirs();
+        String fileName = targetOutputLocation + "/" + classname + CUtils.C_FILE_SUFFIX;
 
         if (useServiceName)
         {
             String serviceName = this.wscontext.getSerInfo().getServicename();
-            fileName =
-                targetOutputLocation
-                    + "/"
-                    + serviceName
-                    + "_"
-                    + classname
-                    + CUtils.C_FILE_SUFFIX;
-            this.wscontext.addGeneratedFile(
-                serviceName + "_" + classname + CUtils.C_FILE_SUFFIX);
+            fileName = targetOutputLocation + "/" + serviceName + "_" + classname + CUtils.C_FILE_SUFFIX;
+            this.wscontext.addGeneratedFile(serviceName + "_" + classname + CUtils.C_FILE_SUFFIX);
         }
         else
-        {
             this.wscontext.addGeneratedFile(classname + CUtils.C_FILE_SUFFIX);
-        }
 
         return new File(fileName);
     }

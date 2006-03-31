@@ -56,54 +56,7 @@ public class BeanParamWriter
     protected void writeGlobalCodes() throws WrapperFault
     {
         try
-        {
-            HashSet typeSet = new HashSet();
-            String typeName;
-            for (int i = 0; i < attribs.length; i++)
-                if (!(attribs[i].isSimpleType() || attribs[i].isAnyType()))
-                    typeSet.add(attribs[i].getTypeName());
-
-            Iterator itr = typeSet.iterator();
-            while (itr.hasNext())
-            {
-                /*
-                 * Needed for self referenced  array.
-                * <xsd:complexType name="Type1">
-                *    <xsd:sequence>
-                *        <xsd:element name="followings" maxOccurs="unbounded" minOccurs="0" type="tns:Type1" />
-                *        <xsd:element name="kind" type="xsd:string" />
-                *        <xsd:element name="index" type="xsd:int" />
-                *    </xsd:sequence>
-                *    <xsd:attribute name="att_kind" type="tns:Kind" />
-                * </xsd:complexType>
-                */
-                typeName = itr.next().toString();
-                if (!typeName.equals(type.getName().getLocalPart()))
-                {
-                    writer.write("extern int Axis_DeSerialize_" + typeName
-                            + "(" + typeName + "* param, AXISCHANDLE pDZ);\n");
-                    writer.write("extern void* Axis_Create_" + typeName
-                            + "(" + typeName + "* pObj, AxiscBool bArray, int nSize);\n");
-                    writer.write("extern void Axis_Delete_" + typeName
-                            + "(" + typeName + "* param, AxiscBool bArray, int nSize);\n");
-                    writer.write("extern int Axis_Serialize_" + typeName
-                            + "(" + typeName + "* param, AXISCHANDLE pSZ, AxiscBool bArray);\n");
-                    writer.write("extern int Axis_GetSize_" + typeName + "();\n\n");
-                }
-                else
-                {
-                    writer.write("int Axis_DeSerialize_" + typeName
-                            + "(" + typeName + "* param, AXISCHANDLE pDZ);\n");
-                    writer.write("void* Axis_Create_" + typeName
-                            + "(void* pObj, AxiscBool bArray, int nSize);\n");
-                    writer.write("void Axis_Delete_" + typeName 
-                            + "(" + typeName + "* param, AxiscBool bArray, int nSize);\n");
-                    writer.write("int Axis_Serialize_" + typeName 
-                            + "(" + typeName + "* param, AXISCHANDLE pSZ, AxiscBool bArray);\n");
-                    writer.write("int Axis_GetSize_" + typeName + "();\n\n");
-                }
-            }
-            
+        {           
             writeSerializeGlobalMethod();
             writeDeSerializeGlobalMethod();
             writeCreateGlobalMethod();
@@ -313,8 +266,9 @@ public class BeanParamWriter
                 else
                 {
                     arrayType = attribs[i].getTypeName();
-                    writer.write("\tarray" + arrayCount + " = axiscGetCmplxArray(pDZ, (void*)Axis_DeSerialize_"
-                            + arrayType
+                    writer.write("\tarray" + arrayCount + " = axiscGetCmplxArrayCall(pDZ," 
+                            + "&array" + arrayCount + ","
+                            + "(void*)Axis_DeSerialize_"  + arrayType
                             + "\n\t\t, (void*)Axis_Create_" + arrayType
                             + ", (void*)Axis_Delete_" + arrayType
                             + "\n\t\t, (void*)Axis_GetSize_" + arrayType
@@ -588,7 +542,7 @@ public class BeanParamWriter
                             "\t\t\tif (pTemp->"  + attribs[i].getParamName()
                                 + ".m_Array) Axis_Delete_" + attribs[i].getTypeName()
                                 + "(pTemp->" + attribs[i].getParamName()
-                                + ".m_Array, true, pTemp->" + attribs[i].getParamName()
+                                + ".m_Array, xsdc_boolean_true, pTemp->" + attribs[i].getParamName()
                                 + ".m_Size);\n");
                     }
                 }
@@ -659,7 +613,7 @@ public class BeanParamWriter
                             + attribs[i].getParamName()
                             + ".m_Array) Axis_Delete_" + attribs[i].getTypeName()
                             + "(param->" + attribs[i].getParamName()
-                            + ".m_Array, true, param->" + attribs[i].getParamName()
+                            + ".m_Array, xsdc_boolean_true, param->" + attribs[i].getParamName()
                             + ".m_Size);\n");
                 }
             }

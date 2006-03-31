@@ -1817,7 +1817,8 @@ void * axiscGetCmplxObjectCall(AXISCHANDLE call,
 
 AXISC_STORAGE_CLASS_INFO 
 Axisc_Array* axiscGetCmplxArrayCall(AXISCHANDLE call, 
-                                    Axisc_Array* pArray, void * pDZFunct, 
+                                    Axisc_Array* pArray, 
+                                    void * pDZFunct, 
                                     void * pCreFunct, 
                                     void * pDelFunct, 
                                     void * pSizeFunct, 

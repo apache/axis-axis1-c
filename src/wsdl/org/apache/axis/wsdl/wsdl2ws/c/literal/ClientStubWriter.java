@@ -564,49 +564,7 @@ public class ClientStubWriter
     /* (non-Javadoc)
      * @see org.apache.axis.wsdl.wsdl2ws.c.CFileWriter#writeGlobalCodes()
      */
-    protected void writeGlobalCodes() throws WrapperFault
+    protected void writeGlobalCodes() throws WrapperFault 
     {
-        Iterator types = wscontext.getTypemap().getTypes().iterator();
-        HashSet typeSet = new HashSet();
-        String typeName;
-        Type type;
-        try
-        {
-            while (types.hasNext())
-            {
-                type = (Type) types.next();
-                
-                if (type.isSimpleType())
-                    continue;
-                
-                if (type.isArray())
-                    continue;
-                
-                typeName = type.getLanguageSpecificName();
-                if (typeName.startsWith(">"))
-                    continue;
-                
-                typeSet.add(typeName);
-            }
-            
-            Iterator itr = typeSet.iterator();
-            while (itr.hasNext())
-            {
-                typeName = itr.next().toString();
-                writer.write("extern int Axis_DeSerialize_" + typeName
-                             + "(" + typeName + "* param, AXISCHANDLE pDZ);\n");
-                writer.write("extern void* Axis_Create_" + typeName
-                             + "(" + typeName + " *Obj, AxiscBool bArray, int nSize);\n");
-                writer.write("extern void Axis_Delete_" + typeName
-                             + "(" + typeName + "* param, AxiscBool bArray, int nSize);\n");
-                writer.write("extern int Axis_Serialize_" + typeName
-                             + "(" + typeName + "* param, AXISCHANDLE pSZ, AxiscBool bArray);\n");
-                writer.write("extern int Axis_GetSize_" + typeName + "();\n\n");
-            }
-        }
-        catch (IOException e)
-        {
-            throw new WrapperFault(e);
-        }
     }
 }

@@ -28,6 +28,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Vector;
+import java.util.HashSet;
 
 import javax.xml.namespace.QName;
 
@@ -74,6 +75,7 @@ public class ParmHeaderFileWriter
                 this.writer.write("typedef struct " + classname + "Tag {\n");
                 writeAttributes();
                 this.writer.write("} " + classname + ";\n\n");
+                writeFunctionPrototypes();
             }
             
             this.writer.write("#endif /* !defined(__" + classname.toUpperCase() + "_H__INCLUDED_)*/\n");
@@ -215,6 +217,53 @@ public class ParmHeaderFileWriter
         }
     }
 
+    protected void writeFunctionPrototypes() throws WrapperFault
+    {
+        Iterator types = wscontext.getTypemap().getTypes().iterator();
+        HashSet typeSet = new HashSet();
+        String typeName;
+        Type type;
+        try
+        {
+            while (types.hasNext())
+            {
+                type = (Type) types.next();
+                
+                if (type.isSimpleType())
+                    continue;
+                
+                if (type.isArray())
+                    continue;
+                
+                typeName = type.getLanguageSpecificName();
+                if (typeName.startsWith(">") || !typeName.equals(classname))
+                    continue;
+                
+                typeSet.add(typeName);
+            }
+            
+            Iterator itr = typeSet.iterator();
+            while (itr.hasNext())
+            {
+                typeName = itr.next().toString();
+                this.writer.write("extern int Axis_DeSerialize_" + typeName
+                             + "(" + typeName + "* param, AXISCHANDLE pDZ);\n");
+                this.writer.write("extern void* Axis_Create_" + typeName
+                             + "(" + typeName + " *Obj, AxiscBool bArray, int nSize);\n");
+                this.writer.write("extern void Axis_Delete_" + typeName
+                             + "(" + typeName + "* param, AxiscBool bArray, int nSize);\n");
+                this.writer.write("extern int Axis_Serialize_" + typeName
+                             + "(" + typeName + "* param, AXISCHANDLE pSZ, AxiscBool bArray);\n");
+                this.writer.write("extern int Axis_GetSize_" + typeName + "();\n\n");
+            }
+        }
+        catch (IOException e)
+        {
+            throw new WrapperFault(e);
+        }
+    }
+    
+    
     /* (non-Javadoc)
      * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#writePreprocessorStatements()
      */
@@ -224,7 +273,8 @@ public class ParmHeaderFileWriter
         {
             Type atype;
             Iterator types = this.wscontext.getTypemap().getTypes().iterator();
-            
+
+            writer.write("#include <axis/Axis.h>\n");
             writer.write("#include <axis/GDefine.h>\n");
             writer.write("#include <axis/AxisUserAPI.h>\n");
             
