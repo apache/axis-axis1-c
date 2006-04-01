@@ -31,6 +31,7 @@ import java.util.Iterator;
 import javax.xml.namespace.QName;
 
 import org.apache.axis.wsdl.wsdl2ws.CUtils;
+import org.apache.axis.wsdl.wsdl2ws.WrapperConstants;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.MethodInfo;
@@ -107,6 +108,7 @@ public class ClientStubWriter
         boolean isAllTreatedAsOutParams = false;
         ParameterInfo returntype = null;
         int noOfOutParams = minfo.getOutputParameterTypes().size();
+        
         if (0 == noOfOutParams)
             returntype = null;
         else if (1 == noOfOutParams)
@@ -119,8 +121,9 @@ public class ClientStubWriter
         Type retType = null;
         boolean returntypeissimple = false;
         boolean returntypeisarray = false;
-        boolean aretherearrayparams = false;
         String outparamType = null;
+        boolean aretherearrayparams = false;
+        
         if (returntype != null)
             retType = wscontext.getTypemap().getType(returntype.getSchemaName());
     
@@ -145,6 +148,7 @@ public class ClientStubWriter
         writer.write("\n/*\n");
         writer.write(" * This function wraps the service method " + methodName + "\n");
         writer.write(" */\n");
+        
         //method signature
         String paraTypeName;
         boolean typeisarray = false;
@@ -264,7 +268,11 @@ public class ClientStubWriter
         {
             ParameterInfo param = (ParameterInfo) paramsB.get(i);
 
-            // Ignore attributes, while adding elements
+            // Ignore attributes
+            if (param.isAttribute ())
+                continue;
+            
+            // Add elements
             type = wscontext.getTypemap().getType(param.getSchemaName());
             if (type != null)
             {
@@ -284,65 +292,129 @@ public class ClientStubWriter
             }
             else
             {
-                paraTypeName = param.getLangName();
+                paraTypeName = ((ParameterInfo) paramsB.get (i)).getLangName ();
                 typeisarray = false;
             }
-            
-            typeissimple = CUtils.isSimpleType(paraTypeName);
-            if (typeisarray)
-            {
-                //arrays
-                QName qname = WrapperUtils.getArrayType(type).getName();
-                String containedType = null;
-                if (CUtils.isSimpleType(qname))
-                {
-                    containedType = CUtils.getclass4qname(qname);
-                    writer.write("\taxiscAddBasicArrayParameterCall(call, ");
-                    writer.write("(Axisc_Array*)(&Value" + i + "), "
-                            + CUtils.getXSDTypeForBasicType(containedType) + ", \""
-                            + param.getElementNameAsString() + "\"");
-                }
-                else
-                {
-                    containedType = qname.getLocalPart();
-                    writer.write("\taxiscAddCmplxArrayParameterCall(call, ");
-                    writer.write("(Axisc_Array*)(&Value" + i
-                                 + "), (void*)Axis_Serialize_" + containedType
-                                 + ", (void*)Axis_Delete_" + containedType
-                                 + ", (void*) Axis_GetSize_" + containedType
-                                 + ", \""
-                                 + param.getElementNameAsString()
-                                 + "\", Axis_URI_" + containedType);
-                }
-            }
-            else if (typeissimple)
-            {
-                writer.write("\taxiscAddParameterCall(call, ");
-                if (param.isNillable() || CUtils.isPointerType(paraTypeName))
-                    writer.write("(void*)Value" + i + ", \"" 
-                            + param.getElementNameAsString()
-                            + "\", " + CUtils.getXSDTypeForBasicType(paraTypeName));
-                else
-                    writer.write("(void*)&Value" + i + ", \"" 
-                            + param.getElementNameAsString()
-                            + "\", " + CUtils.getXSDTypeForBasicType(paraTypeName));
-            }
-            else if (param.isAnyType())
+ 
+            if (param.isAnyType ())
                 writer.write("\taxiscAddAnyObjectCall(call, Value" + i);
             else
             {
-                // for complex types
-                writer.write( "\taxiscAddCmplxParameterCall(call, ");
-                writer.write( "Value"
-                                + i
-                                + ", (void*)Axis_Serialize_" + paraTypeName
-                                + ", (void*)Axis_Delete_" + paraTypeName
-                                + ", \""
-                                + param.getElementNameAsString()
-                                + "\", Axis_URI_" + paraTypeName);
+                String parameterName = ((ParameterInfo) paramsB.get (i)).getElementNameAsString ();
+                String namespace = ((ParameterInfo) paramsB.get (i)).getElementName ().getNamespaceURI ();
+    
+                if (((ParameterInfo)paramsB.get(i)).isOptional())
+                    writer.write("\tif (Value" + i + " != NULL)\n\t{\n");
+                else
+                    writer.write("\t{\n");
+                
+                if (namespace.length () == 0)
+                {
+                    writer.write ("\tchar cPrefixAndParamName"
+                              + i + "[" + "] = \"" + parameterName + "\";\n");
+                }
+                else
+                {
+                    int stringLength = 8 + 1 + parameterName.length () + 1;
+                    writer.write ("\tchar cPrefixAndParamName" + i + "[" + stringLength + "];\n");
+                    writer.write ("\tsprintf( cPrefixAndParamName" + i +
+                              ", \"%s:" + parameterName +
+                              "\", axiscGetNamespacePrefixCall(call,\"" +  namespace + "\"));\n");
+                }
+    
+                if (param.getType().isAttachment())
+                {
+                    // TODO
+                    String attchType = param.getType().getName().getLocalPart();
+                          writer.write("\n\tconst AxisChar *xmlSoapNsPfx" + i + 
+                        " = axiscGetNamespacePrefixCall(call,\"" + 
+                        WrapperConstants.APACHE_XMLSOAP_NAMESPACE + "\");\n");
+                    writer.write("\tchar attchType" + i + "[64];\n");
+                    writer.write("\tstrcpy(attchType" + i + ", xmlSoapNsPfx" + i + ");\n");
+                    writer.write("\tstrcat(attchType" + i + ", \":" + attchType + "\");\n");
+                    writer.write("\tIAttribute *attrs" + i + "[2];\n");
+                    writer.write("\tattrs" + i + "[0] = axiscCreateAttributeCall(call,\"type\", \"xsi\", attchType" + i + 
+                        ");\n");
+                    writer.write("\tattrs" + i + "[1] = axiscCreateAttributeCall(call,xmlSoapNsPfx" + i + 
+                        ", \"xmlns\", \"http://xml.apache.org/xml-soap\");\n");
+                    writer.write("\taxiscAddAttachmentParameterCall(call, Value" + i + ", cPrefixAndParamName" + i + 
+                        ", attrs" + i + ", 2");
+                }
+                else if (typeisarray)
+                {
+                    Type arrayType = WrapperUtils.getArrayType (type);
+        
+                    QName qname = null;
+                    if (arrayType != null)
+                        qname = arrayType.getName ();
+                    else
+                        qname = type.getName ();
+                
+                    if (CUtils.isSimpleType (qname))
+                    {
+                        // Array of simple type
+                        String containedType = CUtils.getclass4qname (qname);
+                        writer.write ("\taxiscAddBasicArrayParameterCall(call,");
+                        writer.write ("Value" + i + ", " +
+                              CUtils.getXSDTypeForBasicType(containedType) + ", cPrefixAndParamName" + i);
+                    }
+                    else if (arrayType != null && arrayType.isSimpleType ())
+                    {
+                        String containedType = CUtils.getclass4qname (arrayType.getBaseType ());
+                        writer.write ("\taxiscAddBasicArrayParameterCall(call,");
+                        writer.write ("Value" + i + ", " +
+                                  CUtils.getXSDTypeForBasicType(containedType) +
+                                  ", cPrefixAndParamName" + i);
+                    }
+                    else
+                    {
+                        // Array of complex type
+                        String containedType = qname.getLocalPart ();
+                        writer.write ("\taxiscAddCmplxArrayParameterCall(call,");
+                        writer.write ("Value" + i +
+                                  ", (void*)Axis_Serialize_" + containedType +
+                                  ", (void*)Axis_Delete_" + containedType +
+                                  ", (void*) Axis_GetSize_" + containedType + ", \"" +
+                                  parameterName + "\"" + ", ");
+                        
+                        if (namespace.length () == 0)
+                            writer.write ("NULL");
+                        else
+                            writer.write ("Axis_URI_" + containedType);
+                    }
+                }
+                else if (CUtils.isSimpleType (paraTypeName))
+                {
+                    if (param.isNillable () 
+                            || param.isOptional()
+                            || CUtils.isPointerType(paraTypeName))
+                    {
+                        writer.write ("\taxiscAddParameterCall(call,");
+                        writer.write ("(void*)Value" + i + ", cPrefixAndParamName" + i
+                                  + ", " + CUtils.getXSDTypeForBasicType(paraTypeName));
+                    }
+                    else
+                    {
+                        writer.write ("\taxiscAddParameterCall(call,");
+                        writer.write ("(void*)&Value" + i + ", cPrefixAndParamName" + i
+                                  + ", " + CUtils.getXSDTypeForBasicType(paraTypeName));
+                    }
+                }
+                else
+                {
+                    // Complex Type
+                    writer.write ("\taxiscAddCmplxParameterCall(call,");
+                    writer.write ("Value" + i
+                          + ", (void*)Axis_Serialize_" + paraTypeName
+                          + ", (void*)Axis_Delete_" + paraTypeName
+                          + ", cPrefixAndParamName" + i + ", Axis_URI_" + paraTypeName);
+                }              
             }
-            writer.write(");\n");
-          }
+
+            writer.write (");\n");
+            if (!param.isAnyType ())
+                writer.write("\t}\n");            
+          } // end for-loop
         
         writer.write("\tif (AXISC_SUCCESS == axiscInvokeCall(call))\n\t{\n");
         writer.write("\t\tif(AXISC_SUCCESS == axiscCheckMessageCall(call, \""
