@@ -520,8 +520,7 @@ public class ClientStubWriter
                     if (CUtils.isSimpleType (qname))
                     {
                         // Array of simple type
-                        String containedType =
-                        CUtils.getclass4qname (qname);
+                        String containedType = CUtils.getclass4qname (qname);
                         writer.write ("\tm_pCall->addBasicArrayParameter(");
                         writer.write ("Value" + i + ", " +
                               CUtils.getXSDTypeForBasicType(containedType) + ", cPrefixAndParamName" + i);
