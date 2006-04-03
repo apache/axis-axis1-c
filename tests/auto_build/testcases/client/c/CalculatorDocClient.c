@@ -13,7 +13,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <axis/Axis.h>
 #include "CommonClientTestCode.h"
 
 #include "Calculator.h"
