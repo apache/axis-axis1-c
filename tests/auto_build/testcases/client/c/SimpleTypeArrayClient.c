@@ -13,44 +13,64 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include "CommonClientTestCode.h"
+
 #include "SimpleTypeArrayWS.h" 
+
+#include <stdio.h>
+
+#define WSDL_DEFAULT_ENDPOINT "http://localhost:9080/SimpleTypeArray/services/sampleWS"
+
 int main(int argc, char* argv[])
 { 
+    AXISCHANDLE ws = NULL;
+    char *endpoint = WSDL_DEFAULT_ENDPOINT;
+    int returnValue = 1; /* Assume Failure */
+    Type *input;
+    Type *output;
+    xsdc__int_Array array_input;
+    xsdc__int_Array *array_output;
+    xsdc__int * array[100];
+    xsdc__int   elements[100];
+    int i;
 
-  void *pStub;
-  Type *input;
-  Type *output;
-  xsd__int_Array array_input;
-  xsd__int_Array array_output;
-  int * entries;
-  int i;
+    if (argc>2 && strcmp(argv[1], "-e") == 0) 
+        endpoint = argv[2];   
 
-  entries = malloc ( sizeof (int) );
+    for ( i = 0; i < 100; i++ )
+    {     
+      elements[i] = i;
+      array[i]    = &elements[i];
+    }
+    
+    array_input.m_Array = array;
+    array_input.m_Size  = 100;
+    array_input.m_Type  = XSD_INT;
 
-  array_input.m_Array = entries;
-  array_input.m_Size  = 100;
+    input = Axis_Create_Type(0,0,0);
+    input->item = &array_input;
 
-  for ( i = 0; i < 100; i++ ) {
-    entries[i] = i;
-  }
-
-  input = Axis_Create_Type(0,0,0);
-  input->item = array_input;
-
-  pStub = 
-    get_SimpleTypeArrayWS_stub();
-  
-  output = getInput(pStub, input);
-
-  for ( i = 0; i < 100; i++ ) {
-    printf ("item [%d] = %d\n",i,output->item.m_Array[i]);
-  }
-  
-  Axis_Delete_Type(input,0,0);
-  Axis_Delete_Type(output,0,0);
-
-  destroy_SimpleTypeArrayWS_stub(pStub);
-
-
+    ws = get_SimpleTypeArrayWS_stub(endpoint);
+    output = getInput(ws, input);
+    
+    if (exceptionOccurred == C_TRUE ||
+        get_SimpleTypeArrayWS_Status(ws) == AXISC_FAIL ||
+        output == NULL || output->item == NULL)
+       printf("FAILED\n");
+    else
+    {
+       returnValue = 0;
+       for ( i = 0; i < 100; i++ )
+         printf ("item [%d] = %d\n",i,output->item->m_Array[i]);
+    }
+    
+    input->item = NULL;
+    Axis_Delete_Type(input,0,0);
+    Axis_Delete_Type(output,0,0);
+    
+    destroy_SimpleTypeArrayWS_stub(ws);
+   
+    printf("---------------------- TEST COMPLETE -----------------------------\n");   
+    return returnValue; 
 }
 
