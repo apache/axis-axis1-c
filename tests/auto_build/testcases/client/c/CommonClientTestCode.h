@@ -1,12 +1,18 @@
 #ifndef __COMMONCHEADERFILE
 #define __COMMONCHEADERFILE
 
+/* need to resolve, but we cannot include stdlib.h when running
+ * calculatordoc tests because div() is already defined. So we
+ * hard-code the malloc prototype.
+ */
+
 #include <stdio.h>
 
 #define C_BOOL  int
 #define C_FALSE (int)0
 #define C_TRUE  (int)1 
 
+extern void *malloc(unsigned int);
 char *c_strdup(char *s)
 {
     char * ret = (char *)malloc(strlen(s)+1);
