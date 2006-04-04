@@ -83,8 +83,7 @@ public class ClientStubWriter extends CPPClassWriter
     {
         try
         {
-            writer
-                    .write(classname
+            writer.write(classname
                             + "::"
                             + classname
                             + "(const char* pchEndpointUri, AXIS_PROTOCOL_TYPE eProtocol)\n:Stub(pchEndpointUri, eProtocol)\n{\n");
@@ -166,10 +165,6 @@ public class ClientStubWriter extends CPPClassWriter
             }
             writer.write("#include <axis/AxisWrapperAPI.hpp>\n");
             writer.write ("#include <axis/Axis.hpp>\n\n");
-            
-            writer.write("#include <string.h>\n\n"); // for memcpy
-            writer.write("using namespace std;\n\n ");
-
         } catch (IOException e)
         {
             throw new WrapperFault(e);
@@ -779,14 +774,15 @@ public class ClientStubWriter extends CPPClassWriter
         writer.write("\t\tint iExceptionCode = e.getExceptionCode();\n\n");
         writer.write("\t\tif( AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)\n");
         writer.write("\t\t{\n");
-        writer.write("\t\t\tthrow SoapFaultException( e);\n");
+        writer.write("\t\t\tm_pCall->unInitialize();\n");
+        writer.write("\t\t\tthrow;\n");
         writer.write("\t\t}\n\n");
         //ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault",
         // "http://localhost/axis/MathOps");
 
-        writer.write("\t\tISoapFault *\tpSoapFault = (ISoapFault *) m_pCall->checkFault( \"Fault\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\""
+        writer.write("\t\tISoapFault * pSoapFault = (ISoapFault *)\n\t\t\tm_pCall->checkFault(\"Fault\",\""
                 + wscontext.getWrapInfo().getTargetEndpointURI() + "\");\n\n");
-        writer.write("\t\tif( pSoapFault)\n");
+        writer.write("\t\tif(pSoapFault)\n");
         writer.write("\t\t{\n");
         //writer.write("\t\t\tpcCmplxFaultName =
         // pSoapFault->getCmplxFaultObjectName();\n");
@@ -800,8 +796,30 @@ public class ClientStubWriter extends CPPClassWriter
         int j = 0;
         if (!paramsFault.hasNext())
         {
-            writer.write("\t\t\tm_pCall->unInitialize();\n\n");
-            writer.write("\t\t\tthrow SoapFaultException( e);\n");
+            writer.write("\t\t\tconst char *detail = pSoapFault->getSimpleFaultDetail();\n");
+            writer.write("\t\t\tbool deleteDetail=false;\n\n");
+            writer.write("\t\t\tif (NULL==detail || 0==strlen(detail))\n");
+            writer.write("\t\t\t{\n");
+            writer.write("\t\t\t\tdetail=m_pCall->getFaultAsXMLString();\n");
+            writer.write("\t\t\t\tif (NULL==detail)\n");
+            writer.write("\t\t\t\t{\n");
+            writer.write("\t\t\t\t\tdetail=\"\";\n");
+            writer.write("\t\t\t\t}\n");
+            writer.write("\t\t\t\telse\n");
+            writer.write("\t\t\t\t{\n");
+            writer.write("\t\t\t\t\tdeleteDetail=true;\n");
+            writer.write("\t\t\t\t}\n");
+            writer.write("\t\t\t}\n\n");
+            writer.write("\t\t\tOtherFaultException ofe(pSoapFault->getFaultcode(),\n");
+            writer.write("\t\t\t\tpSoapFault->getFaultstring(), pSoapFault->getFaultactor(),\n");
+            writer.write("\t\t\t\tdetail, iExceptionCode);\n\n");
+            writer.write("\t\t\tif (deleteDetail && NULL!=detail)\n");
+            writer.write("\t\t\t{\n");
+            writer.write("\t\t\t\tAxis::AxisDelete( (void *) const_cast<char*>(detail), XSD_STRING);\n");
+            writer.write("\t\t\t}\n\n");
+            writer.write("\t\t\tm_pCall->unInitialize();\n");
+            writer.write("\t\t\tdelete pSoapFault;\n");
+            writer.write("\t\t\tthrow ofe;\n");
         }
         else
         {
@@ -842,13 +860,40 @@ public class ClientStubWriter extends CPPClassWriter
         {
             writer.write("\t\t\telse\n");
             writer.write("\t\t\t{\n");
-            writer.write("\t\t\t\tm_pCall->unInitialize();\n\n");
-            writer.write("\t\t\t\tthrow SoapFaultException(e);\n");
+            writer.write("\t\t\t\tconst char *detail = pSoapFault->getSimpleFaultDetail();\n");
+            writer.write("\t\t\t\tbool deleteDetail=false;\n\n");
+            writer.write("\t\t\t\tif (NULL==detail || 0==strlen(detail))\n");
+            writer.write("\t\t\t\t{\n");
+            writer.write("\t\t\t\t\tdetail=m_pCall->getFaultAsXMLString();\n");
+            writer.write("\t\t\t\t\tif (NULL==detail)\n");
+            writer.write("\t\t\t\t\t{\n");
+            writer.write("\t\t\t\t\t\tdetail=\"\";\n");
+            writer.write("\t\t\t\t\t}\n");
+            writer.write("\t\t\t\t\telse\n");
+            writer.write("\t\t\t\t\t{\n");
+            writer.write("\t\t\t\t\t\tdeleteDetail=true;\n");
+            writer.write("\t\t\t\t\t}\n");
+            writer.write("\t\t\t\t}\n\n");
+            writer.write("\t\t\t\tOtherFaultException ofe(pSoapFault->getFaultcode(),\n");
+            writer.write("\t\t\t\t\tpSoapFault->getFaultstring(), pSoapFault->getFaultactor(),\n");
+            writer.write("\t\t\t\t\tdetail, iExceptionCode);\n\n");
+            writer.write("\t\t\t\tif (deleteDetail && NULL!=detail)\n");
+            writer.write("\t\t\t\t{\n");
+            writer.write("\t\t\t\t\tAxis::AxisDelete( (void *) const_cast<char*>(detail), XSD_STRING);\n");
+            writer.write("\t\t\t\t}\n\n");
+            writer.write("\t\t\t\tm_pCall->unInitialize();\n");
+            writer.write("\t\t\t\tdelete pSoapFault;\n");
+            writer.write("\t\t\t\tthrow ofe;\n");
             writer.write("\t\t\t}\n");
         }
 
         writer.write("\t\t}\n");
-        writer.write("\t\telse\n\t\t{\n\t\t\tthrow;\n\t\t}\n");
+        writer.write("\t\telse\n");
+        writer.write("\t\t{\n");
+        writer.write("\t\t\tm_pCall->unInitialize();\n");
+        writer.write("\t\t\tdelete pSoapFault;\n");
+        writer.write("\t\t\tthrow;\n");
+        writer.write("\t\t}\n");
         writer.write("\t}\n");
         writer.write("}\n");
     }

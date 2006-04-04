@@ -35,14 +35,14 @@ public class SourceWriterFactory
                 return new UndeploymentWriter(wscontext);
             case WrapperConstants.GENERATOR_BUILDSCRIPT :
                 return new BuildScriptWriter(wscontext);
+            case WrapperConstants.GENERATOR_PARAM_CPP_ALL :
+                return new org.apache.axis.wsdl.wsdl2ws.cpp.AllParamWriter(wscontext);
         }
         if ("rpc".equals(wscontext.getWrapInfo().getWrapperStyle()))
         {
             switch (generatorType)
             {
                 // C++
-                case WrapperConstants.GENERATOR_PARAM_CPP_ALL :
-                    return new org.apache.axis.wsdl.wsdl2ws.cpp.AllParamWriter(wscontext);
                 case WrapperConstants.GENERATOR_WRAPPER_CPP :
                     return new org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter(wscontext);
                 case WrapperConstants.GENERATOR_WRAPPER_HPP :
@@ -82,8 +82,6 @@ public class SourceWriterFactory
                 switch (generatorType)
                 {
                     // C++
-                    case WrapperConstants.GENERATOR_PARAM_CPP_ALL :
-                        return new org.apache.axis.wsdl.wsdl2ws.cpp.literal.AllParamWriter(wscontext);
                     case WrapperConstants.GENERATOR_WRAPPER_CPP :
                         return new org.apache.axis.wsdl.wsdl2ws.cpp.literal.WrapWriter(wscontext);
                     case WrapperConstants.GENERATOR_WRAPPER_HPP :

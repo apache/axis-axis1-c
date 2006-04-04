@@ -774,6 +774,34 @@ public class WSDL2Ws
                               Iterator AllTypes = symbolTable.getTypeIndex().values().iterator();
                           }
                       }
+                      Collection outputParameterTypes = method.getOutputParameterTypes();
+                      paramIterator = outputParameterTypes.iterator();
+                      while(paramIterator.hasNext())
+                      {
+                          ParameterInfo parameterInfo =(ParameterInfo)paramIterator.next();
+                          Type parameterType = parameterInfo.getType();
+                          if(parameterType.getName().equals(type.getQName()))
+                          {
+                              QName oldName = parameterType.getName();
+                              QName newTypeName = new QName(parameterType.getName().getNamespaceURI(), parameterType.getName().getLocalPart().substring(1));
+                              
+                              Type innerClassType =  wsContext.getTypemap().getType(parameterType.getName());
+                              // innerClassType.setLanguageSpecificName(newTypeName);
+                              
+                              // First thing to do is to expose the type so it gets created.
+                              innerClassType.setLanguageSpecificName(newTypeName.getLocalPart().toString());
+                              
+                              // also have to set the QName becuase this is used in generating the header info.
+                              innerClassType.setName(newTypeName);
+                              
+                              // The typemap we get back is a copy of the actual typemap so we have to set the new value explicitly
+                              // firstly remove the old version
+                              wsContext.getTypemap().removeType(oldName);
+                              wsContext.getTypemap().addType(newTypeName, innerClassType);
+                              
+                              Iterator AllTypes = symbolTable.getTypeIndex().values().iterator();
+                          }
+                      }
                   }
                     
                 }

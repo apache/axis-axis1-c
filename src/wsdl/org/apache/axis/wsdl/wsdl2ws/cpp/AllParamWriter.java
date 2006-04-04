@@ -56,57 +56,69 @@ public class AllParamWriter implements SourceWriter
             try
             {
                 type = (Type) types.next();
-                    if (type.isArray())
+                if (type.isArray())
+                {
+                    if (WSDL2Ws.verbose)
                     {
-                        if (WSDL2Ws.verbose)
-                        {
-                            System.out.println("Array writer called ......");
-                        }
-                        QName qname = type.getName();
-                        if (CUtils.isSimpleType(qname)
-                            && !CUtils.isDefinedSimpleType(qname))
-                        {
-                            throw new WrapperFault(
-                                "No need to create an Array for simple type "
-                                    + qname
-                                    + "\n"
-                                    + "It seems that some thing wrong with symbolTable population - Susantha");
-                        }
-                        ArrayParamHeaderWriter writer =
-                            (new ArrayParamHeaderWriter(wscontext, type));
-                        if (!writer.isSimpleTypeArray())
-                        {
-                            writer.writeSource();
-                            (new ArrayParamWriter(wscontext, type)).writeSource();
-                        }
+                        System.out.println("Array writer called ......");
+                    }
+                    QName qname = type.getName();
+                    
+                    String elementType = type.getElementType();
+                    if (elementType != null)
+                    {
+                        elementType = elementType.replace('>', '_');
+                        QName elementQname = new QName(qname.getNamespaceURI(), elementType);
+                        
+                        Type currentType = wscontext.getTypemap().getType(elementQname);
+                        if (currentType != null)
+                            if ( currentType.isSimpleType())
+                                continue;
+                    }
+                    
+                    if (CUtils.isSimpleType(qname)
+                        && !CUtils.isDefinedSimpleType(qname))
+                    {
+                        throw new WrapperFault(
+                            "No need to create an Array for simple type "
+                                + qname
+                                + "\n"
+                                + "It seems that some thing wrong with symbolTable population - Susantha");
+                    }
+                    ArrayParamHeaderWriter writer =
+                        (new ArrayParamHeaderWriter(wscontext, type));
+                    if (!writer.isSimpleTypeArray())
+                    {
+                        writer.writeSource();
+                        (new ArrayParamWriter(wscontext, type)).writeSource();
+                    }
+                }
+                else
+                {
+                    /* TODO check whether this type is referenced or not. Synthesize only if  reference
+                     * But of cause that depends on the command line option too  */
+                    if (type.getLanguageSpecificName().startsWith(">"))
+                    {
+                        /* TODO do some processing to this type before synthesizing to remove ">" charactors.
+                         * And then it should also be synthesized if command line option says to */
+                        if(WSDL2Ws.verbose)
+                            System.out.println(
+                                    "ignoring anonymous type " + type.getLanguageSpecificName() + "\n");
                     }
                     else
                     {
-                        /* TODO check whether this type is referenced or not. Synthesize only if  reference
-                         * But of cause that depends on the command line option too  */
-                        if (type.getLanguageSpecificName().startsWith(">"))
+                        if (WSDL2Ws.verbose)
                         {
-                            /* TODO do some processing to this type before synthesizing to remove ">" charactors.
-                             * And then it should also be synthesized if command line option says to */
                             System.out.println(
-                                "ignoring anonymous type "
-                                    + type.getLanguageSpecificName()
-                                    + "\n");
+                                "struct writer called ......");
                         }
-                        else
-                        {
-                            if (WSDL2Ws.verbose)
-                            {
-                                System.out.println(
-                                    "struct writer called ......");
-                            }
-                            (new BeanParamWriter(wscontext, type))
-                                .writeSource();
-                            (new ParmHeaderFileWriter(wscontext, type))
-                                .writeSource();
-                        }
+                        (new BeanParamWriter(wscontext, type))
+                            .writeSource();
+                        (new ParmHeaderFileWriter(wscontext, type))
+                            .writeSource();
                     }
                 }
+            }
             catch (Exception e)
             {
                 System.out.println(
