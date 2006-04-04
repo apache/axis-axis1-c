@@ -125,51 +125,67 @@ int main(int argc, char* argv[])
 		NEWCOPY(array[0], "never odd or even"); // should be returned in errortext element of attrlisterr
 		NEWCOPY(array[1], "any data string");   // add data
 		ml.item->set(array,ARRAYSIZE);
+		delete array[0];
+		delete array[1];
+		delete [] array;
 
 		// To set into namepair item of namepair array of attrlist arg of multilist
 		xsd__string * array1 = new xsd__string[ARRAYSIZE];		
 		NEWCOPY(array1[0], "Apache");
 		NEWCOPY(array1[1], "Axis C++");
 		mlnp->item->set(array1,ARRAYSIZE);
+		delete array1[0];
+		delete array1[1];
+		delete [] array1;
 
 		// To set into namepair item of namepair array of attrlist arg of multilist
 		xsd__string * array2 = new xsd__string[ARRAYSIZE];		
 		NEWCOPY(array2[0], "Test");
 		NEWCOPY(array2[1], "Complex");
 		mlnp2->item->set(array2,ARRAYSIZE);
+		delete array2[0];
+		delete array2[1];
+		delete [] array2;
 
 		// set first namepair item to put into array
 		np1->m_list_Ref = mlnp;
-		NEWCOPY(np1->name, "namepair1");
+		np1->setname("namepair1");
 
 		// set second namepair item to put into array
 		np2->m_list_Ref = mlnp2;
-		NEWCOPY(np2->name, "namepair2");
+		np2->setname("namepair2");
 
 		// create a namepair array to add into attrlist
 		namepair ** nArray = new namepair *[ARRAYSIZE];
 		nArray[0]=np1;
 		nArray[1]=np2;
 		npArr.set(nArray,ARRAYSIZE);
+		delete nArray[0];
+		delete nArray[1];
+		delete [] nArray;
 
 		// set attrlist argument
 		al.setitem(&npArr);
 
 		attrlisterr* ale = ws->multilist(&ml, &al);
         printResponse(ale);
+		delete ale;
 
 		ale = ws->multilist((m_list*)NULL, &al);
         printResponse(ale);
+		delete ale;
 
 		// Have nil elements in response
 		ale = ws->multilistnil((m_list*)NULL, &al);
         printResponse(ale);
+		delete ale;
 
 		ale = ws->complexlist(&al, "hoohah!", &al);
         printResponse(ale);
-		bSuccess = true;
+		delete ale;
 
 		delete ws;
+		bSuccess = true;
 	}
 	catch(AxisException& e)
 	{
