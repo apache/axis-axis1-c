@@ -16,14 +16,9 @@
  
 package org.apache.axis.wsdl.wsdl2ws;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Iterator;
 
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
-import org.apache.axis.wsdl.wsdl2ws.WSDL2Ws;
 
 /**
  * @author Susantha Kumara susantha@opensource.lk

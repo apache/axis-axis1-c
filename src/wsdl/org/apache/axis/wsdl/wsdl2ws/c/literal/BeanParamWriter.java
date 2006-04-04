@@ -23,8 +23,6 @@
 package org.apache.axis.wsdl.wsdl2ws.c.literal;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Iterator;
 
 import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
