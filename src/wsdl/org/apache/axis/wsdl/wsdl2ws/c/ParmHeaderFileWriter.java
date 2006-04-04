@@ -45,8 +45,7 @@ public class ParmHeaderFileWriter extends ParamWriter
      * @param type
      * @throws WrapperFault
      */
-    public ParmHeaderFileWriter(WebServiceContext wscontext, Type type)
-        throws WrapperFault
+    public ParmHeaderFileWriter(WebServiceContext wscontext, Type type) throws WrapperFault
     {
         super(wscontext, type);
     }
@@ -60,16 +59,23 @@ public class ParmHeaderFileWriter extends ParamWriter
         {
             this.writer = new BufferedWriter(new FileWriter(getFilePath(), false));
             writeClassComment();
-            // if this headerfile not defined define it 
+
             this.writer.write("#if !defined(__" + classname.toUpperCase() + "_H__INCLUDED_)\n");
             this.writer.write("#define __" + classname.toUpperCase() + "_H__INCLUDED_\n\n");
+            
             writePreprocessorStatements();
+            
             this.writer.write("typedef struct " + classname + "Tag {\n");
+            
             writeAttributes();
+            
             this.writer.write("} " + classname + ";\n\n");
+            
             this.writer.write("#endif /* !defined(__" + classname.toUpperCase() + "_H__INCLUDED_)*/\n");
+            
             writer.flush();
             writer.close();
+            
             if (WSDL2Ws.verbose)
                 System.out.println(getFilePath().getAbsolutePath() + " created.....");
         }
@@ -85,8 +91,11 @@ public class ParmHeaderFileWriter extends ParamWriter
      */
     protected void writeAttributes() throws WrapperFault
     {
+        int anyCounter = 0;
+        
         if (type.isArray())
             return;
+        
         try
         {
             if (attribs.length == 0)
@@ -96,8 +105,38 @@ public class ParmHeaderFileWriter extends ParamWriter
             }
             for (int i = 0; i < attribs.length; i++)
             {
-                writer.write("\t" + getCHeaderFileCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-                        + " " + attribs[i].getParamName() + ";\n");
+
+                if (isElementNillable(i) || attribs[i].isArray()) 
+                {
+                    if(attribs[i].isAnyType())
+                    {
+                        anyCounter += 1;
+                        writer.write("\t"
+                                + getCHeaderFileCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+                                + " *\t" + attribs[i].getParamName()
+                                + Integer.toString(anyCounter) + ";\n");
+                    }
+                    else
+                    {
+                        writer.write("\t"
+                                    + getCHeaderFileCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+                                    + " *\t" + attribs[i].getParamName() + ";\n");
+                    }
+                } 
+                else if(attribs[i].isAnyType())
+                {
+                    anyCounter += 1;
+                    writer.write("\t"
+                            + getCHeaderFileCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+                            + " \t" + attribs[i].getParamName()
+                            + Integer.toString(anyCounter) + ";\n");
+                }
+                else
+                {
+                    writer.write("\t"
+                                + getCHeaderFileCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+                                + "\t" + attribs[i].getParamName() + ";\n");
+                }                
             }
         }
         catch (IOException e)
@@ -137,8 +176,7 @@ public class ParmHeaderFileWriter extends ParamWriter
      */
     protected File getFilePath(boolean useServiceName) throws WrapperFault
     {
-        String targetOutputLocation =
-            this.wscontext.getWrapInfo().getTargetOutputLocation();
+        String targetOutputLocation = this.wscontext.getWrapInfo().getTargetOutputLocation();
         if (targetOutputLocation.endsWith("/"))
             targetOutputLocation = targetOutputLocation.substring(0,targetOutputLocation.length() - 1);
         new File(targetOutputLocation).mkdirs();
@@ -185,7 +223,7 @@ public class ParmHeaderFileWriter extends ParamWriter
             {
                 writer.write("#include \"" + itr.next().toString() + CUtils.C_HEADER_SUFFIX + "\"\n");
             }
-            writer.write("/*Local name and the URI for the type*/\n");
+            writer.write("\n/*Local name and the URI for the type*/\n");
             writer.write("static const char* Axis_URI_" + classname
                     + " = \"" + type.getName().getNamespaceURI() + "\";\n");
             writer.write("static const char* Axis_TypeName_" + classname
