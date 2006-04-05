@@ -121,14 +121,14 @@ public class ParmHeaderFileWriter extends ParamWriter
                         anyCounter += 1;
                         writer.write("\t"
                                 + getCHeaderFileCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-                                + " *\t" + attribs[i].getParamName()
+                                + " *  " + attribs[i].getParamName()
                                 + Integer.toString(anyCounter) + ";\n");
                     }
                     else
                     {
                         writer.write("\t"
                                     + getCHeaderFileCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-                                    + " *\t" + attribs[i].getParamName() + ";\n");
+                                    + " *  " + attribs[i].getParamName() + ";\n");
                     }
                 } 
                 else if(attribs[i].isAnyType())
@@ -136,14 +136,14 @@ public class ParmHeaderFileWriter extends ParamWriter
                     anyCounter += 1;
                     writer.write("\t"
                             + getCHeaderFileCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-                            + " \t" + attribs[i].getParamName()
+                            + "  " + attribs[i].getParamName()
                             + Integer.toString(anyCounter) + ";\n");
                 }
                 else
                 {
                     writer.write("\t"
                                 + getCHeaderFileCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-                                + "\t" + attribs[i].getParamName() + ";\n");
+                                + "  " + attribs[i].getParamName() + ";\n");
                 }                
             }
         }
