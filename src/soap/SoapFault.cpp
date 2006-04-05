@@ -77,16 +77,7 @@ int SoapFault::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
     if(m_pFaultDetail)
     {
         pSZ.serialize("<detail>", NULL);
-
-        if(m_bIsSimpleDetail) // Fix for AXISCPP-706
-        {
-            pSZ.serialize("<appSpecific>", NULL);
-        }
         m_pFaultDetail->serialize(pSZ);
-        if(m_bIsSimpleDetail) // Fix for AXISCPP-706
-        {
-            pSZ.serialize("</appSpecific>", NULL);
-        }
         pSZ.serialize("</detail>\n", NULL);
     }
 
