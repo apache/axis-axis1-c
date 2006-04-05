@@ -236,9 +236,9 @@ public class ClientStubWriter
             }
         }
         
-        writer.write ("\tconst char* pcCmplxFaultName;\n");
-        writer.write ("\tpcCmplxFaultName = NULL;\n");
-
+        writer.write ("\tconst char* pcCmplxFaultName = NULL;\n");
+        writer.write("\n");
+        
         writer.write("\t/* Following will establish the connections with the server too */\n");
         writer.write("\tif (AXISC_SUCCESS != axiscInitializeCall(call, C_DOC_PROVIDER " + ")) return ");
         
@@ -246,10 +246,12 @@ public class ClientStubWriter
             writer.write((returntypeisarray ? "RetArray" : returntypeissimple ? "Ret" : "pReturn") + ";\n");
         else
             writer.write(";\n");
-
+        writer.write("\n");
+        
         writer.write("\tif (NULL==axiscGetTransportPropertyCall(call,\"SOAPAction\",0))\n");
         writer.write("\t\taxiscSetTransportPropertyCall(call,AXISC_SOAPACTION_HEADER , \""
                 + minfo.getSoapAction() + "\");\n");
+        writer.write("\n");
         writer.write("\taxiscSetSOAPVersionCall(call, SOAP_VER_1_1);\n");
         //TODO check which version is it really.
         writer.write("\taxiscSetOperationCall(call, \""
@@ -261,7 +263,8 @@ public class ClientStubWriter
         // new calls from stub base
         writer.write ("\taxiscIncludeSecure(stub);\n");  
         writer.write ("\taxiscApplyUserPreferences(stub);\n");
-          
+        writer.write("\n");
+        
         for (int i = 0; i < paramsB.size(); i++)
         {
             ParameterInfo param = (ParameterInfo) paramsB.get(i);
@@ -324,7 +327,7 @@ public class ClientStubWriter
                 {
                     // TODO
                     String attchType = param.getType().getName().getLocalPart();
-                          writer.write("\n\tconst AxisChar *xmlSoapNsPfx" + i + 
+                    writer.write("\n\tconst AxisChar *xmlSoapNsPfx" + i + 
                         " = axiscGetNamespacePrefixCall(call,\"" + 
                         WrapperConstants.APACHE_XMLSOAP_NAMESPACE + "\");\n");
                     writer.write("\tchar attchType" + i + "[64];\n");
@@ -413,6 +416,8 @@ public class ClientStubWriter
             if (!param.isAnyType ())
                 writer.write("\t}\n");            
           } // end for-loop
+
+        writer.write("\n");
         
         writer.write("\tif (AXISC_SUCCESS == axiscInvokeCall(call))\n\t{\n");
         writer.write("\t\tif(AXISC_SUCCESS == axiscCheckMessageCall(call, \""

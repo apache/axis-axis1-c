@@ -59,7 +59,8 @@ public class ClientStubHeaderWriter
             writer.write("#include <axis/TypeMapping.h>\n");
             writer.write("#include <axis/client/Stub.h>\n");
             writer.write("#include <axis/client/Call.h>\n");
-
+            writer.write("\n");
+            
             Type atype;
             Iterator types = this.wscontext.getTypemap().getTypes().iterator();
             Vector typeSet = new Vector();

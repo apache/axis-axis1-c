@@ -99,18 +99,12 @@ public abstract class ParamCFileWriter extends ParamWriter
      */
     protected File getFilePath() throws WrapperFault
     {
-        String targetOutputLocation =
-            this.wscontext.getWrapInfo().getTargetOutputLocation();
+        String targetOutputLocation = this.wscontext.getWrapInfo().getTargetOutputLocation();
         if (targetOutputLocation.endsWith("/"))
-        {
-            targetOutputLocation =
-                targetOutputLocation.substring(
-                    0,
-                    targetOutputLocation.length() - 1);
-        }
+            targetOutputLocation = targetOutputLocation.substring(0,targetOutputLocation.length() - 1);
+
         new File(targetOutputLocation).mkdirs();
-        String fileName =
-            targetOutputLocation + "/" + this.classname + CUtils.C_FILE_SUFFIX;
+        String fileName = targetOutputLocation + "/" + this.classname + CUtils.C_FILE_SUFFIX;
         this.wscontext.addGeneratedFile(classname + CUtils.C_FILE_SUFFIX);
         return new File(fileName);
     }
@@ -124,21 +118,21 @@ public abstract class ParamCFileWriter extends ParamWriter
         {
             writer.write("#include <stdlib.h>\n");
             writer.write("#include <memory.h>\n");
-            writer.write(
-                "#include \""
-                    + this.classname
-                    + CUtils.C_HEADER_SUFFIX
-                    + "\"\n");
-		writer.write("#include <axis/GDefine.h>\n");
-		writer.write("#include <axis/AxisUserAPI.h>\n");
-		writer.write("#include <axis/SoapEnvVersions.h>\n");
-		writer.write("#include <axis/WSDDDefines.h>\n");
-		writer.write("#include <axis/TypeMapping.h>\n");
-		writer.write("#include <axis/client/Stub.h>\n");
-		writer.write("#include <axis/client/Call.h>\n");
+            writer.write("\n");
+
+            writer.write("#include <axis/GDefine.h>\n");
+            writer.write("#include <axis/AxisUserAPI.h>\n");
+            writer.write("#include <axis/SoapEnvVersions.h>\n");
+            writer.write("#include <axis/WSDDDefines.h>\n");
+            writer.write("#include <axis/TypeMapping.h>\n");
             writer.write("#include <axis/AxisWrapperAPI.h>\n\n");
-		writer.write("#include <axis/IWrapperSoapSerializer.h>\n");
-		writer.write("#include <axis/IWrapperSoapDeSerializer.h>\n");
+            writer.write("#include <axis/IWrapperSoapSerializer.h>\n");
+            writer.write("#include <axis/IWrapperSoapDeSerializer.h>\n");
+            writer.write("#include <axis/client/Stub.h>\n");
+            writer.write("#include <axis/client/Call.h>\n");
+            writer.write("\n");
+            
+            writer.write("#include \"" + this.classname + CUtils.C_HEADER_SUFFIX + "\"\n");
         }
         catch (IOException e)
         {
