@@ -122,16 +122,16 @@ int main( int argc, char * argv[])
 		pszPropertyValue = "(null)";
 	}
 
-	printf( "First transport key = %s\n", pszPropertyKey);
-    printf( "First transport value = %s\n", pszPropertyValue);
+	cout << "First transport key = " << pszPropertyKey << endl;
+    cout << "First transport value = " << pszPropertyValue << endl;
 
     const char *key = NULL;
     int count = 1;
     while (key = ws.getNextTransportPropertyKey())
     {
-        printf("Next transport key = %s\n", key);
-        printf("Next transport value = %s\n",
-               ws.getCurrentTransportPropertyValue());
+        cout << "Next transport key = " << key << endl;
+        cout << "Next transport value = " << 
+               ws.getCurrentTransportPropertyValue() << endl;
         count++;
     }
 
