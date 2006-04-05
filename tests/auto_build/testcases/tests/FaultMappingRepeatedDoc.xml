@@ -9,5 +9,5 @@
             FaultMappingRepeatedDoc.cpp.out
         </output>
     </expected>
-	<endpoint>http://localhost:80/axis/MathOpsDoc</endpoint>
+	<endpoint>http://localhost:80/axis/FaultMappingDoc</endpoint>
 </test>
