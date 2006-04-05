@@ -1,0 +1,13 @@
+<test>
+    <name>SimpleTypeArrayC</name>
+    <description>SimpleTypeArray</description>
+    <clientLang>c</clientLang>
+    <clientCode>SimpleTypeArrayClient.c</clientCode>
+    <wsdl>SimpleTypeArray.wsdl</wsdl>
+    <expected>
+        <output>
+            SimpleTypeArrayC.c.out
+        </output>
+    </expected>
+	<endpoint>-e http://localhost:80/axis/SimpleTypeArray</endpoint>
+</test>
