@@ -253,9 +253,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                             writer.write("\t\t\t" + parameterName + " = new " + type + "();\n");
                     }
                     else
-                    {
                         writer.write("\t\t\t" + parameterName + " = new " + properParamName + "();\n");
-                    }
                     
                     writer.write("\t\t\t*" + parameterName + " = *pInValue;\n");
                     writer.write("\t\t}\n");
@@ -274,22 +272,14 @@ public class BeanParamWriter extends ParamCPPFileWriter
                         for (int j = 0; j < attribs.length; j++)
                         {
                             if ((attribs[j].getChoiceElement()) && (j != i))
-                            {
-                                writer.write("\t"
-                                        + attribs[j].getParamNameWithoutSymbols()
-                                        + " = NULL ; \n");
-                            }
+                                writer.write("\t" + attribs[j].getParamNameWithoutSymbols() + " = NULL ; \n");
                         }
                     
                     if (attribs[i].getAllElement())
                         for (int j = 0; j < attribs.length; j++)
                         {
                             if ((attribs[j].getAllElement()) && (j != i))
-                            {
-                                writer.write("\t"
-                                        + attribs[j].getParamNameWithoutSymbols()
-                                        + " = NULL ; \n");
-                            }
+                                writer.write("\t" + attribs[j].getParamNameWithoutSymbols() + " = NULL ; \n");
                         }
 
                     writer.write("}\n");
@@ -411,7 +401,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
             throw new WrapperFault(e);
         }
 
-	}
+    }
 
     private void writeGetSizeGlobalMethod() throws IOException
     {
@@ -421,19 +411,16 @@ public class BeanParamWriter extends ParamCPPFileWriter
         writer.write("int Axis_GetSize_" + classname + "()\n{\n\treturn sizeof(" + classname + ");\n}\n");
     }
 
-	private void writeSerializeGlobalMethod() throws IOException, WrapperFault 
+    private void writeSerializeGlobalMethod() throws IOException, WrapperFault 
     {
-		writer.write( "/*\n");
-		writer.write( " * This static method serialize a " + classname + " type of object\n");
-		writer.write( " */\n");
-		writer.write( "int Axis_Serialize_" +
-		              classname	+
-		              "( " +
-		              classname	+
-		              "* param, IWrapperSoapSerializer* pSZ, bool bArray = false)\n");
-		writer.write( "{\n");
+        writer.write( "/*\n");
+        writer.write( " * This static method serialize a " + classname + " type of object\n");
+        writer.write( " */\n");
+        writer.write( "int Axis_Serialize_" + classname 
+                     + "( " + classname + "* param, IWrapperSoapSerializer* pSZ, bool bArray = false)\n");
+        writer.write( "{\n");
 
-		if (attribs.length == 0) 
+        if (attribs.length == 0) 
         {
             writer.write("\tpSZ->serialize(\">\", NULL);\n");
 
@@ -445,10 +432,8 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 if (!CUtils.isPointerType(typeName))
                     writer.write("&");
                 
-                writer.write("(param->"
-                        + extensionBaseAttrib.getParamNameAsMember()
-                        + "), "
-                        + CUtils.getXSDTypeForBasicType(typeName) + ");\n");
+                writer.write("(param->" + extensionBaseAttrib.getParamNameAsMember()
+                        + "), " + CUtils.getXSDTypeForBasicType(typeName) + ");\n");
             } 
             else
             {
@@ -460,7 +445,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
             writer.write("}\n\n");
             return;
         }
-		
+        
         String arrayType;
         
         
@@ -475,17 +460,12 @@ public class BeanParamWriter extends ParamCPPFileWriter
         writer.write("\t}\n\n");
         /*
          * This is the only real difference for the serializer between rpc/encoded and doc/literal objects
-         * 
          */
         if (wscontext.getWrapInfo().getWrapperStyle().equals("rpc"))
-        {
             writeRPCArrayPortionOfSerializeGlobalMethod();
-    		
-        }
         else
-        {
             writeDOCArrayPortionOfSerializeGlobalMethod();
-        }
+
         writer.write( "\t\t}\n");
         writer.write( "\t}\n\n");
         
@@ -822,7 +802,6 @@ public class BeanParamWriter extends ParamCPPFileWriter
 
     private void writeDeSerializeGlobalMethod() throws IOException, WrapperFault
     {
-        int arrayCount = 0;
         writer.write("/*\n");
         writer.write(" * This static method deserialize a " + classname + " type of object\n");
         writer.write(" */\n");
@@ -853,6 +832,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
         boolean firstIfWritten = false;
         boolean foundAll = false;
         int anyCounter = 0; //counter for any types.
+        int arrayCount = 0;
         
         for (int i = 0; i < attribs.length; i++)
         {
