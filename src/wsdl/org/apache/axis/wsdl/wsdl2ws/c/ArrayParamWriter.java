@@ -153,17 +153,9 @@ public class ArrayParamWriter extends ParamWriter
              *    <xsd:attribute name="att_kind" type="tns:Kind" />
              * </xsd:complexType>
              */
-            //writer.write("\t"+attribs[0].getTypeName()+"* m_Array;\n\tint m_Size;\n} "+classname+";\n\n");
-            if (attribs[0].isSimpleType())
-            {
-                throw new WrapperFault("Error : no need to synthesis arrays for simple types");
-            }
-            else
-            {
-                writer.write("\tstruct " + attribs[0].getTypeName()
+            writer.write("\tstruct " + attribs[0].getTypeName()
                         + "Tag * m_Array;\n\tint m_Size;\n\tAXISC_XSD_TYPE m_Type;\n} "
                         + classname + ";\n\n");
-            }
         }
         catch (IOException e)
         {

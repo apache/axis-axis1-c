@@ -20,9 +20,13 @@
  * @author Susantha Kumara(susantha@opensource.lk, skumara@virtusa.com)
  * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
  */
+
 package org.apache.axis.wsdl.wsdl2ws.c;
 import java.util.Iterator;
 
+import javax.xml.namespace.QName;
+
+import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.SourceWriter;
 import org.apache.axis.wsdl.wsdl2ws.WSDL2Ws;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
@@ -35,7 +39,7 @@ import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
  */
 public class AllParamWriter implements SourceWriter
 {
-    protected WebServiceContext wscontext;
+    private WebServiceContext wscontext;
 
     /**
      * @param wscontext
@@ -51,40 +55,44 @@ public class AllParamWriter implements SourceWriter
      */
     public void writeSource() throws WrapperFault
     {
-        Iterator enu = wscontext.getTypemap().getTypes().iterator();
+        Iterator types = wscontext.getTypemap().getTypes().iterator();
         Type type = null;
-        while (enu.hasNext())
+        while (types.hasNext())
         {
             try
             {
-                type = (Type) enu.next();
+                type = (Type) types.next();
                 if (type.isArray())
                 {
                     if (WSDL2Ws.verbose)
                         System.out.println("Array writer called ......");
-                    ArrayParamWriter writer = (new ArrayParamWriter(wscontext, type));
-                    if (!writer.isSimpleTypeArray())
-                        writer.writeSource();
+                    (new ArrayParamWriter(wscontext, type)).writeSource();
                 }
                 /* TODO check whether this type is referenced or not. Synthesize only if  reference
-                 * But of cause that depends on the commandline option too  */
+                 * But of course that depends on the commandline option too  */
                 else if (type.getLanguageSpecificName().startsWith(">"))
                 {
                     /* TODO do some processing to this type before synthesizing to remove ">" charactors.
                      * And then it should also be synthesized if commandline option says to */
-                    System.out.println("ignoring anonymous type " + type.getLanguageSpecificName() + "\n");
+                    if(WSDL2Ws.verbose)
+                    {                          
+                        System.out.println(
+                                "ignoring anonymous type " + type.getLanguageSpecificName() + "\n");
+                    }
                 }
                 else
                 {
                     if (WSDL2Ws.verbose)
                         System.out.println("struct writer called ......");
+                    
                     (new BeanParamWriter(wscontext, type)).writeSource();
                     (new ParmHeaderFileWriter(wscontext, type)).writeSource();
                 }
             }
             catch (Exception e)
             {
-                System.out.println("Error occurred generating code for " + type.getLanguageSpecificName()
+                System.out.println(
+                        "Error occurred generating code for " + type.getLanguageSpecificName()
                             + ". Other classes will continue to be generated.");
                 e.printStackTrace();
             }

@@ -27,9 +27,13 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Vector;
+import java.util.HashSet;
 
+import javax.xml.namespace.QName;
+
+import org.apache.axis.wsdl.symbolTable.TypeEntry;
 import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.ParamWriter;
 import org.apache.axis.wsdl.wsdl2ws.WSDL2Ws;
@@ -60,16 +64,20 @@ public class ParmHeaderFileWriter extends ParamWriter
             this.writer = new BufferedWriter(new FileWriter(getFilePath(), false));
             writeClassComment();
 
+            // if this headerfile not defined define it 
             this.writer.write("#if !defined(__" + classname.toUpperCase() + "_H__INCLUDED_)\n");
             this.writer.write("#define __" + classname.toUpperCase() + "_H__INCLUDED_\n\n");
             
-            writePreprocessorStatements();
-            
-            this.writer.write("typedef struct " + classname + "Tag {\n");
-            
-            writeAttributes();
-            
-            this.writer.write("} " + classname + ";\n\n");
+            if (type.isSimpleType())
+                writeSimpleTypeWithEnumerations();
+            else
+            {
+                writePreprocessorStatements();
+                this.writer.write("typedef struct " + classname + "Tag {\n");
+                writeAttributes();
+                this.writer.write("} " + classname + ";\n\n");
+                writeFunctionPrototypes();
+            }
             
             this.writer.write("#endif /* !defined(__" + classname.toUpperCase() + "_H__INCLUDED_)*/\n");
             
@@ -193,6 +201,179 @@ public class ParmHeaderFileWriter extends ParamWriter
         return new File(fileName);
     }
 
+    /**
+     * @throws WrapperFault
+     */
+    protected void writeSimpleTypeWithEnumerations() throws WrapperFault
+    {
+        try
+        {
+            Vector restrictionData = type.getEnumerationdata();
+            if (restrictionData == null)
+                return;
+            
+            TypeEntry baseEType = (TypeEntry) restrictionData.firstElement();
+            QName baseType = baseEType.getQName();
+            if (!CUtils.isSimpleType(baseType))
+                return;
+            
+            String langTypeName = CUtils.getclass4qname(baseType);
+            writer.write("typedef ");
+            if ("string".equals(baseType.getLocalPart()))
+            {
+                writer.write(langTypeName + " " + classname + ";\n");
+                for (int i = 1; i < restrictionData.size(); i++)
+                {
+                    QName value = (QName) restrictionData.elementAt(i);
+                    if ("enumeration".equals(value.getLocalPart()))
+                    {
+                        writer.write(
+                            "static const " + classname + " "
+                                + classname + "_"
+                                + value.getNamespaceURI() + " = \""
+                                + value.getNamespaceURI() + "\";\n");
+                    }
+                    else if ("maxLength".equals(value.getLocalPart()))
+                    {
+                        writer.write(
+                            "static const " + classname + "_MaxLength = " 
+                            + value.getNamespaceURI() + ";\n");
+                    }
+                    else if ("minLength".equals(value.getLocalPart()))
+                    {
+                        writer.write(
+                            "static const " + classname + "_MinLength = " 
+                            + value.getNamespaceURI() + ";\n");
+                    }
+                }
+            }
+            else if ("int".equals(baseType.getLocalPart()))
+            {
+                if (restrictionData.size() > 1)
+                { 
+                    //there are enumerations or [min|max]Inclusive
+                    boolean isEnum = false;
+                    boolean hasRestrictionItems = false;
+                    
+                    for (int i = 1; i < restrictionData.size(); i++)
+                    {
+                        QName value = (QName) restrictionData.elementAt(i);
+                        if ("enumeration".equals(value.getLocalPart()))
+                        {
+                            isEnum = true;
+                            
+                            if (i > 1)
+                                writer.write(", ");
+                            else
+                                writer.write(" enum { ");
+                            
+                            writer.write(
+                                "ENUM"
+                                    + classname.toUpperCase() + "_" + value.getNamespaceURI()
+                                    + "=" + value.getNamespaceURI());
+                        }
+                        else if ("minInclusive".equals(value.getLocalPart()))
+                        {
+                            hasRestrictionItems = true;
+                            
+                            if (i <= 1)
+                                writer.write(langTypeName + " " + classname + ";\n");
+                            
+                            writer.write(
+                                "static const int "
+                                 + classname + "_MinInclusive = " + value.getNamespaceURI() + ";\n");
+                        }
+                        else if ("maxInclusive".equals(value.getLocalPart()))
+                        {
+                            hasRestrictionItems = true;
+                            
+                            if (i <= 1)
+                                writer.write(langTypeName + " " + classname + ";\n");
+                            
+                            writer.write(
+                                "static const int "
+                                 + classname + "_MaxInclusive = " + value.getNamespaceURI() + ";\n");
+                        }
+                    }
+                    
+                    if (isEnum)
+                        writer.write("} " + classname + ";\n");
+                    else if (!hasRestrictionItems)
+                        writer.write(langTypeName + " " + classname + ";\n");
+                }
+                else
+                    writer.write(langTypeName + " " + classname + ";\n");
+            }
+            else
+            {
+                writer.write(langTypeName + " " + classname + ";\n");
+                for (int i = 1; i < restrictionData.size(); i++)
+                {
+                    QName value = (QName) restrictionData.elementAt(i);
+                    if ("enumeration".equals(value.getLocalPart()))
+                    {
+                        writer.write(
+                            "static const "
+                                + classname + " " + classname
+                                + "_" + value.getNamespaceURI()
+                                + " = " + value.getNamespaceURI() + ";\n");
+                    }
+                }
+            }
+        }
+        catch (IOException e)
+        {
+            throw new WrapperFault(e);
+        }
+    }
+
+    protected void writeFunctionPrototypes() throws WrapperFault
+    {
+        Iterator types = wscontext.getTypemap().getTypes().iterator();
+        HashSet typeSet = new HashSet();
+        String typeName;
+        Type type;
+        try
+        {
+            while (types.hasNext())
+            {
+                type = (Type) types.next();
+                
+                if (type.isSimpleType())
+                    continue;
+                
+                if (type.isArray())
+                    continue;
+                
+                typeName = type.getLanguageSpecificName();
+                if (typeName.startsWith(">") || !typeName.equals(classname))
+                    continue;
+                
+                typeSet.add(typeName);
+            }
+            
+            Iterator itr = typeSet.iterator();
+            while (itr.hasNext())
+            {
+                typeName = itr.next().toString();
+                this.writer.write("extern int Axis_DeSerialize_" + typeName
+                             + "(" + typeName + "* param, AXISCHANDLE pDZ);\n");
+                this.writer.write("extern void* Axis_Create_" + typeName
+                             + "(" + typeName + " *Obj, AxiscBool bArray, int nSize);\n");
+                this.writer.write("extern void Axis_Delete_" + typeName
+                             + "(" + typeName + "* param, AxiscBool bArray, int nSize);\n");
+                this.writer.write("extern int Axis_Serialize_" + typeName
+                             + "(" + typeName + "* param, AXISCHANDLE pSZ, AxiscBool bArray);\n");
+                this.writer.write("extern int Axis_GetSize_" + typeName + "();\n\n");
+            }
+        }
+        catch (IOException e)
+        {
+            throw new WrapperFault(e);
+        }
+    }
+    
+
     /* (non-Javadoc)
      * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#writePreprocessorStatements()
      */
@@ -202,20 +383,32 @@ public class ParmHeaderFileWriter extends ParamWriter
         {
             Type atype;
             Iterator types = this.wscontext.getTypemap().getTypes().iterator();
-            writer.write("#include <axis/server/AxisUserAPI.h>\n\n");
-            HashSet typeSet = new HashSet();
+
+            writer.write("#include <axis/Axis.h>\n");
+            writer.write("#include <axis/GDefine.h>\n");
+            writer.write("#include <axis/AxisUserAPI.h>\n");
+            
+            Vector typeSet = new Vector();
             String typeName = null;
             
             while (types.hasNext())
             {
                 atype = (Type) types.next();
                 if (!(atype.equals(this.type)))
+                {
                     if (this.type.isContainedType(atype))
                     {
                         typeName = WrapperUtils.getLanguageTypeName4Type(atype);
-                        if (null != typeName)
-                            typeSet.add(typeName);
+                        /* TODO : second test if for inner attributes declaration */
+                        if (null != typeName && !(typeName.charAt(0) == '>'))
+                        {
+                            if (!atype.isArray())
+                                typeSet.insertElementAt(typeName, 0);
+                            else
+                                typeSet.add(typeName);
+                        }
                     }
+                }
             }
             
             Iterator itr = typeSet.iterator();
@@ -223,11 +416,12 @@ public class ParmHeaderFileWriter extends ParamWriter
             {
                 writer.write("#include \"" + itr.next().toString() + CUtils.C_HEADER_SUFFIX + "\"\n");
             }
-            writer.write("\n/*Local name and the URI for the type*/\n");
-            writer.write("static const char* Axis_URI_" + classname
-                    + " = \"" + type.getName().getNamespaceURI() + "\";\n");
-            writer.write("static const char* Axis_TypeName_" + classname
-                    + " = \"" + type.getName().getLocalPart()+ "\";\n\n");
+            
+            writer.write("/*Local name and the URI for the type*/\n");
+            writer.write("static const char* Axis_URI_" + classname + " = \""
+                    + type.getName().getNamespaceURI() + "\";\n");
+            writer.write("static const char* Axis_TypeName_" + classname + " = \""
+                    + type.getName().getLocalPart() + "\";\n\n");
         }
         catch (IOException e)
         {

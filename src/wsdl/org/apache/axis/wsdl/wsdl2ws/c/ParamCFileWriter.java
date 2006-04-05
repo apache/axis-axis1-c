@@ -42,11 +42,15 @@ public abstract class ParamCFileWriter extends ParamWriter
      * @param type
      * @throws WrapperFault
      */
-    public ParamCFileWriter(WebServiceContext wscontext, Type type)
-        throws WrapperFault
+    public ParamCFileWriter(WebServiceContext wscontext, Type type) throws WrapperFault
     {
         super(wscontext, type);
     }
+
+    /**
+     * @throws WrapperFault
+     */
+    protected abstract void writeRestrictionCheckerFunction() throws WrapperFault;
 
     /* (non-Javadoc)
      * @see org.apache.axis.wsdl.wsdl2ws.SourceWriter#writeSource()
@@ -55,19 +59,22 @@ public abstract class ParamCFileWriter extends ParamWriter
     {
         try
         {
-            this.writer =
-                new BufferedWriter(new FileWriter(getFilePath(), false));
+            this.writer = new BufferedWriter(new FileWriter(getFilePath(), false));
             writeClassComment();
             writePreprocessorStatements();
-            writeGlobalCodes();
-            writeAttributes();
-            writeMethods();
+            if (type.isSimpleType())
+                writeRestrictionCheckerFunction();
+            else
+            {
+                writeGlobalCodes();
+                writeAttributes();
+                writeMethods();
+            }
             //cleanup
             writer.flush();
             writer.close();
             if (WSDL2Ws.verbose)
-                System.out.println(
-                    getFilePath().getAbsolutePath() + " created.....");
+                System.out.println(getFilePath().getAbsolutePath() + " created.....");
         }
         catch (IOException e)
         {
@@ -116,6 +123,7 @@ public abstract class ParamCFileWriter extends ParamWriter
         try
         {
             writer.write("#include <stdlib.h>\n");
+            writer.write("#include <memory.h>\n");
             writer.write(
                 "#include \""
                     + this.classname
