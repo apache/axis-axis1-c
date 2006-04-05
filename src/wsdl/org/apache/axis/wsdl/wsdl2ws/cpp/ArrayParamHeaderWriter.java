@@ -51,56 +51,37 @@ public class ArrayParamHeaderWriter extends ParamWriter
     {
         try
         {
-            this.writer =
-                new BufferedWriter(new FileWriter(getFilePath(), false));
+            this.writer = new BufferedWriter(new FileWriter(getFilePath(), false));
             writeClassComment();
-            // if this headerfile not defined define it 
-            this.writer.write(
-                "#if !defined(__"
-                    + classname.toUpperCase()
-                    + "_"
-                    + getFileType().toUpperCase()
-                    + "_H__INCLUDED_)\n");
-            this.writer.write(
-                "#define __"
-                    + classname.toUpperCase()
-                    + "_"
-                    + getFileType().toUpperCase()
-                    + "_H__INCLUDED_\n\n");
+
+            this.writer.write("#if !defined(__"  + classname.toUpperCase()
+                    + "_"  + getFileType().toUpperCase() + "_H__INCLUDED_)\n");
+            this.writer.write("#define __" + classname.toUpperCase()
+                    + "_" + getFileType().toUpperCase() + "_H__INCLUDED_\n\n");
+            
             if (attribs.length != 1)
             {
-                System.out.println(
-                    "Array "
-                        + classname
-                        + " contains unexpected no of variables");
-                throw new WrapperFault(
-                    "Array type "
-                        + classname
-                        + " contain unexpected no of types");
+                System.out.println( "Array " + classname + " contains unexpected no of variables");
+                throw new WrapperFault("Array type " + classname + " contain unexpected no of types");
             }
+            
             //include header file for the contained type
             QName qname = WrapperUtils.getArrayType(type).getName();
 
             if (!CUtils.isSimpleType(qname))
-            {
                 writer.write("#include \""+ attribs[0].getTypeName() + ".hpp\"\n");
-            }
+
             writer.write("#include <axis/AxisUserAPI.hpp>\n\n");
 
             writeArrayClassDefinition();
-            this.writer.write(
-                "#endif /* !defined(__"
-                    + classname.toUpperCase()
-                    + "_"
-                    + getFileType().toUpperCase()
-                    + "_H__INCLUDED_)*/\n");
+            
+            this.writer.write("#endif /* !defined(__" + classname.toUpperCase()
+                    + "_" + getFileType().toUpperCase() + "_H__INCLUDED_)*/\n");
+            
             writer.flush();
             writer.close();
             if (WSDL2Ws.verbose)
-            {
-                System.out.println(
-                    getFilePath().getAbsolutePath() + " created.....");
-            }
+                System.out.println(getFilePath().getAbsolutePath() + " created.....");
         }
         catch (IOException e)
         {
@@ -122,29 +103,19 @@ public class ArrayParamHeaderWriter extends ParamWriter
 
     protected File getFilePath(boolean useServiceName) throws WrapperFault
     {
-        String targetOutputLocation =
-            this.wscontext.getWrapInfo().getTargetOutputLocation();
+        String targetOutputLocation = this.wscontext.getWrapInfo().getTargetOutputLocation();
         if (targetOutputLocation.endsWith("/"))
-        {
-            targetOutputLocation =
-                targetOutputLocation.substring(
-                    0,
-                    targetOutputLocation.length() - 1);
-        }
+            targetOutputLocation = targetOutputLocation.substring(0,targetOutputLocation.length() - 1);
+
         new File(targetOutputLocation).mkdirs();
 
-        String fileName =
-            targetOutputLocation + "/" + classname + CUtils.CPP_HEADER_SUFFIX;
+        String fileName = targetOutputLocation + "/" + classname + CUtils.CPP_HEADER_SUFFIX;
 
         if (useServiceName)
         {
-            fileName =
-                targetOutputLocation
-                    + "/"
+            fileName =  targetOutputLocation + "/"
                     + this.wscontext.getSerInfo().getServicename()
-                    + "_"
-                    + classname
-                    + CUtils.CPP_HEADER_SUFFIX;
+                    + "_" + classname + CUtils.CPP_HEADER_SUFFIX;
         }
 
         return new File(fileName);
@@ -154,35 +125,33 @@ public class ArrayParamHeaderWriter extends ParamWriter
     {
         try
         {
-        	Iterator	itForTypes = wscontext.getTypemap().getTypes().iterator();
-        	boolean		nillable = false;
-        	
-        	while( itForTypes.hasNext())
-        	{
-        		Type aType = (Type) itForTypes.next();
-        		
-        		if( aType.getLanguageSpecificName().indexOf( ">") > -1)
-        		{
-					Iterator	itForElemName = aType.getElementnames();
-					
-        			while( itForElemName.hasNext() && !nillable)
-        			{
-        				String key = (String) itForElemName.next();
-        				
-        				if( aType.getElementForElementName( key).getNillable())
-        				{
-							nillable = true;
-        				}
-        			}
-        		}
-        	}
-        	
-        	writer.write("class STORAGE_CLASS_INFO " + classname + " : public Axis_Array\n");
-        	writer.write("{\n");
-        	writer.write("\tpublic:\n");
-        	this.writeConstructors();
-        	this.writeDestructors();
-        	this.writeMethods();
+            Iterator    itForTypes = wscontext.getTypemap().getTypes().iterator();
+            boolean        nillable = false;
+            
+            while( itForTypes.hasNext())
+            {
+                Type aType = (Type) itForTypes.next();
+                
+                if( aType.getLanguageSpecificName().indexOf( ">") > -1)
+                {
+                    Iterator    itForElemName = aType.getElementnames();
+                    
+                    while( itForElemName.hasNext() && !nillable)
+                    {
+                        String key = (String) itForElemName.next();
+                        
+                        if( aType.getElementForElementName( key).getNillable())
+                            nillable = true;
+                    }
+                }
+            }
+            
+            writer.write("class STORAGE_CLASS_INFO " + classname + " : public Axis_Array\n");
+            writer.write("{\n");
+            writer.write("\tpublic:\n");
+            this.writeConstructors();
+            this.writeDestructors();
+            this.writeMethods();
             writer.write("};\n\n");
         }
         catch (IOException e)

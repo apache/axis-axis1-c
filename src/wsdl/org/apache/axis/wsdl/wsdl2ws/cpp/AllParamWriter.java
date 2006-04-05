@@ -59,9 +59,8 @@ public class AllParamWriter implements SourceWriter
                 if (type.isArray())
                 {
                     if (WSDL2Ws.verbose)
-                    {
                         System.out.println("Array writer called ......");
-                    }
+
                     QName qname = type.getName();
                     
                     String elementType = type.getElementType();
@@ -76,17 +75,14 @@ public class AllParamWriter implements SourceWriter
                                 continue;
                     }
                     
-                    if (CUtils.isSimpleType(qname)
-                        && !CUtils.isDefinedSimpleType(qname))
+                    if (CUtils.isSimpleType(qname) && !CUtils.isDefinedSimpleType(qname))
                     {
                         throw new WrapperFault(
-                            "No need to create an Array for simple type "
-                                + qname
-                                + "\n"
-                                + "It seems that some thing wrong with symbolTable population - Susantha");
+                            "No need to create an Array for simple type " + qname + "\n"
+                                + "It seems that some thing wrong with symbolTable population");
                     }
-                    ArrayParamHeaderWriter writer =
-                        (new ArrayParamHeaderWriter(wscontext, type));
+                    
+                    ArrayParamHeaderWriter writer = (new ArrayParamHeaderWriter(wscontext, type));
                     if (!writer.isSimpleTypeArray())
                     {
                         writer.writeSource();
@@ -102,28 +98,22 @@ public class AllParamWriter implements SourceWriter
                         /* TODO do some processing to this type before synthesizing to remove ">" charactors.
                          * And then it should also be synthesized if command line option says to */
                         if(WSDL2Ws.verbose)
-                            System.out.println(
-                                    "ignoring anonymous type " + type.getLanguageSpecificName() + "\n");
+                            System.out.println("ignoring anonymous type " + type.getLanguageSpecificName() + "\n");
                     }
                     else
                     {
                         if (WSDL2Ws.verbose)
-                        {
-                            System.out.println(
-                                "struct writer called ......");
-                        }
-                        (new BeanParamWriter(wscontext, type))
-                            .writeSource();
-                        (new ParmHeaderFileWriter(wscontext, type))
-                            .writeSource();
+                            System.out.println("struct writer called ......");
+
+                        (new BeanParamWriter(wscontext, type)).writeSource();
+                        (new ParmHeaderFileWriter(wscontext, type)).writeSource();
                     }
                 }
             }
             catch (Exception e)
             {
                 System.out.println(
-                    "Error occurred generating code for "
-                        + type.getLanguageSpecificName()
+                    "Error occurred generating code for " + type.getLanguageSpecificName()
                             + ". Other classes will continue to be generated.");                
                 e.printStackTrace();
             }
