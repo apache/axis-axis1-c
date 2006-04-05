@@ -58,7 +58,7 @@ public class ClientStubWriter
         {
           writer.write("\n");
           writer.write("/* ================================================== */\n" +
-                       "/* Functions corresponding to actual web service      */\n" +
+                       "/* Functions relating to web service client proxy     */\n" +
                        "/* ================================================== */\n");
           writer.write("\n");
           
