@@ -56,6 +56,12 @@ public class ClientStubWriter
   {
       try
         {
+          writer.write("\n");
+          writer.write("/* ================================================== */\n" +
+                       "/* Functions corresponding to actual web service      */\n" +
+                       "/* ================================================== */\n");
+          writer.write("\n");
+          
           // get_xxx_stub() routine
           writer.write("AXISCHANDLE get_" + classname + "_stub(const char* pchEndPointUri)\n{\n");
           writer.write("\tif(pchEndPointUri)\n");
@@ -74,9 +80,14 @@ public class ClientStubWriter
           writer.write("int get_" + classname + "_Status(AXISCHANDLE stub)\n{\n");
           writer.write("\tAXISCHANDLE call = axiscGetCall(stub);\n");
           writer.write("\treturn axiscGetStatusCall(call);\n");
-          writer.write("}\n\n");
+          writer.write("}\n");
 
-          writer.write("/* Functions corresponding to the web service methods*/\n");
+          writer.write("\n");
+          writer.write("/* ================================================== */\n" +
+                       "/* Functions corresponding to the web service methods */\n" +
+                       "/* ================================================== */\n");
+          writer.write("\n");
+          
           MethodInfo minfo;
           for (int i = 0; i < methods.size(); i++)
           {
@@ -577,8 +588,7 @@ public class ClientStubWriter
             }
             else if (CUtils.isPointerType(outparamType))
             {
-                writer.write( "\t\t\t" + outparamType 
-                              + " pReturn = " 
+                writer.write( "\t\t\t" + outparamType + " pReturn = " 
                               + CUtils.getParameterGetValueMethodName( outparamType, false)
                               + "(call, \"" + returntype.getElementNameAsString() + "\", 0);\n");           
                 writer.write ("\t\t\tif(pReturn)\n");
@@ -586,8 +596,7 @@ public class ClientStubWriter
             }
             else
             {
-                writer.write( "\t\t\t" + outparamType 
-                              + " *pReturn = " 
+                writer.write( "\t\t\t" + outparamType + " *pReturn = " 
                               + CUtils.getParameterGetValueMethodName( outparamType, false)
                               + "(call, \"" + returntype.getElementNameAsString() + "\", 0);\n");           
                 writer.write ("\t\t\tif(pReturn)\n");
@@ -610,8 +619,7 @@ public class ClientStubWriter
             {
                 String outparamTypeBase = outparamType.substring (0, outparamType.lastIndexOf("*"));
 
-                writer.write( "\t\t\tpReturn = ("
-                              + outparamType
+                writer.write( "\t\t\tpReturn = (" + outparamType
                               + ")axiscGetCmplxObjectCall(call, (void*) Axis_DeSerialize_" + outparamTypeBase
                               + ", (void*) Axis_Create_" + outparamTypeBase
                               + ", (void*) Axis_Delete_" + outparamTypeBase
@@ -619,8 +627,7 @@ public class ClientStubWriter
             }
             else
             {
-                writer.write( "\t\t\tpReturn = ("
-                              + outparamType
+                writer.write( "\t\t\tpReturn = (" + outparamType
                               + "*)axiscGetCmplxObjectCall(call, (void*) Axis_DeSerialize_" + outparamType
                               + ", (void*) Axis_Create_" + outparamType
                               + ", (void*) Axis_Delete_" + outparamType
