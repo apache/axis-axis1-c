@@ -56,7 +56,7 @@ public class BeanParamWriter extends ParamCFileWriter
     protected void writeGlobalCodes() throws WrapperFault
     {
         try
-        {           
+        {
             writeSerializeGlobalMethod();
             writeDeSerializeGlobalMethod();
             writeCreateGlobalMethod();
@@ -74,6 +74,7 @@ public class BeanParamWriter extends ParamCFileWriter
      */
     protected void writeGetSizeGlobalMethod() throws IOException
     {
+        writer.write("\n");
         writer.write("/**\n");
         writer.write(" * This static method gives the size of " + classname + " type of object\n");
         writer.write(" */\n");
@@ -86,6 +87,7 @@ public class BeanParamWriter extends ParamCFileWriter
      */
     private void writeSerializeGlobalMethod() throws IOException, WrapperFault
     {
+        writer.write("\n");
         writer.write("/**\n");
         writer.write(" * This static method serializes a " + classname + " type of object\n");
         writer.write(" */\n");
@@ -410,7 +412,7 @@ public class BeanParamWriter extends ParamCFileWriter
         writer.write("\t\taxiscRemoveNamespacePrefix(pSZ, Axis_URI_" + classname + ");\n\n");
         
         writer.write("\treturn AXISC_SUCCESS;\n");
-        writer.write("}\n\n");     
+        writer.write("}\n");
     }
 
     /**
@@ -419,6 +421,7 @@ public class BeanParamWriter extends ParamCFileWriter
      */
     private void writeDeSerializeGlobalMethod() throws IOException, WrapperFault
     {
+        writer.write("\n");
         writer.write("/**\n");
         writer.write(" * This static method deserializes a " + classname + " type of object\n");
         writer.write(" */\n");
@@ -687,6 +690,7 @@ public class BeanParamWriter extends ParamCFileWriter
      */
     private void writeCreateGlobalMethod() throws IOException
     {
+        writer.write("\n");
         writer.write("/**\n");
         writer.write(" * This static method to deallocate a " + classname + " type of object\n");
         writer.write(" */\n");
@@ -713,6 +717,7 @@ public class BeanParamWriter extends ParamCFileWriter
      */
     private void writeDeleteGlobalMethod() throws IOException
     {
+        writer.write("\n");
         writer.write("/**\n");
         writer.write(" * This static method to deallocate a " + classname + " type of object\n");
         writer.write(" */\n");
@@ -1017,6 +1022,7 @@ public class BeanParamWriter extends ParamCFileWriter
     {
         try
         {
+            writer.write("\n");
             writer.write("int Check_Restrictions_" + classname + "(" + classname + " value)\n");
             writer.write("{\n");
             writer.write("\treturn 0;\n");
