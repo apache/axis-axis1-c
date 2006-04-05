@@ -417,6 +417,7 @@ public class ParmHeaderFileWriter extends ParamWriter
                 writer.write("#include \"" + itr.next().toString() + CUtils.C_HEADER_SUFFIX + "\"\n");
             }
             
+            writer.write("\n");
             writer.write("/*Local name and the URI for the type*/\n");
             writer.write("static const char* Axis_URI_" + classname + " = \""
                     + type.getName().getNamespaceURI() + "\";\n");
