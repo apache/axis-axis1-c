@@ -543,7 +543,11 @@ public class BeanParamWriter extends ParamCPPFileWriter
             writer.write(", NULL);\n\t}\n");
         }               
         
-        writer.write("\tpSZ->serialize( \">\", 0);\n");
+        if(wscontext.getWrapInfo().getWrapperStyle().equals("document"))
+        {
+            writer.write("\tpSZ->serialize( \">\", 0);\n");
+        }
+        
         if (extensionBaseAttrib != null)
         {
             String typeName = extensionBaseAttrib.getTypeName(); 
@@ -733,6 +737,13 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     writer.write("\t}\n");
         }
 
+        if (wscontext.getWrapInfo().getWrapperStyle().equals("rpc"))
+        {
+            writer.write("\n\tpSZ->serialize(\"</\", Axis_TypeName_" + classname
+                    + ", \">\", NULL);\n");
+        }
+
+        
         writer.write("\n\tif (!bArray && blnIsNewPrefix)\n");
         writer.write("\t{\n");
         writer.write("\t\tpSZ->removeNamespacePrefix(Axis_URI_" + classname + ");\n");
