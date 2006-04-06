@@ -1603,10 +1603,10 @@ void SoapDeSerializer::getElement (const AxisChar * pName,
                 return;
             } 
 
-            else if (END_ELEMENT == m_pNode->m_type)    // We have an empty string - Jira AXISCPP-93
+            else if (m_pNode && (END_ELEMENT == m_pNode->m_type))    // We have an empty string - Jira AXISCPP-93
             {
                 pSimpleType->deserialize("");
-                m_pNode = m_pParser->next();
+                m_pNode = NULL;
                 return;
             }
             else
@@ -1703,7 +1703,6 @@ void SoapDeSerializer::getElement (const AxisChar * pName,
             else if (m_pNode && (END_ELEMENT == m_pNode->m_type) ) // empty tag case <tag/>
             {
                 pSimpleType->deserialize("");
-    //            m_pNode = m_pParser->next();
                 m_pNode = NULL;
                 return;
             }
