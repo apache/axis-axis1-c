@@ -1206,6 +1206,14 @@ public class BeanParamWriter extends ParamCPPFileWriter
         {
             //write copy constructor
             writer.write("\n" + classname + "::" + classname + "(const " + classname + " & original)\n{\n");
+
+            // AXISCPP-918 patch provided by Franz Fehringer
+            if (extensionBaseAttrib != null && extensionBaseAttrib.getTypeName() != null)
+            {
+                writer.write("\t" + extensionBaseAttrib.getParamNameAsMember() + " = " + "original." + extensionBaseAttrib.getParamNameAsMember() + ";\n");
+            }
+            // End of AXISCPP-918
+
             int anyCounter = 0;
             for (int i = 0 ; i < attribs.length ; i++)
             {
