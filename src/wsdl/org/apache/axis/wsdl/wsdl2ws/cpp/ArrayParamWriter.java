@@ -43,6 +43,7 @@ public class ArrayParamWriter extends ParamWriter
     {
         super(wscontext, type);
     }
+    
     /* (non-Javadoc)
      * @see org.apache.axis.wsdl.wsdl2ws.SourceWriter#writeSource()
      */
@@ -50,19 +51,15 @@ public class ArrayParamWriter extends ParamWriter
     {
         try
         {
-            this.writer =
-                new BufferedWriter(new FileWriter(getFilePath(), false));
-            writeClassComment();
+            this.writer = new BufferedWriter(new FileWriter(getFilePath(), false));
             
+            writeClassComment();            
             writer.write("#include \"" + classname + ".hpp\"\n\n");
             this.writeMethods();
             writer.flush();
             writer.close();
             if (WSDL2Ws.verbose)
-            {
-                System.out.println(
-                    getFilePath().getAbsolutePath() + " created.....");
-            }
+                System.out.println(getFilePath().getAbsolutePath() + " created.....");
         }
         catch (IOException e)
         {
@@ -78,15 +75,12 @@ public class ArrayParamWriter extends ParamWriter
     {
         this.writeConstructors();
         this.writeDestructors();
-        
-            this.writeSetMethod();
-            this.writeGetMethod();
-            this.writeCloneMethod();
-            this.writeClearMethod();
+        this.writeSetMethod();
+        this.writeGetMethod();
+        this.writeCloneMethod();
+        this.writeClearMethod();
     }
 
-    
-    
     /**
      * @throws WrapperFault
      * 
@@ -261,29 +255,19 @@ public class ArrayParamWriter extends ParamWriter
      */
     protected File getFilePath(boolean useServiceName) throws WrapperFault
     {
-        String targetOutputLocation =
-            this.wscontext.getWrapInfo().getTargetOutputLocation();
+        String targetOutputLocation = this.wscontext.getWrapInfo().getTargetOutputLocation();
         if (targetOutputLocation.endsWith("/"))
-        {
-            targetOutputLocation =
-                targetOutputLocation.substring(
-                    0,
-                    targetOutputLocation.length() - 1);
-        }
+            targetOutputLocation = targetOutputLocation.substring(0,targetOutputLocation.length() - 1);
+
         new File(targetOutputLocation).mkdirs();
 
-        String fileName =
-            targetOutputLocation + "/" + classname + CUtils.CPP_CLASS_SUFFIX;
+        String fileName = targetOutputLocation + "/" + classname + CUtils.CPP_CLASS_SUFFIX;
 
         if (useServiceName)
         {
-            fileName =
-                targetOutputLocation
-                    + "/"
+            fileName = targetOutputLocation + "/"
                     + this.wscontext.getSerInfo().getServicename()
-                    + "_"
-                    + classname
-                    + CUtils.CPP_HEADER_SUFFIX;
+                    + "_" + classname + CUtils.CPP_HEADER_SUFFIX;
         }
 
         return new File(fileName);
