@@ -486,12 +486,12 @@ public class BeanParamWriter extends ParamCFileWriter
                             + attribs[i].getParamNameAsSOAPElement()
                             + "\",0);\n");
                     
-                    // TODO MEMORY MANAGEMENT
+                    // TODO C-BINDING MEMORY MANAGEMENT
                 }
                 else
                 {
                     arrayType = attribs[i].getTypeName();
-                    writer.write("\tAxisc_Array array" + arrayCount + " = axiscGetCmplxArrayCall(pDZ," 
+                    writer.write("\tAxisc_Array * array" + arrayCount + " = axiscGetCmplxArrayCall(pDZ," 
                             + "&array" + arrayCount + ","
                             + "(void*)Axis_DeSerialize_"  + arrayType
                             + "\n\t\t, (void*)Axis_Create_" + arrayType
@@ -499,6 +499,8 @@ public class BeanParamWriter extends ParamCFileWriter
                             + "\n\t\t, (void*)Axis_GetSize_" + arrayType
                             + ", \""  + attribs[i].getElementNameAsString()
                             + "\", Axis_URI_" + arrayType + ");\n");
+                    
+                    // TODO C-BINDING MEMORY MANAGEMENT
                 }
                 
                 writer.write("\tmemcpy(&(param->" + attribs[i].getParamName()
