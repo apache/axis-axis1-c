@@ -236,9 +236,7 @@ int main( int argc, char * argv[])
 // Following check for os/400 - the mock server will return ascii char which needs to be converted
 #ifdef __OS400__
                         if( outArray[i]->ByteType == 0x31) 
-						{
                             outArray[i]->ByteType = '1';
-						}
 #endif
                         cout << " ByteType " << outArray[i]->ByteType << endl;
                         cout << " DecimalType " << outArray[i]->DecimalType << endl;
@@ -256,13 +254,7 @@ int main( int argc, char * argv[])
                         {
                             cout << " Base64BinaryType " << asciiToString((char *)base64BinaryData) << endl;
                         }
-/* Not Required
-                        if (base64BinaryData != NULL)
-                        {
-                            delete [] base64BinaryData;
-                            base64BinaryData = NULL;
-                        }
-*/
+
                         size = 0;
 
                         xsd__unsignedByte * hexBinaryData = outArray[i]->HexBinary.get(size);
@@ -273,14 +265,6 @@ int main( int argc, char * argv[])
                         {
                             cout << " HexBinaryType " << asciiToString( (char *) hexBinaryData) << endl;
                         }
-
-/* Not Required
-                        if (hexBinaryData != NULL)
-                        {
-                            delete [] hexBinaryData;
-                            hexBinaryData = NULL;
-                        }
-*/
                     }
 
                     returnValue = 0;

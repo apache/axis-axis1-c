@@ -294,7 +294,7 @@ public class BeanParamWriter extends ParamCFileWriter
                     else
                         namespace = "NULL";
                     
-                    writer.write("\taxiscSerializeCmplxArray(pSZ, param->"
+                    writer.write("\taxiscSerializeCmplxArray(pSZ, (const Axisc_Array *)param->"
                                     + attribs[i].getParamNameAsMember() + ",\n");
                     writer.write("\t\t\t\t\t\t (void*) Axis_Serialize_" + arrayType + ",\n");
                     writer.write("\t\t\t\t\t\t (void*) Axis_Delete_" + arrayType + ",\n");

@@ -324,14 +324,10 @@ typedef long long xsdc__negativeInteger;
  */
 typedef struct
 {
-    /**
-     * Binary data
-     */
+    /** Binary data */
     xsdc__unsignedByte * __ptr;
     
-    /**
-     * Length, in bytes, of binary data
-     */
+    /** Length, in bytes, of binary data */
     xsdc__int __size;
 } xsdc__base64Binary;
 
@@ -341,16 +337,13 @@ typedef struct
  */
 typedef struct
 {
-    /**
-     * Binary data
-     */
+    /** Binary data */
     xsdc__unsignedByte * __ptr;
     
-    /**
-     * Length, in bytes, of binary data
-     */
+    /** Length, in bytes, of binary data */
     xsdc__int __size;
 } xsdc__hexBinary;
+
 /**
  * @typedef xsdc__anyURI
  * Axis C++ defined type for xml basic type anyURI
@@ -390,7 +383,7 @@ typedef enum {
     } type##_Array;
 
 typedef struct {
-    void* m_Array;
+    void** m_Array;
     int m_Size;
     AXISC_XSDTYPE m_Type; \
 } Axisc_Array;

@@ -13,11 +13,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "CommonClientTestCode.h"
-
-#include "SimpleTypeArrayWS.h" 
-
 #include <stdio.h>
+
+#include "CommonClientTestCode.h"
+#include "SimpleTypeArrayWS.h" 
 
 #define WSDL_DEFAULT_ENDPOINT "http://localhost:9080/SimpleTypeArray/services/sampleWS"
 
@@ -33,6 +32,8 @@ int main(int argc, char* argv[])
     xsdc__int * array[100];
     xsdc__int   elements[100];
     int i;
+
+    axiscRegisterExceptionHandler(exceptionHandler);
 
     if (argc>2 && strcmp(argv[1], "-e") == 0) 
         endpoint = argv[2];   
