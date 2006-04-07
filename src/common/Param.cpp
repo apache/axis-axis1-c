@@ -54,8 +54,8 @@ Param::~Param ()
             delete m_Value.pCplxObj;
             break;
         case XSD_ANY:
-			// Do not delete the m_Value.pAnyObject here because it is the
-			// application's storage. The AnyObject has never been cloned.
+            // Do not delete the m_Value.pAnyObject here because it is the
+            // application's storage. The AnyObject has never been cloned.
             break;
         default:;
     }
@@ -69,12 +69,13 @@ int Param::serialize (SoapSerializer &pSZ)
     {
         case XSD_ARRAY:
             /* pSZ.serialize("<abc:ArrayOfPhoneNumbers 
-	     * xmlns:abc="http://example.org/2001/06/numbers"
-	     * xmlns:enc="http://www.w3.org/2001/06/soap-encoding" 
-	     * enc:arrayType="abc:phoneNumberType[2]" >";
-	     */
-	    if (!m_Value.pArray)
-                return AXIS_FAIL; // error condition
+             * xmlns:abc="http://example.org/2001/06/numbers"
+             * xmlns:enc="http://www.w3.org/2001/06/soap-encoding" 
+             * enc:arrayType="abc:phoneNumberType[2]" >";
+             */
+            if (!m_Value.pArray)
+                return AXIS_FAIL;
+                
             if (RPC_ENCODED == pSZ.getStyle ())
             {
                 pSZ.serialize ("<", NULL);
@@ -85,16 +86,14 @@ int Param::serialize (SoapSerializer &pSZ)
                         m_strUri.c_str (), "\"", NULL);
                 }
                 else
-                {
                     pSZ.serialize (m_sName.c_str (), "Array", NULL);
-                }
+
                 // get a prefix from Serializer
-                ATprefix =
-                    pSZ.getNamespacePrefix (m_Value.pArray->m_URI.c_str ());
+                ATprefix = pSZ.getNamespacePrefix (m_Value.pArray->m_URI.c_str ());
 
                 pSZ.serialize (" xmlns:enc", NULL);
-                pSZ.serialize
-                    ("=\"http://www.w3.org/2001/06/soap-encoding\" ", NULL);
+                pSZ.serialize ("=\"http://www.w3.org/2001/06/soap-encoding\" ", NULL);
+                
                 if (m_Value.pArray->m_type == USER_TYPE)
                 {
                     pSZ.serialize ("xmlns:", ATprefix.c_str (), "=\"",
@@ -111,6 +110,7 @@ int Param::serialize (SoapSerializer &pSZ)
                     pSZ.serialize ("xsd:", BasicTypeSerializer::
                         basicTypeStr (m_Value.pArray->m_type), NULL);
                 }
+                
                 {
                     char Buf[10]; //maximum array dimension is 99999999
                     sprintf (Buf, "[%d]", m_Value.pArray->m_nSize);
@@ -121,40 +121,33 @@ int Param::serialize (SoapSerializer &pSZ)
                 m_Value.pArray->Serialize (pSZ); //Only serializes the inner items
                 pSZ.serialize ("</", NULL);
                 if (!m_strPrefix.empty ())
-                {
-                    pSZ.serialize (m_strPrefix.c_str (), ":", m_sName.c_str (),
-                        "Array", NULL);
-                }
+                    pSZ.serialize (m_strPrefix.c_str (), ":", m_sName.c_str (), "Array", NULL);
                 else
-                {
                     pSZ.serialize (m_sName.c_str (), "Array", NULL);
-                }
+
                 pSZ.removeNamespacePrefix (m_Value.pArray->m_URI.c_str ());
                 pSZ.serialize (">\n", NULL);
             }
-            else /* no wrapper element in doc/lit style. 
-		  * So directly call Array Serializer 
-		  */
+            else 
             {
-				if (!m_strUri.empty())
-					pSZ.setNamespace(m_strUri.c_str());
+                /* no wrapper element in doc/lit style. So directly call Array Serializer */
+                
+                if (!m_strUri.empty())
+                    pSZ.setNamespace(m_strUri.c_str());
 
-                m_Value.pArray->Serialize (pSZ); /* Only serializes the inner 
-						  * items
-						  */ 
-				if (!m_strUri.empty())
-					pSZ.setNamespace(NULL);
-
+                m_Value.pArray->Serialize (pSZ); /* Only serializes the inner items */ 
+                if (!m_strUri.empty())
+                    pSZ.setNamespace(NULL);
             }
             break;
         
-	case USER_TYPE:
+        case USER_TYPE:
             if (RPC_ENCODED == pSZ.getStyle ())
             {
-				TRACE_SERIALIZE_FUNCT_ENTRY(m_Value.pCplxObj->pSZFunct, m_Value.pCplxObj->pObject, &pSZ, false);
+                TRACE_SERIALIZE_FUNCT_ENTRY(m_Value.pCplxObj->pSZFunct, m_Value.pCplxObj->pObject, &pSZ, false);
                 int stat = AXIS_FAIL;
                 stat = m_Value.pCplxObj->pSZFunct (m_Value.pCplxObj->pObject, &pSZ, false);
-				TRACE_SERIALIZE_FUNCT_EXIT(m_Value.pCplxObj->pSZFunct, stat);
+                TRACE_SERIALIZE_FUNCT_EXIT(m_Value.pCplxObj->pSZFunct, stat);
             }
             else
             {
@@ -162,28 +155,30 @@ int Param::serialize (SoapSerializer &pSZ)
                 /* note : ">" is not serialized to enable the type's serializer
                  * to add attributes 
                  */
-				TRACE_SERIALIZE_FUNCT_ENTRY(m_Value.pCplxObj->pSZFunct, m_Value.pCplxObj->pObject, &pSZ, false);
+                TRACE_SERIALIZE_FUNCT_ENTRY(m_Value.pCplxObj->pSZFunct, m_Value.pCplxObj->pObject, &pSZ, false);
                 int stat = AXIS_FAIL;
                 stat = m_Value.pCplxObj->pSZFunct (m_Value.pCplxObj->pObject, &pSZ, false);
-				TRACE_SERIALIZE_FUNCT_EXIT(m_Value.pCplxObj->pSZFunct, stat);
+                TRACE_SERIALIZE_FUNCT_EXIT(m_Value.pCplxObj->pSZFunct, stat);
 
-				pSZ.serialize ("</", m_sName.c_str (), ">\n", NULL);
+                pSZ.serialize ("</", m_sName.c_str (), ">\n", NULL);
             }
             break;
-      case XSD_ANY:
+        case XSD_ANY:
              pSZ.serializeAnyObject(m_Value.pAnyObject);
              break;
-      case ATTACHMENT:
+        case ATTACHMENT:
             m_Value.pAttachmentRef->serialize(pSZ,m_sName.c_str());
             break;
-      default:
+        default:
             pSZ.serializeAsElement((AxisChar*) m_sName.c_str (), (IAnySimpleType*) m_AnySimpleType);
             break;
     }
+    
     return AXIS_SUCCESS;
 }
 
-void Param::setValue( XSDTYPE nType, IAnySimpleType* value)
+void Param::setValue(XSDTYPE nType, 
+                     IAnySimpleType* value)
 {
     m_Type = nType;
     m_AnySimpleType = value;
@@ -199,15 +194,18 @@ void Param::setURI (const AxisChar* uri)
     m_strUri = uri;
 }
 
-int Param::setUserType (void* pObject, AXIS_DESERIALIZE_FUNCT pDZFunct,
-    AXIS_OBJECT_DELETE_FUNCT pDelFunct)
+int Param::setUserType (void* pObject, 
+                        AXIS_DESERIALIZE_FUNCT pDZFunct,
+                        AXIS_OBJECT_DELETE_FUNCT pDelFunct)
 {
     if (m_Type != USER_TYPE)
         return AXIS_FAIL;
+        
     m_Value.pCplxObj = new ComplexObjectHandler;
     m_Value.pCplxObj->pObject = pObject;
     m_Value.pCplxObj->pDZFunct = pDZFunct;
     m_Value.pCplxObj->pDelFunct = pDelFunct;
+    
     return AXIS_SUCCESS;
 }
 
@@ -215,6 +213,7 @@ int Param::setArrayElements (void* pElements)
 {
     if (m_Type != XSD_ARRAY)
         return AXIS_FAIL;
+        
     if (m_Value.pArray)
     {
         if (m_Value.pArray->m_type != USER_TYPE)
@@ -223,19 +222,21 @@ int Param::setArrayElements (void* pElements)
             return AXIS_SUCCESS;
         }
         else // unexpected situation
-        {
             return AXIS_FAIL;
-        }
     }
+    
     return AXIS_FAIL;
 }
 
 // following function is called to set array of user types.
-int Param::setArrayElements (void* pObject, AXIS_DESERIALIZE_FUNCT pDZFunct,
-    AXIS_OBJECT_DELETE_FUNCT pDelFunct, AXIS_OBJECT_SIZE_FUNCT pSizeFunct)
+int Param::setArrayElements (void* pObject, 
+                             AXIS_DESERIALIZE_FUNCT pDZFunct,
+                             AXIS_OBJECT_DELETE_FUNCT pDelFunct, 
+                             AXIS_OBJECT_SIZE_FUNCT pSizeFunct)
 {
     if (m_Type != XSD_ARRAY)
         return AXIS_FAIL;
+        
     if (m_Value.pArray)
     {
         if (m_Value.pArray->m_type == USER_TYPE)
@@ -248,10 +249,9 @@ int Param::setArrayElements (void* pObject, AXIS_DESERIALIZE_FUNCT pDZFunct,
             return AXIS_SUCCESS;
         }
         else                  //unexpected situation
-        {
             return AXIS_FAIL;
-        }
     }
+    
     return AXIS_FAIL;
 }
 
@@ -272,11 +272,11 @@ ComplexObjectHandler::~ComplexObjectHandler ()
     if (AxisEngine::m_bServer)
     {
         if (pObject && pDelFunct)
-		{
-			TRACE_OBJECT_DELETE_FUNCT_ENTRY(pDelFunct, pObject, false, 0);
-			pDelFunct(pObject, false, 0);
-			TRACE_OBJECT_DELETE_FUNCT_EXIT(pDelFunct);
-		}
+        {
+            TRACE_OBJECT_DELETE_FUNCT_ENTRY(pDelFunct, pObject, false, 0);
+            pDelFunct(pObject, false, 0);
+            TRACE_OBJECT_DELETE_FUNCT_EXIT(pDelFunct);
+        }
     }
 }
 

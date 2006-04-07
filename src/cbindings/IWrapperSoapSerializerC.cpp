@@ -371,10 +371,40 @@ int axiscSerializeAsElement(AXISCHANDLE wrapperSoapSerializer,
     IWrapperSoapSerializer *sz = (IWrapperSoapSerializer*)wrapperSoapSerializer;
 
     try
-    {
-        if (pNamespace)
-            return sz->serializeAsElement(sName,pNamespace,pValue,(XSDTYPE)type);
-        return sz->serializeAsElement(sName,pValue,(XSDTYPE)type);
+    {                
+        // Some elements (e.g. xsd__hexBinary, base64Binary) differ in how C++ defines
+        // the types and how C defines the types, in those cases we need to create 
+        // the correct type that the engine is expecting.
+        switch (type)
+        {
+            case axiscpp::XSD_HEXBINARY:
+            {
+                xsdc__hexBinary *pVal = (xsdc__hexBinary *)pValue;
+                xsd__hexBinary pValObject;
+                pValObject.set(pVal->__ptr, pVal->__size);
+                if (pNamespace)
+                   return sz->serializeAsElement(sName,pNamespace,&pValObject,(XSDTYPE)type);
+                else               
+                   return sz->serializeAsElement(sName,&pValObject,(XSDTYPE)type);
+            }
+            case axiscpp::XSD_BASE64BINARY:
+            {
+                xsdc__base64Binary *pVal = (xsdc__base64Binary *)pValue;
+                xsd__base64Binary pValObject;
+                pValObject.set(pVal->__ptr, pVal->__size);
+                if (pNamespace)
+                   return sz->serializeAsElement(sName,pNamespace,&pValObject,(XSDTYPE)type);
+                else               
+                   return sz->serializeAsElement(sName,&pValObject,(XSDTYPE)type);
+            }
+            default:
+            {
+                if (pNamespace)
+                   return sz->serializeAsElement(sName,pNamespace,pValue,(XSDTYPE)type);
+                else 
+                   return sz->serializeAsElement(sName,pValue,(XSDTYPE)type);
+            }
+        }
     }
     catch ( AxisException& e  )
     {

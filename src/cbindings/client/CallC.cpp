@@ -55,8 +55,8 @@ AXISCHANDLE axiscCreateCall()
 AXISC_STORAGE_CLASS_INFO 
 void axiscDestroyCall(AXISCHANDLE call) 
 {
-	if ((AXISCHANDLE)NULL == call)
-		return;
+    if ((AXISCHANDLE)NULL == call)
+        return;
 
     AxisObjectContainer *h = (AxisObjectContainer *)call;
     Call *c = (Call*)h->_objHandle;
