@@ -470,7 +470,6 @@ public class BeanParamWriter extends ParamCFileWriter
             }
             else if (attribs[i].isArray())
             {
-                writer.write("\n\t{\n"); // start new variable scope
                 arrayCount++;
                 
                 if (attribs[i].isSimpleType() || attribs[i].getType().isSimpleType())
@@ -486,27 +485,22 @@ public class BeanParamWriter extends ParamCFileWriter
                             + attribs[i].getParamNameAsSOAPElement()
                             + "\",0);\n");
                     
-                    // TODO C-BINDING MEMORY MANAGEMENT
+                    // TODO C-BINDING MEMORY MANAGEMENT?
                 }
                 else
                 {
                     arrayType = attribs[i].getTypeName();
-                    writer.write("\tAxisc_Array * array" + arrayCount + " = axiscGetCmplxArrayCall(pDZ," 
-                            + "&array" + arrayCount + ","
-                            + "(void*)Axis_DeSerialize_"  + arrayType
-                            + "\n\t\t, (void*)Axis_Create_" + arrayType
-                            + ", (void*)Axis_Delete_" + arrayType
-                            + "\n\t\t, (void*)Axis_GetSize_" + arrayType
-                            + ", \""  + attribs[i].getElementNameAsString()
-                            + "\", Axis_URI_" + arrayType + ");\n");
+                    writer.write("\taxiscGetCmplxArrayCall(pDZ, " 
+                            + "\t\t(Axisc_Array *)param->" + attribs[i].getParamName() + ",\n" 
+                            + "\t\t(void*)Axis_DeSerialize_"  + arrayType + ",\n"
+                            + "\t\t(void*)Axis_Create_"       + arrayType + ",\n"
+                            + "\t\t(void*)Axis_Delete_"       + arrayType + ",\n"
+                            + "\t\t(void*)Axis_GetSize_"      + arrayType + ",\n"
+                            + "\t\t\""  + attribs[i].getElementNameAsString() + "\",\n"  
+                            + "\t\tAxis_URI_" + arrayType + ");\n");
                     
-                    // TODO C-BINDING MEMORY MANAGEMENT
+                    // TODO C-BINDING MEMORY MANAGEMENT?
                 }
-                
-                writer.write("\tmemcpy(&(param->" + attribs[i].getParamName()
-                        + "), &array" + arrayCount + ", sizeof(Axisc_Array));\n");
-                
-                writer.write("\n\t}\n"); // end new variable scope
             }
             else if ((attribs[i].isSimpleType() || attribs[i].getType().isSimpleType()))
             {
