@@ -475,10 +475,12 @@ void Axis_Array::set(void** array, int size, XSDTYPE type)
             case XSD_ARRAY:
             {
                 ((Axis_Array**) m_Array)[count] = new Axis_Array(*((Axis_Array**) array)[count]);
+                break;
             }
             case USER_TYPE:
             {
-                ((int*) m_Array)[count] = ((int*) array)[count];
+                m_Array[count] = array[count];
+                break;
             }
             case XSD_UNKNOWN:
             case XSD_ANY:
@@ -782,10 +784,12 @@ void Axis_Array::addElement(void* element)
             case XSD_ARRAY:
             {
                 ((Axis_Array**) m_Array)[m_Size] = new Axis_Array(*(Axis_Array*) element);
+                break;
             }
             case USER_TYPE:
             {
                 m_Array[m_Size] = element;
+                break;
             }
             case XSD_UNKNOWN:
             case XSD_ANY:

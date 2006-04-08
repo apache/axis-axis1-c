@@ -60,8 +60,14 @@ public class ArrayParamWriter extends ParamWriter
         {
             this.writer = new BufferedWriter(new FileWriter(getFilePath(), false));
             
-            writeClassComment();  
+            // Write prolog
+            writeClassComment(); 
+
+            // include system header files
+            writer.write("#include <stdlib.h>\n");
+            writer.write("\n");
             
+            // include header file for datatype
             writer.write("#include \"" + classname + ".h\"\n");
             writer.write("\n");
             
@@ -122,10 +128,22 @@ public class ArrayParamWriter extends ParamWriter
         {
             writer.write("extern void* Axis_Create_" + classname + "(int nSize)\n");
             writer.write("{\n");
-
-//            writer.write("\tm_Type = USER_TYPE;\n");
             
-            writer.write("\treturn NULL;");
+            // Begin function body
+            
+            writer.write("\t" + classname + " *pArray = (" + classname + "*)malloc(sizeof(" + classname + "));\n");
+            writer.write("\tmemset(pArray, 0, sizeof(" + classname + "));\n");
+            writer.write("\tpArray->m_Type = USER_TYPE;\n");
+            writer.write("\n");
+
+            writer.write("\tif (nSize > 0)\n");
+            writer.write("\t{\n");
+            writer.write("\t\tpArray->m_Array = Axis_Create_" + attribs[0].getTypeName() 
+                    + "(NULL, 1, nSize);\n");
+            writer.write("\t\tpArray->m_Size = nSize;\n"); 
+            writer.write("\t}\n");
+            
+            // End function body
 
             writer.write("}\n");
             writer.write("\n");
@@ -145,22 +163,16 @@ public class ArrayParamWriter extends ParamWriter
                     + "(" + classname + "* param)\n");
             writer.write("{\n");
             
-            writer.write("\tif (m_Array != NULL)\n");
+            writer.write("\tif (param == NULL)\n");
+            writer.write("\t\treturn;\n");
+            writer.write("\n");
+            writer.write("\tif (param->m_Array != NULL)\n");
             writer.write("\t{\n");
-            writer.write("\t\tif (m_Size > 0)\n");
-            writer.write("\t\t{\n");
-            writer.write("\t\t\tfor (int count = 0 ; count < m_Size ; count++)\n");
-            writer.write("\t\t\t{\n");
-            writer.write("\t\t\t\tif (m_Array[count] != NULL)\n");
-            writer.write("\t\t\t\t{\n");
-            writer.write("\t\t\t\t\tdelete ((" + attribs[0].getTypeName() + "**) m_Array)[count];\n");
-            writer.write("\t\t\t\t\tm_Array[count] = NULL;\n");
-            writer.write("\t\t\t\t}\n");
-            writer.write("\t\t\t}\n");
-            writer.write("\t\t}\n");
-            writer.write("\t\t\tdelete [] m_Array;\n");
+            writer.write("\t\tAxis_Delete_" +  attribs[0].getTypeName() 
+                    + "((" + attribs[0].getTypeName() + " *)param->m_Array, 1, param->m_Size);\n");
+            writer.write("\t\tfree(param->m_Array);\n");
             writer.write("\t}\n");
-            
+            writer.write("\tfree(param);\n");
             writer.write("}\n");
             writer.write("\n");            
         }

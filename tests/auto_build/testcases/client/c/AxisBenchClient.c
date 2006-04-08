@@ -108,6 +108,7 @@ int main(int argc, char* argv[])
 
     arrayIn.m_Array = ppBBDT;
     arrayIn.m_Size  = input->count;
+    arrayIn.m_Type  = USER_TYPE;
     
     input->infos =  &arrayIn;
     
@@ -129,6 +130,10 @@ int main(int argc, char* argv[])
         }
 
         output = doBenchRequest(ws, input);
+        if (exceptionOccurred == C_TRUE 
+              || output == NULL 
+              || get_AxisBench_Status(ws) == AXISC_FAIL )
+            break;
     }
 
     for( i = 0; i < input->count; i++)
@@ -140,8 +145,6 @@ int main(int argc, char* argv[])
       free(ppBBDT);
     if (buffer)
 	  free( buffer);
-    
-  	output = doBenchRequest(ws,input);
 
   	if (exceptionOccurred == C_TRUE 
   			|| output == NULL 
