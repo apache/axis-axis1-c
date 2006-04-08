@@ -66,7 +66,34 @@ public class AllParamWriter implements SourceWriter
                 {
                     if (WSDL2Ws.verbose)
                         System.out.println("Array writer called ......");
-                    (new ArrayParamWriter(wscontext, type)).writeSource();
+                    
+                    QName qname = type.getName();
+                    
+                    String elementType = type.getElementType();
+                    if (elementType != null)
+                    {
+                        elementType = elementType.replace('>', '_');
+                        QName elementQname = new QName(qname.getNamespaceURI(), elementType);
+                        
+                        Type currentType = wscontext.getTypemap().getType(elementQname);
+                        if (currentType != null)
+                            if ( currentType.isSimpleType())
+                                continue;
+                    }
+                    
+                    if (CUtils.isSimpleType(qname) && !CUtils.isDefinedSimpleType(qname))
+                    {
+                        throw new WrapperFault(
+                            "No need to create an Array for simple type " + qname + "\n"
+                                + "It seems that some thing wrong with symbolTable population");
+                    }
+                    
+                    ArrayParamHeaderWriter writer = (new ArrayParamHeaderWriter(wscontext, type));
+                    if (!writer.isSimpleTypeArray())
+                    {
+                        writer.writeSource();
+                        (new ArrayParamWriter(wscontext, type)).writeSource();
+                    }
                 }
                 /* TODO check whether this type is referenced or not. Synthesize only if  reference
                  * But of course that depends on the commandline option too  */
