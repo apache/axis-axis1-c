@@ -19,10 +19,23 @@
 #if !defined(_AXISUSERAPIARRAYS_H____OF_AXIS_INCLUDED_)
 #define _AXISUSERAPIARRAYS_H____OF_AXIS_INCLUDED_
 
-#include <axis/GDefine.hpp>
-#include <axis/TypeMapping.hpp>
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* ----------------------------------------------------------------   */
+/* CHANGES TO hpp HEADER FILE MAY NEED TO BE PROPAGATED TO THE        */
+/* C-EQUIVALENT HEADER FILE IN SUPPORT OF THE C-BINDING INTERFACES.   */
+/* ----------------------------------------------------------------   */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+
+
 #include <time.h>
 #include <string.h>
+
+#include <axis/GDefine.hpp>
+#include <axis/TypeMapping.hpp>
+#include <axis/AxisUserAPI.hpp>
+
 
 AXIS_CPP_NAMESPACE_START
 
@@ -33,9 +46,6 @@ AXIS_CPP_NAMESPACE_START
   * 
   * @author Adrian DIck (adrian.dick@uk.ibm.com)
   */
-
-
-#include <axis/AxisUserAPI.hpp>
 
 class STORAGE_CLASS_INFO xsd__duration_Array : public Axis_Array {
   public:

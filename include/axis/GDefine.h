@@ -16,8 +16,8 @@
  *
  */
 
-#if !defined(__GDEFINE_H_OF_AXIS_INCLUDED__)
-#define __GDEFINE_H_OF_AXIS_INCLUDED__
+#if !defined(__GDEFINEC_H_OF_AXIS_INCLUDED__)
+#define __GDEFINEC_H_OF_AXIS_INCLUDED__
 
 /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
 /* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
