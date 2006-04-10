@@ -62,8 +62,10 @@ public class ArrayParamHeaderWriter extends ParamWriter
                 System.out.println("Array " + classname + " contains unexpected no of variables");
                 throw new WrapperFault("Array type " + classname + " contain unexpected no of types");
             }
-                        
-            writer.write("#include <axis/AxisUserAPI.h>\n\n");
+                      
+            writer.write("#include <axis/Axis.h>\n");
+            writer.write("#include <axis/AxisUserAPI.h>\n");
+            writer.write("#include <axis/AxisUserAPIArrays.h>\n\n");
 
             //include header file for the contained type
             QName qname = WrapperUtils.getArrayType(type).getName();

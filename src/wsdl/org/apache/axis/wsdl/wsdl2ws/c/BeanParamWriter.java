@@ -484,13 +484,15 @@ public class BeanParamWriter extends ParamCFileWriter
                             + CUtils.getXSDTypeForBasicType(baseTypeName) + ", \"" 
                             + attribs[i].getParamNameAsSOAPElement()
                             + "\",0);\n");
-                    
+      
+                    writer.write("\tparam->" + attribs[i].getParamNameAsMember() + " = array" + arrayCount + "->m_Array;\n");
+              
                     // TODO C-BINDING MEMORY MANAGEMENT?
                 }
                 else
                 {
                     arrayType = attribs[i].getTypeName();
-                    writer.write("\taxiscGetCmplxArrayCall(pDZ, " 
+                    writer.write("\taxiscGetCmplxArrayCall(pDZ,\n" 
                             + "\t\t(Axisc_Array *)param->" + attribs[i].getParamName() + ",\n" 
                             + "\t\t(void*)Axis_DeSerialize_"  + arrayType + ",\n"
                             + "\t\t(void*)Axis_Create_"       + arrayType + ",\n"

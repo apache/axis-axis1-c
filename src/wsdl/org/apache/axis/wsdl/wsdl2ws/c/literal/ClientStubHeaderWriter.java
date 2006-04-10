@@ -54,6 +54,7 @@ public class ClientStubHeaderWriter
             writer.write("#include <axis/Axis.h>\n");
             writer.write("#include <axis/GDefine.h>\n");
             writer.write("#include <axis/AxisUserAPI.h>\n");
+            writer.write("#include <axis/AxisUserAPIArrays.h>\n");
             writer.write("#include <axis/SoapEnvVersions.h>\n");
             writer.write("#include <axis/WSDDDefines.h>\n");
             writer.write("#include <axis/TypeMapping.h>\n");
