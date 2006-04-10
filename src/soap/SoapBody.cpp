@@ -45,14 +45,10 @@ SoapBody::SoapBody()
 SoapBody::~SoapBody()
 {
     if(m_pSoapMethod)
-    {
         delete m_pSoapMethod;
-    }
 
     if(m_pSoapFault)
-    {
         delete m_pSoapFault;
-    }
 }
 
 void SoapBody::setSoapMethod(SoapMethod* ptrSoapMethod)
@@ -76,9 +72,7 @@ int SoapBody::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
             NULL);
         iStatus= serializeAttributes(pSZ);
         if(iStatus==AXIS_FAIL)
-        {
             break;
-        }
         
         pSZ.serialize(">\n", NULL);
 
@@ -86,17 +80,13 @@ int SoapBody::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
         {        
             iStatus= m_pSoapFault->serialize(pSZ, eSoapVersion);
             if(iStatus==AXIS_FAIL)
-            {
                 break;
-            }
         }
         else if(NULL != m_pSoapMethod)
         {
             iStatus= m_pSoapMethod->serialize(pSZ);
             if(iStatus==AXIS_FAIL)
-            {
                 break;
-            }
         } 
         else
         {
@@ -133,9 +123,7 @@ int SoapBody::serializeAttributes(SoapSerializer& pSZ)
 
         iStatus= (*itCurrAttribute)->serialize(pSZ);
         if(iStatus==AXIS_FAIL)
-        {
             break;
-        }
         itCurrAttribute++;        
     }    
 
