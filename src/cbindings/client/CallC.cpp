@@ -20,16 +20,18 @@
 
 #include "../AxisObjectContainer.hpp"
 
-AXIS_CPP_NAMESPACE_USE
-
-extern "C" {
 #include <axis/Axis.h>
 #include <axis/GDefine.h>
 #include <axis/AxisUserAPI.h>
+#include <axis/AxisUserAPIArrays.h>
 #include <axis/SoapEnvVersions.h>
 #include <axis/TypeMapping.h>
 #include <axis/WSDDDefines.h>
 #include <axis/client/Call.h>
+
+AXIS_CPP_NAMESPACE_USE
+
+extern "C" {
 
 AXISC_STORAGE_CLASS_INFO 
 AXISCHANDLE axiscCreateCall() 
@@ -1831,9 +1833,9 @@ Axisc_Array* axiscGetCmplxArrayCall(AXISCHANDLE call,
     
     try
     {
-        //TODO: Unimplemented
-        Axisc_Array* aa = (Axisc_Array *)NULL;
-        return aa;
+    	Axis_Array ObjArray;
+    	ObjArray.set(pArray->m_Array, pArray->m_Size, (XSDTYPE)pArray->m_Type);
+    	c->getCmplxArray(&ObjArray, pDZFunct, pCreFunct,pDelFunct,pSizeFunct, pName, pNamespace); 
     }
     catch ( AxisException& e  )
     {

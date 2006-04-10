@@ -20,6 +20,12 @@
 
 #include "../AxisObjectContainer.hpp"
 
+#include <axis/Axis.h>
+#include <axis/GDefine.h>
+#include <axis/AxisUserAPI.h>
+#include <axis/AxisUserAPIArrays.h>
+#include <axis/client/Stub.h>
+
 AXIS_CPP_NAMESPACE_START
 class StubC : Stub
 {
@@ -36,11 +42,6 @@ AXIS_CPP_NAMESPACE_END
 AXIS_CPP_NAMESPACE_USE
 
 extern "C" {
-#include <axis/Axis.h>
-#include <axis/GDefine.h>
-#include <axis/AxisUserAPI.h>
-#include <axis/client/Stub.h>
-
 
 AXISC_STORAGE_CLASS_INFO 
 AXISCHANDLE axiscCreateStub(const char * pcEndPointURI, 

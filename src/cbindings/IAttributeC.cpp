@@ -20,12 +20,13 @@
 
 #include "AxisObjectContainer.hpp"
 
-AXIS_CPP_NAMESPACE_USE
-
-extern "C" {
 #include <axis/Axis.h>
 #include <axis/GDefine.h>
 #include <axis/IAttribute.h>
+
+AXIS_CPP_NAMESPACE_USE
+
+extern "C" {
 
 AXISC_STORAGE_CLASS_INFO 
 void axiscDestroyIAttribute(AXISCHANDLE attribute) 

@@ -19,13 +19,15 @@
 
 #include "AxisObjectContainer.hpp"
 
-AXIS_CPP_NAMESPACE_USE
-
-extern "C" {
 #include <axis/Axis.h>
 #include <axis/GDefine.h>
 #include <axis/AxisUserAPI.h>
+#include <axis/AxisUserAPIArrays.h>
 #include <axis/BasicNode.h>
+
+AXIS_CPP_NAMESPACE_USE
+
+extern "C" {
 
 AXISC_STORAGE_CLASS_INFO 
 AXISCHANDLE axiscGetAttribute(AXISCHANDLE basicNode, 
