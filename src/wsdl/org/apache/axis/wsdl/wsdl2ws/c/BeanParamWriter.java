@@ -738,7 +738,7 @@ public class BeanParamWriter extends ParamCFileWriter
         writer.write("\t\treturn;\n");
         writer.write("\n");
         
-        writer.write("\t/* Recursion is used to delete arrays */\n");
+        writer.write("\t/* Reclaim memory resources (recursion is used to reclaim arrays) */\n");
         writer.write("\tif (bArray)\n");
         writer.write("\t{\n");
         writer.write("\t\tif (nSize > 0)\n");
@@ -756,10 +756,13 @@ public class BeanParamWriter extends ParamCFileWriter
         writer.write("\t\t\tfree(param);\n");
         writer.write("\t\t}\n");
         writer.write("\t}\n");
+        
         writer.write("\telse\n");
+        
         writer.write("\t{\n");
         writer.write("\t\tfree(param);\n");
         writer.write("\t}\n");
+        
         writer.write("}\n");
     }
 
@@ -769,34 +772,16 @@ public class BeanParamWriter extends ParamCFileWriter
 //        boolean hasComplexTypeOrArray = false;
 //        for (int i = 0; i < attribs.length; i++)
 //        {
-//            if (!attribs[i].isSimpleType())
+//            if (!attribs[i].isSimpleType() || 
+//                "xsdc__string".equals(attribs[i].getTypeName()) ||
+//                "xsdc__base64Binary".equals(attribs[i].getTypeName()) ||
+//                "xsdc__hexBinary".equals(attribs[i].getTypeName()))
 //            {
-//                hasComplexTypeOrArray = true;
-//                break;
+//                  writer.write("\tint x, i;\n");
+//                  writer.write("\t" + classname + "* pTemp;\n");    
+//                  hasComplexTypeOrArray = true;
+//                  break;
 //            }
-//            else
-//                if ("xsdc__string".equals(attribs[i].getTypeName()))
-//                {
-//                    hasComplexTypeOrArray = true;
-//                    break;
-//                }
-//                else
-//                    if ("xsdc__base64Binary".equals(attribs[i].getTypeName()))
-//                    {
-//                        hasComplexTypeOrArray = true;
-//                        break;
-//                    }
-//                    else
-//                        if ("xsdc__hexBinary".equals(attribs[i].getTypeName()))
-//                        {
-//                            hasComplexTypeOrArray = true;
-//                            break;
-//                        }
-//        }
-//        if (hasComplexTypeOrArray)
-//        {
-//            writer.write("\tint x, i;\n");
-//            writer.write("\t" + classname + "* pTemp;\n");
 //        }
 //        writer.write("\tif (bArray)\n");
 //        writer.write("\t{\n");
@@ -915,8 +900,7 @@ public class BeanParamWriter extends ParamCFileWriter
 //        writer.write("\t}\n");
 //        writer.write("\telse\n");
 //        writer.write("\t{\n");
-//        writer.write(
-//            "\t\t/*delete any pointer members or array members of this struct here*/\n");
+//        writer.write("\t\t/*delete any pointer members or array members of this struct here*/\n");
 //        for (int i = 0; i < attribs.length; i++)
 //        {
 //            if (attribs[i].isArray())

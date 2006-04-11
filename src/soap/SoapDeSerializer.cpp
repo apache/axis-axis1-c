@@ -369,13 +369,6 @@ int
 SoapDeSerializer::checkMessageBody (const AxisChar * pName,
                                     const AxisChar * pNamespace)
 {
-    /* check and skip the soap body tag */
-    /*if (AXIS_SUCCESS != getBody ())
-    {
-    //return AXIS_FAIL;    
-    throw AxisGenException (SERVER_UNKNOWN_ERROR);
-    }*/
-
     if (!m_pNode)
         m_pNode = m_pParser->next ();
 
@@ -866,20 +859,10 @@ SoapDeSerializer::getCmplxObject (void *pDZFunct,
     
             if (pObject && pDZFunct)
             {
-                if (C_DOC_PROVIDER == getCurrentProviderType ())
-                {
-                    // Disable C support
-                    //IWrapperSoapDeSerializer_C cWSD;
-                    //cWSD._object = this;
-                    //cWSD._functions = &IWrapperSoapDeSerializer::ms_VFtable;
-                    //m_nStatus = ((AXIS_DESERIALIZE_FUNCT)pDZFunct) (pObject, &cWSD);
-                }
-                else
-                {
-                    TRACE_DESERIALIZE_FUNCT_ENTRY(pDZFunct, pObject, this);
-                    m_nStatus =    ((AXIS_DESERIALIZE_FUNCT) pDZFunct) (pObject, this);
-                    TRACE_DESERIALIZE_FUNCT_EXIT(pDZFunct, m_nStatus);
-                }
+                TRACE_DESERIALIZE_FUNCT_ENTRY(pDZFunct, pObject, this);
+                m_nStatus =    ((AXIS_DESERIALIZE_FUNCT) pDZFunct) (pObject, this);
+                TRACE_DESERIALIZE_FUNCT_EXIT(pDZFunct, m_nStatus);
+
                 if (AXIS_SUCCESS == m_nStatus)
                 {
                     m_pParser->next ();    /* skip end node too */
@@ -997,77 +980,64 @@ SoapDeSerializer::getCmplxFaultObject (void *pDZFunct,
             }
         }
     }
-    else
-    {   
-        if (0 == strcmp (pName, m_pNode->m_pchNameOrValue))
+    else if (0 == strcmp (pName, m_pNode->m_pchNameOrValue))
+    {
+    /* if this node contain attributes let them be used by the complex
+     * type's deserializer
+     */
+        if (0 != m_pNode->m_pchAttributes[0])
         {
-        /* if this node contain attributes let them be used by the complex
-         * type's deserializer
-         */
-            if (0 != m_pNode->m_pchAttributes[0])
+            m_pCurrNode = m_pNode;
+            xsd__boolean * isNill = getAttributeAsBoolean("nil", 0);
+            if (NULL != isNill)
             {
-                m_pCurrNode = m_pNode;
-                xsd__boolean * isNill = getAttributeAsBoolean("nil", 0);
-                if (NULL != isNill)
+                if(true_ == *isNill)
                 {
-                    if(true_ == *isNill)
-                    {
-                        m_pParser->next ();
-                        m_pNode = NULL;
-                        delete isNill;
-                        return NULL;
-                    } 
-                    else
-                        delete isNill;
-                }
-            }
-            m_pNode = NULL;    /* node identified and used */
-
-            TRACE_OBJECT_CREATE_FUNCT_ENTRY(pCreFunct, NULL, false, 0);
-            void *pObject = ((AXIS_OBJECT_CREATE_FUNCT) pCreFunct)(NULL, false, 0);
-            TRACE_OBJECT_CREATE_FUNCT_EXIT(pCreFunct, pObject);
-
-            if (pObject && pDZFunct)
-            {
-                if (C_DOC_PROVIDER == getCurrentProviderType ())
-                {
-                // Disable C support
-                //IWrapperSoapDeSerializer_C cWSD;
-                //cWSD._object = this;
-                //cWSD._functions = &IWrapperSoapDeSerializer::ms_VFtable;
-                //m_nStatus = ((AXIS_DESERIALIZE_FUNCT)pDZFunct)
-                //    (pObject, &cWSD);
-                }
+                    m_pParser->next ();
+                    m_pNode = NULL;
+                    delete isNill;
+                    return NULL;
+                } 
                 else
-                {
-                    TRACE_DESERIALIZE_FUNCT_ENTRY(pDZFunct, pObject, this);
-                    m_nStatus =    ((AXIS_DESERIALIZE_FUNCT) pDZFunct) (pObject, this);
-                    TRACE_DESERIALIZE_FUNCT_EXIT(pDZFunct, m_nStatus);
-                }
-                if (AXIS_SUCCESS == m_nStatus)
-                {
-                    m_pParser->next ();    /* skip end node too */
-                    return pObject;
-                }
-                else
-                {
-                    TRACE_OBJECT_DELETE_FUNCT_ENTRY(pDelFunct, pObject, false, 0);
-                    ((AXIS_OBJECT_DELETE_FUNCT) pDelFunct) (pObject, false, 0);
-                    TRACE_OBJECT_DELETE_FUNCT_EXIT(pDelFunct);
-                }
+                    delete isNill;
             }
         }
-        else
+        m_pNode = NULL;    /* node identified and used */
+
+        TRACE_OBJECT_CREATE_FUNCT_ENTRY(pCreFunct, NULL, false, 0);
+        void *pObject = ((AXIS_OBJECT_CREATE_FUNCT) pCreFunct)(NULL, false, 0);
+        TRACE_OBJECT_CREATE_FUNCT_EXIT(pCreFunct, pObject);
+
+        if (pObject && pDZFunct)
         {
-        /*
-         * TODO: Need to verify what WS-I 1.0 say
-         * about the mandatory of all the elements in the response in case of
-         * null value or none filled value. Some Web services servers work
-         * like this. This apply for all the rest of the deserializer.
-         */
-            return NULL;
+            TRACE_DESERIALIZE_FUNCT_ENTRY(pDZFunct, pObject, this);
+            m_nStatus =    ((AXIS_DESERIALIZE_FUNCT) pDZFunct) (pObject, this);
+            TRACE_DESERIALIZE_FUNCT_EXIT(pDZFunct, m_nStatus);
+
+            if (AXIS_SUCCESS == m_nStatus)
+            {
+                m_pParser->next ();    /* skip end node too */
+                return pObject;
+            }
+            else
+            {
+                TRACE_OBJECT_DELETE_FUNCT_ENTRY(pDelFunct, pObject, false, 0);
+                ((AXIS_OBJECT_DELETE_FUNCT) pDelFunct) (pObject, false, 0);
+                TRACE_OBJECT_DELETE_FUNCT_EXIT(pDelFunct);
+            }
         }
     }
+    else
+    {
+    /*
+     * TODO: Need to verify what WS-I 1.0 say
+     * about the mandatory of all the elements in the response in case of
+     * null value or none filled value. Some Web services servers work
+     * like this. This apply for all the rest of the deserializer.
+     */
+        return NULL;
+    }
+
     m_nStatus = AXIS_FAIL;    /* unexpected SOAP stream */
     return NULL;
 }
@@ -2247,9 +2217,6 @@ xsd__base64Binary SoapDeSerializer::getBodyAsBase64Binary ()
 {
     /* TODO */
 
-    //AxisChar *
-    //pBodyContent = (AxisChar *) malloc (1000);
-    //Chinthana:Remove malloc
     pBodyContent = new AxisChar[1000];
     pBodyContent[0] = '\0';
 
@@ -2274,8 +2241,6 @@ xsd__base64Binary SoapDeSerializer::getBodyAsBase64Binary ()
 AxisChar *
 SoapDeSerializer::getBodyAsChar ()
 {
-    //AxisChar *pBodyContent = (AxisChar *) malloc (1000);
-    //Chinthana:Remove malloc
     pBodyContent = new AxisChar[1000];
     pBodyContent[0] = '\0';
 
