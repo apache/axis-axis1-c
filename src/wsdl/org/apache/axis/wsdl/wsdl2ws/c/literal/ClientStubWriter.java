@@ -211,7 +211,7 @@ public class ClientStubWriter
         {
             writer.write("\t");
             if (returntypeisarray)
-                writer.write(outparamType + " RetArray = {NULL, 0, XSD_UNKNOWN};\n");
+                writer.write(outparamType + " RetArray = {NULL, 0, XSDC_UNKNOWN};\n");
             else if (!returntypeissimple)
             {
                 // for AnyType and complex types

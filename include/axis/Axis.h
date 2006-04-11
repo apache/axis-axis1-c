@@ -77,14 +77,14 @@ int axiscAxisDelete(void * pValue, AXISC_XSDTYPE type);
 
 /**
   * Allocates storage to be used by Axis engine.  All proxy code and allocated
-  * storage required by the client must use this to allocate storage
-  * that may be freed by proxy code or the Axis engine.
+  * storage required by the client for basic types must use this 
+  * function in order that it may be freed by proxy code or the Axis engine.
   * 
   * @param size - size of storage to be allocated
   * @return pointer to allocated storage
   */
 AXISC_STORAGE_CLASS_INFO 
-void * axiscAxisNew(int size);
+void * axiscAxisNew(AXISC_XSDTYPE type, int size);
 
 /**
   * Registers a function that will be invoked to handle Axis engine

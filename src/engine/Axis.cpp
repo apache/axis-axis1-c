@@ -85,6 +85,7 @@ SessionScopeHandlerPool* g_pSessionScopeHandlerPool;
 DeserializerPool* g_pDeserializerPool;
 SerializerPool* g_pSerializerPool;
 HandlerPool* g_pHandlerPool;
+
 // Unsynchronized read-only global variables.
 WSDDDeployment* g_pWSDDDeployment;
 AxisConfig* g_pConfig;
@@ -106,14 +107,10 @@ void ModuleInitialize ()
     // unsynchronized read-only global variables.
     g_pWSDDDeployment = new WSDDDeployment ();
 
-	if( g_pConfig != NULL)
-	{
-		g_pConfig = new AxisConfig( g_pConfig);
-	}
-	else
-	{
-		g_pConfig = new AxisConfig();
-	}
+    if( g_pConfig != NULL)
+        g_pConfig = new AxisConfig( g_pConfig);
+    else
+        g_pConfig = new AxisConfig();
 }
 
 void ModuleUnInitialize ()
@@ -126,12 +123,13 @@ void ModuleUnInitialize ()
     delete g_pSerializerPool;
     delete g_pHandlerPool;
     delete g_pHandlerLoader;
+    
     // unsynchronized read-only global variables.
     delete g_pWSDDDeployment;
     delete g_pConfig;
 
-	g_pConfig = NULL;
-	g_pWSDDDeployment = NULL;
+    g_pConfig = NULL;
+    g_pWSDDDeployment = NULL;
 
     AxisTrace::terminate();
 }
@@ -168,11 +166,9 @@ STORAGE_CLASS_INFO int process_request(SOAPTransport* pStream)
                      try
                      {
                         Status = engine->process(pStream);
-					   if (AXIS_SUCCESS == Status)
-						{
-							pStream->flushOutput();
-						}
-						else
+                       if (AXIS_SUCCESS == Status)
+                            pStream->flushOutput();
+                        else
                         {
                             ServerAxisEngine* pObjTempServer = (ServerAxisEngine*) engine;
                             pObjTempServer->setFaultOutputStream(Status, pStream);
@@ -193,7 +189,6 @@ STORAGE_CLASS_INFO int process_request(SOAPTransport* pStream)
                     delete engine;
                 }
             }
-          // Handle the GET method
             else if (AXIS_HTTP_GET == pStream->getSubProtocol())
             {
                 // get the uri path
@@ -279,25 +274,21 @@ STORAGE_CLASS_INFO int process_request(SOAPTransport* pStream)
                 }
                 else
                 {
-					sServiceName = g_pConfig->getAxisConfProperty(AXCONF_AXISHOME);
+                    sServiceName = g_pConfig->getAxisConfProperty(AXCONF_AXISHOME);
                     sServiceName += WSDLDIRECTORY + sUriWOAxis + ".wsdl";
                     // Check whether wsdl file is available
                     if ((WsddFile = fopen (sServiceName.c_str (), "r")) == NULL)
                     {
-                        pStream->sendBytes("<h3>Url not available</h3>",
-                            NULL);
+                        pStream->sendBytes("<h3>Url not available</h3>", NULL);
                         Status = AXIS_SUCCESS;
-                        // Handle the error
                     }
                     else
                     {
                         int charcount = 0;
-                        while ((charcount = fread (ReadBuffer, 1,
-                            BYTESTOREAD - 1, WsddFile)) != 0)
+                        while ((charcount = fread (ReadBuffer, 1, BYTESTOREAD - 1, WsddFile)) != 0)
                         {
                             *(ReadBuffer + charcount) = '\0';
-                            pStream->sendBytes(ReadBuffer,
-                                NULL);
+                            pStream->sendBytes(ReadBuffer, NULL);
                         }
                         Status = AXIS_SUCCESS;
                         fclose (WsddFile);
@@ -305,7 +296,7 @@ STORAGE_CLASS_INFO int process_request(SOAPTransport* pStream)
                 }
             }
             
-	    break;
+        break;
 
         default:
             pStream->sendBytes("Unknown Protocol", NULL);
@@ -373,16 +364,16 @@ int initialize_module (int bServer)
 
             if (bServer) // no client side wsdd processing at the moment
             {
-    		    // Read from the configuration file
+                // Read from the configuration file
                 status = g_pConfig->readConfFile (); 
 
                 if (status == AXIS_SUCCESS)
-                {					
-					try
-					{            
-						XMLParserFactory::initialize();
-					}
-					catch (AxisException& e)
+                {                    
+                    try
+                    {            
+                        XMLParserFactory::initialize();
+                    }
+                    catch (AxisException& e)
                     {
                         throw AxisEngineException(e.getExceptionCode(), e.what());
                     }
@@ -399,9 +390,7 @@ int initialize_module (int bServer)
                     try
                     {            
                         if (AXIS_SUCCESS != g_pWSDDDeployment->loadWSDD (pWsddPath))
-                        {
                             status = AXIS_FAIL;
-                        }
                     }
                     catch (AxisException& e)
                     {
@@ -409,9 +398,7 @@ int initialize_module (int bServer)
                     }
                 }
                 else
-                {
                     status = AXIS_FAIL;
-                }
            }
            else if (bServer == 0)      // client side module initialization
            {
@@ -425,22 +412,18 @@ int initialize_module (int bServer)
                    XMLParserFactory::initialize();
                    SOAPTransportFactory::initialize();
 
-                   char *	pClientWsddPath = g_pConfig->getAxisConfProperty(AXCONF_CLIENTWSDDFILEPATH);
+                   char *    pClientWsddPath = g_pConfig->getAxisConfProperty(AXCONF_CLIENTWSDDFILEPATH);
     
-// May be there is no client side handlers configured. So may not have CLIENTWSDDFILEPATH entry in axiscpp.conf 
+                   // May be there is no client side handlers configured. So may not have CLIENTWSDDFILEPATH entry in axiscpp.conf 
                    if (pClientWsddPath)
-                   {
                        if (AXIS_SUCCESS != g_pWSDDDeployment->loadWSDD (pClientWsddPath))
-                       {
                            status = AXIS_FAIL;
-                       }
-                   }
                 }
                 else
                 {
                     AXISTRACE3( "Reading from the configuration file failed. \
-								Check for error in the configuration file.\n\
-								Handlers and logging are not working");
+                                Check for error in the configuration file.\n\
+                                Handlers and logging are not working");
                     /* TODO:Improve the AxisTrace so that it will log these kind of 
                      * messages into a log file according to the critical level 
                      * specified.
@@ -455,7 +438,7 @@ int initialize_module (int bServer)
        }
        else if (AxisEngine::m_bServer != bServer)
        {
-		   throw AxisEngineException(SERVER_ENGINE_EXCEPTION);
+           throw AxisEngineException(SERVER_ENGINE_EXCEPTION);
        }
     }
     catch (...)
@@ -531,288 +514,243 @@ void Axis::terminate()
 
 void Axis::AxisDelete(void *pValue, XSDTYPE type)
 {
-    if (pValue != NULL)
+    if (pValue == NULL)
+        return;
+        
+    switch (type)
     {
-        switch (type)
+        case XSD_DURATION:
         {
-            case XSD_DURATION:
-            {
-                delete (xsd__duration*) pValue;
-                pValue = NULL;
-    			break;
-            }
-            case XSD_DATETIME:
-            {
-                delete (xsd__dateTime*) pValue;
-                pValue = NULL;
-                break;
-            }
-            case XSD_TIME:
-            {
-                delete (xsd__time*) pValue;
-                pValue = NULL;
-                break;
-            }
-            case XSD_DATE:
-            {
-                delete (xsd__date*) pValue;
-                pValue = NULL;
-                break;
-            }
-            case XSD_GYEARMONTH:
-            {
-                delete (xsd__gYearMonth*) pValue;
-                pValue = NULL;
-                break;
-            }
-            case XSD_GYEAR:
-            {
-                delete (xsd__gYear*) pValue;
-                pValue = NULL;
-                break;
-            }
-            case XSD_GMONTHDAY:
-            {
-                delete (xsd__gMonthDay*) pValue;
-                pValue = NULL;
-                break;
-            }
-            case XSD_GDAY:
-            {
-                delete (xsd__gDay*) pValue;
-                pValue = NULL;
-                break;
-            }
-            case XSD_GMONTH:
-            {
-                delete (xsd__gMonth*) pValue;
-                pValue = NULL;
-                break;
-            }
-            case XSD_STRING:
-            {
-                delete [] (xsd__string) pValue;
-                pValue = NULL;
-                break;
-            }
-            case XSD_NORMALIZEDSTRING:
-            {
-                delete [] (xsd__normalizedString) pValue;
-                pValue = NULL;
-                break;
-            }
-            case XSD_TOKEN:
-            {
-                delete [] (xsd__token) pValue;
-                pValue = NULL;
-                break;
-            }
-            case XSD_LANGUAGE:
-            {
-                delete [] (xsd__language) pValue;
-                pValue = NULL;
-                break;
-            }
-            case XSD_NAME:
-            {
-                delete [] (xsd__Name) pValue;
-                pValue = NULL;
-                break;
-            }
-            case XSD_NCNAME:
-            {
-                delete [] (xsd__NCName) pValue;
-                pValue = NULL;
-                break;
-            }
-            case XSD_ID:
-            {
-                delete [] (xsd__ID) pValue;
-                pValue = NULL;
-                break;
-            }
-            case XSD_IDREF:
-            {
-                delete [] (xsd__IDREF) pValue;
-                pValue = NULL;
-                break;
-            }
-            case XSD_IDREFS:
-            {
-                delete [] (xsd__IDREFS) pValue;
-                pValue = NULL;
-                break;
-            }
-            case XSD_ENTITY:
-            {
-                delete [] (xsd__ENTITY) pValue;
-                pValue = NULL;
-                break;
-            }
-            case XSD_ENTITIES:
-            {
-                delete [] (xsd__ENTITIES) pValue;
-                pValue = NULL;
-                break;
-            }
-            case XSD_NMTOKEN:
-            {
-                delete [] (xsd__NMTOKEN) pValue;
-                pValue = NULL;
-                break;
-            }
-            case XSD_NMTOKENS:
-            {
-                delete [] (xsd__NMTOKENS) pValue;
-                pValue = NULL;
-                break;
-            }
-            case XSD_BOOLEAN:
-            {
-                delete (xsd__boolean*) pValue;
-                pValue = NULL;
-                break;
-            }
-            case XSD_BASE64BINARY:
-            {
-                delete (xsd__base64Binary*) pValue;
-                pValue = NULL;
-                break;
-            }
-            case XSD_HEXBINARY:
-            {
-                delete (xsd__hexBinary*) pValue;
-                pValue = NULL;
-                break;
-            }
-            case XSD_FLOAT:
-            {
-                delete (xsd__float*) pValue;
-                pValue = NULL;
-                break;
-            }
-            case XSD_DECIMAL:
-            {
-                delete (xsd__decimal*) pValue;
-                pValue = NULL;
-                break;
-            }
-            case XSD_NONPOSITIVEINTEGER:
-            {
-                delete (xsd__nonPositiveInteger*) pValue;
-                pValue = NULL;
-                break;
-            }
-            case XSD_NEGATIVEINTEGER:
-            {
-                delete (xsd__negativeInteger*) pValue;
-                pValue = NULL;
-                break;
-            }
-            case XSD_INTEGER:
-            {
-                delete (xsd__integer*) pValue;
-                pValue = NULL;
-                break;
-            }
-            case XSD_LONG:
-            {
-                delete (xsd__long*) pValue;
-                pValue = NULL;
-                break;
-            }
-            case XSD_INT:
-            {
-                delete (xsd__int*) pValue;
-                pValue = NULL;
-                break;
-            }
-            case XSD_SHORT:
-            {
-                delete (xsd__short*) pValue;
-                pValue = NULL;
-                break;
-            }
-            case XSD_BYTE:
-            {
-                delete (xsd__byte*) pValue;
-                pValue = NULL;
-                break;
-            }
-            case XSD_NONNEGATIVEINTEGER:
-            {
-                delete (xsd__nonNegativeInteger*) pValue;
-                pValue = NULL;
-                break;
-            }
-            case XSD_UNSIGNEDLONG:
-            {
-                delete (xsd__unsignedLong*) pValue;
-                pValue = NULL;
-                break;
-            }
-            case XSD_UNSIGNEDINT:
-            {
-                delete (xsd__unsignedInt*) pValue;
-                pValue = NULL;
-                break;
-            }
-            case XSD_UNSIGNEDSHORT:
-            {
-                delete (xsd__unsignedShort*) pValue;
-                pValue = NULL;
-                break;
-            }
-            case XSD_UNSIGNEDBYTE:
-            {
-                delete (xsd__unsignedByte*) pValue;
-                pValue = NULL;
-                break;
-            }
-            case XSD_POSITIVEINTEGER:
-            {
-                delete (xsd__positiveInteger*) pValue;
-                pValue = NULL;
-                break;
-            }
-            case XSD_DOUBLE:
-            {
-                delete (xsd__double*) pValue;
-                pValue = NULL;
-                break;
-            }
-            case XSD_ANYURI:
-            {
-                delete [] (xsd__anyURI) pValue;
-                pValue = NULL;
-                break;
-            }
-            case XSD_QNAME:
-            {
-                delete [] (xsd__QName) pValue;
-                pValue = NULL;
-                break;
-            }
-            case XSD_NOTATION:
-            {
-                delete [] (xsd__NOTATION) pValue;
-                pValue = NULL;
-                break;
-            }
-            case USER_TYPE:
-                // The USER_TYPE object should be cleared by the Application
-                break;
-            case XSD_ARRAY:
-            {
-                delete (Axis_Array*) pValue;
-                pValue = NULL;
-                break;
-            }
-            case XSD_ANY:
-            case ATTACHMENT:
-            case XSD_UNKNOWN:
-            default:
-    			;
+            delete (xsd__duration*) pValue;
+            break;
         }
+        case XSD_DATETIME:
+        {
+            delete (xsd__dateTime*) pValue;
+            break;
+        }
+        case XSD_TIME:
+        {
+            delete (xsd__time*) pValue;
+            break;
+        }
+        case XSD_DATE:
+        {
+            delete (xsd__date*) pValue;
+            break;
+        }
+        case XSD_GYEARMONTH:
+        {
+            delete (xsd__gYearMonth*) pValue;
+            break;
+        }
+        case XSD_GYEAR:
+        {
+            delete (xsd__gYear*) pValue;
+            break;
+        }
+        case XSD_GMONTHDAY:
+        {
+            delete (xsd__gMonthDay*) pValue;
+            break;
+        }
+        case XSD_GDAY:
+        {
+            delete (xsd__gDay*) pValue;
+            break;
+        }
+        case XSD_GMONTH:
+        {
+            delete (xsd__gMonth*) pValue;
+            break;
+        }
+        case XSD_STRING:
+        {
+            delete [] (xsd__string) pValue;
+            break;
+        }
+        case XSD_NORMALIZEDSTRING:
+        {
+            delete [] (xsd__normalizedString) pValue;
+            break;
+        }
+        case XSD_TOKEN:
+        {
+            delete [] (xsd__token) pValue;
+            break;
+        }
+        case XSD_LANGUAGE:
+        {
+            delete [] (xsd__language) pValue;
+            break;
+        }
+        case XSD_NAME:
+        {
+            delete [] (xsd__Name) pValue;
+            break;
+        }
+        case XSD_NCNAME:
+        {
+            delete [] (xsd__NCName) pValue;
+            break;
+        }
+        case XSD_ID:
+        {
+            delete [] (xsd__ID) pValue;
+            break;
+        }
+        case XSD_IDREF:
+        {
+            delete [] (xsd__IDREF) pValue;
+            break;
+        }
+        case XSD_IDREFS:
+        {
+            delete [] (xsd__IDREFS) pValue;
+            break;
+        }
+        case XSD_ENTITY:
+        {
+            delete [] (xsd__ENTITY) pValue;
+            break;
+        }
+        case XSD_ENTITIES:
+        {
+            delete [] (xsd__ENTITIES) pValue;
+            break;
+        }
+        case XSD_NMTOKEN:
+        {
+            delete [] (xsd__NMTOKEN) pValue;
+            break;
+        }
+        case XSD_NMTOKENS:
+        {
+            delete [] (xsd__NMTOKENS) pValue;
+            break;
+        }
+        case XSD_BOOLEAN:
+        {
+            delete (xsd__boolean*) pValue;
+            break;
+        }
+        case XSD_BASE64BINARY:
+        {
+            delete (xsd__base64Binary*) pValue;
+            break;
+        }
+        case XSD_HEXBINARY:
+        {
+            delete (xsd__hexBinary*) pValue;
+            break;
+        }
+        case XSD_FLOAT:
+        {
+            delete (xsd__float*) pValue;
+            break;
+        }
+        case XSD_DECIMAL:
+        {
+            delete (xsd__decimal*) pValue;
+            break;
+        }
+        case XSD_NONPOSITIVEINTEGER:
+        {
+            delete (xsd__nonPositiveInteger*) pValue;
+            break;
+        }
+        case XSD_NEGATIVEINTEGER:
+        {
+            delete (xsd__negativeInteger*) pValue;
+            break;
+        }
+        case XSD_INTEGER:
+        {
+            delete (xsd__integer*) pValue;
+            break;
+        }
+        case XSD_LONG:
+        {
+            delete (xsd__long*) pValue;
+            break;
+        }
+        case XSD_INT:
+        {
+            delete (xsd__int*) pValue;
+            break;
+        }
+        case XSD_SHORT:
+        {
+            delete (xsd__short*) pValue;
+            break;
+        }
+        case XSD_BYTE:
+        {
+            delete (xsd__byte*) pValue;
+            break;
+        }
+        case XSD_NONNEGATIVEINTEGER:
+        {
+            delete (xsd__nonNegativeInteger*) pValue;
+            break;
+        }
+        case XSD_UNSIGNEDLONG:
+        {
+            delete (xsd__unsignedLong*) pValue;
+            break;
+        }
+        case XSD_UNSIGNEDINT:
+        {
+            delete (xsd__unsignedInt*) pValue;
+            break;
+        }
+        case XSD_UNSIGNEDSHORT:
+        {
+            delete (xsd__unsignedShort*) pValue;
+            break;
+        }
+        case XSD_UNSIGNEDBYTE:
+        {
+            delete (xsd__unsignedByte*) pValue;
+            break;
+        }
+        case XSD_POSITIVEINTEGER:
+        {
+            delete (xsd__positiveInteger*) pValue;
+            break;
+        }
+        case XSD_DOUBLE:
+        {
+            delete (xsd__double*) pValue;
+            break;
+        }
+        case XSD_ANYURI:
+        {
+            delete [] (xsd__anyURI) pValue;
+            break;
+        }
+        case XSD_QNAME:
+        {
+            delete [] (xsd__QName) pValue;
+            break;
+        }
+        case XSD_NOTATION:
+        {
+            delete [] (xsd__NOTATION) pValue;
+            break;
+        }
+        case USER_TYPE:
+            // The USER_TYPE object should be cleared by the Application
+            break;
+        case XSD_ARRAY:
+        {
+            delete (Axis_Array*) pValue;
+            break;
+        }
+        case XSD_ANY:
+        case ATTACHMENT:
+        case XSD_UNKNOWN:
+        default:
+            ;
     }
 }

@@ -19,14 +19,18 @@
 
 #include <axis/Axis.hpp>
 #include <axis/AxisException.hpp>
+#include <axis/AxisUserAPI.hpp>
+
+#include <axis/Axis.h>
+#include <axis/GDefine.h>
+#include <axis/AxisUserAPI.h>
+#include <axis/AxisUserAPIArrays.h>
+#include <axis/TypeMapping.h>
+
 
 AXIS_CPP_NAMESPACE_USE
 
 extern "C" {
-#include <axis/GDefine.h>
-#include <axis/AxisUserAPI.h>
-#include <axis/TypeMapping.h>
-#include <axis/Axis.h>
 
 static AXIS_EXCEPTION_HANDLER_FUNCT global_exceptionHandler = NULL;
 
@@ -84,7 +88,84 @@ int axiscAxisDelete(void * pValue,
     
     try 
     {
-        Axis::AxisDelete(pValue, (XSDTYPE) type);
+	    if (pValue == NULL)
+	        return rc;
+	        
+	    // There are some types we cannot pass to C++ engine
+	    switch (type)
+	    {
+	        case XSDC_DURATION:
+	        case XSDC_DATETIME:
+	        case XSDC_TIME:
+	        case XSDC_DATE:
+	        case XSDC_GYEARMONTH:
+	        case XSDC_GYEAR:
+	        case XSDC_GMONTHDAY:
+	        case XSDC_GDAY:
+	        case XSDC_GMONTH:
+	        case XSDC_STRING:
+	        case XSDC_NORMALIZEDSTRING:
+	        case XSDC_TOKEN:
+	        case XSDC_LANGUAGE:
+	        case XSDC_NAME:
+	        case XSDC_NCNAME:
+	        case XSDC_ID:
+	        case XSDC_IDREF:
+	        case XSDC_IDREFS:
+	        case XSDC_ENTITY:
+	        case XSDC_ENTITIES:
+	        case XSDC_NMTOKEN:
+	        case XSDC_NMTOKENS:
+	        case XSDC_BOOLEAN:
+	        case XSDC_FLOAT:
+	        case XSDC_DECIMAL:
+	        case XSDC_NONPOSITIVEINTEGER:
+	        case XSDC_NEGATIVEINTEGER:
+	        case XSDC_INTEGER:
+	        case XSDC_LONG:
+	        case XSDC_INT:
+	        case XSDC_SHORT:
+	        case XSDC_BYTE:
+	        case XSDC_NONNEGATIVEINTEGER:
+	        case XSDC_UNSIGNEDLONG:
+	        case XSDC_UNSIGNEDINT:
+	        case XSDC_UNSIGNEDSHORT:
+	        case XSDC_UNSIGNEDBYTE:
+	        case XSDC_POSITIVEINTEGER:
+	        case XSDC_DOUBLE:
+	        case XSDC_ANYURI:
+	        case XSDC_QNAME:
+	        case XSDC_NOTATION:
+	        case C_USER_TYPE:
+	        case XSDC_ANY:
+	        case C_ATTACHMENT:
+	        case XSDC_UNKNOWN:
+	        {
+	            Axis::AxisDelete(pValue, (XSDTYPE) type);
+	            break;
+	        }
+	        case XSDC_ARRAY:
+	        {
+	            // TODO delete array elements if simple types
+	            delete (Axisc_Array*) pValue;
+	            break;
+	        }
+	        case XSDC_BASE64BINARY:
+	        {
+	            // TODO delete elements?	        
+	            delete (xsdc__base64Binary*) pValue;
+	            break;
+	        }
+	        case XSDC_HEXBINARY:
+	        {
+	            // TODO delete elements?	        
+	            delete (xsdc__hexBinary*) pValue;
+	            break;
+	        }
+	        
+	        default:
+	            ;
+	    }
     }
     catch ( AxisException& e  )
     {
@@ -98,6 +179,207 @@ int axiscAxisDelete(void * pValue,
     }    
     
     return rc;
+}
+
+
+AXISC_STORAGE_CLASS_INFO 
+void *axiscAxisNew(AXISC_XSDTYPE type, int size)
+{
+    void *retVal=NULL;
+    
+    try 
+    {	        
+	    switch (type)
+	    {
+            case XSDC_DURATION:
+            {
+                retVal = new xsd__duration();
+                break;
+            }
+            case XSDC_DATETIME:
+            {
+                retVal = new xsd__dateTime();
+                break;
+            }
+            case XSDC_TIME:
+            {
+                retVal = new xsd__time();
+                break;
+            }
+            case XSDC_DATE:
+            {
+                retVal = new xsd__date();
+                break;
+            }
+            case XSDC_GYEARMONTH:
+            {
+                retVal = new xsd__gYearMonth();
+                break;
+            }           
+            case XSDC_GYEAR:
+            {
+                retVal = new xsd__gYear();
+                break;
+            }
+            case XSDC_GMONTHDAY:
+            {
+                retVal = new xsd__gMonthDay();
+                break;
+            }
+            case XSDC_GDAY:
+            {
+                retVal = new xsd__gDay();
+                break;
+            }
+            case XSDC_GMONTH:
+            {
+                retVal = new xsd__gMonth();
+                break;
+            }
+            case XSDC_STRING:
+            case XSDC_NORMALIZEDSTRING:
+            case XSDC_TOKEN:
+            case XSDC_LANGUAGE:
+            case XSDC_NAME:
+            case XSDC_NCNAME:
+            case XSDC_ID:
+            case XSDC_IDREF:
+            case XSDC_IDREFS:
+            case XSDC_ENTITY:
+            case XSDC_ENTITIES:
+            case XSDC_NMTOKEN:
+            case XSDC_NMTOKENS:
+            case XSDC_ANYURI:
+            case XSDC_QNAME:
+            case XSDC_NOTATION:
+            {
+                retVal = new char[size+1];
+                break;
+            }
+            case XSDC_BOOLEAN:
+            {
+                retVal = new xsd__boolean();
+                break;
+            }
+            case XSDC_BASE64BINARY:
+            {
+                xsdc__base64Binary *b64bin = new xsdc__base64Binary();
+                b64bin->__size=0;
+                b64bin->__ptr=NULL;
+                retVal = b64bin;
+                break;
+            }
+            case XSDC_HEXBINARY:
+            {
+                xsdc__hexBinary *hexbin = new xsdc__hexBinary();
+                hexbin->__size=0;
+                hexbin->__ptr=NULL;
+ 				retVal = hexbin;
+                break;
+            }
+            case XSDC_FLOAT:
+            {
+                retVal = new xsd__float();
+                break;
+            }
+            case XSDC_DECIMAL:
+            {
+                retVal = new xsd__decimal();
+                break;
+            }
+            case XSDC_INTEGER:
+            {
+                retVal = new xsd__integer();
+                break;
+            }
+            case XSDC_NONPOSITIVEINTEGER:
+            {
+                retVal = new xsd__nonPositiveInteger();
+                break;
+            }
+            case XSDC_NEGATIVEINTEGER:
+            {
+                retVal = new xsd__negativeInteger();
+                break;
+            }
+            case XSDC_LONG:
+            {
+                retVal = new xsd__long();
+                break;
+            }
+            case XSDC_INT:
+            {
+                retVal = new xsd__int();
+                break;
+            }
+            case XSDC_SHORT:
+            {
+                retVal = new xsd__short();
+                break;
+            }
+            case XSDC_BYTE:
+            {
+                retVal = new xsd__byte();
+                break;
+            }
+            case XSDC_NONNEGATIVEINTEGER:
+            {
+                retVal = new xsd__nonNegativeInteger();
+                break;
+            }
+            case XSDC_UNSIGNEDLONG:
+            {
+                retVal = new xsd__unsignedLong();
+                break;
+            }
+            case XSDC_UNSIGNEDINT:
+            {
+                retVal = new xsd__unsignedInt();
+                break;
+            }
+            case XSDC_UNSIGNEDSHORT:
+            {
+                retVal = new xsd__unsignedShort();
+                break;
+            }
+            case XSDC_UNSIGNEDBYTE:
+            {
+                retVal = new xsd__unsignedByte();
+                break;
+            }
+            case XSDC_POSITIVEINTEGER:
+            {
+                retVal = new xsd__positiveInteger();
+                break;
+            }
+            case XSDC_DOUBLE:
+            {
+                retVal = new xsd__double();
+                break;
+            }
+            case XSDC_ARRAY:
+            {
+                Axisc_Array * array = new Axisc_Array();
+                array->m_Array = NULL;
+                array->m_Size  = 0;
+                array->m_Type  = XSDC_UNKNOWN;
+                retVal = array;
+                break;
+            }
+            case C_USER_TYPE:
+            case XSDC_UNKNOWN:
+            case XSDC_ANY:
+            case C_ATTACHMENT:
+            default:
+                break;
+	    }
+    }
+    catch ( ... )
+    {
+        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }    
+    
+    return retVal;
 }
 
 AXISC_STORAGE_CLASS_INFO 

@@ -267,7 +267,7 @@ public class ClientStubWriter extends CFileWriter
             if (returntypeisarray)
             {
                 //for arrays
-                writer.write(outparamTypeName + " RetArray = {NULL, 0, XSD_UNKNOWN};\n");
+                writer.write(outparamTypeName + " RetArray = {NULL, 0, XSDC_UNKNOWN};\n");
             }
             else
                 if (!returntypeissimple)

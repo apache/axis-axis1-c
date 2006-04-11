@@ -130,7 +130,7 @@ public class BeanParamWriter extends ParamCFileWriter
         writer.write("\tAxiscBool blnIsNewPrefix = xsdc_boolean_false;\n\n");
         
         writer.write("\tif ( param == NULL )\n\t{\n");
-        writer.write("\t\taxiscSerializeAsAttribute(pSZ, \"xsi:nil\", 0, (void*)&(xsdc_boolean_true), XSD_BOOLEAN);\n");
+        writer.write("\t\taxiscSerializeAsAttribute(pSZ, \"xsi:nil\", 0, (void*)&(xsdc_boolean_true), XSDC_BOOLEAN);\n");
         writer.write("\t\taxiscSerializeIWrapperSoapSerializer(pSZ, \">\", NULL);\n");
         writer.write("\t\treturn AXISC_SUCCESS;\n");
         writer.write("\t}\n\n");
@@ -479,15 +479,23 @@ public class BeanParamWriter extends ParamCFileWriter
                         baseTypeName = CUtils.getclass4qname(attribs[i].getType().getBaseType());
                     else
                         baseTypeName = attribs[i].getTypeName();
+
+                    writer.write("\t/* If there is an existing array, delete it */\n");
+                    writer.write("\tif (param->" + attribs[i].getParamNameAsMember() + " != NULL)\n");
+                    writer.write("\t{\n");
+                    writer.write("\t\taxiscAxisDelete(param->" + attribs[i].getParamNameAsMember() + ", XSDC_ARRAY);\n");
+                    writer.write("\t\tparam->" + attribs[i].getParamNameAsMember() + "= NULL;\n");
+                    writer.write("\t}\n");
+                    writer.write("\n");
                     
-                    writer.write("\tAxisc_Array *array" + arrayCount + "= axiscGetBasicArrayIWrapperSoapDeSerializer(pDZ, " 
+                    writer.write("\t/* Deserialize array */\n");
+                    writer.write("\tparam->" + attribs[i].getParamNameAsMember() 
+                            + " = (" + baseTypeName + "_Array *)" 
+                            + "axiscGetBasicArrayIWrapperSoapDeSerializer(pDZ, " 
                             + CUtils.getXSDTypeForBasicType(baseTypeName) + ", \"" 
-                            + attribs[i].getParamNameAsSOAPElement()
-                            + "\",0);\n");
-      
-                    writer.write("\tparam->" + attribs[i].getParamNameAsMember() + " = array" + arrayCount + "->m_Array;\n");
-              
-                    // TODO C-BINDING MEMORY MANAGEMENT?
+                            + attribs[i].getParamNameAsSOAPElement() + "\",0);\n");
+
+                    writer.write("\n");
                 }
                 else
                 {
@@ -678,6 +686,7 @@ public class BeanParamWriter extends ParamCFileWriter
                     + CUtils.getXSDTypeForBasicType(extensionBaseAttrib.getTypeName()) + ");\n");
         }
         
+        writer.write("\t/* Return deserialization status */\n");
         writer.write("\treturn axiscGetStatusIWrapperSoapDeSerializer(pDZ);\n");
         writer.write("}\n");
     }
@@ -722,21 +731,29 @@ public class BeanParamWriter extends ParamCFileWriter
 
         writer.write("void Axis_Delete_" + classname
                 + "(" + classname + "* param, AxiscBool bArray, int nSize)\n");
+        
         writer.write("{\n");
-        writer.write("\tif (!param) return;\n\n");
+        writer.write("\t/* If NULL, just return */\n");
+        writer.write("\tif (!param)\n");
+        writer.write("\t\treturn;\n");
+        writer.write("\n");
+        
+        writer.write("\t/* Recursion is used to delete arrays */\n");
         writer.write("\tif (bArray)\n");
         writer.write("\t{\n");
         writer.write("\t\tif (nSize > 0)\n");
         writer.write("\t\t{\n");
         writer.write("\t\t\tint count;\n");
+        writer.write("\t\t\t" + classname + " **paramArray = (" + classname + " **)param;\n");
         writer.write("\t\t\tfor (count = 0 ; count < nSize ; count++ )\n");
         writer.write("\t\t\t{\n");
-        writer.write("\t\t\t\tif ( (( " + classname + " ** ) param)[count])\n");
+        writer.write("\t\t\t\tif (paramArray[count])\n");
         writer.write("\t\t\t\t{\n");
-        writer.write("\t\t\t\t\tfree ((( " + classname + " ** ) param)[count]);\n");
+        writer.write("\t\t\t\t\tAxis_Delete_" + classname + "(paramArray[count],0,0);\n");
+        writer.write("\t\t\t\t\tparamArray[count] = NULL;\n");
         writer.write("\t\t\t\t}\n");
         writer.write("\t\t\t}\n");
-        writer.write("\t\t\tfree(( " + classname + " ** ) param);\n");
+        writer.write("\t\t\tfree(param);\n");
         writer.write("\t\t}\n");
         writer.write("\t}\n");
         writer.write("\telse\n");
@@ -749,13 +766,6 @@ public class BeanParamWriter extends ParamCFileWriter
 // Following will need to be used above....
 //    private void writeDeleteGlobalMethod() throws IOException
 //    {
-//        writer.write("/**\n");
-//        writer.write(" * This static method to deallocate a " + classname + " type of object\n");
-//        writer.write(" */\n");
-//
-//        writer.write(
-//            "void Axis_Delete_" + classname + "(" + classname + "* param, AxiscBool bArray, int nSize)\n");
-//        writer.write("{\n");
 //        boolean hasComplexTypeOrArray = false;
 //        for (int i = 0; i < attribs.length; i++)
 //        {

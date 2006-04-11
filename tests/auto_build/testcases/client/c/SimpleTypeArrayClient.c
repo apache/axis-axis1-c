@@ -46,7 +46,7 @@ int main(int argc, char* argv[])
     
     array_input.m_Array = array;
     array_input.m_Size  = 100;
-    array_input.m_Type  = XSD_INT;
+    array_input.m_Type  = XSDC_INT;
 
     input = Axis_Create_Type(0,0,0);
     input->item = &array_input;
@@ -62,10 +62,11 @@ int main(int argc, char* argv[])
     {
        returnValue = 0;
        for ( i = 0; i < 100; i++ )
-         printf ("item [%d] = %d\n",i,output->item->m_Array[i]);
+         printf ("item [%d] = %d\n",i,*output->item->m_Array[i]);
     }
     
     input->item = NULL;
+    
     Axis_Delete_Type(input,0,0);
     Axis_Delete_Type(output,0,0);
     

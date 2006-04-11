@@ -117,7 +117,7 @@ public abstract class ParamCFileWriter extends ParamWriter
         try
         {
             writer.write("#include <stdlib.h>\n");
-            writer.write("#include <memory.h>\n");
+            writer.write("#include <string.h>\n");
             writer.write("\n");
 
             writer.write("#include <axis/Axis.h>\n");
