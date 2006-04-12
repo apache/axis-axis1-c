@@ -23,27 +23,216 @@ void ComplexLists::onFault()
 
 attrlisterr* ComplexLists::multilist(m_list* Value0, attrlist* Value1)  
 {
-	attrlisterr* ret=new attrlisterr();	
-	ret->attrlist_Ref=Value1;
-	int size=0;	
-	Value1->getitem()->get(size)[0]->setm_list_Ref(Value0);	
-	return ret;
-	
+    xsd__string input_string;
+    xsd__string input_string2;
+
+    if (Value0)
+    {
+        int size = 0;
+        const xsd__string * items = Value0->getitem()->get(size);
+        if (size >= 1 && items[0])
+        {
+            input_string = new char[strlen(items[0]) + 1];
+            strcpy(input_string, items[0]);
+        }
+        else
+        {
+            input_string = new char[strlen("attrlist->m_list-item[0] was NULL") + 1];
+            strcpy(input_string, "attrlist->m_list-item[0] was NULL");
+        }
+
+        if (size >= 2 && items[1])
+        {
+            input_string2 = new char[strlen(items[1]) + 1];
+            strcpy(input_string2, items[1]);
+        }
+        else
+        {
+            input_string2 = new char[strlen("attrlist->m_list-item[1] was NULL") + 1];
+            strcpy(input_string2, "attrlist->m_list-item[1] was NULL");
+        }
+    }
+    else
+    {
+        input_string = new char[strlen("attrlist->m_list-item[0] was NULL") + 1];
+        strcpy(input_string, "attrlist->m_list-item[0] was NULL");
+
+        input_string2 = new char[strlen("attrlist->m_list-item[1] was NULL") + 1];
+        strcpy(input_string2, "attrlist->m_list-item[1] was NULL");
+    }
+
+    attrlisterr * ale = new attrlisterr();
+    attrlist * al = new attrlist();
+    m_list * ml = new m_list();
+    m_list * ml2 = new m_list();
+    namepair * np = new namepair();
+    namepair * np2 = new namepair();
+    namepair ** np_array = new namepair*[2];
+    namepair_Array * np_arr = new namepair_Array;
+    xsd__string * str_array = new xsd__string[2];
+    xsd__string_Array * str_arr = new xsd__string_Array;
+    xsd__string * str_array2 = new xsd__string[2];
+    xsd__string_Array * str_arr2 = new xsd__string_Array;
+
+    str_array[0] = input_string;
+    str_array[1] = NULL;
+    str_arr->set(str_array, 2);
+    delete [] str_array[0];
+    delete [] str_array;
+
+    ml->setitem(str_arr);
+    delete str_arr;
+
+    np->setm_list_Ref(ml);
+    np->setname("namepair return");
+
+    str_array2[0] = input_string2;
+    str_array2[1] = NULL;
+    str_arr2->set(str_array2, 2);
+    delete [] str_array2[0];
+    delete [] str_array2;
+
+    ml2->setitem(str_arr2);
+    delete str_arr2;
+
+    np2->setm_list_Ref(ml2);
+    np2->setname("namepair2 return");
+
+    np_array[0] = np;
+    np_array[1] = np2;
+    np_arr->set(np_array, 2);
+    delete np_array[0];
+    delete np_array[1];
+    delete [] np_array;
+
+    al->setitem(np_arr);
+    delete np_arr;
+
+    ale->setattrlist_Ref(al);
+    ale->seterrorcode(007);
+    ale->seterrortext("request successful");
+
+    delete Value0;
+    delete Value1;
+
+    return ale;
 }
+
 attrlisterr* ComplexLists::multilistnil(m_list* Value0, attrlist* Value1)  
 {
-	attrlisterr* ret=new attrlisterr();
-	ret->attrlist_Ref=Value1;
-	int size = 0;
-	Value1->getitem()->get(size)[0]->setm_list_Ref(Value0);	
-	return ret;
+    delete Value0;
+    delete Value1;
+    attrlisterr * pReturn = new attrlisterr();
+    pReturn->seterrorcode(0);
+    return pReturn;
 }
 attrlisterr* ComplexLists::complexlist(attrlist* Value0, xsd__string Value1, attrlist* Value2)  
 {
-	attrlisterr* ret=new attrlisterr();
-	ret->attrlist_Ref=Value0;	
-	namepair **np=new namepair*[1];
-	np[0]=new namepair();
-	Value0->item->set(np,1);
-	return ret;
+    xsd__string input_string;
+    xsd__string input_string2;
+
+    bool success = false;
+    if (Value0)
+    {
+        int size = 0;
+        namepair ** items = Value0->getitem()->get(size);
+        if (size >= 1 && items[0])
+        {
+            m_list * ml = items[0]->getm_list_Ref();
+            const xsd__string * stringItems = ml->getitem()->get(size);
+            if (size >= 1 && stringItems[0])
+            {
+                input_string = new char[strlen(stringItems[0]) + 1];
+                strcpy(input_string, stringItems[0]);
+                success = true;
+            }
+        }
+    }
+    if (!success)
+    {
+        input_string = new char[strlen("arg1 attrlist->m_list-item[0] was NULL") + 1];
+        strcpy(input_string, "arg1 attrlist->m_list-item[0] was NULL");
+    }
+
+    success = false;
+    if (Value2)
+    {
+        bool success = false;
+        int size = 0;
+        namepair ** items = Value2->getitem()->get(size);
+        if (size >= 1 && items[0])
+        {
+            m_list * ml = items[0]->getm_list_Ref();
+            const xsd__string * stringItems = ml->getitem()->get(size);
+            if (size >= 1 && stringItems[0])
+            {
+                input_string2 = new char[strlen(stringItems[0]) + 1];
+                strcpy(input_string2, stringItems[0]);
+                success = true;
+            }
+        }
+    }
+    if (!success)
+    {
+        input_string2 = new char[strlen("arg1 attrlist->m_list-item[0] was NULL") + 1];
+        strcpy(input_string2, "arg3 attrlist->m_list-item[0] was NULL");
+    }
+
+    attrlisterr * ale = new attrlisterr();
+    attrlist * al = new attrlist();
+    namepair * np = new namepair();
+    namepair * np2 = new namepair();
+    namepair ** np_array = new namepair*[2];
+    namepair_Array * np_arr = new namepair_Array();
+    m_list * ml = new m_list();
+    m_list * ml2 = new m_list();
+    xsd__string * str_array = new xsd__string[2];
+    xsd__string_Array * str_arr = new xsd__string_Array();
+    xsd__string * str_array2 = new xsd__string[2];
+    xsd__string_Array * str_arr2 = new xsd__string_Array();
+
+    str_array[0] = input_string;
+    str_array[1] = NULL;
+    str_arr->set(str_array, 2);
+    delete [] str_array[0];
+    delete [] str_array;
+
+    ml->setitem(str_arr);
+    delete str_arr;
+
+    np->setm_list_Ref(ml);
+    np->setname("namepair return");
+
+    str_array2[0] = input_string2;
+    str_array2[1] = NULL;
+    str_arr2->set(str_array2, 2);
+    delete [] str_array2[0];
+    delete [] str_array2;
+
+    ml2->setitem(str_arr2);
+    delete str_arr2;
+
+    np2->setm_list_Ref(ml2);
+    np2->setname("namepair2 return");
+
+    np_array[0] = np;
+    np_array[1] = np2;
+    np_arr->set(np_array, 2);
+    delete np_array[0];
+    delete np_array[1];
+    delete [] np_array;
+
+    al->setitem(np_arr);
+    delete np_arr;
+
+    ale->setattrlist_Ref(al);
+    ale->seterrorcode(007);
+    ale->seterrortext("request successful");
+
+    delete Value0;
+    delete Value1;
+    delete Value2;
+
+    return ale;
 }
+
