@@ -61,6 +61,26 @@ void Calculator::SetSecure( char * pszArguments, ...)
 	}
 }
 
+/**
+ * This method is written to step over any returned AnyObject containing just whitespace.
+ */
+AnyType * Calculator::getNextAnyTag(void)
+{
+	AnyType * any = NULL;
+	bool foundStart = false;
+	while (!foundStart)
+	{
+		any = (AnyType*)m_pCall->getAnyObject();
+		if (any!= NULL && any->_size > 0 && any->_array[0][0] != '<')
+		{
+			continue;
+		}
+		
+		foundStart = true;
+	}
+	return any;
+}
+
 xsd__int Calculator::div(xsd__int Value0, xsd__int Value1)
 {
 	xsd__int Ret = 0;
@@ -88,14 +108,16 @@ xsd__int Calculator::div(xsd__int Value0, xsd__int Value1)
 	{
 		if(AXIS_SUCCESS == m_pCall->checkMessage("divResponse", "http://localhost/axis/Calculator"))
 		{
-			any = (AnyType*)m_pCall->getAnyObject();
+			any = this->getNextAnyTag();
+			
 			if(any!=NULL){
 				cout << any->_size<<endl;
 				cout << any->_array[0]<<endl;
 			}
-			any = (AnyType*)m_pCall->getAnyObject();	// Skip past </divResponse> tag
-//			any = (AnyType*)m_pCall->getAnyObject();	// Skip past </Body> tag
-//			any = (AnyType*)m_pCall->getAnyObject();	// Skip past </Envelope> tag
+
+			any = this->getNextAnyTag();	// Skip past </divResponse> tag
+//			any = this->getNextAnyTag();	// Skip past </Body> tag
+//			any = this->getNextAnyTag();	// Skip past </Envelope> tag
 
 			if( any != NULL)
 			{

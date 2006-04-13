@@ -39,6 +39,7 @@ public:
 	STORAGE_CLASS_INFO xsd__int div(xsd__int Value0,xsd__int Value1);
 
 private:
+	AnyType * getNextAnyTag(void);
 	void includeSecure();
 	Call *m_pCall;
 
