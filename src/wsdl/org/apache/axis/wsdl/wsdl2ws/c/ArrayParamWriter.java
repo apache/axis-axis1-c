@@ -133,7 +133,7 @@ public class ArrayParamWriter extends ParamWriter
             
             writer.write("\t" + classname + " *pArray = (" + classname + "*)malloc(sizeof(" + classname + "));\n");
             writer.write("\tmemset(pArray, 0, sizeof(" + classname + "));\n");
-            writer.write("\tpArray->m_Type = USER_TYPE;\n");
+            writer.write("\tpArray->m_Type = C_USER_TYPE;\n");
             writer.write("\n");
 
             writer.write("\tif (nSize > 0)\n");
