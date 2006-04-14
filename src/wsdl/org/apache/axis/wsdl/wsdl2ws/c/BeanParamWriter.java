@@ -269,7 +269,7 @@ public class BeanParamWriter extends ParamCFileWriter
             {
                 anyCounter += 1;
                 writer.write("\taxiscSerializeAnyObject(pSZ, param->any" + Integer.toString(anyCounter) +");\n");
-            }
+            } 
             else if (attribs[i].isArray())
             {
                 if (attribs[i].isSimpleType() || attribs[i].getType().isSimpleType())
@@ -760,252 +760,103 @@ public class BeanParamWriter extends ParamCFileWriter
         writer.write("\telse\n");
         
         writer.write("\t{\n");
+        for (int i = 0; i < attribs.length; i++)
+        {
+            if (attribs[i].isSimpleType() || attribs[i].getType().isSimpleType())
+            {
+                String passedInBaseType;
+                String baseTypeName = null;
+                
+                if (!attribs[i].isSimpleType() && attribs[i].getType().isSimpleType())
+                    baseTypeName = CUtils.getclass4qname(attribs[i].getType().getBaseType());
+                else
+                    baseTypeName = attribs[i].getTypeName();
+                
+                if (attribs[i].isArray())
+                    passedInBaseType = "XSDC_ARRAY";
+                else
+                    passedInBaseType = CUtils.getXSDTypeForBasicType(baseTypeName);
+                                
+                writer.write("\t\tif (param->" + attribs[i].getParamNameAsMember() + " != NULL)\n");
+                writer.write("\t\t\taxiscAxisDelete(param->" + attribs[i].getParamNameAsMember() 
+                        + "," + passedInBaseType + ");\n");
+                writer.write("\n");
+            }
+            else
+            {
+                String isArray = "0";
+                String arraySize = "0";    
+                
+                if (attribs[i].isArray())
+                {
+                    isArray = "1";
+                    arraySize = "param->" + attribs[i].getParamName() + "->m_Size";
+                }
+                
+                writer.write("\t\tif (param->" + attribs[i].getParamName());
+                writer.write("\t\t\tAxis_Delete_" + attribs[i].getTypeName()
+                              + "(param->" + attribs[i].getParamName()
+                              + isArray + "," + arraySize + ");\n");
+            }
+        }
+        
         writer.write("\t\tfree(param);\n");
         writer.write("\t}\n");
         
         writer.write("}\n");
     }
 
-// Following will need to be used above....
-//    private void writeDeleteGlobalMethod() throws IOException
-//    {
-//        boolean hasComplexTypeOrArray = false;
-//        for (int i = 0; i < attribs.length; i++)
-//        {
-//            if (!attribs[i].isSimpleType() || 
-//                "xsdc__string".equals(attribs[i].getTypeName()) ||
-//                "xsdc__base64Binary".equals(attribs[i].getTypeName()) ||
-//                "xsdc__hexBinary".equals(attribs[i].getTypeName()))
-//            {
-//                  writer.write("\tint x, i;\n");
-//                  writer.write("\t" + classname + "* pTemp;\n");    
-//                  hasComplexTypeOrArray = true;
-//                  break;
-//            }
-//        }
-//        writer.write("\tif (bArray)\n");
-//        writer.write("\t{\n");
-//        if (hasComplexTypeOrArray)
-//        {
-//            writer.write(
-//                "\t\t/*delete any pointer members or array members of this struct here*/\n");
-//            writer.write("\t\tpTemp = param;\n");
-//            writer.write("\t\tfor (x=0; x<nSize; x++)\n");
-//            writer.write("\t\t{\n");
-//            for (int i = 0; i < attribs.length; i++)
-//            {
-//                if (attribs[i].isArray())
-//                {
-//                    if (attribs[i].isSimpleType())
-//                    {
-//                        writer.write(
-//                            "\t\t\tif (pTemp->"
-//                                + attribs[i].getParamName()
-//                                + ".m_Array) free(pTemp->"
-//                                + attribs[i].getParamName()
-//                                + ".m_Array);\n");
-//                    }
-//                    else
-//                    {
-//                        writer.write(
-//                            "\t\t\tif (pTemp->"
-//                                + attribs[i].getParamName()
-//                                + ".m_Array) Axis_Delete_"
-//                                + attribs[i].getTypeName()
-//                                + "(pTemp->"
-//                                + attribs[i].getParamName()
-//                                + ".m_Array, true, pTemp->"
-//                                + attribs[i].getParamName()
-//                                + ".m_Size);\n");
-//                    }
-//                }
-//                else
-//                    if (attribs[i].isAnyType())
-//                    {
-//                        writer.write(
-//                            "\t\t\tif (pTemp->"
-//                                + attribs[i].getParamName()
-//                                + ") \n\t\t\t{ \n");
-//                        writer.write(
-//                            "\t\t\t\tfor (i=0; i<pTemp->"
-//                                + attribs[i].getParamName()
-//                                + "->_size; i++)\n\t\t\t\t{\n");
-//                        writer.write(
-//                            "\t\t\t\t\tif (pTemp->"
-//                                + attribs[i].getParamName()
-//                                + "->_array[i]) free(pTemp->"
-//                                + attribs[i].getParamName()
-//                                + "->_array[i]);\n");
-//                        writer.write("\t\t\t\t}\n");
-//                        writer.write(
-//                            "\t\t\t\tfree(pTemp->"
-//                                + attribs[i].getParamName()
-//                                + ");\n");
-//                        writer.write("\t\t\t}\n");
-//                    }
-//                    else
-//                        if (!attribs[i].isSimpleType())
-//                        {
-//                            writer.write(
-//                                "\t\t\tif (pTemp->"
-//                                    + attribs[i].getParamName()
-//                                    + ") Axis_Delete_"
-//                                    + attribs[i].getTypeName()
-//                                    + "(pTemp->"
-//                                    + attribs[i].getParamName()
-//                                    + ", false, 0);\n");
-//                        }
-//                        else
-//                            if ("xsdc__string".equals(attribs[i].getTypeName()))
-//                            {
-//                                writer.write(
-//                                    "\t\t\tif(pTemp->"
-//                                        + attribs[i].getParamName()
-//                                        + ") free(pTemp->"
-//                                        + attribs[i].getParamName()
-//                                        + ");\n");
-//                            }
-//                            else
-//                                if ("xsdc__base64Binary"
-//                                    .equals(attribs[i].getTypeName()))
-//                                {
-//                                    writer.write(
-//                                        "\t\t\tif(pTemp->"
-//                                            + attribs[i].getParamName()
-//                                            + ".__ptr) free(pTemp->"
-//                                            + attribs[i].getParamName()
-//                                            + ".__ptr);\n");
-//                                }
-//                                else
-//                                    if ("xsdc__hexBinary"
-//                                        .equals(attribs[i].getTypeName()))
-//                                    {
-//                                        writer.write(
-//                                            "\t\t\tif(pTemp->"
-//                                                + attribs[i].getParamName()
-//                                                + ".__ptr) free(pTemp->"
-//                                                + attribs[i].getParamName()
-//                                                + ".__ptr);\n");
-//                                    }
-//                                    else
-//                                        if (attribs[i].isOptional())
-//                                        {
-//                                            //TODO
-//                                        }
-//            }
-//            writer.write("\t\t\tpTemp++;\n");
-//            writer.write("\t\t}\n");
-//        }
-//        writer.write("\t\tfree(param);\n");
-//        writer.write("\t}\n");
-//        writer.write("\telse\n");
-//        writer.write("\t{\n");
-//        writer.write("\t\t/*delete any pointer members or array members of this struct here*/\n");
 //        for (int i = 0; i < attribs.length; i++)
 //        {
 //            if (attribs[i].isArray())
 //            {
 //                if (attribs[i].isSimpleType())
 //                {
-//                    writer.write(
-//                        "\t\tif (param->"
-//                            + attribs[i].getParamName()
-//                            + ".m_Array) free(param->"
-//                            + attribs[i].getParamName()
-//                            + ".m_Array);\n");
+//                    writer.write("\t\tif (param->" + attribs[i].getParamName()
+//                            + ".m_Array) free(param->" + attribs[i].getParamName() + ".m_Array);\n");
 //                }
 //                else
 //                {
-//                    writer.write(
-//                        "\t\tif (param->"
-//                            + attribs[i].getParamName()
-//                            + ".m_Array) Axis_Delete_"
-//                            + attribs[i].getTypeName()
-//                            + "(param->"
-//                            + attribs[i].getParamName()
-//                            + ".m_Array, true, param->"
-//                            + attribs[i].getParamName()
-//                            + ".m_Size);\n");
+//                    writer.write("\t\tif (param->" + attribs[i].getParamName()
+//                            + ".m_Array) Axis_Delete_" + attribs[i].getTypeName()
+//                            + "(param->" + attribs[i].getParamName()
+//                            + ".m_Array, true, param->" + attribs[i].getParamName() + ".m_Size);\n");
 //                }
 //            }
-//            else
-//                if (attribs[i].isAnyType())
+//            else if (attribs[i].isAnyType())
 //                {
-//                    writer.write(
-//                        "\t\tif (param->"
-//                            + attribs[i].getParamName()
-//                            + ") \n\t\t{ \n");
-//                    writer.write(
-//                        "\t\t\tfor (i=0; i<param->"
-//                            + attribs[i].getParamName()
+//                    writer.write("\t\tif (param->" + attribs[i].getParamName() + ") \n\t\t{ \n");
+//                    writer.write("\t\t\tfor (i=0; i<param->" + attribs[i].getParamName()
 //                            + "->_size; i++)\n\t\t\t{\n");
-//                    writer.write(
-//                        "\t\t\t\tif (param->"
-//                            + attribs[i].getParamName()
-//                            + "->_array[i]) free(param->"
-//                            + attribs[i].getParamName()
-//                            + "->_array[i]);\n");
+//                    writer.write("\t\t\t\tif (param->"
+//                            + attribs[i].getParamName() "->_array[i]) free(param->"
+//                            + attribs[i].getParamName() + "->_array[i]);\n");
 //                    writer.write("\t\t\t}\n");
-//                    writer.write(
-//                        "\t\t\tfree(param->"
-//                            + attribs[i].getParamName()
-//                            + ");\n");
+//                    writer.write("\t\t\tfree(param->" + attribs[i].getParamName() + ");\n");
 //                    writer.write("\t\t}\n");
 //                }
-//                else
-//                    if (!attribs[i].isSimpleType())
+//                else if (!attribs[i].isSimpleType())
 //                    {
-//                        writer.write(
-//                            "\t\tif (param->"
-//                                + attribs[i].getParamName()
-//                                + ") Axis_Delete_"
-//                                + attribs[i].getTypeName()
-//                                + "(param->"
-//                                + attribs[i].getParamName()
-//                                + ", false, 0);\n");
+//                        writer.write("\t\tif (param->" + attribs[i].getParamName()
+//                                + ") Axis_Delete_" + attribs[i].getTypeName()
+//                                + "(param->" + attribs[i].getParamName() + ", false, 0);\n");
 //                    }
-//                    else
-//                        if ("xsdc__string".equals(attribs[i].getTypeName()))
+//                    else if ("xsdc__string".equals(attribs[i].getTypeName()))
 //                        {
-//                            writer.write(
-//                                "\t\tif(param->"
-//                                    + attribs[i].getParamName()
-//                                    + ") free(param->"
-//                                    + attribs[i].getParamName()
-//                                    + ");\n");
+//                            writer.write("\t\tif(param->" + attribs[i].getParamName()
+//                                    + ") free(param->" + attribs[i].getParamName() + ");\n");
 //                        }
-//                        else
-//                            if ("xsdc__base64Binary"
-//                                .equals(attribs[i].getTypeName()))
-//                            {
-//                                writer.write(
-//                                    "\t\tif(param->"
-//                                        + attribs[i].getParamName()
-//                                        + ".__ptr) free(param->"
-//                                        + attribs[i].getParamName()
-//                                        + ".__ptr);\n");
-//                            }
-//                            else
-//                                if ("xsdc__hexBinary"
-//                                    .equals(attribs[i].getTypeName()))
-//                                {
-//                                    writer.write(
-//                                        "\t\tif(param->"
-//                                            + attribs[i].getParamName()
-//                                            + ".__ptr) free(param->"
-//                                            + attribs[i].getParamName()
-//                                            + ".__ptr);\n");
-//                                }
-//                                else
-//                                    if (attribs[i].isOptional())
-//                                    {
+//                        else if ("xsdc__base64Binary".equals(attribs[i].getTypeName())
+//                                 "xsdc__hexBinary" .equals(attribs[i].getTypeName()))
+//                        {
+//                            writer.write("\t\tif(param->" + attribs[i].getParamName()
+//                                    + ".__ptr) free(param->" + attribs[i].getParamName() + ".__ptr);\n");
+//                        }
+//                        else if (attribs[i].isOptional())
+//                        {
 //                                        //TODO
-//                                    }
+//                        }
 //        }
-//        writer.write("\t\tfree(param);\n");
-//        writer.write("\t}\n");
-//        writer.write("}\n");
-//    }    
     
     /**
      * @throws WrapperFault
