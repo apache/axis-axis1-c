@@ -88,84 +88,91 @@ int axiscAxisDelete(void * pValue,
     
     try 
     {
-	    if (pValue == NULL)
-	        return rc;
-	        
-	    // There are some types we cannot pass to C++ engine
-	    switch (type)
-	    {
-	        case XSDC_DURATION:
-	        case XSDC_DATETIME:
-	        case XSDC_TIME:
-	        case XSDC_DATE:
-	        case XSDC_GYEARMONTH:
-	        case XSDC_GYEAR:
-	        case XSDC_GMONTHDAY:
-	        case XSDC_GDAY:
-	        case XSDC_GMONTH:
-	        case XSDC_STRING:
-	        case XSDC_NORMALIZEDSTRING:
-	        case XSDC_TOKEN:
-	        case XSDC_LANGUAGE:
-	        case XSDC_NAME:
-	        case XSDC_NCNAME:
-	        case XSDC_ID:
-	        case XSDC_IDREF:
-	        case XSDC_IDREFS:
-	        case XSDC_ENTITY:
-	        case XSDC_ENTITIES:
-	        case XSDC_NMTOKEN:
-	        case XSDC_NMTOKENS:
-	        case XSDC_BOOLEAN:
-	        case XSDC_FLOAT:
-	        case XSDC_DECIMAL:
-	        case XSDC_NONPOSITIVEINTEGER:
-	        case XSDC_NEGATIVEINTEGER:
-	        case XSDC_INTEGER:
-	        case XSDC_LONG:
-	        case XSDC_INT:
-	        case XSDC_SHORT:
-	        case XSDC_BYTE:
-	        case XSDC_NONNEGATIVEINTEGER:
-	        case XSDC_UNSIGNEDLONG:
-	        case XSDC_UNSIGNEDINT:
-	        case XSDC_UNSIGNEDSHORT:
-	        case XSDC_UNSIGNEDBYTE:
-	        case XSDC_POSITIVEINTEGER:
-	        case XSDC_DOUBLE:
-	        case XSDC_ANYURI:
-	        case XSDC_QNAME:
-	        case XSDC_NOTATION:
-	        case C_USER_TYPE:
-	        case XSDC_ANY:
-	        case C_ATTACHMENT:
-	        case XSDC_UNKNOWN:
-	        {
-	            Axis::AxisDelete(pValue, (XSDTYPE) type);
-	            break;
-	        }
-	        case XSDC_ARRAY:
-	        {
-	            // TODO delete array elements if simple types
-	            delete (Axisc_Array*) pValue;
-	            break;
-	        }
-	        case XSDC_BASE64BINARY:
-	        {
-	            // TODO delete elements?	        
-	            delete (xsdc__base64Binary*) pValue;
-	            break;
-	        }
-	        case XSDC_HEXBINARY:
-	        {
-	            // TODO delete elements?	        
-	            delete (xsdc__hexBinary*) pValue;
-	            break;
-	        }
-	        
-	        default:
-	            ;
-	    }
+        if (pValue == NULL)
+            return rc;
+            
+        // There are some types we cannot pass to C++ engine
+        switch (type)
+        {
+            case XSDC_DURATION:
+            case XSDC_DATETIME:
+            case XSDC_TIME:
+            case XSDC_DATE:
+            case XSDC_GYEARMONTH:
+            case XSDC_GYEAR:
+            case XSDC_GMONTHDAY:
+            case XSDC_GDAY:
+            case XSDC_GMONTH:
+            case XSDC_STRING:
+            case XSDC_NORMALIZEDSTRING:
+            case XSDC_TOKEN:
+            case XSDC_LANGUAGE:
+            case XSDC_NAME:
+            case XSDC_NCNAME:
+            case XSDC_ID:
+            case XSDC_IDREF:
+            case XSDC_IDREFS:
+            case XSDC_ENTITY:
+            case XSDC_ENTITIES:
+            case XSDC_NMTOKEN:
+            case XSDC_NMTOKENS:
+            case XSDC_BOOLEAN:
+            case XSDC_FLOAT:
+            case XSDC_DECIMAL:
+            case XSDC_NONPOSITIVEINTEGER:
+            case XSDC_NEGATIVEINTEGER:
+            case XSDC_INTEGER:
+            case XSDC_LONG:
+            case XSDC_INT:
+            case XSDC_SHORT:
+            case XSDC_BYTE:
+            case XSDC_NONNEGATIVEINTEGER:
+            case XSDC_UNSIGNEDLONG:
+            case XSDC_UNSIGNEDINT:
+            case XSDC_UNSIGNEDSHORT:
+            case XSDC_UNSIGNEDBYTE:
+            case XSDC_POSITIVEINTEGER:
+            case XSDC_DOUBLE:
+            case XSDC_ANYURI:
+            case XSDC_QNAME:
+            case XSDC_NOTATION:
+            case C_USER_TYPE:
+            case XSDC_ANY:
+            case C_ATTACHMENT:
+            case XSDC_UNKNOWN:
+            {
+                Axis::AxisDelete(pValue, (XSDTYPE) type);
+                break;
+            }
+            case XSDC_ARRAY:
+            {
+                Axisc_Array *array = (Axisc_Array*)pValue;
+                
+                // Delete array elements via recursion
+                for (int i=0; i<array->m_Size; ++i)
+                    if (array->m_Array[i])
+                        axiscAxisDelete(array->m_Array[i], array->m_Type);
+
+                // Delete array
+                delete (Axisc_Array*) pValue;
+                break;
+            }
+            case XSDC_BASE64BINARY:
+            {
+                // TODO delete elements?            
+                delete (xsdc__base64Binary*) pValue;
+                break;
+            }
+            case XSDC_HEXBINARY:
+            {
+                // TODO delete elements?            
+                delete (xsdc__hexBinary*) pValue;
+                break;
+            }
+            
+            default:
+                ;
+        }
     }
     catch ( AxisException& e  )
     {
@@ -188,9 +195,9 @@ void *axiscAxisNew(AXISC_XSDTYPE type, int size)
     void *retVal=NULL;
     
     try 
-    {	        
-	    switch (type)
-	    {
+    {            
+        switch (type)
+        {
             case XSDC_DURATION:
             {
                 retVal = new xsd__duration();
@@ -274,7 +281,7 @@ void *axiscAxisNew(AXISC_XSDTYPE type, int size)
                 xsdc__hexBinary *hexbin = new xsdc__hexBinary();
                 hexbin->__size=0;
                 hexbin->__ptr=NULL;
- 				retVal = hexbin;
+                 retVal = hexbin;
                 break;
             }
             case XSDC_FLOAT:
@@ -372,7 +379,7 @@ void *axiscAxisNew(AXISC_XSDTYPE type, int size)
             case C_ATTACHMENT:
             default:
                 break;
-	    }
+        }
     }
     catch ( ... )
     {

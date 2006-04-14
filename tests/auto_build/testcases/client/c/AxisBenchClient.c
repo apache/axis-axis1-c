@@ -108,7 +108,7 @@ int main(int argc, char* argv[])
 
     arrayIn.m_Array = ppBBDT;
     arrayIn.m_Size  = input->count;
-    arrayIn.m_Type  = USER_TYPE;
+    arrayIn.m_Type  = C_USER_TYPE;
     
     input->infos =  &arrayIn;
     
