@@ -745,9 +745,8 @@ public class BeanParamWriter extends ParamCPPFileWriter
 
         
         writer.write("\n\tif (!bArray && blnIsNewPrefix)\n");
-        writer.write("\t{\n");
         writer.write("\t\tpSZ->removeNamespacePrefix(Axis_URI_" + classname + ");\n");
-        writer.write("\t}\n\n");
+        writer.write("\n");
         
         writer.write("\treturn AXIS_SUCCESS;\n");
         writer.write("}\n\n");
@@ -992,19 +991,17 @@ public class BeanParamWriter extends ParamCPPFileWriter
                         {
                             writer.write("\t" + typeName + "    pValue" + i + " = pIWSDZ->" +
                                     CUtils.getParameterGetValueMethodName(baseTypeName, attribs[i].isAttribute()) +
-                                    "( \"" + soapTagName + "\", 0);\n\n");
+                                    "( \"" + soapTagName + "\", 0);\n");
                         }
                         else
                         {
                             writer.write("\t\t\t" + typeName + " *    pValue" + i + " = pIWSDZ->" +
                                     CUtils.getParameterGetValueMethodName(baseTypeName, attribs[i].isAttribute()) +
-                                    "( \"" + soapTagName + "\", 0);\n\n");
+                                    "( \"" + soapTagName + "\", 0);\n");
                         }
                         
                         writer.write( "\t\t\tif( pValue" + i + " == NULL)\n");
-                        writer.write( "\t\t\t{\n");
                         writer.write("\t\t\t\tparam->" + elementName + " = NULL;\n");
-                        writer.write( "\t\t\t}\n");
                         writer.write( "\t\t\telse\n");
                         writer.write( "\t\t\t{\n");
                         
@@ -1015,7 +1012,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                         writer.write("\t\t\t\tparam->set" + localElemName + " (pValue" + i + ");\n");
                         writer.write("\t\t\t\tAxis::AxisDelete( (void *) pValue" + i + ", " 
                                 + CUtils.getXSDTypeForBasicType( baseTypeName) + ");\n\n");
-                        writer.write( "\t\t\t}\n");
+                        writer.write( "\t\t\t}\n\n");
                     }
                 } 
                 else if (attribs[i].getChoiceElement() || attribs[i].getAllElement())
@@ -1051,9 +1048,8 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 {
                     writer.write("\t\t\t}\n");
                     writer.write("\t\telse\n");
-                    writer.write("\t\t{\n");
                     writer.write("\t\t\tparam->" + attribs[i].getParamNameAsMember() + " = NULL;\n");
-                    writer.write("\t\t}\n\n");
+                    writer.write("\n");
                 }
             }
             else
@@ -1088,9 +1084,8 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 {
                     writer.write("\t}\n");
                     writer.write("\telse\n");
-                    writer.write("\t{\n");
                     writer.write("\t\tparam->" + attribs[i].getParamNameAsMember() + " = NULL;\n");
-                    writer.write("\t}\n\n");
+                    writer.write("\n");
                 }
             }
 

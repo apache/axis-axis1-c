@@ -158,8 +158,7 @@ public class ClientStubWriter
                 outparamType = CUtils.getclass4qname (retType.getBaseType ());
             else
             {
-                outparamType = 
-                    WrapperUtils.getClassNameFromParamInfoConsideringArrays (returntype, wscontext);
+                outparamType = WrapperUtils.getClassNameFromParamInfoConsideringArrays (returntype, wscontext);
                 returntypeisarray = (outparamType.lastIndexOf ("_Array") > 0);
             }
             
@@ -374,29 +373,29 @@ public class ClientStubWriter
             //TODO initialize return parameter appropriately.
         }
         
-        writer.write ("\tconst char* pcCmplxFaultName;\n");
-        writer.write ("\tpcCmplxFaultName = NULL;\n");
-        writer.write ("\ttry\n\t{");
+        writer.write ("\tconst char* pcCmplxFaultName = NULL;\n");
+        writer.write ("\ttry\n\t{\n");
     
         writer.write("\tif (AXIS_SUCCESS != m_pCall->initialize(CPP_DOC_PROVIDER" + ")) return ");
         if (returntype != null)
-            writer.write ((returntypeisarray ? "RetArray" : returntypeissimple ? "Ret" : "pReturn") + ";\n\t");
+            writer.write ((returntypeisarray ? "RetArray" : returntypeissimple ? "Ret" : "pReturn") + ";\n");
         else
             writer.write (";\n");
+        writer.write ("\n");
         
         writer.write ("\tif (NULL==m_pCall->getTransportProperty(\"SOAPAction\",false))\n");
-        writer.write ("\t{\n");
         writer.write ("\t\tm_pCall->setTransportProperty(SOAPACTION_HEADER , \""
                + minfo.getSoapAction () + "\");\n");
-        writer.write ("\t}\n");
+        writer.write("\n");
+        
         writer.write ("\tm_pCall->setSOAPVersion(SOAP_VER_1_1);\n");
         //TODO check which version is it really.
         
         if( minfo.getInputMessage() != null)
         {
-            writer.write( "\tm_pCall->setOperation(\"" +
-                            minfo.getInputMessage().getLocalPart() +
-                            "\", \"" + minfo.getInputMessage().getNamespaceURI() + "\");\n");
+            writer.write( "\tm_pCall->setOperation(\"" 
+                    + minfo.getInputMessage().getLocalPart() + "\", \"" 
+                    + minfo.getInputMessage().getNamespaceURI() + "\");\n");
         }
         
         // Add attributes to soap method
@@ -428,8 +427,10 @@ public class ClientStubWriter
         } // end for-loop
     
         //new calls from stub base
+        writer.write("\n");
         writer.write ("\tincludeSecure();\n");
         writer.write ("\tapplyUserPreferences();\n");
+        writer.write("\n");
     
         // Process elements
         for (int i = 0; i < paramsB.size (); i++)
@@ -450,8 +451,7 @@ public class ClientStubWriter
                 {
                     paraTypeName = type.getLanguageSpecificName ();
                     if (CUtils.isSimpleType (paraTypeName))
-                        paraTypeName =
-                            WrapperUtils.getClassNameFromParamInfoConsideringArrays(param,wscontext);
+                        paraTypeName = WrapperUtils.getClassNameFromParamInfoConsideringArrays(param,wscontext);
                     
                     typeisarray = (paraTypeName.lastIndexOf ("_Array") > 0);
                     if (!typeisarray)
@@ -583,6 +583,8 @@ public class ClientStubWriter
                 writer.write("\t}\n");
         } // end for-loop
         
+        writer.write("\n");
+        
         writer.write ("\tif (AXIS_SUCCESS == m_pCall->invoke())\n\t{\n");
         if (minfo.getOutputMessage () != null)
         {
@@ -668,20 +670,16 @@ public class ClientStubWriter
                         writer.write("\n\t\t\tif (OutValue" + i + " != NULL)\n" );
                         writer.write("\t\t\t{\n");
                         writer.write("\t\t\t\tif (" + currentParamName + " == NULL)\n");
-                        writer.write("\t\t\t\t{\n");
                         writer.write("\t\t\t\t\t" + currentParamName + " = new " + containedType + "_Array();\n");
-                        writer.write("\t\t\t\t}\n");
                         writer.write("\t\t\t\telse\n");
-                        writer.write("\t\t\t\t{\n");
                         writer.write("\t\t\t\t\t(" + currentParamName + ")->clear();\n");
-                        writer.write("\t\t\t\t}\n");
                         writer.write("\t\t\t\tm_pCall->getCmplxArray(" + currentParamName 
-                                + ", (void*) Axis_DeSerialize_" + containedType);
-                        writer.write (", (void*) Axis_Create_" + containedType
+                              + ", (void*) Axis_DeSerialize_" + containedType
+                              + ", (void*) Axis_Create_" + containedType
                               + ", (void*) Axis_Delete_" + containedType
                               + ", (void*) Axis_GetSize_" + containedType
-                              + ", \"" + currentType.getElementNameAsString () +
-                              "\", Axis_URI_" + containedType + ");\n");
+                              + ", \"" + currentType.getElementNameAsString () 
+                              + "\", Axis_URI_" + containedType + ");\n");
                         writer.write("\t\t\t}\n");
                         writer.write("\t\t\telse\n");
                         writer.write("\t\t\t{\n");
@@ -689,8 +687,8 @@ public class ClientStubWriter
                         writer.write("\t\t\t\t" + containedType + "_Array * pTemp" + i 
                                 + " = new " + containedType + "_Array();\n");
                         writer.write("\t\t\t\tm_pCall->getCmplxArray(pTemp" + i 
-                                + ", (void*) Axis_DeSerialize_" + containedType);
-                        writer.write (", (void*) Axis_Create_" + containedType
+                              + ", (void*) Axis_DeSerialize_" + containedType
+                              + ", (void*) Axis_Create_" + containedType
                               + ", (void*) Axis_Delete_" + containedType
                               + ", (void*) Axis_GetSize_" + containedType
                               + ", \"" + currentType.getElementNameAsString () 
@@ -731,9 +729,7 @@ public class ClientStubWriter
                         writer.write( "\t\t\t\t\t\tstrcpy( (char *) *OutValue" + i + ", pReturn" + i + ");\n");
                         writer.write( "\t\t\t\t\t}\n");
                         writer.write( "\t\t\t\t\telse\n");
-                        writer.write( "\t\t\t\t\t{\n");
                         writer.write( "\t\t\t\t\t\tstrcpy( (char *) *OutValue" + i + ", pReturn" + i + ");\n");
-                        writer.write( "\t\t\t\t\t}\n");
                         writer.write( "\t\t\t\t}\n");
                         writer.write( "\t\t\t\telse\n");
                         writer.write( "\t\t\t\t{\n");
@@ -974,21 +970,16 @@ public class ClientStubWriter
             writer.write ("\t\t\t{\n");
             writer.write ("\t\t\t\tdetail=m_pCall->getFaultAsXMLString();\n");
             writer.write ("\t\t\t\tif (NULL==detail)\n");
-            writer.write ("\t\t\t\t{\n");
             writer.write ("\t\t\t\t\tdetail=\"\";\n");
-            writer.write ("\t\t\t\t}\n");
             writer.write ("\t\t\t\telse\n");
-            writer.write ("\t\t\t\t{\n");
             writer.write ("\t\t\t\t\tdeleteDetail=true;\n");
-            writer.write ("\t\t\t\t}\n");
             writer.write ("\t\t\t}\n\n");
             writer.write ("\t\t\tOtherFaultException ofe(pSoapFault->getFaultcode(),\n");
             writer.write ("\t\t\t\tpSoapFault->getFaultstring(), pSoapFault->getFaultactor(),\n");
             writer.write ("\t\t\t\tdetail, iExceptionCode);\n\n");
             writer.write ("\t\t\tif (deleteDetail && NULL!=detail)\n");
-            writer.write ("\t\t\t{\n");
             writer.write ("\t\t\t\tAxis::AxisDelete( (void *) const_cast<char*>(detail), XSD_STRING);\n");
-            writer.write ("\t\t\t}\n\n");
+            writer.write ("\n");
             writer.write ("\t\t\tm_pCall->unInitialize();\n");
             writer.write ("\t\t\tdelete pSoapFault;\n");
             writer.write ("\t\t\tthrow ofe;\n");
@@ -1054,21 +1045,16 @@ public class ClientStubWriter
             writer.write ("\t\t\t\t{\n");
             writer.write ("\t\t\t\t\tdetail=m_pCall->getFaultAsXMLString();\n\n");
             writer.write ("\t\t\t\t\tif (NULL==detail)\n");
-            writer.write ("\t\t\t\t\t{\n");
             writer.write ("\t\t\t\t\t\tdetail=\"\";\n");
-            writer.write ("\t\t\t\t\t}\n");
             writer.write ("\t\t\t\t\telse\n");
-            writer.write ("\t\t\t\t\t{\n");
             writer.write ("\t\t\t\t\t\tdeleteDetail=true;\n");
-            writer.write ("\t\t\t\t\t}\n");
             writer.write ("\t\t\t\t}\n\n");
             writer.write ("\t\t\t\tOtherFaultException ofe(pSoapFault->getFaultcode(),\n");
             writer.write ("\t\t\t\t\tpSoapFault->getFaultstring(), pSoapFault->getFaultactor(),\n");
             writer.write ("\t\t\t\t\tdetail, iExceptionCode);\n\n");
             writer.write ("\t\t\t\tif (deleteDetail && NULL!=detail)\n");
-            writer.write ("\t\t\t\t{\n");
             writer.write ("\t\t\t\t\tAxis::AxisDelete( (void *) const_cast<char*>(detail), XSD_STRING);\n");
-            writer.write ("\t\t\t\t}\n\n");
+            writer.write ("\n");
             writer.write ("\t\t\t\tm_pCall->unInitialize();\n");
             writer.write ("\t\t\t\tdelete pSoapFault;\n");
             writer.write ("\t\t\t\tthrow ofe;\n");
