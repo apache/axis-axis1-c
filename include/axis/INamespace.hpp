@@ -58,7 +58,7 @@ public:
     /**
       * Sets the namespace uri of this Namespace.
       *
-      * @param uri The namespace uri to set in.
+      * @param achURI The namespace uri to set in.
       * @return AXIS_SUCCESS if successful AXIS_FAIL otherwise. NOTE: Passing NULL will result in a AXIS_SUCCESS
       * 
       */
@@ -66,7 +66,7 @@ public:
     /**
      * Sets the prefix of this Namespace.
      *
-     * @param prefix The prefix to set in.
+     * @param achPrefix The prefix to set in.
      * @return AXIS_SUCCESS if successful AXIS_FAIL otherwise. NOTE: Passing NULL will result in a AXIS_SUCCESS
      */
 	virtual int setPrefix(const AxisChar* achPrefix)=0;
