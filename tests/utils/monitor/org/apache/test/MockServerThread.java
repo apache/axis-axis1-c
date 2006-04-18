@@ -274,7 +274,8 @@ public class MockServerThread extends ChildHandler implements Runnable
             // Recalculate time for local offset
             Calendar calendar = format.getCalendar();
             Date date = calendar.getTime();
-            date.setTime(date.getTime() - calendar.getTimeZone().getRawOffset());
+//            date.setTime(date.getTime() - calendar.getTimeZone().getRawOffset());
+            date.setTime(date.getTime() - calendar.getTimeZone().getOffset(date.getTime()));
 
             // Create new string to be placed in response
             format.applyPattern("HH:mm:ss'.000Z'");
