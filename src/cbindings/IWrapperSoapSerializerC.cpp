@@ -36,7 +36,7 @@ AXIS_CPP_NAMESPACE_USE
 extern "C" {
 
 AXISC_STORAGE_CLASS_INFO 
-void axiscDestroyIWrapperSoapSerializer(AXISCHANDLE wrapperSoapSerializer) 
+void axiscSoapSerializerDestroy(AXISCHANDLE wrapperSoapSerializer) 
 {
     IWrapperSoapSerializer *sz = (IWrapperSoapSerializer*)wrapperSoapSerializer;
 
@@ -46,16 +46,16 @@ void axiscDestroyIWrapperSoapSerializer(AXISCHANDLE wrapperSoapSerializer)
     }
     catch ( AxisException& e  )
     {
-        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
     }
 }
 
 AXISC_STORAGE_CLASS_INFO 
-int axiscCreateSoapMethod(AXISCHANDLE wrapperSoapSerializer, 
+int axiscSoapSerializerCreateSoapMethod(AXISCHANDLE wrapperSoapSerializer, 
                           const AxiscChar * sLocalName, 
                           const AxiscChar * sURI) 
 {
@@ -67,18 +67,18 @@ int axiscCreateSoapMethod(AXISCHANDLE wrapperSoapSerializer,
     }
     catch ( AxisException& e  )
     {
-        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
     }
 
     return AXISC_FAIL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
-int axiscCreateSoapFault(AXISCHANDLE wrapperSoapSerializer, 
+int axiscSoapSerializerCreateSoapFault(AXISCHANDLE wrapperSoapSerializer, 
                          const AxiscChar * sLocalName, 
                          const AxiscChar * sURI, 
                          const AxiscChar * sFaultCode, 
@@ -92,11 +92,11 @@ int axiscCreateSoapFault(AXISCHANDLE wrapperSoapSerializer,
     }
     catch ( AxisException& e  )
     {
-        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
     }
 
     return AXISC_FAIL;
@@ -104,7 +104,7 @@ int axiscCreateSoapFault(AXISCHANDLE wrapperSoapSerializer,
 
 /**
 AXISC_STORAGE_CLASS_INFO 
-const AxiscChar * axiscGetNamespacePrefixIWrapperSoapSerializer(AXISCHANDLE wrapperSoapSerializer, 
+const AxiscChar * axiscSoapSerializerGetNamespacePrefix(AXISCHANDLE wrapperSoapSerializer, 
                                                                 const AxiscChar * pNamespace) 
 {
     IWrapperSoapSerializer *sz = (IWrapperSoapSerializer*)wrapperSoapSerializer;
@@ -115,11 +115,11 @@ const AxiscChar * axiscGetNamespacePrefixIWrapperSoapSerializer(AXISCHANDLE wrap
     }
     catch ( AxisException& e  )
     {
-        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
     }
     
     return (const AxiscChar *)NULL;
@@ -127,7 +127,7 @@ const AxiscChar * axiscGetNamespacePrefixIWrapperSoapSerializer(AXISCHANDLE wrap
 ***/
 
 AXISC_STORAGE_CLASS_INFO 
-const AxiscChar * axiscGetNamespacePrefixIWrapperSoapSerializer(AXISCHANDLE wrapperSoapSerializer, 
+const AxiscChar * axiscSoapSerializerGetNamespacePrefix(AXISCHANDLE wrapperSoapSerializer, 
                                                                 const AxiscChar * pNamespace,
                                                                 AxiscBool * blnIsNewPrefix) 
 {
@@ -142,18 +142,18 @@ const AxiscChar * axiscGetNamespacePrefixIWrapperSoapSerializer(AXISCHANDLE wrap
     }
     catch ( AxisException& e  )
     {
-        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
     }
     
     return (const AxiscChar *)NULL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
-void axiscRemoveNamespacePrefix(AXISCHANDLE wrapperSoapSerializer, 
+void axiscSoapSerializerRemoveNamespacePrefix(AXISCHANDLE wrapperSoapSerializer, 
                                 const AxiscChar * pNamespace) 
 {
     IWrapperSoapSerializer *sz = (IWrapperSoapSerializer*)wrapperSoapSerializer;
@@ -164,16 +164,16 @@ void axiscRemoveNamespacePrefix(AXISCHANDLE wrapperSoapSerializer,
     }
     catch ( AxisException& e  )
     {
-        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
     }
 }
 
 AXISC_STORAGE_CLASS_INFO 
-int axiscAddOutputParam(AXISCHANDLE wrapperSoapSerializer, 
+int axiscSoapSerializerAddOutputParam(AXISCHANDLE wrapperSoapSerializer, 
                         const AxiscChar * pchName, 
                         void * pValue, 
                         AXISC_XSDTYPE type) 
@@ -186,18 +186,18 @@ int axiscAddOutputParam(AXISCHANDLE wrapperSoapSerializer,
     }
     catch ( AxisException& e  )
     {
-        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
     }
 
     return AXISC_FAIL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
-int axiscAddOutputCmplxArrayParam(AXISCHANDLE wrapperSoapSerializer, 
+int axiscSoapSerializerAddOutputCmplxArrayParam(AXISCHANDLE wrapperSoapSerializer, 
                                   const Axisc_Array * pArray, 
                                   void * pSZFunct, 
                                   void * pDelFunct, 
@@ -214,18 +214,18 @@ int axiscAddOutputCmplxArrayParam(AXISCHANDLE wrapperSoapSerializer,
     }
     catch ( AxisException& e  )
     {
-        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
     }
 
     return AXISC_FAIL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
-int axiscAddOutputBasicArrayParam(AXISCHANDLE wrapperSoapSerializer, 
+int axiscSoapSerializerAddOutputBasicArrayParam(AXISCHANDLE wrapperSoapSerializer, 
                                   const Axisc_Array * pArray,
                                   AXISC_XSDTYPE nType, 
                                   const AxiscChar * pName) 
@@ -238,18 +238,18 @@ int axiscAddOutputBasicArrayParam(AXISCHANDLE wrapperSoapSerializer,
     }
     catch ( AxisException& e  )
     {
-        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
     }
 
     return AXISC_FAIL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
-int axiscAddOutputCmplxParam(AXISCHANDLE wrapperSoapSerializer, 
+int axiscSoapSerializerAddOutputCmplxParam(AXISCHANDLE wrapperSoapSerializer, 
                              void * pObject, 
                              void * pSZFunct, 
                              void * pDelFunct, 
@@ -264,18 +264,18 @@ int axiscAddOutputCmplxParam(AXISCHANDLE wrapperSoapSerializer,
     }
     catch ( AxisException& e  )
     {
-        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
     }
 
     return AXISC_FAIL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
-int axiscAddFaultDetail(AXISCHANDLE wrapperSoapSerializer, 
+int axiscSoapSerializerAddFaultDetail(AXISCHANDLE wrapperSoapSerializer, 
                         void * pObject, 
                         void * pSZFunct, 
                         void * pDelFunct, 
@@ -290,18 +290,18 @@ int axiscAddFaultDetail(AXISCHANDLE wrapperSoapSerializer,
     }
     catch ( AxisException& e  )
     {
-        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
     }
 
     return AXISC_FAIL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
-int axiscSerializeCmplxArray(AXISCHANDLE wrapperSoapSerializer, 
+int axiscSoapSerializerSerializeCmplxArray(AXISCHANDLE wrapperSoapSerializer, 
                              const Axisc_Array * pArray,
                              void * pSZFunct, 
                              void * pDelFunct, 
@@ -323,18 +323,18 @@ int axiscSerializeCmplxArray(AXISCHANDLE wrapperSoapSerializer,
     }
     catch ( AxisException& e  )
     {
-        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
     }
 
     return AXISC_FAIL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
-int axiscSerializeBasicArray(AXISCHANDLE wrapperSoapSerializer, 
+int axiscSoapSerializerSerializeBasicArray(AXISCHANDLE wrapperSoapSerializer, 
                              const Axisc_Array * pArray, 
                              const AxiscChar * pNamespace,
                              AXISC_XSDTYPE nType, 
@@ -354,18 +354,18 @@ int axiscSerializeBasicArray(AXISCHANDLE wrapperSoapSerializer,
     }
     catch ( AxisException& e  )
     {
-        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
     }
 
     return AXISC_FAIL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
-int axiscSerializeAsElement(AXISCHANDLE wrapperSoapSerializer, 
+int axiscSoapSerializerSerializeAsElement(AXISCHANDLE wrapperSoapSerializer, 
                             const AxiscChar * sName, 
                             const AxiscChar * pNamespace, 
                             void * pValue, AXISC_XSDTYPE type) 
@@ -410,18 +410,18 @@ int axiscSerializeAsElement(AXISCHANDLE wrapperSoapSerializer,
     }
     catch ( AxisException& e  )
     {
-        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
     }
     
     return AXISC_FAIL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
-int axiscSerializeAsAttribute(AXISCHANDLE wrapperSoapSerializer, 
+int axiscSoapSerializerSerializeAsAttribute(AXISCHANDLE wrapperSoapSerializer, 
                               const AxiscChar * sName, 
                               const AxiscChar * pNamespace, 
                               void * pValue, 
@@ -435,18 +435,18 @@ int axiscSerializeAsAttribute(AXISCHANDLE wrapperSoapSerializer,
     }
     catch ( AxisException& e  )
     {
-        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
     }
 
     return AXISC_FAIL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
-void axiscSerializeStartElementOfType(AXISCHANDLE wrapperSoapSerializer, 
+void axiscSoapSerializerSerializeStartElementOfType(AXISCHANDLE wrapperSoapSerializer, 
                                       const AxiscChar * pName, 
                                       const AxiscChar * pNamespace, 
                                       const AxiscChar * pPrefix) 
@@ -459,16 +459,16 @@ void axiscSerializeStartElementOfType(AXISCHANDLE wrapperSoapSerializer,
     }
     catch ( AxisException& e  )
     {
-        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
     }
 }
 
 AXISC_STORAGE_CLASS_INFO 
-void axiscSerializeEndElementOfType(AXISCHANDLE wrapperSoapSerializer, 
+void axiscSoapSerializerSerializeEndElementOfType(AXISCHANDLE wrapperSoapSerializer, 
                                     const AxiscChar * pName) 
 {
     IWrapperSoapSerializer *sz = (IWrapperSoapSerializer*)wrapperSoapSerializer;
@@ -479,16 +479,16 @@ void axiscSerializeEndElementOfType(AXISCHANDLE wrapperSoapSerializer,
     }
     catch ( AxisException& e  )
     {
-        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
     }
 }
 
 AXISC_STORAGE_CLASS_INFO 
-AXISC_PROVIDERTYPE axiscGetCurrentProviderType(AXISCHANDLE wrapperSoapSerializer) 
+AXISC_PROVIDERTYPE axiscSoapSerializerGetCurrentProviderType(AXISCHANDLE wrapperSoapSerializer) 
 {
     IWrapperSoapSerializer *sz = (IWrapperSoapSerializer*)wrapperSoapSerializer;
 
@@ -498,18 +498,18 @@ AXISC_PROVIDERTYPE axiscGetCurrentProviderType(AXISCHANDLE wrapperSoapSerializer
     }
     catch ( AxisException& e  )
     {
-        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
     }
     
     return ::UNKNOWN_PROVIDER;
 }
 
 AXISC_STORAGE_CLASS_INFO 
-void axiscSetCurrentProviderType(AXISCHANDLE wrapperSoapSerializer, 
+void axiscSoapSerializerSetCurrentProviderType(AXISCHANDLE wrapperSoapSerializer, 
                                  AXISC_PROVIDERTYPE nType) 
 {
     IWrapperSoapSerializer *sz = (IWrapperSoapSerializer*)wrapperSoapSerializer;
@@ -520,16 +520,16 @@ void axiscSetCurrentProviderType(AXISCHANDLE wrapperSoapSerializer,
     }
     catch ( AxisException& e  )
     {
-        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
     }
 }
 
 AXISC_STORAGE_CLASS_INFO 
-int axiscAddOutputAnyObject(AXISCHANDLE wrapperSoapSerializer, 
+int axiscSoapSerializerAddOutputAnyObject(AXISCHANDLE wrapperSoapSerializer, 
                             AxiscAnyType * pAnyObject) 
 {
     IWrapperSoapSerializer *sz = (IWrapperSoapSerializer*)wrapperSoapSerializer;
@@ -540,18 +540,18 @@ int axiscAddOutputAnyObject(AXISCHANDLE wrapperSoapSerializer,
     }
     catch ( AxisException& e  )
     {
-        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
     }
 
     return AXISC_FAIL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
-int axiscSerializeAnyObject(AXISCHANDLE wrapperSoapSerializer, 
+int axiscSoapSerializerSerializeAnyObject(AXISCHANDLE wrapperSoapSerializer, 
                             AxiscAnyType * pAnyObject) 
 {
     IWrapperSoapSerializer *sz = (IWrapperSoapSerializer*)wrapperSoapSerializer;
@@ -562,18 +562,18 @@ int axiscSerializeAnyObject(AXISCHANDLE wrapperSoapSerializer,
     }
     catch ( AxisException& e  )
     {
-        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
     }
 
     return AXISC_FAIL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
-int axiscSerializeAsChardata(AXISCHANDLE wrapperSoapSerializer, 
+int axiscSoapSerializerSerializeAsChardata(AXISCHANDLE wrapperSoapSerializer, 
                              void * pValue, 
                              AXISC_XSDTYPE type) 
 {
@@ -585,18 +585,18 @@ int axiscSerializeAsChardata(AXISCHANDLE wrapperSoapSerializer,
     }
     catch ( AxisException& e  )
     {
-        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
     }
 
     return AXISC_FAIL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
-void axiscAddAttachment(AXISCHANDLE wrapperSoapSerializer, 
+void axiscSoapSerializerAddAttachment(AXISCHANDLE wrapperSoapSerializer, 
                         const AxiscChar * achId, 
                         AXISCHANDLE objAttach) 
 {
@@ -608,16 +608,16 @@ void axiscAddAttachment(AXISCHANDLE wrapperSoapSerializer,
     }
     catch ( AxisException& e  )
     {
-        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
     }
 }
 
 AXISC_STORAGE_CLASS_INFO 
-void axiscAddAttachmentBody(AXISCHANDLE wrapperSoapSerializer, 
+void axiscSoapSerializerAddAttachmentBody(AXISCHANDLE wrapperSoapSerializer, 
                             const AxiscChar * achId, 
                             xsdc__base64Binary * pAttchBody) 
 {
@@ -629,16 +629,16 @@ void axiscAddAttachmentBody(AXISCHANDLE wrapperSoapSerializer,
     }
     catch ( AxisException& e  )
     {
-        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
     }
 }
 
 AXISC_STORAGE_CLASS_INFO 
-void axiscAddAttachmentHeader(AXISCHANDLE wrapperSoapSerializer, 
+void axiscSoapSerializerAddAttachmentHeader(AXISCHANDLE wrapperSoapSerializer, 
                               const AxiscChar * achId, 
                               const AxiscChar * achHeaderName, 
                               const AxiscChar * achHeaderValue) 
@@ -651,16 +651,16 @@ void axiscAddAttachmentHeader(AXISCHANDLE wrapperSoapSerializer,
     }
     catch ( AxisException& e  )
     {
-        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
     }
 }
 
 AXISC_STORAGE_CLASS_INFO 
-AXISCHANDLE axiscCreateSoapAttachmentSoapAttachment(AXISCHANDLE wrapperSoapSerializer) 
+AXISCHANDLE axiscSoapSerializerCreateSoapAttachmentSoapAttachment(AXISCHANDLE wrapperSoapSerializer) 
 {
     IWrapperSoapSerializer *sz = (IWrapperSoapSerializer*)wrapperSoapSerializer;
 
@@ -670,17 +670,17 @@ AXISCHANDLE axiscCreateSoapAttachmentSoapAttachment(AXISCHANDLE wrapperSoapSeria
     }
     catch ( AxisException& e  )
     {
-        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
     }
 
     return (AXISCHANDLE)NULL;
 }
 
-AXISC_STORAGE_CLASS_INFO void axiscSerializeIWrapperSoapSerializer(AXISCHANDLE wrapperSoapSerializer, 
+AXISC_STORAGE_CLASS_INFO void axiscSoapSerializerSerialize(AXISCHANDLE wrapperSoapSerializer, 
                                                                    const char *pFirst, 
                                                                    ...) 
 {
@@ -698,11 +698,11 @@ AXISC_STORAGE_CLASS_INFO void axiscSerializeIWrapperSoapSerializer(AXISCHANDLE w
     }
     catch ( AxisException& e  )
     {
-        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
     }
 }
 

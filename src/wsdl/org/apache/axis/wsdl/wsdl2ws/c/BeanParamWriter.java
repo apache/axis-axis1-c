@@ -96,12 +96,12 @@ public class BeanParamWriter extends ParamCFileWriter
         
         if (attribs.length == 0)
         {
-            writer.write("\taxiscSerializeIWrapperSoapSerializer(pSZ,\">\", NULL);\n");
+            writer.write("\taxiscSoapSerializerSerialize(pSZ,\">\", NULL);\n");
 
             if (extensionBaseAttrib != null)
             {
                 String typeName = extensionBaseAttrib.getTypeName();
-                writer.write("\taxiscSerializeAsChardata(pSZ,(void*)");
+                writer.write("\taxiscSoapSerializerSerializeAsChardata(pSZ,(void*)");
                 
                 if (!CUtils.isPointerType(typeName))
                     writer.write("&");
@@ -130,15 +130,15 @@ public class BeanParamWriter extends ParamCFileWriter
         writer.write("\tAxiscBool blnIsNewPrefix = xsdc_boolean_false;\n\n");
         
         writer.write("\tif ( param == NULL )\n\t{\n");
-        writer.write("\t\taxiscSerializeAsAttribute(pSZ, \"xsi:nil\", 0, (void*)&(xsdc_boolean_true), XSDC_BOOLEAN);\n");
-        writer.write("\t\taxiscSerializeIWrapperSoapSerializer(pSZ, \">\", NULL);\n");
+        writer.write("\t\taxiscSoapSerializerSerializeAsAttribute(pSZ, \"xsi:nil\", 0, (void*)&(xsdc_boolean_true), XSDC_BOOLEAN);\n");
+        writer.write("\t\taxiscSoapSerializerSerialize(pSZ, \">\", NULL);\n");
         writer.write("\t\treturn AXISC_SUCCESS;\n");
         writer.write("\t}\n\n");
 
         writer.write("\tif (!bArray)\n\t{\n");
-        writer.write("\t\tconst AxiscChar* sPrefix = axiscGetNamespacePrefixIWrapperSoapSerializer(pSZ,Axis_URI_" + classname + ", &blnIsNewPrefix);\n");
+        writer.write("\t\tconst AxiscChar* sPrefix = axiscSoapSerializerGetNamespacePrefix(pSZ,Axis_URI_" + classname + ", &blnIsNewPrefix);\n");
         writer.write("\t\tif (blnIsNewPrefix)\n\t\t{\n");
-        writer.write("\t\t\taxiscSerializeIWrapperSoapSerializer(pSZ,\" xmlns:\", sPrefix, \"=\\\"\",\n");
+        writer.write("\t\t\taxiscSoapSerializerSerialize(pSZ,\" xmlns:\", sPrefix, \"=\\\"\",\n");
         writer.write("\t\t\t\tAxis_URI_" + classname + ", \"\\\"\", NULL );\n");
         writer.write("\t\t}\n");
         writer.write("\t}\n");
@@ -179,14 +179,14 @@ public class BeanParamWriter extends ParamCFileWriter
                 if (isPointerType)
                 {
                     writer.write("\tif (0 != param->" + attribs[i].getParamNameAsMember() + ")\n");
-                    writer.write("\t\taxiscSerializeAsAttribute(pSZ,\""
+                    writer.write("\t\taxiscSoapSerializerSerializeAsAttribute(pSZ,\""
                             + soapTagName + "\", 0, (void*)(param->"
                             + attribs[i].getParamNameAsMember() + "), "
                             + CUtils.getXSDTypeForBasicType(basicType) + ");\n");
                 }
                 else
                 {
-                    writer.write("\t\taxiscSerializeAsAttribute(pSZ,\""
+                    writer.write("\t\taxiscSoapSerializerSerializeAsAttribute(pSZ,\""
                             + soapTagName
                             + "\", 0, (void*)&(param->"
                             + attribs[i].getParamNameAsMember()
@@ -211,20 +211,20 @@ public class BeanParamWriter extends ParamCFileWriter
         {
             writer.write("\tif(Axis_URI_" + classname + ")\n\t{\n");
             writer.write("\t\tAxiscBool blnIsNewPrefix = xsdc_boolean_false;\n");
-            writer.write("\t\tconst AxisChar* sPrefix = axiscGetNamespacePrefixIWrapperSoapSerializer(pSZ,Axis_URI_"
+            writer.write("\t\tconst AxisChar* sPrefix = axiscSoapSerializerGetNamespacePrefix(pSZ,Axis_URI_"
                         + classname + ", &blnIsNewPrefix);\n");
-            writer.write("\t\taxiscSerializeIWrapperSoapSerializer(pSZ, \" xmlns:\", sPrefix, \"=\\\"\",");
+            writer.write("\t\taxiscSoapSerializerSerialize(pSZ, \" xmlns:\", sPrefix, \"=\\\"\",");
             writer.write("Axis_URI_" + classname + ", \" " + " \\\"\"");
             writer.write(", NULL);\n\t}\n");
         }               
         
-        writer.write("\taxiscSerializeIWrapperSoapSerializer(pSZ, \">\", 0);\n");
+        writer.write("\taxiscSoapSerializerSerialize(pSZ, \">\", 0);\n");
         if (extensionBaseAttrib != null)
         {
             String typeName = extensionBaseAttrib.getTypeName(); 
             if( typeName != null)
             {
-                writer.write("\taxiscSerializeAsChardata(pSZ, (void*)");
+                writer.write("\taxiscSoapSerializerSerializeAsChardata(pSZ, (void*)");
                 if (!CUtils.isPointerType(typeName))
                     writer.write("&");
 
@@ -268,7 +268,7 @@ public class BeanParamWriter extends ParamCFileWriter
             if (attribs[i].isAnyType())
             {
                 anyCounter += 1;
-                writer.write("\taxiscSerializeAnyObject(pSZ, param->any" + Integer.toString(anyCounter) +");\n");
+                writer.write("\taxiscSoapSerializerSerializeAnyObject(pSZ, param->any" + Integer.toString(anyCounter) +");\n");
             } 
             else if (attribs[i].isArray())
             {
@@ -280,7 +280,7 @@ public class BeanParamWriter extends ParamCFileWriter
                     else
                         baseTypeName = attribs[i].getTypeName();
                     
-                    writer.write("\taxiscSerializeBasicArray(pSZ, (const Axisc_Array *)param->" + attribs[i].getParamName()
+                    writer.write("\taxiscSoapSerializerSerializeBasicArray(pSZ, (const Axisc_Array *)param->" + attribs[i].getParamName()
                         + ", " + namespace + ","
                         + CUtils.getXSDTypeForBasicType(baseTypeName) + ", \""
                         + attribs[i].getParamNameAsSOAPElement() + "\");\n");
@@ -294,7 +294,7 @@ public class BeanParamWriter extends ParamCFileWriter
                     else
                         namespace = "NULL";
                     
-                    writer.write("\taxiscSerializeCmplxArray(pSZ, (const Axisc_Array *)param->"
+                    writer.write("\taxiscSoapSerializerSerializeCmplxArray(pSZ, (const Axisc_Array *)param->"
                                     + attribs[i].getParamNameAsMember() + ",\n");
                     writer.write("\t\t\t\t\t\t (void*) Axis_Serialize_" + arrayType + ",\n");
                     writer.write("\t\t\t\t\t\t (void*) Axis_Delete_" + arrayType + ",\n");
@@ -317,7 +317,7 @@ public class BeanParamWriter extends ParamCFileWriter
                 
                 if (CUtils.isPointerType(baseTypeName))
                 {
-                    writer.write("\taxiscSerializeAsElement(pSZ, \""
+                    writer.write("\taxiscSoapSerializerSerializeAsElement(pSZ, \""
                             + attribs[i].getSOAPElementNameAsString()
                             + "\", " + namespace
                             + ", (void*)(param->" + attribs[i].getParamNameWithoutSymbols() + "), "
@@ -335,14 +335,14 @@ public class BeanParamWriter extends ParamCFileWriter
                             && (isElementNillable(i)))
                             && !(attribs[i].getTypeName().equals("xsdc__string")) )
                     {
-                        writer.write("\t\taxiscSerializeAsElement(pSZ, \""
+                        writer.write("\t\taxiscSoapSerializerSerializeAsElement(pSZ, \""
                                 + attribs[i].getSOAPElementNameAsString() + "\", " + namespace
                                 + ", (void*)(*(param->" + attribs[i].getParamNameWithoutSymbols()
                                 + ")), " + CUtils.getXSDTypeForBasicType(baseTypeName) + ");\n");
                     }
                     else
                     {
-                        writer.write("\t\taxiscSerializeAsElement(pSZ, \""
+                        writer.write("\t\taxiscSoapSerializerSerializeAsElement(pSZ, \""
                                 + attribs[i].getSOAPElementNameAsString() + "\", " + namespace
                                 + ", (void*)(param->" + attribs[i].getParamNameWithoutSymbols()
                                 + "), " + CUtils.getXSDTypeForBasicType(baseTypeName) + ");\n");
@@ -350,7 +350,7 @@ public class BeanParamWriter extends ParamCFileWriter
                 }                           
                 else
                 {
-                    writer.write("\taxiscSerializeAsElement(pSZ, \""
+                    writer.write("\taxiscSoapSerializerSerializeAsElement(pSZ, \""
                             + attribs[i].getSOAPElementNameAsString() + "\", " + namespace
                             + ", (void*)&(param->" + attribs[i].getParamNameWithoutSymbols()
                             + "), " + CUtils.getXSDTypeForBasicType(baseTypeName) + ");\n");
@@ -377,21 +377,21 @@ public class BeanParamWriter extends ParamCFileWriter
                 
                 if (attribs[i].getNsQualified())
                 {
-                    writer.write("\taxiscSerializeIWrapperSoapSerializer(pSZ, \"<\", axiscGetNamespacePrefixIWrapperSoapSerializer(pSZ, \""
+                    writer.write("\taxiscSoapSerializerSerialize(pSZ, \"<\", axiscSoapSerializerGetNamespacePrefix(pSZ, \""
                                     + type.getName().getNamespaceURI()
                                     + "\"), \":\", \"" + elm + "\", 0);\n");
                     writer.write("\tAxis_Serialize_" + attribs[i].getTypeName()
                             + "(param->" + attribs[i].getParamName() + ", pSZ);\n");
-                    writer.write("\taxiscSerializeIWrapperSoapSerializer(pSZ, \"</\", axiscGetNamespacePrefixIWrapperSoapSerializer(pSZ, \""
+                    writer.write("\taxiscSoapSerializerSerialize(pSZ, \"</\", axiscSoapSerializerGetNamespacePrefix(pSZ, \""
                                     + type.getName().getNamespaceURI()
                                     + "\"), \":\", \"" + elm + "\", \">\", 0);\n");
                 }
                 else
                 {
-                    writer.write("\taxiscSerializeIWrapperSoapSerializer(pSZ, \"<" + elm + "\", 0);\n");
+                    writer.write("\taxiscSoapSerializerSerialize(pSZ, \"<" + elm + "\", 0);\n");
                     writer.write("\tAxis_Serialize_" + attribs[i].getTypeName()
                             + "(param->" + attribs[i].getParamName() + ", pSZ);\n");
-                    writer.write("\taxiscSerializeIWrapperSoapSerializer(pSZ, \"</" + elm + "\", \">\", 0);\n");
+                    writer.write("\taxiscSoapSerializerSerialize(pSZ, \"</" + elm + "\", \">\", 0);\n");
                 }
                 
                 if (attribs[i].isOptional())
@@ -409,7 +409,7 @@ public class BeanParamWriter extends ParamCFileWriter
         }
 
         writer.write("\n\tif (!bArray && blnIsNewPrefix)\n");
-        writer.write("\t\taxiscRemoveNamespacePrefix(pSZ, Axis_URI_" + classname + ");\n\n");
+        writer.write("\t\taxiscSoapSerializerRemoveNamespacePrefix(pSZ, Axis_URI_" + classname + ");\n\n");
         
         writer.write("\treturn AXISC_SUCCESS;\n");
         writer.write("}\n");
@@ -432,7 +432,7 @@ public class BeanParamWriter extends ParamCFileWriter
         {
             if (extensionBaseAttrib != null)
             {
-                writer.write("\taxiscGetChardataAs(pDZ, (void*)&(param->"
+                writer.write("\taxiscSoapDeSerializerGetChardataAs(pDZ, (void*)&(param->"
                         + extensionBaseAttrib.getParamNameAsMember() + "), "
                         + CUtils.getXSDTypeForBasicType(extensionBaseAttrib.getTypeName()) + ");\n");
             }
@@ -466,7 +466,7 @@ public class BeanParamWriter extends ParamCFileWriter
             if (attribs[i].isAnyType())
             {
                 anyCounter +=1;
-                writer.write("\tparam->any" + anyCounter + " = axiscGetAnyObjectIWrapperSoapDeSerializer(pDZ);\n");
+                writer.write("\tparam->any" + anyCounter + " = axiscSoapDeSerializerGetAnyObject(pDZ);\n");
             }
             else if (attribs[i].isArray())
             {
@@ -492,7 +492,7 @@ public class BeanParamWriter extends ParamCFileWriter
                     writer.write("\t/* Deserialize array */\n");
                     writer.write("\tparam->" + attribs[i].getParamNameAsMember() 
                             + " = (" + baseTypeName + "_Array *)" 
-                            + "axiscGetBasicArrayIWrapperSoapDeSerializer(pDZ, " 
+                            + "axiscSoapDeSerializerGetBasicArray(pDZ, " 
                             + CUtils.getXSDTypeForBasicType(baseTypeName) + ", \"" 
                             + attribs[i].getParamNameAsSOAPElement() + "\",0);\n");
 
@@ -501,7 +501,7 @@ public class BeanParamWriter extends ParamCFileWriter
                 else
                 {
                     arrayType = attribs[i].getTypeName();
-                    writer.write("\taxiscGetCmplxArrayIWrapperSoapDeSerializer(pDZ,\n" 
+                    writer.write("\taxiscSoapDeSerializerGetCmplxArray(pDZ,\n" 
                             + "\t\t(Axisc_Array *)param->" + attribs[i].getParamName() + ",\n" 
                             + "\t\t(void*)Axis_DeSerialize_"  + arrayType + ",\n"
                             + "\t\t(void*)Axis_Create_"       + arrayType + ",\n"
@@ -525,7 +525,7 @@ public class BeanParamWriter extends ParamCFileWriter
                 if (attribs[i].isOptional())
                 {
                     writer.write("\n\t{\n"); // start new variable scope                    
-                    writer.write("\tconst char* elementName" + i + " = axiscPeekNextElementName(pDZ);\n");
+                    writer.write("\tconst char* elementName" + i + " = axiscSoapDeSerializerPeekNextElementName(pDZ);\n");
                     writer.write("\t\tif(strcmp(elementName" + i + ", \"" + soapTagName + "\") == 0)\n");
                     writer.write("\t\t{\n");
                 }
@@ -553,6 +553,7 @@ public class BeanParamWriter extends ParamCFileWriter
                         
                         writer.write("\t\t*(param->"
                                 + attribs[i].getParamNameAsMember() + ") = "
+                                + "axiscSoapDeSerializer" 
                                 + CUtils.getParameterGetValueMethodName(
                                         attribs[i].getTypeName(), attribs[i].isAttribute()) + "(pDZ, \""
                                 + soapTagName + "\",0);\n");
@@ -571,14 +572,16 @@ public class BeanParamWriter extends ParamCFileWriter
                         writer.write("\t{\n");  // start new scope
                         if( isPointerType)
                         {
-                            writer.write("\t" + typeName + "    pValue" + i + " = " +
-                                    CUtils.getParameterGetValueMethodName(baseTypeName, attribs[i].isAttribute()) +
+                            writer.write("\t" + typeName + "    pValue" + i + " = "
+                                    + "axiscSoapDeSerializer"
+                                    + CUtils.getParameterGetValueMethodName(baseTypeName, attribs[i].isAttribute()) +
                                     "(pDZ,\"" + soapTagName + "\", 0);\n");
                         }
                         else
                         {
-                            writer.write("\t" + typeName + " *  pValue" + i + " = " +
-                                    CUtils.getParameterGetValueMethodName(baseTypeName, attribs[i].isAttribute()) +
+                            writer.write("\t" + typeName + " *  pValue" + i + " = " 
+                                    + "axiscSoapDeSerializer"
+                                    + CUtils.getParameterGetValueMethodName(baseTypeName, attribs[i].isAttribute()) +
                                     "(pDZ, \"" + soapTagName + "\", 0);\n");
                         }
                         
@@ -599,6 +602,7 @@ public class BeanParamWriter extends ParamCFileWriter
                 {
                     writer.write("\tparam->"
                             + attribs[i].getParamNameAsMember() + " = "
+                            + "axiscSoapDeSerializer"
                             + CUtils.getParameterGetValueMethodName(
                                     attribs[i].getTypeName(), attribs[i].isAttribute()) + "(pDZ, \""
                             + soapTagName + "\",0);\n");
@@ -610,6 +614,7 @@ public class BeanParamWriter extends ParamCFileWriter
                     writer.write("\t{\n");
                     writer.write("\t" + attribs[i].getTypeName() + " * "
                         + attribs[i].getParamNameAsMember() + " = " 
+                        + "axiscSoapDeSerializer"
                         + CUtils.getParameterGetValueMethodName(attribs[i].getTypeName(), attribs[i].isAttribute()) 
                         + "(pDZ, \"" + elementNameToSearchFor + "\",0);\n");
                     
@@ -647,14 +652,14 @@ public class BeanParamWriter extends ParamCFileWriter
                 
                 if (attribs[i].isOptional())
                 {
-                    writer.write("\tconst char* elementName" + i + " = axiscPeekNextElementName(pDZ);\n");
+                    writer.write("\tconst char* elementName" + i + " = axiscSoapDeSerializerPeekNextElementName(pDZ);\n");
                     writer.write("\tif(strcmp(elementName" + i + ", \"" + soapTagName + "\") == 0)\n");
                     writer.write("\t{\n");
                 }
 
                 writer.write("\tparam->" + attribs[i].getParamNameAsMember() 
                         + " = ("  + attribs[i].getTypeName()
-                        + "*)axiscGetCmplxObjectIWrapperSoapDeSerializer(pDZ,(void*)Axis_DeSerialize_"
+                        + "*)axiscSoapDeSerializerGetCmplxObject(pDZ,(void*)Axis_DeSerialize_"
                         + attribs[i].getTypeName()
                         + "\n\t\t, (void*)Axis_Create_"
                         + attribs[i].getTypeName() + ", (void*)Axis_Delete_"
@@ -686,13 +691,13 @@ public class BeanParamWriter extends ParamCFileWriter
         if (extensionBaseAttrib != null
                 && extensionBaseAttrib.getTypeName() != null)
         {
-            writer.write("\taxiscGetChardataAs(pDZ, (void*)&(param->"
+            writer.write("\taxiscSoapDeSerializerGetChardataAs(pDZ, (void*)&(param->"
                     + extensionBaseAttrib.getParamNameAsMember() + "), "
                     + CUtils.getXSDTypeForBasicType(extensionBaseAttrib.getTypeName()) + ");\n");
         }
         
         writer.write("\t/* Return deserialization status */\n");
-        writer.write("\treturn axiscGetStatusIWrapperSoapDeSerializer(pDZ);\n");
+        writer.write("\treturn axiscSoapDeSerializerGetStatus(pDZ);\n");
         writer.write("}\n");
     }
     

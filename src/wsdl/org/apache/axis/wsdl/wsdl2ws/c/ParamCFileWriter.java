@@ -119,22 +119,15 @@ public abstract class ParamCFileWriter extends ParamWriter
             writer.write("#include <stdlib.h>\n");
             writer.write("#include <string.h>\n");
             writer.write("\n");
+            
+            writer.write("#include \"" + this.classname + CUtils.C_HEADER_SUFFIX + "\"\n");
+            writer.write("\n");
 
-            writer.write("#include <axis/Axis.h>\n");
-            writer.write("#include <axis/GDefine.h>\n");
-            writer.write("#include <axis/AxisUserAPI.h>\n");
-            writer.write("#include <axis/AxisUserAPIArrays.h>\n");
-            writer.write("#include <axis/SoapEnvVersions.h>\n");
-            writer.write("#include <axis/WSDDDefines.h>\n");
-            writer.write("#include <axis/TypeMapping.h>\n");
+            writer.write("#include <axis/client/Stub.h>\n");
+            writer.write("#include <axis/client/Call.h>\n");
             writer.write("#include <axis/AxisWrapperAPI.h>\n");
             writer.write("#include <axis/IWrapperSoapSerializer.h>\n");
             writer.write("#include <axis/IWrapperSoapDeSerializer.h>\n");
-            writer.write("#include <axis/client/Stub.h>\n");
-            writer.write("#include <axis/client/Call.h>\n");
-            writer.write("\n");
-            
-            writer.write("#include \"" + this.classname + CUtils.C_HEADER_SUFFIX + "\"\n");
             writer.write("\n");
         }
         catch (IOException e)

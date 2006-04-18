@@ -55,12 +55,12 @@ typedef enum XSDCTYPETag
  *  @class TypeMapping
  *  @brief interface for the TypeMapping class.
  */
-AXISC_STORAGE_CLASS_INFO AXISC_XSDTYPE axiscMap(const AxiscXMLCh * sType);
-AXISC_STORAGE_CLASS_INFO void axiscInitializeTypeMapping();
-AXISC_STORAGE_CLASS_INFO void axiscUninitialize();
+AXISC_STORAGE_CLASS_INFO AXISC_XSDTYPE axiscTypeMappingMap(const AxiscXMLCh * sType);
+AXISC_STORAGE_CLASS_INFO void axiscTypeMappingInitialize();
+AXISC_STORAGE_CLASS_INFO void axiscTypeMappingUninitialize();
 
-AXISC_STORAGE_CLASS_INFO AXISCHANDLE axiscCreateTypeMapping();
-AXISC_STORAGE_CLASS_INFO void axiscDestroyTypeMapping(AXISCHANDLE typeMapping);
+AXISC_STORAGE_CLASS_INFO AXISCHANDLE axiscTypeMappingCreate();
+AXISC_STORAGE_CLASS_INFO void axiscTypeMappingDestroy(AXISCHANDLE typeMapping);
 
 
 #ifdef __cplusplus

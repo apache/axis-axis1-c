@@ -3,7 +3,7 @@
     <description>CalculatorDocC</description>
     <clientLang>c</clientLang>
     <clientCode>CalculatorDocClient.c</clientCode>
-    <wsdl>CalculatorDoc.wsdl</wsdl>
+    <wsdl>CalculatorDocC.wsdl</wsdl>
     <expected>
         <output>
             CalculatorDocC.c.out

@@ -25,7 +25,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.Hashtable;
 import java.util.*;
+
 
 import org.apache.axis.tools.common.CParsingTool;
 import org.apache.axis.tools.common.Configuration;
@@ -48,9 +50,40 @@ import org.apache.axis.tools.common.Utils;
  */
 public class CBindingGenerator extends CParsingTool implements FileActor 
 {
+    private static Hashtable classMapping = new Hashtable();
+    
+    static{ 
+        classMapping.put("AxisCPPConfigDefaults",   "axiscConfigDefaults");
+        classMapping.put("AxisException",           "axiscException");
+        classMapping.put("BasicHandler",            "axiscBasicHandler");
+        classMapping.put("BasicNode",               "axiscBasicNode");
+        classMapping.put("IAttribute",              "axiscAttribute");
+        classMapping.put("IHandlerSoapDeSerializer","axiscHandlerSoapDeSerializer");
+        classMapping.put("IHandlerSoapSerializer",  "axiscHandlerSoapSerializer");
+        classMapping.put("IHeaderBlock",            "axiscHeaderBlock");
+        classMapping.put("IMessageData",            "axiscMessageData");
+        classMapping.put("INamespace",              "axiscNamespace");
+        classMapping.put("ISoapAttachment",         "axiscSoapAttachment");
+        classMapping.put("ISoapFault",              "axiscSoapFault");
+        classMapping.put("IWrapperSoapDeSerializer","axiscSoapDeSerializer");
+        classMapping.put("IWrapperSoapSerializer",  "axiscSoapSerializer");
+        classMapping.put("OtherFaultException",     "axiscOtherFaultException");
+        classMapping.put("SoapFaultException",      "axiscSoapFaultException");
+        classMapping.put("TypeMapping",             "axiscTypeMapping");
+     }
+    
     private CBindingGenerator(String[] args) throws Exception 
     {
         super(args);
+    }
+    
+    public static String getClassMapping(String theClass)
+    {
+        String val = (String)classMapping.get(theClass);
+        if (val == null)
+            val = "axisc" + theClass;
+
+        return val;
     }
 
     /**
@@ -296,9 +329,7 @@ public class CBindingGenerator extends CParsingTool implements FileActor
         String text = new String();
 
         // Look to see if this method is overloaded by another method
-        // in the same class or a different class. If methods in two 
-        // different classes happen to have the same name, then change
-        // their names. If methods are overloaded in the same class then
+        // in the same class. If methods are overloaded in the same class then
         // convert the longest method prototype to C. We should really 
         // superset the parameters in the two prototypes instead of
         // picking the longest one.
@@ -310,9 +341,7 @@ public class CBindingGenerator extends CParsingTool implements FileActor
             while (it.hasNext()) 
             {
                 Signature s = (Signature) it.next();
-                if (!s.getTrimClassName().equals(classname))
-                    sameClass = false;
-                else 
+                if (s.getTrimClassName().equals(classname))
                 {
                     int n1 = 0;
                     int n2 = 0;
@@ -326,11 +355,14 @@ public class CBindingGenerator extends CParsingTool implements FileActor
             }
         }
 
+        String classMapping = getClassMapping(classname);
+        
+        text += "AXISC_STORAGE_CLASS_INFO\n";
         if (sign.isConstructor()) 
-            text += "AXISC_STORAGE_CLASS_INFO AXISCHANDLE axiscCreate" + classname + "(";
+            text += "AXISCHANDLE " + classMapping + "Create(";
         else if (sign.isDestructor()) 
         {
-            text += "AXISC_STORAGE_CLASS_INFO void axiscDestroy" + classname + "(AXISCHANDLE ";
+            text += "void " + classMapping + "Destroy(AXISCHANDLE ";
             String prettyClass = classNamePretty(classname);
             text += Character.toLowerCase(prettyClass.charAt(0));
             text += prettyClass.substring(1);
@@ -346,17 +378,14 @@ public class CBindingGenerator extends CParsingTool implements FileActor
             if (System.getProperty("os.name").equals("OS/400"))
                 retType = retType.replaceAll("const xsdc__string","const char *");
 
-            text += "AXISC_STORAGE_CLASS_INFO " + retType + " ";
-            text += "axisc";
+            text += retType + " ";
+            text += getClassMapping(classname);
             text += Character.toUpperCase(method.charAt(0));
             text += method.substring(1);
             
             String retClass = getClassFromRetType(sign);
             if ("AXISCHANDLE".equals(retType) && -1 == method.indexOf(retClass))
                 text += retClass;
-            
-            if (!sameClass)
-                text += classname;
             
             text += "(";
 

@@ -55,14 +55,14 @@
   * @return AXISC_SUCCESS or AXISC_FAIL to indicate success or fail
   */
 AXISC_STORAGE_CLASS_INFO 
-int axiscInitializeAxis(AxiscBool bIsServer);
+int axiscAxisInitialize(AxiscBool bIsServer);
 
 /** 
   * Terminates the Axis runtime. 
   * @return AXISC_SUCCESS or AXISC_FAIL to indicate success or fail
   */
 AXISC_STORAGE_CLASS_INFO 
-int axiscTerminate();
+int axiscAxisTerminate();
 
 /**
   * Deletes storage allocated by the Axis engine, that is no longer required
@@ -97,7 +97,7 @@ void * axiscAxisNew(AXISC_XSDTYPE type, int size);
 typedef void (* AXIS_EXCEPTION_HANDLER_FUNCT)(int errorCode, const char *errorString);
 
 AXISC_STORAGE_CLASS_INFO 
-void axiscRegisterExceptionHandler(AXIS_EXCEPTION_HANDLER_FUNCT);
+void axiscAxisRegisterExceptionHandler(AXIS_EXCEPTION_HANDLER_FUNCT);
 
 /**
   * Invokes the registered exception handler. If an exception handler was not
@@ -108,7 +108,7 @@ void axiscRegisterExceptionHandler(AXIS_EXCEPTION_HANDLER_FUNCT);
   */
 
 AXISC_STORAGE_CLASS_INFO 
-void axiscInvokeExceptionHandler(int errorCode, const char *errorString);
+void axiscAxisInvokeExceptionHandler(int errorCode, const char *errorString);
 
 #ifdef __cplusplus
   }

@@ -35,7 +35,7 @@ extern "C" {
 static AXIS_EXCEPTION_HANDLER_FUNCT global_exceptionHandler = NULL;
 
 STORAGE_CLASS_INFO 
-int axiscInitializeAxis(AxiscBool bIsServer) 
+int axiscAxisInitialize(AxiscBool bIsServer) 
 {
     int rc = AXISC_SUCCESS;
     
@@ -45,12 +45,12 @@ int axiscInitializeAxis(AxiscBool bIsServer)
     }
     catch ( AxisException& e  )
     {
-        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
         rc = AXISC_FAIL;    
     }
     catch ( ... )
     {
-        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
         rc = AXISC_FAIL;
     }
     
@@ -58,7 +58,7 @@ int axiscInitializeAxis(AxiscBool bIsServer)
 } 
 
 STORAGE_CLASS_INFO 
-int axiscTerminate() 
+int axiscAxisTerminate() 
 {
     int rc = AXISC_SUCCESS;
     
@@ -68,12 +68,12 @@ int axiscTerminate()
     }
     catch ( AxisException& e  )
     {
-        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
         rc = AXISC_FAIL;    
     }
     catch ( ... )
     {
-        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
         rc = AXISC_FAIL;
     }
     
@@ -176,12 +176,12 @@ int axiscAxisDelete(void * pValue,
     }
     catch ( AxisException& e  )
     {
-        axiscInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
         rc = AXISC_FAIL;    
     }
     catch ( ... )
     {
-        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
         rc = AXISC_FAIL;
     }    
     
@@ -383,21 +383,21 @@ void *axiscAxisNew(AXISC_XSDTYPE type, int size)
     }
     catch ( ... )
     {
-        axiscInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
     }    
     
     return retVal;
 }
 
 AXISC_STORAGE_CLASS_INFO 
-void axiscRegisterExceptionHandler( AXIS_EXCEPTION_HANDLER_FUNCT fp )
+void axiscAxisRegisterExceptionHandler( AXIS_EXCEPTION_HANDLER_FUNCT fp )
 {
     global_exceptionHandler = fp;
 }
 
 
 AXISC_STORAGE_CLASS_INFO 
-void axiscInvokeExceptionHandler(int errorCode, const char *errorString)
+void axiscAxisInvokeExceptionHandler(int errorCode, const char *errorString)
 {
     if (global_exceptionHandler)
         global_exceptionHandler(errorCode, errorString);

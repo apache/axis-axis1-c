@@ -48,7 +48,7 @@ int main(int argc, char* argv[])
     int request = 1;
     
 
-    axiscRegisterExceptionHandler(exceptionHandler);
+    axiscAxisRegisterExceptionHandler(exceptionHandler);
   
     if (argc>2 && strcmp(argv[1], "-e") == 0) 
         endpoint = argv[2];   
@@ -56,7 +56,7 @@ int main(int argc, char* argv[])
     ws = get_AxisBench_stub (endpoint);
     
     /* extend transport timeout value to 60 secs */
-    axiscSetTransportTimeout(ws, 60);
+    axiscStubSetTransportTimeout(ws, 60);
 
     ppBBDT = (BenchBasicDataType **)malloc(sizeof(BenchBasicDataType *) * 100);
 

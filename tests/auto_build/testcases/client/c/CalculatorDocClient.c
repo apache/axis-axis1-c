@@ -25,7 +25,7 @@ int main(int argc, char ** argv)
     int ret = 0;
     char *uri = "http://localhost:80/axis/Calculator";
 
-    axiscRegisterExceptionHandler(exceptionHandler);
+    axiscAxisRegisterExceptionHandler(exceptionHandler);
 
     if (argc>1) 
         uri = argv[1];

@@ -71,6 +71,13 @@ public class ArrayParamWriter extends ParamWriter
             
             // include header file for datatype
             writer.write("#include \"" + classname + ".h\"\n");
+            
+            writer.write("\n");
+            writer.write("#include <axis/AxisWrapperAPI.h>\n");
+            writer.write("#include <axis/IWrapperSoapSerializer.h>\n");
+            writer.write("#include <axis/IWrapperSoapDeSerializer.h>\n");
+            writer.write("#include <axis/client/Stub.h>\n");
+            writer.write("#include <axis/client/Call.h>\n");
             writer.write("\n");
             
             this.writeMethods();

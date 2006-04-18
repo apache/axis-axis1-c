@@ -33,7 +33,7 @@ int main(int argc, char* argv[])
     xsdc__int   elements[100];
     int i;
 
-    axiscRegisterExceptionHandler(exceptionHandler);
+    axiscAxisRegisterExceptionHandler(exceptionHandler);
 
     if (argc>2 && strcmp(argv[1], "-e") == 0) 
         endpoint = argv[2];   

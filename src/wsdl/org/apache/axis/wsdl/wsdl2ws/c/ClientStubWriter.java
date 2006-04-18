@@ -127,6 +127,12 @@ public class ClientStubWriter extends CFileWriter
             
             writer.write("#include \"" + classname + CUtils.C_HEADER_SUFFIX + "\"\n");
             writer.write("\n");
+            writer.write("#include <axis/client/Stub.h>\n");
+            writer.write("#include <axis/client/Call.h>\n");
+            writer.write("#include <axis/IWrapperSoapSerializer.h>\n");
+            writer.write("#include <axis/IWrapperSoapDeSerializer.h>\n");
+
+            writer.write("\n");
         }
         catch (IOException e)
         {
