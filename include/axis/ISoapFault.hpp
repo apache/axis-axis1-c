@@ -52,7 +52,8 @@ public:
 
     virtual ~ISoapFault(){};
 
-    /** When a complex fault arrives this method can be used to
+    /** 
+      * When a complex fault arrives this method can be used to
       * get the name of that fault. This is useful because once 
       * we have the fault name we can pass the information necessary
       * to deserialize it, back to the SoapFault class.
@@ -61,53 +62,92 @@ public:
       */
     virtual const AxisChar* getCmplxFaultObjectName() = 0;
     
-    /** Once we know the complex fault name we can pass the information such as the
+    /** 
+      * Once we know the complex fault name we can pass the information such as the
       * knowledge to deserialize the complex fault by calling this method.
       *
-      * @param deserialize callback function pointer
-      * @param create callback function
-      * @param delete callback function
-      * @param name
-      * @param url
+      * @param pDZFunct deserialize callback function pointer
+      * @param pCreFunct create callback function
+      * @param pDelFunct delete callback function
+      * @param pName name
+      * @param pNamespace url
       */
     virtual void* getCmplxFaultObject(void* pDZFunct, void* pCreFunct, void* pDelFunct, 
         const AxisChar* pName, const AxisChar* pNamespace) = 0;
 
-
+    /**
+     * To retrieve a complex fault detail object
+     * 
+     *  @ return Complex fault detail object
+     */
     virtual const void* getCmplxFaultObject() = 0;
     
-    /** To retrive a simple fault detail string
+    /** 
+      * To retrieve a simple fault detail string
       *
       * @return Simple fault detail
       */
     virtual const AxisChar* getSimpleFaultDetail() = 0;
 
-    /** To retrive the soap fault code
+    /**
+      * To retrieve the soap fault code
       *
       * @return fault code
       */
     virtual const AxisChar* getFaultcode() = 0;
 
-    /** To retrive the soap fault string
+    /**
+      * To retrieve the soap fault string
       *
       * @return fault string
       */
     virtual const AxisChar* getFaultstring() = 0;
 
-    /** To retrive the soap fault actor
+    /** 
+      * To retrieve the soap fault actor
       *
       * @return fault actor
       */
     virtual const AxisChar* getFaultactor() = 0;
 
+    /**
+     * To set the soap fault code
+     * 
+     * @param sFaultcode fault code
+     * @return status
+     */
     virtual int setFaultcode(const AxisChar* sFaultcode) = 0;
 
+    /**
+     * To set the soap fault string
+     * 
+     * @param sFaultstring fault string
+     * @return status
+     */
     virtual int setFaultstring(const AxisChar* sFaultstring) = 0;
 
+    /**
+     * To set the soap fault actor
+     * 
+     * @param sFaultactor fault actor
+     * @return status
+     */
     virtual int setFaultactor(const AxisChar* sFaultactor) = 0;
 
+    /**
+     * To set the soap fault detail for simple text detail
+     * 
+     * @param sFaultdetail detail
+     * @return status
+     */
     virtual int setFaultDetail(const AxisChar* sFaultdetail) = 0;
 
+    /**
+     * To set the soap fault detail for complex detail
+     * 
+     * @param pCmplxFaultObject detail
+     * @return status
+     */
     virtual int setCmplxFaultObject(const void* pCmplxFaultObject) = 0;
 
 };
