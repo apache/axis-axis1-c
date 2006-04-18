@@ -28,6 +28,13 @@
 /* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
 /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
 
+ /**
+  * @file AxisUserAPIArrays.hpp
+  * This file contains arrays defined for the basic types declared in AxisUserAPI.hpp
+  * 
+  * 
+  * @author Adrian DIck (adrian.dick@uk.ibm.com)
+  */
 
 #include <time.h>
 #include <string.h>
@@ -39,14 +46,14 @@
 
 AXIS_CPP_NAMESPACE_START
 
- /**
-  * @file AxisUserAPIArrays.hpp
-  * This file contains arrays defined for the basic types declared in AxisUserAPI.hpp
-  * 
-  * 
-  * @author Adrian DIck (adrian.dick@uk.ibm.com)
-  */
 
+
+/**
+ * @class xsd__duration_Array
+ * 
+ * The storage class for arrays of xsd__duration
+ * 
+ */
 class STORAGE_CLASS_INFO xsd__duration_Array : public Axis_Array {
   public:
     /**
@@ -56,7 +63,7 @@ class STORAGE_CLASS_INFO xsd__duration_Array : public Axis_Array {
 
     /**
      * Copy constructor
-     * @param orginal Axis_Array to copy.
+     * @param original Axis_Array to copy.
      */
     xsd__duration_Array(const xsd__duration_Array & original);
     
@@ -76,12 +83,18 @@ class STORAGE_CLASS_INFO xsd__duration_Array : public Axis_Array {
     /**
      * Return a c-style array.
      * 
-     * @param size, this will be updated with the size of the array returned.
+     * @param size will be updated with the size of the array returned.
      * @return c-style array of pointers to the xsd_duration data.
      */
     const xsd__duration** get(int& size) const;
 };
 
+/**
+ * @class xsd__dateTime_Array
+ * 
+ * The storage class for arrays of xsd__dateTime
+ * 
+ */
 class STORAGE_CLASS_INFO xsd__dateTime_Array : public Axis_Array {
   public:
     /**
@@ -91,7 +104,7 @@ class STORAGE_CLASS_INFO xsd__dateTime_Array : public Axis_Array {
 
     /**
      * Copy constructor
-     * @param orginal Axis_Array to copy.
+     * @param original Axis_Array to copy.
      */
     xsd__dateTime_Array(const xsd__dateTime_Array & original);
     
@@ -111,12 +124,18 @@ class STORAGE_CLASS_INFO xsd__dateTime_Array : public Axis_Array {
     /**
      * Return a c-style array.
      * 
-     * @param size, this will be updated with the size of the array returned.
+     * @param size will be updated with the size of the array returned.
      * @return c-style array of pointers to the xsd_duration data.
      */
     const xsd__dateTime** get(int& size) const;
 };
 
+/**
+ * @class xsd__time_Array
+ * 
+ * The storage class for arrays of xsd__time
+ * 
+ */
 class STORAGE_CLASS_INFO xsd__time_Array : public Axis_Array {
   public:
     /**
@@ -126,7 +145,7 @@ class STORAGE_CLASS_INFO xsd__time_Array : public Axis_Array {
 
     /**
      * Copy constructor
-     * @param orginal Axis_Array to copy.
+     * @param original Axis_Array to copy.
      */
     xsd__time_Array(const xsd__time_Array & original);
         
@@ -146,12 +165,18 @@ class STORAGE_CLASS_INFO xsd__time_Array : public Axis_Array {
     /**
      * Return a c-style array.
      * 
-     * @param size, this will be updated with the size of the array returned.
+     * @param size will be updated with the size of the array returned.
      * @return c-style array of pointers to the xsd_duration data.
      */
     const xsd__time** get(int& size) const;
 };
 
+/**
+ * @class xsd__date_Array
+ * 
+ * The storage class for arrays of xsd__date
+ * 
+ */
 class STORAGE_CLASS_INFO xsd__date_Array : public Axis_Array {
   public:
     /**
@@ -161,7 +186,7 @@ class STORAGE_CLASS_INFO xsd__date_Array : public Axis_Array {
 
     /**
      * Copy constructor
-     * @param orginal Axis_Array to copy.
+     * @param original Axis_Array to copy.
      */
     xsd__date_Array(const xsd__date_Array & original);
         
@@ -181,12 +206,18 @@ class STORAGE_CLASS_INFO xsd__date_Array : public Axis_Array {
     /**
      * Return a c-style array.
      * 
-     * @param size, this will be updated with the size of the array returned.
+     * @param size will be updated with the size of the array returned.
      * @return c-style array of pointers to the xsd_duration data.
      */
     const xsd__date** get(int& size) const;
 };
 
+/**
+ * @class xsd__gYearMonth_Array
+ * 
+ * The storage class for arrays of xsd__gYearMonth
+ * 
+ */
 class STORAGE_CLASS_INFO xsd__gYearMonth_Array : public Axis_Array {
   public:
     /**
@@ -196,7 +227,7 @@ class STORAGE_CLASS_INFO xsd__gYearMonth_Array : public Axis_Array {
 
     /**
      * Copy constructor
-     * @param orginal Axis_Array to copy.
+     * @param original Axis_Array to copy.
      */
     xsd__gYearMonth_Array(const xsd__gYearMonth_Array & original);
         
@@ -217,12 +248,18 @@ class STORAGE_CLASS_INFO xsd__gYearMonth_Array : public Axis_Array {
     /**
      * Return a c-style array.
      * 
-     * @param size, this will be updated with the size of the array returned.
+     * @param size will be updated with the size of the array returned.
      * @return c-style array of pointers to the xsd_duration data.
      */
     const xsd__gYearMonth** get(int& size) const;
 };
 
+/**
+ * @class xsd__gYear_Array
+ * 
+ * The storage class for arrays of xsd__gYear
+ * 
+ */
 class STORAGE_CLASS_INFO xsd__gYear_Array : public Axis_Array {
   public:
     /**
@@ -232,7 +269,7 @@ class STORAGE_CLASS_INFO xsd__gYear_Array : public Axis_Array {
 
     /**
      * Copy constructor
-     * @param orginal Axis_Array to copy.
+     * @param original Axis_Array to copy.
      */
     xsd__gYear_Array(const xsd__gYear_Array & original);
         
@@ -252,12 +289,18 @@ class STORAGE_CLASS_INFO xsd__gYear_Array : public Axis_Array {
     /**
      * Return a c-style array.
      * 
-     * @param size, this will be updated with the size of the array returned.
+     * @param size will be updated with the size of the array returned.
      * @return c-style array of pointers to the xsd_duration data.
      */
     const xsd__gYear** get(int& size) const;
 };
 
+/**
+ * @class xsd__gMonthDay_Array
+ * 
+ * The storage class for arrays of xsd__gMonthDay
+ * 
+ */
 class STORAGE_CLASS_INFO xsd__gMonthDay_Array : public Axis_Array {
   public:
     /**
@@ -267,7 +310,7 @@ class STORAGE_CLASS_INFO xsd__gMonthDay_Array : public Axis_Array {
 
     /**
      * Copy constructor
-     * @param orginal Axis_Array to copy.
+     * @param original Axis_Array to copy.
      */
     xsd__gMonthDay_Array(const xsd__gMonthDay_Array & original);
         
@@ -287,12 +330,17 @@ class STORAGE_CLASS_INFO xsd__gMonthDay_Array : public Axis_Array {
     /**
      * Return a c-style array.
      * 
-     * @param size, this will be updated with the size of the array returned.
+     * @param size will be updated with the size of the array returned.
      * @return c-style array of pointers to the xsd_duration data.
      */
     const xsd__gMonthDay** get(int& size) const;
 };
-
+/**
+ * @class xsd__gDay_Array
+ * 
+ * The storage class for arrays of xsd__gDay
+ * 
+ */
 class STORAGE_CLASS_INFO xsd__gDay_Array : public Axis_Array {
   public:
     /**
@@ -302,7 +350,7 @@ class STORAGE_CLASS_INFO xsd__gDay_Array : public Axis_Array {
 
     /**
      * Copy constructor
-     * @param orginal Axis_Array to copy.
+     * @param original Axis_Array to copy.
      */
     xsd__gDay_Array(const xsd__gDay_Array & original);
         
@@ -322,12 +370,18 @@ class STORAGE_CLASS_INFO xsd__gDay_Array : public Axis_Array {
     /**
      * Return a c-style array.
      * 
-     * @param size, this will be updated with the size of the array returned.
+     * @param size will be updated with the size of the array returned.
      * @return c-style array of pointers to the xsd_duration data.
      */
     const xsd__gDay** get(int& size) const;
 };
 
+/**
+ * @class xsd__gMonth_Array
+ * 
+ * The storage class for arrays of xsd__gMonth
+ * 
+ */
 class STORAGE_CLASS_INFO xsd__gMonth_Array : public Axis_Array {
   public:
     /**
@@ -337,7 +391,7 @@ class STORAGE_CLASS_INFO xsd__gMonth_Array : public Axis_Array {
 
     /**
      * Copy constructor
-     * @param orginal Axis_Array to copy.
+     * @param original Axis_Array to copy.
      */
     xsd__gMonth_Array(const xsd__gMonth_Array & original);
         
@@ -357,12 +411,18 @@ class STORAGE_CLASS_INFO xsd__gMonth_Array : public Axis_Array {
     /**
      * Return a c-style array.
      * 
-     * @param size, this will be updated with the size of the array returned.
+     * @param size will be updated with the size of the array returned.
      * @return c-style array of pointers to the xsd_duration data.
      */
     const xsd__gMonth** get(int& size) const;
 };
 
+/**
+ * @class xsd__string_Array
+ * 
+ * The storage class for arrays of xsd__string
+ * 
+ */
 class STORAGE_CLASS_INFO xsd__string_Array : public Axis_Array {
   public:
     /**
@@ -392,12 +452,18 @@ class STORAGE_CLASS_INFO xsd__string_Array : public Axis_Array {
     /**
      * Return a c-style array.
      * 
-     * @param size, this will be updated with the size of the array returned.
+     * @param size will be updated with the size of the array returned.
      * @return c-style array of pointers to the xsd__string data.
      */
     const xsd__string* get(int& size) const;
 };
 
+/**
+ * @class xsd__normalizedString_Array
+ * 
+ * The storage class for arrays of xsd__normalizedString
+ * 
+ */
 class STORAGE_CLASS_INFO xsd__normalizedString_Array : public Axis_Array {
   public:
     /**
@@ -427,12 +493,18 @@ class STORAGE_CLASS_INFO xsd__normalizedString_Array : public Axis_Array {
     /**
      * Return a c-style array.
      * 
-     * @param size, this will be updated with the size of the array returned.
+     * @param size will be updated with the size of the array returned.
      * @return c-style array of pointers to the xsd__normalizedString data.
      */
     const xsd__normalizedString* get(int& size) const;
 };
 
+/**
+ * @class xsd__token_Array
+ * 
+ * The storage class for arrays of xsd__token
+ * 
+ */
 class STORAGE_CLASS_INFO xsd__token_Array : public Axis_Array {
   public:
     /**
@@ -462,12 +534,18 @@ class STORAGE_CLASS_INFO xsd__token_Array : public Axis_Array {
     /**
      * Return a c-style array.
      * 
-     * @param size, this will be updated with the size of the array returned.
+     * @param size will be updated with the size of the array returned.
      * @return c-style array of pointers to the xsd__token data.
      */
     const xsd__token* get(int& size) const;
 };
 
+/**
+ * @class xsd__language_Array
+ * 
+ * The storage class for arrays of xsd__language
+ * 
+ */
 class STORAGE_CLASS_INFO xsd__language_Array : public Axis_Array {
   public:
     /**
@@ -498,12 +576,18 @@ class STORAGE_CLASS_INFO xsd__language_Array : public Axis_Array {
     /**
      * Return a c-style array.
      * 
-     * @param size, this will be updated with the size of the array returned.
+     * @param size will be updated with the size of the array returned.
      * @return c-style array of pointers to the xsd__language data.
      */
     const xsd__language* get(int& size) const;
 };
 
+/**
+ * @class xsd__Name_Array
+ * 
+ * The storage class for arrays of xsd__Name
+ * 
+ */
 class STORAGE_CLASS_INFO xsd__Name_Array : public Axis_Array {
   public:
     /**
@@ -533,12 +617,18 @@ class STORAGE_CLASS_INFO xsd__Name_Array : public Axis_Array {
     /**
      * Return a c-style array.
      * 
-     * @param size, this will be updated with the size of the array returned.
+     * @param size will be updated with the size of the array returned.
      * @return c-style array of pointers to the xsd__Name data.
      */
     const xsd__Name* get(int& size) const;
 };
 
+/**
+ * @class xsd__NCName_Array
+ * 
+ * The storage class for arrays of xsd__NCName
+ * 
+ */
 class STORAGE_CLASS_INFO xsd__NCName_Array : public Axis_Array {
   public:
     /**
@@ -568,12 +658,18 @@ class STORAGE_CLASS_INFO xsd__NCName_Array : public Axis_Array {
     /**
      * Return a c-style array.
      * 
-     * @param size, this will be updated with the size of the array returned.
+     * @param size will be updated with the size of the array returned.
      * @return c-style array of pointers to the xsd__NCName data.
      */
     const xsd__NCName* get(int& size) const;
 };
 
+/**
+ * @class xsd__ID_Array
+ * 
+ * The storage class for arrays of xsd__ID
+ * 
+ */
 class STORAGE_CLASS_INFO xsd__ID_Array : public Axis_Array {
   public:
     /**
@@ -603,12 +699,18 @@ class STORAGE_CLASS_INFO xsd__ID_Array : public Axis_Array {
     /**
      * Return a c-style array.
      * 
-     * @param size, this will be updated with the size of the array returned.
+     * @param size will be updated with the size of the array returned.
      * @return c-style array of pointers to the xsd__ID data.
      */
     const xsd__ID* get(int& size) const;
 };
 
+/**
+ * @class xsd__IDREF_Array
+ * 
+ * The storage class for arrays of xsd__IDREF
+ * 
+ */
 class STORAGE_CLASS_INFO xsd__IDREF_Array : public Axis_Array {
   public:
     /**
@@ -638,12 +740,18 @@ class STORAGE_CLASS_INFO xsd__IDREF_Array : public Axis_Array {
     /**
      * Return a c-style array.
      * 
-     * @param size, this will be updated with the size of the array returned.
+     * @param size will be updated with the size of the array returned.
      * @return c-style array of pointers to the xsd__IDREF data.
      */
     const xsd__IDREF* get(int& size) const;
 };
 
+/**
+ * @class xsd__IDREFS_Array
+ * 
+ * The storage class for arrays of xsd__IDREFS
+ * 
+ */
 class STORAGE_CLASS_INFO xsd__IDREFS_Array : public Axis_Array {
   public:
     /**
@@ -673,12 +781,18 @@ class STORAGE_CLASS_INFO xsd__IDREFS_Array : public Axis_Array {
     /**
      * Return a c-style array.
      * 
-     * @param size, this will be updated with the size of the array returned.
+     * @param size will be updated with the size of the array returned.
      * @return c-style array of pointers to the xsd__IDREFS data.
      */
     const xsd__IDREFS* get(int& size) const;
 };
 
+/**
+ * @class xsd__ENTITY_Array
+ * 
+ * The storage class for arrays of xsd__ENTITY
+ * 
+ */
 class STORAGE_CLASS_INFO xsd__ENTITY_Array : public Axis_Array {
   public:
     /**
@@ -708,12 +822,18 @@ class STORAGE_CLASS_INFO xsd__ENTITY_Array : public Axis_Array {
     /**
      * Return a c-style array.
      * 
-     * @param size, this will be updated with the size of the array returned.
+     * @param size will be updated with the size of the array returned.
      * @return c-style array of pointers to the xsd__ENTITY data.
      */
     const xsd__ENTITY* get(int& size) const;
 };
 
+/**
+ * @class xsd__ENTITIES_Array
+ * 
+ * The storage class for arrays of xsd__ENTITIES
+ * 
+ */
 class STORAGE_CLASS_INFO xsd__ENTITIES_Array : public Axis_Array {
   public:
     /**
@@ -743,12 +863,18 @@ class STORAGE_CLASS_INFO xsd__ENTITIES_Array : public Axis_Array {
     /**
      * Return a c-style array.
      * 
-     * @param size, this will be updated with the size of the array returned.
+     * @param size will be updated with the size of the array returned.
      * @return c-style array of pointers to the xsd__ENTITIES data.
      */
     const xsd__ENTITIES* get(int& size) const;
 };
 
+/**
+ * @class xsd__NMTOKEN_Array
+ * 
+ * The storage class for arrays of xsd__NMTOKEN
+ * 
+ */
 class STORAGE_CLASS_INFO xsd__NMTOKEN_Array : public Axis_Array {
   public:
     /**
@@ -778,12 +904,18 @@ class STORAGE_CLASS_INFO xsd__NMTOKEN_Array : public Axis_Array {
     /**
      * Return a c-style array.
      * 
-     * @param size, this will be updated with the size of the array returned.
+     * @param size will be updated with the size of the array returned.
      * @return c-style array of pointers to the xsd__NMTOKEN data.
      */
     const xsd__NMTOKEN* get(int& size) const;
 };
 
+/**
+ * @class xsd__NMTOKENS_Array
+ * 
+ * The storage class for arrays of xsd__NMTOKENS
+ * 
+ */
 class STORAGE_CLASS_INFO xsd__NMTOKENS_Array : public Axis_Array {
   public:
     /**
@@ -813,12 +945,18 @@ class STORAGE_CLASS_INFO xsd__NMTOKENS_Array : public Axis_Array {
     /**
      * Return a c-style array.
      * 
-     * @param size, this will be updated with the size of the array returned.
+     * @param size will be updated with the size of the array returned.
      * @return c-style array of pointers to the xsd__NMTOKENS data.
      */
     const xsd__NMTOKENS* get(int& size) const;
 };
 
+/**
+ * @class xsd__boolean_Array
+ * 
+ * The storage class for arrays of xsd__boolean
+ * 
+ */
 class STORAGE_CLASS_INFO xsd__boolean_Array : public Axis_Array {
   public:
     /**
@@ -848,12 +986,18 @@ class STORAGE_CLASS_INFO xsd__boolean_Array : public Axis_Array {
     /**
      * Return a c-style array.
      * 
-     * @param size, this will be updated with the size of the array returned.
+     * @param size will be updated with the size of the array returned.
      * @return c-style array of pointers to the xsd__boolean data.
      */
     const xsd__boolean** get(int& size) const;
 };
 
+/**
+ * @class xsd__base64Binary_Array
+ * 
+ * The storage class for arrays of xsd__base64Binary
+ * 
+ */
 class STORAGE_CLASS_INFO xsd__base64Binary_Array : public Axis_Array {
   public:
     /**
@@ -883,12 +1027,18 @@ class STORAGE_CLASS_INFO xsd__base64Binary_Array : public Axis_Array {
     /**
      * Return a c-style array.
      * 
-     * @param size, this will be updated with the size of the array returned.
+     * @param size will be updated with the size of the array returned.
      * @return c-style array of pointers to the xsd__base64Binary data.
      */
     const xsd__base64Binary** get(int& size) const;
 };
 
+/**
+ * @class xsd__hexBinary_Array
+ * 
+ * The storage class for arrays of xsd__hexBinary
+ * 
+ */
 class STORAGE_CLASS_INFO xsd__hexBinary_Array : public Axis_Array {
   public:
     /**
@@ -918,12 +1068,18 @@ class STORAGE_CLASS_INFO xsd__hexBinary_Array : public Axis_Array {
     /**
      * Return a c-style array.
      * 
-     * @param size, this will be updated with the size of the array returned.
+     * @param size will be updated with the size of the array returned.
      * @return c-style array of pointers to the xsd__hexBinary data.
      */
     const xsd__hexBinary** get(int& size) const;
 };
 
+/**
+ * @class xsd__float_Array
+ * 
+ * The storage class for arrays of xsd__float
+ * 
+ */
 class STORAGE_CLASS_INFO xsd__float_Array : public Axis_Array {
   public:
     /**
@@ -953,12 +1109,18 @@ class STORAGE_CLASS_INFO xsd__float_Array : public Axis_Array {
     /**
      * Return a c-style array.
      * 
-     * @param size, this will be updated with the size of the array returned.
+     * @param size will be updated with the size of the array returned.
      * @return c-style array of pointers to the xsd__float data.
      */
     const xsd__float** get(int& size) const;
 };
 
+/**
+ * @class xsd__decimal_Array
+ * 
+ * The storage class for arrays of xsd__decimal
+ * 
+ */
 class STORAGE_CLASS_INFO xsd__decimal_Array : public Axis_Array {
   public:
     /**
@@ -988,12 +1150,18 @@ class STORAGE_CLASS_INFO xsd__decimal_Array : public Axis_Array {
     /**
      * Return a c-style array.
      * 
-     * @param size, this will be updated with the size of the array returned.
+     * @param size will be updated with the size of the array returned.
      * @return c-style array of pointers to the xsd__decimal data.
      */
     const xsd__decimal** get(int& size) const;
 };
 
+/**
+ * @class xsd__integer_Array
+ * 
+ * The storage class for arrays of xsd__integer
+ * 
+ */
 class STORAGE_CLASS_INFO xsd__integer_Array : public Axis_Array {
   public:
     /**
@@ -1023,12 +1191,18 @@ class STORAGE_CLASS_INFO xsd__integer_Array : public Axis_Array {
     /**
      * Return a c-style array.
      * 
-     * @param size, this will be updated with the size of the array returned.
+     * @param size will be updated with the size of the array returned.
      * @return c-style array of pointers to the xsd__integer data.
      */
     const xsd__integer** get(int& size) const;
 };
 
+/**
+ * @class xsd__nonPositiveInteger_Array
+ * 
+ * The storage class for arrays of xsd__nonPositiveInteger
+ * 
+ */
 class STORAGE_CLASS_INFO xsd__nonPositiveInteger_Array : public Axis_Array {
   public:
     /**
@@ -1058,12 +1232,18 @@ class STORAGE_CLASS_INFO xsd__nonPositiveInteger_Array : public Axis_Array {
     /**
      * Return a c-style array.
      * 
-     * @param size, this will be updated with the size of the array returned.
+     * @param size will be updated with the size of the array returned.
      * @return c-style array of pointers to the xsd__nonPositiveInteger data.
      */
     const xsd__nonPositiveInteger** get(int& size) const;
 };
 
+/**
+ * @class xsd__negativeInteger_Array
+ * 
+ * The storage class for arrays of xsd__negativeInteger
+ * 
+ */
 class STORAGE_CLASS_INFO xsd__negativeInteger_Array : public Axis_Array {
   public:
     /**
@@ -1093,12 +1273,18 @@ class STORAGE_CLASS_INFO xsd__negativeInteger_Array : public Axis_Array {
     /**
      * Return a c-style array.
      * 
-     * @param size, this will be updated with the size of the array returned.
+     * @param size will be updated with the size of the array returned.
      * @return c-style array of pointers to the xsd__negativeInteger data.
      */
     const xsd__negativeInteger** get(int& size) const;
 };
 
+/**
+ * @class xsd__long_Array
+ * 
+ * The storage class for arrays of xsd__long
+ * 
+ */
 class STORAGE_CLASS_INFO xsd__long_Array : public Axis_Array {
   public:
     /**
@@ -1128,12 +1314,18 @@ class STORAGE_CLASS_INFO xsd__long_Array : public Axis_Array {
     /**
      * Return a c-style array.
      * 
-     * @param size, this will be updated with the size of the array returned.
+     * @param size will be updated with the size of the array returned.
      * @return c-style array of pointers to the xsd__long data.
      */
     const xsd__long** get(int& size) const;
 };
 
+/**
+ * @class xsd__int_Array
+ * 
+ * The storage class for arrays of xsd__int
+ * 
+ */
 class STORAGE_CLASS_INFO xsd__int_Array : public Axis_Array {
   public:
     /**
@@ -1163,12 +1355,18 @@ class STORAGE_CLASS_INFO xsd__int_Array : public Axis_Array {
     /**
      * Return a c-style array.
      * 
-     * @param size, this will be updated with the size of the array returned.
+     * @param size will be updated with the size of the array returned.
      * @return c-style array of pointers to the xsd__int data.
      */
     const xsd__int** get(int& size) const;
 };
 
+/**
+ * @class xsd__short_Array
+ * 
+ * The storage class for arrays of xsd__short
+ * 
+ */
 class STORAGE_CLASS_INFO xsd__short_Array : public Axis_Array {
   public:
     /**
@@ -1198,12 +1396,18 @@ class STORAGE_CLASS_INFO xsd__short_Array : public Axis_Array {
     /**
      * Return a c-style array.
      * 
-     * @param size, this will be updated with the size of the array returned.
+     * @param size will be updated with the size of the array returned.
      * @return c-style array of pointers to the xsd__short data.
      */
     const xsd__short** get(int& size) const;
 };
 
+/**
+ * @class xsd__byte_Array
+ * 
+ * The storage class for arrays of xsd__byte
+ * 
+ */
 class STORAGE_CLASS_INFO xsd__byte_Array : public Axis_Array {
   public:
     /**
@@ -1233,12 +1437,18 @@ class STORAGE_CLASS_INFO xsd__byte_Array : public Axis_Array {
     /**
      * Return a c-style array.
      * 
-     * @param size, this will be updated with the size of the array returned.
+     * @param size will be updated with the size of the array returned.
      * @return c-style array of pointers to the xsd__byte data.
      */
     const xsd__byte** get(int& size) const;
 };
 
+/**
+ * @class xsd__nonNegativeInteger_Array
+ * 
+ * The storage class for arrays of xsd__nonNegativeInteger
+ * 
+ */
 class STORAGE_CLASS_INFO xsd__nonNegativeInteger_Array : public Axis_Array {
   public:
     /**
@@ -1268,12 +1478,18 @@ class STORAGE_CLASS_INFO xsd__nonNegativeInteger_Array : public Axis_Array {
     /**
      * Return a c-style array.
      * 
-     * @param size, this will be updated with the size of the array returned.
+     * @param size will be updated with the size of the array returned.
      * @return c-style array of pointers to the xsd__nonNegativeInteger data.
      */
     const xsd__nonNegativeInteger** get(int& size) const;
 };
 
+/**
+ * @class xsd__unsignedLong_Array
+ * 
+ * The storage class for arrays of xsd__unsignedLong
+ * 
+ */
 class STORAGE_CLASS_INFO xsd__unsignedLong_Array : public Axis_Array {
   public:
     /**
@@ -1303,12 +1519,18 @@ class STORAGE_CLASS_INFO xsd__unsignedLong_Array : public Axis_Array {
     /**
      * Return a c-style array.
      * 
-     * @param size, this will be updated with the size of the array returned.
+     * @param size will be updated with the size of the array returned.
      * @return c-style array of pointers to the xsd__unsignedLong data.
      */
     const xsd__unsignedLong** get(int& size) const;
 };
 
+/**
+ * @class xsd__unsignedInt_Array
+ * 
+ * The storage class for arrays of xsd__unsignedInt
+ * 
+ */
 class STORAGE_CLASS_INFO xsd__unsignedInt_Array : public Axis_Array {
   public:
     /**
@@ -1338,12 +1560,18 @@ class STORAGE_CLASS_INFO xsd__unsignedInt_Array : public Axis_Array {
     /**
      * Return a c-style array.
      * 
-     * @param size, this will be updated with the size of the array returned.
+     * @param size will be updated with the size of the array returned.
      * @return c-style array of pointers to the xsd__unsignedInt data.
      */
     const xsd__unsignedInt** get(int& size) const;
 };
 
+/**
+ * @class xsd__unsignedByte_Array
+ * 
+ * The storage class for arrays of xsd__unsignedByte
+ * 
+ */
 class STORAGE_CLASS_INFO xsd__unsignedByte_Array : public Axis_Array {
   public:
     /**
@@ -1373,12 +1601,18 @@ class STORAGE_CLASS_INFO xsd__unsignedByte_Array : public Axis_Array {
     /**
      * Return a c-style array.
      * 
-     * @param size, this will be updated with the size of the array returned.
+     * @param size will be updated with the size of the array returned.
      * @return c-style array of pointers to the xsd__unsignedByte data.
      */
     const xsd__unsignedByte** get(int& size) const;
 };
 
+/**
+ * @class xsd__unsignedShort_Array
+ * 
+ * The storage class for arrays of xsd__unsignedShort
+ * 
+ */
 class STORAGE_CLASS_INFO xsd__unsignedShort_Array : public Axis_Array {
   public:
     /**
@@ -1408,12 +1642,18 @@ class STORAGE_CLASS_INFO xsd__unsignedShort_Array : public Axis_Array {
     /**
      * Return a c-style array.
      * 
-     * @param size, this will be updated with the size of the array returned.
+     * @param size will be updated with the size of the array returned.
      * @return c-style array of pointers to the xsd__unsignedShort data.
      */
     const xsd__unsignedShort** get(int& size) const;
 };
 
+/**
+ * @class xsd__positiveInteger_Array
+ * 
+ * The storage class for arrays of xsd__positiveInteger
+ * 
+ */
 class STORAGE_CLASS_INFO xsd__positiveInteger_Array : public Axis_Array {
   public:
     /**
@@ -1443,12 +1683,18 @@ class STORAGE_CLASS_INFO xsd__positiveInteger_Array : public Axis_Array {
     /**
      * Return a c-style array.
      * 
-     * @param size, this will be updated with the size of the array returned.
+     * @param size will be updated with the size of the array returned.
      * @return c-style array of pointers to the xsd__positiveInteger data.
      */
     const xsd__positiveInteger** get(int& size) const;
 };
 
+/**
+ * @class xsd__double_Array
+ * 
+ * The storage class for arrays of xsd__double
+ * 
+ */
 class STORAGE_CLASS_INFO xsd__double_Array : public Axis_Array {
   public:
     /**
@@ -1478,12 +1724,18 @@ class STORAGE_CLASS_INFO xsd__double_Array : public Axis_Array {
     /**
      * Return a c-style array.
      * 
-     * @param size, this will be updated with the size of the array returned.
+     * @param size will be updated with the size of the array returned.
      * @return c-style array of pointers to the xsd__double data.
      */
     const xsd__double** get(int& size) const;
 };
 
+/**
+ * @class xsd__anyURI_Array
+ * 
+ * The storage class for arrays of xsd__anyURI
+ * 
+ */
 class STORAGE_CLASS_INFO xsd__anyURI_Array : public Axis_Array {
   public:
     /**
@@ -1513,12 +1765,18 @@ class STORAGE_CLASS_INFO xsd__anyURI_Array : public Axis_Array {
     /**
      * Return a c-style array.
      * 
-     * @param size, this will be updated with the size of the array returned.
+     * @param size will be updated with the size of the array returned.
      * @return c-style array of pointers to the xsd__anyURI data.
      */
     const xsd__anyURI* get(int& size) const;
 };
 
+/**
+ * @class xsd__QName_Array
+ * 
+ * The storage class for arrays of xsd__QName
+ * 
+ */
 class STORAGE_CLASS_INFO xsd__QName_Array : public Axis_Array {
   public:
     /**
@@ -1548,12 +1806,18 @@ class STORAGE_CLASS_INFO xsd__QName_Array : public Axis_Array {
     /**
      * Return a c-style array.
      * 
-     * @param size, this will be updated with the size of the array returned.
+     * @param size will be updated with the size of the array returned.
      * @return c-style array of pointers to the xsd__QName data.
      */
     const xsd__QName* get(int& size) const;
 };
 
+/**
+ * @class xsd__NOTATION_Array
+ * 
+ * The storage class for arrays of xsd__NOTATION
+ * 
+ */
 class STORAGE_CLASS_INFO xsd__NOTATION_Array : public Axis_Array {
   public:
     /**
@@ -1583,7 +1847,7 @@ class STORAGE_CLASS_INFO xsd__NOTATION_Array : public Axis_Array {
     /**
      * Return a c-style array.
      * 
-     * @param size, this will be updated with the size of the array returned.
+     * @param size will be updated with the size of the array returned.
      * @return c-style array of pointers to the xsd__NOTATION data.
      */
     const xsd__NOTATION* get(int& size) const;
