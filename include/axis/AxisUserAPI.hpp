@@ -431,7 +431,7 @@ class STORAGE_CLASS_INFO Axis_Array {
 
     /**
      * Copy constructor
-     * @param orginal Axis_Array to copy.
+     * @param original Axis_Array to copy.
      */
     Axis_Array(const Axis_Array & original);
     
@@ -465,8 +465,8 @@ class STORAGE_CLASS_INFO Axis_Array {
     /**
      * Return a c-style array.
      * 
-     * @param size, this will be updated with the size of the array returned.
-     * @param type, this will be updated with the type of the data returned.
+     * @param size will be updated with the size of the array returned.
+     * @param type will be updated with the type of the data returned.
      * @return c-style array of pointers to the array data.
      */
     void** get(int& size, XSDTYPE& type) const;
@@ -514,6 +514,11 @@ protected:
 static const xsd__boolean xsd_boolean_true = (xsd__boolean) 1;
 static const xsd__boolean xsd_boolean_false = (xsd__boolean) 0;
 
+/**
+ * @enum AXIS_CHANNEL_TYPE
+ * 
+ * Enumeration to indicate type of channel as either SSL or non-SSL channel
+ */
 typedef enum {
     NORMAL_CHANNEL=0,
     SSL_CHANNEL
@@ -536,12 +541,12 @@ public:
     ~AnyType();
 
     /**
-     * @var _array Contains an array of xml encoded strings.
+     * _array Contains an array of xml encoded strings.
      */
     XML_String* _array;
 
     /**
-     * @var _size Contains how many xml strings are there in _array
+     * _size Contains how many xml strings are there in _array
      */
     int _size;
 };
