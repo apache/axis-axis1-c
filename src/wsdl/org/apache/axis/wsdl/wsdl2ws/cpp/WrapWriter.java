@@ -798,6 +798,29 @@ public class WrapWriter extends CPPClassWriter
                 writeExceptions(faultType, faultInfoName, paramName, langName);
             }
         }
+        
+        // Handle SOAP faults not specified within the WSDL (ie OtherFaultException)
+        writer.write("\tcatch(OtherFaultException * pObjFault)\n");
+        writer.write("\t{\n");
+        writer.write("\t\tif (pObjFault)\n");
+        writer.write("\t\t{\n");
+        writer.write("\t\t\tpIWSSZ->createSoapFault(\"\", \"\", pObjFault->getFaultCode(), pObjFault->getFaultString());\n");
+        writer.write("\t\t\tpIWSSZ->addFaultDetail(pObjFault->getFaultDetail());\n");
+        writer.write("\t\t\tdelete pObjFault;\n");
+        writer.write("\t\t\tthrow AxisServiceException(AXISC_SERVICE_THROWN_EXCEPTION);\n");
+        writer.write("\t\t}\n");
+        writer.write("\t\treturn AXIS_FAIL;\n");
+        writer.write("\t}\n");
+        
+        // Handle generic exception, placing the message into a generic SOAP fault
+        writer.write("\tcatch (exception & e)\n");
+        writer.write("\t{\n");
+        writer.write("\t\tpIWSSZ->createSoapFault(\"\", \"\", \"Server\", e.what());\n");
+        writer.write("\t\tthrow AxisServiceException(AXISC_SERVICE_THROWN_EXCEPTION);\n");
+        writer.write("\t\treturn AXIS_FAIL;\n");
+        writer.write("\t}\n");
+        
+        // Handle any other exception
         writer.write("\tcatch(...)\n");
         writer.write("\t{\n");
         writer.write("\t\treturn AXIS_FAIL;\n");

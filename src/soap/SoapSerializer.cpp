@@ -291,7 +291,20 @@ int SoapSerializer::addFaultDetail( void * pObject,
     return iSuccess;
 }
 
-int SoapSerializer::setSoapFault( SoapFault * pSoapFault)
+int SoapSerializer::addFaultDetail( const AxisChar * pDetail)
+{
+	int iStatus = AXIS_FAIL;
+    if( m_pSoapEnvelope &&
+        (m_pSoapEnvelope->m_pSoapBody) &&
+        (m_pSoapEnvelope->m_pSoapBody->m_pSoapFault))
+	{
+		iStatus = m_pSoapEnvelope->m_pSoapBody->m_pSoapFault->setFaultDetail(pDetail);
+	}
+
+	return iStatus;
+}
+
+int SoapSerializer::setSoapFault( ISoapFault * pSoapFault)
 {
     int intStatus = AXIS_FAIL;
 
@@ -300,7 +313,7 @@ int SoapSerializer::setSoapFault( SoapFault * pSoapFault)
         if(m_pSoapEnvelope->m_pSoapBody->m_pSoapFault)
             delete m_pSoapEnvelope->m_pSoapBody->m_pSoapFault;
 
-        m_pSoapEnvelope->m_pSoapBody->m_pSoapFault = pSoapFault;
+        m_pSoapEnvelope->m_pSoapBody->m_pSoapFault = (SoapFault *) pSoapFault;
         intStatus = AXIS_SUCCESS;
     }
 

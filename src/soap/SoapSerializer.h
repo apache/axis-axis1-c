@@ -117,7 +117,7 @@ public:
     int setOutputStream(SOAPTransport* pStream);
     void markEndOfStream();
     int setSoapMethod(SoapMethod* pSoapMethod);
-    int setSoapFault(SoapFault* pSoapFault);
+    int AXISCALL setSoapFault(ISoapFault* pSoapFault);
     int setSoapBody(SoapBody* pSoapBody);
     int setSoapEnvelope(SoapEnvelope* pSoapEnvelope);
     SoapSerializer();
@@ -138,6 +138,8 @@ public:
 
     int AXISCALL addFaultDetail(void* pObject, void* pSZFunct,
         void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace );
+
+    int AXISCALL addFaultDetail( const AxisChar * pDetail);
 
     int AXISCALL serializeCmplxArray(const Axis_Array* pArray, void* pSZFunct,
         void* pDelFunct, void* pSizeFunct, const AxisChar* pName, 

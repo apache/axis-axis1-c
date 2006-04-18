@@ -22,6 +22,7 @@
 #include <axis/TypeMapping.hpp>
 #include <axis/WSDDDefines.hpp>
 #include <axis/ISoapAttachment.hpp>
+#include <axis/ISoapFault.hpp>
 #include <stdarg.h>
 #include <cctype>
 
@@ -49,6 +50,9 @@ public:
                                          const AxisChar* sURI, 
                                          const AxisChar* sFaultCode,
                                          const AxisChar* sFaultString)=0;
+
+    virtual int AXISCALL setSoapFault(ISoapFault* pSoapFault)=0;
+
     /**
      * Returns the corrosponding namespace prefix.
      * @param pNamespace The namespace.
@@ -99,6 +103,14 @@ public:
                                         void* pDelFunct, 
                                         const AxisChar* pName, 
                                         const AxisChar* pNamespace) = 0;
+
+    /**
+     * Use this method to add simple, ie text, detail to a SOAP fault.
+     * 
+     * @param pDetail The text to be used for the detail element of the SOAP fault.
+     * @return indicates success or failure of adding fault detail
+     */
+    virtual int AXISCALL addFaultDetail( const AxisChar * pDetail) = 0;
 
     /* Methods used to serialize arrays */
     virtual int AXISCALL serializeCmplxArray(const Axis_Array* pArray,
