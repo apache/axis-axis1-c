@@ -65,6 +65,8 @@ public class ArrayParamWriter extends ParamWriter
 
             // include system header files
             writer.write("#include <stdlib.h>\n");
+            writer.write("#include <stdio.h>\n");
+            writer.write("#include <string.h>\n");
             writer.write("\n");
             
             // include header file for datatype
@@ -130,12 +132,13 @@ public class ArrayParamWriter extends ParamWriter
             writer.write("{\n");
             
             // Begin function body
-            
-            writer.write("\t" + classname + " *pArray = (" + classname + "*)malloc(sizeof(" + classname + "));\n");
-            writer.write("\tmemset(pArray, 0, sizeof(" + classname + "));\n");
+
+            writer.write("\t/* Create array data type */\n");
+            writer.write("\t" + classname + " *pArray = (" + classname + "*)axiscAxisNew(XSDC_ARRAY, 0);\n");
             writer.write("\tpArray->m_Type = C_USER_TYPE;\n");
             writer.write("\n");
 
+            writer.write("\t/* Create actual array of requested size */\n");
             writer.write("\tif (nSize > 0)\n");
             writer.write("\t{\n");
             writer.write("\t\tpArray->m_Array = Axis_Create_" + attribs[0].getTypeName() 
@@ -163,16 +166,28 @@ public class ArrayParamWriter extends ParamWriter
                     + "(" + classname + "* param)\n");
             writer.write("{\n");
             
-            writer.write("\tif (param == NULL)\n");
+            // Begin function body
+            
+            writer.write("\t/* If null, simply return */\n");
+            writer.write("\tif (!param)\n");
             writer.write("\t\treturn;\n");
             writer.write("\n");
-            writer.write("\tif (param->m_Array != NULL)\n");
+            
+            writer.write("\t/* Reclaim array memory resources, if it exists */\n");
+            writer.write("\tif (param->m_Array)\n");
             writer.write("\t{\n");
             writer.write("\t\tAxis_Delete_" +  attribs[0].getTypeName() 
                     + "((" + attribs[0].getTypeName() + " *)param->m_Array, 1, param->m_Size);\n");
-            writer.write("\t\tfree(param->m_Array);\n");
+            writer.write("\t\tparam->m_Array = (" + attribs[0].getTypeName() + " **)NULL;\n");
+            writer.write("\t\taxiscAxisDelete(param, XSDC_ARRAY);\n");
             writer.write("\t}\n");
+            writer.write("\n");
+            
+            writer.write("\t/* Reclaim array data type memory resources */\n");
             writer.write("\tfree(param);\n");
+            
+            // End function body            
+            
             writer.write("}\n");
             writer.write("\n");            
         }

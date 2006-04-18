@@ -142,7 +142,7 @@ public class BeanParamWriter extends ParamCFileWriter
         writer.write("\t\t\t\tAxis_URI_" + classname + ", \"\\\"\", NULL );\n");
         writer.write("\t\t}\n");
         writer.write("\t}\n");
-
+        writer.write("\n");
         
         writer.write("\t/* If there are any attributes serialize them. If there aren't then close the tag */\n");
         for (int i = 0; i < attributeParamCount; i++)
@@ -317,7 +317,7 @@ public class BeanParamWriter extends ParamCFileWriter
                 
                 if (CUtils.isPointerType(baseTypeName))
                 {
-                    writer.write("\t\taxiscSerializeAsElement(pSZ, \""
+                    writer.write("\taxiscSerializeAsElement(pSZ, \""
                             + attribs[i].getSOAPElementNameAsString()
                             + "\", " + namespace
                             + ", (void*)(param->" + attribs[i].getParamNameWithoutSymbols() + "), "
@@ -466,7 +466,7 @@ public class BeanParamWriter extends ParamCFileWriter
             if (attribs[i].isAnyType())
             {
                 anyCounter +=1;
-                writer.write("\tparam->any" + anyCounter + " = axiscGetAnyObject(pDZ);\n");
+                writer.write("\tparam->any" + anyCounter + " = axiscGetAnyObjectIWrapperSoapDeSerializer(pDZ);\n");
             }
             else if (attribs[i].isArray())
             {
@@ -480,6 +480,7 @@ public class BeanParamWriter extends ParamCFileWriter
                     else
                         baseTypeName = attribs[i].getTypeName();
 
+                    // TODO  - need to create a deletearray function that accepts a delete function
                     writer.write("\t/* If there is an existing array, delete it */\n");
                     writer.write("\tif (param->" + attribs[i].getParamNameAsMember() + " != NULL)\n");
                     writer.write("\t{\n");
@@ -500,7 +501,7 @@ public class BeanParamWriter extends ParamCFileWriter
                 else
                 {
                     arrayType = attribs[i].getTypeName();
-                    writer.write("\taxiscGetCmplxArrayCall(pDZ,\n" 
+                    writer.write("\taxiscGetCmplxArrayIWrapperSoapDeSerializer(pDZ,\n" 
                             + "\t\t(Axisc_Array *)param->" + attribs[i].getParamName() + ",\n" 
                             + "\t\t(void*)Axis_DeSerialize_"  + arrayType + ",\n"
                             + "\t\t(void*)Axis_Create_"       + arrayType + ",\n"
@@ -513,9 +514,7 @@ public class BeanParamWriter extends ParamCFileWriter
                 }
             }
             else if ((attribs[i].isSimpleType() || attribs[i].getType().isSimpleType()))
-            {
-                writer.write("\n\t{\n"); // start new variable scope
-                
+            {                
                 String soapTagName = (attribs[i].isAttribute() ? attribs[i].getParamName() : attribs[i].getElementNameAsString());
                 if (soapTagName.lastIndexOf("_Ref") > -1)
                     soapTagName = soapTagName.substring(0, soapTagName.lastIndexOf("_Ref"));
@@ -525,6 +524,7 @@ public class BeanParamWriter extends ParamCFileWriter
                 
                 if (attribs[i].isOptional())
                 {
+                    writer.write("\n\t{\n"); // start new variable scope                    
                     writer.write("\tconst char* elementName" + i + " = axiscPeekNextElementName(pDZ);\n");
                     writer.write("\t\tif(strcmp(elementName" + i + ", \"" + soapTagName + "\") == 0)\n");
                     writer.write("\t\t{\n");
@@ -568,25 +568,31 @@ public class BeanParamWriter extends ParamCFileWriter
 
                         String elementName = attribs[i].getParamNameAsMember();
 
-                        writer.write("\t{\n");
+                        writer.write("\t{\n");  // start new scope
                         if( isPointerType)
                         {
                             writer.write("\t" + typeName + "    pValue" + i + " = " +
                                     CUtils.getParameterGetValueMethodName(baseTypeName, attribs[i].isAttribute()) +
-                                    "(pDZ,\"" + soapTagName + "\", 0);\n\n");
+                                    "(pDZ,\"" + soapTagName + "\", 0);\n");
                         }
                         else
                         {
                             writer.write("\t" + typeName + " *  pValue" + i + " = " +
                                     CUtils.getParameterGetValueMethodName(baseTypeName, attribs[i].isAttribute()) +
-                                    "(pDZ, \"" + soapTagName + "\", 0);\n\n");
+                                    "(pDZ, \"" + soapTagName + "\", 0);\n");
                         }
                         
                         writer.write( "\tparam->" + elementName + "= pValue" + i + ";\n");
-                        writer.write( "\tif( pValue" + i + " != NULL)\n");
-                        writer.write("\t\taxiscAxisDelete( (void *) pValue" + i + ", " 
-                                + CUtils.getXSDTypeForBasicType( baseTypeName) + ");\n\n");
-                        writer.write("\t}\n\n");
+                        
+                        // TODO - need to delete only if hex, or base 64, or any. and just the struct,
+                        // not contents.
+                        if (!isPointerType)
+                        {
+                            writer.write( "\tif( pValue" + i + " != NULL)\n");
+                            writer.write("\t\taxiscAxisDelete( (void *) pValue" + i + ", " 
+                                + CUtils.getXSDTypeForBasicType( baseTypeName) + ");\n");
+                        }
+                        writer.write("\t}\n\n"); // end new scope
                     }
                 } 
                 else if (attribs[i].getChoiceElement() || attribs[i].getAllElement())
@@ -620,12 +626,10 @@ public class BeanParamWriter extends ParamCFileWriter
                 {
                     writer.write("\t\t\t}\n");
                     writer.write("\t\telse\n");
-                    writer.write("\t\t{\n");
                     writer.write("\t\t\tparam->" + attribs[i].getParamNameAsMember() + " = NULL;\n");
-                    writer.write("\t\t}\n\n");
+                    writer.write("\n");
+                    writer.write("\n\t}\n"); // end new variable scope
                 }
-                
-                writer.write("\n\t}\n"); // end new variable scope
             }
             else
             {
@@ -650,7 +654,7 @@ public class BeanParamWriter extends ParamCFileWriter
 
                 writer.write("\tparam->" + attribs[i].getParamNameAsMember() 
                         + " = ("  + attribs[i].getTypeName()
-                        + "*)axiscGetCmplxObject(pDZ,(void*)Axis_DeSerialize_"
+                        + "*)axiscGetCmplxObjectIWrapperSoapDeSerializer(pDZ,(void*)Axis_DeSerialize_"
                         + attribs[i].getTypeName()
                         + "\n\t\t, (void*)Axis_Create_"
                         + attribs[i].getTypeName() + ", (void*)Axis_Delete_"
@@ -676,6 +680,7 @@ public class BeanParamWriter extends ParamCFileWriter
                 if (attribs[i].getMinOccurs() == 0)
                     writer.write("\t}\n");
             
+            writer.write("\n");
         }
         
         if (extensionBaseAttrib != null
@@ -706,13 +711,13 @@ public class BeanParamWriter extends ParamCFileWriter
         writer.write("\t" + classname + "* pTemp;\n");
         writer.write("\tif (bArray && (nSize > 0))\n\t{\n");
         writer.write("\t\tif (pObj)\n\t\t{\n");
-        writer.write("\t\t\tpObj = (void *)  realloc(pObj, sizeof(" + classname + ")*nSize);\n");
+        writer.write("\t\t\tpObj = (void *)  realloc(pObj, sizeof(" + classname + " *)*nSize);\n");
         writer.write("\t\t\tpTemp = pObj;\n");
         writer.write("\t\t\tpTemp += nSize/2;\n");
-        writer.write("\t\t\tmemset(pTemp, 0, sizeof(" + classname + ")*nSize/2);\n");
+        writer.write("\t\t\tmemset(pTemp, 0, sizeof(" + classname + " *)*nSize/2);\n");
         writer.write("\t\t}\n\t\telse\n\t\t{\n");
-        writer.write("\t\t\tpObj = (void *)  malloc(sizeof(" + classname + ")*nSize);\n");
-        writer.write("\t\t\tmemset(pObj, 0, sizeof(" + classname + ")*nSize);\n\t\t}\n");
+        writer.write("\t\t\tpObj = (void *)  malloc(sizeof(" + classname + " *)*nSize);\n");
+        writer.write("\t\t\tmemset(pObj, 0, sizeof(" + classname + " *)*nSize);\n\t\t}\n");
         writer.write("\t}\n\telse\n\t{\n");
         writer.write("\t\tpObj = (void *)  malloc(sizeof(" + classname + "));\n");
         writer.write("\t\tmemset(pObj, 0, sizeof(" + classname + "));\n\n");
@@ -764,39 +769,37 @@ public class BeanParamWriter extends ParamCFileWriter
         {
             if (attribs[i].isSimpleType() || attribs[i].getType().isSimpleType())
             {
-                String passedInBaseType;
-                String baseTypeName = null;
-                
-                if (!attribs[i].isSimpleType() && attribs[i].getType().isSimpleType())
-                    baseTypeName = CUtils.getclass4qname(attribs[i].getType().getBaseType());
-                else
-                    baseTypeName = attribs[i].getTypeName();
-                
-                if (attribs[i].isArray())
-                    passedInBaseType = "XSDC_ARRAY";
-                else
-                    passedInBaseType = CUtils.getXSDTypeForBasicType(baseTypeName);
-                                
-                writer.write("\t\tif (param->" + attribs[i].getParamNameAsMember() + " != NULL)\n");
-                writer.write("\t\t\taxiscAxisDelete(param->" + attribs[i].getParamNameAsMember() 
-                        + "," + passedInBaseType + ");\n");
-                writer.write("\n");
+                if (CUtils.isPointerType(attribs[i].getTypeName()))
+                {
+                    String passedInBaseType;
+                    String baseTypeName = null;
+                    
+                    if (!attribs[i].isSimpleType() && attribs[i].getType().isSimpleType())
+                        baseTypeName = CUtils.getclass4qname(attribs[i].getType().getBaseType());
+                    else
+                        baseTypeName = attribs[i].getTypeName();
+                    
+                    if (attribs[i].isArray())
+                        passedInBaseType = "XSDC_ARRAY";
+                    else
+                        passedInBaseType = CUtils.getXSDTypeForBasicType(baseTypeName);
+                                    
+                    writer.write("\t\tif (param->" + attribs[i].getParamNameAsMember() + " != NULL)\n");
+                    writer.write("\t\t\taxiscAxisDelete(param->" + attribs[i].getParamNameAsMember() 
+                            + "," + passedInBaseType + ");\n");
+                    writer.write("\n");
+                }
             }
             else
             {
-                String isArray = "0";
-                String arraySize = "0";    
-                
+
+                String deleteFunctionSuffix = "";
                 if (attribs[i].isArray())
-                {
-                    isArray = "1";
-                    arraySize = "param->" + attribs[i].getParamName() + "->m_Size";
-                }
+                    deleteFunctionSuffix = "_Array";
                 
-                writer.write("\t\tif (param->" + attribs[i].getParamName());
-                writer.write("\t\t\tAxis_Delete_" + attribs[i].getTypeName()
-                              + "(param->" + attribs[i].getParamName()
-                              + isArray + "," + arraySize + ");\n");
+                writer.write("\t\tif (param->" + attribs[i].getParamName() + ")\n");
+                writer.write("\t\t\tAxis_Delete_" + attribs[i].getTypeName() + deleteFunctionSuffix 
+                            + "(param->" + attribs[i].getParamName() + ");\n");                   
             }
         }
         
