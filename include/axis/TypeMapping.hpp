@@ -24,6 +24,9 @@
 /* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
 /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
 
+/**
+ * @file TypeMapping.hpp
+ */
 
 #ifdef WIN32
 #pragma warning (disable : 4786)
@@ -39,26 +42,261 @@
 AXIS_CPP_NAMESPACE_START
 using namespace std;
 
+/**
+ * @enum XSDTYPE
+ * Enumeration of xsd types
+ */
 typedef enum XSDTYPETag 
-{ XSD_UNKNOWN=1, XSD_INT, XSD_FLOAT, XSD_STRING, XSD_LONG, XSD_SHORT, \
-                XSD_BYTE, XSD_UNSIGNEDLONG, \
-                XSD_BOOLEAN, XSD_UNSIGNEDINT, XSD_UNSIGNEDSHORT, \
-                XSD_UNSIGNEDBYTE, \
-                XSD_DOUBLE, XSD_DECIMAL, XSD_DURATION, \
-                XSD_DATETIME, XSD_TIME, XSD_DATE, \
-                XSD_GYEARMONTH, XSD_GYEAR, XSD_GMONTHDAY, XSD_GDAY, \
-                XSD_GMONTH, XSD_HEXBINARY, \
-                XSD_BASE64BINARY, XSD_ANYURI, XSD_QNAME,  XSD_NOTATION, \
-                XSD_INTEGER, \
-                XSD_ARRAY, USER_TYPE,  XSD_NMTOKEN, XSD_ANY, XSD_NONNEGATIVEINTEGER, \
-                XSD_POSITIVEINTEGER, XSD_NONPOSITIVEINTEGER, XSD_NEGATIVEINTEGER, \
-                XSD_NORMALIZEDSTRING, XSD_TOKEN, XSD_LANGUAGE, XSD_NAME, \
-                XSD_NCNAME, XSD_ID, XSD_IDREF, XSD_IDREFS, XSD_ENTITY, \
-                XSD_ENTITIES, XSD_NMTOKENS, ATTACHMENT \
+{
+    /**
+     * Unknown XSD type
+     */
+    XSD_UNKNOWN=1,
+    
+    /**
+     * xsd:int
+     */
+    XSD_INT,
+    
+    /**
+     * xsd:float
+     */
+    XSD_FLOAT,
+    
+    /**
+     * xsd:string
+     */
+    XSD_STRING,
+    
+    /**
+     * xsd:long
+     */
+    XSD_LONG,
+    
+    /**
+     * xsd:short
+     */
+    XSD_SHORT,
+    
+    /**
+     * xsd:byte
+     */
+    XSD_BYTE,
+    
+    /**
+     * xsd:unsignedLong
+     */
+    XSD_UNSIGNEDLONG,
+    
+    /**
+     * xsd:boolean
+     */
+    XSD_BOOLEAN,
+    
+    /**
+     * xsd:unsignedInt
+     */
+    XSD_UNSIGNEDINT,
+    
+    /**
+     * xsd:unsignedShort
+     */
+    XSD_UNSIGNEDSHORT,
+    
+    /**
+     * xsd:unsignedByte
+     */
+    XSD_UNSIGNEDBYTE,
+    
+    /**
+     * xsd:double
+     */
+    XSD_DOUBLE,
+    
+    /**
+     * xsd:decimal
+     */
+    XSD_DECIMAL,
+    
+    /**
+     * xsd:duration
+     */
+    XSD_DURATION,
+    
+    /**
+     * xsd:dateTime
+     */
+    XSD_DATETIME,
+    
+    /**
+     * xsd:time
+     */
+    XSD_TIME,
+    
+    /**
+     * xsd:date
+     */
+    XSD_DATE,
+    
+    /**
+     * xsd:gYearMonth
+     */
+    XSD_GYEARMONTH,
+    
+    /**
+     * xsd:gYear
+     */
+    XSD_GYEAR,
+    
+    /**
+     * xsd:gMonthDay
+     */
+    XSD_GMONTHDAY,
+    
+    /**
+     * xsd:gDay
+     */
+    XSD_GDAY,
+    
+    /**
+     * xsd:gMonth
+     */
+    XSD_GMONTH,
+    
+    /**
+     * xsd:hexBinary
+     */
+    XSD_HEXBINARY,
+    
+    /**
+     * xsd:base64Binary
+     */
+    XSD_BASE64BINARY,
+    
+    /**
+     * xsd:anyURI
+     */
+    XSD_ANYURI,
+    
+    /**
+     * xsd:QName
+     */
+    XSD_QNAME,
+    
+    /**
+     * xsd:NOTATION
+     */
+    XSD_NOTATION,
+    
+    /**
+     * xsd:integer
+     */
+    XSD_INTEGER,
+    
+    /**
+     * Array, indicated in WSDL by maxOccurs greater than 1.
+     * This may be an array of any other XSDTYPE.
+     */
+    XSD_ARRAY,
+    
+    /**
+     * User type, also referred to as a complex type
+     */
+    USER_TYPE,
+    
+    /**
+     * xsd:NMTOKEN
+     */
+    XSD_NMTOKEN,
+    
+    /**
+     * xsd:any
+     */
+    XSD_ANY,
+    
+    /**
+     * xsd:nonNegativeInteger
+     */
+    XSD_NONNEGATIVEINTEGER,
+    
+    /**
+     * xsd:positivInteger
+     */
+    XSD_POSITIVEINTEGER,
+    
+    /**
+     * xsd:nonPositiveInteger
+     */
+    XSD_NONPOSITIVEINTEGER,
+    
+    /**
+     * xsd:negativeInteger
+     */
+    XSD_NEGATIVEINTEGER,
+    
+    /**
+     * xsd:normalizedString
+     */
+    XSD_NORMALIZEDSTRING,
+    
+    /**
+     * xsd:token
+     */
+    XSD_TOKEN,
+    
+    /**
+     * xsd:language
+     */
+    XSD_LANGUAGE,
+    
+    /**
+     * xsd:Name
+     */
+    XSD_NAME,
+    
+    /**
+     * xsd:NCName
+     */
+    XSD_NCNAME,
+    
+    /**
+     * xsd:ID
+     */
+    XSD_ID,
+    
+    /**
+     * xsd:IDREF
+     */
+    XSD_IDREF,
+    
+    /**
+     * xsd:IDREFS
+     */
+    XSD_IDREFS,
+    
+    /**
+     * xsd:ENTITY
+     */
+    XSD_ENTITY,
+    
+    /**
+     * xsd:ENTITIES
+     */
+    XSD_ENTITIES,
+    
+    /**
+     * xsd:NMTOKENS
+     */
+    XSD_NMTOKENS,
+    
+    /**
+     * Attachment
+     */
+    ATTACHMENT
 } XSDTYPE;
 
 /**
- * REMOVED from XSDTYPETag-> ACCESSOR, XSD_NCNAME,
+ * REMOVED from XSDTYPETag-> ACCESSOR,
  */
 /**
  *  @class TypeMapping
@@ -71,17 +309,52 @@ typedef enum XSDTYPETag
 class TypeMapping  
 {
 public:
+    /**
+     * Map xsd type name to corresponding XSDTYPE enumeration value.
+     * 
+     * @param sType xsd type name
+     * @return corresponding XSDTYPE enumeration value.
+     */
     static XSDTYPE map(const AxisXMLCh* sType);
+    
+    /**
+     * Initialize internal table of mappings from xsd type names to XSDTYPE enumeration values.
+     */
     static void initialize();
+    
+    /**
+     * Clear internal table of mappings from xsd type names to XSDTYPE enumeration values.
+     */
 	static void uninitialize();
 
+    /**
+     * Internal table of mappings from xsd type names to XSDTYPE enumeration values.
+     */
 #if (defined(AIX) || (defined(_MSC_VER) && _MSC_VER >= 1300) || defined( __OS400__ ) || defined(__sun))
+    /**
+     * Internal table of mappings from xsd type names to XSDTYPE enumeration values.
+     */
 	static std::map<std::string, XSDTYPE> m_sTypeMap;
 #else
+    /**
+     * Internal table of mappings from xsd type names to XSDTYPE enumeration values.
+     */
 	static std::map<const std::string, XSDTYPE> m_sTypeMap;
 #endif
+
+    /**
+     * Flag to indicate if TypeMapping class has been initialized.
+     */
     static volatile bool m_bInit;
+
+    /**
+     * Default constructor
+     */
     TypeMapping();
+    
+    /**
+     * Destructor
+     */
     virtual ~TypeMapping();
 
 };
