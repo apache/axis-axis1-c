@@ -357,16 +357,38 @@ typedef AxiscChar * xsdc__anyURI;
  * engine to identify the web service or client style.
  */
 typedef enum {
+    /**
+     * rpc/encoded binding style
+     */
     AXISC_RPC_ENCODED, /*default*/
+    
+    /**
+     * doc/literal binding style
+     */
     AXISC_DOC_LITERAL,
+    
+    /**
+     * rpc/literal binding style
+     */
     AXISC_RPC_LITERAL
 } AXISC_BINDING_STYLE;
 
 static const xsdc__boolean xsdc_boolean_true = (xsdc__boolean) 1;
 static const xsdc__boolean xsdc_boolean_false = (xsdc__boolean) 0;
 
+/**
+ * @enum
+ * Enumeration of channel types
+ */
 typedef enum {
+    /**
+     * Non-SSL channel
+     */
     AXISC_NORMAL_CHANNEL=0,
+    
+    /**
+     * SSL channel
+     */
     AXISC_SSL_CHANNEL
 } AXISC_CHANNEL_TYPE;
 

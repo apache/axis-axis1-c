@@ -33,9 +33,23 @@ AXIS_CPP_NAMESPACE_START
 
 class SoapSerializer;
 
-typedef enum { ELEMENT_NODE=1, CHARACTER_NODE} NODE_TYPE;
+/**
+ * @enum NODE_TYPE
+ * 
+ * Enumeration of support node types.
+ */
+typedef enum {
+    /**
+     * An XML element node
+     */
+    ELEMENT_NODE=1,
+    /**
+     * A text node
+     */
+    CHARACTER_NODE
+    } NODE_TYPE;
 
-/*
+/**
  * @class BasicNode
  * @brief interface for the BasicNode class.
  *
@@ -217,7 +231,7 @@ public:
       * Sets the namespace URI of this Element. The operation behavior
       * depends on the TYPE of the node.
       *
-      * @param pachURI the namespace URI of this Element.
+      * @param sURI the namespace URI of this Element.
       * @return AXIS_SUCCESS to indicate successfull operation.
       */
     virtual int setURI(const AxisChar* sURI) =0;
@@ -226,7 +240,7 @@ public:
       * Sets the local name of this Element. The operation behavior
       * depends on the TYPE of the node.
       *
-      * @param pachLocalName the local name of this Element.
+      * @param sLocalName the local name of this Element.
       * @return AXIS_SUCCESS to indicate successfull operation.
       */
     virtual int setLocalName(const AxisChar* sLocalName) =0;
@@ -235,7 +249,7 @@ public:
       * Sets the prefix of this Element. The operation behavior
       * depends on the TYPE of the node.
       *
-      * @param pachPrefix the prefix of this Element.
+      * @param sPrefix the prefix of this Element.
       * @return AXIS_SUCCESS to indicate successfull operation.
       */
     virtual int setPrefix(const AxisChar* sPrefix) =0;
@@ -252,13 +266,52 @@ public:
       */
     virtual const AxisChar* getPrefix() = 0;
 
+    /**
+     * Serialize this BasicNode.
+     * 
+     * @param pSZ SoapSerializer instance used for serialization
+     * @return status
+     */
     virtual int serialize(SoapSerializer& pSZ) =0;
+    
+    /**
+     * Serialize this BasicNode.
+     * 
+     * @param pSZ SoapSerializer instance used for serialization
+     * @param lstTmpNameSpaceStack stack of namespaces to be used for serialization
+     * @return status
+     */
     virtual int serialize(SoapSerializer& pSZ, 
-    std::list<AxisChar*>& lstTmpNameSpaceStack) =0;
+        std::list<AxisChar*>& lstTmpNameSpaceStack) =0;
+    
+    /**
+     * Default constructor
+     */
     BasicNode();
+    
+    /**
+     * Parameterized constructor
+     * @param pachValue value for BasicNode
+     * @param eNodeType type of this BasicNode
+     */
     BasicNode(const AxisChar* pachValue, NODE_TYPE eNodeType = ELEMENT_NODE);
+
+    /**
+     * Copy constructor
+     * 
+     * @param rCopy BasicNode to be copied
+     */
     BasicNode(const BasicNode& rCopy);
+    
+    /**
+     * Create a clone of the current BasicNode instance
+     * @return clone of the current BasicNode instance
+     */
     virtual BasicNode* clone() = 0;
+    
+    /**
+     * Destructor
+     */
     virtual ~BasicNode();
 
 protected:

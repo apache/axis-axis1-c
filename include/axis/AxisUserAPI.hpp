@@ -158,7 +158,18 @@ typedef double xsd__double;
  * @typedef xsd__boolean
  * Axis C++ defined type for xml basic type boolean
  */
-typedef enum { false_=0, true_ } xsd__boolean;
+typedef enum
+{
+    /**
+     * False
+     */
+    false_=0,
+    
+    /**
+     * True
+     */
+    true_
+} xsd__boolean;
 /**
  * @typedef xsd__byte
  * Axis C++ defined type for xml basic type byte
@@ -412,8 +423,19 @@ typedef AxisChar * xsd__anyURI;
  * engine to identify the web service or client style.
  */
 typedef enum {
+    /**
+     * rpc/encoded binding
+     */
     RPC_ENCODED, /*default*/
+    
+    /**
+     * doc/literal binding
+     */
     DOC_LITERAL,
+    
+    /**
+     * rpc/literal binding
+     */
     RPC_LITERAL
 } AXIS_BINDING_STYLE;
 
@@ -520,7 +542,14 @@ static const xsd__boolean xsd_boolean_false = (xsd__boolean) 0;
  * Enumeration to indicate type of channel as either SSL or non-SSL channel
  */
 typedef enum {
+    /**
+     * Non-SSL channel
+     */
     NORMAL_CHANNEL=0,
+    
+    /**
+     * SSL channel
+     */
     SSL_CHANNEL
 } AXIS_CHANNEL_TYPE;
 

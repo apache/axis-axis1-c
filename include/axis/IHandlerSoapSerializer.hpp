@@ -18,6 +18,10 @@
 #if !defined(_IHANDLERSOAPSERIALIZER_H____OF_AXIS_INCLUDED_)
 #define _IHANDLERSOAPSERIALIZER_H____OF_AXIS_INCLUDED_
 
+/**
+ * @file IHandlerSoapSerializer.hpp
+ */
+
 #include <axis/IWrapperSoapSerializer.hpp>
 #include <axis/SoapEnvVersions.hpp>
 
@@ -32,17 +36,20 @@ class IHeaderBlock;
   * <PRE>
   * int ESHHandler::invoke(void *pvIMsg)
   * {
-  *	IMessageData *pIMsg = (IMessageData*) pvIMsg;
-  *  AxisChar* pachTemp;
-  *	if(pIMsg->isPastPivot()) {
-  *		//this is a response
+  *     IMessageData *pIMsg = (IMessageData*) pvIMsg;
+  *     AxisChar* pachTemp;
+  *     if(pIMsg->isPastPivot())
+  *     {
+  *         //this is a response
+  * 
+  *         IHandlerSoapSerializer* pISZ;
+  *	        pIMsg->getSoapSerializer(&pISZ);
   *
-  *		IHandlerSoapSerializer* pISZ;
-  *		pIMsg->getSoapSerializer(&pISZ);
+  *	        IHeaderBlock* pIHeaderBlock= pISZ->createHeaderBlock();
   *
-  *		IHeaderBlock* pIHeaderBlock= pISZ->createHeaderBlock();
-  *
-  *		pIHeaderBlock->setLocalName("echoMeStringResponse");
+  *	        pIHeaderBlock->setLocalName("echoMeStringResponse");
+  *     }
+  * }
   * </PRE>
   * 
   * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
@@ -100,24 +107,32 @@ public:
 	virtual IHeaderBlock* getHeaderBlock() = 0;
 	*/
 
-	/**
-	  * Gets and returns the Header Block of the given local name and 
-	  * namespace uri.After returning the Header Block pointer, it will not be
-	  * removed from the available Header Block list of the Serializer.
-	  * The caller of this method should not delete the returned pointer 
-	  * object.
-	  */
+    /**
+	 * Gets and returns the Header Block of the given local name and 
+	 * namespace uri.After returning the Header Block pointer, it will not be
+	 * removed from the available Header Block list of the Serializer.
+	 * The caller of this method should not delete the returned pointer 
+	 * object.
+     * 
+     * @param pcName local name of the HeaderBlock
+     * @param pcNamespace namespace of the HeaderBlock
+     * @return HeaderBlock
+	 */
 	virtual IHeaderBlock* getHeaderBlock(const AxisChar *pcName, 
 											 const AxisChar *pcNamespace) = 0;
      /**
       * Used with getNextHeaderBlock, it returns the first header block,
       * or NULL if there are no headers.
+      * 
+      * @return First HeaderBlock
       */
      virtual IHeaderBlock* getFirstHeaderBlock()=0;
  
      /**
       * Used with getFirstHeaderBlock, it returns the next header block,
       * or NULL if there are no headers.
+      * 
+      * @return Next HeaderBlock
       */
      virtual IHeaderBlock* getNextHeaderBlock()=0;
 
@@ -126,6 +141,7 @@ public:
       * or NULL if:
 	  *  - there are no headers, 
 	  *  - or if the getFirstHeaderBlock method is not called at least once.
+      * @return Current HeaderBlock
       */
      virtual IHeaderBlock* getCurrentHeaderBlock()=0;
 
@@ -138,26 +154,47 @@ public:
      * back to the Serializer
      */
 
+    /**
+     * Set the SOAP body with HexBinary data.
+     * 
+     * @param body SOAP body to set, in HexBinary.
+     * @return status
+     */
     virtual int AXISCALL setBodyAsHexBinary(xsd__hexBinary body)=0;
+    
+    /**
+     * Set the SOAP body with Base64Binary data.
+     * 
+     * @param body SOAP body to set, in Base64Binary.
+     * @return status
+     */
     virtual int AXISCALL setBodyAsBase64Binary(xsd__base64Binary body)=0;
+
+    /**
+     * Get the SOAP body as a string.
+     * 
+     * @return SOAP body as a string
+     */
     virtual const AxisChar* AXISCALL getBodyAsString()=0;
 
 
-/**
-*Used to delete a header block
-*
-*/
+    /**
+    *Used to delete a header block
+    *
+    */
+    
+    virtual int deleteHeaderBlock(const AxisChar* pName, const AxisChar* pNamespace)=0;
+    /**
+    *Used to delete all the header block
+    *
+    */
+    virtual int removeSoapHeader()=0;
 
-virtual int deleteHeaderBlock(const AxisChar* pName, const AxisChar* pNamespace)=0;
-/**
-*Used to delete all the header block
-*
-*/
-virtual int removeSoapHeader()=0;
-
-	/**
-	  * Adds the namespace declaration to the SOAP Envelope.
-	  */
+    /**
+     * Adds the namespace declaration to the SOAP Envelope.
+     * @param pachNamespaceURI namespace URI to add to SOAP envelope
+     * @param pachPrefix prefix to be used for namespace URI
+	 */
 	virtual void addNamespaceToEnvelope(AxisChar *pachNamespaceURI, AxisChar* pachPrefix)=0;
 };
 

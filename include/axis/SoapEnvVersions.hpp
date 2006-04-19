@@ -21,6 +21,10 @@
 
 /* SoapEnvVersions.h:*/
 
+/**
+ * @file SoapEnvVersions.hpp
+ */
+
 #include <axis/GDefine.hpp>
 
 #ifdef WIN32
@@ -36,41 +40,135 @@ AXIS_CPP_NAMESPACE_START
  * Here SKW stands for SoapKeyWord. This is a internal naming convension
  * for Axis C++.
  */
+
+/**
+ * @enum SOAP_WORDS
+ * Enumeration of SOAP key words
+ */
 typedef enum SOAP_WORDSTag 
 {
+    /**
+     * SOAP Envelope
+     */
     SKW_ENVELOPE=0, /* this should always be 0 */
+    
+    /**
+     * SOAP Header
+     */
     SKW_HEADER,
+    
+    /**
+     * SOAP Body
+     */
     SKW_BODY,
+    
+    /**
+     * SOAP mustUnderstand attribute
+     */
     SKW_MUSTUNDERSTAND,
+    
+    /**
+     * SOAP actor attribute
+     */
     SKW_ACTOR,
+    
+    /**
+     * SOAP encodingStyle attribute
+     */
     SKW_ENCODING_STYLE,
+    
+    /**
+     * SOAP Fault
+     */
     SKW_FAULT,
+    
+    /**
+     * SOAP Fault code
+     */
     SKW_FAULT_CODE,
+    
+    /**
+     * SOAP Fault string
+     */
     SKW_FAULT_STRING,
+    
+    /**
+     * SOAP Fault actor
+     */
     SKW_FAULT_ACTOR,
+    
+    /**
+     * SOAP Fault detail
+     */
     SKW_DETAIL,
+    
+    /**
+     * Multi-Ref
+     */
     SKW_MULTIREF,
     
+    /**
+     * type attribute
+     */
     SKW_TYPE,
+    
+    /**
+     * arrayType attribute
+     */
     SKW_ARRAYTYPE,
+    
+    /**
+     * href attribute
+     */
     SKW_HREF,
+    
+    /**
+     * id attribute
+     */
     SKW_ID,
 
     SOAP_WORDS_LAST /*this should be the number of entries in this enum */
 } SOAP_WORDS;
 
+/**
+ * @enum SOAP_VERSION
+ * Enumeration to indicate SOAP version being used
+ */
 typedef enum SOAP_VERSIONTag 
 {
+    /**
+     * SOAP 1.1
+     */
     SOAP_VER_1_1=0,
+    
+    /**
+     * SOAP 1.2
+     */
     SOAP_VER_1_2,
 
     VERSION_LAST
 } SOAP_VERSION;
 
+/**
+ * @struct SoapEnvVersionsStruct
+ * Structure to provide mapping between SOAP namespace, and prefix, and the various
+ * SOAP keywords.
+ */
 struct SoapEnvVersionsStruct 
-{    
+{
+    /**
+     * Namespace URI of SOAP version
+     */
     const AxisChar* pchNamespaceUri;
+    
+    /**
+     * Namespace prefix to use for this SOAP version
+     */
     const AxisChar* pchPrefix;
+    
+    /**
+     * Array of SOAP keywords
+     */
     const AxisChar* pchWords[SOAP_WORDS_LAST];
 };
 

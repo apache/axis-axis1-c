@@ -37,6 +37,10 @@
 
 #include <axis/TypeMapping.hpp>
 
+/**
+ * @file Axis.hpp
+ */
+
 AXIS_CPP_NAMESPACE_START
 
 /**

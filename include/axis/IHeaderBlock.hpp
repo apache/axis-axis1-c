@@ -23,12 +23,52 @@
 #include <axis/IAttribute.hpp>
 #include <axis/INamespace.hpp>
 
+/**
+ * @file IHeaderBlock.hpp
+ */
+
 AXIS_CPP_NAMESPACE_START
 
+/**
+ * @enum HEADER_BLOCK_STD_ATTR_TYPE
+ * Enumeration of standard header block attributes.
+ */
 typedef enum 
-{   ROLE_NEXT=1, ROLE_NONE=2, 
-    ROLE_ULTIMATE_RECEIVER=3, 
-    ACTOR=4, MUST_UNDERSTAND_TRUE= 5, 
+{   
+    /**
+     * (SOAP 1.2 only) The role attribute set as next.
+     * The value will be set as "http://www.w3.org/2003/05/soap-envelope/role/next"
+     */
+    ROLE_NEXT=1,
+    
+    /**
+     * (SOAP 1.2 only) The role attribute set as none.
+     * The value will be set as "http://www.w3.org/2003/05/soap-envelope/role/none"
+     */
+    ROLE_NONE=2,
+    
+    /**
+     * (SOAP 1.2 only) The role attribute set as ultimateReceiver
+     * The value will be set as "http://www.w3.org/2003/05/soap-envelope/role/ultimateReceiver"
+     */
+    ROLE_ULTIMATE_RECEIVER=3,
+    
+    /**
+     * (SOAP 1.1 only) The actor attribute
+     */
+    ACTOR=4,
+
+    /**
+     * The mustUnderstand attribute set as true.
+     * For SOAP 1.1 - the value will be set as "1".
+     * For SOAP 1.2 - the value will be set as "true".
+     */
+    MUST_UNDERSTAND_TRUE= 5,
+    /**
+     * The mustUnderstand attribute set as false.
+     * For SOAP 1.1 - the value will be set as "0".
+     * For SOAP 1.2 - the value will be set as "false".
+     */
     MUST_UNDERSTAND_FALSE=6
 } HEADER_BLOCK_STD_ATTR_TYPE;
 
@@ -70,6 +110,11 @@ public:
     virtual INamespace* createNamespaceDecl(const AxisChar *prefix, 
             const AxisChar *uri)=0; 
 
+    /**
+     * Retyrbs the first child element of this Header Block.
+     * 
+     * @return A pointer to the first child element of this Header Block.
+     */
     virtual BasicNode* getFirstChild() =0;
     /**
      * Returns the number of child elements of this HeaderBlock.
@@ -210,7 +255,15 @@ public:
       */
      virtual const AxisChar* getAttributeValue(const AxisChar* localname,
          const AxisChar* prefix) = 0;
- 
+
+    /**
+     * Gets and Attribute URI from the Header Block.
+     * 
+     * @param localname The local name of the attribute.
+     * @param prefix The prefix of the attribute.
+     * 
+     * @return the uri of the attribute is returned.
+     */ 
      virtual const AxisChar* getAttributeUri( const AxisChar * localname,
          const AxisChar* prefix) = 0;
 
@@ -220,7 +273,7 @@ public:
      * ELEMENT_NODE a ComplexElement is created. After creating the child it
      * will be added as a immediate child to the header block.
      *
-     * @param The type of the child to be created, it should be either 
+     * @param eNODE_TYPE The type of the child to be created, it should be either 
      * CHARACTER_NODE for CharacterElements or ELEMENT_NODE for 
      * ComplexElements.
      * @return The child node created will be returned if the creation is
@@ -319,8 +372,16 @@ public:
     virtual int initializeForTesting() = 0;
 #endif
     
+    /**
+     * Default constructor
+     */
     IHeaderBlock(){/*empty body as there are no member variable*/};
 
+    /**
+     * Copy constructor
+     * 
+     * @param rCopy IHeaderBlock to be copied.
+     */
     IHeaderBlock(const IHeaderBlock& rCopy){/*empty body as there are no member variable*/};
 
     /**

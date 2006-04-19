@@ -32,22 +32,83 @@
 
 AXIS_CPP_NAMESPACE_START
 
-typedef enum { NORMAL_HANDLER, WEBSERVICE_HANDLER, CHAIN_HANDLER } HANDLER_TYPE;
+/**
+ * @enum HANDLER_TYPE
+ * Enumeration to indicate the type of handler
+ */
+typedef enum {
+    /**
+     * Handler
+     */
+    NORMAL_HANDLER,
+    
+    /**
+     * Web Service
+     */
+    WEBSERVICE_HANDLER,
+    
+    /**
+     * Handler Chain, a chain contains 1 or more Handlers
+     */
+    CHAIN_HANDLER
+} HANDLER_TYPE;
 
+/**
+ * @struct BasicHandlerFunctions
+ * 
+ * Structure containing function pointers to the BasicHandler functions
+ */
 typedef struct 
 {
+    /**
+     * Function pointer to the BasicHandler invoke method
+     */
     int (AXISCALL* invoke)(void* _object, void* pMsg);
+    
+    /**
+     * Function pointer to the BasicHandler onFault method
+     */
     void (AXISCALL* onFault)(void* _object, void* pMsg);
+    
+    /**
+     * Function pointer to the BasicHandler init method
+     */
     int (AXISCALL* init)(void* _object);
+    
+    /**
+     * Function pointer to the BasicHandler fini method
+     */
     int (AXISCALL* fini)(void* _object);
+    
+    /**
+     * Function pointer to the BasicHandler getType method
+     */
     int (AXISCALL* getType)(void* _object);
+    
+    /**
+     * Function pointer to the BasicHandler getBindingStyle method
+     */
     AXIS_BINDING_STYLE (AXISCALL* getBindingStyle)(void* _object);
 } BasicHandlerFunctions;
 
+/**
+ * @struct BasicHandler
+ * 
+ * Structure containing handler instance and functions
+ */
 typedef struct 
 {
+    /**
+     * Handler instance.
+     * 
+     * For C++ implementations this will be an instance of HandlerBase.
+     */
     void* _object; 
-    /* present only for interfaces passed from C to C++ (eg:BasicHandler) */
+    /**
+     * Structure of function pointers.
+     * 
+     * Present only for interfaces passed from C to C++ (eg:BasicHandler)
+     */
     BasicHandlerFunctions* _functions;
 } BasicHandler;
 

@@ -19,10 +19,15 @@
 #if !defined(_IHANDLERSOAPDESERIALIZER_H____OF_AXIS_INCLUDED_)
 #define _IHANDLERSOAPDESERIALIZER_H____OF_AXIS_INCLUDED_
 
+/**
+ * @file IHandlerSoapDeSerializer.hpp
+ */
+
 #include <axis/IWrapperSoapDeSerializer.hpp>
 #include <axis/IHeaderBlock.hpp>
 #include <axis/AxisUserAPI.hpp>
-/*
+
+/**
  *  @class IHandlerSoapDeSerializer
  *  @brief interface for the IHandlerSoapDeSerializer class.
  *
@@ -61,18 +66,47 @@ public:
      * the new SoapBody back to the 
      * Deserializer.
      */
+
+    /**
+     * Gets and returns the SOAP body as HexBinary data.
+     * 
+     * @return SOAP Body as HexBinary data
+     */
     virtual xsd__hexBinary AXISCALL getBodyAsHexBinary()=0;
+    
+    /**
+     * Gets and returns the SOAP boday as Base64Binary data.
+     * 
+     * @return SOAP body as Base64Binary data.
+     */
     virtual xsd__base64Binary AXISCALL getBodyAsBase64Binary()=0;
+    
+    /**
+     * Gets and returns the SOAP body as a string.
+     * 
+     * @return SOAP body as a string.
+     */
     virtual AxisChar* AXISCALL getBodyAsChar()=0;
+    
+    /**
+     * Sets a new SOAP body from a string
+     * 
+     * @param pNewSoapBody new SOAP body as a string.
+     * @return status
+     */
     virtual int AXISCALL setNewSoapBody(AxisChar* pNewSoapBody)=0;
 
-	/**
-	  * Gets and returns the Header Block of the given local name and 
-	  * namespace uri. After returning the Header Block pointer, it will be
-	  * removed from the available Header Block list of the DeSerializer.
-	  * It is the responsibilty of the caller of this method to delete the
-	  * returned pointer object, to avoid memory leaks.
-	  */
+    /**
+     * Gets and returns the Header Block of the given local name and 
+     * namespace uri. After returning the Header Block pointer, it will be
+     * removed from the available Header Block list of the DeSerializer.
+     * It is the responsibilty of the caller of this method to delete the
+     * returned pointer object, to avoid memory leaks.
+     * 
+     * @param pName local name of header block.
+     * @param pNamespace namespare URI of header block.
+     * @return HeaderBlock
+     */
     virtual IHeaderBlock* getHeaderBlock(const AxisChar* pName, 
         const AxisChar* pNamespace) = 0;
 };

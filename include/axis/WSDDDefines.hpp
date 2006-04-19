@@ -20,18 +20,50 @@
  *
  */
 
+/**
+ * @file WSDDDefines.hpp
+ */
+
 #if !defined(__WSDD_DEFINES_H__OF_AXIS_INCLUDEDED__)
 #define __WSDD_DEFINES_H__OF_AXIS_INCLUDEDED__
 
 AXIS_CPP_NAMESPACE_START
 
+/**
+ * @enum PROVIDERTYPE
+ * 
+ * Enumeration of provider types
+ */
 typedef enum  
 {
+    /**
+     * Unknown or unable to determine provider type
+     */
     UNKNOWN_PROVIDER=0,
+    
+    /**
+     * RPC style C provider
+     */
     C_RPC_PROVIDER,
+    
+    /**
+     * Doc style C provider
+     */
     C_DOC_PROVIDER,
+    
+    /**
+     * RPC style C++ provider
+     */
     CPP_RPC_PROVIDER,
+    
+    /**
+     * Doc style C++ provider
+     */
     CPP_DOC_PROVIDER,
+    
+    /**
+     * 
+     */
     COM_PROVIDER
 } PROVIDERTYPE;
 

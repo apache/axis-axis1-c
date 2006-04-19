@@ -24,12 +24,16 @@
 #include <axis/IWrapperSoapDeSerializer.hpp>
 #include <axis/IWrapperSoapSerializer.hpp>
 
+/**
+ * @file IMessageData.hpp
+ */
+
 AXIS_CPP_NAMESPACE_START
 
 class WSDDService;
 class IAdminUtils;
 
-/*
+/**
  *   @class IMessageData
  *   @brief interface for the IMessageData class.
  *   @author Susantha Kumara (skumara@virtusa.com, susantha@opensource.lk)
