@@ -124,9 +124,9 @@ void Call::cleanup()
 	m_pcEndPointUri = NULL;
 }
 
-int Call::setEndpointURI (const char* pchEndpointURI)
+int Call::setEndpointURI( const char * pchEndpointURI)
 {
-    m_pTransport->setEndpointUri(pchEndpointURI);
+    m_pTransport->setEndpointUri( pchEndpointURI);
 
     return AXIS_SUCCESS;
 }
@@ -137,40 +137,54 @@ void Call::setOperation (const char* pchOperation, const char* pchNamespace)
     m_pAxisEngine->getMessageData()->setOperationName(pchOperation);
 }
 
-void Call::addParameter (void* pValue, const char* pchName, XSDTYPE nType)
+void Call::addParameter( void * pValue, const char * pchName, XSDTYPE nType)
 {
-     m_nStatus = m_pIWSSZ->addOutputParam (pchName, pValue, nType);
+	m_nStatus = m_pIWSSZ->addOutputParam( pchName, pValue, nType);
 }
 
 /*
  * Method used to add arrays of basic types as parameters
  */
-void Call::addBasicArrayParameter (Axis_Array* pArray, XSDTYPE nType,
-    const AxisChar* pName)
+void Call::addBasicArrayParameter( Axis_Array *		pArray,
+								   XSDTYPE			nType,
+								   const AxisChar *	pName)
 {
-    m_nStatus = m_pIWSSZ->addOutputBasicArrayParam (pArray, nType, pName);
+	m_nStatus = m_pIWSSZ->addOutputBasicArrayParam( pArray, nType, pName);
 }
 
-void Call::addCmplxArrayParameter (Axis_Array* pArray, void* pSZFunct,
-    void* pDelFunct, void* pSizeFunct, const AxisChar* pName, 
-    const AxisChar* pNamespace)
+void Call::addCmplxArrayParameter( Axis_Array *		pArray,
+								   void *			pSZFunct,
+                                   void *			pDelFunct,
+								   void *			pSizeFunct,
+								   const AxisChar *	pName,
+                                   const AxisChar *	pNamespace)
 {
-     m_nStatus = m_pIWSSZ->addOutputCmplxArrayParam (pArray, pSZFunct, pDelFunct, pSizeFunct,
-        pName, pNamespace);
+	m_nStatus = m_pIWSSZ->addOutputCmplxArrayParam( pArray,
+													pSZFunct,
+													pDelFunct,
+													pSizeFunct,
+                                                    pName,
+													pNamespace);
 }
 
-void Call::addCmplxParameter (void* pObject, void* pSZFunct, void* pDelFunct,
-    const AxisChar* pName, const AxisChar* pNamespace)
+void Call::addCmplxParameter( void *			pObject,
+							  void *			pSZFunct,
+							  void *			pDelFunct,
+                              const AxisChar *	pName,
+							  const AxisChar *	pNamespace)
 {
-     m_nStatus = m_pIWSSZ->addOutputCmplxParam (pObject, pSZFunct, pDelFunct, pName,
-        pNamespace);
+	m_nStatus = m_pIWSSZ->addOutputCmplxParam( pObject,
+											   pSZFunct,
+											   pDelFunct,
+											   pName,
+                                               pNamespace);
 }
 
-int Call::invoke ()
+int Call::invoke()
 {
-        m_nStatus =  m_pAxisEngine->process(m_pTransport);
+	m_nStatus = m_pAxisEngine->process( m_pTransport);
 
-    return m_nStatus;
+	return m_nStatus;
 }
 
 class HandlerProperty
@@ -184,7 +198,7 @@ public:
 	int len;
 };
 
-int Call::initialize(PROVIDERTYPE nStyle)
+int Call::initialize( PROVIDERTYPE nStyle)
 /* Does this mean that the stub that uses this Call object as well as all 
  * client side handlers have the same PROVIDERTYPE ? 
  */
@@ -194,118 +208,153 @@ int Call::initialize(PROVIDERTYPE nStyle)
     /* Initialize re-usable objects of this instance (objects may have been 
      * populated by the previous call.)
      */
-    try
-    {
-        m_nStatus = AXIS_SUCCESS;
-            MessageData *msgData = m_pAxisEngine->getMessageData ();
-            if (msgData)
-            {
-				list<void*>::iterator it = m_handlerProperties.begin();
-				while (it != m_handlerProperties.end())
+	try
+	{
+		m_nStatus = AXIS_SUCCESS;
+
+// Move the handler data previously added using the setHandlerProperty method into the message data object (that is visible to the handlers).
+		MessageData *	msgData = m_pAxisEngine->getMessageData();
+
+		if( msgData)
+		{
+			list<void*>::iterator it = m_handlerProperties.begin();
+
+// Copy the list of handler objects.
+			while( it != m_handlerProperties.end())
+			{
+				HandlerProperty *pHp = (HandlerProperty *) (*it);
+
+				msgData->setProperty( pHp->name, pHp->value, pHp->len);
+
+				delete pHp;
+
+				it++;
+			}
+
+// Delete the original list.
+			m_handlerProperties.clear();
+
+// Add the SOAP serialiser/deserialiser entry points to the message data object.
+			msgData->getSoapSerializer( (IWrapperSoapSerializer **) (&m_pIWSSZ));
+			msgData->getSoapDeSerializer( (IWrapperSoapDeSerializer **) (&m_pIWSDZ));
+
+			if( m_pIWSSZ && m_pIWSDZ)
+			{
+				m_pIWSSZ->setCurrentProviderType( nStyle);
+				m_pIWSDZ->setCurrentProviderType( nStyle);
+
+				m_pIWSSZ->reset();
+				m_pIWSDZ->init();
+
+				switch (nStyle)
 				{
-					HandlerProperty *pHp = (HandlerProperty*)(*it);
-					msgData->setProperty(pHp->name, pHp->value, pHp->len);
-					delete pHp;
-					it++;
+					case C_RPC_PROVIDER:
+					case CPP_RPC_PROVIDER:
+						m_pIWSSZ->setStyle( RPC_ENCODED);
+						m_pIWSDZ->setStyle( RPC_ENCODED);
+						break;
+
+					case C_DOC_PROVIDER:
+					case CPP_DOC_PROVIDER:
+						m_pIWSSZ->setStyle( DOC_LITERAL);
+						m_pIWSDZ->setStyle( DOC_LITERAL);
+						break;
+
+					case COM_PROVIDER:
+						// TODO: ??
+						break;
+
+					default:;
+						//TODO: ??
 				}
-				m_handlerProperties.clear();
 
-                msgData->getSoapSerializer ((IWrapperSoapSerializer**) 
-                    (&m_pIWSSZ));
-                msgData->getSoapDeSerializer ((IWrapperSoapDeSerializer**) 
-                    (&m_pIWSDZ));
-                if (m_pIWSSZ && m_pIWSDZ)
-                {
-                    m_pIWSSZ->setCurrentProviderType (nStyle);
-                    m_pIWSDZ->setCurrentProviderType (nStyle);
+				if( m_pchSessionID)
+				{
+					msgData->setProperty( "sessionid", m_pchSessionID);
+				}
 
-                    m_pIWSSZ->reset();
-                    m_pIWSDZ->init();
-                    
-                    switch (nStyle)
-                    {
-                        case C_RPC_PROVIDER:
-                        case CPP_RPC_PROVIDER:
-                            m_pIWSSZ->setStyle (RPC_ENCODED);
-                            m_pIWSDZ->setStyle (RPC_ENCODED);
-                            break;
-                        case C_DOC_PROVIDER:
-                        case CPP_DOC_PROVIDER:
-                            m_pIWSSZ->setStyle (DOC_LITERAL);
-                            m_pIWSDZ->setStyle (DOC_LITERAL);
-                            break;
-                        case COM_PROVIDER:
-                            // TODO: ??
-                            break;
-                        default:;
-                                //TODO: ??
-                    }
-                    if(m_pchSessionID)
-                    {
-                        msgData->setProperty("sessionid", m_pchSessionID);
-                    }
+				m_pIWSSZ->setContentIdSet( m_pContentIdSet);
 
-					m_pIWSSZ->setContentIdSet(m_pContentIdSet);
-					list<ISoapAttachment*>::iterator itAtt = m_attachments.begin();
-					while (itAtt != m_attachments.end())
-					{
-						m_pIWSSZ->addAttachment((*itAtt)->getHeader(AXIS_CONTENT_ID),*itAtt);
-						itAtt++;
-					}
-					m_attachments.clear();
-                    return AXIS_SUCCESS;
-                }
-            }
-            m_nStatus = AXIS_FAIL;
-            return AXIS_FAIL;
-        m_nStatus = AXIS_FAIL;        
-        return AXIS_FAIL;
-    }
-    catch (AxisException& e)
-    {
-        e = e;
-        m_nStatus = AXIS_FAIL;
-        throw;
-    }
-    catch (...)
-    {
-        m_nStatus = AXIS_FAIL;        
-        throw;
-    }
+				list<ISoapAttachment*>::iterator itAtt = m_attachments.begin();
+
+				while( itAtt != m_attachments.end())
+				{
+					m_pIWSSZ->addAttachment( (*itAtt)->getHeader( AXIS_CONTENT_ID), *itAtt);
+
+					itAtt++;
+				}
+
+				m_attachments.clear();
+
+				return AXIS_SUCCESS;
+			}
+		}
+
+		m_nStatus = AXIS_FAIL;
+
+		return AXIS_FAIL;
+	}
+
+	catch( AxisException& e)
+	{
+		e = e;
+		m_nStatus = AXIS_FAIL;
+		throw;
+	}
+	catch( ...)
+	{
+		m_nStatus = AXIS_FAIL;        
+		throw;
+	}
 }
 
-int Call::unInitialize ()
+int Call::unInitialize()
 {
     m_bCallInitialized = false;
-    if (m_pAxisEngine)
+
+    if( m_pAxisEngine)
     {
-		//Initialization,serialization, invokation or check message success 
-		if ( m_nStatus == AXIS_SUCCESS &&  m_pIWSDZ != NULL ) 
+// Initialization, serialization, invocation or check message success 
+		if( m_nStatus == AXIS_SUCCESS && m_pIWSDZ != NULL)
 		{
-			// Test if deserialization failed 
+// Test if deserialization failed 
 			m_nStatus = m_pIWSDZ->getStatus();
 		}
-		MessageData *msgData = m_pAxisEngine->getMessageData();	
-        AxisChar * pachTemp = (AxisChar *)msgData->getProperty("sessionid");
-        int len = strlen(pachTemp);
-        if ( len > 0 ) // Samisa: check if there is a session key
+
+		MessageData *	msgData = m_pAxisEngine->getMessageData();	
+        AxisChar *		pachTemp = (AxisChar *) msgData->getProperty( "sessionid");
+        int				len = (int) strlen( pachTemp);
+
+// Check if there is a session key
+		if( len > 0)
         {
-            if (m_pchSessionID) // Samisa: deallocate before allocation
+// De-allocate before re-allocation
+			if( m_pchSessionID)
             {
                 delete [] m_pchSessionID;
+
                 m_pchSessionID = NULL;
             }
-            m_pchSessionID = new char[len + 1];  // Samisa: should have space for terminating char
-            strcpy(m_pchSessionID, pachTemp);
+
+// Should have space for terminating char
+			m_pchSessionID = new char[len + 1];
+            
+			strcpy( m_pchSessionID, pachTemp);
         }
-        else //Samisa: there is no session key
+        else
         {
-            if (m_pchSessionID) 
+// There is no session key
+			if( m_pchSessionID)
+			{
                 delete [] m_pchSessionID;
+			}
+
             m_pchSessionID = NULL;
         }
     }
-    closeConnection ();
+
+    closeConnection();
+
     return AXIS_SUCCESS;
 }
 
@@ -945,10 +994,11 @@ xsd__positiveInteger * Call::getAttributeAsPositiveInteger (const AxisChar* pNam
     return m_pIWSDZ->getAttributeAsPositiveInteger (pName, pNamespace);
 }
 
-int Call::checkMessage (const AxisChar* pName, const AxisChar* pNamespace)
+int Call::checkMessage( const AxisChar * pName, const AxisChar * pNamespace)
 {
-	 m_nStatus = m_pIWSDZ->checkMessageBody (pName, pNamespace);
-    return m_nStatus;
+	m_nStatus = m_pIWSDZ->checkMessageBody( pName, pNamespace);
+
+	return m_nStatus;
 }
 
 void* Call::checkFault (const AxisChar* pName, const AxisChar* pNamespace)
@@ -963,21 +1013,22 @@ void* Call::getCmplxObject (void* pDZFunct, void* pCreFunct, void* pDelFunct,
         pNamespace);
 }
 
-IHeaderBlock* Call::createHeaderBlock ()
+IHeaderBlock * Call::createHeaderBlock()
 {
-    return (m_pIWSSZ->createHeaderBlock ());
+    return m_pIWSSZ->createHeaderBlock();
 }
 
-IHeaderBlock* Call::createHeaderBlock(AxisChar* pachLocalName, 
-                                       AxisChar* pachUri)
+IHeaderBlock * Call::createHeaderBlock( AxisChar * pachLocalName, 
+                                       AxisChar * pachUri)
 {
- 	return new HeaderBlock(pachLocalName, pachUri);
+ 	return new HeaderBlock( pachLocalName, pachUri);
 }
 
-IHeaderBlock* Call::createHeaderBlock(AxisChar* pachLocalName, 
-                                       AxisChar* pachUri, AxisChar* pachPrefix)
+IHeaderBlock * Call::createHeaderBlock( AxisChar * pachLocalName,
+									    AxisChar * pachUri,
+										AxisChar * pachPrefix)
 {
- 	return new HeaderBlock(pachLocalName, pachUri, pachPrefix);
+ 	return new HeaderBlock( pachLocalName, pachUri, pachPrefix);
 }
 
 int Call::getStatus() 
@@ -992,14 +1043,14 @@ void Call::setProxy(const char* pcProxyHost, unsigned int uiProxyPort)
     m_bUseProxy = true;    
 }
 
-AnyType* Call::getAnyObject()
+AnyType * Call::getAnyObject()
 {
 	return m_pIWSDZ->getAnyObject();
 }
 
-int Call::addAnyObject(AnyType* pAnyObject)
+int Call::addAnyObject( AnyType * pAnyObject)
 {
-	return m_pIWSSZ->addOutputAnyObject(pAnyObject);
+	return m_pIWSSZ->addOutputAnyObject( pAnyObject);
 }
 
 const AxisChar* Call::getNamespacePrefix(const AxisChar* pNamespace)
@@ -1007,27 +1058,37 @@ const AxisChar* Call::getNamespacePrefix(const AxisChar* pNamespace)
     return m_pIWSSZ->getNamespacePrefix(pNamespace);
 }
 
-void Call::setSOAPMethodAttribute(const AxisChar *pLocalname, const AxisChar *pPrefix, const AxisChar *pValue)
+void Call::setSOAPMethodAttribute( const AxisChar * pLocalname,
+								   const AxisChar * pPrefix,
+								   const AxisChar * pValue)
 {
-    setSOAPMethodAttribute(pLocalname,pPrefix,NULL,pValue);
+    setSOAPMethodAttribute( pLocalname, pPrefix, NULL, pValue);
 }
 
-void Call::setSOAPMethodAttribute(const AxisChar *pLocalname, const AxisChar *pPrefix, 
-                                  const AxisChar *pUri, const AxisChar *pValue)
+void Call::setSOAPMethodAttribute( const AxisChar * pLocalname,
+								   const AxisChar * pPrefix, 
+                                   const AxisChar * pUri,
+								   const AxisChar * pValue)
 {
-    IAttribute* pAttribute;
-	if (pValue==NULL) pValue = "";
-    if (NULL!=pUri)
+    IAttribute *	pAttribute;
+
+	if( pValue == NULL)
+	{
+		pValue = "";
+	}
+
+    std::list<Attribute*>	attributeList;
+
+    if( NULL != pUri)
     {
-        std::list<Attribute*> attributeList;
-        pAttribute = new Attribute(attributeList, pLocalname, pPrefix, pUri, pValue);
+        pAttribute = new Attribute( attributeList, pLocalname, pPrefix, pUri, pValue);
     }
     else
     {
-        std::list<Attribute*> attributeList;
-        pAttribute = new Attribute(attributeList, pLocalname, pPrefix, pValue);
+        pAttribute = new Attribute( attributeList, pLocalname, pPrefix, pValue);
     }
-    m_pIWSSZ->setSOAPMethodAttribute(((Attribute*)pAttribute)->clone());
+
+    m_pIWSSZ->setSOAPMethodAttribute( ((Attribute *) pAttribute)->clone());
 }
 
 const xsd__string Call::getFaultAsXMLString()
