@@ -721,7 +721,35 @@ public class BeanParamWriter extends ParamCFileWriter
         writer.write("\n");
         
         for (int i = 0; i < attribs.length; i++)
-            if (!(attribs[i].isSimpleType() || attribs[i].getType().isSimpleType()))
+        {
+            if (attribs[i].isSimpleType() || attribs[i].getType().isSimpleType())
+            {
+                // Probably want to do it for hexbinary and base64binary and ?
+                if (attribs[i].isArray())
+                {
+                    writeNewline = true;
+                    
+                    String passedInBaseType;
+                    String baseTypeName = null;
+                    
+                    if (!attribs[i].isSimpleType() && attribs[i].getType().isSimpleType())
+                        baseTypeName = CUtils.getclass4qname(attribs[i].getType().getBaseType());
+                    else
+                        baseTypeName = attribs[i].getTypeName();
+                    
+                    if (attribs[i].isArray())
+                    {
+                        passedInBaseType = "XSDC_ARRAY";
+                        baseTypeName += "_Array";
+                    }
+                    else
+                        passedInBaseType = CUtils.getXSDTypeForBasicType(baseTypeName);
+                                    
+                    writer.write("\tpTemp->" + attribs[i].getParamNameAsMember() 
+                            + " = (" + baseTypeName + "*)axiscAxisNew(" + passedInBaseType + ",0);\n");
+                }
+            }
+            else
             {
                 writeNewline = true;
                 
@@ -735,7 +763,8 @@ public class BeanParamWriter extends ParamCFileWriter
                     writer.write("\tpTemp->" + attribs[i].getParamName() + " = "
                             + "Axis_Create_" + attribs[i].getTypeName() + "(0,0,0);\n");                   
                 }
-            }
+            }            
+        }
         
         if (writeNewline)
             writer.write("\n");
