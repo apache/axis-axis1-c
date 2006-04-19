@@ -707,47 +707,39 @@ public class BeanParamWriter extends ParamCFileWriter
      */
     private void writeCreateGlobalMethod() throws IOException
     {
+        boolean writeNewline = false;
+        
         writer.write("\n");
         writer.write("/**\n");
-        writer.write(" * This static method to deallocate a " + classname + " type of object\n");
+        writer.write(" * This static method to allocate a " + classname + " type of object\n");
         writer.write(" */\n");
         
         writer.write("void* Axis_Create_" + classname + "(void* pObj, AxiscBool bArray, int nSize)\n{\n");
         
-        writer.write("\t" + classname + "* pTemp;\n");
+        writer.write("\t" + classname + "* pTemp = (" + classname + " *)malloc(sizeof(" + classname + "));\n");
+        writer.write("\tmemset(pTemp, 0, sizeof(" + classname + "));\n");
         writer.write("\n");
-        writer.write("\tif (bArray && (nSize > 0))\n\t{\n");
-        writer.write("\t\tif (pObj)\n\t\t{\n");
-        writer.write("\t\t\tpObj = (void *)  realloc(pObj, sizeof(" + classname + " *)*nSize);\n");
-        writer.write("\t\t\tpTemp = pObj;\n");
-        writer.write("\t\t\tpTemp += nSize/2;\n");
-        writer.write("\t\t\tmemset(pTemp, 0, sizeof(" + classname + " *)*nSize/2);\n");
-        writer.write("\t\t}\n\t\telse\n\t\t{\n");
-        writer.write("\t\t\tpObj = (void *)  malloc(sizeof(" + classname + " *)*nSize);\n");
-        writer.write("\t\t\tmemset(pObj, 0, sizeof(" + classname + " *)*nSize);\n\t\t}\n");
-        writer.write("\t}\n\telse\n\t{\n");
-        writer.write("\t\tpObj = (void *)  malloc(sizeof(" + classname + "));\n");
-        writer.write("\t\tmemset(pObj, 0, sizeof(" + classname + "));\n");
-        writer.write("\t\tpTemp = (" + classname + " *)pObj;\n");
         
         for (int i = 0; i < attribs.length; i++)
             if (!(attribs[i].isSimpleType() || attribs[i].getType().isSimpleType()))
             {
+                writeNewline = true;
+                
                 if (attribs[i].isArray())
                 {
-                    writer.write("\t\tpTemp->" + attribs[i].getParamName() + " = "
+                    writer.write("\tpTemp->" + attribs[i].getParamName() + " = "
                             + "Axis_Create_" + attribs[i].getTypeName() + "_Array(0);\n");
                 }
                 else
                 {
-                    writer.write("\t\tpTemp->" + attribs[i].getParamName() + " = "
+                    writer.write("\tpTemp->" + attribs[i].getParamName() + " = "
                             + "Axis_Create_" + attribs[i].getTypeName() + "(0,0,0);\n");                   
                 }
             }
         
-        writer.write("\t}\n");
-        writer.write("\n");
-        writer.write("\treturn pObj;\n}\n");
+        if (writeNewline)
+            writer.write("\n");
+        writer.write("\treturn pTemp;\n}\n");
     }
 
     /**
@@ -765,7 +757,7 @@ public class BeanParamWriter extends ParamCFileWriter
         
         writer.write("{\n");
         writer.write("\t/* If NULL, just return */\n");
-        writer.write("\tif (!param)\n");
+        writer.write("\tif (param == NULL)\n");
         writer.write("\t\treturn;\n");
         writer.write("\n");
         
@@ -784,7 +776,6 @@ public class BeanParamWriter extends ParamCFileWriter
         writer.write("\t\t\t\t\tparamArray[count] = NULL;\n");
         writer.write("\t\t\t\t}\n");
         writer.write("\t\t\t}\n");
-        writer.write("\t\t\tfree(param);\n");
         writer.write("\t\t}\n");
         writer.write("\t}\n");
         
@@ -795,7 +786,7 @@ public class BeanParamWriter extends ParamCFileWriter
         {
             if (attribs[i].isSimpleType() || attribs[i].getType().isSimpleType())
             {
-                if (CUtils.isPointerType(attribs[i].getTypeName()))
+                if (CUtils.isPointerType(attribs[i].getTypeName()) || attribs[i].isArray())
                 {
                     String passedInBaseType;
                     String baseTypeName = null;
@@ -833,58 +824,6 @@ public class BeanParamWriter extends ParamCFileWriter
         
         writer.write("}\n");
     }
-
-//        for (int i = 0; i < attribs.length; i++)
-//        {
-//            if (attribs[i].isArray())
-//            {
-//                if (attribs[i].isSimpleType())
-//                {
-//                    writer.write("\t\tif (param->" + attribs[i].getParamName()
-//                            + ".m_Array) free(param->" + attribs[i].getParamName() + ".m_Array);\n");
-//                }
-//                else
-//                {
-//                    writer.write("\t\tif (param->" + attribs[i].getParamName()
-//                            + ".m_Array) Axis_Delete_" + attribs[i].getTypeName()
-//                            + "(param->" + attribs[i].getParamName()
-//                            + ".m_Array, true, param->" + attribs[i].getParamName() + ".m_Size);\n");
-//                }
-//            }
-//            else if (attribs[i].isAnyType())
-//                {
-//                    writer.write("\t\tif (param->" + attribs[i].getParamName() + ") \n\t\t{ \n");
-//                    writer.write("\t\t\tfor (i=0; i<param->" + attribs[i].getParamName()
-//                            + "->_size; i++)\n\t\t\t{\n");
-//                    writer.write("\t\t\t\tif (param->"
-//                            + attribs[i].getParamName() "->_array[i]) free(param->"
-//                            + attribs[i].getParamName() + "->_array[i]);\n");
-//                    writer.write("\t\t\t}\n");
-//                    writer.write("\t\t\tfree(param->" + attribs[i].getParamName() + ");\n");
-//                    writer.write("\t\t}\n");
-//                }
-//                else if (!attribs[i].isSimpleType())
-//                    {
-//                        writer.write("\t\tif (param->" + attribs[i].getParamName()
-//                                + ") Axis_Delete_" + attribs[i].getTypeName()
-//                                + "(param->" + attribs[i].getParamName() + ", false, 0);\n");
-//                    }
-//                    else if ("xsdc__string".equals(attribs[i].getTypeName()))
-//                        {
-//                            writer.write("\t\tif(param->" + attribs[i].getParamName()
-//                                    + ") free(param->" + attribs[i].getParamName() + ");\n");
-//                        }
-//                        else if ("xsdc__base64Binary".equals(attribs[i].getTypeName())
-//                                 "xsdc__hexBinary" .equals(attribs[i].getTypeName()))
-//                        {
-//                            writer.write("\t\tif(param->" + attribs[i].getParamName()
-//                                    + ".__ptr) free(param->" + attribs[i].getParamName() + ".__ptr);\n");
-//                        }
-//                        else if (attribs[i].isOptional())
-//                        {
-//                                        //TODO
-//                        }
-//        }
     
     /**
      * @throws WrapperFault

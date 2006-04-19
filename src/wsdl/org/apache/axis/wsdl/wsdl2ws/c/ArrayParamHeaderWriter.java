@@ -143,7 +143,7 @@ public class ArrayParamHeaderWriter extends ParamWriter
     {
         try
         {
-            this.writer.write("extern void* Axis_Create_" + classname + "(int nSize);\n");
+            this.writer.write("extern void* Axis_Create_" + classname + "();\n");
         }
         catch (IOException e)
         {

@@ -135,7 +135,7 @@ public class ArrayParamWriter extends ParamWriter
     {
         try
         {
-            writer.write("extern void* Axis_Create_" + classname + "(int nSize)\n");
+            writer.write("extern void* Axis_Create_" + classname + "()\n");
             writer.write("{\n");
             
             // Begin function body
@@ -145,14 +145,6 @@ public class ArrayParamWriter extends ParamWriter
             writer.write("\tpArray->m_Type = C_USER_TYPE;\n");
             writer.write("\n");
 
-            writer.write("\t/* Create actual array of requested size */\n");
-            writer.write("\tif (nSize > 0)\n");
-            writer.write("\t{\n");
-            writer.write("\t\tpArray->m_Array = Axis_Create_" + attribs[0].getTypeName() 
-                    + "(NULL, 1, nSize);\n");
-            writer.write("\t\tpArray->m_Size = nSize;\n"); 
-            writer.write("\t}\n");
-            writer.write("\n");
             writer.write("\treturn pArray;\n");
             
             // End function body
@@ -178,22 +170,18 @@ public class ArrayParamWriter extends ParamWriter
             // Begin function body
             
             writer.write("\t/* If null, simply return */\n");
-            writer.write("\tif (!param)\n");
+            writer.write("\tif (param == NULL)\n");
             writer.write("\t\treturn;\n");
             writer.write("\n");
             
-            writer.write("\t/* Reclaim array memory resources, if it exists */\n");
-            writer.write("\tif (param->m_Array)\n");
-            writer.write("\t{\n");
+            writer.write("\t/* Reclaim memory resources of array elements, if it exists */\n");
+            writer.write("\tif (param->m_Array && param->m_Size > 0)\n");
             writer.write("\t\tAxis_Delete_" +  attribs[0].getTypeName() 
                     + "((" + attribs[0].getTypeName() + " *)param->m_Array, 1, param->m_Size);\n");
-            writer.write("\t\tparam->m_Array = (" + attribs[0].getTypeName() + " **)NULL;\n");
-            writer.write("\t\taxiscAxisDelete(param, XSDC_ARRAY);\n");
-            writer.write("\t}\n");
             writer.write("\n");
             
             writer.write("\t/* Reclaim array data type memory resources */\n");
-            writer.write("\tfree(param);\n");
+            writer.write("\t\taxiscAxisDelete(param, XSDC_ARRAY);\n");
             
             // End function body            
             
