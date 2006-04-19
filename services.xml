@@ -108,6 +108,8 @@ XMLParser:${dir.libraries}/${libraryPrefix}${ClientParserLib}${librarySuffix}
 &lt;service name="AxisAdmin" provider="CPP:DOCUMENT" description="Axis C++ Admin Service"&gt;
 &lt;parameter name="className" value="${dir.adminService}/${libraryPrefix}${adminServiceLibraryName}${librarySuffix}"/&gt;
 &lt;/service&gt;
+&lt;/deployment&gt;
+        	
 </echo>
     </target>
 
@@ -226,7 +228,7 @@ Channel_HTTP:${dir.libraries}/${libraryPrefix}${HTTP.ChannelLibraryName}${librar
     <target name="runAdminClient">
         <exec executable="${dir.release}/bin/${adminClientExecutableName}${executableSuffix}"
             failifexecutionfails="true">
-            <arg line="localhost ${testPort} ${wsddFile}" />
+            <arg line="localhost ${testPort} &quot;${wsddFile}&quot;" />
             <env key="PATH"
                 path="${java.library.path}${path.separator}${dir.libraries}${path.separator}${dir.xmlParser}" />
             <env key="LD_LIBRARY_PATH"
