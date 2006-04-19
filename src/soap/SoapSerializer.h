@@ -117,7 +117,7 @@ public:
     int setOutputStream(SOAPTransport* pStream);
     void markEndOfStream();
     int setSoapMethod(SoapMethod* pSoapMethod);
-    int AXISCALL setSoapFault(ISoapFault* pSoapFault);
+    int setSoapFault(SoapFault* pSoapFault);
     int setSoapBody(SoapBody* pSoapBody);
     int setSoapEnvelope(SoapEnvelope* pSoapEnvelope);
     SoapSerializer();
