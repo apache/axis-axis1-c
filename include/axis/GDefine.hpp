@@ -37,7 +37,10 @@
 #if !defined(__GDEFINE_OF_AXIS_INCLUDED__)
 #define __GDEFINE_OF_AXIS_INCLUDED__
 
-/* This file contains all global definitions that are valid across whole
+/**
+ * @file GDefine.hpp
+ *  
+ * This file contains all global definitions that are valid across whole
  * Axis C++ project.
  */
 
@@ -53,33 +56,139 @@ namespace axiscpp {}
 
 AXIS_CPP_NAMESPACE_START
 
-typedef enum {SECURE, UNSECURE} AXIS_SECURE_PROTOCOL;
-
+/**
+ * @enum AXIS_GLOBAL_ERROR
+ * Enumeration of global error codes used by the Axis C++ engine.
+ */
 typedef enum 
 { 
-    AXIS_SUCCESS=0, 
+    /**
+     * Success
+     */
+    AXIS_SUCCESS=0,
+    
+    /**
+     * Failure
+     */
     AXIS_FAIL = -1, 
+    
+    /**
+     * Object already exists
+     */
     AXIS_OBJECT_ALREADY_EXISTS=1,
+    
+    /**
+     * A matching handler does not exist
+     */
     AXIS_NO_SUCH_HANDLER,
+    
+    /**
+     * A matching service does not exist
+     */
     AXIS_NO_SUCH_SERVICE,
+    
+    /**
+     * No SOAP header blocks remaining
+     */
     AXIS_NO_REMAINING_SOAP_HEADERS
 } AXIS_GLOBAL_ERROR;
+
+/**
+ * @enum AXIS_PROTOCOL_TYPE
+ * Enumeration of transport protocols.
+ */
 typedef enum 
 { 
-    APT_UNKNOWN = -1, APTHTTP1_0=0, APTHTTP1_1, APTFTP, APTSMTP, APTHTTPS, APTOTHER
+    /**
+     * Unknown
+     */
+    APT_UNKNOWN = -1,
+    
+    /**
+     * HTTP 1.0
+     */
+    APTHTTP1_0=0,
+    
+    /**
+     * HTTP 1.1
+     */
+    APTHTTP1_1,
+    
+    /**
+     * FTP
+     */
+    APTFTP,
+    
+    /**
+     * SMTP
+     */
+    APTSMTP,
+    
+    /**
+     * HTTPS
+     */
+    APTHTTPS,
+    
+    /**
+     * Other
+     */
+    APTOTHER
 } AXIS_PROTOCOL_TYPE;
 
+/**
+ * @enum AXIS_TRANSPORT_INFORMATION_TYPE
+ * Enumeration of the different information types used by the transport.
+ */
 typedef enum 
 {
+    /**
+     * SoapAction header field
+     */
     SOAPACTION_HEADER,
+    
+    /**
+     * URI to service
+     */
     SERVICE_URI,
+    
+    /**
+     * Name of operation on service
+     */
     OPERATION_NAME,
+    
+    /**
+     * Length of SOAP message
+     */
     SOAP_MESSAGE_LENGTH,
+    
+    /**
+     * Generic transport properties
+     */
 	TRANSPORT_PROPERTIES,
+    
+    /**
+     * Properties for secure transport
+     */
     SECURE_PROPERTIES,
+    
+    /**
+     * Name of transport library
+     */
     DLL_NAME,
+    
+    /**
+     * Name of SSL channel library
+     */
 	CHANNEL_HTTP_SSL_DLL_NAME = DLL_NAME,
+    
+    /**
+     * Name of non-SSL channel library
+     */
 	CHANNEL_HTTP_DLL_NAME,
+   
+    /**
+     * Content type
+     */
 	CONTENT_TYPE
 } AXIS_TRANSPORT_INFORMATION_TYPE;
 
