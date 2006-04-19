@@ -31,7 +31,7 @@ class IHeaderBlock;
 /**
   * @class IHandlerSoapSerializer
   * @brief interface for the IHandlerSoapSerializer class. This interface is
-  *	exposed to a Handler Writer, to let him manipulate on the Serialzer object.
+  * exposed to a Handler Writer, to let him manipulate on the Serialzer object.
   * Example usage is given below.
   * <PRE>
   * int ESHHandler::invoke(void *pvIMsg)
@@ -43,11 +43,11 @@ class IHeaderBlock;
   *         //this is a response
   * 
   *         IHandlerSoapSerializer* pISZ;
-  *	        pIMsg->getSoapSerializer(&pISZ);
+  *         pIMsg->getSoapSerializer(&pISZ);
   *
-  *	        IHeaderBlock* pIHeaderBlock= pISZ->createHeaderBlock();
+  *         IHeaderBlock* pIHeaderBlock= pISZ->createHeaderBlock();
   *
-  *	        pIHeaderBlock->setLocalName("echoMeStringResponse");
+  *         pIHeaderBlock->setLocalName("echoMeStringResponse");
   *     }
   * }
   * </PRE>
@@ -60,66 +60,54 @@ class IHandlerSoapSerializer : public IWrapperSoapSerializer
 public:        
     virtual ~IHandlerSoapSerializer() {};
 
-	/**
-	  * Will create a Header Block and adds it to the Serializer.
-	  *
-	  * @return The created Header Block pointer will be returned, which the
-	  * user can manipulate on it.
-	  */
+    /**
+      * Will create a Header Block and adds it to the Serializer.
+      *
+      * @return The created Header Block pointer will be returned, which the
+      * user can manipulate on it.
+      */
     virtual IHeaderBlock* createHeaderBlock()=0;
 
-	/**
-	  * Will create a Header Block using the given local name and the namespace
-	  * uri, and adds it to the Serializer.
-	  *
-	  * @param pachLocalName The local name of the Header Block
-	  * @param pachUri The namespace uri of the Header Block.
-	  * @return The created Header Block pointer will be returned, which the
-	  * user can manipulate on it.
-	  */
+    /**
+      * Will create a Header Block using the given local name and the namespace
+      * uri, and adds it to the Serializer.
+      *
+      * @param pachLocalName The local name of the Header Block
+      * @param pachUri The namespace uri of the Header Block.
+      * @return The created Header Block pointer will be returned, which the
+      * user can manipulate on it.
+      */
     virtual IHeaderBlock*  createHeaderBlock(const AxisChar *pachLocalName, 
-		const AxisChar *pachUri)=0;    
-
-	/**
-	  * Adds the given Header Block to the Serialzer.
-	  *
-	  * @param pBlk The Header Block to be added.
-	  * @return AXIS_SUCCESS or AXIS_FAIL to indicate success or fail.
-	  */
-    virtual int AXISCALL addHeaderBlock(IHeaderBlock* pBlk)=0;
-
-	/**
-	  * Sets the SOAP Version.
-	  * @param eSOAP_VERSION The SOAP version to set.
-	  * @return AXIS_SUCCESS to indicate success.
-	  */
-    virtual int setSoapVersion(SOAP_VERSION eSOAP_VERSION)=0;
-
-	/**
-	  * Gets the Header Block. After returning the Header Block pointer, it 
-	  * will not be removed from the available Header Block list of the 
-	  * Serializer.The caller of this method should not delete the returned 
-	  * pointer object.
-	  */
-	/*
-	 * TO DO: Have to remove this method from this api. Logged this msg on
-	 *  13Jan2005.
-	virtual IHeaderBlock* getHeaderBlock() = 0;
-	*/
+                                             const AxisChar *pachUri)=0;    
 
     /**
-	 * Gets and returns the Header Block of the given local name and 
-	 * namespace uri.After returning the Header Block pointer, it will not be
-	 * removed from the available Header Block list of the Serializer.
-	 * The caller of this method should not delete the returned pointer 
-	 * object.
+      * Adds the given Header Block to the Serialzer.
+      *
+      * @param pBlk The Header Block to be added.
+      * @return AXIS_SUCCESS or AXIS_FAIL to indicate success or fail.
+      */
+    virtual int AXISCALL addHeaderBlock(IHeaderBlock* pBlk)=0;
+
+    /**
+      * Sets the SOAP Version.
+      * @param eSOAP_VERSION The SOAP version to set.
+      * @return AXIS_SUCCESS to indicate success.
+      */
+    virtual int setSoapVersion(SOAP_VERSION eSOAP_VERSION)=0;
+
+    /**
+     * Gets and returns the Header Block of the given local name and 
+     * namespace uri.After returning the Header Block pointer, it will not be
+     * removed from the available Header Block list of the Serializer.
+     * The caller of this method should not delete the returned pointer 
+     * object.
      * 
      * @param pcName local name of the HeaderBlock
      * @param pcNamespace namespace of the HeaderBlock
      * @return HeaderBlock
-	 */
-	virtual IHeaderBlock* getHeaderBlock(const AxisChar *pcName, 
-											 const AxisChar *pcNamespace) = 0;
+     */
+     virtual IHeaderBlock* getHeaderBlock(const AxisChar *pcName, 
+                                          const AxisChar *pcNamespace)=0;
      /**
       * Used with getNextHeaderBlock, it returns the first header block,
       * or NULL if there are no headers.
@@ -136,11 +124,11 @@ public:
       */
      virtual IHeaderBlock* getNextHeaderBlock()=0;
 
-	 /**
+     /**
       * Used with getFirstHeaderBlock, it returns the current header block,
       * or NULL if:
-	  *  - there are no headers, 
-	  *  - or if the getFirstHeaderBlock method is not called at least once.
+      *  - there are no headers, 
+      *  - or if the getFirstHeaderBlock method is not called at least once.
       * @return Current HeaderBlock
       */
      virtual IHeaderBlock* getCurrentHeaderBlock()=0;
@@ -183,7 +171,8 @@ public:
     *
     */
     
-    virtual int deleteHeaderBlock(const AxisChar* pName, const AxisChar* pNamespace)=0;
+    virtual int deleteHeaderBlock(const AxisChar* pName, 
+                                  const AxisChar* pNamespace)=0;
     /**
     *Used to delete all the header block
     *
@@ -194,8 +183,9 @@ public:
      * Adds the namespace declaration to the SOAP Envelope.
      * @param pachNamespaceURI namespace URI to add to SOAP envelope
      * @param pachPrefix prefix to be used for namespace URI
-	 */
-	virtual void addNamespaceToEnvelope(AxisChar *pachNamespaceURI, AxisChar* pachPrefix)=0;
+     */
+    virtual void addNamespaceToEnvelope(AxisChar *pachNamespaceURI, 
+                                        AxisChar* pachPrefix)=0;
 };
 
 AXIS_CPP_NAMESPACE_END

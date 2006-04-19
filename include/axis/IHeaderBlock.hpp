@@ -87,17 +87,6 @@ typedef enum
 class IHeaderBlock
 {
 public:
-    /** 
-    * Sets the namespace declaration of the Header Block. 
-    *
-    * @param pAttribute The Attribute pointer which points to a valid 
-    * namespace declartion Attribute. 
-    * @return AXIS_SUCCESS to indicate successfull operation. 
-    */ 
-	/* TO DO: We need to remove this completely
-	*
-	virtual int addNamespaceDecl(INamespace *pAttribute)=0;
-	*/
 
     /** 
     * Creates a Attribute and adds it to this Header Block as a namespace. 
@@ -108,20 +97,20 @@ public:
     * @return A pointer to the created Attribute will be returned. 
     */ 
     virtual INamespace* createNamespaceDecl(const AxisChar *prefix, 
-            const AxisChar *uri)=0; 
+                                            const AxisChar *uri)=0; 
 
     /**
      * Retyrbs the first child element of this Header Block.
      * 
      * @return A pointer to the first child element of this Header Block.
      */
-    virtual BasicNode* getFirstChild() =0;
+    virtual BasicNode* getFirstChild()=0;
     /**
      * Returns the number of child elements of this HeaderBlock.
      *
      * @return The number of child elements of this HeaderBlock.
      */
-    virtual int getNoOfChildren() =0;
+    virtual int getNoOfChildren()=0;
 
     /**
       * Creates a child node depending on the given node type. i.e:
@@ -151,33 +140,37 @@ public:
       * successfull. If the creation is unsccessfull it will return NULL.
       */
     virtual BasicNode* createChild(NODE_TYPE eNODE_TYPE,  
-        AxisChar *pachLocalName, AxisChar *pachPrefix, AxisChar *pachUri, 
-        AxisChar* pachValue) = 0;
+                                   AxisChar *pachLocalName, 
+                                   AxisChar *pachPrefix, 
+                                   AxisChar *pachUri,
+                                   AxisChar* pachValue) = 0;
 
-  /**
-   * Creates a child node depending on the given type. If the type is 
-   *  CHARACTER_NODE a CharacterElement is created. If the type is 
-   *  ELEMENT_NODE a ComplexElement is created. After creating the child it
-   *  will be added as a immediate child to the header block.
-   *  It is important to note that if the type is CHARACTER_NODE only the
-   *  NODE_TYPE and value (pachValue) parameters will be usefull.If the type
-   *  is ELEMENT_NODE the parameters NODE_TYPE, pachLocalName, pachPrefix, 
-   *  pachUri will be usefull.
-   *
-   * @param eNODE_TYPE The type of the child to be created, it should be either 
-   *  CHARACTER_NODE for CharacterElements or ELEMENT_NODE for 
-   *  ComplexElements.
-   * @param pachLocalName The local name of the complex element to be created.
-   * @param pachPrefix The prefix of the complex element to be created.
-   * @param pachUri The namespace uri of the complex element to be created.
-   * @param pachValue The value of the character element to be created.
-   *
-   * @return The child node created will be returned if the creation is
-   *  successfull. If the creation is unsccessfull it will return NULL.
-   */    
+    /**
+     * Creates a child node depending on the given type. If the type is 
+     *  CHARACTER_NODE a CharacterElement is created. If the type is 
+     *  ELEMENT_NODE a ComplexElement is created. After creating the child it
+     *  will be added as a immediate child to the header block.
+     *  It is important to note that if the type is CHARACTER_NODE only the
+     *  NODE_TYPE and value (pachValue) parameters will be usefull.If the type
+     *  is ELEMENT_NODE the parameters NODE_TYPE, pachLocalName, pachPrefix, 
+     *  pachUri will be usefull.
+     *
+     * @param eNODE_TYPE The type of the child to be created, it should be either 
+     *  CHARACTER_NODE for CharacterElements or ELEMENT_NODE for 
+     *  ComplexElements.
+     * @param pachLocalName The local name of the complex element to be created.
+     * @param pachPrefix The prefix of the complex element to be created.
+     * @param pachUri The namespace uri of the complex element to be created.
+     * @param pachValue The value of the character element to be created.
+     *
+     * @return The child node created will be returned if the creation is
+     *  successfull. If the creation is unsccessfull it will return NULL.
+     */    
     virtual BasicNode* createImmediateChild(NODE_TYPE eNODE_TYPE, 
-        AxisChar *pachLocalName, AxisChar *pachPrefix, AxisChar *pachUri, 
-        AxisChar* pachValue) = 0;
+                                            AxisChar *pachLocalName, 
+                                            AxisChar *pachPrefix, 
+                                            AxisChar *pachUri, 
+                                            AxisChar* pachValue) = 0;
 
     /**
      * A user can use this method to create a standard HeaderBlock attribute. 
@@ -211,8 +204,8 @@ public:
      *
      * @return A pointer to the created standard Attribute will be returned.
      */
-    virtual IAttribute* createStdAttribute(HEADER_BLOCK_STD_ATTR_TYPE 
-        eStdAttrType, SOAP_VERSION eSOAP_VERSION) =0;
+    virtual IAttribute* createStdAttribute(HEADER_BLOCK_STD_ATTR_TYPE eStdAttrType, 
+                                           SOAP_VERSION eSOAP_VERSION) =0;
 
     /**
       * Creates a Attribute and adds it to this Header Block. 
@@ -228,8 +221,9 @@ public:
       * @return A pointer to the created Attribute will be returned.
       */
     virtual IAttribute* createAttribute(const AxisChar* localname, 
-        const AxisChar* prefix, 
-        const AxisChar* uri, const AxisChar* value) = 0;
+                                        const AxisChar* prefix, 
+                                        const AxisChar* uri, 
+                                        const AxisChar* value) = 0;
 
     /**
       * Creates a Attribute and adds it to this Header Block.
@@ -244,7 +238,8 @@ public:
       * @return A pointer to the created Attribute will be returned.
       */
     virtual IAttribute* createAttribute(const AxisChar *localname, 
-        const AxisChar *prefix, const AxisChar *value) = 0;
+                                        const AxisChar *prefix, 
+                                        const AxisChar *value) = 0;
      /**
       * Gets an Attribute from the HeaderBlock.
       *
@@ -254,7 +249,7 @@ public:
       * @return the value of the attribute is returned.
       */
      virtual const AxisChar* getAttributeValue(const AxisChar* localname,
-         const AxisChar* prefix) = 0;
+                                               const AxisChar* prefix) = 0;
 
     /**
      * Gets and Attribute URI from the Header Block.
@@ -265,7 +260,7 @@ public:
      * @return the uri of the attribute is returned.
      */ 
      virtual const AxisChar* getAttributeUri( const AxisChar * localname,
-         const AxisChar* prefix) = 0;
+                                              const AxisChar* prefix) = 0;
 
     /**
      * Creates a child node depending on the given type. If the type is 
@@ -346,17 +341,8 @@ public:
       * @return AXIS_SUCCESS if successful AXIS_FAIL otherwise
       * 
       */
-
     virtual int setURI(const AxisChar* uri)=0;
 
-	/* 
-	 * Commented by Susantha - 21/06/2004
-	 * The prefix should be decided by the Serializer at runtime
-	 * 
-	 * Uncommented by Mark Whitlock - 24/8/04 after discussion 
-	 * on the mailing list agreed to add back in this method.
-	 * Jira issue AXISCPP-135
-	 */
     /**
       * Sets the prefix of this Header Block.
       *

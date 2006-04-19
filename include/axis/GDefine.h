@@ -34,43 +34,141 @@
 #endif
 
 /*
+ * @file GDefine.h
+ *  
  * This file contains all global definitions that are valid across whole
  * Axis C++ project.
  */
-
-typedef enum {AXISC_SECURE, AXISC_UNSECURE} AXISC_SECURE_PROTOCOL;
-
 typedef enum 
 { 
-    AXISC_SUCCESS=0, 
+    /**
+     * Success
+     */
+    AXISC_SUCCESS=0,
+    
+    /**
+     * Failure
+     */
     AXISC_FAIL = -1, 
+    
+    /**
+     * Object already exists
+     */
     AXISC_OBJECT_ALREADY_EXISTS=1,
+    
+    /**
+     * A matching handler does not exist
+     */
     AXISC_NO_SUCH_HANDLER,
-    AXISC_NO_SUCH_SERVICE
+    
+    /**
+     * A matching service does not exist
+     */
+    AXISC_NO_SUCH_SERVICE,
+    
+    /**
+     * No SOAP header blocks remaining
+     */
+    AXISC_NO_REMAINING_SOAP_HEADERS
 } AXISC_GLOBAL_ERROR;
 
+/**
+ * @enum AXIS_PROTOCOL_TYPE
+ * Enumeration of transport protocols.
+ */
 typedef enum 
 { 
-    AXISC_PT_UNKNOWN = -1, 
-    AXISC_PTHTTP1_0=0, 
-    AXISC_PTHTTP1_1, 
-    AXISC_PTFTP, 
-    AXISC_PTSMTP, 
-    AXISC_PTHTTPS, 
-    AXISC_PTOTHER
+    /**
+     * Unknown
+     */
+    AXISC_APT_UNKNOWN = -1,
+    
+    /**
+     * HTTP 1.0
+     */
+    AXISC_APTHTTP1_0=0,
+    
+    /**
+     * HTTP 1.1
+     */
+    AXISC_APTHTTP1_1,
+    
+    /**
+     * FTP
+     */
+    AXISC_APTFTP,
+    
+    /**
+     * SMTP
+     */
+    AXISC_APTSMTP,
+    
+    /**
+     * HTTPS
+     */
+    AXISC_APTHTTPS,
+    
+    /**
+     * Other
+     */
+    AXISC_APTOTHER
 } AXISC_PROTOCOL_TYPE;
 
+/**
+ * @enum AXIS_TRANSPORT_INFORMATION_TYPE
+ * Enumeration of the different information types used by the transport.
+ */
 typedef enum 
 {
+    /**
+     * SoapAction header field
+     */
     AXISC_SOAPACTION_HEADER,
+    
+    /**
+     * URI to service
+     */
     AXISC_SERVICE_URI,
+    
+    /**
+     * Name of operation on service
+     */
     AXISC_OPERATION_NAME,
+    
+    /**
+     * Length of SOAP message
+     */
     AXISC_SOAP_MESSAGE_LENGTH,
+    
+    /**
+     * Generic transport properties
+     */
     AXISC_TRANSPORT_PROPERTIES,
+    
+    /**
+     * Properties for secure transport
+     */
     AXISC_SECURE_PROPERTIES,
+    
+    /**
+     * Name of transport library
+     */
     AXISC_DLL_NAME,
+    
+    /**
+     * Name of SSL channel library
+     */
     AXISC_CHANNEL_HTTP_SSL_DLL_NAME = AXISC_DLL_NAME,
-    AXISC_CHANNEL_HTTP_DLL_NAME
+    
+    /**
+     * Name of non-SSL channel library
+     */
+    AXISC_CHANNEL_HTTP_DLL_NAME,
+   
+    /**
+     * Content type
+     */
+    AXISC_CONTENT_TYPE
 } AXISC_TRANSPORT_INFORMATION_TYPE;
 
 #define AXISC_SOAPACTIONHEADER "SOAPAction"

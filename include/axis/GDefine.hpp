@@ -164,7 +164,7 @@ typedef enum
     /**
      * Generic transport properties
      */
-	TRANSPORT_PROPERTIES,
+    TRANSPORT_PROPERTIES,
     
     /**
      * Properties for secure transport
@@ -179,17 +179,17 @@ typedef enum
     /**
      * Name of SSL channel library
      */
-	CHANNEL_HTTP_SSL_DLL_NAME = DLL_NAME,
+    CHANNEL_HTTP_SSL_DLL_NAME = DLL_NAME,
     
     /**
      * Name of non-SSL channel library
      */
-	CHANNEL_HTTP_DLL_NAME,
+    CHANNEL_HTTP_DLL_NAME,
    
     /**
      * Content type
      */
-	CONTENT_TYPE
+    CONTENT_TYPE
 } AXIS_TRANSPORT_INFORMATION_TYPE;
 
 #define SOAPACTIONHEADER "SOAPAction"

@@ -19,8 +19,6 @@
  *
  */
 
-/* SoapEnvVersions.h:*/
-
 /**
  * @file SoapEnvVersions.hpp
  */

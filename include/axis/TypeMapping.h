@@ -33,34 +33,296 @@
  extern "C" {
 #endif
 
+/**
+ * @file TypeMapping.h
+ */
+
+
+/**
+ * @enum XSDTYPE
+ * Enumeration of xsd types
+ */
 typedef enum XSDCTYPETag 
-{ XSDC_UNKNOWN=1, XSDC_INT, XSDC_FLOAT, XSDC_STRING, XSDC_LONG, XSDC_SHORT, \
-                XSDC_BYTE, XSDC_UNSIGNEDLONG, \
-                XSDC_BOOLEAN, XSDC_UNSIGNEDINT, XSDC_UNSIGNEDSHORT, \
-                XSDC_UNSIGNEDBYTE, \
-                XSDC_DOUBLE, XSDC_DECIMAL, XSDC_DURATION, \
-                XSDC_DATETIME, XSDC_TIME, XSDC_DATE, \
-                XSDC_GYEARMONTH, XSDC_GYEAR, XSDC_GMONTHDAY, XSDC_GDAY, \
-                XSDC_GMONTH, XSDC_HEXBINARY, \
-                XSDC_BASE64BINARY, XSDC_ANYURI, XSDC_QNAME,  XSDC_NOTATION, \
-                XSDC_INTEGER, \
-                XSDC_ARRAY, C_USER_TYPE,  XSDC_NMTOKEN, XSDC_ANY, XSDC_NONNEGATIVEINTEGER, \
-                XSDC_POSITIVEINTEGER, XSDC_NONPOSITIVEINTEGER, XSDC_NEGATIVEINTEGER, \
-                XSDC_NORMALIZEDSTRING, XSDC_TOKEN, XSDC_LANGUAGE, XSDC_NAME, \
-                XSDC_NCNAME, XSDC_ID, XSDC_IDREF, XSDC_IDREFS, XSDC_ENTITY, \
-                XSDC_ENTITIES, XSDC_NMTOKENS, C_ATTACHMENT \
+{
+    /**
+     * Unknown XSD type
+     */
+    XSDC_UNKNOWN=1,
+    
+    /**
+     * xsd:int
+     */
+    XSDC_INT,
+    
+    /**
+     * xsd:float
+     */
+    XSDC_FLOAT,
+    
+    /**
+     * xsd:string
+     */
+    XSDC_STRING,
+    
+    /**
+     * xsd:long
+     */
+    XSDC_LONG,
+    
+    /**
+     * xsd:short
+     */
+    XSDC_SHORT,
+    
+    /**
+     * xsd:byte
+     */
+    XSDC_BYTE,
+    
+    /**
+     * xsd:unsignedLong
+     */
+    XSDC_UNSIGNEDLONG,
+    
+    /**
+     * xsd:boolean
+     */
+    XSDC_BOOLEAN,
+    
+    /**
+     * xsd:unsignedInt
+     */
+    XSDC_UNSIGNEDINT,
+    
+    /**
+     * xsd:unsignedShort
+     */
+    XSDC_UNSIGNEDSHORT,
+    
+    /**
+     * xsd:unsignedByte
+     */
+    XSDC_UNSIGNEDBYTE,
+    
+    /**
+     * xsd:double
+     */
+    XSDC_DOUBLE,
+    
+    /**
+     * xsd:decimal
+     */
+    XSDC_DECIMAL,
+    
+    /**
+     * xsd:duration
+     */
+    XSDC_DURATION,
+    
+    /**
+     * xsd:dateTime
+     */
+    XSDC_DATETIME,
+    
+    /**
+     * xsd:time
+     */
+    XSDC_TIME,
+    
+    /**
+     * xsd:date
+     */
+    XSDC_DATE,
+    
+    /**
+     * xsd:gYearMonth
+     */
+    XSDC_GYEARMONTH,
+    
+    /**
+     * xsd:gYear
+     */
+    XSDC_GYEAR,
+    
+    /**
+     * xsd:gMonthDay
+     */
+    XSDC_GMONTHDAY,
+    
+    /**
+     * xsd:gDay
+     */
+    XSDC_GDAY,
+    
+    /**
+     * xsd:gMonth
+     */
+    XSDC_GMONTH,
+    
+    /**
+     * xsd:hexBinary
+     */
+    XSDC_HEXBINARY,
+    
+    /**
+     * xsd:base64Binary
+     */
+    XSDC_BASE64BINARY,
+    
+    /**
+     * xsd:anyURI
+     */
+    XSDC_ANYURI,
+    
+    /**
+     * xsd:QName
+     */
+    XSDC_QNAME,
+    
+    /**
+     * xsd:NOTATION
+     */
+    XSDC_NOTATION,
+    
+    /**
+     * xsd:integer
+     */
+    XSDC_INTEGER,
+    
+    /**
+     * Array, indicated in WSDL by maxOccurs greater than 1.
+     * This may be an array of any other XSDTYPE.
+     */
+    XSDC_ARRAY,
+    
+    /**
+     * User type, also referred to as a complex type
+     */
+    C_USER_TYPE,
+    
+    /**
+     * xsd:NMTOKEN
+     */
+    XSDC_NMTOKEN,
+    
+    /**
+     * xsd:any
+     */
+    XSDC_ANY,
+    
+    /**
+     * xsd:nonNegativeInteger
+     */
+    XSDC_NONNEGATIVEINTEGER,
+    
+    /**
+     * xsd:positivInteger
+     */
+    XSDC_POSITIVEINTEGER,
+    
+    /**
+     * xsd:nonPositiveInteger
+     */
+    XSDC_NONPOSITIVEINTEGER,
+    
+    /**
+     * xsd:negativeInteger
+     */
+    XSDC_NEGATIVEINTEGER,
+    
+    /**
+     * xsd:normalizedString
+     */
+    XSDC_NORMALIZEDSTRING,
+    
+    /**
+     * xsd:token
+     */
+    XSDC_TOKEN,
+    
+    /**
+     * xsd:language
+     */
+    XSDC_LANGUAGE,
+    
+    /**
+     * xsd:Name
+     */
+    XSDC_NAME,
+    
+    /**
+     * xsd:NCName
+     */
+    XSDC_NCNAME,
+    
+    /**
+     * xsd:ID
+     */
+    XSDC_ID,
+    
+    /**
+     * xsd:IDREF
+     */
+    XSDC_IDREF,
+    
+    /**
+     * xsd:IDREFS
+     */
+    XSDC_IDREFS,
+    
+    /**
+     * xsd:ENTITY
+     */
+    XSDC_ENTITY,
+    
+    /**
+     * xsd:ENTITIES
+     */
+    XSDC_ENTITIES,
+    
+    /**
+     * xsd:NMTOKENS
+     */
+    XSDC_NMTOKENS,
+    
+    /**
+     * Attachment
+     */
+    C_ATTACHMENT
 } AXISC_XSDTYPE;
 
 /**
- *  @class TypeMapping
- *  @brief interface for the TypeMapping class.
+ * Map xsd type name to corresponding XSDTYPE enumeration value.
+ * 
+ * @param sType xsd type name
+ * @return corresponding XSDTYPE enumeration value.
  */
-AXISC_STORAGE_CLASS_INFO AXISC_XSDTYPE axiscTypeMappingMap(const AxiscXMLCh * sType);
-AXISC_STORAGE_CLASS_INFO void axiscTypeMappingInitialize();
-AXISC_STORAGE_CLASS_INFO void axiscTypeMappingUninitialize();
+AXISC_STORAGE_CLASS_INFO 
+AXISC_XSDTYPE axiscTypeMappingMap(const AxiscXMLCh * sType);
 
-AXISC_STORAGE_CLASS_INFO AXISCHANDLE axiscTypeMappingCreate();
-AXISC_STORAGE_CLASS_INFO void axiscTypeMappingDestroy(AXISCHANDLE typeMapping);
+/**
+ * Initialize internal table of mappings from xsd type names to XSDTYPE enumeration values.
+ */
+AXISC_STORAGE_CLASS_INFO 
+void axiscTypeMappingInitialize();
+
+/**
+ * Clear internal table of mappings from xsd type names to XSDTYPE enumeration values.
+ */
+AXISC_STORAGE_CLASS_INFO 
+void axiscTypeMappingUninitialize();
+
+/**
+ * Create TyeMapping object.
+ */
+AXISC_STORAGE_CLASS_INFO 
+AXISCHANDLE axiscTypeMappingCreate();
+
+/**
+ * Destroy TypeMapping object.
+ */
+AXISC_STORAGE_CLASS_INFO 
+void axiscTypeMappingDestroy(AXISCHANDLE typeMapping);
 
 
 #ifdef __cplusplus

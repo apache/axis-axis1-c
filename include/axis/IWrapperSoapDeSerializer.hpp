@@ -55,7 +55,7 @@ public:
      * 
      */
     virtual int AXISCALL checkMessageBody(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+                                          const AxisChar* pNamespace)=0;
 
     /**
      * Check if message is a fault
@@ -65,7 +65,7 @@ public:
      * @return ISoapFault object
      */
     virtual void* AXISCALL checkForFault(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+                                         const AxisChar* pNamespace)=0;
     /**
      * Method used by wrappers to get a deserialized Array of complex types
      * 
@@ -78,9 +78,13 @@ public:
      * @param pNamespace SOAP namespace for complex type
      * @return deserialized complex type array, this is pArray
      */
-    virtual Axis_Array* AXISCALL getCmplxArray(Axis_Array * pArray, void* pDZFunct, void* pCreFunct, 
-        void* pDelFunct, void* pSizeFunct, const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+    virtual Axis_Array* AXISCALL getCmplxArray(Axis_Array * pArray, 
+                                               void* pDZFunct, 
+                                               void* pCreFunct, 
+                                               void* pDelFunct, 
+                                               void* pSizeFunct, 
+                                               const AxisChar* pName, 
+                                               const AxisChar* pNamespace)=0;
     /**
      *  Method used by wrappers to get a deserialized Array of basic types
      * 
@@ -90,7 +94,8 @@ public:
      * @return deserialized array
      */
     virtual Axis_Array* AXISCALL getBasicArray(XSDTYPE nType, 
-        const AxisChar* pName, const AxisChar* pNamespace)=0;
+                                               const AxisChar* pName, 
+                                               const AxisChar* pNamespace)=0;
     /**
      *  Method used by wrappers to get a deserialized single object of 
      *  complex type 
@@ -102,8 +107,11 @@ public:
      * @param pNamespace SOAP namespace for complex type
      * @return deserialized complex type
      */
-    virtual void* AXISCALL getCmplxObject(void* pDZFunct, void* pCreFunct, 
-        void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace)=0;
+    virtual void* AXISCALL getCmplxObject(void* pDZFunct, 
+                                          void* pCreFunct, 
+                                          void* pDelFunct, 
+                                          const AxisChar* pName, 
+                                          const AxisChar* pNamespace)=0;
     
     /**
      * Method used by wrapper to deserialize an xsd:int element
@@ -113,7 +121,7 @@ public:
      * @return deserialized xsd:int value
      */
     virtual xsd__int * AXISCALL getElementAsInt(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+                                                const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:boolean element
      * 
@@ -122,7 +130,7 @@ public:
      * @return deserialized xsd:boolean value
      */
     virtual xsd__boolean * AXISCALL getElementAsBoolean(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+                                                        const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:unsignedInt element
      * 
@@ -130,8 +138,8 @@ public:
      * @param pNamespace SOAP namespace
      * @return deserialized xsd:unsignedInt value
      */
-    virtual xsd__unsignedInt * AXISCALL getElementAsUnsignedInt(const AxisChar* 
-        pName, const AxisChar* pNamespace)=0;
+    virtual xsd__unsignedInt * AXISCALL getElementAsUnsignedInt(const AxisChar* pName, 
+                                                                const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:short element
      * 
@@ -140,7 +148,7 @@ public:
      * @return deserialized xsd:short value
      */
     virtual xsd__short * AXISCALL getElementAsShort(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+                                                    const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:unsignedShort element
      * 
@@ -148,9 +156,9 @@ public:
      * @param pNamespace SOAP namespace
      * @return deserialized xsd:unsignedShort value
      */
-    virtual xsd__unsignedShort * AXISCALL getElementAsUnsignedShort(const AxisChar* 
-        pName, const AxisChar* pNamespace)=0;
-        /**
+    virtual xsd__unsignedShort * AXISCALL getElementAsUnsignedShort(const AxisChar* pName, 
+                                                                    const AxisChar* pNamespace)=0;
+    /**
      * Method used by wrapper to deserialize an xsd:byte element
      * 
      * @param pName SOAP element name
@@ -158,7 +166,7 @@ public:
      * @return deserialized xsd:byte value
      */
     virtual xsd__byte * AXISCALL getElementAsByte(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+                                                  const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:unsignedByte element
      * 
@@ -166,8 +174,8 @@ public:
      * @param pNamespace SOAP namespace
      * @return deserialized xsd:unsignedByte value
      */
-    virtual xsd__unsignedByte * AXISCALL getElementAsUnsignedByte(const AxisChar* 
-        pName, const AxisChar* pNamespace)=0;
+    virtual xsd__unsignedByte * AXISCALL getElementAsUnsignedByte(const AxisChar* pName, 
+                                                                  const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:long element
      * 
@@ -176,7 +184,7 @@ public:
      * @return deserialized xsd:long value
      */
     virtual xsd__long * AXISCALL getElementAsLong(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+                                                  const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:integer element
      * 
@@ -185,7 +193,7 @@ public:
      * @return deserialized xsd:integer value
      */
     virtual xsd__integer * AXISCALL getElementAsInteger(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+                                                        const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:unsignedLong element
      * 
@@ -193,8 +201,8 @@ public:
      * @param pNamespace SOAP namespace
      * @return deserialized xsd:unsignedLong value
      */
-    virtual xsd__unsignedLong * AXISCALL getElementAsUnsignedLong(const AxisChar* 
-        pName, const AxisChar* pNamespace)=0;
+    virtual xsd__unsignedLong * AXISCALL getElementAsUnsignedLong(const AxisChar* pName, 
+                                                                  const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:float element
      * 
@@ -203,7 +211,7 @@ public:
      * @return deserialized xsd:float value
      */
     virtual xsd__float * AXISCALL getElementAsFloat(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+                                                    const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:double element
      * 
@@ -212,7 +220,7 @@ public:
      * @return deserialized xsd:double value
      */
     virtual xsd__double * AXISCALL getElementAsDouble(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+                                                      const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:decimal element
      * 
@@ -221,7 +229,7 @@ public:
      * @return deserialized xsd:decimal value
      */
     virtual xsd__decimal * AXISCALL getElementAsDecimal(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+                                                        const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:string element
      * 
@@ -230,7 +238,7 @@ public:
      * @return deserialized xsd:string value
      */
     virtual xsd__string AXISCALL getElementAsString(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+                                                    const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:anyURI element
      * 
@@ -239,7 +247,7 @@ public:
      * @return deserialized xsd:anyURI value
      */
     virtual xsd__anyURI AXISCALL getElementAsAnyURI(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+                                                    const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:QName element
      * 
@@ -248,7 +256,7 @@ public:
      * @return deserialized xsd:QName value
      */
     virtual xsd__QName AXISCALL getElementAsQName(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+                                                  const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:hexBinary element
      * 
@@ -256,8 +264,8 @@ public:
      * @param pNamespace SOAP namespace
      * @return deserialized xsd:hexBinary value
      */
-    virtual xsd__hexBinary * AXISCALL getElementAsHexBinary(const AxisChar* 
-        pName, const AxisChar* pNamespace)=0;
+    virtual xsd__hexBinary * AXISCALL getElementAsHexBinary(const AxisChar* pName, 
+                                                            const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:base64Binary element
      * 
@@ -265,8 +273,8 @@ public:
      * @param pNamespace SOAP namespace
      * @return deserialized xsd:base64Binary value
      */
-    virtual xsd__base64Binary * AXISCALL getElementAsBase64Binary(const AxisChar*
-        pName, const AxisChar* pNamespace)=0;
+    virtual xsd__base64Binary * AXISCALL getElementAsBase64Binary(const AxisChar* pName, 
+                                                                  const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:dateTime element
      * 
@@ -275,7 +283,7 @@ public:
      * @return deserialized xsd:dateTime value
      */
     virtual xsd__dateTime * AXISCALL getElementAsDateTime(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+                                                          const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:date element
      * 
@@ -284,7 +292,7 @@ public:
      * @return deserialized xsd:date value
      */
     virtual xsd__date * AXISCALL getElementAsDate(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+                                                  const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:time element
      * 
@@ -293,7 +301,7 @@ public:
      * @return deserialized xsd:time value
      */
     virtual xsd__time * AXISCALL getElementAsTime(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+                                                  const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:duration element
      * 
@@ -302,7 +310,7 @@ public:
      * @return deserialized xsd:duration value
      */
     virtual xsd__duration * AXISCALL getElementAsDuration(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+                                                          const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:gYearMonth element
      * 
@@ -311,7 +319,7 @@ public:
      * @return deserialized xsd:gYearMonth value
      */
     virtual xsd__gYearMonth * AXISCALL getElementAsGYearMonth(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+                                                              const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:gYear element
      * 
@@ -320,7 +328,7 @@ public:
      * @return deserialized xsd:gYear value
      */
     virtual xsd__gYear * AXISCALL getElementAsGYear(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+                                                    const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:gMonthDay element
      * 
@@ -329,7 +337,7 @@ public:
      * @return deserialized xsd:gMonthDay value
      */
     virtual xsd__gMonthDay * AXISCALL getElementAsGMonthDay(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+                                                            const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:gDay element
      * 
@@ -338,7 +346,7 @@ public:
      * @return deserialized xsd:gDay value
      */
     virtual xsd__gDay * AXISCALL getElementAsGDay(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+                                                  const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:gMonth element
      * 
@@ -347,7 +355,7 @@ public:
      * @return deserialized xsd:gMonth value
      */
     virtual xsd__gMonth * AXISCALL getElementAsGMonth(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+                                                      const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:nonPositiveInteger element
      * 
@@ -356,7 +364,7 @@ public:
      * @return deserialized xsd:nonPositiveInteger value
      */
     virtual xsd__nonPositiveInteger * AXISCALL getElementAsNonPositiveInteger(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+                                                                              const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:negativeInteger element
      * 
@@ -365,7 +373,7 @@ public:
      * @return deserialized xsd:negativeInteger value
      */
     virtual xsd__negativeInteger * AXISCALL getElementAsNegativeInteger(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+                                                                        const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:nonNegativeInteger element
      * 
@@ -374,7 +382,7 @@ public:
      * @return deserialized xsd:nonNegativeInteger value
      */
     virtual xsd__nonNegativeInteger * AXISCALL getElementAsNonNegativeInteger(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+                                                                              const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:positiveInteger element
      * 
@@ -383,7 +391,7 @@ public:
      * @return deserialized xsd:positiveInteger value
      */
     virtual xsd__positiveInteger * AXISCALL getElementAsPositiveInteger(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+                                                                        const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:normalizedString element
      * 
@@ -392,7 +400,7 @@ public:
      * @return deserialized xsd:normalizedString value
      */
     virtual xsd__normalizedString AXISCALL getElementAsNormalizedString(const AxisChar* pName,
-        const AxisChar* pNamespace)=0;
+                                                                        const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:token element
      * 
@@ -401,7 +409,7 @@ public:
      * @return deserialized xsd:token value
      */
     virtual xsd__token AXISCALL getElementAsToken(const AxisChar* pName,
-        const AxisChar* pNamespace)=0;
+                                                  const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:language element
      * 
@@ -410,7 +418,7 @@ public:
      * @return deserialized xsd:language value
      */
     virtual xsd__language AXISCALL getElementAsLanguage(const AxisChar* pName,
-        const AxisChar* pNamespace)=0;
+                                                        const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:Name element
      * 
@@ -419,7 +427,7 @@ public:
      * @return deserialized xsd:Name value
      */
     virtual xsd__Name AXISCALL getElementAsName(const AxisChar* pName,
-        const AxisChar* pNamespace)=0;
+                                                const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:NCName element
      * 
@@ -428,7 +436,7 @@ public:
      * @return deserialized xsd:NCName value
      */
     virtual xsd__NCName AXISCALL getElementAsNCName(const AxisChar* pName,
-        const AxisChar* pNamespace)=0;
+                                                    const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:ID element
      * 
@@ -437,7 +445,7 @@ public:
      * @return deserialized xsd:ID value
      */
     virtual xsd__ID AXISCALL getElementAsID(const AxisChar* pName,
-        const AxisChar* pNamespace)=0;
+                                            const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:IDREF element
      * 
@@ -446,7 +454,7 @@ public:
      * @return deserialized xsd:IDREF value
      */
     virtual xsd__IDREF AXISCALL getElementAsIDREF(const AxisChar* pName,
-        const AxisChar* pNamespace)=0;
+                                                  const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:IDREFS element
      * 
@@ -455,7 +463,7 @@ public:
      * @return deserialized xsd:IDREFS value
      */
     virtual xsd__IDREFS AXISCALL getElementAsIDREFS(const AxisChar* pName,
-        const AxisChar* pNamespace)=0;
+                                                    const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:ENTITY element
      * 
@@ -464,7 +472,7 @@ public:
      * @return deserialized xsd:ENTITY value
      */
     virtual xsd__ENTITY AXISCALL getElementAsENTITY(const AxisChar* pName,
-        const AxisChar* pNamespace)=0;
+                                                    const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:ENTITIES element
      * 
@@ -473,7 +481,7 @@ public:
      * @return deserialized xsd:ENTITIES value
      */
     virtual xsd__ENTITIES AXISCALL getElementAsENTITIES(const AxisChar* pName,
-        const AxisChar* pNamespace)=0;
+                                                        const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:NMTOKEN element
      * 
@@ -482,7 +490,7 @@ public:
      * @return deserialized xsd:NMTOKEN value
      */
     virtual xsd__NMTOKEN AXISCALL getElementAsNMTOKEN(const AxisChar* pName,
-        const AxisChar* pNamespace)=0;
+                                                      const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:NMTOKENS element
      * 
@@ -491,7 +499,7 @@ public:
      * @return deserialized xsd:NMTOKENS value
      */
     virtual xsd__NMTOKENS AXISCALL getElementAsNMTOKENS(const AxisChar* pName,
-        const AxisChar* pNamespace)=0;
+                                                        const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:NOTATION element
      * 
@@ -500,7 +508,7 @@ public:
      * @return deserialized xsd:NOTATION value
      */
     virtual xsd__NOTATION AXISCALL getElementAsNOTATION(const AxisChar* pName,
-        const AxisChar* pNamespace)=0;
+                                                        const AxisChar* pNamespace)=0;
 
     /**
      * Method used by wrapper to deserialize an xsd:int attribute
@@ -510,7 +518,7 @@ public:
      * @return deserialized xsd:int value
      */
     virtual xsd__int * AXISCALL getAttributeAsInt(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+                                                  const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:boolean attribute
      * 
@@ -519,7 +527,7 @@ public:
      * @return deserialized xsd:boolean value
      */
     virtual xsd__boolean * AXISCALL getAttributeAsBoolean(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+                                                          const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:unsignedInt attribute
      * 
@@ -527,8 +535,8 @@ public:
      * @param pNamespace SOAP namespace
      * @return deserialized xsd:unsignedInt value
      */
-    virtual xsd__unsignedInt * AXISCALL getAttributeAsUnsignedInt(const AxisChar* 
-        pName, const AxisChar* pNamespace)=0;
+    virtual xsd__unsignedInt * AXISCALL getAttributeAsUnsignedInt(const AxisChar* pName, 
+                                                                  const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:short attribute
      * 
@@ -537,7 +545,7 @@ public:
      * @return deserialized xsd:short value
      */
     virtual xsd__short * AXISCALL getAttributeAsShort(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+                                                      const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:unsignedShort attribute
      * 
@@ -545,8 +553,8 @@ public:
      * @param pNamespace SOAP namespace
      * @return deserialized xsd:unsignedShort value
      */
-    virtual xsd__unsignedShort * AXISCALL getAttributeAsUnsignedShort(const AxisChar*
-        pName, const AxisChar* pNamespace)=0;
+    virtual xsd__unsignedShort * AXISCALL getAttributeAsUnsignedShort(const AxisChar* pName, 
+                                                                      const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:byte attribute
      * 
@@ -555,7 +563,7 @@ public:
      * @return deserialized xsd:byte value
      */
     virtual xsd__byte * AXISCALL getAttributeAsByte(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+                                                    const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:unsignedByte attribute
      * 
@@ -563,8 +571,8 @@ public:
      * @param pNamespace SOAP namespace
      * @return deserialized xsd:unsignedByte value
      */
-    virtual xsd__unsignedByte * AXISCALL getAttributeAsUnsignedByte(const AxisChar* 
-        pName, const AxisChar* pNamespace)=0;
+    virtual xsd__unsignedByte * AXISCALL getAttributeAsUnsignedByte(const AxisChar* pName, 
+                                                                    const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:long attribute
      * 
@@ -573,7 +581,7 @@ public:
      * @return deserialized xsd:long value
      */
     virtual xsd__long * AXISCALL getAttributeAsLong(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+                                                    const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:integer attribute
      * 
@@ -582,7 +590,7 @@ public:
      * @return deserialized xsd:integer value
      */
     virtual xsd__integer * AXISCALL getAttributeAsInteger(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+                                                          const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:nonPositiveInteger attribute
      * 
@@ -591,7 +599,7 @@ public:
      * @return deserialized xsd:nonPositiveInteger value
      */
     virtual xsd__nonPositiveInteger * AXISCALL getAttributeAsNonPositiveInteger(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+                                                                                const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:negativeInteger attribute
      * 
@@ -600,7 +608,7 @@ public:
      * @return deserialized xsd:negativeInteger value
      */
     virtual xsd__negativeInteger * AXISCALL getAttributeAsNegativeInteger(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+                                                                          const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:nonNegativeInteger attribute
      * 
@@ -609,7 +617,7 @@ public:
      * @return deserialized xsd:nonNegativeInteger value
      */
     virtual xsd__nonNegativeInteger * AXISCALL getAttributeAsNonNegativeInteger(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+                                                                                const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:positiveInteger attribute
      * 
@@ -618,7 +626,7 @@ public:
      * @return deserialized xsd:positiveInteger value
      */
     virtual xsd__positiveInteger * AXISCALL getAttributeAsPositiveInteger(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+                                                                          const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:unsignedLong attribute
      * 
@@ -626,8 +634,8 @@ public:
      * @param pNamespace SOAP namespace
      * @return deserialized xsd:unsignedLong value
      */
-    virtual xsd__unsignedLong * AXISCALL getAttributeAsUnsignedLong(const AxisChar* 
-        pName, const AxisChar* pNamespace)=0;
+    virtual xsd__unsignedLong * AXISCALL getAttributeAsUnsignedLong(const AxisChar* pName, 
+                                                                    const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:float attribute
      * 
@@ -636,7 +644,7 @@ public:
      * @return deserialized xsd:float value
      */
     virtual xsd__float * AXISCALL getAttributeAsFloat(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+                                                      const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:double attribute
      * 
@@ -645,7 +653,7 @@ public:
      * @return deserialized xsd:double value
      */
     virtual xsd__double * AXISCALL getAttributeAsDouble(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+                                                        const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:decimal attribute
      * 
@@ -654,7 +662,7 @@ public:
      * @return deserialized xsd:decimal value
      */
     virtual xsd__decimal * AXISCALL getAttributeAsDecimal(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+                                                          const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:NOTATION attribute
      * 
@@ -663,7 +671,7 @@ public:
      * @return deserialized xsd:NOTATION value
      */
     virtual xsd__NOTATION AXISCALL getAttributeAsNOTATION(const AxisChar* pName,
-        const AxisChar* pNamespace)=0;
+                                                          const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:string attribute
      * 
@@ -672,7 +680,7 @@ public:
      * @return deserialized xsd:string value
      */
     virtual xsd__string AXISCALL getAttributeAsString(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+                                                      const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:normalizedString attribute
      * 
@@ -681,7 +689,7 @@ public:
      * @return deserialized xsd:normalizedString value
      */
     virtual xsd__normalizedString AXISCALL getAttributeAsNormalizedString(const AxisChar* pName,
-        const AxisChar* pNamespace)=0;
+                                                                          const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:token attribute
      * 
@@ -690,7 +698,7 @@ public:
      * @return deserialized xsd:token value
      */
     virtual xsd__token AXISCALL getAttributeAsToken(const AxisChar* pName,
-        const AxisChar* pNamespace)=0;
+                                                    const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:language attribute
      * 
@@ -699,7 +707,7 @@ public:
      * @return deserialized xsd:language value
      */
     virtual xsd__language AXISCALL getAttributeAsLanguage(const AxisChar* pName,
-        const AxisChar* pNamespace)=0;
+                                                          const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:NMTOKEN attribute
      * 
@@ -708,7 +716,7 @@ public:
      * @return deserialized xsd:NMTOKEN value
      */
     virtual xsd__NMTOKEN AXISCALL getAttributeAsNMTOKEN(const AxisChar* pName,
-        const AxisChar* pNamespace)=0;
+                                                        const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:NMTOKENS attribute
      * 
@@ -717,7 +725,7 @@ public:
      * @return deserialized xsd:NMTOKENS value
      */
     virtual xsd__NMTOKENS AXISCALL getAttributeAsNMTOKENS(const AxisChar* pName,
-        const AxisChar* pNamespace)=0;
+                                                          const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:Name attribute
      * 
@@ -726,7 +734,7 @@ public:
      * @return deserialized xsd:Name value
      */
     virtual xsd__Name AXISCALL getAttributeAsName(const AxisChar* pName,
-        const AxisChar* pNamespace)=0;
+                                                  const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:NCName attribute
      * 
@@ -735,7 +743,7 @@ public:
      * @return deserialized xsd:NCName value
      */
     virtual xsd__NCName AXISCALL getAttributeAsNCName(const AxisChar* pName,
-        const AxisChar* pNamespace)=0;
+                                                      const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:ID attribute
      * 
@@ -744,7 +752,7 @@ public:
      * @return deserialized xsd:ID value
      */
     virtual xsd__ID AXISCALL getAttributeAsID(const AxisChar* pName,
-        const AxisChar* pNamespace)=0;
+                                              const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:IDREF attribute
      * 
@@ -753,7 +761,7 @@ public:
      * @return deserialized xsd:IDREF value
      */
     virtual xsd__IDREF AXISCALL getAttributeAsIDREF(const AxisChar* pName,
-        const AxisChar* pNamespace)=0;
+                                                    const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:IDREFS attribute
      * 
@@ -762,7 +770,7 @@ public:
      * @return deserialized xsd:IDREFS value
      */
     virtual xsd__IDREFS AXISCALL getAttributeAsIDREFS(const AxisChar* pName,
-        const AxisChar* pNamespace)=0;
+                                                      const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:ENTITY attribute
      * 
@@ -771,7 +779,7 @@ public:
      * @return deserialized xsd:ENTITY value
      */
     virtual xsd__ENTITY AXISCALL getAttributeAsENTITY(const AxisChar* pName,
-        const AxisChar* pNamespace)=0;
+                                                      const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:ENTITIES attribute
      * 
@@ -780,7 +788,7 @@ public:
      * @return deserialized xsd:ENTITIES value
      */
     virtual xsd__ENTITIES AXISCALL getAttributeAsENTITIES(const AxisChar* pName,
-        const AxisChar* pNamespace)=0;
+                                                          const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:anyURI attribute
      * 
@@ -789,7 +797,7 @@ public:
      * @return deserialized xsd:anyURI value
      */
     virtual xsd__anyURI AXISCALL getAttributeAsAnyURI(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+                                                      const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:QName attribute
      * 
@@ -798,7 +806,7 @@ public:
      * @return deserialized xsd:QName value
      */
     virtual xsd__QName AXISCALL getAttributeAsQName(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+                                                    const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:hexBinary attribute
      * 
@@ -806,8 +814,8 @@ public:
      * @param pNamespace SOAP namespace
      * @return deserialized xsd:hexBinary value
      */
-    virtual xsd__hexBinary * AXISCALL getAttributeAsHexBinary(const AxisChar* 
-        pName, const AxisChar* pNamespace)=0;
+    virtual xsd__hexBinary * AXISCALL getAttributeAsHexBinary(const AxisChar* pName, 
+                                                              const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:base64Binar attribute
      * 
@@ -815,8 +823,8 @@ public:
      * @param pNamespace SOAP namespace
      * @return deserialized xsd:base64Binary value
      */
-    virtual xsd__base64Binary * AXISCALL getAttributeAsBase64Binary(const 
-        AxisChar* pName, const AxisChar* pNamespace)=0;
+    virtual xsd__base64Binary * AXISCALL getAttributeAsBase64Binary(const AxisChar* pName, 
+                                                                    const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:dateTime attribute
      * 
@@ -825,7 +833,7 @@ public:
      * @return deserialized xsd:dateTime value
      */
     virtual xsd__dateTime * AXISCALL getAttributeAsDateTime(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+                                                            const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:date attribute
      * 
@@ -834,7 +842,7 @@ public:
      * @return deserialized xsd:date value
      */
     virtual xsd__date * AXISCALL getAttributeAsDate(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+                                                    const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:time attribute
      * 
@@ -843,7 +851,7 @@ public:
      * @return deserialized xsd:time value
      */
     virtual xsd__time * AXISCALL getAttributeAsTime(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+                                                    const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:gDay attribute
      * 
@@ -852,7 +860,7 @@ public:
      * @return deserialized xsd:gDay value
      */
     virtual xsd__gDay * AXISCALL getAttributeAsGDay(const AxisChar* pName,
-        const AxisChar* pNamespace)=0;
+                                                    const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:gMonth attribute
      * 
@@ -861,7 +869,7 @@ public:
      * @return deserialized xsd:gMonth value
      */
     virtual xsd__gMonth * AXISCALL getAttributeAsGMonth(const AxisChar* pName,
-        const AxisChar* pNamespace)=0;
+                                                        const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:gMonthDay attribute
      * 
@@ -870,7 +878,7 @@ public:
      * @return deserialized xsd:gMonthDay value
      */
     virtual xsd__gMonthDay * AXISCALL getAttributeAsGMonthDay(const AxisChar* pName,
-        const AxisChar* pNamespace)=0;
+                                                              const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:gYear attribute
      * 
@@ -879,7 +887,7 @@ public:
      * @return deserialized xsd:gYear value
      */
     virtual xsd__gYear * AXISCALL getAttributeAsGYear(const AxisChar* pName,
-        const AxisChar* pNamespace)=0;
+                                                      const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:gYearMonth attribute
      * 
@@ -888,7 +896,7 @@ public:
      * @return deserialized xsd:gYearMonth value
      */
     virtual xsd__gYearMonth * AXISCALL getAttributeAsGYearMonth(const AxisChar* pName,
-        const AxisChar* pNamespace)=0;
+                                                                const AxisChar* pNamespace)=0;
     /**
      * Method used by wrapper to deserialize an xsd:duration attribute
      * 
@@ -897,7 +905,7 @@ public:
      * @return deserialized xsd:duration value
      */
     virtual xsd__duration * AXISCALL getAttributeAsDuration(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+                                                            const AxisChar* pNamespace)=0;
 
     /**
      * Return status of last operation
@@ -905,12 +913,7 @@ public:
      * @return AXIS_SUCCESS of AXIS_FAIL
      */
     virtual int AXISCALL getStatus()=0;
-    
-    /* Externalization of deserializer API */
-//    virtual int setInputStream(SOAPTransport* pInputStream)=0;
-//    virtual int init()=0;
-//    virtual PROVIDERTYPE getCurrentProviderType()=0;
-//    virtual void setCurrentProviderType(PROVIDERTYPE nType)=0;    
+     
     /**
      * Returns binding style of message
      * 
@@ -945,7 +948,7 @@ public:
      * 
      * @return Deserialized xsd:any element
      */
-	virtual AnyType* AXISCALL getAnyObject()=0;            
+    virtual AnyType* AXISCALL getAnyObject()=0;            
 
     /**
      * Deserialize character data, ie the data typically enclosed by an XML tag
@@ -953,7 +956,8 @@ public:
      * @param pValue object into which deserialized value will be placed
      * @param type The xsd simple type of the data.
      */
-    virtual void getChardataAs(void* pValue, XSDTYPE type)=0;
+    virtual void getChardataAs(void* pValue, 
+                               XSDTYPE type)=0;
     
     /**
      * Returns attachment associated with the given ID.
@@ -961,7 +965,7 @@ public:
      * @param pcAttachmentid ID of the attachment to be returned
      * @return SOAP attachment
      */
-	virtual ISoapAttachment* getAttachment(const char* pcAttachmentid)=0;
+    virtual ISoapAttachment* getAttachment(const char* pcAttachmentid)=0;
 
     /**
      * Returns all attachments.
@@ -969,14 +973,15 @@ public:
      * @param pAttchArraySize is updated with the array size
      * @return array of SOAP attachments
      */
-	virtual ISoapAttachment** getAllAttachments(int *pAttchArraySize)=0;
-	/**
-	* This method allows to peek for the name of the next element in XML stream.
-	* Useful in supporting "all" & "choice" WSDL constructs.
-	* @return Name of the next element in XML stream 
-	*/
-	virtual const char* peekNextElementName() = 0;
-	
+    virtual ISoapAttachment** getAllAttachments(int *pAttchArraySize)=0;
+    
+    /**
+    * This method allows to peek for the name of the next element in XML stream.
+    * Useful in supporting "all" & "choice" WSDL constructs.
+    * @return Name of the next element in XML stream 
+    */
+    virtual const char* peekNextElementName() = 0;
+    
 };
 
 AXIS_CPP_NAMESPACE_END

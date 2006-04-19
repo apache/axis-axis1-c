@@ -63,11 +63,8 @@ class STORAGE_CLASS_INFO Stub
     *        with the endpoint. See AXIS_PROTOCOL_TYPE in GDefine.h for
     *        possible values for eProtocol.
     */
-    Stub(const char *pcEndPointURI, AXIS_PROTOCOL_TYPE eProtocol);
-
-  /**
-   * Default Constructor.
-   */
+    Stub(const char *pcEndPointURI, 
+         AXIS_PROTOCOL_TYPE eProtocol);
    
   /**
     * Destructor.
@@ -82,7 +79,6 @@ class STORAGE_CLASS_INFO Stub
     */
 
     void AXISCALL setEndPoint(const char *pcEndPointURI);
-
 
   /**
     * Set transport property.
@@ -108,7 +104,8 @@ class STORAGE_CLASS_INFO Stub
     *              The exception to this is "Cookie" where multiple cookie values will only result in one "Cookie:" header being sent as is correct for HTTP.
     * @param pcValue Header value e.g. "da, en-gb;q=0.8, en;q=0.7"
     */
-    void AXISCALL setTransportProperty(const char *pcKey, const char *pcValue);
+    void AXISCALL setTransportProperty(const char *pcKey, 
+                                       const char *pcValue);
 
   /**
     * Get a transport property.
@@ -120,7 +117,8 @@ class STORAGE_CLASS_INFO Stub
     *                 set to false searches the send message for the property
     * @return the value of the property or NULL if it was not found.
     */
-    const char* AXISCALL getTransportProperty(const char *key, bool response=true);
+    const char* AXISCALL getTransportProperty(const char *key, 
+                                              bool response=true);
 
   /**
     * Iterator initiatior for transport property keys
@@ -222,7 +220,8 @@ class STORAGE_CLASS_INFO Stub
     *                    Default is to delete the first occurance.
     *                    Count starts from 1.
     */
-    void deleteTransportProperty(char* pcKey, unsigned int uiOccurance = 1);
+    void deleteTransportProperty(char* pcKey, 
+                                 unsigned int uiOccurance = 1);
     
     
   /**
@@ -232,7 +231,9 @@ class STORAGE_CLASS_INFO Stub
     * @param value The value of the property
     * @param len The length of the value
     */
-    void setHandlerProperty(AxisChar* name, void* value, int len);
+    void setHandlerProperty(AxisChar* name, 
+                            void* value, 
+                            int len);
 
   /**
     * Create and add a SOAP header block to the Stub.
@@ -311,12 +312,12 @@ class STORAGE_CLASS_INFO Stub
     *
     * @param pachLocalName Local tag name of the SOAP header. e.g. TestHeader    
     * @param pachUri Namespace URI to be used in SOAP header.
-                     e.g http://ws.apache.org/axisCppTestHeader/
+    *                 e.g http://ws.apache.org/axisCppTestHeader/
     *
     * @return Pointer to the creater SOAP header block.
     */
     IHeaderBlock * AXISCALL createSOAPHeaderBlock(AxisChar * pachLocalName,
-                     AxisChar * pachUri);
+                                                  AxisChar * pachUri);
 
   /**
     * Create and add a SOAP header block to the Stub.
@@ -405,7 +406,8 @@ class STORAGE_CLASS_INFO Stub
     * @return Pointer to the creater SOAP header block.
     */
     IHeaderBlock* AXISCALL createSOAPHeaderBlock(AxisChar * pachLocalName,
-        AxisChar * pachUri, AxisChar * pachPrefix);
+                                                 AxisChar * pachUri, 
+                                                 AxisChar * pachPrefix);
 
   /**
     * Iterator initiatior for SOAP header blocks
@@ -495,10 +497,11 @@ class STORAGE_CLASS_INFO Stub
     *                 use 0.
     */
     void setTransportTimeout(long lSeconds);
+    
   /**
     * Get the status of the stub to see any error situation
     */
-       int getStatus();
+    int getStatus();
 
   /**
     * Set whether to Maintain session with service ot not.

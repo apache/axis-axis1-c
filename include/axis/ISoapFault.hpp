@@ -39,17 +39,14 @@ using namespace std;
 /**
  *  @class ISoapFault
  *  @brief Interface to represent SoapFault
- *
- *
- *  @author damitha kumarage (damitha@jkcsworld.com, damitha@opensource.lk)
  */
-
-
 class ISoapFault  
 {
 
 public:
-
+    /**
+     * Destructor
+     */
     virtual ~ISoapFault(){};
 
     /** 
@@ -72,8 +69,11 @@ public:
       * @param pName name
       * @param pNamespace url
       */
-    virtual void* getCmplxFaultObject(void* pDZFunct, void* pCreFunct, void* pDelFunct, 
-        const AxisChar* pName, const AxisChar* pNamespace) = 0;
+    virtual void* getCmplxFaultObject(void* pDZFunct, 
+                                      void* pCreFunct, 
+                                      void* pDelFunct, 
+                                      const AxisChar* pName, 
+                                      const AxisChar* pNamespace) = 0;
 
     /**
      * To retrieve a complex fault detail object

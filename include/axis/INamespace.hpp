@@ -16,10 +16,8 @@
  */
 
  /**
- * @file INamespace.hpp
- *
- *
- */
+  * @file INamespace.hpp
+  */
 
 /**
  *   @class INamespace
@@ -46,14 +44,14 @@ public:
      * 
      * @return prefix of this namespace.
      */
-	virtual const AxisChar* getPrefix()=0;
+    virtual const AxisChar* getPrefix()=0;
    
    /**
     * Gets the namespace uri of this Namespace.
     * 
     * @return namespace uri of this Namespace
     */
-	virtual const AxisChar* getURI()=0;
+    virtual const AxisChar* getURI()=0;
 
     /**
       * Sets the namespace uri of this Namespace.
@@ -62,15 +60,20 @@ public:
       * @return AXIS_SUCCESS if successful AXIS_FAIL otherwise. NOTE: Passing NULL will result in a AXIS_SUCCESS
       * 
       */
-	virtual int setURI(const AxisChar* achURI)=0;
+    virtual int setURI(const AxisChar* achURI)=0;
+    
     /**
      * Sets the prefix of this Namespace.
      *
      * @param achPrefix The prefix to set in.
      * @return AXIS_SUCCESS if successful AXIS_FAIL otherwise. NOTE: Passing NULL will result in a AXIS_SUCCESS
      */
-	virtual int setPrefix(const AxisChar* achPrefix)=0;
-	virtual ~INamespace() {};
+    virtual int setPrefix(const AxisChar* achPrefix)=0;
+
+    /**
+     * Destructor.
+     */    
+    virtual ~INamespace() {};
 
 };
 

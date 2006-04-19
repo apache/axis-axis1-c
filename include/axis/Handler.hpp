@@ -49,67 +49,67 @@ AXIS_CPP_NAMESPACE_START
 class Handler : public HandlerBase
 {
 public:
-	/**
-	  * Constructor.
-	  */
+    /**
+      * Constructor.
+      */
     Handler(){};
 
-	/**
-	  * Destructor.
-	  */
+    /**
+      * Destructor.
+      */
     virtual ~Handler(){};
 
-	/**
-	  * Returns the value of the given option.
-	  *
-	  * @param sArg The option name, i.e key
-	  * @return The option value.
-	  */
+    /**
+      * Returns the value of the given option.
+      *
+      * @param sArg The option name, i.e key
+      * @return The option value.
+      */
     const string& getOption(const string& sArg)
-	{
-		m_sEmpty = "";
+    {
+        m_sEmpty = "";
 
-		map<string, string>::const_iterator it = m_pOption->find(sArg);
-		if (it != m_pOption->end())
-		{
-			return (*it).second;
-		}
-		return m_sEmpty;	
-	}
+        map<string, string>::const_iterator it = m_pOption->find(sArg);
+        if (it != m_pOption->end())
+        {
+            return (*it).second;
+        }
+        return m_sEmpty;    
+    }
 
-	/**
-	  * This method is automatically called by the Axis Engine when it loads a
-	  * Handler. The purpose of this method is described below:
-	  * For each Handler we could configure various parameters/options in the
-	  * Server.wsdd or Client.wsdd. If the engine finds any such options then
-	  * the engine will automaticaly call this method of each handler and will
-	  * set those options to each Handler by calling this method of each 
-	  * Handler which those configuration options belong to. Normaly a Handler
-	  * writer doesn't need to interact/deal with this method.
-	  *
-	  * @param OptionList The map which contains the options to be set.
-	  */
+    /**
+      * This method is automatically called by the Axis Engine when it loads a
+      * Handler. The purpose of this method is described below:
+      * For each Handler we could configure various parameters/options in the
+      * Server.wsdd or Client.wsdd. If the engine finds any such options then
+      * the engine will automaticaly call this method of each handler and will
+      * set those options to each Handler by calling this method of each 
+      * Handler which those configuration options belong to. Normaly a Handler
+      * writer doesn't need to interact/deal with this method.
+      *
+      * @param OptionList The map which contains the options to be set.
+      */
     void setOptionList(const map<string, string>* OptionList) {m_pOption = OptionList;};
 
-	/**
-	  * Gets and returns the type of the handler. The return value here is
-	  * always NORMAL_HANDLER.
-	  *
-	  *	@return returns the type of the handler. The return value here is
-	  * always NORMAL_HANDLER.
-	  */
+    /**
+      * Gets and returns the type of the handler. The return value here is
+      * always NORMAL_HANDLER.
+      *
+      *    @return returns the type of the handler. The return value here is
+      * always NORMAL_HANDLER.
+      */
     int AXISCALL getType(){return NORMAL_HANDLER;};
 
 protected:
-	/**
-	  * Used to store the options which are configured in the WSDD.
-	  */
-	const map<string, string>* m_pOption;
+    /**
+      * Used to store the options which are configured in the WSDD.
+      */
+    const map<string, string>* m_pOption;
 
-	/**
-	  * Represents an empty string.
-	  */
-	string m_sEmpty;
+    /**
+      * Represents an empty string.
+      */
+    string m_sEmpty;
 };
 
 AXIS_CPP_NAMESPACE_END

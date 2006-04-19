@@ -179,7 +179,19 @@ typedef double xsdc__double;
  * @typedef xsdc__boolean
  * Axis C++ defined type for xml basic type boolean
  */
-typedef enum { false_=0, true_ } xsdc__boolean;
+typedef enum 
+{ 
+    /**
+     * False
+     */
+    false_=0, 
+
+    /**
+     * True
+     */    
+    true_ 
+} xsdc__boolean;
+
 /**
  * @typedef xsdc__byte
  * Axis C++ defined type for xml basic type byte

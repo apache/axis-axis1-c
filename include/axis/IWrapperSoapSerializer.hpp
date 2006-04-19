@@ -44,6 +44,9 @@ AXIS_CPP_NAMESPACE_START
 class IWrapperSoapSerializer
 {
 public:
+    /**
+     * Destructor
+     */
     virtual ~IWrapperSoapSerializer(){};
 
     /**
@@ -333,11 +336,6 @@ public:
      */
     virtual void AXISCALL serialize(const char* pFirst, ...)=0;
 
-    /* 
-     * following two functions are needed by serializer 
-     * functions of complex types for RPC style web services 
-     */
-     
     /**
      * Serialize start element tag for complex type.
      * This is only used for rpc/encoded style web services.

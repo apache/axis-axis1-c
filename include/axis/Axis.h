@@ -39,6 +39,10 @@
 #endif
 
 /**
+ * @file Axis.h
+ */
+
+/**
  *
  * Contains methods to initialize and terminate the Axis runtime. Creating a stub also initializes
  * the Axis runtime and deleting the stub terminates it. So simple applications that only ever
@@ -50,49 +54,49 @@
  */
  
 /**
-  * Initializes the Axis runtime.
-  * @param bIsServer should be set to false for client applications.
-  * @return AXISC_SUCCESS or AXISC_FAIL to indicate success or fail
-  */
+ * Initializes the Axis runtime.
+ * @param bIsServer should be set to false for client applications.
+ * @return AXISC_SUCCESS or AXISC_FAIL to indicate success or fail
+ */
 AXISC_STORAGE_CLASS_INFO 
 int axiscAxisInitialize(AxiscBool bIsServer);
 
 /** 
-  * Terminates the Axis runtime. 
-  * @return AXISC_SUCCESS or AXISC_FAIL to indicate success or fail
-  */
+ * Terminates the Axis runtime. 
+ * @return AXISC_SUCCESS or AXISC_FAIL to indicate success or fail
+ */
 AXISC_STORAGE_CLASS_INFO 
 int axiscAxisTerminate();
 
 /**
-  * Deletes storage allocated by the Axis engine, that is no longer required
-  * by the customer application.
-  * 
-  * @param pValue
-  * @param type The XSDTYPE of the storage item to be deleted.
-  * @return AXISC_SUCCESS or AXISC_FAIL to indicate success or fail
-  */
+ * Deletes storage allocated by the Axis engine, that is no longer required
+ * by the customer application.
+ * 
+ * @param pValue Pointer to storage to be reclaimed
+ * @param type The XSDTYPE of the storage item to be deleted.
+ * @return AXISC_SUCCESS or AXISC_FAIL to indicate success or fail
+ */
 AXISC_STORAGE_CLASS_INFO 
 int axiscAxisDelete(void * pValue, AXISC_XSDTYPE type);
 
 /**
-  * Allocates storage to be used by Axis engine.  All proxy code and allocated
-  * storage required by the client for basic types must use this 
-  * function in order that it may be freed by proxy code or the Axis engine.
-  * 
-  * @param size - size of storage to be allocated
-  * @return pointer to allocated storage
-  */
+ * Allocates storage to be used by Axis engine.  All proxy code and allocated
+ * storage required by the client for basic types must use this 
+ * function in order that it may be freed by proxy code or the Axis engine.
+ * 
+ * @param size - size of storage to be allocated
+ * @return pointer to allocated storage
+ */
 AXISC_STORAGE_CLASS_INFO 
 void * axiscAxisNew(AXISC_XSDTYPE type, int size);
 
 /**
-  * Registers a function that will be invoked to handle Axis engine
-  * exceptions.  The function will be called with two parameters, 
-  * the error code and the error message, if any. 
-  * 
-  * @param fp - pointer to exception handler function.
-  */
+ * Registers a function that will be invoked to handle Axis engine
+ * exceptions.  The function will be called with two parameters, 
+ * the error code and the error message, if any. 
+ * 
+ * @param fp - pointer to exception handler function.
+ */
   
 typedef void (* AXIS_EXCEPTION_HANDLER_FUNCT)(int errorCode, const char *errorString);
 
@@ -100,12 +104,12 @@ AXISC_STORAGE_CLASS_INFO
 void axiscAxisRegisterExceptionHandler(AXIS_EXCEPTION_HANDLER_FUNCT);
 
 /**
-  * Invokes the registered exception handler. If an exception handler was not
-  * registered, the errorCode and errorString are printed to stderr. 
-  * 
-  * @param errorCode - error code.
-  * @param errorString - error string.
-  */
+ * Invokes the registered exception handler. If an exception handler was not
+ * registered, the errorCode and errorString are printed to stderr. 
+ * 
+ * @param errorCode - error code.
+ * @param errorString - error string.
+ */
 
 AXISC_STORAGE_CLASS_INFO 
 void axiscAxisInvokeExceptionHandler(int errorCode, const char *errorString);

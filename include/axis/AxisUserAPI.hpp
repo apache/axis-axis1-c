@@ -306,7 +306,7 @@ public:
      * Copy Constructor
      * @param original xsd__base64Binary object to be copied.
      */
-	xsd__base64Binary(const xsd__base64Binary & original);
+    xsd__base64Binary(const xsd__base64Binary & original);
    
    /**
     * Destructor
@@ -318,27 +318,27 @@ public:
      * @param data binary data
      * @param size length, in bytes, of binary data
      */
-	void set(xsd__unsignedByte * data, xsd__int size);
+    void set(xsd__unsignedByte * data, xsd__int size);
    
     /**
      * Get binary data from xsd__base64Binary object.
      * @param size is updated with length, in bytes, of binary data
      * @return binary data
      */
-	xsd__unsignedByte * get(xsd__int & size) const;
+    xsd__unsignedByte * get(xsd__int & size) const;
   
     /**
      * Get length, in bytes, of binary data.
      * @return length, in bytes, of binary data
      */
-	xsd__int getSize(void) const;
+    xsd__int getSize(void) const;
     
     /**
      * Assignment operator
      * @param original xsd__base64Binary object from which data is to be assigned
      * @return reference to this
      */
-	xsd__base64Binary & operator=(const xsd__base64Binary & original);
+    xsd__base64Binary & operator=(const xsd__base64Binary & original);
 private:
     /**
      * Binary data
@@ -371,7 +371,7 @@ public:
    /**
     * Destructor
     */    
-	~xsd__hexBinary();
+    ~xsd__hexBinary();
 
     /**
      * Set binary data into xsd__hexBinary object.

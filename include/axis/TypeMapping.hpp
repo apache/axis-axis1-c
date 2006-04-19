@@ -325,7 +325,7 @@ public:
     /**
      * Clear internal table of mappings from xsd type names to XSDTYPE enumeration values.
      */
-	static void uninitialize();
+    static void uninitialize();
 
     /**
      * Internal table of mappings from xsd type names to XSDTYPE enumeration values.
@@ -334,12 +334,12 @@ public:
     /**
      * Internal table of mappings from xsd type names to XSDTYPE enumeration values.
      */
-	static std::map<std::string, XSDTYPE> m_sTypeMap;
+    static std::map<std::string, XSDTYPE> m_sTypeMap;
 #else
     /**
      * Internal table of mappings from xsd type names to XSDTYPE enumeration values.
      */
-	static std::map<const std::string, XSDTYPE> m_sTypeMap;
+    static std::map<const std::string, XSDTYPE> m_sTypeMap;
 #endif
 
     /**

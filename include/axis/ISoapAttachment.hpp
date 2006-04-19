@@ -21,10 +21,6 @@
  *
  */
 
-// ISoapAttachment.h: interface for the ISoapAttachment class.
-//
-//////////////////////////////////////////////////////////////////////
-
 /**
  * @file ISoapAttachment.hpp
  */
@@ -57,10 +53,10 @@ typedef enum
     AXIS_BINARY = 1
 } AXIS_ATTACHMENT_ENCODING_TYPE;
 
-#define AXIS_CONTENT_ID					"Content-Id"
-#define AXIS_CONTENT_TYPE				"Content-Type"
-#define AXIS_CONTENT_TRANSFER_ENCODING	"Content-Transfer-Encoding"
-#define AXIS_CONTENT_LOCATION			"Content-Location"
+#define AXIS_CONTENT_ID                  "Content-Id"
+#define AXIS_CONTENT_TYPE                "Content-Type"
+#define AXIS_CONTENT_TRANSFER_ENCODING   "Content-Transfer-Encoding"
+#define AXIS_CONTENT_LOCATION            "Content-Location"
 
 /**
  * @class ISoapAttachment
@@ -75,14 +71,14 @@ public:
      * 
      * @return Attachment ID.
      */
-	virtual const char* getAttachmentId()=0;
+    virtual const char* getAttachmentId()=0;
 
     /**
      * Allows the user to add the Body to the current attachment.
      * 
      * @param objBody Base64Binary encoded attachment body.
      */
-	virtual void addBody(xsd__base64Binary* objBody)=0;	
+    virtual void addBody(xsd__base64Binary* objBody)=0;    
 
     /**
      * Allows the user to add headers to the current attachments.
@@ -90,14 +86,15 @@ public:
      * @param pchName header name.
      * @param pchValue header value.
      */
-	virtual void addHeader(const char* pchName, const char* pchValue)=0;
+    virtual void addHeader(const char* pchName, 
+                           const char* pchValue)=0;
 
     /**
      * Allows the user to get the Attachment Body
      * 
      * @return Base64Binary encoded body.
      */
-	virtual xsd__base64Binary* getBody()=0;	
+    virtual xsd__base64Binary* getBody()=0;    
 
     /**
      * Allows the user to get the required Attachment Header
@@ -105,12 +102,12 @@ public:
      * @param pchName The name of the required Attachment Header
      * @return Value of the required attachment header.
      */
-	virtual const char* getHeader(const char* pchName)=0;
+    virtual const char* getHeader(const char* pchName)=0;
 
     /**
      * Destructor
      */
-	virtual ~ISoapAttachment() {};
+    virtual ~ISoapAttachment() {};
 
 };
 

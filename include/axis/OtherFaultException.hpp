@@ -43,7 +43,7 @@ public:
     /**
      * Default constructor
      */
-	OtherFaultException();
+    OtherFaultException();
 
     /**
      * Constructor
@@ -54,22 +54,25 @@ public:
      * @param detail is the SOAP fault detail
      * @param exceptionCode is the axis exception code
      */
-	OtherFaultException(const AxisChar *code, const AxisChar *string, 
-		const AxisChar *actor, const AxisChar *detail, int exceptionCode);
+    OtherFaultException(const AxisChar *code, 
+                        const AxisChar *string, 
+                        const AxisChar *actor, 
+                        const AxisChar *detail, 
+                        int exceptionCode);
 
     /**
      * Copy constructor
      * 
      * @param ae is the AxisException to be copied
      */
-	OtherFaultException(AxisException& ae);
+    OtherFaultException(AxisException& ae);
 
     /**
      * Copy constructor
      * 
      * @param copy is the OtherFaultException to be copied
      */
-	OtherFaultException(const OtherFaultException& copy);
+    OtherFaultException(const OtherFaultException& copy);
     
     /**
      * Assignment operator
@@ -77,31 +80,31 @@ public:
      * @param other is the OtherFaultException to be copied
      * @return reference to this
      */
-	virtual OtherFaultException& operator=(OtherFaultException other);
+    virtual OtherFaultException& operator=(OtherFaultException other);
 
     /**
      * Destructor
      */
-	virtual ~OtherFaultException() throw();
+    virtual ~OtherFaultException() throw();
 
     /**
      * Returns the SOAP fault detail
      * 
      * @return fault detail
      */
-	virtual const AxisChar *getFaultDetail() const;
+    virtual const AxisChar *getFaultDetail() const;
 
     /**
      * Set SOAP fault detail
      * 
      * @param detail is the SOAP fault detail
      */
-	virtual void setFaultDetail(const AxisChar *detail);
+    virtual void setFaultDetail(const AxisChar *detail);
 private:
     /**
      * SOAP fault detail
      */
-	AxisChar *m_detail;
+    AxisChar *m_detail;
 };
 
 AXIS_CPP_NAMESPACE_END
