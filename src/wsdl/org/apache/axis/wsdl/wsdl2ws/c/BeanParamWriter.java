@@ -713,7 +713,9 @@ public class BeanParamWriter extends ParamCFileWriter
         writer.write(" */\n");
         
         writer.write("void* Axis_Create_" + classname + "(void* pObj, AxiscBool bArray, int nSize)\n{\n");
+        
         writer.write("\t" + classname + "* pTemp;\n");
+        writer.write("\n");
         writer.write("\tif (bArray && (nSize > 0))\n\t{\n");
         writer.write("\t\tif (pObj)\n\t\t{\n");
         writer.write("\t\t\tpObj = (void *)  realloc(pObj, sizeof(" + classname + " *)*nSize);\n");
@@ -725,8 +727,27 @@ public class BeanParamWriter extends ParamCFileWriter
         writer.write("\t\t\tmemset(pObj, 0, sizeof(" + classname + " *)*nSize);\n\t\t}\n");
         writer.write("\t}\n\telse\n\t{\n");
         writer.write("\t\tpObj = (void *)  malloc(sizeof(" + classname + "));\n");
-        writer.write("\t\tmemset(pObj, 0, sizeof(" + classname + "));\n\n");
-        writer.write("\t}\n\treturn pObj;\n}\n");
+        writer.write("\t\tmemset(pObj, 0, sizeof(" + classname + "));\n");
+        writer.write("\t\tpTemp = (" + classname + " *)pObj;\n");
+        
+        for (int i = 0; i < attribs.length; i++)
+            if (!(attribs[i].isSimpleType() || attribs[i].getType().isSimpleType()))
+            {
+                if (attribs[i].isArray())
+                {
+                    writer.write("\t\tpTemp->" + attribs[i].getParamName() + " = "
+                            + "Axis_Create_" + attribs[i].getTypeName() + "_Array(0);\n");
+                }
+                else
+                {
+                    writer.write("\t\tpTemp->" + attribs[i].getParamName() + " = "
+                            + "Axis_Create_" + attribs[i].getTypeName() + "(0,0,0);\n");                   
+                }
+            }
+        
+        writer.write("\t}\n");
+        writer.write("\n");
+        writer.write("\treturn pObj;\n}\n");
     }
 
     /**
@@ -797,7 +818,6 @@ public class BeanParamWriter extends ParamCFileWriter
             }
             else
             {
-
                 String deleteFunctionSuffix = "";
                 if (attribs[i].isArray())
                     deleteFunctionSuffix = "_Array";

@@ -115,21 +115,13 @@ int main(int argc, char* argv[])
     for(i = 0; i < request; i++)
     {
         if (output)
-        { 
-        	int j;
-            BenchBasicDataType **	outArray = output->infos->m_Array;             
-			for( j = 0; j < output->infos->m_Size; j++)
-			{
-				Axis_Delete_BenchBasicDataType(outArray[j], 0, 0);
-				
-				/* Who deletes output->infos?? */
-			}
-
+        {      
             Axis_Delete_BenchDataType(output,0,0);
             output = NULL;
         }
 
         output = doBenchRequest(ws, input);
+        
         if (exceptionOccurred == C_TRUE 
               || output == NULL 
               || get_AxisBench_Status(ws) == AXISC_FAIL )
@@ -138,6 +130,12 @@ int main(int argc, char* argv[])
 
     for( i = 0; i < input->count; i++)
     {
+        /* since these are pointers to our own buffers, null them out before deleting  */
+        ppBBDT[i]->StringType = NULL;
+        ppBBDT[i]->QNameType  = NULL;
+        ppBBDT[i]->Base64BinaryType.__ptr=NULL;
+        ppBBDT[i]->HexBinary.__ptr=NULL;
+        
         Axis_Delete_BenchBasicDataType(ppBBDT[i],0,0);
     }
 
@@ -145,6 +143,7 @@ int main(int argc, char* argv[])
       free(ppBBDT);
     if (buffer)
 	  free( buffer);
+    input->infos = NULL;
 
   	if (exceptionOccurred == C_TRUE 
   			|| output == NULL 
@@ -165,11 +164,11 @@ int main(int argc, char* argv[])
       	{
       		if( outArray[i] != NULL)
       		{
-                printf( " ----------------------------------------------" );
+                printf( " ----------------------------------------------\n" );
                 printf( " StringType %s\n", outArray[i]->StringType );
                 printf( " IntType %d\n", outArray[i]->IntType );
-                printf( " IntegerType %d\n", outArray[i]->IntegerType );
-                printf( " DoubleType %f\n", outArray[i]->DoubleType );
+                printf( " IntegerType %lld\n", outArray[i]->IntegerType );
+                printf( " DoubleType %g\n", outArray[i]->DoubleType );
                 printf( " BooleanType %d\n", outArray[i]->BooleanType );
                 strftime(dateTime, 50, "%a %b %d %H:%M:%S %Y", &outArray[i]->DateTimeType);
                 printf( " DateTimeType %s\n", dateTime );
@@ -181,20 +180,20 @@ int main(int argc, char* argv[])
                 if( outArray[i]->ByteType == 0x31)
                 	outArray[i]->ByteType = '1';
 #endif
-                printf( " ByteType %d\n", outArray[i]->ByteType );
-                printf( " DecimalType %f\n", outArray[i]->DecimalType );
-                printf( " FloatType %f\n", outArray[i]->FloatType );
-                printf( " LongType %ld\n", outArray[i]->LongType );
+                printf( " ByteType %c\n", outArray[i]->ByteType );
+                printf( " DecimalType %g\n", outArray[i]->DecimalType );
+                printf( " FloatType %g\n", outArray[i]->FloatType );
+                printf( " LongType %lld\n", outArray[i]->LongType );
                 printf( " QNameType %s\n", outArray[i]->QNameType );
-                printf( " ShortType %d\n", outArray[i]->ShortType );
+                printf( " ShortType %hd\n", outArray[i]->ShortType );
 
-                printf( " Base64BinaryType ", outArray[i]->Base64BinaryType.__size );
+                printf( " Base64BinaryType %d\n", outArray[i]->Base64BinaryType.__size );
                 if( outArray[i]->Base64BinaryType.__size > 0)
-                    printf( " Base64BinaryType ", asciiToString((char *)outArray[i]->Base64BinaryType.__ptr) );
+                    printf( " Base64BinaryType %s\n", asciiToString((char *)outArray[i]->Base64BinaryType.__ptr) );
 
-                printf( " HexBinaryType ", outArray[i]->HexBinary.__size );
+                printf( " HexBinaryType %d\n", outArray[i]->HexBinary.__size );
                 if( outArray[i]->HexBinary.__size > 0)
-                    printf( " HexBinaryType ", asciiToString( (char *) outArray[i]->HexBinary.__ptr) );	    
+                    printf( " HexBinaryType %s\n", asciiToString( (char *) outArray[i]->HexBinary.__ptr) );	    
       		}
       		
       		returnValue = 0;
@@ -204,7 +203,7 @@ int main(int argc, char* argv[])
   	Axis_Delete_BenchDataType (input,0,0);
   	Axis_Delete_BenchDataType (output,0,0);
 
-    printf( "---------------------- TEST COMPLETE -----------------------------" );
+    printf( "---------------------- TEST COMPLETE -----------------------------\n" );
     
 	return returnValue;
 }

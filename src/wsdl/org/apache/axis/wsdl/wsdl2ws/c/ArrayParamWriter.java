@@ -152,6 +152,8 @@ public class ArrayParamWriter extends ParamWriter
                     + "(NULL, 1, nSize);\n");
             writer.write("\t\tpArray->m_Size = nSize;\n"); 
             writer.write("\t}\n");
+            writer.write("\n");
+            writer.write("\treturn pArray;\n");
             
             // End function body
 

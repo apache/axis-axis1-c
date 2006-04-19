@@ -149,12 +149,16 @@ int axiscAxisDelete(void * pValue,
                 Axisc_Array *array = (Axisc_Array*)pValue;
                 
                 // Delete array elements via recursion
-                for (int i=0; i<array->m_Size; ++i)
-                    if (array->m_Array[i])
-                        axiscAxisDelete(array->m_Array[i], array->m_Type);
+                if (array->m_Array)
+                {
+                	for (int i=0; i<array->m_Size; ++i)
+                    	if (array->m_Array[i])
+                        	axiscAxisDelete(array->m_Array[i], array->m_Type);
+                    delete [] array->m_Array;
+                }
 
                 // Delete array
-                delete (Axisc_Array*) pValue;
+                delete array;
                 break;
             }
             case XSDC_BASE64BINARY:
@@ -271,17 +275,23 @@ void *axiscAxisNew(AXISC_XSDTYPE type, int size)
             case XSDC_BASE64BINARY:
             {
                 xsdc__base64Binary *b64bin = new xsdc__base64Binary();
-                b64bin->__size=0;
-                b64bin->__ptr=NULL;
+                b64bin->__size=size;
+                if (size > 0)
+             		b64bin->__ptr = new xsdc__unsignedByte[size+1];
+                else 
+                	b64bin->__ptr=NULL;
                 retVal = b64bin;
                 break;
             }
             case XSDC_HEXBINARY:
             {
                 xsdc__hexBinary *hexbin = new xsdc__hexBinary();
-                hexbin->__size=0;
-                hexbin->__ptr=NULL;
-                 retVal = hexbin;
+                hexbin->__size=size;
+                if (size > 0)
+             		hexbin->__ptr = new xsdc__unsignedByte[size+1];
+                else
+                	hexbin->__ptr=NULL;
+                retVal = hexbin;
                 break;
             }
             case XSDC_FLOAT:
