@@ -222,14 +222,19 @@ public:
     /**
      * Sets an Attribute to the SOAPMethod, using the given Attribute data.
      * You must ensure the prefix has a valid namespace declared, otherwise an
-     * invalid SOAP message will be produced.
-     * It is safer to use setSOAPMethodAttribute(const AxisChar *pLocalname, const AxisChar *pPrefix, const AxisChar* pUri, const AxisChar *pValue)
+     * invalid SOAP message will be produced. @n
+     * It is safer to use setSOAPMethodAttribute( const AxisChar * pLocalname, @n
+	 *                                            const AxisChar * pPrefix, @n
+	 *                                            const AxisChar * pUri, @n
+	 *                                            const AxisChar * pValue) @n
      * 
      * @param pLocalname The local name of the Attribute.
      * @param pPrefix The prefix of the Attribute.
      * @param pValue The value of the Attribute.
      */
-    void setSOAPMethodAttribute(const AxisChar *pLocalname, const AxisChar *pPrefix, const AxisChar *pValue);
+    void setSOAPMethodAttribute( const AxisChar * pLocalname,
+								 const AxisChar * pPrefix,
+								 const AxisChar * pValue);
 
     /**
      * Sets an Attribute to the SOAPMethod, using the given Attribute data.
@@ -239,274 +244,1408 @@ public:
      * @param pUri The namespace uri of the Attribute.
      * @param pValue The value of the Attribute.
      */
-    void setSOAPMethodAttribute(const AxisChar *pLocalname, const AxisChar *pPrefix, const AxisChar* pUri, const AxisChar *pValue);
-
-    /* Method for adding complex parameters */
-    void AXISCALL addCmplxParameter(void* pObject, void* pSZFunct,
-        void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace);
-    /* Method for adding complex type array parameters */
-    void AXISCALL addCmplxArrayParameter(Axis_Array* pArray, void* pSZFunct,
-        void* pDelFunct, void* pSizeFunct, const AxisChar* pName,
-        const AxisChar* pNamespace);
-    /* Method for adding basic type array parameters */
-    void AXISCALL addBasicArrayParameter(Axis_Array* pArray, XSDTYPE nType,
-        const AxisChar* pName);
-    /* Method for adding parameters of basic types */
-    void AXISCALL addParameter(void* pValue,const char* pchName,
-        XSDTYPE nType);
+    void setSOAPMethodAttribute( const AxisChar * pLocalname,
+								 const AxisChar * pPrefix,
+								 const AxisChar * pUri,
+								 const AxisChar * pValue);
 
     /**
-     * Adds an attachment and references it from a parameter in the SOAP body. Axis C++ will delete the storage for
-     * the ISoapAttachment and IAttributes passed to this method during ~Call.
-     * 
-     * @param attachment The attachment to add to the MIME message, referenced from the SOAP body (mandatory)
-     * @param pName The name of the parameter (mandatory)
-     * @param attributes An array of pointers to attributes that will be added to the attachment reference in the 
-     * SOAP body (optional)
-     * @param nAttributes The number of elements in the attributes array
+     * Method for adding complex parameters to the engine, ready to be serialised.
+	 *   An example of this method (taken from the automatically generated stubs
+	 * of the AxisBench test) follows:- @n
+	 * BenchDataType * AxisBench::doBenchRequest( BenchDataType * pBenchDataTypeObj) @n
+	 * : @n
+	 * char cPrefixAndParamName[17]; @n
+	 * sprintf( cPrefixAndParamName, @n
+	 *			"%s:doBench", @n
+	 *			m_pCall->getNamespacePrefix( Axis_URI_BenchDataType)); @n
+	 * m_pCall->addCmplxParameter( pBenchDataTypeObj, @n
+	 *                             (void *) Axis_Serialize_BenchDataType, @n
+	 *							   (void *) Axis_Delete_BenchDataType, @n
+	 *							   cPrefixAndParamName, @n
+	 *							   Axis_URI_BenchDataType); @n
+	 * 
+     * @param pObject is the 'complex' object.
+     * @param pSZFunct is a pointer to the function that knows how to serialise
+	 * the object.
+     * @param pDelFunct is a pointer to the function that knows how to delete the object.
+     * @param pName is a null terminated character string that contains the
+	 * prefix:name of the object.
+     * @param pNamespace is the namespace associated with the prefix used in 'pName'.
      */
-    void AXISCALL addAttachmentParameter(ISoapAttachment* attachment, const char* pName, 
-        IAttribute **attributes=NULL, int nAttributes=0);
+	void AXISCALL addCmplxParameter( void * pObject,
+									 void * pSZFunct,
+							         void * pDelFunct,
+									 const AxisChar * pName,
+									 const AxisChar * pNamespace);
 
     /**
-     * Creates an IAttribute that can be used on an attachment reference on Call::addAttachmentParameter.
-     * If this IAttribute is subsequently passed to Call::addAttachmentParameter, Axis C++ will delete the storage 
-     * associated with the IAttribute during ~Call.
-     * You must ensure the prefix has a valid namespace declared, otherwise an invalid SOAP message will be produced.
+     * Method for adding complex type array parameters to the engine, ready to
+	 * be serialised.
+	 *
+     * @param pArray is a pointer the an Axis_Array object.
+     * @param pSZFunct is a pointer to the function that knows how to serialise the object.
+     * @param pDelFunct is a pointer to the function that knows how to delete the object.
+	 * @param pSizeFunct is a pointer to the function that knows how to increase
+	 * the size of the object.
+     * @param pName is a null terminated character string that contains the
+	 * prefix:name of the object.
+     * @param pNamespace is the namespace associated with the prefix used in 'pName'.
+     */
+    void AXISCALL addCmplxArrayParameter( Axis_Array * pArray,
+										  void * pSZFunct,
+										  void * pDelFunct,
+										  void * pSizeFunct,
+										  const AxisChar * pName,
+                                          const AxisChar * pNamespace);
+
+    /**
+	 * Method for adding basic type array parameters to the engine, ready to be serialised.
+     *
+     * @param pArray is a pointer the an Axis_Array object.
+     * @param nType is an enumerated type that defines the type of array (XSDTYPE
+	 * is defined in TypeMapping.hpp).
+     * @param pName is a null terminated character string containing the name of the array.
+     */
+    void AXISCALL addBasicArrayParameter( Axis_Array * pArray,
+										  XSDTYPE nType,
+										  const AxisChar * pName);
+
+    /**
+	 * Method for adding parameters of basic types to the engine, ready to be serialised.
+	 *
+	 * @param pValue is a pointer to the object.
+	 * @param pchName is a null terminated character string containing the name of
+	 * the parameter.
+	 * @param nType is an enumerated type that defines the type of parameter 
+	 * (XSDTYPE is defined in TypeMapping.hpp).
+     */
+    void AXISCALL addParameter( void * pValue,
+								const char * pchName,
+								XSDTYPE nType);
+
+    /**
+     * Adds an attachment and references it from a parameter in the SOAP body.
+	 * Axis C++ will delete the storage for the ISoapAttachment and IAttributes
+	 * passed to this method during ~Call.
+     * 
+     * @param attachment The attachment to add to the MIME message, referenced
+	 * from the SOAP body (mandatory).
+     * @param pName The name of the parameter (mandatory).
+     * @param attributes An array of pointers to attributes that will be added
+	 * to the attachment reference in the SOAP body (optional).
+     * @param nAttributes The number of elements in the attributes array.
+     */
+    void AXISCALL addAttachmentParameter( ISoapAttachment * attachment,
+										  const char * pName, 
+										  IAttribute ** attributes = NULL,
+										  int nAttributes = 0);
+
+    /**
+     * Creates an IAttribute that can be used on an attachment reference on
+	 * Call::addAttachmentParameter.  If this IAttribute is subsequently passed
+	 * to Call::addAttachmentParameter, Axis C++ will delete the storage associated
+	 * with the IAttribute during ~Call. You must ensure the prefix has a valid
+	 * namespace declared, otherwise an invalid SOAP message will be produced.
      * 
      * @param pLocalname The local name of the Attribute.
      * @param pPrefix The prefix of the Attribute.
      * @param pValue The value of the Attribute.
+     * @return a pointer to an IAttribute object.
      */
-    IAttribute *createAttribute(const AxisChar *pLocalname, const AxisChar *pPrefix, const AxisChar *pValue);
+    IAttribute * createAttribute( const AxisChar * pLocalname,
+								  const AxisChar * pPrefix,
+								  const AxisChar * pValue);
 
-    /* Method that set the remote method name */
-    void AXISCALL setOperation(const char* pchOperation,
-        const char* pchNamespace);
-    int AXISCALL setEndpointURI(const char* pchEndpointURI);
-public:
-    IHeaderBlock* AXISCALL createHeaderBlock(AxisChar *pachLocalName,
-        AxisChar *pachUri);
-    IHeaderBlock* AXISCALL createHeaderBlock(AxisChar *pachLocalName,
-        AxisChar *pachUri, AxisChar *pachPrefix);
-    IHeaderBlock* createHeaderBlock();
-    /* Methods used by stubs to get a deserialized value of XML element
-     * as basic types
+    /**
+     * Method to set the remote method name.
+	 *
+     * @param pchOperation null terminated character string that contains the
+	 * request tag name. i.e. @n
+	 * m_pCall->setOperation( "doBenchRequest", Axis_URI_BenchDataType);@n
+     * @param pchNamespace null terminated character string that contains the
+	 * namespace for the operation.
      */
-    xsd__int * AXISCALL getElementAsInt(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__boolean * AXISCALL getElementAsBoolean(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__unsignedInt * AXISCALL getElementAsUnsignedInt(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__short * AXISCALL getElementAsShort(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__unsignedShort * AXISCALL getElementAsUnsignedShort(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__byte * AXISCALL getElementAsByte(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__unsignedByte * AXISCALL getElementAsUnsignedByte(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__long * AXISCALL getElementAsLong(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__integer * AXISCALL getElementAsInteger(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__unsignedLong * AXISCALL getElementAsUnsignedLong(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__float * AXISCALL getElementAsFloat(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__double * AXISCALL getElementAsDouble(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__decimal * AXISCALL getElementAsDecimal(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__string AXISCALL getElementAsString(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__anyURI AXISCALL getElementAsAnyURI(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__QName AXISCALL getElementAsQName(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__hexBinary * AXISCALL getElementAsHexBinary(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__base64Binary * AXISCALL getElementAsBase64Binary(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__dateTime * AXISCALL getElementAsDateTime(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__date * AXISCALL getElementAsDate(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__time * AXISCALL getElementAsTime(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__duration * AXISCALL getElementAsDuration(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__gYearMonth * AXISCALL getElementAsGYearMonth(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__gYear * AXISCALL getElementAsGYear(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__gMonthDay * AXISCALL getElementAsGMonthDay(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__gDay * AXISCALL getElementAsGDay(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__gMonth * AXISCALL getElementAsGMonth(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__nonPositiveInteger * AXISCALL getElementAsNonPositiveInteger(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__negativeInteger * AXISCALL getElementAsNegativeInteger(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__nonNegativeInteger * AXISCALL getElementAsNonNegativeInteger(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__positiveInteger * AXISCALL getElementAsPositiveInteger(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__normalizedString AXISCALL getElementAsNormalizedString(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__token AXISCALL getElementAsToken(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__language AXISCALL getElementAsLanguage(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__Name AXISCALL getElementAsName(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__NCName AXISCALL getElementAsNCName(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__ID AXISCALL getElementAsID(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__IDREF AXISCALL getElementAsIDREF(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__IDREFS AXISCALL getElementAsIDREFS(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__ENTITY AXISCALL getElementAsENTITY(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__ENTITIES AXISCALL getElementAsENTITIES(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__NMTOKEN AXISCALL getElementAsNMTOKEN(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__NMTOKENS AXISCALL getElementAsNMTOKENS(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__NOTATION AXISCALL getElementAsNOTATION(const AxisChar* pName,
-        const AxisChar* pNamespace);
+    void AXISCALL setOperation( const char * pchOperation,
+						        const char * pchNamespace);
 
-    /* Methods used by stubs to get a deserialized value of a XML attribute
-     * as basic types
+    /**
+	 * Method to set the endpoint URI for the service.
+	 *
+     * @param pchEndpointURI null terminated character string that contains the
+	 * new endpoint URI.
+     * @return Always AXIS_SUCCESS.
+	 * @note There is no syntax parsing used on the URI so the user must be careful
+	 * to ensure that it is correctly formatted.
      */
-    xsd__int * AXISCALL getAttributeAsInt(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__boolean * AXISCALL getAttributeAsBoolean(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__unsignedInt * AXISCALL getAttributeAsUnsignedInt(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__short * AXISCALL getAttributeAsShort(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__unsignedShort * AXISCALL getAttributeAsUnsignedShort(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__byte * AXISCALL getAttributeAsByte(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__unsignedByte * AXISCALL getAttributeAsUnsignedByte(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__long * AXISCALL getAttributeAsLong(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__integer * AXISCALL getAttributeAsInteger(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__unsignedLong * AXISCALL getAttributeAsUnsignedLong(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__float * AXISCALL getAttributeAsFloat(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__double * AXISCALL getAttributeAsDouble(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__decimal * AXISCALL getAttributeAsDecimal(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__string AXISCALL getAttributeAsString(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__anyURI AXISCALL getAttributeAsAnyURI(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__QName AXISCALL getAttributeAsQName(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__hexBinary * AXISCALL getAttributeAsHexBinary(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__base64Binary * AXISCALL getAttributeAsBase64Binary(const AxisChar*
-        pName, const AxisChar* pNamespace);
-    xsd__dateTime * AXISCALL getAttributeAsDateTime(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__date * AXISCALL getAttributeAsDate(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__time * AXISCALL getAttributeAsTime(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__duration * AXISCALL getAttributeAsDuration(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__gYearMonth * AXISCALL getAttributeAsGYearMonth (const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__gYear * AXISCALL getAttributeAsGYear (const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__gMonthDay * AXISCALL getAttributeAsGMonthDay (const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__gDay * AXISCALL getAttributeAsGDay (const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__gMonth * AXISCALL getAttributeAsGMonth (const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__NOTATION AXISCALL getAttributeAsNOTATION (const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__normalizedString AXISCALL getAttributeAsNormalizedString (const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__token AXISCALL getAttributeAsToken (const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__language AXISCALL getAttributeAsLanguage (const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__Name AXISCALL getAttributeAsName (const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__NCName AXISCALL getAttributeAsNCName (const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__ID AXISCALL getAttributeAsID (const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__IDREF AXISCALL getAttributeAsIDREF (const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__IDREFS AXISCALL getAttributeAsIDREFS (const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__ENTITY AXISCALL getAttributeAsENTITY (const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__ENTITIES AXISCALL getAttributeAsENTITIES (const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__NMTOKEN AXISCALL getAttributeAsNMTOKEN (const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__NMTOKENS AXISCALL getAttributeAsNMTOKENS (const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__nonPositiveInteger * AXISCALL getAttributeAsNonPositiveInteger (const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__negativeInteger * AXISCALL getAttributeAsNegativeInteger (const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__nonNegativeInteger * AXISCALL getAttributeAsNonNegativeInteger (const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__positiveInteger * AXISCALL getAttributeAsPositiveInteger (const AxisChar* pName,
-        const AxisChar* pNamespace);
+    int AXISCALL setEndpointURI( const char * pchEndpointURI);
 
+	/**
+	 * Method to create a IHeaderBlock object (defined in IHeaderBlock.hpp).
+     * @param pachLocalName null terminated character string that contains the
+	 * local name of the header block.
+     * @param pachUri null terminated character string that contains the URI
+	 * associated with the local name of the header block.
+     * @return Pointer to the created IHeaderBlock object.
+     */
+    IHeaderBlock * AXISCALL createHeaderBlock( AxisChar * pachLocalName,
+											   AxisChar * pachUri);
 
-    /* Method used by stubs to get a deserialized value of complex types */
-    void* AXISCALL getCmplxObject(void* pDZFunct, void* pCreFunct,
-        void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace);
-    /* Method used by stubs to get a deserialized Array of complex types */
-    Axis_Array* AXISCALL getCmplxArray(Axis_Array * pArray, void* pDZFunct, void* pCreFunct,
-        void* pDelFunct, void* pSizeFunct, const AxisChar* pName,
-        const AxisChar* pNamespace);
-    /* Method used by stubs to get a deserialized Array of basic types */
-    Axis_Array* AXISCALL getBasicArray(XSDTYPE nType, const AxisChar* pName,
-        const AxisChar* pNamespace);
+    /**
+	 * Method to create a IHeaderBlock object (defined in IHeaderBlock.hpp).
+     * @param pachLocalName null terminated character string that contains the
+	 * local name of the header block.
+	 *
+     * @param pachUri null terminated character string that contains the URI
+	 * associated with the local name of the header block.
+     * @param pachPrefix null terminated character string that contains the
+	 * associated prefix for the URI of the header block.
+     * @return Pointer to the created IHeaderBlock object.
+     */
+    IHeaderBlock * AXISCALL createHeaderBlock( AxisChar * pachLocalName,
+											   AxisChar * pachUri,
+											   AxisChar * pachPrefix);
 
-    int AXISCALL checkMessage(const AxisChar* pName,
-        const AxisChar* pNamespace);
+    /**
+	 * Method to create a IHeaderBlock object (defined in IHeaderBlock.hpp).
+	 *
+     * @return Pointer to the created IHeaderBlock object.
+     */
+    IHeaderBlock * createHeaderBlock();
 
-    void* AXISCALL checkFault(const AxisChar* pName,
-        const AxisChar* pNamespace);
+    /**
+     * Method used by stubs to get a deserialized value of XML element as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the element.
+     * @return pointer to the xsd__int type containing the contents of the element.
+     */
+    xsd__int * AXISCALL getElementAsInt( const AxisChar * pName,
+										 const AxisChar * pNamespace);
 
+    /**
+     * Method used by stubs to get a deserialized value of XML element as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the element.
+     * @return pointer to the xsd__boolean type containing the contents of the element.
+     */
+    xsd__boolean * AXISCALL getElementAsBoolean( const AxisChar * pName,
+										         const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of XML element as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the element.
+     * @return pointer to the xsd__unsignedInt type containing the contents of the element.
+     */
+    xsd__unsignedInt * AXISCALL getElementAsUnsignedInt( const AxisChar * pName,
+														 const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of XML element as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the element.
+     * @return pointer to xsd__short type containing the contents of the element.
+     */
+    xsd__short * AXISCALL getElementAsShort(const AxisChar * pName,
+									        const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of XML element as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the element.
+     * @return pointer to xsd__unsignedShort type containing the contents of the element.
+     */
+    xsd__unsignedShort * AXISCALL getElementAsUnsignedShort( const AxisChar * pName,
+															 const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of XML element as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the element.
+     * @return pointer to xsd__byte type containing the contents of the element.
+     */
+    xsd__byte * AXISCALL getElementAsByte( const AxisChar * pName,
+										   const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of XML element as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the element.
+     * @return pointer to xsd__unsignedByte type containing the contents of the element.
+     */
+    xsd__unsignedByte * AXISCALL getElementAsUnsignedByte( const AxisChar * pName,
+													       const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of XML element as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the element.
+     * @return pointer to xsd__long type containing the contents of the element.
+     */
+    xsd__long * AXISCALL getElementAsLong( const AxisChar * pName,
+									       const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of XML element as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the element.
+     * @return pointer to xsd__integer type containing the contents of the element.
+     */
+    xsd__integer * AXISCALL getElementAsInteger( const AxisChar * pName,
+										         const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of XML element as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the element.
+     * @return pointer to xsd__unsignedLong type containing the contents of the element.
+	 */
+    xsd__unsignedLong * AXISCALL getElementAsUnsignedLong( const AxisChar * pName,
+													       const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of XML element as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the element.
+     * @return pointer to xsd__float type containing the contents of the element.
+     */
+    xsd__float * AXISCALL getElementAsFloat( const AxisChar * pName,
+											 const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of XML element as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the element.
+     * @return pointer to xsd__double type containing the contents of the element.
+     */
+    xsd__double * AXISCALL getElementAsDouble( const AxisChar * pName,
+											   const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of XML element as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the element.
+     * @return pointer to xsd__decimal type containing the contents of the element.
+     */
+    xsd__decimal * AXISCALL getElementAsDecimal( const AxisChar * pName,
+												 const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of XML element as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the element.
+     * @return pointer to xsd__string type containing the contents of the element.
+     */
+    xsd__string AXISCALL getElementAsString( const AxisChar * pName,
+										     const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of XML element as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the element.
+     * @return pointer to xsd__anyURI type containing the contents of the element.
+     */
+    xsd__anyURI AXISCALL getElementAsAnyURI( const AxisChar * pName,
+											 const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of XML element as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the element.
+     * @return pointer to xsd__QName type containing the contents of the element.
+     */
+    xsd__QName AXISCALL getElementAsQName( const AxisChar * pName,
+										   const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of XML element as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the element.
+     * @return pointer to xsd__hexBinary type containing the contents of the element.
+     */
+    xsd__hexBinary * AXISCALL getElementAsHexBinary( const AxisChar * pName,
+												     const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of XML element as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the element.
+     * @return pointer to xsd__base64Binary type containing the contents of the element.
+     */
+    xsd__base64Binary * AXISCALL getElementAsBase64Binary( const AxisChar * pName,
+														   const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of XML element as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the element.
+     * @return pointer to xsd__dateTime type containing the contents of the element.
+     */
+    xsd__dateTime * AXISCALL getElementAsDateTime( const AxisChar * pName,
+											       const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of XML element as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the element.
+     * @return pointer to xsd__date type containing the contents of the element.
+     */
+    xsd__date * AXISCALL getElementAsDate( const AxisChar * pName,
+									       const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of XML element as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the element.
+     * @return pointer to xsd__time type containing the contents of the element.
+     */
+    xsd__time * AXISCALL getElementAsTime( const AxisChar * pName,
+										   const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of XML element as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the element.
+     * @return pointer to xsd__duration type containing the contents of the element.
+     */
+    xsd__duration * AXISCALL getElementAsDuration( const AxisChar * pName,
+											       const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of XML element as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the element.
+     * @return pointer to xsd__gYearMonth type containing the contents of the element.
+     */
+    xsd__gYearMonth * AXISCALL getElementAsGYearMonth( const AxisChar * pName,
+												       const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of XML element as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the element.
+     * @return pointer to xsd__gYear type containing the contents of the element.
+     */
+    xsd__gYear * AXISCALL getElementAsGYear( const AxisChar * pName,
+										     const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of XML element as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the element.
+     * @return pointer to xsd__gMonthDay type containing the contents of the element.
+     */
+    xsd__gMonthDay * AXISCALL getElementAsGMonthDay( const AxisChar * pName,
+											         const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of XML element as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the element.
+     * @return pointer to xsd__gDay type containing the contents of the element.
+     */
+    xsd__gDay * AXISCALL getElementAsGDay( const AxisChar * pName,
+									       const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of XML element as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the element.
+     * @return pointer to xsd__gMonth type containing the contents of the element.
+     */
+    xsd__gMonth * AXISCALL getElementAsGMonth( const AxisChar * pName,
+										       const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of XML element as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the element.
+     * @return pointer to xsd__nonPositiveInteger type containing the contents of the element.
+     */
+    xsd__nonPositiveInteger * AXISCALL getElementAsNonPositiveInteger( const AxisChar * pName,
+																       const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of XML element as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the element.
+     * @return pointer to xsd__negativeInteger type containing the contents of the element.
+     */
+    xsd__negativeInteger * AXISCALL getElementAsNegativeInteger( const AxisChar * pName,
+															     const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of XML element as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the element.
+     * @return pointer to xsd__nonNegativeInteger type containing the contents of the element.
+     */
+    xsd__nonNegativeInteger * AXISCALL getElementAsNonNegativeInteger( const AxisChar * pName,
+																       const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of XML element as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the element.
+     * @return pointer to xsd__positiveInteger type containing the contents of the element.
+     */
+    xsd__positiveInteger * AXISCALL getElementAsPositiveInteger( const AxisChar * pName,
+														         const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of XML element as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the element.
+     * @return pointer to xsd__normalizedString type containing the contents of the element.
+     */
+    xsd__normalizedString AXISCALL getElementAsNormalizedString( const AxisChar * pName,
+														         const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of XML element as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the element.
+     * @return pointer to xsd__token type containing the contents of the element.
+     */
+    xsd__token AXISCALL getElementAsToken( const AxisChar * pName,
+									       const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of XML element as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the element.
+     * @return pointer to xsd__language type containing the contents of the element.
+     */
+    xsd__language AXISCALL getElementAsLanguage( const AxisChar * pName,
+										         const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of XML element as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the element.
+     * @return pointer to xsd__Name type containing the contents of the element.
+     */
+    xsd__Name AXISCALL getElementAsName( const AxisChar * pName,
+										 const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of XML element as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the element.
+     * @return pointer to xsd__NCName type containing the contents of the element.
+     */
+    xsd__NCName AXISCALL getElementAsNCName( const AxisChar * pName,
+									         const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of XML element as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the element.
+     * @return pointer to xsd__ID type containing the contents of the element.
+     */
+    xsd__ID AXISCALL getElementAsID( const AxisChar * pName,
+							         const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of XML element as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the element.
+     * @return pointer to xsd__IDREF type containing the contents of the element.
+     */
+    xsd__IDREF AXISCALL getElementAsIDREF( const AxisChar * pName,
+									       const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of XML element as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the element.
+     * @return pointer to xsd__IDREFS type containing the contents of the element.
+     */
+    xsd__IDREFS AXISCALL getElementAsIDREFS( const AxisChar * pName,
+									         const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of XML element as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the element.
+     * @return pointer to xsd__ENTITY type containing the contents of the element.
+     */
+    xsd__ENTITY AXISCALL getElementAsENTITY( const AxisChar * pName,
+									         const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of XML element as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the element.
+     * @return pointer to xsd__ENTITIES type containing the contents of the element.
+     */
+    xsd__ENTITIES AXISCALL getElementAsENTITIES( const AxisChar * pName,
+										         const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of XML element as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the element.
+     * @return pointer to xsd__NMTOKEN type containing the contents of the element.
+     */
+    xsd__NMTOKEN AXISCALL getElementAsNMTOKEN( const AxisChar * pName,
+										       const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of XML element as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the element.
+     * @return pointer to xsd__NMTOKENS type containing the contents of the element.
+     */
+    xsd__NMTOKENS AXISCALL getElementAsNMTOKENS( const AxisChar * pName,
+										         const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of XML element as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the element.
+     * @return pointer to xsd__NOTATION type containing the contents of the element.
+     */
+    xsd__NOTATION AXISCALL getElementAsNOTATION( const AxisChar * pName,
+										         const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of a XML attribute as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the attribute element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the attribute element.
+     * @return pointer to xsd__int type containing the contents of
+	 * the attribute element.
+     */
+    xsd__int * AXISCALL getAttributeAsInt( const AxisChar * pName,
+									       const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of a XML attribute as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the attribute element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the attribute element.
+     * @return pointer to xsd__boolean type containing the contents of
+	 * the attribute element.
+     */
+    xsd__boolean * AXISCALL getAttributeAsBoolean( const AxisChar * pName,
+											       const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of a XML attribute as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the attribute element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the attribute element.
+     * @return pointer to xsd__unsignedInt type containing the contents of
+	 * the attribute element.
+     */
+    xsd__unsignedInt * AXISCALL getAttributeAsUnsignedInt( const AxisChar * pName,
+													       const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of a XML attribute as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the attribute element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the attribute element.
+     * @return pointer to xsd__short type containing the contents of
+	 * the attribute element.
+     */
+    xsd__short * AXISCALL getAttributeAsShort( const AxisChar * pName,
+									           const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of a XML attribute as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the attribute element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the attribute element.
+     * @return pointer to xsd__unsignedShort type containing the contents of
+	 * the attribute element.
+     */
+    xsd__unsignedShort * AXISCALL getAttributeAsUnsignedShort( const AxisChar * pName,
+														       const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of a XML attribute as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the attribute element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the attribute element.
+     * @return pointer to xsd__byte type containing the contents of
+	 * the attribute element.
+     */
+    xsd__byte * AXISCALL getAttributeAsByte( const AxisChar * pName,
+									         const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of a XML attribute as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the attribute element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the attribute element.
+     * @return pointer to xsd__unsignedByte type containing the contents of
+	 * the attribute element.
+     */
+    xsd__unsignedByte * AXISCALL getAttributeAsUnsignedByte( const AxisChar * pName,
+													         const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of a XML attribute as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the attribute element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the attribute element.
+     * @return pointer to xsd__long type containing the contents of
+	 * the attribute element.
+     */
+    xsd__long * AXISCALL getAttributeAsLong( const AxisChar * pName,
+									         const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of a XML attribute as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the attribute element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the attribute element.
+     * @return pointer to xsd__integer type containing the contents of
+	 * the attribute element.
+     */
+    xsd__integer * AXISCALL getAttributeAsInteger( const AxisChar * pName,
+											       const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of a XML attribute as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the attribute element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the attribute element.
+     * @return pointer to xsd__unsignedLong type containing the contents of
+	 * the attribute element.
+     */
+    xsd__unsignedLong * AXISCALL getAttributeAsUnsignedLong( const AxisChar * pName,
+													         const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of a XML attribute as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the attribute element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the attribute element.
+     * @return pointer to xsd__float type containing the contents of
+	 * the attribute element.
+     */
+    xsd__float * AXISCALL getAttributeAsFloat( const AxisChar * pName,
+									           const AxisChar* pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of a XML attribute as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the attribute element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the attribute element.
+     * @return pointer to xsd__double type containing the contents of
+	 * the attribute element.
+     */
+    xsd__double * AXISCALL getAttributeAsDouble( const AxisChar * pName,
+										         const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of a XML attribute as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the attribute element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the attribute element.
+     * @return pointer to xsd__decimal type containing the contents of
+	 * the attribute element.
+     */
+    xsd__decimal * AXISCALL getAttributeAsDecimal( const AxisChar * pName,
+												   const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of a XML attribute as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the attribute element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the attribute element.
+     * @return pointer to xsd__string type containing the contents of
+	 * the attribute element.
+     */
+    xsd__string AXISCALL getAttributeAsString( const AxisChar * pName,
+										       const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of a XML attribute as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the attribute element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the attribute element.
+     * @return pointer to xsd__anyURI type containing the contents of
+	 * the attribute element.
+     */
+    xsd__anyURI AXISCALL getAttributeAsAnyURI( const AxisChar * pName,
+										       const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of a XML attribute as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the attribute element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the attribute element.
+     * @return pointer to xsd__QName type containing the contents of
+	 * the attribute element.
+     */
+    xsd__QName AXISCALL getAttributeAsQName( const AxisChar * pName,
+									         const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of a XML attribute as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the attribute element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the attribute element.
+     * @return pointer to xsd__hexBinary type containing the contents of
+	 * the attribute element.
+     */
+    xsd__hexBinary * AXISCALL getAttributeAsHexBinary( const AxisChar * pName,
+												       const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of a XML attribute as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the attribute element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the attribute element.
+     * @return pointer to xsd__base64Binary type containing the contents of
+	 * the attribute element.
+     */
+    xsd__base64Binary * AXISCALL getAttributeAsBase64Binary( const AxisChar * pName,
+															 const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of a XML attribute as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the attribute element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the attribute element.
+     * @return pointer to xsd__dateTime type containing the contents of
+	 * the attribute element.
+     */
+    xsd__dateTime * AXISCALL getAttributeAsDateTime( const AxisChar * pName,
+											         const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of a XML attribute as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the attribute element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the attribute element.
+     * @return pointer to xsd__date type containing the contents of
+	 * the attribute element.
+     */
+    xsd__date * AXISCALL getAttributeAsDate( const AxisChar * pName,
+									         const AxisChar* pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of a XML attribute as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the attribute element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the attribute element.
+     * @return pointer to xsd__time type containing the contents of
+	 * the attribute element.
+     */
+    xsd__time * AXISCALL getAttributeAsTime( const AxisChar * pName,
+									         const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of a XML attribute as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the attribute element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the attribute element.
+     * @return pointer to xsd__duration type containing the contents of
+	 * the attribute element.
+     */
+    xsd__duration * AXISCALL getAttributeAsDuration( const AxisChar * pName,
+											         const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of a XML attribute as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the attribute element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the attribute element.
+     * @return pointer to xsd__gYearMonth type containing the contents of
+	 * the attribute element.
+     */
+    xsd__gYearMonth * AXISCALL getAttributeAsGYearMonth( const AxisChar * pName,
+												         const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of a XML attribute as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the attribute element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the attribute element.
+     * @return pointer to xsd__gYear type containing the contents of
+	 * the attribute element.
+     */
+    xsd__gYear * AXISCALL getAttributeAsGYear( const AxisChar * pName,
+											   const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of a XML attribute as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the attribute element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the attribute element.
+     * @return pointer to xsd__gMonthDay type containing the contents of
+	 * the attribute element.
+     */
+    xsd__gMonthDay * AXISCALL getAttributeAsGMonthDay( const AxisChar * pName,
+												       const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of a XML attribute as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the attribute element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the attribute element.
+     * @return pointer to xsd__gDay type containing the contents of
+	 * the attribute element.
+     */
+    xsd__gDay * AXISCALL getAttributeAsGDay( const AxisChar * pName,
+									         const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of a XML attribute as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the attribute element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the attribute element.
+     * @return pointer to xsd__gMonth type containing the contents of
+	 * the attribute element.
+     */
+    xsd__gMonth * AXISCALL getAttributeAsGMonth( const AxisChar * pName,
+										         const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of a XML attribute as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the attribute element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the attribute element.
+     * @return pointer to xsd__NOTATION type containing the contents of
+	 * the attribute element.
+     */
+    xsd__NOTATION AXISCALL getAttributeAsNOTATION( const AxisChar * pName,
+											       const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of a XML attribute as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the attribute element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the attribute element.
+     * @return pointer to xsd__normalizedString type containing the contents of
+	 * the attribute element.
+     */
+    xsd__normalizedString AXISCALL getAttributeAsNormalizedString( const AxisChar * pName,
+															       const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of a XML attribute as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the attribute element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the attribute element.
+     * @return pointer to xsd__token type containing the contents of
+	 * the attribute element.
+     */
+    xsd__token AXISCALL getAttributeAsToken( const AxisChar * pName,
+									         const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of a XML attribute as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the attribute element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the attribute element.
+     * @return pointer to xsd__language type containing the contents of
+	 * the attribute element.
+     */
+    xsd__language AXISCALL getAttributeAsLanguage( const AxisChar * pName,
+											        const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of a XML attribute as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the attribute element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the attribute element.
+     * @return pointer to xsd__Name type containing the contents of
+	 * the attribute element.
+     */
+    xsd__Name AXISCALL getAttributeAsName( const AxisChar * pName,
+									       const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of a XML attribute as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the attribute element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the attribute element.
+     * @return pointer to xsd__NCName type containing the contents of
+	 * the attribute element.
+     */
+    xsd__NCName AXISCALL getAttributeAsNCName( const AxisChar * pName,
+										       const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of a XML attribute as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the attribute element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the attribute element.
+     * @return pointer to xsd__ID type containing the contents of
+	 * the attribute element.
+     */
+    xsd__ID AXISCALL getAttributeAsID( const AxisChar * pName,
+								       const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of a XML attribute as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the attribute element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the attribute element.
+     * @return pointer to xsd__IDREF type containing the contents of
+	 * the attribute element.
+     */
+    xsd__IDREF AXISCALL getAttributeAsIDREF( const AxisChar * pName,
+									         const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of a XML attribute as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the attribute element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the attribute element.
+     * @return pointer to xsd__IDREFS type containing the contents of
+	 * the attribute element.
+     */
+    xsd__IDREFS AXISCALL getAttributeAsIDREFS( const AxisChar * pName,
+										       const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of a XML attribute as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the attribute element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the attribute element.
+     * @return pointer to xsd__ENTITY type containing the contents of
+	 * the attribute element.
+     */
+    xsd__ENTITY AXISCALL getAttributeAsENTITY( const AxisChar * pName,
+										       const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of a XML attribute as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the attribute element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the attribute element.
+     * @return pointer to xsd__ENTITIES type containing the contents of
+	 * the attribute element.
+     */
+    xsd__ENTITIES AXISCALL getAttributeAsENTITIES( const AxisChar * pName,
+											       const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of a XML attribute as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the attribute element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the attribute element.
+     * @return pointer to xsd__NMTOKEN type containing the contents of
+	 * the attribute element.
+     */
+    xsd__NMTOKEN AXISCALL getAttributeAsNMTOKEN( const AxisChar * pName,
+										         const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of a XML attribute as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the attribute element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the attribute element.
+     * @return pointer to xsd__NMTOKENS type containing the contents of
+	 * the attribute element.
+     */
+    xsd__NMTOKENS AXISCALL getAttributeAsNMTOKENS( const AxisChar * pName,
+											       const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of a XML attribute as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the attribute element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the attribute element.
+     * @return pointer to xsd__nonPositiveInteger type containing the contents of
+	 * the attribute element.
+     */
+    xsd__nonPositiveInteger * AXISCALL getAttributeAsNonPositiveInteger( const AxisChar * pName,
+																         const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of a XML attribute as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the attribute element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the attribute element.
+     * @return pointer to xsd__negativeInteger type containing the contents of
+	 * the attribute element.
+     */
+    xsd__negativeInteger * AXISCALL getAttributeAsNegativeInteger( const AxisChar * pName,
+															       const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of a XML attribute as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the attribute element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the attribute element.
+     * @return pointer to xsd__nonNegativeInteger type containing the contents of
+	 * the attribute element.
+     */
+    xsd__nonNegativeInteger * AXISCALL getAttributeAsNonNegativeInteger( const AxisChar * pName,
+																	     const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of a XML attribute as basic type.
+     *
+     * @param pName null terminated character string that contains the name of
+	 * the tag containing the attribute element.
+     * @param pNamespace null terminated character string that contains the
+	 * namespace of the tag containing the attribute element.
+     * @return pointer to xsd__positiveInteger type containing the contents of
+	 * the attribute element.
+     */
+    xsd__positiveInteger * AXISCALL getAttributeAsPositiveInteger( const AxisChar * pName,
+																   const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized value of complex types.
+	 *
+     * @param pDZFunct is a pointer to the function that knows how to de-serialise
+	 * the object.
+     * @param pCreFunct is a pointer to the function that knows how to create the object.
+     * @param pDelFunct is a pointer to the function that knows how to delete the object.
+     * @param pName is a null terminated character string that contains the
+	 * prefix:name of the object.
+     * @param pNamespace is the namespace associated with the prefix used in 'pName'.
+     * @return pointer to a void object that contains the 'complex' object.
+     */
+    void * AXISCALL getCmplxObject( void * pDZFunct,
+								    void * pCreFunct,
+							        void * pDelFunct,
+								    const AxisChar * pName,
+								    const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized Array of complex type.
+	 *
+     * @param pArray is a pointer to array of objects that needs to be de-serialised.
+     * @param pDZFunct is a pointer to the function that knows how to de-serialise
+	 * the object.
+     * @param pCreFunct is a pointer to the function that knows how to create the object.
+     * @param pDelFunct is a pointer to the function that knows how to delete the object.
+     * @param pSizeFunct is a pointer to the function that knows how to add more
+	 * elements to the object.
+     * @param pName is a null terminated character string that contains the
+	 * prefix:name of the object.
+     * @param pNamespace is the namespace associated with the prefix used in 'pName'.
+     * @return pointer to a void object that contains the 'complex' object.
+     */
+    Axis_Array * AXISCALL getCmplxArray( Axis_Array * pArray,
+										 void * pDZFunct,
+										 void * pCreFunct,
+								         void * pDelFunct,
+										 void * pSizeFunct,
+										 const AxisChar * pName,
+								         const AxisChar * pNamespace);
+
+    /**
+     * Method used by stubs to get a deserialized Array of basic type.
+	 *
+     * @param nType is an enumerated type that defines the type of array (XSDTYPE
+	 * is defined in TypeMapping.hpp).
+     * @param pName is a null terminated character string containing the name
+	 * of the array.
+     * @param pNamespace is a null terminated character string  containing the
+	 * namespace for the array.
+     * @return is a pointer to the Axis_Array object.
+     */
+    Axis_Array * AXISCALL getBasicArray( XSDTYPE nType,
+										 const AxisChar * pName,
+									     const AxisChar * pNamespace);
+
+    /**
+	 * Method to check that the SOAP message body contains the specified name and
+	 * namespace.
+	 *
+     * @param pName is a null terminated character string containing the response name.
+     * @param pNamespace is a null terminated character string containing the
+	 * response namespace.
+     * @return The return value is either AXIS_SUCCESS or AXIS_FAIL depending
+	 * if the name was found.
+     */
+    int AXISCALL checkMessage( const AxisChar * pName,
+						       const AxisChar * pNamespace);
+
+    /**
+	 * Method to check that the SOAP message fault contains the specified name and
+	 * namespace.
+	 *
+     * @param pName is a null terminated character string containing the response name.
+     * @param pNamespace is a null terminated character string containing the
+	 * response namespace.
+     * @return The return value is either AXIS_SUCCESS or AXIS_FAIL depending
+	 * if the name was found.
+     */
+    void * AXISCALL checkFault( const AxisChar * pName,
+							    const AxisChar * pNamespace);
+
+    /**
+	 * Method to retrieve the status flag of the engine.
+	 *
+     * @return The return value is either AXIS_SUCCESS or AXIS_FAIL.
+     */
     int AXISCALL getStatus();
 
-    SOAPTransport* getTransport() { return m_pTransport; }
-    SoapSerializer* getSOAPSerializer() { return (SoapSerializer*)m_pIWSSZ; }
+    /**
+	 * Method to retrieve the current SOAP Transport object.
+	 *
+     * @return A pointer to the currently loaded SOAP transport.
+     */
+    SOAPTransport * getTransport()
+	{
+		return m_pTransport;
+	}
+
+    /**
+	 * Method to retrieve the current SOAP Serializer object.
+	 *
+     * @return A pointer to the currently loaded SOAP serialiser.
+     */
+    SoapSerializer * getSOAPSerializer()
+	{
+		return (SoapSerializer *) m_pIWSSZ;
+	}
 
   /**
     * Set proxy server and port for transport.
     *
-    * @param pcProxyHost Host name of proxy server
-    * @param uiProxyPort Port of proxy server
+    * @param pcProxyHost Host name of proxy server.
+    * @param uiProxyPort Port of proxy server.
     */
-    void setProxy(const char* pcProxyHost, unsigned int uiProxyPort);
+    void setProxy( const char * pcProxyHost, unsigned int uiProxyPort);
 
-    AnyType* AXISCALL getAnyObject();
-    int AXISCALL addAnyObject(AnyType* pAnyObject);
+    /**
+	 * Method to get an 'ANY' object from the engine.
+	 *
+     * @return A pointer to an 'ANY' type object (the 'AnyType' object is defined in
+	 * AxisUserAPI.hpp).
+     */
+    AnyType * AXISCALL getAnyObject();
+
+    /**
+	 * Method to add an 'ANY' object to the engine.
+	 *
+     * @param pAnyObject a pointer to an 'ANY' type object (the 'AnyType' object is defined in
+	 * AxisUserAPI.hpp).
+     * @return The return value is either AXIS_SUCCESS or AXIS_FAIL.
+     */
+    int AXISCALL addAnyObject( AnyType * pAnyObject);
 
     /**
      * Returns the prefix for a previously defined namespace. If the 
@@ -515,38 +1654,44 @@ public:
      * only return prefixes for user-defined namespaces, so passing a 
      * standard namespace will cause a new prefix to be created.
      * 
-     * @param pNamespace the namespace to look for
-     * @return the prefix for this namespace
+     * @param pNamespace the namespace to look for.
+     * @return the prefix for this namespace.
      */
-    const AxisChar* AXISCALL getNamespacePrefix(const AxisChar* pNamespace);
+    const AxisChar * AXISCALL getNamespacePrefix( const AxisChar * pNamespace);
     
     /**
-     * Returns a complex fault as an XML string 
+     * Returns a complex fault as an XML string.
+	 *
+     * @return a null terminated character string of the complex fault in XML.
      */
     const xsd__string getFaultAsXMLString();
 
     /**
-     * Adds an attachment to the MIME message. This attachment will not be referenced from the SOAP body. The storage
-     * associated with the ISoapAttachment will be deleted during ~Call.
+     * Adds an attachment to the MIME message. This attachment will not be
+	 * referenced from the SOAP body. The storage associated with the ISoapAttachment
+	 * will be deleted during ~Call.
      * 
      * @param objAttach the attachment to add to the message.
      */
-    void addAttachment(ISoapAttachment* objAttach);
+    void addAttachment( ISoapAttachment * objAttach);
 
     /**
-     * Creates an ISoapAttachment which represents an attachment. The ISoapAttachment can be passed to addAttachment
-     * or addAttachmentParameter. The attachment will not be added to the message unless it is subsequently passed to
-     * addAttachment or addAttachmentParameter. The storage associated with the ISoapAttachment will not be 
-     * automatically deleted by Axis C++ unless it is passed to addAttachment or addAttachmentParamater.
+     * Creates an ISoapAttachment which represents an attachment. The ISoapAttachment
+	 * can be passed to addAttachment or addAttachmentParameter. The attachment
+	 * will not be added to the message unless it is subsequently passed to
+	 * addAttachment or addAttachmentParameter. The storage associated with the
+	 * ISoapAttachment will not be automatically deleted by Axis C++ unless it
+	 * is passed to addAttachment or addAttachmentParamater.
+	 *
+     * @return Pointer to an ISoapAttachment object.
      */
-    ISoapAttachment* createSoapAttachment();
+    ISoapAttachment * createSoapAttachment();
 
 private:
     void closeConnection();
     int makeArray();
     void cleanup(); // clean memeory in case of exceptions and destructor etc.
 
-private:
     ClientAxisEngine* m_pAxisEngine;
 
 #ifdef WIN32
