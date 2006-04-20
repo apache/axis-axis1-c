@@ -104,84 +104,20 @@ int main( int argc, char * argv[])
 				}
 				catch( OtherFaultException& ofe)
 				{
-					const char *	pszDetail = ofe.getFaultDetail();
-					const char *	pszCode = ofe.getFaultCode();
+                    const char *    pszDetail = ofe.getFaultDetail();
 
-// This is the expected 'Fault Detail'.  But, the namespace is not necessarily 717 so the test fails...  Need to replace the given namespace with the expected one.
-// <p717:DivByZeroStruct><p717:varString>Division by zero exception</p717:varString><p717:varInt>1</p717:varInt><p717:varFloat>10.52</p717:varFloat></DivByZeroStruct>
-// <p717:SpecialDetailStruct><p717:varString>You have entered 1000 for the first parameter. 1000 is reserved. Please do not use it</p717:varString></SpecialDetailStruct>
-// <p717:OutOfBoundStruct><p717:varString>Out of bounds exception</p717:varString><p717:varInt>2</p717:varInt><p717:specialDetail><p717:varString>This bounds exception is a forced exception</p717:varString></p717:specialDetail></OutOfBoundStruct>
+                    string detail = pszDetail;
+                    int startOfDetailMessage = detail.find("varString>", 0);
+                    if (startOfDetailMessage != string::npos)
+                    {
+                        startOfDetailMessage += strlen("varString>");
+                        int endOfDetailMessage = detail.find("</", startOfDetailMessage);
 
-// The namespace is always the first item to appear after the opening '<'.  We
-// can use this fact to find and extract the namespace.
-					int		iNSStart = 1;
-					char *	pNSEnd = strchr( pszDetail, ':');
-					char *	pTagEnd = strchr( pszDetail, '>');
-					string	sDetail = pszDetail;
-					string	sExpectedNS = "p717";
-
-					if( pNSEnd && (pNSEnd < pTagEnd))
-					{
-						int	iNSEnd = (int) (pNSEnd - pszDetail) - iNSStart;
-
-						string	sNamespace = ((string) pszDetail).substr( iNSStart, iNSEnd);
-
-						if( sExpectedNS.compare( sNamespace))
-						{
-							int		iNSPos = (int) sDetail.find( sNamespace);
-
-							while( iNSPos != std::string::npos)
-							{
-								sDetail.replace( iNSPos, sNamespace.length(), sExpectedNS);
-
-								iNSPos = (int) sDetail.find( sNamespace);
-							}
-						}
-					}
-
-// Because there is not always a namespace used (depends on server) I have now
-// had to remove any namespace from the Detail string.
-
-					sExpectedNS += ":";
-
-					int		iNSPos = (int) sDetail.find( sExpectedNS);
-
-					while( iNSPos != std::string::npos)
-					{
-						sDetail.replace( iNSPos, sExpectedNS.length(), "");
-
-						iNSPos = (int) sDetail.find( sExpectedNS);
-					}
-
-// This is the expected 'Fault code'.  But, the namespace is not necessarily 717 so the test fails...  Need to replace the given namespace with the expected one.
-// p717:DivByZeroStruct
-// p717:SpecialDetailStruct
-// p717:OutOfBoundStruct
-					string	sCode = pszCode;
-
-					int	iNSEnd = (int) (strchr( pszCode, ':') - pszCode);
-
-					if( iNSEnd > 0)
-					{
-						sCode.replace( 0, iNSEnd, sExpectedNS);
-					}
-
-// Because there is not always a namespace used (depends on server) I have now
-// had to remove any namespace from the Code string.
-
-					char * pEndOfNamespace = strchr( pszCode, ':');
-
-					if( pEndOfNamespace != NULL)
-					{
-						sCode = pEndOfNamespace + 1;
-					}
-
-					cout << "Fault Detail - "<< sDetail << endl;
-					cout << "Fault String - "<< ofe.getFaultString() << endl;
-					cout << "Fault code   - "<< sCode << endl;
-
-					bSuccess = true;
-				}	
+                        cout << "Fault Detail - "<< detail.substr(startOfDetailMessage, endOfDetailMessage - startOfDetailMessage).c_str() << endl;
+                    }
+                    
+                    bSuccess = true;
+                }	
 				catch( SoapFaultException& sfe)
 				{
 					cout << "SoapFaultException: " << sfe.what() << endl;
