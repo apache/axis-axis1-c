@@ -63,12 +63,12 @@ typedef struct
     /**
      * Function pointer to the BasicHandler invoke method
      */
-    int (AXISCALL* invoke)(void* _object, void* pMsg);
+    int (AXISCALL* invoke)(void* _object, void*);
     
     /**
      * Function pointer to the BasicHandler onFault method
      */
-    void (AXISCALL* onFault)(void* _object, void* pMsg);
+    void (AXISCALL* onFault)(void* _object, void*);
     
     /**
      * Function pointer to the BasicHandler init method
