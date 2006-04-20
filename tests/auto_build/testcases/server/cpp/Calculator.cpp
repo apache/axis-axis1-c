@@ -43,6 +43,7 @@ int Calculator::mul(int Value0, int Value1)
 }
 int Calculator::div(int Value0, int Value1)
 {
-	if (Value1 == 0) return -1; /* :)) */
+	if (Value1 == 0)
+        throw exception("Division by zero error");
 	return Value0/Value1;
 }
