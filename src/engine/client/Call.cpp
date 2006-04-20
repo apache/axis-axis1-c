@@ -54,35 +54,31 @@ m_bCallInitialized(false), m_pContentIdSet(NULL)
     
     m_nStatus = AXIS_SUCCESS;
     m_pchSessionID = NULL;
-	m_pContentIdSet = new ContentIdSet();
+    m_pContentIdSet = new ContentIdSet();
 
     // Setup Transport
     try
     {
         // Get a transport object from factory
         if( !m_pTransport)
-		{
+        {
             m_pTransport = SOAPTransportFactory::getTransportObject(m_nTransportType);
 
-			if( !m_pTransport)
-			{
-				m_nStatus = AXIS_FAIL;
-			}
-		}
+            if( !m_pTransport)
+                m_nStatus = AXIS_FAIL;
+        }
 
         // Engine initialization
         m_pAxisEngine = new ClientAxisEngine ();
         if (!m_pAxisEngine) 
-        {
-        	m_nStatus = AXIS_FAIL;
-        }
-        m_nStatus = m_pAxisEngine->initialize ();
-
+            m_nStatus = AXIS_FAIL;
+        else
+            m_nStatus = m_pAxisEngine->initialize ();
     }
     catch( AxisException& e)
     {
         cleanup();
-		throw AxisGenException( e.getExceptionCode(), e.what());
+        throw AxisGenException( e.getExceptionCode(), e.what());
     }
     catch(...)
     {
@@ -93,19 +89,21 @@ m_bCallInitialized(false), m_pContentIdSet(NULL)
 
 Call::~Call ()
 {
-    m_pAxisEngine->unInitialize ();
+    if (m_pAxisEngine)
+        m_pAxisEngine->unInitialize ();
     
     cleanup();
 
     uninitialize_module();
     
-	list<ISoapAttachment*>::iterator it = m_attachments.begin();
-	while (it != m_attachments.end())
-	{
-		delete *it;
-		it++;
-	}
-	m_attachments.clear();
+    list<ISoapAttachment*>::iterator it = m_attachments.begin();
+    while (it != m_attachments.end())
+    {
+        delete *it;
+        it++;
+    }
+    
+    m_attachments.clear();
 }
 
 void Call::cleanup()
@@ -113,15 +111,19 @@ void Call::cleanup()
     if (m_pContentIdSet)
         delete m_pContentIdSet;
     m_pContentIdSet = NULL;
+    
     if (m_pTransport)
         SOAPTransportFactory::destroyTransportObject(m_pTransport);
     m_pTransport = NULL;
+    
     if (m_pAxisEngine)
         delete m_pAxisEngine;
     m_pAxisEngine = NULL;
+    
     if (m_pcEndPointUri)
         delete [] m_pcEndPointUri;  
-	m_pcEndPointUri = NULL;
+        
+    m_pcEndPointUri = NULL;
 }
 
 int Call::setEndpointURI( const char * pchEndpointURI)
@@ -131,181 +133,171 @@ int Call::setEndpointURI( const char * pchEndpointURI)
     return AXIS_SUCCESS;
 }
 
-void Call::setOperation (const char* pchOperation, const char* pchNamespace)
+void Call::setOperation (const char* pchOperation, 
+                         const char* pchNamespace)
 {
     m_pIWSSZ->createSoapMethod (pchOperation, pchNamespace);
     m_pAxisEngine->getMessageData()->setOperationName(pchOperation);
 }
 
-void Call::addParameter( void * pValue, const char * pchName, XSDTYPE nType)
+void Call::addParameter( void * pValue, 
+                         const char * pchName, 
+                         XSDTYPE nType)
 {
-	m_nStatus = m_pIWSSZ->addOutputParam( pchName, pValue, nType);
+    m_nStatus = m_pIWSSZ->addOutputParam( pchName, pValue, nType);
 }
 
 /*
  * Method used to add arrays of basic types as parameters
  */
-void Call::addBasicArrayParameter( Axis_Array *		pArray,
-								   XSDTYPE			nType,
-								   const AxisChar *	pName)
+void Call::addBasicArrayParameter( Axis_Array *        pArray,
+                                   XSDTYPE            nType,
+                                   const AxisChar *    pName)
 {
-	m_nStatus = m_pIWSSZ->addOutputBasicArrayParam( pArray, nType, pName);
+    m_nStatus = m_pIWSSZ->addOutputBasicArrayParam( pArray, nType, pName);
 }
 
-void Call::addCmplxArrayParameter( Axis_Array *		pArray,
-								   void *			pSZFunct,
-                                   void *			pDelFunct,
-								   void *			pSizeFunct,
-								   const AxisChar *	pName,
-                                   const AxisChar *	pNamespace)
+void Call::addCmplxArrayParameter( Axis_Array *        pArray,
+                                   void *            pSZFunct,
+                                   void *            pDelFunct,
+                                   void *            pSizeFunct,
+                                   const AxisChar *    pName,
+                                   const AxisChar *    pNamespace)
 {
-	m_nStatus = m_pIWSSZ->addOutputCmplxArrayParam( pArray,
-													pSZFunct,
-													pDelFunct,
-													pSizeFunct,
-                                                    pName,
-													pNamespace);
+    m_nStatus = m_pIWSSZ->addOutputCmplxArrayParam( pArray,
+                                                    pSZFunct, pDelFunct, pSizeFunct,
+                                                    pName, pNamespace);
 }
 
-void Call::addCmplxParameter( void *			pObject,
-							  void *			pSZFunct,
-							  void *			pDelFunct,
-                              const AxisChar *	pName,
-							  const AxisChar *	pNamespace)
+void Call::addCmplxParameter( void *            pObject,
+                              void *            pSZFunct,
+                              void *            pDelFunct,
+                              const AxisChar *    pName,
+                              const AxisChar *    pNamespace)
 {
-	m_nStatus = m_pIWSSZ->addOutputCmplxParam( pObject,
-											   pSZFunct,
-											   pDelFunct,
-											   pName,
-                                               pNamespace);
+    m_nStatus = m_pIWSSZ->addOutputCmplxParam( pObject,
+                                               pSZFunct, pDelFunct, 
+                                               pName, pNamespace);
 }
 
 int Call::invoke()
 {
-	m_nStatus = m_pAxisEngine->process( m_pTransport);
+    m_nStatus = m_pAxisEngine->process( m_pTransport);
 
-	return m_nStatus;
+    return m_nStatus;
 }
 
 class HandlerProperty
 {
 public:
-	HandlerProperty(AxisChar *n, void *v, int l) {name=n; value=v; len=l;}
+    HandlerProperty(AxisChar *n, void *v, int l) {name=n; value=v; len=l;}
 
-	// The storage pointed at by name and value is not owned by HandlerProperty
-	AxisChar *name;
-	void *value;
-	int len;
+    // The storage pointed at by name and value is not owned by HandlerProperty
+    AxisChar *name;
+    void *value;
+    int len;
 };
 
 int Call::initialize( PROVIDERTYPE nStyle)
-/* Does this mean that the stub that uses this Call object as well as all 
- * client side handlers have the same PROVIDERTYPE ? 
- */
 {
     m_bCallInitialized = true;
 
-    /* Initialize re-usable objects of this instance (objects may have been 
-     * populated by the previous call.)
-     */
-	try
-	{
-		m_nStatus = AXIS_SUCCESS;
+    // Initialize re-usable objects of this instance (objects may have been 
+    // populated by the previous call.)
+    try
+    {
+        m_nStatus = AXIS_SUCCESS;
 
-// Move the handler data previously added using the setHandlerProperty method into the message data object (that is visible to the handlers).
-		MessageData *	msgData = m_pAxisEngine->getMessageData();
+        // Move the handler data previously added using the setHandlerProperty
+        // method into the message data object (that is visible to the handlers).
+        MessageData *    msgData = m_pAxisEngine->getMessageData();
 
-		if( msgData)
-		{
-			list<void*>::iterator it = m_handlerProperties.begin();
+        if( msgData)
+        {
+            list<void*>::iterator it = m_handlerProperties.begin();
 
-// Copy the list of handler objects.
-			while( it != m_handlerProperties.end())
-			{
-				HandlerProperty *pHp = (HandlerProperty *) (*it);
+            // Copy the list of handler objects.
+            while( it != m_handlerProperties.end())
+            {
+                HandlerProperty *pHp = (HandlerProperty *) (*it);
 
-				msgData->setProperty( pHp->name, pHp->value, pHp->len);
+                msgData->setProperty( pHp->name, pHp->value, pHp->len);
 
-				delete pHp;
+                delete pHp;
 
-				it++;
-			}
+                it++;
+            }
 
-// Delete the original list.
-			m_handlerProperties.clear();
+            // Delete the original list.
+            m_handlerProperties.clear();
 
-// Add the SOAP serialiser/deserialiser entry points to the message data object.
-			msgData->getSoapSerializer( (IWrapperSoapSerializer **) (&m_pIWSSZ));
-			msgData->getSoapDeSerializer( (IWrapperSoapDeSerializer **) (&m_pIWSDZ));
+            // Add the SOAP serialiser/deserialiser entry points to the message data object.
+            msgData->getSoapSerializer( (IWrapperSoapSerializer **) (&m_pIWSSZ));
+            msgData->getSoapDeSerializer( (IWrapperSoapDeSerializer **) (&m_pIWSDZ));
 
-			if( m_pIWSSZ && m_pIWSDZ)
-			{
-				m_pIWSSZ->setCurrentProviderType( nStyle);
-				m_pIWSDZ->setCurrentProviderType( nStyle);
+            if( m_pIWSSZ && m_pIWSDZ)
+            {
+                m_pIWSSZ->setCurrentProviderType( nStyle);
+                m_pIWSDZ->setCurrentProviderType( nStyle);
 
-				m_pIWSSZ->reset();
-				m_pIWSDZ->init();
+                m_pIWSSZ->reset();
+                m_pIWSDZ->init();
 
-				switch (nStyle)
-				{
-					case C_RPC_PROVIDER:
-					case CPP_RPC_PROVIDER:
-						m_pIWSSZ->setStyle( RPC_ENCODED);
-						m_pIWSDZ->setStyle( RPC_ENCODED);
-						break;
+                switch (nStyle)
+                {
+                    case C_RPC_PROVIDER:
+                    case CPP_RPC_PROVIDER:
+                        m_pIWSSZ->setStyle( RPC_ENCODED);
+                        m_pIWSDZ->setStyle( RPC_ENCODED);
+                        break;
 
-					case C_DOC_PROVIDER:
-					case CPP_DOC_PROVIDER:
-						m_pIWSSZ->setStyle( DOC_LITERAL);
-						m_pIWSDZ->setStyle( DOC_LITERAL);
-						break;
+                    case C_DOC_PROVIDER:
+                    case CPP_DOC_PROVIDER:
+                        m_pIWSSZ->setStyle( DOC_LITERAL);
+                        m_pIWSDZ->setStyle( DOC_LITERAL);
+                        break;
 
-					case COM_PROVIDER:
-						// TODO: ??
-						break;
+                    case COM_PROVIDER:
+                        // TODO: ??
+                        break;
 
-					default:;
-						//TODO: ??
-				}
+                    default:;
+                        //TODO: ??
+                }
 
-				if( m_pchSessionID)
-				{
-					msgData->setProperty( "sessionid", m_pchSessionID);
-				}
+                if( m_pchSessionID)
+                    msgData->setProperty( "sessionid", m_pchSessionID);
 
-				m_pIWSSZ->setContentIdSet( m_pContentIdSet);
+                m_pIWSSZ->setContentIdSet( m_pContentIdSet);
 
-				list<ISoapAttachment*>::iterator itAtt = m_attachments.begin();
+                list<ISoapAttachment*>::iterator itAtt = m_attachments.begin();
 
-				while( itAtt != m_attachments.end())
-				{
-					m_pIWSSZ->addAttachment( (*itAtt)->getHeader( AXIS_CONTENT_ID), *itAtt);
+                while( itAtt != m_attachments.end())
+                {
+                    m_pIWSSZ->addAttachment( (*itAtt)->getHeader( AXIS_CONTENT_ID), *itAtt);
+                    itAtt++;
+                }
 
-					itAtt++;
-				}
+                m_attachments.clear();
+                return AXIS_SUCCESS;
+            }
+        }
 
-				m_attachments.clear();
+        m_nStatus = AXIS_FAIL;
+        return AXIS_FAIL;
+    }
 
-				return AXIS_SUCCESS;
-			}
-		}
-
-		m_nStatus = AXIS_FAIL;
-
-		return AXIS_FAIL;
-	}
-
-	catch( AxisException& e)
-	{
-		e = e;
-		m_nStatus = AXIS_FAIL;
-		throw;
-	}
-	catch( ...)
-	{
-		m_nStatus = AXIS_FAIL;        
-		throw;
-	}
+    catch( AxisException& e)
+    {
+        e = e;
+        m_nStatus = AXIS_FAIL;
+        throw;
+    }
+    catch( ...)
+    {
+        m_nStatus = AXIS_FAIL;        
+        throw;
+    }
 }
 
 int Call::unInitialize()
@@ -314,131 +306,130 @@ int Call::unInitialize()
 
     if( m_pAxisEngine)
     {
-// Initialization, serialization, invocation or check message success 
-		if( m_nStatus == AXIS_SUCCESS && m_pIWSDZ != NULL)
-		{
-// Test if deserialization failed 
-			m_nStatus = m_pIWSDZ->getStatus();
-		}
-
-		MessageData *	msgData = m_pAxisEngine->getMessageData();	
-        AxisChar *		pachTemp = (AxisChar *) msgData->getProperty( "sessionid");
-        int				len = (int) strlen( pachTemp);
-
-// Check if there is a session key
-		if( len > 0)
+        // Initialization, serialization, invocation or check message success 
+        if( m_nStatus == AXIS_SUCCESS && m_pIWSDZ != NULL)
         {
-// De-allocate before re-allocation
-			if( m_pchSessionID)
+            // Test if deserialization failed 
+            m_nStatus = m_pIWSDZ->getStatus();
+        }
+
+        MessageData *    msgData = m_pAxisEngine->getMessageData();    
+        AxisChar *        pachTemp = (AxisChar *) msgData->getProperty( "sessionid");
+        int                len = (int) strlen( pachTemp);
+
+        // Check if there is a session key
+        if( len > 0)
+        {
+            // De-allocate before re-allocation
+            if( m_pchSessionID)
             {
                 delete [] m_pchSessionID;
-
                 m_pchSessionID = NULL;
             }
 
-// Should have space for terminating char
-			m_pchSessionID = new char[len + 1];
-            
-			strcpy( m_pchSessionID, pachTemp);
+            // Should have space for terminating char
+            m_pchSessionID = new char[len + 1];
+            strcpy( m_pchSessionID, pachTemp);
         }
         else
         {
-// There is no session key
-			if( m_pchSessionID)
-			{
+            // There is no session key
+            if( m_pchSessionID)
                 delete [] m_pchSessionID;
-			}
-
             m_pchSessionID = NULL;
         }
     }
 
     closeConnection();
-
     return AXIS_SUCCESS;
 }
 
 int Call::setProtocol (AXIS_PROTOCOL_TYPE protocol)
 {
-	int success = AXIS_FAIL;
+    int success = AXIS_FAIL;
+    
     if (m_pTransport)
     {
-    	if( m_pTransport->setProtocol(protocol)==AXIS_SUCCESS)
-    	{
-    		m_nTransportType=protocol;
-    		success = AXIS_SUCCESS;
-    	}
+        if( m_pTransport->setProtocol(protocol)==AXIS_SUCCESS)
+        {
+            m_nTransportType=protocol;
+            success = AXIS_SUCCESS;
+        }
     }
     else
     {
-    		m_nTransportType=protocol;
-    		success = AXIS_SUCCESS;
+        m_nTransportType=protocol;
+        success = AXIS_SUCCESS;
     }
-   	return success;
+       
+    return success;
 }
 
 AXIS_PROTOCOL_TYPE Call::getProtocol ()
 {
-	if(m_pTransport)
-	{
-		return m_pTransport->getProtocol();
-	}
-	else
-	{
-		return m_nTransportType;
-	}
+    if(m_pTransport)
+        return m_pTransport->getProtocol();
+    else
+        return m_nTransportType;
 }
 
 int Call::setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char* value)
 {
-	int	iSuccess = AXIS_SUCCESS;
+    int    iSuccess = AXIS_SUCCESS;
 
-    // Samisa - if SOAPAction is being set add extra "" to value
+    // if SOAPAction is being set add extra "" to value
     if (type == SOAPACTION_HEADER)
     {
         char* tempvalue = new char[strlen(value) + 3];
-        sprintf( tempvalue, "\"%s\"", value);
-        m_pTransport->setTransportProperty(type, tempvalue);
-		if( tempvalue != NULL)
-		{
-        delete [] tempvalue;
-			tempvalue = NULL;
-		}
+        
+        if( tempvalue != NULL)
+        {
+            sprintf( tempvalue, "\"%s\"", value);
+            m_pTransport->setTransportProperty(type, tempvalue);
+            delete [] tempvalue;
+        }
+        else
+        {
+            // need to throw some sort of exception relating to memory allocation failure?
+            return  AXIS_FAIL;
+        }
     }
     else
-	{
-		try
-		{
-			iSuccess = m_pTransport->setTransportProperty( type, value);
-		}
-		catch( AxisException& e)
-		{
-			throw AxisGenException(e.getExceptionCode(), e.what());
-		}
-	}
+    {
+        try
+        {
+            iSuccess = m_pTransport->setTransportProperty( type, value);
+        }
+        catch( AxisException& e)
+        {
+            throw AxisGenException(e.getExceptionCode(), e.what());
+        }
+    }
 
-	if( iSuccess < 0)
-	{
-		throw AxisGenException( -iSuccess, m_pTransport->getLastChannelError());
-	}
+    if( iSuccess < 0)
+    {
+        throw AxisGenException( -iSuccess, m_pTransport->getLastChannelError());
+    }
 
     return iSuccess;
 }
 
 const char* Call::getTransportProperty(const char *key, bool response) 
 {
-	if (m_pTransport) return m_pTransport->getTransportProperty(key,response);
-	else return NULL;
+    if (m_pTransport) 
+        return m_pTransport->getTransportProperty(key,response);
+    else 
+        return NULL;
 }
 
 int Call::setHandlerProperty(AxisChar* name, void* value, int len)
 {
-	// Unfortunately we have to cache the handler properties here
-	// in the Call object since the m_pMsgData is not set up
-	// until Call::initialize which doesn't happen until the actual
-	// web service is invoked.
-	m_handlerProperties.push_back(new HandlerProperty(name,value,len));
-	return AXIS_SUCCESS;
+    // Unfortunately we have to cache the handler properties here
+    // in the Call object since the m_pMsgData is not set up
+    // until Call::initialize which doesn't happen until the actual
+    // web service is invoked.
+    m_handlerProperties.push_back(new HandlerProperty(name,value,len));
+    return AXIS_SUCCESS;
 }
 
 /*
@@ -446,9 +437,8 @@ int Call::setHandlerProperty(AxisChar* name, void* value, int len)
  */
 void Call::closeConnection()
 {
-	if (m_pTransport) {
+    if (m_pTransport)
         m_pTransport->closeConnection();
-	}
 }
 
 void Call::setSOAPVersion (SOAP_VERSION version)
@@ -456,277 +446,286 @@ void Call::setSOAPVersion (SOAP_VERSION version)
     m_pIWSSZ->setSoapVersion (version);
 }
 
-Axis_Array* Call::getBasicArray (XSDTYPE nType, const AxisChar* pName,
-    const AxisChar* pNamespace)
+Axis_Array* Call::getBasicArray (XSDTYPE nType, 
+                                 const AxisChar* pName,
+                                 const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getBasicArray (nType, pName, pNamespace);
 }
 
-Axis_Array* Call::getCmplxArray (Axis_Array * pArray, void* pDZFunct, void* pCreFunct, 
-    void* pDelFunct, void* pSizeFunct, const AxisChar* pName, 
-    const AxisChar* pNamespace)
+Axis_Array* Call::getCmplxArray (Axis_Array * pArray, 
+                                 void* pDZFunct, 
+                                 void* pCreFunct, 
+                                 void* pDelFunct, 
+                                 void* pSizeFunct, 
+                                 const AxisChar* pName, 
+                                 const AxisChar* pNamespace)
 {
-    return m_pIWSDZ->getCmplxArray (pArray, pDZFunct, pCreFunct, pDelFunct, pSizeFunct,
-        pName, pNamespace);
+    return m_pIWSDZ->getCmplxArray (pArray, 
+                                    pDZFunct, pCreFunct, pDelFunct, pSizeFunct,
+                                    pName, pNamespace);
 }
 
-xsd__int * Call::getElementAsInt (const AxisChar* pName, const AxisChar* pNamespace)
+xsd__int * Call::getElementAsInt (const AxisChar* pName, 
+                                  const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsInt (pName, pNamespace);
 }
 
 xsd__boolean * Call::getElementAsBoolean (const AxisChar* pName, 
-    const AxisChar* pNamespace)
+                                          const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsBoolean (pName, pNamespace);
 }
 
 xsd__unsignedInt * Call::getElementAsUnsignedInt (const AxisChar* pName,
-    const AxisChar* pNamespace)
+                                                  const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsUnsignedInt (pName, pNamespace);
 }
 
 xsd__short * Call::getElementAsShort (const AxisChar* pName, 
-    const AxisChar* pNamespace)
+                                      const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsShort (pName, pNamespace);
 }
 
 xsd__unsignedShort * Call::getElementAsUnsignedShort (const AxisChar* pName,
-    const AxisChar* pNamespace)
+                                                      const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsUnsignedShort (pName, pNamespace);
 }
 
-xsd__byte * Call::getElementAsByte (const AxisChar* pName, const AxisChar* pNamespace)
+xsd__byte * Call::getElementAsByte (const AxisChar* pName, 
+                                    const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsByte (pName, pNamespace);
 }
 
 xsd__unsignedByte * Call::getElementAsUnsignedByte (const AxisChar* pName,
-    const AxisChar * pNamespace)
+                                                    const AxisChar * pNamespace)
 {
     return m_pIWSDZ->getElementAsUnsignedByte (pName, pNamespace);
 }
 
-xsd__long * Call::getElementAsLong (const AxisChar* pName, const AxisChar* pNamespace)
+xsd__long * Call::getElementAsLong (const AxisChar* pName, 
+                                    const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsLong (pName, pNamespace);
 }
 
 xsd__integer * Call::getElementAsInteger (const AxisChar* pName, 
-    const AxisChar* pNamespace)
+                                          const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsInteger (pName, pNamespace);
 }
 
 xsd__unsignedLong * Call::getElementAsUnsignedLong (const AxisChar* pName,
-    const AxisChar* pNamespace)
+                                                    const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsUnsignedLong (pName, pNamespace);
 }
 
 xsd__float * Call::getElementAsFloat (const AxisChar* pName, 
-    const AxisChar* pNamespace)
+                                      const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsFloat (pName, pNamespace);
 }
 
 xsd__double * Call::getElementAsDouble (const AxisChar* pName, 
-    const AxisChar* pNamespace)
+                                        const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsDouble (pName, pNamespace);
 }
 
 xsd__decimal * Call::getElementAsDecimal (const AxisChar* pName, 
-    const AxisChar* pNamespace)
+                                          const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsDecimal (pName, pNamespace);
 }
 
 xsd__string Call::getElementAsString (const AxisChar* pName, 
-    const AxisChar* pNamespace)
+                                      const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsString (pName, pNamespace);
 }
 
 xsd__anyURI Call::getElementAsAnyURI (const AxisChar* pName, 
-    const AxisChar* pNamespace)
+                                      const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsAnyURI (pName, pNamespace);
 }
 
 xsd__QName Call::getElementAsQName (const AxisChar* pName, 
-    const AxisChar* pNamespace)
+                                    const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsQName (pName, pNamespace);
 }
 
 xsd__hexBinary * Call::getElementAsHexBinary (const AxisChar* pName, 
-    const AxisChar * pNamespace)
+                                              const AxisChar * pNamespace)
 {
     return m_pIWSDZ->getElementAsHexBinary (pName, pNamespace);
 }
 
 xsd__base64Binary * Call::getElementAsBase64Binary (const AxisChar* pName,
-    const AxisChar* pNamespace)
+                                                    const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsBase64Binary (pName, pNamespace);
 }
 
 xsd__dateTime * Call::getElementAsDateTime (const AxisChar* pName,
-    const AxisChar* pNamespace)
+                                            const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsDateTime (pName, pNamespace);
 }
 
 xsd__date * Call::getElementAsDate (const AxisChar* pName, 
-    const AxisChar* pNamespace)
+                                    const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsDate (pName, pNamespace);
 }
 
 xsd__time * Call::getElementAsTime (const AxisChar* pName, 
-    const AxisChar* pNamespace)
+                                    const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsTime (pName, pNamespace);
 }
 
 xsd__duration * Call::getElementAsDuration (const AxisChar* pName, 
-    const AxisChar* pNamespace)
+                                            const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsDuration (pName, pNamespace);
 }
 
 xsd__gYearMonth * Call::getElementAsGYearMonth (const AxisChar* pName, 
-    const AxisChar* pNamespace)
+                                                const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsGYearMonth (pName, pNamespace);
 }
 
 xsd__gYear * Call::getElementAsGYear (const AxisChar* pName, 
-    const AxisChar* pNamespace)
+                                      const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsGYear (pName, pNamespace);
 }
 
 xsd__gMonthDay * Call::getElementAsGMonthDay (const AxisChar* pName, 
-    const AxisChar* pNamespace)
+                                              const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsGMonthDay (pName, pNamespace);
 }
 
 xsd__gDay * Call::getElementAsGDay (const AxisChar* pName, 
-    const AxisChar* pNamespace)
+                                    const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsGDay (pName, pNamespace);
 }
 
 xsd__gMonth * Call::getElementAsGMonth (const AxisChar* pName, 
-    const AxisChar* pNamespace)
+                                        const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsGMonth (pName, pNamespace);
 }
 
 xsd__nonPositiveInteger * Call::getElementAsNonPositiveInteger (const AxisChar* pName, 
-    const AxisChar* pNamespace)
+                                                                const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsNonPositiveInteger (pName, pNamespace);
 }
 
 xsd__negativeInteger * Call::getElementAsNegativeInteger (const AxisChar* pName, 
-    const AxisChar* pNamespace)
+                                                          const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsNegativeInteger (pName, pNamespace);
 }
 
 xsd__nonNegativeInteger * Call::getElementAsNonNegativeInteger (const AxisChar* pName, 
-    const AxisChar* pNamespace)
+                                                                const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsNonNegativeInteger (pName, pNamespace);
 }
 
 xsd__positiveInteger * Call::getElementAsPositiveInteger (const AxisChar* pName, 
-    const AxisChar* pNamespace)
+                                                          const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsPositiveInteger (pName, pNamespace);
 }
 
 xsd__normalizedString Call::getElementAsNormalizedString (const AxisChar* pName, 
-    const AxisChar* pNamespace)
+                                                          const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsNormalizedString (pName, pNamespace);
 }
 
 xsd__token Call::getElementAsToken (const AxisChar* pName, 
-    const AxisChar* pNamespace)
+                                    const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsToken (pName, pNamespace);
 }
 
 xsd__language Call::getElementAsLanguage (const AxisChar* pName, 
-    const AxisChar* pNamespace)
+                                          const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsLanguage (pName, pNamespace);
 }
 
 xsd__Name Call::getElementAsName (const AxisChar* pName, 
-    const AxisChar* pNamespace)
+                                  const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsName (pName, pNamespace);
 }
 
 xsd__NCName Call::getElementAsNCName (const AxisChar* pName, 
-    const AxisChar* pNamespace)
+                                      const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsNCName (pName, pNamespace);
 }
 
 xsd__ID Call::getElementAsID (const AxisChar* pName, 
-    const AxisChar* pNamespace)
+                              const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsID (pName, pNamespace);
 }
 
 xsd__IDREF Call::getElementAsIDREF (const AxisChar* pName, 
-    const AxisChar* pNamespace)
+                                    const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsIDREF (pName, pNamespace);
 }
 
 xsd__IDREFS Call::getElementAsIDREFS (const AxisChar* pName, 
-    const AxisChar* pNamespace)
+                                      const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsIDREFS (pName, pNamespace);
 }
 
 xsd__ENTITY Call::getElementAsENTITY (const AxisChar* pName, 
-    const AxisChar* pNamespace)
+                                      const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsENTITY (pName, pNamespace);
 }
 
 xsd__ENTITIES Call::getElementAsENTITIES (const AxisChar* pName, 
-    const AxisChar* pNamespace)
+                                          const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsENTITIES (pName, pNamespace);
 }
 
 xsd__NMTOKEN Call::getElementAsNMTOKEN (const AxisChar* pName, 
-    const AxisChar* pNamespace)
+                                        const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsNMTOKEN (pName, pNamespace);
 }
 
 xsd__NMTOKENS Call::getElementAsNMTOKENS (const AxisChar* pName, 
-    const AxisChar* pNamespace)
+                                          const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsNMTOKENS (pName, pNamespace);
 }
 
 xsd__NOTATION Call::getElementAsNOTATION (const AxisChar* pName, 
-    const AxisChar* pNamespace)
+                                          const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsNOTATION (pName, pNamespace);
 }
@@ -737,169 +736,169 @@ xsd__int * Call::getAttributeAsInt (const AxisChar* pName, const AxisChar* pName
 }
 
 xsd__boolean * Call::getAttributeAsBoolean (const AxisChar* pName,
-    const AxisChar* pNamespace)
+                                            const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsBoolean (pName, pNamespace);
 }
 
 xsd__unsignedInt * Call::getAttributeAsUnsignedInt (const AxisChar* pName,
-    const AxisChar* pNamespace)
+                                                    const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsUnsignedInt (pName, pNamespace);
 }
 
 xsd__short * Call::getAttributeAsShort (const AxisChar* pName, 
-    const AxisChar* pNamespace)
+                                        const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsShort (pName, pNamespace);
 }
 
 xsd__unsignedShort * Call::getAttributeAsUnsignedShort (const AxisChar* pName,
-    const AxisChar* pNamespace)
+                                                        const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsUnsignedShort (pName, pNamespace);
 }
 
 xsd__byte * Call::getAttributeAsByte (const AxisChar* pName, 
-    const AxisChar* pNamespace)
+                                      const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsByte (pName, pNamespace);
 }
 
 xsd__unsignedByte * Call::getAttributeAsUnsignedByte (const AxisChar* pName,
-    const AxisChar* pNamespace)
+                                                      const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsUnsignedByte (pName, pNamespace);
 }
 
 xsd__long * Call::getAttributeAsLong (const AxisChar* pName, 
-    const AxisChar* pNamespace)
+                                      const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsLong (pName, pNamespace);
 }
 
 xsd__integer * Call::getAttributeAsInteger (const AxisChar* pName,
-    const AxisChar * pNamespace)
+                                            const AxisChar * pNamespace)
 {
     return m_pIWSDZ->getAttributeAsInteger (pName, pNamespace);
 }
 
 xsd__unsignedLong * Call::getAttributeAsUnsignedLong (const AxisChar* pName,
-    const AxisChar* pNamespace)
+                                                      const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsUnsignedLong (pName, pNamespace);
 }
 
 xsd__float * Call::getAttributeAsFloat (const AxisChar* pName,
-    const AxisChar* pNamespace)
+                                        const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsFloat (pName, pNamespace);
 }
 
 xsd__double * Call::getAttributeAsDouble (const AxisChar* pName,
-    const AxisChar* pNamespace)
+                                          const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsDouble (pName, pNamespace);
 }
 
 xsd__decimal * Call::getAttributeAsDecimal (const AxisChar* pName,
-    const AxisChar* pNamespace)
+                                            const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsDecimal (pName, pNamespace);
 }
 
 xsd__string Call::getAttributeAsString (const AxisChar* pName,
-    const AxisChar* pNamespace)
+                                        const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsString (pName, pNamespace);
 }
 
 xsd__anyURI Call::getAttributeAsAnyURI (const AxisChar* pName,
-    const AxisChar* pNamespace)
+                                        const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsAnyURI (pName, pNamespace);
 }
 
 xsd__QName Call::getAttributeAsQName (const AxisChar* pName,
-    const AxisChar* pNamespace)
+                                      const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsQName (pName, pNamespace);
 }
 
 xsd__hexBinary * Call::getAttributeAsHexBinary (const AxisChar* pName,
-    const AxisChar* pNamespace)
+                                                const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsHexBinary (pName, pNamespace);
 }
 
 xsd__base64Binary * Call::getAttributeAsBase64Binary (const AxisChar* pName,
-    const AxisChar * pNamespace)
+                                                      const AxisChar * pNamespace)
 {
     return m_pIWSDZ->getAttributeAsBase64Binary (pName, pNamespace);
 }
 
 xsd__dateTime * Call::getAttributeAsDateTime (const AxisChar* pName,
-    const AxisChar * pNamespace)
+                                              const AxisChar * pNamespace)
 {
     return m_pIWSDZ->getAttributeAsDateTime (pName, pNamespace);
 }
 
 xsd__date * Call::getAttributeAsDate (const AxisChar* pName, 
-    const AxisChar* pNamespace)
+                                      const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsDate (pName, pNamespace);
 }
 
 xsd__time * Call::getAttributeAsTime (const AxisChar* pName, 
-    const AxisChar* pNamespace)
+                                      const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsTime (pName, pNamespace);
 }
 
 xsd__duration * Call::getAttributeAsDuration (const AxisChar* pName,
-    const AxisChar* pNamespace)
+                                              const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsDuration (pName, pNamespace);
 }
 
 xsd__gYearMonth * Call::getAttributeAsGYearMonth (const AxisChar* pName,
-    const AxisChar* pNamespace)
+                                                  const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsGYearMonth (pName, pNamespace);
 }
 
 xsd__gYear * Call::getAttributeAsGYear (const AxisChar* pName,
-    const AxisChar* pNamespace)
+                                        const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsGYear (pName, pNamespace);
 }
 
 xsd__gMonthDay * Call::getAttributeAsGMonthDay (const AxisChar* pName,
-    const AxisChar* pNamespace)
+                                                const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsGMonthDay (pName, pNamespace);
 }
 
 xsd__gDay * Call::getAttributeAsGDay (const AxisChar* pName,
-    const AxisChar* pNamespace)
+                                      const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsGDay (pName, pNamespace);
 }
 
 xsd__gMonth * Call::getAttributeAsGMonth (const AxisChar* pName,
-    const AxisChar* pNamespace)
+                                          const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsGMonth (pName, pNamespace);
 }
 
 xsd__NOTATION Call::getAttributeAsNOTATION (const AxisChar* pName,
-    const AxisChar* pNamespace)
+                                            const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsNOTATION (pName, pNamespace);
 }
 
 xsd__normalizedString Call::getAttributeAsNormalizedString (const AxisChar* pName,
-    const AxisChar* pNamespace)
+                                                            const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsNormalizedString (pName, pNamespace);
 }
@@ -996,14 +995,14 @@ xsd__positiveInteger * Call::getAttributeAsPositiveInteger (const AxisChar* pNam
 
 int Call::checkMessage( const AxisChar * pName, const AxisChar * pNamespace)
 {
-	m_nStatus = m_pIWSDZ->checkMessageBody( pName, pNamespace);
+    m_nStatus = m_pIWSDZ->checkMessageBody( pName, pNamespace);
 
-	return m_nStatus;
+    return m_nStatus;
 }
 
 void* Call::checkFault (const AxisChar* pName, const AxisChar* pNamespace)
 {
-	 return m_pIWSDZ->checkForFault (pName, pNamespace);
+     return m_pIWSDZ->checkForFault (pName, pNamespace);
 }
 
 void* Call::getCmplxObject (void* pDZFunct, void* pCreFunct, void* pDelFunct,
@@ -1021,19 +1020,19 @@ IHeaderBlock * Call::createHeaderBlock()
 IHeaderBlock * Call::createHeaderBlock( AxisChar * pachLocalName, 
                                        AxisChar * pachUri)
 {
- 	return new HeaderBlock( pachLocalName, pachUri);
+     return new HeaderBlock( pachLocalName, pachUri);
 }
 
 IHeaderBlock * Call::createHeaderBlock( AxisChar * pachLocalName,
-									    AxisChar * pachUri,
-										AxisChar * pachPrefix)
+                                        AxisChar * pachUri,
+                                        AxisChar * pachPrefix)
 {
- 	return new HeaderBlock( pachLocalName, pachUri, pachPrefix);
+     return new HeaderBlock( pachLocalName, pachUri, pachPrefix);
 }
 
 int Call::getStatus() 
 {
-	return m_nStatus;
+    return m_nStatus;
 }
 
 void Call::setProxy(const char* pcProxyHost, unsigned int uiProxyPort)
@@ -1045,12 +1044,12 @@ void Call::setProxy(const char* pcProxyHost, unsigned int uiProxyPort)
 
 AnyType * Call::getAnyObject()
 {
-	return m_pIWSDZ->getAnyObject();
+    return m_pIWSDZ->getAnyObject();
 }
 
 int Call::addAnyObject( AnyType * pAnyObject)
 {
-	return m_pIWSSZ->addOutputAnyObject( pAnyObject);
+    return m_pIWSSZ->addOutputAnyObject( pAnyObject);
 }
 
 const AxisChar* Call::getNamespacePrefix(const AxisChar* pNamespace)
@@ -1059,59 +1058,53 @@ const AxisChar* Call::getNamespacePrefix(const AxisChar* pNamespace)
 }
 
 void Call::setSOAPMethodAttribute( const AxisChar * pLocalname,
-								   const AxisChar * pPrefix,
-								   const AxisChar * pValue)
+                                   const AxisChar * pPrefix,
+                                   const AxisChar * pValue)
 {
     setSOAPMethodAttribute( pLocalname, pPrefix, NULL, pValue);
 }
 
 void Call::setSOAPMethodAttribute( const AxisChar * pLocalname,
-								   const AxisChar * pPrefix, 
+                                   const AxisChar * pPrefix, 
                                    const AxisChar * pUri,
-								   const AxisChar * pValue)
+                                   const AxisChar * pValue)
 {
-    IAttribute *	pAttribute;
+    IAttribute *    pAttribute;
 
-	if( pValue == NULL)
-	{
-		pValue = "";
-	}
+    if( pValue == NULL)
+        pValue = "";
 
-    std::list<Attribute*>	attributeList;
+    std::list<Attribute*>    attributeList;
 
     if( NULL != pUri)
-    {
         pAttribute = new Attribute( attributeList, pLocalname, pPrefix, pUri, pValue);
-    }
     else
-    {
         pAttribute = new Attribute( attributeList, pLocalname, pPrefix, pValue);
-    }
 
     m_pIWSSZ->setSOAPMethodAttribute( ((Attribute *) pAttribute)->clone());
 }
 
 const xsd__string Call::getFaultAsXMLString()
 {
-	return m_pIWSDZ->getFaultAsXMLString();
+    return m_pIWSDZ->getFaultAsXMLString();
 }
 
 void Call::addAttachment(ISoapAttachment* att)
 {
-	if (NULL==m_pIWSSZ)
-		m_attachments.push_back(att);
-	else
-		m_pIWSSZ->addAttachment(att->getHeader(AXIS_CONTENT_ID),att);
+    if (NULL==m_pIWSSZ)
+        m_attachments.push_back(att);
+    else
+        m_pIWSSZ->addAttachment(att->getHeader(AXIS_CONTENT_ID),att);
 }
 
 ISoapAttachment* Call::createSoapAttachment()
 {
-	return new SoapAttachment(m_pContentIdSet);
+    return new SoapAttachment(m_pContentIdSet);
 }
 
 void Call::addAttachmentParameter(ISoapAttachment* att, const char* pName, IAttribute **attributes, int nAttributes)
 {
-	m_pIWSSZ->addAttachmentParameter(att,pName,attributes,nAttributes);
+    m_pIWSSZ->addAttachmentParameter(att,pName,attributes,nAttributes);
 }
 
 IAttribute* Call::createAttribute(const AxisChar *pLocalname, const AxisChar *pPrefix, const AxisChar *pValue)

@@ -40,11 +40,13 @@ class ClientAxisEngine:public AxisEngine
         ClientAxisEngine ();
         virtual ~ ClientAxisEngine ();
         virtual int process (SOAPTransport* pSoap);
+        
     protected:
         virtual int invoke (MessageData* pMsg);
         virtual void onFault (MessageData* pMsg);
+        
     private:
-	void releaseHandlers(string sSessionId);
+        void releaseHandlers(string sSessionId);
         SOAPTransport* m_pSoap;
 };
 AXIS_CPP_NAMESPACE_END
