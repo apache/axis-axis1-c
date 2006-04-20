@@ -19,7 +19,7 @@
  */
 
 #include "ComplexTypeWithNillableSimpleElement.hpp"
-
+#include <stdio.h>
 
 ComplexTypeWithNillableSimpleElement::ComplexTypeWithNillableSimpleElement()
 {
@@ -40,10 +40,28 @@ SimpleComplexType* ComplexTypeWithNillableSimpleElement::echo(SimpleComplexType*
 {
 	int number=*(Value0->complexTypeElement);
 	char *ptr = new char[10];
+	int iSign = (number > 0 ? 1 : -1);
+#ifdef WIN32
 	ptr=itoa(number,ptr,10);
 	ptr=strrev(ptr);
-	number=atoi(ptr);
+#else
+	sprintf( ptr, "%d", number);
+
+	int	iNumberLength = (int) strlen( ptr);
+
+	if( iNumberLength > 1)
+	{
+		for( number = 0; number < iNumberLength / 2; number++)
+		{
+			char cSwap = ptr[number];
+			ptr[number] = ptr[iNumberLength - number - 1];
+			ptr[iNumberLength - number - 1] = cSwap;
+		}
+	}
+#endif
+	number=atoi(ptr) * iSign;
 	*Value0->complexTypeElement=number;
 	return Value0;
 }
+
 
