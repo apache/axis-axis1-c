@@ -146,7 +146,7 @@ string HTTPTransportException::getMessageForExceptionCode (const int iExceptionC
 
 		case CLIENT_TRANSPORT_TYPE_MISMATCH:
 		{
-			m_sMessageForExceptionCode = "HTTPTransportException:Client attempted to use SSL functions without the proper prerquistes";
+			m_sMessageForExceptionCode = "HTTPTransportException:Client attempted to use SSL functions without the proper prerequisites";
 			break;
 		}
 
