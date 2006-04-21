@@ -101,9 +101,114 @@ xsd__int Calculator::div(xsd__int Value0, xsd__int Value1)
 	catch(AxisException& e)
 	{
 		any = (AnyType*)m_pCall->getAnyObject();
-		if(any!=NULL){
-				cout << any->_size<<endl;
+
+		if(any!=NULL)
+		{
+			cout << any->_size<<endl;
+
+// Check here for a particular syntax as different servers produce different output.
+			if( strstr( any->_array[0], "SOAP-ENV:Fault") != NULL)
+			{
+				cout << "<soapenv:Fault>";
+
+// faultcode
+				char *	pszToken = "<faultcode";
+				char *	pcToken = strstr( any->_array[0], pszToken);
+
+				if( pcToken != NULL)
+				{
+					pcToken += strlen( pszToken);
+
+					char *	pcValue = strchr( pcToken, '>');
+
+					if( pcValue != NULL)
+					{
+						pcValue++;
+
+						char *	pcValueFrom = pcValue;
+
+						while( *pcValue != '\0' && *pcValue != '<')
+						{
+							pcValue++;
+						}
+
+						if( *pcValue != '\0')
+						{
+							*pcValue = '\0';
+
+							cout << pszToken << " xmlns=\"\">";
+
+							if( strchr( pcValueFrom, '.') != NULL)
+							{
+								cout << pcValueFrom;
+							}
+							else
+							{
+								cout << pcValueFrom << ".generalException";
+							}
+
+							cout << "</" << (pszToken + 1) << ">";
+
+							*pcValue = '<';
+						}
+					}
+				}
+
+// faultstring
+				pszToken = "<faultstring";
+				pcToken = strstr( any->_array[0], pszToken);
+
+				if( pcToken != NULL)
+				{
+					pcToken += strlen( pszToken);
+
+					char *	pcValue = strchr( pcToken, '>');
+
+					if( pcValue != NULL)
+					{
+						pcValue++;
+
+						char *	pcValueFrom = pcValue;
+
+						while( *pcValue != '\0' && *pcValue != '<')
+						{
+							pcValue++;
+						}
+
+						if( *pcValue != '\0')
+						{
+							*pcValue = '\0';
+
+							cout << pszToken 
+								 << " xmlns=\"\">"
+								 << pcValueFrom
+								 << "</"
+								 << (pszToken + 1)
+								 << ">";
+
+							*pcValue = '<';
+						}
+						else
+						{
+							cout << "Couldn't find opening '</' after message for " << (pszToken + 1) << endl;
+						}
+					}
+					else
+					{
+						cout << "Couldn't find closing '>' for " << (pszToken + 1) << endl;
+					}
+				}
+				else
+				{
+					cout << "Couldn't find " << (pszToken + 1) << endl;
+				}
+
+				cout << "<detail xmlns=\"\"/></soapenv:Fault>" << endl;
+			}
+			else
+			{
 				cout << any->_array[0]<<endl;
+			}
 		}
 		//throw;
 	}
@@ -141,11 +246,11 @@ int main(int argc, char* argv[])
 	}
 	catch(exception& e)
 	{
-	    cout << "Unknown exception has occured" << endl;
+	    cout << "Unknown exception has occurred : " << e.what() << endl;
 	}
 	catch(...)
 	{
-		cout << "Unspecified exception has occured" << endl;
+		cout << "Unspecified exception has occurred" << endl;
 	}
 	cout << "----------------------------TEST COMPLETE------------------------------------" << endl;
 	return 0;

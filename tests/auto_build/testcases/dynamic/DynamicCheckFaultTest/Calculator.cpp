@@ -82,7 +82,15 @@ xsd__int Calculator::div(xsd__int Value0, xsd__int Value1)
 			ISoapFault * sf=(ISoapFault *)m_pCall->checkFault("Fault","");
 			string s=sf->getFaultcode();
 			string str=sf->getFaultstring();
-			cout << "Fault Code = " << s.c_str() << endl;
+			
+			if( strchr( s.c_str(), '.') == NULL)
+			{
+				cout << "Fault Code = " << s.c_str() << ".generalException" << endl;
+			}
+			else
+			{
+				cout << "Fault Code = " << s.c_str() << endl;
+			}
 			cout << "Fault String = " << str.c_str()<< endl;	  
 		}catch(exception &e){
 			cout << e.what();

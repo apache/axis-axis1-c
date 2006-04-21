@@ -44,6 +44,10 @@ int Calculator::mul(int Value0, int Value1)
 int Calculator::div(int Value0, int Value1)
 {
 	if (Value1 == 0)
-        throw exception("Division by zero error");
-	return Value0/Value1;
+	{
+// This has been done to fit the existing JAVA implementations!
+		throw exception( "java.lang.ArithmeticException: / by zero");
+	}
+
+	return Value0 / Value1;
 }
