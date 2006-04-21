@@ -65,11 +65,11 @@ public class ClientStubWriter
           // get_xxx_stub() routine
           writer.write("AXISCHANDLE get_" + classname + "_stub(const char* pchEndPointUri)\n{\n");
           writer.write("\tif(pchEndPointUri)\n");
-          writer.write("\t\treturn axiscStubCreate(pchEndPointUri, AXISC_PTHTTP1_1);\n");
+          writer.write("\t\treturn axiscStubCreate(pchEndPointUri, AXISC_APTHTTP1_1);\n");
           writer.write("\telse\n");
           writer.write("\t\treturn axiscStubCreate(\"" 
                   + wscontext.getWrapInfo().getTargetEndpointURI() 
-                  + "\", AXISC_PTHTTP1_1);\n");
+                  + "\", AXISC_APTHTTP1_1);\n");
           writer.write("}\n\n");
           
           // destroy_xxxx_stub()
@@ -173,11 +173,13 @@ public class ClientStubWriter
         else // for AnyType too
             writer.write(outparamType + "*");
    
-        writer.write(" " + methodName + "(AXISCHANDLE stub, ");
+        writer.write(" " + methodName + "(AXISCHANDLE stub");
         ArrayList paramsB = (ArrayList) params;
         ParameterInfo paramtype = null;
         if (0 < paramsB.size ())
         {
+            writer.write(", ");
+            
             type = wscontext.getTypemap ().getType (((ParameterInfo) paramsB.get (0)).getSchemaName ());
             paramtype = (ParameterInfo) paramsB.get (0);
             String baseTypeName = null;
@@ -646,6 +648,7 @@ public class ClientStubWriter
                     }
                     else
                     {
+                        // TODO
                         containedType = qname.getLocalPart ();
                         writer.write("\n\t\t\tif (OutValue" + i + " != NULL)\n" );
                         writer.write("\t\t\t{\n");
@@ -822,79 +825,35 @@ public class ClientStubWriter
         }
         else if (returntypeissimple)
         {
-            if (returntype.isNillable ())
+            if (returntype.isNillable () 
+                    || CUtils.isPointerType(outparamType))
             {
-                if( CUtils.isPointerType( outparamType))
-                {
-                    writer.write( "\t\t\t" + outparamType + " pReturn = " 
-                            + "axiscCall"
-                            + CUtils.getParameterGetValueMethodName( outparamType, false) 
-                            + "(call, \"" + returntype.getParamName() + "\", 0);\n");
-                }
-                else
-                {
-                    writer.write( "\t\t\t" + outparamType + " * pReturn = " 
-                            + "axiscCall"
-                            + CUtils.getParameterGetValueMethodName( outparamType, false) 
-                            + "(call, \"" + returntype.getParamName() + "\", 0);\n");
-                }
-                
-                writer.write( "\n");
-                writer.write( "\t\t\tif( pReturn != NULL)\n");
-                writer.write( "\t\t\t{\n");
-                if( CUtils.isPointerType(outparamType))
-                {
-                    writer.write( "\t\t\t\tRet = axiscAxisNew(XSDC_STRING, strlen( pReturn) + 1);\n");
-                    writer.write( "\t\t\t\tstrcpy( Ret, pReturn);\n");
-                }
-                else
-                {
-                    writer.write( "\t\t\t\tRet = malloc(sizeof( " + outparamType + ");\n");
-                    writer.write( "\t\t\t\t*Ret = *pReturn;\n");
-                }
-                
-                writer.write( "\t\t\t\taxiscAxisDelete( (void *) pReturn, " + CUtils.getXSDTypeForBasicType( outparamType) + ");\n");
-                writer.write( "\t\t\t}\n");
+                // Just return the pointer as-is - no need to delete.
+                writer.write( "\t\t\tRet = axiscCall"
+                        + CUtils.getParameterGetValueMethodName( outparamType, false) 
+                        + "(call, \"" + returntype.getParamName() + "\", 0);\n");
+
                 writer.write( "\t\t}\n");
             }
             else
             {
-                if (CUtils.isPointerType(outparamType))
-                {
-                    writer.write ("\t\t\t" + outparamType + " pReturn = " 
-                            + "axiscCall"
-                            + CUtils.getParameterGetValueMethodName(outparamType,false) 
-                            + "(call, \"" + returntype.getParamName () + "\", 0);\n");
-                    writer.write ("\t\t\tif(pReturn)\n");
-                    writer.write ("\t\t\t{\n");
-                    writer.write ("\t\t\t\tRet = axiscAxisNew(XSDC_STRING, strlen( pReturn) + 1);\n");
-                    writer.write ("\t\t\t\tstrcpy( Ret, pReturn);\n");
-                    writer.write ("\t\t\t\taxiscAxisDelete( pReturn, XSD_STRING);\n");
-                    writer.write ("\t\t\t}\n");
-                }
-                else
-                {
-                    writer.write ("\t\t\t" + outparamType + " * pReturn = " 
-                            + "axiscCall"
-                            + CUtils.getParameterGetValueMethodName(outparamType, false) 
-                            + "(call, \"" + returntype.getSOAPElementNameAsString() + "\", 0);\n");
-                    writer.write ("\t\t\tif(pReturn)\n");
-                    writer.write ("\t\t\t{\n");
-                    
-                    if( CUtils.isPointerType( outparamType))
-                        writer.write ("\t\t\t\tRet = *pReturn;\n");
-                    else
-                        writer.write ("\t\t\t\tRet = *pReturn;\n");
-    
-                    writer.write ("\t\t\t\taxiscAxisDelete( (void *) pReturn, " + CUtils.getXSDTypeForBasicType( outparamType) + ");\n");
-                    writer.write ("\t\t\t}\n");
-                }
+                writer.write ("\t\t\t" + outparamType + " * pReturn = " 
+                        + "axiscCall"
+                        + CUtils.getParameterGetValueMethodName(outparamType, false) 
+                        + "(call, \"" + returntype.getSOAPElementNameAsString() + "\", 0);\n");
                 
-                // TODO If we unexpectedly receive a nill value, when nillable="false" we should do something appropriate, perhaps as below:
-//                              writer.write("\t\t\telse");
-//                              writer.write("\t\t\t\tthrow new Exception(\"Unexpected use of nill\");");
-                writer.write ("\t\t}\n");
+                writer.write ("\t\t\tif(pReturn)\n");
+                writer.write ("\t\t\t{\n");
+                
+                writer.write ("\t\t\t\tRet = *pReturn;\n");
+                // TODO - hex and base and any...what about internal pointers?  
+                // TODO - need to null out the pointers in the structure.
+                writer.write ("\t\t\t\taxiscAxisDelete( (void *) pReturn, " 
+                        + CUtils.getXSDTypeForBasicType( outparamType) + ");\n");
 
+                writer.write ("\t\t\t}\n");
+                
+                writer.write ("\t\t}\n");
             }
             writer.write ("\t}\n");
             writer.write ("\taxiscCallUnInitialize(call);\n");

@@ -26,6 +26,9 @@ import java.util.Vector;
 
 import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
+import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
+import org.apache.axis.wsdl.wsdl2ws.info.MethodInfo;
+import org.apache.axis.wsdl.wsdl2ws.info.ParameterInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
@@ -40,6 +43,136 @@ public class ClientStubHeaderWriter
         throws WrapperFault
     {
         super(wscontext);
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.axis.wsdl.wsdl2ws.cpp.HeaderFileWriter#writeMethods()
+     */
+    protected void writeMethods() throws WrapperFault
+    {
+        MethodInfo minfo;
+        try
+        {
+            writer.write("\n");
+            writer.write("/* --- Functions relating to web service client proxy --- */\n");
+            writer.write("extern AXISCHANDLE get_" + classname + "_stub(const char* pchEndPointUri);\n");
+            writer.write("extern void destroy_" + classname + "_stub(AXISCHANDLE pStub);\n");
+            writer.write("extern int get_" + classname + "_Status(AXISCHANDLE pStub);\n");
+
+            writer.write("\n");
+            writer.write("/* --- Functions relating to web service methods --- */\n");
+
+            for (int i = 0; i < methods.size(); i++)
+            {
+                minfo = (MethodInfo) this.methods.get(i);
+                boolean isAllTreatedAsOutParams = false;
+                int noOfOutParams = minfo.getOutputParameterTypes().size();
+                
+                //write return type
+                if (0 == noOfOutParams)
+                    writer.write("extern void ");
+                else if (1 == noOfOutParams)
+                {
+                    ParameterInfo returnParam =
+                        (ParameterInfo) minfo.getOutputParameterTypes().iterator().next();
+                    String outParamTypeName = WrapperUtils.getClassNameFromParamInfoConsideringArrays(returnParam, wscontext);
+                    if ((outParamTypeName.lastIndexOf ("_Array") > 0) 
+                            || (CUtils.isSimpleType(outParamTypeName)
+                            && (returnParam.isNillable() || returnParam.isOptional())
+                            && !(CUtils.isPointerType(outParamTypeName))))
+                        writer.write("extern " + outParamTypeName + " * ");
+                    else
+                        writer.write("extern " + outParamTypeName + " ");
+                }
+                else
+                {
+                    isAllTreatedAsOutParams = true;
+                    writer.write("extern void ");
+                }
+                
+                //write return type
+                writer.write(minfo.getMethodname() + "(AXISCHANDLE pStub");                
+
+                //write parameter names 
+                boolean hasInputParms = false;
+                Iterator params = minfo.getInputParameterTypes().iterator();
+                for (int j = 0; params.hasNext(); j++)
+                {
+
+                    writer.write(", ");
+                    hasInputParms = true;
+                    ParameterInfo nparam = (ParameterInfo) params.next();
+                    String paramTypeName = WrapperUtils.getClassNameFromParamInfoConsideringArrays(nparam, wscontext);
+                    Type type = nparam.getType();
+                    String baseTypeName = null;
+                    
+                    if (type.isSimpleType())
+                        baseTypeName = CUtils.getclass4qname (type.getBaseType ());
+                    else
+                        baseTypeName = paramTypeName;
+                    
+                    if (nparam.getType().isAttachment())
+                        writer.write("AXISCHANDLE *Value" + j);
+                    else if ((paramTypeName.lastIndexOf ("_Array") > 0)
+                                || (CUtils.isSimpleType(baseTypeName)
+                                        && (nparam.isNillable() || nparam.isOptional())
+                                        && !(CUtils.isPointerType(baseTypeName))))
+                        writer.write(paramTypeName + " * Value" + j);
+                    else
+                        writer.write(paramTypeName + " Value" + j);
+                }
+
+                if (isAllTreatedAsOutParams)
+                {
+                    params = minfo.getOutputParameterTypes().iterator();
+                    for (int j = 0; params.hasNext(); j++)
+                    {
+                        ParameterInfo nparam = (ParameterInfo) params.next();
+                        String paramType = WrapperUtils.getClassNameFromParamInfoConsideringArrays( nparam, wscontext);
+                        Type type = nparam.getType();
+                        String baseTypeName = null;
+                        
+                        if (type.isSimpleType())
+                            baseTypeName = CUtils.getclass4qname (type.getBaseType ());
+                        else
+                            baseTypeName = paramType;
+                        
+                        boolean bTypeHasStar = paramType.endsWith( "*");
+                        
+
+                        writer.write(", ");
+                        
+                        writer.write("AXIS_OUT_PARAM " + paramType);
+                        if (CUtils.isSimpleType(baseTypeName))
+                        {
+                            if ((nparam.isOptional() 
+                                    || nparam.isNillable()) 
+                                    && !CUtils.isPointerType(baseTypeName))
+                            {
+                                if (bTypeHasStar)
+                                    writer.write(" *");
+                                else
+                                    writer.write(" **");
+                            }
+                            else if (CUtils.isPointerType(baseTypeName) || !bTypeHasStar)
+                                writer.write(" *");
+                        }
+                        else if(bTypeHasStar)
+                            writer.write(" *");
+                        else
+                            writer.write(" **");
+                        
+                        writer.write(" OutValue" + j);
+                    } // for loop
+                }
+                writer.write(");\n");
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            throw new WrapperFault(e);
+        }
     }
 
     /*
