@@ -83,8 +83,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 {
                     writer.write("extern int Axis_DeSerialize_" + typeName
                             + "(" + typeName + "* param, IWrapperSoapDeSerializer* pDZ);\n");
-                    writer.write("extern void* Axis_Create_" + typeName + "("
-                            + typeName + "* pObj, bool bArray = false, int nSize=0);\n");
+                    writer.write("extern void* Axis_Create_" + typeName + "();\n");
                     writer.write("extern void Axis_Delete_" + typeName + "("
                             + typeName + "* param, bool bArray = false, int nSize=0);\n");
                     writer.write("extern int Axis_Serialize_" + typeName + "("
@@ -95,8 +94,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 {
                     writer.write("int Axis_DeSerialize_" + typeName + "("
                             + typeName + "* param, IWrapperSoapDeSerializer* pDZ);\n");
-                    writer.write("void* Axis_Create_" + typeName + "("
-                            + typeName + "* pObj, bool bArray, int nSize);\n");
+                    writer.write("void* Axis_Create_" + typeName + "();\n");
                     writer.write("void Axis_Delete_" + typeName + "("
                             + typeName + "* param, bool bArray, int nSize);\n");
                     writer.write("int Axis_Serialize_" + typeName
@@ -1111,22 +1109,11 @@ public class BeanParamWriter extends ParamCPPFileWriter
 
     private void writeCreateGlobalMethod() throws IOException
     {
-        writer.write("void* Axis_Create_" + classname + "(" + classname
-                + "* pObj, bool bArray = false, int nSize=0)\n{\n");
-        writer.write("\tif (bArray && (nSize > 0))\n\t{\n\t\tif (pObj)\n\t\t{\n");
-        writer.write("\t\t\t" + classname + "* pNew = new " + classname + "[nSize];\n");
-
-        writer.write("\t\t\tsize_t i = nSize/2;\n");
-        writer.write("\t\t\tfor (int ii = 0; ii < (int) i; ++ii)\n"); 
-        writer.write("\t\t\t{\n");
-        writer.write("\t\t\t\tpNew[ii] = pObj[ii];\n");
-        writer.write("\t\t\t\tpObj[ii].reset();\n");
-        writer.write("\t\t\t}\n");
-
-        writer.write("\t\t\tdelete [] pObj;\n");
-        writer.write("\t\t\treturn pNew;\n\t\t}\n\t\telse\n\t\t{\n");
-        writer.write("\t\t\treturn new " + classname + "[nSize];\n\t\t}\n\t}\n");
-        writer.write("\telse\n\t\treturn new " + classname + ";\n}\n\n");
+        writer.write("void* Axis_Create_" + classname + "()\n");
+        writer.write("{\n");
+        writer.write("\treturn new " + classname + ";\n");
+        writer.write("}\n");
+        writer.write("\n");
     }
 
     private void writeDeleteGlobalMethod() throws IOException
@@ -1137,6 +1124,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
         writer.write("void Axis_Delete_" + classname + "(" + classname
                 + "* param, bool bArray = false, int nSize=0)\n");
         writer.write("{\n");
+        writer.write("\t/* If array, only objects in array are reclaimed, not array */\n");
         writer.write("\tif (bArray)\n");
         writer.write("\t{\n");
         writer.write("\t\tif (nSize > 0)\n");
@@ -1149,14 +1137,10 @@ public class BeanParamWriter extends ParamCPPFileWriter
         writer.write("\t\t\t\t\t(( " + classname + " ** ) param)[count] = NULL;\n");
         writer.write("\t\t\t\t}\n");
         writer.write("\t\t\t}\n");
-        writer.write("\t\t\tdelete [] ( " + classname + " ** ) param;\n");
         writer.write("\t\t}\n");
         writer.write("\t}\n");
         writer.write("\telse\n");
-        writer.write("\t{\n");
         writer.write("\t\tdelete param;\n");
-        writer.write("\t}\n");
-        writer.write("\tparam = NULL;\n");
         writer.write("}\n");
     }
 

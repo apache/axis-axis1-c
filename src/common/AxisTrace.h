@@ -296,17 +296,11 @@ private:
 };
 
 #ifdef ENABLE_AXISTRACE
-#define TRACE_OBJECT_CREATE_FUNCT_ENTRY(funct, arr, bArr, size) \
+#define TRACE_OBJECT_CREATE_FUNCT_ENTRY(funct) \
 { \
 	if (axiscpp::AxisTrace::isTraceOn()) \
 	{ \
-		void *traceArr = arr; \
-		bool traceBArr = bArr; \
-		int traceSize = size; \
-		axiscpp::AxisTrace::traceEntry(NULL, "AXIS_OBJECT_CREATE_FUNCT", (void*)(funct), 3, \
-			TRACETYPE_POINTER, 1, (void*)&traceArr, \
-			TRACETYPE_BOOL, 0, (void*)&traceBArr, \
-			TRACETYPE_INT, 0, (void*)&traceSize); \
+		axiscpp::AxisTrace::traceEntry(NULL, "AXIS_OBJECT_CREATE_FUNCT", (void*)(funct), 0); \
 	} \
 }
 
@@ -393,7 +387,7 @@ private:
 }
 
 #else
-#define TRACE_OBJECT_CREATE_FUNCT_ENTRY(funct, arr, bArr, size)
+#define TRACE_OBJECT_CREATE_FUNCT_ENTRY(funct)
 #define TRACE_OBJECT_CREATE_FUNCT_EXIT(funct, arr)
 #define TRACE_OBJECT_SIZE_FUNCT_ENTRY(funct)
 #define TRACE_OBJECT_SIZE_FUNCT_EXIT(funct, size)

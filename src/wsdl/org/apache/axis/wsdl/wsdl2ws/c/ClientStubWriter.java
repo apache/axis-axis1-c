@@ -618,30 +618,13 @@ public class ClientStubWriter extends CFileWriter
             while (itr.hasNext())
             {
                 typeName = itr.next().toString();
-                writer.write(
-                    "extern int Axis_DeSerialize_"
-                        + typeName
-                        + "("
-                        + typeName
-                        + "* param, IWrapperSoapDeSerializer* pDZ);\n");
-                writer.write(
-                    "extern void* Axis_Create_"
-                        + typeName
-                        + "("
-                        + typeName
-                        + " *Obj, bool bArray, int nSize);\n");
-                writer.write(
-                    "extern void Axis_Delete_"
-                        + typeName
-                        + "("
-                        + typeName
-                        + "* param, bool bArray, int nSize);\n");
-                writer.write(
-                    "extern int Axis_Serialize_"
-                        + typeName
-                        + "("
-                        + typeName
-                        + "* param, IWrapperSoapSerializer* pSZ, bool bArray);\n");
+                writer.write("extern int Axis_DeSerialize_" + typeName
+                        + "(" + typeName  + "* param, IWrapperSoapDeSerializer* pDZ);\n");
+                writer.write("extern void* Axis_Create_" + typeName + "();\n");
+                writer.write("extern void Axis_Delete_" + typeName + "("
+                        + typeName + "* param, bool bArray, int nSize);\n");
+                writer.write("extern int Axis_Serialize_" + typeName + "("
+                        + typeName + "* param, IWrapperSoapSerializer* pSZ, bool bArray);\n");
                 writer.write("extern int Axis_GetSize_" + typeName + "();\n\n");
             }
         }

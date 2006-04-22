@@ -358,8 +358,7 @@ public class ParmHeaderFileWriter extends ParamWriter
                 typeName = itr.next().toString();
                 this.writer.write("extern int Axis_DeSerialize_" + typeName
                              + "(" + typeName + "* param, AXISCHANDLE pDZ);\n");
-                this.writer.write("extern void* Axis_Create_" + typeName
-                             + "(" + typeName + " *Obj, AxiscBool bArray, int nSize);\n");
+                this.writer.write("extern void* Axis_Create_" + typeName + "();\n");
                 this.writer.write("extern void Axis_Delete_" + typeName
                              + "(" + typeName + "* param, AxiscBool bArray, int nSize);\n");
                 this.writer.write("extern int Axis_Serialize_" + typeName

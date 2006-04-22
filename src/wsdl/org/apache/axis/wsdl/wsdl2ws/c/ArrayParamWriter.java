@@ -181,7 +181,7 @@ public class ArrayParamWriter extends ParamWriter
             writer.write("\n");
             
             writer.write("\t/* Reclaim array data type memory resources */\n");
-            writer.write("\t\taxiscAxisDelete(param, XSDC_ARRAY);\n");
+            writer.write("\taxiscAxisDelete(param, XSDC_ARRAY);\n");
             
             // End function body            
             

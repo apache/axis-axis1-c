@@ -707,11 +707,7 @@ public class WrapWriter extends CFileWriter
                         + typeName
                         + "* param, IWrapperSoapDeSerializer* pDZ);\n");
                 writer.write(
-                    "extern void* Axis_Create_"
-                        + typeName
-                        + "("
-                        + typeName
-                        + " * param, bool bArray, int nSize);\n");
+                    "extern void* Axis_Create_" + typeName + "();\n");
                 writer.write(
                     "extern void Axis_Delete_"
                         + typeName

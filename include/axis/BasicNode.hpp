@@ -58,21 +58,6 @@ typedef enum {
  *
  */
 
-/*
- * Revision 1.1  2004/05/25 samisa
- * Added constructors, copy constructure and pure virtual clone for copy constructing derived classes
- */
-
-/*
- * Revision 1.2  2004/06/13 roshan
- * Added doxygen comments to help autobuild API docs
- */
-
-/*
- * Revision 1.3  2004/07/28 roshan
- * Added the method getLocalName()
- */
-
 class BasicNode
 {
 public:
@@ -116,39 +101,39 @@ public:
 
 
     /** 
-      * Creates an Attribute and adds it to this Basic Node. 
-      * 
-      * @param localname The local name of the attribute. 
-      * @param prefix The prefix of the attribute. 
-      * @param uri The namespace uri of the attribute. 
-      * @param value The value of the attribute. 
-      * 
-      * @return A pointer to the created Attribute will be returned. 
-      */
+      * Creates an Attribute and adds it to this Basic Node. 
+      * 
+      * @param localname The local name of the attribute. 
+      * @param prefix The prefix of the attribute. 
+      * @param uri The namespace uri of the attribute. 
+      * @param value The value of the attribute. 
+      * 
+      * @return A pointer to the created Attribute will be returned. 
+      */
     virtual IAttribute* createAttribute(const AxisChar* localname, 
             const AxisChar* prefix, const AxisChar* uri, 
             const AxisChar* value) =0;
 
     /** 
-      * Creates an Attribute and adds it to this Basic Node. 
-      * 
-      * @param localname The local name of the attribute. 
-      * @param prefix The prefix of the attribute. 
-      * @param value The value of the attribute. 
-      * 
-      * @return A pointer to the created Attribute will be returned. 
-      */
+     * Creates an Attribute and adds it to this Basic Node. 
+     * 
+     * @param localname The local name of the attribute. 
+     * @param prefix The prefix of the attribute. 
+     * @param value The value of the attribute. 
+     * 
+     * @return A pointer to the created Attribute will be returned. 
+     */
     virtual IAttribute* createAttribute(const AxisChar* localname,
         const AxisChar* prefix, const AxisChar* value)=0 ;
 
     /**
-      * Creates an Attribute and adds it to this Basic Node.
-      *
-      * @param localname The local name of the attribute.
-      * @param value The value of the attribute.
-      *
-      * @return A pointer to the created Attribute will be returned.
-      */
+     * Creates an Attribute and adds it to this Basic Node.
+     *
+     * @param localname The local name of the attribute.
+     * @param value The value of the attribute.
+     *
+     * @return A pointer to the created Attribute will be returned.
+     */
     virtual IAttribute* createAttribute(const AxisChar* localname,
         const AxisChar* value)=0 ;
 
