@@ -77,6 +77,12 @@ public class CBindingGenerator extends CParsingTool implements FileActor
         super(args);
     }
     
+    /** 
+     * This method is used to determine the prefix to use for the class 
+     * methods. All class methods should be prefixed with "axisc + classname".
+     * We use mapping table to try to shorten long names or to remove the 'I'
+     * from the class name. See mapping table above.
+     */
     public static String getClassMapping(String theClass)
     {
         String val = (String)classMapping.get(theClass);
@@ -179,9 +185,11 @@ public class CBindingGenerator extends CParsingTool implements FileActor
                     StringTokenizer tkzr = new StringTokenizer(text, "\n\r");
                     while (tkzr.hasMoreTokens()) 
                     {
-                        String line = tkzr.nextToken();
+                        String line = tkzr.nextToken().trim();
                         if (-1 == line.indexOf("@author")) 
                         {
+                            if (line.startsWith("*"))
+                                outputFile.write(" ");
                             outputFile.write(line);
                             outputFile.newLine();
                         }
