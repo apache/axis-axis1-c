@@ -135,7 +135,7 @@ public class ArrayParamWriter extends ParamWriter
     {
         try
         {
-            writer.write("extern void* Axis_Create_" + classname + "()\n");
+            writer.write("extern void* Axis_Create_" + classname + "(void)\n");
             writer.write("{\n");
             
             // Begin function body

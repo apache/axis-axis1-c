@@ -78,7 +78,7 @@ public class BeanParamWriter extends ParamCFileWriter
         writer.write("/**\n");
         writer.write(" * This static method gives the size of " + classname + " type of object\n");
         writer.write(" */\n");
-        writer.write("int Axis_GetSize_" + classname + "()\n{\n\treturn sizeof(" + classname + ");\n}\n");
+        writer.write("int Axis_GetSize_" + classname + "(void)\n{\n\treturn sizeof(" + classname + ");\n}\n");
     }
 
     /**
@@ -714,7 +714,7 @@ public class BeanParamWriter extends ParamCFileWriter
         writer.write(" * This static method to allocate a " + classname + " type of object\n");
         writer.write(" */\n");
         
-        writer.write("void* Axis_Create_" + classname + "()\n{\n");
+        writer.write("void* Axis_Create_" + classname + "(void)\n{\n");
         
         writer.write("\t" + classname + "* pTemp = (" + classname + " *)malloc(sizeof(" + classname + "));\n");
         writer.write("\tmemset(pTemp, 0, sizeof(" + classname + "));\n");
