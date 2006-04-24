@@ -366,7 +366,8 @@ public class MockServerThread extends ChildHandler implements Runnable
         }
         catch(IOException exception)
         {
-            exception.printStackTrace(System.err);
+            // swallow exceptions on close
+            //exception.printStackTrace(System.err);
         }
         try
         {
@@ -374,7 +375,8 @@ public class MockServerThread extends ChildHandler implements Runnable
         }
         catch(IOException exception)
         {
-            exception.printStackTrace(System.err);
+            // swallow exceptions on close
+            //exception.printStackTrace(System.err);
         }
         
         try
@@ -383,7 +385,8 @@ public class MockServerThread extends ChildHandler implements Runnable
         }
         catch(IOException exception)
         {
-            exception.printStackTrace(System.err);
+            // swallow exceptions on close
+           // exception.printStackTrace(System.err);
         }
         
         // just to make sure - clean up the response files

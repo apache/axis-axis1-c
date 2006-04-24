@@ -33,7 +33,16 @@ public abstract class ChildHandler
             for(int i=0; i<children.size(); i++)
             {
                 ChildHandler child = (ChildHandler)children.remove(i);
-                child.close();
+                try 
+                {
+                    child.close();
+                }
+                catch (Throwable exception)
+                {
+                    // Swallow exceptions on close....
+                    //System.out.println( "Exception in ChildHandler.close()...");            
+                    //exception.printStackTrace( );
+                }                
             }
             children=null;
             System.out.println( "Closed "+this);

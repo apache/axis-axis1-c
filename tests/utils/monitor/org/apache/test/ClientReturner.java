@@ -127,12 +127,12 @@ public class ClientReturner extends ChildHandler implements Runnable
             }
             catch(IOException exception)
             {
-                exception.printStackTrace();
+                // swallow exceptions on close                
+                // exception.printStackTrace();
             }
         }
         catch (IOException exception)
         {
-            exception.printStackTrace();
             if(TCPMonitor.state<TCPMonitor.CLOSING_STATE)
             {
                 System.err.println("ClientReturner#run(): IOException when reading in response from server ");
@@ -155,7 +155,8 @@ public class ClientReturner extends ChildHandler implements Runnable
         }
         catch(IOException exception)
         {
-            exception.printStackTrace(System.err);
+            // swallow exceptions on close
+            //exception.printStackTrace(System.err);
         }
         try
         {
@@ -163,7 +164,8 @@ public class ClientReturner extends ChildHandler implements Runnable
         }
         catch(IOException exception)
         {
-            exception.printStackTrace(System.err);
+            // swallow exceptions on close
+            //exception.printStackTrace(System.err);
         }
         
         try
@@ -172,7 +174,8 @@ public class ClientReturner extends ChildHandler implements Runnable
         }
         catch(IOException exception)
         {
-            exception.printStackTrace(System.err);
+            // swallow exceptions on close
+            //exception.printStackTrace(System.err);
         }
         super.close();
     }

@@ -160,7 +160,8 @@ public class TestClientListener extends ChildHandler implements Runnable
         }
         catch(IOException exception)
         {
-            exception.printStackTrace(System.err);
+            // swallow exceptions on close
+            // exception.printStackTrace(System.err);
         }
         super.close();
     }
