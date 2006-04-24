@@ -1,4 +1,4 @@
-// Copyright 2003-2004 The Apache Software Foundation.
+// Copyright 2003-2006 The Apache Software Foundation.
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,6 +18,25 @@
  *
  */
 #include "Calculator.hpp"
+
+class CalculatorException : public std::exception
+{
+public:
+	CalculatorException(const char *errorMessage)
+	{
+		m_ErrorMessage = errorMessage;
+	};
+
+	~CalculatorException() throw() {}
+
+	virtual const char *what() throw()
+	{
+		return m_ErrorMessage.c_str();
+	}
+
+private:
+	string m_ErrorMessage;
+};
 
 void Calculator::onFault(){}
 
@@ -46,8 +65,9 @@ int Calculator::div(int Value0, int Value1)
 	if (Value1 == 0)
 	{
 // This has been done to fit the existing JAVA implementations!
-		throw exception( "java.lang.ArithmeticException: / by zero");
+		throw CalculatorException( "java.lang.ArithmeticException: / by zero");
 	}
 
 	return Value0 / Value1;
 }
+
