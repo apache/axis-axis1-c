@@ -438,7 +438,10 @@ public class ParmHeaderFileWriter extends ParamWriter
             Iterator itr = typeSet.iterator();
             while (itr.hasNext())
             {
-                writer.write("#include \"" + itr.next().toString() + CUtils.C_HEADER_SUFFIX + "\"\n");
+                // Do not want to include the header file we are generating!
+                String includeFile = itr.next().toString();
+                if (!includeFile.equals(classname))
+                   writer.write("#include \"" + includeFile + CUtils.C_HEADER_SUFFIX + "\"\n");
             }
 
             writer.write("\n");
