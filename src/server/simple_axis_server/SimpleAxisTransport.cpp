@@ -119,7 +119,7 @@ AXIS_TRANSPORT_STATUS SimpleAxisTransport::flushOutput()
 		setTransportProperty( SOAP_MESSAGE_LENGTH, strtonum);
 
 		m_strHTTPHeaders = std::string( "HTTP/1.1 200 OK\r\n") +
-						   std::string( "Server: Apache Axis C++/1.6.a\r\n") +
+						   std::string( "Server: Apache Axis C++/1.6\r\n") +
 						   std::string( "Connection: close\r\n") +
 						   m_strHTTPHeaders +
 						   std::string( "Content-Type: text/xml\r\n\r\n");
