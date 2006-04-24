@@ -1,0 +1,16 @@
+<test>
+    <name>LargeReturningStringC</name>
+    <description>LargeReturningStringC</description>
+    <clientLang>c</clientLang>
+    <clientCode>LargeReturningStringClient.c</clientCode>
+    <wsdl>LargeReturningString.wsdl</wsdl>
+    <expected>
+        <output>
+            LargeReturningStringC.c.out
+        </output>
+		<serverResponse>
+			LargeReturningString_ServerResponse.expected
+	    </serverResponse>
+    </expected>
+	<endpoint>-e http://localhost:80/axis/LargeReturningString</endpoint>
+</test>
