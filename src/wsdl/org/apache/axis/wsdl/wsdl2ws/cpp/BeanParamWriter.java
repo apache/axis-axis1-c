@@ -509,7 +509,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 }
                 else
                 {
-                    writer.write("\t\tpSZ->serializeAsAttribute(\""
+                    writer.write("\tpSZ->serializeAsAttribute(\""
                             + soapTagName
                             + "\", 0, (void*)&(param->"
                             + attribs[i].getParamNameAsMember()

@@ -186,7 +186,7 @@ public class BeanParamWriter extends ParamCFileWriter
                 }
                 else
                 {
-                    writer.write("\t\taxiscSoapSerializerSerializeAsAttribute(pSZ,\""
+                    writer.write("\taxiscSoapSerializerSerializeAsAttribute(pSZ,\""
                             + soapTagName
                             + "\", 0, (void*)&(param->"
                             + attribs[i].getParamNameAsMember()

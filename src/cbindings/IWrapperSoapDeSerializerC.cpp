@@ -1784,4 +1784,25 @@ AXISCHANDLE axiscSoapDeSerializerGetAttachmentSoapAttachment(AXISCHANDLE wrapper
     return (AXISCHANDLE)NULL;
 }
 
+AXISC_STORAGE_CLASS_INFO
+const char * axiscSoapDeSerializerPeekNextElementName(AXISCHANDLE wrapperSoapDeSerializer)
+{
+    IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+
+    try
+    {
+        return dz->peekNextElementName();
+    }
+    catch ( AxisException& e  )
+    {
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (const char *)NULL;
+}
+
 }
