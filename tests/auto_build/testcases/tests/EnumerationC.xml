@@ -1,0 +1,16 @@
+<test>
+    <name>EnumerationC</name>
+    <description>EnumerationC</description>
+    <clientLang>c</clientLang>
+    <clientCode>EnumerationClient.c</clientCode>
+    <wsdl>Enumeration.wsdl</wsdl>
+    <expected>
+        <output>
+            EnumerationC.c.out
+        </output>
+		<serverResponse>
+			Enumeration_ServerResponse.expected
+		</serverResponse>
+    </expected>
+	<endpoint>-e http://localhost:80/axis/Enumeration</endpoint>
+</test>
