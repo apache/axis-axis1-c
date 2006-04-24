@@ -1,0 +1,14 @@
+<test>
+    <name>RecurseTypesC</name>
+    <description>RecurseTypesC</description>
+    <clientLang>c</clientLang>
+    <clientCode>RecurseTypesClient.c</clientCode>
+    <wsdl>RecurseTypes.wsdl</wsdl>
+    <expected>
+        <output>
+            RecurseTypes.cpp.out
+        </output>
+		<serverResponse>RecurseTypes_ServerResponse.expected</serverResponse>
+    </expected>
+	<endpoint>-e http://localhost:80/axis/RecurseTypes</endpoint>
+</test>
