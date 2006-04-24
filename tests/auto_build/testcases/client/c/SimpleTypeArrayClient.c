@@ -48,7 +48,7 @@ int main(int argc, char* argv[])
     array_input.m_Size  = 100;
     array_input.m_Type  = XSDC_INT;
 
-    input = Axis_Create_Type(0,0,0);
+    input = Axis_Create_Type();
     input->item = &array_input;
 
     ws = get_SimpleTypeArrayWS_stub(endpoint);

@@ -60,7 +60,7 @@ int main(int argc, char* argv[])
 
     ppBBDT = (BenchBasicDataType **)malloc(sizeof(BenchBasicDataType *) * 100);
 
-    input = Axis_Create_BenchDataType(0,0,0);
+    input = Axis_Create_BenchDataType();
     input->count = 100;
     
     ll = 10000;
@@ -75,7 +75,7 @@ int main(int argc, char* argv[])
 
     for( i = 0; i < input->count ; i++)
     {
-        BenchBasicDataType *type = Axis_Create_BenchBasicDataType(0,0,0);
+        BenchBasicDataType *type = Axis_Create_BenchBasicDataType();
 
         type->StringType = "StringType";
         type->IntegerType = 10 * (i + 1);
