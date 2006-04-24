@@ -60,9 +60,9 @@ int main(int argc, char* argv[])
        printf("FAILED\n");
     else 
     {
-      printf("att_enum_int %s\n", result->att_enum_int);
+      printf("att_enum_int %d\n", result->att_enum_int);
       printf("att_enum_string %s\n", result->att_enum_string);
-      printf("enum_int %s\n", *result->enum_int);
+      printf("enum_int %d\n", *result->enum_int);
       printf("enum_string %s\n", result->enum_string);
       printf("enum_kind %s\n", result->att_enum_kind);
       returnValue = 0; /* Success */
