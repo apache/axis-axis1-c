@@ -106,7 +106,6 @@ public class ParmHeaderFileWriter extends ParamWriter
         try
         {
             writer.write("#include <axis/AxisUserAPI.h>\n");
-            writer.write("#include <axis/AxisUserAPIArrays.h>\n");
             writer.write("\n");
 
             Vector restrictionData = type.getEnumerationdata();
@@ -416,7 +415,6 @@ public class ParmHeaderFileWriter extends ParamWriter
             writer.write("#include <axis/Axis.h>\n");
             writer.write("#include <axis/GDefine.h>\n");
             writer.write("#include <axis/AxisUserAPI.h>\n");
-            writer.write("#include <axis/AxisUserAPIArrays.h>\n");
             writer.write("#include <axis/SoapEnvVersions.h>\n");
             writer.write("#include <axis/WSDDDefines.h>\n");
             writer.write("#include <axis/TypeMapping.h>\n");

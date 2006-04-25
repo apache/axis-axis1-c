@@ -64,8 +64,7 @@ public class ArrayParamHeaderWriter extends ParamWriter
             }
                       
             writer.write("#include <axis/Axis.h>\n");
-            writer.write("#include <axis/AxisUserAPI.h>\n");
-            writer.write("#include <axis/AxisUserAPIArrays.h>\n\n");
+            writer.write("#include <axis/AxisUserAPI.h>\n\n");
             
             writeArrayClassDefinition();
             
