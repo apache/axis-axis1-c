@@ -13,50 +13,84 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <stdlib.h>
+#include <stdio.h>
+#include <time.h>
+
+#include "CommonClientTestCode.h"
 #include "SimpleTypeInnerUnboundedWS.h" 
+
+#define WSDL_DEFAULT_ENDPOINT "http://localhost:9080/SimpleTypeInnerUnbounded/services/sampleWS"
+
+#define NEWCOPY(ptr,str) {ptr=axiscAxisNew(XSDC_STRING, strlen(str)+1); strcpy(ptr,str);}
 
 int main(int argc, char* argv[])
 { 
-  int i;
-  void * pStub = get_SimpleTypeInnerUnboundedWS_stub ("http://localhost:9080/SimpleTypeInnerUnbounded/services/sampleWS");
+    AXISCHANDLE ws;
 
-  Type1 *input = Axis_Create_Type1(0,0,0);
-  Type1_ident idents[10];
-  
-  Type1* result;
+    char *endpoint = WSDL_DEFAULT_ENDPOINT;
+    int returnValue = 1; // Assume Failure
+    
+    Type1 *input;
+    Type1 * result;
+    int i;
 
-  input->enum_int = 1;
-  input->enum_string = strdup("one");
-  input->att_enum_kind = strdup("CHEQUE");
-  input->att_enum_string = strdup("one");
-  input->att_enum_int = 1;
+#define identSize  10
+    xsdc__string idents[identSize];
+    xsdc__string_Array ident;
+    
 
+    axiscAxisRegisterExceptionHandler(exceptionHandler);
 
-  input->ident.m_Array = idents;
-  input->ident.m_Size = 10;
-  for ( i = 0; i < 10; i++ ) {
-    idents[i] = strdup ("Hello world");
-  }
+    if (argc>2 && strcmp(argv[1], "-e") == 0) 
+        endpoint = argv[2];      
+        
+    ws = get_SimpleTypeInnerUnboundedWS_stub(endpoint);
 
+    input =  (Type1*)Axis_Create_Type1();
 
+    input->enum_int=axiscAxisNew(XSDC_INT, 0);   
+    *input->enum_int = ENUMTYPEINT_1;
+    NEWCOPY(input->enum_string, "one");
+    NEWCOPY(input->att_enum_kind, "CHEQUE");
+    NEWCOPY(input->att_enum_string, "one");
+    input->att_enum_int = ENUMTYPEINT_1;
 
-  result = getInput(pStub,input);
+    for (i = 0 ; i < identSize ; i++)
+    {
+        NEWCOPY(idents[i], "Hello world");
+    }
+    
+    ident.m_Array = idents;
+    ident.m_Size  = identSize;
+    
+    input->ident = &ident;
 
-  printf ("Result\n");
-  if ( result == NULL )
-   printf ("NULL\n");
-  else {
-   printf ("att_enum_int %d\n", result->att_enum_int);
-   printf ("att_enum_string %s\n", result->att_enum_string);
-   printf ("enum_int %d\n", result->enum_int);
-   printf ("enum_string %s\n", result->enum_string);
-   printf ("enum_kind %s\n", result->att_enum_kind);
-  }
+    result = getInput(ws, input);
+    
+    // clear up input array
+    for (i = 0 ; i < identSize ; i++)
+    {
+        axiscAxisDelete(idents[i], XSDC_STRING);
+    }    
 
-  //Axis_Delete_Type1(input,0,0);
-  //Axis_Delete_Type1(result,0,0);
+    printf("Result\n");
+    if (exceptionOccurred == C_TRUE ||
+        get_SimpleTypeInnerUnboundedWS_Status(ws) == AXISC_FAIL ||
+        result == NULL)
+       printf("FAILED\n");    
+    else 
+    {
+      printf("att_enum_int %d\n", result->att_enum_int);
+      printf("att_enum_string %s\n", result->att_enum_string);
+      printf("enum_int %d\n", *result->enum_int);
+      printf("enum_string %s\n", result->enum_string);
+      printf("enum_kind %s\n", result->att_enum_kind);
+      returnValue = 0; // Success
+    }
 
-  destroy_SimpleTypeInnerUnboundedWS_stub(pStub);
-  
-  return 0;
+    destroy_SimpleTypeInnerUnboundedWS_stub(ws);
+
+    printf("---------------------- TEST COMPLETE -----------------------------\n");
+    return returnValue;
 }
