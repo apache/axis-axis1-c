@@ -1,0 +1,13 @@
+<test>
+    <name>SimpleTypeInnerUnboundedInOutputC</name>
+    <description>SimpleTypeInnerUnboundedInOutputC</description>
+    <clientLang>c</clientLang>
+    <clientCode>SimpleTypeInnerUnboundedInOutputClient.c</clientCode>
+    <wsdl>SimpleTypeInnerUnboundedInOutput.wsdl</wsdl>
+    <expected>
+        <output>
+            SimpleTypeInnerUnboundedInOutput.cpp.out
+        </output>
+    </expected>
+	<endpoint>-e http://localhost:80/axis/SimpleTypeInnerUnboundedInOutput</endpoint>
+</test>

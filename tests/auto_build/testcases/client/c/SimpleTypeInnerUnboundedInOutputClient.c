@@ -13,32 +13,61 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <stdlib.h>
+#include <stdio.h>
+#include <time.h>
+
+#include "CommonClientTestCode.h"
 #include "SimpleTypeInnerUnboundedInOutputWS.h" 
+
+#define WSDL_DEFAULT_ENDPOINT "http://localhost:9080/SimpleTypeInnerUnboundedInOutput/services/sampleWS"
+
 
 int main(int argc, char* argv[])
 { 
-  int i;
-  int size;
-  void * pStub = get_SimpleTypeInnerUnboundedInOutputWS_stub ();
+    AXISCHANDLE ws;
+    
+    int returnValue = 1; // Assume failure
+    char *endpoint = WSDL_DEFAULT_ENDPOINT;
+    
+    Type1* result;
+    int i;
+    xsdc__int size = 10;
+    
+    axiscAxisRegisterExceptionHandler(exceptionHandler);
 
-  Type1* result;
+    if (argc>2 && strcmp(argv[1], "-e") == 0) 
+        endpoint = argv[2];      
+        
+    ws = get_SimpleTypeInnerUnboundedInOutputWS_stub(endpoint);
 
-  size = 10;
+    result = getInput(ws, &size);
 
-  result = getInput(pStub,size);
+    if (exceptionOccurred == C_TRUE ||
+        get_SimpleTypeInnerUnboundedInOutputWS_Status(ws) == AXISC_FAIL ||
+        result == NULL)
+       printf("FAILED\n");    
+    else 
+    {  
+        xsdc__string_Array * output = result->ident;
+        int size = output->m_Size;
+        const xsdc__string* array = output->m_Array;
+        if (array != NULL)
+        {
+            if (size > 0)
+                for ( i = 0 ; i < size ; i++)
+                    printf("Result [%d] : %s\n", i, array[i]);
+            else
+                printf("empty array\n");
+        }
+        else
+            printf("NULL array\n");
 
-  if ( result == NULL )
-   printf ("NULL\n");
-  else {
-    Type1_ident* pTemp = result->ident.m_Array;
-    for ( i = 0; i < result->ident.m_Size; i++ ) {
-      printf ("Result [%d] : %s\n",i,pTemp[i]);
+      returnValue = 0; // Success
     }
-  }
 
-  Axis_Delete_Type1(result,0,0);
-
-  destroy_SimpleTypeInnerUnboundedInOutputWS_stub(pStub);
+  destroy_SimpleTypeInnerUnboundedInOutputWS_stub(ws);
   
-  return 0;
+  printf("---------------------- TEST COMPLETE -----------------------------\n");
+  return returnValue;
 }
