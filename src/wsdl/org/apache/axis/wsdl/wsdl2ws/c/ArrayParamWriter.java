@@ -72,6 +72,12 @@ public class ArrayParamWriter extends ParamWriter
             // include header file for datatype
             writer.write("#include \"" + classname + ".h\"\n");
             
+            // include header file for the contained type
+            QName qname = WrapperUtils.getArrayType(type).getName();
+            if (!CUtils.isSimpleType(qname))
+                writer.write("#include \"" + attribs[0].getTypeName() + CUtils.C_HEADER_SUFFIX + "\"\n");
+            this.writer.write("\n");
+            
             writer.write("\n");
             writer.write("#include <axis/AxisWrapperAPI.h>\n");
             writer.write("#include <axis/IWrapperSoapSerializer.h>\n");

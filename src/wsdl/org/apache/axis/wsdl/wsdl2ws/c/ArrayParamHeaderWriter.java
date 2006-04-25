@@ -66,12 +66,6 @@ public class ArrayParamHeaderWriter extends ParamWriter
             writer.write("#include <axis/Axis.h>\n");
             writer.write("#include <axis/AxisUserAPI.h>\n");
             writer.write("#include <axis/AxisUserAPIArrays.h>\n\n");
-
-            //include header file for the contained type
-            QName qname = WrapperUtils.getArrayType(type).getName();
-            if (!CUtils.isSimpleType(qname))
-                writer.write("#include \"" + attribs[0].getTypeName() + CUtils.C_HEADER_SUFFIX + "\"\n");
-            this.writer.write("\n");
             
             writeArrayClassDefinition();
             
