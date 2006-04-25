@@ -19,11 +19,11 @@
 #include <axis/AxisException.hpp>
 
 #include "../AxisObjectContainer.hpp"
+#include "../AxisObjectConverter.hpp"
 
 #include <axis/Axis.h>
 #include <axis/GDefine.h>
 #include <axis/AxisUserAPI.h>
-#include <axis/AxisUserAPIArrays.h>
 #include <axis/SoapEnvVersions.h>
 #include <axis/TypeMapping.h>
 #include <axis/WSDDDefines.h>
@@ -1003,10 +1003,9 @@ xsdc__hexBinary * axiscCallGetElementAsHexBinary(AXISCHANDLE call,
     
     try
     {
-        //TODO: Unimplemented
-        xsdc__hexBinary * hb = new xsdc__hexBinary();
-        memset(hb,0,sizeof(hb));
-        return hb;
+        xsd__hexBinary * pObjCpp = dc->getElementAsHexBinary(pName, pNamespace);
+        
+        return AxisObjectConverter::cppHexBinaryToC(pObjCpp, NULL, true);
     }
     catch ( AxisException& e  )
     {
@@ -1034,10 +1033,9 @@ xsdc__base64Binary * axiscCallGetElementAsBase64Binary(AXISCHANDLE call,
     
     try
     {
-        //TODO: Unimplemented
-        xsdc__base64Binary * bb = new xsdc__base64Binary();
-        memset(bb,0,sizeof(bb));
-        return bb;
+        xsd__base64Binary * pObjCpp = c->getElementAsBase64Binary(pName, pNamespace);
+        
+        return AxisObjectConverter::cppBase64BinaryToC(pObjCpp, NULL, true);
     }
     catch ( AxisException& e  )
     {
@@ -1624,10 +1622,9 @@ xsdc__hexBinary * axiscCallGetAttributeAsHexBinary(AXISCHANDLE call,
     
     try
     {
-        //TODO: Unimplemented
-        xsdc__hexBinary * hb = new xsdc__hexBinary();
-        memset(hb,0,sizeof(hb));
-        return hb;
+        xsd__hexBinary * pObjCpp = c->getAttributeAsHexBinary(pName, pNamespace);
+        
+        return AxisObjectConverter::cppHexBinaryToC(pObjCpp, NULL, true);  
     }
     catch ( AxisException& e  )
     {
@@ -1655,10 +1652,9 @@ xsdc__base64Binary * axiscCallGetAttributeAsBase64Binary(AXISCHANDLE call,
     
     try
     {
-        //TODO: Unimplemented
-        xsdc__base64Binary *bb = new xsdc__base64Binary();
-        memset(bb,0,sizeof(bb));
-        return bb;
+        xsd__base64Binary * pObjCpp = c->getAttributeAsBase64Binary(pName, pNamespace);
+        
+        return AxisObjectConverter::cppBase64BinaryToC(pObjCpp, NULL, true);
     }
     catch ( AxisException& e  )
     {
@@ -1834,15 +1830,16 @@ Axisc_Array* axiscCallGetCmplxArray(AXISCHANDLE call,
     try
     {
     	Axis_Array ObjArray;
-    	Axis_Array *pObjArray = NULL;
+    	Axis_Array *pObjArray;
     	
     	if (pArray)
-    	{
     		ObjArray.set(pArray->m_Array, pArray->m_Size, (XSDTYPE)pArray->m_Type);
-    		pObjArray = &ObjArray;
-        }
         
-    	c->getCmplxArray(&ObjArray, pDZFunct, pCreFunct,pDelFunct,pSizeFunct, pName, pNamespace); 
+    	pObjArray = c->getCmplxArray(&ObjArray, 
+    	                             pDZFunct, pCreFunct,pDelFunct,pSizeFunct, 
+    	                             pName, pNamespace); 
+    	                             
+    	return AxisObjectConverter::cppArrayToC(pObjArray, pArray, false);
     }
     catch ( AxisException& e  )
     {
@@ -1871,9 +1868,9 @@ Axisc_Array* axiscCallGetBasicArray(AXISCHANDLE call,
     
     try
     {
-        //TODO: Unimplemented
-        Axisc_Array* aa = (Axisc_Array *)NULL;
-        return aa;
+    	Axis_Array *pObjArray = c->getBasicArray(nType, pName, pNamespace);
+    	
+    	return AxisObjectConverter::cppArrayToC(pObjArray, NULL, true);
     }
     catch ( AxisException& e  )
     {
@@ -2008,7 +2005,9 @@ AxiscAnyType * axiscCallGetAnyObject(AXISCHANDLE call)
     
     try
     {
-        return (AxiscAnyType*)(c->getAnyObject());
+        AnyType * pObjCpp = c->getAnyObject();
+        
+        return AxisObjectConverter::cppAnyTypeToC(pObjCpp, NULL, true);
     }
     catch ( AxisException& e  )
     {

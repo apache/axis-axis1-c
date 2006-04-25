@@ -24,7 +24,6 @@
 #include <axis/Axis.h>
 #include <axis/GDefine.h>
 #include <axis/AxisUserAPI.h>
-#include <axis/AxisUserAPIArrays.h>
 #include <axis/TypeMapping.h>
 
 

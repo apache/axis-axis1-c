@@ -22,7 +22,6 @@
 #include <axis/Axis.h>
 #include <axis/GDefine.h>
 #include <axis/AxisUserAPI.h>
-#include <axis/AxisUserAPIArrays.h>
 #include <axis/BasicNode.h>
 
 AXIS_CPP_NAMESPACE_USE

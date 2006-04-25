@@ -1,6 +1,6 @@
 /*
- *   Copyright 2003-2004 The Apache Software Foundation.
-// (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved
+ *   Copyright 2006-2006 The Apache Software Foundation.
+// (c) Copyright IBM Corp. 2006, 2006 All Rights Reserved
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
