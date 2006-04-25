@@ -17,6 +17,7 @@
  *
  */
 
+#include <axis/Axis.h>
 #include "AxisObjectConverter.hpp"
 
 AXIS_CPP_NAMESPACE_START
