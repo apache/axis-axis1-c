@@ -598,9 +598,13 @@ public class ParmHeaderFileWriter extends ParamWriter
             Iterator itr = typeSet.iterator();
             while (itr.hasNext())
             {
-                writer.write("#include \"" + itr.next().toString() + CUtils.CPP_HEADER_SUFFIX + "\"\n");
+                // Do not want to include the header file we are generating!
+                String includeFile = itr.next().toString();
+                if (!includeFile.equals(classname))                
+                    writer.write("#include \"" + includeFile + CUtils.CPP_HEADER_SUFFIX + "\"\n");
             }
 
+            writer.write("\n");
             //Local name and the URI for the type
             writer.write("/*Local name and the URI for the type*/\n");
             writer.write("static const char* Axis_URI_" + classname + " = \""
