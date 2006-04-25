@@ -31,13 +31,15 @@ int main(int argc, char* argv[])
 
     Type1 *input,*output;
     int i;
+    Type1_Array arrayIn;
+    Type1 ** array;
  
     axiscAxisRegisterExceptionHandler(exceptionHandler);
 
     if (argc>2 && strcmp(argv[1], "-e") == 0) 
         endpoint = argv[2];       
        
-    ws = get_RecurseTypesWS_stub();
+    ws = get_RecurseTypesWS_stub(endpoint);
                
     input = (Type1 *)Axis_Create_Type1();
     input->att_kind = axiscAxisNew(XSDC_STRING,strlen(Kind_CHEQUE) + 1);
@@ -45,8 +47,7 @@ int main(int argc, char* argv[])
     input->kind = axiscAxisNew(XSDC_STRING,strlen("Check In") + 1);
     strcpy(input->kind, "Check In");
 
-    Type1_Array arrayIn;
-    Type1 ** array = (Type1 **)malloc(sizeof(Type1 *) * 10);
+    array = (Type1 **)malloc(sizeof(Type1 *) * 10);
 
     for ( i = 0; i < 10; i++ )
     {
@@ -55,9 +56,9 @@ int main(int argc, char* argv[])
         strcpy(array[i]->kind, "Sample");
         array[i]->index = 0;
     }
-    arrayIn.followings->m_Array = array;
-    arrayIn.followings->m_Size = 10;
-    arrayIn.followings->m_Type = C_USER_TYPE;
+    arrayIn.m_Array = array;
+    arrayIn.m_Size = 10;
+    arrayIn.m_Type = C_USER_TYPE;
     
     output = getInput(ws, input);
 
@@ -77,14 +78,14 @@ int main(int argc, char* argv[])
       for ( i = 0; i < outputSize; i++ )
         printf("\tKind [%d] = %s\n", i, outArray[i]->kind);
         
-      Axis_Delete_Type1(array, 1, 10);
+      Axis_Delete_Type1((Type1 *)array, 1, 10);
 
       /* TODO need to free resources */
 
       returnValue = 0; // Success
     }
 
-  printf("---------------------- TEST COMPLETE -----------------------------"<< endl;
+  printf("---------------------- TEST COMPLETE -----------------------------\n");
   
   return returnValue;
 }
