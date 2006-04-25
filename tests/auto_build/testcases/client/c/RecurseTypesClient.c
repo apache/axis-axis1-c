@@ -86,6 +86,8 @@ int main(int argc, char* argv[])
       returnValue = 0; // Success
     }
 
+  destroy_RecurseTypesWS_stub(ws);
+  
   printf("---------------------- TEST COMPLETE -----------------------------\n");
   
   return returnValue;
