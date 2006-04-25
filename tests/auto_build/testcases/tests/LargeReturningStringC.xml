@@ -6,7 +6,7 @@
     <wsdl>LargeReturningString.wsdl</wsdl>
     <expected>
         <output>
-            LargeReturningStringC.c.out
+            LargeReturningString.cpp.out
         </output>
 		<serverResponse>
 			LargeReturningString_ServerResponse.expected

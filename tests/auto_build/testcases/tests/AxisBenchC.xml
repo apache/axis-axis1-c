@@ -6,7 +6,7 @@
     <wsdl>AxisBench.wsdl</wsdl>
     <expected>
         <output>
-            AxisBenchC.c.out
+            AxisBench.cpp.out
         </output>
 		<serverResponse>AxisBenchC_ServerResponse.expected</serverResponse>
     </expected>

@@ -6,7 +6,7 @@
     <wsdl>Enumeration.wsdl</wsdl>
     <expected>
         <output>
-            EnumerationC.c.out
+            Enumeration.cpp.out
         </output>
 		<serverResponse>
 			Enumeration_ServerResponse.expected

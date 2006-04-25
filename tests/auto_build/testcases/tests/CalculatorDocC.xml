@@ -6,7 +6,7 @@
     <wsdl>CalculatorDocC.wsdl</wsdl>
     <expected>
         <output>
-            CalculatorDocC.c.out
+            CalculatorDoc.cpp.out
         </output>
         <serverResponse>
 		CalculatorDocC_ServerResponse.expected
