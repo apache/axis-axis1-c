@@ -46,6 +46,7 @@ int main(int argc, char* argv[])
     strcpy(input->att_kind, Kind_CHEQUE);
     input->kind = axiscAxisNew(XSDC_STRING,strlen("Check In") + 1);
     strcpy(input->kind, "Check In");
+    input->followings = &arrayIn;
 
     array = (Type1 **)malloc(sizeof(Type1 *) * 10);
 
