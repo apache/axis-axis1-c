@@ -1003,7 +1003,7 @@ xsdc__hexBinary * axiscCallGetElementAsHexBinary(AXISCHANDLE call,
     
     try
     {
-        xsd__hexBinary * pObjCpp = dc->getElementAsHexBinary(pName, pNamespace);
+        xsd__hexBinary * pObjCpp = c->getElementAsHexBinary(pName, pNamespace);
         
         return AxisObjectConverter::cppHexBinaryToC(pObjCpp, NULL, true);
     }
@@ -1868,7 +1868,7 @@ Axisc_Array* axiscCallGetBasicArray(AXISCHANDLE call,
     
     try
     {
-    	Axis_Array *pObjArray = c->getBasicArray(nType, pName, pNamespace);
+    	Axis_Array *pObjArray = c->getBasicArray((XSDTYPE)nType, pName, pNamespace);
     	
     	return AxisObjectConverter::cppArrayToC(pObjArray, NULL, true);
     }
