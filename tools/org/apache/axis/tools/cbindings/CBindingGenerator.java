@@ -247,7 +247,8 @@ public class CBindingGenerator extends CParsingTool implements FileActor
             {
                 // We currently do not support handlers for C bindings
                 if (-1 == text.indexOf("BasicHandler") && 
-                    -1 == text.indexOf("IHandlerSoap"))
+                    -1 == text.indexOf("IHandlerSoap") &&
+                    -1 == text.indexOf("AxisUserAPIArrays")) // no equivalent
                 {
                     // Change .hpp files to .h files and dump out include
                     text = text.replaceAll(".hpp",".h");
