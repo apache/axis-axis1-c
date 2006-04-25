@@ -31,122 +31,97 @@ void setLogOptions( const char * output_filename);
 
 int main( int argc, char * argv[])
 {
-	LargeReturningString *	ws;
-	char *					endpoint = WSDL_DEFAULT_ENDPOINT;
-	bool					endpoint_set = false;
-	int						returnValue = 1; // Assume Failure
+    LargeReturningString * ws;
+    char * endpoint = WSDL_DEFAULT_ENDPOINT;
+    bool endpoint_set = false;
+    int returnValue = 1; // Assume Failure
 
-	endpoint_set = parse_args_for_endpoint( &argc, argv, &endpoint);
+    endpoint_set = parse_args_for_endpoint( &argc, argv, &endpoint);
 
-	bool	bSuccess = false;
-	int		iRetryIterationCount = 3;
+    bool bSuccess = false;
+    int iRetryIterationCount = 3;
 
-	do
-	{
-		try
-		{
-			if( endpoint_set)
-			{
-				ws = new LargeReturningString( endpoint, APTHTTP1_1);
-				free( endpoint);
-				endpoint_set = false;
-			}
-			else
-			{
-				ws = new LargeReturningString();
-			}
+    do
+    {
+        try
+        {
+            if( endpoint_set)
+            {
+                ws = new LargeReturningString( endpoint, APTHTTP1_1);
+                free( endpoint);
+                endpoint_set = false;
+            }
+            else
+                ws = new LargeReturningString();
 
-			int			input = 2 * 1024 * 1024;
-			xsd__string	result = "";
+            int    input = 2 * 1024 * 1024;
+            xsd__string    result = "";
 
-// Extend transport timeout to 60 seconds (default is 10).
-			ws->setTransportTimeout( 60);
+            // Extend transport timeout to 60 seconds (default is 10).
+            ws->setTransportTimeout(60);
 
-			result = ws->getLargeString(input);
+            result = ws->getLargeString(input);
 
-			cout << "Result" << endl;
+            cout << "Result" << endl;
 
-			if ( result == NULL)
-			{
-				cout << "NULL" << endl;
-			}
+            int resultLength = 0;
+            if ( result == NULL)
+                cout << "NULL" << endl;
+            else
+                resultLength = strlen(result);
+                
+            if ( resultLength == input)
+            {
+                cout << resultLength << endl;
+                returnValue = 0; // Success
+            }
+            else if (resultLength > 0)
+                cout << "Requested " << input << " bytes.  Received " << resultLength << " bytes." << endl;
 
-			if( strlen( result) == input)
-			{
-				cout << (int) strlen( result) << endl;
-			}
-			else
-			{
-				int	iError = 0;
+            bSuccess = true;
+        }
+        catch( AxisException &e)
+        {
+            bool bSilent = false;
 
-				for( int x = 0; x < input; x++)
-				{
-					if( result[x] != 'a' + (x + iError) % 26)
-					{
-						cout << "Error. result[" << x << "] should have been " << (char) ('a' + x % 26) << " but was " << result[x] << endl;
-
-					iError++;
-					}
-				}
-
-				cout << "There where " << iError << " errors." << endl;
-				cout << "Requested " << input << " bytes.  Received " << (int) strlen( result) << " bytes." << endl;
-		
-				returnValue = 0; // Success
-			}
-
-			bSuccess = true;
-		}
-		catch( AxisException &e)
-		{
-			bool bSilent = false;
-
-			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-			{
-				if( iRetryIterationCount > 1)
-				{
-					bSilent = true;
-				}
-			}
-			else
-			{
-				iRetryIterationCount = 0;
-			}
+            if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+            {
+                if( iRetryIterationCount > 1)
+                    bSilent = true;
+            }
+            else
+                iRetryIterationCount = 0;
 
             if( !bSilent)
-			{
-			    cout << e.what() << endl;
-			}
-		}
-		catch( ...)
-		{
-			cout << "Unknown Exception occured." << endl;
-		}
+                cout << e.what() << endl;
+        }
+        catch( ...)
+        {
+            cout << "Unknown Exception occured." << endl;
+        }
 
-		try
-		{
-			delete ws;
-		}
-		catch( exception& exception)
-		{
-			cout << "Exception on clean up of ws: " << exception.what() << endl;
-		}
-		catch( ...)
-		{
-			cout << "Unknown exception on clean up of ws: " << endl;
-		}
+        try
+        {
+            delete ws;
+        }
+        catch( exception& exception)
+        {
+            cout << "Exception on clean up of ws: " << exception.what() << endl;
+        }
+        catch( ...)
+        {
+            cout << "Unknown exception on clean up of ws: " << endl;
+        }
 
-		iRetryIterationCount--;
-	} while( iRetryIterationCount > 0 && !bSuccess);
+        iRetryIterationCount--;
+    } while( iRetryIterationCount > 0 && !bSuccess);
 
     if( endpoint_set)
-	{
-		free( endpoint);
-	}
+        free( endpoint);
 
-	cout << "---------------------- TEST COMPLETE -----------------------------" << endl;
+    cout << "---------------------- TEST COMPLETE -----------------------------" << endl;
   
-	return returnValue;
+    return returnValue;
 }
 
 /* Spin through args list and check for -e -p and -s options.
