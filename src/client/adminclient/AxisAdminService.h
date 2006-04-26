@@ -24,20 +24,19 @@
 #if !defined(__AXISADMINSERVICE_CLIENTSTUB_H__OF_AXIS_INCLUDED_)
 #define __AXISADMINSERVICE_CLIENTSTUB_H__OF_AXIS_INCLUDED_
 
-#include <axis/client/Call.hpp>
-#include <axis/AxisUserAPI.hpp>
-
+#include <axis/client/Stub.hpp>
+#include <axis/OtherFaultException.hpp>
+#include <axis/ISoapAttachment.hpp>
+#include <axis/ISoapFault.hpp>
 AXIS_CPP_NAMESPACE_START
 
-class AxisAdminService
+class AxisAdminService :public Stub
 {
     public:
-        AxisAdminService (const char *pchUri);
-        virtual ~ AxisAdminService ();
-        xsd__boolean updateWSDD (xsd__base64Binary Value0);
-
-	private:
-        Call * m_pCall;
+        AxisAdminService(const char* pchEndpointUri, AXIS_PROTOCOL_TYPE eProtocol=APTHTTP1_1);
+        AxisAdminService();
+        virtual ~AxisAdminService();
+        xsd__boolean updateWSDD(xsd__base64Binary Value0);
 };
 
 AXIS_CPP_NAMESPACE_END
