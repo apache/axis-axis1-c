@@ -88,8 +88,7 @@ public class ClientReturner extends ChildHandler implements Runnable
             while (continueToRun)
             {
                 bytesRead=serverResponseStream.read(readBuffer, 0, READ_BUFFER_SIZE);
-                //                System.out.println( "Clientreturner got some bytes from the
-                // server "+bytesRead);
+
                 if (bytesRead!=-1)
                 {
                     /*System.out.println("ClientReturner#run("+number
@@ -100,15 +99,18 @@ public class ClientReturner extends ChildHandler implements Runnable
                     {
                         streamToClient.write(readBuffer, 0, bytesRead);
                         streamToClient.flush( );
+
+                        TCPMonitor.getInstance( ).writeResponse(readBuffer,bytesRead);
+                        System.out.println("About to go around again");
                     }
                     catch (IOException exception)
                     {
                         System.err.println("IOException when writing server response back to client");
                         exception.printStackTrace(System.err);
+                        
+                        // the socket to client is broken, so stop.
+                        continueToRun=false;
                     }
-                    // System.out.println("ClientReturner#run(): flushed");
-                    TCPMonitor.getInstance( ).writeResponse(readBuffer,bytesRead);
-                    System.out.println("About to go around again");
                 }
                 else
                 {
