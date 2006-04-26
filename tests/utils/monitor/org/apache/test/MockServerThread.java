@@ -40,7 +40,7 @@ public class MockServerThread extends ChildHandler implements Runnable
     private static String   ENVELOPE_TAG    ="</SOAP-ENV:Envelope>";
     private static String   MIME_BOUNDARY   ="MIME_BOUNDARY";
 
-    private static int      CHARBUFFER_SIZE =20000;
+    private static int      CHARBUFFER_SIZE =32768; // 32K
 
     // Only store the socket so we can close it
     private Socket socket;

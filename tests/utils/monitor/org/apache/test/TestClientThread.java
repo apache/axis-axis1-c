@@ -40,7 +40,7 @@ public class TestClientThread extends ChildHandler implements Runnable
     // I didn't want to make this global but it has to be for the constructor
     // pattern to work :-(
     private int              bytesRead                     =0;
-    private static final int READ_BUFFER_SIZE              =10000;                     // 4096=4k
+    private static final int READ_BUFFER_SIZE              =32768; // 32k
     private char[]           readBuffer                    =new char[READ_BUFFER_SIZE];
 
     // the request from the client

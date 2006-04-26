@@ -43,7 +43,7 @@ public class ClientReturner extends ChildHandler implements Runnable
     // the writer back to the client
     protected BufferedWriter streamToClient       =null;
 
-    private static final int READ_BUFFER_SIZE     =4091; // 4k
+    private static final int READ_BUFFER_SIZE     =32768; // 32k
 
     protected ClientReturner(Socket clientSocket) throws IOException
     {
