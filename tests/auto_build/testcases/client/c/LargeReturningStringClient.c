@@ -21,27 +21,27 @@
 
 
 #include "CommonClientTestCode.h"
-#include "LargeReturningString.h" 
+#include "LargeReturningString.h"
 
 #define WSDL_DEFAULT_ENDPOINT "http://bora.hursley.ibm.com:9080/LargeReturningString/services/LargeReturningString"
 
 
 int main(int argc, char* argv[])
-{ 
+{
     AXISCHANDLE ws;
 
     char *                  endpoint = WSDL_DEFAULT_ENDPOINT;
     int                     returnValue = 1; /* Assume Failure */
-    
+
     int         input = 2 * 1024 * 1024;
     xsdc__string result = "";
- 
+
     axiscAxisRegisterExceptionHandler(exceptionHandler);
 
-    if (argc>2 && strcmp(argv[1], "-e") == 0) 
-        endpoint = argv[2];       
-        
-    ws = get_LargeReturningString_stub(endpoint);        
+    if (argc>2 && strcmp(argv[1], "-e") == 0)
+        endpoint = argv[2];
+
+    ws = get_LargeReturningString_stub(endpoint);
 
     // Extend transport timeout to 60 seconds (default is 10).
     axiscStubSetTransportTimeout(ws, 60);
@@ -52,7 +52,7 @@ int main(int argc, char* argv[])
     if (exceptionOccurred == C_TRUE ||
         get_LargeReturningString_Status(ws) == AXISC_FAIL ||
         result == NULL)
-       printf("FAILED\n");
+        printf("FAILED\n");
     else if( strlen( result) == input)
         printf("%d\n", strlen( result));
     else
@@ -73,11 +73,11 @@ int main(int argc, char* argv[])
 
         returnValue = 0; /* Success */
     }
-   
+
     axiscAxisDelete(result, XSDC_STRING);
     destroy_LargeReturningString_stub(ws);
 
     printf("---------------------- TEST COMPLETE -----------------------------\n");
-  
+
     return returnValue;
 }

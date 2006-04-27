@@ -16,12 +16,12 @@
 #include <stdio.h>
 
 #include "CommonClientTestCode.h"
-#include "SimpleTypeArrayWS.h" 
+#include "SimpleTypeArrayWS.h"
 
 #define WSDL_DEFAULT_ENDPOINT "http://localhost:9080/SimpleTypeArray/services/sampleWS"
 
 int main(int argc, char* argv[])
-{ 
+{
     AXISCHANDLE ws = NULL;
     char *endpoint = WSDL_DEFAULT_ENDPOINT;
     int returnValue = 1; /* Assume Failure */
@@ -35,15 +35,15 @@ int main(int argc, char* argv[])
 
     axiscAxisRegisterExceptionHandler(exceptionHandler);
 
-    if (argc>2 && strcmp(argv[1], "-e") == 0) 
-        endpoint = argv[2];   
+    if (argc>2 && strcmp(argv[1], "-e") == 0)
+        endpoint = argv[2];
 
     for ( i = 0; i < 100; i++ )
-    {     
-      elements[i] = i;
-      array[i]    = &elements[i];
+    {
+        elements[i] = i;
+        array[i]    = &elements[i];
     }
-    
+
     array_input.m_Array = array;
     array_input.m_Size  = 100;
     array_input.m_Type  = XSDC_INT;
@@ -53,26 +53,26 @@ int main(int argc, char* argv[])
 
     ws = get_SimpleTypeArrayWS_stub(endpoint);
     output = getInput(ws, input);
-    
+
     if (exceptionOccurred == C_TRUE ||
         get_SimpleTypeArrayWS_Status(ws) == AXISC_FAIL ||
         output == NULL || output->item == NULL)
-       printf("FAILED\n");
+        printf("FAILED\n");
     else
     {
-       returnValue = 0;
-       for ( i = 0; i < 100; i++ )
-         printf ("item [%d] = %d\n",i,*output->item->m_Array[i]);
+        returnValue = 0;
+        for ( i = 0; i < 100; i++ )
+            printf ("item [%d] = %d\n",i,*output->item->m_Array[i]);
     }
-    
+
     input->item = NULL;
-    
+
     Axis_Delete_Type(input,0,0);
     Axis_Delete_Type(output,0,0);
-    
+
     destroy_SimpleTypeArrayWS_stub(ws);
-   
-    printf("---------------------- TEST COMPLETE -----------------------------\n");   
-    return returnValue; 
+
+    printf("---------------------- TEST COMPLETE -----------------------------\n");
+    return returnValue;
 }
 

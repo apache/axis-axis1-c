@@ -18,27 +18,27 @@
 #include <time.h>
 
 #include "CommonClientTestCode.h"
-#include "SimpleTypeInnerUnboundedInOutputWS.h" 
+#include "SimpleTypeInnerUnboundedInOutputWS.h"
 
 #define WSDL_DEFAULT_ENDPOINT "http://localhost:9080/SimpleTypeInnerUnboundedInOutput/services/sampleWS"
 
 
 int main(int argc, char* argv[])
-{ 
+{
     AXISCHANDLE ws;
-    
+
     int returnValue = 1; // Assume failure
     char *endpoint = WSDL_DEFAULT_ENDPOINT;
-    
+
     Type1* result;
     int i;
     xsdc__int size = 10;
-    
+
     axiscAxisRegisterExceptionHandler(exceptionHandler);
 
-    if (argc>2 && strcmp(argv[1], "-e") == 0) 
-        endpoint = argv[2];      
-        
+    if (argc>2 && strcmp(argv[1], "-e") == 0)
+        endpoint = argv[2];
+
     ws = get_SimpleTypeInnerUnboundedInOutputWS_stub(endpoint);
 
     result = getInput(ws, &size);
@@ -46,9 +46,9 @@ int main(int argc, char* argv[])
     if (exceptionOccurred == C_TRUE ||
         get_SimpleTypeInnerUnboundedInOutputWS_Status(ws) == AXISC_FAIL ||
         result == NULL)
-       printf("FAILED\n");    
-    else 
-    {  
+        printf("FAILED\n");
+    else
+    {
         xsdc__string_Array * output = result->ident;
         int size = output->m_Size;
         const xsdc__string* array = output->m_Array;
@@ -63,11 +63,11 @@ int main(int argc, char* argv[])
         else
             printf("NULL array\n");
 
-      returnValue = 0; // Success
+        returnValue = 0; // Success
     }
 
-  destroy_SimpleTypeInnerUnboundedInOutputWS_stub(ws);
-  
-  printf("---------------------- TEST COMPLETE -----------------------------\n");
-  return returnValue;
+    destroy_SimpleTypeInnerUnboundedInOutputWS_stub(ws);
+
+    printf("---------------------- TEST COMPLETE -----------------------------\n");
+    return returnValue;
 }

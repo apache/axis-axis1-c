@@ -18,14 +18,14 @@
 #include <time.h>
 
 #include "CommonClientTestCode.h"
-#include "EnumerationWS.h" 
+#include "EnumerationWS.h"
 
 #define WSDL_DEFAULT_ENDPOINT "http://localhost:80/Enumeration/services/sampleWS"
 
 #define NEWCOPY(ptr,str) {ptr=axiscAxisNew(XSDC_STRING, strlen(str)+1); strcpy(ptr,str);}
 
 int main(int argc, char* argv[])
-{ 
+{
 
     AXISCHANDLE ws;
 
@@ -37,8 +37,8 @@ int main(int argc, char* argv[])
 
     axiscAxisRegisterExceptionHandler(exceptionHandler);
 
-    if (argc>2 && strcmp(argv[1], "-e") == 0) 
-        endpoint = argv[2];   
+    if (argc>2 && strcmp(argv[1], "-e") == 0)
+        endpoint = argv[2];
 
     ws = get_EnumerationWS_stub(endpoint);
 
@@ -57,23 +57,23 @@ int main(int argc, char* argv[])
     if (exceptionOccurred == C_TRUE ||
         get_EnumerationWS_Status(ws) == AXISC_FAIL ||
         result == NULL)
-       printf("FAILED\n");
-    else 
+        printf("FAILED\n");
+    else
     {
-      printf("att_enum_int %d\n", result->att_enum_int);
-      printf("att_enum_string %s\n", result->att_enum_string);
-      printf("enum_int %d\n", *result->enum_int);
-      printf("enum_string %s\n", result->enum_string);
-      printf("enum_kind %s\n", result->att_enum_kind);
-      returnValue = 0; /* Success */
+        printf("att_enum_int %d\n", result->att_enum_int);
+        printf("att_enum_string %s\n", result->att_enum_string);
+        printf("enum_int %d\n", *result->enum_int);
+        printf("enum_string %s\n", result->enum_string);
+        printf("enum_kind %s\n", result->att_enum_kind);
+        returnValue = 0; /* Success */
     }
-    
+
     Axis_Delete_Type1(input,0,0);
     Axis_Delete_Type1(result,0,0);
-    
-    destroy_EnumerationWS_stub(ws);
-    
-  printf( "---------------------- TEST COMPLETE -----------------------------\n");
 
-  return returnValue;    
+    destroy_EnumerationWS_stub(ws);
+
+    printf( "---------------------- TEST COMPLETE -----------------------------\n");
+
+    return returnValue;
 }

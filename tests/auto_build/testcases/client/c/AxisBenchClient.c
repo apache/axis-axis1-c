@@ -23,11 +23,11 @@
 #define WSDL_DEFAULT_ENDPOINT "http://localhost:9080/AxisBench/services/AxisBenchSoapImpl"
 
 int main(int argc, char* argv[])
-{ 
+{
     AXISCHANDLE ws = NULL;
-  
+
     BenchDataType *     input = NULL;
-  	BenchDataType *     output = NULL;
+    BenchDataType *     output = NULL;
     xsdc__unsignedByte* buffer = NULL;
 
     char *	endpoint = WSDL_DEFAULT_ENDPOINT;
@@ -42,19 +42,19 @@ int main(int argc, char* argv[])
     time_t tim;
     struct tm *  temp;
     struct tm lt;
-    
+
     char * letterA_String;
-    
+
     int request = 1;
-    
+
 
     axiscAxisRegisterExceptionHandler(exceptionHandler);
-  
-    if (argc>2 && strcmp(argv[1], "-e") == 0) 
-        endpoint = argv[2];   
+
+    if (argc>2 && strcmp(argv[1], "-e") == 0)
+        endpoint = argv[2];
 
     ws = get_AxisBench_stub (endpoint);
-    
+
     /* extend transport timeout value to 60 secs */
     axiscStubSetTransportTimeout(ws, 60);
 
@@ -62,16 +62,16 @@ int main(int argc, char* argv[])
 
     input = Axis_Create_BenchDataType();
     input->count = 100;
-    
+
     ll = 10000;
     tim = 1100246323;
     temp = gmtime( &tim);
-    
+
     memcpy( &lt, temp, sizeof( struct tm));
-    
+
     letterA_String = stringToAscii( "A");
     buffer = (xsdc__unsignedByte *) calloc( 1, input->count + 2);
-    strcpy( (char *) buffer, letterA_String);      
+    strcpy( (char *) buffer, letterA_String);
 
     for( i = 0; i < input->count ; i++)
     {
@@ -95,13 +95,13 @@ int main(int argc, char* argv[])
         type->Base64BinaryType.__ptr=buffer;
         type->HexBinary.__size=i;
         type->HexBinary.__ptr=buffer;
-    
+
         ppBBDT[i] = type;
 
-        if( ll == 0) 
-        	ll = 1; 
-        else 
-        	ll += 10000;
+        if( ll == 0)
+            ll = 1;
+        else
+            ll += 10000;
 
         strcat ( (char *) buffer, letterA_String);
     }
@@ -109,22 +109,22 @@ int main(int argc, char* argv[])
     arrayIn.m_Array = ppBBDT;
     arrayIn.m_Size  = input->count;
     arrayIn.m_Type  = C_USER_TYPE;
-    
+
     input->infos =  &arrayIn;
-    
+
     for(i = 0; i < request; i++)
     {
         if (output)
-        {      
+        {
             Axis_Delete_BenchDataType(output,0,0);
             output = NULL;
         }
 
         output = doBenchRequest(ws, input);
-        
-        if (exceptionOccurred == C_TRUE 
-              || output == NULL 
-              || get_AxisBench_Status(ws) == AXISC_FAIL )
+
+        if (exceptionOccurred == C_TRUE
+            || output == NULL
+            || get_AxisBench_Status(ws) == AXISC_FAIL )
             break;
     }
 
@@ -135,35 +135,35 @@ int main(int argc, char* argv[])
         ppBBDT[i]->QNameType  = NULL;
         ppBBDT[i]->Base64BinaryType.__ptr=NULL;
         ppBBDT[i]->HexBinary.__ptr=NULL;
-        
+
         Axis_Delete_BenchBasicDataType(ppBBDT[i],0,0);
     }
 
     if (ppBBDT)
-      free(ppBBDT);
+        free(ppBBDT);
     if (buffer)
-	  free( buffer);
+        free( buffer);
     input->infos = NULL;
 
-  	if (exceptionOccurred == C_TRUE 
-  			|| output == NULL 
-  			|| get_AxisBench_Status(ws) == AXISC_FAIL ) 
-    	printf ("Failed\n");
-  	else 
-  	{
-  		char	dateTime[50];
-  		BenchBasicDataType **	outArray = output->infos->m_Array;             
-  		
+    if (exceptionOccurred == C_TRUE
+        || output == NULL
+        || get_AxisBench_Status(ws) == AXISC_FAIL )
+        printf ("Failed\n");
+    else
+    {
+        char	dateTime[50];
+        BenchBasicDataType **	outArray = output->infos->m_Array;
+
         if( argc > 1)
             i = output->count - 1;
-  		  
+
         printf("Input Count : %d\n", input->count);
         printf("Count : %d\n", output->count);
-  		  
-     	for ( i = 0; i < output->count ; i++ ) 
-      	{
-      		if( outArray[i] != NULL)
-      		{
+
+        for ( i = 0; i < output->count ; i++ )
+        {
+            if( outArray[i] != NULL)
+            {
                 printf( " ----------------------------------------------\n" );
                 printf( " StringType %s\n", outArray[i]->StringType );
                 printf( " IntType %d\n", outArray[i]->IntType );
@@ -175,10 +175,10 @@ int main(int argc, char* argv[])
                 strftime(dateTime, 50, "%a %b %d %Y", &outArray[i]->DateType);
                 printf( " DateType %s\n", dateTime );
 
-// Following check for os/400 - the mock server will return ascii char which needs to be converted
+                // Following check for os/400 - the mock server will return ascii char which needs to be converted
 #ifdef __OS400__
                 if( outArray[i]->ByteType == 0x31)
-                	outArray[i]->ByteType = '1';
+                    outArray[i]->ByteType = '1';
 #endif
                 printf( " ByteType %c\n", outArray[i]->ByteType );
                 printf( " DecimalType %g\n", outArray[i]->DecimalType );
@@ -193,17 +193,17 @@ int main(int argc, char* argv[])
 
                 printf( " HexBinaryType %d\n", outArray[i]->HexBinary.__size );
                 if( outArray[i]->HexBinary.__size > 0)
-                    printf( " HexBinaryType %s\n", asciiToString( (char *) outArray[i]->HexBinary.__ptr) );	    
-      		}
-      		
-      		returnValue = 0;
-      	}
-  	}
-  
-  	Axis_Delete_BenchDataType (input,0,0);
-  	Axis_Delete_BenchDataType (output,0,0);
+                    printf( " HexBinaryType %s\n", asciiToString( (char *) outArray[i]->HexBinary.__ptr) );
+            }
+
+            returnValue = 0;
+        }
+    }
+
+    Axis_Delete_BenchDataType (input,0,0);
+    Axis_Delete_BenchDataType (output,0,0);
 
     printf( "---------------------- TEST COMPLETE -----------------------------\n" );
-    
-	return returnValue;
+
+    return returnValue;
 }

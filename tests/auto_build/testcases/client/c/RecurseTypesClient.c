@@ -18,12 +18,12 @@
 #include <time.h>
 
 #include "CommonClientTestCode.h"
-#include "RecurseTypesWS.h" 
+#include "RecurseTypesWS.h"
 
 #define WSDL_DEFAULT_ENDPOINT "http://localhost:9080/RecurseTypes/services/sampleWS"
 
 int main(int argc, char* argv[])
-{ 
+{
     AXISCHANDLE ws;
 
     char *endpoint = WSDL_DEFAULT_ENDPOINT;
@@ -33,14 +33,14 @@ int main(int argc, char* argv[])
     int i;
     Type1_Array arrayIn;
     Type1 ** array;
- 
+
     axiscAxisRegisterExceptionHandler(exceptionHandler);
 
-    if (argc>2 && strcmp(argv[1], "-e") == 0) 
-        endpoint = argv[2];       
-       
+    if (argc>2 && strcmp(argv[1], "-e") == 0)
+        endpoint = argv[2];
+
     ws = get_RecurseTypesWS_stub(endpoint);
-               
+
     input = (Type1 *)Axis_Create_Type1();
     input->att_kind = axiscAxisNew(XSDC_STRING,strlen(Kind_CHEQUE) + 1);
     strcpy(input->att_kind, Kind_CHEQUE);
@@ -60,35 +60,35 @@ int main(int argc, char* argv[])
     arrayIn.m_Array = array;
     arrayIn.m_Size = 10;
     arrayIn.m_Type = C_USER_TYPE;
-    
+
     output = getInput(ws, input);
 
     printf("Result\n");
     if (exceptionOccurred == C_TRUE ||
         get_RecurseTypesWS_Status(ws) == AXISC_FAIL ||
         output == NULL)
-       printf("FAILED\n");    
-    else 
+        printf("FAILED\n");
+    else
     {
-      int outputSize = output->followings->m_Size;
-      Type1 ** outArray = output->followings->m_Array;
-      
-      printf("\tAtt_kind = %s\n", output->att_kind);
-      printf("\tKind = %s\n", output->kind);
+        int outputSize = output->followings->m_Size;
+        Type1 ** outArray = output->followings->m_Array;
 
-      for ( i = 0; i < outputSize; i++ )
-        printf("\tKind [%d] = %s\n", i, outArray[i]->kind);
-        
-      Axis_Delete_Type1((Type1 *)array, 1, 10);
+        printf("\tAtt_kind = %s\n", output->att_kind);
+        printf("\tKind = %s\n", output->kind);
 
-      /* TODO need to free resources */
+        for ( i = 0; i < outputSize; i++ )
+            printf("\tKind [%d] = %s\n", i, outArray[i]->kind);
 
-      returnValue = 0; // Success
+        Axis_Delete_Type1((Type1 *)array, 1, 10);
+
+        /* TODO need to free resources */
+
+        returnValue = 0; // Success
     }
 
-  destroy_RecurseTypesWS_stub(ws);
-  
-  printf("---------------------- TEST COMPLETE -----------------------------\n");
-  
-  return returnValue;
+    destroy_RecurseTypesWS_stub(ws);
+
+    printf("---------------------- TEST COMPLETE -----------------------------\n");
+
+    return returnValue;
 }

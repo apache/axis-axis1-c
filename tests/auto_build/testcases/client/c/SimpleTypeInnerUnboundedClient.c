@@ -18,19 +18,19 @@
 #include <time.h>
 
 #include "CommonClientTestCode.h"
-#include "SimpleTypeInnerUnboundedWS.h" 
+#include "SimpleTypeInnerUnboundedWS.h"
 
 #define WSDL_DEFAULT_ENDPOINT "http://localhost:9080/SimpleTypeInnerUnbounded/services/sampleWS"
 
 #define NEWCOPY(ptr,str) {ptr=axiscAxisNew(XSDC_STRING, strlen(str)+1); strcpy(ptr,str);}
 
 int main(int argc, char* argv[])
-{ 
+{
     AXISCHANDLE ws;
 
     char *endpoint = WSDL_DEFAULT_ENDPOINT;
     int returnValue = 1; // Assume Failure
-    
+
     Type1 *input;
     Type1 * result;
     int i;
@@ -38,18 +38,18 @@ int main(int argc, char* argv[])
 #define identSize  10
     xsdc__string idents[identSize];
     xsdc__string_Array ident;
-    
+
 
     axiscAxisRegisterExceptionHandler(exceptionHandler);
 
-    if (argc>2 && strcmp(argv[1], "-e") == 0) 
-        endpoint = argv[2];      
-        
+    if (argc>2 && strcmp(argv[1], "-e") == 0)
+        endpoint = argv[2];
+
     ws = get_SimpleTypeInnerUnboundedWS_stub(endpoint);
 
     input =  (Type1*)Axis_Create_Type1();
 
-    input->enum_int=axiscAxisNew(XSDC_INT, 0);   
+    input->enum_int=axiscAxisNew(XSDC_INT, 0);
     *input->enum_int = ENUMTYPEINT_1;
     NEWCOPY(input->enum_string, "one");
     NEWCOPY(input->att_enum_kind, "CHEQUE");
@@ -60,33 +60,33 @@ int main(int argc, char* argv[])
     {
         NEWCOPY(idents[i], "Hello world");
     }
-    
+
     ident.m_Array = idents;
     ident.m_Size  = identSize;
-    
+
     input->ident = &ident;
 
     result = getInput(ws, input);
-    
+
     // clear up input array
     for (i = 0 ; i < identSize ; i++)
     {
         axiscAxisDelete(idents[i], XSDC_STRING);
-    }    
+    }
 
     printf("Result\n");
     if (exceptionOccurred == C_TRUE ||
         get_SimpleTypeInnerUnboundedWS_Status(ws) == AXISC_FAIL ||
         result == NULL)
-       printf("FAILED\n");    
-    else 
+        printf("FAILED\n");
+    else
     {
-      printf("att_enum_int %d\n", result->att_enum_int);
-      printf("att_enum_string %s\n", result->att_enum_string);
-      printf("enum_int %d\n", *result->enum_int);
-      printf("enum_string %s\n", result->enum_string);
-      printf("enum_kind %s\n", result->att_enum_kind);
-      returnValue = 0; // Success
+        printf("att_enum_int %d\n", result->att_enum_int);
+        printf("att_enum_string %s\n", result->att_enum_string);
+        printf("enum_int %d\n", *result->enum_int);
+        printf("enum_string %s\n", result->enum_string);
+        printf("enum_kind %s\n", result->att_enum_kind);
+        returnValue = 0; // Success
     }
 
     destroy_SimpleTypeInnerUnboundedWS_stub(ws);

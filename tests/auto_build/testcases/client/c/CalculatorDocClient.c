@@ -19,7 +19,7 @@
 
 #include <stdio.h>
 
-int main(int argc, char ** argv) 
+int main(int argc, char ** argv)
 {
     AXISCHANDLE stub;
     int ret = 0;
@@ -27,17 +27,17 @@ int main(int argc, char ** argv)
 
     axiscAxisRegisterExceptionHandler(exceptionHandler);
 
-    if (argc>1) 
+    if (argc>1)
         uri = argv[1];
 
     stub = get_Calculator_stub(uri);
     ret = add(stub,3,2);
     if (exceptionOccurred == C_TRUE ||
         get_Calculator_Status(stub) == AXISC_FAIL)
-       printf("FAILED\n");
+        printf("FAILED\n");
     else
-       printf("%i\n",ret);
-        
+        printf("%i\n",ret);
+
     destroy_Calculator_stub(stub);
 
     printf("---------------------- TEST COMPLETE -----------------------------\n");
