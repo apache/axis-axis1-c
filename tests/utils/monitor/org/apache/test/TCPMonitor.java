@@ -33,7 +33,7 @@ import java.net.SocketException;
 public class TCPMonitor extends ChildHandler
 {
 
-    private static TCPMonitor         singleton              =null;
+    protected static TCPMonitor         singleton              =null;
     private static BufferedWriter     requestFileWriter;
     private static BufferedWriter     responseFileWriter;
     private static boolean            responseFileWriterOpen =false;
@@ -56,7 +56,7 @@ public class TCPMonitor extends ChildHandler
      * @throws IOException if any issues occur listening for connections or
      *             supporting them.
      */
-    private TCPMonitor(int listenerPort, String serviceHost, int servicePort,
+    protected TCPMonitor(int listenerPort, String serviceHost, int servicePort,
             String requestFile, String responseFile) throws IOException
     {
         state = OPENING_STATE;
@@ -90,14 +90,13 @@ public class TCPMonitor extends ChildHandler
         /*
          * Create a thread which listens for incoming requests
          */
-        TestClientListener testClientListener=new TestClientListener(listenerPort, serviceHost,
+        TestClientListener testClientListener= new TestClientListener(listenerPort, serviceHost,
                 servicePort);
         addChild(testClientListener);
         Thread testClientListenerThread=new Thread(testClientListener);
         testClientListenerThread.start( );
         state = OPENED_STATE;
     }
-
 
     public static TCPMonitor getInstance( )
     {

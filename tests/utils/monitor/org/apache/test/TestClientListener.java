@@ -16,6 +16,7 @@
 package org.apache.test;
 
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.net.*;
 
 /**
@@ -110,11 +111,49 @@ public class TestClientListener extends ChildHandler implements Runnable
                 TestClientThread connectionToServer=null;
                 try
                 {
-                        connectionToServer=new TestClientThread(clientSocket,
-                                serviceHostNme, servicePort);
+                        connectionToServer=ServerConnectionFactory.getServerConnection(clientSocket, serviceHostNme, servicePort);
+                        
                         addChild(connectionToServer);
                         Thread connectionToServerThread = new Thread(connectionToServer);
                         connectionToServerThread.start( );
+                }
+                catch(IllegalAccessException illegalAccessException)
+                {
+                    // this is thrown when we cannot instantiate the connection to server class
+                    System.err.println( "Cannot connect to server");
+                    illegalAccessException.printStackTrace();
+                    stayAlive=false;
+                    
+                }
+                catch(InstantiationException instantiationException)
+                {
+                    // this is thrown when we cannot instantiate the connection to server class
+                    System.err.println( "InstatntiationException: Cannot connect to server");
+                    instantiationException.printStackTrace();
+                    stayAlive=false;
+                }
+                catch(NoSuchMethodException noSuchMethodException)
+                {
+                    // this is thrown when we cannot instantiate the connection to server class
+                    System.err.println( "NoSuchMethodException: Cannot connect to server");
+                    noSuchMethodException.printStackTrace();
+                    stayAlive=false;
+                }
+                catch(InvocationTargetException invocationTargetException)
+                {
+                    if(invocationTargetException.getCause() instanceof StopRequestException)
+                    {
+                        // All is well !
+                        System.out
+                        .println("TestClientListener got a Stop monitor message");
+                    }
+                    else
+                    {
+                        // 	this is bad when we cannot instantiate the connection to server class
+                        System.err.println( "InvocationTargetException: Cannot connect to server");
+                        invocationTargetException.printStackTrace();
+                    }
+                    stayAlive=false;
                 }
                 catch (StopRequestException stopRequestException)
                 {
@@ -125,7 +164,7 @@ public class TestClientListener extends ChildHandler implements Runnable
                 catch(ConnectionNotEstablishedException connectionNotEstablishedException)
                 {
                     // this is thrown when we cannot connect to the server
-                    System.err.println( "Cannot connect to server");
+                    System.err.println( "ConnectionNotEstablished: Cannot connect to server");
                     stayAlive=false;
                 }
                 catch (ConnectException connectException)
@@ -156,7 +195,10 @@ public class TestClientListener extends ChildHandler implements Runnable
     {
         try
         {
-            serverSocket.close();
+            if(serverSocket!=null)
+            {
+                serverSocket.close();
+            }
         }
         catch(IOException exception)
         {

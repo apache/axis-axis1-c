@@ -44,6 +44,12 @@ public class ClientReturner extends ChildHandler implements Runnable
     protected BufferedWriter streamToClient       =null;
 
     private static final int READ_BUFFER_SIZE     =32768; // 32k
+    /** 
+     * Null constructor used by anyone who overrides this class
+     *
+     */
+    protected ClientReturner()
+    {}
 
     protected ClientReturner(Socket clientSocket) throws IOException
     {

@@ -85,7 +85,16 @@ public class TestClientThread extends ChildHandler implements Runnable
 
         // OK, now we've done that we can create the new thread to stream
         // the result back to the client
-        ClientReturner clientReturner=new ClientReturner(clientSocket, serviceSocket, this);
+        ClientReturner clientReturner=null;
+        try
+        {
+            clientReturner=ClientReturnerFactory.getClientReturner(clientSocket, serviceSocket, this);
+        }
+        catch(Exception exception)
+        {
+            exception.printStackTrace(System.err);
+            throw new ConnectException("Cannot Create Client Returner");
+        }
         addChild(clientReturner);
         new Thread(clientReturner).start( );
     }
@@ -307,7 +316,7 @@ public class TestClientThread extends ChildHandler implements Runnable
         return serviceSocket;
     }
 
-    private void writeToServer(char[] request, int bytesToWrite)
+    protected void writeToServer(char[] request, int bytesToWrite)
             throws IOException
     {
         //System.out.println( "writeToServer: "+new String(request, 0,
