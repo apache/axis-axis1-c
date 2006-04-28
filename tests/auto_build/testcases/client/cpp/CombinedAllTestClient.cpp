@@ -26,99 +26,94 @@ main (int argc, char *argv[])
 
     int returnValue = 1;        // Assume Failure
 
-       if (argc > 1)
+    if (argc > 1)
     {
-                // Watch for special case help request
-                if (!strncmp (argv[1], "-", 1)) // Check for - only so that it works for
-                        //-?, -h or --help; -anything
-                {
-                        usage (argv[0], endpoint);
-                        return 2;
-                }
-                sprintf (endpoint, argv[1]);
+        // Watch for special case help request
+        if (!strncmp (argv[1], "-", 1)) // Check for - only so that it works for
+            //-?, -h or --help; -anything
+        {
+            usage (argv[0], endpoint);
+            return 2;
         }
+        sprintf (endpoint, argv[1]);
+    }
 
-        bool bSuccess = false;
+    bool bSuccess = false;
     int iRetryIterationCount = 3;
 
-        do
+    do
     {
-                try
-                {
-                        AllTestSoap ws (endpoint, APTHTTP1_1);
-                        AllComplexType* inParam = new AllComplexType();
+        try
+        {
+            AllTestSoap ws (endpoint, APTHTTP1_1);
+            AllComplexType* inParam = new AllComplexType();
 
-                        inParam->NonAllIntValue = 3;
-                        inParam->Value0 = new int;
-                        *(inParam->Value0) = 5;
-                        inParam->Value2 = "TINTIN";
-                        inParam->NonAllStringValue = "HELLO";
+            inParam->NonAllIntValue = 3;
+            inParam->Value0 = new int;
+            *(inParam->Value0) = 5;
+            inParam->Value2 = "TINTIN";
+            inParam->NonAllStringValue = "HELLO";
 
-                        printf("\nSending.................");
-                        printf("\nNonAllIntValue = %d",inParam->NonAllIntValue);
-                        printf("\nAllValue0 = %d",*(inParam->Value0));
-                        printf("\nAllValue2 = %s",inParam->Value2);
-                        printf("\nNonAllStringValue = %s",inParam->NonAllStringValue);
-                        
-                        ws.setTransportProperty("SOAPAction" , "CombinedAll#echoAll");
-                        AllComplexType* outParam = ws.echoAll(inParam);
+            printf("\nSending.................");
+            printf("\nNonAllIntValue = %d",inParam->NonAllIntValue);
+            printf("\nAllValue0 = %d",*(inParam->Value0));
+            printf("\nAllValue2 = %s",inParam->Value2);
+            printf("\nNonAllStringValue = %s",inParam->NonAllStringValue);
 
-                        if (outParam != NULL)
-                        {
-                                printf("\n\nReceived................");
-                                printf("\nNonAllIntValue = %d",outParam->NonAllIntValue);
-                                printf("\nAllValue0 = %d",*(outParam->Value0));
-                                printf("\nAllValue2 = %s",outParam->Value2);
-                                printf("\nNonAllStringValue = %s",outParam->NonAllStringValue);
-                                printf("\n\nSuccessfull\n");
-                        }
-                        else
-                                printf("\nFault\n");
+            ws.setTransportProperty("SOAPAction" , "CombinedAll#echoAll");
+            AllComplexType* outParam = ws.echoAll(inParam);
 
-                        bSuccess = true;
-                        delete inParam;
-                        delete outParam;
-                }
-                catch (AxisException & e)
-                {
-                        bool bSilent = false;
+            if (outParam != NULL)
+            {
+                printf("\n\nReceived................");
+                printf("\nNonAllIntValue = %d",outParam->NonAllIntValue);
+                printf("\nAllValue0 = %d",*(outParam->Value0));
+                printf("\nAllValue2 = %s",outParam->Value2);
+                printf("\nNonAllStringValue = %s",outParam->NonAllStringValue);
+                printf("\n\nSuccessfull\n");
+            }
+            else
+                printf("\nFault\n");
 
-                        if (e.getExceptionCode () ==
-                        CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-                        {
-                        if (iRetryIterationCount > 0)
-                        {
-                                bSilent = true;
-                        }
-                        }
-                        else
-                        {
-                        iRetryIterationCount = 0;
-                        }
+            bSuccess = true;
+            delete inParam;
+            delete outParam;
+        }
+        catch (AxisException & e)
+        {
+            bool bSilent = false;
 
-                        if (!bSilent)
-                        {
-                        printf ("%s\n", e.what ());
-                        }
-                }
-                catch (exception & e)
-                {
-                        printf ("%s\n", e.what ());
-                }       
-                catch (...)
-                {
-                        cout << "Unknown Exception occured." << endl;
-                }
+            if (e.getExceptionCode () ==
+                CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+            {
+                if (iRetryIterationCount > 0)
+                    bSilent = true;
+            }
+            else
+                iRetryIterationCount = 0;
 
-                iRetryIterationCount--;
+            if (!bSilent)
+                printf ("%s\n", e.what ());
+        }
+        catch (exception & e)
+        {
+            printf ("%s\n", e.what ());
+        }
+        catch (...)
+        {
+            cout << "Unknown Exception occured." << endl;
+        }
 
-        }while (iRetryIterationCount > 0 && !bSuccess);
+        iRetryIterationCount--;
+
+    }
+    while (iRetryIterationCount > 0 && !bSuccess);
 
     fflush(stdout); // Need to flush output from printf's before cout
     cout <<
-        "---------------------- TEST COMPLETE -----------------------------"
-        << endl;
-    
-        return returnValue;
+      "---------------------- TEST COMPLETE -----------------------------"
+      << endl;
+
+    return returnValue;
 
 }

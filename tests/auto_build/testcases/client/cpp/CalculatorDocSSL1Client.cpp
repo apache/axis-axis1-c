@@ -28,77 +28,71 @@ void sig_handler(int);
 
 int main(int argc, char* argv[])
 {
-        char endpoint[256];
-        const char* url="https://localhost:80/axis/Calculator";
-        int iResult;
-        const char* sslkeyhome = 0;
-        char keylocation[255];
+    char endpoint[256];
+    const char* url="https://localhost:80/axis/Calculator";
+    int iResult;
+    const char* sslkeyhome = 0;
+    char keylocation[255];
 
-        signal(SIGILL, sig_handler);
-        signal(SIGABRT, sig_handler);
-        signal(SIGSEGV, sig_handler);
-        //signal(SIGQUIT, sig_handler);
-        //signal(SIGBUS, sig_handler);
-        signal(SIGFPE, sig_handler);
+    signal(SIGILL, sig_handler);
+    signal(SIGABRT, sig_handler);
+    signal(SIGSEGV, sig_handler);
+    //signal(SIGQUIT, sig_handler);
+    //signal(SIGBUS, sig_handler);
+    signal(SIGFPE, sig_handler);
 
-        url = argv[1];
+    url = argv[1];
 
-                bool bSuccess = false;
-                int     iRetryIterationCount = 3;
+    bool bSuccess = false;
+    int     iRetryIterationCount = 3;
 
-                do
-                {
+    do
+    {
         try
         {
-                sprintf(endpoint, "%s", url);
-                Calculator ws(endpoint);
-                //ws.SetSecure("/home/axistest/ssl/myKeyRing.kdb", "axxxis4all", "AXIS", "NONE", "05", "NONE", false);
-                sslkeyhome=getenv("SSL_KEYS_HOME");
+            sprintf(endpoint, "%s", url);
+            Calculator ws(endpoint);
+            sslkeyhome=getenv("SSL_KEYS_HOME");
 
-                if (!sslkeyhome)
-                {       cout << "SSL_KEYS_HOME not set" << endl;
-                        return 1;
-                }
+            if (!sslkeyhome)
+            {
+                cout << "SSL_KEYS_HOME not set" << endl;
+                return 1;
+            }
 
-                sprintf(keylocation,"%s/%s",sslkeyhome,"myKeyRing.kdb");
-                ws.SetSecure(keylocation, "axxxxis4all", "AXIS", "NONE", "05", "NONE", false);
+            sprintf(keylocation,"%s/%s",sslkeyhome,"myKeyRing.kdb");
+            ws.SetSecure(keylocation, "axxxxis4all", "AXIS", "NONE", "05", "NONE", false);
 
-
-                iResult = ws.add(2,3);
-                cout << iResult <<endl;
-                                bSuccess = true;
+            iResult = ws.add(2,3);
+            cout << iResult <<endl;
+            bSuccess = true;
         }
         catch(AxisException& e)
         {
-                        bool bSilent = false;
+            bool bSilent = false;
 
-                        if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-                        {
-                                if( iRetryIterationCount > 0)
-                                {
-                                        bSilent = true;
-                                }
-                        }
-                        else
-                        {
-                                iRetryIterationCount = 0;
-                        }
+            if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+            {
+                if( iRetryIterationCount > 0)
+                    bSilent = true;
+            }
+            else
+                iRetryIterationCount = 0;
 
             if( !bSilent)
-                        {
-                                // Since OS400 error message is different, ensure that
-                                // correct error message is returned and then return 
-                                // what is expected to match verification file.
+            {
+                // Since OS400 error message is different, ensure that correct error message is returned and then return
+                // what is expected to match verification file.
 #ifdef __OS400__
                 char *errorText = (char *)e.what();
                 if (strstr(errorText, "GSKit Error 408") != NULL)
-                   cout << "Exception : " << " (GSKit Error 408 - GSK_ERROR_BAD_KEYFILE_PASSWORD)" << endl;
+                    cout << "Exception : " << " (GSKit Error 408 - GSK_ERROR_BAD_KEYFILE_PASSWORD)" << endl;
                 else
-                   cout << "Exception : " << e.what() << endl;
+                    cout << "Exception : " << e.what() << endl;
 #else
-                                cout << "Exception : " << e.what() << endl;
+                cout << "Exception : " << e.what() << endl;
 #endif
-                        }
+            }
         }
         catch(exception& e)
         {
@@ -108,15 +102,18 @@ int main(int argc, char* argv[])
         {
             cout << "Unknown exception has occured" << endl;
         }
-                iRetryIterationCount--;
-                } while( iRetryIterationCount > 0 && !bSuccess);
-        cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;
-        return 0;
+        
+        iRetryIterationCount--;
+    }
+    while( iRetryIterationCount > 0 && !bSuccess);
+    
+    cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;
+    return 0;
 }
 
 void sig_handler(int sig) {
-        signal(sig, sig_handler);
+    signal(sig, sig_handler);
     cout << "SIGNAL RECEIVED " << sig << endl;
-        exit(1);
+    exit(1);
 }
 

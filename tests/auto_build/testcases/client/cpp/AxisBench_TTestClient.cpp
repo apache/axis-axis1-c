@@ -14,9 +14,7 @@
 // limitations under the License.
 
 
-/* This program will create 10 Threads and each thread will invoke AxisBench Service 
-   @Author James
-*/
+/* This program will create 10 Threads and each thread will invoke AxisBench Service @Author James */
 
 #include "AxisBench.hpp"
 #include <axis/AxisException.hpp>
@@ -30,16 +28,16 @@
 #include "CommonClientTestCode.hpp"
 
 #ifdef WIN32
-        #include <windows.h>
-                #include "sys/timeb.h"
-        #define RETTYPE DWORD WINAPI
-        #define ARGTYPE LPVOID
+#include <windows.h>
+#include "sys/timeb.h"
+#define RETTYPE DWORD WINAPI
+#define ARGTYPE LPVOID
 #else
-        #include <pthread.h>
-        #include <unistd.h>
-        #include "sys/time.h"
-        #define RETTYPE void*
-        #define ARGTYPE void*
+#include <pthread.h>
+#include <unistd.h>
+#include "sys/time.h"
+#define RETTYPE void*
+#define ARGTYPE void*
 #endif
 
 
@@ -48,8 +46,8 @@
 #define NUM_THREADS 5
 
 
-/* In windows the entry point function return type is DWORD WINAPI
-   In linux it is void *                                          */
+/* In windows the entry point function return type is DWORD WINAPI In linux it is void *
+ */
 RETTYPE ThreadFunc(ARGTYPE Param)
 {
     /*Type casting the url to char * */
@@ -61,8 +59,8 @@ RETTYPE ThreadFunc(ARGTYPE Param)
     BenchDataType *output = NULL;
     xsd__unsignedByte* buffer = NULL;
     if (p!=NULL)
-       url=p;
-         
+        url=p;
+
     int iResult;
     bool bSuccess = false;
     int     iRetryIterationCount = 1;
@@ -74,37 +72,37 @@ RETTYPE ThreadFunc(ARGTYPE Param)
             sprintf(endpoint, "%s", url);
             ws = new AxisBench(endpoint, APTHTTP1_1);
             int request = 1;
-  
+
             input = new BenchDataType();
             input->count = 1;
-                          
+
             BenchBasicDataType_Array arrayIn;
-//              cout <<" About to create BenchBasicDataType"<<endl;
+            //              cout <<" About to create BenchBasicDataType"<<endl;
             BenchBasicDataType **   ppBBDT = new BenchBasicDataType *[input->count];
 
-            #ifdef WIN32
-                    __int64 ll = 10000;
-            #else
-                    long long ll = 10000;
-            #endif
+#ifdef WIN32
+            __int64 ll = 10000;
+#else
+            long long ll = 10000;
+#endif
 
             // input->infos.m_Array = ppBBDT;
 
             // input->infos.m_Size = input->count;
-          
+
             time_t tim;
             tim = 1100246323;
             struct tm *temp = gmtime(&tim);
             struct tm lt;
             memcpy(&lt, temp, sizeof(struct tm));
-            
-            char *letterA_String = stringToAscii("A");  
+
+            char *letterA_String = stringToAscii("A");
             buffer = (xsd__unsignedByte*)calloc (1, input->count + 2);
 
-            strcpy ( (char *)buffer, letterA_String);  
-                              
-//                cout <<" input->count = "<<input->count<<endl;
-            for ( int i = 0; i < input->count ; i++ ) 
+            strcpy ( (char *)buffer, letterA_String);
+
+            //                cout <<" input->count = "<<input->count<<endl;
+            for ( int i = 0; i < input->count ; i++ )
             {
                 BenchBasicDataType *type = new BenchBasicDataType();
                 type->StringType = "StringType";
@@ -123,54 +121,54 @@ RETTYPE ThreadFunc(ARGTYPE Param)
                 type->ShortType = (i+1);
                 type->Base64BinaryType.set(buffer, i);
                 type->HexBinary.set(buffer, i);
-        
+
                 ppBBDT[i] = type;
-        
+
                 if( ll == 0)
-                  ll = 1;
+                    ll = 1;
                 else
-                  ll += 10000;
-        
+                    ll += 10000;
+
                 strcat ( (char *)buffer, letterA_String);
             }
 
             arrayIn.set(ppBBDT,input->count);
-            input->setinfos(&arrayIn);    
-//                cout << "About to delete the output prior to calling the service"<<endl;
-            for ( int ii = 0; ii < request ; ii++ ) 
+            input->setinfos(&arrayIn);
+            //                cout << "About to delete the output prior to calling the service"<<endl;
+            for ( int ii = 0; ii < request ; ii++ )
             {
-                if (output) 
+                if (output)
                 {
                     int outputSize =0;
-                    BenchBasicDataType ** outArray =output->infos->get(outputSize); 
+                    BenchBasicDataType ** outArray =output->infos->get(outputSize);
                     for (int i = 0; i < outputSize; i++)
                         delete outArray[i];
                     delete output;
                     output = NULL;
                 }
-//                    cout << "About to do bench request"<<endl;
+                //                    cout << "About to do bench request"<<endl;
                 output = ws->doBenchRequest(input);
-//                    cout << "Done bench request"<<endl;
+                //                    cout << "Done bench request"<<endl;
             }
 
             free(buffer);
 
             if ( ws->getStatus() == AXIS_FAIL )
-                    cout << "Failed" << endl;
-            else 
+                cout << "Failed" << endl;
+            else
             {
                 bSuccess = true;
                 char dateTime[50];
                 int i = 0;
                 int outputSize = 0;
                 BenchBasicDataType ** outArray =output->infos->get(outputSize);
-                for ( ; i < output->count ; i++ ) 
+                for ( ; i < output->count ; i++ )
                 {
-                      if ( outArray[i] != (BenchBasicDataType *) 0xcdcdcdcd)
-                          cout << " StringType " << outArray[i]->StringType << endl;
+                    if ( outArray[i] != (BenchBasicDataType *) 0xcdcdcdcd)
+                        cout << " StringType " << outArray[i]->StringType << endl;
                 }
-                                 
-                                        // returnValue=0;
+
+                // returnValue=0;
             }
         }
         catch(AxisException& e)
@@ -179,14 +177,14 @@ RETTYPE ThreadFunc(ARGTYPE Param)
 
             if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
             {
-                    if( iRetryIterationCount > 0)
-                            bSilent = true;
+                if( iRetryIterationCount > 0)
+                    bSilent = true;
             }
             else
-                    iRetryIterationCount = 0;
+                iRetryIterationCount = 0;
 
             if( !bSilent)
-                    cout << "Exception : " << e.what() << endl;
+                cout << "Exception : " << e.what() << endl;
         }
         catch(exception& e)
         {
@@ -196,31 +194,31 @@ RETTYPE ThreadFunc(ARGTYPE Param)
         {
             cout << "Unknown exception has occured" << endl;
         }
-        
+
         try
         {
-              delete ws; 
-              delete input;
-              if (output)
+            delete ws;
+            delete input;
+            if (output)
                 delete output;
         }
         catch(exception& exception)
         {
-              cout << "Exception on clean up: " << exception.what()<<endl;
+            cout << "Exception on clean up: " << exception.what()<<endl;
         }
         catch(...)
         {
-              cout << "Unknown exception on clean up: " << endl;
+            cout << "Unknown exception on clean up: " << endl;
         }
-                
-        iRetryIterationCount--;               
-    } 
+
+        iRetryIterationCount--;
+    }
     while( iRetryIterationCount > 1 && !bSuccess);
-  
-    #ifndef WIN32
-            pthread_exit(0);
-    #endif
-    
+
+#ifndef WIN32
+    pthread_exit(0);
+#endif
+
     return 0;
 }
 
@@ -230,63 +228,59 @@ RETTYPE ThreadFunc(ARGTYPE Param)
 int main(int argc, char *argv[])
 {
     Axis::initialize(false);
-        try{
-                 int i;
-                 #ifdef WIN32
-                        /*Windows specific code comes here */
-                        HANDLE hThread[NUM_THREADS];
-                        for(i=0;i<NUM_THREADS;i++){
-                                        DWORD dwThreadId;
-                                        //LPVOID dwThrdParam = LPVOID(argv[1]);
-                                        hThread[i] = CreateThread(
-                                                                                        NULL,                        // no security attributes
-                                                                                        0,                           // use default stack size
-                                                                                        ThreadFunc,                  // thread function
-                                                                                        LPVOID(argv[1]),             // argument to thread function
-                                                                                        0,   
-                                                                                &dwThreadId);              // returns the thread identifier
+    try
+    {
+        int i;
+#ifdef WIN32
+        /*Windows specific code comes here */
+        HANDLE hThread[NUM_THREADS];
+        for(i=0;i<NUM_THREADS;i++){
+            DWORD dwThreadId;
+            //LPVOID dwThrdParam = LPVOID(argv[1]);
+            hThread[i] = CreateThread(
+                                      NULL,                        // no security attributes
+                                      0,                           // use default stack size
+                                      ThreadFunc,                  // thread function
+                                      LPVOID(argv[1]),             // argument to thread function
+                                      0,
+                                      &dwThreadId);              // returns the thread identifier
 
-                        if (hThread[i] == NULL)
-                        {
-                             cout<<"Thread creation Failed";
-                        }
-                        }
-                        /* Waiting for threads to terminate */
-                        WaitForMultipleObjects(NUM_THREADS,hThread,true, INFINITE);
-                        for(i=0;i<NUM_THREADS;i++)
-                                        CloseHandle( hThread[i] );
+            if (hThread[i] == NULL)
+                cout<<"Thread creation Failed";
+        }
+        /* Waiting for threads to terminate */
+        WaitForMultipleObjects(NUM_THREADS,hThread,true, INFINITE);
+        for(i=0;i<NUM_THREADS;i++)
+            CloseHandle( hThread[i] );
 
-                #else   
-                        pthread_t thread[NUM_THREADS];
-                        pthread_attr_t attr;
-                        int rc, t;
-            void *status;
-                //   Initialize and set thread detached attribute
-                        pthread_attr_init(&attr);
-                        pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
-                        for (t = 0; t < NUM_THREADS; t++)
-                        {
-                        /*Creating threads */
-                                rc = pthread_create(&thread[t], &attr, ThreadFunc,(void *)argv[1]);
-                                if (rc)
-                                {
-                                        cout<<"Thread Creation Failed";
-                                }
-                        }
-                //Free attribute and wait for the other threads
-                pthread_attr_destroy(&attr);
-                /* Wait for the threads to terminate  */
-                for(t=0;t<NUM_THREADS;t++){
-                        rc = pthread_join(thread[t], &status);
-                                if (rc)
-                                {
-                                        cout<<"ERROR from pthread_join()"<<endl;
-                                }
-                }
-        #endif
-  }catch(exception &e){
-           cout<< e.what();
-  }
-  cout<<endl <<"----------------------------------TEST COMPLETE--------------------------------"<<endl;
+#else
+        pthread_t thread[NUM_THREADS];
+        pthread_attr_t attr;
+        int rc, t;
+        void *status;
+        //   Initialize and set thread detached attribute
+        pthread_attr_init(&attr);
+        pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
+        for (t = 0; t < NUM_THREADS; t++)
+        {
+            /*Creating threads */
+            rc = pthread_create(&thread[t], &attr, ThreadFunc,(void *)argv[1]);
+            if (rc)
+                cout<<"Thread Creation Failed";
+        }
+        //Free attribute and wait for the other threads
+        pthread_attr_destroy(&attr);
+        /* Wait for the threads to terminate  */
+        for(t=0;t<NUM_THREADS;t++)
+        {
+            rc = pthread_join(thread[t], &status);
+            if (rc)
+                cout<<"ERROR from pthread_join()"<<endl;
+        }
+#endif
+    }catch(exception &e){
+        cout<< e.what();
+    }
+    cout<<endl <<"----------------------------------TEST COMPLETE--------------------------------"<<endl;
 }
 

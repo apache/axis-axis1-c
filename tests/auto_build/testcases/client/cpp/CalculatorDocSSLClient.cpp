@@ -29,36 +29,35 @@ void sig_handler(int);
 int main(int argc, char* argv[])
 {
     char endpoint[256];
-        const char* sslkeyhome = 0;
+    const char* sslkeyhome = 0;
     char keylocation[255];
- 
+
     const char* url="https://localhost:80/axis/Calculator";
 
-        signal(SIGILL, sig_handler);
-        signal(SIGABRT, sig_handler);
-        signal(SIGSEGV, sig_handler);
-        //signal(SIGQUIT, sig_handler);
-        //signal(SIGBUS, sig_handler);
-        signal(SIGFPE, sig_handler);
+    signal(SIGILL, sig_handler);
+    signal(SIGABRT, sig_handler);
+    signal(SIGSEGV, sig_handler);
+    //signal(SIGQUIT, sig_handler);
+    //signal(SIGBUS, sig_handler);
+    signal(SIGFPE, sig_handler);
     int iResult;
 
     url = argv[1];
 
-        bool bSuccess = false;
-        int     iRetryIterationCount = 3;
+    bool bSuccess = false;
+    int     iRetryIterationCount = 3;
 
-        do
-        {
+    do
+    {
         try
         {
             sprintf(endpoint, "%s", url);
             Calculator ws(endpoint);
-                //ws.SetSecure("/home/axistest/ssl/myKeyRing.kdb", "axis4all", "AXIS", "NONE", "05", "NONE", false);
             sslkeyhome=getenv("SSL_KEYS_HOME");
 
             if (!sslkeyhome)
             {
-                cout << "SSL_KEYS_HOME not set" << endl;        
+                cout << "SSL_KEYS_HOME not set" << endl;
                 return 1;
             }
 
@@ -67,28 +66,22 @@ int main(int argc, char* argv[])
 
             iResult = ws.add(2,3);
             cout << iResult << endl;
-                        bSuccess = true;
+            bSuccess = true;
         }
         catch(AxisException& e)
         {
-                        bool bSilent = false;
+            bool bSilent = false;
 
-                        if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-                        {
-                                if( iRetryIterationCount > 0)
-                                {
-                                        bSilent = true;
-                                }
-                        }
-                        else
-                        {
-                                iRetryIterationCount = 0;
-                        }
+            if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+            {
+                if( iRetryIterationCount > 0)
+                    bSilent = true;
+            }
+            else
+                iRetryIterationCount = 0;
 
             if( !bSilent)
-                        {
-                                cout << "Exception : " << e.what() << endl;
-                        }
+                cout << "Exception : " << e.what() << endl;
         }
         catch(exception& e)
         {
@@ -98,15 +91,17 @@ int main(int argc, char* argv[])
         {
             cout << "Unknown exception has occured" << endl;
         }
-                iRetryIterationCount--;
-                } while( iRetryIterationCount > 0 && !bSuccess);
-        cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;
-        return 0;
+        iRetryIterationCount--;
+    }
+    while( iRetryIterationCount > 0 && !bSuccess);
+    
+    cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;
+    return 0;
 }
 
 void sig_handler(int sig) {
-        signal(sig, sig_handler);
+    signal(sig, sig_handler);
     cout << "SIGNAL RECEIVED " << sig << endl;
-        exit(1);
+    exit(1);
 }
 
