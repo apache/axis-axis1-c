@@ -63,100 +63,135 @@ int main( int argc, char * argv[])
     try
 	{
 		InteropTestPortTypeB	ws( endpoint);
-	/*we do not support multi-dimensional arrays.*/
-	/*ws.echo2DStringArray*/
 
-	/*testing Nested Arrays*/
-	SOAPArrayStruct	sas;
+// testing Nested Arrays
+		SOAPArrayStruct	sas;
 
-	sas.varFloat = 12345.67890;
-	sas.varInt = 5000;
-	sas.varString = strdup( "varString content of SOAPArrayStruct");
-	sas.varArray.m_Array = new AxisChar*[ARRAYSIZE];
-	sas.varArray.m_Size = ARRAYSIZE;
+		sas.setvarFloat( (xsd__float) 12345.67890);
+		sas.setvarInt( 5000);
+		sas.setvarString( strdup( "varString content of SOAPArrayStruct"));
 
-	for( x=0; x < ARRAYSIZE; x++)
+		xsd__string *		pArray = new xsd__string [ARRAYSIZE];
+		xsd__string_Array 	sArray;
+
+		for( x = 0; x < ARRAYSIZE; x++)
+		{
+			pArray[x] = (xsd__string) strdup( "content of string array element");
+		}
+
+		sArray.set( pArray, ARRAYSIZE);
+
+		sas.setvarArray( &sArray);
+
+		cout << "invoking echoNestedArray..." << endl;
+
+		ws.setTransportProperty( "SOAPAction" , "groupB#echoNestedArray");
+
+		if( ws.echoNestedArray( &sas) != NULL)
+		{
+			cout << "successful" << endl;
+		}
+		else
+		{
+			cout << "failed" << endl;
+		}
+
+// testing Nested Structs
+		cout << endl << "invoking echoNestedStruct..." << endl;
+
+		ws.setTransportProperty( "SOAPAction", "groupB#echoNestedStruct");
+
+		SOAPStruct			sSOAPStruct;
+		SOAPStructStruct	sss;
+
+		sss.setvarFloat( (xsd__float) 12345.67890);
+		sss.setvarInt( 5000);
+		sss.setvarString( (xsd__string) strdup("varString content of SOAPStructStruct"));
+
+		sSOAPStruct.setvarFloat( (xsd__float) 67890.12345);
+		sSOAPStruct.setvarInt( (xsd__int) 54321);
+		sSOAPStruct.setvarString( (xsd__string) strdup("varString content of SOAPStruct"));
+
+		sss.setvarStruct( &sSOAPStruct);
+
+		if( ws.echoNestedStruct( &sss) != NULL)
+		{
+			cout << "successful" << endl;
+		}
+		else
+		{
+			cout << "failed" << endl;
+		}
+
+// testing echo Simple types as struct
+		cout << endl << "invoking echoSimpleTypesAsStruct..." << endl;
+
+		ws.setTransportProperty( "SOAPAction", "groupB#echoSimpleTypesAsStruct");
+
+		xsd__string	str = (xsd__string) strdup( "content of string passed");
+
+		SOAPStruct *	pRet = ws.echoSimpleTypesAsStruct( str,
+														   (xsd__int) 5000,
+														   (xsd__float) 2345.67890);
+
+		cout << "String = " << pRet->getvarString() << endl;
+		cout << "Integer = " << pRet->getvarInt() << endl;
+		cout << "Float = " << pRet->getvarFloat() << endl;
+
+		if( ws.echoSimpleTypesAsStruct( str,
+										(xsd__int) 5000,
+										(xsd__float) 2345.67890) != NULL)
+		{
+			cout << "successful" << endl;
+		}
+		else
+		{
+			cout << "failed" << endl;
+		}
+
+		delete str;
+		delete pRet;
+
+// testing echo Struct as simple types.
+		cout << endl << "invoking echoStructAsSimpleTypes..." << endl;
+
+		ws.setTransportProperty( "SOAPAction", "groupB#echoStructAsSimpleTypes");
+
+		SOAPStruct ss;
+
+		ss.setvarFloat( (xsd__float) 12345.67890);
+		ss.setvarInt( (xsd__int) 5000);
+		ss.setvarString( (xsd__string) strdup("content of string passed"));
+
+		xsd__int	iOutValue1 = 0;
+		xsd__float	fOutValue2 = 0;
+
+		ws.echoStructAsSimpleTypes( &ss, &iOutValue1, &fOutValue2);
+
+		cout << "Integer = " << iOutValue1 << endl;
+		cout << "Float = " << fOutValue2 << endl;
+
+		if( iOutValue1 == (xsd__int) 5000 && fOutValue2 > (xsd__float) 12345.67)
+		{
+			cout << "successful" << endl;
+		}
+		else
+		{
+			cout << "failed" << endl;
+		}
+	}
+	catch( AxisException& e)
 	{
-		sas.varArray.m_Array[x] = strdup( "content of string array element");
+		cout << "Exception : " << e.what() << endl;
+	}
+	catch( exception& e)
+	{
+		cout << "Unknown exception has occurred" << e.what() << endl;
+	}
+	catch( ...)
+	{
+		cout << "Unknown exception has occurred" << endl;
 	}
 
-	cout << "invoking echoNestedArray..." << endl;
-
-	ws.setTransportProperty( "SOAPAction" , "groupB#echoNestedArray");
-
-	if( ws.echoNestedArray( &sas) != NULL)
-	{
-		cout << "successful" << endl;
-	}
-	else
-	{
-		cout << "failed" << endl;
-	}
-
-	/*testing Nested Structs*/
-	SOAPStructStruct sss;
-	sss.varFloat = 12345.67890;
-	sss.varInt = 5000;
-	sss.varString = strdup("varString content of SOAPStructStruct");
-	sss.varStruct = new SOAPStruct();
-	float ff = 67890.12345;
-	int ii = 54321;
-	sss.varStruct->varFloat = ff;
-	sss.varStruct->varInt = ii;
-	sss.varStruct->varString = strdup("varString content of SOAPStruct");
-	printf("\n\ninvoking echoNestedStruct...\n");
-	ws.setTransportProperty("SOAPAction" , "groupB#echoNestedStruct");
-	if (ws.echoNestedStruct(&sss) != NULL)
-		printf("successful\n");
-	else
-		printf("failed\n");
-
-	/*testing echo Simple types as struct*/
-	char* str = strdup("content of string passed");
-	printf("\n\ninvoking echoSimpleTypesAsStruct...\n\n");
-	ws.setTransportProperty("SOAPAction" , "groupB#echoSimpleTypesAsStruct");
-	SOAPStruct* pRet = ws.echoSimpleTypesAsStruct(str,5000,2345.67890);
-	cout << "String = " << pRet->varString << endl;
-	cout << "Integer = " << pRet->varInt<< endl;
-	cout << "Float = " << pRet->varFloat << endl;
-
-	if (ws.echoSimpleTypesAsStruct(str,5000,2345.67890) != NULL)
-		printf("successful\n");
-	else
-		printf("failed\n");
-	delete str;
-	delete pRet;
-	/*testing echo Struct as simple types.*/
-	SOAPStruct ss;
-	ss.varFloat = 12345.67890;
-	ss.varInt = 5000;
-	ss.varString = strdup("content of string passed");
-	int OutValue1 =0;
-	float OutValue2 = 0;
-	printf("\n\ninvoking echoStructAsSimpleTypes...\n");
-	ws.setTransportProperty("SOAPAction" , "groupB#echoStructAsSimpleTypes");
-	
-	ws.echoStructAsSimpleTypes(&ss,&OutValue1,&OutValue2);
-	cout << "Integer = " << OutValue1 << endl;
-	cout << "Float = " << OutValue2 << endl;
-
-	if (OutValue1 == 5000 && OutValue2 > 12345.67)
-		printf("successful\n");
-	else
-		printf("failed\n");	
-	/*getchar();*/
-        }
-        catch(AxisException& e)
-        {
-            printf("Exception : %s\n", e.what());
-        }
-        catch(exception& e)
-        {
-            printf("Unknown exception has occured\n");
-        }
-        catch(...)
-        {
-            printf("Unknown exception has occured\n");
-        }
 	return 0;
 }
