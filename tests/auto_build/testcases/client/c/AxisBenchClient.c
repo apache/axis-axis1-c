@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
     BenchDataType *     output = NULL;
     xsdc__unsignedByte* buffer = NULL;
 
-    char *	endpoint = WSDL_DEFAULT_ENDPOINT;
+    char *      endpoint = WSDL_DEFAULT_ENDPOINT;
     int    returnValue = 1; /* Assume Failure */
 
     int i;
@@ -151,8 +151,8 @@ int main(int argc, char* argv[])
         printf ("Failed\n");
     else
     {
-        char	dateTime[50];
-        BenchBasicDataType **	outArray = output->infos->m_Array;
+        char    dateTime[50];
+        BenchBasicDataType **   outArray = output->infos->m_Array;
 
         if( argc > 1)
             i = output->count - 1;
