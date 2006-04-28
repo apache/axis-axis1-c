@@ -40,11 +40,11 @@ int main(int argc, char* argv[])
 
     endpoint_set = parse_args_for_endpoint(&argc, argv, &endpoint);
 
-		bool bSuccess = false;
-		int	iRetryIterationCount = 3;
+                bool bSuccess = false;
+                int     iRetryIterationCount = 3;
 
-		do
-		{
+                do
+                {
     try {
         if(endpoint_set) {
             ws = new ManyTypeRefRoot(endpoint, APTHTTP1_1);
@@ -69,14 +69,14 @@ int main(int argc, char* argv[])
 
         result = ws->getInput(&input);
         cout << "Success " << endl;
-		int outputSize=0;
+                int outputSize=0;
         Type1 **arrayResult = result->get(outputSize);
         for ( i = 0; i < 10; i++) {
             cout << " Result " << *arrayResult[i]->index << " : " << arrayResult[i]->kind << endl;
         }
         returnValue = 0; // Success
 
-		 // Clear up input array        
+                 // Clear up input array        
         for (int deleteIndex = 0 ; deleteIndex < 10 ; deleteIndex++ )
         {
             delete types[deleteIndex];
@@ -84,35 +84,35 @@ int main(int argc, char* argv[])
         delete [] types;
 
 
-		bSuccess = true;
+                bSuccess = true;
 
     } catch(AxisException &e) {
-			bool bSilent = false;
+                        bool bSilent = false;
 
-			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-			{
-				if( iRetryIterationCount > 0)
-				{
-					bSilent = true;
-				}
-			}
-			else
-			{
-				iRetryIterationCount = 0;
-			}
+                        if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+                        {
+                                if( iRetryIterationCount > 0)
+                                {
+                                        bSilent = true;
+                                }
+                        }
+                        else
+                        {
+                                iRetryIterationCount = 0;
+                        }
 
             if( !bSilent)
-			{
+                        {
         cout << e.what() << endl;
-			}
+                        }
     } catch(...) {
         cout << "Unknown Exception occured." << endl;
     }
-		iRetryIterationCount--;
-		} while( iRetryIterationCount > 0 && !bSuccess);
+                iRetryIterationCount--;
+                } while( iRetryIterationCount > 0 && !bSuccess);
         if(endpoint_set)
             free(endpoint);
-  	cout << "---------------------- TEST COMPLETE -----------------------------"<< endl;
+        cout << "---------------------- TEST COMPLETE -----------------------------"<< endl;
     return returnValue;
 }
 

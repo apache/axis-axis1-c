@@ -18,72 +18,72 @@
 
 int main( int argc, char * argv[])
 {
-	bool	bSuccess = false;
-	int		iRetryIterationCount = 3;
+        bool    bSuccess = false;
+        int             iRetryIterationCount = 3;
 
-	do
-	{
-		try
-		{
-			const char *			pszURL = "http://localhost:9090/AxisBench/services/AxisBenchSoapImpl";
+        do
+        {
+                try
+                {
+                        const char *                    pszURL = "http://localhost:9090/AxisBench/services/AxisBenchSoapImpl";
 
-			pszURL = argv[1];
+                        pszURL = argv[1];
 
-			TestServicePortType *	pWS = new TestServicePortType( pszURL, APTHTTP1_1);
-			SampleBean				sSB;
-			sSB.setBoolean(false_);
-			sSB.setByte(0);
-			sSB.setCalendar(NULL);
-			sSB.setDouble(0.000000000);
-			sSB.setFloat(0.00000);
-			sSB.setInt(0);
-			sSB.setLong(0);
-			sSB.setShort(0);
-			sSB.setString(NULL);
-			sSB.setTime(NULL);
+                        TestServicePortType *   pWS = new TestServicePortType( pszURL, APTHTTP1_1);
+                        SampleBean                              sSB;
+                        sSB.setBoolean(false_);
+                        sSB.setByte(0);
+                        sSB.setCalendar(NULL);
+                        sSB.setDouble(0.000000000);
+                        sSB.setFloat(0.00000);
+                        sSB.setInt(0);
+                        sSB.setLong(0);
+                        sSB.setShort(0);
+                        sSB.setString(NULL);
+                        sSB.setTime(NULL);
 
-			pWS->aBeanPortType( &sSB);
+                        pWS->aBeanPortType( &sSB);
 
-			delete pWS;
+                        delete pWS;
 
-			cout << "Test completed without fault" << endl;
+                        cout << "Test completed without fault" << endl;
 
-			bSuccess = true;
-		}
-		catch( AxisException& e)
-		{
-			bool bSilent = false;
+                        bSuccess = true;
+                }
+                catch( AxisException& e)
+                {
+                        bool bSilent = false;
 
-			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-			{
-				if( iRetryIterationCount > 0)
-				{
-					bSilent = true;
-				}
-			}
-			else
-			{
-				iRetryIterationCount = 0;
-			}
+                        if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+                        {
+                                if( iRetryIterationCount > 0)
+                                {
+                                        bSilent = true;
+                                }
+                        }
+                        else
+                        {
+                                iRetryIterationCount = 0;
+                        }
 
-			if( !bSilent)
-			{
-				cout << "Exception : " << e.what() << endl;
-			}
-		}
-		catch( exception& e)
-		{
-			cout << "Unknown exception has occured : " << e.what() << endl;
-		}
-		catch(...)
-		{
-			cout << "Unknown exception has occured" << endl;
-		}
+                        if( !bSilent)
+                        {
+                                cout << "Exception : " << e.what() << endl;
+                        }
+                }
+                catch( exception& e)
+                {
+                        cout << "Unknown exception has occured : " << e.what() << endl;
+                }
+                catch(...)
+                {
+                        cout << "Unknown exception has occured" << endl;
+                }
 
-		iRetryIterationCount--;
-	} while( iRetryIterationCount > 0 && !bSuccess);
+                iRetryIterationCount--;
+        } while( iRetryIterationCount > 0 && !bSuccess);
 
-	cout << "---------------------- TEST COMPLETE -----------------------------" << endl;
+        cout << "---------------------- TEST COMPLETE -----------------------------" << endl;
 
-	return 0;
+        return 0;
 }

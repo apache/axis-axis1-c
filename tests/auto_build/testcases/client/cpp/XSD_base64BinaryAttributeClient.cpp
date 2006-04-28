@@ -23,18 +23,18 @@
 
 int main(int argc, char* argv[])
 {
-	char endpoint[256];
-	const char* url="http://localhost:80/axis/XSD_base64Binary";
+        char endpoint[256];
+        const char* url="http://localhost:80/axis/XSD_base64Binary";
 
-	if(argc>1)
-		url = argv[1];
+        if(argc>1)
+                url = argv[1];
 
-		// bool bSuccess = false;
+                // bool bSuccess = false;
 
-	try
-	{
-		sprintf(endpoint, "%s", url);
-		XSD_base64Binary* ws = new XSD_base64Binary(endpoint);
+        try
+        {
+                sprintf(endpoint, "%s", url);
+                XSD_base64Binary* ws = new XSD_base64Binary(endpoint);
 
         xsd__base64Binary input;
 
@@ -42,36 +42,36 @@ int main(int argc, char* argv[])
 
         int.set(testUB, 41);
         
-		// Test required attribute
-		RequiredAttributeElement requiredAttributeInput;
-		requiredAttributeInput.setrequiredAttribute(input);
-		RequiredAttributeElement* requiredAttributeResult = ws->asRequiredAttribute(&requiredAttributeInput);
-		cout << "required attribute" << endl;
+                // Test required attribute
+                RequiredAttributeElement requiredAttributeInput;
+                requiredAttributeInput.setrequiredAttribute(input);
+                RequiredAttributeElement* requiredAttributeResult = ws->asRequiredAttribute(&requiredAttributeInput);
+                cout << "required attribute" << endl;
         int size = 0;
         const xsd__unsignedByte * base64BinaryData = requiredAttributeResult->getrequiredAttribute().get(size);
         cout << " size=" << size << endl;
         cout << " data=" << asciiToStringOfLength((char *)base64BinaryData, size) << endl;
-		delete requiredAttributeResult;
+                delete requiredAttributeResult;
 
-		// Test now complete
+                // Test now complete
 
-		delete ws;
-	}
-	catch(AxisException& e)
-	{
-		cout << "Exception : " << e.what() << endl;
-	}
-	catch(exception& e)
-	{
-	    cout << "Unknown exception has occured: " << e.what() << endl;
-	}
-	catch(...)
-	{
-	    cout << "Unknown exception has occured" << endl;
-	}
+                delete ws;
+        }
+        catch(AxisException& e)
+        {
+                cout << "Exception : " << e.what() << endl;
+        }
+        catch(exception& e)
+        {
+            cout << "Unknown exception has occured: " << e.what() << endl;
+        }
+        catch(...)
+        {
+            cout << "Unknown exception has occured" << endl;
+        }
 
-	cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;
-	
-	return 0;
+        cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;
+        
+        return 0;
 }
 

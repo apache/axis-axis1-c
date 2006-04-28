@@ -54,58 +54,58 @@ RETTYPE ThreadFunc(ARGTYPE Param)
         if(p!=NULL)
              url=p;
           SimpleTypeArrayWS *ws;
-		bool bSuccess = false;
-		int	iRetryIterationCount = 3;
+                bool bSuccess = false;
+                int     iRetryIterationCount = 3;
 
-		do
-		{
+                do
+                {
         try
         {
                 sprintf(endpoint, "%s", url);
                 ws=new SimpleTypeArrayWS(endpoint, APTHTTP1_1);
                 Type *input;
-				Type *output;
-				xsd__int_Array array_input;
-				int entries[100];
-				int i;
+                                Type *output;
+                                xsd__int_Array array_input;
+                                int entries[100];
+                                int i;
 
-				array_input.m_Array = new int*[100];
-				array_input.m_Size  = 100;
+                                array_input.m_Array = new int*[100];
+                                array_input.m_Size  = 100;
 
-				for ( i = 0; i < 100; i++ ) {
-				entries[i] = i;
+                                for ( i = 0; i < 100; i++ ) {
+                                entries[i] = i;
                     array_input.m_Array[i] = &entries[i];
-				}
+                                }
 
-				input = new Type();
-				input->item = array_input;
+                                input = new Type();
+                                input->item = array_input;
 
-				output = ws->getInput(input);
-				i=0;				
-				cout << "item [" << i << "] = " << *(output->item.m_Array[i]) << endl;			
-				delete ws;
-				bSuccess = true;
+                                output = ws->getInput(input);
+                                i=0;                            
+                                cout << "item [" << i << "] = " << *(output->item.m_Array[i]) << endl;                  
+                                delete ws;
+                                bSuccess = true;
         }
         catch(AxisException& e)
         {
-			bool bSilent = false;
+                        bool bSilent = false;
 
-			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-			{
-				if( iRetryIterationCount > 0)
-				{
-					bSilent = true;
-				}
-			}
-			else
-			{
-				iRetryIterationCount = 0;
-			}
+                        if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+                        {
+                                if( iRetryIterationCount > 0)
+                                {
+                                        bSilent = true;
+                                }
+                        }
+                        else
+                        {
+                                iRetryIterationCount = 0;
+                        }
 
             if( !bSilent)
-			{
-				cout << "Exception : " << e.what() << endl;
-			}
+                        {
+                                cout << "Exception : " << e.what() << endl;
+                        }
         }
         catch(exception& e)
         {
@@ -115,8 +115,8 @@ RETTYPE ThreadFunc(ARGTYPE Param)
         {
             cout << "Unknown exception has occured" << endl;
         }
-		iRetryIterationCount--;
-		} while( iRetryIterationCount > 0 && !bSuccess);
+                iRetryIterationCount--;
+                } while( iRetryIterationCount > 0 && !bSuccess);
                 #ifndef WIN32
                         pthread_exit(0);
                 #endif
@@ -129,60 +129,60 @@ RETTYPE ThreadFunc(ARGTYPE Param)
 int main(int argc, char *argv[])
 {
     Axis::initialize(false);
-	try{
-		 int i;
-		 #ifdef WIN32
-			/*Windows specific code comes here */
-			HANDLE hThread[NUM_THREADS];
-			for(i=0;i<NUM_THREADS;i++){
-					DWORD dwThreadId;
-					//LPVOID dwThrdParam = LPVOID(argv[1]);
-					hThread[i] = CreateThread(
-											NULL,                        // no security attributes
-											0,                           // use default stack size
-											ThreadFunc,                  // thread function
-											LPVOID(argv[1]),             // argument to thread function
-											0,   
-										&dwThreadId);              // returns the thread identifier
+        try{
+                 int i;
+                 #ifdef WIN32
+                        /*Windows specific code comes here */
+                        HANDLE hThread[NUM_THREADS];
+                        for(i=0;i<NUM_THREADS;i++){
+                                        DWORD dwThreadId;
+                                        //LPVOID dwThrdParam = LPVOID(argv[1]);
+                                        hThread[i] = CreateThread(
+                                                                                        NULL,                        // no security attributes
+                                                                                        0,                           // use default stack size
+                                                                                        ThreadFunc,                  // thread function
+                                                                                        LPVOID(argv[1]),             // argument to thread function
+                                                                                        0,   
+                                                                                &dwThreadId);              // returns the thread identifier
 
-			if (hThread[i] == NULL)
-			{
-			cout<<"Thread creation Failed";
-			}
-			}
-			/* Waiting for threads to terminate */
-			WaitForMultipleObjects(NUM_THREADS,hThread,true, INFINITE);
-			for(i=0;i<NUM_THREADS;i++)
-					CloseHandle( hThread[i] );
+                        if (hThread[i] == NULL)
+                        {
+                        cout<<"Thread creation Failed";
+                        }
+                        }
+                        /* Waiting for threads to terminate */
+                        WaitForMultipleObjects(NUM_THREADS,hThread,true, INFINITE);
+                        for(i=0;i<NUM_THREADS;i++)
+                                        CloseHandle( hThread[i] );
 
-		#else	
-			pthread_t thread[NUM_THREADS];
-			pthread_attr_t attr;
-			int rc, t;
+                #else   
+                        pthread_t thread[NUM_THREADS];
+                        pthread_attr_t attr;
+                        int rc, t;
             void *status;
-		//   Initialize and set thread detached attribute
-			pthread_attr_init(&attr);
-			pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
-			for (t = 0; t < NUM_THREADS; t++)
-			{
-			/*Creating threads */
-				rc = pthread_create(&thread[t], &attr, ThreadFunc,(void *)argv[1]);
-				if (rc)
-				{
-					cout<<"Thread Creation Failed";
-				}
-			}
-		//Free attribute and wait for the other threads
-		pthread_attr_destroy(&attr);
-		/* Wait for the threads to terminate  */
-		for(t=0;t<NUM_THREADS;t++){
-			rc = pthread_join(thread[t], &status);
-				if (rc)
-				{
-					cout<<"ERROR from pthread_join()"<<endl;
-				}
-		}
-	#endif
+                //   Initialize and set thread detached attribute
+                        pthread_attr_init(&attr);
+                        pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
+                        for (t = 0; t < NUM_THREADS; t++)
+                        {
+                        /*Creating threads */
+                                rc = pthread_create(&thread[t], &attr, ThreadFunc,(void *)argv[1]);
+                                if (rc)
+                                {
+                                        cout<<"Thread Creation Failed";
+                                }
+                        }
+                //Free attribute and wait for the other threads
+                pthread_attr_destroy(&attr);
+                /* Wait for the threads to terminate  */
+                for(t=0;t<NUM_THREADS;t++){
+                        rc = pthread_join(thread[t], &status);
+                                if (rc)
+                                {
+                                        cout<<"ERROR from pthread_join()"<<endl;
+                                }
+                }
+        #endif
   }catch(exception &e){
            cout<< e.what();
   }

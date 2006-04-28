@@ -299,18 +299,18 @@ int main(int argc, char* argv[])
 
         // Test array
         xsd__NMTOKEN_Array arrayInput;
-		int arraySize =2;
-		xsd__NMTOKEN * array = new xsd__NMTOKEN[arraySize];        
+                int arraySize =2;
+                xsd__NMTOKEN * array = new xsd__NMTOKEN[arraySize];        
         for (int inputIndex=0 ; inputIndex < arraySize ; inputIndex++)
         {
             array[inputIndex] = new char[25];
             strcpy (array[inputIndex], simpleNMTOKEN);
             
         }
-		arrayInput.set(array,arraySize);
+                arrayInput.set(array,arraySize);
         xsd__NMTOKEN_Array* arrayResult = ws->asArray(&arrayInput);
-		int outputSize = 0;
-		const xsd__NMTOKEN * output = arrayResult->get(outputSize);
+                int outputSize = 0;
+                const xsd__NMTOKEN * output = arrayResult->get(outputSize);
         cout << "array of " << outputSize << " elements" << endl;
         for (int index = 0; index < outputSize ; index++)
         {
@@ -331,7 +331,7 @@ int main(int argc, char* argv[])
                 cout << "  element[" << index << "]=<nil>" << endl;
             }
         }
-		// Clear up input array        
+                // Clear up input array        
         for (int deleteIndex = 0 ; deleteIndex < arraySize ; deleteIndex++ )
         {
             delete array[deleteIndex];

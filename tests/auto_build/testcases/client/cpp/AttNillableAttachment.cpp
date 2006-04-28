@@ -27,101 +27,98 @@ void sig_handler(int);
 
 int main(int argc, char* argv[])
 {
-	char endpoint[256];
-	const char* url="http://localhost:80/axis/AttachmentService";	
-	char *Result;
-	url = argv[1];
-	bool bSuccess = false;
-	int	iRetryIterationCount = 3;
+    char endpoint[256];
+    const char* url="http://localhost:80/axis/AttachmentService";   
+    char *Result;
+    url = argv[1];
+    bool bSuccess = false;
+    int     iRetryIterationCount = 3;
 
-	signal(SIGILL, sig_handler);
-	signal(SIGABRT, sig_handler);
-	signal(SIGSEGV, sig_handler);
-	//signal(SIGQUIT, sig_handler);
-	//signal(SIGBUS, sig_handler);
-	signal(SIGFPE, sig_handler);
+    signal(SIGILL, sig_handler);
+    signal(SIGABRT, sig_handler);
+    signal(SIGSEGV, sig_handler);
+    //signal(SIGQUIT, sig_handler);
+    //signal(SIGBUS, sig_handler);
+    signal(SIGFPE, sig_handler);
 
-	do
-		{
-			try
-			{
-				sprintf(endpoint, "%s", url);
-				AttachmentService ws(endpoint);
-				ISoapAttachment *att=ws.createSoapAttachment();
-				//declare an ifstream object to read from a file.
-			    ifstream is;
-				//Opening a file which contans an actual SOAP Message.
-				is.open ("SOAPMessage.xml",ios::binary);
-				if(is==NULL){
-					cout<<"Filepath specified for attachment is wrong";
-					exit(0);
-				}
-				//Finding out the number of bytes in the file
-				is.seekg (0, ios::end);
-				int length = is.tellg();
-				is.seekg (0, ios::beg);
-				char *buffer;
-				
-				// allocate memory:
+    do
+    {
+        try
+        {
+            sprintf(endpoint, "%s", url);
+            AttachmentService ws(endpoint);
+            ISoapAttachment *att=ws.createSoapAttachment();
+            //declare an ifstream object to read from a file.
+            ifstream is;
+            //Opening a file which contans an actual SOAP Message.
+            is.open ("SOAPMessage.xml",ios::binary);
+            if(is==NULL)
+            {
+                    cout<<"Filepath specified for attachment is wrong";
+                    exit(0);
+            }
+            //Finding out the number of bytes in the file
+            is.seekg (0, ios::end);
+            int length = is.tellg();
+            is.seekg (0, ios::beg);
+            char *buffer;
+            
+            // allocate memory:
 
-				buffer = new char [length];
-				// read data as a block:
-				is.read (buffer,length); 				
-                is.close(); 
+            buffer = new char [length];
+            // read data as a block:
+            is.read (buffer,length);                                
+            is.close(); 
 
-				//Adding the content type as text/xml
-				att->addHeader(AXIS_CONTENT_TYPE,"text/xml");
-				xsd__base64Binary b64b1;
-                b64b1.set((xsd__unsignedByte *) buffer, length);
-				att->addBody(&b64b1);
-				//Calling the service. Here passing NULL as argument
-				//Service will return the content of 'att' ie content of first argument
-				xsd__string str=ws.nillableAttachment(att,NULL,NULL,"hello");
-				if(str!=NULL)
-				   cout<<str<<endl;
-				else
-					cout<<"<null>"<<endl;				
-			    bSuccess = true;
-			}	
-	catch(AxisException& e)
-	{
-			bool bSilent = false;
+            //Adding the content type as text/xml
+            att->addHeader(AXIS_CONTENT_TYPE,"text/xml");
+            xsd__base64Binary b64b1;
+            b64b1.set((xsd__unsignedByte *) buffer, length);
+            att->addBody(&b64b1);
 
-			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-			{
-				if( iRetryIterationCount > 0)
-				{
-					bSilent = true;
-				}
-			}
-			else
-			{
-				iRetryIterationCount = 0;
-			}
+            xsd__string str=ws.nillableAttachment(att,NULL,NULL,"hello");
+            if(str!=NULL)
+               cout<<str<<endl;
+            else
+               cout<<"<null>"<<endl;                           
+            bSuccess = true;
+        }       
+        catch(AxisException& e)
+        {
+            bool bSilent = false;
+
+            if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+            {
+                    if( iRetryIterationCount > 0)
+                            bSilent = true;
+            }
+            else
+                    iRetryIterationCount = 0;
 
             if( !bSilent)
-			{
-				cout << "Exception : " << e.what() << endl;
-			}
-	}
-	catch(exception& e)
-	{
-	    cout << "Unknown exception has occured" << endl;
-	}
-	catch(...)
-	{
-	    cout << "Unknown exception has occured" << endl;
-	}
-		iRetryIterationCount--;
-		} while( iRetryIterationCount > 0 && !bSuccess);
-  cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;
-	
-	return 0;
+                cout << "Exception : " << e.what() << endl;
+        }
+        catch(exception& e)
+        {
+            cout << "Unknown exception has occured" << endl;
+        }
+        catch(...)
+        {
+            cout << "Unknown exception has occured" << endl;
+        }
+        
+        iRetryIterationCount--;
+    } 
+    while( iRetryIterationCount > 0 && !bSuccess);
+    
+    cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;
+        
+    return 0;
 }
 
 void sig_handler(int sig) {
-	signal(sig, sig_handler);
-    cout << "SIGNAL RECEIVED " << sig << endl;
-	exit(1);
+        signal(sig, sig_handler);
+        cout << "SIGNAL RECEIVED " << sig << endl;
+        exit(1);
 }
 

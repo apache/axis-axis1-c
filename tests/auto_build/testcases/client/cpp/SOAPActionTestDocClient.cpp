@@ -39,11 +39,11 @@ int main(int argc, char* argv[])
         char simpleanyURI[25] = "A simple test message!";
         xsd__anyURI input = new char[25];
         strcpy (input, simpleanyURI);
-		xsd__anyURI result;
-        //The client uses the SOAPAction set by generated code		
-		cout << "Using the default SOAPAction set by Generated code..." << endl;
-				
-		result = ws->asNonNillableElement(input);
+                xsd__anyURI result;
+        //The client uses the SOAPAction set by generated code          
+                cout << "Using the default SOAPAction set by Generated code..." << endl;
+                                
+                result = ws->asNonNillableElement(input);
         if (result)
         {
             if (*result)
@@ -60,12 +60,12 @@ int main(int argc, char* argv[])
             cout << "non-nillable element=<nil>" << endl;
         }
         
-			
-		//The client uses an empty SOAPAction
+                        
+                //The client uses an empty SOAPAction
 
-		cout << "Using an empty SOAPAction ..." << endl;
+                cout << "Using an empty SOAPAction ..." << endl;
 
-		ws->setTransportProperty("SOAPAction" , "");
+                ws->setTransportProperty("SOAPAction" , "");
         result = ws->asNonNillableElement(input);
         if (result)
         {
@@ -84,11 +84,11 @@ int main(int argc, char* argv[])
         }
         
 
-		//The client uses aSOAPAction which is invalid
+                //The client uses aSOAPAction which is invalid
 
-		cout << "Using an empty SOAPAction ..." << endl;
+                cout << "Using an empty SOAPAction ..." << endl;
 
-		ws->setTransportProperty("SOAPAction" , "GARBAGE");
+                ws->setTransportProperty("SOAPAction" , "GARBAGE");
         result = ws->asNonNillableElement(input);
         if (result)
         {

@@ -41,7 +41,7 @@ int main(int argc, char* argv[])
         strcpy (input, simpleanyURI);
 
         // Test non-nillable element
-		//ws->setTransportProperty("SOAPAction" , "XSD_anyURI#asNonNillableElement");
+                //ws->setTransportProperty("SOAPAction" , "XSD_anyURI#asNonNillableElement");
         xsd__anyURI result = ws->asNonNillableElement(input);
         if (result)
         {
@@ -61,7 +61,7 @@ int main(int argc, char* argv[])
         delete [] input;
 
         // Test empty non-nillable element
-		//ws->setTransportProperty("SOAPAction" , "XSD_anyURI#asNonNillableElement");
+                //ws->setTransportProperty("SOAPAction" , "XSD_anyURI#asNonNillableElement");
         result = ws->asNonNillableElement(emptyInput);
         if (result)
         {
@@ -83,7 +83,7 @@ int main(int argc, char* argv[])
         // Test non-nillable element with XML reserved characters
         char reservedCharactersanyURI[] = "<>&\"\'";
         xsd__anyURI reservedCharactersInput = reservedCharactersanyURI;
-		//ws->setTransportProperty("SOAPAction" , "XSD_anyURI#asNonNillableElement");
+                //ws->setTransportProperty("SOAPAction" , "XSD_anyURI#asNonNillableElement");
         result = ws->asNonNillableElement(reservedCharactersInput);
         if (result)
         {
@@ -104,7 +104,7 @@ int main(int argc, char* argv[])
         // Test non-nillable element with XML reserved characters
         char whitespaceanyURI[] = "  \t\r\nsome text \t\r\nmore text \t\r\n";
         xsd__anyURI whitespaceInput = whitespaceanyURI;
-		//ws->setTransportProperty("SOAPAction" , "XSD_anyURI#asNonNillableElement");
+                //ws->setTransportProperty("SOAPAction" , "XSD_anyURI#asNonNillableElement");
         result = ws->asNonNillableElement(whitespaceInput);
         if (result)
         {
@@ -125,7 +125,7 @@ int main(int argc, char* argv[])
         // Test nillable element, with a value
         input = new char[25];
         strcpy (input, simpleanyURI);
-		//ws->setTransportProperty("SOAPAction" , "XSD_anyURI#asNillableElement");
+                //ws->setTransportProperty("SOAPAction" , "XSD_anyURI#asNillableElement");
         xsd__anyURI nillableResult = ws->asNillableElement(input);
         if (nillableResult)
         {
@@ -148,7 +148,7 @@ int main(int argc, char* argv[])
         // Test empty nillable element
         emptyInput = new char[1];
         strcpy (emptyInput, emptyanyURI);
-		//ws->setTransportProperty("SOAPAction" , "XSD_anyURI#asNillableElement");
+                //ws->setTransportProperty("SOAPAction" , "XSD_anyURI#asNillableElement");
         nillableResult = ws->asNillableElement(emptyInput);
         if (nillableResult)
         {
@@ -169,7 +169,7 @@ int main(int argc, char* argv[])
         delete [] emptyInput;
 
         // Test nillable element, with nil
-		//ws->setTransportProperty("SOAPAction" , "XSD_anyURI#asNillableElement");
+                //ws->setTransportProperty("SOAPAction" , "XSD_anyURI#asNillableElement");
         nillableResult = ws->asNillableElement(NULL);
         if (nillableResult)
         {
@@ -193,7 +193,7 @@ int main(int argc, char* argv[])
         strcpy (input, simpleanyURI);
         RequiredAttributeElement requiredAttributeInput;
         requiredAttributeInput.setrequiredAttribute(input);
-		//ws->setTransportProperty("SOAPAction" , "XSD_anyURI#asRequiredAttribute");
+                //ws->setTransportProperty("SOAPAction" , "XSD_anyURI#asRequiredAttribute");
         RequiredAttributeElement* requiredAttributeResult = ws->asRequiredAttribute(&requiredAttributeInput);
         if (requiredAttributeResult->getrequiredAttribute())
         {
@@ -217,7 +217,7 @@ int main(int argc, char* argv[])
         strcpy (emptyInput, emptyanyURI);
         requiredAttributeInput;
         requiredAttributeInput.setrequiredAttribute(emptyInput);
-		//ws->setTransportProperty("SOAPAction" , "XSD_anyURI#asRequiredAttribute");
+                //ws->setTransportProperty("SOAPAction" , "XSD_anyURI#asRequiredAttribute");
         requiredAttributeResult = ws->asRequiredAttribute(&requiredAttributeInput);
         if (requiredAttributeResult->getrequiredAttribute())
         {
@@ -308,18 +308,18 @@ int main(int argc, char* argv[])
 
         // Test array
         xsd__anyURI_Array arrayInput;
-		int arraySize = 2;
-		xsd__anyURI * array = new xsd__anyURI[arraySize];
+                int arraySize = 2;
+                xsd__anyURI * array = new xsd__anyURI[arraySize];
         for (int inputIndex=0 ; inputIndex < arraySize ; inputIndex++)
         {
             array[inputIndex] = new char[25];
             strcpy (array[inputIndex], simpleanyURI);            
         }
-		arrayInput.set(array,arraySize);
-		//ws->setTransportProperty("SOAPAction" , "XSD_anyURI#asArray");
+                arrayInput.set(array,arraySize);
+                //ws->setTransportProperty("SOAPAction" , "XSD_anyURI#asArray");
         xsd__anyURI_Array* arrayResult = ws->asArray(&arrayInput);
-		int outputSize =0;
-		const xsd__anyURI *output = arrayResult->get(outputSize); 
+                int outputSize =0;
+                const xsd__anyURI *output = arrayResult->get(outputSize); 
         cout << "array of " << outputSize << " elements" << endl;
         for (int index = 0; index < outputSize ; index++)
         {
@@ -353,7 +353,7 @@ int main(int argc, char* argv[])
         strcpy (input, simpleanyURI);
         SimpleComplexType complexTypeInput;
         complexTypeInput.setcomplexTypeElement(input);
-		//ws->setTransportProperty("SOAPAction" , "XSD_anyURI#asComplexType");
+                //ws->setTransportProperty("SOAPAction" , "XSD_anyURI#asComplexType");
         SimpleComplexType* complexTypeResult = ws->asComplexType(&complexTypeInput);
         if (complexTypeResult->getcomplexTypeElement())
         {

@@ -48,32 +48,32 @@ main(int argc, char *argv[])
     Inquire *ws = new Inquire(endpoint); 
     //ws->setProxy("localhost", 9090);
 
-		bool bSuccess = false;
-		int	iRetryIterationCount = 3;
+                bool bSuccess = false;
+                int     iRetryIterationCount = 3;
 
-		do
-		{
+                do
+                {
     try 
     {
         char buffer[100];
         sprintf(buffer, "UUID:2524c425-656e-4eb2-8b13-080cfb081382");
 
         tModelKey_Array arrtModelKeys;
-		tModelKey * array = new tModelKey [ARRAYSIZE];        
+                tModelKey * array = new tModelKey [ARRAYSIZE];        
         int i = 0;
         for (i = 0; i < ARRAYSIZE; i++)
         {
             array[i] = new char[100];
-			strcpy(array[i],buffer);
+                        strcpy(array[i],buffer);
 
         }
-		arrtModelKeys.set(array,ARRAYSIZE);
+                arrtModelKeys.set(array,ARRAYSIZE);
         char* cpname = "2.0";
         
         printf("invoking get_tModelDetail...\n");
         tModel_Array *result = ws->get_tModelDetail(&arrtModelKeys, cpname);
-		int outputSize=0;
-		tModel ** arrayOut = result->get(outputSize);
+                int outputSize=0;
+                tModel ** arrayOut = result->get(outputSize);
         printf("tModel_Array size = %d\n", outputSize);
         for( i = 0; i < outputSize; i++ ) 
         {
@@ -83,8 +83,8 @@ main(int argc, char *argv[])
             printf("\t Authorized Name = %s\n", arrayOut[i]->authorizedName);
             if(arrayOut[i]->name_Ref)
                 printf("\t Name = %s\n", arrayOut[i]->name_Ref->name_value);
-				int outputSizeDesc = 0;
-			    description ** arrayDesc= arrayOut[i]->description_Ref->get(outputSizeDesc);  
+                                int outputSizeDesc = 0;
+                            description ** arrayDesc= arrayOut[i]->description_Ref->get(outputSizeDesc);  
             for( int j = 0; j < outputSizeDesc; j++)
             {
                 printf("\t Description %d = %s\n", j + 1,  arrayDesc[j]->description_value);
@@ -96,18 +96,18 @@ main(int argc, char *argv[])
 
         sprintf(buffer, "aea80cae-6cde-4eac-9feb-19ac9719ebb9");
         businessKey_Array arrBusinessKeys;
-		businessKey * arrayBusiness = new businessKey[ARRAYSIZE];        
+                businessKey * arrayBusiness = new businessKey[ARRAYSIZE];        
         for (i = 0; i < ARRAYSIZE; i++)
         {
             arrayBusiness[i] = new char[100];
-			strcpy(arrayBusiness[i],buffer);
+                        strcpy(arrayBusiness[i],buffer);
         }
-		arrBusinessKeys.set(arrayBusiness,ARRAYSIZE);
+                arrBusinessKeys.set(arrayBusiness,ARRAYSIZE);
         printf("invoking get_businessDetail ...\n");
-        //printf("businessEntity_Array size = %d\n", ws->get_businessDetail(arrBusinessKeys, cpname).m_Size);		
+        //printf("businessEntity_Array size = %d\n", ws->get_businessDetail(arrBusinessKeys, cpname).m_Size);           
         businessEntity_Array* businessEntities = ws->get_businessDetail(&arrBusinessKeys, cpname);
-		outputSize = 0;
-		businessEntity ** arrayOutB = businessEntities->get(outputSize);
+                outputSize = 0;
+                businessEntity ** arrayOutB = businessEntities->get(outputSize);
         //businessEntity_Array get_businessDetail(businessKey_Array Value0,xsd__string Value1);
         printf("businessEntity_Array size = %d\n", outputSize);
         for( i = 0; i < outputSize; i++ ) 
@@ -117,8 +117,8 @@ main(int argc, char *argv[])
             printf("\t Operator = %s\n", arrayOutB[i]->_operator);
             printf("\t Authorized Name = %s\n", arrayOutB[i]->authorizedName);
             printf( "\t Names... \n" );
-			int outputSizeBE = 0;
-			 name** arrayBE = arrayOutB[i]->name_Ref->get(outputSizeBE);
+                        int outputSizeBE = 0;
+                         name** arrayBE = arrayOutB[i]->name_Ref->get(outputSizeBE);
             for( int j = 0; j < outputSizeBE; j++)
             {
                 printf("\t\t Name %d = %s\n", j + 1,  arrayBE[j]->name_value);
@@ -127,8 +127,8 @@ main(int argc, char *argv[])
             if( arrayOutB[i]->businessServices_Ref )
             {
                 printf( "\t Business Services...\n" );
-				int outputSizeBS = 0;
-				businessService ** arrayOutBS = arrayOutB[i]->businessServices_Ref->businessService_Ref->get(outputSizeBS);
+                                int outputSizeBS = 0;
+                                businessService ** arrayOutBS = arrayOutB[i]->businessServices_Ref->businessService_Ref->get(outputSizeBS);
                 for( int j = 0; j < outputSizeBS; j++ )
                 {
                     printf( "\t\t Business Service %d...\n", j + 1 );
@@ -137,8 +137,8 @@ main(int argc, char *argv[])
                     if( arrayOutBS[j]->bindingTemplates_Ref )
                     {
                          printf( "\t\t\t Binding Templates...\n" );
-						 int outputSizeBT=0;
-						 bindingTemplate ** arrayOutBT = arrayOutBS[j]->bindingTemplates_Ref->bindingTemplate_Ref->get(outputSizeBT);
+                                                 int outputSizeBT=0;
+                                                 bindingTemplate ** arrayOutBT = arrayOutBS[j]->bindingTemplates_Ref->bindingTemplate_Ref->get(outputSizeBT);
                          for( int k = 0; k < outputSizeBT; k++ )
                          {
                             printf( "\t\t\t\t Access Point %d...\n", k + 1 );
@@ -164,27 +164,27 @@ main(int argc, char *argv[])
     } 
     catch(AxisException& e)
     {
-			bool bSilent = false;
+                        bool bSilent = false;
 
-			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-			{
-				if( iRetryIterationCount > 0)
-				{
-					bSilent = true;
-				}
-			}
-			else
-			{
-				iRetryIterationCount = 0;
-			}
+                        if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+                        {
+                                if( iRetryIterationCount > 0)
+                                {
+                                        bSilent = true;
+                                }
+                        }
+                        else
+                        {
+                                iRetryIterationCount = 0;
+                        }
 
             if( !bSilent)
-			{
+                        {
         printf("Exception caught : %s\n", e.what());
-			}
+                        }
     }
-		iRetryIterationCount--;
-		} while( iRetryIterationCount > 0 && !bSuccess);
+                iRetryIterationCount--;
+                } while( iRetryIterationCount > 0 && !bSuccess);
 
     return 0;
 }

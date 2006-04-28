@@ -56,38 +56,38 @@ void printResponse(attrlisterr* ale)
             cout << "ale->errorcode is NULL" << endl;
         }
         
-		if (ale->attrlist_Ref != NULL)
-		{
-			int outputSize =0;
-			namepair ** output =ale->attrlist_Ref->getitem()->get(outputSize);
-			//if (ale->attrlist_Ref->item.m_Array[0] != NULL)
-			if (output[0] != NULL)
-			{
-				if (output[0]->name != NULL)
-				{
-					cout << output[0]->name << endl;
-				}
-				else
-				{
-					cout << "ale->attrlist_Ref->item.m_Array[0]->name is NULL" << endl;
-				}
+                if (ale->attrlist_Ref != NULL)
+                {
+                        int outputSize =0;
+                        namepair ** output =ale->attrlist_Ref->getitem()->get(outputSize);
+                        //if (ale->attrlist_Ref->item.m_Array[0] != NULL)
+                        if (output[0] != NULL)
+                        {
+                                if (output[0]->name != NULL)
+                                {
+                                        cout << output[0]->name << endl;
+                                }
+                                else
+                                {
+                                        cout << "ale->attrlist_Ref->item.m_Array[0]->name is NULL" << endl;
+                                }
 
-				if (output[0]->m_list_Ref != NULL)
-				{
-					outputSize = 0;
-					const xsd__string * outString = output[0]->m_list_Ref->item->get(outputSize);
-					if (outString[0]
-						&& *(outString[0]))
-					{
-						cout << outString[0] << endl;
-					}
-					else
-					{
-						cout << "ale->attrlist_Ref->item.m_Array[0]->m_list_Ref->item.m_Array[0]" << endl;
-					}
-				}
-			}
-		}
+                                if (output[0]->m_list_Ref != NULL)
+                                {
+                                        outputSize = 0;
+                                        const xsd__string * outString = output[0]->m_list_Ref->item->get(outputSize);
+                                        if (outString[0]
+                                                && *(outString[0]))
+                                        {
+                                                cout << outString[0] << endl;
+                                        }
+                                        else
+                                        {
+                                                cout << "ale->attrlist_Ref->item.m_Array[0]->m_list_Ref->item.m_Array[0]" << endl;
+                                        }
+                                }
+                        }
+                }
     }
     else
     {
@@ -97,129 +97,129 @@ void printResponse(attrlisterr* ale)
 
 int main(int argc, char* argv[])
 {
-	char endpoint[256];
-	const char* url="http://localhost:80/axis/ComplexLists";
+        char endpoint[256];
+        const char* url="http://localhost:80/axis/ComplexLists";
 
-	if(argc>1) url = argv[1];
+        if(argc>1) url = argv[1];
 
-		bool bSuccess = false;
-		int	iRetryIterationCount = 3;
+                bool bSuccess = false;
+                int     iRetryIterationCount = 3;
 
-		do
-		{
-	try
-	{
-		sprintf(endpoint, "%s", url);
-		ComplexLists* ws = new ComplexLists(endpoint);
+                do
+                {
+        try
+        {
+                sprintf(endpoint, "%s", url);
+                ComplexLists* ws = new ComplexLists(endpoint);
 
-		m_list ml;     // xsd__string array
-		m_list *mlnp = new m_list;   // used for 1st namepair item of array
-		m_list *mlnp2 = new m_list;  // used for 2nd namepair item of array
-		attrlist al;   // attrlist has namepair array
-		namepair *np1 = new namepair;  // namepair has m_list and name
-		namepair *np2 = new namepair;
-		namepair_Array npArr;
+                m_list ml;     // xsd__string array
+                m_list *mlnp = new m_list;   // used for 1st namepair item of array
+                m_list *mlnp2 = new m_list;  // used for 2nd namepair item of array
+                attrlist al;   // attrlist has namepair array
+                namepair *np1 = new namepair;  // namepair has m_list and name
+                namepair *np2 = new namepair;
+                namepair_Array npArr;
 
-		// m_list arg to numtilist
-		xsd__string * array = new xsd__string[ARRAYSIZE];		
-		NEWCOPY(array[0], "never odd or even"); // should be returned in errortext element of attrlisterr
-		NEWCOPY(array[1], "any data string");   // add data
-		ml.item->set(array,ARRAYSIZE);
-		delete array[0];
-		delete array[1];
-		delete [] array;
+                // m_list arg to numtilist
+                xsd__string * array = new xsd__string[ARRAYSIZE];               
+                NEWCOPY(array[0], "never odd or even"); // should be returned in errortext element of attrlisterr
+                NEWCOPY(array[1], "any data string");   // add data
+                ml.item->set(array,ARRAYSIZE);
+                delete array[0];
+                delete array[1];
+                delete [] array;
 
-		// To set into namepair item of namepair array of attrlist arg of multilist
-		xsd__string * array1 = new xsd__string[ARRAYSIZE];		
-		NEWCOPY(array1[0], "Apache");
-		NEWCOPY(array1[1], "Axis C++");
-		mlnp->item->set(array1,ARRAYSIZE);
-		delete array1[0];
-		delete array1[1];
-		delete [] array1;
+                // To set into namepair item of namepair array of attrlist arg of multilist
+                xsd__string * array1 = new xsd__string[ARRAYSIZE];              
+                NEWCOPY(array1[0], "Apache");
+                NEWCOPY(array1[1], "Axis C++");
+                mlnp->item->set(array1,ARRAYSIZE);
+                delete array1[0];
+                delete array1[1];
+                delete [] array1;
 
-		// To set into namepair item of namepair array of attrlist arg of multilist
-		xsd__string * array2 = new xsd__string[ARRAYSIZE];		
-		NEWCOPY(array2[0], "Test");
-		NEWCOPY(array2[1], "Complex");
-		mlnp2->item->set(array2,ARRAYSIZE);
-		delete array2[0];
-		delete array2[1];
-		delete [] array2;
+                // To set into namepair item of namepair array of attrlist arg of multilist
+                xsd__string * array2 = new xsd__string[ARRAYSIZE];              
+                NEWCOPY(array2[0], "Test");
+                NEWCOPY(array2[1], "Complex");
+                mlnp2->item->set(array2,ARRAYSIZE);
+                delete array2[0];
+                delete array2[1];
+                delete [] array2;
 
-		// set first namepair item to put into array
-		np1->m_list_Ref = mlnp;
-		np1->setname("namepair1");
+                // set first namepair item to put into array
+                np1->m_list_Ref = mlnp;
+                np1->setname("namepair1");
 
-		// set second namepair item to put into array
-		np2->m_list_Ref = mlnp2;
-		np2->setname("namepair2");
+                // set second namepair item to put into array
+                np2->m_list_Ref = mlnp2;
+                np2->setname("namepair2");
 
-		// create a namepair array to add into attrlist
-		namepair ** nArray = new namepair *[ARRAYSIZE];
-		nArray[0]=np1;
-		nArray[1]=np2;
-		npArr.set(nArray,ARRAYSIZE);
-		delete nArray[0];
-		delete nArray[1];
-		delete [] nArray;
+                // create a namepair array to add into attrlist
+                namepair ** nArray = new namepair *[ARRAYSIZE];
+                nArray[0]=np1;
+                nArray[1]=np2;
+                npArr.set(nArray,ARRAYSIZE);
+                delete nArray[0];
+                delete nArray[1];
+                delete [] nArray;
 
-		// set attrlist argument
-		al.setitem(&npArr);
+                // set attrlist argument
+                al.setitem(&npArr);
 
-		attrlisterr* ale = ws->multilist(&ml, &al);
+                attrlisterr* ale = ws->multilist(&ml, &al);
         printResponse(ale);
-		delete ale;
+                delete ale;
 
-		ale = ws->multilist((m_list*)NULL, &al);
+                ale = ws->multilist((m_list*)NULL, &al);
         printResponse(ale);
-		delete ale;
+                delete ale;
 
-		// Have nil elements in response
-		ale = ws->multilistnil((m_list*)NULL, &al);
+                // Have nil elements in response
+                ale = ws->multilistnil((m_list*)NULL, &al);
         printResponse(ale);
-		delete ale;
+                delete ale;
 
-		ale = ws->complexlist(&al, "hoohah!", &al);
+                ale = ws->complexlist(&al, "hoohah!", &al);
         printResponse(ale);
-		delete ale;
+                delete ale;
 
-		delete ws;
-		bSuccess = true;
-	}
-	catch(AxisException& e)
-	{
-			bool bSilent = false;
+                delete ws;
+                bSuccess = true;
+        }
+        catch(AxisException& e)
+        {
+                        bool bSilent = false;
 
-			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-			{
-				if( iRetryIterationCount > 0)
-				{
-					bSilent = true;
-				}
-			}
-			else
-			{
-				iRetryIterationCount = 0;
-			}
+                        if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+                        {
+                                if( iRetryIterationCount > 0)
+                                {
+                                        bSilent = true;
+                                }
+                        }
+                        else
+                        {
+                                iRetryIterationCount = 0;
+                        }
 
             if( !bSilent)
-			{
-				cout << "Exception : " << e.what() << endl;
-			}
-	}
-	catch(exception& e)
-	{
-	    cout << "Unknown exception has occured : " << e.what() << endl;
-	}
-	catch(...)
-	{
-	    cout << "Unknown exception has occured" << endl;
-	}
-		iRetryIterationCount--;
-		} while( iRetryIterationCount > 0 && !bSuccess);
-	cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;
-	
-	return 0;
+                        {
+                                cout << "Exception : " << e.what() << endl;
+                        }
+        }
+        catch(exception& e)
+        {
+            cout << "Unknown exception has occured : " << e.what() << endl;
+        }
+        catch(...)
+        {
+            cout << "Unknown exception has occured" << endl;
+        }
+                iRetryIterationCount--;
+                } while( iRetryIterationCount > 0 && !bSuccess);
+        cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;
+        
+        return 0;
 }
 

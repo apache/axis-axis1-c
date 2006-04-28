@@ -22,94 +22,94 @@ bool IsNumber(const char* p);
 
 int main(int argc, char* argv[])
 {
-	char endpoint[256];
-	const char* server="localhost";
-	const char* port="80";
-	const char* op = 0;
-	const char* p1 = 0;
-	const char* p2 = 0;
-	int i1=0, i2=0;
+        char endpoint[256];
+        const char* server="localhost";
+        const char* port="80";
+        const char* op = 0;
+        const char* p1 = 0;
+        const char* p2 = 0;
+        int i1=0, i2=0;
         int iResult;
         char* pcDetail;
-		bool bSuccess = false;
-		int	iRetryIterationCount = 3;
+                bool bSuccess = false;
+                int     iRetryIterationCount = 3;
 
-		do
-		{
+                do
+                {
         try
         {
-	sprintf(endpoint, "http://%s:%s/axis/MathOps", server, port);
-	
-	
-	if (argc > 1)
-		strcpy(endpoint, argv[1]);
-	
+        sprintf(endpoint, "http://%s:%s/axis/MathOps", server, port);
+        
+        
+        if (argc > 1)
+                strcpy(endpoint, argv[1]);
+        
 
-	MathOps ws(endpoint);
+        MathOps ws(endpoint);
 
-	op = "div";/*Operation name*/
-	i1 = 10;/*First parameter*/
-	i2 = 5;/*Second parameter*/
+        op = "div";/*Operation name*/
+        i1 = 10;/*First parameter*/
+        i2 = 5;/*Second parameter*/
 
-	if (strcmp(op, "div") == 0)
-	{
-	    iResult = ws.div(i1, i2);		
+        if (strcmp(op, "div") == 0)
+        {
+            iResult = ws.div(i1, i2);           
             printf("Result is:%d\n", iResult);
-	}
-	else 
-	{
-		printf("Invalid operation %s\n\n", op);
-		PrintUsage();
-	}
+        }
+        else 
+        {
+                printf("Invalid operation %s\n\n", op);
+                PrintUsage();
+        }
 
-				bSuccess = true;
+                                bSuccess = true;
         }
         catch(AxisException& e)
         {
-			bool bSilent = false;
+                        bool bSilent = false;
 
-			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-			{
-				if( iRetryIterationCount > 0)
-				{
-					bSilent = true;
-				}
-			}
-			else
-			{
-				iRetryIterationCount = 0;
-			}
+                        if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+                        {
+                                if( iRetryIterationCount > 0)
+                                {
+                                        bSilent = true;
+                                }
+                        }
+                        else
+                        {
+                                iRetryIterationCount = 0;
+                        }
 
             if( !bSilent)
-			{
+                        {
             printf("%s\n", e.what());
-			}
+                        }
         }
         catch(exception& e)
         {
-	    printf("Unknown exception has occured\n");
+            printf("Unknown exception has occured\n");
         }
         catch(...)
         {
-	    printf("Unknown exception has occured\n");
+            printf("Unknown exception has occured\n");
         }
-		iRetryIterationCount--;
-		} while( iRetryIterationCount > 0 && !bSuccess);
-	
-	return 0;
+                iRetryIterationCount--;
+                } while( iRetryIterationCount > 0 && !bSuccess);
+        
+        return 0;
 }
 
 void PrintUsage()
 {
-	printf("Usage :\n MathOps <server> <port> <operation> <parameter> <parameter>\n\n");
-	exit(1);
+        printf("Usage :\n MathOps <server> <port> <operation> <parameter> <parameter>\n\n");
+        exit(1);
 }
 
 bool IsNumber(const char* p)
 {
-	for (int x=0; x < strlen(p); x++)
-	{
-		if (!isdigit(p[x])) return false;
-	}
-	return true;
+        for (int x=0; x < strlen(p); x++)
+        {
+                if (!isdigit(p[x])) return false;
+        }
+        return true;
 }

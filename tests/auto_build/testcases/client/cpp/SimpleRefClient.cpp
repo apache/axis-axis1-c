@@ -25,23 +25,23 @@ using namespace std;
 
 int main( int argc, char * argv[])
 {
-	char *	url = "http://localhost:80/axis/MathOps";
-	bool	bSuccess = false;
-	int		iRetryIterationCount = 3;
+        char *  url = "http://localhost:80/axis/MathOps";
+        bool    bSuccess = false;
+        int             iRetryIterationCount = 3;
 
-	url = argv[1];
+        url = argv[1];
 
-		do
-		{
-			try
-			{
-				RefTestPortType	ws( url);
+                do
+                {
+                        try
+                        {
+                                RefTestPortType ws( url);
 
-				printf( "invoking echoInt..\n");
+                                printf( "invoking echoInt..\n");
 
-				intType	refint;
+                                intType refint;
 
-				refint.intItem = 56;
+                                refint.intItem = 56;
 
 // The webservice call returns the following message (NB: The use of the
 // unsupported 'multiRef' tag):-
@@ -70,49 +70,49 @@ int main( int argc, char * argv[])
 // </multiRef>
 // </soapenv:Body>
 // </soapenv:Envelope>
-				if( (ws.echoInt( &refint))->intItem == 56)
-				{
-					printf( "successful\n");
-				}
-				else
-				{
-					printf( "failed \n");
-				}
+                                if( (ws.echoInt( &refint))->intItem == 56)
+                                {
+                                        printf( "successful\n");
+                                }
+                                else
+                                {
+                                        printf( "failed \n");
+                                }
 
-				bSuccess = true;
-			}
-			catch( AxisException& e)
-			{
-				bool	bSilent = false;
+                                bSuccess = true;
+                        }
+                        catch( AxisException& e)
+                        {
+                                bool    bSilent = false;
 
-				if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-				{
-					if( iRetryIterationCount > 0)
-					{
-						bSilent = true;
-					}
-				}
-				else
-				{
-					iRetryIterationCount = 0;
-				}
+                                if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+                                {
+                                        if( iRetryIterationCount > 0)
+                                        {
+                                                bSilent = true;
+                                        }
+                                }
+                                else
+                                {
+                                        iRetryIterationCount = 0;
+                                }
 
-				if( !bSilent)
-				{
-					printf( "Exception : %s\n", e.what());
-				}
-	        }
-			catch( exception& e)
-			{
-				printf( "Unknown exception has occured : %s\n", e.what());
-			}
-			catch( ...)
-			{
-				printf( "Unknown exception has occured\n");
-			}
+                                if( !bSilent)
+                                {
+                                        printf( "Exception : %s\n", e.what());
+                                }
+                }
+                        catch( exception& e)
+                        {
+                                printf( "Unknown exception has occured : %s\n", e.what());
+                        }
+                        catch( ...)
+                        {
+                                printf( "Unknown exception has occured\n");
+                        }
 
-			iRetryIterationCount--;
-		} while( iRetryIterationCount > 0 && !bSuccess);
+                        iRetryIterationCount--;
+                } while( iRetryIterationCount > 0 && !bSuccess);
 
-	return 0;
+        return 0;
 }

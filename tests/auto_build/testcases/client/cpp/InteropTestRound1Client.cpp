@@ -22,445 +22,445 @@ using namespace std;
 #include "InteropTestPortType.hpp" 
 #include "CommonClientTestCode.hpp"
 
-#define ARRAYSIZE							2
-#define macro_ToTwoDecPlaces( value, type)	(type)(((int)(value * (type) 100.0))) / ((type) 100.0)
-#define macro_BoolToString( value)			(value == true_ ? "true" : "false")
+#define ARRAYSIZE                                                       2
+#define macro_ToTwoDecPlaces( value, type)      (type)(((int)(value * (type) 100.0))) / ((type) 100.0)
+#define macro_BoolToString( value)                      (value == true_ ? "true" : "false")
 
 int main( int argc, char * argv[])
 {
-	char			buffer1[100];
-	char			buffer2[100];
-	char			endpoint[256];
-	
-	if( argc > 1)
-	{
-		strcpy( endpoint, argv[1]);
-	}
-	else
-	{
-		const char *	server = "localhost";
-		const char *	port = "80";
-
-		sprintf( endpoint, "http://%s:%s/axis/InteropBase", server, port);
-	}
-		
-	bool	bSuccess = false;
-	int		iRetryIterationCount = 3;
-
-	do
-	{
-		try
+        char                    buffer1[100];
+        char                    buffer2[100];
+        char                    endpoint[256];
+        
+        if( argc > 1)
         {
-			InteropTestPortType	ws( endpoint, APTHTTP1_1);
+                strcpy( endpoint, argv[1]);
+        }
+        else
+        {
+                const char *    server = "localhost";
+                const char *    port = "80";
 
-			ws.setTransportTimeout( 5);
-			ws.setTransportProperty( "SOAPAction", "InteropBase#echoString");
+                sprintf( endpoint, "http://%s:%s/axis/InteropBase", server, port);
+        }
+                
+        bool    bSuccess = false;
+        int             iRetryIterationCount = 3;
 
-			cout << "invoking echoString..." << endl;
+        do
+        {
+                try
+        {
+                        InteropTestPortType     ws( endpoint, APTHTTP1_1);
+
+                        ws.setTransportTimeout( 5);
+                        ws.setTransportProperty( "SOAPAction", "InteropBase#echoString");
+
+                        cout << "invoking echoString..." << endl;
 //testing echoString 
 
-			string	bigString;
+                        string  bigString;
 
-			for (int ii = 0; ii < 2; ii++)
-			{
-				bigString += "hello world ";
-			}
+                        for (int ii = 0; ii < 2; ii++)
+                        {
+                                bigString += "hello world ";
+                        }
 
-			strcpy( buffer1, bigString.c_str());
+                        strcpy( buffer1, bigString.c_str());
 
-			ws.setTransportProperty( "SOAPAction", "InteropBase#echoString");
+                        ws.setTransportProperty( "SOAPAction", "InteropBase#echoString");
 
-			cout << ws.echoString( buffer1) << endl;
+                        cout << ws.echoString( buffer1) << endl;
 
-			xsd__string	retString = ws.echoString( "hello world");
-			xsd__string	expString = "hello world";
+                        xsd__string     retString = ws.echoString( "hello world");
+                        xsd__string     expString = "hello world";
 
-			if( 0 == strcmp( retString, expString))
-			{
-				cout << "successful" << endl;
-			}
-			else
-			{
-				cout << "Failed.  The returned string (" << retString << ") was not the same as the expected string(" << expString << ")." << endl;
-			}
+                        if( 0 == strcmp( retString, expString))
+                        {
+                                cout << "successful" << endl;
+                        }
+                        else
+                        {
+                                cout << "Failed.  The returned string (" << retString << ") was not the same as the expected string(" << expString << ")." << endl;
+                        }
 
 // testing echoStringArray 
-			xsd__string_Array	arrstr;
-			xsd__string *		sToSend = new xsd__string[ARRAYSIZE];
+                        xsd__string_Array       arrstr;
+                        xsd__string *           sToSend = new xsd__string[ARRAYSIZE];
 
-			sprintf( buffer1, "%dth element of string array", 0);
-			sprintf( buffer2, "%dst element of string array", 1);
+                        sprintf( buffer1, "%dth element of string array", 0);
+                        sprintf( buffer2, "%dst element of string array", 1);
 
-			sToSend[0]= buffer1;
-			sToSend[1]= buffer2;
+                        sToSend[0]= buffer1;
+                        sToSend[1]= buffer2;
 
-			arrstr.set( sToSend, ARRAYSIZE);
+                        arrstr.set( sToSend, ARRAYSIZE);
 
-			ws.setTransportProperty( "SOAPAction", "InteropBase#echoStringArray");
+                        ws.setTransportProperty( "SOAPAction", "InteropBase#echoStringArray");
 
-			cout << "invoking echoStringArray..." << endl;
+                        cout << "invoking echoStringArray..." << endl;
 
-			int					outputSize = 0;
-			xsd__string_Array *	outPutStrArray = ws.echoStringArray( &arrstr);
+                        int                                     outputSize = 0;
+                        xsd__string_Array *     outPutStrArray = ws.echoStringArray( &arrstr);
 
-			if( outPutStrArray != NULL &&
-				outPutStrArray->get( outputSize) != NULL &&
-				outputSize == ARRAYSIZE)
-			{
-				cout << "successful" << endl;
-			}
-			else
-			{
-				cout << "Failed. outputsize=" << outputSize << endl;
-			}
+                        if( outPutStrArray != NULL &&
+                                outPutStrArray->get( outputSize) != NULL &&
+                                outputSize == ARRAYSIZE)
+                        {
+                                cout << "successful" << endl;
+                        }
+                        else
+                        {
+                                cout << "Failed. outputsize=" << outputSize << endl;
+                        }
 
 // testing echoInteger 
-			ws.setTransportProperty("SOAPAction" , "InteropBase#echoInteger");
+                        ws.setTransportProperty("SOAPAction" , "InteropBase#echoInteger");
 
-			cout << "invoking echoInteger..." << endl;
+                        cout << "invoking echoInteger..." << endl;
 
-			xsd__int		expInt = 56;
-			xsd__integer	retInt = ws.echoInteger( expInt);
+                        xsd__int                expInt = 56;
+                        xsd__integer    retInt = ws.echoInteger( expInt);
 
 
-			if( retInt == expInt)
-			{
-				cout << "successful" << endl;
-			}
-			else
-			{
-				cout << "Failed.  The returned integer (" << retInt << ") was not the same as the expected integer (" << expInt << ")." << endl;
-			}
+                        if( retInt == expInt)
+                        {
+                                cout << "successful" << endl;
+                        }
+                        else
+                        {
+                                cout << "Failed.  The returned integer (" << retInt << ") was not the same as the expected integer (" << expInt << ")." << endl;
+                        }
 
-	// testing echoIntegerArray 
-			xsd__int_Array	arrint;
-			xsd__int **		iToSend = new xsd__int*[ARRAYSIZE];
+        // testing echoIntegerArray 
+                        xsd__int_Array  arrint;
+                        xsd__int **             iToSend = new xsd__int*[ARRAYSIZE];
 
             int count;
-			for( count = 0; count < ARRAYSIZE; count++)
-			{
-				iToSend[count] = new xsd__int(count);
-			}
+                        for( count = 0; count < ARRAYSIZE; count++)
+                        {
+                                iToSend[count] = new xsd__int(count);
+                        }
 
-			arrint.set( iToSend, ARRAYSIZE);
+                        arrint.set( iToSend, ARRAYSIZE);
 
-			ws.setTransportProperty( "SOAPAction" , "InteropBase#echoIntegerArray");
+                        ws.setTransportProperty( "SOAPAction" , "InteropBase#echoIntegerArray");
 
-			cout << "invoking echoIntegerArray..." << endl;
+                        cout << "invoking echoIntegerArray..." << endl;
 
-			outputSize = 0;
+                        outputSize = 0;
 
-			xsd__int_Array *	outPutIntArray = ws.echoIntegerArray( &arrint);
+                        xsd__int_Array *        outPutIntArray = ws.echoIntegerArray( &arrint);
 
-			if( outPutIntArray != NULL &&
-				outPutIntArray->get( outputSize) != NULL &&
-				outputSize == ARRAYSIZE)
-			{
-				cout << "successful" << endl;
-			}
-			else
-			{
-				cout << "Failed.  outputsize=" << outputSize << endl;
-			}
+                        if( outPutIntArray != NULL &&
+                                outPutIntArray->get( outputSize) != NULL &&
+                                outputSize == ARRAYSIZE)
+                        {
+                                cout << "successful" << endl;
+                        }
+                        else
+                        {
+                                cout << "Failed.  outputsize=" << outputSize << endl;
+                        }
 
-	// testing echoFloat 
-			cout << "invoking echoFloat..." << endl;
+        // testing echoFloat 
+                        cout << "invoking echoFloat..." << endl;
 
-			float		fvalue = (float) 1.4214;
+                        float           fvalue = (float) 1.4214;
 
-			ws.setTransportProperty( "SOAPAction", "InteropBase#echoFloat");
+                        ws.setTransportProperty( "SOAPAction", "InteropBase#echoFloat");
 
-			xsd__float	retFloat = ws.echoFloat( fvalue);
-			xsd__float	expFloat = macro_ToTwoDecPlaces( fvalue, float);
+                        xsd__float      retFloat = ws.echoFloat( fvalue);
+                        xsd__float      expFloat = macro_ToTwoDecPlaces( fvalue, float);
 
-			if( retFloat > expFloat)
-			{
-				cout << "successful" << endl;
-			}
-			else
-			{
-				cout << "Failed.  The returned float (" << retFloat << ") was not the same as the expected float (" << expFloat << ")." << endl;
-			}
+                        if( retFloat > expFloat)
+                        {
+                                cout << "successful" << endl;
+                        }
+                        else
+                        {
+                                cout << "Failed.  The returned float (" << retFloat << ") was not the same as the expected float (" << expFloat << ")." << endl;
+                        }
 
-	// testing echoFloatArray 
-			xsd__float_Array	arrfloat;
-			xsd__float **		fToSend = new xsd__float*[ARRAYSIZE];
+        // testing echoFloatArray 
+                        xsd__float_Array        arrfloat;
+                        xsd__float **           fToSend = new xsd__float*[ARRAYSIZE];
 
-			for( count = 0; count < ARRAYSIZE; count++)
-			{
-				fToSend[count] = new xsd__float( (xsd__float) 1.1111 * (xsd__float) count);
-			}
+                        for( count = 0; count < ARRAYSIZE; count++)
+                        {
+                                fToSend[count] = new xsd__float( (xsd__float) 1.1111 * (xsd__float) count);
+                        }
 
-			arrfloat.set( fToSend, ARRAYSIZE);
+                        arrfloat.set( fToSend, ARRAYSIZE);
 
-			ws.setTransportProperty( "SOAPAction", "InteropBase#echoFloatArray");
+                        ws.setTransportProperty( "SOAPAction", "InteropBase#echoFloatArray");
 
-			cout << "invoking echoFloatArray..." << endl;
+                        cout << "invoking echoFloatArray..." << endl;
 
-			outputSize = 0;
+                        outputSize = 0;
 
-			xsd__float_Array *	outPutFloatArray = ws.echoFloatArray( &arrfloat);
+                        xsd__float_Array *      outPutFloatArray = ws.echoFloatArray( &arrfloat);
 
-			if( outPutFloatArray != NULL &&
-				outPutFloatArray->get( outputSize) != NULL &&
-				outputSize == ARRAYSIZE)	
-			{
-				cout << "successful" << endl;
-			}
-			else
-			{
-				cout << "Failed.  outputsize=" << outputSize << endl;
-			}
+                        if( outPutFloatArray != NULL &&
+                                outPutFloatArray->get( outputSize) != NULL &&
+                                outputSize == ARRAYSIZE)        
+                        {
+                                cout << "successful" << endl;
+                        }
+                        else
+                        {
+                                cout << "Failed.  outputsize=" << outputSize << endl;
+                        }
 
-	// testing echo Struct
-			SOAPStruct	stct;
+        // testing echo Struct
+                        SOAPStruct      stct;
 
-			stct.varFloat = new float;
-			stct.varInt = new int;
+                        stct.varFloat = new float;
+                        stct.varInt = new int;
 
-			*(stct.varFloat) = (xsd__float) 12345.7346345;
-			*(stct.varInt) = 5000;
+                        *(stct.varFloat) = (xsd__float) 12345.7346345;
+                        *(stct.varInt) = 5000;
 
-			stct.varString = strdup( "This is string in SOAPStruct");
+                        stct.varString = strdup( "This is string in SOAPStruct");
 
-			cout << "invoking echoStruct..." << endl;
+                        cout << "invoking echoStruct..." << endl;
 
-			ws.setTransportProperty( "SOAPAction", "InteropBase#echoStruct");
+                        ws.setTransportProperty( "SOAPAction", "InteropBase#echoStruct");
 
-			if( ws.echoStruct( &stct) != NULL)
-			{
-				cout << "successful" << endl;
-			}
-			else
-			{
-				cout << "Failed.  The deserialised structure was null." << endl;
-			}
+                        if( ws.echoStruct( &stct) != NULL)
+                        {
+                                cout << "successful" << endl;
+                        }
+                        else
+                        {
+                                cout << "Failed.  The deserialised structure was null." << endl;
+                        }
 
-	//testing echo Array of Struct
-			SOAPStruct_Array	arrstct;
-			SOAPStruct **		m_Array4 = new SOAPStruct *[ARRAYSIZE];
-			SOAPStruct			ssToSend[ARRAYSIZE];
-			xsd__float			myFloat;
+        //testing echo Array of Struct
+                        SOAPStruct_Array        arrstct;
+                        SOAPStruct **           m_Array4 = new SOAPStruct *[ARRAYSIZE];
+                        SOAPStruct                      ssToSend[ARRAYSIZE];
+                        xsd__float                      myFloat;
 
-			for( count = 0; count < ARRAYSIZE; count++)
-			{
-				myFloat = (xsd__float) (1.1111 * count);
+                        for( count = 0; count < ARRAYSIZE; count++)
+                        {
+                                myFloat = (xsd__float) (1.1111 * count);
 
-				ssToSend[count].setvarFloat( &myFloat);
-				ssToSend[count].setvarInt( &count);
-
-				sprintf( buffer1, "varString of %dth element of SOAPStruct array", count);
-
-				ssToSend[count].setvarString( buffer1);
-
-				m_Array4[count] = &ssToSend[count];
-			}
-
-			arrstct.set( m_Array4, ARRAYSIZE);
-
-	//testing echo Struct Array
-			ws.setTransportProperty( "SOAPAction", "InteropBase#echoStructArray");
-
-			cout << "invoking echoStructArray..." << endl;
-
-			SOAPStruct_Array *	outPutStructArray = ws.echoStructArray( &arrstct);
-
-			if( outPutStructArray != NULL)
-			{
-				outputSize = 0;
-
-				SOAPStruct ** ppSOAPStruct = outPutStructArray->get( outputSize);
-
-				if( ppSOAPStruct != NULL && outputSize == ARRAYSIZE)
-				{
-					cout << "successful" << endl;
-				}
-				else
-				{
-					cout << "Failed.  outputsize = " << outputSize << endl;
-
-					for( int iIndex = 0; iIndex < outputSize; iIndex++)
-					{
-						cout << "Failed(" << iIndex << ") varString = \"" << ppSOAPStruct[iIndex]->getvarString() << "\", varInt = " << *ppSOAPStruct[iIndex]->getvarInt() << ", varFloat = " << *ppSOAPStruct[iIndex]->getvarFloat() << endl;
-					}
-				}
-			}
-			else
-			{
-				cout << "Failed.  outPutStructArray = NULL" << endl;
-			}
-
-	//testing echo void
-			cout << "invoking echoVoid..." << endl;
-
-			ws.setTransportProperty( "SOAPAction", "InteropBase#echoVoid");
-			ws.echoVoid();
-
-			cout << "successful" << endl;
-
-	//testing echo base 64 binary
-			const char *		bstr = stringToAscii( "some string that is sent encoded to either base64Binary or hexBinary");
-			xsd__base64Binary	bb;
-
-			cout << "invoking echoBase64..." << endl;
-
-			bb.set( (unsigned char *) strdup( bstr), (xsd__int) strlen( bstr));
-
-			ws.setTransportProperty( "SOAPAction", "InteropBase#echoBase64");
-
-			xsd__base64Binary			bbResult = ws.echoBase64( bb);
-			xsd__int					size = 0;
-			const xsd__unsignedByte *	data = bbResult.get( size);
-
-			if( bb.getSize() == size)
-			{
-				cout << "successful" << endl;
-				cout << "Returned String :" << endl << asciiToString( (char *) data) << endl;
-			}
-			else
-			{
-				cout << "Failed.  The returned base 64 binary size (" << size << ") was not the same as the expected size (" << bb.getSize() << ")." << endl;
-			}
-
-			time_t		timeToTest = 1100246323;
-			struct tm *	temp = gmtime( &timeToTest);
-			struct tm	time;
-
-			memcpy( &time, temp, sizeof( struct tm));
-
-			cout << "invoking echoDate..." << endl;
-
-			ws.setTransportProperty( "SOAPAction", "InteropBase#echoDate");
-
-			xsd__dateTime	ed_temp = ws.echoDate( time);
-			
-			// A simple memcmp of ed_temp and time will not work because
-			// it does not take into account timezone, so we need to 
-			// compare results of asctime()
-			char ExpectedTime[1024];
-			char ReturnedTime[1024];
-			
-			char *	pExpectedTime = asctime( &time );
-			int	 iETLength = (pExpectedTime != NULL) ? (int) strlen(pExpectedTime) : 0;
-			if (iETLength > 0)
-				strcpy(ExpectedTime, pExpectedTime);
-			
-			char *	pReturnedTime = asctime( &ed_temp );
-			int		iRTLength = (pReturnedTime != NULL) ? (int) strlen(pReturnedTime) : 0;
-			if( iRTLength > 0)
-				strcpy(ReturnedTime, pReturnedTime);
-
-			if( iETLength > 0 && 
-				iRTLength > 0 &&
-				strcmp(ExpectedTime, ReturnedTime) == 0)
-			{
-				cout << "successful" << endl;
-			}
-			else
-			{
-				if( iETLength == 0)
-					strcpy(ExpectedTime,"NULL");
-
-				if( iRTLength == 0)
-					strcpy(ReturnedTime,"NULL");
-	
-				cout << "Failed.  The expected time (" << ExpectedTime << ") was not the same as the returned time (" << ReturnedTime << ")." << endl;
-			}
-
-	//testing echo hex binary
-			cout << "invoking echoHexBinary..." << endl;
-
-			xsd__hexBinary	hb;
-
-			hb.set( (unsigned char *) strdup( bstr), (xsd__int) strlen( bstr));
-
-			ws.setTransportProperty( "SOAPAction", "InteropBase#echoHexBinary");
-
-			xsd__hexBinary	hbResult = ws.echoHexBinary( hb);
-
-			size = 0;
-			data = hbResult.get( size);
-
-			if( hb.getSize() == size)
-			{
-				cout << "successful" << endl;
-				cout << "Returned String :" << endl << asciiToString( (char *) data) << endl;
-			}
-			else
-			{
-				cout << "Failed.  The returned hex64Binary size (" << size << ") was not the same as the expected hex64Binary size (" << hb.getSize() << ")." << endl;
-			}
-
-	//testing echo decimal
-			cout << "invoking echoDecimal..." << endl;
-
-			ws.setTransportProperty( "SOAPAction", "InteropBase#echoDecimal");
-
-			xsd__decimal decimalValue = 1234.567890;
-			xsd__decimal decimalExpected = macro_ToTwoDecPlaces( decimalValue, xsd__decimal);
-			xsd__decimal decimalReturn = ws.echoDecimal( decimalValue);
-
-			if( decimalReturn > decimalExpected)
-			{
-				cout << "successful" << endl;
-			}
-			else
-			{
-				cout << "Failed.  The returned value (" << decimalReturn << ") was not the same as the expected value (" << decimalExpected << ")." << endl;
-			}
-
-	//testing echo boolean
-			cout << "invoking echoBoolean..." << endl;
-
-			ws.setTransportProperty( "SOAPAction", "InteropBase#echoBoolean");
-
-			xsd__boolean	bExpected = true_;
-			xsd__boolean	bReturned = ws.echoBoolean( bExpected);
-
-			if( bReturned == bExpected)
-			{
-				cout << "successful" << endl;
-			}
-			else
-			{
-				cout << "Failed.  The returned value (" << macro_BoolToString( bReturned) << ") was not the same as the expected value (" << macro_BoolToString( bExpected) << ")." << endl;
-			}
-
-	bSuccess = true;
-	}
-	catch( AxisException& e)
-	{
-		bool bSilent = false;
-
-		if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-		{
-			if( iRetryIterationCount > 1)
-			{
-				bSilent = true;
-			}
-		}
-		else
-		{
-			iRetryIterationCount = 0;
-		}
+                                ssToSend[count].setvarFloat( &myFloat);
+                                ssToSend[count].setvarInt( &count);
+
+                                sprintf( buffer1, "varString of %dth element of SOAPStruct array", count);
+
+                                ssToSend[count].setvarString( buffer1);
+
+                                m_Array4[count] = &ssToSend[count];
+                        }
+
+                        arrstct.set( m_Array4, ARRAYSIZE);
+
+        //testing echo Struct Array
+                        ws.setTransportProperty( "SOAPAction", "InteropBase#echoStructArray");
+
+                        cout << "invoking echoStructArray..." << endl;
+
+                        SOAPStruct_Array *      outPutStructArray = ws.echoStructArray( &arrstct);
+
+                        if( outPutStructArray != NULL)
+                        {
+                                outputSize = 0;
+
+                                SOAPStruct ** ppSOAPStruct = outPutStructArray->get( outputSize);
+
+                                if( ppSOAPStruct != NULL && outputSize == ARRAYSIZE)
+                                {
+                                        cout << "successful" << endl;
+                                }
+                                else
+                                {
+                                        cout << "Failed.  outputsize = " << outputSize << endl;
+
+                                        for( int iIndex = 0; iIndex < outputSize; iIndex++)
+                                        {
+                                                cout << "Failed(" << iIndex << ") varString = \"" << ppSOAPStruct[iIndex]->getvarString() << "\", varInt = " << *ppSOAPStruct[iIndex]->getvarInt() << ", varFloat = " << *ppSOAPStruct[iIndex]->getvarFloat() << endl;
+                                        }
+                                }
+                        }
+                        else
+                        {
+                                cout << "Failed.  outPutStructArray = NULL" << endl;
+                        }
+
+        //testing echo void
+                        cout << "invoking echoVoid..." << endl;
+
+                        ws.setTransportProperty( "SOAPAction", "InteropBase#echoVoid");
+                        ws.echoVoid();
+
+                        cout << "successful" << endl;
+
+        //testing echo base 64 binary
+                        const char *            bstr = stringToAscii( "some string that is sent encoded to either base64Binary or hexBinary");
+                        xsd__base64Binary       bb;
+
+                        cout << "invoking echoBase64..." << endl;
+
+                        bb.set( (unsigned char *) strdup( bstr), (xsd__int) strlen( bstr));
+
+                        ws.setTransportProperty( "SOAPAction", "InteropBase#echoBase64");
+
+                        xsd__base64Binary                       bbResult = ws.echoBase64( bb);
+                        xsd__int                                        size = 0;
+                        const xsd__unsignedByte *       data = bbResult.get( size);
+
+                        if( bb.getSize() == size)
+                        {
+                                cout << "successful" << endl;
+                                cout << "Returned String :" << endl << asciiToString( (char *) data) << endl;
+                        }
+                        else
+                        {
+                                cout << "Failed.  The returned base 64 binary size (" << size << ") was not the same as the expected size (" << bb.getSize() << ")." << endl;
+                        }
+
+                        time_t          timeToTest = 1100246323;
+                        struct tm *     temp = gmtime( &timeToTest);
+                        struct tm       time;
+
+                        memcpy( &time, temp, sizeof( struct tm));
+
+                        cout << "invoking echoDate..." << endl;
+
+                        ws.setTransportProperty( "SOAPAction", "InteropBase#echoDate");
+
+                        xsd__dateTime   ed_temp = ws.echoDate( time);
+                        
+                        // A simple memcmp of ed_temp and time will not work because
+                        // it does not take into account timezone, so we need to 
+                        // compare results of asctime()
+                        char ExpectedTime[1024];
+                        char ReturnedTime[1024];
+                        
+                        char *  pExpectedTime = asctime( &time );
+                        int      iETLength = (pExpectedTime != NULL) ? (int) strlen(pExpectedTime) : 0;
+                        if (iETLength > 0)
+                                strcpy(ExpectedTime, pExpectedTime);
+                        
+                        char *  pReturnedTime = asctime( &ed_temp );
+                        int             iRTLength = (pReturnedTime != NULL) ? (int) strlen(pReturnedTime) : 0;
+                        if( iRTLength > 0)
+                                strcpy(ReturnedTime, pReturnedTime);
+
+                        if( iETLength > 0 && 
+                                iRTLength > 0 &&
+                                strcmp(ExpectedTime, ReturnedTime) == 0)
+                        {
+                                cout << "successful" << endl;
+                        }
+                        else
+                        {
+                                if( iETLength == 0)
+                                        strcpy(ExpectedTime,"NULL");
+
+                                if( iRTLength == 0)
+                                        strcpy(ReturnedTime,"NULL");
+        
+                                cout << "Failed.  The expected time (" << ExpectedTime << ") was not the same as the returned time (" << ReturnedTime << ")." << endl;
+                        }
+
+        //testing echo hex binary
+                        cout << "invoking echoHexBinary..." << endl;
+
+                        xsd__hexBinary  hb;
+
+                        hb.set( (unsigned char *) strdup( bstr), (xsd__int) strlen( bstr));
+
+                        ws.setTransportProperty( "SOAPAction", "InteropBase#echoHexBinary");
+
+                        xsd__hexBinary  hbResult = ws.echoHexBinary( hb);
+
+                        size = 0;
+                        data = hbResult.get( size);
+
+                        if( hb.getSize() == size)
+                        {
+                                cout << "successful" << endl;
+                                cout << "Returned String :" << endl << asciiToString( (char *) data) << endl;
+                        }
+                        else
+                        {
+                                cout << "Failed.  The returned hex64Binary size (" << size << ") was not the same as the expected hex64Binary size (" << hb.getSize() << ")." << endl;
+                        }
+
+        //testing echo decimal
+                        cout << "invoking echoDecimal..." << endl;
+
+                        ws.setTransportProperty( "SOAPAction", "InteropBase#echoDecimal");
+
+                        xsd__decimal decimalValue = 1234.567890;
+                        xsd__decimal decimalExpected = macro_ToTwoDecPlaces( decimalValue, xsd__decimal);
+                        xsd__decimal decimalReturn = ws.echoDecimal( decimalValue);
+
+                        if( decimalReturn > decimalExpected)
+                        {
+                                cout << "successful" << endl;
+                        }
+                        else
+                        {
+                                cout << "Failed.  The returned value (" << decimalReturn << ") was not the same as the expected value (" << decimalExpected << ")." << endl;
+                        }
+
+        //testing echo boolean
+                        cout << "invoking echoBoolean..." << endl;
+
+                        ws.setTransportProperty( "SOAPAction", "InteropBase#echoBoolean");
+
+                        xsd__boolean    bExpected = true_;
+                        xsd__boolean    bReturned = ws.echoBoolean( bExpected);
+
+                        if( bReturned == bExpected)
+                        {
+                                cout << "successful" << endl;
+                        }
+                        else
+                        {
+                                cout << "Failed.  The returned value (" << macro_BoolToString( bReturned) << ") was not the same as the expected value (" << macro_BoolToString( bExpected) << ")." << endl;
+                        }
+
+        bSuccess = true;
+        }
+        catch( AxisException& e)
+        {
+                bool bSilent = false;
+
+                if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+                {
+                        if( iRetryIterationCount > 1)
+                        {
+                                bSilent = true;
+                        }
+                }
+                else
+                {
+                        iRetryIterationCount = 0;
+                }
 
         if( !bSilent)
-		{
-			cout << "Exception: " << e.what() << " has occurred." << endl;
-		}
-	}
-	catch( exception& e)
-	{
-		cout  << "Exception: " << e.what() << " has occurred." <<  endl;
-	}
-	catch( ...)
-	{
-		cout << "An unknown exception has occurred." << endl;
-	}
+                {
+                        cout << "Exception: " << e.what() << " has occurred." << endl;
+                }
+        }
+        catch( exception& e)
+        {
+                cout  << "Exception: " << e.what() << " has occurred." <<  endl;
+        }
+        catch( ...)
+        {
+                cout << "An unknown exception has occurred." << endl;
+        }
 
-	iRetryIterationCount--;
+        iRetryIterationCount--;
 
-	} while( iRetryIterationCount > 0 && !bSuccess);
+        } while( iRetryIterationCount > 0 && !bSuccess);
 
-	return 0;
+        return 0;
 }

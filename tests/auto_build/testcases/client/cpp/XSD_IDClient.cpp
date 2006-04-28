@@ -299,10 +299,10 @@ int main(int argc, char* argv[])
 
         // Test array
             
-		    
-		int arraySize = 2;
+                    
+                int arraySize = 2;
         xsd__ID_Array arrayInput;
-		xsd__ID * array=new xsd__ID[arraySize];        
+                xsd__ID * array=new xsd__ID[arraySize];        
         for (int inputIndex=0 ; inputIndex < arraySize ; inputIndex++)
         {
             array[inputIndex]= new char[25];
@@ -311,8 +311,8 @@ int main(int argc, char* argv[])
         }
         arrayInput.set(array,arraySize);
         xsd__ID_Array* arrayResult = ws->asArray(&arrayInput);
-		int outputSize=0;
-		const xsd__ID * output=arrayResult->get(outputSize);
+                int outputSize=0;
+                const xsd__ID * output=arrayResult->get(outputSize);
         cout << "array of " << outputSize << " elements" << endl;
         for (int index = 0; index < outputSize ; index++)
         {

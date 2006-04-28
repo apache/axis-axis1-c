@@ -46,94 +46,94 @@
 
 int main(int argc, char* argv[])
 {
-	char endpoint[256];
-	const char* url="http://localhost:80/axis/NestedComplex";
+        char endpoint[256];
+        const char* url="http://localhost:80/axis/NestedComplex";
 
-	if(argc>1)
-		url = argv[1];
+        if(argc>1)
+                url = argv[1];
 
-	try
-	{
-		sprintf(endpoint, "%s", url);
-		NestedComplex ws(endpoint);
+        try
+        {
+                sprintf(endpoint, "%s", url);
+                NestedComplex ws(endpoint);
 
-		ComplexType2 complexType2;
-		ComplexType2* response;
-		SimpleArrays *simpleArrays1 = new SimpleArrays;
-		SimpleArrays *simpleArrays2 = new SimpleArrays;
-		SimpleArrays *simpleArrays[2] = {simpleArrays1, simpleArrays2};
-		ComplexType1 *complexType1_1 = new ComplexType1;
-		ComplexType1 *complexType1_2 = new ComplexType1;
+                ComplexType2 complexType2;
+                ComplexType2* response;
+                SimpleArrays *simpleArrays1 = new SimpleArrays;
+                SimpleArrays *simpleArrays2 = new SimpleArrays;
+                SimpleArrays *simpleArrays[2] = {simpleArrays1, simpleArrays2};
+                ComplexType1 *complexType1_1 = new ComplexType1;
+                ComplexType1 *complexType1_2 = new ComplexType1;
 
-		for (int i=0; i<2; i++)
-		{
-			xsd__string_Array *strArray = simpleArrays[i]->stringArray;
-			xsd__int_Array *intArray = simpleArrays[i]->intArray;
-			xsd__string *strType = new xsd__string[ARRAYSIZE];
-			xsd__int ** intType = new xsd__int*[ARRAYSIZE];			
-			NEWCOPY(strType[0], "Apache");
-			NEWCOPY(strType[1], "Axis C++");
-			strArray->set(strType,ARRAYSIZE);			
-			intType[0] = new int(6);			
-			intType[1] = new int(7);
-			intArray->set(intType,ARRAYSIZE);
-			delete intType[0];
-			delete intType[1];
-			delete [] intType;
-			delete strType[0];
-			delete strType[1];
-			delete [] strType;
-			
-		}
+                for (int i=0; i<2; i++)
+                {
+                        xsd__string_Array *strArray = simpleArrays[i]->stringArray;
+                        xsd__int_Array *intArray = simpleArrays[i]->intArray;
+                        xsd__string *strType = new xsd__string[ARRAYSIZE];
+                        xsd__int ** intType = new xsd__int*[ARRAYSIZE];                 
+                        NEWCOPY(strType[0], "Apache");
+                        NEWCOPY(strType[1], "Axis C++");
+                        strArray->set(strType,ARRAYSIZE);                       
+                        intType[0] = new int(6);                        
+                        intType[1] = new int(7);
+                        intArray->set(intType,ARRAYSIZE);
+                        delete intType[0];
+                        delete intType[1];
+                        delete [] intType;
+                        delete strType[0];
+                        delete strType[1];
+                        delete [] strType;
+                        
+                }
 
-		complexType1_1->simpleArrays = simpleArrays1;
-		NEWCOPY(complexType1_1->ct1_string, "Hello");
-		complexType1_1->ct1_int = 13;
-		complexType1_2->simpleArrays = simpleArrays2;
-		NEWCOPY(complexType1_2->ct1_string, "World");
-		complexType1_2->ct1_int = 27;
+                complexType1_1->simpleArrays = simpleArrays1;
+                NEWCOPY(complexType1_1->ct1_string, "Hello");
+                complexType1_1->ct1_int = 13;
+                complexType1_2->simpleArrays = simpleArrays2;
+                NEWCOPY(complexType1_2->ct1_string, "World");
+                complexType1_2->ct1_int = 27;
 
         
-		ComplexType1_Array cType1Array;
-		ComplexType1 ** array = new ComplexType1*[ARRAYSIZE];
-		array[0]= complexType1_1;
-		array[1] = complexType1_2;
-		cType1Array.set(array,ARRAYSIZE);
-		complexType2.setcomplexType1Array(&cType1Array);
-		delete array[0];
-		delete array[1];
-		delete []array;
-		response = ws.echoNestedComplex(&complexType2);
-		int outputSize =0;
-		ComplexType1 ** output = response->getcomplexType1Array()->get(outputSize);
-		cout << output[0]->ct1_string << endl;
-		cout << output[0]->ct1_int << endl;
-		cout << output[0]->simpleArrays->stringArray->get(outputSize)[0] << " ";
-		cout << output[0]->simpleArrays->stringArray->get(outputSize)[1] << endl;
-		cout << *(output[0]->simpleArrays->intArray->get(outputSize)[0]) << " ";
-		cout << *(output[0]->simpleArrays->intArray->get(outputSize)[1]) << endl;
-		cout << output[1]->ct1_string << endl;
-		cout << output[1]->ct1_int << endl;
-		cout << output[1]->simpleArrays->stringArray->get(outputSize)[0] << " ";
-		cout << output[1]->simpleArrays->stringArray->get(outputSize)[1] << endl;
-		cout << *(output[1]->simpleArrays->intArray->get(outputSize)[0]) << " ";
-		cout << *(output[1]->simpleArrays->intArray->get(outputSize)[1]) << endl;
+                ComplexType1_Array cType1Array;
+                ComplexType1 ** array = new ComplexType1*[ARRAYSIZE];
+                array[0]= complexType1_1;
+                array[1] = complexType1_2;
+                cType1Array.set(array,ARRAYSIZE);
+                complexType2.setcomplexType1Array(&cType1Array);
+                delete array[0];
+                delete array[1];
+                delete []array;
+                response = ws.echoNestedComplex(&complexType2);
+                int outputSize =0;
+                ComplexType1 ** output = response->getcomplexType1Array()->get(outputSize);
+                cout << output[0]->ct1_string << endl;
+                cout << output[0]->ct1_int << endl;
+                cout << output[0]->simpleArrays->stringArray->get(outputSize)[0] << " ";
+                cout << output[0]->simpleArrays->stringArray->get(outputSize)[1] << endl;
+                cout << *(output[0]->simpleArrays->intArray->get(outputSize)[0]) << " ";
+                cout << *(output[0]->simpleArrays->intArray->get(outputSize)[1]) << endl;
+                cout << output[1]->ct1_string << endl;
+                cout << output[1]->ct1_int << endl;
+                cout << output[1]->simpleArrays->stringArray->get(outputSize)[0] << " ";
+                cout << output[1]->simpleArrays->stringArray->get(outputSize)[1] << endl;
+                cout << *(output[1]->simpleArrays->intArray->get(outputSize)[0]) << " ";
+                cout << *(output[1]->simpleArrays->intArray->get(outputSize)[1]) << endl;
 
-	}
-	catch(AxisException& e)
-	{
-	    cout << "Exception : " << e.what() << endl;
-	}
-	catch(exception& e)
-	{
-	    cout << "Unknown exception has occured : " << e.what() << endl;
-	}
-	catch(...)
-	{
-	    cout << "Unknown exception has occured" << endl;
-	}
-	cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;
+        }
+        catch(AxisException& e)
+        {
+            cout << "Exception : " << e.what() << endl;
+        }
+        catch(exception& e)
+        {
+            cout << "Unknown exception has occured : " << e.what() << endl;
+        }
+        catch(...)
+        {
+            cout << "Unknown exception has occured" << endl;
+        }
+        cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;
 
-	return 0;
+        return 0;
 }
 

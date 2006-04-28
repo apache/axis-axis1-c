@@ -32,30 +32,30 @@ void setLogOptions(const char *output_filename);
 
 int main(int argc, char* argv[])
 { 
-	XSD_byte* ws;
+        XSD_byte* ws;
 
-	char *endpoint = WSDL_DEFAULT_ENDPOINT;
-	bool endpoint_set = false;
-	int returnValue = 1; // Assume Failure
+        char *endpoint = WSDL_DEFAULT_ENDPOINT;
+        bool endpoint_set = false;
+        int returnValue = 1; // Assume Failure
 
-	endpoint_set = parse_args_for_endpoint(&argc, argv, &endpoint);
+        endpoint_set = parse_args_for_endpoint(&argc, argv, &endpoint);
 
-	bool bSuccess = false;
-	int	iRetryIterationCount = 1;
+        bool bSuccess = false;
+        int     iRetryIterationCount = 1;
 
-	do
-	{
-	 try {
-		if(endpoint_set) {
-			ws = new XSD_byte(endpoint);
-			free(endpoint);
-			 endpoint_set = false;
-		} else
-			ws = new XSD_byte();
+        do
+        {
+         try {
+                if(endpoint_set) {
+                        ws = new XSD_byte(endpoint);
+                        free(endpoint);
+                         endpoint_set = false;
+                } else
+                        ws = new XSD_byte();
 
-	
-	oneSimpleComplexType* onesimplecomplextype = new oneSimpleComplexType();
-	onesimplecomplextype->onecomplexTypeElement=xsd__byte(65);
+        
+        oneSimpleComplexType* onesimplecomplextype = new oneSimpleComplexType();
+        onesimplecomplextype->onecomplexTypeElement=xsd__byte(65);
 
     SimpleComplexType* input = new SimpleComplexType();
 
@@ -66,41 +66,41 @@ int main(int argc, char* argv[])
     SimpleComplexType* result = NULL;
     result = ws->asComplexType(input);
 
-	if ( result == NULL )
-	{
-			cout << "Returned result object is NULL" << endl;
-			return -1;
-	}
+        if ( result == NULL )
+        {
+                        cout << "Returned result object is NULL" << endl;
+                        return -1;
+        }
 
-	// For ebcdic-based platforms, need to convert ascii 'A' (decimal 65) to ebcdic before
-	// writing to stdout. Following assignment statement will do just that.
+        // For ebcdic-based platforms, need to convert ascii 'A' (decimal 65) to ebcdic before
+        // writing to stdout. Following assignment statement will do just that.
     xsd__byte resultField1 = result->complexTypeElement->onecomplexTypeElement;
     if (resultField1 == 65) resultField1 = 'A';
     cout << "Result field1 is = " << resultField1 << endl;
 
-	bSuccess = true;
+        bSuccess = true;
 
     returnValue = 0; // Success
 
   } catch(AxisException &e) {
-			bool bSilent = false;
+                        bool bSilent = false;
 
-			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-			{
-				if( iRetryIterationCount > 0)
-				{
-					bSilent = true;
-				}
-			}
-			else
-			{
-				iRetryIterationCount = 0;
-			}
+                        if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+                        {
+                                if( iRetryIterationCount > 0)
+                                {
+                                        bSilent = true;
+                                }
+                        }
+                        else
+                        {
+                                iRetryIterationCount = 0;
+                        }
 
             if( !bSilent)
-			{
+                        {
     cout << e.what() << endl;
-			}
+                        }
   } catch(...) {
     cout << "Unknown Exception occured." << endl;
   }
@@ -108,18 +108,18 @@ int main(int argc, char* argv[])
   // Samisa : clean up memory allocated for stub
   try
   {
-	  delete ws; 
+          delete ws; 
   }
   catch(exception& exception)
   {
-  	cout << "Exception on clean up of ws : " << exception.what()<<endl;
+        cout << "Exception on clean up of ws : " << exception.what()<<endl;
   }
   catch(...)
   {
-  	cout << "Unknown exception on clean up of ws : " << endl;
+        cout << "Unknown exception on clean up of ws : " << endl;
   }
-		iRetryIterationCount--;
-		} while( iRetryIterationCount > 0 && !bSuccess);
+                iRetryIterationCount--;
+                } while( iRetryIterationCount > 0 && !bSuccess);
     if(endpoint_set)
       free(endpoint);
   cout << "---------------------- TEST COMPLETE -----------------------------"<< endl;

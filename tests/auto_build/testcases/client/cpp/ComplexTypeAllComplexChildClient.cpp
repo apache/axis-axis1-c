@@ -40,11 +40,11 @@ int main(int argc, char* argv[])
 
   endpoint_set = parse_args_for_endpoint(&argc, argv, &endpoint);
 
-		bool bSuccess = false;
-		int	iRetryIterationCount = 3;
+                bool bSuccess = false;
+                int     iRetryIterationCount = 3;
 
-		do
-		{
+                do
+                {
   try {
     if(endpoint_set) {
       ws = new XSD_byte(endpoint);
@@ -53,9 +53,9 @@ int main(int argc, char* argv[])
     } else
       ws = new XSD_byte();
 
-	
-	oneSimpleComplexType* onesimplecomplextype = new oneSimpleComplexType();
-	onesimplecomplextype->onecomplexTypeElement=xsd__byte(65);
+        
+        oneSimpleComplexType* onesimplecomplextype = new oneSimpleComplexType();
+        onesimplecomplextype->onecomplexTypeElement=xsd__byte(65);
 
     SimpleComplexType* input = new SimpleComplexType();
 
@@ -72,32 +72,32 @@ int main(int argc, char* argv[])
     if (theByte == 0x41) theByte = 'A';
  #endif
     cout << "Result field1 is = " << theByte << endl;
-	cout << "Result field2 is = " << result->field2 << endl;
-	cout << "Result field3 is = " << *(result->field3) << endl;
+        cout << "Result field2 is = " << result->field2 << endl;
+        cout << "Result field3 is = " << *(result->field3) << endl;
 
-	bSuccess = true;
+        bSuccess = true;
 
     returnValue = 0; // Success
 
   } catch(AxisException &e) {
-			bool bSilent = false;
+                        bool bSilent = false;
 
-			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-			{
-				if( iRetryIterationCount > 0)
-				{
-					bSilent = true;
-				}
-			}
-			else
-			{
-				iRetryIterationCount = 0;
-			}
+                        if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+                        {
+                                if( iRetryIterationCount > 0)
+                                {
+                                        bSilent = true;
+                                }
+                        }
+                        else
+                        {
+                                iRetryIterationCount = 0;
+                        }
 
             if( !bSilent)
-			{
+                        {
     cout << e.what() << endl;
-			}
+                        }
   } catch(...) {
     cout << "Unknown Exception occured." << endl;
   }
@@ -105,18 +105,18 @@ int main(int argc, char* argv[])
   // Samisa : clean up memory allocated for stub
   try
   {
-	  delete ws; 
+          delete ws; 
   }
   catch(exception& exception)
   {
-  	cout << "Exception on clean up of ws : " << exception.what()<<endl;
+        cout << "Exception on clean up of ws : " << exception.what()<<endl;
   }
   catch(...)
   {
-  	cout << "Unknown exception on clean up of ws : " << endl;
+        cout << "Unknown exception on clean up of ws : " << endl;
   }
-		iRetryIterationCount--;
-		} while( iRetryIterationCount > 0 && !bSuccess);
+                iRetryIterationCount--;
+                } while( iRetryIterationCount > 0 && !bSuccess);
     if(endpoint_set)
       free(endpoint);
   cout << "---------------------- TEST COMPLETE -----------------------------"<< endl;

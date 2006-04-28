@@ -63,7 +63,7 @@ main(int argc, char *argv[])
     cout << "invoking echoString..." << endl;
     //testing echoString 
     bool bSuccess = false;
-    int	iRetryIterationCount = 3;
+    int iRetryIterationCount = 3;
 
     do
     {
@@ -172,7 +172,7 @@ main(int argc, char *argv[])
             if( !bSilent)
             {
                 cout << "AxisException : " << e.what() << endl;
-			}
+                        }
         }
         catch (exception& e)
         {

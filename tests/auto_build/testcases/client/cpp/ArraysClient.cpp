@@ -47,9 +47,9 @@ int main(int argc, char* argv[])
     testAxis_Array();
     testAxis_ArrayWithNillElements();
     testAxis_ArrayCopying();
-	testComplexTypeWithSimpleArray();
-	testArrayOfComplexType();
-	testCopyingArrayOfComplexType();
+    testComplexTypeWithSimpleArray();
+    testArrayOfComplexType();
+    testCopyingArrayOfComplexType();
 
     bool bSuccess = false;
     int iRetryIterationCount = 3;
@@ -57,7 +57,7 @@ int main(int argc, char* argv[])
     {
         try
         {
-			int count = 0;
+            int count = 0;
             sprintf(endpoint, "%s", url);
             Arrays ws(endpoint);
 
@@ -65,9 +65,8 @@ int main(int argc, char* argv[])
             xsd__int_Array inputArray;
             xsd__int** array = new xsd__int*[arraySize];
             for (count = 0 ; count < arraySize ; count++)
-            {
                 array[count] = new xsd__int(count);
-            }
+
             inputArray.set(array, arraySize);
 
             xsd__int_Array * outputArray = ws.simpleArray(&inputArray);
@@ -79,175 +78,140 @@ int main(int argc, char* argv[])
                 for (count = 0 ; count < outputSize ; count++)
                 {
                     if (output[count] != NULL)
-                    {
                         cout << *output[count] << endl;
-                    }
                     else
-                    {
                         cout << "NULL" << endl;
-                    }
                 }
             }
             else
-            {
                 cout << "NULL array" << endl;
+            delete outputArray;
+
+
+            ComplexTypeWithSimpleArray * inputComplexType = new ComplexTypeWithSimpleArray;
+            inputComplexType->setsimpleType(&inputArray);
+            ComplexTypeWithSimpleArray * outputComplexType = ws.complexTypeWithSimpleArray(inputComplexType);
+            outputArray = outputComplexType->getsimpleType();
+            if (outputComplexType != NULL)
+            {
+                output = outputArray->get(outputSize);
+                cout << "Array size = " << outputSize << endl;
+                if (output != NULL)
+                {
+                    for (int count = 0 ; count < outputSize ; count++)
+                    {
+                        if (output[count] != NULL)
+                            cout << *output[count] << endl;
+                        else
+                            cout << "NULL" << endl;
+                    }
+                }
+                else
+                    cout << "NULL array" << endl;
             }
-			delete outputArray;
-            
+            else
+                cout << "NULL complex type" << endl;
 
-			ComplexTypeWithSimpleArray * inputComplexType = new ComplexTypeWithSimpleArray;
-			inputComplexType->setsimpleType(&inputArray);
-			ComplexTypeWithSimpleArray * outputComplexType = ws.complexTypeWithSimpleArray(inputComplexType);
-			outputArray = outputComplexType->getsimpleType();
-			if (outputComplexType != NULL)
-			{
-				output = outputArray->get(outputSize);
-				cout << "Array size = " << outputSize << endl;
-				if (output != NULL)
-				{
-					for (int count = 0 ; count < outputSize ; count++)
-					{
-						if (output[count] != NULL)
-						{
-							cout << *output[count] << endl;
-						}
-						else
-						{
-							cout << "NULL" << endl;
-						}
-					}
-				}
-				else
-				{
-					cout << "NULL array" << endl;
-				}
-			}
-			else
-			{
-				cout << "NULL complex type" << endl;
-			}
+            // Clean up simple input array
+            for (count = 0 ; count < arraySize ; count++)
+                delete array[count];
+            delete [] array;
 
-			// Clean up simple input array
-			for (count = 0 ; count < arraySize ; count++)
-			{
-				delete array[count];
-			}
-			delete [] array;
+            delete inputComplexType;
+            delete outputComplexType;
 
-			delete inputComplexType;
-			delete outputComplexType;
+            ComplexTypeWithSimpleElement_Array complexArray;
+            int inputSize = 3;
+            ComplexTypeWithSimpleElement** complexInputArray = new ComplexTypeWithSimpleElement*[inputSize];
+            for (count = 0 ; count < inputSize ; count++)
+            {
+                complexInputArray[count] = new ComplexTypeWithSimpleElement();
+                complexInputArray[count]->setsimpleType(count);
+            }
+            complexArray.set(complexInputArray, inputSize);
 
-			ComplexTypeWithSimpleElement_Array complexArray;
-			int inputSize = 3;
-			ComplexTypeWithSimpleElement** complexInputArray = new ComplexTypeWithSimpleElement*[inputSize];
-			for (count = 0 ; count < inputSize ; count++)
-			{
-				complexInputArray[count] = new ComplexTypeWithSimpleElement();
-				complexInputArray[count]->setsimpleType(count);
-			}
-			complexArray.set(complexInputArray, inputSize);
+            ComplexTypeWithSimpleElement_Array * complexOutputAxis_Array = ws.complexTypeArray(&complexArray);
 
-			ComplexTypeWithSimpleElement_Array * complexOutputAxis_Array = ws.complexTypeArray(&complexArray);
+            outputSize = 0;
+            ComplexTypeWithSimpleElement** complexOutputArray = complexOutputAxis_Array->get(outputSize);
+            cout << "Complex array size is " << outputSize << endl;
+            if (complexOutputArray != NULL)
+            {
+                for (count = 0 ; count < outputSize ; count++)
+                {
+                    if (complexOutputArray[count] != NULL)
+                        cout << ((ComplexTypeWithSimpleElement) *complexOutputArray[count]).getsimpleType() << endl;
+                    else
+                        cout << "NULL" << endl;
+                }
+            }
+            else
+                cout << "NULL array" << endl;
+            delete complexOutputAxis_Array;
 
-			outputSize = 0;
-			ComplexTypeWithSimpleElement** complexOutputArray = complexOutputAxis_Array->get(outputSize);
-			cout << "Complex array size is " << outputSize << endl;
-			if (complexOutputArray != NULL)
-			{
-				for (count = 0 ; count < outputSize ; count++)
-				{
-					if (complexOutputArray[count] != NULL)
-					{
-						cout << ((ComplexTypeWithSimpleElement) *complexOutputArray[count]).getsimpleType() << endl;
-					}
-					else
-					{
-						cout << "NULL" << endl;
-					}
-				}
-			}
-			else
-			{
-				cout << "NULL array" << endl;
-			}
-			delete complexOutputAxis_Array;
+            ComplexTypeWithComplexArray complexTypeWithComplexArray;
+            complexTypeWithComplexArray.setcomplexTypeWithSimpleElement(&complexArray);
 
-			ComplexTypeWithComplexArray complexTypeWithComplexArray;
-			complexTypeWithComplexArray.setcomplexTypeWithSimpleElement(&complexArray);
+            ComplexTypeWithComplexArray * outputComplexTypeWithComplexArray =
+              ws.complexTypeWithComplexArray(&complexTypeWithComplexArray);
 
-			ComplexTypeWithComplexArray * outputComplexTypeWithComplexArray = ws.complexTypeWithComplexArray(&complexTypeWithComplexArray);
+            complexOutputAxis_Array = outputComplexTypeWithComplexArray->getcomplexTypeWithSimpleElement();
+            outputSize = 0;
+            complexOutputArray = complexOutputAxis_Array->get(outputSize);
+            cout << "Complex array size is " << outputSize << endl;
+            if (complexOutputArray != NULL)
+            {
+                for (count = 0 ; count < outputSize ; count++)
+                {
+                    if (complexOutputArray[count] != NULL)
+                        cout << complexOutputArray[count]->getsimpleType() << endl;
+                    else
+                        cout << "NULL" << endl;
+                }
+            }
+            else
+                cout << "NULL array" << endl;
+            delete outputComplexTypeWithComplexArray;
 
-			complexOutputAxis_Array = outputComplexTypeWithComplexArray->getcomplexTypeWithSimpleElement();
-			outputSize = 0;
-			complexOutputArray = complexOutputAxis_Array->get(outputSize);
-			cout << "Complex array size is " << outputSize << endl;
-			if (complexOutputArray != NULL)
-			{
-				for (count = 0 ; count < outputSize ; count++)
-				{
-					if (complexOutputArray[count] != NULL)
-					{
-						cout << complexOutputArray[count]->getsimpleType() << endl;
-					}
-					else
-					{
-						cout << "NULL" << endl;
-					}
-				}
-			}
-			else
-			{
-				cout << "NULL array" << endl;
-			}
-			delete outputComplexTypeWithComplexArray;
+            // Clean up complex input array
+            for (count = 0 ; count < inputSize ; count++)
+                delete complexInputArray[count];
+            delete [] complexInputArray;
 
-			// Clean up complex input array
-			for (count = 0 ; count < inputSize ; count++)
-			{
-				delete complexInputArray[count];
-			}
-			delete [] complexInputArray;
+            MoreComplexType_Array moreComplexTypeArray;
+            MoreComplexType** arrayOfMoreComplexType = new MoreComplexType*[inputSize];
+            for (count = 0 ; count < inputSize ; count++ )
+            {
+                xsd__string temp = new char[strlen("Hello World!") + 1];
+                strcpy(temp, "Hello World!");
+                arrayOfMoreComplexType[count] = new MoreComplexType();
+                arrayOfMoreComplexType[count]->setsimpleString(temp);
+            }
+            moreComplexTypeArray.set(arrayOfMoreComplexType, inputSize);
+            MoreComplexType_Array * outputMoreComplexTypeArray  = ws.moreComplexTypeArray(&moreComplexTypeArray);
+            outputSize = 0;
+            MoreComplexType** outputArrayOfMoreComplexType = outputMoreComplexTypeArray->get(outputSize);
+            cout <<"Complex array size is " << outputSize << endl;
+            if (outputArrayOfMoreComplexType != NULL)
+            {
+                for (count = 0 ; count < outputSize ; count++)
+                {
+                    if (outputArrayOfMoreComplexType[count] != NULL)
+                        cout << outputArrayOfMoreComplexType[count]->getsimpleString() << endl;
+                    else
+                        cout << "NULL" << endl;
+                }
+            }
+            else
+                cout << "NULL" << endl;
 
-			MoreComplexType_Array moreComplexTypeArray;
-			MoreComplexType** arrayOfMoreComplexType = new MoreComplexType*[inputSize];
-			for (count = 0 ; count < inputSize ; count++ )
-			{
-				xsd__string temp = new char[strlen("Hello World!") + 1];
-				strcpy(temp, "Hello World!");
-				arrayOfMoreComplexType[count] = new MoreComplexType();
-				arrayOfMoreComplexType[count]->setsimpleString(temp);
-			}
-			moreComplexTypeArray.set(arrayOfMoreComplexType, inputSize);
-			MoreComplexType_Array * outputMoreComplexTypeArray  = ws.moreComplexTypeArray(&moreComplexTypeArray);
-			outputSize = 0;
-			MoreComplexType** outputArrayOfMoreComplexType = outputMoreComplexTypeArray->get(outputSize);
-			cout <<"Complex array size is " << outputSize << endl;
-			if (outputArrayOfMoreComplexType != NULL)
-			{
-				for (count = 0 ; count < outputSize ; count++)
-				{
-					if (outputArrayOfMoreComplexType[count] != NULL)
-					{
-						cout << outputArrayOfMoreComplexType[count]->getsimpleString() << endl;
-					}
-					else
-					{
-						cout << "NULL" << endl;
-					}
-				}
-			}
-			else
-			{
-				cout << "NULL" << endl;
-			}
-
-			//Clean up more complex input array
-			for (count = 0 ; count < inputSize ; count++)
-			{
-				delete arrayOfMoreComplexType[count];
-			}
-			delete [] arrayOfMoreComplexType;
-			delete outputMoreComplexTypeArray;
+            //Clean up more complex input array
+            for (count = 0 ; count < inputSize ; count++)
+            {
+                delete arrayOfMoreComplexType[count];
+            }
+            delete [] arrayOfMoreComplexType;
+            delete outputMoreComplexTypeArray;
 
 
             bSuccess = 1;
@@ -256,71 +220,62 @@ int main(int argc, char* argv[])
         {
             bool bSilent = false;
 
-           if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-          {
-             if( iRetryIterationCount > 0)
-             {
-                 bSilent = true;
-               }
-         }
-         else
-          {
-             iRetryIterationCount = 0;
-         }
+            if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+            {
+                if( iRetryIterationCount > 0)
+                    bSilent = true;
+            }
+            else
+                iRetryIterationCount = 0;
 
             if( !bSilent)
-            {
-             cout << "Exception : " << e.what() << endl;
-           }
-     }
-     catch(exception& e)
-       {
-         cout << "Unexpected exception has occured: " << e.what() << endl;
-     }
-     catch(...)
+                cout << "Exception : " << e.what() << endl;
+        }
+        catch(exception& e)
         {
-         cout << "Unknown exception has occured" << endl;
-      }
-     iRetryIterationCount--;
-   } while( iRetryIterationCount > 0 && !bSuccess);
+            cout << "Unexpected exception has occured: " << e.what() << endl;
+        }
+        catch(...)
+        {
+            cout << "Unknown exception has occured" << endl;
+        }
+        iRetryIterationCount--;
+    }
+    while( iRetryIterationCount > 0 && !bSuccess);
+    
     cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;
- 
-  return 0;
+
+    return 0;
 }
 
 void PrintUsage()
 {
-  printf("Usage :\n Calculator <url>\n\n");
- exit(1);
+    printf("Usage :\n Calculator <url>\n\n");
+    exit(1);
 }
 
 bool IsNumber(const char* p)
 {
     for (unsigned int x=0; x < strlen(p); x++)
- {
-     if (!isdigit(p[x])) return false;
- }
- return true;
+        if (!isdigit(p[x])) return false;
+    return true;
 }
 
 void sig_handler(int sig) {
     signal(sig, sig_handler);
     cout << "SIGNAL RECEIVED " << sig << endl;
- exit(1);
+    exit(1);
 }
 
 void testAxis_Array()
 {
     int count = 0;
-    // Unit test the Axis_Array object for simple types (in this case xsd__int)
-    // Initialize Array
+    // Unit test the Axis_Array object for simple types (in this case xsd__int) Initialize Array
     int unitTestInputSize = 3;
     xsd__int_Array unitTest_Axis_Array;
     xsd__int** unitTestActualArray = new xsd__int*[unitTestInputSize];
     for (count = 0 ; count < unitTestInputSize ; count++ )
-    {
         unitTestActualArray[count] = new xsd__int(count);
-    }
     unitTest_Axis_Array.set(unitTestActualArray, unitTestInputSize);
 
     // Verify the correct data is available
@@ -332,25 +287,17 @@ void testAxis_Array()
         for (count = 0 ; count < size ; count++)
         {
             if (unitTestOutputArray[count] != NULL)
-            {
                 cout << *unitTestOutputArray[count] << endl;
-            }
             else
-            {
                 cout << "NULL" << endl;
-            }
         }
     }
     else
-    {
         cout << "NULL array" << endl;
-    }
 
     // Alter the content of the original array, this should no longer affect the Axis_Array object
     for (count = 0 ; count < unitTestInputSize ; count++ )
-    {
         *unitTestActualArray[count] = count * 1000;
-    }
 
     // Verify the correct data is available, and not the altered content
     unitTestOutputArray = unitTest_Axis_Array.get(size);
@@ -360,25 +307,17 @@ void testAxis_Array()
         for (count = 0 ; count < size ; count++)
         {
             if (unitTestOutputArray[count] != NULL)
-            {
                 cout << *unitTestOutputArray[count] << endl;
-            }
             else
-            {
                 cout << "NULL" << endl;
-            }
         }
     }
     else
-    {
         cout << "NULL array" << endl;
-    }
 
     // Delete the original array, this should not affect the Axis_Array
     for (count = 0 ; count < unitTestInputSize ; count++)
-    {
         delete unitTestActualArray[count];
-    }
     delete [] unitTestActualArray;
 
     // Verify the correct data is still available
@@ -389,25 +328,19 @@ void testAxis_Array()
         for (count = 0 ; count < size ; count++)
         {
             if (unitTestOutputArray[count] != NULL)
-            {
                 cout << *unitTestOutputArray[count] << endl;
-            }
             else
-            {
                 cout << "NULL" << endl;
-            }
         }
     }
     else
-    {
         cout << "NULL array" << endl;
-    }
 }
 
 void testAxis_ArrayWithNillElements()
 {
-    // Unit test the Axis_Array object for simple types (in this case xsd__int) with a nil (NULL) element
-    // Initialize Array
+    // Unit test the Axis_Array object for simple types (in this case xsd__int) with a nil (NULL) element Initialize
+    // Array
     int unitTestInputSize = 3;
     xsd__int_Array unitTest_Axis_Array;
     xsd__int** unitTestActualArray = new xsd__int*[unitTestInputSize];
@@ -417,10 +350,10 @@ void testAxis_ArrayWithNillElements()
 
     unitTest_Axis_Array.set(unitTestActualArray, unitTestInputSize);
 
-	// Clean up the input array
-	delete unitTestActualArray[0];
-	delete unitTestActualArray[2];
-	delete [] unitTestActualArray;
+    // Clean up the input array
+    delete unitTestActualArray[0];
+    delete unitTestActualArray[2];
+    delete [] unitTestActualArray;
 
     // Verify the correct data is available
     int size;
@@ -431,19 +364,13 @@ void testAxis_ArrayWithNillElements()
         for (int count = 0 ; count < size ; count++)
         {
             if (unitTestOutputArray[count] != NULL)
-            {
                 cout << *unitTestOutputArray[count] << endl;
-            }
             else
-            {
                 cout << "NULL" << endl;
-            }
         }
     }
     else
-    {
         cout << "NULL array" << endl;
-    }
 }
 
 void testAxis_ArrayCopying()
@@ -459,15 +386,11 @@ void testAxis_ArrayCopying()
     unitTest_Axis_Array.set(unitTestActualArray, unitTestInputSize);
 
     for (count = 0 ; count < unitTestInputSize ; count++ )
-    {
         *unitTestActualArray[count] = count * 10;
-    }
     unitTest_Axis_Array.set(unitTestActualArray, unitTestInputSize);
 
     for (count = 0 ; count < unitTestInputSize ; count++)
-    {
         delete unitTestActualArray[count];
-    }
     delete [] unitTestActualArray;
 
     int outputSize = 0;
@@ -478,139 +401,110 @@ void testAxis_ArrayCopying()
         for (count = 0 ; count < outputSize ; count++)
         {
             if (outputArray[count] != NULL)
-            {
                 cout << *outputArray[count] << endl;
-            }
             else
-            {
                 cout << "NULL" << endl;
-            }
         }
     }
     else
-    {
         cout << "NULL" << endl;
-    }
 }
 
 void testComplexTypeWithSimpleArray()
 {
-	ComplexTypeWithSimpleArray complexType;
-	int count = 0;
-	int inputSize = 3;
-	xsd__int_Array inputArray;
-	xsd__int** array = new xsd__int*[inputSize];
-	for (count = 0 ; count < inputSize ; count++ )
-	{
-		array[count] = new xsd__int(count);
-	}
-	inputArray.set(array, inputSize);
-	
-	// Clear up the input array
-	for (count = 0 ; count < inputSize ; count++ )
-	{
-		delete array[count];
-	}
-	delete [] array;
+    ComplexTypeWithSimpleArray complexType;
+    int count = 0;
+    int inputSize = 3;
+    xsd__int_Array inputArray;
+    xsd__int** array = new xsd__int*[inputSize];
+    for (count = 0 ; count < inputSize ; count++ )
+        array[count] = new xsd__int(count);
+    inputArray.set(array, inputSize);
 
-	complexType.setsimpleType(&inputArray);
+    // Clear up the input array
+    for (count = 0 ; count < inputSize ; count++ )
+        delete array[count];
+    delete [] array;
 
-	xsd__int_Array * outputArray = complexType.getsimpleType();
-	int outputSize = 0;
-	const xsd__int** output = outputArray->get(outputSize);
-	cout << "Size is " << outputSize << endl;
-	if (output != NULL)
-	{
-		for (count = 0 ; count < outputSize ; count++ )
-		{	
-			if (output[count] != NULL)
-			{
-				cout << *output[count] << endl;
-			}
-			else
-			{
-				cout << "NULL" << endl;
-			}
+    complexType.setsimpleType(&inputArray);
 
-		}
-	}
-	else
-	{
-		cout << "NULL array" << endl;
-	}
-
+    xsd__int_Array * outputArray = complexType.getsimpleType();
+    int outputSize = 0;
+    const xsd__int** output = outputArray->get(outputSize);
+    cout << "Size is " << outputSize << endl;
+    if (output != NULL)
+    {
+        for (count = 0 ; count < outputSize ; count++ )
+        {
+            if (output[count] != NULL)
+                cout << *output[count] << endl;
+            else
+                cout << "NULL" << endl;
+        }
+    }
+    else
+        cout << "NULL array" << endl;
 
 }
 
 void testArrayOfComplexType()
 {
-	ComplexTypeWithSimpleElement_Array array;
-	int count = 0;
-	int inputSize = 3;
-	ComplexTypeWithSimpleElement** inputArray = new ComplexTypeWithSimpleElement*[inputSize];
-	for (count = 0 ; count < inputSize ; count++)
-	{
-		inputArray[count] = new ComplexTypeWithSimpleElement();
-		inputArray[count]->setsimpleType(count);
-	}
-	array.set(inputArray, inputSize);
+    ComplexTypeWithSimpleElement_Array array;
+    int count = 0;
+    int inputSize = 3;
+    ComplexTypeWithSimpleElement** inputArray = new ComplexTypeWithSimpleElement*[inputSize];
+    for (count = 0 ; count < inputSize ; count++)
+    {
+        inputArray[count] = new ComplexTypeWithSimpleElement();
+        inputArray[count]->setsimpleType(count);
+    }
+    array.set(inputArray, inputSize);
 
-	int outputSize = 0;
-	ComplexTypeWithSimpleElement** outputArray = array.get(outputSize);
-	cout << "Size is " << outputSize << endl;
-	if (outputArray != NULL)
-	{
-		for (count = 0 ; count < outputSize ; count++)
-		{
-			if (outputArray[count] != NULL)
-			{
-				cout << ((ComplexTypeWithSimpleElement) *outputArray[count]).getsimpleType() << endl;
-			}
-			else
-			{
-				cout << "NULL" << endl;
-			}
-		}
-	}
-	else
-	{
-		cout << "NULL array" << endl;
-	}
+    int outputSize = 0;
+    ComplexTypeWithSimpleElement** outputArray = array.get(outputSize);
+    cout << "Size is " << outputSize << endl;
+    if (outputArray != NULL)
+    {
+        for (count = 0 ; count < outputSize ; count++)
+        {
+            if (outputArray[count] != NULL)
+                cout << ((ComplexTypeWithSimpleElement) *outputArray[count]).getsimpleType() << endl;
+            else
+                cout << "NULL" << endl;
+        }
+    }
+    else
+        cout << "NULL array" << endl;
 
-	// Delete contents of input array - NOTE: this will also be output array!
-	for (count = 0 ; count < inputSize ; count ++ )
-	{
-		delete inputArray[count];
-	}
-	delete [] inputArray;
+    // Delete contents of input array - NOTE: this will also be output array!
+    for (count = 0 ; count < inputSize ; count ++ )
+        delete inputArray[count];
+    delete [] inputArray;
 
 }
 
 void testCopyingArrayOfComplexType()
 {
-	ComplexTypeWithSimpleElement_Array * array = new ComplexTypeWithSimpleElement_Array();
-	int count = 0;
-	int inputSize = 3;
-	ComplexTypeWithSimpleElement** inputArray = new ComplexTypeWithSimpleElement*[inputSize];
-	for (count = 0 ; count < inputSize ; count++)
-	{
-		inputArray[count] = new ComplexTypeWithSimpleElement();
-		inputArray[count]->setsimpleType(count);
-	}
-	array->set(inputArray, inputSize);
+    ComplexTypeWithSimpleElement_Array * array = new ComplexTypeWithSimpleElement_Array();
+    int count = 0;
+    int inputSize = 3;
+    ComplexTypeWithSimpleElement** inputArray = new ComplexTypeWithSimpleElement*[inputSize];
+    for (count = 0 ; count < inputSize ; count++)
+    {
+        inputArray[count] = new ComplexTypeWithSimpleElement();
+        inputArray[count]->setsimpleType(count);
+    }
+    array->set(inputArray, inputSize);
 
-	ComplexTypeWithSimpleElement_Array * copyArray = new ComplexTypeWithSimpleElement_Array();
-	copyArray->clone(*array);
-	copyArray->clear();
-	delete (Axis_Array*) copyArray;
-	delete array;
+    ComplexTypeWithSimpleElement_Array * copyArray = new ComplexTypeWithSimpleElement_Array();
+    copyArray->clone(*array);
+    copyArray->clear();
+    delete (Axis_Array*) copyArray;
+    delete array;
 
-	// Delete contents of input array
-	for (count = 0 ; count < inputSize ; count ++ )
-	{
-		delete inputArray[count];
-	}
-	delete [] inputArray;
-
+    // Delete contents of input array
+    for (count = 0 ; count < inputSize ; count ++ )
+        delete inputArray[count];
+    delete [] inputArray;
 }
 

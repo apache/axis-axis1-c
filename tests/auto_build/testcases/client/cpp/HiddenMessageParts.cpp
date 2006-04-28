@@ -15,12 +15,12 @@ main (int argc, char *argv[])
     char *endpoint = WSDL_DEFAULT_ENDPOINT;
     bool endpoint_set = parse_args(&argc, argv, &endpoint); 
     
-    int returnValue = 1;	// Assume Failure
+    int returnValue = 1;        // Assume Failure
 
-	bool bSuccess = false;
+        bool bSuccess = false;
     PruebasBugPortType* ws;
-		try
-		{
+                try
+                {
             if(endpoint_set) 
             {
               ws = new PruebasBugPortType(endpoint, APTHTTP1_1);
@@ -39,29 +39,29 @@ main (int argc, char *argv[])
             cout <<"Sending................." << endl;
             xsd__int returnVal = ws->AbySend(data);
             cout << "result = "<<returnVal<<endl;
-			
-			bSuccess = true;
-			delete data;
-		}
-		catch (AxisException & e)
-		{
-			bool bSilent = false;
+                        
+                        bSuccess = true;
+                        delete data;
+                }
+                catch (AxisException & e)
+                {
+                        bool bSilent = false;
 
-			cout << "AxisException : " << e.what() << endl;
-		}
-		catch (exception & e)
-		{
-			cout << "Unexpected exception : " << e.what() << endl;
-		}	
-		catch (...)
-		{
-			cout << "Unknown Exception occured." << endl;
-		}
+                        cout << "AxisException : " << e.what() << endl;
+                }
+                catch (exception & e)
+                {
+                        cout << "Unexpected exception : " << e.what() << endl;
+                }       
+                catch (...)
+                {
+                        cout << "Unknown Exception occured." << endl;
+                }
 
 
     cout <<
-	"---------------------- TEST COMPLETE -----------------------------"
-	<< endl;
+        "---------------------- TEST COMPLETE -----------------------------"
+        << endl;
 
     return returnValue;
 }

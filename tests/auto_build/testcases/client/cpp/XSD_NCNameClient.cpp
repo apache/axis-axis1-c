@@ -36,7 +36,7 @@ int main(int argc, char* argv[])
         char emptyNCName[1] = "";
         xsd__NCName emptyInput = new char[1];
         strcpy (emptyInput, emptyNCName);
-		char simpleNCName[25] = "xml.si-mple_name ";
+                char simpleNCName[25] = "xml.si-mple_name ";
         xsd__NCName input = new char[25];
         strcpy (input, simpleNCName);
 
@@ -261,16 +261,16 @@ int main(int argc, char* argv[])
         // Test array
         int arraySize=2;
         xsd__NCName_Array arrayInput;
-		xsd__NCName * array=new xsd__NCName[arraySize];        
+                xsd__NCName * array=new xsd__NCName[arraySize];        
         for (int inputIndex=0 ; inputIndex < 2 ; inputIndex++)
         {
             array[inputIndex]= new char[25];
             strcpy (array[inputIndex], simpleNCName);
             
         }
-		arrayInput.set(array,arraySize);
+                arrayInput.set(array,arraySize);
         xsd__NCName_Array* arrayResult = ws->asArray(&arrayInput);
-		int outputSize = 0;
+                int outputSize = 0;
         const xsd__NCName* output = arrayResult->get(outputSize);
         cout << "array of " << outputSize << " elements" << endl;
         for (int index = 0; index < outputSize ; index++)

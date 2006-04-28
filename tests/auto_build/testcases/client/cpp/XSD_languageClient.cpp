@@ -299,18 +299,18 @@ int main(int argc, char* argv[])
 
         // Test array
         xsd__language_Array arrayInput;
-		int arraySize=2;
-		xsd__language * array = new xsd__language[arraySize];        
+                int arraySize=2;
+                xsd__language * array = new xsd__language[arraySize];        
         for (int inputIndex=0 ; inputIndex < arraySize ; inputIndex++)
         {
             array[inputIndex] = new char[25];
             strcpy (array[inputIndex], simplelanguage);
             
         }
-		arrayInput.set(array,arraySize);
+                arrayInput.set(array,arraySize);
         xsd__language_Array* arrayResult = ws->asArray(&arrayInput);
-		int outputSize=0;
-		const xsd__language *output = arrayResult->get(outputSize);
+                int outputSize=0;
+                const xsd__language *output = arrayResult->get(outputSize);
         cout << "array of " << outputSize << " elements" << endl;
         for (int index = 0; index < outputSize ; index++)
         {

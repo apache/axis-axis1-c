@@ -116,17 +116,17 @@ int main(int argc, char* argv[])
 */
         // Test array
         xsd__gMonthDay_Array arrayInput;
-		int arraySize = 2;
-		xsd__gMonthDay ** array = new xsd__gMonthDay*[arraySize];        
+                int arraySize = 2;
+                xsd__gMonthDay ** array = new xsd__gMonthDay*[arraySize];        
         for (int inputIndex=0 ; inputIndex < arraySize ; inputIndex++)
         {
             array[inputIndex] = new xsd__gMonthDay(time);
             
         }
-		arrayInput.set(array,arraySize);
+                arrayInput.set(array,arraySize);
         xsd__gMonthDay_Array* arrayResult = ws->asArray(&arrayInput);
-		int outputSize = 0;
-		const xsd__gMonthDay ** output = arrayResult->get(outputSize);
+                int outputSize = 0;
+                const xsd__gMonthDay ** output = arrayResult->get(outputSize);
         cout << "array of " << outputSize << " elements" << endl;
         for (int index = 0; index < outputSize ; index++)
         {

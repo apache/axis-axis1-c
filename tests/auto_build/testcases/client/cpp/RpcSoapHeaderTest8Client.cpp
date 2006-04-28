@@ -43,13 +43,13 @@ main(int argc, char *argv[])
     //endpoint for Axis CPP sample
     sprintf(endpoint, "http://%s:%s/axis/base", server, port);
     
-	// Set the endpoint from command line argument if set
-	if (argc > 1)
-		strcpy(endpoint, argv[1]);
+        // Set the endpoint from command line argument if set
+        if (argc > 1)
+                strcpy(endpoint, argv[1]);
 
-	
-	
-	InteropTestPortType ws(endpoint, APTHTTP1_1);
+        
+        
+        InteropTestPortType ws(endpoint, APTHTTP1_1);
 
     /*create a header of the form:
        <SOAP-ENV:Header>
@@ -60,7 +60,7 @@ main(int argc, char *argv[])
 
     //set SOAP headers
     IHeaderBlock *phb = ws.createSOAPHeaderBlock("TestHeader", 
-		"http://ws.apache.org/axisCppTest/");
+                "http://ws.apache.org/axisCppTest/");
 
     //set second SOAP headers
     phb = ws.createSOAPHeaderBlock("TestHeader2",
@@ -68,47 +68,47 @@ main(int argc, char *argv[])
                                                                                                                                                                            
     printf("invoking echoString...\n");
     //testing echoString 
-    		bool bSuccess = false;
-		int	iRetryIterationCount = 3;
+                bool bSuccess = false;
+                int     iRetryIterationCount = 3;
 
-		do
-		{
+                do
+                {
 try
     {
     if (0 == strcmp(ws.echoString("hello world"), "hello world"))
-	printf("successful\n");
+        printf("successful\n");
     else
-	printf("failed\n");
+        printf("failed\n");
 
-				bSuccess = true;
+                                bSuccess = true;
     }
     catch(AxisException& e)
     {
-			bool bSilent = false;
+                        bool bSilent = false;
 
-			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-			{
-				if( iRetryIterationCount > 0)
-				{
-					bSilent = true;
-				}
-			}
-			else
-			{
-				iRetryIterationCount = 0;
-			}
+                        if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+                        {
+                                if( iRetryIterationCount > 0)
+                                {
+                                        bSilent = true;
+                                }
+                        }
+                        else
+                        {
+                                iRetryIterationCount = 0;
+                        }
 
             if( !bSilent)
-			{
+                        {
         printf("%s\n", e.what());
-			}
+                        }
     }
     catch(...)
     {
         printf("unknown exception\n");
     }
-		iRetryIterationCount--;
-		} while( iRetryIterationCount > 0 && !bSuccess);
+                iRetryIterationCount--;
+                } while( iRetryIterationCount > 0 && !bSuccess);
 
 
     //test removing SOAP header block using pointer
@@ -118,11 +118,11 @@ try
     header = ws.getFirstSOAPHeaderBlock();
     ws.deleteSOAPHeaderBlock(header);
     //now the request should have no SOAP headers
-    	bSuccess = false;
-		iRetryIterationCount = 3;
+        bSuccess = false;
+                iRetryIterationCount = 3;
 
-		do
-		{
+                do
+                {
 try
     {
     if (0 == strcmp(ws.echoString("hello world"), "hello world"))
@@ -130,35 +130,35 @@ try
     else
         printf("failed\n");
 
-				bSuccess = true;
+                                bSuccess = true;
     }
     catch(AxisException& e)
     {
-			bool bSilent = false;
+                        bool bSilent = false;
 
-			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-			{
-				if( iRetryIterationCount > 0)
-				{
-					bSilent = true;
-				}
-			}
-			else
-			{
-				iRetryIterationCount = 0;
-			}
+                        if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+                        {
+                                if( iRetryIterationCount > 0)
+                                {
+                                        bSilent = true;
+                                }
+                        }
+                        else
+                        {
+                                iRetryIterationCount = 0;
+                        }
 
             if( !bSilent)
-			{
+                        {
         printf("%s\n", e.what());
-			}
+                        }
     }
     catch(...)
     {
         printf("unknown exception\n");
     }
-		iRetryIterationCount--;
-		} while( iRetryIterationCount > 0 && !bSuccess);
+                iRetryIterationCount--;
+                } while( iRetryIterationCount > 0 && !bSuccess);
 
 
 

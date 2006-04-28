@@ -18,86 +18,86 @@
 
 int main( int argc, char * argv[])
 {
-	bool	bSuccess = false;
-	int		iRetryIterationCount = 3;
+        bool    bSuccess = false;
+        int             iRetryIterationCount = 3;
 
-	do
-	{
-		try
-		{
-			const char *	pszURL = "http://localhost:9090/SameComplexTypeAndElementName/services/SameComplexTypeAndElementNameSoapImpl";
+        do
+        {
+                try
+                {
+                        const char *    pszURL = "http://localhost:9090/SameComplexTypeAndElementName/services/SameComplexTypeAndElementNameSoapImpl";
 
-			pszURL = argv[1];
+                        pszURL = argv[1];
 
-			TestServicePortType *	pWS = new TestServicePortType( pszURL, APTHTTP1_1);
-			SampleBeanBoolean *		pSBB = new SampleBeanBoolean();
-			SampleBeanComplex *		pSBC = new SampleBeanComplex();
+                        TestServicePortType *   pWS = new TestServicePortType( pszURL, APTHTTP1_1);
+                        SampleBeanBoolean *             pSBB = new SampleBeanBoolean();
+                        SampleBeanComplex *             pSBC = new SampleBeanComplex();
 
-			SampleBeanComplex_Array BBArrayIn;
-			SampleBeanComplex ** BBArray = NULL;			
-			BBArrayIn.set(BBArray,0);
-			pSBB->setSampleBean(&BBArrayIn);
-			pSBB->setSampleBeanBoolean(false_);
-	
-			pWS->aBeanPortTypeBase( pSBB);	
-			cout << "Called aBeanPortTypeBase()" << endl;
+                        SampleBeanComplex_Array BBArrayIn;
+                        SampleBeanComplex ** BBArray = NULL;                    
+                        BBArrayIn.set(BBArray,0);
+                        pSBB->setSampleBean(&BBArrayIn);
+                        pSBB->setSampleBeanBoolean(false_);
+        
+                        pWS->aBeanPortTypeBase( pSBB);  
+                        cout << "Called aBeanPortTypeBase()" << endl;
 
-			SampleBeanComplex_Array BCArrayIn;
-			SampleBeanComplex ** BCArray = NULL;			
-			BCArrayIn.set(BCArray,0);
-			
-			pSBC->setSampleBeanComplex_Ref(&BCArrayIn);
-			pSBC->setBoolean(false_);
-			pWS->aBeanPortTypeComplex( pSBC);
+                        SampleBeanComplex_Array BCArrayIn;
+                        SampleBeanComplex ** BCArray = NULL;                    
+                        BCArrayIn.set(BCArray,0);
+                        
+                        pSBC->setSampleBeanComplex_Ref(&BCArrayIn);
+                        pSBC->setBoolean(false_);
+                        pWS->aBeanPortTypeComplex( pSBC);
 
-			cout << "Called aBeanPortTypeComplex()" << endl;
+                        cout << "Called aBeanPortTypeComplex()" << endl;
 
-			delete pSBC;
-			delete pSBB;
-			delete pWS;
+                        delete pSBC;
+                        delete pSBB;
+                        delete pWS;
 
-			bSuccess = true;
-		}
-		catch( AxisException& e)
-		{
-			bool bSilent = false;
+                        bSuccess = true;
+                }
+                catch( AxisException& e)
+                {
+                        bool bSilent = false;
 
-			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-			{
-				if( iRetryIterationCount > 0)
-				{
-					bSilent = true;
-				}
-			}
-			else
-			{
-				iRetryIterationCount = 0;
-			}
+                        if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+                        {
+                                if( iRetryIterationCount > 0)
+                                {
+                                        bSilent = true;
+                                }
+                        }
+                        else
+                        {
+                                iRetryIterationCount = 0;
+                        }
 
-			if( !bSilent)
-			{
-				cout << "Exception : " << e.what() << endl;
-			}
-		}
-		catch( exception& e)
-		{
-			cout << "Unknown exception has occured : " << e.what() << endl;
-		}
-		catch(...)
-		{
-			cout << "Unknown exception has occured" << endl;
-		}
+                        if( !bSilent)
+                        {
+                                cout << "Exception : " << e.what() << endl;
+                        }
+                }
+                catch( exception& e)
+                {
+                        cout << "Unknown exception has occured : " << e.what() << endl;
+                }
+                catch(...)
+                {
+                        cout << "Unknown exception has occured" << endl;
+                }
 
-		iRetryIterationCount--;
-	} while( iRetryIterationCount > 0 && !bSuccess);
+                iRetryIterationCount--;
+        } while( iRetryIterationCount > 0 && !bSuccess);
 
-	if( bSuccess)
-	{
-		cout << "---------------------- TEST PASSED -----------------------------" << endl;
-	}
-	else
-	{
-		cout << "---------------------- TEST FAILED -----------------------------" << endl;
-	}
-	return 0;
+        if( bSuccess)
+        {
+                cout << "---------------------- TEST PASSED -----------------------------" << endl;
+        }
+        else
+        {
+                cout << "---------------------- TEST FAILED -----------------------------" << endl;
+        }
+        return 0;
 }

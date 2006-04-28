@@ -18,35 +18,35 @@
 
 int main( int argc, char * argv[])
 {
-	bool	bSuccess = false;
-	int		iRetryIterationCount = 3;
+        bool    bSuccess = false;
+        int             iRetryIterationCount = 3;
 
-	do
-	{
-		try
-		{
-			const char *	pszURL = "http://localhost:9090/axis/ValidXMLCharIsInterpretedAsCPPCommand";
+        do
+        {
+                try
+                {
+                        const char *    pszURL = "http://localhost:9090/axis/ValidXMLCharIsInterpretedAsCPPCommand";
 
-			pszURL = argv[1];
+                        pszURL = argv[1];
 
-			ValidXMLCharIsInterpretedAsCPPCommand *	pWS = new ValidXMLCharIsInterpretedAsCPPCommand( pszURL, APTHTTP1_1);
-			test1Punctuation *						pTest1Punctuation = new test1Punctuation();
-//			test2Logical *							pTest2Logical = new test2Logical();
-//			test3Mathematical *						pTest3Mathematical = new test3Mathematical();
-//			test4Miscellaneous *					pTest4Miscellaneous = new test4Miscellaneous();
+                        ValidXMLCharIsInterpretedAsCPPCommand * pWS = new ValidXMLCharIsInterpretedAsCPPCommand( pszURL, APTHTTP1_1);
+                        test1Punctuation *                                              pTest1Punctuation = new test1Punctuation();
+//                      test2Logical *                                                  pTest2Logical = new test2Logical();
+//                      test3Mathematical *                                             pTest3Mathematical = new test3Mathematical();
+//                      test4Miscellaneous *                                    pTest4Miscellaneous = new test4Miscellaneous();
 
-			pTest1Punctuation->setarg_WithADot( 1);
-			pTest1Punctuation->setarg_WithAnUnderscore( 2);
-			pTest1Punctuation->setarg_WithAHyphen( 3);
-			pTest1Punctuation->setarg_WithAColon( 4);
+                        pTest1Punctuation->setarg_WithADot( 1);
+                        pTest1Punctuation->setarg_WithAnUnderscore( 2);
+                        pTest1Punctuation->setarg_WithAHyphen( 3);
+                        pTest1Punctuation->setarg_WithAColon( 4);
             pTest1Punctuation->setarg__WithTwoUnderscores( 5);
             pTest1Punctuation->setarg_With_TwoDots( 6);
             pTest1Punctuation->setarg__WithTwoDotsInline( 7);
            
-//			pTest1Punctuation->setarg_name5( 5);
+//                      pTest1Punctuation->setarg_name5( 5);
 
-            cout <<"About to invoke test1"<<endl;			
-			xsd__int iResult1 = pWS->test1( pTest1Punctuation);
+            cout <<"About to invoke test1"<<endl;                       
+                        xsd__int iResult1 = pWS->test1( pTest1Punctuation);
             if( iResult1 == 1 + 2 + 3 + 4 + 5+6+7)
             {
               cout <<"Got result from test1 "<<iResult1<<endl;
@@ -70,94 +70,94 @@ int main( int argc, char * argv[])
               cout << "Results should have been 1+2+3+4+5+6+7="<<(1+2+3+4+5+6+7)<<" but was "<<iResult1<<endl;
             }
 
-/*			if( iResult1 == 1 + 2 + 3 + 4 + 5)
-			{
-				pTest2Logical->setarg_name1( 6);
+/*                      if( iResult1 == 1 + 2 + 3 + 4 + 5)
+                        {
+                                pTest2Logical->setarg_name1( 6);
 
-				xsd__int iResult2 = pWS->test2( pTest2Logical);
+                                xsd__int iResult2 = pWS->test2( pTest2Logical);
 
-				if( iResult2 == 6)
-				{
-					pTest3Mathematical->setarg_name1( 7);
-					pTest3Mathematical->setarg_name2( 8);
-					pTest3Mathematical->setarg_name3( 9);
-					pTest3Mathematical->setarg_name4( 10);
-					pTest3Mathematical->setarg_name5( 11);
-					pTest3Mathematical->setarg_name6( 12);
+                                if( iResult2 == 6)
+                                {
+                                        pTest3Mathematical->setarg_name1( 7);
+                                        pTest3Mathematical->setarg_name2( 8);
+                                        pTest3Mathematical->setarg_name3( 9);
+                                        pTest3Mathematical->setarg_name4( 10);
+                                        pTest3Mathematical->setarg_name5( 11);
+                                        pTest3Mathematical->setarg_name6( 12);
 
-					xsd__int iResult3 = pWS->test3( pTest3Mathematical);
+                                        xsd__int iResult3 = pWS->test3( pTest3Mathematical);
 
-					if( iResult3 == 7 + 8 + 9 + 10 + 11 + 12)
-					{
-						pTest4Miscellaneous->setarg_name1_( 13);
-						pTest4Miscellaneous->setarg_name2_( 14);
-						pTest4Miscellaneous->setarg_name3_( 15);
-						pTest4Miscellaneous->setarg_name4( 16);
-						pTest4Miscellaneous->setarg_name5( 17);
-						pTest4Miscellaneous->setarg_name6( 18);
+                                        if( iResult3 == 7 + 8 + 9 + 10 + 11 + 12)
+                                        {
+                                                pTest4Miscellaneous->setarg_name1_( 13);
+                                                pTest4Miscellaneous->setarg_name2_( 14);
+                                                pTest4Miscellaneous->setarg_name3_( 15);
+                                                pTest4Miscellaneous->setarg_name4( 16);
+                                                pTest4Miscellaneous->setarg_name5( 17);
+                                                pTest4Miscellaneous->setarg_name6( 18);
 
-						xsd__int iResult4 = pWS->test4( pTest4Miscellaneous);
+                                                xsd__int iResult4 = pWS->test4( pTest4Miscellaneous);
 
-						if( iResult4 == 13 + 14 + 15 + 16 + 17 + 18)
-						{
-							bSuccess = true;
-						}
-					}
-				}
-			}
-	*/		
-			if( !bSuccess)
-			{
-				cout << "Unexpected result." << endl;
-			}
+                                                if( iResult4 == 13 + 14 + 15 + 16 + 17 + 18)
+                                                {
+                                                        bSuccess = true;
+                                                }
+                                        }
+                                }
+                        }
+        */              
+                        if( !bSuccess)
+                        {
+                                cout << "Unexpected result." << endl;
+                        }
 
-			delete pTest1Punctuation;
-//			delete pTest2Logical;
-//			delete pTest3Mathematical;
-//			delete pTest4Miscellaneous;
+                        delete pTest1Punctuation;
+//                      delete pTest2Logical;
+//                      delete pTest3Mathematical;
+//                      delete pTest4Miscellaneous;
 
-			delete pWS;
-		}
-		catch( AxisException& e)
-		{
-			bool bSilent = false;
+                        delete pWS;
+                }
+                catch( AxisException& e)
+                {
+                        bool bSilent = false;
 
-			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-			{
-				if( iRetryIterationCount > 0)
-				{
-					bSilent = true;
-				}
-			}
-			else
-			{
-				iRetryIterationCount = 0;
-			}
+                        if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+                        {
+                                if( iRetryIterationCount > 0)
+                                {
+                                        bSilent = true;
+                                }
+                        }
+                        else
+                        {
+                                iRetryIterationCount = 0;
+                        }
 
-			if( !bSilent)
-			{
-				cout << "Exception : " << e.what() << endl;
-			}
-		}
-		catch( exception& e)
-		{
-			cout << "Unknown exception has occured : " << e.what() << endl;
-		}
-		catch(...)
-		{
-			cout << "Unknown exception has occured" << endl;
-		}
+                        if( !bSilent)
+                        {
+                                cout << "Exception : " << e.what() << endl;
+                        }
+                }
+                catch( exception& e)
+                {
+                        cout << "Unknown exception has occured : " << e.what() << endl;
+                }
+                catch(...)
+                {
+                        cout << "Unknown exception has occured" << endl;
+                }
 
-		iRetryIterationCount--;
-	} while( iRetryIterationCount > 0 && !bSuccess);
+                iRetryIterationCount--;
+        } while( iRetryIterationCount > 0 && !bSuccess);
 
-	if( bSuccess)
-	{
-		cout << "---------------------- TEST COMPLETED SUCCESSFULLY -----------------------------" << endl;
-	}
-	else
-	{
-		cout << "---------------------- TEST DID NOT COMPLETE -----------------------------" << endl;
-	}
-	return 0;
+        if( bSuccess)
+        {
+                cout << "---------------------- TEST COMPLETED SUCCESSFULLY -----------------------------" << endl;
+        }
+        else
+        {
+                cout << "---------------------- TEST DID NOT COMPLETE -----------------------------" << endl;
+        }
+        return 0;
 }

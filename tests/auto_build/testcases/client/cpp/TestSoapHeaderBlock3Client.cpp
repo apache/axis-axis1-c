@@ -21,7 +21,7 @@
 #include <iostream>
 int main(int argc, char *argv[])
 {
-	char endpoint[256];
+        char endpoint[256];
     const char* url="http://localhost:80/axis/MathOps";
     int iResult=0;
     
@@ -31,8 +31,8 @@ int main(int argc, char *argv[])
     ws.setEndPoint(url);
 
 
-	/*create a header of the form:
-	<SOAP-ENV:Header>
+        /*create a header of the form:
+        <SOAP-ENV:Header>
     <th:TestHeader xmlns:th="http://ws.apache.org/axisCppTest/">
     <Credentials1>
     <username>Test User</username>
@@ -40,13 +40,13 @@ int main(int argc, char *argv[])
     </Credentials1>
     </th:TestHeader>
     </SOAP-ENV:Header>
-	*/
-	
-	
+        */
+        
+        
 
     //creating  first SOAP header block 
     IHeaderBlock *phb = ws.createSOAPHeaderBlock("TestHeader1", "http://ws.apache.org/axisCppTest/");
-	
+        
     //create parent node
     BasicNode *parentNode = phb->createChild(ELEMENT_NODE);
     parentNode->setLocalName("Credentials1");
@@ -65,10 +65,10 @@ int main(int argc, char *argv[])
     childNode->addChild(valueNode);
     parentNode->addChild(childNode);
 
-	phb->addChild(parentNode);
-	
-	//Creating second SOAP header block
-	phb = ws.createSOAPHeaderBlock("TestHeader2",
+        phb->addChild(parentNode);
+        
+        //Creating second SOAP header block
+        phb = ws.createSOAPHeaderBlock("TestHeader2",
                                    "http://ws.apache.org/axisCppTest/");
                                                                                                                                                                             
     //create parent node
@@ -98,46 +98,46 @@ int main(int argc, char *argv[])
 
     phb->addChild(parentNode);
 
-	cout << "invoking MathOps div..." << endl;
-		bool bSuccess = false;
-		int	iRetryIterationCount = 3;
+        cout << "invoking MathOps div..." << endl;
+                bool bSuccess = false;
+                int     iRetryIterationCount = 3;
 
-		do
-		{
-	try
-		{
+                do
+                {
+        try
+                {
                 iResult = ws.div(15,5);
-                cout << iResult << endl;		
-				bSuccess = true;
+                cout << iResult << endl;                
+                                bSuccess = true;
         }
         catch (AxisException& e)
         {
-			bool bSilent = false;
+                        bool bSilent = false;
 
-			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-			{
-				if( iRetryIterationCount > 0)
-				{
-					bSilent = true;
-				}
-			}
-			else
-			{
-				iRetryIterationCount = 0;
-			}
+                        if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+                        {
+                                if( iRetryIterationCount > 0)
+                                {
+                                        bSilent = true;
+                                }
+                        }
+                        else
+                        {
+                                iRetryIterationCount = 0;
+                        }
 
             if( !bSilent)
-			{
-				cout << "Exception : " << e.what() << endl;
-			}
+                        {
+                                cout << "Exception : " << e.what() << endl;
+                        }
         }
         catch(...)
         {
                 cout << "Unknown exception" << endl;
         }
-		iRetryIterationCount--;
-		} while( iRetryIterationCount > 0 && !bSuccess);
-	
+                iRetryIterationCount--;
+                } while( iRetryIterationCount > 0 && !bSuccess);
+        
    
    IHeaderBlock *header = NULL;
    header = ws.getFirstSOAPHeaderBlock();
@@ -149,50 +149,50 @@ int main(int argc, char *argv[])
    //to test weather getNextSOAPHeaderBlock returns NULL when there are no header blocks exist.
    header = ws.getNextSOAPHeaderBlock();
    if ( header == NULL)
-	   cout << "header is null" << endl ;
+           cout << "header is null" << endl ;
    else
-	   cout << header << endl ;
+           cout << header << endl ;
 
-		bSuccess = false;
-		iRetryIterationCount = 3;
+                bSuccess = false;
+                iRetryIterationCount = 3;
 
-		do
-		{
+                do
+                {
     try
     {
         iResult = ws.div(15,5);
         cout << iResult << endl;
-				bSuccess = true;
+                                bSuccess = true;
     }
     catch (AxisException& e)
     {
-			bool bSilent = false;
+                        bool bSilent = false;
 
-			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-			{
-				if( iRetryIterationCount > 0)
-				{
-					bSilent = true;
-				}
-			}
-			else
-			{
-				iRetryIterationCount = 0;
-			}
+                        if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+                        {
+                                if( iRetryIterationCount > 0)
+                                {
+                                        bSilent = true;
+                                }
+                        }
+                        else
+                        {
+                                iRetryIterationCount = 0;
+                        }
 
             if( !bSilent)
-			{
-				cout << "Exception : " << e.what() << endl;
-			}
+                        {
+                                cout << "Exception : " << e.what() << endl;
+                        }
     }
     catch(...)
     {
         cout << "Unknown exception\n" << endl;
     }
-		iRetryIterationCount--;
-		} while( iRetryIterationCount > 0 && !bSuccess);
+                iRetryIterationCount--;
+                } while( iRetryIterationCount > 0 && !bSuccess);
 
-	
+        
     return 0;
 }
                                  

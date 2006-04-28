@@ -41,7 +41,7 @@ int main(int argc, char* argv[])
     endpoint_set = parse_args_for_endpoint(&argc, argv, &endpoint);
 
     bool bSuccess = false;
-    int	iRetryIterationCount = 3;
+    int iRetryIterationCount = 3;
 
     do
     {
@@ -66,7 +66,7 @@ int main(int argc, char* argv[])
 
             aRecord* result;
             result = ws->myOperation(input); 
-				
+                                
             if (result== NULL) 
             {
                 cout<< "result is NULL " << endl;
@@ -77,7 +77,7 @@ int main(int argc, char* argv[])
 
                 if (result->field1)
                 {              
-				    cout << " Field1 = " << *(result->field1) << endl;
+                                    cout << " Field1 = " << *(result->field1) << endl;
                 }
                 else
                 {
@@ -100,7 +100,7 @@ int main(int argc, char* argv[])
 
             returnValue = 0; // Success
 
-		}
+                }
        catch(AxisException &e)
        {
             bool bSilent = false;
@@ -125,7 +125,7 @@ int main(int argc, char* argv[])
         catch(exception& exception)
         {
             cout << "Unexpected exception : " << exception.what()<<endl;
-		}
+                }
         catch(...)
         {
             cout << "Unknown Exception occured" << endl;
@@ -146,7 +146,7 @@ int main(int argc, char* argv[])
         }
 
         iRetryIterationCount--;
-	
+        
     } while( iRetryIterationCount > 0 && !bSuccess);
 
     if(endpoint_set)

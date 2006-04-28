@@ -117,18 +117,18 @@ int main(int argc, char* argv[])
 
         // Test array
         xsd__gDay_Array arrayInput;
-		int arraySize=2;
-		xsd__gDay ** array = new xsd__gDay*[arraySize];
+                int arraySize=2;
+                xsd__gDay ** array = new xsd__gDay*[arraySize];
         
         for (int inputIndex=0 ; inputIndex < 2 ; inputIndex++)
         {
             array[inputIndex] = new xsd__gDay(time);
            
         }
-		arrayInput.set(array,arraySize);
+                arrayInput.set(array,arraySize);
         xsd__gDay_Array* arrayResult = ws->asArray(&arrayInput);
-		int outputSize=0;
-		const xsd__gDay ** output = arrayResult->get(outputSize);
+                int outputSize=0;
+                const xsd__gDay ** output = arrayResult->get(outputSize);
         cout << "array of " << outputSize << " elements" << endl;
         for (int index = 0; index < outputSize ; index++)
         {

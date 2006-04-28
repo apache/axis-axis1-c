@@ -25,105 +25,105 @@ bool IsNumber(const char* p);
 
 int main(int argc, char* argv[])
 {
-	char endpoint[256];
-	const char* url="http://localhost:80/axis/Calculator";
+        char endpoint[256];
+        const char* url="http://localhost:80/axis/Calculator";
 
-	signal(SIGILL, sig_handler);
-	signal(SIGABRT, sig_handler);
-	signal(SIGSEGV, sig_handler);
-	//signal(SIGQUIT, sig_handler);
-	//signal(SIGBUS, sig_handler);
-	signal(SIGFPE, sig_handler);
+        signal(SIGILL, sig_handler);
+        signal(SIGABRT, sig_handler);
+        signal(SIGSEGV, sig_handler);
+        //signal(SIGQUIT, sig_handler);
+        //signal(SIGBUS, sig_handler);
+        signal(SIGFPE, sig_handler);
 
-	url = argv[1];
+        url = argv[1];
 
-		bool bSuccess = false;
-		int	iRetryIterationCount = 3;
+                bool bSuccess = false;
+                int     iRetryIterationCount = 3;
 
-		do
-		{
-	try
-	{
-		sprintf(endpoint, "%s", url);
-		SameComplexTypeAndNillableElementName ws(endpoint);
+                do
+                {
+        try
+        {
+                sprintf(endpoint, "%s", url);
+                SameComplexTypeAndNillableElementName ws(endpoint);
 
-		aType input;
-		xsd__int* inputValue = NULL;
-		input.setaType(inputValue);
+                aType input;
+                xsd__int* inputValue = NULL;
+                input.setaType(inputValue);
 
-		aType * output = ws.complexTypeAndNillableElement(&input);
-		if (output != NULL)
-		{
-			xsd__int * outputValue = output->getaType();
-			if (outputValue != NULL)
-			{
-				cout << "aType->aType = " << *outputValue << endl;
-			}
-			else
-			{
-				cout << "aType->aType = NULL" << endl;
-			}
-		}
-		else
-		{
-			cout << "output is NULL" << endl;
-		}
-		bSuccess = true;
-	}
-	catch(AxisException& e)
-	{
-			bool bSilent = false;
+                aType * output = ws.complexTypeAndNillableElement(&input);
+                if (output != NULL)
+                {
+                        xsd__int * outputValue = output->getaType();
+                        if (outputValue != NULL)
+                        {
+                                cout << "aType->aType = " << *outputValue << endl;
+                        }
+                        else
+                        {
+                                cout << "aType->aType = NULL" << endl;
+                        }
+                }
+                else
+                {
+                        cout << "output is NULL" << endl;
+                }
+                bSuccess = true;
+        }
+        catch(AxisException& e)
+        {
+                        bool bSilent = false;
 
-			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-			{
-				if( iRetryIterationCount > 0)
-				{
-					bSilent = true;
-				}
-			}
-			else
-			{
-				iRetryIterationCount = 0;
-			}
+                        if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+                        {
+                                if( iRetryIterationCount > 0)
+                                {
+                                        bSilent = true;
+                                }
+                        }
+                        else
+                        {
+                                iRetryIterationCount = 0;
+                        }
 
             if( !bSilent)
-			{
-				cout << "Exception : " << e.what() << endl;
-			}
-	}
-	catch(exception& e)
-	{
-	    cout << "Unknown exception has occured" << endl;
-	}
-	catch(...)
-	{
-	    cout << "Unknown exception has occured" << endl;
-	}
-		iRetryIterationCount--;
-		} while( iRetryIterationCount > 0 && !bSuccess);
+                        {
+                                cout << "Exception : " << e.what() << endl;
+                        }
+        }
+        catch(exception& e)
+        {
+            cout << "Unknown exception has occured" << endl;
+        }
+        catch(...)
+        {
+            cout << "Unknown exception has occured" << endl;
+        }
+                iRetryIterationCount--;
+                } while( iRetryIterationCount > 0 && !bSuccess);
   cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;
-	
-	return 0;
+        
+        return 0;
 }
 
 void PrintUsage()
 {
-	printf("Usage :\n Calculator <url>\n\n");
-	exit(1);
+        printf("Usage :\n Calculator <url>\n\n");
+        exit(1);
 }
 
 bool IsNumber(const char* p)
 {
-	for (int x=0; x < strlen(p); x++)
-	{
-		if (!isdigit(p[x])) return false;
-	}
-	return true;
+        for (int x=0; x < strlen(p); x++)
+        {
+                if (!isdigit(p[x])) return false;
+        }
+        return true;
 }
 
 void sig_handler(int sig) {
-	signal(sig, sig_handler);
+        signal(sig, sig_handler);
     cout << "SIGNAL RECEIVED " << sig << endl;
-	exit(1);
+        exit(1);
 }
 

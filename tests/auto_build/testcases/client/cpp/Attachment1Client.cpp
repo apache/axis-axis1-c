@@ -21,85 +21,85 @@
 
 int main(int argc, char* argv[])
 {
-	bool bSuccess = false;
-	int	iRetryIterationCount = 3;
+        bool bSuccess = false;
+        int     iRetryIterationCount = 3;
 
-	do
-	{
-		try
-		{
-			AttachmentBindingImpl ws(argv[1]);
+        do
+        {
+                try
+                {
+                        AttachmentBindingImpl ws(argv[1]);
 
-			char *text=stringToAscii("Some attachment text");
+                        char *text=stringToAscii("Some attachment text");
 
-			#define NUM_ATTS 6
-			ISoapAttachment *att[NUM_ATTS];
-			xsd__base64Binary b64b[NUM_ATTS];
+                        #define NUM_ATTS 6
+                        ISoapAttachment *att[NUM_ATTS];
+                        xsd__base64Binary b64b[NUM_ATTS];
 
-			for (int i=0; i<NUM_ATTS; i++)
-			{
-				att[i] = ws.createSoapAttachment();
+                        for (int i=0; i<NUM_ATTS; i++)
+                        {
+                                att[i] = ws.createSoapAttachment();
 
-				if (1==i)
-					att[i]->addHeader(AXIS_CONTENT_TYPE,"image/jpeg");
-				else if (2==i)
-					att[i]->addHeader("Content-Disposition","checked");
-				
-				b64b[i].set((unsigned char *)text, strlen(text)+1);
-				att[i]->addBody(&b64b[i]);	
-			}
+                                if (1==i)
+                                        att[i]->addHeader(AXIS_CONTENT_TYPE,"image/jpeg");
+                                else if (2==i)
+                                        att[i]->addHeader("Content-Disposition","checked");
+                                
+                                b64b[i].set((unsigned char *)text, strlen(text)+1);
+                                att[i]->addBody(&b64b[i]);      
+                        }
 
-			xsd__int iResult = ws.put(att[0], att[1], att[2], att[3], att[4], att[5], NULL);
-			cout << iResult << endl;
-			bSuccess = true;
-		}
-		catch(AxisException& e)
-		{
-			bool bSilent = false;
-			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-			{
-				if( iRetryIterationCount > 0)
-				{
-					bSilent = true;
-				}
-			}
-			else
-			{
-				iRetryIterationCount = 0;
-			}		
+                        xsd__int iResult = ws.put(att[0], att[1], att[2], att[3], att[4], att[5], NULL);
+                        cout << iResult << endl;
+                        bSuccess = true;
+                }
+                catch(AxisException& e)
+                {
+                        bool bSilent = false;
+                        if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+                        {
+                                if( iRetryIterationCount > 0)
+                                {
+                                        bSilent = true;
+                                }
+                        }
+                        else
+                        {
+                                iRetryIterationCount = 0;
+                        }               
 
-			if( !bSilent)
-			{
-				cout << "Exception : " << e.what() << endl;
-			}
-		}
-		catch(exception& e)
-		{
-		    cout << "Unknown exception has occured" << endl;
-		}
-		catch(...)
-		{
-		    cout << "Unknown exception has occured" << endl;
-		}
-		iRetryIterationCount--;
-	} while( iRetryIterationCount > 0 && !bSuccess);
+                        if( !bSilent)
+                        {
+                                cout << "Exception : " << e.what() << endl;
+                        }
+                }
+                catch(exception& e)
+                {
+                    cout << "Unknown exception has occured" << endl;
+                }
+                catch(...)
+                {
+                    cout << "Unknown exception has occured" << endl;
+                }
+                iRetryIterationCount--;
+        } while( iRetryIterationCount > 0 && !bSuccess);
 
-	cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;
-	return 0;
+        cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;
+        return 0;
 }
 
 void PrintUsage()
 {
-	printf("Usage :\n Calculator <url>\n\n");
-	exit(1);
+        printf("Usage :\n Calculator <url>\n\n");
+        exit(1);
 }
 
 bool IsNumber(const char* p)
 {
-	for (int x=0; x < strlen(p); x++)
-	{
-		if (!isdigit(p[x])) return false;
-	}
-	return true;
+        for (int x=0; x < strlen(p); x++)
+        {
+                if (!isdigit(p[x])) return false;
+        }
+        return true;
 }
 

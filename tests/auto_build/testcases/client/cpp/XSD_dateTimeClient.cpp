@@ -22,18 +22,18 @@
 
 int main(int argc, char* argv[])
 {
-	char endpoint[256];
-	const char* url="http://localhost:80/axis/XSD_dateTime";
+        char endpoint[256];
+        const char* url="http://localhost:80/axis/XSD_dateTime";
 
-	if(argc>1)
-		url = argv[1];
+        if(argc>1)
+                url = argv[1];
 
-		// bool bSuccess = false;
+                // bool bSuccess = false;
 
-	try
-	{
-		sprintf(endpoint, "%s", url);
-		XSD_dateTime* ws = new XSD_dateTime(endpoint);
+        try
+        {
+                sprintf(endpoint, "%s", url);
+                XSD_dateTime* ws = new XSD_dateTime(endpoint);
 
         char returnString[50];
         
@@ -42,95 +42,95 @@ int main(int argc, char* argv[])
         struct tm time;
         memcpy(&time, temp, sizeof(struct tm));
 
-		// Test non-nillable element
-	    xsd__dateTime result = ws->asNonNillableElement(time);
+                // Test non-nillable element
+            xsd__dateTime result = ws->asNonNillableElement(time);
         strftime(returnString, 50, "%a %b %d %H:%M:%S %Y", &result);
-		cout << "non-nillable element=" << returnString << endl;
+                cout << "non-nillable element=" << returnString << endl;
 
-		// Test nillable element, with a value
-		xsd__dateTime* nillableInput = new xsd__dateTime();
-		*(nillableInput) = time;
-		xsd__dateTime* nillableResult = ws->asNillableElement(nillableInput);
-		if (nillableResult)
-		{
+                // Test nillable element, with a value
+                xsd__dateTime* nillableInput = new xsd__dateTime();
+                *(nillableInput) = time;
+                xsd__dateTime* nillableResult = ws->asNillableElement(nillableInput);
+                if (nillableResult)
+                {
             strftime(returnString, 50, "%a %b %d %H:%M:%S %Y", nillableResult);
-			cout << "nillable element=" << returnString << endl;
-			delete nillableResult;
-		}
-		else
-		{
-			cout << "nillable element=<nil>" << endl;
-		}
+                        cout << "nillable element=" << returnString << endl;
+                        delete nillableResult;
+                }
+                else
+                {
+                        cout << "nillable element=<nil>" << endl;
+                }
        delete nillableInput;
 
-		// Test nillable element, with nil
+                // Test nillable element, with nil
         nillableResult = ws->asNillableElement(NULL);
-		if (nillableResult)
-		{
+                if (nillableResult)
+                {
             strftime(returnString, 50, "%a %b %d %H:%M:%S %Y", nillableResult);
-			cout << "nil element=" << returnString << endl;
-			delete nillableResult;
-		}
-		else
-		{
-			cout << "nil element=<nil>" << endl;
-		}
+                        cout << "nil element=" << returnString << endl;
+                        delete nillableResult;
+                }
+                else
+                {
+                        cout << "nil element=<nil>" << endl;
+                }
 
-		// Test required attribute
-		RequiredAttributeElement requiredAttributeInput;
-		requiredAttributeInput.setrequiredAttribute(time);
-		RequiredAttributeElement* requiredAttributeResult = ws->asRequiredAttribute(&requiredAttributeInput);
+                // Test required attribute
+                RequiredAttributeElement requiredAttributeInput;
+                requiredAttributeInput.setrequiredAttribute(time);
+                RequiredAttributeElement* requiredAttributeResult = ws->asRequiredAttribute(&requiredAttributeInput);
         result = requiredAttributeResult->getrequiredAttribute();
-		strftime(returnString, 50, "%a %b %d %H:%M:%S %Y", &result);
+                strftime(returnString, 50, "%a %b %d %H:%M:%S %Y", &result);
         cout << "required attribute=" << returnString << endl;
-		delete requiredAttributeResult;
+                delete requiredAttributeResult;
 
 /* Optional Attributes currently unsupported by WSDL2Ws
  * Exact coding of this section may change depending on chosen implementation
-		// Test optional attribute, with a value
-		OptionalAttributeElement optionalAttributeInput;
-		optionalAttributeInput.setoptionalAttribute(time);
-		OptionalAttributeElement* optionalAttributeResult = ws->asOptionalAttribute(&optionalAttributeInput);
-		if (optionalAttributeResult->getoptionalAttribute())
-		{
+                // Test optional attribute, with a value
+                OptionalAttributeElement optionalAttributeInput;
+                optionalAttributeInput.setoptionalAttribute(time);
+                OptionalAttributeElement* optionalAttributeResult = ws->asOptionalAttribute(&optionalAttributeInput);
+                if (optionalAttributeResult->getoptionalAttribute())
+                {
             strftime(returnString, 50, "%a %b %d %H:%M:%S %Y", optionalAttributeResult->getoptionalAttribute());
-			cout << "optional attribute, with data=" << returnString << endl;
-		}
-		else
-		{
-			cout << "optional attribute, with data=<not present>" << endl;
-		}
-		delete optionalAttributeResult;
+                        cout << "optional attribute, with data=" << returnString << endl;
+                }
+                else
+                {
+                        cout << "optional attribute, with data=<not present>" << endl;
+                }
+                delete optionalAttributeResult;
 
-		// Test optional attribute, not present
-		//optionalAttributeInput.setattribute();
-		optionalAttributeResult = ws->asOptionalAttribute(&optionalAttributeInput);
-		if (optionalAttributeResult->getoptionalAttribute())
-		{
+                // Test optional attribute, not present
+                //optionalAttributeInput.setattribute();
+                optionalAttributeResult = ws->asOptionalAttribute(&optionalAttributeInput);
+                if (optionalAttributeResult->getoptionalAttribute())
+                {
             strftime(returnString, 50, "%a %b %d %H:%M:%S %Y", optionalAttributeResult->getoptionalAttribute());
-			cout << "optional attribute, not present=" << returnString << endl;
-		}
-		else
-		{
-			cout << "optional attribute, not present=<not present>" << endl;
-		}
-		delete optionalAttributeResult;
+                        cout << "optional attribute, not present=" << returnString << endl;
+                }
+                else
+                {
+                        cout << "optional attribute, not present=<not present>" << endl;
+                }
+                delete optionalAttributeResult;
 */
-		// Test array
+                // Test array
 
         xsd__dateTime_Array arrayInput;
-		int arraySize = 2;
-		xsd__dateTime ** array = new xsd__dateTime*[arraySize];
+                int arraySize = 2;
+                xsd__dateTime ** array = new xsd__dateTime*[arraySize];
         
         for (int inputIndex=0 ; inputIndex < arraySize ; inputIndex++)
         {
             array[inputIndex] =new xsd__dateTime(time);
             
         }
-		arrayInput.set(array,arraySize);
+                arrayInput.set(array,arraySize);
         xsd__dateTime_Array* arrayResult = ws->asArray(&arrayInput);
-		int outputSize = 0;
-		const xsd__dateTime **output = arrayResult->get(outputSize);
+                int outputSize = 0;
+                const xsd__dateTime **output = arrayResult->get(outputSize);
         cout << "array of " << outputSize << " elements" << endl;
         for (int index = 0; index < outputSize ; index++)
         {
@@ -147,33 +147,33 @@ int main(int argc, char* argv[])
         delete arrayResult;
 
 
-		// Test complex type
-		SimpleComplexType complexTypeInput;
-		complexTypeInput.setcomplexTypeElement(time);
-		SimpleComplexType* complexTypeResult = ws->asComplexType(&complexTypeInput);
+                // Test complex type
+                SimpleComplexType complexTypeInput;
+                complexTypeInput.setcomplexTypeElement(time);
+                SimpleComplexType* complexTypeResult = ws->asComplexType(&complexTypeInput);
         result = complexTypeResult->getcomplexTypeElement();
         strftime(returnString, 50, "%a %b %d %H:%M:%S %Y", &result);
-		cout << "within complex type=" << returnString << endl;
-		delete complexTypeResult;
+                cout << "within complex type=" << returnString << endl;
+                delete complexTypeResult;
 
-		// Tests now complete
+                // Tests now complete
 
-		delete ws;
-	}
-	catch(AxisException& e)
-	{
-		cout << "Exception : " << e.what() << endl;
-	}
-	catch(exception& e)
-	{
-	    cout << "Unknown exception has occured: " << e.what() << endl;
-	}
-	catch(...)
-	{
-	    cout << "Unknown exception has occured" << endl;
-	}
+                delete ws;
+        }
+        catch(AxisException& e)
+        {
+                cout << "Exception : " << e.what() << endl;
+        }
+        catch(exception& e)
+        {
+            cout << "Unknown exception has occured: " << e.what() << endl;
+        }
+        catch(...)
+        {
+            cout << "Unknown exception has occured" << endl;
+        }
 
-	cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;
-	
-	return 0;
+        cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;
+        
+        return 0;
 }

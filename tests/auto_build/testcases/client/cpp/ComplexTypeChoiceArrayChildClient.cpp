@@ -40,11 +40,11 @@ int main(int argc, char* argv[])
 
   endpoint_set = parse_args_for_endpoint(&argc, argv, &endpoint);
 
-		bool bSuccess = false;
-		int	iRetryIterationCount = 3;
+                bool bSuccess = false;
+                int     iRetryIterationCount = 3;
 
-		do
-		{
+                do
+                {
   try {
     if(endpoint_set) {
       ws = new XSD_byte(endpoint);
@@ -53,14 +53,14 @@ int main(int argc, char* argv[])
     } else
       ws = new XSD_byte();
 
-	SimpleArray *simpleArray1 = new SimpleArray();
-	xsd__int_Array arrayIn;
-	xsd__int **array = new xsd__int*[3];
-	array[0]=new xsd__int(5);
-	array[1]=new xsd__int(6);
-	array[2]=new xsd__int(7);
-	arrayIn.set(array,3);
-	simpleArray1->setintArray(&arrayIn);	
+        SimpleArray *simpleArray1 = new SimpleArray();
+        xsd__int_Array arrayIn;
+        xsd__int **array = new xsd__int*[3];
+        array[0]=new xsd__int(5);
+        array[1]=new xsd__int(6);
+        array[2]=new xsd__int(7);
+        arrayIn.set(array,3);
+        simpleArray1->setintArray(&arrayIn);    
     SimpleComplexType1* input = new SimpleComplexType1();
 
     input->arrayElement = simpleArray1;
@@ -69,38 +69,38 @@ int main(int argc, char* argv[])
 
     SimpleComplexType1* result = NULL;
     result = ws->asComplexType(input);
-	int outputSize = 0;
-	const xsd__int ** arrayOut = result->arrayElement->intArray->get(outputSize);
+        int outputSize = 0;
+        const xsd__int ** arrayOut = result->arrayElement->intArray->get(outputSize);
 
-	cout << "Array Size = " << outputSize << endl; 
+        cout << "Array Size = " << outputSize << endl; 
 
-	cout << "First element in Array = " << *arrayOut[0] << endl;
-	cout << "Second element in Array = " << *arrayOut[1] << endl;
-	cout << "Third element in Array = " << *arrayOut[2] << endl;
-	
-	bSuccess = true;
+        cout << "First element in Array = " << *arrayOut[0] << endl;
+        cout << "Second element in Array = " << *arrayOut[1] << endl;
+        cout << "Third element in Array = " << *arrayOut[2] << endl;
+        
+        bSuccess = true;
 
     returnValue = 0; // Success
 
   } catch(AxisException &e) {
-			bool bSilent = false;
+                        bool bSilent = false;
 
-			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-			{
-				if( iRetryIterationCount > 0)
-				{
-					bSilent = true;
-				}
-			}
-			else
-			{
-				iRetryIterationCount = 0;
-			}
+                        if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+                        {
+                                if( iRetryIterationCount > 0)
+                                {
+                                        bSilent = true;
+                                }
+                        }
+                        else
+                        {
+                                iRetryIterationCount = 0;
+                        }
 
             if( !bSilent)
-			{
+                        {
     cout << e.what() << endl;
-			}
+                        }
   } catch(...) {
     cout << "Unknown Exception occured." << endl;
   }
@@ -108,18 +108,18 @@ int main(int argc, char* argv[])
   // Samisa : clean up memory allocated for stub
   try
   {
-	  delete ws; 
+          delete ws; 
   }
   catch(exception& exception)
   {
-  	cout << "Exception on clean up of ws : " << exception.what()<<endl;
+        cout << "Exception on clean up of ws : " << exception.what()<<endl;
   }
   catch(...)
   {
-  	cout << "Unknown exception on clean up of ws : " << endl;
+        cout << "Unknown exception on clean up of ws : " << endl;
   }
-		iRetryIterationCount--;
-		} while( iRetryIterationCount > 0 && !bSuccess);
+                iRetryIterationCount--;
+                } while( iRetryIterationCount > 0 && !bSuccess);
     if(endpoint_set)
       free(endpoint);
   cout << "---------------------- TEST COMPLETE -----------------------------"<< endl;

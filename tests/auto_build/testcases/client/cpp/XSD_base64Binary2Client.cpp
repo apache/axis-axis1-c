@@ -22,47 +22,47 @@
 
 int main(int argc, char* argv[])
 {
-	char endpoint[256];
-	const char* url="http://localhost:80/axis/XSD_base64Binary";
+        char endpoint[256];
+        const char* url="http://localhost:80/axis/XSD_base64Binary";
 
-	if(argc>1)
-		url = argv[1];
+        if(argc>1)
+                url = argv[1];
 
-		// bool bSuccess = false;
+                // bool bSuccess = false;
 
-	try
-	{
-		sprintf(endpoint, "%s", url);
-		XSD_base64Binary* ws = new XSD_base64Binary(endpoint);
+        try
+        {
+                sprintf(endpoint, "%s", url);
+                XSD_base64Binary* ws = new XSD_base64Binary(endpoint);
 
-    	xsd__base64Binary input;
-    	xsd__unsignedByte* testUB = (xsd__unsignedByte*)"  <test><xml>  some dod&y string </xml></test> ";
+        xsd__base64Binary input;
+        xsd__unsignedByte* testUB = (xsd__unsignedByte*)"  <test><xml>  some dod&y string </xml></test> ";
         input.set(testUB, 100);
 
-		// Test non-nillable element
-    	xsd__base64Binary result = ws->asNonNillableElement(input);
+                // Test non-nillable element
+        xsd__base64Binary result = ws->asNonNillableElement(input);
         int size = 0;
         const xsd__unsignedByte * data = result.get(size);
-		cout << "non-nillable element" << endl;
-    	cout << " size=" << size << endl;
-    	cout << " data=" << data << endl;
+                cout << "non-nillable element" << endl;
+        cout << " size=" << size << endl;
+        cout << " data=" << data << endl;
 
-		delete ws;
-	}
-	catch(AxisException& e)
-	{
-		cout << "Exception : " << e.what() << endl;
-	}
-	catch(exception& e)
-	{
-	    cout << "Unknown exception has occured: " << e.what() << endl;
-	}
-	catch(...)
-	{
-	    cout << "Unknown exception has occured" << endl;
-	}
+                delete ws;
+        }
+        catch(AxisException& e)
+        {
+                cout << "Exception : " << e.what() << endl;
+        }
+        catch(exception& e)
+        {
+            cout << "Unknown exception has occured: " << e.what() << endl;
+        }
+        catch(...)
+        {
+            cout << "Unknown exception has occured" << endl;
+        }
 
-	cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;
-	
-	return 0;
+        cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;
+        
+        return 0;
 }

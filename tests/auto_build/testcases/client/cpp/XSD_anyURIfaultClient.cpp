@@ -36,7 +36,7 @@ int main(int argc, char* argv[])
         char emptyanyURI[1] = "";
         xsd__anyURI emptyInput = new char[1];
         strcpy (emptyInput, emptyanyURI);
-		char simpleanyURI[25] = "http://www.xyz.com";
+                char simpleanyURI[25] = "http://www.xyz.com";
         xsd__anyURI input = new char[25];
         strcpy (input, simpleanyURI);
 

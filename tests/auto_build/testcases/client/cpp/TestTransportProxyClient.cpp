@@ -55,11 +55,11 @@ int main(int argc, char* argv[])
         
         
 
-		bool bSuccess = false;
-		int	iRetryIterationCount = 3;
+                bool bSuccess = false;
+                int     iRetryIterationCount = 3;
 
-		do
-		{
+                do
+                {
         try
         {
                 sprintf(endpoint, "%s", url);
@@ -68,29 +68,29 @@ int main(int argc, char* argv[])
                 iResult = ws.add(2,3);
                 cout<<  iResult << endl;
                 rc=0;
-				bSuccess = true;
+                                bSuccess = true;
         }
         catch(AxisException& e)
         {
-			bool bSilent = false;
+                        bool bSilent = false;
 
-			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-			{
-				if( iRetryIterationCount > 0)
-				{
-					bSilent = true;
-				}
-				
-			}
-			else
-			{
-				iRetryIterationCount = 0;
-			}
+                        if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+                        {
+                                if( iRetryIterationCount > 0)
+                                {
+                                        bSilent = true;
+                                }
+                                
+                        }
+                        else
+                        {
+                                iRetryIterationCount = 0;
+                        }
 
             if( !bSilent)
-			{
+                        {
                 cout << "Inside AxisException block: " << e.what() << endl;
-			}
+                        }
         }
         catch(exception& e)
         {
@@ -100,9 +100,9 @@ int main(int argc, char* argv[])
         {
                 cout << "Unspecified exception has occured" << endl;
         }
-		iRetryIterationCount--;
-		} while( iRetryIterationCount > 0 && !bSuccess);
-	cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;
+                iRetryIterationCount--;
+                } while( iRetryIterationCount > 0 && !bSuccess);
+        cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;
         return rc;
 }
 

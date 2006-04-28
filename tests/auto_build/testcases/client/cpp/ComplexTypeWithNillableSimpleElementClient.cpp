@@ -18,37 +18,37 @@
 
 int main( int argc, char* argv[])
 {
-	char *	pszEndpoint = "http://localhost:9080/ComplexTypeWithNillableSimpleElement";
+        char *  pszEndpoint = "http://localhost:9080/ComplexTypeWithNillableSimpleElement";
 
     if( argc > 1)
-	{
+        {
         pszEndpoint = argv[1];
-	}
+        }
 
     try
     {
-		ComplexTypeWithNillableSimpleElement *	pWS = new ComplexTypeWithNillableSimpleElement( pszEndpoint, APTHTTP1_1);
+                ComplexTypeWithNillableSimpleElement *  pWS = new ComplexTypeWithNillableSimpleElement( pszEndpoint, APTHTTP1_1);
 
-		SimpleComplexType *	pSCTI = new SimpleComplexType();
-		SimpleComplexType * pSCTO = NULL;
-		xsd__int *			pI = new xsd__int();
-		xsd__int			iInput = 1738;
-		xsd__int			iOutput = 8371;
+                SimpleComplexType *     pSCTI = new SimpleComplexType();
+                SimpleComplexType * pSCTO = NULL;
+                xsd__int *                      pI = new xsd__int();
+                xsd__int                        iInput = 1738;
+                xsd__int                        iOutput = 8371;
 
-		*pI = iInput;
+                *pI = iInput;
 
-		pSCTI->setcomplexTypeElement( pI);
+                pSCTI->setcomplexTypeElement( pI);
 
-		pSCTO = pWS->echo( pSCTI);
+                pSCTO = pWS->echo( pSCTI);
 
-		cout << "The output should be the reverse of the input." << endl <<
-			 "Input = " << *pI << " Output = " << *pSCTO->getcomplexTypeElement() << endl <<
-			 (iOutput == *pSCTO->getcomplexTypeElement() ? "Success" : "Failed") << endl;
+                cout << "The output should be the reverse of the input." << endl <<
+                         "Input = " << *pI << " Output = " << *pSCTO->getcomplexTypeElement() << endl <<
+                         (iOutput == *pSCTO->getcomplexTypeElement() ? "Success" : "Failed") << endl;
 
-		delete pI;
-		delete pSCTI;
-		delete pSCTO;
-		delete pWS;
+                delete pI;
+                delete pSCTI;
+                delete pSCTO;
+                delete pWS;
     }
     catch( AxisException& e)
     {
@@ -65,5 +65,5 @@ int main( int argc, char* argv[])
 
     cout << "---------------------- TEST COMPLETE -----------------------------" << endl;
 
-	return 0;
+        return 0;
 }

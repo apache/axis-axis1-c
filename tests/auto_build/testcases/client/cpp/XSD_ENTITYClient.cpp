@@ -300,17 +300,17 @@ int main(int argc, char* argv[])
 
         // Test array
         xsd__ENTITY_Array arrayInput;
-		int arraySize = 2;
-		xsd__ENTITY *array = new xsd__ENTITY[arraySize];        
+                int arraySize = 2;
+                xsd__ENTITY *array = new xsd__ENTITY[arraySize];        
         for (int inputIndex=0 ; inputIndex < arraySize ; inputIndex++)
         {
             array[inputIndex] = new char[25];
             strcpy (array[inputIndex], simpleENTITY);            
         }
-		arrayInput.set(array,arraySize);
+                arrayInput.set(array,arraySize);
         xsd__ENTITY_Array* arrayResult = ws->asArray(&arrayInput);
-		int outputSize =0;
-		const xsd__ENTITY *output = arrayResult->get(outputSize);
+                int outputSize =0;
+                const xsd__ENTITY *output = arrayResult->get(outputSize);
         cout << "array of " << outputSize << " elements" << endl;
         for (int index = 0; index < outputSize ; index++)
         {

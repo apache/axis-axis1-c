@@ -111,23 +111,23 @@ int main(int argc, char* argv[])
 
      // Test array
         xsd__double_Array arrayInput;
-		int arraySize=2;
-		xsd__double **array =new xsd__double*[arraySize];        
+                int arraySize=2;
+                xsd__double **array =new xsd__double*[arraySize];        
         for (int inputIndex=0 ; inputIndex < 2 ; inputIndex++)
         {
             array[inputIndex] =new xsd__double(70.7175888888);          
         }
-		arrayInput.set(array,arraySize);
+                arrayInput.set(array,arraySize);
         xsd__double_Array* arrayResult = ws->asArray(&arrayInput);
-		int outputSize=0;
-		const xsd__double ** output=arrayResult->get(outputSize);
+                int outputSize=0;
+                const xsd__double ** output=arrayResult->get(outputSize);
         cout << "array of " << outputSize << " elements" << endl;
         for (int index = 0; index < outputSize ; index++)
          {
          printf("  element[%i]=%.5f\n", index,  *(output[index]));
             fflush(stdout);
         }
-	  // Clear up input array        
+          // Clear up input array        
         for (int deleteIndex = 0 ; deleteIndex < arraySize ; deleteIndex++ )
         {
             delete array[deleteIndex];

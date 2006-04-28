@@ -21,59 +21,59 @@
 
 int main(int argc, char* argv[])
 {
-	char endpoint[256];
-	const char* url="http://localhost:80/axis/Calculator";
+        char endpoint[256];
+        const char* url="http://localhost:80/axis/Calculator";
 
-	if(argc>1)
-		url = argv[1];
+        if(argc>1)
+                url = argv[1];
 
-	try
-	{
-		sprintf(endpoint, "%s", url);
-		PrimitiveAndArray* ws = new PrimitiveAndArray(endpoint);
+        try
+        {
+                sprintf(endpoint, "%s", url);
+                PrimitiveAndArray* ws = new PrimitiveAndArray(endpoint);
 
-		xsd__int single;
-		xsd__int_Array intArray;
-		ComplexReturn* response;
+                xsd__int single;
+                xsd__int_Array intArray;
+                ComplexReturn* response;
 
-		single=37;
+                single=37;
 
         xsd__int ** arrayOfInt = new xsd__int*[ARRAYSIZE];
-		arrayOfInt[0] = new xsd__int(6);        
-        arrayOfInt[1] = new xsd__int(7);		
-		intArray.set(arrayOfInt,ARRAYSIZE);
+                arrayOfInt[0] = new xsd__int(6);        
+        arrayOfInt[1] = new xsd__int(7);                
+                intArray.set(arrayOfInt,ARRAYSIZE);
 
-		response = ws->sendPrimitiveAndArray(single, &intArray);
-		int outputSize = 0;
-		const xsd__int **output = response->getreturnArray()->get(outputSize);
-		cout << response->returnInt << " " << *(output[0]) << " " << *(output[1]) << endl;
-		single=43;
+                response = ws->sendPrimitiveAndArray(single, &intArray);
+                int outputSize = 0;
+                const xsd__int **output = response->getreturnArray()->get(outputSize);
+                cout << response->returnInt << " " << *(output[0]) << " " << *(output[1]) << endl;
+                single=43;
         *arrayOfInt[0] = 13;
         *arrayOfInt[1] = 17;
-		intArray.set(arrayOfInt,ARRAYSIZE);
-		response = ws->sendArrayAndPrimitive(&intArray, single);
-		outputSize = 0;
-		output = response->getreturnArray()->get(outputSize);
-		cout << response->returnInt << " " << *(output[0]) << " " << *(output[1]) << endl;
-		delete arrayOfInt[0];
-		delete arrayOfInt[1];
-		delete [] arrayOfInt;
-		delete ws;
-	}
-	catch(AxisException& e)
-	{
-	    cout << "Exception : " << e.what() << endl;
-	}
-	catch(exception& e)
-	{
-	    cout << "Unknown exception has occured" << endl;
-	}
-	catch(...)
-	{
-	    cout << "Unknown exception has occured" << endl;
-	}
-	cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;
-	
-	return 0;
+                intArray.set(arrayOfInt,ARRAYSIZE);
+                response = ws->sendArrayAndPrimitive(&intArray, single);
+                outputSize = 0;
+                output = response->getreturnArray()->get(outputSize);
+                cout << response->returnInt << " " << *(output[0]) << " " << *(output[1]) << endl;
+                delete arrayOfInt[0];
+                delete arrayOfInt[1];
+                delete [] arrayOfInt;
+                delete ws;
+        }
+        catch(AxisException& e)
+        {
+            cout << "Exception : " << e.what() << endl;
+        }
+        catch(exception& e)
+        {
+            cout << "Unknown exception has occured" << endl;
+        }
+        catch(...)
+        {
+            cout << "Unknown exception has occured" << endl;
+        }
+        cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;
+        
+        return 0;
 }
 

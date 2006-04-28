@@ -13,6 +13,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* ----------------------------------------------------------------   */
+/* CHANGES TO THIS FILE MAY ALSO REQUIRE CHANGES TO THE               */
+/* C-EQUIVALENT FILE. PLEASE ENSURE THAT IT IS DONE.                  */
+/* ----------------------------------------------------------------   */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
 
 #include "EnumerationWS.hpp" 
 #include <stdlib.h> // For malloc(), calloc(), strdup() and free()
@@ -44,11 +52,11 @@ int main(int argc, char* argv[])
 
   endpoint_set = parse_args_for_endpoint(&argc, argv, &endpoint);
 
-		bool bSuccess = false;
-		int	iRetryIterationCount = 3;
+                bool bSuccess = false;
+                int     iRetryIterationCount = 3;
 
-		do
-		{
+                do
+                {
   try {
     if(endpoint_set) {
       ws = new EnumerationWS(endpoint, APTHTTP1_1);
@@ -79,45 +87,45 @@ int main(int argc, char* argv[])
       returnValue = 0; // Success
     }
 
-	bSuccess = true;
+        bSuccess = true;
   } catch(AxisException &e) {
-			bool bSilent = false;
+                        bool bSilent = false;
 
-			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-			{
-				if( iRetryIterationCount > 0)
-				{
-					bSilent = true;
-				}
-			}
-			else
-			{
-				iRetryIterationCount = 0;
-			}
+                        if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+                        {
+                                if( iRetryIterationCount > 0)
+                                {
+                                        bSilent = true;
+                                }
+                        }
+                        else
+                        {
+                                iRetryIterationCount = 0;
+                        }
 
             if( !bSilent)
-			{
+                        {
     cout << e.what() << endl;
-			}
+                        }
   } catch(...) {
     cout << "Unknown Exception occured." << endl;
   }
   try
   {
-	  delete ws;
-	  delete input;
-	  delete result;
+          delete ws;
+          delete input;
+          delete result;
   }
   catch(exception& exception)
   {
-  	cout << "Exception when cleaning up: " << exception.what()<<endl;
+        cout << "Exception when cleaning up: " << exception.what()<<endl;
   }
   catch(...)
   {
-  	cout << "Unknown exception when cleaning up: "<<endl;
+        cout << "Unknown exception when cleaning up: "<<endl;
   }
-		iRetryIterationCount--;
-		} while( iRetryIterationCount > 0 && !bSuccess);
+                iRetryIterationCount--;
+                } while( iRetryIterationCount > 0 && !bSuccess);
     if(endpoint_set)
       free(endpoint);
   cout << "---------------------- TEST COMPLETE -----------------------------"<< endl;

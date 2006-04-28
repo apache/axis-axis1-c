@@ -31,79 +31,75 @@ void sig_handler(int);
 
 int main(int argc, char* argv[])
 {
-	char endpoint[256];
-	const char* url="http://localhost:80/axis/PlainTextAttachment";	
-	char *Result;
-	url = argv[1];
-	bool bSuccess = false;
-	int	iRetryIterationCount = 3;
+    char endpoint[256];
+    const char* url="http://localhost:80/axis/PlainTextAttachment"; 
+    char *Result;
+    url = argv[1];
+    bool bSuccess = false;
+    int     iRetryIterationCount = 3;
 
-	signal(SIGILL, sig_handler);
-	signal(SIGABRT, sig_handler);
-	signal(SIGSEGV, sig_handler);
-	//signal(SIGQUIT, sig_handler);
-	//signal(SIGBUS, sig_handler);
-	signal(SIGFPE, sig_handler);
+    signal(SIGILL, sig_handler);
+    signal(SIGABRT, sig_handler);
+    signal(SIGSEGV, sig_handler);
+    //signal(SIGQUIT, sig_handler);
+    //signal(SIGBUS, sig_handler);
+    signal(SIGFPE, sig_handler);
 
-	do
-		{
-			try
-			{
-				sprintf(endpoint, "%s", url);
-				AttachmentBindingImpl ws(endpoint);
-				ISoapAttachment *att=ws.createSoapAttachment();	
+    do
+    {
+        try
+        {
+            sprintf(endpoint, "%s", url);
+            AttachmentBindingImpl ws(endpoint);
+            ISoapAttachment *att=ws.createSoapAttachment(); 
 
-				char *text=stringToAscii("This is a test message for attachment");
+            char *text=stringToAscii("This is a test message for attachment");
 
-				//Adding the content type as text/plain
-				att->addHeader(AXIS_CONTENT_TYPE,"text/plain");
-				xsd__base64Binary b64b1;
-                b64b1.set((xsd__unsignedByte *) text, strlen(text));
-				att->addBody(&b64b1);
-				//Calling the dataHandlerService, service will return content		        
-				Result=ws.echoText(att);				
-			    cout<<Result<<endl;				
-			    bSuccess = true;
-			}	
-	catch(AxisException& e)
-	{
-			bool bSilent = false;
+            att->addHeader(AXIS_CONTENT_TYPE,"text/plain");
+            xsd__base64Binary b64b1;
+            b64b1.set((xsd__unsignedByte *) text, strlen(text));
+            att->addBody(&b64b1);
 
-			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-			{
-				if( iRetryIterationCount > 0)
-				{
-					bSilent = true;
-				}
-			}
-			else
-			{
-				iRetryIterationCount = 0;
-			}
+            Result=ws.echoText(att);                                
+            cout<<Result<<endl;                         
+            bSuccess = true;
+        }       
+        catch(AxisException& e)
+        {
+            bool bSilent = false;
+
+            if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+            {
+                    if( iRetryIterationCount > 0)
+                            bSilent = true;
+            }
+            else
+                    iRetryIterationCount = 0;
 
             if( !bSilent)
-			{
-				cout << "Exception : " << e.what() << endl;
-			}
-	}
-	catch(exception& e)
-	{
-	    cout << "Unknown exception has occured" << endl;
-	}
-	catch(...)
-	{
-	    cout << "Unknown exception has occured" << endl;
-	}
-		iRetryIterationCount--;
-		} while( iRetryIterationCount > 0 && !bSuccess);
-  cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;
-	
-	return 0;
+                cout << "Exception : " << e.what() << endl;
+        }
+        catch(exception& e)
+        {
+            cout << "Unknown exception has occured" << endl;
+        }
+        catch(...)
+        {
+            cout << "Unknown exception has occured" << endl;
+        }
+        
+        iRetryIterationCount--;
+   } 
+   while( iRetryIterationCount > 0 && !bSuccess);
+   
+   cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;
+        
+   return 0;
 }
 
 void sig_handler(int sig) {
-	signal(sig, sig_handler);
-    cout << "SIGNAL RECEIVED " << sig << endl;
-	exit(1);
+        signal(sig, sig_handler);
+        cout << "SIGNAL RECEIVED " << sig << endl;
+        exit(1);
 }
 

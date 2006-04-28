@@ -40,11 +40,11 @@ int main(int argc, char* argv[])
 
   endpoint_set = parse_args_for_endpoint(&argc, argv, &endpoint);
 
-		bool bSuccess = false;
-		int	iRetryIterationCount = 3;
+                bool bSuccess = false;
+                int     iRetryIterationCount = 3;
 
-		do
-		{
+                do
+                {
   try {
     if(endpoint_set) {
       ws = new XSD_byte(endpoint, APTHTTP1_1);
@@ -55,64 +55,64 @@ int main(int argc, char* argv[])
 
     SimpleComplexType1* input = new SimpleComplexType1();
 
-	AnyType* any1 = new AnyType();
+        AnyType* any1 = new AnyType();
 
-	AnyType *pAny = new AnyType();
+        AnyType *pAny = new AnyType();
     pAny->_size = 1;
     pAny->_array = new char*[1];
-	pAny->_array[0]=strdup("<mybook>WSCC</mybook>");
+        pAny->_array[0]=strdup("<mybook>WSCC</mybook>");
 
-	input->setany1(pAny);
-	input->setfield2("WebServices");
-	input->setfield3(123);
+        input->setany1(pAny);
+        input->setfield2("WebServices");
+        input->setfield3(123);
     
     SimpleComplexType1* result = NULL;
     result = ws->asComplexType(input);
 
-	if( result == NULL )
-			cout << "result object is NULL" << endl;
+        if( result == NULL )
+                        cout << "result object is NULL" << endl;
 
-	AnyType* pAnyReturn = result->getany1();
-	xsd__string f2 = result->getfield2();
-	xsd__int f3 = result->getfield3();
+        AnyType* pAnyReturn = result->getany1();
+        xsd__string f2 = result->getfield2();
+        xsd__int f3 = result->getfield3();
 
-	char * p = strstr( pAnyReturn->_array[0], "<mybook");
+        char * p = strstr( pAnyReturn->_array[0], "<mybook");
 
-	if( p && strstr( p, ">WSCC</mybook>"))
-	{
-	    cout << "Result field1 is = <mybook>WSCC</mybook>" << endl;
-	}
-	else
-	{
-	    cout << "Result field1 is = " << pAnyReturn->_array[0] << endl;
-	}
+        if( p && strstr( p, ">WSCC</mybook>"))
+        {
+            cout << "Result field1 is = <mybook>WSCC</mybook>" << endl;
+        }
+        else
+        {
+            cout << "Result field1 is = " << pAnyReturn->_array[0] << endl;
+        }
 
-	cout << "Result field2 is = " << f2 << endl;
-	cout << "Result field3 is = " << f3 << endl;
+        cout << "Result field2 is = " << f2 << endl;
+        cout << "Result field3 is = " << f3 << endl;
 
-	bSuccess = true;
+        bSuccess = true;
 
     returnValue = 0; // Success
 
   } catch(AxisException &e) {
-			bool bSilent = false;
+                        bool bSilent = false;
 
-			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-			{
-				if( iRetryIterationCount > 0)
-				{
-					bSilent = true;
-				}
-			}
-			else
-			{
-				iRetryIterationCount = 0;
-			}
+                        if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+                        {
+                                if( iRetryIterationCount > 0)
+                                {
+                                        bSilent = true;
+                                }
+                        }
+                        else
+                        {
+                                iRetryIterationCount = 0;
+                        }
 
             if( !bSilent)
-			{
+                        {
     cout << e.what() << endl;
-			}
+                        }
   } catch(...) {
     cout << "Unknown Exception occured." << endl;
   }
@@ -120,18 +120,18 @@ int main(int argc, char* argv[])
   // Samisa : clean up memory allocated for stub
   try
   {
-	  delete ws; 
+          delete ws; 
   }
   catch(exception& exception)
   {
-  	cout << "Exception on clean up of ws : " << exception.what()<<endl;
+        cout << "Exception on clean up of ws : " << exception.what()<<endl;
   }
   catch(...)
   {
-  	cout << "Unknown exception on clean up of ws : " << endl;
+        cout << "Unknown exception on clean up of ws : " << endl;
   }
-		iRetryIterationCount--;
-		} while( iRetryIterationCount > 0 && !bSuccess);
+                iRetryIterationCount--;
+                } while( iRetryIterationCount > 0 && !bSuccess);
     if(endpoint_set)
       free(endpoint);
   cout << "---------------------- TEST COMPLETE -----------------------------"<< endl;

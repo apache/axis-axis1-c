@@ -36,7 +36,7 @@ int main(int argc, char* argv[])
         char emptyanyURI[1] = "";
         xsd__anyURI emptyInput = new char[1];
         strcpy (emptyInput, emptyanyURI);
-		char simpleanyURI[100] = "http://www.w3.org/People/Dürst/";
+                char simpleanyURI[100] = "http://www.w3.org/People/Dürst/";
         xsd__anyURI input = new char[100];
         strcpy (input, simpleanyURI);
 
@@ -58,7 +58,7 @@ int main(int argc, char* argv[])
             cout << "non-nillable element=<nil>" << endl;
         }
         delete [] input;
-	}
+        }
     catch(AxisException& e)
     {
         cout << "Exception : " << e.what() << endl;

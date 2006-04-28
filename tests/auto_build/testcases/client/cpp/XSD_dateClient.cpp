@@ -116,18 +116,18 @@ int main(int argc, char* argv[])
 */
         // Test array
         xsd__date_Array arrayInput;
-		int arraySize = 2;
-		xsd__date ** array = new xsd__date*[arraySize];
+                int arraySize = 2;
+                xsd__date ** array = new xsd__date*[arraySize];
         
         for (int inputIndex=0 ; inputIndex < arraySize ; inputIndex++)
         {
             array[inputIndex] =new xsd__date(time);
             
         }
-		arrayInput.set(array,arraySize);
+                arrayInput.set(array,arraySize);
         xsd__date_Array* arrayResult = ws->asArray(&arrayInput);
-		int outputSize = 0;
-		const xsd__date **output = arrayResult->get(outputSize);
+                int outputSize = 0;
+                const xsd__date **output = arrayResult->get(outputSize);
         cout << "array of " << outputSize << " elements" << endl;
         for (int index = 0; index < outputSize ; index++)
         {

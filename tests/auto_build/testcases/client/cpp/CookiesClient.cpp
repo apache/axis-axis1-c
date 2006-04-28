@@ -27,28 +27,28 @@ void callCalculatorAndPrintProperties(Calculator& calculator, int, int);
 
 int main(int argc, char* argv[])
 {
-	char endpoint[256];
-	const char* url="http://localhost:80/axis/Calculator";
-	const char* op = 0;
-	int i1=0, i2=0;
+        char endpoint[256];
+        const char* url="http://localhost:80/axis/Calculator";
+        const char* op = 0;
+        int i1=0, i2=0;
 
-	signal(SIGILL, sig_handler);
-	signal(SIGABRT, sig_handler);
-	signal(SIGSEGV, sig_handler);
-	//signal(SIGQUIT, sig_handler);
-	//signal(SIGBUS, sig_handler);
-	signal(SIGFPE, sig_handler);
+        signal(SIGILL, sig_handler);
+        signal(SIGABRT, sig_handler);
+        signal(SIGSEGV, sig_handler);
+        //signal(SIGQUIT, sig_handler);
+        //signal(SIGBUS, sig_handler);
+        signal(SIGFPE, sig_handler);
 
-	url = argv[1];
+        url = argv[1];
 
-	try
-	{
-		sprintf(endpoint, "%s", url);
-		Calculator ws(endpoint);
+        try
+        {
+                sprintf(endpoint, "%s", url);
+                Calculator ws(endpoint);
 
-		op = "add";
-		i1 = 2;
-		i2 = 3;
+                op = "add";
+                i1 = 2;
+                i2 = 3;
 
         ws.setMaintainSession(true);
         cout << "Calling calculator for the first time and expecting Set-Cookie back"<<endl;
@@ -109,22 +109,22 @@ int main(int argc, char* argv[])
         calculator.deleteTransportProperty("Cookie");
         cout <<"Calling the service and expecting no cookies to be there"<<endl;
         callCalculatorAndPrintProperties(calculator, i1, i2);
-	}
-	catch(AxisException& e)
-	{
-			cout << "Exception : " << e.what() << endl;
-	}
-	catch(exception& e)
-	{
-	    cout << "Unknown exception has occured : " << e.what() << endl;
-	}
-	catch(...)
-	{
-	    cout << "Unknown exception has occured" << endl;
-	}
+        }
+        catch(AxisException& e)
+        {
+                        cout << "Exception : " << e.what() << endl;
+        }
+        catch(exception& e)
+        {
+            cout << "Unknown exception has occured : " << e.what() << endl;
+        }
+        catch(...)
+        {
+            cout << "Unknown exception has occured" << endl;
+        }
   cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;
-	
-	return 0;
+        
+        return 0;
 }
 
 void callCalculatorAndPrintProperties(Calculator& calculator, int i1, int i2)
@@ -168,22 +168,22 @@ void callCalculatorAndPrintProperties(Calculator& calculator, int i1, int i2)
 
 void PrintUsage()
 {
-	printf("Usage :\n Calculator <url>\n\n");
-	exit(1);
+        printf("Usage :\n Calculator <url>\n\n");
+        exit(1);
 }
 
 bool IsNumber(const char* p)
 {
-	for (int x=0; x < (int) strlen(p); x++)
-	{
-		if (!isdigit(p[x])) return false;
-	}
-	return true;
+        for (int x=0; x < (int) strlen(p); x++)
+        {
+                if (!isdigit(p[x])) return false;
+        }
+        return true;
 }
 
 void sig_handler(int sig) {
-	signal(sig, sig_handler);
+        signal(sig, sig_handler);
     cout << "SIGNAL RECEIVED " << sig << endl;
-	exit(1);
+        exit(1);
 }
 

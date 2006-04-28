@@ -45,27 +45,27 @@ main(int argc, char *argv[])
     //endpoint for Axis CPP sample
     sprintf(endpoint, "http://%s:%s/axis/base", server, port);
     
-	// Set the endpoint from command line argument if set
-	if (argc > 1)
-		strcpy(endpoint, argv[1]);
+        // Set the endpoint from command line argument if set
+        if (argc > 1)
+                strcpy(endpoint, argv[1]);
 
-	
-	InteropTestPortType ws(endpoint, APTHTTP1_1);
+        
+        InteropTestPortType ws(endpoint, APTHTTP1_1);
 
     /*
     <SOAP-ENV:Header>
-    	<ns2:TestHeader xmlns:ns2="http://ws.apache.org/axisCppTest/" xmlns:namesp1="http://mynamespace.com">
-	    <Credentials ns2:type="normal">
-		<username ns2:usertype="normal_user">Test User</username>
-		<password>Test Password</password>
-	    </Credentials>
-	</ns2:TestHeader>
+        <ns2:TestHeader xmlns:ns2="http://ws.apache.org/axisCppTest/" xmlns:namesp1="http://mynamespace.com">
+            <Credentials ns2:type="normal">
+                <username ns2:usertype="normal_user">Test User</username>
+                <password>Test Password</password>
+            </Credentials>
+        </ns2:TestHeader>
     </SOAP-ENV:Header>
     */
 
     //set SOAP headers
     IHeaderBlock *phb = ws.createSOAPHeaderBlock("TestHeader", 
-		"http://ws.apache.org/axisCppTest/");
+                "http://ws.apache.org/axisCppTest/");
     phb->createNamespaceDecl("namesp1", "http://mynamespace.com");
 
     //create parent node
@@ -103,15 +103,15 @@ main(int argc, char *argv[])
     /* start testing the getters for SOAP Header Attributes*/
     IAttribute* pIAttribute1 = parentNode->getFirstAttribute();
     if (pIAttribute1)
-    	printf("pIAttribute1 details = %s %s \n", pIAttribute1->getLocalName(), pIAttribute1->getURI());
+        printf("pIAttribute1 details = %s %s \n", pIAttribute1->getLocalName(), pIAttribute1->getURI());
 
     pIAttribute1 = NULL;
     int iTmpX = 0;
     while ((pIAttribute1 = parentNode->getNextAttribute()) != NULL) {
-	printf("pIAttribute1 details = %s %s \n", pIAttribute1->getLocalName(), pIAttribute1->getURI());
-	
-	iTmpX++;
-   	if (iTmpX==2) break; /*Just for a simple logic*/
+        printf("pIAttribute1 details = %s %s \n", pIAttribute1->getLocalName(), pIAttribute1->getURI());
+        
+        iTmpX++;
+        if (iTmpX==2) break; /*Just for a simple logic*/
     }
 
     pIAttribute1 = NULL;
@@ -122,7 +122,7 @@ main(int argc, char *argv[])
     pIAttribute1 = NULL;
     pIAttribute1 = parentNode->getLastAttribute();
     if (pIAttribute1)
-    	printf("pIAttribute1 details = %s %s \n", pIAttribute1->getLocalName(), pIAttribute1->getURI());
+        printf("pIAttribute1 details = %s %s \n", pIAttribute1->getLocalName(), pIAttribute1->getURI());
 
     pIAttribute1 = NULL;
     pIAttribute1 = parentNode->getAttribute("", "http://ws.apache.org/axisCppTest/", "scale");
@@ -132,47 +132,47 @@ main(int argc, char *argv[])
 
     printf("invoking echoString...\n");
     //testing echoString 
-		bool bSuccess = false;
-		int	iRetryIterationCount = 3;
+                bool bSuccess = false;
+                int     iRetryIterationCount = 3;
 
-		do
-		{
+                do
+                {
     try 
     {
     if (0 == strcmp(ws.echoString("hello world"), "hello world"))
-	printf("successful\n");
+        printf("successful\n");
     else
-	printf("failed\n");
+        printf("failed\n");
 
-				bSuccess = true;
+                                bSuccess = true;
     }
     catch (AxisException& e)
     {
-			bool bSilent = false;
+                        bool bSilent = false;
 
-			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-			{
-				if( iRetryIterationCount > 0)
-				{
-					bSilent = true;
-				}
-			}
-			else
-			{
-				iRetryIterationCount = 0;
-			}
+                        if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+                        {
+                                if( iRetryIterationCount > 0)
+                                {
+                                        bSilent = true;
+                                }
+                        }
+                        else
+                        {
+                                iRetryIterationCount = 0;
+                        }
 
             if( !bSilent)
-			{
+                        {
         printf("%s\n", e.what());
-			}
+                        }
     }
     catch(...)
     {
         printf("Unknown exception\n");
     }
-		iRetryIterationCount--;
-		} while( iRetryIterationCount > 0 && !bSuccess);
+                iRetryIterationCount--;
+                } while( iRetryIterationCount > 0 && !bSuccess);
 
     printf("Soap Header test end\n");
     return 0;

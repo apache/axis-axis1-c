@@ -299,17 +299,17 @@ int main(int argc, char* argv[])
 
         // Test array
         xsd__normalizedString_Array arrayInput;
-		int arraySize=2;
-		xsd__normalizedString * array = new xsd__normalizedString[arraySize];        
+                int arraySize=2;
+                xsd__normalizedString * array = new xsd__normalizedString[arraySize];        
         for (int inputIndex=0 ; inputIndex < arraySize ; inputIndex++)
         {
             array[inputIndex] = new char[25];
             strcpy (array[inputIndex], simplenormalizedString);            
         }
-		arrayInput.set(array,arraySize);
+                arrayInput.set(array,arraySize);
         xsd__normalizedString_Array* arrayResult = ws->asArray(&arrayInput);
-		int outputSize=0;
-		const xsd__normalizedString * output = arrayResult->get(outputSize);
+                int outputSize=0;
+                const xsd__normalizedString * output = arrayResult->get(outputSize);
         cout << "array of " << outputSize << " elements" << endl;
         for (int index = 0; index < outputSize ; index++)
         {

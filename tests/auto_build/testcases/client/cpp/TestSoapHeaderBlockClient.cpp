@@ -22,7 +22,7 @@
 
 int main(int argc, char *argv[])
 {
-	char endpoint[256];
+        char endpoint[256];
     const char* url="http://localhost:80/axis/MathOps";
     int iResult=0;
     //AxisChar * localname = "    " ;
@@ -33,8 +33,8 @@ int main(int argc, char *argv[])
     ws.setEndPoint(url);
 
 
-	/*create a header of the form:
-	<SOAP-ENV:Header>
+        /*create a header of the form:
+        <SOAP-ENV:Header>
     <th:TestHeader xmlns:th="http://ws.apache.org/axisCppTest/">
     <Credentials>
     <username>Test User</username>
@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
     </Credentials>
     </th:TestHeader>
     </SOAP-ENV:Header>
-	*/
+        */
 
     //set SOAP headers
     IHeaderBlock *phb = ws.createSOAPHeaderBlock("TestHeader", "http://ws.apache.org/axisCppTest/","th1");
@@ -75,89 +75,89 @@ int main(int argc, char *argv[])
 
     cout << "invoking MathOps div..." << endl;
     //testing add function
-		bool bSuccess = false;
-		int	iRetryIterationCount = 3;
+                bool bSuccess = false;
+                int     iRetryIterationCount = 3;
 
-		do
-		{
+                do
+                {
         try
         {
                 iResult = ws.div(15,5);
                 cout << iResult << endl;
 
-				bSuccess = true;
+                                bSuccess = true;
         }
         catch (AxisException& e)
         {
-			bool bSilent = false;
+                        bool bSilent = false;
 
-			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-			{
-				if( iRetryIterationCount > 0)
-				{
-					bSilent = true;
-				}
-			}
-			else
-			{
-				iRetryIterationCount = 0;
-			}
+                        if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+                        {
+                                if( iRetryIterationCount > 0)
+                                {
+                                        bSilent = true;
+                                }
+                        }
+                        else
+                        {
+                                iRetryIterationCount = 0;
+                        }
 
             if( !bSilent)
-			{
+                        {
                 cout << e.what() << endl;
-			}
+                        }
         }
         catch(...)
         {
                 cout << "Unknown exception" << endl;
         }
-		iRetryIterationCount--;
-		} while( iRetryIterationCount > 0 && !bSuccess);
+                iRetryIterationCount--;
+                } while( iRetryIterationCount > 0 && !bSuccess);
 
     //test removing SOAP header block using pointer
     IHeaderBlock *header = NULL;
     header = ws.getFirstSOAPHeaderBlock();
     ws.deleteSOAPHeaderBlock(header);
 
-		bSuccess = false;
-		iRetryIterationCount = 3;
+                bSuccess = false;
+                iRetryIterationCount = 3;
 
-		do
-		{
+                do
+                {
     try
     {
                 iResult = ws.div(15,5);
                 cout << iResult << endl;
-				bSuccess = true;
+                                bSuccess = true;
     }
     catch (AxisException& e)
     {
-			bool bSilent = false;
+                        bool bSilent = false;
 
-			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-			{
-				if( iRetryIterationCount > 0)
-				{
-					bSilent = true;
-				}
-			}
-			else
-			{
-				iRetryIterationCount = 0;
-			}
+                        if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+                        {
+                                if( iRetryIterationCount > 0)
+                                {
+                                        bSilent = true;
+                                }
+                        }
+                        else
+                        {
+                                iRetryIterationCount = 0;
+                        }
 
             if( !bSilent)
-			{
+                        {
                 cout << e.what() << endl;
-			}
+                        }
     }
     catch(...)
     {
         cout << "Unknown exception\n" << endl;
     }
-		iRetryIterationCount--;
-		} while( iRetryIterationCount > 0 && !bSuccess);
+                iRetryIterationCount--;
+                } while( iRetryIterationCount > 0 && !bSuccess);
 
 
     return 0;

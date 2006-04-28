@@ -13,6 +13,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* ----------------------------------------------------------------   */
+/* CHANGES TO THIS FILE MAY ALSO REQUIRE CHANGES TO THE               */
+/* C-EQUIVALENT FILE. PLEASE ENSURE THAT IT IS DONE.                  */
+/* ----------------------------------------------------------------   */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+
 #include "SimpleTypeArrayWS.hpp" 
 #include <stdlib.h> // For malloc(), calloc(), strdup() and free()
 #include <iostream>
@@ -38,11 +47,11 @@ int main(int argc, char* argv[])
 
   endpoint_set = parse_args_for_endpoint(&argc, argv, &endpoint);
 
-		bool bSuccess = false;
-		int	iRetryIterationCount = 3;
+                bool bSuccess = false;
+                int     iRetryIterationCount = 3;
 
-		do
-		{
+                do
+                {
   try {
     if(endpoint_set) {
       ws = new SimpleTypeArrayWS(endpoint, APTHTTP1_1);
@@ -55,49 +64,49 @@ int main(int argc, char* argv[])
     Type *output;
     xsd__int_Array array_input;   
     int i;
-	xsd__int ** array = new xsd__int*[100];
+        xsd__int ** array = new xsd__int*[100];
     for ( i = 0; i < 100; i++ ) {      
       array[i] = new xsd__int(i);
     }
-	array_input.set(array,100);
+        array_input.set(array,100);
     input = new Type();
     input->setitem(&array_input);
     output = ws->getInput(input);
-	xsd__int_Array * outputArray = output->getitem();
-	int outputSize=0;
-	const xsd__int ** outarray = outputArray->get(outputSize);
+        xsd__int_Array * outputArray = output->getitem();
+        int outputSize=0;
+        const xsd__int ** outarray = outputArray->get(outputSize);
     for ( i = 0; i < 100; i++ ) {
       cout << "item [" << i << "] = " << *(outarray[i]) << endl;
     }
     returnValue = 0; // Success
-	
-	// Clear up input array        
+        
+        // Clear up input array        
         for (int deleteIndex = 0 ; deleteIndex < 100 ; deleteIndex++ )
         {
             delete array[deleteIndex];
         }
         delete [] array;
-		delete input;
-	bSuccess = true;
+                delete input;
+        bSuccess = true;
   } catch(AxisException &e) {
-			bool bSilent = false;
+                        bool bSilent = false;
 
-			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-			{
-				if( iRetryIterationCount > 0)
-				{
-					bSilent = true;
-				}
-			}
-			else
-			{
-				iRetryIterationCount = 0;
-			}
+                        if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+                        {
+                                if( iRetryIterationCount > 0)
+                                {
+                                        bSilent = true;
+                                }
+                        }
+                        else
+                        {
+                                iRetryIterationCount = 0;
+                        }
 
             if( !bSilent)
-			{
+                        {
     cout << e.what() << endl;
-			}
+                        }
     if(endpoint_set)
       free(endpoint);
   } catch(...) {
@@ -109,18 +118,18 @@ int main(int argc, char* argv[])
   // clean up
   try
   {
-  	delete ws;
+        delete ws;
   }
   catch(exception& exception)
   {
-  	cout << "Exception on clean up of ws : " << exception.what()<<endl;
+        cout << "Exception on clean up of ws : " << exception.what()<<endl;
   }
   catch(...)
   {
-  	cout << "Unknown exception on clean up of ws : " << endl;
+        cout << "Unknown exception on clean up of ws : " << endl;
   }
-		iRetryIterationCount--;
-		} while( iRetryIterationCount > 0 && !bSuccess);
+                iRetryIterationCount--;
+                } while( iRetryIterationCount > 0 && !bSuccess);
   cout << "---------------------- TEST COMPLETE -----------------------------"<< endl;
   return returnValue;
 

@@ -121,18 +121,18 @@ int main(int argc, char* argv[])
 
         // Test array
         xsd__negativeInteger_Array arrayInput;
-		int arraySize=2;
-		xsd__negativeInteger ** array = new xsd__negativeInteger*[arraySize];
+                int arraySize=2;
+                xsd__negativeInteger ** array = new xsd__negativeInteger*[arraySize];
         
         for (int inputIndex=0 ; inputIndex < arraySize ; inputIndex++)
         {
             array[inputIndex] = new xsd__negativeInteger(-123456789);
           
         }
-		arrayInput.set(array,arraySize);
+                arrayInput.set(array,arraySize);
         xsd__negativeInteger_Array* arrayResult = ws->asArray(&arrayInput);
-		int outputSize=0;
-		const xsd__negativeInteger ** output = arrayResult->get(outputSize);
+                int outputSize=0;
+                const xsd__negativeInteger ** output = arrayResult->get(outputSize);
         cout << "array of " << outputSize << " elements" << endl;
         for (int index = 0; index < outputSize; index++)
         {

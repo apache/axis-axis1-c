@@ -18,98 +18,98 @@
 
 int main( int iArgC, char * pArgV[])
 {
-    char *	pszURL = "http://localhost:9090/MixedFalseWithMixedTextMessage/services/MixedFalseWithMixedTextMessage";
-	bool	bSuccess = false;
-	int		iRetryIterationCount = 3;
+    char *      pszURL = "http://localhost:9090/MixedFalseWithMixedTextMessage/services/MixedFalseWithMixedTextMessage";
+        bool    bSuccess = false;
+        int             iRetryIterationCount = 3;
 
-	do
-	{
-		try
-		{
-			if( iArgC > 0)
-			{
-				pszURL = pArgV[1];
-			}
+        do
+        {
+                try
+                {
+                        if( iArgC > 0)
+                        {
+                                pszURL = pArgV[1];
+                        }
 
-			MixedFalseWithMixedTextMessage *	pWS = new MixedFalseWithMixedTextMessage( pszURL, APTHTTP1_1);
+                        MixedFalseWithMixedTextMessage *        pWS = new MixedFalseWithMixedTextMessage( pszURL, APTHTTP1_1);
 
-			xsd__string	sLetterId = new char[6];
+                        xsd__string     sLetterId = new char[6];
 
-			strcpy( sLetterId, "0100");
+                        strcpy( sLetterId, "0100");
 
-	// Demonstrating pointer to pointers.
-			xsd__string	xsTo = NULL;
-			xsd__date *	pxdDate = NULL;
-			xsd__int *	pxiOrderNumber = NULL;
+        // Demonstrating pointer to pointers.
+                        xsd__string     xsTo = NULL;
+                        xsd__date *     pxdDate = NULL;
+                        xsd__int *      pxiOrderNumber = NULL;
 
-			xsd__string *	psTo = &xsTo;
-			xsd__date * pdDate = new xsd__date();
-			xsd__int * piOrderNumber = new xsd__int();
+                        xsd__string *   psTo = &xsTo;
+                        xsd__date * pdDate = new xsd__date();
+                        xsd__int * piOrderNumber = new xsd__int();
 
-			pWS->GetLetter( sLetterId, psTo, pdDate, piOrderNumber);
+                        pWS->GetLetter( sLetterId, psTo, pdDate, piOrderNumber);
 
-			cout << "The letter information for: " << sLetterId << endl;
-			cout << "To:      " << *psTo << endl;
-			cout << "Date:    " << asctime( pdDate);
-			cout << "OrderNo: " << *piOrderNumber << endl << endl;
+                        cout << "The letter information for: " << sLetterId << endl;
+                        cout << "To:      " << *psTo << endl;
+                        cout << "Date:    " << asctime( pdDate);
+                        cout << "OrderNo: " << *piOrderNumber << endl << endl;
 
-			delete *psTo;
+                        delete *psTo;
 
-	// Demonstrating references to pointers.
-			xsd__string	sTo = NULL;
-			xsd__date dDate;
-			xsd__int iOrderNumber;
+        // Demonstrating references to pointers.
+                        xsd__string     sTo = NULL;
+                        xsd__date dDate;
+                        xsd__int iOrderNumber;
 
-			pWS->GetLetter( sLetterId, &sTo, &dDate, &iOrderNumber);
+                        pWS->GetLetter( sLetterId, &sTo, &dDate, &iOrderNumber);
 
-			cout << "The letter information for: " << sLetterId << endl;
-			cout << "To:      " << sTo << endl;
-			cout << "Date:    " << asctime( &dDate);
-			cout << "OrderNo: " << iOrderNumber << endl;
+                        cout << "The letter information for: " << sLetterId << endl;
+                        cout << "To:      " << sTo << endl;
+                        cout << "Date:    " << asctime( &dDate);
+                        cout << "OrderNo: " << iOrderNumber << endl;
 
-			delete sLetterId;
-			delete sTo;
-			delete pdDate;
-			delete piOrderNumber;
+                        delete sLetterId;
+                        delete sTo;
+                        delete pdDate;
+                        delete piOrderNumber;
 
-			delete pWS;
+                        delete pWS;
 
-			bSuccess = true;
-		}
-		catch( AxisException & e)
-		{
-			bool bSilent = false;
+                        bSuccess = true;
+                }
+                catch( AxisException & e)
+                {
+                        bool bSilent = false;
 
-			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-			{
-				if( iRetryIterationCount > 1)
-				{
-					bSilent = true;
-				}
-			}
-			else
-			{
-				iRetryIterationCount = 0;
-			}
+                        if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+                        {
+                                if( iRetryIterationCount > 1)
+                                {
+                                        bSilent = true;
+                                }
+                        }
+                        else
+                        {
+                                iRetryIterationCount = 0;
+                        }
 
             if( !bSilent)
-			{
-				cout << "Exception: " << e.what() << endl;
-			}
-		}
-		catch( exception & e)
-		{
-			cout << "An unknown exception has occured: " << e.what() << endl;
-		}
-		catch (...)
-		{
-			cout << "Unknown exception has occured" << endl;
-		}
+                        {
+                                cout << "Exception: " << e.what() << endl;
+                        }
+                }
+                catch( exception & e)
+                {
+                        cout << "An unknown exception has occured: " << e.what() << endl;
+                }
+                catch (...)
+                {
+                        cout << "Unknown exception has occured" << endl;
+                }
 
-	iRetryIterationCount--;
-	} while( iRetryIterationCount > 0 && !bSuccess);
+        iRetryIterationCount--;
+        } while( iRetryIterationCount > 0 && !bSuccess);
 
-	cout << "---------------------- TEST COMPLETE -----------------------------"<< endl;
+        cout << "---------------------- TEST COMPLETE -----------------------------"<< endl;
 
-	return 0;
+        return 0;
 }

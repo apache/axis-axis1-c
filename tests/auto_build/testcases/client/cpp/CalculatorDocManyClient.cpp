@@ -25,165 +25,165 @@ bool IsNumber( const char * p);
 
 typedef enum
 {
-	eAdd,
-	eSub,
-	eMul,
-	eDiv
+        eAdd,
+        eSub,
+        eMul,
+        eDiv
 } EOPERATION;
 
 int main( int argc, char * argv[])
 {
-	char *		pURL = "http://localhost:80/axis/Calculator";
-	char *		pOpList[] = {"add", "sub", "mul", "div", "*"};
-	int			iValue1List[] = {2,  5,  23, 5879, 123,  76, 94, 3987, 432, 65, 0};
-	int			iValue2List[] = {3, 99, 243,    8, 987, 987, 45,  908, -45,  0};
-	int			iResult;
-	int			iIndex_Value1List = 0;
-	int			iIndex_Value2List = 0;
-	EOPERATION	eOperation = eAdd;
-	bool		bSuccess = false;
-	int			iRetryIterationCount = 3;
-	char		cSign;
-	int			iIterationCount = 20000;
-	int			iIteration;
+        char *          pURL = "http://localhost:80/axis/Calculator";
+        char *          pOpList[] = {"add", "sub", "mul", "div", "*"};
+        int                     iValue1List[] = {2,  5,  23, 5879, 123,  76, 94, 3987, 432, 65, 0};
+        int                     iValue2List[] = {3, 99, 243,    8, 987, 987, 45,  908, -45,  0};
+        int                     iResult;
+        int                     iIndex_Value1List = 0;
+        int                     iIndex_Value2List = 0;
+        EOPERATION      eOperation = eAdd;
+        bool            bSuccess = false;
+        int                     iRetryIterationCount = 3;
+        char            cSign;
+        int                     iIterationCount = 20000;
+        int                     iIteration;
 
-	signal( SIGILL, sig_handler);
-	signal( SIGABRT, sig_handler);
-	signal( SIGSEGV, sig_handler);
-	signal( SIGFPE, sig_handler);
+        signal( SIGILL, sig_handler);
+        signal( SIGABRT, sig_handler);
+        signal( SIGSEGV, sig_handler);
+        signal( SIGFPE, sig_handler);
 
-	if( argc > 0)
-	{
-		pURL = argv[1];
-	}
+        if( argc > 0)
+        {
+                pURL = argv[1];
+        }
 
-	do
-	{
-		try
-		{
-			Calculator	ws( pURL);
+        do
+        {
+                try
+                {
+                        Calculator      ws( pURL);
 
-			cout << "Invoke the same web service method " << iIterationCount << " times without closing the connection." << endl;
+                        cout << "Invoke the same web service method " << iIterationCount << " times without closing the connection." << endl;
 
-			for( iIteration = 0; iIteration < iIterationCount; iIteration++)
-			{
-				switch( eOperation)
-				{
-					case eAdd:
-					{
-						iResult = ws.add( iValue1List[iIndex_Value1List],
-										  iValue2List[iIndex_Value2List]);
-						cSign = '+';
-						eOperation = eSub;
-						break;
-					}
+                        for( iIteration = 0; iIteration < iIterationCount; iIteration++)
+                        {
+                                switch( eOperation)
+                                {
+                                        case eAdd:
+                                        {
+                                                iResult = ws.add( iValue1List[iIndex_Value1List],
+                                                                                  iValue2List[iIndex_Value2List]);
+                                                cSign = '+';
+                                                eOperation = eSub;
+                                                break;
+                                        }
 
-					case eSub:
-					{
-						iResult = ws.sub( iValue1List[iIndex_Value1List],
-										  iValue2List[iIndex_Value2List]);
-						cSign = '-';
-						eOperation = eMul;
-						break;
-					}
+                                        case eSub:
+                                        {
+                                                iResult = ws.sub( iValue1List[iIndex_Value1List],
+                                                                                  iValue2List[iIndex_Value2List]);
+                                                cSign = '-';
+                                                eOperation = eMul;
+                                                break;
+                                        }
 
-					case eMul:
-					{
-						iResult = ws.mul( iValue1List[iIndex_Value1List],
-										  iValue2List[iIndex_Value2List]);
-						cSign = '*';
-						eOperation = eDiv;
-						break;
-					}
+                                        case eMul:
+                                        {
+                                                iResult = ws.mul( iValue1List[iIndex_Value1List],
+                                                                                  iValue2List[iIndex_Value2List]);
+                                                cSign = '*';
+                                                eOperation = eDiv;
+                                                break;
+                                        }
 
-					case eDiv:
-					{
-						iResult = ws.div( iValue1List[iIndex_Value1List],
-										  iValue2List[iIndex_Value2List]);
-						cSign = '/';
-						eOperation = eAdd;
-						break;
-					}
-				}
+                                        case eDiv:
+                                        {
+                                                iResult = ws.div( iValue1List[iIndex_Value1List],
+                                                                                  iValue2List[iIndex_Value2List]);
+                                                cSign = '/';
+                                                eOperation = eAdd;
+                                                break;
+                                        }
+                                }
 
-				if( iIteration == iIterationCount / 4)
-				{
-					cout << "Quarter of the way there!" << endl;
-				}
-				else if( iIteration == iIterationCount / 2)
-				{
-					cout << "Half of the way there!" << endl;
-				}
-				else if( iIteration == (3 * iIterationCount) / 4)
-				{
-					cout << "Three quarters of the way there!" << endl;
-				}
-				else if( iIteration == iIterationCount - 1)
-				{
-					cout << "All the way there!" << endl;
+                                if( iIteration == iIterationCount / 4)
+                                {
+                                        cout << "Quarter of the way there!" << endl;
+                                }
+                                else if( iIteration == iIterationCount / 2)
+                                {
+                                        cout << "Half of the way there!" << endl;
+                                }
+                                else if( iIteration == (3 * iIterationCount) / 4)
+                                {
+                                        cout << "Three quarters of the way there!" << endl;
+                                }
+                                else if( iIteration == iIterationCount - 1)
+                                {
+                                        cout << "All the way there!" << endl;
 
-					bSuccess = true;
-				}
+                                        bSuccess = true;
+                                }
 
-				if( iValue1List[++iIndex_Value1List] == 0)
-				{
-					iIndex_Value1List = 0;
-				}
+                                if( iValue1List[++iIndex_Value1List] == 0)
+                                {
+                                        iIndex_Value1List = 0;
+                                }
 
-				if( iValue2List[++iIndex_Value2List] == 0)
-				{
-					iIndex_Value2List = 0;
-				}
-			}
-		}
-		catch( AxisException& e)
-		{
-			bool bSilent = false;
+                                if( iValue2List[++iIndex_Value2List] == 0)
+                                {
+                                        iIndex_Value2List = 0;
+                                }
+                        }
+                }
+                catch( AxisException& e)
+                {
+                        bool bSilent = false;
 
-			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-			{
-				if( iRetryIterationCount > 1)
-				{
-					bSilent = true;
-				}
-			}
-			else
-			{
-				iRetryIterationCount = 0;
-			}
+                        if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+                        {
+                                if( iRetryIterationCount > 1)
+                                {
+                                        bSilent = true;
+                                }
+                        }
+                        else
+                        {
+                                iRetryIterationCount = 0;
+                        }
 
             if( !bSilent)
-			{
-				cout << "Exception : " << e.what() << endl;
-			}
-		}
-		catch( exception& e)
-		{
-			cout << "Exception has occured:" << e.what() << endl;
-		}
-		catch(...)
-		{
-			cout << "Unknown exception has occured" << endl;
-		}
+                        {
+                                cout << "Exception : " << e.what() << endl;
+                        }
+                }
+                catch( exception& e)
+                {
+                        cout << "Exception has occured:" << e.what() << endl;
+                }
+                catch(...)
+                {
+                        cout << "Unknown exception has occured" << endl;
+                }
 
-		if( !bSuccess)
-		{
-			iRetryIterationCount--;
+                if( !bSuccess)
+                {
+                        iRetryIterationCount--;
 
-			cout << "Iteration: " << iIteration << " " << iValue1List[iIndex_Value1List] << cSign << iValue2List[iIndex_Value2List] << "=" << iResult << endl;
-		}
+                        cout << "Iteration: " << iIteration << " " << iValue1List[iIndex_Value1List] << cSign << iValue2List[iIndex_Value2List] << "=" << iResult << endl;
+                }
 
-	} while( iRetryIterationCount > 0 && !bSuccess);
+        } while( iRetryIterationCount > 0 && !bSuccess);
 
-	cout << "---------------------- TEST COMPLETE -----------------------------"<< endl;
-	
-	return 0;
+        cout << "---------------------- TEST COMPLETE -----------------------------"<< endl;
+        
+        return 0;
 }
 
 void sig_handler( int sig)
 {
-	signal( sig, sig_handler);
+        signal( sig, sig_handler);
     cout << "SIGNAL RECEIVED " << sig << endl;
-	exit( 1);
+        exit( 1);
 }
 

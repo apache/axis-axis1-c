@@ -30,68 +30,68 @@
 
 int main(int argc, char* argv[])
 {
-	char endpoint[256];
-	const char* url="http://localhost:80/axis/Calculator";
-	int iResult;
-	
+        char endpoint[256];
+        const char* url="http://localhost:80/axis/Calculator";
+        int iResult;
+        
 
-	url = argv[1];
+        url = argv[1];
 
-		bool bSuccess = false;
-		int	iRetryIterationCount = 3;
+                bool bSuccess = false;
+                int     iRetryIterationCount = 3;
 
-		do
-		{
-	try
-	{
-		sprintf(endpoint, "%s", url);
-		Calculator ws(endpoint);
-		char buffer[100];
-		char* pbuff=buffer; 
-		
-		ws.setHandlerProperty("prop1", (void*)"value1", 7);
-		ws.setHandlerProperty("prop2", &pbuff, 100);
-		
-		iResult = ws.add(2,3);
-		cout << iResult << endl;
-		cout << "value of prop2 printed in client is = " << buffer << endl;
+                do
+                {
+        try
+        {
+                sprintf(endpoint, "%s", url);
+                Calculator ws(endpoint);
+                char buffer[100];
+                char* pbuff=buffer; 
+                
+                ws.setHandlerProperty("prop1", (void*)"value1", 7);
+                ws.setHandlerProperty("prop2", &pbuff, 100);
+                
+                iResult = ws.add(2,3);
+                cout << iResult << endl;
+                cout << "value of prop2 printed in client is = " << buffer << endl;
 
-		bSuccess = true;
-	
-	}
-	catch(AxisException& e)
-	{
-			bool bSilent = false;
+                bSuccess = true;
+        
+        }
+        catch(AxisException& e)
+        {
+                        bool bSilent = false;
 
-			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-			{
-				if( iRetryIterationCount > 0)
-				{
-					bSilent = true;
-				}
-			}
-			else
-			{
-				iRetryIterationCount = 0;
-			}
+                        if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+                        {
+                                if( iRetryIterationCount > 0)
+                                {
+                                        bSilent = true;
+                                }
+                        }
+                        else
+                        {
+                                iRetryIterationCount = 0;
+                        }
 
             if( !bSilent)
-			{
-				cout << "Exception : " << e.what() << endl;
-			}
-	}
-	catch(exception& e)
-	{
-	    printf("Unknown exception has occured\n" );
-	}
-	catch(...)
-	{
-	    printf("Unknown exception has occured\n" );
-	}
-		iRetryIterationCount--;
-		} while( iRetryIterationCount > 0 && !bSuccess);
-	cout << "---------------- TEST COMPLETE ----------------" << endl;
-	return 0;
+                        {
+                                cout << "Exception : " << e.what() << endl;
+                        }
+        }
+        catch(exception& e)
+        {
+            printf("Unknown exception has occured\n" );
+        }
+        catch(...)
+        {
+            printf("Unknown exception has occured\n" );
+        }
+                iRetryIterationCount--;
+                } while( iRetryIterationCount > 0 && !bSuccess);
+        cout << "---------------- TEST COMPLETE ----------------" << endl;
+        return 0;
 }
 
 

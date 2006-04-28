@@ -13,6 +13,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* ----------------------------------------------------------------   */
+/* CHANGES TO THIS FILE MAY ALSO REQUIRE CHANGES TO THE               */
+/* C-EQUIVALENT FILE. PLEASE ENSURE THAT IT IS DONE.                  */
+/* ----------------------------------------------------------------   */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+
 #include "RecurseTypesWS.hpp" 
 #include <stdlib.h> // For malloc(), calloc(), strdup() and free()
 #include <iostream>
@@ -40,11 +49,11 @@ int main(int argc, char* argv[])
 
   endpoint_set = parse_args_for_endpoint(&argc, argv, &endpoint);
 
-		bool bSuccess = false;
-		int	iRetryIterationCount = 3;
+                bool bSuccess = false;
+                int     iRetryIterationCount = 3;
 
-		do
-		{
+                do
+                {
   try {
     if(endpoint_set) {
       ws = new RecurseTypesWS(endpoint, APTHTTP1_1);
@@ -58,22 +67,22 @@ int main(int argc, char* argv[])
 
     input = new Type1 ();
     input->att_kind = new char[strlen(Kind_CHEQUE) + 1];
-	strcpy(input->att_kind, Kind_CHEQUE);
+        strcpy(input->att_kind, Kind_CHEQUE);
     input->kind = new char[strlen("Check In") + 1];
-	strcpy(input->kind, "Check In");
+        strcpy(input->kind, "Check In");
 
-	Type1_Array arrayIn;
-	Type1 ** array = new Type1*[10];
+        Type1_Array arrayIn;
+        Type1 ** array = new Type1*[10];
 
     for ( i = 0; i < 10; i++ )
-	{
-		array[i]=new Type1();
+        {
+                array[i]=new Type1();
         array[i]->kind = new char[strlen("Sample") + 1];
-		strcpy(array[i]->kind, "Sample");
-		array[i]->index = 0;
+                strcpy(array[i]->kind, "Sample");
+                array[i]->index = 0;
     }
-	arrayIn.set(array,10);
-	input->setfollowings(&arrayIn);
+        arrayIn.set(array,10);
+        input->setfollowings(&arrayIn);
     output = ws->getInput(input);
 
     cout << "Result" << endl;
@@ -82,59 +91,59 @@ int main(int argc, char* argv[])
     else {
       cout << "\tAtt_kind = " << output->att_kind << endl;
       cout << "\tKind = " << output->kind << endl;
-	  int outputSize = 0;
+          int outputSize = 0;
       Type1 ** outArray = output->followings->get(outputSize);;
       for ( i = 0; i < outputSize; i++ ) {
         cout << "\tKind [" << i << "] = " << outArray[i]->kind << endl;        
       }
-	    // Clear up input array        
+            // Clear up input array        
         for (int deleteIndex = 0 ; deleteIndex < 10 ; deleteIndex++ )
         {
             delete array[deleteIndex];
         }
-		delete [] array;
-		delete input;
-		delete output;
+                delete [] array;
+                delete input;
+                delete output;
       returnValue = 0; // Success
 
-	  bSuccess = true;
+          bSuccess = true;
     }
   } catch(AxisException &e) {
-			bool bSilent = false;
+                        bool bSilent = false;
 
-			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-			{
-				if( iRetryIterationCount > 0)
-				{
-					bSilent = true;
-				}
-			}
-			else
-			{
-				iRetryIterationCount = 0;
-			}
+                        if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+                        {
+                                if( iRetryIterationCount > 0)
+                                {
+                                        bSilent = true;
+                                }
+                        }
+                        else
+                        {
+                                iRetryIterationCount = 0;
+                        }
 
             if( !bSilent)
-			{
+                        {
     cout << e.what() << endl;
-			}
+                        }
   } catch(...) {
     cout << "Unknown Exception occured." << endl;
   }
   try
   {
-	  delete ws; 
+          delete ws; 
   }
   catch(exception& exception)
   {
-  	cout << "Exception on clean up of ws: " << exception.what()<<endl;
+        cout << "Exception on clean up of ws: " << exception.what()<<endl;
   }
   catch(...)
   {
-  	cout << "Unknown exception on clean up of ws: " << endl;
+        cout << "Unknown exception on clean up of ws: " << endl;
   }
-		iRetryIterationCount--;
-		} while( iRetryIterationCount > 0 && !bSuccess);
+                iRetryIterationCount--;
+                } while( iRetryIterationCount > 0 && !bSuccess);
     if(endpoint_set)
       free(endpoint);
   cout << "---------------------- TEST COMPLETE -----------------------------"<< endl;

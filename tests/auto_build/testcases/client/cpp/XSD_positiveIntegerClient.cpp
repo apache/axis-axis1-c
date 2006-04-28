@@ -115,18 +115,18 @@ int main(int argc, char* argv[])
 
         // Test array
         xsd__positiveInteger_Array arrayInput;
-		int arraySize=2;
-		xsd__positiveInteger ** array = new xsd__positiveInteger*[arraySize];
+                int arraySize=2;
+                xsd__positiveInteger ** array = new xsd__positiveInteger*[arraySize];
         
         for (int inputIndex=0 ; inputIndex < arraySize ; inputIndex++)
         {
             array[inputIndex] = new xsd__positiveInteger(123456789);
            
         }
-		arrayInput.set(array,arraySize);
+                arrayInput.set(array,arraySize);
         xsd__positiveInteger_Array* arrayResult = ws->asArray(&arrayInput);
-		int outputSize=0;
-		const xsd__positiveInteger ** output=arrayResult->get(outputSize);
+                int outputSize=0;
+                const xsd__positiveInteger ** output=arrayResult->get(outputSize);
         cout << "array of " << outputSize << " elements" << endl;
         for (int index = 0; index < outputSize; index++)
         {

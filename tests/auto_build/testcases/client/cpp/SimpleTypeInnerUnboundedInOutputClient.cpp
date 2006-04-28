@@ -13,6 +13,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* ----------------------------------------------------------------   */
+/* CHANGES TO THIS FILE MAY ALSO REQUIRE CHANGES TO THE               */
+/* C-EQUIVALENT FILE. PLEASE ENSURE THAT IT IS DONE.                  */
+/* ----------------------------------------------------------------   */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+
 #include "SimpleTypeInnerUnboundedInOutputWS.hpp" 
 #include <stdlib.h> // For malloc(), calloc(), strdup() and free()
 #include <iostream>
@@ -38,11 +47,11 @@ int main(int argc, char* argv[])
 
   endpoint_set = parse_args_for_endpoint(&argc, argv, &endpoint);
 
-		bool bSuccess = false;
-		int	iRetryIterationCount = 3;
+        bool bSuccess = false;
+        int    iRetryIterationCount = 3;
 
-		do
-		{
+        do
+        {
   try {
     if(endpoint_set) {
       ws = new SimpleTypeInnerUnboundedInOutputWS(endpoint, APTHTTP1_1);
@@ -85,44 +94,44 @@ int main(int argc, char* argv[])
         }
       returnValue = 0; // Success
     }
-	bSuccess = true;
+    bSuccess = true;
   } catch(AxisException &e) {
-			bool bSilent = false;
+            bool bSilent = false;
 
-			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-			{
-				if( iRetryIterationCount > 0)
-				{
-					bSilent = true;
-				}
-			}
-			else
-			{
-				iRetryIterationCount = 0;
-			}
+            if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+            {
+                if( iRetryIterationCount > 0)
+                {
+                    bSilent = true;
+                }
+            }
+            else
+            {
+                iRetryIterationCount = 0;
+            }
 
             if( !bSilent)
-			{
+            {
     cout << e.what() << endl;
-			}
+            }
   } catch(...) {
     cout << "Unknown Exception occured." << endl;
   }
 // clean up
   try
   {
-  	delete ws;
+      delete ws;
   }
   catch(exception& exception)
   {
-  	cout << "Exception on clean up of ws: " << exception.what()<<endl;
+      cout << "Exception on clean up of ws: " << exception.what()<<endl;
   }
   catch(...)
   {
-  	cout << "Unknown exception on clean up of ws: " << endl;
+      cout << "Unknown exception on clean up of ws: " << endl;
   }
-		iRetryIterationCount--;
-		} while( iRetryIterationCount > 0 && !bSuccess);
+        iRetryIterationCount--;
+        } while( iRetryIterationCount > 0 && !bSuccess);
     if(endpoint_set) {
         free(endpoint);
     }

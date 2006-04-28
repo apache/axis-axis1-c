@@ -299,19 +299,19 @@ int main(int argc, char* argv[])
 
         // Test array
         xsd__NMTOKENS_Array arrayInput;
-		int arraySize = 2;
-		xsd__NMTOKENS * array = new xsd__NMTOKENS[arraySize];
+                int arraySize = 2;
+                xsd__NMTOKENS * array = new xsd__NMTOKENS[arraySize];
         
         for (int inputIndex=0 ; inputIndex < arraySize ; inputIndex++)
         {
             array[inputIndex] = new char[25];
             strcpy (array[inputIndex], simpleNMTOKENS);            
         }
-		arrayInput.set(array,arraySize);
+                arrayInput.set(array,arraySize);
 
         xsd__NMTOKENS_Array* arrayResult = ws->asArray(&arrayInput);
-		int outputSize =0;
-		const xsd__NMTOKENS * output = arrayResult->get(outputSize);
+                int outputSize =0;
+                const xsd__NMTOKENS * output = arrayResult->get(outputSize);
         cout << "array of " << outputSize << " elements" << endl;
         for (int index = 0; index < outputSize ; index++)
         {

@@ -24,59 +24,59 @@ using namespace std;
 
 typedef struct
 {
-	int	iValue1;
-	int	iValue2;
+        int     iValue1;
+        int     iValue2;
 } MathOperationData;
 
 int main( int argc, char * argv[])
 {
-	char *				pszURL = "http://localhost:80/axis/MathOps";
-	const char *		pszOperation = NULL;
-	MathOperationData	sMathOperationData[] = {{  10,  5},
-												{  10,  0},
-												{1000,  5},
-												{  10, -5},
-												{   0,  0}};
+        char *                          pszURL = "http://localhost:80/axis/MathOps";
+        const char *            pszOperation = NULL;
+        MathOperationData       sMathOperationData[] = {{  10,  5},
+                                                                                                {  10,  0},
+                                                                                                {1000,  5},
+                                                                                                {  10, -5},
+                                                                                                {   0,  0}};
 
-	signal( SIGILL,  sig_handler);
-	signal( SIGABRT, sig_handler);
-	signal( SIGSEGV, sig_handler);
+        signal( SIGILL,  sig_handler);
+        signal( SIGABRT, sig_handler);
+        signal( SIGSEGV, sig_handler);
 //  signal( SIGQUIT, sig_handler);
 //  signal( SIGBUS,  sig_handler);
-	signal( SIGFPE,  sig_handler);
+        signal( SIGFPE,  sig_handler);
 
-	pszURL = argv[1];
+        pszURL = argv[1];
 
-	pszOperation = "div";
+        pszOperation = "div";
 
-	if( strcmp( pszOperation, "div") == 0)
-	{
-	    int	iMathDataCount = 0;
+        if( strcmp( pszOperation, "div") == 0)
+        {
+            int iMathDataCount = 0;
 
-		while( sMathOperationData[iMathDataCount].iValue1 != 0 &&
-			   sMathOperationData[iMathDataCount].iValue1 != sMathOperationData[iMathDataCount].iValue2)
-	    {
-			bool bSuccess = false;
-			int	iRetryIterationCount = 3;
+                while( sMathOperationData[iMathDataCount].iValue1 != 0 &&
+                           sMathOperationData[iMathDataCount].iValue1 != sMathOperationData[iMathDataCount].iValue2)
+            {
+                        bool bSuccess = false;
+                        int     iRetryIterationCount = 3;
 
             cout << iMathDataCount << endl;
 
-			do
-			{
-				try
-				{
-					MathOps	ws( pszURL);
+                        do
+                        {
+                                try
+                                {
+                                        MathOps ws( pszURL);
 
-					if( iRetryIterationCount == 3)
-					{
-						cout << "Trying to "
-							 << pszOperation
-							 << " "
-							 << sMathOperationData[iMathDataCount].iValue1
-							 << " by "
-							 << sMathOperationData[iMathDataCount].iValue2
-							 << endl;
-					}
+                                        if( iRetryIterationCount == 3)
+                                        {
+                                                cout << "Trying to "
+                                                         << pszOperation
+                                                         << " "
+                                                         << sMathOperationData[iMathDataCount].iValue1
+                                                         << " by "
+                                                         << sMathOperationData[iMathDataCount].iValue2
+                                                         << endl;
+                                        }
 
 // HTTP/1.1 500 Internal Server Error
 // :
@@ -96,102 +96,102 @@ int main( int argc, char * argv[])
 //           xmlns="">
 // <varString xsi:type="xsd:string">Division by zero exception</varString>
 
-					int	iResult = ws.div( sMathOperationData[iMathDataCount].iValue1,
-										  sMathOperationData[iMathDataCount].iValue2);
-				
-					cout << "Result is " << iResult << endl;
-				
-					bSuccess = true;
-				}
-				catch( DivByZeroStruct& dbzs)
-				{
-					cout << "DivByZeroStruct Fault: \""
-						 << dbzs.varString
-						 << "\", "
-						 << dbzs.varInt
-						 << ", "
-						 << dbzs.varFloat
-						 << endl;
+                                        int     iResult = ws.div( sMathOperationData[iMathDataCount].iValue1,
+                                                                                  sMathOperationData[iMathDataCount].iValue2);
+                                
+                                        cout << "Result is " << iResult << endl;
+                                
+                                        bSuccess = true;
+                                }
+                                catch( DivByZeroStruct& dbzs)
+                                {
+                                        cout << "DivByZeroStruct Fault: \""
+                                                 << dbzs.varString
+                                                 << "\", "
+                                                 << dbzs.varInt
+                                                 << ", "
+                                                 << dbzs.varFloat
+                                                 << endl;
 
-					bSuccess = true;
-				}
-				catch( SpecialDetailStruct& sds)
-				{
-					cout << "SpecialDetailStruct Fault: \""
-						 << sds.varString
-						 << "\""
-						 << endl;
+                                        bSuccess = true;
+                                }
+                                catch( SpecialDetailStruct& sds)
+                                {
+                                        cout << "SpecialDetailStruct Fault: \""
+                                                 << sds.varString
+                                                 << "\""
+                                                 << endl;
 
-					bSuccess = true;
-				}
-				catch( OutOfBoundStruct& oobs)
-				{
-					cout << "OutOfBoundStruct Fault: \""
-						 << oobs.varString
-						 << "\", "
-						 << oobs.varInt
-						 << ", \""
-						 << oobs.specialDetail->varString
-						 << "\""
-						 << endl;
+                                        bSuccess = true;
+                                }
+                                catch( OutOfBoundStruct& oobs)
+                                {
+                                        cout << "OutOfBoundStruct Fault: \""
+                                                 << oobs.varString
+                                                 << "\", "
+                                                 << oobs.varInt
+                                                 << ", \""
+                                                 << oobs.specialDetail->varString
+                                                 << "\""
+                                                 << endl;
 
-					bSuccess = true;
-				}
-				catch( SoapFaultException& sfe)
-				{
-					cout << "SoapFaultException: " << sfe.what() << endl;
-				}
-				catch( AxisException& e)
-				{
-					bool bSilent = false;
+                                        bSuccess = true;
+                                }
+                                catch( SoapFaultException& sfe)
+                                {
+                                        cout << "SoapFaultException: " << sfe.what() << endl;
+                                }
+                                catch( AxisException& e)
+                                {
+                                        bool bSilent = false;
 
-					if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-					{
-						if( iRetryIterationCount > 1)
-						{
-							bSilent = true;
-						}
-					}
-					else
-					{
-						iRetryIterationCount = 0;
-					}
+                                        if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+                                        {
+                                                if( iRetryIterationCount > 1)
+                                                {
+                                                        bSilent = true;
+                                                }
+                                        }
+                                        else
+                                        {
+                                                iRetryIterationCount = 0;
+                                        }
 
-		            if( !bSilent)
-					{
-						cout << "Exception : " << e.what() << endl;
-					}
-				}
-				catch( exception& e)
-				{
-		            cout << "Unknown Exception: " << e.what() << endl;
-				}
-				catch(...)
-				{
-		            cout << "Unspecified Exception: " << endl;
-				}
+                            if( !bSilent)
+                                        {
+                                                cout << "Exception : " << e.what() << endl;
+                                        }
+                                }
+                                catch( exception& e)
+                                {
+                            cout << "Unknown Exception: " << e.what() << endl;
+                                }
+                                catch(...)
+                                {
+                            cout << "Unspecified Exception: " << endl;
+                                }
 
-				iRetryIterationCount--;
-			} while( iRetryIterationCount > 0 && !bSuccess);
+                                iRetryIterationCount--;
+                        } while( iRetryIterationCount > 0 && !bSuccess);
 
-			iMathDataCount++;
-	    }
-	}
-	else 
-	{
-		cout << "Invalid operation " << pszOperation << endl;
-	}
+                        iMathDataCount++;
+            }
+        }
+        else 
+        {
+                cout << "Invalid operation " << pszOperation << endl;
+        }
 
-	cout << "---------------------- TEST COMPLETE -----------------------------" << endl;
-	
-	return 0;
+        cout << "---------------------- TEST COMPLETE -----------------------------" << endl;
+        
+        return 0;
 }
 
 void sig_handler( int sig)
 {
-	signal( sig, sig_handler);
+        signal( sig, sig_handler);
 
     cout << "SIGNAL RECEIVED " << sig << endl;
 
-	exit(1);
+        exit(1);
 }

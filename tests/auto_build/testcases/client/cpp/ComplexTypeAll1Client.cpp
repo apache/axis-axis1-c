@@ -32,105 +32,105 @@ void setLogOptions(const char *output_filename);
 
 int main(int argc, char* argv[])
 { 
-	
+        
   operations *ws;
 
   char *endpoint = WSDL_DEFAULT_ENDPOINT;
   bool endpoint_set = false;
   int returnValue = 1; // Assume Failure
 
-	endpoint_set = parse_args_for_endpoint(&argc, argv, &endpoint);
+        endpoint_set = parse_args_for_endpoint(&argc, argv, &endpoint);
 
-	bool bSuccess = false;
-	int	iRetryIterationCount = 3;
+        bool bSuccess = false;
+        int     iRetryIterationCount = 3;
 
-	do
-	{
-		try {
-	
-				if(endpoint_set) {
-					ws = new operations(endpoint, APTHTTP1_1);
-					free(endpoint);
-					endpoint_set = false;
-				} else
-					ws = new operations();
+        do
+        {
+                try {
+        
+                                if(endpoint_set) {
+                                        ws = new operations(endpoint, APTHTTP1_1);
+                                        free(endpoint);
+                                        endpoint_set = false;
+                                } else
+                                        ws = new operations();
 
-				aRecord* input=new aRecord(); 
+                                aRecord* input=new aRecord(); 
 
-				xsd__int* fieldone=new xsd__int();
-				*fieldone=12345;
-				input->field1=fieldone;
+                                xsd__int* fieldone=new xsd__int();
+                                *fieldone=12345;
+                                input->field1=fieldone;
 
-				input->field2 = "I'm still here!";
+                                input->field2 = "I'm still here!";
 
-				xsd__byte* fieldthree=new xsd__byte();
-				*fieldthree=65;
-				input->field3=fieldthree;
+                                xsd__byte* fieldthree=new xsd__byte();
+                                *fieldthree=65;
+                                input->field3=fieldthree;
 
-			    xsd__boolean result;
-				result = ws->myOperation(input); 
-				
-				if (result!= NULL) 
-					cout<< "Result= " << result << endl;
-				else 
-					cout << "result is NULL" << endl;
+                            xsd__boolean result;
+                                result = ws->myOperation(input); 
+                                
+                                if (result!= NULL) 
+                                        cout<< "Result= " << result << endl;
+                                else 
+                                        cout << "result is NULL" << endl;
 
-				bSuccess = true;
+                                bSuccess = true;
 
-			    returnValue = 0; // Success
+                            returnValue = 0; // Success
 
-		} catch(AxisException &e) {
-				bool bSilent = false;
+                } catch(AxisException &e) {
+                                bool bSilent = false;
 
-				if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-				{
-					if( iRetryIterationCount > 0)
-					{
-						bSilent = true;
-					}
-				}
-				else
-				{
-					iRetryIterationCount = 0;
-				}
+                                if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+                                {
+                                        if( iRetryIterationCount > 0)
+                                        {
+                                                bSilent = true;
+                                        }
+                                }
+                                else
+                                {
+                                        iRetryIterationCount = 0;
+                                }
 
-				if( !bSilent)
-				{
-					cout << e.what() << endl;
-				}
-		} catch(exception& exception){
+                                if( !bSilent)
+                                {
+                                        cout << e.what() << endl;
+                                }
+                } catch(exception& exception){
 
-  				cout << "Exception on clean up of ws : " << exception.what()<<endl;
-		
-		} catch(...) {
-			
-				cout << "Unknown Exception occured" << endl;
-		}  
+                                cout << "Exception on clean up of ws : " << exception.what()<<endl;
+                
+                } catch(...) {
+                        
+                                cout << "Unknown Exception occured" << endl;
+                }  
   
   // Samisa : clean up memory allocated for stub
-		try
-		{
-			delete ws; 
-		}
-		catch(exception& exception)
-		{
-  			cout << "Exception on clean up of ws : " << exception.what()<<endl;
-		}
-		catch(...)
-		{
-  			cout << "Unknown exception on clean up of ws : " << endl;
-		}
+                try
+                {
+                        delete ws; 
+                }
+                catch(exception& exception)
+                {
+                        cout << "Exception on clean up of ws : " << exception.what()<<endl;
+                }
+                catch(...)
+                {
+                        cout << "Unknown exception on clean up of ws : " << endl;
+                }
 
-		iRetryIterationCount--;
-	
-	} while( iRetryIterationCount > 0 && !bSuccess);
+                iRetryIterationCount--;
+        
+        } while( iRetryIterationCount > 0 && !bSuccess);
 
     if(endpoint_set)
     free(endpoint);
 
-	cout << "---------------------- TEST COMPLETE -----------------------------"<< endl;
+        cout << "---------------------- TEST COMPLETE -----------------------------"<< endl;
 
-	return returnValue;
+        return returnValue;
 }
 
 /* Spin through args list and check for -e -p and -s options.

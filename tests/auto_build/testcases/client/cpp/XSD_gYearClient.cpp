@@ -116,18 +116,18 @@ int main(int argc, char* argv[])
 */
         // Test array
         xsd__gYear_Array arrayInput;
-		int arraySize = 2;
-		xsd__gYear ** array = new xsd__gYear*[arraySize];
+                int arraySize = 2;
+                xsd__gYear ** array = new xsd__gYear*[arraySize];
         
         for (int inputIndex=0 ; inputIndex < 2 ; inputIndex++)
         {
             array[inputIndex] = new xsd__gYear(time);
             
         }
-		arrayInput.set(array,arraySize);
+                arrayInput.set(array,arraySize);
         xsd__gYear_Array* arrayResult = ws->asArray(&arrayInput);
-		int outputSize = 0;
-		const xsd__gYear **output = arrayResult->get(outputSize);
+                int outputSize = 0;
+                const xsd__gYear **output = arrayResult->get(outputSize);
         cout << "array of " << outputSize << " elements" << endl;
         for (int index = 0; index < outputSize ; index++)
         {

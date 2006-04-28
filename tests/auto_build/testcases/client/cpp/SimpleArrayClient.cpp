@@ -12,72 +12,72 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
-	int		x;
-	char *	url="http://localhost:80/axis/MathOps";
-	bool	bSuccess = false;
-	int		iRetryIterationCount = 3;
+        int             x;
+        char *  url="http://localhost:80/axis/MathOps";
+        bool    bSuccess = false;
+        int             iRetryIterationCount = 3;
 
-	url = argv[1];
+        url = argv[1];
 
-	do
-	{
-		try
+        do
         {
-			ArrayTestPortType	ws( url);
-			intArrayType		arrin;
-			intArrayType *		arrout;
-			xsd__int_Array		arrayInput;
-			int **				array = new int*[ARRAYSIZE];
+                try
+        {
+                        ArrayTestPortType       ws( url);
+                        intArrayType            arrin;
+                        intArrayType *          arrout;
+                        xsd__int_Array          arrayInput;
+                        int **                          array = new int*[ARRAYSIZE];
 
-			for( x = 0; x < ARRAYSIZE; x++)
-			{
-				array[x] = new int(x + 1000);
-			}
+                        for( x = 0; x < ARRAYSIZE; x++)
+                        {
+                                array[x] = new int(x + 1000);
+                        }
 
-			arrayInput.set(array,ARRAYSIZE);
-			arrin.setintItem(&arrayInput);
+                        arrayInput.set(array,ARRAYSIZE);
+                        arrin.setintItem(&arrayInput);
 
-			cout << "invoking echoIntArray..." << endl;
+                        cout << "invoking echoIntArray..." << endl;
 
-			int		outputSize = 0;
+                        int             outputSize = 0;
 
-			arrout = ws.echoIntArray( &arrin);
+                        arrout = ws.echoIntArray( &arrin);
 
-			for( x = 0; x < ARRAYSIZE; x++)
-			{
-				cout << *(arrout->intItem->get(outputSize)[x])<<endl;
-			}
+                        for( x = 0; x < ARRAYSIZE; x++)
+                        {
+                                cout << *(arrout->intItem->get(outputSize)[x])<<endl;
+                        }
 
-			// Clear up input array        
-			for( int deleteIndex = 0; deleteIndex < ARRAYSIZE; deleteIndex++)
-			{
-				delete array[deleteIndex];
-			}
+                        // Clear up input array        
+                        for( int deleteIndex = 0; deleteIndex < ARRAYSIZE; deleteIndex++)
+                        {
+                                delete array[deleteIndex];
+                        }
 
-			delete [] array;
+                        delete [] array;
 
-			bSuccess = true;
-		}
+                        bSuccess = true;
+                }
         catch( AxisException& e)
         {
-			bool bSilent = false;
+                        bool bSilent = false;
 
-			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-			{
-				if( iRetryIterationCount > 1)
-				{
-					bSilent = true;
-				}
-			}
-			else
-			{
-				iRetryIterationCount = 0;
-			}
+                        if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+                        {
+                                if( iRetryIterationCount > 1)
+                                {
+                                        bSilent = true;
+                                }
+                        }
+                        else
+                        {
+                                iRetryIterationCount = 0;
+                        }
 
             if( !bSilent)
-			{
-	            cout << "Exception : " << e.what() << endl;
-			}
+                        {
+                    cout << "Exception : " << e.what() << endl;
+                        }
         }
         catch( exception& e)
         {
@@ -88,10 +88,10 @@ int main(int argc, char* argv[])
             cout << "Unknown exception has occurred" << endl;
         }
 
-		iRetryIterationCount--;
-	} while( iRetryIterationCount > 0 && !bSuccess);
+                iRetryIterationCount--;
+        } while( iRetryIterationCount > 0 && !bSuccess);
 
-	cout << "---------------------- TEST COMPLETE -----------------------------" << endl;
+        cout << "---------------------- TEST COMPLETE -----------------------------" << endl;
 
-	return 0;
+        return 0;
 }

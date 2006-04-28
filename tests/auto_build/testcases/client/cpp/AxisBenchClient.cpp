@@ -13,6 +13,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* ----------------------------------------------------------------   */
+/* CHANGES TO THIS FILE MAY ALSO REQUIRE CHANGES TO THE               */
+/* C-EQUIVALENT FILE. PLEASE ENSURE THAT IT IS DONE.                  */
+/* ----------------------------------------------------------------   */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+
+
 #include "AxisBench.hpp"
 #include <iostream>
 #include <fstream>
@@ -20,9 +30,9 @@
 #include "CommonClientTestCode.hpp"
 
 #ifndef WIN32
-  #include "sys/time.h"
+#include "sys/time.h"
 #else
-  #include "sys/timeb.h"
+#include "sys/timeb.h"
 #endif
 
 static bool verbose = false;
@@ -39,21 +49,21 @@ static ofstream output_file;
 #define WSDL_DEFAULT_ENDPOINT "http://localhost:9080/AxisBench/services/AxisBenchSoapImpl"
 
 int main( int argc, char * argv[])
-{ 
-    AxisBench *	ws;
+{
+    AxisBench * ws;
 
-    BenchDataType *		input = NULL;
-    BenchDataType *		output = NULL;
-    xsd__unsignedByte *	buffer = NULL;
+    BenchDataType *             input = NULL;
+    BenchDataType *             output = NULL;
+    xsd__unsignedByte * buffer = NULL;
 
-    char *	endpoint = WSDL_DEFAULT_ENDPOINT;
-    bool	endpoint_set = false;
-    int		returnValue = 1; // Assume Failure
+    char *      endpoint = WSDL_DEFAULT_ENDPOINT;
+    bool        endpoint_set = false;
+    int         returnValue = 1; // Assume Failure
 
     endpoint_set = parse_args_for_endpoint( &argc, argv, &endpoint);
 
-    bool	bSuccess = false;
-    int		iRetryIterationCount = 3;
+    bool        bSuccess = false;
+    int         iRetryIterationCount = 3;
 
     do
     {
@@ -62,42 +72,38 @@ int main( int argc, char * argv[])
             if( endpoint_set)
             {
                 ws = new AxisBench( endpoint, APTHTTP1_1);
-
                 free( endpoint);
-                
-				endpoint_set = false;
+                endpoint_set = false;
             }
             else
-			{
                 ws = new AxisBench();
-			}
 
-// Extend transport timeout to 60 seconds (default is 10).
-			ws->setTransportTimeout( 60);
+            // Extend transport timeout to 60 seconds (default is 10).
+            ws->setTransportTimeout( 60);
 
             int request = 1;
-      
+
             input = new BenchDataType();
             input->count = 100;
-      
-            BenchBasicDataType_Array	arrayIn;
-            BenchBasicDataType **		ppBBDT = new BenchBasicDataType *[input->count];
-            xsd__long					ll = 10000;
-            time_t						tim = 1100246323;
-            struct tm *					temp = gmtime( &tim);
-            struct tm					lt;
+
+            BenchBasicDataType_Array    arrayIn;
+            BenchBasicDataType **       ppBBDT = new BenchBasicDataType *[input->count];
+            xsd__long                   ll = 10000;
+            time_t                      tim = 1100246323;
+            struct tm *                 temp = gmtime( &tim);
+            struct tm                   lt;
 
             memcpy( &lt, temp, sizeof( struct tm));
-            
-            char *	letterA_String = stringToAscii( "A");
-            
-			buffer = (xsd__unsignedByte *) calloc( 1, input->count + 2);
-            
-            strcpy( (char *) buffer, letterA_String);  
+
+            char * letterA_String = stringToAscii( "A");
+
+            buffer = (xsd__unsignedByte *) calloc( 1, input->count + 2);
+
+            strcpy( (char *) buffer, letterA_String);
 
             for( int i = 0; i < input->count ; i++)
             {
-                BenchBasicDataType *	type = new BenchBasicDataType();
+                BenchBasicDataType *    type = new BenchBasicDataType();
 
                 type->StringType = "StringType";
                 type->IntegerType = 10 * (i + 1);
@@ -115,51 +121,43 @@ int main( int argc, char * argv[])
                 type->ShortType = (i + 1);
                 type->Base64BinaryType.set( buffer, i);
                 type->HexBinary.set( buffer, i);
-            
+
                 ppBBDT[i] = type;
 
                 if( ll == 0)
-                {
                     ll = 1;
-                }
                 else
-                {
                     ll += 10000;
-                }
 
                 strcat ( (char *) buffer, letterA_String);
             }
 
-#ifndef WIN32  
-            struct timeval	mstart;
-            struct timeval	mstop;
+#ifndef WIN32
+            struct timeval      mstart;
+            struct timeval      mstop;
 
             gettimeofday( &mstart, NULL);
 #else
-            struct timeb	mstart;
-            struct timeb	mstop;
+            struct timeb        mstart;
+            struct timeb        mstop;
 
             ftime( &mstart);
 #endif
 
             arrayIn.set( ppBBDT, input->count);
 
-            input->setinfos( &arrayIn);    
+            input->setinfos( &arrayIn);
 
             for( int ii = 0; ii < request; ii++)
             {
                 if( output)
-                { // Samisa: memory management BP
-                    int						outputSize = 0;
-                    BenchBasicDataType **	outArray = output->infos->get( outputSize); 
-                    
-					for( int i = 0; i < outputSize; i++)
-					{
+                { 
+                    int outputSize = 0;
+                    BenchBasicDataType ** outArray = output->infos->get( outputSize);
+
+                    for( int i = 0; i < outputSize; i++)
                         delete outArray[i];
-					}
-
                     delete output;
-
                     output = NULL;
                 }
 
@@ -167,16 +165,14 @@ int main( int argc, char * argv[])
             }
 
             for( int count = 0; count < input->count; count++)
-            {
                 delete ppBBDT[count];
-            }
 
             delete [] ppBBDT;
-            
-			free( buffer);
+
+            free( buffer);
 
             int t1;
-			int	t2;
+            int t2;
 
 #ifndef WIN32
             gettimeofday( &mstop, NULL);
@@ -193,26 +189,22 @@ int main( int argc, char * argv[])
             int total = t2 - t1;
 
             if( ws->getStatus() == AXIS_FAIL)
-			{
                 cout << "Failed" << endl;
-			}
-            else 
+            else
             {
                 bSuccess = true;
 
-                char	dateTime[50];
-                int		i = 0;
+                char    dateTime[50];
+                int             i = 0;
 
                 if( argc > 1)
-				{
                     i = output->count - 1;
-				}
 
                 cout << "Input Count : " << input->count << endl;
                 cout << "Count : " << output->count << endl;
 
-                int						outputSize = 0;
-                BenchBasicDataType **	outArray = output->infos->get( outputSize);
+                int outputSize = 0;
+                BenchBasicDataType **   outArray = output->infos->get( outputSize);
 
                 for( ; i < output->count; i++)
                 {
@@ -228,14 +220,14 @@ int main( int argc, char * argv[])
                         cout << " DateTimeType " << dateTime << endl;
                         strftime(dateTime, 50, "%a %b %d %Y", &outArray[i]->DateType);
                         cout << " DateType " << dateTime << endl;
-// This is being removed due to problem in some servers.
-// See XSDTime or XSDTimeNil testcases for full validation of the xsd:time type
-//                      strftime(dateTime, 50, "%H:%M:%S", &output->infos.m_Array[i]->TimeType);
-//                      cout << " TimeType " << dateTime << endl;
+                        // This is being removed due to problem in some servers. See XSDTime or XSDTimeNil testcases for
+                        // full validation of the xsd:time type strftime(dateTime, 50, "%H:%M:%S",
+                        // &output->infos.m_Array[i]->TimeType); cout << " TimeType " << dateTime << endl;
 
-// Following check for os/400 - the mock server will return ascii char which needs to be converted
+                        // Following check for os/400 - the mock server will return ascii char which needs to be
+                        // converted
 #ifdef __OS400__
-                        if( outArray[i]->ByteType == 0x31) 
+                        if( outArray[i]->ByteType == 0x31)
                             outArray[i]->ByteType = '1';
 #endif
                         cout << " ByteType " << outArray[i]->ByteType << endl;
@@ -245,26 +237,18 @@ int main( int argc, char * argv[])
                         cout << " QNameType " << outArray[i]->QNameType << endl;
                         cout << " ShortType " << outArray[i]->ShortType << endl;
 
-                        int					size = 0;
-                        xsd__unsignedByte *	base64BinaryData = outArray[i]->Base64BinaryType.get( size);
-
+                        int size = 0;
+                        
+                        xsd__unsignedByte * base64BinaryData = outArray[i]->Base64BinaryType.get( size);
                         cout << " Base64BinaryType " << size << endl;
-
                         if( size > 0)
-                        {
                             cout << " Base64BinaryType " << asciiToString((char *)base64BinaryData) << endl;
-                        }
 
                         size = 0;
-
                         xsd__unsignedByte * hexBinaryData = outArray[i]->HexBinary.get(size);
-
                         cout << " HexBinaryType " << size << endl;
-
                         if( size > 0)
-                        {
                             cout << " HexBinaryType " << asciiToString( (char *) hexBinaryData) << endl;
-                        }
                     }
 
                     returnValue = 0;
@@ -286,19 +270,13 @@ int main( int argc, char * argv[])
             if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
             {
                 if( iRetryIterationCount > 1)
-                {
                     bSilent = true;
-                }
             }
             else
-            {
                 iRetryIterationCount = 0;
-            }
 
             if( !bSilent)
-            {
                 cout << "Exception : " << e.what() << endl;
-            }
         }
         catch(...)
         {
@@ -308,13 +286,11 @@ int main( int argc, char * argv[])
         // Samisa: make sure we clean up memory allocated
         try
         {
-            delete ws; 
+            delete ws;
             delete input;
 
             if (output)
-            {
                 delete output;
-            }
         }
         catch( AxisException& e)
         {
@@ -333,22 +309,17 @@ int main( int argc, char * argv[])
     while( iRetryIterationCount > 0 && !bSuccess);
 
     if( endpoint_set)
-	{
         free( endpoint);
-	}
 
     cout << "---------------------- TEST COMPLETE -----------------------------" << endl;
-    
-	return returnValue;
+
+    return returnValue;
 }
 
-/* Spin through args list and check for -e -p and -s options.
-   Option values are expected to follow the option letter as the next
-   argument.
- 
-   These options and values are removed from the arg list.
-   If both -e and -s and or -p, then -e takes priority
-*/
+/* Spin through args list and check for -e -p and -s options. Option values are expected to follow the option letter as
+ the next argument.
+
+ These options and values are removed from the arg list. If both -e and -s and or -p, then -e takes priority */
 bool parse_args_for_endpoint(int *argc, char *argv[], char **endpoint) {
 
     // We need at least 2 extra arg after program name
@@ -364,46 +335,46 @@ bool parse_args_for_endpoint(int *argc, char *argv[], char **endpoint) {
     for(int i=1; i<*argc; i++) {
         if(*argv[i] == '-') {
             switch(*(argv[i]+1)) {
-            case 'e':
-                *endpoint = strdup(argv[i+1]);
-                ep_set = true;
-                shift_args(i, argc, argv);
-                i--;
-                break;
-            case 's':
-                server = strdup(argv[i+1]);
-                server_set = true;
-                shift_args(i, argc, argv);
-                i--;
-                break;
-            case 'p':
-                port = atoi(argv[i+1]);
-                if(port >80) port_set = true;
-                shift_args(i, argc, argv);
-                i--;
-                break;
-            case 'o':
-                setLogOptions(argv[i+1]);
-                shift_args(i, argc, argv);
-                i--;
-                break;
-            case 'v':
-                verbose=true;
-                break;
-            default:
-                break;
+                case 'e':
+                    *endpoint = strdup(argv[i+1]);
+                    ep_set = true;
+                    shift_args(i, argc, argv);
+                    i--;
+                    break;
+                case 's':
+                    server = strdup(argv[i+1]);
+                    server_set = true;
+                    shift_args(i, argc, argv);
+                    i--;
+                    break;
+                case 'p':
+                    port = atoi(argv[i+1]);
+                    if(port >80) port_set = true;
+                    shift_args(i, argc, argv);
+                    i--;
+                    break;
+                case 'o':
+                    setLogOptions(argv[i+1]);
+                    shift_args(i, argc, argv);
+                    i--;
+                    break;
+                case 'v':
+                    verbose=true;
+                    break;
+                default:
+                    break;
             }
         }
     }
 
     // use the supplied server and/or port to build the endpoint
     if(ep_set == false && (server_set || port_set)) {
-        // Set p to the location of the first '/' after the http:// (7 chars)
-        // e.g. from http://localhost:80/axis/base gets /axis/base
+        // Set p to the location of the first '/' after the http:// (7 chars) e.g. from http://localhost:80/axis/base
+        // gets /axis/base
         char *ep_context = strpbrk(&(*endpoint)[7], "/");
 
-        // http://:/ is 9 characters + terminating NULL character so add 10.
-        // Allow space for port number upto 999999 6 chars
+        // http://:/ is 9 characters + terminating NULL character so add 10. Allow space for port number upto 999999 6
+        // chars
         *endpoint = (char *)calloc(1, 10 + strlen(ep_context) + strlen(server) + 6);
         sprintf(*endpoint, "http://%s:%d/%s", server, port, ep_context+1);
         if(server_set) free(server);

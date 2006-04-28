@@ -116,17 +116,17 @@ int main(int argc, char* argv[])
 */
         // Test array
        xsd__time_Array arrayInput;
-		int arraySize = 2;
-		xsd__time ** array = new xsd__time*[arraySize];
+                int arraySize = 2;
+                xsd__time ** array = new xsd__time*[arraySize];
         
         for (int inputIndex=0 ; inputIndex < arraySize ; inputIndex++)
         {
             array[inputIndex] = new xsd__time(time);           
         }
-		arrayInput.set(array,arraySize);
+                arrayInput.set(array,arraySize);
         xsd__time_Array* arrayResult = ws->asArray(&arrayInput);
-		int outputSize=0;
-		const xsd__time ** output = arrayResult->get(outputSize);
+                int outputSize=0;
+                const xsd__time ** output = arrayResult->get(outputSize);
         cout << "array of " << outputSize << " elements" << endl;
         for (int index = 0; index < outputSize ; index++)
         {

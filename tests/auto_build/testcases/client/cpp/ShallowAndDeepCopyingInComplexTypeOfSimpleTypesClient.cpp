@@ -35,10 +35,10 @@ int main(int argc, char* argv[])
     //signal(SIGQUIT, sig_handler);
     //signal(SIGBUS, sig_handler);
     signal(SIGFPE, sig_handler);
-	
-	testDeepCopyUsingDefault();
-	testDeepCopyUsingFlag();
-	testShallowCopy();
+        
+        testDeepCopyUsingDefault();
+        testDeepCopyUsingFlag();
+        testShallowCopy();
 
        
     cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;
@@ -69,136 +69,136 @@ void sig_handler(int sig) {
 
 void testDeepCopyUsingDefault()
 {
-	ElementFormDefaultIsQualified * complexType = new ElementFormDefaultIsQualified();
-	// Test for string based types
-	complexType->setaStringType("Hello!");
-	complexType->setaStringType("Goodbye!");
-	xsd__string aStringType = new char[9];
-	strcpy(aStringType, "Welcome!");
-	complexType->setaStringType(aStringType);
-	delete [] aStringType;
-	complexType->setaStringType(NULL);
-	
+        ElementFormDefaultIsQualified * complexType = new ElementFormDefaultIsQualified();
+        // Test for string based types
+        complexType->setaStringType("Hello!");
+        complexType->setaStringType("Goodbye!");
+        xsd__string aStringType = new char[9];
+        strcpy(aStringType, "Welcome!");
+        complexType->setaStringType(aStringType);
+        delete [] aStringType;
+        complexType->setaStringType(NULL);
+        
 
-	// Test for nillable numeric types
-	xsd__integer * aNillableIntegerType = new xsd__integer(123);
-	complexType->setaNillableIntegerType(aNillableIntegerType);
-	delete aNillableIntegerType;
-	xsd__integer * aSecondNillableIntegerType = new xsd__integer(456);
-	complexType->setaNillableIntegerType(aSecondNillableIntegerType);
-	delete aSecondNillableIntegerType;
-	complexType->setaNillableIntegerType(NULL);
+        // Test for nillable numeric types
+        xsd__integer * aNillableIntegerType = new xsd__integer(123);
+        complexType->setaNillableIntegerType(aNillableIntegerType);
+        delete aNillableIntegerType;
+        xsd__integer * aSecondNillableIntegerType = new xsd__integer(456);
+        complexType->setaNillableIntegerType(aSecondNillableIntegerType);
+        delete aSecondNillableIntegerType;
+        complexType->setaNillableIntegerType(NULL);
 
-	// Test for optional numeric types
-	xsd__integer * anOptionalIntegerType = new xsd__integer(789);
-	complexType->setanOptionalIntegerType(anOptionalIntegerType);
-	delete anOptionalIntegerType;
-	xsd__integer * aSecondOptionalIntegerType = new xsd__integer(54321);
-	complexType->setanOptionalIntegerType(aSecondOptionalIntegerType);
-	delete aSecondOptionalIntegerType;
-	complexType->setanOptionalIntegerType(NULL);
+        // Test for optional numeric types
+        xsd__integer * anOptionalIntegerType = new xsd__integer(789);
+        complexType->setanOptionalIntegerType(anOptionalIntegerType);
+        delete anOptionalIntegerType;
+        xsd__integer * aSecondOptionalIntegerType = new xsd__integer(54321);
+        complexType->setanOptionalIntegerType(aSecondOptionalIntegerType);
+        delete aSecondOptionalIntegerType;
+        complexType->setanOptionalIntegerType(NULL);
 
-	// Test correct copying (so repopulate values)
-	complexType->setaStringType("Welcome!");
-	xsd__integer * optionalInteger = new xsd__integer(9876);
-	complexType->setanOptionalIntegerType(optionalInteger);
-	delete optionalInteger;
-	xsd__integer * nillableInteger = new xsd__integer(321);
-	complexType->setaNillableIntegerType(nillableInteger);
-	delete nillableInteger;
-	ElementFormDefaultIsQualified * aSecondComplexType = new ElementFormDefaultIsQualified(*complexType);
+        // Test correct copying (so repopulate values)
+        complexType->setaStringType("Welcome!");
+        xsd__integer * optionalInteger = new xsd__integer(9876);
+        complexType->setanOptionalIntegerType(optionalInteger);
+        delete optionalInteger;
+        xsd__integer * nillableInteger = new xsd__integer(321);
+        complexType->setaNillableIntegerType(nillableInteger);
+        delete nillableInteger;
+        ElementFormDefaultIsQualified * aSecondComplexType = new ElementFormDefaultIsQualified(*complexType);
 
-	delete complexType;
-	delete aSecondComplexType;
+        delete complexType;
+        delete aSecondComplexType;
 }
 
 void testDeepCopyUsingFlag()
 {
-	ElementFormDefaultIsQualified * complexType = new ElementFormDefaultIsQualified();
-	// Test for string based types
-	complexType->setaStringType("Hello!", true);
-	complexType->setaStringType("Goodbye!", true);
-	xsd__string aStringType = new char[9];
-	strcpy(aStringType, "Welcome!");
-	complexType->setaStringType(aStringType, true);
-	delete [] aStringType;
-	complexType->setaStringType(NULL, true);
-	
+        ElementFormDefaultIsQualified * complexType = new ElementFormDefaultIsQualified();
+        // Test for string based types
+        complexType->setaStringType("Hello!", true);
+        complexType->setaStringType("Goodbye!", true);
+        xsd__string aStringType = new char[9];
+        strcpy(aStringType, "Welcome!");
+        complexType->setaStringType(aStringType, true);
+        delete [] aStringType;
+        complexType->setaStringType(NULL, true);
+        
 
-	// Test for nillable numeric types
-	xsd__integer * aNillableIntegerType = new xsd__integer(123);
-	complexType->setaNillableIntegerType(aNillableIntegerType, true);
-	delete aNillableIntegerType;
-	xsd__integer * aSecondNillableIntegerType = new xsd__integer(456);
-	complexType->setaNillableIntegerType(aSecondNillableIntegerType, true);
-	delete aSecondNillableIntegerType;
-	complexType->setaNillableIntegerType(NULL, true);
+        // Test for nillable numeric types
+        xsd__integer * aNillableIntegerType = new xsd__integer(123);
+        complexType->setaNillableIntegerType(aNillableIntegerType, true);
+        delete aNillableIntegerType;
+        xsd__integer * aSecondNillableIntegerType = new xsd__integer(456);
+        complexType->setaNillableIntegerType(aSecondNillableIntegerType, true);
+        delete aSecondNillableIntegerType;
+        complexType->setaNillableIntegerType(NULL, true);
 
-	// Test for optional numeric types
-	xsd__integer * anOptionalIntegerType = new xsd__integer(789);
-	complexType->setanOptionalIntegerType(anOptionalIntegerType, true);
-	delete anOptionalIntegerType;
-	xsd__integer * aSecondOptionalIntegerType = new xsd__integer(54321);
-	complexType->setanOptionalIntegerType(aSecondOptionalIntegerType, true);
-	delete aSecondOptionalIntegerType;
-	complexType->setanOptionalIntegerType(NULL, true);
+        // Test for optional numeric types
+        xsd__integer * anOptionalIntegerType = new xsd__integer(789);
+        complexType->setanOptionalIntegerType(anOptionalIntegerType, true);
+        delete anOptionalIntegerType;
+        xsd__integer * aSecondOptionalIntegerType = new xsd__integer(54321);
+        complexType->setanOptionalIntegerType(aSecondOptionalIntegerType, true);
+        delete aSecondOptionalIntegerType;
+        complexType->setanOptionalIntegerType(NULL, true);
 
-	// Test correct copying (so repopulate values)
-	complexType->setaStringType("Welcome!", true);
-	xsd__integer * optionalInteger = new xsd__integer(9876);
-	complexType->setanOptionalIntegerType(optionalInteger, true);
-	delete optionalInteger;
-	xsd__integer * nillableInteger = new xsd__integer(321);
-	complexType->setaNillableIntegerType(nillableInteger, true);
-	delete nillableInteger;
-	ElementFormDefaultIsQualified * aSecondComplexType = new ElementFormDefaultIsQualified(*complexType);
+        // Test correct copying (so repopulate values)
+        complexType->setaStringType("Welcome!", true);
+        xsd__integer * optionalInteger = new xsd__integer(9876);
+        complexType->setanOptionalIntegerType(optionalInteger, true);
+        delete optionalInteger;
+        xsd__integer * nillableInteger = new xsd__integer(321);
+        complexType->setaNillableIntegerType(nillableInteger, true);
+        delete nillableInteger;
+        ElementFormDefaultIsQualified * aSecondComplexType = new ElementFormDefaultIsQualified(*complexType);
 
-	delete complexType;
-	delete aSecondComplexType;
+        delete complexType;
+        delete aSecondComplexType;
 }
 
 
 void testShallowCopy()
 {
-	ElementFormDefaultIsQualified * complexType = new ElementFormDefaultIsQualified();
+        ElementFormDefaultIsQualified * complexType = new ElementFormDefaultIsQualified();
 
-	// Test for string based types
-	complexType->setaStringType("Hello!", false);
-	complexType->setaStringType("Goodbye!", false);
-	xsd__string aStringType = new char[9];
-	strcpy(aStringType, "Welcome!");
-	complexType->setaStringType(aStringType, false);
-	complexType->setaStringType(NULL, false);
+        // Test for string based types
+        complexType->setaStringType("Hello!", false);
+        complexType->setaStringType("Goodbye!", false);
+        xsd__string aStringType = new char[9];
+        strcpy(aStringType, "Welcome!");
+        complexType->setaStringType(aStringType, false);
+        complexType->setaStringType(NULL, false);
 
-	// Test for nillable numeric types
-	xsd__integer * aNillableIntegerType = new xsd__integer(123);
-	complexType->setaNillableIntegerType(aNillableIntegerType, false);
-	xsd__integer * aSecondNillableIntegerType = new xsd__integer(456);
-	complexType->setaNillableIntegerType(aSecondNillableIntegerType, false);
-	complexType->setaNillableIntegerType(NULL, false);
+        // Test for nillable numeric types
+        xsd__integer * aNillableIntegerType = new xsd__integer(123);
+        complexType->setaNillableIntegerType(aNillableIntegerType, false);
+        xsd__integer * aSecondNillableIntegerType = new xsd__integer(456);
+        complexType->setaNillableIntegerType(aSecondNillableIntegerType, false);
+        complexType->setaNillableIntegerType(NULL, false);
 
-	// Test for optional numeric types
-	xsd__integer * anOptionalIntegerType = new xsd__integer(789);
-	complexType->setanOptionalIntegerType(anOptionalIntegerType, false);
-	xsd__integer * aSecondOptionalIntegerType = new xsd__integer(54321);
-	complexType->setanOptionalIntegerType(aSecondOptionalIntegerType, false);
-	complexType->setanOptionalIntegerType(NULL, false);
-	
-	// Test correct copying (so repopulate values)
-	complexType->setaStringType("Welcome!", false);
-	xsd__integer * optionalInteger = new xsd__integer(9876);
-	complexType->setanOptionalIntegerType(optionalInteger, false);
-	xsd__integer * nillableInteger = new xsd__integer(321);
-	complexType->setaNillableIntegerType(nillableInteger, false);
-	ElementFormDefaultIsQualified * aSecondComplexType = new ElementFormDefaultIsQualified(*complexType);
+        // Test for optional numeric types
+        xsd__integer * anOptionalIntegerType = new xsd__integer(789);
+        complexType->setanOptionalIntegerType(anOptionalIntegerType, false);
+        xsd__integer * aSecondOptionalIntegerType = new xsd__integer(54321);
+        complexType->setanOptionalIntegerType(aSecondOptionalIntegerType, false);
+        complexType->setanOptionalIntegerType(NULL, false);
+        
+        // Test correct copying (so repopulate values)
+        complexType->setaStringType("Welcome!", false);
+        xsd__integer * optionalInteger = new xsd__integer(9876);
+        complexType->setanOptionalIntegerType(optionalInteger, false);
+        xsd__integer * nillableInteger = new xsd__integer(321);
+        complexType->setaNillableIntegerType(nillableInteger, false);
+        ElementFormDefaultIsQualified * aSecondComplexType = new ElementFormDefaultIsQualified(*complexType);
 
-	delete [] aStringType;
-	delete aNillableIntegerType;
-	delete aSecondNillableIntegerType;
-	delete anOptionalIntegerType;
-	delete aSecondOptionalIntegerType;
-	delete optionalInteger;
-	delete nillableInteger;
-	delete complexType;
-	delete aSecondComplexType;
+        delete [] aStringType;
+        delete aNillableIntegerType;
+        delete aSecondNillableIntegerType;
+        delete anOptionalIntegerType;
+        delete aSecondOptionalIntegerType;
+        delete optionalInteger;
+        delete nillableInteger;
+        delete complexType;
+        delete aSecondComplexType;
 }

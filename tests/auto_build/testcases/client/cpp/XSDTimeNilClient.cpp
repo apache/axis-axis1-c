@@ -35,54 +35,51 @@ int main(int argc, char* argv[])
     if(argc>1)
         url = argv[1];
 
-		bool bSuccess = false;
-		int	iRetryIterationCount = 3;
+    bool bSuccess = false;
+    int     iRetryIterationCount = 3;
 
-		do
-		{
-    try
+    do
     {
-     sprintf(endpoint, "%s", url);
-     XSDElementNil* ws = new XSDElementNil(endpoint);
+        try
+        {
+            sprintf(endpoint, "%s", url);
+            XSDElementNil* ws = new XSDElementNil(endpoint);
+        
+            timeResult = ws->setGetTimeType(&testDate);
+            strftime(dateTime, 50, "%H:%M:%S", timeResult);
+            cout << "time=" << dateTime << endl;
+        
+            bSuccess = true;
+            delete ws;
+        }
+        catch(AxisException& e)
+        {
+            bool bSilent = false;
 
-     timeResult = ws->setGetTimeType(&testDate);
-     strftime(dateTime, 50, "%H:%M:%S", timeResult);
-     cout << "time=" << dateTime << endl;
-
-	 bSuccess = true;
-     delete ws;
-    }
-    catch(AxisException& e)
-    {
-			bool bSilent = false;
-
-			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-			{
-				if( iRetryIterationCount > 0)
-				{
-					bSilent = true;
-				}
-			}
-			else
-			{
-				iRetryIterationCount = 0;
-			}
+            if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+            {
+                    if( iRetryIterationCount > 0)
+                            bSilent = true;
+            }
+            else
+                    iRetryIterationCount = 0;
 
             if( !bSilent)
-			{
-				cout << "Exception : " << e.what() << endl;
-			}
-    }
-    catch(exception& e)
-    {
-        cout << "Unknown exception has occured" << endl;
-    }
-    catch(...)
-    {
-        cout << "Unknown exception has occured" << endl;
-    }
-		iRetryIterationCount--;
-		} while( iRetryIterationCount > 0 && !bSuccess);
+                    cout << "Exception : " << e.what() << endl;
+        }
+        catch(exception& e)
+        {
+            cout << "Unknown exception has occured" << endl;
+        }
+        catch(...)
+        {
+            cout << "Unknown exception has occured" << endl;
+        }
+                
+        iRetryIterationCount--;         
+    } 
+    while( iRetryIterationCount > 0 && !bSuccess);
+    
     cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;
    
     return 0;

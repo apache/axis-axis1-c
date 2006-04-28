@@ -29,28 +29,28 @@ void shift_args( int i, int * argc, char * argv[]);
 
 int main( int argc, char * argv[])
 {
-	ChoiceServiceSoap*	ws;
+        ChoiceServiceSoap*      ws;
     FaultPropertyType* input;
-	char *					endpoint = WSDL_DEFAULT_ENDPOINT;
-	bool					endpoint_set = false;
-	int						returnValue = 1; // Assume Failure
+        char *                                  endpoint = WSDL_DEFAULT_ENDPOINT;
+        bool                                    endpoint_set = false;
+        int                                             returnValue = 1; // Assume Failure
 
-	endpoint_set = parse_args_for_endpoint( &argc, argv, &endpoint);
+        endpoint_set = parse_args_for_endpoint( &argc, argv, &endpoint);
 
-	bool	bSuccess = false;
+        bool    bSuccess = false;
 
-		try
-		{
-			if( endpoint_set)
-			{
-				ws = new ChoiceServiceSoap( endpoint, APTHTTP1_1);
-				free( endpoint);
-				endpoint_set = false;
-			}
-			else
-			{
-				ws = new ChoiceServiceSoap();
-			}
+                try
+                {
+                        if( endpoint_set)
+                        {
+                                ws = new ChoiceServiceSoap( endpoint, APTHTTP1_1);
+                                free( endpoint);
+                                endpoint_set = false;
+                        }
+                        else
+                        {
+                                ws = new ChoiceServiceSoap();
+                        }
 
             cout <<"About to create FaultPropertyType"<<endl;
             input = new FaultPropertyType();
@@ -65,9 +65,9 @@ int main( int argc, char * argv[])
             
             // remember to clean up the resourceproperirtes !
 
-			FaultPropertyType* result;
+                        FaultPropertyType* result;
             cout << "About to call get"<<endl;
-			result = ws->get(input);
+                        result = ws->get(input);
 
             if(result)
             {
@@ -89,35 +89,35 @@ int main( int argc, char * argv[])
                 cout << "result came back as null" << endl;
             }
 
-			bSuccess = true;
-		}
-		catch( AxisException &e)
-		{
-		    cout << e.what() << endl;
-		}
-		catch( ...)
-		{
-			cout << "Unknown Exception occured." << endl;
-		}
+                        bSuccess = true;
+                }
+                catch( AxisException &e)
+                {
+                    cout << e.what() << endl;
+                }
+                catch( ...)
+                {
+                        cout << "Unknown Exception occured." << endl;
+                }
 
-		try
-		{
-			delete ws;
+                try
+                {
+                        delete ws;
             delete input;
-		}
-		catch( exception& exception)
-		{
-			cout << "Exception on clean up of ws: " << exception.what() << endl;
-		}
-		catch( ...)
-		{
-			cout << "Unknown exception on clean up of ws: " << endl;
-		}
+                }
+                catch( exception& exception)
+                {
+                        cout << "Exception on clean up of ws: " << exception.what() << endl;
+                }
+                catch( ...)
+                {
+                        cout << "Unknown exception on clean up of ws: " << endl;
+                }
 
 
-	cout << "---------------------- TEST COMPLETE -----------------------------" << endl;
+        cout << "---------------------- TEST COMPLETE -----------------------------" << endl;
   
-	return returnValue;
+        return returnValue;
 }
 
 /* Spin through args list and check for -e -p and -s options.

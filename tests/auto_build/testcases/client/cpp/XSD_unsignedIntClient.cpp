@@ -108,18 +108,18 @@ int main(int argc, char* argv[])
 
         // Test array
         xsd__unsignedInt_Array arrayInput;
-		int arraySize = 2;
-		xsd__unsignedInt ** array =new xsd__unsignedInt*[arraySize];
+                int arraySize = 2;
+                xsd__unsignedInt ** array =new xsd__unsignedInt*[arraySize];
         
         for (int inputIndex=0 ; inputIndex < arraySize; inputIndex++)
         {
             array[inputIndex] = new xsd__unsignedInt(123456789);
             
         }
-		arrayInput.set(array,arraySize);
+                arrayInput.set(array,arraySize);
         xsd__unsignedInt_Array* arrayResult = ws->asArray(&arrayInput);
-		int outputSize=0;
-		const xsd__unsignedInt ** output =arrayResult->get(outputSize);
+                int outputSize=0;
+                const xsd__unsignedInt ** output =arrayResult->get(outputSize);
         cout << "array of " << outputSize << " elements" << endl;
         for (int index = 0; index < outputSize ; index++)
         {
