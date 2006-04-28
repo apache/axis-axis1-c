@@ -140,7 +140,7 @@ Notes:
   <target name="compileSamples">
 <!--    <for list="array,base,bench,calculator,doclitfault,element,enumeration,groupB,ref,rpcfault,transportProperties" param="samplename">
 -->
-    <for list="calculator" param="samplename">
+    <for list="array,base,bench,calculator,doclitfault,element,enumeration,ref,rpcfault,transportProperties" param="samplename">
       <sequential>
         <property name="clientSampleDir" value="client"/>		
 

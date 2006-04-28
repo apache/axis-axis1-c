@@ -42,7 +42,6 @@ int main(int argc, char* argv[])
 	const char* p2 = 0;
 	int i1=0, i2=0;
     int iResult;
-    char* pcDetail;
 
     // Set default service URL
     sprintf (endpoint, "http://localhost:80/axis/doclitfault");
@@ -122,7 +121,7 @@ int main(int argc, char* argv[])
         }
         catch(exception& e)
         {
-		printf("Unknown exception has occured\n");
+			printf("Unknown exception has occured:%s\n", e.what());
         }
         catch(...)
         {
@@ -134,7 +133,7 @@ int main(int argc, char* argv[])
 
 bool IsNumber(const char* p)
 {
-	for (int x=0; x < strlen(p); x++)
+	for (int x=0; x < (int) strlen(p); x++)
 	{
 		if (!isdigit(p[x])) return false;
 	}

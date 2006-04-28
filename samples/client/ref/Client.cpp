@@ -21,8 +21,6 @@ usage (char *programName, char *defaultURL)
 
 int main(int argc, char* argv[])
 {
-	int x;
-	char buffer1[100];
 	char endpoint[256];
 	const char* url="http://localhost:80/axis/ref";
 	sprintf(endpoint, "%s", url);
@@ -91,11 +89,11 @@ int main(int argc, char* argv[])
         }
         catch(exception& e)
         {
-            printf("Unknown exception has occured\n");
+            printf("Unknown exception has occurred: %s\n", e.what());
         }
         catch(...)
         {
-            printf("Unknown exception has occured\n");
+            printf("Unknown exception has occurred\n");
         }
 		iRetryIterationCount--;
 		} while( iRetryIterationCount > 0 && !bSuccess);

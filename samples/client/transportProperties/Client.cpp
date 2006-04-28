@@ -102,11 +102,11 @@ main (int argc, char *argv[])
 	}
 	catch (exception & e)
 	{
-	    cout << "Unknown exception has occured" << endl;
+	    cout << "Unknown exception has occurred " << e.what () << endl;
 	}
 	catch (...)
 	{
-	    cout << "Unspecified exception has occured" << endl;
+	    cout << "Unspecified exception has occurred" << endl;
 	}
 	iRetryIterationCount--;
     }

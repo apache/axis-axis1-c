@@ -16,338 +16,412 @@
 // InteropBaseClient.cpp : Defines the entry point for the console application.
 //
 #include <string>
-#include <iostream>
+//#include <iostream>
 using namespace std;
 
 #include "InteropTestPortType.hpp"
 
 #define ARRAYSIZE 2
 
-static void
-usage (char *programName, char *defaultURL)
+static void usage( char * programName, char * defaultURL)
 {
-    cout << "\nUsage:\n"
-	<< programName << " [-? | service_url] " << endl
-	<< "    -?             Show this help.\n"
-	<< "    service_url    URL of the service.\n"
-	<< "    Default service URL is assumed to be " << defaultURL << endl;
+    cout << endl << "Usage:" << endl
+		 << programName << " [-? | service_url] " << endl
+		 << "    -?              Show this help." << endl
+		 << "    service_url     URL of the service." << endl
+		 << "    Default service URL is assumed to be " << defaultURL << endl;
 }
 
-
-int
-main (int argc, char *argv[])
+int main( int argc, char *argv[])
 {
-    int x = 0;
-    int i = 0;
-    char buffer1[100];
-    char endpoint[256];
-    const char *server = "localhost";
-    const char *port = "80";
-    sprintf (endpoint, "http://%s:%s/axis/base", server, port);
+    int				x = 0;
+    int				i = 0;
+    char			buffer1[100];
+    char			endpoint[256];
+    const char *	server = "localhost";
+    const char *	port = "80";
 
-    if (argc > 1)
+    sprintf( endpoint, "http://%s:%s/axis/base", server, port);
+
+    if( argc > 1)
     {
-	// Watch for special case help request
-	if (!strncmp (argv[1], "-", 1))	// Check for - only so that it works for
-	    //-?, -h or --help; -anything
-	{
-	    usage (argv[0], endpoint);
-	    return 2;
-	}
-	sprintf (endpoint, argv[1]);
-    }
+// Watch for special case help request
+// Check for - only so that it works for
+//-?, -h or --help; -anything
+		if( !strncmp( argv[1], "-", 1))	
+		{
+			usage( argv[0], endpoint);
 
-    bool bSuccess = false;
-    int iRetryIterationCount = 3;
+			return 2;
+		}
+
+		sprintf( endpoint, argv[1]);
+	}
+
+    bool	bSuccess = false;
+    int		iRetryIterationCount = 3;
 
     do
     {
-	try
-	{
-	    InteropTestPortType ws (endpoint, APTHTTP1_1);
-
-	    //testing echoString 
-	    printf ("invoking echoString...\n");
-	    ws.setTransportProperty ("SOAPAction", "InteropBase#echoString");
-	    string bigstring;
-	    for (int ii = 0; ii < 2; ii++)
-	    {
-		bigstring += "hello world ";
-	    }
-	    strcpy (buffer1, bigstring.c_str ());
-
-	    ws.setTransportProperty ("SOAPAction", "InteropBase#echoString");
-
-        char* cpResult = ws.echoString ("hello world");
-	    if (0 == strcmp (cpResult, "hello world"))
-		printf ("successful\n");
-	    else
-		printf ("failed\n");
-
-        delete [] cpResult;
-
-	    // testing echoStringArray 
-	    xsd__string_Array arrstr;
-	    arrstr.m_Array = new char *[ARRAYSIZE];
-	    arrstr.m_Size = ARRAYSIZE;
-	    sprintf (buffer1, "%dth element of string array", 0);
-	    for (i = 0; i < ARRAYSIZE; i++)
-	    {
-		arrstr.m_Array[i] = buffer1;
-	    }
-
-	    ws.setTransportProperty ("SOAPAction",
-				     "InteropBase#echoStringArray");
-	    printf ("invoking echoStringArray...\n");
-
-            char** arrstrResult = ws.echoStringArray (arrstr).m_Array;
-        
-	    if (arrstrResult != NULL)
-		printf ("successful\n");
-	    else
-		printf ("failed\n");
-
-            delete [] arrstr.m_Array;
-            for (i = 0; i < ARRAYSIZE; i++)
-            {
-                delete [] arrstrResult[i];
-            }
-
-            delete [] arrstrResult;
-
-	    // testing echoInteger 
-	    ws.setTransportProperty ("SOAPAction", "InteropBase#echoInteger");
-	    printf ("invoking echoInteger...\n");
-	    if (ws.echoInteger (56) == 56)
-		printf ("successful\n");
-	    else
-		printf ("failed\n");
-
-	    // testing echoIntegerArray 
-	    xsd__int_Array arrint;
-	    arrint.m_Array = new int *[ARRAYSIZE];
-	    arrint.m_Size = ARRAYSIZE;
-	    int iToSend[ARRAYSIZE];
-
-	    for (x = 0; x < ARRAYSIZE; x++)
-	    {
-		iToSend[x] = x;
-		arrint.m_Array[x] = &iToSend[x];
-	    }
-	    ws.setTransportProperty ("SOAPAction",
-				     "InteropBase#echoIntegerArray");
-	    printf ("invoking echoIntegerArray...\n");
-	    xsd__int_Array arrintResult = ws.echoIntegerArray (arrint);
-	    if (arrintResult.m_Array != NULL)
-		printf ("successful\n");
-	    else
-		printf ("failed\n");
-
-            delete [] arrint.m_Array;
-	    // Free memory for result
-	    for (x = 0; x < arrintResult.m_Size; x++)
-                delete arrintResult.m_Array[x];
-
-            delete [] arrintResult.m_Array;
-
-	    // testing echoFloat 
-	    printf ("invoking echoFloat...\n");
-	    float fvalue = 1.4214;
-	    ws.setTransportProperty ("SOAPAction", "InteropBase#echoFloat");
-	    if (ws.echoFloat (fvalue) > 1.42)
-		printf ("successful\n");
-	    else
-		printf ("failed\n");
-
-	    // testing echoFloat 
-	    xsd__float_Array arrfloat;
-	    arrfloat.m_Array = new float *[ARRAYSIZE];
-	    arrfloat.m_Size = ARRAYSIZE;
-	    float fToSend[ARRAYSIZE];
-	    for (x = 0; x < ARRAYSIZE; x++)
-	    {
-		fToSend[x] = 1.1111 * x;
-		arrfloat.m_Array[x] = &fToSend[x];
-	    }
-	    ws.setTransportProperty ("SOAPAction",
-				     "InteropBase#echoFloatArray");
-	    printf ("invoking echoFloatArray...\n");
-	    xsd__float_Array arrfloatResult = ws.echoFloatArray (arrfloat);
-	    if (arrfloatResult.m_Array != NULL)
-		printf ("successful\n");
-	    else
-		printf ("failed\n");
-
-            delete [] arrfloat.m_Array;
-            
-	    for (x = 0; x < arrfloatResult.m_Size; x++)
-                delete arrfloatResult.m_Array[x];
-            delete [] arrfloatResult.m_Array;
-
-	    // testing echo Struct
-	    SOAPStruct stct;
-		xsd__int integer = 5000;
-		xsd__float floatVal = 12345.7346345;
-	    stct.varFloat = &floatVal;
-	    stct.varInt = &integer;
-	    stct.varString = strdup ("This is string in SOAPStruct");
-	    printf ("invoking echoStruct...\n");
-	    ws.setTransportProperty ("SOAPAction", "InteropBase#echoStruct");
-	    SOAPStruct *stctResult = ws.echoStruct (&stct);
-	    if (stctResult != NULL)
-		printf ("successful\n");
-	    else
-		printf ("failed\n");
-
-            // Free parameter memeory
-            free(stct.varString);
-
-            // Free result memory
-            delete [] stctResult->varString;
-            delete stctResult->varInt;
-            delete stctResult->varFloat;
-            delete stctResult;
-
-	    //testing echo Array of Struct
-	    SOAPStruct_Array arrstct;
-	    arrstct.m_Array = new SOAPStruct[ARRAYSIZE];
-	    arrstct.m_Size = ARRAYSIZE;
-	    for (x = 0; x < ARRAYSIZE; x++)
-	    {
-			integer = x;
-			floatVal = 1.1111 * x;
-		arrstct.m_Array[x].varFloat = &floatVal;
-		arrstct.m_Array[x].varInt = &integer;
-		sprintf (buffer1,
-			 "varString of %dth element of SOAPStruct array", x);
-		arrstct.m_Array[x].varString = buffer1;
-	    }
-
-	    //testing echo Struct Array
-	    ws.setTransportProperty ("SOAPAction",
-				     "InteropBase#echoStructArray");
-	    printf ("invoking echoStructArray...\n");
-	    SOAPStruct_Array arrstctResult = ws.echoStructArray (arrstct);
-	    if (arrstctResult.m_Array != NULL)
-		printf ("successful\n");
-	    else
-		printf ("failed\n");
-
-        delete [] arrstct.m_Array;
-        for( x = 0; x < arrstctResult.m_Size; x++)
+        try
         {
-            delete [] arrstctResult.m_Array[x].varString;
-            delete arrstctResult.m_Array[x].varInt;
-            delete arrstctResult.m_Array[x].varFloat;
-        }
-        delete [] arrstctResult.m_Array;
+			InteropTestPortType ws( endpoint, APTHTTP1_1);
 
-	    //testing echo void
-	    printf ("invoking echoVoid...\n");
-	    ws.setTransportProperty ("SOAPAction", "InteropBase#echoVoid");
-	    ws.echoVoid ();
-	    printf ("successful\n");
+//testing echoString 
+			cout << "invoking echoString..." << endl;
 
-	    //testing echo base 64 binary
-	    const char *bstr =
-		"some string that is sent encoded to either base64Binary or hexBinary";
+			ws.setTransportProperty( "SOAPAction", "InteropBase#echoString");
 
-	    printf ("invoking echoBase64...\n");
-	    xsd__base64Binary bb;
-	    bb.__ptr = (unsigned char *) strdup (bstr);
-	    bb.__size = strlen (bstr);
-	    ws.setTransportProperty ("SOAPAction", "InteropBase#echoBase64");
-	    xsd__base64Binary bbResult = ws.echoBase64 (bb);
-	    if (bb.__size == bbResult.__size)
-	    {
-		printf ("successful\n");
-		printf ("Returned String :\n%s\n", bbResult.__ptr);
-	    }
-	    else
-		printf ("failed\n");
-        
-        free(bb.__ptr);
-        delete [] bbResult.__ptr;
+			string	bigstring;
 
-	    time_t tim;
-	    time (&tim);
-	    tm *lt = gmtime (&tim);
-	    printf ("invoking echoDate...\n");
-	    ws.setTransportProperty ("SOAPAction", "InteropBase#echoDate");
-	    if (memcmp (&ws.echoDate (*lt), lt, sizeof (tm)) == 0)
-		printf ("successful\n");
-	    else
-		printf ("failed\n");
+			for( int ii = 0; ii < 2; ii++)
+			{
+				bigstring += "hello world ";
+			}
 
-	    //testing echo hex binary
-	    printf ("invoking echoHexBinary...\n");
-	    xsd__hexBinary hb;
-	    hb.__ptr = (unsigned char *) strdup (bstr);
-	    hb.__size = strlen (bstr);
-	    ws.setTransportProperty ("SOAPAction",
-				     "InteropBase#echoHexBinary");
-	    xsd__hexBinary hbReturn = ws.echoHexBinary (hb);
-	    if (hb.__size == hbReturn.__size)
-	    {
-		printf ("successful\n");
-		printf ("Returned String :\n%s\n", hbReturn.__ptr);
-	    }
-	    else
-		printf ("failed\n");
+			strcpy( buffer1, bigstring.c_str());
 
-        free(hb.__ptr);
-        delete [] hbReturn.__ptr;
-	    //testing echo decimal
-	    printf ("invoking echoDecimal...\n");
-	    ws.setTransportProperty ("SOAPAction", "InteropBase#echoDecimal");
-	    if (ws.echoDecimal (1234.567890) > 1234.56)
-		printf ("successful\n");
-	    else
-		printf ("failed\n");
+			char *	cpResult = ws.echoString( "hello world");
 
-	    //testing echo boolean
-	    printf ("invoking echoBoolean...\n");
-	    ws.setTransportProperty ("SOAPAction", "InteropBase#echoBoolean");
-	    if (ws.echoBoolean (true_) == true_)
-		printf ("successful\n");
-	    else
-		printf ("failed\n");
+			if( 0 == strcmp( cpResult, "hello world"))
+			{
+				cout << "successful" << endl;
+			}
+			else
+			{
+				cout << "failed" << endl;
+			}
 
-	    bSuccess = true;
-	}
-	catch (AxisException & e)
-	{
-	    bool bSilent = false;
+			delete [] cpResult;
 
-	    if (e.getExceptionCode () ==
-		CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-	    {
-		if (iRetryIterationCount > 0)
-		{
-		    bSilent = true;
+// testing echoStringArray 
+			cout << "invoking echoStringArray..." << endl;
+
+			ws.setTransportProperty( "SOAPAction", "InteropBase#echoStringArray");
+
+			xsd__string *		pStringArray = new char *[ARRAYSIZE];
+			xsd__string_Array	arrstr;
+
+			sprintf( buffer1, "%dth element of string array", 0);
+
+			for( i = 0; i < ARRAYSIZE; i++)
+			{
+				pStringArray[i] = buffer1;
+			}
+
+			arrstr.set( pStringArray, ARRAYSIZE);
+
+			xsd__string_Array *	arrstrResult = ws.echoStringArray( &arrstr);
+
+			if( arrstrResult != NULL)
+			{
+				cout << "successful" << endl;
+			}
+			else
+			{
+				cout << "failed" << endl;
+			}
+
+			delete [] arrstrResult;
+
+// testing echoInteger 
+			cout << "invoking echoInteger..." << endl;
+
+			ws.setTransportProperty( "SOAPAction", "InteropBase#echoInteger");
+
+			if( ws.echoInteger( 56) == 56)
+			{
+				cout << "successful" << endl;
+			}
+			else
+			{
+				cout << "failed" << endl;
+			}
+
+// testing echoIntegerArray 
+			cout << "invoking echoIntegerArray..." << endl;
+
+			ws.setTransportProperty( "SOAPAction", "InteropBase#echoIntegerArray");
+
+			xsd__int **		ppIntArray = new xsd__int *[ARRAYSIZE];
+			xsd__int_Array	arrint;
+			int				iToSend[ARRAYSIZE];
+
+			for( x = 0; x < ARRAYSIZE; x++)
+			{
+				iToSend[x] = x;
+				ppIntArray[x] = (xsd__int *) &iToSend[x];
+			}
+
+			arrint.set( ppIntArray, ARRAYSIZE);
+
+			xsd__int_Array *	arrintResult = ws.echoIntegerArray( &arrint);
+			int					iSize;
+			const xsd__int **	ppIntOutputArray = arrintResult->get( iSize);
+
+			if( ppIntOutputArray != NULL)
+			{
+				cout << "successful" << endl;
+			}
+			else
+			{
+				cout << "failed" << endl;
+			}
+
+			// Free memory for result
+			delete [] arrintResult;
+
+// testing echoFloat 
+			cout << "invoking echoFloat..." << endl;
+
+			ws.setTransportProperty( "SOAPAction", "InteropBase#echoFloat");
+
+			xsd__float	fvalue = (xsd__float) 1.4214;
+
+			if (ws.echoFloat (fvalue) > (xsd__float) 1.42)
+			{
+				cout << "successful" << endl;
+			}
+			else
+			{
+				cout << "failed" << endl;
+			}
+
+// testing echoFloat 
+			cout << "invoking echoFloatArray..." << endl;
+
+			ws.setTransportProperty ( "SOAPAction", "InteropBase#echoFloatArray");
+
+			xsd__float_Array	arrfloat;
+			xsd__float **		ppFloatArray = new xsd__float *[ARRAYSIZE];
+			xsd__float			fToSend[ARRAYSIZE];
+
+			for( x = 0; x < ARRAYSIZE; x++)
+			{
+				fToSend[x] = (xsd__float) 1.1111 * x;
+				ppFloatArray[x] = &fToSend[x];
+			}
+
+			arrfloat.set( ppFloatArray, ARRAYSIZE);
+
+			xsd__float_Array *	arrfloatResult = ws.echoFloatArray( &arrfloat);
+
+			if( arrfloatResult != NULL)
+			{
+				cout << "successful" << endl;
+			}
+			else
+			{
+				cout << "failed" << endl;
+			}
+
+			delete [] ppFloatArray;
+			delete [] arrfloatResult;
+
+// testing echo Struct
+			cout << "invoking echoStruct..." << endl;
+
+			ws.setTransportProperty( "SOAPAction", "InteropBase#echoStruct");
+
+			SOAPStruct	stct;
+			xsd__int	integer = 5000;
+			xsd__float	floatVal = (xsd__float) 12345.7346345;
+
+			stct.varFloat = &floatVal;
+			stct.varInt = &integer;
+			stct.varString = strdup( "This is string in SOAPStruct");
+
+			SOAPStruct *stctResult = ws.echoStruct( &stct);
+
+			if (stctResult != NULL)
+			{
+				cout << "successful" << endl;
+			}
+			else
+			{
+				cout << "failed" << endl;
+			}
+
+			// Free result memory
+			delete stctResult;
+
+//testing echo Array of Struct
+			SOAPStruct_Array	arrstct;
+			SOAPStruct **		ppSOAPStruct = new SOAPStruct* [ARRAYSIZE];
+
+			for( x = 0; x < ARRAYSIZE; x++)
+			{
+				integer = x;
+				floatVal = (xsd__float) 1.1111 * x;
+
+				sprintf( buffer1, "varString of %dth element of SOAPStruct array", x);
+
+				ppSOAPStruct[x]->setvarFloat( &floatVal);
+				ppSOAPStruct[x]->setvarInt( &integer);
+				ppSOAPStruct[x]->setvarString( buffer1);
+			}
+
+			arrstct.set( ppSOAPStruct, ARRAYSIZE);
+
+//testing echo Struct Array
+			cout << "invoking echoStructArray..." << endl;
+
+			ws.setTransportProperty( "SOAPAction", "InteropBase#echoStructArray");
+
+			SOAPStruct_Array *	arrstctResult = ws.echoStructArray( &arrstct);
+
+			if( arrstctResult != NULL)
+			{
+				cout << "successful" << endl;
+			}
+			else
+			{
+				cout << "failed" << endl;
+			}
+
+			delete ppSOAPStruct;
+			delete [] arrstctResult;
+
+//testing echo void
+			cout << "invoking echoVoid..." << endl;
+
+			ws.setTransportProperty( "SOAPAction", "InteropBase#echoVoid");
+
+			ws.echoVoid();
+			
+			cout << "successful" << endl;
+
+//testing echo base 64 binary
+			cout << "invoking echoBase64..." << endl;
+
+			ws.setTransportProperty ("SOAPAction", "InteropBase#echoBase64");
+
+			const char *	bstr = "some string that is sent encoded to either base64Binary or hexBinary";
+
+			xsd__base64Binary	bb;
+
+			bb.set( (xsd__unsignedByte *) strdup( bstr), (xsd__int) strlen( bstr));
+
+			xsd__base64Binary bbResult = ws.echoBase64( bb);
+
+			if( (xsd__int) strlen( bstr) == bbResult.getSize())
+			{
+				xsd__int	iSize;
+
+				cout << "successful" << endl
+					 << "Returned String :" << endl
+					 << bbResult.get( iSize) << endl;
+			}
+			else
+			{
+				printf ("failed\n");
+			}
+
+			cout << "invoking echoDate..." << endl;
+			ws.setTransportProperty( "SOAPAction", "InteropBase#echoDate");
+
+			time_t	tim;
+
+			time( &tim);
+
+			tm *	lt = gmtime( &tim);
+
+			if( memcmp( &ws.echoDate( *lt), lt, sizeof( tm)) == 0)
+			{
+				cout << "successful" << endl;
+			}
+			else
+			{
+				cout << "failed" << endl;
+			}
+
+//testing echo hex binary
+			cout << "invoking echoHexBinary..." << endl;
+
+			ws.setTransportProperty( "SOAPAction", "InteropBase#echoHexBinary");
+
+			xsd__hexBinary	hb;
+			
+			iSize = (xsd__int) strlen( bstr);
+
+			hb.set( (xsd__unsignedByte *) strdup( bstr), iSize);
+
+			xsd__hexBinary hbReturn = ws.echoHexBinary( hb);
+
+			if( iSize == hbReturn.getSize())
+			{
+				cout << "successful" << endl
+					 << "Returned String :" << endl
+					 << hbReturn.get( iSize) << endl;
+			}
+			else
+			{
+				cout << "failed" << endl;
+			}
+
+//testing echo decimal
+			cout << "invoking echoDecimal..." << endl;
+
+			ws.setTransportProperty( "SOAPAction", "InteropBase#echoDecimal");
+
+            if( ws.echoDecimal( 1234.567890) > 1234.56)
+			{
+				cout << "successful" << endl;
+			}
+			else
+			{
+				cout << "failed" << endl;
+			}
+
+			//testing echo boolean
+			cout << "invoking echoBoolean..." << endl;
+
+			ws.setTransportProperty( "SOAPAction", "InteropBase#echoBoolean");
+
+			if( ws.echoBoolean (true_) == true_)
+			{
+				cout << "successful" << endl;
+			}
+			else
+			{
+				cout << "failed" << endl;
+			}
+
+			bSuccess = true;
 		}
-	    }
-	    else
-	    {
-		iRetryIterationCount = 0;
-	    }
+		catch( AxisException & e)
+		{
+			bool bSilent = false;
 
-	    if (!bSilent)
-	    {
-		printf ("%s\n", e.what ());
-	    }
-	}
-	catch (exception & e)
-	{
-	    printf ("%s\n", e.what ());
-	}
-	catch (...)
-	{
-	    printf ("Unknown exception has occured\n");
-	}
-	iRetryIterationCount--;
-    }
-    while (iRetryIterationCount > 0 && !bSuccess);
+			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+			{
+				if( iRetryIterationCount > 1)
+				{
+					bSilent = true;
+				}
+			}
+			else
+			{
+				iRetryIterationCount = 0;
+			}
+
+			if( !bSilent)
+			{
+				cout << e.what() << endl;
+			}
+		}
+		catch( exception & e)
+		{
+			cout << e.what() << endl;
+		}
+		catch( ...)
+		{
+			cout << "Unknown exception has occured" << endl;
+		}
+
+		iRetryIterationCount--;
+    } while( iRetryIterationCount > 0 && !bSuccess);
+
     //getchar();
     return 0;
 }

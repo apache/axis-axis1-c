@@ -23,66 +23,75 @@
 #define WSDL_DEFAULT_ENDPOINT "http://localhost:80/axis/groupB"
 
 
-static void
-usage (char *programName, char *defaultURL)
+static void usage( char * programName, char * defaultURL)
 {
-    cout << "\nUsage:\n"
-	<< programName << " [-? | service_url] " << endl
-	<< "    -?             Show this help.\n"
-	<< "    service_url    URL of the service.\n"
-	<< "    Default service URL is assumed to be " << defaultURL
-	<<
-	"\n    Could use http://localhost:80/axis/groupB"
-	<< endl;
+    cout << "Usage:" << endl
+		 << programName << " [-? | service_url] " << endl
+		 << "    -?             Show this help." << endl
+		 << "    service_url    URL of the service." << endl
+		 << "    Default service URL is assumed to be " << defaultURL << endl
+		 <<	"    Could use http://localhost:80/axis/groupB" << endl;
 }
 
-int main(int argc, char* argv[])
+int main( int argc, char * argv[])
 {
-	int x;
-	char endpoint[256];
+	int		x;
+	char	endpoint[256];
 
     // Set default service URL
-    sprintf (endpoint, "%s", WSDL_DEFAULT_ENDPOINT);
+    sprintf( endpoint, "%s", WSDL_DEFAULT_ENDPOINT);
+
     // Could use http://localhost:8080/axis/services/echo to test with Axis Java
 
-	if (argc > 1)
+	if( argc > 1)
 	{
-	    // Watch for special case help request
-	    if (!strncmp (argv[1], "-", 1)) // Check for - only so that it works for 
-                                            //-?, -h or --help; -anything 
+// Watch for special case help request
+// Check for - only so that it works for 
+// -?, -h or --help; -anything 
+		if( !strncmp( argv[1], "-", 1))
 	    {
-		usage (argv[0], endpoint);
-		return 2;
-	    }
-	    sprintf (endpoint, argv[1]);
-	}
+			usage( argv[0], endpoint);
 
+            return 2;
+	    }
+	    
+		sprintf( endpoint, argv[1]);
+	}
 
 	cout << endl << " Using service at " << endpoint << endl << endl;
     
     try
 	{
-	InteropTestPortTypeB ws(endpoint);
+		InteropTestPortTypeB	ws( endpoint);
 	/*we do not support multi-dimensional arrays.*/
 	/*ws.echo2DStringArray*/
 
 	/*testing Nested Arrays*/
-	SOAPArrayStruct sas;
+	SOAPArrayStruct	sas;
+
 	sas.varFloat = 12345.67890;
 	sas.varInt = 5000;
-	sas.varString = strdup("varString content of SOAPArrayStruct");
+	sas.varString = strdup( "varString content of SOAPArrayStruct");
 	sas.varArray.m_Array = new AxisChar*[ARRAYSIZE];
 	sas.varArray.m_Size = ARRAYSIZE;
-	for (x=0; x<ARRAYSIZE; x++)
+
+	for( x=0; x < ARRAYSIZE; x++)
 	{
-		sas.varArray.m_Array[x] = strdup("content of string array element");
+		sas.varArray.m_Array[x] = strdup( "content of string array element");
 	}
-	printf("invoking echoNestedArray...\n");
-	ws.setTransportProperty("SOAPAction" , "groupB#echoNestedArray");
-	if (ws.echoNestedArray(&sas) != NULL)
-		printf("successful\n");
+
+	cout << "invoking echoNestedArray..." << endl;
+
+	ws.setTransportProperty( "SOAPAction" , "groupB#echoNestedArray");
+
+	if( ws.echoNestedArray( &sas) != NULL)
+	{
+		cout << "successful" << endl;
+	}
 	else
-		printf("failed\n");
+	{
+		cout << "failed" << endl;
+	}
 
 	/*testing Nested Structs*/
 	SOAPStructStruct sss;
