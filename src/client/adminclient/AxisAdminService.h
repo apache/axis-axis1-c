@@ -37,6 +37,7 @@ class AxisAdminService :public Stub
         AxisAdminService();
         virtual ~AxisAdminService();
         xsd__boolean updateWSDD(xsd__base64Binary Value0);
+        xsd__boolean stopAxis();
 };
 
 AXIS_CPP_NAMESPACE_END

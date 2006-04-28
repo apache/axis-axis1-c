@@ -39,6 +39,7 @@ public:
     AXIS_BINDING_STYLE AXISCALL getBindingStyle(){return DOC_LITERAL;};
 private:/*Methods corresponding to the web service methods*/
     int updateWSDD(void* pMsg);
+	int stopAxis(void* pMsg);
 };
 
 #endif /* !defined(__AXISADMINSERVICEWRAPPER_SERVERWRAPPER_H__INCLUDED_)*/

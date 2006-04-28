@@ -446,5 +446,22 @@ Channel_HTTP:${dir.libraries}/${libraryPrefix}${HTTP.ChannelLibraryName}${librar
 		</if>
 		
 	</target>
+    
+    <target name="stopAxisServer" depends="initialize">
+        <exec executable="${dir.release}/bin/${adminClientExecutableName}${executableSuffix}"
+            failifexecutionfails="true">
+            <arg line="localhost ${testPort} STOP" />
+            <env key="PATH"
+                path="${dir.libraries}${path.separator}${dir.xmlParser}${path.separator}${java.library.path}" />
+            <env key="LD_LIBRARY_PATH"
+                path="${dir.libraries}${path.separator}${dir.xmlParser}" />
+            <env key="LIBPATH"
+                path="${dir.libraries}${path.separator}${dir.xmlParser}" />
+            <env key="SHLIB_PATH"
+                path="${dir.libraries}${path.separator}${dir.xmlParser}" />
+            <env key="AXISCPP_DEPLOY" value="${dir.test.generated}/AdminClient" />
+        </exec>
+    </target>
+    
 </project>
 

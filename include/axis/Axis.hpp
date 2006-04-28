@@ -76,6 +76,17 @@ class STORAGE_CLASS_INFO Axis
      * @param type The XSDTYPE of the storage item to be deleted.
      */
     static void AxisDelete(void* pValue, XSDTYPE type);
+    
+    /**
+     * Indicates if the Axis engine is running.
+     * This will return true after the first invocation of Axis::initialize()before
+     * the last invocation of Axis::terminate().
+     * 
+     * @return Indicate if Axis engine is still running.
+     */
+     static bool isRunning();
+     
+     static void stopAxis();
 };
 
 AXIS_CPP_NAMESPACE_END

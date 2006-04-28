@@ -129,4 +129,85 @@ xsd__boolean AxisAdminService::updateWSDD(xsd__base64Binary Value0)
 		}
 	}
 }
+
+
+xsd__boolean AxisAdminService::stopAxis()
+{
+	xsd__boolean Ret = false_;
+	const char* pcCmplxFaultName = NULL;
+	try
+	{
+	if (AXIS_SUCCESS != m_pCall->initialize(CPP_DOC_PROVIDER)) return Ret;
+
+	if (NULL==m_pCall->getTransportProperty("SOAPAction",false))
+		m_pCall->setTransportProperty(SOAPACTION_HEADER , "AxisAdmin#stopAxis");
+
+	m_pCall->setSOAPVersion(SOAP_VER_1_1);
+	m_pCall->setOperation("stopAxis", "http://www.opensource.lk/xsd");
+
+	includeSecure();
+	applyUserPreferences();
+
+
+	if (AXIS_SUCCESS == m_pCall->invoke())
+	{
+		if(AXIS_SUCCESS == m_pCall->checkMessage("stopAxisResponse", "http://www.opensource.lk/xsd"))
+		{
+			xsd__boolean * pReturn = m_pCall->getElementAsBoolean("return", 0);
+			if(pReturn)
+			{
+				Ret = *pReturn;
+				Axis::AxisDelete( (void *) pReturn, XSD_BOOLEAN);
+			}
+		}
+	}
+	m_pCall->unInitialize();
+	return Ret;
+	}
+	catch(AxisException& e)
+	{
+		int iExceptionCode = e.getExceptionCode();
+
+		if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
+		{
+			m_pCall->unInitialize();
+			throw;
+		}
+
+		ISoapFault* pSoapFault = (ISoapFault*)
+			m_pCall->checkFault("Fault","http://localhost/axis/AxisAdmin" );
+
+		if(pSoapFault)
+		{
+			const char *detail = pSoapFault->getSimpleFaultDetail();
+			bool deleteDetail=false;
+
+			if (NULL==detail || 0==strlen(detail))
+			{
+				detail=m_pCall->getFaultAsXMLString();
+				if (NULL==detail)
+					detail="";
+				else
+					deleteDetail=true;
+			}
+
+			OtherFaultException ofe(pSoapFault->getFaultcode(),
+				pSoapFault->getFaultstring(), pSoapFault->getFaultactor(),
+				detail, iExceptionCode);
+
+			if (deleteDetail && NULL!=detail)
+				Axis::AxisDelete( (void *) const_cast<char*>(detail), XSD_STRING);
+
+			m_pCall->unInitialize();
+			delete pSoapFault;
+			throw ofe;
+		}
+		else
+		{
+			m_pCall->unInitialize();
+			delete pSoapFault;
+			throw;
+		}
+	}
+}
 AXIS_CPP_NAMESPACE_END

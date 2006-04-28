@@ -56,6 +56,8 @@ public:
      * @return AXIS_SUCCESS if the WSDD update successful, AXIS_FAIL otherwise.
      */
     virtual int updateWSDD(AxisChar* wsdd)=0;
+    
+    virtual void stopAxis()=0;
 };
 
 AXIS_CPP_NAMESPACE_END

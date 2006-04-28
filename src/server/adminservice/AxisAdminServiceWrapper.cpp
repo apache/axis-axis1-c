@@ -44,6 +44,10 @@ int AxisAdminServiceWrapper::invoke(void *pMsg)
     {
         return updateWSDD(mc);
     }
+    else if ( 0 == strcmp(method, "stopAxis") )
+    {
+        return stopAxis(mc);
+    }
     else
     {
         return AXIS_FAIL;
@@ -110,5 +114,55 @@ int AxisAdminServiceWrapper::updateWSDD(void* pMsg)
     {
         return AXIS_FAIL;
     }
+}
+
+
+/*
+ * This method wrap the service method 
+ */
+int AxisAdminServiceWrapper::stopAxis(void* pMsg)
+{
+	IMessageData* mc = (IMessageData*)pMsg;
+	int nStatus;
+	IWrapperSoapSerializer* pIWSSZ = NULL;
+	mc->getSoapSerializer(&pIWSSZ);
+	if (!pIWSSZ)
+	{
+		return AXIS_FAIL;
+	}
+	IWrapperSoapDeSerializer* pIWSDZ = NULL;
+	mc->getSoapDeSerializer(&pIWSDZ);
+	if (!pIWSDZ)
+	{
+		return AXIS_FAIL;
+	}
+	/* check whether we have got correct message */
+	if (AXIS_SUCCESS != pIWSDZ->checkMessageBody("stopAxis", "http://www.opensource.lk/xsd"))
+	{
+		return AXIS_FAIL;
+	}
+	pIWSSZ->createSoapMethod("stopAxisResponse", "http://www.opensource.lk/xsd");
+
+	if (AXIS_SUCCESS != (nStatus = pIWSDZ->getStatus()))
+	{
+		return nStatus;
+	}
+
+	try
+	{
+        xsd__boolean ret = false_;
+		IAdminUtils* pAdminUtils;
+        mc->getAdminUtils (&pAdminUtils);
+        if (pAdminUtils)
+        {
+            pAdminUtils->stopAxis ();
+            ret = true_;
+        }
+        return pIWSSZ->addOutputParam ("return", (void*) &ret, XSD_BOOLEAN);
+	}
+	catch(...)
+	{
+		return AXIS_FAIL;
+	}
 }
 

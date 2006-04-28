@@ -13,66 +13,97 @@
 <!-- See the License for the specific language governing permissions and      -->
 <!-- limitations under the License.                                           -->
 
-<definitions name="AxisAdminService" 
-    targetNamespace="http://www.opensource.lk/AxisAdmin" 
-    xmlns="http://schemas.xmlsoap.org/wsdl/" 
-    xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" 
-    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
-    xmlns:tns="http://www.opensource.lk/AxisAdmin" 
-    xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-    xmlns:xsd1="http://www.opensource.lk/xsd"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <types>
-        <schema targetNamespace="http://www.opensource.lk/xsd"
-            xmlns="http://www.w3.org/2001/XMLSchema" 
-            xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
-            <element name="updateWSDD">
-                <complexType>
-                    <sequence>
-                        <element name="wsdd" type="xsd:base64Binary"/>
-                    </sequence>
-                </complexType>
-            </element>
-            <element name="updateWSDDResponse">
-                <complexType>
-                    <sequence>
-                        <element name="return" type="xsd:boolean"/>
-                    </sequence>
-                </complexType>
-            </element>
-        </schema>
-    </types>
-    <message name="updateWSDD">
-        <part element="xsd1:updateWSDD" name="parameters"/>
-    </message>
-    <message name="updateWSDDResponse">
-        <part element="xsd1:updateWSDDResponse" name="parameters"/>
-    </message>
-    <portType name="AxisAdminService">
-        <operation name="updateWSDD">
-            <input message="tns:updateWSDD" name="updateWSDD"/>
-            <output message="tns:updateWSDDResponse" name="updateWSDDResponse"/>
-        </operation>
-    </portType>
-    <binding name="AxisAdminPortBinding" type="tns:AxisAdminService">
-        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
-        <operation name="updateWSDD">
-            <soap:operation soapAction="AxisAdmin#updateWSDD" style="document"/>
-            <input name="updateWSDD">
-                <soap:body namespace="http://www.opensource.lk/AxisAdmin" 
-                    use="literal"/>
-            </input>
-            <output name="updateWSDDResponse">
-                <soap:body namespace="http://www.opensource.lk/AxisAdmin" 
-                    use="literal"/>
-            </output>
-        </operation>
-    </binding>
-    <service name="AxisAdmin">
-        <port binding="tns:AxisAdminPortBinding" 
-            name="AxisAdminParamPort">
-            <soap:address 
-                location="http://localhost/axis/AxisAdmin"/>
-        </port>
-    </service>
+<definitions name="AxisAdminService"
+	targetNamespace="http://www.opensource.lk/AxisAdmin"
+	xmlns="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:tns="http://www.opensource.lk/AxisAdmin"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:xsd1="http://www.opensource.lk/xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<types>
+		<schema targetNamespace="http://www.opensource.lk/xsd"
+			xmlns="http://www.w3.org/2001/XMLSchema"
+			xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+			<element name="updateWSDD">
+				<complexType>
+					<sequence>
+						<element name="wsdd" type="xsd:base64Binary" />
+					</sequence>
+				</complexType>
+			</element>
+			<element name="updateWSDDResponse">
+				<complexType>
+					<sequence>
+						<element name="return" type="xsd:boolean" />
+					</sequence>
+				</complexType>
+			</element>
+			<xsd:element name="stopAxis">
+				<xsd:complexType></xsd:complexType>
+			</xsd:element>
+			<xsd:element name="stopAxisResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="return" type="xsd:boolean"></xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</schema>
+	</types>
+	<message name="updateWSDD">
+		<part element="xsd1:updateWSDD" name="parameters" />
+	</message>
+	<message name="updateWSDDResponse">
+		<part element="xsd1:updateWSDDResponse" name="parameters" />
+	</message>
+	<message name="stopAxisResponse">
+		<part element="xsd1:stopAxisResponse" name="parameters" />
+	</message>
+	<message name="stopAxis">
+		<part element="xsd1:stopAxis" name="parameters" />
+	</message>
+	<portType name="AxisAdminService">
+		<operation name="updateWSDD">
+			<input message="tns:updateWSDD" name="updateWSDD" />
+			<output message="tns:updateWSDDResponse"
+				name="updateWSDDResponse" />
+		</operation>
+		<operation name="stopAxis">
+			<input message="tns:stopAxis" name="stopAxis" />
+			<output message="tns:stopAxisResponse"
+				name="stopAxisResponse" />
+		</operation>
+	</portType>
+	<binding name="AxisAdminPortBinding" type="tns:AxisAdminService">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<operation name="updateWSDD">
+			<soap:operation soapAction="AxisAdmin#updateWSDD"
+				style="document" />
+			<input name="updateWSDD">
+				<soap:body use="literal" />
+			</input>
+			<output name="updateWSDDResponse">
+				<soap:body use="literal" />
+			</output>
+		</operation>
+		<operation name="stopAxis">
+			<soap:operation style="document"
+				soapAction="AxisAdmin#stopAxis" />
+			<input name="stopAxis">
+				<soap:body use="literal" />
+			</input>
+			<output name="stopAxisResponse">
+				<soap:body use="literal" />
+			</output>
+		</operation>
+	</binding>
+	<service name="AxisAdmin">
+		<port binding="tns:AxisAdminPortBinding"
+			name="AxisAdminParamPort">
+			<soap:address location="http://localhost/axis/AxisAdmin" />
+		</port>
+	</service>
 </definitions>

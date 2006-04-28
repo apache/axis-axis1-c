@@ -85,6 +85,7 @@ SessionScopeHandlerPool* g_pSessionScopeHandlerPool;
 DeserializerPool* g_pDeserializerPool;
 SerializerPool* g_pSerializerPool;
 HandlerPool* g_pHandlerPool;
+bool g_isRunning;
 
 // Unsynchronized read-only global variables.
 WSDDDeployment* g_pWSDDDeployment;
@@ -435,6 +436,7 @@ int initialize_module (int bServer)
                /* Ok if we can't read config file */
                status = AXIS_SUCCESS;
            }
+           g_isRunning = true;
        }
        else if (AxisEngine::m_bServer != bServer)
        {
@@ -467,6 +469,7 @@ int uninitialize_module ()
         {
             if (--g_uModuleInitialize == 0)
             {
+				g_isRunning = false;
                 TypeMapping::uninitialize();
                 URIMapping::uninitialize();
                 if (!AxisEngine::m_bServer) // we have to deal with transport factory only if it is the client
@@ -753,4 +756,16 @@ void Axis::AxisDelete(void *pValue, XSDTYPE type)
         default:
             ;
     }
+}
+
+bool Axis::isRunning()
+{
+	return g_isRunning;
+}
+
+void Axis::stopAxis()
+{
+    start_initializing();
+    g_isRunning = false;
+    done_initializing();
 }

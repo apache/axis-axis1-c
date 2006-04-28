@@ -34,6 +34,7 @@
 
 #include "SimpleAxisTransport.h"
 #include <iostream>
+#include <axis/Axis.hpp>
 
 #include <axis/AxisCPPConfigDefaults.hpp>
 
@@ -207,7 +208,7 @@ int main (int argc, char *argv[])
 
     initialize_module( 1);
 
-    while (running)
+    while (Axis::isRunning())
     {
    FD_ZERO (&sockSet);
    FD_SET (servSock[0], &sockSet);

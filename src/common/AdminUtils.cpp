@@ -16,6 +16,7 @@
  */
 
 #include "AdminUtils.h"
+#include <axis/Axis.hpp>
 #include "../wsdd/WSDDDeployment.h"
 
 extern AXIS_CPP_NAMESPACE_PREFIX WSDDDeployment* g_pWSDDDeployment;
@@ -35,6 +36,13 @@ AdminUtils::~AdminUtils()
 int AdminUtils::updateWSDD(AxisChar* wsdd)
 {
     return g_pWSDDDeployment->updateWSDD(wsdd);	
+}
+
+
+
+void AdminUtils::stopAxis()
+{
+    Axis::stopAxis();
 }
 
 AXIS_CPP_NAMESPACE_END
