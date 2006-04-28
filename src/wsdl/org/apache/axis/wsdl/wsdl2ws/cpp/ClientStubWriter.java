@@ -533,6 +533,7 @@ public class ClientStubWriter extends CPPClassWriter
                 typeissimple = CUtils.isSimpleType(currentParaType);
 
                 currentParamName = "*OutValue" + i;
+                    
                 // Some code need to be merged as we have some duplicated in
                 // coding here.
                 if (typeisarray)
@@ -651,12 +652,14 @@ public class ClientStubWriter extends CPPClassWriter
         				    writer.write( "\n");
         				    writer.write( "\t\t\tif( pReturn" + i + " != NULL && OutValue" + i + " != NULL)\n");
         				    writer.write( "\t\t\t{\n");
-        				    writer.write( "\t\t\t\tif( *OutValue" + i + " == NULL)\n");
-        				    writer.write( "\t\t\t\t{\n");
-        				    writer.write( "\t\t\t\t\t*OutValue" + i + " = new " + currentParaType + "();\n");
-        				    writer.write( "\t\t\t\t}\n");
+        				    writer.write( "// OutValue" + i + " is not nillable.\n");
+//        				    writer.write( "\t\t\t\tif( *OutValue" + i + " == NULL)\n");
+//        				    writer.write( "\t\t\t\t{\n");
+//        				    writer.write( "\t\t\t\t\t*OutValue" + i + " = new " + currentParaType + "();\n");
+//        				    writer.write( "\t\t\t\t}\n");
+        				    writer.write( "\t\t\t\tOutValue" + i + " = new " + currentParaType + "();\n");
         				    writer.write( "\n");
-        				    writer.write( "\t\t\t**OutValue" + i + " = *pReturn" + i + ";\n");
+        				    writer.write( "\t\t\t\t*OutValue" + i + " = *pReturn" + i + ";\n");
         				    writer.write( "\t\t\t}\n");
         				    writer.write( "\n");
         				    writer.write( "\t\t\tAxis::AxisDelete( (void *) pReturn" + i + ", " + CUtils.getXSDTypeForBasicType( currentParaType) + ");\n");
