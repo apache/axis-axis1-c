@@ -27,6 +27,8 @@
 #if !defined(_STUB_H____OF_AXIS_INCLUDED_)
 #define _STUB_H____OF_AXIS_INCLUDED_
 
+#include <stdarg.h>
+
 #include <axis/client/Call.hpp>
 #include <vector>
 
@@ -577,7 +579,13 @@ class STORAGE_CLASS_INFO Stub
     /**
      * Set SSL configuration properties.
      */
-    void AXISCALL SetSecure( char *, ...);
+    void AXISCALL SetSecure( char *pszArguments, ...);
+
+    /**
+     * Set SSL configuration properties. Added
+     * to support C bindings implementation.
+     */
+    void AXISCALL SetSecure( char *pszArguments, va_list args);
 
   protected:
   /**

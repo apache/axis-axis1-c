@@ -151,6 +151,21 @@ public class Parameter {
 		return 1 == type.size() && "...".equals(type.get(0));
 	}
 
+    public boolean isVaListArg() 
+    {
+        String s = null;
+        Iterator it = type.iterator();
+        while (it.hasNext()) 
+        {
+            String next = (String) it.next();
+            if ("va_list".equals(next))
+                return true;
+        }
+        
+        return false;
+    }
+    
+    
     /**
      * For two parameters to match their types must match or both be null,
      * but the parameters names don't have to match. Just because a parameter

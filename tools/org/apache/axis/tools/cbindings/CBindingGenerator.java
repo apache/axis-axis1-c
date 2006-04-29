@@ -335,6 +335,7 @@ public class CBindingGenerator extends CParsingTool implements FileActor
             return;
         
         Parameter[] parms = sign.getParameters();
+                
         String text = new String();
 
         // Look to see if this method is overloaded by another method
@@ -412,17 +413,18 @@ public class CBindingGenerator extends CParsingTool implements FileActor
         if (parms != null) 
         {
             for (int i = 0; i < parms.length; i++) 
-            {
+            { 
+                // Do not include prototypes with va_list...since these functions have
+                // probably been added in support of C binding.
+                if (parms[i].isVaListArg())
+                    return;
+                
                 if (0 != i) 
                 {
                     text += ", ";
+                    // wrap long lines at 50 chars
                     if (text.length() > 50) 
-                    { 
-                        // wrap long lines at 50 chars
-                        outputFile.write(text);
-                        outputFile.newLine();
-                        text = "\t";
-                    }
+                        text += "\n\t";
                 }
                 text += toCType(parms[i]) + " ";
                 String name = parms[i].getName();
@@ -431,7 +433,7 @@ public class CBindingGenerator extends CParsingTool implements FileActor
             }
         }
         text += ");";
-                
+        
         outputFile.write(text);
         outputFile.newLine();
     }

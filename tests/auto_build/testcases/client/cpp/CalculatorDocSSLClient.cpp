@@ -62,7 +62,7 @@ int main(int argc, char* argv[])
             }
 
             sprintf(keylocation,"%s/%s",sslkeyhome,"myKeyRing.kdb");
-            ws.SetSecure(keylocation, "axis4all", "AXIS", "NONE", "05", "NONE", false);
+            ws.SetSecure(keylocation, "axis4all", "AXIS", "NONE", "05", "NONE", "false");
 
             iResult = ws.add(2,3);
             cout << iResult << endl;

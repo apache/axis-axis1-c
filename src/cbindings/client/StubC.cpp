@@ -14,6 +14,8 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
+ 
+#include <stdarg.h>
 
 #include <axis/client/Stub.hpp>
 #include <axis/AxisException.hpp>
@@ -26,7 +28,7 @@
 #include <axis/client/Stub.h>
 
 AXIS_CPP_NAMESPACE_START
-class StubC : Stub
+class StubC : public Stub
 {
 public :
     StubC(const char *ep, AXIS_PROTOCOL_TYPE pt):Stub(ep,pt) {}
@@ -746,6 +748,37 @@ void axiscStubSetSOAPHeaders(AXISCHANDLE stub)
     try
     {
         s->setSOAPHeadersStubC(); 
+    }
+    catch ( AxisException& e  )
+    {
+        h->_exception.setExceptionFromException(e);
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        h->_exception.setExceptionCode(-1);  
+        h->_exception.setMessage("Unrecognized exception thrown.");  
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+}
+
+
+AXISC_STORAGE_CLASS_INFO 
+void axiscStubSetSecure(AXISCHANDLE stub, 
+                        char * pszArguments, 
+                        ... )
+{ 
+    AxisObjectContainer *h = (AxisObjectContainer *)stub;
+    h->_exception.resetException();
+    StubC *s = (StubC*)h->_objHandle;
+    
+    try
+    {
+        va_list args;
+    
+        va_start( args, pszArguments);    
+        s->SetSecure(pszArguments, args);
+        va_end( args);    
     }
     catch ( AxisException& e  )
     {

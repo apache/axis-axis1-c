@@ -514,30 +514,32 @@ ISoapAttachment* Stub::createSoapAttachment()
 /*Methods for supporting SecureChannel*/
 void Stub::SetSecure( char * pszArguments, ...)
 {
-    int iArgIndex = 0;
     va_list args;
-    char *  pszArg = NULL;
     
-    va_start( args, pszArguments);
+    va_start( args, pszArguments);    
+    SetSecure(pszArguments, args);
+    va_end( args);
+}
+
+/*Methods for supporting SecureChannel*/
+void Stub::SetSecure( char * pszArguments, va_list args)
+{
+    int iArgIndex = 0;
+    char * pszArg = pszArguments;
     
-    if( (pszArg = pszArguments) != NULL)
+    if (pszArg != NULL)
     {
         do
         {
-            if( pszArg == (char *) 1)
-                m_sArguments[iArgIndex] = "true";
-            else
-                m_sArguments[iArgIndex] = pszArg;
-
+            m_sArguments[iArgIndex] = pszArg;
             iArgIndex++;
         } 
         while( (pszArg = va_arg( args, char *)) != NULL && iArgIndex < 8);
-
+        
+        // Leave for now, but remove in future. 
         if( iArgIndex == 6)
             m_sArguments[iArgIndex] = "false";
     }
-
-    va_end( args);
 }
 
 void Stub::includeSecure()
