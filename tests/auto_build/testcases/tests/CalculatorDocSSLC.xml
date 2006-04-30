@@ -1,0 +1,17 @@
+<test>
+    <name>CalculatorDocSSLC</name>
+    <description>CalculatorDocSSLC test</description>
+    <clientLang>c</clientLang>
+    <clientCode>CalculatorDocSSLClient.c</clientCode>
+    <wsdl>CalculatorDocC.wsdl</wsdl>
+    <expected>
+        <output>
+           CalculatorDocSSL.expected
+        </output>
+    </expected>
+        <endpoint>https://localhost:80/axis/CalculatorDoc</endpoint>
+        <nomonitor>true</nomonitor>
+        <port>9443</port>
+	    <ssl>true</ssl>
+</test>
+
