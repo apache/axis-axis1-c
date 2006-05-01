@@ -56,7 +56,7 @@ public class ArrayParamHeaderWriter extends ParamWriter
 
             this.writer.write("#if !defined(__"  + classname.toUpperCase() + "_H__INCLUDED_)\n");
             this.writer.write("#define __" + classname.toUpperCase() + "_H__INCLUDED_\n\n");
-            
+                        
             if (attribs.length != 1)
             {
                 System.out.println("Array " + classname + " contains unexpected no of variables");
@@ -65,10 +65,12 @@ public class ArrayParamHeaderWriter extends ParamWriter
                       
             writer.write("#include <axis/Axis.h>\n");
             writer.write("#include <axis/AxisUserAPI.h>\n\n");
+
+            this.writer.write("#ifdef __cplusplus\n extern \"C\" {\n#endif\n\n");
             
             writeArrayClassDefinition();
             
-            this.writer.write("\n");
+            this.writer.write("\n#ifdef __cplusplus\n }\n#endif\n\n");
             this.writer.write("#endif /* !defined(__" + classname.toUpperCase() + "_H__INCLUDED_)*/\n");
             
             writer.flush();

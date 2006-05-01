@@ -64,11 +64,14 @@ public abstract class HeaderFileWriter extends BasicFileWriter
             //includes
             writePreprocessorStatements();
             
+            this.writer.write("\n#ifdef __cplusplus\n extern \"C\" {\n#endif\n\n");
+
             //class
             writeAttributes();
             writeMethods();
-            this.writer.write("\n\n");
             
+            this.writer.write("\n");
+            this.writer.write("#ifdef __cplusplus\n }\n#endif\n\n");
             this.writer.write("#endif /* !defined(__" + classname.toUpperCase() + "_H__INCLUDED_) */\n");
             
             //cleanup
