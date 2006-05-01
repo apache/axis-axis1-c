@@ -317,10 +317,6 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
         void* pItem;
         AXIS_BINDING_STYLE nStyle = pSZ.getStyle();
 
-		TRACE_OBJECT_SIZE_FUNCT_ENTRY(m_value.cta->pSizeFunct);
-        int itemsize = m_value.cta->pSizeFunct();
-		TRACE_OBJECT_SIZE_FUNCT_EXIT(m_value.cta->pSizeFunct, itemsize);
-
         void** ptrval = (void**) m_value.cta->pObject;
         if (DOC_LITERAL == nStyle) 
         {
