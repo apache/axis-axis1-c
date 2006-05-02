@@ -286,8 +286,6 @@ public:
      * @param pArray is a pointer the an Axis_Array object.
      * @param pSZFunct is a pointer to the function that knows how to serialise the object.
      * @param pDelFunct is a pointer to the function that knows how to delete the object.
-     * @param pSizeFunct is a pointer to the function that knows how to increase
-     * the size of the object.
      * @param pName is a null terminated character string that contains the
      * prefix:name of the object.
      * @param pNamespace is the namespace associated with the prefix used in 'pName'.
@@ -295,7 +293,6 @@ public:
     void AXISCALL addCmplxArrayParameter( Axis_Array * pArray,
                                           void * pSZFunct,
                                           void * pDelFunct,
-                                          void * pSizeFunct,
                                           const AxisChar * pName,
                                           const AxisChar * pNamespace);
 
@@ -1539,8 +1536,6 @@ public:
      * the object.
      * @param pCreFunct is a pointer to the function that knows how to create the object.
      * @param pDelFunct is a pointer to the function that knows how to delete the object.
-     * @param pSizeFunct is a pointer to the function that knows how to add more
-     * elements to the object.
      * @param pName is a null terminated character string that contains the
      * prefix:name of the object.
      * @param pNamespace is the namespace associated with the prefix used in 'pName'.
@@ -1550,7 +1545,6 @@ public:
                                          void * pDZFunct,
                                          void * pCreFunct,
                                          void * pDelFunct,
-                                         void * pSizeFunct,
                                          const AxisChar * pName,
                                          const AxisChar * pNamespace);
 

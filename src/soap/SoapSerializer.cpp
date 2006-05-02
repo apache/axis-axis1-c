@@ -187,7 +187,6 @@ int SoapSerializer::addOutputBasicArrayParam( const Axis_Array * pArray,
 int SoapSerializer::addOutputCmplxArrayParam( const Axis_Array * pArray, 
                                               void * pSZFunct,
                                               void * pDelFunct,
-                                              void * pSizeFunct, 
                                               const AxisChar * pName, 
                                               const AxisChar * pNamespace)
 {
@@ -195,9 +194,7 @@ int SoapSerializer::addOutputCmplxArrayParam( const Axis_Array * pArray,
 
     Axis_Array * pLocalArray = pArray->clone();
 
-    ArrayBean* pAb = makeArrayBean( pLocalArray->m_Array, pSZFunct,
-                                     pDelFunct,
-                                     pSizeFunct);
+    ArrayBean* pAb = makeArrayBean( pLocalArray->m_Array, pSZFunct, pDelFunct);
 
     pAb->SetDimension( pLocalArray->m_Size);
     
@@ -584,8 +581,7 @@ ArrayBean * SoapSerializer::makeArrayBean( XSDTYPE nType, void ** pArray)
  */
 ArrayBean * SoapSerializer::makeArrayBean(void ** pObject,
                                            void * pSZFunct, 
-                                           void * pDelFunct,
-                                           void * pSizeFunct)
+                                           void * pDelFunct)
 {
     ArrayBean* pAb = new ArrayBean();
 
@@ -593,7 +589,6 @@ ArrayBean * SoapSerializer::makeArrayBean(void ** pObject,
     pAb->m_value.cta = new ComplexObjectHandler;
     pAb->m_value.cta->pSZFunct = (AXIS_SERIALIZE_FUNCT) pSZFunct;
     pAb->m_value.cta->pDelFunct = (AXIS_OBJECT_DELETE_FUNCT) pDelFunct;
-    pAb->m_value.cta->pSizeFunct = (AXIS_OBJECT_SIZE_FUNCT) pSizeFunct;
     pAb->m_value.cta->pObject = pObject;
 
     return pAb;
@@ -648,15 +643,11 @@ int SoapSerializer::removeSoapHeader()
  */
 int SoapSerializer::serializeCmplxArray( const Axis_Array * pArray, 
                                          void * pSZFunct,
-                                         void * pDelFunct,
-                                         void * pSizeFunct, 
+                                         void * pDelFunct, 
                                          const AxisChar * pName, 
                                          const AxisChar * pNamespace)
 {
-    ArrayBean * pAb = (ArrayBean*) makeArrayBean( pArray->m_Array, 
-                                                  pSZFunct,
-                                                  pDelFunct,
-                                                  pSizeFunct);
+    ArrayBean * pAb = (ArrayBean*) makeArrayBean( pArray->m_Array, pSZFunct, pDelFunct);
 
     pAb->SetDimension( pArray->m_Size);
 

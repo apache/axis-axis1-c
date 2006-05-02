@@ -536,8 +536,7 @@ public class ClientStubWriter
                         writer.write ("Value" + i +
                                   ", (void*)Axis_Serialize_" + containedType +
                                   ", (void*)Axis_Delete_" + containedType +
-                                  ", (void*) Axis_GetSize_" + containedType + ", \"" +
-                                  parameterName + "\"" + ", ");
+                                  ", \"" + parameterName + "\"" + ", ");
                         
                         if (namespace.length () == 0)
                             writer.write ("NULL");
@@ -662,7 +661,6 @@ public class ClientStubWriter
                               + ", (void*) Axis_DeSerialize_" + containedType
                               + ", (void*) Axis_Create_" + containedType
                               + ", (void*) Axis_Delete_" + containedType
-                              + ", (void*) Axis_GetSize_" + containedType
                               + ", \"" + currentType.getElementNameAsString () 
                               + "\", Axis_URI_" + containedType + ");\n");
                         
@@ -677,7 +675,6 @@ public class ClientStubWriter
                               + ", (void*) Axis_DeSerialize_" + containedType
                               + ", (void*) Axis_Create_" + containedType
                               + ", (void*) Axis_Delete_" + containedType
-                              + ", (void*) Axis_GetSize_" + containedType
                               + ", \"" + currentType.getElementNameAsString () 
                               + "\", Axis_URI_" + containedType + ");\n");
                         writer.write("\t\t\t\tdelete pTemp" + i + ";\n");
@@ -813,7 +810,6 @@ public class ClientStubWriter
                         + containedType 
                         + ", (void*) Axis_Create_" + containedType
                           + ", (void*) Axis_Delete_" + containedType
-                          + ", (void*) Axis_GetSize_" + containedType
                           + ", \"" + returntype.getElementNameAsString ()
                           + "\", Axis_URI_" + containedType + ");\n");
             }

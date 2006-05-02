@@ -200,7 +200,6 @@ int axiscSoapSerializerAddOutputCmplxArrayParam(AXISCHANDLE wrapperSoapSerialize
                                   const Axisc_Array * pArray, 
                                   void * pSZFunct, 
                                   void * pDelFunct, 
-                                  void * pSizeFunct,
                                   const AxiscChar * pName, 
                                   const AxiscChar * pNamespace) 
 {
@@ -208,8 +207,7 @@ int axiscSoapSerializerAddOutputCmplxArrayParam(AXISCHANDLE wrapperSoapSerialize
 
     try
     {
-        return sz->addOutputCmplxArrayParam((const Axis_Array*)pArray,pSZFunct,pDelFunct,
-                                            pSizeFunct,pName,pNamespace);
+        return sz->addOutputCmplxArrayParam((const Axis_Array*)pArray,pSZFunct,pDelFunct,pName,pNamespace);
     }
     catch ( AxisException& e  )
     {
@@ -304,7 +302,6 @@ int axiscSoapSerializerSerializeCmplxArray(AXISCHANDLE wrapperSoapSerializer,
                              const Axisc_Array * pArray,
                              void * pSZFunct, 
                              void * pDelFunct, 
-                             void * pSizeFunct, 
                              const AxiscChar * pName, 
                              const AxiscChar * pNamespace) 
 {
@@ -317,8 +314,7 @@ int axiscSoapSerializerSerializeCmplxArray(AXISCHANDLE wrapperSoapSerializer,
         if (pArray && pArray->m_Array)
             objArray.set((void **)pArray->m_Array, pArray->m_Size, (XSDTYPE)pArray->m_Type);
 
-        return sz->serializeCmplxArray((const Axis_Array*)&objArray,pSZFunct,pDelFunct,
-                                       pSizeFunct,pName,pNamespace);
+        return sz->serializeCmplxArray((const Axis_Array*)&objArray,pSZFunct,pDelFunct,pName,pNamespace);
     }
     catch ( AxisException& e  )
     {

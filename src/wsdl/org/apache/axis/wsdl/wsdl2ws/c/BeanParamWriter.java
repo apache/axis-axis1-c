@@ -61,24 +61,11 @@ public class BeanParamWriter extends ParamCFileWriter
             writeDeSerializeGlobalMethod();
             writeCreateGlobalMethod();
             writeDeleteGlobalMethod();
-            writeGetSizeGlobalMethod();
         }
         catch (IOException e)
         {
             throw new WrapperFault(e);
         }
-    }
-
-    /**
-     * @throws IOException
-     */
-    protected void writeGetSizeGlobalMethod() throws IOException
-    {
-        writer.write("\n");
-        writer.write("/**\n");
-        writer.write(" * This static method gives the size of " + classname + " type of object\n");
-        writer.write(" */\n");
-        writer.write("int Axis_GetSize_" + classname + "(void)\n{\n\treturn sizeof(" + classname + ");\n}\n");
     }
 
     /**
@@ -298,7 +285,6 @@ public class BeanParamWriter extends ParamCFileWriter
                                     + attribs[i].getParamNameAsMember() + ",\n");
                     writer.write("\t\t\t\t\t\t (void*) Axis_Serialize_" + arrayType + ",\n");
                     writer.write("\t\t\t\t\t\t (void*) Axis_Delete_" + arrayType + ",\n");
-                    writer.write("\t\t\t\t\t\t (void*) Axis_GetSize_" + arrayType + ",\n");
                     writer.write("\t\t\t\t\t\t \""
                             + attribs[i].getElementNameAsString() + "\", " + namespace + ");\n");
                 }
@@ -506,7 +492,6 @@ public class BeanParamWriter extends ParamCFileWriter
                             + "\t\t(void*)Axis_DeSerialize_"  + arrayType + ",\n"
                             + "\t\t(void*)Axis_Create_"       + arrayType + ",\n"
                             + "\t\t(void*)Axis_Delete_"       + arrayType + ",\n"
-                            + "\t\t(void*)Axis_GetSize_"      + arrayType + ",\n"
                             + "\t\t\""  + attribs[i].getElementNameAsString() + "\",\n"  
                             + "\t\tAxis_URI_" + arrayType + ");\n");
                     

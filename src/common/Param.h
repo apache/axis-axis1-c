@@ -70,10 +70,8 @@ public:
     void setPrefix(const AxisChar* prefix);
     void setURI(const AxisChar* uri);
     int setArrayElements(void* pElements);
-    int setArrayElements(void* pObject, AXIS_DESERIALIZE_FUNCT pDZFunct, 
-        AXIS_OBJECT_DELETE_FUNCT pDelFunct, AXIS_OBJECT_SIZE_FUNCT pSizeFunct);
-    int setUserType(void* pObject, AXIS_DESERIALIZE_FUNCT pDZFunct, 
-        AXIS_OBJECT_DELETE_FUNCT pDelFunct);
+    int setArrayElements(void* pObject, AXIS_DESERIALIZE_FUNCT pDZFunct, AXIS_OBJECT_DELETE_FUNCT pDelFunct);
+    int setUserType(void* pObject, AXIS_DESERIALIZE_FUNCT pDZFunct, AXIS_OBJECT_DELETE_FUNCT pDelFunct);
     void setName(const AxisChar* sName);
 };
 

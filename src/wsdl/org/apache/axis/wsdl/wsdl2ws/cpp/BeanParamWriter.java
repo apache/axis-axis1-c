@@ -87,8 +87,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     writer.write("extern void Axis_Delete_" + typeName + "("
                             + typeName + "* param, int nSize=0);\n");
                     writer.write("extern int Axis_Serialize_" + typeName + "("
-                            + typeName + "* param, IWrapperSoapSerializer* pSZ, bool bArray = false);\n");
-                    writer.write("extern int Axis_GetSize_" + typeName + "();\n\n");
+                            + typeName + "* param, IWrapperSoapSerializer* pSZ, bool bArray = false);\n\n");
                 } 
                 else
                 {
@@ -99,8 +98,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                             + typeName + "* param, int nSize);\n");
                     writer.write("int Axis_Serialize_" + typeName
                                     + "(" + typeName
-                                    + "* param, IWrapperSoapSerializer* pSZ, bool bArray);\n");
-                    writer.write("int Axis_GetSize_" + typeName + "();\n\n");
+                                    + "* param, IWrapperSoapSerializer* pSZ, bool bArray);\n\n");
                 }
             }
 
@@ -109,7 +107,6 @@ public class BeanParamWriter extends ParamCPPFileWriter
             writeDeSerializeGlobalMethod();
             writeCreateGlobalMethod();
             writeDeleteGlobalMethod();
-            writeGetSizeGlobalMethod();
         } 
         catch (IOException e)
         {
@@ -401,14 +398,6 @@ public class BeanParamWriter extends ParamCPPFileWriter
 
     }
 
-    private void writeGetSizeGlobalMethod() throws IOException
-    {
-        writer.write("/*\n");
-        writer.write(" * This static method gives the size of " + classname + " type of object\n");
-        writer.write(" */\n");
-        writer.write("int Axis_GetSize_" + classname + "()\n{\n\treturn sizeof(" + classname + ");\n}\n");
-    }
-
     private void writeSerializeGlobalMethod() throws IOException, WrapperFault 
     {
         writer.write( "/*\n");
@@ -625,7 +614,6 @@ public class BeanParamWriter extends ParamCPPFileWriter
                                     + attribs[i].getParamNameAsMember() + ",\n");
                     writer.write("\t\t\t\t\t\t (void*) Axis_Serialize_" + arrayType + ",\n");
                     writer.write("\t\t\t\t\t\t (void*) Axis_Delete_" + arrayType + ",\n");
-                    writer.write("\t\t\t\t\t\t (void*) Axis_GetSize_" + arrayType + ",\n");
                     writer.write("\t\t\t\t\t\t \""
                             + attribs[i].getElementNameAsString() + "\", " + namespace + ");\n");
                 }
@@ -923,7 +911,6 @@ public class BeanParamWriter extends ParamCPPFileWriter
                                     + arrayType + ",\n"
                                     + "\t\t\t\t\t\t\t\t  (void*)Axis_Create_" + arrayType + ",\n"
                                     + "\t\t\t\t\t\t\t\t  (void*)Axis_Delete_" + arrayType + ",\n"
-                                    + "\t\t\t\t\t\t\t\t  (void*)Axis_GetSize_" + arrayType + ",\n"
                                     + "\t\t\t\t\t\t\t\t  \""
                                     + attribs[i].getElementNameAsString()
                                     + "\", Axis_URI_" + arrayType + ");\n\n");

@@ -444,9 +444,7 @@ public class WrapWriter extends CFileWriter
                                 + containedType
                                 + ", (void*)Axis_Delete_"
                                 + containedType
-                                + "\n\t\t, (void*)Axis_GetSize_"
-                                + containedType
-                                + ", Axis_TypeName_"
+                                + "\n\t\t, Axis_TypeName_"
                                 + containedType
                                 + ", Axis_URI_"
                                 + containedType
@@ -526,8 +524,6 @@ public class WrapWriter extends CFileWriter
                                 + "(void*) Axis_Serialize_"
                                 + containedType
                                 + ", (void*) Axis_Delete_"
-                                + containedType
-                                + ", (void*) Axis_GetSize_"
                                 + containedType
                                 + ", \""
                                 + methodName
@@ -630,8 +626,6 @@ public class WrapWriter extends CFileWriter
                                         + containedType
                                         + ", (void*) Axis_Delete_"
                                         + containedType
-                                        + ", (void*) Axis_GetSize_"
-                                        + containedType
                                         + ", \""
                                         + returnParamName
                                         + "\", Axis_URI_"
@@ -719,8 +713,7 @@ public class WrapWriter extends CFileWriter
                         + typeName
                         + "("
                         + typeName
-                        + "* param, IWrapperSoapSerializer* pSZ, bool bArray);\n");
-                writer.write("extern int Axis_GetSize_" + typeName + "(void);\n\n");
+                        + "* param, IWrapperSoapSerializer* pSZ, bool bArray);\n\n");
             }
         }
         catch (IOException e)

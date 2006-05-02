@@ -64,12 +64,6 @@ typedef void (* AXIS_OBJECT_DELETE_FUNCT)(void*, int nSize);
  */
 typedef int (* AXIS_SERIALIZE_FUNCT)(void*, void*, bool bArray);
 
-/**
- * @fn AXIS_OBJECT_SIZE_FUNCT
- * Function that is used to get the size of an object of a custom type.
- */
-typedef int (* AXIS_OBJECT_SIZE_FUNCT)(void);
-
 AXIS_CPP_NAMESPACE_END
 
 #endif

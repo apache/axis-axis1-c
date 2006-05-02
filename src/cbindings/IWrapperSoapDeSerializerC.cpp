@@ -103,7 +103,6 @@ Axisc_Array* axiscSoapDeSerializerGetCmplxArray(AXISCHANDLE wrapperSoapDeSeriali
                                                         void * pDZFunct, 
                                                         void * pCreFunct, 
                                                         void * pDelFunct, 
-                                                        void * pSizeFunct, 
                                                         const AxiscChar * pName, 
                                                         const AxiscChar * pNamespace) 
 {
@@ -116,8 +115,7 @@ Axisc_Array* axiscSoapDeSerializerGetCmplxArray(AXISCHANDLE wrapperSoapDeSeriali
         tmpObjArray.set((void **)pArray->m_Array, pArray->m_Size, (XSDTYPE)pArray->m_Type);
         
         Axis_Array* pObjArray = dz->getCmplxArray(&tmpObjArray, 
-                                                  pDZFunct, pCreFunct, pDelFunct, pSizeFunct, 
-                                                  pName, pNamespace);
+                                                  pDZFunct, pCreFunct, pDelFunct, pName, pNamespace);
         
         return AxisObjectConverter::cppArrayToC(pObjArray, pArray, false);
     }

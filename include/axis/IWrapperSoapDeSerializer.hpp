@@ -73,7 +73,6 @@ public:
      * @param pDZFunct function pointer to the complex type deserialize method
      * @param pCreFunct function pointer to the complex type creation method
      * @param pDelFunct function pointer to the complex type delete method
-     * @param pSizeFunct function pointer toeh complex type size method
      * @param pName SOAP element name for complex type
      * @param pNamespace SOAP namespace for complex type
      * @return deserialized complex type array, this is pArray
@@ -82,7 +81,6 @@ public:
                                                void* pDZFunct, 
                                                void* pCreFunct, 
                                                void* pDelFunct, 
-                                               void* pSizeFunct, 
                                                const AxisChar* pName, 
                                                const AxisChar* pNamespace)=0;
     /**

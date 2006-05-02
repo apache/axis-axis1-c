@@ -130,7 +130,6 @@ public:
      * @param pArray Axis_Array containing complex type elements.
      * @param pSZFunct function pointer to complex type serialize method.
      * @param pDelFunct function pointer to complex type delete method.
-     * @param pSizeFunct function pointer to complex type size method.
      * @param pName local name for array elements.
      * @param pNamespace namespace URI for array elements.
      * @return status
@@ -138,7 +137,6 @@ public:
     virtual int AXISCALL addOutputCmplxArrayParam(const Axis_Array* pArray, 
                                                   void* pSZFunct, 
                                                   void* pDelFunct, 
-                                                  void* pSizeFunct, 
                                                   const AxisChar* pName, 
                                                   const AxisChar* pNamespace)=0;
 
@@ -216,7 +214,6 @@ public:
      * @param pArray Axis_Array containing complex type elements.
      * @param pSZFunct function pointer to complex type serialize method.
      * @param pDelFunct function pointer to complex type delete method.
-     * @param pSizeFunct function pointer to complex type size method.
      * @param pName local name for array elements.
      * @param pNamespace namespace URI for array elements.
      * @return status
@@ -224,7 +221,6 @@ public:
     virtual int AXISCALL serializeCmplxArray(const Axis_Array* pArray,
                                              void* pSZFunct, 
                                              void* pDelFunct, 
-                                             void* pSizeFunct,
                                              const AxisChar* pName, 
                                              const AxisChar* pNamespace)=0;
 

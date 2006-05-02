@@ -513,8 +513,7 @@ SoapDeSerializer::getVersion ()
 void SoapDeSerializer::deserializeLiteralComplexArray(Axis_Array * pArray, 
                                                       void *pDZFunct,
                                                       void *pCreFunct, 
-                                                      void *pDelFunct, 
-                                                      void* pSizeFunct,
+                                                      void *pDelFunct,
                                                       const AxisChar * pName, 
                                                       const AxisChar * pNamespace)
 {
@@ -532,7 +531,6 @@ void SoapDeSerializer::deserializeEncodedComplexArray(Axis_Array * pArray,
                                                       void *pDZFunct,
                                                       void *pCreFunct, 
                                                       void *pDelFunct, 
-                                                      void* pSizeFunct,
                                                       const AxisChar * pName, 
                                                       const AxisChar * pNamespace, 
                                                       int size)
@@ -552,7 +550,6 @@ SoapDeSerializer::getCmplxArray ( Axis_Array* pArray,
                                   void *pDZFunct,
                                   void *pCreFunct, 
                                   void *pDelFunct, 
-                                  void *pSizeFunct,
                                   const AxisChar * pName, 
                                   const AxisChar * pNamespace)
 {
@@ -583,7 +580,7 @@ SoapDeSerializer::getCmplxArray ( Axis_Array* pArray,
         else if (arraySize > 0)
         {
             deserializeEncodedComplexArray(pArray, pDZFunct, pCreFunct, pDelFunct,
-                                           pSizeFunct, pName, pNamespace, arraySize);
+                                           pName, pNamespace, arraySize);
             
             if (m_nStatus != AXIS_FAIL)
                 return pArray;
@@ -592,7 +589,7 @@ SoapDeSerializer::getCmplxArray ( Axis_Array* pArray,
     else
     {
         deserializeLiteralComplexArray(pArray, pDZFunct, pCreFunct, pDelFunct,
-                                       pSizeFunct, pName, pNamespace);
+                                       pName, pNamespace);
 
         if (m_nStatus != AXIS_FAIL)
             return pArray;

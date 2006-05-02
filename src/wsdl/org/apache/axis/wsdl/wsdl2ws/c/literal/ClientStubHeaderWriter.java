@@ -54,18 +54,18 @@ public class ClientStubHeaderWriter
         try
         {
             writer.write("\n");
-            writer.write("/* ****************************************************** */\n");
-            writer.write("/* --- Functions relating to web service client proxy --- */\n");
-            writer.write("/* ****************************************************** */\n");
+            writer.write("/* ************************************************************ */\n");
+            writer.write("/* --- Functions relating to web service client proxy       --- */\n");
+            writer.write("/* ************************************************************ */\n");
             writer.write("\n");
             writer.write("extern AXISCHANDLE get_" + classname + "_stub(const char* pchEndPointUri);\n");
             writer.write("extern void destroy_" + classname + "_stub(AXISCHANDLE pStub);\n");
             writer.write("extern int get_" + classname + "_Status(AXISCHANDLE pStub);\n");
 
             writer.write("\n");
-            writer.write("/* ****************************************************** */\n");
-            writer.write("/* --- Functions relating to web service methods      --- */\n");
-            writer.write("/* ****************************************************** */\n");
+            writer.write("/* ************************************************************ */\n");
+            writer.write("/* --- Functions relating to web service methods            --- */\n");
+            writer.write("/* ************************************************************ */\n");
             writer.write("\n");
 
             for (int i = 0; i < methods.size(); i++)

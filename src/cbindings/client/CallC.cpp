@@ -354,7 +354,6 @@ void axiscCallAddCmplxArrayParameter(AXISCHANDLE call,
                                      Axisc_Array * pArray,
                                      void * pSZFunct, 
                                      void * pDelFunct, 
-                                     void * pSizeFunct, 
                                      const AxiscChar * pName, 
                                      const AxiscChar * pNamespace) 
 {
@@ -364,7 +363,7 @@ void axiscCallAddCmplxArrayParameter(AXISCHANDLE call,
     
     try
     {
-        c->addCmplxArrayParameter((Axis_Array*)pArray,pSZFunct,pDelFunct,pSizeFunct,pName,pNamespace);
+        c->addCmplxArrayParameter((Axis_Array*)pArray,pSZFunct,pDelFunct,pName,pNamespace);
     }
     catch ( AxisException& e  )
     {
@@ -1819,7 +1818,6 @@ Axisc_Array* axiscCallGetCmplxArray(AXISCHANDLE call,
                                     void * pDZFunct, 
                                     void * pCreFunct, 
                                     void * pDelFunct, 
-                                    void * pSizeFunct, 
                                     const AxiscChar * pName, 
                                     const AxiscChar * pNamespace) 
 {
@@ -1836,8 +1834,7 @@ Axisc_Array* axiscCallGetCmplxArray(AXISCHANDLE call,
     		ObjArray.set(pArray->m_Array, pArray->m_Size, (XSDTYPE)pArray->m_Type);
         
     	pObjArray = c->getCmplxArray(&ObjArray, 
-    	                             pDZFunct, pCreFunct,pDelFunct,pSizeFunct, 
-    	                             pName, pNamespace); 
+    	                             pDZFunct, pCreFunct,pDelFunct, pName, pNamespace); 
     	                             
     	return AxisObjectConverter::cppArrayToC(pObjArray, pArray, false);
     }

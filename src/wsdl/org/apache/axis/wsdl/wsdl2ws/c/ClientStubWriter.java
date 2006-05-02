@@ -357,8 +357,6 @@ public class ClientStubWriter extends CFileWriter
                             + containedType
                             + ", (void*)Axis_Delete_"
                             + containedType
-                            + ", (void*) Axis_GetSize_"
-                            + containedType
                             + ", Axis_TypeName_"
                             + containedType
                             + ", Axis_URI_"
@@ -457,8 +455,6 @@ public class ClientStubWriter extends CFileWriter
                                 + containedType
                                 + ", (void*) Axis_Delete_"
                                 + containedType
-                                + ", (void*) Axis_GetSize_"
-                                + containedType
                                 + ", \""
                                 + currentType.getParamName()
                                 + "\", Axis_URI_"
@@ -541,8 +537,6 @@ public class ClientStubWriter extends CFileWriter
                                 + containedType
                                 + ", (void*) Axis_Delete_"
                                 + containedType
-                                + ", (void*) Axis_GetSize_"
-                                + containedType
                                 + ", \""
                                 + returntype.getParamName()
                                 + "\", 0);\n");
@@ -624,8 +618,7 @@ public class ClientStubWriter extends CFileWriter
                 writer.write("extern void Axis_Delete_" + typeName + "("
                         + typeName + "* param, int nSize);\n");
                 writer.write("extern int Axis_Serialize_" + typeName + "("
-                        + typeName + "* param, IWrapperSoapSerializer* pSZ, bool bArray);\n");
-                writer.write("extern int Axis_GetSize_" + typeName + "(void);\n\n");
+                        + typeName + "* param, IWrapperSoapSerializer* pSZ, bool bArray);\n\n");
             }
         }
         catch (IOException e)

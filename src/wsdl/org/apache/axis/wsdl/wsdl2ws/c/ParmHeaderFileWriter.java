@@ -384,6 +384,17 @@ public class ParmHeaderFileWriter extends ParamWriter
             }
             
             Iterator itr = typeSet.iterator();
+            
+            if (itr.hasNext())
+            {
+                writer.write("\n");
+                writer.write("/* ************************************************************ */\n");
+                writer.write("/* --- Functions to create/delete, serialize/deserialize    --- */\n");
+                writer.write("/* --- custom types                                         --- */\n");
+                writer.write("/* ************************************************************ */\n");
+                writer.write("\n");                
+            }
+            
             while (itr.hasNext())
             {
                 typeName = itr.next().toString();
@@ -393,8 +404,7 @@ public class ParmHeaderFileWriter extends ParamWriter
                 this.writer.write("extern void Axis_Delete_" + typeName
                              + "(" + typeName + "* param, int nSize);\n");
                 this.writer.write("extern int Axis_Serialize_" + typeName
-                             + "(" + typeName + "* param, AXISCHANDLE pSZ, AxiscBool bArray);\n");
-                this.writer.write("extern int Axis_GetSize_" + typeName + "(void);\n\n");
+                             + "(" + typeName + "* param, AXISCHANDLE pSZ, AxiscBool bArray);\n\n");
             }
         }
         catch (IOException e)
@@ -446,7 +456,7 @@ public class ParmHeaderFileWriter extends ParamWriter
 
             writer.write("\n");
             //Local name and the URI for the type
-            writer.write("/*Local name and the URI for the type*/\n");
+            writer.write("/* Local name and the URI for the type */\n");
             writer.write("static const char* Axis_URI_" + classname + " = \""
                     + type.getName().getNamespaceURI() + "\";\n");
             writer.write("static const char* Axis_TypeName_" + classname

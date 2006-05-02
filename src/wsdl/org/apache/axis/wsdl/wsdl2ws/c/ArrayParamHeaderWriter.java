@@ -138,6 +138,12 @@ public class ArrayParamHeaderWriter extends ParamWriter
     {
         try
         {
+            writer.write("\n");
+            writer.write("/* ************************************************************ */\n");
+            writer.write("/* --- Function to create custom type                       --- */\n");
+            writer.write("/* ************************************************************ */\n");
+            writer.write("\n");                
+
             this.writer.write("extern void* Axis_Create_" + classname + "(int nSize);\n");
         }
         catch (IOException e)

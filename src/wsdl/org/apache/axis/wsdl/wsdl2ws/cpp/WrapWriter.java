@@ -458,9 +458,7 @@ public class WrapWriter extends CPPClassWriter
                                 + containedType
                                 + ", (void*)Axis_Delete_"
                                 + containedType
-                                + ",\n\t\t(void*)Axis_GetSize_"
-                                + containedType
-                                + ", \""
+                                + ",\n\t\t \""
                                 + parameterName
                                 + "\", Axis_URI_"
                                 + containedType
@@ -586,8 +584,6 @@ public class WrapWriter extends CPPClassWriter
                                 + "(void*) Axis_Serialize_"
                                 + containedType
                                 + ", (void*) Axis_Delete_"
-                                + containedType
-                                + ", (void*) Axis_GetSize_"
                                 + containedType
                                 + ", \""
                                 + methodName
@@ -719,8 +715,6 @@ public class WrapWriter extends CPPClassWriter
                                         + "(void*) Axis_Serialize_"
                                         + containedType
                                         + ", (void*) Axis_Delete_"
-                                        + containedType
-                                        + ", (void*) Axis_GetSize_"
                                         + containedType
                                         + ", \""
                                         + returnParamName
@@ -904,8 +898,7 @@ public class WrapWriter extends CPPClassWriter
                 writer.write("extern void Axis_Delete_" + typeName
                         + "(" + typeName + "* param, int nSize=0);\n");
                 writer.write("extern int Axis_Serialize_" + typeName
-                        + "(" + typeName + "* param, IWrapperSoapSerializer* pSZ, bool bArray = false);\n");
-                writer.write("extern int Axis_GetSize_" + typeName + "();\n\n");
+                        + "(" + typeName + "* param, IWrapperSoapSerializer* pSZ, bool bArray = false);\n\n");
             }
         }
         catch (IOException e)

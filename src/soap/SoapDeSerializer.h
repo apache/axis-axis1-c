@@ -116,7 +116,7 @@ public:
      * Note:  returned Axis_Array object is the same object as passed in to this
      * method. */
     Axis_Array* AXISCALL getCmplxArray(Axis_Array* pArray, void* pDZFunct, void* pCreFunct, 
-        void* pDelFunct, void* pSizeFunct, const AxisChar* pName, 
+        void* pDelFunct, const AxisChar* pName, 
         const AxisChar* pNamespace);
     /* Method used by wrappers to get a deserialized Array of basic types */
     Axis_Array* AXISCALL getBasicArray(XSDTYPE nType, const AxisChar* pName, 
@@ -314,8 +314,6 @@ public:
     xsd__duration * AXISCALL getAttributeAsDuration(const AxisChar* pName, 
         const AxisChar* pNamespace);
     
-/*    void* CreateArray(XSDTYPE nType, int nSize); */
-/*    void DeleteArray(Axis_Array* pArray , XSDTYPE nType); */
     void setStyle(AXIS_BINDING_STYLE nStyle){ m_nStyle = nStyle;};
     AXIS_BINDING_STYLE getStyle(){return m_nStyle;};    
     XSDTYPE getXSDType(const AnyElement* pElement);
@@ -362,8 +360,8 @@ private:
     xsd__hexBinary decodeFromHexBinary(const AxisChar* pValue);
     void deserializeLiteralArray (Axis_Array* pArray, IAnySimpleType* pSimpleType, const AxisChar* pName, const AxisChar* pNamespace);
     void deserializeEncodedArray (Axis_Array* pArray, IAnySimpleType* pSimpleType, const AxisChar* pName, const AxisChar* pNamespace, int size);
-	void deserializeLiteralComplexArray(Axis_Array * pArray, void *pDZFunct, void *pCreFunct, void *pDelFunct, void* pSizeFunct, const AxisChar * pName, const AxisChar * pNamespace);
-	void deserializeEncodedComplexArray(Axis_Array * pArray, void *pDZFunct, void *pCreFunct, void *pDelFunct, void* pSizeFunct, const AxisChar * pName, const AxisChar * pNamespace, int size);
+	void deserializeLiteralComplexArray(Axis_Array * pArray, void *pDZFunct, void *pCreFunct, void *pDelFunct,  const AxisChar * pName, const AxisChar * pNamespace);
+	void deserializeEncodedComplexArray(Axis_Array * pArray, void *pDZFunct, void *pCreFunct, void *pDelFunct, const AxisChar * pName, const AxisChar * pNamespace, int size);
 
 	LONGLONG strtoll(const char *);
 };

@@ -313,21 +313,6 @@ private:
 			TRACETYPE_POINTER, 1, (void*)&(arr)); \
 }
 
-#define TRACE_OBJECT_SIZE_FUNCT_ENTRY(funct) \
-{ \
-	if (axiscpp::AxisTrace::isTraceOn()) \
-	{ \
-		axiscpp::AxisTrace::traceEntry(NULL, "AXIS_OBJECT_SIZE_FUNCT", (void*)(funct), 0); \
-	} \
-}
-
-#define TRACE_OBJECT_SIZE_FUNCT_EXIT(funct, size) \
-{ \
-	if (axiscpp::AxisTrace::isTraceOn()) \
-		axiscpp::AxisTrace::traceExit(NULL, "AXIS_OBJECT_SIZE_FUNCT", (void*)(funct), 1, \
-			TRACETYPE_INT, 1, (void*)&(size)); \
-}
-
 #define TRACE_OBJECT_DELETE_FUNCT_ENTRY(funct, arr, size) \
 { \
 	if (axiscpp::AxisTrace::isTraceOn()) \
@@ -389,8 +374,6 @@ private:
 #else
 #define TRACE_OBJECT_CREATE_FUNCT_ENTRY(funct, size)
 #define TRACE_OBJECT_CREATE_FUNCT_EXIT(funct, arr)
-#define TRACE_OBJECT_SIZE_FUNCT_ENTRY(funct)
-#define TRACE_OBJECT_SIZE_FUNCT_EXIT(funct, size)
 #define TRACE_OBJECT_DELETE_FUNCT_ENTRY(funct, arr, size)
 #define TRACE_OBJECT_DELETE_FUNCT_EXIT(funct)
 #define TRACE_DESERIALIZE_FUNCT_ENTRY(funct, item, that)

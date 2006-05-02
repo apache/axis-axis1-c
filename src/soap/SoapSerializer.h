@@ -129,7 +129,7 @@ public:
 
     /* for arrays of complex types */
     int AXISCALL addOutputCmplxArrayParam(const Axis_Array* pArray, 
-        void* pSZFunct, void* pDelFunct, void* pSizeFunct, 
+        void* pSZFunct, void* pDelFunct, 
         const AxisChar* pName, const AxisChar* pNamespace);
 
     /* for complex types */
@@ -142,7 +142,7 @@ public:
     int AXISCALL addFaultDetail( const AxisChar * pDetail);
 
     int AXISCALL serializeCmplxArray(const Axis_Array* pArray, void* pSZFunct,
-        void* pDelFunct, void* pSizeFunct, const AxisChar* pName, 
+        void* pDelFunct, const AxisChar* pName, 
         const AxisChar* pNamespace);
 
     int AXISCALL serializeBasicArray(const Axis_Array* pArray, XSDTYPE nType, 
@@ -163,8 +163,7 @@ public:
 
 private:
     ArrayBean* makeArrayBean(XSDTYPE nType, void** pArray);
-    ArrayBean* makeArrayBean(void** pObject, void* pSZFunct, void* pDelFunct, 
-        void* pSizeFunct);
+    ArrayBean* makeArrayBean(void** pObject, void* pSZFunct, void* pDelFunct);
     int setSoapHeader(SoapHeader* pSoapHeader);
 
 public: /* Basic Type Serializing methods */

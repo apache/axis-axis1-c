@@ -160,12 +160,11 @@ void Call::addBasicArrayParameter( Axis_Array *        pArray,
 void Call::addCmplxArrayParameter( Axis_Array *        pArray,
                                    void *            pSZFunct,
                                    void *            pDelFunct,
-                                   void *            pSizeFunct,
                                    const AxisChar *    pName,
                                    const AxisChar *    pNamespace)
 {
     m_nStatus = m_pIWSSZ->addOutputCmplxArrayParam( pArray,
-                                                    pSZFunct, pDelFunct, pSizeFunct,
+                                                    pSZFunct, pDelFunct,
                                                     pName, pNamespace);
 }
 
@@ -457,12 +456,11 @@ Axis_Array* Call::getCmplxArray (Axis_Array * pArray,
                                  void* pDZFunct, 
                                  void* pCreFunct, 
                                  void* pDelFunct, 
-                                 void* pSizeFunct, 
                                  const AxisChar* pName, 
                                  const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getCmplxArray (pArray, 
-                                    pDZFunct, pCreFunct, pDelFunct, pSizeFunct,
+                                    pDZFunct, pCreFunct, pDelFunct,
                                     pName, pNamespace);
 }
 

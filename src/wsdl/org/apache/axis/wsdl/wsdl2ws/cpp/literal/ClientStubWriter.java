@@ -541,8 +541,7 @@ public class ClientStubWriter
                         writer.write ("Value" + i +
                                   ", (void*)Axis_Serialize_" + containedType +
                                   ", (void*)Axis_Delete_" + containedType +
-                                  ", (void*) Axis_GetSize_" + containedType + ", \"" +
-                                  parameterName + "\"" + ", ");
+                                  ", \"" + parameterName + "\"" + ", ");
                         
                         if (namespace.length () == 0)
                             writer.write ("NULL");
@@ -677,7 +676,6 @@ public class ClientStubWriter
                               + ", (void*) Axis_DeSerialize_" + containedType
                               + ", (void*) Axis_Create_" + containedType
                               + ", (void*) Axis_Delete_" + containedType
-                              + ", (void*) Axis_GetSize_" + containedType
                               + ", \"" + currentType.getElementNameAsString () 
                               + "\", Axis_URI_" + containedType + ");\n");
                         writer.write("\t\t\t}\n");
@@ -690,7 +688,6 @@ public class ClientStubWriter
                               + ", (void*) Axis_DeSerialize_" + containedType
                               + ", (void*) Axis_Create_" + containedType
                               + ", (void*) Axis_Delete_" + containedType
-                              + ", (void*) Axis_GetSize_" + containedType
                               + ", \"" + currentType.getElementNameAsString () 
                               + "\", Axis_URI_" + containedType + ");\n");
                         writer.write("\t\t\t\tdelete pTemp" + i + ";\n");
@@ -821,7 +818,6 @@ public class ClientStubWriter
                         + containedType 
                         + ", (void*) Axis_Create_" + containedType
                           + ", (void*) Axis_Delete_" + containedType
-                          + ", (void*) Axis_GetSize_" + containedType
                           + ", \"" + returntype.getElementNameAsString ()
                           + "\", Axis_URI_" + containedType + ");\n");
             }
@@ -1149,8 +1145,7 @@ public class ClientStubWriter
                 writer.write ("extern void Axis_Delete_" + typeName + "(" +
                           typeName + "* param, int nSize=0);\n");
                 writer.write ("extern int Axis_Serialize_" + typeName + "(" +
-                          typeName + "* param, IWrapperSoapSerializer* pSZ, bool bArray = false);\n");
-                writer.write ("extern int Axis_GetSize_" + typeName + "();\n\n");
+                          typeName + "* param, IWrapperSoapSerializer* pSZ, bool bArray = false);\n\n");
             }
         }
         catch (IOException e)

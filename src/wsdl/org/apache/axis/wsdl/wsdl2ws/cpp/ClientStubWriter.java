@@ -441,7 +441,6 @@ public class ClientStubWriter extends CPPClassWriter
                     writer.write("Value" + i
                             + ",\n\t\t\t\t\t\t\t\t\t\t(void *) Axis_Serialize_" + containedType
                             + ",\n\t\t\t\t\t\t\t\t\t\t(void *) Axis_Delete_" + containedType
-                            + ",\n\t\t\t\t\t\t\t\t\t\t(void *) Axis_GetSize_" + containedType
                             + ",\n\t\t\t\t\t\t\t\t\t\t\"" + ((ParameterInfo) paramsB.get(i)).getParamName() + "\""
                             + ",\n\t\t\t\t\t\t\t\t\t\tAxis_URI_" + containedType);
                 }
@@ -579,7 +578,6 @@ public class ClientStubWriter extends CPPClassWriter
 
         			    writer.write (",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t(void *) Axis_Create_" + containedType
         					  + ",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t(void *) Axis_Delete_" + containedType
-        					  + ",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t(void *) Axis_GetSize_" + containedType
         					  + ",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"" +currentType.getElementNameAsString() +
         					  "\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tAxis_URI_" + containedType +
         					  ");\n");
@@ -592,7 +590,6 @@ public class ClientStubWriter extends CPPClassWriter
         						 + containedType);
         			    writer.write (",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t(void *) Axis_Create_" + containedType
         					  + ",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t(void *) Axis_Delete_" + containedType
-        					  + ",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t(void *) Axis_GetSize_" + containedType
         					  + ",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"" + currentType.getElementNameAsString() +
         					  "\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tAxis_URI_" + containedType +
         					  ");\n");
@@ -711,7 +708,6 @@ public class ClientStubWriter extends CPPClassWriter
                 //damitha
                 writer.write(",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t(void *) Axis_Create_" + containedType
                         + ",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t(void *) Axis_Delete_" + containedType
-                        + ",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t(void *) Axis_GetSize_" + containedType
                         + ",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"" + paramTagName
                         + "\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tAxis_URI_" + containedType + ");\n");			
             }
@@ -969,8 +965,7 @@ public class ClientStubWriter extends CPPClassWriter
                         + typeName  + "* param, int nSize=0);\n");
                 writer.write("extern int Axis_Serialize_" + typeName
                                 + "(" + typeName
-                                + "* param, IWrapperSoapSerializer* pSZ, bool bArray = false);\n");
-                writer.write("extern int Axis_GetSize_" + typeName + "();\n\n");
+                                + "* param, IWrapperSoapSerializer* pSZ, bool bArray = false);\n\n");
             }
         } catch (IOException e)
         {

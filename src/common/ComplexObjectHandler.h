@@ -37,7 +37,6 @@ public:
     AXIS_OBJECT_CREATE_FUNCT pCreFunct;
     AXIS_OBJECT_DELETE_FUNCT pDelFunct;
     AXIS_DESERIALIZE_FUNCT pDZFunct;
-    AXIS_OBJECT_SIZE_FUNCT pSizeFunct;
     AxisString m_TypeName;
     AxisString m_URI;
 public:

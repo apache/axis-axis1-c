@@ -231,8 +231,7 @@ int Param::setArrayElements (void* pElements)
 // following function is called to set array of user types.
 int Param::setArrayElements (void* pObject, 
                              AXIS_DESERIALIZE_FUNCT pDZFunct,
-                             AXIS_OBJECT_DELETE_FUNCT pDelFunct, 
-                             AXIS_OBJECT_SIZE_FUNCT pSizeFunct)
+                             AXIS_OBJECT_DELETE_FUNCT pDelFunct)
 {
     if (m_Type != XSD_ARRAY)
         return AXIS_FAIL;
@@ -244,7 +243,6 @@ int Param::setArrayElements (void* pObject,
             m_Value.pArray->m_value.cta = new ComplexObjectHandler;
             m_Value.pArray->m_value.cta->pDZFunct = pDZFunct;
             m_Value.pArray->m_value.cta->pDelFunct = pDelFunct;
-            m_Value.pArray->m_value.cta->pSizeFunct = pSizeFunct;
             m_Value.pArray->m_value.cta->pObject = pObject;
             return AXIS_SUCCESS;
         }
@@ -286,7 +284,6 @@ void ComplexObjectHandler::init ()
     pSZFunct = NULL;
     pDelFunct = NULL;
     pDZFunct = NULL;
-    pSizeFunct = NULL;
     m_TypeName = "";
     m_URI = "";
 }

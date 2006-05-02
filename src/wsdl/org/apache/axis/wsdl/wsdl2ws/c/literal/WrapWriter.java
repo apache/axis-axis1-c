@@ -295,8 +295,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.c.WrapWriter
                             + containedType
                             + "\n\t\t, (void*)Axis_Create_" + containedType
                             + ", (void*)Axis_Delete_" + containedType
-                            + "\n\t\t, (void*)Axis_GetSize_" + containedType
-                            + ", \""
+                            + "\n\t\t, \""
                             + elementName
                             + "\", Axis_URI_" + containedType
                             + ");\n");
@@ -382,7 +381,6 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.c.WrapWriter
                         "\treturn SZ._functions->addOutputCmplxArrayParam(SZ._object, (Axis_Array*)(&ret), (void*) Axis_Serialize_"
                             + containedType
                             + ", (void*) Axis_Delete_" + containedType
-                            + ", (void*) Axis_GetSize_" + containedType
                             + ", \""
                             + returnParamName
                             + "\", Axis_URI_" + containedType
@@ -476,7 +474,6 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.c.WrapWriter
                                 + i + "),"
                                 + "(void*) Axis_Serialize_" + containedType
                                 + ", (void*) Axis_Delete_" + containedType
-                                + ", (void*) Axis_GetSize_" + containedType
                                 + ", \""
                                 + returnParamName
                                 + "\", Axis_URI_"  + containedType
@@ -562,8 +559,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.c.WrapWriter
                         + "(" + typeName + "* param, int nSize);\n");
                 writer.write(
                     "extern int Axis_Serialize_" + typeName
-                        + "(" + typeName + "* param, IWrapperSoapSerializer* pSZ, bool bArray);\n");
-                writer.write("extern int Axis_GetSize_" + typeName + "(void);\n\n");
+                        + "(" + typeName + "* param, IWrapperSoapSerializer* pSZ, bool bArray);\n\n");
             }
         }
         catch (IOException e)
