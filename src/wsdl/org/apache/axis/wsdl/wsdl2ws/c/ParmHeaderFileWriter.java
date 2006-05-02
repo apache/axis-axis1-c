@@ -73,12 +73,19 @@ public class ParmHeaderFileWriter extends ParamWriter
             else
             {
                 writePreprocessorStatements();
+
                 this.writer.write("\n#ifdef __cplusplus\n extern \"C\" {\n#endif\n\n");
+
+                writer.write("\n");
+                writer.write("/* ************************************************************ */\n");
+                writer.write("/* --- Custom type                                          --- */\n");
+                writer.write("/* ************************************************************ */\n");
+                writer.write("\n");                
+                
                 this.writer.write("typedef struct " + classname + "Tag {\n");
-                this.writer.write("\n");
                 writeAttributes();
-                this.writer.write("\n");
                 this.writer.write("} " + classname + ";\n\n");
+                
                 writeFunctionPrototypes();
                 this.writer.write("\n#ifdef __cplusplus\n }\n#endif\n");
             }
@@ -234,7 +241,7 @@ public class ParmHeaderFileWriter extends ParamWriter
         try
         {
             for (int i = 0; i < attribs.length; i++)
-            {
+            {  
                 attribs[i].setParamName( CUtils.sanitiseAttributeName( classname, attribs[i].getParamName()));
                 
                 if (isElementNillable(i) 
@@ -245,11 +252,10 @@ public class ParmHeaderFileWriter extends ParamWriter
                     if(attribs[i].isAnyType())
                     {
                         anyCounter += 1;
-                        writer.write(
-                                  getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-                                + " * " + attribs[i].getParamName()
-                                + Integer.toString(anyCounter)
-                                + ";\n");
+                        writer.write("\t"
+                                +  getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+                                + " *  " + attribs[i].getParamName()
+                                + Integer.toString(anyCounter) + ";\n");
                     }
                     else if( attribs[i].isArray())
                     {
@@ -257,50 +263,45 @@ public class ParmHeaderFileWriter extends ParamWriter
                         if (!paramName.endsWith("*"))
                             paramName += " *";
 
-                        writer.write(paramName + " " + attribs[i].getParamName() + ";\n");
+                        writer.write("\t" + paramName + "  " + attribs[i].getParamName() + ";\n");
                     }
                     else if(attribs[i].getChoiceElement() && !isElementNillable(i))
-                        writer.write(
-                               getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-                             + " " + attribs[i].getParamName()
-                             + ";\n");
+                        writer.write("\t"
+                             + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+                             + "  " + attribs[i].getParamName() + ";\n");
                     else
-                        writer.write(
-                                   getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-                                 + " * " + attribs[i].getParamName()
-                                 + ";\n");
+                        writer.write("\t"
+                                 + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+                                 + " *  " + attribs[i].getParamName() + ";\n");
                 } 
                 else if(attribs[i].getAllElement() || attribs[i].getChoiceElement() )
                 {
-                    writer.write(
-                               getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-                             + " " + attribs[i].getParamName()
-                             + ";\n");
+                    writer.write("\t"
+                             + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+                             + "  " + attribs[i].getParamName() + ";\n");
                 }
                 else if(attribs[i].isAnyType())
                 {
                     anyCounter += 1;
-                    writer.write(
-                              getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-                            + " " + attribs[i].getParamName()
-                            + Integer.toString(anyCounter)
-                            + ";\n");
+                    writer.write("\t"
+                            + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+                            + "  " + attribs[i].getParamName()
+                            + Integer.toString(anyCounter) + ";\n");
                 }                   
                 else
                 {
-                    writer.write(
-                                  getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-                                + " " + attribs[i].getParamNameWithoutSymbols()
-                                + ";\n");
+                    writer.write("\t"
+                                + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+                                + "  " + attribs[i].getParamNameWithoutSymbols() + ";\n");
                 }
             }
             
             if (extensionBaseAttrib != null &&
                 getCorrectParmNameConsideringArraysAndComplexTypes(extensionBaseAttrib) != null)
             {
-                writer.write(
-                               getCorrectParmNameConsideringArraysAndComplexTypes(extensionBaseAttrib)
-                             + " "
+                writer.write("\t"
+                             + getCorrectParmNameConsideringArraysAndComplexTypes(extensionBaseAttrib)
+                             + "  "
                              + extensionBaseAttrib.getParamNameWithoutSymbols() + ";\n");
             }            
         }
@@ -390,7 +391,7 @@ public class ParmHeaderFileWriter extends ParamWriter
                 writer.write("\n");
                 writer.write("/* ************************************************************ */\n");
                 writer.write("/* --- Functions to create/delete, serialize/deserialize    --- */\n");
-                writer.write("/* --- custom types                                         --- */\n");
+                writer.write("/* --- custom type                                          --- */\n");
                 writer.write("/* ************************************************************ */\n");
                 writer.write("\n");                
             }

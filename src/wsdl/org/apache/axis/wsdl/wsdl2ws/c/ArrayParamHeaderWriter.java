@@ -120,11 +120,24 @@ public class ArrayParamHeaderWriter extends ParamWriter
     {
         try
         {
-            writer.write("typedef struct " + classname + "Tag {\n");
-            writer.write("\tstruct " + attribs[0].getTypeName()
-                        + "Tag ** m_Array;\n\tint m_Size;\n\tAXISC_XSDTYPE m_Type;\n} "
-                        + classname + ";\n");   
             writer.write("\n");
+            writer.write("/* ************************************************************ */\n");
+            writer.write("/* --- Array type                                           --- */\n");
+            writer.write("/* ************************************************************ */\n");
+            writer.write("\n");                
+            
+            writer.write("typedef struct " + classname + "Tag {\n"
+                       + "   struct " + attribs[0].getTypeName() + "Tag **   m_Array;\n"
+                       + "   int   m_Size;\n"
+                       + "   AXISC_XSDTYPE   m_Type;\n"
+                       + "} " + classname + ";\n"); 
+            
+            writer.write("\n");
+            writer.write("/* ************************************************************ */\n");
+            writer.write("/* --- Functions to create/delete array type                --- */\n");
+            writer.write("/* ************************************************************ */\n");
+            writer.write("\n");                
+
             this.writeConstructors();
             this.writeDestructors();
         }
@@ -138,12 +151,6 @@ public class ArrayParamHeaderWriter extends ParamWriter
     {
         try
         {
-            writer.write("\n");
-            writer.write("/* ************************************************************ */\n");
-            writer.write("/* --- Function to create custom type                       --- */\n");
-            writer.write("/* ************************************************************ */\n");
-            writer.write("\n");                
-
             this.writer.write("extern void* Axis_Create_" + classname + "(int nSize);\n");
         }
         catch (IOException e)
