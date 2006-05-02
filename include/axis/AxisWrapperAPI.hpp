@@ -42,17 +42,20 @@ typedef int (* AXIS_DESERIALIZE_FUNCT)(void*, void*);
 
 /**
  * @fn AXIS_OBJECT_CREATE_FUNCT
- * Function used to create a custom type. bArray is true if array of 
- * objects to be created. Then nSize is the size of that array.
+ * Function used to create a custom type. If nSize is 0, a singleton object
+ * is created; if nSize is greater than 0, a c-type array of nSize pointers to 
+ * objects are created and returned.
  */
-typedef void* (* AXIS_OBJECT_CREATE_FUNCT)();
+typedef void* (* AXIS_OBJECT_CREATE_FUNCT)(int nSize);
 
 /**
  * @fn AXIS_OBJECT_DELETE_FUNCT
- * Function used to delete a custom type. bArray is true if void* is a 
- * pointer to an array. Then nSize is the size of that array.
+ * Function used to delete a custom type. If nSize is 0, void * points to 
+ * a singleton object; if nSize is greater than 0, then void* points to 
+ * a c-type array of nSize pointers to objects that are to be deleted. 
+ * The function will also delete the c-type array.
  */
-typedef void (* AXIS_OBJECT_DELETE_FUNCT)(void*, bool bArray, int nSize);
+typedef void (* AXIS_OBJECT_DELETE_FUNCT)(void*, int nSize);
 
 /**
  * @fn AXIS_SERIALIZE_FUNCT

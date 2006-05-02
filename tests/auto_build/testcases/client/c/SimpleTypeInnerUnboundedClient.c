@@ -47,7 +47,7 @@ int main(int argc, char* argv[])
 
     ws = get_SimpleTypeInnerUnboundedWS_stub(endpoint);
 
-    input =  (Type1*)Axis_Create_Type1();
+    input =  (Type1*)Axis_Create_Type1(0);
 
     input->enum_int=axiscAxisNew(XSDC_INT, 0);
     *input->enum_int = ENUMTYPEINT_1;

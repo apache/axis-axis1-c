@@ -296,12 +296,14 @@ private:
 };
 
 #ifdef ENABLE_AXISTRACE
-#define TRACE_OBJECT_CREATE_FUNCT_ENTRY(funct) \
+#define TRACE_OBJECT_CREATE_FUNCT_ENTRY(funct, size) \
 { \
 	if (axiscpp::AxisTrace::isTraceOn()) \
 	{ \
-		axiscpp::AxisTrace::traceEntry(NULL, "AXIS_OBJECT_CREATE_FUNCT", (void*)(funct), 0); \
-	} \
+        int traceSize = size; \
+		axiscpp::AxisTrace::traceEntry(NULL, "AXIS_OBJECT_CREATE_FUNCT", (void*)(funct), 1, \
+            TRACETYPE_INT, 1, (void*)&traceSize); \
+    } \
 }
 
 #define TRACE_OBJECT_CREATE_FUNCT_EXIT(funct, arr) \
@@ -326,16 +328,14 @@ private:
 			TRACETYPE_INT, 1, (void*)&(size)); \
 }
 
-#define TRACE_OBJECT_DELETE_FUNCT_ENTRY(funct, arr, bArr, size) \
+#define TRACE_OBJECT_DELETE_FUNCT_ENTRY(funct, arr, size) \
 { \
 	if (axiscpp::AxisTrace::isTraceOn()) \
 	{ \
 		void *traceArr = arr; \
-		bool traceBArr = bArr; \
 		int traceSize = size; \
-		axiscpp::AxisTrace::traceEntry(NULL, "AXIS_OBJECT_DELETE_FUNCT", (void*)(funct), 3, \
+		axiscpp::AxisTrace::traceEntry(NULL, "AXIS_OBJECT_DELETE_FUNCT", (void*)(funct), 2, \
 			TRACETYPE_POINTER, 1, (void*)&traceArr, \
-			TRACETYPE_BOOL, 0, (void*)&traceBArr, \
 			TRACETYPE_INT, 0, (void*)&traceSize); \
 	} \
 }
@@ -387,11 +387,11 @@ private:
 }
 
 #else
-#define TRACE_OBJECT_CREATE_FUNCT_ENTRY(funct)
+#define TRACE_OBJECT_CREATE_FUNCT_ENTRY(funct, size)
 #define TRACE_OBJECT_CREATE_FUNCT_EXIT(funct, arr)
 #define TRACE_OBJECT_SIZE_FUNCT_ENTRY(funct)
 #define TRACE_OBJECT_SIZE_FUNCT_EXIT(funct, size)
-#define TRACE_OBJECT_DELETE_FUNCT_ENTRY(funct, arr, bArr, size)
+#define TRACE_OBJECT_DELETE_FUNCT_ENTRY(funct, arr, size)
 #define TRACE_OBJECT_DELETE_FUNCT_EXIT(funct)
 #define TRACE_DESERIALIZE_FUNCT_ENTRY(funct, item, that)
 #define TRACE_DESERIALIZE_FUNCT_EXIT(funct, status)

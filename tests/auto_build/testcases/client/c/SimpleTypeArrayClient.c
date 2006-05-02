@@ -48,7 +48,7 @@ int main(int argc, char* argv[])
     array_input.m_Size  = 100;
     array_input.m_Type  = XSDC_INT;
 
-    input = Axis_Create_Type();
+    input = Axis_Create_Type(0);
     input->item = &array_input;
 
     ws = get_SimpleTypeArrayWS_stub(endpoint);
@@ -67,8 +67,8 @@ int main(int argc, char* argv[])
 
     input->item = NULL;
 
-    Axis_Delete_Type(input,0,0);
-    Axis_Delete_Type(output,0,0);
+    Axis_Delete_Type(input,0);
+    Axis_Delete_Type(output,0);
 
     destroy_SimpleTypeArrayWS_stub(ws);
 

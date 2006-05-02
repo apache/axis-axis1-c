@@ -41,7 +41,7 @@ int main(int argc, char* argv[])
 
     ws = get_RecurseTypesWS_stub(endpoint);
 
-    input = (Type1 *)Axis_Create_Type1();
+    input = (Type1 *)Axis_Create_Type1(0);
     input->att_kind = axiscAxisNew(XSDC_STRING,strlen(Kind_CHEQUE) + 1);
     strcpy(input->att_kind, Kind_CHEQUE);
     input->kind = axiscAxisNew(XSDC_STRING,strlen("Check In") + 1);
@@ -52,7 +52,7 @@ int main(int argc, char* argv[])
 
     for ( i = 0; i < 10; i++ )
     {
-        array[i]=Axis_Create_Type1();
+        array[i]=Axis_Create_Type1(0);
         array[i]->kind = axiscAxisNew(XSDC_STRING,strlen("Sample") + 1);
         strcpy(array[i]->kind, "Sample");
         array[i]->index = 0;
@@ -79,7 +79,7 @@ int main(int argc, char* argv[])
         for ( i = 0; i < outputSize; i++ )
             printf("\tKind [%d] = %s\n", i, outArray[i]->kind);
 
-        Axis_Delete_Type1((Type1 *)array, 1, 10);
+        Axis_Delete_Type1((Type1 *)array, 10);
 
         /* TODO need to free resources */
 

@@ -141,7 +141,7 @@ public class ArrayParamWriter extends ParamWriter
     {
         try
         {
-            writer.write("extern void* Axis_Create_" + classname + "(void)\n");
+            writer.write("extern void* Axis_Create_" + classname + "(int nSize)\n");
             writer.write("{\n");
             
             // Begin function body
@@ -183,7 +183,7 @@ public class ArrayParamWriter extends ParamWriter
             writer.write("\t/* Reclaim memory resources of array elements, if it exists */\n");
             writer.write("\tif (param->m_Array && param->m_Size > 0)\n");
             writer.write("\t\tAxis_Delete_" +  attribs[0].getTypeName() 
-                    + "((" + attribs[0].getTypeName() + " *)param->m_Array, 1, param->m_Size);\n");
+                    + "((" + attribs[0].getTypeName() + " *)param->m_Array, param->m_Size);\n");
             writer.write("\n");
             
             writer.write("\t/* Reclaim array data type memory resources */\n");

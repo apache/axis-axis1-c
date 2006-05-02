@@ -781,8 +781,8 @@ SoapDeSerializer::getCmplxObject (void *pDZFunct,
         if (!m_pNode)
             return NULL;
         /* type  can be checked here */
-        TRACE_OBJECT_CREATE_FUNCT_ENTRY(pCreFunct);
-        void *pObject = ((AXIS_OBJECT_CREATE_FUNCT) pCreFunct) ();
+        TRACE_OBJECT_CREATE_FUNCT_ENTRY(pCreFunct, 0);
+        void *pObject = ((AXIS_OBJECT_CREATE_FUNCT) pCreFunct) (0);
         TRACE_OBJECT_CREATE_FUNCT_EXIT(pCreFunct, pObject);
         if (pObject && pDZFunct)
         {
@@ -808,8 +808,8 @@ SoapDeSerializer::getCmplxObject (void *pDZFunct,
             }
             else
             {
-                TRACE_OBJECT_DELETE_FUNCT_ENTRY(pDelFunct, pObject, false, 0);
-                ((AXIS_OBJECT_DELETE_FUNCT) pDelFunct) (pObject, false, 0);
+                TRACE_OBJECT_DELETE_FUNCT_ENTRY(pDelFunct, pObject, 0);
+                ((AXIS_OBJECT_DELETE_FUNCT) pDelFunct) (pObject, 0);
                 TRACE_OBJECT_DELETE_FUNCT_EXIT(pDelFunct);
             }
         }
@@ -853,8 +853,8 @@ SoapDeSerializer::getCmplxObject (void *pDZFunct,
             
             m_pNode = NULL;    /* node identified and used */
     
-            TRACE_OBJECT_CREATE_FUNCT_ENTRY(pCreFunct);
-            void *pObject = ((AXIS_OBJECT_CREATE_FUNCT) pCreFunct)();
+            TRACE_OBJECT_CREATE_FUNCT_ENTRY(pCreFunct, 0);
+            void *pObject = ((AXIS_OBJECT_CREATE_FUNCT) pCreFunct)(0);
             TRACE_OBJECT_CREATE_FUNCT_EXIT(pCreFunct, pObject);
     
             if (pObject && pDZFunct)
@@ -870,8 +870,8 @@ SoapDeSerializer::getCmplxObject (void *pDZFunct,
                 }
                 else
                 {
-                    TRACE_OBJECT_DELETE_FUNCT_ENTRY(pDelFunct, pObject, false, 0);
-                    ((AXIS_OBJECT_DELETE_FUNCT) pDelFunct) (pObject, false, 0);
+                    TRACE_OBJECT_DELETE_FUNCT_ENTRY(pDelFunct, pObject, 0);
+                    ((AXIS_OBJECT_DELETE_FUNCT) pDelFunct) (pObject, 0);
                     TRACE_OBJECT_DELETE_FUNCT_EXIT(pDelFunct);
                 }
             }
@@ -946,8 +946,8 @@ SoapDeSerializer::getCmplxFaultObject (void *pDZFunct,
     if (RPC_ENCODED == m_nStyle)
     {
         /* type  can be checked here */
-        TRACE_OBJECT_CREATE_FUNCT_ENTRY(pCreFunct);
-        void *pObject = ((AXIS_OBJECT_CREATE_FUNCT) pCreFunct) ();
+        TRACE_OBJECT_CREATE_FUNCT_ENTRY(pCreFunct,0);
+        void *pObject = ((AXIS_OBJECT_CREATE_FUNCT) pCreFunct) (0);
         TRACE_OBJECT_CREATE_FUNCT_EXIT(pCreFunct, pObject);
     
         if (pObject && pDZFunct)
@@ -974,8 +974,8 @@ SoapDeSerializer::getCmplxFaultObject (void *pDZFunct,
             }
             else
             {
-                TRACE_OBJECT_DELETE_FUNCT_ENTRY(pDelFunct, pObject, false, 0);
-                ((AXIS_OBJECT_DELETE_FUNCT) pDelFunct) (pObject, false, 0);
+                TRACE_OBJECT_DELETE_FUNCT_ENTRY(pDelFunct, pObject, 0);
+                ((AXIS_OBJECT_DELETE_FUNCT) pDelFunct) (pObject, 0);
                 TRACE_OBJECT_DELETE_FUNCT_EXIT(pDelFunct);
             }
         }
@@ -1004,8 +1004,8 @@ SoapDeSerializer::getCmplxFaultObject (void *pDZFunct,
         }
         m_pNode = NULL;    /* node identified and used */
 
-        TRACE_OBJECT_CREATE_FUNCT_ENTRY(pCreFunct);
-        void *pObject = ((AXIS_OBJECT_CREATE_FUNCT) pCreFunct)();
+        TRACE_OBJECT_CREATE_FUNCT_ENTRY(pCreFunct,0);
+        void *pObject = ((AXIS_OBJECT_CREATE_FUNCT) pCreFunct)(0);
         TRACE_OBJECT_CREATE_FUNCT_EXIT(pCreFunct, pObject);
 
         if (pObject && pDZFunct)
@@ -1021,8 +1021,8 @@ SoapDeSerializer::getCmplxFaultObject (void *pDZFunct,
             }
             else
             {
-                TRACE_OBJECT_DELETE_FUNCT_ENTRY(pDelFunct, pObject, false, 0);
-                ((AXIS_OBJECT_DELETE_FUNCT) pDelFunct) (pObject, false, 0);
+                TRACE_OBJECT_DELETE_FUNCT_ENTRY(pDelFunct, pObject, 0);
+                ((AXIS_OBJECT_DELETE_FUNCT) pDelFunct) (pObject, 0);
                 TRACE_OBJECT_DELETE_FUNCT_EXIT(pDelFunct);
             }
         }

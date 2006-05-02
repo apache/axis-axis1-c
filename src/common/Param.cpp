@@ -273,8 +273,8 @@ ComplexObjectHandler::~ComplexObjectHandler ()
     {
         if (pObject && pDelFunct)
         {
-            TRACE_OBJECT_DELETE_FUNCT_ENTRY(pDelFunct, pObject, false, 0);
-            pDelFunct(pObject, false, 0);
+            TRACE_OBJECT_DELETE_FUNCT_ENTRY(pDelFunct, pObject, 0);
+            pDelFunct(pObject, 0);
             TRACE_OBJECT_DELETE_FUNCT_EXIT(pDelFunct);
         }
     }

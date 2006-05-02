@@ -46,8 +46,8 @@ ArrayBean::~ArrayBean()
             {
                 if (AxisEngine::m_bServer)
                 {
-					TRACE_OBJECT_DELETE_FUNCT_ENTRY(m_value.cta->pDelFunct, m_value.cta->pObject, true, m_nSize);
-                    m_value.cta->pDelFunct(m_value.cta->pObject, true, m_nSize);
+					TRACE_OBJECT_DELETE_FUNCT_ENTRY(m_value.cta->pDelFunct, m_value.cta->pObject,  m_nSize);
+                    m_value.cta->pDelFunct(m_value.cta->pObject, m_nSize);
 					TRACE_OBJECT_DELETE_FUNCT_EXIT(m_value.cta->pDelFunct);
                 }
                 // make sure that the ComplexObjectHandler's destructor does 

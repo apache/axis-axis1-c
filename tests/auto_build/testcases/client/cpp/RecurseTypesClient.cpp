@@ -37,8 +37,6 @@ bool parse_args_for_endpoint(int *argc, char *argv[], char **endpoint);
 void shift_args(int i, int *argc, char *argv[]);
 void setLogOptions(const char *output_filename);
 
-extern void* Axis_Create_Type1(Type1 *Obj, bool bArray = false, int nSize=0);
-
 int main(int argc, char* argv[])
 { 
   RecurseTypesWS *ws;

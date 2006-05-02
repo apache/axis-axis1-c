@@ -556,10 +556,10 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.c.WrapWriter
                     "extern int Axis_DeSerialize_" + typeName
                         + "(" + typeName + "* param, IWrapperSoapDeSerializer* pDZ);\n");
                 writer.write(
-                    "extern void* Axis_Create_" + typeName + "(void);\n");
+                    "extern void* Axis_Create_" + typeName + "(int nSize);\n");
                 writer.write(
                     "extern void Axis_Delete_" + typeName
-                        + "(" + typeName + "* param, bool bArray, int nSize);\n");
+                        + "(" + typeName + "* param, int nSize);\n");
                 writer.write(
                     "extern int Axis_Serialize_" + typeName
                         + "(" + typeName + "* param, IWrapperSoapSerializer* pSZ, bool bArray);\n");

@@ -714,7 +714,7 @@ public class BeanParamWriter extends ParamCFileWriter
         writer.write(" * This static method to allocate a " + classname + " type of object\n");
         writer.write(" */\n");
         
-        writer.write("void* Axis_Create_" + classname + "(void)\n{\n");
+        writer.write("void* Axis_Create_" + classname + "(int nSize)\n{\n");
         
         writer.write("\t" + classname + "* pTemp = (" + classname + " *)malloc(sizeof(" + classname + "));\n");
         writer.write("\tmemset(pTemp, 0, sizeof(" + classname + "));\n");
@@ -756,12 +756,12 @@ public class BeanParamWriter extends ParamCFileWriter
                 if (attribs[i].isArray())
                 {
                     writer.write("\tpTemp->" + attribs[i].getParamName() + " = "
-                            + "Axis_Create_" + attribs[i].getTypeName() + "_Array();\n");
+                            + "Axis_Create_" + attribs[i].getTypeName() + "_Array(0);\n");
                 }
                 else
                 {
                     writer.write("\tpTemp->" + attribs[i].getParamName() + " = "
-                            + "Axis_Create_" + attribs[i].getTypeName() + "();\n");                   
+                            + "Axis_Create_" + attribs[i].getTypeName() + "(0);\n");                   
                 }
             }            
         }
@@ -782,7 +782,7 @@ public class BeanParamWriter extends ParamCFileWriter
         writer.write(" */\n");
 
         writer.write("void Axis_Delete_" + classname
-                + "(" + classname + "* param, AxiscBool bArray, int nSize)\n");
+                + "(" + classname + "* param, int nSize)\n");
         
         writer.write("{\n");
         writer.write("\t/* If NULL, just return */\n");
@@ -791,19 +791,16 @@ public class BeanParamWriter extends ParamCFileWriter
         writer.write("\n");
         
         writer.write("\t/* Reclaim memory resources (recursion is used to reclaim arrays) */\n");
-        writer.write("\tif (bArray)\n");
+        writer.write("\tif (nSize > 0)\n");
         writer.write("\t{\n");
-        writer.write("\t\tif (nSize > 0)\n");
+        writer.write("\t\tint count;\n");
+        writer.write("\t\t" + classname + " **paramArray = (" + classname + " **)param;\n");
+        writer.write("\t\tfor (count = 0 ; count < nSize ; count++ )\n");
         writer.write("\t\t{\n");
-        writer.write("\t\t\tint count;\n");
-        writer.write("\t\t\t" + classname + " **paramArray = (" + classname + " **)param;\n");
-        writer.write("\t\t\tfor (count = 0 ; count < nSize ; count++ )\n");
+        writer.write("\t\t\tif (paramArray[count])\n");
         writer.write("\t\t\t{\n");
-        writer.write("\t\t\t\tif (paramArray[count])\n");
-        writer.write("\t\t\t\t{\n");
-        writer.write("\t\t\t\t\tAxis_Delete_" + classname + "(paramArray[count],0,0);\n");
-        writer.write("\t\t\t\t\tparamArray[count] = NULL;\n");
-        writer.write("\t\t\t\t}\n");
+        writer.write("\t\t\t\tAxis_Delete_" + classname + "(paramArray[count],0);\n");
+        writer.write("\t\t\t\tparamArray[count] = NULL;\n");
         writer.write("\t\t\t}\n");
         writer.write("\t\t}\n");
         writer.write("\t}\n");

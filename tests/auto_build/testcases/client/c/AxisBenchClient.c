@@ -60,7 +60,7 @@ int main(int argc, char* argv[])
 
     ppBBDT = (BenchBasicDataType **)malloc(sizeof(BenchBasicDataType *) * 100);
 
-    input = Axis_Create_BenchDataType();
+    input = Axis_Create_BenchDataType(0);
     input->count = 100;
 
     ll = 10000;
@@ -75,7 +75,7 @@ int main(int argc, char* argv[])
 
     for( i = 0; i < input->count ; i++)
     {
-        BenchBasicDataType *type = Axis_Create_BenchBasicDataType();
+        BenchBasicDataType *type = Axis_Create_BenchBasicDataType(0);
 
         type->StringType = "StringType";
         type->IntegerType = 10 * (i + 1);
@@ -116,7 +116,7 @@ int main(int argc, char* argv[])
     {
         if (output)
         {
-            Axis_Delete_BenchDataType(output,0,0);
+            Axis_Delete_BenchDataType(output,0);
             output = NULL;
         }
 
@@ -136,7 +136,7 @@ int main(int argc, char* argv[])
         ppBBDT[i]->Base64BinaryType.__ptr=NULL;
         ppBBDT[i]->HexBinary.__ptr=NULL;
 
-        Axis_Delete_BenchBasicDataType(ppBBDT[i],0,0);
+        Axis_Delete_BenchBasicDataType(ppBBDT[i],0);
     }
 
     if (ppBBDT)
@@ -200,8 +200,8 @@ int main(int argc, char* argv[])
         }
     }
 
-    Axis_Delete_BenchDataType (input,0,0);
-    Axis_Delete_BenchDataType (output,0,0);
+    Axis_Delete_BenchDataType (input,0);
+    Axis_Delete_BenchDataType (output,0);
 
     printf( "---------------------- TEST COMPLETE -----------------------------\n" );
 

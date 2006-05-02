@@ -83,9 +83,9 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 {
                     writer.write("extern int Axis_DeSerialize_" + typeName
                             + "(" + typeName + "* param, IWrapperSoapDeSerializer* pDZ);\n");
-                    writer.write("extern void* Axis_Create_" + typeName + "();\n");
+                    writer.write("extern void* Axis_Create_" + typeName + "(int nSize);\n");
                     writer.write("extern void Axis_Delete_" + typeName + "("
-                            + typeName + "* param, bool bArray = false, int nSize=0);\n");
+                            + typeName + "* param, int nSize=0);\n");
                     writer.write("extern int Axis_Serialize_" + typeName + "("
                             + typeName + "* param, IWrapperSoapSerializer* pSZ, bool bArray = false);\n");
                     writer.write("extern int Axis_GetSize_" + typeName + "();\n\n");
@@ -94,9 +94,9 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 {
                     writer.write("int Axis_DeSerialize_" + typeName + "("
                             + typeName + "* param, IWrapperSoapDeSerializer* pDZ);\n");
-                    writer.write("void* Axis_Create_" + typeName + "();\n");
+                    writer.write("void* Axis_Create_" + typeName + "(int nSize);\n");
                     writer.write("void Axis_Delete_" + typeName + "("
-                            + typeName + "* param, bool bArray, int nSize);\n");
+                            + typeName + "* param, int nSize);\n");
                     writer.write("int Axis_Serialize_" + typeName
                                     + "(" + typeName
                                     + "* param, IWrapperSoapSerializer* pSZ, bool bArray);\n");
@@ -1109,9 +1109,17 @@ public class BeanParamWriter extends ParamCPPFileWriter
 
     private void writeCreateGlobalMethod() throws IOException
     {
-        writer.write("void* Axis_Create_" + classname + "()\n");
+        writer.write("void* Axis_Create_" + classname + "(int nSize)\n");
         writer.write("{\n");
-        writer.write("\treturn new " + classname + ";\n");
+        writer.write("\tif (nSize > 0)\n");
+        writer.write("\t{\n");
+        writer.write("\t\t" + classname + "** pNew = new " + classname + "* [nSize];\n");
+        writer.write("\t\tfor (int i=0; i < nSize; ++i)\n");
+        writer.write("\t\t\tpNew[i] = new " + classname + ";\n");
+        writer.write("\t\treturn pNew;\n");
+        writer.write("\t}\n");
+        writer.write("\telse\n");
+        writer.write("\t\treturn new " + classname + ";\n");
         writer.write("}\n");
         writer.write("\n");
     }
@@ -1121,23 +1129,25 @@ public class BeanParamWriter extends ParamCPPFileWriter
         writer.write("/*\n");
         writer.write(" * This static method delete a " + classname + " type of object\n");
         writer.write(" */\n");
-        writer.write("void Axis_Delete_" + classname + "(" + classname
-                + "* param, bool bArray = false, int nSize=0)\n");
+        writer.write("void Axis_Delete_" + classname + "(" + classname + "* param, int nSize=0)\n");
         writer.write("{\n");
-        writer.write("\t/* If array, only objects in array are reclaimed, not array */\n");
-        writer.write("\tif (bArray)\n");
+        
+        writer.write("\t/* If null just return */\n");
+        writer.write("\tif (!param)\n");
+        writer.write("\t\treturn;\n\n");
+        
+        writer.write("\t/* Reclaim array objects if array */\n");
+        writer.write("\tif (nSize > 0)\n");
         writer.write("\t{\n");
-        writer.write("\t\tif (nSize > 0)\n");
+        writer.write("\t\tfor (int count = 0 ; count < nSize ; count++ )\n");
         writer.write("\t\t{\n");
-        writer.write("\t\t\tfor (int count = 0 ; count < nSize ; count++ )\n");
+        writer.write("\t\t\tif ( (( " + classname + " ** ) param)[count])\n");
         writer.write("\t\t\t{\n");
-        writer.write("\t\t\t\tif ( (( " + classname + " ** ) param)[count])\n");
-        writer.write("\t\t\t\t{\n");
-        writer.write("\t\t\t\t\tdelete (( " + classname + " ** ) param)[count];\n");
-        writer.write("\t\t\t\t\t(( " + classname + " ** ) param)[count] = NULL;\n");
-        writer.write("\t\t\t\t}\n");
+        writer.write("\t\t\t\tdelete (( " + classname + " ** ) param)[count];\n");
+        writer.write("\t\t\t\t(( " + classname + " ** ) param)[count] = NULL;\n");
         writer.write("\t\t\t}\n");
         writer.write("\t\t}\n");
+        writer.write("\t\tdelete [] ( " + classname + " ** ) param;\n");
         writer.write("\t}\n");
         writer.write("\telse\n");
         writer.write("\t\tdelete param;\n");

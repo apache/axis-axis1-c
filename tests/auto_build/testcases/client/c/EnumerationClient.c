@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
 
     ws = get_EnumerationWS_stub(endpoint);
 
-    input = (Type1*)Axis_Create_Type1();
+    input = (Type1*)Axis_Create_Type1(0);
 
     NEWCOPY(input->enum_string,"one");
     NEWCOPY(input->att_enum_string,"one");
@@ -68,8 +68,8 @@ int main(int argc, char* argv[])
         returnValue = 0; /* Success */
     }
 
-    Axis_Delete_Type1(input,0,0);
-    Axis_Delete_Type1(result,0,0);
+    Axis_Delete_Type1(input,0);
+    Axis_Delete_Type1(result,0);
 
     destroy_EnumerationWS_stub(ws);
 
