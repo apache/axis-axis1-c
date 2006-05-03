@@ -112,7 +112,8 @@ Axisc_Array* axiscSoapDeSerializerGetCmplxArray(AXISCHANDLE wrapperSoapDeSeriali
     {
         Axis_Array  tmpObjArray;
         
-        tmpObjArray.set((void **)pArray->m_Array, pArray->m_Size, (XSDTYPE)pArray->m_Type);
+        if (pArray && pArray->m_Array)
+            tmpObjArray.set((void **)pArray->m_Array, pArray->m_Size, (XSDTYPE)pArray->m_Type);
         
         Axis_Array* pObjArray = dz->getCmplxArray(&tmpObjArray, 
                                                   pDZFunct, pCreFunct, pDelFunct, pName, pNamespace);

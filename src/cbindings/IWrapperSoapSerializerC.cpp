@@ -207,7 +207,12 @@ int axiscSoapSerializerAddOutputCmplxArrayParam(AXISCHANDLE wrapperSoapSerialize
 
     try
     {
-        return sz->addOutputCmplxArrayParam((const Axis_Array*)pArray,pSZFunct,pDelFunct,pName,pNamespace);
+        // Need to convert C-style array to C++-style array before calling serialization method.
+        Axis_Array objArray;
+        if (pArray && pArray->m_Array)
+            objArray.set((void **)pArray->m_Array, pArray->m_Size, (XSDTYPE)pArray->m_Type);
+        
+        return sz->addOutputCmplxArrayParam((const Axis_Array*)&objArray,pSZFunct,pDelFunct,pName,pNamespace);
     }
     catch ( AxisException& e  )
     {
@@ -231,7 +236,12 @@ int axiscSoapSerializerAddOutputBasicArrayParam(AXISCHANDLE wrapperSoapSerialize
 
     try
     {
-        return sz->addOutputBasicArrayParam((const Axis_Array*)pArray,(XSDTYPE)nType,pName);
+        // Need to convert C-style array to C++-style array before calling serialization method.
+        Axis_Array objArray;
+        if (pArray && pArray->m_Array)
+            objArray.set((void **)pArray->m_Array, pArray->m_Size, (XSDTYPE)pArray->m_Type);
+        
+        return sz->addOutputBasicArrayParam((const Axis_Array*)&objArray,(XSDTYPE)nType,pName);
     }
     catch ( AxisException& e  )
     {
