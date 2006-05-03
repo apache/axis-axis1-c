@@ -1,0 +1,17 @@
+<test>
+    <name>XSD_IDC</name>
+    <description>Test serialization and deserialization of the XSD built-in simple type ID</description>
+    <clientLang>c</clientLang>
+    <clientCode>XSD_IDClient.c</clientCode>
+    <wsdl>XSD_ID.wsdl</wsdl>
+    <expected>
+        <output>
+            XSD_ID.expected
+        </output>
+		<serverResponse>
+			XSD_ID_ServerResponse.expected
+	    </serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/XSD_ID</endpoint>
+</test>
+
