@@ -329,7 +329,7 @@ public class ClientStubWriter
             writer.write("\t");
             
             if (returntypeisarray)
-                writer.write(outparamType + " *RetArray = (" + outparamType + " *)axiscAxisNew(AXISC_ARRAY, 0);\n");
+                writer.write(outparamType + " *RetArray = (" + outparamType + " *)axiscAxisNew(XSDC_ARRAY, 0);\n");
             else if (!returntypeissimple)
             {
                 // for AnyType and complex types
@@ -517,14 +517,14 @@ public class ClientStubWriter
                         // Array of simple type
                         String containedType = CUtils.getclass4qname (qname);
                         writer.write ("\taxiscCallAddBasicArrayParameter(call,");
-                        writer.write ("Value" + i + ", " +
+                        writer.write ("(Axisc_Array *)Value" + i + ", " +
                               CUtils.getXSDTypeForBasicType(containedType) + ", cPrefixAndParamName" + i);
                     }
                     else if (arrayType != null && arrayType.isSimpleType ())
                     {
                         String containedType = CUtils.getclass4qname (arrayType.getBaseType ());
                         writer.write ("\taxiscCallAddBasicArrayParameter(call,");
-                        writer.write ("Value" + i + ", " +
+                        writer.write ("(Axisc_Array *)Value" + i + ", " +
                                   CUtils.getXSDTypeForBasicType(containedType) +
                                   ", cPrefixAndParamName" + i);
                     }
@@ -533,7 +533,7 @@ public class ClientStubWriter
                         // Array of complex type
                         String containedType = qname.getLocalPart ();
                         writer.write ("\taxiscCallAddCmplxArrayParameter(call,");
-                        writer.write ("Value" + i +
+                        writer.write ("(Axisc_Array *)Value" + i +
                                   ", (void*)Axis_Serialize_" + containedType +
                                   ", (void*)Axis_Delete_" + containedType +
                                   ", \"" + parameterName + "\"" + ", ");
@@ -798,7 +798,7 @@ public class ClientStubWriter
             if (CUtils.isSimpleType (qname))
             {
                 containedType = CUtils.getclass4qname (qname);
-                writer.write ("\t\t\tRetArray = axiscCallGetBasicArray(call, " 
+                writer.write ("\t\t\tRetArray =(" + containedType + "_Array *) axiscCallGetBasicArray(call, " 
                         + CUtils.getXSDTypeForBasicType (containedType) 
                         + ", \"" + returntype.getParamName () + "\", 0);\n");
             }

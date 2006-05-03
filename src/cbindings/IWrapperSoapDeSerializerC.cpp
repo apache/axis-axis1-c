@@ -693,6 +693,519 @@ xsdc__duration * axiscSoapDeSerializerGetElementAsDuration(AXISCHANDLE wrapperSo
     return (xsdc__duration *)NULL;
 }
 
+AXISC_STORAGE_CLASS_INFO
+xsdc__gYearMonth * axiscSoapDeSerializerGetElementAsGYearMonth(AXISCHANDLE wrapperSoapDeSerializer, 
+                                                               const AxiscChar * pName, 
+                                                               const AxiscChar * pNamespace)
+{
+    IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+
+    try
+    {
+        return dz->getElementAsGYearMonth(pName,pNamespace);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (xsdc__gYearMonth *)NULL;    
+}
+
+AXISC_STORAGE_CLASS_INFO
+xsdc__gYear * axiscSoapDeSerializerGetElementAsGYear(AXISCHANDLE wrapperSoapDeSerializer, 
+                                                     const AxiscChar * pName, 
+                                                     const AxiscChar * pNamespace)
+{
+    IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+
+    try
+    {
+        return dz->getElementAsGYear(pName,pNamespace);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (xsdc__gYear *)NULL;
+}
+
+AXISC_STORAGE_CLASS_INFO
+xsdc__gMonthDay * axiscSoapDeSerializerGetElementAsGMonthDay(AXISCHANDLE wrapperSoapDeSerializer, 
+                                                             const AxiscChar * pName, 
+                                                             const AxiscChar * pNamespace)
+{
+    IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+
+    try
+    {
+        return dz->getElementAsGMonthDay(pName,pNamespace);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (xsdc__gMonthDay *)NULL;
+}
+
+AXISC_STORAGE_CLASS_INFO
+xsdc__gDay * axiscSoapDeSerializerGetElementAsGDay(AXISCHANDLE wrapperSoapDeSerializer, 
+                                                   const AxiscChar * pName, 
+                                                   const AxiscChar * pNamespace)
+{
+    IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+
+    try
+    {
+        return dz->getElementAsGDay(pName,pNamespace);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (xsdc__gDay *)NULL;    
+}
+
+AXISC_STORAGE_CLASS_INFO
+xsdc__gMonth * axiscSoapDeSerializerGetElementAsGMonth(AXISCHANDLE wrapperSoapDeSerializer, 
+                                                       const AxiscChar * pName, 
+                                                       const AxiscChar * pNamespace)
+{
+    IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+
+    try
+    {
+        return dz->getElementAsGMonth(pName,pNamespace);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (xsdc__gMonth *)NULL;
+}
+
+AXISC_STORAGE_CLASS_INFO
+xsdc__nonPositiveInteger * axiscSoapDeSerializerGetElementAsNonPositiveInteger(AXISCHANDLE wrapperSoapDeSerializer, 
+                                                                               const AxiscChar * pName, 
+                                                                               const AxiscChar * pNamespace)
+{
+    IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+
+    try
+    {
+        return dz->getElementAsNonPositiveInteger(pName,pNamespace);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (xsdc__nonPositiveInteger *)NULL;        
+}
+
+AXISC_STORAGE_CLASS_INFO
+xsdc__negativeInteger * axiscSoapDeSerializerGetElementAsNegativeInteger(AXISCHANDLE wrapperSoapDeSerializer, 
+                                                                         const AxiscChar * pName, 
+                                                                         const AxiscChar * pNamespace)
+{
+    IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+
+    try
+    {
+        return dz->getElementAsNegativeInteger(pName,pNamespace);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (xsdc__negativeInteger *)NULL;          
+}
+
+AXISC_STORAGE_CLASS_INFO
+xsdc__nonNegativeInteger * axiscSoapDeSerializerGetElementAsNonNegativeInteger(AXISCHANDLE wrapperSoapDeSerializer, 
+                                                                               const AxiscChar * pName, 
+                                                                               const AxiscChar * pNamespace)
+{
+    IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+
+    try
+    {
+        return dz->getElementAsNonNegativeInteger(pName,pNamespace);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (xsdc__nonNegativeInteger *)NULL;          
+}
+
+AXISC_STORAGE_CLASS_INFO
+xsdc__positiveInteger * axiscSoapDeSerializerGetElementAsPositiveInteger(AXISCHANDLE wrapperSoapDeSerializer, 
+                                                                         const AxiscChar * pName, 
+                                                                         const AxiscChar * pNamespace)
+{
+    IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+
+    try
+    {
+        return dz->getElementAsPositiveInteger(pName,pNamespace);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (xsdc__positiveInteger *)NULL;          
+}
+
+AXISC_STORAGE_CLASS_INFO
+xsdc__normalizedString axiscSoapDeSerializerGetElementAsNormalizedString(AXISCHANDLE wrapperSoapDeSerializer, 
+                                                                         const AxiscChar * pName, 
+                                                                         const AxiscChar * pNamespace)
+{
+    IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+
+    try
+    {
+        return dz->getElementAsNormalizedString(pName,pNamespace);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (xsdc__normalizedString)NULL;          
+}
+
+AXISC_STORAGE_CLASS_INFO
+xsdc__token axiscSoapDeSerializerGetElementAsToken(AXISCHANDLE wrapperSoapDeSerializer, 
+                                                   const AxiscChar * pName,
+                                                   const AxiscChar * pNamespace)
+{
+    IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+
+    try
+    {
+        return dz->getElementAsToken(pName,pNamespace);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (xsdc__token)NULL;      
+}
+
+AXISC_STORAGE_CLASS_INFO
+xsdc__language axiscSoapDeSerializerGetElementAsLanguage(AXISCHANDLE wrapperSoapDeSerializer, 
+                                                         const AxiscChar * pName, 
+                                                         const AxiscChar * pNamespace)
+{
+    IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+
+    try
+    {
+        return dz->getElementAsLanguage(pName,pNamespace);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (xsdc__language)NULL;      
+}
+
+AXISC_STORAGE_CLASS_INFO
+xsdc__Name axiscSoapDeSerializerGetElementAsName(AXISCHANDLE wrapperSoapDeSerializer, 
+                                                 const AxiscChar * pName, 
+                                                 const AxiscChar * pNamespace)
+{
+    IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+
+    try
+    {
+        return dz->getElementAsName(pName,pNamespace);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (xsdc__Name)NULL;      
+}
+
+AXISC_STORAGE_CLASS_INFO
+xsdc__NCName axiscSoapDeSerializerGetElementAsNCName(AXISCHANDLE wrapperSoapDeSerializer, 
+                                                     const AxiscChar * pName, 
+                                                     const AxiscChar * pNamespace)
+{
+    IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+
+    try
+    {
+        return dz->getElementAsNCName(pName,pNamespace);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (xsdc__NCName)NULL;      
+}
+
+
+AXISC_STORAGE_CLASS_INFO
+xsdc__ID axiscSoapDeSerializerGetElementAsID(AXISCHANDLE wrapperSoapDeSerializer, 
+                                             const AxiscChar * pName,
+                                             const AxiscChar * pNamespace)
+{
+    IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+
+    try
+    {
+        return dz->getElementAsID(pName,pNamespace);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (xsdc__ID)NULL;    
+}
+
+AXISC_STORAGE_CLASS_INFO
+xsdc__IDREF axiscSoapDeSerializerGetElementAsIDREF(AXISCHANDLE wrapperSoapDeSerializer, 
+                                                   const AxiscChar * pName,
+                                                   const AxiscChar * pNamespace)
+{
+    IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+
+    try
+    {
+        return dz->getElementAsIDREF(pName,pNamespace);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (xsdc__IDREF)NULL;      
+}
+
+AXISC_STORAGE_CLASS_INFO
+xsdc__IDREFS axiscSoapDeSerializerGetElementAsIDREFS(AXISCHANDLE wrapperSoapDeSerializer, 
+                                                     const AxiscChar * pName,
+                                                     const AxiscChar * pNamespace)
+{
+    IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+
+    try
+    {
+        return dz->getElementAsIDREFS(pName,pNamespace);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (xsdc__IDREFS)NULL;      
+}
+
+AXISC_STORAGE_CLASS_INFO
+xsdc__ENTITY axiscSoapDeSerializerGetElementAsENTITY(AXISCHANDLE wrapperSoapDeSerializer, 
+                                                     const AxiscChar * pName,
+                                                     const AxiscChar * pNamespace)
+{
+    IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+
+    try
+    {
+        return dz->getElementAsENTITY(pName,pNamespace);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (xsdc__ENTITY)NULL;      
+}
+
+AXISC_STORAGE_CLASS_INFO
+xsdc__ENTITIES axiscSoapDeSerializerGetElementAsENTITIES(AXISCHANDLE wrapperSoapDeSerializer, 
+                                                         const AxiscChar * pName,
+                                                         const AxiscChar * pNamespace)
+{
+    IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+
+    try
+    {
+        return dz->getElementAsENTITIES(pName,pNamespace);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (xsdc__ENTITIES)NULL;      
+}
+
+AXISC_STORAGE_CLASS_INFO
+xsdc__NMTOKEN axiscSoapDeSerializerGetElementAsNMTOKEN(AXISCHANDLE wrapperSoapDeSerializer, 
+                                                       const AxiscChar * pName,
+                                                       const AxiscChar * pNamespace)
+{
+    IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+
+    try
+    {
+        return dz->getElementAsNMTOKEN(pName,pNamespace);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (xsdc__NMTOKEN)NULL;      
+}
+
+AXISC_STORAGE_CLASS_INFO
+xsdc__NMTOKENS axiscSoapDeSerializerGetElementAsNMTOKENS(AXISCHANDLE wrapperSoapDeSerializer, 
+                                                         const AxiscChar * pName, 
+                                                         const AxiscChar * pNamespace)
+{
+    IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+
+    try
+    {
+        return dz->getElementAsNMTOKENS(pName,pNamespace);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (xsdc__NMTOKENS)NULL;      
+}
+
+AXISC_STORAGE_CLASS_INFO
+xsdc__NOTATION axiscSoapDeSerializerGetElementAsNOTATION(AXISCHANDLE wrapperSoapDeSerializer, 
+                                                         const AxiscChar * pName, 
+                                                         const AxiscChar * pNamespace)
+{
+    IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+
+    try
+    {
+        return dz->getElementAsNOTATION(pName,pNamespace);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (xsdc__NOTATION)NULL;      
+}
+
+
+
+
+
+
+
 AXISC_STORAGE_CLASS_INFO 
 xsdc__int * axiscSoapDeSerializerGetAttributeAsInt(AXISCHANDLE wrapperSoapDeSerializer, 
                                                            const AxiscChar * pName, 
@@ -1202,6 +1715,527 @@ xsdc__duration * axiscSoapDeSerializerGetAttributeAsDuration(AXISCHANDLE wrapper
 
     return (xsdc__duration *)NULL;
 }
+
+AXISC_STORAGE_CLASS_INFO
+xsdc__gYearMonth * axiscSoapDeSerializerGetAttributeAsGYearMonth(AXISCHANDLE wrapperSoapDeSerializer, 
+                                                               const AxiscChar * pName, 
+                                                               const AxiscChar * pNamespace)
+{
+    IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+
+    try
+    {
+        return dz->getAttributeAsGYearMonth(pName,pNamespace);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (xsdc__gYearMonth *)NULL;    
+}
+
+AXISC_STORAGE_CLASS_INFO
+xsdc__gYear * axiscSoapDeSerializerGetAttributeAsGYear(AXISCHANDLE wrapperSoapDeSerializer, 
+                                                     const AxiscChar * pName, 
+                                                     const AxiscChar * pNamespace)
+{
+    IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+
+    try
+    {
+        return dz->getAttributeAsGYear(pName,pNamespace);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (xsdc__gYear *)NULL;
+}
+
+AXISC_STORAGE_CLASS_INFO
+xsdc__gMonthDay * axiscSoapDeSerializerGetAttributeAsGMonthDay(AXISCHANDLE wrapperSoapDeSerializer, 
+                                                             const AxiscChar * pName, 
+                                                             const AxiscChar * pNamespace)
+{
+    IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+
+    try
+    {
+        return dz->getAttributeAsGMonthDay(pName,pNamespace);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (xsdc__gMonthDay *)NULL;
+}
+
+AXISC_STORAGE_CLASS_INFO
+xsdc__gDay * axiscSoapDeSerializerGetAttributeAsGDay(AXISCHANDLE wrapperSoapDeSerializer, 
+                                                   const AxiscChar * pName, 
+                                                   const AxiscChar * pNamespace)
+{
+    IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+
+    try
+    {
+        return dz->getAttributeAsGDay(pName,pNamespace);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (xsdc__gDay *)NULL;    
+}
+
+AXISC_STORAGE_CLASS_INFO
+xsdc__gMonth * axiscSoapDeSerializerGetAttributeAsGMonth(AXISCHANDLE wrapperSoapDeSerializer, 
+                                                       const AxiscChar * pName, 
+                                                       const AxiscChar * pNamespace)
+{
+    IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+
+    try
+    {
+        return dz->getAttributeAsGMonth(pName,pNamespace);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (xsdc__gMonth *)NULL;
+}
+
+
+AXISC_STORAGE_CLASS_INFO
+xsdc__nonPositiveInteger * axiscSoapDeSerializerGetAttributeAsNonPositiveInteger(AXISCHANDLE wrapperSoapDeSerializer, 
+                                                                               const AxiscChar * pName, 
+                                                                               const AxiscChar * pNamespace)
+{
+    IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+
+    try
+    {
+        return dz->getAttributeAsNonPositiveInteger(pName,pNamespace);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (xsdc__nonPositiveInteger *)NULL;        
+}
+
+AXISC_STORAGE_CLASS_INFO
+xsdc__negativeInteger * axiscSoapDeSerializerGetAttributeAsNegativeInteger(AXISCHANDLE wrapperSoapDeSerializer, 
+                                                                         const AxiscChar * pName, 
+                                                                         const AxiscChar * pNamespace)
+{
+    IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+
+    try
+    {
+        return dz->getAttributeAsNegativeInteger(pName,pNamespace);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (xsdc__negativeInteger *)NULL;          
+}
+
+AXISC_STORAGE_CLASS_INFO
+xsdc__nonNegativeInteger * axiscSoapDeSerializerGetAttributeAsNonNegativeInteger(AXISCHANDLE wrapperSoapDeSerializer, 
+                                                                               const AxiscChar * pName, 
+                                                                               const AxiscChar * pNamespace)
+{
+    IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+
+    try
+    {
+        return dz->getAttributeAsNonNegativeInteger(pName,pNamespace);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (xsdc__nonNegativeInteger *)NULL;          
+}
+
+AXISC_STORAGE_CLASS_INFO
+xsdc__positiveInteger * axiscSoapDeSerializerGetAttributeAsPositiveInteger(AXISCHANDLE wrapperSoapDeSerializer, 
+                                                                         const AxiscChar * pName, 
+                                                                         const AxiscChar * pNamespace)
+{
+    IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+
+    try
+    {
+        return dz->getAttributeAsPositiveInteger(pName,pNamespace);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (xsdc__positiveInteger *)NULL;          
+}
+
+AXISC_STORAGE_CLASS_INFO
+xsdc__normalizedString axiscSoapDeSerializerGetAttributeAsNormalizedString(AXISCHANDLE wrapperSoapDeSerializer, 
+                                                                         const AxiscChar * pName, 
+                                                                         const AxiscChar * pNamespace)
+{
+    IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+
+    try
+    {
+        return dz->getAttributeAsNormalizedString(pName,pNamespace);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (xsdc__normalizedString)NULL;          
+}
+
+AXISC_STORAGE_CLASS_INFO
+xsdc__token axiscSoapDeSerializerGetAttributeAsToken(AXISCHANDLE wrapperSoapDeSerializer, 
+                                                   const AxiscChar * pName,
+                                                   const AxiscChar * pNamespace)
+{
+    IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+
+    try
+    {
+        return dz->getAttributeAsToken(pName,pNamespace);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (xsdc__token)NULL;      
+}
+
+AXISC_STORAGE_CLASS_INFO
+xsdc__language axiscSoapDeSerializerGetAttributeAsLanguage(AXISCHANDLE wrapperSoapDeSerializer, 
+                                                         const AxiscChar * pName, 
+                                                         const AxiscChar * pNamespace)
+{
+    IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+
+    try
+    {
+        return dz->getAttributeAsLanguage(pName,pNamespace);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (xsdc__language)NULL;      
+}
+
+AXISC_STORAGE_CLASS_INFO
+xsdc__Name axiscSoapDeSerializerGetAttributeAsName(AXISCHANDLE wrapperSoapDeSerializer, 
+                                                 const AxiscChar * pName, 
+                                                 const AxiscChar * pNamespace)
+{
+    IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+
+    try
+    {
+        return dz->getAttributeAsName(pName,pNamespace);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (xsdc__Name)NULL;      
+}
+
+AXISC_STORAGE_CLASS_INFO
+xsdc__NCName axiscSoapDeSerializerGetAttributeAsNCName(AXISCHANDLE wrapperSoapDeSerializer, 
+                                                     const AxiscChar * pName, 
+                                                     const AxiscChar * pNamespace)
+{
+    IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+
+    try
+    {
+        return dz->getAttributeAsNCName(pName,pNamespace);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (xsdc__NCName)NULL;      
+}
+
+
+AXISC_STORAGE_CLASS_INFO
+xsdc__ID axiscSoapDeSerializerGetAttributeAsID(AXISCHANDLE wrapperSoapDeSerializer, 
+                                               const AxiscChar * pName,
+                                               const AxiscChar * pNamespace)
+{
+    IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+
+    try
+    {
+        return dz->getAttributeAsID(pName,pNamespace);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (xsdc__ID)NULL;    
+}
+
+
+AXISC_STORAGE_CLASS_INFO
+xsdc__IDREF axiscSoapDeSerializerGetAttributeAsIDREF(AXISCHANDLE wrapperSoapDeSerializer, 
+                                                   const AxiscChar * pName,
+                                                   const AxiscChar * pNamespace)
+{
+    IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+
+    try
+    {
+        return dz->getAttributeAsIDREF(pName,pNamespace);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (xsdc__IDREF)NULL;      
+}
+
+AXISC_STORAGE_CLASS_INFO
+xsdc__IDREFS axiscSoapDeSerializerGetAttributeAsIDREFS(AXISCHANDLE wrapperSoapDeSerializer, 
+                                                     const AxiscChar * pName,
+                                                     const AxiscChar * pNamespace)
+{
+    IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+
+    try
+    {
+        return dz->getAttributeAsIDREFS(pName,pNamespace);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (xsdc__IDREFS)NULL;      
+}
+
+AXISC_STORAGE_CLASS_INFO
+xsdc__ENTITY axiscSoapDeSerializerGetAttributeAsENTITY(AXISCHANDLE wrapperSoapDeSerializer, 
+                                                     const AxiscChar * pName,
+                                                     const AxiscChar * pNamespace)
+{
+    IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+
+    try
+    {
+        return dz->getAttributeAsENTITY(pName,pNamespace);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (xsdc__ENTITY)NULL;      
+}
+
+AXISC_STORAGE_CLASS_INFO
+xsdc__ENTITIES axiscSoapDeSerializerGetAttributeAsENTITIES(AXISCHANDLE wrapperSoapDeSerializer, 
+                                                         const AxiscChar * pName,
+                                                         const AxiscChar * pNamespace)
+{
+    IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+
+    try
+    {
+        return dz->getAttributeAsENTITIES(pName,pNamespace);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (xsdc__ENTITIES)NULL;      
+}
+
+AXISC_STORAGE_CLASS_INFO
+xsdc__NMTOKEN axiscSoapDeSerializerGetAttributeAsNMTOKEN(AXISCHANDLE wrapperSoapDeSerializer, 
+                                                       const AxiscChar * pName,
+                                                       const AxiscChar * pNamespace)
+{
+    IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+
+    try
+    {
+        return dz->getAttributeAsNMTOKEN(pName,pNamespace);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (xsdc__NMTOKEN)NULL;      
+}
+
+AXISC_STORAGE_CLASS_INFO
+xsdc__NMTOKENS axiscSoapDeSerializerGetAttributeAsNMTOKENS(AXISCHANDLE wrapperSoapDeSerializer, 
+                                                         const AxiscChar * pName, 
+                                                         const AxiscChar * pNamespace)
+{
+    IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+
+    try
+    {
+        return dz->getAttributeAsNMTOKENS(pName,pNamespace);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (xsdc__NMTOKENS)NULL;      
+}
+
+AXISC_STORAGE_CLASS_INFO
+xsdc__NOTATION axiscSoapDeSerializerGetAttributeAsNOTATION(AXISCHANDLE wrapperSoapDeSerializer, 
+                                                         const AxiscChar * pName, 
+                                                         const AxiscChar * pNamespace)
+{
+    IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+
+    try
+    {
+        return dz->getAttributeAsNOTATION(pName,pNamespace);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+
+    return (xsdc__NOTATION)NULL;      
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 AXISC_STORAGE_CLASS_INFO 
 int axiscSoapDeSerializerGetStatus(AXISCHANDLE wrapperSoapDeSerializer) 
