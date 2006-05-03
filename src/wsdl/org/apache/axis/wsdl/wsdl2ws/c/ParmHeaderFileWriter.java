@@ -77,9 +77,9 @@ public class ParmHeaderFileWriter extends ParamWriter
                 this.writer.write("\n#ifdef __cplusplus\n extern \"C\" {\n#endif\n\n");
 
                 writer.write("\n");
-                writer.write("/* ************************************************************ */\n");
-                writer.write("/* --- Custom type                                          --- */\n");
-                writer.write("/* ************************************************************ */\n");
+                writer.write("/* ********************************************************************* */\n");
+                writer.write("/* --- Custom type                                                   --- */\n");
+                writer.write("/* ********************************************************************* */\n");
                 writer.write("\n");                
                 
                 this.writer.write("typedef struct " + classname + "Tag {\n");
@@ -115,17 +115,22 @@ public class ParmHeaderFileWriter extends ParamWriter
         try
         {
             writer.write("#include <axis/AxisUserAPI.h>\n");
-            writer.write("\n");
 
             Vector restrictionData = type.getEnumerationdata();
             if (restrictionData == null)
-                return;
-
+                return;            
+            
             TypeEntry baseEType = (TypeEntry) restrictionData.firstElement();
             QName baseType = baseEType.getQName();
             if (!CUtils.isSimpleType(baseType))
                 return;
-
+            
+            writer.write("\n");
+            writer.write("/* ********************************************************************* */\n");
+            writer.write("/* --- Simple types and enumerations                                 --- */\n");
+            writer.write("/* ********************************************************************* */\n");
+            writer.write("\n");                
+            
             String langTypeName = CUtils.getclass4qname(baseType);
             writer.write("typedef ");
             if (CUtils.isPointerType(CUtils.getclass4qname(baseType)) 
@@ -134,6 +139,7 @@ public class ParmHeaderFileWriter extends ParamWriter
             {
                 writer.write(langTypeName + " " + classname + ";\n");
                 writer.write("typedef " + langTypeName + "_Array " + classname + "_Array;\n");
+                writer.write("\n");
                 
                 for (int i = 1; i < restrictionData.size(); i++)
                 {
@@ -209,6 +215,7 @@ public class ParmHeaderFileWriter extends ParamWriter
             else
             {
                 writer.write(langTypeName + " " + classname + ";\n");
+                writer.write("\n");
                 for (int i = 1; i < restrictionData.size(); i++)
                 {
                     QName value = (QName) restrictionData.elementAt(i);
@@ -389,10 +396,9 @@ public class ParmHeaderFileWriter extends ParamWriter
             if (itr.hasNext())
             {
                 writer.write("\n");
-                writer.write("/* ************************************************************ */\n");
-                writer.write("/* --- Functions to create/delete, serialize/deserialize    --- */\n");
-                writer.write("/* --- custom type                                          --- */\n");
-                writer.write("/* ************************************************************ */\n");
+                writer.write("/* ********************************************************************* */\n");
+                writer.write("/* --- Functions to create/delete, serialize/deserialize custom type --- */\n");
+                writer.write("/* ********************************************************************* */\n");
                 writer.write("\n");                
             }
             
@@ -447,6 +453,9 @@ public class ParmHeaderFileWriter extends ParamWriter
             }
             
             Iterator itr = typeSet.iterator();
+            if (itr.hasNext())
+                writer.write("\n");    
+            
             while (itr.hasNext())
             {
                 // Do not want to include the header file we are generating!
