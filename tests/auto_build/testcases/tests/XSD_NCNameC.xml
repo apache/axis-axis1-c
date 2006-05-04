@@ -1,0 +1,17 @@
+<test>
+    <name>XSD_NCNameC</name>
+    <description>Test serialization and deserialization of the XSD built-in simple type NCName</description>
+    <clientLang>c</clientLang>
+    <clientCode>XSD_NCNameClient.c</clientCode>
+    <wsdl>XSD_NCName.wsdl</wsdl>
+    <expected>
+        <output>
+            XSD_NCName.expected
+        </output>
+		<serverResponse>
+			XSD_NCName_ServerResponse.expected
+	    </serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/XSD_NCName</endpoint>
+</test>
+

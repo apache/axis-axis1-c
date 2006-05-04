@@ -13,6 +13,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* ----------------------------------------------------------------   */
+/* CHANGES TO THIS FILE MAY ALSO REQUIRE CHANGES TO THE               */
+/* C-EQUIVALENT FILE. PLEASE ENSURE THAT IT IS DONE.                  */
+/* ----------------------------------------------------------------   */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
 
 #include "XSD_IDPort.hpp"
 #include <axis/AxisException.hpp>
@@ -24,6 +32,9 @@ int main(int argc, char* argv[])
 {
     xsd__ID result = NULL;
     xsd__ID input = NULL;
+    
+    RequiredAttributeElement requiredAttributeInput;
+    RequiredAttributeElement* requiredAttributeResult;
     
     char emptyID[1] = "";
     char simpleID[25] = "A simple test message!";
@@ -149,9 +160,10 @@ int main(int argc, char* argv[])
         // Test required attribute
         input = new char[25];
         strcpy (input, simpleID);
-        RequiredAttributeElement requiredAttributeInput;
+
         requiredAttributeInput.setrequiredAttribute(input);
-        RequiredAttributeElement* requiredAttributeResult = ws->asRequiredAttribute(&requiredAttributeInput);
+        requiredAttributeResult = ws->asRequiredAttribute(&requiredAttributeInput);
+        
         if (requiredAttributeResult->getrequiredAttribute())
         {
             if (*(requiredAttributeResult->getrequiredAttribute()))

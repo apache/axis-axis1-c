@@ -43,7 +43,12 @@ int main(int argc, char* argv[])
         url = argv[1];
 
     sprintf(endpoint, "%s", url);
-    ws = get_XSD_IDPort_stub(url);
+    ws = get_XSD_IDPort_stub(url);    
+    if (!ws)
+    {
+        printf("FAILED to get WS\n");
+        return -1;
+    }
   
     // Test non-nillable element
     input = (xsdc__ID)axiscAxisNew(XSDC_ID,25);
@@ -61,6 +66,8 @@ int main(int argc, char* argv[])
             printf("non-nillable element=%s\n", result);
         else
             printf("non-nillable element=<empty>\n");
+        
+        axiscAxisDelete(result, XSDC_ID);                
     }
     else
         printf("non-nillable element=<nil>\n");
@@ -81,6 +88,8 @@ int main(int argc, char* argv[])
             printf("empty non-nillable element=%s\n", result);
         else
             printf("empty non-nillable element=<empty>\n");
+        
+        axiscAxisDelete(result, XSDC_ID);                
     }
     else
         printf("empty non-nillable element=<nil>\n");
@@ -100,6 +109,8 @@ int main(int argc, char* argv[])
             printf("non-nillable element with XML reserved characters=%s\n", result);
         else
             printf("non-nillable element with XML reserved characters=<empty>\n");
+        
+        axiscAxisDelete(result, XSDC_ID);                
     }
     else
         printf("non-nillable element with XML reserved characters=<nil>\n");
@@ -117,6 +128,8 @@ int main(int argc, char* argv[])
             printf("non-nillable element with whitespace characters=\"%s\"\n", result);
         else
             printf("non-nillable element with whitespace characters=<empty>\n");
+        
+        axiscAxisDelete(result, XSDC_ID);                
     }
     else
         printf("non-nillable element with whitespace characters=<nil>\n");
@@ -135,6 +148,7 @@ int main(int argc, char* argv[])
             printf("nillable element=%s\n", result);
         else
             printf("nillable element=<empty>\n");
+            
         axiscAxisDelete(result, XSDC_ID);
     }
     else
@@ -156,6 +170,7 @@ int main(int argc, char* argv[])
             printf("empty nillable element=%s\n", result);
         else
             printf("empty nillable element=<empty>\n");
+            
         axiscAxisDelete(result, XSDC_ID);
     }
     else
@@ -175,6 +190,7 @@ int main(int argc, char* argv[])
             printf("nil element=%s\n", result);
         else
             printf("nil element=<empty>\n");
+            
         axiscAxisDelete(result, XSDC_ID);
     }
     else
@@ -342,6 +358,10 @@ int main(int argc, char* argv[])
 
         complexTypeInput.complexTypeElement = input;
         complexTypeResult = asComplexType(ws, &complexTypeInput);
+        
+        if (exceptionOccurred == C_TRUE
+            || get_XSD_IDPort_Status(ws) == AXISC_FAIL )
+            printf ("Failed\n");
         
         if (complexTypeResult->complexTypeElement)
         {
