@@ -39,6 +39,8 @@ int main(int argc, char* argv[])
     if(argc>1)
         url = argv[1];
 
+    axiscAxisRegisterExceptionHandler(exceptionHandler);
+
     sprintf(endpoint, "%s", url);
     ws = get_XSD_NCName_stub(endpoint);
     if (!ws)
