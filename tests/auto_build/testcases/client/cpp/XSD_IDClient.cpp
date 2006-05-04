@@ -63,6 +63,8 @@ int main(int argc, char* argv[])
                 cout << "non-nillable element=" << result << endl;
             else
                 cout << "non-nillable element=<empty>" << endl;
+                
+            delete result;
         }
         else
             cout << "non-nillable element=<nil>" << endl;
@@ -80,6 +82,8 @@ int main(int argc, char* argv[])
                 cout << "empty non-nillable element=" << result << endl;
             else
                 cout << "empty non-nillable element=<empty>" << endl;
+                
+            delete result;
         }
         else
             cout << "empty non-nillable element=<nil>" << endl;
@@ -94,6 +98,8 @@ int main(int argc, char* argv[])
                 cout << "non-nillable element with XML reserved characters=" << result << endl;
             else
                 cout << "non-nillable element with XML reserved characters=<empty>" << endl;
+                
+            delete result;
         }
         else
             cout << "non-nillable element with XML reserved characters=<nil>" << endl;
@@ -107,6 +113,8 @@ int main(int argc, char* argv[])
                 cout << "non-nillable element with whitespace characters=\"" << result << "\"" << endl;
             else
                 cout << "non-nillable element with whitespace characters=<empty>" << endl;
+                
+            delete result;
         }
         else
             cout << "non-nillable element with whitespace characters=<nil>" << endl;
