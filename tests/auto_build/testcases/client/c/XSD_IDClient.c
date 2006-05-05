@@ -246,15 +246,16 @@ int main(int argc, char* argv[])
 /* Optional Attributes currently unsupported by WSDL2Ws
  * Exact coding of this section may change depending on chosen implementation
         // Test optional attribute, with a value
-        input = new char[25];
-        strcpy (input, simpleID);
+    {
         OptionalAttributeElement optionalAttributeInput;
-        optionalAttributeInput.setoptionalAttribute(input);
-        OptionalAttributeElement* optionalAttributeResult = ws->asOptionalAttribute(&optionalAttributeInput);
-        if (optionalAttributeResult->getoptionalAttribute())
+        OptionalAttributeElement* optionalAttributeResult;
+        
+        optionalAttributeInput.setoptionalAttribute = simpleID;
+        optionalAttributeResult = asOptionalAttribute(ws, &optionalAttributeInput);
+        if (optionalAttributeResult->optionalAttribute)
         {
-            if (*(optionalAttributeResult->getoptionalAttribute()))
-                printf("optional attribute, with data=" << optionalAttributeResult->getoptionalAttribute() << endl;
+            if (*(optionalAttributeResult->optionalAttribute))
+                printf("optional attribute, with data=%s\n", optionalAttributeResult->optionalAttribute);
             else
                 printf("optional attribute, with data=<empty>\n");
 
@@ -262,39 +263,38 @@ int main(int argc, char* argv[])
         else
             printf("optional attribute, with data=<not present>\n");
 
-        delete [] input;
-        delete optionalAttributeResult;
+        Axis_Delete_OptionalAttributeElement(optionalAttributeResult, 0);
 
         // Test empty optional attribute
-        emptyInput = new char[1];
-        strcpy (emptyInput, emptyID);
-        optionalAttributeInput.setoptionalAttribute(emptyInput);
-        optionalAttributeResult = ws->asOptionalAttribute(&optionalAttributeInput);
-        if (optionalAttributeResult->getoptionalAttribute())
+        optionalAttributeInput.optionalAttribute = emptyInput;
+        optionalAttributeResult = asOptionalAttribute(ws, &optionalAttributeInput);
+        if (optionalAttributeResult->optionalAttribute)
         {
-            if (*(optionalAttributeResult->getoptionalAttribute()))
-                printf("empty optional attribute=" << optionalAttributeResult->getoptionalAttribute() << endl;
+            if (*(optionalAttributeResult->optionalAttribute))
+                printf("empty optional attribute=%s\n", optionalAttributeResult->optionalAttribute);
             else
                 printf("empty optional attribute=<empty>\n");
         }
         else
             printf("empty optional attribute=<not present>\n");
-        delete [] emptyInput;
-        delete optionalAttributeResult;
+
+        Axis_Delete_OptionalAttributeElement(optionalAttributeResult, 0);
 
         // Test optional attribute, not present
         // optionalAttributeInput.setattribute();
-        optionalAttributeResult = ws->asOptionalAttribute(&optionalAttributeInput);
-        if (optionalAttributeResult->getoptionalAttribute())
+        optionalAttributeResult = asOptionalAttribute(ws, &optionalAttributeInput);
+        if (optionalAttributeResult->optionalAttribute)
         {
-            if (*(optionalAttributeResult->getoptionalAttribute()))
-                printf("optional attribute, not present=" << optionalAttributeResult->getoptionalAttribute() << endl;
+            if (*(optionalAttributeResult->optionalAttribute))
+                printf("optional attribute, not present=%s\n", optionalAttributeResult->optionalAttribute);
             else
                 printf("optional attribute, not present=<empty>\n");
         }
         else
             printf("optional attribute, not present=<not present>\n");
-        delete optionalAttributeResult;
+            
+        Axis_Delete_OptionalAttributeElement(optionalAttributeResult, 0);
+    }
 */
 
     // Test array
