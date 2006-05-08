@@ -14,6 +14,15 @@
 // limitations under the License.
 
 
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* ----------------------------------------------------------------   */
+/* CHANGES TO THIS FILE MAY ALSO REQUIRE CHANGES TO THE               */
+/* C-EQUIVALENT FILE. PLEASE ENSURE THAT IT IS DONE.                  */
+/* ----------------------------------------------------------------   */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+
 #include "XSD_short.hpp"
 #include <axis/AxisException.hpp>
 #include <ctype.h>
@@ -21,44 +30,50 @@
 
 int main(int argc, char* argv[])
 {
+    XSD_short* ws;
+    
+    xsd__short result;
+    xsd__short* nillableInput;
+    xsd__short* nillableResult;
+    
     char endpoint[256];
     const char* url="http://localhost:80/axis/XSD_short";
 
     if(argc>1)
         url = argv[1];
 
-      // bool bSuccess = false;
-
     try
     {
         sprintf(endpoint, "%s", url);
-        XSD_short* ws = new XSD_short(endpoint);
+        ws = new XSD_short(endpoint);
 
-        xsd__short result = ws->asNonNillableElement((xsd__short)32767);
+        result = ws->asNonNillableElement((xsd__short)32767);
         cout << "non-nillable element=" << result << endl;
+        
         result = ws->asNonNillableElement((xsd__short)1);
         cout << "non-nillable element=" << result << endl;
+        
         result = ws->asNonNillableElement((xsd__short)-32768);
         cout << "non-nillable element=" << result << endl;
+        
         result = ws->asNonNillableElement((xsd__short)-1);
         cout << "non-nillable element=" << result << endl;
+        
         result = ws->asNonNillableElement((xsd__short)0);
         cout << "non-nillable element=" << result << endl;
 
 
         // Test nillable element, with a value
-        xsd__short* nillableInput = new xsd__short();
+        nillableInput = new xsd__short();
         *(nillableInput) = (xsd__short)12345;
-        xsd__short* nillableResult = ws->asNillableElement(nillableInput);
+        nillableResult = ws->asNillableElement(nillableInput);
         if (nillableResult)
         {
             cout << "nillable element=" << *(nillableResult) << endl;
             delete nillableResult;
         }
         else
-        {
             cout << "nillable element=<nil>" << endl;
-        }
         delete nillableInput;
 
         // Test nillable element, with nil
@@ -69,9 +84,7 @@ int main(int argc, char* argv[])
             delete nillableResult;
         }
         else
-        {
             cout << "nil element=<nil>" << endl;
-        }
 
         // Test required attribute
         RequiredAttributeElement requiredAttributeInput;
@@ -111,33 +124,35 @@ int main(int argc, char* argv[])
 */
 
         // Test array
-        xsd__short_Array arrayInput;
-                int arraySize=2;
-                xsd__short ** array = new xsd__short*[arraySize];
+#define ARRAY_SIZE 2                    
+        int i, outputSize=0;
         
-        for (int inputIndex=0 ; inputIndex < arraySize ; inputIndex++)
-        {
-            array[inputIndex] = new xsd__short(12345);
-          
-        }
-                arrayInput.set(array,arraySize);
-        xsd__short_Array* arrayResult = ws->asArray(&arrayInput);
-                int outputSize=0;
-                const xsd__short ** output = arrayResult->get(outputSize);
+        xsd__short_Array arrayInput;
+        xsd__short_Array* arrayResult;
+        xsd__short * array[ARRAY_SIZE];
+        const xsd__short ** output;
+        
+        for (i=0 ; i < ARRAY_SIZE ; i++)
+            array[i] = new xsd__short(12345);
+        arrayInput.set(array,ARRAY_SIZE);
+        
+        arrayResult = ws->asArray(&arrayInput);
+
+        if (arrayResult)
+            output = arrayResult->get(outputSize);
+        
         cout << "array of " << outputSize << " elements" << endl;
-        for (int index = 0; index < outputSize ; index++)
-        {
-            cout << "  element[" << index << "]=" << *((xsd__short*)(output[index])) << endl;
-            
-        }
+        for (i = 0; i < outputSize ; i++)
+            cout << "  element[" << i << "]=" << *((xsd__short*)(output[i])) << endl;
+        
         // Clear up input array        
-        for (int deleteIndex = 0 ; deleteIndex < arraySize ; deleteIndex++ )
-        {
-            delete array[deleteIndex];
-        }
-        delete [] array;
+        for (i = 0 ; i < ARRAY_SIZE ; i++ )
+            delete array[i];
         delete arrayResult;
 
+
+
+        
         // Test complex type
         SimpleComplexType complexTypeInput;
         complexTypeInput.setcomplexTypeElement(12345);
