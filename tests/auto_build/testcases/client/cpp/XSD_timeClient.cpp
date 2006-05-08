@@ -14,6 +14,15 @@
 // limitations under the License.
 
 
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* ----------------------------------------------------------------   */
+/* CHANGES TO THIS FILE MAY ALSO REQUIRE CHANGES TO THE               */
+/* C-EQUIVALENT FILE. PLEASE ENSURE THAT IT IS DONE.                  */
+/* ----------------------------------------------------------------   */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+
 #include "XSD_time.hpp"
 #include <axis/AxisException.hpp>
 #include <ctype.h>
@@ -22,6 +31,14 @@
 
 int main(int argc, char* argv[])
 {
+    XSD_time* ws;
+
+    xsd__time input;
+    xsd__time result;
+    xsd__time* nillableInput;
+    xsd__time* nillableResult;
+    
+    
     char endpoint[256];
     const char* url="http://localhost:80/axis/XSD_time";
 
@@ -31,24 +48,23 @@ int main(int argc, char* argv[])
     try
     {
         sprintf(endpoint, "%s", url);
-        XSD_time* ws = new XSD_time(endpoint);
+        ws = new XSD_time(endpoint);
 
         char returnString[50];
         
         time_t timeToTest = 1100246323;
         struct tm *temp = gmtime(&timeToTest);
-        struct tm time;
-        memcpy(&time, temp, sizeof(struct tm));
+        memcpy(&input, temp, sizeof(struct tm));
 
         // Test non-nillable element
-        xsd__time result = ws->asNonNillableElement(time);
+        result = ws->asNonNillableElement(input);
         strftime(returnString, 50, "%H:%M:%S", &result);
         cout << "non-nillable element=" << returnString << endl;
 
         // Test nillable element, with a value
-        xsd__time* nillableInput = new xsd__time();
-        *(nillableInput) = time;
-        xsd__time* nillableResult = ws->asNillableElement(nillableInput);
+        nillableInput = new xsd__time();
+        *(nillableInput) = input;
+        nillableResult = ws->asNillableElement(nillableInput);
         if (nillableResult)
         {
             strftime(returnString, 50, "%H:%M:%S", nillableResult);
@@ -56,9 +72,7 @@ int main(int argc, char* argv[])
             delete nillableResult;
         }
         else
-        {
             cout << "nillable element=<nil>" << endl;
-        }
         delete nillableInput;
 
         // Test nillable element, with nil
@@ -70,13 +84,11 @@ int main(int argc, char* argv[])
             delete nillableResult;
         }
         else
-        {
             cout << "nil element=<nil>" << endl;
-        }
 
         // Test required attribute
         RequiredAttributeElement requiredAttributeInput;
-        requiredAttributeInput.setrequiredAttribute(time);
+        requiredAttributeInput.setrequiredAttribute(input);
         RequiredAttributeElement* requiredAttributeResult = ws->asRequiredAttribute(&requiredAttributeInput);
         result = requiredAttributeResult->getrequiredAttribute();
         strftime(returnString, 50, "%H:%M:%S", &result);
@@ -87,7 +99,7 @@ int main(int argc, char* argv[])
  * Exact coding of this section may change depending on chosen implementation
         // Test optional attribute, with a value
         OptionalAttributeElement optionalAttributeInput;
-        optionalAttributeInput.setoptionalAttribute(time);
+        optionalAttributeInput.setoptionalAttribute(input);
         OptionalAttributeElement* optionalAttributeResult = ws->asOptionalAttribute(&optionalAttributeInput);
         if (optionalAttributeResult->getoptionalAttribute())
         {
@@ -95,9 +107,7 @@ int main(int argc, char* argv[])
             cout << "optional attribute, with data=" << returnString << endl;
         }
         else
-        {
             cout << "optional attribute, with data=<not present>" << endl;
-        }
         delete optionalAttributeResult;
 
         // Test optional attribute, not present
@@ -109,43 +119,45 @@ int main(int argc, char* argv[])
             cout << "optional attribute, not present=" << returnString << endl;
         }
         else
-        {
             cout << "optional attribute, not present=<not present>" << endl;
-        }
         delete optionalAttributeResult;
 */
         // Test array
-       xsd__time_Array arrayInput;
-                int arraySize = 2;
-                xsd__time ** array = new xsd__time*[arraySize];
+#define ARRAY_SIZE 2                    
+        int i, outputSize=0;
         
-        for (int inputIndex=0 ; inputIndex < arraySize ; inputIndex++)
-        {
-            array[inputIndex] = new xsd__time(time);           
-        }
-                arrayInput.set(array,arraySize);
-        xsd__time_Array* arrayResult = ws->asArray(&arrayInput);
-                int outputSize=0;
-                const xsd__time ** output = arrayResult->get(outputSize);
+        xsd__time_Array arrayInput;
+        xsd__time_Array* arrayResult;
+        xsd__time * array[ARRAY_SIZE];
+        const xsd__time ** output;
+        
+        for (i=0 ; i < ARRAY_SIZE ; i++)
+            array[i] = new xsd__time(input);
+        arrayInput.set(array,ARRAY_SIZE);
+        
+        arrayResult = ws->asArray(&arrayInput);
+
+        if (arrayResult)
+            output = arrayResult->get(outputSize);
         cout << "array of " << outputSize << " elements" << endl;
-        for (int index = 0; index < outputSize ; index++)
+        for (i = 0; i < outputSize ; i++)
         {
-            strftime(returnString, 50, "%H:%M:%S", output[index]);
-            cout << "  element[" << index << "]=" << returnString << endl;
-            
+            strftime(returnString, 50, "%H:%M:%S", output[i]);
+            cout << "  element[" << i << "]=" << returnString << endl;
         }
-       // Clear up input array        
-        for (int deleteIndex = 0 ; deleteIndex < arraySize ; deleteIndex++ )
-        {
-            delete array[deleteIndex];
-        }
-        delete [] array;
+        
+        // Clear up input array        
+        for (i = 0 ; i < ARRAY_SIZE ; i++ )
+            delete array[i];
         delete arrayResult;
 
 
+
+        
+
         // Test complex type
         SimpleComplexType complexTypeInput;
-        complexTypeInput.setcomplexTypeElement(time);
+        complexTypeInput.setcomplexTypeElement(input);
         SimpleComplexType* complexTypeResult = ws->asComplexType(&complexTypeInput);
         result = complexTypeResult->getcomplexTypeElement();
         strftime(returnString, 50, "%H:%M:%S", &result);

@@ -14,6 +14,15 @@
 // limitations under the License.
 
 
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* ----------------------------------------------------------------   */
+/* CHANGES TO THIS FILE MAY ALSO REQUIRE CHANGES TO THE               */
+/* C-EQUIVALENT FILE. PLEASE ENSURE THAT IT IS DONE.                  */
+/* ----------------------------------------------------------------   */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+
 #include "XSD_token.hpp"
 #include <axis/AxisException.hpp>
 #include <ctype.h>
@@ -22,6 +31,16 @@
 
 int main(int argc, char* argv[])
 {
+    XSD_token* ws ;
+
+    xsd__token input;
+    xsd__token result;
+
+    char emptytoken[1] = "";
+    char simpletoken[25] = "A simple test message!";
+    char reservedCharacterstoken[] = "<>&\"\'";
+    char whitespacetoken[] = "  \t\r\nsome text \t\r\nmore text \t\r\n";
+    
     char endpoint[256];
     const char* url="http://localhost:80/axis/XSD_token";
 
@@ -31,114 +50,81 @@ int main(int argc, char* argv[])
     try
     {
         sprintf(endpoint, "%s", url);
-        XSD_token* ws = new XSD_token(endpoint);
+        ws = new XSD_token(endpoint);
       
-        char emptytoken[1] = "";
-        xsd__token emptyInput = new char[1];
-        strcpy (emptyInput, emptytoken);
-        char simpletoken[25] = "A simple test message!";
-        xsd__token input = new char[25];
+        input = new char[25];
         strcpy (input, simpletoken);
 
         // Test non-nillable element
-        xsd__token result = ws->asNonNillableElement(input);
+        result = ws->asNonNillableElement(input);
         if (result)
         {
             if (*result)
-            {
                 cout << "non-nillable element=" << result << endl;
-            }
             else
-            {
                 cout << "non-nillable element=<empty>" << endl;
-            }
+            delete result;
         }
         else
-        {
             cout << "non-nillable element=<nil>" << endl;
-        }
         delete [] input;
 
         // Test non-nillable element with XML reserved characters
-        char reservedCharacterstoken[] = "<>&\"\'";
-        xsd__token reservedCharactersInput = reservedCharacterstoken;
-        result = ws->asNonNillableElement(reservedCharactersInput);
+        input = reservedCharacterstoken;
+        result = ws->asNonNillableElement(input);
         if (result)
         {
             if (*result)
-            {
                 cout << "non-nillable element with XML reserved characters=" << result << endl;
-            }
             else
-            {
                 cout << "non-nillable element with XML reserved characters=<empty>" << endl;
-            }
+            delete result;
         }
         else
-        {
             cout << "non-nillable element with XML reserved characters=<nil>" << endl;
-        }
 
         // Test non-nillable element with XML reserved characters
-        char whitespacetoken[] = "  \t\r\nsome text \t\r\nmore text \t\r\n";
-        xsd__token whitespaceInput = whitespacetoken;
-        result = ws->asNonNillableElement(whitespaceInput);
+        input = whitespacetoken;
+        result = ws->asNonNillableElement(input);
         if (result)
         {
             if (*result)
-            {
                 cout << "non-nillable element with whitespace characters=\"" << result << "\"" << endl;
-            }
             else
-            {
                 cout << "non-nillable element with whitespace characters=<empty>" << endl;
-            }
+            delete result;
         }
         else
-        {
             cout << "non-nillable element with whitespace characters=<nil>" << endl;
-        }
 
         // Test nillable element, with a value
         input = new char[25];
         strcpy (input, simpletoken);
-        xsd__token nillableResult = ws->asNillableElement(input);
-        if (nillableResult)
+        result = ws->asNillableElement(input);
+        if (result)
         {
-            if (*nillableResult)
-            {
-                cout << "nillable element=" << nillableResult << endl;
-            }
+            if (*result)
+                cout << "nillable element=" << result << endl;
             else
-            {
                 cout << "nillable element=<empty>" << endl;
-            }
-            delete nillableResult;
+            delete result;
         }
         else
-        {
             cout << "nillable element=<nil>" << endl;
-        }
         delete [] input;
 
         // Test nillable element, with nil
-        nillableResult = ws->asNillableElement(NULL);
-        if (nillableResult)
+        result = ws->asNillableElement(NULL);
+        if (result)
         {
-            if (*nillableResult)
-            {
-                cout << "nil element=" << nillableResult << endl;
-            }
+            if (*result)
+                cout << "nil element=" << result << endl;
             else
-            {
                 cout << "nil element=<empty>" << endl;
-            }
-            delete nillableResult;
+            delete result;
         }
         else
-        {
             cout << "nil element=<nil>" << endl;
-        }
 
         // Test required attribute
         input = new char[25];
@@ -149,18 +135,12 @@ int main(int argc, char* argv[])
         if (requiredAttributeResult->getrequiredAttribute())
         {
             if (*(requiredAttributeResult->getrequiredAttribute()))
-            {
                 cout << "required attribute=" << requiredAttributeResult->getrequiredAttribute() << endl;
-            }
             else
-            {
                 cout << "required attribute=<empty>" << endl;
-            }
         }
         else
-        {
             cout << "required attribute=<nil>" << endl;
-        }
         delete requiredAttributeResult;
 
 
@@ -191,26 +171,20 @@ int main(int argc, char* argv[])
         delete optionalAttributeResult;
 
         // Test empty optional attribute
-        emptyInput = new char[1];
-        strcpy (emptyInput, emptytoken);
-        optionalAttributeInput.setoptionalAttribute(emptyInput);
+        input = new char[1];
+        strcpy (input, emptytoken);
+        optionalAttributeInput.setoptionalAttribute(input);
         optionalAttributeResult = ws->asOptionalAttribute(&optionalAttributeInput);
         if (optionalAttributeResult->getoptionalAttribute())
         {
             if (*(optionalAttributeResult->getoptionalAttribute()))
-            {
                 cout << "empty optional attribute=" << optionalAttributeResult->getoptionalAttribute() << endl;
-            }
             else
-            {
                 cout << "empty optional attribute=<empty>" << endl;
-            }
         }
         else
-        {
             cout << "empty optional attribute=<not present>" << endl;
-        }
-        delete [] emptyInput;
+        delete [] input;
         delete optionalAttributeResult;
 
         // Test optional attribute, not present
@@ -235,46 +209,49 @@ int main(int argc, char* argv[])
 */
 
         // Test array
+#define ARRAY_SIZE 2                    
+        int i, outputSize=0;
+        
         xsd__token_Array arrayInput;
-                int arraySize=2;
-                xsd__token * array = new xsd__token[arraySize];        
-        for (int inputIndex=0 ; inputIndex < arraySize ; inputIndex++)
+        xsd__token_Array* arrayResult;
+        xsd__token array[ARRAY_SIZE];
+        const xsd__token * output;
+        
+        for (i=0 ; i < ARRAY_SIZE ; i++)
         {
-            array[inputIndex]= new char[25];
-            strcpy (array[inputIndex], simpletoken);           
+            array[i]= new char[25];
+            strcpy (array[i], simpletoken);           
         }
-                arrayInput.set(array,arraySize);
-        xsd__token_Array* arrayResult = ws->asArray(&arrayInput);
-                int outputSize=0;
-                const xsd__token * output = arrayResult->get(outputSize);
+        arrayInput.set(array,ARRAY_SIZE);
+        
+        arrayResult = ws->asArray(&arrayInput);
+
+        if (arrayResult)
+            output = arrayResult->get(outputSize);
         cout << "array of " << outputSize << " elements" << endl;
-        for (int index = 0; index < outputSize ; index++)
+        for (i = 0; i < outputSize ; i++)
         {
             if (output !=NULL)
             {
-                if (output[index]!=NULL)
-                {
-                    cout << "  element[" << index << "]=" << output[index] << endl;
-                }
+                if (output[i]!=NULL)
+                    cout << "  element[" << i << "]=" << output[i] << endl;
                 else
-                {
-                    cout << "  element[" << index << "]=<empty>" << endl;
-                }
-               
+                    cout << "  element[" << i << "]=<empty>" << endl;
             }
             else
-            {
-                cout << "  element[" << index << "]=<nil>" << endl;
-            }
+                cout << "  element[" << i << "]=<nil>" << endl;
         }
-         // Clear up input array        
-        for (int deleteIndex = 0 ; deleteIndex < arraySize ; deleteIndex++ )
-        {
-            delete [] array[deleteIndex];
-        }
-        delete [] array;
+        
+        // Clear up input array        
+        for (i = 0 ; i < ARRAY_SIZE ; i++ )
+            delete [] array[i];
         delete arrayResult;
 
+
+
+
+
+        
         // Test complex type
         input = new char[25];
         strcpy (input, simpletoken);
@@ -284,18 +261,12 @@ int main(int argc, char* argv[])
         if (complexTypeResult->getcomplexTypeElement())
         {
             if (*(complexTypeResult->getcomplexTypeElement()))
-            {
                 cout << "within complex type=" << complexTypeResult->getcomplexTypeElement() << endl;
-            }
             else
-            {
                 cout << "within complex type=<empty>" << endl;
-            }
         }
         else
-        {
             cout << "within complex type=<nil>" << endl;
-        }
         delete complexTypeResult;
 
         // Tests now complete

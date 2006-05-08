@@ -14,6 +14,15 @@
 // limitations under the License.
 
 
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* ----------------------------------------------------------------   */
+/* CHANGES TO THIS FILE MAY ALSO REQUIRE CHANGES TO THE               */
+/* C-EQUIVALENT FILE. PLEASE ENSURE THAT IT IS DONE.                  */
+/* ----------------------------------------------------------------   */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+
 #include "XSD_unsignedInt.hpp"
 #include <axis/AxisException.hpp>
 #include <ctype.h>
@@ -21,6 +30,13 @@
 
 int main(int argc, char* argv[])
 {
+    XSD_unsignedInt* ws;
+    
+    xsd__unsignedInt result;
+    xsd__unsignedInt* nillableInput;
+    xsd__unsignedInt* nillableResult;    
+        
+    
     char endpoint[256];
     const char* url="http://localhost:80/axis/XSD_unsignedInt";
 
@@ -32,9 +48,9 @@ int main(int argc, char* argv[])
     try
     {
         sprintf(endpoint, "%s", url);
-        XSD_unsignedInt* ws = new XSD_unsignedInt(endpoint);
+        ws = new XSD_unsignedInt(endpoint);
 
-        xsd__unsignedInt result = ws->asNonNillableElement((xsd__unsignedInt)4294967295);
+        result = ws->asNonNillableElement((xsd__unsignedInt)4294967295);
         cout << "non-nillable element=" << result << endl;
         result = ws->asNonNillableElement((xsd__unsignedInt)1);
         cout << "non-nillable element=" << result << endl;
@@ -43,18 +59,16 @@ int main(int argc, char* argv[])
 
 
         // Test nillable element, with a value
-        xsd__unsignedInt* nillableInput = new xsd__unsignedInt();
+        nillableInput = new xsd__unsignedInt();
         *(nillableInput) = (xsd__unsignedInt)123456789;
-        xsd__unsignedInt* nillableResult = ws->asNillableElement(nillableInput);
+        nillableResult = ws->asNillableElement(nillableInput);
         if (nillableResult)
         {
             cout << "nillable element=" << *(nillableResult) << endl;
             delete nillableResult;
         }
         else
-        {
             cout << "nillable element=<nil>" << endl;
-        }
         delete nillableInput;
 
         // Test nillable element, with nil
@@ -65,9 +79,7 @@ int main(int argc, char* argv[])
             delete nillableResult;
         }
         else
-        {
             cout << "nil element=<nil>" << endl;
-        }
 
         // Test required attribute
         RequiredAttributeElement requiredAttributeInput;
@@ -83,55 +95,45 @@ int main(int argc, char* argv[])
         optionalAttributeInput.setoptionalAttribute(123456789);
         OptionalAttributeElement* optionalAttributeResult = ws->asOptionalAttribute(&optionalAttributeInput);
         if (optionalAttributeResult->getoptionalAttribute())
-        {
             cout << "optional attribute, with data=" << optionalAttributeResult->getoptionalAttribute() << endl;
-        }
         else
-        {
             cout << "optional attribute, with data=<not present>" << endl;
-        }
         delete optionalAttributeResult;
 
         // Test optional attribute, not present
         optionalAttributeInput.setattribute();
         optionalAttributeResult = ws->asOptionalAttribute(&optionalAttributeInput);
         if (optionalAttributeResult->getoptionalAttribute())
-        {
             cout << "optional attribute, not present=" << optionalAttributeResult->getoptionalAttribute() << endl;
-        }
         else
-        {
             cout << "optional attribute, not present=<not present>" << endl;
-        }
         delete optionalAttributeResult;
 */
 
         // Test array
-        xsd__unsignedInt_Array arrayInput;
-                int arraySize = 2;
-                xsd__unsignedInt ** array =new xsd__unsignedInt*[arraySize];
+#define ARRAY_SIZE 2                    
+        int i, outputSize=0;
         
-        for (int inputIndex=0 ; inputIndex < arraySize; inputIndex++)
-        {
-            array[inputIndex] = new xsd__unsignedInt(123456789);
-            
-        }
-                arrayInput.set(array,arraySize);
-        xsd__unsignedInt_Array* arrayResult = ws->asArray(&arrayInput);
-                int outputSize=0;
-                const xsd__unsignedInt ** output =arrayResult->get(outputSize);
+        xsd__unsignedInt_Array arrayInput;
+        xsd__unsignedInt_Array* arrayResult;
+        xsd__unsignedInt * array[ARRAY_SIZE];
+        const xsd__unsignedInt ** output;
+        
+        for (i=0 ; i < ARRAY_SIZE; i++)
+            array[i] = new xsd__unsignedInt(123456789);
+        arrayInput.set(array,ARRAY_SIZE);
+        
+        arrayResult = ws->asArray(&arrayInput);
+
+        if (arrayResult)
+            output =arrayResult->get(outputSize);
         cout << "array of " << outputSize << " elements" << endl;
-        for (int index = 0; index < outputSize ; index++)
-        {
-            cout << "  element[" << index << "]=" << *((xsd__unsignedInt*)(output[index])) << endl;
-            
-        }
+        for (i = 0; i < outputSize ; i++)
+            cout << "  element[" << i << "]=" << *((xsd__unsignedInt*)(output[i])) << endl;
+
         // Clear up input array        
-        for (int deleteIndex = 0 ; deleteIndex < arraySize ; deleteIndex++ )
-        {
-            delete array[deleteIndex];
-        }
-        delete [] array;
+        for (i = 0 ; i < ARRAY_SIZE ; i++ )
+            delete array[i];
         delete arrayResult;
 
 
