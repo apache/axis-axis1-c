@@ -149,8 +149,7 @@ static C_BOOL exceptionOccurred = C_FALSE;
 void exceptionHandler(int errorCode, const char *errorString)
 {
     exceptionOccurred = C_TRUE;    
-    printf("TEST EXCEPTION HANDLER: ERROR-CODE=%d, ERROR-STRING=%s\n", 
-           errorCode, errorString);
+    printf("AxisException : %s\n", errorString);
 }
 
 #endif
