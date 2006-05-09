@@ -1,0 +1,17 @@
+<test>
+    <name>XSD_languageC</name>
+    <description>Test serialization and deserialization of the XSD built-in simple type language</description>
+    <clientLang>c</clientLang>
+    <clientCode>XSD_languageClient.c</clientCode>
+    <wsdl>XSD_language.wsdl</wsdl>
+    <expected>
+        <output>
+            XSD_language.expected
+        </output>
+		<serverResponse>
+			XSD_language_ServerResponse.expected
+	    </serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/XSD_language</endpoint>
+</test>
+

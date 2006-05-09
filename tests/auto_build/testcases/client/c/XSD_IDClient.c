@@ -301,6 +301,7 @@ int main(int argc, char* argv[])
     {
 #define ARRAY_SIZE 2                    
         int i, outputSize=0;
+        
         xsdc__ID_Array arrayInput;
         xsdc__ID_Array* arrayResult;
         xsdc__ID array[ARRAY_SIZE];  
@@ -316,9 +317,6 @@ int main(int argc, char* argv[])
         arrayInput.m_Type  = XSDC_ID;
         
         arrayResult = asArray(ws, &arrayInput);
-        if (exceptionOccurred == C_TRUE
-            || get_XSD_IDPort_Status(ws) == AXISC_FAIL )
-            printf ("Failed\n");
 
         if (arrayResult)
         {

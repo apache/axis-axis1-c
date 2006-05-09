@@ -13,6 +13,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* ----------------------------------------------------------------   */
+/* CHANGES TO THIS FILE MAY ALSO REQUIRE CHANGES TO THE               */
+/* C-EQUIVALENT FILE. PLEASE ENSURE THAT IT IS DONE.                  */
+/* ----------------------------------------------------------------   */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
 
 #include "XSD_integer.hpp"
 #include <axis/AxisException.hpp>
@@ -22,6 +30,12 @@
 
 int main(int argc, char* argv[])
 {
+    XSD_integer* ws;
+    
+    xsd__integer result;
+    xsd__integer input;
+    xsd__integer* nillableResult;
+    
     char endpoint[256];
     const char* url="http://localhost:80/axis/XSD_integer";
 
@@ -33,33 +47,34 @@ int main(int argc, char* argv[])
     try
     {
         sprintf(endpoint, "%s", url);
-        XSD_integer* ws = new XSD_integer(endpoint);
-        xsd__integer result = ws->asNonNillableElement((xsd__integer) LONGLONGVALUE(9223372036854775807));
+        ws = new XSD_integer(endpoint);
+        
+        result = ws->asNonNillableElement((xsd__integer) LONGLONGVALUE(9223372036854775807));
         cout << "non-nillable element=" << result << endl;
+        
         result = ws->asNonNillableElement((xsd__integer)1);
         cout << "non-nillable element=" << result << endl;
+        
         result = ws->asNonNillableElement((xsd__integer) LONGLONGVALUE(-9223372036854775808));
         cout << "non-nillable element=" << result << endl;
+        
         result = ws->asNonNillableElement((xsd__integer)-1);
         cout << "non-nillable element=" << result << endl;
+        
         result = ws->asNonNillableElement((xsd__integer)0);
         cout << "non-nillable element=" << result << endl;
 
 
         // Test nillable element, with a value
-        xsd__integer* nillableInput = new xsd__integer();
-        *(nillableInput) = (xsd__integer)123456789;
-        xsd__integer* nillableResult = ws->asNillableElement(nillableInput);
+        input = (xsd__integer)123456789;
+        nillableResult = ws->asNillableElement(&input);
         if (nillableResult)
         {
             cout << "nillable element=" << *(nillableResult) << endl;
             delete nillableResult;
         }
         else
-        {
             cout << "nillable element=<nil>" << endl;
-        }
-        delete nillableInput;
 
         // Test nillable element, with nil
         nillableResult = ws->asNillableElement(NULL);
@@ -69,14 +84,14 @@ int main(int argc, char* argv[])
             delete nillableResult;
         }
         else
-        {
             cout << "nil element=<nil>" << endl;
-        }
 
         // Test required attribute
         RequiredAttributeElement requiredAttributeInput;
+        RequiredAttributeElement* requiredAttributeResult;
+        
         requiredAttributeInput.setrequiredAttribute(123456789);
-        RequiredAttributeElement* requiredAttributeResult = ws->asRequiredAttribute(&requiredAttributeInput);
+        requiredAttributeResult = ws->asRequiredAttribute(&requiredAttributeInput);
         cout << "required attribute=" << requiredAttributeResult->getrequiredAttribute() << endl;
         delete requiredAttributeResult;
 
@@ -87,74 +102,65 @@ int main(int argc, char* argv[])
         optionalAttributeInput.setoptionalAttribute(123456789);
         OptionalAttributeElement* optionalAttributeResult = ws->asOptionalAttribute(&optionalAttributeInput);
         if (optionalAttributeResult->getoptionalAttribute())
-        {
             cout << "optional attribute, with data=" << optionalAttributeResult->getoptionalAttribute() << endl;
-        }
         else
-        {
             cout << "optional attribute, with data=<not present>" << endl;
-        }
         delete optionalAttributeResult;
 
         // Test optional attribute, not present
         optionalAttributeInput.setattribute();
         optionalAttributeResult = ws->asOptionalAttribute(&optionalAttributeInput);
         if (optionalAttributeResult->getoptionalAttribute())
-        {
             cout << "optional attribute, not present=" << optionalAttributeResult->getoptionalAttribute() << endl;
-        }
         else
-        {
             cout << "optional attribute, not present=<not present>" << endl;
-        }
         delete optionalAttributeResult;
 */
 
         // Test arrays
-        int arraySize = 2;
-        xsd__integer_Array inputArray;
-        xsd__integer** array = new xsd__integer*[arraySize];
-        for (int count = 0 ; count < arraySize ; count++)
-        {
-            array[count] = new xsd__integer(123456789);
-        }
-        inputArray.set(array, arraySize);
+#define ARRAY_SIZE 2                    
+        int i, outputSize=0;
         
-        xsd__integer_Array * arrayResult = ws->asArray(&inputArray);
-        int outputSize = 0;
-        const xsd__integer** output = arrayResult->get(outputSize);
+        xsd__integer_Array inputArray;
+        xsd__integer_Array * arrayResult;
+        xsd__integer* array[ARRAY_SIZE];
+        const xsd__integer** output;
+        
+        for (i = 0 ; i < ARRAY_SIZE ; i++)
+            array[i] = new xsd__integer(123456789);
+        inputArray.set(array, ARRAY_SIZE);
+        
+        arrayResult = ws->asArray(&inputArray);
+
+        if (arrayResult)
+            output = arrayResult->get(outputSize);
+            
         cout << "array of " << outputSize << " elements" << endl;
         if (output != NULL)
         {
-            for (int count = 0 ; count < outputSize ; count++)
+            for (i = 0 ; i < outputSize ; i++)
             {
-                cout << "  element[" << count << "]=";
-                if (output[count] != NULL)
-                {
-                    cout << *output[count] << endl;
-                }
+                cout << "  element[" << i << "]=";
+                if (output[i] != NULL)
+                    cout << *output[i] << endl;
                 else
-                {
                     cout << "NULL" << endl;
-                }
             }
         }
         else
-        {
             cout << "NULL array" << endl;
-        }
+
         // Clear up input array        
-        for (int deleteIndex = 0 ; deleteIndex < arraySize ; deleteIndex++ )
-        {
-            delete array[deleteIndex];
-        }
-        delete [] array;
+        for (i = 0 ; i < ARRAY_SIZE ; i++ )
+            delete array[i];
         delete arrayResult;
 
         // Test complex type
         SimpleComplexType complexTypeInput;
+        SimpleComplexType* complexTypeResult;
+        
         complexTypeInput.setcomplexTypeElement(123456789);
-        SimpleComplexType* complexTypeResult = ws->asComplexType(&complexTypeInput);
+        complexTypeResult = ws->asComplexType(&complexTypeInput);
         cout << "within complex type=" << complexTypeResult->getcomplexTypeElement() << endl;
         delete complexTypeResult;
 

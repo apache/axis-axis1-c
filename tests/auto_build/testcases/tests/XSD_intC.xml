@@ -1,0 +1,17 @@
+<test>
+    <name>XSD_intC</name>
+    <description>Test serialization and deserialization of the XSD built-in simple type int</description>
+    <clientLang>c</clientLang>
+    <clientCode>XSD_intClient.c</clientCode>
+    <wsdl>XSD_int.wsdl</wsdl>
+    <expected>
+        <output>
+            XSD_int.expected
+        </output>
+		<serverResponse>
+			XSD_int_ServerResponse.expected
+	    </serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/XSD_int</endpoint>
+</test>
+

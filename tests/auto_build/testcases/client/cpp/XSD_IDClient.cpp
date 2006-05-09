@@ -259,35 +259,35 @@ int main(int argc, char* argv[])
         // Test array
             
                     
-        int arraySize = 2;
+        int ARRAY_SIZE = 2;
         xsd__ID_Array arrayInput;
-        xsd__ID * array=new xsd__ID[arraySize];        
-        for (int inputIndex=0 ; inputIndex < arraySize ; inputIndex++)
+        xsd__ID * array=new xsd__ID[ARRAY_SIZE];        
+        for (int i=0 ; i < ARRAY_SIZE ; i++)
         {
-            array[inputIndex]= new char[25];
-            strcpy (array[inputIndex], simpleID);
+            array[i]= new char[25];
+            strcpy (array[i], simpleID);
            
         }
-        arrayInput.set(array,arraySize);
+        arrayInput.set(array,ARRAY_SIZE);
         xsd__ID_Array* arrayResult = ws->asArray(&arrayInput);
         int outputSize=0;
         const xsd__ID * output=arrayResult->get(outputSize);
         cout << "array of " << outputSize << " elements" << endl;
-        for (int index = 0; index < outputSize ; index++)
+        for (int i = 0; i < outputSize ; i++)
         {
             if (output!=NULL)
             {
-                if (output[index]!=NULL)
-                    cout << "  element[" << index << "]=" << output[index] << endl;
+                if (output[i]!=NULL)
+                    cout << "  element[" << i << "]=" << output[i] << endl;
                 else
-                    cout << "  element[" << index << "]=<empty>" << endl;
+                    cout << "  element[" << i << "]=<empty>" << endl;
             }
             else
-                cout << "  element[" << index << "]=<nil>" << endl;
+                cout << "  element[" << i << "]=<nil>" << endl;
         }
         // Clear up input array        
-        for (int deleteIndex = 0 ; deleteIndex < arraySize ; deleteIndex++ )
-            delete array[deleteIndex];
+        for (int i = 0 ; i < ARRAY_SIZE ; i++ )
+            delete array[i];
 
         delete [] array;
         delete arrayResult;
