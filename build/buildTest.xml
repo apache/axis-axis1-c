@@ -109,7 +109,10 @@
 			<compiler refid="AIXxlc"/>
             <compiler refid="HP-UXaC++"/>      
             <compiler extends="OS400icc"> 
- 			   <compilerarg value="-g"/>
+ 			   <compilerarg value="-g"/> 
+                <defineset>         
+                    <define name="_LONG_LONG" />
+                </defineset>                	      	
             </compiler>
 			<!-- Linkers -->
 			<linker refid="VisualC++Linker"/>
