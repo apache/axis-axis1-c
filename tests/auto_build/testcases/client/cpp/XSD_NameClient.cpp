@@ -233,36 +233,41 @@ int main(int argc, char* argv[])
 */
 
         // Test array
+#define ARRAY_SIZE 2                    
+        int i, outputSize=0;
+                
         xsd__Name_Array arrayInput;
-        int arraySize=2;
-        xsd__Name *array = new xsd__Name[arraySize];        
-        for (int inputIndex=0 ; inputIndex <arraySize ; inputIndex++)
+        xsd__Name_Array* arrayResult;
+        xsd__Name array[ARRAY_SIZE];   
+        const xsd__Name *output;
+             
+        for (i=0 ; i <ARRAY_SIZE ; i++)
         {
-            array[inputIndex] = new char[25];
-            strcpy (array[inputIndex], simpleName);
+            array[i] = new char[25];
+            strcpy (array[i], simpleName);
         }
-        arrayInput.set(array,arraySize);
-        xsd__Name_Array* arrayResult = ws->asArray(&arrayInput);
-        int outputSize=0;
-        const xsd__Name *output = arrayResult->get(outputSize);
+        arrayInput.set(array,ARRAY_SIZE);
+        
+        arrayResult = ws->asArray(&arrayInput);
+
+        if (arrayResult)
+            output = arrayResult->get(outputSize);
         cout << "array of " << outputSize << " elements" << endl;
-        for (int index = 0; index < outputSize ; index++)
+        for (i = 0; i < outputSize ; i++)
         {
             if (output!=NULL)
             {
-                if (output[index]!=NULL)
-                    cout << "  element[" << index << "]=" << output[index] << endl;
+                if (output[i]!=NULL)
+                    cout << "  element[" << i << "]=" << output[i] << endl;
                 else
-                    cout << "  element[" << index << "]=<empty>" << endl;
+                    cout << "  element[" << i << "]=<empty>" << endl;
              }
             else
-                cout << "  element[" << index << "]=<nil>" << endl;
+                cout << "  element[" << i << "]=<nil>" << endl;
         }
         // Clear up input array        
-        for (int deleteIndex = 0 ; deleteIndex < arraySize ; deleteIndex++ )
-            delete array[deleteIndex];
-
-        delete [] array;
+        for (i = 0 ; i < ARRAY_SIZE ; i++ )
+            delete array[i];
         delete arrayResult;
 
 
