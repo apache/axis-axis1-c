@@ -1,0 +1,17 @@
+<test>
+    <name>XSD_unsignedIntC</name>
+    <description>Test serialization and deserialization of the XSD built-in simple type unsignedInt</description>
+    <clientLang>c</clientLang>
+    <clientCode>XSD_unsignedIntClient.c</clientCode>
+    <wsdl>XSD_unsignedInt.wsdl</wsdl>
+    <expected>
+        <output>
+            XSD_unsignedInt.expected
+        </output>
+		<serverResponse>
+			XSD_unsignedInt_ServerResponse.expected
+	    </serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/XSD_unsignedInt</endpoint>
+</test>
+

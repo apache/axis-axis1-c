@@ -1,0 +1,17 @@
+<test>
+    <name>XSD_shortC</name>
+    <description>Test serialization and deserialization of the XSD built-in simple type short</description>
+    <clientLang>c</clientLang>
+    <clientCode>XSD_shortClient.c</clientCode>
+    <wsdl>XSD_short.wsdl</wsdl>
+    <expected>
+        <output>
+            XSD_short.expected
+        </output>
+		<serverResponse>
+			XSD_short_ServerResponse.expected
+	    </serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/XSD_short</endpoint>
+</test>
+

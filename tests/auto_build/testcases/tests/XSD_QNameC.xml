@@ -1,0 +1,17 @@
+<test>
+    <name>XSD_QNameC</name>
+    <description>Test serialization and deserialization of the XSD built-in simple type QName</description>
+    <clientLang>c</clientLang>
+    <clientCode>XSD_QNameClient.c</clientCode>
+    <wsdl>XSD_QName.wsdl</wsdl>
+    <expected>
+        <output>
+            XSD_QName.expected
+        </output>
+		<serverResponse>
+			XSD_QName_ServerResponse.expected
+	    </serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/XSD_QName</endpoint>
+</test>
+

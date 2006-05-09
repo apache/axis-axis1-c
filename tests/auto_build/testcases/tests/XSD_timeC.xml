@@ -1,0 +1,17 @@
+<test>
+    <name>XSD_timeC</name>
+    <description>Test serialization and deserialization of the XSD built-in simple type time</description>
+    <clientLang>c</clientLang>
+    <clientCode>XSD_timeClient.c</clientCode>
+    <wsdl>XSD_time.wsdl</wsdl>
+    <expected>
+        <output>
+            XSD_time.expected
+        </output>
+		<serverResponse>
+			XSD_time_ServerResponse.expected
+	    </serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/XSD_time</endpoint>
+</test>
+

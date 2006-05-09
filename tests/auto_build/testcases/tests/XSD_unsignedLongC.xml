@@ -1,0 +1,17 @@
+<test>
+    <name>XSD_unsignedLongC</name>
+    <description>Test serialization and deserialization of the XSD built-in simple type unsignedLong</description>
+    <clientLang>c</clientLang>
+    <clientCode>XSD_unsignedLongClient.c</clientCode>
+    <wsdl>XSD_unsignedLong.wsdl</wsdl>
+    <expected>
+        <output>
+            XSD_unsignedLong.expected
+        </output>
+		<serverResponse>
+			XSD_unsignedLong_ServerResponse.expected
+	    </serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/XSD_unsignedLong</endpoint>
+</test>
+

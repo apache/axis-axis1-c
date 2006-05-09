@@ -1,0 +1,17 @@
+<test>
+    <name>XSD_stringC</name>
+    <description>Test serialization and deserialization of the XSD built-in simple type string</description>
+    <clientLang>c</clientLang>
+    <clientCode>XSD_stringClient.c</clientCode>
+    <wsdl>XSD_string.wsdl</wsdl>
+    <expected>
+        <output>
+            XSD_string.expected
+        </output>
+		<serverResponse>
+			XSD_string_ServerResponse.expected
+	    </serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/XSD_string</endpoint>
+</test>
+
