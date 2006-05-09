@@ -13,6 +13,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* ----------------------------------------------------------------   */
+/* CHANGES TO THIS FILE MAY ALSO REQUIRE CHANGES TO THE               */
+/* C-EQUIVALENT FILE. PLEASE ENSURE THAT IT IS DONE.                  */
+/* ----------------------------------------------------------------   */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
 
 #include "XSD_hexBinary.hpp"
 #include <axis/AxisException.hpp>
@@ -23,6 +31,17 @@
 
 int main(int argc, char* argv[])
 {
+    XSD_hexBinary* ws;
+    
+    xsd__hexBinary input;
+    xsd__hexBinary result;
+    xsd__hexBinary* nillableResult;
+    
+    xsd__unsignedByte* testUB;
+    
+    int size = 0;
+    const xsd__unsignedByte * resultData;    
+    
     char endpoint[256];
     const char* url="http://localhost:80/axis/XSD_hexBinary";
 
@@ -32,98 +51,90 @@ int main(int argc, char* argv[])
     try
     {
         sprintf(endpoint, "%s", url);
-        XSD_hexBinary* ws = new XSD_hexBinary(endpoint);
+        ws = new XSD_hexBinary(endpoint);       
 
-        xsd__hexBinary input;
-
-        xsd__unsignedByte* testUB = (xsd__unsignedByte*)stringToAscii("<test><xml>some dod&y string</xml></test>");
-
+        testUB = (xsd__unsignedByte*)stringToAscii("<test><xml>some dod&y string</xml></test>");
         input.set(testUB, 41);
 
         // Test non-nillable element
-        xsd__hexBinary result = ws->asNonNillableElement(input);
+        result = ws->asNonNillableElement(input);
         cout << "non-nillable element" << endl;
-        int size = 0;
-        const xsd__unsignedByte * data = result.get(size);
+
+        resultData = result.get(size);
         cout << " size=" << size << endl;
-        cout << " data=" << asciiToStringOfLength((char *)data, size) << endl;
+        cout << " data=" << asciiToStringOfLength((char *)resultData, size) << endl;
 
         // Test nillable element, with a value
-        xsd__hexBinary* nillableInput = new xsd__hexBinary();
-        *(nillableInput) = input;
-        xsd__hexBinary* nillableResult = ws->asNillableElement(nillableInput);
+        nillableResult = ws->asNillableElement(&input);
         if (nillableResult)
         {
             cout << "nillable element" << endl;
-            size = 0;
-            data = nillableResult->get(size);
+            resultData = nillableResult->get(size);
             cout << " size=" << size << endl;
-            cout << " data=" << asciiToStringOfLength((char *)data, size) << endl;
+            cout << " data=" << asciiToStringOfLength((char *)resultData, size) << endl;
             delete nillableResult;
         }
         else
-        {
             cout << "nillable element=<nil>" << endl;
-        }
-        delete nillableInput;
 
         // Test nillable element, with nil
         nillableResult = ws->asNillableElement(NULL);
         if (nillableResult)
         {
             cout << "nillable element" << endl;
-            size = 0 ;
-            data = nillableResult->get(size);
+            resultData = nillableResult->get(size);
             cout << " size=" << size << endl;
-            cout << " data=" << asciiToStringOfLength((char *)data, size) << endl;
+            cout << " data=" << asciiToStringOfLength((char *)resultData, size) << endl;
             delete nillableResult;
         }
         else
-        {
             cout << "nil element=<nil>" << endl;
-        }
 
         // Test array
+#define ARRAY_SIZE 2                    
+        int i, outputSize=0;
+        
         xsd__hexBinary_Array arrayInput;
-                int arraySize = 2;
-        xsd__hexBinary ** array = new xsd__hexBinary*[arraySize];
-        for (int inputIndex=0 ; inputIndex < arraySize ; inputIndex++)
-        {
-            array[inputIndex] = new xsd__hexBinary(input);            
-        }
-                arrayInput.set(array,arraySize);
-        xsd__hexBinary_Array* arrayResult = ws->asArray(&arrayInput);
-                int outputSize=0;
-                const xsd__hexBinary ** output =arrayResult->get(outputSize);
+        xsd__hexBinary_Array* arrayResult;
+        xsd__hexBinary * array[ARRAY_SIZE];
+        const xsd__hexBinary ** output;
+        
+        for (i=0 ; i < ARRAY_SIZE ; i++)
+            array[i] = new xsd__hexBinary(input);            
+
+        arrayInput.set(array,ARRAY_SIZE);
+        
+        arrayResult = ws->asArray(&arrayInput);
+        
+        if (arrayResult)
+             output =arrayResult->get(outputSize);
+             
         cout << "array of " << outputSize << " elements" << endl;
-        for (int index = 0; index < outputSize; index++)
+        for (i = 0; i < outputSize; i++)
         {
-            cout << " element[" << index << "]" << endl;
-            size = 0;
-            data = output[index]->get(size);
+            cout << " element[" << i << "]" << endl;
+            resultData = output[i]->get(size);
             cout << "  size=" << size << endl;
-            cout << "  data=" << asciiToStringOfLength((char *)data, size) << endl;
+            cout << "  data=" << asciiToStringOfLength((char *)resultData, size) << endl;
             
         }
         // Clear up input array        
-        for (int deleteIndex = 0 ; deleteIndex < arraySize ; deleteIndex++ )
-        {
-            delete array[deleteIndex];
-        }
-        delete [] array;
+        for (i = 0 ; i < ARRAY_SIZE ; i++ )
+            delete array[i];
         delete arrayResult;
 
 
         // Test complex type
         SimpleComplexType complexTypeInput;
+        SimpleComplexType* complexTypeResult;
+        
         complexTypeInput.setcomplexTypeElement(input);
-        SimpleComplexType* complexTypeResult = ws->asComplexType(&complexTypeInput);
+        complexTypeResult = ws->asComplexType(&complexTypeInput);
         cout << "within complex type" << endl;
         xsd__hexBinary binaryObject = complexTypeResult->getcomplexTypeElement();
-        size = 0;
-        data = binaryObject.get(size);
+        resultData = binaryObject.get(size);
         cout << " size=" << size << endl;
-        cout << " data=" << asciiToStringOfLength((char *)data, size) << endl;
+        cout << " data=" << asciiToStringOfLength((char *)resultData, size) << endl;
         delete complexTypeResult;
 
         // Tests now complete

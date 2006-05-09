@@ -1,0 +1,17 @@
+<test>
+    <name>XSD_hexBinaryC</name>
+    <description>Test serialization and deserialization of the XSD built-in simple type hexBinary</description>
+    <clientLang>c</clientLang>
+    <clientCode>XSD_hexBinaryClient.c</clientCode>
+    <wsdl>XSD_hexBinary.wsdl</wsdl>
+    <expected>
+        <output>
+            XSD_hexBinary.expected
+        </output>
+		<serverResponse>
+			XSD_hexBinary_ServerResponse.expected
+	    </serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/XSD_hexBinary</endpoint>
+</test>
+

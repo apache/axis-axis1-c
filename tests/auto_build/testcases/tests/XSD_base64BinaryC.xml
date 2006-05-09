@@ -1,0 +1,17 @@
+<test>
+    <name>XSD_base64BinaryC</name>
+    <description>Test serialization and deserialization of the XSD built-in simple type base64Binary</description>
+    <clientLang>c</clientLang>
+    <clientCode>XSD_base64BinaryClient.c</clientCode>
+    <wsdl>XSD_base64Binary.wsdl</wsdl>
+    <expected>
+        <output>
+            XSD_base64Binary.expected
+        </output>
+		<serverResponse>
+			XSD_base64Binary_ServerResponse.expected
+	    </serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/XSD_base64Binary</endpoint>
+</test>
+
