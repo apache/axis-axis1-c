@@ -245,7 +245,7 @@ int main(int argc, char* argv[])
         xsdc__NCName_Array arrayInput;
         xsdc__NCName_Array* arrayResult;
         xsdc__NCName array[ARRAY_SIZE]; 
-        const xsdc__NCName* output;
+        xsdc__NCName* output;
         int outputSize=0;
                
         for (i=0 ; i < ARRAY_SIZE; i++)

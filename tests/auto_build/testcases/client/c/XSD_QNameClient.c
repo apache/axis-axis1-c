@@ -17,25 +17,27 @@
 #include <stdio.h>
 
 #include "CommonClientTestCode.h"
-#include "XSD_IDPort.h"
+#include "XSD_QName.h"
 
 
 int main(int argc, char* argv[])
 {
-    AXISCHANDLE ws = NULL;
-    xsdc__ID result = NULL;
-    xsdc__ID input = NULL;
-            
-    RequiredAttributeElement requiredAttributeInput;
-    RequiredAttributeElement* requiredAttributeResult;    
+    AXISCHANDLE ws;
     
-    char emptyID[1] = "";
-    char simpleID[25] = "A simple test message!";
-    char reservedCharactersID[] = "<>&\"\'";
-    char whitespaceID[] = "  \t\r\nsome text \t\r\nmore text \t\r\n";
-        
+    xsdc__QName input;
+    xsdc__QName result;
+    
+    RequiredAttributeElement requiredAttributeInput;
+    RequiredAttributeElement* requiredAttributeResult;
+    
+    char emptyQName[1] = "";
+    char simpleQName[25] = "A simple test message!";
+    char reservedCharactersQName[] = "<>&\"\'";
+    char whitespaceQName[] = "  \t\r\nsome text \t\r\nmore text \t\r\n";
+    
     char endpoint[256];
-    const char* url="http://localhost:80/axis/XSD_IDPort";
+    const char* url="http://localhost:80/axis/XSD_QName";
+
 
     axiscAxisRegisterExceptionHandler(exceptionHandler);
 
@@ -43,169 +45,116 @@ int main(int argc, char* argv[])
         url = argv[1];
 
     sprintf(endpoint, "%s", url);
-    ws = get_XSD_IDPort_stub(url);    
-    if (!ws)
-    {
-        printf("FAILED to get WS\n");
-        return -1;
-    }
-  
-    // Test non-nillable element
-    input = (xsdc__ID)axiscAxisNew(XSDC_ID,25);
-    strcpy (input, simpleID);
+    ws = get_XSD_QName_stub(endpoint);
+          
+    input =  simpleQName;
 
+    // Test non-nillable element
     result = asNonNillableElement(ws, input);
-    
-    if (exceptionOccurred == C_TRUE
-        || get_XSD_IDPort_Status(ws) == AXISC_FAIL )
-        printf ("Failed\n");
-    
     if (result)
     {
         if (*result)
             printf("non-nillable element=%s\n", result);
         else
             printf("non-nillable element=<empty>\n");
-        
-        axiscAxisDelete(result, XSDC_ID);                
+            
+        axiscAxisDelete(result, XSDC_QNAME);
     }
     else
         printf("non-nillable element=<nil>\n");
 
-    axiscAxisDelete(input, XSDC_ID);
-
     // Test empty non-nillable element
-    input = (xsdc__ID)axiscAxisNew(XSDC_ID, 1);
-    strcpy (input, emptyID);   
-    result = asNonNillableElement(ws,input);
-    if (exceptionOccurred == C_TRUE
-        || get_XSD_IDPort_Status(ws) == AXISC_FAIL )
-        printf ("Failed\n");
+    input = emptyQName;
     
+    result = asNonNillableElement(ws, input);
     if (result)
     {
         if (*result)
             printf("empty non-nillable element=%s\n", result);
         else
             printf("empty non-nillable element=<empty>\n");
-        
-        axiscAxisDelete(result, XSDC_ID);                
+            
+        axiscAxisDelete(result, XSDC_QNAME);
     }
     else
         printf("empty non-nillable element=<nil>\n");
 
-    axiscAxisDelete(input, XSDC_ID);
-
     // Test non-nillable element with XML reserved characters
-    input = reservedCharactersID;
-    result = asNonNillableElement(ws,input);
-    if (exceptionOccurred == C_TRUE
-        || get_XSD_IDPort_Status(ws) == AXISC_FAIL )
-        printf ("Failed\n");
     
+    input = reservedCharactersQName;
+    result = asNonNillableElement(ws, input);
     if (result)
     {
         if (*result)
             printf("non-nillable element with XML reserved characters=%s\n", result);
         else
             printf("non-nillable element with XML reserved characters=<empty>\n");
-        
-        axiscAxisDelete(result, XSDC_ID);                
+            
+        axiscAxisDelete(result, XSDC_QNAME);
     }
     else
         printf("non-nillable element with XML reserved characters=<nil>\n");
 
     // Test non-nillable element with XML reserved characters
-    input = whitespaceID;
-    result = asNonNillableElement(ws, input);
-    if (exceptionOccurred == C_TRUE
-        || get_XSD_IDPort_Status(ws) == AXISC_FAIL )
-        printf ("Failed\n");
     
+    input = whitespaceQName;
+    result = asNonNillableElement(ws, input);
     if (result)
     {
         if (*result)
             printf("non-nillable element with whitespace characters=\"%s\"\n", result);
         else
             printf("non-nillable element with whitespace characters=<empty>\n");
-        
-        axiscAxisDelete(result, XSDC_ID);                
+            
+        axiscAxisDelete(result, XSDC_QNAME);
     }
     else
         printf("non-nillable element with whitespace characters=<nil>\n");
 
     // Test nillable element, with a value
-    input = (xsdc__ID)axiscAxisNew(XSDC_ID,25);
-    strcpy (input, simpleID);
+    input =  simpleQName;
     result = asNillableElement(ws, input);
-    if (exceptionOccurred == C_TRUE
-        || get_XSD_IDPort_Status(ws) == AXISC_FAIL )
-        printf ("Failed\n");
-    
     if (result)
     {
         if (*result)
             printf("nillable element=%s\n", result);
         else
             printf("nillable element=<empty>\n");
-            
-        axiscAxisDelete(result, XSDC_ID);
+        axiscAxisDelete(result, XSDC_QNAME);
     }
     else
         printf("nillable element=<nil>\n");
-    
-    axiscAxisDelete(input, XSDC_ID);
 
     // Test empty nillable element
-    input = (xsdc__ID)axiscAxisNew(XSDC_ID,1);
-    strcpy (input, emptyID);
+    input =  emptyQName;
     result = asNillableElement(ws, input);
-    if (exceptionOccurred == C_TRUE
-        || get_XSD_IDPort_Status(ws) == AXISC_FAIL )
-        printf ("Failed\n");
-    
     if (result)
     {
         if (*result)
             printf("empty nillable element=%s\n", result);
         else
             printf("empty nillable element=<empty>\n");
-            
-        axiscAxisDelete(result, XSDC_ID);
+        axiscAxisDelete(result, XSDC_QNAME);
     }
     else
         printf("empty nillable element=<nil>\n");
 
-    axiscAxisDelete(input, XSDC_ID);
-
     // Test nillable element, with nil
     result = asNillableElement(ws, NULL);
-    if (exceptionOccurred == C_TRUE
-        || get_XSD_IDPort_Status(ws) == AXISC_FAIL )
-        printf ("Failed\n");
-    
     if (result)
     {
         if (*result)
             printf("nil element=%s\n", result);
         else
             printf("nil element=<empty>\n");
-            
-        axiscAxisDelete(result, XSDC_ID);
+        axiscAxisDelete(result, XSDC_QNAME);
     }
     else
         printf("nil element=<nil>\n");
 
     // Test required attribute
-    input = (xsdc__ID)axiscAxisNew(XSDC_ID,25);
-    strcpy (input, simpleID);
-    
-    requiredAttributeInput.requiredAttribute = input;
+    requiredAttributeInput.requiredAttribute = simpleQName;
     requiredAttributeResult = asRequiredAttribute(ws, &requiredAttributeInput);
-    if (exceptionOccurred == C_TRUE
-        || get_XSD_IDPort_Status(ws) == AXISC_FAIL )
-        printf ("Failed\n");
-    
     if (requiredAttributeResult->requiredAttribute)
     {
         if (*(requiredAttributeResult->requiredAttribute))
@@ -215,21 +164,11 @@ int main(int argc, char* argv[])
     }
     else
         printf("required attribute=<nil>\n");
-    
-    Axis_Delete_RequiredAttributeElement(requiredAttributeResult, 0);        
-    axiscAxisDelete(input, XSDC_ID);
-
+    Axis_Delete_RequiredAttributeElement(requiredAttributeResult, 0);
 
     // Test empty required attribute
-    input = (xsdc__ID)axiscAxisNew(XSDC_ID,1);
-    strcpy (input, emptyID);
-
-    requiredAttributeInput.requiredAttribute = input;
+    requiredAttributeInput.requiredAttribute = emptyQName;
     requiredAttributeResult = asRequiredAttribute(ws, &requiredAttributeInput);
-    if (exceptionOccurred == C_TRUE
-        || get_XSD_IDPort_Status(ws) == AXISC_FAIL )
-        printf ("Failed\n");
-    
     if (requiredAttributeResult->requiredAttribute)
     {
         if (*(requiredAttributeResult->requiredAttribute))
@@ -239,85 +178,86 @@ int main(int argc, char* argv[])
     }
     else
         printf("empty required attribute=<nil>\n");
-        
-    Axis_Delete_RequiredAttributeElement(requiredAttributeResult, 0);        
-    axiscAxisDelete(input, XSDC_ID);
+    Axis_Delete_RequiredAttributeElement(requiredAttributeResult, 0);
 
 /* Optional Attributes currently unsupported by WSDL2Ws
  * Exact coding of this section may change depending on chosen implementation
         // Test optional attribute, with a value
-    {
+        input = new char[25];
+        strcpy (input, simpleQName);
         OptionalAttributeElement optionalAttributeInput;
-        OptionalAttributeElement* optionalAttributeResult;
-        
-        optionalAttributeInput.setoptionalAttribute = simpleID;
-        optionalAttributeResult = asOptionalAttribute(ws, &optionalAttributeInput);
-        if (optionalAttributeResult->optionalAttribute)
+        optionalAttributeInput.setoptionalAttribute(input);
+        OptionalAttributeElement* optionalAttributeResult = ws->asOptionalAttribute(&optionalAttributeInput);
+        if (optionalAttributeResult->getoptionalAttribute())
         {
-            if (*(optionalAttributeResult->optionalAttribute))
-                printf("optional attribute, with data=%s\n", optionalAttributeResult->optionalAttribute);
+            if (*(optionalAttributeResult->getoptionalAttribute()))
+                printf("optional attribute, with data=" ,optionalAttributeResult->getoptionalAttribute());
             else
                 printf("optional attribute, with data=<empty>\n");
-
         }
         else
             printf("optional attribute, with data=<not present>\n");
-
-        Axis_Delete_OptionalAttributeElement(optionalAttributeResult, 0);
+        delete [] input;
+        delete optionalAttributeResult;
 
         // Test empty optional attribute
-        optionalAttributeInput.optionalAttribute = emptyInput;
-        optionalAttributeResult = asOptionalAttribute(ws, &optionalAttributeInput);
-        if (optionalAttributeResult->optionalAttribute)
+        input = new char[1];
+        strcpy (input, emptyQName);
+        optionalAttributeInput.setoptionalAttribute(input);
+        optionalAttributeResult = ws->asOptionalAttribute(&optionalAttributeInput);
+        if (optionalAttributeResult->getoptionalAttribute())
         {
-            if (*(optionalAttributeResult->optionalAttribute))
-                printf("empty optional attribute=%s\n", optionalAttributeResult->optionalAttribute);
+            if (*(optionalAttributeResult->getoptionalAttribute()))
+                printf("empty optional attribute=" ,optionalAttributeResult->getoptionalAttribute());
             else
                 printf("empty optional attribute=<empty>\n");
         }
         else
+        {
             printf("empty optional attribute=<not present>\n");
-
-        Axis_Delete_OptionalAttributeElement(optionalAttributeResult, 0);
+        }
+        delete [] input;
+        delete optionalAttributeResult;
 
         // Test optional attribute, not present
         // optionalAttributeInput.setattribute();
-        optionalAttributeResult = asOptionalAttribute(ws, &optionalAttributeInput);
-        if (optionalAttributeResult->optionalAttribute)
+        optionalAttributeResult = ws->asOptionalAttribute(&optionalAttributeInput);
+        if (optionalAttributeResult->getoptionalAttribute())
         {
-            if (*(optionalAttributeResult->optionalAttribute))
-                printf("optional attribute, not present=%s\n", optionalAttributeResult->optionalAttribute);
+            if (*(optionalAttributeResult->getoptionalAttribute()))
+                printf("optional attribute, not present=" ,optionalAttributeResult->getoptionalAttribute());
             else
                 printf("optional attribute, not present=<empty>\n");
         }
         else
             printf("optional attribute, not present=<not present>\n");
-            
-        Axis_Delete_OptionalAttributeElement(optionalAttributeResult, 0);
-    }
+        delete optionalAttributeResult;
 */
 
     // Test array
     {
 #define ARRAY_SIZE 2                    
-        int i, outputSize=0;
-        xsdc__ID_Array arrayInput;
-        xsdc__ID_Array* arrayResult;
-        xsdc__ID array[ARRAY_SIZE];  
-        xsdc__ID * output;
-              
-        for (i=0 ; i < ARRAY_SIZE; i++)
+       int i, outputSize=0;
+        
+       xsdc__QName_Array arrayInput;
+       xsdc__QName_Array* arrayResult;
+       xsdc__QName array[ARRAY_SIZE];
+       xsdc__QName *output;
+       
+        for (i=0 ; i < ARRAY_SIZE ; i++)
         {
-            array[i]= (xsdc__ID)axiscAxisNew(XSDC_ID,25);
-            strcpy (array[i], simpleID);
+            array[i] = (xsdc__QName)axiscAxisNew(XSDC_QNAME,25);
+            strcpy (array[i], simpleQName);            
         }
+        
         arrayInput.m_Array = array;
         arrayInput.m_Size  = ARRAY_SIZE;
-        arrayInput.m_Type  = XSDC_ID;
+        arrayInput.m_Type  = XSDC_QNAME;
         
         arrayResult = asArray(ws, &arrayInput);
+        
         if (exceptionOccurred == C_TRUE
-            || get_XSD_IDPort_Status(ws) == AXISC_FAIL )
+            || get_XSD_QName_Status(ws) == AXISC_FAIL )
             printf ("Failed\n");
 
         if (arrayResult)
@@ -325,62 +265,52 @@ int main(int argc, char* argv[])
            output     = arrayResult->m_Array;
            outputSize = arrayResult->m_Size;
         }
-        
-        printf("array of %d elements\n", outputSize);
-        for (i = 0; i < outputSize; i++)
+
+        printf("array of %d elements\n" ,outputSize);
+        for (i = 0; i < outputSize ; i++)
         {
             if (output!=NULL)
             {
                 if (output[i]!=NULL)
-                    printf("  element[%d]=%s\n", i, output[i]);
+                    printf("  element[%d]=%s\n" ,i ,output[i]);
                 else
-                    printf("  element[%d]=<empty>\n");
+                    printf("  element[%d]=<empty>\n" ,i);
             }
             else
-                printf("  element[%d]=<nil>\n");
+                printf("  element[%d]=<nil>\n" ,i);
         }
-        
-        // Clear up input array        
-        for (i = 0 ; i < ARRAY_SIZE; i++ )
-            axiscAxisDelete(array[i], XSDC_ID);
-    
+
+                // Clear up input array        
+        for (i = 0 ; i < ARRAY_SIZE ; i++ )
+            axiscAxisDelete(array[i], XSDC_QNAME);
         axiscAxisDelete(arrayResult, XSDC_ARRAY);
     }
+
 
     // Test complex type
     {
         SimpleComplexType complexTypeInput;
         SimpleComplexType* complexTypeResult;
         
-        input = (xsdc__ID)axiscAxisNew(XSDC_ID,25);
-        strcpy (input, simpleID);
-
-        complexTypeInput.complexTypeElement = input;
+        complexTypeInput.complexTypeElement = simpleQName;
         complexTypeResult = asComplexType(ws, &complexTypeInput);
-        
-        if (exceptionOccurred == C_TRUE
-            || get_XSD_IDPort_Status(ws) == AXISC_FAIL )
-            printf ("Failed\n");
-        
         if (complexTypeResult->complexTypeElement)
         {
             if (*(complexTypeResult->complexTypeElement))
-                printf("within complex type=%s\n", complexTypeResult->complexTypeElement);
+                printf("within complex type=%s\n" ,complexTypeResult->complexTypeElement);
             else
                 printf("within complex type=<empty>\n");
         }
         else
             printf("within complex type=<nil>\n");
-        
-        axiscAxisDelete(input, XSDC_ID);
         Axis_Delete_SimpleComplexType(complexTypeResult, 0);
     }
 
-    // Tests now complete
+        // Tests now complete
 
-    destroy_XSD_IDPort_stub(ws);
+        destroy_XSD_QName_stub(ws);
 
-    printf("---------------------- TEST COMPLETE -----------------------------\n");
+    printf( "---------------------- TEST COMPLETE -----------------------------\n");
    
     return 0;
 }
