@@ -1,0 +1,17 @@
+<test>
+    <name>XSD_normalizedStringC</name>
+    <description>Test serialization and deserialization of the XSD built-in simple type normalizedString</description>
+    <clientLang>c</clientLang>
+    <clientCode>XSD_normalizedStringClient.c</clientCode>
+    <wsdl>XSD_normalizedString.wsdl</wsdl>
+    <expected>
+        <output>
+            XSD_normalizedString.expected
+        </output>
+		<serverResponse>
+			XSD_normalizedString_ServerResponse.expected
+	    </serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/XSD_normalizedString</endpoint>
+</test>
+

@@ -134,9 +134,6 @@ int main(int argc, char* argv[])
         arrayInput.m_Type  = XSDC_POSITIVEINTEGER;
         
         arrayResult = asArray(ws, &arrayInput);
-        
-        if (get_XSD_positiveInteger_Status(ws) == AXISC_FAIL )
-            printf ("Failed\n");
 
         if (arrayResult)
         {

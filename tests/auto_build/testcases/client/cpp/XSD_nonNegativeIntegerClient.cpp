@@ -22,39 +22,44 @@
 
 int main(int argc, char* argv[])
 {
+    XSD_nonNegativeInteger* ws;
+    
+    xsd__nonNegativeInteger result;
+    xsd__nonNegativeInteger* nillableInput;
+    xsd__nonNegativeInteger* nillableResult;
+    
     char endpoint[256];
     const char* url="http://localhost:80/axis/XSD_nonNegativeInteger";
 
     if(argc>1)
         url = argv[1];
 
-      // bool bSuccess = false;
-
     try
     {
         sprintf(endpoint, "%s", url);
-        XSD_nonNegativeInteger* ws = new XSD_nonNegativeInteger(endpoint);
-        xsd__nonNegativeInteger result = ws->asNonNillableElement((xsd__nonNegativeInteger) UNSIGNED_LONGLONGVALUE(18446744073709551615));
+        ws = new XSD_nonNegativeInteger(endpoint);
+        
+        result = ws->asNonNillableElement((xsd__nonNegativeInteger) UNSIGNED_LONGLONGVALUE(18446744073709551615));
         cout << "non-nillable element=" << result << endl;
+        
         result = ws->asNonNillableElement((xsd__nonNegativeInteger)1);
         cout << "non-nillable element=" << result << endl;
+        
         result = ws->asNonNillableElement((xsd__nonNegativeInteger)0);
         cout << "non-nillable element=" << result << endl;
 
 
         // Test nillable element, with a value
-        xsd__nonNegativeInteger* nillableInput = new xsd__nonNegativeInteger();
+        nillableInput = new xsd__nonNegativeInteger();
         *(nillableInput) = (xsd__nonNegativeInteger)123456789;
-        xsd__nonNegativeInteger* nillableResult = ws->asNillableElement(nillableInput);
+        nillableResult = ws->asNillableElement(nillableInput);
         if (nillableResult)
         {
             cout << "nillable element=" << *(nillableResult) << endl;
             delete nillableResult;
         }
         else
-        {
             cout << "nillable element=<nil>" << endl;
-        }
         delete nillableInput;
 
         // Test nillable element, with nil
@@ -65,14 +70,14 @@ int main(int argc, char* argv[])
             delete nillableResult;
         }
         else
-        {
             cout << "nil element=<nil>" << endl;
-        }
 
         // Test required attribute
         RequiredAttributeElement requiredAttributeInput;
+        RequiredAttributeElement* requiredAttributeResult;
+        
         requiredAttributeInput.setrequiredAttribute(123456789);
-        RequiredAttributeElement* requiredAttributeResult = ws->asRequiredAttribute(&requiredAttributeInput);
+        requiredAttributeResult = ws->asRequiredAttribute(&requiredAttributeInput);
         cout << "required attribute=" << requiredAttributeResult->getrequiredAttribute() << endl;
         delete requiredAttributeResult;
 
@@ -83,61 +88,54 @@ int main(int argc, char* argv[])
         optionalAttributeInput.setoptionalAttribute(123456789);
         OptionalAttributeElement* optionalAttributeResult = ws->asOptionalAttribute(&optionalAttributeInput);
         if (optionalAttributeResult->getoptionalAttribute())
-        {
             cout << "optional attribute, with data=" << optionalAttributeResult->getoptionalAttribute() << endl;
-        }
         else
-        {
             cout << "optional attribute, with data=<not present>" << endl;
-        }
         delete optionalAttributeResult;
 
         // Test optional attribute, not present
         optionalAttributeInput.setattribute();
         optionalAttributeResult = ws->asOptionalAttribute(&optionalAttributeInput);
         if (optionalAttributeResult->getoptionalAttribute())
-        {
             cout << "optional attribute, not present=" << optionalAttributeResult->getoptionalAttribute() << endl;
-        }
         else
-        {
             cout << "optional attribute, not present=<not present>" << endl;
-        }
         delete optionalAttributeResult;
 */
 
         // Test array
-          xsd__nonNegativeInteger_Array arrayInput;
-                int arraySize=2;
-                xsd__nonNegativeInteger **array = new xsd__nonNegativeInteger*[arraySize];
+#define ARRAY_SIZE 2                    
+        int i, outputSize=0;
+        
+        xsd__nonNegativeInteger_Array arrayInput;
+        xsd__nonNegativeInteger_Array* arrayResult;
+        xsd__nonNegativeInteger *array[ARRAY_SIZE];
+        const xsd__nonNegativeInteger ** output;
        
-        for (int inputIndex=0 ; inputIndex < arraySize ; inputIndex++)
-        {
-            array[inputIndex] = new xsd__nonNegativeInteger(123456789);;
-           
-        }
-                arrayInput.set(array,arraySize);
-        xsd__nonNegativeInteger_Array* arrayResult = ws->asArray(&arrayInput);
-                int outputSize=0;
-                const xsd__nonNegativeInteger ** output = arrayResult->get(outputSize);
+        for (i=0 ; i < ARRAY_SIZE ; i++)
+            array[i] = new xsd__nonNegativeInteger(123456789);
+        
+        arrayInput.set(array,ARRAY_SIZE);
+        arrayResult = ws->asArray(&arrayInput);
+        
+        if (arrayResult)
+            output = arrayResult->get(outputSize);
+            
         cout << "array of " << outputSize << " elements" << endl;
-        for (int index = 0; index < outputSize ; index++)
-        {
-            cout << "  element[" << index << "]=" << *((xsd__nonNegativeInteger*)(output[index])) << endl;
-           
-        }
+        for (i = 0; i < outputSize ; i++)
+            cout << "  element[" << i << "]=" << *((xsd__nonNegativeInteger*)(output[i])) << endl;
+        
         // Clear up input array        
-        for (int deleteIndex = 0 ; deleteIndex < arraySize ; deleteIndex++ )
-        {
-            delete array[deleteIndex];
-        }
-        delete [] array;
+        for (i = 0 ; i < ARRAY_SIZE ; i++ )
+            delete array[i];
         delete arrayResult;
 
         // Test complex type
         SimpleComplexType complexTypeInput;
+        SimpleComplexType* complexTypeResult;
+        
         complexTypeInput.setcomplexTypeElement(123456789);
-        SimpleComplexType* complexTypeResult = ws->asComplexType(&complexTypeInput);
+        complexTypeResult = ws->asComplexType(&complexTypeInput);
         cout << "within complex type=" << complexTypeResult->getcomplexTypeElement() << endl;
         delete complexTypeResult;
 

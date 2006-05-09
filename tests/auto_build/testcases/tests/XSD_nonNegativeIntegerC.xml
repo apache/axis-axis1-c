@@ -1,0 +1,17 @@
+<test>
+    <name>XSD_nonNegativeIntegerC</name>
+    <description>Test serialization and deserialization of the XSD built-in simple type nonNegativeInteger</description>
+    <clientLang>c</clientLang>
+    <clientCode>XSD_nonNegativeIntegerClient.c</clientCode>
+    <wsdl>XSD_nonNegativeInteger.wsdl</wsdl>
+    <expected>
+        <output>
+            XSD_nonNegativeInteger.expected
+        </output>
+		<serverResponse>
+			XSD_nonNegativeInteger_ServerResponse.expected
+	    </serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/XSD_nonNegativeInteger</endpoint>
+</test>
+
