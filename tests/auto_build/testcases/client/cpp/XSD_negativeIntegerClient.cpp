@@ -22,22 +22,29 @@
 
 int main(int argc, char* argv[])
 {
+    XSD_negativeInteger* ws;
+    
+    xsd__negativeInteger result;
+    xsd__negativeInteger input;
+    xsd__negativeInteger* nillableResult;
+    
     char endpoint[256];
     const char* url="http://localhost:80/axis/XSD_negativeInteger";
 
     if(argc>1)
         url = argv[1];
 
-      // bool bSuccess = false;
-
     try
     {
         sprintf(endpoint, "%s", url);
-        XSD_negativeInteger* ws = new XSD_negativeInteger(endpoint);
-        xsd__negativeInteger result = ws->asNonNillableElement((xsd__negativeInteger) LONGLONGVALUE(-9223372036854775808));
+        ws = new XSD_negativeInteger(endpoint);
+        
+        result = ws->asNonNillableElement((xsd__negativeInteger) LONGLONGVALUE(-9223372036854775808));
         cout << "non-nillable element=" << result << endl;
+        
         result = ws->asNonNillableElement((xsd__negativeInteger)-1);
         cout << "non-nillable element=" << result << endl;
+        
         try
         {
             result = ws->asNonNillableElement((xsd__negativeInteger)0);
@@ -54,21 +61,16 @@ int main(int argc, char* argv[])
         result = ws->asNonNillableElement((xsd__negativeInteger)-123456789);
         cout << "non-nillable element=" << result << endl;
 
-
         // Test nillable element, with a value
-        xsd__negativeInteger* nillableInput = new xsd__negativeInteger();
-        *(nillableInput) = (xsd__negativeInteger)-123456789;
-        xsd__negativeInteger* nillableResult = ws->asNillableElement(nillableInput);
+        input = (xsd__negativeInteger)-123456789;
+        nillableResult = ws->asNillableElement(&input);
         if (nillableResult)
         {
             cout << "nillable element=" << *(nillableResult) << endl;
             delete nillableResult;
         }
         else
-        {
             cout << "nillable element=<nil>" << endl;
-        }
-        delete nillableInput;
 
         // Test nillable element, with nil
         nillableResult = ws->asNillableElement(NULL);
@@ -78,9 +80,7 @@ int main(int argc, char* argv[])
             delete nillableResult;
         }
         else
-        {
             cout << "nil element=<nil>" << endl;
-        }
 
         // Test required attribute
         RequiredAttributeElement requiredAttributeInput;
@@ -96,55 +96,46 @@ int main(int argc, char* argv[])
         optionalAttributeInput.setoptionalAttribute(-123456789);
         OptionalAttributeElement* optionalAttributeResult = ws->asOptionalAttribute(&optionalAttributeInput);
         if (optionalAttributeResult->getoptionalAttribute())
-        {
             cout << "optional attribute, with data=" << optionalAttributeResult->getoptionalAttribute() << endl;
-        }
         else
-        {
             cout << "optional attribute, with data=<not present>" << endl;
-        }
         delete optionalAttributeResult;
 
         // Test optional attribute, not present
         optionalAttributeInput.setattribute();
         optionalAttributeResult = ws->asOptionalAttribute(&optionalAttributeInput);
         if (optionalAttributeResult->getoptionalAttribute())
-        {
             cout << "optional attribute, not present=" << optionalAttributeResult->getoptionalAttribute() << endl;
-        }
         else
-        {
             cout << "optional attribute, not present=<not present>" << endl;
-        }
         delete optionalAttributeResult;
 */
 
         // Test array
+#define ARRAY_SIZE 2                    
+        int i, outputSize=0;
+                
         xsd__negativeInteger_Array arrayInput;
-                int arraySize=2;
-                xsd__negativeInteger ** array = new xsd__negativeInteger*[arraySize];
+        xsd__negativeInteger_Array* arrayResult;       
+        const xsd__negativeInteger ** output;        
+        xsd__negativeInteger * array[ARRAY_SIZE];
         
-        for (int inputIndex=0 ; inputIndex < arraySize ; inputIndex++)
-        {
-            array[inputIndex] = new xsd__negativeInteger(-123456789);
-          
-        }
-                arrayInput.set(array,arraySize);
-        xsd__negativeInteger_Array* arrayResult = ws->asArray(&arrayInput);
-                int outputSize=0;
-                const xsd__negativeInteger ** output = arrayResult->get(outputSize);
+        for (i=0 ; i < ARRAY_SIZE ; i++)
+            array[i] = new xsd__negativeInteger(-123456789);
+        
+        arrayInput.set(array,ARRAY_SIZE);
+        arrayResult = ws->asArray(&arrayInput);
+        
+        if (arrayResult)
+            output = arrayResult->get(outputSize);
+            
         cout << "array of " << outputSize << " elements" << endl;
-        for (int index = 0; index < outputSize; index++)
-        {
-            cout << "  element[" << index << "]=" << *((xsd__negativeInteger*)(output[index])) << endl;
-          
-        }
+        for (i = 0; i < outputSize; i++)
+            cout << "  element[" << i << "]=" << *((xsd__negativeInteger*)(output[i])) << endl;
+        
         // Clear up input array        
-        for (int deleteIndex = 0 ; deleteIndex < arraySize ; deleteIndex++ )
-        {
-            delete array[deleteIndex];
-        }
-        delete [] array;
+        for (i = 0 ; i < ARRAY_SIZE ; i++ )
+            delete array[i];
         delete arrayResult;
 
 
