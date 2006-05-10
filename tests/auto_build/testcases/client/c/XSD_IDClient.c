@@ -226,9 +226,6 @@ int main(int argc, char* argv[])
 
     requiredAttributeInput.requiredAttribute = input;
     requiredAttributeResult = asRequiredAttribute(ws, &requiredAttributeInput);
-    if (exceptionOccurred == C_TRUE
-        || get_XSD_IDPort_Status(ws) == AXISC_FAIL )
-        printf ("Failed\n");
     
     if (requiredAttributeResult->requiredAttribute)
     {

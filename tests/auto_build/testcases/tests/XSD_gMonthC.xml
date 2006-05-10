@@ -1,0 +1,17 @@
+<test>
+    <name>XSD_gMonthC</name>
+    <description>Test serialization and deserialization of the XSD built-in simple type gMonth</description>
+    <clientLang>c</clientLang>
+    <clientCode>XSD_gMonthClient.c</clientCode>
+    <wsdl>XSD_gMonth.wsdl</wsdl>
+    <expected>
+        <output>
+            XSD_gMonth.expected
+        </output>
+		<serverResponse>
+			XSD_gMonth_ServerResponse.expected
+	    </serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/XSD_gMonth</endpoint>
+</test>
+

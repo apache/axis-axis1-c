@@ -1,0 +1,17 @@
+<test>
+    <name>XSD_gDayC</name>
+    <description>Test serialization and deserialization of the XSD built-in simple type gDay</description>
+    <clientLang>c</clientLang>
+    <clientCode>XSD_gDayClient.c</clientCode>
+    <wsdl>XSD_gDay.wsdl</wsdl>
+    <expected>
+        <output>
+            XSD_gDay.expected
+        </output>
+		<serverResponse>
+			XSD_gDay_ServerResponse.expected
+	    </serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/XSD_gDay</endpoint>
+</test>
+

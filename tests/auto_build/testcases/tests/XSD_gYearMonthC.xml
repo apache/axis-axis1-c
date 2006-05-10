@@ -1,0 +1,17 @@
+<test>
+    <name>XSD_gYearMonthC</name>
+    <description>Test serialization and deserialization of the XSD built-in simple type gYearMonth</description>
+    <clientLang>c</clientLang>
+    <clientCode>XSD_gYearMonthClient.c</clientCode>
+    <wsdl>XSD_gYearMonth.wsdl</wsdl>
+    <expected>
+        <output>
+            XSD_gYearMonth.expected
+        </output>
+		<serverResponse>
+			XSD_gYearMonth_ServerResponse.expected
+	    </serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/XSD_gYearMonth</endpoint>
+</test>
+
