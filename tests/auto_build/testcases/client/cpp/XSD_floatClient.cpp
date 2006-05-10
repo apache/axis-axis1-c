@@ -14,6 +14,16 @@
 // limitations under the License.
 
 
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* ----------------------------------------------------------------   */
+/* CHANGES TO THIS FILE MAY ALSO REQUIRE CHANGES TO THE               */
+/* C-EQUIVALENT FILE. PLEASE ENSURE THAT IT IS DONE.                  */
+/* ----------------------------------------------------------------   */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+
+
 #include "XSD_float.hpp"
 #include <axis/AxisException.hpp>
 #include <ctype.h>
@@ -22,60 +32,62 @@
 
 int main(int argc, char* argv[])
 {
-        char endpoint[256];
-        const char* url="http://localhost:80/axis/XSD_float";
+    XSD_float* ws;
+    
+    xsd__float result;
+    xsd__float input;
+    xsd__float* nillableResult;
+    
+    char endpoint[256];
+    const char* url="http://localhost:80/axis/XSD_float";
 
-        if(argc>1)
-                url = argv[1];
+    if(argc>1)
+        url = argv[1];
 
-                // bool bSuccess = false;
+    // bool bSuccess = false;
 
-        try
+    try
+    {
+        sprintf(endpoint, "%s", url);
+        ws = new XSD_float(endpoint);
+
+        // Test non-nillable element
+        result = ws->asNonNillableElement((xsd__float)35.353588);
+        printf("non-nillable element=%.6g\n", result);
+        fflush(stdout);
+
+        // Test nillable element, with a value
+        input = (xsd__float)35.353588;
+        nillableResult = ws->asNillableElement(&input);
+        if (nillableResult)
         {
-                sprintf(endpoint, "%s", url);
-                XSD_float* ws = new XSD_float(endpoint);
-
-                // Test non-nillable element
-            xsd__float result = ws->asNonNillableElement((xsd__float)35.353588);
-                printf("non-nillable element=%.6g\n", result);
-        fflush(stdout);
-
-                // Test nillable element, with a value
-                xsd__float* nillableInput = new xsd__float();
-                *(nillableInput) = (xsd__float)35.353588;
-                xsd__float* nillableResult = ws->asNillableElement(nillableInput);
-                if (nillableResult)
-                {
-                        printf("nillable element=%.6g\n", *(nillableResult));
+            printf("nillable element=%.6g\n", *(nillableResult));
             fflush(stdout);
-                        delete nillableResult;
-                }
-                else
-                {
-                        cout << "nillable element=<nil>" << endl;
-                }
-       delete nillableInput;
+            delete nillableResult;
+        }
+        else
+            cout << "nillable element=<nil>" << endl;
 
-                // Test nillable element, with nil
+        // Test nillable element, with nil
         nillableResult = ws->asNillableElement(NULL);
-                if (nillableResult)
-                {
-                        printf("nil element=%.6g\n", *(nillableResult));
+        if (nillableResult)
+        {
+            printf("nil element=%.6g\n", *(nillableResult));
             fflush(stdout);
-                        delete nillableResult;
-                }
-                else
-                {
-                        cout << "nil element=<nil>" << endl;
-                }
+            delete nillableResult;
+        }
+        else
+            cout << "nil element=<nil>" << endl;
 
-                // Test required attribute
-                RequiredAttributeElement requiredAttributeInput;
-                requiredAttributeInput.setrequiredAttribute((xsd__float)35.353588);
-                RequiredAttributeElement* requiredAttributeResult = ws->asRequiredAttribute(&requiredAttributeInput);
-                printf("required attribute=%.6g\n", requiredAttributeResult->getrequiredAttribute());
+        // Test required attribute
+        RequiredAttributeElement requiredAttributeInput;
+        RequiredAttributeElement* requiredAttributeResult;
+        
+        requiredAttributeInput.setrequiredAttribute((xsd__float)35.353588);
+        requiredAttributeResult = ws->asRequiredAttribute(&requiredAttributeInput);
+        printf("required attribute=%.6g\n", requiredAttributeResult->getrequiredAttribute());
         fflush(stdout);
-                delete requiredAttributeResult;
+        delete requiredAttributeResult;
 
 /* Optional Attributes currently unsupported by WSDL2Ws
  * Exact coding of this section may change depending on chosen implementation
@@ -109,60 +121,63 @@ int main(int argc, char* argv[])
                 delete optionalAttributeResult;
 */
 
-                // Test array
+        // Test array
+#define ARRAY_SIZE 2                    
+        int i, outputSize=0;
+                
         xsd__float_Array arrayInput;
-                int arraySize=2;
-                xsd__float ** array = new xsd__float*[arraySize];
+        xsd__float_Array* arrayResult;
+        xsd__float * array[ARRAY_SIZE];
+        const xsd__float ** output;
+
+        for (i=0 ; i < ARRAY_SIZE ; i++)
+            array[i] = new xsd__float(35.353588);
+        arrayInput.set(array,ARRAY_SIZE);
         
-        for (int inputIndex=0 ; inputIndex < arraySize ; inputIndex++)
-        {
-            array[inputIndex] = new xsd__float(35.353588);
-        }
-                arrayInput.set(array,arraySize);
-                xsd__float_Array* arrayResult = ws->asArray(&arrayInput);
-                int outputSize=0;
-                const xsd__float ** output = arrayResult->get(outputSize);
+        arrayResult = ws->asArray(&arrayInput);
+
+        if (arrayResult)
+            output = arrayResult->get(outputSize);
+
         cout << "array of " << outputSize << " elements" << endl;
-                for (int index = 0; index < outputSize ; index++)
-                {
-                        printf("  element[%i]=%.6g\n", index,  *(output[index]));
-            fflush(stdout);
-                        
-                }
-         // Clear up input array        
-        for (int deleteIndex = 0 ; deleteIndex < arraySize ; deleteIndex++ )
+        for (i = 0; i < outputSize ; i++)
         {
-            delete array[deleteIndex];
+            printf("  element[%i]=%.6g\n", i,  *(output[i]));
+            fflush(stdout);
         }
-        delete [] array;
+        // Clear up input array
+        for (i = 0 ; i < ARRAY_SIZE ; i++ )
+            delete array[i];
         delete arrayResult;
 
-                // Test complex type
-                SimpleComplexType complexTypeInput;
-                complexTypeInput.setcomplexTypeElement((xsd__float) 35.353588);
-                SimpleComplexType* complexTypeResult = ws->asComplexType(&complexTypeInput);
-                printf("within complex type=%.6g\n", complexTypeResult->getcomplexTypeElement());
-        fflush(stdout);
-                delete complexTypeResult;
-
-                // Tests now complete
-
-                delete ws;
-        }
-        catch(AxisException& e)
-        {
-                cout << "Exception : " << e.what() << endl;
-        }
-        catch(exception& e)
-        {
-            cout << "Unknown exception has occured: " << e.what() << endl;
-        }
-        catch(...)
-        {
-            cout << "Unknown exception has occured" << endl;
-        }
-
-        cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;
+        // Test complex type
+        SimpleComplexType complexTypeInput;
+        SimpleComplexType* complexTypeResult;
         
-        return 0;
+        complexTypeInput.setcomplexTypeElement((xsd__float) 35.353588);
+        complexTypeResult = ws->asComplexType(&complexTypeInput);
+        printf("within complex type=%.6g\n", complexTypeResult->getcomplexTypeElement());
+        fflush(stdout);
+        delete complexTypeResult;
+
+        // Tests now complete
+
+        delete ws;
+    }
+    catch(AxisException& e)
+    {
+        cout << "Exception : " << e.what() << endl;
+    }
+    catch(exception& e)
+    {
+        cout << "Unknown exception has occured: " << e.what() << endl;
+    }
+    catch(...)
+    {
+        cout << "Unknown exception has occured" << endl;
+    }
+
+    cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;
+
+    return 0;
 }

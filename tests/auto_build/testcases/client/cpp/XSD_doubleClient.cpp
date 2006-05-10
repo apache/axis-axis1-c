@@ -14,6 +14,16 @@
 // limitations under the License.
 
 
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* ----------------------------------------------------------------   */
+/* CHANGES TO THIS FILE MAY ALSO REQUIRE CHANGES TO THE               */
+/* C-EQUIVALENT FILE. PLEASE ENSURE THAT IT IS DONE.                  */
+/* ----------------------------------------------------------------   */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+
+
 #include "XSD_double.hpp"
 #include <axis/AxisException.hpp>
 #include <ctype.h>
@@ -22,58 +32,58 @@
 
 int main(int argc, char* argv[])
 {
-  char endpoint[256];
-   const char* url="http://localhost:80/axis/XSD_double";
+    XSD_double* ws ;
+    
+    xsd__double result;
+    xsd__double input;
+    xsd__double* nillableResult;
+    
+    char endpoint[256];
+    const char* url="http://localhost:80/axis/XSD_double";
 
-   if(argc>1)
+    if(argc>1)
         url = argv[1];
 
-      // bool bSuccess = false;
-
-   try
-   {
-     sprintf(endpoint, "%s", url);
-     XSD_double* ws = new XSD_double(endpoint);
+    try
+    {
+        sprintf(endpoint, "%s", url);
+        ws = new XSD_double(endpoint);
 
         // Test non-nillable element
-      xsd__double result = ws->asNonNillableElement((xsd__double)70.7175888888);
-      printf("non-nillable element=%.5f\n", result);
+        result = ws->asNonNillableElement((xsd__double)70.7175888888);
+        printf("non-nillable element=%.5f\n", result);
         fflush(stdout);
 
-     // Test nillable element, with a value
-        xsd__double* nillableInput = new xsd__double();
-     *(nillableInput) = (xsd__double)70.7175888888;
-     xsd__double* nillableResult = ws->asNillableElement(nillableInput);
+        // Test nillable element, with a value
+        input = (xsd__double)70.7175888888;
+        nillableResult = ws->asNillableElement(&input);
         if (nillableResult)
-       {
-         printf("nillable element=%.5f\n", *(nillableResult));
+        {
+            printf("nillable element=%.5f\n", *(nillableResult));
             fflush(stdout);
             delete nillableResult;
         }
-     else
-      {
-         cout << "nillable element=<nil>" << endl;
-     }
-       delete nillableInput;
+        else
+            cout << "nillable element=<nil>" << endl;
 
-     // Test nillable element, with nil
+        // Test nillable element, with nil
         nillableResult = ws->asNillableElement(NULL);
-     if (nillableResult)
-       {
-         printf("nil element=%.5f\n", *(nillableResult));
+        if (nillableResult)
+        {
+            printf("nil element=%.5f\n", *(nillableResult));
             fflush(stdout);
-         delete nillableResult;
+            delete nillableResult;
         }
-     else
-      {
-         cout << "nil element=<nil>" << endl;
-      }
+        else
+            cout << "nil element=<nil>" << endl;
 
-       // Test required attribute
+        // Test required attribute
         RequiredAttributeElement requiredAttributeInput;
-      requiredAttributeInput.setrequiredAttribute((xsd__double)70.7175888888);
-       RequiredAttributeElement* requiredAttributeResult = ws->asRequiredAttribute(&requiredAttributeInput);
-     printf("required attribute=%.5f\n", requiredAttributeResult->getrequiredAttribute());
+        RequiredAttributeElement* requiredAttributeResult;
+        
+        requiredAttributeInput.setrequiredAttribute((xsd__double)70.7175888888);
+        requiredAttributeResult = ws->asRequiredAttribute(&requiredAttributeInput);
+        printf("required attribute=%.5f\n", requiredAttributeResult->getrequiredAttribute());
         fflush(stdout);
         delete requiredAttributeResult;
 
@@ -109,58 +119,63 @@ int main(int argc, char* argv[])
      delete optionalAttributeResult;
 */
 
-     // Test array
+        // Test array
+#define ARRAY_SIZE 2                    
+        int i, outputSize=0;
+                
         xsd__double_Array arrayInput;
-                int arraySize=2;
-                xsd__double **array =new xsd__double*[arraySize];        
-        for (int inputIndex=0 ; inputIndex < 2 ; inputIndex++)
-        {
-            array[inputIndex] =new xsd__double(70.7175888888);          
-        }
-                arrayInput.set(array,arraySize);
-        xsd__double_Array* arrayResult = ws->asArray(&arrayInput);
-                int outputSize=0;
-                const xsd__double ** output=arrayResult->get(outputSize);
+        xsd__double_Array* arrayResult;
+        xsd__double *array[ARRAY_SIZE];
+        const xsd__double ** output;
+        
+        for (i=0 ; i < 2 ; i++)
+            array[i] =new xsd__double(70.7175888888);
+        arrayInput.set(array,ARRAY_SIZE);
+        
+        arrayResult = ws->asArray(&arrayInput);
+
+        if (arrayResult)
+            output = arrayResult->get(outputSize);
+
         cout << "array of " << outputSize << " elements" << endl;
-        for (int index = 0; index < outputSize ; index++)
-         {
-         printf("  element[%i]=%.5f\n", index,  *(output[index]));
+        for (i = 0; i < outputSize ; i++)
+        {
+            printf("  element[%i]=%.5f\n", i,  *(output[i]));
             fflush(stdout);
         }
-          // Clear up input array        
-        for (int deleteIndex = 0 ; deleteIndex < arraySize ; deleteIndex++ )
-        {
-            delete array[deleteIndex];
-        }
-        delete [] array;
+        // Clear up input array
+        for (i = 0 ; i < ARRAY_SIZE ; i++ )
+            delete array[i];
         delete arrayResult;
 
-      // Test complex type
-      SimpleComplexType complexTypeInput;
-       complexTypeInput.setcomplexTypeElement((xsd__double) 70.7175888888);
-       SimpleComplexType* complexTypeResult = ws->asComplexType(&complexTypeInput);
-      printf("within complex type=%.5f\n", complexTypeResult->getcomplexTypeElement());
+        // Test complex type
+        SimpleComplexType complexTypeInput;
+        SimpleComplexType* complexTypeResult;
+        
+        complexTypeInput.setcomplexTypeElement((xsd__double) 70.7175888888);
+        complexTypeResult = ws->asComplexType(&complexTypeInput);
+        printf("within complex type=%.5f\n", complexTypeResult->getcomplexTypeElement());
         fflush(stdout);
         delete complexTypeResult;
 
-       // Tests now complete
+        // Tests now complete
 
-       delete ws;
+        delete ws;
     }
- catch(AxisException& e)
-   {
-     cout << "Exception : " << e.what() << endl;
-   }
- catch(exception& e)
-   {
-     cout << "Unknown exception has occured: " << e.what() << endl;
-    }
- catch(...)
+    catch(AxisException& e)
     {
-     cout << "Unknown exception has occured" << endl;
-  }
+        cout << "Exception : " << e.what() << endl;
+    }
+    catch(exception& e)
+    {
+        cout << "Unknown exception has occured: " << e.what() << endl;
+    }
+    catch(...)
+    {
+        cout << "Unknown exception has occured" << endl;
+    }
 
-   cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;
-   
-  return 0;
+    cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;
+
+    return 0;
 }

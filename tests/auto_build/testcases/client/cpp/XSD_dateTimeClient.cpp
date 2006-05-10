@@ -14,6 +14,16 @@
 // limitations under the License.
 
 
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* ----------------------------------------------------------------   */
+/* CHANGES TO THIS FILE MAY ALSO REQUIRE CHANGES TO THE               */
+/* C-EQUIVALENT FILE. PLEASE ENSURE THAT IT IS DONE.                  */
+/* ----------------------------------------------------------------   */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+
+
 #include "XSD_dateTime.hpp"
 #include <axis/AxisException.hpp>
 #include <ctype.h>
@@ -22,68 +32,69 @@
 
 int main(int argc, char* argv[])
 {
-        char endpoint[256];
-        const char* url="http://localhost:80/axis/XSD_dateTime";
+    XSD_dateTime* ws;
+    
+    char returnString[50];
+    
+    xsd__dateTime result;
+    xsd__dateTime input;
+    xsd__dateTime* nillableResult;
 
-        if(argc>1)
-                url = argv[1];
+    time_t timeToTest;
+    struct tm *temp;
+    
+    char endpoint[256];
+    const char* url="http://localhost:80/axis/XSD_dateTime";
 
-                // bool bSuccess = false;
+    if(argc>1)
+        url = argv[1];
 
-        try
-        {
-                sprintf(endpoint, "%s", url);
-                XSD_dateTime* ws = new XSD_dateTime(endpoint);
+    try
+    {
+        sprintf(endpoint, "%s", url);
+        XSD_dateTime* ws = new XSD_dateTime(endpoint);
 
-        char returnString[50];
-        
-        time_t timeToTest = 1100246323;
-        struct tm *temp = gmtime(&timeToTest);
-        struct tm time;
-        memcpy(&time, temp, sizeof(struct tm));
+        timeToTest = 1100246323;
+        temp = gmtime(&timeToTest);
+        memcpy(&input, temp, sizeof(struct tm));
 
-                // Test non-nillable element
-            xsd__dateTime result = ws->asNonNillableElement(time);
+        // Test non-nillable element
+        result = ws->asNonNillableElement(input);
         strftime(returnString, 50, "%a %b %d %H:%M:%S %Y", &result);
-                cout << "non-nillable element=" << returnString << endl;
+        cout << "non-nillable element=" << returnString << endl;
 
-                // Test nillable element, with a value
-                xsd__dateTime* nillableInput = new xsd__dateTime();
-                *(nillableInput) = time;
-                xsd__dateTime* nillableResult = ws->asNillableElement(nillableInput);
-                if (nillableResult)
-                {
+        // Test nillable element, with a value
+        nillableResult = ws->asNillableElement(&input);
+        if (nillableResult)
+        {
             strftime(returnString, 50, "%a %b %d %H:%M:%S %Y", nillableResult);
-                        cout << "nillable element=" << returnString << endl;
-                        delete nillableResult;
-                }
-                else
-                {
-                        cout << "nillable element=<nil>" << endl;
-                }
-       delete nillableInput;
+            cout << "nillable element=" << returnString << endl;
+            delete nillableResult;
+        }
+        else
+            cout << "nillable element=<nil>" << endl;
 
-                // Test nillable element, with nil
+        // Test nillable element, with nil
         nillableResult = ws->asNillableElement(NULL);
-                if (nillableResult)
-                {
+        if (nillableResult)
+        {
             strftime(returnString, 50, "%a %b %d %H:%M:%S %Y", nillableResult);
-                        cout << "nil element=" << returnString << endl;
-                        delete nillableResult;
-                }
-                else
-                {
-                        cout << "nil element=<nil>" << endl;
-                }
+            cout << "nil element=" << returnString << endl;
+            delete nillableResult;
+        }
+        else
+            cout << "nil element=<nil>" << endl;
 
-                // Test required attribute
-                RequiredAttributeElement requiredAttributeInput;
-                requiredAttributeInput.setrequiredAttribute(time);
-                RequiredAttributeElement* requiredAttributeResult = ws->asRequiredAttribute(&requiredAttributeInput);
+        // Test required attribute
+        RequiredAttributeElement requiredAttributeInput;
+        RequiredAttributeElement* requiredAttributeResult;
+        
+        requiredAttributeInput.setrequiredAttribute(input);
+        requiredAttributeResult = ws->asRequiredAttribute(&requiredAttributeInput);
         result = requiredAttributeResult->getrequiredAttribute();
-                strftime(returnString, 50, "%a %b %d %H:%M:%S %Y", &result);
+        strftime(returnString, 50, "%a %b %d %H:%M:%S %Y", &result);
         cout << "required attribute=" << returnString << endl;
-                delete requiredAttributeResult;
+        delete requiredAttributeResult;
 
 /* Optional Attributes currently unsupported by WSDL2Ws
  * Exact coding of this section may change depending on chosen implementation
@@ -97,9 +108,7 @@ int main(int argc, char* argv[])
                         cout << "optional attribute, with data=" << returnString << endl;
                 }
                 else
-                {
                         cout << "optional attribute, with data=<not present>" << endl;
-                }
                 delete optionalAttributeResult;
 
                 // Test optional attribute, not present
@@ -111,67 +120,66 @@ int main(int argc, char* argv[])
                         cout << "optional attribute, not present=" << returnString << endl;
                 }
                 else
-                {
                         cout << "optional attribute, not present=<not present>" << endl;
-                }
                 delete optionalAttributeResult;
 */
-                // Test array
-
-        xsd__dateTime_Array arrayInput;
-                int arraySize = 2;
-                xsd__dateTime ** array = new xsd__dateTime*[arraySize];
+        // Test array
+#define ARRAY_SIZE 2                    
+        int i, outputSize=0;
         
-        for (int inputIndex=0 ; inputIndex < arraySize ; inputIndex++)
-        {
-            array[inputIndex] =new xsd__dateTime(time);
-            
-        }
-                arrayInput.set(array,arraySize);
-        xsd__dateTime_Array* arrayResult = ws->asArray(&arrayInput);
-                int outputSize = 0;
-                const xsd__dateTime **output = arrayResult->get(outputSize);
+        xsd__dateTime_Array arrayInput;
+        xsd__dateTime_Array* arrayResult;
+        xsd__dateTime *array[ARRAY_SIZE];
+        const xsd__dateTime **output;
+
+        for (i=0 ; i < ARRAY_SIZE ; i++)
+            array[i] =new xsd__dateTime(input);
+        arrayInput.set(array,ARRAY_SIZE);
+        
+        arrayResult = ws->asArray(&arrayInput);
+ 
+        if (arrayResult)
+            output = arrayResult->get(outputSize);
+        
         cout << "array of " << outputSize << " elements" << endl;
-        for (int index = 0; index < outputSize ; index++)
+        for (i = 0; i < outputSize ; i++)
         {
-            strftime(returnString, 50, "%a %b %d %H:%M:%S %Y", output[index]);
-            cout << "  element[" << index << "]=" << returnString << endl;
-            
+            strftime(returnString, 50, "%a %b %d %H:%M:%S %Y", output[i]);
+            cout << "  element[" << i << "]=" << returnString << endl;
         }
-         // Clear up input array        
-        for (int deleteIndex = 0 ; deleteIndex < arraySize ; deleteIndex++ )
-        {
-            delete array[deleteIndex];
-        }
-        delete [] array;
+        // Clear up input array
+        for (i = 0 ; i < ARRAY_SIZE ; i++ )
+            delete array[i];
         delete arrayResult;
 
 
-                // Test complex type
-                SimpleComplexType complexTypeInput;
-                complexTypeInput.setcomplexTypeElement(time);
-                SimpleComplexType* complexTypeResult = ws->asComplexType(&complexTypeInput);
+        // Test complex type
+        SimpleComplexType complexTypeInput;
+        SimpleComplexType* complexTypeResult;
+        
+        complexTypeInput.setcomplexTypeElement(input);
+        complexTypeResult = ws->asComplexType(&complexTypeInput);
         result = complexTypeResult->getcomplexTypeElement();
         strftime(returnString, 50, "%a %b %d %H:%M:%S %Y", &result);
-                cout << "within complex type=" << returnString << endl;
-                delete complexTypeResult;
+        cout << "within complex type=" << returnString << endl;
+        delete complexTypeResult;
 
-                // Tests now complete
+        // Tests now complete
 
-                delete ws;
-        }
-        catch(AxisException& e)
-        {
-                cout << "Exception : " << e.what() << endl;
-        }
-        catch(exception& e)
-        {
-            cout << "Unknown exception has occured: " << e.what() << endl;
-        }
-        catch(...)
-        {
-            cout << "Unknown exception has occured" << endl;
-        }
+        delete ws;
+    }
+    catch(AxisException& e)
+    {
+        cout << "Exception : " << e.what() << endl;
+    }
+    catch(exception& e)
+    {
+        cout << "Unknown exception has occured: " << e.what() << endl;
+    }
+    catch(...)
+    {
+        cout << "Unknown exception has occured" << endl;
+    }
 
         cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;
         

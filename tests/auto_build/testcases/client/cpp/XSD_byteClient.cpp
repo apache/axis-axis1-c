@@ -14,6 +14,16 @@
 // limitations under the License.
 
 
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* ----------------------------------------------------------------   */
+/* CHANGES TO THIS FILE MAY ALSO REQUIRE CHANGES TO THE               */
+/* C-EQUIVALENT FILE. PLEASE ENSURE THAT IT IS DONE.                  */
+/* ----------------------------------------------------------------   */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+
+
 #include "XSD_byte.hpp"
 #include <axis/AxisException.hpp>
 #include <ctype.h>
@@ -21,6 +31,12 @@
 
 int main(int argc, char* argv[])
 {
+    XSD_byte* ws;
+    
+    xsd__byte result;
+    xsd__byte input;
+    xsd__byte* nillableResult;
+    
     char endpoint[256];
     const char* url="http://localhost:80/axis/XSD_byte";
 
@@ -32,34 +48,34 @@ int main(int argc, char* argv[])
     try
     {
         sprintf(endpoint, "%s", url);
-        XSD_byte* ws = new XSD_byte(endpoint);
+        ws = new XSD_byte(endpoint);
 
         xsd__byte result = ws->asNonNillableElement((xsd__byte)127);
         cout << "non-nillable element=" << (int) result << endl;
+        
         result = ws->asNonNillableElement((xsd__byte)1);
         cout << "non-nillable element=" << (int) result << endl;
+        
         result = ws->asNonNillableElement((xsd__byte)-128);
         cout << "non-nillable element=" << (int) result << endl;
+        
         result = ws->asNonNillableElement((xsd__byte)-1);
         cout << "non-nillable element=" << (int) result << endl;
+        
         result = ws->asNonNillableElement((xsd__byte)0);
         cout << "non-nillable element=" << (int) result << endl;
 
 
         // Test nillable element, with a value
-        xsd__byte* nillableInput = new xsd__byte();
-        *(nillableInput) = (xsd__byte)123;
-        xsd__byte* nillableResult = ws->asNillableElement(nillableInput);
+        input = (xsd__byte)123;
+        nillableResult = ws->asNillableElement(&input);
         if (nillableResult)
         {
             cout << "nillable element=" << (int) *(nillableResult) << endl;
             delete nillableResult;
         }
         else
-        {
             cout << "nillable element=<nil>" << endl;
-        }
-        delete nillableInput;
 
         // Test nillable element, with nil
         nillableResult = ws->asNillableElement(NULL);
@@ -69,14 +85,14 @@ int main(int argc, char* argv[])
             delete nillableResult;
         }
         else
-        {
             cout << "nil element=<nil>" << endl;
-        }
 
         // Test required attribute
         RequiredAttributeElement requiredAttributeInput;
+        RequiredAttributeElement* requiredAttributeResult;
+        
         requiredAttributeInput.setrequiredAttribute(123);
-        RequiredAttributeElement* requiredAttributeResult = ws->asRequiredAttribute(&requiredAttributeInput);
+        requiredAttributeResult = ws->asRequiredAttribute(&requiredAttributeInput);
         cout << "required attribute=" << (int) requiredAttributeResult->getrequiredAttribute() << endl;
         delete requiredAttributeResult;
 
@@ -111,36 +127,38 @@ int main(int argc, char* argv[])
 */
 
         // Test array
+#define ARRAY_SIZE 2                    
+        int i, outputSize=0;
+                
         xsd__byte_Array arrayInput;
-                int arraySize=2;
-                xsd__byte **array = new xsd__byte*[arraySize];
+        xsd__byte_Array* arrayResult;
+        const xsd__byte ** output;        
+        xsd__byte *array[ARRAY_SIZE];
         
-        for (int inputIndex=0 ; inputIndex < 2 ; inputIndex++)
-        {
-            array[inputIndex] = new xsd__byte(123);
-        }
-                arrayInput.set(array,arraySize);
-        xsd__byte_Array* arrayResult = ws->asArray(&arrayInput);
-                int outputSize=0;
-                const xsd__byte ** output=arrayResult->get(outputSize);
+        for (i=0 ; i < 2 ; i++)
+            array[i] = new xsd__byte(123);
+        arrayInput.set(array,ARRAY_SIZE);
+        
+        arrayResult = ws->asArray(&arrayInput);
+        if (arrayResult)
+            output = arrayResult->get(outputSize);
+
         cout << "array of " << outputSize << " elements" << endl;
-        for (int index = 0; index < outputSize ; index++)
-        {
-            cout << "  element[" << index << "]=" << (int)*output[index] << endl;
-        }
+        for (i = 0; i < outputSize ; i++)
+            cout << "  element[" << i << "]=" << (int)*output[i] << endl;
+            
         // Clear up input array        
-        for (int deleteIndex = 0 ; deleteIndex < arraySize ; deleteIndex++ )
-        {
-            delete array[deleteIndex];
-        }
-        delete [] array;
+        for (i = 0 ; i < ARRAY_SIZE ; i++ )
+            delete array[i];
         delete arrayResult;
 
 
         // Test complex type
         SimpleComplexType complexTypeInput;
+        SimpleComplexType* complexTypeResult;
+        
         complexTypeInput.setcomplexTypeElement(123);
-        SimpleComplexType* complexTypeResult = ws->asComplexType(&complexTypeInput);
+        complexTypeResult = ws->asComplexType(&complexTypeInput);
         cout << "within complex type=" << (int) complexTypeResult->getcomplexTypeElement() << endl;
         delete complexTypeResult;
 

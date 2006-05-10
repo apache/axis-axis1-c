@@ -14,6 +14,16 @@
 // limitations under the License.
 
 
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* ----------------------------------------------------------------   */
+/* CHANGES TO THIS FILE MAY ALSO REQUIRE CHANGES TO THE               */
+/* C-EQUIVALENT FILE. PLEASE ENSURE THAT IT IS DONE.                  */
+/* ----------------------------------------------------------------   */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+
+
 #include "XSD_float.hpp"
 #include <axis/AxisException.hpp>
 #include <ctype.h>
@@ -22,42 +32,44 @@
 
 int main(int argc, char* argv[])
 {
-        char endpoint[256];
-        const char* url="http://localhost:80/axis/XSD_float";
+    XSD_float* ws ;
+    
+    xsd__float result;
+    
+    char endpoint[256];
+    const char* url="http://localhost:80/axis/XSD_float";
 
-        if(argc>1)
-                url = argv[1];
+    if(argc>1)
+        url = argv[1];
 
-                // bool bSuccess = false;
+    try
+    {
+        sprintf(endpoint, "%s", url);
+        ws = new XSD_float(endpoint);
 
-        try
-        {
-                sprintf(endpoint, "%s", url);
-                XSD_float* ws = new XSD_float(endpoint);
+        // Test non-nillable element
+        result = ws->asNonNillableElement((xsd__float)555.555);
+        printf("non-nillable element=%.6g\n", result);
+        fflush(stdout);
 
-                // Test non-nillable element
-                xsd__float result = ws->asNonNillableElement((xsd__float)555.555);
-                printf("non-nillable element=%.6g\n", result);
-                fflush(stdout);
+        // Tests now complete
 
-                // Tests now complete
+        delete ws;
+    }
+    catch(AxisException& e)
+    {
+        cout << "Exception : " << e.what() << endl;
+    }
+    catch(exception& e)
+    {
+        cout << "Unknown exception has occured: " << e.what() << endl;
+    }
+    catch(...)
+    {
+        cout << "Unknown exception has occured" << endl;
+    }
 
-                delete ws;
-        }
-        catch(AxisException& e)
-        {
-                cout << "Exception : " << e.what() << endl;
-        }
-        catch(exception& e)
-        {
-            cout << "Unknown exception has occured: " << e.what() << endl;
-        }
-        catch(...)
-        {
-            cout << "Unknown exception has occured" << endl;
-        }
+    cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;
 
-        cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;
-        
-        return 0;
+    return 0;
 }
