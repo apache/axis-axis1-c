@@ -52,7 +52,7 @@ int main(int argc, char* argv[])
     try
     {
         sprintf(endpoint, "%s", url);
-        XSD_dateTime* ws = new XSD_dateTime(endpoint);
+        ws = new XSD_dateTime(endpoint);
 
         timeToTest = 1100246323;
         temp = gmtime(&timeToTest);

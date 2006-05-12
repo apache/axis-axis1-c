@@ -50,7 +50,7 @@ int main(int argc, char* argv[])
         sprintf(endpoint, "%s", url);
         ws = new XSD_byte(endpoint);
 
-        xsd__byte result = ws->asNonNillableElement((xsd__byte)127);
+        result = ws->asNonNillableElement((xsd__byte)127);
         cout << "non-nillable element=" << (int) result << endl;
         
         result = ws->asNonNillableElement((xsd__byte)1);
