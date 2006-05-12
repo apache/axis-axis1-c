@@ -346,16 +346,9 @@ public class ClientStubWriter
                 String initValue = CUtils.getInitValue(outparamType);
                 if (initValue != null)
                     writer.write(outparamType + " Ret = " + initValue + ";\n");
-                else if (outparamType.equals("xsd__base64Binary")
-                        || outparamType.equals("xsd__hexBinary"))
-                {
-                    writer.write(outparamType + " Ret;\n");
-                    writer.write("\tRet.__ptr = NULL;\n");
-                    writer.write("\tRet.__size = 0;\n");
-                }
-                else if (outparamType.equals("xsd__dateTime")
-                        || outparamType.equals("xsd__date")
-                        || outparamType.equals("xsd__time"))
+                else if (outparamType.equals("xsdc__dateTime")
+                        || outparamType.equals("xsdc__date")
+                        || outparamType.equals("xsdc__time"))
                 {
                     writer.write(outparamType + " Ret;\n");
                     writer.write("\tmemset(&Ret,0,sizeof(" + outparamType + "));\n");

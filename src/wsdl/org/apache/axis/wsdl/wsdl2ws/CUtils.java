@@ -641,7 +641,7 @@ public class CUtils
         initValuesCpp.put("xsd__NOTATION",                "NULL");
  
         
-        initValuesC.put("xsdc__duration",                "{0, 0, 0, 0, 0, 0, 0, 0, 0}");
+        initValuesC.put("xsdc__duration",                "0");
         initValuesC.put("xsdc__dateTime",                "{0, 0, 0, 0, 0, 0, 0, 0, 0}");
         initValuesC.put("xsdc__time",                    "{0, 0, 0, 0, 0, 0, 0, 0, 0}");
         initValuesC.put("xsdc__date",                    "{0, 0, 0, 0, 0, 0, 0, 0, 0}");

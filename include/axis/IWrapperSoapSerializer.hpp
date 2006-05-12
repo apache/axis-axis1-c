@@ -316,11 +316,12 @@ public:
      * Serialize an array of strings.
      * 
      * The strings will be serialized "as-is", no validation will take place.
+     * Primary use is by the C-bindings interface.
      * 
-     * @param count number of strings to be serialized.
-     * @param args array of strings to be serialized.
+     * @param pFirst first string to be serialized.
+     * @param args ptr to va_list of strings to be serialized.
      */
-    virtual void AXISCALL serializeVargs(int count, const char** args)=0;
+    virtual void AXISCALL serializeVargs(const char* pFirst, va_list args)=0;
     
     /**
      * Serialize strings.  All arguments must be strings (char *).

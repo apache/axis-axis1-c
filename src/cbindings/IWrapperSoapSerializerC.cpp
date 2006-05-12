@@ -101,29 +101,6 @@ int axiscSoapSerializerCreateSoapFault(AXISCHANDLE wrapperSoapSerializer,
     return AXISC_FAIL;
 }
 
-/**
-AXISC_STORAGE_CLASS_INFO 
-const AxiscChar * axiscSoapSerializerGetNamespacePrefix(AXISCHANDLE wrapperSoapSerializer, 
-                                                                const AxiscChar * pNamespace) 
-{
-    IWrapperSoapSerializer *sz = (IWrapperSoapSerializer*)wrapperSoapSerializer;
-
-    try
-    {
-        return sz->getNamespacePrefix(pNamespace);
-    }
-    catch ( AxisException& e  )
-    {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
-    }
-    catch ( ... )
-    {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
-    }
-    
-    return (const AxiscChar *)NULL;
-}
-***/
 
 AXISC_STORAGE_CLASS_INFO 
 const AxiscChar * axiscSoapSerializerGetNamespacePrefix(AXISCHANDLE wrapperSoapSerializer, 
@@ -135,8 +112,16 @@ const AxiscChar * axiscSoapSerializerGetNamespacePrefix(AXISCHANDLE wrapperSoapS
     try
     {
         bool isNewPrefix = false;
-        const AxiscChar * returnValue = sz->getNamespacePrefix(pNamespace, isNewPrefix);
-        *(blnIsNewPrefix) = (AxiscBool) isNewPrefix;
+        const AxiscChar * returnValue;
+        
+        if (blnIsNewPrefix)
+        {
+            returnValue = sz->getNamespacePrefix(pNamespace, isNewPrefix);
+            *(blnIsNewPrefix) = (AxiscBool) isNewPrefix;
+        }
+        else
+            returnValue = sz->getNamespacePrefix(pNamespace);
+            
         return returnValue;
     }
     catch ( AxisException& e  )
@@ -685,21 +670,20 @@ AXISCHANDLE axiscSoapSerializerCreateSoapAttachmentSoapAttachment(AXISCHANDLE wr
     return (AXISCHANDLE)NULL;
 }
 
-AXISC_STORAGE_CLASS_INFO void axiscSoapSerializerSerialize(AXISCHANDLE wrapperSoapSerializer, 
-                                                                   const char *pFirst, 
-                                                                   ...) 
+AXISC_STORAGE_CLASS_INFO 
+void axiscSoapSerializerSerialize(AXISCHANDLE wrapperSoapSerializer, 
+                                  const char *pFirst, 
+                                  ...) 
 {
     SoapSerializer *sz = (SoapSerializer*)wrapperSoapSerializer;
 
     try
     {
-        // TODO: There were problems getting the ... to work properly, so serializeVargs was
-        // introduced. Also wsdl2ws only ever calls this method with one parameter so
-        // ignore the extra parameters here for the moment. This should be fixed properly
-        // later. I think SoapSerializer::serialize is wrong to assume that the variable
-        // list of parameters will be terminated by a null pointer. I think we should always
-        // pass in an explicit parameter count here.
-        sz->serializeVargs(1,&pFirst);
+        va_list args;
+    
+        va_start( args, pFirst);    
+        sz->serializeVargs(pFirst, args);
+        va_end( args);          
     }
     catch ( AxisException& e  )
     {

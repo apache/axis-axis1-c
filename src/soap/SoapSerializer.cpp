@@ -894,21 +894,8 @@ int SoapSerializer::serializeAsAttribute( const AxisChar * pName,
     return AXIS_FAIL;  // Can it only be unsuccessful?
 }
 
-void SoapSerializer::serializeVargs( int count, const char ** args)
+void SoapSerializer::serializeVargs( const char * pFirst, va_list vList)
 {
-    for (int i=0; i<count; i++)
-    {
-        if (NULL != args[i])
-            *this << args[i];
-    }
-}
-
-void SoapSerializer::serialize( const char * pFirst, ...)
-{
-    va_list vList;
-
-    va_start( vList, pFirst );     /* Initialize variable arguments. */
-    
     const char * pArg;
     
     if( pFirst)
@@ -922,8 +909,15 @@ void SoapSerializer::serialize( const char * pFirst, ...)
             *this << pArg;
     } 
     while( pArg != NULL);
+}
 
-    va_end( vList);              /* Reset variable arguments.      */
+void SoapSerializer::serialize( const char * pFirst, ...)
+{
+    va_list vList;
+
+    va_start( vList, pFirst );   
+    serializeVargs(pFirst, vList);
+    va_end( vList);         
 }
 
 /*

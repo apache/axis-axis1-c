@@ -165,7 +165,7 @@ public class ArrayParamHeaderWriter extends ParamWriter
         try
         {
             this.writer.write("extern void Axis_Delete_" + classname 
-                    + "(" + classname + "* param);\n");
+                    + "(" + classname + "* param, int nSize);\n");
         }
         catch (IOException e)
         {

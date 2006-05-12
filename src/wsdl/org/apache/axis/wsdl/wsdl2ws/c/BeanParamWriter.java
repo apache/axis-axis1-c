@@ -365,18 +365,18 @@ public class BeanParamWriter extends ParamCFileWriter
                 {
                     writer.write("\taxiscSoapSerializerSerialize(pSZ, \"<\", axiscSoapSerializerGetNamespacePrefix(pSZ, \""
                                     + type.getName().getNamespaceURI()
-                                    + "\"), \":\", \"" + elm + "\", 0);\n");
+                                    + "\", NULL), \":\", \"" + elm + "\", 0);\n");
                     writer.write("\tAxis_Serialize_" + attribs[i].getTypeName()
-                            + "(param->" + attribs[i].getParamName() + ", pSZ);\n");
+                            + "(param->" + attribs[i].getParamName() + ", pSZ, 0);\n");
                     writer.write("\taxiscSoapSerializerSerialize(pSZ, \"</\", axiscSoapSerializerGetNamespacePrefix(pSZ, \""
                                     + type.getName().getNamespaceURI()
-                                    + "\"), \":\", \"" + elm + "\", \">\", 0);\n");
+                                    + "\", NULL), \":\", \"" + elm + "\", \">\", 0);\n");
                 }
                 else
                 {
                     writer.write("\taxiscSoapSerializerSerialize(pSZ, \"<" + elm + "\", 0);\n");
                     writer.write("\tAxis_Serialize_" + attribs[i].getTypeName()
-                            + "(param->" + attribs[i].getParamName() + ", pSZ);\n");
+                            + "(param->" + attribs[i].getParamName() + ", pSZ, 0);\n");
                     writer.write("\taxiscSoapSerializerSerialize(pSZ, \"</" + elm + "\", \">\", 0);\n");
                 }
                 
@@ -826,7 +826,8 @@ public class BeanParamWriter extends ParamCFileWriter
                 
                 writer.write("\t\tif (param->" + attribs[i].getParamName() + ")\n");
                 writer.write("\t\t\tAxis_Delete_" + attribs[i].getTypeName() + deleteFunctionSuffix 
-                            + "(param->" + attribs[i].getParamName() + ");\n");                   
+                            + "(param->" + attribs[i].getParamName() + ", 0);\n");  
+                    
             }
         }
         

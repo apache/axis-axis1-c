@@ -223,7 +223,7 @@ public:
     int AXISCALL serializeAsAttribute(const AxisChar* pName,
                                       const AxisChar* pNamespace,
                                       IAnySimpleType* pSimpleType);
-    void AXISCALL serializeVargs(int count, const char** args);
+    void AXISCALL serializeVargs(const char * pFirst, va_list vList);
     void AXISCALL serialize(const char* pFirst, ...);
     void setStyle(AXIS_BINDING_STYLE nStyle)
     { m_nStyle = nStyle; m_BTSZ.setStyle(nStyle);};
