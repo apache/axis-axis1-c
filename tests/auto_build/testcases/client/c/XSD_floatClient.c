@@ -13,52 +13,48 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
 #include <stdlib.h>
 #include <stdio.h>
 
 #include "CommonClientTestCode.h"
-#include "XSD_gDay.h"
+#include "XSD_float.h"
+
 
 
 int main(int argc, char* argv[])
 {
     AXISCHANDLE ws;
     
-    xsdc__gDay result;
-    xsdc__gDay input;
-    xsdc__gDay* nillableResult;
-    
-    char returnString[50];
-    time_t timeToTest;
-    struct tm *temp;
+    xsdc__float result;
+    xsdc__float input;
+    xsdc__float* nillableResult;
     
     char endpoint[256];
-    const char* url="http://localhost:80/axis/XSD_gDay";
+    const char* url="http://localhost:80/axis/XSD_float";
 
     axiscAxisRegisterExceptionHandler(exceptionHandler);
 
     if(argc>1)
         url = argv[1];
 
+
     sprintf(endpoint, "%s", url);
-    ws = get_XSD_gDay_stub(endpoint);
-    
-    timeToTest = 1100246323;
-    temp = gmtime(&timeToTest);
-    memcpy(&input, temp, sizeof(struct tm));
+    ws = get_XSD_float_stub(endpoint);
 
     // Test non-nillable element
-    result = asNonNillableElement(ws, input);
-    strftime(returnString, 50, "%d", &result);
-    printf( "non-nillable element=%s\n" , returnString );
+    result = asNonNillableElement(ws, (xsdc__float)35.353588);
+    printf("non-nillable element=%.6g\n", result);
+    fflush(stdout);
 
     // Test nillable element, with a value
+    input = (xsdc__float)35.353588;
     nillableResult = asNillableElement(ws, &input);
     if (nillableResult)
     {
-        strftime(returnString, 50, "%d", nillableResult);
-        printf( "nillable element=%s\n" , returnString );
-        axiscAxisDelete(nillableResult, XSDC_GDAY);
+        printf("nillable element=%.6g\n", *(nillableResult));
+        fflush(stdout);
+        axiscAxisDelete(nillableResult, XSDC_FLOAT);
     }
     else
         printf( "nillable element=<nil>\n" );
@@ -67,9 +63,9 @@ int main(int argc, char* argv[])
     nillableResult = asNillableElement(ws, NULL);
     if (nillableResult)
     {
-        strftime(returnString, 50, "%d", nillableResult);
-        printf( "nil element=%s\n" , returnString );
-        axiscAxisDelete(nillableResult, XSDC_GDAY);
+        printf("nil element=%.6g\n", *(nillableResult));
+        fflush(stdout);
+        axiscAxisDelete(nillableResult, XSDC_FLOAT);
     }
     else
         printf( "nil element=<nil>\n" );
@@ -79,40 +75,43 @@ int main(int argc, char* argv[])
         RequiredAttributeElement requiredAttributeInput;
         RequiredAttributeElement* requiredAttributeResult;
         
-        requiredAttributeInput.requiredAttribute = input;
+        requiredAttributeInput.requiredAttribute = ((xsdc__float)35.353588);
         requiredAttributeResult = asRequiredAttribute(ws, &requiredAttributeInput);
-        result = requiredAttributeResult->requiredAttribute;
-        strftime(returnString, 50, "%d", &result);
-        printf( "required attribute=%s\n" , returnString );
+        printf("required attribute=%.6g\n", requiredAttributeResult->requiredAttribute);
+        fflush(stdout);
         Axis_Delete_RequiredAttributeElement(requiredAttributeResult, 0);
     }
 
 /* Optional Attributes currently unsupported by WSDL2Ws
  * Exact coding of this section may change depending on chosen implementation
-        // Test optional attribute, with a value
-        OptionalAttributeElement optionalAttributeInput;
-        optionalAttributeInput.setoptionalAttribute(input);
-        OptionalAttributeElement* optionalAttributeResult = asOptionalAttribute(&optionalAttributeInput);
-        if (optionalAttributeResult->getoptionalAttribute())
-        {
-            strftime(returnString, 50, "%d", optionalAttributeResult->getoptionalAttribute());
-            printf( "optional attribute, with data=%s\n" , returnString );
-        }
-        else
-            printf( "optional attribute, with data=<not present>\n" );
-        delete optionalAttributeResult;
+                // Test optional attribute, with a value
+                OptionalAttributeElement optionalAttributeInput;
+                optionalAttributeInput.setoptionalAttribute(35.353588);
+                OptionalAttributeElement* optionalAttributeResult = asOptionalAttribute(&optionalAttributeInput);
+                if (optionalAttributeResult->getoptionalAttribute())
+                {
+                        printf("optional attribute, with data=%.6g\n", *(optionalAttributeResult->getoptionalAttribute()));
+            fflush(stdout);
+                }
+                else
+                {
+                        printf( "optional attribute, with data=<not present>\n" );
+                }
+                delete optionalAttributeResult;
 
-        // Test optional attribute, not present
-        //optionalAttributeInput.setattribute();
-        optionalAttributeResult = asOptionalAttribute(&optionalAttributeInput);
-        if (optionalAttributeResult->getoptionalAttribute())
-        {
-            strftime(returnString, 50, "%d", optionalAttributeResult->getoptionalAttribute());
-            printf( "optional attribute, not present=%s\n" , returnString );
-        }
-        else
-            printf( "optional attribute, not present=<not present>\n" );
-        delete optionalAttributeResult;
+                // Test optional attribute, not present
+                //optionalAttributeInput.setattribute();
+                optionalAttributeResult = asOptionalAttribute(&optionalAttributeInput);
+                if (optionalAttributeResult->getoptionalAttribute())
+                {
+                        printf("optional attribute, not present=%.6g\n", *(optionalAttributeResult->getoptionalAttribute()));
+            fflush(stdout);
+                }
+                else
+                {
+                        printf( "optional attribute, not present=<not present>\n" );
+                }
+                delete optionalAttributeResult;
 */
 
     // Test array
@@ -120,17 +119,18 @@ int main(int argc, char* argv[])
 #define ARRAY_SIZE 2                    
         int i, outputSize=0;
                 
-        xsdc__gDay_Array arrayInput;
-        xsdc__gDay_Array* arrayResult;
-        xsdc__gDay * array[ARRAY_SIZE];
-        const xsdc__gDay ** output;
-        
+        xsdc__float_Array arrayInput;
+        xsdc__float_Array* arrayResult;
+        xsdc__float * array[ARRAY_SIZE];
+        const xsdc__float ** output;
+
+        input = 35.353588;
         for (i=0 ; i < ARRAY_SIZE ; i++)
             array[i] = &input;
-                
+
         arrayInput.m_Array = array;
         arrayInput.m_Size  = ARRAY_SIZE;
-        arrayInput.m_Type  = XSDC_GDAY;
+        arrayInput.m_Type  = XSDC_FLOAT;
         
         arrayResult = asArray(ws, &arrayInput);
 
@@ -144,31 +144,31 @@ int main(int argc, char* argv[])
 
         for (i = 0; i < outputSize ; i++)
         {
-            strftime(returnString, 50, "%d", output[i]);
-            printf( "  element[%d]=%s\n" , i, returnString );
+            printf("  element[%d]=%.6g\n", i,  *(output[i]));
+            fflush(stdout);
         }
+
         axiscAxisDelete(arrayResult, XSDC_ARRAY);
     }
-        
+
     // Test complex type
     {
         SimpleComplexType complexTypeInput;
         SimpleComplexType* complexTypeResult;
         
-        complexTypeInput.complexTypeElement = input;
+        complexTypeInput.complexTypeElement = ((xsdc__float) 35.353588);
         complexTypeResult = asComplexType(ws, &complexTypeInput);
-        result = complexTypeResult->complexTypeElement;
-        strftime(returnString, 50, "%d", &result);
-        printf( "within complex type=%s\n" , returnString );
+        printf("within complex type=%.6g\n", complexTypeResult->complexTypeElement);
+        fflush(stdout);
         Axis_Delete_SimpleComplexType(complexTypeResult, 0);
     }
 
     // Tests now complete
 
-    destroy_XSD_gDay_stub(ws);
+    destroy_XSD_float_stub(ws);
 
 
     printf( "---------------------- TEST COMPLETE -----------------------------\n");
-   
+
     return 0;
 }

@@ -1,0 +1,17 @@
+<test>
+    <name>XSD_floatC</name>
+    <description>Test serialization and deserialization of the XSD built-in simple type float</description>
+    <clientLang>c</clientLang>
+    <clientCode>XSD_floatClient.c</clientCode>
+    <wsdl>XSD_float.wsdl</wsdl>
+    <expected>
+        <output>
+            XSD_float.expected
+        </output>
+		<serverResponse>
+			XSD_float_ServerResponse.expected
+	    </serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/XSD_float</endpoint>
+</test>
+

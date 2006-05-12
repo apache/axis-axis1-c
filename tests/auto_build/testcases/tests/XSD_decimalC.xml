@@ -1,0 +1,17 @@
+<test>
+    <name>XSD_decimalC</name>
+    <description>Test serialization and deserialization of the XSD built-in simple type decimal</description>
+    <clientLang>c</clientLang>
+    <clientCode>XSD_decimalClient.c</clientCode>
+    <wsdl>XSD_decimal.wsdl</wsdl>
+    <expected>
+        <output>
+            XSD_decimal.expected
+        </output>
+		<serverResponse>
+			XSD_decimal_ServerResponse.expected
+	    </serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/XSD_decimal</endpoint>
+</test>
+

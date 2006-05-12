@@ -13,28 +13,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 #include <stdlib.h>
 #include <stdio.h>
 
 #include "CommonClientTestCode.h"
-#include "XSD_gYear.h"
+#include "XSD_dateTime.h"
 
 
 int main(int argc, char* argv[])
 {
     AXISCHANDLE ws;
     
-    xsdc__gYear result;
-    xsdc__gYear input;
-    xsdc__gYear* nillableResult;
-    
     char returnString[50];
+    
+    xsdc__dateTime result;
+    xsdc__dateTime input;
+    xsdc__dateTime* nillableResult;
+
     time_t timeToTest;
     struct tm *temp;
-        
+    
     char endpoint[256];
-    const char* url="http://localhost:80/axis/XSD_gYear";
+    const char* url="http://localhost:80/axis/XSD_dateTime";
 
     axiscAxisRegisterExceptionHandler(exceptionHandler);
 
@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
         url = argv[1];
 
     sprintf(endpoint, "%s", url);
-    ws = get_XSD_gYear_stub(endpoint);
+    ws = get_XSD_dateTime_stub(endpoint);
 
     timeToTest = 1100246323;
     temp = gmtime(&timeToTest);
@@ -50,16 +50,16 @@ int main(int argc, char* argv[])
 
     // Test non-nillable element
     result = asNonNillableElement(ws, input);
-    strftime(returnString, 50, "%Y", &result);
+    strftime(returnString, 50, "%a %b %d %H:%M:%S %Y", &result);
     printf( "non-nillable element=%s\n" , returnString );
 
     // Test nillable element, with a value
     nillableResult = asNillableElement(ws, &input);
     if (nillableResult)
     {
-        strftime(returnString, 50, "%Y", nillableResult);
+        strftime(returnString, 50, "%a %b %d %H:%M:%S %Y", nillableResult);
         printf( "nillable element=%s\n" , returnString );
-        axiscAxisDelete(nillableResult, XSDC_GYEAR);
+        axiscAxisDelete(nillableResult, XSDC_DATETIME);
     }
     else
         printf( "nillable element=<nil>\n" );
@@ -68,9 +68,9 @@ int main(int argc, char* argv[])
     nillableResult = asNillableElement(ws, NULL);
     if (nillableResult)
     {
-        strftime(returnString, 50, "%Y", nillableResult);
+        strftime(returnString, 50, "%a %b %d %H:%M:%S %Y", nillableResult);
         printf( "nil element=%s\n" , returnString );
-        axiscAxisDelete(nillableResult, XSDC_GYEAR);
+        axiscAxisDelete(nillableResult, XSDC_DATETIME);
     }
     else
         printf( "nil element=<nil>\n" );
@@ -80,57 +80,57 @@ int main(int argc, char* argv[])
         RequiredAttributeElement requiredAttributeInput;
         RequiredAttributeElement* requiredAttributeResult;
         
-        requiredAttributeInput.requiredAttribute = input;
+        requiredAttributeInput.requiredAttribute= (input);
         requiredAttributeResult = asRequiredAttribute(ws, &requiredAttributeInput);
         result = requiredAttributeResult->requiredAttribute;
-        strftime(returnString, 50, "%Y", &result);
+        strftime(returnString, 50, "%a %b %d %H:%M:%S %Y", &result);
         printf( "required attribute=%s\n" , returnString );
         Axis_Delete_RequiredAttributeElement(requiredAttributeResult, 0);
     }
 
 /* Optional Attributes currently unsupported by WSDL2Ws
  * Exact coding of this section may change depending on chosen implementation
-        // Test optional attribute, with a value
-        OptionalAttributeElement optionalAttributeInput;
-        optionalAttributeInput.setoptionalAttribute(input);
-        OptionalAttributeElement* optionalAttributeResult = asOptionalAttribute(&optionalAttributeInput);
-        if (optionalAttributeResult->getoptionalAttribute())
-        {
-            strftime(returnString, 50, "%Y", optionalAttributeResult->getoptionalAttribute());
-            printf( "optional attribute, with data=%s\n" , returnString );
-        }
-        else
-            printf( "optional attribute, with data=<not present>\n" );
-        delete optionalAttributeResult;
+                // Test optional attribute, with a value
+                OptionalAttributeElement optionalAttributeInput;
+                optionalAttributeInput.setoptionalAttribute(time);
+                OptionalAttributeElement* optionalAttributeResult = asOptionalAttribute(&optionalAttributeInput);
+                if (optionalAttributeResult->getoptionalAttribute())
+                {
+            strftime(returnString, 50, "%a %b %d %H:%M:%S %Y", optionalAttributeResult->getoptionalAttribute());
+                        printf( "optional attribute, with data=" , returnString );
+                }
+                else
+                        printf( "optional attribute, with data=<not present>\n" );
+                delete optionalAttributeResult;
 
-        // Test optional attribute, not present
-        optionalAttributeInput.setattribute();
-        optionalAttributeResult = asOptionalAttribute(&optionalAttributeInput);
-        if (optionalAttributeResult->getoptionalAttribute())
-        {
-            strftime(returnString, 50, "%Y", optionalAttributeResult->getoptionalAttribute());
-            printf( "optional attribute, not present=%s\n" , returnString );
-        }
-        else
-            printf( "optional attribute, not present=<not present>\n" );
-        delete optionalAttributeResult;
+                // Test optional attribute, not present
+                //optionalAttributeInput.setattribute();
+                optionalAttributeResult = asOptionalAttribute(&optionalAttributeInput);
+                if (optionalAttributeResult->getoptionalAttribute())
+                {
+            strftime(returnString, 50, "%a %b %d %H:%M:%S %Y", optionalAttributeResult->getoptionalAttribute());
+                        printf( "optional attribute, not present=" , returnString );
+                }
+                else
+                        printf( "optional attribute, not present=<not present>\n" );
+                delete optionalAttributeResult;
 */
     // Test array
     {
 #define ARRAY_SIZE 2                    
         int i, outputSize=0;
-                
-        xsdc__gYear_Array arrayInput;
-        xsdc__gYear_Array* arrayResult;
-        xsdc__gYear * array[ARRAY_SIZE];
-        const xsdc__gYear **output;
         
-        for (i=0 ; i < 2 ; i++)
+        xsdc__dateTime_Array arrayInput;
+        xsdc__dateTime_Array* arrayResult;
+        xsdc__dateTime *array[ARRAY_SIZE];
+        const xsdc__dateTime **output;
+
+        for (i=0 ; i < ARRAY_SIZE ; i++)
             array[i] = &input;
-                
+
         arrayInput.m_Array = array;
         arrayInput.m_Size  = ARRAY_SIZE;
-        arrayInput.m_Type  = XSDC_GYEAR;
+        arrayInput.m_Type  = XSDC_DATETIME;
         
         arrayResult = asArray(ws, &arrayInput);
 
@@ -142,11 +142,13 @@ int main(int argc, char* argv[])
     
         printf("array of %d elements\n" , outputSize );   
 
+
         for (i = 0; i < outputSize ; i++)
         {
-            strftime(returnString, 50, "%Y", output[i]);
-            printf( "  element[%d]=%s\n" , i, returnString );
+            strftime(returnString, 50, "%a %b %d %H:%M:%S %Y", output[i]);
+            printf( "  element[%d]=%s\n", i , returnString );
         }
+
         axiscAxisDelete(arrayResult, XSDC_ARRAY);
     }
 
@@ -156,19 +158,20 @@ int main(int argc, char* argv[])
         SimpleComplexType complexTypeInput;
         SimpleComplexType* complexTypeResult;
         
-        complexTypeInput.complexTypeElement =input;
+        complexTypeInput.complexTypeElement = input;
         complexTypeResult = asComplexType(ws, &complexTypeInput);
         result = complexTypeResult->complexTypeElement;
-        strftime(returnString, 50, "%Y", &result);
+        strftime(returnString, 50, "%a %b %d %H:%M:%S %Y", &result);
         printf( "within complex type=%s\n" , returnString );
         Axis_Delete_SimpleComplexType(complexTypeResult, 0);
     }
 
     // Tests now complete
-    destroy_XSD_gYear_stub(ws);
+
+    destroy_XSD_dateTime_stub(ws);
 
 
-    printf( "---------------------- TEST COMPLETE -----------------------------\n");
-   
+    printf("---------------------- TEST COMPLETE -----------------------------\n");
+        
     return 0;
 }

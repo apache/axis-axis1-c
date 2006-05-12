@@ -1,0 +1,17 @@
+<test>
+    <name>XSD_durationC</name>
+    <description>Test serialization and deserialization of the XSD built-in simple type duration</description>
+    <clientLang>c</clientLang>
+    <clientCode>XSD_durationClient.c</clientCode>
+    <wsdl>XSD_duration.wsdl</wsdl>
+    <expected>
+        <output>
+            XSD_duration.expected
+        </output>
+		<serverResponse>
+			XSD_duration_ServerResponse.expected
+	    </serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/XSD_duration</endpoint>
+</test>
+

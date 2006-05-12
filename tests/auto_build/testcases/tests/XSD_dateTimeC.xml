@@ -1,0 +1,17 @@
+<test>
+    <name>XSD_dateTimeC</name>
+    <description>Test serialization and deserialization of the XSD built-in simple type dateTime</description>
+    <clientLang>c</clientLang>
+    <clientCode>XSD_dateTimeClient.c</clientCode>
+    <wsdl>XSD_dateTime.wsdl</wsdl>
+    <expected>
+        <output>
+            XSD_dateTime.expected
+        </output>
+		<serverResponse>
+			XSD_dateTime_ServerResponse.expected
+	    </serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/XSD_dateTime</endpoint>
+</test>
+

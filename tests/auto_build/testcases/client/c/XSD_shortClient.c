@@ -60,7 +60,7 @@ int main(int argc, char* argv[])
     if (nillableResult)
     {
         printf("nillable element=%hd\n", *(nillableResult));
-        delete nillableResult;
+        axiscAxisDelete(nillableResult, XSDC_SHORT);
     }
     else
         printf("nillable element=<nil>\n");
@@ -70,7 +70,7 @@ int main(int argc, char* argv[])
     if (nillableResult)
     {
         printf("nil element=%hd\n", *(nillableResult));
-        delete nillableResult;
+        axiscAxisDelete(nillableResult, XSDC_SHORT);
     }
     else
         printf("nil element=<nil>\n");

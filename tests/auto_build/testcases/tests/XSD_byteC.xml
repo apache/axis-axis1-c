@@ -1,0 +1,17 @@
+<test>
+    <name>XSD_byteC</name>
+    <description>Test serialization and deserialization of the XSD built-in simple type byte</description>
+    <clientLang>c</clientLang>
+    <clientCode>XSD_byteClient.c</clientCode>
+    <wsdl>XSD_byte.wsdl</wsdl>
+    <expected>
+        <output>
+            XSD_byte.expected
+        </output>
+		<serverResponse>
+			XSD_byte_ServerResponse.expected
+	    </serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/XSD_byte</endpoint>
+</test>
+
