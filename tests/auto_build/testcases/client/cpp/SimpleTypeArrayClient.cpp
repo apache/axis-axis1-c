@@ -40,6 +40,9 @@ static ofstream output_file;
 int main(int argc, char* argv[])
 {
   SimpleTypeArrayWS *ws;
+  
+  Type *input;
+  Type *output;
 
   char *endpoint = WSDL_DEFAULT_ENDPOINT;
   bool endpoint_set = false;
@@ -47,89 +50,98 @@ int main(int argc, char* argv[])
 
   endpoint_set = parse_args_for_endpoint(&argc, argv, &endpoint);
 
-                bool bSuccess = false;
-                int     iRetryIterationCount = 3;
+  bool bSuccess = false;
+  int     iRetryIterationCount = 3;
 
-                do
-                {
-  try {
-    if(endpoint_set) {
-      ws = new SimpleTypeArrayWS(endpoint, APTHTTP1_1);
-      free(endpoint);
-      endpoint_set = false;
-    } else
-      ws = new SimpleTypeArrayWS();
-
-    Type *input;
-    Type *output;
-    xsd__int_Array array_input;   
-    int i;
-        xsd__int ** array = new xsd__int*[100];
-    for ( i = 0; i < 100; i++ ) {      
-      array[i] = new xsd__int(i);
-    }
-        array_input.set(array,100);
-    input = new Type();
-    input->setitem(&array_input);
-    output = ws->getInput(input);
-        xsd__int_Array * outputArray = output->getitem();
-        int outputSize=0;
-        const xsd__int ** outarray = outputArray->get(outputSize);
-    for ( i = 0; i < 100; i++ ) {
-      cout << "item [" << i << "] = " << *(outarray[i]) << endl;
-    }
-    returnValue = 0; // Success
-        
-        // Clear up input array        
-        for (int deleteIndex = 0 ; deleteIndex < 100 ; deleteIndex++ )
+  do
+  {
+      try 
+      {
+        if(endpoint_set) 
         {
-            delete array[deleteIndex];
-        }
-        delete [] array;
-                delete input;
+          ws = new SimpleTypeArrayWS(endpoint, APTHTTP1_1);
+          free(endpoint);
+          endpoint_set = false;
+        } 
+        else
+          ws = new SimpleTypeArrayWS();
+
+#define ARRAY_SIZE 100                    
+        int i, outputSize=0;
+    
+        xsd__int_Array array_input;
+        xsd__int_Array * outputArray;
+        const xsd__int ** outarray;
+           
+        xsd__int *array[ARRAY_SIZE];
+        for ( i = 0; i < ARRAY_SIZE; i++ ) 
+          array[i] = new xsd__int(i);
+
+        array_input.set(array,ARRAY_SIZE);
+        input = new Type();
+        input->setitem(&array_input);
+        
+        output = ws->getInput(input);
+        
+        outputArray = output->getitem();
+        if (outputArray)
+            outarray = outputArray->get(outputSize);
+        
+        for ( i = 0; i < ARRAY_SIZE; i++ )
+          cout << "item [" << i << "] = " << *(outarray[i]) << endl;
+
+        returnValue = 0; // Success
+            
+        // Clear up       
+        for (i = 0 ; i < ARRAY_SIZE ; i++ )
+            delete array[i];
+        delete input;
+        
         bSuccess = true;
-  } catch(AxisException &e) {
-                        bool bSilent = false;
-
-                        if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-                        {
-                                if( iRetryIterationCount > 0)
-                                {
-                                        bSilent = true;
-                                }
-                        }
-                        else
-                        {
-                                iRetryIterationCount = 0;
-                        }
-
+      } 
+      catch(AxisException &e) 
+      {
+            bool bSilent = false;
+        
+            if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+            {
+                if( iRetryIterationCount > 0)
+                            bSilent = true;
+            }
+            else
+                iRetryIterationCount = 0;
+        
             if( !bSilent)
-                        {
-    cout << e.what() << endl;
-                        }
-    if(endpoint_set)
-      free(endpoint);
-  } catch(...) {
-    cout << "Unknown Exception occured." << endl;
-    if(endpoint_set)
-      free(endpoint);
-  }
-  
-  // clean up
-  try
-  {
-        delete ws;
-  }
-  catch(exception& exception)
-  {
-        cout << "Exception on clean up of ws : " << exception.what()<<endl;
-  }
-  catch(...)
-  {
-        cout << "Unknown exception on clean up of ws : " << endl;
-  }
-                iRetryIterationCount--;
-                } while( iRetryIterationCount > 0 && !bSuccess);
+                cout << e.what() << endl;
+    
+        if(endpoint_set)
+          free(endpoint);
+      } 
+      catch(...) 
+      {
+        cout << "Unknown Exception occured." << endl;
+        if(endpoint_set)
+          free(endpoint);
+      }
+      
+      // clean up
+      try
+      {
+            delete ws;
+      }
+      catch(exception& exception)
+      {
+            cout << "Exception on clean up of ws : " << exception.what()<<endl;
+      }
+      catch(...)
+      {
+            cout << "Unknown exception on clean up of ws : " << endl;
+      }
+      
+      iRetryIterationCount--;
+  } 
+  while( iRetryIterationCount > 0 && !bSuccess);
+                
   cout << "---------------------- TEST COMPLETE -----------------------------"<< endl;
   return returnValue;
 
