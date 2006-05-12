@@ -1,0 +1,16 @@
+<test>
+    <name>ComplexListsC</name>
+    <description>ComplexLists</description>
+    <clientLang>c</clientLang>
+    <clientCode>ComplexListsClient.c</clientCode>
+    <wsdl>ComplexLists.wsdl</wsdl>
+    <expected>
+        <output>
+            ComplexLists.expected
+        </output>
+		<serverResponse>
+			ComplexLists_ServerResponse.expected
+		</serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/ComplexLists</endpoint>
+</test>
