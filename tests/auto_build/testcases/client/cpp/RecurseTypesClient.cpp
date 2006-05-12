@@ -77,7 +77,7 @@ int main(int argc, char* argv[])
                 array[i]=new Type1();
         array[i]->kind = new char[strlen("Sample") + 1];
                 strcpy(array[i]->kind, "Sample");
-                array[i]->index = 0;
+                array[i]->i = 0;
     }
         arrayIn.set(array,10);
         input->setfollowings(&arrayIn);
@@ -95,9 +95,9 @@ int main(int argc, char* argv[])
         cout << "\tKind [" << i << "] = " << outArray[i]->kind << endl;        
       }
             // Clear up input array        
-        for (int deleteIndex = 0 ; deleteIndex < 10 ; deleteIndex++ )
+        for (i = 0 ; i < 10 ; i++ )
         {
-            delete array[deleteIndex];
+            delete array[i];
         }
                 delete [] array;
                 delete input;
