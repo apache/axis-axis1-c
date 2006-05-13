@@ -77,7 +77,7 @@ int main(int argc, char* argv[])
                 array[i]=new Type1();
         array[i]->kind = new char[strlen("Sample") + 1];
                 strcpy(array[i]->kind, "Sample");
-                array[i]->i = 0;
+                array[i]->index = 0;
     }
         arrayIn.set(array,10);
         input->setfollowings(&arrayIn);
