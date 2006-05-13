@@ -40,7 +40,7 @@ public class ClientReturnerFactory
             // Set it to the default for Axis
             clientReturnerClass = ClientReturner.class;
         }
-        System.out.println( "client returner class = "+clientReturnerClass);
+        //System.out.println( "client returner class = "+clientReturnerClass);
         
         Class[] constructorArgs = new Class[3];
         constructorArgs[0] = clientSocket.getClass();

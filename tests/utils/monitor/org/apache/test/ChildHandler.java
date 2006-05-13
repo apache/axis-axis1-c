@@ -27,7 +27,7 @@ public abstract class ChildHandler
      */
     protected void close()
     {
-        System.out.println( "Closing "+this);
+        // System.out.println( "Closing "+this);
         try 
         {
             for(int i=0; i<children.size(); i++)
@@ -45,7 +45,7 @@ public abstract class ChildHandler
                 }                
             }
             children=null;
-            System.out.println( "Closed "+this);
+            // System.out.println( "Closed "+this);
         }
         catch (Throwable exception)
         {

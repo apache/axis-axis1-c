@@ -41,7 +41,7 @@ public class ServerConnectionFactory
             // Set it to the default for Axis
             serverConnectionClass = TestClientThread.class;
         }
-        System.out.println( "Server connection class = "+serverConnectionClass);
+        //System.out.println( "Server connection class = "+serverConnectionClass);
         
         Class[] constructorArgs = new Class[3];
         constructorArgs[0] = clientSocket.getClass();

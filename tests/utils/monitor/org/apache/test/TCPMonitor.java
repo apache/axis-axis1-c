@@ -239,9 +239,9 @@ public class TCPMonitor extends ChildHandler
         {
             exception.printStackTrace(System.err);
         }
-        System.out.println( "About to call super.close");
+        // System.out.println( "About to call super.close");
         super.close();
-        System.out.println( "called super.close");
+        // System.out.println( "called super.close");
         state = CLOSED_STATE;
     }
 

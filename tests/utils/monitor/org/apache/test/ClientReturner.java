@@ -97,21 +97,17 @@ public class ClientReturner extends ChildHandler implements Runnable
 
                 if (bytesRead!=-1)
                 {
-                    /*System.out.println("ClientReturner#run("+number
-                            +"): Writing to client: "
-                            +new String(readBuffer, 0, bytesRead));
-                            */
                     try
                     {
                         streamToClient.write(readBuffer, 0, bytesRead);
                         streamToClient.flush( );
 
                         TCPMonitor.getInstance( ).writeResponse(readBuffer,bytesRead);
-                        System.out.println("About to go around again");
+                        System.out.println("ClientReturner#run(): processed " + bytesRead + " bytes - about to go around again");
                     }
                     catch (IOException exception)
                     {
-                        System.err.println("IOException when writing server response back to client");
+                        System.err.println("ClientReturner#run(): IOException when writing server response back to client");
                         exception.printStackTrace(System.err);
                         
                         // the socket to client is broken, so stop.
