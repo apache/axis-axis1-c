@@ -320,7 +320,7 @@ public class BeanParamWriter extends ParamCFileWriter
                     
                     if (((attribs[i].getChoiceElement())
                             && (isElementNillable(i)))
-                            && !(attribs[i].getTypeName().equals("xsdc__string")) )
+                            && !(CUtils.isPointerType(attribs[i].getTypeName())) )
                     {
                         writer.write("\t\taxiscSoapSerializerSerializeAsElement(pSZ, \""
                                 + attribs[i].getSOAPElementNameAsString() + "\", " + namespace
@@ -448,7 +448,6 @@ public class BeanParamWriter extends ParamCFileWriter
 
             //if the attribute is a 'all' construct we have to check Min
             // occures TODO
-
             
             if (attribs[i].isAnyType())
             {
@@ -512,8 +511,8 @@ public class BeanParamWriter extends ParamCFileWriter
                 {
                     writer.write("\n\t{\n"); // start new variable scope                    
                     writer.write("\tconst char* elementName" + i + " = axiscSoapDeSerializerPeekNextElementName(pDZ);\n");
-                    writer.write("\t\tif(strcmp(elementName" + i + ", \"" + soapTagName + "\") == 0)\n");
-                    writer.write("\t\t{\n");
+                    writer.write("\tif(strcmp(elementName" + i + ", \"" + soapTagName + "\") == 0)\n");
+                    writer.write("\t{\n");
                 }
                 
                 Type type = attribs[i].getType();
