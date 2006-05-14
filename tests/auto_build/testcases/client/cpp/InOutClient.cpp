@@ -37,175 +37,173 @@
 
 int main(int argc, char* argv[])
 {
-        char endpoint[256];
-        const char* url="http://localhost:80/axis/InOut";
+    char endpoint[256];
+    const char* url="http://localhost:80/axis/InOut";
 
-        if(argc>1)
-                url = argv[1];
+    if(argc>1)
+            url = argv[1];
 
-        try
-        {
-                sprintf(endpoint, "%s", url);
-                InOut ws(endpoint);
+    try
+    {
+        sprintf(endpoint, "%s", url);
+        InOut ws(endpoint);
 
-                xsd__int_Array int_in;
-                xsd__double_Array double_in; 
-                xsd__string_Array string_in;
-                //xsd__double* moDouble;
-                //xsd__int* moInt;
-                //xsd__string moString;
+        xsd__int_Array int_in;
+        xsd__double_Array double_in;
+        xsd__string_Array string_in;
 
         static char* str1 = "Apache";
         static char* str2 = "Axis C++";
 
-                cout << "noParametersNoReturn" << endl;
-                ws.noParametersNoReturn();
-                cout << "noParametersNoReturn returned" << endl;
+        cout << "noParametersNoReturn" << endl;
+        ws.noParametersNoReturn();
+        cout << "noParametersNoReturn returned" << endl;
 
-                cout << "noParametersIntReturn" << endl;
-                int npir = ws.noParametersIntReturn();
-                cout << "noParametersIntReturn returned " << npir << endl;
+        cout << "noParametersIntReturn" << endl;
+        int npir = ws.noParametersIntReturn();
+        cout << "noParametersIntReturn returned " << npir << endl;
 
-                cout << "multiParametersNoReturn" << endl;
-                ws.multiParametersNoReturn("Hey dude", 69, (xsd__double)17.19);
-                cout << "multiParametersNoReturn returned" << endl;
+        cout << "multiParametersNoReturn" << endl;
+        ws.multiParametersNoReturn("Hey dude", 69, (xsd__double)17.19);
+        cout << "multiParametersNoReturn returned" << endl;
 
-                
-                // test multiParametersMultiReturn
-                xsd__string outValue0 = "";
-                xsd__int outValue1 = 0;
-                xsd__double outValue2 = 0;
-                
-                cout << "multiParametersMultiReturn" << endl;
-                ws.multiParametersMultiReturn("Hey dude", 69, (xsd__double)17.19, &outValue0, &outValue1, &outValue2);
-                cout << "multiParametersMultiReturn returned " << outValue0 << " , " << outValue1 << " , " << outValue2 <<endl;
 
-                //...........................................................
+        // test multiParametersMultiReturn
+        xsd__string outValue0 = "";
+        xsd__int outValue1 = 0;
+        xsd__double outValue2 = 0;
+
+        cout << "multiParametersMultiReturn" << endl;
+        ws.multiParametersMultiReturn("Hey dude", 69, (xsd__double)17.19, &outValue0, &outValue1, &outValue2);
+        cout << "multiParametersMultiReturn returned " << outValue0 << " , " << outValue1 << " , " << outValue2
+          <<endl;
+
+        //...........................................................
 
         xsd__int ** arrayOfInt = new xsd__int*[3];
-                xsd__int_Array intArray;                
-        arrayOfInt[0] = new xsd__int(37);               
-        arrayOfInt[1] = new xsd__int(0);                
+        xsd__int_Array intArray;
+        arrayOfInt[0] = new xsd__int(37);
+        arrayOfInt[1] = new xsd__int(0);
         arrayOfInt[2] = new xsd__int(43);
-                intArray.set(arrayOfInt,3);
+        intArray.set(arrayOfInt,3);
 
-                xsd__string_Array stringArray;
-                xsd__string * arrayOfString =new xsd__string[3];                
-                arrayOfString[0]="One";
-                arrayOfString[1]="Two";
-                arrayOfString[2]="Three";
-                stringArray.set(arrayOfString,3);
+        xsd__string_Array stringArray;
+        xsd__string * arrayOfString =new xsd__string[3];
+        arrayOfString[0]="One";
+        arrayOfString[1]="Two";
+        arrayOfString[2]="Three";
+        stringArray.set(arrayOfString,3);
 
-                ComplexType1 ct;
-                ct.ctLong = (xsd__long)87654321;
-                ct.ctString = "World";
-                ct.setctIntArray(&intArray);
+        ComplexType1 ct;
+        ct.ctLong = (xsd__long)87654321;
+        ct.ctString = "World";
+        ct.setctIntArray(&intArray);
 
-                cout << "multiComplexParametersIntReturn" << endl;
-                int mcpir = ws.multiComplexParametersIntReturn("Hello", &ct, 27, 13.31, &stringArray);
-                cout << "multiComplexParametersIntReturn returned " << mcpir << endl;
+        cout << "multiComplexParametersIntReturn" << endl;
+        int mcpir = ws.multiComplexParametersIntReturn("Hello", &ct, 27, 13.31, &stringArray);
+        cout << "multiComplexParametersIntReturn returned " << mcpir << endl;
 
-                //test multiComplexParametersMultiComplexReturn
+        //test multiComplexParametersMultiComplexReturn
 
-                xsd__string OutValue0 = "";
-                ComplexType1* OutValue1;
-                xsd__int outValue22 = 0;
-                xsd__double outValue33 = 0;
+        xsd__string OutValue0 = "";
+        ComplexType1* OutValue1;
+        xsd__int outValue22 = 0;
+        xsd__double outValue33 = 0;
 
-                cout << "multiComplexParametersMultiComplexReturn" << endl;
-                ws.multiComplexParametersMultiComplexReturn("Hello", &ct, 27, 13.31, &stringArray, &OutValue0, &OutValue1, &outValue22, &outValue33);
-                cout << "multiComplexParametersMultiComplexReturn returned " << OutValue0 << " , " << OutValue1->ctString << endl;
+        cout << "multiComplexParametersMultiComplexReturn" << endl;
+        ws.multiComplexParametersMultiComplexReturn("Hello", &ct, 27, 13.31, &stringArray, &OutValue0, &OutValue1,
+                                                    &outValue22, &outValue33);
+        cout << "multiComplexParametersMultiComplexReturn returned " << OutValue0 << " , " << OutValue1->ctString <<
+          endl;
 
-                //..............................................................................
-                
-                
-                arrayOfString[0]="Four";
-                arrayOfString[1]=NULL;
-                arrayOfString[2]="Six";
-                stringArray.set(arrayOfString,3);
+        //..............................................................................
 
 
-                ComplexNilType1 cnt;
+        arrayOfString[0]="Four";
+        arrayOfString[1]=NULL;
+        arrayOfString[2]="Six";
+        stringArray.set(arrayOfString,3);
+
+
+        ComplexNilType1 cnt;
         xsd__long * longValue = new xsd__long(87654321);
-                cnt.ctLong = longValue;
-                cnt.ctString = NULL;
-                cnt.setctIntArray(&intArray);
+        cnt.ctLong = longValue;
+        cnt.ctString = NULL;
+        cnt.setctIntArray(&intArray);
 
-                cout << "multiComplexParametersNilIntReturn" << endl;
-                mcpir = ws.multiComplexParametersNilIntReturn(NULL, &cnt, NULL, NULL, &stringArray);
-                cout << "multiComplexParametersNilIntReturn returned " << mcpir << endl;
+        cout << "multiComplexParametersNilIntReturn" << endl;
+        mcpir = ws.multiComplexParametersNilIntReturn(NULL, &cnt, NULL, NULL, &stringArray);
+        cout << "multiComplexParametersNilIntReturn returned " << mcpir << endl;
 
         delete longValue;
 
-                /* Commented out as there is a bug in WSDL2Ws.
-                 * AXISCPP-565 is the Jira against this problem.
-         *
-                cout << "noParametersMultiReturn" << endl;
-                ws.noParametersMultiReturn(&moDouble, &moInt, &moString);
-                cout << "noParametersMultiReturn returned " << *moDouble << " " << *moInt << " " << moString << endl;
-                 *
-                 * Removed from WSDL for time being.
-                 */
+            /* Commented out as there is a bug in WSDL2Ws.
+             * AXISCPP-565 is the Jira against this problem.
+            xsd__double* moDouble;
+            xsd__int* moInt;
+            xsd__string moString;
+            cout << "noParametersMultiReturn" << endl;
+            ws.noParametersMultiReturn(&moDouble, &moInt, &moString);
+            cout << "noParametersMultiReturn returned " << *moDouble << " " << *moInt << " " << moString << endl;
+             *
+             * Removed from WSDL for time being.
+             */
 
-        xsd__int ** arrayOfInt2 = new xsd__int*[ARRAYSIZE];        
+        xsd__int ** arrayOfInt2 = new xsd__int*[ARRAYSIZE];
         int x = 0;
         for (x=0; x<ARRAYSIZE; x++)
-        {
             arrayOfInt2[x] = new xsd__int(x+1);
-            
-        }
-                int_in.set(arrayOfInt2,ARRAYSIZE);
+
+        int_in.set(arrayOfInt2,ARRAYSIZE);
 
         xsd__double ** arrayOfDouble = new xsd__double*[ARRAYSIZE];
-        
+
         for (x=0; x<ARRAYSIZE; x++)
-        {
             arrayOfDouble[x] = new xsd__double((xsd__double)x+71.15656);
-            
-        }
-                double_in.set(arrayOfDouble,ARRAYSIZE);
+
+        double_in.set(arrayOfDouble,ARRAYSIZE);
         xsd__string * arrayOfString2 = new xsd__string[ARRAYSIZE];
-        
+
         arrayOfString2[0] = str1;
         arrayOfString2[1] = str2;
-                string_in.set(arrayOfString2,ARRAYSIZE);
-                cout << "multiArrayParametersIntReturn" << endl;
-                int mapir = ws.multiArrayParametersIntReturn(&int_in, &double_in, &string_in);
-                cout << "multiArrayParametersIntReturn returned " << mapir << endl;
+        string_in.set(arrayOfString2,ARRAYSIZE);
+        cout << "multiArrayParametersIntReturn" << endl;
+        int mapir = ws.multiArrayParametersIntReturn(&int_in, &double_in, &string_in);
+        cout << "multiArrayParametersIntReturn returned " << mapir << endl;
 
-                ComplexType2 ct2;
-                ct2.ctLong = (xsd__long)98765432;
-                ct2.setctIntArray(&intArray);
-                ct2.ctString = "Complex2";
-                ct2.ctComplex = &ct;
+        ComplexType2 ct2;
+        ct2.ctLong = (xsd__long)98765432;
+        ct2.setctIntArray(&intArray);
+        ct2.ctString = "Complex2";
+        ct2.ctComplex = &ct;
 
-                cout << "complexParameterComplexReturn" << endl;
-                ComplexType2* ctr = ws.complexParameterComplexReturn(&ct2);
-                cout << "complexParameterComplexReturn returned " << ctr->ctString << endl;
+        cout << "complexParameterComplexReturn" << endl;
+        ComplexType2* ctr = ws.complexParameterComplexReturn(&ct2);
+        cout << "complexParameterComplexReturn returned " << ctr->ctString << endl;
 
-                ct2.ctLong = (xsd__long)22222222;
-                ct2.ctString = NULL;
-                ct2.ctComplex = NULL;
+        ct2.ctLong = (xsd__long)22222222;
+        ct2.ctString = NULL;
+        ct2.ctComplex = NULL;
 
-                cout << "complexParameterComplexReturn with nil parameters" << endl;
-                ctr = ws.complexParameterComplexReturn(&ct2);
-                cout << "complexParameterComplexReturn with nil parameters returned " << ctr->ctLong << endl;
+        cout << "complexParameterComplexReturn with nil parameters" << endl;
+        ctr = ws.complexParameterComplexReturn(&ct2);
+        cout << "complexParameterComplexReturn with nil parameters returned " << ctr->ctLong << endl;
 
-        }
-        catch(AxisException& e)
-        {
-            cout << "Exception : " << e.what() << endl;
-        }
-        catch(exception& e)
-        {
-                cout << "Unknown exception has occured : " << e.what() << endl;
-        }
-        catch(...)
-        {
-            cout << "Unknown exception has occured" << endl;
-        }
-        cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;
-        
-        return 0;
+    }
+    catch(AxisException& e)
+    {
+        cout << "Exception : " << e.what() << endl;
+    }
+    catch(exception& e)
+    {
+        cout << "Unknown exception has occured : " << e.what() << endl;
+    }
+    catch(...)
+    {
+        cout << "Unknown exception has occured" << endl;
+    }
+    cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;
+
+    return 0;
 }
 
