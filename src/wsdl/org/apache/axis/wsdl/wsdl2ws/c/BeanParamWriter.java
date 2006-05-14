@@ -206,6 +206,7 @@ public class BeanParamWriter extends ParamCFileWriter
         }               
         
         writer.write("\taxiscSoapSerializerSerialize(pSZ, \">\", 0);\n");
+        
         if (extensionBaseAttrib != null)
         {
             String typeName = extensionBaseAttrib.getTypeName(); 
@@ -709,12 +710,10 @@ public class BeanParamWriter extends ParamCFileWriter
         {
             if (attribs[i].isSimpleType() || attribs[i].getType().isSimpleType())
             {
-                // Probably want to do it for hexbinary and base64binary and ?
                 if (attribs[i].isArray())
                 {
                     writeNewline = true;
                     
-                    String passedInBaseType;
                     String baseTypeName = null;
                     
                     if (!attribs[i].isSimpleType() && attribs[i].getType().isSimpleType())
@@ -722,16 +721,13 @@ public class BeanParamWriter extends ParamCFileWriter
                     else
                         baseTypeName = attribs[i].getTypeName();
                     
-                    if (attribs[i].isArray())
-                    {
-                        passedInBaseType = "XSDC_ARRAY";
-                        baseTypeName += "_Array";
-                    }
-                    else
-                        passedInBaseType = CUtils.getXSDTypeForBasicType(baseTypeName);
+                    String m_type =  CUtils.getXSDTypeForBasicType(baseTypeName);
                                     
                     writer.write("\tpTemp->" + attribs[i].getParamNameAsMember() 
-                            + " = (" + baseTypeName + "*)axiscAxisNew(" + passedInBaseType + ",0);\n");
+                            + " = (" + baseTypeName + "_Array *)axiscAxisNew(XSDC_ARRAY, 0);\n");
+                    
+                    writer.write("\tpTemp->" + attribs[i].getParamNameAsMember() + "->m_Type = " 
+                            + CUtils.getXSDTypeForBasicType(baseTypeName) + ";\n");
                 }
             }
             else
