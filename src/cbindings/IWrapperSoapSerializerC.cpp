@@ -194,7 +194,7 @@ int axiscSoapSerializerAddOutputCmplxArrayParam(AXISCHANDLE wrapperSoapSerialize
     {
         // Need to convert C-style array to C++-style array before calling serialization method.
         Axis_Array objArray;
-        if (pArray && pArray->m_Array)
+        if (pArray)
             objArray.set((void **)pArray->m_Array, pArray->m_Size, (XSDTYPE)pArray->m_Type);
         
         return sz->addOutputCmplxArrayParam((const Axis_Array*)&objArray,pSZFunct,pDelFunct,pName,pNamespace);
@@ -223,7 +223,7 @@ int axiscSoapSerializerAddOutputBasicArrayParam(AXISCHANDLE wrapperSoapSerialize
     {
         // Need to convert C-style array to C++-style array before calling serialization method.
         Axis_Array objArray;
-        if (pArray && pArray->m_Array)
+        if (pArray)
             objArray.set((void **)pArray->m_Array, pArray->m_Size, (XSDTYPE)pArray->m_Type);
         
         return sz->addOutputBasicArrayParam((const Axis_Array*)&objArray,(XSDTYPE)nType,pName);
@@ -306,7 +306,7 @@ int axiscSoapSerializerSerializeCmplxArray(AXISCHANDLE wrapperSoapSerializer,
     {
         // Need to convert C-style array to C++-style array before calling serialization method.
         Axis_Array objArray;
-        if (pArray && pArray->m_Array)
+        if (pArray)
             objArray.set((void **)pArray->m_Array, pArray->m_Size, (XSDTYPE)pArray->m_Type);
 
         return sz->serializeCmplxArray((const Axis_Array*)&objArray,pSZFunct,pDelFunct,pName,pNamespace);
@@ -336,7 +336,7 @@ int axiscSoapSerializerSerializeBasicArray(AXISCHANDLE wrapperSoapSerializer,
     {
         // Need to convert C-style array to C++-style array before calling serialization method.
         Axis_Array objArray;
-        if (pArray && pArray->m_Array)
+        if (pArray)
             objArray.set((void **)pArray->m_Array, pArray->m_Size, (XSDTYPE)pArray->m_Type);
         
         // Serialize

@@ -365,7 +365,7 @@ void axiscCallAddCmplxArrayParameter(AXISCHANDLE call,
     {
         // Need to convert C-style array to C++-style array before calling serialization method.
         Axis_Array objArray;
-        if (pArray && pArray->m_Array)
+        if (pArray)
             objArray.set((void **)pArray->m_Array, pArray->m_Size, (XSDTYPE)pArray->m_Type);
     
         c->addCmplxArrayParameter(&objArray,pSZFunct,pDelFunct,pName,pNamespace);
@@ -397,7 +397,7 @@ void axiscCallAddBasicArrayParameter(AXISCHANDLE call,
     {
         // Need to convert C-style array to C++-style array before calling serialization method.
         Axis_Array objArray;
-        if (pArray && pArray->m_Array)
+        if (pArray)
             objArray.set((void **)pArray->m_Array, pArray->m_Size, (XSDTYPE)pArray->m_Type);
     
         c->addBasicArrayParameter(&objArray, (XSDTYPE)nType, pName);
