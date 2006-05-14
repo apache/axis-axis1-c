@@ -168,7 +168,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.c.WrapWriter
             {
                 type = wscontext.getTypemap().getType(((ParameterInfo) paramsC.get(i)).getSchemaName());
                 writer.write(
-                    ", AXIS_OUT_PARAM "
+                    ", AXISC_OUT_PARAM "
                     + WrapperUtils.getClassNameFromParamInfoConsideringArrays((ParameterInfo) paramsC.get(i),wscontext)
                     + "*");
             }

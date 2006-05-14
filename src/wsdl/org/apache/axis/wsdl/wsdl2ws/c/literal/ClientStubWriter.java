@@ -299,7 +299,7 @@ public class ClientStubWriter
                 if (paramsB.size()!=0 || 0!=i)
                     writer.write(", ");
                 
-                writer.write("AXIS_OUT_PARAM " + paramType);
+                writer.write("AXISC_OUT_PARAM " + paramType);
                 if (CUtils.isSimpleType(baseTypeName))
                 {
                     if ((param.isOptional() || param.isNillable()) && !CUtils.isPointerType(baseTypeName))

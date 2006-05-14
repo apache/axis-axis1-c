@@ -329,7 +329,7 @@ public class WrapWriter extends CFileWriter
                     wscontext.getTypemap().getType(
                         ((ParameterInfo) paramsC.get(i)).getSchemaName());
                 writer.write(
-                    ", AXIS_OUT_PARAM "
+                    ", AXISC_OUT_PARAM "
                         + WrapperUtils
                             .getClassNameFromParamInfoConsideringArrays(
                             (ParameterInfo) paramsC.get(i),

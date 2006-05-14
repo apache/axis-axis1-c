@@ -148,7 +148,7 @@ public class ClientStubHeaderWriter
 
                         writer.write(", ");
                         
-                        writer.write("AXIS_OUT_PARAM " + paramType);
+                        writer.write("AXISC_OUT_PARAM " + paramType);
                         if (CUtils.isSimpleType(baseTypeName))
                         {
                             if ((nparam.isOptional() 

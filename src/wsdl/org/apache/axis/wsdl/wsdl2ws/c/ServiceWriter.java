@@ -157,7 +157,7 @@ public class ServiceWriter extends CFileWriter
                     {
                         ParameterInfo nparam = (ParameterInfo) params.next();
                         writer.write(
-                            ", AXIS_OUT_PARAM "
+                            ", AXISC_OUT_PARAM "
                                 + WrapperUtils
                                     .getClassNameFromParamInfoConsideringArrays(
                                     nparam,

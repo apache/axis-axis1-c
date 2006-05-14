@@ -140,7 +140,7 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
                     for (int j = 0; params.hasNext(); j++)
                     {
                         ParameterInfo nparam = (ParameterInfo) params.next();
-                        writer.write(", AXIS_OUT_PARAM "
+                        writer.write(", AXISC_OUT_PARAM "
                                 + WrapperUtils.getClassNameFromParamInfoConsideringArrays(nparam,wscontext)
                                 + " *OutValue" + j);
                     }

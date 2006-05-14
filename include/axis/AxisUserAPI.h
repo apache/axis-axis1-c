@@ -385,6 +385,8 @@ typedef enum {
     AXISC_RPC_LITERAL
 } AXISC_BINDING_STYLE;
 
+#define AXISC_OUT_PARAM 
+
 static const xsdc__boolean xsdc_boolean_true = (xsdc__boolean) 1;
 static const xsdc__boolean xsdc_boolean_false = (xsdc__boolean) 0;
 
