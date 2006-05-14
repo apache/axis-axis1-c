@@ -38,6 +38,8 @@ int main(int argc, char* argv[])
     char endpoint[256];
     const char* url="http://localhost:80/axis/XSD_normalizedString";
 
+    axiscAxisRegisterExceptionHandler(exceptionHandler); 
+    
     if(argc>1)
         url = argv[1];
 
