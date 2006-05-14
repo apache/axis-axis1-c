@@ -1,0 +1,19 @@
+<test>
+    <name>ComplexTypeAllC</name>
+    <description>ComplexTypeAllC</description>
+    <clientLang>c</clientLang>
+    <clientCode>ComplexTypeAllClient.c</clientCode>
+    <wsdl>ComplexTypeAll.wsdl</wsdl>
+    <expected>
+        <output>
+            ComplexTypeAll.cpp.out
+        </output>
+		<request>
+			ComplexTypeAll.request
+		</request>
+		<serverResponse>
+			ComplexTypeAll_ServerResponse.expected
+		</serverResponse>
+    </expected>
+	<endpoint>-e http://localhost:80/axis/ComplexTypeAll</endpoint>
+</test>
