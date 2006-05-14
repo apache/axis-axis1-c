@@ -134,6 +134,8 @@ int main(int argc, char* argv[])
     nArray[1]=np2;
     npArr.m_Array = nArray;
     npArr.m_Size  = ARRAYSIZE;
+    npArr.m_Type  = C_USER_TYPE;
+    
 
     // set attrlist argument
     al.item = (&npArr);
