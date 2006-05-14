@@ -13,6 +13,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* ----------------------------------------------------------------   */
+/* CHANGES TO THIS FILE MAY ALSO REQUIRE CHANGES TO THE               */
+/* C-EQUIVALENT FILE. PLEASE ENSURE THAT IT IS DONE.                  */
+/* ----------------------------------------------------------------   */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+
+
 #include <axis/AxisException.hpp>
 #include "operations.hpp" 
 
@@ -31,84 +42,92 @@ void shift_args(int i, int *argc, char *argv[]);
 void setLogOptions(const char *output_filename);
 
 int main(int argc, char* argv[])
-{ 
-  operations *ws;
+{
+    operations *ws;
 
-  char *endpoint = WSDL_DEFAULT_ENDPOINT;
-  bool endpoint_set = false;
-  int returnValue = 1; // Assume Failure
+    aRecord* input;
+    xsd__boolean result;
 
-  endpoint_set = parse_args_for_endpoint(&argc, argv, &endpoint);
+    char *endpoint = WSDL_DEFAULT_ENDPOINT;
+    bool endpoint_set = false;
+    int returnValue = 1; // Assume Failure
 
-                bool bSuccess = false;
-                int     iRetryIterationCount = 3;
+    endpoint_set = parse_args_for_endpoint(&argc, argv, &endpoint);
 
-                do
-                {
-  try {
-    if(endpoint_set) {
-      ws = new operations(endpoint, APTHTTP1_1);
-      free(endpoint);
-      endpoint_set = false;
-    } else
-      ws = new operations();
+    bool bSuccess = false;
+    int     iRetryIterationCount = 3;
 
-    aRecord* input = new aRecord();
-    input->field1 = "Hello World!";
-    input->field2 = "I'm still here!";
-    input->field3 = "Now I go!";
-    xsd__boolean result = (xsd__boolean)0;
-    result = ws->myOperation(input);
+    do
+    {
+        try
+        {
+            if(endpoint_set)
+            {
+                ws = new operations(endpoint, APTHTTP1_1);
+                free(endpoint);
+                endpoint_set = false;
+            }
+            else
+                ws = new operations();
 
-    cout << "Result " << result << endl;
+            input = new aRecord();
+            input->field1 = "Hello World!";
+            input->field2 = "I'm still here!";
+            input->field3 = "Now I go!";
+            result = (xsd__boolean)0;
+            
+            result = ws->myOperation(input);
 
-        bSuccess = true;
+            cout << "Result " << result << endl;
 
-    returnValue = 0; // Success
+            bSuccess = true;
 
-  } catch(AxisException &e) {
-                        bool bSilent = false;
+            returnValue = 0; // Success
 
-                        if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-                        {
-                                if( iRetryIterationCount > 0)
-                                {
-                                        bSilent = true;
-                                }
-                        }
-                        else
-                        {
-                                iRetryIterationCount = 0;
-                        }
+        }
+        catch(AxisException &e)
+        {
+            bool bSilent = false;
+
+            if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+            {
+                if( iRetryIterationCount > 0)
+                    bSilent = true;
+            }
+            else
+                iRetryIterationCount = 0;
 
             if( !bSilent)
-                        {
-    cout << e.what() << endl;
-                        }
-  } catch(...) {
-    cout << "Unknown Exception occured." << endl;
-  }
-  
-  // Samisa : clean up memory allocated for stub
-  try
-  {
-          delete ws; 
-  }
-  catch(exception& exception)
-  {
-        cout << "Exception on clean up of ws : " << exception.what()<<endl;
-  }
-  catch(...)
-  {
-        cout << "Unknown exception on clean up of ws : " << endl;
-  }
-                iRetryIterationCount--;
-                } while( iRetryIterationCount > 0 && !bSuccess);
-    if(endpoint_set)
-      free(endpoint);
-  cout << "---------------------- TEST COMPLETE -----------------------------"<< endl;
+                cout << e.what() << endl;
+        }
+        catch(...)
+        {
+            cout << "Unknown Exception occured." << endl;
+        }
 
-  return returnValue;
+        try
+        {
+            delete ws;
+        }
+        catch(exception& exception)
+        {
+            cout << "Exception on clean up of ws : " << exception.what()<<endl;
+        }
+        catch(...)
+        {
+            cout << "Unknown exception on clean up of ws : " << endl;
+        }
+        
+        iRetryIterationCount--;
+    }
+    while( iRetryIterationCount > 0 && !bSuccess);
+    
+    if(endpoint_set)
+        free(endpoint);
+    
+    cout << "---------------------- TEST COMPLETE -----------------------------"<< endl;
+
+    return returnValue;
 }
 
 /* Spin through args list and check for -e -p and -s options.
