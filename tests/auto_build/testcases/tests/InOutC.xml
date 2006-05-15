@@ -1,0 +1,16 @@
+<test>
+    <name>InOutC</name>
+    <description>InOutC</description>
+    <clientLang>c</clientLang>
+    <clientCode>InOutClient.c</clientCode>
+    <wsdl>InOut.wsdl</wsdl>
+    <expected>
+        <output>
+            InOut.expected
+        </output>
+	<serverResponse>
+	    InOut_ServerResponse.expected
+	</serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/InOut</endpoint>
+</test>

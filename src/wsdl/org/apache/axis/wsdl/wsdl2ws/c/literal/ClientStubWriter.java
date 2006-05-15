@@ -640,15 +640,13 @@ public class ClientStubWriter
                     }
                     else
                     {
-                        // TODO
                         containedType = qname.getLocalPart ();
                         writer.write("\n\t\t\tif (OutValue" + i + " != NULL)\n" );
-                        writer.write("\t\t\t{\n");
+                        writer.write("\t\t{\n");
                         
-                        writer.write("\t\t\t\tif (" + currentParamName + " == NULL)\n");
-                        writer.write("\t\t\t\t\t" + currentParamName + " = new " + containedType + "_Array();\n");
-                        writer.write("\t\t\t\telse\n");
-                        writer.write("\t\t\t\t\t(" + currentParamName + ")->clear();\n");
+                        writer.write("\t\t\t\tif (" + currentParamName + " != NULL)\n");
+                        writer.write("\t\t\t\t\t" + currentParamName + " = Axis_Delete_" + containedType + "_Array(" + currentParamName + ",0);\n");
+                        writer.write("\t\t\t\t" + currentParamName + " = Axis_Create_" + containedType + "_Array(0);\n");
                         
                         writer.write("\t\t\t\taxiscCallGetCmplxArray(call, " + currentParamName 
                               + ", (void*) Axis_DeSerialize_" + containedType
@@ -663,14 +661,14 @@ public class ClientStubWriter
                         
                         writer.write("\t\t\t\t/* Unable to return value, but will deserialize to ensure subsequent elements can be correctly processed. */\n");
                         writer.write("\t\t\t\t" + containedType + "_Array * pTemp" + i 
-                              + " = new " + containedType + "_Array();\n");
+                              + " = Axis_Create_" + containedType + "_Array(0);\n");
                         writer.write("\t\t\t\taxiscCallGetCmplxArray(call, pTemp" + i 
                               + ", (void*) Axis_DeSerialize_" + containedType
                               + ", (void*) Axis_Create_" + containedType
                               + ", (void*) Axis_Delete_" + containedType
                               + ", \"" + currentType.getElementNameAsString () 
                               + "\", Axis_URI_" + containedType + ");\n");
-                        writer.write("\t\t\t\tdelete pTemp" + i + ";\n");
+                        writer.write("\t\t\t\tAxis_Delete_" + containedType + "_Array(pTemp" + i + ", 0);\n");
                         writer.write("\t\t\t}\n");                        
                     }
                 }
@@ -679,6 +677,7 @@ public class ClientStubWriter
                     if( i > 0)
                         writer.write( "\n");
                     
+                    writer.write("\t\t\t{\n"); // begin scope
                     if (CUtils.isPointerType(baseTypeName))
                     {
                         String xsdType =  WrapperUtils.getClassNameFromParamInfoConsideringArrays ((ParameterInfo) paramsC.get (i), wscontext);
@@ -697,7 +696,7 @@ public class ClientStubWriter
                                 + "(call,  \"" + currentType.getParamName() + "\", 0);\n");
                         writer.write( "\n");
                         writer.write( "\t\t\tif( pReturn" + i + " != NULL && OutValue" + i + " != NULL)\n");
-                        writer.write( "\t\t\t\t{\n");
+                        writer.write( "\t\t\t{\n");
                         writer.write( "\t\t\t\tif( *OutValue" + i + " != NULL)\n");
                         writer.write( "\t\t\t\t{\n");
                         writer.write( "\t\t\t\t\tint\tiStringSize" + i + " = strlen( (char *) *OutValue" + i + ");\n");
@@ -746,6 +745,7 @@ public class ClientStubWriter
                         writer.write( "\n");
                         writer.write( "\t\t\taxiscAxisDelete( (void *) pReturn" + i + ", " + CUtils.getXSDTypeForBasicType( baseTypeName) + ");\n");
                     }
+                    writer.write("\t\t\t}\n"); // end scope
                 }
                 else if (currentType.isAnyType ())
                 {
