@@ -1,0 +1,14 @@
+<test>
+    <name>PrimitiveAndArrayC</name>
+    <description>PrimitiveAndArrayC</description>
+    <clientLang>c</clientLang>
+    <clientCode>PrimitiveAndArrayClient.c</clientCode>
+    <wsdl>PrimitiveAndArray.wsdl</wsdl>
+    <expected>
+        <output>
+            PrimitiveAndArray.expected
+        </output>
+		<serverResponse>PrimitiveAndArray_ServerResponse.expected</serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/PrimitiveAndArray</endpoint>
+</test>
