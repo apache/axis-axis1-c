@@ -329,8 +329,16 @@ public class ClientStubWriter
             writer.write("\t");
             
             if (returntypeisarray)
-            {
-                writer.write(outparamType + " *RetArray = (" + outparamType + " *)axiscAxisNew(XSDC_ARRAY, 0);\n");
+            {   
+                QName qname = null;
+                if (WrapperUtils.getArrayType (retType) != null)
+                    qname = WrapperUtils.getArrayType (retType).getName ();
+                else
+                    qname = retType.getName ();
+                if (CUtils.isSimpleType (qname))               
+                    writer.write(outparamType + " *RetArray = (" + outparamType + " *)axiscAxisNew(XSDC_ARRAY, 0);\n");
+                else
+                    writer.write(outparamType + " *RetArray = (" + outparamType + " *)Axis_Create_" + outparamType + "(0);\n");
             }
             else if (!returntypeissimple)
             {

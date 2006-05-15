@@ -1,0 +1,14 @@
+<test>
+    <name>ManyTypeRefRootC</name>
+    <description>ManyTypeRefRootC</description>
+    <clientLang>c</clientLang>
+    <clientCode>ManyTypeRefRootClient.c</clientCode>
+    <wsdl>ManyTypeRefRoot.wsdl</wsdl>
+    <expected>
+        <output>
+            ManyTypeRefRoot.cpp.out
+        </output>
+		<serverResponse>ManyTypeRefRoot_ServerResponse.expected</serverResponse>
+    </expected>
+	<endpoint>-e http://localhost:80/axis/ManyTypeRefRoot</endpoint>
+</test>

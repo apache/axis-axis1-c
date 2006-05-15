@@ -13,6 +13,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* ----------------------------------------------------------------   */
+/* CHANGES TO THIS FILE MAY ALSO REQUIRE CHANGES TO THE               */
+/* C-EQUIVALENT FILE. PLEASE ENSURE THAT IT IS DONE.                  */
+/* ----------------------------------------------------------------   */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+
+
 #include "ManyTypeRefRoot.hpp" 
 #include <stdlib.h> // For malloc(), calloc(), strdup() and free()
 #include <iostream>
@@ -32,7 +42,7 @@ void setLogOptions(const char *output_filename);
 
 int main(int argc, char* argv[])
 {
-    ManyTypeRefRoot *ws;
+    ManyTypeRefRoot *ws;    
 
     char *endpoint = WSDL_DEFAULT_ENDPOINT;
     bool endpoint_set = false;
@@ -40,79 +50,91 @@ int main(int argc, char* argv[])
 
     endpoint_set = parse_args_for_endpoint(&argc, argv, &endpoint);
 
-                bool bSuccess = false;
-                int     iRetryIterationCount = 3;
+    bool bSuccess = false;
+    int     iRetryIterationCount = 3;
 
-                do
-                {
-    try {
-        if(endpoint_set) {
-            ws = new ManyTypeRefRoot(endpoint, APTHTTP1_1);
-            free(endpoint);
-            endpoint_set = false;
-        } else
-            ws = new ManyTypeRefRoot();
-
-        Type1_Array input;
-        Type1_Array* result;
-        Type1 ** types = new Type1*[10];
-        
-        int i;
-
-        for ( i = 0; i < 10; i++ ) {
-            types[i] = new Type1 ();
-            NEWCOPY(types[i]->kind, "Test type");
-            types[i]->index = new xsd__int(i);           
-        }
-
-        input.set(types,10);     
-
-        result = ws->getInput(&input);
-        cout << "Success " << endl;
-                int outputSize=0;
-        Type1 **arrayResult = result->get(outputSize);
-        for ( i = 0; i < 10; i++) {
-            cout << " Result " << *arrayResult[i]->index << " : " << arrayResult[i]->kind << endl;
-        }
-        returnValue = 0; // Success
-
-                 // Clear up input array        
-        for (int deleteIndex = 0 ; deleteIndex < 10 ; deleteIndex++ )
+    do
+    {
+        try
         {
-            delete types[deleteIndex];
+            if(endpoint_set)
+            {
+                ws = new ManyTypeRefRoot(endpoint, APTHTTP1_1);
+                free(endpoint);
+                endpoint_set = false;
+            }
+            else
+                ws = new ManyTypeRefRoot();
+
+
+            Type1_Array input;
+            Type1_Array* result;
+            Type1 *types[10];
+
+            int i, outputSize=0;
+            Type1 **arrayResult;
+            
+            for ( i = 0; i < 10; i++ )
+            {
+                types[i] = new Type1 ();
+                NEWCOPY(types[i]->kind, "Test type");
+                types[i]->index = new xsd__int(i);
+            }
+
+            input.set(types,10);
+
+            result = ws->getInput(&input);
+            
+            cout << "Success " << endl;
+
+            if (result)
+                arrayResult = result->get(outputSize);
+            
+            for ( i = 0; i < outputSize; i++) 
+                cout << " Result " << *arrayResult[i]->index << " : " << arrayResult[i]->kind << endl;
+
+            returnValue = 0; // Success
+
+            // Clear up
+            for (i = 0 ; i < 10 ; i++ )
+                delete types[i];
+            delete result;
+
+            bSuccess = true;
+            
+            delete ws;
+
         }
-        delete [] types;
+        catch(AxisException &e)
+        {
+            bool bSilent = false;
 
-
-                bSuccess = true;
-
-    } catch(AxisException &e) {
-                        bool bSilent = false;
-
-                        if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-                        {
-                                if( iRetryIterationCount > 0)
-                                {
-                                        bSilent = true;
-                                }
-                        }
-                        else
-                        {
-                                iRetryIterationCount = 0;
-                        }
+            if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+            {
+                if( iRetryIterationCount > 0)
+                    bSilent = true;
+            }
+            else
+                iRetryIterationCount = 0;
 
             if( !bSilent)
-                        {
-        cout << e.what() << endl;
-                        }
-    } catch(...) {
-        cout << "Unknown Exception occured." << endl;
+                cout << e.what() << endl;
+        }
+        catch(...)
+        {
+            cout << "Unknown Exception occured." << endl;
+        }
+        
+        iRetryIterationCount--;
+        
     }
-                iRetryIterationCount--;
-                } while( iRetryIterationCount > 0 && !bSuccess);
-        if(endpoint_set)
-            free(endpoint);
-        cout << "---------------------- TEST COMPLETE -----------------------------"<< endl;
+    while( iRetryIterationCount > 0 && !bSuccess);
+    
+    if(endpoint_set)
+        free(endpoint);
+    
+    cout << "---------------------- TEST COMPLETE -----------------------------"<< endl;
+    
     return returnValue;
 }
 
