@@ -329,7 +329,9 @@ public class ClientStubWriter
             writer.write("\t");
             
             if (returntypeisarray)
+            {
                 writer.write(outparamType + " *RetArray = (" + outparamType + " *)axiscAxisNew(XSDC_ARRAY, 0);\n");
+            }
             else if (!returntypeissimple)
             {
                 // for AnyType and complex types
@@ -648,7 +650,7 @@ public class ClientStubWriter
                         writer.write("\t\t\t\t\t" + currentParamName + " = Axis_Delete_" + containedType + "_Array(" + currentParamName + ",0);\n");
                         writer.write("\t\t\t\t" + currentParamName + " = Axis_Create_" + containedType + "_Array(0);\n");
                         
-                        writer.write("\t\t\t\taxiscCallGetCmplxArray(call, " + currentParamName 
+                        writer.write("\t\t\t\taxiscCallGetCmplxArray(call, (Axisc_Array *)" + currentParamName 
                               + ", (void*) Axis_DeSerialize_" + containedType
                               + ", (void*) Axis_Create_" + containedType
                               + ", (void*) Axis_Delete_" + containedType
@@ -662,7 +664,7 @@ public class ClientStubWriter
                         writer.write("\t\t\t\t/* Unable to return value, but will deserialize to ensure subsequent elements can be correctly processed. */\n");
                         writer.write("\t\t\t\t" + containedType + "_Array * pTemp" + i 
                               + " = Axis_Create_" + containedType + "_Array(0);\n");
-                        writer.write("\t\t\t\taxiscCallGetCmplxArray(call, pTemp" + i 
+                        writer.write("\t\t\t\taxiscCallGetCmplxArray(call, (Axisc_Array *)pTemp" + i 
                               + ", (void*) Axis_DeSerialize_" + containedType
                               + ", (void*) Axis_Create_" + containedType
                               + ", (void*) Axis_Delete_" + containedType
@@ -799,7 +801,7 @@ public class ClientStubWriter
             {
                 containedType = qname.getLocalPart ();
                 writer.write("\t\t\tRetArray = (" + containedType 
-                        + "_Array *) axiscCallGetCmplxArray(call, RetArray, (void*) Axis_DeSerialize_"
+                        + "_Array *) axiscCallGetCmplxArray(call, (Axisc_Array *)RetArray, (void*) Axis_DeSerialize_"
                         + containedType 
                         + ", (void*) Axis_Create_" + containedType
                           + ", (void*) Axis_Delete_" + containedType
