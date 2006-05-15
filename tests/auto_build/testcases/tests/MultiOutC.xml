@@ -1,0 +1,16 @@
+<test>
+    <name>MultiOutC</name>
+    <description>MultiOutC</description>
+    <clientLang>c</clientLang>
+    <clientCode>MultiOutClient.c</clientCode>
+    <wsdl>MultiOut.wsdl</wsdl>
+    <expected>
+        <output>
+            MultiOut.expected
+        </output>
+        <serverResponse>
+		MultiOutServerResponse.expected
+        </serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/MultiOut</endpoint>
+</test>

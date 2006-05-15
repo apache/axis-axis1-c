@@ -296,8 +296,7 @@ public class ClientStubWriter
                 
                 boolean bTypeHasStar = paramType.endsWith("*");
                 
-                if (paramsB.size()!=0 || 0!=i)
-                    writer.write(", ");
+                writer.write(", ");
                 
                 writer.write("AXISC_OUT_PARAM " + paramType);
                 if (CUtils.isSimpleType(baseTypeName))
@@ -741,9 +740,7 @@ public class ClientStubWriter
                         if (currentType.isNillable() || currentType.isOptional())
                         {
                             writer.write( "\t\t\t\tif( *OutValue" + i + " == NULL)\n");
-                            writer.write( "\t\t\t\t{\n");
-                            writer.write( "\t\t\t\t\t*OutValue" + i + " = new " + currentParaType + "();\n");
-                            writer.write( "\t\t\t\t}\n");
+                            writer.write( "\t\t\t\t\t*OutValue" + i + " = axiscAxisNew(" + CUtils.getXSDTypeForBasicType( baseTypeName) + ", 0);\n");
                             writer.write( "\n");
                             writer.write( "\t\t\t\t*");
                         }
