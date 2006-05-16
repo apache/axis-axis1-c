@@ -186,7 +186,10 @@ AXISCHANDLE axiscHeaderBlockCreateAttribute(AXISCHANDLE headerBlock,
 
     try
     {
-        return (AXISCHANDLE)(hdr->createAttribute(localname, prefix, uri, value));
+        if (uri)
+            return (AXISCHANDLE)(hdr->createAttribute(localname, prefix, uri, value));
+        else
+            return (AXISCHANDLE)(hdr->createAttribute(localname, prefix, value));
     }
     catch ( AxisException& e  )
     {

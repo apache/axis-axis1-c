@@ -147,7 +147,12 @@ AXISCHANDLE axiscBasicNodeCreateAttribute(AXISCHANDLE basicNode,
     
     try
     {
-        return bn->createAttribute(localname,prefix,uri,value);
+        if (uri == NULL && prefix == NULL)
+           return bn->createAttribute(localname,value);
+        else if (uri == NULL)
+           return bn->createAttribute(localname,prefix, value);
+        else
+           return bn->createAttribute(localname,prefix, uri, value);
     }
     catch ( AxisException& e  )
     {
