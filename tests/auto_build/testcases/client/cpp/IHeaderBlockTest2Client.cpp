@@ -17,6 +17,14 @@
 @ Author : James Jose
 */
 
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* ----------------------------------------------------------------   */
+/* CHANGES TO THIS FILE MAY ALSO REQUIRE CHANGES TO THE               */
+/* C-EQUIVALENT FILE. PLEASE ENSURE THAT IT IS DONE.                  */
+/* ----------------------------------------------------------------   */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
 
 #include "Calculator.hpp"
 #include <axis/IHeaderBlock.hpp>
@@ -26,71 +34,71 @@
 
 int main(int argc, char* argv[])
 {
-        char endpoint[256];
-        const char* url="http://localhost:80/axis/Calculator";
-        const char* op = 0;
-        int i1=0, i2=0;
-        int iResult;
-        url = argv[1];
-                bool bSuccess = false;
-                int     iRetryIterationCount = 3;
+    char endpoint[256];
+    const char* url="http://localhost:80/axis/Calculator";
+    const char* op = 0;
+    int i1=0, i2=0;
+    int iResult;
 
-                do
-                {
+    bool bSuccess = false;
+    int     iRetryIterationCount = 3;
+    
+    const AxisChar *prefix="np";
+    const AxisChar *uri="http://axis.apache.com";
+    IHeaderBlock *phb;
+    
+    do
+    {
         try
         {
-                sprintf(endpoint, "%s", url);
-                Calculator ws(endpoint);
-                op = "add";
-                i1 = 2;
-                i2 = 3; 
-                const AxisChar *prefix="np";
-                const AxisChar *uri="http://axis.apache.com";
-                IHeaderBlock *phb = ws.createSOAPHeaderBlock("TestHeader","http://apache.org/");
-                cout<<phb->setPrefix(NULL)<<endl;
-                cout<<phb->setPrefix(prefix)<<endl;
-                cout<<phb->setURI(NULL)<<endl;
-                cout<<phb->setURI(uri)<<endl;           
-                if (strcmp(op, "add") == 0)
-                {
-                        iResult=ws.add(i1, i2); 
-                        cout << iResult << endl;
-                        bSuccess = true;
-                }
-            
+            if (argc > 1)
+                url = argv[1];
+            sprintf(endpoint, "%s", url);
+            Calculator ws(endpoint);
+            op = "add";
+            i1 = 2;
+            i2 = 3;
+
+            phb = ws.createSOAPHeaderBlock("TestHeader","http://apache.org/");
+            cout<<phb->setPrefix(NULL)<<endl;
+            cout<<phb->setPrefix(prefix)<<endl;
+            cout<<phb->setURI(NULL)<<endl;
+            cout<<phb->setURI(uri)<<endl;
+            if (strcmp(op, "add") == 0)
+            {
+                iResult=ws.add(i1, i2);
+                cout << iResult << endl;
+                bSuccess = true;
+            }
         }
         catch(AxisException& e)
         {
-                        bool bSilent = false;
+            bool bSilent = false;
 
-                        if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-                        {
-                                if( iRetryIterationCount > 0)
-                                {
-                                        bSilent = true;
-                                }
-                        }
-                        else
-                        {
-                                iRetryIterationCount = 0;
-                        }
+            if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+            {
+                if( iRetryIterationCount > 0)
+                    bSilent = true;
+            }
+            else
+                iRetryIterationCount = 0;
 
             if( !bSilent)
-                        {
-                                cout << "Exception : " << e.what() << endl;
-                        }
+                cout << "Exception : " << e.what() << endl;
         }
         catch(exception& e)
         {
-                cout << "Unknown exception has occured" << endl;
+            cout << "Unknown exception has occured" << endl;
         }
         catch(...)
         {
-                cout << "Unspecified exception has occured" << endl;
+            cout << "Unspecified exception has occured" << endl;
         }
-                iRetryIterationCount--;
-                } while( iRetryIterationCount > 0 && !bSuccess);
-        cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;     
-        return 0;
+        iRetryIterationCount--;
+    } 
+    while( iRetryIterationCount > 0 && !bSuccess);
+    
+    cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;
+    return 0;
 }
 
