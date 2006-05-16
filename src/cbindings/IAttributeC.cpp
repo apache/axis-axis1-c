@@ -70,7 +70,7 @@ int axiscAttributeSetValue(AXISCHANDLE attribute,
 }
 
 AXISC_STORAGE_CLASS_INFO 
-int axiscAttributeSetUri(AXISCHANDLE attribute, 
+int axiscAttributeSetURI(AXISCHANDLE attribute, 
                           const AxiscChar * uri) 
 {
     IAttribute *attr = (IAttribute*)attribute;
@@ -158,7 +158,7 @@ const AxiscChar * axiscAttributeGetValue(AXISCHANDLE attribute)
 }
 
 AXISC_STORAGE_CLASS_INFO 
-const AxiscChar * axiscAttributeGetUri(AXISCHANDLE attribute) 
+const AxiscChar * axiscAttributeGetURI(AXISCHANDLE attribute) 
 {
     IAttribute *attr = (IAttribute*)attribute;
 

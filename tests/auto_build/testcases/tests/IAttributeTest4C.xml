@@ -1,0 +1,16 @@
+<test>
+    <name>IAttributeTest4C</name>
+    <description>IAttributeTest4C</description>
+    <clientLang>c</clientLang>
+    <clientCode>IAttributeTest4Client.c</clientCode>
+    <wsdl>CalculatorDocC.wsdl</wsdl>
+    <expected>
+        <output>
+            IAttributeTest4.expected
+        </output>
+	<request> 
+		IAttributeTest4Request.out 
+	</request>
+    </expected>
+	<endpoint>http://localhost:80/axis/CalculatorDoc</endpoint>
+</test>
