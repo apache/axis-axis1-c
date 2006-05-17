@@ -100,13 +100,10 @@ public class ClientStubHeaderWriter
                 writer.write(minfo.getMethodname() + "(AXISCHANDLE pStub");                
 
                 //write parameter names 
-                boolean hasInputParms = false;
                 Iterator params = minfo.getInputParameterTypes().iterator();
                 for (int j = 0; params.hasNext(); j++)
                 {
-
                     writer.write(", ");
-                    hasInputParms = true;
                     ParameterInfo nparam = (ParameterInfo) params.next();
                     String paramTypeName = WrapperUtils.getClassNameFromParamInfoConsideringArrays(nparam, wscontext);
                     Type type = nparam.getType();

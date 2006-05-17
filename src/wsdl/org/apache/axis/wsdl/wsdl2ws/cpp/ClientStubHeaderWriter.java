@@ -257,14 +257,11 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
             {
                 atype = (Type) types.next();
                 if (atype.getLanguageSpecificName().startsWith(">"))
-                {
                     continue;
-                }
+
                 typeName = WrapperUtils.getLanguageTypeName4Type(atype);
                 if (null != typeName)
-                {
                     typeSet.add(typeName);
-                }
             }
             Iterator itr = typeSet.iterator();
             while (itr.hasNext())
