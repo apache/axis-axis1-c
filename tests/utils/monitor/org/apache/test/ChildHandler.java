@@ -27,9 +27,11 @@ public abstract class ChildHandler
      */
     protected void close()
     {
-        // System.out.println( "Closing "+this);
+        System.out.println( "Closing "+this);
         try 
         {
+            if(children!=null)
+            {
             for(int i=0; i<children.size(); i++)
             {
                 ChildHandler child = (ChildHandler)children.remove(i);
@@ -44,8 +46,9 @@ public abstract class ChildHandler
                     //exception.printStackTrace( );
                 }                
             }
+            }
             children=null;
-            // System.out.println( "Closed "+this);
+            System.out.println( "Closed "+this);
         }
         catch (Throwable exception)
         {

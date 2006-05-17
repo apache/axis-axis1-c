@@ -98,6 +98,13 @@ public class TestClientThread extends ChildHandler implements Runnable
         addChild(clientReturner);
         new Thread(clientReturner).start( );
     }
+    
+    /**
+     * if a class overrides this to get the lifecycle but not the function then it needs this constructor
+     *
+     */
+    protected TestClientThread()
+    {}
 
     private void IsStopMessage(Socket clientSocket) throws IOException,
             StopRequestException
@@ -181,8 +188,7 @@ public class TestClientThread extends ChildHandler implements Runnable
         {
             try
             {
-                bytesRead=clientRequestStream.read(readBuffer, 0,
-                        READ_BUFFER_SIZE);
+                bytesRead = readBytes(readBuffer, 0, READ_BUFFER_SIZE);
                 if (bytesRead==-1)
                 {
                     continueToRun=false;
@@ -246,6 +252,18 @@ public class TestClientThread extends ChildHandler implements Runnable
             }
         }
         //        System.out.println( "TestClientThread#run(): exit");
+    }
+
+    /**
+     * @param bufferToreadInto
+     * @param startingPointInBuffer
+     * @param sizeOfReadBuffer
+     * @return the number of bytes read
+     */
+    protected int readBytes(char[] bufferToreadInto, int startingPointInBuffer, int sizeOfReadBuffer)throws IOException
+    {
+        return clientRequestStream.read(bufferToreadInto, startingPointInBuffer,
+                sizeOfReadBuffer);
     }
 
     public Socket createSocketToServer(String serviceHostName, int servicePort)

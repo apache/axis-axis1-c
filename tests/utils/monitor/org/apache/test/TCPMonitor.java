@@ -49,6 +49,43 @@ public class TCPMonitor extends ChildHandler
 
     
     /**
+     * This method is used by monitors that don't use http e.g. MQ.
+     * @param requestFile
+     * @param responseFile
+     */
+    protected TCPMonitor(String requestFile, String responseFile)throws IOException
+    {
+        state = OPENING_STATE;
+        try
+        {
+            requestFileWriter=new BufferedWriter(new FileWriter(requestFile));
+        }
+        catch (IOException exception)
+        {
+            System.err
+                    .println("IOEXCeption when creating filewriter to requestfile: "
+                            +exception);
+            throw exception;
+        }
+        if (!responseFile.equals(""))
+        {
+            try
+            {
+                responseFileWriter=new BufferedWriter(new FileWriter(
+                        responseFile));
+            }
+            catch (IOException exception)
+            {
+                System.err
+                        .println("IOException when creating writer to response file: "
+                                +exception);
+                throw exception;
+            }
+            responseFileWriterOpen=true;
+        }
+        
+    }
+    /**
      * Creates a new TCPMonitor listening on the given port for incoming
      * requests (this is always on localhost of course!)
      * 
@@ -59,34 +96,7 @@ public class TCPMonitor extends ChildHandler
     protected TCPMonitor(int listenerPort, String serviceHost, int servicePort,
             String requestFile, String responseFile) throws IOException
     {
-        state = OPENING_STATE;
-      try
-      {
-          requestFileWriter=new BufferedWriter(new FileWriter(requestFile));
-      }
-      catch (IOException exception)
-      {
-          System.err
-                  .println("IOEXCeption when creating filewriter to requestfile: "
-                          +exception);
-          throw exception;
-      }
-      if (!responseFile.equals(""))
-      {
-          try
-          {
-              responseFileWriter=new BufferedWriter(new FileWriter(
-                      responseFile));
-          }
-          catch (IOException exception)
-          {
-              System.err
-                      .println("IOException when creating writer to response file: "
-                              +exception);
-              throw exception;
-          }
-          responseFileWriterOpen=true;
-      }
+        this(requestFile, responseFile);
         /*
          * Create a thread which listens for incoming requests
          */
@@ -209,7 +219,7 @@ public class TCPMonitor extends ChildHandler
         }
     }
     
-    protected void close()
+    public void close()
     {
         // close() should flush() the streams but let's just be sure !
         System.out.println( "TCPMonitor#close(): Flushing and closing the output files");

@@ -18,6 +18,7 @@ package org.apache.test;
 import java.io.*;
 import java.net.*;
 
+
 /**
  * ClientReturner handles the response 
  * from the server to the original requestor.
@@ -34,7 +35,7 @@ public class ClientReturner extends ChildHandler implements Runnable
     private Socket serviceSocket;
     // We hold on to our parent so we can tell it that the server has closed the socket and not to be alarmed when we close the socket to the client
     private TestClientThread parent;
-    boolean                  continueToRun        =true;
+    protected boolean                  continueToRun        =true;
     private static int       number               =0;
 
     // the response from the server
@@ -48,11 +49,14 @@ public class ClientReturner extends ChildHandler implements Runnable
      * Null constructor used by anyone who overrides this class
      *
      */
-    protected ClientReturner()
-    {}
-
-    protected ClientReturner(Socket clientSocket) throws IOException
+    protected ClientReturner(TestClientThread ourParent)
     {
+        this.parent = ourParent;
+    }
+
+    protected ClientReturner(Socket clientSocket, TestClientThread ourParent) throws IOException
+    {
+        this(ourParent);
         number++;
         streamToClient=new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream( )));
     }
@@ -65,13 +69,13 @@ public class ClientReturner extends ChildHandler implements Runnable
     public ClientReturner(Socket clientSocket, Socket serviceSocket, TestClientThread ourParent)
             throws IOException
     {
-        this(clientSocket);
-        parent = ourParent;
+        this(clientSocket,ourParent);
         //        System.out.println( "ClientReturner(): entry");
         // create the reader from the server
         this.serviceSocket = serviceSocket;
         serverResponseStream=new BufferedReader(new InputStreamReader(serviceSocket.getInputStream( )));
     }
+
 
     /**
      * Reads the request from the client and if of a valid format will extract

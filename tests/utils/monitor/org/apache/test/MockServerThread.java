@@ -238,7 +238,7 @@ public class MockServerThread extends ChildHandler implements Runnable
         return (Response) responses[requests++];
     }
 
-    static void cacheResponseFile(File responseFile)
+    public static void cacheResponseFile(File responseFile)
             throws FileNotFoundException, IOException
     {
         // open the response file for reading in
@@ -394,6 +394,10 @@ public class MockServerThread extends ChildHandler implements Runnable
         super.close();
     }
 
+    public static Response[] getResponses()
+    {
+        return responses;
+    }
     private void setSocketTimeouts() throws SocketException
     {
         socket.setKeepAlive(false);
