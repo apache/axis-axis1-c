@@ -24,6 +24,16 @@
  * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
  */
 
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* ----------------------------------------------------------------   */
+/* CHANGES TO THIS FILE MAY ALSO REQUIRE CHANGES TO THE               */
+/* C-EQUIVALENT FILE. PLEASE ENSURE THAT IT IS DONE.                  */
+/* ----------------------------------------------------------------   */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+
+
 #include <string>
 #include <iostream>
 using namespace std;
@@ -47,9 +57,7 @@ main(int argc, char *argv[])
 
     // Set the endpoint from command line argument if set
     if (argc > 1)
-    {
         strcpy(endpoint, argv[1]);
-    }
 
     /*Set for HTTP transport */
     InteropTestPortType ws(endpoint, APTHTTP1_1);
@@ -61,7 +69,7 @@ main(int argc, char *argv[])
     ws.setTransportProperty("Date", "Sat, 26 Jun 2004 13:32:19 GMT");
 
     cout << "invoking echoString..." << endl;
-    //testing echoString 
+    //testing echoString
     bool bSuccess = false;
     int iRetryIterationCount = 3;
 
@@ -70,36 +78,26 @@ main(int argc, char *argv[])
         try
         {
             if (0 == strcmp(ws.echoString("hello world"), "hello world"))
-            {
                 cout << "successful" << endl;
-            }
             else
-            {
                 cout << "failed" << endl;
-            }
 
             bSuccess = true;
         }
-        catch(AxisException& e) 
+        catch(AxisException& e)
         {
             bool bSilent = false;
 
             if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
             {
                 if( iRetryIterationCount > 0)
-                {
                     bSilent = true;
-                }
             }
             else
-            {
                 iRetryIterationCount = 0;
-            }
 
             if( !bSilent)
-            {
                 cout << "AxisException : " << e.what() << endl;
-            }
         }
         catch(exception& e)
         {
@@ -110,14 +108,14 @@ main(int argc, char *argv[])
             cout << "Unknown exception" << endl;
         }
 
-    iRetryIterationCount--;
+        iRetryIterationCount--;
     } while( iRetryIterationCount > 0 && !bSuccess);
 
     cout << "Test transport property accessors" << endl;
     cout << "First transport key = ";
     cout << ws.getFirstTransportPropertyKey(false) << endl;
     cout << "First transport value = ";
-    cout << ws.getCurrentTransportPropertyValue(false) << endl; 
+    cout << ws.getCurrentTransportPropertyValue(false) << endl;
     const char *key = NULL;
     int count = 1;
     while (key = ws.getNextTransportPropertyKey(false))
@@ -128,9 +126,7 @@ main(int argc, char *argv[])
         count++;
         //test removal of last transport property
         if (count == 4)
-        {
             ws.deleteCurrentTransportProperty(false);
-        }
     }
 
     //test removing HTTP headers
@@ -146,13 +142,9 @@ main(int argc, char *argv[])
         try
         {
             if (0 == strcmp(ws.echoString("hello world"), "hello world"))
-            {
                 cout << "successful" << endl;
-            }
             else
-            {
                 cout << "failed" << endl;
-            }
 
             bSuccess = true;
         }
@@ -163,19 +155,13 @@ main(int argc, char *argv[])
             if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
             {
                 if( iRetryIterationCount > 0)
-                {
                     bSilent = true;
-                }
             }
             else
-            {
                 iRetryIterationCount = 0;
-            }
 
             if( !bSilent)
-            {
                 cout << "AxisException : " << e.what() << endl;
-            }
         }
         catch(exception& e)
         {
@@ -186,7 +172,7 @@ main(int argc, char *argv[])
             cout << "Unknown exception" << endl;
         }
 
-    iRetryIterationCount--;
+        iRetryIterationCount--;
     } while( iRetryIterationCount > 0 && !bSuccess);
 
     cout << "HTTP Header test end" << endl;
