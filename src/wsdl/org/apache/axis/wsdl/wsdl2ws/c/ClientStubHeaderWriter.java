@@ -50,13 +50,7 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
         this.wscontext = wscontext;
         this.methods = wscontext.getSerInfo().getMethods();
     }
-
-    /* (non-Javadoc)
-     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#writeAttributes()
-     */
-    protected void writeAttributes() throws WrapperFault
-    {}
-
+    
     /* (non-Javadoc)
      * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#writeClassComment()
      */
@@ -75,6 +69,14 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
             throw new WrapperFault(e);
         }
     }
+    
+    /* (non-Javadoc)
+     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#writeAttributes()
+     */
+    protected void writeAttributes() throws WrapperFault
+    {}
+
+
 
     /* (non-Javadoc)
      * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#writeMethods()
@@ -85,64 +87,123 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
         try
         {
             writer.write("\n");
-            writer.write("/* Functions relating to web service client proxy     */\n");
+            writer.write("/* ********************************************************************* */\n");
+            writer.write("/* --- Functions relating to web service client proxy                --- */\n");
+            writer.write("/* ********************************************************************* */\n");
+            writer.write("\n");
+
             writer.write("extern AXISCHANDLE get_" + classname + "_stub(const char* pchEndPointUri);\n");
             writer.write("extern void destroy_" + classname + "_stub(AXISCHANDLE pStub);\n");
             writer.write("extern int get_" + classname + "_Status(AXISCHANDLE pStub);\n");
 
             writer.write("\n");
-            writer.write("/* Functions relating to web service methods          */\n");
+            writer.write("/* ********************************************************************* */\n");
+            writer.write("/* --- Functions relating to web service methods                     --- */\n");
+            writer.write("/* ********************************************************************* */\n");
+            writer.write("\n");
 
             for (int i = 0; i < methods.size(); i++)
             {
                 minfo = (MethodInfo) this.methods.get(i);
                 boolean isAllTreatedAsOutParams = false;
-                ParameterInfo returntype = null;
                 int noOfOutParams = minfo.getOutputParameterTypes().size();
+                
+                //write return type
                 if (0 == noOfOutParams)
-                {
-                    returntype = null;
                     writer.write("extern void ");
-                }
                 else if (1 == noOfOutParams)
                 {
-                    returntype = (ParameterInfo) minfo.getOutputParameterTypes().iterator().next();
-                    writer.write("extern "
-                            + WrapperUtils.getClassNameFromParamInfoConsideringArrays(returntype,wscontext)
-                            + " ");
+                    ParameterInfo returnParam =
+                        (ParameterInfo) minfo.getOutputParameterTypes().iterator().next();
+                    String outParamTypeName = WrapperUtils.getClassNameFromParamInfoConsideringArrays(returnParam, wscontext);
+                    if ((outParamTypeName.lastIndexOf ("_Array") > 0) 
+                            || (CUtils.isSimpleType(outParamTypeName)
+                            && (returnParam.isNillable() || returnParam.isOptional())
+                            && !(CUtils.isPointerType(outParamTypeName))))
+                        writer.write("extern " + outParamTypeName + " * ");
+                    else
+                        writer.write("extern " + outParamTypeName + " ");
                 }
                 else
                 {
                     isAllTreatedAsOutParams = true;
                     writer.write("extern void ");
                 }
-                writer.write(minfo.getMethodname() + "(AXISCHANDLE pStub");
+                
+                //write return type
+                writer.write(minfo.getMethodname() + "(AXISCHANDLE pStub");                
 
                 //write parameter names 
                 Iterator params = minfo.getInputParameterTypes().iterator();
                 if (params.hasNext())
                 {
+                    writer.write(", ");   
+                    
                     ParameterInfo fparam = (ParameterInfo) params.next();
-                    writer.write(", "
-                            + WrapperUtils.getClassNameFromParamInfoConsideringArrays(fparam,wscontext)
-                            + " Value" + 0);
+                    String paramTypeName = WrapperUtils
+                    .getClassNameFromParamInfoConsideringArrays(
+                            fparam,
+                            wscontext);
+                    if ((paramTypeName.lastIndexOf ("_Array") > 0)
+                            ||(CUtils.isSimpleType(paramTypeName)
+                            && fparam.isNillable()
+                            && !(CUtils.isPointerType(paramTypeName))))
+                    {
+                        writer.write(
+                                paramTypeName
+                                    + " * Value"
+                                    + 0);
+                     }
+                    else
+                    {
+                        writer.write(
+                            paramTypeName
+                                + " Value"
+                                + 0);
+                    }
                 }
+                
                 for (int j = 1; params.hasNext(); j++)
                 {
+                    writer.write(", ");
+                    
                     ParameterInfo nparam = (ParameterInfo) params.next();
-                    writer.write(", "
-                            + WrapperUtils.getClassNameFromParamInfoConsideringArrays(nparam,wscontext)
-                            + " Value" + j);
+                    String paramTypeName = WrapperUtils
+                    .getClassNameFromParamInfoConsideringArrays(
+                            nparam,
+                            wscontext);
+                    if (CUtils.isSimpleType(paramTypeName)
+                            && nparam.isNillable()
+                            && !(CUtils.isPointerType(paramTypeName)))
+                    {
+                        writer.write(", "
+                                + paramTypeName
+                                + " * Value"
+                                + j);
+                    }
+                    else
+                    {
+                        writer.write(", "
+                                + paramTypeName
+                                + " Value"
+                                + j);
+                    }
                 }
+
                 if (isAllTreatedAsOutParams)
                 {
                     params = minfo.getOutputParameterTypes().iterator();
                     for (int j = 0; params.hasNext(); j++)
                     {
                         ParameterInfo nparam = (ParameterInfo) params.next();
-                        writer.write(", AXISC_OUT_PARAM "
-                                + WrapperUtils.getClassNameFromParamInfoConsideringArrays(nparam,wscontext)
-                                + " *OutValue" + j);
+                        writer.write(
+                            ", AXISC_OUT_PARAM "
+                                + WrapperUtils
+                                    .getClassNameFromParamInfoConsideringArrays(
+                                    nparam,
+                                    wscontext)
+                                + " *OutValue"
+                                + j);
                     }
                 }
                 writer.write(");\n");
@@ -171,6 +232,9 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
             while (types.hasNext())
             {
                 atype = (Type) types.next();
+                if (atype.getLanguageSpecificName().startsWith(">"))
+                    continue;
+
                 typeName = WrapperUtils.getLanguageTypeName4Type(atype);
                 if (null != typeName)
                     typeSet.add(typeName);
