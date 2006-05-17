@@ -1,0 +1,16 @@
+<test>
+    <name>IHeaderBlockTest6C</name>
+    <description>IHeaderBlockTest6C</description>
+    <clientLang>c</clientLang>
+    <clientCode>IHeaderBlockTest6Client.c</clientCode>
+    <wsdl>CalculatorDocC.wsdl</wsdl>
+    <expected>
+        <output>
+            IHeaderBlockTest6.expected
+        </output>
+	<request> 
+	IHeaderBlockTest6Request.out 
+	</request> 
+    </expected>
+	<endpoint>http://localhost:80/axis/CalculatorDoc</endpoint>
+</test>

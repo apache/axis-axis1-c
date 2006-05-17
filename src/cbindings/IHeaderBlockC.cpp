@@ -108,6 +108,9 @@ AXISCHANDLE axiscHeaderBlockCreateChildBasicNode(AXISCHANDLE headerBlock,
 
     try
     {
+        if (!pachLocalName && !pachPrefix && !pachUri && !pachValue)
+           return (AXISCHANDLE)(hdr->createChild((NODE_TYPE)eNODE_TYPE));
+        else
            return (AXISCHANDLE)(hdr->createChild((NODE_TYPE)eNODE_TYPE,pachLocalName,
                                               pachPrefix,pachUri,pachValue));
     }
@@ -335,7 +338,7 @@ const AxiscChar * axiscHeaderBlockGetLocalName(AXISCHANDLE headerBlock)
 }
 
 AXISC_STORAGE_CLASS_INFO 
-int axiscHeaderBlockSetUri(AXISCHANDLE headerBlock, 
+int axiscHeaderBlockSetURI(AXISCHANDLE headerBlock, 
                              const AxiscChar * uri) 
 {
     IHeaderBlock *hdr = (IHeaderBlock*)headerBlock;

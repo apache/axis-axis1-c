@@ -367,7 +367,10 @@ AXISCHANDLE axiscStubCreateSOAPHeaderBlock(AXISCHANDLE stub,
     
     try
     {
-        return (AXISCHANDLE)s->createSOAPHeaderBlock(pachLocalName,pachUri,pachPrefix);
+        if (pachPrefix)
+            return (AXISCHANDLE)s->createSOAPHeaderBlock(pachLocalName,pachUri,pachPrefix);
+        else
+            return (AXISCHANDLE)s->createSOAPHeaderBlock(pachLocalName,pachUri);        
     }
     catch ( AxisException& e  )
     {

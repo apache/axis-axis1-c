@@ -209,7 +209,7 @@ int axiscBasicNodeGetNoOfChildren(AXISCHANDLE basicNode)
 }
 
 AXISC_STORAGE_CLASS_INFO 
-AXISCHANDLE axiscBasicNodeGetFirstChild(AXISCHANDLE basicNode) 
+AXISCHANDLE axiscBasicNodeGetFirstChildBasicNode(AXISCHANDLE basicNode) 
 {
     BasicNode *bn = (BasicNode*)basicNode;
     
@@ -230,7 +230,7 @@ AXISCHANDLE axiscBasicNodeGetFirstChild(AXISCHANDLE basicNode)
 }
 
 AXISC_STORAGE_CLASS_INFO 
-AXISCHANDLE axiscBasicNodeGetLastChild(AXISCHANDLE basicNode) 
+AXISCHANDLE axiscBasicNodeGetLastChildBasicNode(AXISCHANDLE basicNode) 
 {
     BasicNode *bn = (BasicNode*)basicNode;
     
@@ -251,7 +251,7 @@ AXISCHANDLE axiscBasicNodeGetLastChild(AXISCHANDLE basicNode)
 }
 
 AXISC_STORAGE_CLASS_INFO 
-AXISCHANDLE axiscBasicNodeGetChild(AXISCHANDLE basicNode, 
+AXISCHANDLE axiscBasicNodeGetChildBasicNode(AXISCHANDLE basicNode, 
                                             int iChildPosition) 
 {
     BasicNode *bn = (BasicNode*)basicNode;
@@ -468,7 +468,7 @@ const AxiscChar * axiscBasicNodeGetPrefix(AXISCHANDLE basicNode)
 }
 
 AXISC_STORAGE_CLASS_INFO 
-AXISCHANDLE axiscBasicNodeClone(AXISCHANDLE basicNode) 
+AXISCHANDLE axiscBasicNodeCloneBasicNode(AXISCHANDLE basicNode) 
 {
     BasicNode *bn = (BasicNode*)basicNode;
     
