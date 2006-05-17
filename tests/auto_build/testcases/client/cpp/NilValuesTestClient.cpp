@@ -13,6 +13,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* ----------------------------------------------------------------   */
+/* CHANGES TO THIS FILE MAY ALSO REQUIRE CHANGES TO THE               */
+/* C-EQUIVALENT FILE. PLEASE ENSURE THAT IT IS DONE.                  */
+/* ----------------------------------------------------------------   */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+
+
 #include <axis/AxisException.hpp>
 #include "operations.hpp" 
 
@@ -31,81 +41,83 @@ void shift_args(int i, int *argc, char *argv[]);
 void setLogOptions(const char *output_filename);
 
 int main(int argc, char* argv[])
-{ 
-  operations *ws;
+{
+    operations *ws;
 
-  char *endpoint = WSDL_DEFAULT_ENDPOINT;
-  bool endpoint_set = false;
-  int returnValue = 1; // Assume Failure
+    char *endpoint = WSDL_DEFAULT_ENDPOINT;
+    bool endpoint_set = false;
+    int returnValue = 1; // Assume Failure
 
-  endpoint_set = parse_args_for_endpoint(&argc, argv, &endpoint);
+    endpoint_set = parse_args_for_endpoint(&argc, argv, &endpoint);
 
-                bool bSuccess = false;
-                int     iRetryIterationCount = 3;
+    bool bSuccess = false;
+    int     iRetryIterationCount = 3;
 
-                do
-                {
-  try {
-    if(endpoint_set) {
-      ws = new operations(endpoint, APTHTTP1_1);
-      free(endpoint);
-      endpoint_set = false;
-    } else
-      ws = new operations();
+    do
+    {
+        try
+        {
+            if(endpoint_set)
+            {
+                ws = new operations(endpoint, APTHTTP1_1);
+                free(endpoint);
+                endpoint_set = false;
+            }
+            else
+                ws = new operations();
 
-    aRecord* input = new aRecord();
-    xsd__boolean result = (xsd__boolean)0;
-    result = ws->myOperation(input);
+            aRecord* input = new aRecord();
+            xsd__boolean result = (xsd__boolean)0;
+            result = ws->myOperation(input);
 
-    cout << "Result " << result << endl;
+            cout << "Result " << result << endl;
 
-    returnValue = 0; // Success
+            returnValue = 0; // Success
 
-        bSuccess = true;
+            bSuccess = true;
 
-  } catch(AxisException &e) {
-                        bool bSilent = false;
+        }
+        catch(AxisException &e)
+        {
+            bool bSilent = false;
 
-                        if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
-                        {
-                                if( iRetryIterationCount > 0)
-                                {
-                                        bSilent = true;
-                                }
-                        }
-                        else
-                        {
-                                iRetryIterationCount = 0;
-                        }
+            if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+            {
+                if( iRetryIterationCount > 0)
+                    bSilent = true;
+            }
+            else
+                iRetryIterationCount = 0;
 
             if( !bSilent)
-                        {
-                                cout << "Exception : " << e.what() << endl;
-                        }
-  } catch(...) {
-    cout << "Unknown Exception occured." << endl;
-  }
-                iRetryIterationCount--;
-                } while( iRetryIterationCount > 0 && !bSuccess);
+                cout << "Exception : " << e.what() << endl;
+        }
+        catch(...)
+        {
+            cout << "Unknown Exception occured." << endl;
+        }
+        iRetryIterationCount--;
+    }
+    while( iRetryIterationCount > 0 && !bSuccess);
 
-  if( endpoint_set)
-          free(endpoint);
-  // Samisa : clean up memory allocated for stub
-  try
-  {
-   delete ws; 
-  }
-  catch(exception& exception)
-  {
-    cout << "Exception on clean up of ws : " << exception.what()<<endl;
-  }
-  catch(...)
-  {
-   cout << "Unknown exception on clean up of ws : " << endl;
-  }
-  cout << "---------------------- TEST COMPLETE -----------------------------"<< endl;
+    if( endpoint_set)
+        free(endpoint);
 
-  return returnValue;
+    try
+    {
+        delete ws;
+    }
+    catch(exception& exception)
+    {
+        cout << "Exception on clean up of ws : " << exception.what()<<endl;
+    }
+    catch(...)
+    {
+        cout << "Unknown exception on clean up of ws : " << endl;
+    }
+    cout << "---------------------- TEST COMPLETE -----------------------------"<< endl;
+
+    return returnValue;
 }
 
 /* Spin through args list and check for -e -p and -s options.
