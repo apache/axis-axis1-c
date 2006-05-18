@@ -78,26 +78,38 @@ public class ClientStubWriter extends CFileWriter
     {
         try
         {
-            writer.write("void* get_" + classname + "_stub(const char* pchEndPointUri)\n{");
+            writer.write("\n");
+            writer.write("/* ================================================== */\n" +
+                         "/* Functions relating to web service client proxy     */\n" +
+                         "/* ================================================== */\n");
+            writer.write("\n");
+
+            // get_xxx_stub() routine
+            writer.write("AXISCHANDLE get_" + classname + "_stub(const char* pchEndPointUri)\n{\n");
             writer.write("\tif(pchEndPointUri)\n");
-            writer.write("\t{\n");
-            writer.write("\t\treturn getStubObject(APTHTTP1_1, pchEndPointUri);\n");
-            writer.write("\t}\n");
+            writer.write("\t\treturn axiscStubCreate(pchEndPointUri, AXISC_APTHTTP1_1);\n");
             writer.write("\telse\n");
-            writer.write("\t{\n");
-            writer.write("\t\treturn getStubObject(APTHTTP1_1, \""
-                    + wscontext.getWrapInfo().getTargetEndpointURI() + "\");\n");
-            writer.write("\t}\n");
+            writer.write("\t\treturn axiscStubCreate(\"" 
+                    + wscontext.getWrapInfo().getTargetEndpointURI() 
+                    + "\", AXISC_APTHTTP1_1);\n");
+            writer.write("}\n\n");
+            
+            // destroy_xxxx_stub()
+            writer.write("void destroy_" + classname + "_stub(AXISCHANDLE p)\n{\n");
+            writer.write("\taxiscStubDestroy(p);\n}\n\n");
+
+            // get_xxxx_Status() routine
+            writer.write("int get_" + classname + "_Status(AXISCHANDLE stub)\n{\n");
+            writer.write("\tAXISCHANDLE call = axiscStubGetCall(stub);\n");
+            writer.write("\treturn axiscCallGetStatus(call);\n");
             writer.write("}\n");
-            writer.write("void destroy_" + classname + "_stub(void* p){\n");
-            writer.write("\tdestroyStubObject(p);\n}\n");
 
-            writer.write("int get_" + classname + "_Status(void* pStub){\n");
-            writer.write("\tCall* pCall = (Call*)pStub;\n");
-            writer.write("\tif ( pStub == NULL ) return AXIS_SUCCESS; else return pCall->_functions->getStatus(pCall->_object);\n");
-            writer.write("\t}\n");
+            writer.write("\n");
+            writer.write("/* ================================================== */\n" +
+                         "/* Functions corresponding to the web service methods */\n" +
+                         "/* ================================================== */\n");
+            writer.write("\n");
 
-            writer.write("\n/*Methods corresponding to the web service methods*/\n");
             MethodInfo minfo;
             for (int i = 0; i < methods.size(); i++)
             {
@@ -150,6 +162,7 @@ public class ClientStubWriter extends CFileWriter
 
     public void writeMethodInWrapper(MethodInfo minfo)  throws WrapperFault, IOException
     {
+
         boolean isAllTreatedAsOutParams = false;
         ParameterInfo returntype = null;
         int noOfOutParams = minfo.getOutputParameterTypes().size();
@@ -161,32 +174,27 @@ public class ClientStubWriter extends CFileWriter
             isAllTreatedAsOutParams = true;
         
         Collection params = minfo.getInputParameterTypes();
+
         String methodName = minfo.getMethodname();
         Type retType = null;
         boolean returntypeissimple = false;
         boolean returntypeisarray = false;
-        boolean aretherearrayparams = false;
         String outparamTypeName = null;
         if (returntype != null)
         {
-            outparamTypeName =
-                WrapperUtils.getClassNameFromParamInfoConsideringArrays(
-                    returntype,
-                    wscontext);
-            retType =
-                wscontext.getTypemap().getType(returntype.getSchemaName());
+            outparamTypeName = 
+                WrapperUtils.getClassNameFromParamInfoConsideringArrays(returntype, wscontext);
+            retType = wscontext.getTypemap().getType(returntype.getSchemaName());
             if (retType != null)
             {
                 returntypeisarray = retType.isArray();
+
                 if (CUtils.isSimpleType(retType.getLanguageSpecificName()))
-                {
                     returntypeissimple = true;
-                }
             }
         }
         writer.write("\n/*\n");
-        writer.write(
-            " * This method wrap the service method" + methodName + "\n");
+        writer.write(" * This method wrap the service method " + methodName + "\n");
         writer.write(" */\n");
         //method signature
         String paramTypeName;
@@ -194,127 +202,143 @@ public class ClientStubWriter extends CFileWriter
         boolean typeissimple = false;
         Type type;
         if (returntype == null)
-        {
             writer.write("void");
-        }
         else
         {
-            writer.write(outparamTypeName);
+            if (returntypeissimple
+                    && (!(returntype.isNillable() || returntype.isOptional()) 
+                            || CUtils.isPointerType(outparamTypeName)))
+                writer.write (outparamTypeName);
+            else if (outparamTypeName.lastIndexOf ("*") > 0)
+                writer.write (outparamTypeName);
+            else
+                writer.write (outparamTypeName + "*");
+
         }
-        writer.write(" " + methodName + "(void* pStub");
+        
+        writer.write(" " + methodName + "(AXISCHANDLE stub");
         ArrayList paramsB = (ArrayList) params;
         for (int i = 0; i < paramsB.size(); i++)
         {
-            paramTypeName =
-                WrapperUtils.getClassNameFromParamInfoConsideringArrays(
-                    (ParameterInfo) paramsB.get(i),
-                    wscontext);
-            writer.write(", " + paramTypeName + " Value" + i);
-            if ((type =
-                wscontext.getTypemap().getType(
-                    ((ParameterInfo) paramsB.get(i)).getSchemaName()))
-                != null
-                && type.isArray())
-            {
-                aretherearrayparams = true;
-            }
+            writer.write(", ");
+            
+            paramTypeName = 
+                WrapperUtils.getClassNameFromParamInfoConsideringArrays((ParameterInfo) paramsB.get(i), wscontext);
+            
+            typeissimple = CUtils.isSimpleType(paramTypeName);
+            if (typeissimple
+                    && (!(((ParameterInfo) paramsB.get (0)).isNillable () 
+                            || ((ParameterInfo) paramsB.get (0)).isOptional())
+                    || CUtils.isPointerType(paramTypeName)))
+                writer.write (paramTypeName + " Value" + i);
+            else if (paramTypeName.lastIndexOf ("*") > 0)
+                writer.write (paramTypeName + " Value" + i);
+            else
+                writer.write (paramTypeName + "* Value" + i);
         }
+        
         // Multiples parameters so fill the methods prototype
         ArrayList paramsC = (ArrayList) minfo.getOutputParameterTypes();
         if (isAllTreatedAsOutParams)
         {
+            String currentParaTypeName;
             for (int i = 0; i < paramsC.size(); i++)
             {
-                type =
-                    wscontext.getTypemap().getType(
+                type = wscontext.getTypemap().getType(
                         ((ParameterInfo) paramsC.get(i)).getSchemaName());
-                writer.write(
-                    ", AXISC_OUT_PARAM  "
-                        + WrapperUtils
-                            .getClassNameFromParamInfoConsideringArrays(
-                            (ParameterInfo) paramsC.get(i),
-                            wscontext)
-                        + " *OutValue"
-                        + i);
-                if ((type =
-                    wscontext.getTypemap().getType(
-                        ((ParameterInfo) paramsC.get(i)).getSchemaName()))
-                    != null
-                    && type.isArray())
-                {
-                    aretherearrayparams = true;
-                }
+                writer.write(", AXISC_OUT_PARAM  "
+                    + WrapperUtils.getClassNameFromParamInfoConsideringArrays(
+                                (ParameterInfo) paramsC.get(i),wscontext) + " *OutValue" + i);
             }
         }
+        
         writer.write(")\n{\n");
-        writer.write("\tCall* pCall = (Call*)pStub;\n");
+        
+        writer.write("\tAXISCHANDLE call = axiscStubGetCall(stub);\n");
+        
         if (returntype != null)
         {
             writer.write("\t");
             if (returntypeisarray)
             {
-                //for arrays
-                writer.write(outparamTypeName + " RetArray = {NULL, 0, XSDC_UNKNOWN};\n");
+                QName qname = null;
+                if (WrapperUtils.getArrayType (retType) != null)
+                    qname = WrapperUtils.getArrayType (retType).getName ();
+                else
+                    qname = retType.getName ();
+                if (CUtils.isSimpleType (qname))               
+                    writer.write(outparamTypeName + " *RetArray = (" + outparamTypeName + " *)axiscAxisNew(XSDC_ARRAY, 0);\n");
+                else
+                    writer.write(outparamTypeName + " *RetArray = (" + outparamTypeName + " *)Axis_Create_" + outparamTypeName + "(0);\n");
+            }
+            else if (!returntypeissimple)
+                writer.write(outparamTypeName + "\tpReturn = NULL;\n");
+            else if (returntype.isNillable() || returntype.isOptional()
+                        || CUtils.isPointerType(outparamTypeName))
+            {
+                writer.write(outparamTypeName);
+                if (!CUtils.isPointerType(outparamTypeName))
+                    writer.write(" *");
+
+                writer.write("\tRet = NULL;\n");
             }
             else
-                if (!returntypeissimple)
+            {
+                String initValue = CUtils.getInitValue(outparamTypeName);
+                if (initValue != null)
+                    writer.write(outparamTypeName + " Ret = " + initValue + ";\n");
+                else if (outparamTypeName.equals("xsdc__dateTime")
+                        || outparamTypeName.equals("xsdc__date")
+                        || outparamTypeName.equals("xsdc__time"))
                 {
-                    writer.write(outparamTypeName + " pReturn = NULL;\n");
-                    //for complex types
+                    writer.write(outparamTypeName + " Ret;\n");
+                    writer.write("\tmemset(&Ret,0,sizeof(" + outparamTypeName + "));\n");
                 }
                 else
-                {
-                    //for simple types
                     writer.write(outparamTypeName + " Ret;\n");
-                    //TODO initialize return parameter appropriately.
-                }
+            }
         }
-        if (aretherearrayparams || returntypeisarray)
-        {
-            writer.write("\tAxis_Array array;\n");
-        }
-        String provider =
-            minfo.getInputUse().equals("literal")
-                ? "C_RPC_LITERAL_PROVIDER"
-                : "C_RPC_PROVIDER";
-        writer.write(
-            "\t/* Following will establish the connections with the server too */\n");
-        writer.write(
-            "\tif (AXIS_SUCCESS != pCall->_functions->initialize(pCall->_object,"
-                + provider
-                + ")) return ");
+
+        //writer.write("\tchar* cFaultcode;\n");
+        //writer.write("\tchar* cFaultstring;\n");
+        //writer.write("\tchar* cFaultactor;\n");
+        writer.write("\tconst char *\tpcCmplxFaultName = NULL;\n\n");
+
+        writer.write("\n\tif( AXISC_SUCCESS != axiscCallInitialize(call, CPP_RPC_PROVIDER"
+                        + "))\n\t\treturn ");
+
         if (returntype != null)
         {
-            writer.write(
-                (returntypeisarray
-                    ? "RetArray"
-                    : returntypeissimple
-                    ? "Ret"
-                    : "pReturn")
-                    + ";\n");
+            if (returntypeisarray)
+                writer.write("RetArray;\n");
+            else if (CUtils.isPointerType(outparamTypeName) || 
+                       (returntypeissimple && !(returntype.isNillable() || returntype.isOptional())))
+                writer.write("Ret;\n");
+            else if (returntypeissimple)
+                writer.write("*Ret;\n");
+            else
+                writer.write("pReturn;\n");
         }
         else
-        {
             writer.write(";\n");
-        }
-        writer.write(
-            "\tpCall->_functions->setTransportProperty(pCall->_object,SOAPACTION_HEADER , \""
-                + minfo.getSoapAction()
-                + "\");\n");
-        writer.write(
-            "\tpCall->_functions->setSOAPVersion(pCall->_object, SOAP_VER_1_1);\n");
+
+        writer.write("\n");
+
+        writer.write("\tif( NULL == axiscCallGetTransportProperty(call, \"SOAPAction\", 0))\n");
+        writer.write("\t\taxiscCallSetTransportProperty(call, AXISC_SOAPACTION_HEADER,\""
+                + minfo.getSoapAction() + "\");\n");
+
+        writer.write("\taxiscCallSetSOAPVersion(call, SOAP_VER_1_1);\n");
         //TODO check which version is it really.
-        writer.write(
-            "\tpCall->_functions->setOperation(pCall->_object, \""
-                + methodName
-                + "\", \""
-                + wscontext.getWrapInfo().getTargetNameSpaceOfWSDL()
+        writer.write("\taxiscCallSetOperation(call, \"" + minfo.getMethodname()
+                + "\", \"" + wscontext.getWrapInfo().getTargetNameSpaceOfWSDL()
                 + "\");\n");
+        writer.write ("\taxiscStubApplyUserPreferences(stub);\n");        
+        
         for (int i = 0; i < paramsB.size(); i++)
         {
-            type =
-                wscontext.getTypemap().getType(
-                    ((ParameterInfo) paramsB.get(i)).getSchemaName());
+            type = wscontext.getTypemap().getType( ((ParameterInfo) paramsB.get(i)).getSchemaName());
+            
             if (type != null)
             {
                 paramTypeName = type.getLanguageSpecificName();
@@ -325,7 +349,9 @@ public class ClientStubWriter extends CFileWriter
                 paramTypeName = ((ParameterInfo) paramsB.get(i)).getLangName();
                 typeisarray = false;
             }
+            
             typeissimple = CUtils.isSimpleType(paramTypeName);
+            
             if (typeisarray)
             {
                 //arrays
@@ -334,12 +360,8 @@ public class ClientStubWriter extends CFileWriter
                 if (CUtils.isSimpleType(qname))
                 {
                     containedType = CUtils.getclass4qname(qname);
-                    writer.write(
-                        "\tpCall->_functions->addBasicArrayParameter(pCall->_object, ");
-                    writer.write(
-                        "(Axis_Array*)(&Value"
-                            + i
-                            + "), "
+                    writer.write("\taxiscCallAddBasicArrayParameter(call, ");
+                    writer.write("(Axisc_Array *)Value" + i + ", "
                             + CUtils.getXSDTypeForBasicType(containedType)
                             + ", \""
                             + ((ParameterInfo) paramsB.get(i)).getParamName()
@@ -348,59 +370,73 @@ public class ClientStubWriter extends CFileWriter
                 else
                 {
                     containedType = qname.getLocalPart();
-                    writer.write(
-                        "\tpCall->_functions->addCmplxArrayParameter(pCall->_object, ");
-                    writer.write(
-                        "(Axis_Array*)(&Value"
-                            + i
-                            + "), (void*)Axis_Serialize_"
-                            + containedType
-                            + ", (void*)Axis_Delete_"
-                            + containedType
-                            + ", Axis_TypeName_"
-                            + containedType
-                            + ", Axis_URI_"
-                            + containedType);
+                    writer.write("\taxiscCallAddCmplxArrayParameter(call, ");
+                    writer.write("(Axisc_Array *)Value" + i
+                            + ",(void *) Axis_Serialize_" + containedType
+                            + ",(void *) Axis_Delete_" + containedType
+                            + ",\"" + ((ParameterInfo) paramsB.get(i)).getParamName() + "\""
+                            + ",Axis_URI_" + containedType);
                 }
             }
-            else
-                if (typeissimple)
+            else if (typeissimple)
+            {
+
+                //for simple types
+                if (((ParameterInfo) paramsB.get(i)).isNillable()
+                        || CUtils.isPointerType(paramTypeName))
                 {
-                    //for simple types    
-                    writer.write(
-                        "\tpCall->_functions->addParameter(pCall->_object, ");
-                    writer.write(
-                        "(void*)&Value"
+                    writer.write("\taxiscCallAddParameter(call, ");
+                    writer.write("(void *) Value"
                             + i
                             + ", \""
-                            + ((ParameterInfo) paramsB.get(i)).getParamName()
-                            + "\", "
+                            + ((ParameterInfo) paramsB.get(i))
+                                    .getParamName() + "\", "
                             + CUtils.getXSDTypeForBasicType(paramTypeName));
                 }
                 else
                 {
-                    //for complex types 
-                    writer.write(
-                        "\tpCall->_functions->addCmplxParameter(pCall->_object, ");
-                    writer.write(
-                        "Value"
+                    writer.write("\taxiscCallAddParameter(call, ");
+                    writer.write("(void *) &Value"
                             + i
-                            + ", (void*)Axis_Serialize_"
-                            + paramTypeName
-                            + ", (void*)Axis_Delete_"
-                            + paramTypeName
                             + ", \""
-                            + ((ParameterInfo) paramsB.get(i)).getParamName()
-                            + "\", 0");
+                            + ((ParameterInfo) paramsB.get(i))
+                                    .getParamName() + "\", "
+                            + CUtils.getXSDTypeForBasicType(paramTypeName));
                 }
+            }
+            else
+            {
+                //for complex types
+                writer.write("\taxiscCallAddCmplxParameter(call, ");
+                writer.write("Value" + i + ",(void *) Axis_Serialize_"
+                        + paramTypeName + ",(void *) Axis_Delete_"
+                        + paramTypeName + ",\""
+                        + ((ParameterInfo) paramsB.get(i)).getParamName()
+                        + "\",Axis_URI_" + paramTypeName);
+            }
             writer.write(");\n");
         }
-        writer.write(
-            "\tif (AXIS_SUCCESS == pCall->_functions->invoke(pCall->_object))\n\t{\n");
-        writer.write(
-            "\t\tif(AXIS_SUCCESS == pCall->_functions->checkMessage(pCall->_object, \""
-                + methodName
-                + "Response\", \"\"))\n\t\t{\n");
+        writer.write("\n\tif( AXISC_SUCCESS == axiscCallInvoke(call))\n\t{\n");
+        writer.write("\t\tif( AXISC_SUCCESS == axiscCallCheckMessage(call, \""
+                + minfo.getOutputMessage().getLocalPart() + "\",\""
+                + wscontext.getWrapInfo().getTargetNameSpaceOfWSDL()
+                + "\"))\n\t\t{\n");
+
+        // Because getParamName will prefix any c++ reserved word with an
+        // underscore (i.e 'return' becomes '_return'), this unnecessary
+        // modification needs to be removed before using the name as a soap
+        // tag identifier.
+        
+        String paramTagName = "";
+        
+        if( returntype != null)
+        {
+            paramTagName = returntype.getParamName();
+
+            if( paramTagName.charAt(0) == '_')
+                paramTagName = paramTagName.substring( 1);
+        }
+        
         if (isAllTreatedAsOutParams)
         {
             String currentParamName;
@@ -408,8 +444,8 @@ public class ClientStubWriter extends CFileWriter
             for (int i = 0; i < paramsC.size(); i++)
             {
                 ParameterInfo currentType = (ParameterInfo) paramsC.get(i);
-                type =
-                    wscontext.getTypemap().getType(currentType.getSchemaName());
+                type = wscontext.getTypemap().getType(
+                        currentType.getSchemaName());
                 if (type != null)
                 {
                     currentParaType = type.getLanguageSpecificName();
@@ -417,14 +453,16 @@ public class ClientStubWriter extends CFileWriter
                 }
                 else
                 {
-                    currentParaType =
-                        ((ParameterInfo) paramsC.get(i)).getLangName();
+                    currentParaType = ((ParameterInfo) paramsC.get(i))
+                            .getLangName();
                     typeisarray = false;
                 }
                 typeissimple = CUtils.isSimpleType(currentParaType);
 
                 currentParamName = "*OutValue" + i;
-                // Some code need to be merged as we have some duplicated in coding here.
+                    
+                // Some code need to be merged as we have some duplicated in
+                // coding here.
                 if (typeisarray)
                 {
                     QName qname = WrapperUtils.getArrayType(type).getName();
@@ -432,161 +470,199 @@ public class ClientStubWriter extends CFileWriter
                     if (CUtils.isSimpleType(qname))
                     {
                         containedType = CUtils.getclass4qname(qname);
-                        writer.write(
-                            "\t\t\tarray = pCall->_functions->getBasicArray(pCall->_object, "
-                                + CUtils.getXSDTypeForBasicType(containedType)
-                                + ", \""
-                                + currentType.getParamName()
-                                + "\", 0);\n");
-                        writer.write(
-                            "\t\t\tmemcpy(OutValue"
-                                + i
-                                + ", &array, sizeof(Axis_Array));\n");
-
+                        writer.write("\n\t\tAxisc_Array * pReturn" + i 
+                                + " = axiscCallGetBasicArray(call, " 
+                                + CUtils.getXSDTypeForBasicType (containedType) 
+                                + ",\"" + currentType.getParamName() + "\",0);\n\n");
+                        writer.write("\t\tif( OutValue" + i + " != NULL)\n");
+                        writer.write("\t\t{\n");
+                        writer.write("\t\t\tif( *OutValue" + i + " != NULL)\n");
+                        writer.write("\t\t\t\taxiscAxisDelete(*OutValue" + i + ", XSDC_ARRAY);\n");                        
+                        writer.write("\t\t\t\t*OutValue" + i + " = pReturn;\n");
+                        writer.write("\t\t}\n\n");
+                        writer.write("\t\telse\n");                        
+                        writer.write("\t\t\taxiscAxisDelete(pReturn" + i + ", XSDC_ARRAY);\n");
                     }
                     else
                     {
                         containedType = qname.getLocalPart();
-                        writer.write(
-                            "\t\t\tarray = pCall->_functions->getCmplxArray(pCall->_object, (void*) Axis_DeSerialize_"
-                                + containedType);
-                        writer.write(
-                            ", (void*) Axis_Create_"
-                                + containedType
-                                + ", (void*) Axis_Delete_"
-                                + containedType
-                                + ", \""
-                                + currentType.getParamName()
-                                + "\", Axis_URI_"
-                                + containedType
-                                + ");\n");
-                        writer.write(
-                            "\t\t\tmemcpy(OutValue"
-                                + i
-                                + ", &array, sizeof(Axis_Array));\n");
+                        writer.write("\n\t\tif( OutValue" + i + " != NULL)\n" );
+                        writer.write("\t\t{\n");
+                        writer.write("\t\t\tif( " + currentParamName + " != NULL)\n");
+                        writer.write("\t\t\t\tAxis_Delete_" + containedType + "_Array(" + currentParamName + ", 0);\n");
+                        writer.write("\t\t\t" + currentParamName + " = (" + containedType + " *)Axis_Create_" + containedType + "_Array(0);\n");
+
+                        writer.write("\t\t\taxiscCallGetCmplxArray(call, " + currentParamName 
+                                + ",(void *) Axis_DeSerialize_" + containedType
+                                + ",(void *) Axis_Create_" + containedType
+                                + ",(void *) Axis_Delete_" + containedType
+                                + ",\"" +currentType.getElementNameAsString() 
+                                + "\",Axis_URI_" + containedType + ");\n");
+                        writer.write("\t\t}\n");
+                        writer.write("\t\telse\n");
+                        writer.write("\t\t{\n");
+                        writer.write("\t\t\t// Unable to return value, but will deserialize to ensure subsequent elements can be correctly processed.\n");
+                        writer.write("\t\t\t" + containedType + "_Array * pTemp" + i + " = (" + containedType + " *)Axis_Create_" + containedType + "_Array(0);\n");
+                        writer.write("\t\t\taxiscCallGetCmplxArray(call, pTemp" + i 
+                                + ",(void *) Axis_DeSerialize_" + containedType
+                                + ",(void *) Axis_Create_" + containedType
+                                + ",(void *) Axis_Delete_" + containedType
+                                + ",\"" + currentType.getElementNameAsString() 
+                                + "\",Axis_URI_" + containedType + ");\n");
+                        writer.write("\t\t\t\tAxis_Delete_" + containedType + "_Array(pTemp" + i + ", 0);\n");
+                        writer.write("\t\t}\n");
                     }
                 }
                 else
+                {
                     if (typeissimple)
                     {
-                        writer.write(
-                            "\t\t\t"
-                                + currentParamName
-                                + " = pCall->_functions->"
-                                + CUtils.getParameterGetValueMethodName(
-                                    currentParaType,
-                                    false)
-                                + "(pCall->_object, \""
-                                + currentType.getParamName()
-                                + "\", 0);\n");
+                        if( i > 0)
+                            writer.write( "\n");
+                        
+                        if (CUtils.isPointerType(currentParaType))
+                        {
+                            String xsdType =  WrapperUtils.getClassNameFromParamInfoConsideringArrays ((ParameterInfo) paramsC.get (i), wscontext);
+                            
+                            if( !CUtils.isPointerType(xsdType))
+                                xsdType += " *";
+                            
+                            writer.write( "\n");
+                            writer.write( "\t\t\tif( pReturn" + i + " != NULL && OutValue" + i + " != NULL)\n");
+                            writer.write( "\t\t\t{\n");
+                            writer.write( "\t\t\t\tif( *OutValue" + i + " != NULL)\n");
+                            writer.write( "\t\t\t\t{\n");
+                            writer.write( "\t\t\t\t\tint\tiStringSize" + i + " = strlen( (char *) *OutValue" + i + ");\n");
+                            writer.write( "\t\t\t\t\tint\tiStrLenValue" + i + " = strlen( pReturn" + i + ");\n");
+                            writer.write( "\n");
+                            writer.write( "\t\t\t\t\tif( iStrLenValue" + i + " > iStringSize" + i + ")\n");
+                            writer.write( "\t\t\t\t\t{\n");
+                            writer.write( "\t\t\t\t\t\t*OutValue" + i + " =(" + xsdType + ") axiscAxisNew(XSDC_STRING, iStrLenValue" + i + " + 1);\n");
+                            writer.write( "\t\t\t\t\t\tstrcpy( (char *) *OutValue" + i + ", pReturn" + i + ");\n");
+                            writer.write( "\t\t\t\t\t}\n");
+                            writer.write( "\t\t\t\t\telse\n");
+                            writer.write( "\t\t\t\t\t\tstrcpy( (char *) *OutValue" + i + ", pReturn" + i + ");\n");
+                            writer.write( "\t\t\t\t}\n");
+                            writer.write( "\t\t\t\telse\n");
+                            writer.write( "\t\t\t\t{\n");
+                            writer.write( "\t\t\t\t\t*OutValue" + i + " = (" + xsdType + ") axiscAxisNew(XSDC_STRING,strlen( pReturn" + i + ") + 1);\n");
+                            writer.write( "\t\t\t\t\tstrcpy( (char *) *OutValue" + i + ", pReturn" + i + ");\n");
+                            writer.write( "\t\t\t\t}\n");
+                            writer.write( "\t\t\t}\n");
+                            writer.write( "\n");
+                            writer.write( "\t\t\taxiscAxisDelete( (void *) pReturn" + i + ", " + CUtils.getXSDTypeForBasicType( currentParaType) + ");\n");
+                        }
+                        else 
+                        {
+                            writer.write( "\t\t" + currentParaType + " * pReturn" + i + " = axiscCall" + CUtils.getParameterGetValueMethodName( currentParaType, false) + "(call, \"" + currentType.getParamName() + "\", 0);\n");
+                            writer.write( "\n");
+                            writer.write( "\t\tif( pReturn" + i + " != NULL && OutValue" + i + " != NULL)\n");
+                            writer.write( "\t\t{\n");
+                            writer.write( "\t\t\t// OutValue" + i + " is not nillable.\n");
+                            writer.write( "\t\t\t*OutValue" + i + " = *pReturn" + i + ";\n");
+                            writer.write( "\t\t}\n");
+                            writer.write( "\n");
+                            writer.write( "\t\taxiscAxisDelete(pReturn" + i + ", " + CUtils.getXSDTypeForBasicType( currentParaType) + ");\n");
+                        }
                     }
                     else
                     {
-                        writer.write(
-                            "\t\t\t"
-                                + currentParamName
-                                + " = ("
-                                + currentParaType
-                                + "*)pCall->_functions->getCmplxObject(pCall->_object, (void*) Axis_DeSerialize_"
-                                + currentParaType
-                                + ", (void*) Axis_Create_"
-                                + currentParaType
-                                + ", (void*) Axis_Delete_"
-                                + currentParaType
-                                + ",\""
-                                + currentType.getParamName()
-                                + "\", 0);\n");
+                        writer.write("\t\t\t"
+                                        + currentParamName
+                                        + " = ("
+                                        + currentParaType
+                                        + " *) axiscCallGetCmplxObject(call, (void *) Axis_DeSerialize_" + currentParaType
+                                        + ",(void *) Axis_Create_" + currentParaType
+                                        + ",(void *) Axis_Delete_" + currentParaType
+                                        + ",\"" + currentType.getParamName()
+                                        + "\",0);\n");
                     }
+                }
             }
             writer.write("\t\t}\n");
-            writer.write(
-                "\t}\n\tpCall->_functions->unInitialize(pCall->_object);\n");
+            writer.write("\t}\n\n");
+            writer.write("\taxiscCallUnInitialize(call);\n");
         }
-        else
-            if (returntype == null)
+        else if (returntype == null)
+        {
+            writer.write("\t\t\t/*not successful*/\n\t\t\t}\n");
+            writer.write("\t}\n\n");
+            writer.write("\taxiscCallUnInitialize(call);\n");
+        }
+        else if (returntypeisarray)
+        {
+            QName qname = WrapperUtils.getArrayType(retType).getName();
+            String containedType = null;
+            if (CUtils.isSimpleType(qname))
             {
-                writer.write("\t\t\t/*not successful*/\n\t\t}\n");
-                writer.write(
-                    "\t}\n\tpCall->_functions->unInitialize(pCall->_object);\n");
+                containedType = CUtils.getclass4qname(qname);
+                writer.write("\t\t\tRetArray = (" + containedType + "_Array *)axiscCallGetBasicArray(call, "
+                        + CUtils.getXSDTypeForBasicType(containedType) + ",\""
+                        + paramTagName + "\",0);\n");
             }
             else
-                if (returntypeisarray)
-                {
-                    QName qname = WrapperUtils.getArrayType(retType).getName();
-                    String containedType = null;
-                    if (CUtils.isSimpleType(qname))
-                    {
-                        containedType = CUtils.getclass4qname(qname);
-                        writer.write(
-                            "\t\t\tarray = pCall->_functions->getBasicArray(pCall->_object, "
-                                + CUtils.getXSDTypeForBasicType(containedType)
-                                + ", \""
-                                + returntype.getParamName()
-                                + "\", 0);\n");
-                        writer.write(
-                            "\t\t\tmemcpy(&RetArray, &array, sizeof(Axis_Array));\n");
-                    }
-                    else
-                    {
-                        containedType = qname.getLocalPart();
-                        writer.write(
-                            "\t\t\tarray = pCall->_functions->getCmplxArray(pCall->_object, (void*) Axis_DeSerialize_"
-                                + containedType);
-                        writer.write(
-                            ", (void*) Axis_Create_"
-                                + containedType
-                                + ", (void*) Axis_Delete_"
-                                + containedType
-                                + ", \""
-                                + returntype.getParamName()
-                                + "\", 0);\n");
-                        writer.write(
-                            "\t\t\tmemcpy(&RetArray, &array, sizeof(Axis_Array));\n");
-                    }
-                    writer.write("\t\t}\n");
-                    writer.write(
-                        "\t}\n\tpCall->_functions->unInitialize(pCall->_object);\n");
-                    writer.write("\treturn RetArray;\n");
-                }
-                else
-                    if (returntypeissimple)
-                    {
-                        writer.write(
-                            "\t\t\tRet = pCall->_functions->"
-                                + CUtils.getParameterGetValueMethodName(
-                                    outparamTypeName,
-                                    false)
-                                + "(pCall->_object, \""
-                                + returntype.getParamName()
-                                + "\", 0);\n");
-                        writer.write("\t\t}\n");
-                        writer.write(
-                            "\t}\n\tpCall->_functions->unInitialize(pCall->_object);\n");
-                        writer.write("\treturn Ret;\n");
-                    }
-                    else
-                    {
-                        outparamTypeName = returntype.getLangName();
-                        //need to have complex type name without *
-                        writer.write(
-                            "\t\t\tpReturn = ("
-                                + outparamTypeName
-                                + "*)pCall->_functions->getCmplxObject(pCall->_object, (void*) Axis_DeSerialize_"
-                                + outparamTypeName
-                                + ", (void*) Axis_Create_"
-                                + outparamTypeName
-                                + ", (void*) Axis_Delete_"
-                                + outparamTypeName
-                                + ",\""
-                                + returntype.getParamName()
-                                + "\", 0);\n");
-                        writer.write("\t\t}\n");
-                        writer.write(
-                            "\t}\n\tpCall->_functions->unInitialize(pCall->_object);\n");
-                        writer.write("\treturn pReturn;\n");
-                    }
-        //write end of method
-        writer.write("}\n");
+            {
+                containedType = qname.getLocalPart();
+                writer.write("\t\t\tRetArray = (" + containedType 
+                        + "_Array *) axiscCallGetCmplxArray(call, (Axisc_Array *)RetArray,(void *) Axis_DeSerialize_"
+                        + containedType);
+                //damitha
+                writer.write(",(void *) Axis_Create_" + containedType
+                        + ",(void *) Axis_Delete_" + containedType
+                        + ",\"" + paramTagName
+                        + "\",Axis_URI_" + containedType + ");\n");            
+            }
+            writer.write("\t\t}\n\t}\n\n");
+            writer.write("\taxiscCallUnInitialize(call);\n\n");
+
+            writer.write("\treturn RetArray;\n");
+        }
+        else if (returntypeissimple)
+        {
+            writer.write("\t\t\t" + outparamTypeName);
+            if (!CUtils.isPointerType(outparamTypeName))
+                writer.write(" *");
+            
+            writer.write(" pReturn = axiscCall"
+                    + CUtils.getParameterGetValueMethodName(outparamTypeName,
+                            false) + "(call, \"" + paramTagName + "\", 0);\n\n");
+            writer.write("\t\t\tif( pReturn)\n");
+            writer.write("\t\t\t{\n");
+            if (CUtils.isPointerType(outparamTypeName))
+            {
+                writer.write("\t\t\t\tRet = pReturn;\n");
+            }
+            else if (returntype.isOptional() || returntype.isNillable())
+                writer.write("\t\t\t\tRet = pReturn;\n");
+            else
+            {
+                writer.write("\t\t\t\tRet = *pReturn;\n");
+                writer.write("\t\t\t\taxiscAxisDelete(pReturn, " + CUtils.getXSDTypeForBasicType(outparamTypeName) + ");\n");                
+            }
+
+            writer.write("\t\t\t}\n");
+            writer.write("\t\t}\n");
+            writer.write("\t}\n\n");
+            writer.write("\taxiscCallUnInitialize(call);\n");
+            writer.write("\treturn Ret;\n");
+        }
+        else
+        {
+            outparamTypeName = returntype.getLangName();
+            //need to have complex type name without *
+            writer.write("\t\t\tpReturn = (" + outparamTypeName
+                    + " *) axiscCallGetCmplxObject(call, (void *) Axis_DeSerialize_"
+                    + outparamTypeName + ",(void *) Axis_Create_"
+                    + outparamTypeName + ",(void *) Axis_Delete_"
+                    + outparamTypeName + ",\"" + paramTagName
+                    + "\",0);\n\t\t\t}\n");
+            writer.write("\t}\n\n");
+            writer.write("\taxiscCallUnInitialize(call);\n\n");
+            writer.write("\treturn pReturn;\n");
+
+        }
+
+        writer.write("}\n");        
     }
 
     /* (non-Javadoc)
@@ -594,36 +670,5 @@ public class ClientStubWriter extends CFileWriter
      */
     protected void writeGlobalCodes() throws WrapperFault
     {
-        Iterator types = wscontext.getTypemap().getTypes().iterator();
-        HashSet typeSet = new HashSet();
-        String typeName;
-        Type type;
-        try
-        {
-            while (types.hasNext())
-            {
-                type = (Type) types.next();
-                if (type.isArray())
-                    continue;
-                typeName = type.getLanguageSpecificName();
-                typeSet.add(typeName);
-            }
-            Iterator itr = typeSet.iterator();
-            while (itr.hasNext())
-            {
-                typeName = itr.next().toString();
-                writer.write("extern int Axis_DeSerialize_" + typeName
-                        + "(" + typeName  + "* param, IWrapperSoapDeSerializer* pDZ);\n");
-                writer.write("extern void* Axis_Create_" + typeName + "(int nSize);\n");
-                writer.write("extern void Axis_Delete_" + typeName + "("
-                        + typeName + "* param, int nSize);\n");
-                writer.write("extern int Axis_Serialize_" + typeName + "("
-                        + typeName + "* param, IWrapperSoapSerializer* pSZ, bool bArray);\n\n");
-            }
-        }
-        catch (IOException e)
-        {
-            throw new WrapperFault(e);
-        }
     }
 }
