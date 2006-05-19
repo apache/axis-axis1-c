@@ -1,0 +1,13 @@
+<test>
+    <name>NestedArraysC</name>
+    <description>NestedArraysC</description>
+    <clientLang>c</clientLang>
+    <clientCode>NestedArraysClient.c</clientCode>
+    <wsdl>NestedArrays.wsdl</wsdl>
+    <expected>
+        <output>
+            NestedArrays.expected
+        </output>
+    </expected>
+	<endpoint>http://localhost:80/axis/NestedArrays</endpoint>
+</test>
