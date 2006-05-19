@@ -1,0 +1,16 @@
+<test>
+    <name>TestSetEndpointC</name>
+    <description>TestSetEndpointC</description>
+    <clientLang>c</clientLang>
+    <clientCode>TestSetEndpointClient.c</clientCode>
+    <wsdl>CalculatorDocC.wsdl</wsdl>
+    <expected>
+        <output>
+			   CalculatorDoc.cpp.out
+        </output>
+        <request>
+            TestSetEndpoint.request
+			</request>
+    </expected>
+	<endpoint>http://localhost:80/axis/CalculatorDoc</endpoint>
+</test>

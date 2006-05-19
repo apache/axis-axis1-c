@@ -1,0 +1,13 @@
+<test>
+    <name>TestTransportTimeoutC</name>
+    <description>TestTransportTimeoutC</description>
+    <clientLang>c</clientLang>
+    <clientCode>TestTransportTimeoutClient.c</clientCode>
+    <wsdl>TestTransportTimeoutC.wsdl</wsdl>
+    <expected>
+        <output>
+            TestTransportTimeout.expected
+        </output>
+    </expected>
+	<endpoint>http://localhost:80/axis/TestTransportTimeout</endpoint>
+</test>

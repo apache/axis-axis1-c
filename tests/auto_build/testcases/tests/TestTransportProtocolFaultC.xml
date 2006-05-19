@@ -1,0 +1,13 @@
+<test>
+    <name>TestTransportProtocolFaultC</name>
+    <description>TestTransportProtocolFaultC test</description>
+    <clientLang>c</clientLang>
+    <clientCode>TestTransportProtocolFaultClient.c</clientCode>
+    <wsdl>CalculatorDocC.wsdl</wsdl>
+    <expected>
+        <output>
+            TestTransportProtocolFault.expected
+        </output>
+    </expected>
+	<endpoint>http://localhost:80/axis/CalculatorDoc</endpoint>
+</test>

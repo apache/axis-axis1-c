@@ -1,0 +1,16 @@
+<test>
+    <name>TestTransportPropertiesC</name>
+    <description>TestTransportPropertiesC</description>
+    <clientLang>c</clientLang>
+    <clientCode>TestTransportPropertiesClient.c</clientCode>
+    <wsdl>CalculatorDocC.wsdl</wsdl>
+    <expected>
+        <output>
+            TestTransportProperties.expected
+        </output>
+        <request>
+            TestTransportPropertiesRequest.out
+        </request>
+    </expected>
+	<endpoint>http://localhost:80/axis/CalculatorDoc</endpoint>
+</test>
