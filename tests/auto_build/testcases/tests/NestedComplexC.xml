@@ -1,0 +1,14 @@
+<test>
+    <name>NestedComplexC</name>
+    <description>NestedComplexC</description>
+    <clientLang>c</clientLang>
+    <clientCode>NestedComplexClient.c</clientCode>
+    <wsdl>NestedComplex.wsdl</wsdl>
+    <expected>
+        <output>
+            NestedComplex.expected
+        </output>
+		<serverResponse>NestedComplex_ServerResponse.expected</serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/NestedComplex</endpoint>
+</test>
