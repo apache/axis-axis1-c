@@ -3312,7 +3312,15 @@ int axiscCallAddAnyObject(AXISCHANDLE call,
     
     try
     {
-        return c->addAnyObject((AnyType*)pAnyObject);
+        AnyType objAnyType;
+        
+        if (pAnyObject && pAnyObject->_size > 0)
+        {
+            objAnyType._size  = pAnyObject->_size;
+            objAnyType._array = pAnyObject->_array;
+        }
+        
+        return c->addAnyObject(&objAnyType);
     }
     catch ( AxisException& e  )
     {

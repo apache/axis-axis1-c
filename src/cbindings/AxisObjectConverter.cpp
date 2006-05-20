@@ -27,7 +27,40 @@ AxisObjectConverter::cppAnyTypeToC(AnyType *objAnyType,
                                    AxiscAnyType *cAnyType, 
                                    bool deleteObj)
 {
-    return NULL;
+    // If nothing to transform, return
+    if (objAnyType == NULL)
+        return cAnyType;
+            
+    // Allocate cAnyType and initialize
+    if (cAnyType == NULL)
+        cAnyType = (AxiscAnyType *)axiscAxisNew(XSDC_ANY, 0);
+
+    cAnyType->_size = objAnyType->_size;
+    
+    int len;
+    if (cAnyType->_size > 0)
+    {
+        cAnyType->_array = new AXISC_XML_String [cAnyType->_size];
+        
+        for (int i=0; i<cAnyType->_size; ++i)
+        {
+            if ( objAnyType->_array[i] == NULL)
+            {
+                cAnyType->_array[i] = NULL;
+                continue;
+            }      
+            
+            len = strlen(objAnyType->_array[i]) + 1;
+            cAnyType->_array[i] = new char[len];     
+            strcpy(cAnyType->_array[i], objAnyType->_array[i]);
+        }
+    }
+
+    // Delete c++ object before returning c object
+    if (deleteObj)
+        delete objAnyType;
+                
+    return cAnyType;
 }
 
 Axisc_Array *

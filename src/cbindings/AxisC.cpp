@@ -136,7 +136,6 @@ int axiscAxisDelete(void * pValue,
             case XSDC_QNAME:
             case XSDC_NOTATION:
             case C_USER_TYPE:
-            case XSDC_ANY:
             case C_ATTACHMENT:
             case XSDC_UNKNOWN:
             {
@@ -170,6 +169,19 @@ int axiscAxisDelete(void * pValue,
             {
                 // TODO delete elements?            
                 delete (xsdc__hexBinary*) pValue;
+                break;
+            }
+            case XSDC_ANY:
+            {
+                AxiscAnyType *anytype = (AxiscAnyType *)pValue;
+				if (anytype->_size > 0 && anytype->_array) 
+				{
+					for (int i=0; i<anytype->_size; i++)
+						if (anytype->_array[i]) delete [] anytype->_array[i];
+                    
+                    delete [] anytype->_array;
+					delete anytype;
+				}
                 break;
             }
             
@@ -382,9 +394,16 @@ void *axiscAxisNew(AXISC_XSDTYPE type, int size)
                 retVal = array;
                 break;
             }
+            case XSDC_ANY:
+            {
+                AxiscAnyType * anytype= new AxiscAnyType();
+                anytype->_array = NULL;
+                anytype->_size  = 0;
+                retVal = anytype;
+                break;
+            }
             case C_USER_TYPE:
             case XSDC_UNKNOWN:
-            case XSDC_ANY:
             case C_ATTACHMENT:
             default:
                 break;

@@ -1,0 +1,19 @@
+<test>
+    <name>SimpleXSDAnyC</name>
+    <description>SimpleXSDAnyC</description>
+    <clientLang>c</clientLang>
+    <clientCode>SimpleXSDAnyClient.c</clientCode>
+    <wsdl>SimpleXSDAny.wsdl</wsdl>
+    <expected>
+        <output>
+            SimpleXSDAny.cpp.out
+        </output>
+		<request>
+			SimpleXSDAny.request
+		</request>
+		<serverResponse>
+			SimpleXSDAny_ServerResponse.expected
+	    </serverResponse>
+    </expected>
+	<endpoint>-e http://localhost:9080/axis/SimpleXSDAny</endpoint>
+</test>
