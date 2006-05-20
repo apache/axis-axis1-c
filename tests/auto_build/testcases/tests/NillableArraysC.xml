@@ -1,0 +1,18 @@
+<test>
+    <name>NillableArraysC</name>
+    <description>NillableArraysC</description>
+    <clientLang>c</clientLang>
+    <clientCode>NillableArraysClient.c</clientCode>
+    <wsdl>NillableArrays.wsdl</wsdl>
+    <expected>
+        <output>
+            NillableArrays.expected
+        </output>
+        <request>
+            NillableArraysRequest.out
+        </request>
+		<serverResponse>NillableArrays_ServerResponse.expected</serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/NillableArrays</endpoint>
+</test>
+
