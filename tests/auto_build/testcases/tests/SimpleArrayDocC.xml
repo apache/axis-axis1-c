@@ -1,0 +1,13 @@
+<test>
+    <name>SimpleArrayDocC</name>
+    <description>SimpleArrayDocC</description>
+    <clientLang>c</clientLang>
+    <clientCode>SimpleArrayDocClient.c</clientCode>
+    <wsdl>SimpleArrayDoc.wsdl</wsdl>
+    <expected>
+        <output>
+            SimpleArrayDoc.cpp.out
+        </output>
+    </expected>
+	<endpoint>http://localhost:80/axis/SimpleArrayDoc</endpoint>
+</test>
