@@ -37,7 +37,7 @@ const char * axiscExceptionWhat(AXISCHANDLE axisException)
 }
 
 AXISC_STORAGE_CLASS_INFO 
-const int axiscExceptionGetExceptionCode(AXISCHANDLE axisException) 
+int axiscExceptionGetExceptionCode(AXISCHANDLE axisException) 
 {
 	AxisException *ae = (AxisException*)axisException;
 	return ae->getExceptionCode();

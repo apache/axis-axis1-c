@@ -161,14 +161,18 @@ int axiscAxisDelete(void * pValue,
             }
             case XSDC_BASE64BINARY:
             {
-                // TODO delete elements?            
-                delete (xsdc__base64Binary*) pValue;
+                xsdc__base64Binary* b64 = (xsdc__base64Binary*) pValue;
+                if (b64->__ptr)
+                    delete [] b64->__ptr;
+                delete b64;
                 break;
             }
             case XSDC_HEXBINARY:
             {
-                // TODO delete elements?            
-                delete (xsdc__hexBinary*) pValue;
+                xsdc__hexBinary* hb = (xsdc__hexBinary*) pValue;
+                if (hb->__ptr)
+                    delete [] hb->__ptr;
+                delete hb;
                 break;
             }
             case XSDC_ANY:
