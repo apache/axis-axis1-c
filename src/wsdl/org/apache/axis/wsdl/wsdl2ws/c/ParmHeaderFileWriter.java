@@ -259,7 +259,7 @@ public class ParmHeaderFileWriter extends ParamWriter
                     if(attribs[i].isAnyType())
                     {
                         anyCounter += 1;
-                        writer.write("\t"
+                        writer.write("\t" + "Axisc"
                                 +  getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
                                 + " *  " + attribs[i].getParamName()
                                 + Integer.toString(anyCounter) + ";\n");
@@ -290,7 +290,7 @@ public class ParmHeaderFileWriter extends ParamWriter
                 else if(attribs[i].isAnyType())
                 {
                     anyCounter += 1;
-                    writer.write("\t"
+                    writer.write("\t" + "Axisc"
                             + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
                             + "  " + attribs[i].getParamName()
                             + Integer.toString(anyCounter) + ";\n");
