@@ -738,7 +738,7 @@ public class BeanParamWriter extends ParamCFileWriter
                     writer.write("\tpTemp->" + attribs[i].getParamName() + " = "
                             + "Axis_Create_" + attribs[i].getTypeName() + "_Array(0);\n");
                 }
-                else
+                else if (!attribs[i].isAnyType())
                 {
                     writer.write("\tpTemp->" + attribs[i].getParamName() + " = "
                             + "Axis_Create_" + attribs[i].getTypeName() + "(0);\n");                   
@@ -788,6 +788,8 @@ public class BeanParamWriter extends ParamCFileWriter
         writer.write("\telse\n");
         
         writer.write("\t{\n");
+        int anyCounter = 0;
+        
         for (int i = 0; i < attribs.length; i++)
         {
             if (attribs[i].isSimpleType() || attribs[i].getType().isSimpleType())
@@ -813,6 +815,14 @@ public class BeanParamWriter extends ParamCFileWriter
                     writer.write("\n");
                 }
             }
+            else if (attribs[i].isAnyType())
+            {
+                anyCounter += 1;
+                String name = attribs[i].getParamNameAsMember() + anyCounter;
+                
+                writer.write("\t\tif (param->" + name + " != NULL)\n");
+                writer.write("\t\t\taxiscAxisDelete(param->" + name + ", XSDC_ANY);\n");               
+            }            
             else
             {
                 String deleteFunctionSuffix = "";
