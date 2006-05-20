@@ -409,6 +409,10 @@ public class CBindingGenerator extends CParsingTool implements FileActor
                     text += ", ";
             }
         }
+        
+        // For now, ignore operator-type methods
+        if (-1 != text.indexOf("Operator="))
+            return;
 
         if (parms != null) 
         {
