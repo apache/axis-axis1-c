@@ -465,7 +465,7 @@ public:
      *
      * @return Exception code
      */
-    virtual const int getExceptionCode() const { return m_iExceptionCode; }
+    virtual int getExceptionCode() const { return m_iExceptionCode; }
 
     /**
      * This can be called to set the exception code
