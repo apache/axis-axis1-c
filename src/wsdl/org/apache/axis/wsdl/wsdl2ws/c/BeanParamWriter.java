@@ -198,7 +198,7 @@ public class BeanParamWriter extends ParamCFileWriter
         {
             writer.write("\tif(Axis_URI_" + classname + ")\n\t{\n");
             writer.write("\t\tAxiscBool blnIsNewPrefix = xsdc_boolean_false;\n");
-            writer.write("\t\tconst AxisChar* sPrefix = axiscSoapSerializerGetNamespacePrefix(pSZ,Axis_URI_"
+            writer.write("\t\tconst AxiscChar* sPrefix = axiscSoapSerializerGetNamespacePrefix(pSZ,Axis_URI_"
                         + classname + ", &blnIsNewPrefix);\n");
             writer.write("\t\taxiscSoapSerializerSerialize(pSZ, \" xmlns:\", sPrefix, \"=\\\"\",");
             writer.write("Axis_URI_" + classname + ", \" " + " \\\"\"");

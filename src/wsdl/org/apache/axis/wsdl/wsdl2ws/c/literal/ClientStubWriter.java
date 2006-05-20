@@ -490,13 +490,13 @@ public class ClientStubWriter
                 {
                     // TODO
                     String attchType = param.getType().getName().getLocalPart();
-                    writer.write("\n\tconst AxisChar *xmlSoapNsPfx" + i + 
+                    writer.write("\n\tconst AxiscChar *xmlSoapNsPfx" + i + 
                         " = axiscCallGetNamespacePrefix(call,\"" + 
                         WrapperConstants.APACHE_XMLSOAP_NAMESPACE + "\");\n");
                     writer.write("\tchar attchType" + i + "[64];\n");
                     writer.write("\tstrcpy(attchType" + i + ", xmlSoapNsPfx" + i + ");\n");
                     writer.write("\tstrcat(attchType" + i + ", \":" + attchType + "\");\n");
-                    writer.write("\tIAttribute *attrs" + i + "[2];\n");
+                    writer.write("\tAXISCHANDLE attrs" + i + "[2];\n");
                     writer.write("\tattrs" + i + "[0] = axiscCallCreateAttribute(call,\"type\", \"xsi\", attchType" + i + 
                         ");\n");
                     writer.write("\tattrs" + i + "[1] = axiscCallCreateAttribute(call,xmlSoapNsPfx" + i + 

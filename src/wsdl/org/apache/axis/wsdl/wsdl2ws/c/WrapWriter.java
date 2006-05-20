@@ -184,7 +184,7 @@ public class WrapWriter extends CFileWriter
         writer.write(
             "int AXISCALL " + classname + "_Invoke(void*p, void *pMsg){\n");
         writer.write("\tIMessageData* mc = (IMessageData*)pMsg;\n");
-        writer.write("\tconst AxisChar* method = 0;\n");
+        writer.write("\tconst AxiscChar* method = 0;\n");
         writer.write("\tIWrapperSoapDeSerializer DZ = {0,0};\n");
         writer.write("\tIWrapperSoapSerializer SZ = {0,0};\n");
         writer.write(
