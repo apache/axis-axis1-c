@@ -1,0 +1,13 @@
+<test>
+    <name>FaultMappingDocC</name>
+    <description>FaultMappingDocC</description>
+    <clientLang>c</clientLang>
+    <clientCode>FaultMappingDocClient.c</clientCode>
+    <wsdl>FaultMappingDoc.wsdl</wsdl>
+    <expected>
+        <output>
+            FaultMappingDoc.cpp.out
+        </output>
+    </expected>
+	<endpoint>http://localhost:80/axis/FaultMappingDoc</endpoint>
+</test>
