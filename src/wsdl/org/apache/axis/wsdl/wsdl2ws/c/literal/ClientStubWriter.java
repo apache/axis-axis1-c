@@ -750,6 +750,13 @@ public class ClientStubWriter
                         writer.write( "*OutValue" + i + " = *pReturn" + i + ";\n");
                         writer.write( "\t\t\t}\n");
                         writer.write( "\n");
+                        
+                        if (CUtils.getXSDTypeForBasicType( baseTypeName).equals("XSDC_HEXBINARY")
+                                || CUtils.getXSDTypeForBasicType( baseTypeName).equals("XSDC_BASE64BINARY"))
+                        {
+                            writer.write( "\t\t\tpReturn" + i + "->__ptr = NULL;\n");
+                        }
+                        
                         writer.write( "\t\t\taxiscAxisDelete( (void *) pReturn" + i + ", " + CUtils.getXSDTypeForBasicType( baseTypeName) + ");\n");
                     }
                     writer.write("\t\t\t}\n"); // end scope
@@ -842,8 +849,13 @@ public class ClientStubWriter
                 writer.write ("\t\t\t{\n");
                 
                 writer.write ("\t\t\t\tRet = *pReturn;\n");
-                // TODO - hex and base and any...what about internal pointers?  
-                // TODO - need to null out the pointers in the structure.
+
+                if (CUtils.getXSDTypeForBasicType( outparamType).equals("XSDC_HEXBINARY")
+                        || CUtils.getXSDTypeForBasicType( outparamType).equals("XSDC_BASE64BINARY"))
+                {
+                    writer.write( "\t\t\t\tpReturn->__ptr = NULL;\n");
+                }
+                
                 writer.write ("\t\t\t\taxiscAxisDelete( (void *) pReturn, " 
                         + CUtils.getXSDTypeForBasicType( outparamType) + ");\n");
 

@@ -132,8 +132,8 @@ public class ClientStubWriter extends CFileWriter
     {
         try
         {
-            writer.write("#include <stdlib.h>\n");
-            writer.write("#include <stdio.h>\n");
+            //writer.write("#include <stdlib.h>\n");
+            //writer.write("#include <stdio.h>\n");
             writer.write("#include <string.h>\n");
             writer.write("\n");
             
