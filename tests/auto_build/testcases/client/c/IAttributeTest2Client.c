@@ -26,6 +26,13 @@
 #include "CommonClientTestCode.h"
 #include "Calculator.h"
 
+void myExceptionHandler(int errorCode, const char *errorString)
+{
+    exceptionOccurred = C_TRUE;    
+    printf("Exception : %s\n", errorString);
+}
+
+
 int main(int argc, char* argv[])
 {
     AXISCHANDLE ws;
@@ -42,7 +49,7 @@ int main(int argc, char* argv[])
     AXISCHANDLE attr1, attr2;
     AXISCHANDLE bn;
 
-    axiscAxisRegisterExceptionHandler(exceptionHandler);
+    axiscAxisRegisterExceptionHandler(myExceptionHandler);
     
     if (argc > 1)
         url = argv[1];
@@ -69,7 +76,8 @@ int main(int argc, char* argv[])
     if (strcmp(op, "add") == 0)
     {
         iResult = add(ws, i1, i2);
-        printf("%d\n", iResult );
+        if (!exceptionOccurred)
+            printf("%d\n", iResult );
     }
     
     destroy_Calculator_stub(ws);
