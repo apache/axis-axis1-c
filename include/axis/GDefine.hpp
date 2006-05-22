@@ -71,6 +71,12 @@ typedef enum
      * Failure
      */
     AXIS_FAIL = -1, 
+
+    /**
+     * Failure - only for C binding, not used in C++,
+     * but defined in order to reserve.
+     */
+    AXIS_EXCEPTION = -2, 
     
     /**
      * Object already exists

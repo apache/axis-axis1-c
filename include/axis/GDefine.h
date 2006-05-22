@@ -52,6 +52,11 @@ typedef enum
     AXISC_FAIL = -1, 
     
     /**
+     * Failure - only for C binding, not in C++
+     */
+    AXISC_EXCEPTION = -2, 
+    
+    /**
      * Object already exists
      */
     AXISC_OBJECT_ALREADY_EXISTS=1,
