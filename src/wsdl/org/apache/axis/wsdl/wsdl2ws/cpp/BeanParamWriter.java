@@ -20,6 +20,15 @@
  * @author Susantha Kumara(susantha@opensource.lk, skumara@virtusa.com)
  */
 
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* ----------------------------------------------------------------   */
+/* CHANGES TO FILE MAY NEED TO BE PROPAGATED TO THE                   */
+/* C-EQUIVALENT FILE IN SUPPORT OF THE C-BINDING INTERFACES.          */
+/* ----------------------------------------------------------------   */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+
 package org.apache.axis.wsdl.wsdl2ws.cpp;
 
 import java.io.File;
@@ -400,6 +409,15 @@ public class BeanParamWriter extends ParamCPPFileWriter
 
     private void writeSerializeGlobalMethod() throws IOException, WrapperFault 
     {
+        /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+        /* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+        /* ----------------------------------------------------------------   */
+        /* CHANGES TO FILE MAY NEED TO BE PROPAGATED TO THE                   */
+        /* C-EQUIVALENT FILE IN SUPPORT OF THE C-BINDING INTERFACES.          */
+        /* ----------------------------------------------------------------   */
+        /* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+        /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+        
         writer.write( "/*\n");
         writer.write( " * This static method serialize a " + classname + " type of object\n");
         writer.write( " */\n");
@@ -798,6 +816,15 @@ public class BeanParamWriter extends ParamCPPFileWriter
 
     private void writeDeSerializeGlobalMethod() throws IOException, WrapperFault
     {
+        /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+        /* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+        /* ----------------------------------------------------------------   */
+        /* CHANGES TO FILE MAY NEED TO BE PROPAGATED TO THE                   */
+        /* C-EQUIVALENT FILE IN SUPPORT OF THE C-BINDING INTERFACES.          */
+        /* ----------------------------------------------------------------   */
+        /* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+        /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+        
         writer.write("/*\n");
         writer.write(" * This static method deserialize a " + classname + " type of object\n");
         writer.write(" */\n");

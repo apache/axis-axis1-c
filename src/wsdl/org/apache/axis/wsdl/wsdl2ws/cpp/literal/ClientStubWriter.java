@@ -25,6 +25,15 @@
  * Added Stub base class into code generation
  */
 
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* ----------------------------------------------------------------   */
+/* CHANGES TO FILE MAY NEED TO BE PROPAGATED TO THE                   */
+/* C-EQUIVALENT FILE IN SUPPORT OF THE C-BINDING INTERFACES.          */
+/* ----------------------------------------------------------------   */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+
 package org.apache.axis.wsdl.wsdl2ws.cpp.literal;
 
 import java.io.IOException;
@@ -131,6 +140,15 @@ public class ClientStubWriter
 
     public void writeMethodInWrapper (MethodInfo minfo) throws WrapperFault, IOException
     {
+        /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+        /* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+        /* ----------------------------------------------------------------   */
+        /* CHANGES TO FILE MAY NEED TO BE PROPAGATED TO THE                   */
+        /* C-EQUIVALENT FILE IN SUPPORT OF THE C-BINDING INTERFACES.          */
+        /* ----------------------------------------------------------------   */
+        /* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+        /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */   
+        
         boolean isAllTreatedAsOutParams = false;
         ParameterInfo returntype = null;
         int noOfOutParams = minfo.getOutputParameterTypes().size();
