@@ -3392,4 +3392,31 @@ void axiscCallSetSOAPMethodAttribute(AXISCHANDLE call,
     }
 }
 
+
+AXISC_STORAGE_CLASS_INFO 
+const char * axiscCallGetFaultAsXMLString(AXISCHANDLE call) 
+{
+    AxisObjectContainer *h = (AxisObjectContainer *)call;
+    h->_exception.resetException();
+    Call *c = (Call*)h->_objHandle;
+    
+    try
+    {
+        return c->getFaultAsXMLString();
+    }
+    catch ( AxisException& e  )
+    {
+        h->_exception.setExceptionFromException(e);
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        h->_exception.setExceptionCode(-1);  
+        h->_exception.setMessage("Unrecognized exception thrown.");  
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    }
+    
+    return (xsdc__string)NULL;
+}
+
 }
