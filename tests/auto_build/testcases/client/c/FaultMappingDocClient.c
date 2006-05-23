@@ -18,11 +18,39 @@
 
 #include "CommonClientTestCode.h"
 #include "MathOps.h"
+#include "axis/ISoapFault.h"
 
-void myExceptionHandler(int errorCode, const char *errorString)
+void myExceptionHandler(int exceptionCode, const char *exceptionString, AXISCHANDLE pSoapFault, void *faultDetail)
 {
+    const char *pcCmplxFaultName;
+    
     exceptionOccurred = C_TRUE;    
-    printf("AxisException : %s\n", errorString);
+    
+    if (pSoapFault)
+    {
+       pcCmplxFaultName = axiscSoapFaultGetCmplxFaultObjectName(pSoapFault);
+       if(0 == strcmp("DivByZeroStruct", pcCmplxFaultName))
+       {
+         DivByZeroStruct *dbzs = (DivByZeroStruct *)faultDetail;
+         printf("DivByZeroStruct Fault: \"%s\", %d, %f\n", dbzs->varString, dbzs->varInt, dbzs->varFloat);
+       }
+       else if (0 == strcmp("SpecialDetailStruct", pcCmplxFaultName))
+       {
+        SpecialDetailStruct *sds = (SpecialDetailStruct *)faultDetail;
+        printf("SpecialDetailStruct Fault: \"%s\"\n", sds->varString);
+       }
+       else if (0 == strcmp("OutOfBoundStruct", pcCmplxFaultName))
+       {
+        OutOfBoundStruct *oobs = (OutOfBoundStruct *)faultDetail;
+        printf("OutOfBoundStruct Fault: \"%s\", %d, \"%s\"\n", oobs->varString, oobs->varInt, oobs->specialDetail->varString);
+       }
+       else
+       {
+          printf("SoapFaultException: %s\n", faultDetail);
+       }
+       
+    }
+    
 }
 
 int main(int argc, char* argv[])
@@ -40,8 +68,6 @@ int main(int argc, char* argv[])
     int iResult;
     char* pcDetail;
     int i;
-
-    axiscAxisRegisterExceptionHandler(myExceptionHandler);
 
     if (argc > 1)
         url = argv[1];
@@ -62,6 +88,8 @@ int main(int argc, char* argv[])
         }
 
         ws = get_MathOps_stub(endpoint);
+        
+        set_MathOps_ExceptionHandler(ws, myExceptionHandler);        
         
         printf( "Trying to %s %d by %d\n", op, i1, i2 );
         iResult = div(ws, i1, i2);
