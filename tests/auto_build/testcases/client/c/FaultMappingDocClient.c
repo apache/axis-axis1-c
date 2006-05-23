@@ -32,7 +32,7 @@ void myExceptionHandler(int exceptionCode, const char *exceptionString, AXISCHAN
        if(0 == strcmp("DivByZeroStruct", pcCmplxFaultName))
        {
          DivByZeroStruct *dbzs = (DivByZeroStruct *)faultDetail;
-         printf("DivByZeroStruct Fault: \"%s\", %d, %f\n", dbzs->varString, dbzs->varInt, dbzs->varFloat);
+         printf("DivByZeroStruct Fault: \"%s\", %d, %.6g\n", dbzs->varString, dbzs->varInt, dbzs->varFloat);
        }
        else if (0 == strcmp("SpecialDetailStruct", pcCmplxFaultName))
        {
