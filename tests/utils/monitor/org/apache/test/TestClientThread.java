@@ -27,6 +27,8 @@ import java.net.*;
  */
 public class TestClientThread extends ChildHandler implements Runnable
 {
+    public static final String STOPTCPMON_STRING ="STOPTCPMON";
+
     private boolean          continueToRun                 =true;
     private boolean serverClosedSocket;
     // the responder back to the client
@@ -118,7 +120,7 @@ public class TestClientThread extends ChildHandler implements Runnable
         try
         {
             bytesRead=clientRequestStream.read(readBuffer, 0,
-                    StopTCPMonitor.STOPTCPMON.length( ));
+                    STOPTCPMON_STRING.length( ));
         }
         catch (ConnectException connectException)
         {
@@ -150,7 +152,7 @@ public class TestClientThread extends ChildHandler implements Runnable
         if (bytesRead!=-1)
         {
             String inputLine=new String(readBuffer, 0, bytesRead);
-            if (inputLine.startsWith(StopTCPMonitor.STOPTCPMON))
+            if (inputLine.startsWith(STOPTCPMON_STRING))
             {
                 clientRequestStream=null;
                 throw new StopRequestException(
@@ -276,6 +278,8 @@ public class TestClientThread extends ChildHandler implements Runnable
             try
             {
                 serviceSocket=TCPMonitor.getClientSocket(serviceHostName, servicePort);
+                System.out.println( "TestClientThread: local addr="+serviceSocket.getLocalPort());
+
             }
             catch (UnknownHostException unknownHostException)
             {
@@ -285,7 +289,7 @@ public class TestClientThread extends ChildHandler implements Runnable
             catch (ConnectException connectException)
             {
                 System.err
-                        .println("ConnectionException when Monitor connecting to server "
+                        .println("ConnectionException when Monitor connecting to server <"+serviceHostName+":"+servicePort+">"
                                 +connectException.getMessage( ));
                 connectException.printStackTrace(System.err);
                 throw new ConnectionNotEstablishedException(connectException);

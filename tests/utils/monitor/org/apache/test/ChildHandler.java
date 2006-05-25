@@ -11,12 +11,12 @@ import java.util.Vector;
  * Connection handlers handleconnections and have a common goal of ensuring that they are 
  * all closed when they need to be
  */
-public abstract class ChildHandler
+public abstract class ChildHandler extends org.apache.tools.ant.Task
 {
     protected Vector children;
     protected ChildHandler()
     {
-        System.out.println( "Constructing "+this);
+//        System.out.println( "Constructing "+this);
         children=new Vector();
         
     }
@@ -27,7 +27,7 @@ public abstract class ChildHandler
      */
     protected void close()
     {
-        System.out.println( "Closing "+this);
+//        System.out.println( "Closing "+this);
         try 
         {
             if(children!=null)
@@ -48,7 +48,7 @@ public abstract class ChildHandler
             }
             }
             children=null;
-            System.out.println( "Closed "+this);
+//            System.out.println( "Closed "+this);
         }
         catch (Throwable exception)
         {
@@ -68,7 +68,7 @@ public abstract class ChildHandler
     }
     public void finalize()throws Throwable
     {
-        System.out.println( "Destroying: "+this);
+//        System.out.println( "Destroying: "+this);
         super.finalize();
     }
 }

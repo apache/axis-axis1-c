@@ -21,12 +21,11 @@ import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketException;
 import java.net.SocketTimeoutException;
-import java.rmi.server.SocketSecurityException;
 import java.util.Vector;
 
-import javax.net.SocketFactory;
+
+import org.apache.tools.ant.BuildException;
 
 /**
  * This class sits listening on a port. When a client connects to it it returns a predefined response
@@ -36,13 +35,19 @@ import javax.net.SocketFactory;
 
 public class MockServer extends ChildHandler implements Runnable 
 {
+    private static MockServer singleton;
+    
     private static int SOCKET_TIMEOUT = 700000;
     // The port that we will listen on for the client to connect to
     private int           port;
+    private String responseFileName;
     // File that contains the http responses that the client is expecting back.
     private File          responseFile;
     private boolean       continueToRun =true;
     ServerSocket serverSocket;
+    
+    // When this is an ANT task - whether to stop the current MockServer or not.
+    private boolean stop; 
     
     public static final void printUsage( )
     {
@@ -51,7 +56,7 @@ public class MockServer extends ChildHandler implements Runnable
         System.out.println("responseFile: The file to write out when a request is received");
     }
 
-    public static void main(String[] args)
+/**    public static void main(String[] args)
     {
         // check that we have the required params
         if (args.length<2)
@@ -61,9 +66,34 @@ public class MockServer extends ChildHandler implements Runnable
         }
 
         // We have the params now let's run the server !
+        int port=0;
+        String fileName=null;
         try
         {
-            MockServer server=new MockServer(args);
+            for(int i=0; i<args.length; i++)
+            {
+                if (args[i].equalsIgnoreCase("-p"))
+                {
+                    String portString=args[++i];
+                    try
+                    {
+                        port = Integer.parseInt(portString);
+                        continue;
+                    }
+                    catch (NumberFormatException numberFormatException)
+                    {
+                        printUsage( );
+                        throw new NumberFormatException("port is not an integer " +portString);
+                    }
+                }
+                if (args[i].equals("-r"))
+                {
+                    fileName= args[++i];
+                    continue;
+                }
+            }
+
+            MockServer server=new MockServer(fileName, port);
             Thread serverThread=new Thread(server);
             serverThread.start( );
         }
@@ -74,52 +104,109 @@ public class MockServer extends ChildHandler implements Runnable
             throw new RuntimeException("Failed to start MockServer due to IOException: "+ioException);
         }
     }
+*/
 
-
-
-
-    /**
-     * @param the arguments as they were passed into main
-     */
-    public MockServer(String[] arguments) throws IOException ,
-            NumberFormatException
+    public MockServer()
     {
-        for(int i=0; i<arguments.length; i++)
+        System.out.println( "MockServer()");
+    }
+    public void execute() throws BuildException
+    {
+        // If we are closing then get the singleton and close it
+        if(isStop())
         {
-            if (arguments[i].equalsIgnoreCase("-p"))
+            System.out.println( "Closing the mockServer in ANT");
+            if(singleton!=null)
             {
-                String portString=arguments[++i];
-                try
-                {
-                    port=Integer.parseInt(portString);
-                    continue;
-                }
-                catch (NumberFormatException numberFormatException)
-                {
-                    printUsage( );
-                    throw new NumberFormatException("port is not an integer " +portString);
-                }
+                singleton.close();
             }
-            if (arguments[i].equals("-r"))
+            else
             {
-                responseFile=new File(arguments[++i]);
-                continue;
-            }
-
-            // check the responsefile is there
-            if (!this.responseFile.canRead( ))
-            {
-                throw new IOException("Can't read the response file <"
-                        +responseFile+">");
+                throw new RuntimeException( "Been told to close the MockServer but there isn't one");
             }
         }
+        else
+        {
+            if(singleton==null)
+            {
+                try
+                {
+                    singleton = new MockServer(responseFileName, port);
+                    Thread serverThread=new Thread(singleton);
+                    serverThread.start( );
+                }
+                catch(IOException exception)
+                {
+                    throw new BuildException("MockServer threw IOException: "+exception);
+                }
+            }
+            else
+            {
+                // This means we should reset the current singletons files
+                try
+                {
+                    System.out.println( "MockServer; resetting the response file");
+                    singleton.reset(responseFileName);
+                }
+                catch(IOException exception)
+                {
+                    //throw new 
+                }
+            }
+        }
+                
+    }
+
+    /**
+     * This method closes the current response file and opens up a new one
+     * @param responseFileName
+     */
+    private void reset(String responseFileName)throws IOException
+    {
+        // close all the connections we got from the client
+        super.close();
+        // unfortunately super.close is an unnatural act so we'll have to recreate the children vector
+        children = new Vector();
+        this.responseFileName = responseFileName;
+        // deal with the responsefile first
+        responseFile=new File(responseFileName);
+        // check the responsefile is there
+        if (!this.responseFile.canRead( ))
+        {
+            throw new IOException("Can't read the response file <"
+                    +responseFile+">");
+        }
+        
+        // now deal with the port and threads
+        // cache the response file (this is a necessary optimisation - if the file is big then the connection blows)
+        MockServerThread.cacheResponseFile(responseFile);
+    }
+
+    /**
+     * 
+     */
+    private MockServer( String responseFileName, int port) throws IOException
+    {
+        System.out.println( "MockServer(responseFile, port)");
+        this.port =port;
+        this.responseFileName = responseFileName;
+        // deal with the responsefile first
+        responseFile=new File(responseFileName);
+        // check the responsefile is there
+        if (!this.responseFile.canRead( ))
+        {
+            throw new IOException("Can't read the response file <"
+                    +responseFile+">");
+        }
+        
+        // now deal with the port and threads
         // cache the response file (this is a necessary optimisation - if the file is big then the connection blows)
         MockServerThread.cacheResponseFile(responseFile);
 
         // no point in going on if we can;'t create a server socket
-        serverSocket = TCPMonitor.getServerSocket(port);
-        serverSocket.setReuseAddress(true);
+        //serverSocket = TCPMonitor.getServerSocket(port);
     }
+    
 
 
     /*
@@ -131,22 +218,33 @@ public class MockServer extends ChildHandler implements Runnable
      */
     public void run( )
     {
-        System.out.println("MockServer listening on port: "+port);
+        System.out.println("MockServer listening on port: "+getPort());
         System.out.println("Returning Output file: "+responseFile);
+        System.out.println( "singleton="+singleton);
         Socket incoming=null;
+        try
+        {
+            serverSocket = TCPMonitor.getServerSocket(port);
+        }
+        catch(IOException exception)
+        {
+            exception.printStackTrace();
+            continueToRun=false;
+        }
 
         do
         {
             try
             {
                 System.out.println("Mockserver#run(): About to wait for incoming client request");
+                incoming=null;
                 incoming=serverSocket.accept( );
 
                 // Set keep-alive option to ensure that if server crashes we do not 
                 // hang waiting on TCP/IP response.
-                incoming.setKeepAlive(true);
+//                incoming.setKeepAlive(true);
                 
-                System.out.println("Mockserver#run(): Got a new client request");
+//                System.out.println("Mockserver#run(): Got a new client request");
             }
             catch (SocketTimeoutException socketTimeoutException)
             {
@@ -156,11 +254,18 @@ public class MockServer extends ChildHandler implements Runnable
             }
             catch (IOException exception)
             {
-                // uh oh !
-                System.err
-                        .println("IOException when accepting a client request on the serverSocket");
-                exception.printStackTrace(System.err);
-                continueToRun=false;
+                if(continueToRun)
+                {
+                    // uh oh !
+                    System.err
+                        	.println("IOException when accepting a client request on the serverSocket");
+                    exception.printStackTrace(System.err);
+                    continueToRun=false;
+                }
+                else
+                {
+                    // that's fine we're stopping
+                }
             }
             
             if (incoming!=null)
@@ -185,12 +290,13 @@ public class MockServer extends ChildHandler implements Runnable
             }
         }
         while (continueToRun);
-        
-        close();
     }
     
     protected void close()
     {
+        System.out.println( "Closing MockServer");
+        continueToRun=false;
+        singleton=null;
         // clean up
         try
         {
@@ -203,6 +309,55 @@ public class MockServer extends ChildHandler implements Runnable
         }
         
         super.close();
+    }
+
+    /**
+     * @param stop The stop to set.
+     */
+    public void setStop(boolean stop)
+    {
+        this.stop=stop;
+    }
+
+    /**
+     * @return Returns the stop.
+     */
+    public boolean isStop( )
+    {
+        return stop;
+    }
+
+    /**
+     * @param port The port to set.
+     */
+    public void setPort(int port)
+    {
+        this.port=port;
+    }
+
+    /**
+     * @return Returns the port.
+     */
+    public int getPort( )
+    {
+        return port;
+    }
+
+    /**
+     * @param responseFileName The responseFileName to set.
+     */
+    public void setResponseFileName(String responseFileName)
+    {
+        System.out.println( "Setting response file to "+responseFileName);
+        this.responseFileName=responseFileName;
+    }
+
+    /**
+     * @return Returns the responseFileName.
+     */
+    public String getResponseFileName( )
+    {
+        return responseFileName;
     }
 }
  

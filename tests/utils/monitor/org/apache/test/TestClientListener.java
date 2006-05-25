@@ -76,6 +76,8 @@ public class TestClientListener extends ChildHandler implements Runnable
         //        }
         while (stayAlive==true)
         {
+            // ensure clientSocket is an indicator of whether we got a new connection or not
+            clientSocket=null;
             try
             {
                 System.out
@@ -96,12 +98,15 @@ public class TestClientListener extends ChildHandler implements Runnable
             }
             catch (IOException exception)
             {
+                if(stayAlive)
+                {
                 System.err
                         .println("IOException when accepting a connection from the client: "
                                 +exception);
                 throw new RuntimeException(
                         "IOException when accepting a connection from the client: "
                                 +exception);
+                }
             }
 
             if (clientSocket!=null)
@@ -186,24 +191,24 @@ public class TestClientListener extends ChildHandler implements Runnable
                 }
             }
         }
-        // We've been told to stop
-        // Tell the Monitor to stop writing things out and to tidy itself up
-        // the tcpmon will call our close method in a second
-        TCPMonitor.getInstance().close( );
     }
     protected void close()
     {
+        // ensure that when we close the serversocket (which causes an ioexception) that we know it was us
+        stayAlive=false;
         try
         {
             if(serverSocket!=null)
             {
+                // closing the server socket will enable us to break out of the loop with an IOException
+                // but this will be abosrbed becuase we reminded ourselves that we are closing
                 serverSocket.close();
             }
         }
         catch(IOException exception)
         {
             // swallow exceptions on close
-            // exception.printStackTrace(System.err);
+            exception.printStackTrace(System.err);
         }
         super.close();
     }

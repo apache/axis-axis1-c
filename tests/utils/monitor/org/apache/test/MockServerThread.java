@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
-import java.net.SocketException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -35,12 +34,15 @@ import java.util.Date;
  * This class is responsible for handling the socket from the client.
  */
 public class MockServerThread extends ChildHandler implements Runnable
-{
+{    
+    public static final String STOPMOCKSERVER_STRING ="STOPMOCKSERVER";
+
     // NOTE: We read in this string plus two bytes (the end of the request)
     private static String   ENVELOPE_TAG    ="</SOAP-ENV:Envelope>";
     private static String   MIME_BOUNDARY   ="MIME_BOUNDARY";
 
     private static int      CHARBUFFER_SIZE =32768; // 32K
+    private boolean continueToRun;
 
     // Only store the socket so we can close it
     private Socket socket;
@@ -61,7 +63,7 @@ public class MockServerThread extends ChildHandler implements Runnable
         inputStream = null;
         outputStream = null;
         this.socket = socket; 
-        setSocketTimeouts();
+//        setSocketTimeouts();
         
         try
         {
@@ -99,6 +101,9 @@ public class MockServerThread extends ChildHandler implements Runnable
     }
 
     /**
+     * NOTE: THIS METHOD IS NOT REQUIRED ANYMORE. NOW THAT THE MOCKSERVER IS AN ANTTASK
+     * THE ANTTASK AND EXECUTE METOHDS ARE USED. HOWEVER, SO AS NOT TO REWRITE THIS
+     * CLASS I LEFT THIS METHOD IN  - IT'S STILL CALLED BUT WILL NEVER FIND THE STRING.
      * This program is made to stop when it receives a specific stop message.
      * This method checks for that message and throws a StopRequestException if
      * it finds that it's been given it
@@ -108,18 +113,18 @@ public class MockServerThread extends ChildHandler implements Runnable
     {
         // Read in the first few bytes of the message to see if it's a stop
         // message
-        char[] charBuffer=new char[StopMockServer.STOPMOCKSERVER_STRING.length( )];
+        char[] charBuffer=new char[STOPMOCKSERVER_STRING.length( )];
         int totalBytesRead=0;
         String message="";
         int bytesRead=0;
         System.out.println("MockServerThread#run():About to wait for stop msg");
         System.out.println("----------------------------------MockServer Thread new Request------------------------");
 
-        while (totalBytesRead<StopMockServer.STOPMOCKSERVER_STRING.length( ))
+        while (totalBytesRead<STOPMOCKSERVER_STRING.length( ))
         {
             try
             {
-                bytesRead=inputStream.read(charBuffer, 0, StopMockServer.STOPMOCKSERVER_STRING.length( ));
+                bytesRead=inputStream.read(charBuffer, 0, STOPMOCKSERVER_STRING.length( ));
                 System.out.println("MockServerThread#run(): Got some bytes: " +bytesRead);
             }
             catch (IOException exception)
@@ -140,7 +145,7 @@ public class MockServerThread extends ChildHandler implements Runnable
             }
         }
 
-        if (message.equals(StopMockServer.STOPMOCKSERVER_STRING))
+        if (message.equals(STOPMOCKSERVER_STRING))
         {
             // we've been told to stop
             System.out.println("--------------------------------------------------------------------");
@@ -160,6 +165,7 @@ public class MockServerThread extends ChildHandler implements Runnable
      */
     public void run( )
     {
+        continueToRun=true;
         int bytesRead=0;
         char[] charBuffer=new char[CHARBUFFER_SIZE];
         try
@@ -241,6 +247,8 @@ public class MockServerThread extends ChildHandler implements Runnable
     public static void cacheResponseFile(File responseFile)
             throws FileNotFoundException, IOException
     {
+        // If we already have a set of responses then they will be cleared later on
+        
         // open the response file for reading in
         FileReader reader=new FileReader(responseFile);
         BufferedReader responseFileStream=new BufferedReader(reader);
@@ -347,6 +355,7 @@ public class MockServerThread extends ChildHandler implements Runnable
             responses[i - 1] = new Response( newResponse);
         }
         reader.close();
+        requests=0;
         System.out.println( "MockServer got " + (responses.length - 1) + " responses");
     }
    
@@ -362,6 +371,7 @@ public class MockServerThread extends ChildHandler implements Runnable
     {
         try
         {
+            closedConnection=true;
             socket.close();
         }
         catch(IOException exception)
@@ -398,11 +408,11 @@ public class MockServerThread extends ChildHandler implements Runnable
     {
         return responses;
     }
-    private void setSocketTimeouts() throws SocketException
-    {
-        socket.setKeepAlive(false);
-        socket.setReuseAddress(true);
-        socket.setSoLinger(false, 1);
-        
-    }
+//    private void setSocketTimeouts() throws SocketException
+//    {
+//        socket.setKeepAlive(false);
+//        socket.setReuseAddress(true);
+//        socket.setSoLinger(false, 1);
+//        
+//    }
 }
