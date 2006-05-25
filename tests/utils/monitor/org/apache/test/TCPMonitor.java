@@ -123,7 +123,7 @@ public class TCPMonitor extends ChildHandler
     /**
      * 
      */
-    private void flushAndCloseFiles( )
+    protected void flushAndCloseFiles( )
     {
         try
         {
@@ -342,15 +342,27 @@ public class TCPMonitor extends ChildHandler
         IOException exception=null;
         try
         {
-            requestFileWriter.flush( );
-            requestFileWriter.close( );
+            System.out.println( "Doing requestfile");
+            try
+            {
+                requestFileWriter.flush( );
+                requestFileWriter.close( );
+            }
+            catch(IOException exception2)
+            {
+                // ignore
+            }
 
-            responseFileWriter.flush( );
-            responseFileWriter.close( );
-        }
-        catch (IOException ioException)
-        {
-            exception=ioException;
+            System.out.println( "Doing responsefile");
+            try
+            {
+                responseFileWriter.flush( );
+                responseFileWriter.close( );
+            }
+            catch(IOException exception2)
+            {
+                // ignore
+            }
         }
         catch (NullPointerException nullPointerException)
         {
@@ -364,9 +376,9 @@ public class TCPMonitor extends ChildHandler
         {
             exception.printStackTrace(System.err);
         }
-        // System.out.println( "About to call super.close");
+//        System.out.println( "About to call super.close");
         super.close( );
-        // System.out.println( "called super.close");
+//        System.out.println( "called super.close");
         state=CLOSED_STATE;
     }
 
