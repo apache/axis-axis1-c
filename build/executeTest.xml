@@ -136,6 +136,7 @@
 	</target>
 
 	<target name="startMonitor" unless="test.nomonitor">
+		
 		<!--  if the mockserver is on then we want to forward to localhost -->
 
 		<if>
@@ -156,7 +157,14 @@
                  stdout/stderr directly since echoing the property on OS/400 results 
                  in garbage because data is in ASCII, not EBCDIC.
           -->
-		<java classname="org.apache.test.TCPMonitor" >
+		<antcall target="executeMonitor">
+			<param name="TCPMonitor.classname" value="org.apache.test.TCPMonitor"/>
+		</antcall>
+	</target>
+	<target name="executeMonitor">
+		<monitor requestFile="${test.directory}/tcpm.req" responseFile="${test.directory}/tcpm.res" listenerPort="${monitorPort}" servicePort="${testPort}" serviceHost="${actualTestHost}"/>
+		
+<!--		<java classname="${TCPMonitor.classname}" >
 			<arg line="-l ${monitorPort}" />
 			<arg line="-p ${testPort}" />
 			<arg line="-h ${actualTestHost}" />
@@ -167,6 +175,7 @@
 					location="${dir.obj}/test/monitor/monitor.jar" />
 			</classpath>
 		</java>
+		-->
 	</target>
 
 	<target name="startMockServer">
@@ -178,28 +187,11 @@
                  to stdout/stderr directly since echoing the property on OS/400 results 
                  in garbage because data is in ASCII, not EBCDIC.
           -->
-		<java classname="org.apache.test.MockServer">
-			<arg line="-p ${testPort}" /> 
-			<arg line="-r &quot;${response_expected.file}&quot;" />
-			<classpath>
-				<pathelement
-					location="${dir.obj}/test/monitor/monitor.jar" />
-			</classpath>
-		</java>
+		<mockServer port="${testPort}" responseFileName="${response_expected.file}"/>
 	</target>
 
 	<target name="stopMonitor" unless="test.nomonitor">
-		<!-- 
-		     Added fork="true" because on OS/400 this hangs without it.
-          -->
-		<java classname="org.apache.test.StopTCPMonitor" fork="true">
-			<arg line="-p ${monitorPort}" />
-			<arg line="-h localhost" />
-			<classpath>
-				<pathelement
-					location="${dir.obj}/test/monitor/monitor.jar" />
-			</classpath>
-		</java>
+		<monitor stop="true"/>
 	</target>
 
 	<target name="stopMockServer">
@@ -209,13 +201,7 @@
                  to stdout/stderr directly since echoing the property on OS/400 results in 
                  garbage because data is in ASCII, not EBCDIC.
           -->
-		<java classname="org.apache.test.StopMockServer" fork="true">
-			<arg line="-p ${testPort}" />
-			<classpath>
-				<pathelement
-					location="${dir.obj}/test/monitor/monitor.jar" />
-			</classpath>
-		</java>
+		<mockServer stop="true"/>
 	</target>
 
 
@@ -231,16 +217,15 @@
 		<trycatch>
 			<try>
 				<!-- if we are running in mockserver mode then we need to start the MockServer -->
+				<!-- if there is already an instance of the mockserver then this will reset it to use the new responsefile -->
 				<if>
 					<equals arg1="${mockServer}" arg2="true" />
 					<then>
 						<antcall target="startMockServer"
 							inheritall="true" />
-<!--						<property name="mockServerLine"
-							value="-s &quot;${response_expected.file}&quot;" />
--->
 					</then>
 				</if>
+
 
 				<antcall target="startMonitor" inheritall="true" />
 				<echo message="Running Test ${test.name} ${clientArgs}" />
@@ -254,21 +239,7 @@
 						<property name="test.timeout" value="120000"/>
 					</then>
 				</if>
-				<exec dir="${test.directory}"
-					executable="${test.directory}/${test.name}"
-					output="${results.stdout}" error="${results.stderr}"
-					failifexecutionfails="false" timeout="${test.timeout}">
-					<arg line="${clientArgs}" />
-					<env key="PATH"
-						path="${java.library.path}${path.separator}${dir.libraries}${path.separator}${dir.xmlParser}${path.separator}${HTTP.SSLChannel.eay.dir}${path.separator}${test.directory}" />
-					<env key="LD_LIBRARY_PATH"
-						path="${dir.libraries}${path.separator}${dir.xmlParser}${path.separator}${HTTP.SSLChannel.dir}/lib${path.separator}${test.directory}" />
-					<env key="LIBPATH"
-						path="${dir.libraries}${path.separator}${dir.xmlParser}${path.separator}${HTTP.SSLChannel.dir}/lib${path.separator}${HTTP.SSLChannel.dir}/lib64${path.separator}${test.directory}" />
-                    <env key="SHLIB_PATH"
-                        path="${dir.libraries}${path.separator}${dir.xmlParser}${path.separator}${HTTP.SSLChannel.dir}/lib${path.separator}${HTTP.SSLChannel.dir}/lib64${path.separator}${test.directory}" />
-					<env key="AXISCPP_DEPLOY" value="${axiscpp_deploy}" />
-				</exec>
+				<antcall target="callClient"/>
 
 				<stopwatch name="${test.name}.timer" action="total" />
 				<propertycopy property="timer1"
@@ -278,16 +249,7 @@
 				<echo
 					message="${test.name} - Execution Time - ${timer1}" />
 
-				<antcall target="stopMonitor" inheritall="true" />
-				<!-- if we are running in mockserver mode then we need to stop the MockServer -->
-				<if>
-					<equals arg1="${mockServer}" arg2="true" />
-					<then>
-						<antcall target="stopMockServer"
-							inheritall="true" />
-					</then>
-				</if>
-
+				<monitor flush="true"/>
 			</try>
 			<catch>
 				<echo
@@ -298,6 +260,24 @@
 				<sleep seconds="1" />
 			</finally>
 		</trycatch>
+	</target>
+	<target name="callClient">
+		<!-- %XML4C_HOME%\bin;%PACKAGE_BIN%;%XMS_BIN%;%MQ_HOME%\bin;%PATH%-->
+	<exec dir="${test.directory}"
+		executable="${test.directory}/${test.name}"
+		output="${results.stdout}" error="${results.stderr}"
+		failifexecutionfails="false" timeout="${test.timeout}">
+		<arg line="${clientArgs}" />
+		<env key="PATH"
+			path="&quot;${dir.xmlParser}${path.separator}${test.directory}${path.separator}${dir.libraries}${path.separator}${java.library.path}${path.separator}${HTTP.SSLChannel.eay.dir}&quot;" />
+		<env key="LD_LIBRARY_PATH"
+			path="${dir.libraries}${path.separator}${dir.xmlParser}${path.separator}${HTTP.SSLChannel.dir}/lib${path.separator}${test.directory}" />
+		<env key="LIBPATH"
+			path="${dir.libraries}${path.separator}${dir.xmlParser}${path.separator}${HTTP.SSLChannel.dir}/lib${path.separator}${HTTP.SSLChannel.dir}/lib64${path.separator}${test.directory}" />
+        <env key="SHLIB_PATH"
+            path="${dir.libraries}${path.separator}${dir.xmlParser}${path.separator}${HTTP.SSLChannel.dir}/lib${path.separator}${HTTP.SSLChannel.dir}/lib64${path.separator}${test.directory}" />
+		<env key="AXISCPP_DEPLOY" value="${axiscpp_deploy}" />
+	</exec>
 	</target>
 
 	<!--
@@ -326,7 +306,7 @@
 			<then>
 
 <!-- No Client Log, No SSL Library -->
-				<echo message="No Client log or SSL library."/>  
+				<echo message="No Client log or SSL library."/>
 				<exec executable="${dir.release}/bin/${axisConfigurationExecutableName}${executableSuffix}">
 					<arg line="Client"/>
                     <arg line="-acd  ${confFileDirectory}"/>
@@ -355,16 +335,17 @@
 				<echo message="Client log, but no SSL library."/>
 				<exec executable="${dir.release}/bin/${axisConfigurationExecutableName}${executableSuffix}">
 					<arg line="Client"/>
-                    <arg line="-acd ${confFileDirectory}"/>
-                    <arg line="-th  ${dir.libraries}/${libraryPrefix}${transportLibraryName}${librarySuffix}"/>
-                    <arg line="-c   ${dir.libraries}/${libraryPrefix}${HTTP.ChannelLibraryName}${librarySuffix}"/>
-                    <arg line="-x   ${dir.libraries}/${ClientParserLib}"/>
-                    <arg line="-cl  ${test.directory}/ClientLog.taw"/>
+                    <arg line="-acd &quot;${confFileDirectory}&quot;"/>
+                    <arg line="-th  &quot;${dir.libraries}/${libraryPrefix}${transportLibraryName}${librarySuffix}&quot;"/>
+                    <arg line="-c   &quot;${dir.libraries}/${libraryPrefix}${HTTP.ChannelLibraryName}${librarySuffix}&quot;"/>
+                    <arg line="-x   &quot;${dir.libraries}/${ClientParserLib}&quot;"/>
+                    <arg line="-cl  &quot;${test.directory}/ClientLog.taw&quot;"/>
                     <arg line="-so  &quot;${env.SSL_KEYS_HOME}/myKeyRing.kdb,axis4all,AXIS,NONE,05,NONE,false&quot;"/>
                     <arg line="-b   false"/>
                     <arg line="-pi  quiet"/>
                     <arg line="-qmf off"/>
 				</exec>
+				<echo message="CONFIG COMPLETE"/>
 			</then>
 		</if>
 
@@ -466,5 +447,11 @@ SecureInfo:${env.SSL_KEYS_HOME}/myKeyRing.kdb,axis4all,AXIS,NONE,05,NONE,false
 </echo>	
             </then>
         </if>
+	</target>
+	<target name="defineMonitor">
+		<taskdef name="monitor" classname="org.apache.test.TCPMonitor" classpath="${dir.obj}/test/monitor/monitor.jar;${ant.home}/lib/ant.jar"/>
+	</target>
+	<target name="defineMockServer">
+		<taskdef name="mockServer" classname="org.apache.test.MockServer" classpath="${dir.obj}/test/monitor/monitor.jar;${ant.home}/lib/ant.jar"/>
 	</target>
 </project>
