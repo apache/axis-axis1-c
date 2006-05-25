@@ -83,7 +83,7 @@ public class TCPMonitor extends ChildHandler
                 {
                     if (getInstance( )!=null)
                     {
-                        System.out.println( "Resetting requeest and responsefiles");
+                        System.out.println( "Resetting request and responsefiles");
                         getInstance( ).setRequestFile(requestFile);
                         getInstance( ).setResponseFile(responseFile);
                         try
@@ -163,7 +163,7 @@ public class TCPMonitor extends ChildHandler
         this.responseFile = responseFile;
         attachToFiles();
     }
-    private void attachToFiles()throws IOException
+    protected void attachToFiles()throws IOException
     {
         try
         {
