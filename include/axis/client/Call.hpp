@@ -1583,8 +1583,8 @@ public:
      * @param pName is a null terminated character string containing the response name.
      * @param pNamespace is a null terminated character string containing the
      * response namespace.
-     * @return The return value is either AXIS_SUCCESS or AXIS_FAIL depending
-     * if the name was found.
+     * @return The return value is a pointer to ISoapFault object if a fault exists, 
+     * or NULL if there is no fault.
      */
     void * AXISCALL checkFault( const AxisChar * pName,
                                 const AxisChar * pNamespace);
