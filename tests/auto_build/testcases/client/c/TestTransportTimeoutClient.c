@@ -20,7 +20,7 @@
 
 #include "Timeout.h"
 
-void myExceptionHandler(int errorCode, const char *errorString)
+void myExceptionHandler(int errorCode, const char *errorString, void *soapFault, void *faultDetail)
 {
     exceptionOccurred = C_TRUE;    
     printf("in AxisException block\n");

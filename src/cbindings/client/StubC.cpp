@@ -20,8 +20,6 @@
 #include <axis/client/Stub.hpp>
 #include <axis/AxisException.hpp>
 
-#include "../AxisObjectContainer.hpp"
-
 #include <axis/Axis.h>
 #include <axis/GDefine.h>
 #include <axis/AxisUserAPI.h>
@@ -51,16 +49,15 @@ AXISCHANDLE axiscStubCreate(const char * pcEndPointURI,
     try
     {
         StubC *stub = new StubC(pcEndPointURI, (AXIS_PROTOCOL_TYPE)eProtocol);
-        AxisObjectContainer *h = new AxisObjectContainer(stub);
-        return (AXISCHANDLE)h;
+        return (AXISCHANDLE)stub;
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
     return (AXISCHANDLE)NULL;
@@ -72,21 +69,19 @@ void axiscStubDestroy(AXISCHANDLE stub)
 	if ((AXISCHANDLE)NULL == stub)
 		return;
 			
-    AxisObjectContainer *h = (AxisObjectContainer *)stub;
-    StubC *s = (StubC*)h->_objHandle;
+    StubC *s = (StubC*)stub;
     
     try
     {
-        delete h;
         delete s;
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 }
 
@@ -94,9 +89,9 @@ AXISC_STORAGE_CLASS_INFO
 void axiscStubSetEndPoint(AXISCHANDLE stub, 
                       const char * pcEndPointURI) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)stub;
-    h->_exception.resetException();
-    Stub *s = (Stub*)h->_objHandle;
+    
+    
+    Stub *s = (Stub*)stub;
     
     try
     {
@@ -104,14 +99,14 @@ void axiscStubSetEndPoint(AXISCHANDLE stub,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 }
 
@@ -120,9 +115,9 @@ void axiscStubSetTransportProperty(AXISCHANDLE stub,
                                    const char * pcKey, 
                                    const char * pcValue) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)stub;
-    h->_exception.resetException();
-    Stub *s = (Stub*)h->_objHandle;
+    
+    
+    Stub *s = (Stub*)stub;
     
     try
     {
@@ -130,14 +125,14 @@ void axiscStubSetTransportProperty(AXISCHANDLE stub,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 }
 
@@ -146,9 +141,9 @@ const char * axiscStubGetTransportProperty(AXISCHANDLE stub,
                                            const char *key, 
                                            AxiscBool response) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)stub;
-    h->_exception.resetException();
-    Stub *s = (Stub*)h->_objHandle;
+    
+    
+    Stub *s = (Stub*)stub;
     
     try
     {
@@ -156,14 +151,14 @@ const char * axiscStubGetTransportProperty(AXISCHANDLE stub,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (const char *)NULL;
@@ -173,9 +168,9 @@ AXISC_STORAGE_CLASS_INFO
 const char * axiscStubGetFirstTransportPropertyKey(AXISCHANDLE stub, 
                                                AxiscBool response) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)stub;
-    h->_exception.resetException();
-    Stub *s = (Stub*)h->_objHandle;
+    
+    
+    Stub *s = (Stub*)stub;
     
     try
     {
@@ -183,14 +178,14 @@ const char * axiscStubGetFirstTransportPropertyKey(AXISCHANDLE stub,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
     return (const char *)NULL;
@@ -200,9 +195,9 @@ AXISC_STORAGE_CLASS_INFO
 const char * axiscStubGetNextTransportPropertyKey(AXISCHANDLE stub, 
                                               AxiscBool response) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)stub;
-    h->_exception.resetException();
-    Stub *s = (Stub*)h->_objHandle;
+    
+    
+    Stub *s = (Stub*)stub;
     
     try
     {
@@ -210,14 +205,14 @@ const char * axiscStubGetNextTransportPropertyKey(AXISCHANDLE stub,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (const char *)NULL;
@@ -227,9 +222,9 @@ AXISC_STORAGE_CLASS_INFO
 const char * axiscStubGetCurrentTransportPropertyKey(AXISCHANDLE stub, 
                                                  AxiscBool response) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)stub;
-    h->_exception.resetException();
-    Stub *s = (Stub*)h->_objHandle;
+    
+    
+    Stub *s = (Stub*)stub;
     
     try
     {
@@ -237,14 +232,14 @@ const char * axiscStubGetCurrentTransportPropertyKey(AXISCHANDLE stub,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (const char *)NULL;    
@@ -254,9 +249,9 @@ AXISC_STORAGE_CLASS_INFO
 const char * axiscStubGetCurrentTransportPropertyValue(AXISCHANDLE stub, 
                                                    AxiscBool response) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)stub;
-    h->_exception.resetException();
-    Stub *s = (Stub*)h->_objHandle;
+    
+    
+    Stub *s = (Stub*)stub;
 
     try
     {
@@ -264,14 +259,14 @@ const char * axiscStubGetCurrentTransportPropertyValue(AXISCHANDLE stub,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (const char *)NULL;    
@@ -281,9 +276,9 @@ AXISC_STORAGE_CLASS_INFO
 void axiscStubDeleteCurrentTransportProperty(AXISCHANDLE stub, 
                                          AxiscBool response) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)stub;
-    h->_exception.resetException();
-    Stub *s = (Stub*)h->_objHandle;
+    
+    
+    Stub *s = (Stub*)stub;
     
     try
     {
@@ -291,14 +286,14 @@ void axiscStubDeleteCurrentTransportProperty(AXISCHANDLE stub,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 }
 
@@ -307,9 +302,9 @@ void axiscStubDeleteTransportProperty(AXISCHANDLE stub,
                                   char * pcKey, 
                                   unsigned int uiOccurance) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)stub;
-    h->_exception.resetException();
-    Stub *s = (Stub*)h->_objHandle;
+    
+    
+    Stub *s = (Stub*)stub;
 
     try
     {
@@ -317,14 +312,14 @@ void axiscStubDeleteTransportProperty(AXISCHANDLE stub,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 }
 
@@ -334,9 +329,9 @@ void axiscStubSetHandlerProperty(AXISCHANDLE stub,
                                  void * value, 
                                  int len) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)stub;
-    h->_exception.resetException();
-    Stub *s = (Stub*)h->_objHandle;
+    
+    
+    Stub *s = (Stub*)stub;
 
     try
     {
@@ -344,14 +339,14 @@ void axiscStubSetHandlerProperty(AXISCHANDLE stub,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 }
 
@@ -361,9 +356,9 @@ AXISCHANDLE axiscStubCreateSOAPHeaderBlock(AXISCHANDLE stub,
                                        AxiscChar * pachUri, 
                                        AxiscChar * pachPrefix) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)stub;
-    h->_exception.resetException();
-    Stub *s = (Stub*)h->_objHandle;
+    
+    
+    Stub *s = (Stub*)stub;
     
     try
     {
@@ -374,14 +369,14 @@ AXISCHANDLE axiscStubCreateSOAPHeaderBlock(AXISCHANDLE stub,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (AXISCHANDLE)NULL;
@@ -390,9 +385,9 @@ AXISCHANDLE axiscStubCreateSOAPHeaderBlock(AXISCHANDLE stub,
 AXISC_STORAGE_CLASS_INFO 
 AXISCHANDLE axiscStubGetFirstSOAPHeaderBlock(AXISCHANDLE stub) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)stub;
-    h->_exception.resetException();
-    Stub *s = (Stub*)h->_objHandle;
+    
+    
+    Stub *s = (Stub*)stub;
     
     try
     {
@@ -400,14 +395,14 @@ AXISCHANDLE axiscStubGetFirstSOAPHeaderBlock(AXISCHANDLE stub)
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (AXISCHANDLE)NULL;    
@@ -416,9 +411,9 @@ AXISCHANDLE axiscStubGetFirstSOAPHeaderBlock(AXISCHANDLE stub)
 AXISC_STORAGE_CLASS_INFO 
 AXISCHANDLE axiscStubGetNextSOAPHeaderBlock(AXISCHANDLE stub) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)stub;
-    h->_exception.resetException();
-    Stub *s = (Stub*)h->_objHandle;
+    
+    
+    Stub *s = (Stub*)stub;
     
     try
     {
@@ -426,14 +421,14 @@ AXISCHANDLE axiscStubGetNextSOAPHeaderBlock(AXISCHANDLE stub)
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (AXISCHANDLE)NULL;    
@@ -442,9 +437,9 @@ AXISCHANDLE axiscStubGetNextSOAPHeaderBlock(AXISCHANDLE stub)
 AXISC_STORAGE_CLASS_INFO 
 AXISCHANDLE axiscStubGetCurrentSOAPHeaderBlock(AXISCHANDLE stub) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)stub;
-    h->_exception.resetException();
-    Stub *s = (Stub*)h->_objHandle;
+    
+    
+    Stub *s = (Stub*)stub;
     
     try
     {
@@ -452,14 +447,14 @@ AXISCHANDLE axiscStubGetCurrentSOAPHeaderBlock(AXISCHANDLE stub)
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (AXISCHANDLE)NULL;    
@@ -468,9 +463,9 @@ AXISCHANDLE axiscStubGetCurrentSOAPHeaderBlock(AXISCHANDLE stub)
 AXISC_STORAGE_CLASS_INFO 
 void axiscStubDeleteCurrentSOAPHeaderBlock(AXISCHANDLE stub) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)stub;
-    h->_exception.resetException();
-    Stub *s = (Stub*)h->_objHandle;
+    
+    
+    Stub *s = (Stub*)stub;
     
     try
     {
@@ -478,23 +473,23 @@ void axiscStubDeleteCurrentSOAPHeaderBlock(AXISCHANDLE stub)
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 }
 
 AXISC_STORAGE_CLASS_INFO 
 void axiscStubDeleteSOAPHeaderBlock(AXISCHANDLE stub, AXISCHANDLE pHeaderBlock) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)stub;
-    h->_exception.resetException();
-    Stub *s = (Stub*)h->_objHandle;
+    
+    
+    Stub *s = (Stub*)stub;
     
     try
     {
@@ -502,14 +497,14 @@ void axiscStubDeleteSOAPHeaderBlock(AXISCHANDLE stub, AXISCHANDLE pHeaderBlock)
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 }
 
@@ -518,9 +513,9 @@ void axiscStubSetProxy(AXISCHANDLE stub,
                        const char * pcProxyHost, 
                        unsigned int uiProxyPort) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)stub;
-    h->_exception.resetException();
-    Stub *s = (Stub*)h->_objHandle;
+    
+    
+    Stub *s = (Stub*)stub;
     
     try
     {
@@ -528,14 +523,14 @@ void axiscStubSetProxy(AXISCHANDLE stub,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 }
 
@@ -543,9 +538,9 @@ AXISC_STORAGE_CLASS_INFO
 void axiscStubSetTransportTimeout(AXISCHANDLE stub, 
                               long lSeconds) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)stub;
-    h->_exception.resetException();
-    Stub *s = (Stub*)h->_objHandle;
+    
+    
+    Stub *s = (Stub*)stub;
     
     try
     {
@@ -553,23 +548,23 @@ void axiscStubSetTransportTimeout(AXISCHANDLE stub,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 }
 
 AXISC_STORAGE_CLASS_INFO 
 int axiscStubGetStatus(AXISCHANDLE stub) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)stub;
-    h->_exception.resetException();
-    Stub *s = (Stub*)h->_objHandle;
+    
+    
+    Stub *s = (Stub*)stub;
     
     try
     {
@@ -577,14 +572,14 @@ int axiscStubGetStatus(AXISCHANDLE stub)
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return -1;
@@ -594,9 +589,9 @@ AXISC_STORAGE_CLASS_INFO
 void axiscStubSetMaintainSession(AXISCHANDLE stub, 
                              AxiscBool bSession) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)stub;
-    h->_exception.resetException();
-    Stub *s = (Stub*)h->_objHandle;
+    
+    
+    Stub *s = (Stub*)stub;
     
     try
     {
@@ -604,14 +599,14 @@ void axiscStubSetMaintainSession(AXISCHANDLE stub,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 }
 
@@ -619,9 +614,9 @@ AXISC_STORAGE_CLASS_INFO
 void axiscStubSetTransportProtocol(AXISCHANDLE stub, 
                                AXISC_PROTOCOL_TYPE eProtocol) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)stub;
-    h->_exception.resetException();
-    Stub *s = (Stub*)h->_objHandle;
+    
+    
+    Stub *s = (Stub*)stub;
     
     try
     {
@@ -629,23 +624,23 @@ void axiscStubSetTransportProtocol(AXISCHANDLE stub,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 }
 
 AXISC_STORAGE_CLASS_INFO 
 AXISC_PROTOCOL_TYPE axiscStubGetTransportProtocol(AXISCHANDLE stub) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)stub;
-    h->_exception.resetException();
-    Stub *s = (Stub*)h->_objHandle;
+    
+    
+    Stub *s = (Stub*)stub;
     
     try
     {
@@ -653,14 +648,14 @@ AXISC_PROTOCOL_TYPE axiscStubGetTransportProtocol(AXISCHANDLE stub)
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
     return (AXISC_PROTOCOL_TYPE)-1;
@@ -669,26 +664,26 @@ AXISC_PROTOCOL_TYPE axiscStubGetTransportProtocol(AXISCHANDLE stub)
 AXISC_STORAGE_CLASS_INFO 
 AXISCHANDLE axiscStubGetCall(AXISCHANDLE stub) 
 { 
-    AxisObjectContainer *h = (AxisObjectContainer *)stub;
-    h->_exception.resetException();
-    StubC *s = (StubC*)h->_objHandle;
+    
+    
+    StubC *s = (StubC*)stub;
     
     try
     {
-        AxisObjectContainer *newH = new AxisObjectContainer(s->getCallStubC());
-
-        return (AXISCHANDLE)newH;
+        Call *c = s->getCallStubC();
+        c->setCStub(s);
+        return (AXISCHANDLE)c;
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (AXISCHANDLE)NULL;    
@@ -697,9 +692,9 @@ AXISCHANDLE axiscStubGetCall(AXISCHANDLE stub)
 AXISC_STORAGE_CLASS_INFO 
 void axiscStubApplyUserPreferences(AXISCHANDLE stub) 
 { 
-    AxisObjectContainer *h = (AxisObjectContainer *)stub;
-    h->_exception.resetException();
-    StubC *s = (StubC*)h->_objHandle;
+    
+    
+    StubC *s = (StubC*)stub;
     
     try
     {
@@ -707,22 +702,22 @@ void axiscStubApplyUserPreferences(AXISCHANDLE stub)
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 }
 AXISC_STORAGE_CLASS_INFO 
 void axiscStubIncludeSecure(AXISCHANDLE stub)
 { 
-    AxisObjectContainer *h = (AxisObjectContainer *)stub;
-    h->_exception.resetException();
-    StubC *s = (StubC*)h->_objHandle;
+    
+    
+    StubC *s = (StubC*)stub;
     
     try
     {
@@ -730,23 +725,23 @@ void axiscStubIncludeSecure(AXISCHANDLE stub)
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 }
 
 AXISC_STORAGE_CLASS_INFO 
 void axiscStubSetSOAPHeaders(AXISCHANDLE stub) 
 { 
-    AxisObjectContainer *h = (AxisObjectContainer *)stub;
-    h->_exception.resetException();
-    StubC *s = (StubC*)h->_objHandle;
+    
+    
+    StubC *s = (StubC*)stub;
     
     try
     {
@@ -754,14 +749,14 @@ void axiscStubSetSOAPHeaders(AXISCHANDLE stub)
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 }
 
@@ -771,9 +766,9 @@ void axiscStubSetSecure(AXISCHANDLE stub,
                         char * pszArguments, 
                         ... )
 { 
-    AxisObjectContainer *h = (AxisObjectContainer *)stub;
-    h->_exception.resetException();
-    StubC *s = (StubC*)h->_objHandle;
+    
+    
+    StubC *s = (StubC*)stub;
     
     try
     {
@@ -785,14 +780,14 @@ void axiscStubSetSecure(AXISCHANDLE stub,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 }
 

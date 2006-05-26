@@ -42,7 +42,7 @@ AXIS_CPP_NAMESPACE_USE
 
 Call::Call ()
 :m_pcEndPointUri(NULL), m_strProxyHost(""), m_uiProxyPort(0), m_bUseProxy(false),
-m_bCallInitialized(false), m_pContentIdSet(NULL)
+m_bCallInitialized(false), m_pContentIdSet(NULL), m_pStub(NULL), m_pExceptionHandler(NULL)
 {
     m_pAxisEngine = NULL;
     m_pIWSSZ = NULL;

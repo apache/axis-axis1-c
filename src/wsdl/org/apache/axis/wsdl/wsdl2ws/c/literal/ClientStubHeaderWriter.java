@@ -61,7 +61,7 @@ public class ClientStubHeaderWriter
             writer.write("extern AXISCHANDLE get_" + classname + "_stub(const char* pchEndPointUri);\n");
             writer.write("extern void destroy_" + classname + "_stub(AXISCHANDLE pStub);\n");
             writer.write("extern int get_" + classname + "_Status(AXISCHANDLE pStub);\n");
-
+            writer.write("extern void set_" + classname + "_ExceptionHandler(AXISCHANDLE pStub, AXIS_EXCEPTION_HANDLER_FUNCT fp);\n");
             writer.write("\n");
             writer.write("/* ********************************************************************* */\n");
             writer.write("/* --- Functions relating to web service methods                     --- */\n");

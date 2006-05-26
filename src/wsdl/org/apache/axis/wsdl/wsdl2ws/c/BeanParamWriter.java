@@ -444,10 +444,48 @@ public class BeanParamWriter extends ParamCFileWriter
         for (int i = 0; i < attribs.length; i++)
         {       
             //if the attribute is a 'choice' construct we have to peek and make
-            // the choice - TODO
+            // the choice
 
+            if (attribs[i].getChoiceElement())
+            {
+                if (!peekCalled)
+                {
+                    writer.write("\tconst char* choiceName=axiscSoapDeSerializerPeekNextElementName(pDZ);\n");
+                    peekCalled = true;
+                }
+
+                if (!firstIfWritten)
+                {
+                    writer.write("\tif");
+                    firstIfWritten = true;
+                } 
+                else
+                    writer.write("\telse if");
+
+                writer.write("(strcmp(choiceName,\""
+                        + attribs[i].getElementNameAsString() + "\")==0)\n\t{\n\t");
+            }
+            
             //if the attribute is a 'all' construct we have to check Min
-            // occures TODO
+            // occures
+            if (attribs[i].getAllElement())
+                if (attribs[i].getMinOccurs() == 0)
+                {
+                    if (!foundAll)
+                    {
+                        writer.write("\tconst char* allName = NULL;\n");
+                        writer.write("\tAxiscBool peekCalled = xsdc_boolean_false;\n");
+                        foundAll = true;
+                    }
+
+                    writer.write("\n\tif(!peekCalled)\n\t{\n\t");
+                    writer.write("\tallName=axiscSoapDeSerializerPeekNextElementName(pDZ);\n");
+                    writer.write("\t\tpeekCalled = xsdc_boolean_true;\n");
+                    writer.write("\t}\n");
+                    writer.write("\tif(strcmp(allName,\""
+                            + attribs[i].getParamNameAsMember() + "\")==0)\n\t{\n\t");
+                    writer.write("\tpeekCalled = xsdc_boolean_false;\n\t");
+                }
             
             if (attribs[i].isAnyType())
             {

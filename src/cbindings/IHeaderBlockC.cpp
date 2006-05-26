@@ -44,11 +44,11 @@ AXISCHANDLE axiscHeaderBlockCreateNamespaceDeclINamespace(AXISCHANDLE headerBloc
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
     return (AXISCHANDLE)NULL;
@@ -65,11 +65,11 @@ AXISCHANDLE axiscHeaderBlockGetFirstChildBasicNode(AXISCHANDLE headerBlock)
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
     return (AXISCHANDLE)NULL;
@@ -86,11 +86,11 @@ int axiscHeaderBlockGetNoOfChildren(AXISCHANDLE headerBlock)
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
     return -1;
@@ -116,11 +116,11 @@ AXISCHANDLE axiscHeaderBlockCreateChildBasicNode(AXISCHANDLE headerBlock,
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
     return (AXISCHANDLE)NULL;
@@ -144,11 +144,11 @@ AXISCHANDLE axiscHeaderBlockCreateImmediateChildBasicNode(AXISCHANDLE headerBloc
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
     return (AXISCHANDLE)NULL;
@@ -168,11 +168,11 @@ AXISCHANDLE axiscHeaderBlockCreateStdAttribute(AXISCHANDLE headerBlock,
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (AXISCHANDLE)NULL;
@@ -196,11 +196,11 @@ AXISCHANDLE axiscHeaderBlockCreateAttribute(AXISCHANDLE headerBlock,
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (AXISCHANDLE)NULL;
@@ -219,11 +219,11 @@ const AxiscChar * axiscHeaderBlockGetAttributeValue(AXISCHANDLE headerBlock,
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (const AxiscChar *)NULL;
@@ -240,11 +240,11 @@ AXISCHANDLE axiscHeaderBlockGetLastChildBasicNode(AXISCHANDLE headerBlock)
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (AXISCHANDLE)NULL;
@@ -262,11 +262,11 @@ AXISCHANDLE axiscHeaderBlockGetChildBasicNode(AXISCHANDLE headerBlock,
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (AXISCHANDLE)NULL;
@@ -284,11 +284,11 @@ int axiscHeaderBlockAddChild(AXISCHANDLE headerBlock,
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
     return AXISC_FAIL;
@@ -306,11 +306,11 @@ int axiscHeaderBlockSetLocalName(AXISCHANDLE headerBlock,
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return AXISC_FAIL;
@@ -327,11 +327,11 @@ const AxiscChar * axiscHeaderBlockGetLocalName(AXISCHANDLE headerBlock)
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (const AxiscChar *)NULL;
@@ -349,11 +349,11 @@ int axiscHeaderBlockSetURI(AXISCHANDLE headerBlock,
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
     return AXISC_FAIL;
@@ -371,11 +371,11 @@ int axiscHeaderBlockSetPrefix(AXISCHANDLE headerBlock,
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return AXISC_FAIL;
@@ -392,11 +392,11 @@ AXISCHANDLE axiscHeaderBlockCloneHeaderBlock(AXISCHANDLE headerBlock)
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (AXISCHANDLE)NULL;
@@ -413,11 +413,11 @@ void axiscHeaderBlockDestroy(AXISCHANDLE headerBlock)
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 }
 

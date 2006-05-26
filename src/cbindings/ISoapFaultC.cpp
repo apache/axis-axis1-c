@@ -39,11 +39,11 @@ void axiscSoapFaultDestroy(AXISCHANDLE soapFault)
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 }
 
@@ -58,11 +58,11 @@ const AxiscChar* axiscSoapFaultGetCmplxFaultObjectName(AXISCHANDLE soapFault)
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
     return (const AxiscChar*)NULL;
@@ -84,11 +84,11 @@ void * axiscSoapFaultGetCmplxFaultObject(AXISCHANDLE soapFault,
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
     return (void *)NULL;
@@ -105,11 +105,11 @@ const AxiscChar* axiscSoapFaultGetSimpleFaultDetail(AXISCHANDLE soapFault)
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (const AxiscChar*)NULL;    
@@ -126,11 +126,11 @@ const AxiscChar* axiscSoapFaultGetFaultcode(AXISCHANDLE soapFault)
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (const AxiscChar*)NULL;    
@@ -147,11 +147,11 @@ const AxiscChar* axiscSoapFaultGetFaultstring(AXISCHANDLE soapFault)
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (const AxiscChar*)NULL;    
@@ -168,11 +168,11 @@ const AxiscChar* axiscSoapFaultGetFaultactor(AXISCHANDLE soapFault)
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (const AxiscChar*)NULL;    
@@ -190,11 +190,11 @@ int axiscSoapFaultSetFaultcode(AXISCHANDLE soapFault,
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
     return AXISC_FAIL;
@@ -212,11 +212,11 @@ int axiscSoapFaultSetFaultstring(AXISCHANDLE soapFault,
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return AXISC_FAIL;
@@ -234,11 +234,11 @@ int axiscSoapFaultSetFaultactor(AXISCHANDLE soapFault,
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return AXISC_FAIL;
@@ -256,11 +256,11 @@ int axiscSoapFaultSetFaultDetail(AXISCHANDLE soapFault,
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return AXISC_FAIL;
@@ -278,11 +278,11 @@ int axiscSoapFaultSetCmplxFaultObject(AXISCHANDLE soapFault,
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return AXISC_FAIL;

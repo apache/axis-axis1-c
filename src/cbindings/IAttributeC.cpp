@@ -39,11 +39,11 @@ void axiscAttributeDestroy(AXISCHANDLE attribute)
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 }
 
@@ -59,11 +59,11 @@ int axiscAttributeSetValue(AXISCHANDLE attribute,
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
  
     return AXISC_FAIL;
@@ -81,11 +81,11 @@ int axiscAttributeSetURI(AXISCHANDLE attribute,
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
     return AXISC_FAIL;
@@ -104,11 +104,11 @@ int axiscAttributeSetPrefix(AXISCHANDLE attribute,
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
     return AXISC_FAIL;
@@ -126,11 +126,11 @@ int axiscAttributeSetLocalName(AXISCHANDLE attribute,
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
     return AXISC_FAIL;
@@ -147,11 +147,11 @@ const AxiscChar * axiscAttributeGetValue(AXISCHANDLE attribute)
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
     return (const AxiscChar *)NULL;
@@ -168,11 +168,11 @@ const AxiscChar * axiscAttributeGetURI(AXISCHANDLE attribute)
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (const AxiscChar *)NULL;
@@ -189,11 +189,11 @@ const AxiscChar * axiscAttributeGetPrefix(AXISCHANDLE attribute)
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (const AxiscChar *)NULL;    
@@ -210,11 +210,11 @@ const AxiscChar * axiscAttributeGetLocalName(AXISCHANDLE attribute)
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (const AxiscChar *)NULL;    

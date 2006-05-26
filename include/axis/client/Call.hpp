@@ -1680,6 +1680,33 @@ public:
      * @return Pointer to an ISoapAttachment object.
      */
     ISoapAttachment * createSoapAttachment();
+    
+    /** 
+     * Set C-binding stub pointer associated with Call object. 
+     * This function was added in support of the c-Binding implementation.  
+     */
+     void setCStub(void *pStub) { m_pStub = pStub; }
+     
+    /** 
+     * Get C-binding stub pointer. 
+     * This function was added in support of the c-Binding implementation.  
+     */     
+     void *getCStub() { return m_pStub; }
+     
+    /** 
+     * Set pointer to exception handler function for call object. 
+     * This function was added in support of the c-Binding implementation.  
+     */
+     void setCExceptionHandler(void *pExceptionHandler) 
+     { 
+        m_pExceptionHandler = pExceptionHandler; 
+     }
+     
+    /** 
+     * Get pointer to exception handling function for call object. 
+     * This function was added in support of the c-Binding implementation.
+     */     
+     void *getCExceptionHandler() { return m_pExceptionHandler; }
 
 private:
     void closeConnection();
@@ -1736,6 +1763,16 @@ private:
     char* m_pchSessionID;
 
     ContentIdSet *m_pContentIdSet;
+    
+    /**
+     * following is for C-binding support.
+     */
+    void * m_pStub;
+    
+    /**
+     * Following is for C-binding support. Pointer to exception handler function.
+     */
+    void * m_pExceptionHandler;    
 };
 AXIS_CPP_NAMESPACE_END
 

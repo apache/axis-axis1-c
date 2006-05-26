@@ -44,12 +44,12 @@ int axiscAxisInitialize(AxiscBool bIsServer)
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
         rc = AXISC_FAIL;    
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
         rc = AXISC_FAIL;
     }
     
@@ -67,12 +67,12 @@ int axiscAxisTerminate()
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
         rc = AXISC_FAIL;    
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
         rc = AXISC_FAIL;
     }
     
@@ -195,12 +195,12 @@ int axiscAxisDelete(void * pValue,
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
         rc = AXISC_FAIL;    
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
         rc = AXISC_FAIL;
     }    
     
@@ -415,7 +415,7 @@ void *axiscAxisNew(AXISC_XSDTYPE type, int size)
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }    
     
     return retVal;
@@ -429,10 +429,13 @@ void axiscAxisRegisterExceptionHandler( AXIS_EXCEPTION_HANDLER_FUNCT fp )
 
 
 AXISC_STORAGE_CLASS_INFO 
-void axiscAxisInvokeExceptionHandler(int errorCode, const char *errorString)
+void axiscAxisInvokeExceptionHandler(int errorCode, 
+                                     const char *errorString, 
+                                     AXISCHANDLE pSoapFault, 
+                                     void *faultDetail)
 {
     if (global_exceptionHandler)
-        global_exceptionHandler(errorCode, errorString);
+        global_exceptionHandler(errorCode, errorString, pSoapFault, faultDetail);
     else
         std::cerr <<  "AXIS EXCEPTION: (" << errorCode << ") " << errorString << std::endl;
 }

@@ -587,6 +587,21 @@ class STORAGE_CLASS_INFO Stub
      */
     void AXISCALL SetSecure( char *pszArguments, va_list args);
 
+    /** 
+     * Set pointer to exception handler function for stub object. 
+     * This function was added in support of the c-Binding implementation.  
+     */
+     void setCExceptionHandler(void *pExceptionHandler) 
+     { 
+        m_pExceptionHandler = pExceptionHandler; 
+     }
+     
+    /** 
+     * Get pointer to exception handling function for call object. 
+     * This function was added in support of the c-Binding implementation.
+     */     
+     void *getCExceptionHandler() { return m_pExceptionHandler; }
+
   protected:
   /**
     * Apply user set preferences to each call made on the Stub object.
@@ -669,6 +684,11 @@ private:
      * SSL configuration parameters
      */
     std::string m_sArguments[8];
+    
+    /**
+     * Following is for C-binding support. Pointer to exception handler function.
+     */
+    void * m_pExceptionHandler;        
 };
 
 AXIS_CPP_NAMESPACE_END

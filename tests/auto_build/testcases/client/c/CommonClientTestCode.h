@@ -146,7 +146,7 @@ char * asciiToStringOfLength( char * pString, int iLength)
 #endif
 
 static C_BOOL exceptionOccurred = C_FALSE;
-void exceptionHandler(int errorCode, const char *errorString)
+void exceptionHandler(int errorCode, const char *errorString, void *pSoapFault, void *pSoapFaultDetail)
 {
     exceptionOccurred = C_TRUE;    
     printf("AxisException : %s\n", errorString);

@@ -35,7 +35,8 @@ AXIS_CPP_NAMESPACE_USE
 m_pcUsername (NULL),
 m_pcPassword (NULL),
 m_proxyUsername (NULL),
-m_proxyPassword (NULL)
+m_proxyPassword (NULL), 
+m_pExceptionHandler(NULL)
 {
     m_pCall = new Call ();
     m_pCall->setProtocol (eProtocol);

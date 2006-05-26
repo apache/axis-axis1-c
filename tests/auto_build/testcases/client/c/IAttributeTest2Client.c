@@ -26,7 +26,7 @@
 #include "CommonClientTestCode.h"
 #include "Calculator.h"
 
-void myExceptionHandler(int errorCode, const char *errorString)
+void myExceptionHandler(int errorCode, const char *errorString, void *soapFault, void *faultDetail)
 {
     exceptionOccurred = C_TRUE;    
     printf("Exception : %s\n", errorString);

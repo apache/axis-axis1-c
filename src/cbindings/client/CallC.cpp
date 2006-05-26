@@ -18,7 +18,6 @@
 #include <axis/client/Call.hpp>
 #include <axis/AxisException.hpp>
 
-#include "../AxisObjectContainer.hpp"
 #include "../AxisObjectConverter.hpp"
 
 #include <axis/Axis.h>
@@ -33,22 +32,35 @@ AXIS_CPP_NAMESPACE_USE
 
 extern "C" {
 
+typedef void (* AXIS_METHOD_EXCEPTION_HANDLER_FUNCT)(AXISCHANDLE c, int exceptionCode, const char *exceptionString);
+
+
+static void processException(Call *c, AxisException& e)
+{
+    AXIS_METHOD_EXCEPTION_HANDLER_FUNCT mfp = (AXIS_METHOD_EXCEPTION_HANDLER_FUNCT)c->getCExceptionHandler();
+    
+    if (mfp)
+       mfp(c, e.getExceptionCode(), e.what());
+    else
+       axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+}
+
+
 AXISC_STORAGE_CLASS_INFO 
 AXISCHANDLE axiscCallCreate() 
 {
     try
     {
         Call *c = new Call();
-        AxisObjectContainer *h = new AxisObjectContainer(c);
-        return (AXISCHANDLE)h;
+        return (AXISCHANDLE)c;
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (AXISCHANDLE)NULL;
@@ -60,21 +72,19 @@ void axiscCallDestroy(AXISCHANDLE call)
     if ((AXISCHANDLE)NULL == call)
         return;
 
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    Call *c = (Call*)h->_objHandle;
+    Call *c = (Call*)call;
     
     try
     {
         delete c;
-        delete h;
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        processException(c, e);
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 }
 
@@ -82,9 +92,9 @@ AXISC_STORAGE_CLASS_INFO
 void axiscCallSetSOAPVersion(AXISCHANDLE call, 
                              AXISC_SOAP_VERSION version) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -92,14 +102,14 @@ void axiscCallSetSOAPVersion(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 }
 
@@ -108,9 +118,9 @@ int axiscCallSetTransportProperty(AXISCHANDLE call,
                                   AXISC_TRANSPORT_INFORMATION_TYPE type, 
                                   const char * value) 
 {   
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -118,14 +128,14 @@ int axiscCallSetTransportProperty(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
     return -1;
@@ -136,9 +146,9 @@ const char * axiscCallGetTransportProperty(AXISCHANDLE call,
                                            const char *key, 
                                            AxiscBool response) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -146,14 +156,14 @@ const char * axiscCallGetTransportProperty(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
     return (char *)NULL;
@@ -165,9 +175,9 @@ int axiscCallSetHandlerProperty(AXISCHANDLE call,
                                 void * value, 
                                 int len) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -175,14 +185,14 @@ int axiscCallSetHandlerProperty(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
     return -1;
@@ -192,9 +202,9 @@ AXISC_STORAGE_CLASS_INFO
 int axiscCallSetProtocol(AXISCHANDLE call, 
                          AXISC_PROTOCOL_TYPE protocol) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -202,14 +212,14 @@ int axiscCallSetProtocol(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return -1;
@@ -218,9 +228,9 @@ int axiscCallSetProtocol(AXISCHANDLE call,
 AXISC_STORAGE_CLASS_INFO 
 AXISC_PROTOCOL_TYPE axiscCallGetProtocol(AXISCHANDLE call) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -228,14 +238,14 @@ AXISC_PROTOCOL_TYPE axiscCallGetProtocol(AXISCHANDLE call)
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
     return (AXISC_PROTOCOL_TYPE)-1;
@@ -244,9 +254,9 @@ AXISC_PROTOCOL_TYPE axiscCallGetProtocol(AXISCHANDLE call)
 AXISC_STORAGE_CLASS_INFO 
 int axiscCallUnInitialize(AXISCHANDLE call) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -254,14 +264,14 @@ int axiscCallUnInitialize(AXISCHANDLE call)
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
     return -1;
@@ -271,9 +281,9 @@ AXISC_STORAGE_CLASS_INFO
 int axiscCallInitialize(AXISCHANDLE call, 
                         AXISC_PROVIDERTYPE nStyle) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -281,14 +291,14 @@ int axiscCallInitialize(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
     return -1;
@@ -297,9 +307,9 @@ int axiscCallInitialize(AXISCHANDLE call,
 AXISC_STORAGE_CLASS_INFO 
 int axiscCallInvoke(AXISCHANDLE call) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -307,14 +317,14 @@ int axiscCallInvoke(AXISCHANDLE call)
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
     return -1;
@@ -328,9 +338,9 @@ void axiscCallAddCmplxParameter(AXISCHANDLE call,
                                 const AxiscChar * pName, 
                                 const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -338,14 +348,14 @@ void axiscCallAddCmplxParameter(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 }
 
@@ -357,9 +367,9 @@ void axiscCallAddCmplxArrayParameter(AXISCHANDLE call,
                                      const AxiscChar * pName, 
                                      const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -372,14 +382,14 @@ void axiscCallAddCmplxArrayParameter(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 }
 
@@ -389,9 +399,9 @@ void axiscCallAddBasicArrayParameter(AXISCHANDLE call,
                                      AXISC_XSDTYPE nType, 
                                      const AxiscChar * pName) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -404,14 +414,14 @@ void axiscCallAddBasicArrayParameter(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 }
 
@@ -421,9 +431,9 @@ void axiscCallAddParameter(AXISCHANDLE call,
                            const char * pchName, 
                            AXISC_XSDTYPE nType) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -431,14 +441,14 @@ void axiscCallAddParameter(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 }
 
@@ -448,9 +458,9 @@ AXISCHANDLE axiscCallCreateAttribute(AXISCHANDLE call,
 	                                 const AxiscChar * pPrefix, 
 	                                 const AxiscChar * pValue)
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -458,14 +468,14 @@ AXISCHANDLE axiscCallCreateAttribute(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (AXISCHANDLE)NULL;
@@ -476,9 +486,9 @@ void axiscCallSetOperation(AXISCHANDLE call,
                            const char * pchOperation, 
                            const char * pchNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -486,14 +496,14 @@ void axiscCallSetOperation(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 }
 
@@ -501,9 +511,9 @@ AXISC_STORAGE_CLASS_INFO
 int axiscCallSetEndpointURI(AXISCHANDLE call, 
                             const char * pchEndpointURI) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -511,14 +521,14 @@ int axiscCallSetEndpointURI(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
     return -1;
@@ -530,9 +540,9 @@ AXISCHANDLE axiscCallCreateHeaderBlock(AXISCHANDLE call,
                                        AxiscChar * pachUri, 
                                        AxiscChar * pachPrefix) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -540,14 +550,14 @@ AXISCHANDLE axiscCallCreateHeaderBlock(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
     return (AXISCHANDLE)NULL;
@@ -558,9 +568,9 @@ xsdc__int * axiscCallGetElementAsInt(AXISCHANDLE call,
                                      const AxiscChar * pName, 
                                      const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -568,14 +578,14 @@ xsdc__int * axiscCallGetElementAsInt(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
     return (xsdc__int *)NULL;
@@ -586,9 +596,9 @@ AXISC_STORAGE_CLASS_INFO
 int axiscCallGetFaultDetail(AXISCHANDLE call, 
                             char * * ppcDetail) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -596,14 +606,14 @@ int axiscCallGetFaultDetail(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
    
     return -1;
@@ -622,9 +632,9 @@ xsdc__boolean * axiscCallGetElementAsBoolean(AXISCHANDLE call,
                                              const AxiscChar * pName, 
                                              const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -632,14 +642,14 @@ xsdc__boolean * axiscCallGetElementAsBoolean(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__boolean *)NULL;
@@ -650,9 +660,9 @@ xsdc__unsignedInt * axiscCallGetElementAsUnsignedInt(AXISCHANDLE call,
                                                      const AxiscChar * pName, 
                                                      const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -660,14 +670,14 @@ xsdc__unsignedInt * axiscCallGetElementAsUnsignedInt(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__unsignedInt *)NULL;
@@ -678,9 +688,9 @@ xsdc__short * axiscCallGetElementAsShort(AXISCHANDLE call,
                                          const AxiscChar * pName, 
                                          const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -688,14 +698,14 @@ xsdc__short * axiscCallGetElementAsShort(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__short *)NULL;
@@ -706,9 +716,9 @@ xsdc__unsignedShort * axiscCallGetElementAsUnsignedShort(AXISCHANDLE call,
                                                          const AxiscChar * pName, 
                                                          const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -716,14 +726,14 @@ xsdc__unsignedShort * axiscCallGetElementAsUnsignedShort(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__unsignedShort *)NULL;
@@ -734,9 +744,9 @@ xsdc__byte * axiscCallGetElementAsByte(AXISCHANDLE call,
                                        const AxiscChar * pName, 
                                        const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -744,14 +754,14 @@ xsdc__byte * axiscCallGetElementAsByte(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__byte *)NULL;
@@ -762,9 +772,9 @@ xsdc__unsignedByte * axiscCallGetElementAsUnsignedByte(AXISCHANDLE call,
                                                        const AxiscChar * pName, 
                                                        const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -772,14 +782,14 @@ xsdc__unsignedByte * axiscCallGetElementAsUnsignedByte(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
     return (xsdc__unsignedByte *)NULL;
@@ -790,9 +800,9 @@ xsdc__long * axiscCallGetElementAsLong(AXISCHANDLE call,
                                        const AxiscChar * pName, 
                                        const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -800,14 +810,14 @@ xsdc__long * axiscCallGetElementAsLong(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__long *)NULL;
@@ -818,9 +828,9 @@ xsdc__integer * axiscCallGetElementAsInteger(AXISCHANDLE call,
                                              const AxiscChar * pName, 
                                              const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -828,14 +838,14 @@ xsdc__integer * axiscCallGetElementAsInteger(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__integer *)NULL;
@@ -846,9 +856,9 @@ xsdc__unsignedLong * axiscCallGetElementAsUnsignedLong(AXISCHANDLE call,
                                                        const AxiscChar * pName, 
                                                        const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -856,14 +866,14 @@ xsdc__unsignedLong * axiscCallGetElementAsUnsignedLong(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__unsignedLong *)NULL;
@@ -874,9 +884,9 @@ xsdc__float * axiscCallGetElementAsFloat(AXISCHANDLE call,
                                          const AxiscChar * pName, 
                                          const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -884,14 +894,14 @@ xsdc__float * axiscCallGetElementAsFloat(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__float *)NULL;
@@ -902,9 +912,9 @@ xsdc__double * axiscCallGetElementAsDouble(AXISCHANDLE call,
                                            const AxiscChar * pName, 
                                            const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -912,14 +922,14 @@ xsdc__double * axiscCallGetElementAsDouble(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__double *)NULL;
@@ -930,9 +940,9 @@ xsdc__decimal * axiscCallGetElementAsDecimal(AXISCHANDLE call,
                                              const AxiscChar * pName, 
                                              const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -940,14 +950,14 @@ xsdc__decimal * axiscCallGetElementAsDecimal(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__decimal *)NULL;
@@ -958,9 +968,9 @@ xsdc__string axiscCallGetElementAsString(AXISCHANDLE call,
                                          const AxiscChar * pName, 
                                          const AxiscChar * pNamespace)
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -968,14 +978,14 @@ xsdc__string axiscCallGetElementAsString(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__string)NULL;
@@ -986,9 +996,9 @@ xsdc__anyURI axiscCallGetElementAsAnyURI(AXISCHANDLE call,
                                          const AxiscChar * pName, 
                                          const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -996,14 +1006,14 @@ xsdc__anyURI axiscCallGetElementAsAnyURI(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
     return (xsdc__anyURI)NULL;
@@ -1014,9 +1024,9 @@ xsdc__QName axiscCallGetElementAsQName(AXISCHANDLE call,
                                        const AxiscChar * pName, 
                                        const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -1024,14 +1034,14 @@ xsdc__QName axiscCallGetElementAsQName(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__QName)NULL;
@@ -1042,9 +1052,9 @@ xsdc__hexBinary * axiscCallGetElementAsHexBinary(AXISCHANDLE call,
                                                  const AxiscChar * pName, 
                                                  const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -1054,14 +1064,14 @@ xsdc__hexBinary * axiscCallGetElementAsHexBinary(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__hexBinary *)NULL;
@@ -1072,9 +1082,9 @@ xsdc__base64Binary * axiscCallGetElementAsBase64Binary(AXISCHANDLE call,
                                                        const AxiscChar * pName, 
                                                        const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -1084,14 +1094,14 @@ xsdc__base64Binary * axiscCallGetElementAsBase64Binary(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__base64Binary *)NULL;
@@ -1102,9 +1112,9 @@ xsdc__dateTime * axiscCallGetElementAsDateTime(AXISCHANDLE call,
                                                const AxiscChar * pName, 
                                                const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -1112,14 +1122,14 @@ xsdc__dateTime * axiscCallGetElementAsDateTime(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__dateTime *)NULL;
@@ -1130,9 +1140,9 @@ xsdc__date * axiscCallGetElementAsDate(AXISCHANDLE call,
                                        const AxiscChar * pName, 
                                        const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -1140,14 +1150,14 @@ xsdc__date * axiscCallGetElementAsDate(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__date *)NULL;
@@ -1158,9 +1168,9 @@ xsdc__time * axiscCallGetElementAsTime(AXISCHANDLE call,
                                        const AxiscChar * pName, 
                                        const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -1168,14 +1178,14 @@ xsdc__time * axiscCallGetElementAsTime(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__time *)NULL;
@@ -1186,9 +1196,9 @@ xsdc__duration * axiscCallGetElementAsDuration(AXISCHANDLE call,
                                                const AxiscChar * pName, 
                                                const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -1196,14 +1206,14 @@ xsdc__duration * axiscCallGetElementAsDuration(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__duration *)NULL;
@@ -1216,9 +1226,9 @@ xsdc__gYearMonth * axiscCallGetElementAsGYearMonth(AXISCHANDLE call,
                                                    const AxiscChar * pName, 
                                                    const AxiscChar * pNamespace)
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -1226,14 +1236,14 @@ xsdc__gYearMonth * axiscCallGetElementAsGYearMonth(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__gYearMonth *)NULL;
@@ -1244,9 +1254,9 @@ xsdc__gYear * axiscCallGetElementAsGYear(AXISCHANDLE call,
                                          const AxiscChar * pName, 
                                          const AxiscChar * pNamespace)
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -1254,14 +1264,14 @@ xsdc__gYear * axiscCallGetElementAsGYear(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__gYear *)NULL;
@@ -1272,9 +1282,9 @@ xsdc__gMonthDay * axiscCallGetElementAsGMonthDay(AXISCHANDLE call,
                                                  const AxiscChar * pName, 
                                                  const AxiscChar * pNamespace)
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -1282,14 +1292,14 @@ xsdc__gMonthDay * axiscCallGetElementAsGMonthDay(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__gMonthDay *)NULL;
@@ -1300,9 +1310,9 @@ xsdc__gDay * axiscCallGetElementAsGDay(AXISCHANDLE call,
                                        const AxiscChar * pName,
                                        const AxiscChar * pNamespace)
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -1310,14 +1320,14 @@ xsdc__gDay * axiscCallGetElementAsGDay(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__gDay *)NULL;
@@ -1328,9 +1338,9 @@ xsdc__gMonth * axiscCallGetElementAsGMonth(AXISCHANDLE call,
                                            const AxiscChar * pName, 
                                            const AxiscChar * pNamespace)
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -1338,14 +1348,14 @@ xsdc__gMonth * axiscCallGetElementAsGMonth(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__gMonth *)NULL;
@@ -1356,9 +1366,9 @@ xsdc__nonPositiveInteger * axiscCallGetElementAsNonPositiveInteger(AXISCHANDLE c
                                                                    const AxiscChar * pName,
                                                                    const AxiscChar * pNamespace)
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -1366,14 +1376,14 @@ xsdc__nonPositiveInteger * axiscCallGetElementAsNonPositiveInteger(AXISCHANDLE c
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__nonPositiveInteger *)NULL;
@@ -1384,9 +1394,9 @@ xsdc__negativeInteger * axiscCallGetElementAsNegativeInteger(AXISCHANDLE call,
                                                              const AxiscChar * pName,
                                                              const AxiscChar * pNamespace)
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -1394,14 +1404,14 @@ xsdc__negativeInteger * axiscCallGetElementAsNegativeInteger(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__negativeInteger *)NULL;
@@ -1412,9 +1422,9 @@ xsdc__nonNegativeInteger * axiscCallGetElementAsNonNegativeInteger(AXISCHANDLE c
                                                                    const AxiscChar * pName,
                                                                    const AxiscChar * pNamespace)
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -1422,14 +1432,14 @@ xsdc__nonNegativeInteger * axiscCallGetElementAsNonNegativeInteger(AXISCHANDLE c
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__nonNegativeInteger *)NULL;
@@ -1440,9 +1450,9 @@ xsdc__positiveInteger * axiscCallGetElementAsPositiveInteger(AXISCHANDLE call,
                                                              const AxiscChar * pName, 
                                                              const AxiscChar * pNamespace)
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -1450,14 +1460,14 @@ xsdc__positiveInteger * axiscCallGetElementAsPositiveInteger(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__positiveInteger *)NULL;
@@ -1467,9 +1477,9 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__normalizedString axiscCallGetElementAsNormalizedString(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -1477,14 +1487,14 @@ xsdc__normalizedString axiscCallGetElementAsNormalizedString(AXISCHANDLE call, c
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__normalizedString)NULL;
@@ -1494,9 +1504,9 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__token axiscCallGetElementAsToken(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -1504,14 +1514,14 @@ xsdc__token axiscCallGetElementAsToken(AXISCHANDLE call, const AxiscChar * pName
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__token)NULL;
@@ -1521,9 +1531,9 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__language axiscCallGetElementAsLanguage(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -1531,14 +1541,14 @@ xsdc__language axiscCallGetElementAsLanguage(AXISCHANDLE call, const AxiscChar *
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__language)NULL;
@@ -1548,9 +1558,9 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__Name axiscCallGetElementAsName(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -1558,14 +1568,14 @@ xsdc__Name axiscCallGetElementAsName(AXISCHANDLE call, const AxiscChar * pName,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__Name)NULL;
@@ -1575,9 +1585,9 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__NCName axiscCallGetElementAsNCName(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -1585,14 +1595,14 @@ xsdc__NCName axiscCallGetElementAsNCName(AXISCHANDLE call, const AxiscChar * pNa
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__NCName)NULL;
@@ -1602,9 +1612,9 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__ID axiscCallGetElementAsID(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -1612,14 +1622,14 @@ xsdc__ID axiscCallGetElementAsID(AXISCHANDLE call, const AxiscChar * pName,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__ID)NULL;
@@ -1629,9 +1639,9 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__IDREF axiscCallGetElementAsIDREF(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -1639,14 +1649,14 @@ xsdc__IDREF axiscCallGetElementAsIDREF(AXISCHANDLE call, const AxiscChar * pName
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__IDREF)NULL;
@@ -1656,9 +1666,9 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__IDREFS axiscCallGetElementAsIDREFS(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -1666,14 +1676,14 @@ xsdc__IDREFS axiscCallGetElementAsIDREFS(AXISCHANDLE call, const AxiscChar * pNa
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__IDREFS)NULL;
@@ -1683,9 +1693,9 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__ENTITY axiscCallGetElementAsENTITY(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -1693,14 +1703,14 @@ xsdc__ENTITY axiscCallGetElementAsENTITY(AXISCHANDLE call, const AxiscChar * pNa
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__ENTITY)NULL;
@@ -1710,9 +1720,9 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__ENTITIES axiscCallGetElementAsENTITIES(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -1720,14 +1730,14 @@ xsdc__ENTITIES axiscCallGetElementAsENTITIES(AXISCHANDLE call, const AxiscChar *
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__ENTITIES)NULL;
@@ -1737,9 +1747,9 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__NMTOKEN axiscCallGetElementAsNMTOKEN(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -1747,14 +1757,14 @@ xsdc__NMTOKEN axiscCallGetElementAsNMTOKEN(AXISCHANDLE call, const AxiscChar * p
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__NMTOKEN)NULL;
@@ -1764,9 +1774,9 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__NMTOKENS axiscCallGetElementAsNMTOKENS(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -1774,14 +1784,14 @@ xsdc__NMTOKENS axiscCallGetElementAsNMTOKENS(AXISCHANDLE call, const AxiscChar *
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__NMTOKENS)NULL;
@@ -1791,9 +1801,9 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__NOTATION axiscCallGetElementAsNOTATION(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -1801,14 +1811,14 @@ xsdc__NOTATION axiscCallGetElementAsNOTATION(AXISCHANDLE call, const AxiscChar *
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__NOTATION)NULL;
@@ -1831,9 +1841,9 @@ xsdc__int * axiscCallGetAttributeAsInt(AXISCHANDLE call,
                                        const AxiscChar * pName,
                                        const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -1841,14 +1851,14 @@ xsdc__int * axiscCallGetAttributeAsInt(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__int *)NULL;
@@ -1858,9 +1868,9 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__boolean * axiscCallGetAttributeAsBoolean(AXISCHANDLE call, 
                                                const AxiscChar * pName, const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -1868,14 +1878,14 @@ xsdc__boolean * axiscCallGetAttributeAsBoolean(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__boolean *)NULL;
@@ -1886,9 +1896,9 @@ xsdc__unsignedInt * axiscCallGetAttributeAsUnsignedInt(AXISCHANDLE call,
                                                        const AxiscChar * pName, 
                                                        const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -1896,14 +1906,14 @@ xsdc__unsignedInt * axiscCallGetAttributeAsUnsignedInt(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__unsignedInt *)NULL;
@@ -1914,9 +1924,9 @@ xsdc__short * axiscCallGetAttributeAsShort(AXISCHANDLE call,
                                            const AxiscChar * pName, 
                                            const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -1924,14 +1934,14 @@ xsdc__short * axiscCallGetAttributeAsShort(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__short *)NULL;
@@ -1942,9 +1952,9 @@ xsdc__unsignedShort * axiscCallGetAttributeAsUnsignedShort(AXISCHANDLE call,
                                                            const AxiscChar * pName, 
                                                            const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -1952,14 +1962,14 @@ xsdc__unsignedShort * axiscCallGetAttributeAsUnsignedShort(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__unsignedShort *)NULL;
@@ -1970,9 +1980,9 @@ xsdc__byte * axiscCallGetAttributeAsByte(AXISCHANDLE call,
                                          const AxiscChar * pName, 
                                          const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -1980,14 +1990,14 @@ xsdc__byte * axiscCallGetAttributeAsByte(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__byte *)NULL;
@@ -1998,9 +2008,9 @@ xsdc__unsignedByte * axiscCallGetAttributeAsUnsignedByte(AXISCHANDLE call,
                                                          const AxiscChar * pName, 
                                                          const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -2008,14 +2018,14 @@ xsdc__unsignedByte * axiscCallGetAttributeAsUnsignedByte(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__unsignedByte *)NULL;
@@ -2026,9 +2036,9 @@ xsdc__long * axiscCallGetAttributeAsLong(AXISCHANDLE call,
                                          const AxiscChar * pName, 
                                          const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -2036,14 +2046,14 @@ xsdc__long * axiscCallGetAttributeAsLong(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__long *)NULL;
@@ -2054,9 +2064,9 @@ xsdc__integer * axiscCallGetAttributeAsInteger(AXISCHANDLE call,
                                                const AxiscChar * pName, 
                                                const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -2064,14 +2074,14 @@ xsdc__integer * axiscCallGetAttributeAsInteger(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__integer *)NULL;
@@ -2082,9 +2092,9 @@ xsdc__unsignedLong * axiscCallGetAttributeAsUnsignedLong(AXISCHANDLE call,
                                                          const AxiscChar * pName, 
                                                          const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -2092,14 +2102,14 @@ xsdc__unsignedLong * axiscCallGetAttributeAsUnsignedLong(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__unsignedLong *)NULL;
@@ -2110,9 +2120,9 @@ xsdc__float * axiscCallGetAttributeAsFloat(AXISCHANDLE call,
                                            const AxiscChar * pName, 
                                            const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -2120,14 +2130,14 @@ xsdc__float * axiscCallGetAttributeAsFloat(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__float *)NULL;
@@ -2138,9 +2148,9 @@ xsdc__double * axiscCallGetAttributeAsDouble(AXISCHANDLE call,
                                              const AxiscChar * pName, 
                                              const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -2148,14 +2158,14 @@ xsdc__double * axiscCallGetAttributeAsDouble(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__double *)NULL;
@@ -2166,9 +2176,9 @@ xsdc__decimal * axiscCallGetAttributeAsDecimal(AXISCHANDLE call,
                                                const AxiscChar * pName, 
                                                const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -2176,14 +2186,14 @@ xsdc__decimal * axiscCallGetAttributeAsDecimal(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__decimal *)NULL;
@@ -2194,9 +2204,9 @@ xsdc__string axiscCallGetAttributeAsString(AXISCHANDLE call,
                                            const AxiscChar * pName, 
                                            const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -2204,14 +2214,14 @@ xsdc__string axiscCallGetAttributeAsString(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__string)NULL;
@@ -2222,9 +2232,9 @@ xsdc__anyURI axiscCallGetAttributeAsAnyURI(AXISCHANDLE call,
                                            const AxiscChar * pName, 
                                            const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -2232,14 +2242,14 @@ xsdc__anyURI axiscCallGetAttributeAsAnyURI(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__anyURI)NULL;
@@ -2250,9 +2260,9 @@ xsdc__QName axiscCallGetAttributeAsQName(AXISCHANDLE call,
                                          const AxiscChar * pName, 
                                          const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -2260,14 +2270,14 @@ xsdc__QName axiscCallGetAttributeAsQName(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__QName)NULL;
@@ -2278,9 +2288,9 @@ xsdc__hexBinary * axiscCallGetAttributeAsHexBinary(AXISCHANDLE call,
                                                    const AxiscChar * pName, 
                                                    const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -2290,14 +2300,14 @@ xsdc__hexBinary * axiscCallGetAttributeAsHexBinary(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__hexBinary *)NULL;
@@ -2308,9 +2318,9 @@ xsdc__base64Binary * axiscCallGetAttributeAsBase64Binary(AXISCHANDLE call,
                                                          const AxiscChar * pName, 
                                                          const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -2320,14 +2330,14 @@ xsdc__base64Binary * axiscCallGetAttributeAsBase64Binary(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__base64Binary *)NULL;
@@ -2338,9 +2348,9 @@ xsdc__dateTime * axiscCallGetAttributeAsDateTime(AXISCHANDLE call,
                                                  const AxiscChar * pName, 
                                                  const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -2348,14 +2358,14 @@ xsdc__dateTime * axiscCallGetAttributeAsDateTime(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__dateTime *)NULL;
@@ -2366,9 +2376,9 @@ xsdc__date * axiscCallGetAttributeAsDate(AXISCHANDLE call,
                                          const AxiscChar * pName, 
                                          const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -2376,14 +2386,14 @@ xsdc__date * axiscCallGetAttributeAsDate(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__date *)NULL;
@@ -2394,9 +2404,9 @@ xsdc__time * axiscCallGetAttributeAsTime(AXISCHANDLE call,
                                          const AxiscChar * pName, 
                                          const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -2404,14 +2414,14 @@ xsdc__time * axiscCallGetAttributeAsTime(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     return (xsdc__time *)NULL;
 }
@@ -2421,9 +2431,9 @@ xsdc__duration * axiscCallGetAttributeAsDuration(AXISCHANDLE call,
                                                  const AxiscChar * pName, 
                                                  const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -2431,14 +2441,14 @@ xsdc__duration * axiscCallGetAttributeAsDuration(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
     return (xsdc__duration *)NULL;
@@ -2449,9 +2459,9 @@ xsdc__gYearMonth * axiscCallGetAttributeAsGYearMonth(AXISCHANDLE call,
                                                    const AxiscChar * pName, 
                                                    const AxiscChar * pNamespace)
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -2459,14 +2469,14 @@ xsdc__gYearMonth * axiscCallGetAttributeAsGYearMonth(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__gYearMonth *)NULL;
@@ -2477,9 +2487,9 @@ xsdc__gYear * axiscCallGetAttributeAsGYear(AXISCHANDLE call,
                                          const AxiscChar * pName, 
                                          const AxiscChar * pNamespace)
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -2487,14 +2497,14 @@ xsdc__gYear * axiscCallGetAttributeAsGYear(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+
+
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__gYear *)NULL;
@@ -2505,9 +2515,9 @@ xsdc__gMonthDay * axiscCallGetAttributeAsGMonthDay(AXISCHANDLE call,
                                                  const AxiscChar * pName, 
                                                  const AxiscChar * pNamespace)
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -2515,14 +2525,14 @@ xsdc__gMonthDay * axiscCallGetAttributeAsGMonthDay(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__gMonthDay *)NULL;
@@ -2533,9 +2543,9 @@ xsdc__gDay * axiscCallGetAttributeAsGDay(AXISCHANDLE call,
                                        const AxiscChar * pName,
                                        const AxiscChar * pNamespace)
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -2543,14 +2553,14 @@ xsdc__gDay * axiscCallGetAttributeAsGDay(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__gDay *)NULL;
@@ -2561,9 +2571,9 @@ xsdc__gMonth * axiscCallGetAttributeAsGMonth(AXISCHANDLE call,
                                            const AxiscChar * pName, 
                                            const AxiscChar * pNamespace)
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -2571,14 +2581,14 @@ xsdc__gMonth * axiscCallGetAttributeAsGMonth(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__gMonth *)NULL;
@@ -2589,9 +2599,9 @@ xsdc__nonPositiveInteger * axiscCallGetAttributeAsNonPositiveInteger(AXISCHANDLE
                                                                    const AxiscChar * pName,
                                                                    const AxiscChar * pNamespace)
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -2599,14 +2609,14 @@ xsdc__nonPositiveInteger * axiscCallGetAttributeAsNonPositiveInteger(AXISCHANDLE
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__nonPositiveInteger *)NULL;
@@ -2617,9 +2627,9 @@ xsdc__negativeInteger * axiscCallGetAttributeAsNegativeInteger(AXISCHANDLE call,
                                                              const AxiscChar * pName,
                                                              const AxiscChar * pNamespace)
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -2627,14 +2637,14 @@ xsdc__negativeInteger * axiscCallGetAttributeAsNegativeInteger(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__negativeInteger *)NULL;
@@ -2645,9 +2655,9 @@ xsdc__nonNegativeInteger * axiscCallGetAttributeAsNonNegativeInteger(AXISCHANDLE
                                                                    const AxiscChar * pName,
                                                                    const AxiscChar * pNamespace)
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -2655,14 +2665,14 @@ xsdc__nonNegativeInteger * axiscCallGetAttributeAsNonNegativeInteger(AXISCHANDLE
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__nonNegativeInteger *)NULL;
@@ -2673,9 +2683,9 @@ xsdc__positiveInteger * axiscCallGetAttributeAsPositiveInteger(AXISCHANDLE call,
                                                              const AxiscChar * pName, 
                                                              const AxiscChar * pNamespace)
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -2683,14 +2693,14 @@ xsdc__positiveInteger * axiscCallGetAttributeAsPositiveInteger(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__positiveInteger *)NULL;
@@ -2700,9 +2710,9 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__normalizedString axiscCallGetAttributeAsNormalizedString(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -2710,14 +2720,14 @@ xsdc__normalizedString axiscCallGetAttributeAsNormalizedString(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__normalizedString)NULL;
@@ -2727,9 +2737,9 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__token axiscCallGetAttributeAsToken(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -2737,14 +2747,14 @@ xsdc__token axiscCallGetAttributeAsToken(AXISCHANDLE call, const AxiscChar * pNa
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__token)NULL;
@@ -2754,9 +2764,9 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__language axiscCallGetAttributeAsLanguage(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -2764,14 +2774,14 @@ xsdc__language axiscCallGetAttributeAsLanguage(AXISCHANDLE call, const AxiscChar
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__language)NULL;
@@ -2781,9 +2791,9 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__Name axiscCallGetAttributeAsName(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -2791,14 +2801,14 @@ xsdc__Name axiscCallGetAttributeAsName(AXISCHANDLE call, const AxiscChar * pName
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__Name)NULL;
@@ -2808,9 +2818,9 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__NCName axiscCallGetAttributeAsNCName(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -2818,14 +2828,14 @@ xsdc__NCName axiscCallGetAttributeAsNCName(AXISCHANDLE call, const AxiscChar * p
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__NCName)NULL;
@@ -2835,9 +2845,9 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__ID axiscCallGetAttributeAsID(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -2845,14 +2855,14 @@ xsdc__ID axiscCallGetAttributeAsID(AXISCHANDLE call, const AxiscChar * pName,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__ID)NULL;
@@ -2862,9 +2872,9 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__IDREF axiscCallGetAttributeAsIDREF(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -2872,14 +2882,14 @@ xsdc__IDREF axiscCallGetAttributeAsIDREF(AXISCHANDLE call, const AxiscChar * pNa
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__IDREF)NULL;
@@ -2889,9 +2899,9 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__IDREFS axiscCallGetAttributeAsIDREFS(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -2899,14 +2909,14 @@ xsdc__IDREFS axiscCallGetAttributeAsIDREFS(AXISCHANDLE call, const AxiscChar * p
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__IDREFS)NULL;
@@ -2916,9 +2926,9 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__ENTITY axiscCallGetAttributeAsENTITY(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -2926,14 +2936,14 @@ xsdc__ENTITY axiscCallGetAttributeAsENTITY(AXISCHANDLE call, const AxiscChar * p
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__ENTITY)NULL;
@@ -2943,9 +2953,9 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__ENTITIES axiscCallGetAttributeAsENTITIES(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -2953,14 +2963,14 @@ xsdc__ENTITIES axiscCallGetAttributeAsENTITIES(AXISCHANDLE call, const AxiscChar
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__ENTITIES)NULL;
@@ -2970,9 +2980,9 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__NMTOKEN axiscCallGetAttributeAsNMTOKEN(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -2980,14 +2990,14 @@ xsdc__NMTOKEN axiscCallGetAttributeAsNMTOKEN(AXISCHANDLE call, const AxiscChar *
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__NMTOKEN)NULL;
@@ -2997,9 +3007,9 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__NMTOKENS axiscCallGetAttributeAsNMTOKENS(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -3007,14 +3017,14 @@ xsdc__NMTOKENS axiscCallGetAttributeAsNMTOKENS(AXISCHANDLE call, const AxiscChar
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__NMTOKENS)NULL;
@@ -3024,9 +3034,9 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__NOTATION axiscCallGetAttributeAsNOTATION(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -3034,14 +3044,14 @@ xsdc__NOTATION axiscCallGetAttributeAsNOTATION(AXISCHANDLE call, const AxiscChar
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__NOTATION)NULL;
@@ -3070,9 +3080,9 @@ void * axiscCallGetCmplxObject(AXISCHANDLE call,
                                const AxiscChar * pName, 
                                const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -3080,14 +3090,14 @@ void * axiscCallGetCmplxObject(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
     return NULL;
@@ -3102,9 +3112,9 @@ Axisc_Array* axiscCallGetCmplxArray(AXISCHANDLE call,
                                     const AxiscChar * pName, 
                                     const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -3121,14 +3131,14 @@ Axisc_Array* axiscCallGetCmplxArray(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
     return (Axisc_Array *)NULL;
@@ -3140,9 +3150,9 @@ Axisc_Array* axiscCallGetBasicArray(AXISCHANDLE call,
                                     const AxiscChar * pName, 
                                     const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -3152,14 +3162,14 @@ Axisc_Array* axiscCallGetBasicArray(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
     return (Axisc_Array *)NULL;
@@ -3170,9 +3180,9 @@ int axiscCallCheckMessage(AXISCHANDLE call,
                           const AxiscChar * pName, 
                           const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -3180,14 +3190,14 @@ int axiscCallCheckMessage(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
     return -1;
@@ -3198,9 +3208,9 @@ void * axiscCallCheckFault(AXISCHANDLE call,
                            const AxiscChar * pName, 
                            const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -3208,14 +3218,14 @@ void * axiscCallCheckFault(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
     return NULL;
@@ -3224,9 +3234,9 @@ void * axiscCallCheckFault(AXISCHANDLE call,
 AXISC_STORAGE_CLASS_INFO 
 int axiscCallGetStatus(AXISCHANDLE call) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -3234,14 +3244,14 @@ int axiscCallGetStatus(AXISCHANDLE call)
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
     return -1;
@@ -3253,9 +3263,9 @@ void axiscCallSetProxy(AXISCHANDLE call,
                        const char * pcProxyHost, 
                        unsigned int uiProxyPort) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -3263,23 +3273,23 @@ void axiscCallSetProxy(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 }
 
 AXISC_STORAGE_CLASS_INFO 
 AxiscAnyType * axiscCallGetAnyObject(AXISCHANDLE call) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -3289,14 +3299,14 @@ AxiscAnyType * axiscCallGetAnyObject(AXISCHANDLE call)
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
     return (AxiscAnyType *)NULL;
@@ -3306,9 +3316,9 @@ AXISC_STORAGE_CLASS_INFO
 int axiscCallAddAnyObject(AXISCHANDLE call, 
                           AxiscAnyType * pAnyObject) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    
+    
+    Call *c = (Call*)call;
     
     try
     {
@@ -3324,14 +3334,14 @@ int axiscCallAddAnyObject(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
     return -1;
@@ -3341,9 +3351,7 @@ AXISC_STORAGE_CLASS_INFO
 const AxiscChar * axiscCallGetNamespacePrefix(AXISCHANDLE call, 
                                               const AxiscChar * pNamespace) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    Call *c = (Call*)call;
     
     try
     {
@@ -3351,14 +3359,11 @@ const AxiscChar * axiscCallGetNamespacePrefix(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        processException(c, e);
     }
     catch ( ... )
-    {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+    { 
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
     return (AxiscChar *)NULL;
@@ -3371,9 +3376,7 @@ void axiscCallSetSOAPMethodAttribute(AXISCHANDLE call,
                                  const AxiscChar * pUri, 
                                  const AxiscChar * pValue) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    Call *c = (Call*)call;
     
     try
     {
@@ -3381,14 +3384,11 @@ void axiscCallSetSOAPMethodAttribute(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 }
 
@@ -3396,9 +3396,7 @@ void axiscCallSetSOAPMethodAttribute(AXISCHANDLE call,
 AXISC_STORAGE_CLASS_INFO 
 const char * axiscCallGetFaultAsXMLString(AXISCHANDLE call) 
 {
-    AxisObjectContainer *h = (AxisObjectContainer *)call;
-    h->_exception.resetException();
-    Call *c = (Call*)h->_objHandle;
+    Call *c = (Call*)call;
     
     try
     {
@@ -3406,17 +3404,44 @@ const char * axiscCallGetFaultAsXMLString(AXISCHANDLE call)
     }
     catch ( AxisException& e  )
     {
-        h->_exception.setExceptionFromException(e);
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what());
+        processException(c, e);
     }
     catch ( ... )
     {
-        h->_exception.setExceptionCode(-1);  
-        h->_exception.setMessage("Unrecognized exception thrown.");  
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.");
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
     return (xsdc__string)NULL;
 }
+
+AXISC_STORAGE_CLASS_INFO 
+void axiscCallSetCStub(AXISCHANDLE call, void *pStub) 
+{ 
+        Call *c = (Call*)call;
+        c->setCStub(pStub);
+}
+
+AXISC_STORAGE_CLASS_INFO 
+void *axiscCallGetCStub(AXISCHANDLE call) 
+{ 
+        Call *c = (Call*)call;
+        return c->getCStub();
+}
+     
+AXISC_STORAGE_CLASS_INFO 
+void axiscCallSetCExceptionHandlerFunction(AXISCHANDLE call, void *pExceptionHandlerFunction) 
+{ 
+        Call *c = (Call*)call;
+        c->setCExceptionHandler(pExceptionHandlerFunction);
+}
+     
+AXISC_STORAGE_CLASS_INFO    
+void *axiscCallGetCExceptionHandlerFunction(AXISCHANDLE call) 
+{ 
+        Call *c = (Call*)call;
+        return c->getCExceptionHandler();        
+}
+
+
 
 }

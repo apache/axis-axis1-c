@@ -133,7 +133,7 @@ public class ClientStubWriter extends CFileWriter
         try
         {
             //writer.write("#include <stdlib.h>\n");
-            //writer.write("#include <stdio.h>\n");
+            writer.write("#include <stdio.h>\n");
             writer.write("#include <string.h>\n");
             writer.write("\n");
             
@@ -143,7 +143,9 @@ public class ClientStubWriter extends CFileWriter
             writer.write("#include <axis/client/Call.h>\n");
             writer.write("#include <axis/IWrapperSoapSerializer.h>\n");
             writer.write("#include <axis/IWrapperSoapDeSerializer.h>\n");
-
+            writer.write("#include <axis/AxisException.h>\n");            
+            writer.write("#include <axis/ISoapFault.h>\n");
+            
             writer.write("\n");
         }
         catch (IOException e)

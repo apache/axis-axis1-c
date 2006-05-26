@@ -77,7 +77,8 @@ int axiscAxisTerminate();
  * @return AXISC_SUCCESS or AXISC_FAIL to indicate success or fail
  */
 AXISC_STORAGE_CLASS_INFO 
-int axiscAxisDelete(void * pValue, AXISC_XSDTYPE type);
+int axiscAxisDelete(void * pValue, 
+                    AXISC_XSDTYPE type);
 
 /**
  * Allocates storage to be used by Axis engine.  All proxy code and allocated
@@ -88,7 +89,8 @@ int axiscAxisDelete(void * pValue, AXISC_XSDTYPE type);
  * @return pointer to allocated storage
  */
 AXISC_STORAGE_CLASS_INFO 
-void * axiscAxisNew(AXISC_XSDTYPE type, int size);
+void * axiscAxisNew(AXISC_XSDTYPE type, 
+                    int size);
 
 /**
  * Registers a function that will be invoked to handle Axis engine
@@ -98,7 +100,8 @@ void * axiscAxisNew(AXISC_XSDTYPE type, int size);
  * @param fp - pointer to exception handler function.
  */
   
-typedef void (* AXIS_EXCEPTION_HANDLER_FUNCT)(int errorCode, const char *errorString);
+typedef void (* AXIS_EXCEPTION_HANDLER_FUNCT)(int exceptionCode, const char *exceptionString, AXISCHANDLE pSoapFault, void *faultDetail);
+
 
 AXISC_STORAGE_CLASS_INFO 
 void axiscAxisRegisterExceptionHandler(AXIS_EXCEPTION_HANDLER_FUNCT);
@@ -109,10 +112,15 @@ void axiscAxisRegisterExceptionHandler(AXIS_EXCEPTION_HANDLER_FUNCT);
  * 
  * @param errorCode - error code.
  * @param errorString - error string.
+ * @param pSoapFault - pointer to soap fault object.  If no fault, param will be set to NULL.
+ * @param faultDetail - pointer to fault detail.  If no fault detail, param will be set to NULL. 
  */
 
 AXISC_STORAGE_CLASS_INFO 
-void axiscAxisInvokeExceptionHandler(int errorCode, const char *errorString);
+void axiscAxisInvokeExceptionHandler(int exceptionCode, 
+                                     const char *exceptionString, 
+                                     AXISCHANDLE pSoapFault, 
+                                     void *faultDetail);
 
 #ifdef __cplusplus
   }
