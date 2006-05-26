@@ -18,8 +18,10 @@
 	 description="Build and Run all tests"/>
 
 	<target name="preInitializeTest" depends="pre-init">
+		<echo message="dir.properties = ${dir.properties} - ${platform}"/>
 		<property file="${dir.properties}/test.${platform}.properties" />
 		<property file="${dir.properties}/test.common.properties" />
+		<property name="dir.xmlParser" value="${env.XERCES_HOME}/bin${path.separator}${env.XERCES_HOME}/lib"/>
 	</target>
 	
 	
@@ -44,10 +46,21 @@
 	  Loop through all the test xml properties files in the tests
 	  list and call runTest target
 	  -->
-	<target name="runTests" depends="setTestList">
+	<target name="runTests" depends="setTestList, defineMonitor, defineMockServer">
 		<foreach target="runTest" param="test_property" inheritall="true">
 			<path refid="test_properties"/>
 		</foreach>
+		<!-- we need to stop the monitor (if there is any) -->
+		<antcall target="stopMonitor" inheritall="true" />
+		
+		<!-- if we are running in mockserver mode then we need to stop the MockServer -->
+				<if>
+			<equals arg1="${mockServer}" arg2="true" />
+			<then>
+				<antcall target="stopMockServer"
+					inheritall="true" />
+			</then>
+		</if>
 	</target>
 
 	<!--
