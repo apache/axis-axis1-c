@@ -54,10 +54,9 @@ int main(int argc, char* argv[])
 
     result = myOperation(ws, &input);
 
-    if (result!= NULL)
-        cout, "Result= %d\n" , result );
-    else
-        printf( "result is NULL\n" );
+
+    printf("Result= %d\n" , result );
+
 
     returnValue = 0; // Success
 

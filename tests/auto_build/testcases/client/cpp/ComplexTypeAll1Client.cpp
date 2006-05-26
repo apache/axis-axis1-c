@@ -88,10 +88,7 @@ int main(int argc, char* argv[])
 
             result = ws->myOperation(input);
 
-            if (result!= NULL)
-                cout<< "Result= " << result << endl;
-            else
-                cout << "result is NULL" << endl;
+            cout<< "Result= " << result << endl;
 
             bSuccess = true;
 
