@@ -85,17 +85,14 @@ public class ClientStubWriter
           writer.write("\treturn axiscCallGetStatus(call);\n");
           writer.write("}\n\n");
 
-          writer.write("static AXIS_EXCEPTION_HANDLER_FUNCT " + classname + "_StubExceptionHandler = NULL;\n\n");
           writer.write("void set_" + classname 
                   + "_ExceptionHandler(AXISCHANDLE stub, AXIS_EXCEPTION_HANDLER_FUNCT fp)\n{\n");          
-          writer.write("\t" + classname + "_StubExceptionHandler = fp;\n");          
+          writer.write("\taxiscStubSetCExceptionHandler(stub, (void *)fp);\n");          
           writer.write("}\n");
           
           writer.write("\n");
           writer.write("/* ================================================== */\n" +
                        "/* Functions corresponding to the web service methods */\n" +
-                       "/* (also includes exception handlers for each         */\n" +
-                       "/* web service method)                                */\n" +
                        "/* ================================================== */\n");
           writer.write("\n");
           
@@ -103,7 +100,6 @@ public class ClientStubWriter
           for (int i = 0; i < methods.size(); i++)
           {
                 minfo = (MethodInfo) methods.get(i);
-                this.writeMethodExceptionHandler(minfo);
                 this.writeMethodInWrapper(minfo);
                 writer.write("\n");
           }
@@ -386,12 +382,11 @@ public class ClientStubWriter
             // TODO initialize return parameter appropriately.
         }
         
-        writer.write ("\tconst char* pcCmplxFaultName = NULL;\n");
         writer.write("\n");
-        
-        writer.write ("\taxiscCallSetCExceptionHandlerFunction(call, (void *)" + methodName 
-            + "_ExceptionHandler);\n");
+
+        writeFaultHandlingCode(minfo);
         writer.write("\n");        
+        
         
         writer.write("\tif (AXISC_SUCCESS != axiscCallInitialize(call, C_DOC_PROVIDER " + ")) return ");
         if (returntype != null)
@@ -928,52 +923,18 @@ public class ClientStubWriter
         writer.write("}\n");
     }
 
-private void writeMethodExceptionHandler(MethodInfo minfo) throws WrapperFault, IOException
-{
-    String methodName = minfo.getMethodname();
-    String stubExceptionHandler = classname + "_StubExceptionHandler";
-
-    writer.write("\n/*\n");
-    writer.write(" * This function is the exception handler for the service method " + methodName + "\n");
-    writer.write(" */\n");
+private void writeFaultHandlingCode(MethodInfo minfo) throws WrapperFault, IOException
+{  
+    writer.write ("\taxiscCallSetSoapFaultNamespace(call, \"" 
+            + wscontext.getWrapInfo ().getTargetEndpointURI () + "\");\n");
     
-    writer.write ("static void " + methodName 
-            + "_ExceptionHandler(AXISCHANDLE call, int exceptionCode, const char *exceptionString)\n");
-    writer.write ("{\n");
-    
-    // ===================================================================
-    // start of function body
-    // ===================================================================
-    
-    writer.write ("\tconst char* pcCmplxFaultName = NULL;\n");  
-    writer.write ("\tAXISCHANDLE pSoapFault = NULL;\n");    
-    
-    writer.write ("\n");   
-    writer.write ("\tif (AXISC_NODE_VALUE_MISMATCH_EXCEPTION == exceptionCode)\n");   
-    writer.write ("\t\tpSoapFault = axiscCallCheckFault(call, \"Fault\",\""
-              + wscontext.getWrapInfo ().getTargetEndpointURI () + "\" );\n\n");
-    
-    writer.write ("\tif(pSoapFault)\n");
-    writer.write ("\t{\n");
-
     //to get fault info             
     Iterator paramsFault = minfo.getFaultType ().iterator ();
     String faultInfoName = null;
-    String faultType = null;
     String langName = null;
-    String paramName = null;
-    boolean flag = false;
-    int j = 0;
-    
-    if (paramsFault.hasNext ())
-    {
-        flag = true;
-        writer.write ("\t\tpcCmplxFaultName = axiscSoapFaultGetCmplxFaultObjectName(pSoapFault);\n");
-    }
     
     while (paramsFault.hasNext ())
     {
-        j = j + 1;
         FaultInfo info = (FaultInfo) paramsFault.next ();
         faultInfoName = info.getFaultInfo ();
 
@@ -994,90 +955,20 @@ private void writeMethodExceptionHandler(MethodInfo minfo) throws WrapperFault, 
                     found = true;
                 }
         }
-        // FJP - D0004 <                            
 
         ArrayList paramInfo = info.getParams ();
         for (int i = 0; i < paramInfo.size (); i++)
         {
             ParameterInfo par = (ParameterInfo) paramInfo.get (i);
-            paramName = par.getParamName ();
             langName = par.getLangName ();
-            faultType = WrapperUtils.getClassNameFromParamInfoConsideringArrays (par,wscontext);
-            if (j > 1)
-                writer.write ("\t\telse if");
-            else
-                writer.write ("\t\tif");
 
-            writer.write ("(0 == strcmp(\"" + faultInfoName + "\", pcCmplxFaultName))\n");
-            writer.write ("\t\t{\n");
-            writer.write ("\t\t\t" + faultType + " pFaultDetail = \n");
-            writer.write ("\t\t\t\t(" + faultType + ")axiscSoapFaultGetCmplxFaultObject(pSoapFault,\n");
-            writer.write ("\t\t\t\t\t(void*) Axis_DeSerialize_" + langName + ",\n");
-            writer.write ("\t\t\t\t\t(void*) Axis_Create_" + langName + ",\n");
-            writer.write ("\t\t\t\t\t(void*) Axis_Delete_" + langName + ",\n");
-            writer.write ("\t\t\t\t\t\"" + faultInfoName + "\",\n");
-            writer.write ("\t\t\t\t\t0);\n\n");
-
-            writer.write ("\t\t\tif (" + stubExceptionHandler + ")\n");
-            writer.write ("\t\t\t\t" + stubExceptionHandler + "(exceptionCode, exceptionString, pSoapFault, pFaultDetail);\n");
-            writer.write ("\t\t\telse\n");
-            writer.write ("\t\t\t\taxiscAxisInvokeExceptionHandler(exceptionCode, exceptionString, pSoapFault, pFaultDetail);\n\n");        
-            
-            writer.write ("\t\t\tAxis_Delete_" + langName + "(pFaultDetail, 0);\n");
-            
-            writer.write ("\t\t}\n");
+            writer.write ("\taxiscCallAddSoapFaultToList(call, \"" 
+                    + faultInfoName + "\", "
+                    + "(void*) Axis_Create_" + langName + ", "
+                    + "(void*) Axis_Delete_" + langName + ", "                    
+                    + "(void*) Axis_DeSerialize_" + langName + ");\n");
         }
     }
-    
-    if (flag == true)
-    {
-        writer.write ("\t\telse\n");
-        writer.write ("\t\t{\n");
-    }
-
-    writer.write ("\t\t\tconst char *detail = axiscSoapFaultGetSimpleFaultDetail(pSoapFault);\n");
-    writer.write ("\t\t\tint deleteDetail=0;\n\n");
-    writer.write ("\t\t\tif (NULL==detail || 0==strlen(detail))\n");
-    writer.write ("\t\t\t{\n");
-    writer.write ("\t\t\t\tdetail=axiscCallGetFaultAsXMLString(call);\n\n");
-    writer.write ("\t\t\t\tif (NULL==detail)\n");
-    writer.write ("\t\t\t\t\tdetail=\"\";\n");
-    writer.write ("\t\t\t\telse\n");
-    writer.write ("\t\t\t\t\tdeleteDetail=1;\n");
-    writer.write ("\t\t\t}\n\n");
-
-    writer.write ("\t\t\tif (" + stubExceptionHandler + ")\n");
-    writer.write ("\t\t\t\t" + stubExceptionHandler + "(exceptionCode, exceptionString, pSoapFault, (void *)detail);\n");
-    writer.write ("\t\t\telse\n");
-    writer.write ("\t\t\t\taxiscAxisInvokeExceptionHandler(exceptionCode, exceptionString, pSoapFault, (void *)detail);\n\n");               
-    
-    writer.write ("\t\t\tif (deleteDetail && NULL!=detail)\n");
-    writer.write ("\t\t\t\taxiscAxisDelete( (void *)detail, XSDC_STRING);\n");
-
-    if (flag == true)
-        writer.write ("\t\t}\n");
-    
-    writer.write ("\t}\n");
-    writer.write ("\telse\n");
-    writer.write ("\t{\n");
-
-    writer.write ("\t\tif (" + stubExceptionHandler + ")\n");
-    writer.write ("\t\t\t" + stubExceptionHandler + "(exceptionCode, exceptionString, NULL, NULL);\n");
-    writer.write ("\t\telse\n");
-    writer.write ("\t\t\taxiscAxisInvokeExceptionHandler(exceptionCode, exceptionString, NULL, NULL);\n\n");               
-
-    writer.write ("\t}\n");
-
-    writer.write ("\n");
-    writer.write ("\tif (pSoapFault != NULL);\n");    
-    writer.write ("\t\taxiscSoapFaultDestroy(pSoapFault);\n");  
-    
-    // ===================================================================
-    // end of function body
-    // ===================================================================
-    
-    
-    writer.write ("}\n");
 }
 
     /* (non-Javadoc)

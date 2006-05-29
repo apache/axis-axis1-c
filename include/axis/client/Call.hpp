@@ -47,6 +47,7 @@ class SoapDeSerializer;
 class SoapSerializer;
 class ISoapAttachment;
 class ContentIdSet;
+class AxisException;
 
 /**
  * @class Call
@@ -1684,34 +1685,67 @@ public:
     /** 
      * Set C-binding stub pointer associated with Call object. 
      * This function was added in support of the c-Binding implementation.  
+     *
+     * @param pStub - pointer to C binding stub object.
      */
      void setCStub(void *pStub) { m_pStub = pStub; }
      
     /** 
      * Get C-binding stub pointer. 
      * This function was added in support of the c-Binding implementation.  
+     *
+     * @return Pointer to C binding stub object.
      */     
      void *getCStub() { return m_pStub; }
      
     /** 
      * Set pointer to exception handler function for call object. 
+     * The pSoapFaultNamespace is used as-is - i.e. it should not be deleted
+     * by the caller unless a subsequent call to this function is being made.
+     * Calling this function will result in the resetting of the SOAP Fault list.
+     * If service does not have any SOAP faults defined, call this function with
+     * NULL pointer in order to clear the SOAP fault list.
      * This function was added in support of the c-Binding implementation.  
+     *
+     * @param pSoapFaultNamespace - pointer to namespace to use when checking for fault.
      */
-     void setCExceptionHandler(void *pExceptionHandler) 
-     { 
-        m_pExceptionHandler = pExceptionHandler; 
+     void setSoapFaultNamespace(const char *pSoapFaultNamespace) 
+     {      
+        m_pSoapFaultNamespace = pSoapFaultNamespace; 
+        resetSoapFaultList();
      }
-     
+
     /** 
-     * Get pointer to exception handling function for call object. 
-     * This function was added in support of the c-Binding implementation.
-     */     
-     void *getCExceptionHandler() { return m_pExceptionHandler; }
+     * Set pointer to exception handler function for call object. 
+     * Calling this function will result in the resetting of the SOAP Fault list.
+     * This function was added in support of the c-Binding implementation.  
+     *
+     * @param faultName - pointer to fault name.
+     * @param createFp - pointer to object creation function for fault detail
+     * @param deleteFp - pointer to object deletion function for fault detail
+     * @param deserializerFp - pointer to object deserializer function for fault detail
+     */
+     void addSoapFaultToList(const char *faultName, 
+                             void *createFp, void *deleteFp, void *deserializerFp);
+     
+     /** 
+      * Process soap fault. The SOAP fault list will be searched to see if there
+      * is a SOAP Fault in the list that matches.  After the SOAP fault has been processed,
+      * the stub exception handler will be called if one exists; otherwise, the generic 
+      * exception handler will be called.
+      * This function was added in support of the c-Binding implementation.  
+      *
+      * @param exceptionCode - exception code in an AXIS exception that was thrown.
+      * @param createFp - pointer to exception string in AXIS exception that was thrown.
+      * @param exceptionHandlerFp - pointer to exception handler function
+      */
+     void processSoapFault(AxisException *e, void *exceptionHandlerFp);
 
 private:
     void closeConnection();
     int makeArray();
-    void cleanup(); // clean memeory in case of exceptions and destructor etc.
+    void cleanup(); // clean memory in case of exceptions and destructor etc.
+    void resetSoapFaultList(); // added in support of C-binding implementation.
 
     ClientAxisEngine* m_pAxisEngine;
 
@@ -1720,6 +1754,7 @@ private:
 #endif
     list<void*> m_handlerProperties;
     list<ISoapAttachment*> m_attachments;
+    list<void *> m_soapFaults; // c binding support use only
 
 #ifdef WIN32
   #pragma warning (default : 4251)
@@ -1765,14 +1800,14 @@ private:
     ContentIdSet *m_pContentIdSet;
     
     /**
-     * following is for C-binding support.
+     * Following is for C-binding support. The stub that the Call object belongs to.
      */
     void * m_pStub;
     
     /**
-     * Following is for C-binding support. Pointer to exception handler function.
+     * Following is for C-binding support. Namespace associated with soap fault.
      */
-    void * m_pExceptionHandler;    
+    const char * m_pSoapFaultNamespace;       
 };
 AXIS_CPP_NAMESPACE_END
 

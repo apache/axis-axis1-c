@@ -17,6 +17,7 @@
 
 #include <axis/client/Call.hpp>
 #include <axis/AxisException.hpp>
+#include <axis/client/Stub.hpp>
 
 #include "../AxisObjectConverter.hpp"
 
@@ -32,17 +33,16 @@ AXIS_CPP_NAMESPACE_USE
 
 extern "C" {
 
-typedef void (* AXIS_METHOD_EXCEPTION_HANDLER_FUNCT)(AXISCHANDLE c, int exceptionCode, const char *exceptionString);
-
-
 static void processException(Call *c, AxisException& e)
 {
-    AXIS_METHOD_EXCEPTION_HANDLER_FUNCT mfp = (AXIS_METHOD_EXCEPTION_HANDLER_FUNCT)c->getCExceptionHandler();
+    void *exceptionHandler = axiscAxisInvokeExceptionHandler;
+    void *stubExceptionHandler;
     
-    if (mfp)
-       mfp(c, e.getExceptionCode(), e.what());
-    else
-       axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+    Stub *s = (Stub *)c->getCStub();
+    if ((stubExceptionHandler = s->getCExceptionHandler()) != NULL)
+        exceptionHandler = stubExceptionHandler;
+    
+    c->processSoapFault(&e, exceptionHandler);
 }
 
 
@@ -3427,20 +3427,27 @@ void *axiscCallGetCStub(AXISCHANDLE call)
         Call *c = (Call*)call;
         return c->getCStub();
 }
-     
-AXISC_STORAGE_CLASS_INFO 
-void axiscCallSetCExceptionHandlerFunction(AXISCHANDLE call, void *pExceptionHandlerFunction) 
-{ 
-        Call *c = (Call*)call;
-        c->setCExceptionHandler(pExceptionHandlerFunction);
+
+AXISC_STORAGE_CLASS_INFO
+void axiscCallSetSoapFaultNamespace(AXISCHANDLE call, const char * pSoapFaultNamespace)
+{
+    Call *c = (Call*)call;
+    c->setSoapFaultNamespace(pSoapFaultNamespace);
 }
-     
-AXISC_STORAGE_CLASS_INFO    
-void *axiscCallGetCExceptionHandlerFunction(AXISCHANDLE call) 
-{ 
-        Call *c = (Call*)call;
-        return c->getCExceptionHandler();        
+
+
+AXISC_STORAGE_CLASS_INFO
+void axiscCallAddSoapFaultToList(AXISCHANDLE call, 
+                                 const char * faultName, 
+                                 void * createFp,
+                                 void * deleteFp,
+                                 void * deserializerFp)
+{
+    Call *c = (Call*)call;
+    c->addSoapFaultToList(faultName, createFp, deleteFp, deserializerFp);
 }
+
+
 
 
 

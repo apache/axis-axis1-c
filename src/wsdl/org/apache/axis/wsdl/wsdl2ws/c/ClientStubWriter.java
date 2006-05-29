@@ -143,8 +143,6 @@ public class ClientStubWriter extends CFileWriter
             writer.write("#include <axis/client/Call.h>\n");
             writer.write("#include <axis/IWrapperSoapSerializer.h>\n");
             writer.write("#include <axis/IWrapperSoapDeSerializer.h>\n");
-            writer.write("#include <axis/AxisException.h>\n");            
-            writer.write("#include <axis/ISoapFault.h>\n");
             
             writer.write("\n");
         }

@@ -23,6 +23,8 @@
 
 #include <axis/client/Call.hpp>
 #include <axis/AxisException.hpp>
+#include <axis/ISoapFault.hpp>
+#include <axis/AxisWrapperAPI.hpp>
 #include "../../common/AxisConfig.h"
 #include "ClientAxisEngine.h"
 #include "../SOAPTransportFactory.h"
@@ -33,6 +35,7 @@
 #include "../../common/AxisGenException.h"
 #include "../../soap/Attribute.h"
 
+
 extern AXIS_CPP_NAMESPACE_PREFIX AxisConfig* g_pConfig;
 
 extern "C" int initialize_module (int bServer);
@@ -42,7 +45,7 @@ AXIS_CPP_NAMESPACE_USE
 
 Call::Call ()
 :m_pcEndPointUri(NULL), m_strProxyHost(""), m_uiProxyPort(0), m_bUseProxy(false),
-m_bCallInitialized(false), m_pContentIdSet(NULL), m_pStub(NULL), m_pExceptionHandler(NULL)
+m_bCallInitialized(false), m_pContentIdSet(NULL), m_pStub(NULL)
 {
     m_pAxisEngine = NULL;
     m_pIWSSZ = NULL;
@@ -104,6 +107,9 @@ Call::~Call ()
     }
     
     m_attachments.clear();
+    
+    // Following is for C-binding support.
+    resetSoapFaultList();
 }
 
 void Call::cleanup()
@@ -1109,4 +1115,115 @@ IAttribute* Call::createAttribute(const AxisChar *pLocalname, const AxisChar *pP
 {
     std::list<Attribute*> attributeList;
     return new Attribute(attributeList, pLocalname, pPrefix, pValue);
+}
+
+/** 
+ * ===================================================================================
+ * Following methods and structures are used in support of C-binding implementation
+ * ===================================================================================
+ */
+
+// following function typedef is also defined in Axis.h, but did not want to include in this file.
+typedef void (* AXIS_EXCEPTION_HANDLER_FUNCT)(int exceptionCode, const char *exceptionString, void * pSoapFault, void *faultDetail);
+
+typedef struct FaultInformation
+{
+    const char *             m_faultName;
+    AXIS_OBJECT_CREATE_FUNCT m_createFp;
+    AXIS_DESERIALIZE_FUNCT   m_deserializerFp;
+    AXIS_OBJECT_DELETE_FUNCT m_deleteFp;
+} FaultInformation_t;
+
+void Call::addSoapFaultToList(const char *faultName, 
+                              void *createFp, 
+                              void *deleteFp, 
+                              void *deserializerFp)
+{
+    FaultInformation_t *fi = new FaultInformation_t;
+    
+    fi->m_faultName      = faultName;
+    fi->m_createFp       = (AXIS_OBJECT_CREATE_FUNCT)createFp;
+    fi->m_deserializerFp = (AXIS_DESERIALIZE_FUNCT)deserializerFp;
+    fi->m_deleteFp       = (AXIS_OBJECT_DELETE_FUNCT)deleteFp;
+    
+    m_soapFaults.push_back(fi);
+}
+
+void Call::processSoapFault(AxisException *e, 
+                            void *exceptionHandlerFp)
+{
+    AXIS_EXCEPTION_HANDLER_FUNCT excFp = (AXIS_EXCEPTION_HANDLER_FUNCT)exceptionHandlerFp;
+    ISoapFault* pSoapFault             = NULL;
+    
+    if (AXISC_NODE_VALUE_MISMATCH_EXCEPTION == e->getExceptionCode() 
+            && m_pSoapFaultNamespace != NULL)
+        pSoapFault = (ISoapFault*) this->checkFault("Fault", m_pSoapFaultNamespace);
+
+    if(pSoapFault)
+    {
+	    void *pFaultDetail = NULL;
+	    bool faultIsDefined = false;
+	    bool isFaultDetailXMLString = false;
+        FaultInformation_t *fi;
+        const char* pcCmplxFaultName = pSoapFault->getCmplxFaultObjectName();
+
+        // See if fault is defined        
+        list<void *>::iterator it = m_soapFaults.begin();
+        while (it != m_soapFaults.end())
+        {
+            fi = (FaultInformation_t *)*it;
+            if (strcmp(fi->m_faultName, pcCmplxFaultName) == 0)
+            {
+                faultIsDefined = true;
+                break;
+            }
+            it++;
+        }
+        
+        if (faultIsDefined)
+        {
+            pFaultDetail = pSoapFault->getCmplxFaultObject(fi->m_deserializerFp, 
+                                                           fi->m_createFp,
+                                                           fi->m_deleteFp, 
+                                                           fi->m_faultName, 
+                                                           0);
+        }
+        else
+        {
+            pFaultDetail = (void *)pSoapFault->getSimpleFaultDetail();
+            
+            if (NULL==pFaultDetail || 0==strlen((char *)pFaultDetail))
+            {
+                pFaultDetail = this->getFaultAsXMLString();
+
+                if (NULL==pFaultDetail)
+                    pFaultDetail = "";
+                else
+                    isFaultDetailXMLString=true;
+            }
+        }
+        
+        excFp(e->getExceptionCode(), e->what(), pSoapFault, pFaultDetail);
+        
+        if (faultIsDefined)
+            fi->m_deleteFp(pFaultDetail, 0);
+        else if (isFaultDetailXMLString)
+            delete [] (char *)pFaultDetail;
+    }
+    else
+        excFp(e->getExceptionCode(), e->what(), NULL, NULL);
+}
+
+void Call::resetSoapFaultList()
+{
+    FaultInformation_t *fi;
+    
+    list<void *>::iterator it = m_soapFaults.begin();
+    while (it != m_soapFaults.end())
+    {
+        fi = (FaultInformation_t *)*it;
+        delete fi;
+        it++;
+    }
+    m_soapFaults.clear();
 }

@@ -791,6 +791,22 @@ void axiscStubSetSecure(AXISCHANDLE stub,
     }
 }
 
+AXISC_STORAGE_CLASS_INFO
+void axiscStubSetCExceptionHandler(AXISCHANDLE stub, void * pExceptionHandler)
+{
+    StubC *s = (StubC*)stub;  
+    s->setCExceptionHandler(pExceptionHandler); 
+}
+
+AXISC_STORAGE_CLASS_INFO
+void * axiscStubGetCExceptionHandler(AXISCHANDLE stub)
+{
+    StubC *s = (StubC*)stub;
+    return s->getCExceptionHandler();
+}
+
+
+
 }
 
 
