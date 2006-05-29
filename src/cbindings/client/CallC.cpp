@@ -80,7 +80,7 @@ void axiscCallDestroy(AXISCHANDLE call)
     }
     catch ( AxisException& e  )
     {
-        processException(c, e);
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
     }
     catch ( ... )
     {
