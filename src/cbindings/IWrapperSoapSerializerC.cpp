@@ -19,7 +19,6 @@
 #include <axis/AxisException.hpp>
 
 #include "../soap/SoapSerializer.h"
-#include "AxisObjectContainer.hpp"
 
 #include <axis/Axis.h>
 #include <axis/GDefine.h>

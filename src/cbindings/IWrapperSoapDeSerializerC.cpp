@@ -18,7 +18,6 @@
 #include <axis/IWrapperSoapDeSerializer.hpp>
 #include <axis/AxisException.hpp>
 
-#include "AxisObjectContainer.hpp"
 #include "AxisObjectConverter.hpp"
 
 #include <axis/Axis.h>

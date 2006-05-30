@@ -18,8 +18,6 @@
 #include <axis/ISoapFault.hpp>
 #include <axis/AxisException.hpp>
 
-#include "AxisObjectContainer.hpp"
-
 AXIS_CPP_NAMESPACE_USE
 
 extern "C" {

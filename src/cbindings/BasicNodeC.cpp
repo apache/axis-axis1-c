@@ -17,8 +17,6 @@
 #include <axis/BasicNode.hpp>
 #include <axis/AxisException.hpp>
 
-#include "AxisObjectContainer.hpp"
-
 #include <axis/Axis.h>
 #include <axis/GDefine.h>
 #include <axis/AxisUserAPI.h>
