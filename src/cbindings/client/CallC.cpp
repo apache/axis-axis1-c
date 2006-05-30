@@ -3394,7 +3394,12 @@ void axiscCallSetSOAPMethodAttribute(AXISCHANDLE call,
 
 
 AXISC_STORAGE_CLASS_INFO 
-const char * axiscCallGetFaultAsXMLString(AXISCHANDLE call) 
+#ifdef __OS400__
+const char *
+#else
+const xsd__string 
+#endif
+axiscCallGetFaultAsXMLString(AXISCHANDLE call) 
 {
     Call *c = (Call*)call;
     
@@ -3411,7 +3416,7 @@ const char * axiscCallGetFaultAsXMLString(AXISCHANDLE call)
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
-    return (xsdc__string)NULL;
+    return (const char *)NULL;
 }
 
 AXISC_STORAGE_CLASS_INFO 
