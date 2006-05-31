@@ -170,7 +170,7 @@
 
       <wsdl:operation name="add">
 
-         <wsdlsoap:operation soapAction="Calculator#add"/>
+         <wsdlsoap:operation soapAction="CalculatorDoc#add"/>
 
          <wsdl:input name="addRequest">
 
@@ -188,7 +188,7 @@
 
       <wsdl:operation name="sub">
 
-         <wsdlsoap:operation soapAction="Calculator#sub"/>
+         <wsdlsoap:operation soapAction="CalculatorDoc#sub"/>
 
          <wsdl:input name="subRequest">
 
@@ -206,7 +206,7 @@
 
       <wsdl:operation name="mul">
 
-         <wsdlsoap:operation soapAction="Calculator#mul"/>
+         <wsdlsoap:operation soapAction="CalculatorDoc#mul"/>
 
          <wsdl:input name="mulRequest">
 
@@ -224,7 +224,7 @@
 
       <wsdl:operation name="div">
 
-         <wsdlsoap:operation soapAction="Calculator#div"/>
+         <wsdlsoap:operation soapAction="CalculatorDoc#div"/>
 
          <wsdl:input name="divRequest">
 
@@ -242,11 +242,11 @@
 
    </wsdl:binding>
 
-   <wsdl:service name="Calculator">
+   <wsdl:service name="CalculatorDoc">
 
-      <wsdl:port binding="impl:CalculatorSoapBinding" name="Calculator">
+      <wsdl:port binding="impl:CalculatorSoapBinding" name="CalculatorDoc">
 
-         <wsdlsoap:address location="http://localhost/axis/Calculator"/>
+         <wsdlsoap:address location="http://localhost/axis/CalculatorDoc"/>
 
       </wsdl:port>
 
