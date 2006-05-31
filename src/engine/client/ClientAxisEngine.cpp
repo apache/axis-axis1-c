@@ -76,17 +76,23 @@ int ClientAxisEngine::process (SOAPTransport* pSoap)
                 // The convention for the service name appears to be service#port
                 if( strchr( pchService, '#') == NULL)
                 {
-                    // If there is no # seperator, then strip off the outer quotes.
-                    int        iStringLength = strlen( pchService);
-                    char *    pszService = new char[iStringLength];
+                    int     iStringLength = strlen( pchService);
+                    char *  pszService = new char[iStringLength];
 
-                    memset( pszService, 0, iStringLength);
-                    memcpy( pszService, pchService + 1, iStringLength - 2);
+                   memset( pszService, 0, iStringLength);
+                    // If there is no # seperator, then strip off the outer quotes. if they exist !
+                    if(strchr(pchService, '"') == NULL)
+                    {
+                       memcpy( pszService, pchService, iStringLength);
+                    }
+                    else
+                    {
+                        memcpy( pszService, pchService + 1, iStringLength - 2);
+                    }
 
-                    pService = g_pWSDDDeployment->getService( pszService);
+                 pService = g_pWSDDDeployment->getService( pszService);
 
-                    delete [] pszService;
-                }
+                  delete [] pszService;                }
                 else
                 {
                     char * pchTempService = new char [strlen(pchService)+1];
