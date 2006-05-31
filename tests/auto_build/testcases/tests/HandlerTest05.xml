@@ -14,7 +14,7 @@
             handler_test5
         </directory>
        <service>
-           Calculator
+           CalculatorDoc
        </service>
     </handler>
 	<endpoint>http://localhost:80/axis/CalculatorDoc</endpoint>

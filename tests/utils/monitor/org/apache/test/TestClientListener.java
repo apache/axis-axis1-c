@@ -36,6 +36,7 @@ public class TestClientListener extends ChildHandler implements Runnable
     private String  serviceHostNme =null;
     private boolean stayAlive      =false;
     private ServerSocket    serverSocket   =null;
+    private int listenPort; // only kept to do sysout message
 
     /**
      * 
@@ -50,6 +51,7 @@ public class TestClientListener extends ChildHandler implements Runnable
     {
         this.serviceHostNme=serviceHost;
         this.servicePort=servicePort;
+        this.listenPort = listenPort;
 
         // no point in carrying on if we can't listen to the client !
         serverSocket=TCPMonitor.getServerSocket(listenPort);
@@ -81,7 +83,7 @@ public class TestClientListener extends ChildHandler implements Runnable
             try
             {
                 System.out
-                        .println("TestClientListener#run(): Waiting for a new client request");
+                        .println("TestClientListener#run(): Waiting for a new client request: "+listenPort);
                 clientSocket=serverSocket.accept( );
                 
                 // Set keep-alive option to ensure that if client crashes we do not 
