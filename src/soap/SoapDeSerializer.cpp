@@ -2120,7 +2120,7 @@ xsd__hexBinary SoapDeSerializer::decodeFromHexBinary (const AxisChar * pValue)
     return value;
 }
 
-const xsd__string
+xsd__string
 SoapDeSerializer::getFaultAsXMLString()
 {
     if (AXIS_SUCCESS != m_nStatus || RPC_ENCODED == m_nStyle)

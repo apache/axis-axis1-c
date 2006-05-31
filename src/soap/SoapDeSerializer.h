@@ -331,7 +331,7 @@ public:
 	/**
 	 * Returns a complex fault as an XML string 
 	 */
-	const xsd__string getFaultAsXMLString();
+	xsd__string getFaultAsXMLString();
 
     /*
      *This class is used by the DeSerializer to set the input stream back to 

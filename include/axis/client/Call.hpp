@@ -1659,7 +1659,7 @@ public:
      *
      * @return a null terminated character string of the complex fault in XML.
      */
-    const xsd__string getFaultAsXMLString();
+    xsd__string getFaultAsXMLString();
 
     /**
      * Adds an attachment to the MIME message. This attachment will not be
