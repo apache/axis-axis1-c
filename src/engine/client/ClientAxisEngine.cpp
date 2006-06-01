@@ -79,7 +79,7 @@ int ClientAxisEngine::process (SOAPTransport* pSoap)
                     int     iStringLength = strlen( pchService);
                     char *  pszService = new char[iStringLength];
 
-                   memset( pszService, 0, iStringLength);
+                    memset( pszService, 0, iStringLength);
                     // If there is no # seperator, then strip off the outer quotes. if they exist !
                     if(strchr(pchService, '"') == NULL)
                     {
@@ -90,9 +90,10 @@ int ClientAxisEngine::process (SOAPTransport* pSoap)
                         memcpy( pszService, pchService + 1, iStringLength - 2);
                     }
 
-                 pService = g_pWSDDDeployment->getService( pszService);
+                    pService = g_pWSDDDeployment->getService( pszService);
 
-                  delete [] pszService;                }
+                    delete [] pszService;                
+                  }
                 else
                 {
                     char * pchTempService = new char [strlen(pchService)+1];
