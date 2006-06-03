@@ -1129,9 +1129,9 @@ typedef void (* AXIS_EXCEPTION_HANDLER_FUNCT)(int exceptionCode, const char *exc
 typedef struct FaultInformation
 {
     const char *             m_faultName;
-    AXIS_OBJECT_CREATE_FUNCT m_createFp;
-    AXIS_DESERIALIZE_FUNCT   m_deserializerFp;
-    AXIS_OBJECT_DELETE_FUNCT m_deleteFp;
+    void *                   m_createFp;
+    void *                   m_deserializerFp;
+    void *                   m_deleteFp;
 } FaultInformation_t;
 
 void Call::addSoapFaultToList(const char *faultName, 
@@ -1142,9 +1142,9 @@ void Call::addSoapFaultToList(const char *faultName,
     FaultInformation_t *fi = new FaultInformation_t;
     
     fi->m_faultName      = faultName;
-    fi->m_createFp       = (AXIS_OBJECT_CREATE_FUNCT)createFp;
-    fi->m_deserializerFp = (AXIS_DESERIALIZE_FUNCT)deserializerFp;
-    fi->m_deleteFp       = (AXIS_OBJECT_DELETE_FUNCT)deleteFp;
+    fi->m_createFp       = createFp;
+    fi->m_deserializerFp = deserializerFp;
+    fi->m_deleteFp       = deleteFp;
     
     m_soapFaults.push_back(fi);
 }
@@ -1194,10 +1194,10 @@ void Call::processSoapFault(AxisException *e,
             
             if (NULL==pFaultDetail || 0==strlen((char *)pFaultDetail))
             {
-                pFaultDetail = this->getFaultAsXMLString();
+                pFaultDetail = (void *)this->getFaultAsXMLString();
 
                 if (NULL==pFaultDetail)
-                    pFaultDetail = "";
+                    pFaultDetail = (void *)"";
                 else
                     isFaultDetailXMLString=true;
             }
@@ -1206,7 +1206,10 @@ void Call::processSoapFault(AxisException *e,
         excFp(e->getExceptionCode(), e->what(), pSoapFault, pFaultDetail);
         
         if (faultIsDefined)
-            fi->m_deleteFp(pFaultDetail, 0);
+        {
+            AXIS_OBJECT_DELETE_FUNCT deleteFp = (AXIS_OBJECT_DELETE_FUNCT)fi->m_deleteFp;
+            deleteFp(pFaultDetail, 0);
+        }
         else if (isFaultDetailXMLString)
             delete [] (char *)pFaultDetail;
     }
