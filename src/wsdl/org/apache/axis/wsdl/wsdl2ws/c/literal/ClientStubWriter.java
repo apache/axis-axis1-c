@@ -349,7 +349,7 @@ public class ClientStubWriter
                 else
                     qname = retType.getName ();
                 if (CUtils.isSimpleType (qname))               
-                    writer.write(outparamType + " *RetArray = (" + outparamType + " *)axiscAxisNew(XSDC_ARRAY, 0);\n");
+                    writer.write(outparamType + " *RetArray = (" + outparamType + " *)NULL;\n");
                 else
                     writer.write(outparamType + " *RetArray = (" + outparamType + " *)Axis_Create_" + outparamType + "(0);\n");
             }
