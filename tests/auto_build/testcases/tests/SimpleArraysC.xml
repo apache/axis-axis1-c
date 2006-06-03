@@ -1,0 +1,17 @@
+<test>
+    <name>SimpleArraysC</name>
+    <description>SimpleArraysC</description>
+    <clientLang>c</clientLang>
+    <clientCode>SimpleArraysClient.c</clientCode>
+    <wsdl>SimpleArrays.wsdl</wsdl>
+    <expected>
+        <output>
+            SimpleArrays.expected
+        </output>
+		<serverResponse>
+			SimpleArrays_ServerResponse.expected
+		</serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/SimpleArrays</endpoint>
+</test>
+
