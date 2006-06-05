@@ -35,7 +35,7 @@ extern "C" {
 
 static void processException(Call *c, AxisException& e)
 {
-    void *exceptionHandler = axiscAxisInvokeExceptionHandler;
+    void *exceptionHandler = (void *)axiscAxisInvokeExceptionHandler;
     void *stubExceptionHandler;
     
     Stub *s = (Stub *)c->getCStub();
