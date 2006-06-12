@@ -421,6 +421,25 @@ void *axiscAxisNew(AXISC_XSDTYPE type, int size)
     return retVal;
 }
 
+
+AXISC_STORAGE_CLASS_INFO 
+int axiscAxisDeleteCArray(void ** pValue)
+{
+    delete [] pValue;
+}
+
+
+AXISC_STORAGE_CLASS_INFO 
+void ** axiscAxisNewCArray(int size)
+{
+    if (size > 0)
+        return new void *[size];
+    else
+        return (void **)NULL;
+}
+
+
+
 AXISC_STORAGE_CLASS_INFO 
 void axiscAxisRegisterExceptionHandler( AXIS_EXCEPTION_HANDLER_FUNCT fp )
 {

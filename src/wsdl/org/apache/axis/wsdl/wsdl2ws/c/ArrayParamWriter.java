@@ -182,8 +182,11 @@ public class ArrayParamWriter extends ParamWriter
             
             writer.write("\t/* Reclaim memory resources of array elements, if it exists */\n");
             writer.write("\tif (param->m_Array && param->m_Size > 0)\n");
+            writer.write("\t{\n");            
             writer.write("\t\tAxis_Delete_" +  attribs[0].getTypeName() 
                     + "((" + attribs[0].getTypeName() + " *)param->m_Array, param->m_Size);\n");
+            writer.write("\t\tparam->m_Array = NULL;\n");            
+            writer.write("\t}\n");                     
             writer.write("\n");
             
             writer.write("\t/* Reclaim array data type memory resources */\n");

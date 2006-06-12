@@ -754,7 +754,7 @@ public class BeanParamWriter extends ParamCFileWriter
         writer.write("\t{\n");
         writer.write("\t\tint i;\n");        
         writer.write("\t\t" + classname + "** pNew = (" + 
-                classname + "**) malloc(sizeof(" + classname + "*)*nSize);\n");
+                classname + "**) axiscAxisNewCArray(nSize);\n");
         writer.write("\t\tfor (i=0; i < nSize; ++i)\n");
         writer.write("\t\t\tpNew[i] = (" + classname + "*)Axis_Create_" + classname + "(0);\n");
         writer.write("\t\treturn (void *)pNew;\n");
@@ -840,7 +840,7 @@ public class BeanParamWriter extends ParamCFileWriter
         writer.write("\t\tfor (i = 0 ; i < nSize ; i++ )\n");
         writer.write("\t\t\tif (paramArray[i])\n");
         writer.write("\t\t\t\tAxis_Delete_" + classname + "(paramArray[i],0);\n");
-        writer.write("\t\tfree(param);\n");
+        writer.write("\t\taxiscAxisDeleteCArray((void **)param);\n");
         writer.write("\t}\n");
         
         writer.write("\telse\n");

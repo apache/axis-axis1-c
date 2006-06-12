@@ -85,12 +85,34 @@ int axiscAxisDelete(void * pValue,
  * storage required by the client for basic types must use this 
  * function in order that it may be freed by proxy code or the Axis engine.
  * 
+ * @param type The XSDTYPE of the storage to be allocated.
  * @param size - size of storage to be allocated
  * @return pointer to allocated storage
  */
 AXISC_STORAGE_CLASS_INFO 
 void * axiscAxisNew(AXISC_XSDTYPE type, 
                     int size);
+
+/**
+ * Deletes storage allocated by the Axis engine representing a C-type array. 
+ * This is an internal API used by the generated stubs. The elements in array are
+ * the responsibility of the stubs to clean up.
+ * 
+ * @param pValue Pointer to storage to be reclaimed
+ * @return AXISC_SUCCESS or AXISC_FAIL to indicate success or fail
+ */
+AXISC_STORAGE_CLASS_INFO 
+int axiscAxisDeleteCArray(void ** pValue);
+
+/**
+ * Allocates storage to be used by stubs.  The storage is a C-type array.
+ * This is an internal API used by the generated stubs.
+ * 
+ * @param size - size of array to be allocated
+ * @return pointer to allocated storage
+ */
+AXISC_STORAGE_CLASS_INFO 
+void ** axiscAxisNewCArray(int size);
 
 /**
  * Registers a function that will be invoked to handle Axis engine
