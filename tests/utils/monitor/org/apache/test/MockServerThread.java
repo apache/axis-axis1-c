@@ -42,7 +42,7 @@ public class MockServerThread extends ChildHandler implements Runnable
     private static String   MIME_BOUNDARY   ="MIME_BOUNDARY";
 
     private static int      CHARBUFFER_SIZE =32768; // 32K
-    private boolean continueToRun;
+    protected boolean continueToRun;
 
     // Only store the socket so we can close it
     private Socket socket;
@@ -53,9 +53,16 @@ public class MockServerThread extends ChildHandler implements Runnable
 
     private static Response[] responses;
     
-    private boolean closedConnection=false;
+    protected boolean closedConnection=false;
 
-    public MockServerThread(Socket socket, File responseFile)
+    /** 
+     * Any classes that override this class need this constructor 
+     *
+     */
+    protected MockServerThread ()
+    {
+    }
+    public MockServerThread(Socket socket)
             throws IOException , StopRequestException
     {
         System.out.println("MockServerThread(): entry");
@@ -238,7 +245,7 @@ public class MockServerThread extends ChildHandler implements Runnable
      * 
      * @return a complete HTTP response
      */
-    private Response getResponseMessage( ) throws IOException,
+    protected Response getResponseMessage( ) throws IOException,
             ArrayIndexOutOfBoundsException
     {
         return (Response) responses[requests++];

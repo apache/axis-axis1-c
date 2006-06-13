@@ -17,8 +17,8 @@ public class Response
 {
     private static final char CR             ='\r';
     private static final char LF             ='\n';
-    private static final String CRLF          =""+CR+LF;
-    private static final String DOUBLE_CRLF    =CRLF+CRLF;
+    public static final String CRLF          =""+CR+LF;
+    public static final String DOUBLE_CRLF    =CRLF+CRLF;
     private static final String CONTENT_LENGTH ="Content-Length:";
 
     private char[]              message;

@@ -25,16 +25,20 @@ import java.io.IOException;
  */
 public class ResponseSender extends ChildHandler implements Runnable
 {
-    private Response response;
+    protected Response response;
     private BufferedWriter writer;
     // we need to keep a hold of the parent that created us so we can tell them if we closed the connection
     private MockServerThread parent;
     
     
+    protected ResponseSender(Response responseToSend)
+    {
+        this.response = responseToSend;
+    }
     ResponseSender (Response responseToSend, BufferedWriter writerToClient, MockServerThread mockServerThread)
     {
+        this(responseToSend);
 //        System.out.println( "NEW RESPONDER");
-        response = responseToSend;
         writer = writerToClient;
         parent = mockServerThread;
     }

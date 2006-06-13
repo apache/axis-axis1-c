@@ -40,11 +40,11 @@ public class MockServer extends ChildHandler implements Runnable
     private static int SOCKET_TIMEOUT = 700000;
     // The port that we will listen on for the client to connect to
     private int           port;
-    private String responseFileName;
+    protected String responseFileName;
     // File that contains the http responses that the client is expecting back.
-    private File          responseFile;
-    private boolean       continueToRun =true;
-    ServerSocket serverSocket;
+    protected  File          responseFile;
+    protected boolean       continueToRun =true;
+    private ServerSocket serverSocket;
     
     // When this is an ANT task - whether to stop the current MockServer or not.
     private boolean stop; 
@@ -161,7 +161,7 @@ public class MockServer extends ChildHandler implements Runnable
      * This method closes the current response file and opens up a new one
      * @param responseFileName
      */
-    private void reset(String responseFileName)throws IOException
+    protected void reset(String responseFileName)throws IOException
     {
         // close all the connections we got from the client
         super.close();
@@ -187,8 +187,21 @@ public class MockServer extends ChildHandler implements Runnable
      */
     private MockServer( String responseFileName, int port) throws IOException
     {
+        this(responseFileName);
         System.out.println( "MockServer(responseFile, port)");
         this.port =port;
+        // no point in going on if we can;'t create a server socket
+        //serverSocket = TCPMonitor.getServerSocket(port);
+    }
+    
+
+
+    /**
+     * This method is required when this class is being used as a superclass.
+     * @param responseFileName2
+     */
+    protected MockServer(String responseFileName)throws IOException
+    {
         this.responseFileName = responseFileName;
         // deal with the responsefile first
         responseFile=new File(responseFileName);
@@ -198,16 +211,19 @@ public class MockServer extends ChildHandler implements Runnable
             throw new IOException("Can't read the response file <"
                     +responseFile+">");
         }
-        
+    
+        cacheResponseFile();
         // now deal with the port and threads
+    }
+
+    /**
+     * caches the response file ready to send it back. 
+     */
+    protected void cacheResponseFile( )throws IOException
+    {
         // cache the response file (this is a necessary optimisation - if the file is big then the connection blows)
         MockServerThread.cacheResponseFile(responseFile);
-
-        // no point in going on if we can;'t create a server socket
-        //serverSocket = TCPMonitor.getServerSocket(port);
     }
-    
-
 
     /*
      * (non-Javadoc)
@@ -273,7 +289,7 @@ public class MockServer extends ChildHandler implements Runnable
                 try
                 {
                     MockServerThread mockServer;
-                    mockServer=new MockServerThread(incoming, responseFile);
+                    mockServer=new MockServerThread(incoming);
                     addChild(mockServer);
                     Thread mockServerThread = new Thread(mockServer);
                     mockServerThread.start( );
@@ -300,7 +316,10 @@ public class MockServer extends ChildHandler implements Runnable
         // clean up
         try
         {
-            serverSocket.close();
+            if(serverSocket!=null)
+            {
+                serverSocket.close();
+            }
         }
         catch(IOException exception)
         {
