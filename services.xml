@@ -65,6 +65,7 @@ XMLParser:${dir.libraries}/${libraryPrefix}${ClientParserLib}${librarySuffix}
                 <sleep seconds="3" />
             </then>
             <else>
+            	<antcall target="stopAxisServer"/>
                 <echo message="WARNING!" />
                 <echo message="this script can't stop this server (${serverexecutable}).
                                 If the server is started stop it yourself and then run ant again" />
@@ -230,13 +231,13 @@ Channel_HTTP:${dir.libraries}/${libraryPrefix}${HTTP.ChannelLibraryName}${librar
             failifexecutionfails="true">
             <arg line="localhost ${testPort} &quot;${wsddFile}&quot;" />
             <env key="PATH"
-                path="${dir.libraries}${path.separator}${dir.xmlParser}${path.separator}${java.library.path}" />
+                path="${dir.libraries}${path.separator}${dir.xmlParser}/bin${path.separator}${java.library.path}" />
             <env key="LD_LIBRARY_PATH"
-                path="${dir.libraries}${path.separator}${dir.xmlParser}" />
+                path="${dir.libraries}${path.separator}${dir.xmlParser}/lib" />
             <env key="LIBPATH"
-                path="${dir.libraries}${path.separator}${dir.xmlParser}" />
+                path="${dir.libraries}${path.separator}${dir.xmlParser}/lib" />
             <env key="SHLIB_PATH"
-                path="${dir.libraries}${path.separator}${dir.xmlParser}" />
+                path="${dir.libraries}${path.separator}${dir.xmlParser}/lib" />
             <env key="AXISCPP_DEPLOY" value="${dir.test.generated}/AdminClient" />
         </exec>
     </target>
