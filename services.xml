@@ -228,6 +228,7 @@ Channel_HTTP:${dir.libraries}/${libraryPrefix}${HTTP.ChannelLibraryName}${librar
 
     <target name="runAdminClient">
         <exec executable="${dir.release}/bin/${adminClientExecutableName}${executableSuffix}"
+        	
             failifexecutionfails="true">
             <arg line="localhost ${testPort} &quot;${wsddFile}&quot;" />
             <env key="PATH"
@@ -453,7 +454,7 @@ Channel_HTTP:${dir.libraries}/${libraryPrefix}${HTTP.ChannelLibraryName}${librar
             failifexecutionfails="true">
             <arg line="localhost ${testPort} STOP" />
             <env key="PATH"
-                path="${dir.libraries}${path.separator}${dir.xmlParser}/bin${path.separator}${java.library.path}" />
+                path="${dir.xmlParser}/bin${path.separator}${dir.libraries}${path.separator}${java.library.path}" />
             <env key="LD_LIBRARY_PATH"
                 path="${dir.libraries}${path.separator}${dir.xmlParser}/lib" />
             <env key="LIBPATH"
