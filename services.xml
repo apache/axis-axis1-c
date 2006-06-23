@@ -453,11 +453,11 @@ Channel_HTTP:${dir.libraries}/${libraryPrefix}${HTTP.ChannelLibraryName}${librar
             failifexecutionfails="true">
             <arg line="localhost ${testPort} STOP" />
             <env key="PATH"
-                path="${dir.libraries}${path.separator}${dir.xmlParser}${path.separator}${java.library.path}" />
+                path="${dir.libraries}${path.separator}${dir.xmlParser}/bin${path.separator}${java.library.path}" />
             <env key="LD_LIBRARY_PATH"
-                path="${dir.libraries}${path.separator}${dir.xmlParser}" />
+                path="${dir.libraries}${path.separator}${dir.xmlParser}/lib" />
             <env key="LIBPATH"
-                path="${dir.libraries}${path.separator}${dir.xmlParser}" />
+                path="${dir.libraries}${path.separator}${dir.xmlParser}/lib" />
             <env key="SHLIB_PATH"
                 path="${dir.libraries}${path.separator}${dir.xmlParser}" />
             <env key="AXISCPP_DEPLOY" value="${dir.test.generated}/AdminClient" />
