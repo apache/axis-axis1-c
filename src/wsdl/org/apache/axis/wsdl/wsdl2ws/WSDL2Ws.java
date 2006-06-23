@@ -63,7 +63,7 @@ import org.w3c.dom.Node;
  * This this the main class for the WSDL2Ws Tool. This class reuses the code in the 
  * Axis java implementations to parse the WSDL file.
  * the functinality of the class can be discribed as follows 
- *     1) create a Symbol table
+ *  1) create a Symbol table
  *  2) create WrapperInfo class parsing the commandline arguments and the SymbolTable
  *  3) create TypeMap parsing the  Symbol Table
  *  4) create Service Info parsing the Symbol table
@@ -102,6 +102,7 @@ public class WSDL2Ws
         try
         {
             Parser wsdlParser = new Parser();
+            
             // set timeout
             String timeout = cmdLineArgs.getOptionBykey("t"); 
             if (timeout != null) 
@@ -111,11 +112,9 @@ public class WSDL2Ws
             String wsdlfile = cmdLineArgs.getArgument(0);
             wsdlParser.run(wsdlfile);
 
-            symbolTable = wsdlParser.getSymbolTable();
-
             //get the target namespace
-            targetNameSpaceOfWSDL =
-                symbolTable.getDefinition().getTargetNamespace();
+            symbolTable = wsdlParser.getSymbolTable();
+            targetNameSpaceOfWSDL = symbolTable.getDefinition().getTargetNamespace();
         }
         catch (Exception e)
         {
@@ -1452,17 +1451,15 @@ public class WSDL2Ws
     {
         System.out.println(
             "java WSDL2Ws -<options> <wsdlfile>\n"
-                + "-help, -h              print this message\n"
+                + "-h, -help              print this message\n"
                 + "-o<folder>             target output folder - default is current folder\n"
                 + "-l<c++|c>              target language (c++|c) - default is c++\n"
                 + "-s<server|client>      target side (server|client) - default is server\n"
-//                + "-w<wrapped|nonwrapped> wrapping style of the WSDL (wrapped|nonwrapped) - default is wrapped - nonwrapped is currently not implemented\n"
-                + "-verbose, -v           be verbose\n"
-                + "-t timeout              timeout wehen trying to get resolve uri's"
+                + "-v, -verbose           be verbose\n"
+                + "-t<timeout>            uri resolution timeout - 0 means no timeout"
                 );
-//                + "-m<none|gnu>           generate make files (none|gnu) - default is none\n");
-
     }
+    
     /**
      * Usage
      * =====
@@ -1472,12 +1469,9 @@ public class WSDL2Ws
      * ======= === ======
      * -o target output folder
      * -l target language(c|c++) default is c++
-     * -help (later ???? not implemented)
      * -h print usage()
      * -s (client|server|both)  
      * -t timeout
-     * ****** removed *******-w wrapping style of the WSDL (wrapped|nonwrapped) - default is wrapped - nonwrapped is currently not implemented so removed option for -wnonwrapped
-     * ****** removed *******-m create GNU make files - this was failing and not supported so removed.
      * 
      * Note:  PP - pull parser
      * @param args
@@ -1486,101 +1480,37 @@ public class WSDL2Ws
 
     public static void main(String[] args) throws Exception
     {
+        // Get parameters and validate
         CLArgParser data = new CLArgParser(args);
-        if (data.getArgumentCount() != 1 || !checkArguments(data))
+        
+        if (!data.areOptionsValid() || data.isSet("h") || data.getArgumentCount() != 1)
         {
             usage();
+            return;
         }
-        else
+    
+        // Verbose mode?
+        if (data.isSet("v"))
+            WSDL2Ws.verbose = true;
+
+        // Kick off code generation
+        try
         {
-            
+            WSDL2Ws gen = new WSDL2Ws(data);
+            gen.generateWrappers(
+                null,
+                data.getOptionBykey("o"),
+                data.getOptionBykey("l"),
+                data.getOptionBykey("s"),
+                data.getOptionBykey("w"));
 
-            if (data.isSet("v"))
-                WSDL2Ws.verbose = true;
-
-            if (data.isSet("h"))
-            {
-                usage();
-                return;
-            }
-            
-
-            
-
-            // WSDL2Ws.makeSystem = data.getOptionBykey("m");
-            try
-            {
-
-                WSDL2Ws gen = new WSDL2Ws(data);
-                gen.generateWrappers(
-                    null,
-                    data.getOptionBykey("o"),
-                    data.getOptionBykey("l"),
-                    data.getOptionBykey("s"),
-                    data.getOptionBykey("w"));
-
-                System.out.println("\nCode generation completed.\n");
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-                System.out.println(
-                    "\nCode generation failed. Please see errors above.\n");
-            }
+            System.out.println("\nCode generation completed.\n");
         }
-    }
-
-    /**
-     * This method checks that we do not have extraneous inputs to the tool that we do not support
-     * @param data the args coming in
-     * @return tre if the args are all supported false otherwise.
-     */
-    private static boolean checkArguments(CLArgParser data)
-    {
-        for(int i=0; i<data.getArgumentCount(); i++)
+        catch (Exception e)
         {
-            // Check that those supported args have only the acceptable options.
-            // target language
-            String language = data.getOptionBykey("l");
-            if(language!=null)
-            {
-                if(!language.equals("c++") && !language.equals("c"))
-                {
-                    return false;
-                }
-            }
-            
-            // target side
-            String targetSide = data.getOptionBykey("s");
-            if(targetSide!=null)
-            {
-                if(!targetSide.equals("server") && !targetSide.equals("client") && !targetSide.equals("both"))
-                {
-                    return false;
-                }
-            }
-
-            // ensure that only wrapped style is used. 
-            if(data.isSet("w") && !"wrapped".equalsIgnoreCase(data.getOptionBykey("w")))
-            {
-                usage();
-                return false;
-            }
-            
-            // make file generation
-            String makeFiles = data.getOptionBykey("m");
-            if(makeFiles!=null)
-            {
-                // hawkeye - makefiles are not supported as of Nov 2005.
-                return false;
-//                if(!makeFiles.equals("none") && !makeFiles.equals("gnu"))
-//                {
-//                    return false;
-//                }
-            }
-            
+            e.printStackTrace();
+            System.out.println("\nCode generation failed. Please see errors above.\n");
         }
-        return true;
     }
     
     /**
@@ -1600,12 +1530,8 @@ public class WSDL2Ws
         //     a base type array then tell other people of this case. Do this to two levels of indirection
         
         if(type.getRefType()!=null)
-        {
             if(type.getRefType().getRefType()!=null && type.getRefType().getRefType().isBaseType())
-            {
                 return false;
-            }
-        }
             
         return true;
     }
