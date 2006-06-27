@@ -47,13 +47,11 @@ public class WrapperUtils
             lastIndex = index;
             index = fullyQualifiedName.indexOf('.', lastIndex + 1);
         }
+        
         if (lastIndex == 0)
-        {
             return fullyQualifiedName;
-        }
 
         return fullyQualifiedName.substring(0, lastIndex);
-
     }
 
     /**
@@ -78,10 +76,9 @@ public class WrapperUtils
             lastIndex = index;
             index = fullyQualifiedName.indexOf('.', lastIndex + 1);
         }
+        
         if (lastIndex == 0)
-        {
             return fullyQualifiedName;
-        }
 
         return fullyQualifiedName.substring(lastIndex + 1);
     }
@@ -140,14 +137,13 @@ public class WrapperUtils
         chars[0] = Character.toLowerCase(value.charAt(0));
         return new String(chars);
     }
+    
     public static String nsURI2packageName(String nsuri)
     {
 
-        //gard agien if nsuri is urn | http and nothing return		
+        //gard agien if nsuri is urn | http and nothing return        
         if (("urn".equals(nsuri) || "http".equals(nsuri)))
-        {
             return nsuri;
-        }
 
         StringTokenizer tokenizer = new StringTokenizer(nsuri, ":/.", false);
         String token;
@@ -158,35 +154,29 @@ public class WrapperUtils
         {
             token = tokenizer.nextToken();
             if (!("urn".equals(token) || "http".equals(token)))
-            {
                 stack.push(token);
-            }
         }
 
         while (tokenizer.hasMoreTokens())
         {
             token = tokenizer.nextToken();
             if (!(token == null || "".equals(token)))
-            {
                 stack.push(token);
-            }
         }
 
         // create the String from the stack
         StringBuffer buff = new StringBuffer(150);
         if (!stack.isEmpty())
-        {
             buff.append((String) stack.pop());
-        }
+
         while (!stack.isEmpty())
         {
             buff.append('.');
             buff.append((String) stack.pop());
-
         }
 
         String changednsuri = buff.toString();
-        //remove any unexpected charactors		
+        //remove any unexpected charactors        
         changednsuri = changednsuri.replaceAll("[^(a-zA-z0-9|.|_)]", "_");
         return changednsuri;
     }
@@ -197,85 +187,65 @@ public class WrapperUtils
         throws WrapperFault
     {
         if (param.getType().getName().equals(CUtils.anyTypeQname))
-        { //anyType
             return "AnyType*";
-        }
+        
         Type type = wscontext.getTypemap().getType(param.getSchemaName());
         if (type.isSimpleType())
         {
-            // FJP - Additional code for AXISCPP-697 vv
             String name = param.getLangName();
             
             if( name.indexOf(">") != -1)
-            {
                 name = CUtils.getclass4qname (param.getType().getBaseType());
-            }
             
             return name;
-            // FJP - Additional code for AXISCPP-697 ^^
         }
-        else
-        {
-            if (!TypeMap.isSimpleType(param.getSchemaName()))
-            { //array or complex types
-                if (type.isArray())
-                {
-                    String arrayName =
-                        CUtils.getCmplxArrayNameforType(
-                            getArrayType(type).getName());
-                    if (null == arrayName)
-                    { //simple type array
-                        /* Does the program flow ever come to this place ? if so in which situation ? - Susantha 20/10/2004 */
-                        arrayName =
-                            CUtils.getBasicArrayNameforType(
-                                CUtils.getclass4qname(
-                                    getArrayType(type).getName()));
-                    }
-                    return arrayName;
+        else if (!TypeMap.isSimpleType(param.getSchemaName()))
+        { 
+            //array or complex types
+            if (type.isArray())
+            {
+                String arrayName = CUtils.getCmplxArrayNameforType(getArrayType(type).getName());
+                if (null == arrayName)
+                { 
+                    //simple type array
+                    /* Does the program flow ever come to this place ? if so in which situation ? - Susantha 20/10/2004 */
+                    arrayName =
+                        CUtils.getBasicArrayNameforType(CUtils.getclass4qname(getArrayType(type).getName()));
                 }
-                else
-                {
-                    return param.getLangName() + "*";
-                    //All complex types will be pointers	
-                }
+                return arrayName;
             }
             else
             {
-                if (param.isArray())
-                {
-                    /* This enables having simple type array declarations in the wrapping element
-                     * <s:element name="GetProjectNamesResponse">
-                    	<s:complexType>
-                    		<s:sequence>
-                    			<s:element minOccurs="0" maxOccurs="unbounded" form="unqualified" name="return" type="s:string" />
-                    		</s:sequence>
-                    	</s:complexType>
-                    </s:element>
-                     */
-                    return CUtils.getBasicArrayNameforType(
-                        CUtils.getclass4qname(type.getName()));
-                }
-                else
-                {
-                    return param.getLangName();
-                }
+                return param.getLangName() + "*";
+                //All complex types will be pointers    
             }
         }
+        else if (param.isArray())
+        {
+            /* This enables having simple type array declarations in the wrapping element
+             * <s:element name="GetProjectNamesResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="unbounded" form="unqualified" name="return" type="s:string" />
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+             */
+            return CUtils.getBasicArrayNameforType(CUtils.getclass4qname(type.getName()));
+        }
+        else
+            return param.getLangName();
     }
 
     public static Type getArrayType(Type type) throws WrapperFault
     {
         if (!type.isArray())
-        {
             return null;
-        }
+
         Iterator elements = type.getElementnames();
         if (elements.hasNext())
-        {
-            return type
-                .getElementForElementName((String) elements.next())
-                .getType();
-        }
+            return type.getElementForElementName((String) elements.next()).getType();
+        
         throw new WrapperFault("Array type do not have any attibutes");
     }
 

@@ -100,11 +100,7 @@ public class Type
 
 
 
-    public Type(
-        QName name,
-        String languageSpecificName,
-        boolean hasOrder,
-        String language)
+    public Type(QName name, String languageSpecificName, boolean hasOrder, String language)
     {
         this.languageSpecificName = languageSpecificName;
         this.hasOrder = hasOrder;
@@ -113,53 +109,32 @@ public class Type
         attributes = new Hashtable();
         vElements = new Vector();
         vAttributes = new Vector();
+        
         if (language == null)
-        {
             this.language = WrapperConstants.LANGUAGE_JAVA;
-        }
         else
-        {
             this.language = language;
-        }
 
-        // if the language specific name does not specified try weather is it a simple type  	 
+        // if the language specific name is not specified try a simple type       
         if (languageSpecificName == null)
         {
             if (WrapperConstants.LANGUAGE_CPP.equalsIgnoreCase(this.language))
-            {
                 this.languageSpecificName = CUtils.getclass4qname(name);
-            }
+            else if (WrapperConstants.LANGUAGE_C.equalsIgnoreCase(this.language))
+                this.languageSpecificName = CUtils.getclass4qname(name);
             else
-            {
-                if (WrapperConstants
-                    .LANGUAGE_C
-                    .equalsIgnoreCase(this.language))
-                {
-                    this.languageSpecificName = CUtils.getclass4qname(name);
-                }
-                else
-                {
-                    this.languageSpecificName =
-                        TypeMap.getBasicTypeClass4qname(name);
-                }
-            }
-
+                this.languageSpecificName = TypeMap.getBasicTypeClass4qname(name);
         }
 
         //if it is not a simple type genarate the name using usual QName -> language specific name mapping
         if (this.languageSpecificName == null)
-        {
             this.languageSpecificName = qname2LSN();
-        }
         else
         {
             //remove any funny Charactors
-            this.languageSpecificName =
-                this.languageSpecificName.replaceAll("/", "_");
-
-            this.languageSpecificName =
-                this.languageSpecificName.replaceAll(":", "_");
-            // JBY : add this one more clean?
+            this.languageSpecificName = this.languageSpecificName.replaceAll("/", "_");
+            this.languageSpecificName = this.languageSpecificName.replaceAll(":", "_");
+            
             // This arrived in case of inner type declaration. And for compilation
             // we replace all '>' by '_' (not the first one). Quick and durty fix.
             if (this.languageSpecificName.length() > 1)
@@ -167,10 +142,7 @@ public class Type
                 if (this.languageSpecificName.charAt(0) == '>')
                 {
                     this.languageSpecificName =
-                        ">"
-                            + this.languageSpecificName.substring(1).replaceAll(
-                                ">",
-                                "_");
+                        ">" + this.languageSpecificName.substring(1).replaceAll(">","_");
                 }
                 else
                 {
@@ -179,6 +151,7 @@ public class Type
                 }
             }
         }
+        
         this.attribOrder = new Vector();
 
         if (name.getNamespaceURI().equals(WrapperConstants.APACHE_XMLSOAP_NAMESPACE) && 
@@ -217,8 +190,7 @@ public class Type
                     attribName.lastIndexOf(SymbolTable.ANON_TOKEN) + 1,
                     attribName.length());
         }
-        attribName =
-            TypeMap.resolveWSDL2LanguageNameClashes(attribName, this.language);
+        attribName = TypeMap.resolveWSDL2LanguageNameClashes(attribName, this.language);
 
         return attribName;
     }
@@ -243,7 +215,7 @@ public class Type
      */
     public void setTypeForAttributeName(String attribName, Type type)
     {
-        //Samisa:	
+        //Samisa:    
         // Check to see if this is an anonymous type,
         // if it is, replace Axis' ANON_TOKEN with
         // an underscore to make sure we don't run
@@ -267,13 +239,12 @@ public class Type
                     attribName.lastIndexOf(SymbolTable.ANON_TOKEN) + 1,
                     attribName.length());
         }
-        attribName =
-            TypeMap.resolveWSDL2LanguageNameClashes(attribName, this.language);
+        
+        attribName = TypeMap.resolveWSDL2LanguageNameClashes(attribName, this.language);
 
         if (hasOrder)
-        {
             this.attribOrder.add(attribName);
-        }
+
         this.attributes.put(attribName, type);
         this.vAttributes.add(attribName);
     }
@@ -296,10 +267,9 @@ public class Type
     {
         String attribName =
             TypeMap.resolveWSDL2LanguageNameClashes(
-                element.getName().getLocalPart(),
-                this.language);
+                element.getName().getLocalPart(),this.language);
 
-        //Samisa:	
+        //Samisa:    
         // Check to see if this is an anonymous type,
         // if it is, replace Axis' ANON_TOKEN with
         // an underscore to make sure we don't run
@@ -320,18 +290,15 @@ public class Type
         {
             attribName =
                 attribName.substring(
-                    attribName.lastIndexOf(SymbolTable.ANON_TOKEN) + 1,
-                    attribName.length());
+                    attribName.lastIndexOf(SymbolTable.ANON_TOKEN) + 1,attribName.length());
         }
         // Samisa: This second call to TypeMap.resoleveWSDL2LanguageNameClashes
         // is made to make sure after replacinf ANON_TOKEN it is still not a keyword
-        attribName =
-            TypeMap.resolveWSDL2LanguageNameClashes(attribName, this.language);
+        attribName = TypeMap.resolveWSDL2LanguageNameClashes(attribName, this.language);
 
         if (hasOrder)
-        {
             this.attribOrder.add(attribName);
-        }
+
         this.elements.put(attribName, element);
         this.vElements.add(attribName);
     }
@@ -368,28 +335,22 @@ public class Type
     {
         String nsuri = this.name.getNamespaceURI();
         if (nsuri == null)
-        {
             return this.name.getLocalPart();
-        }
 
         if (language.equalsIgnoreCase(WrapperConstants.LANGUAGE_CPP))
         {
             /* if it is CPP the namespace is neglected fr time been */
             return this.name.getLocalPart();
         }
+        else if (language.equalsIgnoreCase(WrapperConstants.LANGUAGE_C))
+            return this.name.getLocalPart();
         else
-            if (language.equalsIgnoreCase(WrapperConstants.LANGUAGE_C))
-            {
-                return this.name.getLocalPart();
-            }
-            else
-            {
-                return WrapperUtils.firstCharacterToLowercase(
-                    WrapperUtils.nsURI2packageName(nsuri))
-                    + "."
-                    + WrapperUtils.capitalizeFirstCaractor(
-                        this.name.getLocalPart());
-            }
+        {
+            return WrapperUtils.firstCharacterToLowercase(
+                WrapperUtils.nsURI2packageName(nsuri))
+                + "."
+                + WrapperUtils.capitalizeFirstCaractor(this.name.getLocalPart());
+        }
     }
     /**
      * @return
@@ -415,19 +376,17 @@ public class Type
         {
             typeName = ((Type) ntype.next()).getName();
             if (typeName.equals(containedType.name))
-            {
                 return true;
-            }
         }
+        
         Iterator nelements = this.elements.values().iterator();
         while (nelements.hasNext())
         {
             typeName = ((ElementInfo) nelements.next()).getType().getName();
             if (typeName.equals(containedType.name))
-            {
                 return true;
-            }
         }
+        
         return false;
     }
 
@@ -456,9 +415,7 @@ public class Type
             if (basetype != null)
             {
                 setBaseType(basetype.getQName());
-                CUtils.addSchemaDefinedSimpleType(
-                    name,
-                    CUtils.getclass4qname(baseType));
+                CUtils.addSchemaDefinedSimpleType(name, CUtils.getclass4qname(baseType));
             }
             enumerationdata = vector;
         }
@@ -598,17 +555,17 @@ public class Type
 
     public void setAsFault(boolean isFault) 
     {
-    	this.isFault = isFault;
+        this.isFault = isFault;
     }
     
     public boolean isFault() 
     {
-    	return isFault;
+        return isFault;
     }
 
     public boolean isAttachment() 
     {
-    	return isAttachment;
+        return isAttachment;
     }
 
     /**
