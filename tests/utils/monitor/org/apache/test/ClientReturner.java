@@ -34,7 +34,7 @@ public class ClientReturner extends ChildHandler implements Runnable
     // socket to the service;
     private Socket serviceSocket;
     // We hold on to our parent so we can tell it that the server has closed the socket and not to be alarmed when we close the socket to the client
-    private TestClientThread parent;
+    protected TestClientThread parent;
     protected boolean                  continueToRun        =true;
     private static int       number               =0;
 
