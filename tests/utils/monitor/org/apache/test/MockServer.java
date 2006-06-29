@@ -56,7 +56,7 @@ public class MockServer extends ChildHandler implements Runnable
         System.out.println("responseFile: The file to write out when a request is received");
     }
 
-/**    public static void main(String[] args)
+    public static void main(String[] args)
     {
         // check that we have the required params
         if (args.length<2)
@@ -68,8 +68,6 @@ public class MockServer extends ChildHandler implements Runnable
         // We have the params now let's run the server !
         int port=0;
         String fileName=null;
-        try
-        {
             for(int i=0; i<args.length; i++)
             {
                 if (args[i].equalsIgnoreCase("-p"))
@@ -93,18 +91,12 @@ public class MockServer extends ChildHandler implements Runnable
                 }
             }
 
-            MockServer server=new MockServer(fileName, port);
-            Thread serverThread=new Thread(server);
-            serverThread.start( );
-        }
-        catch (IOException ioException)
-        {
-            ioException.printStackTrace( System.err);
-            
-            throw new RuntimeException("Failed to start MockServer due to IOException: "+ioException);
-        }
+            MockServer server=new MockServer();
+            server.setPort(port);
+            server.setResponseFileName(fileName);
+            server.execute();
     }
-*/
+
 
     public MockServer()
     {
