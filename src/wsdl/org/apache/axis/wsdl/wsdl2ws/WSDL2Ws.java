@@ -76,6 +76,7 @@ import org.w3c.dom.Node;
 public class WSDL2Ws
 {
     public static boolean verbose = false;
+    
     // we don't write out the make files anymore - 9th Nov 2005
 //    public static String makeSystem = null;
 
@@ -102,6 +103,10 @@ public class WSDL2Ws
         try
         {
             Parser wsdlParser = new Parser();
+            
+            // set verbose in wsdl parser
+            if (WSDL2Ws.verbose)
+                wsdlParser.setVerbose(true);
             
             // set timeout
             String timeout = cmdLineArgs.getOptionBykey("t"); 
@@ -657,17 +662,26 @@ public class WSDL2Ws
         
         if (WSDL2Ws.verbose)
         {
+            System.out.println( "Dumping typeMap....");
+            
             Iterator it = typeMap.getTypes().iterator();
             while (it.hasNext())
             {
                 System.out.println(it.next());
             }
+            
+            symbolTable.dump(System.out);
         }
         wsg.generate();
     }
 
     
     /**
+     * This method attempts to find anonymous types in the parameter list of 
+     * web-service methods to determine if the type should be exposed.
+     * TODO: Current problem that needs to be fixed is when an anonymous type is 
+     *       encountered, we do not check for nested types within the anonymous type
+     *       in order to expose those types.
      * @param wsContext
      */
     private void exposeMessagePartsThatAreAnonymousTypes(WebServiceContext wsContext)
@@ -684,6 +698,9 @@ public class WSDL2Ws
                 if(type.getQName().getLocalPart().toString().startsWith(">")
                         && !(type.getQName().getLocalPart().toString().lastIndexOf(">")>1))
                 {
+                    if(WSDL2Ws.verbose)
+                        System.out.println( "EXPOSE2: Checking whether to expose anon type "+type.getQName().getLocalPart());
+                    
                     // this is an "inner" type that will not be exposed
                     // however, it needs to be if it is referenced in a message part.
                     // check all the messages
@@ -701,6 +718,9 @@ public class WSDL2Ws
                               Type parameterType = parameterInfo.getType();
                               if(parameterType.getName().equals(type.getQName()))
                               {
+                                  if(WSDL2Ws.verbose)
+                                      System.out.println( "EXPOSE2: Matches input parm, exposing anon type "+type.getQName().getLocalPart());
+                         
                                   QName oldName = parameterType.getName();
                                   QName newTypeName = 
                                       new QName(parameterType.getName().getNamespaceURI(), 
@@ -718,8 +738,6 @@ public class WSDL2Ws
                                   // firstly remove the old version
                                   wsContext.getTypemap().removeType(oldName);
                                   wsContext.getTypemap().addType(newTypeName, innerClassType);
-                                  
-                                  Iterator AllTypes = symbolTable.getTypeIndex().values().iterator();
                               }
                           }
                           
@@ -732,6 +750,9 @@ public class WSDL2Ws
                               Type parameterType = parameterInfo.getType();
                               if(parameterType.getName().equals(type.getQName()))
                               {
+                                  if(WSDL2Ws.verbose)
+                                      System.out.println( "EXPOSE2: Matches output parm, exposing anon type "+type.getQName().getLocalPart());
+                              
                                   QName oldName = parameterType.getName();
                                   QName newTypeName = new QName(parameterType.getName().getNamespaceURI(), parameterType.getName().getLocalPart().substring(1));
                                   
@@ -747,8 +768,6 @@ public class WSDL2Ws
                                   // firstly remove the old version
                                   wsContext.getTypemap().removeType(oldName);
                                   wsContext.getTypemap().addType(newTypeName, innerClassType);
-                                  
-                                  Iterator AllTypes = symbolTable.getTypeIndex().values().iterator();
                               }
                           }
                     }
@@ -773,7 +792,9 @@ public class WSDL2Ws
                 DefinedType type = (DefinedType)highLevelType;
                 if(!type.getQName().getLocalPart().toString().startsWith(">"))
                 {
-//                        System.out.println( "HERE "+type.getQName().getLocalPart());
+                    if(WSDL2Ws.verbose)
+                        System.out.println( "EXPOSE3: Checking for nested anon types for "+type.getQName().getLocalPart());
+                        
                     HashSet nestedTypes = type.getNestedTypes(symbolTable, true);
                     Iterator iterator = nestedTypes.iterator();
                     while(iterator.hasNext())
@@ -785,12 +806,18 @@ public class WSDL2Ws
                             DefinedType nestedType =(DefinedType) nestedObjectType; 
                             // If the nested parts are complex inner/anonymous types then they need to be exposed as seperate classes
                             String name =nestedType.getQName().getLocalPart().toString(); 
-                           // System.out.println( "iterator next = "+name);
+
+                            if(WSDL2Ws.verbose)
+                               System.out.println( "EXPOSE3: Checking whether to expose nested type "+ nestedType.getQName());
+                                
                             if(name.startsWith(">") && name.lastIndexOf(">")>0)
                             {
                               // then this type needs to be exposed !
                               QName oldName = nestedType.getQName();
-//                                  System.out.println( "Exposing nestedType "+oldName);
+                                  
+                              if(WSDL2Ws.verbose)
+                                  System.out.println( "EXPOSE3: Exposing nestedType "+oldName);
+                                  
 //                                  System.out.println( "nestobjecttype = "+nestedObjectType.getClass());
 //                                  QName newTypeName = new QName(oldName.getNamespaceURI(), oldName.getLocalPart().substring(1));
                               QName newTypeName =new QName(oldName.getNamespaceURI(), CUtils.sanitiseClassName(oldName.getLocalPart().toString()));
@@ -812,6 +839,8 @@ public class WSDL2Ws
                         }
                     }
                 }
+                else if(WSDL2Ws.verbose)
+                    System.out.println( "EXPOSE3: Skipping nested types for anon type "+type.getQName().getLocalPart());
             }
         }
     }
@@ -1269,12 +1298,14 @@ public class WSDL2Ws
                             // If there is a ref type and the ref type is not currently exposed because it's an "inner" type (marked by ">")then make sure the ref type is exposed to the user as a class
                             // in order to expose it we simply change the name !                            
                             TypeEntry referencedType =defType.getRefType(); 
+                            if(WSDL2Ws.verbose)
+                                System.out.println( "EXPOSE1: Checking whether to expose ref-type "+defType.getQName().getLocalPart());
+
                             if(referencedType!=null && referencedType.getQName().getLocalPart().startsWith(">") && referencedType.getQName().getLocalPart().lastIndexOf(">") == 0)
                             {
                                 if(WSDL2Ws.verbose)
-                                {
-                                    System.out.println( "got to expose "+defType.getQName().getLocalPart());
-                                }
+                                    System.out.println( "EXPOSE1: Exposing ref-type "+defType.getQName().getLocalPart());
+
                                 Type innerClassType = wsContext.getTypemap().getType(defType.getRefType().getQName());
                                 innerClassType.setLanguageSpecificName(new QName(defType.getQName().getLocalPart()).toString());
                                 
