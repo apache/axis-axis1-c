@@ -31,6 +31,11 @@ public class CLArgParser
     public Hashtable bag;
     public ArrayList args;
 
+    /**
+     * Not very good argument parser, could be improved.  For example, there can be no spaces between
+     * a property starting with '-' and the property value (i.e. '-o/outdir' and not -o /outdir'). 
+     * In addition, only single character options are allowed.
+     */
     public CLArgParser(String[] args) 
     {
         this.bag = new Hashtable();
