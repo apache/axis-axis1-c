@@ -26,6 +26,7 @@ package org.apache.axis.wsdl.wsdl2ws;
 import java.util.Hashtable;
 import javax.xml.namespace.QName;
 import java.util.Vector;
+import java.lang.reflect.Array;
 import org.w3c.dom.Node;
 import org.apache.axis.wsdl.symbolTable.SymbolTable;
 import org.apache.axis.wsdl.toJava.Utils;
@@ -51,8 +52,13 @@ public class CUtils
     public static final String C_FILE_SUFFIX = ".c";
     // File suffix fr C Header files
     public static final String C_HEADER_SUFFIX = ".h";
+    
     // Valid XML but invalid or reserved C/C++ characters 
-    public static final String VALID_XML_INVALID_C = "//!\"#$%&'()*+,-./:;<=>?@\\^`{|}~[]\u00A3";
+    private static final char invalidCChars[] = {
+        '/', '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',',
+        '-', '.', ':', ';', '<', '=', '>', '?',  '@', '\\','^', '`', '{',
+        '|', '}', '~', '[', ']', '\u00A3'     
+    };
 
     /* This type mapping only maps simple types the mapping for
        complex types are done with in the type class */
@@ -72,7 +78,7 @@ public class CUtils
     private static Hashtable isPointerBasedType = new Hashtable();
     private static boolean cpp = true;
     
-    static{    
+    static{        
         class2QNamemapCpp.put("xsd__duration",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "duration"));
         class2QNamemapCpp.put("xsd__dateTime",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"));
         class2QNamemapCpp.put("xsd__time",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "time"));
@@ -1048,18 +1054,8 @@ public class CUtils
     {
         String sanitisedName = name;
 
-        for( int iRSLCount = 0; iRSLCount < VALID_XML_INVALID_C.length(); iRSLCount++)
-        {
-            int        iOffset;
-            String    sChar = VALID_XML_INVALID_C.substring( iRSLCount, iRSLCount + 1);
-            
-            while( (iOffset = sanitisedName.indexOf( sChar)) != -1)
-            {
-                String    sBefore = sanitisedName.substring( 0, iOffset);
-                String    sAfter = sanitisedName.substring( iOffset + 1);
-                sanitisedName = sBefore + "_" + sAfter; 
-            }
-        }
+        for( int i=0; i < Array.getLength(invalidCChars); i++)
+            sanitisedName = sanitisedName.replace((char)invalidCChars[i], '_'); 
         
         //System.out.println("name=" + name + " sanitisedName=" + sanitisedName);
         
@@ -1075,4 +1071,5 @@ public class CUtils
         
         return sanitisedName;
     }
-}
+        }
+
