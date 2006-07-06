@@ -133,7 +133,7 @@ public class WSDL2Ws
      * @throws WrapperFault
      */
 
-    public void perprocess() throws WrapperFault
+    public void preprocess() throws WrapperFault
     {
         typeMap = new TypeMap(language);
         this.serviceentry = getServiceEntry();
@@ -630,7 +630,7 @@ public class WSDL2Ws
         else
             this.wsdlWrappingStyle = false;
 
-        perprocess();
+        preprocess();
 
         CUtils.setLanguage(language);
         QName serviceqname = serviceentry.getService().getQName();
@@ -985,7 +985,7 @@ public class WSDL2Ws
         }
         else if (type instanceof DefinedElement)
         { 
-            //skip any wrapping elements where ref=....
+            // if element references another type, process the referenced type
             if (type.getRefType() != null)
                 return createTypeInfo(type.getRefType(), targetLanguage);
 
@@ -1144,7 +1144,6 @@ public class WSDL2Ws
                     Vector elements =  CSchemaUtils.getContainedElementDeclarations(te.getNode(),
                                                                                     symbolTable);
                     if (elements != null)
-                    {
                         for (int j = 0; j < elements.size(); j++)
                         {
                             ElementInfo eleinfo = null;
@@ -1206,7 +1205,6 @@ public class WSDL2Ws
                                                        
                             typedata.setTypeNameForElementName(eleinfo);
                         }
-                    }
                 }
             }
         }
