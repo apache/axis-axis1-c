@@ -78,6 +78,9 @@ public class CUtils
     private static Hashtable isPointerBasedType = new Hashtable();
     private static boolean cpp = true;
     
+    private static Hashtable uniqueNameMapper = new Hashtable();
+    private static Vector uniqueNamesGenerated = new Vector();
+    
     static{        
         class2QNamemapCpp.put("xsd__duration",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "duration"));
         class2QNamemapCpp.put("xsd__dateTime",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"));
@@ -1071,5 +1074,51 @@ public class CUtils
         
         return sanitisedName;
     }
+
+    /**
+     * This routine is used to basically handle anonymous type naming.  Anonymous types
+     * have names such as '>type' and '>>type>type2', the latter being a nested type. 
+     * When generating classes, we want to use the simplist name, which is the name after
+     * the last '>' character. This routine ensure the uniqueness of the name returned by
+     * keeping a hash table of mapped names and a vector of generated unique names.
+     */
+    public static String getUniqueName(String oldName)
+    {
+        // Should never happen, but just in case.
+        if (oldName == null)
+            return oldName;
+        
+        // If name already in hash table, return the corresponding name
+        String newName = (String)uniqueNameMapper.get(oldName);
+        
+        // If name was not in hash table, generate one, store in hash table.
+        if (newName == null)
+        {
+            newName = oldName;
+            
+            // get name after last '>'
+            int anonCharIndex = oldName.lastIndexOf(SymbolTable.ANON_TOKEN);
+            if (anonCharIndex != -1)
+                newName = oldName.substring(anonCharIndex+1);
+            
+            // Ensure invalid characters are replaced
+            for( int i=0; i < Array.getLength(invalidCChars); i++)
+                newName = newName.replace((char)invalidCChars[i], '_');             
+            
+            // Ensure name does not conflict with language constructs
+            newName = TypeMap.resolveWSDL2LanguageNameClashes(newName, WrapperConstants.LANGUAGE_CPP);
+            
+            // Ensure uniqueness
+            int suffix = 2;            
+            while (uniqueNamesGenerated.contains(newName))
+                newName = newName + Integer.toString(suffix++);
+            
+            // Put newname in hash tables
+            uniqueNameMapper.put(oldName, newName);
+            uniqueNamesGenerated.add(newName);
         }
+
+        return newName;
+    }
+}
 
