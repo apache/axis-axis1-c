@@ -217,7 +217,7 @@ int HandlerLoader::createHandler (BasicHandler** pHandler, int nLibId)
         throw AxisEngineException(SERVER_ENGINE_HANDLER_CREATION_FAILED);
     }
 
-    unlock ();
+    //unlock ();
     return AXIS_SUCCESS;
 }
 
