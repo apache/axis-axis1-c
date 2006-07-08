@@ -1216,13 +1216,19 @@ public class WSDL2Ws
                         if(!(nestedType instanceof BaseType))
                         {
                             TypeEntry defType = (TypeEntry)nestedType;
-                            // If there is a ref type and the ref type is not currently exposed because it's an "inner" type (marked by ">")then make sure the ref type is exposed to the user as a class
-                            // in order to expose it we simply change the name !                            
-                            TypeEntry referencedType =defType.getRefType(); 
-                            if(WSDL2Ws.verbose)
-                                System.out.println( "EXPOSE1: Checking whether to expose ref-type "+defType.getQName().getLocalPart());
 
-                            if(referencedType!=null && referencedType.getQName().getLocalPart().startsWith(">") && referencedType.getQName().getLocalPart().lastIndexOf(">") == 0)
+                            TypeEntry referencedType =defType.getRefType(); 
+                            if (referencedType==null)
+                                continue;
+                            
+                            if(WSDL2Ws.verbose)
+                                System.out.println( "EXPOSE1: Checking whether to expose ref-types for "+defType.getQName().getLocalPart());
+
+                            // If ref type is not currently exposed because it's an "inner" type (marked by ">")
+                            // then expose as a class by simply changing the name !                            
+                            
+                            if(referencedType.getQName().getLocalPart().startsWith(">") 
+                                    && referencedType.getQName().getLocalPart().lastIndexOf(">") == 0)
                             {
                                 if(WSDL2Ws.verbose)
                                     System.out.println( "EXPOSE1: Exposing ref-type "+defType.getQName().getLocalPart());
