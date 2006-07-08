@@ -97,7 +97,29 @@ public class Type
     /* Should this type be generated or not */
     /* this value is currently only used in limited places. usually we use the ">" symbol */
     private boolean generated;
-
+    
+    /* Is anonymous type? qname.localname is checked, and if starts with '>', then true */
+    private boolean isAnonymous = false;
+    
+    /* Has type been exposed - only valid for anonymous types */
+    private boolean anonymousTypeExposed = false;
+    
+    public boolean isAnonymous()
+    {
+        return isAnonymous;
+    }
+    
+    public void exposeAnonymousType()
+    {
+        // Exposing anonymous type means removing starting '>' characters.
+        if (isAnonymous && !anonymousTypeExposed)
+        {
+            languageSpecificName = CUtils.getUniqueName(languageSpecificName);
+            
+            name = new QName(name.getNamespaceURI(), languageSpecificName);
+            anonymousTypeExposed = true;
+        }
+    }
 
 
     public Type(QName name, String languageSpecificName, boolean hasOrder, String language)
@@ -126,7 +148,7 @@ public class Type
                 this.languageSpecificName = TypeMap.getBasicTypeClass4qname(name);
         }
 
-        //if it is not a simple type genarate the name using usual QName -> language specific name mapping
+        //if it is not a simple type try name using usual QName -> language specific name mapping
         if (this.languageSpecificName == null)
             this.languageSpecificName = qname2LSN();
         else
@@ -150,8 +172,12 @@ public class Type
                         this.languageSpecificName.replaceAll(">", "_");
                 }
             }
-        }
+        }     
         
+        // Indicate whether type is anonymous. Anonymous type start with '>'.
+        if (this.languageSpecificName.charAt(0) == '>')
+            isAnonymous = true;
+                            
         this.attribOrder = new Vector();
 
         if (name.getNamespaceURI().equals(WrapperConstants.APACHE_XMLSOAP_NAMESPACE) && 
@@ -448,6 +474,7 @@ public class Type
         }
         else
         {
+            str = str + "isAnonymous =" + isAnonymous + "\n";
             str = str + "isArray =" + isArray + "\n";
             str = str + "Elements[\n";
             Iterator c = elements.values().iterator();
