@@ -1084,6 +1084,8 @@ public class CUtils
      */
     public static String getUniqueName(String oldName)
     {
+        int i;
+        
         // Should never happen, but just in case.
         if (oldName == null)
             return oldName;
@@ -1093,16 +1095,17 @@ public class CUtils
         
         // If name was not in hash table, generate one, store in hash table.
         if (newName == null)
-        {
-            newName = oldName;
-            
-            // get name after last '>'
-            int anonCharIndex = oldName.lastIndexOf(SymbolTable.ANON_TOKEN);
-            if (anonCharIndex != -1)
-                newName = oldName.substring(anonCharIndex+1);
+        {            
+            // Anonymous names start with '>'. For example, '>Type'. However, if it was 
+            // nested, then it would be something like '>>Type>Type2'. 
+            // We should really be nice and get the name after last '>', but at this 
+            // time we will simply by-pass starting '>' and start with the first 
+            // character not equal to '>'.          
+            for (i=0; oldName.charAt(i) == SymbolTable.ANON_TOKEN; ++i);
+            newName = oldName.substring(i);
             
             // Ensure invalid characters are replaced
-            for( int i=0; i < Array.getLength(invalidCChars); i++)
+            for(i=0; i < Array.getLength(invalidCChars); i++)
                 newName = newName.replace((char)invalidCChars[i], '_');             
             
             // Ensure name does not conflict with language constructs
