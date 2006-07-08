@@ -802,9 +802,10 @@ public class WSDL2Ws
                         Object nestedObjectType = iterator.next();
                         if(nestedObjectType instanceof DefinedType)
                         {
-                            //System.out.println( "nestedname"+nestedObjectType);
+                            // If the nested parts are complex inner/anonymous types then they need to 
+                            // be exposed as seperate classes
+                            
                             DefinedType nestedType =(DefinedType) nestedObjectType; 
-                            // If the nested parts are complex inner/anonymous types then they need to be exposed as seperate classes
                             String name =nestedType.getQName().getLocalPart().toString(); 
 
                             if(WSDL2Ws.verbose)
@@ -844,84 +845,6 @@ public class WSDL2Ws
             }
         }
     }
-
-                            
-                            
-//                        }
-//                    }
-//                    if(type.getQName().getLocalPart().toString().startsWith(">")&& !(type.getQName().getLocalPart().toString().lastIndexOf(">")>1))
-//                    {
-//                        // this is an "inner" type that will not be exposed
-//                        // however, it needs to be if it is referenced in a message part.
-//                        // check all the messages
-//                      ArrayList methods = wsContext.getSerInfo().getMethods();
-//                      for(int i=0; i<methods.size(); i++)
-//                      {
-//                          MethodInfo method = (MethodInfo)methods.get(i);
-//                          Collection inputParameterTypes = method.getInputParameterTypes();
-//                          Iterator paramIterator = inputParameterTypes.iterator();
-//                          while(paramIterator.hasNext())
-//                          {
-//                              ParameterInfo parameterInfo =(ParameterInfo)paramIterator.next();
-//                              Type parameterType = parameterInfo.getType();
-//                              if(parameterType.getName().equals(type.getQName()))
-//                              {
-//                                  QName oldName = parameterType.getName();
-//                                  QName newTypeName = new QName(parameterType.getName().getNamespaceURI(), parameterType.getName().getLocalPart().substring(1));
-//                                  
-//                                  Type innerClassType =  wsContext.getTypemap().getType(parameterType.getName());
-//                                  // innerClassType.setLanguageSpecificName(newTypeName);
-//                                  
-//                                  // First thing to do is to expose the type so it gets created.
-//                                  innerClassType.setLanguageSpecificName(newTypeName.getLocalPart().toString());
-//                                  
-//                                  // also have to set the QName becuase this is used in generating the header info.
-//                                  innerClassType.setName(newTypeName);
-//                                  
-//                                  // The typemap we get back is a copy of the actual typemap so we have to set the new value explicitly
-//                                  // firstly remove the old version
-//                                  wsContext.getTypemap().removeType(oldName);
-//                                  wsContext.getTypemap().addType(newTypeName, innerClassType);
-//                                  
-//                                  Iterator AllTypes = symbolTable.getTypeIndex().values().iterator();
-//                              }
-//                          }
-//                      }
-//                        
-//                    }
-//                }
-//            }
-     
-                        
-    //                    ArrayList methods = wsContext.getSerInfo().getMethods();
-    //        for(int i=0; i<methods.size(); i++)
-    //        {
-    //            MethodInfo method = (MethodInfo)methods.get(i);
-    //            Collection inputParameterTypes = method.getInputParameterTypes();
-    //            Iterator paramIterator = inputParameterTypes.iterator();
-    //            while(paramIterator.hasNext())
-    //            {
-    //                ParameterInfo parameterInfo =(ParameterInfo)paramIterator.next();
-    //                Type parameterType = parameterInfo.getType();
-    //                if(parameterType.getLanguageSpecificName().startsWith(">"))
-    //                {
-    //                    // Then this type has not been exposed as a seperate class and it needs to be
-    //                    System.out.println( "got to expose "+parameterType.getName().getLocalPart());
-    //                    QName exposedName = new QName(parameterType.getName().getNamespaceURI(), parameterType.getName().getLocalPart().substring(1));
-    //                    // There'#s no point in doing this unless the type map is changed
-    //                    Type type = wsContext.getTypemap().getType(parameterType.getName());
-    //                    type.setName(exposedName);
-    //                    wsContext.getTypemap().removeType(parameterType.getName());
-    //                    wsContext.getTypemap().addType(exposedName, type);
-    //                    //parameterType.setLanguageSpecificName(new QName(parameterType.getLanguageSpecificName().substring(1)).toString() );
-    //                    
-    //                    // also have to set the QName becuase this is used in generating the header info.
-    //                    //parameterType.setName(new QName(parameterType.getName().getNamespaceURI(), parameterType.getLanguageSpecificName()));
-    //                    
-    //                    
-    //                }
-            
-//        }
 
     /**
      * This code is taken from the org.apache.axis.wsdl.gen.Parser Class.
