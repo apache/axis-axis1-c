@@ -675,176 +675,6 @@ public class WSDL2Ws
         wsg.generate();
     }
 
-    
-    /**
-     * This method attempts to find anonymous types in the parameter list of 
-     * web-service methods to determine if the type should be exposed.
-     * TODO: Current problem that needs to be fixed is when an anonymous type is 
-     *       encountered, we do not check for nested types within the anonymous type
-     *       in order to expose those types.
-     * @param wsContext
-     */
-    private void exposeMessagePartsThatAreAnonymousTypes(WebServiceContext wsContext)
-    {
-        // get the main types
-        Collection types = symbolTable.getTypeIndex().values();
-        Iterator typeIterator = types.iterator();   
-        while(typeIterator.hasNext())
-        {
-            Object highLevelType = typeIterator.next();
-            if(!(highLevelType instanceof BaseType))
-            {
-                DefinedType type = (DefinedType)highLevelType;
-                if(type.getQName().getLocalPart().toString().startsWith(">")
-                        && !(type.getQName().getLocalPart().toString().lastIndexOf(">")>1))
-                {
-                    if(WSDL2Ws.verbose)
-                        System.out.println( "EXPOSE2: Checking whether to expose anon type "+type.getQName().getLocalPart());
-                    
-                    // this is an "inner" type that will not be exposed
-                    // however, it needs to be if it is referenced in a message part.
-                    // check all the messages
-                    ArrayList methods = wsContext.getSerInfo().getMethods();
-                    for(int i=0; i<methods.size(); i++)
-                    {
-                          MethodInfo method = (MethodInfo)methods.get(i);
-                          
-                          // Check input parameters
-                          Collection inputParameterTypes = method.getInputParameterTypes();
-                          Iterator paramIterator = inputParameterTypes.iterator();
-                          while(paramIterator.hasNext())
-                          {
-                              ParameterInfo parameterInfo =(ParameterInfo)paramIterator.next();
-                              Type parameterType = parameterInfo.getType();
-                              if(parameterType.getName().equals(type.getQName()))
-                              {
-                                  if(WSDL2Ws.verbose)
-                                      System.out.println( "EXPOSE2: Matches input parm, exposing anon type "+type.getQName().getLocalPart());
-                         
-                                  QName oldName = parameterType.getName();
-                                  QName newTypeName = 
-                                      new QName(parameterType.getName().getNamespaceURI(), 
-                                                parameterType.getName().getLocalPart().substring(1));
-                                  
-                                  Type innerClassType =  wsContext.getTypemap().getType(parameterType.getName());
-                                  
-                                  // First thing to do is to expose the type so it gets created.
-                                  innerClassType.setLanguageSpecificName(newTypeName.getLocalPart().toString());
-                                  
-                                  // also have to set the QName becuase this is used in generating the header info.
-                                  innerClassType.setName(newTypeName);
-                                  
-                                  // The typemap we get back is a copy of the actual typemap so we have to set the new value explicitly
-                                  // firstly remove the old version
-                                  wsContext.getTypemap().removeType(oldName);
-                                  wsContext.getTypemap().addType(newTypeName, innerClassType);
-                              }
-                          }
-                          
-                          // Check output parameters
-                          Collection outputParameterTypes = method.getOutputParameterTypes();
-                          paramIterator = outputParameterTypes.iterator();
-                          while(paramIterator.hasNext())
-                          {
-                              ParameterInfo parameterInfo =(ParameterInfo)paramIterator.next();
-                              Type parameterType = parameterInfo.getType();
-                              if(parameterType.getName().equals(type.getQName()))
-                              {
-                                  if(WSDL2Ws.verbose)
-                                      System.out.println( "EXPOSE2: Matches output parm, exposing anon type "+type.getQName().getLocalPart());
-                              
-                                  QName oldName = parameterType.getName();
-                                  QName newTypeName = new QName(parameterType.getName().getNamespaceURI(), parameterType.getName().getLocalPart().substring(1));
-                                  
-                                  Type innerClassType =  wsContext.getTypemap().getType(parameterType.getName());
-                                  
-                                  // First thing to do is to expose the type so it gets created.
-                                  innerClassType.setLanguageSpecificName(newTypeName.getLocalPart().toString());
-                                  
-                                  // also have to set the QName becuase this is used in generating the header info.
-                                  innerClassType.setName(newTypeName);
-                                  
-                                  // The typemap we get back is a copy of the actual typemap so we have to set the new value explicitly
-                                  // firstly remove the old version
-                                  wsContext.getTypemap().removeType(oldName);
-                                  wsContext.getTypemap().addType(newTypeName, innerClassType);
-                              }
-                          }
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * @param wsContext
-     */
-    private void exposeNestedTypesThatAreAnonymousTypes(WebServiceContext wsContext)
-    {
-        // get the main types
-        Collection types = symbolTable.getTypeIndex().values();
-        Iterator typeIterator = types.iterator();   
-        while(typeIterator.hasNext())
-        {
-            Object highLevelType = typeIterator.next();
-            if(!(highLevelType instanceof BaseType))
-            {
-                DefinedType type = (DefinedType)highLevelType;
-                if(!type.getQName().getLocalPart().toString().startsWith(">"))
-                {
-                    if(WSDL2Ws.verbose)
-                        System.out.println( "EXPOSE3: Checking for nested anon types for "+type.getQName().getLocalPart());
-                        
-                    HashSet nestedTypes = type.getNestedTypes(symbolTable, true);
-                    Iterator iterator = nestedTypes.iterator();
-                    while(iterator.hasNext())
-                    {
-                        Object nestedObjectType = iterator.next();
-                        if(nestedObjectType instanceof DefinedType)
-                        {
-                            // If the nested parts are complex inner/anonymous types then they need to 
-                            // be exposed as seperate classes
-                            
-                            DefinedType nestedType =(DefinedType) nestedObjectType; 
-                            String name =nestedType.getQName().getLocalPart().toString(); 
-
-                            if(WSDL2Ws.verbose)
-                               System.out.println( "EXPOSE3: Checking whether to expose nested type "+ nestedType.getQName());
-                                
-                            if(name.startsWith(">") && name.lastIndexOf(">")>0)
-                            {
-                              // then this type needs to be exposed !
-                              QName oldName = nestedType.getQName();
-                                  
-                              if(WSDL2Ws.verbose)
-                                  System.out.println( "EXPOSE3: Exposing nestedType "+oldName);
-                                  
-//                                  System.out.println( "nestobjecttype = "+nestedObjectType.getClass());
-//                                  QName newTypeName = new QName(oldName.getNamespaceURI(), oldName.getLocalPart().substring(1));
-                              QName newTypeName =new QName(oldName.getNamespaceURI(), CUtils.sanitiseClassName(oldName.getLocalPart().toString()));
-                              
-                              Type innerClassType =  wsContext.getTypemap().getType(oldName);
-                              if(innerClassType!=null)
-                              {
-                                  //     First thing to do is to expose the type so it gets created.
-                                  innerClassType.setLanguageSpecificName(newTypeName.getLocalPart().toString());
-                              
-                                  //     also have to set the QName because this is used in generating the header info.
-                                  innerClassType.setName(newTypeName);
-                                  //     The typemap we get back is a copy of the actual typemap so we have to set the new value explicitly
-                                  // firstly remove the old version
-                                  wsContext.getTypemap().removeType(oldName);
-                                  wsContext.getTypemap().addType(newTypeName, innerClassType);
-                              }
-                            }
-                        }
-                    }
-                }
-                else if(WSDL2Ws.verbose)
-                    System.out.println( "EXPOSE3: Skipping nested types for anon type "+type.getQName().getLocalPart());
-            }
-        }
-    }
 
     /**
      * This code is taken from the org.apache.axis.wsdl.gen.Parser Class.
@@ -896,8 +726,7 @@ public class WSDL2Ws
      * @return
      */
 
-    public Type createTypeInfo(TypeEntry type, String targetLanguage)
-        throws WrapperFault
+    public Type createTypeInfo(TypeEntry type, String targetLanguage) throws WrapperFault
     {
         // Do not add types which are not used in the wsdl
         if (!type.isReferenced())
@@ -1184,6 +1013,12 @@ public class WSDL2Ws
         
         throw new WrapperFault("binding and the port type do not match");
     }
+    
+    // The following 3 exposeXXX methods attempts to expose anonymous types so that 
+    // the types are externalized to the user.  However, these methods do not do 
+    // a good job in terms of exposing nested types, nor do they generate "nice" 
+    // names for anonymous types.  Attempts are under way to correct the problems.
+    
     /**
      * This method goes through the types and for any types that are referenced works out whether
      * they need to be exposed as a seperate class.
@@ -1207,7 +1042,8 @@ public class WSDL2Ws
                 
                 if(!type.getQName().getLocalPart().toString().startsWith(">"))
                 {
-                    // It's not an "inner" type so look for the refs (this might not be valid logic and refs might be acceptable for these types too !)
+                    // It's not an "inner" type so look for the refs (this might not be valid 
+                    // logic and refs might be acceptable for these types too !)
                     HashSet nestedTypes = type.getNestedTypes(symbolTable, true);
                     Iterator nestTypeIter = nestedTypes.iterator();
                     while(nestTypeIter.hasNext())
@@ -1243,6 +1079,173 @@ public class WSDL2Ws
                     }
                 }
                 
+            }
+        }
+    }
+    
+    /**
+     * This method attempts to find anonymous types in the parameter list of 
+     * web-service methods to determine if the type should be exposed.
+     * TODO: Current problem that needs to be fixed is when an anonymous type is 
+     *       encountered, we do not check for nested types within the anonymous type
+     *       in order to expose those types.
+     * @param wsContext
+     */
+    private void exposeMessagePartsThatAreAnonymousTypes(WebServiceContext wsContext)
+    {
+        // get the main types
+        Collection types = symbolTable.getTypeIndex().values();
+        Iterator typeIterator = types.iterator();   
+        while(typeIterator.hasNext())
+        {
+            Object highLevelType = typeIterator.next();
+            if(!(highLevelType instanceof BaseType))
+            {
+                DefinedType type = (DefinedType)highLevelType;
+                if(type.getQName().getLocalPart().toString().startsWith(">")
+                        && !(type.getQName().getLocalPart().toString().lastIndexOf(">")>1))
+                {
+                    if(WSDL2Ws.verbose)
+                        System.out.println( "EXPOSE2: Checking whether to expose anon type "+type.getQName().getLocalPart());
+                    
+                    // this is an "inner" type that will not be exposed
+                    // however, it needs to be if it is referenced in a message part.
+                    // check all the messages
+                    ArrayList methods = wsContext.getSerInfo().getMethods();
+                    for(int i=0; i<methods.size(); i++)
+                    {
+                          MethodInfo method = (MethodInfo)methods.get(i);
+                          
+                          // Check input parameters
+                          Collection inputParameterTypes = method.getInputParameterTypes();
+                          Iterator paramIterator = inputParameterTypes.iterator();
+                          while(paramIterator.hasNext())
+                          {
+                              ParameterInfo parameterInfo =(ParameterInfo)paramIterator.next();
+                              Type parameterType = parameterInfo.getType();
+                              if(parameterType.getName().equals(type.getQName()))
+                              {
+                                  if(WSDL2Ws.verbose)
+                                      System.out.println( "EXPOSE2: Matches input parm, exposing anon type "+type.getQName().getLocalPart());
+                         
+                                  QName oldName = parameterType.getName();
+                                  QName newTypeName = 
+                                      new QName(parameterType.getName().getNamespaceURI(), 
+                                                parameterType.getName().getLocalPart().substring(1));
+                                  
+                                  Type innerClassType =  wsContext.getTypemap().getType(parameterType.getName());
+                                  
+                                  // First thing to do is to expose the type so it gets created.
+                                  innerClassType.setLanguageSpecificName(newTypeName.getLocalPart().toString());
+                                  
+                                  // also have to set the QName becuase this is used in generating the header info.
+                                  innerClassType.setName(newTypeName);
+                                  
+                                  // The typemap we get back is a copy of the actual typemap so we have to set the new value explicitly
+                                  // firstly remove the old version
+                                  wsContext.getTypemap().removeType(oldName);
+                                  wsContext.getTypemap().addType(newTypeName, innerClassType);
+                              }
+                          }
+                          
+                          // Check output parameters
+                          Collection outputParameterTypes = method.getOutputParameterTypes();
+                          paramIterator = outputParameterTypes.iterator();
+                          while(paramIterator.hasNext())
+                          {
+                              ParameterInfo parameterInfo =(ParameterInfo)paramIterator.next();
+                              Type parameterType = parameterInfo.getType();
+                              if(parameterType.getName().equals(type.getQName()))
+                              {
+                                  if(WSDL2Ws.verbose)
+                                      System.out.println( "EXPOSE2: Matches output parm, exposing anon type "+type.getQName().getLocalPart());
+                              
+                                  QName oldName = parameterType.getName();
+                                  QName newTypeName = new QName(parameterType.getName().getNamespaceURI(), parameterType.getName().getLocalPart().substring(1));
+                                  
+                                  Type innerClassType =  wsContext.getTypemap().getType(parameterType.getName());
+                                  
+                                  // First thing to do is to expose the type so it gets created.
+                                  innerClassType.setLanguageSpecificName(newTypeName.getLocalPart().toString());
+                                  
+                                  // also have to set the QName becuase this is used in generating the header info.
+                                  innerClassType.setName(newTypeName);
+                                  
+                                  // remove the old version and add new one
+                                  wsContext.getTypemap().removeType(oldName);
+                                  wsContext.getTypemap().addType(newTypeName, innerClassType);
+                              }
+                          }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * @param wsContext
+     */
+    private void exposeNestedTypesThatAreAnonymousTypes(WebServiceContext wsContext)
+    {
+        // get the main types
+        Collection types = symbolTable.getTypeIndex().values();
+        Iterator typeIterator = types.iterator();   
+        while(typeIterator.hasNext())
+        {
+            Object highLevelType = typeIterator.next();
+            if(!(highLevelType instanceof BaseType))
+            {
+                DefinedType type = (DefinedType)highLevelType;
+                if(!type.getQName().getLocalPart().toString().startsWith(">"))
+                {
+                    if(WSDL2Ws.verbose)
+                        System.out.println( "EXPOSE3: Checking for nested anon types for "+type.getQName().getLocalPart());
+                        
+                    HashSet nestedTypes = type.getNestedTypes(symbolTable, true);
+                    Iterator iterator = nestedTypes.iterator();
+                    while(iterator.hasNext())
+                    {
+                        Object nestedObjectType = iterator.next();
+                        if(nestedObjectType instanceof DefinedType)
+                        {
+                            // If the nested parts are complex inner/anonymous types then they need to 
+                            // be exposed as seperate classes
+                            
+                            DefinedType nestedType =(DefinedType) nestedObjectType; 
+                            String name =nestedType.getQName().getLocalPart().toString(); 
+
+                            if(WSDL2Ws.verbose)
+                               System.out.println( "EXPOSE3: Checking whether to expose nested type "+ nestedType.getQName());
+                                
+                            if(name.startsWith(">") && name.lastIndexOf(">")>0)
+                            {
+                              // then this type needs to be exposed !
+                              QName oldName = nestedType.getQName();
+                                  
+                              if(WSDL2Ws.verbose)
+                                  System.out.println( "EXPOSE3: Exposing nestedType "+oldName);
+                                  
+                              QName newTypeName =new QName(oldName.getNamespaceURI(), CUtils.sanitiseClassName(oldName.getLocalPart().toString()));
+                              
+                              Type innerClassType =  wsContext.getTypemap().getType(oldName);
+                              if(innerClassType!=null)
+                              {
+                                  //     First thing to do is to expose the type so it gets created.
+                                  innerClassType.setLanguageSpecificName(newTypeName.getLocalPart().toString());
+                              
+                                  //     also have to set the QName because this is used in generating the header info.
+                                  innerClassType.setName(newTypeName);
+
+                                  // remove the old version and add new one
+                                  wsContext.getTypemap().removeType(oldName);
+                                  wsContext.getTypemap().addType(newTypeName, innerClassType);
+                              }
+                            }
+                        }
+                    }
+                }
+                else if(WSDL2Ws.verbose)
+                    System.out.println( "EXPOSE3: Skipping nested types for anon type "+type.getQName().getLocalPart());
             }
         }
     }
