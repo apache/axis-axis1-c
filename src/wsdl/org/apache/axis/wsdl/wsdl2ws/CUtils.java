@@ -1099,10 +1099,15 @@ public class CUtils
             // Anonymous names start with '>'. For example, '>Type'. However, if it was 
             // nested, then it would be something like '>>Type>Type2'. 
             // We should really be nice and get the name after last '>', but at this 
-            // time we will simply by-pass starting '>' and start with the first 
-            // character not equal to '>'.          
-            for (i=0; oldName.charAt(i) == SymbolTable.ANON_TOKEN; ++i);
-            newName = oldName.substring(i);
+            // time we will simply generate a name starting at last instance of '>'.  
+            i = oldName.lastIndexOf(SymbolTable.ANON_TOKEN);     
+            if (i > 0)
+                newName  = oldName.substring(i);
+            else
+                newName = oldName;
+
+            //for (i=0; oldName.charAt(i).equals(SymbolTable.ANON_TOKEN); ++i);
+            //newName = oldName.substring(i);
             
             // Ensure invalid characters are replaced
             for(i=0; i < Array.getLength(invalidCChars); i++)
