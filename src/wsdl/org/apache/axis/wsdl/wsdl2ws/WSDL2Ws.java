@@ -1067,7 +1067,7 @@ public class WSDL2Ws
                                     && referencedType.getQName().getLocalPart().lastIndexOf(">") == 0)
                             {
                                 if(WSDL2Ws.verbose)
-                                    System.out.println( "EXPOSE1: Exposing ref-type "+defType.getQName().getLocalPart());
+                                    System.out.println( "EXPOSE1: Exposing ref-type "+defType.getRefType().getQName());
 
                                 Type innerClassType = wsContext.getTypemap().getType(defType.getRefType().getQName());
                                 innerClassType.setLanguageSpecificName(new QName(defType.getQName().getLocalPart()).toString());
