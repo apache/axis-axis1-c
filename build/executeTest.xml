@@ -309,10 +309,10 @@
 				<echo message="No Client log or SSL library."/>
 				<exec executable="${dir.release}/bin/${axisConfigurationExecutableName}${executableSuffix}">
 					<arg line="Client"/>
-                    <arg line="-acd  ${confFileDirectory}"/>
-                    <arg line="-th  ${dir.libraries}/${libraryPrefix}${transportLibraryName}${librarySuffix}"/>
-                    <arg line="-c   ${dir.libraries}/${libraryPrefix}${HTTP.ChannelLibraryName}${librarySuffix}"/>
-                    <arg line="-x   ${dir.libraries}/${ClientParserLib}"/>
+                    <arg line="-acd  &quot;${confFileDirectory}&quot;"/>
+                    <arg line="-th  &quot;${dir.libraries}/${libraryPrefix}${transportLibraryName}${librarySuffix}&quot;"/>
+                    <arg line="-c   &quot;${dir.libraries}/${libraryPrefix}${HTTP.ChannelLibraryName}${librarySuffix}&quot;"/>
+                    <arg line="-x   &quot;${dir.libraries}/${ClientParserLib}&quot;"/>
                     <arg line="-so  &quot;${env.SSL_KEYS_HOME}/myKeyRing.kdb,axis4all,AXIS,NONE,05,NONE,false&quot;"/>
                     <arg line="-b   false"/>
                     <arg line="-pi  quiet"/>
