@@ -69,6 +69,7 @@ public class WrapperUtils
      */
     public static String getClassNameFromFullyQualifiedName(String fullyQualifiedName)
     {
+        // TODO: Not needed - REMOVE?
         int index = fullyQualifiedName.indexOf('.');
         int lastIndex = 0;
         while (index != -1)
