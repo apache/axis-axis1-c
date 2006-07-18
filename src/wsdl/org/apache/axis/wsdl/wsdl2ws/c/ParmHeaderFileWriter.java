@@ -385,7 +385,8 @@ public class ParmHeaderFileWriter extends ParamWriter
                     continue;
                 
                 typeName = type.getLanguageSpecificName();
-                if (typeName.startsWith(">") || !typeName.equals(classname))
+                if ((type.isAnonymous() && !type.isExternalized())
+                        || !typeName.equals(classname))
                     continue;
                 
                 typeSet.add(typeName);

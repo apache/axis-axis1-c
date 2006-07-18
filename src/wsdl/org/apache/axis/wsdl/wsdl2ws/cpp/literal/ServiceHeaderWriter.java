@@ -94,7 +94,7 @@ public class ServiceHeaderWriter
             while (types.hasNext())
             {
                 atype = (Type) types.next();
-                if (atype.getLanguageSpecificName().startsWith(">"))
+                if (atype.isAnonymous() && !atype.isExternalized())
                     continue;
 
                 typeSet.add(atype.getLanguageSpecificName());

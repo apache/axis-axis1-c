@@ -45,14 +45,17 @@ public class Type
      * with simpleContent
      */
     private ElementInfo extensionBaseType = null;
+    
     /**
      * Indicate whether this is a schema defined simpleType
      */
     private boolean isSimpleType = false;
+    
     /**
      * In case this is schema defined simpleType, this is the base type.
      */
     private QName baseType;
+    
     /**
       * If the specified node represents a supported JAX-RPC restriction,
       * a Vector is returned which contains the base type and the values.
@@ -63,28 +66,34 @@ public class Type
     
     /* This can be null */
     private String languageSpecificName;
+    
     /* element names and the type of the elements (QName,ElementInfo)*/
     private Hashtable elements;
+    
     /* This vector was added to preserve the order of types parsed from the wsdl. 
      * This may be a hack. Should be improved if necessary
      */
     private Vector vElements;
+    
     /* attribute names and the type of the attributes (QName,QName)*/
     private Hashtable attributes;
+    
     /* This vector was added to preserve the order of types parsed from the wsdl. 
      * This may be a hack. Should be improved if necessary
      */
     private Vector vAttributes;
+    
     /* has the attributes are specified with order <sequence> in the schema */
     private boolean hasOrder;
+    
     /*if order presents the order is set in the vector */
     private Vector attribOrder;
+    
     /* weather the type is Array */
     private boolean isArray;
 
-    private boolean isreferenced = false;
-
     private String language;
+    
     //Samisa: element type
     private String elementType;
     
@@ -94,33 +103,11 @@ public class Type
     /* Is this type an attachment under the http://xml.apache.org/xml-soap namespace? */
     private boolean isAttachment = false;
 
-    /* Should this type be generated or not */
-    /* this value is currently only used in limited places. usually we use the ">" symbol */
-    private boolean generated;
+    /* Should this type be generated or not - by default, set to true except for anonymous types */
+    private boolean externalize = true;
     
     /* Is anonymous type? qname.localname is checked, and if starts with '>', then true */
     private boolean isAnonymous = false;
-    
-    /* Has type been exposed - only valid for anonymous types */
-    private boolean anonymousTypeExposed = false;
-    
-    public boolean isAnonymous()
-    {
-        return isAnonymous;
-    }
-    
-    public void exposeAnonymousType()
-    {
-        // Exposing anonymous type means removing starting '>' characters.
-        if (isAnonymous && !anonymousTypeExposed)
-        {
-            languageSpecificName = CUtils.getUniqueName(languageSpecificName);
-            
-            name = new QName(name.getNamespaceURI(), languageSpecificName);
-            anonymousTypeExposed = true;
-        }
-    }
-
 
     public Type(QName name, String languageSpecificName, boolean hasOrder, String language)
     {
@@ -148,6 +135,14 @@ public class Type
                 this.languageSpecificName = TypeMap.getBasicTypeClass4qname(name);
         }
 
+        // Indicate whether type is anonymous. Anonymous type start with '>' and are not
+        // externalized by default.
+        if (this.name.getLocalPart().charAt(0) == '>')
+        {
+            isAnonymous = true;
+            externalize = false;
+        }
+
         //if it is not a simple type try name using usual QName -> language specific name mapping
         if (this.languageSpecificName == null)
             this.languageSpecificName = qname2LSN();
@@ -156,27 +151,8 @@ public class Type
             //remove any funny Charactors
             this.languageSpecificName = this.languageSpecificName.replaceAll("/", "_");
             this.languageSpecificName = this.languageSpecificName.replaceAll(":", "_");
-            
-            // This arrived in case of inner type declaration. And for compilation
-            // we replace all '>' by '_' (not the first one). Quick and durty fix.
-            if (this.languageSpecificName.length() > 1)
-            {
-                if (this.languageSpecificName.charAt(0) == '>')
-                {
-                    this.languageSpecificName =
-                        ">" + this.languageSpecificName.substring(1).replaceAll(">","_");
-                }
-                else
-                {
-                    this.languageSpecificName =
-                        this.languageSpecificName.replaceAll(">", "_");
-                }
-            }
+            this.languageSpecificName = this.languageSpecificName.replaceAll(">", "_");
         }     
-        
-        // Indicate whether type is anonymous. Anonymous type start with '>'.
-        if (this.languageSpecificName.charAt(0) == '>')
-            isAnonymous = true;
                             
         this.attribOrder = new Vector();
 
@@ -190,9 +166,6 @@ public class Type
         {
              isAttachment = true;
         }
-        
-        // generated is always true by default so as not to break any other logic prior to this value being put in
-        generated=true;
     }
 
     /**
@@ -201,24 +174,6 @@ public class Type
     public QName getName()
     {
         return name;
-    }
-
-    /**
-     * @return String 
-     */
-    public String getLocalPartOfName()
-    {
-        String attribName = name.getLocalPart();
-        if (attribName.lastIndexOf(SymbolTable.ANON_TOKEN) > 1)
-        {
-            attribName =
-                attribName.substring(
-                    attribName.lastIndexOf(SymbolTable.ANON_TOKEN) + 1,
-                    attribName.length());
-        }
-        attribName = TypeMap.resolveWSDL2LanguageNameClashes(attribName, this.language);
-
-        return attribName;
     }
 
     /**
@@ -241,23 +196,6 @@ public class Type
      */
     public void setTypeForAttributeName(String attribName, Type type)
     {
-        //Samisa:    
-        // Check to see if this is an anonymous type,
-        // if it is, replace Axis' ANON_TOKEN with
-        // an underscore to make sure we don't run
-        // into name collisions with similarly named
-        // non-anonymous types
-        // StringBuffer sb = new StringBuffer(attribName);
-        // int aidx = -1;
-
-        // while ((aidx = sb.toString().indexOf(SymbolTable.ANON_TOKEN)) > -1) {
-        // sb.replace(aidx, aidx + SymbolTable.ANON_TOKEN.length(), "_");
-        // }
-
-        // attribName = sb.toString();
-        // Nithya:
-        // To resolve fault soap message issue
-
         if (attribName.lastIndexOf(SymbolTable.ANON_TOKEN) > 1)
         {
             attribName =
@@ -294,23 +232,6 @@ public class Type
         String attribName =
             TypeMap.resolveWSDL2LanguageNameClashes(
                 element.getName().getLocalPart(),this.language);
-
-        //Samisa:    
-        // Check to see if this is an anonymous type,
-        // if it is, replace Axis' ANON_TOKEN with
-        // an underscore to make sure we don't run
-        // into name collisions with similarly named
-        // non-anonymous types
-        //StringBuffer sb = new StringBuffer(attribName);
-        //int aidx = -1;
-
-        //while ((aidx = sb.toString().indexOf(SymbolTable.ANON_TOKEN)) > -1) {
-        //    sb.replace(aidx, aidx + SymbolTable.ANON_TOKEN.length(), "_");
-        // }
-
-        //attribName = sb.toString();
-        //Nithya:
-        //to resolve fault soap message
 
         if (attribName.lastIndexOf(SymbolTable.ANON_TOKEN) > 1)
         {
@@ -475,6 +396,7 @@ public class Type
         else
         {
             str = str + "isAnonymous =" + isAnonymous + "\n";
+            str = str + "externalize =" + externalize + "\n";
             str = str + "isArray =" + isArray + "\n";
             str = str + "Elements[\n";
             Iterator c = elements.values().iterator();
@@ -501,24 +423,6 @@ public class Type
         return str;
     }
 
-    /**
-     * @return boolean
-     */
-    public boolean isIsreferenced()
-    {
-        return isreferenced;
-    }
-
-    /**
-     * Sets the isreferenced.
-     * @param isreferenced The isreferenced to set
-     */
-    public void setIsreferenced(boolean isreferenced)
-    {
-        this.isreferenced = isreferenced;
-        /* TODO also make the inner type of this be referenced*/
-
-    }
     /**
      * @return boolean
      */
@@ -594,21 +498,45 @@ public class Type
     {
         return isAttachment;
     }
-
+    
     /**
-     * @param b
+     * Whether the type represents an anonymous type.
      */
-    public void setGenerated(boolean b)
+    public boolean isAnonymous()
     {
-       generated=b;
+        return isAnonymous;
     }
     
     /**
-     * Whether this type will be generated or not. NOT This is not always valid. Be sure that this is being set properly for your instance
-     * @return
+     * Whether this type will be generated or not. 
      */
-    public boolean isGenerated()
+    public boolean isExternalized()
     {
-        return generated; 
+        return externalize; 
     }
+    
+    /**
+     * Ensure type is generated (i.e. externalized).
+     */
+    public void externalize(boolean flag)
+    {   
+        // if false, simply set the flag and return. 
+        if (!flag)
+        {
+            externalize = false; 
+            return;
+        }
+        
+        // Exposing anonymous type also means cleaning up the name. A TODO for now.
+        if (isAnonymous && !externalize)
+        {
+            // Remove leading '_' from language specific name
+//            int i=0;
+//            while (languageSpecificName.charAt(i) == '_') ++i;
+//            languageSpecificName = languageSpecificName.substring(i);
+        }
+        
+        externalize = true;
+    }
+    
 }

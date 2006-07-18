@@ -870,10 +870,10 @@ public class ClientStubWriter extends CPPClassWriter
                 type = (Type) types.next();
                 if (type.isArray())
                     continue;
-                typeName = type.getLanguageSpecificName();
-                if (typeName.startsWith(">"))
+
+                if (type.isAnonymous() && !type.isExternalized())
                     continue;
-                typeSet.add(typeName);
+                typeSet.add(type.getLanguageSpecificName());
             }
             Iterator itr = typeSet.iterator();
             while (itr.hasNext())

@@ -56,7 +56,7 @@ public class ServiceWriter extends org.apache.axis.wsdl.wsdl2ws.c.ServiceWriter
             while (types.hasNext())
             {
                 atype = (Type) types.next();
-                if (atype.getLanguageSpecificName().startsWith(">"))
+                if (atype.isAnonymous() && !atype.isExternalized())
                     continue;
                 typeSet.add(atype.getLanguageSpecificName());
             }

@@ -881,12 +881,10 @@ public class WrapWriter extends CPPClassWriter
             while (types.hasNext())
             {
                 type = (Type) types.next();
-                if (type.isArray())
+                if (type.isArray() 
+                        || (type.isAnonymous() && !type.isExternalized()))
                     continue;
-                typeName = type.getLanguageSpecificName();
-                if (typeName.startsWith(">"))
-                    continue;
-                typeSet.add(typeName);
+                typeSet.add(type.getLanguageSpecificName());
             }
             Iterator itr = typeSet.iterator();
             while (itr.hasNext())

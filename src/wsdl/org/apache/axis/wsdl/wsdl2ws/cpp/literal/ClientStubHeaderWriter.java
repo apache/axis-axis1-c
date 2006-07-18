@@ -190,7 +190,7 @@ public class ClientStubHeaderWriter
             while (types.hasNext())
             {
                 atype = (Type) types.next();
-                if(atype.isGenerated())
+                if(atype.isExternalized())
                 {
                     if (atype.isArray())
                         if (atype.getElementType().equals("string"))
@@ -199,9 +199,6 @@ public class ClientStubHeaderWriter
                     if (atype.getBaseType() != null)
                         if (atype.getBaseType().getLocalPart().equals("string"))
                             removeSet.add(atype.getLanguageSpecificName() + "_Array");
-                    
-                    if (atype.getLanguageSpecificName().startsWith(">"))
-                        continue;
 
                     typeSet.add(atype.getLanguageSpecificName());
                 }

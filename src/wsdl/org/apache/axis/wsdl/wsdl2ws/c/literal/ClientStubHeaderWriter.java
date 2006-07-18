@@ -204,7 +204,7 @@ public class ClientStubHeaderWriter
             while (types.hasNext())
             {
                 atype = (Type) types.next();
-                if (atype.getLanguageSpecificName().startsWith(">"))
+                if (atype.isAnonymous() && !atype.isExternalized())
                     continue;
                 if (!atype.isArray())
                     typeSet.insertElementAt(atype.getLanguageSpecificName(), 0);

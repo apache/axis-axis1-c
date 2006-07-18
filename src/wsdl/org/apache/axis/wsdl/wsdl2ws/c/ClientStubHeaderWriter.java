@@ -232,7 +232,7 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
             while (types.hasNext())
             {
                 atype = (Type) types.next();
-                if (atype.getLanguageSpecificName().startsWith(">"))
+                if (atype.isAnonymous() && !atype.isExternalized())
                     continue;
 
                 typeName = WrapperUtils.getLanguageTypeName4Type(atype);

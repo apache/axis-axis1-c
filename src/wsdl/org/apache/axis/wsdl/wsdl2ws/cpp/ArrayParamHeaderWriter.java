@@ -125,27 +125,6 @@ public class ArrayParamHeaderWriter extends ParamWriter
     {
         try
         {
-            Iterator    itForTypes = wscontext.getTypemap().getTypes().iterator();
-            boolean        nillable = false;
-            
-            while( itForTypes.hasNext())
-            {
-                Type aType = (Type) itForTypes.next();
-                
-                if( aType.getLanguageSpecificName().indexOf( ">") > -1)
-                {
-                    Iterator    itForElemName = aType.getElementnames();
-                    
-                    while( itForElemName.hasNext() && !nillable)
-                    {
-                        String key = (String) itForElemName.next();
-                        
-                        if( aType.getElementForElementName( key).getNillable())
-                            nillable = true;
-                    }
-                }
-            }
-            
             writer.write("class STORAGE_CLASS_INFO " + classname + " : public Axis_Array\n");
             writer.write("{\n");
             writer.write("\tpublic:\n");

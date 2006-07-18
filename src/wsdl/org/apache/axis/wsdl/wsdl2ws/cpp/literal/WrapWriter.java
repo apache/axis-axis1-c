@@ -681,11 +681,10 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                 if (type.isArray())
                     continue;
 
-                typeName = type.getLanguageSpecificName();
-                if (typeName.startsWith(">"))
+                if (type.isAnonymous() && !type.isExternalized())
                     continue;
 
-                typeSet.add(typeName);
+                typeSet.add(type.getLanguageSpecificName());
             }
             
             Iterator itr = typeSet.iterator();

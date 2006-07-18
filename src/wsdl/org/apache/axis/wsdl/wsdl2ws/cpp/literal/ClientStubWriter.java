@@ -1146,11 +1146,10 @@ public class ClientStubWriter
                 if (type.isArray())
                     continue;
 
-                typeName = type.getLanguageSpecificName();
-                if (typeName.startsWith(">"))
+                if (type.isAnonymous() && !type.isExternalized())
                     continue;
 
-                typeSet.add(typeName);
+                typeSet.add(type.getLanguageSpecificName());
             }
             
             Iterator itr = typeSet.iterator();

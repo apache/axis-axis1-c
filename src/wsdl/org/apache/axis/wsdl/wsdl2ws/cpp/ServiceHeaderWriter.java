@@ -291,17 +291,14 @@ public class ServiceHeaderWriter extends HeaderFileWriter
             while (types.hasNext())
             {
                 atype = (Type) types.next();
-                if (atype.getLanguageSpecificName().startsWith(">"))
-                {
+                if (atype.isAnonymous() && !atype.isExternalized())
                     continue;
-                }
+
                 typeName = WrapperUtils.getLanguageTypeName4Type(atype);
                 if (null != typeName)
-                {
                     typeSet.add(typeName);
-                }
-
             }
+            
             Iterator itr = typeSet.iterator();
             while (itr.hasNext())
             {

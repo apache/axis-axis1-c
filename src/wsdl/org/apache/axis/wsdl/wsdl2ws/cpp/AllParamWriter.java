@@ -58,23 +58,27 @@ public class AllParamWriter implements SourceWriter
                 type = (Type) types.next();
                 if (type.isArray())
                 {
-                    if (WSDL2Ws.verbose)
-                        System.out.println("Array writer called ......");
-
                     QName qname = type.getName();
                     
                     String elementType = type.getElementType();
                     if (elementType != null)
                     {
+                        if (WSDL2Ws.verbose)
+                            System.out.println("Array element type: " + elementType);
                         elementType = elementType.replace('>', '_');
                         QName elementQname = new QName(qname.getNamespaceURI(), elementType);
                         
                         Type currentType = wscontext.getTypemap().getType(elementQname);
                         if (currentType != null)
                             if ( currentType.isSimpleType())
+                            {
+                                if (WSDL2Ws.verbose)
+                                    System.out.println("Array writer not called - element type is simple");
+
                                 continue;
+                            }
                     }
-                    
+                                            
                     if (CUtils.isSimpleType(qname) && !CUtils.isDefinedSimpleType(qname))
                     {
                         throw new WrapperFault(
@@ -85,29 +89,25 @@ public class AllParamWriter implements SourceWriter
                     ArrayParamHeaderWriter writer = (new ArrayParamHeaderWriter(wscontext, type));
                     if (!writer.isSimpleTypeArray())
                     {
+                        if (WSDL2Ws.verbose)
+                            System.out.println("Array writer called for......" + type.getName());
+                        
                         writer.writeSource();
                         (new ArrayParamWriter(wscontext, type)).writeSource();
                     }
                 }
+                else if (type.isAnonymous() && !type.isExternalized())
+                {
+                    if(WSDL2Ws.verbose)
+                        System.out.println("ignoring anonymous type " + type.getLanguageSpecificName() + "\n");
+                }
                 else
                 {
-                    /* TODO check whether this type is referenced or not. Synthesize only if  reference
-                     * But of cause that depends on the command line option too  */
-                    if (type.getLanguageSpecificName().startsWith(">"))
-                    {
-                        /* TODO do some processing to this type before synthesizing to remove ">" charactors.
-                         * And then it should also be synthesized if command line option says to */
-                        if(WSDL2Ws.verbose)
-                            System.out.println("ignoring anonymous type " + type.getLanguageSpecificName() + "\n");
-                    }
-                    else
-                    {
-                        if (WSDL2Ws.verbose)
-                            System.out.println("struct writer called ......");
+                    if (WSDL2Ws.verbose)
+                        System.out.println("struct writer called for......" + type.getName());
 
-                        (new BeanParamWriter(wscontext, type)).writeSource();
-                        (new ParmHeaderFileWriter(wscontext, type)).writeSource();
-                    }
+                    (new BeanParamWriter(wscontext, type)).writeSource();
+                    (new ParmHeaderFileWriter(wscontext, type)).writeSource();
                 }
             }
             catch (Exception e)

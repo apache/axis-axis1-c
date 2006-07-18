@@ -64,7 +64,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.c.WrapWriter
             while (types.hasNext())
             {
                 atype = (Type) types.next();
-                if (atype.getLanguageSpecificName().startsWith(">"))
+                if (atype.isAnonymous() && !atype.isExternalized())
                     continue;
                 writer.write(
                         "#include \"" + atype.getLanguageSpecificName() + CUtils.C_HEADER_SUFFIX + "\"\n");
@@ -538,11 +538,10 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.c.WrapWriter
                 if (type.isArray())
                     continue;
                 
-                typeName = type.getLanguageSpecificName();
-                if (typeName.startsWith(">"))
+                if (type.isAnonymous() && !type.isExternalized())
                     continue;
                 
-                typeSet.add(typeName);
+                typeSet.add(type.getLanguageSpecificName());
             }
             
             Iterator itr = typeSet.iterator();

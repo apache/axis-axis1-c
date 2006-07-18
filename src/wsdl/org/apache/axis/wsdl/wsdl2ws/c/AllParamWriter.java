@@ -64,21 +64,25 @@ public class AllParamWriter implements SourceWriter
                 type = (Type) types.next();
                 if (type.isArray())
                 {
-                    if (WSDL2Ws.verbose)
-                        System.out.println("Array writer called ......");
-                    
                     QName qname = type.getName();
                     
                     String elementType = type.getElementType();
                     if (elementType != null)
                     {
+                        if (WSDL2Ws.verbose)
+                            System.out.println("Array element type: " + elementType);
                         elementType = elementType.replace('>', '_');
                         QName elementQname = new QName(qname.getNamespaceURI(), elementType);
                         
                         Type currentType = wscontext.getTypemap().getType(elementQname);
                         if (currentType != null)
                             if ( currentType.isSimpleType())
+                            {
+                                if (WSDL2Ws.verbose)
+                                    System.out.println("Array writer not called - element type is simple");
+
                                 continue;
+                            }
                     }
                     
                     if (CUtils.isSimpleType(qname) && !CUtils.isDefinedSimpleType(qname))
@@ -91,16 +95,15 @@ public class AllParamWriter implements SourceWriter
                     ArrayParamHeaderWriter writer = (new ArrayParamHeaderWriter(wscontext, type));
                     if (!writer.isSimpleTypeArray())
                     {
+                        if (WSDL2Ws.verbose)
+                            System.out.println("Array writer called ......");
+                        
                         writer.writeSource();
                         (new ArrayParamWriter(wscontext, type)).writeSource();
                     }
                 }
-                /* TODO check whether this type is referenced or not. Synthesize only if  reference
-                 * But of course that depends on the commandline option too  */
-                else if (type.getLanguageSpecificName().startsWith(">"))
+                else if (type.isAnonymous() && !type.isExternalized())
                 {
-                    /* TODO do some processing to this type before synthesizing to remove ">" charactors.
-                     * And then it should also be synthesized if commandline option says to */
                     if(WSDL2Ws.verbose)
                     {                          
                         System.out.println(
