@@ -1120,5 +1120,19 @@ public class CUtils
 
         return newName;
     }
+    
+    public static String removeStartingCharFromString(String s, char c)
+    {
+        String sNew = s;
+        
+        if (s != null && s.length()>0)
+        {
+            int i = 0;
+            for (i=0; i < s.length() && s.charAt(i) == c; ++i);
+            sNew = s.substring(i);
+        }
+        
+        return sNew;
+    }
 }
 
