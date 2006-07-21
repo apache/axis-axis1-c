@@ -17,13 +17,12 @@
 
 /**
  * Type map has information about all the custom types in the webservice and it has the
- * Information about inbuild datatypes as well. The Type map class does not know about the
- * packages(java)and namespace(c++) ect information. The typemap registered the types agien the
+ * Information about in-built datatypes as well. The Type map class does not know about the
+ * namespace(c++) etc information. The typemap registers the types against the
  * xmlqname in WSDL. It is the underline applications responsibility to make sense of the
  * namespaceuri and localname in the qname
  *
- * e.g. java {urn:ns}classname -> ns.classname
- *      C++  {urn:ns}classname -> ns:classname
+ * e.g.  C++  {urn:ns}classname -> ns:classname
  * @author hemapani  
  */
 
@@ -38,26 +37,21 @@ import org.apache.axis.wsdl.wsdl2ws.WrapperConstants;
 
 public class TypeMap
 {
-    public static final int SIMPLE_PARAM_GEN = 0;
-    public static final int BEAN_PARAM_GEN = 1;
-    private static String language = WrapperConstants.LANGUAGE_JAVA;
+    private static String language = WrapperConstants.LANGUAGE_CPP;
 
     /* this map maps the classname -> QName */
     private static Hashtable basicTypeClass2QNamemap = new Hashtable();
+    
     /* this map maps QName -> classname */
     private static Hashtable basicTypeQname2classmap = new Hashtable();
+    
     /* this map stores Types keyed by the parameter name */
     private Hashtable typeInfo;
 
-    private static Hashtable javakeywords = new Hashtable();
     private static Hashtable cppkeywords = new Hashtable();
     
     //  29/3/05. To keep symbols
-    private static char[] symbolArray =
-				{	
-					'-',
-					'@'
-				};
+    private static char[] symbolArray = { '-', '@'};
 
     static {
         // c -> xml type mapping
@@ -249,63 +243,6 @@ public class TypeMap
             new QName(WrapperConstants.SOAPENC_NAMESPACE, "base64"),
             "xsd__base64Binary");
 
-        String[] words1 =
-            {
-                "abstract",
-                "default",
-                "if",
-                "private",
-                "this",
-                "boolean",
-                "do",
-                "implements",
-                "protected",
-                "throw",
-                "break",
-                "double",
-                "import",
-                "public",
-                "throws",
-                "byte",
-                "else",
-                "instanceof",
-                "return",
-                "transient",
-                "case",
-                "extends",
-                "int",
-                "short",
-                "try",
-                "catch",
-                "final",
-                "interface",
-                "static",
-                "void",
-                "char",
-                "finally",
-                "long",
-                "strictfp",
-                "volatile",
-                "class",
-                "float",
-                "native",
-                "super",
-                "while",
-                "const",
-                "for",
-                "new",
-                "switch",
-                "continue",
-                "goto",
-                "package",
-                "synchronized",
-                "return",
-                "false",
-                "null" };
-        for (int i = 0; i < words1.length; i++)
-        {
-            javakeywords.put(words1[i], words1[i]);
-        }
         String[] words2 =
             {
                 "and",
@@ -421,9 +358,8 @@ public class TypeMap
     public Type getType(QName name)
     {
         if (isSimpleType(name))
-        {
             return new Type(name, null, false, TypeMap.language);
-        }
+
         return (Type) this.typeInfo.get(name);
     }
 
@@ -451,32 +387,21 @@ public class TypeMap
       * @param language
       * @return
       */
-    public static String resolveWSDL2LanguageNameClashes(
-        String name,
-        String language)
+    public static String resolveWSDL2LanguageNameClashes(String name, String language)
     {
-        Hashtable keywords;
-        if (WrapperConstants.LANGUAGE_JAVA.equalsIgnoreCase(language))
-        {
-            keywords = javakeywords;
-        }
-        else
-        {
-            keywords = cppkeywords;
-        }
+        // C and C++ keywords are all in one hash table
+        Hashtable keywords = cppkeywords;
 
         if (keywords.containsKey(name))
-        {
             return "_" + name;
-        }
 
         return name;
     }
     
     //  29/3/05. To access the symbols
     public static char[] getSymbols()
-        {
-            return symbolArray;
-        }
+    {
+        return symbolArray;
+    }
     
 }
