@@ -28,6 +28,9 @@
 #include "HTTPTransport.hpp"
 #include "../../platforms/PlatformAutoSense.hpp"
 
+// for the basic auth encryption
+#include "../../soap/apr_base64.h"
+
 #include <stdio.h>
 // You can uncommment thisl line if you want any debug putting to stdio but PLEASE ensure you comment it out again before releasing.
 // #include <iostream>
@@ -93,6 +96,8 @@ m_bMaintainSession (false)
     m_viCurrentHeader = m_vHTTPHeaders.begin();
     m_viCurrentResponseHeader = m_vResponseHTTPHeaders.begin();
 	m_pszRxBuffer = new char [BUF_SIZE];
+    m_pcUsername=NULL;
+    m_pcPassword=NULL;
 #ifdef WIN32
 	m_lChannelTimeout = 10;
 #else
@@ -404,6 +409,29 @@ const char * HTTPTransport::getHTTPHeaders()
 	// if we're using attachments, for example.
 	if (!foundCT)
 		m_strHeaderBytesToSend += AXIS_CONTENT_TYPE ": text/xml; charset=UTF-8\r\n";
+        
+    // set basic auth if the username and password are both set
+    if(getUsername()!=NULL && getPassword() !=NULL)
+    {
+        char *cpUsernamePassword = new char[strlen (getUsername()) + strlen (getPassword()) + 2];
+        strcpy (cpUsernamePassword, getUsername());
+        strcat (cpUsernamePassword, ":");
+        strcat (cpUsernamePassword, getPassword());
+
+        int len = apr_base64_encode_len (strlen (cpUsernamePassword));
+        AxisChar *base64Value = new AxisChar[len + 1];
+        len = apr_base64_encode_binary (base64Value,
+                                    (const unsigned char *) cpUsernamePassword,
+                                    strlen (cpUsernamePassword));
+
+        std::string strValue = "Basic ";
+        strValue += base64Value;
+
+        setTransportProperty ("Authorization", strValue.c_str ());
+
+        delete[]cpUsernamePassword;
+        delete[]base64Value;
+    }
 
     // Set other HTTP headers but not cookies as they are put in afterwards.
     for (unsigned int i = 0; i < m_vHTTPHeaders.size (); i++)
@@ -2012,4 +2040,27 @@ void HTTPTransport::trim(string& str)
         str.erase(str.begin(), str.end());
     }
 }
+//void
+//HTTPTransport::setAuthorizationHeader ()
+//{
+//    char *cpUsernamePassword = new char[strlen (m_pcUsername) + strlen (m_pcPassword) + 2];
+//    strcpy (cpUsernamePassword, m_pcUsername);
+//    strcat (cpUsernamePassword, ":");
+//    strcat (cpUsernamePassword, m_pcPassword);
+//
+//    int len = apr_base64_encode_len (strlen (cpUsernamePassword));
+//    AxisChar *base64Value = new AxisChar[len + 1];
+//    len = apr_base64_encode_binary (base64Value,
+//                                    (const unsigned char *) cpUsernamePassword,
+//                                    strlen (cpUsernamePassword));
+//
+//    std::string strValue = "Basic ";
+//    strValue += base64Value;
+//
+//    if (m_pTransport)
+//        m_pTransport->setTransportProperty ("Authorization", strValue.c_str ());
+//
+//    delete[]cpUsernamePassword;
+//    delete[]base64Value;
+//}
 
