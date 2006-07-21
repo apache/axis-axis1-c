@@ -34,34 +34,6 @@ import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
 public class WrapperUtils
 {
-    private static int nscount = 0;
-    /**
-     * translation fullyqualifiedname -> packagename
-     */
-    public static String getPackegeName4QualifiedName(String fullyQualifiedName)
-    {
-        int index = fullyQualifiedName.indexOf('.');
-        int lastIndex = 0;
-        while (index != -1)
-        {
-            lastIndex = index;
-            index = fullyQualifiedName.indexOf('.', lastIndex + 1);
-        }
-        
-        if (lastIndex == 0)
-            return fullyQualifiedName;
-
-        return fullyQualifiedName.substring(0, lastIndex);
-    }
-
-    /**
-     * take care of the conversion from basic type name to parameter names. e.g. int -> Int
-     * the param will not intParam but IntParm !!!
-     * @param packagename
-     * @param classname
-     * @return fully quallified name for the param class.   
-     */
-
     /**
      * extract the parameter name from the fully qualified name
      * @param fullyQualifiedName
@@ -69,7 +41,6 @@ public class WrapperUtils
      */
     public static String getClassNameFromFullyQualifiedName(String fullyQualifiedName)
     {
-        // TODO: Not needed - REMOVE?
         int index = fullyQualifiedName.indexOf('.');
         int lastIndex = 0;
         while (index != -1)
@@ -83,10 +54,9 @@ public class WrapperUtils
 
         return fullyQualifiedName.substring(lastIndex + 1);
     }
-
     /**
      *  get classpart of the class and if name happen to be a Simple type return 
-     *  the Wrapper Class name(service.0 wrapper class name) eg int -> Int ect
+     *  the Wrapper Class name(service.0 wrapper class name)
      *  
      */
     public static String getLanguageTypeName4Type(Type type)
@@ -99,10 +69,7 @@ public class WrapperUtils
             return CUtils.getCmplxArrayNameforType(qname);
         }
         else
-        {
-            String fullyQualifiedName = type.getLanguageSpecificName();
-            return getClassNameFromFullyQualifiedName(fullyQualifiedName);
-        }
+            return type.getLanguageSpecificName();
     }
 
     /**
@@ -115,21 +82,6 @@ public class WrapperUtils
         char[] chars = value.toCharArray();
         chars[0] = Character.toUpperCase(value.charAt(0));
         return new String(chars);
-    }
-
-    /* This return the String of type xsi:type ="typename"*/
-    public static String getParamTypeString(QName name)
-    {
-        nscount++;
-        return " xsi:type=\\\"ns"
-            + nscount
-            + ":"
-            + name.getLocalPart()
-            + "\\\"  xmlns:ns"
-            + nscount
-            + " = \\\""
-            + name.getNamespaceURI()
-            + "\\\"";
     }
 
     public static String firstCharacterToLowercase(String value)

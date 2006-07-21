@@ -56,65 +56,40 @@ public class WrapperInfo
         this.targetOutputLocation = targetOutputLocation;
 
         //validate the data
-        if (this.wrapperLanguage == null
-            || this.wrapperLanguage.toLowerCase().equals(
-                WrapperConstants.LANGUAGE_JAVA))
-        {
-            this.wrapperLanguage = WrapperConstants.LANGUAGE_JAVA;
-        }
+        if (this.wrapperLanguage == null)
+            this.wrapperLanguage = WrapperConstants.LANGUAGE_CPP;
         else
-        {
             this.wrapperLanguage = wrapperLanguage.toLowerCase();
-        }
+        
         if (this.wrapperStyle == null
-            || this.wrapperStyle.toLowerCase().equals(WrapperConstants.STYLE_RPC))
-        {
+                || this.wrapperStyle.toLowerCase().equals(WrapperConstants.STYLE_RPC))
             this.wrapperStyle = WrapperConstants.STYLE_RPC;
-        }
         else
-        {
             this.wrapperStyle = this.wrapperStyle.toLowerCase();
-        }
 
         //        if (encodingStyle == null || encodingStyle.equals(WrapperConstants.ENCODING_STYLE_SOAP))
         //            encodingStyle = WrapperConstants.ENCODING_STYLE_SOAP;
         if (targetOutputLocation == null)
-        {
             targetOutputLocation = ".";
-        }
 
 
         if (targetEngine == null
-            || !WrapperConstants.CLIENT.equalsIgnoreCase(targetEngine))
-        {
+                || !WrapperConstants.CLIENT.equalsIgnoreCase(targetEngine))
             this.targetEngine = WrapperConstants.SERVER;
-        }
         else
-        {
             this.targetEngine = WrapperConstants.CLIENT;
-        }
 
         if (transportUri == null)
-        {
             this.transportUri = WrapperConstants.TRANSPORT_HTTP;
-        }
         else
-        {
             this.transportUri = transportUri;
-        }
 
         if (targetEndpointURI == null)
-        {
-            this.targetEndpointURI =
-                WrapperConstants.DEFAULT_TARGET_ENDPOINT_URI;
-
-        }
+            this.targetEndpointURI = WrapperConstants.DEFAULT_TARGET_ENDPOINT_URI;
         else
-        {
             this.targetEndpointURI = targetEndpointURI;
-        }
-        this.targetNameSpaceOfWSDL =
-            (targetNameSpaceOfWSDL == null) ? "" : targetNameSpaceOfWSDL;
+
+        this.targetNameSpaceOfWSDL = (targetNameSpaceOfWSDL == null) ? "" : targetNameSpaceOfWSDL;
     }
 
     /**
