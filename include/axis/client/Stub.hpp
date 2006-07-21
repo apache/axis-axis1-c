@@ -489,6 +489,14 @@ class STORAGE_CLASS_INFO Stub
     * @param uiProxyPort Port of proxy server
     */
     void setProxy(const char* pcProxyHost, unsigned int uiProxyPort);
+  /**
+    * Sets the username to be used for basic authentication
+    */
+    void setUsername(const char* pcUsername);
+  /**
+    * Sets the password to be used for basic authentication
+    */
+    void setPassword(const char* pcPassword);
 
   /**
     * Set transport timeout.
@@ -523,25 +531,6 @@ class STORAGE_CLASS_INFO Stub
     */
     AXIS_PROTOCOL_TYPE getTransportProtocol();
 
-  /**
-    * Sets the username to be used for basic authentication
-    */
-    void setUsername(const char* pcUsername);
-
-  /**
-    * Sets the password to be used for basic authentication
-    */
-    void setPassword(const char* pcPassword);
-
-  /**
-    * Gets the username used for basic authentication
-    */
-    const char* getUsername();
-
-  /**
-    * Gets the password used for basic authentication
-    */
-    const char* getPassword();
 
   /**
     * Sets the username to be used for Proxy authentication
@@ -622,10 +611,6 @@ class STORAGE_CLASS_INFO Stub
     */
     void setSOAPHeaders();
     
-  /**
-    * Set Authorization header for basic authentication
-    */
-    void setAuthorizationHeader();
   
   /**
     * Set Authorization header for Proxy authentication
@@ -660,15 +645,6 @@ class STORAGE_CLASS_INFO Stub
     SOAPTransport* m_pTransport;
 
 
-  /**
-    * Username
-    */
-   char* m_pcUsername;
-
-  /**
-    * Password
-    */
-   char* m_pcPassword;
   /**
     * proxy Username
     */
