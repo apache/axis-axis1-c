@@ -504,6 +504,57 @@ public:
     * @return string - Last active channel error string.
     */
 	virtual const char * getLastChannelError() {return NULL;};
+   
+  /**
+    * Sets the username to be used for basic authentication
+    */
+    void setUsername(const char* pcUsername)
+    {
+        if (m_pcUsername)
+        {
+            delete[]m_pcUsername;
+            m_pcUsername = NULL;
+        }
+
+        if (!pcUsername)
+            return;
+
+        m_pcUsername = new char[strlen (pcUsername) + 1];
+        strcpy (m_pcUsername, pcUsername);
+    }
+    
+    void setPassword (const char *pcPassword)
+    {
+        if (m_pcPassword)
+        {
+            delete[]m_pcPassword;
+            m_pcPassword = NULL;
+        }
+
+        if (!pcPassword)
+            return;
+
+        m_pcPassword = new char[strlen (pcPassword) + 1];
+        strcpy (m_pcPassword, pcPassword);
+    }
+
+
+  /**
+    * Gets the username used for basic authentication
+    */
+    const char* getUsername()
+    {
+        return m_pcUsername;
+    }
+    
+
+  /**
+    * Gets the password used for basic authentication
+    */
+    const char* getPassword()
+    {
+     return m_pcPassword;
+    }
 
 protected:
     /**
@@ -518,6 +569,16 @@ protected:
     AXIS_ENGINE_CALLBACK_RELEASE_SEND_BUFFER m_pReleaseBufferCallback;
  
     AXIS_PROTOCOL_TYPE m_eProtocolType;  
+
+    /**
+      * Username
+      */
+    char* m_pcUsername;
+
+    /**
+    * Password
+    */
+    char* m_pcPassword;
 
 };
 
