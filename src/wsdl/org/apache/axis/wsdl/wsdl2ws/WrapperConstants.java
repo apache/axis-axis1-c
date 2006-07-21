@@ -38,7 +38,6 @@ public interface WrapperConstants {
 	public static final int RETURN_PARM = 1;
 	public static final int COMMAN_PARM = 2;
 	//language
-	public static final String LANGUAGE_JAVA = "java";
 	public static final String LANGUAGE_CPP = "c++";
 	public static final String LANGUAGE_C = "c";
 	//service style 
@@ -54,11 +53,6 @@ public interface WrapperConstants {
 	
 	public static final String DEFAULT_TARGET_ENDPOINT_URI = "http://127.0.0.1:8080/";
 	//wrapper genarator type
-	//java constants
-	public static final int GENERATOR_WRAPPER_JAVA = 9;
-    public static final int GENERATOR_CLIENT_WRAPPER_JAVA = 10;
-	public static final int GENERATOR_PARAM_JAVA = 11 ;
-	public static final int GENERATOR_SERVICE_JAVA = 12 ;
 	//cpp constants 
 	public static final int GENERATOR_CLASSLOADER_CPP = 13 ;
 	public static final int GENERATOR_WRAPPER_CPP = 14;

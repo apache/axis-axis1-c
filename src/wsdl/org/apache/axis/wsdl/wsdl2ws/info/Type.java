@@ -120,7 +120,7 @@ public class Type
         vAttributes = new Vector();
         
         if (language == null)
-            this.language = WrapperConstants.LANGUAGE_JAVA;
+            this.language = WrapperConstants.LANGUAGE_CPP;
         else
             this.language = language;
 
@@ -153,7 +153,7 @@ public class Type
             this.languageSpecificName = this.languageSpecificName.replaceAll(":", "_");
             this.languageSpecificName = this.languageSpecificName.replaceAll(">", "_");
         }     
-                            
+        
         this.attribOrder = new Vector();
 
         if (name.getNamespaceURI().equals(WrapperConstants.APACHE_XMLSOAP_NAMESPACE) && 
@@ -516,27 +516,10 @@ public class Type
     }
     
     /**
-     * Ensure type is generated (i.e. externalized).
+     * Indicate whether type should be generated (i.e. externalized).
      */
     public void externalize(boolean flag)
-    {   
-        // if false, simply set the flag and return. 
-        if (!flag)
-        {
-            externalize = false; 
-            return;
-        }
-        
-        // Exposing anonymous type also means cleaning up the name. A TODO for now.
-        if (isAnonymous && !externalize)
-        {
-            // Remove leading '_' from language specific name
-//            int i=0;
-//            while (languageSpecificName.charAt(i) == '_') ++i;
-//            languageSpecificName = languageSpecificName.substring(i);
-        }
-        
-        externalize = true;
-    }
-    
+    {           
+        externalize = flag;
+    }    
 }
