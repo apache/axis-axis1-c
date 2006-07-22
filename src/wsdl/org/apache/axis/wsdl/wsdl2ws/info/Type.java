@@ -135,25 +135,21 @@ public class Type
                 this.languageSpecificName = TypeMap.getBasicTypeClass4qname(name);
         }
 
+        //if language specific name still not set, use localPart of QName
+        if (this.languageSpecificName == null)
+            this.languageSpecificName = this.name.getLocalPart();
+        
+        // Ensure name is valid and does not clash with language specific constructs
+        this.languageSpecificName = CUtils.sanitiseClassName(this.languageSpecificName);
+        
         // Indicate whether type is anonymous. Anonymous type start with '>' and are not
         // externalized by default.
-        if (this.name.getLocalPart().charAt(0) == '>')
+        if (TypeMap.isAnonymousType(this.name))
         {
             isAnonymous = true;
             externalize = false;
         }
-
-        //if it is not a simple type try name using usual QName -> language specific name mapping
-        if (this.languageSpecificName == null)
-            this.languageSpecificName = qname2LSN();
-        else
-        {
-            //remove any funny Charactors
-            this.languageSpecificName = this.languageSpecificName.replaceAll("/", "_");
-            this.languageSpecificName = this.languageSpecificName.replaceAll(":", "_");
-            this.languageSpecificName = this.languageSpecificName.replaceAll(">", "_");
-        }     
-        
+                            
         this.attribOrder = new Vector();
 
         if (name.getNamespaceURI().equals(WrapperConstants.APACHE_XMLSOAP_NAMESPACE) && 
@@ -191,7 +187,8 @@ public class Type
     }
 
     /**
-     * The Type take the attributes name to lowercase when add, If there is two names like "Name" and "name"
+     * The Type take the attributes name to lowercase when add, 
+     * If there is two names like "Name" and "name"
      * they will convert to "name"  Is that acceptable ....  
      */
     public void setTypeForAttributeName(String attribName, Type type)
@@ -224,14 +221,13 @@ public class Type
     }
 
     /**
-     * The Type take the attributes name to lowercase when add, If there is two names like "Name" and "name"
+     * The Type take the attributes name to lowercase when add, 
+     * If there is two names like "Name" and "name"
      * they will convert to "name"  Is that acceptable ....  
      */
     public void setTypeNameForElementName(ElementInfo element)
     {
-        String attribName =
-            TypeMap.resolveWSDL2LanguageNameClashes(
-                element.getName().getLocalPart(),this.language);
+        String attribName = element.getName().getLocalPart();
 
         if (attribName.lastIndexOf(SymbolTable.ANON_TOKEN) > 1)
         {
@@ -239,8 +235,7 @@ public class Type
                 attribName.substring(
                     attribName.lastIndexOf(SymbolTable.ANON_TOKEN) + 1,attribName.length());
         }
-        // Samisa: This second call to TypeMap.resoleveWSDL2LanguageNameClashes
-        // is made to make sure after replacinf ANON_TOKEN it is still not a keyword
+
         attribName = TypeMap.resolveWSDL2LanguageNameClashes(attribName, this.language);
 
         if (hasOrder)
@@ -272,33 +267,9 @@ public class Type
 
     public void setLanguageSpecificName(String languageSpecificName)
     {
-        this.languageSpecificName = languageSpecificName;
+        this.languageSpecificName = CUtils.sanitiseClassName(languageSpecificName);
     }
-    /**
-     *  This mrthod define the standread conversion from qname to language spesific name
-     *  @return language specific name 
-     */
-    protected String qname2LSN()
-    {
-        String nsuri = this.name.getNamespaceURI();
-        if (nsuri == null)
-            return this.name.getLocalPart();
 
-        if (language.equalsIgnoreCase(WrapperConstants.LANGUAGE_CPP))
-        {
-            /* if it is CPP the namespace is neglected fr time been */
-            return this.name.getLocalPart();
-        }
-        else if (language.equalsIgnoreCase(WrapperConstants.LANGUAGE_C))
-            return this.name.getLocalPart();
-        else
-        {
-            return WrapperUtils.firstCharacterToLowercase(
-                WrapperUtils.nsURI2packageName(nsuri))
-                + "."
-                + WrapperUtils.capitalizeFirstCaractor(this.name.getLocalPart());
-        }
-    }
     /**
      * @return
      */

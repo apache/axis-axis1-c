@@ -62,24 +62,35 @@ public class AllParamWriter implements SourceWriter
             try
             {
                 type = (Type) types.next();
-                if (type.isArray())
+
+                if (!type.isExternalized())
+                {
+                    if(WSDL2Ws.verbose)
+                        System.out.println("\nSkipping type " + type.getName());
+                }                
+                else if (type.isArray())
                 {
                     QName qname = type.getName();
+                    if (WSDL2Ws.verbose)
+                        System.out.println("\nArray processing for type: " + qname);
                     
                     String elementType = type.getElementType();
                     if (elementType != null)
                     {
-                        if (WSDL2Ws.verbose)
-                            System.out.println("Array element type: " + elementType);
-                        elementType = elementType.replace('>', '_');
-                        QName elementQname = new QName(qname.getNamespaceURI(), elementType);
+                        elementType = CUtils.sanitiseClassName(elementType);
                         
+                        if (WSDL2Ws.verbose)
+                            System.out.println("    Array element type " 
+                                    + type.getElementType() + " normalized to " + elementType);
+                        
+                        QName elementQname = new QName(qname.getNamespaceURI(), elementType);                       
                         Type currentType = wscontext.getTypemap().getType(elementQname);
+                        
                         if (currentType != null)
                             if ( currentType.isSimpleType())
                             {
                                 if (WSDL2Ws.verbose)
-                                    System.out.println("Array writer not called - element type is simple");
+                                    System.out.println("    Array writer not called - element type is simple");
 
                                 continue;
                             }
@@ -96,24 +107,16 @@ public class AllParamWriter implements SourceWriter
                     if (!writer.isSimpleTypeArray())
                     {
                         if (WSDL2Ws.verbose)
-                            System.out.println("Array writer called ......");
+                            System.out.println("    Array writer called......");
                         
                         writer.writeSource();
                         (new ArrayParamWriter(wscontext, type)).writeSource();
                     }
                 }
-                else if (type.isAnonymous() && !type.isExternalized())
-                {
-                    if(WSDL2Ws.verbose)
-                    {                          
-                        System.out.println(
-                                "ignoring anonymous type " + type.getLanguageSpecificName() + "\n");
-                    }
-                }
                 else
                 {
                     if (WSDL2Ws.verbose)
-                        System.out.println("struct writer called ......");
+                        System.out.println("\nstruct writer called for......" + type.getName());
                     
                     (new BeanParamWriter(wscontext, type)).writeSource();
                     (new ParmHeaderFileWriter(wscontext, type)).writeSource();
@@ -122,7 +125,7 @@ public class AllParamWriter implements SourceWriter
             catch (Exception e)
             {
                 System.out.println(
-                        "Error occurred generating code for " + type.getLanguageSpecificName()
+                        "Error occurred generating code for " + type.getName()
                             + ". Other classes will continue to be generated.");
                 e.printStackTrace();
             }

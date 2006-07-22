@@ -78,6 +78,7 @@ public class CUtils
     private static Hashtable isPointerBasedType = new Hashtable();
     private static boolean cpp = true;
     
+    // following in support of generating unique names
     private static Hashtable uniqueNameMapper = new Hashtable();
     private static Vector uniqueNamesGenerated = new Vector();
     
@@ -935,11 +936,7 @@ public class CUtils
         if((cpp && !qname2classmapCpp.containsKey(qname)) ||
            (!cpp && !qname2classmapC.containsKey(qname)))
         {
-            /* arrayName = qname.getLocalPart()+"_Array";
-            * This avoid compilation issue for wsdl SimpleTypeInnerUnboundedInOutput.wsdl
-            * See : malling list.
-            */
-            arrayName = qname.getLocalPart().replace('>','_')+"_Array";            
+            arrayName = CUtils.sanitiseClassName(qname.getLocalPart()) + "_Array";
         }
         return arrayName;        
     }
@@ -1055,12 +1052,19 @@ public class CUtils
     
     public static String sanitiseClassName( String name)
     {
-        String sanitisedName = name;
-
-        for( int i=0; i < Array.getLength(invalidCChars); i++)
-            sanitisedName = sanitisedName.replace((char)invalidCChars[i], '_'); 
+        int i;
+        String sanitisedName=name;
         
-        //System.out.println("name=" + name + " sanitisedName=" + sanitisedName);
+        // Anonymous names start with '>'. For example, '>Type'. However, if it was 
+        // nested, then it would be something like '>>Type>Type2'. 
+        // We should really be nice and get the name after last '>', but will wait and
+        // simply remove starting '>'.
+        for (i=0; i<name.length() && name.charAt(i) == TypeMap.ANON_TOKEN_CHAR; ++i);
+        sanitisedName = name.substring(i);
+
+        // Now replace invalid character with '_'
+        for(i=0; i < Array.getLength(invalidCChars); i++)
+            sanitisedName = sanitisedName.replace((char)invalidCChars[i], '_'); 
         
         return sanitisedName;
     }
@@ -1096,14 +1100,7 @@ public class CUtils
         // If name was not in hash table, generate one, store in hash table.
         if (newName == null)
         {            
-            // Anonymous names start with '>'. For example, '>Type'. However, if it was 
-            // nested, then it would be something like '>>Type>Type2'. 
-            // We should really be nice and get the name after last '>', but will wait.            
-            newName = oldName;
-            
-            // Ensure invalid characters are replaced
-            for(i=0; i < Array.getLength(invalidCChars); i++)
-                newName = newName.replace((char)invalidCChars[i], '_');             
+            newName = sanitiseClassName(oldName);
             
             // Ensure name does not conflict with language constructs
             newName = TypeMap.resolveWSDL2LanguageNameClashes(newName, WrapperConstants.LANGUAGE_CPP);
