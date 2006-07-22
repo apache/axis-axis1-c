@@ -37,6 +37,9 @@ import org.apache.axis.wsdl.wsdl2ws.WrapperConstants;
 
 public class TypeMap
 {
+    public static final String ANON_TOKEN_STRING = ">";
+    public static final char   ANON_TOKEN_CHAR   = '>';
+        
     private static String language = WrapperConstants.LANGUAGE_CPP;
 
     /* this map maps the classname -> QName */
@@ -380,7 +383,6 @@ public class TypeMap
 
     /**
       * The wsdl support the attributes names that are not allowed by the program langage.
-      * e.g. use keyword 
       * This method resolves those clashes by adding "_" to the front. This is a 
       * JAX_RPC recomendation of the situation.  
       * @param name
@@ -398,10 +400,25 @@ public class TypeMap
         return name;
     }
     
-    //  29/3/05. To access the symbols
+    // To access the symbols
     public static char[] getSymbols()
     {
         return symbolArray;
     }
     
+    public static boolean isAnonymousType(String type)
+    {
+        if (type != null)
+            return type.charAt(0) == ANON_TOKEN_CHAR;
+
+        return false;
+    }
+
+    public static boolean isAnonymousType(QName type)
+    {
+        if (type != null)
+            return isAnonymousType(type.getLocalPart());
+        
+        return false;
+    }    
 }
