@@ -33,6 +33,7 @@ import org.apache.axis.wsdl.wsdl2ws.WSDL2Ws;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
+import org.apache.axis.wsdl.wsdl2ws.info.TypeMap;
 
 public class AllParamWriter implements SourceWriter
 {
@@ -70,7 +71,8 @@ public class AllParamWriter implements SourceWriter
                     String elementType = type.getElementType();
                     if (elementType != null)
                     {
-                        elementType = CUtils.sanitiseClassName(elementType);
+                        if (TypeMap.isAnonymousType(elementType))
+                            elementType = CUtils.sanitiseClassName(elementType);
                         
                         if (WSDL2Ws.verbose)
                             System.out.println("    Array element type " 

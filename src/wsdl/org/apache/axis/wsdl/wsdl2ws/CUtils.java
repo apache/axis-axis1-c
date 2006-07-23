@@ -936,7 +936,9 @@ public class CUtils
         if((cpp && !qname2classmapCpp.containsKey(qname)) ||
            (!cpp && !qname2classmapC.containsKey(qname)))
         {
-            arrayName = CUtils.sanitiseClassName(qname.getLocalPart()) + "_Array";
+            arrayName = qname.getLocalPart() + "_Array";
+            if (TypeMap.isAnonymousType(qname))
+                arrayName = CUtils.sanitiseClassName(arrayName);
         }
         return arrayName;        
     }
