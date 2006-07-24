@@ -38,7 +38,7 @@
 /**
  * @file SOAPTransport.h
  *
- * Contains the interfaces that any transport layer should implemnt in order
+ * Contains the interfaces that any transport layer should implement in order
  * for using in Axis. The implementation should be at lease thread safe. The
  * Axis Engine creates a separate transport object for each thread.
  */
@@ -200,7 +200,19 @@ AXIS_CPP_NAMESPACE_START
 class SOAPTransport : public AxisIOStream
 {
 public:
-    virtual ~SOAPTransport(){};
+    virtual ~SOAPTransport()
+    {
+        if (m_pcUsername)
+        {
+            delete[]m_pcUsername;
+            m_pcUsername = NULL;
+        }
+        if (m_pcPassword)
+        {
+            delete[]m_pcPassword;
+            m_pcPassword = NULL;
+        }
+    };
     /**
      * Opens a connection with the provided endpoint URI. The connection
      * type (protocol) is decided by the implementation and the protocol
