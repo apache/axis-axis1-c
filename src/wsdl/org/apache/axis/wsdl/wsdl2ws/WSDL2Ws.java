@@ -23,6 +23,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
+import java.util.Enumeration;
+import java.util.Hashtable;
 
 import javax.wsdl.Binding;
 import javax.wsdl.Fault;
@@ -788,16 +790,11 @@ public class WSDL2Ws
             }            
             
             typedata = new Type(newqn, newqn.getLocalPart(), true, targetLanguage);
- 
-            if (WSDL2Ws.verbose)
-                System.out.println("Created new array type from array ref: " + newqn);
             
             if (type.getRefType().getRefType() != null)
                 typedata.setElementType(type.getRefType().getRefType().getQName().getLocalPart());
             else
                 typedata.setElementType(type.getRefType().getQName().getLocalPart());     
-
-            typeMap.addType(newqn, typedata);
         }
         else
         {
@@ -811,16 +808,15 @@ public class WSDL2Ws
                 return typedata;
             }
             
-            typedata = new Type(type.getQName(),
-                                type.getQName().getLocalPart(),
-                                true,
-                                targetLanguage);
-
-            if (WSDL2Ws.verbose)
-                System.out.println("Created new type: " + type.getQName());
-            
-            typeMap.addType(type.getQName(), typedata);
+            typedata = 
+                new Type(type.getQName(), type.getQName().getLocalPart(), true, targetLanguage);
         }
+        
+        // Add type to type map
+        if (WSDL2Ws.verbose)
+            System.out.println("Created new type: " + typedata.getName());
+        
+        typeMap.addType(typedata.getName(), typedata);
         
         // work out whether this type will be generated or not 
         typedata.externalize(isTypeGenerated(type, typedata));
@@ -837,6 +833,7 @@ public class WSDL2Ws
                 String localpart = type.getQName().getLocalPart() + "_value";
                 QName typeName =  new QName(type.getQName().getNamespaceURI(), localpart);
                 newSecondaryType = createTypeInfo(base.getQName(), targetLanguage);
+                typedata.addRelatedType(newSecondaryType);
                 ElementInfo eleinfo = new ElementInfo(typeName, newSecondaryType);
                 typedata.setExtensionBaseType(eleinfo);
                 if (WSDL2Ws.verbose)
@@ -860,6 +857,7 @@ public class WSDL2Ws
                 for (int j = 0; j < attributes.size(); j += 2)
                 {
                     newSecondaryType = createTypeInfo(((TypeEntry) attributes.get(j)).getQName(), targetLanguage);
+                    typedata.addRelatedType(newSecondaryType);
                     typedata.setTypeForAttributeName(
                         ((QName) attributes.get(j + 1)).getLocalPart(), newSecondaryType);
                 }
@@ -867,6 +865,7 @@ public class WSDL2Ws
         else if (type instanceof CollectionType)
         {
             newSecondaryType = createTypeInfo(type.getRefType().getQName(),targetLanguage);
+            typedata.addRelatedType(newSecondaryType);
             typedata.setTypeNameForElementName(new ElementInfo(type.getQName(),newSecondaryType));
             typedata.setArray(true);
         }
@@ -877,12 +876,14 @@ public class WSDL2Ws
             if (arrayType != null)
             {
                 newSecondaryType = createTypeInfo(arrayType, targetLanguage);
+                typedata.addRelatedType(newSecondaryType);
                 typedata.setTypeNameForElementName(new ElementInfo(new QName("item"), newSecondaryType));
                 typedata.setArray(true);
             }
             else if ((arrayType = CSchemaUtils.getCollectionComponentQName(node)) != null)
             {
                 newSecondaryType = createTypeInfo(arrayType, targetLanguage);
+                typedata.addRelatedType(newSecondaryType);
                 typedata.setTypeNameForElementName(new ElementInfo(new QName("item"), newSecondaryType));
                 typedata.setArray(true);
             }
@@ -930,6 +931,7 @@ public class WSDL2Ws
                         {
                             newSecondaryType = createTypeInfo(((TypeEntry) attributes.get(j)).getQName(),
                                                               targetLanguage);
+                            typedata.addRelatedType(newSecondaryType);
                             typedata.setTypeForAttributeName(((QName) attributes.get(j + 1)).getLocalPart(), 
                                                              newSecondaryType);
                         }
@@ -974,6 +976,7 @@ public class WSDL2Ws
                                     newSecondaryType = createTypeInfo(typeName, targetLanguage);
                             }
                             
+                            typedata.addRelatedType(newSecondaryType);
                             eleinfo = new ElementInfo(elem.getName(), newSecondaryType);
                             
                             eleinfo.setMinOccurs(elem.getMinOccurs());
@@ -1102,13 +1105,11 @@ public class WSDL2Ws
                             {
                                 if(WSDL2Ws.verbose)
                                     System.out.println( "EXPOSE1: Exposing ref-type "+referencedType.getQName());
-                                
+
                                 Type innerClassType = wsContext.getTypemap().getType(referencedType.getQName());
-                                innerClassType.setLanguageSpecificName(new QName(defType.getQName().getLocalPart()).toString());
                                 
-                                // also have to set the QName becuase this is used in generating the header info.
-                                innerClassType.setName(new QName(innerClassType.getName().getNamespaceURI(), innerClassType.getLanguageSpecificName()));
-                                innerClassType.externalize(true);
+                                String newLocalPart =  new QName(defType.getQName().getLocalPart()).toString();
+                                innerClassType.externalize(new QName(innerClassType.getName().getNamespaceURI(), newLocalPart));
                             }
                         }
                     }
@@ -1121,9 +1122,6 @@ public class WSDL2Ws
     /**
      * This method attempts to find anonymous types in the parameter list of 
      * web-service methods to determine if the type should be exposed.
-     * TODO: Current problem that needs to be fixed is when an anonymous type is 
-     *       encountered, we do not check for nested types within the anonymous type
-     *       in order to expose those types.
      * @param wsContext
      */
     private void exposeMessagePartsThatAreAnonymousTypes(WebServiceContext wsContext)
@@ -1166,15 +1164,10 @@ public class WSDL2Ws
                                   Type innerClassType =  wsContext.getTypemap().getType(oldName);
                                   if (innerClassType != null && !innerClassType.isExternalized())
                                   {
-                                      String newLocalPart = parameterType.getLanguageSpecificName();
-                                      QName newTypeName   =  new QName(parameterType.getName().getNamespaceURI(), newLocalPart);
-                                      
-                                      // First thing to do is to expose the type so it gets created.
-                                      innerClassType.setLanguageSpecificName(newLocalPart);
-                                      
-                                      // also have to set the QName since it used in generating the header info.
-                                      innerClassType.setName(newTypeName);
-                                      innerClassType.externalize(true);
+                                      QName newTypeName   =  new QName(parameterType.getName().getNamespaceURI(), 
+                                                                       parameterType.getLanguageSpecificName());
+
+                                      innerClassType.externalize(newTypeName);
                                       
                                       // Update the typemap with new info
                                       wsContext.getTypemap().removeType(oldName);
@@ -1199,16 +1192,11 @@ public class WSDL2Ws
                                   Type innerClassType =  wsContext.getTypemap().getType(oldName);
                                   if (innerClassType != null && !innerClassType.isExternalized())
                                   {
-                                      String newLocalPart =  parameterType.getLanguageSpecificName();
-                                      QName newTypeName   =  new QName(parameterType.getName().getNamespaceURI(), newLocalPart);
-                                      
-                                      // First thing to do is to expose the type so it gets created.
-                                      innerClassType.setLanguageSpecificName(newLocalPart);
-                                      
-                                      // also have to set the QName since it used in generating the header info.
-                                      innerClassType.setName(newTypeName);
-                                      innerClassType.externalize(true);
-                                      
+                                      QName newTypeName   =  new QName(parameterType.getName().getNamespaceURI(), 
+                                                                       parameterType.getLanguageSpecificName());
+
+                                      innerClassType.externalize(newTypeName);
+
                                       // Update the typemap with new info
                                       wsContext.getTypemap().removeType(oldName);
                                       wsContext.getTypemap().addType(newTypeName, innerClassType);
@@ -1220,71 +1208,90 @@ public class WSDL2Ws
             }
         }
     }
+    
+    private void exposeRelatedTypes(TypeMap theOrigMap, Type theType, Hashtable nameMapper)
+    {
+        QName oldName = theType.getName();                              
+        Type classType =  theOrigMap.getType(oldName);
+        if (classType != null && !classType.isExternalized())
+        {
+            if(WSDL2Ws.verbose)
+                System.out.println("\nEXPOSE4: Externalizing type " + oldName);
+            
+            // Externalize the type - if anonymous we have to change to name
+            if (classType.isAnonymous())
+            {
+                QName newName   =  new QName(oldName.getNamespaceURI(), 
+                                             classType.getLanguageSpecificName());
+    
+                classType.externalize(newName);
+                
+                // add old name to new name mapping to name mapper hash table
+                nameMapper.put(oldName, newName);
+            }
+            else
+                classType.externalize(true);
 
+            // Now check to see related types of this type - recursively.
+            Iterator relatedTypesIt = theType.getRelatedTypes();
+            Type relatedType;
+            while (relatedTypesIt.hasNext())
+            {
+                relatedType = (Type) relatedTypesIt.next();
+                if (!relatedType.isExternalized())
+                    exposeRelatedTypes(theOrigMap, relatedType, nameMapper);
+            }            
+        }
+    }
+    
     /**
      * @param wsContext
      */
     private void exposeNestedTypesThatAreAnonymousTypes(WebServiceContext wsContext)
     {
-        // get the main types
-        Collection types = symbolTable.getTypeIndex().values();
-        Iterator typeIterator = types.iterator();   
-        while(typeIterator.hasNext())
+        // Go through the externalized types in the typemap and externalize the 
+        // related types used by each externalized type. In order to complete the externalization,
+        // we need to remove the entry from the typemap and replace it with a new name.  
+        // However, this will have to be done after we have iterated through the typemap since
+        // updating the typemap as we iterate through it will result in an exception.
+        // So we have a hash table to map old names to new names for those types that have been 
+        // externalized.
+        Hashtable nameMapper = new Hashtable();
+        Iterator typesIt = wsContext.getTypemap().getTypes().iterator();
+        Type type;
+        while (typesIt.hasNext())
         {
-            Object highLevelType = typeIterator.next();
-            if(!(highLevelType instanceof BaseType))
+            type = (Type) typesIt.next();
+            if (type.isExternalized())
             {
-                DefinedType type = (DefinedType)highLevelType;
-                if(!type.getQName().getLocalPart().toString().startsWith(">"))
+                if(WSDL2Ws.verbose)
+                    System.out.println("\nEXPOSE3: Checking related types for type " + type.getName());
+                
+                Iterator relatedTypesIt = type.getRelatedTypes();
+                Type relatedType;
+                while (relatedTypesIt.hasNext())
                 {
-                    if(WSDL2Ws.verbose)
-                        System.out.println( "EXPOSE3: Checking for nested anon types for "+type.getQName().getLocalPart());
-                        
-                    HashSet nestedTypes = type.getNestedTypes(symbolTable, true);
-                    Iterator iterator = nestedTypes.iterator();
-                    while(iterator.hasNext())
-                    {
-                        Object nestedObjectType = iterator.next();
-                        if(nestedObjectType instanceof DefinedType)
-                        {
-                            // If the nested parts are complex inner/anonymous types then they need to 
-                            // be exposed as seperate classes
-                            
-                            DefinedType nestedType =(DefinedType) nestedObjectType; 
-                            String name =nestedType.getQName().getLocalPart().toString(); 
-
-                            if(WSDL2Ws.verbose)
-                               System.out.println( "EXPOSE3: Checking whether to expose nested type "+ nestedType.getQName());
-                                
-                            if(name.startsWith(">") && name.lastIndexOf(">")>0)
-                            {     
-                              if(WSDL2Ws.verbose)
-                                  System.out.println( "EXPOSE3: Exposing nestedType "+nestedType.getQName());
- 
-                              QName oldName = nestedType.getQName();                              
-                              Type innerClassType =  wsContext.getTypemap().getType(oldName);
-                              if (innerClassType != null && !innerClassType.isExternalized())
-                              {
-                                  String newLocalPart =  innerClassType.getLanguageSpecificName();
-                                  QName newTypeName   =  new QName(oldName.getNamespaceURI(), newLocalPart);
-                                  
-                                  // First thing to do is to expose the type so it gets created.
-                                  innerClassType.setLanguageSpecificName(newLocalPart);
-                                  
-                                  // also have to set the QName since it used in generating the header info.
-                                  innerClassType.setName(newTypeName);
-                                  innerClassType.externalize(true);
-                                  
-                                  // Update the typemap with new info
-                                  wsContext.getTypemap().removeType(oldName);
-                                  wsContext.getTypemap().addType(newTypeName, innerClassType);
-                              }
-                            }
-                        }
-                    }
+                    relatedType = (Type) relatedTypesIt.next();
+                    if (!relatedType.isExternalized())
+                        exposeRelatedTypes(wsContext.getTypemap(), relatedType, nameMapper);
                 }
-                else if(WSDL2Ws.verbose)
-                    System.out.println( "EXPOSE3: Skipping nested types for anon type "+type.getQName().getLocalPart());
+            }              
+        }
+        
+        // Now update the typemap, replacing old names with new names, using the hash table that
+        // maps old names to new names.
+        QName oldName;
+        QName newName;
+        
+        for (Enumeration e = nameMapper.keys(); e.hasMoreElements() ;)
+        {
+            oldName = (QName) e.nextElement();
+            newName = (QName) nameMapper.get(oldName);
+            type    = wsContext.getTypemap().getType(oldName);
+            if (type != null)
+            {
+                wsContext.getTypemap().removeType(oldName);
+                wsContext.getTypemap().addType(newName, type);                
             }
         }
     }

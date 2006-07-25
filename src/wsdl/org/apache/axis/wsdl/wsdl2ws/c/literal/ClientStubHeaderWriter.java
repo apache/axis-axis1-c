@@ -22,6 +22,7 @@
 package org.apache.axis.wsdl.wsdl2ws.c.literal;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.HashSet;
 import java.util.Vector;
 
 import org.apache.axis.wsdl.wsdl2ws.CUtils;
@@ -201,16 +202,30 @@ public class ClientStubHeaderWriter
             Type atype;
             Iterator types = this.wscontext.getTypemap().getTypes().iterator();
             Vector typeSet = new Vector();
+            HashSet removeSet = new HashSet();
+
             while (types.hasNext())
             {
                 atype = (Type) types.next();
-                if (atype.isAnonymous() && !atype.isExternalized())
+                
+                if (!atype.isExternalized())
                     continue;
-                if (!atype.isArray())
-                    typeSet.insertElementAt(atype.getLanguageSpecificName(), 0);
-                else
-                    typeSet.add(atype.getLanguageSpecificName());
+
+                if (atype.isArray())
+                    if (atype.getElementType().equals("string"))
+                        removeSet.add(atype.getLanguageSpecificName());
+                
+                if (atype.getBaseType() != null)
+                    if (atype.getBaseType().getLocalPart().equals("string"))
+                        removeSet.add(atype.getLanguageSpecificName() + "_Array");
+
+                typeSet.add(atype.getLanguageSpecificName());
             }
+            
+            Iterator ritr = removeSet.iterator();
+            while (ritr.hasNext())
+                typeSet.remove(ritr.next());
+            
             Iterator itr = typeSet.iterator();
             while (itr.hasNext())
             {

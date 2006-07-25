@@ -109,6 +109,12 @@ public class Type
     /* Is anonymous type? qname.localname is checked, and if starts with '>', then true */
     private boolean isAnonymous = false;
 
+    /* This vector was added in order to ensure that when a type is externalized, its 
+     * related types (types that are directly or indirectly referenced within this type) 
+     * are also externalized. 
+     */
+    private Vector vRelatedTypes = new Vector();
+    
     public Type(QName name, String languageSpecificName, boolean hasOrder, String language)
     {
         this.languageSpecificName = languageSpecificName;
@@ -492,5 +498,33 @@ public class Type
     public void externalize(boolean flag)
     {           
         externalize = flag;
+    }  
+
+    /**
+     * Externalize type - changing qname and use localPart of qname as 
+     * platform specific language name.
+     */
+    public void externalize(QName newQName)
+    {           
+        externalize(true);
+        setName(newQName);
+        setLanguageSpecificName(newQName.getLocalPart());
+    }     
+    
+    /**
+     * Return iterator for vector of related non-simple types.
+     */
+    public Iterator getRelatedTypes()
+    {
+        return this.vRelatedTypes.iterator();
+    }  
+    
+    /*
+     * Add to vector a Type that is related that is non-simple.
+     */
+    public void addRelatedType(Type type)
+    {
+        if (type != null && !TypeMap.isSimpleType(type.getName()))
+            this.vRelatedTypes.add(type);
     }    
 }
