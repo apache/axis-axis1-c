@@ -445,7 +445,7 @@ bool HTTPChannel::OpenChannel()
         pszHost = m_strProxyHost.c_str();
     }
  
-    sprintf( szPort, "%hd", uiPort);
+    sprintf( szPort, "%u", uiPort);
 
     if( getaddrinfo( pszHost, szPort, &aiHints, &paiAddrInfo0))
     {
