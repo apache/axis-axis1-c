@@ -584,8 +584,8 @@ SoapDeSerializer::getCmplxArray ( Axis_Array* pArray,
             
             if (m_nStatus != AXIS_FAIL)
                 return pArray;
+            }
         }
-    }
     else
     {
         deserializeLiteralComplexArray(pArray, pDZFunct, pCreFunct, pDelFunct,
@@ -2509,8 +2509,8 @@ SoapDeSerializer::serializeTag (AxisString & xmlStr,
                 // There has got to be a better way of doing this, but it was not obvious at
                 // the time!
                 const char *    pszXML = xmlStr.c_str();
-                char *            pNSEnd = strchr( pszXML, ':');
-                char *            pTagEnd = strchr( pszXML, '>');
+                char *            pNSEnd = (char *)strchr( pszXML, ':');
+                char *            pTagEnd = (char *)strchr( pszXML, '>');
 
                 if( pNSEnd && (pNSEnd < pTagEnd))
                 {
@@ -2518,8 +2518,8 @@ SoapDeSerializer::serializeTag (AxisString & xmlStr,
                     int                iNSEnd = (int) (strchr( pszXML, ':') - pszXML) - iNSStart;
                     string            sNamespace = xmlStr.substr( iNSStart, iNSEnd);
                     int                iTagEnd = 0;
-                    char *            pSpace = strchr( pszXML, ' ');
-                    char *            pBrace = strchr( pszXML, '>');
+                    char *            pSpace = (char *)strchr( pszXML, ' ');
+                    char *            pBrace = (char *)strchr( pszXML, '>');
 
                     if( pSpace == NULL)
                         iTagEnd = pSpace - pszXML;
