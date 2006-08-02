@@ -76,24 +76,6 @@ extern "C"
 
     }
 
-    STORAGE_CLASS_INFO const char * WhatAmI()
-	{
-		char			szInfo[64];
-		char			szWhatAmI[256];
-		const char *	pszWhatAmI = szWhatAmI;
-
-		memset( szInfo, 0, sizeof( szInfo));
-		memset( szWhatAmI, 0, sizeof( szWhatAmI));
-
-		strcpy( szWhatAmI, "LibraryName: HTTPTransport\n");
-
-#ifdef WIN32
-		sprintf( szInfo, "Built: %s\n", __TIMESTAMP__);
-		strcat( szWhatAmI, szInfo);
-#endif
-		return pszWhatAmI;
-	}
-
 	STORAGE_CLASS_INFO void preloadChannels(char *unsecChannel, char *secChannel)
 	{
 		ChannelFactory::preloadChannels(unsecChannel, secChannel);
