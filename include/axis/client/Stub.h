@@ -473,18 +473,6 @@ AXISC_STORAGE_CLASS_INFO
 void axiscStubSetPassword(AXISCHANDLE stub, const char * pcPassword);
 
 /**
- * Gets the username used for basic authentication
- */
-AXISC_STORAGE_CLASS_INFO
-const char * axiscStubGetUsername(AXISCHANDLE stub);
-
-/**
- * Gets the password used for basic authentication
- */
-AXISC_STORAGE_CLASS_INFO
-const char * axiscStubGetPassword(AXISCHANDLE stub);
-
-/**
  * Sets the username to be used for Proxy authentication
  */
 AXISC_STORAGE_CLASS_INFO
@@ -565,12 +553,6 @@ void axiscStubIncludeSecure(AXISCHANDLE stub);
  */
 AXISC_STORAGE_CLASS_INFO
 void axiscStubSetSOAPHeaders(AXISCHANDLE stub);
-
-/**
- * Set Authorization header for basic authentication
- */
-AXISC_STORAGE_CLASS_INFO
-void axiscStubSetAuthorizationHeader(AXISCHANDLE stub);
 
 /**
  * Set Authorization header for Proxy authentication
