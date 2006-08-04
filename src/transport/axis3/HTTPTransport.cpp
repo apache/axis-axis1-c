@@ -87,26 +87,26 @@ m_bMaintainSession (false)
     m_strHeaderBytesToSend = "";
     m_iBytesLeft = 0;
     m_iContentLength = 0;
-	m_bChannelSecure = false;
+    m_bChannelSecure = false;
     m_pNormalChannel = 0;
     m_pSecureChannel = 0;
-	m_pActiveChannel = 0;
+    m_pActiveChannel = 0;
     m_pChannelFactory = new ChannelFactory();
     m_bMimeTrue = false;
     m_viCurrentHeader = m_vHTTPHeaders.begin();
     m_viCurrentResponseHeader = m_vResponseHTTPHeaders.begin();
-	m_pszRxBuffer = new char [BUF_SIZE];
+    m_pszRxBuffer = new char [BUF_SIZE];
     m_pcUsername=NULL;
     m_pcPassword=NULL;
 #ifdef WIN32
-	m_lChannelTimeout = 10;
+    m_lChannelTimeout = 10;
 #else
-	m_lChannelTimeout = 0;
+    m_lChannelTimeout = 0;
 #endif
-	m_pNormalChannel = m_pChannelFactory->createChannel(UnsecureChannel);
-	m_pSecureChannel = m_pChannelFactory->createChannel(SecureChannel);
+    m_pNormalChannel = m_pChannelFactory->createChannel(UnsecureChannel);
+    m_pSecureChannel = m_pChannelFactory->createChannel(SecureChannel);
 
-	m_GetBytesState = eWaitingForHTTPHeader;
+    m_GetBytesState = eWaitingForHTTPHeader;
 }
 
 /*
@@ -116,24 +116,24 @@ HTTPTransport::~HTTPTransport()
 {
     if( m_pcEndpointUri)
     {
-		delete[] m_pcEndpointUri;
+        delete[] m_pcEndpointUri;
 
-		m_pcEndpointUri = NULL;
+        m_pcEndpointUri = NULL;
     }
 
     if( m_pChannelFactory)
-	{
-		delete m_pChannelFactory;
+    {
+        delete m_pChannelFactory;
 
-		m_pChannelFactory = NULL;
-	}
+        m_pChannelFactory = NULL;
+    }
 
-	if( m_pszRxBuffer)
-	{
-		delete [] m_pszRxBuffer;
+    if( m_pszRxBuffer)
+    {
+        delete [] m_pszRxBuffer;
 
-		m_pszRxBuffer = NULL;
-	}
+        m_pszRxBuffer = NULL;
+    }
 }
 
 /*
@@ -146,101 +146,72 @@ HTTPTransport::~HTTPTransport()
  */
 void HTTPTransport::setEndpointUri( const char * pcEndpointUri) throw (HTTPTransportException)
 {
-    bool bUpdateURL = false;
+    bool bUpdateURL = true;
 
-    if (!pcEndpointUri) // We have NULL so cannot proceed
-        return;
+    // if URI not valid, return
+    if (!pcEndpointUri || strlen(pcEndpointUri) < strlen("http://") )
+        return;                                                  
 
-    // Samisa:We have to have at lest "http://" in the URL
-    // We also need to handle passing " " as URL which 
-    // is done by some auto generated code
-    if ( strlen(pcEndpointUri) < strlen("http://") ) 
-        return;
-                                                  
-
-    // Get the current channel URI
+    // Does the new URI equal the existing channel URI?
     if( m_pActiveChannel != NULL && m_pActiveChannel->getURL())
-    {
-		// Does the new URI equal the existing channel URI?
-		if( strcmp (m_pActiveChannel->getURL (), pcEndpointUri) != 0)
-		{
-	    	// There is a new URI.
-			bUpdateURL = true;
-		}
-    }
-    else
-    {
-		bUpdateURL = true;
-    }
+        if( strcmp (m_pActiveChannel->getURL (), pcEndpointUri) == 0)
+            bUpdateURL = false;
 
-
-    // If there is a new URI, then this flag will be set.  Depending on whether
-    // there is an SSL implementation available, if the new URI is a secure
-	// connection, a secure channel will be opened.  If an SSL implementation
-	// is not available and the URL requires a secure connection then an
-	// exception will be thrown.
+    // If there is a new URI, then this flag will be set.  Depending on whether there is an SSL implementation
+    // available, if the new URI is a secure connection, a secure channel will be opened.  If an SSL implementation is
+    // not available and the URL requires a secure connection then an exception will be thrown.
     if( bUpdateURL)
     {
-		if( m_pActiveChannel == NULL)
-		{
-			m_pActiveChannel = m_pNormalChannel;
-		}
+        if( m_pActiveChannel == NULL)
+            m_pActiveChannel = m_pNormalChannel;
 
-		m_pActiveChannel->setURL( pcEndpointUri);
+        m_pActiveChannel->setURL( pcEndpointUri);
+        m_bReopenConnection = true;
 
-		m_bReopenConnection = true;
+        // Check if the new URI requires SSL (denoted by the https prefix).
+        if( (m_pActiveChannel->getURLObject()).getProtocol() == URL::https)
+        {
+            if( m_pSecureChannel != NULL)
+            {
+                m_pNormalChannel->close();
+                m_pActiveChannel = m_pSecureChannel;
+                m_pActiveChannel->setURL( pcEndpointUri);
+                m_bChannelSecure = true;
+            }
 
-		// Check if the new URI requires SSL (denoted by the https prefix).
-		if( (m_pActiveChannel->getURLObject()).getProtocol() == URL::https)
-		{
-			if( m_pSecureChannel != NULL)
-			{
-				m_pNormalChannel->close();
+            if( !m_bChannelSecure)
+            {
+                throw HTTPTransportException( CLIENT_TRANSPORT_HAS_NO_SECURE_TRANSPORT_LAYER);
+            }
+        }
+        else
+        {
+            // URI does not require a secure channel.  Delete the existing channel if it is secure and create a new
+            // unsecure channel.
+            if (m_bChannelSecure)
+            {
+                if( m_pNormalChannel != NULL)
+                {
+                    m_pSecureChannel->close();
 
-				m_pActiveChannel = m_pSecureChannel;
+                    m_pActiveChannel = m_pNormalChannel;
+                    m_pActiveChannel->setURL( pcEndpointUri);
+                    m_bChannelSecure = false;
+                }
 
-				m_pActiveChannel->setURL( pcEndpointUri);
-
-				m_bChannelSecure = true;
-			}
-
-			if( !m_bChannelSecure)
-			{
-				throw HTTPTransportException( CLIENT_TRANSPORT_HAS_NO_SECURE_TRANSPORT_LAYER);
-			}
-		}
-		else
-		{
-	    	// URI does not require a secure channel.  Delete the existing
-	    	// channel if it is secure and create a new unsecure
-	    	// channel.
-			if (m_bChannelSecure)
-			{
-				if( m_pNormalChannel != NULL)
-				{
-					m_pSecureChannel->close();
-
-					m_pActiveChannel = m_pNormalChannel;
-					m_pActiveChannel->setURL( pcEndpointUri);
-					m_bChannelSecure = false;
-				}
-
-				if( m_bChannelSecure)
-				{
-					throw HTTPTransportException( CLIENT_TRANSPORT_HAS_NO_UNSECURE_TRANSPORT_LAYER);
-				}
-			}
-		}
+                if( m_bChannelSecure)
+                {
+                    throw HTTPTransportException( CLIENT_TRANSPORT_HAS_NO_UNSECURE_TRANSPORT_LAYER);
+                }
+            }
+        }
     }
 
-	// Need this code to set the channel timeout.  If the timeout was changed
-	// before the channel was created, then it may not have the correct timeout.
-	// By setting it here, the channel is sure to have the correct timeout value
-	// next time the channel is read.
-	if( m_pActiveChannel != NULL)
-	{
-		m_pActiveChannel->setTimeout( m_lChannelTimeout);
-	}
+    // Need this code to set the channel timeout.  If the timeout was changed before the channel was created, then it
+    // may not have the correct timeout. By setting it here, the channel is sure to have the correct timeout value next
+    // time the channel is read.
+    if( m_pActiveChannel != NULL)
+        m_pActiveChannel->setTimeout( m_lChannelTimeout);
 }
 
 /*
@@ -251,21 +222,21 @@ int HTTPTransport::openConnection()
 {
     if( m_bReopenConnection)
     {
-		m_bReopenConnection = false;
+        m_bReopenConnection = false;
 
-		if( m_pActiveChannel->open() != AXIS_SUCCESS)
-		{
-		    int	iStringLength = m_pActiveChannel->GetLastErrorMsg().length() + 1;
-			const char * pszLastError = new char[iStringLength];
+        if( m_pActiveChannel->open() != AXIS_SUCCESS)
+        {
+            int	iStringLength = m_pActiveChannel->GetLastErrorMsg().length() + 1;
+            const char * pszLastError = new char[iStringLength];
 
-		    memcpy( (void *) pszLastError,
-					m_pActiveChannel->GetLastErrorMsg().c_str(),
-					iStringLength);
+            memcpy( (void *) pszLastError,
+                    m_pActiveChannel->GetLastErrorMsg().c_str(),
+                    iStringLength);
 
-		    throw HTTPTransportException( CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED,
-										  (char *) pszLastError);
-		}
-	}
+            throw HTTPTransportException( CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED,
+                                          (char *) pszLastError);
+        }
+    }
     return AXIS_SUCCESS;
 }
 
@@ -275,7 +246,7 @@ int HTTPTransport::openConnection()
 void HTTPTransport::closeConnection()
 {
     // get ready for a new message.
-	m_GetBytesState = eWaitingForHTTPHeader;
+    m_GetBytesState = eWaitingForHTTPHeader;
 
     //clear the message buffer in preperation of the next read.
     m_strReceived = "";
@@ -283,9 +254,7 @@ void HTTPTransport::closeConnection()
 
     m_iContentLength = 0;
 
-    // Samisa : closing the connection is done in setEndpointUri
-    // no need to close here
-    // Fix for AXISCPP-481
+    // Samisa : closing the connection is done in setEndpointUri no need to close here Fix for AXISCPP-481
 }
 
 /*
@@ -300,67 +269,64 @@ void HTTPTransport::closeConnection()
  */
 AXIS_TRANSPORT_STATUS HTTPTransport::flushOutput() throw (AxisException, HTTPTransportException)
 {
-	char *utf8Buf = NULL; // buffer for ebcdic/utf8 conversions.
-	
-    // In preperation for sending the message, calculate the size of the message
-    // by using the string length method.
+    char *utf8Buf = NULL; // buffer for ebcdic/utf8 conversions.
+
+    // In preperation for sending the message, calculate the size of the message by using the string length method.
     char buff[24];
-	sprintf( buff, "%d", m_strBytesToSend.length ());
+    sprintf( buff, "%d", m_strBytesToSend.length ());
     this->setTransportProperty ("Content-Length", buff);
 
-    // The header is now complete.  The message header and message can now be
-    // transmitted.
-	try
-	{
+    // The header is now complete.  The message header and message can now be transmitted.
+    try
+    {
 #ifndef __OS400__
-		*m_pActiveChannel << this->getHTTPHeaders ();
-		*m_pActiveChannel << this->m_strBytesToSend.c_str ();
+        *m_pActiveChannel << this->getHTTPHeaders ();
+        *m_pActiveChannel << this->m_strBytesToSend.c_str ();
 #else
-        // Ebcdic (OS/400) systems need to convert the data to UTF-8. Note that free() is 
-        // correctly used and should not be changed to delete().		
+        // Ebcdic (OS/400) systems need to convert the data to UTF-8. Note that free() is correctly used and should not
+        // be changed to delete().
         const char *buf = this->getHTTPHeaders ();
         utf8Buf = toUTF8((char *)buf, strlen(buf)+1);
-		*m_pActiveChannel << utf8Buf;
+        *m_pActiveChannel << utf8Buf;
         free(utf8Buf);
         utf8Buf = NULL;
         utf8Buf = toUTF8((char *)this->m_strBytesToSend.c_str(), this->m_strBytesToSend.length()+1);
-		*m_pActiveChannel << utf8Buf;
+        *m_pActiveChannel << utf8Buf;
         free(utf8Buf);
         utf8Buf = NULL;
 #endif
-	}
-	catch( HTTPTransportException & e)
-	{
-		if (utf8Buf) free(utf8Buf);
+    }
+    catch( HTTPTransportException & e)
+    {
+        if (utf8Buf) free(utf8Buf);
         m_strBytesToSend = "";
         m_strHeaderBytesToSend = "";
-		throw;
-	}
-	catch( AxisException & e)
-	{
-		if (utf8Buf) free(utf8Buf);
+        throw;
+    }
+    catch( AxisException & e)
+    {
+        if (utf8Buf) free(utf8Buf);
         m_strBytesToSend = "";
         m_strHeaderBytesToSend = "";
-		throw;
-	}
-	catch(...)
-	{
-		if (utf8Buf) free(utf8Buf);
+        throw;
+    }
+    catch(...)
+    {
+        if (utf8Buf) free(utf8Buf);
         m_strBytesToSend = "";
         m_strHeaderBytesToSend = "";
-		throw;
-	}
+        throw;
+    }
 
     // Empty the bytes to send string.
-	m_strBytesToSend = "";
-	m_strHeaderBytesToSend = "";
- 
+    m_strBytesToSend = "";
+    m_strHeaderBytesToSend = "";
+
     // Also empty the response headers as there aren't any yet until the response comes back !
     m_vResponseHTTPHeaders.clear();
     // TODO: Possible memory leak here - does the clear op clean out the memory too?
-    
 
-	return TRANSPORT_FINISHED;
+    return TRANSPORT_FINISHED;
 }
 
 /* HTTPTransport::getHTTPHeaders() Called to retrieve the current HTTP header
@@ -371,9 +337,9 @@ AXIS_TRANSPORT_STATUS HTTPTransport::flushOutput() throw (AxisException, HTTPTra
  */
 const char * HTTPTransport::getHTTPHeaders()
 {
-    URL &           url = m_pActiveChannel->getURLObject(); 
-    unsigned short	uiPort;
-    char			buff[32];
+    URL & url = m_pActiveChannel->getURLObject();
+    unsigned short uiPort;
+    char buff[32];
 
     m_strHeaderBytesToSend = m_strHTTPMethod + " ";
 
@@ -388,28 +354,29 @@ const char * HTTPTransport::getHTTPHeaders()
     }
     else
     {
-		m_strHeaderBytesToSend += url.getResource ();
+        m_strHeaderBytesToSend += url.getResource ();
         m_strHeaderBytesToSend += " ";
         m_strHeaderBytesToSend += m_strHTTPProtocol;
-		m_strHeaderBytesToSend += "\r\nHost: ";
-		m_strHeaderBytesToSend += url.getHostName ();
+        m_strHeaderBytesToSend += "\r\nHost: ";
+        m_strHeaderBytesToSend += url.getHostName ();
         uiPort = url.getPort();
-    }  
-
-    sprintf(buff, ":%u\r\n", uiPort);
-    m_strHeaderBytesToSend += buff; 
-
-	bool foundCT = false;
-    for (unsigned int j = 0; j < m_vHTTPHeaders.size (); j++)
-    {
-		if (0==strcmp(AXIS_CONTENT_TYPE,m_vHTTPHeaders[j].first.c_str())) foundCT = true;
     }
 
-	// The Content-Type must be set, but it may already be set in m_strHeaderBytesToSend
-	// if we're using attachments, for example.
-	if (!foundCT)
-		m_strHeaderBytesToSend += AXIS_CONTENT_TYPE ": text/xml; charset=UTF-8\r\n";
-        
+    sprintf(buff, ":%u\r\n", uiPort);
+    m_strHeaderBytesToSend += buff;
+
+    bool foundCT = false;
+    for (unsigned int j = 0; j < m_vHTTPHeaders.size (); j++)
+    {
+        if (0==strcmp(AXIS_CONTENT_TYPE,m_vHTTPHeaders[j].first.c_str()))
+            foundCT = true;
+    }
+
+    // The Content-Type must be set, but it may already be set in m_strHeaderBytesToSend if we're using attachments, for
+    // example.
+    if (!foundCT)
+        m_strHeaderBytesToSend += AXIS_CONTENT_TYPE ": text/xml; charset=UTF-8\r\n";
+
     // set basic auth if the username and password are both set
     if(getUsername()!=NULL && getPassword() !=NULL)
     {
@@ -421,8 +388,8 @@ const char * HTTPTransport::getHTTPHeaders()
         int len = apr_base64_encode_len (strlen (cpUsernamePassword));
         AxisChar *base64Value = new AxisChar[len + 1];
         len = apr_base64_encode_binary (base64Value,
-                                    (const unsigned char *) cpUsernamePassword,
-                                    strlen (cpUsernamePassword));
+                                        (const unsigned char *) cpUsernamePassword,
+                                        strlen (cpUsernamePassword));
 
         std::string strValue = "Basic ";
         strValue += base64Value;
@@ -438,10 +405,10 @@ const char * HTTPTransport::getHTTPHeaders()
     {
         if( strcmp(m_vHTTPHeaders[i].first.c_str(), "Cookie")!=0)
         {
-          m_strHeaderBytesToSend += m_vHTTPHeaders[i].first;
-		  m_strHeaderBytesToSend += ": ";
-		  m_strHeaderBytesToSend += m_vHTTPHeaders[i].second;
-		  m_strHeaderBytesToSend += "\r\n";
+            m_strHeaderBytesToSend += m_vHTTPHeaders[i].first;
+            m_strHeaderBytesToSend += ": ";
+            m_strHeaderBytesToSend += m_vHTTPHeaders[i].second;
+            m_strHeaderBytesToSend += "\r\n";
         }
     }
 
@@ -449,27 +416,27 @@ const char * HTTPTransport::getHTTPHeaders()
     if (m_bMaintainSession && (m_vCookies.size () > 0))
     {
         string cookieHeader="";
-        
+
         // Add in all the cookies ar the last one because that shouldn't have a ';' on it
-        for (unsigned int var = 0; var < m_vCookies.size()-1; var++) 
+        for (unsigned int var = 0; var < m_vCookies.size()-1; var++)
         {
             cookieHeader += m_vCookies[var].first;
             cookieHeader += "=";
             cookieHeader += m_vCookies[var].second;
             cookieHeader += ";";
         }
+        
         // add on the last cookie
         cookieHeader += m_vCookies[m_vCookies.size()-1].first;
         cookieHeader += "=";
         cookieHeader += m_vCookies[m_vCookies.size()-1].second;
-        
-        
+
         m_strHeaderBytesToSend += "Cookie: ";
         m_strHeaderBytesToSend += cookieHeader;
         m_strHeaderBytesToSend += "\r\n";
-        
-        // Now add this header in to the list of sent headers
-        // if it's not already been set ! If it has been then override it
+
+        // Now add this header in to the list of sent headers if it's not already been set ! If it has been then
+        // override it
         bool b_keyFound=false;
         for (unsigned int i = 0; i < m_vHTTPHeaders.size(); i++)
         {
@@ -577,174 +544,148 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char * pcBuffer, int * piSize) th
 //   eSOAPMessageIsNotChunked - The message is read until the number of message
 //                              bytes read equals the HTTP header content
 //                              length value.
-	switch( m_GetBytesState)
-	{
-		case eWaitingForHTTPHeader:
-		{
-			// If there is still data to be sent, then drop out of the switch statement and send more data!
-			if( m_iBytesLeft > 0)
-			{
-				break;
-			}
+        switch( m_GetBytesState)
+        {
+            case eWaitingForHTTPHeader:
+                {
+                    // If there is still data to be sent, then drop out of the switch statement and send more data!
+                    if( m_iBytesLeft > 0)
+                        break;
 
-		// Wait for a HTTP header to be located on the input stream.
-			do
-			{
-		// From the input stream, wait for a 'valid' HTTP header.
-				readHTTPHeader();
+                    // Wait for a HTTP header to be located on the input stream.
+                    do
+                    {
+                        // From the input stream, wait for a 'valid' HTTP header.
+                        readHTTPHeader();
 
-		// From the header,extract such things as chunking, message length, etc.
-				processHTTPHeader();
+                        // From the header,extract such things as chunking, message length, etc.
+                        processHTTPHeader();
 
-			} while( m_iResponseHTTPStatusCode == 100);
+                    }
+                    while( m_iResponseHTTPStatusCode == 100);
 
-		// Check that the HTTP status code is valid.
-			checkHTTPStatusCode();
+                    // Check that the HTTP status code is valid.
+                    checkHTTPStatusCode();
 
-		// Done with HTTP headers, get SOAP message.
-			int iHTTPStart = m_strReceived.find( ASCII_S_HTTP);
-			int iHTTPEnd = m_strReceived.find( ASCII_S_CRLFCRLF, iHTTPStart);
+                    // Done with HTTP headers, get SOAP message.
+                    int iHTTPStart = m_strReceived.find( ASCII_S_HTTP);
+                    int iHTTPEnd = m_strReceived.find( ASCII_S_CRLFCRLF, iHTTPStart);
 
-			m_strReceived = m_strReceived.substr( iHTTPEnd + strlen( ASCII_S_CRLFCRLF));
+                    m_strReceived = m_strReceived.substr( iHTTPEnd + strlen( ASCII_S_CRLFCRLF));
 
-			m_iBytesLeft = m_strReceived.length();
+                    m_iBytesLeft = m_strReceived.length();
 
-		// This bit of code should not be necessary, but just in case...
-			if( m_GetBytesState == eWaitingForHTTPHeader)
-			{
-				break;
-			}
-		}
+                    // This bit of code should not be necessary, but just in case...
+                    if( m_GetBytesState == eWaitingForHTTPHeader)
+                        break;
+                }
 
-		// At this point it is assumed that m_strReceived contains the block of
-		// unprocessed data.  m_iBytesLeft is the length of text/data in m_strReceived
-		// is a 'char *' type copy of the m_strReceived string.
-		// NB: It is assumed that all of these variables ARE in sync at this point.
-		case eSOAPMessageIsChunked:
-			{
-				if( m_GetBytesState == eSOAPMessageIsChunked)
-				{
-					if( m_iBytesLeft == 0)
-					{
-						getNextDataPacket( "No data available for next chunk size.");
-					}
+           // At this point it is assumed that m_strReceived contains the block of unprocessed data.  m_iBytesLeft
+           // is the length of text/data in m_strReceived is a 'char *' type copy of the m_strReceived string. NB:
+           // It is assumed that all of these variables ARE in sync at this point.
+            case eSOAPMessageIsChunked:
+                {
+                    if( m_GetBytesState == eSOAPMessageIsChunked)
+                    {
+                        if( m_iBytesLeft == 0)
+                            getNextDataPacket( "No data available for next chunk size.");
 
-					m_iContentLength = getChunkSize();
+                        m_iContentLength = getChunkSize();
 
-		// If the chunk size is larger than the available data, then read in more data
-		// until all of the chunk has been read.
-					while( m_iContentLength > m_iBytesLeft)
-					{
-						getNextDataPacket( "No data available for next chunk.");
-					}
+                        // If the chunk size is larger than the available data, then read in more data until all of the
+                        // chunk has been read.
+                        while( m_iContentLength > m_iBytesLeft)
+                        {
+                            getNextDataPacket( "No data available for next chunk.");
+                        }
 
-		// If data read is longer than chunk size, then copy the extra data to a
-		// temporary variable and process data just belonging to this chunk.
-					if( m_iBytesLeft > m_iContentLength)
-					{
-						if( m_strReceived.length() > (m_iContentLength + strlen( ASCII_S_CRLF) + 1))
-						{
-							nextChunk = m_strReceived.substr( m_iContentLength + strlen( ASCII_S_CRLF));
-						}
-						else
-						{
-							nextChunk = "";
-						}
+                        // If data read is longer than chunk size, then copy the extra data to a temporary variable and
+                        // process data just belonging to this chunk.
+                        if( m_iBytesLeft > m_iContentLength)
+                        {
+                            if( m_strReceived.length() > (m_iContentLength + strlen( ASCII_S_CRLF) + 1))
+                                nextChunk = m_strReceived.substr( m_iContentLength + strlen( ASCII_S_CRLF));
+                            else
+                                nextChunk = "";
 
-						m_strReceived = m_strReceived.substr( 0, m_iContentLength);
-						m_iBytesLeft = m_iContentLength;
+                            m_strReceived = m_strReceived.substr( 0, m_iContentLength);
+                            m_iBytesLeft = m_iContentLength;
 
-		// Check to see if the next chunk size is zero.  If it is then change the state.
-						if( peekChunkLength( nextChunk) == 0)
-						{
-							m_GetBytesState = eWaitingForHTTPHeader;
-						}
-					}
-					else
-					{
-						nextChunk = "";
-					}
+                            // Check to see if the next chunk size is zero.  If it is then change the state.
+                            if( peekChunkLength( nextChunk) == 0)
+                                m_GetBytesState = eWaitingForHTTPHeader;
+                        }
+                        else
+                            nextChunk = "";
 
-		// Now have at least chunk size worth of data.  The chunk may contain Mime data
-		// (this depends on information in the HTTP header).  If Mime data is expected,
-		// process it first.
-					if( m_bMimeTrue)
-					{
-						processRootMimeBody();
+                        // Now have at least chunk size worth of data.  The chunk may contain Mime data (this depends on
+                        // information in the HTTP header).  If Mime data is expected, process it first.
+                        if( m_bMimeTrue)
+                        {
+                            processRootMimeBody();
 
-						m_iBytesLeft = m_strReceived.length();
-					}
+                            m_iBytesLeft = m_strReceived.length();
+                        }
 
-					break;
-				}
-			}
+                        break;
+                    }
+                }
 
-		case eSOAPMessageIsNotChunked:
-		{
-		// Check that there is more message to read.  Or, if the message has no
-		// length defined, keep reading until the connection is closed by the
-		// server.
-			if( m_iContentLength > 0 ||
-				(m_bReopenConnection && m_pActiveChannel->getSocket()))
-			{
-				if( m_iContentLength > 0)
-				{
-					getNextDataPacket( "No data available for message.");
-				}
-				else
-				{
-					getNextDataPacket( "Expecting server connection to close.");
-				}
+            case eSOAPMessageIsNotChunked:
+                {
+                    // Check that there is more message to read.  Or, if the message has no length defined, keep reading
+                    // until the connection is closed by the server.
+                    if( m_iContentLength > 0 ||
+                        (m_bReopenConnection && m_pActiveChannel->getSocket()))
+                    {
+                        if( m_iContentLength > 0)
+                            getNextDataPacket( "No data available for message.");
+                        else
+                            getNextDataPacket( "Expecting server connection to close.");
 
-		// Check for Mime header
-				if( m_bMimeTrue)
-				{
-					processRootMimeBody();
+                        // Check for Mime header
+                        if( m_bMimeTrue)
+                        {
+                            processRootMimeBody();
 
-					m_iBytesLeft = m_strReceived.length();
-				}
+                            m_iBytesLeft = m_strReceived.length();
+                        }
 
-		// Subtract message length (so far) from expcted content length.
-				m_iContentLength -= m_iBytesLeft;
+                        // Subtract message length (so far) from expcted content length.
+                        m_iContentLength -= m_iBytesLeft;
 
-		// If all of the message has been received, then reset the process state.
-				if( m_iContentLength <= 0)
-				{
-		// The content length is <= 0, BUT the m_bReopenConnection is true
-		// (because a 'Connection: close' has been found) the socket has been
-		// closed by the server, then wait for the next HTTP message, otherwise
-		// keep reading!
-					if( m_bReopenConnection && m_pActiveChannel->getSocket())
-					{
-						m_iContentLength = 0;
-					}
-					else
-					{
-						m_GetBytesState = eWaitingForHTTPHeader;
-					}
-				}
-			}
-			else
-			{
+                        // If all of the message has been received, then reset the process state.
+                        if( m_iContentLength <= 0)
+                        {
+                            // The content length is <= 0, BUT the m_bReopenConnection is true (because a 'Connection:
+                            // close' has been found) the socket has been closed by the server, then wait for the next
+                            // HTTP message, otherwise keep reading!
+                            if( m_bReopenConnection && m_pActiveChannel->getSocket())
+                                m_iContentLength = 0;
+                            else
+                                m_GetBytesState = eWaitingForHTTPHeader;
+                        }
+                    }
+                    else
+                    {
+                        // Reset the process state.
+                        m_GetBytesState = eWaitingForHTTPHeader;
+                    }
 
-		// Reset the process state.
-				m_GetBytesState = eWaitingForHTTPHeader;
-			}
+                    break;
+                }
+        }
 
-		break;
-		}
-	}
+        // Copy as much of the message to the parser buffer as possible.
+        if( copyDataToParserBuffer( pcBuffer, piSize, m_iBytesLeft))
+        {
+            m_strReceived += nextChunk;
+            m_iBytesLeft = m_strReceived.length();
 
-// Copy as much of the message to the parser buffer as possible.
-	if( copyDataToParserBuffer( pcBuffer, piSize, m_iBytesLeft))
-	{
-		m_strReceived += nextChunk;
-		m_iBytesLeft = m_strReceived.length();
+            return TRANSPORT_IN_PROGRESS;
+        }
 
-		return TRANSPORT_IN_PROGRESS;
-	}
-
-	return TRANSPORT_FINISHED;
+        return TRANSPORT_FINISHED;
 }
 
 /* HTTPTransport::setTransportProperty( Type, Value) Is an overloaded public
@@ -759,81 +700,76 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char * pcBuffer, int * piSize) th
 int HTTPTransport::setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char *value) throw (HTTPTransportException)
 {
     const char *key = NULL;
-	int			iSuccess = AXIS_SUCCESS;
+    int	iSuccess = AXIS_SUCCESS;
 
     switch (type)
     {
-	    case SOAPACTION_HEADER:
-		{
-			key = "SOAPAction";
-		    break;
-		}
+        case SOAPACTION_HEADER:
+            {
+                key = "SOAPAction";
+                break;
+            }
 
-		case SERVICE_URI:		// need to set ?
-		{
-			break;
-		}
+        case SERVICE_URI:		// need to set ?
+            {
+                break;
+            }
 
-		case OPERATION_NAME:	// need to set ?
-		{
-			break;
-		}
+        case OPERATION_NAME:	// need to set ?
+            {
+                break;
+            }
 
-		case SOAP_MESSAGE_LENGTH:
-		{
-			key = "Content-Length";	// this Axis transport handles only HTTP
-			break;
-		}
+        case SOAP_MESSAGE_LENGTH:
+            {
+                key = "Content-Length";	// this Axis transport handles only HTTP
+                break;
+            }
 
-		case TRANSPORT_PROPERTIES:
-		{
-			if( m_pActiveChannel != NULL)
-			{
-				m_pActiveChannel->setTransportProperty( type, value);
-			}
+        case TRANSPORT_PROPERTIES:
+            {
+                if( m_pActiveChannel != NULL)
+                {
+                    m_pActiveChannel->setTransportProperty( type, value);
+                }
 
-			break;
-		}
+                break;
+            }
 
-		case SECURE_PROPERTIES:
-		{
-			if( m_pActiveChannel != NULL)
-			{
-				iSuccess = m_pActiveChannel->setSecureProperties( value);
-			}
-			break;
-		}
+        case SECURE_PROPERTIES:
+            {
+                if( m_pActiveChannel != NULL)
+                    iSuccess = m_pActiveChannel->setSecureProperties( value);
+                
+                break;
+            }
 
-		case CHANNEL_HTTP_DLL_NAME:
-		{
-			if( m_pChannelFactory != NULL)
-			{
-				m_pNormalChannel = m_pChannelFactory->LoadChannelLibrary( UnsecureChannel, value);
-			}
-			break;
-		}
+        case CHANNEL_HTTP_DLL_NAME:
+            {
+                if( m_pChannelFactory != NULL)
+                    m_pNormalChannel = m_pChannelFactory->LoadChannelLibrary( UnsecureChannel, value);
 
-		case CHANNEL_HTTP_SSL_DLL_NAME:
-		{
-			if( m_pChannelFactory != NULL)
-			{
-				m_pSecureChannel = m_pChannelFactory->LoadChannelLibrary( SecureChannel, value);
-			}
-			break;
-		}
+                break;
+            }
 
-		default:
-		{
-			break;
-		}
+        case CHANNEL_HTTP_SSL_DLL_NAME:
+            {
+                if( m_pChannelFactory != NULL)
+                    m_pSecureChannel = m_pChannelFactory->LoadChannelLibrary( SecureChannel, value);
+
+                break;
+            }
+
+        default:
+            {
+                break;
+            }
     }
 
     if( key)
-    {
-		setTransportProperty( key, value);
-    }
+        setTransportProperty( key, value);
 
-	return iSuccess;
+    return iSuccess;
 }
 
 /* HTTPTransport::setTransportProperty( Key, Value) Is an overloaded public
@@ -847,42 +783,32 @@ int HTTPTransport::setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, c
  */
 int HTTPTransport::setTransportProperty( const char *pcKey, const char *pcValue) throw (HTTPTransportException)
 {
-    if( !pcKey || !pcValue)	// Samisa - fix for AXISCPP-295. We must check for valid values here.
-	{
-		return AXIS_SUCCESS;
-	}
+    if( !pcKey || !pcValue)	
+        return AXIS_SUCCESS;
 
     bool b_KeyFound = false;
 
     // Check for well known headers that we add on in every iteration
     if( strcmp( pcKey, "SOAPAction") == 0 || strcmp( pcKey, "Content-Length") == 0)
     {
-		std::string strKeyToFind = std::string( pcKey);
+        std::string strKeyToFind = std::string( pcKey);
 
-		for (unsigned int i = 0; i < m_vHTTPHeaders.size(); i++)
-		{
-		    if (m_vHTTPHeaders[i].first == strKeyToFind)
-			{
-				m_vHTTPHeaders[i].second = (string) pcValue;
-				b_KeyFound = true;
+        for (unsigned int i = 0; i < m_vHTTPHeaders.size(); i++)
+            if (m_vHTTPHeaders[i].first == strKeyToFind)
+            {
+                m_vHTTPHeaders[i].second = (string) pcValue;
+                b_KeyFound = true;
 
-				break;
-		    }
-		}
+                break;
+            }
     }
-    else
-    {
-        if(strcmp(pcKey, "Cookie")==0)
-        {
+    else if(strcmp(pcKey, "Cookie")==0)
         return addCookie(pcValue);
-        }
-    }
 
     if( !b_KeyFound)
-    {
-  		m_vHTTPHeaders.push_back( std::make_pair( (string) pcKey, (string) pcValue));
-    }
-	return AXIS_SUCCESS;
+        m_vHTTPHeaders.push_back( std::make_pair( (string) pcKey, (string) pcValue));
+    
+    return AXIS_SUCCESS;
 }
 
 /* HTTPTransport::getTransportProperty( Type) Is a public method that will
@@ -901,53 +827,49 @@ const char * HTTPTransport::getTransportProperty( AXIS_TRANSPORT_INFORMATION_TYP
 
     switch( eType)
     {
-	    case SOAPACTION_HEADER:
-		{
-			int iIndex = FindTransportPropertyIndex( "SOAPAction");
+        case SOAPACTION_HEADER:
+            {
+                int iIndex = FindTransportPropertyIndex( "SOAPAction");
 
-		    if (iIndex > -1)
-		    {
-				pszPropValue = m_vHTTPHeaders[iIndex].second.c_str();
-		    }
+                if (iIndex > -1)
+                    pszPropValue = m_vHTTPHeaders[iIndex].second.c_str();
 
-		    break;
-		}
+                break;
+            }
 
-	    case SERVICE_URI:
-		{
-			break;
-		}
+        case SERVICE_URI:
+            {
+                break;
+            }
 
-	    case OPERATION_NAME:
-		{
-			break;
-		}
+        case OPERATION_NAME:
+            {
+                break;
+            }
 
-	    case SOAP_MESSAGE_LENGTH:
-		{
-			int iIndex = FindTransportPropertyIndex( "Content-Length");
+        case SOAP_MESSAGE_LENGTH:
+            {
+                int iIndex = FindTransportPropertyIndex( "Content-Length");
 
-		    if (iIndex > -1)
-		    {
-				pszPropValue = m_vHTTPHeaders[iIndex].second.c_str();
-		    }
+                if (iIndex > -1)
+                    pszPropValue = m_vHTTPHeaders[iIndex].second.c_str();
 
-		    break;
-		}
+                break;
+            }
 
-	case TRANSPORT_PROPERTIES:
-    case SECURE_PROPERTIES:
-		{
-			pszPropValue = m_pActiveChannel->getTransportProperty( eType);
-			break;
-		}
+        case TRANSPORT_PROPERTIES:
+        case SECURE_PROPERTIES:
+            {
+                pszPropValue = m_pActiveChannel->getTransportProperty( eType);
+                break;
+            }
 
-	case CHANNEL_HTTP_SSL_DLL_NAME:
-	case CHANNEL_HTTP_DLL_NAME:
-    case CONTENT_TYPE:
-		{
-			break;
-		}
+        case CHANNEL_HTTP_SSL_DLL_NAME:
+        case CHANNEL_HTTP_DLL_NAME:
+        case CONTENT_TYPE:
+            {
+                break;
+            }
     }
 
     return pszPropValue;
@@ -969,20 +891,14 @@ int HTTPTransport::FindTransportPropertyIndex( string sKey)
 
     while( (unsigned int) iIndex < m_vHTTPHeaders.size() && !bKeyFound)
     {
-		if (!m_vHTTPHeaders[iIndex].first.compare( sKey))
-		{
-			bKeyFound = true;
-		}
-		else
-		{
-			iIndex++;
-		}
-    } 
+        if (!m_vHTTPHeaders[iIndex].first.compare( sKey))
+            bKeyFound = true;
+        else
+            iIndex++;
+    }
 
     if( !bKeyFound)
-    {
-		iIndex = -1;
-    }
+        iIndex = -1;
 
     return iIndex;
 }
@@ -999,9 +915,7 @@ const char * HTTPTransport::getServiceName()
     int		iIndex = FindTransportPropertyIndex( "SOAPAction");
 
     if (iIndex > -1)
-    {
 		return m_vHTTPHeaders[iIndex].second.c_str();
-    }
 
     return NULL;
 }
@@ -1022,10 +936,8 @@ int HTTPTransport::setProtocol( AXIS_PROTOCOL_TYPE eProtocol)
 
 		return AXIS_SUCCESS;
     }
-    else
-	{
-		return AXIS_FAIL;
-	}
+
+    return AXIS_FAIL;
 }
 
 /**
@@ -1051,7 +963,7 @@ int HTTPTransport::getSubProtocol()
 void HTTPTransport::setProxy( const char *pcProxyHost, unsigned int uiProxyPort)
 {
     m_pActiveChannel->setProxy(pcProxyHost,uiProxyPort);
-	m_strProxyHost = pcProxyHost;
+    m_strProxyHost = pcProxyHost;
     m_uiProxyPort = uiProxyPort;
     m_bUseProxy = true;
 }
@@ -1064,12 +976,10 @@ void HTTPTransport::setProxy( const char *pcProxyHost, unsigned int uiProxyPort)
  */
 void HTTPTransport::setTimeout( long lSeconds)
 {
-	if( m_pActiveChannel != NULL)
-	{
-		m_pActiveChannel->setTimeout( lSeconds);
-	}
+    if( m_pActiveChannel != NULL)
+        m_pActiveChannel->setTimeout( lSeconds);
 
-	m_lChannelTimeout = lSeconds;
+    m_lChannelTimeout = lSeconds;
 }
 
 /* HTTPTransport::getHTTPProtocol() Is a public method for retrieving the
@@ -1103,29 +1013,25 @@ int axtoi( char *pcHexString)
 */
     while( iN < 32)
     {
-		if( pcHexString[iN] == '\0')
-		{
-			break;
-		}
-	
-		if( pcHexString[iN] >= ASCII_C_ZERO && 
-			pcHexString[iN] <= ASCII_C_NINE)
-		{
-			iDigit[iN] = pcHexString[iN] & 0x0f;	//convert to int
-		}
-		else if ((pcHexString[iN] >= ASCII_C_LOWERCASEA && 
-		          pcHexString[iN] <= ASCII_C_LOWERCASEF) ||
-		         (pcHexString[iN] >= ASCII_C_UPPERCASEA && 
-		          pcHexString[iN] <= ASCII_C_UPPERCASEF))
-		{
-			iDigit[iN] = (pcHexString[iN] & 0x0f) + 9;	//convert to int
-		}
-		else
-		{
-			break;
-		}
+        if( pcHexString[iN] == '\0')
+            break;
 
-		iN++;
+        if( pcHexString[iN] >= ASCII_C_ZERO &&
+            pcHexString[iN] <= ASCII_C_NINE)
+        {
+            iDigit[iN] = pcHexString[iN] & 0x0f;	//convert to int
+        }
+        else if ((pcHexString[iN] >= ASCII_C_LOWERCASEA &&
+                  pcHexString[iN] <= ASCII_C_LOWERCASEF) ||
+                 (pcHexString[iN] >= ASCII_C_UPPERCASEA &&
+                  pcHexString[iN] <= ASCII_C_UPPERCASEF))
+        {
+            iDigit[iN] = (pcHexString[iN] & 0x0f) + 9;	//convert to int
+        }
+        else
+            break;
+
+        iN++;
     }
 
     iCount = iN;
@@ -1134,12 +1040,11 @@ int axtoi( char *pcHexString)
 
     while( iN < iCount)
     {
-		// digit[n] is value of hex digit at position n
-		// (m << 2) is the number of positions to shift
-		// OR the bits into return value
-		intValue = intValue | (iDigit[iN] << (iM << 2));
-		iM--;			// adjust the position to set
-		iN++;			// next digit to process
+        // digit[n] is value of hex digit at position n (m << 2) is the number of positions to shift OR the bits into
+        // return value
+        intValue = intValue | (iDigit[iN] << (iM << 2));
+        iM--;			// adjust the position to set
+        iN++;			// next digit to process
     }
 
     return intValue;
@@ -1155,143 +1060,126 @@ void HTTPTransport::processResponseHTTPHeaders() throw (HTTPTransportException)
 
     if( (iPosition = m_strResponseHTTPHeaders.find( ASCII_S_HTTP )) != std::string::npos)
     {
-		m_strResponseHTTPProtocol = m_strResponseHTTPHeaders.substr( iPosition, strlen( "HTTP/1.x"));
-		iPosition += strlen( "HTTP/1.x");
+        m_strResponseHTTPProtocol = m_strResponseHTTPHeaders.substr( iPosition, strlen( "HTTP/1.x"));
+        iPosition += strlen( "HTTP/1.x");
 
-		while( m_strResponseHTTPHeaders.substr()[iPosition] == ASCII_C_SPACE)
-		{
-			iPosition++;
-		}
+        while( m_strResponseHTTPHeaders.substr()[iPosition] == ASCII_C_SPACE)
+        {
+            iPosition++;
+        }
 
-		iStartPosition = iPosition;
+        iStartPosition = iPosition;
 
-		while( m_strResponseHTTPHeaders.substr()[iPosition] != ASCII_C_SPACE )
-		{
-			iPosition++;
-		}
+        while( m_strResponseHTTPHeaders.substr()[iPosition] != ASCII_C_SPACE )
+        {
+            iPosition++;
+        }
 
-		std::string strResponseHTTPStatusCode = 
-               m_strResponseHTTPHeaders.substr( iStartPosition,iPosition - iStartPosition);
-		m_iResponseHTTPStatusCode = atoi( PLATFORM_ASCTOSTR(strResponseHTTPStatusCode.c_str()));
+        std::string strResponseHTTPStatusCode =  m_strResponseHTTPHeaders.substr( iStartPosition,iPosition - iStartPosition);
+        m_iResponseHTTPStatusCode = atoi( PLATFORM_ASCTOSTR(strResponseHTTPStatusCode.c_str()));
 
-		iStartPosition = ++iPosition;
-		iPosition = m_strResponseHTTPHeaders.find( ASCII_S_LF );
-		m_strResponseHTTPStatusMessage = 
-              m_strResponseHTTPHeaders.substr( iStartPosition,iPosition - iStartPosition - 1);
+        iStartPosition = ++iPosition;
+        iPosition = m_strResponseHTTPHeaders.find( ASCII_S_LF );
+        m_strResponseHTTPStatusMessage = m_strResponseHTTPHeaders.substr( iStartPosition,iPosition - iStartPosition - 1);
         PLATFORM_ASCTOSTR(m_strResponseHTTPStatusMessage.c_str());
 
-		// reached the end of the first line
-		iStartPosition = m_strResponseHTTPHeaders.find( ASCII_S_LF );
+        // reached the end of the first line
+        iStartPosition = m_strResponseHTTPHeaders.find( ASCII_S_LF );
 
-		iStartPosition++;
+        iStartPosition++;
 
-		// read header fields and add to vector
-		do
-		{
-		    m_strResponseHTTPHeaders = m_strResponseHTTPHeaders.substr( iStartPosition);
-			iPosition = m_strResponseHTTPHeaders.find( ASCII_S_LF );
+        // read header fields and add to vector
+        do
+        {
+            m_strResponseHTTPHeaders = m_strResponseHTTPHeaders.substr( iStartPosition);
+            iPosition = m_strResponseHTTPHeaders.find( ASCII_S_LF );
 
-		    if( iPosition == std::string::npos)
-		    {
-				break;
-			}
+            if( iPosition == std::string::npos)
+                break;
 
-			std::string		strHeaderLine = m_strResponseHTTPHeaders.substr( 0, iPosition);
-			unsigned long	iSeperator = strHeaderLine.find( ASCII_S_COLON );
+            std::string		strHeaderLine = m_strResponseHTTPHeaders.substr( 0, iPosition);
+            unsigned long	iSeperator = strHeaderLine.find( ASCII_S_COLON );
 
-		    if( iSeperator == std::string::npos)
-			{
-				break;
-			}
+            if( iSeperator == std::string::npos)
+                break;
 
-			iStartPosition = iPosition + 1;
+            iStartPosition = iPosition + 1;
 
-			string	key = strHeaderLine.substr( 0, iSeperator);
-			string	value = strHeaderLine.substr( iSeperator + 1,
-												  strHeaderLine.length () - iSeperator - 1 - 1);
+            string	key = strHeaderLine.substr( 0, iSeperator);
+            string	value = strHeaderLine.substr( iSeperator + 1,
+                                                      strHeaderLine.length () - iSeperator - 1 - 1);
             PLATFORM_ASCTOSTR(key.c_str());
             PLATFORM_ASCTOSTR(value.c_str());
 
-			m_vResponseHTTPHeaders.push_back( std::make_pair( key, value));
+            m_vResponseHTTPHeaders.push_back( std::make_pair( key, value));
 
-	   	 	// if HTTP/1.0 we have to always close the connection by default
-		    if( m_eProtocolType == APTHTTP1_0)
-			{
-				m_bReopenConnection = true;
-			}
+            // if HTTP/1.0 we have to always close the connection by default
+            if( m_eProtocolType == APTHTTP1_0)
+                m_bReopenConnection = true;
 
-	    	// if HTTP/1.1 we have to assume persistant connection by default
+            // if HTTP/1.1 we have to assume persistant connection by default
 
-	    	// We need to close the connection and open a new one if we have 'Connection: close'
-			if( key == "Connection" && (value == " close" || value == " Close"))
-			{
-				m_bReopenConnection = true;
+            // We need to close the connection and open a new one if we have 'Connection: close'
+            if( key == "Connection" && (value == " close" || value == " Close"))
+            {
+                m_bReopenConnection = true;
 
-				m_pActiveChannel->closeQuietly( true);
-			}
+                m_pActiveChannel->closeQuietly( true);
+            }
 
             // We need to close the connection and open a new one if we have 'Proxy-Connection: close'
             if (key == "Proxy-Connection" && (value == " close" || value == " Close"))
-			{
                 m_bReopenConnection = true;
-			}
 
-	    	// For both HTTP/1.0 and HTTP/1.1,
-	    	// We need to keep the connection if we have 'Connection: Keep-Alive'
-			if( key == "Connection" && value == " Keep-Alive")
-			{
-				m_bReopenConnection = false;
-			}
+            // For both HTTP/1.0 and HTTP/1.1, We need to keep the connection if we have 'Connection: Keep-Alive'
+            if( key == "Connection" && value == " Keep-Alive")
+                m_bReopenConnection = false;
 
-	    	// Look for cookies
-			if( m_bMaintainSession )
-		    {
-				if( key == "Set-Cookie")
-                  addCookie(value);
-		    }
+            // Look for cookies
+            if( m_bMaintainSession )
+                if( key == "Set-Cookie")
+                    addCookie(value);
 
-	    	/* If Content-Type: Multipart/Related; boundary=<MIME_boundary>; type=text/xml;
-	       start="<content id>" */
-			if( key == "Content-Type")
-			{
-				m_strContentType = value;
-		
-				unsigned long	ulMimePos = m_strContentType.find( ";");
-				std::string		strTypePart;
+            /* If Content-Type: Multipart/Related; boundary=<MIME_boundary>; type=text/xml; start="<content id>" */
+            if( key == "Content-Type")
+            {
+                m_strContentType = value;
 
-				if( ulMimePos != std::string::npos)
-				{
-					strTypePart = m_strContentType.substr( 1, ulMimePos - 1);
-				}
-		
-				if( "Multipart/Related" == strTypePart)
-				{
-					m_bMimeTrue = true;
-					m_strContentType = m_strContentType.substr( ulMimePos + 1, m_strContentType.length());
+                unsigned long	ulMimePos = m_strContentType.find( ";");
+                std::string		strTypePart;
 
-				    ulMimePos = m_strContentType.find( "boundary=");
-					m_strMimeBoundary = m_strContentType.substr( ulMimePos);
-					ulMimePos = m_strMimeBoundary.find( ";");
-					m_strMimeBoundary = m_strMimeBoundary.substr( 9, ulMimePos - 9);
+                if( ulMimePos != std::string::npos)
+                    strTypePart = m_strContentType.substr( 1, ulMimePos - 1);
+
+                if( "Multipart/Related" == strTypePart)
+                {
+                    m_bMimeTrue = true;
+                    m_strContentType = m_strContentType.substr( ulMimePos + 1, m_strContentType.length());
+
+                    ulMimePos = m_strContentType.find( "boundary=");
+                    m_strMimeBoundary = m_strContentType.substr( ulMimePos);
+                    ulMimePos = m_strMimeBoundary.find( ";");
+                    m_strMimeBoundary = m_strMimeBoundary.substr( 9, ulMimePos - 9);
                     PLATFORM_STRTOASC(m_strMimeBoundary.c_str());
 
-					ulMimePos = m_strContentType.find( "type=");
-					m_strMimeType = m_strContentType.substr( ulMimePos);
-					ulMimePos = m_strMimeType.find( ";");
-					m_strMimeType = m_strMimeType.substr( 5, ulMimePos - 5);
+                    ulMimePos = m_strContentType.find( "type=");
+                    m_strMimeType = m_strContentType.substr( ulMimePos);
+                    ulMimePos = m_strMimeType.find( ";");
+                    m_strMimeType = m_strMimeType.substr( 5, ulMimePos - 5);
 
-				    ulMimePos = m_strContentType.find( "start=");
-					m_strMimeStart = m_strContentType.substr( ulMimePos);
-					ulMimePos = m_strMimeStart.find( ";");
-					m_strMimeStart = m_strMimeStart.substr( 6, ulMimePos - 6);
-				}
-			}
-		} while( iPosition != std::string::npos);
+                    ulMimePos = m_strContentType.find( "start=");
+                    m_strMimeStart = m_strContentType.substr( ulMimePos);
+                    ulMimePos = m_strMimeStart.find( ";");
+                    m_strMimeStart = m_strMimeStart.substr( 6, ulMimePos - 6);
+                }
+            }
+        }
+        while( iPosition != std::string::npos);
     }
     else
     {
-		throw HTTPTransportException( SERVER_TRANSPORT_UNKNOWN_HTTP_RESPONSE,
-									  "Protocol is not HTTP.");
+        throw HTTPTransportException( SERVER_TRANSPORT_UNKNOWN_HTTP_RESPONSE,
+                                      "Protocol is not HTTP.");
     }
 }
 
@@ -1302,51 +1190,51 @@ void HTTPTransport::processRootMimeBody()
 {
     if( false == m_bReadPastRootMimeHeader)
     {
-		do
-		{
-			if( m_strReceived.find( ASCII_S_CRLFCRLF ) == std::string::npos)
-			{
-				m_pszRxBuffer [0] = '\0';
-				*m_pActiveChannel >> m_pszRxBuffer;
-				m_strReceived += m_pszRxBuffer;
-			}
-		} while( m_strReceived.find( ASCII_S_CRLFCRLF ) == std::string::npos);
+        do
+        {
+            if( m_strReceived.find( ASCII_S_CRLFCRLF ) == std::string::npos)
+            {
+                m_pszRxBuffer [0] = '\0';
+                *m_pActiveChannel >> m_pszRxBuffer;
+                m_strReceived += m_pszRxBuffer;
+            }
+        }
+        while( m_strReceived.find( ASCII_S_CRLFCRLF ) == std::string::npos);
 
-		//now we have found the end of root mime header
-		m_bReadPastRootMimeHeader = true;
+        //now we have found the end of root mime header
+        m_bReadPastRootMimeHeader = true;
 
-		//processMimeHeader(); For the time being we don't process this
-		// Done with root mime body headers, get rest of the payload 
-		// which contain the soap message
-		m_strReceived = m_strReceived.substr( m_strReceived.find( ASCII_S_CRLFCRLF ) + 4);
-	
-		unsigned long intMimeTemp = m_strReceived.find( m_strMimeBoundary);
+        //processMimeHeader(); For the time being we don't process this Done with root mime body headers, get rest of
+        // the payload which contain the soap message
+        m_strReceived = m_strReceived.substr( m_strReceived.find( ASCII_S_CRLFCRLF ) + 4);
 
-		if (intMimeTemp != std::string::npos)
-		{
-			m_strReceived = m_strReceived.substr( 0, intMimeTemp);
-			m_strMimeReceived = m_strReceived.substr( intMimeTemp);
+        unsigned long intMimeTemp = m_strReceived.find( m_strMimeBoundary);
+
+        if (intMimeTemp != std::string::npos)
+        {
+            m_strReceived = m_strReceived.substr( 0, intMimeTemp);
+            m_strMimeReceived = m_strReceived.substr( intMimeTemp);
             PLATFORM_ASCTOSTR(m_strMimeReceived.c_str());
 
-	    	// Using m_strMimeReceived will be continued when getAttachment is called.
-			m_bMimeTrue = false;
-		}
+            // Using m_strMimeReceived will be continued when getAttachment is called.
+            m_bMimeTrue = false;
+        }
     }
     else
     {
-		unsigned long intMimeTemp = m_strReceived.find( m_strMimeBoundary);
-		
-		if( intMimeTemp != std::string::npos)
-		{
-			m_strReceived = m_strReceived.substr( 0, intMimeTemp);
-			m_strMimeReceived = m_strReceived.substr( intMimeTemp);
+        unsigned long intMimeTemp = m_strReceived.find( m_strMimeBoundary);
+
+        if( intMimeTemp != std::string::npos)
+        {
+            m_strReceived = m_strReceived.substr( 0, intMimeTemp);
+            m_strMimeReceived = m_strReceived.substr( intMimeTemp);
             PLATFORM_ASCTOSTR(m_strMimeReceived.c_str());
 
-	    	// Using m_strMimeReceived will be continued when getAttachment is called.
-			m_bMimeTrue = false;
-		}
+            // Using m_strMimeReceived will be continued when getAttachment is called.
+            m_bMimeTrue = false;
+        }
 
-	return;
+        return;
     }
 }
 
@@ -1360,47 +1248,43 @@ void HTTPTransport::processMimeHeader()
 
     // Look for content lenght
     if( (pos = m_strMimeReceived.find( "Content-Type: ")) != std::string::npos)
-	{
-		m_strMimeContentType = m_strMimeReceived.substr( pos + strlen( "Content-Type: "),
-														 m_strMimeReceived.find( "\n", pos));
-		pos = m_strMimeContentType.find( ";");
-		temppos = m_strMimeContentType.find( "\r\n");
+    {
+        m_strMimeContentType = m_strMimeReceived.substr( pos + strlen( "Content-Type: "),
+                                                         m_strMimeReceived.find( "\n", pos));
+        pos = m_strMimeContentType.find( ";");
+        temppos = m_strMimeContentType.find( "\r\n");
 
-		if( pos < temppos)
-		{
-			m_strMimeContentType = m_strMimeContentType.substr( 0, pos);
-		}
-		else
-		{
-			m_strMimeContentType = m_strMimeContentType.substr( 0, temppos);
-		}
+        if( pos < temppos)
+            m_strMimeContentType = m_strMimeContentType.substr( 0, pos);
+        else
+            m_strMimeContentType = m_strMimeContentType.substr( 0, temppos);
     }
 
     // Look for mime root body's content transfer encoding
     if( (pos = m_strMimeReceived.find( "Content-Transfer-Encoding: ")) != std::string::npos)
-	{
-		m_strMimeContentTransferEncoding = m_strMimeReceived.substr( pos + strlen( "Content-Transfer-Encoding: "),
-																     m_strMimeReceived.find( "\n", pos));
-		temppos = m_strMimeContentTransferEncoding.find( "\r\n");
-		m_strMimeContentTransferEncoding = m_strMimeContentTransferEncoding.substr( 0, temppos);
+    {
+        m_strMimeContentTransferEncoding = m_strMimeReceived.substr( pos + strlen( "Content-Transfer-Encoding: "),
+                                                                     m_strMimeReceived.find( "\n", pos));
+        temppos = m_strMimeContentTransferEncoding.find( "\r\n");
+        m_strMimeContentTransferEncoding = m_strMimeContentTransferEncoding.substr( 0, temppos);
     }
 
     // Look for mime root body's content id
     if( (pos = m_strMimeReceived.find( "Content-ID: ")) != std::string::npos)
-	{
-		m_strMimeContentID = m_strMimeReceived.substr( pos + strlen( "Content-ID: "),
-													   m_strMimeReceived.find( "\n", pos));
-		temppos = m_strMimeContentID.find( "\r\n");
-		m_strMimeContentID = m_strMimeContentID.substr( 0, temppos);
+    {
+        m_strMimeContentID = m_strMimeReceived.substr( pos + strlen( "Content-ID: "),
+                                                       m_strMimeReceived.find( "\n", pos));
+        temppos = m_strMimeContentID.find( "\r\n");
+        m_strMimeContentID = m_strMimeContentID.substr( 0, temppos);
     }
 
     // Look for mime root body's content location
     if( (pos = m_strMimeReceived.find( "Content-Location: ")) != std::string::npos)
     {
-		m_strMimeContentLocation = atoi( m_strMimeReceived.substr( pos + strlen( "Content-Location: "),
-																   m_strMimeReceived.find( "\n", pos)).c_str());
-		temppos = m_strMimeContentLocation.find( "\r\n");
-		m_strMimeContentLocation = m_strMimeContentLocation.substr( 0, temppos);
+        m_strMimeContentLocation = atoi( m_strMimeReceived.substr( pos + strlen( "Content-Location: "),
+                                                                   m_strMimeReceived.find( "\n", pos)).c_str());
+        temppos = m_strMimeContentLocation.find( "\r\n");
+        m_strMimeContentLocation = m_strMimeContentLocation.substr( 0, temppos);
     }
 }
 
@@ -1410,19 +1294,20 @@ void HTTPTransport::processMimeBody ()
 
 void HTTPTransport::getAttachment( char * pStrAttachment, int * pIntSize, int intAttachmentId)
 {
-	m_pszRxBuffer [0] = '\0';
-	*m_pActiveChannel >> m_pszRxBuffer;
+    m_pszRxBuffer [0] = '\0';
+    *m_pActiveChannel >> m_pszRxBuffer;
     m_strMimeReceived += m_pszRxBuffer;
 
     do
     {
-		if( m_strMimeReceived.find( "\r\n\r\n") == std::string::npos)
-		{
-			m_pszRxBuffer [0] = '\0';
-			*m_pActiveChannel >> m_pszRxBuffer;
-		    m_strMimeReceived += m_pszRxBuffer;
-		}
-    } while( m_strMimeReceived.find( "\r\n\r\n") == std::string::npos);
+        if( m_strMimeReceived.find( "\r\n\r\n") == std::string::npos)
+        {
+            m_pszRxBuffer [0] = '\0';
+            *m_pActiveChannel >> m_pszRxBuffer;
+            m_strMimeReceived += m_pszRxBuffer;
+        }
+    }
+    while( m_strMimeReceived.find( "\r\n\r\n") == std::string::npos);
 
     //now we have found the end of next mime header
     processMimeHeader();
@@ -1439,17 +1324,16 @@ void HTTPTransport::setSocket( unsigned int uiNewSocket)
 const char * HTTPTransport::getTransportProperty( const char * pcKey, bool response) throw (HTTPTransportException)
 {
     std::string strKeyToFind = std::string( pcKey);
-	std::vector < std::pair < std::string, std::string > > *hdrs=NULL;
-	if (response) hdrs = &m_vResponseHTTPHeaders;
-	else hdrs = &m_vHTTPHeaders;
+    std::vector < std::pair < std::string, std::string > > *hdrs=NULL;
+    
+    if (response)
+        hdrs = &m_vResponseHTTPHeaders;
+    else
+        hdrs = &m_vHTTPHeaders;
 
     for( unsigned int i = 0; i < hdrs->size(); i++)
-	{
-		if( (*hdrs)[i].first == strKeyToFind)
-		{
-			return (*hdrs)[i].second.c_str();
-		}
-    }
+        if( (*hdrs)[i].first == strKeyToFind)
+            return (*hdrs)[i].second.c_str();
 
     return NULL;
 }
@@ -1459,28 +1343,20 @@ const char * HTTPTransport::getFirstTransportPropertyKey(bool response)
     if(response)
     {
         m_viCurrentResponseHeader = m_vResponseHTTPHeaders.begin ();
-    
+
         if( m_viCurrentResponseHeader == m_vResponseHTTPHeaders.end())
-        {
-         return NULL;
-        }
+            return NULL;
         else
-        {
-         return (*m_viCurrentResponseHeader).first.c_str();
-        }
+            return (*m_viCurrentResponseHeader).first.c_str();
     }
     else
     {
         m_viCurrentHeader = m_vHTTPHeaders.begin ();
-    
+
         if( m_viCurrentHeader == m_vHTTPHeaders.end())
-    	{
-    		return NULL;
-    	}
+            return NULL;
         else
-    	{
-    		return (*m_viCurrentHeader).first.c_str();
-    	}
+            return (*m_viCurrentHeader).first.c_str();
     }
 }
 
@@ -1490,40 +1366,28 @@ const char * HTTPTransport::getNextTransportPropertyKey(bool response)
     {
         //already at the end?
         if( m_viCurrentResponseHeader == m_vResponseHTTPHeaders.end())
-        {
             return NULL;
-        }
 
         m_viCurrentResponseHeader++;
 
         if( m_viCurrentResponseHeader == m_vResponseHTTPHeaders.end())
-        {
             return NULL;
-        }
         else
-        {
             return (*m_viCurrentResponseHeader).first.c_str();
-        }
     }
     else
     {
-    
+
         //already at the end?
         if( m_viCurrentHeader == m_vResponseHTTPHeaders.end())
-    	{
-    		return NULL;
-    	}
-    
+            return NULL;
+
         m_viCurrentHeader++;
-    
+
         if( m_viCurrentHeader == m_vHTTPHeaders.end())
-    	{
-    		return NULL;
-    	}
+            return NULL;
         else
-    	{
-    		return (*m_viCurrentHeader).first.c_str();
-    	}
+            return (*m_viCurrentHeader).first.c_str();
     }
 }
 
@@ -1532,25 +1396,14 @@ const char * HTTPTransport::getCurrentTransportPropertyKey(bool response)
     if (response)
     {
         if( m_viCurrentResponseHeader == m_vResponseHTTPHeaders.end())
-        {
             return NULL;
-        }
         else
-        {
             return (*m_viCurrentResponseHeader).first.c_str();
-        }
     }
+    else if( m_viCurrentHeader == m_vHTTPHeaders.end())
+        return NULL;
     else
-    {
-        if( m_viCurrentHeader == m_vHTTPHeaders.end())
-        {
-            return NULL;
-        }
-        else
-        {
-            return (*m_viCurrentHeader).first.c_str();
-        }
-    }
+        return (*m_viCurrentHeader).first.c_str();
 }
 
 const char * HTTPTransport::getCurrentTransportPropertyValue(bool response)
@@ -1558,25 +1411,14 @@ const char * HTTPTransport::getCurrentTransportPropertyValue(bool response)
     if(response)
     {
         if( m_viCurrentResponseHeader == m_vResponseHTTPHeaders.end())
-        {
             return NULL;
-        }
         else
-        {
             return (*m_viCurrentResponseHeader).second.c_str();
-        }
     }
+    else if( m_viCurrentHeader == m_vHTTPHeaders.end())
+        return NULL;
     else
-    {
-        if( m_viCurrentHeader == m_vHTTPHeaders.end())
-        {
-            return NULL;
-        }
-        else
-        {
-            return (*m_viCurrentHeader).second.c_str();
-        }
-    }
+        return (*m_viCurrentHeader).second.c_str();
 }
 
 void HTTPTransport::deleteCurrentTransportProperty(bool response)
@@ -1589,48 +1431,40 @@ void HTTPTransport::deleteCurrentTransportProperty(bool response)
         headers = &m_vHTTPHeaders;
         currentHeader = &m_viCurrentHeader;
     }
+    
     if( *currentHeader != headers->end())
-    {
        headers->erase( *currentHeader);
-    }
-//    if( m_viCurrentHeader != m_vHTTPHeaders.end())
-//    {
-//		m_vHTTPHeaders.erase( m_viCurrentHeader);
-//    }
 }
 
 void HTTPTransport::deleteTransportProperty (char *pcKey, unsigned int uiOccurance)
 {
     vector < std::pair < std::string,
-	std::string > >::iterator currentHeader = m_vHTTPHeaders.begin();
+    std::string > >::iterator currentHeader = m_vHTTPHeaders.begin();
     unsigned int uiCount = 1;
     bool found=false;
     while( currentHeader != m_vHTTPHeaders.end() && uiCount <= uiOccurance)
     {
-		if( strcmp( pcKey, (*currentHeader).first.c_str()) == 0)
-		{
-			if( uiCount == uiOccurance)
-			{
-				m_vHTTPHeaders.erase( currentHeader);
+        if( strcmp( pcKey, (*currentHeader).first.c_str()) == 0)
+        {
+            if( uiCount == uiOccurance)
+            {
+                m_vHTTPHeaders.erase( currentHeader);
                 // if this is the special case of cookies then delete them all
                 if(strcmp(pcKey, "Cookie")==0)
-                {
-                 removeAllCookies();
-                }
+                    removeAllCookies();
                 found=true;
-				break;
-			}
-	    
-			uiCount++;
-		}
-	
-		currentHeader++;
+                break;
+            }
+
+            uiCount++;
+        }
+
+        currentHeader++;
     }
+    
     // if the property has not been found then it might be a cookie
     if(!found)
-    {
         removeCookie(pcKey);
-    }
 }
 
 void HTTPTransport::setMaintainSession( bool bSession)
@@ -1650,280 +1484,249 @@ const char * HTTPTransport::getSessionId()
 
 const char * HTTPTransport::getLastChannelError()
 {
-	if( m_pActiveChannel != NULL)
-	{
-		return m_pActiveChannel->GetLastErrorMsg().c_str();
-	}
+    if( m_pActiveChannel != NULL)
+        return m_pActiveChannel->GetLastErrorMsg().c_str();
 
-	return NULL;
+    return NULL;
 }
 
 void HTTPTransport::readHTTPHeader()
 {
-// The parser is expecting a SOAP message.  Thus, the HTTP header must have
-// been read and processed before control is returned to the parser.  It can
-// not be assumed that the HTTP header will be read in one block, thus there
-// must be processing that first identifies the beginning of the HTTP header
-// block (i.e. looks for 'HTTP') and then additional processing that identifies
-// the end of the HTTP header block (i.e. looks for CR LF CR LF).  To stop the
-// search becoming 'stuck' because of an incomplete, corrupt or unexpected
-// message an iteration count has been added (this could become configurable if
-// the user needs to remove this feature if the server is particularily slow,
-// etc.).
-	bool	bHTTPHeaderFound = false;
-	int		iIterationCount = 100;
+    // The parser is expecting a SOAP message.  Thus, the HTTP header must have
+    // been read and processed before control is returned to the parser.  It can
+    // not be assumed that the HTTP header will be read in one block, thus there
+    // must be processing that first identifies the beginning of the HTTP header
+    // block (i.e. looks for 'HTTP') and then additional processing that identifies
+    // the end of the HTTP header block (i.e. looks for CR LF CR LF).  To stop the
+    // search becoming 'stuck' because of an incomplete, corrupt or unexpected
+    // message an iteration count has been added (this could become configurable if
+    // the user needs to remove this feature if the server is particularily slow,
+    // etc.).
+    bool bHTTPHeaderFound = false;
+    int	iIterationCount = 100;
 
-	m_strReceived = "";
+    m_strReceived = "";
 
-	m_pActiveChannel->closeQuietly( false);
+    m_pActiveChannel->closeQuietly( false);
 
-	do
-	{
-// Read whatever part of the response message that has arrived at the active
-// channel socket.
-		m_pszRxBuffer[0] = '\0';
-		*m_pActiveChannel >> m_pszRxBuffer;
+    do
+    {
+        // Read whatever part of the response message that has arrived at the active channel socket.
+        m_pszRxBuffer[0] = '\0';
+        *m_pActiveChannel >> m_pszRxBuffer;
 
-// Add the new message part to the received string.
-		m_strReceived += m_pszRxBuffer;
+        // Add the new message part to the received string.
+        m_strReceived += m_pszRxBuffer;
 
-// Do iteration processing.
-		if( strlen( m_pszRxBuffer) > 0)
-		{
-			iIterationCount = 100;
-		}
-		else
-		{
-			iIterationCount--;
-		}
+        // Do iteration processing.
+        if( strlen( m_pszRxBuffer) > 0)
+            iIterationCount = 100;
+        else
+            iIterationCount--;
 
-// Check for beginning and end of HTTP header.
-		if( m_strReceived.find( ASCII_S_HTTP) != std::string::npos &&
-			m_strReceived.find( ASCII_S_CRLFCRLF) != std::string::npos)
-		{
-			bHTTPHeaderFound = true;
-		}
-	} while( !bHTTPHeaderFound && iIterationCount > 0);
+        // Check for beginning and end of HTTP header.
+        if( m_strReceived.find( ASCII_S_HTTP) != std::string::npos &&
+            m_strReceived.find( ASCII_S_CRLFCRLF) != std::string::npos)
+        {
+            bHTTPHeaderFound = true;
+        }
+    }
+    while( !bHTTPHeaderFound && iIterationCount > 0);
 
-// If the HTTP header was not found in the given number of iterations then
-// throw an exception.
-	if( iIterationCount == 0)
-	{
-		throw HTTPTransportException( SERVER_TRANSPORT_INPUT_STREAMING_ERROR,
-									  "Timed out waiting for HTTP header message.");
-	}
+    // If the HTTP header was not found in the given number of iterations then throw an exception.
+    if( iIterationCount == 0)
+    {
+        throw HTTPTransportException( SERVER_TRANSPORT_INPUT_STREAMING_ERROR,
+                                      "Timed out waiting for HTTP header message.");
+    }
 }
 
 void HTTPTransport::processHTTPHeader()
 {
-// At this point the HTTP header has been found.  It now needs to be processed.
-	int	iPosContentLength = m_strReceived.find( ASCII_S_CONTENT_LENGTH);
+    // At this point the HTTP header has been found.  It now needs to be processed.
+    int	iPosContentLength = m_strReceived.find( ASCII_S_CONTENT_LENGTH);
 
-	if( iPosContentLength != std::string::npos)
-	{
-		int	iEOL = m_strReceived.find( ASCII_S_LF, iPosContentLength);
+    if( iPosContentLength != std::string::npos)
+    {
+        int	iEOL = m_strReceived.find( ASCII_S_LF, iPosContentLength);
 
-		iPosContentLength += strlen( ASCII_S_CONTENT_LENGTH);
+        iPosContentLength += strlen( ASCII_S_CONTENT_LENGTH);
 
-		m_iContentLength = atoi( m_strReceived.substr( iPosContentLength, iEOL).c_str());
+        m_iContentLength = atoi( m_strReceived.substr( iPosContentLength, iEOL).c_str());
 
-		m_GetBytesState = eSOAPMessageIsNotChunked;
-	}
+        m_GetBytesState = eSOAPMessageIsNotChunked;
+    }
 
-// Check if the message is chunked
-	int	iPosChunked = m_strReceived.find( ASCII_S_TRANSFERENCODING_CHUNKED);
-	int iHTTPStart = m_strReceived.find( ASCII_S_HTTP);
-	int iHTTPEnd = m_strReceived.find( ASCII_S_CRLFCRLF);
+    // Check if the message is chunked
+    int	iPosChunked = m_strReceived.find( ASCII_S_TRANSFERENCODING_CHUNKED);
+    int iHTTPStart = m_strReceived.find( ASCII_S_HTTP);
+    int iHTTPEnd = m_strReceived.find( ASCII_S_CRLFCRLF);
 
-	if( iPosChunked != std::string::npos)
-	{
-//Chunked data looks like ->
-//      Chunked-Body   = *chunk
-//                       "0" CRLF
-//                       footer
-//                       CRLF
-//
-//      chunk          = chunk-size [ chunk-ext ] CRLF
-//                         chunk-data CRLF
-//
-//      hex-no-zero    = <HEX excluding "0">
-//
-//      chunk-size     = hex-no-zero *HEX
-//      chunk-ext      = *( ";" chunk-ext-name [ "=" chunk-ext-value ] )
-//      chunk-ext-name = token
-//      chunk-ext-val  = token | quoted-string
-//      chunk-data     = chunk-size(OCTET)
-//
-//      footer         = *entity-header
+    if( iPosChunked != std::string::npos)
+    {
+        //Chunked data looks like ->
+        //      Chunked-Body   = *chunk
+        //                       "0" CRLF
+        //                       footer
+        //                       CRLF
+        //
+        //      chunk          = chunk-size [ chunk-ext ] CRLF
+        //                         chunk-data CRLF
+        //
+        //      hex-no-zero    = <HEX excluding "0">
+        //
+        //      chunk-size     = hex-no-zero *HEX
+        //      chunk-ext      = *( ";" chunk-ext-name [ "=" chunk-ext-value ] )
+        //      chunk-ext-name = token
+        //      chunk-ext-val  = token | quoted-string
+        //      chunk-data     = chunk-size(OCTET)
+        //
+        //      footer         = *entity-header
 
-		m_GetBytesState = eSOAPMessageIsChunked;
-	}
-	else
-	{
-		if( (m_eProtocolType == APTHTTP1_0) || (m_eProtocolType == APTHTTP1_1) )
-		{
-			m_GetBytesState = eSOAPMessageIsNotChunked;
-			m_iBytesLeft = m_strReceived.substr( iHTTPEnd + 2).length();
+        m_GetBytesState = eSOAPMessageIsChunked;
+    }
+    else
+    {
+        if( (m_eProtocolType == APTHTTP1_0) || (m_eProtocolType == APTHTTP1_1) )
+        {
+            m_GetBytesState = eSOAPMessageIsNotChunked;
+            m_iBytesLeft = m_strReceived.substr( iHTTPEnd + 2).length();
 
-// Check if all the message has already been received.  If not, then subtract
-// that bit that has been from the total length.  If so, then make the content
-// length equal to zero.
-			if( m_iContentLength >= m_iBytesLeft)
-			{
-				m_iContentLength -= m_iBytesLeft;
-			}
-			else
-			{
-				m_iContentLength = 0;
-			}
-		}
-		else
-		{
-			m_GetBytesState = eWaitingForHTTPHeader;
+            // Check if all the message has already been received.  If not, then subtract that bit that has been from
+            // the total length.  If so, then make the content length equal to zero.
+            if( m_iContentLength >= m_iBytesLeft)
+                m_iContentLength -= m_iBytesLeft;
+            else
+                m_iContentLength = 0;
+        }
+        else
+        {
+            m_GetBytesState = eWaitingForHTTPHeader;
 
-			throw HTTPTransportException( SERVER_TRANSPORT_INPUT_STREAMING_ERROR,
-										  "HTTP header message must be chunked or have a content length.");
-		}
-	}
+            throw HTTPTransportException( SERVER_TRANSPORT_INPUT_STREAMING_ERROR,
+                                          "HTTP header message must be chunked or have a content length.");
+        }
+    }
 
-// Extract HTTP header and process it
-	m_strResponseHTTPHeaders = m_strReceived.substr( iHTTPStart, iHTTPEnd + 2 - iHTTPStart);
+    // Extract HTTP header and process it
+    m_strResponseHTTPHeaders = m_strReceived.substr( iHTTPStart, iHTTPEnd + 2 - iHTTPStart);
 
-	processResponseHTTPHeaders();
+    processResponseHTTPHeaders();
 
-// If the HTTP message is a 'continue' message then remove the HTTP header and
-// then repeat HTTP header processing.
-	if( m_iResponseHTTPStatusCode == 100)
-	{
-		m_strReceived = m_strReceived.substr( iHTTPEnd + 2);
-	}
+    // If the HTTP message is a 'continue' message then remove the HTTP header and then repeat HTTP header processing.
+    if( m_iResponseHTTPStatusCode == 100)
+        m_strReceived = m_strReceived.substr( iHTTPEnd + 2);
 }
 
 void HTTPTransport::checkHTTPStatusCode()
 {
-// Now have a valid HTTP header that is not 100.
-	if ( m_iResponseHTTPStatusCode != 500 &&
-		 (m_iResponseHTTPStatusCode < 200 ||
-		  m_iResponseHTTPStatusCode >= 300))
-	{
-		m_GetBytesState = eWaitingForHTTPHeader;
+    // Now have a valid HTTP header that is not 100.
+    if ( m_iResponseHTTPStatusCode != 500 &&
+         (m_iResponseHTTPStatusCode < 200 ||
+          m_iResponseHTTPStatusCode >= 300))
+    {
+        m_GetBytesState = eWaitingForHTTPHeader;
 
-		m_strResponseHTTPStatusMessage = std::string( "\n Server sent HTTP error: '") +
-										 m_strResponseHTTPStatusMessage +
-										 std::string("'\n");
+        m_strResponseHTTPStatusMessage = std::string( "\n Server sent HTTP error: '") +
+          m_strResponseHTTPStatusMessage +  std::string("'\n");
 
-		throw HTTPTransportException( SERVER_TRANSPORT_HTTP_EXCEPTION,
-								  const_cast <char *> (m_strResponseHTTPStatusMessage.c_str()));
-	}
+        throw HTTPTransportException( SERVER_TRANSPORT_HTTP_EXCEPTION,
+                                      const_cast <char *> (m_strResponseHTTPStatusMessage.c_str()));
+    }
 }
 
 bool HTTPTransport::getNextDataPacket( const char * pcszExceptionMessage)
 {
-	int		iIterationCount = 100;
-	bool	bDataRead = false;
+    int	iIterationCount = 100;
+    bool bDataRead = false;
 
-	do
-	{
-// Read whatever part of the response message that has arrived at the active
-// channel socket.
-		m_pszRxBuffer[0] = '\0';
-		*m_pActiveChannel >> m_pszRxBuffer;
+    do
+    {
+        // Read whatever part of the response message that has arrived at the active channel socket.
+        m_pszRxBuffer[0] = '\0';
+        *m_pActiveChannel >> m_pszRxBuffer;
 
-// Do iteration processing.
-		if( strlen( m_pszRxBuffer) == 0)
-		{
-			iIterationCount--;
-		}
-		else
-		{
-			bDataRead = true;
-		}
+        // Do iteration processing.
+        if( strlen( m_pszRxBuffer) == 0)
+            iIterationCount--;
+        else
+            bDataRead = true;
+    }
+    while( !bDataRead && iIterationCount > 0);
 
-	} while( !bDataRead && iIterationCount > 0);
+    if( bDataRead)
+    {
+        m_strReceived += m_pszRxBuffer;
 
-	if( bDataRead)
-	{
-		m_strReceived += m_pszRxBuffer;
+        m_iBytesLeft = m_strReceived.length();
+    }
+    else if( m_strReceived.length() == 0)
+    {
+        m_GetBytesState = eWaitingForHTTPHeader;
 
-		m_iBytesLeft = m_strReceived.length();
-	}
-	else
-	{
-		if( m_strReceived.length() == 0)
-		{
-			m_GetBytesState = eWaitingForHTTPHeader;
+        if( pcszExceptionMessage != NULL && strlen( pcszExceptionMessage) > 0)
+        {
+            int	iStringLength = strlen( pcszExceptionMessage) + 1;
+            const char * pszLastError = new char[iStringLength];
 
-			if( pcszExceptionMessage != NULL && strlen( pcszExceptionMessage) > 0)
-			{
-				int	iStringLength = strlen( pcszExceptionMessage) + 1;
-				const char * pszLastError = new char[iStringLength];
+            memcpy( (void *) pszLastError, pcszExceptionMessage, iStringLength);
 
-				memcpy( (void *) pszLastError, pcszExceptionMessage, iStringLength);
+            throw HTTPTransportException( SERVER_TRANSPORT_HTTP_EXCEPTION, (char *) pszLastError);
+        }
+    }
 
-				throw HTTPTransportException( SERVER_TRANSPORT_HTTP_EXCEPTION,
-											  (char *) pszLastError);
-			}
-		}
-	}
-
-	return bDataRead;
+    return bDataRead;
 }
 
 int HTTPTransport::getChunkSize()
 {
-	int	iChunkSize;
+    int	iChunkSize;
 
-	while( m_strReceived.find( ASCII_S_CRLF) == std::string::npos)
-	{
-		getNextDataPacket( "Could not find delimiter for end of chunk size.");
-	}
+    while( m_strReceived.find( ASCII_S_CRLF) == std::string::npos)
+    {
+        getNextDataPacket( "Could not find delimiter for end of chunk size.");
+    }
 
-	int iEndOfChunkData = m_strReceived.find( ASCII_S_CRLF) + strlen( ASCII_S_CRLF);
-	int iEndOfChunkSize = m_strReceived.find( ASCII_S_CRLF);
+    int iEndOfChunkData = m_strReceived.find( ASCII_S_CRLF) + strlen( ASCII_S_CRLF);
+    int iEndOfChunkSize = m_strReceived.find( ASCII_S_CRLF);
 
-// Now get the size of the chunk from the data.  Look to see if there are any
-// extensions - these are put in brackets so look for those.
-	if( m_strReceived.substr( 0, iEndOfChunkSize).find( ASCII_S_LEFTPAREN) != string::npos)
-	{
-		iEndOfChunkSize = m_strReceived.find( ASCII_S_LEFTPAREN);
-	}
+    // Now get the size of the chunk from the data.  Look to see if there are any extensions - these are put in brackets
+    // so look for those.
+    if( m_strReceived.substr( 0, iEndOfChunkSize).find( ASCII_S_LEFTPAREN) != string::npos)
+        iEndOfChunkSize = m_strReceived.find( ASCII_S_LEFTPAREN);
 
-// Convert the hex string into the length of the chunk.
-	iChunkSize = axtoi( (char *) m_strReceived.substr( 0, iEndOfChunkSize).c_str());
+    // Convert the hex string into the length of the chunk.
+    iChunkSize = axtoi( (char *) m_strReceived.substr( 0, iEndOfChunkSize).c_str());
 
-	m_strReceived = m_strReceived.substr( iEndOfChunkData);
+    m_strReceived = m_strReceived.substr( iEndOfChunkData);
 
-	m_iBytesLeft = m_strReceived.length();
+    m_iBytesLeft = m_strReceived.length();
 
-	return iChunkSize;
+    return iChunkSize;
 }
 
 bool HTTPTransport::copyDataToParserBuffer( char * pcBuffer, int * piSize, int iBytesToCopy)
 {
-	bool	bTransportInProgress = false;
+    bool bTransportInProgress = false;
 
-	if( iBytesToCopy > 0)
-	{
-		int iToCopy = (*piSize < iBytesToCopy) ? *piSize : iBytesToCopy;
+    if( iBytesToCopy > 0)
+    {
+        int iToCopy = (*piSize < iBytesToCopy) ? *piSize : iBytesToCopy;
 
-		strncpy( pcBuffer, m_strReceived.c_str(), iToCopy);
+        strncpy( pcBuffer, m_strReceived.c_str(), iToCopy);
 
-		m_iBytesLeft -= iToCopy;
-		*piSize = iToCopy;
+        m_iBytesLeft -= iToCopy;
+        *piSize = iToCopy;
 
-		if( m_iBytesLeft > 0)
-		{
-			m_strReceived = m_strReceived.substr( iToCopy);
-		}
-		else
-		{
-			m_strReceived = "";
-		}
+        if( m_iBytesLeft > 0)
+            m_strReceived = m_strReceived.substr( iToCopy);
+        else
+            m_strReceived = "";
 
-		bTransportInProgress = true;
-	}
+        bTransportInProgress = true;
+    }
 
-	return bTransportInProgress;
+    return bTransportInProgress;
 }
 
 int HTTPTransport::addCookie(const string name, const string value)
@@ -1931,8 +1734,7 @@ int HTTPTransport::addCookie(const string name, const string value)
     // trim the name
     string theName(name);
     trim(theName);
-    // Make sure that the cookie is not duplicated.
-    // This cookie might be replacing one that's already there
+    // Make sure that the cookie is not duplicated. This cookie might be replacing one that's already there
     bool b_keyFound=false;
     for (unsigned int i = 0; i < m_vCookies.size(); i++)
     {
@@ -1943,30 +1745,28 @@ int HTTPTransport::addCookie(const string name, const string value)
 
             break;
         }
-     }
- 
- 
-    if(!b_keyFound)
-    {
-     // cookie has not already been found
-     m_vCookies.push_back( std::make_pair( theName, value));
     }
+
+    // if cookie has not already been found add it
+    if(!b_keyFound)
+        m_vCookies.push_back( std::make_pair( theName, value));
+    
     return true;
 }
+
 int HTTPTransport::addCookie(const string nameValuePair)
 {
     // Spec syntax : Set-Cookie: NAME=VALUE; expires=DATE; path=PATH; domain=DOMAIN_NAME; secure
     // This code assumes it to be : Set-Cookie: NAME=VALUE; Anything_else
     // And discards stuff after first ';'
     // This is the same assumption used in Axis Java
-    
+
     unsigned long ulKeyEndsAt = nameValuePair.find( ";");
-           
+
     string nameValue;
     if( ulKeyEndsAt != std::string::npos)
-    {
-       nameValue = nameValuePair.substr( 0, ulKeyEndsAt);
-    }
+        nameValue = nameValuePair.substr( 0, ulKeyEndsAt);
+
     // Now split the nameValue up
     unsigned long nameEndsAt = nameValue.find("=");
     return addCookie(nameValue.substr(0, nameEndsAt), nameValue.substr(nameEndsAt+1));
@@ -1997,32 +1797,28 @@ int HTTPTransport::removeAllCookies()
     // This is done from the deleteTransportMethod before this one is called.
     return AXIS_SUCCESS;
 }
+
 int HTTPTransport::peekChunkLength( std::string& strNextChunk)
 {
-	if( strNextChunk.length() == 0)
-	{
-		return -1;
-	}
+    if( strNextChunk.length() == 0)
+        return -1;
 
-	int iEndOfChunkSize = strNextChunk.find( ASCII_S_CRLF);
+    int iEndOfChunkSize = strNextChunk.find( ASCII_S_CRLF);
 
-	if( iEndOfChunkSize == std::string::npos)
-	{
-		return -1;
-	}
+    if( iEndOfChunkSize == std::string::npos)
+        return -1;
 
-// Now get the size of the chunk from the data.  Look to see if there are any
-// extensions - these are put in brackets so look for those.
-	if( strNextChunk.substr( iEndOfChunkSize).find( ASCII_S_LEFTPAREN) != std::string::npos)
-	{
-		iEndOfChunkSize = strNextChunk.find( ASCII_S_LEFTPAREN);
-	}
+    // Now get the size of the chunk from the data.  Look to see if there are any extensions - these are put in brackets
+    // so look for those.
+    if( strNextChunk.substr( iEndOfChunkSize).find( ASCII_S_LEFTPAREN) != std::string::npos)
+        iEndOfChunkSize = strNextChunk.find( ASCII_S_LEFTPAREN);
 
-// Convert the hex string into the length of the chunk.
-	char *	pszValue = (char *) strNextChunk.c_str();
+    // Convert the hex string into the length of the chunk.
+    char *	pszValue = (char *) strNextChunk.c_str();
 
-	return axtoi( (char *) strNextChunk.substr( 0, iEndOfChunkSize).c_str());
+    return axtoi( (char *) strNextChunk.substr( 0, iEndOfChunkSize).c_str());
 }
+
 void HTTPTransport::trim(string& str)
 {
     string::size_type pos = str.find_last_not_of(' ');
@@ -2031,36 +1827,9 @@ void HTTPTransport::trim(string& str)
         str.erase(pos + 1);
         pos = str.find_first_not_of(' ');
         if(pos != string::npos) 
-        {
             str.erase(0, pos);
-        }
     }
     else 
-    {
         str.erase(str.begin(), str.end());
-    }
 }
-//void
-//HTTPTransport::setAuthorizationHeader ()
-//{
-//    char *cpUsernamePassword = new char[strlen (m_pcUsername) + strlen (m_pcPassword) + 2];
-//    strcpy (cpUsernamePassword, m_pcUsername);
-//    strcat (cpUsernamePassword, ":");
-//    strcat (cpUsernamePassword, m_pcPassword);
-//
-//    int len = apr_base64_encode_len (strlen (cpUsernamePassword));
-//    AxisChar *base64Value = new AxisChar[len + 1];
-//    len = apr_base64_encode_binary (base64Value,
-//                                    (const unsigned char *) cpUsernamePassword,
-//                                    strlen (cpUsernamePassword));
-//
-//    std::string strValue = "Basic ";
-//    strValue += base64Value;
-//
-//    if (m_pTransport)
-//        m_pTransport->setTransportProperty ("Authorization", strValue.c_str ());
-//
-//    delete[]cpUsernamePassword;
-//    delete[]base64Value;
-//}
 
