@@ -23,6 +23,15 @@
  *
  */
  
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* ----------------------------------------------------------------   */
+/* CHANGES TO hpp HEADER FILE MAY NEED TO BE PROPAGATED TO THE        */
+/* C-EQUIVALENT HEADER FILE IN SUPPORT OF THE C-BINDING INTERFACES.   */
+/* ----------------------------------------------------------------   */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+ 
 #if !defined(__AXIS_AXISCPPCONFIGDEFAULTS_H_OF_AXIS_INCLUDED__)
 #define __AXIS_AXISCPPCONFIGDEFAULTS_H_OF_AXIS_INCLUDED__
 

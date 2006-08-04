@@ -25,6 +25,16 @@
  * @file ISoapAttachment.hpp
  */
 
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* ----------------------------------------------------------------   */
+/* CHANGES TO hpp HEADER FILE MAY NEED TO BE PROPAGATED TO THE        */
+/* C-EQUIVALENT HEADER FILE IN SUPPORT OF THE C-BINDING INTERFACES.   */
+/* ----------------------------------------------------------------   */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+
+
 #if !defined(AFX_ISOAPATTACHMENT_H__8B3A65FD_40A6_45B2_A8C5_295DE4222952__INCLUDED_)
 #define AFX_ISOAPATTACHMENT_H__8B3A65FD_40A6_45B2_A8C5_295DE4222952__INCLUDED_
 

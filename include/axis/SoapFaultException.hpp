@@ -14,7 +14,17 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
- 
+
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* ----------------------------------------------------------------   */
+/* CHANGES TO hpp HEADER FILE MAY NEED TO BE PROPAGATED TO THE        */
+/* C-EQUIVALENT HEADER FILE IN SUPPORT OF THE C-BINDING INTERFACES.   */
+/* ----------------------------------------------------------------   */
+/* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+
+
 #ifndef __SOAPFAULTEXCEPTION_H_OF_AXIS_INCLUDED_
 #define __SOAPFAULTEXCEPTION_H_OF_AXIS_INCLUDED_
 
