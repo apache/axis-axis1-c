@@ -142,8 +142,6 @@ void axiscStubSetTransportProperty(AXISCHANDLE stub,
     }
     catch ( ... )
     {
-          
-          
         processException(s, -1, "Unrecognized exception thrown.");
     }
 }
@@ -163,7 +161,6 @@ const char * axiscStubGetTransportProperty(AXISCHANDLE stub,
     }
     catch ( AxisException& e  )
     {
-        
         processException(s, e.getExceptionCode(), e.what());
     }
     catch ( ... )
@@ -303,8 +300,6 @@ void axiscStubDeleteCurrentTransportProperty(AXISCHANDLE stub,
     }
     catch ( ... )
     {
-          
-          
         processException(s, -1, "Unrecognized exception thrown.");
     }
 }
@@ -329,8 +324,6 @@ void axiscStubDeleteTransportProperty(AXISCHANDLE stub,
     }
     catch ( ... )
     {
-          
-          
         processException(s, -1, "Unrecognized exception thrown.");
     }
 }
@@ -355,9 +348,7 @@ void axiscStubSetHandlerProperty(AXISCHANDLE stub,
         processException(s, e.getExceptionCode(), e.what());
     }
     catch ( ... )
-    {
-          
-          
+    { 
         processException(s, -1, "Unrecognized exception thrown.");
     }
 }
@@ -386,8 +377,6 @@ AXISCHANDLE axiscStubCreateSOAPHeaderBlock(AXISCHANDLE stub,
     }
     catch ( ... )
     {
-          
-          
         processException(s, -1, "Unrecognized exception thrown.");
     }
 
@@ -411,9 +400,7 @@ AXISCHANDLE axiscStubGetFirstSOAPHeaderBlock(AXISCHANDLE stub)
         processException(s, e.getExceptionCode(), e.what());
     }
     catch ( ... )
-    {
-          
-          
+    {      
         processException(s, -1, "Unrecognized exception thrown.");
     }
 
@@ -438,8 +425,6 @@ AXISCHANDLE axiscStubGetNextSOAPHeaderBlock(AXISCHANDLE stub)
     }
     catch ( ... )
     {
-          
-          
         processException(s, -1, "Unrecognized exception thrown.");
     }
 
@@ -463,9 +448,7 @@ AXISCHANDLE axiscStubGetCurrentSOAPHeaderBlock(AXISCHANDLE stub)
         processException(s, e.getExceptionCode(), e.what());
     }
     catch ( ... )
-    {
-          
-          
+    { 
         processException(s, -1, "Unrecognized exception thrown.");
     }
 
@@ -485,13 +468,10 @@ void axiscStubDeleteCurrentSOAPHeaderBlock(AXISCHANDLE stub)
     }
     catch ( AxisException& e  )
     {
-        
         processException(s, e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-          
-          
         processException(s, -1, "Unrecognized exception thrown.");
     }
 }
@@ -499,8 +479,6 @@ void axiscStubDeleteCurrentSOAPHeaderBlock(AXISCHANDLE stub)
 AXISC_STORAGE_CLASS_INFO 
 void axiscStubDeleteSOAPHeaderBlock(AXISCHANDLE stub, AXISCHANDLE pHeaderBlock) 
 {
-    
-    
     StubC *s = (StubC*)stub;
     
     try
@@ -509,13 +487,10 @@ void axiscStubDeleteSOAPHeaderBlock(AXISCHANDLE stub, AXISCHANDLE pHeaderBlock)
     }
     catch ( AxisException& e  )
     {
-        
         processException(s, e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-          
-          
         processException(s, -1, "Unrecognized exception thrown.");
     }
 }
@@ -525,8 +500,6 @@ void axiscStubSetProxy(AXISCHANDLE stub,
                        const char * pcProxyHost, 
                        unsigned int uiProxyPort) 
 {
-    
-    
     StubC *s = (StubC*)stub;
     
     try
@@ -540,8 +513,6 @@ void axiscStubSetProxy(AXISCHANDLE stub,
     }
     catch ( ... )
     {
-          
-          
         processException(s, -1, "Unrecognized exception thrown.");
     }
 }
@@ -565,8 +536,6 @@ void axiscStubSetTransportTimeout(AXISCHANDLE stub,
     }
     catch ( ... )
     {
-          
-          
         processException(s, -1, "Unrecognized exception thrown.");
     }
 }
@@ -574,8 +543,6 @@ void axiscStubSetTransportTimeout(AXISCHANDLE stub,
 AXISC_STORAGE_CLASS_INFO 
 int axiscStubGetStatus(AXISCHANDLE stub) 
 {
-    
-    
     StubC *s = (StubC*)stub;
     
     try
@@ -589,8 +556,6 @@ int axiscStubGetStatus(AXISCHANDLE stub)
     }
     catch ( ... )
     {
-          
-          
         processException(s, -1, "Unrecognized exception thrown.");
     }
 
@@ -601,8 +566,6 @@ AXISC_STORAGE_CLASS_INFO
 void axiscStubSetMaintainSession(AXISCHANDLE stub, 
                              AxiscBool bSession) 
 {
-    
-    
     StubC *s = (StubC*)stub;
     
     try
@@ -616,8 +579,6 @@ void axiscStubSetMaintainSession(AXISCHANDLE stub,
     }
     catch ( ... )
     {
-          
-          
         processException(s, -1, "Unrecognized exception thrown.");
     }
 }
@@ -641,8 +602,6 @@ void axiscStubSetTransportProtocol(AXISCHANDLE stub,
     }
     catch ( ... )
     {
-          
-          
         processException(s, -1, "Unrecognized exception thrown.");
     }
 }
@@ -650,8 +609,6 @@ void axiscStubSetTransportProtocol(AXISCHANDLE stub,
 AXISC_STORAGE_CLASS_INFO 
 AXISC_PROTOCOL_TYPE axiscStubGetTransportProtocol(AXISCHANDLE stub) 
 {
-    
-    
     StubC *s = (StubC*)stub;
     
     try
@@ -660,24 +617,96 @@ AXISC_PROTOCOL_TYPE axiscStubGetTransportProtocol(AXISCHANDLE stub)
     }
     catch ( AxisException& e  )
     {
-        
         processException(s, e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-          
-          
         processException(s, -1, "Unrecognized exception thrown.");
     }
     
     return (AXISC_PROTOCOL_TYPE)-1;
 }
 
+AXISC_STORAGE_CLASS_INFO
+void axiscStubSetUsername(AXISCHANDLE stub, const char * pcUsername)
+{
+    StubC *s = (StubC*)stub;
+    
+    try
+    {
+        return s->setUsername(pcUsername);
+    }
+    catch ( AxisException& e  )
+    {
+        processException(s, e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        processException(s, -1, "Unrecognized exception thrown.");
+    }
+}
+
+AXISC_STORAGE_CLASS_INFO
+void axiscStubSetPassword(AXISCHANDLE stub, const char * pcPassword)
+{
+    StubC *s = (StubC*)stub;
+    
+    try
+    {
+        return s->setPassword(pcPassword);
+    }
+    catch ( AxisException& e  )
+    {
+        processException(s, e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        processException(s, -1, "Unrecognized exception thrown.");
+    }    
+}
+
+AXISC_STORAGE_CLASS_INFO
+void axiscStubSetProxyUsername(AXISCHANDLE stub, const char * pcProxyUsername)
+{
+    StubC *s = (StubC*)stub;
+    
+    try
+    {
+        return s->setProxyUsername(pcProxyUsername);
+    }
+    catch ( AxisException& e  )
+    {
+        processException(s, e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        processException(s, -1, "Unrecognized exception thrown.");
+    }    
+}
+
+AXISC_STORAGE_CLASS_INFO
+void axiscStubSetProxyPassword(AXISCHANDLE stub, const char * pcProxyPassword)
+{
+    StubC *s = (StubC*)stub;
+    
+    try
+    {
+        return s->setProxyPassword(pcProxyPassword);
+    }
+    catch ( AxisException& e  )
+    {
+        processException(s, e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        processException(s, -1, "Unrecognized exception thrown.");
+    }        
+}
+
+
 AXISC_STORAGE_CLASS_INFO 
 AXISCHANDLE axiscStubGetCall(AXISCHANDLE stub) 
 { 
-    
-    
     StubC *s = (StubC*)stub;
     
     try
@@ -699,6 +728,49 @@ AXISCHANDLE axiscStubGetCall(AXISCHANDLE stub)
     }
 
     return (AXISCHANDLE)NULL;    
+}
+
+AXISC_STORAGE_CLASS_INFO 
+void axiscStubSetSecure(AXISCHANDLE stub, 
+                        char * pszArguments, 
+                        ... )
+{ 
+    
+    
+    StubC *s = (StubC*)stub;
+    
+    try
+    {
+        va_list args;
+    
+        va_start( args, pszArguments);    
+        s->SetSecure(pszArguments, args);
+        va_end( args);    
+    }
+    catch ( AxisException& e  )
+    {
+        
+        processException(s, e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+          
+          
+        processException(s, -1, "Unrecognized exception thrown.");
+    }
+}
+AXISC_STORAGE_CLASS_INFO
+void axiscStubSetCExceptionHandler(AXISCHANDLE stub, void * pExceptionHandler)
+{
+    StubC *s = (StubC*)stub;  
+    s->setCExceptionHandler(pExceptionHandler); 
+}
+
+AXISC_STORAGE_CLASS_INFO
+void * axiscStubGetCExceptionHandler(AXISCHANDLE stub)
+{
+    StubC *s = (StubC*)stub;
+    return s->getCExceptionHandler();
 }
 
 AXISC_STORAGE_CLASS_INFO 
@@ -771,53 +843,6 @@ void axiscStubSetSOAPHeaders(AXISCHANDLE stub)
         processException(s, -1, "Unrecognized exception thrown.");
     }
 }
-
-
-AXISC_STORAGE_CLASS_INFO 
-void axiscStubSetSecure(AXISCHANDLE stub, 
-                        char * pszArguments, 
-                        ... )
-{ 
-    
-    
-    StubC *s = (StubC*)stub;
-    
-    try
-    {
-        va_list args;
-    
-        va_start( args, pszArguments);    
-        s->SetSecure(pszArguments, args);
-        va_end( args);    
-    }
-    catch ( AxisException& e  )
-    {
-        
-        processException(s, e.getExceptionCode(), e.what());
-    }
-    catch ( ... )
-    {
-          
-          
-        processException(s, -1, "Unrecognized exception thrown.");
-    }
-}
-
-AXISC_STORAGE_CLASS_INFO
-void axiscStubSetCExceptionHandler(AXISCHANDLE stub, void * pExceptionHandler)
-{
-    StubC *s = (StubC*)stub;  
-    s->setCExceptionHandler(pExceptionHandler); 
-}
-
-AXISC_STORAGE_CLASS_INFO
-void * axiscStubGetCExceptionHandler(AXISCHANDLE stub)
-{
-    StubC *s = (StubC*)stub;
-    return s->getCExceptionHandler();
-}
-
-
 
 }
 
