@@ -485,18 +485,6 @@ AXISC_STORAGE_CLASS_INFO
 void axiscStubSetProxyPassword(AXISCHANDLE stub, const char * pcProxyPassword);
 
 /**
- * Gets the username used for Proxy authentication
- */
-AXISC_STORAGE_CLASS_INFO
-const char * axiscStubGetProxyUsername(AXISCHANDLE stub);
-
-/**
- * Gets the password used for Proxy authentication
- */
-AXISC_STORAGE_CLASS_INFO
-const char * axiscStubGetProxyPassword(AXISCHANDLE stub);
-
-/**
  * Call object of the Stub. This is the point of access to the internals
  * of the Axis engine.
  */
@@ -553,13 +541,6 @@ void axiscStubIncludeSecure(AXISCHANDLE stub);
  */
 AXISC_STORAGE_CLASS_INFO
 void axiscStubSetSOAPHeaders(AXISCHANDLE stub);
-
-/**
- * Set Authorization header for Proxy authentication
- */
-AXISC_STORAGE_CLASS_INFO
-void axiscStubSetProxyAuthorizationHeader(AXISCHANDLE stub);
-
 
 #ifdef __cplusplus
  }
