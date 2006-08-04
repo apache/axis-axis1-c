@@ -385,11 +385,12 @@ const char * HTTPTransport::getHTTPHeaders()
         strcat (cpUsernamePassword, ":");
         strcat (cpUsernamePassword, getPassword());
 
+        // We use apr_base64_encode and NOT apr_base64_encode_binary since this is 
+        // textual data that needs to be converted to ascii on ebcdic platforms. 
+        // On ascii platforms the data will just get passed to apr_base64_encode_binary().
         int len = apr_base64_encode_len (strlen (cpUsernamePassword));
         AxisChar *base64Value = new AxisChar[len + 1];
-        len = apr_base64_encode_binary (base64Value,
-                                        (const unsigned char *) cpUsernamePassword,
-                                        strlen (cpUsernamePassword));
+        len = apr_base64_encode(base64Value,(const char *) cpUsernamePassword);
 
         std::string strValue = "Basic ";
         strValue += base64Value;

@@ -68,17 +68,16 @@ extern "C" {
 APU_DECLARE(int) apr_base64_encode_len(int len);
 
 /*
- * Encode a text string using base64encoding.
+ * Encode a string using base64encoding.
+ * On EBCDIC platforms, data will be converted to UTF-8 prior to encoding. 
+ * On non-EBCDIC platforms, data is encoded as-is.
  * @param coded_dst The destination string for the encoded string.
- * @param plain_src The original string in plain text
- * @param len_plain_src The length of the plain text string
+ * @param plain_src The original string in plain text - must be null terminated.
  * @return the length of the encoded string
  */ 
-APU_DECLARE(int) apr_base64_encode(char * coded_dst, const char *plain_src, 
-                                 int len_plain_src);
+APU_DECLARE(int) apr_base64_encode(char * coded_dst, const char *plain_src);
 
 /*
- * Encode an EBCDIC string using base64encoding.
  * @param coded_dst The destination string for the encoded string.
  * @param plain_src The original string in plain text
  * @param len_plain_src The length of the plain text string

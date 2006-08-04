@@ -427,12 +427,10 @@ Stub::setProxyAuthorizationHeader ()
     strcpy( cpUsernamePassword, m_proxyUsername );
     strcat( cpUsernamePassword, ":" );
     strcat( cpUsernamePassword, m_proxyPassword );
+    
     int len = apr_base64_encode_len (strlen(cpUsernamePassword));
-     
     AxisChar* base64Value = new AxisChar[len + 1];
-    len = apr_base64_encode_binary (base64Value, 
-                                    (const unsigned char*)cpUsernamePassword, 
-                                    strlen(cpUsernamePassword));
+    len = apr_base64_encode (base64Value, (const char*)cpUsernamePassword);
   
     std::string strValue = "Basic ";
     strValue += base64Value;
