@@ -24,6 +24,8 @@
 #pragma warning (disable : 4101)
 #endif
 
+#include "../../platforms/PlatformAutoSense.hpp"
+
 #include "XMLParserXerces.h"
 #include <xercesc/sax2/XMLReaderFactory.hpp>
 
