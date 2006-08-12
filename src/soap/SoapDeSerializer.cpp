@@ -863,6 +863,7 @@ SoapDeSerializer::getCmplxObject (void *pDZFunct,
                 if (AXIS_SUCCESS == m_nStatus)
                 {
                     m_pParser->next ();    /* skip end node too */
+                    m_pNode = NULL;    /* AXISCPP-978 node identified and used */
                     return pObject;
                 }
                 else
@@ -1014,6 +1015,7 @@ SoapDeSerializer::getCmplxFaultObject (void *pDZFunct,
             if (AXIS_SUCCESS == m_nStatus)
             {
                 m_pParser->next ();    /* skip end node too */
+                m_pNode = NULL;    /* AXISCPP-978 node identified and used */
                 return pObject;
             }
             else
@@ -1648,6 +1650,7 @@ void SoapDeSerializer::getElement (const AxisChar * pName,
                         if (bReturn)
                         {
                             m_pNode = m_pParser->next ();   /* skip end element node too */
+                            m_pNode = NULL;    /* AXISCPP-978 node identified and used */
                             return;
                         }
                     }
