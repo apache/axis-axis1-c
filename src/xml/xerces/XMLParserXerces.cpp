@@ -82,8 +82,6 @@ int XMLParserXerces::getStatus()
 
 const AnyElement* XMLParserXerces::next(bool isCharData)
 {
-    bool bCanParseMore = false;
-
     if( !m_bFirstParsed)
     {
 //    Try this again at some point in the future.  At the moment it works on
@@ -134,39 +132,31 @@ const AnyElement* XMLParserXerces::next(bool isCharData)
     if(!m_bPeeked) 
         m_Xhandler.freeElement();
     
-    while (true)
+    bool bCanParseMore = true;
+    AnyElement* elem;
+    while (bCanParseMore)
     {
-        AnyElement* elem = m_Xhandler.getAnyElement();
+        // See if we have a token to consume
+        elem = m_Xhandler.getAnyElement();
+        
+        // Since we have consumed whatever is there, ensure peek flag is set to false
+        m_bPeeked = false;
+        
+        // If we do not have an element, then parse next token; else if
+        // whitespace, ignore whitespace; else return token
         if (!elem)
-        {
-            //Chinthana:check the peek is called or not
-            if(!m_bPeeked) 
-                bCanParseMore = m_pParser->parseNext(m_ScanToken);
-            else
-            {
-                m_bPeeked = false;
-                bCanParseMore = true;
-            }
-            elem = m_Xhandler.getAnyElement();
+        {     
+            bCanParseMore = m_pParser->parseNext(m_ScanToken);
+            if (AXIS_FAIL == m_Xhandler.getStatus())
+                break;
         }
-        if (elem)
-        {
-            if (!isCharData && (CHARACTER_ELEMENT == elem->m_type))
-            { /* ignorable white space */
-                m_Xhandler.freeElement();
-                continue;
-            }
-
-            if( m_bPeeked )
-                m_bPeeked = false;
-            
+        else if (!isCharData && (CHARACTER_ELEMENT == elem->m_type))
+            m_Xhandler.freeElement();
+        else
             return elem;
-        }
-        else if (AXIS_FAIL == m_Xhandler.getStatus()) 
-            return NULL;
-        else if (!bCanParseMore) 
-            return NULL;
     }
+    
+    return NULL;
 }
 // New method which peek a head next element 
 // Here always Peek() will call after the first pase done
@@ -179,18 +169,20 @@ const char* XMLParserXerces::peek()
             m_pParser->parseFirst(*m_pInputSource, m_ScanToken);
             m_bFirstParsed = true;
         }
-         
-        bool bCanParseMore = true;
         
         m_Xhandler.freeElement();
-        bCanParseMore = m_pParser->parseNext(m_ScanToken);
-        AnyElement* elem = m_Xhandler.getAnyElement();
-        while (CHARACTER_ELEMENT == elem->m_type) // we never peek for char data
-                                                  //hence this is a white space
-        { /* ignorable white space */
-            m_Xhandler.freeElement();
-            bCanParseMore = m_pParser->parseNext(m_ScanToken);
+        
+        AnyElement* elem;
+        while (m_pParser->parseNext(m_ScanToken) && AXIS_FAIL != m_Xhandler.getStatus())
+        {                             
+            // Attempt to get token
             elem = m_Xhandler.getAnyElement();
+            
+            // we never peek for char data hence this is a white space - ignore it.
+            if (elem && CHARACTER_ELEMENT == elem->m_type)
+                m_Xhandler.freeElement();
+            else
+                break;
          }
     }
 
