@@ -2367,7 +2367,7 @@ AxiscAnyType * axiscSoapDeSerializerGetAnyObject(AXISCHANDLE wrapperSoapDeSerial
 
 AXISC_STORAGE_CLASS_INFO 
 void axiscSoapDeSerializerGetChardataAs(AXISCHANDLE wrapperSoapDeSerializer, 
-                        void * pValue, 
+                        void ** pValue, 
                         AXISC_XSDTYPE type) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;

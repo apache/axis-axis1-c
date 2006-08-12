@@ -1147,7 +1147,7 @@ AxiscAnyType * axiscSoapDeSerializerGetAnyObject(AXISCHANDLE wrapperSoapDeSerial
  * @param type The xsd simple type of the data.
  */
 AXISC_STORAGE_CLASS_INFO
-void axiscSoapDeSerializerGetChardataAs(AXISCHANDLE wrapperSoapDeSerializer, void * pValue, 
+void axiscSoapDeSerializerGetChardataAs(AXISCHANDLE wrapperSoapDeSerializer, void ** pValue, 
 	AXISC_XSDTYPE type);
 
 /**

@@ -419,7 +419,7 @@ public class BeanParamWriter extends ParamCFileWriter
         {
             if (extensionBaseAttrib != null)
             {
-                writer.write("\taxiscSoapDeSerializerGetChardataAs(pDZ, (void*)&(param->"
+                writer.write("\taxiscSoapDeSerializerGetChardataAs(pDZ, (void **)&(param->"
                         + extensionBaseAttrib.getParamNameAsMember() + "), "
                         + CUtils.getXSDTypeForBasicType(extensionBaseAttrib.getTypeName()) + ");\n");
             }
@@ -725,7 +725,7 @@ public class BeanParamWriter extends ParamCFileWriter
         if (extensionBaseAttrib != null
                 && extensionBaseAttrib.getTypeName() != null)
         {
-            writer.write("\taxiscSoapDeSerializerGetChardataAs(pDZ, (void*)&(param->"
+            writer.write("\taxiscSoapDeSerializerGetChardataAs(pDZ, (void **)&(param->"
                     + extensionBaseAttrib.getParamNameAsMember() + "), "
                     + CUtils.getXSDTypeForBasicType(extensionBaseAttrib.getTypeName()) + ");\n");
         }

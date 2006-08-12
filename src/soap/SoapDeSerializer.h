@@ -320,7 +320,7 @@ public:
     int AXISCALL getStatus(){return m_nStatus;};
 	AnyType* AXISCALL getAnyObject();
     void serializeTag(AxisString& xmlStr, const AnyElement* node, AxisString& nsDecls);
-    void getChardataAs(void* pValue, XSDTYPE type);
+    void getChardataAs(void** pValue, XSDTYPE type);
 
     /**
       *Returns the attachemtn object for the given id.

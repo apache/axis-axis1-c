@@ -964,7 +964,7 @@ public:
      * @param pValue object into which deserialized value will be placed
      * @param type The xsd simple type of the data.
      */
-    virtual void getChardataAs(void* pValue, 
+    virtual void getChardataAs(void** pValue, 
                                XSDTYPE type)=0;
     
     /**

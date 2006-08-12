@@ -835,7 +835,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
         {
             if (extensionBaseAttrib != null)
             {
-                writer.write("\tpIWSDZ->getChardataAs((void*)&(param->"
+                writer.write("\tpIWSDZ->getChardataAs((void **)&(param->"
                         + extensionBaseAttrib.getParamNameAsMember() + "), "
                         + CUtils.getXSDTypeForBasicType(extensionBaseAttrib.getTypeName()) + ");\n");
             }
@@ -1112,7 +1112,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
         if (extensionBaseAttrib != null
                 && extensionBaseAttrib.getTypeName() != null)
         {
-            writer.write("\tpIWSDZ->getChardataAs((void*)&(param->"
+            writer.write("\tpIWSDZ->getChardataAs((void **)&(param->"
                     + extensionBaseAttrib.getParamNameAsMember() + "), "
                     + CUtils.getXSDTypeForBasicType(extensionBaseAttrib.getTypeName()) + ");\n");
         }

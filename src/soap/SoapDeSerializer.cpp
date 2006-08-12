@@ -2553,7 +2553,7 @@ SoapDeSerializer::serializeTag (AxisString & xmlStr,
 }
 
 void
-SoapDeSerializer::getChardataAs (void *pValue, 
+SoapDeSerializer::getChardataAs (void **pValue, 
                                  XSDTYPE type)
 {
     if (!m_pNode)
@@ -2563,7 +2563,7 @@ SoapDeSerializer::getChardataAs (void *pValue,
     {
         IAnySimpleType* pSimpleType = AxisUtils::createSimpleTypeObject(type);
         pSimpleType->deserialize(m_pNode->m_pchNameOrValue);
-        pValue = pSimpleType->getValue();
+        *pValue = pSimpleType->getValue();
         delete pSimpleType;
     }
 }
