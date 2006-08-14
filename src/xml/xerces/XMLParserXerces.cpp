@@ -62,12 +62,13 @@ int XMLParserXerces::setInputStream(AxisIOStream* pInputStream)
     m_pInputSource = new SoapInputSource(pInputStream);
     m_Xhandler.reset();
     m_pParser->setContentHandler(&m_Xhandler);
-     if (m_bFirstParsed)
-    {
+    if (m_bFirstParsed)
         m_pParser->parseReset(m_ScanToken);
-        m_bFirstParsed = false;
-    }
-   
+
+    m_bFirstParsed = false;
+    m_bPeeked = false;
+    m_bCanParseMore = false;
+    
     return AXIS_SUCCESS;
 }
 
