@@ -28,6 +28,11 @@ XMLParserGuththila::XMLParserGuththila ()
   element.m_pchNamespace = 0;
   element.m_pchNameOrValue = 0;
   element.m_pchAttributes[0] = 0;
+  
+  // This is just to set it up. Not sure if this 
+  // parser is functional - if so, following needs
+  // to be set correctly.
+  m_bCanParseMore = true;
 }
 
 

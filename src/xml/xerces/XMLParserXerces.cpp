@@ -37,6 +37,7 @@ XMLParserXerces::XMLParserXerces()
     m_bPeeked = false;
     m_pParser = XMLReaderFactory::createXMLReader();
     m_pInputSource = NULL;
+    m_bCanParseMore = false;
 }
 
 XMLParserXerces::~XMLParserXerces()
@@ -87,11 +88,11 @@ const AnyElement* XMLParserXerces::next(bool isCharData)
 //    Try this again at some point in the future.  At the moment it works on
 //    Windows, but Linux has a problem...will keep for OS/400
 #ifndef __OS400__           
-        m_pParser->parseFirst( *m_pInputSource, m_ScanToken);
+        m_bCanParseMore = m_pParser->parseFirst( *m_pInputSource, m_ScanToken);
 #else
         try
         {
-            m_pParser->parseFirst( *m_pInputSource, m_ScanToken);
+            m_bCanParseMore = m_pParser->parseFirst( *m_pInputSource, m_ScanToken);
         }
         catch( const XMLException& toCatch)
         {
@@ -132,9 +133,8 @@ const AnyElement* XMLParserXerces::next(bool isCharData)
     if(!m_bPeeked) 
         m_Xhandler.freeElement();
     
-    bool bCanParseMore = true;
     AnyElement* elem;
-    while (bCanParseMore)
+    while (m_bCanParseMore && AXIS_FAIL != m_Xhandler.getStatus())
     {
         // See if we have a token to consume
         elem = m_Xhandler.getAnyElement();
@@ -145,11 +145,7 @@ const AnyElement* XMLParserXerces::next(bool isCharData)
         // If we do not have an element, then parse next token; else if
         // whitespace, ignore whitespace; else return token
         if (!elem)
-        {     
-            bCanParseMore = m_pParser->parseNext(m_ScanToken);
-            if (AXIS_FAIL == m_Xhandler.getStatus())
-                break;
-        }
+            m_bCanParseMore = m_pParser->parseNext(m_ScanToken);
         else if (!isCharData && (CHARACTER_ELEMENT == elem->m_type))
             m_Xhandler.freeElement();
         else
@@ -166,20 +162,21 @@ const char* XMLParserXerces::peek()
     {
         if(!m_bFirstParsed)
         {
-            m_pParser->parseFirst(*m_pInputSource, m_ScanToken);
+            m_bCanParseMore = m_pParser->parseFirst(*m_pInputSource, m_ScanToken);
             m_bFirstParsed = true;
         }
         
         m_Xhandler.freeElement();
         
         AnyElement* elem;
-        while (m_pParser->parseNext(m_ScanToken) && AXIS_FAIL != m_Xhandler.getStatus())
-        {                             
+        while (m_bCanParseMore && AXIS_FAIL != m_Xhandler.getStatus())
+        {
             // Attempt to get token
+            m_bCanParseMore = m_pParser->parseNext(m_ScanToken);                            
             elem = m_Xhandler.getAnyElement();
             
             // we never peek for char data hence this is a white space - ignore it.
-            if (elem && CHARACTER_ELEMENT == elem->m_type)
+            if (m_bCanParseMore && elem && CHARACTER_ELEMENT == elem->m_type)
                 m_Xhandler.freeElement();
             else
                 break;
@@ -200,49 +197,39 @@ const char* XMLParserXerces::peek()
 
 const AnyElement* XMLParserXerces::anyNext()
 {
-    bool bCanParseMore = false;
-    
     // Say the SAX event handler to record prefix mappings too 
     // By default the event handler do not record them.
     m_Xhandler.setGetPrefixMappings(true);
     if(!m_bFirstParsed)
     {
-        m_pParser->parseFirst(*m_pInputSource, m_ScanToken);
+        m_bCanParseMore = m_pParser->parseFirst(*m_pInputSource, m_ScanToken);
         m_bFirstParsed = true;
     }
 
     if(!m_bPeeked) 
         m_Xhandler.freeElement();
 
-    while (true)
+    AnyElement* elem;
+    while (m_bCanParseMore && AXIS_FAIL != m_Xhandler.getStatus())
     {
-        AnyElement* elem = m_Xhandler.getAnyElement();
+        // See if we have a token to consume
+        elem = m_Xhandler.getAnyElement();
+        
+        // Since we have consumed whatever is there, ensure peek flag is set to false
+        m_bPeeked = false;
+        
+        // If we do not have an element, then parse next token;  
+        // else return token
         if (!elem)
-        {
-            if(!m_bPeeked) 
-                bCanParseMore = m_pParser->parseNext(m_ScanToken);
-            else
-            {
-                m_bPeeked = false;
-                bCanParseMore = true;
-            }
-
-            elem = m_Xhandler.getAnyElement();
-        }
-        if (elem)
+            m_bCanParseMore = m_pParser->parseNext(m_ScanToken);
+        else
         {
             m_Xhandler.setGetPrefixMappings(false);
-
-            if( m_bPeeked )
-                m_bPeeked = false;
-
             return elem;
         }
-        else if (AXIS_FAIL == m_Xhandler.getStatus()) 
-            return NULL;
-        else if (!bCanParseMore) 
-            return NULL;
     }
+    
+    return NULL;
 }
 
 const XML_Ch* XMLParserXerces::getPrefix4NS(const XML_Ch* pcNS)

@@ -126,13 +126,14 @@ public:
      *         of the current XML element. See AnyElement.h for the structure
      *         of AnyElement.
      */
-	virtual const char* peek()=0; //Chinthana:Add the method to peek head and find the next element 26/04/2005.
+    virtual const AnyElement* anyNext()=0;
+    
     /**
      * @brief  Peek a head and get the next elemnt. .
-     * @param  peek is pointer to bool type wich have to set true in side this method.
      * @return Return the name of the next element. 
      */
-    virtual const AnyElement* anyNext()=0;
+    virtual const char* peek()=0;      
+
     /**
      * Gets the corresponding prefix string for a given namespace. The
      * Parser should store the prefix/namespace pairs that it finds and
@@ -145,9 +146,16 @@ public:
      * @return The prefix if a match is found. NULL otherwise. 
      */
     virtual const XML_Ch* getPrefix4NS(const XML_Ch* pcNS)=0;
+
+    /**
+     * @brief  Whether there is more data to parse.
+     * @return true if more data to parse; false otherwise. 
+     */
+    virtual bool canParseMore() { return m_bCanParseMore; }
+
 protected:
     AxisIOStream* m_pInputStream;
-
+    bool m_bCanParseMore;
 };
 
 #endif
