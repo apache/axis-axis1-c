@@ -73,14 +73,15 @@
 AxisChar * pBodyContent;
 
 AXIS_CPP_NAMESPACE_START
-#define INITIAL_ARRAY_SIZE 1
 
 SoapDeSerializer::SoapDeSerializer ()
 {
     m_pParser = XMLParserFactory::getParserObject ();
     m_pEnv = NULL;
     m_pHeader = NULL;
-    m_pInputStream = 0;
+    m_pCurrNode = NULL;
+    m_pNode = NULL;
+    m_pInputStream = NULL;
     m_nStatus = AXIS_SUCCESS;
 }
 
@@ -463,7 +464,8 @@ SoapDeSerializer::checkForFault (const AxisChar * pName,
 int
 SoapDeSerializer::init ()
 {
-    m_pNode = 0;
+    m_pNode = NULL;
+    m_pCurrNode = NULL;
 
     if (m_pEnv)
     {
@@ -1041,35 +1043,6 @@ SoapDeSerializer::getCmplxFaultObject (void *pDZFunct,
     return NULL;
 }
 
-int
-SoapDeSerializer::getElementForAttributes (const AxisChar * pName,
-                                           const AxisChar * pNamespace)
-{
-    if (m_pCurrNode)
-    {
-        if (0 == strcmp (pName, m_pCurrNode->m_pchNameOrValue))
-            return m_nStatus;
-    }
-    
-    if (!m_pNode)
-    {
-        m_pNode = m_pParser->next ();
-        m_pCurrNode = m_pParser->next ();
-    }
-    else            /* previous node not processed. So consider it */
-        m_pCurrNode = m_pNode;
-
-    if (0 == strcmp (pName, m_pNode->m_pchNameOrValue))
-        m_pNode = NULL;
-    else            /* error : current element is not the expected one */
-    {
-        m_nStatus = AXIS_FAIL;
-        m_pCurrNode = NULL;
-    }
-
-    return m_nStatus;
-}
-
 void SoapDeSerializer::getAttribute(const AxisChar* pName, const AxisChar * pNamespace, IAnySimpleType * pSimpleType)
 {
     if (m_pCurrNode)
@@ -1091,10 +1064,6 @@ void SoapDeSerializer::getAttribute(const AxisChar* pName, const AxisChar * pNam
     return;
 }
 
-/*
- * Before calling any of getAttributeAs... API functions the user should move 
- * current Element to the right Element by calling GetElementForAttributes(..)
- */
 xsd__int *
 SoapDeSerializer::getAttributeAsInt (const AxisChar * pName,
                                      const AxisChar * pNamespace)
@@ -2566,36 +2535,6 @@ SoapDeSerializer::getChardataAs (void **pValue,
         *pValue = pSimpleType->getValue();
         delete pSimpleType;
     }
-}
-
-LONGLONG
-SoapDeSerializer::strtoll (const char *pValue)
-{
-    LONGLONG llRetVal = 0;
-    LONGLONG llPowerOf10 = 1;
-    int iLength = strlen (pValue);
-    int iCountDownTo = 0;
-    bool bMinus = false;
-
-    if (*pValue == '-')
-    {
-        bMinus = true;
-        iCountDownTo = 1;
-    }
-
-    if (iLength > 0)
-        iLength--;
-
-    for (int iCount = iLength; iCount >= iCountDownTo; iCount--)
-    {
-        llRetVal += (LONGLONG) (pValue[iCount] - '0') * llPowerOf10;
-        llPowerOf10 *= (LONGLONG) 10;
-    }
-
-    if (bMinus)
-        llRetVal = -llRetVal;
-
-    return llRetVal;
 }
 
 /* This function is never called. */

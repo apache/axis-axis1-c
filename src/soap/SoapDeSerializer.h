@@ -354,16 +354,12 @@ public:
 
 
 private:
-    int getElementForAttributes(const AxisChar* pName, 
-        const AxisChar* pNamespace);
     xsd__base64Binary decodeFromBase64Binary(const AxisChar* pValue);
     xsd__hexBinary decodeFromHexBinary(const AxisChar* pValue);
     void deserializeLiteralArray (Axis_Array* pArray, IAnySimpleType* pSimpleType, const AxisChar* pName, const AxisChar* pNamespace);
     void deserializeEncodedArray (Axis_Array* pArray, IAnySimpleType* pSimpleType, const AxisChar* pName, const AxisChar* pNamespace, int size);
 	void deserializeLiteralComplexArray(Axis_Array * pArray, void *pDZFunct, void *pCreFunct, void *pDelFunct,  const AxisChar * pName, const AxisChar * pNamespace);
 	void deserializeEncodedComplexArray(Axis_Array * pArray, void *pDZFunct, void *pCreFunct, void *pDelFunct, const AxisChar * pName, const AxisChar * pNamespace, int size);
-
-	LONGLONG strtoll(const char *);
 };
 
 AXIS_CPP_NAMESPACE_END

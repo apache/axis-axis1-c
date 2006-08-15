@@ -17,6 +17,9 @@
  *
  */
 
+// Must be included as first thing in file - DO NOT REMOVE
+#include "../platforms/PlatformAutoSense.hpp"
+
 #include <axis/Axis.h>
 #include "AxisObjectConverter.hpp"
 
