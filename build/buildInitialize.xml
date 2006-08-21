@@ -242,6 +242,12 @@
   		<!-- Load properties from file -->
  		<property file="${dir.properties}/build.${platform}.properties"/>
         <property file="${dir.properties}/build.common.properties"/>   
+		<!-- there is a problem on windows where the dir.release is not set before the dir.libraries/dir.lib therefore dir.libraries/dir.lib gets incorrectly
+		set to ${dir.release}/bin & ${dir.release}/lib. to fix this I'll have to hack it in here. -->
+		<!-- Before we can do this we have to make all backslashes in dir.release into forward slashes -->
+		<propertyregex property="dir.release" input="${dir.release}" regexp="\\" replace="/" defaultValue="${dir.release}" override="true"/>
+		<propertyregex property="dir.libraries" input="${dir.libraries}" regexp="\$\{dir.release\}" replace="${dir.release}" defaultValue="${dir.libraries}" override="true"/>
+		<propertyregex property="dir.lib" input="${dir.lib}" regexp="\$\{dir.release\}" replace="${dir.release}" defaultValue="${dir.lib}" override="true"/>
 	</target>
 
 	<!--
