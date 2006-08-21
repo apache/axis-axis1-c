@@ -634,7 +634,7 @@ void axiscStubSetUsername(AXISCHANDLE stub, const char * pcUsername)
     
     try
     {
-        return s->setUsername(pcUsername);
+        s->setUsername(pcUsername);
     }
     catch ( AxisException& e  )
     {
@@ -653,7 +653,7 @@ void axiscStubSetPassword(AXISCHANDLE stub, const char * pcPassword)
     
     try
     {
-        return s->setPassword(pcPassword);
+        s->setPassword(pcPassword);
     }
     catch ( AxisException& e  )
     {
@@ -672,7 +672,7 @@ void axiscStubSetProxyUsername(AXISCHANDLE stub, const char * pcProxyUsername)
     
     try
     {
-        return s->setProxyUsername(pcProxyUsername);
+        s->setProxyUsername(pcProxyUsername);
     }
     catch ( AxisException& e  )
     {
@@ -691,7 +691,7 @@ void axiscStubSetProxyPassword(AXISCHANDLE stub, const char * pcProxyPassword)
     
     try
     {
-        return s->setProxyPassword(pcProxyPassword);
+        s->setProxyPassword(pcProxyPassword);
     }
     catch ( AxisException& e  )
     {
