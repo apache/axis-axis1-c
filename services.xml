@@ -93,7 +93,7 @@ XMLParser:${dir.libraries}/${libraryPrefix}${ClientParserLib}${librarySuffix}
             </or>
         </condition>
         
-        <condition property="dir.adminService" value="${dir.release}/lib/axis">
+        <condition property="dir.adminService" value="${dir.release}/lib">
             <not>
 	            <or>
 	                <equals arg1="${platform}" arg2="Win32"/>
@@ -201,7 +201,15 @@ XMLParser:${dir.libraries}/${libraryPrefix}${ClientParserLib}${librarySuffix}
             <not>   
 	           <isset property="windows"/>
             </not>
-	    </condition>    
+	    </condition>
+		<condition property="ClientLogPath" value="${dir.test.generated}/server/${serviceLang}/${serviceName}/AdminClientLog.taw">
+			<isset property="serviceName"/>
+		</condition>
+		<condition property="ClientLogPath" value="${dir.test.generated}/AdminClient/AdminClientLog.taw">
+			<not>
+				<isset property="serviceName"/>
+			</not>
+		</condition>
 	    <dirname file="${adminconffile}" property="adminconffilePath"/>
 	    <mkdir dir="${adminconffilePath}"/>
 	    <echo file="${adminconffile}"># The comment character is '#'
@@ -212,7 +220,7 @@ XMLParser:${dir.libraries}/${libraryPrefix}${ClientParserLib}${librarySuffix}
 # Transport_http:   The HTTP Transport library   
 # Channel_HTTP:     The HTTP (non-SSL) Channel library   
 #
-ClientLogPath:${dir.test.generated}/server/${serviceLang}/${serviceName}/AdminClientLog.taw
+ClientLogPath:${ClientLogPath}
 XMLParser:${dir.libraries}/${libraryPrefix}${ClientParserLib}${librarySuffix}
 Transport_http:${dir.libraries}/${libraryPrefix}${transportLibraryName}${librarySuffix}
 Channel_HTTP:${dir.libraries}/${libraryPrefix}${HTTP.ChannelLibraryName}${librarySuffix}
