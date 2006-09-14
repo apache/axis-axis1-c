@@ -34,8 +34,7 @@ int main( int argc, char *argv[])
 
     if( argc < 4)
     {
-        printf( "Usage: %s <server> <port> <wsdd file>\n", argv[0]);
-        printf( "Usage: %s <server> <port> STOP\n", argv[0]);
+        printf( "Usage: %s [server] [port] [wsdd file | STOP] <time to wait>\n", argv[0]);
         exit( 1);
     }
 
@@ -47,6 +46,13 @@ int main( int argc, char *argv[])
     try
     {
         axiscpp::AxisAdminService   ws( Uri.c_str());
+        
+        if(argc==5)
+        {
+            // set the timeout or else on linux it'll sit there forever.
+            ws.setTransportTimeout(atoi(argv[4]));
+        }
+        
 		if ( 0 == strcmp(argv[3], "STOP") )
 		{
             if( axiscpp::true_ == ws.stopAxis())
