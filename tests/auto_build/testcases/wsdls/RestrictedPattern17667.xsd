@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+          xmlns:tns="urn:com:17667:plm1"
+    targetNamespace="urn:com:17667:plm1"
+ elementFormDefault="qualified">
+
+ <xs:complexType name="plmType" abstract="true">
+  <xs:attribute name="plmid" type="xs:int"/>
+ </xs:complexType>
+
+ <xs:complexType name="partType">
+  <xs:complexContent>
+   <xs:extension base="tns:plmType">
+    <xs:attribute name="partName" type="xs:string"/>
+   </xs:extension>
+  </xs:complexContent>
+ </xs:complexType>
+
+ <xs:complexType name="productType">
+  <xs:complexContent>
+   <xs:extension base="tns:plmType">
+    <xs:attribute name="productName" type="xs:string"/>
+    <xs:attribute name="productDescription" type="xs:string"/>
+   </xs:extension>
+  </xs:complexContent>
+ </xs:complexType>
+
+ <xs:complexType name="queryResultType">
+  <xs:sequence>
+   <xs:element name="item1" type="tns:plmType" minOccurs="0" maxOccurs="unbounded"/>
+   <xs:element name="item2" type="tns:RepFormatType" minOccurs="0" maxOccurs="unbounded"/>
+  </xs:sequence>
+ </xs:complexType>
+
+ <xs:complexType name="newQueryResultType">  
+  <xs:sequence>  
+   <xs:element name="item" type="tns:plmType" minOccurs="0" maxOccurs="unbounded"/>  
+  </xs:sequence>  
+ </xs:complexType>
+ 
+	<xs:simpleType name="LinkType">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="urn:3DXML:.*:(loc|ext):.*"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="RepresentationLinkType">
+		<xs:restriction base="tns:LinkType">
+			<xs:pattern value="urn:3DXML:(Representation|TechRep):(loc|ext):.*"/>
+		</xs:restriction>
+	</xs:simpleType>
+ 
+	<xs:complexType name="RepFormatType" abstract="false">
+		<xs:attribute name="owner" type="xs:unsignedInt" use="required"/>
+		<xs:attribute name="format" type="tns:RepresentationFormatType" use="required"/>
+		<xs:attribute name="associatedFile" type="tns:RepresentationLinkType" use="required"/>
+	</xs:complexType>
+
+	<xs:simpleType name="RepresentationFormatType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="TESSELLATED"/>
+			<xs:enumeration value="ANNOTATION3D"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+ <xs:element name="queryResult" type="tns:queryResultType"/>
+</xs:schema>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions targetNamespace="urn:com:17667:plm1wsdl"
+                       xmlns="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:plm1="urn:com:17667:plm1"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                   xmlns:tns="urn:com:17667:plm1wsdl"
+                   xmlns:wsi="http://ws-i.org/schemas/conformanceClaim/"
+                   xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <types>
+    <xsd:schema targetNamespace="urn:com:17667:plm1wsdl">
+      <xsd:import namespace="urn:com:17667:plm1" schemaLocation="RestrictedPattern17667.xsd"/>
+      <xsd:element name="query">
+        <xsd:complexType/>
+      </xsd:element>
+      <xsd:element name="queryResponse" type="plm1:queryResultType"/>
+    </xsd:schema>
+  </types>
+
+	<message name="queryInput">
+		<part element="tns:query" name="parameters"/>
+	</message>
+	
+	<message name="queryOutput">
+		<part element="tns:queryResponse" name="parameters"/>
+	</message>
+	
+	<portType name="IQueryService">
+		<operation name="query">
+			<input message="tns:queryInput"/>
+			<output message="tns:queryOutput"/>
+		</operation>
+	</portType>
+	<binding name="IQueryServiceBinding" type="tns:IQueryService">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<operation name="query">
+			<soap:operation soapAction="" style="document"/>
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+	</binding>
+	<service name="queryService">
+     <port binding="tns:IQueryServiceBinding" name="IQueryServicePort">
+      <soap:address location="http://localhost:9080/webapp/QueryService"/>
+     </port>  
+    </service>
+</definitions>

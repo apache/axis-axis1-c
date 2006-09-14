@@ -1,0 +1,16 @@
+<test>
+  <name>RestrictedPattern17667</name>
+  <description>RestrictedPattern17667</description>
+  <clientLang>cpp</clientLang>
+  <clientCode>RestrictedPattern17667client.cpp</clientCode>
+  <wsdl>RestrictedPattern17667.wsdl</wsdl>
+  <expected>
+    <output>
+      RestrictedPattern17667.cpp.out
+    </output>
+    <serverResponse>
+      RestrictedPattern17667_ServerResponse.expected
+    </serverResponse>
+  </expected>
+  <endpoint>http://localhost:80/RestrictedPattern17667</endpoint>
+</test>

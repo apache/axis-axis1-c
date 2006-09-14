@@ -147,3 +147,6 @@ SameComplexTypeAndNillableElementName.xml
 
 # There seem to be problems with very large chunk sizes
 LargeReturningString2.xml
+
+# Test added on 14 Sept 2006
+RestrictedPattern17667.xml
