@@ -459,7 +459,7 @@ Channel_HTTP:${dir.libraries}/${libraryPrefix}${HTTP.ChannelLibraryName}${librar
     
     <target name="stopAxisServer" depends="initialize">
         <exec executable="${dir.release}/bin/${adminClientExecutableName}${executableSuffix}"
-            failifexecutionfails="true">
+            timeout="60000" failifexecutionfails="false">
             <arg line="localhost ${testPort} STOP 120" />
             <env key="PATH"
                 path="${dir.xmlParser}/bin${path.separator}${dir.libraries}${path.separator}${java.library.path}" />
