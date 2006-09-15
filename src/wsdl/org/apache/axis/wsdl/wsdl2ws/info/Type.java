@@ -105,6 +105,13 @@ public class Type
 
     /* Should this type be generated or not - by default, set to true except for anonymous types */
     private boolean externalize = true;
+
+    // vvv FJP - 17667
+    private boolean	restriction = false;
+    private String  restrictionBase = null;
+    private Vector  restrictionPattern = null;
+    private Vector  restrictionEnumeration = null;
+    // ^^^ FJP - 17667
     
     /* Is anonymous type? qname.localname is checked, and if starts with '>', then true */
     private boolean isAnonymous = false;
@@ -527,4 +534,62 @@ public class Type
         if (type != null && !TypeMap.isSimpleType(type.getName()))
             this.vRelatedTypes.add(type);
     }    
+    // vvv FJP - 17667
+    /**
+     * @return Returns the restrictionBase.
+     */
+    public String getRestrictionBase()
+    {
+        return restrictionBase;
+    }
+    /**
+     * @param restrictionBase The restrictionBase to set.
+     */
+    public void setRestrictionBase(String restrictionBase)
+    {
+        this.restrictionBase = restrictionBase;
+    }
+    /**
+     * @return Returns the restrictionEnumeration.
+     */
+    public Vector getRestrictionEnumeration()
+    {
+        return restrictionEnumeration;
+    }
+    /**
+     * @param restrictionEnumeration The restrictionEnumeration to set.
+     */
+    public void setRestrictionEnumeration(Vector restrictionEnumeration)
+    {
+        this.restrictionEnumeration = restrictionEnumeration;
+    }
+    /**
+     * @return Returns the restrictionPattern.
+     */
+    public Vector getRestrictionPattern()
+    {
+        return restrictionPattern;
+    }
+    /**
+     * @param restrictionPattern The restrictionPattern to set.
+     */
+    public void setRestrictionPattern(Vector restrictionPattern)
+    {
+        this.restrictionPattern = restrictionPattern;
+    }
+    /**
+     * @return Returns the restriction.
+     */
+    public boolean isRestriction()
+    {
+        return restriction;
+    }
+    /**
+     * @param restriction The restriction to set.
+     */
+    public void setRestriction(boolean restriction)
+    {
+        this.restriction = restriction;
+    }
+    // ^^^ FJP - 17667
 }

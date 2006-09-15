@@ -152,16 +152,22 @@ public class WSDL2Ws
 
         Binding binding = null;
         if (ports.hasNext())
+        {
             binding = ((Port) ports.next()).getBinding();
+        }
         
         if (binding == null)
+        {
             throw new WrapperFault("No binding specified");
+        }
         
         this.bindingEntry = symbolTable.getBindingEntry(binding.getQName());
 
         this.portTypeEntry = symbolTable.getPortTypeEntry(binding.getPortType().getQName());
         if (portTypeEntry == null)
+        {
             throw new WrapperFault("Service not found");
+        }
         
         ports = this.serviceentry.getService().getPorts().values().iterator();
         this.targetEndpointURI = SymbolTableParsingUtils.getTargetEndPointURI(ports);
@@ -192,6 +198,7 @@ public class WSDL2Ws
         
         List operations = bindingEntry.getBinding().getBindingOperations();
         if (operations != null)
+        {
             for (int i = 0; i < operations.size(); i++)
             {
                 //for the each binding operation found
@@ -205,6 +212,7 @@ public class WSDL2Ws
                     SymbolTableParsingUtils.getOutputInfo(bindinop.getBindingOutput(), method);
                 }
             }
+        }
     }
 
     /**
@@ -241,19 +249,28 @@ public class WSDL2Ws
         
         //add each parameter to parameter list
         if ("document".equals(bindingEntry.getBindingStyle().getName()))
+        {
             this.addDocumentStyleInputMessageToMethodInfo(op, minfo);
+        }
         else
+        {
             this.addRPCStyleInputMessageToMethodInfo(op, minfo);
-
+        }
         //get the return type
         if (op.getOutput() != null)
         {
             Iterator returnlist = op.getOutput().getMessage().getParts().values().iterator();
             if (returnlist.hasNext()
                     && "document".equals(bindingEntry.getBindingStyle().getName()))
-                this.addDocumentStyleOutputMessageToMethodInfo(minfo, (Part) returnlist.next());
+            {
+                this.addDocumentStyleOutputMessageToMethodInfo(
+                    minfo,
+                    (Part) returnlist.next());
+            }
             else
+            {
                 this.addRPCStyleOutputMessageToMethodInfo(op, minfo);
+            }
         }
         
         return minfo;
@@ -281,36 +298,54 @@ public class WSDL2Ws
                                    .getMessage()
                                    .getParts()
                                    .get((String) op.getParameterOrdering().get(ix)));
+                
                 if (p == null)
+                {
                     continue;
+                }
+                
                 pinfo = createParameterInfo(p);
+                
                 if (null != pinfo)
+                {
                     minfo.addOutputParameter(pinfo);
+                }
             }
             
             /* there can be more output parameters than in parameterOrder list (partial parameter ordering) */
             returnlist = op.getOutput().getMessage().getParts().values().iterator();
             while (returnlist.hasNext())
-            { 
-                //RPC style messages can have multiple parts
+            { //RPC style messages can have multiple parts
                 Part p = (Part) returnlist.next();
+                
                 if (op.getParameterOrdering().contains(p.getName()))
+                {
                     continue;
+                }
+                
                 pinfo = createParameterInfo(p);
+                
                 if (null != pinfo)
+                {
                     minfo.addOutputParameter(pinfo);
+                }
             }
         }
         else
         {
             returnlist = op.getOutput().getMessage().getParts().values().iterator();
+            
             while (returnlist.hasNext())
             { 
                 //RPC style messages can have multiple parts
                 Part p = ((Part) returnlist.next());
+                
                 pinfo = createParameterInfo(p);
+                
                 if (null != pinfo)
+                {
                     minfo.addOutputParameter(pinfo);
+                }
             }
         }
     }
@@ -328,7 +363,6 @@ public class WSDL2Ws
         ParameterInfo pinfo;
         Type type;
         QName minfoqname;
-        
         element = symbolTable.getElement(part.getElementName());
         if (element == null)
         {
@@ -350,19 +384,29 @@ public class WSDL2Ws
             boolean wrapped = wsdlWrappingStyle;
 
             if (type == null)
+            {
                 throw new WrapperFault("Unregistered type " + qname + " referred");
-
+            }
             //get inner attributes and elements and add them as parameters 
             if (wrapped)
+            {
+                //get inner attributes and elements and add them as parameters 
                 addOutputElementsToMethodInfo(minfo, type);
+            }
             else
             { 
                 // for non-wrapped style wsdl's
                 String elementName = (String) element.getQName().getLocalPart();
+                
                 pinfo = new ParameterInfo(type, elementName);
+                
                 pinfo.setElementName(type.getName());
+                
                 if (type.getName().equals(CUtils.anyTypeQname))
+                {
                     pinfo.setAnyType(true);
+                }
+                
                 minfo.addOutputParameter(pinfo);
             }
         }
@@ -377,37 +421,46 @@ public class WSDL2Ws
         ParameterInfo pinfo;
         ElementInfo eleinfo;
         ArrayList elementlist = new ArrayList();
-        
         Iterator names = type.getElementnames();
+        
         while (names.hasNext())
         {
             elementlist.add(names.next());
         }
         
         Type innerType;
+        
         for (int i = 0; i < elementlist.size(); i++)
         {
             String elementname = (String) elementlist.get(i);
+            
             eleinfo = type.getElementForElementName(elementname);
             innerType = eleinfo.getType();
-            
             pinfo = new ParameterInfo(innerType, elementname);
             
             if (eleinfo.getMaxOccurs() > 1)
+            {
                 pinfo.setArray(true);
+            }
             
             pinfo.setNillable(eleinfo.getNillable());
             
             if (eleinfo.getMinOccurs() == 0)
+            {
                 pinfo.setOptional(true);
+            }
             else
+            {
                 pinfo.setOptional(false);
-
+            }
+            
             pinfo.setElementName(type.getElementForElementName(elementname).getName());
             
             if (innerType.getName().equals(CUtils.anyTypeQname))
+            {
                 pinfo.setAnyType(true);
-
+            }
+            
             minfo.addOutputParameter(pinfo);
         }
     }
@@ -424,6 +477,7 @@ public class WSDL2Ws
         Iterator paramlist;
 
         minfo.setInputMessage(op.getInput().getMessage().getQName());
+        
         if (op.getParameterOrdering() != null)
         {
             for (int ix = 0; ix < op.getParameterOrdering().size(); ix++)
@@ -432,24 +486,35 @@ public class WSDL2Ws
                                    .getMessage()
                                    .getParts()
                                    .get((String) op.getParameterOrdering().get(ix)));
+                
                 if (p == null)
+                {
                     continue;
-
+                }
+                
                 pinfo = createParameterInfo(p);
+                
                 if (null != pinfo)
+                {
                     minfo.addInputParameter(pinfo);
+                }
             }
         }
         else
         {
             paramlist = op.getInput().getMessage().getParts().values().iterator();
+            
             while (paramlist.hasNext())
             { 
                 //RPC style messages can have multiple parts
                 Part p = (Part) paramlist.next();
+                
                 pinfo = createParameterInfo(p);
+                
                 if (null != pinfo)
+                {
                     minfo.addInputParameter(pinfo);
+                }
             }
         }
     }
@@ -497,10 +562,13 @@ public class WSDL2Ws
             if (qname != null)
             {
                 type = this.typeMap.getType(qname);
+            
                 boolean wrapped = wsdlWrappingStyle;
     
                 if (type == null)
+            {
                     throw new WrapperFault("unregistered type " + qname + " referred");
+            }
     
                 if (wrapped)
                 {
@@ -513,10 +581,14 @@ public class WSDL2Ws
                     // for non-wrapped style wsdl's
                     String elementName = (String) element.getQName().getLocalPart();
                     pinfo = new ParameterInfo(type, elementName);
+                
                     pinfo.setElementName(type.getName());
+                
                     if (type.getName().equals(CUtils.anyTypeQname))
+                {
                         pinfo.setAnyType(true);
-
+                }
+                
                     minfo.addInputParameter(pinfo);
                 }
             }
@@ -532,6 +604,7 @@ public class WSDL2Ws
         ParameterInfo pinfo;
         ArrayList attributeList = new ArrayList();
         Iterator attributeNames = type.getAttributeNames();
+
         while (attributeNames.hasNext())
         {
             attributeList.add(attributeNames.next());
@@ -541,10 +614,11 @@ public class WSDL2Ws
         {
             String attributeName = (String) attributeList.get(i);
             Type innerType = type.getTypForAttribName(attributeName);
+            
             pinfo = new ParameterInfo(innerType, attributeName);
+            
             pinfo.setElementName(type.getTypForAttribName(attributeName).getName());
             pinfo.setAttribute(true);
-            
             minfo.addInputParameter(pinfo);
         }
     }
@@ -573,20 +647,27 @@ public class WSDL2Ws
             pinfo = new ParameterInfo(innerType, elementname);
             
             if (eleinfo.getMaxOccurs() > 1)
+            {
                 pinfo.setArray(true);
-
+            }
+            
             pinfo.setElementName(type.getElementForElementName(elementname).getName());
             
             if (innerType.getName().equals(CUtils.anyTypeQname))
+            {
                 pinfo.setAnyType(true);
+            }
             
             pinfo.setNillable(eleinfo.getNillable());
             
             if (eleinfo.getMinOccurs() == 0)
+            {
                 pinfo.setOptional(true);
+            }
             else
+            {
                 pinfo.setOptional(false);
-
+            }
             minfo.addInputParameter(pinfo);
         }
     }
@@ -603,7 +684,9 @@ public class WSDL2Ws
         while (it.hasNext())
         {
             type = (TypeEntry) it.next();
+            
             Node node = type.getNode();
+            
             if (node != null)
             {
                 if (WSDL2Ws.verbose)
@@ -627,28 +710,46 @@ public class WSDL2Ws
     {
 
         if (targetLanguage == null)
+        {
             targetLanguage = "c++";
+        }
+        
         if (targetEngine == null)
+        {
             targetEngine = "server";
+        }
+        
         if (targetoutputLocation == null)
+        {
             targetoutputLocation = "./";
+        }
+        
         if (wsdlWrapStyle == null)
+        {
             wsdlWrapStyle = "wrapped";
-
+        }
+        
         this.language = targetLanguage;
 
         if (wsdlWrapStyle.equalsIgnoreCase("wrapped"))
+        {
             this.wsdlWrappingStyle = true;
+        }
         else
+        {
             this.wsdlWrappingStyle = false;
+        }
 
         preprocess();
 
         CUtils.setLanguage(language);
+        
         QName serviceqname = serviceentry.getService().getQName();
+        
         servicename = serviceqname.getLocalPart();
         typeMap = this.getTypeInfo(targetLanguage);
         methods = this.getServiceInfo(this.portTypeEntry.getPortType());
+        
         this.getWebServiceInfo();
 
         //TODO    check whether the name at the WrapperConstant Doclit is right "doc"
@@ -666,7 +767,9 @@ public class WSDL2Ws
         WebServiceGenerator wsg = WebServiceGeneratorFactory.createWebServiceGenerator(wsContext);
         
         if (wsg == null)
+        {
             throw new WrapperFault("WSDL2Ws does not support the option combination");
+        }
         
         exposeReferenceTypes(wsContext);
         exposeMessagePartsThatAreAnonymousTypes(wsContext);
@@ -677,6 +780,7 @@ public class WSDL2Ws
             System.out.println( "Dumping typeMap....");
             
             Iterator it = typeMap.getTypes().iterator();
+            
             while (it.hasNext())
             {
                 System.out.println(it.next());
@@ -705,7 +809,9 @@ public class WSDL2Ws
                 SymTabEntry entry = (SymTabEntry) v.elementAt(i);
 
                 if (entry instanceof ServiceEntry)
+                {
                     return (ServiceEntry) entry;
+                }
             }
         }
         throw new WrapperFault("the service does not exists");
@@ -743,8 +849,9 @@ public class WSDL2Ws
         
         // Do not add types which are not used in the wsdl
         if (!type.isReferenced())
+        {
             return null;
-        
+        }
         if (WSDL2Ws.verbose && !typeMap.isSimpleType(type.getQName()))
             System.out.println("Attempting to create type: " + type.getQName());
         
@@ -769,11 +876,15 @@ public class WSDL2Ws
         { 
             /* it seems that this is an array */
             if (null == type.getRefType())
+            {
                 throw new WrapperFault("Array type found without a Ref type");
+            }
             
             QName qn = type.getRefType().getQName();
             if (null == qn)
+            {
                 throw new WrapperFault("Array type found without a Ref type");
+            }
             
             if (CUtils.isBasicType(qn))
                 return null;
@@ -846,7 +957,9 @@ public class WSDL2Ws
                 //types declared as simpleType
                 restrictdata = CUtils.getRestrictionBaseAndValues(node, symbolTable);
                 if (restrictdata != null)
+                {
                     typedata.setRestrictiondata(restrictdata);
+                }
             }
             
             // There can be attributes in this extended basic type
@@ -854,13 +967,33 @@ public class WSDL2Ws
             Vector attributes =
                 CSchemaUtils.getContainedAttributeTypes(type.getNode(), symbolTable);
             if (attributes != null)
+            {
+                if( attributes.get(0).getClass() == CElementDecl.class)
+                {
+	                for (int j = 0; j < attributes.size(); j++)
+	                {
+	                    CElementDecl ed = (CElementDecl) attributes.get(j);
+	                    
+	                    if( ed.isRestriction())
+	                    {
+	                        typedata.setRestriction( true);
+	                        typedata.setRestrictionBase( ed.getRestrictionBase());
+	                        typedata.setRestrictionEnumeration( ed.getRestrictionEnumeration());
+	                        typedata.setRestrictionPattern( ed.getRestrictionPattern());
+	                    }
+	                }
+                }
+                else
+                {
                 for (int j = 0; j < attributes.size(); j += 2)
                 {
                     newSecondaryType = createTypeInfo(((TypeEntry) attributes.get(j)).getQName(), targetLanguage);
                     typedata.addRelatedType(newSecondaryType);
                     typedata.setTypeForAttributeName(
                         ((QName) attributes.get(j + 1)).getLocalPart(), newSecondaryType);
+                    }
                 }
+            }
         }
         else if (type instanceof CollectionType)
         {
@@ -956,6 +1089,22 @@ public class WSDL2Ws
                                                     true,
                                                     targetLanguage);
                             }
+	                                // vvv FJP - 17667
+	                                // FJP - Check if element is an extension or restriction
+	                                else if( elem.isRestriction())
+	                                { // 8 
+	                                    typedata.setRestriction( true);
+	                                    typedata.setRestrictionBase( elem.getRestrictionBase());
+	                                    typedata.setRestrictionEnumeration(elem.getRestrictionEnumeration());
+	                                    typedata.setRestrictionPattern( elem.getRestrictionPattern());
+	
+	                                    eleinfo = new ElementInfo( elem.getName(),
+	                                            				   new Type( CUtils.anyTypeQname,
+	                                            				           	 CUtils.anyTypeQname.getLocalPart(),
+	                                            				           	 true,
+	                                            				           	 targetLanguage));
+	                                } // 8
+	                                // ^^^ FJP - 17667
                             else
                             {
                                 QName typeName = elem.getType().getQName();
@@ -1036,7 +1185,9 @@ public class WSDL2Ws
 
         Type type = this.typeMap.getType(qname);
         if (type == null)
+        {
             throw new WrapperFault("unregistered type " + qname + " referred");
+        }
         ParameterInfo parainfo = new ParameterInfo(type, part.getName());
         parainfo.setElementName(part.getElementName());
         return parainfo;
@@ -1045,8 +1196,12 @@ public class WSDL2Ws
     private MethodInfo getMethodInfoByName(String name) throws WrapperFault
     {
         for (int i = 0; i < methods.size(); i++)
+        {
             if (((MethodInfo) methods.get(i)).getMethodname().equals(name))
+            {
                 return (MethodInfo) methods.get(i);
+            }
+        }
         
         throw new WrapperFault("binding and the port type do not match");
     }
@@ -1070,9 +1225,11 @@ public class WSDL2Ws
         // get the main types
         Collection types = symbolTable.getTypeIndex().values();
         Iterator typeIterator = types.iterator();   
+        
         while(typeIterator.hasNext())
         {
             Object highLevelType = typeIterator.next();
+            
             if(!(highLevelType instanceof BaseType))
             {
                 DefinedType type = (DefinedType)highLevelType;

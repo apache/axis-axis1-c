@@ -24,6 +24,7 @@
 package org.apache.axis.wsdl.wsdl2ws;
 
 import java.util.Hashtable;
+import java.util.Iterator;
 import javax.xml.namespace.QName;
 import java.util.Vector;
 import java.lang.reflect.Array;
@@ -35,7 +36,9 @@ import org.w3c.dom.NodeList;
 import org.apache.axis.wsdl.symbolTable.TypeEntry;
 import javax.xml.rpc.holders.BooleanHolder;
 import org.apache.axis.wsdl.symbolTable.SchemaUtils;
+import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.TypeMap;
+import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
 public class CUtils 
 {
@@ -1133,5 +1136,58 @@ public class CUtils
         
         return sNew;
     }
+    // vvv FJP - 17667
+    public static Type findBaseTypeOfRestriction( Type type, WebServiceContext wscontext)
+    {
+        // FJP - Find base type of the restricted type.
+        Type   restType = type;
+        String restBaseType = null;
+        int    restBaseCount = 10;
+        String restBaseClass = null;
+        
+        while( restType != null && restBaseClass == null && restBaseCount > 0)
+        {
+	        restBaseType = restType.getRestrictionBase();
+	        restBaseType = restBaseType.substring( restBaseType.indexOf( ":") + 1);
+	        restBaseCount--;
+	        // Is the restBaseType as base type?
+	        restBaseClass = CUtils.getclass4qname( new QName( WrapperConstants.SOAPENC_NAMESPACE, restBaseType));
+
+	        while( restBaseClass == null && restType != null)
+	        {
+		        // Find the type in the type list.
+	            Iterator theBaseTypes = wscontext.getTypemap().getTypes().iterator();
+	            
+	            restType = null;
+	            
+	            while( theBaseTypes.hasNext())
+	            {
+	                Type aType = (Type) theBaseTypes.next();
+	                
+	                if( aType.getName().getLocalPart().equals( restBaseType))
+	                {
+	                    restType = aType;
+				        restBaseType = restType.getRestrictionBase();
+				        restBaseType = restBaseType.substring( restBaseType.indexOf( ":") + 1);
+	                    restBaseClass = CUtils.getclass4qname( new QName( WrapperConstants.SOAPENC_NAMESPACE, restBaseType));
+	                    break;
+	                }
+	            }
+            }
+        }
+
+        return restType;
+    }
+    // ^^^ FJP - 17667
+
+    // vvv FJP - 17667
+    public static String getBaseTypeOfRestrictionAsString( Type type)
+    {
+        String restBaseType = type.getRestrictionBase();
+        restBaseType = restBaseType.substring( restBaseType.indexOf( ":") + 1);
+        
+        return CUtils.getclass4qname( new QName( WrapperConstants.SOAPENC_NAMESPACE, restBaseType));
+    }
+    // ^^^ FJP - 17667
 }
 
