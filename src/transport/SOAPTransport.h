@@ -200,6 +200,13 @@ AXIS_CPP_NAMESPACE_START
 class SOAPTransport : public AxisIOStream
 {
 public:
+    SOAPTransport()
+    {
+        m_pcEndpointUri = NULL;
+        m_pcUsername    = NULL;
+        m_pcPassword    = NULL;        
+    }
+    
     virtual ~SOAPTransport()
     {
         if (m_pcUsername)
@@ -522,11 +529,8 @@ public:
     */
     void setUsername(const char* pcUsername)
     {
-        if (m_pcUsername)
-        {
-            delete[]m_pcUsername;
-            m_pcUsername = NULL;
-        }
+        delete [] m_pcUsername;
+        m_pcUsername = NULL;
 
         if (!pcUsername)
             return;
@@ -537,11 +541,8 @@ public:
     
     void setPassword (const char *pcPassword)
     {
-        if (m_pcPassword)
-        {
-            delete[]m_pcPassword;
-            m_pcPassword = NULL;
-        }
+        delete [] m_pcPassword;
+        m_pcPassword = NULL;
 
         if (!pcPassword)
             return;
