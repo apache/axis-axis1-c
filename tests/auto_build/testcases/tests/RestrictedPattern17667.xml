@@ -2,7 +2,7 @@
   <name>RestrictedPattern17667</name>
   <description>RestrictedPattern17667</description>
   <clientLang>cpp</clientLang>
-  <clientCode>RestrictedPattern17667client.cpp</clientCode>
+  <clientCode>RestrictedPattern17667Client.cpp</clientCode>
   <wsdl>RestrictedPattern17667.wsdl</wsdl>
   <expected>
     <output>
