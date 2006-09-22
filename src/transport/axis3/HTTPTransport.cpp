@@ -344,24 +344,21 @@ const char * HTTPTransport::getHTTPHeaders()
     m_strHeaderBytesToSend = m_strHTTPMethod + " ";
 
     if (m_bUseProxy)
-    {
         m_strHeaderBytesToSend += url.getURL ();
-        m_strHeaderBytesToSend += " ";
-        m_strHeaderBytesToSend += m_strHTTPProtocol;
-        m_strHeaderBytesToSend += "\r\nHost: ";
-        m_strHeaderBytesToSend += m_strProxyHost;
-        uiPort = m_uiProxyPort;
-    }
     else
-    {
         m_strHeaderBytesToSend += url.getResource ();
-        m_strHeaderBytesToSend += " ";
-        m_strHeaderBytesToSend += m_strHTTPProtocol;
-        m_strHeaderBytesToSend += "\r\nHost: ";
-        m_strHeaderBytesToSend += url.getHostName ();
-        uiPort = url.getPort();
-    }
 
+    m_strHeaderBytesToSend += " ";
+    m_strHeaderBytesToSend += m_strHTTPProtocol;
+
+    // The "Host:" HTTP request header should specify the Internet host and port number of 
+    // the resource being requested, as obtained from the original URI given by the user or 
+    // referring resource. 
+    
+    m_strHeaderBytesToSend += "\r\nHost: ";
+    m_strHeaderBytesToSend += url.getHostName ();
+    uiPort = url.getPort();
+    
     sprintf(buff, ":%u\r\n", uiPort);
     m_strHeaderBytesToSend += buff;
 
