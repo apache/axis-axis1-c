@@ -766,14 +766,19 @@ public class BeanParamWriter extends ParamCFileWriter
         writer.write("\t\tmemset(pTemp, 0, sizeof(" + classname + "));\n");
         writer.write("\n");
         
+        // The only items in the structure that we pre-allocate is for the container structure
+        // for arrays.  All other variables and the actual element array that gets put into 
+        // the container structure for arrays are created by the corresponding deserializer.
         for (int i = 0; i < attribs.length; i++)
         {
-            if (attribs[i].isSimpleType() || attribs[i].getType().isSimpleType())
+            if (attribs[i].isArray())
             {
-                if (attribs[i].isArray())
-                {
-                    writeNewline = true;
-                    
+                writeNewline = true;
+                
+                // If simple type array we call the axiscAxisNew() API; otherwise, we 
+                // invoke the dynamically generated Axis_Create_xxxx() function. 
+	            if (attribs[i].isSimpleType() || attribs[i].getType().isSimpleType())
+	            {
                     String baseTypeName = null;
                     
                     if (!attribs[i].isSimpleType() && attribs[i].getType().isSimpleType())
@@ -789,23 +794,14 @@ public class BeanParamWriter extends ParamCFileWriter
                     writer.write("\t\tpTemp->" + attribs[i].getParamNameAsMember() + "->m_Type = " 
                             + CUtils.getXSDTypeForBasicType(baseTypeName) + ";\n");
                 }
+	            else
+	            {
+	                    writer.write("\t\tpTemp->" + attribs[i].getParamName() + " = "
+	                            + "Axis_Create_" + attribs[i].getTypeName() + "_Array(0);\n");
+	            }     
             }
-            else
-            {
-                writeNewline = true;
-                
-                if (attribs[i].isArray())
-                {
-                    writer.write("\t\tpTemp->" + attribs[i].getParamName() + " = "
-                            + "Axis_Create_" + attribs[i].getTypeName() + "_Array(0);\n");
-                }
-                else if (!attribs[i].isAnyType())
-                {
-                    writer.write("\t\tpTemp->" + attribs[i].getParamName() + " = "
-                            + "Axis_Create_" + attribs[i].getTypeName() + "(0);\n");                   
-                }
-            }            
         }
+        
         if (writeNewline)
             writer.write("\n");
         writer.write("\t\treturn pTemp;\n");
