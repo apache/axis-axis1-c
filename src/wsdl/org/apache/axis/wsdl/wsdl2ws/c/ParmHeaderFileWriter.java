@@ -129,7 +129,22 @@ public class ParmHeaderFileWriter extends ParamWriter
             writer.write("/* ********************************************************************* */\n");
             writer.write("/* --- Simple types and enumerations                                 --- */\n");
             writer.write("/* ********************************************************************* */\n");
-            writer.write("\n");                
+            writer.write("\n");  
+            
+            // Need to determine what to use for enumeration identifiers.  That is, if a string
+            // enumeration value is "foobar", then we can generate an enumerator identifer of 
+            // [type]_foobar.  However, if the value is "foo bar", then we are forced to generate
+            // identifiers in the following format: [type]_ENUM[#], where [#] is a number starting
+            // at 1. We need to go through all the enumerators to determine what to do.
+            boolean validEnumIdentifier = true;
+            for (int i = 1; i < restrictionData.size(); i++)
+            {
+                QName value = (QName) restrictionData.elementAt(i);
+                if ("enumeration".equals(value.getLocalPart()))
+                    validEnumIdentifier = CUtils.isValidCIdentifier(value.getNamespaceURI(), false);
+                if (!validEnumIdentifier)
+                    break;
+            }
             
             String langTypeName = CUtils.getclass4qname(baseType);
             writer.write("typedef ");
@@ -146,9 +161,12 @@ public class ParmHeaderFileWriter extends ParamWriter
                     QName value = (QName) restrictionData.elementAt(i);
                     if ("enumeration".equals(value.getLocalPart()))
                     {
-                        writer.write("static const " + classname + " "
-                                + classname + "_" + value.getNamespaceURI()
-                                + " = \"" + value.getNamespaceURI() + "\";\n");
+                        writer.write("static const " + classname + " " + classname + "_");
+                        if (validEnumIdentifier)
+                            writer.write(value.getNamespaceURI());
+                        else
+                            writer.write("ENUM" + i);
+                        writer.write(" = \"" + value.getNamespaceURI() + "\";\n");
                     } 
                     else if ("maxLength".equals(value.getLocalPart()))
                     {
@@ -221,9 +239,12 @@ public class ParmHeaderFileWriter extends ParamWriter
                     QName value = (QName) restrictionData.elementAt(i);
                     if ("enumeration".equals(value.getLocalPart()))
                     {
-                        writer.write("static const " + classname + " "
-                                + classname + "_" + value.getNamespaceURI()
-                                + " = \"" + value.getNamespaceURI() + "\";\n");
+                        writer.write("static const " + classname + " " + classname + "_");
+                        if (validEnumIdentifier)
+                            writer.write(value.getNamespaceURI());
+                        else
+                            writer.write("ENUM" + i);
+                        writer.write(" = \"" + value.getNamespaceURI() + "\";\n");
                     }
                 }
             }

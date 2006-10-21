@@ -1123,6 +1123,32 @@ public class CUtils
         return newName;
     }
     
+    /**
+     * This routine is used to determine if a string can be used as an identifier
+     * in the C or C++ language. Currently used to determine if enumerator value can 
+     * be used as part of an identifier. 
+     */
+    public static boolean isValidCIdentifier(String id, boolean checkForNumericFirstChar)
+    {    
+        if (id == null || id.equals(""))
+            return false;
+        
+        if (checkForNumericFirstChar)
+            if (id.charAt(0) >= '0' && id.charAt(0) <= '9')
+                return false;
+        
+        // Check for invalid characters
+        for(int i=0; i < Array.getLength(invalidCChars); i++)
+            if (id.indexOf(invalidCChars[i]) != -1)
+                return false;
+        
+        // Check for blanks
+        if (id.indexOf(' ') != -1)
+            return false;
+        
+        return true;
+    }
+    
     public static String removeStartingCharFromString(String s, char c)
     {
         String sNew = s;
@@ -1147,32 +1173,32 @@ public class CUtils
         
         while( restType != null && restBaseClass == null && restBaseCount > 0)
         {
-	        restBaseType = restType.getRestrictionBase();
-	        restBaseType = restBaseType.substring( restBaseType.indexOf( ":") + 1);
-	        restBaseCount--;
-	        // Is the restBaseType as base type?
-	        restBaseClass = CUtils.getclass4qname( new QName( WrapperConstants.SOAPENC_NAMESPACE, restBaseType));
+            restBaseType = restType.getRestrictionBase();
+            restBaseType = restBaseType.substring( restBaseType.indexOf( ":") + 1);
+            restBaseCount--;
+            // Is the restBaseType as base type?
+            restBaseClass = CUtils.getclass4qname( new QName( WrapperConstants.SOAPENC_NAMESPACE, restBaseType));
 
-	        while( restBaseClass == null && restType != null)
-	        {
-		        // Find the type in the type list.
-	            Iterator theBaseTypes = wscontext.getTypemap().getTypes().iterator();
-	            
-	            restType = null;
-	            
-	            while( theBaseTypes.hasNext())
-	            {
-	                Type aType = (Type) theBaseTypes.next();
-	                
-	                if( aType.getName().getLocalPart().equals( restBaseType))
-	                {
-	                    restType = aType;
-				        restBaseType = restType.getRestrictionBase();
-				        restBaseType = restBaseType.substring( restBaseType.indexOf( ":") + 1);
-	                    restBaseClass = CUtils.getclass4qname( new QName( WrapperConstants.SOAPENC_NAMESPACE, restBaseType));
-	                    break;
-	                }
-	            }
+            while( restBaseClass == null && restType != null)
+            {
+                // Find the type in the type list.
+                Iterator theBaseTypes = wscontext.getTypemap().getTypes().iterator();
+                
+                restType = null;
+                
+                while( theBaseTypes.hasNext())
+                {
+                    Type aType = (Type) theBaseTypes.next();
+                    
+                    if( aType.getName().getLocalPart().equals( restBaseType))
+                    {
+                        restType = aType;
+                        restBaseType = restType.getRestrictionBase();
+                        restBaseType = restBaseType.substring( restBaseType.indexOf( ":") + 1);
+                        restBaseClass = CUtils.getclass4qname( new QName( WrapperConstants.SOAPENC_NAMESPACE, restBaseType));
+                        break;
+                    }
+                }
             }
         }
 
