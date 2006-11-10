@@ -243,8 +243,7 @@ class HTTPTransport:public SOAPTransport
   /**
     * Vector to hold response HTTP header key/value pairs
     */
-    std::vector < std::pair < std::string,
-	std::string > >m_vResponseHTTPHeaders;
+    std::vector < std::pair < std::string, std::string > >m_vResponseHTTPHeaders;
 
   /**
     * Channel used for communication

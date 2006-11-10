@@ -559,7 +559,6 @@ getBytes( char * pcBuffer, int * piSize) throw (AxisException, HTTPTransportExce
 
                         // From the header,extract such things as chunking, message length, etc.
                         processHTTPHeader();
-
                     }
                     while( m_iResponseHTTPStatusCode == 100);
 

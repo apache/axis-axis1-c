@@ -31,8 +31,8 @@
 #include <axis/GDefine.hpp>
 #include "IChannel.hpp"
 
-#define CREATE_FUNCTION3			"CreateInstance"
-#define DELETE_FUNCTION3			"DestroyInstance"
+#define CREATE_FUNCTION3            "CreateInstance"
+#define DELETE_FUNCTION3            "DestroyInstance"
 
 typedef int (* CREATE_OBJECT3) (IChannel** inst);
 typedef int (* DELETE_OBJECT3) (IChannel* inst);
@@ -42,29 +42,29 @@ AXIS_CPP_NAMESPACE_START
 class ChannelLibrary
 {
 public:
-	DLHandler m_Library;
-	CREATE_OBJECT3 m_Create;
-	DELETE_OBJECT3 m_Delete;
+    DLHandler m_Library;
+    CREATE_OBJECT3 m_Create;
+    DELETE_OBJECT3 m_Delete;
 };
 
 class ChannelFactory  
 {
 public:
-	ChannelFactory();
-	virtual ~ChannelFactory();
-	virtual IChannel * LoadChannelLibrary( g_ChannelType eChannelType, const char * pcLibraryName);
-	static void preloadChannels(char *unsecChannel, char *secChannel);
-	static void unloadChannels();
-	virtual IChannel *createChannel(g_ChannelType eChannelType);
+    ChannelFactory();
+    virtual ~ChannelFactory();
+    virtual IChannel * LoadChannelLibrary( g_ChannelType eChannelType, const char * pcLibraryName);
+    static void preloadChannels(char *unsecChannel, char *secChannel);
+    static void unloadChannels();
+    virtual IChannel *createChannel(g_ChannelType eChannelType);
 
 private:
-	static void preloadChannel(g_ChannelType eChannelType, const char *pcLibraryName);
-	virtual bool UnLoadChannelLibrary( g_ChannelType eChannelType);
+    static void preloadChannel(g_ChannelType eChannelType, const char *pcLibraryName);
+    virtual bool UnLoadChannelLibrary( g_ChannelType eChannelType);
 
-	char *					m_pLibName[(int) MaxChannelCount];
-	DLHandler				m_LibHandler[(int) MaxChannelCount];
-	IChannel *				m_pChannel[(int) MaxChannelCount];
-	static ChannelLibrary	*m_ChannelLibrary[(int) MaxChannelCount];
+    char *                    m_pLibName[(int) MaxChannelCount];
+    DLHandler                 m_LibHandler[(int) MaxChannelCount];
+    IChannel *                m_pChannel[(int) MaxChannelCount];
+    static ChannelLibrary    *m_ChannelLibrary[(int) MaxChannelCount];
 };
 AXIS_CPP_NAMESPACE_END
 #endif 

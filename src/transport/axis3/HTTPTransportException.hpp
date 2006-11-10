@@ -39,7 +39,7 @@ public:
                                                                                                                              
 private:
     string getMessageForExceptionCode(const int iExceptionCode);
-	std::string m_sMessageForExceptionCode;
+    std::string m_sMessageForExceptionCode;
 };
 
 #endif

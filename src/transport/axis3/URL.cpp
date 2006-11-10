@@ -29,8 +29,11 @@
 
 using namespace std;
 
-URL::URL()
-    : m_Protocol(unknown), m_Port(0), m_URL("")
+URL::
+URL():
+ m_Protocol(unknown), 
+ m_Port(0), 
+ m_URL("")
 {
     m_Host = "";
     m_Path = "";
@@ -39,7 +42,8 @@ URL::URL()
     m_User = "";
 }
 
-URL::URL(std::string url)
+URL::
+URL(std::string url)
 {
     m_URL = url;
     if(isascii((int)url.at(0)))
@@ -53,12 +57,13 @@ URL::URL(std::string url)
     }
 }
 
-URL::~URL()
+URL::
+~URL()
 {
-
 }
 
-void URL::setProtocol(std::string prot)
+void URL::
+setProtocol(std::string prot)
 {
     m_Port = 0;
     if(prot == "http")
@@ -77,7 +82,6 @@ void URL::setProtocol(std::string prot)
     }
     else if( prot == "https")
     {
-
         m_Protocol = https;
         m_Port = HTTPS_PORT;
     }
@@ -86,7 +90,8 @@ void URL::setProtocol(std::string prot)
 
 }
 
-void URL::setURL(const char* cpURL)
+void URL::
+setURL(const char* cpURL)
 {
     m_URL = std::string(cpURL);
     if(isascii((int)m_URL.at(0)))
@@ -100,7 +105,8 @@ void URL::setURL(const char* cpURL)
     }
 }
 
-const char* URL::getURL()
+const char* URL::
+getURL()
 { 
     if (m_URL.length() > 0 )
         return m_URL.c_str();
@@ -108,7 +114,8 @@ const char* URL::getURL()
         return NULL;
 }
 
-void URL::ParseURL(std::string url)
+void URL::
+ParseURL(std::string url)
 {
     std::string::size_type begpos, pos;
 
@@ -127,8 +134,7 @@ void URL::ParseURL(std::string url)
             {
                 if(pos == std::string::npos) /* only host name found */
                 {
-                    //if(m_Host.empty())
-                        m_Host = url;
+                    m_Host = url;
                     if (key == "?") /* found path */
                         m_Path = url.substr(begpos - 1);
                     break;
@@ -139,8 +145,7 @@ void URL::ParseURL(std::string url)
                 switch(url.at(pos))
                 {
                     case ':': 
-                        //if(m_Host.empty())
-                            m_Host = url.substr(begpos, pos - begpos);
+                        m_Host = url.substr(begpos, pos - begpos);
                         pos++;
                         begpos = pos;
                         key = "/?"; 
@@ -150,10 +155,8 @@ void URL::ParseURL(std::string url)
                     case '/':
                         if (key == "/?") /* found port number */
                         {
-                            m_Port = atoi(url.substr(begpos, 
-                                pos - begpos + 1).c_str());
-                            //if(m_Host.empty())
-                                m_Host = url.substr(0, begpos - 1);
+                            m_Port = atoi(url.substr(begpos, pos - begpos + 1).c_str());
+                            m_Host = url.substr(0, begpos - 1);
                         }
                         else
                             m_Host = url.substr(0, pos);

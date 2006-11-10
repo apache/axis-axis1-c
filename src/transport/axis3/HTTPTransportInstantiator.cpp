@@ -42,9 +42,7 @@ extern "C"
     {
         *inst = new HTTPTransport ();
         if (*inst)
-        {
             return AXIS_SUCCESS;
-        }
         return AXIS_FAIL;
     }
 
@@ -54,7 +52,6 @@ extern "C"
         if (inst)
         {
             delete inst;
-
             return AXIS_SUCCESS;
         }
         return AXIS_FAIL;
@@ -72,13 +69,13 @@ extern "C"
     STORAGE_CLASS_INFO void uninitializeLibrary (void)
     {
         // Do uninit actions
-		ChannelFactory::unloadChannels();
+        ChannelFactory::unloadChannels();
 
     }
 
-	STORAGE_CLASS_INFO void preloadChannels(char *unsecChannel, char *secChannel)
-	{
-		ChannelFactory::preloadChannels(unsecChannel, secChannel);
-	}
+    STORAGE_CLASS_INFO void preloadChannels(char *unsecChannel, char *secChannel)
+    {
+        ChannelFactory::preloadChannels(unsecChannel, secChannel);
+    }
 }
 

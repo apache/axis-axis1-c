@@ -13,8 +13,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "HTTPChannel.hpp"
+// !!! Must be first thing in file !!!
 #include "../../../platforms/PlatformAutoSense.hpp"
+
+#include "HTTPChannel.hpp"
 #include "../../../common/AxisTrace.h"
 
 /**
@@ -23,7 +25,8 @@
  * HTTPChannel constuctor
  */
 
-HTTPChannel::HTTPChannel()
+HTTPChannel::
+HTTPChannel()
 {
     m_LastError = "No Errors";
 
@@ -39,7 +42,7 @@ HTTPChannel::HTTPChannel()
     m_lTimeoutSeconds = 0;
 #endif
 
-	bNoExceptionOnForceClose = false;
+    bNoExceptionOnForceClose = false;
 
     if( !StartSockets())
     {
@@ -54,14 +57,13 @@ HTTPChannel::HTTPChannel()
  *
  */
 
-HTTPChannel::~HTTPChannel()
+HTTPChannel::
+~HTTPChannel()
 {
     // If the socket value is not invalid, then close the socket before
     // deleting the Channel object.
     if( m_Sock != INVALID_SOCKET)
-    {
         CloseChannel();
-    }
 
     StopSockets();
 }
@@ -74,7 +76,8 @@ HTTPChannel::~HTTPChannel()
  * @return char * containing the URL associated with the open socket
  */
 
-const char * HTTPChannel::getURL()
+const char * HTTPChannel::
+getURL()
 {
     return m_URL.getURL();
 }
@@ -87,7 +90,8 @@ const char * HTTPChannel::getURL()
  * @param const char * containing the new URL
  */
 
-void HTTPChannel::setURL( const char * cpURL)
+void HTTPChannel::
+setURL( const char * cpURL)
 {
     m_URL.setURL( cpURL);
 }
@@ -100,7 +104,8 @@ void HTTPChannel::setURL( const char * cpURL)
  * @return URL & current URL object
  */
 
-URL & HTTPChannel::getURLObject()
+URL & HTTPChannel::
+getURLObject()
 {
     return m_URL;
 }
@@ -117,14 +122,13 @@ URL & HTTPChannel::getURLObject()
  * returned flag will only be returned on a successful outcome).
  */
 
-bool HTTPChannel::open() throw (HTTPTransportException&)
+bool HTTPChannel::
+open() throw (HTTPTransportException&)
 {
     bool    bSuccess = (bool) AXIS_FAIL;
 
     if( m_Sock != INVALID_SOCKET)
-    {
         CloseChannel();
-    }
 
     m_LastError = "No Errors";
 
@@ -146,12 +150,11 @@ bool HTTPChannel::open() throw (HTTPTransportException&)
  * of closing the channel.
  */
 
-bool HTTPChannel::close()
+bool HTTPChannel::
+close()
 {
     if( m_Sock != INVALID_SOCKET)
-    {
         CloseChannel();
-    }
 
     m_Sock = INVALID_SOCKET;
 
@@ -166,7 +169,8 @@ bool HTTPChannel::close()
  * @return string containing last error.
  */
 
-const std::string & HTTPChannel::GetLastErrorMsg()
+const std::string & HTTPChannel::
+GetLastErrorMsg()
 {
     return m_LastError;
 }
@@ -186,7 +190,8 @@ const std::string & HTTPChannel::GetLastErrorMsg()
  * recieved message.
  */
 
-const IChannel & HTTPChannel::operator >> (char * msg)
+const IChannel & HTTPChannel::
+operator >> (char * msg)
 {
     if (INVALID_SOCKET == m_Sock)
     {
@@ -242,17 +247,16 @@ const IChannel & HTTPChannel::operator >> (char * msg)
 
         CloseChannel();
 
-		if( !bNoExceptionOnForceClose)
-		{
-	        throw HTTPTransportException( SERVER_TRANSPORT_INPUT_STREAMING_ERROR, 
-		                                  (char *) m_LastError.c_str());
-		}
+        if( !bNoExceptionOnForceClose)
+        {
+            throw HTTPTransportException( SERVER_TRANSPORT_INPUT_STREAMING_ERROR, 
+                                          (char *) m_LastError.c_str());
+        }
     }
 
     if( nByteRecv)
     {
         buf[nByteRecv] = '\0';
-        // got a part of the message, so add to form
         memcpy(msg, buf, nByteRecv + 1);
     }
 
@@ -271,7 +275,8 @@ const IChannel & HTTPChannel::operator >> (char * msg)
  * message to be transmitted.
  */
 
-const IChannel & HTTPChannel::operator << (const char * msg)
+const IChannel & HTTPChannel::
+operator << (const char * msg)
 {
     // Check that the Tx/Rx sockets are valid (this will have been done if the
     // application has called the open method first.
@@ -316,7 +321,8 @@ const IChannel & HTTPChannel::operator << (const char * msg)
  * @param long containing timeout value in seconds
  */
 
-void HTTPChannel::setTimeout( long lSeconds)
+void HTTPChannel::
+setTimeout( long lSeconds)
 {
     m_lTimeoutSeconds = lSeconds;
 }
@@ -329,7 +335,8 @@ void HTTPChannel::setTimeout( long lSeconds)
  * @param unsigned int containing the new server socket.
  */
 
-void HTTPChannel::setSocket( unsigned int uiNewSocket)
+void HTTPChannel::
+setSocket( unsigned int uiNewSocket)
 {
     m_Sock = uiNewSocket;
 }
@@ -355,7 +362,8 @@ void HTTPChannel::setSocket( unsigned int uiNewSocket)
  * @return boolean flag indicating success of the alteration. 
  */
 
-bool HTTPChannel::setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char * value)
+bool HTTPChannel::
+setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char * value)
 {
     bool    bSuccess = false;
 
@@ -381,7 +389,8 @@ bool HTTPChannel::setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, co
  * @return const char * contains the value for the requested type.
  */
 
-const char * HTTPChannel::getTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type)
+const char * HTTPChannel::
+getTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type)
 {
     return NULL;
 }
@@ -395,7 +404,8 @@ const char * HTTPChannel::getTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE 
  *        unsigned int containing the proxy port value.
  */
 
-void HTTPChannel::setProxy( const char * pcProxyHost, unsigned int uiProxyPort)
+void HTTPChannel::
+setProxy( const char * pcProxyHost, unsigned int uiProxyPort)
 {
     m_strProxyHost = pcProxyHost;
     m_uiProxyPort = uiProxyPort;
@@ -416,7 +426,8 @@ void HTTPChannel::setProxy( const char * pcProxyHost, unsigned int uiProxyPort)
  * @return 
  */
 
-bool HTTPChannel::OpenChannel()
+bool HTTPChannel::
+OpenChannel()
 {
     // This method is common to all channel implementations
     bool    bSuccess = (bool) AXIS_FAIL;
@@ -562,7 +573,7 @@ bool HTTPChannel::OpenChannel()
 #ifdef __OS400__
     if( (pHostEntry = gethostbyname( (char *)host)))
 #else
-	if( (pHostEntry = gethostbyname( host)))
+    if( (pHostEntry = gethostbyname( host)))
 #endif
     {
         svAddr.sin_addr.s_addr = ((struct in_addr *) pHostEntry->h_addr)->s_addr;
@@ -573,7 +584,7 @@ bool HTTPChannel::OpenChannel()
 #ifdef __OS400__
         svAddr.sin_addr.s_addr = inet_addr( (char *)host);
 #else
-		svAddr.sin_addr.s_addr = inet_addr( host);
+        svAddr.sin_addr.s_addr = inet_addr( host);
 #endif
     }
 
@@ -586,8 +597,7 @@ bool HTTPChannel::OpenChannel()
         // Before we do anything else get the last error message;
         long dw = GETLASTERROR
         CloseChannel();
-
-            
+           
         string* message = PLATFORM_GET_ERROR_MESSAGE(dw);
 
         char fullMessage[600];
@@ -638,7 +648,8 @@ bool HTTPChannel::OpenChannel()
  * @return 
  */
 
-void HTTPChannel::CloseChannel()
+void HTTPChannel::
+CloseChannel()
 {
     if( INVALID_SOCKET != m_Sock) // Check if socket already closed : AXISCPP-185
     {
@@ -660,7 +671,8 @@ void HTTPChannel::CloseChannel()
  * @return 
  */
 
-bool HTTPChannel::StartSockets()
+bool HTTPChannel::
+StartSockets()
 {
     bool    bSuccess = false;
 #ifdef WIN32
@@ -717,7 +729,8 @@ bool HTTPChannel::StartSockets()
  * @return 
  */
 
-void HTTPChannel::StopSockets()
+void HTTPChannel::
+StopSockets()
 {
 #ifdef WIN32
     WSACleanup();
@@ -732,7 +745,8 @@ void HTTPChannel::StopSockets()
  * @return int 
  */
 
-int HTTPChannel::applyTimeout()
+int HTTPChannel::
+applyTimeout()
 {
     fd_set          set;
     struct timeval  timeout;
@@ -749,7 +763,8 @@ int HTTPChannel::applyTimeout()
     return select( FD_SETSIZE, &set, NULL, NULL, &timeout);
 }
 
-void HTTPChannel::ReportError( char * szText1, char * szText2)
+void HTTPChannel::
+ReportError( char * szText1, char * szText2)
 {
     long        dwMsg = GETLASTERROR
     string *    sMsg = PLATFORM_GET_ERROR_MESSAGE( dwMsg);
@@ -760,7 +775,8 @@ void HTTPChannel::ReportError( char * szText1, char * szText2)
     m_LastError = szMsg;
 }
 
-void HTTPChannel::closeQuietly( bool bNoExceptionOnForceClose_Update)
+void HTTPChannel::
+closeQuietly( bool bNoExceptionOnForceClose_Update)
 {
-	bNoExceptionOnForceClose = bNoExceptionOnForceClose_Update;
+    bNoExceptionOnForceClose = bNoExceptionOnForceClose_Update;
 }

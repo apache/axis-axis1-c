@@ -149,7 +149,7 @@ public:
      *       code TRANSPORT_IN_PROGRESS.
      */
     virtual AXIS_TRANSPORT_STATUS sendBytes(const char* pcSendBuffer, 
-		const void* pBufferid)=0;
+        const void* pBufferid)=0;
     /**
      * Gets a part of or full SOAP message. A Caller may call this method
      * multiple times to get parts of the SOAP message until the function
@@ -209,16 +209,8 @@ public:
     
     virtual ~SOAPTransport()
     {
-        if (m_pcUsername)
-        {
-            delete[]m_pcUsername;
-            m_pcUsername = NULL;
-        }
-        if (m_pcPassword)
-        {
-            delete[]m_pcPassword;
-            m_pcPassword = NULL;
-        }
+        delete[]m_pcUsername;
+        delete[]m_pcPassword;
     };
     /**
      * Opens a connection with the provided endpoint URI. The connection
@@ -250,8 +242,7 @@ public:
      *        for predefined transport property types.
      * @param pcValue Transport property value to be set.
      */
-    virtual int setTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE eType,
-    const char* pcValue)=0;
+    virtual int setTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE eType, const char* pcValue)=0;
     /**
      * @brief Gets a predefined transport property in the arrived message
      *
@@ -260,8 +251,7 @@ public:
      * @return Value of the transport property if available. Returns null
      *         if unavailable.
      */
-    virtual const char* getTransportProperty(
-    AXIS_TRANSPORT_INFORMATION_TYPE eType)=0;
+    virtual const char* getTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE eType)=0;
     /**
      * Sets any transport property to be included in the outgoing message.
      * This transport property is not persistent in the transport layer.
@@ -276,7 +266,7 @@ public:
      * @brief Gets any transport property in the arrived message
      *
      * @param pcKey The key of the transport property to get.
-   * @param response gets a property from the response message when true and
+     * @param response gets a property from the response message when true and
      *                 from the send message when false
      * @return Value of the transport property if available. Returns null
      *         if unavailable.
@@ -313,11 +303,11 @@ public:
      * @return The attachment if available. Returns null if the attachment
      *         corresponding to the pcAttachmentid is not found.
      */    
-	virtual ISoapAttachment* getAttachment(const char* pcAttachmentid)=0;
-	virtual ISoapAttachment** getAllAttachments(int *pAttchArraySize)=0;
+    virtual ISoapAttachment* getAttachment(const char* pcAttachmentid)=0;
+    virtual ISoapAttachment** getAllAttachments(int *pAttchArraySize)=0;
 
 
-	virtual char* getIncomingSOAPMimeHeaders()=0;
+    virtual char* getIncomingSOAPMimeHeaders()=0;
 
     /**
      * Sets the the remote endpoint for tranport to connect to. This URI
@@ -522,7 +512,7 @@ public:
     * Get the last channel error string from the active channel.
     * @return string - Last active channel error string.
     */
-	virtual const char * getLastChannelError() {return NULL;};
+    virtual const char * getLastChannelError() {return NULL;};
    
   /**
     * Sets the username to be used for basic authentication

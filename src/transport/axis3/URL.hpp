@@ -83,8 +83,6 @@ public:
 
     unsigned short getPort(){return m_Port;}
 
-    // other functions are not supported yet
-
 private:
 
     void ParseURL(std::string url);
