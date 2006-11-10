@@ -62,7 +62,7 @@ OtherFaultException::OtherFaultException(const OtherFaultException& copy) : Soap
 	STRINGCOPY(m_detail, copy.m_detail);
 }
 
-OtherFaultException& OtherFaultException::operator=(OtherFaultException copy)
+OtherFaultException& OtherFaultException::operator=(const OtherFaultException& copy)
 {
 	SoapFaultException::operator=(copy);
 	STRINGREPLACE(m_detail, copy.m_detail);

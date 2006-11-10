@@ -94,7 +94,7 @@ public:
      * @param other is the SOAPFaultException to be copied
      * @return reference to this
      */
-    virtual SoapFaultException& operator=(SoapFaultException other);
+    SoapFaultException& operator=(const SoapFaultException& other);
 
     /**
      * Destructor

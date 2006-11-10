@@ -73,7 +73,7 @@ SoapFaultException::SoapFaultException(const SoapFaultException& copy)
 	m_iExceptionCode = copy.m_iExceptionCode;
 }
 
-SoapFaultException& SoapFaultException::operator=(SoapFaultException copy)
+SoapFaultException& SoapFaultException::operator=(const SoapFaultException& copy)
 {
 	exception::operator=(copy);
 	STRINGREPLACE(m_code	,copy.m_code);

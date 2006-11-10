@@ -90,7 +90,7 @@ public:
      * @param other is the OtherFaultException to be copied
      * @return reference to this
      */
-    virtual OtherFaultException& operator=(OtherFaultException other);
+    OtherFaultException& operator=(const OtherFaultException& other);
 
     /**
      * Destructor
