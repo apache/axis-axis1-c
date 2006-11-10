@@ -457,8 +457,7 @@ public:
     /** Destructor */
     virtual ~AxisException() throw()
     {
-        if (m_sMessage)
-            delete [] m_sMessage;
+        delete [] m_sMessage;
     };
 
     /**
@@ -500,11 +499,8 @@ public:
       */
     void setMessage(const char* psMessage)
     {
-        if (m_sMessage)
-        {
-            delete [] m_sMessage;
-            m_sMessage = NULL;
-        }
+        delete [] m_sMessage;
+        m_sMessage = NULL;
 
         if (psMessage)
         {
