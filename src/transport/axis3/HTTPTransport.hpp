@@ -38,8 +38,6 @@
 
 AXIS_CPP_NAMESPACE_USE using namespace std;
 
-int axtoi (char *hexStg);
-
 typedef enum
 {
 	eWaitingForHTTPHeader,

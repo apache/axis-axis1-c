@@ -25,15 +25,15 @@
 #pragma warning (disable : 4101)
 #endif
 
-#include "HTTPTransport.hpp"
+// !!! This include file must be first thing in file !!!
 #include "../../platforms/PlatformAutoSense.hpp"
+
+#include "HTTPTransport.hpp"
 
 // for the basic auth encryption
 #include "../../soap/apr_base64.h"
 
 #include <stdio.h>
-// You can uncommment thisl line if you want any debug putting to stdio but PLEASE ensure you comment it out again before releasing.
-// #include <iostream>
 
 // =================================================================
 // In order to parse the HTTP protocol data on an ebcdic system, we
@@ -74,10 +74,13 @@
 /*
  * HTTPTransport constuctor
  */
-HTTPTransport::HTTPTransport ():m_bReopenConnection (false),
+HTTPTransport::HTTPTransport ():
+m_bReopenConnection (false),
 m_strHTTPProtocol ("HTTP/1.1"),
 m_strHTTPMethod ("POST"),
-m_strProxyHost (""), m_uiProxyPort (0), m_bUseProxy (false),
+m_strProxyHost (""), 
+m_uiProxyPort (0), 
+m_bUseProxy (false),
 m_bMaintainSession (false)
 {
     m_pcEndpointUri = NULL;
@@ -112,28 +115,17 @@ m_bMaintainSession (false)
 /*
  * HTTPTransport destructor
  */
-HTTPTransport::~HTTPTransport()
+HTTPTransport::
+~HTTPTransport()
 {
-    if( m_pcEndpointUri)
-    {
-        delete[] m_pcEndpointUri;
+    delete [] m_pcEndpointUri;
+    m_pcEndpointUri = NULL;
 
-        m_pcEndpointUri = NULL;
-    }
+    delete m_pChannelFactory;
+    m_pChannelFactory = NULL;
 
-    if( m_pChannelFactory)
-    {
-        delete m_pChannelFactory;
-
-        m_pChannelFactory = NULL;
-    }
-
-    if( m_pszRxBuffer)
-    {
-        delete [] m_pszRxBuffer;
-
-        m_pszRxBuffer = NULL;
-    }
+    delete [] m_pszRxBuffer;
+    m_pszRxBuffer = NULL;
 }
 
 /*
@@ -141,10 +133,11 @@ HTTPTransport::~HTTPTransport()
  * Everytime the endpoint changes then currently connected channel is closed
  * and a new channel connection is opened.
  *
- * @param	EndpointURI - char * to a null terminated string that holds the
- *			new URI. 
+ * @param   EndpointURI - char * to a null terminated string that holds the
+ *         new URI. 
  */
-void HTTPTransport::setEndpointUri( const char * pcEndpointUri) throw (HTTPTransportException)
+void HTTPTransport::
+setEndpointUri( const char * pcEndpointUri) throw (HTTPTransportException)
 {
     bool bUpdateURL = true;
 
@@ -218,7 +211,8 @@ void HTTPTransport::setEndpointUri( const char * pcEndpointUri) throw (HTTPTrans
  * HTTPTransport::openConnection().
  */
 
-int HTTPTransport::openConnection()
+int HTTPTransport::
+openConnection()
 {
     if( m_bReopenConnection)
     {
@@ -226,7 +220,7 @@ int HTTPTransport::openConnection()
 
         if( m_pActiveChannel->open() != AXIS_SUCCESS)
         {
-            int	iStringLength = m_pActiveChannel->GetLastErrorMsg().length() + 1;
+            int   iStringLength = m_pActiveChannel->GetLastErrorMsg().length() + 1;
             const char * pszLastError = new char[iStringLength];
 
             memcpy( (void *) pszLastError,
@@ -243,7 +237,8 @@ int HTTPTransport::openConnection()
 /*
  * HTTPTransport::closeConnection().
  */
-void HTTPTransport::closeConnection()
+void HTTPTransport::
+closeConnection()
 {
     // get ready for a new message.
     m_GetBytesState = eWaitingForHTTPHeader;
@@ -267,7 +262,8 @@ void HTTPTransport::closeConnection()
  * this will be set to TRANSPORT_FINISHED.  Otherwise, an exception will have
  * been thrown.
  */
-AXIS_TRANSPORT_STATUS HTTPTransport::flushOutput() throw (AxisException, HTTPTransportException)
+AXIS_TRANSPORT_STATUS HTTPTransport::
+flushOutput() throw (AxisException, HTTPTransportException)
 {
     char *utf8Buf = NULL; // buffer for ebcdic/utf8 conversions.
 
@@ -335,7 +331,8 @@ AXIS_TRANSPORT_STATUS HTTPTransport::flushOutput() throw (AxisException, HTTPTra
  * @return const char* Pointer to a NULL terminated character string containing
  * the HTTP header block of information.
  */
-const char * HTTPTransport::getHTTPHeaders()
+const char * HTTPTransport::
+getHTTPHeaders()
 {
     URL & url = m_pActiveChannel->getURLObject();
     unsigned short uiPort;
@@ -463,7 +460,8 @@ const char * HTTPTransport::getHTTPHeaders()
  * @return const char* Pointer to a NULL terminated character string containing
  * the HTTP method.
  */
-const char * HTTPTransport::getHTTPMethod()
+const char * HTTPTransport::
+getHTTPMethod()
 {
     return m_strHTTPMethod.c_str ();
 }
@@ -474,7 +472,8 @@ const char * HTTPTransport::getHTTPMethod()
  * @param const char* Pointer to a NULL terminated character string containing
  * the new HTTP method.
  */
-void HTTPTransport::setHTTPMethod( const char *cpMethod)
+void HTTPTransport::
+setHTTPMethod( const char *cpMethod)
 {
     m_strHTTPMethod = std::string( cpMethod);
 }
@@ -490,7 +489,8 @@ void HTTPTransport::setHTTPMethod( const char *cpMethod)
  * @return AXIS_TRANSPORT_STATUS Value to a status value (currently it will
  * always be TRANSPORT_IN_PROGRESS).
  */
-AXIS_TRANSPORT_STATUS HTTPTransport::sendBytes( const char *pcSendBuffer, const void *pBufferId)
+AXIS_TRANSPORT_STATUS HTTPTransport::
+sendBytes( const char *pcSendBuffer, const void *pBufferId)
 {
     m_strBytesToSend += std::string (pcSendBuffer);
 
@@ -508,16 +508,17 @@ AXIS_TRANSPORT_STATUS HTTPTransport::sendBytes( const char *pcSendBuffer, const 
  * @return AXIS_TRANSPORT_STATUS Value to the status o message reception
  * (TRANSPORT_FINISHED or TRANSPORT_IN_PROGRESS).
  */
-AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char * pcBuffer, int * piSize) throw (AxisException, HTTPTransportException)
+AXIS_TRANSPORT_STATUS HTTPTransport::
+getBytes( char * pcBuffer, int * piSize) throw (AxisException, HTTPTransportException)
 {
-	std::string	nextChunk = "";
+   std::string   nextChunk = "";
 
 // It is assumed that the constructor has initialised the following variables:-
-// Type			Label			Initial Value		Description
-// enum			m_eMsgState		eHTTP_Header		Message decode state.
-// int			m_iBytesLeft	0					Size of string held in m_strReceived.
-// char *		m_pszRxBuffer	new char [BUF_SIZE]	Local buffer with message read from channel.
-// std::string	m_strReceived   <uninitialised>		Contains the concatination of all unprocessed message string parts.
+// Type         Label          Initial Value      Description
+// enum         m_eMsgState    eHTTP_Header        Message decode state.
+// int          m_iBytesLeft   0                   Size of string held in m_strReceived.
+// char *       m_pszRxBuffer  new char [BUF_SIZE] Local buffer with message read from channel.
+// std::string  m_strReceived  <uninitialised>     Contains the concatination of all unprocessed message string parts.
 
 // The method getBytes has three distinct states.  These are defined as
 // follows:-
@@ -695,73 +696,72 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char * pcBuffer, int * piSize) th
  * @param const char* Value is a NULL terminated character string containing
  * the value associated with the type.
  */
-int HTTPTransport::setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char *value) throw (HTTPTransportException)
+int HTTPTransport::
+setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char *value) throw (HTTPTransportException)
 {
     const char *key = NULL;
-    int	iSuccess = AXIS_SUCCESS;
+    int   iSuccess = AXIS_SUCCESS;
 
     switch (type)
     {
         case SOAPACTION_HEADER:
-            {
-                key = "SOAPAction";
-                break;
-            }
+        {
+            key = "SOAPAction";
+            break;
+        }
 
-        case SERVICE_URI:		// need to set ?
-            {
-                break;
-            }
+        case SERVICE_URI:      // need to set ?
+        {
+            break;
+        }
 
-        case OPERATION_NAME:	// need to set ?
-            {
-                break;
-            }
+        case OPERATION_NAME:   // need to set ?
+        {
+            break;
+        }
 
         case SOAP_MESSAGE_LENGTH:
-            {
-                key = "Content-Length";	// this Axis transport handles only HTTP
-                break;
-            }
+        {
+            key = "Content-Length";   // this Axis transport handles only HTTP
+            break;
+        }
 
         case TRANSPORT_PROPERTIES:
-            {
-                if( m_pActiveChannel != NULL)
-                {
-                    m_pActiveChannel->setTransportProperty( type, value);
-                }
+        {
+            if( m_pActiveChannel != NULL)
+                m_pActiveChannel->setTransportProperty( type, value);
 
-                break;
-            }
+            break;
+        }
 
         case SECURE_PROPERTIES:
-            {
-                if( m_pActiveChannel != NULL)
-                    iSuccess = m_pActiveChannel->setSecureProperties( value);
-                
-                break;
-            }
+        {
+            if( m_pActiveChannel != NULL)
+                iSuccess = m_pActiveChannel->setSecureProperties( value);
+            
+            break;
+        }
 
         case CHANNEL_HTTP_DLL_NAME:
-            {
-                if( m_pChannelFactory != NULL)
-                    m_pNormalChannel = m_pChannelFactory->LoadChannelLibrary( UnsecureChannel, value);
+        {
+            if( m_pChannelFactory != NULL)
+                m_pNormalChannel = m_pChannelFactory->LoadChannelLibrary( UnsecureChannel, value);
 
-                break;
-            }
+            break;
+        }
 
         case CHANNEL_HTTP_SSL_DLL_NAME:
-            {
-                if( m_pChannelFactory != NULL)
-                    m_pSecureChannel = m_pChannelFactory->LoadChannelLibrary( SecureChannel, value);
+        {
+            if( m_pChannelFactory != NULL)
+                m_pSecureChannel = m_pChannelFactory->LoadChannelLibrary( SecureChannel, value);
 
-                break;
-            }
+            break;
+        }
 
         default:
-            {
-                break;
-            }
+        {
+            break;
+        }
     }
 
     if( key)
@@ -779,9 +779,10 @@ int HTTPTransport::setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, c
  * @param const char* Value is a NULL terminated character string containing
  * the value associated with the type.
  */
-int HTTPTransport::setTransportProperty( const char *pcKey, const char *pcValue) throw (HTTPTransportException)
+int HTTPTransport::
+setTransportProperty( const char *pcKey, const char *pcValue) throw (HTTPTransportException)
 {
-    if( !pcKey || !pcValue)	
+    if( !pcKey || !pcValue)   
         return AXIS_SUCCESS;
 
     bool b_KeyFound = false;
@@ -819,55 +820,56 @@ int HTTPTransport::setTransportProperty( const char *pcKey, const char *pcValue)
  * @return const char* Value is a NULL terminated character string containing
  * the value associated with the type.
  */
-const char * HTTPTransport::getTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE eType) throw (HTTPTransportException)
+const char * HTTPTransport::
+getTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE eType) throw (HTTPTransportException)
 {
     const char *pszPropValue = NULL;
 
     switch( eType)
     {
         case SOAPACTION_HEADER:
-            {
-                int iIndex = FindTransportPropertyIndex( "SOAPAction");
+        {
+            int iIndex = FindTransportPropertyIndex( "SOAPAction");
 
-                if (iIndex > -1)
-                    pszPropValue = m_vHTTPHeaders[iIndex].second.c_str();
+            if (iIndex > -1)
+                pszPropValue = m_vHTTPHeaders[iIndex].second.c_str();
 
-                break;
-            }
+            break;
+        }
 
         case SERVICE_URI:
-            {
-                break;
-            }
+        {
+            break;
+        }
 
         case OPERATION_NAME:
-            {
-                break;
-            }
+        {
+            break;
+        }
 
         case SOAP_MESSAGE_LENGTH:
-            {
-                int iIndex = FindTransportPropertyIndex( "Content-Length");
+        {
+            int iIndex = FindTransportPropertyIndex( "Content-Length");
 
-                if (iIndex > -1)
-                    pszPropValue = m_vHTTPHeaders[iIndex].second.c_str();
+            if (iIndex > -1)
+                pszPropValue = m_vHTTPHeaders[iIndex].second.c_str();
 
-                break;
-            }
+            break;
+        }
 
         case TRANSPORT_PROPERTIES:
         case SECURE_PROPERTIES:
-            {
-                pszPropValue = m_pActiveChannel->getTransportProperty( eType);
-                break;
-            }
+        {
+            pszPropValue = m_pActiveChannel->getTransportProperty( eType);
+            break;
+        }
 
         case CHANNEL_HTTP_SSL_DLL_NAME:
         case CHANNEL_HTTP_DLL_NAME:
         case CONTENT_TYPE:
-            {
-                break;
-            }
+        {
+            break;
+        }
     }
 
     return pszPropValue;
@@ -882,10 +884,11 @@ const char * HTTPTransport::getTransportProperty( AXIS_TRANSPORT_INFORMATION_TYP
  * @return int Index is an index to the key within the HTTP Header list.  If
  * the return value is -1, then the key was not found.
  */
-int HTTPTransport::FindTransportPropertyIndex( string sKey)
+int HTTPTransport::
+FindTransportPropertyIndex( string sKey)
 {
-    bool	bKeyFound = false;
-    int		iIndex = 0;
+    bool   bKeyFound = false;
+    int      iIndex = 0;
 
     while( (unsigned int) iIndex < m_vHTTPHeaders.size() && !bKeyFound)
     {
@@ -910,29 +913,31 @@ int HTTPTransport::FindTransportPropertyIndex( string sKey)
 const char * HTTPTransport::getServiceName()
 {
     //Assume SOAPAction header to contain service name
-    int		iIndex = FindTransportPropertyIndex( "SOAPAction");
+    int iIndex = FindTransportPropertyIndex( "SOAPAction");
 
     if (iIndex > -1)
-		return m_vHTTPHeaders[iIndex].second.c_str();
+      return m_vHTTPHeaders[iIndex].second.c_str();
 
     return NULL;
 }
 
 
-AXIS_PROTOCOL_TYPE HTTPTransport::getProtocol()
+AXIS_PROTOCOL_TYPE HTTPTransport::
+getProtocol()
 {
     return m_eProtocolType;
 }
 
-int HTTPTransport::setProtocol( AXIS_PROTOCOL_TYPE eProtocol)
+int HTTPTransport::
+setProtocol( AXIS_PROTOCOL_TYPE eProtocol)
 {
     if (eProtocol == APTHTTP1_1 || eProtocol == APTHTTP1_0)
     {
-		m_eProtocolType = eProtocol;
+      m_eProtocolType = eProtocol;
 
-		m_strHTTPProtocol = (m_eProtocolType == APTHTTP1_1) ? "HTTP/1.1" : "HTTP/1.0";
+      m_strHTTPProtocol = (m_eProtocolType == APTHTTP1_1) ? "HTTP/1.1" : "HTTP/1.0";
 
-		return AXIS_SUCCESS;
+      return AXIS_SUCCESS;
     }
 
     return AXIS_FAIL;
@@ -940,10 +945,11 @@ int HTTPTransport::setProtocol( AXIS_PROTOCOL_TYPE eProtocol)
 
 /**
  * HTTPTransport::getSubProtocol() is a public method that is supposed to
- * return the sub protocol (currently this method always return 0).
+ * return the sub protocol (currently this method always return POST).
  * This method is supposed to return whether it is http GET or POST
  */
-int HTTPTransport::getSubProtocol()
+int HTTPTransport::
+getSubProtocol()
 {
     //TODO
     // for SimpleAxisServer assume POST
@@ -958,7 +964,8 @@ int HTTPTransport::getSubProtocol()
  * proxy host.
  * @param unsigned int Port is the new proxy port number.
  */
-void HTTPTransport::setProxy( const char *pcProxyHost, unsigned int uiProxyPort)
+void HTTPTransport::
+setProxy( const char *pcProxyHost, unsigned int uiProxyPort)
 {
     m_pActiveChannel->setProxy(pcProxyHost,uiProxyPort);
     m_strProxyHost = pcProxyHost;
@@ -972,7 +979,8 @@ void HTTPTransport::setProxy( const char *pcProxyHost, unsigned int uiProxyPort)
  *
  * @param long Timeout is a long value in seconds.
  */
-void HTTPTransport::setTimeout( long lSeconds)
+void HTTPTransport::
+setTimeout( long lSeconds)
 {
     if( m_pActiveChannel != NULL)
         m_pActiveChannel->setTimeout( lSeconds);
@@ -986,29 +994,22 @@ void HTTPTransport::setTimeout( long lSeconds)
  * @return const char* HTTPProtocol is a NULL terminated character string
  * containing the HTTP protocol.
  */
-const char * HTTPTransport::getHTTPProtocol()
+const char * HTTPTransport::
+getHTTPProtocol()
 {
     return m_strHTTPProtocol.c_str ();
 }
 
 /* axtoi( Hex) Is a private method to convert an ascii hex string to an integer.
  */
-int axtoi( char *pcHexString)
+static int axtoi( char *pcHexString)
 {
-    int		iN = 0;			// position in string
-    int		iM = 0;			// position in digit[] to shift
-    int		iCount;			// loop index
-    int		intValue = 0;	// integer value of hex string
-    int		iDigit[32];		// hold values to convert
-/*
-	char *	pcHexString = pcHexStringIn;
+    int      iN = 0;         // position in string
+    int      iM = 0;         // position in digit[] to shift
+    int      iCount;         // loop index
+    int      intValue = 0;   // integer value of hex string
+    int      iDigit[32];      // hold values to convert
 
-	// Remove whitespace characters from string before processing.
-	while( *pcHexString == ' ' || *pcHexString == '\r' || *pcHexString == '\n' || *pcHexString == '\t') 
-	{
-		pcHexString++;
-	}
-*/
     while( iN < 32)
     {
         if( pcHexString[iN] == '\0')
@@ -1017,14 +1018,14 @@ int axtoi( char *pcHexString)
         if( pcHexString[iN] >= ASCII_C_ZERO &&
             pcHexString[iN] <= ASCII_C_NINE)
         {
-            iDigit[iN] = pcHexString[iN] & 0x0f;	//convert to int
+            iDigit[iN] = pcHexString[iN] & 0x0f;   //convert to int
         }
         else if ((pcHexString[iN] >= ASCII_C_LOWERCASEA &&
                   pcHexString[iN] <= ASCII_C_LOWERCASEF) ||
                  (pcHexString[iN] >= ASCII_C_UPPERCASEA &&
                   pcHexString[iN] <= ASCII_C_UPPERCASEF))
         {
-            iDigit[iN] = (pcHexString[iN] & 0x0f) + 9;	//convert to int
+            iDigit[iN] = (pcHexString[iN] & 0x0f) + 9;   //convert to int
         }
         else
             break;
@@ -1041,8 +1042,8 @@ int axtoi( char *pcHexString)
         // digit[n] is value of hex digit at position n (m << 2) is the number of positions to shift OR the bits into
         // return value
         intValue = intValue | (iDigit[iN] << (iM << 2));
-        iM--;			// adjust the position to set
-        iN++;			// next digit to process
+        iM--;         // adjust the position to set
+        iN++;         // next digit to process
     }
 
     return intValue;
@@ -1051,7 +1052,8 @@ int axtoi( char *pcHexString)
 /* HTTPTransport::processResponseHTTPHeaders() Is a public method used to
  * parse the HTTP header of the response message.
  */
-void HTTPTransport::processResponseHTTPHeaders() throw (HTTPTransportException)
+void HTTPTransport::
+processResponseHTTPHeaders() throw (HTTPTransportException)
 {
     unsigned long iPosition = std::string::npos;
     unsigned long iStartPosition = iPosition;
@@ -1095,16 +1097,16 @@ void HTTPTransport::processResponseHTTPHeaders() throw (HTTPTransportException)
             if( iPosition == std::string::npos)
                 break;
 
-            std::string		strHeaderLine = m_strResponseHTTPHeaders.substr( 0, iPosition);
-            unsigned long	iSeperator = strHeaderLine.find( ASCII_S_COLON );
+            std::string      strHeaderLine = m_strResponseHTTPHeaders.substr( 0, iPosition);
+            unsigned long   iSeperator = strHeaderLine.find( ASCII_S_COLON );
 
             if( iSeperator == std::string::npos)
                 break;
 
             iStartPosition = iPosition + 1;
 
-            string	key = strHeaderLine.substr( 0, iSeperator);
-            string	value = strHeaderLine.substr( iSeperator + 1,
+            string   key = strHeaderLine.substr( 0, iSeperator);
+            string   value = strHeaderLine.substr( iSeperator + 1,
                                                       strHeaderLine.length () - iSeperator - 1 - 1);
             PLATFORM_ASCTOSTR(key.c_str());
             PLATFORM_ASCTOSTR(value.c_str());
@@ -1143,8 +1145,8 @@ void HTTPTransport::processResponseHTTPHeaders() throw (HTTPTransportException)
             {
                 m_strContentType = value;
 
-                unsigned long	ulMimePos = m_strContentType.find( ";");
-                std::string		strTypePart;
+                unsigned long   ulMimePos = m_strContentType.find( ";");
+                std::string      strTypePart;
 
                 if( ulMimePos != std::string::npos)
                     strTypePart = m_strContentType.substr( 1, ulMimePos - 1);
@@ -1184,7 +1186,8 @@ void HTTPTransport::processResponseHTTPHeaders() throw (HTTPTransportException)
 /* HTTPTransport::processRootMimeBody() Is a public method used to
  * parse the mime attachments.
  */
-void HTTPTransport::processRootMimeBody()
+void HTTPTransport::
+processRootMimeBody()
 {
     if( false == m_bReadPastRootMimeHeader)
     {
@@ -1286,11 +1289,13 @@ void HTTPTransport::processMimeHeader()
     }
 }
 
-void HTTPTransport::processMimeBody ()
+void HTTPTransport::
+processMimeBody ()
 {
 }
 
-void HTTPTransport::getAttachment( char * pStrAttachment, int * pIntSize, int intAttachmentId)
+void HTTPTransport::
+getAttachment( char * pStrAttachment, int * pIntSize, int intAttachmentId)
 {
     m_pszRxBuffer [0] = '\0';
     *m_pActiveChannel >> m_pszRxBuffer;
@@ -1314,12 +1319,14 @@ void HTTPTransport::getAttachment( char * pStrAttachment, int * pIntSize, int in
     processMimeBody();
 }
 
-void HTTPTransport::setSocket( unsigned int uiNewSocket)
+void HTTPTransport::
+setSocket( unsigned int uiNewSocket)
 {
     m_pActiveChannel->setSocket( uiNewSocket);
 }
 
-const char * HTTPTransport::getTransportProperty( const char * pcKey, bool response) throw (HTTPTransportException)
+const char * HTTPTransport::
+getTransportProperty( const char * pcKey, bool response) throw (HTTPTransportException)
 {
     std::string strKeyToFind = std::string( pcKey);
     std::vector < std::pair < std::string, std::string > > *hdrs=NULL;
@@ -1336,7 +1343,8 @@ const char * HTTPTransport::getTransportProperty( const char * pcKey, bool respo
     return NULL;
 }
 
-const char * HTTPTransport::getFirstTransportPropertyKey(bool response)
+const char * HTTPTransport::
+getFirstTransportPropertyKey(bool response)
 {
     if(response)
     {
@@ -1358,7 +1366,8 @@ const char * HTTPTransport::getFirstTransportPropertyKey(bool response)
     }
 }
 
-const char * HTTPTransport::getNextTransportPropertyKey(bool response)
+const char * HTTPTransport::
+getNextTransportPropertyKey(bool response)
 {
     if(response)
     {
@@ -1389,7 +1398,8 @@ const char * HTTPTransport::getNextTransportPropertyKey(bool response)
     }
 }
 
-const char * HTTPTransport::getCurrentTransportPropertyKey(bool response)
+const char * HTTPTransport::
+getCurrentTransportPropertyKey(bool response)
 {
     if (response)
     {
@@ -1404,7 +1414,8 @@ const char * HTTPTransport::getCurrentTransportPropertyKey(bool response)
         return (*m_viCurrentHeader).first.c_str();
 }
 
-const char * HTTPTransport::getCurrentTransportPropertyValue(bool response)
+const char * HTTPTransport::
+getCurrentTransportPropertyValue(bool response)
 {
     if(response)
     {
@@ -1419,7 +1430,8 @@ const char * HTTPTransport::getCurrentTransportPropertyValue(bool response)
         return (*m_viCurrentHeader).second.c_str();
 }
 
-void HTTPTransport::deleteCurrentTransportProperty(bool response)
+void HTTPTransport::
+deleteCurrentTransportProperty(bool response)
 {
     // response=true by default
     std::vector < std::pair < std::string, std::string > >* headers = &m_vResponseHTTPHeaders;
@@ -1434,7 +1446,8 @@ void HTTPTransport::deleteCurrentTransportProperty(bool response)
        headers->erase( *currentHeader);
 }
 
-void HTTPTransport::deleteTransportProperty (char *pcKey, unsigned int uiOccurance)
+void HTTPTransport::
+deleteTransportProperty (char *pcKey, unsigned int uiOccurance)
 {
     vector < std::pair < std::string,
     std::string > >::iterator currentHeader = m_vHTTPHeaders.begin();
@@ -1465,22 +1478,26 @@ void HTTPTransport::deleteTransportProperty (char *pcKey, unsigned int uiOccuran
         removeCookie(pcKey);
 }
 
-void HTTPTransport::setMaintainSession( bool bSession)
+void HTTPTransport::
+setMaintainSession( bool bSession)
 {
     m_bMaintainSession = bSession;
 }
 
-void HTTPTransport::setSessionId( const char * pcSessionId)
+void HTTPTransport::
+setSessionId( const char * pcSessionId)
 {
     m_strSessionKey = std::string (pcSessionId);
 }
 
-const char * HTTPTransport::getSessionId()
+const char * HTTPTransport::
+getSessionId()
 {
     return m_strSessionKey.c_str();
 }
 
-const char * HTTPTransport::getLastChannelError()
+const char * HTTPTransport::
+getLastChannelError()
 {
     if( m_pActiveChannel != NULL)
         return m_pActiveChannel->GetLastErrorMsg().c_str();
@@ -1488,7 +1505,8 @@ const char * HTTPTransport::getLastChannelError()
     return NULL;
 }
 
-void HTTPTransport::readHTTPHeader()
+void HTTPTransport::
+readHTTPHeader()
 {
     // The parser is expecting a SOAP message.  Thus, the HTTP header must have
     // been read and processed before control is returned to the parser.  It can
@@ -1501,7 +1519,7 @@ void HTTPTransport::readHTTPHeader()
     // the user needs to remove this feature if the server is particularily slow,
     // etc.).
     bool bHTTPHeaderFound = false;
-    int	iIterationCount = 100;
+    int   iIterationCount = 100;
 
     m_strReceived = "";
 
@@ -1539,14 +1557,15 @@ void HTTPTransport::readHTTPHeader()
     }
 }
 
-void HTTPTransport::processHTTPHeader()
+void HTTPTransport::
+processHTTPHeader()
 {
     // At this point the HTTP header has been found.  It now needs to be processed.
-    int	iPosContentLength = m_strReceived.find( ASCII_S_CONTENT_LENGTH);
+    int   iPosContentLength = m_strReceived.find( ASCII_S_CONTENT_LENGTH);
 
     if( iPosContentLength != std::string::npos)
     {
-        int	iEOL = m_strReceived.find( ASCII_S_LF, iPosContentLength);
+        int   iEOL = m_strReceived.find( ASCII_S_LF, iPosContentLength);
 
         iPosContentLength += strlen( ASCII_S_CONTENT_LENGTH);
 
@@ -1556,7 +1575,7 @@ void HTTPTransport::processHTTPHeader()
     }
 
     // Check if the message is chunked
-    int	iPosChunked = m_strReceived.find( ASCII_S_TRANSFERENCODING_CHUNKED);
+    int   iPosChunked = m_strReceived.find( ASCII_S_TRANSFERENCODING_CHUNKED);
     int iHTTPStart = m_strReceived.find( ASCII_S_HTTP);
     int iHTTPEnd = m_strReceived.find( ASCII_S_CRLFCRLF);
 
@@ -1616,7 +1635,8 @@ void HTTPTransport::processHTTPHeader()
         m_strReceived = m_strReceived.substr( iHTTPEnd + 2);
 }
 
-void HTTPTransport::checkHTTPStatusCode()
+void HTTPTransport::
+checkHTTPStatusCode()
 {
     // Now have a valid HTTP header that is not 100.
     if ( m_iResponseHTTPStatusCode != 500 &&
@@ -1633,9 +1653,10 @@ void HTTPTransport::checkHTTPStatusCode()
     }
 }
 
-bool HTTPTransport::getNextDataPacket( const char * pcszExceptionMessage)
+bool HTTPTransport::
+getNextDataPacket( const char * pcszExceptionMessage)
 {
-    int	iIterationCount = 100;
+    int   iIterationCount = 100;
     bool bDataRead = false;
 
     do
@@ -1664,7 +1685,7 @@ bool HTTPTransport::getNextDataPacket( const char * pcszExceptionMessage)
 
         if( pcszExceptionMessage != NULL && strlen( pcszExceptionMessage) > 0)
         {
-            int	iStringLength = strlen( pcszExceptionMessage) + 1;
+            int   iStringLength = strlen( pcszExceptionMessage) + 1;
             const char * pszLastError = new char[iStringLength];
 
             memcpy( (void *) pszLastError, pcszExceptionMessage, iStringLength);
@@ -1676,9 +1697,10 @@ bool HTTPTransport::getNextDataPacket( const char * pcszExceptionMessage)
     return bDataRead;
 }
 
-int HTTPTransport::getChunkSize()
+int HTTPTransport::
+getChunkSize()
 {
-    int	iChunkSize;
+    int   iChunkSize;
 
     while( m_strReceived.find( ASCII_S_CRLF) == std::string::npos)
     {
@@ -1703,7 +1725,8 @@ int HTTPTransport::getChunkSize()
     return iChunkSize;
 }
 
-bool HTTPTransport::copyDataToParserBuffer( char * pcBuffer, int * piSize, int iBytesToCopy)
+bool HTTPTransport::
+copyDataToParserBuffer( char * pcBuffer, int * piSize, int iBytesToCopy)
 {
     bool bTransportInProgress = false;
 
@@ -1727,7 +1750,8 @@ bool HTTPTransport::copyDataToParserBuffer( char * pcBuffer, int * piSize, int i
     return bTransportInProgress;
 }
 
-int HTTPTransport::addCookie(const string name, const string value)
+int HTTPTransport::
+addCookie(const string name, const string value)
 {
     // trim the name
     string theName(name);
@@ -1752,7 +1776,8 @@ int HTTPTransport::addCookie(const string name, const string value)
     return true;
 }
 
-int HTTPTransport::addCookie(const string nameValuePair)
+int HTTPTransport::
+addCookie(const string nameValuePair)
 {
     // Spec syntax : Set-Cookie: NAME=VALUE; expires=DATE; path=PATH; domain=DOMAIN_NAME; secure
     // This code assumes it to be : Set-Cookie: NAME=VALUE; Anything_else
@@ -1770,7 +1795,8 @@ int HTTPTransport::addCookie(const string nameValuePair)
     return addCookie(nameValue.substr(0, nameEndsAt), nameValue.substr(nameEndsAt+1));
 }
 
-int HTTPTransport::removeCookie(const string name)
+int HTTPTransport::
+removeCookie(const string name)
 {
      vector < std::pair < std::string,
      std::string > >::iterator currentCookie = m_vCookies.begin();
@@ -1788,7 +1814,8 @@ int HTTPTransport::removeCookie(const string name)
     return AXIS_FAIL;
 }
 
-int HTTPTransport::removeAllCookies()
+int HTTPTransport::
+removeAllCookies()
 {
     m_vCookies.clear();
     // we also need to remove it from the header properties that we send.
@@ -1796,7 +1823,8 @@ int HTTPTransport::removeAllCookies()
     return AXIS_SUCCESS;
 }
 
-int HTTPTransport::peekChunkLength( std::string& strNextChunk)
+int HTTPTransport::
+peekChunkLength( std::string& strNextChunk)
 {
     if( strNextChunk.length() == 0)
         return -1;
@@ -1812,12 +1840,13 @@ int HTTPTransport::peekChunkLength( std::string& strNextChunk)
         iEndOfChunkSize = strNextChunk.find( ASCII_S_LEFTPAREN);
 
     // Convert the hex string into the length of the chunk.
-    char *	pszValue = (char *) strNextChunk.c_str();
+    char *   pszValue = (char *) strNextChunk.c_str();
 
     return axtoi( (char *) strNextChunk.substr( 0, iEndOfChunkSize).c_str());
 }
 
-void HTTPTransport::trim(string& str)
+void HTTPTransport::
+trim(string& str)
 {
     string::size_type pos = str.find_last_not_of(' ');
     if(pos != string::npos) 
