@@ -849,13 +849,10 @@ public class WSDL2Ws
             }
             
             // There can be attributes in this extended basic type
-            // Process the attributes
-            Vector attributes =
-                CSchemaUtils.getContainedAttributeTypes(type.getNode(), symbolTable);
+            Vector attributes = CSchemaUtils.getContainedAttributeTypes(type.getNode(), symbolTable);
             if (attributes != null)
             {
                 if( attributes.get(0).getClass() == CElementDecl.class)
-                {
 	                for (int j = 0; j < attributes.size(); j++)
 	                {
 	                    CElementDecl ed = (CElementDecl) attributes.get(j);
@@ -868,17 +865,14 @@ public class WSDL2Ws
 	                        typedata.setRestrictionPattern( ed.getRestrictionPattern());
 	                    }
 	                }
-                }
                 else
-                {
-                for (int j = 0; j < attributes.size(); j += 2)
-                {
-                    newSecondaryType = createTypeInfo(((TypeEntry) attributes.get(j)).getQName(), targetLanguage);
-                    typedata.addRelatedType(newSecondaryType);
-                    typedata.setTypeForAttributeName(
-                        ((QName) attributes.get(j + 1)).getLocalPart(), newSecondaryType);
+                    for (int j = 0; j < attributes.size(); j += 2)
+                    {
+                        newSecondaryType = createTypeInfo(((TypeEntry) attributes.get(j)).getQName(), targetLanguage);
+                        typedata.addRelatedType(newSecondaryType);
+                        typedata.setTypeForAttributeName(
+                            ((QName) attributes.get(j + 1)).getLocalPart(), newSecondaryType);
                     }
-                }
             }
         }
         else if (type instanceof CollectionType)

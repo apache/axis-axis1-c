@@ -357,20 +357,16 @@ public class Type
      */
     public String toString()
     {
-        String str =
-            "---------"
-                + this.name
-                + "------------\n"
-                + "languageSpecificName = "
-                + this.languageSpecificName
-                + "\n";
+        String str = "---------" + this.name + "------------\n"
+                + "languageSpecificName = " + this.languageSpecificName + "\n";
+        str = str + "isAnonymous =" + isAnonymous + "\n";
+        str = str + "isSimpleType =" + isSimpleType + "\n";
+        str = str + "externalize =" + externalize + "\n";
+        str = str + "isArray =" + isArray + "\n";
+        
         if (enumerationdata != null)
         {
-            str =
-                str
-                    + "enumerationType = "
-                    + ((TypeEntry) enumerationdata.get(0)).getQName()
-                    + "\n(";
+            str = str + "enumerationType = " + ((TypeEntry) enumerationdata.get(0)).getQName() + "\n(";
             for (int i = 1; i < enumerationdata.size(); i++)
             {
                 str = str + "," + enumerationdata.get(i);
@@ -379,9 +375,6 @@ public class Type
         }
         else
         {
-            str = str + "isAnonymous =" + isAnonymous + "\n";
-            str = str + "externalize =" + externalize + "\n";
-            str = str + "isArray =" + isArray + "\n";
             str = str + "Elements[\n";
             Iterator c = elements.values().iterator();
             java.util.Enumeration k = elements.keys(); //.iterator();
