@@ -39,7 +39,7 @@ import java.util.Vector;
 
 import javax.xml.namespace.QName;
 
-import org.apache.axis.wsdl.symbolTable.BaseType;
+import org.apache.axis.wsdl.symbolTable.TypeEntry;
 import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.WrapperConstants;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
@@ -1617,7 +1617,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 
                 Iterator i = type.getEnumerationdata().iterator();
                 int iIndex = 0;
-                BaseType baseTypeForArray = (BaseType) i.next();
+                TypeEntry baseTypeForArray = (TypeEntry) i.next();
                 
                 while( i.hasNext())
                 {
@@ -1642,7 +1642,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 
                 Iterator i = type.getEnumerationdata().iterator();
                 int iIndex = 0;
-                BaseType baseTypeForArray = (BaseType) i.next();
+                TypeEntry baseTypeForArray = (TypeEntry) i.next();
                 
                 while( i.hasNext())
                 {
