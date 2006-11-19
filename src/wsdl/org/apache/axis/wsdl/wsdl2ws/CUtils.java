@@ -1046,8 +1046,7 @@ public class CUtils
                 }
                 
                 // is this really an enumeration?
-                /* if(v.isEmpty()) return null; There can be restriction without any child nodes */
-                // The first element in the vector is the base type (an TypeEntry).
+                // The first element in the vector is a TypeEntry.
                 v.add(0,baseEType);
                 return v;
             }
