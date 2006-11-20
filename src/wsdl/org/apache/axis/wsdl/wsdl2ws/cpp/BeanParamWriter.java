@@ -510,7 +510,6 @@ public class BeanParamWriter extends ParamCPPFileWriter
             AttributeInfo ai = attribs[i];
             Type          type = ai.getType();
             boolean       repeat = false;
-            boolean       forceSimpleType = false;
             int           countdown = 5;
             
             do
@@ -571,8 +570,6 @@ public class BeanParamWriter extends ParamCPPFileWriter
                         type.setBaseType( new QName( WrapperConstants.SCHEMA_NAMESPACE, baseType));
                         
                         ai.setType( type);
-                        
-                        forceSimpleType = true;
                     }
                 }
             
