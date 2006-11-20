@@ -177,36 +177,22 @@ public class ParmHeaderFileWriter extends ParamWriter
                 boolean isPointerType = false;
                 
                 if (type.isSimpleType())
-				{
                     isPointerType = CUtils.isPointerType(CUtils.getclass4qname(type.getBaseType())); 
-				}
-				else
-				{
-			        // vvv FJP - 17667
-				    if( type.isRestriction())
-				    {
-				        // FJP - Find base type of the restricted type.
-				        type = CUtils.findBaseTypeOfRestriction( type, wscontext);
-				        String restBaseClass = CUtils.getBaseTypeOfRestrictionAsString( type);
+				else if( type.isRestriction()) // vvv FJP - 17667
+			    {
+			        // Find base type of the restricted type.
+			        type = CUtils.findBaseTypeOfRestriction( type, wscontext);
+			        String restBaseClass = CUtils.getBaseTypeOfRestrictionAsString( type);
 
-				        if( type == null)
-				        {
-				            System.out.println( "Warning - Could not find root base class of " + type.getName().getLocalPart());
-				        }
-				        else
-				        {
-					        if( restBaseClass != null)
-					        {
-					            isPointerType = CUtils.isPointerType( restBaseClass);
-					        }
-				        }
-				    }
-			        // ^^^ FJP - 17667
-				    else
-				    {
-					    isPointerType = CUtils.isPointerType(getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]));
-				    }
-				}
+			        if( type == null)
+			            System.out.println( "Warning - Could not find root base class of " + type.getName().getLocalPart());
+			        else if( restBaseClass != null)
+				        isPointerType = CUtils.isPointerType( restBaseClass);
+			    } // ^^^ FJP - 17667
+			    else
+			    {
+				    isPointerType = CUtils.isPointerType(getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]));
+			    }
 				
         	    if ((attribs[i].isSimpleType() || type.isSimpleType())
                         && !attribs[i].isArray() 
