@@ -59,17 +59,11 @@ public abstract class ParamCPPFileWriter extends ParamWriter
             writePreprocessorStatements();
             
             if (type.isSimpleType())
-            {
                 writeRestrictionCheckerFunction();
-            }
-            else
+            else if( type.isRestriction())    // vvv FJP - 17667
             {
-                // vvv FJP - 17667
-                if( type.isRestriction())
-                {
-                    writer.write( "\n// Type consists of purely 'restriction' information.\n// Currently no code has been written, but some may be required to check the restriction.\n\n");
-                }
-                // ^^^ FJP - 17667
+                writer.write( "\n// Type consists of purely 'restriction' information.\n// Currently no code has been written, but some may be required to check the restriction.\n\n");
+            } // ^^^ FJP - 17667              
             else
             {
                 writeGlobalCodes();
@@ -77,7 +71,6 @@ public abstract class ParamCPPFileWriter extends ParamWriter
                 writeConstructors();
                 writeDestructors();
                 writeMethods();
-            }
             }
             
             writer.flush();
