@@ -159,14 +159,10 @@ public class ParmHeaderFileWriter extends ParamWriter
     private void writeDeepCopyFlags() throws WrapperFault
     {
         if (type.isArray())
-        {
             return;
-        }
         
         if (attribs.length == 0)
-        {
             return;
-        }
         
         try
         {
