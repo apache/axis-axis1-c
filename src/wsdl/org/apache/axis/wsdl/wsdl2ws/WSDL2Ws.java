@@ -969,22 +969,22 @@ public class WSDL2Ws
                                                     true,
                                                     targetLanguage);
                             }
-	                                // vvv FJP - 17667
-	                                // FJP - Check if element is an extension or restriction
-	                                else if( elem.isRestriction())
-	                                { // 8 
-	                                    typedata.setRestriction( true);
-	                                    typedata.setRestrictionBase( elem.getRestrictionBase());
-	                                    typedata.setRestrictionEnumeration(elem.getRestrictionEnumeration());
-	                                    typedata.setRestrictionPattern( elem.getRestrictionPattern());
-	
-	                                    eleinfo = new ElementInfo( elem.getName(),
-	                                            				   new Type( CUtils.anyTypeQname,
-	                                            				           	 CUtils.anyTypeQname.getLocalPart(),
-	                                            				           	 true,
-	                                            				           	 targetLanguage));
-	                                } // 8
-	                                // ^^^ FJP - 17667
+                            // vvv FJP - 17667
+                            // FJP - Check if element is an extension or restriction
+                            else if( elem.isRestriction())
+                            { // 8 
+                                typedata.setRestriction( true);
+                                typedata.setRestrictionBase( elem.getRestrictionBase());
+                                typedata.setRestrictionEnumeration(elem.getRestrictionEnumeration());
+                                typedata.setRestrictionPattern( elem.getRestrictionPattern());
+
+                                eleinfo = new ElementInfo( elem.getName(),
+                                        				   new Type( CUtils.anyTypeQname,
+                                        				           	 CUtils.anyTypeQname.getLocalPart(),
+                                        				           	 true,
+                                        				           	 targetLanguage));
+                            } // 8
+                            // ^^^ FJP - 17667
                             else
                             {
                                 QName typeName = elem.getType().getQName();
