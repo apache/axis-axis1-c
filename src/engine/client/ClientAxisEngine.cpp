@@ -35,22 +35,26 @@ extern AXIS_CPP_NAMESPACE_PREFIX HandlerPool* g_pHandlerPool;
 
 AXIS_CPP_NAMESPACE_START
 
-ClientAxisEngine::ClientAxisEngine ()
+ClientAxisEngine::
+ClientAxisEngine ()
 {
 
 }
 
-ClientAxisEngine::~ClientAxisEngine ()
+ClientAxisEngine::
+~ClientAxisEngine ()
 {
 
 }
 
-MessageData* ClientAxisEngine::getMessageData ()
+MessageData* ClientAxisEngine::
+getMessageData ()
 {
     return m_pMsgData;
 }
 
-int ClientAxisEngine::process (SOAPTransport* pSoap)
+int ClientAxisEngine::
+process (SOAPTransport* pSoap)
 {
     int Status = AXIS_FAIL;
     const WSDDService* pService = NULL;
@@ -82,13 +86,9 @@ int ClientAxisEngine::process (SOAPTransport* pSoap)
                     memset( pszService, 0, iStringLength);
                     // If there is no # seperator, then strip off the outer quotes. if they exist !
                     if(strchr(pchService, '"') == NULL)
-                    {
-                       memcpy( pszService, pchService, iStringLength);
-                    }
+                        memcpy( pszService, pchService, iStringLength);
                     else
-                    {
                         memcpy( pszService, pchService + 1, iStringLength - 2);
-                    }
 
                     pService = g_pWSDDDeployment->getService( pszService);
 
@@ -151,7 +151,8 @@ int ClientAxisEngine::process (SOAPTransport* pSoap)
     return Status;
 }
 
-void ClientAxisEngine::releaseHandlers(string sSessionId)
+void ClientAxisEngine::
+releaseHandlers(string sSessionId)
 {
     // Pool back the Service specific handlers
     if (m_pSReqFChain) 
@@ -160,7 +161,8 @@ void ClientAxisEngine::releaseHandlers(string sSessionId)
         g_pHandlerPool->poolHandlerChain(m_pSResFChain, sSessionId); 
 }
 
-int ClientAxisEngine::invoke (MessageData* pMsg)
+int ClientAxisEngine::
+invoke (MessageData* pMsg)
 {
     enum AE_LEVEL { AE_START = 1, AE_SERH, AE_GLH, AE_TRH, AE_SERV };
     int Status = AXIS_FAIL;
@@ -252,7 +254,8 @@ int ClientAxisEngine::invoke (MessageData* pMsg)
     return Status;
 }
 
-void ClientAxisEngine::onFault (MessageData* pMsg)
+void ClientAxisEngine::
+onFault (MessageData* pMsg)
 {
 
 }
