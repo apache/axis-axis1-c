@@ -29,419 +29,396 @@ extern AXIS_CPP_NAMESPACE_PREFIX HandlerPool *g_pHandlerPool;
 extern AXIS_CPP_NAMESPACE_PREFIX WSDDDeployment *g_pWSDDDeployment;
 
 AXIS_CPP_NAMESPACE_START
-ServerAxisEngine::ServerAxisEngine ()
+ServerAxisEngine::
+ServerAxisEngine ()
 {
     m_pWebService = NULL;
 }
 
-ServerAxisEngine::~ServerAxisEngine ()
+ServerAxisEngine::
+~ServerAxisEngine ()
 {
 
 }
 
-int
-ServerAxisEngine::process (SOAPTransport * pStream)
+int ServerAxisEngine::
+process (SOAPTransport * pStream)
 {
     int Status = 0;
     int nSoapVersion;
     try
     {
-    	if (!pStream)
-    	{
-    	    AXISTRACE1 ("transport is not set properly", CRITICAL);
-    	    throw AxisConfigException (SERVER_CONFIG_TRANSPORT_CONF_FAILED);
-    	}
-    	string sSessionId = pStream->getSessionId ();
+        if (!pStream)
+        {
+            AXISTRACE1 ("transport is not set properly", CRITICAL);
+            throw AxisConfigException (SERVER_CONFIG_TRANSPORT_CONF_FAILED);
+        }
+        string sSessionId = pStream->getSessionId ();
     
-    	/*
-    	 * After this point we should return AXIS_SUCCESS. Otherwise the transport 
-    	 * layer may not send the response back (either soap fault or result).
-    	 */
-    	do
-    	{
-    	    /* populate MessageData with transport information */
-    	    m_pMsgData->m_Protocol = pStream->getProtocol ();
+        /*
+         * After this point we should return AXIS_SUCCESS. Otherwise the transport 
+         * layer may not send the response back (either soap fault or result).
+         */
+        do
+        {
+            /* populate MessageData with transport information */
+            m_pMsgData->m_Protocol = pStream->getProtocol ();
     
-    	    if (AXIS_SUCCESS != m_pDZ->setInputStream (pStream))
-    	    {
-        		nSoapVersion = m_pDZ->getVersion ();
-        		nSoapVersion =
-        		    (nSoapVersion ==
-        		     VERSION_LAST) ? SOAP_VER_1_2 : nSoapVersion;
-        		m_pSZ->setSoapVersion ((SOAP_VERSION) nSoapVersion);
-        		AXISTRACE1 ("CLIENT_SOAP_SOAP_CONTENT_ERROR", CRITICAL);
-        		throw AxisSoapException (CLIENT_SOAP_SOAP_CONTENT_ERROR);
-        		break;		// do .. while(0)
-    	    }
+            if (AXIS_SUCCESS != m_pDZ->setInputStream (pStream))
+            {
+                nSoapVersion = m_pDZ->getVersion ();
+                nSoapVersion = (nSoapVersion == VERSION_LAST) ? SOAP_VER_1_2 : nSoapVersion;
+                m_pSZ->setSoapVersion ((SOAP_VERSION) nSoapVersion);
+                AXISTRACE1 ("CLIENT_SOAP_SOAP_CONTENT_ERROR", CRITICAL);
+                throw AxisSoapException (CLIENT_SOAP_SOAP_CONTENT_ERROR);
+                break;        // do .. while(0)
+            }
     
-    	    const char *cService =
-    		pStream->getTransportProperty (SERVICE_URI);
-    	    if (!cService)
-    	    {
-        		AXISTRACE1 ("CLIENT_SOAP_SOAP_CONTENT_ERROR", CRITICAL);
-        		throw AxisSoapException (CLIENT_SOAP_SOAP_CONTENT_ERROR);
-        		break;		// do .. while(0)
-    	    }
-    	    AxisString service = (cService == NULL) ? "" : cService;
+            const char *cService = pStream->getTransportProperty (SERVICE_URI);
+            if (!cService)
+            {
+                AXISTRACE1 ("CLIENT_SOAP_SOAP_CONTENT_ERROR", CRITICAL);
+                throw AxisSoapException (CLIENT_SOAP_SOAP_CONTENT_ERROR);
+                break;        // do .. while(0)
+            }
+            AxisString service = (cService == NULL) ? "" : cService;
     
-    	    if (service.empty ())
-    	    {
-        		nSoapVersion = m_pMsgData->m_pDZ->getVersion ();
-        		nSoapVersion =
-        		    (nSoapVersion ==
-        		     VERSION_LAST) ? SOAP_VER_1_2 : nSoapVersion;
-        		m_pSZ->setSoapVersion ((SOAP_VERSION) nSoapVersion);
-        		AXISTRACE1 ("CLIENT_SOAP_SOAP_ACTION_EMTPY", CRITICAL);
-        		throw AxisSoapException (CLIENT_SOAP_SOAP_ACTION_EMTPY);
-        		break;		// do .. while(0)
-    	    }
-    	    // if there are quotes remove them. 
-    	    if (service.find ('\"') != string::npos)
-    	    {
-        		service = service.substr (1, service.length () - 2);
-    	    }
+            if (service.empty ())
+            {
+                nSoapVersion = m_pMsgData->m_pDZ->getVersion ();
+                nSoapVersion = (nSoapVersion == VERSION_LAST) ? SOAP_VER_1_2 : nSoapVersion;
+                m_pSZ->setSoapVersion ((SOAP_VERSION) nSoapVersion);
+                AXISTRACE1 ("CLIENT_SOAP_SOAP_ACTION_EMTPY", CRITICAL);
+                throw AxisSoapException (CLIENT_SOAP_SOAP_ACTION_EMTPY);
+                break;        // do .. while(0)
+            }
+            // if there are quotes remove them. 
+            if (service.find ('\"') != string::npos)
+            {
+                service = service.substr (1, service.length () - 2);
+            }
     
-    	    // get service description object from the WSDD Deployment object 
-    	    m_pService = g_pWSDDDeployment->getService (service.c_str ());
-    	    if (!m_pService)
-    	    {
-        		nSoapVersion = m_pMsgData->m_pDZ->getVersion ();
-        		nSoapVersion =
-        		    (nSoapVersion ==
-        		     VERSION_LAST) ? SOAP_VER_1_2 : nSoapVersion;
-        		m_pSZ->setSoapVersion ((SOAP_VERSION) nSoapVersion);
-        		AXISTRACE1 ("CLIENT_WSDD_SERVICE_NOT_FOUND", CRITICAL);
-        		throw AxisWsddException (CLIENT_WSDD_SERVICE_NOT_FOUND, service.c_str());
-        		break;		// do .. while(0)
-    	    }
+            // get service description object from the WSDD Deployment object 
+            m_pService = g_pWSDDDeployment->getService (service.c_str ());
+            if (!m_pService)
+            {
+                nSoapVersion = m_pMsgData->m_pDZ->getVersion ();
+                nSoapVersion = (nSoapVersion == VERSION_LAST) ? SOAP_VER_1_2 : nSoapVersion;
+                m_pSZ->setSoapVersion ((SOAP_VERSION) nSoapVersion);
+                AXISTRACE1 ("CLIENT_WSDD_SERVICE_NOT_FOUND", CRITICAL);
+                throw AxisWsddException (CLIENT_WSDD_SERVICE_NOT_FOUND, service.c_str());
+                break;        // do .. while(0)
+            }
     
-    	    m_CurrentProviderType = m_pService->getProvider ();
-    	    m_pSZ->setCurrentProviderType (m_CurrentProviderType);
-    	    m_pDZ->setCurrentProviderType (m_CurrentProviderType);
-    	    switch (m_CurrentProviderType)
-    	    {
-        	    case C_RPC_PROVIDER:
-        	    case CPP_RPC_PROVIDER:
-        		m_pSZ->setStyle (RPC_ENCODED);
-        		m_pDZ->setStyle (RPC_ENCODED);
-        		break;
-        	    case C_DOC_PROVIDER:
-        	    case CPP_DOC_PROVIDER:
-        		m_pSZ->setStyle (DOC_LITERAL);
-        		m_pDZ->setStyle (DOC_LITERAL);
-        		break;
-        	    case COM_PROVIDER:
-        		// TODO: ??
-        		break;
-        	    default:;
-        		// TODO: ??
-    	    }
+            m_CurrentProviderType = m_pService->getProvider ();
+            m_pSZ->setCurrentProviderType (m_CurrentProviderType);
+            m_pDZ->setCurrentProviderType (m_CurrentProviderType);
+            switch (m_CurrentProviderType)
+            {
+                case C_RPC_PROVIDER:
+                case CPP_RPC_PROVIDER:
+                    m_pSZ->setStyle (RPC_ENCODED);
+                    m_pDZ->setStyle (RPC_ENCODED);
+                    break;
+                case C_DOC_PROVIDER:
+                case CPP_DOC_PROVIDER:
+                    m_pSZ->setStyle (DOC_LITERAL);
+                    m_pDZ->setStyle (DOC_LITERAL);
+                    break;
+                case COM_PROVIDER:
+                // TODO: ??
+                break;
+                default:;
+                // TODO: ??
+            }
     
-    	    /* Check for stream version in the request and decide whether we support
-    	     * it or not. If we do not support send a soapfault with version 
-    	     * mismatch. 
-    	     */
-    	    nSoapVersion = m_pDZ->getVersion ();
-    	    if (m_pDZ->getStatus () != AXIS_SUCCESS)
-    	    {
-        		AXISTRACE1 ("CLIENT_SOAP_MESSAGE_INCOMPLETE", CRITICAL);
-        		throw AxisSoapException (CLIENT_SOAP_MESSAGE_INCOMPLETE);
-        		break;		// do .. while(0)
-    	    }
+            /* Check for stream version in the request and decide whether we support
+             * it or not. If we do not support send a soapfault with version 
+             * mismatch. 
+             */
+            nSoapVersion = m_pDZ->getVersion ();
+            if (m_pDZ->getStatus () != AXIS_SUCCESS)
+            {
+                AXISTRACE1 ("CLIENT_SOAP_MESSAGE_INCOMPLETE", CRITICAL);
+                throw AxisSoapException (CLIENT_SOAP_MESSAGE_INCOMPLETE);
+                break;        // do .. while(0)
+            }
     
-    	    if (nSoapVersion == VERSION_LAST)	// version not supported 
-    	    {
-        		m_pSZ->setSoapVersion (SOAP_VER_1_2);
-        		AXISTRACE1 ("SOAP_VERSION_MISMATCH", CRITICAL);
-        		throw AxisSoapException (SOAP_VERSION_MISMATCH);
-        		break;		// do .. while(0)         
-    	    }
+            if (nSoapVersion == VERSION_LAST)    // version not supported 
+            {
+                m_pSZ->setSoapVersion (SOAP_VER_1_2);
+                AXISTRACE1 ("SOAP_VERSION_MISMATCH", CRITICAL);
+                throw AxisSoapException (SOAP_VERSION_MISMATCH);
+                break;        // do .. while(0)         
+            }
     
-    	    /* Set Soap version in the Serializer and the envelope */
-    	    if (AXIS_SUCCESS !=
-    		m_pSZ->setSoapVersion ((SOAP_VERSION) nSoapVersion))
-    	    {
-        		AXISTRACE1 ("CLIENT_SOAP_SOAP_CONTENT_ERROR", CRITICAL);
-        		throw AxisSoapException (CLIENT_SOAP_SOAP_CONTENT_ERROR);
-        		break;		// do .. while(0)
-    	    }
+            /* Set Soap version in the Serializer and the envelope */
+            if (AXIS_SUCCESS != m_pSZ->setSoapVersion ((SOAP_VERSION) nSoapVersion))
+            {
+                AXISTRACE1 ("CLIENT_SOAP_SOAP_CONTENT_ERROR", CRITICAL);
+                throw AxisSoapException (CLIENT_SOAP_SOAP_CONTENT_ERROR);
+                break;        // do .. while(0)
+            }
     
-    	    /* Get the operation name from transport information Ex: from 
-    	     * SOAPAction header 
-    	     */
-    	    if (AXIS_SUCCESS != m_pDZ->getHeader ())
-    	    {
-        		AXISTRACE1 ("CLIENT_SOAP_SOAP_CONTENT_ERROR", CRITICAL);
-        		throw AxisSoapException (CLIENT_SOAP_SOAP_CONTENT_ERROR);
-        		break;		// do .. while(0)                         
-    	    }
-    	    if (AXIS_SUCCESS != m_pDZ->getBody ())
-    	    {
-        		AXISTRACE1 ("CLIENT_SOAP_SOAP_CONTENT_ERROR", CRITICAL);
-        		throw AxisSoapException (CLIENT_SOAP_SOAP_CONTENT_ERROR);
-        		break;		// do .. while(0)                         
-    	    }
+            /* Get the operation name from transport information Ex: from 
+             * SOAPAction header 
+             */
+            if (AXIS_SUCCESS != m_pDZ->getHeader ())
+            {
+                AXISTRACE1 ("CLIENT_SOAP_SOAP_CONTENT_ERROR", CRITICAL);
+                throw AxisSoapException (CLIENT_SOAP_SOAP_CONTENT_ERROR);
+                break;        // do .. while(0)                         
+            }
+            if (AXIS_SUCCESS != m_pDZ->getBody ())
+            {
+                AXISTRACE1 ("CLIENT_SOAP_SOAP_CONTENT_ERROR", CRITICAL);
+                throw AxisSoapException (CLIENT_SOAP_SOAP_CONTENT_ERROR);
+                break;        // do .. while(0)                         
+            }
     
-    	    AxisString sOperation = m_pDZ->getMethodNameToInvoke ();
+            AxisString sOperation = m_pDZ->getMethodNameToInvoke ();
     
-    	    if (sOperation.empty ())
-    	    {
-        		AXISTRACE1 ("CLIENT_SOAP_NO_SOAP_METHOD", CRITICAL);
-        		throw AxisSoapException (CLIENT_SOAP_NO_SOAP_METHOD);
-        		break;		// do .. while(0)
-    	    }
-    	    /* remove any quotes in the operation name */
-    	    if (sOperation.rfind ('\"') != string::npos)
-    	    {
-        		sOperation = sOperation.substr (0, sOperation.length () - 1);
-    	    }
+            if (sOperation.empty ())
+            {
+                AXISTRACE1 ("CLIENT_SOAP_NO_SOAP_METHOD", CRITICAL);
+                throw AxisSoapException (CLIENT_SOAP_NO_SOAP_METHOD);
+                break;        // do .. while(0)
+            }
+            /* remove any quotes in the operation name */
+            if (sOperation.rfind ('\"') != string::npos)
+            {
+                sOperation = sOperation.substr (0, sOperation.length () - 1);
+            }
     
-    	    AxisString operationToInvoke = sOperation;
+            AxisString operationToInvoke = sOperation;
     
-    	    m_pMsgData->setOperationName (operationToInvoke.c_str ());
+            m_pMsgData->setOperationName (operationToInvoke.c_str ());
     
-    	    if (m_pService->isAllowedMethod (operationToInvoke.c_str ()))
-    	    {
-    		/* load actual web service handler */
-    		if (AXIS_SUCCESS !=
-    		    g_pHandlerPool->getWebService (&m_pWebService, sSessionId,
-    						   m_pService))
-    		{
-    		    /* error : couldnot load web service */
-    		    AXISTRACE1 ("SERVER_ENGINE_COULD_NOT_LOAD_SRV", CRITICAL);
-    		    throw
-    			AxisEngineException
-    			(SERVER_ENGINE_COULD_NOT_LOAD_SRV);
-    		    break;	// do .. while(0)
-    		}
+            if (m_pService->isAllowedMethod (operationToInvoke.c_str ()))
+            {
+                /* load actual web service handler */
+                if (AXIS_SUCCESS != g_pHandlerPool->getWebService (&m_pWebService, sSessionId, m_pService))
+                {
+                    /* error : couldnot load web service */
+                    AXISTRACE1 ("SERVER_ENGINE_COULD_NOT_LOAD_SRV", CRITICAL);
+                    throw AxisEngineException(SERVER_ENGINE_COULD_NOT_LOAD_SRV);
+                    break;    // do .. while(0)
+                }
+        
+                /* Check whether the provider type in the wsdd matchs the service's 
+                 * binding style 
+                 */
+                AXIS_BINDING_STYLE nBindingStyle = RPC_ENCODED;
+                if (0 != m_pWebService->_functions)
+                    /* C service */
+                {
+                    nBindingStyle = m_pWebService->_functions->getBindingStyle (m_pWebService->_object);
+                }
+                else if (0 != m_pWebService->_object)
+                {
+                    nBindingStyle = ((WrapperClassHandler *)m_pWebService->_object)->getBindingStyle ();
+                }
+        
+                if (m_pSZ->getStyle () != nBindingStyle)
+                {
+                    AXISTRACE1 ("CLIENT_SOAP_SOAP_CONTENT_ERROR", CRITICAL);
+                    throw AxisSoapException (CLIENT_SOAP_SOAP_CONTENT_ERROR);
+                    break;    // do .. while(0)
+                }
+            }
+            else
+            {
+                AXISTRACE1 ("CLIENT_WSDD_METHOD_NOT_ALLOWED", CRITICAL);
+                throw AxisWsddException (CLIENT_WSDD_METHOD_NOT_ALLOWED);
+                // Method is not an exposed allowed method
+                break;        // do .. while(0)
+            }
     
-    		/* Check whether the provider type in the wsdd matchs the service's 
-    		 * binding style 
-    		 */
-    		AXIS_BINDING_STYLE nBindingStyle = RPC_ENCODED;
-    		if (0 != m_pWebService->_functions)
-    		    /* C service */
-    		{
-    		    nBindingStyle = m_pWebService->_functions->
-    			getBindingStyle (m_pWebService->_object);
-    		}
-    		else if (0 != m_pWebService->_object)
-    		{
-    		    nBindingStyle = ((WrapperClassHandler *)
-    				     m_pWebService->_object)->
-    			getBindingStyle ();
-    		}
+            // Get Global and Transport Handlers
+            if (AXIS_SUCCESS != (Status = initializeHandlers (sSessionId,pStream->getProtocol())))
+            {
+                AXISTRACE1 ("SERVER_ENGINE_COULD_NOT_LOAD_HDL", CRITICAL);
+                throw AxisEngineException (SERVER_ENGINE_COULD_NOT_LOAD_HDL);
+                break;        // do .. while(0)
+            }
+            
+            // Get Service specific Handlers from the pool if configured any
+            if (AXIS_SUCCESS !=
+            (Status =
+             g_pHandlerPool->getRequestFlowHandlerChain (&m_pSReqFChain,sSessionId,m_pService)))
+            {
+                AXISTRACE1 ("SERVER_ENGINE_COULD_NOT_LOAD_HDL", CRITICAL);
+                throw AxisEngineException (SERVER_ENGINE_COULD_NOT_LOAD_HDL);
+                break;        // do .. while(0)
+            }
     
-    		if (m_pSZ->getStyle () != nBindingStyle)
-    		{
-    		    AXISTRACE1 ("CLIENT_SOAP_SOAP_CONTENT_ERROR", CRITICAL);
-    		    throw AxisSoapException (CLIENT_SOAP_SOAP_CONTENT_ERROR);
-    		    break;	// do .. while(0)
-    		}
-    	    }
-    	    else
-    	    {
-    		AXISTRACE1 ("CLIENT_WSDD_METHOD_NOT_ALLOWED", CRITICAL);
-    		throw AxisWsddException (CLIENT_WSDD_METHOD_NOT_ALLOWED);
-    		// Method is not an exposed allowed method
-    		break;		// do .. while(0)
-    	    }
+            if (AXIS_SUCCESS != (Status =
+                     g_pHandlerPool->getResponseFlowHandlerChain (&m_pSResFChain,sSessionId,m_pService)))
+            {
+                AXISTRACE1 ("SERVER_ENGINE_COULD_NOT_LOAD_HDL", CRITICAL);
+                throw AxisEngineException (SERVER_ENGINE_COULD_NOT_LOAD_HDL);
+                break;        // do .. while(0)
+            }
     
-    	    // Get Global and Transport Handlers
-    	    if (AXIS_SUCCESS != (Status = initializeHandlers (sSessionId,
-    							      pStream->
-    							      getProtocol
-    							      ())))
-    	    {
-    		AXISTRACE1 ("SERVER_ENGINE_COULD_NOT_LOAD_HDL", CRITICAL);
-    		throw AxisEngineException (SERVER_ENGINE_COULD_NOT_LOAD_HDL);
-    		break;		// do .. while(0)
-    	    }
-    	    // Get Service specific Handlers from the pool if configured any
-    	    if (AXIS_SUCCESS !=
-    		(Status =
-    		 g_pHandlerPool->getRequestFlowHandlerChain (&m_pSReqFChain,
-    							     sSessionId,
-    							     m_pService)))
-    	    {
-    		AXISTRACE1 ("SERVER_ENGINE_COULD_NOT_LOAD_HDL", CRITICAL);
-    		throw AxisEngineException (SERVER_ENGINE_COULD_NOT_LOAD_HDL);
-    		break;		// do .. while(0)
-    	    }
+            /*
+             * Invoke all handlers including the webservice
+             * in case of failure coresponding stream fault message will be set
+             */
+            Status = invoke (m_pMsgData);
+        }
+        while (0);
     
-    	    if (AXIS_SUCCESS != (Status =
-    				 g_pHandlerPool->
-    				 getResponseFlowHandlerChain (&m_pSResFChain,
-    							      sSessionId,
-    							      m_pService)))
-    	    {
-    		AXISTRACE1 ("SERVER_ENGINE_COULD_NOT_LOAD_HDL", CRITICAL);
-    		throw AxisEngineException (SERVER_ENGINE_COULD_NOT_LOAD_HDL);
-    		break;		// do .. while(0)
-    	    }
+        if (AXIS_SUCCESS != m_pDZ->flushInputStream ())
+        {
+            AXISTRACE1 ("CLIENT_SOAP_SOAP_CONTENT_ERROR", CRITICAL);
+        }
+        
+        /*
+         * Get any header blocks unprocessed (left) in the Deserializer and add them
+         * to the Serializer
+         * They may be headers targetted to next soap processors
+         */
+        HeaderBlock *pHderBlk = NULL;
+        while (true)
+        {
+            /* Following function gets a header block from Deserializer irrespective
+             * of any thing 
+             */
+            pHderBlk = m_pDZ->getHeaderBlock ();
+            /* Add it to the Serializer */
+            if (pHderBlk)
+                m_pSZ->addHeaderBlock (pHderBlk);
+            else
+                break;
+        }
+        m_pSZ->setOutputStream (pStream);
     
-    	    /*
-    	     * Invoke all handlers including the webservice
-    	     * in case of failure coresponding stream fault message will be set
-    	     */
-    	    Status = invoke (m_pMsgData);
-    	}
-    	while (0);
-    
-    	if (AXIS_SUCCESS != m_pDZ->flushInputStream ())
-    	{
-    	    AXISTRACE1 ("CLIENT_SOAP_SOAP_CONTENT_ERROR", CRITICAL);
-    	}
-    	/*
-    	 * Get any header blocks unprocessed (left) in the Deserializer and add them
-    	 * to the Serializer
-    	 * They may be headers targetted to next soap processors
-    	 */
-    	HeaderBlock *pHderBlk = NULL;
-    	while (true)
-    	{
-    	    /* Following function gets a header block from Deserializer irrespective
-    	     * of any thing 
-    	     */
-    	    pHderBlk = m_pDZ->getHeaderBlock ();
-    	    /* Add it to the Serializer */
-    	    if (pHderBlk)
-    		m_pSZ->addHeaderBlock (pHderBlk);
-    	    else
-    		break;
-    	}
-    	m_pSZ->setOutputStream (pStream);
-    
-    	// Pool back the handlers and services
-    	releaseHandlers (pStream);
-    	//todo
-    	/* An exception derived from exception which is not handled will be 
-    	 * handled here. You can call a method in AxisModule which may unload 
-    	 * the ServerAxisEngine from the webserver and report the error. You can
-    	 * also write this in a logfile specific to axis.
-    	 */
+        // Pool back the handlers and services
+        releaseHandlers (pStream);
+        
+        //todo
+        /* An exception derived from exception which is not handled will be 
+         * handled here. You can call a method in AxisModule which may unload 
+         * the ServerAxisEngine from the webserver and report the error. You can
+         * also write this in a logfile specific to axis.
+         */
     }
     catch (AxisException & e)
     {
-    	/*
-    	 * An exception which is not handled will be handled here.
-    	 */
-    	int iExceptionCode = e.getExceptionCode ();
-    	//char* pcTempStr = (char*) e.what();
-    	//AXISTRACE2("Exception:", pcTempStr, CRITICAL);
-    	if (AXISC_SERVICE_THROWN_EXCEPTION == iExceptionCode)
-    	{
-    	    /*Writes the SoapMessage in which soap body contains only Fault */
-    	    m_pSZ->setOutputStream (pStream);
-    	    releaseHandlers (pStream);
-    	    return AXIS_SUCCESS;	//Service created fault is written to the stream. 
-    	    //so return success.
-    	}
-    	else
-        {		
+        /*
+         * An exception which is not handled will be handled here.
+         */
+        int iExceptionCode = e.getExceptionCode ();
+        //char* pcTempStr = (char*) e.what();
+        //AXISTRACE2("Exception:", pcTempStr, CRITICAL);
+        if (AXISC_SERVICE_THROWN_EXCEPTION == iExceptionCode)
+        {
+            /*Writes the SoapMessage in which soap body contains only Fault */
+            m_pSZ->setOutputStream (pStream);
+            releaseHandlers (pStream);
+            return AXIS_SUCCESS;    //Service created fault is written to the stream. 
+            //so return success.
+        }
+        else
+        {        
            /* An exception has occurred inside Axis C++ engine.(not in a
-    		* webservice or handler). Later we handle this by coming back in here
+            * webservice or handler). Later we handle this by coming back in here
             * and serialising the fault out
-    		*/
-    	    throw e;
+            */
+            throw e;
         }
     }
     catch (exception& e)
     {
-    	e = e;
-	   /* Handle standerd exceptions here */
+        e = e;
+       /* Handle standerd exceptions here */
        AxisTrace::trace(e.what());
        return SERVER_UNKNOWN_ERROR;
     }
     catch (...)
     {
-	   return SERVER_UNKNOWN_ERROR;
+       return SERVER_UNKNOWN_ERROR;
     }
     return AXIS_SUCCESS;
 }
 
-int
-ServerAxisEngine::invoke (MessageData * pMsg)
+int ServerAxisEngine::
+invoke (MessageData * pMsg)
 {
-    enum AE_LEVEL
-    { AE_START = 1, AE_TRH, AE_GLH, AE_SERH, AE_SERV };
+    enum AE_LEVEL { AE_START = 1, AE_TRH, AE_GLH, AE_SERH, AE_SERV };
     int Status = AXIS_FAIL;
     int level = AE_START;
     do
     {
-	// Invoke transport request handlers
-	if (m_pTReqFChain)
-	{
-	    if (AXIS_SUCCESS != (Status = m_pTReqFChain->invoke (pMsg)))
-	    {
-		AXISTRACE1 ("SERVER_ENGINE_HANDLER_FAILED", CRITICAL);
-		throw AxisEngineException (SERVER_ENGINE_HANDLER_FAILED);
-		break;		// do .. while (0)
-	    }
+        // Invoke transport request handlers
+        if (m_pTReqFChain)
+            if (AXIS_SUCCESS != (Status = m_pTReqFChain->invoke (pMsg)))
+            {
+                AXISTRACE1 ("SERVER_ENGINE_HANDLER_FAILED", CRITICAL);
+                throw AxisEngineException (SERVER_ENGINE_HANDLER_FAILED);
+                break;        // do .. while (0)
+            }
+        
+        level++;        // AE_TRH
+        // Invoke global request handlers
+        if (m_pGReqFChain)
+            if (AXIS_SUCCESS != (Status = m_pGReqFChain->invoke (pMsg)))
+            {
+                AXISTRACE1 ("SERVER_ENGINE_HANDLER_FAILED", CRITICAL);
+                throw AxisEngineException (SERVER_ENGINE_HANDLER_FAILED);
+                break;        // do .. while (0)
+            }
 
-	}
-	level++;		// AE_TRH
-	// Invoke global request handlers
-	if (m_pGReqFChain)
-	{
-	    if (AXIS_SUCCESS != (Status = m_pGReqFChain->invoke (pMsg)))
-	    {
-		AXISTRACE1 ("SERVER_ENGINE_HANDLER_FAILED", CRITICAL);
-		throw AxisEngineException (SERVER_ENGINE_HANDLER_FAILED);
-		break;		// do .. while (0)
-	    }
-	}
-	level++;		// AE_GLH
-	// Invoke service specific request handlers
-	if (m_pSReqFChain)
-	{
-	    if (AXIS_SUCCESS != (Status = m_pSReqFChain->invoke (pMsg)))
-	    {
-		AXISTRACE1 ("SERVER_ENGINE_HANDLER_FAILED", CRITICAL);
-		throw AxisEngineException (SERVER_ENGINE_HANDLER_FAILED);
-		break;		// do .. while (0)
-	    }
-	}
-	level++;		// AE_SERH
-	/*
-	 * Before processing the soap body check whether there is any header 
-	 * blocks with mustUnderstand attribute left unprocessed in the 
-	 * Deserializer. If so return a soap fault.
-	 */
-	if (m_pDZ->isAnyMustUnderstandHeadersLeft ())
-	{
-	    AXISTRACE1 ("SOAP_MUSTUNDERSTAND", CRITICAL);
-	    throw AxisSoapException (SOAP_MUST_UNDERSTAND);
-	    break;		// do .. while (0)
-	}
-	// Call actual web service handler
-	if (m_pWebService)
-	{
-	    if (0 != m_pWebService->_functions)
-		/* C web service */
-	    {
-		// Disable C support
-		//IMessageData_C cMC = { 0, 0 };
-		//cMC._object = pMsg;
-		//cMC._functions = &IMessageData::ms_VFtable;
-		//Status = m_pWebService->_functions->invoke (m_pWebService->
-		//    _object, &cMC);
-	    }
-	    else if (0 != m_pWebService->_object)
-	    {
-		Status = ((WrapperClassHandler *) m_pWebService->_object)->
-		    invoke (pMsg);
-	    }
-	    else
-		Status = AXIS_FAIL;
-	    if (AXIS_SUCCESS != Status)
-	    {
-		AXISTRACE1 ("SERVER_ENGINE_WEBSERVICEFAILED", CRITICAL);
-		throw AxisEngineException (SERVER_ENGINE_WEBSERVICE_FAILED);
-		break;
-	    }
-	}
-	level++;		// AE_SERV
+        level++;        // AE_GLH
+        // Invoke service specific request handlers
+        if (m_pSReqFChain)
+            if (AXIS_SUCCESS != (Status = m_pSReqFChain->invoke (pMsg)))
+            {
+                AXISTRACE1 ("SERVER_ENGINE_HANDLER_FAILED", CRITICAL);
+                throw AxisEngineException (SERVER_ENGINE_HANDLER_FAILED);
+                break;        // do .. while (0)
+            }
+        
+        level++;        // AE_SERH
+        
+        /*
+         * Before processing the soap body check whether there is any header 
+         * blocks with mustUnderstand attribute left unprocessed in the 
+         * Deserializer. If so return a soap fault.
+         */
+        if (m_pDZ->isAnyMustUnderstandHeadersLeft ())
+        {
+            AXISTRACE1 ("SOAP_MUSTUNDERSTAND", CRITICAL);
+            throw AxisSoapException (SOAP_MUST_UNDERSTAND);
+            break;        // do .. while (0)
+        }
+        
+        // Call actual web service handler
+        if (m_pWebService)
+        {
+            if (0 != m_pWebService->_functions)
+            /* C web service */
+            {
+                // Disable C support
+                //IMessageData_C cMC = { 0, 0 };
+                //cMC._object = pMsg;
+                //cMC._functions = &IMessageData::ms_VFtable;
+                //Status = m_pWebService->_functions->invoke (m_pWebService->
+                //    _object, &cMC);
+            }
+            else if (0 != m_pWebService->_object)
+                Status = ((WrapperClassHandler *) m_pWebService->_object)->invoke (pMsg);
+            else
+                Status = AXIS_FAIL;
+            
+            if (AXIS_SUCCESS != Status)
+            {
+                AXISTRACE1 ("SERVER_ENGINE_WEBSERVICEFAILED", CRITICAL);
+                throw AxisEngineException (SERVER_ENGINE_WEBSERVICE_FAILED);
+                break;
+            }
+        }
+        level++;        // AE_SERV
     }
     while (0);
 
@@ -456,42 +433,36 @@ ServerAxisEngine::invoke (MessageData * pMsg)
      */
     switch (level)
     {
-    case AE_SERV:		// Everything Success.        
-	Status = AXIS_SUCCESS;
-	// no break;
-    case AE_SERH:		// Actual web service handler has failed
-	// Invoke web service specific response handlers
-	if (m_pSResFChain)
-	{
-	    m_pSResFChain->invoke (pMsg);
-	}
-	// no break;
-    case AE_GLH:		// web service specific handlers have failed
-	// invoke global response handlers
-	if (m_pGResFChain)
-	{
-	    m_pGResFChain->invoke (pMsg);
-	}
-	// no break;
-    case AE_TRH:		// Global handlers have failed
-	if (m_pTResFChain)
-	{
-	    m_pTResFChain->invoke (pMsg);
-	}
-	// no break;
-    case AE_START:;		// Transport handlers have failed
+        case AE_SERV:        // Everything Success.        
+            Status = AXIS_SUCCESS;
+            // no break;
+        case AE_SERH:        // Actual web service handler has failed
+            // Invoke web service specific response handlers
+            if (m_pSResFChain)
+                m_pSResFChain->invoke (pMsg);
+            // no break;
+        case AE_GLH:        // web service specific handlers have failed
+            // invoke global response handlers
+            if (m_pGResFChain)
+                m_pGResFChain->invoke (pMsg);
+            // no break;
+        case AE_TRH:        // Global handlers have failed
+            if (m_pTResFChain)
+                m_pTResFChain->invoke (pMsg);
+            // no break;
+        case AE_START:;        // Transport handlers have failed
     };
+    
     return Status;
 }
 
-void
-ServerAxisEngine::onFault (MessageData * pMsg)
+void ServerAxisEngine::
+onFault (MessageData * pMsg)
 {
 }
 
-int
-ServerAxisEngine::setFaultOutputStream (int iFaultCode,
-                  SOAPTransport * pStream)
+int ServerAxisEngine::
+setFaultOutputStream (int iFaultCode, SOAPTransport * pStream)
 {
     AxisMessage objMessage;
     string sMessage = objMessage.getMessage (iFaultCode);
@@ -503,9 +474,8 @@ ServerAxisEngine::setFaultOutputStream (int iFaultCode,
     return AXIS_SUCCESS;
 }
 
-int
-ServerAxisEngine::setFaultOutputStream (AxisException iFault,
-                  SOAPTransport * pStream)
+int ServerAxisEngine::
+setFaultOutputStream (AxisException iFault, SOAPTransport * pStream)
 {
     SoapFault *pObjSoapFault = SoapFault::getSoapFault (iFault.getExceptionCode());
     pObjSoapFault->setFaultDetail (iFault.what());
@@ -515,22 +485,23 @@ ServerAxisEngine::setFaultOutputStream (AxisException iFault,
     return AXIS_SUCCESS;
 }
 
-int
-ServerAxisEngine::releaseHandlers (SOAPTransport * pStream)
+int ServerAxisEngine::
+releaseHandlers (SOAPTransport * pStream)
 {
     string sSessionId = pStream->getSessionId ();
     // Pool back the Service specific handlers
     if (m_pSReqFChain)
-	g_pHandlerPool->poolHandlerChain (m_pSReqFChain, sSessionId);
+        g_pHandlerPool->poolHandlerChain (m_pSReqFChain, sSessionId);
+        
     if (m_pSResFChain)
-	g_pHandlerPool->poolHandlerChain (m_pSResFChain, sSessionId);
+        g_pHandlerPool->poolHandlerChain (m_pSResFChain, sSessionId);
+        
     /* Pool back the Global and Transport handlers
      * UnInitializeHandlers(sSessionId, stream->trtype);
      * Pool back the webservice
      */
     if (m_pWebService)
-	g_pHandlerPool->poolWebService (sSessionId, m_pWebService,
-					m_pService);
+        g_pHandlerPool->poolWebService (sSessionId, m_pWebService, m_pService);
 
     return AXIS_SUCCESS;
 }
