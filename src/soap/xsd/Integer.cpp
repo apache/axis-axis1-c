@@ -65,15 +65,15 @@ AxisChar* Integer::serialize(const xsd__integer* value) throw (AxisSoapException
         {
             AxisString exceptionMessage =
             "Value to be serialized is less than MinInclusive specified for this type.  MinInclusive = ";
-            AxisChar* length = new AxisChar[25];
+            AxisChar length[100];
             sprintf(length, PRINTF_LONGLONG_FORMAT_SPECIFIER, minInclusive->getMinInclusiveAsLONGLONG());
             exceptionMessage += length;
             exceptionMessage += ", Value = ";
             sprintf(length, PRINTF_LONGLONG_FORMAT_SPECIFIER, *value);
             exceptionMessage += length;
             exceptionMessage += ".";
-            delete [] length;
             
+            delete minInclusive;
             throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
                 const_cast<AxisChar*>(exceptionMessage.c_str()));
         }
@@ -87,15 +87,15 @@ AxisChar* Integer::serialize(const xsd__integer* value) throw (AxisSoapException
         {
             AxisString exceptionMessage =
             "Value to be serialized is less than or equal to MinExclusive specified for this type.  MinExclusive = ";
-            AxisChar* length = new AxisChar[25];
+            AxisChar length[100];
             sprintf(length, PRINTF_LONGLONG_FORMAT_SPECIFIER, minExclusive->getMinExclusiveAsLONGLONG());
             exceptionMessage += length;
             exceptionMessage += ", Value = ";
             sprintf(length, PRINTF_LONGLONG_FORMAT_SPECIFIER, *value);
             exceptionMessage += length;
             exceptionMessage += ".";
-            delete [] length;
             
+            delete minExclusive;
             throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
                 const_cast<AxisChar*>(exceptionMessage.c_str()));
         }
@@ -109,15 +109,15 @@ AxisChar* Integer::serialize(const xsd__integer* value) throw (AxisSoapException
         {
             AxisString exceptionMessage =
             "Value to be serialized is greater than MaxInclusive specified for this type.  MaxInclusive = ";
-            AxisChar* length = new AxisChar[25];
+            AxisChar length[100];
             sprintf(length, PRINTF_LONGLONG_FORMAT_SPECIFIER, maxInclusive->getMaxInclusiveAsLONGLONG());
             exceptionMessage += length;
             exceptionMessage += ", Value = ";
             sprintf(length, PRINTF_LONGLONG_FORMAT_SPECIFIER, *value);
             exceptionMessage += length;
             exceptionMessage += ".";
-            delete [] length;
             
+            delete maxInclusive;
             throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
                 const_cast<AxisChar*>(exceptionMessage.c_str()));
         }
@@ -131,15 +131,15 @@ AxisChar* Integer::serialize(const xsd__integer* value) throw (AxisSoapException
         {
             AxisString exceptionMessage =
             "Value to be serialized is greater than or equal to MaxExclusive specified for this type.  MaxExclusive = ";
-            AxisChar* length = new AxisChar[25];
+            AxisChar length[100];
             sprintf(length, PRINTF_LONGLONG_FORMAT_SPECIFIER, maxExclusive->getMaxExclusiveAsLONGLONG());
             exceptionMessage += length;
             exceptionMessage += ", Value = ";
             sprintf(length, PRINTF_LONGLONG_FORMAT_SPECIFIER, *value);
             exceptionMessage += length;
             exceptionMessage += ".";
-            delete [] length;
             
+            delete maxExclusive;
             throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
                 const_cast<AxisChar*>(exceptionMessage.c_str()));
         }
@@ -153,10 +153,9 @@ AxisChar* Integer::serialize(const xsd__integer* value) throw (AxisSoapException
     if (totalDigits->isSet())
     {
         valueSize = totalDigits->getTotalDigits() + 1;
-        AxisChar* digits = new char[10];
+        AxisChar digits[10];
         AxisSprintf (digits, 10, "%i", totalDigits->getTotalDigits());
         formatSpecifier += digits;
-        delete [] digits;
     }
     delete totalDigits;
     

@@ -17,156 +17,145 @@
 
 AXIS_CPP_NAMESPACE_START
 
-    Base64Binary::Base64Binary()
+Base64Binary::Base64Binary()
+{
+}
+
+Base64Binary::~Base64Binary()
+{
+}
+
+Base64Binary::Base64Binary(const xsd__base64Binary* value)
+{
+    if (value)
     {
+        setNil(false);
+        serialize(value);
     }
+}
+
+XSDTYPE Base64Binary::getType()
+{
+    return XSD_BASE64BINARY;
+}
+
+xsd__base64Binary* Base64Binary::getBase64Binary()
+{
+    if (isNil())
+        return NULL;
+    else
+        return deserializeBase64Binary(m_Buf);
+}
+
+void * Base64Binary::getValue()
+{
+    return (void*) getBase64Binary();
+}
+
+AxisChar* Base64Binary::serialize(const xsd__base64Binary * value) throw (AxisSoapException)
+{
+    AxisString exceptionMessage;
+    char lengthAsString[100];
     
-    Base64Binary::~Base64Binary()
-    {
-    }
-
-    Base64Binary::Base64Binary(const xsd__base64Binary* value)
-    {
-        if (value)
+    MinLength* minLength= getMinLength();
+    if (minLength->isSet())
+        if (value->getSize() < minLength->getMinLength())
         {
-            setNil(false);
-            serialize(value);
-        }
-    }
-
-    XSDTYPE Base64Binary::getType()
-    {
-        return XSD_BASE64BINARY;
-    }
-
-    xsd__base64Binary* Base64Binary::getBase64Binary()
-    {
-        if (isNil())
-        {
-            return NULL;
-        }
-        else
-        {
-            return deserializeBase64Binary(m_Buf);
-        }
-    }
-
-    void * Base64Binary::getValue()
-    {
-        return (void*) getBase64Binary();
-    }
-    
-    AxisChar* Base64Binary::serialize(const xsd__base64Binary * value) throw (AxisSoapException)
-    {
-        MinLength* minLength= getMinLength();
-        if (minLength->isSet())
-        {
-            if (value->getSize() < minLength->getMinLength())
-            {
-                AxisString exceptionMessage =
-                "Length of value to be serialized is shorter than MinLength specified for this type.  Minlength = ";
-                AxisChar* length = new AxisChar[10];
-                sprintf(length, "%d", minLength->getMinLength());
-                exceptionMessage += length;
-                exceptionMessage += ", Length of value = ";
-                sprintf(length, "%d", value->getSize());
-                exceptionMessage += length;
-                exceptionMessage += ".";
-                delete [] length;
-                
-                throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
-                    const_cast<AxisChar*>(exceptionMessage.c_str()));
-            }
+            exceptionMessage =
+            "Length of value to be serialized is shorter than MinLength specified for this type.  Minlength = ";
+            sprintf(lengthAsString, "%d", minLength->getMinLength());
+            exceptionMessage += lengthAsString;
+            exceptionMessage += ", Length of value = ";
+            sprintf(lengthAsString, "%d", value->getSize());
+            exceptionMessage += lengthAsString;
+            exceptionMessage += ".";
             
+            delete minLength;
+            throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
+                const_cast<AxisChar*>(exceptionMessage.c_str()));
         }
-        delete minLength;
-        
-        MaxLength* maxLength = getMaxLength();
-        if (maxLength->isSet())
-        {
-            if (value->getSize() > maxLength->getMaxLength())
-            {
-                AxisString exceptionMessage =
-                "Length of value to be serialized is longer than MaxLength specified for this type.  Maxlength = ";
-                AxisChar* length = new AxisChar[10];
-                sprintf(length, "%d", maxLength->getMaxLength());
-                exceptionMessage += length;
-                exceptionMessage += ", Length of value = ";
-                sprintf(length, "%d", value->getSize());
-                exceptionMessage += length;
-                exceptionMessage += ".";
-                delete [] length;
-                
-                throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
-                    const_cast<AxisChar*>(exceptionMessage.c_str()));
-            }
-        }
-        delete maxLength;
-
-        Length* length= getLength();
-        if (length->isSet())
-        {
-            if (value->getSize() != length->getLength())
-            {
-                AxisString exceptionMessage =
-                "Length of value to be serialized is not the same as Length specified for this type.  Length = ";
-                AxisChar* lengthAsString = new AxisChar[10];
-                sprintf(lengthAsString, "%d", length->getLength());
-                exceptionMessage += lengthAsString;
-                exceptionMessage += ", Length of value = ";
-                sprintf(lengthAsString, "%d", value->getSize());
-                exceptionMessage += lengthAsString;
-                exceptionMessage += ".";
-                delete [] lengthAsString;
-                
-                throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
-                    const_cast<AxisChar*>(exceptionMessage.c_str()));
-            }
-        }
-        delete length;
-     
-	    int len = apr_base64_encode_len (value->getSize());	    
-	    AxisChar* serializedValue = new AxisChar[len + 1];
-		int size = 0;
-		xsd__unsignedByte * pTemp = value->get(size);
-	    len = apr_base64_encode_binary (serializedValue, pTemp, size);
-	    serializedValue[len] = 0;
-	    	    
-        IAnySimpleType::serialize(serializedValue);
-        delete [] serializedValue;        
-		return m_Buf;
-    }
-	
-    xsd__base64Binary * Base64Binary::deserializeBase64Binary(const AxisChar* valueAsChar) throw (AxisSoapException)
-    {
-    	xsd__base64Binary * value = new xsd__base64Binary();
-	    xsd__int size = apr_base64_decode_len (valueAsChar);
-	    xsd__unsignedByte * pTemp = new xsd__unsignedByte[size + 1];
-	    size = apr_base64_decode_binary (pTemp, valueAsChar);
-	    pTemp[size] = 0; // Null terminate so it could be used as a string
-		value->set(pTemp, size);
-		delete [] pTemp;
-	    return value;
-    }
-
-    MinLength* Base64Binary::getMinLength()
-    {
-        return new MinLength();
-    }
+    delete minLength;
     
-    MaxLength* Base64Binary::getMaxLength()
-    {
-        return new MaxLength();
-    }
+    MaxLength* maxLength = getMaxLength();
+    if (maxLength->isSet())
+        if (value->getSize() > maxLength->getMaxLength())
+        {
+            exceptionMessage =
+            "Length of value to be serialized is longer than MaxLength specified for this type.  Maxlength = ";
+            sprintf(lengthAsString, "%d", maxLength->getMaxLength());
+            exceptionMessage += lengthAsString;
+            exceptionMessage += ", Length of value = ";
+            sprintf(lengthAsString, "%d", value->getSize());
+            exceptionMessage += lengthAsString;
+            exceptionMessage += ".";
+            
+            delete maxLength;
+            throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
+                const_cast<AxisChar*>(exceptionMessage.c_str()));
+        }
+    delete maxLength;
 
-    Length* Base64Binary::getLength()
-    {
-        return new Length();
-    }
-    
-    WhiteSpace* Base64Binary::getWhiteSpace()
-    {
-        return new WhiteSpace(COLLAPSE);
-    }
+    Length* length= getLength();
+    if (length->isSet())
+        if (value->getSize() != length->getLength())
+        {
+            exceptionMessage =
+            "Length of value to be serialized is not the same as Length specified for this type.  Length = ";
+            sprintf(lengthAsString, "%d", length->getLength());
+            exceptionMessage += lengthAsString;
+            exceptionMessage += ", Length of value = ";
+            sprintf(lengthAsString, "%d", value->getSize());
+            exceptionMessage += lengthAsString;
+            exceptionMessage += ".";
+
+            delete length;
+            throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
+                const_cast<AxisChar*>(exceptionMessage.c_str()));
+        }
+    delete length;
+ 
+    int len = apr_base64_encode_len (value->getSize());	    
+    AxisChar* serializedValue = new AxisChar[len + 1];
+	int size = 0;
+	xsd__unsignedByte * pTemp = value->get(size);
+    len = apr_base64_encode_binary (serializedValue, pTemp, size);
+    serializedValue[len] = 0;
+    	    
+    IAnySimpleType::serialize(serializedValue);
+    delete [] serializedValue;        
+	return m_Buf;
+}
+
+xsd__base64Binary * Base64Binary::deserializeBase64Binary(const AxisChar* valueAsChar) throw (AxisSoapException)
+{
+	xsd__base64Binary * value = new xsd__base64Binary();
+    xsd__int size = apr_base64_decode_len (valueAsChar);
+    xsd__unsignedByte * pTemp = new xsd__unsignedByte[size + 1];
+    size = apr_base64_decode_binary (pTemp, valueAsChar);
+    pTemp[size] = 0; // Null terminate so it could be used as a string
+	value->set(pTemp, size);
+	delete [] pTemp;
+    return value;
+}
+
+MinLength* Base64Binary::getMinLength()
+{
+    return new MinLength();
+}
+
+MaxLength* Base64Binary::getMaxLength()
+{
+    return new MaxLength();
+}
+
+Length* Base64Binary::getLength()
+{
+    return new Length();
+}
+
+WhiteSpace* Base64Binary::getWhiteSpace()
+{
+    return new WhiteSpace(COLLAPSE);
+}
 
 AXIS_CPP_NAMESPACE_END

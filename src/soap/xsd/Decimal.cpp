@@ -42,13 +42,9 @@ XSDTYPE Decimal::getType()
 xsd__decimal* Decimal::getDecimal()
 {
     if (isNil())
-    {
         return NULL;
-    }
     else
-    {
         return deserializeDecimal(m_Buf);
-    }
 }
 
 void * Decimal::getValue()
@@ -60,91 +56,83 @@ AxisChar* Decimal::serialize(const xsd__decimal* value) throw (AxisSoapException
 {
     MinInclusive* minInclusive = getMinInclusive();
     if (minInclusive->isSet())
-    {
         if ( *value < minInclusive->getMinInclusiveAsDouble() )
         {
             AxisString exceptionMessage =
             "Value to be serialized is less than MinInclusive specified for this type.  MinInclusive = ";
-            AxisChar* length = new AxisChar[25];
+            AxisChar length[100];
             sprintf(length, "%f", minInclusive->getMinInclusiveAsDouble());
             exceptionMessage += length;
             exceptionMessage += ", Value = ";
             sprintf(length, "%f", *value);
             exceptionMessage += length;
             exceptionMessage += ".";
-            delete [] length;
             
+            delete minInclusive;
             throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
                 const_cast<AxisChar*>(exceptionMessage.c_str()));
         }
-    }
     delete minInclusive;
 
     MinExclusive* minExclusive = getMinExclusive();
     if (minExclusive->isSet())
-    {
         if ( *value <= minExclusive->getMinExclusiveAsDouble() )
         {
             AxisString exceptionMessage =
             "Value to be serialized is less than or equal to MinExclusive specified for this type.  MinExclusive = ";
-            AxisChar* length = new AxisChar[25];
+            AxisChar length[100];
             sprintf(length, "%f", minExclusive->getMinExclusiveAsDouble());
             exceptionMessage += length;
             exceptionMessage += ", Value = ";
             sprintf(length, "%f", *value);
             exceptionMessage += length;
             exceptionMessage += ".";
-            delete [] length;
             
+            delete minExclusive;
             throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
                 const_cast<AxisChar*>(exceptionMessage.c_str()));
         }
-    }
     delete minExclusive;
 
 
     MaxInclusive* maxInclusive = getMaxInclusive();
     if (maxInclusive->isSet())
-    {
         if ( *value > maxInclusive->getMaxInclusiveAsDouble() )
         {
             AxisString exceptionMessage =
             "Value to be serialized is greater than MaxInclusive specified for this type.  MaxInclusive = ";
-            AxisChar* length = new AxisChar[25];
+            AxisChar length[100];
             sprintf(length, "%f", maxInclusive->getMaxInclusiveAsDouble());
             exceptionMessage += length;
             exceptionMessage += ", Value = ";
             sprintf(length, "%f", *value);
             exceptionMessage += length;
             exceptionMessage += ".";
-            delete [] length;
             
+            delete maxInclusive;
             throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
                 const_cast<AxisChar*>(exceptionMessage.c_str()));
         }
-    }
     delete maxInclusive;
 
     MaxExclusive* maxExclusive = getMaxExclusive();
     if (maxExclusive->isSet())
-    {
         if ( *value >= maxExclusive->getMaxExclusiveAsDouble() )
         {
             AxisString exceptionMessage =
             "Value to be serialized is greater than or equal to MaxExclusive specified for this type.  MaxExclusive = ";
-            AxisChar* length = new AxisChar[25];
+            AxisChar length[100];
             sprintf(length, "%f", maxExclusive->getMaxExclusiveAsDouble());
             exceptionMessage += length;
             exceptionMessage += ", Value = ";
             sprintf(length, "%f", *value);
             exceptionMessage += length;
             exceptionMessage += ".";
-            delete [] length;
             
+            delete maxExclusive;
             throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
                 const_cast<AxisChar*>(exceptionMessage.c_str()));
         }
-    }
     delete maxExclusive;
 
 
@@ -155,10 +143,9 @@ AxisChar* Decimal::serialize(const xsd__decimal* value) throw (AxisSoapException
     if (totalDigits->isSet())
     {
         valueSize = totalDigits->getTotalDigits() + 1;
-        AxisChar* digits = new char[10];
+        AxisChar digits[100];
         AxisSprintf (digits, 10, "%i", totalDigits->getTotalDigits());
         formatSpecifier += digits;
-        delete [] digits;
     }
     delete totalDigits;
     
@@ -166,10 +153,9 @@ AxisChar* Decimal::serialize(const xsd__decimal* value) throw (AxisSoapException
     if (fractionDigits->isSet())
     {
         formatSpecifier += ".";
-        AxisChar* digits = new char[10];
+        AxisChar digits[100];
         AxisSprintf (digits, 10, "%i", fractionDigits->getFractionDigits());
         formatSpecifier += digits;
-        delete [] digits;
     }
     delete fractionDigits;
     

@@ -61,15 +61,15 @@ AxisChar* NOTATION::serialize(const xsd__NOTATION value) throw (AxisSoapExceptio
         {
             AxisString exceptionMessage =
             "Length of value to be serialized is shorter than MinLength specified for this type.  Minlength = ";
-            AxisChar* length = new AxisChar[10];
+            AxisChar length[100];
             sprintf(length, "%d", minLength->getMinLength());
             exceptionMessage += length;
             exceptionMessage += ", Length of value = ";
             sprintf(length, "%d", strlen(value));
             exceptionMessage += length;
             exceptionMessage += ".";
-            delete [] length;
             
+            delete minLength;
             throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
                 const_cast<AxisChar*>(exceptionMessage.c_str()));
         }
@@ -83,15 +83,15 @@ AxisChar* NOTATION::serialize(const xsd__NOTATION value) throw (AxisSoapExceptio
         {
             AxisString exceptionMessage =
             "Length of value to be serialized is longer than MaxLength specified for this type.  Maxlength = ";
-            AxisChar* length = new AxisChar[10];
+            AxisChar length[100];
             sprintf(length, "%d", maxLength->getMaxLength());
             exceptionMessage += length;
             exceptionMessage += ", Length of value = ";
             sprintf(length, "%d", strlen(value));
             exceptionMessage += length;
             exceptionMessage += ".";
-            delete [] length;
             
+            delete maxLength;
             throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
                 const_cast<AxisChar*>(exceptionMessage.c_str()));
         }
@@ -105,15 +105,15 @@ AxisChar* NOTATION::serialize(const xsd__NOTATION value) throw (AxisSoapExceptio
         {
             AxisString exceptionMessage =
             "Length of value to be serialized is not the same as Length specified for this type.  Length = ";
-            AxisChar* lengthAsString = new AxisChar[10];
+            AxisChar lengthAsString[100];
             sprintf(lengthAsString, "%d", length->getLength());
             exceptionMessage += lengthAsString;
             exceptionMessage += ", Length of value = ";
             sprintf(lengthAsString, "%d", strlen(value));
             exceptionMessage += lengthAsString;
             exceptionMessage += ".";
-            delete [] lengthAsString;
             
+            delete length;
             throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
                 const_cast<AxisChar*>(exceptionMessage.c_str()));
         }

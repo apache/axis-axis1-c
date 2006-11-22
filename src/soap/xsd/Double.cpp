@@ -56,7 +56,6 @@ AxisChar* Double::serialize(const xsd__double* value) throw (AxisSoapException)
 {
     MinInclusive* minInclusive = getMinInclusive();
     if (minInclusive->isSet())
-    {
         if ( *value < minInclusive->getMinInclusiveAsDouble() )
         {
             AxisString exceptionMessage =
@@ -69,18 +68,14 @@ AxisChar* Double::serialize(const xsd__double* value) throw (AxisSoapException)
             exceptionMessage += length;
             exceptionMessage += ".";
             
-            if (minInclusive)
-                delete minInclusive;
-            
+            delete minInclusive;
             throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
                 const_cast<AxisChar*>(exceptionMessage.c_str()));
         }
-    }
     delete minInclusive;
 
     MinExclusive* minExclusive = getMinExclusive();
     if (minExclusive->isSet())
-    {
         if ( *value <= minExclusive->getMinExclusiveAsDouble() )
         {
             AxisString exceptionMessage =
@@ -93,19 +88,15 @@ AxisChar* Double::serialize(const xsd__double* value) throw (AxisSoapException)
             exceptionMessage += length;
             exceptionMessage += ".";
             
-            if (minExclusive)
-                delete minExclusive;
-            
+            delete minExclusive;
             throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
                 const_cast<AxisChar*>(exceptionMessage.c_str()));
         }
-    }
     delete minExclusive;
  
 
     MaxInclusive* maxInclusive = getMaxInclusive();
     if (maxInclusive->isSet())
-    {
         if ( *value > maxInclusive->getMaxInclusiveAsDouble() )
         {
             AxisString exceptionMessage =
@@ -117,19 +108,15 @@ AxisChar* Double::serialize(const xsd__double* value) throw (AxisSoapException)
             sprintf(length, "%f", *value);
             exceptionMessage += length;
             exceptionMessage += ".";
-            
-            if (maxInclusive)
-                delete maxInclusive;
-            
+           
+            delete maxInclusive;
             throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
                 const_cast<AxisChar*>(exceptionMessage.c_str()));
         }
-    }
     delete maxInclusive;
 
     MaxExclusive* maxExclusive = getMaxExclusive();
     if (maxExclusive->isSet())
-    {
         if ( *value >= maxExclusive->getMaxExclusiveAsDouble() )
         {
             AxisString exceptionMessage =
@@ -142,13 +129,11 @@ AxisChar* Double::serialize(const xsd__double* value) throw (AxisSoapException)
             exceptionMessage += length;
             exceptionMessage += ".";
             
-            if (maxExclusive)
-                delete maxExclusive;
+            delete maxExclusive;
             
             throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
                 const_cast<AxisChar*>(exceptionMessage.c_str()));
         }
-    }
     delete maxExclusive;
 
  

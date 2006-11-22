@@ -42,13 +42,9 @@ XSDTYPE Boolean::getType()
 xsd__boolean* Boolean::getBoolean()
 {
     if (isNil())
-    {
         return NULL;
-    }
     else
-    {
         return deserializeBoolean(m_Buf);
-    }
 }
 
 void * Boolean::getValue()
@@ -63,12 +59,11 @@ void * Boolean::getValue()
  */
 AxisChar* Boolean::serialize(const xsd__boolean * value) throw (AxisSoapException)
 {
-    AxisChar* serializedValue = new char[6];
+    AxisChar serializedValue[6];
 	AxisSprintf (serializedValue, 6, "%s",
             (*((int *) (value)) == false_) ? "false" : "true");
     
     IAnySimpleType::serialize(serializedValue);
-    delete [] serializedValue;        
     return m_Buf;
 }
 
@@ -82,13 +77,9 @@ xsd__boolean * Boolean::deserializeBoolean(const AxisChar* valueAsChar) throw (A
     xsd__boolean * value = new xsd__boolean;
  
 	if ( 0 == strcmp (valueAsChar, "true") || 0 == strcmp (valueAsChar, "1"))
-	{
 		*value = true_;
-	}
 	else
-	{
 		*value =  false_;
-	}
     
     return value;
 }

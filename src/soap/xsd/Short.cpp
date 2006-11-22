@@ -68,7 +68,7 @@ xsd__short* Short::deserializeShort(const AxisChar* valueAsChar) throw (AxisSoap
  
     xsd__short * value = new xsd__short;
     *value = static_cast<xsd__short> (*returnValue);
-    delete returnValue; // Samissa - need to clean this memory
+    delete returnValue; 
     return value;
 }
 

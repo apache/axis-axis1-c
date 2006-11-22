@@ -23,11 +23,7 @@ IAnySimpleType::IAnySimpleType():m_Buf(NULL), m_isNil(true)
 
 IAnySimpleType::~IAnySimpleType()
 {
-    if (m_Buf)
-    {
-        delete [] m_Buf;
-        m_Buf = NULL;
-    }
+    delete [] m_Buf;
 }
 
 bool IAnySimpleType::isNil()
@@ -47,11 +43,8 @@ AxisChar* IAnySimpleType::serialize()
 
 void IAnySimpleType::deserialize(const AxisChar* value)
 {
-    if (m_Buf)
-    {
-        delete [] m_Buf;
-        m_Buf = NULL;
-    }
+    delete [] m_Buf;
+    m_Buf = NULL;
  
     if (value)
     {
@@ -84,11 +77,9 @@ AxisChar* IAnySimpleType::serialize(const AxisChar* value) throw (AxisSoapExcept
     }
     delete enumeration;
 
-    if (m_Buf)
-    {
-        delete [] m_Buf;
-        m_Buf = NULL;
-    } 
+    delete [] m_Buf;
+    m_Buf = NULL;
+
     m_Buf = new char[strlen (serializedValue) + 1];
     strcpy (m_Buf, serializedValue);
     delete whiteSpace;

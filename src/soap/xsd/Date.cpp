@@ -17,227 +17,221 @@
 
 AXIS_CPP_NAMESPACE_START
 
-    Date::Date()
+Date::Date()
+{
+}
+
+Date::Date(const xsd__date* value)
+{
+    if (value)
     {
+        setNil(false);
+        serialize(value);
     }
+}
 
-    Date::Date(const xsd__date* value)
+XSDTYPE Date::getType()
+{
+    return XSD_DATE;
+}
+
+xsd__date* Date::getDate()
+{
+    if (isNil())
+        return NULL;
+    else
+        return deserializeDate(m_Buf);
+}
+
+void * Date::getValue()
+{
+    return (void*) getDate();
+}
+
+AxisChar* Date::serialize(const xsd__date* value) throw (AxisSoapException)
+{        
+    MinInclusive* minInclusive = getMinInclusive();
+    if (minInclusive->isSet())
     {
-        if (value)
-        {
-            setNil(false);
-            serialize(value);
-        }
-    }
-
-    XSDTYPE Date::getType()
-    {
-        return XSD_DATE;
-    }
-
-    xsd__date* Date::getDate()
-    {
-        if (isNil())
-        {
-            return NULL;
-        }
-        else
-        {
-            return deserializeDate(m_Buf);
-        }
-    }
-
-    void * Date::getValue()
-    {
-        return (void*) getDate();
-    }
-
-    AxisChar* Date::serialize(const xsd__date* value) throw (AxisSoapException)
-    {
-        MinInclusive* minInclusive = getMinInclusive();
-        if (minInclusive->isSet())
-        {
-            struct tm minInclusiveAsStructTM = minInclusive->getMinInclusiveAsStructTM();
-            if ( 0 > difftime(mktime(&minInclusiveAsStructTM), mktime(const_cast<struct tm*>(value))) )
-            {
-                AxisString exceptionMessage =
-                "Value to be serialized is less than MinInclusive specified for this type.  MinInclusive = ";
-                exceptionMessage += asctime(&minInclusiveAsStructTM);
-                exceptionMessage += ", Value = ";
-                exceptionMessage += asctime(value);
-                exceptionMessage += ".";
-                
-                throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
-                    const_cast<AxisChar*>(exceptionMessage.c_str()));
-            }
-        }
-        delete minInclusive;
-
-        MinExclusive* minExclusive = getMinExclusive();
-        if (minExclusive->isSet())
-        {
-            struct tm minExclusiveAsStructTM = minExclusive->getMinExclusiveAsStructTM();
-            if ( 0 >= difftime(mktime(&minExclusiveAsStructTM), mktime(const_cast<struct tm*>(value))) )
-            {
-                AxisString exceptionMessage =
-                "Value to be serialized is less than or equal to MinExclusive specified for this type.  MinExclusive = ";
-                exceptionMessage += asctime(&minExclusiveAsStructTM);
-                exceptionMessage += ", Value = ";
-                exceptionMessage += asctime(value);
-                exceptionMessage += ".";
-                
-                throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
-                    const_cast<AxisChar*>(exceptionMessage.c_str()));
-            }
-        }
-        delete minExclusive;
-
-        MaxInclusive* maxInclusive = getMaxInclusive();
-        if (maxInclusive->isSet())
-        {
-            struct tm maxInclusiveAsStructTM = maxInclusive->getMaxInclusiveAsStructTM();
-            if ( 0 < difftime(mktime(&maxInclusiveAsStructTM), mktime(const_cast<struct tm*>(value))) )
-            {
-                AxisString exceptionMessage =
-                "Value to be serialized is greater than MaxInclusive specified for this type.  MaxInclusive = ";
-                exceptionMessage += asctime(&maxInclusiveAsStructTM);
-                exceptionMessage += ", Value = ";
-                exceptionMessage += asctime(value);
-                exceptionMessage += ".";
-                
-                throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
-                    const_cast<AxisChar*>(exceptionMessage.c_str()));
-            }
-        }
-        delete maxInclusive;
-
-        MaxExclusive* maxExclusive = getMaxExclusive();
-        if (maxExclusive->isSet())
-        {
-            struct tm maxExclusiveAsStructTM = maxExclusive->getMaxExclusiveAsStructTM();
-            if ( 0 <= difftime(mktime(&maxExclusiveAsStructTM), mktime(const_cast<struct tm*>(value))) )
-            {
-                AxisString exceptionMessage =
-                "Value to be serialized is greater than or equal to MaxExclusive specified for this type.  MaxExclusive = ";
-                exceptionMessage += asctime(&maxExclusiveAsStructTM);
-                exceptionMessage += ", Value = ";
-                exceptionMessage += asctime(value);
-                exceptionMessage += ".";
-                
-                throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
-                    const_cast<AxisChar*>(exceptionMessage.c_str()));
-            }
-        }
-        delete maxExclusive;
-
-        AxisString serializedValue = "";
-        AxisChar* valueAsString = new AxisChar[80];
-        strftime (valueAsString, 80, "%Y-%m-%d", value);
-        serializedValue += valueAsString;
-        delete [] valueAsString;
-
-        // Calculate local timezone offset
-        time_t now = time(NULL);
-        struct tm *temp = gmtime(&now);
-        struct tm utcTime;
-        memcpy(&utcTime, temp, sizeof(struct tm));
-        temp = localtime(&now);
-        struct tm localTime;
-        memcpy(&localTime, temp, sizeof(struct tm));
-
-        long utcTimeInMinutes = (utcTime.tm_year * 60 * 24 * 365)
-            + (utcTime.tm_yday * 60 * 24)
-            + (utcTime.tm_hour * 60)
-            + utcTime.tm_min;
-
-        long localTimeInMinutes = (localTime.tm_year * 60 * 24 * 365)
-            + (localTime.tm_yday * 60 * 24)
-            + (localTime.tm_hour * 60)
-            + localTime.tm_min;
-
-        int timeOffsetInMinutes = localTimeInMinutes - utcTimeInMinutes;
-
-        if (timeOffsetInMinutes == 0)
-        {
-            serializedValue += "Z";
-        }
-        else
-        {
-            struct tm timeOffset;
-            timeOffset.tm_year = 0;
-            timeOffset.tm_yday = 0;
-            timeOffset.tm_sec = 0;
-            timeOffset.tm_min = timeOffsetInMinutes % 60;
-            timeOffsetInMinutes -= timeOffset.tm_min;
-            timeOffset.tm_hour = (timeOffsetInMinutes % (60 * 24)) / 60;
-            
-            if ( (timeOffset.tm_hour < 0) || (timeOffset.tm_min < 0) )
-            {
-                serializedValue += "-";
-                timeOffset.tm_hour *= -1;
-                timeOffset.tm_min *= -1;
-            }
-            else
-            {
-                serializedValue += "+";
-            }
-            
-            AxisChar * offSetString = new AxisChar[6];
-            sprintf(offSetString, "%02i:%02i", timeOffset.tm_hour, timeOffset.tm_min);
-            serializedValue += offSetString;
-            delete [] offSetString;
-        }
-
-        
-        IAnySimpleType::serialize(serializedValue.c_str());
-		return m_Buf;
-    }
-	
-    xsd__date* Date::deserializeDate(const AxisChar* valueAsChar) throw (AxisSoapException)
-    {
-    	struct tm value;
-	    struct tm *pTm;
-        AxisChar *cUtc;
-	    AxisChar *cTemp;
-	    AxisChar *cTemp2;
-
-        // Calculate local timezone offset
-        time_t now = time(NULL);
-        struct tm *temp = gmtime(&now);
-        struct tm utcTime;
-        memcpy(&utcTime, temp, sizeof(struct tm));
-        temp = localtime(&now);
-        struct tm localTime;
-        memcpy(&localTime, temp, sizeof(struct tm));
-
-        long utcTimeInSeconds = (utcTime.tm_year * 60 * 60 * 24 * 365)
-            + (utcTime.tm_yday * 60 * 60 * 24)
-            + (utcTime.tm_hour * 60 * 60)
-            + (utcTime.tm_min * 60);
-
-        long localTimeInSeconds = (localTime.tm_year * 60 * 60 * 24 * 365)
-            + (localTime.tm_yday * 60 * 60 * 24)
-            + (localTime.tm_hour * 60 * 60)
-            + (localTime.tm_min * 60);
-
-        time_t d = utcTimeInSeconds - localTimeInSeconds;
-
-        /* dismantle m_sValue to get tm value;
-         * XSD_DATETIME format is
-         * CCYY(-)MM(-)DDZ OR
-         * CCYY(-)MM(-)DD+/-<UTC TIME DIFFERENCE>
-         */
-        if (sscanf (valueAsChar, "%d-%d-%d", &value.tm_year, 
-            &value.tm_mon, &value.tm_mday) != 3)
+        struct tm minInclusiveAsStructTM = minInclusive->getMinInclusiveAsStructTM();
+        if ( 0 > difftime(mktime(&minInclusiveAsStructTM), mktime(const_cast<struct tm*>(value))) )
         {
             AxisString exceptionMessage =
-            "Unable to decompose from string form of DateTime value.  Value =";
-            exceptionMessage += valueAsChar;
+            "Value to be serialized is less than MinInclusive specified for this type.  MinInclusive = ";
+            exceptionMessage += asctime(&minInclusiveAsStructTM);
+            exceptionMessage += ", Value = ";
+            exceptionMessage += asctime(value);
             exceptionMessage += ".";
             
+            delete minInclusive;
             throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
                 const_cast<AxisChar*>(exceptionMessage.c_str()));
         }
+    }
+    delete minInclusive;
+
+    MinExclusive* minExclusive = getMinExclusive();
+    if (minExclusive->isSet())
+    {
+        struct tm minExclusiveAsStructTM = minExclusive->getMinExclusiveAsStructTM();
+        if ( 0 >= difftime(mktime(&minExclusiveAsStructTM), mktime(const_cast<struct tm*>(value))) )
+        {
+            AxisString exceptionMessage =
+            "Value to be serialized is less than or equal to MinExclusive specified for this type.  MinExclusive = ";
+            exceptionMessage += asctime(&minExclusiveAsStructTM);
+            exceptionMessage += ", Value = ";
+            exceptionMessage += asctime(value);
+            exceptionMessage += ".";
+            
+            delete minExclusive;
+            throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
+                const_cast<AxisChar*>(exceptionMessage.c_str()));
+        }
+    }
+    delete minExclusive;
+
+    MaxInclusive* maxInclusive = getMaxInclusive();
+    if (maxInclusive->isSet())
+    {
+        struct tm maxInclusiveAsStructTM = maxInclusive->getMaxInclusiveAsStructTM();
+        if ( 0 < difftime(mktime(&maxInclusiveAsStructTM), mktime(const_cast<struct tm*>(value))) )
+        {
+            AxisString exceptionMessage =
+            "Value to be serialized is greater than MaxInclusive specified for this type.  MaxInclusive = ";
+            exceptionMessage += asctime(&maxInclusiveAsStructTM);
+            exceptionMessage += ", Value = ";
+            exceptionMessage += asctime(value);
+            exceptionMessage += ".";
+            
+            delete maxInclusive;
+            throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
+                const_cast<AxisChar*>(exceptionMessage.c_str()));
+        }
+    }
+    delete maxInclusive;
+
+    MaxExclusive* maxExclusive = getMaxExclusive();
+    if (maxExclusive->isSet())
+    {
+        struct tm maxExclusiveAsStructTM = maxExclusive->getMaxExclusiveAsStructTM();
+        if ( 0 <= difftime(mktime(&maxExclusiveAsStructTM), mktime(const_cast<struct tm*>(value))) )
+        {
+            AxisString exceptionMessage =
+            "Value to be serialized is greater than or equal to MaxExclusive specified for this type.  MaxExclusive = ";
+            exceptionMessage += asctime(&maxExclusiveAsStructTM);
+            exceptionMessage += ", Value = ";
+            exceptionMessage += asctime(value);
+            exceptionMessage += ".";
+            
+            delete maxExclusive;
+            throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
+                const_cast<AxisChar*>(exceptionMessage.c_str()));
+        }
+    }
+    delete maxExclusive;
+
+    AxisString serializedValue = "";
+    AxisChar valueAsString[80];
+    strftime (valueAsString, 80, "%Y-%m-%d", value);
+    serializedValue += valueAsString;
+
+    // Calculate local timezone offset
+    time_t now = time(NULL);
+    struct tm *temp = gmtime(&now);
+    struct tm utcTime;
+    memcpy(&utcTime, temp, sizeof(struct tm));
+    temp = localtime(&now);
+    struct tm localTime;
+    memcpy(&localTime, temp, sizeof(struct tm));
+
+    long utcTimeInMinutes = (utcTime.tm_year * 60 * 24 * 365)
+        + (utcTime.tm_yday * 60 * 24)
+        + (utcTime.tm_hour * 60)
+        + utcTime.tm_min;
+
+    long localTimeInMinutes = (localTime.tm_year * 60 * 24 * 365)
+        + (localTime.tm_yday * 60 * 24)
+        + (localTime.tm_hour * 60)
+        + localTime.tm_min;
+
+    int timeOffsetInMinutes = localTimeInMinutes - utcTimeInMinutes;
+
+    if (timeOffsetInMinutes == 0)
+        serializedValue += "Z";
+    else
+    {
+        struct tm timeOffset;
+        timeOffset.tm_year = 0;
+        timeOffset.tm_yday = 0;
+        timeOffset.tm_sec = 0;
+        timeOffset.tm_min = timeOffsetInMinutes % 60;
+        timeOffsetInMinutes -= timeOffset.tm_min;
+        timeOffset.tm_hour = (timeOffsetInMinutes % (60 * 24)) / 60;
+        
+        if ( (timeOffset.tm_hour < 0) || (timeOffset.tm_min < 0) )
+        {
+            serializedValue += "-";
+            timeOffset.tm_hour *= -1;
+            timeOffset.tm_min *= -1;
+        }
+        else
+            serializedValue += "+";
+        
+        AxisChar offSetString[6];
+        sprintf(offSetString, "%02i:%02i", timeOffset.tm_hour, timeOffset.tm_min);
+        serializedValue += offSetString;
+    }
+
+    
+    IAnySimpleType::serialize(serializedValue.c_str());
+	return m_Buf;
+}
+
+xsd__date* Date::deserializeDate(const AxisChar* valueAsChar) throw (AxisSoapException)
+{
+	struct tm value;
+    struct tm *pTm;
+    AxisChar *cUtc;
+    AxisChar *cTemp;
+    AxisChar *cTemp2;
+
+    // Calculate local timezone offset
+    time_t now = time(NULL);
+    struct tm *temp = gmtime(&now);
+    struct tm utcTime;
+    memcpy(&utcTime, temp, sizeof(struct tm));
+    temp = localtime(&now);
+    struct tm localTime;
+    memcpy(&localTime, temp, sizeof(struct tm));
+
+    long utcTimeInSeconds = (utcTime.tm_year * 60 * 60 * 24 * 365)
+        + (utcTime.tm_yday * 60 * 60 * 24)
+        + (utcTime.tm_hour * 60 * 60)
+        + (utcTime.tm_min * 60);
+
+    long localTimeInSeconds = (localTime.tm_year * 60 * 60 * 24 * 365)
+        + (localTime.tm_yday * 60 * 60 * 24)
+        + (localTime.tm_hour * 60 * 60)
+        + (localTime.tm_min * 60);
+
+    time_t d = utcTimeInSeconds - localTimeInSeconds;
+
+    /* dismantle m_sValue to get tm value;
+     * XSD_DATETIME format is
+     * CCYY(-)MM(-)DDZ OR
+     * CCYY(-)MM(-)DD+/-<UTC TIME DIFFERENCE>
+     */
+    if (sscanf (valueAsChar, "%d-%d-%d", &value.tm_year, 
+        &value.tm_mon, &value.tm_mday) != 3)
+    {
+        AxisString exceptionMessage =
+        "Unable to decompose from string form of DateTime value.  Value =";
+        exceptionMessage += valueAsChar;
+        exceptionMessage += ".";
+            
+        throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
+                const_cast<AxisChar*>(exceptionMessage.c_str()));
+     }
 
         value.tm_year -= 1900;
         value.tm_mon--;
@@ -251,105 +245,101 @@ AXIS_CPP_NAMESPACE_START
 #endif
         cTemp2 = const_cast<char*>(strpbrk (valueAsChar, ":"));
 
-        /* if the timezone is represented adding 'Z' at the end */
-        if ((cTemp = const_cast<char*>(strpbrk (valueAsChar, "Z"))) != NULL)
+    /* if the timezone is represented adding 'Z' at the end */
+    if ((cTemp = const_cast<char*>(strpbrk (valueAsChar, "Z"))) != NULL)
+    {
+        time_t timeInSecs = mktime (&value);
+        if (timeInSecs == -1)
         {
-            time_t timeInSecs = mktime (&value);
-            if (timeInSecs == -1)
-            {
-                throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
-            }
-            pTm = localtime (&timeInSecs);
-            memcpy (&value, pTm, sizeof (tm));
-            time_t t = mktime (&value);
-            if (t == -1)
-            {
-                throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
-            }
-            t = labs (t - d);
-            pTm = localtime (&t);
+            throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
         }
-        else if (cTemp2 != NULL)
+        pTm = localtime (&timeInSecs);
+        memcpy (&value, pTm, sizeof (tm));
+        time_t t = mktime (&value);
+        if (t == -1)
         {
-            cUtc = const_cast<char*>(strrchr (valueAsChar, '+'));
-            if (cUtc == NULL)
-            {
-                cUtc = const_cast<char*>(strrchr (valueAsChar, '-'));
-            }
-            time_t timeInSecs = mktime (&value);
-            if (timeInSecs == -1)
-            {
-                throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
-            }
-            
-            int hours = 0;
-            int mins = 0;   
-            if (sscanf (cUtc + 1, "%d:%d", &hours, &mins) != 2)
-            {
-                throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
-            }
-            
-            int secs = hours * 60 * 60 + mins * 60;
-            if ((cTemp = strpbrk ((cUtc), "+")) != NULL)
-            {
-                timeInSecs -= secs;
-            }
-            else
-            {
-                timeInSecs += secs;
-            }
-            
-            pTm = localtime (&timeInSecs);
-            memcpy (&value, pTm, sizeof (tm));
-            time_t t = mktime (&value);
-            if (t == -1)
-            {
-                throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
-            }
-            t = labs (t - d);
-            pTm = localtime (&t);
+            throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
         }
-        /*if the zone is not represented in the date */
-        else
+        t = labs (t - d);
+        pTm = localtime (&t);
+    }
+    else if (cTemp2 != NULL)
+    {
+        cUtc = const_cast<char*>(strrchr (valueAsChar, '+'));
+        if (cUtc == NULL)
         {
-            /*else it is assumed that the sent time is localtime */
-            time_t timeInSecs = mktime (&value);
-            if (timeInSecs == -1)
-            {
-                throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
-            }
-            pTm = localtime (&timeInSecs);
+            cUtc = const_cast<char*>(strrchr (valueAsChar, '-'));
+        }
+        time_t timeInSecs = mktime (&value);
+        if (timeInSecs == -1)
+        {
+            throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
         }
         
-
-        xsd__date * returnValue = new xsd__date;
-        memcpy (returnValue, pTm, sizeof (tm));
-        return returnValue;
-	}
-
-    MinInclusive* Date::getMinInclusive()
-    {
-        return new MinInclusive();
+        int hours = 0;
+        int mins = 0;   
+        if (sscanf (cUtc + 1, "%d:%d", &hours, &mins) != 2)
+        {
+            throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
+        }
+        
+        int secs = hours * 60 * 60 + mins * 60;
+        if ((cTemp = strpbrk ((cUtc), "+")) != NULL)
+            timeInSecs -= secs;
+        else
+            timeInSecs += secs;
+        
+        pTm = localtime (&timeInSecs);
+        memcpy (&value, pTm, sizeof (tm));
+        time_t t = mktime (&value);
+        if (t == -1)
+        {
+            throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
+        }
+        t = labs (t - d);
+        pTm = localtime (&t);
     }
-
-    MinExclusive* Date::getMinExclusive()
+    /*if the zone is not represented in the date */
+    else
     {
-        return new MinExclusive();
+        /*else it is assumed that the sent time is localtime */
+        time_t timeInSecs = mktime (&value);
+        if (timeInSecs == -1)
+        {
+            throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
+        }
+        pTm = localtime (&timeInSecs);
     }
+    
 
-    MaxInclusive* Date::getMaxInclusive()
-    {
-        return new MaxInclusive();
-    }
+    xsd__date * returnValue = new xsd__date;
+    memcpy (returnValue, pTm, sizeof (tm));
+    return returnValue;
+}
 
-    MaxExclusive* Date::getMaxExclusive()
-    {
-        return new MaxExclusive();
-    }
+MinInclusive* Date::getMinInclusive()
+{
+    return new MinInclusive();
+}
 
-    WhiteSpace* Date::getWhiteSpace()
-    {
-        return new WhiteSpace(COLLAPSE);
-    }
+MinExclusive* Date::getMinExclusive()
+{
+    return new MinExclusive();
+}
+
+MaxInclusive* Date::getMaxInclusive()
+{
+    return new MaxInclusive();
+}
+
+MaxExclusive* Date::getMaxExclusive()
+{
+    return new MaxExclusive();
+}
+
+WhiteSpace* Date::getWhiteSpace()
+{
+    return new WhiteSpace(COLLAPSE);
+}
 	
 AXIS_CPP_NAMESPACE_END

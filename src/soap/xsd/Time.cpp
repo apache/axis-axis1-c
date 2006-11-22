@@ -67,6 +67,7 @@ AXIS_CPP_NAMESPACE_START
                 exceptionMessage += asctime(value);
                 exceptionMessage += ".";
                 
+                delete minInclusive;
                 throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
                     const_cast<AxisChar*>(exceptionMessage.c_str()));
             }
@@ -86,6 +87,7 @@ AXIS_CPP_NAMESPACE_START
                 exceptionMessage += asctime(value);
                 exceptionMessage += ".";
                 
+                delete minExclusive;
                 throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
                     const_cast<AxisChar*>(exceptionMessage.c_str()));
             }
@@ -105,6 +107,7 @@ AXIS_CPP_NAMESPACE_START
                 exceptionMessage += asctime(value);
                 exceptionMessage += ".";
                 
+                delete maxInclusive;
                 throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
                     const_cast<AxisChar*>(exceptionMessage.c_str()));
             }
@@ -124,6 +127,7 @@ AXIS_CPP_NAMESPACE_START
                 exceptionMessage += asctime(value);
                 exceptionMessage += ".";
                 
+                delete maxExclusive;
                 throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
                     const_cast<AxisChar*>(exceptionMessage.c_str()));
             }
@@ -131,10 +135,9 @@ AXIS_CPP_NAMESPACE_START
         delete maxExclusive;
      
         AxisString serializedValue = "";
-        AxisChar* valueAsString = new AxisChar[80];
+        AxisChar valueAsString[80];
         strftime (valueAsString, 80, "%H:%M:%S", value);
         serializedValue += valueAsString;
-        delete [] valueAsString;
 
         // Calculate local timezone offset
         time_t now = time(NULL);
@@ -182,10 +185,9 @@ AXIS_CPP_NAMESPACE_START
                 serializedValue += "+";
             }
             
-            AxisChar * offSetString = new AxisChar[6];
+            AxisChar offSetString[6];
             sprintf(offSetString, "%02i:%02i", timeOffset.tm_hour, timeOffset.tm_min);
             serializedValue += offSetString;
-            delete [] offSetString;
         }
 
         

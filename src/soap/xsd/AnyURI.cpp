@@ -17,142 +17,132 @@
 
 AXIS_CPP_NAMESPACE_START
 
-    AnyURI::AnyURI()
-    {
-    }
+AnyURI::AnyURI()
+{
+}
 
-    AnyURI::AnyURI(const xsd__anyURI value)
+AnyURI::AnyURI(const xsd__anyURI value)
+{
+    if (value)
     {
-        if (value)
-        {
-            setNil(false);            
-            serialize(value);
-        }
+        setNil(false);            
+        serialize(value);
     }
+}
+
+XSDTYPE AnyURI::getType()
+{
+    return XSD_ANYURI;
+}
+
+xsd__anyURI AnyURI::getAnyURI()
+{
+    if (isNil())
+        return NULL;
+    else
+        return deserializeAnyURI(m_Buf);
+}
+
+void * AnyURI::getValue()
+{
+    return (void*) getAnyURI();
+}
+
+AxisChar* AnyURI::serialize(const xsd__anyURI value) throw (AxisSoapException)
+{
+    AxisString exceptionMessage;
+    char lengthAsString[100];
     
-    XSDTYPE AnyURI::getType()
-    {
-        return XSD_ANYURI;
-    }
-
-    xsd__anyURI AnyURI::getAnyURI()
-    {
-        if (isNil())
+    MinLength* minLength= getMinLength();
+    if (minLength->isSet())
+        if (strlen(value) < (unsigned int) minLength->getMinLength())
         {
-            return NULL;
+            exceptionMessage =
+            "Length of value to be serialized is shorter than MinLength specified for this type.  Minlength = ";
+            sprintf(lengthAsString, "%d", minLength->getMinLength());
+            exceptionMessage += lengthAsString;
+            exceptionMessage += ", Length of value = ";
+            sprintf(lengthAsString, "%d", strlen(value));
+            exceptionMessage += lengthAsString;
+            exceptionMessage += ".";
+            
+            delete minLength;
+            throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
+                const_cast<AxisChar*>(exceptionMessage.c_str()));
         }
-        else
+    delete minLength;
+    
+    MaxLength* maxLength = getMaxLength();
+    if (maxLength->isSet())
+        if (strlen(value) > (unsigned int) maxLength->getMaxLength())
         {
-            return deserializeAnyURI(m_Buf);
+            exceptionMessage =
+            "Length of value to be serialized is longer than MaxLength specified for this type.  Maxlength = ";
+            sprintf(lengthAsString, "%d", maxLength->getMaxLength());
+            exceptionMessage += lengthAsString;
+            exceptionMessage += ", Length of value = ";
+            sprintf(lengthAsString, "%d", strlen(value));
+            exceptionMessage += lengthAsString;
+            exceptionMessage += ".";
+            
+            delete maxLength;
+            throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
+                const_cast<AxisChar*>(exceptionMessage.c_str()));
         }
-    }
+    delete maxLength;
 
-    void * AnyURI::getValue()
-    {
-        return (void*) getAnyURI();
-    }
-
-    AxisChar* AnyURI::serialize(const xsd__anyURI value) throw (AxisSoapException)
-    {
-        MinLength* minLength= getMinLength();
-        if (minLength->isSet())
+    Length* length = getLength();
+    if (length->isSet())
+        if (strlen(value) != (unsigned int) length->getLength())
         {
-            if (strlen(value) < (unsigned int) minLength->getMinLength())
-            {
-                AxisString exceptionMessage =
-                "Length of value to be serialized is shorter than MinLength specified for this type.  Minlength = ";
-                AxisChar* length = new AxisChar[10];
-                sprintf(length, "%d", minLength->getMinLength());
-                exceptionMessage += length;
-                exceptionMessage += ", Length of value = ";
-                sprintf(length, "%d", strlen(value));
-                exceptionMessage += length;
-                exceptionMessage += ".";
-                delete [] length;
-                
-                throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
-                    const_cast<AxisChar*>(exceptionMessage.c_str()));
-            }
+            exceptionMessage =
+            "Length of value to be serialized is not the same as Length specified for this type.  Length = ";
+            sprintf(lengthAsString, "%d", length->getLength());
+            exceptionMessage += lengthAsString;
+            exceptionMessage += ", Length of value = ";
+            sprintf(lengthAsString, "%d", strlen(value));
+            exceptionMessage += lengthAsString;
+            exceptionMessage += ".";
+            
+            delete length;
+            throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
+                const_cast<AxisChar*>(exceptionMessage.c_str()));
         }
-        delete minLength;
-        
-        MaxLength* maxLength = getMaxLength();
-        if (maxLength->isSet())
-        {
-            if (strlen(value) > (unsigned int) maxLength->getMaxLength())
-            {
-                AxisString exceptionMessage =
-                "Length of value to be serialized is longer than MaxLength specified for this type.  Maxlength = ";
-                AxisChar* length = new AxisChar[10];
-                sprintf(length, "%d", maxLength->getMaxLength());
-                exceptionMessage += length;
-                exceptionMessage += ", Length of value = ";
-                sprintf(length, "%d", strlen(value));
-                exceptionMessage += length;
-                exceptionMessage += ".";
-                delete [] length;
-                
-                throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
-                    const_cast<AxisChar*>(exceptionMessage.c_str()));
-            }
-        }
-        delete maxLength;
-
-        Length* length = getLength();
-        if (length->isSet())
-        {
-            if (strlen(value) != (unsigned int) length->getLength())
-            {
-                AxisString exceptionMessage =
-                "Length of value to be serialized is not the same as Length specified for this type.  Length = ";
-                AxisChar* lengthAsString = new AxisChar[10];
-                sprintf(lengthAsString, "%d", length->getLength());
-                exceptionMessage += lengthAsString;
-                exceptionMessage += ", Length of value = ";
-                sprintf(lengthAsString, "%d", strlen(value));
-                exceptionMessage += lengthAsString;
-                exceptionMessage += ".";
-                delete [] lengthAsString;
-                
-                throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
-                    const_cast<AxisChar*>(exceptionMessage.c_str()));
-            }
-        }
-        delete length;
-             
-		AxisString valueAsString = value;
-		AxisChar* serializedValue = (AxisChar*) replaceReservedCharacters(valueAsString).c_str();
-		
-        IAnySimpleType::serialize(serializedValue);
-
-		return m_Buf;
-    }
+    delete length;
+         
+	AxisString valueAsString = value;
+	AxisChar* serializedValue = (AxisChar*) replaceReservedCharacters(valueAsString).c_str();
 	
-    xsd__anyURI AnyURI::deserializeAnyURI(const AxisChar* valueAsChar) throw (AxisSoapException)
-    {
-        xsd__anyURI value = new char[strlen (valueAsChar) + 1];
-		strcpy (value, valueAsChar);
-		return value;
-    }
+    IAnySimpleType::serialize(serializedValue);
 
-    WhiteSpace* AnyURI::getWhiteSpace()
-    {
-        return new WhiteSpace(REPLACE);
-    }
+	return m_Buf;
+}
 
-    MinLength* AnyURI::getMinLength()
-    {
-        return new MinLength();
-    }
-    
-    MaxLength* AnyURI::getMaxLength()
-    {
-        return new MaxLength();
-    }
+xsd__anyURI AnyURI::deserializeAnyURI(const AxisChar* valueAsChar) throw (AxisSoapException)
+{
+    xsd__anyURI value = new char[strlen (valueAsChar) + 1];
+	strcpy (value, valueAsChar);
+	return value;
+}
 
-    Length* AnyURI::getLength()
-    {
-        return new Length();
-    }
+WhiteSpace* AnyURI::getWhiteSpace()
+{
+    return new WhiteSpace(REPLACE);
+}
+
+MinLength* AnyURI::getMinLength()
+{
+    return new MinLength();
+}
+
+MaxLength* AnyURI::getMaxLength()
+{
+    return new MaxLength();
+}
+
+Length* AnyURI::getLength()
+{
+    return new Length();
+}
 
 AXIS_CPP_NAMESPACE_END
