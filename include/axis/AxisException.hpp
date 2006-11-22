@@ -553,7 +553,7 @@ public:
                 sMsg = "AxisSoapException: Soap MustUnderstand fault occurred.";
                 break;
             case CLIENT_SOAP_MESSAGE_INCOMPLETE:
-                sMsg = "AxisSoapException: Received message is incomplete.";
+                sMsg = "AxisSoapException: Soap message is incomplete.";
                 break;
             case CLIENT_SOAP_SOAP_ACTION_EMTPY:
                 sMsg = "AxisSoapException: SOAPAction HTTP header is empty.";

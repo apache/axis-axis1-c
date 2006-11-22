@@ -24,14 +24,18 @@
 #pragma warning (disable : 4101)
 #endif
 
+// !!! Must be first thing in file !!!
 #include "../../platforms/PlatformAutoSense.hpp"
 
+#include <string>
 #include "XMLParserXerces.h"
 #include <xercesc/sax2/XMLReaderFactory.hpp>
 
 XERCES_CPP_NAMESPACE_USE
+using namespace std;
 
-XMLParserXerces::XMLParserXerces()
+XMLParserXerces::
+XMLParserXerces()
 {
     m_bFirstParsed = false;
     m_bPeeked = false;
@@ -40,25 +44,23 @@ XMLParserXerces::XMLParserXerces()
     m_bCanParseMore = false;
 }
 
-XMLParserXerces::~XMLParserXerces()
+XMLParserXerces::
+~XMLParserXerces()
 {
     // Parser has memory allocated with the last AnyElement parsed; clean that
     m_Xhandler.freeElement();
 
-    if(m_pInputSource)
-        delete m_pInputSource;
+    delete m_pInputSource;
     delete m_pParser;
     
 }
 
-int XMLParserXerces::setInputStream(AxisIOStream* pInputStream)
+int XMLParserXerces::
+setInputStream(AxisIOStream* pInputStream)
 {
     m_pInputStream = pInputStream;
     
-    // check if memory is already allocated for is
-    if(m_pInputSource)
-        delete m_pInputSource;
-    
+    delete m_pInputSource;
     m_pInputSource = new SoapInputSource(pInputStream);
     m_Xhandler.reset();
     m_pParser->setContentHandler(&m_Xhandler);
@@ -72,17 +74,20 @@ int XMLParserXerces::setInputStream(AxisIOStream* pInputStream)
     return AXIS_SUCCESS;
 }
 
-const XML_Ch* XMLParserXerces::getNS4Prefix(const XML_Ch* prefix)
+const XML_Ch* XMLParserXerces::
+getNS4Prefix(const XML_Ch* prefix)
 {
     return m_Xhandler.ns4Prefix(prefix);
 }
 
-int XMLParserXerces::getStatus()
+int XMLParserXerces::
+getStatus()
 {
     return m_Xhandler.getStatus();
 }
 
-const AnyElement* XMLParserXerces::next(bool isCharData)
+const AnyElement* XMLParserXerces::
+next(bool isCharData)
 {
     if( !m_bFirstParsed)
     {
@@ -100,22 +105,20 @@ const AnyElement* XMLParserXerces::next(bool isCharData)
             char *    message = XMLString::transcode( toCatch.getMessage());
 
             // Clone the error message before deleting it.
-            char *    pErrorMsg = new char[strlen( message ) + 1];
-            strcpy( pErrorMsg, message);
+            std::string sErrorMsg = message;
             XMLString::release( &message);
 
-            throw AxisParseException( CLIENT_SOAP_CONTENT_NOT_SOAP, pErrorMsg);
+            throw AxisParseException( CLIENT_SOAP_CONTENT_NOT_SOAP, sErrorMsg.c_str());
         }
         catch( const SAXParseException& toCatch)
         {
             char *    message = XMLString::transcode( toCatch.getMessage());
 
             // Clone the error message before deleting it.
-            char *    pErrorMsg = new char[strlen( message ) + 1];
-            strcpy( pErrorMsg, message);
+            std::string sErrorMsg = message;
             XMLString::release( &message);
 
-            throw AxisParseException( CLIENT_SOAP_CONTENT_NOT_SOAP, pErrorMsg);
+            throw AxisParseException( CLIENT_SOAP_CONTENT_NOT_SOAP, sErrorMsg.c_str());
         }
         catch( HTTPTransportException & e)
         {
@@ -123,7 +126,7 @@ const AnyElement* XMLParserXerces::next(bool isCharData)
         }
         catch( ...)
         {
-            char *pErrorMsg = "Unexpected Exception in SAX parser.  Probably no message or the message is not recognised as XML.";
+            char *pErrorMsg = "Unexpected exception in SAX parser.";
             
             throw AxisParseException( CLIENT_SOAP_CONTENT_NOT_SOAP, pErrorMsg);
         }
@@ -157,7 +160,8 @@ const AnyElement* XMLParserXerces::next(bool isCharData)
 }
 // New method which peek a head next element 
 // Here always Peek() will call after the first pase done
-const char* XMLParserXerces::peek()
+const char* XMLParserXerces::
+peek()
 {
     if (!m_bPeeked)
     {
@@ -196,7 +200,8 @@ const char* XMLParserXerces::peek()
         return "";
 }
 
-const AnyElement* XMLParserXerces::anyNext()
+const AnyElement* XMLParserXerces::
+anyNext()
 {
     // Say the SAX event handler to record prefix mappings too 
     // By default the event handler do not record them.
@@ -233,7 +238,8 @@ const AnyElement* XMLParserXerces::anyNext()
     return NULL;
 }
 
-const XML_Ch* XMLParserXerces::getPrefix4NS(const XML_Ch* pcNS)
+const XML_Ch* XMLParserXerces::
+getPrefix4NS(const XML_Ch* pcNS)
 {
     return m_Xhandler.prefix4NS(pcNS);
 }
