@@ -22,7 +22,6 @@
 #include "../../common/AxisUtils.h"
 #include "../../wsdd/WSDDDeployment.h"
 #include "../HandlerPool.h"
-#include "../../common/AxisMessage.h"
 #include "../../common/AxisTrace.h"
 
 extern AXIS_CPP_NAMESPACE_PREFIX HandlerPool *g_pHandlerPool;
@@ -464,8 +463,7 @@ onFault (MessageData * pMsg)
 int ServerAxisEngine::
 setFaultOutputStream (int iFaultCode, SOAPTransport * pStream)
 {
-    AxisMessage objMessage;
-    string sMessage = objMessage.getMessage (iFaultCode);
+    string sMessage = AxisException::getMessageForExceptionCode(iFaultCode);
     SoapFault *pObjSoapFault = SoapFault::getSoapFault (iFaultCode);
     pObjSoapFault->setFaultDetail (sMessage.c_str ());
     m_pSZ->setSoapFault (pObjSoapFault);
