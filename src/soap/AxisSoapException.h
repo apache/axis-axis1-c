@@ -21,25 +21,26 @@
 #ifndef __AXISSOAPEXCEPTION_H_OF_AXIS_INCLUDED_
 #define __AXISSOAPEXCEPTION_H_OF_AXIS_INCLUDED_
 
-#include <string>
 #include <axis/AxisException.hpp>
 
 AXIS_CPP_NAMESPACE_START
 
 using namespace std;
 
-class STORAGE_CLASS_INFO AxisSoapException :public AxisException
+class STORAGE_CLASS_INFO AxisSoapException : public AxisException
 {
-
 public:
-    AxisSoapException(const int iExceptionCode,const char* pcMessage = NULL);
-    AxisSoapException(const AxisSoapException& e);
-    virtual ~AxisSoapException() throw();
+    // constructor   
+    AxisSoapException(int iExceptionCode,const char* pcMessage = NULL): AxisException()
+    {
+        setMessage(iExceptionCode, "AxisSoapException:", pcMessage);
+    }
     
-
-private:
-    string getMessageForExceptionCode(const int iExceptionCode);
-	std::string m_sMessageForExceptionCode;
+    // constructor
+    AxisSoapException(const AxisSoapException& e): AxisException (e) { }
+    
+    // destructor
+    virtual ~AxisSoapException() throw() { }
 };
 
 AXIS_CPP_NAMESPACE_END

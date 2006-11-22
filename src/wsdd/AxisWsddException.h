@@ -21,7 +21,6 @@
 #ifndef __AXISWSDDEXCEPTION_H_OF_AXIS_INCLUDED_
 #define __AXISWSDDEXCEPTION_H_OF_AXIS_INCLUDED_
 
-#include <string>
 #include <axis/AxisException.hpp>
 
 AXIS_CPP_NAMESPACE_START
@@ -32,14 +31,17 @@ class STORAGE_CLASS_INFO AxisWsddException :public AxisException
 {
 
 public:
-    AxisWsddException(const int iExceptionCode,const char* pcMessage = NULL);
-    AxisWsddException(const AxisWsddException& e);
-    virtual ~AxisWsddException() throw();
+    // constructor
+    AxisWsddException(int iExceptionCode,const char* pcMessage = NULL): AxisException()
+    {
+        setMessage(iExceptionCode, "AxisWsddException:", pcMessage);
+    }
     
-private:
-    string getMessageForExceptionCode(const int iExceptionCode);
-    const char* what() const throw(){ return m_sMessage; };
-    string m_sMessageForExceptionCode;
+    // constructor
+    AxisWsddException(const AxisWsddException& e): AxisException (e) { }
+    
+    // destructor
+    virtual ~AxisWsddException() throw() { }
 };
 
 AXIS_CPP_NAMESPACE_END

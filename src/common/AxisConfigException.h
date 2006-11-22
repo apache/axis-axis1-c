@@ -21,24 +21,26 @@
 #ifndef __AXISCONFIGEXCEPTION_H_OF_AXIS_INCLUDED_
 #define __AXISCONFIGEXCEPTION_H_OF_AXIS_INCLUDED_
 
-#include <string>
 #include <axis/AxisException.hpp>
 
 AXIS_CPP_NAMESPACE_START
 
 using namespace std;
 
-class STORAGE_CLASS_INFO AxisConfigException :public AxisException
+class STORAGE_CLASS_INFO AxisConfigException : public AxisException
 {
-
 public:
-    AxisConfigException(const int iExceptionCode, const char* pcMessage = NULL);
-    AxisConfigException(const AxisConfigException& e);
-    virtual ~AxisConfigException() throw();
-        
-private:
-    string getMessageForExceptionCode(const int iExceptionCode);
-	std::string m_sMessageForExceptionCode;
+    // constructor
+    AxisConfigException(int iExceptionCode, const char* pcMessage = NULL): AxisException()
+    {
+        setMessage(iExceptionCode, "AxisConfigException:", pcMessage);
+    }
+    
+    // constructor
+    AxisConfigException(const AxisConfigException& e): AxisException(e) { }
+    
+    // destructor
+    virtual ~AxisConfigException() throw() { }
 };
 
 AXIS_CPP_NAMESPACE_END

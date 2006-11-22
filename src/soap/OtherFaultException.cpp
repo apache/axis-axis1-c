@@ -24,65 +24,68 @@ AXIS_CPP_NAMESPACE_START
  * processed whatever state the engine is in. Doing a deep copy means this class owns
  * the storage and can delete it in its destructor making client programming simpler.
  */
-#define STRINGCOPY(tgt,src)					\
-{											\
-	if (NULL != src && 0 != strlen(src))	\
-	{										\
-		tgt = new AxisChar[strlen(src)+1];	\
-		strcpy(tgt, src);					\
-	} else tgt = NULL;						\
+#define STRINGCOPY(tgt,src)                  \
+{                                            \
+    delete [] tgt;                           \
+    tgt = NULL;                              \
+    if (NULL != src && 0 != strlen(src))     \
+    {                                        \
+        tgt = new AxisChar[strlen(src)+1];   \
+        strcpy(tgt, src);                    \
+    }                                        \
 }
 
-#define STRINGREPLACE(tgt,src)				\
-{											\
-	if (NULL != tgt)						\
-		delete [] tgt;						\
-	STRINGCOPY(tgt,src);					\
-}
-
-OtherFaultException::OtherFaultException() 
+OtherFaultException::
+OtherFaultException() : SoapFaultException()
 {
-	m_detail = NULL;
+    m_detail = NULL;
 }
 
-OtherFaultException::OtherFaultException(
-	const AxisChar *code, const AxisChar *string, const AxisChar *actor, const AxisChar *detail, int exceptionCode) :
-	SoapFaultException(code,string,actor,exceptionCode)
+OtherFaultException::
+OtherFaultException(const AxisChar *code, const AxisChar *string, const AxisChar *actor, 
+                    const AxisChar *detail, int exceptionCode) :
+    SoapFaultException(code,string,actor,exceptionCode)
 {
-	STRINGCOPY(m_detail,detail);
+    m_detail = NULL;
+    STRINGCOPY(m_detail,detail);
 }
 
-OtherFaultException::OtherFaultException(AxisException& ae) : SoapFaultException(ae)
+OtherFaultException::
+OtherFaultException(AxisException& ae) : SoapFaultException(ae)
 {
-	m_detail = NULL;
+    m_detail = NULL;
 }
 
-OtherFaultException::OtherFaultException(const OtherFaultException& copy) : SoapFaultException(copy)
+OtherFaultException::
+OtherFaultException(const OtherFaultException& copy) : SoapFaultException(copy)
 {
-	STRINGCOPY(m_detail, copy.m_detail);
+    STRINGCOPY(m_detail, copy.m_detail);
 }
 
-OtherFaultException& OtherFaultException::operator=(const OtherFaultException& copy)
+OtherFaultException& OtherFaultException::
+operator=(const OtherFaultException& copy)
 {
-	SoapFaultException::operator=(copy);
-	STRINGREPLACE(m_detail, copy.m_detail);
-	return *this;
+    SoapFaultException::operator=(copy);
+    STRINGCOPY(m_detail, copy.m_detail);
+    return *this;
 }
 
-OtherFaultException::~OtherFaultException() throw()
+OtherFaultException::
+~OtherFaultException() throw()
 {
-	if (NULL != m_detail) delete [] m_detail;
-	m_detail = NULL;
+    delete [] m_detail;
 }
 
-const AxisChar *OtherFaultException::getFaultDetail() const
+const AxisChar *OtherFaultException::
+getFaultDetail() const
 {
-	return m_detail;
+    return m_detail;
 }
 
-void OtherFaultException::setFaultDetail(const AxisChar *detail)
+void OtherFaultException::
+setFaultDetail(const AxisChar *detail)
 {
-	STRINGCOPY(m_detail,detail);
+    STRINGCOPY(m_detail,detail);
 }
 
 AXIS_CPP_NAMESPACE_END

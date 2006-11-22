@@ -26,62 +26,53 @@ AXIS_CPP_NAMESPACE_START
  */
 #define STRINGCOPY(tgt,src)                  \
 {                                            \
+    delete [] tgt;                           \
+    tgt = NULL;                              \
     if (NULL != src && 0 != strlen(src))     \
     {                                        \
         tgt = new AxisChar[strlen(src)+1];   \
         strcpy(tgt, src);                    \
-    } else tgt = NULL;                       \
-}
-
-#define STRINGREPLACE(tgt,src)               \
-{                                            \
-    delete [] tgt;                           \
-    STRINGCOPY(tgt,src);                     \
+    }                                        \
 }
 
 SoapFaultException::
-SoapFaultException()
+SoapFaultException() : AxisException()
 {
     m_code = NULL;
-    m_sMessage = NULL;
     m_actor = NULL;
-    m_iExceptionCode = 0;
 }
 
 SoapFaultException::
-SoapFaultException(const AxisChar *code, const AxisChar *string, const AxisChar *actor, int exceptionCode) 
+SoapFaultException(const AxisChar *code, const AxisChar *string, 
+                   const AxisChar *actor, int exceptionCode) : AxisException(exceptionCode, string)
 {
+    m_code  = NULL;
+    m_actor = NULL;    
     STRINGCOPY(m_code,code);
-    STRINGCOPY(m_sMessage,string);
     STRINGCOPY(m_actor,actor);
-    m_iExceptionCode = exceptionCode;
 }
 
 SoapFaultException::
-SoapFaultException(AxisException& ae)
+SoapFaultException(AxisException& ae): AxisException(ae)
 {
-    STRINGCOPY(m_sMessage,ae.what());
-    m_iExceptionCode = ae.getExceptionCode();
     m_code = NULL;
     m_actor = NULL;
 }
 
 SoapFaultException::
-SoapFaultException(const SoapFaultException& copy)
+SoapFaultException(const SoapFaultException& copy): AxisException(copy)
 {
-    STRINGCOPY(m_code    ,copy.m_code);
-    STRINGCOPY(m_sMessage    ,copy.m_sMessage);
-    STRINGCOPY(m_actor    ,copy.m_actor);
-    m_iExceptionCode = copy.m_iExceptionCode;
+    STRINGCOPY(m_code, copy.m_code);
+    STRINGCOPY(m_actor, copy.m_actor);
 }
 
 SoapFaultException& SoapFaultException::
 operator=(const SoapFaultException& copy)
 {
     exception::operator=(copy);
-    STRINGREPLACE(m_code    ,copy.m_code);
-    STRINGREPLACE(m_sMessage    ,copy.m_sMessage);
-    STRINGREPLACE(m_actor    ,copy.m_actor);
+    STRINGCOPY(m_code, copy.m_code);
+    STRINGCOPY(m_actor, copy.m_actor);
+    m_sMessage       = copy.m_sMessage;
     m_iExceptionCode = copy.m_iExceptionCode;
     return *this;
 }
@@ -90,7 +81,6 @@ SoapFaultException::
 ~SoapFaultException() throw()
 {
     delete [] m_code;
-    delete [] m_sMessage;
     delete [] m_actor;
 }
 
@@ -104,7 +94,7 @@ getFaultCode() const
 const AxisChar *SoapFaultException::
 getFaultString() const
 {
-    return m_sMessage;
+    return m_sMessage.c_str();
 }
 
 const AxisChar *SoapFaultException::
@@ -122,7 +112,7 @@ setFaultCode(const AxisChar *code)
 void SoapFaultException::
 setFaultString(const AxisChar *string)
 {
-    STRINGCOPY(m_sMessage,string);
+    setMessage(string);
 }
 
 void SoapFaultException::

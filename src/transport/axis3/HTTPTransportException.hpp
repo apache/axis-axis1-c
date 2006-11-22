@@ -22,24 +22,26 @@
 #ifndef __HTTPTransportEXCEPTION_H_OF_AXIS_INCLUDED_
 #define __HTTPTransportEXCEPTION_H_OF_AXIS_INCLUDED_
 
-#include <string>
 #include <axis/AxisException.hpp>
 
 using namespace std;
 
 AXIS_CPP_NAMESPACE_USE
 
-class STORAGE_CLASS_INFO HTTPTransportException :public AxisException
+class STORAGE_CLASS_INFO HTTPTransportException : public AxisException
 {
-
 public:
-    HTTPTransportException(const int iExceptionCode, char* pcMessage = NULL);
-    HTTPTransportException(const HTTPTransportException& e);
-    virtual ~HTTPTransportException() throw();
-                                                                                                                             
-private:
-    string getMessageForExceptionCode(const int iExceptionCode);
-    std::string m_sMessageForExceptionCode;
+    // constructor
+    HTTPTransportException(int iExceptionCode, const char* pcMessage = NULL): AxisException()
+    {
+        setMessage(iExceptionCode, "HTTPTransportException:", pcMessage);
+    }
+    
+    // constructor
+    HTTPTransportException(const HTTPTransportException& e): AxisException (e) { }
+    
+    // destructor
+    virtual ~HTTPTransportException() throw() { }
 };
 
 #endif

@@ -413,11 +413,11 @@ typedef enum
  *
  *   @author Damitha Kumarage (damitha@opensource.lk, damitha@jkcsworld.com)
  */
-class STORAGE_CLASS_INFO AxisException :public exception
+class STORAGE_CLASS_INFO AxisException : public exception
 {
 public:
     /** No parameter constructor*/
-    AxisException():m_iExceptionCode(0), m_sMessage(NULL){};
+    AxisException():m_iExceptionCode(0), m_sMessage("") { }
 
     /** This can be used to throw an exception with exception code which is
       * is defined in the AxisException.h file, under AXISC_EXCEPTIONS type.
@@ -433,7 +433,7 @@ public:
       *                     "Some additional exception info");
         </pre>
       */
-    AxisException(const int iExceptionCode, const char* pcMessage = NULL):m_iExceptionCode(iExceptionCode), m_sMessage(NULL)
+    AxisException(int iExceptionCode, const char* pcMessage = NULL):m_iExceptionCode(iExceptionCode)
     {
         setMessage(pcMessage);    
     }
@@ -449,16 +449,13 @@ public:
       * throw AxisException(std::bad_alloc);
       * </pre>
       */
-    AxisException(const AxisException& e):m_iExceptionCode(e.m_iExceptionCode), m_sMessage(NULL)
+    AxisException(const AxisException& e):m_iExceptionCode(e.m_iExceptionCode)
     {
-        setMessage(e.m_sMessage);
-    };
+        setMessage(e.m_sMessage.c_str());
+    }
     
     /** Destructor */
-    virtual ~AxisException() throw()
-    {
-        delete [] m_sMessage;
-    };
+    virtual ~AxisException() throw() { }
 
     /**
      *  This method is defined in std::exception. AxisException and derived
@@ -466,7 +463,7 @@ public:
      * 
      * @return Exception message
      */
-    virtual const char* what() const throw() { return m_sMessage; };
+    virtual const char* what() const throw() { return m_sMessage.c_str(); }
 
     /**
      * This can be called to get the exception code.
@@ -497,16 +494,22 @@ public:
       * 
       * @param psMessage The exception message to be set.
       */
-    void setMessage(const char* psMessage)
+    void setMessage(const char* psMessage) { m_sMessage = psMessage ? psMessage : "";  }
+     
+    /**
+      * The method setMessage(std::string psMessage) uses to set the code and message.
+      * This method will retrieve the corresponding message for the exceptionCode and then append 
+      * the detailMessage if set.
+      * 
+      * @param exceptionCode The exception code for which message is to be retrieved.
+      * @param defaultMsg    If exception code cannot be mapped to message, this will be used.
+      * @param detailMessage Additional message information that will be appended to the exception message.
+      */
+    void setMessage(int exceptionCode, const char *defaultMsg, const char* detailMessage=NULL)
     {
-        delete [] m_sMessage;
-        m_sMessage = NULL;
-
-        if (psMessage)
-        {
-            m_sMessage = new char[strlen(psMessage) + 1];
-            strcpy(m_sMessage,psMessage);
-        }        
+        m_iExceptionCode = exceptionCode;
+        std::string sMessage = detailMessage ? detailMessage : "";
+        m_sMessage = getMessageForExceptionCode(exceptionCode, defaultMsg) + " " + sMessage;
     }
     
     /** 
@@ -517,7 +520,7 @@ public:
     void setExceptionFromException(const AxisException& e)
     {
         m_iExceptionCode = e.m_iExceptionCode;
-        setMessage(e.m_sMessage);
+        m_sMessage       = e.m_sMessage;
     }
 
     /**
@@ -527,8 +530,238 @@ public:
     void resetException()
     {
         m_iExceptionCode = 0;
-        setMessage((const char *)NULL);
+        m_sMessage       = "";
     }
+    
+    /**
+     * This method is used to map AXIS exception code to a text message. Primarily used
+     * by classes that inherit from AxisException. 
+     * 
+     * @param exceptionCode The exception code for which message is to be retrieved.
+     * @param defaultMsg    If exception code cannot be mapped to message, this will be returned.
+     */
+     static std::string getMessageForExceptionCode(int exceptionCode, const char *defaultMsg=NULL)
+     {
+        std::string sMsg;
+        
+        switch (exceptionCode)
+        {
+            case SOAP_VERSION_MISMATCH:
+                sMsg = "AxisSoapException: Soap VersionMismatch fault occurred.";
+                break;
+            case SOAP_MUST_UNDERSTAND:    
+                sMsg = "AxisSoapException: Soap MustUnderstand fault occurred.";
+                break;
+            case CLIENT_SOAP_MESSAGE_INCOMPLETE:
+                sMsg = "AxisSoapException: Received message is incomplete.";
+                break;
+            case CLIENT_SOAP_SOAP_ACTION_EMTPY:
+                sMsg = "AxisSoapException: SOAPAction HTTP header is empty.";
+                break;
+            case CLIENT_SOAP_SOAP_CONTENT_ERROR:
+                sMsg = "AxisSoapException: Received content is faulty.";
+                break;
+            case CLIENT_SOAP_NO_SOAP_METHOD:
+                sMsg = "AxisSoapException: Request method is not a soap method.";
+                break;
+            case CLIENT_SOAP_CONTENT_NOT_SOAP:
+                sMsg = "AxisSoapException: Content is not a valid soap message.";
+                break;
+            case CLIENT_WSDD_SERVICE_NOT_FOUND:
+                sMsg = "AxisWsddException: Requested service not found.";
+                break;
+            case CLIENT_WSDD_METHOD_NOT_ALLOWED:
+                sMsg = "AxisWsddException: Requested method is not allowed.";
+                break;
+            case CLIENT_WSDD_PARA_TYPE_MISMATCH:
+                sMsg = "AxisWsddException: Parameter type mismatch.";
+                break;
+            case CLIENT_ENGINE_CLIENT_HANDLER_FAILED:
+                sMsg = "AxisEngineException: Client handler failed.";
+                break;
+            case CLIENT_TRANSPORT_EXCEPTION:
+                sMsg = "HTTPTransportException: Client transport exception.";
+                break;
+            case CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED:
+                sMsg = "HTTPTransportException: Client failed to open.";
+                break;
+            case CLIENT_TRANSPORT_TYPE_MISMATCH:
+                sMsg = "HTTPTransportException: Client attempted to use SSL functions without the proper prerequisites.";
+                break;
+            case CLIENT_TRANSPORT_HAS_NO_UNSECURE_TRANSPORT_LAYER:
+                sMsg = "HTTPTransportException: Client attempted to use non-existant unsecure transport (http).";
+                break;
+            case CLIENT_TRANSPORT_HAS_NO_SECURE_TRANSPORT_LAYER:
+                sMsg = "HTTPTransportException: Client attempted to use non-existant secure transport (https).";
+                break;
+            case CLIENT_MIME_CONTENT_ID_NOT_UNIQUE:
+                sMsg = "AxisSoapException: Content is not unique within the MIME message.";
+                break;
+            case SERVER_ENGINE_EXCEPTION:
+                sMsg = "AxisEngineException: Exception occurred.";
+                break;
+            case SERVER_ENGINE_COULD_NOT_LOAD_SRV:
+                sMsg = "AxisEngineException: Could not load service.";
+                break;
+            case SERVER_ENGINE_COULD_NOT_LOAD_HDL:
+                sMsg = "AxisEngineException: Could not load handler.";
+                break;
+            case SERVER_ENGINE_LOADING_TRANSPORT_FAILED:
+                sMsg = "AxisEngineException: Failed to load transport library.";
+                break;
+            case SERVER_ENGINE_LOADING_PARSER_FAILED:
+                sMsg = "AxisEngineException: Failed to load parser library.";
+                break;
+            case SERVER_ENGINE_HANDLER_FAILED:
+                sMsg = "AxisEngineException: Handler failed.";
+                break;
+            case SERVER_ENGINE_WEBSERVICE_FAILED:
+                sMsg = "AxisEngineException: Web service failed.";
+                break;
+            case SERVER_ENGINE_HANDLER_INIT_FAILED:
+                sMsg = "AxisEngineException: Handler initialization failed.";
+                break;
+            case SERVER_ENGINE_HANDLER_CREATION_FAILED:
+                sMsg = "AxisEngineException: Handler creation failed.";
+                break;
+            case SERVER_ENGINE_LIBRARY_LOADING_FAILED:
+                sMsg = "AxisEngineException: Library loading failed.";
+                break;
+            case SERVER_ENGINE_HANDLER_NOT_LOADED:
+                sMsg = "AxisEngineException: Handler is not loaded.";
+                break;
+            case SERVER_ENGINE_HANDLER_BEING_USED:
+                sMsg = "AxisEngineException: Handler is being used.";
+                break;
+            case SERVER_ENGINE_GET_HANDLER_FAILED:
+                sMsg = "AxisEngineException: Failed to get handler.";
+                break;
+            case SERVER_ENGINE_WRONG_HANDLER_TYPE:
+                sMsg = "AxisEngineException: Wrong handler type.";
+                break;
+            case SERVER_CONFIG_EXCEPTION:
+                sMsg = "AxisConfigException: Exception occurred.";
+                break;
+            case SERVER_CONFIG_TRANSPORT_CONF_FAILED:
+                sMsg = "AxisConfigException: Transport layer is not configured properly.";
+                break;
+            case SERVER_CONFIG_LIBRARY_PATH_EMPTY:
+                sMsg = "AxisConfigException: Library path is empty (not in server.wsdd file).";
+                break;
+            case SERVER_WSDD_FILE_NOT_FOUND:
+                sMsg = "AxisWsddException: Unable to load file.";
+                break;
+            case SERVER_WSDD_EXCEPTION:
+                sMsg = "AxisWsddException: Exception occurred.";
+                break;
+            case SERVER_WSDD_NO_HANDLERS_CONFIGURED:
+                sMsg = "AxisWsddException: No handlers configured in server.wsdd file.";
+                break;
+            case SERVER_SOAP_EXCEPTION:
+                sMsg = "AxisSoapException: Exception occurred.";
+                break;
+            case SERVER_TRANSPORT_EXCEPTION:
+                sMsg = "HTTPTransportException: Exception occurred.";
+                break;
+            case CLIENT_SSLCHANNEL_RECEPTION_EXCEPTION:
+            case SERVER_TRANSPORT_RECEPTION_EXCEPTION:
+                sMsg = "HTTPTransportException: Problem occurred when receiving the stream.";
+                break;
+            case CLIENT_SSLCHANNEL_SENDING_EXCEPTION:
+            case SERVER_TRANSPORT_SENDING_EXCEPTION:
+                sMsg = "HTTPTransportException: Problem occurred when sending the stream.";
+                break;
+            case SERVER_TRANSPORT_PROCESS_EXCEPTION:
+                sMsg = "HTTPTransportException: Cannot process response message.";
+                break;
+            case SERVER_TRANSPORT_UNKNOWN_HTTP_RESPONSE:
+                sMsg = "HTTPTransportException: Unknown HTTP response, cannot process response message.";
+                break;
+            case CLIENT_SSLCHANNEL_CONTEXT_CREATE_ERROR:
+                sMsg = "HTTPTransportException: Context creation error.";
+                break;
+            case CLIENT_SSLCHANNEL_ERROR:
+                sMsg = "HTTPTransportException: HTTPS transport error.";
+                break;
+            case SERVER_TRANSPORT_HTTP_EXCEPTION:
+                sMsg = "HTTPTransportException: HTTP transport error.";
+                break;
+            case SERVER_TRANSPORT_UNEXPECTED_STRING:
+                sMsg = "HTTPTransportException: Unexpected string received.";
+                break;
+            case CLIENT_SSLCHANNEL_CHANNEL_INIT_ERROR:    
+            case SERVER_TRANSPORT_CHANNEL_INIT_ERROR:
+                sMsg = "HTTPTransportException: Cannot initialize a channel to the remote end.";
+                break;
+            case CLIENT_SSLCHANNEL_SOCKET_CREATE_ERROR:                
+            case SERVER_TRANSPORT_SOCKET_CREATE_ERROR:
+                sMsg = "AxisTransportException: Unable to create a socket.";
+                break;
+            case CLIENT_SSLCHANNEL_SOCKET_CONNECT_ERROR:                
+            case SERVER_TRANSPORT_SOCKET_CONNECT_ERROR:
+                sMsg = "AxisTransportException: Cannot open a channel to the remote end.";
+                break;
+            case CLIENT_SSLCHANNEL_INVALID_SOCKET_ERROR:                
+            case SERVER_TRANSPORT_INVALID_SOCKET:
+                sMsg = "AxisTransportException: Socket not valid.";
+                break;
+            case SERVER_TRANSPORT_OUTPUT_STREAMING_ERROR:
+                sMsg = "HTTPTransportException: Output streaming error while writing to channel.";
+                break;
+            case SERVER_TRANSPORT_INPUT_STREAMING_ERROR:
+                sMsg = "HTTPTransportException: Input streaming error while reading from channel.";
+                break;
+            case SERVER_TRANSPORT_TIMEOUT_EXCEPTION:
+                sMsg = "HTTPTransportException: Channel error while doing a timed wait.";
+                break;
+            case SERVER_TRANSPORT_TIMEOUT_EXPIRED:
+                sMsg = "HTTPTransportException: Channel I/O operation timed out.";
+                break;
+            case SERVER_TRANSPORT_LOADING_SSLCHANNEL_FAILED:
+            case SERVER_TRANSPORT_LOADING_CHANNEL_FAILED:
+                sMsg = "HTTPTransportException: Unable to load channel library.";
+                break;
+            case SERVER_TRANSPORT_BUFFER_EMPTY:
+                sMsg = "HTTPTransportException: Transport buffer is empty.";
+                break;
+            case SERVER_PARSE_BUFFER_EMPTY:
+                sMsg = "AxisParseException: Buffer received from the parser is empty.";
+                break;
+            case SERVER_PARSE_PARSER_FAILED: 
+                sMsg = "AxisParseException: XML_STATUS_ERROR thrown from parser.";
+                break;
+            case SERVER_PARSE_TRANSPORT_FAILED:
+                sMsg = "AxisParseException: Error when getting the byte stream from the transport.";
+                break;
+            case SERVER_TEST_EXCEPTION:
+                sMsg = "This is a testing error.";
+                break;
+            case SERVER_CLIENT_ENGINE_MISMATCH:
+                sMsg = "AxisEngineException: Engine cannot be initialized as both client and server.";
+                break;
+            case AXISC_SERVICE_THROWN_EXCEPTION:
+                sMsg = "A service has thrown an exception.";
+                break;
+            case AXISC_UNKNOWN_ELEMENT_EXCEPTION:
+                sMsg = "AxisParseException: Unknown element encountered.";
+                break;
+            case AXISC_NODE_VALUE_MISMATCH_EXCEPTION:
+                sMsg = "Cannot deserialize the requested element.";
+                break;
+            case AXISC_READ_CONF_EXCEPTION:
+                sMsg = "AxisConfigException: Unable to read configuration file.";
+                break;
+            case CONFIG_DEFAULTS_ALREADY_SET:  
+                sMsg = "AxisConfigException: Configuration defaults have already been set.";
+                break;
+            case SERVER_UNKNOWN_ERROR:
+            default:    
+                sMsg= defaultMsg ? defaultMsg : "AxisException:";      
+                break;
+        }
+        
+        return sMsg;
+     }
 
 protected:
     /**
@@ -539,10 +772,9 @@ protected:
 
     /**
       * This data member is common to all the inherited classes of this base class.
-      * The char* variable m_sMessage is used to store the Exception message
-      * Whenever you want to set this variable use method setMessage(std::string psMessage)
+      * The variable m_sMessage is used to store the Exception message
       */
-    char* m_sMessage;
+    std::string m_sMessage;
 };
 
 AXIS_CPP_NAMESPACE_END

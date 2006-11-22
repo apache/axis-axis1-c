@@ -22,8 +22,6 @@
 #ifndef __AXISGENEXCEPTION_H_OF_AXIS_INCLUDED_
 #define __AXISGENEXCEPTION_H_OF_AXIS_INCLUDED_
 
-#include <string>
-#include <exception>
 #include <axis/AxisException.hpp>
 
 AXIS_CPP_NAMESPACE_START
@@ -34,13 +32,12 @@ class STORAGE_CLASS_INFO AxisGenException :public AxisException
 {
 
 public:
-    AxisGenException(const int iExceptionCode, const char* pcMessage = NULL);
-	AxisGenException(const AxisGenException& e);
-    virtual ~AxisGenException() throw();
-    
-private:
-    string getMessageForExceptionCode(const int iExceptionCode);
-	std::string m_sMessageForExceptionCode;
+    AxisGenException(int iExceptionCode, const char* pcMessage = NULL): AxisException()
+    {
+        setMessage(iExceptionCode, "AxisGenException:", pcMessage);
+    }
+	AxisGenException(const AxisGenException& e): AxisException (e) { }
+    virtual ~AxisGenException() throw() { }
 };
 
 AXIS_CPP_NAMESPACE_END

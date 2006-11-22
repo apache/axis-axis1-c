@@ -21,23 +21,22 @@
 #ifndef __AXISPARSEEXCEPTION_H_OF_AXIS_INCLUDED_
 #define __AXISPARSEEXCEPTION_H_OF_AXIS_INCLUDED_
 
-#include <string>
 #include <axis/AxisException.hpp>
+
 using namespace std;
 
 AXIS_CPP_NAMESPACE_USE
 
 class STORAGE_CLASS_INFO AxisParseException :public AxisException
 {
-
 public:
-    AxisParseException(const int iExceptionCode,const char* pcMessage = NULL);
-    AxisParseException(const AxisParseException& e);
-    virtual ~AxisParseException() throw();
-                                                                                                                             
-private:
-    string getMessageForExceptionCode (const int iExceptionCode);
-    string m_sMessageForExceptionCode;
+    AxisParseException(int iExceptionCode,const char* pcMessage = NULL): AxisException()
+    {
+        setMessage(iExceptionCode, "AxisParseException:", pcMessage);
+    }
+    
+    AxisParseException(const AxisParseException& e): AxisException(e) { }
+    virtual ~AxisParseException() throw() { }
 };
 
 #endif

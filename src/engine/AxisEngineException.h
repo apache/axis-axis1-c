@@ -21,7 +21,6 @@
 #ifndef __AXISENGINEEXCEPTION_H_OF_AXIS_INCLUDED_
 #define __AXISENGINEEXCEPTION_H_OF_AXIS_INCLUDED_
 
-#include <string>
 #include <axis/AxisException.hpp>
 
 AXIS_CPP_NAMESPACE_START
@@ -32,13 +31,12 @@ class STORAGE_CLASS_INFO AxisEngineException :public AxisException
 {
 
 public:
-    AxisEngineException(const int iExceptionCode, const char* pcMessage = NULL);
-    AxisEngineException(const AxisEngineException& e);
-    virtual ~AxisEngineException() throw();
-
-private:
-    string getMessageForExceptionCode(const int iExceptionCode);
-	string m_sMessageForExceptionCode;
+    AxisEngineException(int iExceptionCode, const char* pcMessage = NULL): AxisException()
+    {
+        setMessage(iExceptionCode, "AxisEngineException:", pcMessage);
+    }
+    AxisEngineException(const AxisEngineException& e): AxisException (e) { }
+    virtual ~AxisEngineException() throw() { }
 };
 
 AXIS_CPP_NAMESPACE_END
