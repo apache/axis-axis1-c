@@ -559,7 +559,7 @@ public:
                 sMsg = "AxisSoapException: SOAPAction HTTP header is empty.";
                 break;
             case CLIENT_SOAP_SOAP_CONTENT_ERROR:
-                sMsg = "AxisSoapException: Received content is faulty.";
+                sMsg = "AxisSoapException: Soap message content is not valid.";
                 break;
             case CLIENT_SOAP_NO_SOAP_METHOD:
                 sMsg = "AxisSoapException: Request method is not a soap method.";
