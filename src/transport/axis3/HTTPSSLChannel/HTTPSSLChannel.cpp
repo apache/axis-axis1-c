@@ -691,12 +691,8 @@ ReadFromSocket( char * pszRxBuffer)
     }
     else if ( 0 == nByteRecv )
     {
-        // read-side of socket is closed - anytime we come down expecting to read something
-        // and read-side is closed means that there must be a parsing bug in http transport level.
-        OpenSSL_Close();
-        close(); 
-        m_LastError = "Remote side of socket has been closed.";     
-        throw HTTPTransportException( SERVER_TRANSPORT_INPUT_STREAMING_ERROR, m_LastError.c_str());
+        // read-side of socket is closed 
+        *(pszRxBuffer + nByteRecv) = '\0';
     }
     else
     {

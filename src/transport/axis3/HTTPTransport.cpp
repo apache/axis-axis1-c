@@ -1493,8 +1493,13 @@ readHTTPHeader()
     // not be assumed that the HTTP header will be read in one block, thus there
     // must be processing that first identifies the beginning of the HTTP header
     // block (i.e. looks for 'HTTP') and then additional processing that identifies
-    // the end of the HTTP header block (i.e. looks for CR LF CR LF).  
+    // the end of the HTTP header block (i.e. looks for CR LF CR LF).  To stop the
+    // search becoming 'stuck' because of an incomplete, corrupt or unexpected
+    // message an iteration count has been added (this could become configurable if
+    // the user needs to remove this feature if the server is particularily slow,
+    // etc.).
     bool bHTTPHeaderFound = false;
+    int   iIterationCount = 100;
 
     m_strReceived = "";
 
@@ -1509,6 +1514,12 @@ readHTTPHeader()
         // Add the new message part to the received string.
         m_strReceived += m_pszRxBuffer;
 
+        // Do iteration processing.
+        if( strlen( m_pszRxBuffer) > 0)
+            iIterationCount = 100;
+        else
+            iIterationCount--;
+
         // Check for beginning and end of HTTP header.
         if( m_strReceived.find( ASCII_S_HTTP) != std::string::npos &&
             m_strReceived.find( ASCII_S_CRLFCRLF) != std::string::npos)
@@ -1516,7 +1527,14 @@ readHTTPHeader()
             bHTTPHeaderFound = true;
         }
     }
-    while(!bHTTPHeaderFound);
+    while( !bHTTPHeaderFound && iIterationCount > 0);
+
+    // If the HTTP header was not found in the given number of iterations then throw an exception.
+    if( iIterationCount == 0)
+    {
+        throw HTTPTransportException( SERVER_TRANSPORT_INPUT_STREAMING_ERROR,
+                                      "Timed out waiting for HTTP header message.");
+    }
 }
 
 void HTTPTransport::
@@ -1617,17 +1635,27 @@ checkHTTPStatusCode()
 bool HTTPTransport::
 getNextDataPacket( const char * pcszExceptionMessage)
 {
+    int   iIterationCount = 100;
     bool bDataRead = false;
 
+    do
+    {
     // Read whatever part of the response message that has arrived at the active channel socket.
     m_pszRxBuffer[0] = '\0';
     *m_pActiveChannel >> m_pszRxBuffer;
 
-    if( strlen( m_pszRxBuffer) > 0)
+        // Do iteration processing.
+        if( strlen( m_pszRxBuffer) == 0)
+            iIterationCount--;
+        else
+            bDataRead = true;
+    }
+    while( !bDataRead && iIterationCount > 0);
+
+    if( bDataRead)
     {
         m_strReceived += m_pszRxBuffer;
         m_iBytesLeft = m_strReceived.length();
-        bDataRead = true;
     }
     else if( m_strReceived.length() == 0)
     {

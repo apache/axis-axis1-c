@@ -226,11 +226,7 @@ operator >> (char * msg)
     }
     else if ( 0 == nByteRecv )
     {
-        // read-side of socket is closed - anytime we come down expecting to read something
-        // and read-side is closed means that there must be a parsing bug in http transport level.
-        m_LastError = "Remote side of socket has been closed.";
-        CloseChannel();
-        throw HTTPTransportException( SERVER_TRANSPORT_INPUT_STREAMING_ERROR, m_LastError.c_str());
+        // read-side of socket is closed.
     }
     else if( nByteRecv)
     {
