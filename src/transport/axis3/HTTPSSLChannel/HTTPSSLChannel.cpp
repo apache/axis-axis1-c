@@ -393,7 +393,8 @@ OpenChannel()
 
     if( getaddrinfo( pszHost, szPort, &aiHints, &paiAddrInfo0))
     {
-        throw HTTPTransportException( SERVER_TRANSPORT_SOCKET_CREATE_ERROR);
+        m_LastError = "Unable to get address information.";
+        throw HTTPTransportException( SERVER_TRANSPORT_SOCKET_CREATE_ERROR, m_LastError.c_str());
     }
 
     for( paiAddrInfo = paiAddrInfo0; paiAddrInfo; paiAddrInfo = paiAddrInfo->ai_next)
