@@ -509,7 +509,7 @@ public:
     {
         m_iExceptionCode = exceptionCode;
         std::string sMessage = detailMessage ? detailMessage : "";
-        m_sMessage = getMessageForExceptionCode(exceptionCode, defaultMsg) + " " + sMessage;
+        m_sMessage = getMessageForExceptionCode(exceptionCode, defaultMsg) + "\n" + sMessage;
     }
     
     /** 

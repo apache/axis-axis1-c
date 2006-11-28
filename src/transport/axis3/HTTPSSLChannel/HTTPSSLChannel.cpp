@@ -423,7 +423,7 @@ OpenChannel()
             
             string fullMessage = "Failed to open connection to server " + 
                    string(m_URL.getHostName()) + " at port " + string(pcPort) +
-                   ". Error " + string(pcErr) + PLATFORM_GET_ERROR_MESSAGE( dwError );
+                   ".\nError " + string(pcErr) + PLATFORM_GET_ERROR_MESSAGE( dwError );
 
             throw HTTPTransportException( CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED, fullMessage.c_str());
         }
@@ -514,7 +514,7 @@ OpenChannel()
         
         string fullMessage = "Failed to open connection to server " + 
                string(m_URL.getHostName()) + " at port " + string(pcPort) +
-               ". Error " + string(pcErr) + PLATFORM_GET_ERROR_MESSAGE( dwError );
+               ".\nError " + string(pcErr) + PLATFORM_GET_ERROR_MESSAGE( dwError );
 
         m_LastError = fullMessage;
 

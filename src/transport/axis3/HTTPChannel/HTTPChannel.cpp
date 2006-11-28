@@ -447,7 +447,7 @@ OpenChannel()
             sprintf(buffer, "%d", m_URL.getPort());
             string fullMessage = "Failed to open connection to server at host " +
                                  string(m_URL.getHostName()) + 
-                                 " and port " +  string(buffer) + ". " + m_LastError;
+                                 " and port " +  string(buffer) + ".\n" + m_LastError;
 
             CloseChannel();
             freeaddrinfo( paiAddrInfo0);
@@ -547,7 +547,7 @@ OpenChannel()
         sprintf(buffer, "%d", m_URL.getPort());
         string fullMessage = "Failed to open connection to server at host " +
                              string(m_URL.getHostName()) + 
-                             " and port " +  string(buffer) + ". " + m_LastError;
+                             " and port " +  string(buffer) + ".\n" + m_LastError;
 
         CloseChannel();
 
