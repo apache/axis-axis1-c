@@ -60,11 +60,7 @@ HTTPChannel()
 HTTPChannel::
 ~HTTPChannel()
 {
-    // If the socket value is not invalid, then close the socket before
-    // deleting the Channel object.
-    if( m_Sock != INVALID_SOCKET)
-        CloseChannel();
-
+    CloseChannel();
     StopSockets();
 }
 
@@ -127,15 +123,13 @@ open() throw (HTTPTransportException&)
 {
     bool    bSuccess = (bool) AXIS_FAIL;
 
-    if( m_Sock != INVALID_SOCKET)
-        CloseChannel();
+    CloseChannel();
 
     m_LastError = "No Errors";
 
     if( (bSuccess = OpenChannel()) != AXIS_SUCCESS)
     {
-        throw HTTPTransportException( SERVER_TRANSPORT_SOCKET_CONNECT_ERROR,
-                                      (char *) m_LastError.c_str());
+        throw HTTPTransportException( SERVER_TRANSPORT_SOCKET_CONNECT_ERROR, m_LastError.c_str());
     }
 
     return bSuccess;
@@ -153,11 +147,7 @@ open() throw (HTTPTransportException&)
 bool HTTPChannel::
 close()
 {
-    if( m_Sock != INVALID_SOCKET)
-        CloseChannel();
-
-    m_Sock = INVALID_SOCKET;
-
+    CloseChannel();
     return AXIS_SUCCESS;
 }
 
@@ -195,66 +185,54 @@ operator >> (char * msg)
 {
     if (INVALID_SOCKET == m_Sock)
     {
-        // Error - Reading cannot be done without having a open socket Input
-        //         streaming error on undefined channel; please open the
-        //         channel first
-
-        m_LastError = "No open socket to read from.";
-
-        throw HTTPTransportException( SERVER_TRANSPORT_INVALID_SOCKET,
-                                      (char *) m_LastError.c_str());
+        m_LastError = "Unable to perform read operation.";
+        throw HTTPTransportException( SERVER_TRANSPORT_INVALID_SOCKET, m_LastError.c_str());
     }
 
     int     nByteRecv = 0;
     char    buf[BUF_SIZE];
     int     iBufSize = BUF_SIZE - 10;
 
-    //assume timeout not set; set default tatus to OK
-    int iTimeoutStatus = 1;
-
-    //check if timeout set
+    // If timeout set then wait for maximum amount of time for data
     if( m_lTimeoutSeconds)
     {
-        iTimeoutStatus = applyTimeout();
-    }
+        int iTimeoutStatus = applyTimeout();
 
-    // Handle timeout outcome
-    if( iTimeoutStatus < 0)
-    {
-        // Error
-        m_LastError = "Channel error while waiting for timeout";
-
-        // Select SOCKET_ERROR. Channel error while waiting for timeout
-        throw HTTPTransportException( SERVER_TRANSPORT_TIMEOUT_EXCEPTION, 
-                                      (char *) m_LastError.c_str());
-    }
-
-    if( iTimeoutStatus == 0)
-    {
-        // Timeout expired - select timeout expired.
-        // Channel error connection timeout before receiving
-        m_LastError = "Channel error: connection timed out before receiving";
-
-        throw HTTPTransportException( SERVER_TRANSPORT_TIMEOUT_EXPIRED, 
-                                      (char *) m_LastError.c_str());
+        // Handle timeout outcome
+        if( iTimeoutStatus < 0)
+        {
+            throw HTTPTransportException( SERVER_TRANSPORT_TIMEOUT_EXCEPTION, m_LastError.c_str());
+        }
+    
+        if( iTimeoutStatus == 0)
+        {
+            m_LastError = "Read operation timed-out while waiting for data.";
+            throw HTTPTransportException( SERVER_TRANSPORT_TIMEOUT_EXPIRED, m_LastError.c_str() );
+        }
     }
 
     // Either timeout was not set or data available before timeout; so read
-
-    if( (nByteRecv = recv( m_Sock, (char *) &buf, iBufSize, 0)) == SOCKET_ERROR)
+    nByteRecv = recv( m_Sock, (char *) &buf, iBufSize, 0);
+    if (nByteRecv == SOCKET_ERROR)
     {
-        ReportError( "Channel error", "while reading data");
-
+        // error on read operation
+        ReportError();
         CloseChannel();
 
         if( !bNoExceptionOnForceClose)
         {
-            throw HTTPTransportException( SERVER_TRANSPORT_INPUT_STREAMING_ERROR, 
-                                          (char *) m_LastError.c_str());
+            throw HTTPTransportException( SERVER_TRANSPORT_INPUT_STREAMING_ERROR, m_LastError.c_str());
         }
     }
-
-    if( nByteRecv)
+    else if ( 0 == nByteRecv )
+    {
+        // read-side of socket is closed - anytime we come down expecting to read something
+        // and read-side is closed means that there must be a parsing bug in http transport level.
+        m_LastError = "Remote side of socket has been closed.";
+        CloseChannel();
+        throw HTTPTransportException( SERVER_TRANSPORT_INPUT_STREAMING_ERROR, m_LastError.c_str());
+    }
+    else if( nByteRecv)
     {
         buf[nByteRecv] = '\0';
         memcpy(msg, buf, nByteRecv + 1);
@@ -278,17 +256,10 @@ operator >> (char * msg)
 const IChannel & HTTPChannel::
 operator << (const char * msg)
 {
-    // Check that the Tx/Rx sockets are valid (this will have been done if the
-    // application has called the open method first.
     if( INVALID_SOCKET == m_Sock)
     {
-        // Error - Writing cannot be done without having a open socket to
-        //         remote end.  Throw an exception.
-
-        m_LastError = "No valid socket open";
-
-        throw HTTPTransportException( SERVER_TRANSPORT_INVALID_SOCKET,
-                                      (char *) m_LastError.c_str());
+        m_LastError = "No valid socket to perform write operation.";
+        throw HTTPTransportException( SERVER_TRANSPORT_INVALID_SOCKET, m_LastError.c_str());
     }
 
     int size = strlen( msg);
@@ -300,14 +271,13 @@ operator << (const char * msg)
     if( (nByteSent = send( m_Sock, msg, size, 0)) == SOCKET_ERROR)
 #endif
     {
-        // Output streaming error while writing data.  Close the channel and
-        // throw an exception.
+        // This must be done first before closing channel in order to get actual error.
+        ReportError(); 
+               
+        // Close the channel and throw an exception.
         CloseChannel();
 
-        ReportError( "Channel error", "while writing data");
-
-        throw HTTPTransportException( SERVER_TRANSPORT_OUTPUT_STREAMING_ERROR,
-                                      (char *) m_LastError.c_str());
+        throw HTTPTransportException( SERVER_TRANSPORT_OUTPUT_STREAMING_ERROR, m_LastError.c_str());
     }
 
     return *this;
@@ -470,49 +440,37 @@ OpenChannel()
                          paiAddrInfo->ai_protocol);
 
         if( m_Sock < 0)
-        {
             continue;
-        }
 
         if( connect( m_Sock, paiAddrInfo->ai_addr, paiAddrInfo->ai_addrlen) < 0)
         {
-            // Cannot open a channel to the remote end, shutting down the
-            // channel and then throw an exception.
-            // Before we do anything else get the last error message;
-            long dwError = GETLASTERROR
+            // This must be done first thing to get proper error. Generate full message.
+            ReportError();
+            char buffer[100];
+            sprintf(buffer, "%d", m_URL.getPort());
+            string fullMessage = "Failed to open connection to server at host " +
+                                 string(m_URL.getHostName()) + 
+                                 " and port " +  string(buffer) + ". " + m_LastError;
 
             CloseChannel();
             freeaddrinfo( paiAddrInfo0);
             
-            string *    message = PLATFORM_GET_ERROR_MESSAGE( dwError);
-            char        fullMessage[600];
-            sprintf(fullMessage,
-                "Failed to open connection to server: \n \
-                hostname='%s'\n\
-                port='%d'\n\
-                Error Message='%s'\
-                Error Code='%d'\n",
-                m_URL.getHostName(), m_URL.getPort(), message->c_str(), (int) dwError);
-                
-            delete( message);
+            m_LastError = fullMessage;
 
-            throw HTTPTransportException( CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED,
-                                          fullMessage);
+            throw HTTPTransportException( CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED, m_LastError.c_str());
         }
 
         break;
     }
 
-    // Samisa: free addrInfo0 - no longer needed
     freeaddrinfo( paiAddrInfo0);
 
+    // If couldn't create socket, close the channel and throw an exception.
     if( m_Sock < 0)
     {
-        // Sockets error Couldn't create socket.  Close the channel and throw
-        // an exception.
+        ReportError();        
         CloseChannel();
-
-        throw HTTPTransportException( SERVER_TRANSPORT_SOCKET_CREATE_ERROR);
+        throw HTTPTransportException( SERVER_TRANSPORT_SOCKET_CREATE_ERROR, m_LastError.c_str());
     }
 
     bSuccess = AXIS_SUCCESS;
@@ -520,8 +478,7 @@ OpenChannel()
 #else // IPV6 not defined
     if( (m_Sock = socket( PF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET)
     {
-        m_LastError = "Could not Create a socket.";
-
+        ReportError();
         return bSuccess;
     }
 
@@ -536,12 +493,8 @@ OpenChannel()
     // Attempt to bind the client to the client socket.
     if( bind( m_Sock, (struct sockaddr *) &clAddr, sizeof( clAddr)) == SOCKET_ERROR)
     {
-        // Error whilst binding. Cannot open a channel to the remote end,
-        // shutting down the channel and then throw an exception.
+        ReportError();        
         CloseChannel();
-
-        m_LastError = "Error whilst binding. Cannot open a channel to the remote end,";
-
         return bSuccess;
     }
 
@@ -591,34 +544,22 @@ OpenChannel()
     // Attempt to connect to the remote server.
     if( connect( m_Sock, (struct sockaddr *) &svAddr, sizeof (svAddr)) == SOCKET_ERROR)
     {
-        // Cannot open a channel to the remote end, shutting down the
-        // channel and then throw an exception.
+        // This must be done first thing to get proper error. Generate full message.
+        ReportError();
+        char buffer[100];
+        sprintf(buffer, "%d", m_URL.getPort());
+        string fullMessage = "Failed to open connection to server at host " +
+                             string(m_URL.getHostName()) + 
+                             " and port " +  string(buffer) + ". " + m_LastError;
 
-        // Before we do anything else get the last error message;
-        long dw = GETLASTERROR
         CloseChannel();
-           
-        string* message = PLATFORM_GET_ERROR_MESSAGE(dw);
-
-        char fullMessage[600];
-        sprintf(fullMessage,
-                "Failed to open connection to server: \n \
-                hostname='%s'\n\
-                port='%d'\n\
-                Error Message='%s'\
-                Error Code='%d'\n",
-                m_URL.getHostName(), m_URL.getPort(), message->c_str(), dw);
-                
-        delete(message);
 
         m_LastError = fullMessage;
 
         return bSuccess;
     }
     else
-    {
         bSuccess = AXIS_SUCCESS;
-    }
 
 #endif // IPV6
 
@@ -633,7 +574,6 @@ OpenChannel()
      */
 
     int one = 1;
-
     setsockopt( m_Sock, IPPROTO_TCP, TCP_NODELAY, (char *) &one, sizeof( int));
 
     return bSuccess;
@@ -651,14 +591,14 @@ OpenChannel()
 void HTTPChannel::
 CloseChannel()
 {
-    if( INVALID_SOCKET != m_Sock) // Check if socket already closed : AXISCPP-185
+    if( INVALID_SOCKET != m_Sock)
     {
 #ifdef WIN32
         closesocket( m_Sock);
 #else
         ::close( m_Sock);
 #endif
-        m_Sock = INVALID_SOCKET; // fix for AXISCPP-185
+        m_Sock = INVALID_SOCKET;
     }
 }
 
@@ -760,19 +700,21 @@ applyTimeout()
     timeout.tv_usec = 0;
 
     /* select returns 0 if timeout, 1 if input available, -1 if error. */
-    return select( FD_SETSIZE, &set, NULL, NULL, &timeout);
+    int rc = select( FD_SETSIZE, &set, NULL, NULL, &timeout);
+    
+    if (rc < 0)
+        ReportError();
+        
+    return rc;
 }
 
 void HTTPChannel::
-ReportError( char * szText1, char * szText2)
+ReportError()
 {
-    long        dwMsg = GETLASTERROR
-    string *    sMsg = PLATFORM_GET_ERROR_MESSAGE( dwMsg);
-    char        szMsg[600];
-
-    sprintf( szMsg, "%s %d %s: '%s'\n", szText1, (int) dwMsg, szText2, sMsg->c_str());
-
-    m_LastError = szMsg;
+    long dwError = GETLASTERROR;
+    char pcErr[100];
+    sprintf(pcErr,"Error is %d - ",(int)dwError);
+    m_LastError = string(pcErr) + PLATFORM_GET_ERROR_MESSAGE(dwError);
 }
 
 void HTTPChannel::

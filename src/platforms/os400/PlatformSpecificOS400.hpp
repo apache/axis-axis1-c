@@ -19,6 +19,16 @@
 #define _PLATFORM_SPECIFIC_OS400_HPP
 
 
+#include <stdio.h>      
+#include <stdlib.h>      
+#include <string.h>      
+#include <errno.h>
+#include <stdarg.h>
+#include <time.h>       // strftime(), localtime()      
+#include <sys/time.h>   // gettimeofday()
+#include <unistd.h>     // access()
+#include <string>      
+
 // =============================================================
 // Default paths to shared library/DLLs and files
 // =============================================================
@@ -47,11 +57,12 @@
 #define PLATFORM_UNLOADLIB         os400_dlclose
 #define PLATFORM_GETPROCADDR       os400_dlsym
 #define PLATFORM_LOADLIBEXIT()
-#define PLATFORM_LOADLIB_ERROR     strerror(errno)
+#define PLATFORM_LOADLIB_ERROR     string(os400_dlerror())
 
 extern void	*os400_dlopen(const char *);
 extern void	*os400_dlsym(void *, const char *);
 extern int   os400_dlclose(void *);
+extern char *os400_dlerror();
 
 // =============================================================
 // National Language Support
@@ -78,7 +89,7 @@ extern char *toUTF8(char *b, int len);
 #include <pthread.h> 
 #include <unistd.h>
 #include <errno.h>
-#define PLATFORM_SLEEP(x) sleep(0);
+#define PLATFORM_SLEEP(x) sleep(x)
 
 
 /**
@@ -87,16 +98,16 @@ extern char *toUTF8(char *b, int len);
  * and that it returns a long
  * @return long the lsat error message for this thread
  */
-#define GETLASTERROR errno;
+#define GETLASTERROR errno
 
 
 /**
  * From the last error number get a sensible std::string representing it
  * @param errorNumber the error Number you are trying to get a message for
- * @return the error message. NOTE: The caller is responsible for deleting the returned string
+ * @return the error message. 
  */
 #include <string>
-#define PLATFORM_GET_ERROR_MESSAGE(errorNumber) new string(strerror(errorNumber));
+#define PLATFORM_GET_ERROR_MESSAGE(errorNumber) string(strerror(errorNumber))
 
 /**
  * Platform specific method to obtain current thread ID
@@ -139,6 +150,22 @@ static int os400_ftime(struct os400_timeb * tp)
 #define PRINTF_LONGLONG_FORMAT_SPECIFIER_CHARS "lld"
 #define PRINTF_UNSIGNED_LONGLONG_FORMAT_SPECIFIER "%llu"
 #define PRINTF_UNSIGNED_LONGLONG_FORMAT_SPECIFIER_CHARS "llu"
+
+/**
+ * For debugging
+ */
+static void traceData(void *d, int length)
+{
+    char logFile[1024];
+    sprintf(logFile, "/tmp/axis.log");
+    FILE *fh = fopen(logFile, "ab, codepage=819");
+    setvbuf(fh, NULL, _IOFBF, (size_t)(4*1024));
+    fwrite(d, 1, length, fh);
+    fwrite("\x0d\x0a\x2b\x2b\x2b\x2b\x2b\x2b\x0d\x0a", 1, 10, fh);
+    fflush(fh);
+    fclose(fh);
+}
+
 
 #endif
 

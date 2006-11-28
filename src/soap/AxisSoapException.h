@@ -37,7 +37,7 @@ public:
     }
     
     // constructor
-    AxisSoapException(const AxisSoapException& e): AxisException (e) { }
+    AxisSoapException(const AxisException& e): AxisException (e) { }
     
     // destructor
     virtual ~AxisSoapException() throw() { }

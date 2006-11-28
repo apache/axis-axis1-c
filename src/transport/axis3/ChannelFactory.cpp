@@ -72,39 +72,37 @@ LoadChannelLibrary( g_ChannelType eChannelType, const char * pcLibraryName)
 
         if( !sLibHandler)
         {
-            long dwError = GETLASTERROR
-            string *    message = PLATFORM_GET_ERROR_MESSAGE( dwError);
-            char        fullMessage[1024];
-            sprintf(fullMessage,
-                    "Failed to load transport channel within server engine: \n \
-                     Error Message='%s'\
-                     Error Code='%d'\n \
-                     Load lib error='%s' \n",
-                     message->c_str(), (int) dwError, PLATFORM_LOADLIB_ERROR);
+            // get load lib error information
+            string sFullMessage = "Failed to load transport channel library " +  
+                                  string(pcLibraryName) + ". " + PLATFORM_LOADLIB_ERROR;
 
-            delete( message);
-
-            throw HTTPTransportException( SERVER_TRANSPORT_LOADING_CHANNEL_FAILED, fullMessage);
+            throw HTTPTransportException( SERVER_TRANSPORT_LOADING_CHANNEL_FAILED, sFullMessage.c_str());
         }
         else
         {
-            CREATE_OBJECT3 sCreate = (CREATE_OBJECT3) PLATFORM_GETPROCADDR( sLibHandler, CREATE_FUNCTION3);
-            DELETE_OBJECT3 sDelete = (DELETE_OBJECT3) PLATFORM_GETPROCADDR( sLibHandler, DELETE_FUNCTION3);
+            CREATE_OBJECT3 sCreate = (CREATE_OBJECT3)NULL;
+            DELETE_OBJECT3 sDelete = (DELETE_OBJECT3)NULL;
+            
+            sCreate = (CREATE_OBJECT3) PLATFORM_GETPROCADDR( sLibHandler, CREATE_FUNCTION3);
+            if (sCreate)
+                sDelete = (DELETE_OBJECT3) PLATFORM_GETPROCADDR( sLibHandler, DELETE_FUNCTION3);
 
             if (!sCreate || !sDelete)
             {
+                // get load lib error information
+                string sFullMessage = "Failed to resolve to transport channel procedures in library " +
+                                      string(pcLibraryName) + ". " +  PLATFORM_LOADLIB_ERROR;
+                
+                // Unload library - this must be done after obtaining error info above
                 PLATFORM_UNLOADLIB( sLibHandler);
-
-                char * pszErrorInfo = new char[ strlen( pcLibraryName) + 1];
-                strcpy( pszErrorInfo, pcLibraryName);
 
                 if( eChannelType == UnsecureChannel)
                 {
-                    throw HTTPTransportException( SERVER_TRANSPORT_LOADING_CHANNEL_FAILED, pszErrorInfo);
+                    throw HTTPTransportException( SERVER_TRANSPORT_LOADING_CHANNEL_FAILED, sFullMessage.c_str());
                 }
                 else
                 {
-                    throw HTTPTransportException( SERVER_TRANSPORT_LOADING_SSLCHANNEL_FAILED, pszErrorInfo);
+                    throw HTTPTransportException( SERVER_TRANSPORT_LOADING_SSLCHANNEL_FAILED, sFullMessage.c_str());
                 }
             }
 
@@ -203,38 +201,37 @@ preloadChannel(g_ChannelType type, const char *pcLibraryName)
     pCh->m_Library = PLATFORM_LOADLIB( pcLibraryName);
     if( !pCh->m_Library)
     {
+        // get load lib error information
+        string sFullMessage = "Failed to pre-load transport channel library " +  
+                              string(pcLibraryName) + ". " + PLATFORM_LOADLIB_ERROR;
+        
         delete pCh;
-           
-        long dwError = GETLASTERROR
-        string *    message = PLATFORM_GET_ERROR_MESSAGE( dwError);
-        char        fullMessage[1024];
-        sprintf(fullMessage,
-                "Failed to load transport channel within server engine: \n \
-                 Error Message='%s'\
-                 Error Code='%d'\n \
-                 Load lib error='%s' \n",
-                 message->c_str(), (int) dwError, PLATFORM_LOADLIB_ERROR);
 
-        delete( message);
-
-        throw HTTPTransportException( SERVER_TRANSPORT_LOADING_CHANNEL_FAILED, fullMessage);
+        throw HTTPTransportException( SERVER_TRANSPORT_LOADING_CHANNEL_FAILED, sFullMessage.c_str());
     }
 
     pCh->m_Create = (CREATE_OBJECT3) PLATFORM_GETPROCADDR( pCh->m_Library, CREATE_FUNCTION3);
-    pCh->m_Delete = (DELETE_OBJECT3) PLATFORM_GETPROCADDR( pCh->m_Library, DELETE_FUNCTION3);
+    if (pCh->m_Create)
+        pCh->m_Delete = (DELETE_OBJECT3) PLATFORM_GETPROCADDR( pCh->m_Library, DELETE_FUNCTION3);
+        
     if (!pCh->m_Create || !pCh->m_Delete)
     {
+        // get load lib error information
+        string sFullMessage = "Failed to resolve to transport channel procedures in library " +
+                              string(pcLibraryName) + ". " +  PLATFORM_LOADLIB_ERROR;
+        
+        // Unload library - this must be done after obtaining error info above
         PLATFORM_UNLOADLIB( pCh->m_Library);
+        
         delete pCh;
-        char * pszErrorInfo = new char[ strlen( pcLibraryName) + 1];
-        strcpy( pszErrorInfo, pcLibraryName);
+
         if( type == UnsecureChannel)
         {
-            throw HTTPTransportException( SERVER_TRANSPORT_LOADING_CHANNEL_FAILED, pszErrorInfo);
+            throw HTTPTransportException( SERVER_TRANSPORT_LOADING_CHANNEL_FAILED, sFullMessage.c_str());
         }
         else
         {
-            throw HTTPTransportException( SERVER_TRANSPORT_LOADING_SSLCHANNEL_FAILED, pszErrorInfo);
+            throw HTTPTransportException( SERVER_TRANSPORT_LOADING_SSLCHANNEL_FAILED, sFullMessage.c_str());
         }
     }
 

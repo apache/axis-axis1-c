@@ -21,9 +21,8 @@
 
 
 
-std::string* getPlatformErrorMessage(long errorNumber)
+std::string getPlatformErrorMessage(long errorNumber)
 {
-	std::string* returningString = new std::string();
     LPVOID lpMsgBuf;
 
 	FormatMessage(
@@ -35,7 +34,7 @@ std::string* getPlatformErrorMessage(long errorNumber)
 	(LPTSTR) &lpMsgBuf,
 	0, NULL );
 
-	returningString->append((LPTSTR)lpMsgBuf);
+	std::string returningString((LPTSTR)lpMsgBuf);
     LocalFree(lpMsgBuf);
 		    
     return returningString;

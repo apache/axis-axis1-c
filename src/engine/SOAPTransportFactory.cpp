@@ -59,15 +59,19 @@ int SOAPTransportFactory::initialize()
 	if (!loadLib())
 	{
         m_Create = (CREATE_OBJECT1) PLATFORM_GETPROCADDR(m_LibHandler, CREATE_FUNCTION1);
-        m_Delete = (DELETE_OBJECT1) PLATFORM_GETPROCADDR(m_LibHandler, DELETE_FUNCTION1);
+        if (m_Create)
+            m_Delete = (DELETE_OBJECT1) PLATFORM_GETPROCADDR(m_LibHandler, DELETE_FUNCTION1);
 
         if (!m_Create || !m_Delete)
         {
+            // get load lib error information
+            string sFullMessage = "Failed to resolve to SOAP transport procedures in library " +
+                                  string(m_pcLibraryPath) + ". " +  PLATFORM_LOADLIB_ERROR;
+            
+            // Unload library - this must be done after obtaining error info above
             unloadLib();
-            AXISTRACE1("SERVER_ENGINE_LOADING_TRANSPORT_FAILED", CRITICAL);
-            char *s = new char[strlen(m_pcLibraryPath)+1];
-            strcpy(s,m_pcLibraryPath);
-            throw AxisEngineException(SERVER_ENGINE_LOADING_TRANSPORT_FAILED,  s);
+            
+            throw AxisEngineException(SERVER_ENGINE_LOADING_TRANSPORT_FAILED,  sFullMessage.c_str());
         }
 #ifdef ENABLE_AXISTRACE
         // Load function to do lib level inits
@@ -86,10 +90,8 @@ int SOAPTransportFactory::initialize()
 	}
 	else
 	{
-        AXISTRACE1("SERVER_ENGINE_LOADING_TRANSPORT_FAILED", CRITICAL);
-        char *s = new char[strlen(m_pcLibraryPath)+1];
-        strcpy(s,m_pcLibraryPath);
-        throw AxisEngineException(SERVER_ENGINE_LOADING_TRANSPORT_FAILED,  s);
+        // dead code - will never be reached, need to remove.
+        throw AxisEngineException(SERVER_ENGINE_LOADING_TRANSPORT_FAILED);
 	}
 	return AXIS_SUCCESS;
 }
@@ -110,7 +112,7 @@ SOAPTransport* SOAPTransportFactory::getTransportObject(AXIS_PROTOCOL_TYPE eProt
 {
 	SOAPTransport* pTpt = NULL;
 	m_Create(&pTpt);
-        pTpt->setProtocol(eProtocol);
+    pTpt->setProtocol(eProtocol);
 	return pTpt;
 }
 
@@ -125,20 +127,11 @@ int SOAPTransportFactory::loadLib()
 
     if (!m_LibHandler)
     {
-        AXISTRACE1("SERVER_ENGINE_LOADING_TRANSPORT_FAILED", CRITICAL);
-        long dwError = GETLASTERROR
-        string *    message = PLATFORM_GET_ERROR_MESSAGE( dwError);
-        char        fullMessage[1024];
-        sprintf(fullMessage,
-                "Failed to load transport within server engine: \n \
-                Error Message='%s'\
-                Error Code='%d'\n \
-                Load lib error='%s' \n",
-                message->c_str(), (int) dwError, PLATFORM_LOADLIB_ERROR);
+        // get load lib error information
+        string sFullMessage = "Failed to load transport library " +  
+                              string(m_pcLibraryPath) + ". " + PLATFORM_LOADLIB_ERROR;
 
-        delete( message);
-
-        throw AxisEngineException(SERVER_ENGINE_LOADING_TRANSPORT_FAILED, fullMessage);
+        throw AxisEngineException(SERVER_ENGINE_LOADING_TRANSPORT_FAILED, sFullMessage.c_str());
     }
     return AXIS_SUCCESS;
 }

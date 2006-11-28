@@ -38,7 +38,7 @@ public:
     }
     
     // constructor
-    HTTPTransportException(const HTTPTransportException& e): AxisException (e) { }
+    HTTPTransportException(const AxisException& e): AxisException (e) { }
     
     // destructor
     virtual ~HTTPTransportException() throw() { }

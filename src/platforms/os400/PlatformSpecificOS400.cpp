@@ -30,9 +30,11 @@
 #include <except.h>
 #include <iconv.h>                      // iconv_t, iconv()
 #include <qtqiconv.h>                   // QtqCode_T, QtqIconvOpen()
-
+#include <errno.h>
 
 typedef int HMODULE;
+
+static char *dlErrorMessage = NULL;
 
 /*
  * ==========================================
@@ -43,6 +45,7 @@ typedef int HMODULE;
 void * os400_dlopen(const char *file)
 {
     Qus_EC_t err = { sizeof(err),  0};
+    dlErrorMessage = NULL;
 
     // Assume symbolic link, if error, assume actual path
     char  dllPath[4*1024+1];
@@ -68,7 +71,10 @@ void * os400_dlopen(const char *file)
     Qp0lCvtPathToQSYSObjName(pathName,&qsys_info,"QSYS0100",sizeof(Qp0l_QSYS_Info_t), 0, &err);
 
     if (err.Bytes_Available)
+    {
+        dlErrorMessage = "Path to shared library not valid.";
         return NULL;
+    }
 
     // blank pad object name and library in order to use on rslvsp().
     char objectName[11];
@@ -94,7 +100,10 @@ void * os400_dlopen(const char *file)
     actInfoLen = sizeof(activationInfo);
     QleActBndPgm (&sysP,&handle,&activationInfo,&actInfoLen,&err);
     if (err.Bytes_Available)
+    {
+        dlErrorMessage = "Unable to activate shared library.";        
         return NULL;
+    }
 
     // Return the dlopen object.
     void *returnHandle = malloc(sizeof(HMODULE));
@@ -102,6 +111,7 @@ void * os400_dlopen(const char *file)
     return returnHandle;
 
     LBL_RSLV_EH:
+      dlErrorMessage = "Unable to resolve to shared library.";
       return NULL;
 }
 
@@ -115,6 +125,7 @@ void * os400_dlsym(void *handle, const char * name)
     int exportType;
 
     Qus_EC_t err = {sizeof(err),0 };
+    dlErrorMessage = NULL;
 
 #pragma exception_handler (LBL_RSLV_EH, 0,_C1_ALL,_C2_MH_ESCAPE |_C2_MH_FUNCTION_CHECK, _CTLA_HANDLE)
 
@@ -123,13 +134,17 @@ void * os400_dlsym(void *handle, const char * name)
 
     QleGetExp ((int *)handle,0,0,(char *)name,&symbolAddress,&exportType,&err);
     if (err.Bytes_Available)
+    {
+        dlErrorMessage = "Unable to resolve to procedure in shared library.";
         return NULL;
+    }
 
     return symbolAddress;
 
 #pragma disable_handler
 
     LBL_RSLV_EH:
+      dlErrorMessage = "Unable to resolve to procedure in shared library.";
       return NULL;
 }
 
@@ -142,11 +157,24 @@ void * os400_dlsym(void *handle, const char * name)
  */
 int os400_dlclose(void *handle)
 {
+    dlErrorMessage = NULL;
     *(int *)handle = -1;
     free(handle);
     return 0;
 }
 
+/*
+ * ==========================================
+ * dlclose()
+ * Close a dlopen() object.
+ * ==========================================
+ */
+char * os400_dlerror()
+{
+    char *retError = dlErrorMessage;
+    dlErrorMessage = NULL;
+    return retError;
+}
 
 /* ---------------------------------------------------------------------------------*/
 /* ---------------------------------------------------------------------------------*/

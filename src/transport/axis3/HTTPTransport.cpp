@@ -119,13 +119,8 @@ HTTPTransport::
 ~HTTPTransport()
 {
     delete [] m_pcEndpointUri;
-    m_pcEndpointUri = NULL;
-
     delete m_pChannelFactory;
-    m_pChannelFactory = NULL;
-
     delete [] m_pszRxBuffer;
-    m_pszRxBuffer = NULL;
 }
 
 /*
@@ -220,15 +215,8 @@ openConnection()
 
         if( m_pActiveChannel->open() != AXIS_SUCCESS)
         {
-            int   iStringLength = m_pActiveChannel->GetLastErrorMsg().length() + 1;
-            const char * pszLastError = new char[iStringLength];
-
-            memcpy( (void *) pszLastError,
-                    m_pActiveChannel->GetLastErrorMsg().c_str(),
-                    iStringLength);
-
             throw HTTPTransportException( CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED,
-                                          (char *) pszLastError);
+                                          m_pActiveChannel->GetLastErrorMsg().c_str());
         }
     }
     return AXIS_SUCCESS;
@@ -291,13 +279,6 @@ flushOutput() throw (AxisException, HTTPTransportException)
         free(utf8Buf);
         utf8Buf = NULL;
 #endif
-    }
-    catch( HTTPTransportException & e)
-    {
-        if (utf8Buf) free(utf8Buf);
-        m_strBytesToSend = "";
-        m_strHeaderBytesToSend = "";
-        throw;
     }
     catch( AxisException & e)
     {
@@ -1512,13 +1493,8 @@ readHTTPHeader()
     // not be assumed that the HTTP header will be read in one block, thus there
     // must be processing that first identifies the beginning of the HTTP header
     // block (i.e. looks for 'HTTP') and then additional processing that identifies
-    // the end of the HTTP header block (i.e. looks for CR LF CR LF).  To stop the
-    // search becoming 'stuck' because of an incomplete, corrupt or unexpected
-    // message an iteration count has been added (this could become configurable if
-    // the user needs to remove this feature if the server is particularily slow,
-    // etc.).
+    // the end of the HTTP header block (i.e. looks for CR LF CR LF).  
     bool bHTTPHeaderFound = false;
-    int   iIterationCount = 100;
 
     m_strReceived = "";
 
@@ -1533,12 +1509,6 @@ readHTTPHeader()
         // Add the new message part to the received string.
         m_strReceived += m_pszRxBuffer;
 
-        // Do iteration processing.
-        if( strlen( m_pszRxBuffer) > 0)
-            iIterationCount = 100;
-        else
-            iIterationCount--;
-
         // Check for beginning and end of HTTP header.
         if( m_strReceived.find( ASCII_S_HTTP) != std::string::npos &&
             m_strReceived.find( ASCII_S_CRLFCRLF) != std::string::npos)
@@ -1546,14 +1516,7 @@ readHTTPHeader()
             bHTTPHeaderFound = true;
         }
     }
-    while( !bHTTPHeaderFound && iIterationCount > 0);
-
-    // If the HTTP header was not found in the given number of iterations then throw an exception.
-    if( iIterationCount == 0)
-    {
-        throw HTTPTransportException( SERVER_TRANSPORT_INPUT_STREAMING_ERROR,
-                                      "Timed out waiting for HTTP header message.");
-    }
+    while(!bHTTPHeaderFound);
 }
 
 void HTTPTransport::
@@ -1644,39 +1607,27 @@ checkHTTPStatusCode()
     {
         m_GetBytesState = eWaitingForHTTPHeader;
 
-        m_strResponseHTTPStatusMessage = std::string( "\n Server sent HTTP error: '") +
+        m_strResponseHTTPStatusMessage = std::string( "Server sent HTTP error: '") +
           m_strResponseHTTPStatusMessage +  std::string("'\n");
 
-        throw HTTPTransportException( SERVER_TRANSPORT_HTTP_EXCEPTION,
-                                      const_cast <char *> (m_strResponseHTTPStatusMessage.c_str()));
+        throw HTTPTransportException( SERVER_TRANSPORT_HTTP_EXCEPTION, m_strResponseHTTPStatusMessage.c_str());
     }
 }
 
 bool HTTPTransport::
 getNextDataPacket( const char * pcszExceptionMessage)
 {
-    int   iIterationCount = 100;
     bool bDataRead = false;
 
-    do
-    {
-        // Read whatever part of the response message that has arrived at the active channel socket.
-        m_pszRxBuffer[0] = '\0';
-        *m_pActiveChannel >> m_pszRxBuffer;
+    // Read whatever part of the response message that has arrived at the active channel socket.
+    m_pszRxBuffer[0] = '\0';
+    *m_pActiveChannel >> m_pszRxBuffer;
 
-        // Do iteration processing.
-        if( strlen( m_pszRxBuffer) == 0)
-            iIterationCount--;
-        else
-            bDataRead = true;
-    }
-    while( !bDataRead && iIterationCount > 0);
-
-    if( bDataRead)
+    if( strlen( m_pszRxBuffer) > 0)
     {
         m_strReceived += m_pszRxBuffer;
-
         m_iBytesLeft = m_strReceived.length();
+        bDataRead = true;
     }
     else if( m_strReceived.length() == 0)
     {
@@ -1684,12 +1635,7 @@ getNextDataPacket( const char * pcszExceptionMessage)
 
         if( pcszExceptionMessage != NULL && strlen( pcszExceptionMessage) > 0)
         {
-            int   iStringLength = strlen( pcszExceptionMessage) + 1;
-            const char * pszLastError = new char[iStringLength];
-
-            memcpy( (void *) pszLastError, pcszExceptionMessage, iStringLength);
-
-            throw HTTPTransportException( SERVER_TRANSPORT_HTTP_EXCEPTION, (char *) pszLastError);
+            throw HTTPTransportException( SERVER_TRANSPORT_HTTP_EXCEPTION, pcszExceptionMessage);
         }
     }
 

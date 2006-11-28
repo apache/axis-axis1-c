@@ -37,7 +37,7 @@ public:
     }
     
     // constructor
-    AxisConfigException(const AxisConfigException& e): AxisException(e) { }
+    AxisConfigException(const AxisException& e): AxisException(e) { }
     
     // destructor
     virtual ~AxisConfigException() throw() { }

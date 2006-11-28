@@ -25,7 +25,7 @@
 #pragma warning (disable : 4786)
 #endif
 
-
+// !!! Must be first thing in file !!!
 #include "../platforms/PlatformAutoSense.hpp"
 
 #include "HandlerLoader.h"
@@ -90,21 +90,11 @@ int HandlerLoader::loadLib (HandlerInformation* pHandlerInfo)
 
     if (!pHandlerInfo->m_Handler)
     {
-        AXISTRACE1("SERVER_ENGINE_LIBRARY_LOADING_FAILED", CRITICAL);
+        // get load lib error information
+        string sFullMessage = "Failed to load handler library " +  
+                              pHandlerInfo->m_sLib + ". " + PLATFORM_LOADLIB_ERROR;
 
-        long dwError = GETLASTERROR
-        string *    message = PLATFORM_GET_ERROR_MESSAGE( dwError);
-        char        fullMessage[1024];
-        sprintf(fullMessage,
-                "Failed to load handler within server engine: \n \
-                Error Message='%s'\
-                Error Code='%d'\n \
-                Load lib error='%s' \n",
-                message->c_str(), (int) dwError, PLATFORM_LOADLIB_ERROR);
-
-        delete( message);
-
-        throw AxisEngineException(SERVER_ENGINE_LIBRARY_LOADING_FAILED, fullMessage);
+        throw AxisEngineException(SERVER_ENGINE_LIBRARY_LOADING_FAILED, sFullMessage.c_str());
     }
 
     return AXIS_SUCCESS;
@@ -138,18 +128,23 @@ int HandlerLoader::createHandler (BasicHandler** pHandler, int nLibId)
         if (AXIS_SUCCESS == loadLib (pHandlerInfo))
         {
             pHandlerInfo->m_Create =
-                (CREATE_OBJECT) PLATFORM_GETPROCADDR(pHandlerInfo->m_Handler,
-                CREATE_FUNCTION);
-            pHandlerInfo->m_Delete =
-                (DELETE_OBJECT) PLATFORM_GETPROCADDR(pHandlerInfo->m_Handler,
-                DELETE_FUNCTION);
+                (CREATE_OBJECT) PLATFORM_GETPROCADDR(pHandlerInfo->m_Handler, CREATE_FUNCTION);
+                
+            if (pHandlerInfo->m_Create)
+                pHandlerInfo->m_Delete =
+                    (DELETE_OBJECT) PLATFORM_GETPROCADDR(pHandlerInfo->m_Handler,DELETE_FUNCTION);
 
             if (!pHandlerInfo->m_Create || !pHandlerInfo->m_Delete)
             {
+                // get load lib error information
+                string sFullMessage = "Failed to resolve to handler procedures in library " +  
+                                      pHandlerInfo->m_sLib + ". " + PLATFORM_LOADLIB_ERROR;
+                
+                // Unload library - this must be done after obtaining error info above            
                 unloadLib (pHandlerInfo);
+                
                 delete pHandlerInfo;
                 //unlock ();
-                AXISTRACE1 ("Library loading failed", CRITICAL);
                 throw AxisEngineException(SERVER_ENGINE_LIBRARY_LOADING_FAILED);
             }
             else // success
@@ -159,8 +154,7 @@ int HandlerLoader::createHandler (BasicHandler** pHandler, int nLibId)
         }
         else
         {
-            //unlock ();
-            AXISTRACE1 ("Library loading failed", CRITICAL);
+            // dead code - will never be reached, need to remove.
             throw AxisEngineException(SERVER_ENGINE_LIBRARY_LOADING_FAILED);
         }
     }

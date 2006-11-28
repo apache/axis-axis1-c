@@ -13,8 +13,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "HTTPSSLChannel.hpp"
+// !!! Must be first thing in file !!!
 #include "../../../platforms/PlatformAutoSense.hpp"
+
+#include "HTTPSSLChannel.hpp"
+
 
 /**
  * cert_verify_callback( int ok, X509_STORE_CTX * ctx)
@@ -25,8 +28,8 @@
 
 static int cert_verify_callback( int ok, X509_STORE_CTX * ctx)
 {
-  X509 *	err_cert;
-  char		buf[256];
+  X509 *    err_cert;
+  char        buf[256];
 
   err_cert = X509_STORE_CTX_get_current_cert( ctx);
   X509_NAME_oneline( X509_get_subject_name( err_cert), buf, 256);
@@ -41,33 +44,34 @@ static int cert_verify_callback( int ok, X509_STORE_CTX * ctx)
  *
  */
 
-HTTPSSLChannel::HTTPSSLChannel()
+HTTPSSLChannel::
+HTTPSSLChannel()
 {
-	m_LastError = "No Errors";
+    m_LastError = "No Errors";
 
-	m_Sock = INVALID_SOCKET;
+    m_Sock = INVALID_SOCKET;
 
-	m_bUseProxy = false;
+    m_bUseProxy = false;
     m_strProxyHost = "";
     m_uiProxyPort = 0;
 
 #ifdef WIN32
-	m_lTimeoutSeconds = 10;
+    m_lTimeoutSeconds = 10;
 #else
-	m_lTimeoutSeconds = 0;
+    m_lTimeoutSeconds = 0;
 #endif
 
-	bNoExceptionOnForceClose = false;
+    bNoExceptionOnForceClose = false;
 
-	if( !StartSockets())
-	{
-		throw HTTPTransportException( SERVER_TRANSPORT_CHANNEL_INIT_ERROR);
-	}
+    if( !StartSockets())
+    {
+        throw HTTPTransportException( SERVER_TRANSPORT_CHANNEL_INIT_ERROR);
+    }
 
-	OpenSSL_Initialise();
+    OpenSSL_Initialise();
 
-	m_sslContext = NULL;
-	m_sslHandle = NULL;
+    m_sslContext = NULL;
+    m_sslHandle = NULL;
 }
 
 /**
@@ -77,18 +81,12 @@ HTTPSSLChannel::HTTPSSLChannel()
  *
  */
 
-HTTPSSLChannel::~HTTPSSLChannel()
+HTTPSSLChannel::
+~HTTPSSLChannel()
 {
-	OpenSSL_Close();
-
-// If the socket value is not invalid, then close the socket before
-// deleting the Channel object.
-	if( m_Sock != INVALID_SOCKET)
-	{
-		CloseChannel();
-	}
-
-	StopSockets();
+    OpenSSL_Close();
+    CloseChannel();
+    StopSockets();
 }
 
 /**
@@ -99,7 +97,8 @@ HTTPSSLChannel::~HTTPSSLChannel()
  * @return char * containing the URL associated with the open socket
  */
 
-const char * HTTPSSLChannel::getURL()
+const char * HTTPSSLChannel::
+getURL()
 {
     return m_URL.getURL();
 }
@@ -112,7 +111,8 @@ const char * HTTPSSLChannel::getURL()
  * @param const char * containing the new URL
  */
 
-void HTTPSSLChannel::setURL( const char * cpURL)
+void HTTPSSLChannel::
+setURL( const char * cpURL)
 {
     m_URL.setURL( cpURL);
 }
@@ -125,7 +125,8 @@ void HTTPSSLChannel::setURL( const char * cpURL)
  * @return URL & current URL object
  */
 
-URL & HTTPSSLChannel::getURLObject()
+URL & HTTPSSLChannel::
+getURLObject()
 {
     return m_URL;
 }
@@ -142,26 +143,23 @@ URL & HTTPSSLChannel::getURLObject()
  * returned flag will only be returned on a successful outcome).
  */
 
-bool HTTPSSLChannel::open() throw (HTTPTransportException&)
+bool HTTPSSLChannel::
+open() throw (HTTPTransportException&)
 {
-	bool	bSuccess = (bool) AXIS_FAIL;
+    bool    bSuccess = (bool) AXIS_FAIL;
 
-    if( m_Sock != INVALID_SOCKET)
-	{
-		CloseChannel();
-	}
+    CloseChannel();
 
-	m_LastError = "No Errors";
+    m_LastError = "No Errors";
 
-	if( (bSuccess = OpenChannel()) != AXIS_SUCCESS)
-	{
-		throw HTTPTransportException( SERVER_TRANSPORT_SOCKET_CONNECT_ERROR,
-									  (char *) m_LastError.c_str());
-	}
+    if( (bSuccess = OpenChannel()) != AXIS_SUCCESS)
+    {
+        throw HTTPTransportException( SERVER_TRANSPORT_SOCKET_CONNECT_ERROR,m_LastError.c_str());
+    }
 
-	bSuccess = OpenSSL_Open();
+    bSuccess = OpenSSL_Open();
 
-	return bSuccess;
+    return bSuccess;
 }
 
 /**
@@ -173,16 +171,11 @@ bool HTTPSSLChannel::open() throw (HTTPTransportException&)
  * of closing the channel.
  */
 
-bool HTTPSSLChannel::close()
+bool HTTPSSLChannel::
+close()
 {
-    if( m_Sock != INVALID_SOCKET)
-	{
-		CloseChannel();
-	}
-
-	m_Sock = INVALID_SOCKET;
-
-	return AXIS_SUCCESS;
+    CloseChannel();
+    return AXIS_SUCCESS;
 }
 
 /**
@@ -193,9 +186,10 @@ bool HTTPSSLChannel::close()
  * @return string containing last error.
  */
 
-const std::string & HTTPSSLChannel::GetLastErrorMsg()
+const std::string & HTTPSSLChannel::
+GetLastErrorMsg()
 {
-	return m_LastError;
+    return m_LastError;
 }
 
 /**
@@ -213,20 +207,18 @@ const std::string & HTTPSSLChannel::GetLastErrorMsg()
  * recieved message.
  */
 
-const IChannel & HTTPSSLChannel::operator >> (char * msg)
+const IChannel & HTTPSSLChannel::
+operator >> (char * msg)
 {
     if (INVALID_SOCKET == m_Sock)
     {
-    	// Socket not opened!
-		m_LastError = "No open socket to read from.";
-
-		throw HTTPTransportException( SERVER_TRANSPORT_INVALID_SOCKET,
-									  (char *) m_LastError.c_str());
+        m_LastError = "Unable to perform read operation.";
+        throw HTTPTransportException( SERVER_TRANSPORT_INVALID_SOCKET, m_LastError.c_str());
     }
 
     ReadFromSocket( msg);
 
-	return *this;
+    return *this;
 }
 
 /**
@@ -241,24 +233,18 @@ const IChannel & HTTPSSLChannel::operator >> (char * msg)
  * message to be transmitted.
  */
 
-const IChannel & HTTPSSLChannel::operator << (const char * msg)
+const IChannel & HTTPSSLChannel::
+operator << (const char * msg)
 {
-// Check that the Tx/Rx sockets are valid (this will have been done if the
-// application has called the open method first.
     if( INVALID_SOCKET == m_Sock)
     {
-// Error - Writing cannot be done without having a open socket to
-//         remote end.  Throw an exception.
-
-		m_LastError = "No valid socket open";
-
-		throw HTTPTransportException( SERVER_TRANSPORT_INVALID_SOCKET,
-									  (char *) m_LastError.c_str());
+        m_LastError = "Unable to perform write operation.";
+        throw HTTPTransportException( SERVER_TRANSPORT_INVALID_SOCKET, m_LastError.c_str());
     }
 
-	WriteToSocket( msg, strlen( msg));
+    WriteToSocket( msg, strlen( msg));
 
-	return *this;
+    return *this;
 }
 
 /**
@@ -269,7 +255,8 @@ const IChannel & HTTPSSLChannel::operator << (const char * msg)
  * @param long containing timeout value in seconds
  */
 
-void HTTPSSLChannel::setTimeout( long lSeconds)
+void HTTPSSLChannel::
+setTimeout( long lSeconds)
 {
     m_lTimeoutSeconds = lSeconds;
 }
@@ -282,25 +269,26 @@ void HTTPSSLChannel::setTimeout( long lSeconds)
  * @param unsigned int containing the new server socket.
  */
 
-void HTTPSSLChannel::setSocket( unsigned int uiNewSocket)
+void HTTPSSLChannel::
+setSocket( unsigned int uiNewSocket)
 {
     m_Sock = uiNewSocket;
 }
 
 /**
  * HTTPSSLChannel::setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type,
- *										 const char * value)
+ *                                         const char * value)
  *
  * The following list can be set using this property:-
- * SOAPACTION_HEADER			- No action
- * SERVICE_URI					- No action
- * OPERATION_NAME				- No action
- * SOAP_MESSAGE_LENGTH			- No action
- * TRANSPORT_PROPERTIES			- No action
- * SECURE_PROPERTIES			- No action
- * DLL_NAME						- No action
- * CHANNEL_HTTP_SSL_DLL_NAME	- No action
- * CHANNEL_HTTP_DLL_NAME		- No action
+ * SOAPACTION_HEADER            - No action
+ * SERVICE_URI                    - No action
+ * OPERATION_NAME                - No action
+ * SOAP_MESSAGE_LENGTH            - No action
+ * TRANSPORT_PROPERTIES            - No action
+ * SECURE_PROPERTIES            - No action
+ * DLL_NAME                        - No action
+ * CHANNEL_HTTP_SSL_DLL_NAME    - No action
+ * CHANNEL_HTTP_DLL_NAME        - No action
  *
  * @param AXIS_TRANSPORT_INFORMATION_TYPE contains the type of property to be
  *        set.
@@ -308,35 +296,37 @@ void HTTPSSLChannel::setSocket( unsigned int uiNewSocket)
  * @return boolean flag indicating success of the alteration. 
  */
 
-bool HTTPSSLChannel::setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char* value)
+bool HTTPSSLChannel::
+setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char* value)
 {
-	bool	bSuccess = false;
+    bool    bSuccess = false;
 
-	return bSuccess;
+    return bSuccess;
 }
 
 /**
  * HTTPSSLChannel::getTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type)
  *
  * The following list can be retrieved using this property:-
- * SOAPACTION_HEADER			- No action
- * SERVICE_URI					- No action
- * OPERATION_NAME				- No action
- * SOAP_MESSAGE_LENGTH			- No action
- * TRANSPORT_PROPERTIES			- No action
- * SECURE_PROPERTIES			- No action
- * DLL_NAME						- No action
- * CHANNEL_HTTP_SSL_DLL_NAME	- No action
- * CHANNEL_HTTP_DLL_NAME		- No action
+ * SOAPACTION_HEADER            - No action
+ * SERVICE_URI                    - No action
+ * OPERATION_NAME                - No action
+ * SOAP_MESSAGE_LENGTH            - No action
+ * TRANSPORT_PROPERTIES            - No action
+ * SECURE_PROPERTIES            - No action
+ * DLL_NAME                        - No action
+ * CHANNEL_HTTP_SSL_DLL_NAME    - No action
+ * CHANNEL_HTTP_DLL_NAME        - No action
  *
  * @param AXIS_TRANSPORT_INFORMATION_TYPE contains the type of property to be
  *        recovered.
  * @return const char * contains the value for the requested type.
  */
 
-const char * HTTPSSLChannel::getTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type)
+const char * HTTPSSLChannel::
+getTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type)
 {
-	return NULL;
+    return NULL;
 }
 
 /**
@@ -345,10 +335,11 @@ const char * HTTPSSLChannel::getTransportProperty( AXIS_TRANSPORT_INFORMATION_TY
  * Setup he proxy values to be used by the channel.
  *
  * @param const char * containing the name of the proxy host.
- *		  unsigned int containing the proxy port value.
+ *          unsigned int containing the proxy port value.
  */
 
-void HTTPSSLChannel::setProxy (const char *pcProxyHost, unsigned int uiProxyPort)
+void HTTPSSLChannel::
+setProxy (const char *pcProxyHost, unsigned int uiProxyPort)
 {
     m_strProxyHost = pcProxyHost;
     m_uiProxyPort = uiProxyPort;
@@ -356,8 +347,8 @@ void HTTPSSLChannel::setProxy (const char *pcProxyHost, unsigned int uiProxyPort
 }
 
 // +--------------------------------------------------------------------------+
-// | Protected methods														  |
-// | -----------------														  |
+// | Protected methods                                                          |
+// | -----------------                                                          |
 // +--------------------------------------------------------------------------+
 
 /**
@@ -369,28 +360,28 @@ void HTTPSSLChannel::setProxy (const char *pcProxyHost, unsigned int uiProxyPort
  * @return 
  */
 
-bool HTTPSSLChannel::OpenChannel()
+bool HTTPSSLChannel::
+OpenChannel()
 {
-// This method is common to all channel implementations
-	bool	bSuccess = (bool) AXIS_FAIL;
+    bool    bSuccess = (bool) AXIS_FAIL;
 
-// Create the Client (Rx) side first.
+    // Create the Client (Rx) side first.
 #ifdef IPV6
-    struct addrinfo		aiHints;
-	struct addrinfo *	paiAddrInfo;
-	struct addrinfo *	paiAddrInfo0;
+    struct addrinfo        aiHints;
+    struct addrinfo *    paiAddrInfo;
+    struct addrinfo *    paiAddrInfo0;
 
     // hints is used after zero cleared
     memset( &aiHints, 0, sizeof( aiHints));
 
-    aiHints.ai_family = PF_UNSPEC;		// This allows the sockets code to use
-										// whatever socket family is available.
+    aiHints.ai_family = PF_UNSPEC;        // This allows the sockets code to use
+                                        // whatever socket family is available.
     aiHints.ai_socktype = SOCK_STREAM;
 
     char szPort[7];
    
-    const char	*	pszHost = m_URL.getHostName();
-    unsigned int	uiPort = m_URL.getPort();
+    const char    *    pszHost = m_URL.getHostName();
+    unsigned int    uiPort = m_URL.getPort();
 
     if( m_bUseProxy)
     {
@@ -408,40 +399,32 @@ bool HTTPSSLChannel::OpenChannel()
     for( paiAddrInfo = paiAddrInfo0; paiAddrInfo; paiAddrInfo = paiAddrInfo->ai_next)
     {
         m_Sock = socket( paiAddrInfo->ai_family,
-						 paiAddrInfo->ai_socktype,
-						 paiAddrInfo->ai_protocol);
+                         paiAddrInfo->ai_socktype,
+                         paiAddrInfo->ai_protocol);
 
         if( m_Sock < 0)
-        {
             continue;
-        }
 
         if( connect( m_Sock, paiAddrInfo->ai_addr, paiAddrInfo->ai_addrlen) < 0)
         {
             // Cannot open a channel to the remote end, shutting down the
             // channel and then throw an exception.
             // Before we do anything else get the last error message;
-			long dw = GETLASTERROR
+            long dwError = GETLASTERROR;
 
-			CloseChannel();
+            CloseChannel();
 
             freeaddrinfo( paiAddrInfo0);
-			
-			string *	message = PLATFORM_GET_ERROR_MESSAGE( dw);
-			char		fullMessage[600];
 
-			sprintf( fullMessage,
-					 "Failed to open connection to server: \n \
-					 hostname='%s'\n\
-					 port='%d'\n\
-					 Error Message='%s'\
-					 Error Code='%d'\n",
-					 m_URL.getHostName(), m_URL.getPort(), message->c_str(), (int) dw);
-				
-			delete( message);
+            char pcErr[64], pcPort[64];
+            sprintf(pcErr,"%d - ",(int)dwError);
+            sprintf(pcPort,"%d",(int)m_URL.getPort());
+            
+            string fullMessage = "Failed to open connection to server " + 
+                   string(m_URL.getHostName()) + " at port " + string(pcPort) +
+                   ". Error " + string(pcErr) + PLATFORM_GET_ERROR_MESSAGE( dwError );
 
-			throw HTTPTransportException( CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED,
-										  fullMessage);
+            throw HTTPTransportException( CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED, fullMessage.c_str());
         }
 
         break;
@@ -459,101 +442,87 @@ bool HTTPSSLChannel::OpenChannel()
         throw HTTPTransportException( SERVER_TRANSPORT_SOCKET_CREATE_ERROR);
     }
 
-	bSuccess = AXIS_SUCCESS;
+    bSuccess = AXIS_SUCCESS;
 
 #else // IPV6 not defined
     if( (m_Sock = socket( PF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET)
-	{
-		m_LastError = "Could not Create a socket.";
+    {
+        m_LastError = "Could not Create a socket.";
 
-		return bSuccess;
-	}
-
-// If the transport was initilised, then create client and server sockets.
-    sockaddr_in	clAddr;
-
-	clAddr.sin_family = AF_INET;	// AF_INET (address family Internet).
-	clAddr.sin_port = 0;			// No Specify Port required.
-	clAddr.sin_addr.s_addr = INADDR_ANY;
-
-// Attempt to bind the client to the client socket.
-	if( bind( m_Sock, (struct sockaddr *) &clAddr, sizeof( clAddr)) == SOCKET_ERROR)
-	{
-// Error whilst binding. Cannot open a channel to the remote end,
-// shutting down the channel and then throw an exception.
-		CloseChannel();
-
-		m_LastError = "Error whilst binding. Cannot open a channel to the remote end,";
-
-		return bSuccess;
-	}
-
-// Although the above fragment makes use of the bind() API, it would be
-// just as effective to skip over this call as there are no specific
-// local port ID requirements for this client. The only advantage that
-// bind() offers is the accessibility of the port which the system 
-// chose via the .sin_port member of the cli_addr structure which will 
-// be set upon success of the bind() call.
-
-// Create the Server (Tx) side.
-
-	sockaddr_in			svAddr;
-	struct hostent *	pHostEntry = NULL;
-	const char *		host = m_URL.getHostName();
-	unsigned int		port = m_URL.getPort();
-
-	if( m_bUseProxy)
-	{
-		port = m_uiProxyPort;
-		host = m_strProxyHost.c_str();
-	}
-
-	svAddr.sin_family = AF_INET;
-	svAddr.sin_port = htons( port);
-
-// Probably this is the host-name of the server we are connecting to...
-	if( (pHostEntry = gethostbyname( host)))
-	{
-		svAddr.sin_addr.s_addr = ((struct in_addr *) pHostEntry->h_addr)->s_addr;
-	}
-	else
-	{
-// No this is the IP address
-		svAddr.sin_addr.s_addr = inet_addr( host);
-	}
-
-// Attempt to connect to the remote server.
-	if( connect( m_Sock, (struct sockaddr *) &svAddr, sizeof (svAddr)) == SOCKET_ERROR)
-	{
-// Cannot open a channel to the remote end, shutting down the
-// channel and then throw an exception.
-
-// Before we do anything else get the last error message;
-			long dw = GETLASTERROR
-			CloseChannel();
-
-			
-			string* message = PLATFORM_GET_ERROR_MESSAGE(dw);
-
-			char fullMessage[600];
-			sprintf(fullMessage,
-				"Failed to open connection to server: \n \
-				hostname='%s'\n\
-				port='%d'\n\
-				Error Message='%s'\
-				Error Code='%d'\n",
-				m_URL.getHostName(), m_URL.getPort(), message->c_str(), dw);
-				
-			delete(message);
-
-		m_LastError = fullMessage;
-
-	    return bSuccess;
+        return bSuccess;
     }
-	else
-	{
-		bSuccess = AXIS_SUCCESS;
-	}
+
+    // If the transport was initilised, then create client and server sockets.
+    sockaddr_in    clAddr;
+
+    clAddr.sin_family = AF_INET;    // AF_INET (address family Internet).
+    clAddr.sin_port = 0;            // No Specify Port required.
+    clAddr.sin_addr.s_addr = INADDR_ANY;
+
+    // Attempt to bind the client to the client socket.
+    if( bind( m_Sock, (struct sockaddr *) &clAddr, sizeof( clAddr)) == SOCKET_ERROR)
+    {
+        CloseChannel();
+        m_LastError = "Error whilst binding. Cannot open a channel to the remote end.";
+        return bSuccess;
+    }
+
+    // Although the above fragment makes use of the bind() API, it would be
+    // just as effective to skip over this call as there are no specific
+    // local port ID requirements for this client. The only advantage that
+    // bind() offers is the accessibility of the port which the system 
+    // chose via the .sin_port member of the cli_addr structure which will 
+    // be set upon success of the bind() call.
+    
+    // Create the Server (Tx) side.
+
+    sockaddr_in            svAddr;
+    struct hostent *    pHostEntry = NULL;
+    const char *        host = m_URL.getHostName();
+    unsigned int        port = m_URL.getPort();
+
+    if( m_bUseProxy)
+    {
+        port = m_uiProxyPort;
+        host = m_strProxyHost.c_str();
+    }
+
+    svAddr.sin_family = AF_INET;
+    svAddr.sin_port = htons( port);
+
+    // Probably this is the host-name of the server we are connecting to...
+    if( (pHostEntry = gethostbyname( host)))
+    {
+        svAddr.sin_addr.s_addr = ((struct in_addr *) pHostEntry->h_addr)->s_addr;
+    }
+    else
+    {
+        // No this is the IP address
+        svAddr.sin_addr.s_addr = inet_addr( host);
+    }
+
+    // Attempt to connect to the remote server.
+    if( connect( m_Sock, (struct sockaddr *) &svAddr, sizeof (svAddr)) == SOCKET_ERROR)
+    {
+        long dwError = GETLASTERROR;
+        CloseChannel();
+
+        char pcErr[64], pcPort[64];
+        sprintf(pcErr,"%d - ",(int)dwError);
+        sprintf(pcPort,"%d",(int)m_URL.getPort());
+        
+        string fullMessage = "Failed to open connection to server " + 
+               string(m_URL.getHostName()) + " at port " + string(pcPort) +
+               ". Error " + string(pcErr) + PLATFORM_GET_ERROR_MESSAGE( dwError );
+
+        m_LastError = fullMessage;
+
+        return bSuccess;
+    }
+    else
+    {
+        bSuccess = AXIS_SUCCESS;
+    }
 
 #endif // IPV6
 
@@ -583,17 +552,18 @@ bool HTTPSSLChannel::OpenChannel()
  * @return 
  */
 
-void HTTPSSLChannel::CloseChannel()
+void HTTPSSLChannel::
+CloseChannel()
 {
-    if( INVALID_SOCKET != m_Sock) // Check if socket already closed : AXISCPP-185
-	{
+    if( INVALID_SOCKET != m_Sock) 
+    {
 #ifdef WIN32
-		closesocket( m_Sock);
+        closesocket( m_Sock);
 #else
-		::close( m_Sock);
+        ::close( m_Sock);
 #endif
-		m_Sock = INVALID_SOCKET; // fix for AXISCPP-185
-	}
+        m_Sock = INVALID_SOCKET; 
+    }
 }
 
 /**
@@ -605,48 +575,47 @@ void HTTPSSLChannel::CloseChannel()
  * @return 
  */
 
-bool HTTPSSLChannel::StartSockets()
+bool HTTPSSLChannel::
+StartSockets()
 {
-	bool	bSuccess = false;
+    bool    bSuccess = false;
 #ifdef WIN32
-    WSADATA wsaData;	// Contains vendor-specific information, such as the
-						// maximum number of sockets available and the maximum
-						// datagram size.
+    WSADATA wsaData;    // Contains vendor-specific information, such as the
+                        // maximum number of sockets available and the maximum
+                        // datagram size.
 
-// wsaData filled by Windows Sockets DLLs.
+    // wsaData filled by Windows Sockets DLLs.
     if( WSAStartup( WS_VERSION_REQD, &wsaData))
     {
-// Error - Could not setup underlying Windows socket transport mechanism.
-		m_LastError = "WinSock DLL not responding.";
+        m_LastError = "WinSock DLL not responding.";
     }
     else
     {
-// Query to see whether the available version matches what is required
-		if ((LOBYTE( wsaData.wVersion) <  WS_VERSION_MAJOR()) ||
-			(LOBYTE( wsaData.wVersion) == WS_VERSION_MAJOR() &&
-			 HIBYTE( wsaData.wVersion) <  WS_VERSION_MINOR()))
-		{
-// Error - Underlying Windows socket transport version is not compatible with what is required.
-			char 	szErrorBuffer[100];
+        // Query to see whether the available version matches what is required
+        if ((LOBYTE( wsaData.wVersion) <  WS_VERSION_MAJOR()) ||
+            (LOBYTE( wsaData.wVersion) == WS_VERSION_MAJOR() &&
+             HIBYTE( wsaData.wVersion) <  WS_VERSION_MINOR()))
+        {
+            // Error - Underlying Windows socket transport version is not compatible with what is required.
+            char     szErrorBuffer[100];
 
-			sprintf( szErrorBuffer,
-					 "Windows Sockets version %d.%d is not supported by winsock2.dll",
-					 LOBYTE( wsaData.wVersion),
-					 HIBYTE( wsaData.wVersion));
+            sprintf( szErrorBuffer,
+                     "Windows Sockets version %d.%d is not supported by winsock2.dll",
+                     LOBYTE( wsaData.wVersion),
+                     HIBYTE( wsaData.wVersion));
 
-			m_LastError = szErrorBuffer;
+            m_LastError = szErrorBuffer;
 
-			StopSockets();
-		}
-		else
-		{
-			bSuccess = true;
-		}
+            StopSockets();
+        }
+        else
+        {
+            bSuccess = true;
+        }
     }
 #else
-    /* cout << "no need for linux" << endl; */
     /* other OS specific Intitialization goes here */
-	bSuccess = true;
+    bSuccess = true;
 #endif
 
     return bSuccess;
@@ -661,10 +630,11 @@ bool HTTPSSLChannel::StartSockets()
  * @return 
  */
 
-void HTTPSSLChannel::StopSockets()
+void HTTPSSLChannel::
+StopSockets()
 {
 #ifdef WIN32
-	WSACleanup();
+    WSACleanup();
 #endif // WIN32
 }
 
@@ -674,10 +644,11 @@ void HTTPSSLChannel::StopSockets()
  * @return int 
  */
 
-int HTTPSSLChannel::applyTimeout()
+int HTTPSSLChannel::
+applyTimeout()
 {
-    fd_set			set;
-    struct timeval	timeout;
+    fd_set            set;
+    struct timeval    timeout;
 
     // Initialize the file descriptor set.
     FD_ZERO( &set);
@@ -699,7 +670,8 @@ int HTTPSSLChannel::applyTimeout()
  * @return int 
  */
 
-int HTTPSSLChannel::ReadFromSocket( char * pszRxBuffer)
+int HTTPSSLChannel::
+ReadFromSocket( char * pszRxBuffer)
 {
     int nByteRecv = 0;
 
@@ -708,21 +680,30 @@ int HTTPSSLChannel::ReadFromSocket( char * pszRxBuffer)
     if(nByteRecv < 0)
     {
         // failed SSL_read
-		if( !bNoExceptionOnForceClose)
-		{
-	        OpenSSL_SetSecureError( SSL_get_error( m_sslHandle, nByteRecv));
-		}
+        if( !bNoExceptionOnForceClose)
+        {
+            OpenSSL_SetSecureError( SSL_get_error( m_sslHandle, nByteRecv));
+        }
 
         OpenSSL_Close();
-		close();
-		m_Sock = INVALID_SOCKET; // fix for AXISCPP-185
+        close();
+        m_Sock = INVALID_SOCKET; // fix for AXISCPP-185
     }
-	else
+    else if ( 0 == nByteRecv )
+    {
+        // read-side of socket is closed - anytime we come down expecting to read something
+        // and read-side is closed means that there must be a parsing bug in http transport level.
+        OpenSSL_Close();
+        close(); 
+        m_LastError = "Remote side of socket has been closed.";     
+        throw HTTPTransportException( SERVER_TRANSPORT_INPUT_STREAMING_ERROR, m_LastError.c_str());
+    }
+    else
     {
        *(pszRxBuffer + nByteRecv) = '\0';  
     }
 
-	return nByteRecv;
+    return nByteRecv;
 }
 
 /**
@@ -733,9 +714,10 @@ int HTTPSSLChannel::ReadFromSocket( char * pszRxBuffer)
  * @return int 
  */
 
-int HTTPSSLChannel::WriteToSocket( const char * psTxBuffer, int iSize)
+int HTTPSSLChannel::
+WriteToSocket( const char * psTxBuffer, int iSize)
 {
-	int nByteSent;
+    int nByteSent;
 
     nByteSent = SSL_write( m_sslHandle, (char *) psTxBuffer, iSize);
 
@@ -747,7 +729,7 @@ int HTTPSSLChannel::WriteToSocket( const char * psTxBuffer, int iSize)
         OpenSSL_Close();
     }
 
-	return nByteSent;
+    return nByteSent;
 }
 
 /**
@@ -758,13 +740,14 @@ int HTTPSSLChannel::WriteToSocket( const char * psTxBuffer, int iSize)
  * @return int 
  */
 
-void HTTPSSLChannel::OpenSSL_Initialise()
+void HTTPSSLChannel::
+OpenSSL_Initialise()
 {
-// Lets get nice error messages
-	SSL_load_error_strings();
+    // Lets get nice error messages
+    SSL_load_error_strings();
 
-// Setup all the global SSL stuff
-	SSLeay_add_ssl_algorithms();
+    // Setup all the global SSL stuff
+    SSLeay_add_ssl_algorithms();
 }
 
 /**
@@ -775,11 +758,12 @@ void HTTPSSLChannel::OpenSSL_Initialise()
  * @return int 
  */
 
-bool HTTPSSLChannel::OpenSSL_Open()
+bool HTTPSSLChannel::
+OpenSSL_Open()
 {
-    SSL_METHOD *	req_method = SSLv23_client_method();
-	bool			bSuccess = (bool) AXIS_FAIL;
-	int				iSSLErrorIndex = 0;
+    SSL_METHOD *    req_method = SSLv23_client_method();
+    bool            bSuccess = (bool) AXIS_FAIL;
+    int                iSSLErrorIndex = 0;
 
     m_sslContext = SSL_CTX_new( req_method);
 
@@ -787,45 +771,45 @@ bool HTTPSSLChannel::OpenSSL_Open()
     {
         iSSLErrorIndex = ERR_get_error();
 
-// OpenSSL documents that this must be at least 120 bytes long.
-        char	szSSLErrorBuffer[120];
+        // OpenSSL documents that this must be at least 120 bytes long.
+        char    szSSLErrorBuffer[120];
 
         ERR_error_string( iSSLErrorIndex, szSSLErrorBuffer);
 
-		m_LastError = szSSLErrorBuffer;
+        m_LastError = szSSLErrorBuffer;
 
         OpenSSL_Close();
 
         throw HTTPTransportException( CLIENT_SSLCHANNEL_CONTEXT_CREATE_ERROR,
-									  szSSLErrorBuffer);
+                                      szSSLErrorBuffer);
     }
 
     SSL_CTX_set_verify( m_sslContext,
-						SSL_VERIFY_NONE, // SSL_VERIFY_PEER 
-						cert_verify_callback);
+                        SSL_VERIFY_NONE, // SSL_VERIFY_PEER 
+                        cert_verify_callback);
 
-// Lets make an SSL structure
+    // Lets make an SSL structure
     m_sslHandle = SSL_new( m_sslContext);
     SSL_set_connect_state( m_sslHandle);
 
-// pass the raw socket into the SSL layers
+    // pass the raw socket into the SSL layers
     SSL_set_fd( m_sslHandle, m_Sock);
 
     iSSLErrorIndex = SSL_connect( m_sslHandle);
 
-//   1  is fine
-//   0  is "not successful but was shut down controlled"
-//  <0  is "handshake was not successful, because a fatal error occurred"
-	if( iSSLErrorIndex <= 0)
-	{
-		OpenSSL_SetSecureError( iSSLErrorIndex);
-	}
-	else
-	{
-		bSuccess = (bool) AXIS_SUCCESS;
-	}
+    //   1  is fine
+    //   0  is "not successful but was shut down controlled"
+    //  <0  is "handshake was not successful, because a fatal error occurred"
+    if( iSSLErrorIndex <= 0)
+    {
+        OpenSSL_SetSecureError( iSSLErrorIndex);
+    }
+    else
+    {
+        bSuccess = (bool) AXIS_SUCCESS;
+    }
 
-	return bSuccess;
+    return bSuccess;
 }
 
 /**
@@ -836,7 +820,8 @@ bool HTTPSSLChannel::OpenSSL_Open()
  * @return int 
  */
 
-int HTTPSSLChannel::OpenSSL_Close()
+int HTTPSSLChannel::
+OpenSSL_Close()
 {
     if( m_sslHandle)
     {
@@ -853,7 +838,7 @@ int HTTPSSLChannel::OpenSSL_Close()
         m_sslContext = NULL;
     }
 
-	return 0;
+    return 0;
 }
 
 /**
@@ -864,12 +849,13 @@ int HTTPSSLChannel::OpenSSL_Close()
  * @return int 
  */
 
-void HTTPSSLChannel::OpenSSL_SetSecureError( int iError)
+void HTTPSSLChannel::
+OpenSSL_SetSecureError( int iError)
 {
     switch( iError)
     {
-        case SSL_ERROR_NONE:		// this is not an error
-        case SSL_ERROR_ZERO_RETURN:	// no more data
+        case SSL_ERROR_NONE:        // this is not an error
+        case SSL_ERROR_ZERO_RETURN:    // no more data
             break;
 
         case SSL_ERROR_WANT_READ:
@@ -884,56 +870,55 @@ void HTTPSSLChannel::OpenSSL_SetSecureError( int iError)
 
             OpenSSL_Close();
 
-			m_LastError = "SSL_ERROR_SYSCALL";
+            m_LastError = "SSL_ERROR_SYSCALL";
 
-            throw HTTPTransportException( CLIENT_SSLCHANNEL_ERROR,
-										  (char *) m_LastError.c_str());
-
-			break;
+            throw HTTPTransportException( CLIENT_SSLCHANNEL_ERROR, m_LastError.c_str());
+            break;
         }
 
         case SSL_ERROR_SSL:
         {
-// A failure in the SSL library occurred, usually a protocol error.  The
-// OpenSSL error queue contains more information on the error.
-			int sslerror = ERR_get_error();
+            // A failure in the SSL library occurred, usually a protocol error.  The
+            // OpenSSL error queue contains more information on the error.
+            int sslerror = ERR_get_error();
 
-// OpenSSL documents that this must be at least 120 bytes long.
+            // OpenSSL documents that this must be at least 120 bytes long.
             char error_buffer[120];
 
             ERR_error_string( sslerror, error_buffer);
 
             OpenSSL_Close();
 
-			m_LastError = error_buffer;
+            m_LastError = error_buffer;
 
             throw HTTPTransportException( CLIENT_SSLCHANNEL_ERROR, error_buffer);
 
-			break;
+            break;
         }
 
         default: 
-// openssl/ssl.h says "look at error stack/return value/errno"
+        // openssl/ssl.h says "look at error stack/return value/errno"
         {
-// A failure in the SSL library occurred, usually a protocol error.  The
-// OpenSSL error queue contains more information on the error.
+            // A failure in the SSL library occurred, usually a protocol error.  The
+            // OpenSSL error queue contains more information on the error.
             int sslerror = ERR_get_error();
 
-// OpenSSL documents that this must be at least 120 bytes long.
+            // OpenSSL documents that this must be at least 120 bytes long.
             char error_buffer[120];
 
             ERR_error_string( sslerror, error_buffer);
 
             OpenSSL_Close();
 
-			m_LastError = error_buffer;
+            m_LastError = error_buffer;
 
             throw HTTPTransportException( CLIENT_SSLCHANNEL_ERROR, error_buffer);
         }
     }
 }
 
-void HTTPSSLChannel::closeQuietly( bool bNoExceptionOnForceClose_Update)
+void HTTPSSLChannel::
+closeQuietly( bool bNoExceptionOnForceClose_Update)
 {
-	bNoExceptionOnForceClose = bNoExceptionOnForceClose_Update;
+    bNoExceptionOnForceClose = bNoExceptionOnForceClose_Update;
 }

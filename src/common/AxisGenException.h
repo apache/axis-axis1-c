@@ -36,7 +36,7 @@ public:
     {
         setMessage(iExceptionCode, "AxisGenException:", pcMessage);
     }
-	AxisGenException(const AxisGenException& e): AxisException (e) { }
+	AxisGenException(const AxisException& e): AxisException (e) { }
     virtual ~AxisGenException() throw() { }
 };
 

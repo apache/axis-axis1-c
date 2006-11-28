@@ -142,11 +142,9 @@ process (SOAPTransport* pSoap)
     {
         /* Throw a AxisGenException here instead of rethrowing the original exception because
          * the original exception may be an transport exception which will go out of scope when
-         * the transport library is unloaded. The original exception will delete its own message
-         * storage, so the false as the last parameter tells AxisGenException not to try to 
-         * delete it.
+         * the transport library is unloaded. 
          */
-        throw AxisGenException(e.getExceptionCode(), const_cast<char*>(e.what()));
+        throw AxisGenException(e);
     }
     return Status;
 }

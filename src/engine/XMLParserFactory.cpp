@@ -57,14 +57,19 @@ int XMLParserFactory::initialize()
 	if (!loadLib())
 	{
         m_Create = (CREATE_OBJECT2) PLATFORM_GETPROCADDR(m_LibHandler, CREATE_FUNCTION2);
-        m_Delete = (DELETE_OBJECT2) PLATFORM_GETPROCADDR(m_LibHandler, DELETE_FUNCTION2);
+        if (m_Create)
+            m_Delete = (DELETE_OBJECT2) PLATFORM_GETPROCADDR(m_LibHandler, DELETE_FUNCTION2);
+            
         if (!m_Create || !m_Delete)
         {
+            // get load lib error information
+            string sFullMessage = "Failed to resolve to XML Parser procedures in library " +  
+                                  string(m_pcLibraryPath) + ". " + PLATFORM_LOADLIB_ERROR;
+            
+            // Unload library - this must be done after obtaining error info above            
             unloadLib();
-            char *s = new char[strlen(m_pcLibraryPath)+1];
-            strcpy(s,m_pcLibraryPath);
-            AxisTrace::traceLine("Server engine failed to load XML Parser");
-            throw AxisEngineException(SERVER_ENGINE_LOADING_PARSER_FAILED, s);
+
+            throw AxisEngineException(SERVER_ENGINE_LOADING_PARSER_FAILED, sFullMessage.c_str());
         } 
 	  else
 	  {
@@ -80,12 +85,8 @@ int XMLParserFactory::initialize()
 	}
 	else
 	{
-        char *s = new char[strlen(m_pcLibraryPath)+1];
-        strcpy(s,m_pcLibraryPath);
-        AxisTrace::traceLine("Server engine failed to load XML Parser: ");
-        AxisTrace::traceLine(s);
-        
-        throw AxisEngineException(SERVER_ENGINE_LOADING_PARSER_FAILED, s);
+        // dead code - will never be reached, need to remove.
+        throw AxisEngineException(SERVER_ENGINE_LOADING_PARSER_FAILED);
 	}
    return AXIS_SUCCESS;
 }
@@ -123,20 +124,11 @@ int XMLParserFactory::loadLib()
 
     if (!m_LibHandler)
     {
-        long dwError = GETLASTERROR
-        string *    message = PLATFORM_GET_ERROR_MESSAGE( dwError);
-        char        fullMessage[5024];
-        sprintf(fullMessage,
-                "Failed to load parser '%s' within server engine: \n \
-                Error Message='%s'\n\
-                Error Code='%d'\n \
-                Load lib error='%s' \n",
-                m_pcLibraryPath, message->c_str(), (int) dwError, PLATFORM_LOADLIB_ERROR);
+        // get load lib error information
+        string sFullMessage = "Failed to load XML Parser library " +  
+                              string(m_pcLibraryPath) + ". " + PLATFORM_LOADLIB_ERROR;
 
-        delete( message);
-
-        AxisTrace::traceLine(fullMessage);
-        throw AxisEngineException(SERVER_ENGINE_LOADING_PARSER_FAILED, fullMessage);
+        throw AxisEngineException(SERVER_ENGINE_LOADING_PARSER_FAILED, sFullMessage.c_str());
     }
 
     return AXIS_SUCCESS;

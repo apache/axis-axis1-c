@@ -19,6 +19,9 @@
 #if !defined( _PLATFORM_SPECIFIC_WINDOWS_HPP )
 #define _PLATFORM_SPECIFIC_WINDOWS_HPP
 
+// Disable: C4290: C++ exception specification ignored except to indicate a function is not __declspec(nothrow)
+#pragma warning (disable : 4290)
+
 //#define _WIN32_WINNT 0x0400
 #define _WINSOCKAPI_ /* Prevent inclusion of winsock.h in windows.h */
 #include <windows.h>
@@ -58,7 +61,7 @@
 #define PLATFORM_UNLOADLIB         FreeLibrary
 #define PLATFORM_GETPROCADDR       GetProcAddress
 #define PLATFORM_LOADLIBEXIT()
-#define PLATFORM_LOADLIB_ERROR     ""
+#define PLATFORM_LOADLIB_ERROR     PLATFORM_GET_ERROR_MESSAGE(GetLastError()) 
 
 // =============================================================
 // National Language Support
@@ -73,7 +76,7 @@
 // =============================================================
 // Miscellaneous
 // =============================================================
-#define PLATFORM_SLEEP(x) Sleep(0);
+#define PLATFORM_SLEEP(x) Sleep(x)
 
 /**
  * Get the last error code from the system.
@@ -81,14 +84,14 @@
  * and that it returns a long
  * @return long the lsat error message for this thread
  */
-#define GETLASTERROR GetLastError();
+#define GETLASTERROR GetLastError()
 
 /**
  * From the last error number get a sensible std::string representing it
  * @param errorNumber the error Number you are trying to get a message for
  * @return the error message. NOTE: The caller is responsible for deleting the returned string
  */
-#define PLATFORM_GET_ERROR_MESSAGE(errorNumber) getPlatformErrorMessage(errorNumber);
+#define PLATFORM_GET_ERROR_MESSAGE(errorNumber) getPlatformErrorMessage(errorNumber)
 
 /**
  * type to be used for 64bit integers
@@ -116,7 +119,7 @@
 #define PLATFORM_GET_TIME_IN_MILLIS _ftime
 #define PLATFORM_TIMEB _timeb
 
-std::string* getPlatformErrorMessage(long errorNumber);
+std::string getPlatformErrorMessage(long errorNumber);
 
 HMODULE callLoadLib(LPCTSTR lib);
 
