@@ -358,20 +358,20 @@ public class Type
      */
     public String toString()
     {
-        String str = "---------" + this.name + "------------\n"
-                + "languageSpecificName = " + this.languageSpecificName + "\n";
+        String str = "---------" + this.name + "------------\n";
+        str = str + "languageSpecificName = " + languageSpecificName + "\n";
         str = str + "isAnonymous =" + isAnonymous + "\n";
         str = str + "isSimpleType =" + isSimpleType + "\n";
         str = str + "externalize =" + externalize + "\n";
         str = str + "isArray =" + isArray + "\n";
+        str = str + "baseType = " + baseType + "\n";
+        str = str + "restriction = " + restriction + "\n";
         
         if (enumerationdata != null)
         {
             str = str + "enumerationType = " + ((TypeEntry) enumerationdata.get(0)).getQName() + "\n(";
             for (int i = 1; i < enumerationdata.size(); i++)
-            {
                 str = str + "," + enumerationdata.get(i);
-            }
             str = str + ")\n";
         }
         else
