@@ -1,7 +1,7 @@
 POST /axis/CalculatorDoc HTTP/1.1
 Host: 127.0.0.1:13260
 Content-Type: text/xml; charset=UTF-8
-SOAPAction: "Calculator#add"
+SOAPAction: "CalculatorDoc#add"
 Content-Length: 397
 
 <?xml version='1.0' encoding='utf-8' ?>
@@ -17,40 +17,7 @@ Content-Length: 397
 POST /axis/CalculatorDoc HTTP/1.1
 Host: 127.0.0.1:13260
 Content-Type: text/xml; charset=UTF-8
-SOAPAction: "Calculator#add"
-Content-Length: 397
-Cookie: LtpaToken2=1234567890abcdefghijklmnopqrstuvwxyz;LtpaToken==+yOkBBuvLtTaiuBDkfgy3W6mZraGn7V5Dzp;JSESSIONID=0000EyvJyGOS-2e9nlRijFiwKSR:-1
-
-<?xml version='1.0' encoding='utf-8' ?>
-<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-<SOAP-ENV:Body>
-<ns1:add xmlns:ns1="http://localhost/axis/Calculator">
-<ns1:arg_0_0>2</ns1:arg_0_0>
-<ns1:arg_1_0>3</ns1:arg_1_0>
-</ns1:add>
-</SOAP-ENV:Body>
-</SOAP-ENV:Envelope>
-
-POST /axis/CalculatorDoc HTTP/1.1
-Host: 127.0.0.1:13260
-Content-Type: text/xml; charset=UTF-8
-SOAPAction: "Calculator#add"
-Content-Length: 397
-
-<?xml version='1.0' encoding='utf-8' ?>
-<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-<SOAP-ENV:Body>
-<ns1:add xmlns:ns1="http://localhost/axis/Calculator">
-<ns1:arg_0_0>2</ns1:arg_0_0>
-<ns1:arg_1_0>3</ns1:arg_1_0>
-</ns1:add>
-</SOAP-ENV:Body>
-</SOAP-ENV:Envelope>
-
-POST /axis/CalculatorDoc HTTP/1.1
-Host: 127.0.0.1:13260
-Content-Type: text/xml; charset=UTF-8
-SOAPAction: "Calculator#add"
+SOAPAction: "CalculatorDoc#add"
 Content-Length: 397
 Cookie: LtpaToken2=1234567890abcdefghijklmnopqrstuvwxyz;LtpaToken==+yOkBBuvLtTaiuBDkfgy3W6mZraGn7V5Dzp;JSESSIONID=0000EyvJyGOS-2e9nlRijFiwKSR:-1
 
@@ -67,7 +34,23 @@ Cookie: LtpaToken2=1234567890abcdefghijklmnopqrstuvwxyz;LtpaToken==+yOkBBuvLtTai
 POST /axis/CalculatorDoc HTTP/1.1
 Host: 127.0.0.1:13260
 Content-Type: text/xml; charset=UTF-8
-SOAPAction: "Calculator#add"
+SOAPAction: "CalculatorDoc#add"
+Content-Length: 397
+
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:add xmlns:ns1="http://localhost/axis/Calculator">
+<ns1:arg_0_0>2</ns1:arg_0_0>
+<ns1:arg_1_0>3</ns1:arg_1_0>
+</ns1:add>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+POST /axis/CalculatorDoc HTTP/1.1
+Host: 127.0.0.1:13260
+Content-Type: text/xml; charset=UTF-8
+SOAPAction: "CalculatorDoc#add"
 Content-Length: 397
 Cookie: LtpaToken2=1234567890abcdefghijklmnopqrstuvwxyz;LtpaToken==+yOkBBuvLtTaiuBDkfgy3W6mZraGn7V5Dzp;JSESSIONID=0000EyvJyGOS-2e9nlRijFiwKSR:-1
 
@@ -84,7 +67,24 @@ Cookie: LtpaToken2=1234567890abcdefghijklmnopqrstuvwxyz;LtpaToken==+yOkBBuvLtTai
 POST /axis/CalculatorDoc HTTP/1.1
 Host: 127.0.0.1:13260
 Content-Type: text/xml; charset=UTF-8
-SOAPAction: "Calculator#add"
+SOAPAction: "CalculatorDoc#add"
+Content-Length: 397
+Cookie: LtpaToken2=1234567890abcdefghijklmnopqrstuvwxyz;LtpaToken==+yOkBBuvLtTaiuBDkfgy3W6mZraGn7V5Dzp;JSESSIONID=0000EyvJyGOS-2e9nlRijFiwKSR:-1
+
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:add xmlns:ns1="http://localhost/axis/Calculator">
+<ns1:arg_0_0>2</ns1:arg_0_0>
+<ns1:arg_1_0>3</ns1:arg_1_0>
+</ns1:add>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+POST /axis/CalculatorDoc HTTP/1.1
+Host: 127.0.0.1:13260
+Content-Type: text/xml; charset=UTF-8
+SOAPAction: "CalculatorDoc#add"
 Content-Length: 397
 Cookie: LtpaToken==+yOkBBuvLtTaiuBDkfgy3W6mZraGn7V5Dzp;JSESSIONID=0000EyvJyGOS-2e9nlRijFiwKSR:-1
 
@@ -101,7 +101,7 @@ Cookie: LtpaToken==+yOkBBuvLtTaiuBDkfgy3W6mZraGn7V5Dzp;JSESSIONID=0000EyvJyGOS-2
 POST /axis/CalculatorDoc HTTP/1.1
 Host: 127.0.0.1:13260
 Content-Type: text/xml; charset=UTF-8
-SOAPAction: "Calculator#add"
+SOAPAction: "CalculatorDoc#add"
 Content-Length: 397
 
 <?xml version='1.0' encoding='utf-8' ?>

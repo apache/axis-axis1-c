@@ -1,6 +1,7 @@
 non-nillable element=-9223372036854775808
 non-nillable element=-1
-AxisException : AxisSoapException:Received content is faulty Value to be serialized is greater than MaxInclusive specified for this type.  MaxInclusive = -1, Value = 0.
+AxisException : AxisSoapException: Soap message content is not valid.
+Value to be serialized is greater than MaxInclusive specified for this type.  MaxInclusive = -1, Value = 0.
 non-nillable element=-123456789
 nillable element=-123456789
 nil element=<nil>

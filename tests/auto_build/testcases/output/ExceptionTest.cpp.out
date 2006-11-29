@@ -1,8 +1,8 @@
 Result is:2
-AxisException has occured:  HTTPTransportException:HTTP transport error 
- Server sent HTTP error: 'Not Found'
+AxisException has occured: HTTPTransportException: HTTP transport error.
+Server sent HTTP error: 'Not Found'
 
-AxisException has occured:  HTTPTransportException:HTTP transport error 
- Server sent HTTP error: 'Not Found'
+AxisException has occured: HTTPTransportException: HTTP transport error.
+Server sent HTTP error: 'Not Found'
 
 ---------------------- TEST COMPLETE -----------------------------

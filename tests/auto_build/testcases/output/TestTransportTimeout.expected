@@ -1,3 +1,4 @@
 in AxisException block
-Exception :  HTTPTransportException:Channel error connection timeout before receiving Channel error: connection timed out before receiving
+Exception : HTTPTransportException: Channel I/O operation timed out.
+Read operation timed-out while waiting for data.
 ---------------------- TEST COMPLETE -----------------------------
