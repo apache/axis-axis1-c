@@ -1,7 +1,7 @@
 POST /Calculator/services/Calculator HTTP/1.1
-Host: localhost:13620
+Host: 127.0.0.1:13260
 Content-Type: text/xml; charset=UTF-8
-SOAPAction: "Calculator#add"
+SOAPAction: "CalculatorDoc#add"
 Content-Length: 560
 
 <?xml version='1.0' encoding='utf-8' ?>
@@ -16,9 +16,9 @@ Content-Length: 560
 </SOAP-ENV:Envelope>
 
 POST /Calculator/services/Calculator HTTP/1.1
-Host: localhost:13620
+Host: 127.0.0.1:13260
 Content-Type: text/xml; charset=UTF-8
-SOAPAction: "Calculator#add"
+SOAPAction: "CalculatorDoc#add"
 Content-Length: 528
 
 <?xml version='1.0' encoding='utf-8' ?>
@@ -33,9 +33,9 @@ Content-Length: 528
 </SOAP-ENV:Envelope>
 
 POST /Calculator/services/Calculator HTTP/1.1
-Host: localhost:13620
+Host: 127.0.0.1:13260
 Content-Type: text/xml; charset=UTF-8
-SOAPAction: "Calculator#add"
+SOAPAction: "CalculatorDoc#add"
 Content-Length: 528
 
 <?xml version='1.0' encoding='utf-8' ?>
@@ -50,9 +50,9 @@ Content-Length: 528
 </SOAP-ENV:Envelope>
 
 POST /Calculator/services/Calculator HTTP/1.1
-Host: localhost:13620
+Host: 127.0.0.1:13260
 Content-Type: text/xml; charset=UTF-8
-SOAPAction: "Calculator#add"
+SOAPAction: "CalculatorDoc#add"
 Content-Length: 500
 
 <?xml version='1.0' encoding='utf-8' ?>
