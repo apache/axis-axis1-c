@@ -85,8 +85,7 @@
 		<property name="clientArgs" value="" />
 	</target>
 
-	<target name="setForMonitor" if="test.endpoint"
-		unless="test.nomonitor">
+	<target name="setForMonitor" if="test.endpoint"	unless="test.nomonitor">
 		<propertyregex property="protocol" input="${test.endpoint}"
 			regexp="(.*)://" select="\1" />
 
@@ -221,8 +220,7 @@
 				<if>
 					<equals arg1="${mockServer}" arg2="true" />
 					<then>
-						<antcall target="startMockServer"
-							inheritall="true" />
+						<antcall target="startMockServer" inheritall="true" />
 					</then>
 				</if>
 
@@ -232,9 +230,7 @@
 				<!-- Run the client test -->
 				<stopwatch name="${test.name}.timer" action="start" />
 				<if>
-					<not>
-						<isset property="test.timeout"/>
-					</not>
+					<not> <isset property="test.timeout"/>	</not>
 					<then>
 						<property name="test.timeout" value="120000"/>
 					</then>
@@ -249,7 +245,11 @@
 				<echo
 					message="${test.name} - Execution Time - ${timer1}" />
 
-				<monitor flush="true"/>
+		        <if>
+		            <isfalse value="${test.nomonitor}" />
+		            <then> <monitor flush="true" /> </then>
+		        </if>				
+
 			</try>
 			<catch>
 				<echo
