@@ -85,8 +85,10 @@ int main(int argc, char* argv[])
                 // what is expected to match verification file.
 #ifdef __OS400__
                 char *errorText = (char *)e.what();
-                if (strstr(errorText, "GSKit Error 408") != NULL)
-                    cout << "Exception : " << " (GSKit Error 408 - GSK_ERROR_BAD_KEYFILE_PASSWORD)" << endl;
+                if (strstr(errorText, "GSKit Error is 408") != NULL)
+                    cout << "Exception : " << 
+                    "HTTPTransportException: HTTPS transport error.\n"
+                    "GSKit Error is 408 - GSK_ERROR_BAD_KEYFILE_PASSWORD." << endl;
                 else
                     cout << "Exception : " << e.what() << endl;
 #else
