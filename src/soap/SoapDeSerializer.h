@@ -55,7 +55,7 @@ private:
     XMLParser* m_pParser;
     /* Current Serialization Style */
     AXIS_BINDING_STYLE m_nStyle;
-    /* Last procesed node needed when the attributes are processed */
+    /* Last procesed node needed when the attributes are processed and to determine if empty element */
     const AnyElement* m_pCurrNode;
     const AnyElement* m_pNode;
     SOAP_VERSION m_nSoapVersion;
@@ -78,6 +78,8 @@ public:
     int getBody();
     const char* getMethodNameToInvoke();
     void setMethodNameToInvoke(const char*);
+    
+    bool isCurrentElementEmpty();
 	/**
 	* This method allows to peek for the name of the next element in XML stream.
 	* Useful in supporting "all" & "choice" WSDL constructs.

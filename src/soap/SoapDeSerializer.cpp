@@ -26,22 +26,6 @@
 
 /* SoapDeSerializer.cpp: implementation of the SoapDeSerializer class. */
 
-/*
- * Revision 1.1  2004/06/10 roshan
- * Fixed the bug AXISCPP-95 at JIRA.
- */
-
-/*
- * Revision 1.2  2004/07/22 roshan
- * Changed code to support proper parsing of incoming SOAP Headers. The 
- *  SoapDeSerializer::getHeader() method was completely rewriten.
- */
-
-/*
- * Revision 1.3  2004/11/27 roshan
- * Added the implementation of the setNewSoapBody() method.
- */
-
 #ifdef WIN32
 #pragma warning (disable : 4101)
 #endif
@@ -498,6 +482,14 @@ SoapDeSerializer::getVersion ()
     return m_nSoapVersion;
 }
 
+bool SoapDeSerializer::isCurrentElementEmpty()
+{
+    if (m_pCurrNode && START_END_ELEMENT == m_pCurrNode->m_type2)
+        return true;
+    
+    return false;
+}
+
 /*
  * In rpc/encoded style the stream is as follows,
  * <abc:ArrayOfPoints xmlns:abc="http://www.opensource.lk/Points"
@@ -585,9 +577,12 @@ SoapDeSerializer::getCmplxArray ( Axis_Array* pArray,
                                            pName, pNamespace, arraySize);
             
             if (m_nStatus != AXIS_FAIL)
+            {
+                m_pNode = m_pParser->next ();   /* skip end element node too */
                 return pArray;
             }
         }
+    }
     else
     {
         deserializeLiteralComplexArray(pArray, pDZFunct, pCreFunct, pDelFunct,
@@ -826,6 +821,13 @@ SoapDeSerializer::getCmplxObject (void *pDZFunct,
             
         if (0 == strcmp (pName, m_pNode->m_pchNameOrValue))
         {
+            // The StartEnd logic imbedded in code below is a temporary fix for 
+            // AXISCPP-991.  Prior to this fix, a start/end tag would create havoc
+            // when deserializing.  This is a temporary fix because if there are 
+            // attributes in the start/end empty tag, then we let it through as before
+            // and problems will surface.
+            
+            bool isStartEnd = false;
             /* if this node contain attributes let them be used by the complex
              * type's deserializer
              */
@@ -849,12 +851,20 @@ SoapDeSerializer::getCmplxObject (void *pDZFunct,
                         delete isNill; 
                 }
             }
+            else
+                isStartEnd = (START_END_ELEMENT == m_pNode->m_type2);
             
             m_pNode = NULL;    /* node identified and used */
     
             TRACE_OBJECT_CREATE_FUNCT_ENTRY(pCreFunct, 0);
             void *pObject = ((AXIS_OBJECT_CREATE_FUNCT) pCreFunct)(0);
             TRACE_OBJECT_CREATE_FUNCT_EXIT(pCreFunct, pObject);
+            
+            if (isStartEnd)
+            {
+                m_pParser->next ();
+                return pObject;
+            }
     
             if (pObject && pDZFunct)
             {
@@ -1050,13 +1060,11 @@ void SoapDeSerializer::getAttribute(const AxisChar* pName, const AxisChar * pNam
         if (START_ELEMENT == m_pCurrNode->m_type)
         {
             for (int i = 0 ; m_pCurrNode->m_pchAttributes[i]; i += 3)
-            {
                 if ( 0 == strcmp(m_pCurrNode->m_pchAttributes[i], pName))
                 {
                     pSimpleType->deserialize(m_pCurrNode->m_pchAttributes[i+2]);
                     return;
                 }
-            }
         }
         else
             m_nStatus = AXIS_FAIL;
@@ -2110,7 +2118,7 @@ SoapDeSerializer::getFaultAsXMLString()
         strcat(ret,any->_array[i]);
         delete [] any->_array[i];
     }
-    delete any->_array;
+    delete [] any->_array;
     delete any;
     return ret;
 }
