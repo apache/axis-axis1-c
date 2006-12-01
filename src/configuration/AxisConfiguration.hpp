@@ -2,8 +2,6 @@
 
 #define __AXIS_CONFIG__
 
-#undef _DEBUG
-
 #include <iostream>
 #include "platforms/PlatformAutoSense.hpp"
 #include "common/AxisConfig.h"
