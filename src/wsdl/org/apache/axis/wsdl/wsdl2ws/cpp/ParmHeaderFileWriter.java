@@ -747,10 +747,10 @@ public class ParmHeaderFileWriter extends ParamWriter
             writer.write("\n");
             //Local name and the URI for the type
             writer.write("/*Local name and the URI for the type*/\n");
-            writer.write("static const char* Axis_URI_" + classname + " = \""
+            writer.write("static const char Axis_URI_" + classname + "[] = \""
                     + type.getName().getNamespaceURI() + "\";\n");
-            writer.write("static const char* Axis_TypeName_" + classname
-                    + " = \"" + type.getName().getLocalPart() + "\";\n\n");
+            writer.write("static const char Axis_TypeName_" + classname
+                    + "[] = \"" + type.getName().getLocalPart() + "\";\n\n");
 
             // Define class to avoid compilation issues (cycle in includes).
             // This is a must for complex wsdl files.
