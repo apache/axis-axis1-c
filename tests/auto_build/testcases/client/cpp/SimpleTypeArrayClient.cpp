@@ -60,8 +60,6 @@ int main(int argc, char* argv[])
         if(endpoint_set) 
         {
           ws = new SimpleTypeArrayWS(endpoint, APTHTTP1_1);
-          free(endpoint);
-          endpoint_set = false;
         } 
         else
           ws = new SimpleTypeArrayWS();
@@ -113,15 +111,10 @@ int main(int argc, char* argv[])
         
             if( !bSilent)
                 cout << e.what() << endl;
-    
-        if(endpoint_set)
-          free(endpoint);
       } 
       catch(...) 
       {
         cout << "Unknown Exception occured." << endl;
-        if(endpoint_set)
-          free(endpoint);
       }
       
       // clean up
@@ -141,7 +134,10 @@ int main(int argc, char* argv[])
       iRetryIterationCount--;
   } 
   while( iRetryIterationCount > 0 && !bSuccess);
-                
+  
+        if(endpoint_set)
+          free(endpoint);
+                          
   cout << "---------------------- TEST COMPLETE -----------------------------"<< endl;
   return returnValue;
 

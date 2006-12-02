@@ -46,11 +46,9 @@ int main(int argc, char* argv[])
                 do
                 {
   try {
-    if(endpoint_set) {
+    if(endpoint_set) 
       ws = new XSD_byte(endpoint);
-      free(endpoint);
-      endpoint_set = false;
-    } else
+    else
       ws = new XSD_byte();
 
         

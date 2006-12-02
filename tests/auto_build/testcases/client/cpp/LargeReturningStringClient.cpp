@@ -56,8 +56,6 @@ int main( int argc, char * argv[])
             if( endpoint_set)
             {
                 ws = new LargeReturningString( endpoint, APTHTTP1_1);
-                free( endpoint);
-                endpoint_set = false;
             }
             else
                 ws = new LargeReturningString();
