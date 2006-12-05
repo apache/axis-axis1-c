@@ -30,7 +30,6 @@
 
 #ifdef IPV6
 #include <ws2tcpip.h>
-#include <tpipv6.h>  // For IPv6 Tech Preview.
 #endif
 
 // What version of WinSock is required
