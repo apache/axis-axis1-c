@@ -859,39 +859,6 @@ public class ClientStubWriter extends CPPClassWriter
      */
     protected void writeGlobalCodes() throws WrapperFault
     {
-        Iterator types = wscontext.getTypemap().getTypes().iterator();
-        HashSet typeSet = new HashSet();
-        String typeName;
-        Type type;
-        try
-        {
-            while (types.hasNext())
-            {
-                type = (Type) types.next();
-                if (type.isArray())
-                    continue;
 
-                if (type.isAnonymous() && !type.isExternalized())
-                    continue;
-                typeSet.add(type.getLanguageSpecificName());
-            }
-            Iterator itr = typeSet.iterator();
-            while (itr.hasNext())
-            {
-                typeName = itr.next().toString();
-                writer.write("extern int Axis_DeSerialize_" + typeName + "("
-                        + typeName + "* param, IWrapperSoapDeSerializer* pDZ);\n");
-                writer.write("extern void* Axis_Create_" + typeName + "(int nSize);\n");
-                writer.write("extern void Axis_Delete_" + typeName + "("
-                        + typeName  + "* param, int nSize=0);\n");
-                writer.write("extern int Axis_Serialize_" + typeName
-                                + "(" + typeName
-                                + "* param, IWrapperSoapSerializer* pSZ, bool bArray = false);\n\n");
-            }
-        } 
-        catch (IOException e)
-        {
-            throw new WrapperFault(e);
-        }
     }
 }

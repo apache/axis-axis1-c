@@ -66,7 +66,7 @@ public class ParmHeaderFileWriter extends ParamWriter
                 writeSimpleTypeWithEnumerations();
             }
             else
-            {
+                {
                 classname = CUtils.sanitiseClassName( classname);
 
                 // vvv FJP - 17667
@@ -76,7 +76,6 @@ public class ParmHeaderFileWriter extends ParamWriter
                     String	baseType = type.getRestrictionBase();
 
                     baseType = baseType.substring( baseType.indexOf( ":") + 1);
-
                     writer.write( "#include \"" + baseType + ".hpp\"\n\n");
                     writer.write( "// " + classname + " is a restricted type (base=" + baseType + ").\n// The following restrictions need to be applied:-\n");
 
@@ -103,49 +102,35 @@ public class ParmHeaderFileWriter extends ParamWriter
                         }
                     }
                     
-                    writer.write( "\ntypedef " + baseType + " " + classname + ";\n\n");
+                    writer.write( "\ntypedef " + baseType + " " + classname + ";\n\n");                    
                 }
                 // ^^^ FJP - 17667
                 else
-                {
-	                writePreprocessorStatements();
-	
-	                this.writer.write("class STORAGE_CLASS_INFO " + classname);
-	                
-	                if (this.type.isFault())
-	                {
-	                    this.writer.write(" : public SoapFaultException");
-	                }
-	                
-	                this.writer.write("\n{\n");
-	                
-	                writeAttributes();
-	
-	                /**
-	                 * Dushshantha: Call writeGetSetMethods() method.
-	                 */
-	
-	                writeGetSetMethods();
-	                //..................................
-	                writeConstructors();
-	                writeDestructors();
-	                writeDeepCopyFlags();
-	                
-	                this.writer.write("};\n\n");
-                }
+            {
+                writePreprocessorStatements();
+
+                this.writer.write("class STORAGE_CLASS_INFO " + classname);
+                if (this.type.isFault())
+                    this.writer.write(" : public SoapFaultException");
+                this.writer.write("\n{\n");
+                writeAttributes();
+                writeGetSetMethods();
+                writeConstructors();
+                writeDestructors();
+                writeDeepCopyFlags();
+                this.writer.write("};\n\n");
+                
+                writeFunctionPrototypes();
+            }
             }
             
             this.writer.write("#endif /* !defined(__" + classname.toUpperCase()
                     + "_" + getFileType().toUpperCase() + "_H__INCLUDED_)*/\n");
             writer.flush();
             writer.close();
-            
             if (WSDL2Ws.verbose)
-            {
-                System.out.println(getFilePath().getAbsolutePath()
-                        + " created.....");
-            }
-        }
+                System.out.println(getFilePath().getAbsolutePath() + " created.....");
+        } 
         catch (IOException e)
         {
             e.printStackTrace();
@@ -185,11 +170,9 @@ public class ParmHeaderFileWriter extends ParamWriter
 			        else if( restBaseClass != null)
 				        isPointerType = CUtils.isPointerType( restBaseClass);
 			    } // ^^^ FJP - 17667
-			    else
-			    {
-				    isPointerType = CUtils.isPointerType(getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]));
-			    }
-				
+                else
+                    isPointerType = CUtils.isPointerType(getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]));
+
         	    if ((attribs[i].isSimpleType() || type.isSimpleType())
                         && !attribs[i].isArray() 
                         && (isElementNillable(i) 
@@ -434,7 +417,7 @@ public class ParmHeaderFileWriter extends ParamWriter
 					    String  typeName = getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]);
 					    Type    baseType = CUtils.findBaseTypeOfRestriction( attribs[i].getType(), wscontext);
 					    boolean	isPointer = CUtils.isPointerType( CUtils.getBaseTypeOfRestrictionAsString( baseType));
-					  
+                    
 					    if( isPointer)
 					    {
 					        int	pointerPos = typeName.indexOf( "*");
@@ -448,13 +431,14 @@ public class ParmHeaderFileWriter extends ParamWriter
 					    writer.write( "\t" + typeName + " " + attribs[i].getParamNameWithoutSymbols() + ";\n");
 					}
 			        // ^^^ FJP - 17667
-					else
-					{
-					    writer.write( "\t" +
-					                  getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]) +
-					                  " " + attribs[i].getParamNameWithoutSymbols() + ";\n");
-					}
-				}								
+                else
+                {
+                    writer.write("\t"
+                                + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
+                                + " " + attribs[i].getParamNameWithoutSymbols()
+                                + ";\n");
+                }
+            }
             }
             
             if (extensionBaseAttrib != null &&
@@ -599,7 +583,7 @@ public class ParmHeaderFileWriter extends ParamWriter
                         isPointerType = CUtils.isPointerType(CUtils.getclass4qname(type.getBaseType())); 
                     else
                         isPointerType = CUtils.isPointerType(getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]));
-
+                    
                     if( type.isRestriction() && isPointerType)
                     {
                         int pointerLocation = typeName.indexOf( "*");
@@ -705,6 +689,38 @@ public class ParmHeaderFileWriter extends ParamWriter
         return new File(fileName);
     }
 
+
+    protected void writeFunctionPrototypes() throws WrapperFault
+    {
+        try
+        {
+            if (type.isSimpleType() || type.isArray() || type.getName().equals(CUtils.anyTypeQname)
+                    || (type.isAnonymous() && !type.isExternalized()))
+                return;
+            
+            String typeName = classname;
+            
+            writer.write("\n");
+            writer.write("/* ********************************************************************* */\n");
+            writer.write("/* --- Functions to create/delete, serialize/deserialize custom type --- */\n");
+            writer.write("/* ********************************************************************* */\n");
+            writer.write("\n");  
+            
+            writer.write("extern int Axis_DeSerialize_" + typeName
+                    + "(" + typeName + "* param, IWrapperSoapDeSerializer* pDZ);\n");
+            writer.write("extern void* Axis_Create_" + typeName + "(int nSize);\n");
+            writer.write("extern void Axis_Delete_" + typeName + "("
+                    + typeName + "* param, int nSize=0);\n");
+            writer.write("extern int Axis_Serialize_" + typeName + "("
+                    + typeName + "* param, IWrapperSoapSerializer* pSZ, bool bArray = false);\n\n");
+
+        }
+        catch (IOException e)
+        {
+            throw new WrapperFault(e);
+        }
+    }
+    
     /*
      * (non-Javadoc)
      * 
@@ -716,6 +732,9 @@ public class ParmHeaderFileWriter extends ParamWriter
         {
             writer.write("#include <axis/AxisUserAPI.hpp>\n");
             writer.write("#include <axis/AxisUserAPIArrays.hpp>\n");
+            writer.write("#include <axis/IWrapperSoapDeSerializer.hpp>\n");
+            writer.write("#include <axis/IWrapperSoapSerializer.hpp>\n");
+
             
             if (this.type.isFault())
             {
@@ -757,13 +776,13 @@ public class ParmHeaderFileWriter extends ParamWriter
             typeSet = new HashSet();
             for (int i = 0; i < attribs.length; i++)
             {
-				if (!attribs[i].isArray() &&
+                if (!attribs[i].isArray() && 
 				    !(attribs[i].isSimpleType() || attribs[i].getType().isSimpleType()) &&
 					!attribs[i].isAnyType() &&
 					!attribs[i].getType().isRestriction())
 				{
                     typeSet.add(attribs[i].getTypeName());
-				}
+            }
             }
             
             itr = typeSet.iterator();

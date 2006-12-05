@@ -70,50 +70,6 @@ public class BeanParamWriter extends ParamCPPFileWriter
     {
         try
         {
-            HashSet typeSet = new HashSet();
-            String typeName;
-            
-            for (int i = 0; i < attribs.length; i++)
-            {
-                if (!(attribs[i].isSimpleType() || attribs[i].isAnyType()))
-                    typeSet.add(attribs[i].getTypeName());
-            }
-            
-            Iterator itr = typeSet.iterator();
-            while (itr.hasNext())
-            {
-                /*
-                 * Needed for self referenced array. <xsd:complexType
-                 * name="Type1"> <xsd:sequence> <xsd:element name="followings"
-                 * maxOccurs="unbounded" minOccurs="0" type="tns:Type1" />
-                 * <xsd:element name="kind" type="xsd:string" /> <xsd:element
-                 * name="index" type="xsd:int" /> </xsd:sequence> <xsd:attribute
-                 * name="att_kind" type="tns:Kind" /> </xsd:complexType>
-                 */
-                typeName = itr.next().toString();
-                if (!typeName.equals(type.getName().getLocalPart()))
-                {
-                    writer.write("extern int Axis_DeSerialize_" + typeName
-                            + "(" + typeName + "* param, IWrapperSoapDeSerializer* pDZ);\n");
-                    writer.write("extern void* Axis_Create_" + typeName + "(int nSize);\n");
-                    writer.write("extern void Axis_Delete_" + typeName + "("
-                            + typeName + "* param, int nSize=0);\n");
-                    writer.write("extern int Axis_Serialize_" + typeName + "("
-                            + typeName + "* param, IWrapperSoapSerializer* pSZ, bool bArray = false);\n\n");
-                } 
-                else
-                {
-                    writer.write("int Axis_DeSerialize_" + typeName + "("
-                            + typeName + "* param, IWrapperSoapDeSerializer* pDZ);\n");
-                    writer.write("void* Axis_Create_" + typeName + "(int nSize);\n");
-                    writer.write("void Axis_Delete_" + typeName + "("
-                            + typeName + "* param, int nSize);\n");
-                    writer.write("int Axis_Serialize_" + typeName
-                                    + "(" + typeName
-                                    + "* param, IWrapperSoapSerializer* pSZ, bool bArray);\n\n");
-                }
-            }
-
             writeGetSetMethods();
             writeSerializeGlobalMethod();
             writeDeSerializeGlobalMethod();
@@ -140,7 +96,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
         
         if (type.isArray())
             return;
-
+        
         try
         {
             for (int i = 0; i < attribs.length; i++)
@@ -165,7 +121,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     String parameterTypeName = properParamName;
                     if (!parameterTypeName.endsWith("*"))
                         parameterTypeName += " *";
-
+                    
                     writer.write("\n" + parameterTypeName + " " + classname
                             + "::get" + methodName + "()\n{\n");
 
@@ -207,15 +163,11 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     if(attribs[i].getAllElement() || attribs[i].getChoiceElement() )
                     {
                         if (isElementNillable(i))
-                        {
                             writer.write("\n" + properParamName + " * " + classname
                                 + "::get" + methodName + "()\n{\n");
-                        }
                         else 
-                        {
                             writer.write("\n" + properParamName + " " + classname
                                     + "::get" + methodName + "()\n{\n");
-                        }
                     }
                     else
                     {
@@ -228,17 +180,13 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     if(attribs[i].getAllElement() || attribs[i].getChoiceElement())
                     {
                         if (isElementNillable(i))
-                        {
                             writer.write("\n" + "void " + classname + "::set"
                                     + methodName + "(" + properParamName
                                     + " * pInValue, bool deep)\n{\n");
-                        }
                         else
-                        {
                             writer.write("\n" + "void " + classname + "::set"
                                 + methodName + "(" + properParamName
                                 + " pInValue, bool deep)\n{\n");
-                        }
                     }
                     else
                     {
@@ -351,7 +299,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                         isPointerType = CUtils.isPointerType(CUtils.getclass4qname(attributeType.getBaseType())); 
                     else
                         isPointerType = CUtils.isPointerType(getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]));
-
+                    
                     if((attribs[i].isSimpleType() || attributeType.isSimpleType()) &&
                        (isPointerType || attribs[i].getAllElement() || attribs[i].getChoiceElement()))
                         writer.write(", bool deep");
@@ -451,7 +399,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
         writer.write( " * This static method serialize a " + classname + " type of object\n");
         writer.write( " */\n");
         writer.write( "int Axis_Serialize_" + classname 
-                     + "( " + classname + "* param, IWrapperSoapSerializer* pSZ, bool bArray = false)\n");
+                     + "( " + classname + "* param, IWrapperSoapSerializer* pSZ, bool bArray)\n");
         writer.write( "{\n");
 
         if (attribs.length == 0) 
@@ -529,7 +477,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                         
                         for( int j = 0; j < vre.size(); j++)
                             writer.write("\t//\t\t " + vre.get( j) + "\n");
-                    }
+            }
                     
                     if( vrp != null)
                     {
@@ -563,8 +511,8 @@ public class BeanParamWriter extends ParamCPPFileWriter
                             }
                         }
                     }
-                    else
-                    {
+            else
+            {
                         baseType = baseType.substring( baseType.lastIndexOf( "_") + 1);
                         
                         type.setBaseType( new QName( WrapperConstants.SCHEMA_NAMESPACE, baseType));
@@ -582,64 +530,64 @@ public class BeanParamWriter extends ParamCPPFileWriter
             // ^^^ FJP - 17667
             
             //Samisa
-            //remove _Ref sufix and _ prefix in SOAP tag name
+                //remove _Ref sufix and _ prefix in SOAP tag name
             String soapTagName = ai.getParamName();
-            if (soapTagName.lastIndexOf("_Ref") > -1)
-                soapTagName = soapTagName.substring(0, soapTagName.lastIndexOf("_Ref"));
-            
-            if (soapTagName.charAt(0) == '_')
-                soapTagName = soapTagName.substring(1, soapTagName.length());
+                if (soapTagName.lastIndexOf("_Ref") > -1)
+                    soapTagName = soapTagName.substring(0, soapTagName.lastIndexOf("_Ref"));
+                
+                if (soapTagName.charAt(0) == '_')
+                    soapTagName = soapTagName.substring(1, soapTagName.length());
 
             //end remove _Ref sufix and _ prefix in SOAP tag name
             boolean isPointerType = false;
-            String basicType = null;
-            
+                String basicType = null;
+                
             if (!ai.isSimpleType() && type.isSimpleType())
             {
-                basicType = CUtils.getclass4qname( type.getBaseType());
+                    basicType = CUtils.getclass4qname(type.getBaseType());
 
                 String    class4QName = CUtils.getclass4qname(type.getBaseType());
                 
                 isPointerType = CUtils.isPointerType( class4QName); 
             }
-            else
-            {
+                else
+                {
                 basicType = ai.getTypeName();
                 isPointerType = CUtils.isPointerType(ai.getTypeName());
-            }
-            
+                }
+                
             if (isPointerType)
-            {
+                {
                 writer.write("\tif (0 != param->"
                         + ai.getParamNameAsMember() + ")\n");
-                writer.write("\t\tpSZ->serializeAsAttribute(\""
+                    writer.write("\t\tpSZ->serializeAsAttribute(\""
                         + soapTagName
                         + "\", 0, (void*)(param->"
                         + ai.getParamNameAsMember()
                         + "), "
-                        + CUtils.getXSDTypeForBasicType(basicType) + ");\n");
+                            + CUtils.getXSDTypeForBasicType(basicType) + ");\n");
+                }
+                else
+                {
+                    writer.write("\tpSZ->serializeAsAttribute(\""
+                            + soapTagName
+                            + "\", 0, (void*)&(param->"
+                            + attribs[i].getParamNameAsMember()
+                            + "), "
+                            + CUtils.getXSDTypeForBasicType(attribs[i].getTypeName()) + ");\n");
+                }
+                
+                if (!attribs[i].isOptional())
+                {
+                    /* This avoid segmentation fault at runtime */
+                    /*
+                     * writer.write("\telse\n");
+                     * writer.write("\t\tAXISTRACE1(\"The mandatory attribute
+                     * "+attribs[i].getParamName()+" is not set\",
+                     * CRITICAL);\n");
+                     */
+                }
             }
-            else
-            {
-                writer.write("\t\tpSZ->serializeAsAttribute(\""
-                        + soapTagName
-                        + "\", 0, (void*)&(param->"
-                        + attribs[i].getParamNameAsMember()
-                        + "), "
-                        + CUtils.getXSDTypeForBasicType(attribs[i].getTypeName()) + ");\n");
-            }
-            
-            if (!attribs[i].isOptional())
-            {
-                /* This avoid segmentation fault at runtime */
-                /*
-                 * writer.write("\telse\n");
-                 * writer.write("\t\tAXISTRACE1(\"The mandatory attribute
-                 * "+attribs[i].getParamName()+" is not set\",
-                 * CRITICAL);\n");
-                 */
-            }
-        }
         
         if (type.isFault())
         {
@@ -1245,7 +1193,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
         writer.write("/*\n");
         writer.write(" * This static method delete a " + classname + " type of object\n");
         writer.write(" */\n");
-        writer.write("void Axis_Delete_" + classname + "(" + classname + "* param, int nSize=0)\n");
+        writer.write("void Axis_Delete_" + classname + "(" + classname + "* param, int nSize)\n");
         writer.write("{\n");
         
         writer.write("\t/* If null just return */\n");
@@ -1569,7 +1517,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
     protected void writeRestrictionCheckerFunction() throws WrapperFault
     {
         try
-        {
+        {            
             writer.write("int Check_Restrictions_" + classname + "(" + classname + " value)\n");
             
             //TODO write code to check the restrictions.  FJP - Begun, but untested.
