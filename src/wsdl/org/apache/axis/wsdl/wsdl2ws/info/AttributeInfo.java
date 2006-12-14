@@ -30,33 +30,26 @@ public class AttributeInfo extends ParameterInfo
     private boolean isSimpleType = true;
     private boolean isAttribute = false;
     private boolean isOptional = false;
-    //Chinthana:To get Max and Min occures
+
     private int maxOccurs = 1;
     private int minOccurs = 1;
-    //12/05/2005...........................
+
     private String typeName;
     private String typeNamespace;
     private String className;
     private String attribNameAsMember;
     
-    
-    //Dushshantha:
     //this variable states whether the attribute is an xsd:choice
     private boolean choiceElement = false;
     
-    //Chinthana:
     //this variable states whether the attribute is an xsd:all
     private boolean allElement = false;
-    //04/05/2005...............................................
     
-    //  Dushshantha:
     //This field is set to true if the element is elementFormDefault qualified.
     //This specifies whether the element must be namespace qualified or not in the SOAP message.
     private boolean nsQualified = false;
     
     /**
-     * @param type
-     * @param attribName
      */
     public AttributeInfo(String className)
     {
@@ -149,12 +142,10 @@ public class AttributeInfo extends ParameterInfo
     public String getParamNameAsMember()
     {
         this.attribNameAsMember = super.getParamNameWithoutSymbols();
+        
         // need to deal with _Ref stuff :(
-        if (this.className != null
-            && this.className.equals(attribNameAsMember))
-        {
+        if (this.className != null && this.className.equals(attribNameAsMember))
             this.attribNameAsMember = "m_" + this.attribNameAsMember;
-        }
 
         return this.attribNameAsMember;
     }
@@ -162,61 +153,49 @@ public class AttributeInfo extends ParameterInfo
     public void setParamName(String paramName)
     {
         super.setParamName(paramName);
+        
         // make sure attributes does not have the same name as class name
-
         if (this.className != null && this.className.equals(attribName))
-        {
             this.attribNameAsMember = "m_" + attribName;
-        }
         else
-        {
             this.attribNameAsMember = attribName;
-        }
     }
     
-    //Dushshantha:
     //getter and setter for choiceElement
-    
     public boolean getChoiceElement()
     {
-    	return this.choiceElement;
+        return this.choiceElement;
     }
     
     public void setChoiceElement(boolean newChoiceElement)
     {
-    	this.choiceElement=newChoiceElement;
+        this.choiceElement=newChoiceElement;
     }
-    //.................................................
     
-    //Chinthana:
     //getter and setter for allElement
-    
     public boolean getAllElement()
     {
-    	return this.allElement;
+        return this.allElement;
     }
     
     public void setAllElement(boolean newAllElement)
     {
-    	this.allElement=newAllElement;
+        this.allElement=newAllElement;
     }
-    //04/05/2005.................................................
-    //Chinthana: Changes to do modification for handle Min and Max occures
     
     /**
-     * Dushshantha:
      * Getter and setter for the field nsQualified 
      */
-    public boolean getNsQualified(){
-    	return nsQualified;
+    public boolean getNsQualified()
+    {
+        return nsQualified;
     }
     
-    public void setNsQualified(boolean nsQual){
-    	nsQualified = nsQual;
+    public void setNsQualified(boolean nsQual)
+    {
+        nsQualified = nsQual;
     }
-    
-    
-    
+
     /**
      * @return int
      */
@@ -249,6 +228,4 @@ public class AttributeInfo extends ParameterInfo
     {
         this.minOccurs = minOccurs;
     }
-    //12/05/2005
-
 }

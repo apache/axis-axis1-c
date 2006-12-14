@@ -33,20 +33,20 @@ public class ParameterInfo
     private boolean isAnyType = false;
     protected boolean isArray = false;
     private boolean isAttribute = false;
-	private boolean isNillable = false;
-    private boolean isOptional;
+    private boolean isNillable = false;
+    private boolean isOptional = false;
 
-	
-	public boolean isNillable()
-	{
-		return isNillable;
-	}
-	
-	public void setNillable(boolean nillable)
-	{
-		isNillable = nillable;
-	}
-	
+    
+    public boolean isNillable()
+    {
+        return isNillable;
+    }
+    
+    public void setNillable(boolean nillable)
+    {
+        isNillable = nillable;
+    }
+    
     /**
      * @return boolean
      */
@@ -77,47 +77,43 @@ public class ParameterInfo
     public String getParamName()
     {
         // TODO: design review needed
-        // 		- If type and name are equals add "_Ref" ie : ref="..."
+        //         - If type and name are equals add "_Ref" ie : ref="..."
         String result;
 
         if (attribName.lastIndexOf(SymbolTable.ANON_TOKEN) > 1)
         {
             attribName =
-                attribName.substring(
-                    attribName.lastIndexOf(SymbolTable.ANON_TOKEN) + 1,
-                    attribName.length());
+                attribName.substring(attribName.lastIndexOf(SymbolTable.ANON_TOKEN) + 1,
+                                     attribName.length());
         }
-        // Samisa: This second call to TypeMap.resoleveWSDL2LanguageNameClashes
-        // is made to make sure after replacinf ANON_TOKEN it is still not a keyword
+        
+        // This second call to TypeMap.resoleveWSDL2LanguageNameClashes
+        // is made to make sure after replacing ANON_TOKEN it is still not a keyword
         attribName =
-            TypeMap.resolveWSDL2LanguageNameClashes(
-                attribName,
-                WrapperConstants.LANGUAGE_CPP);
+            TypeMap.resolveWSDL2LanguageNameClashes(attribName, WrapperConstants.LANGUAGE_CPP);
 
         if (isReference())
-        {
             result = attribName + "_Ref";
-        }
         else
-        {
             result = attribName;
-        }
+
         return result;
     }
-    //  29/3/05.To avoid the '-' in attribute name.
-	public String getParamNameWithoutSymbols() {
-		//    	 TODO: design review needed
-		// 		- If type and name are equals add "_Ref" ie : ref="..."
-		String result = this.getParamName();
-	
-		char[] symbols = TypeMap.getSymbols();
+    
+    // To avoid the '-' in attribute name.
+    public String getParamNameWithoutSymbols() 
+    {
+        //         TODO: design review needed
+        //         - If type and name are equals add "_Ref" ie : ref="..."
+        String result = this.getParamName();
+    
+        char[] symbols = TypeMap.getSymbols();
 
-		for (int j = 0; j < symbols.length; j++) {
-			result = result.replace(symbols[j], '_');
-		}
+        for (int j = 0; j < symbols.length; j++)
+            result = result.replace(symbols[j], '_');
 
-		return result;
-	}
+        return result;
+    }
 
     public String getParamNameAsSOAPElement()
     {
@@ -126,18 +122,18 @@ public class ParameterInfo
         if (attribName.lastIndexOf(SymbolTable.ANON_TOKEN) > 1)
         {
             result =
-                attribName.substring(
-                    attribName.lastIndexOf(SymbolTable.ANON_TOKEN) + 1,
-                    attribName.length());
+                attribName.substring(attribName.lastIndexOf(SymbolTable.ANON_TOKEN) + 1,
+                                     attribName.length());
         }
         
-        if( result.charAt(0) == '_') //  Make sure SOAP tag name is not prefixed
-				     //	 because it is a key word
+        // Make sure SOAP tag name is not prefixed because it is a key word
+        if( result.charAt(0) == '_') 
         {
             String tagname = result.substring(1, result.length() );
+            
             if( result.equals( TypeMap.resolveWSDL2LanguageNameClashes(tagname,
-		                WrapperConstants.LANGUAGE_CPP)))
-		result = tagname;
+                                                                       WrapperConstants.LANGUAGE_CPP)))
+                result = tagname;
 
         }
         return result;
@@ -148,26 +144,20 @@ public class ParameterInfo
      */
     public boolean isReference()
     {
-        return type != null
-            && attribName.equals(type.getLanguageSpecificName());
+        return type != null && attribName.equals(type.getLanguageSpecificName());
     }
 
     public void setParamName(String paramName)
     {
-        //Samisa: 21/08/2004
         if (paramName.lastIndexOf(SymbolTable.ANON_TOKEN) > 1)
         {
             paramName =
-                paramName.substring(
-                    paramName.lastIndexOf(SymbolTable.ANON_TOKEN) + 1,
-                    paramName.length());
+                paramName.substring(paramName.lastIndexOf(SymbolTable.ANON_TOKEN) + 1,
+                                    paramName.length());
         }
-        paramName =
-            TypeMap.resolveWSDL2LanguageNameClashes(
-                paramName,
-                WrapperConstants.LANGUAGE_CPP);
+        paramName =TypeMap.resolveWSDL2LanguageNameClashes(paramName,
+                                                           WrapperConstants.LANGUAGE_CPP);
         
-        //Samisa
         this.attribName = paramName;
     }
 
@@ -176,6 +166,7 @@ public class ParameterInfo
         this.type = type;
         this.attribName = attribName;
     }
+    
     public Type getType()
     {
         return type;
@@ -194,7 +185,7 @@ public class ParameterInfo
     {
         return elementName;
     }
-    //Samisa 21/08/2004
+
     public String getElementNameAsString()
     {
         String paramName = elementName.getLocalPart();
@@ -205,29 +196,23 @@ public class ParameterInfo
                     paramName.lastIndexOf(SymbolTable.ANON_TOKEN) + 1,
                     paramName.length());
         }
-        paramName =
-            TypeMap.resolveWSDL2LanguageNameClashes(
-                paramName,
-                WrapperConstants.LANGUAGE_CPP);
+        paramName = TypeMap.resolveWSDL2LanguageNameClashes(paramName,
+                                                            WrapperConstants.LANGUAGE_CPP);
         return paramName;
 
     }
-    //Samisa
 
-    //Samisa 16/03/2005
     public String getSOAPElementNameAsString()
     {
         String paramName = elementName.getLocalPart();
         if (paramName.lastIndexOf(SymbolTable.ANON_TOKEN) > 1)
         {
             paramName =
-                paramName.substring(
-                    paramName.lastIndexOf(SymbolTable.ANON_TOKEN) + 1,
-                    paramName.length());
+                paramName.substring(paramName.lastIndexOf(SymbolTable.ANON_TOKEN) + 1,
+                                                          paramName.length());
         }
         return paramName;
     }
-    //Samisa
 
     /**
      * @param name
