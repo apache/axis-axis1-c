@@ -29,11 +29,9 @@ public class Generator
 {
     private SourceWriter sourceWriter;
 
-    public Generator(int generatorType, WebServiceContext wscontext)
-        throws WrapperFault
+    public Generator(int generatorType, WebServiceContext wscontext) throws WrapperFault
     {
-        this.sourceWriter =
-            SourceWriterFactory.createSourceWriter(generatorType, wscontext);
+        this.sourceWriter = SourceWriterFactory.createSourceWriter(generatorType, wscontext);
     }
 
     public void generate() throws WrapperFault
@@ -42,6 +40,7 @@ public class Generator
         {
             throw new WrapperFault("Can't find Matching Generator");
         }
+        
         this.sourceWriter.writeSource();
     }
 }

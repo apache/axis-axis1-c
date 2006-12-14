@@ -35,6 +35,7 @@ public class SourceWriterFactory
                 return new UndeploymentWriter(wscontext);
             case WrapperConstants.GENERATOR_BUILDSCRIPT :
                 return new BuildScriptWriter(wscontext);
+                
             // C++
             case WrapperConstants.GENERATOR_PARAM_CPP_ALL :
                 return new org.apache.axis.wsdl.wsdl2ws.cpp.AllParamWriter(wscontext);
@@ -42,10 +43,12 @@ public class SourceWriterFactory
                 return new org.apache.axis.wsdl.wsdl2ws.cpp.ServiceWriter(wscontext);
             case WrapperConstants.GENERATOR_CLASSLOADER_CPP :
                 return new org.apache.axis.wsdl.wsdl2ws.cpp.ClassLoader(wscontext);
+                
             // C
             case WrapperConstants.GENERATOR_PARAM_C_ALL :
                 return new org.apache.axis.wsdl.wsdl2ws.c.AllParamWriter(wscontext);
         }
+        
         if ("rpc".equals(wscontext.getWrapInfo().getWrapperStyle()))
         {
             switch (generatorType)
@@ -63,7 +66,8 @@ public class SourceWriterFactory
                     return new org.apache.axis.wsdl.wsdl2ws.cpp.ClientStubWriter(wscontext);
                 case WrapperConstants.GENERATOR_SERVER_EXCEPTION :
                     return new org.apache.axis.wsdl.wsdl2ws.cpp.AllExceptionWriter(wscontext, "Server");
-                    //C
+                
+                // C
                 case WrapperConstants.GENERATOR_WRAPPER_C :
                     return new org.apache.axis.wsdl.wsdl2ws.c.WrapWriter(wscontext);
                 case WrapperConstants.GENERATOR_WRAPPER_H :
@@ -78,40 +82,40 @@ public class SourceWriterFactory
                     return new org.apache.axis.wsdl.wsdl2ws.c.ClientStubWriter(wscontext);
             }
         }
-        else
-            if ("document".equals(wscontext.getWrapInfo().getWrapperStyle()))
+        else if ("document".equals(wscontext.getWrapInfo().getWrapperStyle()))
+        {
+            switch (generatorType)
             {
-                switch (generatorType)
-                {
-                    // C++
-                    case WrapperConstants.GENERATOR_WRAPPER_CPP :
-                        return new org.apache.axis.wsdl.wsdl2ws.cpp.literal.WrapWriter(wscontext);
-                    case WrapperConstants.GENERATOR_WRAPPER_HPP :
-                        return new org.apache.axis.wsdl.wsdl2ws.cpp.literal.WrapHeaderWriter(wscontext);
-                    case WrapperConstants.GENERATOR_SERVICE_HPP :
-                        return new org.apache.axis.wsdl.wsdl2ws.cpp.literal.ServiceHeaderWriter(wscontext);
-                    case WrapperConstants.GENERATOR_CLIENT_STUB_HPP :
-                        return new org.apache.axis.wsdl.wsdl2ws.cpp.literal.ClientStubHeaderWriter(wscontext);
-                    case WrapperConstants.GENERATOR_CLIENT_STUB_CPP :
-                        return new org.apache.axis.wsdl.wsdl2ws.cpp.literal.ClientStubWriter(wscontext);
-                    case WrapperConstants.GENERATOR_SERVER_EXCEPTION :
-                        // nithya
-                        return new org.apache.axis.wsdl.wsdl2ws.cpp.AllExceptionWriter(wscontext, "Server");
-                        //C
-                    case WrapperConstants.GENERATOR_WRAPPER_C :
-                        return new org.apache.axis.wsdl.wsdl2ws.c.literal.WrapWriter(wscontext);
-                    case WrapperConstants.GENERATOR_WRAPPER_H :
-                        return new org.apache.axis.wsdl.wsdl2ws.c.WrapHeaderWriter(wscontext);
-                    case WrapperConstants.GENERATOR_SERVICE_C :
-                        return new org.apache.axis.wsdl.wsdl2ws.c.literal.ServiceWriter(wscontext);
-                    case WrapperConstants.GENERATOR_CLASSLOADER_C :
-                        return new org.apache.axis.wsdl.wsdl2ws.c.ClassLoader(wscontext);
-                    case WrapperConstants.GENERATOR_CLIENT_STUB_H :
-                        return new org.apache.axis.wsdl.wsdl2ws.c.literal.ClientStubHeaderWriter(wscontext);
-                    case WrapperConstants.GENERATOR_CLIENT_STUB_C :
-                        return new org.apache.axis.wsdl.wsdl2ws.c.literal.ClientStubWriter(wscontext);
-                }
+                // C++
+                case WrapperConstants.GENERATOR_WRAPPER_CPP :
+                    return new org.apache.axis.wsdl.wsdl2ws.cpp.literal.WrapWriter(wscontext);
+                case WrapperConstants.GENERATOR_WRAPPER_HPP :
+                    return new org.apache.axis.wsdl.wsdl2ws.cpp.literal.WrapHeaderWriter(wscontext);
+                case WrapperConstants.GENERATOR_SERVICE_HPP :
+                    return new org.apache.axis.wsdl.wsdl2ws.cpp.literal.ServiceHeaderWriter(wscontext);
+                case WrapperConstants.GENERATOR_CLIENT_STUB_HPP :
+                    return new org.apache.axis.wsdl.wsdl2ws.cpp.literal.ClientStubHeaderWriter(wscontext);
+                case WrapperConstants.GENERATOR_CLIENT_STUB_CPP :
+                    return new org.apache.axis.wsdl.wsdl2ws.cpp.literal.ClientStubWriter(wscontext);
+                case WrapperConstants.GENERATOR_SERVER_EXCEPTION :
+                    return new org.apache.axis.wsdl.wsdl2ws.cpp.AllExceptionWriter(wscontext, "Server");
+                    
+                //C
+                case WrapperConstants.GENERATOR_WRAPPER_C :
+                    return new org.apache.axis.wsdl.wsdl2ws.c.literal.WrapWriter(wscontext);
+                case WrapperConstants.GENERATOR_WRAPPER_H :
+                    return new org.apache.axis.wsdl.wsdl2ws.c.WrapHeaderWriter(wscontext);
+                case WrapperConstants.GENERATOR_SERVICE_C :
+                    return new org.apache.axis.wsdl.wsdl2ws.c.literal.ServiceWriter(wscontext);
+                case WrapperConstants.GENERATOR_CLASSLOADER_C :
+                    return new org.apache.axis.wsdl.wsdl2ws.c.ClassLoader(wscontext);
+                case WrapperConstants.GENERATOR_CLIENT_STUB_H :
+                    return new org.apache.axis.wsdl.wsdl2ws.c.literal.ClientStubHeaderWriter(wscontext);
+                case WrapperConstants.GENERATOR_CLIENT_STUB_C :
+                    return new org.apache.axis.wsdl.wsdl2ws.c.literal.ClientStubWriter(wscontext);
             }
+        }
+        
         throw new WrapperFault("Source writer type not found");
     }
 }
