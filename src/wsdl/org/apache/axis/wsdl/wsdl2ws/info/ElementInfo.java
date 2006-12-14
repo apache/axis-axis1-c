@@ -31,22 +31,15 @@ public class ElementInfo
     private int minOccurs = 1;
     private boolean nillable = false;
 
-    //Dushshantha
     //this variable states whether this element is an xsd:choice or not
     private boolean choiceElement = false;
-    //............................................
     
-    //Chinthana:
     //this variable states whether this element is an xsd:all or not
     private boolean allElement = false;
-    //............................................
     
-    
-    //  Dushshantha:
     //This field is set to true if the element is elementFormDefault qualified.
     //This specifies whether the element must be namespace qualified or not in the SOAP message.
     private boolean nsQualified = false;
-    
     
     public ElementInfo(QName name, Type type)
     {
@@ -127,81 +120,70 @@ public class ElementInfo
         this.type = type;
     }
 
-	/**
-	 * @return boolean
-	 */
-	public boolean getNillable()
-	{
-		return this.nillable;
-	}
+    /**
+     * @return boolean
+     */
+    public boolean getNillable()
+    {
+        return this.nillable;
+    }
 
-	/**
-	 * @param boolean
-	 */
-	public void setNillable( boolean newNillable)
-	{
-		this.nillable = newNillable;
-	}
+    /**
+     * @param boolean
+     */
+    public void setNillable( boolean newNillable)
+    {
+        this.nillable = newNillable;
+    }
 
     /* (non-Javadoc)
      * @see java.lang.Object#toString()
      */
     public String toString()
     {
-        String str =
-            "("
-                + name
-                + ","
+        String str = "("
+                + name + ","
                 + type.getName()
-                + "| max = "
-                + maxOccurs
-                + " min ="
-                + minOccurs
+                + "| max = " + maxOccurs + " min =" + minOccurs
                 + "|)\n";
         return str;
     }
     
-    //Dushshantha:
     //getter and setter for the attribute choiceElement
     
     public boolean getChoiceElement()
-	{
-		return this.choiceElement;
-	}
-	
-	public void setChoiceElement( boolean newChoiceElement)
-	{
-		this.choiceElement = newChoiceElement;
-	}
-	//.................................................
-	
-    //Chinthana:
+    {
+        return this.choiceElement;
+    }
+    
+    public void setChoiceElement( boolean newChoiceElement)
+    {
+        this.choiceElement = newChoiceElement;
+    }
+    
     //getter and setter for the attribute allElement
     
     public boolean getAllElement()
-	{
-		return this.allElement;
-	}
-	
-	public void setAllElement( boolean newAllElement)
-	{
-		this.allElement = newAllElement;
-	}
-	//04/05/2005.................................................
-	
-	
-	/**
+    {
+        return this.allElement;
+    }
+    
+    public void setAllElement( boolean newAllElement)
+    {
+        this.allElement = newAllElement;
+    }
+    
+    /**
      * Dushshantha:
      * Getter and setter for the field nsQualified 
      */
-    public boolean getNsQualified(){
-    	return nsQualified;
+    public boolean getNsQualified()
+    {
+        return nsQualified;
     }
     
-    public void setNsQualified(boolean nsQual){
-    	nsQualified = nsQual;
+    public void setNsQualified(boolean nsQual)
+    {
+        nsQualified = nsQual;
     }
-    
-
-
 }
