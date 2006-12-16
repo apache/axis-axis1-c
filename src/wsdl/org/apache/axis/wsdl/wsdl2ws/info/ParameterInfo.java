@@ -36,6 +36,21 @@ public class ParameterInfo
     private boolean isNillable = false;
     private boolean isOptional = false;
 
+    public String toString()
+    {
+        String str ="\n---------BEGIN ParameterInfo------------\n";
+        str = str + "type = "                 + type.getName() + "\n";
+        str = str + "attribName ="            + attribName + "\n";
+        str = str + "elementName ="           + elementName + "\n";
+        str = str + "isAnyType ="             + isAnyType + "\n";
+        str = str + "isArray ="               + isArray + "\n";
+        str = str + "isAttribute ="           + isAttribute + "\n";
+        str = str + "isNillable = "           + isNillable + "\n";
+        str = str + "isOptional = "           + isOptional + "\n";
+        str = str + "------------END ParameterInfo-------------\n";
+
+        return str;
+    }
     
     public boolean isNillable()
     {

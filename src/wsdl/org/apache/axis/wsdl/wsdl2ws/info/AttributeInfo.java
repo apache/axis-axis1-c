@@ -49,6 +49,29 @@ public class AttributeInfo extends ParameterInfo
     //This specifies whether the element must be namespace qualified or not in the SOAP message.
     private boolean nsQualified = false;
     
+    public String toString()
+    {
+        String str = "\n---------BEGIN AttributeInfo------------\n";
+        str = str + super.toString();
+        str = str + "isOptional = "           + isOptional + "\n";
+        str = str + "isAttribute ="           + isAttribute + "\n";
+        str = str + "isSimpleType ="          + isSimpleType + "\n";
+        str = str + "maxOccurs ="             + maxOccurs + "\n";
+        str = str + "minOccurs ="             + minOccurs + "\n";
+        str = str + "typeName = "             + typeName + "\n";
+        str = str + "typeNamespace = "        + typeNamespace + "\n";
+        str = str + "className ="             + className + "\n";
+        str = str + "attribNameAsMember ="    + attribNameAsMember + "\n";
+        str = str + "choiceElement = "        + choiceElement + "\n";
+        str = str + "allElement ="            + allElement + "\n";
+        str = str + "nsQualified ="           + nsQualified + "\n";
+
+        str = str + "-----------END AttributeInfo---------------\n";
+
+        return str;
+    }
+    
+    
     /**
      */
     public AttributeInfo(String className)
