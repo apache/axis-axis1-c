@@ -237,25 +237,6 @@ public abstract class ParamWriter extends BasicFileWriter
         }
     }
 
-    /* This is a must for complex wsdl file (cycle in includes)*/
-    protected String getCHeaderFileCorrectParmNameConsideringArraysAndComplexTypes(AttributeInfo attrib)
-        throws WrapperFault
-    {
-        if (attrib.isArray())
-        {
-            if (attrib.isSimpleType())
-                return CUtils.getBasicArrayNameforType(attrib.getTypeName());
-            else
-                return CUtils.getCmplxArrayNameforType(attrib.getSchemaName());
-        }
-        else if (!attrib.isSimpleType())
-            return attrib.getTypeName() + "*";
-        else if (attrib.isAttribute() && attrib.isOptional())
-            return attrib.getTypeName() + "*";
-        else
-            return attrib.getTypeName();
-    }
-
     protected boolean isElementNillable(int index)
     {
         boolean bNillable = false;
