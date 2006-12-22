@@ -263,7 +263,11 @@ public class ParmHeaderFileWriter extends ParamWriter
         {
             for (int i = 0; i < attribs.length; i++)
             {  
-                attribs[i].setParamName( CUtils.sanitiseAttributeName( classname, attribs[i].getParamName()));
+                // Ensure field name is valid and does not cause conflict with class names
+                String sanitizedAttrName = CUtils.sanitiseAttributeName(attribs[i].getParamName());
+                if (CUtils.classExists(wscontext, sanitizedAttrName))
+                    sanitizedAttrName += "_";
+                attribs[i].setParamName(sanitizedAttrName);
                 
                 if (isElementNillable(i) 
                         || attribs[i].isArray() 

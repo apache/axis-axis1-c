@@ -1231,16 +1231,32 @@ public class CUtils
         return sanitisedName;
     }
     
-    public static String sanitiseAttributeName( String classname, String name)
+    // TODO - get rid of this and jsut call above routine directly.
+    public static String sanitiseAttributeName(String name)
     {
         String sanitisedName = sanitiseClassName( name);
-        
-        if( classname.equals( sanitisedName))
-            sanitisedName += "_";
-        
         return sanitisedName;
     }
 
+    public static boolean classExists(WebServiceContext wscontext, String name)
+    {   
+        Type atype;
+        String atypeName;
+        Iterator types = wscontext.getTypemap().getTypes().iterator();
+        while (types.hasNext())
+        {
+            atype = (Type) types.next();
+            if (!atype.isExternalized())
+                continue;
+
+            atypeName = atype.getLanguageSpecificName();
+            if (null != atypeName && atypeName.equals( name ))
+                return true;
+        }
+        
+        return false;
+    }
+    
     /**
      * This routine is used to basically handle anonymous type naming.  Anonymous types
      * have names such as '>type' and '>>type>type2', the latter being a nested type. 

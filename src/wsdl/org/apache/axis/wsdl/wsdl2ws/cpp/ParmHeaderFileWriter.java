@@ -316,7 +316,12 @@ public class ParmHeaderFileWriter extends ParamWriter
             writer.write("public:\n");
             for (int i = 0; i < attribs.length; i++)
             {
-                attribs[i].setParamName( CUtils.sanitiseAttributeName(classname, attribs[i].getParamName()));
+                // Ensure field name is valid and does not cause conflict with class names
+                String sanitizedAttrName = CUtils.sanitiseAttributeName(attribs[i].getParamName());
+                attribs[i].setMethodName(sanitizedAttrName);
+                if (CUtils.classExists(wscontext, sanitizedAttrName))
+                    sanitizedAttrName += "_";
+                attribs[i].setParamName(sanitizedAttrName);
                 
                 if (isElementNillable(i) 
                         || attribs[i].isArray() 
@@ -412,15 +417,7 @@ public class ParmHeaderFileWriter extends ParamWriter
         {
             for (int i = 0; i < attribs.length; i++)
             {
-                String methodName = attribs[i].getParamNameWithoutSymbols();
-                
-                if( methodName.endsWith( "_"))
-                {
-                    String localMethodName = methodName.substring( 0, methodName.length() - 1);
-                    
-                    if( localMethodName.equals( classname))
-                        methodName = localMethodName; 
-                }
+                String methodName = attribs[i].getMethodName();
                 
                 if (isElementNillable(i)  || attribs[i].isArray() || isElementOptional(i))
                 {

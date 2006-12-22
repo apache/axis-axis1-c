@@ -38,6 +38,7 @@ public class AttributeInfo extends ParameterInfo
     private String typeNamespace;
     private String className;
     private String attribNameAsMember;
+    private String methodName;
     
     //this variable states whether the attribute is an xsd:choice
     private boolean choiceElement = false;
@@ -162,6 +163,7 @@ public class AttributeInfo extends ParameterInfo
         this.isSimpleType = isSimpleType;
     }
 
+    // TODO - probably can remove since we sanitize attribute name.
     public String getParamNameAsMember()
     {
         this.attribNameAsMember = super.getParamNameWithoutSymbols();
@@ -177,6 +179,7 @@ public class AttributeInfo extends ParameterInfo
     {
         super.setParamName(paramName);
         
+        // TODO - probably can remove since we sanitize attribute name.
         // make sure attributes does not have the same name as class name
         if (this.className != null && this.className.equals(attribName))
             this.attribNameAsMember = "m_" + attribName;
@@ -250,5 +253,15 @@ public class AttributeInfo extends ParameterInfo
     public void setMinOccurs(int minOccurs)
     {
         this.minOccurs = minOccurs;
+    }
+    
+    public String getMethodName()
+    {
+        return methodName;
+    }
+
+    public void setMethodName(String methodName)
+    {
+        this.methodName = methodName;
     }
 }

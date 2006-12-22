@@ -67,6 +67,8 @@ public class BeanParamWriter extends ParamCPPFileWriter
     {
         try
         {
+            // Ensure writeGetSetMethods() is first since it ensure attribute name does not conflict with
+            // existing classes
             writeGetSetMethods();
             writeSerializeGlobalMethod();
             writeDeSerializeGlobalMethod();
@@ -98,20 +100,17 @@ public class BeanParamWriter extends ParamCPPFileWriter
         {
             for (int i = 0; i < attribs.length; i++)
             {
-                attribs[i].setParamName( CUtils.sanitiseAttributeName(classname, attribs[i].getParamName()));
+                // Ensure field name is valid and does not cause conflict with class names
+                String sanitizedAttrName = CUtils.sanitiseAttributeName(attribs[i].getParamName());
+                attribs[i].setMethodName(sanitizedAttrName);
+                if (CUtils.classExists(wscontext, sanitizedAttrName))
+                    sanitizedAttrName += "_";
+                attribs[i].setParamName(sanitizedAttrName);
 
-                String methodName = attribs[i].getParamNameWithoutSymbols();
-                String parameterName = methodName;
+                String methodName = attribs[i].getMethodName();
+                String parameterName = sanitizedAttrName;
                 String properParamName = getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]);
                 String type = attribs[i].getTypeName();
-
-                if( methodName.endsWith( "_"))
-                {
-                    String localMethodName = methodName.substring( 0, methodName.length() - 1);
-                    
-                    if( localMethodName.equals( classname))
-                        methodName = localMethodName; 
-                }
                 
                 if (attribs[i].isArray())
                 {
@@ -932,8 +931,6 @@ public class BeanParamWriter extends ParamCPPFileWriter
                             baseTypeName = CUtils.getclass4qname (type.getBaseType ());
                         else
                             baseTypeName = typeName;
-
-                        String elementName = attribs[i].getParamNameAsMember();
                         
                         if( isPointerType)
                         {
@@ -949,15 +946,11 @@ public class BeanParamWriter extends ParamCPPFileWriter
                         }
                         
                         writer.write( "\t\t\tif( pValue" + i + " == NULL)\n");
-                        writer.write("\t\t\t\tparam->" + elementName + " = NULL;\n");
+                        writer.write("\t\t\t\tparam->" + attribs[i].getParamNameAsMember() + " = NULL;\n");
                         writer.write( "\t\t\telse\n");
                         writer.write( "\t\t\t{\n");
                         
-                        String localElemName = elementName;
-                        if( elementName.endsWith( "_"))
-                            localElemName = elementName.substring( 0, elementName.length() - 1);
-                        
-                        writer.write("\t\t\t\tparam->set" + localElemName + " (pValue" + i + ");\n");
+                        writer.write("\t\t\t\tparam->set" + attribs[i].getMethodName() + " (pValue" + i + ");\n");
                         writer.write("\t\t\t\tAxis::AxisDelete( (void *) pValue" + i + ", " 
                                 + CUtils.getXSDTypeForBasicType( baseTypeName) + ");\n\n");
                         writer.write( "\t\t\t}\n\n");
@@ -981,13 +974,9 @@ public class BeanParamWriter extends ParamCPPFileWriter
                             + CUtils.getParameterGetValueMethodName(
                                     attribs[i].getTypeName(), attribs[i].isAttribute()) + "( \""
                             + elementNameToSearchFor + "\",0)) != NULL)\n\t{\n");
-                    
-                    String localElemName = attribs[i].getParamNameAsMember();
-                    if( localElemName.endsWith( "_"))
-                        localElemName = localElemName.substring( 0, localElemName.length() - 1);
 
                     writer.write("\t\tparam->set"
-                            + localElemName + "(* " + attribs[i].getParamNameAsMember() + " );\n");
+                            + attribs[i].getMethodName() + "(* " + attribs[i].getParamNameAsMember() + " );\n");
                     writer.write("\t\tAxis::AxisDelete( (void *) " + attribs[i].getParamNameAsMember() + ", " + CUtils.getXSDTypeForBasicType( attribs[i].getTypeName()) + ");\n");
                     writer.write("\t}\n");                        
                 }
@@ -1211,15 +1200,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     {
                         writer.write("\t" + attribs[i].getParamName() + " = NULL;\n");
                         writer.write("\t__axis_deepcopy_" + attribs[i].getParamName() + " = false;\n");
-                        String methodName = attribs[i].getParamNameWithoutSymbols();
-                        if( methodName.endsWith( "_"))
-                        {
-                            String localMethodName = methodName.substring( 0, methodName.length() - 1);
-                            
-                            if( localMethodName.equals( classname))
-                                methodName = localMethodName; 
-                        }
-                        writer.write("\tset" + methodName + "(original." + attribs[i].getParamName() + ", original.__axis_deepcopy_" + attribs[i].getParamName() + ");\n\n");
+                        writer.write("\tset" + attribs[i].getMethodName() + "(original." + attribs[i].getParamName() + ", original.__axis_deepcopy_" + attribs[i].getParamName() + ");\n\n");
                     }
                     else if (attribs[i].isSimpleType())
                     {

@@ -52,6 +52,8 @@ public class BeanParamWriter extends ParamCFileWriter
     {
         try
         {
+            // Ensure writeSerializeGlobalMethod() is first since it ensure attribute name does not conflict with
+            // existing classes
             writeSerializeGlobalMethod();
             writeDeSerializeGlobalMethod();
             writeCreateGlobalMethod();
@@ -129,6 +131,12 @@ public class BeanParamWriter extends ParamCFileWriter
         writer.write("\t/* If there are any attributes serialize them. If there aren't then close the tag */\n");
         for (int i = 0; i < attributeParamCount; i++)
         {
+            // Ensure field name is valid and does not cause conflict with class names
+            String sanitizedAttrName = CUtils.sanitiseAttributeName(attribs[i].getParamName());
+            if (CUtils.classExists(wscontext, sanitizedAttrName))
+                sanitizedAttrName += "_";
+            attribs[i].setParamName(sanitizedAttrName);
+            
             if (attribs[i].isArray() || !(attribs[i].isSimpleType() || attribs[i].getType().isSimpleType()))
             {
                 throw new WrapperFault("Error : an attribute is not basic type");
