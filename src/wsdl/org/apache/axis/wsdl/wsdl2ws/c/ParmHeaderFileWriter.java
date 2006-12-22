@@ -27,9 +27,9 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Vector;
-import java.util.HashSet;
 
 import javax.xml.namespace.QName;
 
@@ -38,25 +38,16 @@ import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.ParamWriter;
 import org.apache.axis.wsdl.wsdl2ws.WSDL2Ws;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
-import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
 public class ParmHeaderFileWriter extends ParamWriter
 {
-    /**
-     * @param wscontext
-     * @param type
-     * @throws WrapperFault
-     */
     public ParmHeaderFileWriter(WebServiceContext wscontext, Type type) throws WrapperFault
     {
         super(wscontext, type);
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.axis.wsdl.wsdl2ws.SourceWriter#writeSource()
-     */
     public void writeSource() throws WrapperFault
     {
         try
@@ -69,7 +60,7 @@ public class ParmHeaderFileWriter extends ParamWriter
             this.writer.write("#define __" + classname.toUpperCase() + "_H__INCLUDED_\n\n");
             
             if (type.isSimpleType())
-                writeSimpleTypeWithEnumerations();
+                writeSimpleTypeWithRestrictions();
             else
             {
                 writePreprocessorStatements();
@@ -110,7 +101,7 @@ public class ParmHeaderFileWriter extends ParamWriter
     /**
      * @throws WrapperFault
      */
-    protected void writeSimpleTypeWithEnumerations() throws WrapperFault
+    protected void writeSimpleTypeWithRestrictions() throws WrapperFault
     {
         try
         {
@@ -125,9 +116,24 @@ public class ParmHeaderFileWriter extends ParamWriter
             if (!CUtils.isSimpleType(baseType))
                 return;
             
+            String baseTypeName = CUtils.getclass4qname(baseType);
+            String langTypeName;
+            
+            // User defined simple type based on another user-defined simple type
+            String  restrictionBaseType = type.getRestrictionBaseType();
+            if (null != restrictionBaseType )
+            {  
+                langTypeName = CUtils.sanitiseClassName(restrictionBaseType);               
+                writer.write( "#include \"" + langTypeName + ".hpp\"\n\n");
+            }
+            else
+                langTypeName = baseTypeName;
+            
+
+
             writer.write("\n");
             writer.write("/* ********************************************************************* */\n");
-            writer.write("/* --- Simple types and enumerations                                 --- */\n");
+            writer.write("/* --- Simple types and restrictions                                 --- */\n");
             writer.write("/* ********************************************************************* */\n");
             writer.write("\n");  
             
@@ -146,11 +152,10 @@ public class ParmHeaderFileWriter extends ParamWriter
                     break;
             }
             
-            String langTypeName = CUtils.getclass4qname(baseType);
             writer.write("typedef ");
-            if (CUtils.isPointerType(CUtils.getclass4qname(baseType)) 
-                    || "xsdc__base64Binary".equals(CUtils.getclass4qname(baseType)) 
-                    || "xsdc__hexBinary".equals(CUtils.getclass4qname(baseType)))
+            if (CUtils.isPointerType(baseTypeName) 
+                    || "xsdc__base64Binary".equals(baseTypeName) 
+                    || "xsdc__hexBinary".equals(baseTypeName))
             {
                 writer.write(langTypeName + " " + classname + ";\n");
                 writer.write("typedef " + langTypeName + "_Array " + classname + "_Array;\n");
@@ -182,11 +187,14 @@ public class ParmHeaderFileWriter extends ParamWriter
             } 
             else if ("int".equals(baseType.getLocalPart()))
             {
+                writer.write(langTypeName + " " + classname + ";\n");
+                writer.write("typedef " + langTypeName + "_Array " + classname + "_Array;\n");
+            
                 if (restrictionData.size() > 1)
                 {
                     //there are enumerations or min/maxInclusive
                     boolean isEnum = false;
-                    boolean hasRestrictionItems = false;
+
                     for (int i = 1; i < restrictionData.size(); i++)
                     {
                         QName value = (QName) restrictionData.elementAt(i);
@@ -196,7 +204,7 @@ public class ParmHeaderFileWriter extends ParamWriter
                             if (i > 1)
                                 writer.write(", ");
                             else
-                                writer.write(" enum { ");
+                                writer.write("typedef enum { ");
 
                             writer.write("ENUM" + classname.toUpperCase() + "_"
                                     + value.getNamespaceURI() + "="
@@ -204,36 +212,25 @@ public class ParmHeaderFileWriter extends ParamWriter
                         } 
                         else if ("minInclusive".equals(value.getLocalPart()))
                         {
-                            hasRestrictionItems = true;
-                            if (i <= 1)
-                                writer.write(langTypeName + " " + classname + ";\n");
-                            
                             writer.write("static const int " + classname
                                     + "_MinInclusive = " + value.getNamespaceURI() + ";\n");
                         } 
                         else if ("maxInclusive".equals(value.getLocalPart()))
                         {
-                            hasRestrictionItems = true;
-                            if (i <= 1)
-                                writer.write(langTypeName + " " + classname + ";\n");
-
                             writer.write("static const int " + classname
                                     + "_MaxInclusive = " + value.getNamespaceURI() + ";\n");
                         }
                     }
                     
                     if (isEnum)
-                        writer.write("} " + classname + ";\n");
-                    else if (!hasRestrictionItems)
-                        writer.write(langTypeName + " " + classname + ";\n");
+                        writer.write("} " + classname + "_Enum;\n");
                 } 
-                else
-                    writer.write(langTypeName + " " + classname + ";\n");
             } 
             else
             {
                 writer.write(langTypeName + " " + classname + ";\n");
-                writer.write("\n");
+                writer.write("typedef " + langTypeName + "_Array " + classname + "_Array;\n");
+                
                 for (int i = 1; i < restrictionData.size(); i++)
                 {
                     QName value = (QName) restrictionData.elementAt(i);
@@ -255,10 +252,6 @@ public class ParmHeaderFileWriter extends ParamWriter
         }
     }
     
-    
-    /* (non-Javadoc)
-     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#writeAttributes()
-     */
     protected void writeAttributes() throws WrapperFault
     {
         int anyCounter = 0;
@@ -466,13 +459,28 @@ public class ParmHeaderFileWriter extends ParamWriter
             HashSet typeSet = new HashSet();
             for (int i = 0; i < attribs.length; i++)
             {
-                if ((attribs[i].isArray()) && 
-                        !(attribs[i].isSimpleType() || attribs[i].getType().isSimpleType()))
-                    typeSet.add(attribs[i].getTypeName() + "_Array");
+                String basicType = attribs[i].getTypeName();
+                Type theType = attribs[i].getType();
 
-                if (!(attribs[i].isSimpleType() || attribs[i].isAnyType()))
-                    typeSet.add(attribs[i].getTypeName());
+                if (theType.isRestriction() && !CUtils.isSimpleType(basicType))
+                    typeSet.add(basicType);
+                else if (!attribs[i].isSimpleType())
+                {
+                    if ((attribs[i].isArray()) && !theType.isSimpleType())
+                        typeSet.add(basicType + "_Array");
+    
+                    if (!attribs[i].isAnyType())
+                        typeSet.add(basicType);
+                }
             }
+            
+            if (extensionBaseAttrib != null 
+                    && getCorrectParmNameConsideringArraysAndComplexTypes(extensionBaseAttrib) != null)
+            {
+                String extBaseType = getCorrectParmNameConsideringArraysAndComplexTypes(extensionBaseAttrib);
+                if (!CUtils.isSimpleType(extBaseType))
+                    typeSet.add(extBaseType);
+            }            
             
             Iterator itr = typeSet.iterator();
             if (itr.hasNext())

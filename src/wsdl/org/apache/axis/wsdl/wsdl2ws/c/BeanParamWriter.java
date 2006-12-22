@@ -39,11 +39,6 @@ import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
 public class BeanParamWriter extends ParamCFileWriter
 {
-    /**
-     * @param wscontext
-     * @param type
-     * @throws WrapperFault
-     */
     public BeanParamWriter(WebServiceContext wscontext, Type type)
         throws WrapperFault
     {
@@ -149,21 +144,14 @@ public class BeanParamWriter extends ParamCFileWriter
                     soapTagName = soapTagName.substring(1, soapTagName.length());
 
                 Type type = attribs[i].getType();
-                boolean isPointerType = false;
                 String basicType = null;
                 
                 if (!attribs[i].isSimpleType() && type.isSimpleType())
-                {
-                    basicType = CUtils.getclass4qname(attribs[i].getType().getBaseType());
-                    isPointerType = CUtils.isPointerType(CUtils.getclass4qname(type.getBaseType())); 
-                }
+                    basicType = CUtils.getclass4qname(type.getBaseType());
                 else
-                {
                     basicType = attribs[i].getTypeName();
-                    isPointerType = CUtils.isPointerType(attribs[i].getTypeName());
-                }
                 
-                if (isPointerType)
+                if (CUtils.isPointerType(basicType))
                 {
                     writer.write("\tif (0 != param->" + attribs[i].getParamNameAsMember() + ")\n");
                     writer.write("\t\taxiscSoapSerializerSerializeAsAttribute(pSZ,\""
@@ -179,17 +167,6 @@ public class BeanParamWriter extends ParamCFileWriter
                             + attribs[i].getParamNameAsMember()
                             + "), "
                             + CUtils.getXSDTypeForBasicType(attribs[i].getTypeName()) + ");\n");
-                }
-                
-                if (!attribs[i].isOptional())
-                {
-                    /* This avoid segmentation fault at runtime */
-                    /*
-                     * writer.write("\telse\n");
-                     * writer.write("\t\tAXISTRACE1(\"The mandatory attribute
-                     * "+attribs[i].getParamName()+" is not set\",
-                     * CRITICAL);\n");
-                     */
                 }
             }
         }
@@ -404,7 +381,6 @@ public class BeanParamWriter extends ParamCFileWriter
 
     /**
      * @throws IOException
-     * @throws WrapperFault
      */
     private void writeDeSerializeGlobalMethod() throws IOException, WrapperFault
     {

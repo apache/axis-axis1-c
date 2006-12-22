@@ -235,9 +235,9 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                 else
                 {
                     writer.write("\n\t" + paraTypeName + " v" + i);
-                    if (!"xsd__base64Binary".equals(paraTypeName) 
-                            && !"xsd__hexBinary".equals(paraTypeName))
-                        writer.write(" = " + CUtils.getInitValue(paraTypeName));
+                    String typeInitValue = CUtils.getInitValue(paraTypeName);
+                    if (typeInitValue != null)
+                        writer.write(" = " + typeInitValue);
 
                     writer.write(";\n");
                     writer.write("\t"

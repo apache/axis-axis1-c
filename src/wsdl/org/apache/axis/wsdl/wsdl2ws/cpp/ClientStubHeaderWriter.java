@@ -192,6 +192,8 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
 
     /* (non-Javadoc)
      * @see org.apache.axis.wsdl.wsdl2ws.cpp.HeaderFileWriter#writePreprocssorStatements()
+     * TODO: Not sure why this method should not be the same as the one in literal/ directory - 
+     *       that is, move the one in literal dir here and remove it from literal/ClientStubHeaderWriter.java
      */
     protected void writePreprocessorStatements() throws WrapperFault
     {
@@ -201,10 +203,14 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
             writer.write("#include <axis/OtherFaultException.hpp>\n");
             writer.write("#include <axis/ISoapAttachment.hpp>\n");
             writer.write("#include <axis/ISoapFault.hpp>\n");
+            writer.write("\n");
             writer.write("AXIS_CPP_NAMESPACE_USE\n");
+            writer.write("\n");
+            
             Type atype;
             Iterator types = this.wscontext.getTypemap().getTypes().iterator();
             HashSet typeSet = new HashSet();
+            HashSet removeSet = new HashSet();
             String typeName = null;
             
             while (types.hasNext())
@@ -216,7 +222,14 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
                 typeName = WrapperUtils.getLanguageTypeName4Type(atype);
                 if (null != typeName)
                     typeSet.add(typeName);
+          
+                if (atype.isRestriction())
+                    removeSet.add(atype.getLanguageSpecificName()  + "_Array");                
             }
+            
+            Iterator ritr = removeSet.iterator();
+            while (ritr.hasNext())
+                typeSet.remove(ritr.next());
             
             Iterator itr = typeSet.iterator();
             while (itr.hasNext())

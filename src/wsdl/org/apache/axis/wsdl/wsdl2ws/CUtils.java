@@ -39,6 +39,7 @@ import org.apache.axis.wsdl.symbolTable.SchemaUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.TypeMap;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
+import org.apache.axis.wsdl.symbolTable.CSchemaUtils;
 
 public class CUtils 
 {
@@ -825,14 +826,25 @@ public class CUtils
     public static boolean isPointerType(String name)
     {
         Object o = isPointerBasedType.get(name);
-        boolean    b = false;
         
         if( o != null)
-            b = ((Boolean) isPointerBasedType.get(name)).booleanValue();
+            return ((Boolean)o).booleanValue();
         
-        return b;
+        return false;
     }
-    
+    public static boolean isPointerType(QName name)
+    {
+        Object o;
+        if (cpp)
+            o = qname2classmapCpp.get(name);
+        else
+            o = qname2classmapC.get(name);
+        
+        if (o != null)
+            return isPointerType((String)o);
+
+        return false;
+    }    
     public static boolean isAnyType(QName name)
     {
             return name.equals(anyTypeQname);
@@ -871,6 +883,7 @@ public class CUtils
             
             return methodname;
         }
+
         return null;    
     }
     
@@ -894,9 +907,10 @@ public class CUtils
             val = qname2classmapCpp.get(qname);
         else
             val = qname2classmapC.get(qname);
-        if (val != null)
-            return (String) val;
-        val = schemaDefinedSimpleTypesMap.get(qname);
+        
+        if (val == null)
+            val = schemaDefinedSimpleTypesMap.get(qname);
+        
         if (val != null)
             return (String) val;
         return null;
@@ -928,10 +942,7 @@ public class CUtils
         else
             enumName = (String)basicType2EnumMapC.get(stype);
         
-        if(enumName != null)
-            return enumName;
-
-        return null;    
+        return enumName;   
     }
     public static String getCmplxArrayNameforType(QName qname)
     {
@@ -953,7 +964,7 @@ public class CUtils
         else if (!cpp && type2BasicArrayNameC.containsKey(stype))
             return (String)type2BasicArrayNameC.get(stype);
         else
-            return "";
+            return stype + "_Array";
     }
     
     /**
@@ -961,11 +972,13 @@ public class CUtils
      * a Vector is returned which contains the base type and the values (enumerations etc).
      * The first element in the vector is the base type (an TypeEntry).
      * Subsequent elements are QNames.
+     * NEEDS WORK - CURRENTLY THE ONLY THING WE DO IS GENERATE ENUMERATOR CONSTANTS AND CREATE
+     * AN EMPTY RESTRICTOR FUNCTION WHEN DOING CODE GENERATION STEP.
      */
-    public static Vector getRestrictionBaseAndValues(Node node, SymbolTable symbolTable) 
+    public static void setRestrictionBaseAndValues(Type typedata, Node node, SymbolTable symbolTable) 
     {
         if (node == null)
-            return null;
+            return;
 
         // If the node kind is an element, dive into it.
         QName nodeKind = Utils.getNodeQName(node);
@@ -1006,28 +1019,169 @@ public class CUtils
                     Constants.isSchemaXSD(restrictionKind.getNamespaceURI()))
                     restrictionNode = children.item(j);
             }
+            
+            // If no restriction node, just return
+            if (restrictionNode == null)
+                return;
 
             // The restriction node indicates the type being restricted
             // (the base attribute contains this type).
-            // The base type must be a simple type, and not boolean
-            TypeEntry baseEType = null;
-            if (restrictionNode != null) 
+            QName baseType = Utils.getTypeQName(restrictionNode, new BooleanHolder(), false);
+            TypeEntry baseEType = symbolTable.getType(baseType);
+            
+            if (baseEType != null) 
             {
-                QName baseType = Utils.getTypeQName(restrictionNode, new BooleanHolder(), false);
-                baseEType = symbolTable.getType(baseType);
-                if (baseEType != null) 
+                QName  typedataQName     = typedata.getName();
+                String typedataLocalpart = typedataQName.getLocalPart();
+                String baseTypeLocalpart = baseEType.getQName().getLocalPart();
+                
+                QName  typedataQNameSanitized     = null;
+                String typedataLocalpartSanitized = null;
+                String baseTypeLocalpartSanitized = null;
+                
+                Boolean isPointer   = null;
+                String methodSuffix = null;
+                
+                String primitiveXSDType          = null;
+                String initValueForType          = null;
+                String classForPrimitiveType     = null;
+                
+                if (TypeMap.isAnonymousType(typedataLocalpart))
                 {
-                    String javaName = TypeMap.getBasicTypeClass4qname(baseEType.getQName());
-                    //String javaName = baseEType.getName();
-                    if (javaName == null || javaName.equals("boolean") ||
-                            ! SchemaUtils.isSimpleSchemaType(baseEType.getQName())) 
-                        baseEType = null;
+                    typedataQNameSanitized     = new QName(typedataQName.getNamespaceURI(), sanitiseClassName(typedataLocalpart));
+                    typedataLocalpartSanitized = sanitiseClassName(typedataLocalpart);
                 }
-            }
+                
+                if (TypeMap.isAnonymousType(baseTypeLocalpart))
+                    baseTypeLocalpartSanitized = sanitiseClassName(baseTypeLocalpart);
+                
+                String class4qname          = null;
+                String class4qnameSanitized = null;
+                
+                String javaName = TypeMap.getBasicTypeClass4qname(baseEType.getQName());
+                boolean isBaseTypePrimitive = javaName != null;
+                
+                QName primitiveBaseTypeQName = null;
+                
+                if (javaName == null)
+                {
+                    // No mapping - ensure that the base type is simple - if it is, then this 
+                    // must be a user-defined simple type that is based on another user-defined
+                    // simple type.
+                    if (!baseEType.isSimpleType()
+                            && !SchemaUtils.isSimpleSchemaType(baseEType.getQName())) 
+                        return;
 
-            // Process the enumeration elements underneath the restriction node
-            if (baseEType != null && restrictionNode != null) 
-            {
+                    // Get the primitive base type
+                    TypeEntry primitiveBaseType = CSchemaUtils.getBaseType(baseEType, symbolTable);
+                    primitiveBaseTypeQName      = primitiveBaseType.getQName();
+                }
+                else if (javaName.equals("boolean"))
+                    return;
+                else
+                    primitiveBaseTypeQName = baseEType.getQName();
+                
+                classForPrimitiveType = getclass4qname(primitiveBaseTypeQName);
+                initValueForType      = getInitValue(classForPrimitiveType);
+                
+                // Set the base type for Type
+                typedata.setBaseType(primitiveBaseTypeQName);
+                
+                // We will map the user-defined type to the user-defined type, so set
+                // mapping for the type.
+                class4qname          = typedataLocalpart;
+                class4qnameSanitized = typedataLocalpartSanitized;
+                
+                // Update some commonly-used mapping tables to reflect the user-defined
+                // simple type. If anonymous type, we need to update mapping tables twice: once
+                // with the anonymous names, and once with the sanitized names. 
+                
+                isPointer = new Boolean(isPointerType(primitiveBaseTypeQName));
+                primitiveXSDType = getXSDTypeForBasicType(classForPrimitiveType);
+
+                if (!isBaseTypePrimitive)
+                {
+                    typedata.setRestrictionBaseType(baseTypeLocalpart);
+                    isPointerBasedType.put(baseTypeLocalpart, isPointer);
+                }
+                isPointerBasedType.put(typedataLocalpart, isPointer);                    
+
+                if (cpp)
+                {
+                    methodSuffix = (String)type2getValueMethodNameCpp.get(classForPrimitiveType);
+                    
+                    qname2classmapCpp.put(typedataQName, class4qname);
+                    basicType2EnumMapCpp.put(typedataLocalpart, primitiveXSDType);
+                    if (initValueForType != null)
+                        initValuesCpp.put(typedataLocalpart, initValueForType);
+                    type2getValueMethodNameCpp.put(typedataLocalpart, methodSuffix);
+                    
+                    if (!isBaseTypePrimitive)
+                    {
+                        basicType2EnumMapCpp.put(baseTypeLocalpart, primitiveXSDType);
+                        if (initValueForType != null)
+                            initValuesCpp.put(baseTypeLocalpart, initValueForType);
+                        type2getValueMethodNameCpp.put(baseTypeLocalpart, methodSuffix);
+                    }
+
+                    if (typedataQNameSanitized != null)
+                    {
+                        isPointerBasedType.put(typedataLocalpartSanitized, isPointer); 
+                        qname2classmapCpp.put(typedataQNameSanitized, class4qnameSanitized);
+                        basicType2EnumMapCpp.put(typedataLocalpartSanitized, primitiveXSDType);
+                        if (initValueForType != null)
+                            initValuesCpp.put(typedataLocalpartSanitized, initValueForType);
+                        type2getValueMethodNameCpp.put(typedataLocalpartSanitized, methodSuffix);
+                    }
+                    
+                    if (baseTypeLocalpartSanitized != null)
+                    {
+                        isPointerBasedType.put(baseTypeLocalpartSanitized, isPointer);
+                        basicType2EnumMapCpp.put(baseTypeLocalpartSanitized, primitiveXSDType);
+                        if (initValueForType != null)
+                            initValuesCpp.put(baseTypeLocalpartSanitized, initValueForType);
+                        type2getValueMethodNameCpp.put(baseTypeLocalpartSanitized, methodSuffix);
+                    }
+                }
+                else
+                {
+                    methodSuffix = (String)type2getValueMethodNameC.get(classForPrimitiveType);
+                    
+                    qname2classmapC.put(typedataQName, class4qname);
+                    basicType2EnumMapC.put(typedataLocalpart, primitiveXSDType);
+                    if (initValueForType != null)
+                        initValuesC.put(typedataLocalpart, initValueForType);
+                    type2getValueMethodNameC.put(typedataLocalpart, methodSuffix);
+                    
+                    if (!isBaseTypePrimitive)
+                    {
+                        basicType2EnumMapC.put(baseTypeLocalpart, primitiveXSDType);
+                        if (initValueForType != null)
+                            initValuesC.put(baseTypeLocalpart, initValueForType);
+                        type2getValueMethodNameC.put(baseTypeLocalpart, methodSuffix);
+                    }
+
+                    if (typedataQNameSanitized != null)
+                    {
+                        isPointerBasedType.put(typedataLocalpartSanitized, isPointer); 
+                        qname2classmapC.put(typedataQNameSanitized, class4qnameSanitized);
+                        basicType2EnumMapC.put(typedataLocalpartSanitized, primitiveXSDType);
+                        if (initValueForType != null)
+                            initValuesC.put(typedataLocalpartSanitized, initValueForType);
+                        type2getValueMethodNameC.put(typedataLocalpartSanitized, methodSuffix);
+                    }
+                    
+                    if (baseTypeLocalpartSanitized != null)
+                    {
+                        isPointerBasedType.put(baseTypeLocalpartSanitized, isPointer);
+                        basicType2EnumMapC.put(baseTypeLocalpartSanitized, primitiveXSDType);
+                        if (initValueForType != null)
+                            initValuesC.put(baseTypeLocalpartSanitized, initValueForType);
+                        type2getValueMethodNameC.put(baseTypeLocalpartSanitized, methodSuffix);
+                    }
+                }                
+                
+                // Process the enumeration elements underneath the restriction node
                 Vector v = new Vector();                
                 NodeList enums = restrictionNode.getChildNodes();
                 for (int i=0; i < enums.getLength(); i++) 
@@ -1037,21 +1191,25 @@ public class CUtils
                     {
                         Node enumNode = enums.item(i);
                         String value = Utils.getAttribute(enumNode, "value");
-
-                        // HACK wollsch
+    
                         if (value.indexOf(':')>0)                                                        
                                 value=value.substring(value.indexOf(':')+1,value.length());
                         v.add(new QName(value, enumKind.getLocalPart()));
                     }
                 }
                 
-                // is this really an enumeration?
                 // The first element in the vector is a TypeEntry.
                 v.add(0,baseEType);
-                return v;
+                typedata.setRestrictiondata(v);
+                typedata.setRestriction(true);
+                
+                // Add schema-defined simple type to mapping table - TODO: not sure we need this anymore.
+                CUtils.addSchemaDefinedSimpleType(typedataQName, class4qname);
+                if (typedataQNameSanitized != null)
+                    CUtils.addSchemaDefinedSimpleType(typedataQNameSanitized, class4qnameSanitized);
             }
         }
-        return null;
+        return;
     }    
     
     public static String sanitiseClassName( String name)
@@ -1072,11 +1230,11 @@ public class CUtils
         
         return sanitisedName;
     }
-
+    
     public static String sanitiseAttributeName( String classname, String name)
     {
         String sanitisedName = sanitiseClassName( name);
-
+        
         if( classname.equals( sanitisedName))
             sanitisedName += "_";
         
@@ -1161,58 +1319,5 @@ public class CUtils
         
         return sNew;
     }
-    // vvv FJP - 17667
-    public static Type findBaseTypeOfRestriction( Type type, WebServiceContext wscontext)
-    {
-        // FJP - Find base type of the restricted type.
-        Type   restType = type;
-        String restBaseType = null;
-        int    restBaseCount = 10;
-        String restBaseClass = null;
-        
-        while( restType != null && restBaseClass == null && restBaseCount > 0)
-        {
-            restBaseType = restType.getRestrictionBase();
-            restBaseType = restBaseType.substring( restBaseType.indexOf( ":") + 1);
-            restBaseCount--;
-            // Is the restBaseType as base type?
-            restBaseClass = CUtils.getclass4qname( new QName( WrapperConstants.SOAPENC_NAMESPACE, restBaseType));
-
-            while( restBaseClass == null && restType != null)
-            {
-                // Find the type in the type list.
-                Iterator theBaseTypes = wscontext.getTypemap().getTypes().iterator();
-                
-                restType = null;
-                
-                while( theBaseTypes.hasNext())
-                {
-                    Type aType = (Type) theBaseTypes.next();
-                    
-                    if( aType.getName().getLocalPart().equals( restBaseType))
-                    {
-                        restType = aType;
-                        restBaseType = restType.getRestrictionBase();
-                        restBaseType = restBaseType.substring( restBaseType.indexOf( ":") + 1);
-                        restBaseClass = CUtils.getclass4qname( new QName( WrapperConstants.SOAPENC_NAMESPACE, restBaseType));
-                        break;
-                    }
-                }
-            }
-        }
-
-        return restType;
-    }
-    // ^^^ FJP - 17667
-
-    // vvv FJP - 17667
-    public static String getBaseTypeOfRestrictionAsString( Type type)
-    {
-        String restBaseType = type.getRestrictionBase();
-        restBaseType = restBaseType.substring( restBaseType.indexOf( ":") + 1);
-        
-        return CUtils.getclass4qname( new QName( WrapperConstants.SOAPENC_NAMESPACE, restBaseType));
-    }
-    // ^^^ FJP - 17667
 }
 

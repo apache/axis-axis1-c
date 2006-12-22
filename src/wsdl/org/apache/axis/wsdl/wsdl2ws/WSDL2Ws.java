@@ -822,7 +822,6 @@ public class WSDL2Ws
 
         Node node = type.getNode();
 
-        Vector restrictdata = null;
         if (type.isSimpleType())
         {
             //check for extended types
@@ -841,39 +840,17 @@ public class WSDL2Ws
                             + type.getQName().getLocalPart() + "=====\n");
             }
             else
-            {
-                //types declared as simpleType
-                restrictdata = CUtils.getRestrictionBaseAndValues(node, symbolTable);
-                if (restrictdata != null)
-                    typedata.setRestrictiondata(restrictdata);
-            }
+                CUtils.setRestrictionBaseAndValues(typedata, node, symbolTable);
             
             // There can be attributes in this extended basic type
             Vector attributes = CSchemaUtils.getContainedAttributeTypes(type.getNode(), symbolTable);
             if (attributes != null)
-            {
-                if( attributes.get(0).getClass() == CElementDecl.class)
-	                for (int j = 0; j < attributes.size(); j++)
-	                {
-	                    CElementDecl ed = (CElementDecl) attributes.get(j);
-	                    
-	                    if( ed.isRestriction())
-	                    {
-	                        typedata.setRestriction( true);
-	                        typedata.setRestrictionBase( ed.getRestrictionBase());
-	                        typedata.setRestrictionEnumeration( ed.getRestrictionEnumeration());
-	                        typedata.setRestrictionPattern( ed.getRestrictionPattern());
-	                    }
-	                }
-                else
-                    for (int j = 0; j < attributes.size(); j += 2)
-                    {
-                        newSecondaryType = createTypeInfo(((TypeEntry) attributes.get(j)).getQName(), targetLanguage);
-                        typedata.addRelatedType(newSecondaryType);
-                        typedata.setTypeForAttributeName(
-                            ((QName) attributes.get(j + 1)).getLocalPart(), newSecondaryType);
-                    }
-            }
+                for (int j = 0; j < attributes.size(); j += 2)
+                {
+                    newSecondaryType = createTypeInfo(((TypeEntry) attributes.get(j)).getQName(), targetLanguage);
+                    typedata.addRelatedType(newSecondaryType);
+                    typedata.setTypeForAttributeName(((QName) attributes.get(j + 1)).getLocalPart(), newSecondaryType);
+                }
         }
         else if (type instanceof CollectionType)
         {
@@ -969,22 +946,6 @@ public class WSDL2Ws
                                                     true,
                                                     targetLanguage);
                             }
-                            // vvv FJP - 17667
-                            // FJP - Check if element is an extension or restriction
-                            else if( elem.isRestriction())
-                            { // 8 
-                                typedata.setRestriction( true);
-                                typedata.setRestrictionBase( elem.getRestrictionBase());
-                                typedata.setRestrictionEnumeration(elem.getRestrictionEnumeration());
-                                typedata.setRestrictionPattern( elem.getRestrictionPattern());
-
-                                eleinfo = new ElementInfo( elem.getName(),
-                                        				   new Type( CUtils.anyTypeQname,
-                                        				           	 CUtils.anyTypeQname.getLocalPart(),
-                                        				           	 true,
-                                        				           	 targetLanguage));
-                            } // 8
-                            // ^^^ FJP - 17667
                             else
                             {
                                 QName typeName = elem.getType().getQName();

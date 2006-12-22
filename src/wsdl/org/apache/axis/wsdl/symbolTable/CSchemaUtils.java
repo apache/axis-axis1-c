@@ -30,7 +30,6 @@ import org.apache.axis.Constants;
 import org.apache.axis.wsdl.wsdl2ws.info.ElementInfo;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -202,7 +201,9 @@ public class CSchemaUtils extends SchemaUtils
      * @param symbolTable 
      * @return 
      */
-    public static Vector getContainedElementDeclarations( Node node, SymbolTable symbolTable)
+    public static Vector getContainedElementDeclarations(
+        Node node,
+        SymbolTable symbolTable)
     {
 
         if (node == null)
@@ -339,19 +340,30 @@ public class CSchemaUtils extends SchemaUtils
                 {
                     if (subNodeKind.getLocalPart().equals("sequence"))
                     {
-                        v.addAll( processSequenceNode(children.item(j), symbolTable));
+                        v.addAll(
+                            processSequenceNode(children.item(j), symbolTable));
                     }
-                    else if (subNodeKind.getLocalPart().equals("all"))
+                    else
+                        if (subNodeKind.getLocalPart().equals("all"))
                         {
-                        v.addAll( processAllNode(children.item(j), symbolTable));
+                            v.addAll(
+                                processAllNode(children.item(j), symbolTable));
                         }
-                    else if (subNodeKind.getLocalPart().equals("choice"))
+                        else
+                            if (subNodeKind.getLocalPart().equals("choice"))
                             {
-                        v.addAll( processChoiceNode( children.item(j), symbolTable));
+                                v.addAll(
+                                    processChoiceNode(
+                                        children.item(j),
+                                        symbolTable));
                             }
-                    else if (subNodeKind.getLocalPart().equals("group"))
+                            else
+                                if (subNodeKind.getLocalPart().equals("group"))
                                 {
-                        v.addAll( processGroupNode( children.item(j), symbolTable));
+                                    v.addAll(
+                                        processGroupNode(
+                                            children.item(j),
+                                            symbolTable));
                                 }
                 }
             }
@@ -2158,56 +2170,6 @@ public class CSchemaUtils extends SchemaUtils
         }
     }
 
-    // vvv FJP - 17667
-    private static void addRestrictionsToVector( Vector v, Node child, SymbolTable symbolTable, String base, String restType)
-    {
-        CElementDecl elem = new CElementDecl();
-        Vector       vr = null;
-        
-        NamedNodeMap nodeAttribs = child.getAttributes();
-
-        if( nodeAttribs != null)
-        {
-            for( int i = 0; i < nodeAttribs.getLength(); i++)
-            {
-                if( vr == null)
-                {
-                    vr = new Vector();
-                }
-                
-                if( nodeAttribs.item(i).getLocalName().equals( "name"))
-                {
-                    vr.add( nodeAttribs.item(i).getNodeValue());
-                }
-                else if( nodeAttribs.item(i).getLocalName().equals( "type"))
-                {
-                    vr.add( nodeAttribs.item(i).getNodeValue());
-                }
-                else if( nodeAttribs.item(i).getLocalName().equals( "value"))
-                {
-                    vr.add( nodeAttribs.item(i).getNodeValue());
-                }
-            }
-        }
-        
-        elem.setRestriction( true);
-        elem.setRestrictionBase( base);
-        
-        if( restType.equals( "pattern"))
-        {
-            elem.setRestrictionPattern( vr);
-        }
-        else
-        {
-            elem.setRestrictionEnumeration( vr);
-        }
-        
-        elem.setName( VALUE_QNAME);
-        
-        v.add( elem);
-    }
-    // ^^^ FJP - 17667
-
     /**
      * Return the attribute names and types if any in the node
      * The even indices are the attribute types (TypeEntry) and
@@ -2228,8 +2190,11 @@ public class CSchemaUtils extends SchemaUtils
      * @param symbolTable 
      * @return 
      */
-    public static Vector getContainedAttributeTypes( Node node, SymbolTable symbolTable)
+    public static Vector getContainedAttributeTypes(
+        Node node,
+        SymbolTable symbolTable)
     {
+
         Vector v = null; // return value
 
         if (node == null)
@@ -2322,75 +2287,15 @@ public class CSchemaUtils extends SchemaUtils
                 }
                 else
                 {
+
                     // we have an attribute
                     addAttributeToVector(v, child, symbolTable);
                 }
             }
         }
 
-// vvv FJP - 17667 - Code added
-// Expecting a schema simpleType
-        if (isXSDNode(node, "simpleType"))
-        {
-            // Under the simpleType there could be a restriction
-            NodeList children = node.getChildNodes();
-            Node     content = null;
-            String 	 base = null;
-            String   restType = null;
-
-            for (int j = 0; j < children.getLength(); j++)
-            {
-                Node kid = children.item(j);
-
-                if( isXSDNode(kid, "restriction"))
-                {
-                    content = kid;
-                    
-                    NamedNodeMap nnm = kid.getAttributes();
-
-                    for( int k = 0; k < nnm.getLength(); k++)
-                    {
-                        Node an = nnm.item( k);
-                        
-                        if( an.getLocalName().equals( "base"))
-                        {
-                            base = an.getNodeValue();
-                            
-                            break;
-                        }
-                    }
-                    break;
-                }
-            }
-
-            // Check for extensions or restrictions
-            if (content != null)
-            {
-                children = content.getChildNodes();
-
-                for (int j = 0; j < children.getLength(); j++)
-                {
-                    Node kid = children.item(j);
-
-                    if (isXSDNode(kid, "pattern")
-                        || isXSDNode(kid, "enumeration"))
-                    {
-                        restType = kid.getLocalName();
-
-    	                if (v == null)
-    	                {
-    	                    v = new Vector();
-    	                }
-    	
-                        addRestrictionsToVector( v, kid, symbolTable, base, restType);
-                    }
-                }
-            }
-        }
-
         return v;
     }
-    // ^^^ FJP - 17667
 
     // list of all of the XSD types in Schema 2001
 

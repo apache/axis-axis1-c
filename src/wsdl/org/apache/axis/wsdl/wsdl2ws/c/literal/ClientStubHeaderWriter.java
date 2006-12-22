@@ -20,10 +20,10 @@
  * @author Susantha Kumara(susantha@opensource.lk, skumara@virtusa.com)
  */
 package org.apache.axis.wsdl.wsdl2ws.c.literal;
+
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.HashSet;
-import java.util.Vector;
+import java.util.Iterator;
 
 import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
@@ -36,10 +36,6 @@ import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 public class ClientStubHeaderWriter
     extends org.apache.axis.wsdl.wsdl2ws.c.ClientStubHeaderWriter
 {
-    /**
-     * @param wscontext
-     * @throws WrapperFault
-     */
     public ClientStubHeaderWriter(WebServiceContext wscontext)
         throws WrapperFault
     {
@@ -179,9 +175,7 @@ public class ClientStubHeaderWriter
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
+    /* (non-Javadoc)
      * @see org.apache.axis.wsdl.wsdl2ws.cpp.HeaderFileWriter#writePreprocssorStatements()
      */
     protected void writePreprocessorStatements() throws WrapperFault
@@ -201,7 +195,7 @@ public class ClientStubHeaderWriter
             
             Type atype;
             Iterator types = this.wscontext.getTypemap().getTypes().iterator();
-            Vector typeSet = new Vector();
+            HashSet typeSet = new HashSet();
             HashSet removeSet = new HashSet();
 
             while (types.hasNext())
@@ -218,6 +212,9 @@ public class ClientStubHeaderWriter
                 if (atype.getBaseType() != null)
                     if (atype.getBaseType().getLocalPart().equals("string"))
                         removeSet.add(atype.getLanguageSpecificName() + "_Array");
+
+                if (atype.isRestriction())
+                    removeSet.add(atype.getLanguageSpecificName()  + "_Array");
 
                 typeSet.add(atype.getLanguageSpecificName());
             }

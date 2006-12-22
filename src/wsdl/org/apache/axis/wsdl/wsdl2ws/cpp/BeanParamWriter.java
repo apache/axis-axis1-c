@@ -35,15 +35,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Vector;
 
 import javax.xml.namespace.QName;
 
 import org.apache.axis.wsdl.symbolTable.TypeEntry;
 import org.apache.axis.wsdl.wsdl2ws.CUtils;
-import org.apache.axis.wsdl.wsdl2ws.WrapperConstants;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
-import org.apache.axis.wsdl.wsdl2ws.info.AttributeInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
@@ -101,7 +98,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
         {
             for (int i = 0; i < attribs.length; i++)
             {
-                attribs[i].setParamName( CUtils.sanitiseAttributeName( classname, attribs[i].getParamName()));
+                attribs[i].setParamName( CUtils.sanitiseAttributeName(classname, attribs[i].getParamName()));
 
                 String methodName = attribs[i].getParamNameWithoutSymbols();
                 String parameterName = methodName;
@@ -260,25 +257,6 @@ public class BeanParamWriter extends ParamCPPFileWriter
                         methodName = methodName + Integer.toString(anyCounter);
                     }
 
-                    Type attributeType = attribs[i].getType();
-                    boolean isPointerType = false;
-                    
-                    if( attributeType.isRestriction())
-                    {
-                        // Find the base type of the restriction.
-                        attributeType = CUtils.findBaseTypeOfRestriction( attributeType, wscontext);
-                        
-                        String attributeTypeAsString = CUtils.getBaseTypeOfRestrictionAsString( attributeType); 
-                        
-                        if( CUtils.isPointerType( attributeTypeAsString))
-                        {
-                            int pointerOffset = properParamName.indexOf("*");
-                            
-                            if( pointerOffset > 0)
-                                properParamName = properParamName.substring( 0, pointerOffset);
-                        }
-                    }
-                        
                     writer.write("\n"
                             + properParamName + " " + classname + "::get" + methodName
                             + "()\n{\n");
@@ -293,15 +271,16 @@ public class BeanParamWriter extends ParamCPPFileWriter
                             + "void " + classname + "::set"
                             + methodName + "(" + properParamName + " InValue");
                     
-                    isPointerType = false;
+                    Type attributeType = attribs[i].getType();
                     
+                    boolean isPointerType = false;
                     if (attributeType.isSimpleType())
                         isPointerType = CUtils.isPointerType(CUtils.getclass4qname(attributeType.getBaseType())); 
                     else
                         isPointerType = CUtils.isPointerType(getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]));
                     
-                    if((attribs[i].isSimpleType() || attributeType.isSimpleType()) &&
-                       (isPointerType || attribs[i].getAllElement() || attribs[i].getChoiceElement()))
+                    if((attribs[i].isSimpleType() || attribs[i].getType().isSimpleType()) 
+                            && (isPointerType || attribs[i].getAllElement() || attribs[i].getChoiceElement()))
                         writer.write(", bool deep");
                     
                     writer.write(")\n{\n");
@@ -452,119 +431,36 @@ public class BeanParamWriter extends ParamCPPFileWriter
         writer.write( "\t}\n\n");
         
         writer.write("\t/* If there are any attributes serialize them. If there aren't then close the tag */\n");
-        // vvv FJP - 17667
         for (int i = 0; i < attributeParamCount; i++)
         {
-            AttributeInfo ai = attribs[i];
-            Type          type = ai.getType();
-            boolean       repeat = false;
-            int           countdown = 5;
-            
-            do
+            if (attribs[i].isArray() || !(attribs[i].isSimpleType() || attribs[i].getType().isSimpleType()))
             {
-                repeat = false;
-                
-                if( type.isRestriction())
-                {
-                    writer.write("\t// A restricted type (base=" + type.getRestrictionBase() + ") has been found.  The following restrictions need to be applied:-\n");
-    
-                    Vector vre = type.getRestrictionEnumeration();
-                    Vector vrp = type.getRestrictionPattern();
-    
-                    if( vre != null)
-                    {
-                        writer.write("\t//\t Enumeration:\n");
-                        
-                        for( int j = 0; j < vre.size(); j++)
-                            writer.write("\t//\t\t " + vre.get( j) + "\n");
+                throw new WrapperFault("Error : an attribute is not basic type");
             }
-                    
-                    if( vrp != null)
-                    {
-                        writer.write("\t//\t Pattern:\n");
-                        
-                        for( int j = 0; j < vrp.size(); j++)
-                            writer.write("\t//\t\t " + vrp.get( j) + "\n");
-                    }
-                
-                    // Locate base type for restricted type
-                    String base = type.getRestrictionBase();
-                    String baseType = null;
-                    
-                    base = base.substring( base.indexOf( ":") + 1);
-                    baseType = CUtils.getclass4qname( new QName( WrapperConstants.SCHEMA_NAMESPACE, base));
-                    
-                    if( baseType == null)
-                    {
-                        Iterator itmt = wscontext.getTypemap().getTypes().iterator();
-                    
-                        while( itmt.hasNext())
-                        {
-                            Type t = (Type) itmt.next();
-                            
-                            if( t.getName().getLocalPart().equals( base))
-                            {
-                                type = t;
-                                repeat = true;
-                                countdown--;
-                                break;
-                            }
-                        }
-                    }
             else
             {
-                        baseType = baseType.substring( baseType.lastIndexOf( "_") + 1);
-                        
-                        type.setBaseType( new QName( WrapperConstants.SCHEMA_NAMESPACE, baseType));
-                        
-                        ai.setType( type);
-                    }
-                }
-            
-                if ((ai.isArray() || !(ai.isSimpleType() || ai.getType().isSimpleType())) && !repeat)
-                {
-                        throw new WrapperFault("Error : an attribute is not basic type");
-                }
-
-            } while( repeat && countdown > 0);
-            // ^^^ FJP - 17667
-            
-            //Samisa
                 //remove _Ref sufix and _ prefix in SOAP tag name
-            String soapTagName = ai.getParamName();
+                String soapTagName = attribs[i].getParamName();
                 if (soapTagName.lastIndexOf("_Ref") > -1)
                     soapTagName = soapTagName.substring(0, soapTagName.lastIndexOf("_Ref"));
                 
                 if (soapTagName.charAt(0) == '_')
                     soapTagName = soapTagName.substring(1, soapTagName.length());
 
-            //end remove _Ref sufix and _ prefix in SOAP tag name
-            boolean isPointerType = false;
+                Type type = attribs[i].getType();
                 String basicType = null;
                 
-            if (!ai.isSimpleType() && type.isSimpleType())
-            {
+                if (!attribs[i].isSimpleType() && type.isSimpleType())
                     basicType = CUtils.getclass4qname(type.getBaseType());
-
-                String    class4QName = CUtils.getclass4qname(type.getBaseType());
-                
-                isPointerType = CUtils.isPointerType( class4QName); 
-            }
                 else
+                    basicType = attribs[i].getTypeName();
+
+                if (CUtils.isPointerType(basicType))
                 {
-                basicType = ai.getTypeName();
-                isPointerType = CUtils.isPointerType(ai.getTypeName());
-                }
-                
-            if (isPointerType)
-                {
-                writer.write("\tif (0 != param->"
-                        + ai.getParamNameAsMember() + ")\n");
+                    writer.write("\tif (0 != param->" + attribs[i].getParamNameAsMember() + ")\n");
                     writer.write("\t\tpSZ->serializeAsAttribute(\""
-                        + soapTagName
-                        + "\", 0, (void*)(param->"
-                        + ai.getParamNameAsMember()
-                        + "), "
+                            + soapTagName + "\", 0, (void*)(param->"
+                            + attribs[i].getParamNameAsMember() + "), "
                             + CUtils.getXSDTypeForBasicType(basicType) + ");\n");
                 }
                 else
@@ -576,18 +472,8 @@ public class BeanParamWriter extends ParamCPPFileWriter
                             + "), "
                             + CUtils.getXSDTypeForBasicType(attribs[i].getTypeName()) + ");\n");
                 }
-                
-                if (!attribs[i].isOptional())
-                {
-                    /* This avoid segmentation fault at runtime */
-                    /*
-                     * writer.write("\telse\n");
-                     * writer.write("\t\tAXISTRACE1(\"The mandatory attribute
-                     * "+attribs[i].getParamName()+" is not set\",
-                     * CRITICAL);\n");
-                     */
-                }
             }
+        }
         
         if (type.isFault())
         {
@@ -961,7 +847,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
             else if (attribs[i].isArray())
             {
                 arrayCount++;
-                //if Array
+                
                 if (attribs[i].isSimpleType() || attribs[i].getType().isSimpleType())
                 {
                     String baseTypeName = null;
@@ -1520,7 +1406,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
         {            
             writer.write("int Check_Restrictions_" + classname + "(" + classname + " value)\n");
             
-            //TODO write code to check the restrictions.  FJP - Begun, but untested.
+            //TODO write code to check the restrictions. 
             
             writer.write("{\n");
             

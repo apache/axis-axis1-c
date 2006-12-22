@@ -182,7 +182,10 @@ public class ClientStubHeaderWriter
             writer.write("#include <axis/OtherFaultException.hpp>\n");
             writer.write("#include <axis/ISoapAttachment.hpp>\n");
             writer.write("#include <axis/ISoapFault.hpp>\n");
+            writer.write("\n");
             writer.write("AXIS_CPP_NAMESPACE_USE\n");
+            writer.write("\n");
+            
             Type atype;
             Iterator types = this.wscontext.getTypemap().getTypes().iterator();
             HashSet typeSet = new HashSet();
@@ -190,18 +193,22 @@ public class ClientStubHeaderWriter
             while (types.hasNext())
             {
                 atype = (Type) types.next();
-                if(atype.isExternalized())
-                {
-                    if (atype.isArray())
-                        if (atype.getElementType().equals("string"))
-                            removeSet.add(atype.getLanguageSpecificName());
-                    
-                    if (atype.getBaseType() != null)
-                        if (atype.getBaseType().getLocalPart().equals("string"))
-                            removeSet.add(atype.getLanguageSpecificName() + "_Array");
+                
+                if (!atype.isExternalized())
+                    continue;
 
-                    typeSet.add(atype.getLanguageSpecificName());
-                }
+                if (atype.isArray())
+                    if (atype.getElementType().equals("string"))
+                        removeSet.add(atype.getLanguageSpecificName());
+                
+                if (atype.getBaseType() != null)
+                    if (atype.getBaseType().getLocalPart().equals("string"))
+                        removeSet.add(atype.getLanguageSpecificName() + "_Array");
+                
+                if (atype.isRestriction())
+                    removeSet.add(atype.getLanguageSpecificName()  + "_Array");
+
+                typeSet.add(atype.getLanguageSpecificName());
             }
             
             Iterator ritr = removeSet.iterator();

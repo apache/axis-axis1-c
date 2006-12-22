@@ -294,11 +294,21 @@ public class ClientStubWriter extends CPPClassWriter
 
                 writer.write("\tRet = NULL;\n");
             }
-            else if ("xsd__base64Binary".equals(outparamTypeName) 
-                        || "xsd__hexBinary".equals(outparamTypeName))
-                writer.write(outparamTypeName + "\tRet;\n");
             else
-                writer.write(outparamTypeName + "\tRet = " + CUtils.getInitValue(outparamTypeName) + ";\n");
+            {
+                String initValue = CUtils.getInitValue (outparamTypeName);
+                if (initValue != null)
+                    writer.write (outparamTypeName + " Ret = " + initValue + ";\n");
+                else if (outparamTypeName.equals ("xsd__dateTime")
+                            || outparamTypeName.equals ("xsd__date")
+                            || outparamTypeName.equals ("xsd__time"))
+                {
+                    writer.write (outparamTypeName + " Ret;\n");
+                    writer.write ("\tmemset(&Ret,0,sizeof(" + outparamTypeName + "));\n");
+                }
+                else
+                    writer.write (outparamTypeName + " Ret;\n");
+            }
         }
 
         //writer.write("\tchar* cFaultcode;\n");

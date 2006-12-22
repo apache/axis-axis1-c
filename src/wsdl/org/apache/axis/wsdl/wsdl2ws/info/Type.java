@@ -106,12 +106,10 @@ public class Type
     /* Should this type be generated or not - by default, set to true except for anonymous types */
     private boolean externalize = true;
 
-    // vvv FJP - 17667
-    private boolean	restriction = false;
-    private String  restrictionBase = null;
-    private Vector  restrictionPattern = null;
-    private Vector  restrictionEnumeration = null;
-    // ^^^ FJP - 17667
+    private boolean	  restriction = false;
+    private String    restrictionBaseType = null;
+    private Vector    restrictionPattern = null;      // future - not currently used 
+    private Vector    restrictionEnumeration = null;  // future - not currently used
     
     /* Is anonymous type? qname.localname is checked, and if starts with '>', then true */
     private boolean isAnonymous = false;
@@ -339,18 +337,8 @@ public class Type
      */
     public void setRestrictiondata(Vector vector)
     {
-        if (vector != null)
-        {
-            isSimpleType = true;
-            TypeEntry basetype = (TypeEntry) vector.firstElement();
-            if (basetype != null)
-            {
-                setBaseType(basetype.getQName());
-                String class4qname = CUtils.getclass4qname(baseType);
-                CUtils.addSchemaDefinedSimpleType(name, class4qname);
-            }
-            enumerationdata = vector;
-        }
+        isSimpleType = true;
+        enumerationdata = vector;
     }
 
     /* (non-Javadoc)
@@ -360,13 +348,14 @@ public class Type
     {
         String str = "---------" + this.name + "------------\n";
         str = str + "languageSpecificName = " + languageSpecificName + "\n";
-        str = str + "isAnonymous =" + isAnonymous + "\n";
-        str = str + "isSimpleType =" + isSimpleType + "\n";
-        str = str + "externalize =" + externalize + "\n";
-        str = str + "isArray =" + isArray + "\n";
-        str = str + "baseType = " + baseType + "\n";
-        str = str + "restriction = " + restriction + "\n";
-        
+        str = str + "isAnonymous ="           + isAnonymous + "\n";
+        str = str + "isSimpleType ="          + isSimpleType + "\n";
+        str = str + "externalize ="           + externalize + "\n";
+        str = str + "isArray ="               + isArray + "\n";
+        str = str + "baseType = "             + baseType + "\n";
+        str = str + "restriction = "          + restriction + "\n";
+        str = str + "restrictionBaseType ="   + restrictionBaseType + "\n";
+         
         if (enumerationdata != null)
         {
             str = str + "enumerationType = " + ((TypeEntry) enumerationdata.get(0)).getQName() + "\n(";
@@ -508,6 +497,7 @@ public class Type
     public void externalize(QName newQName)
     {           
         externalize(true);
+        
         setName(newQName);
         setLanguageSpecificName(newQName.getLocalPart());
     }     
@@ -530,18 +520,18 @@ public class Type
     }    
     // vvv FJP - 17667
     /**
-     * @return Returns the restrictionBase.
+     * @return Returns the restrictionBaseType.
      */
-    public String getRestrictionBase()
+    public String getRestrictionBaseType()
     {
-        return restrictionBase;
+        return restrictionBaseType;
     }
     /**
      * @param restrictionBase The restrictionBase to set.
      */
-    public void setRestrictionBase(String restrictionBase)
+    public void setRestrictionBaseType(String restrictionBaseType)
     {
-        this.restrictionBase = restrictionBase;
+        this.restrictionBaseType = restrictionBaseType;
     }
     /**
      * @return Returns the restrictionEnumeration.
