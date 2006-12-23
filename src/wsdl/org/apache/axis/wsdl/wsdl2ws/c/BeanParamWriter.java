@@ -134,7 +134,7 @@ public class BeanParamWriter extends ParamCFileWriter
             // Ensure field name is valid and does not cause conflict with class names
             String sanitizedAttrName = CUtils.sanitiseAttributeName(attribs[i].getParamName());
             if (CUtils.classExists(wscontext, sanitizedAttrName))
-                sanitizedAttrName += "_";
+                sanitizedAttrName += "_Ref";
             attribs[i].setParamName(sanitizedAttrName);
             
             if (attribs[i].isArray() || !(attribs[i].isSimpleType() || attribs[i].getType().isSimpleType()))

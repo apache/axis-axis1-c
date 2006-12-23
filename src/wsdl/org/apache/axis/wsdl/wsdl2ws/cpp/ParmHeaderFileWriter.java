@@ -320,7 +320,7 @@ public class ParmHeaderFileWriter extends ParamWriter
                 String sanitizedAttrName = CUtils.sanitiseAttributeName(attribs[i].getParamName());
                 attribs[i].setMethodName(sanitizedAttrName);
                 if (CUtils.classExists(wscontext, sanitizedAttrName))
-                    sanitizedAttrName += "_";
+                    sanitizedAttrName += "_Ref";
                 attribs[i].setParamName(sanitizedAttrName);
                 
                 if (isElementNillable(i) 

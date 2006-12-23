@@ -104,7 +104,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 String sanitizedAttrName = CUtils.sanitiseAttributeName(attribs[i].getParamName());
                 attribs[i].setMethodName(sanitizedAttrName);
                 if (CUtils.classExists(wscontext, sanitizedAttrName))
-                    sanitizedAttrName += "_";
+                    sanitizedAttrName += "_Ref";
                 attribs[i].setParamName(sanitizedAttrName);
 
                 String methodName = attribs[i].getMethodName();

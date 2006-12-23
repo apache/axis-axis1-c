@@ -94,10 +94,6 @@ public class ParameterInfo
 
     public String getParamName()
     {
-        // TODO: design review needed
-        //         - If type and name are equals add "_Ref" ie : ref="..."
-        String result;
-
         if (attribName.lastIndexOf(SymbolTable.ANON_TOKEN) > 1)
         {
             attribName =
@@ -107,15 +103,9 @@ public class ParameterInfo
         
         // This second call to TypeMap.resoleveWSDL2LanguageNameClashes
         // is made to make sure after replacing ANON_TOKEN it is still not a keyword
-        attribName =
-            TypeMap.resolveWSDL2LanguageNameClashes(attribName, WrapperConstants.LANGUAGE_CPP);
+        attribName = TypeMap.resolveWSDL2LanguageNameClashes(attribName, WrapperConstants.LANGUAGE_CPP);
 
-        if (isReference())
-            result = attribName + "_Ref";
-        else
-            result = attribName;
-
-        return result;
+        return attribName;
     }
     
     // To avoid the '-' in attribute name.
