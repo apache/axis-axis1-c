@@ -52,7 +52,7 @@ int main( int argc, char * argv[])
                         pMyClass->setValues( pMyValues);
 
                         pMyClassArray->set( &pMyClass, iMyClassSize);
-                        pServceReplica->setMyClass_Ref( pMyClassArray);
+                        pServceReplica->setMyClass( pMyClassArray);
 
                         pWS->miReplica( pServceReplica);
 

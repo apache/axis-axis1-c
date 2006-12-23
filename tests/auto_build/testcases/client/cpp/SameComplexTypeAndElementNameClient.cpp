@@ -46,7 +46,7 @@ int main( int argc, char * argv[])
                         SampleBeanComplex ** BCArray = NULL;                    
                         BCArrayIn.set(BCArray,0);
                         
-                        pSBC->setSampleBeanComplex_Ref(&BCArrayIn);
+                        pSBC->setSampleBeanComplex(&BCArrayIn);
                         pSBC->setBoolean(false_);
                         pWS->aBeanPortTypeComplex( pSBC);
 

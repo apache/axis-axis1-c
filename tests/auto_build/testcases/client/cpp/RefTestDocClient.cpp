@@ -61,7 +61,7 @@ int main( int argc, char * argv[])
             cout << "created c"<<endl;
             setResourceProperties->setb(&c);
             cout << "about to set the props"<<endl;
-            input->setSetResourceProperties_Ref(setResourceProperties);
+            input->setSetResourceProperties(setResourceProperties);
             
             // remember to clean up the resourceproperirtes !
 
@@ -72,7 +72,7 @@ int main( int argc, char * argv[])
             if(result)
             {
                 cout << "Got a result FaultPropertyType"<<endl;
-                SetResourceProperties* resultResProps = result->getSetResourceProperties_Ref();
+                SetResourceProperties* resultResProps = result->getSetResourceProperties();
                 if(resultResProps)
                 {
                  cout <<"Got a result Properties"<<endl;
