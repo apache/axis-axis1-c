@@ -119,10 +119,9 @@ public class ParameterInfo
     }
     
     // To avoid the '-' in attribute name.
+    // TODO - not needed, get rid of this.
     public String getParamNameWithoutSymbols() 
     {
-        //         TODO: design review needed
-        //         - If type and name are equals add "_Ref" ie : ref="..."
         String result = this.getParamName();
     
         char[] symbols = TypeMap.getSymbols();

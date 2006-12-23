@@ -37,7 +37,6 @@ public class AttributeInfo extends ParameterInfo
     private String typeName;
     private String typeNamespace;
     private String className;
-    private String attribNameAsMember;
     private String methodName;
     
     //this variable states whether the attribute is an xsd:choice
@@ -62,7 +61,7 @@ public class AttributeInfo extends ParameterInfo
         str = str + "typeName = "             + typeName + "\n";
         str = str + "typeNamespace = "        + typeNamespace + "\n";
         str = str + "className ="             + className + "\n";
-        str = str + "attribNameAsMember ="    + attribNameAsMember + "\n";
+        str = str + "attribNameAsMember ="    + getParamNameAsMember() + "\n";
         str = str + "choiceElement = "        + choiceElement + "\n";
         str = str + "allElement ="            + allElement + "\n";
         str = str + "nsQualified ="           + nsQualified + "\n";
@@ -166,25 +165,13 @@ public class AttributeInfo extends ParameterInfo
     // TODO - probably can remove since we sanitize attribute name.
     public String getParamNameAsMember()
     {
-        this.attribNameAsMember = super.getParamNameWithoutSymbols();
+        String attribNameAsMember = super.getParamNameWithoutSymbols();
         
         // need to deal with _Ref stuff :(
         if (this.className != null && this.className.equals(attribNameAsMember))
-            this.attribNameAsMember = "m_" + this.attribNameAsMember;
+            attribNameAsMember = "m_" + attribNameAsMember;
 
-        return this.attribNameAsMember;
-    }
-
-    public void setParamName(String paramName)
-    {
-        super.setParamName(paramName);
-        
-        // TODO - probably can remove since we sanitize attribute name.
-        // make sure attributes does not have the same name as class name
-        if (this.className != null && this.className.equals(attribName))
-            this.attribNameAsMember = "m_" + attribName;
-        else
-            this.attribNameAsMember = attribName;
+        return attribNameAsMember;
     }
     
     //getter and setter for choiceElement
