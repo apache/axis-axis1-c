@@ -25,6 +25,9 @@ import org.apache.axis.wsdl.wsdl2ws.WrapperConstants;
  * this class represents Parameter(message in the wsdl) 
  * @author Srinath Perera(hemapani@opensource.lk)
  */
+
+// TODO - really need to simplify all these routines to turn 
+// attribName in proper format!!! I do not think we need most of them, if any.
 public class ParameterInfo
 {
     protected Type type;
@@ -203,18 +206,8 @@ public class ParameterInfo
 
     public String getElementNameAsString()
     {
-        String paramName = elementName.getLocalPart();
-        if (paramName.lastIndexOf(SymbolTable.ANON_TOKEN) > 1)
-        {
-            paramName =
-                paramName.substring(
-                    paramName.lastIndexOf(SymbolTable.ANON_TOKEN) + 1,
-                    paramName.length());
-        }
-        paramName = TypeMap.resolveWSDL2LanguageNameClashes(paramName,
-                                                            WrapperConstants.LANGUAGE_CPP);
-        return paramName;
-
+        return TypeMap.resolveWSDL2LanguageNameClashes(getSOAPElementNameAsString(), 
+                                                       WrapperConstants.LANGUAGE_CPP);
     }
 
     public String getSOAPElementNameAsString()
