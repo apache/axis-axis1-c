@@ -229,17 +229,24 @@ public class BeanParamWriter extends ParamCPPFileWriter
 
                     if (attribs[i].getChoiceElement())
                         for (int j = 0; j < attribs.length; j++)
-                        {
                             if ((attribs[j].getChoiceElement()) && (j != i))
-                                writer.write("\t" + attribs[j].getParamNameWithoutSymbols() + " = NULL ; \n");
-                        }
+                            {
+                                // TODO simplify by doing all attributes before we get into code gen
+                                String realName = attribs[j].getParamNameWithoutSymbols();
+                                if (CUtils.classExists(wscontext, realName))
+                                    realName += "_Ref";
+                                writer.write("\t" + realName + " = NULL ; \n");
+                            }
                     
                     if (attribs[i].getAllElement())
                         for (int j = 0; j < attribs.length; j++)
-                        {
                             if ((attribs[j].getAllElement()) && (j != i))
-                                writer.write("\t" + attribs[j].getParamNameWithoutSymbols() + " = NULL ; \n");
-                        }
+                            {
+                                String realName = attribs[j].getParamNameWithoutSymbols();
+                                if (CUtils.classExists(wscontext, realName))
+                                    realName += "_Ref";
+                                writer.write("\t" + realName + " = NULL ; \n");
+                            }
 
                     writer.write("}\n");
                 } 
@@ -346,10 +353,14 @@ public class BeanParamWriter extends ParamCPPFileWriter
 
                     if (attribs[i].getChoiceElement())
                         for (int j = 0; j < attribs.length; j++)
-                        {
                             if ((attribs[j].getChoiceElement()) && (j != i))
-                                writer.write("\t" + attribs[j].getParamNameWithoutSymbols() + " = NULL ; \n");
-                        }
+                            {
+                                String realName = attribs[j].getParamNameWithoutSymbols();
+                                if (CUtils.classExists(wscontext, realName))
+                                    realName += "_Ref";
+
+                                writer.write("\t" + realName + " = NULL ; \n");
+                            }
 
                     writer.write("}\n");
                 }
