@@ -90,10 +90,8 @@ public class BeanParamWriter extends ParamCFileWriter
                 if (!CUtils.isPointerType(typeName))
                     writer.write("&");
                 
-                writer.write("(param->"
-                        + extensionBaseAttrib.getParamNameAsMember()
-                        + "), "
-                        + CUtils.getXSDTypeForBasicType(typeName) + ");\n");
+                writer.write("(param->" + extensionBaseAttrib.getParamNameAsMember()
+                        + "), " + CUtils.getXSDTypeForBasicType(typeName) + ");\n");
             } 
             else
             {
@@ -107,6 +105,8 @@ public class BeanParamWriter extends ParamCFileWriter
         }
 
         String arrayType;
+        
+        
         /*
          * A type does not know whether it is used as a nillable parameter So
          * this may not be the appropriate place to do this
@@ -118,16 +118,14 @@ public class BeanParamWriter extends ParamCFileWriter
         writer.write("\t\taxiscSoapSerializerSerialize(pSZ, \">\", NULL);\n");
         writer.write("\t\treturn AXISC_SUCCESS;\n");
         writer.write("\t}\n\n");
+        /*
+         * This is the only real difference for the serializer between rpc/encoded and doc/literal objects
+         */
+        if (wscontext.getWrapInfo().getWrapperStyle().equals("rpc"))
+            writeRPCArrayPortionOfSerializeGlobalMethod();
+        else
+            writeDOCArrayPortionOfSerializeGlobalMethod();
 
-        writer.write("\tif (!bArray)\n\t{\n");
-        writer.write("\t\tconst AxiscChar* sPrefix = axiscSoapSerializerGetNamespacePrefix(pSZ,Axis_URI_" + classname + ", &blnIsNewPrefix);\n");
-        writer.write("\t\tif (blnIsNewPrefix)\n\t\t{\n");
-        writer.write("\t\t\taxiscSoapSerializerSerialize(pSZ,\" xmlns:\", sPrefix, \"=\\\"\",\n");
-        writer.write("\t\t\t\tAxis_URI_" + classname + ", \"\\\"\", NULL );\n");
-        writer.write("\t\t}\n");
-        writer.write("\t}\n");
-        writer.write("\n");
-        
         writer.write("\t/* If there are any attributes serialize them. If there aren't then close the tag */\n");
         for (int i = 0; i < attributeParamCount; i++)
         {
@@ -190,7 +188,8 @@ public class BeanParamWriter extends ParamCFileWriter
             writer.write(", NULL);\n\t}\n");
         }               
         
-        writer.write("\taxiscSoapSerializerSerialize(pSZ, \">\", 0);\n");
+        if(wscontext.getWrapInfo().getWrapperStyle().equals("document"))
+            writer.write("\taxiscSoapSerializerSerialize(pSZ, \">\", 0);\n");
         
         if (extensionBaseAttrib != null)
         {
@@ -213,6 +212,12 @@ public class BeanParamWriter extends ParamCFileWriter
         
         for (int i = attributeParamCount; i < attribs.length; i++)
         {
+            // Ensure field name is valid and does not cause conflict with class names
+            String sanitizedAttrName = CUtils.sanitiseAttributeName(attribs[i].getParamName());
+            if (CUtils.classExists(wscontext, sanitizedAttrName))
+                sanitizedAttrName += "_Ref";
+            attribs[i].setParamName(sanitizedAttrName);
+
             String namespace = "";
             if (attribs[i].getNsQualified())
                 namespace = "Axis_URI_" + classname;
@@ -380,6 +385,12 @@ public class BeanParamWriter extends ParamCFileWriter
                     writer.write("\t}\n");
         }
 
+        if (wscontext.getWrapInfo().getWrapperStyle().equals("rpc"))
+        {
+            writer.write("\n\taxiscSoapSerializerSerialize(pSZ, \"</\", Axis_TypeName_" + classname
+                    + ", \">\", NULL);\n");
+        }
+        
         writer.write("\n\tif (!bArray && blnIsNewPrefix)\n");
         writer.write("\t\taxiscSoapSerializerRemoveNamespacePrefix(pSZ, Axis_URI_" + classname + ");\n\n");
         
@@ -390,6 +401,61 @@ public class BeanParamWriter extends ParamCFileWriter
     /**
      * @throws IOException
      */
+    private void writeDOCArrayPortionOfSerializeGlobalMethod() throws IOException
+    {
+        // For doc/literal objects
+        writer.write("\tif (!bArray)\n\t{\n");
+        writer.write("\t\tconst AxiscChar* sPrefix = axiscSoapSerializerGetNamespacePrefix(pSZ,Axis_URI_" + classname + ", &blnIsNewPrefix);\n");
+        writer.write("\t\tif (blnIsNewPrefix)\n\t\t{\n");
+        writer.write("\t\t\taxiscSoapSerializerSerialize(pSZ,\" xmlns:\", sPrefix, \"=\\\"\",\n");
+        writer.write("\t\t\t\tAxis_URI_" + classname + ", \"\\\"\", NULL );\n");
+        writer.write("\t\t}\n");
+        writer.write("\t}\n\n");
+    }
+
+    /**
+     * @throws IOException
+     */
+    private void writeRPCArrayPortionOfSerializeGlobalMethod() throws IOException
+    {
+        // For rpc/encoded objects
+        writer.write( "\tif( bArray)\n");
+        writer.write( "\t\taxiscSoapSerializerSerialize(pSZ, \"<\", Axis_TypeName_" + classname + ", \">\", NULL);\n");
+        writer.write( "\telse\n");
+        writer.write( "\t{\n");
+        writer.write( "\t\tconst AxiscChar * sPrefix = axiscSoapSerializerGetNamespacePrefix(pSZ, Axis_URI_" + classname + ",\n" +
+                      "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t&blnIsNewPrefix);\n\n");
+        writer.write( "// If there are objects that require a local namespace, then define it here.\n");
+        writer.write( "// NB: This namespace will go out of scope when the closing tag is reached.\n");
+        writer.write( "\t\tif( !blnIsNewPrefix)\n");
+        writer.write( "\t\t{\n");
+        writer.write( "\t\t\taxiscSoapSerializerSerialize(pSZ, \"<\",\n\t\t\t\t\t\t\tAxis_TypeName_" + classname + ",\n" +
+                      "\t\t\t\t\t\t\t\" xsi:type=\\\"\",\n" +
+                      "\t\t\t\t\t\t\tsPrefix,\n" +
+                      "\t\t\t\t\t\t\t\":\",\n" +
+                      "\t\t\t\t\t\t\t");
+        writer.write( "Axis_TypeName_" + classname + ",\n" +
+                      "\t\t\t\t\t\t\t\"\\\">\",\n" +
+                      "\t\t\t\t\t\t\tNULL);\n");
+        writer.write( "\t\t}\n");
+        writer.write( "\t\telse\n");
+        writer.write( "\t\t{\n");
+        writer.write( "\t\t\taxiscSoapSerializerSerialize(pSZ, \"<\",\n" +
+                      "\t\t\t\t\t\t\tAxis_TypeName_" + classname + ",\n" +
+                      "\t\t\t\t\t\t\t\" xsi:type=\\\"\",\n" +
+                      "\t\t\t\t\t\t\tsPrefix,\n" +
+                      "\t\t\t\t\t\t\t\":\",\n" +
+                      "\t\t\t\t\t\t\tAxis_TypeName_" + classname + ",\n" +
+                      "\t\t\t\t\t\t\t\"\\\" xmlns:\",\n" +
+                      "\t\t\t\t\t\t\tsPrefix,\n" +
+                      "\t\t\t\t\t\t\t\"=\\\"\",\n" +
+                      "\t\t\t\t\t\t\tAxis_URI_" + classname + ",\n" +
+                      "\t\t\t\t\t\t\t\"\\\">\",\n" +
+                      "\t\t\t\t\t\t\tNULL);\n");
+        writer.write("\t\t}\n");
+        writer.write("\t}\n\n");
+    }
+
     private void writeDeSerializeGlobalMethod() throws IOException, WrapperFault
     {
         writer.write("\n");
@@ -521,6 +587,8 @@ public class BeanParamWriter extends ParamCFileWriter
             }
             else if ((attribs[i].isSimpleType() || attribs[i].getType().isSimpleType()))
             {                
+                //TODO handle optional attributes
+                //remove _Ref sufix and _ prefix in SOAP tag name
                 String soapTagName = (attribs[i].isAttribute() ? attribs[i].getParamName() : attribs[i].getElementNameAsString());
                 if (soapTagName.lastIndexOf("_Ref") > -1)
                     soapTagName = soapTagName.substring(0, soapTagName.lastIndexOf("_Ref"));
@@ -688,9 +756,8 @@ public class BeanParamWriter extends ParamCFileWriter
                 {
                     writer.write("\t}\n");
                     writer.write("\telse\n");
-                    writer.write("\t{\n");
                     writer.write("\t\tparam->" + attribs[i].getParamNameAsMember() + " = NULL;\n");
-                    writer.write("\t}\n\n");
+                    writer.write("\n");
                 }      
                 
                 writer.write("\n\t}\n"); // end new variable scope
