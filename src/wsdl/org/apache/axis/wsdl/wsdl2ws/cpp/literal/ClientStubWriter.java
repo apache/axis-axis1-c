@@ -669,14 +669,9 @@ public class ClientStubWriter
                         writer.write("\t\t\tif( pReturn" + i + " != NULL && OutValue" + i + " != NULL)\n");
                         writer.write("\t\t\t{\n");
                         writer.write("\t\t\t\tif( *OutValue" + i + " == NULL)\n");
-                        writer.write("\t\t\t\t{\n");
-                        writer.write("\t\t\t\t\t*OutValue" + i + " = new " + currentParaType 
-                            + "();\n");
-                        writer.write("\t\t\t\t}\n");
+                        writer.write("\t\t\t\t\t*OutValue" + i + " = new " + currentParaType + "();\n");
                         writer.write("\t\t\t\telse\n");
-                        writer.write("\t\t\t\t{\n");
                         writer.write("\t\t\t\t\t(*OutValue" + i + ")->clear();\n");
-                        writer.write("\t\t\t\t}\n\n");
                         writer.write("\t\t\t\t(*OutValue" + i + ")->clone(*pReturn" + i + ");\n");
                         writer.write("\t\t\t}\n\n");
                         writer.write("\t\t\tAxis::AxisDelete( (void *) pReturn" + i + ", XSD_ARRAY);\n");
@@ -761,12 +756,11 @@ public class ClientStubWriter
                         writer.write( "\n");
                         writer.write( "\t\t\tif( pReturn" + i + " != NULL && OutValue" + i + " != NULL)\n");
                         writer.write( "\t\t\t{\n");
+                        
                         if (currentType.isNillable() || currentType.isOptional())
                         {
                             writer.write( "\t\t\t\tif( *OutValue" + i + " == NULL)\n");
-                            writer.write( "\t\t\t\t{\n");
                             writer.write( "\t\t\t\t\t*OutValue" + i + " = new " + currentParaType + "();\n");
-                            writer.write( "\t\t\t\t}\n");
                             writer.write( "\n");
                             writer.write( "\t\t\t\t*");
                         }

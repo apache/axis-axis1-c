@@ -871,9 +871,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                             + attribs[i].getParamNameAsSOAPElement()
                             + "\",0);\n");
                     writer.write("\tif(param->" + attribs[i].getParamNameAsMember() + " == NULL)\n");
-                    writer.write("\t{\n");
                     writer.write("\t\tparam->" + attribs[i].getParamNameAsMember() + " = new " + attribs[i].getTypeName() + "_Array();\n");
-                    writer.write("\t}\n");
                     writer.write("\tparam->" + attribs[i].getParamNameAsMember() + "->clone( *array" + arrayCount + ");\n");
                     writer.write("\tAxis::AxisDelete((void*) array" + arrayCount + ", XSD_ARRAY);\n\n");
                 }
@@ -1190,13 +1188,9 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 {
                     anyCounter++;
                     writer.write("\tif (original." + attribs[i].getParamName() + anyCounter + " != NULL)\n");
-                    writer.write("\t{\n");
                     writer.write("\t\t" + attribs[i].getParamName() + anyCounter + " = new " + attribs[i].getTypeName() + "(*(original." + attribs[i].getParamName() + anyCounter + "));\n");
-                    writer.write("\t}\n");
                     writer.write("\telse\n");
-                    writer.write("\t{\n");
                     writer.write("\t\t" + attribs[i].getParamName() + anyCounter + " = NULL;\n");
-                    writer.write("\t}\n");
                 }
                 else
                 {
@@ -1221,15 +1215,11 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     else
                     {
                         writer.write("\tif (original." + attribs[i].getParamName() + " != NULL)\n");
-                        writer.write("\t{\n");
                         writer.write("\t\t" + attribs[i].getParamName() + " = new " 
                                 + attribs[i].getTypeName() + "(*(original." 
                                 + attribs[i].getParamName() + "));\n");
-                        writer.write("\t}\n");
                         writer.write("\telse\n");
-                        writer.write("\t{\n");
                         writer.write("\t\t" + attribs[i].getParamName() + " = NULL;\n");
-                        writer.write("\t}\n");
                     }
                 }
             }
@@ -1341,47 +1331,27 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     isPointerType = CUtils.isPointerType(typename);
                 
                 if(attribs[i].isArray())
-                {
-                    writer.write("\tif (" + name + "!= NULL)\n");
-                    writer.write("\t{\n");
-                    writer.write("\t\tdelete " + name + ";\n");
-                    writer.write("\t\t" + name + " = NULL;\n");
-                    writer.write("\t}\n");
-                }
+                    writer.write("\tdelete " + name + ";\n");
                 else if (attribs[i].isAnyType())
                 {
                     anyCounter += 1;
                     name = name + Integer.toString(anyCounter);
                     writer.write("\tif ("+name+") \n\t{\n");
-                    writer.write("\t\tfor (int i=0; i<"+name+"->_size; i++)\n\t\t{\n");
-                    writer.write("\t\t\tif ("+name+"->_array[i]) delete [] "+name+"->_array[i];\n");
-                    writer.write("\t\t}\n");
+                    writer.write("\t\tfor (int i=0; i<"+name+"->_size; i++)\n");
+                    writer.write("\t\t\tdelete [] "+name+"->_array[i];\n");
                     writer.write("\t\tdelete "+name+";\n");
                     writer.write("\t}\n");
-                    
                 }
                 else if (!(attribs[i].isSimpleType() || attribs[i].getType().isSimpleType()))
-                {
-                    writer.write("\tif (" + name + "!= NULL)\n");
-                    writer.write("\t{\n");
-                    writer.write("\t\tdelete " + name + ";\n");
-                    writer.write("\t\t" + name + " = NULL;\n");
-                    writer.write("\t}\n");
-                }
+                    writer.write("\tdelete " + name + ";\n");
                 else if (isPointerType || isElementNillable(i) || isElementOptional(i) || attribs[i].getChoiceElement() || attribs[i].getAllElement())
                 {
                     // found pointer type
-                    writer.write("\tif (" + name + " != NULL)\n");
-                    writer.write("\t{\n");
-                    writer.write("\t\tif(__axis_deepcopy_" + name + ")\n");
-                    writer.write("\t\t{\n");
-                    writer.write("\t\t\tdelete ");
+                    writer.write("\tif(__axis_deepcopy_" + name + ")\n");
+                    writer.write("\t\tdelete ");
                     if (isPointerType)
                         writer.write("[] ");
                     writer.write(name + ";\n");
-                    writer.write("\t\t}\n");
-                    writer.write("\t\t" + name + " = NULL;\n");
-                    writer.write("\t}\n");
                 }
             }
             writer.write("}\n");
