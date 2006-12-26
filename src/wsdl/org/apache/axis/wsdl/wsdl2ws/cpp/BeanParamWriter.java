@@ -436,9 +436,6 @@ public class BeanParamWriter extends ParamCPPFileWriter
             writeRPCArrayPortionOfSerializeGlobalMethod();
         else
             writeDOCArrayPortionOfSerializeGlobalMethod();
-
-        writer.write( "\t\t}\n");
-        writer.write( "\t}\n\n");
         
         writer.write("\t/* If there are any attributes serialize them. If there aren't then close the tag */\n");
         for (int i = 0; i < attributeParamCount; i++)
@@ -714,6 +711,8 @@ public class BeanParamWriter extends ParamCPPFileWriter
         writer.write("\t\tif (blnIsNewPrefix)\n\t\t{\n");
         writer.write("\t\t\tpSZ->serialize(\" xmlns:\", sPrefix, \"=\\\"\",\n");
         writer.write("\t\t\t\tAxis_URI_" + classname + ", \"\\\"\", NULL );\n");
+        writer.write( "\t\t}\n");
+        writer.write( "\t}\n\n");
     }
 
     /**
@@ -724,9 +723,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
         // For rpc/encoded objects
         writer.write("\tbool blnIsNewPrefix = false;\n");
         writer.write( "\tif( bArray)\n");
-        writer.write( "\t{\n");
         writer.write( "\t\tpSZ->serialize( \"<\", Axis_TypeName_" + classname + ", \">\", NULL);\n");
-        writer.write( "\t}\n");
         writer.write( "\telse\n");
         writer.write( "\t{\n");
         writer.write( "\t\tconst AxisChar *\tsPrefix = pSZ->getNamespacePrefix( Axis_URI_" + classname + ",\n" +
@@ -758,6 +755,9 @@ public class BeanParamWriter extends ParamCPPFileWriter
                       "\t\t\t\t\t\t\tAxis_URI_" + classname + ",\n" +
                       "\t\t\t\t\t\t\t\"\\\">\",\n" +
                       "\t\t\t\t\t\t\tNULL);\n");
+
+        writer.write( "\t\t}\n");
+        writer.write( "\t}\n\n");
     }
 
     private void writeDeSerializeGlobalMethod() throws IOException, WrapperFault
