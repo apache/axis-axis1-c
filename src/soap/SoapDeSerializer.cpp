@@ -386,6 +386,7 @@ SoapDeSerializer::checkForFault (const AxisChar * pName,
     char *pcFaultCode;
     char *pcFaultstring;
     char *pcFaultactor;
+    
     if (0 == strcmp ("Fault", pName))
     {
         if (0 != strcmp (m_pNode->m_pchNameOrValue, pName))
@@ -407,35 +408,39 @@ SoapDeSerializer::checkForFault (const AxisChar * pName,
         setStyle (DOC_LITERAL);
         pcFaultCode = getElementAsString ("faultcode", 0);
         pFault->setFaultcode (pcFaultCode == NULL ? "" : pcFaultCode);
-        if ( pcFaultCode )
-            delete [] pcFaultCode;
+        delete [] pcFaultCode;
         
         pcFaultstring = getElementAsString ("faultstring", 0);
         pFault->setFaultstring (pcFaultstring == NULL ? "" : pcFaultstring);
-        if ( pcFaultstring )
-            delete [] pcFaultstring;
+        delete [] pcFaultstring;
      
-        pcFaultactor = getElementAsString ("faultactor", 0);
-        pFault->setFaultactor (pcFaultactor == NULL ? "" : pcFaultactor);
-        if ( pcFaultactor )
+        // faultactor is optional
+        const char* elementName = peekNextElementName();
+        if (strcmp(elementName, "faultactor") == 0)
+        {
+            pcFaultactor = getElementAsString ("faultactor", 0);
+            pFault->setFaultactor (pcFaultactor == NULL ? "" : pcFaultactor);
             delete [] pcFaultactor;
-    
+        }      
+         
+        // detail is optional.   
         // FJP Changed the namespace from null to a single space (an impossible
         //     value) to help method know that it is parsing a fault message.
-        pcDetail = getElementAsString ("detail", " ");
-        
-        if (pcDetail)
+        elementName = peekNextElementName();
+        if (strcmp(elementName, "detail") == 0)
         {
-            pFault->setFaultDetail (pcDetail);
-            delete [] pcDetail;          
-        }
-        else
-        {
-            pcCmplxFaultName = getCmplxFaultObjectName ();
-            pFault->setCmplxFaultObjectName (pcCmplxFaultName == NULL ? "" : pcCmplxFaultName);
-            /*    if ( pcCmplxFaultName )
-                    delete [] (reinterpret_cast <char *> (pcCmplxFaultName) );
-            */
+            pcDetail = getElementAsString ("detail", " ");
+            
+            if (pcDetail)
+            {
+                pFault->setFaultDetail (pcDetail);
+                delete [] pcDetail;          
+            }
+            else
+            {
+                pcCmplxFaultName = getCmplxFaultObjectName ();
+                pFault->setCmplxFaultObjectName (pcCmplxFaultName == NULL ? "" : pcCmplxFaultName);
+            }
         }
     
         setStyle (m_nStyle);
