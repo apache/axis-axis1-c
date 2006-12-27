@@ -127,19 +127,18 @@ public class BeanParamWriter extends ParamCPPFileWriter
                             + methodName + "(" + parameterTypeName + " pInValue)\n{\n");
 
                     writer.write("\tif(" + parameterName + " == NULL)\n");
-                    writer.write("\t{\n");
                     
                     if (attribs[i].getChoiceElement() || attribs[i].getAllElement())
                     {
+                        writer.write("\t{\n");
                         writer.write("\t\t// This object is a 'choice' or 'all', so need to ensure that any\n");
                         writer.write("\t\t// other objects belonging to this union of elements are empty.\n");
                         writer.write("\t\t// NB: Hasn't been implemented yet!\n");
                         writer.write("\t\t" + parameterName + " = new " + type + "_Array();\n");
+                        writer.write("\t}\n");
                     }
                     else
-                        writer.write("\t\t" + parameterName + " = new " + properParamName + "();\n");
-                    
-                    writer.write("\t}\n");
+                        writer.write("\t\t" + parameterName + " = new " + properParamName + "();\n");                   
                     
                     if (attribs[i].getChoiceElement() || attribs[i].getAllElement())
                         writer.write("\t" + parameterName + "->clone( *pInValue);\n");
@@ -190,15 +189,11 @@ public class BeanParamWriter extends ParamCPPFileWriter
                                 + methodName + "(" + properParamName
                                 + " * pInValue, bool deep)\n{\n");
                     }
-                    
-                    writer.write("\tif (" + parameterName + " != NULL)\n");
-                    writer.write("\t{\n");
-                    writer.write("\t\tif (__axis_deepcopy_" + parameterName + ")\n");
-                    writer.write("\t\t{\n");
-                    writer.write("\t\t\tdelete " + parameterName + ";\n");
-                    writer.write("\t\t}\n");
-                    writer.write("\t\t" + parameterName + " = NULL;\n");
-                    writer.write("\t}\n");
+
+                    writer.write("\tif (__axis_deepcopy_" + parameterName + ")\n");
+                    writer.write("\t\tdelete " + parameterName + ";\n");
+                    writer.write("\t" + parameterName + " = NULL;\n");
+
                     writer.write("\tif (pInValue != NULL)\n");
                     writer.write("\t{\n");
                     writer.write("\t\tif (deep)\n");
@@ -217,14 +212,9 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     writer.write("\t\t\t*" + parameterName + " = *pInValue;\n");
                     writer.write("\t\t}\n");
                     writer.write("\t\telse\n");
-                    writer.write("\t\t{\n");
                     writer.write("\t\t\t" + parameterName + " = pInValue;\n");
-                    writer.write("\t\t}\n");
                     writer.write("\t}\n");
-                    writer.write("\telse\n");
-                    writer.write("\t{\n");
-                    writer.write("\t\t" + parameterName + " = NULL;\n");
-                    writer.write("\t}\n");
+
                     writer.write("\t__axis_deepcopy_" + parameterName + " = deep;\n");
 
                     if (attribs[i].getChoiceElement())
@@ -293,14 +283,10 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     
                     if(isPointerType)
                     {
-                        writer.write("\tif (" + parameterName + " != NULL)\n");
-                        writer.write("\t{\n");
-                        writer.write("\t\tif (__axis_deepcopy_" + parameterName + ")\n");
-                        writer.write("\t\t{\n");
-                        writer.write("\t\t\tdelete [] " + parameterName + ";\n");
-                        writer.write("\t\t}\n");
-                        writer.write("\t\t" + parameterName + " = NULL;\n");
-                        writer.write("\t}\n\n");
+                        writer.write("\tif (__axis_deepcopy_" + parameterName + ")\n");
+                        writer.write("\t\tdelete [] " + parameterName + ";\n");
+                        writer.write("\t" + parameterName + " = NULL;\n");
+                        
                         writer.write("\tif(InValue != NULL)\n");
                         writer.write("\t{\n");
                         writer.write("\t\tif (deep)\n");
@@ -309,27 +295,18 @@ public class BeanParamWriter extends ParamCPPFileWriter
                         writer.write("\t\t\tstrcpy(" + parameterName + ", InValue);\n");
                         writer.write("\t\t}\n");
                         writer.write("\t\telse\n");
-                        writer.write("\t\t{\n");
                         writer.write("\t\t\t" + parameterName + " = InValue;\n");
-                        writer.write("\t\t}\n");
                         writer.write("\t}\n");
-                        writer.write("\telse\n");
-                        writer.write("\t{\n");
-                        writer.write("\t\t" + parameterName + " = NULL;\n");
-                        writer.write("\t}\n");
+
                         writer.write("\t__axis_deepcopy_" + parameterName + " = deep;\n");
                     }
                     else if ((attribs[i].isSimpleType() || attribs[i].getType().isSimpleType()) 
                                 && (attribs[i].getAllElement() || attribs[i].getChoiceElement()))
                     {
-                        writer.write("\tif (" + parameterName + " != NULL)\n");
-                        writer.write("\t{\n");
-                        writer.write("\t\tif (__axis_deepcopy_" + parameterName + ")\n");
-                        writer.write("\t\t{\n");
-                        writer.write("\t\t\tdelete " + parameterName + ";\n");
-                        writer.write("\t\t}\n");
-                        writer.write("\t\t" + parameterName + " = NULL;\n");
-                        writer.write("\t}\n");
+                        writer.write("\tif (__axis_deepcopy_" + parameterName + ")\n");
+                        writer.write("\t\tdelete " + parameterName + ";\n");
+                        writer.write("\t" + parameterName + " = NULL;\n");
+
                         writer.write("\tif (InValue != NULL)\n");
                         writer.write("\t{\n");
                         writer.write("\t\tif (deep)\n");
@@ -338,14 +315,9 @@ public class BeanParamWriter extends ParamCPPFileWriter
                         writer.write("\t\t\t*" + parameterName + " = *InValue;\n");
                         writer.write("\t\t}\n");
                         writer.write("\t\telse\n");
-                        writer.write("\t\t{\n");
                         writer.write("\t\t\t" + parameterName + " = InValue;\n");
-                        writer.write("\t\t}\n");
                         writer.write("\t}\n");
-                        writer.write("\telse\n");
-                        writer.write("\t{\n");
-                        writer.write("\t\t" + parameterName + " = NULL;\n");
-                        writer.write("\t}\n");
+
                         writer.write("\t__axis_deepcopy_" + parameterName + " = deep;\n");
                     }
                     else
