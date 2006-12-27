@@ -469,9 +469,19 @@ public class BeanParamWriter extends ParamCFileWriter
         {
             if (extensionBaseAttrib != null)
             {
-                writer.write("\taxiscSoapDeSerializerGetChardataAs(pDZ, (void **)&(param->"
-                        + extensionBaseAttrib.getParamNameAsMember() + "), "
-                        + CUtils.getXSDTypeForBasicType(extensionBaseAttrib.getTypeName()) + ");\n");
+                writer.write("\tvoid* pCharDataAs;\n\n");
+                String typeName = extensionBaseAttrib.getTypeName();
+                String xsdType = CUtils.getXSDTypeForBasicType(typeName);
+                writer.write("\taxiscSoapDeSerializerGetChardataAs(pDZ, &pCharDataAs, " + xsdType + ");\n");
+                writer.write("\tparam->" + extensionBaseAttrib.getParamNameAsMember() + " = ");
+                
+                if (CUtils.isPointerType(typeName))
+                    writer.write("(" + typeName + ") pCharDataAs;\n");
+                else
+                {
+                    writer.write(" *(" + typeName + "*) pCharDataAs;\n");
+                    writer.write("\taxiscAxisDelete(pCharDataAs, " + xsdType + ");\n");
+                }                
             }
             else
             {
@@ -776,9 +786,21 @@ public class BeanParamWriter extends ParamCFileWriter
         if (extensionBaseAttrib != null
                 && extensionBaseAttrib.getTypeName() != null)
         {
-            writer.write("\taxiscSoapDeSerializerGetChardataAs(pDZ, (void **)&(param->"
-                    + extensionBaseAttrib.getParamNameAsMember() + "), "
-                    + CUtils.getXSDTypeForBasicType(extensionBaseAttrib.getTypeName()) + ");\n");
+            writer.write("\t{\n"); // ==== begin scope
+            writer.write("\tvoid* pCharDataAs;\n");
+            String typeName = extensionBaseAttrib.getTypeName();
+            String xsdType = CUtils.getXSDTypeForBasicType(typeName);
+            writer.write("\taxiscSoapDeSerializerGetChardataAs(pDZ, &pCharDataAs, " + xsdType + ");\n");
+            writer.write("\tparam->" + extensionBaseAttrib.getParamNameAsMember() + " = ");
+            
+            if (CUtils.isPointerType(typeName))
+                writer.write("(" + typeName + ") pCharDataAs;\n");
+            else
+            {
+                writer.write(" *(" + typeName + "*) pCharDataAs;\n");
+                writer.write("\taxiscAxisDelete(pCharDataAs, " + xsdType + ");\n");
+            }    
+            writer.write("\t}\n"); // ==== end scope
         }
         
         writer.write("\t/* Return deserialization status */\n");

@@ -753,9 +753,19 @@ public class BeanParamWriter extends ParamCPPFileWriter
         {
             if (extensionBaseAttrib != null)
             {
-                writer.write("\tpIWSDZ->getChardataAs((void **)&(param->"
-                        + extensionBaseAttrib.getParamNameAsMember() + "), "
-                        + CUtils.getXSDTypeForBasicType(extensionBaseAttrib.getTypeName()) + ");\n");
+                writer.write("\tvoid* pCharDataAs;\n\n");
+                String typeName = extensionBaseAttrib.getTypeName();
+                String xsdType = CUtils.getXSDTypeForBasicType(typeName);
+                writer.write("\tpIWSDZ->getChardataAs(&pCharDataAs, " + xsdType + ");\n");
+                writer.write("\tparam->" + extensionBaseAttrib.getParamNameAsMember() + " = ");
+                
+                if (CUtils.isPointerType(typeName))
+                    writer.write("(" + typeName + ") pCharDataAs;\n");
+                else
+                {
+                    writer.write(" *(" + typeName + "*) pCharDataAs;\n");
+                    writer.write("\tAxis::AxisDelete( pCharDataAs, " + xsdType + ");\n");
+                }
             }
             else
             {
@@ -1018,9 +1028,19 @@ public class BeanParamWriter extends ParamCPPFileWriter
         if (extensionBaseAttrib != null
                 && extensionBaseAttrib.getTypeName() != null)
         {
-            writer.write("\tpIWSDZ->getChardataAs((void **)&(param->"
-                    + extensionBaseAttrib.getParamNameAsMember() + "), "
-                    + CUtils.getXSDTypeForBasicType(extensionBaseAttrib.getTypeName()) + ");\n");
+            writer.write("\tvoid* pCharDataAs;\n");
+            String typeName = extensionBaseAttrib.getTypeName();
+            String xsdType = CUtils.getXSDTypeForBasicType(typeName);
+            writer.write("\tpIWSDZ->getChardataAs(&pCharDataAs, " + xsdType + ");\n");
+            writer.write("\tparam->" + extensionBaseAttrib.getParamNameAsMember() + " = ");
+            
+            if (CUtils.isPointerType(typeName))
+                writer.write("(" + typeName + ") pCharDataAs;\n");
+            else
+            {
+                writer.write(" *(" + typeName + "*) pCharDataAs;\n");
+                writer.write("\tAxis::AxisDelete( pCharDataAs, " + xsdType + ");\n");
+            }            
         }
 
         writer.write("\treturn pIWSDZ->getStatus();\n");
