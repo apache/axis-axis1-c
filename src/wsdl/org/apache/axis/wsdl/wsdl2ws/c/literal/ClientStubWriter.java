@@ -369,9 +369,9 @@ public class ClientStubWriter
                 String initValue = CUtils.getInitValue(outparamType);
                 if (initValue != null)
                     writer.write(outparamType + " Ret = " + initValue + ";\n");
-                else if (outparamType.equals("xsdc__dateTime")
-                        || outparamType.equals("xsdc__date")
-                        || outparamType.equals("xsdc__time"))
+                else if (CUtils.getXSDTypeForBasicType( outparamType).equals("XSDC_DATETIME")
+                        || CUtils.getXSDTypeForBasicType( outparamType).equals("XSDC_DATE")
+                        || CUtils.getXSDTypeForBasicType( outparamType).equals("XSDC_TIME"))
                 {
                     writer.write(outparamType + " Ret;\n");
                     writer.write("\tmemset(&Ret,0,sizeof(" + outparamType + "));\n");
