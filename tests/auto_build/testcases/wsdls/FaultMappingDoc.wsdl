@@ -45,14 +45,15 @@
     </sequence>
    </complexType>
    <element name="OutOfBoundStruct" nillable="true" type="impl:OutOfBoundStruct"/>
-   <complexType name="DivByZeroStruct">
-    <sequence>
-     <element name="varString" nillable="true" type="xsd:string"/>
-     <element name="varInt" type="xsd:int"/>
-     <element name="varFloat" type="xsd:float"/>
-    </sequence>
-   </complexType>
-   <element name="DivByZeroStruct" nillable="true" type="impl:DivByZeroStruct"/>
+   <element name="DivByZeroStruct" nillable="true">
+   		<complexType>
+    		<sequence>
+     			<element name="varString" nillable="true" type="xsd:string"/>
+     			<element name="varInt" type="xsd:int"/>
+     			<element name="varFloat" type="xsd:float"/>
+    		</sequence>
+   		</complexType>   
+   </element>
    <element name="SpecialDetailStruct" nillable="true" type="impl:SpecialDetailStruct"/>
   </schema>
  </wsdl:types>

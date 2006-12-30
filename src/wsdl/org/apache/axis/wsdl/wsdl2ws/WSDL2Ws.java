@@ -669,6 +669,7 @@ public class WSDL2Ws
         
         exposeReferenceTypes(wsContext);
         exposeMessagePartsThatAreAnonymousTypes(wsContext);
+        // This call must be last one called of the exposexxx methods!
         exposeNestedTypesThatAreAnonymousTypes(wsContext);
         
         if (WSDL2Ws.verbose)
@@ -1138,6 +1139,25 @@ public class WSDL2Ws
                     {
                           MethodInfo method = (MethodInfo)methods.get(i);
                           
+                          // Check for faults that need to be externalized
+                          Collection faultTypes = method.getFaultType();
+                          Iterator faultIterator = faultTypes.iterator();
+                          while(faultIterator.hasNext())
+                          {
+                              FaultInfo faultType = (FaultInfo)faultIterator.next();
+                              Collection parameterTypes = faultType.getParams();
+                              Iterator paramIterator = parameterTypes.iterator();
+                              while(paramIterator.hasNext())
+                              {
+                                  ParameterInfo parameterInfo =(ParameterInfo)paramIterator.next();
+                                  Type parameterType = parameterInfo.getType();
+
+                                  if(WSDL2Ws.verbose)
+                                      System.out.println( "EXPOSE2: Exposing fault type "+parameterType.getName());
+                                  externalizeTypeAndUpdateTypeMap(wsContext, parameterType);
+                              }                              
+                          }
+
                           // Check input parameters
                           Collection inputParameterTypes = method.getInputParameterTypes();
                           Iterator paramIterator = inputParameterTypes.iterator();
@@ -1149,20 +1169,7 @@ public class WSDL2Ws
                               {
                                   if(WSDL2Ws.verbose)
                                       System.out.println( "EXPOSE2: Matches input parm, exposing anon type "+parameterType.getName());
-                         
-                                  QName oldName = parameterType.getName();
-                                  Type innerClassType =  wsContext.getTypemap().getType(oldName);
-                                  if (innerClassType != null && !innerClassType.isExternalized())
-                                  {
-                                      QName newTypeName   =  new QName(parameterType.getName().getNamespaceURI(), 
-                                                                       parameterType.getLanguageSpecificName());
-
-                                      innerClassType.externalize(newTypeName);
-                                      
-                                      // Update the typemap with new info
-                                      wsContext.getTypemap().removeType(oldName);
-                                      wsContext.getTypemap().addType(newTypeName, innerClassType);
-                                  }
+                                  externalizeTypeAndUpdateTypeMap(wsContext, parameterType);
                               }
                           }
                           
@@ -1176,21 +1183,8 @@ public class WSDL2Ws
                               if(parameterType.getName().equals(type.getQName()))
                               {
                                   if(WSDL2Ws.verbose)
-                                      System.out.println( "EXPOSE2: Matches output parm, exposing anon type "+parameterType.getName());
-                              
-                                  QName oldName = parameterType.getName();
-                                  Type innerClassType =  wsContext.getTypemap().getType(oldName);
-                                  if (innerClassType != null && !innerClassType.isExternalized())
-                                  {
-                                      QName newTypeName   =  new QName(parameterType.getName().getNamespaceURI(), 
-                                                                       parameterType.getLanguageSpecificName());
-
-                                      innerClassType.externalize(newTypeName);
-
-                                      // Update the typemap with new info
-                                      wsContext.getTypemap().removeType(oldName);
-                                      wsContext.getTypemap().addType(newTypeName, innerClassType);
-                                  }
+                                      System.out.println( "EXPOSE2: Matches output parm, exposing anon type "+parameterType.getName());                             
+                                  externalizeTypeAndUpdateTypeMap(wsContext, parameterType);
                               }
                           }
                     }
@@ -1286,6 +1280,23 @@ public class WSDL2Ws
         }
     }
 
+    private void externalizeTypeAndUpdateTypeMap(WebServiceContext wsContext, Type parameterType)
+    {
+        QName oldName = parameterType.getName();
+        Type innerClassType =  wsContext.getTypemap().getType(oldName);
+        if (innerClassType != null && !innerClassType.isExternalized())
+        {
+            QName newTypeName   =  new QName(parameterType.getName().getNamespaceURI(), 
+                                             parameterType.getLanguageSpecificName());
+
+            innerClassType.externalize(newTypeName);
+            
+            // Update the typemap with new info
+            wsContext.getTypemap().removeType(oldName);
+            wsContext.getTypemap().addType(newTypeName, innerClassType);
+        }
+    }
+    
     public static void usage()
     {
         System.out.println(
