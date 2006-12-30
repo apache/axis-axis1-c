@@ -703,7 +703,6 @@ public class WrapWriter extends CPPClassWriter
                                         + ", \""
                                         + returnParamName
                                         + "\");\n");
-                                writer.write("\t\tdelete out" + i + ";\n");
                             }
                             else
                             {
@@ -721,7 +720,6 @@ public class WrapWriter extends CPPClassWriter
                                         + "\", Axis_URI_"
                                         + containedType
                                         + ");\n");
-                                writer.write("delete out" + i + ";\n");
                             }
                         }
                         else

@@ -518,7 +518,6 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                         writer.write("\tpIWSSZ->addOutputBasicArrayParam((Axis_Array*)(&out"
                                 + i + ")," + CUtils.getXSDTypeForBasicType( containedType)
                                 + ", \"" + returnParamName + "\");\n");
-                        writer.write("\tdelete out" + i + ";\n");
                     }
                     else if (arrayType.isSimpleType())
                     {
@@ -526,7 +525,6 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                         writer.write("\tpIWSSZ->addOutputBasicArrayParam((Axis_Array*)(&out"
                                 + i + ")," + CUtils.getXSDTypeForBasicType(containedType)
                                 + ", \"" + returnParamName + "\");\n");
-                        writer.write("\tdelete out" + i + ";\n");
                     }
                     else
                     {
@@ -535,7 +533,6 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                                 + "(void*) Axis_Serialize_" + containedType
                                 + ", (void*) Axis_Delete_" + containedType
                                 + ", \"" + returnParamName + "\", Axis_URI_" + containedType + ");\n");
-                        writer.write("\tdelete out" + i + ";\n");
                     }
                 }
                 else if (param.isAnyType())
