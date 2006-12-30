@@ -470,12 +470,14 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                 }
                 
                 returnParamName = param.getElementName().getLocalPart();
+                returnParamName = returnParamName.substring(returnParamName.lastIndexOf(">")+1);
+                
                 if (returntypeissimple)
                 {
                     if (param.isArray())
                     {
                         String containedType = CUtils.getclass4qname(retType.getName());
-                        writer.write("\treturn pIWSSZ->addOutputBasicArrayParam((Axis_Array*)(&ret),"
+                        writer.write("\treturn pIWSSZ->addOutputBasicArrayParam((Axis_Array*)(&out" + i + "),"
                                 + CUtils.getXSDTypeForBasicType(containedType)
                                 + ", \"" + returnParamName + "\");\n");
                     }
@@ -491,7 +493,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                         }
                         
                         writer.write("\tpIWSSZ->addOutputParam(\""
-                                    + returnParamName.substring(returnParamName.lastIndexOf(">")+1)
+                                    + returnParamName
                                     + "\", (void*)out" + i + ", "
                                     + CUtils.getXSDTypeForBasicType(outparamType) + ");\n");
                         
@@ -501,7 +503,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                     else
                     {
                         writer.write("\tpIWSSZ->addOutputParam(\""
-                                    + returnParamName.substring(returnParamName.lastIndexOf(">")+1)
+                                    + returnParamName
                                     + "\", (void*)&out" + i + ", "
                                     + CUtils.getXSDTypeForBasicType(outparamType) + ");\n");
                     }
@@ -549,7 +551,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                     writer.write("\tpIWSSZ->addOutputCmplxParam(out" + i
                             + ", (void*)Axis_Serialize_" + outparamType
                             + ", (void*)Axis_Delete_" + outparamType
-                            + ", \""  + returnParamName.substring(returnParamName.lastIndexOf(">")+1)
+                            + ", \""  + returnParamName
                             + "\", Axis_URI_" + outparamType + ");\n");
                     
                     if (param.isOptional())
