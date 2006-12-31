@@ -82,11 +82,14 @@ public class ServiceHeaderWriter
      */
     protected void writePreprocessorStatements() throws WrapperFault
     {
+        // TODO - remove and use parent class method
         try
         {
             Type atype;
             Iterator types = this.wscontext.getTypemap().getTypes().iterator();
             HashSet typeSet = new HashSet();
+            HashSet removeSet = new HashSet();
+            
             writer.write("#include <axis/AxisUserAPI.hpp>\n");
             writer.write("#include <axis/AxisUserAPIArrays.hpp>\n");
             writer.write("#include <axis/ISoapAttachment.hpp>\n");
@@ -94,11 +97,20 @@ public class ServiceHeaderWriter
             while (types.hasNext())
             {
                 atype = (Type) types.next();
-                if (atype.isAnonymous() && !atype.isExternalized())
-                    continue;
+
+                if (!atype.isExternalized())
+                    continue;                
 
                 typeSet.add(atype.getLanguageSpecificName());
+                
+                if (atype.isRestriction())
+                    removeSet.add(atype.getLanguageSpecificName()  + "_Array");                
             }
+            
+            Iterator ritr = removeSet.iterator();
+            while (ritr.hasNext())
+                typeSet.remove(ritr.next());
+            
             
             Iterator itr = typeSet.iterator();
             while (itr.hasNext())

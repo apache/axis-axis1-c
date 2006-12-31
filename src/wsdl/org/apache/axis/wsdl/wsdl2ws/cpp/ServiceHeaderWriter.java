@@ -283,6 +283,8 @@ public class ServiceHeaderWriter extends HeaderFileWriter
             Type atype;
             Iterator types = this.wscontext.getTypemap().getTypes().iterator();
             HashSet typeSet = new HashSet();
+            HashSet removeSet = new HashSet();
+            
             writer.write("#include <axis/AxisUserAPI.hpp>\n");
             writer.write("#include <axis/AxisUserAPIArrays.hpp>\n");
             writer.write("#include <axis/ISoapAttachment.hpp>\n");
@@ -291,22 +293,26 @@ public class ServiceHeaderWriter extends HeaderFileWriter
             while (types.hasNext())
             {
                 atype = (Type) types.next();
-                if (atype.isAnonymous() && !atype.isExternalized())
+                
+                if (!atype.isExternalized())
                     continue;
 
                 typeName = WrapperUtils.getLanguageTypeName4Type(atype);
                 if (null != typeName)
                     typeSet.add(typeName);
+                   
+                if (atype.isRestriction())
+                    removeSet.add(atype.getLanguageSpecificName()  + "_Array");
             }
+            
+            Iterator ritr = removeSet.iterator();
+            while (ritr.hasNext())
+                typeSet.remove(ritr.next());
             
             Iterator itr = typeSet.iterator();
             while (itr.hasNext())
             {
-                writer.write(
-                    "#include \""
-                        + itr.next().toString()
-                        + CUtils.CPP_HEADER_SUFFIX
-                        + "\"\n");
+                writer.write("#include \"" + itr.next().toString() + CUtils.CPP_HEADER_SUFFIX + "\"\n");
             }
             //writeFaultHeaders();
             writer.write("\n");
