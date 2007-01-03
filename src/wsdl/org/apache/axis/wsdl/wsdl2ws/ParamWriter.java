@@ -218,25 +218,26 @@ public abstract class ParamWriter extends BasicFileWriter
         else if (!(attrib.isSimpleType() || attrib.getType().isSimpleType()))
             return attrib.getTypeName() + "*";
         else
-        {
-            //  if the element is a choice or all element, define as ptr
-            if(attrib.getChoiceElement() || attrib.getAllElement())
-            {
-                String typename = attrib.getTypeName();
-                if (CUtils.isPointerType(typename))
-                    return attrib.getTypeName();
-                else
-                    return attrib.getTypeName() + "*";
-            }
-
-            // variables corresponding to optional attributes are pointer types
-            if (attrib.isAttribute() && attrib.isOptional())
-                return attrib.getTypeName() + "*";
-            else
+        {            
+            // If pointer type, just return type
+            boolean isPtrType;
+            if (attrib.isSimpleType())
+                isPtrType = CUtils.isPointerType(attrib.getTypeName());
+            else 
+                isPtrType = CUtils.isPointerType(CUtils.getclass4qname(attrib.getType().getBaseType()));
+            
+            if (isPtrType)
                 return attrib.getTypeName();
+            
+            //  if the element is nillable, a choice or all element, or optional, define as ptr
+            if(attrib.getChoiceElement() || attrib.getAllElement() || attrib.isNillable() || attrib.isOptional())
+                    return attrib.getTypeName() + "*";
+
+            // Just return type
+            return attrib.getTypeName();
         }
     }
-
+    
     protected boolean isElementNillable(int index)
     {
         boolean bNillable = false;

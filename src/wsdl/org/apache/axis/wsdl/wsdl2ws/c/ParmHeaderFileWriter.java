@@ -269,56 +269,30 @@ public class ParmHeaderFileWriter extends ParamWriter
                     sanitizedAttrName += "_Ref";
                 attribs[i].setParamName(sanitizedAttrName);
                 
-                if (isElementNillable(i) 
-                        || attribs[i].isArray() 
-                        || isElementOptional(i) 
-                        && !attribs[i].getAllElement())
-                {
-                    if(attribs[i].isAnyType())
-                    {
-                        anyCounter += 1;
-                        writer.write("\t" + "Axisc"
-                                +  getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-                                + " *  " + attribs[i].getParamName()
-                                + Integer.toString(anyCounter) + ";\n");
-                    }
-                    else if( attribs[i].isArray())
-                    {
-                        String paramName = getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]);
-                        if (!paramName.endsWith("*"))
-                            paramName += " *";
-
-                        writer.write("\t" + paramName + "  " + attribs[i].getParamName() + ";\n");
-                    }
-                    else if(attribs[i].getChoiceElement() && !isElementNillable(i))
-                        writer.write("\t"
-                             + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-                             + "  " + attribs[i].getParamName() + ";\n");
-                    else
-                        writer.write("\t"
-                                 + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-                                 + " *  " + attribs[i].getParamName() + ";\n");
-                } 
-                else if(attribs[i].getAllElement() || attribs[i].getChoiceElement() )
-                {
-                    writer.write("\t"
-                             + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-                             + "  " + attribs[i].getParamName() + ";\n");
-                }
-                else if(attribs[i].isAnyType())
+                // Following will set the correct type 
+                String paramType = getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]);
+                
+                // Following will set param name - if anyType, we index param name
+                String paramName = attribs[i].getParamName();
+                if(attribs[i].isAnyType())
                 {
                     anyCounter += 1;
-                    writer.write("\t" + "Axisc"
-                            + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-                            + "  " + attribs[i].getParamName()
-                            + Integer.toString(anyCounter) + ";\n");
-                }                   
-                else
-                {
-                    writer.write("\t"
-                                + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-                                + "  " + attribs[i].getParamNameWithoutSymbols() + ";\n");
+                    paramName  += Integer.toString(anyCounter);
+                    
+                    paramType = "Axisc" + paramType;
                 }
+                
+                // we pass arrays as pointers - ensure this
+                if (attribs[i].isArray())
+                {
+                    // TODO - work on removing the following if-check, should not be needed if we
+                    // let getCorrectParmNameConsideringArraysAndComplexTypes() perform check.
+                    if (!paramType.endsWith("*"))
+                        paramType += "*";                 
+                }
+
+                // Print out field.
+                writer.write("\t" + paramType + " " + paramName + ";\n");
             }
             
             if (extensionBaseAttrib != null &&

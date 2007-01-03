@@ -107,14 +107,20 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     sanitizedAttrName += "_Ref";
                 attribs[i].setParamName(sanitizedAttrName);
 
+                // Set method name
                 String methodName = attribs[i].getMethodName();
+                
+                // Set parameter name
                 String parameterName = sanitizedAttrName;
-                String properParamName = getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]);
+                
+                // Set the type to use
+                String properParamType = getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]);
+                
                 String type = attribs[i].getTypeName();
                 
                 if (attribs[i].isArray())
                 {
-                    String parameterTypeName = properParamName;
+                    String parameterTypeName = properParamType;
                     if (!parameterTypeName.endsWith("*"))
                         parameterTypeName += " *";
                     
@@ -138,13 +144,9 @@ public class BeanParamWriter extends ParamCPPFileWriter
                         writer.write("\t}\n");
                     }
                     else
-                        writer.write("\t\t" + parameterName + " = new " + properParamName + "();\n");                   
+                        writer.write("\t\t" + parameterName + " = new " + properParamType + "();\n");                   
                     
-                    if (attribs[i].getChoiceElement() || attribs[i].getAllElement())
-                        writer.write("\t" + parameterName + "->clone( *pInValue);\n");
-                    else
-                        writer.write("\t" + parameterName + "->clone( *pInValue);\n");
-
+                    writer.write("\t" + parameterName + "->clone( *pInValue);\n");
                     writer.write("}\n");
                 }
                 else if (isElementNillable(i)  || isElementOptional(i))
@@ -154,41 +156,17 @@ public class BeanParamWriter extends ParamCPPFileWriter
                         anyCounter += 1;
                         parameterName = parameterName + Integer.toString(anyCounter);
                     }
-                    
-                    if(attribs[i].getAllElement() || attribs[i].getChoiceElement() )
-                    {
-                        if (isElementNillable(i))
-                            writer.write("\n" + properParamName + " * " + classname
+
+                    // Getter method
+                    writer.write("\n" + properParamType + " " + classname
                                 + "::get" + methodName + "()\n{\n");
-                        else 
-                            writer.write("\n" + properParamName + " " + classname
-                                    + "::get" + methodName + "()\n{\n");
-                    }
-                    else
-                    {
-                        writer.write("\n" + properParamName + " * " + classname
-                                + "::get" + methodName + "()\n{\n");
-                    }
                     
                     writer.write("\t" + "return " + parameterName + " ; \n}\n");
 
-                    if(attribs[i].getAllElement() || attribs[i].getChoiceElement())
-                    {
-                        if (isElementNillable(i))
-                            writer.write("\n" + "void " + classname + "::set"
-                                    + methodName + "(" + properParamName
-                                    + " * pInValue, bool deep)\n{\n");
-                        else
-                            writer.write("\n" + "void " + classname + "::set"
-                                + methodName + "(" + properParamName
-                                + " pInValue, bool deep)\n{\n");
-                    }
-                    else
-                    {
-                        writer.write("\n" + "void " + classname + "::set"
-                                + methodName + "(" + properParamName
-                                + " * pInValue, bool deep)\n{\n");
-                    }
+                    // Setter method
+                    writer.write("\n" + "void " + classname + "::set"
+                            + methodName + "(" + properParamType
+                            + " pInValue, bool deep)\n{\n");
 
                     writer.write("\tif (__axis_deepcopy_" + parameterName + ")\n");
                     writer.write("\t\tdelete " + parameterName + ";\n");
@@ -199,16 +177,8 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     writer.write("\t\tif (deep)\n");
                     writer.write("\t\t{\n");
                     
-                    if(attribs[i].getAllElement() || attribs[i].getChoiceElement())
-                    {
-                        if (isElementNillable(i))
-                            writer.write("\t\t\t" + parameterName + " = new " + type + "*();\n");
-                        else
-                            writer.write("\t\t\t" + parameterName + " = new " + type + "();\n");
-                    }
-                    else
-                        writer.write("\t\t\t" + parameterName + " = new " + properParamName + "();\n");
-                    
+                    writer.write("\t\t\t" + parameterName + " = new " + type + "();\n");
+
                     writer.write("\t\t\t*" + parameterName + " = *pInValue;\n");
                     writer.write("\t\t}\n");
                     writer.write("\t\telse\n");
@@ -254,7 +224,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     }
 
                     writer.write("\n"
-                            + properParamName + " " + classname + "::get" + methodName
+                            + properParamType + " " + classname + "::get" + methodName
                             + "()\n{\n");
 
                     writer.write("\t" + "return " + parameterName + " ; \n}\n");
@@ -265,7 +235,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
 
                     writer.write("\n"
                             + "void " + classname + "::set"
-                            + methodName + "(" + properParamName + " InValue");
+                            + methodName + "(" + properParamType + " InValue");
                     
                     Type attributeType = attribs[i].getType();
                     
