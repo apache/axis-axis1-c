@@ -1639,76 +1639,73 @@ public class CSchemaUtils extends SchemaUtils
     private static void addAttributeGroupToVector(
         Vector v, Node attrGrpnode, SymbolTable symbolTable)
     {
-
         // get the type of the attributeGroup
-        QName attributeGroupType =
-            Utils.getTypeQName(attrGrpnode, new BooleanHolder(), false);
+        QName attributeGroupType = Utils.getTypeQName(attrGrpnode, new BooleanHolder(), false);
         TypeEntry type = symbolTable.getTypeEntry(attributeGroupType, false);
-
-        if (type != null)
+        if (type == null)
+            return;
+        
+        if (type.getNode() != null)
         {
-            if (type.getNode() != null)
+            // for each attribute or attributeGroup defined in the attributeGroup...
+            NodeList children = type.getNode().getChildNodes();
+
+            for (int j = 0; j < children.getLength(); j++)
             {
-                // for each attribute or attributeGroup defined in the attributeGroup...
-                NodeList children = type.getNode().getChildNodes();
+                Node kid = children.item(j);
 
-                for (int j = 0; j < children.getLength(); j++)
-                {
-                    Node kid = children.item(j);
-
-                    if (isXSDNode(kid, "attribute"))
-                        addAttributeToVector(v, kid, symbolTable);
-                    else if (isXSDNode(kid, "attributeGroup"))
-                        addAttributeGroupToVector(v, kid, symbolTable);
-                }
+                if (isXSDNode(kid, "attribute"))
+                    addAttributeToVector(v, kid, symbolTable);
+                else if (isXSDNode(kid, "attributeGroup"))
+                    addAttributeGroupToVector(v, kid, symbolTable);
             }
-            else if (type.isBaseType())
+        }
+        else if (type.isBaseType())
+        {
+            // soap/encoding is treated as a "known" schema
+            // so let's act like we know it
+            if (type.getQName().equals(Constants.SOAP_COMMON_ATTRS11))
             {
-                // soap/encoding is treated as a "known" schema
-                // so let's act like we know it
-                if (type.getQName().equals(Constants.SOAP_COMMON_ATTRS11))
-                {
-                    // 1.1 commonAttributes contains two attributes
-                    addAttributeToVector(
-                        v,  symbolTable, Constants.XSD_ID,
-                        new QName(Constants.URI_SOAP11_ENC, "id"));
-                    addAttributeToVector(
-                        v,  symbolTable, Constants.XSD_ANYURI,
-                        new QName(Constants.URI_SOAP11_ENC, "href"));
-                }
-                else if (type.getQName().equals(Constants.SOAP_COMMON_ATTRS12))
-                {
-                    // 1.2 commonAttributes contains one attribute
-                    addAttributeToVector(
-                        v,  symbolTable, Constants.XSD_ID,
-                        new QName(Constants.URI_SOAP12_ENC, "id"));
-                }
-                else if (type.getQName().equals(Constants.SOAP_ARRAY_ATTRS11))
-                {
-                    // 1.1 arrayAttributes contains two attributes
-                    addAttributeToVector(
-                        v, symbolTable, Constants.XSD_STRING,
-                        new QName(Constants.URI_SOAP12_ENC, "arrayType"));
-                    addAttributeToVector(
-                        v, symbolTable, Constants.XSD_STRING,
-                        new QName(Constants.URI_SOAP12_ENC, "offset"));
-                }
-                else if (type.getQName().equals(Constants.SOAP_ARRAY_ATTRS12))
-                {
-                    // 1.2 arrayAttributes contains two attributes
-                    // the type of "arraySize" is really "2003soapenc:arraySize"
-                    // which is rather of a hairy beast that is not yet supported
-                    // in Axis, so let's just use string; nobody should care for
-                    // now because arraySize wasn't used at all up until this
-                    // bug 23145 was fixed, which had nothing to do, per se, with
-                    // adding support for arraySize
-                    addAttributeToVector(
-                        v, symbolTable, Constants.XSD_STRING,
-                        new QName(Constants.URI_SOAP12_ENC, "arraySize"));
-                    addAttributeToVector(
-                        v, symbolTable, Constants.XSD_QNAME,
-                        new QName(Constants.URI_SOAP12_ENC, "itemType"));
-                }
+                // 1.1 commonAttributes contains two attributes
+                addAttributeToVector(
+                    v,  symbolTable, Constants.XSD_ID,
+                    new QName(Constants.URI_SOAP11_ENC, "id"));
+                addAttributeToVector(
+                    v,  symbolTable, Constants.XSD_ANYURI,
+                    new QName(Constants.URI_SOAP11_ENC, "href"));
+            }
+            else if (type.getQName().equals(Constants.SOAP_COMMON_ATTRS12))
+            {
+                // 1.2 commonAttributes contains one attribute
+                addAttributeToVector(
+                    v,  symbolTable, Constants.XSD_ID,
+                    new QName(Constants.URI_SOAP12_ENC, "id"));
+            }
+            else if (type.getQName().equals(Constants.SOAP_ARRAY_ATTRS11))
+            {
+                // 1.1 arrayAttributes contains two attributes
+                addAttributeToVector(
+                    v, symbolTable, Constants.XSD_STRING,
+                    new QName(Constants.URI_SOAP12_ENC, "arrayType"));
+                addAttributeToVector(
+                    v, symbolTable, Constants.XSD_STRING,
+                    new QName(Constants.URI_SOAP12_ENC, "offset"));
+            }
+            else if (type.getQName().equals(Constants.SOAP_ARRAY_ATTRS12))
+            {
+                // 1.2 arrayAttributes contains two attributes
+                // the type of "arraySize" is really "2003soapenc:arraySize"
+                // which is rather of a hairy beast that is not yet supported
+                // in Axis, so let's just use string; nobody should care for
+                // now because arraySize wasn't used at all up until this
+                // bug 23145 was fixed, which had nothing to do, per se, with
+                // adding support for arraySize
+                addAttributeToVector(
+                    v, symbolTable, Constants.XSD_STRING,
+                    new QName(Constants.URI_SOAP12_ENC, "arraySize"));
+                addAttributeToVector(
+                    v, symbolTable, Constants.XSD_QNAME,
+                    new QName(Constants.URI_SOAP12_ENC, "itemType"));
             }
         }
     }
