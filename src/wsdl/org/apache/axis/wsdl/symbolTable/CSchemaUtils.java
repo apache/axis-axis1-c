@@ -68,8 +68,7 @@ public class CSchemaUtils extends SchemaUtils
                 if (isXSDNode(kid, "complexContent"))
                 {
                     mixed = ((Element) kid).getAttribute("mixed");
-                    return (
-                        "true".equalsIgnoreCase(mixed) || "1".equals(mixed));
+                    return ("true".equalsIgnoreCase(mixed) || "1".equals(mixed));
                 }
             }
         }
@@ -1554,8 +1553,7 @@ public class CSchemaUtils extends SchemaUtils
      * @param child       
      * @param symbolTable 
      */
-    private static void addAttributeToVector(
-        Vector v, Node child, SymbolTable symbolTable)
+    private static void addAttributeToVector(Vector v, Node child, SymbolTable symbolTable)
     {
         // Get the name and type qnames.
         // The type qname is used to locate the TypeEntry, which is then
@@ -1577,9 +1575,7 @@ public class CSchemaUtils extends SchemaUtils
 
             if ((form != null) && form.equals("unqualified"))
             {
-                // Unqualified nodeName
-                attributeName =
-                    Utils.findQName("", attributeName.getLocalPart());
+                attributeName = Utils.findQName("", attributeName.getLocalPart());
             }
             else if (form == null)
             {
@@ -1596,9 +1592,13 @@ public class CSchemaUtils extends SchemaUtils
         // Get the corresponding TypeEntry from the symbol table
         TypeEntry type = symbolTable.getTypeEntry(attributeType, forElement.value);
 
+        // Try to get the corresponding global attribute ElementEntry
+        // from the symbol table.
+        if (type instanceof org.apache.axis.wsdl.symbolTable.Element) 
+            type = ((org.apache.axis.wsdl.symbolTable.Element) type).getRefType();
+ 
         // add type and name to vector, skip it if we couldn't parse it
         // XXX - this may need to be revisited.
-        //attributeName.getLocalPart().equals("name>lang")
         if ((type != null) && (attributeName != null))
         {
             v.add(type);
@@ -1620,7 +1620,7 @@ public class CSchemaUtils extends SchemaUtils
     {
 
         TypeEntry typeEnt = symbolTable.getTypeEntry(type, false);
-
+                 
         if (typeEnt != null) // better not be null
         {
             v.add(typeEnt);
@@ -1667,28 +1667,23 @@ public class CSchemaUtils extends SchemaUtils
             if (type.getQName().equals(Constants.SOAP_COMMON_ATTRS11))
             {
                 // 1.1 commonAttributes contains two attributes
-                addAttributeToVector(
-                    v,  symbolTable, Constants.XSD_ID,
+                addAttributeToVector(v,  symbolTable, Constants.XSD_ID,
                     new QName(Constants.URI_SOAP11_ENC, "id"));
-                addAttributeToVector(
-                    v,  symbolTable, Constants.XSD_ANYURI,
+                addAttributeToVector(v,  symbolTable, Constants.XSD_ANYURI,
                     new QName(Constants.URI_SOAP11_ENC, "href"));
             }
             else if (type.getQName().equals(Constants.SOAP_COMMON_ATTRS12))
             {
                 // 1.2 commonAttributes contains one attribute
-                addAttributeToVector(
-                    v,  symbolTable, Constants.XSD_ID,
+                addAttributeToVector(v,  symbolTable, Constants.XSD_ID,
                     new QName(Constants.URI_SOAP12_ENC, "id"));
             }
             else if (type.getQName().equals(Constants.SOAP_ARRAY_ATTRS11))
             {
                 // 1.1 arrayAttributes contains two attributes
-                addAttributeToVector(
-                    v, symbolTable, Constants.XSD_STRING,
+                addAttributeToVector(v, symbolTable, Constants.XSD_STRING,
                     new QName(Constants.URI_SOAP12_ENC, "arrayType"));
-                addAttributeToVector(
-                    v, symbolTable, Constants.XSD_STRING,
+                addAttributeToVector(v, symbolTable, Constants.XSD_STRING,
                     new QName(Constants.URI_SOAP12_ENC, "offset"));
             }
             else if (type.getQName().equals(Constants.SOAP_ARRAY_ATTRS12))
@@ -1700,11 +1695,9 @@ public class CSchemaUtils extends SchemaUtils
                 // now because arraySize wasn't used at all up until this
                 // bug 23145 was fixed, which had nothing to do, per se, with
                 // adding support for arraySize
-                addAttributeToVector(
-                    v, symbolTable, Constants.XSD_STRING,
+                addAttributeToVector(v, symbolTable, Constants.XSD_STRING,
                     new QName(Constants.URI_SOAP12_ENC, "arraySize"));
-                addAttributeToVector(
-                    v, symbolTable, Constants.XSD_QNAME,
+                addAttributeToVector(v, symbolTable, Constants.XSD_QNAME,
                     new QName(Constants.URI_SOAP12_ENC, "itemType"));
             }
         }
@@ -1819,53 +1812,17 @@ public class CSchemaUtils extends SchemaUtils
     // list of all of the XSD types in Schema 2001
 
     /** Field schemaTypes[] */
-    private static String schemaTypes[] =
-        {
-            "string",
-            "normalizedString",
-            "token",
-            "byte",
-            "unsignedByte",
-            "base64Binary",
-            "hexBinary",
-            "integer",
-            "positiveInteger",
-            "negativeInteger",
-            "nonNegativeInteger",
-            "nonPositiveInteger",
-            "int",
-            "unsignedInt",
-            "long",
-            "unsignedLong",
-            "short",
-            "unsignedShort",
-            "decimal",
-            "float",
-            "double",
-            "boolean",
-            "time",
-            "dateTime",
-            "duration",
-            "date",
-            "gMonth",
-            "gYear",
-            "gYearMonth",
-            "gDay",
-            "gMonthDay",
-            "Name",
-            "QName",
-            "NCName",
-            "anyURI",
-            "language",
-            "ID",
-            "IDREF",
-            "IDREFS",
-            "ENTITY",
-            "ENTITIES",
-            "NOTATION",
-            "NMTOKEN",
-            "NMTOKENS",
-            "anySimpleType" };
+    private static String schemaTypes[] = {
+            "string", "normalizedString", "token", "byte", "unsignedByte",
+            "base64Binary", "hexBinary", "integer", "positiveInteger",
+            "negativeInteger", "nonNegativeInteger", "nonPositiveInteger", "int",
+            "unsignedInt", "long", "unsignedLong", "short", "unsignedShort",
+            "decimal", "float", "double", "boolean", "time", "dateTime", "duration",
+            "date", "gMonth", "gYear", "gYearMonth", "gDay", "gMonthDay", "Name",
+            "QName", "NCName", "anyURI", "language", "ID", "IDREF", "IDREFS",
+            "ENTITY", "ENTITIES", "NOTATION", "NMTOKEN", "NMTOKENS",
+            "anySimpleType"
+    };
 
     /** Field schemaTypeSet */
     private static final Set schemaTypeSet =  new HashSet(Arrays.asList(schemaTypes));

@@ -40,9 +40,15 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
+
+<xsd:attribute name="requiredAttribute" type="xsd:boolean"/> 
+
+<xsd:attributeGroup name="AttrGroup">
+   <xsd:attribute ref="tns:requiredAttribute" use="required"/>
+</xsd:attributeGroup>
+
 			<xsd:complexType name="RequiredAttributeElement">
-				<xsd:attribute name="requiredAttribute" type="xsd:boolean"
-					use="required" />
+				<xsd:attributeGroup ref="tns:AttrGroup"/>
 			</xsd:complexType>
 			<xsd:element name="asRequiredAttributeResponse">
 				<xsd:complexType>
