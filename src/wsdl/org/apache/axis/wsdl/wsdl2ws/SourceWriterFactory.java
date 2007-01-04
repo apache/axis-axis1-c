@@ -69,13 +69,10 @@ public class SourceWriterFactory
                 
                 // C
                 case WrapperConstants.GENERATOR_WRAPPER_C :
-                    return new org.apache.axis.wsdl.wsdl2ws.c.WrapWriter(wscontext);
                 case WrapperConstants.GENERATOR_WRAPPER_H :
-                    return new org.apache.axis.wsdl.wsdl2ws.c.WrapHeaderWriter(wscontext);
                 case WrapperConstants.GENERATOR_SERVICE_C :
-                    return new org.apache.axis.wsdl.wsdl2ws.c.ServiceWriter(wscontext);
                 case WrapperConstants.GENERATOR_CLASSLOADER_C :
-                    return new org.apache.axis.wsdl.wsdl2ws.c.ClassLoader(wscontext);
+                    throw new WrapperFault("Server-side Web services for C not supported.");
                 case WrapperConstants.GENERATOR_CLIENT_STUB_H :
                     return new org.apache.axis.wsdl.wsdl2ws.c.ClientStubHeaderWriter(wscontext);
                 case WrapperConstants.GENERATOR_CLIENT_STUB_C :
@@ -102,13 +99,10 @@ public class SourceWriterFactory
                     
                 //C
                 case WrapperConstants.GENERATOR_WRAPPER_C :
-                    return new org.apache.axis.wsdl.wsdl2ws.c.literal.WrapWriter(wscontext);
                 case WrapperConstants.GENERATOR_WRAPPER_H :
-                    return new org.apache.axis.wsdl.wsdl2ws.c.WrapHeaderWriter(wscontext);
                 case WrapperConstants.GENERATOR_SERVICE_C :
-                    return new org.apache.axis.wsdl.wsdl2ws.c.literal.ServiceWriter(wscontext);
                 case WrapperConstants.GENERATOR_CLASSLOADER_C :
-                    return new org.apache.axis.wsdl.wsdl2ws.c.ClassLoader(wscontext);
+                    throw new WrapperFault("Server-side Web services for C not supported.");
                 case WrapperConstants.GENERATOR_CLIENT_STUB_H :
                     return new org.apache.axis.wsdl.wsdl2ws.c.literal.ClientStubHeaderWriter(wscontext);
                 case WrapperConstants.GENERATOR_CLIENT_STUB_C :
