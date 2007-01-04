@@ -47,7 +47,6 @@ public class CElementDecl //extends ElementDecl
     // an xsd:any element
     private boolean anyElement = false;
     
-    // Dushshantha:
     // indicate if the CElementDecl represents 
     // an xsd:choice element 
     private boolean choiceElement = false;
@@ -56,9 +55,7 @@ public class CElementDecl //extends ElementDecl
     // indicate if the CElementDecl represents 
     // an xsd:all element 
     private boolean allElement = false;
-    //04/05/2005
     
-    //Dushshantha:
     //This field is set to true if the element is elementFormDefault qualified.
     //This specifies whether the element must be namespace qualified or not in the SOAP message.
     private boolean nsQualified = false;
@@ -116,9 +113,6 @@ public class CElementDecl //extends ElementDecl
         this.anyElement = anyElement;
     }
     
-    // Dushshantha:
-    //setters and getters for choiceElement
-    
     public boolean getChoiceElement()
     {
         return this.choiceElement;
@@ -129,9 +123,6 @@ public class CElementDecl //extends ElementDecl
         this.choiceElement = choiceElement;
     }
     
-    //Chinthana:
-    //setters and getters for allElement
-    
     public boolean getAllElement()
     {
         return this.allElement;
@@ -141,12 +132,7 @@ public class CElementDecl //extends ElementDecl
     {
         this.allElement = allElement;
     }
-    //04/05/2005
     
-    /**
-     * Dushshantha:
-     * Getter and setter for the field nsQualified 
-     */
     public boolean getNsQualified(){
     	return nsQualified;
     }
