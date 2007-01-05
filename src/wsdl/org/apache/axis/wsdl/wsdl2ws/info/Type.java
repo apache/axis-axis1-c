@@ -70,31 +70,22 @@ public class Type
     /* element names and the type of the elements (QName,ElementInfo)*/
     private Hashtable elements;
     
-    /* This vector was added to preserve the order of types parsed from the wsdl. 
-     * This may be a hack. Should be improved if necessary
-     */
+    /* This vector was added to preserve the order of types parsed from the wsdl. */
     private Vector vElements;
     
     /* attribute names and the type of the attributes (QName,QName)*/
     private Hashtable attributes;
     
-    /* This vector was added to preserve the order of types parsed from the wsdl. 
-     * This may be a hack. Should be improved if necessary
-     */
+    /* This vector was added to preserve the order of types parsed from the wsdl. */
     private Vector vAttributes;
-    
-    /* has the attributes are specified with order <sequence> in the schema */
-    private boolean hasOrder;
-    
-    /*if order presents the order is set in the vector */
-    private Vector attribOrder;
-    
-    /* weather the type is Array */
+ 
+    /* whether the type is Array */
     private boolean isArray;
 
+    /* C or CPP */
     private String language;
     
-    //Samisa: element type
+    /* element type */
     private String elementType;
     
     /* is this type going to be thrown as a soap fault? */
@@ -120,10 +111,9 @@ public class Type
      */
     private Vector vRelatedTypes = new Vector();
     
-    public Type(QName name, String languageSpecificName, boolean hasOrder, String language)
+    public Type(QName name, String languageSpecificName, String language)
     {
         this.languageSpecificName = languageSpecificName;
-        this.hasOrder = hasOrder;
         this.name = name;
         elements = new Hashtable();
         attributes = new Hashtable();
@@ -160,8 +150,6 @@ public class Type
             isAnonymous = true;
             externalize = false;
         }
-                            
-        this.attribOrder = new Vector();
 
         if (name.getNamespaceURI().equals(WrapperConstants.APACHE_XMLSOAP_NAMESPACE) && 
             (name.getLocalPart().equals("DataHandler") ||
@@ -214,9 +202,6 @@ public class Type
         
         attribName = TypeMap.resolveWSDL2LanguageNameClashes(attribName, this.language);
 
-        if (hasOrder)
-            this.attribOrder.add(attribName);
-
         this.attributes.put(attribName, type);
         this.vAttributes.add(attribName);
     }
@@ -249,9 +234,6 @@ public class Type
 
         attribName = TypeMap.resolveWSDL2LanguageNameClashes(attribName, this.language);
 
-        if (hasOrder)
-            this.attribOrder.add(attribName);
-
         this.elements.put(attribName, element);
         this.vElements.add(attribName);
     }
@@ -259,16 +241,6 @@ public class Type
     public ElementInfo getElementForElementName(String attribName)
     {
         return (ElementInfo) this.elements.get(attribName);
-    }
-
-    public void setAttribOrder(Vector order)
-    {
-        this.attribOrder = order;
-    }
-
-    public boolean hasOrder()
-    {
-        return this.hasOrder;
     }
 
     public String getLanguageSpecificName()
@@ -295,28 +267,6 @@ public class Type
     public void setArray(boolean b)
     {
         isArray = b;
-    }
-
-    public boolean isContainedType(Type containedType)
-    {
-        Iterator ntype = this.attributes.values().iterator();
-        QName typeName;
-        while (ntype.hasNext())
-        {
-            typeName = ((Type) ntype.next()).getName();
-            if (typeName.equals(containedType.name))
-                return true;
-        }
-        
-        Iterator nelements = this.elements.values().iterator();
-        while (nelements.hasNext())
-        {
-            typeName = ((ElementInfo) nelements.next()).getType().getName();
-            if (typeName.equals(containedType.name))
-                return true;
-        }
-        
-        return false;
     }
 
     /**

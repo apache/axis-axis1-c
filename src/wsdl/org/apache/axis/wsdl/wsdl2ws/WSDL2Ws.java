@@ -789,7 +789,7 @@ public class WSDL2Ws
                 return typedata;
             }            
             
-            typedata = new Type(newqn, newqn.getLocalPart(), true, targetLanguage);
+            typedata = new Type(newqn, newqn.getLocalPart(), targetLanguage);
             
             if (type.getRefType().getRefType() != null)
                 typedata.setElementType(type.getRefType().getRefType().getQName().getLocalPart());
@@ -809,7 +809,7 @@ public class WSDL2Ws
             }
             
             typedata = 
-                new Type(type.getQName(), type.getQName().getLocalPart(), true, targetLanguage);
+                new Type(type.getQName(), type.getQName().getLocalPart(), targetLanguage);
         }
         
         // Add type to type map
@@ -944,7 +944,6 @@ public class WSDL2Ws
                             {
                                 newSecondaryType =  new Type(CUtils.anyTypeQname,
                                                     CUtils.anyTypeQname.getLocalPart(),
-                                                    true,
                                                     targetLanguage);
                             }
                             else

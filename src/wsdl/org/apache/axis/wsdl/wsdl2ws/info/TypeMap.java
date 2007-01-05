@@ -361,7 +361,7 @@ public class TypeMap
     public Type getType(QName name)
     {
         if (isSimpleType(name))
-            return new Type(name, null, false, TypeMap.language);
+            return new Type(name, null, TypeMap.language);
 
         return (Type) this.typeInfo.get(name);
     }
