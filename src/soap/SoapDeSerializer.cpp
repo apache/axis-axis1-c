@@ -785,20 +785,9 @@ SoapDeSerializer::getCmplxObject (void *pDZFunct,
         TRACE_OBJECT_CREATE_FUNCT_EXIT(pCreFunct, pObject);
         if (pObject && pDZFunct)
         {
-            if (C_RPC_PROVIDER == getCurrentProviderType ())
-            {
-                // Disable C support
-                //IWrapperSoapDeSerializer_C cWSD;
-                //cWSD._object = this;
-                //cWSD._functions = &IWrapperSoapDeSerializer::ms_VFtable;
-                //m_nStatus = ((AXIS_DESERIALIZE_FUNCT)pDZFunct)(pObject, &cWSD);
-            }
-            else
-            {
-                TRACE_DESERIALIZE_FUNCT_ENTRY(pDZFunct, pObject, this);
-                m_nStatus =    ((AXIS_DESERIALIZE_FUNCT) pDZFunct) (pObject, this);
-                TRACE_DESERIALIZE_FUNCT_EXIT(pDZFunct, m_nStatus);
-            }
+            TRACE_DESERIALIZE_FUNCT_ENTRY(pDZFunct, pObject, this);
+            m_nStatus =    ((AXIS_DESERIALIZE_FUNCT) pDZFunct) (pObject, this);
+            TRACE_DESERIALIZE_FUNCT_EXIT(pDZFunct, m_nStatus);
             
             if (AXIS_SUCCESS == m_nStatus)
             {
@@ -967,20 +956,9 @@ SoapDeSerializer::getCmplxFaultObject (void *pDZFunct,
     
         if (pObject && pDZFunct)
         {
-            if (C_RPC_PROVIDER == getCurrentProviderType ())
-            {
-            // Disable C support
-            //IWrapperSoapDeSerializer_C cWSD;
-            //cWSD._object = this;
-            //cWSD._functions = &IWrapperSoapDeSerializer::ms_VFtable;
-            //m_nStatus = ((AXIS_DESERIALIZE_FUNCT)pDZFunct)(pObject, &cWSD);
-            }
-            else
-            {
-                TRACE_DESERIALIZE_FUNCT_ENTRY(pDZFunct, pObject, this);
-                m_nStatus =    ((AXIS_DESERIALIZE_FUNCT) pDZFunct) (pObject, this);
-                TRACE_DESERIALIZE_FUNCT_EXIT(pDZFunct, m_nStatus);
-            }
+            TRACE_DESERIALIZE_FUNCT_ENTRY(pDZFunct, pObject, this);
+            m_nStatus =    ((AXIS_DESERIALIZE_FUNCT) pDZFunct) (pObject, this);
+            TRACE_DESERIALIZE_FUNCT_EXIT(pDZFunct, m_nStatus);
             
             if (AXIS_SUCCESS == m_nStatus)
             {
