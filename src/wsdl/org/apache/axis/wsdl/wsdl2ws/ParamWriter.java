@@ -33,6 +33,7 @@ import org.apache.axis.wsdl.wsdl2ws.info.AttributeInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.ElementInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
+import org.apache.axis.wsdl.symbolTable.CContainedAttribute;
 
 public abstract class ParamWriter extends BasicFileWriter
 {
@@ -107,11 +108,10 @@ public abstract class ParamWriter extends BasicFileWriter
         ArrayList attribfeilds = new ArrayList();
         ArrayList elementfeilds = new ArrayList();
 
-        Iterator names = type.getAttributeNames();
-        while (names.hasNext())
-        {
-            attribfeilds.add(names.next());
-        }
+        Iterator names = type.getAttributes();
+        if (names != null)
+            while (names.hasNext())
+                attribfeilds.add(names.next());
         
         names = type.getElementnames();
         while (names.hasNext())
@@ -125,22 +125,21 @@ public abstract class ParamWriter extends BasicFileWriter
         this.attribs = new AttributeInfo[intAttrFieldSz + intEleFieldSz];
         for (int i = 0; i < intAttrFieldSz; i++)
         {
+            CContainedAttribute attr = (CContainedAttribute)attribfeilds.get(i);
+            
             this.attribs[i] = new AttributeInfo(this.classname);
-            this.attribs[i].setParamName((String) attribfeilds.get(i));
-            Type attribType = type.getTypForAttribName(this.attribs[i].getParamName());
-            if (CUtils.isSimpleType(attribType.getName()))
-                this.attribs[i].setTypeName(CUtils.getclass4qname(attribType.getName()));
+            this.attribs[i].setParamName(attr.getName());
+            if (CUtils.isSimpleType(attr.getType().getName()))
+                this.attribs[i].setTypeName(CUtils.getclass4qname(attr.getType().getName()));
             else
             {
-                this.attribs[i].setTypeName(attribType.getLanguageSpecificName());
+                this.attribs[i].setTypeName(attr.getType().getLanguageSpecificName());
                 this.attribs[i].setSimpleType(false);
             }
-            this.attribs[i].setType(attribType);
+            this.attribs[i].setType(attr.getType());
             this.attribs[i].setAttribute(true);
-            this.attribs[i].setElementName(attribType.getName());
-                        
-            //TODO this is wrong. correct immediately. this will cause attributes serialized incorrectly
-            //TODO : how to find whether this attribute is optional or not ?
+            this.attribs[i].setElementName(attr.getType().getName());
+            this.attribs[i].setOptional(attr.isOptional());           
         }
 
         for (int i = intAttrFieldSz; i < intAttrFieldSz + intEleFieldSz; i++)

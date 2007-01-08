@@ -195,7 +195,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                                 String realName = attribs[j].getParamNameWithoutSymbols();
                                 if (CUtils.classExists(wscontext, realName))
                                     realName += "_Ref";
-                                writer.write("\t" + realName + " = NULL ; \n");
+                                writer.write("\t" + realName + " = NULL; \n");
                             }
                     
                     if (attribs[i].getAllElement())
@@ -404,9 +404,11 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 else
                     basicType = attribs[i].getTypeName();
 
+                if (attribs[i].isOptional())
+                    writer.write("\tif (0 != param->" + attribs[i].getParamNameAsMember() + ")\n");
+                
                 if (CUtils.isPointerType(basicType))
                 {
-                    writer.write("\tif (0 != param->" + attribs[i].getParamNameAsMember() + ")\n");
                     writer.write("\t\tpSZ->serializeAsAttribute(\""
                             + soapTagName + "\", 0, (void*)(param->"
                             + attribs[i].getParamNameAsMember() + "), "
@@ -414,7 +416,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 }
                 else
                 {
-                    writer.write("\tpSZ->serializeAsAttribute(\""
+                    writer.write("\t\tpSZ->serializeAsAttribute(\""
                             + soapTagName
                             + "\", 0, (void*)&(param->"
                             + attribs[i].getParamNameAsMember()
@@ -842,7 +844,6 @@ public class BeanParamWriter extends ParamCPPFileWriter
             }
             else if ((attribs[i].isSimpleType() || attribs[i].getType().isSimpleType()))
             {
-                //TODO handle optional attributes
                 //remove _Ref sufix and _ prefix in SOAP tag name
                 String soapTagName = (attribs[i].isAttribute() ? attribs[i].getParamName() : attribs[i].getElementNameAsString());
                 if (soapTagName.lastIndexOf("_Ref") > -1)
@@ -851,7 +852,8 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 if (soapTagName.charAt(0) == '_')
                     soapTagName = soapTagName.substring(1, soapTagName.length());
                 
-                if (attribs[i].isOptional())
+                // We only peek for elements, not element attributes!
+                if (attribs[i].isOptional() && !attribs[i].isAttribute())
                 {
                     writer.write("\tconst char* elementName" + i + " = pIWSDZ->peekNextElementName();\n");
                     writer.write("\t\tif(strcmp(elementName" + i + ", \"" + soapTagName + "\") == 0)\n");
@@ -942,7 +944,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     writer.write("\t}\n");                        
                 }
                 
-                if (attribs[i].isOptional())
+                if (attribs[i].isOptional() && !attribs[i].isAttribute())
                 {
                     writer.write("\t\t\t}\n");
                     writer.write("\t\telse\n");

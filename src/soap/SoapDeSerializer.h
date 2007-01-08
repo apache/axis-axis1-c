@@ -225,7 +225,7 @@ public:
     xsd__NOTATION AXISCALL getElementAsNOTATION(const AxisChar* pName,
         const AxisChar* pNamespace);
 
-	void getAttribute(const AxisChar* pName, const AxisChar* pNamespace,
+	void *getAttribute(const AxisChar* pName, const AxisChar* pNamespace,
         IAnySimpleType* pSimpleType);
     xsd__int * AXISCALL getAttributeAsInt(const AxisChar* pName, 
         const AxisChar* pNamespace);

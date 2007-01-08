@@ -1036,7 +1036,8 @@ SoapDeSerializer::getCmplxFaultObject (void *pDZFunct,
     return NULL;
 }
 
-void SoapDeSerializer::getAttribute(const AxisChar* pName, const AxisChar * pNamespace, IAnySimpleType * pSimpleType)
+void * SoapDeSerializer::
+getAttribute(const AxisChar* pName, const AxisChar * pNamespace, IAnySimpleType * pSimpleType)
 {
     if (m_pCurrNode)
     {
@@ -1046,13 +1047,14 @@ void SoapDeSerializer::getAttribute(const AxisChar* pName, const AxisChar * pNam
                 if ( 0 == strcmp(m_pCurrNode->m_pchAttributes[i], pName))
                 {
                     pSimpleType->deserialize(m_pCurrNode->m_pchAttributes[i+2]);
-                    return;
+                    return pSimpleType->getValue();
                 }
         }
         else
             m_nStatus = AXIS_FAIL;
     }
-    return;
+    
+    return NULL;
 }
 
 xsd__int *
@@ -1060,8 +1062,7 @@ SoapDeSerializer::getAttributeAsInt (const AxisChar * pName,
                                      const AxisChar * pNamespace)
 {
     Int simpleType;
-    getAttribute(pName, pNamespace, &simpleType);
-    return simpleType.getInt();
+    return (xsd__int *)getAttribute(pName, pNamespace, &simpleType);
 }
 
 xsd__boolean *
@@ -1069,8 +1070,7 @@ SoapDeSerializer::getAttributeAsBoolean (const AxisChar * pName,
                                          const AxisChar * pNamespace)
 {
     Boolean simpleType;
-    getAttribute(pName, pNamespace, &simpleType);
-    return simpleType.getBoolean();
+    return (xsd__boolean *)getAttribute(pName, pNamespace, &simpleType);
 }
 
 xsd__unsignedInt *
@@ -1078,8 +1078,7 @@ SoapDeSerializer::getAttributeAsUnsignedInt (const AxisChar * pName,
                                              const AxisChar * pNamespace)
 {
     UnsignedInt simpleType;
-    getAttribute(pName, pNamespace, &simpleType);
-    return simpleType.getUnsignedInt();
+    return (xsd__unsignedInt *)getAttribute(pName, pNamespace, &simpleType);
 }
 
 xsd__short *
@@ -1087,8 +1086,7 @@ SoapDeSerializer::getAttributeAsShort (const AxisChar * pName,
                                        const AxisChar * pNamespace)
 {
     Short simpleType;
-    getAttribute(pName, pNamespace, &simpleType);
-    return simpleType.getShort();
+    return (xsd__short *)getAttribute(pName, pNamespace, &simpleType);
 }
 
 xsd__unsignedShort *
@@ -1096,8 +1094,7 @@ SoapDeSerializer::getAttributeAsUnsignedShort (const AxisChar * pName,
                                                const AxisChar * pNamespace)
 {
     UnsignedShort simpleType;
-    getAttribute(pName, pNamespace, &simpleType);
-    return simpleType.getUnsignedShort();
+    return (xsd__unsignedShort *)getAttribute(pName, pNamespace, &simpleType);
 }
 
 xsd__byte *
@@ -1105,8 +1102,7 @@ SoapDeSerializer::getAttributeAsByte (const AxisChar * pName,
                                       const AxisChar * pNamespace)
 {
     Byte simpleType;
-    getAttribute(pName, pNamespace, &simpleType);
-    return simpleType.getByte();
+    return (xsd__byte *)getAttribute(pName, pNamespace, &simpleType);
 }
 
 xsd__unsignedByte *
@@ -1114,8 +1110,7 @@ SoapDeSerializer::getAttributeAsUnsignedByte (const AxisChar * pName,
                                               const AxisChar * pNamespace)
 {
     UnsignedByte simpleType;
-    getAttribute(pName, pNamespace, &simpleType);
-    return simpleType.getUnsignedByte();
+    return (xsd__unsignedByte *)getAttribute(pName, pNamespace, &simpleType);
 }
 
 xsd__long *
@@ -1123,8 +1118,7 @@ SoapDeSerializer::getAttributeAsLong (const AxisChar * pName,
                                       const AxisChar * pNamespace)
 {
     Long simpleType;
-    getAttribute(pName, pNamespace, &simpleType);
-    return simpleType.getLong();
+    return (xsd__long *)getAttribute(pName, pNamespace, &simpleType);
 }
 
 xsd__integer *
@@ -1132,8 +1126,7 @@ SoapDeSerializer::getAttributeAsInteger (const AxisChar * pName,
                                          const AxisChar * pNamespace)
 {
     Integer simpleType;
-    getAttribute(pName, pNamespace, &simpleType);
-    return simpleType.getInteger();
+    return (xsd__integer *)getAttribute(pName, pNamespace, &simpleType);
 }
 
 xsd__nonNegativeInteger *
@@ -1141,8 +1134,7 @@ SoapDeSerializer::getAttributeAsNonNegativeInteger (const AxisChar * pName,
                                                     const AxisChar * pNamespace)
 {
     NonNegativeInteger simpleType;
-    getAttribute(pName, pNamespace, &simpleType);
-    return simpleType.getNonNegativeInteger();
+    return (xsd__nonNegativeInteger *)getAttribute(pName, pNamespace, &simpleType);
 }
 
 xsd__positiveInteger *
@@ -1150,8 +1142,7 @@ SoapDeSerializer::getAttributeAsPositiveInteger (const AxisChar * pName,
                                                  const AxisChar * pNamespace)
 {
     PositiveInteger simpleType;
-    getAttribute(pName, pNamespace, &simpleType);
-    return simpleType.getPositiveInteger();
+    return (xsd__positiveInteger *)getAttribute(pName, pNamespace, &simpleType);
 }
 
 xsd__nonPositiveInteger *
@@ -1159,8 +1150,7 @@ SoapDeSerializer::getAttributeAsNonPositiveInteger (const AxisChar * pName,
                                                     const AxisChar * pNamespace)
 {
     NonPositiveInteger simpleType;
-    getAttribute(pName, pNamespace, &simpleType);
-    return simpleType.getNonPositiveInteger();
+    return (xsd__nonPositiveInteger *)getAttribute(pName, pNamespace, &simpleType);
 }
 
 xsd__negativeInteger *
@@ -1168,8 +1158,7 @@ SoapDeSerializer::getAttributeAsNegativeInteger (const AxisChar * pName,
                                                  const AxisChar * pNamespace)
 {
     NegativeInteger simpleType;
-    getAttribute(pName, pNamespace, &simpleType);
-    return simpleType.getNegativeInteger();
+    return (xsd__negativeInteger *)getAttribute(pName, pNamespace, &simpleType);
 }
 
 xsd__unsignedLong *
@@ -1177,8 +1166,7 @@ SoapDeSerializer::getAttributeAsUnsignedLong (const AxisChar *pName,
                                               const AxisChar * pNamespace)
 {
     UnsignedLong simpleType;
-    getAttribute(pName, pNamespace, &simpleType);
-    return simpleType.getUnsignedLong();
+    return (xsd__unsignedLong *)getAttribute(pName, pNamespace, &simpleType);
 }
 
 xsd__float *
@@ -1186,8 +1174,7 @@ SoapDeSerializer::getAttributeAsFloat (const AxisChar * pName,
                                        const AxisChar * pNamespace)
 {
     Float simpleType;
-    getAttribute(pName, pNamespace, &simpleType);
-    return simpleType.getFloat();
+    return (xsd__float *)getAttribute(pName, pNamespace, &simpleType);
 }
 
 xsd__double *
@@ -1195,8 +1182,7 @@ SoapDeSerializer::getAttributeAsDouble (const AxisChar * pName,
                                         const AxisChar * pNamespace)
 {
     Double simpleType;
-    getAttribute(pName, pNamespace, &simpleType);
-    return simpleType.getDouble();
+    return (xsd__double *)getAttribute(pName, pNamespace, &simpleType);
 }
 
 xsd__decimal *
@@ -1204,8 +1190,7 @@ SoapDeSerializer::getAttributeAsDecimal (const AxisChar * pName,
                                          const AxisChar * pNamespace)
 {
     Decimal simpleType;
-    getAttribute(pName, pNamespace, &simpleType);
-    return simpleType.getDecimal();
+    return (xsd__decimal *)getAttribute(pName, pNamespace, &simpleType);
 }
 
 xsd__NOTATION
@@ -1213,8 +1198,7 @@ SoapDeSerializer::getAttributeAsNOTATION (const AxisChar * pName,
                                           const AxisChar * pNamespace)
 {
     NOTATION simpleType;
-    getAttribute(pName, pNamespace, &simpleType);
-    return simpleType.getNOTATION();
+    return (xsd__NOTATION)getAttribute(pName, pNamespace, &simpleType);
 }
 
 xsd__string
@@ -1222,8 +1206,7 @@ SoapDeSerializer::getAttributeAsString (const AxisChar * pName,
                                         const AxisChar * pNamespace)
 {
     String simpleType;
-    getAttribute(pName, pNamespace, &simpleType);
-    return simpleType.getString();
+    return (xsd__string)getAttribute(pName, pNamespace, &simpleType);
 }
 
 xsd__normalizedString
@@ -1231,8 +1214,7 @@ SoapDeSerializer::getAttributeAsNormalizedString (const AxisChar * pName,
                                                   const AxisChar * pNamespace)
 {
     NormalizedString simpleType;
-    getAttribute(pName, pNamespace, &simpleType);
-    return simpleType.getNormalizedString();
+    return (xsd__normalizedString)getAttribute(pName, pNamespace, &simpleType);
 }
 
 xsd__token
@@ -1240,8 +1222,7 @@ SoapDeSerializer::getAttributeAsToken (const AxisChar * pName,
                                        const AxisChar * pNamespace)
 {
     Token simpleType;
-    getAttribute(pName, pNamespace, &simpleType);
-    return simpleType.getToken();
+    return (xsd__token)getAttribute(pName, pNamespace, &simpleType);
 }
 
 xsd__language
@@ -1249,8 +1230,7 @@ SoapDeSerializer::getAttributeAsLanguage (const AxisChar * pName,
                                           const AxisChar * pNamespace)
 {
     Language simpleType;
-    getAttribute(pName, pNamespace, &simpleType);
-    return simpleType.getLanguage();
+    return (xsd__language)getAttribute(pName, pNamespace, &simpleType);
 }
 
 xsd__NMTOKEN
@@ -1258,8 +1238,7 @@ SoapDeSerializer::getAttributeAsNMTOKEN (const AxisChar * pName,
                                          const AxisChar * pNamespace)
 {
     NMTOKEN simpleType;
-    getAttribute(pName, pNamespace, &simpleType);
-    return simpleType.getNMTOKEN();
+    return (xsd__NMTOKEN)getAttribute(pName, pNamespace, &simpleType);
 }
 
 xsd__NMTOKENS
@@ -1267,8 +1246,7 @@ SoapDeSerializer::getAttributeAsNMTOKENS (const AxisChar * pName,
                                           const AxisChar * pNamespace)
 {
     NMTOKENS simpleType;
-    getAttribute(pName, pNamespace, &simpleType);
-    return simpleType.getNMTOKENS();
+    return (xsd__NMTOKENS)getAttribute(pName, pNamespace, &simpleType);
 }
 
 xsd__Name
@@ -1276,8 +1254,7 @@ SoapDeSerializer::getAttributeAsName (const AxisChar * pName,
                                       const AxisChar * pNamespace)
 {
     Name simpleType;
-    getAttribute(pName, pNamespace, &simpleType);
-    return simpleType.getName();
+    return (xsd__Name)getAttribute(pName, pNamespace, &simpleType);
 }
 
 xsd__NCName
@@ -1285,8 +1262,7 @@ SoapDeSerializer::getAttributeAsNCName (const AxisChar * pName,
                                         const AxisChar * pNamespace)
 {
     NCName simpleType;
-    getAttribute(pName, pNamespace, &simpleType);
-    return simpleType.getNCName();
+    return (xsd__NCName)getAttribute(pName, pNamespace, &simpleType);
 }
 
 
@@ -1295,8 +1271,7 @@ SoapDeSerializer::getAttributeAsID (const AxisChar * pName,
                                     const AxisChar * pNamespace)
 {
     ID simpleType;
-    getAttribute(pName, pNamespace, &simpleType);
-    return simpleType.getID();
+    return (xsd__ID)getAttribute(pName, pNamespace, &simpleType);
 }
 
 xsd__IDREF
@@ -1304,8 +1279,7 @@ SoapDeSerializer::getAttributeAsIDREF (const AxisChar * pName,
                                        const AxisChar * pNamespace)
 {
     IDREF simpleType;
-    getAttribute(pName, pNamespace, &simpleType);
-    return simpleType.getIDREF();
+    return (xsd__IDREF)getAttribute(pName, pNamespace, &simpleType);
 }
 
 xsd__IDREFS
@@ -1313,8 +1287,7 @@ SoapDeSerializer::getAttributeAsIDREFS (const AxisChar * pName,
                                         const AxisChar * pNamespace)
 {
     IDREFS simpleType;
-    getAttribute(pName, pNamespace, &simpleType);
-    return simpleType.getIDREFS();
+    return (xsd__IDREFS)getAttribute(pName, pNamespace, &simpleType);
 }
 
 xsd__ENTITY
@@ -1322,8 +1295,7 @@ SoapDeSerializer::getAttributeAsENTITY (const AxisChar * pName,
                                         const AxisChar * pNamespace)
 {
     ENTITY simpleType;
-    getAttribute(pName, pNamespace, &simpleType);
-    return simpleType.getENTITY();
+    return (xsd__ENTITY)getAttribute(pName, pNamespace, &simpleType);
 }
 
 xsd__ENTITIES
@@ -1331,8 +1303,7 @@ SoapDeSerializer::getAttributeAsENTITIES (const AxisChar * pName,
                                           const AxisChar * pNamespace)
 {
     ENTITIES simpleType;
-    getAttribute(pName, pNamespace, &simpleType);
-    return simpleType.getENTITIES();
+    return (xsd__ENTITIES)getAttribute(pName, pNamespace, &simpleType);
 }
 
 xsd__anyURI
@@ -1340,8 +1311,7 @@ SoapDeSerializer::getAttributeAsAnyURI (const AxisChar * pName,
                                         const AxisChar * pNamespace)
 {
     AnyURI simpleType;
-    getAttribute(pName, pNamespace, &simpleType);
-    return simpleType.getAnyURI();
+    return (xsd__anyURI)getAttribute(pName, pNamespace, &simpleType);
 }
 
 xsd__QName
@@ -1349,8 +1319,7 @@ SoapDeSerializer::getAttributeAsQName (const AxisChar * pName,
                                        const AxisChar * pNamespace)
 {
     XSD_QName simpleType;
-    getAttribute(pName, pNamespace, &simpleType);
-    return simpleType.getQName();
+    return (xsd__QName)getAttribute(pName, pNamespace, &simpleType);
 }
 
 xsd__hexBinary *
@@ -1358,8 +1327,7 @@ SoapDeSerializer::getAttributeAsHexBinary (const AxisChar * pName,
                                            const AxisChar * pNamespace)
 {
     HexBinary simpleType;
-    getAttribute(pName, pNamespace, &simpleType);
-    return simpleType.getHexBinary();
+    return (xsd__hexBinary *)getAttribute(pName, pNamespace, &simpleType);
 }
 
 xsd__base64Binary *
@@ -1367,8 +1335,7 @@ SoapDeSerializer::getAttributeAsBase64Binary (const AxisChar * pName,
                                               const AxisChar * pNamespace)
 {
     Base64Binary simpleType;
-    getAttribute(pName, pNamespace, &simpleType);
-    return simpleType.getBase64Binary();
+    return (xsd__base64Binary *)getAttribute(pName, pNamespace, &simpleType);
 }
 
 xsd__dateTime *
@@ -1376,8 +1343,7 @@ SoapDeSerializer::getAttributeAsDateTime (const AxisChar * pName,
                                           const AxisChar * pNamespace)
 {
     DateTime simpleType;
-    getAttribute(pName, pNamespace, &simpleType);
-    return simpleType.getDateTime();
+    return (xsd__dateTime *)getAttribute(pName, pNamespace, &simpleType);
 }
 
 xsd__date *
@@ -1385,8 +1351,7 @@ SoapDeSerializer::getAttributeAsDate (const AxisChar * pName,
                                       const AxisChar * pNamespace)
 {
     Date simpleType;
-    getAttribute(pName, pNamespace, &simpleType);
-    return simpleType.getDate();
+    return (xsd__date *)getAttribute(pName, pNamespace, &simpleType);
 }
 
 xsd__time *
@@ -1394,8 +1359,7 @@ SoapDeSerializer::getAttributeAsTime (const AxisChar * pName,
                                       const AxisChar * pNamespace)
 {
     Time simpleType;
-    getAttribute(pName, pNamespace, &simpleType);
-    return simpleType.getTime();
+    return (xsd__time *)getAttribute(pName, pNamespace, &simpleType);
 }
 
 xsd__gDay*
@@ -1403,18 +1367,15 @@ SoapDeSerializer::getAttributeAsGDay (const AxisChar * pName,
                                       const AxisChar * pNamespace)
 {
     GDay simpleType;
-    getAttribute(pName, pNamespace, &simpleType);
-    return simpleType.getGDay();
+    return (xsd__gDay *)getAttribute(pName, pNamespace, &simpleType);
 }
 
 xsd__gMonth*
 SoapDeSerializer::getAttributeAsGMonth (const AxisChar * pName,
                                         const AxisChar * pNamespace)
 {
- 
     GMonth simpleType;
-    getAttribute(pName, pNamespace, &simpleType);
-    return simpleType.getGMonth();
+    return (xsd__gMonth *)getAttribute(pName, pNamespace, &simpleType);
 }
 
 xsd__gMonthDay*
@@ -1422,8 +1383,7 @@ SoapDeSerializer::getAttributeAsGMonthDay (const AxisChar * pName,
                                            const AxisChar * pNamespace)
 {
     GMonthDay simpleType;
-    getAttribute(pName, pNamespace, &simpleType);
-    return simpleType.getGMonthDay();
+    return (xsd__gMonthDay *)getAttribute(pName, pNamespace, &simpleType);
 }
 
 xsd__gYear*
@@ -1431,8 +1391,7 @@ SoapDeSerializer::getAttributeAsGYear (const AxisChar * pName,
                                        const AxisChar * pNamespace)
 {
     GYear simpleType;
-    getAttribute(pName, pNamespace, &simpleType);
-    return simpleType.getGYear();
+    return (xsd__gYear *)getAttribute(pName, pNamespace, &simpleType);
 }
 
 xsd__gYearMonth*
@@ -1440,8 +1399,7 @@ SoapDeSerializer::getAttributeAsGYearMonth (const AxisChar * pName,
                                             const AxisChar * pNamespace)
 {
     GYearMonth simpleType;
-    getAttribute(pName, pNamespace, &simpleType);
-    return simpleType.getGYearMonth();
+    return (xsd__gYearMonth *)getAttribute(pName, pNamespace, &simpleType);
 }
 
 xsd__duration *
@@ -1449,8 +1407,7 @@ SoapDeSerializer::getAttributeAsDuration (const AxisChar * pName,
                                           const AxisChar * pNamespace)
 {
     Duration simpleType;
-    getAttribute(pName, pNamespace, &simpleType);
-    return simpleType.getDuration();
+    return (xsd__duration *)getAttribute(pName, pNamespace, &simpleType);
 }
 
 void SoapDeSerializer::getElement (const AxisChar * pName,

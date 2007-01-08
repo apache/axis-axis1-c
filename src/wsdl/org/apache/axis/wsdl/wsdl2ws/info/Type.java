@@ -33,6 +33,7 @@ import javax.xml.namespace.QName;
 import org.apache.axis.wsdl.symbolTable.BaseType;
 import org.apache.axis.wsdl.symbolTable.SymbolTable;
 import org.apache.axis.wsdl.symbolTable.TypeEntry;
+import org.apache.axis.wsdl.symbolTable.CContainedAttribute;
 import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.WrapperConstants;
 import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
@@ -72,12 +73,9 @@ public class Type
     
     /* This vector was added to preserve the order of types parsed from the wsdl. */
     private Vector vElements;
-    
-    /* attribute names and the type of the attributes (QName,QName)*/
-    private Hashtable attributes;
-    
-    /* This vector was added to preserve the order of types parsed from the wsdl. */
-    private Vector vAttributes;
+
+    /* contained attributes. */
+    private Vector vAttributes = null;
  
     /* whether the type is Array */
     private boolean isArray;
@@ -116,9 +114,7 @@ public class Type
         this.languageSpecificName = languageSpecificName;
         this.name = name;
         elements = new Hashtable();
-        attributes = new Hashtable();
         vElements = new Vector();
-        vAttributes = new Vector();
         
         if (language == null)
             this.language = WrapperConstants.LANGUAGE_CPP;
@@ -180,35 +176,17 @@ public class Type
         this.name = name;
     }
 
-    public Iterator getAttributeNames()
+    public Iterator getAttributes()
     {
-        return this.vAttributes.iterator();
-    }
-
-    /**
-     * The Type take the attributes name to lowercase when add, 
-     * If there is two names like "Name" and "name"
-     * they will convert to "name"  Is that acceptable ....  
-     */
-    public void setTypeForAttributeName(String attribName, Type type)
-    {
-        if (attribName.lastIndexOf(SymbolTable.ANON_TOKEN) > 1)
-        {
-            attribName =
-                attribName.substring(
-                    attribName.lastIndexOf(SymbolTable.ANON_TOKEN) + 1,
-                    attribName.length());
-        }
+        if (this.vAttributes != null)
+            return this.vAttributes.iterator();
         
-        attribName = TypeMap.resolveWSDL2LanguageNameClashes(attribName, this.language);
-
-        this.attributes.put(attribName, type);
-        this.vAttributes.add(attribName);
+        return null;
     }
 
-    public Type getTypForAttribName(String attribName)
+    public void addAttributes(Vector attrs)
     {
-        return (Type) this.attributes.get(attribName);
+        this.vAttributes = attrs;
     }
 
     public Iterator getElementnames()
@@ -232,7 +210,7 @@ public class Type
                     attribName.lastIndexOf(SymbolTable.ANON_TOKEN) + 1,attribName.length());
         }
 
-        attribName = TypeMap.resolveWSDL2LanguageNameClashes(attribName, this.language);
+        attribName = CUtils.resolveWSDL2LanguageNameClashes(attribName);
 
         this.elements.put(attribName, element);
         this.vElements.add(attribName);
@@ -324,14 +302,14 @@ public class Type
             }
             str = str + "]\n";
 
-            c = attributes.keySet().iterator();
             str = str + "Attributes[\n";
-
-            while (c.hasNext())
-            {
-                String name = (String) c.next();
-                str = str + ",(" + name + "," + attributes.get(name) + ")";
-            }
+            c = getAttributes();
+            if (c != null)
+                while (c.hasNext())
+                {
+                    CContainedAttribute attr = (CContainedAttribute)c.next();
+                    str = str + ",(" + attr.getName() + "," + attr.getTypeEntry() + ")";
+                }
             str = str + "]\n";
 
         }

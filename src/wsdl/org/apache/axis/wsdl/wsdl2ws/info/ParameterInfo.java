@@ -20,6 +20,7 @@ package org.apache.axis.wsdl.wsdl2ws.info;
 import javax.xml.namespace.QName;
 import org.apache.axis.wsdl.symbolTable.SymbolTable;
 import org.apache.axis.wsdl.wsdl2ws.WrapperConstants;
+import org.apache.axis.wsdl.wsdl2ws.CUtils;
 
 /**
  * this class represents Parameter(message in the wsdl) 
@@ -103,7 +104,7 @@ public class ParameterInfo
         
         // This second call to TypeMap.resoleveWSDL2LanguageNameClashes
         // is made to make sure after replacing ANON_TOKEN it is still not a keyword
-        attribName = TypeMap.resolveWSDL2LanguageNameClashes(attribName, WrapperConstants.LANGUAGE_CPP);
+        attribName = CUtils.resolveWSDL2LanguageNameClashes(attribName);
 
         return attribName;
     }
@@ -138,8 +139,7 @@ public class ParameterInfo
         {
             String tagname = result.substring(1, result.length() );
             
-            if( result.equals( TypeMap.resolveWSDL2LanguageNameClashes(tagname,
-                                                                       WrapperConstants.LANGUAGE_CPP)))
+            if( result.equals( CUtils.resolveWSDL2LanguageNameClashes(tagname)))
                 result = tagname;
 
         }
@@ -162,8 +162,7 @@ public class ParameterInfo
                 paramName.substring(paramName.lastIndexOf(SymbolTable.ANON_TOKEN) + 1,
                                     paramName.length());
         }
-        paramName =TypeMap.resolveWSDL2LanguageNameClashes(paramName,
-                                                           WrapperConstants.LANGUAGE_CPP);
+        paramName =CUtils.resolveWSDL2LanguageNameClashes(paramName);
         
         this.attribName = paramName;
     }
@@ -195,8 +194,7 @@ public class ParameterInfo
 
     public String getElementNameAsString()
     {
-        return TypeMap.resolveWSDL2LanguageNameClashes(getSOAPElementNameAsString(), 
-                                                       WrapperConstants.LANGUAGE_CPP);
+        return CUtils.resolveWSDL2LanguageNameClashes(getSOAPElementNameAsString());
     }
 
     public String getSOAPElementNameAsString()

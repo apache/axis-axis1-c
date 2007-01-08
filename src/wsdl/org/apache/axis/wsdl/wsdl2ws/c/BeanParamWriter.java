@@ -157,9 +157,11 @@ public class BeanParamWriter extends ParamCFileWriter
                 else
                     basicType = attribs[i].getTypeName();
                 
+                if (attribs[i].isOptional())
+                    writer.write("\tif (0 != param->" + attribs[i].getParamNameAsMember() + ")\n");
+
                 if (CUtils.isPointerType(basicType))
                 {
-                    writer.write("\tif (0 != param->" + attribs[i].getParamNameAsMember() + ")\n");
                     writer.write("\t\taxiscSoapSerializerSerializeAsAttribute(pSZ,\""
                             + soapTagName + "\", 0, (void*)(param->"
                             + attribs[i].getParamNameAsMember() + "), "
@@ -597,7 +599,6 @@ public class BeanParamWriter extends ParamCFileWriter
             }
             else if ((attribs[i].isSimpleType() || attribs[i].getType().isSimpleType()))
             {                
-                //TODO handle optional attributes
                 //remove _Ref sufix and _ prefix in SOAP tag name
                 String soapTagName = (attribs[i].isAttribute() ? attribs[i].getParamName() : attribs[i].getElementNameAsString());
                 if (soapTagName.lastIndexOf("_Ref") > -1)
@@ -606,7 +607,8 @@ public class BeanParamWriter extends ParamCFileWriter
                 if (soapTagName.charAt(0) == '_')
                     soapTagName = soapTagName.substring(1, soapTagName.length());
                 
-                if (attribs[i].isOptional())
+                // We only peek for elements, not element attributes!
+                if (attribs[i].isOptional() && !attribs[i].isAttribute())
                 {
                     writer.write("\n\t{\n"); // start new variable scope                    
                     writer.write("\tconst char* elementName" + i + " = axiscSoapDeSerializerPeekNextElementName(pDZ);\n");
@@ -628,7 +630,6 @@ public class BeanParamWriter extends ParamCFileWriter
                 {
                     if (attribs[i].getChoiceElement() && isElementNillable(i) && !isPointerType)
                     {
-                        // TODO
                         writer.write("\tparam->"
                                 + attribs[i].getParamNameAsMember()
                                 + " = (" + attribs[i].getTypeName()
@@ -723,7 +724,7 @@ public class BeanParamWriter extends ParamCFileWriter
                     writer.write("\t}\n");                    
                 }
                 
-                if (attribs[i].isOptional())
+                if (attribs[i].isOptional() && !attribs[i].isAttribute())
                 {
                     writer.write("\t\t\t}\n");
                     writer.write("\t\telse\n");

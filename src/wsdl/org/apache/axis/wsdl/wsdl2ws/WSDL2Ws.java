@@ -35,11 +35,15 @@ import javax.wsdl.PortType;
 import javax.xml.namespace.QName;
 import javax.xml.rpc.holders.IntHolder;
 
+// hold off until we use 1.4 or newer axis.jar.
+//import org.apache.axis.constants.Style;
+
 import org.apache.axis.wsdl.gen.Parser;
 import org.apache.axis.wsdl.symbolTable.BaseType;
 import org.apache.axis.wsdl.symbolTable.BindingEntry;
 import org.apache.axis.wsdl.symbolTable.CElementDecl;
 import org.apache.axis.wsdl.symbolTable.CSchemaUtils;
+import org.apache.axis.wsdl.symbolTable.CContainedAttribute;
 import org.apache.axis.wsdl.symbolTable.CollectionElement;
 import org.apache.axis.wsdl.symbolTable.CollectionType;
 import org.apache.axis.wsdl.symbolTable.DefinedElement;
@@ -528,20 +532,17 @@ public class WSDL2Ws
      */
     private void addInputAttributesToMethodInfo(MethodInfo minfo, Type type)
     {
-        ParameterInfo pinfo;
-        ArrayList attributeList = new ArrayList();
-        Iterator attributeNames = type.getAttributeNames();
-        while (attributeNames.hasNext())
+        Iterator attributes = type.getAttributes();
+        if (attributes == null)
+            return;
+        
+        while (attributes.hasNext())
         {
-            attributeList.add(attributeNames.next());
-        }
+            CContainedAttribute attr = (CContainedAttribute)attributes.next();
 
-        for (int i = 0; i < attributeList.size(); i++)
-        {
-            String attributeName = (String) attributeList.get(i);
-            Type innerType = type.getTypForAttribName(attributeName);
-            pinfo = new ParameterInfo(innerType, attributeName);
-            pinfo.setElementName(type.getTypForAttribName(attributeName).getName());
+            ParameterInfo pinfo = new ParameterInfo(attr.getType(), attr.getName());
+            
+            pinfo.setElementName(attr.getType().getName());
             pinfo.setAttribute(true);
             
             minfo.addInputParameter(pinfo);
@@ -846,12 +847,16 @@ public class WSDL2Ws
             // There can be attributes in this extended basic type
             Vector attributes = CSchemaUtils.getContainedAttributeTypes(type.getNode(), symbolTable);
             if (attributes != null)
-                for (int j = 0; j < attributes.size(); j += 2)
+            {
+                for (int j = 0; j < attributes.size(); j++)
                 {
-                    newSecondaryType = createTypeInfo(((TypeEntry) attributes.get(j)).getQName(), targetLanguage);
+                    CContainedAttribute attr = (CContainedAttribute)attributes.get(j);
+                    newSecondaryType = createTypeInfo(attr.getTypeEntry().getQName(), targetLanguage);
+                    attr.setType(newSecondaryType);
                     typedata.addRelatedType(newSecondaryType);
-                    typedata.setTypeForAttributeName(((QName) attributes.get(j + 1)).getLocalPart(), newSecondaryType);
                 }
+                typedata.addAttributes(attributes);
+            }
         }
         else if (type instanceof CollectionType)
         {
@@ -902,30 +907,22 @@ public class WSDL2Ws
                     //TODO the code require the attributes name at extension base types
                     //different, the WSDL2Ws do not support it having same name at up and below.
 
-                    // The names of the inherited parms are mangled
-                    // in case they interfere with local parms.
-                    // String mangle = "";
-                    //if (i > 0) {
-                    //    mangle = "_" +
-                    //        Utils.xmlNameToJava(te.getQName().getLocalPart()) +
-                    //        "_";
-                    //}
-
                     // Process the attributes
                     if (WSDL2Ws.verbose)
                         System.out.println("Processing attributes for type: " + type.getQName());
 
-                    Vector attributes = CSchemaUtils.getContainedAttributeTypes(te.getNode(),
-                                                                                symbolTable);
+                    Vector attributes = CSchemaUtils.getContainedAttributeTypes(te.getNode(), symbolTable);
                     if (attributes != null)
-                        for (int j = 0; j < attributes.size(); j += 2)
+                    {
+                        for (int j = 0; j < attributes.size(); j++)
                         {
-                            newSecondaryType = createTypeInfo(((TypeEntry) attributes.get(j)).getQName(),
-                                                              targetLanguage);
+                            CContainedAttribute attr = (CContainedAttribute)attributes.get(j);
+                            newSecondaryType = createTypeInfo(attr.getTypeEntry().getQName(), targetLanguage);
+                            attr.setType(newSecondaryType);
                             typedata.addRelatedType(newSecondaryType);
-                            typedata.setTypeForAttributeName(((QName) attributes.get(j + 1)).getLocalPart(), 
-                                                             newSecondaryType);
                         }
+                        typedata.addAttributes(attributes);
+                    }                        
                     
                     // Process the elements
                     if (WSDL2Ws.verbose)
@@ -1042,9 +1039,7 @@ public class WSDL2Ws
     }
     
     // The following 3 exposeXXX methods attempts to expose anonymous types so that 
-    // the types are externalized to the user.  However, these methods do not do 
-    // a good job in terms of exposing nested types, nor do they generate "nice" 
-    // names for anonymous types.  Attempts are under way to correct the problems.
+    // the types are externalized to the user.  
     
     /**
      * This method goes through the types and for any types that are referenced works out whether

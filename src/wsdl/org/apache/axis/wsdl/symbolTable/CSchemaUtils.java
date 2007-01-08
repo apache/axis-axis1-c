@@ -1601,8 +1601,14 @@ public class CSchemaUtils extends SchemaUtils
         // XXX - this may need to be revisited.
         if ((type != null) && (attributeName != null))
         {
-            v.add(type);
-            v.add(attributeName);
+            CContainedAttribute attr = new CContainedAttribute(type, attributeName);
+
+            String useValue = Utils.getAttribute(child, "use");
+    
+            if (useValue != null) 
+                attr.setOptional(useValue.equalsIgnoreCase("optional"));
+    
+            v.add(attr);
         }
     }
 
@@ -1618,14 +1624,10 @@ public class CSchemaUtils extends SchemaUtils
     private static void addAttributeToVector(
         Vector v, SymbolTable symbolTable, QName type, QName name)
     {
-
         TypeEntry typeEnt = symbolTable.getTypeEntry(type, false);
                  
-        if (typeEnt != null) // better not be null
-        {
-            v.add(typeEnt);
-            v.add(name);
-        }
+        if (typeEnt != null)
+            v.add(new CContainedAttribute(typeEnt, name));
     }
 
     /**

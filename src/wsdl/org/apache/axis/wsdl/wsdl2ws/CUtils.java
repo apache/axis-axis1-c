@@ -86,6 +86,9 @@ public class CUtils
     private static Hashtable uniqueNameMapper = new Hashtable();
     private static Vector uniqueNamesGenerated = new Vector();
     
+    // list of c and cpp keywords
+    private static Hashtable cppkeywords = new Hashtable();
+    
     static{        
         class2QNamemapCpp.put("xsd__duration",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "duration"));
         class2QNamemapCpp.put("xsd__dateTime",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"));
@@ -791,8 +794,53 @@ public class CUtils
         isPointerBasedType.put("xsdc__QName", new Boolean(true));
         isPointerBasedType.put("xsdc__NOTATION", new Boolean(true));
     
+        String[] words2 = {
+                "and", "and_eq", "asm", "auto",
+                "bitand", "bitor", "bool", "break",
+                "case", "catch", "char", "class",  "compl", "const", "const_cast", "continue",
+                "default", "delete", "do",  "double", "dynamic_cast",
+                "else", "enum", "errno", "explicit", "export", "extern",
+                "false", "float", "for", "friend",       
+                "goto",
+                "if", "inline", "int",
+                "long",
+                "mutable",
+                "namespace", "new", "not", "not_eq",
+                "operator", "or", "or_eq",
+                "private", "protected", "public",
+                "register", "reinterpret_cast", "return",
+                "short", "signed", "sizeof", "static", "static_cast", "struct", "switch",
+                "template", "this", "throw", "true", "try", "typedef", "typeid", "typename",
+                "union", "unsigned", "using",
+                "virtual", "void", "volatile",  
+                "wchar_t", "while",
+                "xor", "xor_eq",
+                "string"
+         };
+        for (int i = 0; i < words2.length; i++)
+            cppkeywords.put(words2[i], words2[i]);
     }
     
+    
+    /**
+     * The wsdl support the attributes names that are not allowed by the program langage.
+     * This method resolves those clashes by adding "_" to the front. This is a 
+     * JAX_RPC recomendation of the situation.  
+     * @param name
+     * @param language
+     * @return
+     */
+    public static String resolveWSDL2LanguageNameClashes(String name)
+    {
+       // C and C++ keywords are all in one hash table
+       Hashtable keywords = cppkeywords;
+
+       if (keywords.containsKey(name))
+           return "_" + name;
+
+       return name;
+    }
+   
     public static void setLanguage(String language) 
     {
         // Only C and C++ are supported here.
@@ -1281,7 +1329,7 @@ public class CUtils
             newName = sanitiseClassName(oldName);
             
             // Ensure name does not conflict with language constructs
-            newName = TypeMap.resolveWSDL2LanguageNameClashes(newName, WrapperConstants.LANGUAGE_CPP);
+            newName = resolveWSDL2LanguageNameClashes(newName);
             
             // Ensure uniqueness
             int suffix = 2;            

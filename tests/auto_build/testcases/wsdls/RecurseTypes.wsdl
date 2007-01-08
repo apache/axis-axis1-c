@@ -48,7 +48,7 @@
 					<xsd:element name="kind" type="xsd:string" />
 					<xsd:element name="index" type="xsd:int" />
 				</xsd:sequence>
-				<xsd:attribute name="att_kind" type="tns:Kind" />
+				<xsd:attribute name="att_kind" type="tns:Kind" use="optional"/>
 			</xsd:complexType>
 
 			<xsd:simpleType name="Kind">

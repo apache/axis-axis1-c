@@ -50,8 +50,6 @@ public class TypeMap
     
     /* this map stores Types keyed by the parameter name */
     private Hashtable typeInfo;
-
-    private static Hashtable cppkeywords = new Hashtable();
     
     //  29/3/05. To keep symbols
     private static char[] symbolArray = { '-', '@'};
@@ -245,91 +243,8 @@ public class TypeMap
         basicTypeQname2classmap.put(
             new QName(WrapperConstants.SOAPENC_NAMESPACE, "base64"),
             "xsd__base64Binary");
-
-        String[] words2 =
-            {
-                "and",
-                "and_eq",
-                "asm",
-                "auto",
-                "bitand",
-                "bitor",
-                "bool",
-                "break",
-                "case",
-                "catch",
-                "char",
-                "class",
-                "compl",
-                "const",
-                "const_cast",
-                "continue",
-                "default",
-                "delete",
-                "do",
-                "double",
-                "dynamic_cast",
-                "else",
-                "enum",
-                "explicit",
-                "export",
-                "extern",
-                "false",
-                "float",
-                "for",
-                "friend",
-                "goto",
-                "if",
-                "inline",
-                "int",
-                "long",
-                "mutable",
-                "namespace",
-                "new",
-                "not",
-                "not_eq",
-                "operator",
-                "or",
-                "or_eq",
-                "private",
-                "protected",
-                "public",
-                "register",
-                "reinterpret_cast",
-                "return",
-                "short",
-                "signed",
-                "sizeof",
-                "static",
-                "static_cast",
-                "struct",
-                "switch",
-                "template",
-                "this",
-                "throw",
-                "true",
-                "try",
-                "typedef",
-                "typeid",
-                "typename",
-                "union",
-                "unsigned",
-                "using",
-                "virtual",
-                "void",
-                "volatile",
-                "wchar_t",
-                "while",
-                "xor",
-                "xor_eq",
-                "string",
-			    "errno" };
-        for (int i = 0; i < words2.length; i++)
-        {
-            cppkeywords.put(words2[i], words2[i]);
-        }
-
     }
+    
     public TypeMap(String language)
     {
         TypeMap.language = language;
@@ -379,25 +294,6 @@ public class TypeMap
     public Collection getTypes()
     {
         return this.typeInfo.values();
-    }
-
-    /**
-      * The wsdl support the attributes names that are not allowed by the program langage.
-      * This method resolves those clashes by adding "_" to the front. This is a 
-      * JAX_RPC recomendation of the situation.  
-      * @param name
-      * @param language
-      * @return
-      */
-    public static String resolveWSDL2LanguageNameClashes(String name, String language)
-    {
-        // C and C++ keywords are all in one hash table
-        Hashtable keywords = cppkeywords;
-
-        if (keywords.containsKey(name))
-            return "_" + name;
-
-        return name;
     }
     
     // To access the symbols
