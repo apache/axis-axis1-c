@@ -623,72 +623,9 @@ public class BeanParamWriter extends ParamCFileWriter
                 else
                     isPointerType = CUtils.isPointerType(attribs[i].getTypeName());
                 
-                if (attribs[i].isNillable() ||
-                        isElementNillable(i) ||
-                        isElementOptional(i) ||
-                        isPointerType)
-                {
-                    if (attribs[i].getChoiceElement() && isElementNillable(i) && !isPointerType)
-                    {
-                        writer.write("\tparam->"
-                                + attribs[i].getParamNameAsMember()
-                                + " = (" + attribs[i].getTypeName()
-                                + "**)(" + attribs[i].getTypeName()
-                                +"*)malloc(sizeof(" +attribs[i].getTypeName() + ");\n");
-                        
-                        writer.write("\t\t*(param->"
-                                + attribs[i].getParamNameAsMember() + ") = "
-                                + "axiscSoapDeSerializer" 
-                                + CUtils.getParameterGetValueMethodName(
-                                        attribs[i].getTypeName(), attribs[i].isAttribute()) + "(pDZ, \""
-                                + soapTagName + "\",0);\n");
-                    }
-                    else
-                    {
-                        String typeName = attribs[i].getTypeName();
-                        String baseTypeName = null;
-                        if (type.isSimpleType())
-                            baseTypeName = CUtils.getclass4qname (type.getBaseType ());
-                        else
-                            baseTypeName = typeName;
-
-                        String elementName = attribs[i].getParamNameAsMember();
-
-                        writer.write("\t{\n");  // start new scope
-                        if( isPointerType)
-                        {
-                            writer.write("\t" + typeName + "    pValue" + i + " = "
-                                    + "axiscSoapDeSerializer"
-                                    + CUtils.getParameterGetValueMethodName(baseTypeName, attribs[i].isAttribute()) +
-                                    "(pDZ,\"" + soapTagName + "\", 0);\n");
-                        }
-                        else
-                        {
-                            writer.write("\t" + typeName + " *  pValue" + i + " = " 
-                                    + "axiscSoapDeSerializer"
-                                    + CUtils.getParameterGetValueMethodName(baseTypeName, attribs[i].isAttribute()) +
-                                    "(pDZ, \"" + soapTagName + "\", 0);\n");
-                        }
-                        
-                        writer.write( "\tparam->" + elementName + "= pValue" + i + ";\n");
-                        
-                        if (!isPointerType)
-                        {
-                            writer.write( "\tif( pValue" + i + " != NULL)\n");
-                            writer.write( "\t{\n");
-                            if (CUtils.getXSDTypeForBasicType( baseTypeName).equals("XSDC_HEXBINARY")
-                                    || CUtils.getXSDTypeForBasicType( baseTypeName).equals("XSDC_BASE64BINARY"))
-                            {
-                                writer.write( "\t\tpValue" + i + "->__ptr = NULL;\n");
-                            }
-                            writer.write("\t\taxiscAxisDelete( (void *) pValue" + i + ", " 
-                                + CUtils.getXSDTypeForBasicType( baseTypeName) + ");\n");
-                            writer.write( "\t}\n");                            
-                        }
-                        writer.write("\t}\n\n"); // end new scope
-                    }
-                } 
-                else if (attribs[i].getChoiceElement() || attribs[i].getAllElement())
+                if (attribs[i].getChoiceElement() || attribs[i].getAllElement()
+                        || attribs[i].isNillable() || isElementNillable(i) ||
+                        isElementOptional(i) || isPointerType)
                 {
                     writer.write("\tparam->"
                             + attribs[i].getParamNameAsMember() + " = "
@@ -696,7 +633,7 @@ public class BeanParamWriter extends ParamCFileWriter
                             + CUtils.getParameterGetValueMethodName(
                                     attribs[i].getTypeName(), attribs[i].isAttribute()) + "(pDZ, \""
                             + soapTagName + "\",0);\n");
-                }
+                }                
                 else
                 {
                     String elementNameToSearchFor = attribs[i].isAttribute()? attribs[i].getParamNameAsMember():attribs[i].getSOAPElementNameAsString();
@@ -851,8 +788,8 @@ public class BeanParamWriter extends ParamCFileWriter
                 
                 // If simple type array we call the axiscAxisNew() API; otherwise, we 
                 // invoke the dynamically generated Axis_Create_xxxx() function. 
-	            if (attribs[i].isSimpleType() || attribs[i].getType().isSimpleType())
-	            {
+                if (attribs[i].isSimpleType() || attribs[i].getType().isSimpleType())
+                {
                     String baseTypeName = null;
                     
                     if (!attribs[i].isSimpleType() && attribs[i].getType().isSimpleType())
@@ -868,11 +805,11 @@ public class BeanParamWriter extends ParamCFileWriter
                     writer.write("\t\tpTemp->" + attribs[i].getParamNameAsMember() + "->m_Type = " 
                             + CUtils.getXSDTypeForBasicType(baseTypeName) + ";\n");
                 }
-	            else
-	            {
-	                    writer.write("\t\tpTemp->" + attribs[i].getParamName() + " = "
-	                            + "Axis_Create_" + attribs[i].getTypeName() + "_Array(0);\n");
-	            }     
+                else
+                {
+                        writer.write("\t\tpTemp->" + attribs[i].getParamName() + " = "
+                                + "Axis_Create_" + attribs[i].getTypeName() + "_Array(0);\n");
+                }     
             }
         }
         
@@ -930,7 +867,23 @@ public class BeanParamWriter extends ParamCFileWriter
                 else
                     baseTypeName = attribs[i].getTypeName();
                 
-                if (CUtils.isPointerType(attribs[i].getTypeName()) || attribs[i].isArray())
+                if (CUtils.getXSDTypeForBasicType( baseTypeName).equals("XSDC_HEXBINARY")
+                        || CUtils.getXSDTypeForBasicType( baseTypeName).equals("XSDC_BASE64BINARY"))
+                {
+                    // need to delete the pointer
+                    String dot = ".";
+                    if (isElementNillable(i) || isElementOptional(i) 
+                            || attribs[i].getChoiceElement() || attribs[i].getAllElement()) 
+                        dot = "->";
+                    
+                    writer.write("\t\tif (param->" + attribs[i].getParamNameAsMember() + dot + "__ptr != NULL)\n");                    
+                    writer.write("\t\t\taxiscAxisDelete(param->" + attribs[i].getParamNameAsMember() 
+                            + dot + "__ptr, XSDC_UNSIGNEDBYTE);\n");
+                    writer.write("\n");
+                }
+                else if (CUtils.isPointerType(attribs[i].getTypeName()) || attribs[i].isArray()
+                        || isElementNillable(i) || isElementOptional(i) 
+                        || attribs[i].getChoiceElement() || attribs[i].getAllElement())
                 {                    
                     if (attribs[i].isArray())
                         passedInBaseType = "XSDC_ARRAY";
@@ -942,16 +895,6 @@ public class BeanParamWriter extends ParamCFileWriter
                             + "," + passedInBaseType + ");\n");
                     writer.write("\n");
                 }
-                else if (CUtils.getXSDTypeForBasicType( baseTypeName).equals("XSDC_HEXBINARY")
-                        || CUtils.getXSDTypeForBasicType( baseTypeName).equals("XSDC_BASE64BINARY"))
-                {
-                    // need to delete the pointer
-                    writer.write("\t\tif (param->" + attribs[i].getParamNameAsMember() + ".__ptr != NULL)\n");                    
-                    writer.write("\t\t\taxiscAxisDelete(param->" + attribs[i].getParamNameAsMember() 
-                            + ".__ptr, XSDC_UNSIGNEDBYTE);\n");
-                    writer.write("\n");
-                }
-
             }
             else if (attribs[i].isAnyType())
             {
