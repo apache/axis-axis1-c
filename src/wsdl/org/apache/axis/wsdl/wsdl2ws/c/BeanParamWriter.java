@@ -160,7 +160,7 @@ public class BeanParamWriter extends ParamCFileWriter
                 if (attribs[i].isOptional())
                     writer.write("\tif (0 != param->" + attribs[i].getParamNameAsMember() + ")\n");
 
-                if (CUtils.isPointerType(basicType))
+                if (CUtils.isPointerType(basicType) || attribs[i].isOptional())
                 {
                     writer.write("\t\taxiscSoapSerializerSerializeAsAttribute(pSZ,\""
                             + soapTagName + "\", 0, (void*)(param->"
