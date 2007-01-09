@@ -41,12 +41,6 @@ using namespace std;
  *  @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
  */
 
-/*
- * Revision 1.1  2004/11/27 roshan
- * Added the implementation of the setNewSoapBody() method. For the same 
- * purpose added the new class "DeSerializerMemBufInputStream".
- */
-
 class SoapDeSerializer : public IHandlerSoapDeSerializer
 {
 private:
@@ -65,7 +59,7 @@ private:
     /* Provider type of current service that uses this DeSerializer object */
     PROVIDERTYPE m_ProviderType;
     SOAPTransport* m_pInputStream;
-
+    
     string m_strMethodNameToInvoke;
 
 private:
@@ -100,17 +94,14 @@ public:
     AxisChar* AXISCALL getBodyAsChar();
     int AXISCALL setNewSoapBody(AxisChar* pNewSoapBody);
     bool isAnyMustUnderstandHeadersLeft();
-    int AXISCALL checkMessageBody(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    void* AXISCALL checkForFault(const AxisChar* pName, 
-        const AxisChar* pNamespace);
+    int AXISCALL checkMessageBody(const AxisChar* pName, const AxisChar* pNamespace);
+    void* AXISCALL checkForFault(const AxisChar* pName,  const AxisChar* pNamespace);
     /* to get any header blocks left in the Deserializer */
     HeaderBlock* getHeaderBlock();
     /* to add a header block to the Deserializer. Probably a handler */
     int AXISCALL addHeaderBlock(IHeaderBlock* pBlk);
     /* to get a named header blcok from the Deserializer */
-    IHeaderBlock* getHeaderBlock(const AxisChar* pName, 
-        const AxisChar* pNamespace);
+    IHeaderBlock* getHeaderBlock(const AxisChar* pName, const AxisChar* pNamespace);
     int setInputStream(SOAPTransport* pInputStream);
     SoapDeSerializer();
     virtual ~SoapDeSerializer();
