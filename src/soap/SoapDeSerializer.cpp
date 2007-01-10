@@ -1394,14 +1394,14 @@ getElement (const AxisChar * pName,
     
                         if (bReturn)
                         {
-                            m_pNode = m_pParser->next ();   /* skip end element node too */
+                            m_pNode = m_pParser->next ();  // skip end element node too
                             return;
                         }
                     }
                 }
                 
                 pSimpleType->deserialize(elementValue);
-                m_pNode = m_pParser->next ();   /* skip end element node too */
+                m_pNode = m_pParser->next ();  // skip end element node too
                 m_pNode = NULL;
                 return;
             }
@@ -1486,7 +1486,7 @@ getElement (const AxisChar * pName,
             
                         if (bReturn)
                         {
-                            m_pNode = m_pParser->next ();   /* skip end element node too */
+                            m_pNode = m_pParser->next ();  // skip end element node too
                             m_pNode = NULL; // indicate node consumed
                             return;
                         }
@@ -1494,7 +1494,7 @@ getElement (const AxisChar * pName,
                 }
                 
                 pSimpleType->deserialize(elementValue);
-                m_pNode = m_pParser->next ();   /* skip end element node too */
+                m_pNode = m_pParser->next ();  // skip end element node too
                 m_pNode = NULL;
                 /* this is important in doc/lit style when deserializing 
                  * arrays
