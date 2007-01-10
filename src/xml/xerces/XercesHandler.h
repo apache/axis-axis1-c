@@ -41,9 +41,6 @@ public :
     const XML_Ch* ns4Prefix(const XML_Ch* prefix);
     const XML_Ch* prefix4NS(const XML_Ch* pcNS);
 	AnyElement* getAnyElement();
-  /**
-    * //Chinthana:This is the method use by XercesPaser to peek ahead next element name
-	*/
 	const char* peekNextElementName();
 	const XML_NODE_TYPE peekNextElementType();
 	void setGetPrefixMappings(bool bValue);
@@ -61,8 +58,7 @@ private:
     void characters(const XMLCh* const chars, const unsigned int length);
     void startPrefixMapping(const XMLCh* const prefix, const XMLCh* const uri);
     void endPrefixMapping(const XMLCh* const prefix);
-    void ignorableWhitespace(const XMLCh* const chars, 
-        const unsigned int length);
+    void ignorableWhitespace(const XMLCh* const chars, const unsigned int length);
     void resetDocument();
 
 
