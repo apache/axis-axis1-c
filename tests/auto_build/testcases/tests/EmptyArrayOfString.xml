@@ -1,0 +1,16 @@
+<test>
+  <name>EmptyArrayOfString</name>
+  <description>EmptyArrayOfString</description>
+  <clientLang>cpp</clientLang>
+  <clientCode>EmptyArrayOfStringClient.cpp</clientCode>
+  <wsdl>EmptyArrayOfString.wsdl</wsdl>
+  <expected>
+    <output>
+      EmptyArrayOfString.cpp.out
+    </output>
+    <serverResponse>
+      EmptyArrayOfString_ServerResponse.expected
+    </serverResponse>
+  </expected>
+  <endpoint>http://localhost:80/EmptyArrayOfString</endpoint>
+</test>
