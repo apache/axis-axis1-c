@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" 
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+                  xmlns:s="http://www.w3.org/2001/XMLSchema" 
+                  xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" 
+                  xmlns:tns="http://emptyarrayofstring.test.apache.org" 
+                  targetNamespace="http://emptyarrayofstring.test.apache.org" 
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" 
+         targetNamespace="http://emptyarrayofstring.test.apache.org">
+      <s:element name="NewOperation">
+        <s:complexType>
+          <s:sequence>
+                 <s:element minOccurs="1" maxOccurs="1" name="shortNumber" type="s:short" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+ 
+      <s:element name="NewOperationResponse" >
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Param_NewOperationResponse">
+              <s:complexType>
+                <s:sequence>
+                  <s:element minOccurs="0" maxOccurs="1" name="ListInfoString" type="tns:ArrayOfInfoString" />
+                  <s:element minOccurs="0" maxOccurs="1" name="SomeString" type="s:string" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+
+      <s:complexType name="ArrayOfInfoString">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="s:string" />
+         </s:sequence>
+      </s:complexType>
+
+    </s:schema>
+  </wsdl:types>
+
+  <wsdl:message name="NewOperationRequest">
+    <wsdl:part name="parameters" element="tns:NewOperation" />
+  </wsdl:message>
+  <wsdl:message name="NewOperationResponse">
+    <wsdl:part name="parameters" element="tns:NewOperationResponse" />
+  </wsdl:message>
+
+  <wsdl:portType name="EmptyArrayOfString">
+    <wsdl:operation name="NewOperation">
+      <wsdl:input message="tns:NewOperationRequest" />
+      <wsdl:output message="tns:NewOperationResponse" />
+    </wsdl:operation>
+  </wsdl:portType>
+
+  <wsdl:binding name="EmptyArrayOfString" type="tns:EmptyArrayOfString">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document" />
+    <wsdl:operation name="NewOperation">
+      <soap:operation soapAction="http://emptyarrayofstring.test.apache.org/NewOperation" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+
+  <wsdl:service name="EmptyArrayOfString">
+    <wsdl:port name="Service" binding="tns:EmptyArrayOfString">
+      <soap:address location="http://localhost:9080/EmptyArrayOfString/services/Service" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
