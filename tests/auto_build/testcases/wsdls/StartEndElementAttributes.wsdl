@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" 
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+                  xmlns:s="http://www.w3.org/2001/XMLSchema" 
+                  xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" 
+                  xmlns:tns="http://startendelement.test.apache.org" 
+                  targetNamespace="http://startendelement.test.apache.org" 
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" 
+         targetNamespace="http://startendelement.test.apache.org">
+      <s:element name="NewOperation">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Param_NewOperation">
+              <s:complexType>
+               <s:sequence>
+                 <s:element minOccurs="1" maxOccurs="1" name="shortNumber" type="s:short" />
+                 <s:element minOccurs="0" maxOccurs="1" name="aString" type="s:string" />
+               </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+ 
+      <s:element name="NewOperationResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Param_NewOperationResponse">
+              <s:complexType>
+                <s:sequence>
+                  <s:element minOccurs="0" maxOccurs="1" name="ListInfoString" type="tns:ArrayOfInfoString" />
+                  <s:element minOccurs="0" maxOccurs="1" name="SomeString" type="s:string" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+
+      <s:complexType name="ArrayOfInfoString">
+        <s:attribute name="attributeA" type="s:string" use="optional"/>
+        <s:attribute name="attributeB" type="s:string" use="required"/>
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="InfoString" nillable="true">
+            <s:complexType name="InfoString">
+             <s:sequence>
+               <s:element minOccurs="0" maxOccurs="1" name="CodInfoString" type="s:string" />
+             </s:sequence>
+            </s:complexType>
+          </s:element>
+        </s:sequence>
+      </s:complexType>
+
+    </s:schema>
+  </wsdl:types>
+
+  <wsdl:message name="NewOperationRequest">
+    <wsdl:part name="parameters" element="tns:NewOperation" />
+  </wsdl:message>
+  <wsdl:message name="NewOperationResponse">
+    <wsdl:part name="parameters" element="tns:NewOperationResponse" />
+  </wsdl:message>
+
+  <wsdl:portType name="StartEndElementAttributes">
+    <wsdl:operation name="NewOperation">
+      <wsdl:input message="tns:NewOperationRequest" />
+      <wsdl:output message="tns:NewOperationResponse" />
+    </wsdl:operation>
+  </wsdl:portType>
+
+  <wsdl:binding name="StartEndElementAttributes" type="tns:StartEndElementAttributes">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document" />
+    <wsdl:operation name="NewOperation">
+      <soap:operation soapAction="http://startendelement.test.apache.org/NewOperation" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+
+  <wsdl:service name="StartEndElementAttributes">
+    <wsdl:port name="Service" binding="tns:StartEndElementAttributes">
+      <soap:address location="http://localhost:9080/StartEndElementAttributes/services/Service" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

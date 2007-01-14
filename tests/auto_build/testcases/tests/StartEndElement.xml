@@ -1,0 +1,16 @@
+<test>
+  <name>StartEndElement</name>
+  <description>StartEndElement</description>
+  <clientLang>cpp</clientLang>
+  <clientCode>StartEndElementClient.cpp</clientCode>
+  <wsdl>StartEndElement.wsdl</wsdl>
+  <expected>
+    <output>
+      StartEndElement.cpp.out
+    </output>
+    <serverResponse>
+      StartEndElement_ServerResponse.expected
+    </serverResponse>
+  </expected>
+  <endpoint>http://localhost:80/StartEndElement</endpoint>
+</test>

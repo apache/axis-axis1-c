@@ -42,6 +42,7 @@ XMLParserXerces()
     m_pParser = XMLReaderFactory::createXMLReader();
     m_pInputSource = NULL;
     m_bCanParseMore = false;
+    m_bStartEndElement = false;
 }
 
 XMLParserXerces::
@@ -52,7 +53,6 @@ XMLParserXerces::
 
     delete m_pInputSource;
     delete m_pParser;
-    
 }
 
 int XMLParserXerces::
@@ -133,19 +133,22 @@ next(bool isCharData)
 #endif
         m_bFirstParsed = true;
     }
-
+    
     if(!m_bPeeked) 
         m_Xhandler.freeElement();
+        
+    // set flag to false since we are going to read next node
+    m_bStartEndElement = false;
     
     AnyElement* elem;
     while (m_bCanParseMore && AXIS_FAIL != m_Xhandler.getStatus())
-    {
+    {        
         // See if we have a token to consume
         elem = m_Xhandler.getAnyElement();
         
         // Since we have consumed whatever is there, ensure peek flag is set to false
         m_bPeeked = false;
-        
+
         // If we do not have an element, then parse next token; else if
         // whitespace, ignore whitespace; else return token
         if (!elem)
@@ -153,7 +156,14 @@ next(bool isCharData)
         else if (!isCharData && (CHARACTER_ELEMENT == elem->m_type))
             m_Xhandler.freeElement();
         else
+        {
+            // Keep track of when we give back a start-end element in order to ensure
+            // that peek() - which is used to determine optional elements or elements 
+            // that are not in order (e.g. xsd:all support) - returns a null string 
+            if (elem->m_type == START_ELEMENT && elem->m_type2 == START_END_ELEMENT)
+               m_bStartEndElement = true;
             return elem;
+        }
     }
     
     return NULL;
@@ -163,6 +173,12 @@ next(bool isCharData)
 const char* XMLParserXerces::
 peek()
 {
+    // peek() is used to determine optional elements or elements 
+    // that are not in order (e.g. xsd:all support) - return a null string if 
+    // the last node processed was a start/end element
+    if (m_bStartEndElement)
+        return "";
+        
     if (!m_bPeeked)
     {
         if(!m_bFirstParsed)
@@ -215,6 +231,9 @@ anyNext()
     if(!m_bPeeked) 
         m_Xhandler.freeElement();
 
+    // set flag to false since we are going to read next node
+    m_bStartEndElement = false;
+
     AnyElement* elem;
     while (m_bCanParseMore && AXIS_FAIL != m_Xhandler.getStatus())
     {
@@ -230,6 +249,12 @@ anyNext()
             m_bCanParseMore = m_pParser->parseNext(m_ScanToken);
         else
         {
+            // Keep track of when we give back a start-end element in order to ensure
+            // that peek() - which is used to determine optional elements or elements 
+            // that are not in order (e.g. xsd:all support) - returns a null string 
+            if (elem->m_type == START_ELEMENT && elem->m_type2 == START_END_ELEMENT)
+               m_bStartEndElement = true;
+                           
             m_Xhandler.setGetPrefixMappings(false);
             return elem;
         }

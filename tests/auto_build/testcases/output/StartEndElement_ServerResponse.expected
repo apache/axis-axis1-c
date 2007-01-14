@@ -1,0 +1,21 @@
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version="1.0" encoding="utf-8"?>                                    
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"     
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"                     
+xmlns:xsd="http://www.w3.org/2001/XMLSchema">                             
+<soap:Body>
+<NewOperationResponse xmlns="http://startendelement.test.apache.org">                                                                  
+      <Param_NewOperationResponse>
+        <ListInfoString />                                                   
+        <SomeString>Testing start/end empty element</SomeString>                       
+      </Param_NewOperationResponse>                                               
+</NewOperationResponse>                                               
+</soap:Body>                                                            
+</soap:Envelope>         
+0

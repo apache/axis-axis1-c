@@ -91,6 +91,21 @@ setInputStream (SOAPTransport * pInputStream)
     return m_pParser->setInputStream (pInputStream);
 }
 
+/*
+ * Routine that ensures we are actually skipping an end element.
+ */
+void SoapDeSerializer::
+skipEndNode()
+{
+    // TODO add code (possible new parser method) to determine if in fact 
+    // TODO the node we are about to skip is an end node. If not, we need 
+    // TODO to throw an exception since there could be extra elements that 
+    // TODO is due to server/client differences in wsdl being used.  in addition, a 
+    // TODO check is another safeguard.
+    m_pParser->next();
+    m_pNode = NULL;
+}
+
 SoapEnvelope *SoapDeSerializer::
 getEnvelope ()
 {
@@ -357,7 +372,6 @@ checkMessageBody (const AxisChar * pName, const AxisChar * pNamespace)
         throw AxisGenException (AXISC_NODE_VALUE_MISMATCH_EXCEPTION);
     }
 
-    /* we can check the namespace uri too here. Should we ? */
     m_pNode = NULL; // indicate node consumed
 
     return AXIS_SUCCESS;
@@ -440,17 +454,11 @@ init ()
     m_pNode = NULL;
     m_pCurrNode = NULL;
 
-    if (m_pEnv)
-    {
-        delete m_pEnv;
-        m_pEnv = NULL;
-    }
+    delete m_pEnv;
+    m_pEnv = NULL;
 
-    if (m_pHeader)
-    {
-        delete m_pHeader;
-        m_pHeader = NULL;
-    }
+    delete m_pHeader;
+    m_pHeader = NULL;
 
     m_nSoapVersion = VERSION_LAST;
     m_nStatus = AXIS_SUCCESS;
@@ -463,21 +471,11 @@ getVersion ()
 {
     if (VERSION_LAST == m_nSoapVersion)
     {
-        if (m_pEnv)
-            delete m_pEnv;
+        delete m_pEnv;
         m_pEnv = getEnvelope ();
     }
 
     return m_nSoapVersion;
-}
-
-bool SoapDeSerializer::
-isCurrentElementEmpty()
-{
-    if (m_pCurrNode && START_END_ELEMENT == m_pCurrNode->m_type2)
-        return true;
-    
-    return false;
 }
 
 /*
@@ -547,9 +545,6 @@ getCmplxArray (Axis_Array* pArray,
     {
         m_pNode = m_pParser->next ();
         
-        // skip wrapper node w/type info - 
-        // Ex:<tns:QuoteInfoTypeArray xmlns:tns="http://www.getquote.org/test">
-
         if (!m_pNode)
             return pArray;
     
@@ -561,7 +556,7 @@ getCmplxArray (Axis_Array* pArray,
     
         if (arraySize == 0)
         {
-            m_pNode = m_pParser->next ();   // skip end element node too
+            skipEndNode();
             return pArray;
         }
         else if (arraySize > 0)
@@ -571,7 +566,7 @@ getCmplxArray (Axis_Array* pArray,
             
             if (m_nStatus != AXIS_FAIL)
             {
-                m_pNode = m_pParser->next ();   // skip end element node too
+                skipEndNode();
                 return pArray;
             }
         }
@@ -694,10 +689,6 @@ getBasicArray (XSDTYPE nType, const AxisChar * pName, const AxisChar * pNamespac
     if (RPC_ENCODED == m_nStyle)
     {
         m_pNode = m_pParser->next ();
-    
-        // skip wrapper node w/type info - 
-        // Ex:<tns:ArrayOfPhoneNumbers xmlns:tns="http://www.getquote.org/test">
-   
         if (!m_pNode)
             return Array;
     
@@ -705,7 +696,7 @@ getBasicArray (XSDTYPE nType, const AxisChar * pName, const AxisChar * pNamespac
     
         if (size == 0)
         {
-            m_pNode = m_pParser->next ();    // skip end element node too
+            skipEndNode();
             return Array;
         }
         else if (size > 0)
@@ -756,17 +747,12 @@ getCmplxObject (void *pDZFunct,
                 const AxisChar * pName,
                 const AxisChar * pNamespace)
 {
-    /* if anything has gone wrong earlier just do nothing */
     if (AXIS_SUCCESS != m_nStatus)
         return NULL;
 
     if (RPC_ENCODED == m_nStyle)
     {
         m_pNode = m_pParser->next ();
-        
-        // just skip wrapper node with type info
-        // Ex: <tns:QuoteInfoType xmlns:tns="http://www.getquote.org/test"> 
-        
         if (!m_pNode)
             return NULL;
             
@@ -782,7 +768,7 @@ getCmplxObject (void *pDZFunct,
             
             if (AXIS_SUCCESS == m_nStatus)
             {
-                m_pParser->next ();    // skip end node too
+                skipEndNode();
                 return pObject;
             }
             else
@@ -797,20 +783,11 @@ getCmplxObject (void *pDZFunct,
     {
         if (!m_pNode)
             m_pNode = m_pParser->next ();
-            
         if (!m_pNode)
             return NULL;
             
         if (0 == strcmp (pName, m_pNode->m_pchNameOrValue))
         {
-            // The StartEnd logic imbedded in code below is a temporary fix for 
-            // AXISCPP-991.  Prior to this fix, a start/end tag would create havoc
-            // when deserializing.  This is a temporary fix because if there are 
-            // attributes in the start/end empty tag, then we let it through as before
-            // and problems will surface.
-            
-            bool isStartEnd = false;
-            
             // if node contain attributes let them be used by the complex type's deserializer
             if (0 != m_pNode->m_pchAttributes[0])
             {
@@ -831,20 +808,12 @@ getCmplxObject (void *pDZFunct,
                         delete isNill; 
                 }
             }
-            else
-                isStartEnd = (START_END_ELEMENT == m_pNode->m_type2);
             
             m_pNode = NULL; // indicate node consumed
     
             TRACE_OBJECT_CREATE_FUNCT_ENTRY(pCreFunct, 0);
             void *pObject = ((AXIS_OBJECT_CREATE_FUNCT) pCreFunct)(0);
             TRACE_OBJECT_CREATE_FUNCT_EXIT(pCreFunct, pObject);
-            
-            if (isStartEnd)
-            {
-                m_pParser->next ();
-                return pObject;
-            }
     
             if (pObject && pDZFunct)
             {
@@ -854,8 +823,7 @@ getCmplxObject (void *pDZFunct,
 
                 if (AXIS_SUCCESS == m_nStatus)
                 {
-                    m_pParser->next ();    // skip end node too
-                    m_pNode = NULL;  // indicate node consumed
+                    skipEndNode();
                     return pObject;
                 }
                 else
@@ -890,10 +858,6 @@ getCmplxFaultObjectName ()
         m_pParser->next ();
         
     m_nStatus = AXIS_SUCCESS;
-
-    // if anything has gone wrong earlier just do nothing
-    if (AXIS_SUCCESS != m_nStatus)
-        return NULL;
         
     if (RPC_ENCODED == m_nStyle)
     {
@@ -931,7 +895,7 @@ getCmplxFaultObject(void *pDZFunct,
             
             if (AXIS_SUCCESS == m_nStatus)
             {
-                m_pParser->next ();    // skip end node too
+                skipEndNode();
                 return pObject;
             }
             else
@@ -976,8 +940,7 @@ getCmplxFaultObject(void *pDZFunct,
 
             if (AXIS_SUCCESS == m_nStatus)
             {
-                m_pParser->next (); // skip end node too
-                m_pNode = NULL; // indicate node consumed
+                skipEndNode();
                 return pObject;
             }
             else
@@ -1394,15 +1357,14 @@ getElement (const AxisChar * pName,
     
                         if (bReturn)
                         {
-                            m_pNode = m_pParser->next ();  // skip end element node too
+                            skipEndNode();
                             return;
                         }
                     }
                 }
                 
                 pSimpleType->deserialize(elementValue);
-                m_pNode = m_pParser->next ();  // skip end element node too
-                m_pNode = NULL;
+                skipEndNode();
                 return;
             }
             else if (m_pNode && (END_ELEMENT == m_pNode->m_type) && bNillFound  ) //xsi:nil="true"
@@ -1411,22 +1373,14 @@ getElement (const AxisChar * pName,
                 m_pNode = NULL;
                 return;
             } 
-
-            else if (m_pNode && (END_ELEMENT == m_pNode->m_type))    // We have an empty string - Jira AXISCPP-93
+            else if (m_pNode && (END_ELEMENT == m_pNode->m_type))    // We have an empty string
             {
                 pSimpleType->deserialize("");
                 m_pNode = NULL;
                 return;
             }
             else
-            {
-                // simpleType may have xsi:nill="true" */
-                //m_pNode = NULL;
-                // this is important when deserializing 
-                // arrays
-                 
                 return;
-            }
         }
         else
         {
@@ -1486,19 +1440,14 @@ getElement (const AxisChar * pName,
             
                         if (bReturn)
                         {
-                            m_pNode = m_pParser->next ();  // skip end element node too
-                            m_pNode = NULL; // indicate node consumed
+                            skipEndNode();
                             return;
                         }
                     }
                 }
                 
                 pSimpleType->deserialize(elementValue);
-                m_pNode = m_pParser->next ();  // skip end element node too
-                m_pNode = NULL;
-                /* this is important in doc/lit style when deserializing 
-                 * arrays
-                 */
+                skipEndNode();
                 return;
             }
             else if (m_pNode && (END_ELEMENT == m_pNode->m_type) && bNillFound ) //xsi:nil="true"
@@ -1514,14 +1463,7 @@ getElement (const AxisChar * pName,
                 return;
             }
             else
-            {
-                /* simpleType may have xsi:nill="true" */
-    //            m_pNode = NULL;
-                /* this is important in doc/lit style when deserializing 
-                 * arrays
-                 */
                 return;
-            }
          }
         else
             return;

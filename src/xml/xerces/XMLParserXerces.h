@@ -68,6 +68,7 @@ private:
     bool m_bFirstParsed;
     SoapInputSource* m_pInputSource;
     bool m_bPeeked;
+    bool m_bStartEndElement;
 };
 
 #endif

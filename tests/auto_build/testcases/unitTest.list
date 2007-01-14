@@ -150,3 +150,7 @@ LargeReturningString2.xml
 
 # Test added on 14 Sept 2006
 RestrictedPattern17667.xml
+
+# Tests to test Start/End element tags, with and without attributes.
+StartEndElement.xml
+StartEndElementAttributes.xml

@@ -73,7 +73,6 @@ public:
     const char* getMethodNameToInvoke();
     void setMethodNameToInvoke(const char*);
     
-    bool isCurrentElementEmpty();
 	/**
 	* This method allows to peek for the name of the next element in XML stream.
 	* Useful in supporting "all" & "choice" WSDL constructs.
@@ -353,6 +352,7 @@ private:
     void deserializeEncodedArray (Axis_Array* pArray, IAnySimpleType* pSimpleType, const AxisChar* pName, const AxisChar* pNamespace, int size);
 	void deserializeLiteralComplexArray(Axis_Array * pArray, void *pDZFunct, void *pCreFunct, void *pDelFunct,  const AxisChar * pName, const AxisChar * pNamespace);
 	void deserializeEncodedComplexArray(Axis_Array * pArray, void *pDZFunct, void *pCreFunct, void *pDelFunct, const AxisChar * pName, const AxisChar * pNamespace, int size);
+    void skipEndNode();
 };
 
 AXIS_CPP_NAMESPACE_END
