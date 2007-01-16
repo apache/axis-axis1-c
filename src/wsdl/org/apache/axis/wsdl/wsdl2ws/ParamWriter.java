@@ -100,7 +100,17 @@ public abstract class ParamWriter extends BasicFileWriter
         {
             extensionBaseAttrib = new AttributeInfo(this.classname);
             extensionBaseAttrib.setParamName(elemi.getName().getLocalPart());
-            extensionBaseAttrib.setTypeName(CUtils.getclass4qname(elemi.getType().getName()));
+            
+            Type elementType = elemi.getType();
+
+            if (CUtils.getclass4qname(elementType.getName()) != null)
+                extensionBaseAttrib.setTypeName(CUtils.getclass4qname(elementType.getName()));
+            else
+            {
+                extensionBaseAttrib.setTypeName(elementType.getLanguageSpecificName());
+                extensionBaseAttrib.setSimpleType(false);
+            }
+            
             extensionBaseAttrib.setType(elemi.getType());
             extensionBaseAttrib.setElementName(elemi.getName());
         }
