@@ -85,13 +85,21 @@ public class BeanParamWriter extends ParamCFileWriter
             if (extensionBaseAttrib != null)
             {
                 String typeName = extensionBaseAttrib.getTypeName();
-                writer.write("\taxiscSoapSerializerSerializeAsChardata(pSZ,(void*)");
                 
-                if (!CUtils.isPointerType(typeName))
-                    writer.write("&");
-                
-                writer.write("(param->" + extensionBaseAttrib.getParamNameAsMember()
-                        + "), " + CUtils.getXSDTypeForBasicType(typeName) + ");\n");
+                if (extensionBaseAttrib.isSimpleType())
+                {                
+                    writer.write("\taxiscSoapSerializerSerializeAsChardata(pSZ,(void*)");
+                    
+                    if (!CUtils.isPointerType(typeName))
+                        writer.write("&");
+                    
+                    writer.write("(param->" + extensionBaseAttrib.getParamNameAsMember()
+                            + "), " + CUtils.getXSDTypeForBasicType(typeName) + ");\n");
+                }
+                else
+                {
+                    // TODO
+                }
             } 
             else
             {
@@ -196,7 +204,8 @@ public class BeanParamWriter extends ParamCFileWriter
         if (extensionBaseAttrib != null)
         {
             String typeName = extensionBaseAttrib.getTypeName(); 
-            if( typeName != null)
+            
+            if (extensionBaseAttrib.isSimpleType())
             {
                 writer.write("\taxiscSoapSerializerSerializeAsChardata(pSZ, (void*)");
                 if (!CUtils.isPointerType(typeName))
@@ -204,6 +213,10 @@ public class BeanParamWriter extends ParamCFileWriter
 
                 writer.write("(param->" + extensionBaseAttrib.getParamNameAsMember() + "), "
                         + CUtils.getXSDTypeForBasicType(typeName) + ");\n");
+            }
+            else
+            {
+                // TODO
             }
         }
 
@@ -471,19 +484,26 @@ public class BeanParamWriter extends ParamCFileWriter
         {
             if (extensionBaseAttrib != null)
             {
-                writer.write("\tvoid* pCharDataAs;\n\n");
-                String typeName = extensionBaseAttrib.getTypeName();
-                String xsdType = CUtils.getXSDTypeForBasicType(typeName);
-                writer.write("\taxiscSoapDeSerializerGetChardataAs(pDZ, &pCharDataAs, " + xsdType + ");\n");
-                writer.write("\tparam->" + extensionBaseAttrib.getParamNameAsMember() + " = ");
-                
-                if (CUtils.isPointerType(typeName))
-                    writer.write("(" + typeName + ") pCharDataAs;\n");
+                if (extensionBaseAttrib.isSimpleType())
+                {
+                    writer.write("\tvoid* pCharDataAs;\n\n");
+                    String typeName = extensionBaseAttrib.getTypeName();
+                    String xsdType = CUtils.getXSDTypeForBasicType(typeName);
+                    writer.write("\taxiscSoapDeSerializerGetChardataAs(pDZ, &pCharDataAs, " + xsdType + ");\n");
+                    writer.write("\tparam->" + extensionBaseAttrib.getParamNameAsMember() + " = ");
+                    
+                    if (CUtils.isPointerType(typeName))
+                        writer.write("(" + typeName + ") pCharDataAs;\n");
+                    else
+                    {
+                        writer.write(" *(" + typeName + "*) pCharDataAs;\n");
+                        writer.write("\taxiscAxisDelete(pCharDataAs, " + xsdType + ");\n");
+                    }     
+                }
                 else
                 {
-                    writer.write(" *(" + typeName + "*) pCharDataAs;\n");
-                    writer.write("\taxiscAxisDelete(pCharDataAs, " + xsdType + ");\n");
-                }                
+                    // TODO
+                }
             }
             else
             {
@@ -724,21 +744,28 @@ public class BeanParamWriter extends ParamCFileWriter
         if (extensionBaseAttrib != null
                 && extensionBaseAttrib.getTypeName() != null)
         {
-            writer.write("\t{\n"); // ==== begin scope
-            writer.write("\tvoid* pCharDataAs;\n");
-            String typeName = extensionBaseAttrib.getTypeName();
-            String xsdType = CUtils.getXSDTypeForBasicType(typeName);
-            writer.write("\taxiscSoapDeSerializerGetChardataAs(pDZ, &pCharDataAs, " + xsdType + ");\n");
-            writer.write("\tparam->" + extensionBaseAttrib.getParamNameAsMember() + " = ");
-            
-            if (CUtils.isPointerType(typeName))
-                writer.write("(" + typeName + ") pCharDataAs;\n");
+            if (extensionBaseAttrib.isSimpleType())
+            {
+                writer.write("\t{\n"); // ==== begin scope
+                writer.write("\tvoid* pCharDataAs;\n");
+                String typeName = extensionBaseAttrib.getTypeName();
+                String xsdType = CUtils.getXSDTypeForBasicType(typeName);
+                writer.write("\taxiscSoapDeSerializerGetChardataAs(pDZ, &pCharDataAs, " + xsdType + ");\n");
+                writer.write("\tparam->" + extensionBaseAttrib.getParamNameAsMember() + " = ");
+                
+                if (CUtils.isPointerType(typeName))
+                    writer.write("(" + typeName + ") pCharDataAs;\n");
+                else
+                {
+                    writer.write(" *(" + typeName + "*) pCharDataAs;\n");
+                    writer.write("\taxiscAxisDelete(pCharDataAs, " + xsdType + ");\n");
+                }    
+                writer.write("\t}\n"); // ==== end scope
+            }
             else
             {
-                writer.write(" *(" + typeName + "*) pCharDataAs;\n");
-                writer.write("\taxiscAxisDelete(pCharDataAs, " + xsdType + ");\n");
-            }    
-            writer.write("\t}\n"); // ==== end scope
+                // TODO
+            }
         }
         
         writer.write("\t/* Return deserialization status */\n");

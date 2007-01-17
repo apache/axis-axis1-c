@@ -576,10 +576,16 @@ public class ParmHeaderFileWriter extends ParamWriter
                 }
             }
             
+            // TODO we really do not support xsd:extension correctly or completely!
             if (extensionBaseAttrib != null 
                     && getCorrectParmNameConsideringArraysAndComplexTypes(extensionBaseAttrib) != null)
             {
                 String extBaseType = getCorrectParmNameConsideringArraysAndComplexTypes(extensionBaseAttrib);
+                
+                // TODO following is hack till we really support xsd:extension correctly
+                if (extBaseType.lastIndexOf("*") > -1)
+                    extBaseType = extBaseType.substring(0, extBaseType.lastIndexOf("*"));
+
                 if (!CUtils.isSimpleType(extBaseType))
                     typeSet.add(extBaseType);
             }            

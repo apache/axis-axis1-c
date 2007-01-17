@@ -340,13 +340,21 @@ public class BeanParamWriter extends ParamCPPFileWriter
             if (extensionBaseAttrib != null)
             {
                 String typeName = extensionBaseAttrib.getTypeName();
-                writer.write("\tpSZ->serializeAsChardata((void*)");
                 
-                if (!CUtils.isPointerType(typeName))
-                    writer.write("&");
-                
-                writer.write("(param->" + extensionBaseAttrib.getParamNameAsMember()
-                        + "), " + CUtils.getXSDTypeForBasicType(typeName) + ");\n");
+                if (extensionBaseAttrib.isSimpleType())
+                {
+                    writer.write("\tpSZ->serializeAsChardata((void*)");
+                    
+                    if (!CUtils.isPointerType(typeName))
+                        writer.write("&");
+                    
+                    writer.write("(param->" + extensionBaseAttrib.getParamNameAsMember()
+                            + "), " + CUtils.getXSDTypeForBasicType(typeName) + ");\n");
+                }
+                else
+                {
+                    // TODO
+                }
             } 
             else
             {
@@ -440,17 +448,22 @@ public class BeanParamWriter extends ParamCPPFileWriter
         if(wscontext.getWrapInfo().getWrapperStyle().equals("document"))
             writer.write("\tpSZ->serialize( \">\", 0);\n");
         
+        // TODO: xsd:extension not fully or correctly supported.
         if (extensionBaseAttrib != null)
         {
             String typeName = extensionBaseAttrib.getTypeName(); 
-            if( typeName != null)
+
+            if (extensionBaseAttrib.isSimpleType())
             {
                 writer.write("\tpSZ->serializeAsChardata((void*)");
                 if (!CUtils.isPointerType(typeName))
-                    writer.write("&");
-
+                    writer.write("&");    
                 writer.write("(param->" + extensionBaseAttrib.getParamNameAsMember() + "), "
                         + CUtils.getXSDTypeForBasicType(typeName) + ");\n");
+            }
+            else
+            {
+                // TODO
             }
         }
 
@@ -461,11 +474,9 @@ public class BeanParamWriter extends ParamCPPFileWriter
         
         for (int i = attributeParamCount; i < attribs.length; i++)
         {
-            String namespace = "";
+            String namespace = "NULL";
             if (attribs[i].getNsQualified())
                 namespace = "Axis_URI_" + classname;
-            else
-                namespace = "NULL";
             
             // if the attribute is a choice following should do
             if (attribs[i].getChoiceElement())
@@ -725,18 +736,25 @@ public class BeanParamWriter extends ParamCPPFileWriter
         {
             if (extensionBaseAttrib != null)
             {
-                writer.write("\tvoid* pCharDataAs;\n\n");
-                String typeName = extensionBaseAttrib.getTypeName();
-                String xsdType = CUtils.getXSDTypeForBasicType(typeName);
-                writer.write("\tpIWSDZ->getChardataAs(&pCharDataAs, " + xsdType + ");\n");
-                writer.write("\tparam->" + extensionBaseAttrib.getParamNameAsMember() + " = ");
-                
-                if (CUtils.isPointerType(typeName))
-                    writer.write("(" + typeName + ") pCharDataAs;\n");
+                if (extensionBaseAttrib.isSimpleType())
+                {
+                    writer.write("\tvoid* pCharDataAs;\n\n");
+                    String typeName = extensionBaseAttrib.getTypeName();
+                    String xsdType = CUtils.getXSDTypeForBasicType(typeName);
+                    writer.write("\tpIWSDZ->getChardataAs(&pCharDataAs, " + xsdType + ");\n");
+                    writer.write("\tparam->" + extensionBaseAttrib.getParamNameAsMember() + " = ");
+                    
+                    if (CUtils.isPointerType(typeName))
+                        writer.write("(" + typeName + ") pCharDataAs;\n");
+                    else
+                    {
+                        writer.write(" *(" + typeName + "*) pCharDataAs;\n");
+                        writer.write("\tAxis::AxisDelete( pCharDataAs, " + xsdType + ");\n");
+                    }
+                }
                 else
                 {
-                    writer.write(" *(" + typeName + "*) pCharDataAs;\n");
-                    writer.write("\tAxis::AxisDelete( pCharDataAs, " + xsdType + ");\n");
+                    // TODO
                 }
             }
             else
@@ -1000,19 +1018,26 @@ public class BeanParamWriter extends ParamCPPFileWriter
         if (extensionBaseAttrib != null
                 && extensionBaseAttrib.getTypeName() != null)
         {
-            writer.write("\tvoid* pCharDataAs;\n");
-            String typeName = extensionBaseAttrib.getTypeName();
-            String xsdType = CUtils.getXSDTypeForBasicType(typeName);
-            writer.write("\tpIWSDZ->getChardataAs(&pCharDataAs, " + xsdType + ");\n");
-            writer.write("\tparam->" + extensionBaseAttrib.getParamNameAsMember() + " = ");
-            
-            if (CUtils.isPointerType(typeName))
-                writer.write("(" + typeName + ") pCharDataAs;\n");
+            if (extensionBaseAttrib.isSimpleType())
+            {
+                writer.write("\tvoid* pCharDataAs;\n");
+                String typeName = extensionBaseAttrib.getTypeName();
+                String xsdType = CUtils.getXSDTypeForBasicType(typeName);
+                writer.write("\tpIWSDZ->getChardataAs(&pCharDataAs, " + xsdType + ");\n");
+                writer.write("\tparam->" + extensionBaseAttrib.getParamNameAsMember() + " = ");
+                
+                if (CUtils.isPointerType(typeName))
+                    writer.write("(" + typeName + ") pCharDataAs;\n");
+                else
+                {
+                    writer.write(" *(" + typeName + "*) pCharDataAs;\n");
+                    writer.write("\tAxis::AxisDelete( pCharDataAs, " + xsdType + ");\n");
+                }    
+            }
             else
             {
-                writer.write(" *(" + typeName + "*) pCharDataAs;\n");
-                writer.write("\tAxis::AxisDelete( pCharDataAs, " + xsdType + ");\n");
-            }            
+                // TODO
+            }
         }
 
         writer.write("\treturn pIWSDZ->getStatus();\n");
@@ -1122,7 +1147,12 @@ public class BeanParamWriter extends ParamCPPFileWriter
             // AXISCPP-918 patch provided by Franz Fehringer
             if (extensionBaseAttrib != null && extensionBaseAttrib.getTypeName() != null)
             {
-                writer.write("\t" + extensionBaseAttrib.getParamNameAsMember() + " = " + "original." + extensionBaseAttrib.getParamNameAsMember() + ";\n");
+                if (extensionBaseAttrib.isSimpleType())
+                    writer.write("\t" + extensionBaseAttrib.getParamNameAsMember() + " = " + "original." + extensionBaseAttrib.getParamNameAsMember() + ";\n");
+                else
+                {
+                    // TODO
+                }
             }
             // End of AXISCPP-918
 
