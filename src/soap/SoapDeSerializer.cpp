@@ -1392,10 +1392,8 @@ getElement (const AxisChar * pName,
     {
         //DOC_LITERAL    
     
-        if (!m_pNode)
+         if (!m_pNode)
             m_pNode = m_pParser->next ();
-    
-         /* wrapper node without type info  Ex: <i> */
          if (!m_pNode)
             return;
     
