@@ -35,6 +35,7 @@ public class CElementDecl //extends ElementDecl
     private int minOccurs = 1;
     private int maxOccurs = 1;
     private boolean nillable = false;
+    private boolean optional = false;
 
     // The following property is set if minOccurs=0.
     // An item that is not set and has minOccurs=0 
@@ -191,10 +192,28 @@ public class CElementDecl //extends ElementDecl
     }
 
     /**
+     * Method setOptional
+     * 
+     * @param optional 
+     */
+    public void setOptional(boolean optional) {
+        this.optional = optional;
+    }
+
+    /**
+     * Method getOptional
+     * 
+     * @return 
+     */
+    public boolean getOptional() {
+        return optional;
+    }
+
+    /**
      *       Method getDocumentation
      *       @return string       
-     */
-
+     */    
+    
     public String getDocumentation()
     {
         return this.documentation;
