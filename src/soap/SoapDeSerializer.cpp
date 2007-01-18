@@ -855,18 +855,12 @@ const char *SoapDeSerializer::
 getCmplxFaultObjectName ()
 {
     if (!m_pNode)
-        m_pParser->next ();
+        m_pNode = m_pParser->next ();
         
     m_nStatus = AXIS_SUCCESS;
         
     if (RPC_ENCODED == m_nStyle)
-    {
-        // just skip wrapper node with type info
-        // Ex: <tns:QuoteInfoType xmlns:tns="http://www.getquote.org/test"> 
         m_pParser->next ();
-    }
-    else if (!m_pNode)
-        m_pNode = m_pParser->next ();
     
     if (!m_pNode)
         return NULL;
@@ -1295,96 +1289,118 @@ getAttributeAsDuration (const AxisChar * pName, const AxisChar * pNamespace)
     return (xsd__duration *)getAttribute(pName, pNamespace, &simpleType);
 }
 
+bool SoapDeSerializer::
+isNillValue()
+{
+    for (int i = 0; m_pNode->m_pchAttributes[i]; i += 3)
+    {
+        string sLocalName = m_pNode->m_pchAttributes[i];
+        string sValue = m_pNode->m_pchAttributes[i + 2];
+
+        if( strcmp( "nil", sLocalName.c_str()) == 0 &&
+            strcmp( "true", sValue.c_str()) == 0)
+            return true;
+    }
+
+    return false;
+}
+
+void SoapDeSerializer::
+processFaultDetail(IAnySimpleType * pSimpleType, const AxisChar* elementValue)
+{
+    bool isWhiteSpace = true;
+    
+    int len = elementValue ? strlen(elementValue) : 0;
+    
+    // See if detail element character data is whitespace
+    for (int i=0; i<len; ++i)
+        if (!(*elementValue == '\r' || *elementValue == '\n' 
+                || *elementValue == '\t' || *elementValue == ' '))
+        {
+            isWhiteSpace = false;
+            break;
+        }
+    
+    // If it is whitespace, peek to see if next element is the start of
+    // a new element, in which case the fault detail is complex.  Peek()
+    // return null string if end-element tag is encountered.
+    char *workingString = (char *)elementValue;
+    if (isWhiteSpace)
+    {
+        // Since we will be doing a peek, elementValue will no longer
+        // be valid, so if we will deserialize null string if we need to.
+        workingString = "";
+        
+        // if end tag not found, must be complex detail - fault handling code
+        // will know what to do when we return with no deserialization
+        const char* nextName = m_pParser->peek();
+        if (nextName[0] != 0x00)
+        {
+            m_pNode = NULL; // node consumed
+            return;
+        }
+    }
+    
+    // If here, detail is simple character data, deserialize simple string
+    pSimpleType->deserialize(workingString);
+    skipEndNode();        
+    
+    return;
+}
+
+
 void SoapDeSerializer::
 getElement (const AxisChar * pName,
             const AxisChar * pNamespace,
             IAnySimpleType * pSimpleType,
             bool isArrayElement)
 {
+    bool    bNillFound = false;
+    
     if (AXIS_SUCCESS != m_nStatus)
         return;
 
     if (RPC_ENCODED == m_nStyle)
     {
-        bool    bNillFound = false;
         m_pNode = m_pParser->next ();
-        
-        // wrapper node with type info  Ex: <i xsi:type="xsd:int"> 
         if (!m_pNode)
            return;
 
         if (0 == strcmp (pName, m_pNode->m_pchNameOrValue))
-        {
-            for (int i = 0; m_pNode->m_pchAttributes[i] && !bNillFound; i += 3)
-            {
-                string sLocalName = m_pNode->m_pchAttributes[i];
-                string sValue = m_pNode->m_pchAttributes[i + 2];
-                
-                if (strcmp( "nil", sLocalName.c_str()) == 0 &&
-                    strcmp( "true", sValue.c_str()) == 0)
-                    bNillFound = true;
-            }
-        }
+            bNillFound = isNillValue();
 
         if (bNillFound || isArrayElement || (pSimpleType->getType() == getXSDType (m_pNode)))
         {
             m_pNode = m_pParser->next (true);   /* charactor node */
-            if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+            if (!m_pNode)
+              return;
+              
+            if (CHARACTER_ELEMENT == m_pNode->m_type)
             {
                 const AxisChar* elementValue = m_pNode->m_pchNameOrValue;
                                     
-                // FJP Added this code for fault finding.  If detail is
-                //     followed by CR/LF or CR/LF then CR/LF then assume that
-                //     it is not a simple object.  As added protection against
+                // FJP Added this code for fault finding.  As added protection against
                 //     false findings, the namespace has been set to an invalid
                 //     value of a single space character.
-                if (strlen (elementValue) < 3 && pNamespace != NULL)
+                if (pNamespace != NULL && *pNamespace == ' ')
+                    processFaultDetail(pSimpleType, elementValue);
+                else
                 {
-                    if (*pNamespace == ' ')
-                    {
-                        bool bReturn = false;
-    
-                        if (strlen (elementValue) == 0)
-                            bReturn = true;
-
-                        if (strlen (elementValue) == 1 && (*elementValue == '\n' || *elementValue == '\r'))
-                            bReturn = true;
-      
-                        if (strlen (elementValue) == 2
-                            && ((*elementValue == '\n' || *elementValue == '\r')
-                            && (*(elementValue + 1) == '\n' || *(elementValue + 1) == '\r')))
-                            bReturn = true;
-    
-                        if (bReturn)
-                        {
-                            skipEndNode();
-                            return;
-                        }
-                    }
+                    pSimpleType->deserialize(elementValue);
+                    skipEndNode();
                 }
-                
-                pSimpleType->deserialize(elementValue);
-                skipEndNode();
-                return;
             }
-            else if (m_pNode && (END_ELEMENT == m_pNode->m_type) && bNillFound  ) //xsi:nil="true"
+            else if (END_ELEMENT == m_pNode->m_type) 
             {
-                pSimpleType->deserialize(NULL);
+                // xsi:nil="true" OR empty tag case <tag/>
+                pSimpleType->deserialize(bNillFound ? NULL : "");
                 m_pNode = NULL;
-                return;
-            } 
-            else if (m_pNode && (END_ELEMENT == m_pNode->m_type))    // We have an empty string
-            {
-                pSimpleType->deserialize("");
-                m_pNode = NULL;
-                return;
-            }
-            else
-                return;
+            }                 
+
+            return;
         }
         else
         {
-            
             /* it is an error if type is different or not present */
         }
     }
@@ -1399,69 +1415,35 @@ getElement (const AxisChar * pName,
     
          if (0 == strcmp (pName, m_pNode->m_pchNameOrValue))
          {
-            bool    bNillFound = false;
-            for (int i = 0; m_pNode->m_pchAttributes[i] && !bNillFound; i += 3)
-            {
-                string sLocalName = m_pNode->m_pchAttributes[i];
-                string sValue = m_pNode->m_pchAttributes[i + 2];
-    
-                if( strcmp( "nil", sLocalName.c_str()) == 0 &&
-                    strcmp( "true", sValue.c_str()) == 0)
-                    bNillFound = true;
-            }
+            bNillFound = isNillValue();
     
             m_pNode = m_pParser->next (true);   /* charactor node */
-            if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+            if (!m_pNode)
+                return;
+                
+            if (CHARACTER_ELEMENT == m_pNode->m_type)
             {
                 const AxisChar* elementValue = m_pNode->m_pchNameOrValue;
-                   // FJP Added this code for fault finding.  If detail is
-                //     followed by CR/LF or CR/LF then CR/LF then assume that
-                //     it is not a simple object.  As added protection against
+
+                // FJP Added this code for fault finding.  As added protection against
                 //     false findings, the namespace has been set to an invalid
                 //     value of a single space character.
-                if (strlen (elementValue) < 3 && pNamespace != NULL)
+                if (pNamespace != NULL && *pNamespace == ' ')
+                    processFaultDetail(pSimpleType, elementValue);
+                else
                 {
-                    if (*pNamespace == ' ')
-                    {
-                        bool bReturn = false;
-    
-                        if (strlen (elementValue) == 0)
-                            bReturn = true;
-                            
-                        if (strlen (elementValue) == 1 && (*elementValue == '\n' || *elementValue == '\r'))
-                            bReturn = true;
-      
-                        if (strlen (elementValue) == 2
-                            && ((*elementValue == '\n' || *elementValue == '\r')
-                            && (*(elementValue + 1) == '\n' || *(elementValue + 1) == '\r')))
-                            bReturn = true;
-            
-                        if (bReturn)
-                        {
-                            skipEndNode();
-                            return;
-                        }
-                    }
+                    pSimpleType->deserialize(elementValue);
+                    skipEndNode();
                 }
-                
-                pSimpleType->deserialize(elementValue);
-                skipEndNode();
-                return;
             }
-            else if (m_pNode && (END_ELEMENT == m_pNode->m_type) && bNillFound ) //xsi:nil="true"
+            else if (END_ELEMENT == m_pNode->m_type) 
             {
-                pSimpleType->deserialize(NULL);
+                // xsi:nil="true" OR empty tag case <tag/>
+                pSimpleType->deserialize(bNillFound ? NULL : "");
                 m_pNode = NULL;
-                return;
             }        
-            else if (m_pNode && (END_ELEMENT == m_pNode->m_type) ) // empty tag case <tag/>
-            {
-                pSimpleType->deserialize("");
-                m_pNode = NULL;
-                return;
-            }
-            else
-                return;
+
+            return;
          }
         else
             return;

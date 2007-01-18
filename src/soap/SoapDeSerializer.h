@@ -353,6 +353,8 @@ private:
 	void deserializeLiteralComplexArray(Axis_Array * pArray, void *pDZFunct, void *pCreFunct, void *pDelFunct,  const AxisChar * pName, const AxisChar * pNamespace);
 	void deserializeEncodedComplexArray(Axis_Array * pArray, void *pDZFunct, void *pCreFunct, void *pDelFunct, const AxisChar * pName, const AxisChar * pNamespace, int size);
     void skipEndNode();
+    void processFaultDetail(IAnySimpleType * pSimpleType, const AxisChar* elementValue);
+    bool isNillValue();
 };
 
 AXIS_CPP_NAMESPACE_END

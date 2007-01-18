@@ -1,0 +1,19 @@
+HTTP/1.1 500 Internal Server Error
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version="1.0" encoding="utf-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<soapenv:Header/>
+<soapenv:Body>
+  <soapenv:Fault>
+   <faultcode xmlns:ns2008922717="http://soapinterop.org/wsdl" xmlns="">ns2008922717:DivByZeroStruct</faultcode>
+   <faultstring xmlns="">org.soapinterop.DivByZeroStruct</faultstring>
+   <faultactor xmlns="">http://www.test.apache.org/endpoint</faultactor>
+  </soapenv:Fault>
+</soapenv:Body>
+</soapenv:Envelope>
+0

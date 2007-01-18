@@ -1,0 +1,18 @@
+<test>
+    <name>FaultMappingDocDivByZeroNoDetail</name>
+    <description>FaultMappingDocDivByZeroNoDetail</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>FaultMappingDocDivByZeroClient.cpp</clientCode>
+    <wsdl>FaultMappingDocDivByZero.wsdl</wsdl>
+    <expected>
+        <output>
+            FaultMappingDocDivByZeroNoDetail.cpp.out
+        </output>
+    <serverResponse>
+			FaultMappingDocDivByZeroNoDetail_ServerResponse.expected
+	</serverResponse>        
+    </expected>
+
+    
+	<endpoint>http://localhost:80/axis/FaultMappingDoc</endpoint>
+</test>

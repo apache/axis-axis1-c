@@ -1,0 +1,5 @@
+FaultCode = ns2008922717:DivByZeroStruct
+FaultString = org.soapinterop.DivByZeroStruct
+FaultActor = http://www.test.apache.org/endpoint
+SoapFaultException: org.soapinterop.DivByZeroStruct
+---------------------- TEST COMPLETE -----------------------------

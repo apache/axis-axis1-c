@@ -1,0 +1,5 @@
+FaultCode = ns2008922717:DivByZeroStruct
+FaultString = org.soapinterop.DivByZeroStruct
+FaultActor = NULL
+DivByZeroStruct Fault: "Division by zero exception", 1, 10.52
+---------------------- TEST COMPLETE -----------------------------

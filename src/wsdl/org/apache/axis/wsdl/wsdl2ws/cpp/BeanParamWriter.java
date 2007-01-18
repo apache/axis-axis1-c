@@ -1156,6 +1156,14 @@ public class BeanParamWriter extends ParamCPPFileWriter
             }
             // End of AXISCPP-918
 
+            // Set fields in SoapFaultException parent class if fault
+            if (type.isFault())
+            {
+                writer.write("\tsetFaultCode(original.getFaultCode());\n");
+                writer.write("\tsetFaultString(original.getFaultString());\n");
+                writer.write("\tsetFaultActor(original.getFaultActor());\n");
+            }
+            
             int anyCounter = 0;
             for (int i = 0 ; i < attribs.length ; i++)
             {

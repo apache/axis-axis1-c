@@ -155,3 +155,9 @@ RestrictedPattern17667.xml
 EmptyArrayOfString.xml
 StartEndElement.xml
 StartEndElementAttributes.xml
+
+# More extensive fault handling testing
+FaultMappingDocDivByZeroActorAndDetail.xml
+FaultMappingDocDivByZeroNoActorNoDetail.xml
+FaultMappingDocDivByZeroNoActor.xml
+FaultMappingDocDivByZeroNoDetail.xml
