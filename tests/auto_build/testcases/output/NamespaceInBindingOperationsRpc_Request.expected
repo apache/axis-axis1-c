@@ -1,0 +1,15 @@
+POST /axis/NamespaceInBindingOperationsRpc HTTP/1.1
+Host: 127.0.0.1:13260
+Content-Type: text/xml; charset=UTF-8
+SOAPAction: "urn:test-quotes#getQuote"
+Content-Length: 375
+
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:getQuote xmlns:ns1="urn:test-quotes">
+<symbol xsi:type="xsd:string">IBM</symbol>
+</ns1:getQuote>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+

@@ -40,6 +40,7 @@ public class MethodInfo {
     private QName outputMessage;
 	private QName faultMessage;
 	private ArrayList faultType;
+    private String namespaceURI = null;
 
     public MethodInfo() {
         this.methodname = null;
@@ -164,6 +165,21 @@ public class MethodInfo {
     public void setOutputUse(String string) {
         outputUse = string;
     }
+    
+    /**
+     * @param string
+     */
+    public void setNamespaceURI(String string) {
+        namespaceURI = string;
+    }
+
+    /**
+     * @param string
+     */
+    public String getNamespaceURI() {
+        return namespaceURI;
+    }
+    
 	/**
 	 * @return QName
 	 */

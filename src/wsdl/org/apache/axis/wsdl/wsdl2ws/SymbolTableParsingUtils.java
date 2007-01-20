@@ -76,13 +76,14 @@ public class SymbolTableParsingUtils {
 
 	  if (soapbodies != null) {
 		  for (int j = 0; j < soapbodies.size(); j++) {
-			  if (soapbodies.get(j)
-				  instanceof javax.wsdl.extensions.soap.SOAPBody) {
+			  if (soapbodies.get(j) instanceof javax.wsdl.extensions.soap.SOAPBody) 
+              {
 					javax.wsdl.extensions.soap.SOAPBody body =
 						 ((javax.wsdl.extensions.soap.SOAPBody) soapbodies
 						  .get(j));
 					methodinfo.setInputEncoding(body.getEncodingStyles());
 					methodinfo.setInputUse(body.getUse());
+                    methodinfo.setNamespaceURI(body.getNamespaceURI());
 			  }
 		  }
 	  }
@@ -94,14 +95,16 @@ public class SymbolTableParsingUtils {
 	  List soapbodies = input.getExtensibilityElements();
 
 	  if (soapbodies != null) {
-		  for (int j = 0; j < soapbodies.size(); j++) {
-			  if (soapbodies.get(j)
-				  instanceof javax.wsdl.extensions.soap.SOAPBody) {
+		  for (int j = 0; j < soapbodies.size(); j++) 
+          {
+			  if (soapbodies.get(j) instanceof javax.wsdl.extensions.soap.SOAPBody) 
+              {
 					javax.wsdl.extensions.soap.SOAPBody body =
 						 ((javax.wsdl.extensions.soap.SOAPBody) soapbodies
 						  .get(j));
 					methodinfo.setInputEncoding(body.getEncodingStyles());
 					methodinfo.setInputUse(body.getUse());
+                    methodinfo.setNamespaceURI(body.getNamespaceURI());
 			  }
 		  }
 	  }

@@ -1,0 +1,20 @@
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version='1.0' encoding='UTF-8'?>
+<soap:Envelope xmlns:soap='http://schemas.xmlsoap.org/soap/envelope/' 
+xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' 
+xmlns:xsd='http://www.w3.org/2001/XMLSchema' 
+xmlns:soapenc='http://schemas.xmlsoap.org/soap/encoding/' 
+soap:encodingStyle='http://schemas.xmlsoap.org/soap/encoding/'>
+<soap:Body>
+<n:getQuoteResponse xmlns:n='urn:test-quotes'>
+  <Result xsi:type='xsd:float'>99.45</Result>
+</n:getQuoteResponse>
+</soap:Body>
+</soap:Envelope>
+0

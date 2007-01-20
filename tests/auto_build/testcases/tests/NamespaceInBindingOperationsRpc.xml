@@ -1,0 +1,19 @@
+<test>
+    <name>NamespaceInBindingOperationsRpc</name>
+    <description>NamespaceInBindingOperationsRpc</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>NamespaceInBindingOperationsRpcClient.cpp</clientCode>
+    <wsdl>NamespaceInBindingOperationsRpc.wsdl</wsdl>
+    <expected>
+        <output>
+            NamespaceInBindingOperationsRpc.cpp.out
+        </output> 
+        <request>
+			NamespaceInBindingOperationsRpc_Request.expected
+		</request>
+        <serverResponse>
+            NamespaceInBindingOperationsRpc_ServerResponse.expected
+        </serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/NamespaceInBindingOperationsRpc</endpoint>
+</test>

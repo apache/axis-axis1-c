@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<definitions name='apache.org.StockQuote' targetNamespace='http://www.apache.org/wsdl/apache.org.StockQuote/' xmlns:tns='http://www.apache.org/wsdl/apache.org.StockQuote/' 
+   xmlns:electric='http://www.apache.org/' xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' 
+   xmlns:xsd='http://www.w3.org/2001/XMLSchema' 
+   xmlns:soapenc='http://schemas.xmlsoap.org/soap/encoding/' 
+   xmlns:wsdl='http://schemas.xmlsoap.org/wsdl/' 
+   xmlns='http://schemas.xmlsoap.org/wsdl/'>
+   
+	<message name='getQuoteResponse'>
+		<part name='Result' type='xsd:float'/>
+	</message>
+	<message name='getQuoteRequest'>
+		<part name='symbol' type='xsd:string'/>
+	</message>
+	<portType name='apache.org.StockQuotePortType'>
+		<operation name='getQuote' parameterOrder='symbol'>
+			<input message='tns:getQuoteRequest'/>
+			<output message='tns:getQuoteResponse'/>
+		</operation>
+	</portType>
+	<binding name='apache.org.StockQuoteBinding' type='tns:apache.org.StockQuotePortType'>
+		<soap:binding style='rpc' transport='http://schemas.xmlsoap.org/soap/http'/>
+		<operation name='getQuote'>
+			<soap:operation soapAction='urn:test-quotes#getQuote'/>
+			<input>
+				<soap:body use='encoded' namespace='urn:test-quotes' encodingStyle='http://schemas.xmlsoap.org/soap/encoding/'/>
+			</input>
+			<output>
+				<soap:body use='encoded' namespace='urn:test-quotes' encodingStyle='http://schemas.xmlsoap.org/soap/encoding/'/>
+			</output>
+		</operation>
+	</binding>
+	<service name='apache.org.StockQuoteService'>
+		<port name='apache.org.StockQuotePort' binding='tns:apache.org.StockQuoteBinding'>
+			<soap:address location='http://localhost/axis/'/>
+		</port>
+	</service>
+</definitions>

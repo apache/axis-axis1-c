@@ -338,15 +338,19 @@ public class ClientStubWriter extends CPPClassWriter
         writer.write("\t\t}\n\n");
 
         writer.write("\t\tif( NULL == m_pCall->getTransportProperty( \"SOAPAction\", false))\n");
-        writer.write("\t\t{\n");
-        writer.write("\t\t\tm_pCall->setTransportProperty( SOAPACTION_HEADER,\n\t\t\t\t\t\t\t\t\t\t\t\""
-                + minfo.getSoapAction() + "\");\n");
-        writer.write("\t\t}\n\n");
+        writer.write("\t\t\tm_pCall->setTransportProperty( SOAPACTION_HEADER,\"" + minfo.getSoapAction() + "\");\n");
+        writer.write("\n");
         writer.write("\t\tm_pCall->setSOAPVersion( SOAP_VER_1_1);\n");
         //TODO check which version is it really.
-        writer.write("\t\tm_pCall->setOperation( \"" + minfo.getMethodname()
-                + "\", \"" + wscontext.getWrapInfo().getTargetNameSpaceOfWSDL()
-                + "\");\n");
+        
+        // Use namespace specified in input/output binding if one exists
+        String namespaceURI = minfo.getNamespaceURI();
+        if (namespaceURI == null)
+            namespaceURI = wscontext.getWrapInfo().getTargetNameSpaceOfWSDL();
+        
+        writer.write("\t\tm_pCall->setOperation( \"" + minfo.getMethodname() + "\", \"" 
+                + namespaceURI + "\");\n"); 
+        
         writer.write("\t\tapplyUserPreferences();\n");
         
         for (int i = 0; i < paramsB.size(); i++)
@@ -436,7 +440,7 @@ public class ClientStubWriter extends CPPClassWriter
         writer.write("\n\t\tif( AXIS_SUCCESS == m_pCall->invoke())\n\t\t{\n");
         writer.write("\t\t\tif( AXIS_SUCCESS == m_pCall->checkMessage( \""
                 + minfo.getOutputMessage().getLocalPart() + "\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\""
-                + wscontext.getWrapInfo().getTargetNameSpaceOfWSDL()
+                + namespaceURI
                 + "\"))\n\t\t\t{\n");
 
         // Because getParamName will prefix any c++ reserved word with an
