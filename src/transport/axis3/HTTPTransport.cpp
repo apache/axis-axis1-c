@@ -1535,7 +1535,7 @@ processHTTPHeader()
     {
         int   iEOL = m_strReceived.find( ASCII_S_LF, iPosContentLength);
         iPosContentLength += strlen( ASCII_S_CONTENT_LENGTH);
-        m_iContentLength = atoi( m_strReceived.substr( iPosContentLength, iEOL).c_str());
+        m_iContentLength = atoi(PLATFORM_ASCTOSTR (m_strReceived.substr( iPosContentLength, iEOL).c_str()));
         m_GetBytesState = eSOAPMessageIsNotChunked;
     }
 
