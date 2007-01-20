@@ -1,0 +1,16 @@
+<test>
+    <name>NamespaceInBindingOperationsRpcNoTypeInResponse</name>
+    <description>NamespaceInBindingOperationsRpcNoTypeInResponse</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>NamespaceInBindingOperationsRpcClient.cpp</clientCode>
+    <wsdl>NamespaceInBindingOperationsRpc.wsdl</wsdl>
+    <expected>
+        <output>
+            NamespaceInBindingOperationsRpcNoTypeInResponse.cpp.out
+        </output> 
+        <serverResponse>
+            NamespaceInBindingOperationsRpcNoTypeInResponse_ServerResponse.expected
+        </serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/NamespaceInBindingOperationsRpcNoTypeInResponse</endpoint>
+</test>
