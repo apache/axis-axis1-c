@@ -161,3 +161,6 @@ FaultMappingDocDivByZeroActorAndDetail.xml
 FaultMappingDocDivByZeroNoActorNoDetail.xml
 FaultMappingDocDivByZeroNoActor.xml
 FaultMappingDocDivByZeroNoDetail.xml
+
+NamespaceInBindingOperationsRpc.xml
+NamespaceInBindingOperationsRpcNoTypeInResponse.xml
