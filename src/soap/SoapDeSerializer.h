@@ -308,7 +308,6 @@ public:
     
     void setStyle(AXIS_BINDING_STYLE nStyle){ m_nStyle = nStyle;};
     AXIS_BINDING_STYLE getStyle(){return m_nStyle;};    
-    XSDTYPE getXSDType(const AnyElement* pElement);
     int AXISCALL getStatus(){return m_nStatus;};
 	AnyType* AXISCALL getAnyObject();
     void serializeTag(AxisString& xmlStr, const AnyElement* node, AxisString& nsDecls);
@@ -355,6 +354,7 @@ private:
     void skipEndNode();
     void processFaultDetail(IAnySimpleType * pSimpleType, const AxisChar* elementValue);
     bool isNillValue();
+    XSDTYPE getXSDType(const AnyElement* pElement, bool &foundType);
 };
 
 AXIS_CPP_NAMESPACE_END

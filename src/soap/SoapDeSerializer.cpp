@@ -1369,7 +1369,10 @@ getElement (const AxisChar * pName,
         if (0 == strcmp (pName, m_pNode->m_pchNameOrValue))
             bNillFound = isNillValue();
 
-        if (bNillFound || isArrayElement || (pSimpleType->getType() == getXSDType (m_pNode)))
+        bool foundType;
+        XSDTYPE theType = getXSDType(m_pNode, foundType);
+
+        if (bNillFound || isArrayElement || (pSimpleType->getType() == theType) || !foundType)
         {
             m_pNode = m_pParser->next (true);   /* charactor node */
             if (!m_pNode)
@@ -1865,8 +1868,10 @@ getFaultAsXMLString()
  * XSD_UNKNOWN.
  */
 XSDTYPE SoapDeSerializer::
-getXSDType (const AnyElement * pElement)
+getXSDType (const AnyElement * pElement, bool & foundType)
 {
+    foundType = true;
+    
     /* first check whether this is a start element node */
     if (START_ELEMENT != pElement->m_type)
         return XSD_UNKNOWN;
@@ -1889,6 +1894,7 @@ getXSDType (const AnyElement * pElement)
         }
     }
 
+    foundType = false;
     return XSD_UNKNOWN;
 }
 
