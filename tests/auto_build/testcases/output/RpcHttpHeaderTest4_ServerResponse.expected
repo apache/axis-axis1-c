@@ -1,13 +1,21 @@
 HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
 Content-Type: text/xml; charset=utf-8
-Content-Language: en-US
-Content-Length: 568
-Date: Wed, 18 Jan 2006 04:14:14 GMT
+Content-Language: en-GB
+Transfer-Encoding: chunked
 
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/><soapenv:Body soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"><p201:echoStringResponse xmlns:p201="http://soapinterop.org/"><return xsi:type="xsd:string">hello world</return></p201:echoStringResponse></soapenv:Body></soapenv:Envelope>HTTP/1.1 200 OK
+###
+<?xml version="1.0" encoding="utf-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header/><soapenv:Body soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"><echoStringResponse xmlns="http://soapinterop.org/"><return xsi:type="xsd:string" xmlns="">hello world</return></echoStringResponse></soapenv:Body></soapenv:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
 Content-Type: text/xml; charset=utf-8
-Content-Language: en-US
-Content-Length: 568
-Date: Wed, 18 Jan 2006 04:14:14 GMT
+Content-Language: en-GB
+Transfer-Encoding: chunked
 
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/><soapenv:Body soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"><p201:echoStringResponse xmlns:p201="http://soapinterop.org/"><return xsi:type="xsd:string">hello world</return></p201:echoStringResponse></soapenv:Body></soapenv:Envelope>
+###
+<?xml version="1.0" encoding="utf-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header/><soapenv:Body soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"><echoStringResponse xmlns="http://soapinterop.org/"><return xsi:type="xsd:string" xmlns="">hello world</return></echoStringResponse></soapenv:Body></soapenv:Envelope>
+0
