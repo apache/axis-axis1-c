@@ -52,6 +52,7 @@ public class MockServerThread extends ChildHandler implements Runnable
     private static int      requests        =0;
 
     private static Response[] responses;
+    private static boolean loopOnResponses = false;
     
     protected boolean closedConnection=false;
 
@@ -248,12 +249,16 @@ public class MockServerThread extends ChildHandler implements Runnable
     protected Response getResponseMessage( ) throws IOException,
             ArrayIndexOutOfBoundsException
     {
+        if (responses[requests] == null && loopOnResponses)
+            requests = 0;
+        
         return (Response) responses[requests++];
     }
 
-    public static void cacheResponseFile(File responseFile)
+    public static void cacheResponseFile(File responseFile, boolean _loopOnResponses)
             throws FileNotFoundException, IOException
     {
+        loopOnResponses = _loopOnResponses;
         // If we already have a set of responses then they will be cleared later on
         
         // open the response file for reading in
@@ -364,6 +369,7 @@ public class MockServerThread extends ChildHandler implements Runnable
         reader.close();
         requests=0;
         System.out.println( "MockServer got " + (responses.length - 1) + " responses");
+        System.out.println( "MockServer will loop on responses? " + loopOnResponses);
     }
    
     public void setClosedConnection(boolean closedConnection)
