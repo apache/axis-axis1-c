@@ -22,10 +22,10 @@ public class Response
     private static final String CONTENT_LENGTH ="Content-Length:";
 
     private char[]              message;
-    private boolean             chunked;
+    private boolean             chunked=false;
 
     // whether the message has a "Connection: Close" http header in it.
-    private boolean             hasCloseConnectionHeader;
+    private boolean             hasCloseConnectionHeader=false;
 
     public boolean hasCloseConnectionHeader( )
     {
@@ -145,28 +145,8 @@ public class Response
             else
             {
                 String request=new String(getMessage( ));
-
-                // check the last two digits for CRLF - if they
-                // are LFLF
-                // then this is wrong
-                // e.g. 0a 0a converts to 0d0a 0d0a
-                // I'm doing it using a matcher because this
-                // could get
-                // complicated !
-                Pattern pattern=Pattern.compile(""+LF);
-                Matcher matcher=pattern.matcher(request);
-                StringBuffer stringBuffer=new StringBuffer( );
-
-                while (matcher.find( ))
-                {
-                    char[] tmpStr=matcher.group( ).toCharArray( );
-                    matcher.appendReplacement(stringBuffer, CRLF);
-                }
-
-                matcher.appendTail(stringBuffer);
-
-                // Now put it back into the responses
-                message=stringBuffer.toString( ).toCharArray( );
+                modifiedResponse = correctHTTPHeaderSection(request);
+                message=modifiedResponse.toCharArray();
             }
         }
 //
@@ -423,8 +403,7 @@ private String correctChunkedData(String request)
      * @param iIndex
      * @param iEOL
      */
-    private static String getResponseLine(String sResponse, 
-            int iIndex, int iEOL)
+    private static String getResponseLine(String sResponse, int iIndex, int iEOL)
     {
         String sLine=sResponse.substring(iIndex, iEOL);
 
@@ -460,7 +439,10 @@ private String correctChunkedData(String request)
         }
         while (iEoL>0&&!sLine.equals(CRLF));
         
-        return returnedResponse;
+        if (chunked)
+            return returnedResponse;
+        else
+            return returnedResponse + response.substring(iIndex);
     }
 
 //    private static boolean isStringAHexNumber(String sValue)
