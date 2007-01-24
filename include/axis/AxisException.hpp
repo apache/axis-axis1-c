@@ -728,7 +728,7 @@ public:
                 sMsg = "AxisParseException: Buffer received from the parser is empty.";
                 break;
             case SERVER_PARSE_PARSER_FAILED: 
-                sMsg = "AxisParseException: XML_STATUS_ERROR thrown from parser.";
+                sMsg = "AxisParseException: Parser error occurred.";
                 break;
             case SERVER_PARSE_TRANSPORT_FAILED:
                 sMsg = "AxisParseException: Error when getting the byte stream from the transport.";
