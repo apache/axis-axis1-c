@@ -149,32 +149,6 @@ public class Response
                 message=modifiedResponse.toCharArray();
             }
         }
-//
-//        // Irrespective of platform ensure that all responses end with \r\n\r\n
-//        String request=new String(getMessage( ));
-//        // this pattern looks for any chars then any non whitespace followed
-//        // directly by the EOF
-//        Pattern pattern=Pattern.compile("(.*)(\\s)*$");
-//        Matcher matcher=pattern.matcher(request);
-//        StringBuffer stringBuffer=new StringBuffer("");
-//        // We should only find one occurence (if any) of the sequence
-//        if (matcher.find( ))
-//        {
-////            System.out.println("MATCHED");
-//            // and replace them with the proper sentence !
-//            matcher.appendReplacement(stringBuffer, "$1\r\n\r\n");
-//        }
-//        else
-//        {
-////            System.out.println("NOT MATCHED");
-//            // We did not find the sequence so just tack on the grouping we
-//            // need.
-//            stringBuffer.append(request);
-//            stringBuffer.append("\r\n\r\n");
-//
-//        }
-//        // Now put it back into the message
-//        message=stringBuffer.toString( ).toCharArray( );
     }
 
         /**
@@ -442,27 +416,13 @@ private String correctChunkedData(String request)
         if (chunked)
             return returnedResponse;
         else
-            return returnedResponse + response.substring(iIndex);
+        {
+            // Just in case HTTP header has ###, indication that 
+            // the Content-Length value needs to be set to the size
+            // of the body of the http response 
+            String returnedHttpBody = response.substring(iIndex);
+            returnedResponse.replaceFirst("###", new Integer(returnedHttpBody.length()).toString());
+            return returnedResponse + returnedHttpBody;
+        }
     }
-
-//    private static boolean isStringAHexNumber(String sValue)
-//    {
-//        boolean bOutcome=true;
-//        String sValidChars="0123456789ABCDEFabcdef";
-//        int iIndex=0;
-//
-//        while (bOutcome&&iIndex<sValue.length( ))
-//        {
-//            if (sValidChars.indexOf(sValue.substring(iIndex, iIndex+1))==-1)
-//            {
-//                bOutcome=false;
-//            }
-//            else
-//            {
-//                iIndex++;
-//            }
-//        }
-//
-//        return bOutcome;
-//    }
 }
