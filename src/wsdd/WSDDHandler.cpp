@@ -23,7 +23,8 @@
 
 AXIS_CPP_NAMESPACE_START
 
-WSDDHandler::WSDDHandler()
+WSDDHandler::
+WSDDHandler()
 {
     m_nLibId = 0;
     m_nScope = AH_REQUEST; /* default */
@@ -32,42 +33,50 @@ WSDDHandler::WSDDHandler()
     m_file = 0;
 }
 
-WSDDHandler::~WSDDHandler()
+WSDDHandler::
+~WSDDHandler()
 {
-    if (m_Params) delete m_Params;
+    delete m_Params;
 }
 
-void WSDDHandler::setLibName(const AxisChar* sLibName)
+void WSDDHandler::
+setLibName(const AxisChar* sLibName)
 {
     m_sLibName = sLibName;
 }
 
-void WSDDHandler::setLibId(int nLibId)
+void WSDDHandler::
+setLibId(int nLibId)
 {
     m_nLibId = nLibId;
 }
 
-void WSDDHandler::setName(const AxisChar* sName)
+void WSDDHandler::
+setName(const AxisChar* sName)
 {
     m_sName = sName;
 }
 
-int WSDDHandler::getLibId() const
+int WSDDHandler::
+getLibId() const
 {
     return m_nLibId;
 }
 
-const AxisChar* WSDDHandler::getLibName() const
+const AxisChar* WSDDHandler::
+getLibName() const
 {
     return m_sLibName.c_str();
 }
 
-int WSDDHandler::getScope() const
+int WSDDHandler::
+getScope() const
 {
     return m_nScope;
 }
 
-void WSDDHandler::setScope(const AxisChar* sScope)
+void WSDDHandler::
+setScope(const AxisChar* sScope)
 {
     if (0 == strcmp(sScope, kw_scope_app))
         m_nScope = AH_APPLICATION;    
@@ -77,35 +86,41 @@ void WSDDHandler::setScope(const AxisChar* sScope)
         m_nScope = AH_REQUEST;    
 }
 
-const AxisChar* WSDDHandler::getParameter(const AxisChar* sKey) const
+const AxisChar* WSDDHandler::
+getParameter(const AxisChar* sKey) const
 {
     if (m_Params->find(sKey) != m_Params->end())
         return (*m_Params)[sKey].c_str();
     return NULL;
 }
 
-void WSDDHandler::addParameter(const AxisChar* sKey, const AxisChar* sValue)
+void WSDDHandler::
+addParameter(const AxisChar* sKey, const AxisChar* sValue)
 {
     if (!m_Params) m_Params = new map<AxisString, AxisString>;
     (*m_Params)[sKey] = sValue; 
 }
 
-const map<AxisString, AxisString>* WSDDHandler::getParameterList() const
+const map<AxisString, AxisString>* WSDDHandler::
+getParameterList() const
 {
     return m_Params;
 }
 
-void WSDDHandler::setDescription(const AxisChar* sDescription)
+void WSDDHandler::
+setDescription(const AxisChar* sDescription)
 {
     m_sDescription = sDescription;
 }
 
-const AxisChar* WSDDHandler::getDescription() const
+const AxisChar* WSDDHandler::
+getDescription() const
 {
     return m_sDescription.c_str();
 }
 
-int WSDDHandler::updateWSDD(FILE* wsddfile, int tabcount)
+int WSDDHandler::
+updateWSDD(FILE* wsddfile, int tabcount)
 {
     m_file = wsddfile;
     printTabs(tabcount); *this << "<handler name=\"" << m_sName.c_str() << 
@@ -125,15 +140,18 @@ int WSDDHandler::updateWSDD(FILE* wsddfile, int tabcount)
     return AXIS_SUCCESS;
 }
 
-WSDDHandler& WSDDHandler::operator << (const char* str)
+WSDDHandler& WSDDHandler::
+operator << (const char* str)
 {
     fputs(str, m_file);
     return *this;
 }
 
-void WSDDHandler::printTabs(int count)
+void WSDDHandler::
+printTabs(int count)
 {
-    for (int x=0; x<count; x++) *this << "\t";
+    for (int x=0; x<count; x++) 
+        *this << "\t";
 }
 
 AXIS_CPP_NAMESPACE_END
