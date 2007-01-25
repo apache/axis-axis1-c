@@ -46,7 +46,7 @@ int main(int argc, char* argv[])
         {
                 sprintf(endpoint, "%s", url);
                 Calculator ws(endpoint);
-                char buffer[100];
+                char buffer[100] = {0x00};
                 char* pbuff=buffer; 
                 
                 ws.setHandlerProperty("prop1", (void*)"value1", 7);
