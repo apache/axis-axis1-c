@@ -248,20 +248,21 @@ addHandler(bool bGlobal, bool bRequestFlow, WSDDHandler* pHandler, AXIS_PROTOCOL
     {
         if (bRequestFlow)
         {
-            if(!m_GlobalRequestHandlers) m_GlobalRequestHandlers = 
-                new WSDDHandlerList;
+            if(!m_GlobalRequestHandlers) 
+                m_GlobalRequestHandlers = new WSDDHandlerList;
             m_GlobalRequestHandlers->push_back(pHandler);
         }
         else
         {
-            if(!m_GlobalResponseHandlers) m_GlobalResponseHandlers = 
-                new WSDDHandlerList;
+            if(!m_GlobalResponseHandlers) 
+                m_GlobalResponseHandlers = new WSDDHandlerList;
             m_GlobalResponseHandlers->push_back(pHandler);
         }
     }
     else /* transport */
     {
-        if (!m_pTransportHandlers) m_pTransportHandlers = new WSDDTransport();
+        if (!m_pTransportHandlers) 
+            m_pTransportHandlers = new WSDDTransport();
         m_pTransportHandlers->addHandler(bRequestFlow, protocol, pHandler);
     }
     return AXIS_SUCCESS;
