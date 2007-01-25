@@ -237,7 +237,7 @@ void  WSDDDocument::
 endElement(const AnyElement* pEvent)
 {
     /* just neglect endElement of parameter */
-    if (0 != strcmp(pEvent->m_pchNameOrValue, kw_param))
+    if (0 == strcmp(pEvent->m_pchNameOrValue, kw_param))
         return;
            
     if (m_lev1 == WSDD_UNKNOWN)    
