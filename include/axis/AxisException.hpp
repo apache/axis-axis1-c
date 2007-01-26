@@ -746,7 +746,7 @@ public:
                 sMsg = "AxisParseException: Unknown element encountered.";
                 break;
             case AXISC_NODE_VALUE_MISMATCH_EXCEPTION:
-                sMsg = "Cannot deserialize the requested element.";
+                sMsg = "AxisSoapException: Cannot deserialize the requested element.";
                 break;
             case AXISC_READ_CONF_EXCEPTION:
                 sMsg = "AxisConfigException: Unable to read configuration file.";
