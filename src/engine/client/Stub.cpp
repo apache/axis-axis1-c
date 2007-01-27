@@ -39,6 +39,7 @@ m_pExceptionHandler(NULL)
     m_pCall->setProtocol (eProtocol);
     m_pTransport = m_pCall->getTransport ();
     m_pTransport->setEndpointUri( pcEndPointUri);
+    m_viCurrentSOAPHeaderBlock = m_vSOAPHeaderBlocks.end();
     
     // SSL channel related initilizations
     char * pcSSLChannelInfo = g_pConfig->getAxisConfProperty( AXCONF_SECUREINFO);

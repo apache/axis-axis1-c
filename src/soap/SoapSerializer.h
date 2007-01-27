@@ -62,15 +62,10 @@ private:
     AxisChar m_Buf[BTS_BUFFSIZE];
     SoapEnvelope* m_pSoapEnvelope;    	
     int m_iSoapVersion;
-    /* Current Serialization Style */
     AXIS_BINDING_STYLE m_nStyle;
-    /* Overall status of Serializer. If anything goes wrong this is not 
-     * AXIS_SUCCESS 
-     */
+    /* Overall status of Serializer. If anything goes wrong this is not AXIS_SUCCESS */
     int m_nStatus;
-    /* Map that contains pairs of currently available namespaces and 
-     * prefixes 
-     */ 
+    /* Map that contains pairs of currently available namespaces and prefixes */ 
     map<AxisXMLString, AxisXMLString> m_NsStack;
     /* Provider type of current service that uses this Serializer object */
     PROVIDERTYPE m_ProviderType;
@@ -85,14 +80,12 @@ public:
 #ifdef UNIT_TESTING_ON
     int setOutputStreamForTesting(SOAPTransport* pStream);
 #endif
-    int AXISCALL createSoapMethod(const AxisChar* sLocalName, 
-        const AxisChar* sURI);
+    int AXISCALL createSoapMethod(const AxisChar* sLocalName, const AxisChar* sURI);
 
     int AXISCALL createSoapFault(const AxisChar* sLocalName, 
         const AxisChar* sURI, const AxisChar* sFaultCode,
 	const AxisChar* sFaultString);
 
-/*    IWrapperSoapSerializer& operator<<(const char* cSerialized); */
     IWrapperSoapSerializer& operator<<(const AxisChar* cSerialized);
     /**
      * Returns the corrosponding namespace prefix.
@@ -189,14 +182,11 @@ public:
 	void setContentIdSet(ContentIdSet *pContentIdSet);
 	void addAttachmentParameter(ISoapAttachment* att, const char* pName, IAttribute **attributes, int nAttributes);
 	IHeaderBlock* getHeaderBlock(const AxisChar* pcName, const AxisChar* pcNamespace);
-	/*
-	* TODO: Have to remove this method. Date logged 13Jan2005
-	IHeaderBlock* getHeaderBlock();
-	*/
 	IHeaderBlock* getFirstHeaderBlock();
 	IHeaderBlock* getNextHeaderBlock();
 
 	int setSOAPMethodAttribute(Attribute* pAttribute);
+    void clearSOAPMethodAttributes();
 	SoapMethod* getSOAPMethod();
     IHeaderBlock* createHeaderBlock(const AxisChar *pachLocalName,
         const AxisChar *pachUri);

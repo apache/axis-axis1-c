@@ -88,11 +88,11 @@ public:
     SoapMethod();
     virtual ~SoapMethod();
 
-  /**
-    * This methos will clear up all the current out params in preperation of a 
-    * new method call
-    */
+    /** Method to clear up all the current out params in preparation of a new method call */
     void clearOutParams();
+    
+    /** Method to clear up all the current attributes in preparation of a new method call */
+    void clearAttributes();
 };
 
 AXIS_CPP_NAMESPACE_END

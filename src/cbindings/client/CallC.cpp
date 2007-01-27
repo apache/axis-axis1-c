@@ -3392,6 +3392,25 @@ void axiscCallSetSOAPMethodAttribute(AXISCHANDLE call,
     }
 }
 
+AXISC_STORAGE_CLASS_INFO 
+void axiscCallClearSOAPMethodAttributes(AXISCHANDLE call)
+{
+    Call *c = (Call*)call;
+    
+    try
+    {
+        c->clearSOAPMethodAttributes();
+    }
+    catch ( AxisException& e  )
+    {
+        processException(c, e);
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
+    }
+}
+
 
 AXISC_STORAGE_CLASS_INFO 
 xsdc__string axiscCallGetFaultAsXMLString(AXISCHANDLE call) 

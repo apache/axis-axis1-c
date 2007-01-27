@@ -241,6 +241,12 @@ void axiscCallSetSOAPMethodAttribute(AXISCHANDLE call, const AxiscChar * pLocaln
 	const AxiscChar * pValue);
 
 /**
+ * Ensure that existing attributes are cleared.
+ */ 
+AXISC_STORAGE_CLASS_INFO                      
+void axiscCallClearSOAPMethodAttributes(AXISCHANDLE call);
+
+/**
  * Method for adding complex parameters to the engine, ready to be serialised.
  *   An example of this method (taken from the automatically generated stubs
  * of the AxisBench test) follows:- @n

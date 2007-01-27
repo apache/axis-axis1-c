@@ -26,73 +26,61 @@
 
 AXIS_CPP_NAMESPACE_START
 
-SoapMethod::SoapMethod()
+SoapMethod::
+SoapMethod()
 {
 }
 
-SoapMethod::~SoapMethod()
+SoapMethod::
+~SoapMethod()
 {
-    /*for (list<Attribute*>::iterator it = m_attributes.begin();
-         it != m_attributes.end(); it++)
-    {
-        delete (*it);
-    }*/
-	list<Attribute*>::iterator it;
-	for (it = m_attributes.begin();
-    it != m_attributes.end(); it++)
-    {
-		if(*it)
-			delete (*it);
-    }
-
+    clearAttributes();
     clearOutParams();
-	m_attributes.clear();
-
 }
 
-void SoapMethod::setPrefix(const AxisChar* prefix)
+void SoapMethod::
+setPrefix(const AxisChar* prefix)
 {
     m_strPrefix = prefix;
 }
 
-void SoapMethod::setLocalName(const AxisChar* localname)
+void SoapMethod::
+setLocalName(const AxisChar* localname)
 {
     m_strLocalname = localname;
 }
 
-void SoapMethod::setURI(const AxisChar* uri)
+void SoapMethod::
+setURI(const AxisChar* uri)
 {
     m_strUri = uri;
 }
 
-void SoapMethod::addOutputParam(Param *param)
+void SoapMethod::
+addOutputParam(Param *param)
 {
     if (param)
-    {
         m_OutputParams.push_back(param);
-    }
 }
 
-int SoapMethod::serialize(SoapSerializer& pSZ)
+int SoapMethod::
+serialize(SoapSerializer& pSZ)
 {    
     int iStatus= AXIS_SUCCESS;
 
     do
     {
         if(isSerializable())
-        {
-                    
+        {           
             pSZ.serialize("<", m_strPrefix.c_str(), ":", m_strLocalname.c_str(),
                 " xmlns:", m_strPrefix.c_str(),
                 "=\"", m_strUri.c_str(), "\"", NULL);
 
-			list<AxisChar*> lstTmpNameSpaceStack;
+            list<AxisChar*> lstTmpNameSpaceStack;
 
             iStatus= serializeAttributes(pSZ, lstTmpNameSpaceStack);
             if(iStatus==AXIS_FAIL)
-            {
                 break;
-            }
             
             pSZ.serialize(">\n", NULL);
 
@@ -105,59 +93,53 @@ int SoapMethod::serialize(SoapSerializer& pSZ)
             pSZ.removeNamespacePrefix(m_strUri.c_str());
 
             if(iStatus==AXIS_FAIL)
-            {
                 break;
-            }
             
             pSZ.serialize("</", NULL);
 
             if(m_strPrefix.length() != 0)
-            {                    
                 pSZ.serialize(m_strPrefix.c_str(), ":", NULL);
-            }
             
             pSZ.serialize(m_strLocalname.c_str(), ">\n", NULL);
 
-			// Removing the namespace list of this SOAPMethod from the stack.
-			list<AxisChar*>::iterator itCurrentNamespace = 
-				lstTmpNameSpaceStack.begin();
-			while (itCurrentNamespace != lstTmpNameSpaceStack.end())
-			{
-				pSZ.removeNamespacePrefix(*itCurrentNamespace);
-				itCurrentNamespace++;
-			}
+            // Removing the namespace list of this SOAPMethod from the stack.
+            list<AxisChar*>::iterator itCurrentNamespace = lstTmpNameSpaceStack.begin();
+            while (itCurrentNamespace != lstTmpNameSpaceStack.end())
+            {
+                pSZ.removeNamespacePrefix(*itCurrentNamespace);
+                itCurrentNamespace++;
+            }
 
             iStatus= AXIS_SUCCESS;
         }
         else
-        {
             iStatus= AXIS_FAIL;
-        }
-    } while(0);
+    } 
+    while(0);
             
     return iStatus;
 }
 
-int SoapMethod::serializeOutputParam(SoapSerializer& pSZ)
+int SoapMethod::
+serializeOutputParam(SoapSerializer& pSZ)
 {    
     int nStatus;
-    for (list<Param*>::iterator it = m_OutputParams.begin();
-    it != m_OutputParams.end(); it++)
-    {
+    
+    for (list<Param*>::iterator it = m_OutputParams.begin(); it != m_OutputParams.end(); it++)
         if (AXIS_SUCCESS != (nStatus = (*it)->serialize(pSZ)))
-        {
             return nStatus;
-        }
-    }
+
     return AXIS_SUCCESS;
 }
 
-const AxisChar* SoapMethod::getMethodName()
+const AxisChar* SoapMethod::
+getMethodName()
 {
     return m_strLocalname.c_str();
 }
 
-bool SoapMethod::isSerializable()
+bool SoapMethod::
+isSerializable()
 {
     bool bStatus= true;    
 
@@ -174,20 +156,22 @@ bool SoapMethod::isSerializable()
             bStatus= false;
             break;
         }
-    } while(0);
+    } 
+    while(0);
 
     return bStatus;
 }
 
-int SoapMethod::addAttribute(Attribute *pAttribute)
+int SoapMethod::
+addAttribute(Attribute *pAttribute)
 {
     m_attributes.push_back(pAttribute);
 
     return AXIS_SUCCESS;
 }
 
-int SoapMethod::serializeAttributes(SoapSerializer& pSZ, 
-        list<AxisChar*>& lstTmpNameSpaceStack)
+int SoapMethod::
+serializeAttributes(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceStack)
 {
     list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
 
@@ -200,7 +184,8 @@ int SoapMethod::serializeAttributes(SoapSerializer& pSZ,
     return AXIS_SUCCESS;    
 }
 
-int SoapMethod::reset()
+int SoapMethod::
+reset()
 {
     m_strUri = "";
     m_strLocalname = "";
@@ -211,18 +196,32 @@ int SoapMethod::reset()
     return AXIS_SUCCESS;
 }
 
-void SoapMethod::clearOutParams()
+void SoapMethod::
+clearOutParams()
 {
     if ( m_OutputParams.empty() )
         return;
+        
     list<Param*>::iterator itParam;
-    for (itParam = m_OutputParams.begin(); 
-         itParam != m_OutputParams.end(); itParam++)
-    {
-		if(*itParam)
-			delete (*itParam);
-    }
+    
+    for (itParam = m_OutputParams.begin(); itParam != m_OutputParams.end(); itParam++)
+        delete *itParam;
+        
     m_OutputParams.clear();
+}
+
+void SoapMethod::
+clearAttributes()
+{
+    if (m_attributes.empty())
+        return;
+    
+    list<Attribute*>::iterator it;
+    
+    for (it = m_attributes.begin(); it != m_attributes.end(); ++it)
+        delete *it;
+    
+    m_attributes.clear();
 }
 
 AXIS_CPP_NAMESPACE_END

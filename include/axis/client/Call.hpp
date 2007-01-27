@@ -249,6 +249,11 @@ public:
                                  const AxisChar * pPrefix,
                                  const AxisChar * pUri,
                                  const AxisChar * pValue);
+    
+    /**
+     * Ensure that existing attributes are cleared.
+     */                      
+    void clearSOAPMethodAttributes();
 
     /**
      * Method for adding complex parameters to the engine, ready to be serialised.

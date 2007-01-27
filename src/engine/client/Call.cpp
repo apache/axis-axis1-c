@@ -1088,6 +1088,11 @@ void Call::setSOAPMethodAttribute( const AxisChar * pLocalname,
     m_pIWSSZ->setSOAPMethodAttribute( ((Attribute *) pAttribute)->clone());
 }
 
+void Call::clearSOAPMethodAttributes()
+{
+    m_pIWSSZ->clearSOAPMethodAttributes();
+}
+
 xsd__string Call::getFaultAsXMLString()
 {
     return m_pIWSDZ->getFaultAsXMLString();
