@@ -54,7 +54,6 @@ extract_Attachment(char *pBuffer)
 
     while (blnContinue)
     {
-        SoapAttachment* pSoapAttachment= new SoapAttachment();
         unsigned int start = 0;
 
         if (blnFirstTime) 
@@ -67,6 +66,8 @@ extract_Attachment(char *pBuffer)
 
         if (start == string::npos)
             break;      
+              
+        SoapAttachment* pSoapAttachment= new SoapAttachment();
               
         int start2 = Soap_Message.find(">", start+strlen("Content-Type"));
         int headerLength = (start2+1)  - start;
@@ -90,16 +91,11 @@ extract_Attachment(char *pBuffer)
 
         if (iEncodingType==AXIS_BASE64) 
         {
-            xsd__base64Binary*  base64_attachment = new xsd__base64Binary();
-            base64_attachment = AxisUtils::decodeFromBase64Binary(attach);        
+            xsd__base64Binary*  base64_attachment = AxisUtils::decodeFromBase64Binary(attach);        
             pSoapAttachment->addBody(base64_attachment);
         } 
         else if (iEncodingType==AXIS_BINARY) 
-        {
-             char* binaryBody = new char[attachment.length() + 1];
-             strcpy(binaryBody, attachment.c_str());
-             pSoapAttachment->addBody(binaryBody);
-        }
+            pSoapAttachment->addBody((char*)attachment.c_str());
 
         x++;
     }
