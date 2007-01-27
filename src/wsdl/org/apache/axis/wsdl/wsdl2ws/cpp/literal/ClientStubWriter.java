@@ -20,10 +20,6 @@
  * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
  */
 
-/*
- * Revision 1.1  2004/05/26 samisa
- * Added Stub base class into code generation
- */
 
 /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
 /* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
@@ -60,74 +56,6 @@ public class ClientStubWriter
     public ClientStubWriter (WebServiceContext wscontext) throws WrapperFault
     {
         super (wscontext);
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.axis.wsdl.wsdl2ws.cpp.HeaderFileWriter#writeConstructors()
-     */
-    protected void writeConstructors () throws WrapperFault
-    {
-        try
-        {
-            writer.write (classname + "::" + classname
-                  + "(const char* pcEndpointUri, AXIS_PROTOCOL_TYPE eProtocol):Stub(pcEndpointUri, eProtocol)\n{\n");
-            writer.write ("}\n\n");
-            writer.write (classname + "::" + classname + "()\n:Stub(\" \", APTHTTP1_1)\n{\n");
-            //TODO get TransportURI from WrapInfo and check what the transport is and do the following line accordingly
-            writer.write ("\tm_pCall->setEndpointURI(\""
-                  + wscontext.getWrapInfo ().getTargetEndpointURI () + "\");\n");
-            writer.write ("}\n\n");
-        }
-        catch (IOException e)
-        {
-            throw new WrapperFault (e);
-        }
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.axis.wsdl.wsdl2ws.cpp.HeaderFileWriter#writeMethods()
-     */
-    protected void writeMethods () throws WrapperFault
-    {
-        try
-        {
-            writer.write("\n/*Methods corresponding to the web service methods*/\n");
-            MethodInfo minfo;
-            for (int i = 0; i < methods.size(); i++)
-            {
-                minfo = (MethodInfo) methods.get(i);
-                this.writeMethodInWrapper(minfo);
-                writer.write("\n");
-            }
-        }
-        catch (IOException e)
-        {
-            throw new WrapperFault (e);
-        }
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.axis.wsdl.wsdl2ws.cpp.HeaderFileWriter#writePreprocssorStatements()
-     */
-    protected void writePreprocessorStatements () throws WrapperFault
-    {
-        try
-        {
-            if ("AxisClientException".equals (classname))
-            {
-                writer.write ("#include \""
-                     + getServiceName () + "_" + classname + CUtils.CPP_HEADER_SUFFIX + "\"\n\n");
-            }
-            else
-                writer.write ("#include \"" + classname + CUtils.CPP_HEADER_SUFFIX + "\"\n\n");
-
-            writer.write ("#include <axis/AxisWrapperAPI.hpp>\n");
-            writer.write ("#include <axis/Axis.hpp>\n\n");
-        }
-        catch (IOException e)
-        {
-            throw new WrapperFault (e);
-        }
     }
 
     /**
@@ -193,7 +121,7 @@ public class ClientStubWriter
         writer.write (" */\n");
         
         //method signature
-        String paraTypeName;
+        String paramTypeName;
         boolean typeisarray = false;
         boolean typeissimple = false;
         Type type;
@@ -206,7 +134,7 @@ public class ClientStubWriter
             writer.write (outparamType);
         else if (outparamType.lastIndexOf ("*") > 0)
             writer.write (outparamType);
-        else //for AnyType too
+        else 
             writer.write (outparamType + "*");
 
         writer.write (" " + classname + "::" + methodName + "(");
@@ -222,31 +150,31 @@ public class ClientStubWriter
                 if (type.isSimpleType ())
                 {        
                     baseTypeName = CUtils.getclass4qname (type.getBaseType ());
-                    paraTypeName = WrapperUtils.getClassNameFromParamInfoConsideringArrays(paramtype, wscontext);
+                    paramTypeName = WrapperUtils.getClassNameFromParamInfoConsideringArrays(paramtype, wscontext);
                 }
                 else
                 {
-                    paraTypeName = type.getLanguageSpecificName ();
-                    if (CUtils.isSimpleType (paraTypeName))
-                        paraTypeName = WrapperUtils.getClassNameFromParamInfoConsideringArrays(paramtype, wscontext);
+                    paramTypeName = type.getLanguageSpecificName ();
+                    if (CUtils.isSimpleType (paramTypeName))
+                        paramTypeName = WrapperUtils.getClassNameFromParamInfoConsideringArrays(paramtype, wscontext);
 
-                    typeisarray = (paraTypeName.lastIndexOf ("_Array") > 0);
+                    typeisarray = (paramTypeName.lastIndexOf ("_Array") > 0);
                     if (!typeisarray)
-                        paraTypeName = type.getLanguageSpecificName ();
+                        paramTypeName = type.getLanguageSpecificName ();
 
-                    typeissimple = CUtils.isSimpleType (paraTypeName);
+                    typeissimple = CUtils.isSimpleType (paramTypeName);
                 }
                 typeisarray |= type.isArray ();
             }
             else
             {
-                paraTypeName = ((ParameterInfo) paramsB.get (0)).getLangName ();
+                paramTypeName = ((ParameterInfo) paramsB.get (0)).getLangName ();
                 paramtype = (ParameterInfo) paramsB.get (0);
                 typeisarray = false;
             }
             
             if (baseTypeName == null)
-                baseTypeName = paraTypeName;
+                baseTypeName = paramTypeName;
 
             typeissimple = CUtils.isSimpleType (baseTypeName);
             if (paramtype.getType().isAttachment())
@@ -255,12 +183,12 @@ public class ClientStubWriter
                     && (!(((ParameterInfo) paramsB.get (0)).isNillable () || ((ParameterInfo) paramsB.get (0)).isOptional())
                             || CUtils.isPointerType(baseTypeName)))
             {
-                writer.write (paraTypeName + " Value0");
+                writer.write (paramTypeName + " Value0");
             }
-            else if (paraTypeName.lastIndexOf ("*") > 0)
-                writer.write (paraTypeName + " Value0");
+            else if (paramTypeName.lastIndexOf ("*") > 0)
+                writer.write (paramTypeName + " Value0");
             else //for AnyType too
-                writer.write (paraTypeName + "* Value0");
+                writer.write (paramTypeName + "* Value0");
 
             for (int i = 1; i < paramsB.size (); i++)
             {
@@ -272,31 +200,31 @@ public class ClientStubWriter
                     if (type.isSimpleType ())
                     {        //schema defined simpleType
                         baseTypeName = CUtils.getclass4qname (type.getBaseType ());
-                        paraTypeName = WrapperUtils.getClassNameFromParamInfoConsideringArrays(paramtype, wscontext);
+                        paramTypeName = WrapperUtils.getClassNameFromParamInfoConsideringArrays(paramtype, wscontext);
                     }
                     else
                     {
-                        paraTypeName = type.getLanguageSpecificName ();
-                        if (CUtils.isSimpleType (paraTypeName))
-                            paraTypeName = WrapperUtils.getClassNameFromParamInfoConsideringArrays(paramtype, wscontext);
+                        paramTypeName = type.getLanguageSpecificName ();
+                        if (CUtils.isSimpleType (paramTypeName))
+                            paramTypeName = WrapperUtils.getClassNameFromParamInfoConsideringArrays(paramtype, wscontext);
 
-                        typeisarray = (paraTypeName.lastIndexOf ("_Array") > 0);
+                        typeisarray = (paramTypeName.lastIndexOf ("_Array") > 0);
                         if (!typeisarray)
-                            paraTypeName = type.getLanguageSpecificName ();       
+                            paramTypeName = type.getLanguageSpecificName ();       
                     }
                     
                     typeisarray |= type.isArray ();
-                    typeissimple = CUtils.isSimpleType (paraTypeName);
+                    typeissimple = CUtils.isSimpleType (paramTypeName);
                 }
                 else
                 {
-                    paraTypeName = ((ParameterInfo) paramsB.get (i)).getLangName ();
+                    paramTypeName = ((ParameterInfo) paramsB.get (i)).getLangName ();
                     paramtype = (ParameterInfo) paramsB.get (i);
                     typeisarray = false;
                 }
                 
                 if (baseTypeName == null)
-                    baseTypeName = paraTypeName;
+                    baseTypeName = paramTypeName;
 
                 typeissimple = CUtils.isSimpleType (baseTypeName);
                 if (paramtype.getType().isAttachment())
@@ -305,11 +233,11 @@ public class ClientStubWriter
                             && (!(((ParameterInfo) paramsB.get (i)).isNillable () 
                                     || ((ParameterInfo) paramsB.get (i)).isOptional())
                                         || CUtils.isPointerType(baseTypeName)))
-                    writer.write (", " + paraTypeName + " Value" + i);
-                else if (paraTypeName.lastIndexOf ("*") > 0)
-                    writer.write (", " + paraTypeName + " Value" + i);
+                    writer.write (", " + paramTypeName + " Value" + i);
+                else if (paramTypeName.lastIndexOf ("*") > 0)
+                    writer.write (", " + paramTypeName + " Value" + i);
                 else //for AnyType too
-                    writer.write (", " + paraTypeName + "* Value" + i);
+                    writer.write (", " + paramTypeName + "* Value" + i);
             } // end for loop
         } // end if (0 < paramsB.size ())
     
@@ -388,7 +316,6 @@ public class ClientStubWriter
                 else
                     writer.write (outparamType + " Ret;\n");
             }
-            //TODO initialize return parameter appropriately.
         }
         
         writer.write ("\tconst char* pcCmplxFaultName = NULL;\n");
@@ -464,23 +391,23 @@ public class ClientStubWriter
             if (type != null)
             {
                 if (type.isSimpleType ())
-                    paraTypeName = CUtils.getclass4qname (type.getBaseType ());
+                    paramTypeName = CUtils.getclass4qname (type.getBaseType ());
                 else
                 {
-                    paraTypeName = type.getLanguageSpecificName ();
-                    if (CUtils.isSimpleType (paraTypeName))
-                        paraTypeName = WrapperUtils.getClassNameFromParamInfoConsideringArrays(param,wscontext);
+                    paramTypeName = type.getLanguageSpecificName ();
+                    if (CUtils.isSimpleType (paramTypeName))
+                        paramTypeName = WrapperUtils.getClassNameFromParamInfoConsideringArrays(param,wscontext);
                     
-                    typeisarray = (paraTypeName.lastIndexOf ("_Array") > 0);
+                    typeisarray = (paramTypeName.lastIndexOf ("_Array") > 0);
                     if (!typeisarray)
-                        paraTypeName = type.getLanguageSpecificName ();
+                        paramTypeName = type.getLanguageSpecificName ();
                 }
                 
                 typeisarray |= type.isArray ();
             }
             else
             {
-                paraTypeName = ((ParameterInfo) paramsB.get (i)).getLangName ();
+                paramTypeName = ((ParameterInfo) paramsB.get (i)).getLangName ();
                 typeisarray = false;
             }
     
@@ -567,21 +494,21 @@ public class ClientStubWriter
                             writer.write ("Axis_URI_" + containedType);
                     }
                 }
-                else if (CUtils.isSimpleType (paraTypeName))
+                else if (CUtils.isSimpleType (paramTypeName))
                 {
                     if (param.isNillable () 
                             || param.isOptional()
-                            || CUtils.isPointerType(paraTypeName))
+                            || CUtils.isPointerType(paramTypeName))
                     {
                         writer.write ("\tm_pCall->addParameter(");
                         writer.write ("(void*)Value" + i + ", cPrefixAndParamName" + i
-                                  + ", " + CUtils.getXSDTypeForBasicType(paraTypeName));
+                                  + ", " + CUtils.getXSDTypeForBasicType(paramTypeName));
                     }
                     else
                     {
                         writer.write ("\tm_pCall->addParameter(");
                         writer.write ("(void*)&Value" + i + ", cPrefixAndParamName" + i
-                                  + ", " + CUtils.getXSDTypeForBasicType(paraTypeName));
+                                  + ", " + CUtils.getXSDTypeForBasicType(paramTypeName));
                     }
                 }
                 else
@@ -589,9 +516,9 @@ public class ClientStubWriter
                     // Complex Type
                     writer.write ("\tm_pCall->addCmplxParameter(");
                     writer.write ("Value" + i
-                          + ", (void*)Axis_Serialize_" + paraTypeName
-                          + ", (void*)Axis_Delete_" + paraTypeName
-                          + ", cPrefixAndParamName" + i + ", Axis_URI_" + paraTypeName);
+                          + ", (void*)Axis_Serialize_" + paramTypeName
+                          + ", (void*)Axis_Delete_" + paramTypeName
+                          + ", cPrefixAndParamName" + i + ", Axis_URI_" + paramTypeName);
                 }              
             }
 
@@ -953,7 +880,7 @@ public class ClientStubWriter
         writer.write ("\t\tint iExceptionCode = e.getExceptionCode();\n\n");
         writer.write ("\t\tif(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)\n");
         writer.write ("\t\t{\n");
-        writer.write ("\t\t\tm_pCall->unInitialize();\n"); // AXISCPP-477
+        writer.write ("\t\t\tm_pCall->unInitialize();\n");
         writer.write ("\t\t\tthrow;\n");
         writer.write ("\t\t}\n\n");
         writer.write ("\t\tISoapFault* pSoapFault = (ISoapFault*)\n");
@@ -1008,9 +935,7 @@ public class ClientStubWriter
             //               the fault message.  If found, update the faultInfoName with the
             //               'localname' of the qname of the attribute.                         
             Iterator infoArrayListIterator = info.getParams ().iterator ();
-            boolean found = false;
-    
-            while (infoArrayListIterator.hasNext () && !found)
+            while (infoArrayListIterator.hasNext ())
             {
                 ParameterInfo paramInfo = (ParameterInfo) infoArrayListIterator.next ();
         
@@ -1018,7 +943,7 @@ public class ClientStubWriter
                     if ("error".equals (paramInfo.getParamName ()))
                     {
                         faultInfoName = paramInfo.getElementName ().getLocalPart ();
-                        found = true;
+                        break;
                     }
             }
             // FJP - D0004 <                            
@@ -1072,52 +997,12 @@ public class ClientStubWriter
         writer.write ("\t\t}\n");
         writer.write ("\t\telse\n");
         writer.write ("\t\t{\n");
-        writer.write ("\t\t\tm_pCall->unInitialize();\n"); // AXISCPP-477
+        writer.write ("\t\t\tm_pCall->unInitialize();\n");
         writer.write ("\t\t\tdelete pSoapFault;\n");
         writer.write ("\t\t\tthrow;\n");
         writer.write ("\t\t}\n");
         writer.write ("\t}\n");
         writer.write ("}\n");
-    }
-
-    private void writeExceptions (String faulttype,
-                  String faultInfoName,
-                  String paramName,
-                  String langName) throws WrapperFault
-    {
-        try
-        {
-            writer.write ("(0 == strcmp(\"" + faultInfoName + "\", pcCmplxFaultName))\n");
-            writer.write ("\t\t\t{\n");
-            writer.write ("\t\t\t\t" + faulttype + " pFaultDetail = \n");
-            writer.write ("\t\t\t\t\t(" + faulttype + ")pSoapFault->getCmplxFaultObject(\n");
-            writer.write ("\t\t\t\t\t\t(void*) Axis_DeSerialize_" + langName + ",\n");
-            writer.write ("\t\t\t\t\t\t(void*) Axis_Create_" + langName + ",\n");
-            writer.write ("\t\t\t\t\t\t(void*) Axis_Delete_" + langName + ",\n");
-            writer.write ("\t\t\t\t\t\t\"" + faultInfoName + "\",\n");
-            writer.write ("\t\t\t\t\t\t0);\n\n");
-            writer.write ("\t\t\t\tpFaultDetail->setFaultCode(pSoapFault->getFaultcode());\n");
-            writer.write ("\t\t\t\tpFaultDetail->setFaultString(pSoapFault->getFaultstring());\n");
-            writer.write ("\t\t\t\tpFaultDetail->setFaultActor(pSoapFault->getFaultactor());\n");
-            writer.write ("\t\t\t\tpFaultDetail->setExceptionCode(e.getExceptionCode());\n");
-            writer.write ("\t\t\t\tm_pCall->unInitialize();\n");
-            writer.write ("\t\t\t\tdelete pSoapFault;\n");
-            
-            String faultTypeName;
-            if (faulttype.lastIndexOf('*') != -1)
-                faultTypeName = faulttype.substring(0, faulttype.lastIndexOf('*'));
-            else
-                faultTypeName = faulttype;
-    
-            writer.write ("\t\t\t\t" + faultTypeName + " fault = *pFaultDetail;\n");
-            writer.write ("\t\t\t\tdelete pFaultDetail;\n");
-            writer.write ("\t\t\t\tthrow fault;\n");
-            writer.write ("\t\t\t}\n");
-        }
-        catch (IOException e)
-        {
-            throw new WrapperFault (e);
-        }
     }
 
     /* (non-Javadoc)
