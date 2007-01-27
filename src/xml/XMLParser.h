@@ -31,8 +31,11 @@
 
 #include <axis/GDefine.hpp>
 #include <iostream>
+#include <string>
 
 AXIS_CPP_NAMESPACE_USE
+
+using namespace std;
 
 /**
  * @class XMLParser
@@ -50,7 +53,22 @@ AXIS_CPP_NAMESPACE_USE
 class XMLParser
 {
 public:
-    virtual ~XMLParser(){};
+    /**
+     * Constructor
+     */
+    XMLParser() 
+    {
+        m_pInputStream = NULL;
+        m_bCanParseMore = false;
+        m_iStatus = AXIS_SUCCESS;
+        m_sErrorString = "";        
+    }
+    
+    /**
+     * Destructor - no-op
+     */
+    virtual ~XMLParser(){}
+    
     /**
      * Sets the input stream. Here the parser should be prepared to start
      * parsing a new stream and hence should be initialized to its initial
@@ -66,6 +84,7 @@ public:
      * @return AXIS_SUCCESS if successfull. AXIS_FAIL otherwise.
      */
     virtual int setInputStream(AxisIOStream* pInputStream)=0;
+    
     /**
      * Gets the corresponding namespace string for a given prefix. The
      * Parser should store the prefix/namespace pairs that it finds and
@@ -78,12 +97,30 @@ public:
      * @return The namespace if a match is found. NULL otherwise. 
      */
     virtual const XML_Ch* getNS4Prefix(const XML_Ch* pcPrefix)=0;
+    
     /**
      * @brief  Used to get the parser status.
      * @return Returns AXIS_SUCCESS if nothing has gone wrong. AXIS_FAIL
      *         otherwise.
      */
-    virtual int getStatus()=0;
+    virtual int getStatus() { return m_iStatus; }
+
+    /**
+     * @brief  Used to get the error string if status is AXIS_FAIL.
+     * @return Returns error string if AXIS_FAIL, NULL otherwise.
+     */
+    virtual const char *getErrorString()
+    {
+        return (m_iStatus == AXIS_SUCCESS) ? NULL : m_sErrorString.c_str(); 
+    } 
+
+    /**
+     * @brief  Used to get the parser exception code corresponding to error if 
+     * status is AXIS_FAIL. See AxisException.hpp for parser error codes.
+     * @return Returns exception code if AXIS_FAIL, -1 otherwise.
+     */
+    virtual int getErrorCode() { return (m_iStatus == AXIS_SUCCESS) ? -1 : m_iErrorCode; }     
+    
     /**
      * Used to get the next XML data event. The valid events are start element, 
 	 * end element and character data. If we think of SAX events the processing 
@@ -109,6 +146,7 @@ public:
      *         structure of AnyElement.
      */
     virtual const AnyElement* next(bool bIsCharData=false)=0; 
+    
     /**
      * Used to get the any next XML event. The valid events are start element,
      * end element, character data and prefix mappings. If we think of SAX  
@@ -129,7 +167,8 @@ public:
     virtual const AnyElement* anyNext()=0;
     
     /**
-     * @brief  Peek a head and get the next elemnt. .
+     * @brief  Peek a head and get the next elemnt. Should return NULL string
+     *         if last element processed was a start/end element.
      * @return Return the name of the next element. 
      */
     virtual const char* peek()=0;      
@@ -156,6 +195,9 @@ public:
 protected:
     AxisIOStream* m_pInputStream;
     bool m_bCanParseMore;
+    int m_iStatus;
+    int m_iErrorCode;
+    string m_sErrorString;
 };
 
 #endif

@@ -364,7 +364,7 @@ void* SoapFault::
 getCmplxFaultObject(void* pDZFunct, void* pCreFunct, void* pDelFunct,
                     const AxisChar* pName, const AxisChar* pNamespace)
 { 
-    return m_pDZ->getCmplxFaultObject (pDZFunct, pCreFunct, pDelFunct, pName, pNamespace);
+    return m_pDZ->getCmplxObject (pDZFunct, pCreFunct, pDelFunct, pName, pNamespace, true);
 }
 
 const void* SoapFault::

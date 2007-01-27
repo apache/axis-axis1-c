@@ -31,7 +31,6 @@
 XercesHandler::
 XercesHandler()
 {
-    m_nStatus = AXIS_SUCCESS;
     m_pCurrElement = 0;
     m_pNextElement = new AnyElement;
     m_pPrefixMappingElement = new AnyElement;
@@ -80,7 +79,7 @@ startElement(const XMLCh *const uri,const XMLCh *const
 const XML_Ch* XercesHandler::
 ns4Prefix(const XML_Ch* prefix)
 {
-    if (m_NsStack.find(prefix) != m_NsStack.end())
+    if (prefix && m_NsStack.find(prefix) != m_NsStack.end())
         return m_NsStack[prefix].c_str();
 
     return NULL;
@@ -89,13 +88,16 @@ ns4Prefix(const XML_Ch* prefix)
 const XML_Ch* XercesHandler::
 prefix4NS(const XML_Ch* pcNS)
 {
-    for (map<AxisXMLString, AxisXMLString>::iterator it=m_NsStack.begin();
-         it!=m_NsStack.end(); it++)
+    if (pcNS)
     {
-        if ((*it).second == pcNS)
-            return (*it).first.c_str();
+        map<AxisXMLString, AxisXMLString>::iterator it;
+        
+        for (it=m_NsStack.begin(); it!=m_NsStack.end(); it++)
+            if ((*it).second == pcNS)
+                return (*it).first.c_str();
     }
-    return 0;
+
+    return NULL;
 }
     
 void XercesHandler::
@@ -153,19 +155,19 @@ resetDocument()
 {}
 
 void XercesHandler::
-warning(const SAXParseException& exception)
+warning(const SAXParseException& exc)
 {}
 
 void XercesHandler::
-error(const SAXParseException& exception)
+error(const SAXParseException& exc)
 {
-    m_nStatus = AXIS_FAIL;
+    throw exc;    
 }
 
 void XercesHandler::
-fatalError(const SAXParseException& exception)
+fatalError(const SAXParseException& exc)
 {
-    m_nStatus = AXIS_FAIL;
+    throw exc;
 }
 
 void XercesHandler::
@@ -316,7 +318,6 @@ setGetPrefixMappings(bool bValue)
 void XercesHandler::
 reset()
 {
-    m_nStatus = AXIS_SUCCESS;
     m_bEndElementFollows = false;
     m_pCurrElement = m_pNextElement;
     freeElement();

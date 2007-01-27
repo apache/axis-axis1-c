@@ -141,7 +141,7 @@ int main(int argc, char* argv[])
 
             if( !bSilent)
                         {
-                                cout << "AxisException has occured: " << e.what() << endl;
+                                cout << e.what() << endl;
                         }
                 }
                 catch(exception& e)

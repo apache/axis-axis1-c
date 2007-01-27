@@ -1,4 +1,4 @@
-Exception : Cannot deserialize the requested element.
+Exception : AxisSoapException: Cannot deserialize the requested element.
 
 Fault Code = Server.generalException
 Fault String = java.lang.ArithmeticException: / by zero

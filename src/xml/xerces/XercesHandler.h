@@ -18,7 +18,6 @@
  *    @author sanjaya singharage (sanjayas@opensource.lk)
  */
 
-#include <xercesc/sax/HandlerBase.hpp>
 #include <xercesc/sax2/DefaultHandler.hpp>
 #include "../AnyElement.h"
 #include <stdlib.h>
@@ -35,7 +34,6 @@ class XercesHandler : public XERCES_CPP_NAMESPACE::DefaultHandler
 {
 public :
     void freeElement();
-    inline int getStatus(){return m_nStatus;};
     XercesHandler();
     ~XercesHandler();
     const XML_Ch* ns4Prefix(const XML_Ch* prefix);
@@ -48,29 +46,38 @@ public :
 
 private:
     /* -----------------------------------------------------------------------
-     *  Handlers for the SAX DocumentHandler interface
+     *  Handlers for the SAX2 DocumentHandler interface
      * -----------------------------------------------------------------------
      */
+    // Receive notification of the start of an element. 
     void startElement(const XMLCh *const uri,const XMLCh *const localname,
-        const XMLCh *const qname,const Attributes &attrs);
+                      const XMLCh *const qname,const Attributes &attrs);
+    // Receive notification of the end of an element. 
     void endElement (const XMLCh *const uri,const XMLCh *const localname,
-        const XMLCh *const qname);
+                     const XMLCh *const qname);
+    // Receive notification of character data inside an element. 
     void characters(const XMLCh* const chars, const unsigned int length);
+    // Receive notification of the start of an namespace prefix mapping. 
     void startPrefixMapping(const XMLCh* const prefix, const XMLCh* const uri);
+    // Receive notification of the end of an namespace prefix mapping.
     void endPrefixMapping(const XMLCh* const prefix);
+    // Receive notification of ignorable whitespace in element content.
     void ignorableWhitespace(const XMLCh* const chars, const unsigned int length);
+    // Reset the Document object on its reuse. 
     void resetDocument();
 
 
     /* -----------------------------------------------------------------------
-     *  Implementations of the SAX ErrorHandler interface
+     *  Implementations of the SAX2 ErrorHandler interface
      * -----------------------------------------------------------------------
      */
+    // Receive notification of a parser warning. 
     void warning(const SAXParseException& exception);
+    // Receive notification of a recoverable parser error. 
     void error(const SAXParseException& exception);
+    // Report a fatal XML parsing error.
     void fatalError(const SAXParseException& exception);
 
-    int m_nStatus;
 	bool m_bEndElementFollows;
     AnyElement* m_pNextElement;
     AnyElement* m_pPrefixMappingElement;

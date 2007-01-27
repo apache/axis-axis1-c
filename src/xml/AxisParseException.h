@@ -30,12 +30,14 @@ AXIS_CPP_NAMESPACE_USE
 class STORAGE_CLASS_INFO AxisParseException :public AxisException
 {
 public:
+    
     AxisParseException(int iExceptionCode,const char* pcMessage = NULL): AxisException()
     {
         setMessage(iExceptionCode, "AxisParseException:", pcMessage);
     }
     
     AxisParseException(const AxisException& e): AxisException(e) { }
+    AxisParseException(): AxisException() { }
     virtual ~AxisParseException() throw() { }
 };
 

@@ -113,13 +113,15 @@ public:
      * @param pDelFunct function pointer to the complex type delete method
      * @param pName SOAP element name for complex type
      * @param pNamespace SOAP namespace for complex type
+     * @param isFault boolean indicating complex object is a fault.
      * @return deserialized complex type
      */
     virtual void* AXISCALL getCmplxObject(void* pDZFunct, 
                                           void* pCreFunct, 
                                           void* pDelFunct, 
                                           const AxisChar* pName, 
-                                          const AxisChar* pNamespace)=0;
+                                          const AxisChar* pNamespace,
+                                          bool  isFault=false)=0;
     
     /**
      * Method used by wrapper to deserialize an xsd:int element

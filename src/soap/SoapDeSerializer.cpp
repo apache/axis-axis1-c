@@ -41,12 +41,12 @@
 #include "ComplexElement.h"
 #include "CharacterElement.h"
 #include <axis/GDefine.hpp>
-#include "../common/AxisTrace.h"
 #include "apr_base64.h"
 #include "HexCoder.h"
 #include "../engine/XMLParserFactory.h"
 #include "../xml/XMLParser.h"
 #include "../xml/QName.h"
+#include "../xml/AxisParseException.h"
 #include "AxisSoapException.h"
 #include "../common/AxisGenException.h"
 #include "../common/AxisTrace.h"
@@ -92,34 +92,101 @@ setInputStream (SOAPTransport * pInputStream)
 }
 
 /*
- * Routine that ensures we are actually skipping an end element.
+ * Routine to help obtain parser information and throw it as an exception
  */
 void SoapDeSerializer::
-skipEndNode()
+throwParserException()
 {
-    // TODO add code (possible new parser method) to determine if in fact 
-    // TODO the node we are about to skip is an end node. If not, we need 
-    // TODO to throw an exception since there could be extra elements that 
-    // TODO is due to server/client differences in wsdl being used.  in addition, a 
-    // TODO check is another safeguard.
-    m_pParser->next();
+    AxisParseException e;
+    
+    if (m_pParser->getStatus() != AXIS_SUCCESS)
+        e.setMessage(m_pParser->getErrorCode(), "AxisParseException:", m_pParser->getErrorString());
+    else
+        e.setMessage(SERVER_PARSE_PARSER_FAILED, "AxisParseException:");
+        
+    throw e;
+}
+
+/*
+ * Routine that handles getting next node, in the future when we sync
+ * up rpc and doc processing and eliminate peek, we should be able to 
+ * get rid of the first parameter!
+ */
+int SoapDeSerializer::
+getNextNode(bool ifNotSet, bool characterMode, bool throwExcOnError)
+{
+    // If node pointer is set and user requested that we 
+    // only get next element if not set, return.
+    if (ifNotSet && m_pNode)
+        return AXIS_SUCCESS;
+    
+    // Ensure m_pNode is NULL before calling parser in case of exceptions.
     m_pNode = NULL;
+    
+    // Just a sanity check
+    if (!m_pParser)
+        return AXIS_FAIL;       
+    
+    try
+    { 
+        m_pNode = m_pParser->next(characterMode);
+    }
+    catch (AxisException &e)
+    {
+        // Exception processing will be handled in subsequent code
+    }
+    
+    // If no node obtained, either there is no more data to read (at this time
+    // we treat this as an error but we do not throw an exception for this) or the 
+    // parser had an exception, in which case we throw an exception if requested.
+    if (!m_pNode)
+    {
+        m_nStatus = AXIS_FAIL;
+        if (throwExcOnError && (AXIS_FAIL == m_pParser->getStatus()))
+            throwParserException();
+    }
+    
+    return m_pNode ? AXIS_SUCCESS : AXIS_FAIL;
+}
+
+
+/*
+ * Routine that ensures we are actually skipping the expected node...usually an end node.
+ */
+int SoapDeSerializer::
+skipNode(bool verifyIfEndNode, bool throwExcOnError)
+{
+    int rc = getNextNode(false, false, throwExcOnError);
+    
+    if (rc == AXIS_SUCCESS)
+    {
+        if (verifyIfEndNode)
+        {
+            // TODO add code to determine if in fact 
+            // TODO the node we are about to skip is an end node. If not, we need 
+            // TODO to throw an exception since there could be extra elements that 
+            // TODO is due to server/client differences in wsdl being used, etc.  
+            // TODO in addition, a check is another safeguard.            
+        }
+        
+        m_pNode = NULL;
+    }
+    
+    return rc;
 }
 
 SoapEnvelope *SoapDeSerializer::
 getEnvelope ()
 {
-    Attribute *pAttr = NULL;
+    Attribute * pAttr = NULL;
 
-    if (!m_pNode)
-        m_pNode = m_pParser->next ();
-
-    if (!m_pNode || (START_ELEMENT != m_pNode->m_type))
+    if ((AXIS_FAIL == getNextNode(true)) || (START_ELEMENT != m_pNode->m_type))
         return NULL;
 
     if (0 == strcmp (m_pNode->m_pchNameOrValue,
                      SoapKeywordMapping::map (SOAP_VER_1_2).pchWords[SKW_ENVELOPE]))
     {
+        // No try/catch block needed here since we already have the node
         SoapEnvelope *m_pEnvl = new SoapEnvelope ();
         
         // set all attributes of SoapEnvelope 
@@ -147,7 +214,8 @@ getEnvelope ()
             m_pEnvl->addAttribute (pAttr);
         }
 
-        m_pNode = NULL; // indicate node consumed 
+        // indicate node consumed and return envelope
+        m_pNode = NULL;  
         return m_pEnvl;
     }
 
@@ -176,36 +244,21 @@ getHeader ()
     if (m_pHeader)
         return m_nStatus;
 
-    m_pNode = m_pParser->next ();
-
-    // no node ==> SOAP error
-    if (!m_pNode)       
-    {
-        m_nStatus = AXIS_FAIL;
+    if (AXIS_FAIL == getNextNode())       
         return m_nStatus;
-    }
 
     if ((START_ELEMENT == m_pNode->m_type) &&
         (0 == strcmp (m_pNode->m_pchNameOrValue,
                       SoapKeywordMapping::map (m_nSoapVersion).pchWords[SKW_HEADER])))
     {
-        if (m_pHeader)
-            delete m_pHeader;
-
+        delete m_pHeader;
         m_pHeader = new SoapHeader ();
         
         // Set any attributes/namspaces to the SoapHeader object
-        bool blnMainLoopContStatus = true;
-
-        while (blnMainLoopContStatus)
+        while (true)
         {
-            m_pNode = m_pParser->next (true);
-    
-            if (!m_pNode)
-            {
-               m_nStatus = AXIS_FAIL;
-               return m_nStatus;
-            }
+            if (AXIS_FAIL == getNextNode(false, true, false))       
+                return m_nStatus;
     
             if ((END_ELEMENT == m_pNode->m_type) &&
                 (0 == strcmp (m_pNode->m_pchNameOrValue,
@@ -213,12 +266,14 @@ getHeader ()
             {
                 m_pNode = NULL; // indicate node consumed
                 return m_nStatus;
-                break;
             }
     
             // following is done to ignore anything (eg : the toplevel whitespaces) but a start element.
             if (START_ELEMENT != m_pNode->m_type)
+            {
+                m_pNode = NULL; // indicate node consumed
                 continue;
+            }
     
             HeaderBlock *pHeaderBlock = new HeaderBlock ();
     
@@ -246,14 +301,15 @@ getHeader ()
                 }
             }
     
-            BasicNode **pNodeList = new BasicNode *[10];
+            BasicNode *pNodeList[10];
+            pNodeList[0] = NULL;
             int iListPos = 0;
             int iLevel = 0;
-            bool bContinue = true;
     
-            while (bContinue)
+            while (true)
             {
-                m_pNode = m_pParser->next (true);
+                if (AXIS_FAIL == getNextNode(false, true, false))
+                    break;
         
                 if (END_ELEMENT == m_pNode->m_type)
                 {
@@ -261,7 +317,7 @@ getHeader ()
                     {
                         //do nothing
                         m_pHeader->addHeaderBlock (pHeaderBlock);
-                        bContinue = false;
+                        break;
                     }
                     else if (iLevel == 1)
                     {
@@ -297,8 +353,7 @@ getHeader ()
                 else if (CHARACTER_ELEMENT == m_pNode->m_type)
                 {
                     //createBasicNode and setValue
-                    BasicNode *pBasicNode =
-                    new CharacterElement (m_pNode->m_pchNameOrValue);
+                    BasicNode *pBasicNode = new CharacterElement (m_pNode->m_pchNameOrValue);
         
                     //addToImmidiateParent
                     if (iLevel == 0)
@@ -307,9 +362,6 @@ getHeader ()
                         (pNodeList[iListPos - 1])->addChild (pBasicNode);
                 }
             } // end while
-                
-            // clean memory
-            delete [] pNodeList;
         }
     }
 
@@ -332,22 +384,20 @@ peekNextElementName ()
 int SoapDeSerializer::
 getBody ()
 {
-    if (!m_pNode)
-        m_pNode = m_pParser->next ();
+    if (AXIS_FAIL == getNextNode(true))
+        return m_nStatus;
 
     // previous header searching may have left a node unidentified
-    if (m_pNode)
+    if ((START_ELEMENT == m_pNode->m_type) &&
+        (0 == strcmp (m_pNode->m_pchNameOrValue,SoapKeywordMapping::map (m_nSoapVersion).pchWords[SKW_BODY])))
     {
-        if ((START_ELEMENT == m_pNode->m_type) &&
-            (0 == strcmp (m_pNode->m_pchNameOrValue,SoapKeywordMapping::map (m_nSoapVersion).pchWords[SKW_BODY])))
-        {
-            // Set any attributes/namspaces to the SoapBody object 
-            m_pNode = NULL; // indicate node consumed
-    
-            // peek for the method name
-            m_strMethodNameToInvoke = m_pParser->peek();
-            return AXIS_SUCCESS;
-        }
+        // indicate node consumed
+        m_pNode = NULL; 
+
+        // peek for the method name
+        m_strMethodNameToInvoke = m_pParser->peek();
+        
+        return AXIS_SUCCESS;
     }
 
     m_nStatus = AXIS_FAIL;
@@ -357,22 +407,24 @@ getBody ()
 int SoapDeSerializer::
 checkMessageBody (const AxisChar * pName, const AxisChar * pNamespace)
 {
-    if (!m_pNode)
-        m_pNode = m_pParser->next ();
+    // Will throw exception if failure in parser
+    if (AXIS_FAIL == getNextNode(true))
+        return AXIS_FAIL;
+        
+    if (START_ELEMENT != m_pNode->m_type)
+        throw AxisSoapException (CLIENT_SOAP_SOAP_CONTENT_ERROR, "Start-element was not found.");
 
-    if (!m_pNode || (START_ELEMENT != m_pNode->m_type))
-        throw AxisGenException (SERVER_UNKNOWN_ERROR);
-
+    // If a fault has occurred or the node name is unexpected, throw exception
+    // deserialize it as doc literal by setting style. 
     if (0 != strcmp (m_pNode->m_pchNameOrValue, pName))
     {
-        // soap fault has occurred. deserialize it as doc literal by setting style. 
-        // This way of doing things is not so nice. I'll rectify this asap
         setStyle (DOC_LITERAL);
         AXISTRACE1 ("AXISC_NODE_VALUE_MISMATCH_EXCEPTION", CRITICAL);
         throw AxisGenException (AXISC_NODE_VALUE_MISMATCH_EXCEPTION);
     }
 
-    m_pNode = NULL; // indicate node consumed
+    // indicate node consumed
+    m_pNode = NULL; 
 
     return AXIS_SUCCESS;
 }
@@ -380,34 +432,42 @@ checkMessageBody (const AxisChar * pName, const AxisChar * pNamespace)
 void *SoapDeSerializer::
 checkForFault (const AxisChar * pName, const AxisChar * pNamespace)
 {
-    const char *pcCmplxFaultName;
-    char *pcDetail;
-    char *pcFaultCode;
-    char *pcFaultstring;
-    char *pcFaultactor;
-    
-    if (0 == strcmp ("Fault", pName))
+    if (0 != strcmp ("Fault", pName))
+        throw AxisGenException (AXISC_NODE_VALUE_MISMATCH_EXCEPTION, 
+                                "Fault element name not valid.");
+        
+    if (0 != strcmp (m_pNode->m_pchNameOrValue, pName))
     {
-        if (0 != strcmp (m_pNode->m_pchNameOrValue, pName))
-        {
-            m_nStatus = AXIS_SUCCESS;
-            m_pNode = NULL;
-            AXISTRACE1 ("AXISC_NODE_VALUE_MISMATCH_EXCEPTION", CRITICAL);
-            throw AxisGenException (AXISC_NODE_VALUE_MISMATCH_EXCEPTION);
-        }
-    
         m_nStatus = AXIS_SUCCESS;
-        m_pNode = NULL;  // indicate node consumed
-        SoapFault *pFault = new SoapFault ();
-        pFault->setDeSerializer (this);
-        m_nStyle = getStyle ();
+        m_pNode = NULL;
+        throw AxisGenException (AXISC_NODE_VALUE_MISMATCH_EXCEPTION);
+    }
+
+    char *pcDetail = NULL;
+    char *pcFaultCode = NULL;
+    char *pcFaultstring = NULL;
+    char *pcFaultactor = NULL;
     
-        // We deserialize fault code in doc literal. 
-        setStyle (DOC_LITERAL);
+    SoapFault *pFault = new SoapFault ();
+    pFault->setDeSerializer (this);
+
+    // indicate node consumed
+    m_nStatus = AXIS_SUCCESS;
+    m_pNode = NULL;  
+
+    // We deserialize fault code in doc literal. 
+    m_nStyle = getStyle ();
+    setStyle (DOC_LITERAL);
+    
+    // getElement or peek will throw exceptions, so need to clean up memory allocations
+    try
+    {
+        // Get fault code
         pcFaultCode = getElementAsString ("faultcode", 0);
         pFault->setFaultcode (pcFaultCode == NULL ? "" : pcFaultCode);
         delete [] pcFaultCode;
         
+        // Get fault string
         pcFaultstring = getElementAsString ("faultstring", 0);
         pFault->setFaultstring (pcFaultstring == NULL ? "" : pcFaultstring);
         delete [] pcFaultstring;
@@ -422,8 +482,8 @@ checkForFault (const AxisChar * pName, const AxisChar * pNamespace)
         }      
          
         // detail is optional.   
-        // FJP Changed the namespace from null to a single space (an impossible
-        //     value) to help method know that it is parsing a fault message.
+        // Changed the namespace from null to a single space (an impossible
+        // value) to help method know that it is parsing a fault message.
         elementName = peekNextElementName();
         if (strcmp(elementName, "detail") == 0)
         {
@@ -436,16 +496,30 @@ checkForFault (const AxisChar * pName, const AxisChar * pNamespace)
             }
             else
             {
-                pcCmplxFaultName = getCmplxFaultObjectName ();
-                pFault->setCmplxFaultObjectName (pcCmplxFaultName == NULL ? "" : pcCmplxFaultName);
+                const char *pcCmplxFaultName = "";
+                
+                if ((AXIS_SUCCESS == getNextNode(true)) && m_pNode->m_pchNameOrValue)
+                    pcCmplxFaultName = m_pNode->m_pchNameOrValue;
+                    
+                pFault->setCmplxFaultObjectName (pcCmplxFaultName);
             }
         }
-    
-        setStyle (m_nStyle);
-        return pFault;
     }
-    else
-        throw AxisGenException (AXISC_NODE_VALUE_MISMATCH_EXCEPTION);
+    catch ( ... )
+    {
+        setStyle (m_nStyle);
+        
+        delete [] pcFaultCode;
+        delete [] pcFaultstring;
+        delete [] pcFaultactor;
+        delete [] pcDetail;
+        delete pFault;
+        
+        throw;
+    }
+
+    setStyle (m_nStyle);
+    return pFault;
 }
 
 int SoapDeSerializer::
@@ -479,6 +553,56 @@ getVersion ()
 }
 
 /*
+ * Get Size of the single dimension array from arrayType attribute
+ * Ex : enc:arrayType="xs:string[6]"
+ * RPC/Encoded only processing.
+ */
+int SoapDeSerializer::
+getArraySize ()
+{
+    int nSize = 0;
+    
+    // If not RPC or failure in getNextNode, return zero.
+    if (RPC_ENCODED != m_nStyle || (AXIS_FAIL == getNextNode()))
+      return nSize;
+    
+    // first check whether this is a start element node
+    if (START_ELEMENT == m_pNode->m_type)
+    {
+        // If start-end element, then empty array
+        if (START_END_ELEMENT == m_pNode->m_type2)
+        {
+            skipNode();
+            return nSize;
+        }
+    }
+    else if (END_ELEMENT == m_pNode->m_type)
+        return nSize;
+
+    for (int i = 0; m_pNode->m_pchAttributes[i]; i += 3)
+    {
+        if (URI_ENC == URIMapping::getURI (m_pNode->m_pchAttributes[i + 1])
+            && (0 == strcmp (m_pNode->m_pchAttributes[i],
+                             SoapKeywordMapping::map (m_nSoapVersion).pchWords[SKW_ARRAYTYPE])))
+        {
+            QName qn;
+    
+            qn.splitQNameString (m_pNode->m_pchAttributes[i + 2], '[');
+            nSize = strtol (qn.localname, &m_pEndptr, 10);
+            qn.mergeQNameString ('[');
+    
+            if (nSize == 0)
+                skipNode();
+                
+            return nSize;
+        }
+    }
+
+    return nSize;
+}
+
+
+/*
  * In rpc/encoded style the stream is as follows,
  * <abc:ArrayOfPoints xmlns:abc="http://www.opensource.lk/Points"
  *    xmlns:enc="http://www.w3.org/2001/06/soap-encoding"
@@ -491,132 +615,38 @@ getVersion ()
  *    <points><x>7</x><y>8</y></points>
  *
  */
- 
-void SoapDeSerializer::
-deserializeLiteralComplexArray(Axis_Array * pArray, 
-                               void *pDZFunct,
-                               void *pCreFunct, 
-                               void *pDelFunct,
-                               const AxisChar * pName, 
-                               const AxisChar * pNamespace)
-{
-    while(true)
-    {
-        const char* elementName = peekNextElementName();
-        if(strcmp(elementName, pName) == 0)
-            pArray->addElement(getCmplxObject(pDZFunct, pCreFunct, pDelFunct, pName, pNamespace));
-        else
-            return;
-    }
-}
-
-void SoapDeSerializer::
-deserializeEncodedComplexArray(Axis_Array * pArray, 
-                               void *pDZFunct,
-                               void *pCreFunct, 
-                               void *pDelFunct, 
-                               const AxisChar * pName, 
-                               const AxisChar * pNamespace, 
-                               int size)
-{
-    for (int count = 0 ; count < size; count++)
-    {
-        const char* elementName = peekNextElementName();
-        if(strcmp(elementName, pName) == 0)
-            pArray->addElement(getCmplxObject(pDZFunct, pCreFunct, pDelFunct, pName, pNamespace));
-        else
-            return;
-    }
-}
 
 Axis_Array *SoapDeSerializer::
 getCmplxArray (Axis_Array* pArray, 
-               void *pDZFunct,
-               void *pCreFunct, 
-               void *pDelFunct, 
-               const AxisChar * pName, 
-               const AxisChar * pNamespace)
+               void *pDZFunct, void *pCreFunct, void *pDelFunct, 
+               const AxisChar * pName, const AxisChar * pNamespace)
 {
     // if anything has gone wrong earlier just do nothing 
     if (AXIS_SUCCESS != m_nStatus)
         return pArray;
 
-    if (RPC_ENCODED == m_nStyle)
+    // Loop through the array adding elements.
+    int arraySize = getArraySize ();    
+    int count = 0;
+    const char* elementName;
+    
+    while(RPC_ENCODED != m_nStyle || count < arraySize)
     {
-        m_pNode = m_pParser->next ();
-        
-        if (!m_pNode)
-            return pArray;
-    
-        // Look for an empty array
-        if (END_ELEMENT == m_pNode->m_type)
-            return pArray;
-    
-        int arraySize = getArraySize (m_pNode);
-    
-        if (arraySize == 0)
-        {
-            skipEndNode();
-            return pArray;
-        }
-        else if (arraySize > 0)
-        {
-            deserializeEncodedComplexArray(pArray, pDZFunct, pCreFunct, pDelFunct,
-                                           pName, pNamespace, arraySize);
+        elementName = m_pParser->peek();
+        if(strcmp(elementName, pName) == 0)
+            pArray->addElement(getCmplxObject(pDZFunct, pCreFunct, pDelFunct, pName, pNamespace));
+        else
+            break;    
             
-            if (m_nStatus != AXIS_FAIL)
-            {
-                skipEndNode();
-                return pArray;
-            }
-        }
-    }
-    else
-    {
-        deserializeLiteralComplexArray(pArray, pDZFunct, pCreFunct, pDelFunct,
-                                       pName, pNamespace);
-
-        if (m_nStatus != AXIS_FAIL)
-            return pArray;
+        ++count;    
     }
     
-    m_nStatus = AXIS_FAIL;
-    m_pNode = NULL;
-
+    if (AXIS_FAIL == m_nStatus) // TODO - not sure this line is needed
+        m_pNode = NULL;         // TODO - not sure this line is needed
+    else if (arraySize > 0)
+        skipNode();
+        
     return pArray;
-}
-
-
-/*
- * Get Size of the single dimension array from arrayType attribute
- * Ex : enc:arrayType="xs:string[6]"
- */
-int SoapDeSerializer::
-getArraySize (const AnyElement * pElement)
-{
-    int nSize = -1;
-    
-    // first check whether this is a start element node
-    if (START_ELEMENT != pElement->m_type)
-        return nSize;
-
-    for (int i = 0; pElement->m_pchAttributes[i]; i += 3)
-    {
-        if (URI_ENC == URIMapping::getURI (pElement->m_pchAttributes[i + 1])
-            && (0 == strcmp (pElement->m_pchAttributes[i],
-                             SoapKeywordMapping::map (m_nSoapVersion).pchWords[SKW_ARRAYTYPE])))
-        {
-            QName qn;
-    
-            qn.splitQNameString (pElement->m_pchAttributes[i + 2], '[');
-            nSize = strtol (qn.localname, &m_pEndptr, 10);
-            qn.mergeQNameString ('[');
-    
-            return nSize;
-        }
-    }
-
-    return nSize;
 }
 
 /*
@@ -633,52 +663,10 @@ getArraySize (const AnyElement * pElement)
  *
  *
  */
-void SoapDeSerializer::
-deserializeEncodedArray (Axis_Array* pArray, 
-                         IAnySimpleType* pSimpleType, 
-                         const AxisChar* pName, 
-                         const AxisChar* pNamespace, 
-                         int size)
-{
-    for (int count = 0 ; count < size; count++)
-    {
-        const char* elementName = peekNextElementName();
-        if(strcmp(elementName, pName) == 0)
-        {
-            getElement(pName, pNamespace, pSimpleType, true);
-            void * pValue = pSimpleType->getValue();
-            pArray->addElement(pValue);
-            Axis::AxisDelete(pValue, pSimpleType->getType());
-        }
-        else
-            return;
-    }
-}
-
-void SoapDeSerializer::
-deserializeLiteralArray (Axis_Array* pArray, 
-                         IAnySimpleType* pSimpleType, 
-                         const AxisChar* pName, 
-                         const AxisChar* pNamespace)
-{
-    while(true)
-    {
-        const char* elementName = peekNextElementName();
-        if(strcmp(elementName, pName) == 0)
-        {
-            getElement(pName, pNamespace, pSimpleType);
-            void * pValue = pSimpleType->getValue();
-            pArray->addElement(pValue);
-            Axis::AxisDelete(pValue, pSimpleType->getType());
-        }
-        else
-            return;
-    }
-}
 
 Axis_Array*SoapDeSerializer::
 getBasicArray (XSDTYPE nType, const AxisChar * pName, const AxisChar * pNamespace)
-{
+{    
     Axis_Array* Array = new Axis_Array();
     Array->m_Type = nType;
 
@@ -686,43 +674,55 @@ getBasicArray (XSDTYPE nType, const AxisChar * pName, const AxisChar * pNamespac
     if (AXIS_SUCCESS != m_nStatus)
         return Array;
 
-    if (RPC_ENCODED == m_nStyle)
+    // Loop through the array adding elements.
+    IAnySimpleType* pSimpleType = NULL;
+    void * pValue = NULL;
+    
+    try
     {
-        m_pNode = m_pParser->next ();
-        if (!m_pNode)
-            return Array;
-    
-        int size = getArraySize (m_pNode);
-    
-        if (size == 0)
+        int size = getArraySize ();
+        const char* elementName;
+        int count = 0;
+                
+        while(RPC_ENCODED != m_nStyle || count < size)
         {
-            skipEndNode();
-            return Array;
-        }
-        else if (size > 0)
-        {
-            IAnySimpleType* pSimpleType = AxisUtils::createSimpleTypeObject(nType);
-            deserializeEncodedArray(Array, pSimpleType, pName, pNamespace, size);
+            elementName = m_pParser->peek();
+            if(strcmp(elementName, pName) == 0)
+            {
+                if (0 == count)
+                    pSimpleType = AxisUtils::createSimpleTypeObject(nType);
+                getElement(pName, pNamespace, pSimpleType, (bool)(RPC_ENCODED == m_nStyle));
+                pValue = pSimpleType->getValue();
+                Array->addElement(pValue);
+                Axis::AxisDelete(pValue, pSimpleType->getType());
+                pValue = NULL;
+            }
+            else
+                break;
+                
+            ++count;
+        }     
+    }
+    catch ( ... )
+    {
+        if (pSimpleType)
+        { 
+            if (pValue)
+                Axis::AxisDelete(pValue, pSimpleType->getType());
             delete pSimpleType;
-            
-            if ( m_nStatus != AXIS_FAIL)
-                return Array;     
         }
-    }
-    else
-    {
-        IAnySimpleType* pSimpleType = AxisUtils::createSimpleTypeObject(nType);
-        deserializeLiteralArray(Array, pSimpleType, pName, pNamespace);
-        delete pSimpleType;
         
-        if ( m_nStatus != AXIS_FAIL)
-            return Array;   
+        delete Array;
+        
+        throw;
     }
     
-    m_nStatus = AXIS_FAIL;
-    m_pNode = NULL;
+    delete pSimpleType;
+    
+    if (AXIS_FAIL == m_nStatus) // TODO - not sure this line is needed
+        m_pNode = NULL;         // TODO - not sure this line is needed
 
-    return Array;
+    return Array;    
 }
 
 /*
@@ -741,242 +741,102 @@ getBasicArray (XSDTYPE nType, const AxisChar * pName, const AxisChar * pNamespac
  *
  */
 void *SoapDeSerializer::
-getCmplxObject (void *pDZFunct, 
-                void *pCreFunct,
-                void *pDelFunct, 
-                const AxisChar * pName,
-                const AxisChar * pNamespace)
+getCmplxObject (void *pDZFunct, void *pCreFunct, void *pDelFunct, 
+                const AxisChar * pName, const AxisChar * pNamespace, bool isFault)
 {
-    if (AXIS_SUCCESS != m_nStatus)
-        return NULL;
-
-    if (RPC_ENCODED == m_nStyle)
+    if (!isFault)
     {
-        m_pNode = m_pParser->next ();
-        if (!m_pNode)
+        if (AXIS_SUCCESS != m_nStatus)
             return NULL;
-            
-        TRACE_OBJECT_CREATE_FUNCT_ENTRY(pCreFunct, 0);
-        void *pObject = ((AXIS_OBJECT_CREATE_FUNCT) pCreFunct) (0);
-        TRACE_OBJECT_CREATE_FUNCT_EXIT(pCreFunct, pObject);
-        
-        if (pObject && pDZFunct)
-        {
-            TRACE_DESERIALIZE_FUNCT_ENTRY(pDZFunct, pObject, this);
-            m_nStatus =    ((AXIS_DESERIALIZE_FUNCT) pDZFunct) (pObject, this);
-            TRACE_DESERIALIZE_FUNCT_EXIT(pDZFunct, m_nStatus);
-            
-            if (AXIS_SUCCESS == m_nStatus)
-            {
-                skipEndNode();
-                return pObject;
-            }
-            else
-            {
-                TRACE_OBJECT_DELETE_FUNCT_ENTRY(pDelFunct, pObject, 0);
-                ((AXIS_OBJECT_DELETE_FUNCT) pDelFunct) (pObject, 0);
-                TRACE_OBJECT_DELETE_FUNCT_EXIT(pDelFunct);
-            }
-        }
+    
+        if (AXIS_FAIL == getNextNode(RPC_ENCODED != m_nStyle))
+            return NULL;  
     }
-    else
-    {
-        if (!m_pNode)
-            m_pNode = m_pParser->next ();
-        if (!m_pNode)
-            return NULL;
-            
-        if (0 == strcmp (pName, m_pNode->m_pchNameOrValue))
-        {
-            // if node contain attributes let them be used by the complex type's deserializer
-            if (0 != m_pNode->m_pchAttributes[0])
-            {
-                m_pCurrNode = m_pNode;
-
-                // Need to verify if the return value is NULL.
-                xsd__boolean * isNill = getAttributeAsBoolean("nil", 0);
-                if (NULL != isNill)
-                {
-                    if(true_ == *isNill)
-                    {
-                        m_pParser->next ();
-                        m_pNode = NULL;
-                        delete isNill;
-                        return NULL;
-                    } 
-                    else 
-                        delete isNill; 
-                }
-            }
-            
-            m_pNode = NULL; // indicate node consumed
     
-            TRACE_OBJECT_CREATE_FUNCT_ENTRY(pCreFunct, 0);
-            void *pObject = ((AXIS_OBJECT_CREATE_FUNCT) pCreFunct)(0);
-            TRACE_OBJECT_CREATE_FUNCT_EXIT(pCreFunct, pObject);
-    
-            if (pObject && pDZFunct)
-            {
-                TRACE_DESERIALIZE_FUNCT_ENTRY(pDZFunct, pObject, this);
-                m_nStatus =    ((AXIS_DESERIALIZE_FUNCT) pDZFunct) (pObject, this);
-                TRACE_DESERIALIZE_FUNCT_EXIT(pDZFunct, m_nStatus);
-
-                if (AXIS_SUCCESS == m_nStatus)
-                {
-                    skipEndNode();
-                    return pObject;
-                }
-                else
-                {
-                    TRACE_OBJECT_DELETE_FUNCT_ENTRY(pDelFunct, pObject, 0);
-                    ((AXIS_OBJECT_DELETE_FUNCT) pDelFunct) (pObject, 0);
-                    TRACE_OBJECT_DELETE_FUNCT_EXIT(pDelFunct);
-                }
-            }
-        }
-        else
+    if (RPC_ENCODED != m_nStyle) // TODO - why do we selectively do this check and not for all?
+        if (0 != strcmp (pName, m_pNode->m_pchNameOrValue))
         {
             /*
-             * TODO: Need to verify what WS-I 1.0 say
+             * TODO: Need to verify what WS-I 1.0 says
              * about the mandatory of all the elements in the response in case of
              * null value or none filled value. Some Web services servers work
              * like this. This apply for all the rest of the deserializer.
              */
-            return NULL;
+            return NULL;            
         }
+    
+    // TODO - even if node is nil, there may be attributes associated with the element that 
+    // TODO - need to be deserialized - thus in the generated code we need to get the nil 
+    // TODO - attribute if element is nillable and check if it is true or false, in which case
+    // TODO - we would short-circuit the deserialization after any other attributes have been 
+    // TODO - obtained. Thus changes will need to be made here and in the code generator.             
+    // if node contain attributes let them be used by the complex type's deserializer
+    if (isNilValue())
+    {
+        skipNode();
+        return NULL;
     }
     
-    m_nStatus = AXIS_FAIL;    /* unexpected SOAP stream */
-
-    return NULL;
-}
-
-const char *SoapDeSerializer::
-getCmplxFaultObjectName ()
-{
-    if (!m_pNode)
-        m_pNode = m_pParser->next ();
-        
-    m_nStatus = AXIS_SUCCESS;
-        
-    if (RPC_ENCODED == m_nStyle)
-        m_pParser->next ();
+    // Make attributes available to code that deserializes the attributes
+    m_pCurrNode = NULL;
+    if (0 != m_pNode->m_pchAttributes[0])
+        m_pCurrNode = m_pNode;    
     
-    if (!m_pNode)
-        return NULL;
+    // indicate node consumed
+    m_pNode = NULL; 
+    
+    if (!isFault && AXIS_FAIL == m_nStatus)  
+        return NULL;  
         
-    return m_pNode->m_pchNameOrValue;
-}
-
-void *SoapDeSerializer::
-getCmplxFaultObject(void *pDZFunct, 
-                    void *pCreFunct,
-                    void *pDelFunct,
-                    const AxisChar * pName,
-                    const AxisChar * pNamespace)
-{
-    if (RPC_ENCODED == m_nStyle)
+    // Call the Axis-generated routine that will deserialize complex object,
+    // including any attributes.
+    
+    TRACE_OBJECT_CREATE_FUNCT_ENTRY(pCreFunct, 0);
+    void *pObject = ((AXIS_OBJECT_CREATE_FUNCT) pCreFunct) (0);
+    TRACE_OBJECT_CREATE_FUNCT_EXIT(pCreFunct, pObject);
+    
+    if (pObject && pDZFunct)
     {
-        TRACE_OBJECT_CREATE_FUNCT_ENTRY(pCreFunct,0);
-        void *pObject = ((AXIS_OBJECT_CREATE_FUNCT) pCreFunct) (0);
-        TRACE_OBJECT_CREATE_FUNCT_EXIT(pCreFunct, pObject);
-    
-        if (pObject && pDZFunct)
-        {
+        try 
+        {        
             TRACE_DESERIALIZE_FUNCT_ENTRY(pDZFunct, pObject, this);
             m_nStatus =    ((AXIS_DESERIALIZE_FUNCT) pDZFunct) (pObject, this);
             TRACE_DESERIALIZE_FUNCT_EXIT(pDZFunct, m_nStatus);
+        
+            if (AXIS_SUCCESS == m_nStatus)
+                skipNode();
+            else
+            {
+                TRACE_OBJECT_DELETE_FUNCT_ENTRY(pDelFunct, pObject, 0);
+                ((AXIS_OBJECT_DELETE_FUNCT) pDelFunct) (pObject, 0);
+                TRACE_OBJECT_DELETE_FUNCT_EXIT(pDelFunct);
             
-            if (AXIS_SUCCESS == m_nStatus)
-            {
-                skipEndNode();
-                return pObject;
-            }
-            else
-            {
-                TRACE_OBJECT_DELETE_FUNCT_ENTRY(pDelFunct, pObject, 0);
-                ((AXIS_OBJECT_DELETE_FUNCT) pDelFunct) (pObject, 0);
-                TRACE_OBJECT_DELETE_FUNCT_EXIT(pDelFunct);
+                pObject = NULL;
             }
         }
-    }
-    else if (0 == strcmp (pName, m_pNode->m_pchNameOrValue))
-    {
-        // if node contain attributes let them be used by the complex type's deserializer
-        if (0 != m_pNode->m_pchAttributes[0])
+        catch ( ... )
         {
-            m_pCurrNode = m_pNode;
-            xsd__boolean * isNill = getAttributeAsBoolean("nil", 0);
-            if (NULL != isNill)
-            {
-                if(true_ == *isNill)
-                {
-                    m_pParser->next ();
-                    m_pNode = NULL;
-                    delete isNill;
-                    return NULL;
-                } 
-                else
-                    delete isNill;
-            }
-        }
-        m_pNode = NULL; // indicate node consumed
+            TRACE_OBJECT_DELETE_FUNCT_ENTRY(pDelFunct, pObject, 0);
+            ((AXIS_OBJECT_DELETE_FUNCT) pDelFunct) (pObject, 0);
+            TRACE_OBJECT_DELETE_FUNCT_EXIT(pDelFunct);
 
-        TRACE_OBJECT_CREATE_FUNCT_ENTRY(pCreFunct,0);
-        void *pObject = ((AXIS_OBJECT_CREATE_FUNCT) pCreFunct)(0);
-        TRACE_OBJECT_CREATE_FUNCT_EXIT(pCreFunct, pObject);
-
-        if (pObject && pDZFunct)
-        {
-            TRACE_DESERIALIZE_FUNCT_ENTRY(pDZFunct, pObject, this);
-            m_nStatus =    ((AXIS_DESERIALIZE_FUNCT) pDZFunct) (pObject, this);
-            TRACE_DESERIALIZE_FUNCT_EXIT(pDZFunct, m_nStatus);
-
-            if (AXIS_SUCCESS == m_nStatus)
-            {
-                skipEndNode();
-                return pObject;
-            }
-            else
-            {
-                TRACE_OBJECT_DELETE_FUNCT_ENTRY(pDelFunct, pObject, 0);
-                ((AXIS_OBJECT_DELETE_FUNCT) pDelFunct) (pObject, 0);
-                TRACE_OBJECT_DELETE_FUNCT_EXIT(pDelFunct);
-            }
+            throw;
         }
     }
-    else
-    {
-    /*
-     * TODO: Need to verify what WS-I 1.0 say
-     * about the mandatory of all the elements in the response in case of
-     * null value or none filled value. Some Web services servers work
-     * like this. This apply for all the rest of the deserializer.
-     */
-        return NULL;
-    }
 
-    m_nStatus = AXIS_FAIL;    /* unexpected SOAP stream */
-    return NULL;
+    return pObject;
 }
 
 void * SoapDeSerializer::
 getAttribute(const AxisChar* pName, const AxisChar * pNamespace, IAnySimpleType * pSimpleType)
 {
     if (m_pCurrNode)
-    {
-        if (START_ELEMENT == m_pCurrNode->m_type)
-        {
-            for (int i = 0 ; m_pCurrNode->m_pchAttributes[i]; i += 3)
-                if ( 0 == strcmp(m_pCurrNode->m_pchAttributes[i], pName))
-                {
-                    pSimpleType->deserialize(m_pCurrNode->m_pchAttributes[i+2]);
-                    return pSimpleType->getValue();
-                }
-        }
-        else
-            m_nStatus = AXIS_FAIL;
-    }
+        for (int i=0; m_pCurrNode->m_pchAttributes[i]; i += 3)
+            if (0 == strcmp(m_pCurrNode->m_pchAttributes[i], pName))
+            {
+                pSimpleType->deserialize(m_pCurrNode->m_pchAttributes[i+2]);
+                return pSimpleType->getValue();
+            }
     
     return NULL;
 }
@@ -1290,19 +1150,26 @@ getAttributeAsDuration (const AxisChar * pName, const AxisChar * pNamespace)
 }
 
 bool SoapDeSerializer::
-isNillValue()
+isNilValue()
 {
+    bool isNillResult = false;    
+
+    // Go through the attributes looking for nil.  We consider
+    // "true" or "1" to be equivalent.
     for (int i = 0; m_pNode->m_pchAttributes[i]; i += 3)
     {
         string sLocalName = m_pNode->m_pchAttributes[i];
         string sValue = m_pNode->m_pchAttributes[i + 2];
 
-        if( strcmp( "nil", sLocalName.c_str()) == 0 &&
-            strcmp( "true", sValue.c_str()) == 0)
-            return true;
+        if (strcmp("nil", sLocalName.c_str()) == 0 &&
+            (strcmp("true", sValue.c_str()) == 0 || strcmp( "1", sValue.c_str()) == 0))
+        {
+            isNillResult = true;
+            break;
+        }
     }
 
-    return false;
+    return isNillResult;
 }
 
 void SoapDeSerializer::
@@ -1343,116 +1210,64 @@ processFaultDetail(IAnySimpleType * pSimpleType, const AxisChar* elementValue)
     
     // If here, detail is simple character data, deserialize simple string
     pSimpleType->deserialize(workingString);
-    skipEndNode();        
+    skipNode();        
     
     return;
 }
 
-
 void SoapDeSerializer::
-getElement (const AxisChar * pName,
-            const AxisChar * pNamespace,
+getElement (const AxisChar * pName, const AxisChar * pNamespace,
             IAnySimpleType * pSimpleType,
             bool isArrayElement)
-{
-    bool    bNillFound = false;
-    
+{   
     if (AXIS_SUCCESS != m_nStatus)
         return;
+        
+    if (AXIS_FAIL == getNextNode(RPC_ENCODED != m_nStyle))
+        return;
+
+    bool    bNillFound = false;
+    if (0 == strcmp (pName, m_pNode->m_pchNameOrValue))
+        bNillFound = isNilValue();
 
     if (RPC_ENCODED == m_nStyle)
     {
-        m_pNode = m_pParser->next ();
-        if (!m_pNode)
-           return;
-
-        if (0 == strcmp (pName, m_pNode->m_pchNameOrValue))
-            bNillFound = isNillValue();
-
+        // it is an error if type is different if the type exists
         bool foundType;
-        XSDTYPE theType = getXSDType(m_pNode, foundType);
-
-        if (bNillFound || isArrayElement || (pSimpleType->getType() == theType) || !foundType)
-        {
-            m_pNode = m_pParser->next (true);   /* charactor node */
-            if (!m_pNode)
-              return;
-              
-            if (CHARACTER_ELEMENT == m_pNode->m_type)
-            {
-                const AxisChar* elementValue = m_pNode->m_pchNameOrValue;
-                                    
-                // FJP Added this code for fault finding.  As added protection against
-                //     false findings, the namespace has been set to an invalid
-                //     value of a single space character.
-                if (pNamespace != NULL && *pNamespace == ' ')
-                    processFaultDetail(pSimpleType, elementValue);
-                else
-                {
-                    pSimpleType->deserialize(elementValue);
-                    skipEndNode();
-                }
-            }
-            else if (END_ELEMENT == m_pNode->m_type) 
-            {
-                // xsi:nil="true" OR empty tag case <tag/>
-                pSimpleType->deserialize(bNillFound ? NULL : "");
-                m_pNode = NULL;
-            }                 
-
-            return;
-        }
-        else
-        {
-            /* it is an error if type is different or not present */
-        }
+        if (!bNillFound && !isArrayElement 
+                && (pSimpleType->getType() != getXSDType(m_pNode, foundType)) && foundType)
+            m_nStatus = AXIS_FAIL;
     }
-    else
+    else if (0 != strcmp (pName, m_pNode->m_pchNameOrValue))
+       return;
+    
+    if (AXIS_FAIL == m_nStatus)
+        return;
+        
+    // get next element, character mode 
+    if (AXIS_FAIL == getNextNode(false, true))
+       return;
+      
+    if (CHARACTER_ELEMENT == m_pNode->m_type)
     {
-        //DOC_LITERAL    
-    
-         if (!m_pNode)
-            m_pNode = m_pParser->next ();
-         if (!m_pNode)
-            return;
-    
-         if (0 == strcmp (pName, m_pNode->m_pchNameOrValue))
-         {
-            bNillFound = isNillValue();
-    
-            m_pNode = m_pParser->next (true);   /* charactor node */
-            if (!m_pNode)
-                return;
-                
-            if (CHARACTER_ELEMENT == m_pNode->m_type)
-            {
-                const AxisChar* elementValue = m_pNode->m_pchNameOrValue;
-
-                // FJP Added this code for fault finding.  As added protection against
-                //     false findings, the namespace has been set to an invalid
-                //     value of a single space character.
-                if (pNamespace != NULL && *pNamespace == ' ')
-                    processFaultDetail(pSimpleType, elementValue);
-                else
-                {
-                    pSimpleType->deserialize(elementValue);
-                    skipEndNode();
-                }
-            }
-            else if (END_ELEMENT == m_pNode->m_type) 
-            {
-                // xsi:nil="true" OR empty tag case <tag/>
-                pSimpleType->deserialize(bNillFound ? NULL : "");
-                m_pNode = NULL;
-            }        
-
-            return;
-         }
+        const AxisChar* elementValue = m_pNode->m_pchNameOrValue;
+                            
+        // Code for fault finding.  As added protection against false findings, 
+        // the namespace has been set to an invalid value of a single space character.
+        if (pNamespace != NULL && *pNamespace == ' ')
+            processFaultDetail(pSimpleType, elementValue);
         else
-            return;
+        {
+            pSimpleType->deserialize(elementValue);
+            skipNode();
+        }
     }
-    
-    m_nStatus = AXIS_FAIL;    /* unexpected SOAP stream */
+    else if (END_ELEMENT == m_pNode->m_type)
+    {
+        // xsi:nil="true" OR empty tag case <tag/>
+        pSimpleType->deserialize(bNillFound ? NULL : "");
+        m_pNode = NULL;
+    }
 
     return;
 }
@@ -1813,37 +1628,12 @@ getElementAsNOTATION (const AxisChar * pName, const AxisChar * pNamespace)
     return simpleType.getNOTATION();
 }
 
-xsd__base64Binary SoapDeSerializer::
-decodeFromBase64Binary (const AxisChar * pValue)
-{
-    xsd__base64Binary value;
-    xsd__int size = apr_base64_decode_len (pValue);
-    xsd__unsignedByte * pTemp = new xsd__unsignedByte[size + 1];
-    size = apr_base64_decode_binary (pTemp, pValue);
-    pTemp[size] = 0; // Null terminate so it could used as a string
-    value.set(pTemp, size);
-    delete [] pTemp;
-    return value;
-}
-
-xsd__hexBinary SoapDeSerializer::
-decodeFromHexBinary (const AxisChar * pValue)
-{
-    xsd__hexBinary value;
-    xsd__int size = strlen (pValue) / 2;
-    xsd__unsignedByte * pTemp = new xsd__unsignedByte[size + 1];
-    Hex_Decode (pTemp, pValue);
-    pTemp[size] = 0; // Null terminate so it could be used as a string
-    value.set(pTemp, size);
-    delete [] pTemp;
-    return value;
-}
-
 xsd__string SoapDeSerializer::
 getFaultAsXMLString()
 {
     if (AXIS_SUCCESS != m_nStatus || RPC_ENCODED == m_nStyle)
         return NULL;
+        
     AnyType *any = getAnyObject();
     int len = 1, i; // Add 1 for the null terminator
     for (i=0; i<any->_size; i++)
@@ -1870,7 +1660,7 @@ getFaultAsXMLString()
 XSDTYPE SoapDeSerializer::
 getXSDType (const AnyElement * pElement, bool & foundType)
 {
-    foundType = true;
+    foundType = false;
     
     /* first check whether this is a start element node */
     if (START_ELEMENT != pElement->m_type)
@@ -1890,11 +1680,11 @@ getXSDType (const AnyElement * pElement, bool & foundType)
                     type = TypeMapping::map (qn.localname);
             }
             qn.mergeQNameString (':');
+            foundType = true;
             return type;
         }
     }
 
-    foundType = false;
     return XSD_UNKNOWN;
 }
 
@@ -1908,7 +1698,7 @@ HeaderBlock * SoapDeSerializer::
 getHeaderBlock ()
 {
     if (!m_pHeader)
-    return NULL;
+        return NULL;
 
     return (HeaderBlock *) m_pHeader->getHeaderBlock (true);
 }
@@ -1930,51 +1720,84 @@ xsd__hexBinary SoapDeSerializer::
 getBodyAsHexBinary ()
 {
     /* TODO */
-    xsd__hexBinary hb;
-    return hb;
+    getNextNode();
+    
+    // skip the BODY element declaration
+    if ((START_ELEMENT == m_pNode->m_type)
+            && (0 == strcmp (m_pNode->m_pchNameOrValue, 
+                             SoapKeywordMapping::map (m_nSoapVersion).pchWords[SKW_BODY])))
+        getNextNode();
+
+    string bodyContent = "";
+    
+    if (m_pNode)
+    {
+        while (!((END_ELEMENT == m_pNode->m_type) &&
+               (0 == strcmp (m_pNode->m_pchNameOrValue,
+                             SoapKeywordMapping::map (m_nSoapVersion).pchWords[SKW_BODY]))))
+            bodyContent += AnyElemntUtils::toString(m_pNode);
+    }
+        
+    xsd__hexBinary value;
+    xsd__int size = bodyContent.length() / 2;
+    xsd__unsignedByte * pTemp = new xsd__unsignedByte[size + 1];
+    Hex_Decode (pTemp, bodyContent.c_str());
+    pTemp[size] = 0; // Null terminate so it could be used as a string
+    value.set(pTemp, size);
+    delete [] pTemp;
+
+    return value;     
 }
 
 xsd__base64Binary SoapDeSerializer::
 getBodyAsBase64Binary ()
 {
     /* TODO */
+    getNextNode();
+    
+    // skip the BODY element declaration
+    if ((START_ELEMENT == m_pNode->m_type)
+            && (0 == strcmp (m_pNode->m_pchNameOrValue, 
+                             SoapKeywordMapping::map (m_nSoapVersion).pchWords[SKW_BODY])))
+        getNextNode();
 
-    pBodyContent = new AxisChar[1000];
-    pBodyContent[0] = '\0';
-
-    m_pNode = m_pParser->next ();
-
-    if ((START_ELEMENT == m_pNode->m_type) &&
-    (0 == strcmp (m_pNode->m_pchNameOrValue,
-                  SoapKeywordMapping::map (m_nSoapVersion).pchWords[SKW_BODY])))
+    string bodyContent = "";
+    
+    if (m_pNode)
     {
-        /* This is done to skip the BODY element declaration */
-        m_pNode = m_pParser->next ();
+        while (!((END_ELEMENT == m_pNode->m_type) &&
+               (0 == strcmp (m_pNode->m_pchNameOrValue,
+                             SoapKeywordMapping::map (m_nSoapVersion).pchWords[SKW_BODY]))))
+            bodyContent += AnyElemntUtils::toString(m_pNode);
     }
 
-    while (!((END_ELEMENT == m_pNode->m_type) &&
-           (0 == strcmp (m_pNode->m_pchNameOrValue,
-                         SoapKeywordMapping::map (m_nSoapVersion).pchWords[SKW_BODY]))))
-        strcat (pBodyContent, (AnyElemntUtils::toString (m_pNode)).c_str ());
-
-    return decodeFromBase64Binary (pBodyContent);
+    xsd__base64Binary value;
+    xsd__int size = apr_base64_decode_len (bodyContent.c_str());
+    xsd__unsignedByte * pTemp = new xsd__unsignedByte[size + 1];
+    size = apr_base64_decode_binary (pTemp, bodyContent.c_str());
+    pTemp[size] = 0; // Null terminate so it could used as a string
+    value.set(pTemp, size);
+    delete [] pTemp;
+    return value;
 }
 
 AxisChar *SoapDeSerializer::
 getBodyAsChar ()
 {
+    if (AXIS_FAIL == getNextNode())
+        return NULL;
+
+    // skip the BODY element declaration 
+    if ((START_ELEMENT == m_pNode->m_type)
+            && (0 == strcmp (m_pNode->m_pchNameOrValue,
+                             SoapKeywordMapping::map (m_nSoapVersion).pchWords[SKW_BODY])))
+    {
+        if (AXIS_FAIL == getNextNode())
+            return NULL;
+    }
+    
     pBodyContent = new AxisChar[1000];
     pBodyContent[0] = '\0';
-
-    m_pNode = m_pParser->next ();
-
-    if ((START_ELEMENT == m_pNode->m_type) &&
-        (0 == strcmp (m_pNode->m_pchNameOrValue,
-                      SoapKeywordMapping::map (m_nSoapVersion).pchWords[SKW_BODY])))
-    {
-        /* This is done to skip the BODY element declaration */
-        m_pNode = m_pParser->next ();
-    }
 
     while (!((END_ELEMENT == m_pNode->m_type) &&
            (0 == strcmp (m_pNode->m_pchNameOrValue,
@@ -2015,10 +1838,12 @@ flushInputStream ()
 AnyType * SoapDeSerializer::
 getAnyObject ()
 {
-    AnyType *pAny = new AnyType ();
-    pAny->_array = 0;
-    pAny->_size = 0;
-
+    // Parser will throw an exception on a parser exception, that is ok...
+    if (!m_pNode)
+        m_pNode = m_pParser->anyNext();
+    if (!m_pNode)
+        return NULL;
+    
     int tagCount = 0;
     int lstSize = 0;
     bool bContinue = false;
@@ -2027,9 +1852,6 @@ getAnyObject ()
     AxisString nsDecls = "";
 
     list < AxisString > lstXML;
-
-    if (!m_pNode)
-        m_pNode = m_pParser->anyNext();
 
     while ((END_ELEMENT != m_pNode->m_type) || (tagCount >= 0) || bContinue)
     {
@@ -2049,13 +1871,7 @@ getAnyObject ()
         if (START_PREFIX == m_pNode->m_type)
         {
             nsDecls += " xmlns";
-            /* why dont parser return null if there is no
-             * prefix. Expat return null but not xerces.
-             * TODO : will have to remove following strcmp s onece Xerces is 
-             * corrected
-             */
-            if (m_pNode->m_pchNameOrValue
-                && (strcmp (m_pNode->m_pchNameOrValue, "") != 0))
+            if (m_pNode->m_pchNameOrValue && (*(m_pNode->m_pchNameOrValue) != 0x00))
             {
                 nsDecls += ":";
                 nsDecls += m_pNode->m_pchNameOrValue;
@@ -2082,7 +1898,7 @@ getAnyObject ()
     
         m_pNode = m_pParser->anyNext ();
     
-        if (!m_pNode) // Samisa: there is something wrong in the XSD Any XML strean
+        if (!m_pNode) // there is something wrong in the XSD Any XML stream
         {          
             // Store whatever we have by now and break
             if (!xmlStr.empty ())
@@ -2094,18 +1910,25 @@ getAnyObject ()
         }
     }
 
-    lstSize = lstXML.size ();
-    pAny->_array = new char *[lstSize];
+    AnyType *pAny = new AnyType ();
+    pAny->_array = 0;
     pAny->_size = 0;
-
-    list < AxisString >::iterator i;    /* Iterator for traversing the list */
-
-    for (i = lstXML.begin (); i != lstXML.end (); i++)
+    
+    lstSize = lstXML.size ();
+    
+    if (lstSize > 0)
     {
-        const char *s = (*i).c_str ();
-        pAny->_array[pAny->_size] = new char[strlen (s) + 1];
-        strcpy (pAny->_array[pAny->_size], s);
-        pAny->_size++;
+        pAny->_array = new char *[lstSize];
+
+        list < AxisString >::iterator i;    /* Iterator for traversing the list */
+    
+        for (i = lstXML.begin (); i != lstXML.end (); i++)
+        {
+            const char *s = (*i).c_str ();
+            pAny->_array[pAny->_size] = new char[strlen (s) + 1];
+            strcpy (pAny->_array[pAny->_size], s);
+            pAny->_size++;
+        }
     }
 
     return pAny;
@@ -2163,22 +1986,13 @@ SoapDeSerializer::serializeTag (AxisString & xmlStr,
                         pchPrefix = m_pParser->getPrefix4NS (node->m_pchAttributes[j + 1]);
                     else
                         pchPrefix = NULL;
-                        
-                    /* why dont parser return null if there is no
-                     * prefix. Expat does but not xerces.
-                     * TODO : will have to remove following strcmp s onece Xerces is 
-                     * corrected
-                     */
-                    if (pchPrefix && (strcmp (pchPrefix, "") != 0))
+                       
+                    xmlStr += " ";
+
+                    if (pchPrefix && (*pchPrefix != 0x00))
                     {
-                        xmlStr += " ";
                         xmlStr += pchPrefix;
                         xmlStr += ":";
-                    }
-                    else
-                    {
-                        // if there is no prefix then we need to add a space
-                        xmlStr +=" ";
                     }
                     
                     xmlStr += node->m_pchAttributes[j];
@@ -2199,20 +2013,12 @@ SoapDeSerializer::serializeTag (AxisString & xmlStr,
     else if (END_ELEMENT == node->m_type)
     {
         xmlStr += "</";
-        /* if (node->m_pchNamespace) why dont parser set null if there is no
-         * namespace. Expat set null but not xerces.
-         * TODO : will have to remove following strcmp s onece Xerces is 
-         * corrected
-         */
-        if (node->m_pchNamespace && (strcmp (node->m_pchNamespace, "") != 0))
+
+        if (node->m_pchNamespace && (*(node->m_pchNamespace) != 0x00))
         {
             pchPrefix = m_pParser->getPrefix4NS (node->m_pchNamespace);
-            /* why dont parser return null if there is no
-             * prefix. Expat does but not xerces.
-             * TODO : will have to remove following strcmp s onece Xerces is 
-             * corrected
-             */
-            if (pchPrefix && (strcmp (pchPrefix, "") != 0))
+
+            if (pchPrefix && (*pchPrefix != 0x00))
             {
                 xmlStr += pchPrefix;
                 xmlStr += ":";
@@ -2234,18 +2040,18 @@ SoapDeSerializer::serializeTag (AxisString & xmlStr,
                 //
                 // There has got to be a better way of doing this, but it was not obvious at
                 // the time!
-                const char *    pszXML = xmlStr.c_str();
-                char *            pNSEnd = (char *)strchr( pszXML, ':');
-                char *            pTagEnd = (char *)strchr( pszXML, '>');
+                const char *pszXML = xmlStr.c_str();
+                char *      pNSEnd = (char *)strchr( pszXML, ':');
+                char *      pTagEnd = (char *)strchr( pszXML, '>');
 
                 if( pNSEnd && (pNSEnd < pTagEnd))
                 {
-                    int                iNSStart = 1;
-                    int                iNSEnd = (int) (strchr( pszXML, ':') - pszXML) - iNSStart;
-                    string            sNamespace = xmlStr.substr( iNSStart, iNSEnd);
-                    int                iTagEnd = 0;
-                    char *            pSpace = (char *)strchr( pszXML, ' ');
-                    char *            pBrace = (char *)strchr( pszXML, '>');
+                    int      iNSStart = 1;
+                    int      iNSEnd = (int) (strchr( pszXML, ':') - pszXML) - iNSStart;
+                    string   sNamespace = xmlStr.substr( iNSStart, iNSEnd);
+                    int      iTagEnd = 0;
+                    char *   pSpace = (char *)strchr( pszXML, ' ');
+                    char *   pBrace = (char *)strchr( pszXML, '>');
 
                     if( pSpace == NULL)
                         iTagEnd = pSpace - pszXML;
@@ -2277,11 +2083,12 @@ SoapDeSerializer::serializeTag (AxisString & xmlStr,
 
 void SoapDeSerializer::
 getChardataAs (void **pValue, XSDTYPE type)
-{
-    if (!m_pNode)
-       m_pNode = m_pParser->next (true);    /* charactor node */
-       
-    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+{  
+    if (!pValue || AXIS_FAIL == getNextNode(true, true))
+        return;
+    
+    *pValue = NULL;
+    if (CHARACTER_ELEMENT == m_pNode->m_type)
     {
         IAnySimpleType* pSimpleType = AxisUtils::createSimpleTypeObject(type);
         pSimpleType->deserialize(m_pNode->m_pchNameOrValue);
@@ -2304,9 +2111,11 @@ getBytes (char *pcBuffer, int *piRetSize)
 {
     if (!m_pcDeSeriaMemBuffer)
         return TRANSPORT_FAILED;
+        
     int nBufLen = strlen (m_pcDeSeriaMemBuffer);
     if (0 == nBufLen)
         return TRANSPORT_FINISHED;
+        
     nBufLen = ((*piRetSize - 1) < nBufLen) ? (*piRetSize - 1) : nBufLen;
     strncpy (pcBuffer, m_pcDeSeriaMemBuffer, nBufLen);
     pcBuffer[nBufLen] = 0;

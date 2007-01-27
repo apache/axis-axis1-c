@@ -35,14 +35,6 @@
 #include <xercesc/parsers/SAXParser.hpp>
 #include <xercesc/framework/XMLPScanToken.hpp>
 #include "SoapInputSource.h"
-#include "../AxisParseException.h"
-/*
-Try this again at some point in the future.  At the moment it works on
-Windows, but Linux as a problem...will keep for OS/400.
-*/
-#ifdef __OS400__
-#include "../../transport/axis3/HTTPTransportException.hpp"
-#endif
 
 XERCES_CPP_NAMESPACE_USE
 
@@ -55,13 +47,14 @@ public:
 
     int setInputStream(AxisIOStream* pInputStream);
     const XML_Ch* getNS4Prefix(const XML_Ch* pcPrefix);
-    int getStatus();
     const AnyElement* next(bool bIsCharData=false);
     const AnyElement* anyNext();
     const char* peek();
     const XML_Ch* getPrefix4NS(const XML_Ch* pcNS);
 
 private:
+    const AnyElement* parse(bool ignoreWhitespace=true, bool peekIt=false);
+
     SAX2XMLReader* m_pParser;
     XMLPScanToken m_ScanToken;
     XercesHandler m_Xhandler;

@@ -49,12 +49,11 @@ private:
     XMLParser* m_pParser;
     /* Current Serialization Style */
     AXIS_BINDING_STYLE m_nStyle;
-    /* Last procesed node needed when the attributes are processed and to determine if empty element */
+    /* Last procesed node needed when the attributes are processed */
     const AnyElement* m_pCurrNode;
     const AnyElement* m_pNode;
     SOAP_VERSION m_nSoapVersion;
     AxisChar* m_pEndptr; 
-    /* used as a parameter to strtoXX conversion functionss */
     int m_nStatus;
     /* Provider type of current service that uses this DeSerializer object */
     PROVIDERTYPE m_ProviderType;
@@ -63,7 +62,7 @@ private:
     string m_strMethodNameToInvoke;
 
 private:
-    int AXISCALL getArraySize(const AnyElement* pElement);
+    int AXISCALL getArraySize();
 public:
     int init();
     int getVersion();
@@ -108,20 +107,12 @@ public:
      * Note:  returned Axis_Array object is the same object as passed in to this
      * method. */
     Axis_Array* AXISCALL getCmplxArray(Axis_Array* pArray, void* pDZFunct, void* pCreFunct, 
-        void* pDelFunct, const AxisChar* pName, 
-        const AxisChar* pNamespace);
+        void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace);
     /* Method used by wrappers to get a deserialized Array of basic types */
-    Axis_Array* AXISCALL getBasicArray(XSDTYPE nType, const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    /* Method used by wrappers to get a deserialized single 
-     * object of complex type 
-     */
+    Axis_Array* AXISCALL getBasicArray(XSDTYPE nType, const AxisChar* pName, const AxisChar* pNamespace);
+    /* Method used by wrappers to get a deserialized single object of complex type */    
     void* AXISCALL getCmplxObject(void* pDZFunct, void* pCreFunct, 
-        void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace);
-    
-    const char* AXISCALL getCmplxFaultObjectName();
-    void* AXISCALL getCmplxFaultObject(void* pDZFunct, void* pCreFunct,
-        void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace);
+        void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace, bool isFault=false);
 
     /* Methods used by wrappers to get a deserialized value of basic types */
     void getElement (const AxisChar* pName, const AxisChar* pNamespace, 
@@ -331,7 +322,7 @@ public:
      *     DeSerializer.
      */
     class DeSerializerMemBufInputStream : public AxisIOStream
-        {
+    {
         private:
                 const char* m_pcDeSeriaMemBuffer;
         public:
@@ -340,21 +331,17 @@ public:
                 virtual ~DeSerializerMemBufInputStream(){};
                 AXIS_TRANSPORT_STATUS sendBytes(const char* pcSendBuffer, const void* pBufferid);
                 AXIS_TRANSPORT_STATUS getBytes(char* pcBuffer, int* piRetSize);
-        };
+    };
 
 
 
 private:
-    xsd__base64Binary decodeFromBase64Binary(const AxisChar* pValue);
-    xsd__hexBinary decodeFromHexBinary(const AxisChar* pValue);
-    void deserializeLiteralArray (Axis_Array* pArray, IAnySimpleType* pSimpleType, const AxisChar* pName, const AxisChar* pNamespace);
-    void deserializeEncodedArray (Axis_Array* pArray, IAnySimpleType* pSimpleType, const AxisChar* pName, const AxisChar* pNamespace, int size);
-	void deserializeLiteralComplexArray(Axis_Array * pArray, void *pDZFunct, void *pCreFunct, void *pDelFunct,  const AxisChar * pName, const AxisChar * pNamespace);
-	void deserializeEncodedComplexArray(Axis_Array * pArray, void *pDZFunct, void *pCreFunct, void *pDelFunct, const AxisChar * pName, const AxisChar * pNamespace, int size);
-    void skipEndNode();
     void processFaultDetail(IAnySimpleType * pSimpleType, const AxisChar* elementValue);
-    bool isNillValue();
+    bool isNilValue();
     XSDTYPE getXSDType(const AnyElement* pElement, bool &foundType);
+    int skipNode(bool verifyIfEndNode=false, bool throwExcOnError=true);
+    int getNextNode(bool ifNotSet=false, bool characterMode=false, bool throwExcOnError=true); 
+    void throwParserException();
 };
 
 AXIS_CPP_NAMESPACE_END

@@ -1,8 +1,10 @@
 Result is:2
-AxisException has occured: HTTPTransportException: HTTP transport error.
+AxisParseException: Error when getting the byte stream from the transport.
+HTTPTransportException: HTTP transport error.
 Server sent HTTP error: 'Not Found'
 
-AxisException has occured: HTTPTransportException: HTTP transport error.
+AxisParseException: Error when getting the byte stream from the transport.
+HTTPTransportException: HTTP transport error.
 Server sent HTTP error: 'Not Found'
 
 ---------------------- TEST COMPLETE -----------------------------

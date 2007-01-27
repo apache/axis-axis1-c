@@ -14,11 +14,6 @@
  *   limitations under the License.
  */
 
-/*
- * @author sanjaya singharage (sanjayas@opensource.lk)
- */
-
-
 #ifdef WIN32
 #pragma warning (disable : 4786)
 #pragma warning (disable : 4101)
@@ -29,20 +24,23 @@
 
 #include <string>
 #include "XMLParserXerces.h"
+#include "../AxisParseException.h"
+#include "../../transport/axis3/HTTPTransportException.hpp"
+
 #include <xercesc/sax2/XMLReaderFactory.hpp>
 
 XERCES_CPP_NAMESPACE_USE
 using namespace std;
 
 XMLParserXerces::
-XMLParserXerces()
+XMLParserXerces() : XMLParser()
 {
+    m_pInputSource = NULL;
     m_bFirstParsed = false;
     m_bPeeked = false;
-    m_pParser = XMLReaderFactory::createXMLReader();
-    m_pInputSource = NULL;
-    m_bCanParseMore = false;
     m_bStartEndElement = false;
+    m_pParser = XMLReaderFactory::createXMLReader();
+    m_pParser->setErrorHandler(&m_Xhandler);
 }
 
 XMLParserXerces::
@@ -69,7 +67,9 @@ setInputStream(AxisIOStream* pInputStream)
 
     m_bFirstParsed = false;
     m_bPeeked = false;
-    m_bCanParseMore = false;
+    m_bCanParseMore = true;
+    m_iStatus = AXIS_SUCCESS;
+    m_sErrorString = "";
     
     return AXIS_SUCCESS;
 }
@@ -80,132 +80,149 @@ getNS4Prefix(const XML_Ch* prefix)
     return m_Xhandler.ns4Prefix(prefix);
 }
 
-int XMLParserXerces::
-getStatus()
-{
-    return m_Xhandler.getStatus();
-}
-
 const AnyElement* XMLParserXerces::
-next(bool isCharData)
+parse(bool ignoreWhitespace, bool peekIt)
 {
-    if( !m_bFirstParsed)
+    try 
     {
-//    Try this again at some point in the future.  At the moment it works on
-//    Windows, but Linux has a problem...will keep for OS/400
-#ifndef __OS400__           
-        m_bCanParseMore = m_pParser->parseFirst( *m_pInputSource, m_ScanToken);
-#else
-        try
+        // Need to do a parseFirst() to kick off parsing
+        if (!m_bFirstParsed) 
         {
+            // if exception is thrown on parseFirst()
+            m_bCanParseMore = false;
+            m_bFirstParsed = true;
+             
             m_bCanParseMore = m_pParser->parseFirst( *m_pInputSource, m_ScanToken);
+            if (!m_bCanParseMore)
+                return (const AnyElement*)NULL;
         }
-        catch( const XMLException& toCatch)
-        {
-            char *    message = XMLString::transcode( toCatch.getMessage());
 
-            // Clone the error message before deleting it.
-            std::string sErrorMsg = message;
-            XMLString::release( &message);
-
-            throw AxisParseException( CLIENT_SOAP_CONTENT_NOT_SOAP, sErrorMsg.c_str());
-        }
-        catch( const SAXParseException& toCatch)
-        {
-            char *    message = XMLString::transcode( toCatch.getMessage());
-
-            // Clone the error message before deleting it.
-            std::string sErrorMsg = message;
-            XMLString::release( &message);
-
-            throw AxisParseException( CLIENT_SOAP_CONTENT_NOT_SOAP, sErrorMsg.c_str());
-        }
-        catch( HTTPTransportException & e)
-        {
-            throw;
-        }
-        catch( ...)
-        {
-            char *pErrorMsg = "Unexpected exception in SAX parser.";
-            
-            throw AxisParseException( CLIENT_SOAP_CONTENT_NOT_SOAP, pErrorMsg);
-        }
-#endif
-        m_bFirstParsed = true;
-    }
-    
-    if(!m_bPeeked) 
-        m_Xhandler.freeElement();
+        // release any element that has been consumed
+        if(!m_bPeeked) 
+            m_Xhandler.freeElement();
+       
+        // Get element
+        AnyElement* elem = m_Xhandler.getAnyElement();
         
-    // set flag to false since we are going to read next node
-    m_bStartEndElement = false;
-    
-    AnyElement* elem;
-    while (m_bCanParseMore && AXIS_FAIL != m_Xhandler.getStatus())
-    {        
-        // See if we have a token to consume
-        elem = m_Xhandler.getAnyElement();
-        
-        // Since we have consumed whatever is there, ensure peek flag is set to false
+        // Since we consumed element set peek to false
         m_bPeeked = false;
 
-        // If we do not have an element, then parse next token; else if
-        // whitespace, ignore whitespace; else return token
-        if (!elem)
-            m_bCanParseMore = m_pParser->parseNext(m_ScanToken);
-        else if (!isCharData && (CHARACTER_ELEMENT == elem->m_type))
-            m_Xhandler.freeElement();
-        else
+        // set flag to false since we are going to read next node
+        if (!peekIt)
+            m_bStartEndElement = false;          
+
+        // If element not obtained and no previous parsing error?
+        if (!elem && m_bCanParseMore)
+        {   
+            // get next token, possibly ignoring whitespace
+            while (m_bCanParseMore && m_iStatus == AXIS_SUCCESS)
+            {            
+                // if exception is thrown on parseNext()
+                m_bCanParseMore = false; 
+            
+                // parse next token
+                m_bCanParseMore = m_pParser->parseNext(m_ScanToken);
+                
+                // if we cannot parse anymore, break out!
+                if (!m_bCanParseMore)
+                    break;
+                
+                // Get parsed element
+                elem = m_Xhandler.getAnyElement();
+                if (!elem)
+                    continue;   
+                                 
+                // Ignore whitespace?
+                if (ignoreWhitespace && (CHARACTER_ELEMENT == elem->m_type))
+                {
+                    elem = NULL;
+                    m_Xhandler.freeElement();
+                }
+                else
+                    break;
+            }          
+        }
+        
+        // Set some state flags
+        if (elem)
         {
             // Keep track of when we give back a start-end element in order to ensure
             // that peek() - which is used to determine optional elements or elements 
             // that are not in order (e.g. xsd:all support) - returns a null string 
-            if (elem->m_type == START_ELEMENT && elem->m_type2 == START_END_ELEMENT)
-               m_bStartEndElement = true;
-            return elem;
+            if (!peekIt && elem->m_type == START_ELEMENT && elem->m_type2 == START_END_ELEMENT)
+               m_bStartEndElement = true;          
+            
+            // Set peek flag if we are doing a peek
+            if (peekIt)
+                m_bPeeked = true;
         }
+        
+        // Return element
+        return (const AnyElement*)elem;
+    } 
+    catch( const SAXParseException& e) 
+    {
+        char *message = XMLString::transcode( e.getMessage());
+        m_sErrorString = message;
+        m_iErrorCode = SERVER_PARSE_PARSER_FAILED;
+        m_iStatus = AXIS_FAIL;
+        XMLString::release( &message);
+        
+        throw AxisParseException(m_iErrorCode, m_sErrorString.c_str());
+    } 
+    catch( const XMLException& e)
+    {
+        char *message = XMLString::transcode( e.getMessage());
+        m_sErrorString = message;
+        m_iErrorCode = SERVER_PARSE_PARSER_FAILED;
+        m_iStatus = AXIS_FAIL;
+        XMLString::release( &message);
+        
+        throw AxisParseException(m_iErrorCode, m_sErrorString.c_str());        
+    }    
+    catch( HTTPTransportException & e)
+    {
+        m_sErrorString = e.what();
+        m_iErrorCode = SERVER_PARSE_TRANSPORT_FAILED;
+        m_iStatus = AXIS_FAIL;
+        
+        throw AxisParseException(m_iErrorCode, m_sErrorString.c_str());        
+    }    
+    catch(...) 
+    {
+        m_sErrorString = "Unexpected exception in parser.";
+        m_iErrorCode = SERVER_PARSE_PARSER_FAILED;
+        m_iStatus = AXIS_FAIL;
+        
+        throw AxisParseException(m_iErrorCode, m_sErrorString.c_str());         
     }
     
-    return NULL;
+    return (const AnyElement*)NULL;
 }
+
+const AnyElement* XMLParserXerces::
+next(bool isCharData)
+{    
+    return parse(isCharData ? false : true);
+}
+
 // New method which peek a head next element 
 // Here always Peek() will call after the first pase done
 const char* XMLParserXerces::
 peek()
-{
+{   
     // peek() is used to determine optional elements or elements 
     // that are not in order (e.g. xsd:all support) - return a null string if 
     // the last node processed was a start/end element
     if (m_bStartEndElement)
         return "";
-        
-    if (!m_bPeeked)
-    {
-        if(!m_bFirstParsed)
-        {
-            m_bCanParseMore = m_pParser->parseFirst(*m_pInputSource, m_ScanToken);
-            m_bFirstParsed = true;
-        }
-        
-        m_Xhandler.freeElement();
-        
-        AnyElement* elem;
-        while (m_bCanParseMore && AXIS_FAIL != m_Xhandler.getStatus())
-        {
-            // Attempt to get token
-            m_bCanParseMore = m_pParser->parseNext(m_ScanToken);                            
-            elem = m_Xhandler.getAnyElement();
-            
-            // we never peek for char data hence this is a white space - ignore it.
-            if (m_bCanParseMore && elem && CHARACTER_ELEMENT == elem->m_type)
-                m_Xhandler.freeElement();
-            else
-                break;
-         }
-    }
-
-    m_bPeeked = true;
     
+    // get element, ignoring whitespace and indicating this is a peek operation   
+    const AnyElement* elem = parse(true, true);
+    if (!elem)
+        return "";
+    
+    // We return null string if end-element or unknown type is encountered
     const XML_NODE_TYPE type = m_Xhandler.peekNextElementType();
     if(type != END_ELEMENT && type != END_PREFIX && type != UNKNOWN)
     {
@@ -222,45 +239,14 @@ anyNext()
     // Say the SAX event handler to record prefix mappings too 
     // By default the event handler do not record them.
     m_Xhandler.setGetPrefixMappings(true);
-    if(!m_bFirstParsed)
-    {
-        m_bCanParseMore = m_pParser->parseFirst(*m_pInputSource, m_ScanToken);
-        m_bFirstParsed = true;
-    }
-
-    if(!m_bPeeked) 
-        m_Xhandler.freeElement();
-
-    // set flag to false since we are going to read next node
-    m_bStartEndElement = false;
-
-    AnyElement* elem;
-    while (m_bCanParseMore && AXIS_FAIL != m_Xhandler.getStatus())
-    {
-        // See if we have a token to consume
-        elem = m_Xhandler.getAnyElement();
-        
-        // Since we have consumed whatever is there, ensure peek flag is set to false
-        m_bPeeked = false;
-        
-        // If we do not have an element, then parse next token;  
-        // else return token
-        if (!elem)
-            m_bCanParseMore = m_pParser->parseNext(m_ScanToken);
-        else
-        {
-            // Keep track of when we give back a start-end element in order to ensure
-            // that peek() - which is used to determine optional elements or elements 
-            // that are not in order (e.g. xsd:all support) - returns a null string 
-            if (elem->m_type == START_ELEMENT && elem->m_type2 == START_END_ELEMENT)
-               m_bStartEndElement = true;
-                           
-            m_Xhandler.setGetPrefixMappings(false);
-            return elem;
-        }
-    }
     
-    return NULL;
+    // get element, ensuring that whitespace is not ignored
+    const AnyElement* elem = parse(false);
+    
+    // Reset prefix mapping
+    m_Xhandler.setGetPrefixMappings(false);
+    
+    return elem;
 }
 
 const XML_Ch* XMLParserXerces::

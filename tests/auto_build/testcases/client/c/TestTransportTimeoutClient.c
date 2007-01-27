@@ -23,8 +23,7 @@
 void myExceptionHandler(int errorCode, const char *errorString, void *soapFault, void *faultDetail)
 {
     exceptionOccurred = C_TRUE;    
-    printf("in AxisException block\n");
-    printf("Exception : %s\n",  errorString);
+    printf("%s\n",  errorString);
 }
 
 
