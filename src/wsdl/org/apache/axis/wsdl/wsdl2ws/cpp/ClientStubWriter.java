@@ -210,6 +210,7 @@ public class ClientStubWriter extends CPPClassWriter
         boolean returntypeissimple = false;
         boolean returntypeisarray = false;
         String outparamType = null;
+
         if (returntype != null)
         {
             outparamType = WrapperUtils.getClassNameFromParamInfoConsideringArrays(returntype, wscontext);
@@ -221,14 +222,17 @@ public class ClientStubWriter extends CPPClassWriter
                     returntypeissimple = true;
             }
         }
+
         writer.write("\n/*\n");
         writer.write(" * This method wrap the service method " + methodName + "\n");
         writer.write(" */\n");
+
         //method signature
         String paramTypeName;
         boolean typeisarray = false;
         boolean typeissimple = false;
         Type type;
+
         if (returntype == null)
             writer.write("void");
         else if (returntypeissimple
@@ -311,11 +315,11 @@ public class ClientStubWriter extends CPPClassWriter
             }
         }
 
-        writer.write("\tconst char *\tpcCmplxFaultName = NULL;\n\n");
-        writer.write("\ttry\n\t{");
-        writer.write("\n\t\tif( AXIS_SUCCESS != m_pCall->initialize( CPP_RPC_PROVIDER"
-                        + "))\n\t\t{\n\t\t\treturn ");
-
+        writer.write("\tconst char* pcCmplxFaultName = NULL;\n\n");
+        writer.write("\ttry\n\t{\n");
+        
+        writer.write("\t\tif (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER" + "))\n");
+        writer.write("\t\t\treturn ");
         if (returntype != null)
         {
             if (returntypeisarray)
@@ -330,12 +334,12 @@ public class ClientStubWriter extends CPPClassWriter
         }
         else
             writer.write(";\n");
-
-        writer.write("\t\t}\n\n");
+        writer.write("\n");
 
         writer.write("\t\tif( NULL == m_pCall->getTransportProperty( \"SOAPAction\", false))\n");
         writer.write("\t\t\tm_pCall->setTransportProperty( SOAPACTION_HEADER,\"" + minfo.getSoapAction() + "\");\n");
         writer.write("\n");
+        
         writer.write("\t\tm_pCall->setSOAPVersion( SOAP_VER_1_1);\n");
         //TODO check which version is it really.
         
@@ -349,8 +353,8 @@ public class ClientStubWriter extends CPPClassWriter
         
         //new calls from stub base
         writer.write("\n");
-        writer.write ("\tincludeSecure();\n");
-        writer.write ("\tapplyUserPreferences();\n");
+        writer.write ("\t\tincludeSecure();\n");
+        writer.write ("\t\tapplyUserPreferences();\n");
         writer.write("\n");        
         
         for (int i = 0; i < paramsB.size(); i++)
@@ -597,7 +601,8 @@ public class ClientStubWriter extends CPPClassWriter
                                     + ",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"" + currentType.getParamName()
                                     + "\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t0);\n");
                 }
-            }
+            } // end for-loop for paramsC
+            
             writer.write("\t\t\t}\n");
             writer.write("\t\t}\n\n");
             writer.write("\t\tm_pCall->unInitialize();\n");

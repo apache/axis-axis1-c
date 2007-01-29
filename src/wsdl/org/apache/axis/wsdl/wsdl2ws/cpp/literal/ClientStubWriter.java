@@ -318,10 +318,11 @@ public class ClientStubWriter
             }
         }
         
-        writer.write ("\tconst char* pcCmplxFaultName = NULL;\n");
+        writer.write ("\tconst char* pcCmplxFaultName = NULL;\n\n");
         writer.write ("\ttry\n\t{\n");
     
-        writer.write("\tif (AXIS_SUCCESS != m_pCall->initialize(CPP_DOC_PROVIDER" + ")) return ");
+        writer.write("\tif (AXIS_SUCCESS != m_pCall->initialize(CPP_DOC_PROVIDER" + "))\n");
+        writer.write("\t\treturn ");
         if (returntype != null)
             writer.write ((returntypeisarray ? "RetArray" : returntypeissimple ? "Ret" : "pReturn") + ";\n");
         else
@@ -719,7 +720,7 @@ public class ClientStubWriter
                               + ", (void*) Axis_Delete_" + currentParaType + ",\"" 
                               + currentType.getElementNameAsString () + "\", 0);\n");
                 }
-            }
+            } // end for-loop for paramsC
             
             writer.write ("\t\t}\n");
             writer.write ("\t}\n");
@@ -1003,12 +1004,5 @@ public class ClientStubWriter
         writer.write ("\t\t}\n");
         writer.write ("\t}\n");
         writer.write ("}\n");
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.axis.wsdl.wsdl2ws.cpp.CPPClassWriter#writeGlobalCodes()
-     */
-    protected void writeGlobalCodes () throws WrapperFault
-    {
     }
 }
