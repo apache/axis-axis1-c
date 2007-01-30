@@ -116,6 +116,10 @@ public class ClientStubWriter
         if (returntype != null)
             returntypeissimple = CUtils.isSimpleType (outparamType);
 
+        //=============================================================================
+        // Generate method prototype
+        //=============================================================================        
+        
         writer.write ("\n/*\n");
         writer.write (" * This method wrap the service method" + methodName + "\n");
         writer.write (" */\n");
@@ -284,10 +288,14 @@ public class ClientStubWriter
     
         writer.write (")\n{\n");
         
+        //=============================================================================
+        // Generate global variables (outside of try block)
+        //=============================================================================   
+        
         if (returntype != null)
         {
             writer.write ("\t");
-            
+    
             if (returntypeisarray)
                 writer.write (outparamType + " * RetArray = new " + outparamType + "();\n");
             else if (!returntypeissimple)
@@ -319,6 +327,11 @@ public class ClientStubWriter
         }
         
         writer.write ("\tconst char* pcCmplxFaultName = NULL;\n\n");
+        
+        //=============================================================================
+        // Generate try block and method logic
+        //=============================================================================        
+                
         writer.write ("\ttry\n\t{\n");
     
         writer.write("\tif (AXIS_SUCCESS != m_pCall->initialize(CPP_DOC_PROVIDER" + "))\n");
@@ -877,132 +890,17 @@ public class ClientStubWriter
         }
     
         writer.write ("\t}\n");
-        writer.write ("\tcatch(AxisException& e)\n\t{\n");
-        writer.write ("\t\tint iExceptionCode = e.getExceptionCode();\n\n");
-        writer.write ("\t\tif(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)\n");
-        writer.write ("\t\t{\n");
-        writer.write ("\t\t\tm_pCall->unInitialize();\n");
-        writer.write ("\t\t\tthrow;\n");
-        writer.write ("\t\t}\n\n");
-        writer.write ("\t\tISoapFault* pSoapFault = (ISoapFault*)\n");
-        writer.write ("\t\t\tm_pCall->checkFault(\"Fault\",\""
-                  + wscontext.getWrapInfo ().getTargetEndpointURI () + "\" );\n\n");
-        writer.write ("\t\tif(pSoapFault)\n");
-        writer.write ("\t\t{\n");
-    
-        //to get fault info             
-        Iterator paramsFault = minfo.getFaultType ().iterator ();
-        String faultInfoName = null;
-        String faultType = null;
-        String langName = null;
-        String paramName = null;
-        boolean flag = false;
-        int j = 0;
-        if (!paramsFault.hasNext ())
-        {
-            writer.write ("\t\t\tconst char *detail = pSoapFault->getSimpleFaultDetail();\n");
-            writer.write ("\t\t\tbool deleteDetail=false;\n\n");
-            writer.write ("\t\t\tif (NULL==detail || 0==strlen(detail))\n");
-            writer.write ("\t\t\t{\n");
-            writer.write ("\t\t\t\tdetail=m_pCall->getFaultAsXMLString();\n");
-            writer.write ("\t\t\t\tif (NULL==detail)\n");
-            writer.write ("\t\t\t\t\tdetail=\"\";\n");
-            writer.write ("\t\t\t\telse\n");
-            writer.write ("\t\t\t\t\tdeleteDetail=true;\n");
-            writer.write ("\t\t\t}\n\n");
-            writer.write ("\t\t\tOtherFaultException ofe(pSoapFault->getFaultcode(),\n");
-            writer.write ("\t\t\t\tpSoapFault->getFaultstring(), pSoapFault->getFaultactor(),\n");
-            writer.write ("\t\t\t\tdetail, iExceptionCode);\n\n");
-            writer.write ("\t\t\tif (deleteDetail && NULL!=detail)\n");
-            writer.write ("\t\t\t\tAxis::AxisDelete( (void *) const_cast<char*>(detail), XSD_STRING);\n");
-            writer.write ("\n");
-            writer.write ("\t\t\tm_pCall->unInitialize();\n");
-            writer.write ("\t\t\tdelete pSoapFault;\n");
-            writer.write ("\t\t\tthrow ofe;\n");
-        }
-        else
-        {
-            flag = true;
-            writer.write ("\t\t\tpcCmplxFaultName = pSoapFault->getCmplxFaultObjectName();\n");
-        }
         
-        while (paramsFault.hasNext ())
-        {
-            j = j + 1;
-            FaultInfo info = (FaultInfo) paramsFault.next ();
-            faultInfoName = info.getFaultInfo ();
-    
-            // FJP - D0004 > Looking through the list of attributes for the 'error' part of
-            //               the fault message.  If found, update the faultInfoName with the
-            //               'localname' of the qname of the attribute.                         
-            Iterator infoArrayListIterator = info.getParams ().iterator ();
-            while (infoArrayListIterator.hasNext ())
-            {
-                ParameterInfo paramInfo = (ParameterInfo) infoArrayListIterator.next ();
+        //=============================================================================
+        // End of try block, beginning of catch block
+        //=============================================================================                
         
-                if (paramInfo != null)
-                    if ("error".equals (paramInfo.getParamName ()))
-                    {
-                        faultInfoName = paramInfo.getElementName ().getLocalPart ();
-                        break;
-                    }
-            }
-            // FJP - D0004 <                            
-    
-            ArrayList paramInfo = info.getParams ();
-            for (int i = 0; i < paramInfo.size (); i++)
-            {
-                ParameterInfo par = (ParameterInfo) paramInfo.get (i);
-                paramName = par.getParamName ();
-                langName = par.getLangName ();
-                faultType = WrapperUtils.getClassNameFromParamInfoConsideringArrays (par,wscontext);
-                if (j > 1)
-                {
-                    writer.write ("\t\t\telse if");
-                    writeExceptions (faultType, faultInfoName, paramName, langName);
-                }
-                else
-                {
-                    writer.write ("\t\t\tif");
-                    writeExceptions (faultType,faultInfoName, paramName, langName);
-                }
-            }
-        }
-        
-        if (flag == true)
-        {
-            writer.write ("\t\t\telse\n");
-            writer.write ("\t\t\t{\n");
-            writer.write ("\t\t\t\tconst char *detail = pSoapFault->getSimpleFaultDetail();\n");
-            writer.write ("\t\t\t\tbool deleteDetail=false;\n\n");
-            writer.write ("\t\t\t\tif (NULL==detail || 0==strlen(detail))\n");
-            writer.write ("\t\t\t\t{\n");
-            writer.write ("\t\t\t\t\tdetail=m_pCall->getFaultAsXMLString();\n\n");
-            writer.write ("\t\t\t\t\tif (NULL==detail)\n");
-            writer.write ("\t\t\t\t\t\tdetail=\"\";\n");
-            writer.write ("\t\t\t\t\telse\n");
-            writer.write ("\t\t\t\t\t\tdeleteDetail=true;\n");
-            writer.write ("\t\t\t\t}\n\n");
-            writer.write ("\t\t\t\tOtherFaultException ofe(pSoapFault->getFaultcode(),\n");
-            writer.write ("\t\t\t\t\tpSoapFault->getFaultstring(), pSoapFault->getFaultactor(),\n");
-            writer.write ("\t\t\t\t\tdetail, iExceptionCode);\n\n");
-            writer.write ("\t\t\t\tif (deleteDetail && NULL!=detail)\n");
-            writer.write ("\t\t\t\t\tAxis::AxisDelete( (void *) const_cast<char*>(detail), XSD_STRING);\n");
-            writer.write ("\n");
-            writer.write ("\t\t\t\tm_pCall->unInitialize();\n");
-            writer.write ("\t\t\t\tdelete pSoapFault;\n");
-            writer.write ("\t\t\t\tthrow ofe;\n");
-            writer.write ("\t\t\t}\n");
-        }
-        
-        writer.write ("\t\t}\n");
-        writer.write ("\t\telse\n");
-        writer.write ("\t\t{\n");
-        writer.write ("\t\t\tm_pCall->unInitialize();\n");
-        writer.write ("\t\t\tdelete pSoapFault;\n");
-        writer.write ("\t\t\tthrow;\n");
-        writer.write ("\t\t}\n");
-        writer.write ("\t}\n");
+        writeCatchBlock(minfo);
+
+        //=============================================================================
+        // End of method
+        //=============================================================================        
+                        
         writer.write ("}\n");
     }
 }
