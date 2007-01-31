@@ -125,9 +125,8 @@ public class ClientStubWriter extends CPPClassWriter
     }
 
     /*
-     * (non-Javadoc)
-     * 
      * @see org.apache.axis.wsdl.wsdl2ws.cpp.HeaderFileWriter#writeMethods()
+     * Used by literal code too!
      */
     protected void writeMethods() throws WrapperFault
     {

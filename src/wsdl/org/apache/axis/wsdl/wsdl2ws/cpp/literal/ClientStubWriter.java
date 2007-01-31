@@ -60,10 +60,10 @@ public class ClientStubWriter
 
     /**
      * This method genarate methods that wraps the each method of the service
-     * @param methodName
-     * @param params
-     * @param outparam
+     * @param MethodInfo
      * @throws IOException
+     * @throws WrapperFault
+     * 
      */
 
     public void writeMethodInWrapper (MethodInfo minfo) throws WrapperFault, IOException
@@ -121,7 +121,7 @@ public class ClientStubWriter
         //=============================================================================        
         
         writer.write ("\n/*\n");
-        writer.write (" * This method wrap the service method" + methodName + "\n");
+        writer.write (" * This method wraps the service method" + methodName + "\n");
         writer.write (" */\n");
         
         //method signature

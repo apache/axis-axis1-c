@@ -315,6 +315,33 @@ public class BeanParamWriter extends ParamCPPFileWriter
 
     }
 
+    private void writeSerializeExtensionCode()  throws IOException, WrapperFault
+    {
+        // TODO: xsd:extension not fully or correctly supported.
+        if (extensionBaseAttrib != null)
+        {
+            String typeName = extensionBaseAttrib.getTypeName(); 
+
+            if (extensionBaseAttrib.isSimpleType())
+            {
+                writer.write("\tpSZ->serializeAsChardata((void*)");
+                if (!CUtils.isPointerType(typeName))
+                    writer.write("&");    
+                writer.write("(param->" + extensionBaseAttrib.getParamNameAsMember() + "), "
+                        + CUtils.getXSDTypeForBasicType(typeName) + ");\n");
+            }
+            else
+            {
+                // TODO
+            }
+        }        
+        else if (attribs.length == 0)
+        {
+            System.out.println("Possible error in class " + classname
+                    + ": class with no attributes or elements...........");
+        }
+    }
+    
     private void writeSerializeGlobalMethod() throws IOException, WrapperFault 
     {
         /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
@@ -332,61 +359,49 @@ public class BeanParamWriter extends ParamCPPFileWriter
         writer.write( "int Axis_Serialize_" + classname 
                      + "( " + classname + "* param, IWrapperSoapSerializer* pSZ, bool bArray)\n");
         writer.write( "{\n");
+       
+        //=============================================================================
+        // No attributes or elements to serialize? Then serialize extension and return.
+        //=============================================================================        
 
         if (attribs.length == 0) 
         {
             writer.write("\tpSZ->serialize(\">\", NULL);\n");
 
-            if (extensionBaseAttrib != null)
-            {
-                String typeName = extensionBaseAttrib.getTypeName();
-                
-                if (extensionBaseAttrib.isSimpleType())
-                {
-                    writer.write("\tpSZ->serializeAsChardata((void*)");
-                    
-                    if (!CUtils.isPointerType(typeName))
-                        writer.write("&");
-                    
-                    writer.write("(param->" + extensionBaseAttrib.getParamNameAsMember()
-                            + "), " + CUtils.getXSDTypeForBasicType(typeName) + ");\n");
-                }
-                else
-                {
-                    // TODO
-                }
-            } 
-            else
-            {
-                System.out.println("Possible error in class " + classname
-                        + ": class with no attributes....................");
-            }
+            writeSerializeExtensionCode();
             
             writer.write("\treturn AXIS_SUCCESS;\n");
             writer.write("}\n\n");
             return;
         }
         
-        String arrayType;
-        
-        
-        /*
-         * A type does not know whether it is used as a nillable parameter So
-         * this may not be the appropriate place to do this
-         */
+        //=============================================================================
+        // NULL param passed in? Assume nillable although type does not know whether
+        // it is used as a nillable parameter so this may not be the appropriate place
+        // to put this, or we need to find a way to determine if nillable.
+        //=============================================================================        
+
         writer.write("\tif ( param == NULL )\n\t{\n");
         writer.write("\t\tpSZ->serializeAsAttribute( \"xsi:nil\", 0, (void*)&(xsd_boolean_true), XSD_BOOLEAN);\n");
         writer.write("\t\tpSZ->serialize( \">\", NULL);\n");
         writer.write("\t\treturn AXIS_SUCCESS;\n");
         writer.write("\t}\n\n");
-        /*
-         * This is the only real difference for the serializer between rpc/encoded and doc/literal objects
-         */
+        
+        //=============================================================================
+        // Serialize 
+        // This is the only real difference for the serializer between rpc/encoded and 
+        // doc/literal objects
+        //=============================================================================        
+        
         if (wscontext.getWrapInfo().getWrapperStyle().equals("rpc"))
             writeRPCArrayPortionOfSerializeGlobalMethod();
         else
             writeDOCArrayPortionOfSerializeGlobalMethod();
         
+        //=============================================================================
+        // Serialize attributes, if any
+        //=============================================================================        
+
         writer.write("\t/* If there are any attributes serialize them. If there aren't then close the tag */\n");
         for (int i = 0; i < attributeParamCount; i++)
         {
@@ -433,7 +448,11 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 }
             }
         }
-        
+
+        //=============================================================================
+        // Serialization relating to faults
+        //=============================================================================                           
+                
         if (type.isFault())
         {
             writer.write("\tif(Axis_URI_" + classname + ")\n\t{\n");
@@ -448,29 +467,21 @@ public class BeanParamWriter extends ParamCPPFileWriter
         if(wscontext.getWrapInfo().getWrapperStyle().equals("document"))
             writer.write("\tpSZ->serialize( \">\", 0);\n");
         
-        // TODO: xsd:extension not fully or correctly supported.
-        if (extensionBaseAttrib != null)
-        {
-            String typeName = extensionBaseAttrib.getTypeName(); 
+        //=============================================================================
+        // Serialize extension, if any
+        //=============================================================================                           
+        
+        writeSerializeExtensionCode();
 
-            if (extensionBaseAttrib.isSimpleType())
-            {
-                writer.write("\tpSZ->serializeAsChardata((void*)");
-                if (!CUtils.isPointerType(typeName))
-                    writer.write("&");    
-                writer.write("(param->" + extensionBaseAttrib.getParamNameAsMember() + "), "
-                        + CUtils.getXSDTypeForBasicType(typeName) + ");\n");
-            }
-            else
-            {
-                // TODO
-            }
-        }
-
+        //=============================================================================
+        // Serialize elements, if any
+        //=============================================================================                
+        
         writer.write("\n\t/* then serialize elements if any*/\n");
 
         boolean firstIfWritten = false;
         int anyCounter = 0; //counter for any types.
+        String arrayType;
         
         for (int i = attributeParamCount; i < attribs.length; i++)
         {
@@ -639,13 +650,16 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     writer.write("\t}\n");
         }
 
+        //=============================================================================
+        // End of attribute and element serialization
+        //=============================================================================                
+                
         if (wscontext.getWrapInfo().getWrapperStyle().equals("rpc"))
         {
             writer.write("\n\tpSZ->serialize(\"</\", Axis_TypeName_" + classname
                     + ", \">\", NULL);\n");
         }
 
-        
         writer.write("\n\tif (!bArray && blnIsNewPrefix)\n");
         writer.write("\t\tpSZ->removeNamespacePrefix(Axis_URI_" + classname + ");\n");
         writer.write("\n");
@@ -715,6 +729,40 @@ public class BeanParamWriter extends ParamCPPFileWriter
         writer.write( "\t}\n\n");
     }
 
+    private void writeDeSerializeExtensionCode() throws IOException, WrapperFault
+    {  
+        if (extensionBaseAttrib != null
+                && extensionBaseAttrib.getTypeName() != null)
+        {
+            if (extensionBaseAttrib.isSimpleType())
+            {
+                writer.write("\tvoid* pCharDataAs;\n");
+                String typeName = extensionBaseAttrib.getTypeName();
+                String xsdType = CUtils.getXSDTypeForBasicType(typeName);
+                writer.write("\tpIWSDZ->getChardataAs(&pCharDataAs, " + xsdType + ");\n");
+                writer.write("\tparam->" + extensionBaseAttrib.getParamNameAsMember() + " = ");
+                
+                if (CUtils.isPointerType(typeName))
+                    writer.write("(" + typeName + ") pCharDataAs;\n");
+                else
+                {
+                    writer.write(" *(" + typeName + "*) pCharDataAs;\n");
+                    writer.write("\tAxis::AxisDelete( pCharDataAs, " + xsdType + ");\n");
+                }    
+            }
+            else
+            {
+                // TODO
+            }
+        }
+        else if (attribs.length == 0)
+        {
+            System.out.println("Possible error in class " + classname
+                    + ": class with no attributes or elements............");
+            
+        }
+    }
+    
     private void writeDeSerializeGlobalMethod() throws IOException, WrapperFault
     {
         /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
@@ -732,41 +780,22 @@ public class BeanParamWriter extends ParamCPPFileWriter
         writer.write("int Axis_DeSerialize_" + classname + "(" + classname
                 + "* param, IWrapperSoapDeSerializer* pIWSDZ)\n{\n");
 
+        //=============================================================================
+        // No attributes or elements to deserialize? Then deserialize extension and return.
+        //=============================================================================        
+
         if (attribs.length == 0)
         {
-            if (extensionBaseAttrib != null)
-            {
-                if (extensionBaseAttrib.isSimpleType())
-                {
-                    writer.write("\tvoid* pCharDataAs;\n\n");
-                    String typeName = extensionBaseAttrib.getTypeName();
-                    String xsdType = CUtils.getXSDTypeForBasicType(typeName);
-                    writer.write("\tpIWSDZ->getChardataAs(&pCharDataAs, " + xsdType + ");\n");
-                    writer.write("\tparam->" + extensionBaseAttrib.getParamNameAsMember() + " = ");
-                    
-                    if (CUtils.isPointerType(typeName))
-                        writer.write("(" + typeName + ") pCharDataAs;\n");
-                    else
-                    {
-                        writer.write(" *(" + typeName + "*) pCharDataAs;\n");
-                        writer.write("\tAxis::AxisDelete( pCharDataAs, " + xsdType + ");\n");
-                    }
-                }
-                else
-                {
-                    // TODO
-                }
-            }
-            else
-            {
-                System.out.println("Possible error in class " + classname
-                        + ": class with no attributes....................");
-            }
+            writeDeSerializeExtensionCode();
             
             writer.write("\treturn AXIS_SUCCESS;\n");
             writer.write("}\n\n");
             return;
         }
+        
+        //=============================================================================
+        // Deserialize attributes and elements.
+        //=============================================================================        
         
         String arrayType = null;
         boolean peekCalled = false;
@@ -1014,31 +1043,12 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 if (attribs[i].getMinOccurs() == 0)
                     writer.write("\t}\n");
         }
-
-        if (extensionBaseAttrib != null
-                && extensionBaseAttrib.getTypeName() != null)
-        {
-            if (extensionBaseAttrib.isSimpleType())
-            {
-                writer.write("\tvoid* pCharDataAs;\n");
-                String typeName = extensionBaseAttrib.getTypeName();
-                String xsdType = CUtils.getXSDTypeForBasicType(typeName);
-                writer.write("\tpIWSDZ->getChardataAs(&pCharDataAs, " + xsdType + ");\n");
-                writer.write("\tparam->" + extensionBaseAttrib.getParamNameAsMember() + " = ");
-                
-                if (CUtils.isPointerType(typeName))
-                    writer.write("(" + typeName + ") pCharDataAs;\n");
-                else
-                {
-                    writer.write(" *(" + typeName + "*) pCharDataAs;\n");
-                    writer.write("\tAxis::AxisDelete( pCharDataAs, " + xsdType + ");\n");
-                }    
-            }
-            else
-            {
-                // TODO
-            }
-        }
+        
+        //=============================================================================
+        // Deserialize extension, if any, and return status
+        //=============================================================================                           
+        
+        writeDeSerializeExtensionCode();
 
         writer.write("\treturn pIWSDZ->getStatus();\n");
         writer.write("}\n");
