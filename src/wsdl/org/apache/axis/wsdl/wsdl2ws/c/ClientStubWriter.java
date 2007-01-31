@@ -33,6 +33,7 @@ import javax.xml.namespace.QName;
 import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
+import org.apache.axis.wsdl.wsdl2ws.info.FaultInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.MethodInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.ParameterInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
@@ -70,20 +71,20 @@ public class ClientStubWriter extends CFileWriter
             throw new WrapperFault(e);
         }
     }
-
-    /* (non-Javadoc)
+    /* 
      * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#writeMethods()
+     * Used by literal code too!
      */
     protected void writeMethods() throws WrapperFault
     {
         try
-        {
+          {
             writer.write("\n");
             writer.write("/* ================================================== */\n" +
                          "/* Functions relating to web service client proxy     */\n" +
                          "/* ================================================== */\n");
             writer.write("\n");
-
+            
             // get_xxx_stub() routine
             writer.write("AXISCHANDLE get_" + classname + "_stub(const char* pchEndPointUri)\n{\n");
             writer.write("\tif(pchEndPointUri)\n");
@@ -102,27 +103,31 @@ public class ClientStubWriter extends CFileWriter
             writer.write("int get_" + classname + "_Status(AXISCHANDLE stub)\n{\n");
             writer.write("\tAXISCHANDLE call = axiscStubGetCall(stub);\n");
             writer.write("\treturn axiscCallGetStatus(call);\n");
-            writer.write("}\n");
+            writer.write("}\n\n");
 
+            writer.write("void set_" + classname 
+                    + "_ExceptionHandler(AXISCHANDLE stub, AXIS_EXCEPTION_HANDLER_FUNCT fp)\n{\n");          
+            writer.write("\taxiscStubSetCExceptionHandler(stub, (void *)fp);\n");          
+            writer.write("}\n");
+            
             writer.write("\n");
             writer.write("/* ================================================== */\n" +
                          "/* Functions corresponding to the web service methods */\n" +
                          "/* ================================================== */\n");
             writer.write("\n");
-
+            
             MethodInfo minfo;
             for (int i = 0; i < methods.size(); i++)
             {
-                minfo = (MethodInfo) methods.get(i);
-                this.writeMethodInWrapper(minfo);
-                writer.write("\n");
+                  minfo = (MethodInfo) methods.get(i);
+                  this.writeMethodInWrapper(minfo);
+                  writer.write("\n");
             }
-
-        }
+          }
         catch (IOException e)
-        {
+          {
             throw new WrapperFault(e);
-        }
+          }
     }
 
     /* (non-Javadoc)
@@ -665,8 +670,61 @@ public class ClientStubWriter extends CFileWriter
         writer.write("}\n");        
     }
 
+
+    /*
+     * Used by literal code too!
+     */
+    protected void writeFaultHandlingCode(MethodInfo minfo) throws WrapperFault, IOException
+    {  
+        writer.write ("\taxiscCallSetSoapFaultNamespace(call, \"" 
+                + wscontext.getWrapInfo ().getTargetEndpointURI () + "\");\n");
+        
+        //to get fault info             
+        Iterator paramsFault = minfo.getFaultType ().iterator ();
+        String faultInfoName = null;
+        String langName = null;
+        
+        while (paramsFault.hasNext ())
+        {
+            FaultInfo info = (FaultInfo) paramsFault.next ();
+            faultInfoName = info.getFaultInfo ();
+
+            // FJP - D0004 > Looking through the list of attributes for the 'error' part of
+            //               the fault message.  If found, update the faultInfoName with the
+            //               'localname' of the qname of the attribute.                         
+            Iterator infoArrayListIterator = info.getParams ().iterator ();
+            boolean found = false;
+
+            while (infoArrayListIterator.hasNext () && !found)
+            {
+                ParameterInfo paramInfo = (ParameterInfo) infoArrayListIterator.next ();
+        
+                if (paramInfo != null)
+                    if ("error".equals (paramInfo.getParamName ()))
+                    {
+                        faultInfoName = paramInfo.getElementName ().getLocalPart ();
+                        found = true;
+                    }
+            }
+
+            ArrayList paramInfo = info.getParams ();
+            for (int i = 0; i < paramInfo.size (); i++)
+            {
+                ParameterInfo par = (ParameterInfo) paramInfo.get (i);
+                langName = par.getLangName ();
+
+                writer.write ("\taxiscCallAddSoapFaultToList(call, \"" 
+                        + faultInfoName + "\", "
+                        + "(void*) Axis_Create_" + langName + ", "
+                        + "(void*) Axis_Delete_" + langName + ", "                    
+                        + "(void*) Axis_DeSerialize_" + langName + ");\n");
+            }
+        }
+    }    
+    
     /* (non-Javadoc)
      * @see org.apache.axis.wsdl.wsdl2ws.cpp.CPPClassWriter#writeGlobalCodes()
+     * Used by literal code too!
      */
     protected void writeGlobalCodes() throws WrapperFault
     {
