@@ -401,7 +401,7 @@ public class ClientStubWriter extends CPPClassWriter
                     writer.write("Value" + i + ", "
                             + CUtils.getXSDTypeForBasicType(containedType)
                             + ", \""
-                            + ((ParameterInfo) paramsB.get(i)).getParamName()
+                            + ((ParameterInfo) paramsB.get(i)).getParamNameAsSOAPElement()
                             + "\"");
                 }
                 else
@@ -411,7 +411,7 @@ public class ClientStubWriter extends CPPClassWriter
                     writer.write("Value" + i
                             + ",(void *) Axis_Serialize_" + containedType
                             + ",(void *) Axis_Delete_" + containedType
-                            + ",\"" + ((ParameterInfo) paramsB.get(i)).getParamName() + "\""
+                            + ",\"" + ((ParameterInfo) paramsB.get(i)).getParamNameAsSOAPElement() + "\""
                             + ",Axis_URI_" + containedType);
                 }
             }
@@ -422,14 +422,14 @@ public class ClientStubWriter extends CPPClassWriter
                 {
                     writer.write("\t\tm_pCall->addParameter( ");
                     writer.write("(void *) Value" + i + ", \""
-                            + ((ParameterInfo) paramsB.get(i)).getParamName() + "\", "
+                            + ((ParameterInfo) paramsB.get(i)).getParamNameAsSOAPElement() + "\", "
                             + CUtils.getXSDTypeForBasicType(paramTypeName));
                 }
                 else
                 {
                     writer.write("\t\tm_pCall->addParameter( ");
                     writer.write("(void *) &Value" + i + ", \""
-                            + ((ParameterInfo) paramsB.get(i)).getParamName() + "\", "
+                            + ((ParameterInfo) paramsB.get(i)).getParamNameAsSOAPElement() + "\", "
                             + CUtils.getXSDTypeForBasicType(paramTypeName));
                 }
             }
@@ -440,7 +440,7 @@ public class ClientStubWriter extends CPPClassWriter
                 writer.write("Value" + i 
                         + ",(void *) Axis_Serialize_" + paramTypeName 
                         + ",(void *) Axis_Delete_" + paramTypeName 
-                        + ",\"" + ((ParameterInfo) paramsB.get(i)).getParamName()
+                        + ",\""  + ((ParameterInfo) paramsB.get(i)).getParamNameAsSOAPElement()
                         + "\",Axis_URI_" + paramTypeName);
             }
 
@@ -460,13 +460,8 @@ public class ClientStubWriter extends CPPClassWriter
         String paramTagName = "";
         
         if( returntype != null)
-        {
-            paramTagName = returntype.getParamName();
+            paramTagName = returntype.getParamNameAsSOAPElement();
 
-            if( paramTagName.charAt(0) == '_')
-                paramTagName = paramTagName.substring( 1);
-        }
-        
         if (isAllTreatedAsOutParams)
         {
             String currentParamName;
@@ -474,6 +469,8 @@ public class ClientStubWriter extends CPPClassWriter
             for (int i = 0; i < paramsC.size(); i++)
             {
                 ParameterInfo currentType = (ParameterInfo) paramsC.get(i);
+                paramTagName = currentType.getParamNameAsSOAPElement();
+                    
                 type = wscontext.getTypemap().getType(currentType.getSchemaName());
                 if (type != null)
                 {
@@ -498,7 +495,7 @@ public class ClientStubWriter extends CPPClassWriter
                     {
                         containedType = CUtils.getclass4qname(qname);
                         writer.write("\n\t\t\tAxis_Array * pReturn" + i + " = m_pCall->getBasicArray( " + CUtils.getXSDTypeForBasicType (containedType) 
-                                + ",\"" + currentType.getParamName()
+                                + ",\"" + paramTagName
                                 + "\", 0);\n\n");
                         writer.write("\t\t\tif( pReturn" + i + " != NULL && OutValue" + i + " != NULL)\n");
                         writer.write("\t\t\t{\n");
@@ -555,7 +552,7 @@ public class ClientStubWriter extends CPPClassWriter
                         
                         writer.write( "\t\t\t" + currentParaType + " pReturn" + i 
                                 + " = m_pCall->" + CUtils.getParameterGetValueMethodName( currentParaType, false) 
-                                + "( \"" + currentType.getParamName() + "\", 0);\n");
+                                + "( \"" + paramTagName + "\", 0);\n");
                         writer.write( "\n");
                         writer.write( "\t\t\tif( pReturn" + i + " != NULL && OutValue" + i + " != NULL)\n");
                         writer.write( "\t\t\t\t{\n");
@@ -586,7 +583,7 @@ public class ClientStubWriter extends CPPClassWriter
                     {
                         writer.write( "\t\t\t" + currentParaType + " * pReturn" + i + " = m_pCall->" 
                                + CUtils.getParameterGetValueMethodName( currentParaType, false) 
-                               + "( \"" + currentType.getParamName() + "\", 0);\n");
+                                + "( \"" + paramTagName + "\", 0);\n");
                         writer.write( "\n");
                         writer.write( "\t\t\tif( pReturn" + i + " != NULL && OutValue" + i + " != NULL)\n");
                         writer.write( "\t\t\t{\n");
@@ -607,7 +604,7 @@ public class ClientStubWriter extends CPPClassWriter
                                     + " *) m_pCall->getCmplxObject( (void *) Axis_DeSerialize_" + currentParaType
                                     + ",(void *) Axis_Create_" + currentParaType
                                     + ",(void *) Axis_Delete_" + currentParaType
-                                    + ",\"" + currentType.getParamName() + "\",0);\n");
+                                    + ",\"" + paramTagName + "\",0);\n");
                 }
             } // end for-loop for paramsC
             
