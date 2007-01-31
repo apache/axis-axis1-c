@@ -268,7 +268,11 @@ public class BeanParamWriter extends ParamCFileWriter
             if (attribs[i].isAnyType())
             {
                 anyCounter += 1;
-                writer.write("\taxiscSoapSerializerSerializeAnyObject(pSZ, param->any" + Integer.toString(anyCounter) +");\n");
+                
+                if (attribs[i].isOptional())
+                    writer.write("\tif (param->any" + Integer.toString(anyCounter) + " != NULL)\n");
+                                          
+                writer.write("\t\taxiscSoapSerializerSerializeAnyObject(pSZ, param->any" + Integer.toString(anyCounter) +");\n");
             } 
             else if (attribs[i].isArray())
             {

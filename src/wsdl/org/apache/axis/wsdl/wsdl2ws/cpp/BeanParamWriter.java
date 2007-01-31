@@ -511,7 +511,11 @@ public class BeanParamWriter extends ParamCPPFileWriter
             if (attribs[i].isAnyType())
             {
                 anyCounter += 1;
-                writer.write("\tpSZ->serializeAnyObject(param->any" + Integer.toString(anyCounter) +");\n");
+                
+                if (attribs[i].isOptional())
+                    writer.write("\tif (param->any" + Integer.toString(anyCounter) + " != NULL)\n");
+                                
+                writer.write("\t\tpSZ->serializeAnyObject(param->any" + Integer.toString(anyCounter) +");\n");
             }
             else if (attribs[i].isArray())
             {
