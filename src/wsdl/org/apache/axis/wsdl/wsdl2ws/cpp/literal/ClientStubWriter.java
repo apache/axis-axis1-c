@@ -543,13 +543,16 @@ public class ClientStubWriter
         
         writer.write("\n");
         
-        writer.write ("\tif (AXIS_SUCCESS == m_pCall->invoke())\n\t{\n");
+
         if (minfo.getOutputMessage () != null)
         {
+            writer.write ("\tif (AXIS_SUCCESS == m_pCall->sendAndReceive())\n\t{\n");
             writer.write ("\t\tif(AXIS_SUCCESS == m_pCall->checkMessage(\""
                   + minfo.getOutputMessage ().getLocalPart () + "\", \""
                   + minfo.getOutputMessage ().getNamespaceURI () + "\"))\n\t\t{\n");
         }
+        else
+            writer.write ("\tif (AXIS_SUCCESS == m_pCall->send())\n\t{\n");
         
         if (isAllTreatedAsOutParams)
         {

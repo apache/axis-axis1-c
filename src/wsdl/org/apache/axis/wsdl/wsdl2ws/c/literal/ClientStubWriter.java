@@ -545,13 +545,16 @@ public class ClientStubWriter
 
         writer.write("\n");
         
-        writer.write("\tif (AXISC_SUCCESS == axiscCallInvoke(call))\n\t{\n");       
+
         if (minfo.getOutputMessage () != null)
         {
+            writer.write("\tif (AXISC_SUCCESS == axiscCallSendAndReceive(call))\n\t{\n");       
             writer.write("\t\tif(AXISC_SUCCESS == axiscCallCheckMessage(call, \""
                 + minfo.getOutputMessage().getLocalPart() + "\", \""
                 + minfo.getOutputMessage().getNamespaceURI() + "\"))\n\t\t{\n");
         }
+        else
+            writer.write("\tif (AXISC_SUCCESS == axiscCallSend(call))\n\t{\n");       
         
         if (isAllTreatedAsOutParams)
         {

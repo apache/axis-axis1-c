@@ -56,6 +56,12 @@ getMessageData ()
 int ClientAxisEngine::
 process (SOAPTransport* pSoap)
 {
+    return process(pSoap, false);
+}
+
+int ClientAxisEngine::
+process (SOAPTransport* pSoap, bool noResponse)
+{
     int Status = AXIS_FAIL;
     const WSDDService* pService = NULL;
 
@@ -131,7 +137,7 @@ process (SOAPTransport* pSoap)
     
             // Invoke all handlers and then the remote webservice
             // we generate response in the same way even if this has failed 
-            Status = invoke (m_pMsgData); 
+            Status = invoke (m_pMsgData, noResponse); 
         }
         while (0);
     
@@ -161,6 +167,12 @@ releaseHandlers(string sSessionId)
 
 int ClientAxisEngine::
 invoke (MessageData* pMsg)
+{
+    invoke(pMsg, false);
+}
+
+int ClientAxisEngine::
+invoke (MessageData* pMsg, bool noResponse)
 {
     enum AE_LEVEL { AE_START = 1, AE_SERH, AE_GLH, AE_TRH, AE_SERV };
     int Status = AXIS_FAIL;
@@ -206,14 +218,17 @@ invoke (MessageData* pMsg)
         if (AXIS_SUCCESS != (Status = m_pDZ->setInputStream (m_pSoap)))
             break;
 
-        // version not supported set status to fail
-        int nSoapVersion = m_pDZ->getVersion ();
-        if (nSoapVersion == VERSION_LAST)     
-            Status = AXIS_FAIL;
+        // Get header and body only if we are expecting a response
+        if (!noResponse)
+        {
+            // version not supported set status to fail
+            int nSoapVersion = m_pDZ->getVersion ();
+            if (nSoapVersion == VERSION_LAST)     
+                Status = AXIS_FAIL;
 
-        m_pDZ->getHeader ();
-        m_pDZ->getBody ();
-
+            m_pDZ->getHeader ();
+            m_pDZ->getBody ();
+        }
     }
     while (0);
 
@@ -229,6 +244,10 @@ invoke (MessageData* pMsg)
         case AE_SERV: 
             // everything success
             Status = AXIS_SUCCESS;
+            
+            // If no response expected, break out.
+            if (noResponse)
+                break;
             
         case AE_TRH: 
            // After invoking the transport handlers (at actual service invokation) it has failed

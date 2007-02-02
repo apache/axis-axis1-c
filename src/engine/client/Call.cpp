@@ -185,9 +185,16 @@ void Call::addCmplxParameter( void *            pObject,
                                                pName, pNamespace);
 }
 
-int Call::invoke()
+int Call::sendAndReceive()
 {
-    m_nStatus = m_pAxisEngine->process( m_pTransport);
+    m_nStatus = m_pAxisEngine->process( m_pTransport, false);
+
+    return m_nStatus;
+}
+
+int Call::send()
+{
+    m_nStatus = m_pAxisEngine->process( m_pTransport, true);
 
     return m_nStatus;
 }

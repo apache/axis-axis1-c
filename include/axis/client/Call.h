@@ -213,6 +213,16 @@ AXISC_STORAGE_CLASS_INFO
 int axiscCallInitialize(AXISCHANDLE call, AXISC_PROVIDERTYPE nStyle);
 
 /**
+ * @see axiscCallSendAndReceive
+ * @deprecated use axiscCallSendAndReceive
+ * @return If the invocation is successful, then AXIS_SUCCESS is returned,
+ * otherwise AXIS_FAIL is returned.
+ * @note This method may thrown an exception.
+ */
+AXISC_STORAGE_CLASS_INFO
+int axiscCallInvoke(AXISCHANDLE call);
+
+/**
  * This is the main entry point into the Axis engine.  Calling this method
  * will begin the sequence that serialises the message, invokes that request
  * handlers, transmits the request message and then wait for the response
@@ -223,8 +233,19 @@ int axiscCallInitialize(AXISCHANDLE call, AXISC_PROVIDERTYPE nStyle);
  * @note This method may thrown an exception.
  */
 AXISC_STORAGE_CLASS_INFO
-int axiscCallInvoke(AXISCHANDLE call);
+int axiscCallSendAndReceive(AXISCHANDLE call);
 
+/**
+ * This is the main entry point into the Axis engine.  Calling this method
+ * will begin the sequence that serialises the message, invokes that request
+ * handlers, transmits the request message. No response is expected and
+ * no response handlers are called. 
+ * @return If the invocation is successful, then AXIS_SUCCESS is returned,
+ * otherwise AXIS_FAIL is returned.
+ * @note This method may thrown an exception.
+ */
+AXISC_STORAGE_CLASS_INFO
+int axiscCallSend(AXISCHANDLE call);
 
 /**
  * Sets an Attribute to the SOAPMethod, using the given Attribute data.

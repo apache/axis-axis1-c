@@ -214,11 +214,35 @@ public:
      * handlers, transmits the request message and then wait for the response
      * message, calls the response handlers and then deserialises the response
      * message.
+     * @deprecated Use sendAndReceive method instead of this method.
      * @return If the invocation is successful, then AXIS_SUCCESS is returned,
      * otherwise AXIS_FAIL is returned.
      * @note This method may thrown an exception.
      */
-    int AXISCALL invoke();
+    int AXISCALL invoke() { return sendAndReceive(); }
+
+    /**
+     * This is the main entry point into the Axis engine.  Calling this method
+     * will begin the sequence that serialises the message, invokes that request
+     * handlers, transmits the request message and then wait for the response
+     * message, calls the response handlers and then deserialises the response
+     * message.
+     * @return If the invocation is successful, then AXIS_SUCCESS is returned,
+     * otherwise AXIS_FAIL is returned.
+     * @note This method may thrown an exception.
+     */
+    int AXISCALL sendAndReceive();
+
+    /**
+     * This is the main entry point into the Axis engine.  Calling this method
+     * will begin the sequence that serialises the message, invokes that request
+     * handlers, transmits the request message. No response
+     * message is expected and no response handlers are invoked.
+     * @return If the invocation is successful, then AXIS_SUCCESS is returned,
+     * otherwise AXIS_FAIL is returned.
+     * @note This method may thrown an exception.
+     */
+    int AXISCALL send();
 
     /**
      * Sets an Attribute to the SOAPMethod, using the given Attribute data.

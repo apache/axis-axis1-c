@@ -307,13 +307,43 @@ int axiscCallInitialize(AXISCHANDLE call,
 AXISC_STORAGE_CLASS_INFO 
 int axiscCallInvoke(AXISCHANDLE call) 
 {
+    return axiscCallSendAndReceive(call);
+}
+
+AXISC_STORAGE_CLASS_INFO 
+int axiscCallSendAndReceive(AXISCHANDLE call) 
+{
+    Call *c = (Call*)call;
+    
+    try
+    {
+        return c->sendAndReceive();
+    }
+    catch ( AxisException& e  )
+    {
+        
+        processException(c, e);
+    }
+    catch ( ... )
+    {
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
+    }
+    
+    return -1;
+}
+
+AXISC_STORAGE_CLASS_INFO 
+int axiscCallSend(AXISCHANDLE call) 
+{
     
     
     Call *c = (Call*)call;
     
     try
     {
-        return c->invoke();
+        return c->send();
     }
     catch ( AxisException& e  )
     {
