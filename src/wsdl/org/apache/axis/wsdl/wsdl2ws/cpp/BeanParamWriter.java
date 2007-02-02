@@ -197,16 +197,6 @@ public class BeanParamWriter extends ParamCPPFileWriter
                                     realName += "_Ref";
                                 writer.write("\t" + realName + " = NULL; \n");
                             }
-                    
-                    if (attribs[i].getAllElement())
-                        for (int j = 0; j < attribs.length; j++)
-                            if ((attribs[j].getAllElement()) && (j != i))
-                            {
-                                String realName = attribs[j].getParamNameWithoutSymbols();
-                                if (CUtils.classExists(wscontext, realName))
-                                    realName += "_Ref";
-                                writer.write("\t" + realName + " = NULL ; \n");
-                            }
 
                     writer.write("}\n");
                 } 
