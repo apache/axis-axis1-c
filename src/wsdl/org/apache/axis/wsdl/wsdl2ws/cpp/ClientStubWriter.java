@@ -446,9 +446,9 @@ public class ClientStubWriter extends CPPClassWriter
 
             writer.write(");\n");
         }
-        writer.write("\n\t\tif( AXIS_SUCCESS == m_pCall->invoke())\n\t\t{\n");
+        writer.write("\n\t\tif( AXIS_SUCCESS == m_pCall->sendAndReceive())\n\t\t{\n");
         writer.write("\t\t\tif( AXIS_SUCCESS == m_pCall->checkMessage( \""
-                + minfo.getOutputMessage().getLocalPart() + "\",\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\""
+                + minfo.getOutputMessage().getLocalPart() + "\",\""
                 + namespaceURI
                 + "\"))\n\t\t\t{\n");
 

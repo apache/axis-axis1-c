@@ -421,7 +421,7 @@ public class ClientStubWriter extends CFileWriter
             }
             writer.write(");\n");
         }
-        writer.write("\n\tif( AXISC_SUCCESS == axiscCallInvoke(call))\n\t{\n");
+        writer.write("\n\tif( AXISC_SUCCESS == axiscCallSendAndReceive(call))\n\t{\n");
         writer.write("\t\tif( AXISC_SUCCESS == axiscCallCheckMessage(call, \""
                 + minfo.getOutputMessage().getLocalPart() + "\",\""
                 + wscontext.getWrapInfo().getTargetNameSpaceOfWSDL()
