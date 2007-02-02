@@ -86,6 +86,9 @@ class STORAGE_CLASS_INFO Axis
      */
      static bool isRunning();
      
+    /**
+     * Stop Axis engine. 
+     */
      static void stopAxis();
 };
 
