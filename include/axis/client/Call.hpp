@@ -1779,6 +1779,7 @@ private:
     ClientAxisEngine* m_pAxisEngine;
 
 #ifdef WIN32
+  #pragma warning (push) 
   #pragma warning (disable : 4251)
 #endif
     list<void*> m_handlerProperties;
@@ -1786,7 +1787,7 @@ private:
     list<void *> m_soapFaults; // c binding support use only
 
 #ifdef WIN32
-  #pragma warning (default : 4251)
+    #pragma warning (pop) 
 #endif
 
     /*

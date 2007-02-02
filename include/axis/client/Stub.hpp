@@ -627,7 +627,8 @@ class STORAGE_CLASS_INFO Stub
     * Vector of Header Block pointers
     */
 #ifdef WIN32
-  #pragma warning (disable : 4251)
+    #pragma warning (push)
+    #pragma warning (disable : 4251)
 #endif
     vector < IHeaderBlock * >m_vSOAPHeaderBlocks;
   /**
@@ -636,7 +637,7 @@ class STORAGE_CLASS_INFO Stub
     vector <IHeaderBlock *>::iterator m_viCurrentSOAPHeaderBlock;
 
 #ifdef WIN32
-  #pragma warning (default : 4251)
+    #pragma warning (pop) 
 #endif
 
   /**
