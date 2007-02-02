@@ -168,7 +168,7 @@ releaseHandlers(string sSessionId)
 int ClientAxisEngine::
 invoke (MessageData* pMsg)
 {
-    invoke(pMsg, false);
+    return invoke(pMsg, false);
 }
 
 int ClientAxisEngine::
