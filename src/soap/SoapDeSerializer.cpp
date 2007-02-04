@@ -632,8 +632,12 @@ getCmplxArray (Axis_Array* pArray,
     
     while(RPC_ENCODED != m_nStyle || count < arraySize)
     {
+        // For RPC-encoded arrays, the element name in array cannot be derived - 
+        // within an array value element names are not significant - so  
+        // we read until end-of-element is encountered (i.e. null string 
+        // is returned from peek()). 
         elementName = m_pParser->peek();
-        if(strcmp(elementName, pName) == 0)
+        if ((RPC_ENCODED == m_nStyle && 0x00 != *elementName) || strcmp(elementName, pName) == 0)
             pArray->addElement(getCmplxObject(pDZFunct, pCreFunct, pDelFunct, pName, pNamespace));
         else
             break;    
@@ -686,8 +690,12 @@ getBasicArray (XSDTYPE nType, const AxisChar * pName, const AxisChar * pNamespac
                 
         while(RPC_ENCODED != m_nStyle || count < size)
         {
+            // For RPC-encoded arrays, the element name in array cannot be derived - 
+            // within an array value element names are not significant -   
+            // so we read until end-of-element is encountered (i.e. null string 
+            // is returned from peek()). 
             elementName = m_pParser->peek();
-            if(strcmp(elementName, pName) == 0)
+            if ((RPC_ENCODED == m_nStyle && 0x00 != *elementName) || strcmp(elementName, pName) == 0)
             {
                 if (0 == count)
                     pSimpleType = AxisUtils::createSimpleTypeObject(nType);
