@@ -82,11 +82,11 @@ int Param::serialize (SoapSerializer &pSZ)
                 if (!m_strPrefix.empty ())
                 {
                     pSZ.serialize (m_strPrefix.c_str (), ":", m_sName.c_str (),
-                        "Array", " xmlns:", m_strPrefix.c_str (), "=\"",
+                         " xmlns:", m_strPrefix.c_str (), "=\"",
                         m_strUri.c_str (), "\"", NULL);
                 }
                 else
-                    pSZ.serialize (m_sName.c_str (), "Array", NULL);
+                    pSZ.serialize (m_sName.c_str (), NULL);
 
                 // get a prefix from Serializer
                 ATprefix = pSZ.getNamespacePrefix (m_Value.pArray->m_URI.c_str ());
@@ -121,9 +121,9 @@ int Param::serialize (SoapSerializer &pSZ)
                 m_Value.pArray->Serialize (pSZ); //Only serializes the inner items
                 pSZ.serialize ("</", NULL);
                 if (!m_strPrefix.empty ())
-                    pSZ.serialize (m_strPrefix.c_str (), ":", m_sName.c_str (), "Array", NULL);
+                    pSZ.serialize (m_strPrefix.c_str (), ":", m_sName.c_str (), NULL);
                 else
-                    pSZ.serialize (m_sName.c_str (), "Array", NULL);
+                    pSZ.serialize (m_sName.c_str (), NULL);
 
                 pSZ.removeNamespacePrefix (m_Value.pArray->m_URI.c_str ());
                 pSZ.serialize (">\n", NULL);
