@@ -99,7 +99,7 @@ public abstract class ParamWriter extends BasicFileWriter
         if (elemi != null)
         {
             extensionBaseAttrib = new AttributeInfo(this.classname);
-            extensionBaseAttrib.setParamName(elemi.getName().getLocalPart());
+            extensionBaseAttrib.setParamName(elemi.getName().getLocalPart(), wscontext.getTypemap());
             
             Type elementType = elemi.getType();
 
@@ -138,7 +138,7 @@ public abstract class ParamWriter extends BasicFileWriter
             CContainedAttribute attr = (CContainedAttribute)attribfeilds.get(i);
             
             this.attribs[i] = new AttributeInfo(this.classname);
-            this.attribs[i].setParamName(attr.getName());
+            this.attribs[i].setParamName(attr.getName(), wscontext.getTypemap());
             if (CUtils.isSimpleType(attr.getType().getName()))
                 this.attribs[i].setTypeName(CUtils.getclass4qname(attr.getType().getName()));
             else
@@ -155,7 +155,7 @@ public abstract class ParamWriter extends BasicFileWriter
         for (int i = intAttrFieldSz; i < intAttrFieldSz + intEleFieldSz; i++)
         {
             this.attribs[i] = new AttributeInfo(this.classname);
-            this.attribs[i].setParamName((String) elementfeilds.get(i - attributeParamCount));
+            this.attribs[i].setParamName((String) elementfeilds.get(i - attributeParamCount), wscontext.getTypemap());
             ElementInfo elem = type.getElementForElementName(this.attribs[i].getParamName());
             Type elementType = elem.getType();
             if (CUtils.isAnyType(elementType.getName()))

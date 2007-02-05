@@ -86,7 +86,7 @@ public abstract class ParamCPPFileWriter extends ParamWriter
     protected abstract void writeGlobalCodes() throws WrapperFault;
     protected File getFilePath() throws WrapperFault
     {
-        classname = CUtils.sanitiseClassName( classname);
+        classname = CUtils.sanitizeString( classname);
 
         String targetOutputLocation = this.wscontext.getWrapInfo().getTargetOutputLocation();
         if (targetOutputLocation.endsWith("/"))

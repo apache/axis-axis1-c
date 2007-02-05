@@ -1000,7 +1000,7 @@ public class CUtils
         {
             arrayName = qname.getLocalPart() + "_Array";
             if (TypeMap.isAnonymousType(qname))
-                arrayName = CUtils.sanitiseClassName(arrayName);
+                arrayName = CUtils.sanitizeString(arrayName);
         }
         return arrayName;        
     }
@@ -1096,12 +1096,12 @@ public class CUtils
                 
                 if (TypeMap.isAnonymousType(typedataLocalpart))
                 {
-                    typedataQNameSanitized     = new QName(typedataQName.getNamespaceURI(), sanitiseClassName(typedataLocalpart));
-                    typedataLocalpartSanitized = sanitiseClassName(typedataLocalpart);
+                    typedataQNameSanitized     = new QName(typedataQName.getNamespaceURI(), sanitizeString(typedataLocalpart));
+                    typedataLocalpartSanitized = sanitizeString(typedataLocalpart);
                 }
                 
                 if (TypeMap.isAnonymousType(baseTypeLocalpart))
-                    baseTypeLocalpartSanitized = sanitiseClassName(baseTypeLocalpart);
+                    baseTypeLocalpartSanitized = sanitizeString(baseTypeLocalpart);
                 
                 String class4qname          = null;
                 String class4qnameSanitized = null;
@@ -1260,7 +1260,7 @@ public class CUtils
         return;
     }    
     
-    public static String sanitiseClassName( String name)
+    public static String sanitizeString( String name)
     {
         int i;
         String sanitisedName=name;
@@ -1278,19 +1278,12 @@ public class CUtils
         
         return sanitisedName;
     }
-    
-    // TODO - get rid of this and jsut call above routine directly.
-    public static String sanitiseAttributeName(String name)
-    {
-        String sanitisedName = sanitiseClassName( name);
-        return sanitisedName;
-    }
 
-    public static boolean classExists(WebServiceContext wscontext, String name)
+    public static boolean classExists(TypeMap typeMap, String name)
     {   
         Type atype;
         String atypeName;
-        Iterator types = wscontext.getTypemap().getTypes().iterator();
+        Iterator types = typeMap.getTypes().iterator();
         while (types.hasNext())
         {
             atype = (Type) types.next();
@@ -1326,7 +1319,7 @@ public class CUtils
         // If name was not in hash table, generate one, store in hash table.
         if (newName == null)
         {            
-            newName = sanitiseClassName(oldName);
+            newName = sanitizeString(oldName);
             
             // Ensure name does not conflict with language constructs
             newName = resolveWSDL2LanguageNameClashes(newName);

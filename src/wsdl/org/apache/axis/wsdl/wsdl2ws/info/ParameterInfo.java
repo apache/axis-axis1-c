@@ -27,30 +27,38 @@ import org.apache.axis.wsdl.wsdl2ws.CUtils;
  * @author Srinath Perera(hemapani@opensource.lk)
  */
 
-// TODO - really need to simplify all these routines to turn 
-// attribName in proper format!!! I do not think we need most of them, if any.
 public class ParameterInfo
 {
     protected Type type;
-    protected String attribName;
-    protected QName elementName;
+    protected String attribName = null;
+    protected QName elementName = null;
+    private String elementNameAsSOAPString = null;
+    private String attribNameAsSOAPString = null;
+    private String attribNameAsMember = null;
+    private String methodName=null;
     private boolean isAnyType = false;
     protected boolean isArray = false;
     private boolean isAttribute = false;
     private boolean isNillable = false;
     private boolean isOptional = false;
 
+    public ParameterInfo()
+    {}
+    
     public String toString()
     {
         String str ="\n---------BEGIN ParameterInfo------------\n";
-        str = str + "type = "                 + type.getName() + "\n";
-        str = str + "attribName ="            + attribName + "\n";
-        str = str + "elementName ="           + elementName + "\n";
-        str = str + "isAnyType ="             + isAnyType + "\n";
-        str = str + "isArray ="               + isArray + "\n";
-        str = str + "isAttribute ="           + isAttribute + "\n";
-        str = str + "isNillable = "           + isNillable + "\n";
-        str = str + "isOptional = "           + isOptional + "\n";
+        str = str + "type = "                   + type.getName() + "\n";
+        str = str + "attribName ="              + attribName + "\n";
+        str = str + "attribNameAsMember ="      + attribNameAsMember + "\n";
+        str = str + "attribNameAsSOAPString ="  + attribNameAsSOAPString + "\n";
+        str = str + "elementName ="             + elementName + "\n";
+        str = str + "elementNameAsSOAPString =" + elementNameAsSOAPString + "\n";
+        str = str + "isAnyType ="               + isAnyType + "\n";
+        str = str + "isArray ="                 + isArray + "\n";
+        str = str + "isAttribute ="             + isAttribute + "\n";
+        str = str + "isNillable = "             + isNillable + "\n";
+        str = str + "isOptional = "             + isOptional + "\n";
         str = str + "------------END ParameterInfo-------------\n";
 
         return str;
@@ -93,57 +101,41 @@ public class ParameterInfo
         this.isAttribute = isAttribute;
     }
 
+    public void setParamName(String paramName, TypeMap typeMap)
+    {
+        // Get the last identifier after anonymous token
+        if (paramName.lastIndexOf(SymbolTable.ANON_TOKEN) > 1)
+        {
+            paramName =
+                paramName.substring(paramName.lastIndexOf(SymbolTable.ANON_TOKEN) + 1,
+                                    paramName.length());
+        }
+        
+        attribName = paramName;
+        attribNameAsSOAPString = paramName;
+        
+        // Now generate a code-safe representation of the name
+        attribNameAsMember = CUtils.sanitizeString(attribName);
+        methodName = attribNameAsMember;
+        
+        if (typeMap != null && CUtils.classExists(typeMap, attribNameAsMember))
+            attribNameAsMember += "_Ref";
+        attribNameAsMember = CUtils.resolveWSDL2LanguageNameClashes(attribNameAsMember);        
+    }
+    
     public String getParamName()
     {
-        if (attribName.lastIndexOf(SymbolTable.ANON_TOKEN) > 1)
-        {
-            attribName =
-                attribName.substring(attribName.lastIndexOf(SymbolTable.ANON_TOKEN) + 1,
-                                     attribName.length());
-        }
-        
-        // This second call to TypeMap.resoleveWSDL2LanguageNameClashes
-        // is made to make sure after replacing ANON_TOKEN it is still not a keyword
-        attribName = CUtils.resolveWSDL2LanguageNameClashes(attribName);
-
         return attribName;
     }
-    
-    // To avoid the '-' in attribute name.
-    // TODO - not needed, get rid of this.
-    public String getParamNameWithoutSymbols() 
+
+    public String getParamNameAsMember()
     {
-        String result = this.getParamName();
-    
-        char[] symbols = TypeMap.getSymbols();
-
-        for (int j = 0; j < symbols.length; j++)
-            result = result.replace(symbols[j], '_');
-
-        return result;
+        return attribNameAsMember;
     }
 
-    public String getParamNameAsSOAPElement()
+    public String getParamNameAsSOAPString()
     {
-        String result = attribName;
-
-        if (attribName.lastIndexOf(SymbolTable.ANON_TOKEN) > 1)
-        {
-            result =
-                attribName.substring(attribName.lastIndexOf(SymbolTable.ANON_TOKEN) + 1,
-                                     attribName.length());
-        }
-        
-        // Make sure SOAP tag name is not prefixed because it is a key word
-        if( result.charAt(0) == '_') 
-        {
-            String tagname = result.substring(1, result.length() );
-            
-            if( result.equals( CUtils.resolveWSDL2LanguageNameClashes(tagname)))
-                result = tagname;
-
-        }
-        return result;
+        return attribNameAsSOAPString;
     }
 
     /**
@@ -153,36 +145,16 @@ public class ParameterInfo
     {
         return type != null && attribName.equals(type.getLanguageSpecificName());
     }
-
-    public void setParamName(String paramName)
-    {
-        if (paramName.lastIndexOf(SymbolTable.ANON_TOKEN) > 1)
-        {
-            paramName =
-                paramName.substring(paramName.lastIndexOf(SymbolTable.ANON_TOKEN) + 1,
-                                    paramName.length());
-        }
-        paramName =CUtils.resolveWSDL2LanguageNameClashes(paramName);
-        
-        this.attribName = paramName;
-    }
-
-    public ParameterInfo(Type type, String attribName)
-    {
-        this.type = type;
-        this.attribName = attribName;
-    }
     
     public Type getType()
     {
         return type;
     }
 
-    /**
-     * 
-     */
-    public ParameterInfo()
-    {}
+    public void setType(Type type)
+    {
+        this.type = type;
+    }
 
     /**
      * @return
@@ -192,21 +164,9 @@ public class ParameterInfo
         return elementName;
     }
 
-    public String getElementNameAsString()
+    public String getElementNameAsSOAPString()
     {
-        return CUtils.resolveWSDL2LanguageNameClashes(getSOAPElementNameAsString());
-    }
-
-    public String getSOAPElementNameAsString()
-    {
-        String paramName = elementName.getLocalPart();
-        if (paramName.lastIndexOf(SymbolTable.ANON_TOKEN) > 1)
-        {
-            paramName =
-                paramName.substring(paramName.lastIndexOf(SymbolTable.ANON_TOKEN) + 1,
-                                                          paramName.length());
-        }
-        return paramName;
+        return elementNameAsSOAPString;
     }
 
     /**
@@ -215,6 +175,19 @@ public class ParameterInfo
     public void setElementName(QName name)
     {
         elementName = name;
+        if (elementName != null)
+        {
+            String paramName = elementName.getLocalPart();
+            if (paramName.lastIndexOf(SymbolTable.ANON_TOKEN) > 1)
+            {
+                paramName =
+                    paramName.substring(paramName.lastIndexOf(SymbolTable.ANON_TOKEN) + 1,
+                                                              paramName.length());
+            }
+            elementNameAsSOAPString = paramName;            
+        }
+        else
+            elementNameAsSOAPString=null;
     }
 
     public QName getSchemaName()
@@ -225,15 +198,6 @@ public class ParameterInfo
     public String getLangName()
     {
         return this.type.getLanguageSpecificName();
-    }
-
-    /**
-     * Sets the type.
-     * @param type The type to set
-     */
-    public void setType(Type type)
-    {
-        this.type = type;
     }
 
     /**
@@ -264,5 +228,14 @@ public class ParameterInfo
     public boolean isOptional()
     {
         return isOptional;
+    }
+    public String getMethodName()
+    {
+        return methodName;
+    }
+
+    public void setMethodName(String methodName)
+    {
+        this.methodName = methodName;
     }
 }

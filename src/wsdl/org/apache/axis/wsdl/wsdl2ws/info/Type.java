@@ -137,7 +137,7 @@ public class Type
             this.languageSpecificName = this.name.getLocalPart();
         
         // Ensure name is valid and does not clash with language specific constructs
-        this.languageSpecificName = CUtils.sanitiseClassName(this.languageSpecificName);
+        this.languageSpecificName = CUtils.sanitizeString(this.languageSpecificName);
         
         // Indicate whether type is anonymous. Anonymous type start with '>' and are not
         // externalized by default.
@@ -195,9 +195,6 @@ public class Type
     }
 
     /**
-     * The Type take the attributes name to lowercase when add, 
-     * If there is two names like "Name" and "name"
-     * they will convert to "name"  Is that acceptable ....  
      */
     public void setTypeNameForElementName(ElementInfo element)
     {
@@ -209,8 +206,6 @@ public class Type
                 attribName.substring(
                     attribName.lastIndexOf(SymbolTable.ANON_TOKEN) + 1,attribName.length());
         }
-
-        attribName = CUtils.resolveWSDL2LanguageNameClashes(attribName);
 
         this.elements.put(attribName, element);
         this.vElements.add(attribName);
@@ -228,7 +223,7 @@ public class Type
 
     public void setLanguageSpecificName(String languageSpecificName)
     {
-        this.languageSpecificName = CUtils.sanitiseClassName(languageSpecificName);
+        this.languageSpecificName = CUtils.sanitizeString(languageSpecificName);
     }
 
     /**

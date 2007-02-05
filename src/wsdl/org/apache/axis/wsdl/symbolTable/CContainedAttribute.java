@@ -47,8 +47,6 @@ public class CContainedAttribute
         name = qname.getLocalPart();
         if (name.lastIndexOf(SymbolTable.ANON_TOKEN) > 1)
             name = name.substring(name.lastIndexOf(SymbolTable.ANON_TOKEN) + 1, name.length());
-        
-        name = CUtils.resolveWSDL2LanguageNameClashes(name);        
     }
 
     public final QName getQName() {

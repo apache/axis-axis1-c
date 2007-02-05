@@ -331,7 +331,7 @@ public class WrapWriter extends CPPClassWriter
                 WrapperUtils.getClassNameFromParamInfoConsideringArrays(
                     (ParameterInfo) paramsB.get(i),
                     wscontext);
-            parameterName = ((ParameterInfo) paramsB.get(i)).getParamName();
+            parameterName = ((ParameterInfo) paramsB.get(i)).getParamNameAsSOAPString();
             ParameterInfo param = (ParameterInfo) paramsB.get(i);
             if ((CUtils
                 .isSimpleType(param.getLangName())))

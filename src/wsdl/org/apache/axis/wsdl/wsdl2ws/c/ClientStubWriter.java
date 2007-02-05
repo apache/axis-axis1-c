@@ -369,7 +369,7 @@ public class ClientStubWriter extends CFileWriter
                     writer.write("(Axisc_Array *)Value" + i + ", "
                             + CUtils.getXSDTypeForBasicType(containedType)
                             + ", \""
-                            + ((ParameterInfo) paramsB.get(i)).getParamName()
+                            + ((ParameterInfo) paramsB.get(i)).getParamNameAsSOAPString()
                             + "\"");
                 }
                 else
@@ -379,7 +379,7 @@ public class ClientStubWriter extends CFileWriter
                     writer.write("(Axisc_Array *)Value" + i
                             + ",(void *) Axis_Serialize_" + containedType
                             + ",(void *) Axis_Delete_" + containedType
-                            + ",\"" + ((ParameterInfo) paramsB.get(i)).getParamName() + "\""
+                            + ",\"" + ((ParameterInfo) paramsB.get(i)).getParamNameAsSOAPString() + "\""
                             + ",Axis_URI_" + containedType);
                 }
             }
@@ -395,7 +395,7 @@ public class ClientStubWriter extends CFileWriter
                             + i
                             + ", \""
                             + ((ParameterInfo) paramsB.get(i))
-                                    .getParamName() + "\", "
+                                    .getParamNameAsSOAPString() + "\", "
                             + CUtils.getXSDTypeForBasicType(paramTypeName));
                 }
                 else
@@ -405,7 +405,7 @@ public class ClientStubWriter extends CFileWriter
                             + i
                             + ", \""
                             + ((ParameterInfo) paramsB.get(i))
-                                    .getParamName() + "\", "
+                                    .getParamNameAsSOAPString() + "\", "
                             + CUtils.getXSDTypeForBasicType(paramTypeName));
                 }
             }
@@ -416,7 +416,7 @@ public class ClientStubWriter extends CFileWriter
                 writer.write("Value" + i + ",(void *) Axis_Serialize_"
                         + paramTypeName + ",(void *) Axis_Delete_"
                         + paramTypeName + ",\""
-                        + ((ParameterInfo) paramsB.get(i)).getParamName()
+                        + ((ParameterInfo) paramsB.get(i)).getParamNameAsSOAPString()
                         + "\",Axis_URI_" + paramTypeName);
             }
             writer.write(");\n");
@@ -426,21 +426,11 @@ public class ClientStubWriter extends CFileWriter
                 + minfo.getOutputMessage().getLocalPart() + "\",\""
                 + wscontext.getWrapInfo().getTargetNameSpaceOfWSDL()
                 + "\"))\n\t\t{\n");
-
-        // Because getParamName will prefix any c++ reserved word with an
-        // underscore (i.e 'return' becomes '_return'), this unnecessary
-        // modification needs to be removed before using the name as a soap
-        // tag identifier.
-        
+      
         String paramTagName = "";
         
         if( returntype != null)
-        {
-            paramTagName = returntype.getParamName();
-
-            if( paramTagName.charAt(0) == '_')
-                paramTagName = paramTagName.substring( 1);
-        }
+            paramTagName = returntype.getParamNameAsSOAPString();
         
         if (isAllTreatedAsOutParams)
         {
@@ -478,7 +468,7 @@ public class ClientStubWriter extends CFileWriter
                         writer.write("\n\t\tAxisc_Array * pReturn" + i 
                                 + " = axiscCallGetBasicArray(call, " 
                                 + CUtils.getXSDTypeForBasicType (containedType) 
-                                + ",\"" + currentType.getParamName() + "\",0);\n\n");
+                                + ",\"" + currentType.getParamNameAsSOAPString() + "\",0);\n\n");
                         writer.write("\t\tif( OutValue" + i + " != NULL)\n");
                         writer.write("\t\t{\n");
                         writer.write("\t\t\tif( *OutValue" + i + " != NULL)\n");
@@ -501,7 +491,7 @@ public class ClientStubWriter extends CFileWriter
                                 + ",(void *) Axis_DeSerialize_" + containedType
                                 + ",(void *) Axis_Create_" + containedType
                                 + ",(void *) Axis_Delete_" + containedType
-                                + ",\"" +currentType.getElementNameAsString() 
+                                + ",\"" +currentType.getElementNameAsSOAPString() 
                                 + "\",Axis_URI_" + containedType + ");\n");
                         writer.write("\t\t}\n");
                         writer.write("\t\telse\n");
@@ -512,7 +502,7 @@ public class ClientStubWriter extends CFileWriter
                                 + ",(void *) Axis_DeSerialize_" + containedType
                                 + ",(void *) Axis_Create_" + containedType
                                 + ",(void *) Axis_Delete_" + containedType
-                                + ",\"" + currentType.getElementNameAsString() 
+                                + ",\"" + currentType.getElementNameAsSOAPString() 
                                 + "\",Axis_URI_" + containedType + ");\n");
                         writer.write("\t\t\t\tAxis_Delete_" + containedType + "_Array(pTemp" + i + ", 0);\n");
                         writer.write("\t\t}\n");
@@ -559,7 +549,7 @@ public class ClientStubWriter extends CFileWriter
                         }
                         else 
                         {
-                            writer.write( "\t\t" + currentParaType + " * pReturn" + i + " = axiscCall" + CUtils.getParameterGetValueMethodName( currentParaType, false) + "(call, \"" + currentType.getParamName() + "\", 0);\n");
+                            writer.write( "\t\t" + currentParaType + " * pReturn" + i + " = axiscCall" + CUtils.getParameterGetValueMethodName( currentParaType, false) + "(call, \"" + currentType.getParamNameAsSOAPString() + "\", 0);\n");
                             writer.write( "\n");
                             writer.write( "\t\tif( pReturn" + i + " != NULL && OutValue" + i + " != NULL)\n");
                             writer.write( "\t\t{\n");
@@ -579,7 +569,7 @@ public class ClientStubWriter extends CFileWriter
                                         + " *) axiscCallGetCmplxObject(call, (void *) Axis_DeSerialize_" + currentParaType
                                         + ",(void *) Axis_Create_" + currentParaType
                                         + ",(void *) Axis_Delete_" + currentParaType
-                                        + ",\"" + currentType.getParamName()
+                                        + ",\"" + currentType.getParamNameAsSOAPString()
                                         + "\",0);\n");
                     }
                 }

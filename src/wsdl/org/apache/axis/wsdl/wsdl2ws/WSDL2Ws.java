@@ -363,7 +363,9 @@ public class WSDL2Ws
             { 
                 // for non-wrapped style wsdl's
                 String elementName = (String) element.getQName().getLocalPart();
-                pinfo = new ParameterInfo(type, elementName);
+                pinfo = new ParameterInfo();
+                pinfo.setType(type);
+                pinfo.setParamName(elementName, typeMap);
                 pinfo.setElementName(type.getName());
                 if (type.getName().equals(CUtils.anyTypeQname))
                     pinfo.setAnyType(true);
@@ -394,7 +396,9 @@ public class WSDL2Ws
             eleinfo = type.getElementForElementName(elementname);
             innerType = eleinfo.getType();
             
-            pinfo = new ParameterInfo(innerType, elementname);
+            pinfo = new ParameterInfo();
+            pinfo.setType(innerType);
+            pinfo.setParamName(elementname, typeMap);
             
             if (eleinfo.getMaxOccurs() > 1)
                 pinfo.setArray(true);
@@ -515,7 +519,11 @@ public class WSDL2Ws
                 { 
                     // for non-wrapped style wsdl's
                     String elementName = (String) element.getQName().getLocalPart();
-                    pinfo = new ParameterInfo(type, elementName);
+                    
+                    pinfo = new ParameterInfo();
+                    
+                    pinfo.setType(type);
+                    pinfo.setParamName(elementName, typeMap);
                     pinfo.setElementName(type.getName());
                     if (type.getName().equals(CUtils.anyTypeQname))
                         pinfo.setAnyType(true);
@@ -540,8 +548,10 @@ public class WSDL2Ws
         {
             CContainedAttribute attr = (CContainedAttribute)attributes.next();
 
-            ParameterInfo pinfo = new ParameterInfo(attr.getType(), attr.getName());
-            
+            ParameterInfo pinfo = new ParameterInfo();
+
+            pinfo.setType(attr.getType());
+            pinfo.setParamName(attr.getName(), typeMap);
             pinfo.setElementName(attr.getType().getName());
             pinfo.setAttribute(true);
             
@@ -570,7 +580,9 @@ public class WSDL2Ws
             eleinfo = type.getElementForElementName(elementname);
             Type innerType = eleinfo.getType();
             
-            pinfo = new ParameterInfo(innerType, elementname);
+            pinfo = new ParameterInfo();
+            pinfo.setType(innerType);
+            pinfo.setParamName(elementname, typeMap);            
             
             if (eleinfo.getMaxOccurs() > 1)
                 pinfo.setArray(true);
@@ -1024,9 +1036,12 @@ public class WSDL2Ws
         Type type = this.typeMap.getType(qname);
         if (type == null)
             throw new WrapperFault("unregistered type " + qname + " referred");
-        ParameterInfo parainfo = new ParameterInfo(type, part.getName());
-        parainfo.setElementName(part.getElementName());
-        return parainfo;
+        
+        ParameterInfo pinfo = new ParameterInfo();
+        pinfo.setType(type);
+        pinfo.setParamName(part.getName(), typeMap);
+        pinfo.setElementName(part.getElementName());
+        return pinfo;
     }
 
     private MethodInfo getMethodInfoByName(String name) throws WrapperFault

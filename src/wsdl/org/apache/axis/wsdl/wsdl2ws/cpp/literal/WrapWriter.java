@@ -158,7 +158,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
             else
                 paraTypeName = param.getLangName();
 
-            elementName = param.getElementNameAsString();
+            elementName = param.getElementNameAsSOAPString();
             if (type != null && type.isSimpleType())
             {
                 if (param.isNillable() && 
@@ -335,7 +335,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
         if (returntype != null)
         { 
             /* Invoke the service when return type not void */
-            returnParamName = returntype.getElementNameAsString();
+            returnParamName = returntype.getElementNameAsSOAPString();
             writer.write("\t\t" + outparamType);
             if ((outparamType.lastIndexOf ("_Array") > 0)
                     ||(!returntypeisarray 
@@ -469,8 +469,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                     returntypeissimple = CUtils.isSimpleType(outparamType);
                 }
                 
-                returnParamName = param.getElementName().getLocalPart();
-                returnParamName = returnParamName.substring(returnParamName.lastIndexOf(">")+1);
+                returnParamName = param.getElementNameAsSOAPString();
                 
                 if (returntypeissimple)
                 {

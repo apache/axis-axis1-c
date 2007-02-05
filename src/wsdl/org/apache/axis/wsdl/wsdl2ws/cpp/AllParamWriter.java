@@ -72,7 +72,7 @@ public class AllParamWriter implements SourceWriter
                     if (elementType != null)
                     {
                         if (TypeMap.isAnonymousType(elementType))
-                            elementType = CUtils.sanitiseClassName(elementType);
+                            elementType = CUtils.sanitizeString(elementType);
                         
                         if (WSDL2Ws.verbose)
                             System.out.println("    Array element type " 

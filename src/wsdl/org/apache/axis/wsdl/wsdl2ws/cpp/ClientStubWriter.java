@@ -401,7 +401,7 @@ public class ClientStubWriter extends CPPClassWriter
                     writer.write("Value" + i + ", "
                             + CUtils.getXSDTypeForBasicType(containedType)
                             + ", \""
-                            + ((ParameterInfo) paramsB.get(i)).getParamNameAsSOAPElement()
+                            + ((ParameterInfo) paramsB.get(i)).getParamNameAsSOAPString()
                             + "\"");
                 }
                 else
@@ -411,7 +411,7 @@ public class ClientStubWriter extends CPPClassWriter
                     writer.write("Value" + i
                             + ",(void *) Axis_Serialize_" + containedType
                             + ",(void *) Axis_Delete_" + containedType
-                            + ",\"" + ((ParameterInfo) paramsB.get(i)).getParamNameAsSOAPElement() + "\""
+                            + ",\"" + ((ParameterInfo) paramsB.get(i)).getParamNameAsSOAPString() + "\""
                             + ",Axis_URI_" + containedType);
                 }
             }
@@ -422,14 +422,14 @@ public class ClientStubWriter extends CPPClassWriter
                 {
                     writer.write("\t\tm_pCall->addParameter( ");
                     writer.write("(void *) Value" + i + ", \""
-                            + ((ParameterInfo) paramsB.get(i)).getParamNameAsSOAPElement() + "\", "
+                            + ((ParameterInfo) paramsB.get(i)).getParamNameAsSOAPString() + "\", "
                             + CUtils.getXSDTypeForBasicType(paramTypeName));
                 }
                 else
                 {
                     writer.write("\t\tm_pCall->addParameter( ");
                     writer.write("(void *) &Value" + i + ", \""
-                            + ((ParameterInfo) paramsB.get(i)).getParamNameAsSOAPElement() + "\", "
+                            + ((ParameterInfo) paramsB.get(i)).getParamNameAsSOAPString() + "\", "
                             + CUtils.getXSDTypeForBasicType(paramTypeName));
                 }
             }
@@ -440,7 +440,7 @@ public class ClientStubWriter extends CPPClassWriter
                 writer.write("Value" + i 
                         + ",(void *) Axis_Serialize_" + paramTypeName 
                         + ",(void *) Axis_Delete_" + paramTypeName 
-                        + ",\""  + ((ParameterInfo) paramsB.get(i)).getParamNameAsSOAPElement()
+                        + ",\""  + ((ParameterInfo) paramsB.get(i)).getParamNameAsSOAPString()
                         + "\",Axis_URI_" + paramTypeName);
             }
 
@@ -451,16 +451,11 @@ public class ClientStubWriter extends CPPClassWriter
                 + minfo.getOutputMessage().getLocalPart() + "\",\""
                 + namespaceURI
                 + "\"))\n\t\t\t{\n");
-
-        // Because getParamName will prefix any c++ reserved word with an
-        // underscore (i.e 'return' becomes '_return'), this unnecessary
-        // modification needs to be removed before using the name as a soap
-        // tag identifier.
         
         String paramTagName = "";
         
         if( returntype != null)
-            paramTagName = returntype.getParamNameAsSOAPElement();
+            paramTagName = returntype.getParamNameAsSOAPString();
 
         if (isAllTreatedAsOutParams)
         {
@@ -469,7 +464,7 @@ public class ClientStubWriter extends CPPClassWriter
             for (int i = 0; i < paramsC.size(); i++)
             {
                 ParameterInfo currentType = (ParameterInfo) paramsC.get(i);
-                paramTagName = currentType.getParamNameAsSOAPElement();
+                paramTagName = currentType.getParamNameAsSOAPString();
                     
                 type = wscontext.getTypemap().getType(currentType.getSchemaName());
                 if (type != null)
@@ -520,7 +515,7 @@ public class ClientStubWriter extends CPPClassWriter
                               + ",(void *) Axis_DeSerialize_" + containedType
                               + ",(void *) Axis_Create_" + containedType
                               + ",(void *) Axis_Delete_" + containedType
-                              + ",\"" +currentType.getElementNameAsString() 
+                              + ",\"" +currentType.getElementNameAsSOAPString() 
                               + "\",Axis_URI_" + containedType + ");\n");
                         writer.write("\t\t\t}\n");
                         writer.write("\t\t\telse\n");
@@ -532,7 +527,7 @@ public class ClientStubWriter extends CPPClassWriter
                               + ",(void *) Axis_DeSerialize_" + containedType
                               + ",(void *) Axis_Create_" + containedType
                               + ",(void *) Axis_Delete_" + containedType
-                              + ",\"" + currentType.getElementNameAsString()
+                              + ",\"" + currentType.getElementNameAsSOAPString()
                               + "\",Axis_URI_" + containedType + ");\n");
                         writer.write("\t\t\t\tdelete pTemp" + i + ";\n");
                         writer.write("\t\t\t}\n");

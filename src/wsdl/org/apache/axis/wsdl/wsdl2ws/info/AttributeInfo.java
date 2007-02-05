@@ -37,7 +37,6 @@ public class AttributeInfo extends ParameterInfo
     private String typeName;
     private String typeNamespace;
     private String className;
-    private String methodName;
     
     //this variable states whether the attribute is an xsd:choice
     private boolean choiceElement = false;
@@ -61,7 +60,6 @@ public class AttributeInfo extends ParameterInfo
         str = str + "typeName = "             + typeName + "\n";
         str = str + "typeNamespace = "        + typeNamespace + "\n";
         str = str + "className ="             + className + "\n";
-        str = str + "attribNameAsMember ="    + getParamNameAsMember() + "\n";
         str = str + "choiceElement = "        + choiceElement + "\n";
         str = str + "allElement ="            + allElement + "\n";
         str = str + "nsQualified ="           + nsQualified + "\n";
@@ -162,18 +160,6 @@ public class AttributeInfo extends ParameterInfo
         this.isSimpleType = isSimpleType;
     }
 
-    // TODO - probably can remove since we sanitize attribute name.
-    public String getParamNameAsMember()
-    {
-        String attribNameAsMember = super.getParamNameWithoutSymbols();
-        
-        // need to deal with _Ref stuff :(
-        if (this.className != null && this.className.equals(attribNameAsMember))
-            attribNameAsMember = "m_" + attribNameAsMember;
-
-        return attribNameAsMember;
-    }
-    
     //getter and setter for choiceElement
     public boolean getChoiceElement()
     {
@@ -240,15 +226,5 @@ public class AttributeInfo extends ParameterInfo
     public void setMinOccurs(int minOccurs)
     {
         this.minOccurs = minOccurs;
-    }
-    
-    public String getMethodName()
-    {
-        return methodName;
-    }
-
-    public void setMethodName(String methodName)
-    {
-        this.methodName = methodName;
     }
 }

@@ -123,7 +123,7 @@ public class ParmHeaderFileWriter extends ParamWriter
             String  restrictionBaseType = type.getRestrictionBaseType();
             if (null != restrictionBaseType )
             {  
-                langTypeName = CUtils.sanitiseClassName(restrictionBaseType);               
+                langTypeName = CUtils.sanitizeString(restrictionBaseType);               
                 writer.write( "#include \"" + langTypeName + ".hpp\"\n\n");
             }
             else
@@ -262,18 +262,12 @@ public class ParmHeaderFileWriter extends ParamWriter
         try
         {
             for (int i = 0; i < attribs.length; i++)
-            {  
-                // Ensure field name is valid and does not cause conflict with class names
-                String sanitizedAttrName = CUtils.sanitiseAttributeName(attribs[i].getParamName());
-                if (CUtils.classExists(wscontext, sanitizedAttrName))
-                    sanitizedAttrName += "_Ref";
-                attribs[i].setParamName(sanitizedAttrName);
-                
+            {                  
                 // Following will set the correct type 
                 String paramType = getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]);
                 
                 // Following will set param name - if anyType, we index param name
-                String paramName = attribs[i].getParamName();
+                String paramName = attribs[i].getParamNameAsMember();
                 if(attribs[i].isAnyType())
                 {
                     anyCounter += 1;
@@ -301,7 +295,7 @@ public class ParmHeaderFileWriter extends ParamWriter
                 writer.write("\t"
                              + getCorrectParmNameConsideringArraysAndComplexTypes(extensionBaseAttrib)
                              + "  "
-                             + extensionBaseAttrib.getParamNameWithoutSymbols() + ";\n");
+                             + extensionBaseAttrib.getParamNameAsMember() + ";\n");
             }            
         }
         catch (IOException e)

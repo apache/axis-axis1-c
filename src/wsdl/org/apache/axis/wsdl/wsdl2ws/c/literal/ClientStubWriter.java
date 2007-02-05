@@ -371,7 +371,7 @@ public class ClientStubWriter
             if ("string".equals (elementType))
             {
                 writer.write ("\taxiscCallSetSOAPMethodAttribute(call, \""
-                      + param.getParamName () + "\", \"\", Value" + i + ");\n");
+                      + param.getParamNameAsSOAPString () + "\", \"\", Value" + i + ");\n");
             }
             else if ("int".equals (elementType))
             {
@@ -379,7 +379,7 @@ public class ClientStubWriter
                 writer.write ("\t\tchar buffer[20];\n");
                 writer.write ("\t\tsprintf(buffer,\"%d\", Value" + i + ");\n");
                 writer.write ("\t\taxiscCallSetSOAPMethodAttribute(call, \"" +
-                       param.getParamName () + "\", \"\", buffer);\n");
+                       param.getParamNameAsSOAPString () + "\", \"\", buffer);\n");
                 writer.write ("\t}\n");
             }
         } // end for-loop
@@ -428,7 +428,7 @@ public class ClientStubWriter
                 writer.write("\taxiscCallAddAnyObject(call, Value" + i);
             else
             {
-                String parameterName = ((ParameterInfo) paramsB.get (i)).getElementNameAsString ();
+                String parameterName = ((ParameterInfo) paramsB.get (i)).getElementNameAsSOAPString ();
                 String namespace = ((ParameterInfo) paramsB.get (i)).getElementName ().getNamespaceURI ();
     
                 if (((ParameterInfo)paramsB.get(i)).isOptional())
@@ -611,7 +611,7 @@ public class ClientStubWriter
                         
                         writer.write("\n\t\t\tOutValue" + i + " = axiscCallGetBasicArray(call, " 
                                 + CUtils.getXSDTypeForBasicType (containedType) 
-                                + ", \"" + currentType.getParamName ()
+                                + ", \"" + currentType.getParamNameAsSOAPString ()
                                 + "\", 0);\n\n");
                     }
                     else
@@ -628,7 +628,7 @@ public class ClientStubWriter
                               + ", (void*) Axis_DeSerialize_" + containedType
                               + ", (void*) Axis_Create_" + containedType
                               + ", (void*) Axis_Delete_" + containedType
-                              + ", \"" + currentType.getElementNameAsString () 
+                              + ", \"" + currentType.getElementNameAsSOAPString () 
                               + "\", Axis_URI_" + containedType + ");\n");
                         
                         writer.write("\t\t\t}\n");
@@ -642,7 +642,7 @@ public class ClientStubWriter
                               + ", (void*) Axis_DeSerialize_" + containedType
                               + ", (void*) Axis_Create_" + containedType
                               + ", (void*) Axis_Delete_" + containedType
-                              + ", \"" + currentType.getElementNameAsString () 
+                              + ", \"" + currentType.getElementNameAsSOAPString () 
                               + "\", Axis_URI_" + containedType + ");\n");
                         writer.write("\t\t\t\tAxis_Delete_" + containedType + "_Array(pTemp" + i + ", 0);\n");
                         writer.write("\t\t\t}\n");                        
@@ -669,7 +669,7 @@ public class ClientStubWriter
                         writer.write( "\t\t\t" + currentParaType + " pReturn" + i + " = " 
                                 + "axiscCall"
                                 + CUtils.getParameterGetValueMethodName( baseTypeName, false) 
-                                + "(call,  \"" + currentType.getParamName() + "\", 0);\n");
+                                + "(call,  \"" + currentType.getParamNameAsSOAPString() + "\", 0);\n");
                         writer.write( "\n");
                         writer.write( "\t\t\tif( pReturn" + i + " != NULL && OutValue" + i + " != NULL)\n");
                         writer.write( "\t\t\t{\n");
@@ -700,7 +700,7 @@ public class ClientStubWriter
                         writer.write( "\t\t\t" + currentParaType + " * pReturn" + i + " = " 
                                 + "axiscCall"
                                 + CUtils.getParameterGetValueMethodName( baseTypeName, false) 
-                                + "(call,  \"" + currentType.getParamName() + "\", 0);\n");
+                                + "(call,  \"" + currentType.getParamNameAsSOAPString() + "\", 0);\n");
                         writer.write( "\n");
                         writer.write( "\t\t\tif( pReturn" + i + " != NULL && OutValue" + i + " != NULL)\n");
                         writer.write( "\t\t\t{\n");
@@ -745,7 +745,7 @@ public class ClientStubWriter
                               + "*)axiscCallGetCmplxObject(call, (void*) Axis_DeSerialize_" + currentParaType 
                               + ", (void*) Axis_Create_" + currentParaType 
                               + ", (void*) Axis_Delete_" + currentParaType + ",\"" 
-                              + currentType.getElementNameAsString () + "\", 0);\n");
+                              + currentType.getElementNameAsSOAPString () + "\", 0);\n");
                 }
             }
             
@@ -774,7 +774,7 @@ public class ClientStubWriter
                 containedType = CUtils.getclass4qname (qname);
                 writer.write ("\t\t\tRetArray =(" + containedType + "_Array *) axiscCallGetBasicArray(call, " 
                         + CUtils.getXSDTypeForBasicType (containedType) 
-                        + ", \"" + returntype.getParamName () + "\", 0);\n");
+                        + ", \"" + returntype.getParamNameAsSOAPString () + "\", 0);\n");
             }
             else
             {
@@ -784,7 +784,7 @@ public class ClientStubWriter
                         + containedType 
                         + ", (void*) Axis_Create_" + containedType
                           + ", (void*) Axis_Delete_" + containedType
-                          + ", \"" + returntype.getElementNameAsString ()
+                          + ", \"" + returntype.getElementNameAsSOAPString ()
                           + "\", Axis_URI_" + containedType + ");\n");
             }
             
@@ -801,7 +801,7 @@ public class ClientStubWriter
                 // Just return the pointer as-is - no need to delete.
                 writer.write( "\t\t\tRet = axiscCall"
                         + CUtils.getParameterGetValueMethodName( outparamType, false) 
-                        + "(call, \"" + returntype.getParamName() + "\", 0);\n");
+                        + "(call, \"" + returntype.getParamNameAsSOAPString() + "\", 0);\n");
 
                 writer.write( "\t\t}\n");
             }
@@ -810,7 +810,7 @@ public class ClientStubWriter
                 writer.write ("\t\t\t" + outparamType + " * pReturn = " 
                         + "axiscCall"
                         + CUtils.getParameterGetValueMethodName(outparamType, false) 
-                        + "(call, \"" + returntype.getSOAPElementNameAsString() + "\", 0);\n");
+                        + "(call, \"" + returntype.getElementNameAsSOAPString() + "\", 0);\n");
                 
                 writer.write ("\t\t\tif(pReturn)\n");
                 writer.write ("\t\t\t{\n");
@@ -850,7 +850,7 @@ public class ClientStubWriter
                           ")axiscCallGetCmplxObject(call, (void*) Axis_DeSerialize_" + outparamTypeBase +
                           ", (void*) Axis_Create_" + outparamTypeBase +
                           ", (void*) Axis_Delete_" + outparamTypeBase + ",\"" +
-                          returntype.getElementNameAsString () + "\", 0);\n\t\t}\n");
+                          returntype.getElementNameAsSOAPString () + "\", 0);\n\t\t}\n");
             }
             else
             {
@@ -858,7 +858,7 @@ public class ClientStubWriter
                           + "*)axiscCallGetCmplxObject(call, (void*) Axis_DeSerialize_" + outparamType +
                           ", (void*) Axis_Create_" + outparamType +
                           ", (void*) Axis_Delete_" + outparamType + ",\"" +
-                          returntype.getElementNameAsString () + "\", 0);\n\t\t}\n");
+                          returntype.getElementNameAsSOAPString () + "\", 0);\n\t\t}\n");
             }
 
             writer.write ("\t}\n");
