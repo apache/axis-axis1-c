@@ -50,9 +50,6 @@ public class TypeMap
     
     /* this map stores Types keyed by the parameter name */
     private Hashtable typeInfo;
-    
-    //  29/3/05. To keep symbols
-    private static char[] symbolArray = { '-', '@'};
 
     static {
         // c -> xml type mapping
@@ -294,12 +291,6 @@ public class TypeMap
     public Collection getTypes()
     {
         return this.typeInfo.values();
-    }
-    
-    // To access the symbols
-    public static char[] getSymbols()
-    {
-        return symbolArray;
     }
     
     public static boolean isAnonymousType(String type)
