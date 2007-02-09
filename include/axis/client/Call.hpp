@@ -1764,8 +1764,7 @@ public:
       * exception handler will be called.
       * This function was added in support of the c-Binding implementation.  
       *
-      * @param exceptionCode - exception code in an AXIS exception that was thrown.
-      * @param createFp - pointer to exception string in AXIS exception that was thrown.
+      * @param e - exception to be processed.
       * @param exceptionHandlerFp - pointer to exception handler function
       */
      void processSoapFault(AxisException *e, void *exceptionHandlerFp);
