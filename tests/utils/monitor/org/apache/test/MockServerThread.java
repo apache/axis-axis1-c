@@ -294,7 +294,6 @@ public class MockServerThread extends ChildHandler implements Runnable
             // Recalculate time for local offset
             Calendar calendar = format.getCalendar();
             Date date = calendar.getTime();
-//            date.setTime(date.getTime() - calendar.getTimeZone().getRawOffset());
             date.setTime(date.getTime() - calendar.getTimeZone().getOffset(date.getTime()));
 
             // Create new string to be placed in response
@@ -319,9 +318,13 @@ public class MockServerThread extends ChildHandler implements Runnable
         {
             String orgResponse = "HTTP" + responseStrings[i];
             String hash = "###";
-            
-            int hashPos = orgResponse.indexOf( hash);
             String newResponse = orgResponse;
+            
+            int hashPos = -1;
+            
+            // The content length will be modified later, so skip if not chunked.
+            if (newResponse.indexOf("Content-Length:")==-1)
+                hashPos = orgResponse.indexOf( hash);
             
             if( hashPos != -1)
             {

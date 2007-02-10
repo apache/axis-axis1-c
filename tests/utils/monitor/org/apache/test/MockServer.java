@@ -179,7 +179,6 @@ public class MockServer extends ChildHandler implements Runnable
     private MockServer( String responseFileName, int port, boolean loopOnResponses) throws IOException
     {
         this(responseFileName, loopOnResponses);
-        System.out.println( "MockServer(responseFile, port)");
         this.port =port;
         // no point in going on if we can;'t create a server socket
         //serverSocket = TCPMonitor.getServerSocket(port);
@@ -200,7 +199,7 @@ public class MockServer extends ChildHandler implements Runnable
         // check the responsefile is there
         if (!this.responseFile.canRead( ))
             throw new IOException("Can't read the response file <" +responseFile+">");
-        System.out.println( "2MockServer will loop on responses? " + loopOnResponses);
+
         cacheResponseFile();
         // now deal with the port and threads
     }
@@ -210,7 +209,6 @@ public class MockServer extends ChildHandler implements Runnable
      */
     protected void cacheResponseFile( )throws IOException
     {
-        System.out.println( "1MockServer will loop on responses? " + loopOnResponses);       
         // cache the response file (this is a necessary optimisation - if the file is big then the connection blows)
         MockServerThread.cacheResponseFile(responseFile, loopOnResponses);
     }

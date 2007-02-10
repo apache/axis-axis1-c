@@ -79,7 +79,8 @@ public class Response
             hasCloseConnectionHeader=true;
        
         // Find out if the message is chunked
-        deriveIsChunked( );
+        // simply look for the content length string
+        chunked= message.indexOf(CONTENT_LENGTH)==-1;
         
         // emulate None OS machines when you want to test out the CRLF method
         //emulateNoneWinmachines();
@@ -101,12 +102,6 @@ public class Response
         if(matcher.find())
            msgString = matcher.replaceAll(""+LF);
         message = msgString.toCharArray();
-    }
-
-    private void deriveIsChunked( )
-    {
-        // simply look for the content length string
-        chunked=new String(message).indexOf(CONTENT_LENGTH)==-1;
     }
 
     public char[] getMessage( )
@@ -131,7 +126,7 @@ public class Response
         String modifiedResponse="";
         if (chunked)
         {
-            System.out.println("Information - Response file is chunked.");
+            System.out.println("Information - Response is chunked.");
             
             String messageString= new String(getMessage());
             modifiedResponse = correctHTTPHeaderSection(messageString);
@@ -140,6 +135,8 @@ public class Response
         }
         else
         {
+            System.out.println("Information - Response is NOT chunked.");    
+            
             if (System.getProperty("os.name").toLowerCase( ).startsWith("windows"))
                 System.out.println("Windows operating system - not converting crlf's");
             else
@@ -311,67 +308,6 @@ private String correctChunkedData(String request)
     return theCorrectedResponse.toString();
 }
 
-//    /**
-//     * This method looks through a chunked data section and ensures that the
-//     * chunksizes are correct. *
-//     * 
-//     * @param message
-//     * @return the message - corrected if necessary
-//     */
-//    private boolean checkBlocks(String message)
-//    {
-//        boolean sizesCorrect=true;
-//        boolean reachedEndOfAllChunks=false;
-//        int indexOfEndOfChunkSize=0;
-//        while (!reachedEndOfAllChunks&&sizesCorrect)
-//        {
-//            // Find this chunk_size value.
-//            indexOfEndOfChunkSize=message.indexOf(CRLF);
-//            System.out.println("indexOfChunkSize = "+indexOfEndOfChunkSize);
-//            //                System.out.println( "Message ="+message);
-//            System.out.println("Message.length() = "+message.length( ));
-//
-//            String chunkSizeString=message.substring(0, indexOfEndOfChunkSize)
-//                    .trim( );
-//
-//            int chunkSize=Integer.parseInt(chunkSizeString, 16);
-//            System.out.println("chunkSize="+chunkSize);
-//            if (chunkSize!=8192)
-//            {
-//                System.out.println("DEBUGGIN");
-//                ;
-//            }
-//            if (chunkSize==0)
-//            {
-//                reachedEndOfAllChunks=true;
-//            }
-//            else
-//            {
-//                // move the message past the size of Chunk
-//                message=message.substring(chunkSizeString.length( )
-//                        +CRLF.length( ));
-//
-//                // check that the last two chars are CRLF
-//                String lastTwoChars=message.substring(chunkSize, chunkSize+2);
-//                if (!lastTwoChars.equals(CRLF))
-//                {
-//                    System.err
-//                            .println("WARNING: Actual chunksize != declared chunksize: "
-//                                    +chunkSize);
-//                    sizesCorrect=false;
-//                }
-//                else
-//                {
-//                    // 	move the message on to the end of this chunk
-//                    message=message.substring(chunkSize+CRLF.length( ));
-//                }
-//            }
-//
-//        }
-//        return sizesCorrect;
-//
-//    }
-
     /**
      * @param sResponse
      * @param iIndex
@@ -421,7 +357,7 @@ private String correctChunkedData(String request)
             // the Content-Length value needs to be set to the size
             // of the body of the http response 
             String returnedHttpBody = response.substring(iIndex);
-            returnedResponse.replaceFirst("###", new Integer(returnedHttpBody.length()).toString());
+            returnedResponse = returnedResponse.replaceFirst("###", Integer.toString(returnedHttpBody.length()));
             return returnedResponse + returnedHttpBody;
         }
     }
