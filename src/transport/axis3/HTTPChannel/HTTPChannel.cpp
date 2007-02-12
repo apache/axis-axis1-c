@@ -166,7 +166,7 @@ GetLastErrorMsg()
 }
 
 /**
- * HTTPChannel::operator >> (char * msg)
+ * HTTPChannel::readBytes()
  *
  * This method attempts to read a message from the curently open channel.  If
  * there is no currently open channel, then the method throws an exception.  If
@@ -180,8 +180,8 @@ GetLastErrorMsg()
  * recieved message.
  */
 
-const IChannel & HTTPChannel::
-operator >> (char * msg)
+int HTTPChannel::
+readBytes(char *buf, int bufLen)
 {
     if (INVALID_SOCKET == m_Sock)
     {
@@ -190,8 +190,7 @@ operator >> (char * msg)
     }
 
     int     nByteRecv = 0;
-    char    buf[BUF_SIZE];
-    int     iBufSize = BUF_SIZE - 10;
+    int     iBufSize = bufLen - 10;
 
     // If timeout set then wait for maximum amount of time for data
     if( m_lTimeoutSeconds)
@@ -212,7 +211,7 @@ operator >> (char * msg)
     }
 
     // Either timeout was not set or data available before timeout; so read
-    nByteRecv = recv( m_Sock, (char *) &buf, iBufSize, 0);
+    nByteRecv = recv( m_Sock, buf, iBufSize, 0);
     if (nByteRecv == SOCKET_ERROR)
     {
         // error on read operation
@@ -229,16 +228,13 @@ operator >> (char * msg)
         // read-side of socket is closed.
     }
     else if( nByteRecv)
-    {
         buf[nByteRecv] = '\0';
-        memcpy(msg, buf, nByteRecv + 1);
-    }
 
-    return *this;
+    return nByteRecv;
 }
 
 /**
- * HTTPChannel::operator << (const char * msg)
+ * HTTPChannel::writeBytes()
  *
  * This method attempts to write a message to the curently open channel.  If
  * there is no currently open channel, then the method throws an exception.  If
@@ -248,9 +244,8 @@ operator >> (char * msg)
  * @param character pointer pointing to the array of character containing the
  * message to be transmitted.
  */
-
-const IChannel & HTTPChannel::
-operator << (const char * msg)
+int HTTPChannel::
+writeBytes(const char *buf, int numBytes)
 {
     if( INVALID_SOCKET == m_Sock)
     {
@@ -258,13 +253,12 @@ operator << (const char * msg)
         throw HTTPTransportException( SERVER_TRANSPORT_INVALID_SOCKET, m_LastError.c_str());
     }
 
-    int size = strlen( msg);
     int nByteSent;
 
 #ifdef __OS400__
-    if( (nByteSent = send( m_Sock, (char *)msg, size, 0)) == SOCKET_ERROR)
+    if( (nByteSent = send( m_Sock, (char *)buf, numBytes, 0)) == SOCKET_ERROR)
 #else
-    if( (nByteSent = send( m_Sock, msg, size, 0)) == SOCKET_ERROR)
+    if( (nByteSent = send( m_Sock, buf, numBytes, 0)) == SOCKET_ERROR)
 #endif
     {
         // This must be done first before closing channel in order to get actual error.
@@ -276,7 +270,7 @@ operator << (const char * msg)
         throw HTTPTransportException( SERVER_TRANSPORT_OUTPUT_STREAMING_ERROR, m_LastError.c_str());
     }
 
-    return *this;
+    return nByteSent;
 }
 
 /**

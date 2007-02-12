@@ -207,8 +207,8 @@ GetLastErrorMsg()
  * recieved message.
  */
 
-const IChannel & HTTPSSLChannel::
-operator >> (char * msg)
+int HTTPSSLChannel::
+readBytes(char *buf, int bufLen)
 {
     if (INVALID_SOCKET == m_Sock)
     {
@@ -216,9 +216,7 @@ operator >> (char * msg)
         throw HTTPTransportException( SERVER_TRANSPORT_INVALID_SOCKET, m_LastError.c_str());
     }
 
-    ReadFromSocket( msg);
-
-    return *this;
+    return ReadFromSocket( buf );
 }
 
 /**
@@ -233,8 +231,8 @@ operator >> (char * msg)
  * message to be transmitted.
  */
 
-const IChannel & HTTPSSLChannel::
-operator << (const char * msg)
+int HTTPSSLChannel::
+writeBytes(const char *buf, int numBytes)
 {
     if( INVALID_SOCKET == m_Sock)
     {
@@ -242,9 +240,7 @@ operator << (const char * msg)
         throw HTTPTransportException( SERVER_TRANSPORT_INVALID_SOCKET, m_LastError.c_str());
     }
 
-    WriteToSocket( msg, strlen( msg));
-
-    return *this;
+    return WriteToSocket( buf, numBytes);
 }
 
 /**

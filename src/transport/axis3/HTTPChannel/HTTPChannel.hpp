@@ -72,8 +72,8 @@ public:
     bool				open() throw (HTTPTransportException&);
     bool				close();
     const std::string &	GetLastErrorMsg();
-    const IChannel &	operator >> (char * msg);
-    const IChannel &	operator << (const char * msg);
+    int                 readBytes(char *buf, int bufLen);
+    int                 writeBytes(const char *buf, int numBytes);
     void				setTimeout( long lSeconds);
     void				setSocket( unsigned int uiNewSocket);
 	int					getSocket() {return m_Sock;}

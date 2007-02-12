@@ -34,7 +34,7 @@
 #include "../../soap/apr_base64.h"
 
 #include <stdio.h>
-
+    
 // =================================================================
 // In order to parse the HTTP protocol data on an ebcdic system, we
 // need to ensure that the various tokens we are looking for to distinguish
@@ -248,7 +248,7 @@ flushOutput() throw (AxisException, HTTPTransportException)
 {
     char *utf8Buf = NULL; // buffer for ebcdic/utf8 conversions.
 
-    // In preperation for sending the message, calculate the size of the message by using the string length method.
+    // In preperation for sending the message, set Content-Length HTTP header.
     char buff[24];
     sprintf( buff, "%d", m_strBytesToSend.length ());
     this->setTransportProperty ("Content-Length", buff);
@@ -256,33 +256,34 @@ flushOutput() throw (AxisException, HTTPTransportException)
     // The header is now complete.  The message header and message can now be transmitted.
     try
     {
+        const char *writeBuffer;
+        int bytesToWrite;
+        
+        // Generate HTTP header string
+        writeBuffer  = this->getHTTPHeaders ();
+        bytesToWrite = strlen(writeBuffer);
+        
+        // Send the data
 #ifndef __OS400__
-        *m_pActiveChannel << this->getHTTPHeaders ();
-        *m_pActiveChannel << this->m_strBytesToSend.c_str ();
+        m_pActiveChannel->writeBytes(writeBuffer, bytesToWrite);
+        m_pActiveChannel->writeBytes(this->m_strBytesToSend.c_str(), m_strBytesToSend.length());
 #else
         // Ebcdic (OS/400) systems need to convert the data to UTF-8. Note that free() 
         // is correctly used and should not be changed to delete().
-        const char *buf = this->getHTTPHeaders ();
-        utf8Buf = toUTF8((char *)buf, strlen(buf)+1);
-        *m_pActiveChannel << utf8Buf;
+        utf8Buf = toUTF8((char *)writeBuffer, bytesToWrite+1);
+        m_pActiveChannel->writeBytes(utf8Buf, strlen(utf8Buf));
         free(utf8Buf);
         utf8Buf = NULL;
         utf8Buf = toUTF8((char *)this->m_strBytesToSend.c_str(), this->m_strBytesToSend.length()+1);
-        *m_pActiveChannel << utf8Buf;
+        m_pActiveChannel->writeBytes(utf8Buf, strlen(utf8Buf));
         free(utf8Buf);
         utf8Buf = NULL;
 #endif
     }
-    catch( AxisException & e)
-    {
-        if (utf8Buf) free(utf8Buf);
-        m_strBytesToSend = "";
-        m_strHeaderBytesToSend = "";
-        throw;
-    }
     catch(...)
     {
-        if (utf8Buf) free(utf8Buf);
+        if (utf8Buf) 
+            free(utf8Buf);
         m_strBytesToSend = "";
         m_strHeaderBytesToSend = "";
         throw;
@@ -544,18 +545,14 @@ getBytes( char * pcBuffer, int * piSize) throw (AxisException, HTTPTransportExce
 
             m_iBytesLeft = m_strReceived.length();
 
-            // This bit of code should not be necessary, but just in case...
+            // This bit of code should not be necessary, but just in case...???
             if( m_GetBytesState == eWaitingForHTTPHeader)
                 break;
         }
         
         case eSOAPMessageIsChunked:
-        { 
-            // At this point it is assumed that m_strReceived contains the block of unprocessed data.  
-            // m_iBytesLeft is the length of text/data in m_strReceived is a 'char *' type copy of 
-            // the m_strReceived string. NB: It is assumed that all of these variables ARE in sync 
-            // at this point.
-            
+        {
+            // We are processing a response that is chunked... 
             if( m_GetBytesState == eSOAPMessageIsChunked)
             {
                 if( m_iBytesLeft == 0)
@@ -1157,15 +1154,17 @@ processResponseHTTPHeaders() throw (HTTPTransportException)
 void HTTPTransport::
 processRootMimeBody()
 {
+    int numberOfBytesRead = 0;
+    
     if( false == m_bReadPastRootMimeHeader)
     {
         do
         {
             if( m_strReceived.find( ASCII_S_CRLFCRLF ) == std::string::npos)
             {
-                m_pszRxBuffer [0] = '\0';
-                *m_pActiveChannel >> m_pszRxBuffer;
-                m_strReceived += m_pszRxBuffer;
+                numberOfBytesRead = m_pActiveChannel->readBytes(m_pszRxBuffer, BUF_SIZE);
+                if (numberOfBytesRead > 0)
+                    m_strReceived += m_pszRxBuffer;
             }
         }
         while( m_strReceived.find( ASCII_S_CRLFCRLF ) == std::string::npos);
@@ -1265,20 +1264,15 @@ processMimeBody ()
 void HTTPTransport::
 getAttachment( char * pStrAttachment, int * pIntSize, int intAttachmentId)
 {
-    m_pszRxBuffer [0] = '\0';
-    *m_pActiveChannel >> m_pszRxBuffer;
-    m_strMimeReceived += m_pszRxBuffer;
-
+    int numberOfBytesRead = 0;
+    
     do
     {
-        if( m_strMimeReceived.find( "\r\n\r\n") == std::string::npos)
-        {
-            m_pszRxBuffer [0] = '\0';
-            *m_pActiveChannel >> m_pszRxBuffer;
+        numberOfBytesRead = m_pActiveChannel->readBytes(m_pszRxBuffer, BUF_SIZE);
+        if (numberOfBytesRead > 0)
             m_strMimeReceived += m_pszRxBuffer;
-        }
     }
-    while( m_strMimeReceived.find( "\r\n\r\n") == std::string::npos);
+    while( m_strMimeReceived.find( "\r\n\r\n") == std::string::npos );
 
     //now we have found the end of next mime header
     processMimeHeader();
@@ -1481,48 +1475,31 @@ readHTTPHeader()
     // not be assumed that the HTTP header will be read in one block, thus there
     // must be processing that first identifies the beginning of the HTTP header
     // block (i.e. looks for 'HTTP') and then additional processing that identifies
-    // the end of the HTTP header block (i.e. looks for CR LF CR LF).  To stop the
-    // search becoming 'stuck' because of an incomplete, corrupt or unexpected
-    // message an iteration count has been added (this could become configurable if
-    // the user needs to remove this feature if the server is particularily slow,
-    // etc.).
-    // TODO - need to rewrite to eliminate iteration count since it is prone to problems!
-    bool bHTTPHeaderFound = false;
-    int   iIterationCount = 100;
+    // the end of the HTTP header block (i.e. looks for CR LF CR LF).  
+    int numberOfBytesRead = 0;
 
     m_strReceived = "";
+    m_iBytesLeft = 0;
     m_pActiveChannel->closeQuietly( false);
 
     do
     {
-        // Read whatever part of the response message that has arrived at the active channel socket.
-        m_pszRxBuffer[0] = '\0';
-        *m_pActiveChannel >> m_pszRxBuffer;
+        numberOfBytesRead = m_pActiveChannel->readBytes(m_pszRxBuffer, BUF_SIZE);
 
-        // Add the new message part to the received string.
-        m_strReceived += m_pszRxBuffer;
-
-        // Do iteration processing.
-        if( strlen( m_pszRxBuffer) > 0)
-            iIterationCount = 100;
+        if (numberOfBytesRead > 0)
+            m_strReceived += m_pszRxBuffer;
         else
-            iIterationCount--;
+        {
+            throw HTTPTransportException( SERVER_TRANSPORT_INPUT_STREAMING_ERROR,
+                                          "Socket connection has been closed.");
+        }
 
         // Check for beginning and end of HTTP header.
-        if( m_strReceived.find( ASCII_S_HTTP) != std::string::npos &&
-            m_strReceived.find( ASCII_S_CRLFCRLF) != std::string::npos)
-        {
-            bHTTPHeaderFound = true;
-        }
+        if( m_strReceived.find( ASCII_S_HTTP) != std::string::npos 
+                && m_strReceived.find( ASCII_S_CRLFCRLF) != std::string::npos)
+            break;
     }
-    while( !bHTTPHeaderFound && iIterationCount > 0);
-
-    // If the HTTP header was not found in the given number of iterations then throw an exception.
-    if( iIterationCount == 0)
-    {
-        throw HTTPTransportException( SERVER_TRANSPORT_INPUT_STREAMING_ERROR,
-                                      "Timed out waiting for HTTP header message.");
-    }
+    while(numberOfBytesRead > 0);
 }
 
 void HTTPTransport::
@@ -1618,24 +1595,13 @@ checkHTTPStatusCode()
 bool HTTPTransport::
 getNextDataPacket( const char * pcszExceptionMessage)
 {
-    int   iIterationCount = 100;
     bool bDataRead = false;
+    int numberOfBytesRead = 0;
 
-    do
-    {
-        // Read whatever part of the response message that has arrived at the active channel socket.
-        m_pszRxBuffer[0] = '\0';
-        *m_pActiveChannel >> m_pszRxBuffer;
+    // Read whatever part of the response message that has arrived at the active channel socket.
+    numberOfBytesRead = m_pActiveChannel->readBytes(m_pszRxBuffer, BUF_SIZE);
 
-        // Do iteration processing.
-        if( strlen( m_pszRxBuffer) == 0)
-            iIterationCount--;
-        else
-            bDataRead = true;
-    }
-    while( !bDataRead && iIterationCount > 0);
-
-    if( bDataRead)
+    if( numberOfBytesRead > 0)
     {
         m_strReceived += m_pszRxBuffer;
         m_iBytesLeft = m_strReceived.length();
@@ -1650,7 +1616,7 @@ getNextDataPacket( const char * pcszExceptionMessage)
         }
     }
 
-    return bDataRead;
+    return (numberOfBytesRead > 0);
 }
 
 int HTTPTransport::
@@ -1698,7 +1664,10 @@ copyDataToParserBuffer( char * pcBuffer, int * piSize, int iBytesToCopy)
         if( m_iBytesLeft > 0)
             m_strReceived = m_strReceived.substr( iToCopy);
         else
+        {
             m_strReceived = "";
+            m_iBytesLeft = 0;
+        }
 
         bTransportInProgress = true;
     }

@@ -49,8 +49,8 @@ public:
     virtual bool                open() throw (HTTPTransportException&)=0;
     virtual bool                close()=0;
     virtual const std::string&  GetLastErrorMsg()=0;
-    virtual const IChannel&     operator >> (char * msg)=0;
-    virtual const IChannel&     operator << (const char * msg)=0;
+    virtual int                 readBytes(char *buf, int bufLen)=0;
+    virtual int                 writeBytes(const char *buf, int numBytes)=0;
     virtual int                 setSecureProperties( const char *) {return true;};
     virtual const char *        getSecureProperties() {return NULL;};
     virtual void                setTimeout( long lSeconds)=0;
