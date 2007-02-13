@@ -80,7 +80,7 @@ public:
 	bool				setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char * value);
 	const char *		getTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type);
     void				setProxy( const char * pcProxyHost, unsigned int uiProxyPort);
-	virtual bool		reopenRequired() throw() { return false; }
+	bool		        reopenRequired() { return (INVALID_SOCKET == m_Sock); }
 	void				closeQuietly( bool bNoExceptionOnForceClose);
 
 protected:
