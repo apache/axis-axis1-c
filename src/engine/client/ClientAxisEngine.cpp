@@ -219,8 +219,11 @@ invoke (MessageData* pMsg, bool noResponse)
             break;
 
         // Get header and body only if we are expecting a response
-        if (!noResponse)
+        if (!noResponse || m_pSoap->isThereResponseData())
         {
+            // There is response data, for one-way it must be a fault.
+            noResponse = false;
+            
             // version not supported set status to fail
             int nSoapVersion = m_pDZ->getVersion ();
             if (nSoapVersion == VERSION_LAST)     

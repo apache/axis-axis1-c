@@ -517,7 +517,13 @@ public:
     * Get the last channel error string from the active channel.
     * @return string - Last active channel error string.
     */
-    virtual const char * getLastChannelError() {return NULL;};
+    virtual const char * getLastChannelError() {return NULL;}
+    
+  /**
+    * Is there a response that needs to be consumed?
+    *  @return boolean - true if response data needs to be processed, falso otherwise.
+    */
+    virtual bool isThereResponseData() {return false;}
    
   /**
     * Sets the username to be used for basic authentication
