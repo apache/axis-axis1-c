@@ -4,7 +4,7 @@ Content-Type: text/xml; charset=utf-8
 Content-Language: en-US
 Transfer-Encoding: chunked
 
-1e6
+###
 <?xml version="1.0" encoding="UTF-8"?>
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Body><echoContentResponse xmlns="http://datahandler.attachment.test.org"><echoContentReturn>This is a test message for attachment</echoContentReturn></echoContentResponse></soapenv:Body></soapenv:Envelope>
 0
@@ -15,7 +15,7 @@ Content-Type: text/xml; charset=utf-8
 Content-Language: en-US
 Transfer-Encoding: chunked
 
-1d7
+###
 <?xml version="1.0" encoding="UTF-8"?>
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Body><getContentTypeResponse xmlns="http://datahandler.attachment.test.org"><getContentTypeReturn>text/plain</getContentTypeReturn></getContentTypeResponse></soapenv:Body></soapenv:Envelope>
 0

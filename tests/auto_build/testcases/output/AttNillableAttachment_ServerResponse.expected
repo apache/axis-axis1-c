@@ -4,7 +4,7 @@ Content-Type: text/xml; charset=utf-8
 Content-Language: en-US
 Transfer-Encoding: chunked
 
-4ac
+###
 <?xml version="1.0" encoding="UTF-8"?>
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Body><nillableAttachmentResponse xmlns="http://attachment.test.org"><nillableAttachmentReturn>&lt;?xml version=&apos;1.0&apos; encoding=&apos;utf-8&apos; ?&gt;&lt;SOAP-ENV:Envelope xmlns:SOAP-ENV=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;&gt;&lt;SOAP-ENV:Header&gt;&lt;ns:TestHeader xmlns:ns=&quot;http://ws.apache.org/&quot; ns:Name=&quot;AXIS&quot;&gt;&lt;Project TYPE=&quot;Open Source&quot;&gt;&lt;/Project&gt;&lt;/ns:TestHeader&gt;&lt;/SOAP-ENV:Header&gt;&lt;SOAP-ENV:Body&gt;&lt;ns1:add xmlns:ns1=&quot;http://localhost/axis/Calculator&quot;&gt;&lt;ns1:arg_0_0&gt;2&lt;/ns1:arg_0_0&gt;&lt;ns1:arg_1_0&gt;3&lt;/ns1:arg_1_0&gt;&lt;/ns1:add&gt;&lt;/SOAP-ENV:Body&gt;&lt;/SOAP-ENV:Envelope&gt;</nillableAttachmentReturn></nillableAttachmentResponse></soapenv:Body></soapenv:Envelope>
 0

@@ -4,7 +4,7 @@ Content-Type: text/xml; charset=utf-8
 Content-Language: en-GB
 Transfer-Encoding: chunked
 
-229
+###
 <?xml version="1.0" encoding="utf-8"?>
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header/><soapenv:Body><getInputResponse xmlns="http://enumeration.test.apache.org"><type att_enum_int="1" att_enum_string="one" att_enum_kind="CHEQUE" xmlns=""><enum_int>0</enum_int><enum_string>one</enum_string></type></getInputResponse></soapenv:Body></soapenv:Envelope>
 0

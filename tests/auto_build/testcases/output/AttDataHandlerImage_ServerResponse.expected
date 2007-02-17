@@ -4,7 +4,7 @@ Content-Type: text/xml; charset=utf-8
 Content-Language: en-US
 Transfer-Encoding: chunked
 
-1c9
+###
 <?xml version="1.0" encoding="UTF-8"?>
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Body><getNoOfBytesResponse xmlns="http://datahandler.attachment.test.org"><getNoOfBytesReturn>6654</getNoOfBytesReturn></getNoOfBytesResponse></soapenv:Body></soapenv:Envelope>
 0

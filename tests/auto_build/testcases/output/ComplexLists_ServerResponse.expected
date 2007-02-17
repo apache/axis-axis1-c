@@ -4,7 +4,7 @@ Content-Type: text/xml; charset=utf-8
 Content-Language: en-GB
 Transfer-Encoding: chunked
 
-38d
+###
 <?xml version="1.0" encoding="utf-8"?>
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header/><soapenv:Body><multilistResponse xmlns="http://complexlist.test.apache.org"><multilistReturn><attrlist xmlns="http://complexlistservice.test.apache.org"><item><m_list><item>never odd or even</item><item xsi:nil="true"/></m_list><name>namepair return</name></item><item><m_list><item>any data string</item><item xsi:nil="true"/></m_list><name>namepair2 return</name></item></attrlist><errorcode xmlns="http://complexlistservice.test.apache.org">7</errorcode><errortext xmlns="http://complexlistservice.test.apache.org">request successful</errortext></multilistReturn></multilistResponse></soapenv:Body></soapenv:Envelope>
 0
@@ -15,7 +15,7 @@ Content-Type: text/xml; charset=utf-8
 Content-Language: en-GB
 Transfer-Encoding: chunked
 
-3b5
+###
 <?xml version="1.0" encoding="utf-8"?>
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header/><soapenv:Body><multilistResponse xmlns="http://complexlist.test.apache.org"><multilistReturn><attrlist xmlns="http://complexlistservice.test.apache.org"><item><m_list><item>attrlist-&gt;m_list-item[0] was NULL</item><item xsi:nil="true"/></m_list><name>namepair return</name></item><item><m_list><item>attrlist-&gt;m_list-item[1] was NULL</item><item xsi:nil="true"/></m_list><name>namepair2 return</name></item></attrlist><errorcode xmlns="http://complexlistservice.test.apache.org">7</errorcode><errortext xmlns="http://complexlistservice.test.apache.org">request successful</errortext></multilistReturn></multilistResponse></soapenv:Body></soapenv:Envelope>
 0
@@ -26,7 +26,7 @@ Content-Type: text/xml; charset=utf-8
 Content-Language: en-GB
 Transfer-Encoding: chunked
 
-2b5
+###
 <?xml version="1.0" encoding="utf-8"?>
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header/><soapenv:Body><multilistnilResponse xmlns="http://complexlist.test.apache.org"><multilistnilReturn><attrlist xsi:nil="true" xmlns="http://complexlistservice.test.apache.org"/><errorcode xmlns="http://complexlistservice.test.apache.org">0</errorcode><errortext xsi:nil="true" xmlns="http://complexlistservice.test.apache.org"/></multilistnilReturn></multilistnilResponse></soapenv:Body></soapenv:Envelope>
 0
@@ -37,7 +37,7 @@ Content-Type: text/xml; charset=utf-8
 Content-Language: en-GB
 Transfer-Encoding: chunked
 
-381
+###
 <?xml version="1.0" encoding="utf-8"?>
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header/><soapenv:Body><complexlistResponse xmlns="http://complexlist.test.apache.org"><complexlistReturn><attrlist xmlns="http://complexlistservice.test.apache.org"><item><m_list><item>Apache</item><item xsi:nil="true"/></m_list><name>namepair return</name></item><item><m_list><item>Apache</item><item xsi:nil="true"/></m_list><name>namepair2 return</name></item></attrlist><errorcode xmlns="http://complexlistservice.test.apache.org">7</errorcode><errortext xmlns="http://complexlistservice.test.apache.org">request successful</errortext></complexlistReturn></complexlistResponse></soapenv:Body></soapenv:Envelope>
 0

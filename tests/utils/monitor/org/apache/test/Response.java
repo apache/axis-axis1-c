@@ -130,7 +130,10 @@ public class Response
             
             String messageString= new String(getMessage());
             modifiedResponse = correctHTTPHeaderSection(messageString);
-            modifiedResponse +=(correctChunkedData(getPostHTTPHeaderData(messageString)));
+            if (messageString.indexOf("###") != -1)
+                modifiedResponse +=(correctChunkedSizes(getPostHTTPHeaderData(messageString)));
+            else
+                modifiedResponse +=(correctChunkedData(getPostHTTPHeaderData(messageString)));
             message = modifiedResponse.toCharArray();
         }
         else
@@ -162,6 +165,60 @@ public class Response
         
         return matcher.replaceAll("$3");
     }
+
+    
+private String correctChunkedSizes(String orgResponse)   
+{
+    // If called, there must be hash's for chunksizes.
+    String hash = "###";
+
+    String newResponse = "";
+    
+    // Remove hash line.
+    int hashPos = orgResponse.indexOf( hash );
+    int endOfLinePos = orgResponse.indexOf('\n', hashPos);
+    orgResponse = orgResponse.substring( endOfLinePos + 1 );
+    String chunk;
+    
+    while( hashPos != -1 && orgResponse.length() > 0)
+    {
+        // Find the next hash in the original response.
+        hashPos = orgResponse.indexOf( hash);
+        
+        boolean eom = false;
+        
+        if( hashPos == -1)
+        {
+            hashPos = orgResponse.lastIndexOf( "0");
+            eom = true;
+        }
+        
+        // Ensure chunk ends with CRLF - if it does not, 
+        // remove ending LF and replace with CRLF
+        chunk = orgResponse.substring( 0, hashPos);
+        if (!chunk.endsWith("\r\n"))
+            chunk = chunk.substring(0, chunk.length()-1) + "\r\n";
+        
+        // Add the next chunk length and data from the original to the new response.
+            
+        newResponse += Integer.toHexString(chunk.length()-2) + "\r\n" + chunk;
+
+        // Remove the old chunk from the original response message.
+        if( eom)
+        {
+            newResponse += "0\r\n\r\n";
+            orgResponse = "";
+        }
+        else
+        {
+            endOfLinePos = orgResponse.indexOf('\n', hashPos);
+            orgResponse = orgResponse.substring( endOfLinePos + 1);
+        }
+    }
+    
+    return newResponse;
+}
+
 
 /**
  * @param string the response message - HTTPheaders

@@ -4,7 +4,7 @@ Content-Type: text/xml; charset=utf-8
 Content-Language: en-US
 Transfer-Encoding: chunked
 
-19d
+###
 <?xml version="1.0" encoding="utf-8"?>
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header/><soapenv:Body><noParametersNoReturnResponse xmlns="http://complexissues.test.apache.org"/></soapenv:Body></soapenv:Envelope>
 0
@@ -15,7 +15,7 @@ Content-Type: text/xml; charset=utf-8
 Content-Language: en-US
 Transfer-Encoding: chunked
 
-1fa
+###
 <?xml version="1.0" encoding="utf-8"?>
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header/><soapenv:Body><noParametersIntReturnResponse xmlns="http://complexissues.test.apache.org"><noParametersIntReturnReturn>27</noParametersIntReturnReturn></noParametersIntReturnResponse></soapenv:Body></soapenv:Envelope>
 0
@@ -26,7 +26,7 @@ Content-Type: text/xml; charset=utf-8
 Content-Language: en-US
 Transfer-Encoding: chunked
 
-1a0
+###
 <?xml version="1.0" encoding="utf-8"?>
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header/><soapenv:Body><multiParametersNoReturnResponse xmlns="http://complexissues.test.apache.org"/></soapenv:Body></soapenv:Envelope>
 0
@@ -37,7 +37,7 @@ Content-Type: text/xml; charset=utf-8
 Content-Language: en-US
 Transfer-Encoding: chunked
 
-20f
+###
 <?xml version="1.0" encoding="utf-8"?>
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header/><soapenv:Body><multiParametersMultiReturnResponse xmlns="http://complexissues.test.apache.org"><arg_0_2>Hey dude</arg_0_2><arg_1_2>69</arg_1_2><arg_2_2>17.19</arg_2_2></multiParametersMultiReturnResponse></soapenv:Body></soapenv:Envelope>
 0
@@ -48,7 +48,7 @@ Content-Type: text/xml; charset=utf-8
 Content-Language: en-US
 Transfer-Encoding: chunked
 
-222
+###
 <?xml version="1.0" encoding="utf-8"?>
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header/><soapenv:Body><multiComplexParametersIntReturnResponse xmlns="http://complexissues.test.apache.org"><multiComplexParametersIntReturnReturn>41</multiComplexParametersIntReturnReturn></multiComplexParametersIntReturnResponse></soapenv:Body></soapenv:Envelope>
 0
@@ -59,7 +59,7 @@ Content-Type: text/xml; charset=utf-8
 Content-Language: en-US
 Transfer-Encoding: chunked
 
-2a6
+###
 <?xml version="1.0" encoding="utf-8"?>
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header/><soapenv:Body><multiComplexParametersMultiComplexReturnResponse xmlns="http://complexissues.test.apache.org"><out1>Hello</out1><out2><ctLong>87654321</ctLong><ctIntArray>37</ctIntArray><ctIntArray>0</ctIntArray><ctIntArray>43</ctIntArray><ctString>World</ctString></out2><out3>27</out3><out4>13.31</out4></multiComplexParametersMultiComplexReturnResponse></soapenv:Body></soapenv:Envelope>
 0
@@ -70,7 +70,7 @@ Content-Type: text/xml; charset=utf-8
 Content-Language: en-US
 Transfer-Encoding: chunked
 
-22e
+###
 <?xml version="1.0" encoding="utf-8"?>
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header/><soapenv:Body><multiComplexParametersNilIntReturnResponse xmlns="http://complexissues.test.apache.org"><multiComplexParametersNilIntReturnReturn>42</multiComplexParametersNilIntReturnReturn></multiComplexParametersNilIntReturnResponse></soapenv:Body></soapenv:Envelope>
 0
@@ -81,7 +81,7 @@ Content-Type: text/xml; charset=utf-8
 Content-Language: en-US
 Transfer-Encoding: chunked
 
-21a
+###
 <?xml version="1.0" encoding="utf-8"?>
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header/><soapenv:Body><multiArrayParametersIntReturnResponse xmlns="http://complexissues.test.apache.org"><multiArrayParametersIntReturnReturn>43</multiArrayParametersIntReturnReturn></multiArrayParametersIntReturnResponse></soapenv:Body></soapenv:Envelope>
 0
@@ -92,7 +92,7 @@ Content-Type: text/xml; charset=utf-8
 Content-Language: en-US
 Transfer-Encoding: chunked
 
-310
+###
 <?xml version="1.0" encoding="utf-8"?>
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header/><soapenv:Body><complexParameterComplexReturnResponse xmlns="http://complexissues.test.apache.org"><complexResponse><ctLong>98765432</ctLong><ctIntArray>37</ctIntArray><ctIntArray>0</ctIntArray><ctIntArray>43</ctIntArray><ctString>Complex2</ctString><ctComplex><ctLong>87654321</ctLong><ctIntArray>37</ctIntArray><ctIntArray>0</ctIntArray><ctIntArray>43</ctIntArray><ctString>World</ctString></ctComplex></complexResponse></complexParameterComplexReturnResponse></soapenv:Body></soapenv:Envelope>
 0
@@ -103,7 +103,7 @@ Content-Type: text/xml; charset=utf-8
 Content-Language: en-US
 Transfer-Encoding: chunked
 
-28e
+###
 <?xml version="1.0" encoding="utf-8"?>
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header/><soapenv:Body><complexParameterComplexReturnResponse xmlns="http://complexissues.test.apache.org"><complexResponse><ctLong>22222222</ctLong><ctIntArray>37</ctIntArray><ctIntArray>0</ctIntArray><ctIntArray>43</ctIntArray><ctString xsi:nil="true"/><ctComplex xsi:nil="true"/></complexResponse></complexParameterComplexReturnResponse></soapenv:Body></soapenv:Envelope>
 0

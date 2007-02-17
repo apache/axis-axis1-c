@@ -4,7 +4,7 @@ Content-Type: text/xml; charset=utf-8
 Content-Language: en-US
 Transfer-Encoding: chunked
 
-26b
+###
 <?xml version="1.0" encoding="utf-8"?>
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header/><soapenv:Body><asComplexTypeResponse xmlns="http://xsd_byte.test.apache.org"><SimpleComplexType xmlns=""><complexTypeElement><onecomplexTypeElement>65</onecomplexTypeElement></complexTypeElement><field2>I&apos;m still here!</field2><field3>123</field3></SimpleComplexType></asComplexTypeResponse></soapenv:Body></soapenv:Envelope>
 0

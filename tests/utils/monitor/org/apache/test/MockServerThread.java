@@ -311,64 +311,12 @@ public class MockServerThread extends ChildHandler implements Runnable
         String[] responseStrings=completeFile.split("HTTP");
 
         // now convert these into char[] and store them
-        responses=new Response[responseStrings.length];
         // the first line always has "HTTP" in it so the first response is null
         // so I have to do the wierd loop below
+        responses=new Response[responseStrings.length];
         for( int i = 1; i < responseStrings.length; i++)
-        {
-            String orgResponse = "HTTP" + responseStrings[i];
-            String hash = "###";
-            String newResponse = orgResponse;
-            
-            int hashPos = -1;
-            
-            // The content length will be modified later, so skip if not chunked.
-            if (newResponse.indexOf("Content-Length:")==-1)
-                hashPos = orgResponse.indexOf( hash);
-            
-            if( hashPos != -1)
-            {
-                // Copy HTTP header into new response and remove header from original response.
-			    newResponse = orgResponse.substring( 0, hashPos);
-			    orgResponse = orgResponse.substring( hashPos + hash.length());
-			    
-	            while( hashPos != -1 && orgResponse.length() > 0)
-	            {
-				    // Find the next hash in the original response.
-		            hashPos = orgResponse.indexOf( hash);
-		            
-		            boolean	eom = false;
-		            
-					if( hashPos == -1)
-				    {
-					    hashPos = orgResponse.lastIndexOf( "0");
-					    eom = true;
-				    }
-	
-					int chunkLength;
-					
-		            if( System.getProperty( "os.name").toLowerCase().startsWith( "windows"))
-		                chunkLength = hashPos - 4; // Take into account the CR+LF's that surround the chunk size, so subtract 4.
-		            else
-		                chunkLength = hashPos - 2; // Take into account the LF's that surround the chunk size, so subtract 2.
-	
-					// Add the next chunk length and data from the original to the new response.
-		                
-				    newResponse += Integer.toHexString( chunkLength) + orgResponse.substring( 0, hashPos);
-	
-				    // Remove the old chunk from the original response message.
-				    if( eom)
-				    {
-					    newResponse += orgResponse.substring( hashPos);
-					    orgResponse = "";
-				    }
-				    else
-					    orgResponse = orgResponse.substring( hashPos + hash.length());
-				}
-            }
+            responses[i - 1] = new Response( "HTTP" + responseStrings[i] );
 
-            responses[i - 1] = new Response( newResponse);
-        }
         reader.close();
         requests=0;
         System.out.println( "MockServer got " + (responses.length - 1) + " responses");
