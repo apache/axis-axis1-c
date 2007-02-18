@@ -235,6 +235,7 @@ public class MockServerThread extends ChildHandler implements Runnable
         else
         {
             System.err.println("We've run out of responses to send back to the client");
+            close();
             throw new IOException("No more responses to send to clients");
         }
     }
