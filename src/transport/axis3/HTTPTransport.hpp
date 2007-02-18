@@ -42,7 +42,8 @@ typedef enum
 {
 	eWaitingForHTTPHeader,
 	eSOAPMessageIsChunked,
-	eSOAPMessageIsNotChunked
+	eSOAPMessageIsNotChunked,
+    eSOAPMessageHasContentLength
 } EGETBYTESSTATE;
 
 class HTTPTransport:public SOAPTransport
@@ -70,6 +71,7 @@ class HTTPTransport:public SOAPTransport
     void					setSessionId( const char * pcSessionId);
     const char *			getSessionId();
     const char *			getServiceName ();
+    bool                    isThereResponseData();
     /* HTTPTransport::getProtocol() Is a public method to return the HTTP protocol
 	 * type.
 	 *
@@ -90,7 +92,7 @@ class HTTPTransport:public SOAPTransport
     const char *			getHTTPProtocol();
     const char *			getHTTPMethod();
     void					setHTTPMethod( const char *);
-    const char *			getHTTPHeaders();
+    const char *			generateHTTPHeaders();
     void					setSocket( unsigned int);
     const char *			getFirstTransportPropertyKey(bool response);
     const char *			getNextTransportPropertyKey(bool response);
@@ -107,7 +109,6 @@ class HTTPTransport:public SOAPTransport
 	const char *			getLastChannelError();
 
   protected:
-    void					processResponseHTTPHeaders() throw (HTTPTransportException);
     void					processRootMimeBody();
     void					processMimeHeader();
     void					processMimeBody();
@@ -115,11 +116,18 @@ class HTTPTransport:public SOAPTransport
     int						FindTransportPropertyIndex( std::string);
 	void					readHTTPHeader();
 	void					processHTTPHeader();
-	void					checkHTTPStatusCode();
-	bool					getNextDataPacket( const char * pcszExceptionMessage);
-	int						getChunkSize();
-	bool					copyDataToParserBuffer( char * pcBuffer, int * piSize, int iBytesToCopy);
-	int						peekChunkLength( std::string& strNextChunk);
+	int 					getNextDataPacket( const char * pcszExceptionMessage, char *bufferToUse=NULL, int *bufferLen=NULL);
+    int                     getBytes_MessageIsChunked(char * pcBuffer, int * piSize);
+    int                     getBytes_MessageIsNotChunked(char * pcBuffer, int * piSize);
+    int                     getBytes_MessageHasContentLength(char * pcBuffer, int * piSize);
+    int                     getChunkSize(string::size_type pos=0);
+    
+    void                    resetInputStateMachine();
+    
+    unsigned int            m_iChunkedDataLeftToConsume;
+    unsigned int            m_iNextChunkedDataSize;
+    
+    
     /**
      * Adds a cookie to the http header. 
      * 
