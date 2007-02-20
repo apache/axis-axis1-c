@@ -230,11 +230,18 @@ public:
      *         Else returns AXIS_FAIL
      */
     virtual int openConnection()=0;
+    
     /**
      * @brief Closes the connection established with OpenConnection.
+     * @param forceClose whether or not to force a close. If true, 
+     *        the connection will be closed.  If false, the transport
+     *        will determine whether connection should be closed based
+     *        on transport dependent properties.  For example, 
+     *        HTTP transport may use HTTP header "Connection: close"
+     *        to determine if connection should be closed.
      * @example AxisTransport.h
      */
-    virtual void closeConnection()=0;
+    virtual void closeConnection(bool forceClose=true)=0;
     
     /**
      * Sets a predefined transport property to be included in the outgoing

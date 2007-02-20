@@ -90,9 +90,10 @@ parse(bool ignoreWhitespace, bool peekIt)
         {
             // if exception is thrown on parseFirst()
             m_bCanParseMore = false;
-            m_bFirstParsed = true;
              
             m_bCanParseMore = m_pParser->parseFirst( *m_pInputSource, m_ScanToken);
+            
+            m_bFirstParsed = true;
             if (!m_bCanParseMore)
                 return (const AnyElement*)NULL;
         }

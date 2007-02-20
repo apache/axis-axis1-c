@@ -115,6 +115,11 @@ public:
      */
     const char * AXISCALL getTransportProperty( const char * key,
                                                 bool response = true);
+                                                
+     /** 
+      * Close the transport connection to the server, if active. 
+      */
+     void closeTransportConnection() { closeConnection(); }                                                
 
     /**
      * Set a handler property.  This adds a new property to a list of properties
@@ -1769,8 +1774,8 @@ public:
       */
      void processSoapFault(AxisException *e, void *exceptionHandlerFp);
 
-private:
-    void closeConnection();
+private:    
+    void closeConnection(bool forceClose=true);
     int makeArray();
     void cleanup(); // clean memory in case of exceptions and destructor etc.
     void resetSoapFaultList(); // added in support of C-binding implementation.

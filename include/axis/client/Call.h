@@ -115,6 +115,9 @@ AXISC_STORAGE_CLASS_INFO
 const char * axiscCallGetTransportProperty(AXISCHANDLE call, const char * key, 
 	AxiscBool response);
 
+AXISC_STORAGE_CLASS_INFO
+void axiscCloseTransportConnection(AXISCHANDLE call);
+
 /**
  * Set a handler property.  This adds a new property to a list of properties
  * that a handler can access when it is invoked.

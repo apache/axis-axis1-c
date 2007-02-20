@@ -61,7 +61,7 @@ class HTTPTransport:public SOAPTransport
     */
     void					setEndpointUri( const char * pszEndpointURI) throw (HTTPTransportException);
     int						openConnection();
-    void					closeConnection();
+    void					closeConnection(bool forceClose=true);
     AXIS_TRANSPORT_STATUS	sendBytes( const char *, const void *);
     AXIS_TRANSPORT_STATUS	getBytes( char *, int *) throw (AxisException, HTTPTransportException);
     int						setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE, const char *) throw (HTTPTransportException);

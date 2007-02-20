@@ -169,6 +169,28 @@ const char * axiscCallGetTransportProperty(AXISCHANDLE call,
     return (char *)NULL;
 }
 
+AXISC_STORAGE_CLASS_INFO
+void axiscCloseTransportConnection(AXISCHANDLE call)
+{
+    Call *c = (Call*)call;
+    
+    try
+    {
+        c->closeTransportConnection();
+    }
+    catch ( AxisException& e  )
+    {
+        
+        processException(c, e);
+    }
+    catch ( ... )
+    {
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
+    }    
+}
+
 AXISC_STORAGE_CLASS_INFO 
 int axiscCallSetHandlerProperty(AXISCHANDLE call, 
                                 AxiscChar * name, 

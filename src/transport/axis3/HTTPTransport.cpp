@@ -115,7 +115,7 @@ HTTPTransport::
 ~HTTPTransport()
 {
     delete [] m_pcEndpointUri;
-    delete m_pChannelFactory;
+    delete m_pChannelFactory; // should also destroy channels
     delete [] m_pszRxBuffer;
 }
 
@@ -143,20 +143,15 @@ resetInputStateMachine()
 void HTTPTransport::
 setEndpointUri( const char * pcEndpointUri) throw (HTTPTransportException)
 {
-    bool bUpdateURL = true;
-
     // if URI not valid, return
     if (!pcEndpointUri || strlen(pcEndpointUri) < strlen("http://") )
         return;                                                  
 
     // Does the new URI equal the existing channel URI?
-    if( m_pActiveChannel != NULL && m_pActiveChannel->getURL())
-        if( strcmp (m_pActiveChannel->getURL (), pcEndpointUri) == 0)
-            bUpdateURL = false;
-
-    // If there is a new URI, then this flag will be set.  A secure or unsecure channel 
-    // will be set. If the required channel is not available, an exception will be thrown.
-    if( bUpdateURL)
+    // If there is a new URI, then connection will be closed and a secure or unsecure channel 
+    // will be set. If the required channel is not available, an exception will be thrown.    
+    if (m_pActiveChannel == NULL || m_pActiveChannel->getURL() == NULL
+            || strcmp(m_pActiveChannel->getURL(), pcEndpointUri) != 0)
     {
         if( m_pActiveChannel == NULL)
             m_pActiveChannel = m_pNormalChannel;
@@ -176,9 +171,7 @@ setEndpointUri( const char * pcEndpointUri) throw (HTTPTransportException)
             }
 
             if( !m_bChannelSecure)
-            {
                 throw HTTPTransportException( CLIENT_TRANSPORT_HAS_NO_SECURE_TRANSPORT_LAYER);
-            }
         }
         else if (m_bChannelSecure)
         {
@@ -191,9 +184,7 @@ setEndpointUri( const char * pcEndpointUri) throw (HTTPTransportException)
             }
 
             if( m_bChannelSecure)
-            {
                 throw HTTPTransportException( CLIENT_TRANSPORT_HAS_NO_UNSECURE_TRANSPORT_LAYER);
-            }
         }
     }
 
@@ -211,19 +202,17 @@ setEndpointUri( const char * pcEndpointUri) throw (HTTPTransportException)
 int HTTPTransport::
 openConnection()
 {
-    if( m_bReopenConnection || m_pActiveChannel->reopenRequired())
+    // If connection not valid or reopen required, open a connection to server.
+    if (m_pActiveChannel->reopenRequired() || m_bReopenConnection)
     {
-        // Call closeConnection in order to reset various state variables.
-        closeConnection();
-        
-        m_bReopenConnection = false;
-
+        closeConnection(true);
         if( m_pActiveChannel->open() != AXIS_SUCCESS)
         {
             throw HTTPTransportException( CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED,
                                           m_pActiveChannel->GetLastErrorMsg().c_str());
         }
     }
+
     return AXIS_SUCCESS;
 }
 
@@ -231,11 +220,17 @@ openConnection()
  * HTTPTransport::closeConnection().
  */
 void HTTPTransport::
-closeConnection()
+closeConnection(bool forceClose)
 {
     resetInputStateMachine();
-
-    // Samisa : closing the connection is done in setEndpointUri no need to close here Fix for AXISCPP-481
+    
+    // We will close the connection if forced close, or if "Connection: close" 
+    // header was detected.
+    if (forceClose || m_bReopenConnection)
+    {
+        m_bReopenConnection = false;
+        m_pActiveChannel->close();
+    }
 }
 
 /*
@@ -335,15 +330,12 @@ generateHTTPHeaders()
     sprintf(buff, ":%u\r\n", uiPort);
     m_strHeaderBytesToSend += buff;
 
+    // The Content-Type must be set, but it may already be set.
     bool foundCT = false;
     for (unsigned int j = 0; j < m_vHTTPHeaders.size (); j++)
-    {
         if (0==strcmp(AXIS_CONTENT_TYPE,m_vHTTPHeaders[j].first.c_str()))
             foundCT = true;
-    }
 
-    // The Content-Type must be set, but it may already be set in m_strHeaderBytesToSend if we're using attachments, for
-    // example.
     if (!foundCT)
         m_strHeaderBytesToSend += AXIS_CONTENT_TYPE ": text/xml; charset=UTF-8\r\n";
 
@@ -380,6 +372,10 @@ generateHTTPHeaders()
             m_strHeaderBytesToSend += ": ";
             m_strHeaderBytesToSend += m_vHTTPHeaders[i].second;
             m_strHeaderBytesToSend += "\r\n";
+            
+            if (0==strcmp("Connection",m_vHTTPHeaders[i].first.c_str())
+                    && 0==strcmp("close", m_vHTTPHeaders[i].second.c_str()))
+                m_bReopenConnection = true;
         }
     }
 
@@ -828,7 +824,9 @@ setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char *value) t
 
         case TRANSPORT_PROPERTIES:
         {
-            if( m_pActiveChannel != NULL)
+            if (value && strcmp(value, "Connection: close") == 0)
+                setTransportProperty("Connection", "close");
+            else if( m_pActiveChannel != NULL)
                 m_pActiveChannel->setTransportProperty( type, value);
 
             break;
@@ -888,7 +886,9 @@ setTransportProperty( const char *pcKey, const char *pcValue) throw (HTTPTranspo
     bool b_KeyFound = false;
 
     // Check for well known headers that we add on in every iteration
-    if( strcmp( pcKey, "SOAPAction") == 0 || strcmp( pcKey, "Content-Length") == 0)
+    if (strcmp( pcKey, "SOAPAction") == 0 
+            || strcmp( pcKey, "Content-Length") == 0
+            || strcmp( pcKey, "Connection") == 0)
     {
         std::string strKeyToFind = std::string( pcKey);
 

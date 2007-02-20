@@ -78,11 +78,6 @@ m_bCallInitialized(false), m_pContentIdSet(NULL), m_pStub(NULL)
         else
             m_nStatus = m_pAxisEngine->initialize ();
     }
-    catch( AxisException& e)
-    {
-        cleanup();
-        throw AxisGenException( e.getExceptionCode(), e.what());
-    }
     catch(...)
     {
         cleanup();
@@ -114,21 +109,17 @@ Call::~Call ()
 
 void Call::cleanup()
 {
-    if (m_pContentIdSet)
-        delete m_pContentIdSet;
+    delete m_pContentIdSet;
     m_pContentIdSet = NULL;
     
     if (m_pTransport)
         SOAPTransportFactory::destroyTransportObject(m_pTransport);
     m_pTransport = NULL;
     
-    if (m_pAxisEngine)
-        delete m_pAxisEngine;
+    delete m_pAxisEngine;
     m_pAxisEngine = NULL;
     
-    if (m_pcEndPointUri)
-        delete [] m_pcEndPointUri;  
-        
+    delete [] m_pcEndPointUri;  
     m_pcEndPointUri = NULL;
 }
 
@@ -352,7 +343,7 @@ int Call::unInitialize()
         }
     }
 
-    closeConnection();
+    closeConnection(false);
     return AXIS_SUCCESS;
 }
 
@@ -407,21 +398,10 @@ int Call::setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char
         }
     }
     else
-    {
-        try
-        {
-            iSuccess = m_pTransport->setTransportProperty( type, value);
-        }
-        catch( AxisException& e)
-        {
-            throw AxisGenException(e.getExceptionCode(), e.what());
-        }
-    }
+        iSuccess = m_pTransport->setTransportProperty( type, value);
 
     if( iSuccess < 0)
-    {
         throw AxisGenException( -iSuccess, m_pTransport->getLastChannelError());
-    }
 
     return iSuccess;
 }
@@ -447,10 +427,10 @@ int Call::setHandlerProperty(AxisChar* name, void* value, int len)
 /*
  * This method closes the connection of this object to the server
  */
-void Call::closeConnection()
+void Call::closeConnection(bool forceClose)
 {
     if (m_pTransport)
-        m_pTransport->closeConnection();
+        m_pTransport->closeConnection(forceClose);
 }
 
 void Call::setSOAPVersion (SOAP_VERSION version)
