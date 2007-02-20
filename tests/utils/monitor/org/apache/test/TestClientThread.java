@@ -216,11 +216,13 @@ public class TestClientThread extends ChildHandler implements Runnable
                 }
             }
             catch (SocketException socketException)
-            {
+            {        
                 continueToRun=false;
                 if (!serverClosedSocket)
                 {
-                    if (socketException.getMessage( )=="Connection reset")
+                    String exceptionString = socketException.getMessage().toLowerCase();
+                    if (exceptionString.indexOf("connection") != -1 
+                            && exceptionString.indexOf("reset") != -1)
                     {
                         // tihs appears to happen when the client has stopped
                         // sending us data and we should close down gracefully
