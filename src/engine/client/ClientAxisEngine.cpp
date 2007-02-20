@@ -177,7 +177,7 @@ invoke (MessageData* pMsg, bool noResponse)
     enum AE_LEVEL { AE_START = 1, AE_SERH, AE_GLH, AE_TRH, AE_SERV };
     int Status = AXIS_FAIL;
     int level = AE_START;
-
+    
     do
     {
         // Invoke client side service specific request handlers
@@ -221,9 +221,6 @@ invoke (MessageData* pMsg, bool noResponse)
         // Get header and body only if we are expecting a response
         if (!noResponse || m_pSoap->isThereResponseData())
         {
-            // There is response data, for one-way it must be a fault.
-            noResponse = false;
-            
             // version not supported set status to fail
             int nSoapVersion = m_pDZ->getVersion ();
             if (nSoapVersion == VERSION_LAST)     
@@ -231,6 +228,13 @@ invoke (MessageData* pMsg, bool noResponse)
 
             m_pDZ->getHeader ();
             m_pDZ->getBody ();
+            
+            // If one-way messaging and there is response data, then it must be a fault. 
+            if (noResponse)
+            {
+                // initiate fault processing. This will result in an exception being thrown.
+                m_pDZ->initiateFault(NULL);
+            }
         }
     }
     while (0);

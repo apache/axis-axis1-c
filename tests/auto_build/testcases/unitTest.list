@@ -164,3 +164,5 @@ FaultMappingDocDivByZeroNoDetail.xml
 
 NamespaceInBindingOperationsRpc.xml
 NamespaceInBindingOperationsRpcNoTypeInResponse.xml
+
+OneWayOperation.xml

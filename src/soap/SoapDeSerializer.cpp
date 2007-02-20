@@ -429,6 +429,21 @@ checkMessageBody (const AxisChar * pName, const AxisChar * pNamespace)
     return AXIS_SUCCESS;
 }
 
+// Used for one-way message processing, to initiate a fault.
+void SoapDeSerializer::
+initiateFault (const AxisChar * pNamespace)
+{
+    // Will throw exception if failure in parser
+    if (AXIS_FAIL == getNextNode(true))
+        return;
+        
+    if (START_ELEMENT != m_pNode->m_type)
+        throw AxisSoapException (CLIENT_SOAP_SOAP_CONTENT_ERROR, "Start-element was not found.");
+
+    setStyle (DOC_LITERAL);
+    throw AxisGenException (AXISC_NODE_VALUE_MISMATCH_EXCEPTION);    
+}
+
 void *SoapDeSerializer::
 checkForFault (const AxisChar * pName, const AxisChar * pNamespace)
 {

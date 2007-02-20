@@ -1,0 +1,16 @@
+<test>
+    <name>OneWayOperation</name>
+    <description>OneWayOperation</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>OneWayOperationClient.cpp</clientCode>
+    <wsdl>OneWayOperation.wsdl</wsdl>
+    <expected>
+        <serverResponse>
+            OneWayOperation_ServerResponse.expected
+        </serverResponse>
+        <output>
+            OneWayOperation.cpp.out
+        </output>
+    </expected>
+	<endpoint>http://localhost:80/axis/OneWayOperation</endpoint>
+</test>

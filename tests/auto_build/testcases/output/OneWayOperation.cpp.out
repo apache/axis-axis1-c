@@ -1,0 +1,9 @@
+Called aBeanPortTypeBase()
+Called aBeanPortTypeComplex()
+Calling aBeanPortTypeComplex() to initiate fault processing
+  FaultCode = soapenv:Client
+  FaultString = OneWayOperation Client Error
+  FaultActor = NULL
+  SoapFaultException: OneWayOperation Client Error
+Calling aBeanPortTypeComplex() to see everything OK after fault processing
+---------------------- TEST COMPLETE -----------------------------

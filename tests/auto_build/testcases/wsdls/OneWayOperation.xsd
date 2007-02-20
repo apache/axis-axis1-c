@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xsd:schema targetNamespace="OneWayOperation"
+            xmlns:tns="OneWayOperation"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+ 
+ <xsd:complexType name="SampleBeanComplex">
+  <xsd:sequence>
+   <xsd:element form="qualified" maxOccurs="unbounded" minOccurs="0" name="SampleBeanComplex" nillable="true"  type="tns:SampleBeanComplex"/>
+   <xsd:element form="qualified" maxOccurs="1"         minOccurs="1" name="Boolean"           nillable="false" type="xsd:boolean"/>
+  </xsd:sequence>
+ </xsd:complexType>
+
+ <xsd:complexType name="SampleBeanBoolean">
+  <xsd:sequence>
+   <xsd:element form="qualified" minOccurs="0" maxOccurs="unbounded"       name="SampleBean"        nillable="true"  type="tns:SampleBeanComplex"/>
+   <xsd:element form="qualified" maxOccurs="1" minOccurs="1" name="SampleBeanBoolean" nillable="false" type="xsd:boolean"/>
+  </xsd:sequence>
+ </xsd:complexType>
+</xsd:schema>
