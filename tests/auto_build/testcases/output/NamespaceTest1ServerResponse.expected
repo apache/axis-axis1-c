@@ -4,9 +4,6 @@ Content-Type: text/xml; charset=utf-8
 Content-Language: en-GB
 Transfer-Encoding: chunked
 
-###
-<?xml version="1.0" encoding="utf-8"?>
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header/><soapenv:Body><NamespaceTest1Response></NamespaceTest1Response></soapenv:Body></soapenv:Envelope>
 0
 
 HTTP/1.1 200 OK
@@ -15,8 +12,5 @@ Content-Type: text/xml; charset=utf-8
 Content-Language: en-GB
 Transfer-Encoding: chunked
 
-###
-<?xml version="1.0" encoding="utf-8"?>
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Header/><soapenv:Body><NamespaceTest1Response></NamespaceTest1Response></soapenv:Body></soapenv:Envelope>
 0
 
