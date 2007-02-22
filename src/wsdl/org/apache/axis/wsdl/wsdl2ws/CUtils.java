@@ -40,6 +40,8 @@ import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.TypeMap;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 import org.apache.axis.wsdl.symbolTable.CSchemaUtils;
+import java.io.BufferedWriter;
+import java.io.IOException;
 
 public class CUtils 
 {
@@ -1376,5 +1378,18 @@ public class CUtils
         
         return sNew;
     }
+    
+    public static void printBlockComment(BufferedWriter writer, String s) throws IOException
+    {
+        writer.write("\n");
+        writer.write("\t// ======================================================================\n");
+        
+        // TODO: divide string into multiple lines if greater then 80, sensitive
+        //       to not break line in middle of word. for now all comments are one-liners.
+        writer.write("\t// " + s + "\n");
+        
+        writer.write("\t// ======================================================================\n");  
+        writer.write("\n");
+    }    
 }
 

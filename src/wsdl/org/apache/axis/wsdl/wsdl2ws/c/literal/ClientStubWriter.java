@@ -332,7 +332,9 @@ public class ClientStubWriter
         //=============================================================================
         // Generate method logic
         //=============================================================================        
-                        
+
+        CUtils.printBlockComment(writer, "Initialize client engine, set SOAP version, SOAPAction, operation, etc.");
+        
         writer.write("\tif (AXISC_SUCCESS != axiscCallInitialize(call, C_DOC_PROVIDER " + "))\n");
         writer.write("\t\treturn ");
         if (returntype != null)
@@ -357,6 +359,7 @@ public class ClientStubWriter
         }
 
         // Add attributes to soap method
+        boolean commentIssued=false;
         for (int i = 0; i < paramsB.size (); i++)
         {
             ParameterInfo param = (ParameterInfo) paramsB.get (i);
@@ -364,6 +367,14 @@ public class ClientStubWriter
             // Skip non-attributes
             if (!param.isAttribute ())
                 continue;
+            
+            if (!commentIssued)
+            {
+                commentIssued = true;
+                CUtils.printBlockComment(writer, "Add attributes to soap method.");
+            }
+            else
+                writer.write ("\n");
             
             // Process attributes
             String elementType = param.getElementName ().getLocalPart ();
@@ -385,20 +396,30 @@ public class ClientStubWriter
         } // end for-loop
         
         // new calls from stub base
-        writer.write("\n");
+        CUtils.printBlockComment(writer, "Apply SSL configuration properties and user-set SOAP headers.");        
         writer.write ("\taxiscStubIncludeSecure(stub);\n");  
         writer.write ("\taxiscStubApplyUserPreferences(stub);\n");
-        writer.write("\n");
         
         // Process elements
+        commentIssued=false;
+        String tab2;
         for (int i = 0; i < paramsB.size(); i++)
         {
+            tab2 = "\t";
             ParameterInfo param = (ParameterInfo) paramsB.get(i);
 
             // Ignore attributes
             if (param.isAttribute ())
                 continue;
             
+            if (!commentIssued)
+            {
+                commentIssued = true;
+                CUtils.printBlockComment(writer, "Process parameters.");
+            }
+            else
+                writer.write ("\n");
+                        
             // add elements
             type = wscontext.getTypemap().getType(param.getSchemaName());
             if (type != null)
@@ -438,14 +459,14 @@ public class ClientStubWriter
                 
                 if (namespace.length () == 0)
                 {
-                    writer.write ("\tchar cPrefixAndParamName"
+                    writer.write ("\t\tchar cPrefixAndParamName"
                               + i + "[" + "] = \"" + parameterName + "\";\n");
                 }
                 else
                 {
                     int stringLength = 8 + 1 + parameterName.length () + 1;
-                    writer.write ("\tchar cPrefixAndParamName" + i + "[" + stringLength + "];\n");
-                    writer.write ("\tsprintf( cPrefixAndParamName" + i +
+                    writer.write ("\t\tchar cPrefixAndParamName" + i + "[" + stringLength + "];\n");
+                    writer.write ("\t\tsprintf( cPrefixAndParamName" + i +
                               ", \"%s:" + parameterName +
                               "\", axiscCallGetNamespacePrefix(call,\"" +  namespace + "\"));\n");
                 }
@@ -454,18 +475,18 @@ public class ClientStubWriter
                 {
                     // TODO
                     String attchType = param.getType().getName().getLocalPart();
-                    writer.write("\n\tconst AxiscChar *xmlSoapNsPfx" + i + 
+                    writer.write("\t\tconst AxiscChar *xmlSoapNsPfx" + i + 
                         " = axiscCallGetNamespacePrefix(call,\"" + 
                         WrapperConstants.APACHE_XMLSOAP_NAMESPACE + "\");\n");
-                    writer.write("\tchar attchType" + i + "[64];\n");
-                    writer.write("\tstrcpy(attchType" + i + ", xmlSoapNsPfx" + i + ");\n");
-                    writer.write("\tstrcat(attchType" + i + ", \":" + attchType + "\");\n");
-                    writer.write("\tAXISCHANDLE attrs" + i + "[2];\n");
-                    writer.write("\tattrs" + i + "[0] = axiscCallCreateAttribute(call,\"type\", \"xsi\", attchType" + i + 
+                    writer.write("\t\tchar attchType" + i + "[64];\n");
+                    writer.write("\t\tstrcpy(attchType" + i + ", xmlSoapNsPfx" + i + ");\n");
+                    writer.write("\t\tstrcat(attchType" + i + ", \":" + attchType + "\");\n");
+                    writer.write("\t\tAXISCHANDLE attrs" + i + "[2];\n");
+                    writer.write("\t\tattrs" + i + "[0] = axiscCallCreateAttribute(call,\"type\", \"xsi\", attchType" + i + 
                         ");\n");
-                    writer.write("\tattrs" + i + "[1] = axiscCallCreateAttribute(call,xmlSoapNsPfx" + i + 
+                    writer.write("\t\tattrs" + i + "[1] = axiscCallCreateAttribute(call,xmlSoapNsPfx" + i + 
                         ", \"xmlns\", \"http://xml.apache.org/xml-soap\");\n");
-                    writer.write("\taxiscCallAddAttachmentParameter(call, Value" + i + ", cPrefixAndParamName" + i + 
+                    writer.write("\t\taxiscCallAddAttachmentParameter(call, Value" + i + ", cPrefixAndParamName" + i + 
                         ", attrs" + i + ", 2");
                 }
                 else if (typeisarray)
@@ -482,14 +503,14 @@ public class ClientStubWriter
                     {
                         // Array of simple type
                         String containedType = CUtils.getclass4qname (qname);
-                        writer.write ("\taxiscCallAddBasicArrayParameter(call,");
+                        writer.write ("\t\taxiscCallAddBasicArrayParameter(call,");
                         writer.write ("(Axisc_Array *)Value" + i + ", " +
                               CUtils.getXSDTypeForBasicType(containedType) + ", cPrefixAndParamName" + i);
                     }
                     else if (arrayType != null && arrayType.isSimpleType ())
                     {
                         String containedType = CUtils.getclass4qname (arrayType.getBaseType ());
-                        writer.write ("\taxiscCallAddBasicArrayParameter(call,");
+                        writer.write ("\t\taxiscCallAddBasicArrayParameter(call,");
                         writer.write ("(Axisc_Array *)Value" + i + ", " +
                                   CUtils.getXSDTypeForBasicType(containedType) +
                                   ", cPrefixAndParamName" + i);
@@ -498,7 +519,7 @@ public class ClientStubWriter
                     {
                         // Array of complex type
                         String containedType = qname.getLocalPart ();
-                        writer.write ("\taxiscCallAddCmplxArrayParameter(call,");
+                        writer.write ("\t\taxiscCallAddCmplxArrayParameter(call,");
                         writer.write ("(Axisc_Array *)Value" + i +
                                   ", (void*)Axis_Serialize_" + containedType +
                                   ", (void*)Axis_Delete_" + containedType +
@@ -516,13 +537,13 @@ public class ClientStubWriter
                             || param.isOptional()
                             || CUtils.isPointerType(paramTypeName))
                     {
-                        writer.write ("\taxiscCallAddParameter(call,");
+                        writer.write ("\t\taxiscCallAddParameter(call,");
                         writer.write ("(void*)Value" + i + ", cPrefixAndParamName" + i
                                   + ", " + CUtils.getXSDTypeForBasicType(paramTypeName));
                     }
                     else
                     {
-                        writer.write ("\taxiscCallAddParameter(call,");
+                        writer.write ("\t\taxiscCallAddParameter(call,");
                         writer.write ("(void*)&Value" + i + ", cPrefixAndParamName" + i
                                   + ", " + CUtils.getXSDTypeForBasicType(paramTypeName));
                     }
@@ -530,7 +551,7 @@ public class ClientStubWriter
                 else
                 {
                     // Complex Type
-                    writer.write ("\taxiscCallAddCmplxParameter(call,");
+                    writer.write ("\t\taxiscCallAddCmplxParameter(call,");
                     writer.write ("Value" + i
                           + ", (void*)Axis_Serialize_" + paramTypeName
                           + ", (void*)Axis_Delete_" + paramTypeName
@@ -548,13 +569,17 @@ public class ClientStubWriter
 
         if (minfo.getOutputMessage () != null)
         {
+            CUtils.printBlockComment(writer, "Invoke web service, send/receive operation. Handle output parameters, if any.");
             writer.write("\tif (AXISC_SUCCESS == axiscCallSendAndReceive(call))\n\t{\n");       
             writer.write("\t\tif(AXISC_SUCCESS == axiscCallCheckMessage(call, \""
                 + minfo.getOutputMessage().getLocalPart() + "\", \""
                 + minfo.getOutputMessage().getNamespaceURI() + "\"))\n\t\t{\n");
         }
         else
-            writer.write("\tif (AXISC_SUCCESS == axiscCallSend(call))\n\t{\n");       
+        {
+            CUtils.printBlockComment(writer, "Invoke web service, send-only operation.");
+            writer.write("\tif (AXISC_SUCCESS == axiscCallSend(call))\n\t{\n");      
+        }
         
         if (isAllTreatedAsOutParams)
         {

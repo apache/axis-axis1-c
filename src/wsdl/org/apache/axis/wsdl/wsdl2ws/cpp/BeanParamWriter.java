@@ -289,6 +289,8 @@ public class BeanParamWriter extends ParamCPPFileWriter
         // TODO: xsd:extension not fully or correctly supported.
         if (extensionBaseAttrib != null)
         {
+            CUtils.printBlockComment(writer, "Serialize extension.");
+            
             String typeName = extensionBaseAttrib.getTypeName(); 
 
             if (extensionBaseAttrib.isSimpleType())
@@ -335,6 +337,8 @@ public class BeanParamWriter extends ParamCPPFileWriter
 
         if (attribs.length == 0) 
         {
+            CUtils.printBlockComment(writer, "No attributes or elements to serialize.");
+            
             writer.write("\tpSZ->serialize(\">\", NULL);\n");
 
             writeSerializeExtensionCode();
@@ -350,11 +354,13 @@ public class BeanParamWriter extends ParamCPPFileWriter
         // to put this, or we need to find a way to determine if nillable.
         //=============================================================================        
 
+        CUtils.printBlockComment(writer, "If null input, serialize as nil element.");
+        
         writer.write("\tif ( param == NULL )\n\t{\n");
         writer.write("\t\tpSZ->serializeAsAttribute( \"xsi:nil\", 0, (void*)&(xsd_boolean_true), XSD_BOOLEAN);\n");
         writer.write("\t\tpSZ->serialize( \">\", NULL);\n");
         writer.write("\t\treturn AXIS_SUCCESS;\n");
-        writer.write("\t}\n\n");
+        writer.write("\t}\n");
         
         //=============================================================================
         // Serialize 
@@ -371,7 +377,9 @@ public class BeanParamWriter extends ParamCPPFileWriter
         // Serialize attributes, if any
         //=============================================================================        
 
-        writer.write("\t/* If there are any attributes serialize them. If there aren't then close the tag */\n");
+        if (attributeParamCount > 0)
+            CUtils.printBlockComment(writer, "Serialize attributes.");
+        
         for (int i = 0; i < attributeParamCount; i++)
         {
             if (attribs[i].isArray() || !(attribs[i].isSimpleType() || attribs[i].getType().isSimpleType()))
@@ -388,22 +396,20 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 basicType = attribs[i].getTypeName();
 
             if (attribs[i].isOptional())
-                writer.write("\tif (0 != param->" + attribs[i].getParamNameAsMember() + ")\n");
+                writer.write("\tif (0 != param->" + attribs[i].getParamNameAsMember() + ")\n\t");
             
             if (CUtils.isPointerType(basicType) || attribs[i].isOptional())
             {
-                writer.write("\t\tpSZ->serializeAsAttribute(\""
+                writer.write("\tpSZ->serializeAsAttribute(\""
                         + soapTagName + "\", 0, (void*)(param->"
                         + attribs[i].getParamNameAsMember() + "), "
                         + CUtils.getXSDTypeForBasicType(basicType) + ");\n");
             }
             else
             {
-                writer.write("\t\tpSZ->serializeAsAttribute(\""
-                        + soapTagName
-                        + "\", 0, (void*)&(param->"
-                        + attribs[i].getParamNameAsMember()
-                        + "), "
+                writer.write("\tpSZ->serializeAsAttribute(\""
+                        + soapTagName + "\", 0, (void*)&(param->"
+                        + attribs[i].getParamNameAsMember() + "), "
                         + CUtils.getXSDTypeForBasicType(attribs[i].getTypeName()) + ");\n");
             }
         }
@@ -436,7 +442,8 @@ public class BeanParamWriter extends ParamCPPFileWriter
         // Serialize elements, if any
         //=============================================================================                
         
-        writer.write("\n\t/* then serialize elements if any*/\n");
+        if (attributeParamCount < attribs.length)
+            CUtils.printBlockComment(writer, "Serialize sub-elements.");
 
         boolean firstIfWritten = false;
         int anyCounter = 0; //counter for any types.
@@ -516,7 +523,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     baseTypeName = typeName;
                 
                 if (attribs[i].isOptional())
-                    writer.write("\tif (param->" + attribs[i].getParamNameAsMember() + " != NULL)\n\t{\n\t");
+                    writer.write("\tif (param->" + attribs[i].getParamNameAsMember() + " != NULL)\n\t");
                 
                 if (CUtils.isPointerType(baseTypeName))
                 {
@@ -558,9 +565,6 @@ public class BeanParamWriter extends ParamCPPFileWriter
                             + ", (void*)&(param->" + attribs[i].getParamNameAsMember()
                             + "), " + CUtils.getXSDTypeForBasicType(baseTypeName) + ");\n");
                 }
-                
-                if (attribs[i].isOptional())
-                    writer.write("\t}\n");
             }
             else
             {
@@ -615,7 +619,9 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     + ", \">\", NULL);\n");
         }
 
-        writer.write("\n\tif (!bArray && blnIsNewPrefix)\n");
+        CUtils.printBlockComment(writer, "Remove namespace, if new.");        
+        
+        writer.write("\tif (!bArray && blnIsNewPrefix)\n");
         writer.write("\t\tpSZ->removeNamespacePrefix(Axis_URI_" + classname + ");\n");
         writer.write("\n");
         
@@ -628,6 +634,8 @@ public class BeanParamWriter extends ParamCPPFileWriter
      */
     private void writeDOCArrayPortionOfSerializeGlobalMethod() throws IOException
     {
+        CUtils.printBlockComment(writer, "Serialize top-most element, possibly defining new namespace.");        
+        
         // For doc/literal objects
         writer.write("\tbool blnIsNewPrefix = false;\n");
         writer.write("\tif (!bArray)\n\t{\n");
@@ -635,7 +643,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
         writer.write("\t\tif (blnIsNewPrefix)\n");
         writer.write("\t\t\tpSZ->serialize(\" xmlns:\", sPrefix, \"=\\\"\", "
                         + "Axis_URI_" + classname + ", \"\\\"\", NULL);\n");
-        writer.write( "\t}\n\n");
+        writer.write( "\t}\n");
     }
 
     /**
@@ -662,7 +670,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     + "\" xsi:type=\\\"\", sPrefix, \":\", " 
                     + "Axis_TypeName_" + classname + ", \"\\\" xmlns:\", " 
                     + "sPrefix, \"=\\\"\", Axis_URI_" + classname + ", \"\\\">\", NULL);\n");
-        writer.write( "\t}\n\n");
+        writer.write( "\t}\n");
     }
 
     private void writeDeSerializeExtensionCode() throws IOException, WrapperFault
@@ -670,6 +678,8 @@ public class BeanParamWriter extends ParamCPPFileWriter
         if (extensionBaseAttrib != null
                 && extensionBaseAttrib.getTypeName() != null)
         {
+            CUtils.printBlockComment(writer, "Deserialize extension.");
+            
             if (extensionBaseAttrib.isSimpleType())
             {
                 writer.write("\tvoid* pCharDataAs;\n");
@@ -729,10 +739,17 @@ public class BeanParamWriter extends ParamCPPFileWriter
             return;
         }
 
+        
+        // We always use this...
+        writer.write("\tconst char* peekedElementName;\n");
+
         //=============================================================================
         // Deserialize attributes.
         // Makes logic simpler to follow with slight duplication. TODO
         //=============================================================================        
+        
+        if (attributeParamCount > 0)
+            CUtils.printBlockComment(writer, "Deserialize attributes.");
         
         //=============================================================================
         // Deserialize attributes and elements.
@@ -745,8 +762,22 @@ public class BeanParamWriter extends ParamCPPFileWriter
         int anyCounter = 0; //counter for any types.
         int arrayCount = 0;
         
+        boolean handleAll = false;
+        boolean handleChoice = false;
+     
+        // Tabs to ensure code alignment
+        String tab1  = "\t";
+        String tab2Default = "";
+        String tab2;
+       
         for (int i = 0; i < attribs.length; i++)
         {
+            // Reset tabs
+            tab2  = tab2Default + "\t";
+            
+            if (i == attributeParamCount)
+                CUtils.printBlockComment(writer, "Deserialize elements.");
+            
             //if the attribute is a 'choice' construct we have to peek and make
             // the choice
 
@@ -794,7 +825,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
             if (attribs[i].isAnyType())
             {
                 anyCounter +=1;
-                writer.write("\tparam->any" + Integer.toString(anyCounter)+ " = pIWSDZ->getAnyObject();\n");
+                writer.write(tab1 + "param->any" + Integer.toString(anyCounter)+ " = pIWSDZ->getAnyObject();\n");
             }
             else if (attribs[i].isArray())
             {
@@ -808,19 +839,19 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     else
                         baseTypeName = attribs[i].getTypeName();
 
-                    writer.write("\tAxis_Array * array" + arrayCount + " = pIWSDZ->getBasicArray("
+                    writer.write(tab1 + "Axis_Array * array" + arrayCount + " = pIWSDZ->getBasicArray("
                             + CUtils.getXSDTypeForBasicType(baseTypeName) + ", \""
                             + attribs[i].getParamNameAsSOAPString()
                             + "\",0);\n");
-                    writer.write("\tif(param->" + attribs[i].getParamNameAsMember() + " == NULL)\n");
-                    writer.write("\t\tparam->" + attribs[i].getParamNameAsMember() + " = new " + attribs[i].getTypeName() + "_Array();\n");
-                    writer.write("\tparam->" + attribs[i].getParamNameAsMember() + "->clone( *array" + arrayCount + ");\n");
-                    writer.write("\tAxis::AxisDelete((void*) array" + arrayCount + ", XSD_ARRAY);\n\n");
+                    writer.write(tab1 + "if(param->" + attribs[i].getParamNameAsMember() + " == NULL)\n");
+                    writer.write(tab1 + "\tparam->" + attribs[i].getParamNameAsMember() + " = new " + attribs[i].getTypeName() + "_Array();\n");
+                    writer.write(tab1 + "param->" + attribs[i].getParamNameAsMember() + "->clone( *array" + arrayCount + ");\n");
+                    writer.write(tab1 + "Axis::AxisDelete((void*) array" + arrayCount + ", XSD_ARRAY);\n\n");
                 }
                 else
                 {
                     arrayType = attribs[i].getTypeName();
-                    writer.write("\tpIWSDZ->getCmplxArray(param->" + attribs[i].getParamNameAsMember() 
+                    writer.write(tab1 + "pIWSDZ->getCmplxArray(param->" + attribs[i].getParamNameAsMember() 
                             + ", (void*)Axis_DeSerialize_" + arrayType
                             + ", (void*)Axis_Create_" + arrayType 
                             + ", (void*)Axis_Delete_" + arrayType
@@ -834,9 +865,10 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 // We only peek for elements, not element attributes!
                 if (attribs[i].isOptional() && !attribs[i].isAttribute())
                 {
-                    writer.write("\tconst char* elementName" + i + " = pIWSDZ->peekNextElementName();\n");
-                    writer.write("\t\tif(strcmp(elementName" + i + ", \"" + soapTagName + "\") == 0)\n");
-                    writer.write("\t\t{\n");
+                    writer.write(tab1 + "peekedElementName = pIWSDZ->peekNextElementName();\n");
+                    writer.write(tab1 + "if (strcmp(peekedElementName, \"" + soapTagName + "\") == 0)\n");
+                    writer.write(tab1 + "{\n");
+                    tab2 += "\t";
                 }
                 
                 Type type = attribs[i].getType();
@@ -853,13 +885,13 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 {
                     if (attribs[i].getChoiceElement() && isElementNillable(i) && !isPointerType)
                     {
-                        writer.write("\tparam->"
+                        writer.write(tab2 + "param->"
                                 + attribs[i].getParamNameAsMember()
                                 + " = (" + attribs[i].getTypeName()
                                 + "**)(" + attribs[i].getTypeName()
                                 +"*)new " +attribs[i].getTypeName() + ";\n");
                         
-                        writer.write("\t\t*(param->"
+                        writer.write(tab2 + "*(param->"
                                 + attribs[i].getParamNameAsMember() + ") = pIWSDZ->"
                                 + CUtils.getParameterGetValueMethodName(
                                         attribs[i].getTypeName(), attribs[i].isAttribute()) + "( \""
@@ -876,59 +908,60 @@ public class BeanParamWriter extends ParamCPPFileWriter
                         
                         if( isPointerType)
                         {
-                            writer.write("\t" + typeName + "    pValue" + i + " = pIWSDZ->" +
+                            writer.write(tab2 + typeName + " pValue" + i + " = pIWSDZ->" +
                                     CUtils.getParameterGetValueMethodName(baseTypeName, attribs[i].isAttribute()) +
                                     "( \"" + soapTagName + "\", 0);\n");
                         }
                         else
                         {
-                            writer.write("\t\t\t" + typeName + " *    pValue" + i + " = pIWSDZ->" +
+                            writer.write(tab2 + typeName + " *    pValue" + i + " = pIWSDZ->" +
                                     CUtils.getParameterGetValueMethodName(baseTypeName, attribs[i].isAttribute()) +
                                     "( \"" + soapTagName + "\", 0);\n");
                         }
                         
-                        writer.write( "\t\t\tif( pValue" + i + " == NULL)\n");
-                        writer.write("\t\t\t\tparam->" + attribs[i].getParamNameAsMember() + " = NULL;\n");
-                        writer.write( "\t\t\telse\n");
-                        writer.write( "\t\t\t{\n");
+                        writer.write(tab2 + "if( pValue" + i + " == NULL)\n");
+                        writer.write(tab2 + "\tparam->" + attribs[i].getParamNameAsMember() + " = NULL;\n");
+                        writer.write(tab2 + "else\n");
+                        writer.write(tab2 + "{\n");
                         
-                        writer.write("\t\t\t\tparam->set" + attribs[i].getMethodName() + " (pValue" + i + ");\n");
-                        writer.write("\t\t\t\tAxis::AxisDelete( (void *) pValue" + i + ", " 
-                                + CUtils.getXSDTypeForBasicType( baseTypeName) + ");\n\n");
-                        writer.write( "\t\t\t}\n\n");
+                        writer.write(tab2 + "\tparam->set" + attribs[i].getMethodName() + " (pValue" + i + ");\n");
+                        writer.write(tab2 + "\tAxis::AxisDelete( (void *) pValue" + i + ", " 
+                                + CUtils.getXSDTypeForBasicType( baseTypeName) + ");\n");
+                        writer.write(tab2 + "}\n");
                     }
                 } 
                 else if (attribs[i].getChoiceElement() || attribs[i].getAllElement())
                 {
-                    writer.write("\tparam->"
+                    writer.write(tab2 + "param->"
                             + attribs[i].getParamNameAsMember() + " = pIWSDZ->"
                             + CUtils.getParameterGetValueMethodName(
                                     attribs[i].getTypeName(), attribs[i].isAttribute()) + "( \""
                             + soapTagName + "\",0);\n");
+//                    writer.write(tab2 + "param->__axis_deepcopy_"  + attribs[i].getParamNameAsMember()
+//                            + " = true;\n");
                 }
                 else
                 {
                     String elementNameToSearchFor = attribs[i].isAttribute()? attribs[i].getParamNameAsSOAPString():attribs[i].getElementNameAsSOAPString();
                     
-                    writer.write("\t" + attribs[i].getTypeName() + " * "
-                            + attribs[i].getParamNameAsMember() + " = NULL;\n\n");
-                    writer.write("\tif ((" + attribs[i].getParamNameAsMember() + " = pIWSDZ->"
+                    writer.write(tab2 + attribs[i].getTypeName() + " * "
+                            + attribs[i].getParamNameAsMember() + " = NULL;\n");
+                    writer.write(tab2 + "if ((" + attribs[i].getParamNameAsMember() + " = pIWSDZ->"
                             + CUtils.getParameterGetValueMethodName(
                                     attribs[i].getTypeName(), attribs[i].isAttribute()) + "( \""
-                            + elementNameToSearchFor + "\",0)) != NULL)\n\t{\n");
-
-                    writer.write("\t\tparam->set"
+                            + elementNameToSearchFor + "\",0)) != NULL)\n");
+                    writer.write(tab2 + "{\n");
+                    writer.write(tab2 + "\tparam->set"
                             + attribs[i].getMethodName() + "(* " + attribs[i].getParamNameAsMember() + " );\n");
-                    writer.write("\t\tAxis::AxisDelete( (void *) " + attribs[i].getParamNameAsMember() + ", " + CUtils.getXSDTypeForBasicType( attribs[i].getTypeName()) + ");\n");
-                    writer.write("\t}\n");                        
+                    writer.write(tab2 + "\tAxis::AxisDelete( (void *) " + attribs[i].getParamNameAsMember() + ", " + CUtils.getXSDTypeForBasicType( attribs[i].getTypeName()) + ");\n");
+                    writer.write(tab2 + "}\n");                        
                 }
                 
                 if (attribs[i].isOptional() && !attribs[i].isAttribute())
                 {
-                    writer.write("\t\t\t}\n");
-                    writer.write("\t\telse\n");
-                    writer.write("\t\t\tparam->" + attribs[i].getParamNameAsMember() + " = NULL;\n");
-                    writer.write("\n");
+                    writer.write(tab1 + "}\n");
+                    writer.write(tab1 + "else\n");
+                    writer.write(tab1 + "\tparam->" + attribs[i].getParamNameAsMember() + " = NULL;\n");
                 }
             }
             else
@@ -938,12 +971,12 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 
                 if (attribs[i].isOptional())
                 {
-                    writer.write("\tconst char* elementName" + i + " = pIWSDZ->peekNextElementName();\n");
-                    writer.write("\tif(strcmp(elementName" + i + ", \"" + soapTagName + "\") == 0)\n");
-                    writer.write("\t{\n");
+                    writer.write(tab1 + "peekedElementName = pIWSDZ->peekNextElementName();\n");
+                    writer.write(tab1 + "if (strcmp(peekedElementName, \"" + soapTagName + "\") == 0)\n");
+                    tab2 += "\t";
                 }
 
-                writer.write("\tparam->" + attribs[i].getParamNameAsMember()
+                writer.write(tab2 + "param->" + attribs[i].getParamNameAsMember()
                         + " = (" + attribs[i].getTypeName()
                         + "*)pIWSDZ->getCmplxObject((void*)Axis_DeSerialize_" + attribs[i].getTypeName()
                         + ", (void*)Axis_Create_" + attribs[i].getTypeName() 
@@ -952,19 +985,19 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 
                 if (attribs[i].isOptional())
                 {
-                    writer.write("\t}\n");
-                    writer.write("\telse\n");
-                    writer.write("\t\tparam->" + attribs[i].getParamNameAsMember() + " = NULL;\n");
-                    writer.write("\n");
+                    writer.write(tab1 + "else\n");
+                    writer.write(tab1 + "\tparam->" + attribs[i].getParamNameAsMember() + " = NULL;\n");
                 }
             }
 
             if (attribs[i].getChoiceElement())
-                writer.write("\t}\n");
+                writer.write(tab1 + "}\n");
             
             if (attribs[i].getAllElement())
                 if (attribs[i].getMinOccurs() == 0)
                     writer.write("\t}\n");
+            
+            writer.write("\n");                        
         }
         
         //=============================================================================
