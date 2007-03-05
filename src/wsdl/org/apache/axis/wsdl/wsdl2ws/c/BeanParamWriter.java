@@ -166,12 +166,11 @@ public class BeanParamWriter extends ParamCFileWriter
                 basicType = CUtils.getclass4qname(type.getBaseType());
             else
                 basicType = attribs[i].getTypeName();
-            
-            if (attribs[i].isOptional())
-                writer.write("\tif (0 != param->" + attribs[i].getParamNameAsMember() + ")\n\t");
 
             if (CUtils.isPointerType(basicType) || attribs[i].isOptional())
             {
+                // TODO: Add check if ptr type and not optional and is null, throw exception.
+                writer.write("\tif (0 != param->" + attribs[i].getParamNameAsMember() + ")\n\t");
                 writer.write("\taxiscSoapSerializerSerializeAsAttribute(pSZ,\""
                         + attribs[i].getParamNameAsSOAPString() + "\", 0, (void*)(param->"
                         + attribs[i].getParamNameAsMember() + "), "
