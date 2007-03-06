@@ -36,8 +36,11 @@ public:
         setMessage(iExceptionCode, "AxisSoapException:", pcMessage);
     }
     
+    // copy constructor
+    AxisSoapException(const AxisSoapException& e): AxisException ((const AxisException)e) { }
+        
     // constructor
-    AxisSoapException(const AxisException& e): AxisException (e) { }
+    AxisSoapException(const AxisException& e): AxisException (e) { } 
     
     // destructor
     virtual ~AxisSoapException() throw() { }

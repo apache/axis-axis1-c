@@ -36,6 +36,7 @@ public:
         setMessage(iExceptionCode, "AxisParseException:", pcMessage);
     }
     
+    AxisParseException(const AxisParseException& e): AxisException((const AxisException)e) { }
     AxisParseException(const AxisException& e): AxisException(e) { }
     AxisParseException(): AxisException() { }
     virtual ~AxisParseException() throw() { }

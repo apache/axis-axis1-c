@@ -35,6 +35,7 @@ public:
     {
         setMessage(iExceptionCode, "AxisEngineException:", pcMessage);
     }
+    AxisEngineException(const AxisEngineException& e): AxisException ((const AxisException)e) { }
     AxisEngineException(const AxisException& e): AxisException (e) { }
     virtual ~AxisEngineException() throw() { }
 };

@@ -37,6 +37,9 @@ public:
         setMessage(iExceptionCode, "HTTPTransportException:", pcMessage);
     }
     
+    // copy constructor
+    HTTPTransportException(const HTTPTransportException& e): AxisException((const AxisException)e) { }
+    
     // constructor
     HTTPTransportException(const AxisException& e): AxisException (e) { }
     
