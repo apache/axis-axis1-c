@@ -164,16 +164,11 @@ addOutputBasicArrayParam( const Axis_Array * pArray, XSDTYPE nType, const AxisCh
 
     Param* pParam = new Param();
 
+    pAb->SetItemName(pName);
     if( RPC_ENCODED == m_nStyle)
-    {
-        pAb->SetItemName("item");
         pParam->setName(pName);
-    }
     else
-    {
-        pAb->SetItemName(pName);
-        pParam->setName("array");        
-    }
+        pParam->setName("array");
 
     pParam->m_Value.pArray = pAb;
     pParam->m_Type = XSD_ARRAY;
@@ -210,17 +205,15 @@ addOutputCmplxArrayParam( const Axis_Array * pArray,
 
     Param * pParam = new Param();
 
+    pAb->SetItemName( pName);
     if( RPC_ENCODED == m_nStyle)
     {
-        pAb->SetItemName( "item");
         pAb->SetTypeName( pName);
         pAb->SetUri( pNamespace);
         pParam->setName( pName);
     }
     else
     {
-        pAb->SetItemName( pName);
-
         if( NULL != pNamespace)
             pParam->setURI( pNamespace);
 
@@ -658,18 +651,15 @@ serializeCmplxArray( const Axis_Array * pArray,
 
     Param * pParam = new Param();
 
+    pAb->SetItemName( pName);
     if( RPC_ENCODED == m_nStyle)
     {
-        pAb->SetItemName( "item");
         pAb->SetTypeName( pName);
         pAb->SetUri( pNamespace);
         pParam->setName( pName);
     }
     else
-    {
-        pAb->SetItemName( pName);
         pParam->setName( "array");        
-    }
 
     pParam->m_Value.pArray = pAb;
     pParam->m_Type = XSD_ARRAY;
@@ -726,16 +716,11 @@ serializeBasicArray(const Axis_Array* pArray,
 
     Param * pParam = new Param();
 
+    pAb->SetItemName( pName);
     if( RPC_ENCODED == m_nStyle)
-    {
-        pAb->SetItemName( "item");
         pParam->setName( pName);
-    }
     else
-    {
-        pAb->SetItemName( pName);
         pParam->setName( "array");        
-    }
 
     pParam->m_Value.pArray = pAb;
     pParam->m_Type = XSD_ARRAY;
