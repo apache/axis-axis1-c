@@ -423,7 +423,8 @@ void ArrayBean::SetTypeName(const AxisChar* sName)
 
 void ArrayBean::SetUri(const AxisChar* sURI)
 {
-    m_URI = sURI;
+    if (sURI)
+        m_URI = sURI;
 }
 
 /**
