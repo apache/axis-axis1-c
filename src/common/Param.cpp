@@ -91,34 +91,48 @@ int Param::serialize (SoapSerializer &pSZ)
                 // get a prefix from Serializer
                 ATprefix = pSZ.getNamespacePrefix (m_Value.pArray->m_URI.c_str ());
 
-                pSZ.serialize (" xmlns:enc", NULL);
-                pSZ.serialize ("=\"http://www.w3.org/2001/06/soap-encoding\" ", NULL);
-                
-                if (m_Value.pArray->m_type == USER_TYPE)
+                if (m_Value.pArray->m_value.cta==NULL || 
+                  m_Value.pArray->m_value.cta->pObject==NULL)
                 {
-                    pSZ.serialize ("xmlns:", ATprefix.c_str (), "=\"",
-                        m_Value.pArray->m_URI.c_str (), "\" ", NULL);
-                }
-                pSZ.serialize ("enc:arrayType=\"", NULL);
-                if (m_Value.pArray->m_type == USER_TYPE)
-                {
-                    pSZ.serialize (ATprefix.c_str (), ":",
-                        m_Value.pArray->m_TypeName.c_str (), NULL);
-                }
-                else //basic type array
-                {
-                    pSZ.serialize ("xsd:", BasicTypeSerializer::
-                        basicTypeStr (m_Value.pArray->m_type), NULL);
-                }
-                
-                {
-                    char Buf[10]; //maximum array dimension is 99999999
-                    sprintf (Buf, "[%d]", m_Value.pArray->m_nSize);
-                    pSZ.serialize (Buf, NULL);
-                }
+                  // ======================================================================
+                  // If null input, serialize as nil element.
+                  // ======================================================================
 
-                pSZ.serialize ("\">\n", NULL);
-                m_Value.pArray->Serialize (pSZ); //Only serializes the inner items
+	                pSZ.serializeAsAttribute( "xsi:nil", 0, (void*)&(xsd_boolean_true), XSD_BOOLEAN);
+	                pSZ.serialize( ">", NULL);
+                }
+                else
+                {
+                  pSZ.serialize (" xmlns:enc", NULL);
+                  pSZ.serialize ("=\"http://www.w3.org/2001/06/soap-encoding\" ", NULL);
+                  
+                  if (m_Value.pArray->m_type == USER_TYPE &&
+                    !m_Value.pArray->m_URI.empty())
+                  {
+                      pSZ.serialize ("xmlns:", ATprefix.c_str (), "=\"",
+                          m_Value.pArray->m_URI.c_str (), "\" ", NULL);
+                  }
+                  pSZ.serialize ("enc:arrayType=\"", NULL);
+                  if (m_Value.pArray->m_type == USER_TYPE)
+                  {
+                      pSZ.serialize (ATprefix.c_str (), ":",
+                          m_Value.pArray->m_TypeName.c_str (), NULL);
+                  }
+                  else //basic type array
+                  {
+                      pSZ.serialize ("xsd:", BasicTypeSerializer::
+                          basicTypeStr (m_Value.pArray->m_type), NULL);
+                  }
+                  
+                  {
+                      char Buf[10]; //maximum array dimension is 99999999
+                      sprintf (Buf, "[%d]", m_Value.pArray->m_nSize);
+                      pSZ.serialize (Buf, NULL);
+                  }
+
+                  pSZ.serialize ("\">\n", NULL);
+                  m_Value.pArray->Serialize (pSZ); //Only serializes the inner items
+                }
                 pSZ.serialize ("</", NULL);
                 if (!m_strPrefix.empty ())
                     pSZ.serialize (m_strPrefix.c_str (), ":", m_sName.c_str (), NULL);
