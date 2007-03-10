@@ -78,14 +78,10 @@ public class ClientStubWriter extends CFileWriter
     protected void writeMethods() throws WrapperFault
     {
         try
-          {
-            writer.write("\n");
-            writer.write("/* ================================================== */\n" +
-                         "/* Functions relating to web service client proxy     */\n" +
-                         "/* ================================================== */\n");
-            writer.write("\n");
-            
+          {            
             // get_xxx_stub() routine
+            CUtils.printMethodComment(writer, "Function to get new object representing a Web service stub.");
+            
             writer.write("AXISCHANDLE get_" + classname + "_stub(const char* pchEndPointUri)\n{\n");
             writer.write("\tif(pchEndPointUri)\n");
             writer.write("\t\treturn axiscStubCreate(pchEndPointUri, AXISC_APTHTTP1_1);\n");
@@ -96,32 +92,30 @@ public class ClientStubWriter extends CFileWriter
             writer.write("}\n\n");
             
             // destroy_xxxx_stub()
+            CUtils.printMethodComment(writer, "Function to destroy an object representing a Web service stub.");
+            
             writer.write("void destroy_" + classname + "_stub(AXISCHANDLE p)\n{\n");
             writer.write("\taxiscStubDestroy(p);\n}\n\n");
 
             // get_xxxx_Status() routine
+            CUtils.printMethodComment(writer, "Function to get the status of last Web service method invocation.");
+            
             writer.write("int get_" + classname + "_Status(AXISCHANDLE stub)\n{\n");
             writer.write("\tAXISCHANDLE call = axiscStubGetCall(stub);\n");
             writer.write("\treturn axiscCallGetStatus(call);\n");
             writer.write("}\n\n");
 
+            CUtils.printMethodComment(writer, "Function to set a Web service stub's exception handler.");
             writer.write("void set_" + classname 
                     + "_ExceptionHandler(AXISCHANDLE stub, AXIS_EXCEPTION_HANDLER_FUNCT fp)\n{\n");          
             writer.write("\taxiscStubSetCExceptionHandler(stub, (void *)fp);\n");          
             writer.write("}\n");
-            
-            writer.write("\n");
-            writer.write("/* ================================================== */\n" +
-                         "/* Functions corresponding to the web service methods */\n" +
-                         "/* ================================================== */\n");
-            writer.write("\n");
             
             MethodInfo minfo;
             for (int i = 0; i < methods.size(); i++)
             {
                   minfo = (MethodInfo) methods.get(i);
                   this.writeMethodInWrapper(minfo);
-                  writer.write("\n");
             }
           }
         catch (IOException e)
@@ -198,9 +192,9 @@ public class ClientStubWriter extends CFileWriter
                     returntypeissimple = true;
             }
         }
-        writer.write("\n/*\n");
-        writer.write(" * This method wrap the service method " + methodName + "\n");
-        writer.write(" */\n");
+
+        CUtils.printMethodComment(writer, "This function wraps the service method " + methodName + ".");
+        
         //method signature
         String paramTypeName;
         boolean typeisarray = false;

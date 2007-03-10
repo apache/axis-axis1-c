@@ -69,9 +69,9 @@ public class BeanParamWriter extends ParamCPPFileWriter
         {
             writeGetSetMethods();
             writeSerializeGlobalMethod();
-            writeDeSerializeGlobalMethod();
+            writeDeSerializeGlobalMethod();              
             writeCreateGlobalMethod();
-            writeDeleteGlobalMethod();
+            writeDeleteGlobalMethod();          
         } 
         catch (IOException e)
         {
@@ -86,16 +86,13 @@ public class BeanParamWriter extends ParamCPPFileWriter
 
     private void writeGetSetMethods() throws WrapperFault
     {
-        /**
-         * Dushshantha: writing getter
-         */
-        int anyCounter = 0;
-        
         if (type.isArray())
             return;
         
         try
         {
+            int anyCounter = 0;
+            
             for (int i = 0; i < attribs.length; i++)
             {
                 // Set method name
@@ -109,26 +106,55 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 
                 String type = attribs[i].getTypeName();
                 
+                // arrays require '*' in prototype for type if one not specified.
+                String asterisk = " ";
+                
+                // Details
                 if (attribs[i].isArray())
                 {
-                    String parameterTypeName = properParamType;
-                    if (!parameterTypeName.endsWith("*"))
-                        parameterTypeName += " *";
-                    
-                    writer.write("\n" + parameterTypeName + " " + classname
-                            + "::get" + methodName + "()\n{\n");
+                    // Ensure that type on prototype is a pointer to an array
+                    if (!properParamType.endsWith("*"))
+                        asterisk += "* ";
+                }
+                else if (attribs[i].isAnyType())
+                {
+                    // We use a counter appeneded to parameter name.
+                    anyCounter += 1;
+                    parameterName = parameterName + Integer.toString(anyCounter);
+                    methodName = methodName + Integer.toString(anyCounter);
+                }
+                
+                //=============================================================================
+                // Write getter method
+                //=============================================================================      
 
-                    writer.write("\t" + "return " + parameterName + " ; \n}\n");
+                CUtils.printMethodComment(writer, "Getter method for class member field " 
+                        + parameterName + ".");
+                
+                writer.write(properParamType + asterisk + classname
+                        + "::get" + methodName + "()\n{\n");
 
-                    writer.write("\n" + "void " + classname + "::set"
-                            + methodName + "(" + parameterTypeName + " pInValue)\n{\n");
+                writer.write("\t" + "return " + parameterName + "; \n}\n");
+
+                //=============================================================================
+                // Write setter method
+                //=============================================================================  
+                
+                CUtils.printMethodComment(writer, "Setter method for class member field " 
+                        + parameterName + ".");
+                
+                if (attribs[i].isArray())
+                {   
+                    writer.write("void " + classname + "::set"
+                            + methodName + "(" + properParamType + asterisk + "pInValue)\n{\n");
 
                     writer.write("\tif(" + parameterName + " == NULL)\n");
                     
                     if (attribs[i].getChoiceElement() || attribs[i].getAllElement())
                     {
+                        // TODO: for choice, we need to ensure any other set element is deleted.
                         writer.write("\t{\n");
-                        writer.write("\t\t// This object is a 'choice' or 'all', so need to ensure that any\n");
+                        writer.write("\t\t// For 'choice' need to ensure that any\n");
                         writer.write("\t\t// other objects belonging to this union of elements are empty.\n");
                         writer.write("\t\t// NB: Hasn't been implemented yet!\n");
                         writer.write("\t\t" + parameterName + " = new " + type + "_Array();\n");
@@ -142,21 +168,9 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 }
                 else if (isElementNillable(i)  || isElementOptional(i))
                 {
-                    if (attribs[i].isAnyType())
-                    {                        
-                        anyCounter += 1;
-                        parameterName = parameterName + Integer.toString(anyCounter);
-                    }
-
-                    // Getter method
-                    writer.write("\n" + properParamType + " " + classname
-                                + "::get" + methodName + "()\n{\n");
-                    
-                    writer.write("\t" + "return " + parameterName + " ; \n}\n");
-
                     // Setter method
-                    writer.write("\n" + "void " + classname + "::set"
-                            + methodName + "(" + properParamType
+                    writer.write("void " + classname + "::set"
+                            + methodName + "(" + properParamType  
                             + " pInValue, bool deep)\n{\n");
 
                     writer.write("\tif (__axis_deepcopy_" + parameterName + ")\n");
@@ -178,6 +192,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
 
                     writer.write("\t__axis_deepcopy_" + parameterName + " = deep;\n");
 
+                    // TODO: wrong! We need to delete the object if deep copy, otherwise NULL it out.
                     if (attribs[i].getChoiceElement())
                         for (int j = 0; j < attribs.length; j++)
                             if ((attribs[j].getChoiceElement()) && (j != i))
@@ -187,29 +202,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 } 
                 else
                 {
-                    /**
-                     * Dushshantha: Write getter
-                     */
-                
-                    if (attribs[i].isAnyType())
-                    {                        
-                        anyCounter += 1;
-                        parameterName = parameterName + Integer.toString(anyCounter);
-                        methodName = methodName + Integer.toString(anyCounter);
-                    }
-
-                    writer.write("\n"
-                            + properParamType + " " + classname + "::get" + methodName
-                            + "()\n{\n");
-
-                    writer.write("\t" + "return " + parameterName + " ; \n}\n");
-
-                    /**
-                     * Dushshantha: Write setter
-                     */
-
-                    writer.write("\n"
-                            + "void " + classname + "::set"
+                    writer.write("void " + classname + "::set"
                             + methodName + "(" + properParamType + " InValue");
                     
                     Type attributeType = attribs[i].getType();
@@ -268,6 +261,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     else
                         writer.write("\t" + parameterName + " = InValue ; \n");
 
+                    // TODO: wrong! We need to delete the object if deep copy, otherwise NULL it out.
                     if (attribs[i].getChoiceElement())
                         for (int j = 0; j < attribs.length; j++)
                             if ((attribs[j].getChoiceElement()) && (j != i))
@@ -323,10 +317,10 @@ public class BeanParamWriter extends ParamCPPFileWriter
         /* ----------------------------------------------------------------   */
         /* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
         /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+
+        CUtils.printMethodComment(writer, "Function to serialize an object of type "  
+                + classname + ".");        
         
-        writer.write( "/*\n");
-        writer.write( " * This static method serialize a " + classname + " type of object\n");
-        writer.write( " */\n");
         writer.write( "int Axis_Serialize_" + classname 
                      + "( " + classname + "* param, IWrapperSoapSerializer* pSZ, bool bArray)\n");
         writer.write( "{\n");
@@ -719,9 +713,9 @@ public class BeanParamWriter extends ParamCPPFileWriter
         /* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
         /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
         
-        writer.write("/*\n");
-        writer.write(" * This static method deserialize a " + classname + " type of object\n");
-        writer.write(" */\n");
+        CUtils.printMethodComment(writer, "Function to deserialize an object of type "  
+                + classname + ".");   
+        
         writer.write("int Axis_DeSerialize_" + classname + "(" + classname
                 + "* param, IWrapperSoapDeSerializer* pIWSDZ)\n{\n");
 
@@ -749,6 +743,11 @@ public class BeanParamWriter extends ParamCPPFileWriter
         
         if (attributeParamCount > 0)
             CUtils.printBlockComment(writer, "Deserialize attributes.");
+        
+        for (int i = 0; i < attributeParamCount; i++) 
+        {
+            
+        }
         
         //=============================================================================
         // Deserialize attributes and elements.
@@ -1011,6 +1010,9 @@ public class BeanParamWriter extends ParamCPPFileWriter
 
     private void writeCreateGlobalMethod() throws IOException
     {
+        CUtils.printMethodComment(writer, "Function used to create objects of type " 
+                + classname + ".");
+        
         writer.write("void* Axis_Create_" + classname + "(int nSize)\n");
         writer.write("{\n");
         writer.write("\tif (nSize > 0)\n");
@@ -1028,9 +1030,9 @@ public class BeanParamWriter extends ParamCPPFileWriter
 
     private void writeDeleteGlobalMethod() throws IOException
     {
-        writer.write("/*\n");
-        writer.write(" * This static method delete a " + classname + " type of object\n");
-        writer.write(" */\n");
+        CUtils.printMethodComment(writer, "Function used to delete objects of type " 
+                + classname + ".");
+        
         writer.write("void Axis_Delete_" + classname + "(" + classname + "* param, int nSize)\n");
         writer.write("{\n");
         
@@ -1066,7 +1068,9 @@ public class BeanParamWriter extends ParamCPPFileWriter
         try
         {
             // Write default constructor
-            writer.write("\n" + classname + "::" + classname + "()\n{\n");
+            CUtils.printMethodComment(writer, "Constructor for class " + classname + ".");
+            
+            writer.write(classname + "::" + classname + "()\n{\n");
             for (int i = 0 ; i < attribs.length ; i++)
             {
                 if (attribs[i].isArray())
@@ -1074,7 +1078,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     if (attribs[i].getChoiceElement()||attribs[i].getAllElement())
                     {
                         // This is the 'choice' or 'all' route in the code
-                        writer.write("\t\t// This object is a 'choice' or 'all', so need to ensure that any\n");
+                        writer.write("\t\t// This a 'choice' so need to ensure that any\n");
                         writer.write("\t\t// other objects belonging to this union of elements are empty.\n");
                         writer.write("\t\t// NB: Hasn't been implemented yet!\n");
                         writer.write("\t" + attribs[i].getParamNameAsMember() + " = new " 
@@ -1107,7 +1111,8 @@ public class BeanParamWriter extends ParamCPPFileWriter
         try
         {
             //write copy constructor
-            writer.write("\n" + classname + "::" + classname + "(const " + classname + " & original)\n{\n");
+            CUtils.printMethodComment(writer, "Copy constructor for class " + classname + ".");            
+            writer.write(classname + "::" + classname + "(const " + classname + " & original)\n{\n");
 
             // AXISCPP-918 patch provided by Franz Fehringer
             if (extensionBaseAttrib != null && extensionBaseAttrib.getTypeName() != null)
@@ -1207,7 +1212,9 @@ public class BeanParamWriter extends ParamCPPFileWriter
     {
         try
         {
-            writer.write("\nvoid " + classname + "::reset()\n{\n");
+            CUtils.printMethodComment(writer, "Method to initialize objects of class " + classname + ".");
+            
+            writer.write("void " + classname + "::reset()\n{\n");
             writer.write("\t/*do not allocate memory to any pointer members here\n\t because deserializer will allocate memory anyway. */\n");
             
             int anyCounter = 0;
@@ -1277,10 +1284,12 @@ public class BeanParamWriter extends ParamCPPFileWriter
     {
         try
         {
+            CUtils.printMethodComment(writer, "Destructor for class " + classname + ".");
+            
             if (type.isFault())
-                writer.write("\n" + classname + "::~" + classname + "() throw ()\n{\n");
+                writer.write(classname + "::~" + classname + "() throw ()\n{\n");
             else
-                writer.write("\n" + classname + "::~" + classname + "()\n{\n");
+                writer.write(classname + "::~" + classname + "()\n{\n");
             
             writer.write("\t/*delete any pointer and array members here*/\n");
             int anyCounter = 0;
@@ -1332,7 +1341,9 @@ public class BeanParamWriter extends ParamCPPFileWriter
     protected void writeRestrictionCheckerFunction() throws WrapperFault
     {
         try
-        {            
+        {
+            CUtils.printMethodComment(writer, "Function used to check whether object has allowed values. Not implemented yet.");
+            
             writer.write("int Check_Restrictions_" + classname + "(" + classname + " value)\n");
             
             //TODO write code to check the restrictions. 

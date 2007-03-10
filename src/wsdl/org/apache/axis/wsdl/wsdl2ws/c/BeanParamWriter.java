@@ -95,10 +95,9 @@ public class BeanParamWriter extends ParamCFileWriter
     
     private void writeSerializeGlobalMethod() throws IOException, WrapperFault
     {
-        writer.write("\n");
-        writer.write("/**\n");
-        writer.write(" * This static method serializes a " + classname + " type of object\n");
-        writer.write(" */\n");
+        CUtils.printMethodComment(writer, "Function to serialize an object of type "  
+                + classname + ".");  
+        
         writer.write("int Axis_Serialize_" + classname
                 + "(" + classname + "* param, AXISCHANDLE pSZ, AxiscBool bArray)\n");
         writer.write( "{\n");
@@ -484,10 +483,9 @@ public class BeanParamWriter extends ParamCFileWriter
     
     private void writeDeSerializeGlobalMethod() throws IOException, WrapperFault
     {
-        writer.write("\n");
-        writer.write("/**\n");
-        writer.write(" * This static method deserializes a " + classname + " type of object\n");
-        writer.write(" */\n");
+        CUtils.printMethodComment(writer, "Function to deserialize an object of type "  
+                + classname + ".");  
+        
         writer.write("int Axis_DeSerialize_" + classname
                 + "(" + classname + "* param, AXISCHANDLE pDZ)\n{\n");
 
@@ -747,13 +745,9 @@ public class BeanParamWriter extends ParamCFileWriter
      * @throws IOException
      */
     private void writeCreateGlobalMethod() throws IOException
-    {
-        boolean writeNewline = false;
-        
-        writer.write("\n");
-        writer.write("/**\n");
-        writer.write(" * This static method to allocate a " + classname + " type of object\n");
-        writer.write(" */\n");
+    {       
+        CUtils.printMethodComment(writer, "Function used to create objects of type " 
+                + classname + ".");
         
         writer.write("void* Axis_Create_" + classname + "(int nSize)\n{\n");
 
@@ -772,6 +766,8 @@ public class BeanParamWriter extends ParamCFileWriter
         writer.write("\t\t" + classname + "* pTemp = (" + classname + " *)malloc(sizeof(" + classname + "));\n");
         writer.write("\t\tmemset(pTemp, 0, sizeof(" + classname + "));\n");
         writer.write("\n");
+        
+        boolean writeNewline = false;
         
         // The only items in the structure that we pre-allocate is for the container structure
         // for arrays.  All other variables and the actual element array that gets put into 
@@ -821,11 +817,9 @@ public class BeanParamWriter extends ParamCFileWriter
      */
     private void writeDeleteGlobalMethod() throws IOException
     {
-        writer.write("\n");
-        writer.write("/**\n");
-        writer.write(" * This static method to deallocate a " + classname + " type of object\n");
-        writer.write(" */\n");
-
+        CUtils.printMethodComment(writer, "Function used to delete objects of type " 
+                + classname + ".");
+        
         writer.write("void Axis_Delete_" + classname
                 + "(" + classname + "* param, int nSize)\n");
         
@@ -926,7 +920,8 @@ public class BeanParamWriter extends ParamCFileWriter
     {
         try
         {
-            writer.write("\n");
+            CUtils.printMethodComment(writer, "Function used to check whether object has allowed values. Not implemented yet.");
+            
             writer.write("int Check_Restrictions_" + classname + "(" + classname + " value)\n");
             writer.write("{\n");
             writer.write("\treturn 0;\n");

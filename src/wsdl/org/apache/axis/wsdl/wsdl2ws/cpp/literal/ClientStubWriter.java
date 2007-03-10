@@ -119,10 +119,8 @@ public class ClientStubWriter
         //=============================================================================
         // Generate method prototype
         //=============================================================================        
-        
-        writer.write ("\n/*\n");
-        writer.write (" * This method wraps the service method" + methodName + "\n");
-        writer.write (" */\n");
+
+        CUtils.printMethodComment(writer, "This method wraps the service method " + methodName + ".");
         
         //method signature
         String paramTypeName;

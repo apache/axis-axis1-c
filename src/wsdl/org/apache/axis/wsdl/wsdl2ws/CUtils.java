@@ -1390,6 +1390,20 @@ public class CUtils
         
         writer.write("\t// ======================================================================\n");  
         writer.write("\n");
-    }    
+    }
+    public static void printMethodComment(BufferedWriter writer, String s) throws IOException
+    {
+        writer.write("\n");
+        writer.write("/**\n");
+        writer.write(" ******************************************************************************\n");
+        
+        // TODO: divide string into multiple lines if greater then 80, sensitive
+        //       to not break line in middle of word. for now all comments are one-liners.
+        writer.write(" * " + s + "\n");
+
+        writer.write(" ******************************************************************************\n");
+        writer.write(" */\n");  
+        writer.write("\n");
+    }       
 }
 

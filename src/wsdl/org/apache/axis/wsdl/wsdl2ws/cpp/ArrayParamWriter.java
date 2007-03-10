@@ -89,6 +89,8 @@ public class ArrayParamWriter extends ParamWriter
     {
         try
         {
+            CUtils.printMethodComment(writer, "Method to delete allocated resources.");
+            
             writer.write("void " + classname + "::clear()\n");
             writer.write("{\n");
             writer.write("\tif (m_Array != NULL)\n");
@@ -117,7 +119,7 @@ public class ArrayParamWriter extends ParamWriter
             writer.write("\t\t}\n");
             writer.write("\t\tm_belongsToAxisEngine = false;\n");
             writer.write("\t}\n");
-            writer.write("}\n\n");
+            writer.write("}\n");
         }
         catch (IOException e)
         {
@@ -132,6 +134,8 @@ public class ArrayParamWriter extends ParamWriter
         // Write clone method
         try
         {
+            CUtils.printMethodComment(writer, "Method to clone objects of type " + classname + ".");
+            
             writer.write("void " + classname + "::clone(const " + classname + " & original)\n");
             writer.write("{\n");
             writer.write("\tset((" + attribs[0].getTypeName() + "**) original.m_Array, original.m_Size);\n");
@@ -140,7 +144,7 @@ public class ArrayParamWriter extends ParamWriter
             writer.write("Axis_Array * " + classname + "::clone() const\n");
             writer.write("{\n");
             writer.write("\treturn new " + classname + "(*this);\n");
-            writer.write("}\n\n");
+            writer.write("}\n");
         }
         catch (IOException e)
         {
@@ -154,11 +158,13 @@ public class ArrayParamWriter extends ParamWriter
     {
         try
         {
+            CUtils.printMethodComment(writer, "Getter method for class member field m_Array.");
+            
             writer.write(attribs[0].getTypeName() + "** " + classname + "::" + "get(int & size) const\n");
             writer.write("{\n");
             writer.write("\tXSDTYPE type;\n");
             writer.write("\treturn (" + attribs[0].getTypeName() + "**) Axis_Array::get(size, type);\n");
-            writer.write("}\n\n");
+            writer.write("}\n");
         }
         catch (IOException e)
         {
@@ -172,6 +178,8 @@ public class ArrayParamWriter extends ParamWriter
     {
         try
         {
+            CUtils.printMethodComment(writer, "Setter method for class member field m_Array.");
+            
             writer.write("void " + classname + "::" + "set(" + attribs[0].getTypeName() + "** array, const int size)\n");
             writer.write("{\n");
             writer.write("\tclear();\n");
@@ -197,7 +205,7 @@ public class ArrayParamWriter extends ParamWriter
             writer.write("\t\t\t}\n");
             writer.write("\t\t}\n");
             writer.write("\t}\n");
-            writer.write("}\n\n");
+            writer.write("}\n");
         }
         catch (IOException e)
         {
@@ -208,17 +216,22 @@ public class ArrayParamWriter extends ParamWriter
     {
         try
         {
+            CUtils.printMethodComment(writer, "Constructor for class " + classname + ".");
+            
             writer.write(classname + "::" + classname + "()\n");
             writer.write("{\n");
             writer.write("\tm_Type = USER_TYPE;\n");
             writer.write("\tm_belongsToAxisEngine = false;\n");
-            writer.write("}\n\n");
+            writer.write("}\n");
+            
+            CUtils.printMethodComment(writer, "Copy constructor for class " + classname + ".");
+            
             writer.write(classname + "::" + classname + "(const " + classname + " & original)\n");
             writer.write("{\n");
             writer.write("\tm_Type = USER_TYPE;\n");
             writer.write("\tm_belongsToAxisEngine = false;\n");
             writer.write("\tclone(original);\n");
-            writer.write("}\n\n");
+            writer.write("}\n");
         }
         catch (IOException e)
         {
@@ -231,10 +244,12 @@ public class ArrayParamWriter extends ParamWriter
     {
         try
         {
+            CUtils.printMethodComment(writer, "Destructor for class " + classname + ".");
+            
             writer.write(classname + "::~" + classname + "()\n");
             writer.write("{\n");
             writer.write("\tclear();\n");
-            writer.write("}\n\n");
+            writer.write("}\n");
         }
         catch (IOException e)
         {

@@ -141,6 +141,9 @@ public class ArrayParamWriter extends ParamWriter
     {
         try
         {
+            CUtils.printMethodComment(writer, "Function used to create objects of type " 
+                    + classname + ".");
+            
             writer.write("extern void* Axis_Create_" + classname + "(int nSize)\n");
             writer.write("{\n");
             
@@ -156,7 +159,6 @@ public class ArrayParamWriter extends ParamWriter
             // End function body
 
             writer.write("}\n");
-            writer.write("\n");
         }
         catch (IOException e)
         {
@@ -169,6 +171,9 @@ public class ArrayParamWriter extends ParamWriter
     {
         try
         {
+            CUtils.printMethodComment(writer, "Function used to delete objects of type " 
+                    + classname + ".");
+            
             this.writer.write("extern void Axis_Delete_" + classname 
                     + "(" + classname + "* param, int nSize)\n");
             writer.write("{\n");
@@ -195,7 +200,6 @@ public class ArrayParamWriter extends ParamWriter
             // End function body            
             
             writer.write("}\n");
-            writer.write("\n");            
         }
         catch (IOException e)
         {
