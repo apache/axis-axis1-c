@@ -105,6 +105,7 @@ int Param::serialize (SoapSerializer &pSZ)
                 {
                   pSZ.serialize (" xmlns:enc", NULL);
                   pSZ.serialize ("=\"http://www.w3.org/2001/06/soap-encoding\" ", NULL);
+                  pSZ.serialize (" xsi:type=\"soapenc:Array\" ", NULL);
                   
                   if (m_Value.pArray->m_type == USER_TYPE &&
                     !m_Value.pArray->m_URI.empty())
