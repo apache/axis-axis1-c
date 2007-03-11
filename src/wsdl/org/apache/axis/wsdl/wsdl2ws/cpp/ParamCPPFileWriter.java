@@ -62,11 +62,11 @@ public abstract class ParamCPPFileWriter extends ParamWriter
                 writeRestrictionCheckerFunction();
             else
             {
-                writeGlobalCodes();
                 writeAttributes();
                 writeConstructors();
                 writeDestructors();
-                writeMethods();
+                writeMethods();                
+                writeGlobalCodes();
             }
             
             writer.flush();
