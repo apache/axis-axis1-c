@@ -338,7 +338,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
             writeSerializeExtensionCode();
             
             writer.write("\treturn AXIS_SUCCESS;\n");
-            writer.write("}\n\n");
+            writer.write("}\n");
             return;
         }
         
@@ -619,7 +619,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
         writer.write("\n");
         
         writer.write("\treturn AXIS_SUCCESS;\n");
-        writer.write("}\n\n");
+        writer.write("}\n");
     }
 
     /**
@@ -728,7 +728,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
             writeDeSerializeExtensionCode();
             
             writer.write("\treturn AXIS_SUCCESS;\n");
-            writer.write("}\n\n");
+            writer.write("}\n");
             return;
         }
 

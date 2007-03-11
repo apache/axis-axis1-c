@@ -115,7 +115,7 @@ public class BeanParamWriter extends ParamCFileWriter
             writeSerializeExtensionCode();
             
             writer.write("\treturn AXISC_SUCCESS;\n");
-            writer.write("}\n\n");
+            writer.write("}\n");
             return;
         }
         
@@ -398,7 +398,7 @@ public class BeanParamWriter extends ParamCFileWriter
         writer.write("\n");
         
         writer.write("\treturn AXISC_SUCCESS;\n");
-        writer.write("}\n\n");
+        writer.write("}\n");
     }
 
     /**
@@ -498,7 +498,7 @@ public class BeanParamWriter extends ParamCFileWriter
             writeDeSerializeExtensionCode();
 
             writer.write("\treturn AXISC_SUCCESS;\n");
-            writer.write("}\n\n");
+            writer.write("}\n");
             return;
         }  
         
