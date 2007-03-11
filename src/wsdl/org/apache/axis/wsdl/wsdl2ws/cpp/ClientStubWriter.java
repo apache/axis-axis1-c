@@ -94,12 +94,12 @@ public class ClientStubWriter extends CPPClassWriter
         {
             CUtils.printMethodComment(writer, "Constructor for service " + classname + ".");
             
-            writer.write(classname + "::" + classname
-                    + "(const char* pcEndpointUri, AXIS_PROTOCOL_TYPE eProtocol):Stub(pcEndpointUri, eProtocol)\n{\n");
+            writer.write(classname + "::\n" + classname
+                    + "(const char* pcEndpointUri, AXIS_PROTOCOL_TYPE eProtocol)\n:Stub(pcEndpointUri, eProtocol)\n{\n");
             writer.write("}\n");
         
             CUtils.printMethodComment(writer, "Constructor for service " + classname + ".");            
-            writer.write(classname + "::" + classname + "()\n:Stub(\" \", APTHTTP1_1)\n{\n");
+            writer.write(classname + "::\n" + classname + "()\n:Stub(\" \", APTHTTP1_1)\n{\n");
             //TODO get TransportURI from WrapInfo and check what the transport is and do the following line accordingly
             writer.write("\tm_pCall->setEndpointURI(\""
                             + wscontext.getWrapInfo().getTargetEndpointURI() + "\");\n");
@@ -122,7 +122,7 @@ public class ClientStubWriter extends CPPClassWriter
         {
             CUtils.printMethodComment(writer, "Destructor for service " + classname + ".");
             
-            writer.write(classname + "::~" + classname + "()\n{\n}\n");
+            writer.write(classname + "::\n~" + classname + "()\n{\n}\n");
         } 
         catch (IOException e)
         {
@@ -249,7 +249,7 @@ public class ClientStubWriter extends CPPClassWriter
             else
                 writer.write (outparamType + "*");
 
-        writer.write(" " + classname + "::" + methodName + "(");
+        writer.write(" " + classname + "::\n" + methodName + "(");
         ArrayList paramsB = (ArrayList) params;
         for (int i = 0; i < paramsB.size(); i++)
         {

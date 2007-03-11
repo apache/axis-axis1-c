@@ -87,7 +87,7 @@ public class WrapWriter extends CPPClassWriter
     {
         try
         {
-            writer.write(classname + "::" + classname + "()\n{\n");
+            writer.write(classname + "::\n" + classname + "()\n{\n");
             writer.write(
                 "\tpWs = new "
                     + CUtils.getWebServiceNameFromWrapperName(classname)
@@ -108,7 +108,7 @@ public class WrapWriter extends CPPClassWriter
         try
         {
             writer.write(
-                classname + "::~" + classname + "()\n{\n\tdelete pWs;\n}\n\n");
+                classname + "::\n~" + classname + "()\n{\n\tdelete pWs;\n}\n\n");
         }
         catch (IOException e)
         {
@@ -129,17 +129,17 @@ public class WrapWriter extends CPPClassWriter
             writer.write(
                 "void "
                     + classname
-                    + "::onFault(void *pMsg)\n{"
+                    + "::\nonFault(void *pMsg)\n{"
                     + "\n\tpWs->onFault();\n}\n\n");
             /*writer.write(
                 "int "
                     + classname
-                    + "::init()\n{\n"
+                    + "::\ninit()\n{\n"
                     + "\tpWs->init();\n\treturn AXIS_SUCCESS;\n}\n\n");
             writer.write(
                 "int "
                     + classname
-                    + "::fini()\n{\n"
+                    + "::\nfini()\n{\n"
                     + "\tpWs->fini();\n\treturn AXIS_SUCCESS;\n}\n\n");
 					*/
             writeInvoke();
@@ -188,7 +188,7 @@ public class WrapWriter extends CPPClassWriter
         writer.write("\n/*\n");
         writer.write(" * This method invokes the right service method \n");
         writer.write(" */\n");
-        writer.write("int " + classname + "::invoke(void *pMsg)\n{\n");
+        writer.write("int " + classname + "::\ninvoke(void *pMsg)\n{\n");
         writer.write("\tIMessageData* mc = (IMessageData*)pMsg;\n");
         //msgdata.setSoapFault(new SOAPFault(new AxisFault()))
         writer.write("\tconst AxisChar *method = mc->getOperationName();\n");
@@ -283,7 +283,7 @@ public class WrapWriter extends CPPClassWriter
         writer.write(" */\n");
         //method signature
         writer.write(
-            "int " + classname + "::" + methodName + "(void* pMsg)\n{\n");
+            "int " + classname + "::\n" + methodName + "(void* pMsg)\n{\n");
         writer.write("\tIMessageData* mc = (IMessageData*)pMsg;\n");
         writer.write("\tint nStatus;\n");
         writer.write("\tIWrapperSoapSerializer* pIWSSZ = NULL;\n");

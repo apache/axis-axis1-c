@@ -91,7 +91,7 @@ public class ArrayParamWriter extends ParamWriter
         {
             CUtils.printMethodComment(writer, "Method to delete allocated resources.");
             
-            writer.write("void " + classname + "::clear()\n");
+            writer.write("void " + classname + "::\nclear()\n");
             writer.write("{\n");
             writer.write("\tif (m_Array != NULL)\n");
             writer.write("\t{\n");
@@ -134,14 +134,16 @@ public class ArrayParamWriter extends ParamWriter
         // Write clone method
         try
         {
-            CUtils.printMethodComment(writer, "Method to clone objects of type " + classname + ".");
+            CUtils.printMethodComment(writer, "Method to initialize object from another object of type " + classname + ".");
             
-            writer.write("void " + classname + "::clone(const " + classname + " & original)\n");
+            writer.write("void " + classname + "::\nclone(const " + classname + " & original)\n");
             writer.write("{\n");
             writer.write("\tset((" + attribs[0].getTypeName() + "**) original.m_Array, original.m_Size);\n");
             writer.write("}\n\n");
+
+            CUtils.printMethodComment(writer, "Method to clone objects of type " + classname + ".");
             
-            writer.write("Axis_Array * " + classname + "::clone() const\n");
+            writer.write("Axis_Array * " + classname + "::\nclone() const\n");
             writer.write("{\n");
             writer.write("\treturn new " + classname + "(*this);\n");
             writer.write("}\n");
@@ -160,7 +162,7 @@ public class ArrayParamWriter extends ParamWriter
         {
             CUtils.printMethodComment(writer, "Getter method for class member field m_Array.");
             
-            writer.write(attribs[0].getTypeName() + "** " + classname + "::" + "get(int & size) const\n");
+            writer.write(attribs[0].getTypeName() + "** " + classname + "::\n" + "get(int & size) const\n");
             writer.write("{\n");
             writer.write("\tXSDTYPE type;\n");
             writer.write("\treturn (" + attribs[0].getTypeName() + "**) Axis_Array::get(size, type);\n");
@@ -180,7 +182,7 @@ public class ArrayParamWriter extends ParamWriter
         {
             CUtils.printMethodComment(writer, "Setter method for class member field m_Array.");
             
-            writer.write("void " + classname + "::" + "set(" + attribs[0].getTypeName() + "** array, const int size)\n");
+            writer.write("void " + classname + "::\n" + "set(" + attribs[0].getTypeName() + "** array, const int size)\n");
             writer.write("{\n");
             writer.write("\tclear();\n");
             writer.write("\tm_Size = size;\n");
@@ -218,7 +220,7 @@ public class ArrayParamWriter extends ParamWriter
         {
             CUtils.printMethodComment(writer, "Constructor for class " + classname + ".");
             
-            writer.write(classname + "::" + classname + "()\n");
+            writer.write(classname + "::\n" + classname + "()\n");
             writer.write("{\n");
             writer.write("\tm_Type = USER_TYPE;\n");
             writer.write("\tm_belongsToAxisEngine = false;\n");
@@ -226,7 +228,7 @@ public class ArrayParamWriter extends ParamWriter
             
             CUtils.printMethodComment(writer, "Copy constructor for class " + classname + ".");
             
-            writer.write(classname + "::" + classname + "(const " + classname + " & original)\n");
+            writer.write(classname + "::\n" + classname + "(const " + classname + " & original)\n");
             writer.write("{\n");
             writer.write("\tm_Type = USER_TYPE;\n");
             writer.write("\tm_belongsToAxisEngine = false;\n");
@@ -246,7 +248,7 @@ public class ArrayParamWriter extends ParamWriter
         {
             CUtils.printMethodComment(writer, "Destructor for class " + classname + ".");
             
-            writer.write(classname + "::~" + classname + "()\n");
+            writer.write(classname + "::\n~" + classname + "()\n");
             writer.write("{\n");
             writer.write("\tclear();\n");
             writer.write("}\n");

@@ -118,7 +118,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 }
                 else if (attribs[i].isAnyType())
                 {
-                    // We use a counter appeneded to parameter name.
+                    // We use a counter appended to parameter name.
                     anyCounter += 1;
                     parameterName = parameterName + Integer.toString(anyCounter);
                     methodName = methodName + Integer.toString(anyCounter);
@@ -132,7 +132,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                         + parameterName + ".");
                 
                 writer.write(properParamType + asterisk + classname
-                        + "::get" + methodName + "()\n{\n");
+                        + "::\nget" + methodName + "()\n{\n");
 
                 writer.write("\t" + "return " + parameterName + "; \n}\n");
 
@@ -145,7 +145,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 
                 if (attribs[i].isArray())
                 {   
-                    writer.write("void " + classname + "::set"
+                    writer.write("void " + classname + "::\nset"
                             + methodName + "(" + properParamType + asterisk + "pInValue)\n{\n");
 
                     writer.write("\tif(" + parameterName + " == NULL)\n");
@@ -169,7 +169,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 else if (isElementNillable(i)  || isElementOptional(i))
                 {
                     // Setter method
-                    writer.write("void " + classname + "::set"
+                    writer.write("void " + classname + "::\nset"
                             + methodName + "(" + properParamType  
                             + " pInValue, bool deep)\n{\n");
 
@@ -202,7 +202,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 } 
                 else
                 {
-                    writer.write("void " + classname + "::set"
+                    writer.write("void " + classname + "::\nset"
                             + methodName + "(" + properParamType + " InValue");
                     
                     Type attributeType = attribs[i].getType();
@@ -1070,7 +1070,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
             // Write default constructor
             CUtils.printMethodComment(writer, "Constructor for class " + classname + ".");
             
-            writer.write(classname + "::" + classname + "()\n{\n");
+            writer.write(classname + "::\n" + classname + "()\n{\n");
             for (int i = 0 ; i < attribs.length ; i++)
             {
                 if (attribs[i].isArray())
@@ -1112,7 +1112,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
         {
             //write copy constructor
             CUtils.printMethodComment(writer, "Copy constructor for class " + classname + ".");            
-            writer.write(classname + "::" + classname + "(const " + classname + " & original)\n{\n");
+            writer.write(classname + "::\n" + classname + "(const " + classname + " & original)\n{\n");
 
             // AXISCPP-918 patch provided by Franz Fehringer
             if (extensionBaseAttrib != null && extensionBaseAttrib.getTypeName() != null)
@@ -1214,7 +1214,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
         {
             CUtils.printMethodComment(writer, "Method to initialize objects of class " + classname + ".");
             
-            writer.write("void " + classname + "::reset()\n{\n");
+            writer.write("void " + classname + "::\nreset()\n{\n");
             writer.write("\t/*do not allocate memory to any pointer members here\n\t because deserializer will allocate memory anyway. */\n");
             
             int anyCounter = 0;
@@ -1287,9 +1287,9 @@ public class BeanParamWriter extends ParamCPPFileWriter
             CUtils.printMethodComment(writer, "Destructor for class " + classname + ".");
             
             if (type.isFault())
-                writer.write(classname + "::~" + classname + "() throw ()\n{\n");
+                writer.write(classname + "::\n~" + classname + "() throw ()\n{\n");
             else
-                writer.write(classname + "::~" + classname + "()\n{\n");
+                writer.write(classname + "::\n~" + classname + "()\n{\n");
             
             writer.write("\t/*delete any pointer and array members here*/\n");
             int anyCounter = 0;

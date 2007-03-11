@@ -184,7 +184,7 @@ public class ExceptionWriter extends BasicFileWriter
             }
 
             writer.write(
-                faultName + "::" + faultName + "(ISoapFault* pFault)\n");
+                faultName + "::\n" + faultName + "(ISoapFault* pFault)\n");
             writer.write("{\n");
             writer.write(
                 "\tm_iExceptionCode = AXISC_SERVICE_THROWN_EXCEPTION;\n");
@@ -192,7 +192,7 @@ public class ExceptionWriter extends BasicFileWriter
             writer.write("}\n\n");
 
             writer.write(
-                faultName + "::" + faultName + "(const int iExceptionCode, const char* pcMessage):AxisException(iExceptionCode)\n");
+                faultName + "::\n" + faultName + "(const int iExceptionCode, const char* pcMessage):AxisException(iExceptionCode)\n");
             writer.write("{\n\n");
             writer.write("\tstring sMessage = \"\";\n");
             writer.write("\tif (pcMessage)\n\t{\n");
@@ -204,7 +204,7 @@ public class ExceptionWriter extends BasicFileWriter
             writer.write("\telse\n");
             writer.write("\t\tsetMessage(getMessageForExceptionCode(iExceptionCode).c_str());\n");
             writer.write("}\n\n");
-            writer.write(faultName + "::" + faultName + "(const " + faultName + "& e):AxisException(e)\n");
+            writer.write(faultName + "::\n" + faultName + "(const " + faultName + "& e):AxisException(e)\n");
             writer.write("{}\n\n");
             
             
@@ -230,7 +230,7 @@ public class ExceptionWriter extends BasicFileWriter
             }
             writer.write(
                 faultName
-                    + "::~"
+                    + "::\n~"
                     + faultName
                     + "() throw () \n{}\n\n");
         }
@@ -257,7 +257,7 @@ public class ExceptionWriter extends BasicFileWriter
             writer.write(
                 "string "
                     + faultName
-                    + "::getMessageForExceptionCode (int iExceptionCode)\n");
+                    + "::\ngetMessageForExceptionCode (int iExceptionCode)\n");
             writer.write("{\n");
             writer.write("\tswitch(iExceptionCode)\n");
             writer.write("\t{\n");
@@ -276,7 +276,7 @@ public class ExceptionWriter extends BasicFileWriter
             writer.write("return m_sMessageForExceptionCode;\n");
             writer.write("}\n\n");
 
-            writer.write("const ISoapFault* " + faultName + "::getFault()");
+            writer.write("const ISoapFault* " + faultName + "::\ngetFault()");
             //Fred Preston
             writer.write("{\n");
             writer.write("\treturn m_pISoapFault;\n");

@@ -139,7 +139,7 @@ public class ClientStubWriter
         else 
             writer.write (outparamType + "*");
 
-        writer.write (" " + classname + "::" + methodName + "(");
+        writer.write (" " + classname + "::\n" + methodName + "(");
         ArrayList paramsB = (ArrayList) params;
         ParameterInfo paramtype = null;
         if (0 < paramsB.size ())
