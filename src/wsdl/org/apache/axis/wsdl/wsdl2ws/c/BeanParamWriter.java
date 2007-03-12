@@ -393,7 +393,7 @@ public class BeanParamWriter extends ParamCFileWriter
 
         CUtils.printBlockComment(writer, "Remove namespace, if new.");        
         
-        writer.write("\n\tif (!bArray && blnIsNewPrefix)\n");
+        writer.write("\tif (!bArray && blnIsNewPrefix)\n");
         writer.write("\t\taxiscSoapSerializerRemoveNamespacePrefix(pSZ, Axis_URI_" + classname + ");\n");
         writer.write("\n");
         
