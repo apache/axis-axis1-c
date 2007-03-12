@@ -171,7 +171,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     // Setter method
                     writer.write("void " + classname + "::\nset"
                             + methodName + "(" + properParamType  
-                            + " pInValue, bool deep)\n{\n");
+                            + " pInValue, bool deep, bool makeCopy)\n{\n");
 
                     writer.write("\tif (__axis_deepcopy_" + parameterName + ")\n");
                     writer.write("\t\tdelete " + parameterName + ";\n");
@@ -179,7 +179,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
 
                     writer.write("\tif (pInValue != NULL)\n");
                     writer.write("\t{\n");
-                    writer.write("\t\tif (deep)\n");
+                    writer.write("\t\tif (deep && makeCopy)\n");
                     writer.write("\t\t{\n");
                     
                     writer.write("\t\t\t" + parameterName + " = new " + type + "();\n");
@@ -215,7 +215,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     
                     if((attribs[i].isSimpleType() || attribs[i].getType().isSimpleType()) 
                             && (isPointerType || attribs[i].getAllElement() || attribs[i].getChoiceElement()))
-                        writer.write(", bool deep");
+                        writer.write(", bool deep, bool makeCopy");
                     
                     writer.write(")\n{\n");
                     
@@ -227,7 +227,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                         
                         writer.write("\tif(InValue != NULL)\n");
                         writer.write("\t{\n");
-                        writer.write("\t\tif (deep)\n");
+                        writer.write("\t\tif (deep && makeCopy)\n");
                         writer.write("\t\t{\n");
                         writer.write("\t\t\t" + parameterName + " = new char[strlen(InValue) + 1];\n");
                         writer.write("\t\t\tstrcpy(" + parameterName + ", InValue);\n");
@@ -247,7 +247,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
 
                         writer.write("\tif (InValue != NULL)\n");
                         writer.write("\t{\n");
-                        writer.write("\t\tif (deep)\n");
+                        writer.write("\t\tif (deep && makeCopy)\n");
                         writer.write("\t\t{\n");
                         writer.write("\t\t\t" + parameterName + " = new " + type + "();\n");
                         writer.write("\t\t\t*" + parameterName + " = *InValue;\n");
@@ -738,17 +738,13 @@ public class BeanParamWriter extends ParamCPPFileWriter
 
         //=============================================================================
         // Deserialize attributes.
-        // Makes logic simpler to follow with slight duplication. TODO
+        // Actually, attribute deserialization takes place in same loop as elements
+        // in order to avoid duplication. But here, we put out a comment block.
         //=============================================================================        
         
         if (attributeParamCount > 0)
             CUtils.printBlockComment(writer, "Deserialize attributes.");
-        
-        for (int i = 0; i < attributeParamCount; i++) 
-        {
             
-        }
-        
         //=============================================================================
         // Deserialize attributes and elements.
         //=============================================================================        
@@ -876,82 +872,46 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 else
                     isPointerType = CUtils.isPointerType(attribs[i].getTypeName());
 
-                if (attribs[i].isNillable() ||
-                        isElementNillable(i) ||
-                        isElementOptional(i) ||
-                        isPointerType)
+                String typeName = attribs[i].getTypeName();
+                String baseTypeName = null;
+                if (type.isSimpleType())
+                    baseTypeName = CUtils.getclass4qname (type.getBaseType ());
+                else
+                    baseTypeName = typeName;
+                
+                if( isPointerType)
                 {
-                    if (attribs[i].getChoiceElement() && isElementNillable(i) && !isPointerType)
-                    {
-                        writer.write(tab2 + "param->"
-                                + attribs[i].getParamNameAsMember()
-                                + " = (" + attribs[i].getTypeName()
-                                + "**)(" + attribs[i].getTypeName()
-                                +"*)new " +attribs[i].getTypeName() + ";\n");
-                        
-                        writer.write(tab2 + "*(param->"
-                                + attribs[i].getParamNameAsMember() + ") = pIWSDZ->"
-                                + CUtils.getParameterGetValueMethodName(
-                                        attribs[i].getTypeName(), attribs[i].isAttribute()) + "( \""
-                                + soapTagName + "\",0);\n");
-                    }
-                    else
-                    {
-                        String typeName = attribs[i].getTypeName();
-                        String baseTypeName = null;
-                        if (type.isSimpleType())
-                            baseTypeName = CUtils.getclass4qname (type.getBaseType ());
-                        else
-                            baseTypeName = typeName;
-                        
-                        if( isPointerType)
-                        {
-                            writer.write(tab2 + typeName + " pValue" + i + " = pIWSDZ->" +
-                                    CUtils.getParameterGetValueMethodName(baseTypeName, attribs[i].isAttribute()) +
-                                    "( \"" + soapTagName + "\", 0);\n");
-                        }
-                        else
-                        {
-                            writer.write(tab2 + typeName + " *    pValue" + i + " = pIWSDZ->" +
-                                    CUtils.getParameterGetValueMethodName(baseTypeName, attribs[i].isAttribute()) +
-                                    "( \"" + soapTagName + "\", 0);\n");
-                        }
-                        
-                        writer.write(tab2 + "if( pValue" + i + " == NULL)\n");
-                        writer.write(tab2 + "\tparam->" + attribs[i].getParamNameAsMember() + " = NULL;\n");
-                        writer.write(tab2 + "else\n");
-                        writer.write(tab2 + "{\n");
-                        
-                        writer.write(tab2 + "\tparam->set" + attribs[i].getMethodName() + " (pValue" + i + ");\n");
-                        writer.write(tab2 + "\tAxis::AxisDelete( (void *) pValue" + i + ", " 
-                                + CUtils.getXSDTypeForBasicType( baseTypeName) + ");\n");
-                        writer.write(tab2 + "}\n");
-                    }
-                } 
-                else if (attribs[i].getChoiceElement() || attribs[i].getAllElement())
-                {
-                    writer.write(tab2 + "param->"
-                            + attribs[i].getParamNameAsMember() + " = pIWSDZ->"
-                            + CUtils.getParameterGetValueMethodName(
-                                    attribs[i].getTypeName(), attribs[i].isAttribute()) + "( \""
-                            + soapTagName + "\",0);\n");
-//                    writer.write(tab2 + "param->__axis_deepcopy_"  + attribs[i].getParamNameAsMember()
-//                            + " = true;\n");
+                    writer.write(tab2 + typeName + " pValue" + i + " = pIWSDZ->" +
+                            CUtils.getParameterGetValueMethodName(baseTypeName, attribs[i].isAttribute()) +
+                            "(\"" + soapTagName + "\", 0);\n");
                 }
                 else
                 {
-                    String elementNameToSearchFor = attribs[i].isAttribute()? attribs[i].getParamNameAsSOAPString():attribs[i].getElementNameAsSOAPString();
-                    
-                    writer.write(tab2 + attribs[i].getTypeName() + " * "
-                            + attribs[i].getParamNameAsMember() + " = NULL;\n");
-                    writer.write(tab2 + "if ((" + attribs[i].getParamNameAsMember() + " = pIWSDZ->"
-                            + CUtils.getParameterGetValueMethodName(
-                                    attribs[i].getTypeName(), attribs[i].isAttribute()) + "( \""
-                            + elementNameToSearchFor + "\",0)) != NULL)\n");
+                    writer.write(tab2 + typeName + " * pValue" + i + " = pIWSDZ->" +
+                            CUtils.getParameterGetValueMethodName(baseTypeName, attribs[i].isAttribute()) +
+                            "(\"" + soapTagName + "\", 0);\n");
+                }
+                
+                // All these fields are pointers, so we should be able to pass ownership of 
+                // deserialized object to object instance.
+                if (attribs[i].isNillable() ||
+                        isElementNillable(i) ||
+                        isElementOptional(i) ||
+                        attribs[i].getChoiceElement() ||
+                        attribs[i].getAllElement() ||
+                        attribs[i].isOptional() ||
+                        isPointerType)
+                {
+                    writer.write(tab2 + "param->set" + attribs[i].getMethodName() 
+                            + "(pValue" + i + ", true, false);\n");
+                } 
+                else
+                {   
+                    writer.write(tab2 + "if (pValue" + i + ")\n");
                     writer.write(tab2 + "{\n");
-                    writer.write(tab2 + "\tparam->set"
-                            + attribs[i].getMethodName() + "(* " + attribs[i].getParamNameAsMember() + " );\n");
-                    writer.write(tab2 + "\tAxis::AxisDelete( (void *) " + attribs[i].getParamNameAsMember() + ", " + CUtils.getXSDTypeForBasicType( attribs[i].getTypeName()) + ");\n");
+                    writer.write(tab2 + "\tparam->set" + attribs[i].getMethodName() + "(*pValue" + i + ");\n");
+                    writer.write(tab2 + "\tAxis::AxisDelete((void *)pValue" + i 
+                            + ", " + CUtils.getXSDTypeForBasicType( attribs[i].getTypeName()) + ");\n");
                     writer.write(tab2 + "}\n");                        
                 }
                 
@@ -1036,11 +996,11 @@ public class BeanParamWriter extends ParamCPPFileWriter
         writer.write("void Axis_Delete_" + classname + "(" + classname + "* param, int nSize)\n");
         writer.write("{\n");
         
-        writer.write("\t/* If null just return */\n");
+        writer.write("\t// If null just return.\n");
         writer.write("\tif (!param)\n");
         writer.write("\t\treturn;\n\n");
         
-        writer.write("\t/* Reclaim array objects if array */\n");
+        writer.write("\t// Reclaim array objects if array.\n");
         writer.write("\tif (nSize > 0)\n");
         writer.write("\t{\n");
         writer.write("\t\tfor (int count = 0 ; count < nSize ; count++ )\n");
@@ -1215,7 +1175,6 @@ public class BeanParamWriter extends ParamCPPFileWriter
             CUtils.printMethodComment(writer, "Method to initialize objects of class " + classname + ".");
             
             writer.write("void " + classname + "::\nreset()\n{\n");
-            writer.write("\t/*do not allocate memory to any pointer members here\n\t because deserializer will allocate memory anyway. */\n");
             
             int anyCounter = 0;
 
@@ -1290,8 +1249,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 writer.write(classname + "::\n~" + classname + "() throw ()\n{\n");
             else
                 writer.write(classname + "::\n~" + classname + "()\n{\n");
-            
-            writer.write("\t/*delete any pointer and array members here*/\n");
+
             int anyCounter = 0;
             
             for(int i = 0; i< attribs.length;i++)

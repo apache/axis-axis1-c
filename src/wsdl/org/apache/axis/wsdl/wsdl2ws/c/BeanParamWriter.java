@@ -486,8 +486,8 @@ public class BeanParamWriter extends ParamCFileWriter
         CUtils.printMethodComment(writer, "Function to deserialize an object of type "  
                 + classname + ".");  
         
-        writer.write("int Axis_DeSerialize_" + classname
-                + "(" + classname + "* param, AXISCHANDLE pDZ)\n{\n");
+        writer.write("int Axis_DeSerialize_" + classname + "(" + classname 
+                + "* param, AXISCHANDLE pDZ)\n{\n");
 
         //=============================================================================
         // No attributes or elements to deserialize? Then deserialize extension and return.
@@ -507,7 +507,8 @@ public class BeanParamWriter extends ParamCFileWriter
 
         //=============================================================================
         // Deserialize attributes.
-        // Makes logic simpler to follow with slight duplication. TODO
+        // Actually, attribute deserialization takes place in same loop as elements
+        // in order to avoid duplication. But here, we put out a comment block.
         //=============================================================================        
         
         if (attributeParamCount > 0)
@@ -646,9 +647,13 @@ public class BeanParamWriter extends ParamCFileWriter
                 else
                     isPointerType = CUtils.isPointerType(attribs[i].getTypeName());
                 
-                if (attribs[i].getChoiceElement() || attribs[i].getAllElement()
-                        || attribs[i].isNillable() || isElementNillable(i) ||
-                        isElementOptional(i) || isPointerType)
+                if (attribs[i].isNillable() ||
+                        isElementNillable(i) ||
+                        isElementOptional(i) ||
+                        attribs[i].getChoiceElement() ||
+                        attribs[i].getAllElement() ||
+                        attribs[i].isOptional() ||
+                        isPointerType)                
                 {
                     writer.write(tab2 + "param->"
                             + attribs[i].getParamNameAsMember() + " = "

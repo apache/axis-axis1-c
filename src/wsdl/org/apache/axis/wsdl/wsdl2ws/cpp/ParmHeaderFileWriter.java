@@ -416,7 +416,7 @@ public class ParmHeaderFileWriter extends ParamWriter
                                 || isPointerType 
                                 || attribs[i].getChoiceElement() 
                                 || attribs[i].getAllElement()))                
-                    writer.write(", bool deep = true");
+                    writer.write(", bool deep=true, bool makeCopy=true");
                     
                 writer.write(");\n");
             }
