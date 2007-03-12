@@ -367,12 +367,20 @@ public class ClientStubWriter extends CPPClassWriter
         writer.write("\t\tm_pCall->setOperation( \"" 
                 + minfo.getMethodname() + "\", \"" 
                 + namespaceURI + "\");\n"); 
+
         
-        //new calls from stub base
+        //=============================================================================
+        // Apply user specified properties
+        //=============================================================================        
+        
         writer.write("\n");
         writer.write ("\t\tincludeSecure();\n");
         writer.write ("\t\tapplyUserPreferences();\n");
         writer.write("\n");        
+
+        //=============================================================================
+        // Process elements
+        //=============================================================================        
         
         for (int i = 0; i < paramsB.size(); i++)
         {
@@ -448,6 +456,11 @@ public class ClientStubWriter extends CPPClassWriter
 
             writer.write(");\n");
         }
+        
+        //=============================================================================
+        // Invoke web service - two-way message processing
+        //=============================================================================        
+        
         writer.write("\n\t\tif( AXIS_SUCCESS == m_pCall->sendAndReceive())\n\t\t{\n");
         writer.write("\t\t\tif( AXIS_SUCCESS == m_pCall->checkMessage( \""
                 + minfo.getOutputMessage().getLocalPart() + "\",\""
@@ -458,7 +471,11 @@ public class ClientStubWriter extends CPPClassWriter
         
         if( returntype != null)
             paramTagName = returntype.getParamNameAsSOAPString();
-
+  
+        //=============================================================================
+        // Process output parameters
+        //=============================================================================        
+        
         if (isAllTreatedAsOutParams)
         {
             String currentParamName;
@@ -645,27 +662,27 @@ public class ClientStubWriter extends CPPClassWriter
         }
         else if (returntypeissimple)
         {
-            writer.write("\t\t\t\t" + outparamType);
-            if (!CUtils.isPointerType(outparamType))
-                writer.write(" *");
-            
-            writer.write(" pReturn = m_pCall->"
-                    + CUtils.getParameterGetValueMethodName(outparamType,
-                            false) + "( \"" + paramTagName + "\", 0);\n\n");
-            writer.write("\t\t\t\tif( pReturn)\n");
-            writer.write("\t\t\t\t{\n");
-            if (CUtils.isPointerType(outparamType))
+            if (returntype.isNillable () || CUtils.isPointerType(outparamType))
             {
-                writer.write("\t\t\t\t\tRet = new char[strlen( pReturn) + 1];\n");
-                writer.write("\t\t\t\t\tstrcpy( Ret, pReturn);\n");
+                writer.write( "\t\t\t\tRet = m_pCall->" 
+                        + CUtils.getParameterGetValueMethodName( outparamType, false) 
+                        + "(\"" + returntype.getParamNameAsSOAPString() + "\", 0);\n");
             }
-            else if (returntype.isOptional() || returntype.isNillable())
-                writer.write("\t\t\t\t\tRet = new " + outparamType + "( *pReturn);\n");
             else
-                writer.write("\t\t\t\t\tRet = *pReturn;\n");
-
-            writer.write("\t\t\t\t\tAxis::AxisDelete( (void *) pReturn, " + CUtils.getXSDTypeForBasicType(outparamType) + ");\n");
-            writer.write("\t\t\t\t}\n");
+            {
+                writer.write ("\t\t\t\t" + outparamType + " * pReturn = m_pCall->" +
+                          CUtils.getParameterGetValueMethodName(outparamType, false) + "(\"" +
+                          returntype.getElementNameAsSOAPString() + "\", 0);\n");
+                writer.write ("\t\t\t\tif(pReturn)\n");
+                writer.write ("\t\t\t\t{\n");
+                writer.write ("\t\t\t\t\tRet = *pReturn;\n");
+                writer.write ("\t\t\t\t\tAxis::AxisDelete( (void *) pReturn, " + CUtils.getXSDTypeForBasicType( outparamType) + ");\n");
+                writer.write ("\t\t\t\t}\n");
+                
+                // TODO If we unexpectedly receive a nill value, when nillable="false" we should do something appropriate, perhaps as below:
+//                              writer.write("\t\t\telse");
+//                              writer.write("\t\t\t\tthrow new Exception(\"Unexpected use of nill\");");
+            }
             writer.write("\t\t\t}\n");
             writer.write("\t\t}\n\n");
             writer.write("\t\tm_pCall->unInitialize();\n");
