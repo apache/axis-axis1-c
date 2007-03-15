@@ -685,7 +685,8 @@ getCmplxArray (Axis_Array* pArray,
 
 Axis_Array*SoapDeSerializer::
 getBasicArray (XSDTYPE nType, const AxisChar * pName, const AxisChar * pNamespace)
-{    
+{
+    int size = 0;      
     Axis_Array* Array = new Axis_Array();
     Array->m_Type = nType;
 
@@ -699,7 +700,7 @@ getBasicArray (XSDTYPE nType, const AxisChar * pName, const AxisChar * pNamespac
     
     try
     {
-        int size = getArraySize ();
+        size = getArraySize ();
         const char* elementName;
         int count = 0;
                 
@@ -724,7 +725,7 @@ getBasicArray (XSDTYPE nType, const AxisChar * pName, const AxisChar * pNamespac
                 break;
                 
             ++count;
-        }     
+        }             
     }
     catch ( ... )
     {
@@ -744,7 +745,9 @@ getBasicArray (XSDTYPE nType, const AxisChar * pName, const AxisChar * pNamespac
     
     if (AXIS_FAIL == m_nStatus) // TODO - not sure this line is needed
         m_pNode = NULL;         // TODO - not sure this line is needed
-
+    else if (size > 0)
+        skipNode();
+                
     return Array;    
 }
 
