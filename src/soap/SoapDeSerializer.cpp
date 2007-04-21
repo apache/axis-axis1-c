@@ -68,6 +68,7 @@ SoapDeSerializer ()
     m_pNode = NULL;
     m_pInputStream = NULL;
     m_nStatus = AXIS_SUCCESS;
+    m_nSoapVersion = VERSION_LAST;
 }
 
 SoapDeSerializer::
@@ -178,48 +179,54 @@ skipNode(bool verifyIfEndNode, bool throwExcOnError)
 SoapEnvelope *SoapDeSerializer::
 getEnvelope ()
 {
-    Attribute * pAttr = NULL;
-
-    if ((AXIS_FAIL == getNextNode(true)) || (START_ELEMENT != m_pNode->m_type))
+    if (AXIS_FAIL == getNextNode(true))     
         return NULL;
-
-    if (0 == strcmp (m_pNode->m_pchNameOrValue,
-                     SoapKeywordMapping::map (SOAP_VER_1_2).pchWords[SKW_ENVELOPE]))
+            
+    // Better be a start-element.
+    if (START_ELEMENT != m_pNode->m_type)
     {
-        // No try/catch block needed here since we already have the node
-        SoapEnvelope *m_pEnvl = new SoapEnvelope ();
-        
-        // set all attributes of SoapEnvelope 
-        std::list<Attribute*> attributeList0;
-        pAttr = new Attribute ( attributeList0);
+        m_nStatus = AXIS_FAIL;
+        throw AxisSoapException (CLIENT_SOAP_SOAP_CONTENT_ERROR, "Start-element for SOAP Envelope not found.");
+    }
+            
+    // We are expecting a SOAP envelope.  
+    if (0 != strcmp(m_pNode->m_pchNameOrValue,SoapKeywordMapping::map(SOAP_VER_1_2).pchWords[SKW_ENVELOPE]))
+    {
+        m_nStatus = AXIS_FAIL;
+        throw AxisSoapException (CLIENT_SOAP_SOAP_CONTENT_ERROR, "Element is not a SOAP Envelope.");
+    }
+    
+    // No try/catch block needed here since we already have the node
+    SoapEnvelope *m_pEnvl = new SoapEnvelope ();
+    
+    // set all attributes of SoapEnvelope 
+    std::list<Attribute*> attributeList0;
+    Attribute * pAttr = new Attribute ( attributeList0);
 
-        pAttr->setValue (m_pNode->m_pchNamespace);
-        m_pEnvl->addNamespaceDecl (pAttr);
+    pAttr->setValue (m_pNode->m_pchNamespace);
+    m_pEnvl->addNamespaceDecl (pAttr);
 
-        if (0 == strcmp (m_pNode->m_pchNamespace, SoapKeywordMapping::map (SOAP_VER_1_1).pchNamespaceUri))
-            m_nSoapVersion = SOAP_VER_1_1;
-        else if (0 == strcmp (m_pNode->m_pchNamespace, SoapKeywordMapping::map (SOAP_VER_1_2).pchNamespaceUri))
-            m_nSoapVersion = SOAP_VER_1_2;
-        else
-            m_nSoapVersion = VERSION_LAST;
+    if (0 == strcmp (m_pNode->m_pchNamespace, SoapKeywordMapping::map (SOAP_VER_1_1).pchNamespaceUri))
+        m_nSoapVersion = SOAP_VER_1_1;
+    else if (0 == strcmp (m_pNode->m_pchNamespace, SoapKeywordMapping::map (SOAP_VER_1_2).pchNamespaceUri))
+        m_nSoapVersion = SOAP_VER_1_2;
+    else
+        m_nSoapVersion = VERSION_LAST;
 
-        // Set Attributes 
-        for (int i = 0; m_pNode->m_pchAttributes[i]; i += 3)
-        {
-            std::list<Attribute*> attributeList1;
-            pAttr = new Attribute (attributeList1);
-            pAttr->setLocalName (m_pNode->m_pchAttributes[i]);
-            pAttr->setURI (m_pNode->m_pchAttributes[i + 1]);
-            pAttr->setValue (m_pNode->m_pchAttributes[i + 2]);
-            m_pEnvl->addAttribute (pAttr);
-        }
-
-        // indicate node consumed and return envelope
-        m_pNode = NULL;  
-        return m_pEnvl;
+    // Set Attributes 
+    for (int i = 0; m_pNode->m_pchAttributes[i]; i += 3)
+    {
+        std::list<Attribute*> attributeList1;
+        pAttr = new Attribute (attributeList1);
+        pAttr->setLocalName (m_pNode->m_pchAttributes[i]);
+        pAttr->setURI (m_pNode->m_pchAttributes[i + 1]);
+        pAttr->setValue (m_pNode->m_pchAttributes[i + 2]);
+        m_pEnvl->addAttribute (pAttr);
     }
 
-    return NULL;
+    // indicate node consumed and return envelope
+    m_pNode = NULL;  
+    return m_pEnvl;
 }
 
 /*
@@ -247,9 +254,10 @@ getHeader ()
     if (AXIS_FAIL == getNextNode())       
         return m_nStatus;
 
-    if ((START_ELEMENT == m_pNode->m_type) &&
-        (0 == strcmp (m_pNode->m_pchNameOrValue,
-                      SoapKeywordMapping::map (m_nSoapVersion).pchWords[SKW_HEADER])))
+    if ((START_ELEMENT == m_pNode->m_type) 
+            && (m_nSoapVersion != VERSION_LAST)
+            && (0 == strcmp (m_pNode->m_pchNameOrValue,
+                             SoapKeywordMapping::map (m_nSoapVersion).pchWords[SKW_HEADER])))
     {
         delete m_pHeader;
         m_pHeader = new SoapHeader ();
@@ -388,8 +396,10 @@ getBody ()
         return m_nStatus;
 
     // previous header searching may have left a node unidentified
-    if ((START_ELEMENT == m_pNode->m_type) &&
-        (0 == strcmp (m_pNode->m_pchNameOrValue,SoapKeywordMapping::map (m_nSoapVersion).pchWords[SKW_BODY])))
+    if ((START_ELEMENT == m_pNode->m_type) 
+            && (m_nSoapVersion != VERSION_LAST)
+            && (0 == strcmp (m_pNode->m_pchNameOrValue,
+                             SoapKeywordMapping::map (m_nSoapVersion).pchWords[SKW_BODY])))
     {
         // indicate node consumed
         m_pNode = NULL; 
@@ -561,6 +571,7 @@ getVersion ()
     if (VERSION_LAST == m_nSoapVersion)
     {
         delete m_pEnv;
+        m_pEnv = NULL;
         m_pEnv = getEnvelope ();
     }
 
