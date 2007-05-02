@@ -59,6 +59,7 @@ OtherFaultException(AxisException& ae) : SoapFaultException(ae)
 OtherFaultException::
 OtherFaultException(const OtherFaultException& copy) : SoapFaultException(copy)
 {
+    m_detail = NULL;
     STRINGCOPY(m_detail, copy.m_detail);
 }
 

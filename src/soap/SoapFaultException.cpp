@@ -62,6 +62,8 @@ SoapFaultException(AxisException& ae): AxisException(ae)
 SoapFaultException::
 SoapFaultException(const SoapFaultException& copy): AxisException(copy)
 {
+    m_code  = NULL;
+    m_actor = NULL;      
     STRINGCOPY(m_code, copy.m_code);
     STRINGCOPY(m_actor, copy.m_actor);
 }
