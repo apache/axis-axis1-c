@@ -197,7 +197,7 @@ protected:
     bool m_bCanParseMore;
     int m_iStatus;
     int m_iErrorCode;
-    string m_sErrorString;
+    std::string m_sErrorString;
 };
 
 #endif
