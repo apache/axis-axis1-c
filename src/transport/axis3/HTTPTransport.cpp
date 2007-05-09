@@ -124,7 +124,7 @@ resetInputStateMachine()
 {
     m_GetBytesState = eWaitingForHTTPHeader;
     
-    m_strReceived.clear();
+    m_strReceived.erase();
     m_iBytesLeft = 0;
     m_iChunkedDataLeftToConsume = 0;
     m_iNextChunkedDataSize = 0;
