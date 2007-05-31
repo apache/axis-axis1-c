@@ -58,7 +58,7 @@ public:
 	ApacheTransport(void* pContext);
 	virtual ~ApacheTransport();
     int openConnection(){return AXIS_SUCCESS;};
-    void closeConnection(){};
+    void closeConnection(bool forceClose=true){};
     AXIS_TRANSPORT_STATUS sendBytes(const char* pcSendBuffer, const void* pBufferId);
 	void registerReleaseBufferCallback(AXIS_ENGINE_CALLBACK_RELEASE_SEND_BUFFER pFunct)
 	{ m_pReleaseBufferCallback = pFunct; };

@@ -43,7 +43,7 @@ AXIS_CPP_NAMESPACE_USE class SimpleAxisTransport:public SOAPTransport
     {
 	return AXIS_SUCCESS;
     };
-    void closeConnection ()
+    void closeConnection (bool forceClose=true)
     {
     };
     AXIS_TRANSPORT_STATUS sendBytes (const char *pcSendBuffer,
