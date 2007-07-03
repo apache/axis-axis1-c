@@ -91,8 +91,6 @@ protected:
 	bool				StartSockets();
 	void				StopSockets();
 	int					applyTimeout();
-	int					ReadFromSocket( char * pszRxBuffer);
-	int					WriteToSocket( const char * psTxBuffer, int iSize);
 	void				OpenSSL_Initialise();
 	bool				OpenSSL_Open();
 	int					OpenSSL_Close();

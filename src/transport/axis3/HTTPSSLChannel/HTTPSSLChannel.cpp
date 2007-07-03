@@ -18,7 +18,6 @@
 
 #include "HTTPSSLChannel.hpp"
 
-
 /**
  * cert_verify_callback( int ok, X509_STORE_CTX * ctx)
  *
@@ -84,7 +83,6 @@ HTTPSSLChannel()
 HTTPSSLChannel::
 ~HTTPSSLChannel()
 {
-    OpenSSL_Close();
     CloseChannel();
     StopSockets();
 }
@@ -157,8 +155,6 @@ open() throw (HTTPTransportException&)
         throw HTTPTransportException( SERVER_TRANSPORT_SOCKET_CONNECT_ERROR,m_LastError.c_str());
     }
 
-    bSuccess = OpenSSL_Open();
-
     return bSuccess;
 }
 
@@ -216,7 +212,31 @@ readBytes(char *buf, int bufLen)
         throw HTTPTransportException( SERVER_TRANSPORT_INVALID_SOCKET, m_LastError.c_str());
     }
 
-    return ReadFromSocket( buf );
+    int nByteRecv = 0;
+
+    nByteRecv = SSL_read( m_sslHandle, buf, bufLen - 1);
+
+    if(nByteRecv < 0)
+    {
+        OpenSSL_SetSecureError( SSL_get_error( m_sslHandle, nByteRecv));
+        CloseChannel();
+        
+        if( !bNoExceptionOnForceClose)
+        {
+           throw HTTPTransportException( SERVER_TRANSPORT_INPUT_STREAMING_ERROR, m_LastError.c_str());   
+        }     
+    }
+    else if ( 0 == nByteRecv )
+    {
+        // read-side of socket is closed 
+        *(buf + nByteRecv) = '\0';
+    }
+    else
+    {
+       *(buf + nByteRecv) = '\0';  
+    }
+
+    return nByteRecv;
 }
 
 /**
@@ -240,7 +260,18 @@ writeBytes(const char *buf, int numBytes)
         throw HTTPTransportException( SERVER_TRANSPORT_INVALID_SOCKET, m_LastError.c_str());
     }
 
-    return WriteToSocket( buf, numBytes);
+    int nByteSent;
+
+    nByteSent = SSL_write( m_sslHandle, (char *) buf, numBytes);
+
+    if(nByteSent < 0)
+    {
+        OpenSSL_SetSecureError( SSL_get_error( m_sslHandle, nByteSent));
+        CloseChannel();
+        throw HTTPTransportException( SERVER_TRANSPORT_OUTPUT_STREAMING_ERROR, m_LastError.c_str());
+    }
+
+    return nByteSent;
 }
 
 /**
@@ -537,6 +568,8 @@ OpenChannel()
 
     setsockopt( m_Sock, IPPROTO_TCP, TCP_NODELAY, (char *)&one, sizeof(int));
 
+    bSuccess = OpenSSL_Open();
+
     return bSuccess;
 }
 
@@ -552,6 +585,8 @@ OpenChannel()
 void HTTPSSLChannel::
 CloseChannel()
 {
+    OpenSSL_Close();
+        
     if( INVALID_SOCKET != m_Sock) 
     {
 #ifdef WIN32
@@ -660,72 +695,6 @@ applyTimeout()
 }
 
 /**
- * HTTPSSLChannel::ReadFromSocket( const char * pszRxBuffer)
- *
- * Protected function
- *
- * @return int 
- */
-
-int HTTPSSLChannel::
-ReadFromSocket( char * pszRxBuffer)
-{
-    int nByteRecv = 0;
-
-    nByteRecv = SSL_read( m_sslHandle, pszRxBuffer, BUF_SIZE - 1);
-
-    if(nByteRecv < 0)
-    {
-        // failed SSL_read
-        if( !bNoExceptionOnForceClose)
-        {
-            OpenSSL_SetSecureError( SSL_get_error( m_sslHandle, nByteRecv));
-        }
-
-        OpenSSL_Close();
-        close();
-        m_Sock = INVALID_SOCKET; // fix for AXISCPP-185
-    }
-    else if ( 0 == nByteRecv )
-    {
-        // read-side of socket is closed 
-        *(pszRxBuffer + nByteRecv) = '\0';
-    }
-    else
-    {
-       *(pszRxBuffer + nByteRecv) = '\0';  
-    }
-
-    return nByteRecv;
-}
-
-/**
- * HTTPSSLChannel::WriteToSocket( const char * psTxBuffer, int iSize)
- *
- * Protected function
- *
- * @return int 
- */
-
-int HTTPSSLChannel::
-WriteToSocket( const char * psTxBuffer, int iSize)
-{
-    int nByteSent;
-
-    nByteSent = SSL_write( m_sslHandle, (char *) psTxBuffer, iSize);
-
-    if(nByteSent < 0)
-    {
-// failed SSL write
-        OpenSSL_SetSecureError( SSL_get_error( m_sslHandle, nByteSent));
-
-        OpenSSL_Close();
-    }
-
-    return nByteSent;
-}
-
-/**
  * HTTPSSLChannel::OpenSSL_Initialise()
  *
  * Protected function
@@ -756,7 +725,7 @@ OpenSSL_Open()
 {
     SSL_METHOD *    req_method = SSLv23_client_method();
     bool            bSuccess = (bool) AXIS_FAIL;
-    int                iSSLErrorIndex = 0;
+    unsigned long   iSSLErrorIndex = 0;
 
     m_sslContext = SSL_CTX_new( req_method);
 
@@ -766,15 +735,11 @@ OpenSSL_Open()
 
         // OpenSSL documents that this must be at least 120 bytes long.
         char    szSSLErrorBuffer[120];
-
         ERR_error_string( iSSLErrorIndex, szSSLErrorBuffer);
-
         m_LastError = szSSLErrorBuffer;
 
-        OpenSSL_Close();
-
-        throw HTTPTransportException( CLIENT_SSLCHANNEL_CONTEXT_CREATE_ERROR,
-                                      szSSLErrorBuffer);
+        CloseChannel();       
+        return bSuccess;
     }
 
     SSL_CTX_set_verify( m_sslContext,
@@ -788,14 +753,16 @@ OpenSSL_Open()
     // pass the raw socket into the SSL layers
     SSL_set_fd( m_sslHandle, m_Sock);
 
-    iSSLErrorIndex = SSL_connect( m_sslHandle);
+    ERR_clear_error();
+    int ret = SSL_connect( m_sslHandle);
 
     //   1  is fine
     //   0  is "not successful but was shut down controlled"
     //  <0  is "handshake was not successful, because a fatal error occurred"
-    if( iSSLErrorIndex <= 0)
+    if( ret <= 0)
     {
-        OpenSSL_SetSecureError( iSSLErrorIndex);
+        OpenSSL_SetSecureError(ret);
+        CloseChannel();
     }
     else
     {
@@ -845,67 +812,44 @@ OpenSSL_Close()
 void HTTPSSLChannel::
 OpenSSL_SetSecureError( int iError)
 {
+    // OpenSSL documents that this must be at least 120 bytes long.
+    char error_buffer[120];   
+    char szError[100];
+    unsigned long sslerror;
+    
+    sprintf( szError, "%d", iError);      
+    
     switch( iError)
     {
         case SSL_ERROR_NONE:        // this is not an error
         case SSL_ERROR_ZERO_RETURN:    // no more data
-            break;
+            return;
 
         case SSL_ERROR_WANT_READ:
         case SSL_ERROR_WANT_WRITE:
         case SSL_ERROR_SYSCALL:
         {
-            #ifdef WIN32
-                iError = ::GetLastError();
-            #else
-                iError =  errno;
-            #endif
-
-            OpenSSL_Close();
-
-            m_LastError = "SSL_ERROR_SYSCALL";
-
-            throw HTTPTransportException( CLIENT_SSLCHANNEL_ERROR, m_LastError.c_str());
+            iError = GETLASTERROR;
+            sprintf( szError, "%d", iError);
+            m_LastError = "OpenSSL socket error is " + std::string(szError) 
+                            + " - " + PLATFORM_GET_ERROR_MESSAGE(iError);
             break;
         }
 
         case SSL_ERROR_SSL:
-        {
-            // A failure in the SSL library occurred, usually a protocol error.  The
-            // OpenSSL error queue contains more information on the error.
-            int sslerror = ERR_get_error();
-
-            // OpenSSL documents that this must be at least 120 bytes long.
-            char error_buffer[120];
-
-            ERR_error_string( sslerror, error_buffer);
-
-            OpenSSL_Close();
-
-            m_LastError = error_buffer;
-
-            throw HTTPTransportException( CLIENT_SSLCHANNEL_ERROR, error_buffer);
-
-            break;
-        }
-
+        // A failure in the SSL library occurred, usually a protocol error.  The
+        // OpenSSL error queue contains more information on the error.
         default: 
         // openssl/ssl.h says "look at error stack/return value/errno"
         {
             // A failure in the SSL library occurred, usually a protocol error.  The
             // OpenSSL error queue contains more information on the error.
-            int sslerror = ERR_get_error();
-
-            // OpenSSL documents that this must be at least 120 bytes long.
-            char error_buffer[120];
-
-            ERR_error_string( sslerror, error_buffer);
-
-            OpenSSL_Close();
-
-            m_LastError = error_buffer;
-
-            throw HTTPTransportException( CLIENT_SSLCHANNEL_ERROR, error_buffer);
+            m_LastError = "OpenSSL error is " + std::string(szError) + ". Error stack:\n";
+            while ((sslerror = ERR_get_error()) != 0)
+            {
+                ERR_error_string( sslerror, error_buffer);
+                m_LastError += std::string(error_buffer) + "\n";
+            }
         }
     }
 }
