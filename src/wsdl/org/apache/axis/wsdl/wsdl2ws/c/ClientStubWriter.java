@@ -25,7 +25,6 @@ package org.apache.axis.wsdl.wsdl2ws.c;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 
 import javax.xml.namespace.QName;
@@ -240,7 +239,6 @@ public class ClientStubWriter extends CFileWriter
         ArrayList paramsC = (ArrayList) minfo.getOutputParameterTypes();
         if (isAllTreatedAsOutParams)
         {
-            String currentParaTypeName;
             for (int i = 0; i < paramsC.size(); i++)
             {
                 type = wscontext.getTypemap().getType(

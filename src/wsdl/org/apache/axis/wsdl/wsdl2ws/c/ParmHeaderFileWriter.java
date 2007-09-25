@@ -415,9 +415,6 @@ public class ParmHeaderFileWriter extends ParamWriter
     {
         try
         {
-            Type atype;
-            Iterator types = this.wscontext.getTypemap().getTypes().iterator();
-
             writer.write("#include <axis/Axis.h>\n");
             writer.write("#include <axis/GDefine.h>\n");
             writer.write("#include <axis/AxisUserAPI.h>\n");

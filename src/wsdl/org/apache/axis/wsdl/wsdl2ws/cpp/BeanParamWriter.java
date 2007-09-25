@@ -33,12 +33,10 @@ package org.apache.axis.wsdl.wsdl2ws.cpp;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.Iterator;
 
 import javax.xml.namespace.QName;
 
-import org.apache.axis.wsdl.symbolTable.TypeEntry;
 import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
@@ -755,9 +753,6 @@ public class BeanParamWriter extends ParamCPPFileWriter
         boolean foundAll = false;
         int anyCounter = 0; //counter for any types.
         int arrayCount = 0;
-        
-        boolean handleAll = false;
-        boolean handleChoice = false;
      
         // Tabs to ensure code alignment
         String tab1  = "\t";
@@ -1315,7 +1310,6 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 
                 Iterator i = type.getEnumerationdata().iterator();
                 int iIndex = 0;
-                TypeEntry baseTypeForArray = (TypeEntry) i.next();
                 
                 while( i.hasNext())
                 {
@@ -1340,7 +1334,6 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 
                 Iterator i = type.getEnumerationdata().iterator();
                 int iIndex = 0;
-                TypeEntry baseTypeForArray = (TypeEntry) i.next();
                 
                 while( i.hasNext())
                 {

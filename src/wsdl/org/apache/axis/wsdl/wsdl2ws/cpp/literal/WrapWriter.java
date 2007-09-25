@@ -25,7 +25,6 @@ package org.apache.axis.wsdl.wsdl2ws.cpp.literal;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 
 import javax.xml.namespace.QName;

@@ -19,7 +19,6 @@ package org.apache.axis.wsdl.wsdl2ws.info;
 
 import javax.xml.namespace.QName;
 import org.apache.axis.wsdl.symbolTable.SymbolTable;
-import org.apache.axis.wsdl.wsdl2ws.WrapperConstants;
 import org.apache.axis.wsdl.wsdl2ws.CUtils;
 
 /**

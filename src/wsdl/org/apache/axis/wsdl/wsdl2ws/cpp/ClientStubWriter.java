@@ -35,13 +35,11 @@ package org.apache.axis.wsdl.wsdl2ws.cpp;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 
 import javax.xml.namespace.QName;
 
 import org.apache.axis.wsdl.wsdl2ws.CUtils;
-import org.apache.axis.wsdl.wsdl2ws.WSDL2Ws;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.FaultInfo;
@@ -275,7 +273,6 @@ public class ClientStubWriter extends CPPClassWriter
         ArrayList paramsC = (ArrayList) minfo.getOutputParameterTypes();
         if (isAllTreatedAsOutParams)
         {
-            String currentParaTypeName;
             for (int i = 0; i < paramsC.size(); i++)
             {
                 type = wscontext.getTypemap().getType(((ParameterInfo) paramsC.get(i)).getSchemaName());

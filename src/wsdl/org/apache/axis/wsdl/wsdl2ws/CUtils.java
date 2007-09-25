@@ -38,7 +38,6 @@ import javax.xml.rpc.holders.BooleanHolder;
 import org.apache.axis.wsdl.symbolTable.SchemaUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.TypeMap;
-import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 import org.apache.axis.wsdl.symbolTable.CSchemaUtils;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -1308,9 +1307,7 @@ public class CUtils
      * keeping a hash table of mapped names and a vector of generated unique names.
      */
     public static String getUniqueName(String oldName)
-    {
-        int i;
-        
+    {    
         // Should never happen, but just in case.
         if (oldName == null)
             return oldName;

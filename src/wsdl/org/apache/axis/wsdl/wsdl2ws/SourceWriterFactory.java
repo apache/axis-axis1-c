@@ -33,8 +33,6 @@ public class SourceWriterFactory
                 return new DeploymentWriter(wscontext);
             case WrapperConstants.GENERATOR_UNDEPLOYMENT :
                 return new UndeploymentWriter(wscontext);
-            case WrapperConstants.GENERATOR_BUILDSCRIPT :
-                return new BuildScriptWriter(wscontext);
                 
             // C++
             case WrapperConstants.GENERATOR_PARAM_CPP_ALL :

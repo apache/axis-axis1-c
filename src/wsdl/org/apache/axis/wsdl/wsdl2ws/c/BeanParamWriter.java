@@ -24,8 +24,6 @@ package org.apache.axis.wsdl.wsdl2ws.c;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Iterator;
 
 import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
@@ -524,9 +522,6 @@ public class BeanParamWriter extends ParamCFileWriter
         boolean foundAll = false;
         int anyCounter = 0; //counter for any types.
         int arrayCount = 0;
-        
-        boolean handleAll = false;
-        boolean handleChoice = false;
      
         // Tabs to ensure code alignment
         String tab1  = "\t";
@@ -794,8 +789,6 @@ public class BeanParamWriter extends ParamCFileWriter
                     else
                         baseTypeName = attribs[i].getTypeName();
                     
-                    String m_type =  CUtils.getXSDTypeForBasicType(baseTypeName);
-                                    
                     writer.write("\t\tpTemp->" + attribs[i].getParamNameAsMember() 
                             + " = (" + baseTypeName + "_Array *)axiscAxisNew(XSDC_ARRAY, 0);\n");
                     

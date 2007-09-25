@@ -702,7 +702,6 @@ public class CSchemaUtils extends SchemaUtils
         } 
         else 
         {
-            QName nodeName = Utils.getNodeNameQName(groupNode);
             QName nodeType = Utils.getTypeQName(groupNode, new BooleanHolder(), false);
             
             // The value of the second argument is 'false' since global model group
@@ -712,7 +711,6 @@ public class CSchemaUtils extends SchemaUtils
 
             if (type != null && type.getNode() != null) 
             {
-                //v.add(new ElementDecl(type, nodeName));
                 Node node = type.getNode();
                 NodeList children = node.getChildNodes();
             	for (int j = 0; j < children.getLength(); j++)

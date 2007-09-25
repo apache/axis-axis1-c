@@ -21,7 +21,6 @@ import javax.xml.namespace.QName;
 import org.apache.axis.wsdl.symbolTable.TypeEntry;
 import org.apache.axis.wsdl.symbolTable.SymbolTable;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
-import org.apache.axis.wsdl.wsdl2ws.CUtils;
 
 public class CContainedAttribute 
 {
