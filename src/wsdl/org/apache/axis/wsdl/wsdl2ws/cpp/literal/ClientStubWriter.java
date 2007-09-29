@@ -347,13 +347,28 @@ public class ClientStubWriter
         writer.write ("\t\tm_pCall->setSOAPVersion(SOAP_VER_1_1);\n");
         //TODO check which version is it really.
         
+        // Issue setOperation logic...namespace for the operation is 
+        // obtained from the namespace of the input message...if there
+        // is no input message then the namespace is obtained from 
+        // the SOAP body extensability element for the input element; if
+        // there is no namespace, then we will use a null string.
+        // Techincally speaking, the SOAP body extensability element 
+        // must not contain the namespace attribute.  The SOAP body 
+        // entry element for doc/literal style gets its namespace from the 
+        // target namespace of the XML schema declaring this element. 
+        String namespaceURI;
         if( minfo.getInputMessage() != null)
-        {
-            writer.write( "\t\tm_pCall->setOperation(\"" 
-                    + minfo.getInputMessage().getLocalPart() + "\", \"" 
-                    + minfo.getInputMessage().getNamespaceURI() + "\");\n");
-        }
+            namespaceURI = minfo.getInputMessage().getNamespaceURI();
+        else
+            namespaceURI = minfo.getInputNamespaceURI();
+        
+        if (namespaceURI == null)
+            namespaceURI = "";
 
+         writer.write( "\t\tm_pCall->setOperation(\""
+                + minfo.getMethodname() + "\", \""
+                + namespaceURI + "\");\n");
+        
         //=============================================================================
         // Add attributes to soap method
         //=============================================================================        

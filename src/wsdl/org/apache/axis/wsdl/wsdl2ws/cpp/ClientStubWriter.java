@@ -356,8 +356,10 @@ public class ClientStubWriter extends CPPClassWriter
         writer.write("\t\tm_pCall->setSOAPVersion( SOAP_VER_1_1);\n");
         //TODO check which version is it really.
         
-        // Use namespace specified in input/output binding if one exists
-        String namespaceURI = minfo.getNamespaceURI();
+        // Use namespace specified in input binding if one exists
+        // For rpc/literal operations the namespace must be set, but if not, use
+        // the target namespace.  
+        String namespaceURI = minfo.getInputNamespaceURI();
         if (namespaceURI == null)
             namespaceURI = wscontext.getWrapInfo().getTargetNameSpaceOfWSDL();
         
@@ -365,7 +367,6 @@ public class ClientStubWriter extends CPPClassWriter
                 + minfo.getMethodname() + "\", \"" 
                 + namespaceURI + "\");\n"); 
 
-        
         //=============================================================================
         // Apply user specified properties
         //=============================================================================        

@@ -83,7 +83,7 @@ public class SymbolTableParsingUtils {
 						  .get(j));
 					methodinfo.setInputEncoding(body.getEncodingStyles());
 					methodinfo.setInputUse(body.getUse());
-                    methodinfo.setNamespaceURI(body.getNamespaceURI());
+                    methodinfo.setInputNamespaceURI(body.getNamespaceURI());
 			  }
 		  }
 	  }
@@ -104,7 +104,7 @@ public class SymbolTableParsingUtils {
 						  .get(j));
 					methodinfo.setInputEncoding(body.getEncodingStyles());
 					methodinfo.setInputUse(body.getUse());
-                    methodinfo.setNamespaceURI(body.getNamespaceURI());
+                    methodinfo.setOutputNamespaceURI(body.getNamespaceURI());
 			  }
 		  }
 	  }
