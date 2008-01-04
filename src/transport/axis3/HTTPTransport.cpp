@@ -503,7 +503,7 @@ getBytes( char * pcBuffer, int * piSize) throw (AxisException, HTTPTransportExce
     //   eSOAPMessageIsChunked        - Keep reading until a zero length chunk is 
     //                                  encountered, signifying end of response.
     //   eSOAPMessageIsNotChunked     - Keep reading until the connection is closed. 
-    //   eSOAPMessageHasContentLength - Keep reading until content-length is zero.                              to zero.
+    //   eSOAPMessageHasContentLength - Keep reading until content-length is zero.        
 
     
     // Read in an HTTP header if we are waiting for one.  Now this is a bit tricky
