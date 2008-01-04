@@ -352,7 +352,7 @@ public class ClientStubWriter
         // is no input message then the namespace is obtained from 
         // the SOAP body extensability element for the input element; if
         // there is no namespace, then we will use a null string.
-        // Techincally speaking, the SOAP body extensability element 
+        // For doc/literal, the SOAP body extensability element 
         // must not contain the namespace attribute.  The SOAP body 
         // entry element for doc/literal style gets its namespace from the 
         // target namespace of the XML schema declaring this element. 
