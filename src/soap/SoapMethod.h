@@ -93,6 +93,9 @@ public:
     
     /** Method to clear up all the current attributes in preparation of a new method call */
     void clearAttributes();
+    
+    /** Return namespace prefix */
+    AxisString getPrefix() { return m_strPrefix; }
 };
 
 AXIS_CPP_NAMESPACE_END

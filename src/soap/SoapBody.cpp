@@ -84,10 +84,16 @@ int SoapBody::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
         }
         else if(NULL != m_pSoapMethod)
         {
-            iStatus= m_pSoapMethod->serialize(pSZ);
-            if(iStatus==AXIS_FAIL)
-                break;
-        } 
+        	// A null-string namespace means the operation does not have input parameters and
+        	// thus we skip this serialization step!
+        	AxisString prefix = m_pSoapMethod->getPrefix();
+        	if (prefix.length() != 0)
+        	{
+        		iStatus= m_pSoapMethod->serialize(pSZ);
+        		if(iStatus==AXIS_FAIL)
+        			break;
+        	}
+        }
         else
         {
             m_pSoapFault = SoapFault::getSoapFault(SERVER_ENGINE_WEBSERVICE_FAILED);

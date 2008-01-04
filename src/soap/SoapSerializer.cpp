@@ -455,19 +455,20 @@ removeNamespacePrefix( const AxisChar * pNamespace)
 const AxisChar * SoapSerializer::
 getNamespacePrefix( const AxisChar * pNamespace)
 {
-    if( m_NsStack.find( pNamespace) == m_NsStack.end())
-    {
-        m_nCounter++;
-        AxisSprintf(m_Buf, 8, "ns%d", m_nCounter);
-        m_NsStack[pNamespace] = m_Buf;
-    }
-
-    return m_NsStack[pNamespace].c_str();
+	bool blnIsNewPrefix;
+	return getNamespacePrefix(pNamespace, blnIsNewPrefix);
 }
 
 const AxisChar * SoapSerializer::
 getNamespacePrefix( const AxisChar * pNamespace, bool & blnIsNewPrefix)
 {
+	blnIsNewPrefix = false;
+	
+	// We will not map null or null string namespaces...MUST return null string
+	// since the namespace is sometimes assigned to object of type string class.
+	if (pNamespace == (const AxisChar *)NULL || pNamespace[0] == '\0')	
+		return (const AxisChar *)"";
+	
     if( m_NsStack.find( pNamespace) == m_NsStack.end())
     {
         m_nCounter++;
