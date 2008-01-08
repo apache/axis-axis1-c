@@ -1293,62 +1293,42 @@ public class BeanParamWriter extends ParamCPPFileWriter
 
     protected void writeRestrictionCheckerFunction() throws WrapperFault
     {
+        //TODO write code to check the restrictions.
         try
         {
             CUtils.printMethodComment(writer, "Function used to check whether object has allowed values. Not implemented yet.");
             
-            writer.write("int Check_Restrictions_" + classname + "(" + classname + " value)\n");
+            boolean isPtrType = CUtils.isPointerType( CUtils.getclass4qname( type.getBaseType()));
             
-            //TODO write code to check the restrictions. 
-            
+            writer.write("int Check_Restrictions_" + classname + "(" + classname + " value)\n"); 
             writer.write("{\n");
-            
-            if( CUtils.isPointerType( CUtils.getclass4qname( type.getBaseType())))
+
+            Iterator i = type.getEnumerationdata().iterator();
+            if (i.hasNext())
             {
-                writer.write( "// String type\n");
-                writer.write( "// Number of " + classname + " elements = " + (type.getEnumerationdata().size() - 1) + "\n");
-                
-                Iterator i = type.getEnumerationdata().iterator();
-                int iIndex = 0;
+                // The first entry is the base type...consume it.
+                i.next();
+                int iIndex=0;
                 
                 while( i.hasNext())
                 {
                     if( iIndex == 0)
-                        writer.write( "//\tif( ");
+                    {
+                        writer.write( "//\tif (");
+                        iIndex++;
+                    }
                     else
                         writer.write( " ||\n//\t    ");
                     
                     QName qnElement = (QName) i.next();
-                    writer.write( "!strcmp( value, " + classname+ "_" + qnElement.getNamespaceURI() + ")");
-                    iIndex++;
-                }
-                
-                writer.write( "//)\n//\t{\n");
-                writer.write( "//\t\treturn 1;\n");
-                writer.write( "//\t}\n");
-            }
-            else
-            {
-                writer.write( "// Non-string type\n");
-                writer.write( "// Number of " + classname + " enums = " + (type.getEnumerationdata().size() - 1) + "\n");
-                
-                Iterator i = type.getEnumerationdata().iterator();
-                int iIndex = 0;
-                
-                while( i.hasNext())
-                {
-                    if( iIndex == 0)
-                        writer.write( "//\tif( ");
-                    else
-                        writer.write( " ||\n//\t    ");
                     
-                    QName qnElement = (QName) i.next();
-                    writer.write( "value == ENUM" + classname.toUpperCase()+ "_" 
-                            + qnElement.getNamespaceURI());
-                    iIndex++;
+                    if (isPtrType)
+                        writer.write( "!strcmp( value, " + classname+ "_" + qnElement.getNamespaceURI() + ")");
+                    else
+                        writer.write( "value == ENUM" + classname.toUpperCase()+ "_" + qnElement.getNamespaceURI());
                 }
                 
-                writer.write( "//)\n//\t{\n");
+                writer.write( ")\n//\t{\n");
                 writer.write( "//\t\treturn 1;\n");
                 writer.write( "//\t}\n");
             }
@@ -1359,7 +1339,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
         catch (IOException e)
         {
             throw new WrapperFault(e);
-        }
+        } 
     }    
 
     protected File getFilePath(boolean useServiceName) throws WrapperFault
