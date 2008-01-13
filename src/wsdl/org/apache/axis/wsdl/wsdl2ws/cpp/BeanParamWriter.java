@@ -1328,9 +1328,12 @@ public class BeanParamWriter extends ParamCPPFileWriter
                         writer.write( "value == ENUM" + classname.toUpperCase()+ "_" + qnElement.getNamespaceURI());
                 }
                 
-                writer.write( ")\n//\t{\n");
-                writer.write( "//\t\treturn 1;\n");
-                writer.write( "//\t}\n");
+                if (index != 0)
+                {
+                    writer.write( "//)\n//\t{\n");
+                    writer.write( "//\t\treturn 1;\n");
+                    writer.write( "//\t}\n");
+                }
             }
             
             writer.write( "\n\treturn 0;\n");
