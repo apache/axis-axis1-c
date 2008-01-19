@@ -165,6 +165,7 @@
 			<linkerarg value="-zmuldefs"/>
 			<syslibset libs="Cstd"/>
 			<syslibset libs="socket"/>
+			<syslibset libs="nsl"/>
 		</linker>
 
 		<!--

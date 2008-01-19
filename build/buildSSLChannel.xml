@@ -18,7 +18,7 @@
 		</then>
 		<else>
 			<property name="HTTP.SSLChannel.inc.dir" value="include"/>
-			<property name="HTTP.SSLChannel.libs" value="crypto,ssl"/>
+			<property name="HTTP.SSLChannel.libs" value="ssl,crypto"/>
 		</else>
       </if>
 
