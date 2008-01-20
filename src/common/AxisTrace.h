@@ -51,24 +51,24 @@ AXIS_CPP_NAMESPACE_START
 // Unfortunately the trace type has to be an int with #defines, not an enum because
 // it is used with '...' and va_args, and ints can be used with '...' but enums 
 // cannot.
-#define TRACETYPE_UNKNOWN		0
-#define TRACETYPE_CHAR			1
-#define TRACETYPE_USHORT		2
-#define TRACETYPE_SHORT			3
-#define TRACETYPE_UINT			4
-#define TRACETYPE_INT			5
-#define TRACETYPE_ULONG			6	
-#define TRACETYPE_LONG			7
-#define TRACETYPE_DOUBLE		9
-#define TRACETYPE_FLOAT			10
-#define TRACETYPE_BOOL			11
-#define TRACETYPE_POINTER		12
-#define TRACETYPE_DATA			13
-#define TRACETYPE_STRING		14
-#define TRACETYPE_STLSTRING		15
-#define TRACETYPE_ANONYMOUS		16
-#define TRACETYPE_EXCEPTION		17
-#define TRACETYPE_AXISEXCEPTION	18
+#define TRACETYPE_UNKNOWN        0
+#define TRACETYPE_CHAR           1
+#define TRACETYPE_USHORT         2
+#define TRACETYPE_SHORT          3
+#define TRACETYPE_UINT           4
+#define TRACETYPE_INT            5
+#define TRACETYPE_ULONG          6    
+#define TRACETYPE_LONG           7
+#define TRACETYPE_DOUBLE         9
+#define TRACETYPE_FLOAT          10
+#define TRACETYPE_BOOL           11
+#define TRACETYPE_POINTER        12
+#define TRACETYPE_DATA           13
+#define TRACETYPE_STRING         14
+#define TRACETYPE_STLSTRING      15
+#define TRACETYPE_ANONYMOUS      16
+#define TRACETYPE_EXCEPTION      17
+#define TRACETYPE_AXISEXCEPTION  18
 
 #define TRACE_ENTRY  ">"
 #define TRACE_EXIT   "<"
@@ -93,11 +93,11 @@ AXIS_CPP_NAMESPACE_START
  */
 enum AxisTraceState
 {
-	STATE_UNINITIALISED=0,
-	STATE_OFF,
-	STATE_ON,
-	STATE_STOPPED,
-	STATE_STARTUP
+    STATE_UNINITIALISED=0,
+    STATE_OFF,
+    STATE_ON,
+    STATE_STOPPED,
+    STATE_STARTUP
 };
 
 class STORAGE_CLASS_INFO AxisTraceEntrypoints {
@@ -105,16 +105,16 @@ public:
     void (*m_traceLine)(const char *data);
     void (*m_traceEntry)(const char *className, const char *methodName, const void* that, int nParms, va_list vargs);
     void (*m_traceExit)(const char *className, const char *methodName, const void* that, int returnIndex,
-		int type, unsigned len, void *value);
+        int type, unsigned len, void *value);
     void (*m_traceCatch)(const char *className, const char *methodName, const void* that, int catchIndex,
-		int type, unsigned len, void *value);
+        int type, unsigned len, void *value);
     bool (*m_traceOn) ();
 };
 
 #ifdef AXISTRACE_LIBRARY
     extern AxisTraceEntrypoints *g_traceEntrypoints;
 #elif !defined(AXIS_CLIENTC_LIB)
-	extern AxisTraceEntrypoints g_traceEntrypoints;
+    extern AxisTraceEntrypoints g_traceEntrypoints;
 #endif
 
 #ifdef AXISTRACE_LIBRARY_MAINENTRYPOINT
@@ -147,8 +147,7 @@ public:
      * @return The status which indicates whether the operation is success 
      * (AXIS_SUCCESS) or not     * (AXIS_FAIL).
      */
-    static int logaxis(const char* sLog1, const char* sLog2, 
-		const char *type, const char* file, int line);
+    static int logaxis(const char* sLog1, const char* sLog2, const char *type, const char* file, int line);
 
     /**
      * Writes the given string to the standard console. 
@@ -199,65 +198,67 @@ public:
 #else
     static inline void traceLine(const char *data) {traceLineInternal(data);}
     static void traceLineInternal(const char *type, const char *classname, 
-								  const char *methodname, const void *that, 
-								  const char *parms);
+                                  const char *methodname, const void *that, 
+                                  const char *parms);
 #endif
     static void traceLineInternal(const char *data);
 
-	/**
-	 * Traces the entry to a method.
-	 */
+    /**
+     * Traces the entry to a method.
+     */
 #ifdef AXISTRACE_LIBRARY
-    static inline void traceEntry(const char *className, const char *methodName, const void* that, int nParms, ...) { 
+    static inline void traceEntry(const char *className, const char *methodName, const void* that, int nParms, ...) 
+    { 
             va_list vargs;
             va_start(vargs,nParms);
             (*g_traceEntrypoints->m_traceEntry)(className,methodName,that,nParms,vargs);
             va_end(vargs);
     }
 #else
-    static inline void traceEntry(const char *className, const char *methodName, const void* that, int nParms, ...) {
+    static inline void traceEntry(const char *className, const char *methodName, const void* that, int nParms, ...) 
+    {
             va_list vargs;
             va_start(vargs,nParms);
             traceEntryInternal(className,methodName,that,nParms,vargs);
             va_end(vargs);
     }
 #endif
-	static void traceEntryInternal(const char *className, const char *methodName, 
+    static void traceEntryInternal(const char *className, const char *methodName, 
             const void* that, int nParms, va_list vargs);
 
-	/**
-	 * Traces the exit to a method.
-	 */
+    /**
+     * Traces the exit to a method.
+     */
 #ifdef AXISTRACE_LIBRARY
     static inline void traceExit(const char *className, const char *methodName, const void* that, int returnIndex,
-		int type=TRACETYPE_UNKNOWN, unsigned len=0, void *value=0) { 
+        int type=TRACETYPE_UNKNOWN, unsigned len=0, void *value=0) { 
             (*g_traceEntrypoints->m_traceExit)(className,methodName,that,returnIndex,type,len,value); 
     }
 #else
     static inline void traceExit(const char *className, const char *methodName, const void* that, int returnIndex,
-		int type=TRACETYPE_UNKNOWN, unsigned len=0, void *value=0) {
+        int type=TRACETYPE_UNKNOWN, unsigned len=0, void *value=0) {
         traceExitInternal(className,methodName,that,returnIndex,type,len,value);
     }
 #endif
-	static void traceExitInternal(const char *className, const char *methodName, const void* that, int returnIndex,
-		int type=TRACETYPE_UNKNOWN, unsigned len=0, void *value=0);
+    static void traceExitInternal(const char *className, const char *methodName, const void* that, int returnIndex,
+        int type=TRACETYPE_UNKNOWN, unsigned len=0, void *value=0);
 
-	/**
-	 * Traces something that has been caught
-	 */
+    /**
+     * Traces something that has been caught
+     */
 #ifdef AXISTRACE_LIBRARY
     static inline void traceCatch(const char *className, const char *methodName, const void* that, int catchIndex,
-		int type=TRACETYPE_UNKNOWN, unsigned len=0, void *value=0) { 
+        int type=TRACETYPE_UNKNOWN, unsigned len=0, void *value=0) { 
             (*g_traceEntrypoints->m_traceCatch)(className,methodName,that,catchIndex,type,len,value); 
     }
 #else
     static inline void traceCatch(const char *className, const char *methodName, const void* that, int catchIndex,
-		int type=TRACETYPE_UNKNOWN, unsigned len=0, void *value=0) {
+        int type=TRACETYPE_UNKNOWN, unsigned len=0, void *value=0) {
         traceCatchInternal(className,methodName,that,catchIndex,type,len,value);
     }
 #endif
-	static void traceCatchInternal(const char *className, const char *methodName, const void* that, int catchIndex,
-		int type=TRACETYPE_UNKNOWN, unsigned len=0, void *value=0);
+    static void traceCatchInternal(const char *className, const char *methodName, const void* that, int catchIndex,
+        int type=TRACETYPE_UNKNOWN, unsigned len=0, void *value=0);
       /**
        * Closes the trace file
        */
@@ -284,91 +285,91 @@ public:
 
 private:
 
-	static enum AxisTraceState m_bLoggingOn;
+    static enum AxisTraceState m_bLoggingOn;
     static AxisFile *m_fileTrace;
 
     static int logthis(const char* pcLog, int level, char* arg2, int arg3);
-	static void addParameter(std::string& line, int type, unsigned len, void *value);
-	static void addDataParameter(std::string& line, unsigned len, void *value);
+    static void addParameter(std::string& line, int type, unsigned len, void *value);
+    static void addDataParameter(std::string& line, unsigned len, void *value);
     static void traceHeader(enum AxisTraceState newState);
     static void traceLine2(const char *data);
-	static int initialise(const char *filename, enum AxisTraceState newState);
+    static int initialise(const char *filename, enum AxisTraceState newState);
 };
 
 #ifdef ENABLE_AXISTRACE
 #define TRACE_OBJECT_CREATE_FUNCT_ENTRY(funct, size) \
 { \
-	if (axiscpp::AxisTrace::isTraceOn()) \
-	{ \
+    if (axiscpp::AxisTrace::isTraceOn()) \
+    { \
         int traceSize = size; \
-		axiscpp::AxisTrace::traceEntry(NULL, "AXIS_OBJECT_CREATE_FUNCT", (void*)(funct), 1, \
+        axiscpp::AxisTrace::traceEntry(NULL, "AXIS_OBJECT_CREATE_FUNCT", (void*)(funct), 1, \
             TRACETYPE_INT, 1, (void*)&traceSize); \
     } \
 }
 
 #define TRACE_OBJECT_CREATE_FUNCT_EXIT(funct, arr) \
 { \
-	if (axiscpp::AxisTrace::isTraceOn()) \
-		axiscpp::AxisTrace::traceExit(NULL, "AXIS_OBJECT_CREATE_FUNCT", (void*)(funct), 1, \
-			TRACETYPE_POINTER, 1, (void*)&(arr)); \
+    if (axiscpp::AxisTrace::isTraceOn()) \
+        axiscpp::AxisTrace::traceExit(NULL, "AXIS_OBJECT_CREATE_FUNCT", (void*)(funct), 1, \
+            TRACETYPE_POINTER, 1, (void*)&(arr)); \
 }
 
 #define TRACE_OBJECT_DELETE_FUNCT_ENTRY(funct, arr, size) \
 { \
-	if (axiscpp::AxisTrace::isTraceOn()) \
-	{ \
-		void *traceArr = arr; \
-		int traceSize = size; \
-		axiscpp::AxisTrace::traceEntry(NULL, "AXIS_OBJECT_DELETE_FUNCT", (void*)(funct), 2, \
-			TRACETYPE_POINTER, 1, (void*)&traceArr, \
-			TRACETYPE_INT, 0, (void*)&traceSize); \
-	} \
+    if (axiscpp::AxisTrace::isTraceOn()) \
+    { \
+        void *traceArr = arr; \
+        int traceSize = size; \
+        axiscpp::AxisTrace::traceEntry(NULL, "AXIS_OBJECT_DELETE_FUNCT", (void*)(funct), 2, \
+            TRACETYPE_POINTER, 1, (void*)&traceArr, \
+            TRACETYPE_INT, 0, (void*)&traceSize); \
+    } \
 }
 
 #define TRACE_OBJECT_DELETE_FUNCT_EXIT(funct) \
 { \
-	if (axiscpp::AxisTrace::isTraceOn()) \
-		axiscpp::AxisTrace::traceExit(NULL, "AXIS_OBJECT_DELETE_FUNCT", (void*)(funct), 0); \
+    if (axiscpp::AxisTrace::isTraceOn()) \
+        axiscpp::AxisTrace::traceExit(NULL, "AXIS_OBJECT_DELETE_FUNCT", (void*)(funct), 0); \
 }
 
 #define TRACE_DESERIALIZE_FUNCT_ENTRY(funct, item, that) \
 { \
-	if (axiscpp::AxisTrace::isTraceOn()) \
-	{ \
-		void *traceItem = item; \
-		void *traceThat = that; \
-		axiscpp::AxisTrace::traceEntry(NULL, "AXIS_OBJECT_CREATE_FUNCT", (void*)(funct), 2, \
-			TRACETYPE_POINTER, 1, (void*)&traceItem, \
-			TRACETYPE_POINTER, 1, (void*)&traceThat); \
-	} \
+    if (axiscpp::AxisTrace::isTraceOn()) \
+    { \
+        void *traceItem = item; \
+        void *traceThat = that; \
+        axiscpp::AxisTrace::traceEntry(NULL, "AXIS_OBJECT_CREATE_FUNCT", (void*)(funct), 2, \
+            TRACETYPE_POINTER, 1, (void*)&traceItem, \
+            TRACETYPE_POINTER, 1, (void*)&traceThat); \
+    } \
 }
 
 #define TRACE_DESERIALIZE_FUNCT_EXIT(funct, status) \
 { \
-	if (axiscpp::AxisTrace::isTraceOn()) \
-		axiscpp::AxisTrace::traceExit(NULL, "AXIS_DESERIALIZE_FUNCT", (void*)(funct), 1, \
-			TRACETYPE_INT, 0, (void*)&(status)); \
+    if (axiscpp::AxisTrace::isTraceOn()) \
+        axiscpp::AxisTrace::traceExit(NULL, "AXIS_DESERIALIZE_FUNCT", (void*)(funct), 1, \
+            TRACETYPE_INT, 0, (void*)&(status)); \
 }
 
 #define TRACE_SERIALIZE_FUNCT_ENTRY(funct, item, that, bArr) \
 { \
-	if (axiscpp::AxisTrace::isTraceOn()) \
-	{ \
-		void *traceItem = item; \
-		void *traceThat = that; \
-		bool traceBArr = bArr; \
-		axiscpp::AxisTrace::traceEntry(NULL, "AXIS_SERIALIZE_FUNCT", (void*)(funct), 3, \
-			TRACETYPE_POINTER, 1, (void*)&traceItem, \
-			TRACETYPE_POINTER, 1, (void*)&traceThat, \
-			TRACETYPE_BOOL, 0, (void*)&traceBArr); \
-	} \
+    if (axiscpp::AxisTrace::isTraceOn()) \
+    { \
+        void *traceItem = item; \
+        void *traceThat = that; \
+        bool traceBArr = bArr; \
+        axiscpp::AxisTrace::traceEntry(NULL, "AXIS_SERIALIZE_FUNCT", (void*)(funct), 3, \
+            TRACETYPE_POINTER, 1, (void*)&traceItem, \
+            TRACETYPE_POINTER, 1, (void*)&traceThat, \
+            TRACETYPE_BOOL, 0, (void*)&traceBArr); \
+    } \
 }
 
 #define TRACE_SERIALIZE_FUNCT_EXIT(funct, status) \
 { \
-	if (axiscpp::AxisTrace::isTraceOn()) \
-		axiscpp::AxisTrace::traceExit(NULL, "AXIS_SERIALIZE_FUNCT", (void*)(funct), 1, \
-			TRACETYPE_INT, 0, (void*)&(status)); \
+    if (axiscpp::AxisTrace::isTraceOn()) \
+        axiscpp::AxisTrace::traceExit(NULL, "AXIS_SERIALIZE_FUNCT", (void*)(funct), 1, \
+            TRACETYPE_INT, 0, (void*)&(status)); \
 }
 
 #else
