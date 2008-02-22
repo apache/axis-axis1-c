@@ -118,12 +118,17 @@ WSDDMemBufInputStream::getBytes(char* pcBuffer, int* piRetSize)
         
     int nBufLen = strlen(m_pcWSDDMemBuffer);
     if (0 == nBufLen) 
+    {
+    	pcBuffer[0]=0; /* put null */
+    	*piRetSize = 0;
         return TRANSPORT_FINISHED;
+    }
         
     nBufLen = ((*piRetSize - 1) < nBufLen) ? (*piRetSize - 1) : nBufLen;
     strncpy(pcBuffer, m_pcWSDDMemBuffer, nBufLen);
     pcBuffer[nBufLen] = 0;
     m_pcWSDDMemBuffer+=nBufLen;
+    *piRetSize = nBufLen;
     return TRANSPORT_IN_PROGRESS;
 }
 
