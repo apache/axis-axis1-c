@@ -830,7 +830,7 @@ public class ClientStubWriter
         }
         else if (returntypeissimple)
         {
-            if (returntype.isNillable () 
+            if (returntype.isNillable () || returntype.isOptional() 
                     || CUtils.isPointerType(outparamType))
             {
                 // Just return the pointer as-is - no need to delete.

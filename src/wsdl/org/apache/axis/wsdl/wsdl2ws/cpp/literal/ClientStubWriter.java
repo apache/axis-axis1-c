@@ -837,7 +837,7 @@ public class ClientStubWriter
         }
         else if (returntypeissimple)
         {
-            if (returntype.isNillable () || CUtils.isPointerType(outparamType))
+            if (returntype.isNillable () || returntype.isOptional() || CUtils.isPointerType(outparamType))
             {
                 writer.write( "\t\t\t\tRet = m_pCall->" 
                         + CUtils.getParameterGetValueMethodName( outparamType, false) 
