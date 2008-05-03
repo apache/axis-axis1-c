@@ -1306,10 +1306,13 @@ processHTTPHeader()
     }
     while( iPosition != std::string::npos);
     
-    // HTTP protocol allows body with no Content-Length and no transfer-encoding! This 
-    // means that we read from the stream until we are unable to read anymore. So ensure
-    // state is set correctly. In this case we set it to not-chunked.
-    if (m_GetBytesState == eWaitingForHTTPHeader)
+    // If 100 Continue is the response header, then we need to ensure we are waiting for 
+    // an HTTP header.  Otherwise, HTTP protocol allows body with no Content-Length 
+    // and no transfer-encoding! This means that we read from the stream until we are unable 
+    // to read anymore. So ensure state is set correctly. In this case we set it to not-chunked.
+    if (m_iResponseHTTPStatusCode == 100)
+        m_GetBytesState = eWaitingForHTTPHeader;
+    else if (m_GetBytesState == eWaitingForHTTPHeader)
         m_GetBytesState = eSOAPMessageIsNotChunked;
 }
 
@@ -1374,7 +1377,8 @@ processRootMimeBody()
 /* HTTPTransport::processMimeHeaders() Is a public method used to
  * parse the Mime headers of the response message.
  */
-void HTTPTransport::processMimeHeader()
+void HTTPTransport::
+processMimeHeader()
 {
     string::size_type pos = 0;
     string::size_type temppos = 0;
@@ -1647,11 +1651,11 @@ readHTTPHeader()
     int numberOfBytesRead;
     string::size_type iHTTPStart;
     string::size_type iHTTPEnd; 
-         
+       
+    resetInputStateMachine();
+    
     do
     {
-        resetInputStateMachine();
-        
         while (m_strReceived.find( ASCII_S_HTTP) == std::string::npos 
                 || m_strReceived.find( ASCII_S_CRLFCRLF) == std::string::npos)
         {
@@ -1679,6 +1683,10 @@ readHTTPHeader()
         
         // Process the HTTP header
         processHTTPHeader();
+        
+        // Remove the HTTP header from the buffer since it has been processed.
+        m_strReceived = m_strReceived.substr( iHTTPEnd + 4);
+        m_iBytesLeft  = m_strReceived.length(); 
     }
     while( m_iResponseHTTPStatusCode == 100); 
     
@@ -1693,11 +1701,6 @@ readHTTPHeader()
         m_GetBytesState = eWaitingForHTTPHeader;
         throw HTTPTransportException( SERVER_TRANSPORT_HTTP_EXCEPTION, m_strResponseHTTPStatusMessage.c_str());
     }      
-    
-    // We are home-free, now is the time to set the HTTP body - i.e. the SOAP message. Note that
-    // we could have done this in the loop, but why allocate resources if we do not need to.
-    m_strReceived = m_strReceived.substr( iHTTPEnd + 4);
-    m_iBytesLeft  = m_strReceived.length(); 
 }
 
 int HTTPTransport::
