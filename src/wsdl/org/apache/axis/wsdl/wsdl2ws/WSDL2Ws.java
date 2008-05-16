@@ -350,14 +350,11 @@ public class WSDL2Ws
         if (qname != null)
         {
             type = this.typeMap.getType(qname);
-            //boolean wrapped = true; //TODO take this from a commandline argument
-            boolean wrapped = wsdlWrappingStyle;
-
             if (type == null)
                 throw new WrapperFault("Unregistered type " + qname + " referred");
 
             //get inner attributes and elements and add them as parameters 
-            if (wrapped)
+            if (wsdlWrappingStyle)
                 addOutputElementsToMethodInfo(minfo, type);
             else
             { 
@@ -504,12 +501,10 @@ public class WSDL2Ws
             if (qname != null)
             {
                 type = this.typeMap.getType(qname);
-                boolean wrapped = wsdlWrappingStyle;
-    
                 if (type == null)
                     throw new WrapperFault("unregistered type " + qname + " referred");
     
-                if (wrapped)
+                if (wsdlWrappingStyle)
                 {
                     //get inner attributes and elements and add them as parameters
                     addInputElementsToMethodInfo(minfo, type);
