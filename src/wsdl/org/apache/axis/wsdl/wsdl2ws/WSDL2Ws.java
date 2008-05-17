@@ -82,9 +82,6 @@ import org.w3c.dom.Node;
 public class WSDL2Ws
 {
     public static boolean verbose = false;
-    
-    // we don't write out the make files anymore - 9th Nov 2005
-//    public static String makeSystem = null;
 
     private String language;
     private boolean wsdlWrappingStyle;
@@ -146,14 +143,32 @@ public class WSDL2Ws
     public void preprocess() throws WrapperFault
     {
         typeMap = new TypeMap(language);
-        this.serviceentry = getServiceEntry();
-        Iterator ports = this.serviceentry.getService().getPorts().values().iterator();
+
+        // Get service definition.
+        // This code is taken from the org.apache.axis.wsdl.gen.Parser Class.
+        // WSDL file should have only one service, The first service found is utilized.
+        this.serviceentry = null;
+        Iterator it = symbolTable.getHashMap().values().iterator();
+        while (it.hasNext())
+        {
+            Vector v = (Vector) it.next();
+            for (int i = 0; i < v.size(); ++i)
+            {
+                SymTabEntry entry = (SymTabEntry) v.elementAt(i);
+
+                if (entry instanceof ServiceEntry)
+                    this.serviceentry = (ServiceEntry) entry;
+            }
+        }
+        
+        if (this.serviceentry == null)
+            throw new WrapperFault("The service does not exist");
 
         //TODO  resolve this
         //        this code support only the service with onebindings it will not care about the
         //        second binding if exists.. if the NO binding specified it will failed
         //        this should be resolved by let user specify which binding to use.
-
+        Iterator ports = this.serviceentry.getService().getPorts().values().iterator();
         Binding binding = null;
         if (ports.hasNext())
             binding = ((Port) ports.next()).getBinding();
@@ -624,15 +639,12 @@ public class WSDL2Ws
         return typeMap;
     }
 
-    public void generateWrappers(
-        String servicename,
-        String targetoutputLocation,
-        String targetLanguage,
-        String targetEngine,
-        String wsdlWrapStyle)
-        throws WrapperFault
+    public void generateWrappers(String servicename,
+                                 String targetoutputLocation,
+                                 String targetLanguage,
+                                 String targetEngine,
+                                 String wsdlWrapStyle) throws WrapperFault
     {
-
         if (targetLanguage == null)
             targetLanguage = "c++";
         if (targetEngine == null)
@@ -659,17 +671,12 @@ public class WSDL2Ws
         this.getWebServiceInfo();
 
         //TODO    check whether the name at the WrapperConstant Doclit is right "doc"
-        WebServiceContext wsContext =new WebServiceContext(
-                new WrapperInfo(
-                        serviceStyle,
-                        targetLanguage,
-                        targetoutputLocation,
-                        targetEngine,
-                        transportURI,
-                        targetEndpointURI,
-                        targetNameSpaceOfWSDL),
-                    new ServiceInfo(servicename, qualifiedServiceName, methods),
-                    typeMap);  
+        WebServiceContext wsContext =
+            new WebServiceContext(new WrapperInfo(serviceStyle, targetLanguage, 
+                                                  targetoutputLocation, targetEngine,
+                                                  transportURI, targetEndpointURI, targetNameSpaceOfWSDL),
+                                  new ServiceInfo(servicename, qualifiedServiceName, methods), 
+                                  typeMap);  
         WebServiceGenerator wsg = WebServiceGeneratorFactory.createWebServiceGenerator(wsContext);
         
         if (wsg == null)
@@ -692,31 +699,6 @@ public class WSDL2Ws
         }
         
         wsg.generate();
-    }
-
-
-    /**
-     * This code is taken from the org.apache.axis.wsdl.gen.Parser Class.
-     * WSDL file should have only one service, The first service 
-     * find is utilized.
-     * @return
-     * @throws WrapperFault
-     */
-    public ServiceEntry getServiceEntry() throws WrapperFault
-    {
-        Iterator it = symbolTable.getHashMap().values().iterator();
-        while (it.hasNext())
-        {
-            Vector v = (Vector) it.next();
-            for (int i = 0; i < v.size(); ++i)
-            {
-                SymTabEntry entry = (SymTabEntry) v.elementAt(i);
-
-                if (entry instanceof ServiceEntry)
-                    return (ServiceEntry) entry;
-            }
-        }
-        throw new WrapperFault("the service does not exists");
     }
 
     public Type createTypeInfo(QName typename, String targetLanguage)  throws WrapperFault
