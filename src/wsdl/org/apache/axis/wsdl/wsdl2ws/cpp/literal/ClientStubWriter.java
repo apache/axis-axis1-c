@@ -81,42 +81,46 @@ public class ClientStubWriter
         if (0 == noOfOutParams)
             returntype = null;
         else if (1 == noOfOutParams)
-            returntype = (ParameterInfo) minfo.getOutputParameterTypes().iterator().next();
+            returntype = (ParameterInfo)minfo.getOutputParameterTypes().iterator().next();
         else
             isAllTreatedAsOutParams = true;
-      
-        Collection params = minfo.getInputParameterTypes ();
-        String methodName = minfo.getMethodname ();
+
+        Collection params = minfo.getInputParameterTypes();
+        String methodName = minfo.getMethodname();
         Type retType = null;
         boolean returntypeissimple = false;
         boolean returntypeisarray = false;
         String outparamType = null;
         
         if (returntype != null)
-            retType = wscontext.getTypemap ().getType (returntype.getSchemaName ());
-        
-        if (retType != null)
         {
-            if (retType.isSimpleType ())
-                outparamType = CUtils.getclass4qname (retType.getBaseType ());
+            retType = wscontext.getTypemap().getType(returntype.getSchemaName());
+            if (retType != null)
+            {
+                if (retType.isSimpleType())
+                {
+                    outparamType = CUtils.getclass4qname(retType.getBaseType());
+                }
+                else
+                {
+                    outparamType = WrapperUtils.getClassNameFromParamInfoConsideringArrays(returntype,wscontext);
+                    returntypeisarray = (outparamType.lastIndexOf("_Array") > 0);
+                }
+            
+                returntypeisarray |= retType.isArray();
+            }
             else
             {
-                outparamType = WrapperUtils.getClassNameFromParamInfoConsideringArrays (returntype, wscontext);
-                returntypeisarray = (outparamType.lastIndexOf ("_Array") > 0);
+                outparamType = returntype.getLangName();
             }
-            
-            returntypeisarray |= retType.isArray ();
-        }
-        else if (returntype != null)
-            outparamType = returntype.getLangName ();
         
-        if (returntype != null)
-            returntypeissimple = CUtils.isSimpleType (outparamType);
+            returntypeissimple = CUtils.isSimpleType(outparamType);
+        }
 
         //=============================================================================
         // Generate method prototype
         //=============================================================================        
-
+        
         CUtils.printMethodComment(writer, "This method wraps the service method " + methodName + ".");
         
         //method signature
@@ -126,15 +130,15 @@ public class ClientStubWriter
         Type type;
         
         if (returntype == null)
-            writer.write ("void");
+            writer.write("void");
         else if (returntypeissimple
                     && (!(returntype.isNillable() || returntype.isOptional()) 
                             || CUtils.isPointerType(outparamType)))
-            writer.write (outparamType);
-        else if (outparamType.lastIndexOf ("*") > 0)
-            writer.write (outparamType);
+            writer.write(outparamType);
+        else if (outparamType.lastIndexOf("*") > 0)
+            writer.write(outparamType);
         else 
-            writer.write (outparamType + "*");
+            writer.write(outparamType + "*");
 
         writer.write (" " + classname + "::\n" + methodName + "(");
         ArrayList paramsB = (ArrayList) params;
@@ -239,9 +243,9 @@ public class ClientStubWriter
                     writer.write (", " + paramTypeName + "* Value" + i);
             } // end for loop
         } // end if (0 < paramsB.size ())
-    
+        
         // Multiples parameters so fill the methods prototype
-        ArrayList paramsC = (ArrayList) minfo.getOutputParameterTypes ();
+        ArrayList paramsC = (ArrayList) minfo.getOutputParameterTypes();
         if (isAllTreatedAsOutParams)
             for (int i = 0; i < paramsC.size (); i++)
             {

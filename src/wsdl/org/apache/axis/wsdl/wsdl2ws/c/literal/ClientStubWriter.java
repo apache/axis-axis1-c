@@ -74,25 +74,29 @@ public class ClientStubWriter
         String outparamType = null;
         
         if (returntype != null)
-            retType = wscontext.getTypemap().getType(returntype.getSchemaName());
-    
-        if (retType != null)
         {
-            if (retType.isSimpleType())
-                outparamType = CUtils.getclass4qname(retType.getBaseType());
+            retType = wscontext.getTypemap().getType(returntype.getSchemaName());
+            if (retType != null)
+            {
+                if (retType.isSimpleType())
+                {
+                    outparamType = CUtils.getclass4qname(retType.getBaseType());
+                }
+                else
+                {
+                    outparamType = WrapperUtils.getClassNameFromParamInfoConsideringArrays(returntype,wscontext);
+                    returntypeisarray = (outparamType.lastIndexOf("_Array") > 0);
+                }
+            
+                returntypeisarray |= retType.isArray();
+            }
             else
             {
-                outparamType = WrapperUtils.getClassNameFromParamInfoConsideringArrays(returntype,wscontext);
-                returntypeisarray = (outparamType.lastIndexOf("_Array") > 0);
+                outparamType = returntype.getLangName();
             }
-            
-            returntypeisarray |= retType.isArray();
-        }
-        else if (returntype != null)
-            outparamType = returntype.getLangName();
         
-        if (returntype != null)
             returntypeissimple = CUtils.isSimpleType(outparamType);
+        }
 
         //=============================================================================
         // Generate method prototype
