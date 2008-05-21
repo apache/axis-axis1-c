@@ -342,13 +342,11 @@ public class WSDL2Ws
     private void addDocumentStyleOutputMessageToMethodInfo(MethodInfo minfo, Part part)
         throws WrapperFault
     {
-        Element element;
         QName qname;
-        ParameterInfo pinfo;
-        Type type;
         QName minfoqname;
         
-        element = symbolTable.getElement(part.getElementName());
+        Element element = symbolTable.getElement(part.getElementName());
+        
         if (element == null)
         {
             // the part reference a type.
@@ -360,73 +358,58 @@ public class WSDL2Ws
             qname = element.getRefType().getQName();
             minfoqname = element.getQName();
         }
+        
         minfo.setOutputMessage(minfoqname);
 
-        if (qname != null)
-        {
-            type = this.typeMap.getType(qname);
-            if (type == null)
-                throw new WrapperFault("Unregistered type " + qname + " referred");
+        if (qname == null)
+            return;
+        
+        Type type = this.typeMap.getType(qname);
+        if (type == null)
+            throw new WrapperFault("Unregistered type " + qname + " referenced!");
 
-            //get inner attributes and elements and add them as parameters 
-            if (wsdlWrappingStyle)
-                addOutputElementsToMethodInfo(minfo, type);
-            else
-            { 
-                // for non-wrapped style wsdl's
-                String elementName = (String) element.getQName().getLocalPart();
-                pinfo = new ParameterInfo();
-                pinfo.setType(type);
-                pinfo.setParamName(elementName, typeMap);
-                pinfo.setElementName(type.getName());
-                if (type.getName().equals(CUtils.anyTypeQname))
+        // For wrapped style, inner attributes and elements are added as parameters.
+        // For unwrapped style, objects are used for the parameters (i.e. classes or structures).
+        if (wsdlWrappingStyle)
+        {
+            Iterator names = type.getElementnames();
+            while (names.hasNext())
+            {
+                String elementname  = (String) names.next();
+                ElementInfo eleinfo = type.getElementForElementName(elementname);
+                Type innerType      = eleinfo.getType();
+                
+                ParameterInfo pinfo = new ParameterInfo();
+                pinfo.setType(innerType);
+                pinfo.setParamName(elementname, typeMap);
+                
+                if (eleinfo.getMaxOccurs() > 1)
+                    pinfo.setArray(true);
+                
+                pinfo.setNillable(eleinfo.getNillable());
+                
+                if (eleinfo.getMinOccurs() == 0)
+                    pinfo.setOptional(true);
+                else
+                    pinfo.setOptional(false);
+
+                pinfo.setElementName(type.getElementForElementName(elementname).getName());
+                
+                if (innerType.getName().equals(CUtils.anyTypeQname))
                     pinfo.setAnyType(true);
+
                 minfo.addOutputParameter(pinfo);
             }
         }
-    }
-
-    /**
-     * @param minfo
-     * @param type
-     */
-    private void addOutputElementsToMethodInfo(MethodInfo minfo, Type type)
-    {
-        ParameterInfo pinfo;
-        ElementInfo eleinfo;
-        ArrayList elementlist = new ArrayList();
-        Iterator names = type.getElementnames();
-        while (names.hasNext())
-        {
-            elementlist.add(names.next());
-        }
-        
-        Type innerType;
-        for (int i = 0; i < elementlist.size(); i++)
-        {
-            String elementname = (String) elementlist.get(i);
-            eleinfo = type.getElementForElementName(elementname);
-            innerType = eleinfo.getType();
-            
-            pinfo = new ParameterInfo();
-            pinfo.setType(innerType);
-            pinfo.setParamName(elementname, typeMap);
-            
-            if (eleinfo.getMaxOccurs() > 1)
-                pinfo.setArray(true);
-            
-            pinfo.setNillable(eleinfo.getNillable());
-            
-            if (eleinfo.getMinOccurs() == 0)
-                pinfo.setOptional(true);
-            else
-                pinfo.setOptional(false);
-
-            pinfo.setElementName(type.getElementForElementName(elementname).getName());
-            
-            if (innerType.getName().equals(CUtils.anyTypeQname))
+        else
+        { 
+            String elementName = (String) element.getQName().getLocalPart();
+            ParameterInfo pinfo = new ParameterInfo();
+            pinfo.setType(type);
+            pinfo.setParamName(elementName, typeMap);
+            pinfo.setElementName(type.getName());
+            if (type.getName().equals(CUtils.anyTypeQname))
                 pinfo.setAnyType(true);
-
             minfo.addOutputParameter(pinfo);
         }
     }
@@ -480,134 +463,104 @@ public class WSDL2Ws
      */
     private void addDocumentStyleInputMessageToMethodInfo(Operation op, MethodInfo minfo)
         throws WrapperFault
-    {
-        Element element;
+    {   
+        // If no input parameters, simply return.
+        Iterator paramlist = op.getInput().getMessage().getParts().values().iterator();
+        if(!paramlist.hasNext())
+            return;
+        
+        Part part = (Part) paramlist.next();
+        
+        QName minfoqname;
         QName qname;
-        ParameterInfo pinfo;
-        Type type;
-        Iterator paramlist;
-
-        paramlist = op.getInput().getMessage().getParts().values().iterator();
         
-        Part part = null;
+        Element element = symbolTable.getElement(part.getElementName());
         
-        if( paramlist.hasNext())
-            part = (Part) paramlist.next();
-        
-        if( part != null)
+        if (element == null)
         {
-            QName minfoqname;
-            element = symbolTable.getElement(part.getElementName());
-            
-            if (element == null)
-            {
-                // the part reference a type.
-                qname = symbolTable.getType(part.getTypeName()).getQName();
-                minfoqname = symbolTable.getType(part.getTypeName()).getQName();
-            }
-            else
-            {
-                qname = element.getRefType().getQName();
-                minfoqname = element.getQName();
-            }
-            
-            minfo.setInputMessage(minfoqname);
-    
-            if (qname != null)
-            {
-                type = this.typeMap.getType(qname);
-                if (type == null)
-                    throw new WrapperFault("unregistered type " + qname + " referred");
-    
-                if (wsdlWrappingStyle)
-                {
-                    //get inner attributes and elements and add them as parameters
-                    addInputElementsToMethodInfo(minfo, type);
-                    addInputAttributesToMethodInfo(minfo, type);
-                }
-                else
-                { 
-                    // for non-wrapped style wsdl's
-                    String elementName = (String) element.getQName().getLocalPart();
-                    
-                    pinfo = new ParameterInfo();
-                    
-                    pinfo.setType(type);
-                    pinfo.setParamName(elementName, typeMap);
-                    pinfo.setElementName(type.getName());
-                    if (type.getName().equals(CUtils.anyTypeQname))
-                        pinfo.setAnyType(true);
+            // the part reference a type.
+            qname = symbolTable.getType(part.getTypeName()).getQName();
+            minfoqname = symbolTable.getType(part.getTypeName()).getQName();
+        }
+        else
+        {
+            qname = element.getRefType().getQName();
+            minfoqname = element.getQName();
+        }
+        
+        minfo.setInputMessage(minfoqname);
 
+        if (qname == null)
+            return;
+        
+        Type type = this.typeMap.getType(qname);
+        if (type == null)
+            throw new WrapperFault("unregistered type " + qname + " referenced");
+
+        // For wrapped style, inner attributes and elements are added as parameters.
+        // For unwrapped style, objects are used for the parameters (i.e. classes or structures).
+        if (wsdlWrappingStyle)
+        {
+            // Add input elements to method info
+            Iterator elementNames = type.getElementnames();
+            while (elementNames.hasNext())
+            {
+                String elementname = (String) elementNames.next();
+                ElementInfo eleinfo = type.getElementForElementName(elementname);
+                Type innerType = eleinfo.getType();
+                
+                ParameterInfo pinfo = new ParameterInfo();
+                pinfo.setType(innerType);
+                pinfo.setParamName(elementname, typeMap);            
+                
+                if (eleinfo.getMaxOccurs() > 1)
+                    pinfo.setArray(true);
+
+                pinfo.setElementName(type.getElementForElementName(elementname).getName());
+                
+                if (innerType.getName().equals(CUtils.anyTypeQname))
+                    pinfo.setAnyType(true);
+                
+                pinfo.setNillable(eleinfo.getNillable());
+                
+                if (eleinfo.getMinOccurs() == 0)
+                    pinfo.setOptional(true);
+                else
+                    pinfo.setOptional(false);
+
+                minfo.addInputParameter(pinfo);
+            }
+            
+            // add input attributes to method info
+            Iterator attributes = type.getAttributes();
+            if (attributes != null)
+            {
+                while (attributes.hasNext())
+                {
+                    CContainedAttribute attr = (CContainedAttribute)attributes.next();
+    
+                    ParameterInfo pinfo = new ParameterInfo();
+    
+                    pinfo.setType(attr.getType());
+                    pinfo.setParamName(attr.getName(), typeMap);
+                    pinfo.setElementName(attr.getType().getName());
+                    pinfo.setAttribute(true);
+                    
                     minfo.addInputParameter(pinfo);
                 }
             }
         }
-    }
-
-    /**
-     * @param minfo
-     * @param type
-     */
-    private void addInputAttributesToMethodInfo(MethodInfo minfo, Type type)
-    {
-        Iterator attributes = type.getAttributes();
-        if (attributes == null)
-            return;
-        
-        while (attributes.hasNext())
-        {
-            CContainedAttribute attr = (CContainedAttribute)attributes.next();
-
+        else
+        { 
+            String elementName = (String) element.getQName().getLocalPart();
+            
             ParameterInfo pinfo = new ParameterInfo();
-
-            pinfo.setType(attr.getType());
-            pinfo.setParamName(attr.getName(), typeMap);
-            pinfo.setElementName(attr.getType().getName());
-            pinfo.setAttribute(true);
             
-            minfo.addInputParameter(pinfo);
-        }
-    }
-
-    /**
-     * @param minfo
-     * @param type
-     */
-    private void addInputElementsToMethodInfo(MethodInfo minfo, Type type)
-    {
-        ParameterInfo pinfo;
-        ElementInfo eleinfo;
-        Iterator elementNames = type.getElementnames();
-        ArrayList elementlist = new ArrayList();
-        while (elementNames.hasNext())
-        {
-            elementlist.add(elementNames.next());
-        }
-
-        for (int i = 0; i < elementlist.size(); i++)
-        {
-            String elementname = (String) elementlist.get(i);
-            eleinfo = type.getElementForElementName(elementname);
-            Type innerType = eleinfo.getType();
-            
-            pinfo = new ParameterInfo();
-            pinfo.setType(innerType);
-            pinfo.setParamName(elementname, typeMap);            
-            
-            if (eleinfo.getMaxOccurs() > 1)
-                pinfo.setArray(true);
-
-            pinfo.setElementName(type.getElementForElementName(elementname).getName());
-            
-            if (innerType.getName().equals(CUtils.anyTypeQname))
+            pinfo.setType(type);
+            pinfo.setParamName(elementName, typeMap);
+            pinfo.setElementName(type.getName());
+            if (type.getName().equals(CUtils.anyTypeQname))
                 pinfo.setAnyType(true);
-            
-            pinfo.setNillable(eleinfo.getNillable());
-            
-            if (eleinfo.getMinOccurs() == 0)
-                pinfo.setOptional(true);
-            else
-                pinfo.setOptional(false);
 
             minfo.addInputParameter(pinfo);
         }
@@ -651,16 +604,13 @@ public class WSDL2Ws
             targetEngine = "server";
         if (targetoutputLocation == null)
             targetoutputLocation = "./";
-        if (wsdlWrapStyle == null)
-            wsdlWrapStyle = "wrapped";
-
-        this.language = targetLanguage;
-
-        if (wsdlWrapStyle.equalsIgnoreCase("wrapped"))
+        if (wsdlWrapStyle == null || wsdlWrapStyle.equalsIgnoreCase("wrapped"))
             this.wsdlWrappingStyle = true;
         else
             this.wsdlWrappingStyle = false;
 
+        this.language = targetLanguage;
+            
         preprocess();
 
         CUtils.setLanguage(language);

@@ -64,7 +64,8 @@ public class CLArgParser
                 }
                 else if (option.equals("w")) 
                 {
-                    if (!"wrapped".equalsIgnoreCase(optionValue))
+                    if (!"wrapped".equalsIgnoreCase(optionValue)
+                            && !"unwrapped".equalsIgnoreCase(optionValue))
                         optionsAreValid = false;
                 }
                 else if (!option.equals("h") && !option.equals("o") 
