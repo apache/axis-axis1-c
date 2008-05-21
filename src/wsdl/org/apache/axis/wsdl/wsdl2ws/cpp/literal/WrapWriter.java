@@ -157,19 +157,20 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
             elementName = param.getElementNameAsSOAPString();
             if (type != null && type.isSimpleType())
             {
-                if (param.isNillable() && 
-                        !(CUtils.isPointerType(type.getLanguageSpecificName())))
+                String splatPtr = " ";
+                String splatDeref = " ";
+                
+                if (!CUtils.isPointerType(type.getLanguageSpecificName()))
                 {
-                    writer.write("\t" + paraTypeName + "* v" + i
-                            + " = pIWSDZ->" + CUtils.getParameterGetValueMethodName(paraTypeName,false)
-                            + "(\"" + elementName + "\",0);\n");
+                    if (param.isNillable() || param.isOptional())
+                        splatPtr   = " * ";
+                    else 
+                        splatDeref = " * ";
                 }
-                else
-                {
-                    writer.write("\t" + paraTypeName + " v" + i
-                            + " = *(pIWSDZ->" + CUtils.getParameterGetValueMethodName(paraTypeName,false)
-                            + "(\"" + elementName + "\",0));\n");
-                }
+                
+                writer.write("\t" + paraTypeName + splatPtr + "v" + i + " =" + splatDeref
+                        + "(pIWSDZ->" + CUtils.getParameterGetValueMethodName(paraTypeName,false)
+                        + "(\"" + elementName + "\",0));\n");
             }
             else if ((CUtils.isSimpleType(param.getLangName())))
             {
