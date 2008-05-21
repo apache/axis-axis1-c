@@ -122,28 +122,17 @@ public class WrapWriter extends CPPClassWriter
     {
         try
         {
-            writer.write(
-                "/*implementation of WrapperClassHandler interface*/\n");
+            CUtils.printMethodComment(writer, "This method handles faults.");
+
 
             writer.write(
                 "void "
                     + classname
                     + "::\nonFault(void *pMsg)\n{"
                     + "\n\tpWs->onFault();\n}\n\n");
-            /*writer.write(
-                "int "
-                    + classname
-                    + "::\ninit()\n{\n"
-                    + "\tpWs->init();\n\treturn AXIS_SUCCESS;\n}\n\n");
-            writer.write(
-                "int "
-                    + classname
-                    + "::\nfini()\n{\n"
-                    + "\tpWs->fini();\n\treturn AXIS_SUCCESS;\n}\n\n");
-					*/
+
             writeInvoke();
-            writer.write(
-                "\n/*Methods corresponding to the web service methods*/\n");
+
             MethodInfo minfo;
             for (int i = 0; i < methods.size(); i++)
             {
@@ -184,37 +173,34 @@ public class WrapWriter extends CPPClassWriter
      */
     private void writeInvoke() throws IOException
     {
-        writer.write("\n/*\n");
-        writer.write(" * This method invokes the right service method \n");
-        writer.write(" */\n");
+        CUtils.printMethodComment(writer, "This method invokes the right service method.");
+
         writer.write("int " + classname + "::\ninvoke(void *pMsg)\n{\n");
         writer.write("\tIMessageData* mc = (IMessageData*)pMsg;\n");
-        //msgdata.setSoapFault(new SOAPFault(new AxisFault()))
         writer.write("\tconst AxisChar *method = mc->getOperationName();\n");
+        
         //if no methods in the service simply return
-        if (methods.size() == 0)
+        if (methods.size() != 0)
         {
-            writer.write("}\n");
-            return;
-        }
-        MethodInfo minfo = (MethodInfo) methods.get(0);
-        //if conditions (if parts)		
-        writer.write(
-            "\tif( (0 == strcmp(method, \"" + minfo.getInputMessage().getLocalPart() + "\")) || (0 == strcmp(method, \"" + minfo.getMethodname() + "\")) )\n");
-        writer.write("\t\treturn " + minfo.getMethodname() + "(mc);\n");
-        //(else if parts)
-        if (methods.size() > 1)
-        {
-            for (int i = 1; i < methods.size(); i++)
+            MethodInfo minfo = (MethodInfo) methods.get(0);
+            //if conditions (if parts)		
+            writer.write(
+                "\tif( (0 == strcmp(method, \"" + minfo.getInputMessage().getLocalPart() + "\")) || (0 == strcmp(method, \"" + minfo.getMethodname() + "\")) )\n");
+            writer.write("\t\treturn " + minfo.getMethodname() + "(mc);\n");
+            //(else if parts)
+            if (methods.size() > 1)
             {
-                minfo = (MethodInfo) methods.get(i);
-                writer.write(
-                    "\telse if ( (0 == strcmp(method, \"" + minfo.getInputMessage().getLocalPart() + "\")) || (0 == strcmp(method, \"" + minfo.getMethodname() + "\")) )\n");
-                writer.write("\t\treturn " + minfo.getMethodname() + "(mc);\n");
+                for (int i = 1; i < methods.size(); i++)
+                {
+                    minfo = (MethodInfo) methods.get(i);
+                    writer.write(
+                        "\telse if ( (0 == strcmp(method, \"" + minfo.getInputMessage().getLocalPart() + "\")) || (0 == strcmp(method, \"" + minfo.getMethodname() + "\")) )\n");
+                    writer.write("\t\treturn " + minfo.getMethodname() + "(mc);\n");
+                }
             }
+            //(else part)
+            writer.write("\telse return AXIS_FAIL;\n");
         }
-        //(else part)
-        writer.write("\telse return AXIS_FAIL;\n");
         //end of method
         writer.write("}\n\n");
     }

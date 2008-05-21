@@ -107,32 +107,29 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
             }
         }
         
-        writer.write("\n/*\n");
-        writer.write(" * This method wrap the service method \n");
-        writer.write(" */\n");
+        CUtils.printMethodComment(writer, "This method wraps the service method " + methodName + ".");
+
         //method signature
         writer.write("int " + classname + "::" + methodName + "(void* pMsg)\n{\n");
         writer.write("\tIMessageData* mc = (IMessageData*)pMsg;\n");
-        writer.write("\tint nStatus;\n");
+        writer.write("\tint nStatus;\n\n");
+        
         writer.write("\tIWrapperSoapSerializer* pIWSSZ = NULL;\n");
         writer.write("\tmc->getSoapSerializer(&pIWSSZ);\n");
         writer.write("\tif (!pIWSSZ)\n");
-        writer.write("\t{\n");
-        writer.write("\t\treturn AXIS_FAIL;\n");
-        writer.write("\t}\n");
+        writer.write("\t\treturn AXIS_FAIL;\n\n");
+        
         writer.write("\tIWrapperSoapDeSerializer* pIWSDZ = NULL;\n");
         writer.write("\tmc->getSoapDeSerializer(&pIWSDZ);\n");
         writer.write("\tif (!pIWSDZ)\n");
-        writer.write("\t{\n");
-        writer.write("\t\treturn AXIS_FAIL;\n");
-        writer.write("\t}\n");
-        writer.write("\t/* check whether we have got correct message */\n");
+        writer.write("\t\treturn AXIS_FAIL;\n\n");
+
+        writer.write("\t// check whether we have got correct message\n");
         writer.write("\tif (AXIS_SUCCESS != pIWSDZ->checkMessageBody(\""
                 + minfo.getInputMessage().getLocalPart() + "\", \""
                 + minfo.getInputMessage().getNamespaceURI() + "\"))\n");
-        writer.write("\t{\n");
-        writer.write("\t\treturn AXIS_FAIL;\n");
-        writer.write("\t}\n");
+        writer.write("\t\treturn AXIS_FAIL;\n\n");
+
         if (minfo.getOutputMessage() != null)
         {
             writer.write("\tpIWSSZ->createSoapMethod(\""
@@ -307,9 +304,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
         } // for loop
         
         writer.write("\n\tif (AXIS_SUCCESS != (nStatus = pIWSDZ->getStatus()))\n");
-        writer.write("\t{\n");
-        writer.write("\t\treturn nStatus;\n");
-        writer.write("\t}\n\n");
+        writer.write("\t\treturn nStatus;\n\n");
         
         // Multiples parameters so fill the methods prototype
         if (isAllTreatedAsOutParams)
@@ -340,7 +335,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                     ||(!returntypeisarray 
                             && (!returntypeissimple
                                     || (returntypeissimple 
-                                            && returntype.isNillable()
+                                            && (returntype.isNillable() || returntype.isOptional())
                                             && !(CUtils.isPointerType(retType.getLanguageSpecificName()))))))
                 writer.write(" *");
             
@@ -370,6 +365,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                 {
                     String returnParamTypeName = retType.getLanguageSpecificName();
                     if (returntype.isNillable()
+                            || returntype.isOptional()
                             || CUtils.isPointerType(returnParamTypeName))
                     {
                         writer.write("\t\treturn pIWSSZ->addOutputParam(\"" + returnParamName
