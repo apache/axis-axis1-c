@@ -160,9 +160,10 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
                 {
                     ParameterInfo nparam = (ParameterInfo) params.next();
                     String paramTypeName = WrapperUtils.getClassNameFromParamInfoConsideringArrays(nparam, wscontext);
-                    if (CUtils.isSimpleType(paramTypeName)
-                            && nparam.isNillable()
-                            && !(CUtils.isPointerType(paramTypeName)))
+                    if ((paramTypeName.lastIndexOf ("_Array") > 0)
+                            || (CUtils.isSimpleType(paramTypeName)
+                                    && nparam.isNillable()
+                                    && !(CUtils.isPointerType(paramTypeName))))
                         writer.write(", " + paramTypeName + " * Value" + j);
                     else
                         writer.write(", " + paramTypeName + " Value" + j);
