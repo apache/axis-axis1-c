@@ -159,11 +159,7 @@ int AxisConfig::readConfFile ()
     // Even if axiscpp.conf does not exist in AXISCPP_DEPLOY default values 
     // will be used. Therefore return AXIS_SUCCESS
     if (AXIS_SUCCESS != fileConfig.fileOpen (sNewConfPath, "r"))
-    {
-        printf ("Warning - The configuration file was not found (%s).\n", sNewConfPath);
-        printf("Using default values\n");
         return AXIS_SUCCESS;
-    }
 
     while (AXIS_SUCCESS == fileConfig.fileGet (carrLine, CONFBUFFSIZE))
     {
