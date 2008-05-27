@@ -714,7 +714,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
         // Determine whether to print variable used for peaking ahead
         for (int i = 0; i < attribs.length; i++)
         {
-            if (attribs[i].isOptional() && !attribs[i].isAttribute() && !attribs[i].isArray())
+            if (!attribs[i].isAttribute() && attribs[i].isOptional() && !attribs[i].isArray() && !attribs[i].isAnyType())
             {
                 writer.write("\tconst char* peekedElementName;\n");
                 break;
