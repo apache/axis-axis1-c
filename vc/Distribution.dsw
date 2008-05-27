@@ -69,19 +69,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "Axis2Transport"=".\TRANSPORT\Axis2\Axis2Transport.dsp" - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "Axis3"=".\transport\Axis3\Axis3.dsp" - Package Owner=<4>
+Project: "Axis3Transport"=".\TRANSPORT\Axis3\Axis3.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{

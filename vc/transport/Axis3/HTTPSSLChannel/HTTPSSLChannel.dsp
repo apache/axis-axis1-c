@@ -100,10 +100,6 @@ SOURCE=..\..\..\..\src\transport\axis3\HTTPSSLChannel\HTTPSSLChannelInstantiator
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\..\src\transport\axis3\HTTPTransportException.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\..\src\platforms\windows\PlatformSpecificWindows.cpp
 # End Source File
 # Begin Source File

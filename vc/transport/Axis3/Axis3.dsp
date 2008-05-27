@@ -100,7 +100,7 @@ SOURCE=..\..\..\src\transport\axis3\HTTPTransport.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\src\transport\axis3\HTTPTransportException.cpp
+SOURCE=..\..\..\src\soap\apr_base64.cpp
 # End Source File
 # Begin Source File
 

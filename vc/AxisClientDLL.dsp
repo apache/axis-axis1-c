@@ -126,10 +126,6 @@ SOURCE=..\src\common\AxisConfig.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\common\AxisConfigException.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\common\AxisCPPConfigDefaults.cpp
 # End Source File
 # Begin Source File
@@ -142,22 +138,6 @@ SOURCE=..\src\engine\AxisEngine.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\engine\AxisEngineException.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\common\AxisGenException.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\xml\AxisParseException.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\soap\AxisSoapException.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\common\AxisTrace.cpp
 # End Source File
 # Begin Source File
@@ -167,10 +147,6 @@ SOURCE=..\src\common\AxisUserAPI.cpp
 # Begin Source File
 
 SOURCE=..\src\common\AxisUtils.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\wsdd\AxisWsddException.cpp
 # End Source File
 # Begin Source File
 
