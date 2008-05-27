@@ -224,6 +224,7 @@ public class BeanParamWriter extends ParamCFileWriter
                 namespace = "Axis_URI_" + classname;
             
             // if the attribute is a choice following should do
+            boolean ifCheckPrinted = false;
             if (attribs[i].getChoiceElement())
             {
                 if (!firstIfWritten)
@@ -234,13 +235,17 @@ public class BeanParamWriter extends ParamCFileWriter
                 else
                     writer.write("\telse if");
 
+                ifCheckPrinted = true;
                 writer.write("(param->" + attribs[i].getParamNameAsMember() + ")\n\t{\n\t");
             }
  
             //if the attribute is a 'all' following should do
             if (attribs[i].getAllElement())
                 if (attribs[i].getMinOccurs() == 0)
+                {
+                    ifCheckPrinted = true;
                     writer.write("\tif(param->" + attribs[i].getParamNameAsMember() + ")\n\t{\n\t");
+                }
              
             if (attribs[i].isAnyType())
             {
@@ -291,92 +296,66 @@ public class BeanParamWriter extends ParamCFileWriter
                 else
                     baseTypeName = typeName;
                 
-                if (attribs[i].isOptional())
+                if (!ifCheckPrinted && attribs[i].isOptional())
                     writer.write("\tif (param->" + attribs[i].getParamNameAsMember() + " != NULL)\n\t");
                 
-                if (CUtils.isPointerType(baseTypeName))
-                {
-                    writer.write("\taxiscSoapSerializerSerializeAsElement(pSZ, \""
-                            + attribs[i].getElementNameAsSOAPString()
-                            + "\", " + namespace
-                            + ", (void*)(param->" + attribs[i].getParamNameAsMember() + "), "
-                            + CUtils.getXSDTypeForBasicType(baseTypeName) + ");\n");
-                }
-                else if (attribs[i].getChoiceElement()
+                // If the simple type is a choice it is handled
+                // as a pointer variable.  This is the same in 'all' element and nillable elements.
+                String ampersand = "&";
+                if (CUtils.isPointerType(baseTypeName)
+                            || attribs[i].getChoiceElement()
                             || attribs[i].getAllElement()
                             || isElementNillable(i) || isElementOptional(i))
-                {
-                    // If the simple type is a choice it is handled
-                    // as a pointer variable. These variables should be defined
-                    // as pointers in the header file. This is the same in 'all' element
-                    
-                    if (((attribs[i].getChoiceElement())
-                            && (isElementNillable(i)))
-                            && !(CUtils.isPointerType(attribs[i].getTypeName())) )
-                    {
-                        writer.write("\t\taxiscSoapSerializerSerializeAsElement(pSZ, \""
-                                + attribs[i].getElementNameAsSOAPString() + "\", " + namespace
-                                + ", (void*)(*(param->" + attribs[i].getParamNameAsMember()
-                                + ")), " + CUtils.getXSDTypeForBasicType(baseTypeName) + ");\n");
-                    }
-                    else
-                    {
-                        writer.write("\t\taxiscSoapSerializerSerializeAsElement(pSZ, \""
-                                + attribs[i].getElementNameAsSOAPString() + "\", " + namespace
-                                + ", (void*)(param->" + attribs[i].getParamNameAsMember()
-                                + "), " + CUtils.getXSDTypeForBasicType(baseTypeName) + ");\n");
-                    }    
-                }                           
-                else
-                {
-                    writer.write("\taxiscSoapSerializerSerializeAsElement(pSZ, \""
-                            + attribs[i].getElementNameAsSOAPString() + "\", " + namespace
-                            + ", (void*)&(param->" + attribs[i].getParamNameAsMember()
-                            + "), " + CUtils.getXSDTypeForBasicType(baseTypeName) + ");\n");
-                }
+                    ampersand = "";
+                
+                writer.write("\taxiscSoapSerializerSerializeAsElement(pSZ, \""
+                        + attribs[i].getElementNameAsSOAPString() + "\", " + namespace
+                        + ", (void*)" + ampersand + "(param->" + attribs[i].getParamNameAsMember() + "), "
+                        + CUtils.getXSDTypeForBasicType(baseTypeName) + ");\n");
             }
             else
             {
                 //if complex type
                 String elm = attribs[i].getParamNameAsSOAPString();
-
                 if (attribs[i].isReference())
                     elm = attribs[i].getTypeName();
                 
-                if (attribs[i].isOptional())
-                    writer.write("\tif (param->" + attribs[i].getParamNameAsMember() + " != NULL)\n\t{\n");
+                String tab = "";
+                if (ifCheckPrinted)
+                    tab = "\t";
+                else if (attribs[i].isOptional())
+                {
+                    tab = "\t";
+                    writer.write("\tif (param->" + attribs[i].getParamNameAsMember() + " != NULL)\n\t{\n\t");
+                }
                 
                 if (attribs[i].getNsQualified())
                 {
                     writer.write("\taxiscSoapSerializerSerialize(pSZ, \"<\", axiscSoapSerializerGetNamespacePrefix(pSZ, \""
                                     + type.getName().getNamespaceURI()
                                     + "\", NULL), \":\", \"" + elm + "\", 0);\n");
-                    writer.write("\tAxis_Serialize_" + attribs[i].getTypeName()
+                    writer.write(tab + "\tAxis_Serialize_" + attribs[i].getTypeName()
                             + "(param->" + attribs[i].getParamNameAsMember() + ", pSZ, 0);\n");
-                    writer.write("\taxiscSoapSerializerSerialize(pSZ, \"</\", axiscSoapSerializerGetNamespacePrefix(pSZ, \""
+                    writer.write(tab + "\taxiscSoapSerializerSerialize(pSZ, \"</\", axiscSoapSerializerGetNamespacePrefix(pSZ, \""
                                     + type.getName().getNamespaceURI()
                                     + "\", NULL), \":\", \"" + elm + "\", \">\", 0);\n");
                 }
                 else
                 {
                     writer.write("\taxiscSoapSerializerSerialize(pSZ, \"<" + elm + "\", 0);\n");
-                    writer.write("\tAxis_Serialize_" + attribs[i].getTypeName()
+                    writer.write(tab + "\tAxis_Serialize_" + attribs[i].getTypeName()
                             + "(param->" + attribs[i].getParamNameAsMember() + ", pSZ, 0);\n");
-                    writer.write("\taxiscSoapSerializerSerialize(pSZ, \"</" + elm + "\", \">\", 0);\n");
+                    writer.write(tab + "\taxiscSoapSerializerSerialize(pSZ, \"</" + elm + "\", \">\", 0);\n");
                 }
                 
-                if (attribs[i].isOptional())
+                if (!ifCheckPrinted && attribs[i].isOptional())
                     writer.write("\t}\n");
             }
 
             //end if choice element
 
-            if (attribs[i].getChoiceElement())
+            if (ifCheckPrinted)
                 writer.write("\t}\n");
-            
-            if (attribs[i].getAllElement())
-                if (attribs[i].getMinOccurs() == 0)
-                    writer.write("\t}\n");
         }
         
         //=============================================================================
@@ -500,8 +479,15 @@ public class BeanParamWriter extends ParamCFileWriter
             return;
         }  
         
-        // We always use this...
-        writer.write("\tconst char* peekedElementName;\n");
+        // Determine whether to print variable used for peaking ahead
+        for (int i = 0; i < attribs.length; i++)
+        {
+            if (attribs[i].isOptional() && !attribs[i].isAttribute())
+            {
+                writer.write("\tconst char* peekedElementName;\n");
+                break;
+            }
+        }
 
         //=============================================================================
         // Deserialize attributes.
