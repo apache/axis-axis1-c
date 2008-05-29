@@ -80,12 +80,14 @@ public class ClientStubWriter
             {
                 if (retType.isSimpleType())
                 {
-                    outparamType = CUtils.getclass4qname(retType.getBaseType());
+                   outparamType = CUtils.getclass4qname(retType.getBaseType());
+                   returntypeissimple = true;
                 }
                 else
                 {
-                    outparamType = WrapperUtils.getClassNameFromParamInfoConsideringArrays(returntype,wscontext);
-                    returntypeisarray = (outparamType.lastIndexOf("_Array") > 0);
+                    outparamType = WrapperUtils.getClassNameFromParamInfoConsideringArrays(returntype, wscontext);
+                    returntypeissimple = CUtils.isSimpleType (outparamType);
+                    returntypeisarray = (outparamType.lastIndexOf ("_Array") > 0);
                 }
             
                 returntypeisarray |= retType.isArray();
@@ -93,9 +95,8 @@ public class ClientStubWriter
             else
             {
                 outparamType = returntype.getLangName();
-            }
-        
-            returntypeissimple = CUtils.isSimpleType(outparamType);
+                returntypeissimple = CUtils.isSimpleType(outparamType);
+            } 
         }
 
         //=============================================================================

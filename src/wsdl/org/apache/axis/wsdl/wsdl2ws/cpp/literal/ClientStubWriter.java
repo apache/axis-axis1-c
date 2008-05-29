@@ -99,28 +99,29 @@ public class ClientStubWriter
             {
                 if (retType.isSimpleType())
                 {
-                    outparamType = CUtils.getclass4qname(retType.getBaseType());
+                   outparamType = CUtils.getclass4qname(retType.getBaseType());
+                   returntypeissimple = true;
                 }
                 else
                 {
-                    outparamType = WrapperUtils.getClassNameFromParamInfoConsideringArrays(returntype,wscontext);
-                    returntypeisarray = (outparamType.lastIndexOf("_Array") > 0);
+                    outparamType = WrapperUtils.getClassNameFromParamInfoConsideringArrays (returntype, wscontext);
+                    returntypeissimple = CUtils.isSimpleType (outparamType);
+                    returntypeisarray = (outparamType.lastIndexOf ("_Array") > 0);
                 }
             
                 returntypeisarray |= retType.isArray();
             }
             else
             {
-                outparamType = returntype.getLangName();
-            }
-        
-            returntypeissimple = CUtils.isSimpleType(outparamType);
+                outparamType = returntype.getLangName ();
+                returntypeissimple = CUtils.isSimpleType (outparamType);
+            } 
         }
 
         //=============================================================================
         // Generate method prototype
         //=============================================================================        
-        
+
         CUtils.printMethodComment(writer, "This method wraps the service method " + methodName + ".");
         
         //method signature
