@@ -115,27 +115,27 @@ public abstract class ParamWriter extends BasicFileWriter
             extensionBaseAttrib.setElementName(elemi.getName());
         }
         
-        ArrayList attribfeilds = new ArrayList();
-        ArrayList elementfeilds = new ArrayList();
+        ArrayList attribfields = new ArrayList();
+        ArrayList elementfields = new ArrayList();
 
         Iterator names = type.getAttributes();
         if (names != null)
             while (names.hasNext())
-                attribfeilds.add(names.next());
+                attribfields.add(names.next());
         
         names = type.getElementnames();
         while (names.hasNext())
         {
-            elementfeilds.add(names.next());
+            elementfields.add(names.next());
         }
         
-        int intAttrFieldSz = attribfeilds.size();
+        int intAttrFieldSz = attribfields.size();
         attributeParamCount = intAttrFieldSz;
-        int intEleFieldSz = elementfeilds.size();
+        int intEleFieldSz = elementfields.size();
         this.attribs = new AttributeInfo[intAttrFieldSz + intEleFieldSz];
         for (int i = 0; i < intAttrFieldSz; i++)
         {
-            CContainedAttribute attr = (CContainedAttribute)attribfeilds.get(i);
+            CContainedAttribute attr = (CContainedAttribute)attribfields.get(i);
             
             this.attribs[i] = new AttributeInfo(this.classname);
             this.attribs[i].setParamName(attr.getName(), wscontext.getTypemap());
@@ -155,7 +155,7 @@ public abstract class ParamWriter extends BasicFileWriter
         for (int i = intAttrFieldSz; i < intAttrFieldSz + intEleFieldSz; i++)
         {
             this.attribs[i] = new AttributeInfo(this.classname);
-            this.attribs[i].setParamName((String) elementfeilds.get(i - attributeParamCount), wscontext.getTypemap());
+            this.attribs[i].setParamName((String) elementfields.get(i - attributeParamCount), wscontext.getTypemap());
             ElementInfo elem = type.getElementForElementName(this.attribs[i].getParamName());
             Type elementType = elem.getType();
             if (CUtils.isAnyType(elementType.getName()))
