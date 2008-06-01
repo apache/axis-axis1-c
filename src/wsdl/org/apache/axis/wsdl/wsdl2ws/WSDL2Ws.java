@@ -166,8 +166,7 @@ public class WSDL2Ws
 
         //TODO  resolve this
         //        this code support only the service with onebindings it will not care about the
-        //        second binding if exists.. if the NO binding specified it will failed
-        //        this should be resolved by let user specify which binding to use.
+        //        second binding if exists..resolve by letting user specify which binding to use.
         Iterator ports = this.serviceentry.getService().getPorts().values().iterator();
         Binding binding = null;
         if (ports.hasNext())
@@ -216,8 +215,7 @@ public class WSDL2Ws
                 //for the each binding operation found
                 if (operations.get(i) instanceof javax.wsdl.BindingOperation)
                 {
-                    javax.wsdl.BindingOperation bindinop =
-                        (javax.wsdl.BindingOperation) operations.get(i);
+                    javax.wsdl.BindingOperation bindinop = (javax.wsdl.BindingOperation) operations.get(i);
                     MethodInfo method = getMethodInfoByName(bindinop.getName());
                     method.setSoapAction(SymbolTableParsingUtils.getSoapAction(bindinop));
                     SymbolTableParsingUtils.getInputInfo(bindinop.getBindingInput(), method);
@@ -233,49 +231,40 @@ public class WSDL2Ws
 
     private ArrayList getServiceInfo(PortType porttype) throws WrapperFault
     {
-        //get opeation list
+        //get operation list
         Iterator oplist = porttype.getOperations().iterator();
         ArrayList methods = new ArrayList();
 
         //for each operation
         while (oplist.hasNext())
         {
-            Operation op = (Operation) oplist.next();
-            methods.add(setMethodInfo(op)); //add operation to operation List
-        }
-        return methods;
-    }
+            Operation op     = (Operation) oplist.next();
+            MethodInfo minfo = new MethodInfo(op.getName());
 
-    /**
-     * @param op Operation from which to set MethodInfo
-     * @return MethodInfo
-     * @throws WrapperFault
-     */
-    private MethodInfo setMethodInfo(Operation op) throws WrapperFault
-    {
-        MethodInfo minfo = new MethodInfo(op.getName());
-
-        //setting the faults
-        this.addFaultInfo(op.getFaults(), minfo);
-        
-        //add each parameter to parameter list
-        if ("document".equals(bindingEntry.getBindingStyle().getName()))
-            this.addDocumentStyleInputMessageToMethodInfo(op, minfo);
-        else
-            this.addRPCStyleInputMessageToMethodInfo(op, minfo);
-
-        //get the return type
-        if (op.getOutput() != null)
-        {
-            Iterator returnlist = op.getOutput().getMessage().getParts().values().iterator();
-            if (returnlist.hasNext()
-                    && "document".equals(bindingEntry.getBindingStyle().getName()))
-                this.addDocumentStyleOutputMessageToMethodInfo(minfo, (Part) returnlist.next());
+            //setting the faults
+            this.addFaultInfo(op.getFaults(), minfo);
+            
+            //add each parameter to parameter list
+            if ("document".equals(bindingEntry.getBindingStyle().getName()))
+                this.addDocumentStyleInputMessageToMethodInfo(op, minfo);
             else
-                this.addRPCStyleOutputMessageToMethodInfo(op, minfo);
+                this.addRPCStyleInputMessageToMethodInfo(op, minfo);
+
+            //get the return type
+            if (op.getOutput() != null)
+            {
+                Iterator returnlist = op.getOutput().getMessage().getParts().values().iterator();
+                if (returnlist.hasNext() && "document".equals(bindingEntry.getBindingStyle().getName()))
+                    this.addDocumentStyleOutputMessageToMethodInfo(minfo, (Part) returnlist.next());
+                else
+                    this.addRPCStyleOutputMessageToMethodInfo(op, minfo);
+            }
+            
+            //add operation to operation List
+            methods.add(minfo); 
         }
         
-        return minfo;
+        return methods;
     }
 
     /**
@@ -344,19 +333,21 @@ public class WSDL2Ws
     {
         QName qname;
         QName minfoqname;
+        TypeEntry elementTypeEntry;
         
         Element element = symbolTable.getElement(part.getElementName());
-        
+
         if (element == null)
         {
-            // the part reference a type.
-            qname = symbolTable.getType(part.getTypeName()).getQName();
-            minfoqname = symbolTable.getType(part.getTypeName()).getQName();
+            elementTypeEntry = symbolTable.getType(part.getTypeName());
+            qname            = elementTypeEntry.getQName();
+            minfoqname       = elementTypeEntry.getQName();
         }
         else
         {
-            qname = element.getRefType().getQName();
-            minfoqname = element.getQName();
+            elementTypeEntry = element.getRefType();
+            qname            = elementTypeEntry.getQName();
+            minfoqname       = element.getQName();
         }
         
         minfo.setOutputMessage(minfoqname);
@@ -368,11 +359,12 @@ public class WSDL2Ws
         if (type == null)
             throw new WrapperFault("Unregistered type " + qname + " referenced!");
 
+        // TODO - need to look into this more.
         // For wrapped style, inner attributes and elements are added as parameters.
         // For unwrapped style, objects are used for the parameters (i.e. classes or structures).
-        if (wsdlWrappingStyle)
+        Iterator names = type.getElementnames();
+        if (names.hasNext() && wsdlWrappingStyle)
         {
-            Iterator names = type.getElementnames();
             while (names.hasNext())
             {
                 String elementname  = (String) names.next();
@@ -407,7 +399,14 @@ public class WSDL2Ws
             ParameterInfo pinfo = new ParameterInfo();
             pinfo.setType(type);
             pinfo.setParamName(elementName, typeMap);
-            pinfo.setElementName(type.getName());
+            if (type.isSimpleType())
+            {
+                pinfo.setElementName(element.getQName());
+            }
+            else
+            {
+            	pinfo.setElementName(type.getName());
+            }
             if (type.getName().equals(CUtils.anyTypeQname))
                 pinfo.setAnyType(true);
             minfo.addOutputParameter(pinfo);
