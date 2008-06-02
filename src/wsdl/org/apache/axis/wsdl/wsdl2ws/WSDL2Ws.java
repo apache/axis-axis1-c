@@ -362,9 +362,9 @@ public class WSDL2Ws
         // TODO - need to look into this more.
         // For wrapped style, inner attributes and elements are added as parameters.
         // For unwrapped style, objects are used for the parameters (i.e. classes or structures).
-        Iterator names = type.getElementnames();
-        if (names.hasNext() && wsdlWrappingStyle)
+        if (wsdlWrappingStyle)
         {
+            Iterator names = type.getElementnames();
             while (names.hasNext())
             {
                 String elementname  = (String) names.next();
