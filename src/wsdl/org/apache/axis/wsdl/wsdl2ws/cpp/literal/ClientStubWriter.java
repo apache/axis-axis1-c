@@ -97,14 +97,11 @@ public class ClientStubWriter
             retType = wscontext.getTypemap().getType(returntype.getSchemaName());
             if (retType != null)
             {
+                outparamType = WrapperUtils.getClassNameFromParamInfoConsideringArrays(returntype, wscontext);
                 if (retType.isSimpleType())
-                {
-                   outparamType = CUtils.getclass4qname(retType.getBaseType());
                    returntypeissimple = true;
-                }
                 else
                 {
-                    outparamType = WrapperUtils.getClassNameFromParamInfoConsideringArrays (returntype, wscontext);
                     returntypeissimple = CUtils.isSimpleType (outparamType);
                     returntypeisarray = (outparamType.lastIndexOf ("_Array") > 0);
                 }
@@ -844,9 +841,32 @@ public class ClientStubWriter
         {
             if (returntype.isNillable () || returntype.isOptional() || CUtils.isPointerType(outparamType))
             {
-                writer.write( "\t\t\t\tRet = m_pCall->" 
-                        + CUtils.getParameterGetValueMethodName( outparamType, false) 
-                        + "(\"" + returntype.getParamNameAsSOAPString() + "\", 0);\n");
+                // Tricky part...if in the WSDL the response is an element that references a type, for example:
+                // 
+                // <simpleType name="ActionResultType">
+                //    <restriction base="xsd:string">
+                //        <enumeration value="Success"/>
+                //        <enumeration value="Connection Failure"/>
+                //    </restriction>
+                // </simpleType>
+                // <element name="callControlResponse" type="tns:ActionResultType"/>
+                //
+                // Then the SOAP response looks like the following:
+                //  <ns37:callControlResponse xmlns:ns37="http://ws.xxx.com/ip/">Success</ns37:callControlResponse>
+                //
+                // So we need to get the data without consuming any elements since the root has already been consumed 
+                // by checkMessage() call. May be a hack but not sure what else can be done at this time.
+                if (returntype.getElementAsCharData())
+                {
+                    String xsdType = CUtils.getXSDTypeForBasicType(outparamType);
+                    writer.write("\t\t\t\tm_pCall->getChardataAs((void **)&Ret, " + xsdType + ");\n");
+                }
+                else
+                {
+                    writer.write( "\t\t\t\tRet = m_pCall->" 
+                            + CUtils.getParameterGetValueMethodName( outparamType, false) 
+                            + "(\"" + returntype.getParamNameAsSOAPString() + "\", 0);\n");
+                }
             }
             else
             {

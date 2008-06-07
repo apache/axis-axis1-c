@@ -45,7 +45,7 @@ public class ExceptionHeaderWriter extends HeaderFileWriter
     {
         //super(WrapperUtils.getClassNameFromFullyQualifiedName(wscontext.getSerInfo().getQualifiedServiceName()));
         super("Axis" + faultInfoName + "Exception"); //damitha
-        if (WSDL2Ws.verbose)
+        if (WSDL2Ws.c_verbose)
             System.out.println("faultInfoName is:" + faultInfoName);
         this.wscontext = wscontext;
         this.methods = wscontext.getSerInfo().getMethods();

@@ -3256,6 +3256,28 @@ int axiscCallCheckMessage(AXISCHANDLE call,
 }
 
 AXISC_STORAGE_CLASS_INFO 
+void axiscCallGetChardataAs(AXISCHANDLE call,
+		                    void** pValue, 
+		                    AXISC_XSDTYPE type)
+{
+    Call *c = (Call*)call;
+    
+    try
+    {
+        return c->getChardataAs( pValue,  (XSDTYPE)type);
+    }
+    catch ( AxisException& e  )
+    {
+        
+        processException(c, e);
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
+    }    
+}
+
+AXISC_STORAGE_CLASS_INFO 
 void * axiscCallCheckFault(AXISCHANDLE call, 
                            const AxiscChar * pName, 
                            const AxiscChar * pNamespace) 

@@ -94,7 +94,7 @@ public class ParmHeaderFileWriter extends ParamWriter
                     + "_" + getFileType().toUpperCase() + "_H__INCLUDED_)*/\n");
             writer.flush();
             writer.close();
-            if (WSDL2Ws.verbose)
+            if (WSDL2Ws.c_verbose)
                 System.out.println(getFilePath().getAbsolutePath() + " created.....");
         } 
         catch (IOException e)

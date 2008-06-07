@@ -991,6 +991,11 @@ int Call::checkMessage( const AxisChar * pName, const AxisChar * pNamespace)
     return m_nStatus;
 }
 
+void Call::getChardataAs(void** pValue, XSDTYPE type)
+{
+	m_pIWSDZ->getChardataAs( pValue,  type);
+}
+
 void* Call::checkFault (const AxisChar* pName, const AxisChar* pNamespace)
 {
      return m_pIWSDZ->checkForFault (pName, pNamespace);

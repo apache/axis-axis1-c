@@ -37,6 +37,7 @@
 #include <axis/AxisUserAPIArrays.hpp>
 #include <axis/WSDDDefines.hpp>
 #include <axis/IHeaderBlock.hpp>
+#include <axis/IWrapperSoapDeSerializer.hpp>
 
 AXIS_CPP_NAMESPACE_START
 
@@ -1651,6 +1652,24 @@ public:
         return (SoapSerializer *) m_pIWSSZ;
     }
 
+    /**
+     * Method to retrieve the current SOAP DeSerializer object.
+     *
+     * @return A pointer to the currently loaded SOAP deserialiser.
+     */
+    IWrapperSoapDeSerializer * getSOAPDeSerializer()
+    {
+        return (IWrapperSoapDeSerializer *) m_pIWSDZ;
+    }
+    
+    /**
+     * Deserialize character data, ie the data typically enclosed by an XML tag
+     * 
+     * @param pValue object into which deserialized value will be placed
+     * @param type The xsd simple type of the data.
+     */
+    void getChardataAs(void** pValue, XSDTYPE type);
+    
   /**
     * Set proxy server and port for transport.
     *

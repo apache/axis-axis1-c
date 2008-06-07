@@ -1703,6 +1703,15 @@ AXISC_STORAGE_CLASS_INFO
 int axiscCallGetStatus(AXISCHANDLE call);
 
 /**
+ * Deserialize character data, ie the data typically enclosed by an XML tag
+ * 
+ * @param pValue object into which deserialized value will be placed
+ * @param type The xsd simple type of the data.
+ */
+AXISC_STORAGE_CLASS_INFO
+void axiscCallGetChardataAs(AXISCHANDLE call, void** pValue, AXISC_XSDTYPE type);
+
+/**
  * Set proxy server and port for transport.
  *
  * @param pcProxyHost Host name of proxy server.

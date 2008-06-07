@@ -66,13 +66,13 @@ public class AllParamWriter implements SourceWriter
 
                 if (!type.isExternalized())
                 {
-                    if(WSDL2Ws.verbose)
+                    if(WSDL2Ws.c_verbose)
                         System.out.println("\nSkipping type " + type.getName());
                 }                
                 else if (type.isArray())
                 {
                     QName qname = type.getName();
-                    if (WSDL2Ws.verbose)
+                    if (WSDL2Ws.c_verbose)
                         System.out.println("\nArray processing for type: " + qname);
                     
                     String elementType = type.getElementType();
@@ -81,7 +81,7 @@ public class AllParamWriter implements SourceWriter
                         if (TypeMap.isAnonymousType(elementType))
                             elementType = CUtils.sanitizeString(elementType);
                         
-                        if (WSDL2Ws.verbose)
+                        if (WSDL2Ws.c_verbose)
                             System.out.println("    Array element type " 
                                     + type.getElementType() + " normalized to " + elementType);
                         
@@ -91,7 +91,7 @@ public class AllParamWriter implements SourceWriter
                         if (currentType != null)
                             if ( currentType.isSimpleType())
                             {
-                                if (WSDL2Ws.verbose)
+                                if (WSDL2Ws.c_verbose)
                                     System.out.println("    Array writer not called - element type is simple");
 
                                 continue;
@@ -108,7 +108,7 @@ public class AllParamWriter implements SourceWriter
                     ArrayParamHeaderWriter writer = (new ArrayParamHeaderWriter(wscontext, type));
                     if (!writer.isSimpleTypeArray())
                     {
-                        if (WSDL2Ws.verbose)
+                        if (WSDL2Ws.c_verbose)
                             System.out.println("    Array writer called......");
                         
                         writer.writeSource();
@@ -117,7 +117,7 @@ public class AllParamWriter implements SourceWriter
                 }
                 else
                 {
-                    if (WSDL2Ws.verbose)
+                    if (WSDL2Ws.c_verbose)
                         System.out.println("\nstruct writer called for......" + type.getName());
                     
                     (new BeanParamWriter(wscontext, type)).writeSource();

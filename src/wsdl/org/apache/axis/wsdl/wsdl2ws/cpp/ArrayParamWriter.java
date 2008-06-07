@@ -58,7 +58,7 @@ public class ArrayParamWriter extends ParamWriter
             this.writeMethods();
             writer.flush();
             writer.close();
-            if (WSDL2Ws.verbose)
+            if (WSDL2Ws.c_verbose)
                 System.out.println(getFilePath().getAbsolutePath() + " created.....");
         }
         catch (IOException e)
