@@ -58,8 +58,7 @@ public class SymbolTableParsingUtils
         if (soapbinding != null
                 && soapbinding.size() > 0
                 && (soapbinding.get(0) instanceof javax.wsdl.extensions.soap.SOAPBinding))
-            return ((javax.wsdl.extensions.soap.SOAPBinding) soapbinding.get(0))
-                    .getTransportURI();
+            return ((javax.wsdl.extensions.soap.SOAPBinding) soapbinding.get(0)).getTransportURI();
         return null;
     }
 
@@ -86,8 +85,7 @@ public class SymbolTableParsingUtils
             {
                 if (soapbodies.get(j) instanceof javax.wsdl.extensions.soap.SOAPBody)
                 {
-                    javax.wsdl.extensions.soap.SOAPBody body = ((javax.wsdl.extensions.soap.SOAPBody) soapbodies
-                            .get(j));
+                    javax.wsdl.extensions.soap.SOAPBody body = ((javax.wsdl.extensions.soap.SOAPBody) soapbodies.get(j));
                     methodinfo.setInputEncoding(body.getEncodingStyles());
                     methodinfo.setInputUse(body.getUse());
                     methodinfo.setInputNamespaceURI(body.getNamespaceURI());
@@ -109,8 +107,7 @@ public class SymbolTableParsingUtils
             {
                 if (soapbodies.get(j) instanceof javax.wsdl.extensions.soap.SOAPBody)
                 {
-                    javax.wsdl.extensions.soap.SOAPBody body = ((javax.wsdl.extensions.soap.SOAPBody) soapbodies
-                            .get(j));
+                    javax.wsdl.extensions.soap.SOAPBody body = ((javax.wsdl.extensions.soap.SOAPBody) soapbodies.get(j));
                     methodinfo.setInputEncoding(body.getEncodingStyles());
                     methodinfo.setInputUse(body.getUse());
                     methodinfo.setOutputNamespaceURI(body.getNamespaceURI());
