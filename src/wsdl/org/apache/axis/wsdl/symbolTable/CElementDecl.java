@@ -19,6 +19,8 @@ package org.apache.axis.wsdl.symbolTable;
 
 import javax.xml.namespace.QName;
 
+import org.apache.axis.wsdl.wsdl2ws.info.Type;
+
 /**
  * Simple utility struct for holding element declarations.
  * 
@@ -29,61 +31,67 @@ import javax.xml.namespace.QName;
  */
 public class CElementDecl //extends ElementDecl
 {
+    public static int UNBOUNDED = 999999999;
+    
     private QName name;
-    private TypeEntry type;
+    private TypeEntry typeEntry = null;
+    private Type type = null;
 
+    // An item that is not set and has minOccurs=0 should not be passed over the wire.  This
+    // is slightly different than nillable=true which causes nil=true to be passed over the wire.
     private int minOccurs = 1;
     private int maxOccurs = 1;
     private boolean nillable = false;
     private boolean optional = false;
 
-    // The following property is set if minOccurs=0.
-    // An item that is not set and has minOccurs=0 
-    // should not be passed over the wire.  This
-    // is slightly different than nillable=true which
-    // causes nil=true to be passed over the wire.
-    private boolean minOccursIs0 = false;
-
-    // Indicate if the CElementDecl represents
-    // an xsd:any element
+    // Indicate if the CElementDecl represents an xsd:any element
     private boolean anyElement = false;
     
-    // indicate if the CElementDecl represents 
-    // an xsd:choice element 
+    // indicate if the CElementDecl represents an xsd:choice element 
     private boolean choiceElement = false;
     
-    // Chinthana:
-    // indicate if the CElementDecl represents 
-    // an xsd:all element 
+    // indicate if the CElementDecl represents an xsd:all element 
     private boolean allElement = false;
     
     //This field is set to true if the element is elementFormDefault qualified.
     //This specifies whether the element must be namespace qualified or not in the SOAP message.
     private boolean nsQualified = false;
     
-    
     /** Field documentation */
     private String documentation;
 
-    public CElementDecl()
-    {}
-
     public CElementDecl(TypeEntry type, QName name)
     {
-        this.type = type;
+        this.typeEntry = type;
         this.name = name;
     }
 
-    public TypeEntry getType()
+    public CElementDecl(Type type, QName name)
+    {
+        this.type = type;
+        this.name = name;
+    }    
+    
+    public TypeEntry getTypeEntry()
+    {
+        return this.typeEntry;
+    }
+
+    public void setTypeEntry(TypeEntry type)
+    {
+        this.typeEntry = type;
+    }
+    
+    public Type getType()
     {
         return this.type;
     }
 
-    public void setType(TypeEntry type)
+    public void setType(Type type)
     {
         this.type = type;
     }
-
+    
     public QName getName()
     {
         return this.name;
@@ -94,16 +102,21 @@ public class CElementDecl //extends ElementDecl
         this.name = name;
     }
 
-    public boolean getMinOccursIs0()
+    public boolean isMinOccurs0()
     {
-        return this.minOccursIs0;
+        return minOccurs == 0;
     }
 
-    public void setMinOccursIs0(boolean minOccursIs0)
+    public boolean isMaxOccursUnbounded() 
     {
-        this.minOccursIs0 = minOccursIs0;
+        return maxOccurs == UNBOUNDED;
     }
-
+    
+    public boolean isMaxOccursExactlyOne() 
+    {
+        return maxOccurs == 1;
+    }
+    
     public boolean getAnyElement()
     {
         return this.anyElement;
@@ -133,100 +146,64 @@ public class CElementDecl //extends ElementDecl
     {
         this.allElement = allElement;
     }
-    
-    public boolean getNsQualified(){
-    	return nsQualified;
+
+    public boolean getNsQualified()
+    {
+        return nsQualified;
     }
-    
-    public void setNsQualified(boolean nsQual){
-    	nsQualified = nsQual;
+
+    public void setNsQualified(boolean nsQual)
+    {
+        nsQualified = nsQual;
     }
-    
-    
-    /**
-     * @return
-     */
+
     public int getMaxOccurs()
     {
         return this.maxOccurs;
     }
 
-    /**
-     * @return
-     */
     public int getMinOccurs()
     {
         return this.minOccurs;
     }
 
-    /**
-     * @return
-     */
     public boolean isNillable()
     {
         return this.nillable;
     }
 
-    /**
-     * @param i
-     */
     public void setMaxOccurs(int i)
     {
         maxOccurs = i;
     }
 
-    /**
-     * @param i
-     */
     public void setMinOccurs(int i)
     {
         minOccurs = i;
     }
 
-    /**
-     * @param b
-     */
     public void setNillable(boolean b)
     {
-		this.nillable = b;
+        this.nillable = b;
     }
 
-    /**
-     * Method setOptional
-     * 
-     * @param optional 
-     */
-    public void setOptional(boolean optional) {
+    public void setOptional(boolean optional)
+    {
         this.optional = optional;
     }
 
-    /**
-     * Method getOptional
-     * 
-     * @return 
-     */
-    public boolean getOptional() {
+    public boolean getOptional()
+    {
         return optional;
     }
 
-    /**
-     *       Method getDocumentation
-     *       @return string       
-     */    
-    
     public String getDocumentation()
     {
         return this.documentation;
     }
 
-    /**
-     *       Method setDocumentation
-     *       @param documentation
-     */
-
     public void setDocumentation(String documentation)
     {
         this.documentation = documentation;
     }
-
 }

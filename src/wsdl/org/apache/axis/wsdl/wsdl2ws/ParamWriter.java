@@ -30,10 +30,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.apache.axis.wsdl.wsdl2ws.info.AttributeInfo;
-import org.apache.axis.wsdl.wsdl2ws.info.ElementInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 import org.apache.axis.wsdl.symbolTable.CContainedAttribute;
+import org.apache.axis.wsdl.symbolTable.CElementDecl;
 
 public abstract class ParamWriter extends BasicFileWriter
 {
@@ -95,7 +95,7 @@ public abstract class ParamWriter extends BasicFileWriter
     /* genarate the attribs array */
     private void populateAttribList() throws WrapperFault
     {
-        ElementInfo elemi = type.getExtensionBaseType();
+        CElementDecl elemi = type.getExtensionBaseType();
         if (elemi != null)
         {
             extensionBaseAttrib = new AttributeInfo(this.classname);
@@ -156,7 +156,7 @@ public abstract class ParamWriter extends BasicFileWriter
         {
             this.attribs[i] = new AttributeInfo(this.classname);
             this.attribs[i].setParamName((String) elementfields.get(i - attributeParamCount), wscontext.getTypemap());
-            ElementInfo elem = type.getElementForElementName(this.attribs[i].getParamName());
+            CElementDecl elem = type.getElementForElementName(this.attribs[i].getParamName());
             Type elementType = elem.getType();
             if (CUtils.isAnyType(elementType.getName()))
                 this.attribs[i].setAnyType(true);
@@ -204,7 +204,7 @@ public abstract class ParamWriter extends BasicFileWriter
             if (elem.getMinOccurs() == 0)
                 this.attribs[i].setOptional(true);
             
-            this.attribs[i].setNillable(elem.getNillable());
+            this.attribs[i].setNillable(elem.isNillable());
         }
     }
 

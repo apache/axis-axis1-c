@@ -104,7 +104,7 @@ public class ParameterInfo
     public void setParamName(String paramName, TypeMap typeMap)
     {
         // Get the last identifier after anonymous token
-        if (paramName.lastIndexOf(SymbolTable.ANON_TOKEN) > 1)
+        if (paramName.lastIndexOf(SymbolTable.ANON_TOKEN) != -1)
         {
             paramName =
                 paramName.substring(paramName.lastIndexOf(SymbolTable.ANON_TOKEN) + 1,
@@ -178,7 +178,7 @@ public class ParameterInfo
         if (elementName != null)
         {
             String paramName = elementName.getLocalPart();
-            if (paramName.lastIndexOf(SymbolTable.ANON_TOKEN) > 1)
+            if (paramName.lastIndexOf(SymbolTable.ANON_TOKEN) != -1)
             {
                 paramName =
                     paramName.substring(paramName.lastIndexOf(SymbolTable.ANON_TOKEN) + 1,

@@ -18,7 +18,6 @@ package org.apache.axis.wsdl.symbolTable;
 
 import org.apache.axis.Constants;
 import org.apache.axis.utils.JavaUtils;
-import org.apache.axis.wsdl.wsdl2ws.info.ElementInfo;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -825,28 +824,21 @@ public class CSchemaUtils extends SchemaUtils
         {
             CElementDecl elem = new CElementDecl(type, nodeName);
             elem.setDocumentation(comments);
+            
             String minOccurs = Utils.getAttribute(elementNode, "minOccurs");
-
-            if ((minOccurs != null) && minOccurs.equals("0"))
-                elem.setMinOccursIs0(true);
-
-            if (minOccurs != null)
-            {
-            	if ("unbounded".equals(minOccurs))
-                	elem.setMinOccurs(ElementInfo.UNBOUNDED);
-            	else
-                	elem.setMinOccurs(Integer.parseInt(minOccurs));
+            if (minOccurs != null) {
+                elem.setMinOccurs(Integer.parseInt(minOccurs));
 			}
 			
             String maxOccurs = Utils.getAttribute(elementNode, "maxOccurs");
-            if (maxOccurs != null)
-            {
-            	if (maxOccurs.equals("unbounded"))
-                	elem.setMaxOccurs(ElementInfo.UNBOUNDED);
-            	else
-                	elem.setMaxOccurs(Integer.parseInt(maxOccurs));
+            if (maxOccurs != null) {
+                if (maxOccurs.equals("unbounded")) {
+                    elem.setMaxOccurs(CElementDecl.UNBOUNDED);
+                }
+                else
+                    elem.setMaxOccurs(Integer.parseInt(maxOccurs));
             }
-            
+
             elem.setNillable(JavaUtils.isTrueExplicitly(Utils.getAttribute(elementNode, "nillable")));
 
             String useValue = Utils.getAttribute(elementNode, "use");

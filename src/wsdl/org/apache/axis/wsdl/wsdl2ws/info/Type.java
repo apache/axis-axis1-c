@@ -30,6 +30,7 @@ import java.util.Vector;
 
 import javax.xml.namespace.QName;
 
+import org.apache.axis.wsdl.symbolTable.CElementDecl;
 import org.apache.axis.wsdl.symbolTable.SymbolTable;
 import org.apache.axis.wsdl.symbolTable.TypeEntry;
 import org.apache.axis.wsdl.symbolTable.CContainedAttribute;
@@ -43,7 +44,7 @@ public class Type
      * variable that represents extension base value in case of a complexType 
      * with simpleContent
      */
-    private ElementInfo extensionBaseType = null;
+    private CElementDecl extensionBaseType = null;
     
     /**
      * Indicate whether this is a schema defined simpleType
@@ -93,7 +94,7 @@ public class Type
     /* Should this type be generated or not - by default, set to true except for anonymous types */
     private boolean externalize = true;
 
-    private boolean	  restriction = false;
+    private boolean   restriction = false;
     private String    restrictionBaseType = null;
     private Vector    restrictionPattern = null;      // future - not currently used 
     private Vector    restrictionEnumeration = null;  // future - not currently used
@@ -194,7 +195,7 @@ public class Type
 
     /**
      */
-    public void setTypeNameForElementName(ElementInfo element)
+    public void setTypeNameForElementName(CElementDecl element)
     {
         String attribName = element.getName().getLocalPart();
 
@@ -209,9 +210,9 @@ public class Type
         this.vElements.add(attribName);
     }
 
-    public ElementInfo getElementForElementName(String attribName)
+    public CElementDecl getElementForElementName(String attribName)
     {
-        return (ElementInfo) this.elements.get(attribName);
+        return (CElementDecl) this.elements.get(attribName);
     }
 
     public String getLanguageSpecificName()
@@ -358,7 +359,7 @@ public class Type
     /**
      * @return ElementInfo
      */
-    public ElementInfo getExtensionBaseType()
+    public CElementDecl getExtensionBaseType()
     {
         return extensionBaseType;
     }
@@ -367,7 +368,7 @@ public class Type
      * Sets the extensionBaseType.
      * @param extensionBaseType The extensionBaseType to set
      */
-    public void setExtensionBaseType(ElementInfo extensionBaseType)
+    public void setExtensionBaseType(CElementDecl extensionBaseType)
     {
         this.extensionBaseType = extensionBaseType;
     }

@@ -54,7 +54,6 @@ import org.apache.axis.wsdl.symbolTable.ServiceEntry;
 import org.apache.axis.wsdl.symbolTable.SymTabEntry;
 import org.apache.axis.wsdl.symbolTable.SymbolTable;
 import org.apache.axis.wsdl.symbolTable.TypeEntry;
-import org.apache.axis.wsdl.wsdl2ws.info.ElementInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.FaultInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.MethodInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.ParameterInfo;
@@ -258,7 +257,7 @@ public class WSDL2Ws
         {
             Operation op     = (Operation) oplist.next();
             MethodInfo minfo = new MethodInfo(op.getName());
-
+            
             //setting the faults
             addFaultInfo(op.getFaults(), minfo);
             
@@ -405,10 +404,10 @@ public class WSDL2Ws
         // TODO - need to look into this more.
         // For wrapped style, inner attributes and elements are added as parameters.
         // For unwrapped style, objects are used for the parameters (i.e. classes or structures).
+        
+        Iterator names = type.getElementnames();
         if (c_wsdlWrappingStyle)
         {
-            Iterator names = type.getElementnames();
-            
             if (!names.hasNext())
             {
                 if (type.isSimpleType())
@@ -429,7 +428,7 @@ public class WSDL2Ws
                 while (names.hasNext())
                 {
                     String elementname  = (String) names.next();
-                    ElementInfo eleinfo = type.getElementForElementName(elementname);
+                    CElementDecl eleinfo = type.getElementForElementName(elementname);
                     Type innerType      = eleinfo.getType();
                     
                     ParameterInfo pinfo = new ParameterInfo();
@@ -439,7 +438,7 @@ public class WSDL2Ws
                     if (eleinfo.getMaxOccurs() > 1)
                         pinfo.setArray(true);
                     
-                    pinfo.setNillable(eleinfo.getNillable());
+                    pinfo.setNillable(eleinfo.isNillable());
                     
                     if (eleinfo.getMinOccurs() == 0)
                         pinfo.setOptional(true);
@@ -461,7 +460,15 @@ public class WSDL2Ws
             ParameterInfo pinfo = new ParameterInfo();
             pinfo.setType(type);
             pinfo.setParamName(elementName, c_typeMap);
-            pinfo.setElementName(type.getName());
+            
+            if (!names.hasNext() && type.isSimpleType())
+            {
+                pinfo.setElementName(element.getQName());
+                pinfo.setGetElementAsCharData(true);                
+            }
+            else
+                pinfo.setElementName(type.getName());
+            
             if (type.getName().equals(CUtils.anyTypeQname))
                 pinfo.setAnyType(true);
             minfo.addOutputParameter(pinfo);
@@ -560,7 +567,7 @@ public class WSDL2Ws
             while (elementNames.hasNext())
             {
                 String elementname = (String) elementNames.next();
-                ElementInfo eleinfo = type.getElementForElementName(elementname);
+                CElementDecl eleinfo = type.getElementForElementName(elementname);
                 Type innerType = eleinfo.getType();
                 
                 ParameterInfo pinfo = new ParameterInfo();
@@ -575,7 +582,7 @@ public class WSDL2Ws
                 if (innerType.getName().equals(CUtils.anyTypeQname))
                     pinfo.setAnyType(true);
                 
-                pinfo.setNillable(eleinfo.getNillable());
+                pinfo.setNillable(eleinfo.isNillable());
                 
                 if (eleinfo.getMinOccurs() == 0)
                     pinfo.setOptional(true);
@@ -673,6 +680,7 @@ public class WSDL2Ws
         if (wsg == null)
             throw new WrapperFault("WSDL2Ws does not support the option combination");
         
+        // There must be a better way to do this
         exposeReferenceTypes(wsContext);
         exposeMessagePartsThatAreAnonymousTypes(wsContext);
         // This call must be last one called of the exposexxx methods!
@@ -814,8 +822,7 @@ public class WSDL2Ws
                 QName typeName =  new QName(type.getQName().getNamespaceURI(), localpart);
                 newSecondaryType = createTypeInfo(base.getQName());
                 typedata.addRelatedType(newSecondaryType);
-                ElementInfo eleinfo = new ElementInfo(typeName, newSecondaryType);
-                typedata.setExtensionBaseType(eleinfo);
+                typedata.setExtensionBaseType(new CElementDecl(newSecondaryType, typeName));
                 if (c_verbose)
                     System.out.print(
                         "=====complexType with simpleContent is found : "
@@ -842,7 +849,7 @@ public class WSDL2Ws
         {
             newSecondaryType = createTypeInfo(type.getRefType().getQName());
             typedata.addRelatedType(newSecondaryType);
-            typedata.setTypeNameForElementName(new ElementInfo(type.getQName(),newSecondaryType));
+            typedata.setTypeNameForElementName(new CElementDecl(newSecondaryType, type.getQName()));
             typedata.setArray(true);
         }
         else
@@ -853,14 +860,14 @@ public class WSDL2Ws
             {
                 newSecondaryType = createTypeInfo(arrayType);
                 typedata.addRelatedType(newSecondaryType);
-                typedata.setTypeNameForElementName(new ElementInfo(new QName("item"), newSecondaryType));
+                typedata.setTypeNameForElementName(new CElementDecl(newSecondaryType, new QName("item")));
                 typedata.setArray(true);
             }
             else if ((arrayType = CSchemaUtils.getCollectionComponentQName(node)) != null)
             {
                 newSecondaryType = createTypeInfo(arrayType);
                 typedata.addRelatedType(newSecondaryType);
-                typedata.setTypeNameForElementName(new ElementInfo(new QName("item"), newSecondaryType));
+                typedata.setTypeNameForElementName(new CElementDecl(newSecondaryType, new QName("item")));
                 typedata.setArray(true);
             }
             //Note in a array the parameter type is stored as under the name item all the time  
@@ -920,7 +927,7 @@ public class WSDL2Ws
                             }
                             else
                             {
-                                QName typeName = elem.getType().getQName();
+                                QName typeName = elem.getTypeEntry().getQName();
                                 if (typeName.getLocalPart().indexOf('[') > 0)
                                 {
                                     String localpart =
@@ -931,29 +938,16 @@ public class WSDL2Ws
                                     if (CUtils.isBasicType(typeName))
                                         newSecondaryType = createTypeInfo(typeName);
                                     else
-                                        newSecondaryType = createTypeInfo(elem.getType());
+                                        newSecondaryType = createTypeInfo(elem.getTypeEntry());
                                 }
                                 else
                                     newSecondaryType = createTypeInfo(typeName);
                             }
                             
                             typedata.addRelatedType(newSecondaryType);
-                            ElementInfo eleinfo = new ElementInfo(elem.getName(), newSecondaryType);
-                            
-                            eleinfo.setMinOccurs(elem.getMinOccurs());
-                            eleinfo.setMaxOccurs(elem.getMaxOccurs());
-                            eleinfo.setNillable( elem.isNillable());
-                            
-                            // states whether this element is a xsd:choice
-                            eleinfo.setChoiceElement(elem.getChoiceElement());
-                            
-                            // states whether this element is a xsd:all
-                            eleinfo.setAllElement(elem.getAllElement());
-                            
-                            //states whether the element must be namespace qualified.
-                            eleinfo.setNsQualified(elem.getNsQualified());
+                            elem.setType(newSecondaryType);
                                                        
-                            typedata.setTypeNameForElementName(eleinfo);
+                            typedata.setTypeNameForElementName(elem);
                         }
                 }
             }
