@@ -16,6 +16,7 @@
  */
 
 package org.apache.axis.wsdl.wsdl2ws;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -83,6 +84,7 @@ public class WSDL2Ws
 
     private String c_language;
     private boolean c_wsdlWrappingStyle;
+    private boolean c_userRequestedWSDLWrappingStyle = false;
     private String c_targetoutputLocation = null;
     private String c_targetEngine = null;
     private String c_targetEndpointURI = null;
@@ -108,42 +110,19 @@ public class WSDL2Ws
     {
         try
         {
-            // Verbose mode?
-            if (cmdLineArgs.isSet("v"))
-                c_verbose = true;
-            
-            // ==================================================
-            // Parse the WSDL file
-            // ==================================================
-            
-            Parser wsdlParser = new Parser();
-            
-            // Set verbose in WSDL parser
-            if (c_verbose)
-                wsdlParser.setVerbose(true);
-            
-            // Set timeout
-            String timeout = cmdLineArgs.getOptionBykey("t"); 
-            if (timeout != null) 
-                wsdlParser.setTimeout(Long.parseLong(timeout)); 
-
-            // Parse the WSDL document.
-            String wsdlfile = cmdLineArgs.getArgument(0);
-            wsdlParser.run(wsdlfile);
-
-            // Get the symbol table
-            c_symbolTable = wsdlParser.getSymbolTable();
-            if (c_verbose)
-                c_symbolTable.dump(System.out);
-            
             // ==================================================
             // Process the parameters
             // ==================================================            
             
-            // Target location
+            // Verbose mode?
+            if (cmdLineArgs.isSet("v"))
+                c_verbose = true;
+            
+            // Target location - we resolve to canonical path and use path in completion message later on.
             c_targetoutputLocation = cmdLineArgs.getOptionBykey("o");
             if (c_targetoutputLocation == null)
-                c_targetoutputLocation = "./";
+                c_targetoutputLocation = "." + File.separator;
+            c_targetoutputLocation = (new File(c_targetoutputLocation)).getCanonicalPath();
             
             // language c or c++
             c_language = cmdLineArgs.getOptionBykey("l");
@@ -155,13 +134,44 @@ public class WSDL2Ws
             if (c_targetEngine == null)
                 c_targetEngine = "server";
             
-            // Wrapped or unwrapped?
+            // Wrapped or unwrapped? The default will be wrapped. 
             String wsdlWrapStyle = cmdLineArgs.getOptionBykey("w");
-            if (wsdlWrapStyle == null || wsdlWrapStyle.equalsIgnoreCase("wrapped"))
+            if (wsdlWrapStyle == null)
                 c_wsdlWrappingStyle = true;
+            else if (wsdlWrapStyle.equalsIgnoreCase("wrapped"))
+            {
+                c_wsdlWrappingStyle = true;
+                c_userRequestedWSDLWrappingStyle = true;
+            }
             else
-                c_wsdlWrappingStyle = false;
+                c_wsdlWrappingStyle = false;            
+            
+            // ==================================================
+            // Parse the WSDL file
+            // ==================================================
+            
+            Parser wsdlParser = new Parser();
+            
+            // Set verbose in WSDL parser
+            wsdlParser.setVerbose(c_verbose);
+            
+            // Set timeout
+            String timeout = cmdLineArgs.getOptionBykey("t"); 
+            if (timeout != null) 
+                wsdlParser.setTimeout(Long.parseLong(timeout)); 
+            
+            // Set unwrapped if requested
+            wsdlParser.setNowrap(c_wsdlWrappingStyle == false);
 
+            // Parse the WSDL document.
+            String wsdlfile = cmdLineArgs.getArgument(0);
+            wsdlParser.run(wsdlfile);
+
+            // Get the symbol table
+            c_symbolTable = wsdlParser.getSymbolTable();
+            if (c_verbose)
+                c_symbolTable.dump(System.out);
+            
             // ==================================================
             // Get service definition
             // ==================================================            
@@ -1301,7 +1311,7 @@ public class WSDL2Ws
             WSDL2Ws gen = new WSDL2Ws(data);
             gen.generateWrappers();
 
-            System.out.println("\nCode generation completed.\n");
+            System.out.println("\nCode generation completed. Generated files in directory '" + gen.getTargetOutputLocation() + "'.");
         }
         catch (Exception e)
         {
@@ -1332,5 +1342,13 @@ public class WSDL2Ws
             return false;
         else
             return true;
+    }
+
+    /**
+     * @return the c_targetoutputLocation
+     */
+    public String getTargetOutputLocation()
+    {
+        return c_targetoutputLocation;
     }
 }
