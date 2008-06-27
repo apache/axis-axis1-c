@@ -27,8 +27,12 @@ import java.util.List;
 
 import javax.xml.namespace.QName;
 
-public class MethodInfo {
+import org.apache.axis.wsdl.symbolTable.Parameters;
+
+public class MethodInfo
+{
     private String methodname;
+    private Parameters operationParameters;
     private ArrayList inputParameters;
     private ArrayList outputParameters;
     private String soapAction;
@@ -38,206 +42,166 @@ public class MethodInfo {
     private String outputUse;
     private QName inputMessage;
     private QName outputMessage;
-	private QName faultMessage;
-	private ArrayList faultType;
+    private QName faultMessage;
+    private ArrayList faultType;
     private String inputNamespaceURI = null;
     private String outputNamespaceURI = null;
 
-    public MethodInfo() {
-        this.methodname = null;
-        inputParameters = new ArrayList(101);
-		outputParameters = new ArrayList(101);
-		faultType=new ArrayList(102);
-    }
-
-    public MethodInfo(String methodname) {
+    public MethodInfo(String methodname)
+    {
         this.methodname = methodname;
         inputParameters = new ArrayList(101);
-		outputParameters = new ArrayList(101);
-		faultType=new ArrayList(102);
+        outputParameters = new ArrayList(101);
+        faultType = new ArrayList(102);
     }
 
-    public String getMethodname() {
+    public String getMethodname()
+    {
         return methodname;
     }
 
-    public void setMethodname(String methodname) {
+    public void setMethodname(String methodname)
+    {
         this.methodname = methodname;
     }
-/*
-    public Enumeration getParameters() {
-        return this.parameters.keys();
-    }
-*/
-    public Collection getInputParameterTypes() {
+
+    public Collection getInputParameterTypes()
+    {
         return this.inputParameters;
     }
-     //	added by nithya
-	 public Collection getFaultType() {
-			 return this.faultType;
-	 }
-     // added by nithya
-	 public void addFaultType(FaultInfo faultType) {
-	 		 this.faultType.add(faultType);
-	}
-    public void addInputParameter(ParameterInfo type) {
+
+    public Collection getFaultType()
+    {
+        return this.faultType;
+    }
+
+    public void addFaultType(FaultInfo faultType)
+    {
+        this.faultType.add(faultType);
+    }
+
+    public void addInputParameter(ParameterInfo type)
+    {
         this.inputParameters.add(type);
     }
-	public Collection getOutputParameterTypes() {
-		return this.outputParameters;
-	}
-	public void addOutputParameter(ParameterInfo type) {
-		this.outputParameters.add(type);
-	}
-    
-/*
-    public ParameterInfo getParameter(String paramName) {
-        Object obj = this.parameters.get(paramName);
-        if (obj != null)
-            return (ParameterInfo) obj;
-        return null;
+
+    public Collection getOutputParameterTypes()
+    {
+        return this.outputParameters;
     }
-*/
-    /**
-     * @return
-     */
-    public List getInputEncoding() {
+
+    public void addOutputParameter(ParameterInfo type)
+    {
+        this.outputParameters.add(type);
+    }
+
+    public List getInputEncoding()
+    {
         return inputEncoding;
     }
 
-    /**
-     * @return
-     */
-    public List getOutputEncoding() {
+    public List getOutputEncoding()
+    {
         return outputEncoding;
     }
 
-    /**
-     * @return
-     */
-    public String getSoapAction() {
+    public String getSoapAction()
+    {
         return soapAction;
     }
 
-    /**
-     * @param string
-     */
-    public void setInputEncoding(List string) {
+    public void setInputEncoding(List string)
+    {
         inputEncoding = string;
     }
 
-    /**
-     * @param string
-     */
-    public void setOutputEncoding(List string) {
+    public void setOutputEncoding(List string)
+    {
         outputEncoding = string;
     }
 
-    /**
-     * @param string
-     */
-    public void setSoapAction(String string) {
+    public void setSoapAction(String string)
+    {
         soapAction = string;
     }
 
-    /**
-     * @return
-     */
-    public String getInputUse() {
+    public String getInputUse()
+    {
         return inputUse;
-	}
-    /**
-     * @return
-     */
-    public String getOutputUse() {
+    }
+
+    public String getOutputUse()
+    {
         return outputUse;
     }
 
-    /**
-     * @param string
-     */
-    public void setInputUse(String string) {
+    public void setInputUse(String string)
+    {
         inputUse = string;
     }
 
-    /**
-     * @param string
-     */
-    public void setOutputUse(String string) {
+    public void setOutputUse(String string)
+    {
         outputUse = string;
     }
-    
-    /**
-     * @param string
-     */
-    public void setInputNamespaceURI(String string) {
+
+    public void setInputNamespaceURI(String string)
+    {
         inputNamespaceURI = string;
     }
 
-    /**
-     * @param string
-     */
-    public String getInputNamespaceURI() {
+    public String getInputNamespaceURI()
+    {
         return inputNamespaceURI;
     }
-    
-    /**
-     * @param string
-     */
-    public void setOutputNamespaceURI(String string) {
+
+    public void setOutputNamespaceURI(String string)
+    {
         outputNamespaceURI = string;
     }
 
-    /**
-     * @param string
-     */
-    public String getOutputNamespaceURI() {
+    public String getOutputNamespaceURI()
+    {
         return outputNamespaceURI;
-    }    
-    
-	/**
-	 * @return QName
-	 */
-	public QName getInputMessage() {
-		return inputMessage;
-	}
+    }
 
-	/**
-	 * @return QName
-	 */
-	public QName getOutputMessage() {
-		return outputMessage;
-	}
+    public QName getInputMessage()
+    {
+        return inputMessage;
+    }
 
-	/**
-	 * Sets the inputMessage.
-	 * @param inputMessage The inputMessage to set
-	 */
-	public void setInputMessage(QName inputMessage) {
-		this.inputMessage = inputMessage;
-	}
+    public QName getOutputMessage()
+    {
+        return outputMessage;
+    }
 
-	/**
-	 * Sets the ouputMessage.
-	 * @param ouputMessage The ouputMessage to set
-	 */
-	public void setOutputMessage(QName ouputMessage) {		
-		this.outputMessage = ouputMessage;
-	}
+    public void setInputMessage(QName inputMessage)
+    {
+        this.inputMessage = inputMessage;
+    }
 
-	//added by nithya
-	/**
-	 * @return QName
-	 */
-	public QName getFaultMessage() {		
-		return faultMessage;
-	}	
-	/**
-	 * Sets the faultMessage.
-	 * @param faultMessage The faultMessage to set
-	 */
-	public void setFaultMessage(QName faultMessage) {		
-		this.faultMessage = faultMessage;
-	}
-	//end of nithya
+    public void setOutputMessage(QName ouputMessage)
+    {
+        this.outputMessage = ouputMessage;
+    }
+
+    public QName getFaultMessage()
+    {
+        return faultMessage;
+    }
+
+    public void setFaultMessage(QName faultMessage)
+    {
+        this.faultMessage = faultMessage;
+    }
+
+    public void setOperationParameters(Parameters opParams)
+    {
+        operationParameters = opParams;
+    }
+
+    public Parameters getOperationParameters()
+    {
+        return operationParameters;
+    }
 }
