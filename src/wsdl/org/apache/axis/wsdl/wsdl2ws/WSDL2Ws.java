@@ -155,10 +155,12 @@ public class WSDL2Ws
             // Set verbose in WSDL parser
             wsdlParser.setVerbose(c_verbose);
             
-            // Set timeout
+            // Set timeout - if not set, we set to zero (i.e. no timeout).
+            // The setTimeout method expects the time in milliseconds.
             String timeout = cmdLineArgs.getOptionBykey("t"); 
-            if (timeout != null) 
-                wsdlParser.setTimeout(Long.parseLong(timeout)); 
+            if (timeout == null)
+                timeout = "0"; 
+            wsdlParser.setTimeout(Long.parseLong(timeout) * 1000); 
             
             // Set unwrapped if requested
             wsdlParser.setNowrap(c_wsdlWrappingStyle == false);
@@ -1272,24 +1274,11 @@ public class WSDL2Ws
                 + "-l<c++|c>              target language (c++|c) - default is c++\n"
                 + "-s<server|client>      target side (server|client) - default is server\n"
                 + "-v, -verbose           be verbose\n"
-                + "-t<timeout>            uri resolution timeout - 0 means no timeout"
+                + "-t<timeout>            uri resolution timeout in seconds - default is 0 (no timeout)"
                 );
     }
     
     /**
-     * Usage
-     * =====
-     * java WSDL2ws <wsdlfile> -<optionChar><value>
-     * 
-     * Options and Values 
-     * ======= === ======
-     * -o target output folder
-     * -l target language(c|c++) default is c++
-     * -h print usage()
-     * -s (client|server|both)  
-     * -t timeout
-     * 
-     * Note:  PP - pull parser
      * @param args
      * @throws Exception
      */
