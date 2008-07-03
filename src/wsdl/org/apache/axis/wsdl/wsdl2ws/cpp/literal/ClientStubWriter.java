@@ -480,7 +480,12 @@ public class ClientStubWriter
                     tab2 = "\t";
                 }
                 
-                if (namespace.length () == 0)
+                // If unwrapped, we pass in null string for qualified element name. 
+                if (minfo.isUnwrapped())
+                {
+                    writer.write (tab2 + "\t\tchar cPrefixAndParamName" + i + "[" + "] = \"\";\n");                    
+                }
+                else if (namespace.length () == 0)
                 {
                     writer.write (tab2 + "\t\tchar cPrefixAndParamName"
                               + i + "[" + "] = \"" + parameterName + "\";\n");
@@ -590,13 +595,32 @@ public class ClientStubWriter
         // Invoke web service - one-way or two-way message processing
         //=============================================================================        
 
+        // Tricky part...if in the WSDL the response is an element that references a type, for example:
+        // 
+        // <simpleType name="ActionResultType">
+        //    <restriction base="xsd:string">
+        //        <enumeration value="Success"/>
+        //        <enumeration value="Connection Failure"/>
+        //    </restriction>
+        // </simpleType>
+        // <element name="callControlResponse" type="tns:ActionResultType"/>
+        //
+        // Then the SOAP response looks like the following:
+        //  <ns37:callControlResponse xmlns:ns37="http://ws.xxx.com/ip/">Success</ns37:callControlResponse>
+        //
+        // So we need to validate response body element w/out consuming node. This also holds true when doing
+        // unwrapped methods.
+        String consumeBodyNode="true";
+        if (!minfo.consumeBodyOnMessageValidation())
+            consumeBodyNode = "false";
+
         if (minfo.getOutputMessage () != null)
         {
             CUtils.printBlockComment(writer, "Invoke web service, send/receive operation. Handle output parameters, if any.");
             writer.write ("\t\tif (AXIS_SUCCESS == m_pCall->sendAndReceive())\n\t\t{\n");
-            writer.write ("\t\t\tif(AXIS_SUCCESS == m_pCall->checkMessage(\""
+            writer.write ("\t\t\tif(AXIS_SUCCESS == m_pCall->validateMessage(\""
                   + minfo.getOutputMessage ().getLocalPart () + "\", \""
-                  + minfo.getOutputMessage ().getNamespaceURI () + "\"))\n\t\t\t{\n");
+                  + minfo.getOutputMessage ().getNamespaceURI () + "\", " + consumeBodyNode + "))\n\t\t\t{\n");
         }
         else
         {
@@ -841,32 +865,9 @@ public class ClientStubWriter
         {
             if (returntype.isNillable () || returntype.isOptional() || CUtils.isPointerType(outparamType))
             {
-                // Tricky part...if in the WSDL the response is an element that references a type, for example:
-                // 
-                // <simpleType name="ActionResultType">
-                //    <restriction base="xsd:string">
-                //        <enumeration value="Success"/>
-                //        <enumeration value="Connection Failure"/>
-                //    </restriction>
-                // </simpleType>
-                // <element name="callControlResponse" type="tns:ActionResultType"/>
-                //
-                // Then the SOAP response looks like the following:
-                //  <ns37:callControlResponse xmlns:ns37="http://ws.xxx.com/ip/">Success</ns37:callControlResponse>
-                //
-                // So we need to get the data without consuming any elements since the root has already been consumed 
-                // by checkMessage() call. May be a hack but not sure what else can be done at this time.
-                if (returntype.getElementAsCharData())
-                {
-                    String xsdType = CUtils.getXSDTypeForBasicType(outparamType);
-                    writer.write("\t\t\t\tm_pCall->getChardataAs((void **)&Ret, " + xsdType + ");\n");
-                }
-                else
-                {
-                    writer.write( "\t\t\t\tRet = m_pCall->" 
-                            + CUtils.getParameterGetValueMethodName( outparamType, false) 
-                            + "(\"" + returntype.getParamNameAsSOAPString() + "\", 0);\n");
-                }
+                writer.write( "\t\t\t\tRet = m_pCall->" 
+                        + CUtils.getParameterGetValueMethodName( outparamType, false) 
+                        + "(\"" + returntype.getParamNameAsSOAPString() + "\", 0);\n");
             }
             else
             {

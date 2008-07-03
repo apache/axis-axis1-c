@@ -26,7 +26,7 @@ Transfer-Encoding: chunked
 <?xml version="1.0" encoding="UTF-8"?>
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <soapenv:Body>
-<ns1:test1Request xmlns:ns1="http://localhost/axis/ValidXMLCharIsInterpretedAsCPPCommand">
+<ns1:Test1WithComplexResponse xmlns:ns1="http://localhost/axis/ValidXMLCharIsInterpretedAsCPPCommand">
 <ns1:Element xmlns:ns2="ValidXMLCharIsInterpretedAsCPPCommandTypes">
 <ns2:arg.WithADot>8</ns2:arg.WithADot>
 <ns2:arg_WithAnUnderscore>9</ns2:arg_WithAnUnderscore>
@@ -36,7 +36,7 @@ Transfer-Encoding: chunked
 <ns2:arg.With.TwoDots>13</ns2:arg.With.TwoDots>
 <ns2:arg..WithTwoDotsInline>14</ns2:arg..WithTwoDotsInline>
 </ns1:Element>
-</ns1:test1Request>
+</ns1:Test1WithComplexResponse>
 </soapenv:Body>
 </soapenv:Envelope>
 0

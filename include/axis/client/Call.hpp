@@ -1608,10 +1608,26 @@ public:
      * response namespace.
      * @return The return value is either AXIS_SUCCESS or AXIS_FAIL depending
      * if the name was found.
+     * 
+     * @deprecated use validateMessage().
      */
     int AXISCALL checkMessage( const AxisChar * pName,
                                const AxisChar * pNamespace);
 
+    /**
+     * Method to check that the SOAP message body contains the specified name and
+     * namespace.
+     *
+     * @param pName is a null terminated character string containing the response name.
+     * @param pNamespace is a null terminated character string containing the
+     * response namespace.
+     * @return The return value is either AXIS_SUCCESS or AXIS_FAIL depending
+     * if the name was found.
+     */
+    int AXISCALL validateMessage( const AxisChar * pName,
+                                  const AxisChar * pNamespace,
+                                  bool  consumeIt=true);    
+    
     /**
      * Method to check that the SOAP message fault contains the specified name and
      * namespace.

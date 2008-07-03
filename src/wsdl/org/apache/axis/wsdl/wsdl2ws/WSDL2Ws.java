@@ -17,6 +17,7 @@
 
 package org.apache.axis.wsdl.wsdl2ws;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -50,6 +51,7 @@ import org.apache.axis.wsdl.symbolTable.CollectionType;
 import org.apache.axis.wsdl.symbolTable.DefinedElement;
 import org.apache.axis.wsdl.symbolTable.DefinedType;
 import org.apache.axis.wsdl.symbolTable.Element;
+import org.apache.axis.wsdl.symbolTable.Parameters;
 import org.apache.axis.wsdl.symbolTable.PortTypeEntry;
 import org.apache.axis.wsdl.symbolTable.ServiceEntry;
 import org.apache.axis.wsdl.symbolTable.SymTabEntry;
@@ -270,12 +272,52 @@ public class WSDL2Ws
             Operation op     = (Operation) oplist.next();
             MethodInfo minfo = new MethodInfo(op.getName());
             
+            // This chunk of code is new and we hope to use it more in the future to replace some of the 
+            // things we do to process parameters.
+            // When getOperationParameters() is called, the code, assuming user did not request unwrapped,
+            // will determine whether the operation is eligible for wrapped-style.   The bad thing is that
+            // isWrapped() is a method on the SymbolTable class.  So before processing an operation, 
+            // we call setWrapped(false) before calling getOperationParameters() so that we can determine 
+            // on a per-operation basis whether the operation is eligible for wrapped-style processing.
+            c_symbolTable.setWrapped(false);
+            Parameters opParams=null;
+            try
+            {
+                opParams = c_symbolTable.getOperationParameters(op, "", c_bindingEntry);
+                minfo.setOperationParameters(opParams);
+                minfo.setEligibleForWrapped(c_symbolTable.isWrapped());
+                
+                // mark the method as wrapped or unwrapped.
+                if (!c_wsdlWrappingStyle || !minfo.isEligibleForWrapped())
+                {
+                    minfo.setIsUnwrapped(true);
+                    minfo.setConsumeBodyOnMessageValidation(false);
+                }
+            }
+            catch (IOException e)
+            {
+                throw new WrapperFault(e);
+            }
+
+            if (c_verbose)
+            {
+                System.out.println("\n\n-----------------------------------------------");
+                System.out.println("Parameters for operation: " + op.getName()); 
+                System.out.println("-----------------------------------------------");
+                System.out.println(opParams);
+                System.out.println("-----------------------------------------------");
+            }
+            
             //setting the faults
             addFaultInfo(op.getFaults(), minfo);
             
             //add each parameter to parameter list
             if ("document".equals(c_bindingEntry.getBindingStyle().getName()))
+            {
+                if (c_userRequestedWSDLWrappingStyle && !minfo.isEligibleForWrapped())
+                    System.out.println("INFORMATIONAL: Operation '" + op.getName() + "' is not eligible for wrapper-style, using non-wrapper style.");
                 addDocumentStyleInputMessageToMethodInfo(op, minfo);
+            }
             else
                 addRPCStyleInputMessageToMethodInfo(op, minfo);
 
@@ -418,10 +460,11 @@ public class WSDL2Ws
         // For unwrapped style, objects are used for the parameters (i.e. classes or structures).
         
         Iterator names = type.getElementnames();
-        if (c_wsdlWrappingStyle)
+        if (!minfo.isUnwrapped())
         {
             if (!names.hasNext())
             {
+                // TODO what if not simple?
                 if (type.isSimpleType())
                 {
                     String elementName = (String) element.getQName().getLocalPart();
@@ -429,10 +472,10 @@ public class WSDL2Ws
                     pinfo.setType(type);
                     pinfo.setParamName(elementName, c_typeMap);
                     pinfo.setElementName(element.getQName());
-                    pinfo.setGetElementAsCharData(true);
                     if (type.getName().equals(CUtils.anyTypeQname))
                         pinfo.setAnyType(true);
                     minfo.addOutputParameter(pinfo);                    
+                    minfo.setConsumeBodyOnMessageValidation(false);
                 }
             }
             else
@@ -471,18 +514,21 @@ public class WSDL2Ws
             String elementName = (String) element.getQName().getLocalPart();
             ParameterInfo pinfo = new ParameterInfo();
             pinfo.setType(type);
+            type.setIsUnwrappedOutputType(true);
             pinfo.setParamName(elementName, c_typeMap);
             
             if (!names.hasNext() && type.isSimpleType())
-            {
                 pinfo.setElementName(element.getQName());
-                pinfo.setGetElementAsCharData(true);                
-            }
             else
                 pinfo.setElementName(type.getName());
             
             if (type.getName().equals(CUtils.anyTypeQname))
                 pinfo.setAnyType(true);
+            
+            // Let us be nice and uppercase the first character in type name, 
+            // in addition to resolving method name/type conflicts.
+            type.setLanguageSpecificName(generateNewTypeName(type, minfo));
+            
             minfo.addOutputParameter(pinfo);
         }
     }
@@ -572,7 +618,7 @@ public class WSDL2Ws
 
         // For wrapped style, inner attributes and elements are added as parameters.
         // For unwrapped style, objects are used for the parameters (i.e. classes or structures).
-        if (c_wsdlWrappingStyle)
+        if (!minfo.isUnwrapped())
         {
             // Add input elements to method info
             Iterator elementNames = type.getElementnames();
@@ -625,16 +671,26 @@ public class WSDL2Ws
         }
         else
         { 
-            String elementName = (String) element.getQName().getLocalPart();
+            String elementName;
+            
+            if (element != null)
+                elementName = element.getQName().getLocalPart();
+            else
+                elementName = type.getName().getLocalPart();
             
             ParameterInfo pinfo = new ParameterInfo();
             
             pinfo.setType(type);
+            type.setIsUnwrappedInputType(true);
             pinfo.setParamName(elementName, c_typeMap);
             pinfo.setElementName(type.getName());
             if (type.getName().equals(CUtils.anyTypeQname))
                 pinfo.setAnyType(true);
 
+            // Let us be nice and uppercase the first character in type name, 
+            // in addition to resolving method name/type conflicts.
+            type.setLanguageSpecificName(generateNewTypeName(type, minfo));
+            
             minfo.addInputParameter(pinfo);
         }
     }
@@ -1274,7 +1330,8 @@ public class WSDL2Ws
                 + "-l<c++|c>              target language (c++|c) - default is c++\n"
                 + "-s<server|client>      target side (server|client) - default is server\n"
                 + "-v, -verbose           be verbose\n"
-                + "-t<timeout>            uri resolution timeout in seconds - default is 0 (no timeout)"
+                + "-t<timeout>            uri resolution timeout in seconds - default is 0 (no timeout)\n"
+                + "-w<wrapped|unwrapped>  generate wrapper style or not - default is wrapped\n"
                 );
     }
     
@@ -1334,10 +1391,32 @@ public class WSDL2Ws
     }
 
     /**
-     * @return the c_targetoutputLocation
+     * Returns absolute path to where the generated code will be located. 
+     * 
+     * @return the absolute path to the target location
      */
     public String getTargetOutputLocation()
     {
         return c_targetoutputLocation;
+    }
+    
+    /**
+     * Resolves name conflict between a method name and a type name. 
+     * When doing document-literal, usually the name of the wrapper element is same as the 
+     * operation name. 
+     * 
+     * @return the new type name that does not conflict with the operation name.
+     */
+    private String generateNewTypeName(Type type, MethodInfo minfo)
+    {
+        String minfo_nm = minfo.getMethodname();
+        String type_nm  = type.getLanguageSpecificName();
+        
+        String newName = WrapperUtils.capitalizeFirstCharacter(type_nm);
+
+        if (!minfo_nm.equals(newName))
+            return newName;
+
+        return newName + "_t";
     }
 }

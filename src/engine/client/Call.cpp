@@ -986,9 +986,14 @@ xsd__positiveInteger * Call::getAttributeAsPositiveInteger (const AxisChar* pNam
 
 int Call::checkMessage( const AxisChar * pName, const AxisChar * pNamespace)
 {
-    m_nStatus = m_pIWSDZ->checkMessageBody( pName, pNamespace);
+    return validateMessage(pName, pNamespace);
+}
 
-    return m_nStatus;
+int Call::validateMessage( const AxisChar * pName, 
+		                   const AxisChar * pNamespace,
+		                   bool consumeIt)
+{
+    return m_pIWSDZ->validateMessageBody( pName, pNamespace, consumeIt);
 }
 
 void Call::getChardataAs(void** pValue, XSDTYPE type)

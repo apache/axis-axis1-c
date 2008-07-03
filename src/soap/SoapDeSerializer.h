@@ -93,6 +93,7 @@ public:
     int AXISCALL setNewSoapBody(AxisChar* pNewSoapBody);
     bool isAnyMustUnderstandHeadersLeft();
     int AXISCALL checkMessageBody(const AxisChar* pName, const AxisChar* pNamespace);
+    int AXISCALL validateMessageBody(const AxisChar * pName, const AxisChar * pNamespace, bool consumeIt=true);
     void* AXISCALL checkForFault(const AxisChar* pName,  const AxisChar* pNamespace);
     void initiateFault(const AxisChar* pNamespace);
     /* to get any header blocks left in the Deserializer */

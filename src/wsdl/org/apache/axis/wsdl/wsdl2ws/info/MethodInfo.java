@@ -47,6 +47,10 @@ public class MethodInfo
     private String inputNamespaceURI = null;
     private String outputNamespaceURI = null;
 
+    private boolean eligibleForWrapped=true;
+    private boolean doUnwrapped=false;
+    private boolean consumeBodyOnMessageValidation=true;
+
     public MethodInfo(String methodname)
     {
         this.methodname = methodname;
@@ -203,5 +207,35 @@ public class MethodInfo
     public Parameters getOperationParameters()
     {
         return operationParameters;
+    }
+
+    public void setEligibleForWrapped(boolean wrapped)
+    {
+        this.eligibleForWrapped = wrapped;
+    }
+    
+    public boolean isEligibleForWrapped()
+    {
+        return eligibleForWrapped;
+    }
+    
+    public void setIsUnwrapped(boolean unwrapped)
+    {
+        this.doUnwrapped = unwrapped;
+    }
+    
+    public boolean isUnwrapped()
+    {
+        return doUnwrapped;
+    }
+
+    public boolean consumeBodyOnMessageValidation()
+    {
+        return consumeBodyOnMessageValidation;
+    }
+
+    public void setConsumeBodyOnMessageValidation(boolean b)
+    {
+        this.consumeBodyOnMessageValidation = b;
     }
 }

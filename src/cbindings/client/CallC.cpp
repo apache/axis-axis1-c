@@ -3232,13 +3232,20 @@ int axiscCallCheckMessage(AXISCHANDLE call,
                           const AxiscChar * pName, 
                           const AxiscChar * pNamespace) 
 {
-    
-    
+    return axiscCallValidateMessage(call, pName, pNamespace, 1);
+}
+
+AXISC_STORAGE_CLASS_INFO
+int axiscCallValidateMessage( AXISCHANDLE call, 
+		                      const AxiscChar * pName,
+                              const AxiscChar * pNamespace,
+                              AxiscBool consumeIt)
+{
     Call *c = (Call*)call;
     
     try
     {
-        return c->checkMessage(pName,pNamespace);
+        return c->validateMessage(pName,pNamespace, (bool)(consumeIt != 0));
     }
     catch ( AxisException& e  )
     {

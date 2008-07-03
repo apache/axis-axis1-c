@@ -40,7 +40,6 @@ public class ParameterInfo
     private boolean isAttribute = false;
     private boolean isNillable = false;
     private boolean isOptional = false;
-    private boolean doGetElementAsCharData=false;
 
     public ParameterInfo()
     {}
@@ -237,16 +236,5 @@ public class ParameterInfo
     public void setMethodName(String methodName)
     {
         this.methodName = methodName;
-    }
-
-    public void setGetElementAsCharData(boolean b)
-    {
-        this.doGetElementAsCharData = true;
-        
-    }
-
-    public boolean getElementAsCharData()
-    {
-        return doGetElementAsCharData;
     }
 }

@@ -108,7 +108,8 @@ public class BeanParamWriter extends ParamCFileWriter
         {
             CUtils.printBlockComment(writer, "No attributes or elements to serialize.");
         
-            writer.write("\taxiscSoapSerializerSerialize(pSZ,\">\", NULL);\n");
+            if (!type.isUnwrappedInputType())
+               writer.write("\taxiscSoapSerializerSerialize(pSZ,\">\", NULL);\n");
 
             writeSerializeExtensionCode();
             
@@ -129,7 +130,8 @@ public class BeanParamWriter extends ParamCFileWriter
         
         writer.write("\tif ( param == NULL )\n\t{\n");
         writer.write("\t\taxiscSoapSerializerSerializeAsAttribute(pSZ, \"xsi:nil\", 0, (void*)&(xsdc_boolean_true), XSDC_BOOLEAN);\n");
-        writer.write("\t\taxiscSoapSerializerSerialize(pSZ, \">\", NULL);\n");
+        if (!type.isUnwrappedInputType())
+            writer.write("\t\taxiscSoapSerializerSerialize(pSZ, \">\", NULL);\n");
         writer.write("\t\treturn AXISC_SUCCESS;\n");
         writer.write("\t}\n");
         
@@ -197,7 +199,7 @@ public class BeanParamWriter extends ParamCFileWriter
             writer.write(", NULL);\n\t}\n");
         }               
         
-        if(wscontext.getWrapInfo().getWrapperStyle().equals("document"))
+        if (wscontext.getWrapInfo().getWrapperStyle().equals("document") && !type.isUnwrappedInputType())
             writer.write("\taxiscSoapSerializerSerialize(pSZ, \">\", 0);\n");
         
         //=============================================================================

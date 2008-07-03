@@ -37,21 +37,17 @@ import org.apache.axis.wsdl.symbolTable.CElementDecl;
 
 public abstract class ParamWriter extends BasicFileWriter
 {
-    protected static final int INPUT_PARM = 0;
-    protected static final int RETURN_PARM = 1;
-    protected static final int COMMAN_PARM = 2;
-
     protected AttributeInfo extensionBaseAttrib = null;
-    /* no of parameters treated as attributes: ie first attributeParamCount of
-     * attribs will be treated as attributes
-     */
+
+    // first attributeParamCount of attribs will be treated as attributes
     protected int attributeParamCount = 0;
-    /* array of parameter types and parameter names of the this param */
+   
+    // array of parameter types and attributes 
     protected AttributeInfo[] attribs;
 
     protected WebServiceContext wscontext;
 
-    /* Type of this param */
+    // Type of this param 
     protected Type type;
 
     public ParamWriter(WebServiceContext wscontext, Type type) throws WrapperFault

@@ -108,6 +108,12 @@ public class Type
      */
     private Vector vRelatedTypes = new Vector();
     
+    // is type the output type for unwrapped doc/lit operation?
+    private boolean isUnwrappedOutputType = false;
+    
+    // is type the input type for unwrapped doc/lit operation?
+    private boolean isUnwrappedInputType  = false;
+    
     public Type(QName name, String languageSpecificName, String language)
     {
         this.languageSpecificName = languageSpecificName;
@@ -498,4 +504,25 @@ public class Type
         this.restriction = restriction;
     }
     // ^^^ FJP - 17667
+
+
+    public void setIsUnwrappedOutputType(boolean b)
+    {
+        this.isUnwrappedOutputType  = b;  
+    }
+
+    public boolean isUnwrappedOutputType()
+    {
+        return isUnwrappedOutputType;
+    }
+    
+    public void setIsUnwrappedInputType(boolean b)
+    {
+        this.isUnwrappedInputType    = b;  
+    }
+
+    public boolean isUnwrappedInputType()
+    {
+        return isUnwrappedInputType;
+    }
 }

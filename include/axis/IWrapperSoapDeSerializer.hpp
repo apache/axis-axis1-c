@@ -57,16 +57,33 @@ public:
     virtual ~IWrapperSoapDeSerializer(){};
 
     /**
-     * Check expected message has been received
+     * Check expected message has been received.  Consumes node.
      * 
      * @param pName SOAP element for message
      * @param pNamespace SOAP namespace for message
      * @return AXIS_SUCCESS if expected message has been received
      * 
+     * @deprecated see validateMessageBody below. 
+     * 
+     * @NOTE: do not remove method in order to keep backward compatibility.
+     * 
      */
     virtual int AXISCALL checkMessageBody(const AxisChar* pName, 
                                           const AxisChar* pNamespace)=0;
 
+    /**
+     * Check expected message has been received. Throws 
+     * exception if message is not what was expected.
+     * 
+     * @param pName SOAP element for message
+     * @param pNamespace SOAP namespace for message
+     * @param consumeIt  indicate whether to consume node.
+     * 
+     */
+    virtual int AXISCALL validateMessageBody(const AxisChar* pName, 
+                                             const AxisChar* pNamespace,
+                                             bool consumeIt=true)=0;
+    
     /**
      * Check if message is a fault
      * 

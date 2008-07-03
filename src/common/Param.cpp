@@ -166,16 +166,20 @@ int Param::serialize (SoapSerializer &pSZ)
             }
             else
             {
-                pSZ.serialize ("<", m_sName.c_str (), NULL); 
-                /* note : ">" is not serialized to enable the type's serializer
-                 * to add attributes 
-                 */
+            	// In order to support doc/lit unwrapped, m_sName (qualified element name) is passed as a null 
+            	// string in the stub code.  So we do not want to serialize null string in this case. 
+            	//
+            	// NOTE: ">" is not serialized to enable the type's serializer to add attributes.
+            	if (!m_sName.empty())
+                    pSZ.serialize ("<", m_sName.c_str (), NULL); 
+
                 TRACE_SERIALIZE_FUNCT_ENTRY(m_Value.pCplxObj->pSZFunct, m_Value.pCplxObj->pObject, &pSZ, false);
                 int stat = AXIS_FAIL;
                 stat = m_Value.pCplxObj->pSZFunct (m_Value.pCplxObj->pObject, &pSZ, false);
                 TRACE_SERIALIZE_FUNCT_EXIT(m_Value.pCplxObj->pSZFunct, stat);
 
-                pSZ.serialize ("</", m_sName.c_str (), ">\n", NULL);
+                if (!m_sName.empty())
+                    pSZ.serialize ("</", m_sName.c_str (), ">\n", NULL);
             }
             break;
         case XSD_ANY:

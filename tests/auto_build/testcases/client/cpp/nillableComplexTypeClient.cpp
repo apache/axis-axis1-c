@@ -14,17 +14,20 @@ int main(int argc, char* argv[])
 
                 nillableComplexType * pwsnillableComplexType = new nillableComplexType( pszEndpoint);
         
-                xsd__string                     sValue = "Hello";
                 xsd__base64Binary * pb64Value = new xsd__base64Binary();
-                xsd__NMTOKEN            nmValue = 0;
-                char *                          psz64BitValue = "FRED";
+                char *psz64BitValue = "FRED";
 
-        pb64Value->set((unsigned char *) psz64BitValue, strlen(psz64BitValue));
+                pb64Value->set((unsigned char *) psz64BitValue, strlen(psz64BitValue));
+                
+                MyClass myclass;
+                myclass.setName("Hello");
+                myclass.setValues(pb64Value, true, false);
 
-                xsd__string  sResult = pwsnillableComplexType->Report( sValue, pb64Value, nmValue);
+                ReportReturn *Result = pwsnillableComplexType->Report( &myclass);
 
-                cout << "The result is " << sResult << endl;
-
+                cout << "The result is " << Result->ReportReturn_Ref << endl;
+                
+                delete Result;
                 delete pwsnillableComplexType;
         }
         catch( SoapFaultException& sfe)

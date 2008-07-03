@@ -77,7 +77,7 @@ public class WrapperUtils
      * @param value String 
      * @return changed String 
      */
-    public static String capitalizeFirstCaractor(String value)
+    public static String capitalizeFirstCharacter(String value)
     {
         char[] chars = value.toCharArray();
         chars[0] = Character.toUpperCase(value.charAt(0));

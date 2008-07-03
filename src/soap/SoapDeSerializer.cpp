@@ -417,6 +417,12 @@ getBody ()
 int SoapDeSerializer::
 checkMessageBody (const AxisChar * pName, const AxisChar * pNamespace)
 {
+	return validateMessageBody(pName, pNamespace, true);
+}
+
+int SoapDeSerializer::
+validateMessageBody(const AxisChar * pName, const AxisChar * pNamespace, bool consumeIt)
+{
     // Will throw exception if failure in parser
     if (AXIS_FAIL == getNextNode(true))
         return AXIS_FAIL;
@@ -434,8 +440,9 @@ checkMessageBody (const AxisChar * pName, const AxisChar * pNamespace)
     }
 
     // indicate node consumed
-    m_pNode = NULL; 
-
+    if (consumeIt)
+    	m_pNode = NULL; 
+    
     return AXIS_SUCCESS;
 }
 

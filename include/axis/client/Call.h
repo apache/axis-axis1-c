@@ -1675,10 +1675,28 @@ Axisc_Array * axiscCallGetBasicArray(AXISCHANDLE call, AXISC_XSDTYPE nType,
  * response namespace.
  * @return The return value is either AXIS_SUCCESS or AXIS_FAIL depending
  * if the name was found.
+ * 
+ * @deprecated use validateMessage().
  */
 AXISC_STORAGE_CLASS_INFO
 int axiscCallCheckMessage(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace);
+
+/**
+ * Method to check that the SOAP message body contains the specified name and
+ * namespace.
+ *
+ * @param pName is a null terminated character string containing the response name.
+ * @param pNamespace is a null terminated character string containing the
+ * response namespace.
+ * @return The return value is either AXIS_SUCCESS or AXIS_FAIL depending
+ * if the name was found.
+ */
+AXISC_STORAGE_CLASS_INFO
+int axiscCallValidateMessage( AXISCHANDLE call,
+		                      const AxiscChar * pName,
+                              const AxiscChar * pNamespace,
+                              AxiscBool consumeIt); 
 
 /**
  * Method to check that the SOAP message fault contains the specified name and

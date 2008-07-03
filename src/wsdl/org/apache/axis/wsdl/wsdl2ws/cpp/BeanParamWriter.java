@@ -331,7 +331,8 @@ public class BeanParamWriter extends ParamCPPFileWriter
         {
             CUtils.printBlockComment(writer, "No attributes or elements to serialize.");
             
-            writer.write("\tpSZ->serialize(\">\", NULL);\n");
+            if (!type.isUnwrappedInputType())
+                writer.write("\tpSZ->serialize(\">\", NULL);\n");
 
             writeSerializeExtensionCode();
             
@@ -350,7 +351,9 @@ public class BeanParamWriter extends ParamCPPFileWriter
         
         writer.write("\tif ( param == NULL )\n\t{\n");
         writer.write("\t\tpSZ->serializeAsAttribute( \"xsi:nil\", 0, (void*)&(xsd_boolean_true), XSD_BOOLEAN);\n");
-        writer.write("\t\tpSZ->serialize( \">\", NULL);\n");
+        
+        if (!type.isUnwrappedInputType())
+            writer.write("\t\tpSZ->serialize( \">\", NULL);\n");
         writer.write("\t\treturn AXIS_SUCCESS;\n");
         writer.write("\t}\n");
         
@@ -420,7 +423,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
             writer.write(", NULL);\n\t}\n");
         }               
         
-        if(wscontext.getWrapInfo().getWrapperStyle().equals("document"))
+        if (wscontext.getWrapInfo().getWrapperStyle().equals("document") && !type.isUnwrappedInputType())
             writer.write("\tpSZ->serialize( \">\", 0);\n");
         
         //=============================================================================
