@@ -33,7 +33,7 @@
         	</xsd:sequence>
       	</xsd:complexType>
       </xsd:element>
-      <xsd:element name="elementFormDefaultIsUnqualifiedRequest">
+      <xsd:element name="elementFormDefaultIsUnqualified">
       	<xsd:complexType>
       		<xsd:sequence>
         		<xsd:element name="aStringType" type="xsd:string"
@@ -95,7 +95,7 @@
         	</xsd:sequence>
       	</xsd:complexType>
       </xsd:element>
-      <xsd:element name="elementFormDefaultIsQualifiedRequest">
+      <xsd:element name="elementFormDefaultIsQualified">
       	<xsd:complexType>
       		<xsd:sequence>
         		<xsd:element name="aStringType" type="xsd:string"
@@ -133,7 +133,7 @@
 				</xsd:sequence>
 			</xsd:complexType>
 		</xsd:element>
-        <xsd:element name="nestedElementFormDefaultIsQualifiedRequest">
+        <xsd:element name="nestedElementFormDefaultIsQualified">
 			<xsd:complexType>
 				<xsd:sequence>
 					<xsd:element name="ElementFormDefaultIsQualified" type="tns:ElementFormDefaultIsQualified" form="qualified"/>
@@ -147,7 +147,7 @@
 				</xsd:sequence>
 			</xsd:complexType>
 		</xsd:element>
-        <xsd:element name="nestedElementFormDefaultIsUnqualifiedRequest">
+        <xsd:element name="nestedElementFormDefaultIsUnqualified">
 			<xsd:complexType>
 				<xsd:sequence>
 					<xsd:element name="ElementFormDefaultIsUnqualified" type="tns:ElementFormDefaultIsUnqualified" form="unqualified"/>
@@ -231,7 +231,7 @@
     <wsdl:part element="tns:elementFormDefaultIsUnqualifiedResponse" name="elementFormDefaultIsUnqualifiedResponse"/>
   </wsdl:message>
   <wsdl:message name="elementFormDefaultIsUnqualifiedRequest">
-    <wsdl:part element="tns:elementFormDefaultIsUnqualifiedRequest" name="elementFormDefaultIsUnqualifiedRequest"/>
+    <wsdl:part element="tns:elementFormDefaultIsUnqualified" name="elementFormDefaultIsUnqualifiedRequest"/>
   </wsdl:message>
   <wsdl:message name="elementFormDefaultIsQualifiedResponse">
   	<wsdl:part name="elementFormDefaultIsQualifiedResponse"
@@ -240,7 +240,7 @@
   </wsdl:message>
   <wsdl:message name="elementFormDefaultIsQualifiedRequest">
   	<wsdl:part name="elementFormDefaultIsQualifiedRequest"
-  		element="tns:elementFormDefaultIsQualifiedRequest">
+  		element="tns:elementFormDefaultIsQualified">
   	</wsdl:part>
   </wsdl:message>
   <wsdl:message name="nestedElementFormDefaultIsQualifiedResponse">
@@ -250,7 +250,7 @@
   </wsdl:message>
   <wsdl:message name="nestedElementFormDefaultIsQualifiedRequest">
   	<wsdl:part name="nestedElementFormDefaultIsQualifiedRequest"
-  		element="tns:nestedElementFormDefaultIsQualifiedRequest">
+  		element="tns:nestedElementFormDefaultIsQualified">
   	</wsdl:part>
   </wsdl:message>
   <wsdl:message name="nestedElementFormDefaultIsUnqualifiedResponse">
@@ -260,7 +260,7 @@
   </wsdl:message>
   <wsdl:message name="nestedElementFormDefaultIsUnqualifiedRequest">
   	<wsdl:part name="nestedElementFormDefaultIsUnqualifiedRequest"
-  		element="tns:nestedElementFormDefaultIsUnqualifiedRequest">
+  		element="tns:nestedElementFormDefaultIsUnqualified">
   	</wsdl:part>
   </wsdl:message>
   <wsdl:portType name="ElementFormDefaultTest">

@@ -30,7 +30,7 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
-			<xsd:element name="asComplexTypeRequest">
+			<xsd:element name="asComplexType">
 				<xsd:complexType>
 					<xsd:sequence>
 						<xsd:element name="SimpleComplexType" type="tns:SimpleComplexType" nillable="false" minOccurs="1" maxOccurs="1" />
@@ -47,7 +47,7 @@
 	</wsdl:message>
 	<wsdl:message name="asComplexTypeRequest">
 		<wsdl:part name="asComplexTypeRequest"
-			element="tns:asComplexTypeRequest">
+			element="tns:asComplexType">
 		</wsdl:part>
 	</wsdl:message>
 	<wsdl:portType name="XSD_byte">

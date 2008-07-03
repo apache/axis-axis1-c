@@ -9,7 +9,7 @@
     <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
           targetNamespace="MixedFalseWithMixedTextMessage">
         
-      <xsd:element name="myLetterRequest">
+      <xsd:element name="GetLetter">
 		<xsd:complexType>
 		  <xsd:sequence>
             <xsd:element name="LetterId" type="xsd:string" nillable="false" minOccurs="1" maxOccurs="1" />
@@ -31,7 +31,7 @@
   </wsdl:types>
     
   <wsdl:message name="LetterRequest">
-    <wsdl:part element="tns:myLetterRequest" name="parameters"/>
+    <wsdl:part element="tns:GetLetter" name="parameters"/>
   </wsdl:message>
 
   <wsdl:message name="LetterResponse">

@@ -58,7 +58,7 @@
         </xsd:choice>
     </xsd:complexType>
 
-      <s:element name="Record1">
+      <s:element name="get">
         <s:complexType>
           <s:sequence>
             <s:element name="elem" type="s0:FaultPropertyType"/>
@@ -78,7 +78,7 @@
   </types>
 
   <message name="Record1SoapIn">
-    <part name="parameters" element="s0:Record1" />
+    <part name="parameters" element="s0:get" />
   </message>
   <message name="Record2SoapOut">
     <part name="parameters" element="s0:Record2" />

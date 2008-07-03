@@ -15,7 +15,7 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
-			<xsd:element name="simpleArrayRequest">
+			<xsd:element name="simpleArray">
 				<xsd:complexType>
 					<xsd:sequence>
 						<xsd:element name="simpleType" type="xsd:int"
@@ -51,7 +51,7 @@
 					</xsd:sequence>
 				</xsd:complexType>
             </xsd:element>
-            <xsd:element name="complexTypeWithSimpleArrayRequest">
+            <xsd:element name="complexTypeWithSimpleArray">
             	<xsd:complexType>
             		<xsd:sequence>
             			<xsd:element name="complexTypeWithSimpleArray"
@@ -69,7 +69,7 @@
             		</xsd:sequence>
             	</xsd:complexType>
             </xsd:element>
-            <xsd:element name="complexTypeArrayRequest">
+            <xsd:element name="complexTypeArray">
             	<xsd:complexType>
             		<xsd:sequence>
             			<xsd:element name="complexTypeWithSimpleElement"
@@ -85,7 +85,7 @@
 					</xsd:sequence>
             	</xsd:complexType>
             </xsd:element>
-            <xsd:element name="complexTypeWithComplexArrayRequest">
+            <xsd:element name="complexTypeWithComplexArray">
             	<xsd:complexType>
             		<xsd:sequence>
 						<xsd:element name="complexTypeWithComplexArray" type="tns:ComplexTypeWithComplexArray"/>
@@ -106,7 +106,7 @@
             		</xsd:sequence>
             	</xsd:complexType>
             </xsd:element>
-            <xsd:element name="moreComplexTypeArrayRequest">
+            <xsd:element name="moreComplexTypeArray">
             	<xsd:complexType>
             		<xsd:sequence>
             			<xsd:element name="moreComplexType"
@@ -122,8 +122,8 @@
 			name="simpleArrayResponse" />
 	</wsdl:message>
 	<wsdl:message name="simpleArrayRequest">
-		<wsdl:part element="tns:simpleArrayRequest"
-			name="simpleArrayRequest" />
+		<wsdl:part element="tns:simpleArray"
+			name="simpleArray" />
 	</wsdl:message>
 	<wsdl:message name="complexTypeWithSimpleArrayResponse">
 		<wsdl:part name="complexTypeWithSimpleArrayResponse"
@@ -132,7 +132,7 @@
 	</wsdl:message>
 	<wsdl:message name="complexTypeWithSimpleArrayRequest">
 		<wsdl:part name="complexTypeWithSimpleArrayRequest"
-			element="tns:complexTypeWithSimpleArrayRequest">
+			element="tns:complexTypeWithSimpleArray">
 		</wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="complexTypeArrayResponse">
@@ -142,7 +142,7 @@
 	</wsdl:message>
 	<wsdl:message name="complexTypeArrayRequest">
 		<wsdl:part name="complexTypeArrayRequest"
-			element="tns:complexTypeArrayRequest">
+			element="tns:complexTypeArray">
 		</wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="complexTypeWithComplexArrayResponse">
@@ -152,7 +152,7 @@
 	</wsdl:message>
 	<wsdl:message name="complexTypeWithComplexArrayRequest">
 		<wsdl:part name="complexTypeWithComplexArrayRequest"
-			element="tns:complexTypeWithComplexArrayRequest">
+			element="tns:complexTypeWithComplexArray">
 		</wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="moreComplexTypeArrayResponse">
@@ -162,7 +162,7 @@
 	</wsdl:message>
 	<wsdl:message name="moreComplexTypeArrayRequest">
 		<wsdl:part name="moreComplexTypeArrayRequest"
-			element="tns:moreComplexTypeArrayRequest">
+			element="tns:moreComplexTypeArray">
 		</wsdl:part>
 	</wsdl:message>
 	<wsdl:portType name="Arrays">

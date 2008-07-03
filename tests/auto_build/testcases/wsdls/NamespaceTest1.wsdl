@@ -14,7 +14,7 @@
   	<xsd:import namespace="SimpleNonBaseType"
   		   schemaLocation="SimpleNonBaseType.xsd"/>
 
-   <xsd:element name="anElement">
+   <xsd:element name="aBeanPortType">
     <xsd:complexType>
      <xsd:sequence>
       <xsd:element maxOccurs="1" minOccurs="1" name="Element" nillable="true" type="ns99:SampleBean"/>
@@ -25,7 +25,7 @@
  </types>
 
  <message name="aBeanMessage">
- 	<part name="aBeanMesage" element="tns:anElement"></part>
+ 	<part name="aBeanMesage" element="tns:aBeanPortType"></part>
  </message>
 
  <portType name="TestServicePortType">  <operation name="aBeanPortType">

@@ -16,7 +16,7 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
-			<xsd:element name="AsNonNillableElementRequest">
+			<xsd:element name="asNonNillableElement">
 				<xsd:complexType>
 					<xsd:sequence>
 						<xsd:element name="nonNillableElement"
@@ -32,7 +32,7 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
-			<xsd:element name="asNillableElementRequest">
+			<xsd:element name="asNillableElement">
 				<xsd:complexType>
 					<xsd:sequence>
 						<xsd:element name="nillableElement"
@@ -52,7 +52,7 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
-			<xsd:element name="asRequiredAttributeRequest">
+			<xsd:element name="asRequiredAttribute">
 				<xsd:complexType>
 					<xsd:sequence>
 						<xsd:element name="RequiredAttributeElement"
@@ -72,7 +72,7 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
-			<xsd:element name="asOptionalAttributeRequest">
+			<xsd:element name="asOptionalAttribute">
 				<xsd:complexType>
 					<xsd:sequence>
 						<xsd:element name="OptionalAttributeElement"
@@ -89,7 +89,7 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
-			<xsd:element name="asArrayRequest">
+			<xsd:element name="asArray">
 				<xsd:complexType>
 					<xsd:sequence>
 						<xsd:element name="arrayElement"
@@ -113,7 +113,7 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
-			<xsd:element name="asComplexTypeRequest">
+			<xsd:element name="asComplexType">
 				<xsd:complexType>
 					<xsd:sequence>
 						<xsd:element name="SimpleComplexType"
@@ -129,7 +129,7 @@
 			name="asNonNillableElementResponse" />
 	</wsdl:message>
 	<wsdl:message name="asNonNillableElementRequest">
-		<wsdl:part element="tns:AsNonNillableElementRequest"
+		<wsdl:part element="tns:asNonNillableElement"
 			name="parameters" />
 	</wsdl:message>
 	<wsdl:message name="asNillableElementResponse">
@@ -139,7 +139,7 @@
 	</wsdl:message>
 	<wsdl:message name="asNillableElementRequest">
 		<wsdl:part name="asNillableElementRequest"
-			element="tns:asNillableElementRequest">
+			element="tns:asNillableElement">
 		</wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="asRequiredAttributeResponse">
@@ -149,7 +149,7 @@
 	</wsdl:message>
 	<wsdl:message name="asRequiredAttributeRequest">
 		<wsdl:part name="asRequiredAttributeRequest"
-			element="tns:asRequiredAttributeRequest">
+			element="tns:asRequiredAttribute">
 		</wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="asOptionalAttributeResponse">
@@ -159,7 +159,7 @@
 	</wsdl:message>
 	<wsdl:message name="asOptionalAttributeRequest">
 		<wsdl:part name="asOptionalAttributeRequest"
-			element="tns:asOptionalAttributeRequest">
+			element="tns:asOptionalAttribute">
 		</wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="asArrayResponse">
@@ -168,7 +168,7 @@
 		</wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="asArrayRequest">
-		<wsdl:part name="asArrayRequest" element="tns:asArrayRequest"></wsdl:part>
+		<wsdl:part name="asArrayRequest" element="tns:asArray"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="asComplexTypeResponse">
 		<wsdl:part name="asComplexTypeResponse"
@@ -177,7 +177,7 @@
 	</wsdl:message>
 	<wsdl:message name="asComplexTypeRequest">
 		<wsdl:part name="asComplexTypeRequest"
-			element="tns:asComplexTypeRequest">
+			element="tns:asComplexType">
 		</wsdl:part>
 	</wsdl:message>
 	<wsdl:portType name="XSD_gDay">

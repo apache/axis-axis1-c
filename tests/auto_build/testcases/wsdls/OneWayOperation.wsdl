@@ -26,7 +26,7 @@
   	<xsd:import namespace="OneWayOperation"
   	       schemaLocation="OneWayOperation.xsd"/>
 
-   <xsd:element name="anElementComplex">
+   <xsd:element name="aBeanPortTypeComplex">
     <xsd:complexType>
      <xsd:sequence>
       <xsd:element maxOccurs="1" minOccurs="1" name="Element" nillable="true" type="ns99:SampleBeanComplex"/>
@@ -34,7 +34,7 @@
     </xsd:complexType>
    </xsd:element>
 
-   <xsd:element name="anElementBase">
+   <xsd:element name="aBeanPortTypeBase">
     <xsd:complexType>
      <xsd:sequence>
       <xsd:element maxOccurs="1" minOccurs="1" name="Element" nillable="true" type="ns99:SampleBeanBoolean"/>
@@ -45,11 +45,11 @@
  </types>
 
  <message name="aBeanMessageComplex">
- 	<part name="aBeanMesage" element="tns:anElementComplex"></part>
+ 	<part name="aBeanMesage" element="tns:aBeanPortTypeComplex"></part>
  </message>
 
  <message name="aBeanMessageBase">
- 	<part name="aBeanMesage" element="tns:anElementBase"></part>
+ 	<part name="aBeanMesage" element="tns:aBeanPortTypeBase"></part>
  </message>
 
  <portType name="TestServicePortType">
