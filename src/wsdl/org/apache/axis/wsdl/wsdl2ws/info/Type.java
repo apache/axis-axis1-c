@@ -191,7 +191,11 @@ public class Type
 
     public void addAttributes(Vector attrs)
     {
-        this.vAttributes = attrs;
+        // Needs to be done this way so we can take care of attributes from extensions
+        if (this.vAttributes == null)
+            this.vAttributes = attrs;
+        else
+            this.vAttributes.addAll(attrs);
     }
 
     public Iterator getElementnames()
