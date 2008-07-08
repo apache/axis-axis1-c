@@ -382,11 +382,11 @@ public class BeanParamWriter extends ParamCPPFileWriter
             
             String soapTagName = attribs[i].getParamNameAsSOAPString();
 
-            Type type = attribs[i].getType();
+            Type attrType = attribs[i].getType();
             String basicType = null;
             
-            if (!attribs[i].isSimpleType() && type.isSimpleType())
-                basicType = CUtils.getclass4qname(type.getBaseType());
+            if (!attribs[i].isSimpleType() && attrType.isSimpleType())
+                basicType = CUtils.getclass4qname(attrType.getBaseType());
             else
                 basicType = attribs[i].getTypeName();
 
