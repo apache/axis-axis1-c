@@ -988,11 +988,10 @@ IHeaderBlock * SoapSerializer::createHeaderBlock( const AxisChar * pachLocalName
 
 SoapMethod * SoapSerializer::getSOAPMethod()
 {
-    /*
-     *TODO
-     * return the SOAPMethod object if one is available. If not available create a SOAPMethod and set it and return it.
-     */
-
+    if ( m_pSoapEnvelope &&
+        (m_pSoapEnvelope->m_pSoapBody))
+    	return m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod;
+	
     return NULL;
 }
 
