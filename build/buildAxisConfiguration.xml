@@ -12,6 +12,7 @@
         objdir="${dir.objects}"
         exceptions="true"
         outtype="executable"
+    	subsystem="console"
         multithreaded="true">
 
       <!-- Compilers -->

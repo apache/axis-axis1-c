@@ -77,6 +77,9 @@
 			</defineset>
 			<compilerarg value="/FD"/>
 			<compilerarg value="/c"/>
+			<compilerarg value="/Zc:wchar_t"/>
+			<compilerarg value="/Zc:forScope"/>
+			<compilerarg value="/GR"/>
 		</compiler>
 
 		<!--
