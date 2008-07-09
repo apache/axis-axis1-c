@@ -513,23 +513,24 @@ operator << (const AxisChar * cSerialized)
 int SoapSerializer::
 createSoapMethod( const AxisChar * sLocalName, const AxisChar * sURI)
 {
-    SoapMethod * pMethod = NULL;
-    if( !(m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod))
+	if (NULL == m_pSoapEnvelope || NULL == m_pSoapEnvelope->m_pSoapBody)
+		return AXIS_FAIL;
+		
+    SoapMethod * pMethod = m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod;
+    if (pMethod == NULL)
     {
         pMethod = new SoapMethod();
         setSoapMethod( pMethod);
     }
-    else
-    {
-        pMethod = m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod;
-        pMethod->clearOutParams();
-    }
+    
+    // Ensure everything is cleared out if using existing method object.
+    pMethod->reset();
 
     pMethod->setLocalName( sLocalName);
     pMethod->setPrefix( getNamespacePrefix( sURI));
     pMethod->setURI( sURI);
 
-    return AXIS_SUCCESS;  // Can it only be successful?
+    return AXIS_SUCCESS;
 }
 
 int SoapSerializer::

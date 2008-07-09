@@ -34,7 +34,7 @@
 #include "../../soap/HeaderBlock.h"
 #include "../../common/AxisGenException.h"
 #include "../../soap/Attribute.h"
-
+#include "../../soap/SoapMethod.h"
 
 extern AXIS_CPP_NAMESPACE_PREFIX AxisConfig* g_pConfig;
 
@@ -133,8 +133,18 @@ int Call::setEndpointURI( const char * pchEndpointURI)
 void Call::setOperation (const char* pchOperation, 
                          const char* pchNamespace)
 {
+    setOperation(pchOperation, pchNamespace, true);
+}
+
+void Call::setOperation (const char* pchOperation, 
+                         const char* pchNamespace,
+                         bool bIsWrapperStyle)
+{
     m_pIWSSZ->createSoapMethod (pchOperation, pchNamespace);
     m_pAxisEngine->getMessageData()->setOperationName(pchOperation);
+    
+    SoapMethod* sm = getSOAPSerializer()->getSOAPMethod();
+    sm->setWrapperStyle(bIsWrapperStyle); 
 }
 
 void Call::addParameter( void * pValue, 

@@ -403,6 +403,20 @@ public:
                                 const char * pchNamespace);
 
     /**
+     * Method to set the remote method name.
+     *
+     * @param pchOperation null terminated character string that contains the
+     * request tag name. i.e. @n
+     * m_pCall->setOperation( "doBenchRequest", Axis_URI_BenchDataType);@n
+     * @param pchNamespace null terminated character string that contains the
+     * namespace for the operation.
+     * @param bIsWrapperStyle whether operation is wrapper-style or not.
+     */
+    void AXISCALL setOperation( const char * pchOperation,
+                                const char * pchNamespace,
+                                bool bIsWrapperStyle);    
+    
+    /**
      * Method to set the endpoint URI for the service.
      *
      * @param pchEndpointURI null terminated character string that contains the

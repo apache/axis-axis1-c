@@ -29,6 +29,7 @@ AXIS_CPP_NAMESPACE_START
 SoapMethod::
 SoapMethod()
 {
+	reset();
 }
 
 SoapMethod::
@@ -41,19 +42,28 @@ SoapMethod::
 void SoapMethod::
 setPrefix(const AxisChar* prefix)
 {
-    m_strPrefix = prefix;
+	if (NULL == prefix)
+		m_strPrefix = "";
+	else
+		m_strPrefix = prefix;
 }
 
 void SoapMethod::
 setLocalName(const AxisChar* localname)
 {
-    m_strLocalname = localname;
+	if (NULL == localname)
+		m_strLocalname = "";
+	else
+		m_strLocalname = localname;
 }
 
 void SoapMethod::
 setURI(const AxisChar* uri)
 {
-    m_strUri = uri;
+	if (NULL == uri)
+		m_strUri = "";
+	else
+		m_strUri = uri;
 }
 
 void SoapMethod::
@@ -82,7 +92,10 @@ serialize(SoapSerializer& pSZ)
             if(iStatus==AXIS_FAIL)
                 break;
             
-            pSZ.serialize(">\n", NULL);
+            // If not wrapper style, then end tag will be added by bean. 
+            // This is a hack in order to keep backward compatibility.
+            if (m_isWrapperStyle)
+            	pSZ.serialize(">\n", NULL);
 
             // push the current NS to the NS stack
             pSZ.getNamespacePrefix(m_strUri.c_str());
@@ -165,7 +178,8 @@ isSerializable()
 int SoapMethod::
 addAttribute(Attribute *pAttribute)
 {
-    m_attributes.push_back(pAttribute);
+	if (pAttribute)
+		m_attributes.push_back(pAttribute);
 
     return AXIS_SUCCESS;
 }
@@ -187,6 +201,7 @@ serializeAttributes(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceStack)
 int SoapMethod::
 reset()
 {
+	m_isWrapperStyle = true;
     m_strUri = "";
     m_strLocalname = "";
     m_strPrefix = "";

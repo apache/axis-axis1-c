@@ -366,46 +366,12 @@ public class ClientStubWriter
         if (namespaceURI == null)
             namespaceURI = "";
              
-        writer.write("\taxiscCallSetOperation(call, \""
-            + minfo.getMethodname() + "\", \""
+        if (minfo.isUnwrapped())
+            writer.write("\taxiscCallSetOperationUnwrapped(call, \"");
+        else
+            writer.write("\taxiscCallSetOperation(call, \"");
+        writer.write( minfo.getMethodname() + "\", \""
             + namespaceURI + "\");\n");
-
-        // Add attributes to soap method
-        boolean commentIssued=false;
-        for (int i = 0; i < paramsB.size (); i++)
-        {
-            ParameterInfo param = (ParameterInfo) paramsB.get (i);
-            
-            // Skip non-attributes
-            if (!param.isAttribute ())
-                continue;
-            
-            if (!commentIssued)
-            {
-                commentIssued = true;
-                CUtils.printBlockComment(writer, "Add attributes to soap method.");
-            }
-            else
-                writer.write ("\n");
-            
-            // Process attributes
-            String elementType = param.getElementName ().getLocalPart ();
-    
-            if ("string".equals (elementType))
-            {
-                writer.write ("\taxiscCallSetSOAPMethodAttribute(call, \""
-                      + param.getParamNameAsSOAPString () + "\", \"\", Value" + i + ");\n");
-            }
-            else if ("int".equals (elementType))
-            {
-                writer.write ("\t{\n");
-                writer.write ("\t\tchar buffer[20];\n");
-                writer.write ("\t\tsprintf(buffer,\"%d\", Value" + i + ");\n");
-                writer.write ("\t\taxiscCallSetSOAPMethodAttribute(call, \"" +
-                       param.getParamNameAsSOAPString () + "\", \"\", buffer);\n");
-                writer.write ("\t}\n");
-            }
-        } // end for-loop
         
         // new calls from stub base
         CUtils.printBlockComment(writer, "Apply SSL configuration properties and user-set SOAP headers.");        
@@ -413,7 +379,7 @@ public class ClientStubWriter
         writer.write ("\taxiscStubApplyUserPreferences(stub);\n");
         
         // Process elements
-        commentIssued=false;
+        boolean commentIssued=false;
         String tab2;
         for (int i = 0; i < paramsB.size(); i++)
         {

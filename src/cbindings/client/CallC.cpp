@@ -560,6 +560,27 @@ void axiscCallSetOperation(AXISCHANDLE call,
 }
 
 AXISC_STORAGE_CLASS_INFO 
+void axiscCallSetOperationUnwrapped(AXISCHANDLE call, 
+                                    const char * pchOperation, 
+                                    const char * pchNamespace) 
+{
+    Call *c = (Call*)call;
+    
+    try
+    {
+        c->setOperation(pchOperation, pchNamespace, false);
+    }
+    catch ( AxisException& e  )
+    {
+        processException(c, e);
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
+    }
+}
+
+AXISC_STORAGE_CLASS_INFO 
 int axiscCallSetEndpointURI(AXISCHANDLE call, 
                             const char * pchEndpointURI) 
 {

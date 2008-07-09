@@ -395,6 +395,19 @@ void axiscCallSetOperation(AXISCHANDLE call, const char * pchOperation,
 	const char * pchNamespace);
 
 /**
+ * Method to set the remote method name in non-wrapper style operation.
+ *
+ * @param pchOperation null terminated character string that contains the
+ * request tag name. i.e. @n
+ * m_pCall->setOperation( "doBenchRequest", Axis_URI_BenchDataType);@n
+ * @param pchNamespace null terminated character string that contains the
+ * namespace for the operation.
+ */
+AXISC_STORAGE_CLASS_INFO
+void axiscCallSetOperationUnwrapped(AXISCHANDLE call, const char * pchOperation, 
+	const char * pchNamespace);
+
+/**
  * Method to set the endpoint URI for the service.
  *
  * @param pchEndpointURI null terminated character string that contains the

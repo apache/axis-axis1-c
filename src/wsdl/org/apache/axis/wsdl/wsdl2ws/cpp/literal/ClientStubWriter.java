@@ -367,50 +367,14 @@ public class ClientStubWriter
         if (namespaceURI == null)
             namespaceURI = "";
 
+        String iswrapperstyle = "true";
+        if (minfo.isUnwrapped())
+            iswrapperstyle = "false";
+        
          writer.write( "\t\tm_pCall->setOperation(\""
                 + minfo.getMethodname() + "\", \""
-                + namespaceURI + "\");\n");
-        
-        //=============================================================================
-        // Add attributes to soap method
-        //=============================================================================        
-                   
-        boolean commentIssued=false;
-        for (int i = 0; i < paramsB.size (); i++)
-        {
-            ParameterInfo param = (ParameterInfo) paramsB.get (i);
+                + namespaceURI + "\", " + iswrapperstyle + ");\n");
             
-            // Skip non-attributes
-            if (!param.isAttribute ())
-                continue;
-            
-            if (!commentIssued)
-            {
-                commentIssued = true;
-                CUtils.printBlockComment(writer, "Add attributes to soap method.");
-            }
-            else
-                writer.write ("\n");
-            
-            // Process attributes
-            String elementType = param.getElementName ().getLocalPart ();
-    
-            if ("string".equals (elementType))
-            {
-                writer.write ("\t\tm_pCall->setSOAPMethodAttribute(\""
-                      + param.getParamNameAsSOAPString () + "\", \"\", Value" + i + ");\n");
-            }
-            else if ("int".equals (elementType))
-            {
-                writer.write ("\t\t{\n");
-                writer.write ("\t\t\tchar buffer[20];\n");
-                writer.write ("\t\t\tsprintf(buffer,\"%d\", Value" + i + ");\n");
-                writer.write ("\t\t\tm_pCall->setSOAPMethodAttribute(\"" +
-                       param.getParamNameAsSOAPString () + "\", \"\", buffer);\n");
-                writer.write ("\t\t}\n");
-            }
-        } // end for-loop
-    
         //=============================================================================
         // Apply user specified properties
         //=============================================================================        
@@ -423,7 +387,7 @@ public class ClientStubWriter
         // Process elements
         //=============================================================================        
 
-        commentIssued=false;
+        boolean commentIssued=false;
         String tab2;
         for (int i = 0; i < paramsB.size (); i++)
         {

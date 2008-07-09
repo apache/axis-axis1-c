@@ -69,6 +69,7 @@ private:
     AxisString m_strLocalname;
     AxisString m_strUri;
     list<Param*> m_OutputParams;
+    bool m_isWrapperStyle;
 
 public:    
     int reset();
@@ -84,6 +85,8 @@ public:
     void addOutputParam(Param *param);
     void setURI(const AxisChar* uri);
     void setLocalName(const AxisChar* localname);
+    void setWrapperStyle(bool bIsWrapperStyle) { m_isWrapperStyle = bIsWrapperStyle; }
+    bool isWrapperStyle() { return m_isWrapperStyle; }
     void setPrefix(const AxisChar* prefix);
     SoapMethod();
     virtual ~SoapMethod();
