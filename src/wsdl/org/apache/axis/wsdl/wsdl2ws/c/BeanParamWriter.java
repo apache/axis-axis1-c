@@ -239,6 +239,8 @@ public class BeanParamWriter extends ParamCFileWriter
                 ifCheckPrinted = true;
                 writer.write("(param->" + attribs[i].getParamNameAsMember() + ")\n\t{\n\t");
             }
+            else
+                firstIfWritten = false;
  
             //if the attribute is a 'all' following should do
             if (attribs[i].getAllElement())
@@ -545,6 +547,8 @@ public class BeanParamWriter extends ParamCFileWriter
                 writer.write("(strcmp(choiceName,\""
                         + attribs[i].getElementNameAsSOAPString() + "\")==0)\n\t{\n\t");
             }
+            else
+                firstIfWritten = false;
             
             //if the attribute is a 'all' construct we have to check Min
             // occures

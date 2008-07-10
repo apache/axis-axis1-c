@@ -143,7 +143,7 @@ public class WrapperUtils
             return "AnyType*";
         
         Type type = wscontext.getTypemap().getType(param.getSchemaName());
-        if (type.isSimpleType())
+        if (null != type && type.isSimpleType())
         {
             String name = param.getLangName();
             
@@ -155,7 +155,7 @@ public class WrapperUtils
         else if (!TypeMap.isSimpleType(param.getSchemaName()))
         { 
             //array or complex types
-            if (type.isArray())
+            if (null != type && type.isArray())
             {
                 String arrayName = CUtils.getCmplxArrayNameforType(getArrayType(type).getName());
                 if (null == arrayName)
@@ -173,7 +173,7 @@ public class WrapperUtils
                 //All complex types will be pointers    
             }
         }
-        else if (param.isArray())
+        else if (null != type && param.isArray())
         {
             /* This enables having simple type array declarations in the wrapping element
              * <s:element name="GetProjectNamesResponse">
