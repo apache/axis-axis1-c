@@ -2069,4 +2069,46 @@ public class CSchemaUtils extends SchemaUtils
         }       
         return null;
     }
+    
+    /*
+     * check whether node should be namespace qualified or not.
+     */
+    public static boolean shouldWeNamespaceQualifyNode(Node elementNode, boolean defaultAnswer)
+    {
+        String form = Utils.getAttribute(elementNode, "form");
+        if (form != null)
+        {
+            if (form.equals("qualified"))
+                return true;
+            else 
+                return false;
+        }
+        else
+            return defaultAnswer;
+    }
+    
+    public static boolean isElementFormDefaultQualified(Node elementNode)
+    {
+        if (elementNode != null)
+        {
+            String def = Utils.getScopedAttribute(elementNode, "elementFormDefault");
+            if ((def != null) && def.equals("qualified"))
+                return true;
+        }
+        
+        return false;
+    }
+    
+    public static boolean isAttributeFormDefaultQualified(Node attributeNode)
+    {
+        if (attributeNode != null)
+        {
+            String def = Utils.getScopedAttribute(attributeNode, "attributeFormDefault");
+            if ((def != null) && def.equals("qualified"))
+                return true;
+        }
+        
+        return false;
+    }
+    
 }

@@ -965,6 +965,7 @@ public class WSDL2Ws
                     if (c_verbose)
                         System.out.println("Processing attributes for type: " + type.getQName());
 
+                    // TODO Need to handle whether attributes are qualified?
                     Vector attributes = CSchemaUtils.getContainedAttributeTypes(te.getNode(), c_symbolTable);
                     if (attributes != null)
                     {
@@ -984,9 +985,23 @@ public class WSDL2Ws
                     
                     Vector elements =  CSchemaUtils.getContainedElementDeclarations(te.getNode(), c_symbolTable);
                     if (elements != null)
+                    {
+                        // The following will get elementFormDefault for the schema the element is in.
+                        boolean nsQualifyElementDefault = CSchemaUtils.isElementFormDefaultQualified(te.getNode());
+                        
+                        // Now process the elements.
                         for (int j = 0; j < elements.size(); j++)
                         {   
                             CElementDecl elem = (CElementDecl) elements.get(j);
+                            
+                            // Set whether to namespace qualify or not. We only process if not set.
+                            if (!elem.getNsQualified())
+                            {
+                                boolean nsQualifyElement = 
+                                    CSchemaUtils.shouldWeNamespaceQualifyNode(elem.getTypeEntry().getNode(), 
+                                                                              nsQualifyElementDefault);
+                                elem.setNsQualified(nsQualifyElement);
+                            }
                             
                             if (elem.getAnyElement())
                             {
@@ -1017,7 +1032,8 @@ public class WSDL2Ws
                                                        
                             typedata.setTypeNameForElementName(elem);
                         }
-                }
+                    }
+                } // for-loop
             }
         }
         return typedata;
