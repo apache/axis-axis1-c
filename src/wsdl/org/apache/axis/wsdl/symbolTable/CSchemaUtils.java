@@ -2071,7 +2071,8 @@ public class CSchemaUtils extends SchemaUtils
     }
     
     /*
-     * check whether node should be namespace qualified or not.
+     * check whether node should be namespace qualified or not by checking for "form"
+     * attribute. If "form" attribute not specified, the defaultAnswer is returned.
      */
     public static boolean shouldWeNamespaceQualifyNode(Node elementNode, boolean defaultAnswer)
     {
@@ -2087,6 +2088,10 @@ public class CSchemaUtils extends SchemaUtils
             return defaultAnswer;
     }
     
+    /*
+     * Find out whether schema's elementFormDefault is "qualified" or not.  This is done by 
+     * recursively interrogating parent nodes until it is found or not. 
+     */
     public static boolean isElementFormDefaultQualified(Node elementNode)
     {
         if (elementNode != null)
@@ -2099,6 +2104,10 @@ public class CSchemaUtils extends SchemaUtils
         return false;
     }
     
+    /*
+     * Find out whether schema's attributeFormDefault is "qualified" or not.  This is done by 
+     * recursively interrogating parent nodes until it is found or not. 
+     */
     public static boolean isAttributeFormDefaultQualified(Node attributeNode)
     {
         if (attributeNode != null)
