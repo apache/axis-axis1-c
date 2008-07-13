@@ -166,5 +166,5 @@ NamespaceInBindingOperationsRpc.xml
 NamespaceInBindingOperationsRpcNoTypeInResponse.xml
 
 OneWayOperation.xml
-#NoInputParams.xml
+NoInputParams.xml
 inquire_v2.xml
