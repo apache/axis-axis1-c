@@ -1,26 +1,35 @@
 invoking get_tModelDetail...
 tModel_Array size = 1
 tModel 1...
-	 tModel Key Ref = uuid:2524c425-656e-4eb2-8b13-080cfb081382
-	 Operator = www.ibm.com/services/uddi
-	 Authorized Name = UNAUTHENTICATED
-	 Name = TestTModel1
-	 Description 1 = This is Technical Model1
-	 Overview URL = http://localhost:9080/Calculator/services/Calculator?wsdl
+     tModel Key Ref = uuid:2524c425-656e-4eb2-8b13-080cfb081382
+     Operator = www.ibm.com/services/uddi
+     Authorized Name = UNAUTHENTICATED
+     Name = TestTModel1
+     Description 1 = This is Technical Model1
+     Overview URL = http://localhost:9080/Calculator/services/Calculator?wsdl
+categoryBag...
+keyedReference  1...
+     tModelKey = uuid:c1acf26d-9672-4404-9d70-39b756e62ab4
+     keyName = Description Type
+     keyValue = wsdlSpec
+keyedReference  2...
+     tModelKey = uuid:48eb2518-c1bd-354f-92c9-21a53b0ff2b1
+     keyName = Location
+     keyValue = Sri Lanka
 invoking get_businessDetail ...
 businessEntity_Array size = 1
 Business Entity 1
-	 Business Key Ref = aea80cae-6cde-4eac-9feb-19ac9719ebb9
-	 Operator = www.ibm.com/services/uddi
-	 Authorized Name = UNAUTHENTICATED
-	 Names... 
-		 Name 1 = TestBusiness3
-	 Business Services...
-		 Business Service 1...
-			 service key referance = 90757090-956e-4e13-82c0-4e85904ec076
-			 business key referance = aea80cae-6cde-4eac-9feb-19ac9719ebb9
-			 Binding Templates...
-				 Access Point 1...
-					 Point = http://localhost:9080/Calculator/services/Calculator
-					 URL Type = other
+     Business Key Ref = aea80cae-6cde-4eac-9feb-19ac9719ebb9
+     Operator = www.ibm.com/services/uddi
+     Authorized Name = UNAUTHENTICATED
+     Names... 
+         Name 1 = TestBusiness3
+     Business Services...
+         Business Service 1...
+             service key referance = 90757090-956e-4e13-82c0-4e85904ec076
+             business key referance = aea80cae-6cde-4eac-9feb-19ac9719ebb9
+             Binding Templates...
+                 Access Point 1...
+                     Point = http://localhost:9080/Calculator/services/Calculator
+                     URL Type = other
 
