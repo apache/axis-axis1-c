@@ -35,7 +35,6 @@ import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
 public class ExceptionHeaderWriter extends HeaderFileWriter
 {
-    private ArrayList methods;
     String faultInfoName;
 
     public ExceptionHeaderWriter(
@@ -48,7 +47,6 @@ public class ExceptionHeaderWriter extends HeaderFileWriter
         if (WSDL2Ws.c_verbose)
             System.out.println("faultInfoName is:" + faultInfoName);
         this.wscontext = wscontext;
-        this.methods = wscontext.getSerInfo().getMethods();
         this.faultInfoName = "Axis" + faultInfoName + "Exception";
     }
 
