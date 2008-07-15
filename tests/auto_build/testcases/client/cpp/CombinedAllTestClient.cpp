@@ -48,28 +48,31 @@ main (int argc, char *argv[])
             AllTestSoap ws (endpoint, APTHTTP1_1);
             AllComplexType* inParam = new AllComplexType();
 
-            inParam->NonAllIntValue = 3;
+            xsd__int NonAllIntValue = 3;
             inParam->Value0 = new int;
             *(inParam->Value0) = 5;
             inParam->Value2 = "TINTIN";
-            inParam->NonAllStringValue = "HELLO";
+            xsd__string NonAllStringValue = "HELLO";
 
             printf("\nSending.................");
-            printf("\nNonAllIntValue = %d",inParam->NonAllIntValue);
+            printf("\nNonAllIntValue = %d",NonAllIntValue);
             printf("\nAllValue0 = %d",*(inParam->Value0));
             printf("\nAllValue2 = %s",inParam->Value2);
-            printf("\nNonAllStringValue = %s",inParam->NonAllStringValue);
+            printf("\nNonAllStringValue = %s", NonAllStringValue);
 
             ws.setTransportProperty("SOAPAction" , "CombinedAll#echoAll");
-            AllComplexType* outParam = ws.echoAll(inParam);
+            AllComplexType* outParam = NULL;
+            xsd__int outValue0 = NULL;
+            xsd__string  OutValue2 = NULL;
+            ws.echoAll(NonAllIntValue, inParam, NonAllStringValue,  &outValue0, &outParam, &OutValue2);
 
             if (outParam != NULL)
             {
                 printf("\n\nReceived................");
-                printf("\nNonAllIntValue = %d",outParam->NonAllIntValue);
+                printf("\nNonAllIntValue = %d", outValue0);
                 printf("\nAllValue0 = %d",*(outParam->Value0));
                 printf("\nAllValue2 = %s",outParam->Value2);
-                printf("\nNonAllStringValue = %s",outParam->NonAllStringValue);
+                printf("\nNonAllStringValue = %s", OutValue2);
                 printf("\n\nSuccessfull\n");
             }
             else

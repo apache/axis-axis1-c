@@ -9,11 +9,12 @@ Transfer-Encoding: chunked
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <SOAP-ENV:Body>
 <ns1:echoAllResponse xmlns:ns1="http://soapinterop.org/">
-<return><ns2:NonAllIntValue xmlns:ns2="http://soapinterop.org/xsd">3</ns2:NonAllIntValue>
+<ns1:NonAllIntValue xmlns:ns2="http://soapinterop.org/xsd">3</ns1:NonAllIntValue>
+<return>
 <ns3:Value0 xmlns:ns3="http://soapinterop.org/xsd">5</ns3:Value0>
 <ns4:Value2 xmlns:ns4="http://soapinterop.org/xsd">TINTIN</ns4:Value2>
-<ns5:NonAllStringValue xmlns:ns5="http://soapinterop.org/xsd">HELLO</ns5:NonAllStringValue>
 </return>
+<ns1:NonAllStringValue xmlns:ns5="http://soapinterop.org/xsd">HELLO</ns1:NonAllStringValue>
 </ns1:echoAllResponse>
 </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>

@@ -10,14 +10,18 @@
       <s:element name="echoAll">
         <s:complexType>
           <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="NonAllIntValue" type="s:int" />
             <s:element name="inputAll" type="s1:AllComplexType" />
+            <s:element minOccurs="1" maxOccurs="1" name="NonAllStringValue" type="s:string" />            
           </s:sequence>
         </s:complexType>
       </s:element>
       <s:element name="echoAllResponse">
         <s:complexType>
           <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="NonAllIntValue" type="s:int" />
             <s:element name="return" type="s1:AllComplexType" />
+            <s:element minOccurs="1" maxOccurs="1" name="NonAllStringValue" type="s:string" />
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -30,17 +34,11 @@
       <s:import namespace="http://soapinterop.org/" />
 
     <s:complexType name="AllComplexType">
-		<s:sequence>
-			<s:element minOccurs="1" maxOccurs="1" name="NonAllIntValue" type="s:int" />
-		</s:sequence>
         <s:all>
             <s:element minOccurs="0" name="Value0" type="s:int" />
             <s:element minOccurs="0" name="Value1" type="s:int" />
             <s:element minOccurs="0" name="Value2" type="s:string" />
         </s:all>
-		<s:sequence>
-			<s:element minOccurs="1" maxOccurs="1" name="NonAllStringValue" type="s:string" />
-		</s:sequence>
       </s:complexType>
     </s:schema>
  
