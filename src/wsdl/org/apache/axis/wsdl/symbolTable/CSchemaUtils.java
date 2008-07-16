@@ -2076,6 +2076,13 @@ public class CSchemaUtils extends SchemaUtils
      */
     public static boolean shouldWeNamespaceQualifyNode(Node elementNode, boolean defaultAnswer)
     {
+        if (null == elementNode || elementNode.getNodeType() != Node.ELEMENT_NODE)
+            return defaultAnswer;
+        
+        // Ensure node represents an "element" node.  If not, get the parent.
+        if (!elementNode.getLocalName().equals("element"))
+            return shouldWeNamespaceQualifyNode(elementNode.getParentNode(), defaultAnswer);
+        
         String form = Utils.getAttribute(elementNode, "form");
         if (form != null)
         {
