@@ -2,12 +2,12 @@ POST /XSD_string/services/XSD_stringSOAP HTTP/1.1
 Host: localhost:13260
 Content-Type: text/xml; charset=UTF-8
 SOAPAction: "http://tempuri.org/MinOccursIsZero/NewOperation"
-Content-Length: 666
+Content-Length: 652
 
 <?xml version='1.0' encoding='utf-8' ?>
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <SOAP-ENV:Body>
-<ns1:optionalElementsRequest xmlns:ns1="http://tempuri.org/MinOccursIsZero/">
+<ns1:optionalElements xmlns:ns1="http://tempuri.org/MinOccursIsZero/">
 <stringElement>Hello!</stringElement>
 <integerElement>123</integerElement>
 <complexType><stringElement>Goodbye!</stringElement>
@@ -15,7 +15,7 @@ Content-Length: 666
 <complexType><stringElement>Welcome!</stringElement>
 <integerElement>345</integerElement>
 </complexType></complexType>
-</ns1:optionalElementsRequest>
+</ns1:optionalElements>
 </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 
@@ -23,16 +23,16 @@ POST /XSD_string/services/XSD_stringSOAP HTTP/1.1
 Host: localhost:13260
 Content-Type: text/xml; charset=UTF-8
 SOAPAction: "http://tempuri.org/MinOccursIsZero/NewOperation"
-Content-Length: 485
+Content-Length: 471
 
 <?xml version='1.0' encoding='utf-8' ?>
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <SOAP-ENV:Body>
-<ns1:optionalElementsRequest xmlns:ns1="http://tempuri.org/MinOccursIsZero/">
+<ns1:optionalElements xmlns:ns1="http://tempuri.org/MinOccursIsZero/">
 <stringElement>Hello!</stringElement>
 <integerElement>123</integerElement>
 <complexType></complexType>
-</ns1:optionalElementsRequest>
+</ns1:optionalElements>
 </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 
@@ -40,13 +40,13 @@ POST /XSD_string/services/XSD_stringSOAP HTTP/1.1
 Host: localhost:13260
 Content-Type: text/xml; charset=UTF-8
 SOAPAction: "http://tempuri.org/MinOccursIsZero/NewOperation"
-Content-Length: 382
+Content-Length: 368
 
 <?xml version='1.0' encoding='utf-8' ?>
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <SOAP-ENV:Body>
-<ns1:optionalElementsRequest xmlns:ns1="http://tempuri.org/MinOccursIsZero/">
-</ns1:optionalElementsRequest>
+<ns1:optionalElements xmlns:ns1="http://tempuri.org/MinOccursIsZero/">
+</ns1:optionalElements>
 </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 

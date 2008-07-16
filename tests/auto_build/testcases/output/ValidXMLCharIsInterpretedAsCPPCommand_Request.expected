@@ -2,12 +2,12 @@ POST /axis/ValidXMLCharIsInterpretedAsCPPCommand HTTP/1.1
 Host: 127.0.0.1:13260
 Content-Type: text/xml; charset=UTF-8
 SOAPAction: "ValidXMLCharIsInterpretedAsCPPCommand#test1"
-Content-Length: 816
+Content-Length: 802
 
 <?xml version='1.0' encoding='utf-8' ?>
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <SOAP-ENV:Body>
-<ns1:test1Request xmlns:ns1="http://localhost/axis/ValidXMLCharIsInterpretedAsCPPCommand">
+<ns1:test1 xmlns:ns1="http://localhost/axis/ValidXMLCharIsInterpretedAsCPPCommand">
 <ns1:Element xmlns:ns2="ValidXMLCharIsInterpretedAsCPPCommandTypes"><ns2:arg.WithADot>1</ns2:arg.WithADot>
 <ns2:arg_WithAnUnderscore>2</ns2:arg_WithAnUnderscore>
 <ns2:arg-WithAHyphen>3</ns2:arg-WithAHyphen>
@@ -16,7 +16,7 @@ Content-Length: 816
 <ns2:arg.With.TwoDots>6</ns2:arg.With.TwoDots>
 <ns2:arg..WithTwoDotsInline>7</ns2:arg..WithTwoDotsInline>
 </ns1:Element>
-</ns1:test1Request>
+</ns1:test1>
 </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 
@@ -24,12 +24,12 @@ POST /axis/ValidXMLCharIsInterpretedAsCPPCommand HTTP/1.1
 Host: 127.0.0.1:13260
 Content-Type: text/xml; charset=UTF-8
 SOAPAction: "ValidXMLCharIsInterpretedAsCPPCommand#test1"
-Content-Length: 816
+Content-Length: 840
 
 <?xml version='1.0' encoding='utf-8' ?>
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <SOAP-ENV:Body>
-<ns1:test1Request xmlns:ns1="http://localhost/axis/ValidXMLCharIsInterpretedAsCPPCommand">
+<ns1:Test1WithComplexResponse xmlns:ns1="http://localhost/axis/ValidXMLCharIsInterpretedAsCPPCommand">
 <ns1:Element xmlns:ns2="ValidXMLCharIsInterpretedAsCPPCommandTypes"><ns2:arg.WithADot>1</ns2:arg.WithADot>
 <ns2:arg_WithAnUnderscore>2</ns2:arg_WithAnUnderscore>
 <ns2:arg-WithAHyphen>3</ns2:arg-WithAHyphen>
@@ -38,7 +38,7 @@ Content-Length: 816
 <ns2:arg.With.TwoDots>6</ns2:arg.With.TwoDots>
 <ns2:arg..WithTwoDotsInline>7</ns2:arg..WithTwoDotsInline>
 </ns1:Element>
-</ns1:test1Request>
+</ns1:Test1WithComplexResponse>
 </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 
