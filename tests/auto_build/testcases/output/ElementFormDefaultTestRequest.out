@@ -2,12 +2,12 @@ POST /axis/ElementFormDefaultTest HTTP/1.1
 Host: 127.0.0.1:13260
 Content-Type: text/xml; charset=UTF-8
 SOAPAction: "null"
-Content-Length: 887
+Content-Length: 873
 
 <?xml version='1.0' encoding='utf-8' ?>
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <SOAP-ENV:Body>
-<ns1:elementFormDefaultIsUnqualifiedRequest xmlns:ns1="http://tempuri.org/ElementFormDefaultTest/">
+<ns1:elementFormDefaultIsUnqualified xmlns:ns1="http://tempuri.org/ElementFormDefaultTest/">
 <aStringType>Hello!</aStringType>
 <anIntegerType>123</anIntegerType>
 <anIntegerArray>0</anIntegerArray>
@@ -18,7 +18,7 @@ Content-Length: 887
 </SimpleComplexType>
 <arrayOfSimpleComplexType><someData>0</someData>
 </arrayOfSimpleComplexType><arrayOfSimpleComplexType><someData>1</someData>
-</arrayOfSimpleComplexType></ns1:elementFormDefaultIsUnqualifiedRequest>
+</arrayOfSimpleComplexType></ns1:elementFormDefaultIsUnqualified>
 </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 
@@ -26,12 +26,12 @@ POST /axis/ElementFormDefaultTest HTTP/1.1
 Host: 127.0.0.1:13260
 Content-Type: text/xml; charset=UTF-8
 SOAPAction: "null"
-Content-Length: 979
+Content-Length: 965
 
 <?xml version='1.0' encoding='utf-8' ?>
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <SOAP-ENV:Body>
-<ns1:elementFormDefaultIsQualifiedRequest xmlns:ns1="http://tempuri.org/ElementFormDefaultTest/">
+<ns1:elementFormDefaultIsQualified xmlns:ns1="http://tempuri.org/ElementFormDefaultTest/">
 <ns1:aStringType>Hello!</ns1:aStringType>
 <ns1:anIntegerType>123</ns1:anIntegerType>
 <ns1:anIntegerArray>0</ns1:anIntegerArray>
@@ -42,7 +42,7 @@ Content-Length: 979
 </ns1:SimpleComplexType>
 <ns1:arrayOfSimpleComplexType><ns1:someData>0</ns1:someData>
 </ns1:arrayOfSimpleComplexType><ns1:arrayOfSimpleComplexType><ns1:someData>1</ns1:someData>
-</ns1:arrayOfSimpleComplexType></ns1:elementFormDefaultIsQualifiedRequest>
+</ns1:arrayOfSimpleComplexType></ns1:elementFormDefaultIsQualified>
 </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 
@@ -50,12 +50,12 @@ POST /axis/ElementFormDefaultTest HTTP/1.1
 Host: 127.0.0.1:13260
 Content-Type: text/xml; charset=UTF-8
 SOAPAction: "null"
-Content-Length: 966
+Content-Length: 952
 
 <?xml version='1.0' encoding='utf-8' ?>
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <SOAP-ENV:Body>
-<ns1:nestedElementFormDefaultIsUnqualifiedRequest xmlns:ns1="http://tempuri.org/ElementFormDefaultTest/">
+<ns1:nestedElementFormDefaultIsUnqualified xmlns:ns1="http://tempuri.org/ElementFormDefaultTest/">
 <ElementFormDefaultIsUnqualified><aStringType>Hello!</aStringType>
 <anIntegerType>123</anIntegerType>
 <anIntegerArray>0</anIntegerArray>
@@ -66,7 +66,7 @@ Content-Length: 966
 </SimpleComplexType><arrayOfSimpleComplexType><someData>0</someData>
 </arrayOfSimpleComplexType><arrayOfSimpleComplexType><someData>1</someData>
 </arrayOfSimpleComplexType></ElementFormDefaultIsUnqualified>
-</ns1:nestedElementFormDefaultIsUnqualifiedRequest>
+</ns1:nestedElementFormDefaultIsUnqualified>
 </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 
@@ -74,12 +74,12 @@ POST /axis/ElementFormDefaultTest HTTP/1.1
 Host: 127.0.0.1:13260
 Content-Type: text/xml; charset=UTF-8
 SOAPAction: "null"
-Content-Length: 1062
+Content-Length: 1048
 
 <?xml version='1.0' encoding='utf-8' ?>
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <SOAP-ENV:Body>
-<ns1:nestedElementFormDefaultIsQualifiedRequest xmlns:ns1="http://tempuri.org/ElementFormDefaultTest/">
+<ns1:nestedElementFormDefaultIsQualified xmlns:ns1="http://tempuri.org/ElementFormDefaultTest/">
 <ns1:ElementFormDefaultIsQualified><ns1:aStringType>Hello!</ns1:aStringType>
 <ns1:anIntegerType>123</ns1:anIntegerType>
 <ns1:anIntegerArray>0</ns1:anIntegerArray>
@@ -90,7 +90,7 @@ Content-Length: 1062
 </ns1:SimpleComplexType><ns1:arrayOfSimpleComplexType><ns1:someData>0</ns1:someData>
 </ns1:arrayOfSimpleComplexType><ns1:arrayOfSimpleComplexType><ns1:someData>1</ns1:someData>
 </ns1:arrayOfSimpleComplexType></ns1:ElementFormDefaultIsQualified>
-</ns1:nestedElementFormDefaultIsQualifiedRequest>
+</ns1:nestedElementFormDefaultIsQualified>
 </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 
