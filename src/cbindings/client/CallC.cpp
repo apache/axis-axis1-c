@@ -20,6 +20,8 @@
 #include <axis/client/Stub.hpp>
 
 #include "../AxisObjectConverter.hpp"
+#include "StubC.h"
+
 
 #include <axis/Axis.h>
 #include <axis/GDefine.h>
@@ -38,11 +40,13 @@ static void processException(Call *c, AxisException& e)
     void *exceptionHandler = (void *)axiscAxisInvokeExceptionHandler;
     void *stubExceptionHandler;
     
-    Stub *s = (Stub *)c->getCStub();
+    StubC *s = (StubC *)c->getCStub();
     if ((stubExceptionHandler = s->getCExceptionHandler()) != NULL)
         exceptionHandler = stubExceptionHandler;
     
     c->processSoapFault(&e, exceptionHandler);
+    
+    s->doNotPerformClientRequest = true;
 }
 
 
@@ -279,6 +283,8 @@ int axiscCallUnInitialize(AXISCHANDLE call)
     
     
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    s->doNotPerformClientRequest = false;
     
     try
     {
@@ -336,6 +342,9 @@ AXISC_STORAGE_CLASS_INFO
 int axiscCallSendAndReceive(AXISCHANDLE call) 
 {
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s->doNotPerformClientRequest)
+    	return -1;
     
     try
     {
@@ -360,8 +369,10 @@ AXISC_STORAGE_CLASS_INFO
 int axiscCallSend(AXISCHANDLE call) 
 {
     
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s->doNotPerformClientRequest)
+    	return -1;
     
     try
     {

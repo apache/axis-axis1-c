@@ -25,18 +25,8 @@
 #include <axis/AxisUserAPI.h>
 #include <axis/client/Stub.h>
 
-AXIS_CPP_NAMESPACE_START
-class StubC : public Stub
-{
-public :
-    StubC(const char *ep, AXIS_PROTOCOL_TYPE pt):Stub(ep,pt) {}
-    virtual ~StubC() {}
-    Call* getCallStubC() { return getCall(); }
-    void applyUserPreferencesStubC() { applyUserPreferences(); }
-    void includeSecureStubC() { includeSecure(); }
-    void setSOAPHeadersStubC() { setSOAPHeaders(); }
-};
-AXIS_CPP_NAMESPACE_END
+#include "StubC.h"
+
 
 AXIS_CPP_NAMESPACE_USE
 
@@ -788,12 +778,12 @@ void axiscStubApplyUserPreferences(AXISCHANDLE stub)
     {
         
         processException(s, e.getExceptionCode(), e.what());
+        s->doNotPerformClientRequest = true;
     }
     catch ( ... )
     {
-          
-          
         processException(s, -1, "Unrecognized exception thrown.");
+        s->doNotPerformClientRequest = true;
     }
 }
 AXISC_STORAGE_CLASS_INFO 
@@ -808,15 +798,14 @@ void axiscStubIncludeSecure(AXISCHANDLE stub)
         s->includeSecureStubC();
     }
     catch ( AxisException& e  )
-    {
-        
+    {       
         processException(s, e.getExceptionCode(), e.what());
+        s->doNotPerformClientRequest = true;
     }
     catch ( ... )
-    {
-          
-          
+    {  
         processException(s, -1, "Unrecognized exception thrown.");
+        s->doNotPerformClientRequest = true;
     }
 }
 
@@ -835,12 +824,12 @@ void axiscStubSetSOAPHeaders(AXISCHANDLE stub)
     {
         
         processException(s, e.getExceptionCode(), e.what());
+        s->doNotPerformClientRequest = true;
     }
     catch ( ... )
     {
-          
-          
         processException(s, -1, "Unrecognized exception thrown.");
+        s->doNotPerformClientRequest = true;
     }
 }
 
