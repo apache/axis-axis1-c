@@ -663,6 +663,16 @@ class STORAGE_CLASS_INFO Stub
    
 private:
     /**
+    * Copy constructor prohibited!
+    */
+    Stub(const Stub& src) {}
+    
+    /**
+     * Assignment prohibited!
+     */
+    Stub& operator=(const Stub& src) {return *this;} 
+    
+    /**
      * SSL configuration parameters
      */
     std::string m_sArguments[8];
