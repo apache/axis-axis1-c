@@ -494,6 +494,11 @@ class STORAGE_CLASS_INFO Axis_Array {
     void** get(int& size, XSDTYPE& type) const;
     
     /**
+     * Returns the size of the array.
+     */
+    int size() { return m_Size; }
+    
+    /**
      * Clear the array, and it's data
      */
     void clear();
