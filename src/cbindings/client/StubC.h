@@ -39,6 +39,7 @@ public :
     void applyUserPreferencesStubC() { applyUserPreferences(); }
     void includeSecureStubC() { includeSecure(); }
     void setSOAPHeadersStubC() { setSOAPHeaders(); }
+    void checkForExtraneousElementsStubC() { checkForExtraneousElements(); }
     
     // flag to indicate invocations should fail without actually trying to perform 
     // client request due to errors prior to the invocation. When set to true, it

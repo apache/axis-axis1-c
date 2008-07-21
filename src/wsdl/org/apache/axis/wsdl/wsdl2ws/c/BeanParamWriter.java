@@ -482,15 +482,8 @@ public class BeanParamWriter extends ParamCFileWriter
             return;
         }  
         
-        // Determine whether to print variable used for peaking ahead
-        for (int i = 0; i < attribs.length; i++)
-        {
-            if (!attribs[i].isAttribute() && attribs[i].isOptional() && !attribs[i].isArray() && !attribs[i].isAnyType())
-            {
-                writer.write("\tconst char* peekedElementName;\n");
-                break;
-            }
-        }
+        // Declare variables we use
+        writer.write("\tconst char* peekedElementName;\n");
 
         //=============================================================================
         // Deserialize attributes.
@@ -506,75 +499,105 @@ public class BeanParamWriter extends ParamCFileWriter
         //=============================================================================        
         
         String arrayType = null;
-        boolean peekCalled = false;
         boolean firstIfWritten = false;
-        boolean foundAll = false;
         int anyCounter = 0; //counter for any types.
         int arrayCount = 0;
-     
+        
+        boolean handleAll = false;
+        boolean handleChoice = false;
+        
         // Tabs to ensure code alignment
         String tab1  = "\t";
-        String tab2Default = "";
-        String tab2;
+        String tab2  = "\t";
+        
+        int startingGroup=0;
+        int endingGroup=0;
        
         for (int i = 0; i < attribs.length; i++)
         {       
-            // Reset tabs
-            tab2  = tab2Default + "\t";
-            
             if (i == attributeParamCount)
                 CUtils.printBlockComment(writer, "Deserialize elements.");
             
-            //if the attribute is a 'choice' construct we have to peek and make
-            // the choice
-
-            if (attribs[i].getChoiceElement())
+            // If All, then the element order is arbitrary, so we need a loop.  For both
+            // 'choice' and 'all', we need to do a peek. 
+            if (attribs[i].getChoiceElement() || attribs[i].getAllElement())
             {
-                if (!peekCalled)
-                {
-                    writer.write("\tconst char* choiceName=axiscSoapDeSerializerPeekNextElementName(pDZ);\n");
-                    peekCalled = true;
-                }
+                endingGroup   = i;
 
                 if (!firstIfWritten)
                 {
-                    writer.write("\tif");
+                    startingGroup = i;
+                    
+                    handleChoice = attribs[i].getChoiceElement();
+                    handleAll    = attribs[i].getAllElement();
+
+                    // Flag for us to know when we found element for 'choice'.
+                    if (handleChoice)
+                        CUtils.printComment(writer, "Deserialize \"choice\" group of elements."); 
+                    else
+                    {
+                        CUtils.printComment(writer, "Deserialize \"all\" group of elements."); 
+                        
+                        writer.write("\twhile (1)\n\t{\n");
+                        
+                        // Need to adjust tabs since we will be in a loop
+                        tab1 = "\t\t";
+                        tab2 = "\t\t";
+                    }
+                    
+                    // for choice and all, we need to do a peek.
+                    writer.write(tab1 + "peekedElementName=axiscSoapDeSerializerPeekNextElementName(pDZ);\n");
+
+                    if (handleAll)
+                    {
+                        writer.write(tab1 + "if (0x00 == *peekedElementName)\n");
+                        writer.write(tab1 + "\tbreak;\n");
+                    }
+
+                    writer.write("\n");
+                   
+                    writer.write(tab1 + "if ");
                     firstIfWritten = true;
                 } 
                 else
-                    writer.write("\telse if");
+                {
+                    writer.write(tab1 + "else if ");
+                    if (handleAll)
+                        tab2 = "\t\t";
+                     else if (handleChoice)
+                        tab2  = "\t";
+                }
 
-                writer.write("(strcmp(choiceName,\""
-                        + attribs[i].getElementNameAsSOAPString() + "\")==0)\n\t{\n\t");
+                writer.write("(strcmp(peekedElementName,\""
+                        + attribs[i].getElementNameAsSOAPString() + "\")==0)\n");
+                writer.write(tab1 + "{\n");
+
+                if (handleAll)
+                {
+                    writer.write(tab1 + "\tif (param->" + attribs[i].getParamNameAsMember() + ")\n");
+                    writer.write(tab1 + "\t\taxiscAxisGenerateRedundantElementException(peekedElementName);\n\n");
+                }
             }
             else
+            {       
+                if (firstIfWritten)
+                    endChoiceOrAll(handleAll, handleChoice, tab1, startingGroup, endingGroup);
+                
+                tab1  = "\t";
+                tab2  = "\t";
+                
                 firstIfWritten = false;
-            
-            //if the attribute is a 'all' construct we have to check Min
-            // occures
-            if (attribs[i].getAllElement())
-                if (attribs[i].getMinOccurs() == 0)
-                {
-                    if (!foundAll)
-                    {
-                        writer.write("\tconst char* allName = NULL;\n");
-                        writer.write("\tAxiscBool peekCalled = xsdc_boolean_false;\n");
-                        foundAll = true;
-                    }
+                handleAll = false;
+                handleChoice = false;
+            }
 
-                    writer.write("\n\tif(!peekCalled)\n\t{\n\t");
-                    writer.write("\tallName=axiscSoapDeSerializerPeekNextElementName(pDZ);\n");
-                    writer.write("\t\tpeekCalled = xsdc_boolean_true;\n");
-                    writer.write("\t}\n");
-                    writer.write("\tif(strcmp(allName,\""
-                            + attribs[i].getParamNameAsMember() + "\")==0)\n\t{\n\t");
-                    writer.write("\tpeekCalled = xsdc_boolean_false;\n\t");
-                }
+            if (handleAll || handleChoice)
+                tab2 += "\t";
             
             if (attribs[i].isAnyType())
             {
                 anyCounter +=1;
-                writer.write(tab1 + "param->any" + anyCounter + " = axiscSoapDeSerializerGetAnyObject(pDZ);\n");
+                writer.write(tab2 + "param->any" + anyCounter + " = axiscSoapDeSerializerGetAnyObject(pDZ);\n");
             }
             else if (attribs[i].isArray())
             {
@@ -588,20 +611,18 @@ public class BeanParamWriter extends ParamCFileWriter
                     else
                         baseTypeName = attribs[i].getTypeName();
 
-                    writer.write(tab1 + "if (param->" + attribs[i].getParamNameAsMember() + " != NULL)\n");
-                    writer.write(tab1 + "{\n");
-                    writer.write(tab1 + "\taxiscAxisDelete(param->" + attribs[i].getParamNameAsMember() + ", XSDC_ARRAY);\n");
-                    writer.write(tab1 + "\tparam->" + attribs[i].getParamNameAsMember() + "= NULL;\n");
-                    writer.write(tab1 + "}\n");
+                    writer.write(tab2 + "if (param->" + attribs[i].getParamNameAsMember() + " != NULL)\n");
+                    writer.write(tab2 + "{\n");
+                    writer.write(tab2 + "\taxiscAxisDelete(param->" + attribs[i].getParamNameAsMember() + ", XSDC_ARRAY);\n");
+                    writer.write(tab2 + "\tparam->" + attribs[i].getParamNameAsMember() + "= NULL;\n");
+                    writer.write(tab2 + "}\n");
                     writer.write("\n");
                  
-                    writer.write(tab1 + "param->" + attribs[i].getParamNameAsMember() 
+                    writer.write(tab2 + "param->" + attribs[i].getParamNameAsMember() 
                             + " = (" + baseTypeName + "_Array *)" 
                             + "axiscSoapDeSerializerGetBasicArray(pDZ, " 
                             + CUtils.getXSDTypeForBasicType(baseTypeName) + ", \"" 
                             + attribs[i].getParamNameAsSOAPString() + "\",0);\n");
-
-                    writer.write("\n");
                 }
                 else
                 {
@@ -618,11 +639,12 @@ public class BeanParamWriter extends ParamCFileWriter
                 String soapTagName = (attribs[i].isAttribute() ? attribs[i].getParamNameAsSOAPString() : attribs[i].getElementNameAsSOAPString());
                 
                 // We only peek for elements, not element attributes!
-                if (attribs[i].isOptional() && !attribs[i].isAttribute())
+                if (attribs[i].isOptional() && !attribs[i].isAttribute() && !handleAll && !handleChoice)
                 {
                     writer.write(tab1 + "peekedElementName = axiscSoapDeSerializerPeekNextElementName(pDZ);\n");
                     writer.write(tab1 + "if (strcmp(peekedElementName, \"" + soapTagName + "\") == 0)\n");
                     writer.write(tab1 + "{\n");
+                    
                     tab2 += "\t";
                 }
                 
@@ -678,7 +700,7 @@ public class BeanParamWriter extends ParamCFileWriter
                     writer.write(tab2 + "}\n");  // end local scope                
                 }
                 
-                if (attribs[i].isOptional() && !attribs[i].isAttribute())
+                if (attribs[i].isOptional() && !attribs[i].isAttribute() && !handleAll && !handleChoice)
                 {
                     writer.write("\t\t\t}\n");
                     writer.write("\t\telse\n");
@@ -690,10 +712,11 @@ public class BeanParamWriter extends ParamCFileWriter
                 //if complex type
                 String soapTagName = attribs[i].getParamNameAsSOAPString();
                 
-                if (attribs[i].isOptional())
+                if (attribs[i].isOptional() && !handleAll && !handleChoice)
                 {
                     writer.write(tab1 + "peekedElementName = axiscSoapDeSerializerPeekNextElementName(pDZ);\n");
                     writer.write(tab1 + "if (strcmp(peekedElementName, \"" + soapTagName + "\") == 0)\n");
+                    
                     tab2 += "\t";
                 }
 
@@ -704,33 +727,78 @@ public class BeanParamWriter extends ParamCFileWriter
                         + ", (void*)Axis_Delete_" + attribs[i].getTypeName() 
                         + ", \"" + soapTagName + "\", Axis_URI_" + attribs[i].getTypeName() + ");\n");
                 
-                if (attribs[i].isOptional())
+                if (attribs[i].isOptional()  && !handleAll && !handleChoice)
                 {
                     writer.write(tab1 + "else\n");
                     writer.write(tab1 + "\tparam->" + attribs[i].getParamNameAsMember() + " = NULL;\n");
                 }      
             }
 
-            if (attribs[i].getChoiceElement())
+            if (attribs[i].getChoiceElement() || attribs[i].getAllElement())
                 writer.write(tab1 + "}\n");
-            
-            if (attribs[i].getAllElement())
-                if (attribs[i].getMinOccurs() == 0)
-                    writer.write("\t}\n");
             
             writer.write("\n");
         }
-
+        
+        if (firstIfWritten)
+            endChoiceOrAll(handleAll, handleChoice, tab1, startingGroup, endingGroup);
+        
         //=============================================================================
         // Deserialize extension, if any, and return status
         //=============================================================================                           
         
         writeDeSerializeExtensionCode();
         
+        //=============================================================================
+        // Ensure there are no more elements - there should not be!
+        //=============================================================================                           
+        writer.write("\n");
+        
+        CUtils.printBlockComment(writer, "Ensure no extraneous elements.");            
+        writer.write("\tpeekedElementName = axiscSoapDeSerializerPeekNextElementName(pDZ);\n");
+        writer.write("\tif (0x00 != *peekedElementName)\n");
+        writer.write("\t\taxiscAxisGenerateUnknownElementException(peekedElementName);\n");
+
+        writer.write("\n");
         writer.write("\treturn axiscSoapDeSerializerGetStatus(pDZ);\n");
         writer.write("}\n");
     }
-    
+
+    private void endChoiceOrAll(boolean handleAll, 
+                                boolean handleChoice, 
+                                String tab1,
+                                int startGroup, int endGroup)  throws IOException
+    {
+        // If xsd:all xsd:choice - an unknown element check - throw exception.
+
+        if (handleAll)
+        {
+              writer.write(tab1 + "else\n");
+              writer.write(tab1 + "\taxiscAxisGenerateUnknownElementException(peekedElementName);\n");
+            
+            // Closes for loop
+            writer.write("\t}\n");
+            
+            // Verify all fields set if possible.
+            boolean commentPrinted = false;
+            for (int j = startGroup; j <= endGroup; j++) 
+                if (attribs[j].getAllElement() && !attribs[j].isArray()
+                        && !attribs[j].isOptional() && !attribs[j].isNillable()
+                        && attribs[j].getMinOccurs() != 0)
+                {
+                    if (!commentPrinted)
+                    {
+                        CUtils.printComment(writer, "Ensure no missing elements in \"all\" groups."); 
+                        commentPrinted = true;
+                    }
+
+                    writer.write("\tif (param->" + attribs[j].getParamNameAsMember() + " == NULL)");
+                    writer.write(" axiscAxisGenerateElementMissingException(\"" + attribs[j].getParamNameAsMember() + "\");\n");
+                }
+        }
+        
+        writer.write("\n");
+    }
 
     /**
      * @throws IOException

@@ -17,6 +17,8 @@
  
 #include <stdarg.h>
 
+#include <axis/UnknownElementException.hpp>
+
 #include <axis/client/Stub.hpp>
 #include <axis/AxisException.hpp>
 
@@ -819,6 +821,30 @@ void axiscStubSetSOAPHeaders(AXISCHANDLE stub)
     try
     {
         s->setSOAPHeadersStubC(); 
+    }
+    catch ( AxisException& e  )
+    {
+        
+        processException(s, e.getExceptionCode(), e.what());
+        s->doNotPerformClientRequest = true;
+    }
+    catch ( ... )
+    {
+        processException(s, -1, "Unrecognized exception thrown.");
+        s->doNotPerformClientRequest = true;
+    }
+}
+
+AXISC_STORAGE_CLASS_INFO 
+void axiscStubCheckForExtraneousElements(AXISCHANDLE stub) 
+{ 
+    
+    
+    StubC *s = (StubC*)stub;
+    
+    try
+    {
+        s->checkForExtraneousElementsStubC(); 
     }
     catch ( AxisException& e  )
     {

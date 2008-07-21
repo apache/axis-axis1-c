@@ -210,13 +210,7 @@ public abstract class ParamWriter extends BasicFileWriter
         if (attrib.isArray())
         {
             if (attrib.isSimpleType())
-            {
-                //  if the element is a choice or all element, define as ptr to array
-                if(attrib.getChoiceElement() || attrib.getAllElement())
-                    return CUtils.getBasicArrayNameforType(attrib.getTypeName())+"*";
-                else
-                    return CUtils.getBasicArrayNameforType(attrib.getTypeName());
-            }
+                return CUtils.getBasicArrayNameforType(attrib.getTypeName());
             else
                 return CUtils.getCmplxArrayNameforType(attrib.getSchemaName());
         }

@@ -585,6 +585,12 @@ public class ClientStubWriter
             writer.write("\tif (AXISC_SUCCESS == axiscCallSend(call))\n\t{\n");      
         }
         
+        //=============================================================================
+        // Process output parameters
+        //=============================================================================     
+        
+        String returnStatement = "";
+        
         if (isAllTreatedAsOutParams)
         {
             String currentParamName;
@@ -779,16 +785,11 @@ public class ClientStubWriter
             }
             
             writer.write ("\t\t}\n");
-            writer.write ("\t}\n");
-            writer.write ("\taxiscCallUnInitialize(call);\n");
         }
         else if (returntype == null)
         {
             if (minfo.getOutputMessage () != null)
-                writer.write ("\t\t\t/*not successful*/\n\t\t}\n");
-
-            writer.write ("\t}\n");
-            writer.write ("\taxiscCallUnInitialize(call);\n");
+                writer.write ("\t\t\t// no output?\n\t\t}\n");
         }
         else if (returntypeisarray)
         {
@@ -818,9 +819,8 @@ public class ClientStubWriter
             }
             
             writer.write ("\t\t}\n");
-            writer.write ("\t}\n");
-            writer.write ("\taxiscCallUnInitialize(call);\n");
-            writer.write ("\treturn RetArray;\n");
+
+            returnStatement = "\treturn RetArray;\n";
         }
         else if (returntypeissimple)
         {
@@ -856,16 +856,14 @@ public class ClientStubWriter
                 
                 writer.write ("\t\t}\n");
             }
-            writer.write ("\t}\n");
-            writer.write ("\taxiscCallUnInitialize(call);\n");
-            writer.write ("\treturn Ret;\n");
+
+            returnStatement = "\treturn Ret;\n";
         }
         else if (returntype.isAnyType ())
         {
             writer.write ("\t\t\tpReturn = (" + outparamType + "*)axiscCallGetAnyObject(call);\n\t\t}\n");
-            writer.write ("\t}\n");
-            writer.write ("\taxiscCallUnInitialize(call);\n");
-            writer.write ("\treturn pReturn;\n");
+
+            returnStatement = "\treturn pReturn;\n";
         }
         else
         {
@@ -887,10 +885,14 @@ public class ClientStubWriter
                           returntype.getElementNameAsSOAPString () + "\", 0);\n\t\t}\n");
             }
 
-            writer.write ("\t}\n");
-            writer.write ("\taxiscCallUnInitialize(call);\n");
-            writer.write ("\treturn pReturn;\n");
+            returnStatement = "\treturn pReturn;\n";
         }
+        
+        if (minfo.getOutputMessage () != null)
+            writer.write ("\n\t\taxiscStubCheckForExtraneousElements(stub);\n");
+        writer.write ("\t}\n");
+        writer.write ("\taxiscCallUnInitialize(call);\n");
+        writer.write(returnStatement);
         
         //=============================================================================
         // End of method

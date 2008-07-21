@@ -144,6 +144,15 @@ void axiscAxisInvokeExceptionHandler(int exceptionCode,
                                      AXISCHANDLE pSoapFault, 
                                      void *faultDetail);
 
+AXISC_STORAGE_CLASS_INFO 
+void axiscAxisGenerateElementMissingException(const char *s);
+
+AXISC_STORAGE_CLASS_INFO 
+void axiscAxisGenerateRedundantElementException(const char *s);
+
+AXISC_STORAGE_CLASS_INFO 
+void axiscAxisGenerateUnknownElementException(const char *s);
+
 #ifdef __cplusplus
   }
 #endif

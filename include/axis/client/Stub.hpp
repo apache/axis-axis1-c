@@ -611,12 +611,17 @@ class STORAGE_CLASS_INFO Stub
     */
     void setSOAPHeaders();
     
-  
   /**
     * Set Authorization header for Proxy authentication
     */
     void setProxyAuthorizationHeader();
-
+    
+    /**
+     * Check for extraneous elements.  Called at the end of SOAP processing
+     * to ensure that there are no extraneous elements. Will throw an 
+     * exception if extraneous elements are detected.
+     */
+    void checkForExtraneousElements();
 
     /**
      * Call object

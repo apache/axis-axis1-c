@@ -594,7 +594,9 @@ public class ClientStubWriter
         
         //=============================================================================
         // Process output parameters
-        //=============================================================================        
+        //=============================================================================     
+        
+        String returnStatement = "";
 
         if (isAllTreatedAsOutParams)
         {
@@ -781,16 +783,11 @@ public class ClientStubWriter
             } // end for-loop for paramsC
             
             writer.write ("\t\t\t}\n");
-            writer.write ("\t\t}\n\n");
-            writer.write ("\t\tm_pCall->unInitialize();\n");
         }
         else if (returntype == null)
         {
             if (minfo.getOutputMessage () != null)
-                writer.write ("\t\t\t\t/*not successful*/\n\t\t\t}\n");
-
-            writer.write ("\t\t}\n\n");
-            writer.write ("\t\tm_pCall->unInitialize();\n");
+                writer.write ("\t\t\t\t// no output?\n\t\t\t}\n");
         }
         else if (returntypeisarray)
         {
@@ -821,9 +818,8 @@ public class ClientStubWriter
             }
             
             writer.write ("\t\t\t}\n");
-            writer.write ("\t\t}\n\n");
-            writer.write ("\t\tm_pCall->unInitialize();\n");
-            writer.write ("\t\treturn RetArray;\n");
+
+            returnStatement = "\t\treturn RetArray;\n";
         }
         else if (returntypeissimple)
         {
@@ -849,16 +845,14 @@ public class ClientStubWriter
 //                              writer.write("\t\t\t\tthrow new Exception(\"Unexpected use of nill\");");
             }
             writer.write ("\t\t\t}\n");
-            writer.write ("\t\t}\n\n");
-            writer.write ("\t\tm_pCall->unInitialize();\n");
-            writer.write ("\t\treturn Ret;\n");
+
+            returnStatement = "\t\treturn Ret;\n";
         }
         else if (returntype.isAnyType ())
         {
             writer.write ("\t\t\t\tpReturn = (" + outparamType + "*)m_pCall->getAnyObject();\n\t\t}\n");
-            writer.write ("\t\t}\n\n");
-            writer.write ("\t\tm_pCall->unInitialize();\n");
-            writer.write ("\t\treturn pReturn;\n");
+
+            returnStatement =  "\t\treturn pReturn;\n";
         }
         else
         {
@@ -880,11 +874,16 @@ public class ClientStubWriter
                           returntype.getElementNameAsSOAPString () + "\", 0);\n\t\t\t}\n");
             }
 
-            writer.write ("\t\t}\n\n");
-            writer.write ("\t\tm_pCall->unInitialize();\n");
-            writer.write ("\t\treturn pReturn;\n");
+
+            returnStatement = "\t\treturn pReturn;\n";
         }
     
+        if (minfo.getOutputMessage () != null)
+            writer.write ("\n\t\t\tcheckForExtraneousElements();\n");
+        writer.write ("\t\t}\n\n");
+        writer.write ("\t\tm_pCall->unInitialize();\n");
+        writer.write(returnStatement);
+        
         writer.write ("\t}\n");
         
         //=============================================================================

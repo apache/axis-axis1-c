@@ -17,6 +17,10 @@
  
 #include <iostream>
 
+#include <axis/ElementMissingException.hpp>
+#include <axis/RedundantElementException.hpp>
+#include <axis/UnknownElementException.hpp>
+
 #include <axis/Axis.hpp>
 #include <axis/AxisException.hpp>
 #include <axis/AxisUserAPI.hpp>
@@ -458,5 +462,24 @@ void axiscAxisInvokeExceptionHandler(int errorCode,
     else
         std::cerr <<  "AXIS EXCEPTION: (" << errorCode << ") " << errorString << std::endl;
 }
+
+AXISC_STORAGE_CLASS_INFO 
+void axiscAxisGenerateElementMissingException(const char *s)
+{
+	throw ElementMissingException(s);
+}
+
+AXISC_STORAGE_CLASS_INFO 
+void axiscAxisGenerateRedundantElementException(const char *s)
+{
+	throw RedundantElementException(s);
+}
+
+AXISC_STORAGE_CLASS_INFO 
+void axiscAxisGenerateUnknownElementException(const char *s)
+{
+	throw UnknownElementException(s);
+}
+
 
 }

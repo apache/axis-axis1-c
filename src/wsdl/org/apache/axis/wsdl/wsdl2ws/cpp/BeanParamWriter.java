@@ -145,21 +145,15 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 {   
                     writer.write("void " + classname + "::\nset"
                             + methodName + "(" + properParamType + asterisk + "pInValue)\n{\n");
-
-                    writer.write("\tif(" + parameterName + " == NULL)\n");
                     
-                    if (attribs[i].getChoiceElement() || attribs[i].getAllElement())
+                    if (attribs[i].getChoiceElement())
                     {
-                        // TODO: for choice, we need to ensure any other set element is deleted.
-                        writer.write("\t{\n");
-                        writer.write("\t\t// For 'choice' need to ensure that any\n");
-                        writer.write("\t\t// other objects belonging to this union of elements are empty.\n");
-                        writer.write("\t\t// NB: Hasn't been implemented yet!\n");
-                        writer.write("\t\t" + parameterName + " = new " + type + "_Array();\n");
-                        writer.write("\t}\n");
+                        writer.write("\t// For 'choice' you need to ensure that any\n");
+                        writer.write("\t// other objects belonging to this union of elements are empty.\n");
                     }
-                    else
-                        writer.write("\t\t" + parameterName + " = new " + properParamType + "();\n");                   
+                    
+                    writer.write("\tif(" + parameterName + " == NULL)\n");
+                    writer.write("\t\t" + parameterName + " = new " + properParamType + "();\n");                   
                     
                     writer.write("\t" + parameterName + "->clone( *pInValue);\n");
                     writer.write("}\n");
@@ -170,6 +164,12 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     writer.write("void " + classname + "::\nset"
                             + methodName + "(" + properParamType  
                             + " pInValue, bool deep, bool makeCopy)\n{\n");
+                    
+                    if (attribs[i].getChoiceElement())
+                    {
+                        writer.write("\t// For 'choice' you need to ensure that any\n");
+                        writer.write("\t// other objects belonging to this union of elements are NULL.\n");
+                    }
 
                     writer.write("\tif (__axis_deepcopy_" + parameterName + ")\n");
                     writer.write("\t\tdelete " + parameterName + ";\n");
@@ -190,19 +190,13 @@ public class BeanParamWriter extends ParamCPPFileWriter
 
                     writer.write("\t__axis_deepcopy_" + parameterName + " = deep;\n");
 
-                    // TODO: wrong! We need to delete the object if deep copy, otherwise NULL it out.
-                    if (attribs[i].getChoiceElement())
-                        for (int j = 0; j < attribs.length; j++)
-                            if ((attribs[j].getChoiceElement()) && (j != i))
-                                writer.write("\t" + attribs[j].getParamNameAsMember() + " = NULL; \n");
-
                     writer.write("}\n");
                 } 
                 else
                 {
                     writer.write("void " + classname + "::\nset"
                             + methodName + "(" + properParamType + " InValue");
-                    
+                                        
                     Type attributeType = attribs[i].getType();
                     
                     boolean isPointerType = false;
@@ -216,6 +210,12 @@ public class BeanParamWriter extends ParamCPPFileWriter
                         writer.write(", bool deep, bool makeCopy");
                     
                     writer.write(")\n{\n");
+                    
+                    if (attribs[i].getChoiceElement())
+                    {
+                        writer.write("\t// For 'choice' you need to ensure that any\n");
+                        writer.write("\t// other objects belonging to this union of elements are NULL.\n");
+                    }
                     
                     if(isPointerType)
                     {
@@ -258,12 +258,6 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     }
                     else
                         writer.write("\t" + parameterName + " = InValue ; \n");
-
-                    // TODO: wrong! We need to delete the object if deep copy, otherwise NULL it out.
-                    if (attribs[i].getChoiceElement())
-                        for (int j = 0; j < attribs.length; j++)
-                            if ((attribs[j].getChoiceElement()) && (j != i))
-                                writer.write("\t" + attribs[j].getParamNameAsMember() + " = NULL ; \n");
 
                     writer.write("}\n");
                 }
@@ -714,16 +708,9 @@ public class BeanParamWriter extends ParamCPPFileWriter
         }
 
         
-        // Determine whether to print variable used for peaking ahead
-        for (int i = 0; i < attribs.length; i++)
-        {
-            if (!attribs[i].isAttribute() && attribs[i].isOptional() && !attribs[i].isArray() && !attribs[i].isAnyType())
-            {
-                writer.write("\tconst char* peekedElementName;\n");
-                break;
-            }
-        }
-
+        // Declare variables we use
+        writer.write("\tconst char* peekedElementName;\n");
+        
         //=============================================================================
         // Deserialize attributes.
         // Actually, attribute deserialization takes place in same loop as elements
@@ -738,75 +725,105 @@ public class BeanParamWriter extends ParamCPPFileWriter
         //=============================================================================        
         
         String arrayType = null;
-        boolean peekCalled = false;
         boolean firstIfWritten = false;
-        boolean foundAll = false;
         int anyCounter = 0; //counter for any types.
         int arrayCount = 0;
+        
+        boolean handleAll = false;
+        boolean handleChoice = false;
      
         // Tabs to ensure code alignment
         String tab1  = "\t";
-        String tab2Default = "";
-        String tab2;
+        String tab2  = "\t";
+        
+        int startingGroup=0;
+        int endingGroup=0;
        
         for (int i = 0; i < attribs.length; i++)
         {
-            // Reset tabs
-            tab2  = tab2Default + "\t";
-            
             if (i == attributeParamCount)
                 CUtils.printBlockComment(writer, "Deserialize elements.");
             
-            //if the attribute is a 'choice' construct we have to peek and make
-            // the choice
-
-            if (attribs[i].getChoiceElement())
+            // If All, then the element order is arbitrary, so we need a loop.  For both
+            // 'choice' and 'all', we need to do a peek. 
+            if (attribs[i].getChoiceElement() || attribs[i].getAllElement())
             {
-                if (!peekCalled)
-                {
-                    writer.write("\tconst char* choiceName=pIWSDZ->peekNextElementName();\n");
-                    peekCalled = true;
-                }
+                endingGroup   = i;
 
                 if (!firstIfWritten)
                 {
-                    writer.write("\tif");
+                    startingGroup = i;
+
+                    handleChoice = attribs[i].getChoiceElement();
+                    handleAll    = attribs[i].getAllElement();
+
+                    // Flag for us to know when we found element for 'choice'.
+                    if (handleChoice)
+                        CUtils.printComment(writer, "Deserialize \"choice\" group of elements."); 
+                    else if (handleAll)
+                    {
+                        CUtils.printComment(writer, "Deserialize \"all\" group of elements."); 
+                        
+                        writer.write("\twhile (true)\n\t{\n");
+                        
+                        // Need to adjust tabs since we will be in a loop
+                        tab1 = "\t\t";
+                        tab2 = "\t\t";
+                    }
+                    
+                    // for choice and all, we need to do a peek.
+                    writer.write(tab1 + "peekedElementName=pIWSDZ->peekNextElementName();\n");
+
+                    if (handleAll)
+                    {
+                        writer.write(tab1 + "if (0x00 == *peekedElementName)\n");
+                        writer.write(tab1 + "\tbreak;\n");
+                    }
+
+                    writer.write("\n");
+                   
+                    writer.write(tab1 + "if ");
                     firstIfWritten = true;
                 } 
                 else
-                    writer.write("\telse if");
+                {
+                    writer.write(tab1 + "else if ");
+                    if (handleAll)
+                       tab2 = "\t\t";
+                    else if (handleChoice)
+                       tab2  = "\t";
+                }
 
-                writer.write("(strcmp(choiceName,\""
-                        + attribs[i].getElementNameAsSOAPString() + "\")==0)\n\t{\n\t");
+                writer.write("(strcmp(peekedElementName,\""
+                        + attribs[i].getElementNameAsSOAPString() + "\")==0)\n");
+                writer.write(tab1 + "{\n");
+
+                if (handleAll)
+                {
+                    writer.write(tab1 + "\tif (param->" + attribs[i].getParamNameAsMember() + ")\n");
+                    writer.write(tab1 + "\t\tthrow RedundantElementException(peekedElementName);\n\n");
+                }
             }
             else
+            {       
+                if (firstIfWritten)
+                    endChoiceOrAll(handleAll, handleChoice, tab1, startingGroup, endingGroup);
+                
+                tab1  = "\t";
+                tab2  = "\t";
+                
                 firstIfWritten = false;
-
-            //if the attribute is a 'all' construct we have to check Min
-            // occures
-            if (attribs[i].getAllElement())
-                if (attribs[i].getMinOccurs() == 0)
-                {
-                    if (!foundAll)
-                    {
-                        writer.write("\tconst char* allName = NULL;\n");
-                        writer.write("\tbool peekCalled = false;\n");
-                        foundAll = true;
-                    }
-
-                    writer.write("\n\tif(!peekCalled)\n\t{\n\t");
-                    writer.write("\tallName=pIWSDZ->peekNextElementName();\n");
-                    writer.write("\t\tpeekCalled = true;\n");
-                    writer.write("\t}\n");
-                    writer.write("\tif(strcmp(allName,\""
-                            + attribs[i].getParamNameAsMember() + "\")==0)\n\t{\n\t");
-                    writer.write("\tpeekCalled = false;\n\t");
-                }
+                handleAll = false;
+                handleChoice = false;
+            }
+            
+            if (handleAll || handleChoice)
+                tab2 += "\t";
             
             if (attribs[i].isAnyType())
             {
                 anyCounter +=1;
-                writer.write(tab1 + "param->any" + Integer.toString(anyCounter)+ " = pIWSDZ->getAnyObject();\n");
+                writer.write(tab2 + "param->any" + Integer.toString(anyCounter)+ " = pIWSDZ->getAnyObject();\n");
             }
             else if (attribs[i].isArray())
             {
@@ -819,20 +836,20 @@ public class BeanParamWriter extends ParamCPPFileWriter
                         baseTypeName = CUtils.getclass4qname(attribs[i].getType().getBaseType());
                     else
                         baseTypeName = attribs[i].getTypeName();
-
-                    writer.write(tab1 + "Axis_Array * array" + arrayCount + " = pIWSDZ->getBasicArray("
+                    
+                    writer.write(tab2 + "Axis_Array * array" + arrayCount + " = pIWSDZ->getBasicArray("
                             + CUtils.getXSDTypeForBasicType(baseTypeName) + ", \""
                             + attribs[i].getParamNameAsSOAPString()
                             + "\",0);\n");
-                    writer.write(tab1 + "if(param->" + attribs[i].getParamNameAsMember() + " == NULL)\n");
-                    writer.write(tab1 + "\tparam->" + attribs[i].getParamNameAsMember() + " = new " + attribs[i].getTypeName() + "_Array();\n");
-                    writer.write(tab1 + "param->" + attribs[i].getParamNameAsMember() + "->clone( *array" + arrayCount + ");\n");
-                    writer.write(tab1 + "Axis::AxisDelete((void*) array" + arrayCount + ", XSD_ARRAY);\n\n");
+                    writer.write(tab2 + "if(param->" + attribs[i].getParamNameAsMember() + " == NULL)\n");
+                    writer.write(tab2 + "\tparam->" + attribs[i].getParamNameAsMember() + " = new " + attribs[i].getTypeName() + "_Array();\n");
+                    writer.write(tab2 + "param->" + attribs[i].getParamNameAsMember() + "->clone( *array" + arrayCount + ");\n");
+                    writer.write(tab2 + "Axis::AxisDelete((void*) array" + arrayCount + ", XSD_ARRAY);\n\n");
                 }
                 else
                 {
                     arrayType = attribs[i].getTypeName();
-                    writer.write(tab1 + "pIWSDZ->getCmplxArray(param->" + attribs[i].getParamNameAsMember() 
+                    writer.write(tab2 + "pIWSDZ->getCmplxArray(param->" + attribs[i].getParamNameAsMember() 
                             + ", (void*)Axis_DeSerialize_" + arrayType
                             + ", (void*)Axis_Create_" + arrayType 
                             + ", (void*)Axis_Delete_" + arrayType
@@ -844,11 +861,12 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 String soapTagName = (attribs[i].isAttribute() ? attribs[i].getParamNameAsSOAPString() : attribs[i].getElementNameAsSOAPString());
                 
                 // We only peek for elements, not element attributes!
-                if (attribs[i].isOptional() && !attribs[i].isAttribute())
+                if (attribs[i].isOptional() && !attribs[i].isAttribute() && !handleAll && !handleChoice)
                 {
                     writer.write(tab1 + "peekedElementName = pIWSDZ->peekNextElementName();\n");
                     writer.write(tab1 + "if (strcmp(peekedElementName, \"" + soapTagName + "\") == 0)\n");
                     writer.write(tab1 + "{\n");
+                    
                     tab2 += "\t";
                 }
                 
@@ -902,7 +920,8 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     writer.write(tab2 + "}\n");                        
                 }
                 
-                if (attribs[i].isOptional() && !attribs[i].isAttribute())
+                // TODO - remove this chunk of code...?
+                if (attribs[i].isOptional() && !attribs[i].isAttribute() && !handleAll && !handleChoice)
                 {
                     writer.write(tab1 + "}\n");
                     writer.write(tab1 + "else\n");
@@ -914,10 +933,11 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 //if complex type
                 String soapTagName = attribs[i].getParamNameAsSOAPString();
                 
-                if (attribs[i].isOptional())
+                if (attribs[i].isOptional() && !handleAll && !handleChoice)
                 {
                     writer.write(tab1 + "peekedElementName = pIWSDZ->peekNextElementName();\n");
                     writer.write(tab1 + "if (strcmp(peekedElementName, \"" + soapTagName + "\") == 0)\n");
+                    
                     tab2 += "\t";
                 }
 
@@ -928,31 +948,76 @@ public class BeanParamWriter extends ParamCPPFileWriter
                         + ", (void*)Axis_Delete_" + attribs[i].getTypeName() 
                         + ", \"" + soapTagName + "\", Axis_URI_" + attribs[i].getTypeName() + ");\n");
                 
-                if (attribs[i].isOptional())
+                // TODO remove following chunk of code...?
+                if (attribs[i].isOptional() && !handleAll && !handleChoice)
                 {
                     writer.write(tab1 + "else\n");
                     writer.write(tab1 + "\tparam->" + attribs[i].getParamNameAsMember() + " = NULL;\n");
                 }
             }
 
-            if (attribs[i].getChoiceElement())
+            if (attribs[i].getChoiceElement() || attribs[i].getAllElement())
                 writer.write(tab1 + "}\n");
-            
-            if (attribs[i].getAllElement())
-                if (attribs[i].getMinOccurs() == 0)
-                    writer.write("\t}\n");
-            
-            writer.write("\n");                        
-        }
+        } // end for-loop
+        
+        if (firstIfWritten)
+            endChoiceOrAll(handleAll, handleChoice, tab1, startingGroup, endingGroup);
         
         //=============================================================================
         // Deserialize extension, if any, and return status
         //=============================================================================                           
         
         writeDeSerializeExtensionCode();
-
+        
+        //=============================================================================
+        // Ensure there are no more elements - there should not be!
+        //=============================================================================                           
+        writer.write("\n");
+        
+        CUtils.printBlockComment(writer, "Ensure no extraneous elements.");            
+        writer.write("\tpeekedElementName = pIWSDZ->peekNextElementName();\n");
+        writer.write("\tif (0x00 != *peekedElementName)\n");
+        writer.write("\t\tthrow UnknownElementException(peekedElementName);\n");
+        
+        writer.write("\n");
         writer.write("\treturn pIWSDZ->getStatus();\n");
         writer.write("}\n");
+    }
+    
+    private void endChoiceOrAll(boolean handleAll, 
+            boolean handleChoice, 
+            String tab1,
+            int startGroup, int endGroup)  throws IOException    
+    {
+        // If xsd:all xsd:choice - an unknown element check - throw exception.
+
+        if (handleAll)
+        {
+            writer.write(tab1 + "else\n");
+            writer.write(tab1 + "\tthrow UnknownElementException(peekedElementName);\n");
+            
+            // Closes for loop
+            writer.write("\t}\n");
+            
+            // Verify all fields set if possible.
+            boolean commentPrinted = false;
+            for (int j = startGroup; j <= endGroup; j++) 
+                if (attribs[j].getAllElement() && !attribs[j].isArray()
+                        && !attribs[j].isOptional() && !attribs[j].isNillable()
+                        && attribs[j].getMinOccurs() != 0)
+                {
+                    if (!commentPrinted)
+                    {
+                        CUtils.printComment(writer, "Ensure no missing elements in \"all\" group."); 
+                        commentPrinted = true;
+                    }
+
+                    writer.write("\tif (param->" + attribs[j].getParamNameAsMember() + " == NULL)");
+                    writer.write(" throw ElementMissingException(\"" + attribs[j].getParamNameAsMember() + "\");\n");
+                }
+        }
+        
+        writer.write("\n");
     }
 
     private void writeCreateGlobalMethod() throws IOException
@@ -1022,20 +1087,8 @@ public class BeanParamWriter extends ParamCPPFileWriter
             {
                 if (attribs[i].isArray())
                 {
-                    if (attribs[i].getChoiceElement()||attribs[i].getAllElement())
-                    {
-                        // This is the 'choice' or 'all' route in the code
-                        writer.write("\t\t// This a 'choice' so need to ensure that any\n");
-                        writer.write("\t\t// other objects belonging to this union of elements are empty.\n");
-                        writer.write("\t\t// NB: Hasn't been implemented yet!\n");
-                        writer.write("\t" + attribs[i].getParamNameAsMember() + " = new " 
-                                + attribs[i].getTypeName() +"_Array();\n");
-                    }
-                    else
-                    {
-                        writer.write("\t" + attribs[i].getParamNameAsMember() + " = new " 
-                                + attribs[i].getTypeName() +"_Array();\n");
-                    }
+                    writer.write("\t" + attribs[i].getParamNameAsMember() + " = new " 
+                            + attribs[i].getTypeName() +"_Array();\n");
                 }
             }
             writer.write("\treset();\n");
@@ -1086,22 +1139,9 @@ public class BeanParamWriter extends ParamCPPFileWriter
             {
                 if (attribs[i].isArray())
                 {    
-                    if (attribs[i].getChoiceElement()||attribs[i].getAllElement())
-                    {
-                        // This is the 'choice' or 'all' route in the code
-                        writer.write("\t\t// This object is a 'choice' or 'all', so need to ensure that any\n");
-                        writer.write("\t\t// other objects belonging to this union of elements are empty.\n");
-                        writer.write("\t\t// NB: Hasn't been implemented yet!\n");
-                        writer.write("\t" + attribs[i].getParamNameAsMember() + " = new " 
-                                + attribs[i].getTypeName() + "_Array( *original." 
-                                + attribs[i].getParamNameAsMember() + ");\n");
-                    }
-                    else
-                    {
-                        writer.write("\t" + attribs[i].getParamNameAsMember() + " = new " 
-                                + attribs[i].getTypeName() + "_Array(*original." 
-                                + attribs[i].getParamNameAsMember() + ");\n");
-                    }
+                    writer.write("\t" + attribs[i].getParamNameAsMember() + " = new " 
+                            + attribs[i].getTypeName() + "_Array(*original." 
+                            + attribs[i].getParamNameAsMember() + ");\n");
                 }
                 else if (attribs[i].isAnyType())
                 {
@@ -1168,18 +1208,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
             for (int i = 0; i < attribs.length; i++)
             {
                 if (attribs[i].isArray())
-                {
-                    if (attribs[i].getChoiceElement()||attribs[i].getAllElement())
-                    {
-                        writer.write( "\t// This object is a 'choice' or 'all', so need to ensure that any\n");
-                        writer.write( "\t// other objects belonging to this union of elements are empty.\n");
-                        writer.write( "\t// NB: Hasn't been implemented yet!\n");
-
-                        writer.write("\t" + attribs[i].getParamNameAsMember() + "->clear();\n");
-                    }
-                    else
-                        writer.write("\t" + attribs[i].getParamNameAsMember() + "->clear();\n");
-                }
+                    writer.write("\t" + attribs[i].getParamNameAsMember() + "->clear();\n");
                 else if (!(attribs[i].isSimpleType() || attribs[i].getType().isSimpleType()))
                 {
                     if (attribs[i].isAnyType())

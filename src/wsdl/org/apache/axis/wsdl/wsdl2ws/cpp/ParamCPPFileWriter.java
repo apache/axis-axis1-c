@@ -101,6 +101,10 @@ public abstract class ParamCPPFileWriter extends ParamWriter
     {
         try
         {
+            writer.write("#include <axis/AxisException.hpp>\n");
+            writer.write("#include <axis/ElementMissingException.hpp>\n");
+            writer.write("#include <axis/RedundantElementException.hpp>\n");
+            writer.write("#include <axis/UnknownElementException.hpp>\n");
             writer.write("#include <axis/AxisWrapperAPI.hpp>\n");
             writer.write("#include <axis/Axis.hpp>\n\n");
             writer.write("#include \"" + this.classname + CUtils.CPP_HEADER_SUFFIX + "\"\n");

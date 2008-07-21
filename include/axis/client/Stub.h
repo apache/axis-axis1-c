@@ -542,6 +542,15 @@ void axiscStubIncludeSecure(AXISCHANDLE stub);
 AXISC_STORAGE_CLASS_INFO
 void axiscStubSetSOAPHeaders(AXISCHANDLE stub);
 
+/**
+ * Check for extraneous elements.  Called at the end of SOAP processing
+ * to ensure that there are no extraneous elements. Will throw an 
+ * exception if extraneous elements are detected.
+ */
+AXISC_STORAGE_CLASS_INFO
+void axiscStubCheckForExtraneousElements(AXISCHANDLE stub);
+
+
 #ifdef __cplusplus
  }
 #endif

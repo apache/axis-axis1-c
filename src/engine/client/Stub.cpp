@@ -18,6 +18,7 @@
  * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
  */
 
+#include <axis/UnknownElementException.hpp>
 #include <axis/client/Stub.hpp>
 #include <stdio.h>
 #include "../../transport/SOAPTransport.h"
@@ -480,4 +481,16 @@ void Stub::SetSecure( char * pszArguments, va_list args)
 void Stub::includeSecure()
 {
     m_pCall->setTransportProperty( SECURE_PROPERTIES, (const char *) &m_sArguments);
+}
+
+void 
+Stub::checkForExtraneousElements ()
+{	 
+	IWrapperSoapDeSerializer *pDeSerializer = m_pCall->getSOAPDeSerializer();
+    if (!pDeSerializer)
+    	return;
+    	
+	const char *peekedElementName = pDeSerializer->peekNextElementName();
+	if (0x00 != *peekedElementName)
+		throw UnknownElementException(peekedElementName);
 }
