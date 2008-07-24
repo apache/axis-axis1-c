@@ -108,12 +108,14 @@ int main(int argc, char* argv[])
             namepair *np1 = new namepair;  // namepair has m_list and name
             namepair *np2 = new namepair;
             namepair_Array npArr;
+            xsd__string_Array xsdStringArray;
 
             // m_list arg to numtilist
             xsd__string * array = new xsd__string[ARRAYSIZE];
             NEWCOPY(array[0], "never odd or even"); // should be returned in errortext element of attrlisterr
             NEWCOPY(array[1], "any data string");   // add data
-            ml.item->set(array,ARRAYSIZE);
+            xsdStringArray.set(array,ARRAYSIZE);
+            ml.setitem(&xsdStringArray);
             delete array[0];
             delete array[1];
             delete [] array;
@@ -122,7 +124,8 @@ int main(int argc, char* argv[])
             xsd__string * array1 = new xsd__string[ARRAYSIZE];
             NEWCOPY(array1[0], "Apache");
             NEWCOPY(array1[1], "Axis C++");
-            mlnp->item->set(array1,ARRAYSIZE);
+            xsdStringArray.set(array1,ARRAYSIZE);
+            mlnp->setitem(&xsdStringArray);
             delete array1[0];
             delete array1[1];
             delete [] array1;
@@ -131,7 +134,8 @@ int main(int argc, char* argv[])
             xsd__string * array2 = new xsd__string[ARRAYSIZE];
             NEWCOPY(array2[0], "Test");
             NEWCOPY(array2[1], "Complex");
-            mlnp2->item->set(array2,ARRAYSIZE);
+            xsdStringArray.set(array2,ARRAYSIZE);
+            mlnp2->setitem(&xsdStringArray);
             delete array2[0];
             delete array2[1];
             delete [] array2;

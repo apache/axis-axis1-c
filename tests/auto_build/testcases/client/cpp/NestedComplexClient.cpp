@@ -77,20 +77,23 @@ int main(int argc, char* argv[])
 
         for (int i=0; i<2; i++)
         {
-            xsd__string_Array *strArray = simpleArrays[i]->stringArray;
-            xsd__int_Array *intArray = simpleArrays[i]->intArray;
+            xsd__string_Array strArray;
+            xsd__int_Array intArray;
             xsd__string strType[ARRAYSIZE];
             xsd__int * intType[ARRAYSIZE];
             NEWCOPY(strType[0], "Apache");
             NEWCOPY(strType[1], "Axis C++");
-            strArray->set(strType,ARRAYSIZE);
+            strArray.set(strType,ARRAYSIZE);
+            simpleArrays[i]->setstringArray(&strArray);
             intType[0] = new int(6);
             intType[1] = new int(7);
-            intArray->set(intType,ARRAYSIZE);
+            intArray.set(intType,ARRAYSIZE);
+            simpleArrays[i]->setintArray(&intArray);
             delete intType[0];
             delete intType[1];
             delete strType[0];
             delete strType[1];
+            
 
         }
 

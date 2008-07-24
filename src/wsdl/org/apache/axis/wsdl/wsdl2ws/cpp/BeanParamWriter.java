@@ -350,7 +350,6 @@ public class BeanParamWriter extends ParamCPPFileWriter
         writer.write("\t}\n");
         
         //=============================================================================
-        // Serialize 
         // This is the only real difference for the serializer between rpc/encoded and 
         // doc/literal objects
         //=============================================================================        
@@ -849,6 +848,8 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 else
                 {
                     arrayType = attribs[i].getTypeName();
+                    writer.write(tab2 + "if(param->" + attribs[i].getParamNameAsMember() + " == NULL)\n");
+                    writer.write(tab2 + "\tparam->" + attribs[i].getParamNameAsMember() + " = new " + arrayType + "_Array();\n");
                     writer.write(tab2 + "pIWSDZ->getCmplxArray(param->" + attribs[i].getParamNameAsMember() 
                             + ", (void*)Axis_DeSerialize_" + arrayType
                             + ", (void*)Axis_Create_" + arrayType 
@@ -958,6 +959,8 @@ public class BeanParamWriter extends ParamCPPFileWriter
 
             if (attribs[i].getChoiceElement() || attribs[i].getAllElement())
                 writer.write(tab1 + "}\n");
+            else
+                writer.write("\n");
         } // end for-loop
         
         if (firstIfWritten)
@@ -1083,19 +1086,14 @@ public class BeanParamWriter extends ParamCPPFileWriter
             CUtils.printMethodComment(writer, "Constructor for class " + classname + ".");
             
             writer.write(classname + "::\n" + classname + "()\n{\n");
-            for (int i = 0 ; i < attribs.length ; i++)
-            {
-                if (attribs[i].isArray())
-                {
-                    writer.write("\t" + attribs[i].getParamNameAsMember() + " = new " 
-                            + attribs[i].getTypeName() +"_Array();\n");
-                }
-            }
-            writer.write("\treset();\n");
+            writeReset(true);
             writer.write("}\n");
 
+            // Write copy constructor
             writeCopyConstructor();
-            writeReset();
+            
+            // Write reset method
+            writeReset(false);
         }
         catch (IOException e)
         {
@@ -1114,6 +1112,10 @@ public class BeanParamWriter extends ParamCPPFileWriter
             CUtils.printMethodComment(writer, "Copy constructor for class " + classname + ".");            
             writer.write(classname + "::\n" + classname + "(const " + classname + " & original)\n{\n");
 
+            writeReset(true);
+            writer.write("\n");
+
+            
             // AXISCPP-918 patch provided by Franz Fehringer
             if (extensionBaseAttrib != null && extensionBaseAttrib.getTypeName() != null)
             {
@@ -1137,8 +1139,12 @@ public class BeanParamWriter extends ParamCPPFileWriter
             int anyCounter = 0;
             for (int i = 0 ; i < attribs.length ; i++)
             {
+                if (i != 0)
+                    writer.write("\n");
+
                 if (attribs[i].isArray())
                 {    
+                    writer.write("\tif (original." + attribs[i].getParamNameAsMember() + " != NULL)\n");
                     writer.write("\t" + attribs[i].getParamNameAsMember() + " = new " 
                             + attribs[i].getTypeName() + "_Array(*original." 
                             + attribs[i].getParamNameAsMember() + ");\n");
@@ -1148,8 +1154,6 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     anyCounter++;
                     writer.write("\tif (original." + attribs[i].getParamNameAsMember() + anyCounter + " != NULL)\n");
                     writer.write("\t\t" + attribs[i].getParamNameAsMember() + anyCounter + " = new " + attribs[i].getTypeName() + "(*(original." + attribs[i].getParamNameAsMember() + anyCounter + "));\n");
-                    writer.write("\telse\n");
-                    writer.write("\t\t" + attribs[i].getParamNameAsMember() + anyCounter + " = NULL;\n");
                 }
                 else
                 {
@@ -1161,11 +1165,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                         isPointerType = CUtils.isPointerType(attribs[i].getTypeName());
     
                     if ((attribs[i].isSimpleType() || attribs[i].getType().isSimpleType()) && (isPointerType || attribs[i].isOptional() || attribs[i].isNillable() || attribs[i].getChoiceElement() || attribs[i].getAllElement()))
-                    {
-                        writer.write("\t" + attribs[i].getParamNameAsMember() + " = NULL;\n");
-                        writer.write("\t__axis_deepcopy_" + attribs[i].getParamNameAsMember() + " = false;\n");
-                        writer.write("\tset" + attribs[i].getMethodName() + "(original." + attribs[i].getParamNameAsMember() + ", original.__axis_deepcopy_" + attribs[i].getParamNameAsMember() + ");\n\n");
-                    }
+                        writer.write("\tset" + attribs[i].getMethodName() + "(original." + attribs[i].getParamNameAsMember() + ", original.__axis_deepcopy_" + attribs[i].getParamNameAsMember() + ");\n");
                     else if (attribs[i].isSimpleType())
                     {
                         writer.write("\t" + attribs[i].getParamNameAsMember() + " = original." 
@@ -1177,8 +1177,6 @@ public class BeanParamWriter extends ParamCPPFileWriter
                         writer.write("\t\t" + attribs[i].getParamNameAsMember() + " = new " 
                                 + attribs[i].getTypeName() + "(*(original." 
                                 + attribs[i].getParamNameAsMember() + "));\n");
-                        writer.write("\telse\n");
-                        writer.write("\t\t" + attribs[i].getParamNameAsMember() + " = NULL;\n");
                     }
                 }
             }
@@ -1195,53 +1193,80 @@ public class BeanParamWriter extends ParamCPPFileWriter
      * 
      * @see
      */
-    protected void writeReset() throws WrapperFault
+    protected void writeReset(boolean forConstructor) throws WrapperFault
     {
         try
         {
-            CUtils.printMethodComment(writer, "Method to initialize objects of class " + classname + ".");
-            
-            writer.write("void " + classname + "::\nreset()\n{\n");
-            
-            int anyCounter = 0;
-
-            for (int i = 0; i < attribs.length; i++)
+            if (!forConstructor)
             {
-                if (attribs[i].isArray())
-                    writer.write("\t" + attribs[i].getParamNameAsMember() + "->clear();\n");
+                CUtils.printMethodComment(writer, "Method to initialize objects of class " + classname + ".");
+            
+                writer.write("void " + classname + "::\nreset()\n{\n");
+            }
+
+            int anyCounter = 0;
+            
+            for(int i = 0; i< attribs.length;i++)
+            {
+                String name = attribs[i].getParamNameAsMember();
+                String typename = attribs[i].getTypeName();
+                
+                Type type = attribs[i].getType();
+                boolean isPointerType = false;
+                if (type.isSimpleType())
+                    isPointerType = CUtils.isPointerType(CUtils.getclass4qname(type.getBaseType())); 
+                else
+                    isPointerType = CUtils.isPointerType(typename);
+                
+                if (i != 0)
+                    writer.write("\n");
+                
+                if(attribs[i].isArray())
+                {
+                    if (!forConstructor)
+                        writer.write("\tdelete " + name + ";\n");
+                    writer.write("\t"+ name + " = NULL;\n");
+                }
+                else if (attribs[i].isAnyType())
+                {
+                    anyCounter += 1;
+                    name = name + Integer.toString(anyCounter);
+                    
+                    if (!forConstructor)
+                    {
+                        writer.write("\tif ("+name+") \n\t{\n");
+                        writer.write("\t\tfor (int i=0; i<"+name+"->_size; i++)\n");
+                        writer.write("\t\t\tdelete [] "+name+"->_array[i];\n");
+                        writer.write("\t\tdelete "+name+";\n");
+                        writer.write("\t}\n");
+                    }
+                    writer.write("\t" + name + "= NULL;\n");
+                }
                 else if (!(attribs[i].isSimpleType() || attribs[i].getType().isSimpleType()))
                 {
-                    if (attribs[i].isAnyType())
-                    {
-                        anyCounter += 1;
-                        writer.write("\t" + attribs[i].getParamNameAsMember() + Integer.toString(anyCounter)
-                                + "= NULL;\n");
-                    }
-                    else
-                        writer.write("\t" + attribs[i].getParamNameAsMember() + "= NULL;\n");
+                    if (!forConstructor)
+                        writer.write("\tdelete " + name + ";\n");
+                    writer.write("\t" + name + "= NULL;\n");
                 }
-                else if (isElementNillable(i) || isElementOptional(i) || attribs[i].getChoiceElement() || attribs[i].getAllElement())
+                else if (isPointerType || isElementNillable(i) || isElementOptional(i) 
+                        || attribs[i].getChoiceElement() || attribs[i].getAllElement())
                 {
-                    writer.write("\t" + attribs[i].getParamNameAsMember() + " = NULL;\n");
-                    writer.write("\t__axis_deepcopy_" + attribs[i].getParamNameAsMember() + " = false;\n");
-                }
-                else
-                {
-                    Type type = attribs[i].getType();
-                    boolean isPointerType = false;
-                    if (type.isSimpleType())
-                        isPointerType = CUtils.isPointerType(CUtils.getclass4qname(type.getBaseType())); 
-                    else
-                        isPointerType = CUtils.isPointerType(attribs[i].getTypeName());
-
-                    if(isPointerType)
+                    if (!forConstructor)
                     {
-                        writer.write("\t"+ attribs[i].getParamNameAsMember() + " = NULL;\n");
-                        writer.write("\t__axis_deepcopy_" + attribs[i].getParamNameAsMember() + " = false;\n");
+                        writer.write("\tif(__axis_deepcopy_" + name + ")\n");
+                        writer.write("\t\tdelete ");
+                        if (isPointerType)
+                            writer.write("[] ");
+                        writer.write(name + ";\n");
                     }
+                    
+                    writer.write("\t" + name + " = NULL;\n");
+                    writer.write("\t__axis_deepcopy_" + name + " = false;\n");
                 }
             }
-            writer.write("}\n");
+            
+            if (!forConstructor)
+                writer.write("}\n");
         } 
         catch (IOException e)
         {
@@ -1266,44 +1291,8 @@ public class BeanParamWriter extends ParamCPPFileWriter
             else
                 writer.write(classname + "::\n~" + classname + "()\n{\n");
 
-            int anyCounter = 0;
-            
-            for(int i = 0; i< attribs.length;i++)
-            {
-                String name = attribs[i].getParamNameAsMember();
-                String typename = attribs[i].getTypeName();
-                
-                Type type = attribs[i].getType();
-                boolean isPointerType = false;
-                if (type.isSimpleType())
-                    isPointerType = CUtils.isPointerType(CUtils.getclass4qname(type.getBaseType())); 
-                else
-                    isPointerType = CUtils.isPointerType(typename);
-                
-                if(attribs[i].isArray())
-                    writer.write("\tdelete " + name + ";\n");
-                else if (attribs[i].isAnyType())
-                {
-                    anyCounter += 1;
-                    name = name + Integer.toString(anyCounter);
-                    writer.write("\tif ("+name+") \n\t{\n");
-                    writer.write("\t\tfor (int i=0; i<"+name+"->_size; i++)\n");
-                    writer.write("\t\t\tdelete [] "+name+"->_array[i];\n");
-                    writer.write("\t\tdelete "+name+";\n");
-                    writer.write("\t}\n");
-                }
-                else if (!(attribs[i].isSimpleType() || attribs[i].getType().isSimpleType()))
-                    writer.write("\tdelete " + name + ";\n");
-                else if (isPointerType || isElementNillable(i) || isElementOptional(i) || attribs[i].getChoiceElement() || attribs[i].getAllElement())
-                {
-                    // found pointer type
-                    writer.write("\tif(__axis_deepcopy_" + name + ")\n");
-                    writer.write("\t\tdelete ");
-                    if (isPointerType)
-                        writer.write("[] ");
-                    writer.write(name + ";\n");
-                }
-            }
+            writer.write("\treset();\n");
+
             writer.write("}\n");
         }
         catch (IOException e)

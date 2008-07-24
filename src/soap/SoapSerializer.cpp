@@ -146,21 +146,28 @@ addOutputBasicArrayParam( const Axis_Array * pArray, XSDTYPE nType, const AxisCh
 {
     int    iSuccess = AXIS_SUCCESS;
 
-    Axis_Array * pLocalArray = pArray->clone();
-
-    ArrayBean * pAb = makeArrayBean( nType, (void**) (pLocalArray->m_Array));
-
-    pAb->SetDimension(pLocalArray->m_Size);
-
-    /*
-     * We're now finished with the local array object, so it can be deleted
-     * However, we need to de-couple from the internal array, which is now owned
-     * by the ArrayBean.
-     */
-    pLocalArray->m_Array = NULL;
-    pLocalArray->m_Size = 0;
-    delete pLocalArray;
-    pLocalArray = NULL;
+    Axis_Array * pLocalArray       = (Axis_Array *)NULL;
+    ArrayBean  * pAb               = (ArrayBean *)NULL;
+    
+    // We need to handle NULL array passed in which means serialize empty array.
+    if (pArray)
+    {
+    	pLocalArray = pArray->clone();
+    	pAb = makeArrayBean( nType, pLocalArray->m_Array );
+    	pAb->SetDimension(pLocalArray->m_Size);
+    	
+        // We're now finished with the local array object, so it can be deleted
+        // However, we need to de-couple from the internal array, which is now owned
+        // by the ArrayBean.
+        pLocalArray->m_Array = NULL;
+        pLocalArray->m_Size = 0;
+        delete pLocalArray;
+    }
+    else
+    {
+    	pAb = makeArrayBean( nType, (void **)NULL );
+    	pAb->SetDimension(0);
+    }
 
     Param* pParam = new Param();
 
@@ -177,7 +184,7 @@ addOutputBasicArrayParam( const Axis_Array * pArray, XSDTYPE nType, const AxisCh
         (m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod)) 
         m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->addOutputParam( pParam);
 
-    return iSuccess;  // Can it only be successful?
+    return iSuccess;  
 }
 
 int SoapSerializer::
@@ -187,22 +194,29 @@ addOutputCmplxArrayParam( const Axis_Array * pArray,
 {
     int    iSuccess = AXIS_SUCCESS;
 
-    Axis_Array * pLocalArray = pArray->clone();
-
-    ArrayBean* pAb = makeArrayBean( pLocalArray->m_Array, pSZFunct, pDelFunct);
-
-    pAb->SetDimension( pLocalArray->m_Size);
+    Axis_Array * pLocalArray       = (Axis_Array *)NULL;
+    ArrayBean  * pAb               = (ArrayBean *)NULL;
     
-    /*
-     * We're now finished with the local array object, so it can be deleted
-     * However, we need to de-couple from the internal array, which is now owned
-     * by the ArrayBean.
-     */
-    pLocalArray->m_Array = NULL;
-    pLocalArray->m_Size = 0;
-    delete pLocalArray;
-    pLocalArray = NULL;
-
+    // We need to handle NULL array passed in which means serialize empty array.
+    if (pArray)
+    {
+	    pLocalArray = pArray->clone();
+	    pAb = makeArrayBean( pLocalArray->m_Array, pSZFunct, pDelFunct);
+	    pAb->SetDimension( pLocalArray->m_Size);
+	    
+        // We're now finished with the local array object, so it can be deleted
+        // However, we need to de-couple from the internal array, which is now owned
+        // by the ArrayBean.
+	    pLocalArray->m_Array = NULL;
+	    pLocalArray->m_Size = 0;
+	    delete pLocalArray;
+    }
+    else
+    {
+    	pAb = makeArrayBean( (void **)NULL, pSZFunct, pDelFunct);
+    	pAb->SetDimension(0);
+    }
+    
     Param * pParam = new Param();
 
     pAb->SetItemName( pName);
@@ -230,7 +244,7 @@ addOutputCmplxArrayParam( const Axis_Array * pArray,
 
     pParam->setName( pName);
 
-    return iSuccess;  // Can it only be successful?
+    return iSuccess;  
 }
 
 int SoapSerializer::
@@ -253,7 +267,7 @@ addOutputCmplxParam( void * pObject,
 
     pParam->setName( pName);
     
-    return iSuccess;  // Can it only be successful?
+    return iSuccess;  
 }
 
 int SoapSerializer::
@@ -556,7 +570,7 @@ createSoapFault( const AxisChar * sLocalName,
     strUrl += string( pcPort);
     pSoapFault->setFaultactor( strUrl.c_str());
     
-    return AXIS_SUCCESS;  // Can it only be successful?
+    return AXIS_SUCCESS;  
 }
 
 /*
@@ -635,7 +649,7 @@ removeSoapHeader()
     delete m_pSoapEnvelope->m_pSoapHeader;
     m_pSoapEnvelope->m_pSoapHeader= NULL;
 
-    return AXIS_SUCCESS;  // Can it only be successful?
+    return AXIS_SUCCESS;  
 }
 
 /*
@@ -647,9 +661,19 @@ serializeCmplxArray( const Axis_Array * pArray,
                      void * pSZFunct, void * pDelFunct, 
                      const AxisChar * pName, const AxisChar * pNamespace)
 {
-    ArrayBean * pAb = (ArrayBean*) makeArrayBean( pArray->m_Array, pSZFunct, pDelFunct);
-
-    pAb->SetDimension( pArray->m_Size);
+    ArrayBean  * pAb = (ArrayBean *)NULL;
+    
+    // We need to handle NULL array passed in which means serialize empty array.
+    if (pArray)
+    {
+    	pAb = (ArrayBean*) makeArrayBean( pArray->m_Array, pSZFunct, pDelFunct);
+    	pAb->SetDimension( pArray->m_Size);
+    }	
+    else
+    {
+    	pAb = (ArrayBean*) makeArrayBean( (void **)NULL, pSZFunct, pDelFunct);
+    	pAb->SetDimension(0);
+    }
 
     Param * pParam = new Param();
 
@@ -690,7 +714,7 @@ serializeCmplxArray( const Axis_Array * pArray,
     pAb->RemoveArrayPointer();
     delete pParam;
 
-    return AXIS_SUCCESS;  // Can it only be successful?
+    return AXIS_SUCCESS;  
 }
 
 /*
@@ -712,9 +736,19 @@ int SoapSerializer::
 serializeBasicArray(const Axis_Array* pArray, 
                     const AxisChar* pNamespace, XSDTYPE nType, const AxisChar* pName)
 {
-    ArrayBean * pAb = (ArrayBean *) makeArrayBean( nType, pArray->m_Array);
-
-    pAb->SetDimension( pArray->m_Size);
+    ArrayBean  * pAb = (ArrayBean *)NULL;
+    
+    // We need to handle NULL array passed in which means serialize empty array.
+    if (pArray)
+    {
+    	pAb = (ArrayBean*) makeArrayBean( nType, pArray->m_Array);
+    	pAb->SetDimension( pArray->m_Size);
+    }	
+    else
+    {
+    	pAb = (ArrayBean*) makeArrayBean( nType, (void **)NULL);
+    	pAb->SetDimension(0);
+    }
 
     Param * pParam = new Param();
 
@@ -752,7 +786,7 @@ serializeBasicArray(const Axis_Array* pArray,
     pAb->RemoveArrayPointer();
     delete pParam;
 
-    return AXIS_SUCCESS;  // Can it only be successful?
+    return AXIS_SUCCESS;  
 }
 
 #ifdef UNIT_TESTING_ON
@@ -793,7 +827,7 @@ addOutputParam( const AxisChar * pchName, void * pValue, XSDTYPE type)
         return AXIS_FAIL;
     }
 
-    return AXIS_SUCCESS;  // Can it only be successful?
+    return AXIS_SUCCESS;  
 }
 
 int SoapSerializer::serializeAsElement( const AxisChar * pName,
@@ -845,7 +879,7 @@ int SoapSerializer::serializeAsElement( const AxisChar * pName,
     if( pSerialized)
     {
         *this << pSerialized;
-        return AXIS_SUCCESS;  // Can it only be successful?
+        return AXIS_SUCCESS;  
     }
 
     return AXIS_FAIL;  // Can it only be unsuccessful?
@@ -878,7 +912,7 @@ int SoapSerializer::serializeAsAttribute( const AxisChar * pName,
     if( pSerialized)
     {
         *this << pSerialized;
-        return AXIS_SUCCESS;   // Can it only be successful?
+        return AXIS_SUCCESS;   
     }
 
     return AXIS_FAIL;  // Can it only be unsuccessful?
@@ -925,7 +959,7 @@ int SoapSerializer::addHeaderBlock( IHeaderBlock * pBlk)
 
     m_pSoapEnvelope->m_pSoapHeader->addHeaderBlock( (HeaderBlock *) pBlk);
 
-    return AXIS_SUCCESS;  // Can it only be successful?
+    return AXIS_SUCCESS;  
 }
 
 int SoapSerializer::setBodyAsHexBinary( xsd__hexBinary body)
@@ -1005,7 +1039,7 @@ setSOAPMethodAttribute( Attribute * pAttribute)
     {
         m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->addAttribute( pAttribute);
 
-        return AXIS_SUCCESS;  // Can it only be successful?
+        return AXIS_SUCCESS;  
     }
 
     return AXIS_FAIL;
@@ -1024,7 +1058,7 @@ serializeAnyObject( AnyType * pAnyObject)
     for( int i = 0; i < pAnyObject->_size; i++)
         serialize( pAnyObject->_array[i], 0);
 
-    return AXIS_SUCCESS;  // Can it only be successful?
+    return AXIS_SUCCESS;  
 }
 
 int SoapSerializer::
@@ -1040,7 +1074,7 @@ addOutputAnyObject( AnyType * pAnyObject)
         (m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod))
         m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->addOutputParam( pParam);
 
-    return AXIS_SUCCESS;  // Can it only be successful?
+    return AXIS_SUCCESS;  
 }
 
 IHeaderBlock * SoapSerializer::getHeaderBlock( const AxisChar * pcName, 
@@ -1073,7 +1107,7 @@ int SoapSerializer::serializeAsChardata( void * pValue, XSDTYPE type)
 
     *this << pStr;
 
-    return AXIS_SUCCESS;  // Can it only be successful?
+    return AXIS_SUCCESS;  
 }
 
 void SoapSerializer::serializeAttachments( SoapSerializer &pSZ)
@@ -1276,7 +1310,7 @@ deleteHeaderBlock( const AxisChar * pName, const AxisChar * pNamespace)
         iStatus = AXIS_SUCCESS;
     }
 
-    return iStatus; // Can it only be successful?
+    return iStatus; 
 }
 
 void SoapSerializer::reset()
