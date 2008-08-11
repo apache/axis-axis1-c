@@ -52,7 +52,6 @@ import org.apache.axis.wsdl.symbolTable.DefinedElement;
 import org.apache.axis.wsdl.symbolTable.DefinedType;
 import org.apache.axis.wsdl.symbolTable.Element;
 import org.apache.axis.wsdl.symbolTable.Parameters;
-import org.apache.axis.wsdl.symbolTable.PortTypeEntry;
 import org.apache.axis.wsdl.symbolTable.ServiceEntry;
 import org.apache.axis.wsdl.symbolTable.SymTabEntry;
 import org.apache.axis.wsdl.symbolTable.SymbolTable;
@@ -92,12 +91,12 @@ public class WSDL2Ws
     private String c_targetEndpointURI = null;
     private String c_transportURI = null;
 
-    private String c_qualifiedServiceName;
+    private String c_serviceName;
     private String c_serviceStyle = null;
     
     private ServiceEntry c_serviceEntry;
     private BindingEntry c_bindingEntry;
-    private PortTypeEntry c_portTypeEntry;
+    private PortType     c_portType;
     
     // Array of MethodInfo objects representing service operations.
     private ArrayList c_methods;
@@ -224,24 +223,15 @@ public class WSDL2Ws
             c_transportURI = SymbolTableParsingUtils.getTransportType(c_bindingEntry.getBinding());    
             
             // ==================================================
-            // Get port type entry information 
+            // Get port type information associated with binding 
             // ==================================================
             
-            c_portTypeEntry = c_symbolTable.getPortTypeEntry(binding.getPortType().getQName());
-            if (c_portTypeEntry == null)
+            c_portType = binding.getPortType();
+            if (c_portType == null)
                 throw new WrapperFault("Port type entry not found");
             
-            c_qualifiedServiceName = c_portTypeEntry.getName();
-            if (c_qualifiedServiceName == null)
-            {
-                // TODO - not sure if stuff below is applicable?
-                c_qualifiedServiceName = c_portTypeEntry.getQName().getNamespaceURI();
-                c_qualifiedServiceName =
-                    WrapperUtils.firstCharacterToLowercase(
-                        WrapperUtils.nsURI2packageName(c_qualifiedServiceName))
-                        + "."
-                        + c_portTypeEntry.getQName().getLocalPart();
-            }
+            // Service name will be the portType name.
+            c_serviceName = WrapperUtils.getClassNameFromFullyQualifiedName(c_portType.getQName().getLocalPart());
 
             // ==================================================
             // Get target end point 
@@ -725,7 +715,7 @@ public class WSDL2Ws
         // Process information about service operations
         // ==================================================            
         
-        processServiceMethods(c_portTypeEntry.getPortType());
+        processServiceMethods(c_portType);
 
         // ==================================================
         // Generate the artifacts
@@ -737,8 +727,7 @@ public class WSDL2Ws
                                                   c_transportURI, c_targetEndpointURI, targetNameSpaceOfWSDL);
         
         // Service info
-        String servicename = c_serviceEntry.getService().getQName().getLocalPart();
-        ServiceInfo serviceInfo = new ServiceInfo(servicename, c_qualifiedServiceName, c_methods);
+        ServiceInfo serviceInfo = new ServiceInfo(c_serviceName, c_methods);
         
         // Context
         WebServiceContext wsContext = new WebServiceContext(wrapperInfo, serviceInfo, c_typeMap); 

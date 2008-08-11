@@ -33,7 +33,6 @@ import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.SourceWriter;
 import org.apache.axis.wsdl.wsdl2ws.WSDL2Ws;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
-import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
 public class ClassLoader implements SourceWriter
@@ -44,9 +43,7 @@ public class ClassLoader implements SourceWriter
     public ClassLoader(WebServiceContext wscontext) throws WrapperFault
     {
         this.wscontext = wscontext;
-        this.classname =
-            WrapperUtils.getClassNameFromFullyQualifiedName(
-                wscontext.getSerInfo().getQualifiedServiceName());
+        this.classname = wscontext.getSerInfo().getServicename();
     }
 
     public void writeSource() throws WrapperFault

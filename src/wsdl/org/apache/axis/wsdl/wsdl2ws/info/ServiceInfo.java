@@ -25,45 +25,26 @@ package org.apache.axis.wsdl.wsdl2ws.info;
 import java.util.ArrayList;
 
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
-import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
 
 public class ServiceInfo
 {
     private String servicename;
-    private String qualifiedServiceName;
     private ArrayList methods;
-    private String[][] parameters;
 
     public ServiceInfo(
         String servicename,
-        String qualifiedServiceName,
         ArrayList methods)
         throws WrapperFault
     {
         this.methods = methods;
-        this.qualifiedServiceName = qualifiedServiceName;
         this.servicename = servicename;
 
-        //validate the infomormation
-        if (this.qualifiedServiceName == null)
-        {
-            throw new WrapperFault("The fully qualified parameter name can't be null");
-        }
+        //validate the information
         if (servicename == null)
-        {
-            servicename =
-                WrapperUtils.getClassNameFromFullyQualifiedName(
-                    qualifiedServiceName);
-        }
-        if (this.methods == null || this.methods.size() == 0)
-        {
-            throw new WrapperFault("service with no methods no point writing a wrapper");
-        }
-        if (this.parameters == null)
-        {
-            this.parameters = new String[0][0];
-        }
+            throw new WrapperFault("Service name can't be null.");
 
+        if (this.methods == null || this.methods.size() == 0)
+            throw new WrapperFault("Service with no methods.");
     }
 
     /**
@@ -72,11 +53,6 @@ public class ServiceInfo
     public ArrayList getMethods()
     {
         return methods;
-    }
-
-    public String getQualifiedServiceName()
-    {
-        return qualifiedServiceName;
     }
 
     /**

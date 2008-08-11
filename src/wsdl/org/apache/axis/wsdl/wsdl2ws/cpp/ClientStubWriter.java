@@ -54,8 +54,7 @@ public class ClientStubWriter extends CPPClassWriter
 
     public ClientStubWriter(WebServiceContext wscontext) throws WrapperFault
     {
-        super(WrapperUtils.getClassNameFromFullyQualifiedName(wscontext
-                .getSerInfo().getQualifiedServiceName()));
+        super(wscontext.getSerInfo().getServicename());
         this.wscontext = wscontext;
         this.methods = wscontext.getSerInfo().getMethods();
     }

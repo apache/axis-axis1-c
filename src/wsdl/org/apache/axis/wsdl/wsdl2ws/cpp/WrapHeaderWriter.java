@@ -28,7 +28,6 @@ import java.util.Iterator;
 
 import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
-import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.FaultInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.MethodInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
@@ -39,10 +38,7 @@ public class WrapHeaderWriter extends HeaderFileWriter
     protected ArrayList methods;
     public WrapHeaderWriter(WebServiceContext wscontext) throws WrapperFault
     {
-        super(
-            WrapperUtils.getClassNameFromFullyQualifiedName(
-                wscontext.getSerInfo().getQualifiedServiceName()
-                    + CUtils.WRAPPER_NAME_APPENDER));
+        super(wscontext.getSerInfo().getServicename() + CUtils.WRAPPER_NAME_APPENDER);
         this.wscontext = wscontext;
         this.methods = wscontext.getSerInfo().getMethods();
         this.bindingStyle = "RPC_ENCODED";

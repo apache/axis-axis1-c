@@ -43,10 +43,7 @@ public class WrapWriter extends CPPClassWriter
     private ArrayList methods;
     public WrapWriter(WebServiceContext wscontext) throws WrapperFault
     {
-        super(
-            WrapperUtils.getClassNameFromFullyQualifiedName(
-                wscontext.getSerInfo().getQualifiedServiceName()
-                    + CUtils.WRAPPER_NAME_APPENDER));
+        super(wscontext.getSerInfo().getServicename() + CUtils.WRAPPER_NAME_APPENDER);
         this.wscontext = wscontext;
         this.methods = wscontext.getSerInfo().getMethods();
     }

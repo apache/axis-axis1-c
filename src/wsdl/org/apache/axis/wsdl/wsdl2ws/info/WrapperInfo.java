@@ -29,27 +29,32 @@ public class WrapperInfo
 {
     //service style
     private String wrapperStyle;
+    
     // programming language
     private String wrapperLanguage;
-    // use getvalue or get TAG or SIMPlE
-//    private String implStyle;
-    //serverside or client side
+
+    //server side or client side
     private String targetEngine;
+    
     //output location
     private String targetOutputLocation;
+    
     //transport method specified in the binding
     private String transportUri;
+    
     //target endpoint (the URI the service is deployed in)
     private String targetEndpointURI;
+    
     //private target name space of the wsdl file 
     private String targetNameSpaceOfWSDL;
 
-    public WrapperInfo(String wrapperStyle, String wrapperLanguage,
-    String targetOutputLocation,
-        String targetEngine,
-        String transportUri,
-        String targetEndpointURI,
-        String targetNameSpaceOfWSDL)
+    public WrapperInfo(String wrapperStyle, 
+                       String wrapperLanguage,
+                       String targetOutputLocation,
+                       String targetEngine,
+                       String transportUri,
+                       String targetEndpointURI,
+                       String targetNameSpaceOfWSDL)
     {
         this.wrapperStyle = wrapperStyle;
         this.wrapperLanguage = wrapperLanguage;
@@ -67,11 +72,8 @@ public class WrapperInfo
         else
             this.wrapperStyle = this.wrapperStyle.toLowerCase();
 
-        //        if (encodingStyle == null || encodingStyle.equals(WrapperConstants.ENCODING_STYLE_SOAP))
-        //            encodingStyle = WrapperConstants.ENCODING_STYLE_SOAP;
         if (targetOutputLocation == null)
             targetOutputLocation = ".";
-
 
         if (targetEngine == null
                 || !WrapperConstants.CLIENT.equalsIgnoreCase(targetEngine))

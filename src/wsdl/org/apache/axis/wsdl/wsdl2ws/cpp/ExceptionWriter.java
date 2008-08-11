@@ -28,7 +28,6 @@ import org.apache.axis.wsdl.wsdl2ws.BasicFileWriter;
 import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.WSDL2Ws;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
-import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
 /**
@@ -45,9 +44,7 @@ public class ExceptionWriter extends BasicFileWriter
     public ExceptionWriter(WebServiceContext wscontext, String faultInfoName)
         throws WrapperFault
     {
-        super(
-            WrapperUtils.getClassNameFromFullyQualifiedName(
-                wscontext.getSerInfo().getQualifiedServiceName()));
+        super(wscontext.getSerInfo().getServicename());
         this.wscontext = wscontext;
         this.faultInfoName = "Axis" + faultInfoName + "Exception";
     }

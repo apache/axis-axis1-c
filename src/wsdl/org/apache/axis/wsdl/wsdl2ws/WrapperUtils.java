@@ -22,8 +22,6 @@
 package org.apache.axis.wsdl.wsdl2ws;
 
 import java.util.Iterator;
-import java.util.Stack;
-import java.util.StringTokenizer;
 
 import javax.xml.namespace.QName;
 
@@ -54,6 +52,7 @@ public class WrapperUtils
 
         return fullyQualifiedName.substring(lastIndex + 1);
     }
+
     /**
      *  get classpart of the class and if name happen to be a Simple type return 
      *  the Wrapper Class name(service.0 wrapper class name)
@@ -91,49 +90,6 @@ public class WrapperUtils
         return new String(chars);
     }
     
-    public static String nsURI2packageName(String nsuri)
-    {
-
-        //gard agien if nsuri is urn | http and nothing return        
-        if (("urn".equals(nsuri) || "http".equals(nsuri)))
-            return nsuri;
-
-        StringTokenizer tokenizer = new StringTokenizer(nsuri, ":/.", false);
-        String token;
-        Stack stack = new Stack();
-
-        //first ine may be urn: or http: remove it
-        if (tokenizer.hasMoreTokens())
-        {
-            token = tokenizer.nextToken();
-            if (!("urn".equals(token) || "http".equals(token)))
-                stack.push(token);
-        }
-
-        while (tokenizer.hasMoreTokens())
-        {
-            token = tokenizer.nextToken();
-            if (!(token == null || "".equals(token)))
-                stack.push(token);
-        }
-
-        // create the String from the stack
-        StringBuffer buff = new StringBuffer(150);
-        if (!stack.isEmpty())
-            buff.append((String) stack.pop());
-
-        while (!stack.isEmpty())
-        {
-            buff.append('.');
-            buff.append((String) stack.pop());
-        }
-
-        String changednsuri = buff.toString();
-        //remove any unexpected charactors        
-        changednsuri = changednsuri.replaceAll("[^(a-zA-z0-9|.|_)]", "_");
-        return changednsuri;
-    }
-
     public static String getClassNameFromParamInfoConsideringArrays(
         ParameterInfo param,
         WebServiceContext wscontext)
