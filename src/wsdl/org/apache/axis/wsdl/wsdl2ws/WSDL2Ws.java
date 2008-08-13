@@ -253,7 +253,7 @@ public class WSDL2Ws
             // ==================================================                
             
             ports = service.getPorts().values().iterator();
-            c_targetEndpointURI = SymbolTableParsingUtils.getTargetEndPointURI(ports);
+            c_targetEndpointURI = WSDLInfo.getTargetEndPointURI(ports);
         }
         catch (Exception e)
         {
@@ -455,9 +455,9 @@ public class WSDL2Ws
                     if (method == null)
                         throw new WrapperFault("binding and the port type do not match");                    
                     
-                    method.setSoapAction(SymbolTableParsingUtils.getSoapAction(bindinop));
-                    SymbolTableParsingUtils.getInputInfo(bindinop.getBindingInput(), method);
-                    SymbolTableParsingUtils.getOutputInfo(bindinop.getBindingOutput(), method);
+                    method.setSoapAction(WSDLInfo.getSoapAction(bindinop));
+                    WSDLInfo.getInputInfo(bindinop.getBindingInput(), method);
+                    WSDLInfo.getOutputInfo(bindinop.getBindingOutput(), method);
                 }
             }
         }
