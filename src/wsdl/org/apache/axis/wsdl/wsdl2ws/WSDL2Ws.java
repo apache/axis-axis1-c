@@ -68,15 +68,17 @@ import org.w3c.dom.Node;
 /**
  * This is the main class for the WSDL2Ws Tool. This class reuses the code in the 
  * Axis java implementations to parse the WSDL file. Here is what is done: 
- *  1) create a Symbol table
- *  2) create WrapperInfo class parsing the command line arguments and the SymbolTable
- *  3) create TypeMap parsing the  Symbol Table
- *  4) create Service Info parsing the Symbol table
+ * 
+ *  1) create a Symbol table by parsing WSDL file.
+ *  2) create TypeMap object by iterating through types in the Symbol Table.
+ *  3) create WrapperInfo object using command line arguments and SymbolTable information.
+ *  4) create ServiceInfo object parsing the Symbol table.
  *  5) create WebServiceContext using above three classes and start execution 
  * 
  * @author hemapani@opensource.lk
  * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
  * @author hawkeye (hawkinsj@uk.ibm.com)
+ * @author amra (amra@us.ibm.com)
  */
 public class WSDL2Ws
 {
@@ -101,6 +103,61 @@ public class WSDL2Ws
     // WSDL info.
     private WSDLInfo c_wsdlInfo;
 
+    /**
+     * Prints out usage.
+     */
+    public static void usage()
+    {
+        System.out.println(
+            "java WSDL2Ws -<options> <wsdlfile>\n"
+                + "-h, -help              print this message\n"
+                + "-o<folder>             target output folder - default is current folder\n"
+                + "-l<c++|c>              target language (c++|c) - default is c++\n"
+                + "-s<server|client>      target side (server|client) - default is server\n"
+                + "-v, -verbose           be verbose\n"
+                + "-t<timeout>            uri resolution timeout in seconds - default is 0 (no timeout)\n"
+                + "-w<wrapped|unwrapped>  generate wrapper style or not - default is wrapped\n"
+                );
+    }
+    
+    /**
+     * Main entry point. 
+     * 
+     * @param args
+     * @throws Exception
+     */
+    public static void main(String[] args) throws Exception
+    {
+        // Get parameters and validate
+        CLArgParser data = new CLArgParser(args);
+        
+        if (!data.areOptionsValid() || data.isSet("h") || data.getArgumentCount() != 1)
+        {
+            usage();
+            return;
+        }
+
+        // Kick off code generation
+        try
+        {
+            WSDL2Ws gen = new WSDL2Ws(data);
+            gen.generateWrappers();
+
+            System.out.println("\nCode generation completed. Generated files in directory '" + gen.getTargetOutputLocation() + "'.");
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            System.out.println("\nCode generation failed. Please see errors above.\n");
+        }
+    }    
+    
+    /**
+     * Gathers the parameters passed in and parses the WSDL file, generating the symbol table. 
+     * 
+     * @param cmdLineArgs
+     * @throws WrapperFault
+     */
     public WSDL2Ws(CLArgParser cmdLineArgs) throws WrapperFault
     {
         try
@@ -206,9 +263,104 @@ public class WSDL2Ws
     }
 
     /**
-     * Process service operations
+     * Kicks of the generation of the stub code.
+     * 
+     * @throws WrapperFault
      */
+    public void generateWrappers() throws WrapperFault
+    {
+        CUtils.setLanguage(c_language);
+        
+        // ==================================================
+        // Generate types, populating the type map
+        // ==================================================            
+        
+        c_typeMap = new TypeMap(c_language);
+        
+        Iterator it = c_symbolTable.getTypeIndex().values().iterator();
+        while (it.hasNext())
+        {
+            TypeEntry type = (TypeEntry) it.next();
+            Node node = type.getNode();
+            if (node != null)
+            {
+                if (c_verbose)
+                {
+                    System.out.println( "==>getTypeInfo: Processing type...." + type.getQName());                    
+                }
+                                
+                createTypeInfo(type);
+            }
+        }
+        
+        // ==================================================
+        // Generate the artifacts
+        // ==================================================            
+        
+        // Wrapper info
+        String c_serviceStyle = c_bindingEntry.getBindingStyle().getName();
 
+        WrapperInfo wrapperInfo = 
+            new WrapperInfo(c_serviceStyle, c_language, 
+                            c_targetoutputLocation, c_targetEngine,
+                            c_wsdlInfo.getTargetNameSpaceOfWSDL());
+        
+        // Service info
+        PortType portType = c_bindingEntry.getBinding().getPortType();
+        if (portType == null)
+            throw new WrapperFault("Port type entry not found");
+        
+        String serviceName = WrapperUtils.getClassNameFromFullyQualifiedName(portType.getQName().getLocalPart());
+        ArrayList serviceMethods = processServiceMethods(portType, c_bindingEntry);
+        ServiceInfo serviceInfo = new ServiceInfo(serviceName, serviceMethods, c_targetEndpointURI);
+        
+        // Context
+        WebServiceContext wsContext = new WebServiceContext(wrapperInfo, serviceInfo, c_typeMap); 
+        
+        // Generator
+        WebServiceGenerator wsg = WebServiceGeneratorFactory.createWebServiceGenerator(wsContext);
+        if (wsg == null)
+            throw new WrapperFault("WSDL2Ws does not support the option combination");
+        
+        // There must be a better way to do this
+        exposeReferenceTypes(wsContext);
+        exposeMessagePartsThatAreAnonymousTypes(wsContext);
+        // This call must be last one called of the exposexxx methods!
+        exposeNestedTypesThatAreAnonymousTypes(wsContext);
+        
+        if (c_verbose)
+        {
+            System.out.println( "Dumping typeMap....");
+            
+            it = c_typeMap.getTypes().iterator();
+            while (it.hasNext())
+            {
+                System.out.println(it.next());
+            }
+        }
+        
+        // Generate code
+        wsg.generate();
+    }    
+    
+    /**
+     * Returns absolute path to where the generated code will be located. 
+     * 
+     * @return the absolute path to the target location
+     */
+    public String getTargetOutputLocation()
+    {
+        return c_targetoutputLocation;
+    }
+    
+    /**
+     * Process service operations, generating information about each operation.
+     *
+     * @param porttype
+     * @param bindingEntry
+     * @return               array of MethodInfo objects.
+     * @throws WrapperFault
+     */
     private ArrayList processServiceMethods(PortType porttype, BindingEntry bindingEntry) throws WrapperFault
     {
         ArrayList serviceMethods = new ArrayList();
@@ -645,83 +797,15 @@ public class WSDL2Ws
         }
     }
 
-    public void generateWrappers() throws WrapperFault
-    {
-        CUtils.setLanguage(c_language);
-        
-        // ==================================================
-        // Generate types, populating the type map
-        // ==================================================            
-        
-        c_typeMap = new TypeMap(c_language);
-        
-        Iterator it = c_symbolTable.getTypeIndex().values().iterator();
-        while (it.hasNext())
-        {
-            TypeEntry type = (TypeEntry) it.next();
-            Node node = type.getNode();
-            if (node != null)
-            {
-                if (c_verbose)
-                {
-                    System.out.println( "==>getTypeInfo: Processing type...." + type.getQName());                    
-                }
-                                
-                createTypeInfo(type);
-            }
-        }
-        
-        // ==================================================
-        // Generate the artifacts
-        // ==================================================            
-        
-        // Wrapper info
-        String c_serviceStyle = c_bindingEntry.getBindingStyle().getName();
 
-        WrapperInfo wrapperInfo = 
-            new WrapperInfo(c_serviceStyle, c_language, 
-                            c_targetoutputLocation, c_targetEngine,
-                            c_wsdlInfo.getTargetNameSpaceOfWSDL());
-        
-        // Service info
-        PortType portType = c_bindingEntry.getBinding().getPortType();
-        if (portType == null)
-            throw new WrapperFault("Port type entry not found");
-        
-        String serviceName = WrapperUtils.getClassNameFromFullyQualifiedName(portType.getQName().getLocalPart());
-        ArrayList serviceMethods = processServiceMethods(portType, c_bindingEntry);
-        ServiceInfo serviceInfo = new ServiceInfo(serviceName, serviceMethods, c_targetEndpointURI);
-        
-        // Context
-        WebServiceContext wsContext = new WebServiceContext(wrapperInfo, serviceInfo, c_typeMap); 
-        
-        // Generator
-        WebServiceGenerator wsg = WebServiceGeneratorFactory.createWebServiceGenerator(wsContext);
-        if (wsg == null)
-            throw new WrapperFault("WSDL2Ws does not support the option combination");
-        
-        // There must be a better way to do this
-        exposeReferenceTypes(wsContext);
-        exposeMessagePartsThatAreAnonymousTypes(wsContext);
-        // This call must be last one called of the exposexxx methods!
-        exposeNestedTypesThatAreAnonymousTypes(wsContext);
-        
-        if (c_verbose)
-        {
-            System.out.println( "Dumping typeMap....");
-            
-            it = c_typeMap.getTypes().iterator();
-            while (it.hasNext())
-            {
-                System.out.println(it.next());
-            }
-        }
-        
-        // Generate code
-        wsg.generate();
-    }
-
-    public Type createTypeInfo(QName typename)  throws WrapperFault
+    /**
+     * Iterates through symbol table, creating types in the typemap.
+     * 
+     * @param typename
+     * @return
+     * @throws WrapperFault
+     */
+    private Type createTypeInfo(QName typename)  throws WrapperFault
     {
         TypeEntry type = c_symbolTable.getType(typename);
         if (type == null)
@@ -738,15 +822,15 @@ public class WSDL2Ws
         }
         return createTypeInfo(type);
     }
-
+    
     /**
-     * This code is borrowd from the JavaBeanWriter#writeFullConstructor().
+     * Creates a type map entry from a symbol table typeentry. 
+     * 
      * @param type
-     * @param targetLanguage
      * @return
+     * @throws WrapperFault
      */
-
-    public Type createTypeInfo(TypeEntry type) throws WrapperFault
+    private Type createTypeInfo(TypeEntry type) throws WrapperFault
     {
         Type typedata = null;
         Type newSecondaryType = null;
@@ -991,6 +1075,13 @@ public class WSDL2Ws
         return typedata;
     }
 
+    /**
+     * Adds faults.
+     * 
+     * @param faults
+     * @param methodinfo
+     * @throws WrapperFault
+     */
     private void addFaultInfo(Map faults, MethodInfo methodinfo)
         throws WrapperFault
     {
@@ -1016,6 +1107,12 @@ public class WSDL2Ws
         }
     }
 
+    /**
+     * 
+     * @param part
+     * @return
+     * @throws WrapperFault
+     */
     private ParameterInfo createParameterInfo(Part part) throws WrapperFault
     {
         QName qname = part.getTypeName();
@@ -1185,6 +1282,12 @@ public class WSDL2Ws
         }
     }
     
+    /**
+     * 
+     * @param theOrigMap
+     * @param theType
+     * @param nameMapper
+     */
     private void exposeRelatedTypes(TypeMap theOrigMap, Type theType, Hashtable nameMapper)
     {
         QName oldName = theType.getName();                              
@@ -1221,6 +1324,7 @@ public class WSDL2Ws
     }
     
     /**
+     * 
      * @param wsContext
      */
     private void exposeNestedTypesThatAreAnonymousTypes(WebServiceContext wsContext)
@@ -1272,6 +1376,11 @@ public class WSDL2Ws
         }
     }
 
+    /**
+     * 
+     * @param wsContext
+     * @param parameterType
+     */
     private void externalizeTypeAndUpdateTypeMap(WebServiceContext wsContext, Type parameterType)
     {
         QName oldName = parameterType.getName();
@@ -1288,60 +1397,15 @@ public class WSDL2Ws
             wsContext.getTypemap().addType(newTypeName, innerClassType);
         }
     }
-    
-    public static void usage()
-    {
-        System.out.println(
-            "java WSDL2Ws -<options> <wsdlfile>\n"
-                + "-h, -help              print this message\n"
-                + "-o<folder>             target output folder - default is current folder\n"
-                + "-l<c++|c>              target language (c++|c) - default is c++\n"
-                + "-s<server|client>      target side (server|client) - default is server\n"
-                + "-v, -verbose           be verbose\n"
-                + "-t<timeout>            uri resolution timeout in seconds - default is 0 (no timeout)\n"
-                + "-w<wrapped|unwrapped>  generate wrapper style or not - default is wrapped\n"
-                );
-    }
-    
-    /**
-     * @param args
-     * @throws Exception
-     */
 
-    public static void main(String[] args) throws Exception
-    {
-        // Get parameters and validate
-        CLArgParser data = new CLArgParser(args);
-        
-        if (!data.areOptionsValid() || data.isSet("h") || data.getArgumentCount() != 1)
-        {
-            usage();
-            return;
-        }
-
-        // Kick off code generation
-        try
-        {
-            WSDL2Ws gen = new WSDL2Ws(data);
-            gen.generateWrappers();
-
-            System.out.println("\nCode generation completed. Generated files in directory '" + gen.getTargetOutputLocation() + "'.");
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            System.out.println("\nCode generation failed. Please see errors above.\n");
-        }
-    }
-    
     /**
      * Work out the various conditions that dictate whether this type will be generated into a new
      * file or not.
      * This method is only very partially implemented. 
      *   
      * @param type
+     * @param typedata
      * @return true if the type will not be generated. False otherwise
-     * 
      */
     private boolean isTypeGenerated(TypeEntry type, Type typedata)
     {
@@ -1357,22 +1421,14 @@ public class WSDL2Ws
         else
             return true;
     }
-
-    /**
-     * Returns absolute path to where the generated code will be located. 
-     * 
-     * @return the absolute path to the target location
-     */
-    public String getTargetOutputLocation()
-    {
-        return c_targetoutputLocation;
-    }
     
     /**
      * Resolves name conflict between a method name and a type name. 
      * When doing document-literal, usually the name of the wrapper element is same as the 
      * operation name. 
      * 
+     * @param type
+     * @param minfo
      * @return the new type name that does not conflict with the operation name.
      */
     private String generateNewTypeName(Type type, MethodInfo minfo)
