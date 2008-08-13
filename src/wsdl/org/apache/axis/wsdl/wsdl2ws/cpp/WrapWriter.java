@@ -43,9 +43,9 @@ public class WrapWriter extends CPPClassWriter
     private ArrayList methods;
     public WrapWriter(WebServiceContext wscontext) throws WrapperFault
     {
-        super(wscontext.getSerInfo().getServicename() + CUtils.WRAPPER_NAME_APPENDER);
+        super(wscontext.getServiceInfo().getServicename() + CUtils.WRAPPER_NAME_APPENDER);
         this.wscontext = wscontext;
-        this.methods = wscontext.getSerInfo().getMethods();
+        this.methods = wscontext.getServiceInfo().getMethods();
     }
     protected void writeClassComment() throws WrapperFault
     {
@@ -285,7 +285,7 @@ public class WrapWriter extends CPPClassWriter
             "\tif (AXIS_SUCCESS != pIWSDZ->checkMessageBody(\""
                 + minfo.getMethodname()
                 + "\", \""
-                + wscontext.getWrapInfo().getTargetNameSpaceOfWSDL()
+                + wscontext.getWrapperInfo().getTargetNameSpaceOfWSDL()
                 + "\"))\n");
         writer.write("\t{\n");
         writer.write("\t\treturn AXIS_FAIL;\n");
@@ -298,7 +298,7 @@ public class WrapWriter extends CPPClassWriter
         		+ minfo.getOutputMessage().getLocalPart()
 				+ "\", \""
 				//15/06/2005................................
-                + wscontext.getWrapInfo().getTargetNameSpaceOfWSDL()
+                + wscontext.getWrapperInfo().getTargetNameSpaceOfWSDL()
                 + "\");\n");
         //create and populate variables for each parameter
         String paraTypeName;
@@ -823,7 +823,7 @@ public class WrapWriter extends CPPClassWriter
                 "\t\tpIWSSZ->createSoapFault(\""
                     + langName
                     + "\", \""
-                    + wscontext.getWrapInfo().getTargetNameSpaceOfWSDL()
+                    + wscontext.getWrapperInfo().getTargetNameSpaceOfWSDL()
                     + "\",\"AxisC++ Faultcode\", \"Custom Out of bound exception\");\n");
             //  writer.write("\t\t"+faulttype+" pObjFault = new "+langName+"();\n");                                                                       
             writer.write(

@@ -46,9 +46,9 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
     public ClientStubHeaderWriter(WebServiceContext wscontext)
         throws WrapperFault
     {
-        super(wscontext.getSerInfo().getServicename());
+        super(wscontext.getServiceInfo().getServicename());
         this.wscontext = wscontext;
-        this.methods = wscontext.getSerInfo().getMethods();
+        this.methods = wscontext.getServiceInfo().getMethods();
     }
     
     /* (non-Javadoc)

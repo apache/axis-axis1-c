@@ -91,7 +91,7 @@ public abstract class CFileWriter extends BasicFileWriter
      */
     protected File getFilePath(boolean useServiceName) throws WrapperFault
     {
-        String targetOutputLocation = this.wscontext.getWrapInfo().getTargetOutputLocation();
+        String targetOutputLocation = this.wscontext.getWrapperInfo().getTargetOutputLocation();
         if (targetOutputLocation.endsWith("/"))
             targetOutputLocation = targetOutputLocation.substring(0,targetOutputLocation.length() - 1);
 
@@ -100,7 +100,7 @@ public abstract class CFileWriter extends BasicFileWriter
 
         if (useServiceName)
         {
-            String serviceName = this.wscontext.getSerInfo().getServicename();
+            String serviceName = this.wscontext.getServiceInfo().getServicename();
             fileName = targetOutputLocation + "/" + serviceName + "_" + classname + CUtils.C_FILE_SUFFIX;
             this.wscontext.addGeneratedFile(serviceName + "_" + classname + CUtils.C_FILE_SUFFIX);
         }

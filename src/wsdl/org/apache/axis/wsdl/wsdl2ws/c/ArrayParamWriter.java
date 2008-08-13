@@ -220,7 +220,7 @@ public class ArrayParamWriter extends ParamWriter
      */
     protected File getFilePath(boolean useServiceName) throws WrapperFault
     {
-        String targetOutputLocation = this.wscontext.getWrapInfo().getTargetOutputLocation();
+        String targetOutputLocation = this.wscontext.getWrapperInfo().getTargetOutputLocation();
         if (targetOutputLocation.endsWith("/"))
             targetOutputLocation = targetOutputLocation.substring(0,targetOutputLocation.length() - 1);
 
@@ -231,7 +231,7 @@ public class ArrayParamWriter extends ParamWriter
         if (useServiceName)
         {
             fileName = targetOutputLocation + "/"
-                    + this.wscontext.getSerInfo().getServicename()
+                    + this.wscontext.getServiceInfo().getServicename()
                     + "_" + classname + CUtils.C_HEADER_SUFFIX;
         }
 

@@ -15,23 +15,19 @@
  *   limitations under the License.
  */
 
-/**
- * This class has all the information about the Webservice. It pass through 
- * all the classes in genaration of wrapper giving them the info they are 
- * required. This is the Mediator that make sure all the classes interact with 
- * this for information but with this. It will keep the system loosley coupled
- * So easier to handle.  
- *  
- * @author Srinath Perera (hemapani@opensource.lk)
- * @author Dimuthu Leelarathne (muthulee@opensource.lk)
- */
-
 package org.apache.axis.wsdl.wsdl2ws.info;
 
 import java.util.HashSet;
 
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 
+/**
+ * This class has all the information needed to generate the stubs representing 
+ * Web services.   
+ *  
+ * @author Srinath Perera (hemapani@opensource.lk)
+ * @author Dimuthu Leelarathne (muthulee@opensource.lk)
+ */
 public class WebServiceContext
 {
     private WrapperInfo wrapInfo;
@@ -40,11 +36,17 @@ public class WebServiceContext
 
     private HashSet generatedFileList = new HashSet();
 
-    public WebServiceContext(
-        WrapperInfo wrapInfo,
-        ServiceInfo serInfo,
-        TypeMap typemap)
-        throws WrapperFault
+    /**
+     * Constructor. 
+     * 
+     * @param wrapInfo
+     * @param serInfo
+     * @param typemap
+     * @throws WrapperFault
+     */
+    public WebServiceContext(WrapperInfo wrapInfo, 
+                             ServiceInfo serInfo,
+                             TypeMap typemap) throws WrapperFault
     {
         this.wrapInfo = wrapInfo;
         this.serInfo = serInfo;
@@ -57,15 +59,18 @@ public class WebServiceContext
     }
 
     /**
+     * Returns ServiceInfo object. 
+     * 
      * @return ServiceInfo
      */
-    public ServiceInfo getSerInfo()
+    public ServiceInfo getServiceInfo()
     {
         return serInfo;
     }
 
     /**
      * Adds a name of the generated file 
+     * 
      * @param filename
      */
     public void addGeneratedFile(String filename)
@@ -73,11 +78,19 @@ public class WebServiceContext
         generatedFileList.add(filename);
     }
 
+    /**
+     * Returns set of all files that have been generated.
+     * 
+     * @return Set of strings representing file names.
+     */
     public HashSet getGeneratedFileList()
     {
         return generatedFileList;
     }
+    
     /**
+     * Returns the map the contains the types to be generated.
+     * 
      * @return TypeMap
      */
     public TypeMap getTypemap()
@@ -86,9 +99,11 @@ public class WebServiceContext
     }
 
     /**
+     * Returns the WrapperInfo object. 
+     * 
      * @return WrapperInfo
      */
-    public WrapperInfo getWrapInfo()
+    public WrapperInfo getWrapperInfo()
     {
         return wrapInfo;
     }

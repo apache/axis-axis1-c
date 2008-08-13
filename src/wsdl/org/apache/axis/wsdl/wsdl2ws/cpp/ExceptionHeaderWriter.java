@@ -58,7 +58,7 @@ public class ExceptionHeaderWriter extends HeaderFileWriter
     protected File getFilePath(boolean useServiceName) throws WrapperFault
     {
         String targetOutputLocation =
-            this.wscontext.getWrapInfo().getTargetOutputLocation();
+            this.wscontext.getWrapperInfo().getTargetOutputLocation();
         if (targetOutputLocation.endsWith("/"))
         {
             targetOutputLocation =
@@ -79,7 +79,7 @@ public class ExceptionHeaderWriter extends HeaderFileWriter
             fileName =
                 targetOutputLocation
                     + "/"
-                    + this.wscontext.getSerInfo().getServicename()
+                    + this.wscontext.getServiceInfo().getServicename()
                     + "_"
                     + faultInfoName
                     + CUtils.CPP_HEADER_SUFFIX;
@@ -210,7 +210,7 @@ public class ExceptionHeaderWriter extends HeaderFileWriter
     public void getLangName() throws WrapperFault
     {
         ArrayList methods;
-        methods = wscontext.getSerInfo().getMethods();
+        methods = wscontext.getServiceInfo().getMethods();
         MethodInfo minfo;
 
         try

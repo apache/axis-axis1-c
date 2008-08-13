@@ -41,9 +41,9 @@ public class ServiceHeaderWriter extends HeaderFileWriter
     protected ArrayList methods;
     public ServiceHeaderWriter(WebServiceContext wscontext) throws WrapperFault
     {
-        super(wscontext.getSerInfo().getServicename());
+        super(wscontext.getServiceInfo().getServicename());
         this.wscontext = wscontext;
-        this.methods = wscontext.getSerInfo().getMethods();
+        this.methods = wscontext.getServiceInfo().getMethods();
     }
 
     /* (non-Javadoc)

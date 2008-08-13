@@ -140,7 +140,7 @@ public class BeanParamWriter extends ParamCFileWriter
         // doc/literal objects
         //=============================================================================        
         
-        if (wscontext.getWrapInfo().getWrapperStyle().equals("rpc"))
+        if (wscontext.getWrapperInfo().getBindingStyle().equals("rpc"))
             writeRPCArrayPortionOfSerializeGlobalMethod();
         else
             writeDOCArrayPortionOfSerializeGlobalMethod();
@@ -198,7 +198,7 @@ public class BeanParamWriter extends ParamCFileWriter
             writer.write(", NULL);\n\t}\n");
         }               
         
-        if (wscontext.getWrapInfo().getWrapperStyle().equals("document"))
+        if (wscontext.getWrapperInfo().getBindingStyle().equals("document"))
             writer.write("\taxiscSoapSerializerSerialize(pSZ, \">\", 0);\n");
         
         //=============================================================================
@@ -365,7 +365,7 @@ public class BeanParamWriter extends ParamCFileWriter
         // End of attribute and element serialization
         //=============================================================================                
                 
-        if (wscontext.getWrapInfo().getWrapperStyle().equals("rpc"))
+        if (wscontext.getWrapperInfo().getBindingStyle().equals("rpc"))
         {
             writer.write("\n\taxiscSoapSerializerSerialize(pSZ, \"</\", Axis_TypeName_" + classname
                     + ", \">\", NULL);\n");

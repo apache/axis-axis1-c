@@ -354,7 +354,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
         // doc/literal objects
         //=============================================================================        
         
-        if (wscontext.getWrapInfo().getWrapperStyle().equals("rpc"))
+        if (wscontext.getWrapperInfo().getBindingStyle().equals("rpc"))
             writeRPCArrayPortionOfSerializeGlobalMethod();
         else
             writeDOCArrayPortionOfSerializeGlobalMethod();
@@ -414,7 +414,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
             writer.write(", NULL);\n\t}\n");
         }               
         
-        if (wscontext.getWrapInfo().getWrapperStyle().equals("document"))
+        if (wscontext.getWrapperInfo().getBindingStyle().equals("document"))
             writer.write("\tpSZ->serialize( \">\", 0);\n");
         
         //=============================================================================
@@ -580,7 +580,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
         // End of attribute and element serialization
         //=============================================================================                
                 
-        if (wscontext.getWrapInfo().getWrapperStyle().equals("rpc"))
+        if (wscontext.getWrapperInfo().getBindingStyle().equals("rpc"))
         {
             writer.write("\n\tpSZ->serialize(\"</\", Axis_TypeName_" + classname
                     + ", \">\", NULL);\n");
@@ -1145,7 +1145,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 if (attribs[i].isArray())
                 {    
                     writer.write("\tif (original." + attribs[i].getParamNameAsMember() + " != NULL)\n");
-                    writer.write("\t" + attribs[i].getParamNameAsMember() + " = new " 
+                    writer.write("\t\t" + attribs[i].getParamNameAsMember() + " = new " 
                             + attribs[i].getTypeName() + "_Array(*original." 
                             + attribs[i].getParamNameAsMember() + ");\n");
                 }
@@ -1218,14 +1218,11 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 else
                     isPointerType = CUtils.isPointerType(typename);
                 
-                if (i != 0)
-                    writer.write("\n");
-                
                 if(attribs[i].isArray())
                 {
                     if (!forConstructor)
                         writer.write("\tdelete " + name + ";\n");
-                    writer.write("\t"+ name + " = NULL;\n");
+                    writer.write("\t"+ name + " = NULL;\n\n");
                 }
                 else if (attribs[i].isAnyType())
                 {
@@ -1240,13 +1237,13 @@ public class BeanParamWriter extends ParamCPPFileWriter
                         writer.write("\t\tdelete "+name+";\n");
                         writer.write("\t}\n");
                     }
-                    writer.write("\t" + name + "= NULL;\n");
+                    writer.write("\t" + name + "= NULL;\n\n");
                 }
                 else if (!(attribs[i].isSimpleType() || attribs[i].getType().isSimpleType()))
                 {
                     if (!forConstructor)
                         writer.write("\tdelete " + name + ";\n");
-                    writer.write("\t" + name + "= NULL;\n");
+                    writer.write("\t" + name + "= NULL;\n\n");
                 }
                 else if (isPointerType || isElementNillable(i) || isElementOptional(i) 
                         || attribs[i].getChoiceElement() || attribs[i].getAllElement())
@@ -1261,7 +1258,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     }
                     
                     writer.write("\t" + name + " = NULL;\n");
-                    writer.write("\t__axis_deepcopy_" + name + " = false;\n");
+                    writer.write("\t__axis_deepcopy_" + name + " = false;\n\n");
                 }
             }
             

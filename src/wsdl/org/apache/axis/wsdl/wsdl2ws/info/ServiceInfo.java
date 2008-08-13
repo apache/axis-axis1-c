@@ -24,27 +24,34 @@ package org.apache.axis.wsdl.wsdl2ws.info;
 
 import java.util.ArrayList;
 
+import org.apache.axis.wsdl.wsdl2ws.WrapperConstants;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 
 public class ServiceInfo
 {
-    private String servicename;
-    private ArrayList methods;
+    private String c_servicename;
+    private ArrayList c_methods;
+    private String c_targetEndpointURI;
 
-    public ServiceInfo(
-        String servicename,
-        ArrayList methods)
+    public ServiceInfo(String servicename, 
+                       ArrayList methods,
+                       String targetEndpointURI)
         throws WrapperFault
     {
-        this.methods = methods;
-        this.servicename = servicename;
+        c_methods = methods;
+        c_servicename = servicename;
 
         //validate the information
         if (servicename == null)
             throw new WrapperFault("Service name can't be null.");
 
-        if (this.methods == null || this.methods.size() == 0)
+        if (c_methods == null || c_methods.size() == 0)
             throw new WrapperFault("Service with no methods.");
+        
+        if (targetEndpointURI == null)
+            c_targetEndpointURI = WrapperConstants.DEFAULT_TARGET_ENDPOINT_URI;
+        else
+            c_targetEndpointURI = targetEndpointURI;
     }
 
     /**
@@ -52,7 +59,7 @@ public class ServiceInfo
      */
     public ArrayList getMethods()
     {
-        return methods;
+        return c_methods;
     }
 
     /**
@@ -60,6 +67,14 @@ public class ServiceInfo
      */
     public String getServicename()
     {
-        return servicename;
+        return c_servicename;
+    }
+    
+    /**
+     * @return String
+     */
+    public String getTargetEndpointURI()
+    {
+        return c_targetEndpointURI;
     }
 }

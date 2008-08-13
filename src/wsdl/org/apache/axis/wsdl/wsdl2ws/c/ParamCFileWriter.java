@@ -99,7 +99,7 @@ public abstract class ParamCFileWriter extends ParamWriter
      */
     protected File getFilePath() throws WrapperFault
     {
-        String targetOutputLocation = this.wscontext.getWrapInfo().getTargetOutputLocation();
+        String targetOutputLocation = this.wscontext.getWrapperInfo().getTargetOutputLocation();
         if (targetOutputLocation.endsWith("/"))
             targetOutputLocation = targetOutputLocation.substring(0,targetOutputLocation.length() - 1);
 

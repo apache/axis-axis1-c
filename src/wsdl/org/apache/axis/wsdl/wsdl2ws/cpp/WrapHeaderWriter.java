@@ -38,9 +38,9 @@ public class WrapHeaderWriter extends HeaderFileWriter
     protected ArrayList methods;
     public WrapHeaderWriter(WebServiceContext wscontext) throws WrapperFault
     {
-        super(wscontext.getSerInfo().getServicename() + CUtils.WRAPPER_NAME_APPENDER);
+        super(wscontext.getServiceInfo().getServicename() + CUtils.WRAPPER_NAME_APPENDER);
         this.wscontext = wscontext;
-        this.methods = wscontext.getSerInfo().getMethods();
+        this.methods = wscontext.getServiceInfo().getMethods();
         this.bindingStyle = "RPC_ENCODED";
     }
 

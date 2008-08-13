@@ -43,7 +43,7 @@ public class ClassLoader implements SourceWriter
     public ClassLoader(WebServiceContext wscontext) throws WrapperFault
     {
         this.wscontext = wscontext;
-        this.classname = wscontext.getSerInfo().getServicename();
+        this.classname = wscontext.getServiceInfo().getServicename();
     }
 
     public void writeSource() throws WrapperFault
@@ -123,7 +123,7 @@ public class ClassLoader implements SourceWriter
     protected File getFilePath() throws WrapperFault
     {
         String targetOutputLocation =
-            this.wscontext.getWrapInfo().getTargetOutputLocation();
+            this.wscontext.getWrapperInfo().getTargetOutputLocation();
         if (targetOutputLocation.endsWith("/"))
         {
             targetOutputLocation =

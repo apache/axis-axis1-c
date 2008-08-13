@@ -21,33 +21,16 @@
 package org.apache.axis.wsdl.wsdl2ws;
 
 public interface WrapperConstants {
-    public static final String DEFAULT_SIMPLETYPE_PACKAGE = "lk.opensource.axis2.wrappers.simpleType.";
     public static final String SCHEMA_NAMESPACE = "http://www.w3.org/2001/XMLSchema";
 	public static final String SOAPENC_NAMESPACE = "http://schemas.xmlsoap.org/soap/encoding/";
 	public static final String APACHE_XMLSOAP_NAMESPACE = "http://xml.apache.org/xml-soap";
-    //wsdl constants
-    public static final String ELEMENT_COMPLEX_TYPE = "ComplexType";
-    public static final String ELEMENT_SEQUENCE = "sequence";
-    public static final String ELEMENT_ALL ="all";
-    public static final String ELEMENT_ELEMENT ="element";
 
-    public static final String ATTRIBUTE_NAME = "name";
-    public static final String ATTRIBUTE_TYPE = "type";
-    //parameter type
-	public static final int INPUT_PARM = 0;
-	public static final int RETURN_PARM = 1;
-	public static final int COMMAN_PARM = 2;
 	//language
 	public static final String LANGUAGE_CPP = "c++";
 	public static final String LANGUAGE_C = "c";
 	//service style 
-    public static final String STYLE_RPC = "rpc";
-    public static final String STYLE_DOCUMENT= "document";
-    public static final String STYLE_WRAPPED = "wrapped";
-    public static final String STYLE_MESSAGE = "message";
-
-	
-	public static final String ENCODING_STYLE_SOAP = "http://schemas.xmlsoap.org/soap/encoding/";
+    public static final String STYLE_RPC      = "rpc";
+    public static final String STYLE_DOCUMENT = "document";
 	
 	public static final String TRANSPORT_HTTP = "http://schemas.xmlsoap.org/soap/http";
 	
@@ -76,7 +59,6 @@ public interface WrapperConstants {
 	//common constants
 	public static final int GENERATOR_DEPLOYMENT = 40;
 	public static final int GENERATOR_UNDEPLOYMENT = 41;
-	public static final int GENERATOR_BUILDSCRIPT = 42;
 	
 
     //target engine

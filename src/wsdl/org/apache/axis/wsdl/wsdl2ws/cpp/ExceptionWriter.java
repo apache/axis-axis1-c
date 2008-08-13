@@ -44,7 +44,7 @@ public class ExceptionWriter extends BasicFileWriter
     public ExceptionWriter(WebServiceContext wscontext, String faultInfoName)
         throws WrapperFault
     {
-        super(wscontext.getSerInfo().getServicename());
+        super(wscontext.getServiceInfo().getServicename());
         this.wscontext = wscontext;
         this.faultInfoName = "Axis" + faultInfoName + "Exception";
     }
@@ -63,7 +63,7 @@ public class ExceptionWriter extends BasicFileWriter
     protected File getFilePath(boolean useServiceName) throws WrapperFault
     {
         String targetOutputLocation =
-            this.wscontext.getWrapInfo().getTargetOutputLocation();
+            this.wscontext.getWrapperInfo().getTargetOutputLocation();
         if (targetOutputLocation.endsWith("/"))
         {
             targetOutputLocation =
@@ -105,7 +105,7 @@ public class ExceptionWriter extends BasicFileWriter
 
     private String getServiceName() throws WrapperFault
     {
-        return wscontext.getSerInfo().getServicename();
+        return wscontext.getServiceInfo().getServicename();
     }
 
     /* (non-Javadoc)

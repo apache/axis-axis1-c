@@ -38,9 +38,9 @@ public class ServiceWriter extends CPPClassWriter
     private ArrayList methods;
     public ServiceWriter(WebServiceContext wscontext) throws WrapperFault
     {
-        super(wscontext.getSerInfo().getServicename());
+        super(wscontext.getServiceInfo().getServicename());
         this.wscontext = wscontext;
-        this.methods = wscontext.getSerInfo().getMethods();
+        this.methods = wscontext.getServiceInfo().getMethods();
     }
 
     public void writeSource() throws WrapperFault

@@ -15,161 +15,124 @@
  *   limitations under the License.
  */
 
-/**
- * This Class have the misc infomation about the Wrapper to genatrated
- * @author Srinath Perera (hemapani@opensource.lk)
- * @author Dimuthu Leelarathne (muthulee@opensource.lk)
- */
-
 package org.apache.axis.wsdl.wsdl2ws.info;
 
 import org.apache.axis.wsdl.wsdl2ws.WrapperConstants;
 
+/**
+ * Contains information of a global nature regarding how to generate
+ * the stubs.
+ * 
+ * @author Srinath Perera (hemapani@opensource.lk)
+ * @author Dimuthu Leelarathne (muthulee@opensource.lk)
+ */
 public class WrapperInfo
 {
-    //service style
-    private String wrapperStyle;
+    // binding style
+    private String c_bindingStyle;
     
     // programming language
-    private String wrapperLanguage;
+    private String c_wrapperLanguage;
 
-    //server side or client side
-    private String targetEngine;
+    // server side or client side
+    private String c_targetEngine;
     
-    //output location
-    private String targetOutputLocation;
+    // output location
+    private String c_targetOutputLocation;
     
-    //transport method specified in the binding
-    private String transportUri;
-    
-    //target endpoint (the URI the service is deployed in)
-    private String targetEndpointURI;
-    
-    //private target name space of the wsdl file 
-    private String targetNameSpaceOfWSDL;
+    // private target name space of the wsdl file 
+    private String c_targetNameSpaceOfWSDL;
 
-    public WrapperInfo(String wrapperStyle, 
+    /**
+     * Constructor 
+     * 
+     * @param style                 binding style (e.g. "rpc", "document").
+     * @param wrapperLanguage       what language to generate (e.g. "c", "c++").
+     * @param targetOutputLocation  where stubs will be generated.
+     * @param targetEngine          generate "client" or "server" stubs?
+     * @param targetNameSpaceOfWSDL target name space of WSDL.
+     */
+    public WrapperInfo(String style, 
                        String wrapperLanguage,
                        String targetOutputLocation,
                        String targetEngine,
-                       String transportUri,
-                       String targetEndpointURI,
                        String targetNameSpaceOfWSDL)
     {
-        this.wrapperStyle = wrapperStyle;
-        this.wrapperLanguage = wrapperLanguage;
-        this.targetOutputLocation = targetOutputLocation;
+        c_bindingStyle = style;
+        c_wrapperLanguage = wrapperLanguage;
+        c_targetOutputLocation = targetOutputLocation;
 
-        //validate the data
-        if (this.wrapperLanguage == null)
-            this.wrapperLanguage = WrapperConstants.LANGUAGE_CPP;
+        // validate the data
+        if (c_wrapperLanguage == null)
+            c_wrapperLanguage = WrapperConstants.LANGUAGE_CPP;
         else
-            this.wrapperLanguage = wrapperLanguage.toLowerCase();
+            c_wrapperLanguage = wrapperLanguage.toLowerCase();
         
-        if (this.wrapperStyle == null
-                || this.wrapperStyle.toLowerCase().equals(WrapperConstants.STYLE_RPC))
-            this.wrapperStyle = WrapperConstants.STYLE_RPC;
+        if (c_bindingStyle == null
+                || c_bindingStyle.toLowerCase().equals(WrapperConstants.STYLE_RPC))
+            c_bindingStyle = WrapperConstants.STYLE_RPC;
         else
-            this.wrapperStyle = this.wrapperStyle.toLowerCase();
+            c_bindingStyle = c_bindingStyle.toLowerCase();
 
         if (targetOutputLocation == null)
             targetOutputLocation = ".";
 
         if (targetEngine == null
                 || !WrapperConstants.CLIENT.equalsIgnoreCase(targetEngine))
-            this.targetEngine = WrapperConstants.SERVER;
+            c_targetEngine = WrapperConstants.SERVER;
         else
-            this.targetEngine = WrapperConstants.CLIENT;
+            c_targetEngine = WrapperConstants.CLIENT;
 
-        if (transportUri == null)
-            this.transportUri = WrapperConstants.TRANSPORT_HTTP;
-        else
-            this.transportUri = transportUri;
-
-        if (targetEndpointURI == null)
-            this.targetEndpointURI = WrapperConstants.DEFAULT_TARGET_ENDPOINT_URI;
-        else
-            this.targetEndpointURI = targetEndpointURI;
-
-        this.targetNameSpaceOfWSDL = (targetNameSpaceOfWSDL == null) ? "" : targetNameSpaceOfWSDL;
+        c_targetNameSpaceOfWSDL = (targetNameSpaceOfWSDL == null) ? "" : targetNameSpaceOfWSDL;
     }
 
     /**
-     * @return int
+     * Returns the programming language to use when generating stubs.
+     * 
+     * @return String representing programming language (e.g. "c", "c++").  
      */
     public String getWrapperLanguage()
     {
-        return wrapperLanguage;
+        return c_wrapperLanguage;
     }
 
     /**
-     * @return int
+     * Returns the binding style that will be used when generated the stubs.
+     * 
+     * @return String representing the binding style (e.g. "rpc", "document").
      */
-    public String getWrapperStyle()
+    public String getBindingStyle()
     {
-        return wrapperStyle;
+        return c_bindingStyle;
     }
 
     /**
-     * Sets the wrapperLanguage.
-     * @param wrapperLanguage The wrapperLanguage to set
-     */
-    public void setWrapperLanguage(String wrapperLanguage)
-    {
-        this.wrapperLanguage = wrapperLanguage;
-    }
-
-    /**
-     * Sets the wrapperStyle.
-     * @param wrapperStyle The wrapperStyle to set
-     */
-    public void setWrapperStyle(String wrapperStyle)
-    {
-        this.wrapperStyle = wrapperStyle;
-    }
-
-    /**
+     * Returns the location in which the stub code will be located.
+     * 
      * @return String
      */
     public String getTargetOutputLocation()
     {
-        return targetOutputLocation;
+        return c_targetOutputLocation;
     }
 
     /**
+     * Returns whether server or client artifacts are to be produced.
+     * 
      * @return String
      */
-
     public String getTargetEngine()
     {
-        return targetEngine;
+        return c_targetEngine;
     }
 
-    public void setTargetEngine(String targetEngine)
-    {
-        this.targetEngine = targetEngine;
-    }
     /**
-     * @return String
-     */
-    public String getTargetEndpointURI()
-    {
-        return targetEndpointURI;
-    }
-    /**
+     * Returns the target name space of WSDL.
+     * 
      * @return String
      */
     public String getTargetNameSpaceOfWSDL()
     {
-        return targetNameSpaceOfWSDL;
+        return c_targetNameSpaceOfWSDL;
     }
-
-    /**
-     * @return String
-     */
-    public String getTransportUri()
-    {
-        return transportUri;
-    }
-
 }

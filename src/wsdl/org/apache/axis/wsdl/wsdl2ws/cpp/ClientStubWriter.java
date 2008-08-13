@@ -54,14 +54,14 @@ public class ClientStubWriter extends CPPClassWriter
 
     public ClientStubWriter(WebServiceContext wscontext) throws WrapperFault
     {
-        super(wscontext.getSerInfo().getServicename());
+        super(wscontext.getServiceInfo().getServicename());
         this.wscontext = wscontext;
-        this.methods = wscontext.getSerInfo().getMethods();
+        this.methods = wscontext.getServiceInfo().getMethods();
     }
 
     protected String getServiceName() throws WrapperFault
     {
-        return wscontext.getSerInfo().getServicename();
+        return wscontext.getServiceInfo().getServicename();
     }
 
     protected void writeClassComment() throws WrapperFault
@@ -99,7 +99,7 @@ public class ClientStubWriter extends CPPClassWriter
             writer.write(classname + "::\n" + classname + "()\n:Stub(\" \", APTHTTP1_1)\n{\n");
             //TODO get TransportURI from WrapInfo and check what the transport is and do the following line accordingly
             writer.write("\tm_pCall->setEndpointURI(\""
-                            + wscontext.getWrapInfo().getTargetEndpointURI() + "\");\n");
+                            + wscontext.getServiceInfo().getTargetEndpointURI() + "\");\n");
             writer.write("}\n");
         } 
         catch (IOException e)
@@ -360,7 +360,7 @@ public class ClientStubWriter extends CPPClassWriter
         // the target namespace.  
         String namespaceURI = minfo.getInputNamespaceURI();
         if (namespaceURI == null)
-            namespaceURI = wscontext.getWrapInfo().getTargetNameSpaceOfWSDL();
+            namespaceURI = wscontext.getWrapperInfo().getTargetNameSpaceOfWSDL();
         
         writer.write("\t\tm_pCall->setOperation( \"" 
                 + minfo.getMethodname() + "\", \"" 
@@ -731,7 +731,7 @@ public class ClientStubWriter extends CPPClassWriter
         writer.write ("\t\t}\n\n");
         writer.write ("\t\tISoapFault* pSoapFault = (ISoapFault*)\n");
         writer.write ("\t\t\tm_pCall->checkFault(\"Fault\",\""
-                  + wscontext.getWrapInfo ().getTargetEndpointURI () + "\" );\n\n");
+                  + wscontext.getServiceInfo().getTargetEndpointURI () + "\" );\n\n");
         writer.write ("\t\tif(pSoapFault)\n");
         writer.write ("\t\t{\n");
     

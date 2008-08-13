@@ -48,9 +48,9 @@ public class ClientStubWriter extends CFileWriter
      */
     public ClientStubWriter(WebServiceContext wscontext) throws WrapperFault
     {
-        super(wscontext.getSerInfo().getServicename());
+        super(wscontext.getServiceInfo().getServicename());
         this.wscontext = wscontext;
-        this.methods = wscontext.getSerInfo().getMethods();
+        this.methods = wscontext.getServiceInfo().getMethods();
     }
 
     /* (non-Javadoc)
@@ -86,7 +86,7 @@ public class ClientStubWriter extends CFileWriter
             writer.write("\t\treturn axiscStubCreate(pchEndPointUri, AXISC_APTHTTP1_1);\n");
             writer.write("\telse\n");
             writer.write("\t\treturn axiscStubCreate(\"" 
-                    + wscontext.getWrapInfo().getTargetEndpointURI() 
+                    + wscontext.getServiceInfo().getTargetEndpointURI() 
                     + "\", AXISC_APTHTTP1_1);\n");
             writer.write("}\n\n");
             
@@ -328,7 +328,7 @@ public class ClientStubWriter extends CFileWriter
         writer.write("\taxiscCallSetSOAPVersion(call, SOAP_VER_1_1);\n");
         //TODO check which version is it really.
         writer.write("\taxiscCallSetOperation(call, \"" + minfo.getMethodname()
-                + "\", \"" + wscontext.getWrapInfo().getTargetNameSpaceOfWSDL()
+                + "\", \"" + wscontext.getWrapperInfo().getTargetNameSpaceOfWSDL()
                 + "\");\n");
         writer.write ("\taxiscStubApplyUserPreferences(stub);\n");        
         
@@ -416,7 +416,7 @@ public class ClientStubWriter extends CFileWriter
         writer.write("\n\tif( AXISC_SUCCESS == axiscCallSendAndReceive(call))\n\t{\n");
         writer.write("\t\tif( AXISC_SUCCESS == axiscCallCheckMessage(call, \""
                 + minfo.getOutputMessage().getLocalPart() + "\",\""
-                + wscontext.getWrapInfo().getTargetNameSpaceOfWSDL()
+                + wscontext.getWrapperInfo().getTargetNameSpaceOfWSDL()
                 + "\"))\n\t\t{\n");
       
         String paramTagName = "";
@@ -659,7 +659,7 @@ public class ClientStubWriter extends CFileWriter
     protected void writeFaultHandlingCode(MethodInfo minfo) throws WrapperFault, IOException
     {  
         writer.write ("\taxiscCallSetSoapFaultNamespace(call, \"" 
-                + wscontext.getWrapInfo ().getTargetEndpointURI () + "\");\n");
+                + wscontext.getServiceInfo().getTargetEndpointURI () + "\");\n");
         
         //to get fault info             
         Iterator paramsFault = minfo.getFaultType ().iterator ();

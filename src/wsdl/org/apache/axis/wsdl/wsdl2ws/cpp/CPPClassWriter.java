@@ -86,7 +86,7 @@ public abstract class CPPClassWriter extends BasicFileWriter
     protected File getFilePath(boolean useServiceName) throws WrapperFault
     {
         String targetOutputLocation =
-            this.wscontext.getWrapInfo().getTargetOutputLocation();
+            this.wscontext.getWrapperInfo().getTargetOutputLocation();
         if (targetOutputLocation.endsWith("/"))
             targetOutputLocation =
                 targetOutputLocation.substring(
@@ -98,7 +98,7 @@ public abstract class CPPClassWriter extends BasicFileWriter
     
         if (useServiceName)
         {
-            String serviceName = this.wscontext.getSerInfo().getServicename();
+            String serviceName = this.wscontext.getServiceInfo().getServicename();
             fileName =
                 targetOutputLocation
                     + "/"

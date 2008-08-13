@@ -47,7 +47,7 @@ public class SourceWriterFactory
                 return new org.apache.axis.wsdl.wsdl2ws.c.AllParamWriter(wscontext);
         }
         
-        if ("rpc".equals(wscontext.getWrapInfo().getWrapperStyle()))
+        if ("rpc".equals(wscontext.getWrapperInfo().getBindingStyle()))
         {
             switch (generatorType)
             {
@@ -77,7 +77,7 @@ public class SourceWriterFactory
                     return new org.apache.axis.wsdl.wsdl2ws.c.ClientStubWriter(wscontext);
             }
         }
-        else if ("document".equals(wscontext.getWrapInfo().getWrapperStyle()))
+        else if ("document".equals(wscontext.getWrapperInfo().getBindingStyle()))
         {
             switch (generatorType)
             {

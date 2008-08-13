@@ -27,9 +27,9 @@ public class WebServiceGeneratorFactory
 {
     public static WebServiceGenerator createWebServiceGenerator(WebServiceContext wscontext)
     {
-        if (wscontext.getWrapInfo().getWrapperStyle() == WrapperConstants.STYLE_RPC)
+        if (wscontext.getWrapperInfo().getBindingStyle() == WrapperConstants.STYLE_RPC)
             return new WebServiceGeneratorImpl(wscontext);
-        else if (wscontext.getWrapInfo().getWrapperStyle() == WrapperConstants.STYLE_DOCUMENT)
+        else if (wscontext.getWrapperInfo().getBindingStyle() == WrapperConstants.STYLE_DOCUMENT)
             return new WebServiceGeneratorImpl(wscontext);
         else
             return null;

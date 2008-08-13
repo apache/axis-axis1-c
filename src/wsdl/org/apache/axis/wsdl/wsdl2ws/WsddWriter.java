@@ -43,10 +43,10 @@ public class WsddWriter implements SourceWriter
     public WsddWriter(WebServiceContext wscontext) throws WrapperFault
     {
         this.wscontext = wscontext;
-        servicename = wscontext.getSerInfo().getServicename();
-        String language = wscontext.getWrapInfo().getWrapperLanguage();
+        servicename = wscontext.getServiceInfo().getServicename();
+        String language = wscontext.getWrapperInfo().getWrapperLanguage();
 
-        if ("rpc".equals(wscontext.getWrapInfo().getWrapperStyle()))
+        if ("rpc".equals(wscontext.getWrapperInfo().getBindingStyle()))
         {
             providerStyle = "RPC";
         }
@@ -64,7 +64,7 @@ public class WsddWriter implements SourceWriter
             providerLang = "CPP";
         }
         description = "Axis C++ web service";
-        ArrayList methods = wscontext.getSerInfo().getMethods();
+        ArrayList methods = wscontext.getServiceInfo().getMethods();
         MethodInfo minfo;
         for (int i = 0; i < methods.size(); i++)
         {
@@ -80,7 +80,7 @@ public class WsddWriter implements SourceWriter
         throws WrapperFault
     {
         String targetOutputLocation =
-            wscontext.getWrapInfo().getTargetOutputLocation();
+            wscontext.getWrapperInfo().getTargetOutputLocation();
         if (targetOutputLocation.endsWith("/"))
         {
             targetOutputLocation =

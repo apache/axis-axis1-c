@@ -101,7 +101,7 @@ public abstract class HeaderFileWriter extends BasicFileWriter
      */
     protected File getFilePath(boolean useServiceName) throws WrapperFault
     {
-        String targetOutputLocation = this.wscontext.getWrapInfo().getTargetOutputLocation();
+        String targetOutputLocation = this.wscontext.getWrapperInfo().getTargetOutputLocation();
         if (targetOutputLocation.endsWith("/"))
             targetOutputLocation = targetOutputLocation.substring(0,targetOutputLocation.length() - 1);
 
@@ -116,6 +116,6 @@ public abstract class HeaderFileWriter extends BasicFileWriter
     }
     protected String getServiceName() throws WrapperFault
     {
-        return wscontext.getSerInfo().getServicename();
+        return wscontext.getServiceInfo().getServicename();
     }
 }

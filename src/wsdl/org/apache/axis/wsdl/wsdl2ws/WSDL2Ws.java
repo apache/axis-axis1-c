@@ -34,13 +34,13 @@ import javax.wsdl.Operation;
 import javax.wsdl.Part;
 import javax.wsdl.Port;
 import javax.wsdl.PortType;
+import javax.wsdl.Service;
 import javax.xml.namespace.QName;
 import javax.xml.rpc.holders.IntHolder;
 
 // hold off until we use 1.4 or newer axis.jar.
 //import org.apache.axis.constants.Style;
 
-import org.apache.axis.wsdl.gen.Parser;
 import org.apache.axis.wsdl.symbolTable.BaseType;
 import org.apache.axis.wsdl.symbolTable.BindingEntry;
 import org.apache.axis.wsdl.symbolTable.CElementDecl;
@@ -52,8 +52,6 @@ import org.apache.axis.wsdl.symbolTable.DefinedElement;
 import org.apache.axis.wsdl.symbolTable.DefinedType;
 import org.apache.axis.wsdl.symbolTable.Element;
 import org.apache.axis.wsdl.symbolTable.Parameters;
-import org.apache.axis.wsdl.symbolTable.ServiceEntry;
-import org.apache.axis.wsdl.symbolTable.SymTabEntry;
 import org.apache.axis.wsdl.symbolTable.SymbolTable;
 import org.apache.axis.wsdl.symbolTable.TypeEntry;
 import org.apache.axis.wsdl.wsdl2ws.info.FaultInfo;
@@ -62,6 +60,7 @@ import org.apache.axis.wsdl.wsdl2ws.info.ParameterInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.ServiceInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.TypeMap;
+import org.apache.axis.wsdl.wsdl2ws.info.WSDLInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 import org.apache.axis.wsdl.wsdl2ws.info.WrapperInfo;
 import org.w3c.dom.Node;
@@ -83,29 +82,24 @@ public class WSDL2Ws
 {
     public static boolean c_verbose = false;
 
-    private String c_language;
+    private String  c_language;
     private boolean c_wsdlWrappingStyle;
     private boolean c_userRequestedWSDLWrappingStyle = false;
-    private String c_targetoutputLocation = null;
-    private String c_targetEngine = null;
+    private String  c_targetoutputLocation = null;
+    private String  c_targetEngine = null;
+    
     private String c_targetEndpointURI = null;
-    private String c_transportURI = null;
-
-    private String c_serviceName;
-    private String c_serviceStyle = null;
     
-    private ServiceEntry c_serviceEntry;
     private BindingEntry c_bindingEntry;
-    private PortType     c_portType;
-    
-    // Array of MethodInfo objects representing service operations.
-    private ArrayList c_methods;
     
     // WSDL parser symbol table
     private SymbolTable c_symbolTable;
     
     // The types
     private TypeMap c_typeMap;
+    
+    // WSDL info.
+    private WSDLInfo c_wsdlInfo;
 
     public WSDL2Ws(CLArgParser cmdLineArgs) throws WrapperFault
     {
@@ -151,53 +145,34 @@ public class WSDL2Ws
             // Parse the WSDL file
             // ==================================================
             
-            Parser wsdlParser = new Parser();
-            
-            // Set verbose in WSDL parser
-            wsdlParser.setVerbose(c_verbose);
-            
-            // Set timeout - if not set, we set to zero (i.e. no timeout).
-            // The setTimeout method expects the time in milliseconds.
-            String timeout = cmdLineArgs.getOptionBykey("t"); 
-            if (timeout == null)
-                timeout = "0"; 
-            wsdlParser.setTimeout(Long.parseLong(timeout) * 1000); 
-            
-            // Set unwrapped if requested
-            wsdlParser.setNowrap(c_wsdlWrappingStyle == false);
+            c_wsdlInfo = new WSDLInfo(cmdLineArgs.getArgument(0));
+            c_wsdlInfo.setVerbose(c_verbose);
+            c_wsdlInfo.setTimeout(cmdLineArgs.getOptionBykey("t")); 
+            c_wsdlInfo.setNoWrapperStyle(c_wsdlWrappingStyle == false);
 
-            // Parse the WSDL document.
-            String wsdlfile = cmdLineArgs.getArgument(0);
-            wsdlParser.run(wsdlfile);
-
-            // Get the symbol table
-            c_symbolTable = wsdlParser.getSymbolTable();
-            if (c_verbose)
-                c_symbolTable.dump(System.out);
+            c_symbolTable = c_wsdlInfo.parse();
             
+            // ==================================================
+            // Let us do some validation on the WSDL passed in.
+            // ==================================================
+            
+            // Maximum of one <service> tag is supported in WSDL for the time being.
+            if (c_wsdlInfo.getServices().size() > 1)
+                throw new WrapperFault("Multiple service definitions not supported.");
+            
+            // TODO
+            // At this time we require a service definition to be defined, but in 
+            // future if not found that caller needs to specify a binding to use in 
+            // order for us to generate the stubs.  Not having service definition will
+            // only result in not knowing the Web service endpoint, so it is really not necessary.
+            if (c_wsdlInfo.getServices().size() == 0)
+                throw new WrapperFault("Service definition not found. A service definition must be specified.");
+
             // ==================================================
             // Get service definition
             // ==================================================            
                         
-            // This code is taken from the org.apache.axis.wsdl.gen.Parser Class.
-            // WSDL file should have only one service, The first service found is utilized.
-            // TODO Service definition is WSDL is optional...
-            c_serviceEntry = null;
-            Iterator it = c_symbolTable.getHashMap().values().iterator();
-            while (it.hasNext())
-            {
-                Vector v = (Vector) it.next();
-                for (int i = 0; i < v.size(); ++i)
-                {
-                    SymTabEntry entry = (SymTabEntry) v.elementAt(i);
-
-                    if (entry instanceof ServiceEntry)
-                        c_serviceEntry = (ServiceEntry) entry;
-                }
-            }
-            
-            if (c_serviceEntry == null)
-                throw new WrapperFault("A service definition does not exist");
+            Service service = (Service)c_wsdlInfo.getServices().get(0);
 
             // ==================================================
             // Get binding information 
@@ -206,7 +181,7 @@ public class WSDL2Ws
             //TODO  resolve this
             //        this code support only the service with one bindings it will not care about the
             //        second binding if exists..resolve by letting user specify which binding to use.
-            Iterator ports = c_serviceEntry.getService().getPorts().values().iterator();
+            Iterator ports = service.getPorts().values().iterator();
             Binding binding = null;
             if (ports.hasNext())
                 binding = ((Port) ports.next()).getBinding();
@@ -215,29 +190,12 @@ public class WSDL2Ws
                 throw new WrapperFault("No binding specified");
             
             c_bindingEntry = c_symbolTable.getBindingEntry(binding.getQName());
-            
-            //the service style (rpc|doc|msg)
-            c_serviceStyle = c_bindingEntry.getBindingStyle().getName();
-            
-            //extract the transport type as a uri
-            c_transportURI = SymbolTableParsingUtils.getTransportType(c_bindingEntry.getBinding());    
-            
-            // ==================================================
-            // Get port type information associated with binding 
-            // ==================================================
-            
-            c_portType = binding.getPortType();
-            if (c_portType == null)
-                throw new WrapperFault("Port type entry not found");
-            
-            // Service name will be the portType name.
-            c_serviceName = WrapperUtils.getClassNameFromFullyQualifiedName(c_portType.getQName().getLocalPart());
-
+                        
             // ==================================================
             // Get target end point 
             // ==================================================                
             
-            ports = c_serviceEntry.getService().getPorts().values().iterator();
+            ports = service.getPorts().values().iterator();
             c_targetEndpointURI = SymbolTableParsingUtils.getTargetEndPointURI(ports);
         }
         catch (Exception e)
@@ -251,9 +209,9 @@ public class WSDL2Ws
      * Process service operations
      */
 
-    private void processServiceMethods(PortType porttype) throws WrapperFault
+    private ArrayList processServiceMethods(PortType porttype, BindingEntry bindingEntry) throws WrapperFault
     {
-        c_methods = new ArrayList();
+        ArrayList serviceMethods = new ArrayList();
         
         //get operation list
         Iterator oplist = porttype.getOperations().iterator();
@@ -273,7 +231,7 @@ public class WSDL2Ws
             Parameters opParams=null;
             try
             {
-                opParams = c_symbolTable.getOperationParameters(op, "", c_bindingEntry);
+                opParams = c_symbolTable.getOperationParameters(op, "", bindingEntry);
                 minfo.setOperationParameters(opParams);
                 minfo.setEligibleForWrapped(c_symbolTable.isWrapped());
                 
@@ -302,7 +260,7 @@ public class WSDL2Ws
             addFaultInfo(op.getFaults(), minfo);
             
             //add each parameter to parameter list
-            if ("document".equals(c_bindingEntry.getBindingStyle().getName()))
+            if ("document".equals(bindingEntry.getBindingStyle().getName()))
             {
                 if (c_userRequestedWSDLWrappingStyle && !minfo.isEligibleForWrapped())
                     System.out.println("INFORMATIONAL: Operation '" + op.getName() + "' is not eligible for wrapper-style, using non-wrapper style.");
@@ -315,42 +273,44 @@ public class WSDL2Ws
             if (op.getOutput() != null)
             {
                 Iterator returnlist = op.getOutput().getMessage().getParts().values().iterator();
-                if (returnlist.hasNext() && "document".equals(c_bindingEntry.getBindingStyle().getName()))
+                if (returnlist.hasNext() && "document".equals(bindingEntry.getBindingStyle().getName()))
                     addDocumentStyleOutputMessageToMethodInfo(minfo, (Part) returnlist.next());
                 else
                     addRPCStyleOutputMessageToMethodInfo(op, minfo);
             }
             
             //add operation to operation List
-            c_methods.add(minfo); 
+            serviceMethods.add(minfo); 
         }
         
-        List operations = c_bindingEntry.getBinding().getBindingOperations();
-        if (operations == null)
-            return;
-        
-        for (int i = 0; i < operations.size(); i++)
+        List operations = bindingEntry.getBinding().getBindingOperations();
+        if (operations != null)
         {
-            //for the each binding operation found
-            if (operations.get(i) instanceof javax.wsdl.BindingOperation)
+            for (int i = 0; i < operations.size(); i++)
             {
-                javax.wsdl.BindingOperation bindinop = (javax.wsdl.BindingOperation) operations.get(i);
-                
-                String name = bindinop.getName();
-                MethodInfo method = null;
-                
-                for (int ii = 0; ii < c_methods.size(); ii++)
-                    if (((MethodInfo) c_methods.get(ii)).getMethodname().equals(name))
-                        method = (MethodInfo) c_methods.get(ii);
-                
-                if (method == null)
-                    throw new WrapperFault("binding and the port type do not match");                    
-                
-                method.setSoapAction(SymbolTableParsingUtils.getSoapAction(bindinop));
-                SymbolTableParsingUtils.getInputInfo(bindinop.getBindingInput(), method);
-                SymbolTableParsingUtils.getOutputInfo(bindinop.getBindingOutput(), method);
+                //for the each binding operation found
+                if (operations.get(i) instanceof javax.wsdl.BindingOperation)
+                {
+                    javax.wsdl.BindingOperation bindinop = (javax.wsdl.BindingOperation) operations.get(i);
+                    
+                    String name = bindinop.getName();
+                    MethodInfo method = null;
+                    
+                    for (int ii = 0; ii < serviceMethods.size(); ii++)
+                        if (((MethodInfo) serviceMethods.get(ii)).getMethodname().equals(name))
+                            method = (MethodInfo) serviceMethods.get(ii);
+                    
+                    if (method == null)
+                        throw new WrapperFault("binding and the port type do not match");                    
+                    
+                    method.setSoapAction(SymbolTableParsingUtils.getSoapAction(bindinop));
+                    SymbolTableParsingUtils.getInputInfo(bindinop.getBindingInput(), method);
+                    SymbolTableParsingUtils.getOutputInfo(bindinop.getBindingOutput(), method);
+                }
             }
         }
+        
+        return serviceMethods;
     }
 
     /**
@@ -712,22 +672,25 @@ public class WSDL2Ws
         }
         
         // ==================================================
-        // Process information about service operations
-        // ==================================================            
-        
-        processServiceMethods(c_portType);
-
-        // ==================================================
         // Generate the artifacts
         // ==================================================            
         
         // Wrapper info
-        String targetNameSpaceOfWSDL= c_symbolTable.getDefinition().getTargetNamespace();
-        WrapperInfo wrapperInfo = new WrapperInfo(c_serviceStyle, c_language, c_targetoutputLocation, c_targetEngine,
-                                                  c_transportURI, c_targetEndpointURI, targetNameSpaceOfWSDL);
+        String c_serviceStyle = c_bindingEntry.getBindingStyle().getName();
+
+        WrapperInfo wrapperInfo = 
+            new WrapperInfo(c_serviceStyle, c_language, 
+                            c_targetoutputLocation, c_targetEngine,
+                            c_wsdlInfo.getTargetNameSpaceOfWSDL());
         
         // Service info
-        ServiceInfo serviceInfo = new ServiceInfo(c_serviceName, c_methods);
+        PortType portType = c_bindingEntry.getBinding().getPortType();
+        if (portType == null)
+            throw new WrapperFault("Port type entry not found");
+        
+        String serviceName = WrapperUtils.getClassNameFromFullyQualifiedName(portType.getQName().getLocalPart());
+        ArrayList serviceMethods = processServiceMethods(portType, c_bindingEntry);
+        ServiceInfo serviceInfo = new ServiceInfo(serviceName, serviceMethods, c_targetEndpointURI);
         
         // Context
         WebServiceContext wsContext = new WebServiceContext(wrapperInfo, serviceInfo, c_typeMap); 
@@ -1163,7 +1126,7 @@ public class WSDL2Ws
                     // this is an "inner" type that will not be exposed
                     // however, it needs to be if it is referenced in a message part.
                     // check all the messages
-                    ArrayList methods = wsContext.getSerInfo().getMethods();
+                    ArrayList methods = wsContext.getServiceInfo().getMethods();
                     for(int i=0; i<methods.size(); i++)
                     {
                           MethodInfo method = (MethodInfo)methods.get(i);

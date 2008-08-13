@@ -38,11 +38,11 @@ public class WebServiceGeneratorImpl implements WebServiceGenerator
      */
     public void generate() throws WrapperFault
     {
-        String language = wscontext.getWrapInfo().getWrapperLanguage();
+        String language = wscontext.getWrapperInfo().getWrapperLanguage();
 
         if (WrapperConstants.LANGUAGE_CPP.equalsIgnoreCase(language))
         {
-            if (WrapperConstants.SERVER.equals(wscontext.getWrapInfo().getTargetEngine()))
+            if (WrapperConstants.SERVER.equals(wscontext.getWrapperInfo().getTargetEngine()))
             {
                 // Generate Server objects
                 (new Generator(WrapperConstants.GENERATOR_WRAPPER_CPP,wscontext)).generate();
@@ -66,7 +66,7 @@ public class WebServiceGeneratorImpl implements WebServiceGenerator
         }
         else if (WrapperConstants.LANGUAGE_C.equalsIgnoreCase(language))
         {
-            if (WrapperConstants.SERVER.equals(wscontext.getWrapInfo().getTargetEngine()))
+            if (WrapperConstants.SERVER.equals(wscontext.getWrapperInfo().getTargetEngine()))
             {
                 // Generate Server objects
                 (new Generator(WrapperConstants.GENERATOR_WRAPPER_C,wscontext)).generate();
