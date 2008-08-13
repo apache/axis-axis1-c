@@ -638,7 +638,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
             writer.write("\t\tif (pObjFault)\n");
             writer.write("\t\t{\n");
             writer.write("\t\t\tpIWSSZ->createSoapFault(\"" + faultInfoName
-                    + "\", \"" + wscontext.getWrapInfo().getTargetNameSpaceOfWSDL()
+                    + "\", \"" + wscontext.getWrapperInfo().getTargetNameSpaceOfWSDL()
                     + "\",\"AxisC++ Faultcode\", \"Custom Out of bound exception\");\n");
 
             writer.write("\t\t\tpIWSSZ->addFaultDetail(pObjFault, (void*) Axis_Serialize_" + langName + ",\n");
