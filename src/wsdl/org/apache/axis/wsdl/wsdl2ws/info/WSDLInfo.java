@@ -31,8 +31,6 @@ import javax.wsdl.Service;
 import javax.wsdl.extensions.soap.SOAPBinding;
 import javax.wsdl.extensions.soap.SOAPOperation;
 
-import javax.xml.namespace.QName;
-
 import org.apache.axis.Constants;
 import org.apache.axis.wsdl.gen.Parser;
 import org.apache.axis.wsdl.symbolTable.BindingEntry;
@@ -176,21 +174,20 @@ public class WSDLInfo
         return c_services;
     }
     
-    public static String getTargetEndPointURI(Iterator ports)
+    /**
+     * Returns end point URI for a Port by looking for the soap:address extensibility element.
+     * 
+     * @param port
+     * @return
+     */
+    public static String getTargetEndPointURI(Port port)
     {
-        // we are checking only the first port.
-        // if the targetEndPointURI not specifed we continue having it null
-
-        if (ports.hasNext())
-        {
-            Port port = (Port) ports.next();
-            List adresslist = port.getExtensibilityElements();
-            if (adresslist != null
-                    && adresslist.size() != 0
-                    && (adresslist.get(0) instanceof javax.wsdl.extensions.soap.SOAPAddress))
-                return ((javax.wsdl.extensions.soap.SOAPAddress) adresslist.get(0))
-                        .getLocationURI();
-        }
+        List adresslist = port.getExtensibilityElements();
+        if (adresslist != null
+                && adresslist.size() != 0
+                && (adresslist.get(0) instanceof javax.wsdl.extensions.soap.SOAPAddress))
+            return ((javax.wsdl.extensions.soap.SOAPAddress) adresslist.get(0)).getLocationURI();
+            
         return null;
     }
 
@@ -261,32 +258,54 @@ public class WSDLInfo
     
     /**
      * Returns list of Port objects in the specified service.  All ports in the list 
-     * will either have a binding style of document or rpc (i.e. one or the other) and
-     * uses the SOAP 1.1 binding. 
+     * will have a binding style of document and uses the SOAP 1.1 binding. 
      * 
-     * @param s
-     * @param styleDocument
-     * @return
+     * @param s service definition
+     * @return list of ports that match the criteria described above.
      * @throws Exception
      */
-    public ArrayList getPortsSOAP11(Service s, boolean styleDocument) throws Exception
+    public ArrayList getPortsSOAP11Document(Service s) throws Exception
     {
-        return getServicePorts(s, styleDocument, true, false, false);
+        return getServicePorts(s, true, true, false, false);
     }
     
     /**
      * Returns list of Port objects in the specified service.  All ports in the list 
-     * will either have a binding style of document or rpc (i.e. one or the other) and
-     * uses the SOAP 1.2 binding. 
+     * will have a binding style of rpc and uses the SOAP 1.1 binding. 
      * 
-     * @param s
-     * @param styleDocument
-     * @return
+     * @param s service definition
+     * @return list of ports that match the criteria described above.
      * @throws Exception
      */
-    public ArrayList getPortsSOAP12Document(Service s, boolean styleDocument) throws Exception
+    public ArrayList getPortsSOAP11RPC(Service s) throws Exception
     {
-        return getServicePorts(s, styleDocument, false, true, false);
+        return getServicePorts(s, false, true, false, false);
+    }
+    
+    /**
+     * Returns list of Port objects in the specified service.  All ports in the list 
+     * will have a binding style of document and uses the SOAP 1.2 binding. 
+     * 
+     * @param s service definition
+     * @return list of ports that match the criteria described above.
+     * @throws Exception
+     */
+    public ArrayList getPortsSOAP12Document(Service s) throws Exception
+    {
+        return getServicePorts(s, true, false, true, false);
+    }
+    
+    /**
+     * Returns list of Port objects in the specified service.  All ports in the list 
+     * will have a binding style of rpc and uses the SOAP 1.2 binding. 
+     * 
+     * @param s service definition
+     * @return list of ports that match the criteria described above.
+     * @throws Exception
+     */
+    public ArrayList getPortsSOAP12RPC(Service s) throws Exception
+    {
+        return getServicePorts(s, false, false, true, false);
     }
     
     /**
@@ -335,12 +354,11 @@ public class WSDLInfo
             if (b == null || be == null)
                 throw new WrapperFault("No binding exists for port '" + p.getName() + "'.");
             
-            if ((be.getBindingType() == BindingEntry.TYPE_SOAP)
-                    && (soap11 || soap12))
+            if ((be.getBindingType() == BindingEntry.TYPE_SOAP) && (soap11 || soap12))
             {
                 String style = be.getBindingStyle().getName();
                 if (style == null)
-                    style = "rpc"; // TODO need to revisit.
+                    style = "rpc"; // TODO need to revisit. Standards say "document"
                 
                 if ((styleDocument && style.equalsIgnoreCase("document"))
                         || (!styleDocument && style.equalsIgnoreCase("rpc")))

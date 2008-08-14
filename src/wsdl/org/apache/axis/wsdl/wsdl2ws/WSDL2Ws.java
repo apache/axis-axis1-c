@@ -89,11 +89,7 @@ public class WSDL2Ws
     private boolean c_userRequestedWSDLWrappingStyle = false;
     private String  c_targetoutputLocation = null;
     private String  c_targetEngine = null;
-    
-    private String c_targetEndpointURI = null;
-    
-    private BindingEntry c_bindingEntry;
-    
+        
     // WSDL parser symbol table
     private SymbolTable c_symbolTable;
     
@@ -111,12 +107,12 @@ public class WSDL2Ws
         System.out.println(
             "java WSDL2Ws -<options> <wsdlfile>\n"
                 + "-h, -help              print this message\n"
-                + "-o<folder>             target output folder - default is current folder\n"
-                + "-l<c++|c>              target language (c++|c) - default is c++\n"
-                + "-s<server|client>      target side (server|client) - default is server\n"
-                + "-v, -verbose           be verbose\n"
-                + "-t<timeout>            uri resolution timeout in seconds - default is 0 (no timeout)\n"
-                + "-w<wrapped|unwrapped>  generate wrapper style or not - default is wrapped\n"
+                + "-o<folder>             target output folder - default is current folder.\n"
+                + "-l<c++|c>              target language (c++|c) - default is c++.\n"
+                + "-s<server|client>      target side (server|client) - default is server.\n"
+                + "-v, -verbose           be verbose.\n"
+                + "-t<timeout>            uri resolution timeout in seconds - default is 0 (no timeout).\n"
+                + "-w<wrapped|unwrapped>  generate wrapper style or not - default is wrapped.\n"
                 );
     }
     
@@ -221,39 +217,9 @@ public class WSDL2Ws
             // At this time we require a service definition to be defined, but in 
             // future if not found that caller needs to specify a binding to use in 
             // order for us to generate the stubs.  Not having service definition will
-            // only result in not knowing the Web service endpoint, so it is really not necessary.
+            // only result in not knowing the Web service end point, so it is really not necessary.
             if (c_wsdlInfo.getServices().size() == 0)
                 throw new WrapperFault("Service definition not found. A service definition must be specified.");
-
-            // ==================================================
-            // Get service definition
-            // ==================================================            
-                        
-            Service service = (Service)c_wsdlInfo.getServices().get(0);
-
-            // ==================================================
-            // Get binding information 
-            // ==================================================                
-            
-            //TODO  resolve this
-            //        this code support only the service with one bindings it will not care about the
-            //        second binding if exists..resolve by letting user specify which binding to use.
-            Iterator ports = service.getPorts().values().iterator();
-            Binding binding = null;
-            if (ports.hasNext())
-                binding = ((Port) ports.next()).getBinding();
-            
-            if (binding == null)
-                throw new WrapperFault("No binding specified");
-            
-            c_bindingEntry = c_symbolTable.getBindingEntry(binding.getQName());
-                        
-            // ==================================================
-            // Get target end point 
-            // ==================================================                
-            
-            ports = service.getPorts().values().iterator();
-            c_targetEndpointURI = WSDLInfo.getTargetEndPointURI(ports);
         }
         catch (Exception e)
         {
@@ -267,7 +233,7 @@ public class WSDL2Ws
      * 
      * @throws WrapperFault
      */
-    public void generateWrappers() throws WrapperFault
+    public void generateWrappers() throws Exception
     {
         CUtils.setLanguage(c_language);
         
@@ -294,25 +260,45 @@ public class WSDL2Ws
         }
         
         // ==================================================
-        // Generate the artifacts
-        // ==================================================            
-        
-        // Wrapper info
-        String c_serviceStyle = c_bindingEntry.getBindingStyle().getName();
+        // Get service, ports, binding, and port type
+        // ==================================================           
+   
+        //TODO  resolve this
+        //  this code will generate one stub corresponding to a port.  Other ports
+        //  are ignored. Should really generate one service stub per port.
 
+        // Get service definition, binding entry, port type.  We first ask for SOAP 1.1 ports
+        // that have a binding style of document....if there is none, then we ask for 
+        // SOAP 1.1 ports that have a binding style of rpc.
+        Service service = (Service)c_wsdlInfo.getServices().get(0);
+        ArrayList servicePorts = c_wsdlInfo.getPortsSOAP11Document(service);
+        if (servicePorts.isEmpty())
+            servicePorts = c_wsdlInfo.getPortsSOAP11RPC(service);
+        if (servicePorts.isEmpty())
+            throw new WrapperFault("A port with a supported binding was not found.");
+
+        Port port                 = (Port)servicePorts.get(0);
+        Binding binding           = port.getBinding();
+        BindingEntry bindingEntry = c_symbolTable.getBindingEntry(binding.getQName());
+        
+        PortType portType         = bindingEntry.getBinding().getPortType();
+        if (portType == null)
+            throw new WrapperFault("Port type specified in binding '" + binding.getQName().getLocalPart() + "' not found");
+        
+        // ==================================================
+        // Build the context that is needed by the code generators.
+        // ==================================================            
+                       
+        // Wrapper info
         WrapperInfo wrapperInfo = 
-            new WrapperInfo(c_serviceStyle, c_language, 
-                            c_targetoutputLocation, c_targetEngine,
+            new WrapperInfo(bindingEntry.getBindingStyle().getName(), 
+                            c_language, c_targetoutputLocation, c_targetEngine,
                             c_wsdlInfo.getTargetNameSpaceOfWSDL());
         
         // Service info
-        PortType portType = c_bindingEntry.getBinding().getPortType();
-        if (portType == null)
-            throw new WrapperFault("Port type entry not found");
-        
         String serviceName = WrapperUtils.getClassNameFromFullyQualifiedName(portType.getQName().getLocalPart());
-        ArrayList serviceMethods = processServiceMethods(portType, c_bindingEntry);
-        ServiceInfo serviceInfo = new ServiceInfo(serviceName, serviceMethods, c_targetEndpointURI);
+        ArrayList serviceMethods = processServiceMethods(portType, bindingEntry);
+        ServiceInfo serviceInfo = new ServiceInfo(serviceName, serviceMethods, WSDLInfo.getTargetEndPointURI(port));
         
         // Context
         WebServiceContext wsContext = new WebServiceContext(wrapperInfo, serviceInfo, c_typeMap); 
@@ -339,7 +325,10 @@ public class WSDL2Ws
             }
         }
         
-        // Generate code
+        // ==================================================
+        // Generate the artifacts
+        // ================================================== 
+        
         wsg.generate();
     }    
     
