@@ -121,29 +121,14 @@ public abstract class HeaderFileWriter extends BasicFileWriter
     }
     protected File getFilePath(boolean useServiceName) throws WrapperFault
     {
-        String targetOutputLocation =
-            this.wscontext.getWrapperInfo().getTargetOutputLocation();
-        if (targetOutputLocation.endsWith("/"))
-        {
-            targetOutputLocation =
-                targetOutputLocation.substring(
-                    0,
-                    targetOutputLocation.length() - 1);
-        }
+        String targetOutputLocation = this.wscontext.getWrapperInfo().getTargetOutputLocation();
         new File(targetOutputLocation).mkdirs();
 
-        String fileName =
-            targetOutputLocation + "/" + classname + CUtils.CPP_HEADER_SUFFIX;
+        String fileName = targetOutputLocation + "/" + classname + CUtils.CPP_HEADER_SUFFIX;
 
         if (useServiceName)
         {
-            fileName =
-                targetOutputLocation
-                    + "/"
-                    + this.getServiceName()
-                    + "_"
-                    + classname
-                    + CUtils.CPP_HEADER_SUFFIX;
+            fileName = targetOutputLocation + "/" + this.getServiceName() + "_" + classname + CUtils.CPP_HEADER_SUFFIX;
         }
 
         return new File(fileName);

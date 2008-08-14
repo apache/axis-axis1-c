@@ -122,24 +122,11 @@ public class ClassLoader implements SourceWriter
 
     protected File getFilePath() throws WrapperFault
     {
-        String targetOutputLocation =
-            this.wscontext.getWrapperInfo().getTargetOutputLocation();
-        if (targetOutputLocation.endsWith("/"))
-        {
-            targetOutputLocation =
-                targetOutputLocation.substring(
-                    0,
-                    targetOutputLocation.length() - 1);
-        }
+        String targetOutputLocation = this.wscontext.getWrapperInfo().getTargetOutputLocation();
         new File(targetOutputLocation).mkdirs();
-        String fileName =
-            targetOutputLocation
-                + "/"
-                + classname
-                + CUtils.CLASS_LOADER_APPENDER
-                + CUtils.CPP_CLASS_SUFFIX;
-        this.wscontext.addGeneratedFile(
-            classname + CUtils.CLASS_LOADER_APPENDER + CUtils.CPP_CLASS_SUFFIX);
+        String fileName = targetOutputLocation
+                + "/" + classname + CUtils.CLASS_LOADER_APPENDER + CUtils.CPP_CLASS_SUFFIX;
+        this.wscontext.addGeneratedFile(classname + CUtils.CLASS_LOADER_APPENDER + CUtils.CPP_CLASS_SUFFIX);
         return new File(fileName);
     }
 

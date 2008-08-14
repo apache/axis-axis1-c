@@ -100,9 +100,6 @@ public abstract class ParamCFileWriter extends ParamWriter
     protected File getFilePath() throws WrapperFault
     {
         String targetOutputLocation = this.wscontext.getWrapperInfo().getTargetOutputLocation();
-        if (targetOutputLocation.endsWith("/"))
-            targetOutputLocation = targetOutputLocation.substring(0,targetOutputLocation.length() - 1);
-
         new File(targetOutputLocation).mkdirs();
         String fileName = targetOutputLocation + "/" + this.classname + CUtils.C_FILE_SUFFIX;
         this.wscontext.addGeneratedFile(classname + CUtils.C_FILE_SUFFIX);

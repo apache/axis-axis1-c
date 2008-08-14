@@ -76,6 +76,8 @@ public class WrapperInfo
 
         if (targetOutputLocation == null)
             targetOutputLocation = ".";
+        if (targetOutputLocation.endsWith("/"))
+            targetOutputLocation = targetOutputLocation.substring(0, targetOutputLocation.length() - 1);
 
         if (targetEngine == null
                 || !WrapperConstants.CLIENT.equalsIgnoreCase(targetEngine))

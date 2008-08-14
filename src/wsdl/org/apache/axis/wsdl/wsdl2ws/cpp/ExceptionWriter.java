@@ -62,43 +62,19 @@ public class ExceptionWriter extends BasicFileWriter
      */
     protected File getFilePath(boolean useServiceName) throws WrapperFault
     {
-        String targetOutputLocation =
-            this.wscontext.getWrapperInfo().getTargetOutputLocation();
-        if (targetOutputLocation.endsWith("/"))
-        {
-            targetOutputLocation =
-                targetOutputLocation.substring(
-                    0,
-                    targetOutputLocation.length() - 1);
-        }
+        String targetOutputLocation = this.wscontext.getWrapperInfo().getTargetOutputLocation();
         new File(targetOutputLocation).mkdirs();
 
-        String fileName =
-            targetOutputLocation
-                + "/"
-                + faultInfoName
-                + CUtils.CPP_CLASS_SUFFIX;
+        String fileName = targetOutputLocation + "/" + faultInfoName + CUtils.CPP_CLASS_SUFFIX;
 
         if (useServiceName)
         {
-            fileName =
-                targetOutputLocation
-                    + "/"
-                    + this.getServiceName()
-                    + "_"
-                    + faultInfoName
-                    + CUtils.CPP_CLASS_SUFFIX;
-
-            this.wscontext.addGeneratedFile(
-                this.getServiceName()
-                    + "_"
-                    + faultInfoName
-                    + CUtils.CPP_CLASS_SUFFIX);
+            fileName = targetOutputLocation + "/" + this.getServiceName() + "_" + faultInfoName + CUtils.CPP_CLASS_SUFFIX;
+            this.wscontext.addGeneratedFile(this.getServiceName() + "_" + faultInfoName + CUtils.CPP_CLASS_SUFFIX);
         }
         else
         {
-            this.wscontext.addGeneratedFile(
-                faultInfoName + CUtils.CPP_CLASS_SUFFIX);
+            this.wscontext.addGeneratedFile(faultInfoName + CUtils.CPP_CLASS_SUFFIX);
         }
         return new File(fileName);
     }

@@ -57,22 +57,10 @@ public class ExceptionHeaderWriter extends HeaderFileWriter
 
     protected File getFilePath(boolean useServiceName) throws WrapperFault
     {
-        String targetOutputLocation =
-            this.wscontext.getWrapperInfo().getTargetOutputLocation();
-        if (targetOutputLocation.endsWith("/"))
-        {
-            targetOutputLocation =
-                targetOutputLocation.substring(
-                    0,
-                    targetOutputLocation.length() - 1);
-        }
+        String targetOutputLocation = this.wscontext.getWrapperInfo().getTargetOutputLocation();
         new File(targetOutputLocation).mkdirs();
 
-        String fileName =
-            targetOutputLocation
-                + "/"
-                + faultInfoName
-                + CUtils.CPP_HEADER_SUFFIX;
+        String fileName = targetOutputLocation + "/" + faultInfoName + CUtils.CPP_HEADER_SUFFIX;
 
         if (useServiceName)
         {
