@@ -273,9 +273,6 @@ public class ArrayParamWriter extends ParamWriter
     protected File getFilePath(boolean useServiceName) throws WrapperFault
     {
         String targetOutputLocation = this.wscontext.getWrapperInfo().getTargetOutputLocation();
-        if (targetOutputLocation.endsWith("/"))
-            targetOutputLocation = targetOutputLocation.substring(0,targetOutputLocation.length() - 1);
-
         new File(targetOutputLocation).mkdirs();
 
         String fileName = targetOutputLocation + "/" + classname + CUtils.CPP_CLASS_SUFFIX;
