@@ -89,8 +89,6 @@ public abstract class ParamCPPFileWriter extends ParamWriter
         classname = CUtils.sanitizeString( classname);
 
         String targetOutputLocation = this.wscontext.getWrapperInfo().getTargetOutputLocation();
-        if (targetOutputLocation.endsWith("/"))
-            targetOutputLocation = targetOutputLocation.substring(0,targetOutputLocation.length() - 1);
         new File(targetOutputLocation).mkdirs();
         String fileName = targetOutputLocation + "/" + this.classname + CUtils.CPP_CLASS_SUFFIX;
         this.wscontext.addGeneratedFile(classname + CUtils.CPP_CLASS_SUFFIX);
