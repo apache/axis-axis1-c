@@ -28,8 +28,10 @@ import javax.wsdl.BindingOperation;
 import javax.wsdl.BindingOutput;
 import javax.wsdl.Port;
 import javax.wsdl.Service;
+import javax.wsdl.WSDLElement;
 import javax.wsdl.extensions.soap.SOAPBinding;
 import javax.wsdl.extensions.soap.SOAPOperation;
+import javax.wsdl.extensions.soap.SOAPAddress;
 
 import org.apache.axis.Constants;
 import org.apache.axis.wsdl.gen.Parser;
@@ -49,6 +51,14 @@ import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
  */
 public class WSDLInfo
 {
+    // Private constants for retrieving extensibility elements.
+    private static final int INSTANCEOF_SOAPBINDING   = 1;
+    private static final int INSTANCEOF_SOAPADDRESS   = 2;
+    private static final int INSTANCEOF_SOAPBODY      = 3;
+    private static final int INSTANCEOF_SOAPOPERATION = 4;
+
+
+
     // verbose flag 
     private boolean c_verbose = false;
     
@@ -182,40 +192,44 @@ public class WSDLInfo
      */
     public static String getTargetEndPointURI(Port port)
     {
-        List adresslist = port.getExtensibilityElements();
-        if (adresslist != null
-                && adresslist.size() != 0
-                && (adresslist.get(0) instanceof javax.wsdl.extensions.soap.SOAPAddress))
-            return ((javax.wsdl.extensions.soap.SOAPAddress) adresslist.get(0)).getLocationURI();
-            
+        SOAPAddress e = (SOAPAddress)getExtensibilityElement(port, INSTANCEOF_SOAPADDRESS);
+        if (e != null)
+            return e.getLocationURI();
         return null;
     }
 
+    /**
+     * Returns the transport URI in a soap:binding element.
+     * 
+     * @param binding
+     * @return
+     */
     public static String getTransportType(Binding binding)
     {
-        List soapbinding = binding.getExtensibilityElements();
-        if (soapbinding != null
-                && soapbinding.size() > 0
-                && (soapbinding.get(0) instanceof javax.wsdl.extensions.soap.SOAPBinding))
-            return ((javax.wsdl.extensions.soap.SOAPBinding) soapbinding.get(0)).getTransportURI();
+        SOAPBinding e = (SOAPBinding)getExtensibilityElement(binding, INSTANCEOF_SOAPBINDING);
+        if (e != null)
+            return e.getTransportURI();
         return null;
     }
 
+    /**
+     * Returns the URI for SoapAction if it exists.
+     * 
+     * @param bindingOperation
+     * @return
+     */
     public static String getSoapAction(BindingOperation bindingOperation)
     {
-        List extenstions = bindingOperation.getExtensibilityElements();
-        for (int i = 0; i < extenstions.size(); i++)
-        {
-            if (extenstions.get(i) instanceof SOAPOperation)
-                return ((SOAPOperation) extenstions.get(i)).getSoapActionURI();
-        }
+        SOAPOperation e = (SOAPOperation)getExtensibilityElement(bindingOperation, INSTANCEOF_SOAPOPERATION);
+        if (e != null)
+            return e.getSoapActionURI();
         return null;
     }
 
-    public static List getInputInfo(BindingInput input, MethodInfo methodinfo)
+    public static void getInputInfo(BindingInput input, MethodInfo methodinfo)
     {
         if (input == null)
-            return null;
+            return;
         List soapbodies = input.getExtensibilityElements();
 
         if (soapbodies != null)
@@ -231,13 +245,12 @@ public class WSDLInfo
                 }
             }
         }
-        return null;
     }
 
-    public static List getOutputInfo(BindingOutput input, MethodInfo methodinfo)
+    public static void getOutputInfo(BindingOutput input, MethodInfo methodinfo)
     {
         if (input == null)
-            return null;
+            return;
         List soapbodies = input.getExtensibilityElements();
 
         if (soapbodies != null)
@@ -253,7 +266,6 @@ public class WSDLInfo
                 }
             }
         }
-        return null;
     }
     
     /**
@@ -358,20 +370,19 @@ public class WSDLInfo
             {
                 String style = be.getBindingStyle().getName();
                 if (style == null)
-                    style = "rpc"; // TODO need to revisit. Standards say "document"
+                    style = "rpc"; // TODO need to revisit.
                 
                 if ((styleDocument && style.equalsIgnoreCase("document"))
                         || (!styleDocument && style.equalsIgnoreCase("rpc")))
                 {
-                    SOAPBinding soapbinding = getSOAPBinding(b);
-                    if (soapbinding != null)
-                    {
-                        String ns = soapbinding.getElementType().getNamespaceURI();
+                    String ns = Constants.URI_WSDL11_SOAP;
+                    SOAPBinding soapbinding = (SOAPBinding)getExtensibilityElement(b, INSTANCEOF_SOAPBINDING);
+                    if (soapbinding != null && null != soapbinding.getElementType().getNamespaceURI())
+                        ns = soapbinding.getElementType().getNamespaceURI();
                         
-                        if ((soap11 && ns.equals(Constants.URI_WSDL11_SOAP))
-                                || (soap12 && ns.equals(Constants.URI_WSDL12_SOAP)))
-                                a.add(p);
-                    }
+                    if ((soap11 && ns.equals(Constants.URI_WSDL11_SOAP))
+                            || (soap12 && ns.equals(Constants.URI_WSDL12_SOAP)))
+                            a.add(p);
                 }
             }
             else if (rest && (be.getBindingType() == BindingEntry.TYPE_HTTP_GET 
@@ -401,25 +412,26 @@ public class WSDLInfo
             {
                 SymTabEntry entry = (SymTabEntry) v.elementAt(i);
 
-                if (entry instanceof ServiceEntry)
+                if (entry instanceof org.apache.axis.wsdl.symbolTable.ServiceEntry)
                     c_services.add(((ServiceEntry) entry).getService());
-                else if (entry instanceof BindingEntry)
+                else if (entry instanceof org.apache.axis.wsdl.symbolTable.BindingEntry)
                     c_bindings.add(entry);
             }
         }
     }
     
     /**
-     * Returns SOAPBinding extensibility element from with a binding element.
+     * Helper function that returns requested extensibility element.
      * 
-     * @param b
-     * @return
+     * @param e element to retrieve extensibility elements from.
+     * @param clazz instance of class
+     * @return extensibility element.
      */
-    private static SOAPBinding getSOAPBinding(Binding b)
+    private static Object getExtensibilityElement(WSDLElement e, int clazz)
     {
-        if (b != null)
+        if (e != null)
         {
-            List extElems = b.getExtensibilityElements();
+            List extElems = e.getExtensibilityElements();
             if (extElems != null)
             {
                 Iterator it = extElems.iterator();
@@ -427,8 +439,11 @@ public class WSDLInfo
                 while (it.hasNext())
                 {
                     Object o = it.next();
-                    if (o instanceof javax.wsdl.extensions.soap.SOAPBinding)
-                        return (SOAPBinding)o;
+                    if ((clazz == INSTANCEOF_SOAPBINDING && (o instanceof javax.wsdl.extensions.soap.SOAPBinding))
+                       || (clazz == INSTANCEOF_SOAPADDRESS && (o instanceof javax.wsdl.extensions.soap.SOAPAddress))
+                       || (clazz == INSTANCEOF_SOAPOPERATION && (o instanceof javax.wsdl.extensions.soap.SOAPOperation))
+                       || (clazz == INSTANCEOF_SOAPBODY && (o instanceof javax.wsdl.extensions.soap.SOAPBody)))
+                        return o;
                 }
             }
         }
