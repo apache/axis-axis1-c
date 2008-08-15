@@ -37,7 +37,6 @@ public class MethodInfo
     private String soapAction = null;
     private QName inputMessage;
     private QName outputMessage;
-    private QName faultMessage;
     private ArrayList faultType;
     private String inputNamespaceURI = null;
 
@@ -126,16 +125,6 @@ public class MethodInfo
     public void setOutputMessage(QName ouputMessage)
     {
         this.outputMessage = ouputMessage;
-    }
-
-    public QName getFaultMessage()
-    {
-        return faultMessage;
-    }
-
-    public void setFaultMessage(QName faultMessage)
-    {
-        this.faultMessage = faultMessage;
     }
 
     public void setOperationParameters(Parameters opParams)
