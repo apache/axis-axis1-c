@@ -25,11 +25,11 @@ import java.util.Vector;
 import javax.wsdl.Binding;
 import javax.wsdl.BindingInput;
 import javax.wsdl.BindingOperation;
-import javax.wsdl.BindingOutput;
 import javax.wsdl.Port;
 import javax.wsdl.Service;
 import javax.wsdl.WSDLElement;
 import javax.wsdl.extensions.soap.SOAPBinding;
+import javax.wsdl.extensions.soap.SOAPBody;
 import javax.wsdl.extensions.soap.SOAPOperation;
 import javax.wsdl.extensions.soap.SOAPAddress;
 
@@ -213,58 +213,24 @@ public class WSDLInfo
     }
 
     /**
-     * Returns the URI for SoapAction if it exists.
+     * Updates MethodInfo with information from the binding operation element.
      * 
-     * @param bindingOperation
-     * @return
+     * @param bindingOp
+     * @param method
      */
-    public static String getSoapAction(BindingOperation bindingOperation)
+    public static void updateMethodInfoFromBinding(BindingOperation bindingOp, MethodInfo method)
     {
-        SOAPOperation e = (SOAPOperation)getExtensibilityElement(bindingOperation, INSTANCEOF_SOAPOPERATION);
+        // Get SOAPAction
+        SOAPOperation e = (SOAPOperation)getExtensibilityElement(bindingOp, INSTANCEOF_SOAPOPERATION);
         if (e != null)
-            return e.getSoapActionURI();
-        return null;
-    }
-
-    public static void getInputInfo(BindingInput input, MethodInfo methodinfo)
-    {
-        if (input == null)
-            return;
-        List soapbodies = input.getExtensibilityElements();
-
-        if (soapbodies != null)
+            method.setSoapAction(e.getSoapActionURI());
+        
+        // Get information about input operation
+        BindingInput  bi = bindingOp.getBindingInput();
+        SOAPBody body = (SOAPBody)getExtensibilityElement(bi, INSTANCEOF_SOAPBODY);
+        if (body != null)
         {
-            for (int j = 0; j < soapbodies.size(); j++)
-            {
-                if (soapbodies.get(j) instanceof javax.wsdl.extensions.soap.SOAPBody)
-                {
-                    javax.wsdl.extensions.soap.SOAPBody body = ((javax.wsdl.extensions.soap.SOAPBody) soapbodies.get(j));
-                    methodinfo.setInputEncoding(body.getEncodingStyles());
-                    methodinfo.setInputUse(body.getUse());
-                    methodinfo.setInputNamespaceURI(body.getNamespaceURI());
-                }
-            }
-        }
-    }
-
-    public static void getOutputInfo(BindingOutput input, MethodInfo methodinfo)
-    {
-        if (input == null)
-            return;
-        List soapbodies = input.getExtensibilityElements();
-
-        if (soapbodies != null)
-        {
-            for (int j = 0; j < soapbodies.size(); j++)
-            {
-                if (soapbodies.get(j) instanceof javax.wsdl.extensions.soap.SOAPBody)
-                {
-                    javax.wsdl.extensions.soap.SOAPBody body = ((javax.wsdl.extensions.soap.SOAPBody) soapbodies.get(j));
-                    methodinfo.setInputEncoding(body.getEncodingStyles());
-                    methodinfo.setInputUse(body.getUse());
-                    methodinfo.setOutputNamespaceURI(body.getNamespaceURI());
-                }
-            }
+            method.setInputNamespaceURI(body.getNamespaceURI());            
         }
     }
     

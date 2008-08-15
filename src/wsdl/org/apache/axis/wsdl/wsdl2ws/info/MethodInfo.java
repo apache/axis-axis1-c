@@ -23,7 +23,6 @@ package org.apache.axis.wsdl.wsdl2ws.info;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import javax.xml.namespace.QName;
 
@@ -35,17 +34,12 @@ public class MethodInfo
     private Parameters operationParameters;
     private ArrayList inputParameters;
     private ArrayList outputParameters;
-    private String soapAction;
-    private List inputEncoding;
-    private List outputEncoding;
-    private String inputUse;
-    private String outputUse;
+    private String soapAction = null;
     private QName inputMessage;
     private QName outputMessage;
     private QName faultMessage;
     private ArrayList faultType;
     private String inputNamespaceURI = null;
-    private String outputNamespaceURI = null;
 
     private boolean eligibleForWrapped=true;
     private boolean doUnwrapped=false;
@@ -62,11 +56,6 @@ public class MethodInfo
     public String getMethodname()
     {
         return methodname;
-    }
-
-    public void setMethodname(String methodname)
-    {
-        this.methodname = methodname;
     }
 
     public Collection getInputParameterTypes()
@@ -99,54 +88,14 @@ public class MethodInfo
         this.outputParameters.add(type);
     }
 
-    public List getInputEncoding()
-    {
-        return inputEncoding;
-    }
-
-    public List getOutputEncoding()
-    {
-        return outputEncoding;
-    }
-
     public String getSoapAction()
     {
         return soapAction;
     }
 
-    public void setInputEncoding(List string)
-    {
-        inputEncoding = string;
-    }
-
-    public void setOutputEncoding(List string)
-    {
-        outputEncoding = string;
-    }
-
     public void setSoapAction(String string)
     {
         soapAction = string;
-    }
-
-    public String getInputUse()
-    {
-        return inputUse;
-    }
-
-    public String getOutputUse()
-    {
-        return outputUse;
-    }
-
-    public void setInputUse(String string)
-    {
-        inputUse = string;
-    }
-
-    public void setOutputUse(String string)
-    {
-        outputUse = string;
     }
 
     public void setInputNamespaceURI(String string)
@@ -157,16 +106,6 @@ public class MethodInfo
     public String getInputNamespaceURI()
     {
         return inputNamespaceURI;
-    }
-
-    public void setOutputNamespaceURI(String string)
-    {
-        outputNamespaceURI = string;
-    }
-
-    public String getOutputNamespaceURI()
-    {
-        return outputNamespaceURI;
     }
 
     public QName getInputMessage()

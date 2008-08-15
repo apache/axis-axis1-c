@@ -424,6 +424,8 @@ public class WSDL2Ws
             serviceMethods.add(minfo); 
         }
         
+        // Need to get some stuff from binding element such as SOAPAction and namespace for 
+        // each operation - we store the information in the method. 
         List operations = bindingEntry.getBinding().getBindingOperations();
         if (operations != null)
         {
@@ -442,11 +444,10 @@ public class WSDL2Ws
                             method = (MethodInfo) serviceMethods.get(ii);
                     
                     if (method == null)
-                        throw new WrapperFault("binding and the port type do not match");                    
+                        throw new WrapperFault("The binding and portType elements do not match.");                    
                     
-                    method.setSoapAction(WSDLInfo.getSoapAction(bindinop));
-                    WSDLInfo.getInputInfo(bindinop.getBindingInput(), method);
-                    WSDLInfo.getOutputInfo(bindinop.getBindingOutput(), method);
+                    // Get binding operation information and store in method for later use.
+                    WSDLInfo.updateMethodInfoFromBinding(bindinop, method);
                 }
             }
         }
