@@ -29,7 +29,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.apache.axis.wsdl.wsdl2ws.info.AttributeInfo;
+import org.apache.axis.wsdl.wsdl2ws.info.ParameterInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 import org.apache.axis.wsdl.symbolTable.CContainedAttribute;
@@ -37,13 +37,13 @@ import org.apache.axis.wsdl.symbolTable.CElementDecl;
 
 public abstract class ParamWriter extends BasicFileWriter
 {
-    protected AttributeInfo extensionBaseAttrib = null;
+    protected ParameterInfo extensionBaseAttrib = null;
 
     // first attributeParamCount of attribs will be treated as attributes
     protected int attributeParamCount = 0;
    
     // array of parameter types and attributes 
-    protected AttributeInfo[] attribs;
+    protected ParameterInfo[] attribs;
 
     protected WebServiceContext wscontext;
 
@@ -94,7 +94,7 @@ public abstract class ParamWriter extends BasicFileWriter
         CElementDecl elemi = type.getExtensionBaseType();
         if (elemi != null)
         {
-            extensionBaseAttrib = new AttributeInfo(this.classname);
+            extensionBaseAttrib = new ParameterInfo();
             extensionBaseAttrib.setParamName(elemi.getName().getLocalPart(), wscontext.getTypemap());
             
             Type elementType = elemi.getType();
@@ -128,12 +128,12 @@ public abstract class ParamWriter extends BasicFileWriter
         int intAttrFieldSz = attribfields.size();
         attributeParamCount = intAttrFieldSz;
         int intEleFieldSz = elementfields.size();
-        this.attribs = new AttributeInfo[intAttrFieldSz + intEleFieldSz];
+        this.attribs = new ParameterInfo[intAttrFieldSz + intEleFieldSz];
         for (int i = 0; i < intAttrFieldSz; i++)
         {
             CContainedAttribute attr = (CContainedAttribute)attribfields.get(i);
             
-            this.attribs[i] = new AttributeInfo(this.classname);
+            this.attribs[i] = new ParameterInfo();
             this.attribs[i].setParamName(attr.getName(), wscontext.getTypemap());
             if (CUtils.isSimpleType(attr.getType().getName()))
                 this.attribs[i].setTypeName(CUtils.getclass4qname(attr.getType().getName()));
@@ -150,7 +150,7 @@ public abstract class ParamWriter extends BasicFileWriter
 
         for (int i = intAttrFieldSz; i < intAttrFieldSz + intEleFieldSz; i++)
         {
-            this.attribs[i] = new AttributeInfo(this.classname);
+            this.attribs[i] = new ParameterInfo();
             this.attribs[i].setParamName((String) elementfields.get(i - attributeParamCount), wscontext.getTypemap());
             CElementDecl elem = type.getElementForElementName(this.attribs[i].getParamName());
             Type elementType = elem.getType();
@@ -171,6 +171,9 @@ public abstract class ParamWriter extends BasicFileWriter
             this.attribs[i].setAllElement(elem.getAllElement());
             this.attribs[i].setNsQualified(elem.getNsQualified());            
             this.attribs[i].setMinOccurs(elem.getMinOccurs());
+            this.attribs[i].setMaxOccurs(elem.getMaxOccurs());
+            this.attribs[i].setNillable(elem.isNillable());
+
             
             if (elementType.isArray())
             { 
@@ -199,12 +202,10 @@ public abstract class ParamWriter extends BasicFileWriter
             
             if (elem.getMinOccurs() == 0)
                 this.attribs[i].setOptional(true);
-            
-            this.attribs[i].setNillable(elem.isNillable());
         }
     }
 
-    protected String getCorrectParmNameConsideringArraysAndComplexTypes(AttributeInfo attrib)
+    protected String getCorrectParmNameConsideringArraysAndComplexTypes(ParameterInfo attrib)
         throws WrapperFault
     {
         if (attrib.isArray())

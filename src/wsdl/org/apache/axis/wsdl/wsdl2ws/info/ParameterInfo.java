@@ -22,24 +22,43 @@ import org.apache.axis.wsdl.symbolTable.SymbolTable;
 import org.apache.axis.wsdl.wsdl2ws.CUtils;
 
 /**
- * this class represents Parameter(message in the wsdl) 
+ * This class stores information about parameters and attributes.
+ * 
  * @author Srinath Perera(hemapani@opensource.lk)
  */
 
 public class ParameterInfo
 {
-    protected Type type;
-    protected String attribName = null;
-    protected QName elementName = null;
+    private Type type;
+    private String attribName = null;
+    private QName elementName = null;
     private String elementNameAsSOAPString = null;
     private String attribNameAsSOAPString = null;
     private String attribNameAsMember = null;
     private String methodName=null;
     private boolean isAnyType = false;
-    protected boolean isArray = false;
+    private boolean isArray = false;
     private boolean isAttribute = false;
     private boolean isNillable = false;
     private boolean isOptional = false;
+    
+    private boolean isSimpleType = true;
+
+    private int maxOccurs = 1;
+    private int minOccurs = 1;
+
+    private String typeName;
+    
+    //this variable states whether the attribute is an xsd:choice
+    private boolean isChoiceElement = false;
+    
+    //this variable states whether the attribute is an xsd:all
+    private boolean isAllElement = false;
+    
+    //This field is set to true if the element is elementFormDefault qualified.
+    //This specifies whether the element must be namespace qualified or not in the SOAP message.
+    private boolean isNamespaceQualified = false;
+
 
     public ParameterInfo()
     {}
@@ -58,6 +77,14 @@ public class ParameterInfo
         str = str + "isAttribute ="             + isAttribute + "\n";
         str = str + "isNillable = "             + isNillable + "\n";
         str = str + "isOptional = "             + isOptional + "\n";
+        
+        str = str + "isSimpleType ="          + isSimpleType + "\n";
+        str = str + "maxOccurs ="             + maxOccurs + "\n";
+        str = str + "minOccurs ="             + minOccurs + "\n";
+        str = str + "typeName = "             + typeName + "\n";
+        str = str + "choiceElement = "        + isChoiceElement + "\n";
+        str = str + "allElement ="            + isAllElement + "\n";
+        str = str + "nsQualified ="           + isNamespaceQualified + "\n";
         str = str + "------------END ParameterInfo-------------\n";
 
         return str;
@@ -236,5 +263,107 @@ public class ParameterInfo
     public void setMethodName(String methodName)
     {
         this.methodName = methodName;
+    }
+    
+    /**
+     * @return String
+     */
+    public String getTypeName()
+    {
+        return typeName;
+    }
+
+    /**
+     * Sets the typeName.
+     * @param typeName The typeName to set
+     */
+    public void setTypeName(String typeName)
+    {
+        this.typeName = typeName;
+    }
+
+    /**
+     * @return boolean
+     */
+    public boolean isSimpleType()
+    {
+        return isSimpleType;
+    }
+
+    /**
+     * Sets the isSimpleType.
+     * @param isSimpleType The isSimpleType to set
+     */
+    public void setSimpleType(boolean isSimpleType)
+    {
+        this.isSimpleType = isSimpleType;
+    }
+
+    //getter and setter for choiceElement
+    public boolean getChoiceElement()
+    {
+        return this.isChoiceElement;
+    }
+    
+    public void setChoiceElement(boolean newChoiceElement)
+    {
+        this.isChoiceElement=newChoiceElement;
+    }
+    
+    //getter and setter for allElement
+    public boolean getAllElement()
+    {
+        return this.isAllElement;
+    }
+    
+    public void setAllElement(boolean newAllElement)
+    {
+        this.isAllElement=newAllElement;
+    }
+    
+    /**
+     * Getter and setter for the field nsQualified 
+     */
+    public boolean getNsQualified()
+    {
+        return isNamespaceQualified;
+    }
+    
+    public void setNsQualified(boolean nsQual)
+    {
+        isNamespaceQualified = nsQual;
+    }
+
+    /**
+     * @return int
+     */
+    public int getMaxOccurs()
+    {
+        return this.maxOccurs;
+    }
+
+    /**
+     * @return int
+     */
+    public int getMinOccurs()
+    {
+        return this.minOccurs;
+    }
+    /**
+     * Sets the maxOccurs.
+     * @param maxOccurs The maxOccurs to set
+     */
+    public void setMaxOccurs(int maxOccurs)
+    {
+        this.maxOccurs = maxOccurs;
+    }
+
+    /**
+     * Sets the minOccurs.
+     * @param minOccurs The minOccurs to set
+     */
+    public void setMinOccurs(int minOccurs)
+    {
+        this.minOccurs = minOccurs;
     }
 }
