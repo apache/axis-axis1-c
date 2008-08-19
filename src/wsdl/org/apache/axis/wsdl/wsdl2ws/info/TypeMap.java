@@ -40,9 +40,6 @@ public class TypeMap
 {
     public static final String ANON_TOKEN_STRING = ">";
     public static final char   ANON_TOKEN_CHAR   = '>';
-        
-    /* this map maps the classname -> QName */
-    private static Hashtable basicTypeClass2QNamemap = new Hashtable();
     
     /* this map maps QName -> classname */
     private static Hashtable basicTypeQname2classmap = new Hashtable();
@@ -51,59 +48,6 @@ public class TypeMap
     private Hashtable typeInfo = new Hashtable();;
 
     static {
-        // c -> xml type mapping
-    	basicTypeClass2QNamemap.put("xsd__duration",			new QName(WrapperConstants.SCHEMA_NAMESPACE, "duration"));
-    	basicTypeClass2QNamemap.put("xsd__dateTime",			new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"));     
-        basicTypeClass2QNamemap.put("xsd__time",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "time"));
-        basicTypeClass2QNamemap.put("xsd__date",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "date"));
-        basicTypeClass2QNamemap.put("xsd__gYearMonth",			new QName(WrapperConstants.SCHEMA_NAMESPACE, "gYearMonth"));
-        basicTypeClass2QNamemap.put("xsd__gYear",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "gYear"));
-        basicTypeClass2QNamemap.put("xsd__gMonthDay",			new QName(WrapperConstants.SCHEMA_NAMESPACE, "gMonthDay"));
-        basicTypeClass2QNamemap.put("xsd__gDay",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "gDay"));
-        basicTypeClass2QNamemap.put("xsd__gMonth",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "gMonth"));
-        basicTypeClass2QNamemap.put("xsd__string",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "string"));
-        basicTypeClass2QNamemap.put("xsd__normalizedString",	new QName(WrapperConstants.SCHEMA_NAMESPACE, "normalizedString"));
-        basicTypeClass2QNamemap.put("xsd__token",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "token"));
-        basicTypeClass2QNamemap.put("xsd__language",			new QName(WrapperConstants.SCHEMA_NAMESPACE, "language"));
-        basicTypeClass2QNamemap.put("xsd__Name",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "Name"));
-        basicTypeClass2QNamemap.put("xsd__NCName",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "NCName"));
-        basicTypeClass2QNamemap.put("xsd__ID",					new QName(WrapperConstants.SCHEMA_NAMESPACE, "ID"));
-        basicTypeClass2QNamemap.put("xsd__IDREF",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "IDREF"));
-        basicTypeClass2QNamemap.put("xsd__IDREFS",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "IDREFS"));
-        basicTypeClass2QNamemap.put("xsd__ENTITY",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "ENTITY"));
-        basicTypeClass2QNamemap.put("xsd__ENTITES",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "ENTITIES"));
-        basicTypeClass2QNamemap.put("xsd__NMTOKEN",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "NMTOKEN"));
-        basicTypeClass2QNamemap.put("xsd__NMTOKENS",			new QName(WrapperConstants.SCHEMA_NAMESPACE, "NMTOKENS"));
-        basicTypeClass2QNamemap.put("xsd__boolean",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "boolean"));
-        basicTypeClass2QNamemap.put("xsd__base64Binary",		new QName(WrapperConstants.SCHEMA_NAMESPACE, "base64Binary"));
-        basicTypeClass2QNamemap.put("xsd__hexBinary",			new QName(WrapperConstants.SCHEMA_NAMESPACE, "hexBinary"));
-        basicTypeClass2QNamemap.put("xsd__float",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "float"));
-        basicTypeClass2QNamemap.put("xsd__decimal",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"));
-        basicTypeClass2QNamemap.put("xsd__integer",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "integer"));
-        basicTypeClass2QNamemap.put("xsd__nonPositiveInteger",	new QName(WrapperConstants.SCHEMA_NAMESPACE, "nonPositiveInteger"));
-        basicTypeClass2QNamemap.put("xsd__negativeInteger",		new QName(WrapperConstants.SCHEMA_NAMESPACE, "negativeInteger"));
-        basicTypeClass2QNamemap.put("xsd__long",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "long"));
-        basicTypeClass2QNamemap.put("xsd__int",					new QName(WrapperConstants.SCHEMA_NAMESPACE, "int"));
-        basicTypeClass2QNamemap.put("xsd__short",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "short"));
-        basicTypeClass2QNamemap.put("xsd__byte",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "byte"));
-        basicTypeClass2QNamemap.put("xsd__nonNegativeInteger",	new QName(WrapperConstants.SCHEMA_NAMESPACE, "nonNegativeInteger"));
-        basicTypeClass2QNamemap.put("xsd__unsignedLong",		new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedLong"));
-        basicTypeClass2QNamemap.put("xsd__unsignedInt",			new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedInt"));
-        basicTypeClass2QNamemap.put("xsd__unsignedShort",		new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedShort"));
-        basicTypeClass2QNamemap.put("xsd__unsignedByte",		new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedByte"));
-        basicTypeClass2QNamemap.put("xsd__positiveInteger",		new QName(WrapperConstants.SCHEMA_NAMESPACE, "positiveInteger"));
-        basicTypeClass2QNamemap.put("xsd__double",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "double"));
-        basicTypeClass2QNamemap.put("xsd__anyURI",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "anyURI"));
-        basicTypeClass2QNamemap.put("xsd__QName",				new QName(WrapperConstants.SCHEMA_NAMESPACE, "QName"));
-        basicTypeClass2QNamemap.put("xsd__NOTATION",			new QName(WrapperConstants.SCHEMA_NAMESPACE, "NOTATION"));
-        basicTypeClass2QNamemap.put("ISoapAttachment",		new QName(WrapperConstants.APACHE_XMLSOAP_NAMESPACE, "Image"));
-        basicTypeClass2QNamemap.put("ISoapAttachment",		new QName(WrapperConstants.APACHE_XMLSOAP_NAMESPACE, "PlainText"));
-        basicTypeClass2QNamemap.put("ISoapAttachment",		new QName(WrapperConstants.APACHE_XMLSOAP_NAMESPACE, "Multipart"));
-        basicTypeClass2QNamemap.put("ISoapAttachment",		new QName(WrapperConstants.APACHE_XMLSOAP_NAMESPACE, "Source"));
-        basicTypeClass2QNamemap.put("ISoapAttachment",		new QName(WrapperConstants.APACHE_XMLSOAP_NAMESPACE, "octet-stream"));
-        basicTypeClass2QNamemap.put("ISoapAttachment",		new QName(WrapperConstants.APACHE_XMLSOAP_NAMESPACE, "DataHandler"));
-
-
         // xml -> c type mapping 
         basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "duration"),   		"xsd__duration");
         basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"),   		"xsd__dateTime");
