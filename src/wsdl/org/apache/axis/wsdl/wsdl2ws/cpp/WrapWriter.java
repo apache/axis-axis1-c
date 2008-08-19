@@ -31,7 +31,6 @@ import javax.xml.namespace.QName;
 
 import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
-import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.FaultInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.MethodInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.ParameterInfo;
@@ -246,7 +245,7 @@ public class WrapWriter extends CPPClassWriter
         if (returntype != null)
         {
             outparamTypeName =
-                WrapperUtils.getClassNameFromParamInfoConsideringArrays(
+                CUtils.getClassNameFromParamInfoConsideringArrays(
                     returntype,
                     wscontext);
             retType =
@@ -310,7 +309,7 @@ public class WrapWriter extends CPPClassWriter
         {
             paraTypeName = ((ParameterInfo) paramsB.get(i)).getLangName();
             paramType =
-                WrapperUtils.getClassNameFromParamInfoConsideringArrays(
+                CUtils.getClassNameFromParamInfoConsideringArrays(
                     (ParameterInfo) paramsB.get(i),
                     wscontext);
             parameterName = ((ParameterInfo) paramsB.get(i)).getParamNameAsSOAPString();
@@ -329,7 +328,7 @@ public class WrapWriter extends CPPClassWriter
 	                            + " value"
 	                            + i
 	                            + " = pIWSDZ->"
-	                            + CUtils.getParameterGetValueMethodName(paraTypeName, false)
+	                            + CUtils.getDeserializerMethodNameForType(paraTypeName, false)
 	                            + "(\""
 	                            + parameterName + "\",0);\n");
             			writer.write("\tif (value" + i + ")\n");
@@ -347,7 +346,7 @@ public class WrapWriter extends CPPClassWriter
 								+ "* pValue"
 								+ i
 								+ " = pIWSDZ->"
-								+ CUtils.getParameterGetValueMethodName(paraTypeName, false)
+								+ CUtils.getDeserializerMethodNameForType(paraTypeName, false)
 								+ "(\""
 								+ parameterName + "\",0);\n");
             			writer.write("\tif (pValue" + i + ")\n");
@@ -368,7 +367,7 @@ public class WrapWriter extends CPPClassWriter
                             + " value"
                             + i
                             + " = pIWSDZ->"
-                            + CUtils.getParameterGetValueMethodName(paraTypeName, false)
+                            + CUtils.getDeserializerMethodNameForType(paraTypeName, false)
                             + "(\""
                             + parameterName + "\",0);\n");
             			writer.write("\tif (value" + i + ")\n");
@@ -381,7 +380,7 @@ public class WrapWriter extends CPPClassWriter
             		else
             		{
             		    writer.write("\n\t" + paraTypeName + " v" + i);
-                        String typeInitValue = CUtils.getInitValue(paraTypeName);
+                        String typeInitValue = CUtils.getInitValueForBasicType(paraTypeName);
             		    if (typeInitValue != null)
             		        writer.write(" = " + typeInitValue);
 
@@ -391,7 +390,7 @@ public class WrapWriter extends CPPClassWriter
 							+ " * pValue"
 							+ i
 							+ " = pIWSDZ->"
-							+ CUtils.getParameterGetValueMethodName(paraTypeName, false)
+							+ CUtils.getDeserializerMethodNameForType(paraTypeName, false)
 							+ "(\""
 							+ parameterName + "\",0);\n");
 	            		writer.write("\tif (pValue" + i + ")\n");
@@ -409,11 +408,11 @@ public class WrapWriter extends CPPClassWriter
                     != null
                     && type.isArray())
                 {
-                    QName qname = WrapperUtils.getArrayType(type).getName();
+                    QName qname = CUtils.getArrayType(type).getName();
                     String containedType = null;
                     if (CUtils.isSimpleType(qname))
                     {
-                        containedType = CUtils.getclass4qname(qname);
+                        containedType = CUtils.getBasicTypeForQName(qname);
                         
                         writer.write("\n\t" + containedType + "_Array * v" + i +" = new " + containedType + "_Array();\n");
                         writer.write(
@@ -481,7 +480,7 @@ public class WrapWriter extends CPPClassWriter
             for (int i = 0; i < paramsC.size(); i++)
             {
                 ParameterInfo param = (ParameterInfo) paramsC.get(i);
-                String typeName = WrapperUtils.getClassNameFromParamInfoConsideringArrays(
+                String typeName = CUtils.getClassNameFromParamInfoConsideringArrays(
                         			(ParameterInfo) paramsC.get(i), wscontext);
                 writer.write("\t" + typeName);
                 
@@ -544,11 +543,11 @@ public class WrapWriter extends CPPClassWriter
             else
                 if (returntypeisarray)
                 {
-                    QName qname = WrapperUtils.getArrayType(retType).getName();
+                    QName qname = CUtils.getArrayType(retType).getName();
                     String containedType = null;
                     if (CUtils.isSimpleType(qname))
                     {
-                        containedType = CUtils.getclass4qname(qname);
+                        containedType = CUtils.getBasicTypeForQName(qname);
                         writer.write(
                             "\t\tnStatus = pIWSSZ->addOutputBasicArrayParam(ret,"
                                 + CUtils.getXSDTypeForBasicType(containedType)
@@ -671,11 +670,11 @@ public class WrapWriter extends CPPClassWriter
                         if (returntypeisarray)
                         {
                             QName qname =
-                                WrapperUtils.getArrayType(retType).getName();
+                                CUtils.getArrayType(retType).getName();
                             String containedType = null;
                             if (CUtils.isSimpleType(qname))
                             {
-                                containedType = CUtils.getclass4qname(qname);
+                                containedType = CUtils.getBasicTypeForQName(qname);
                                 writer.write(
                                     "\t\tpIWSSZ->addOutputBasicArrayParam((Axis_Array*)(&out"
                                         + i
@@ -766,7 +765,7 @@ public class WrapWriter extends CPPClassWriter
                 paramName = par.getParamName();
                 langName = par.getLangName();
                 faultType =
-                    WrapperUtils.getClassNameFromParamInfoConsideringArrays(
+                    CUtils.getClassNameFromParamInfoConsideringArrays(
                         par,
                         wscontext);
                 writeExceptions(faultType, faultInfoName, paramName, langName);

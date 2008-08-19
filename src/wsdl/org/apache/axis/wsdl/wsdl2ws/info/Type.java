@@ -78,9 +78,6 @@ public class Type
  
     /* whether the type is Array */
     private boolean isArray;
-
-    /* C or CPP */
-    private String language;
     
     /* element type */
     private String elementType;
@@ -114,28 +111,16 @@ public class Type
     // is type the input type for unwrapped doc/lit operation?
     private boolean isUnwrappedInputType  = false;
     
-    public Type(QName name, String languageSpecificName, String language)
+    public Type(QName name, String languageSpecificName)
     {
         this.languageSpecificName = languageSpecificName;
         this.name = name;
         elements = new Hashtable();
         vElements = new Vector();
-        
-        if (language == null)
-            this.language = WrapperConstants.LANGUAGE_CPP;
-        else
-            this.language = language;
 
         // if the language specific name is not specified try a simple type       
         if (languageSpecificName == null)
-        {
-            if (WrapperConstants.LANGUAGE_CPP.equalsIgnoreCase(this.language))
-                this.languageSpecificName = CUtils.getclass4qname(name);
-            else if (WrapperConstants.LANGUAGE_C.equalsIgnoreCase(this.language))
-                this.languageSpecificName = CUtils.getclass4qname(name);
-            else
-                this.languageSpecificName = TypeMap.getBasicTypeClass4qname(name);
-        }
+            this.languageSpecificName = CUtils.getBasicTypeForQName(name);
 
         //if language specific name still not set, use localPart of QName
         if (this.languageSpecificName == null)

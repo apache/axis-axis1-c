@@ -30,6 +30,7 @@ package org.apache.axis.wsdl.wsdl2ws.info;
 
 import java.util.Collection;
 import java.util.Hashtable;
+import java.util.Iterator;
 
 import javax.xml.namespace.QName;
 
@@ -40,8 +41,6 @@ public class TypeMap
     public static final String ANON_TOKEN_STRING = ">";
     public static final char   ANON_TOKEN_CHAR   = '>';
         
-    private static String language = WrapperConstants.LANGUAGE_CPP;
-
     /* this map maps the classname -> QName */
     private static Hashtable basicTypeClass2QNamemap = new Hashtable();
     
@@ -49,7 +48,7 @@ public class TypeMap
     private static Hashtable basicTypeQname2classmap = new Hashtable();
     
     /* this map stores Types keyed by the parameter name */
-    private Hashtable typeInfo;
+    private Hashtable typeInfo = new Hashtable();;
 
     static {
         // c -> xml type mapping
@@ -161,108 +160,44 @@ public class TypeMap
          *   Should be removed when the following issue will be fixed :
          * 	-> http://marc.theaimsgroup.com/?t=107907748000002&r=1&w=2 
          */
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SOAPENC_NAMESPACE, "integer"),
-            "xsd__integer");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SOAPENC_NAMESPACE, "string"),
-            "xsd__string");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SOAPENC_NAMESPACE, "decimal"),
-            "xsd__decimal");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SOAPENC_NAMESPACE, "QName"),
-            "xsd__QName");
-/*      basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SOAPENC_NAMESPACE, "NCName"),
-            "xsd__NCName");
-            */
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SOAPENC_NAMESPACE, "dateTime"),
-            "xsd__dateTime");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SOAPENC_NAMESPACE, "date"),
-            "xsd__date");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SOAPENC_NAMESPACE, "time"),
-            "xsd__time");
-        basicTypeQname2classmap.put(
-                new QName(WrapperConstants.SOAPENC_NAMESPACE, "duration"),
-                "xsd__duration");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SOAPENC_NAMESPACE, "base64Binary"),
-            "xsd__base64Binary");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SOAPENC_NAMESPACE, "hexBinary"),
-            "xsd__hexBinary");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SOAPENC_NAMESPACE, "int"),
-            "xsd__int");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SOAPENC_NAMESPACE, "byte"),
-            "xsd__byte");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SOAPENC_NAMESPACE, "float"),
-            "xsd__float");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SOAPENC_NAMESPACE, "long"),
-            "xsd__long");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SOAPENC_NAMESPACE, "double"),
-            "xsd__double");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SOAPENC_NAMESPACE, "boolean"),
-            "xsd__boolean");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SOAPENC_NAMESPACE, "short"),
-            "xsd__short");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedByte"),
-            "xsd__unsignedByte");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedInt"),
-            "xsd__unsignedInt");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedLong"),
-            "xsd__unsignedLong");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedShort"),
-            "xsd__unsignedShort");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SOAPENC_NAMESPACE, "anyURI"),
-            "xsd__anyURI");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SOAPENC_NAMESPACE, "NMTOKEN"),
-            "xsd__NMTOKEN");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "integer"),       "xsd__integer");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "string"),        "xsd__string");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "decimal"),       "xsd__decimal");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "QName"),         "xsd__QName");
+/*      basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "NCName"),        "xsd__NCName");  */
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "dateTime"),      "xsd__dateTime");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "date"),          "xsd__date");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "time"),          "xsd__time");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "duration"),      "xsd__duration");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "base64Binary"),  "xsd__base64Binary");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "hexBinary"),     "xsd__hexBinary");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "int"),           "xsd__int");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "byte"),          "xsd__byte");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "float"),         "xsd__float");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "long"),          "xsd__long");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "double"),        "xsd__double");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "boolean"),       "xsd__boolean");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "short"),         "xsd__short");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedByte"),  "xsd__unsignedByte");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedInt"),   "xsd__unsignedInt");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedLong"),  "xsd__unsignedLong");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedShort"), "xsd__unsignedShort");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "anyURI"),        "xsd__anyURI");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "NMTOKEN"),       "xsd__NMTOKEN");
         /* TODO:
          *  Another strange issue from Axis 1.1 runtime when base64binary is in input/output operations.
          */
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SOAPENC_NAMESPACE, "base64"),
-            "xsd__base64Binary");
+        basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "base64"), "xsd__base64Binary");
     }
     
-    public TypeMap(String language)
+    public TypeMap()
     {
-        TypeMap.language = language;
-        this.typeInfo = new Hashtable();
-    }
-
-    public static QName getBasicTypeQname4class(String classname)
-    {
-        Object val = basicTypeClass2QNamemap.get(classname);
-        return (QName) val;
     }
 
     public static String getBasicTypeClass4qname(QName qname)
     {
         Object val = basicTypeQname2classmap.get(qname);
         return (String) val;
-    }
-
-    public static boolean isSimpleType(String type)
-    {
-        return basicTypeClass2QNamemap.containsKey(type);
     }
 
     public static boolean isSimpleType(QName type)
@@ -273,7 +208,7 @@ public class TypeMap
     public Type getType(QName name)
     {
         if (isSimpleType(name))
-            return new Type(name, null, TypeMap.language);
+            return new Type(name, null);
 
         return (Type) this.typeInfo.get(name);
     }
@@ -291,6 +226,25 @@ public class TypeMap
     public Collection getTypes()
     {
         return this.typeInfo.values();
+    }
+    
+    public boolean doesTypeExist(String name)
+    {   
+        Type atype;
+        String atypeName;
+        Iterator types = getTypes().iterator();
+        while (types.hasNext())
+        {
+            atype = (Type) types.next();
+            if (!atype.isExternalized())
+                continue;
+
+            atypeName = atype.getLanguageSpecificName();
+            if (null != atypeName && atypeName.equals( name ))
+                return true;
+        }
+        
+        return false;
     }
     
     public static boolean isAnonymousType(String type)

@@ -34,7 +34,6 @@ import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.ParamWriter;
 import org.apache.axis.wsdl.wsdl2ws.WSDL2Ws;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
-import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
@@ -65,7 +64,7 @@ public class ArrayParamHeaderWriter extends ParamWriter
             }
             
             //include header file for the contained type
-            QName qname = WrapperUtils.getArrayType(type).getName();
+            QName qname = CUtils.getArrayType(type).getName();
 
             if (!CUtils.isSimpleType(qname))
                 writer.write("#include \""+ attribs[0].getTypeName() + ".hpp\"\n");
@@ -91,7 +90,7 @@ public class ArrayParamHeaderWriter extends ParamWriter
 
     public boolean isSimpleTypeArray() throws WrapperFault
     {
-        QName qname = WrapperUtils.getArrayType(type).getName();
+        QName qname = CUtils.getArrayType(type).getName();
         return CUtils.isSimpleType(qname);
     }
 

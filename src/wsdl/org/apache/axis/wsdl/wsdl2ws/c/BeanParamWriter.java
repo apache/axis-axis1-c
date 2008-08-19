@@ -161,7 +161,7 @@ public class BeanParamWriter extends ParamCFileWriter
             String basicType = null;
             
             if (!attribs[i].isSimpleType() && type.isSimpleType())
-                basicType = CUtils.getclass4qname(type.getBaseType());
+                basicType = CUtils.getBasicTypeForQName(type.getBaseType());
             else
                 basicType = attribs[i].getTypeName();
 
@@ -265,7 +265,7 @@ public class BeanParamWriter extends ParamCFileWriter
                 {
                     String baseTypeName = null;
                     if (!attribs[i].isSimpleType() && attribs[i].getType().isSimpleType())
-                        baseTypeName = CUtils.getclass4qname(attribs[i].getType().getBaseType());
+                        baseTypeName = CUtils.getBasicTypeForQName(attribs[i].getType().getBaseType());
                     else
                         baseTypeName = attribs[i].getTypeName();
                     
@@ -295,7 +295,7 @@ public class BeanParamWriter extends ParamCFileWriter
                 String typeName = attribs[i].getTypeName();
                 String baseTypeName = null;
                 if (attribs[i].getType().isSimpleType())
-                    baseTypeName = CUtils.getclass4qname (attribs[i].getType().getBaseType ());
+                    baseTypeName = CUtils.getBasicTypeForQName (attribs[i].getType().getBaseType ());
                 else
                     baseTypeName = typeName;
                 
@@ -607,7 +607,7 @@ public class BeanParamWriter extends ParamCFileWriter
                 {
                     String baseTypeName = null;
                     if (!attribs[i].isSimpleType() && attribs[i].getType().isSimpleType())
-                        baseTypeName = CUtils.getclass4qname(attribs[i].getType().getBaseType());
+                        baseTypeName = CUtils.getBasicTypeForQName(attribs[i].getType().getBaseType());
                     else
                         baseTypeName = attribs[i].getTypeName();
 
@@ -651,7 +651,7 @@ public class BeanParamWriter extends ParamCFileWriter
                 Type type = attribs[i].getType();
                 boolean isPointerType = false;
                 if (type.isSimpleType())
-                    isPointerType = CUtils.isPointerType(CUtils.getclass4qname(type.getBaseType())); 
+                    isPointerType = CUtils.isPointerType(CUtils.getBasicTypeForQName(type.getBaseType())); 
                 else
                     isPointerType = CUtils.isPointerType(attribs[i].getTypeName());
                 
@@ -666,7 +666,7 @@ public class BeanParamWriter extends ParamCFileWriter
                     writer.write(tab2 + "param->"
                             + attribs[i].getParamNameAsMember() + " = "
                             + "axiscSoapDeSerializer"
-                            + CUtils.getParameterGetValueMethodName(
+                            + CUtils.getDeserializerMethodNameForType(
                                     attribs[i].getTypeName(), attribs[i].isAttribute()) + "(pDZ, \""
                             + soapTagName + "\",0);\n");
                 }                
@@ -679,7 +679,7 @@ public class BeanParamWriter extends ParamCFileWriter
                     writer.write(tab2 + "\t" + attribs[i].getTypeName() + " * "
                         + attribs[i].getParamNameAsMember() + " = " 
                         + "axiscSoapDeSerializer"
-                        + CUtils.getParameterGetValueMethodName(attribs[i].getTypeName(), attribs[i].isAttribute()) 
+                        + CUtils.getDeserializerMethodNameForType(attribs[i].getTypeName(), attribs[i].isAttribute()) 
                         + "(pDZ, \"" + elementNameToSearchFor + "\",0);\n");
                     
                     writer.write(tab2 + "\tif (" + attribs[i].getParamNameAsMember() + " != NULL)\n");
@@ -844,7 +844,7 @@ public class BeanParamWriter extends ParamCFileWriter
                     String baseTypeName = null;
                     
                     if (!attribs[i].isSimpleType() && attribs[i].getType().isSimpleType())
-                        baseTypeName = CUtils.getclass4qname(attribs[i].getType().getBaseType());
+                        baseTypeName = CUtils.getBasicTypeForQName(attribs[i].getType().getBaseType());
                     else
                         baseTypeName = attribs[i].getTypeName();
                     
@@ -910,7 +910,7 @@ public class BeanParamWriter extends ParamCFileWriter
                 String baseTypeName = null;
                 
                 if (!attribs[i].isSimpleType() && attribs[i].getType().isSimpleType())
-                    baseTypeName = CUtils.getclass4qname(attribs[i].getType().getBaseType());
+                    baseTypeName = CUtils.getBasicTypeForQName(attribs[i].getType().getBaseType());
                 else
                     baseTypeName = attribs[i].getTypeName();
                 

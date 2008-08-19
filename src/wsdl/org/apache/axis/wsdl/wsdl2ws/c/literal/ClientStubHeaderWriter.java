@@ -27,7 +27,6 @@ import java.util.Iterator;
 
 import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
-import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.MethodInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.ParameterInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
@@ -78,7 +77,7 @@ public class ClientStubHeaderWriter
                 {
                     ParameterInfo returnParam =
                         (ParameterInfo) minfo.getOutputParameterTypes().iterator().next();
-                    String outParamTypeName = WrapperUtils.getClassNameFromParamInfoConsideringArrays(returnParam, wscontext);
+                    String outParamTypeName = CUtils.getClassNameFromParamInfoConsideringArrays(returnParam, wscontext);
                     if ((outParamTypeName.lastIndexOf ("_Array") > 0) 
                             || (CUtils.isSimpleType(outParamTypeName)
                             && (returnParam.isNillable() || returnParam.isOptional())
@@ -102,12 +101,12 @@ public class ClientStubHeaderWriter
                 {
                     writer.write(", ");
                     ParameterInfo nparam = (ParameterInfo) params.next();
-                    String paramTypeName = WrapperUtils.getClassNameFromParamInfoConsideringArrays(nparam, wscontext);
+                    String paramTypeName = CUtils.getClassNameFromParamInfoConsideringArrays(nparam, wscontext);
                     Type type = nparam.getType();
                     String baseTypeName = null;
                     
                     if (type.isSimpleType())
-                        baseTypeName = CUtils.getclass4qname (type.getBaseType ());
+                        baseTypeName = CUtils.getBasicTypeForQName (type.getBaseType ());
                     else
                         baseTypeName = paramTypeName;
                     
@@ -128,12 +127,12 @@ public class ClientStubHeaderWriter
                     for (int j = 0; params.hasNext(); j++)
                     {
                         ParameterInfo nparam = (ParameterInfo) params.next();
-                        String paramType = WrapperUtils.getClassNameFromParamInfoConsideringArrays( nparam, wscontext);
+                        String paramType = CUtils.getClassNameFromParamInfoConsideringArrays( nparam, wscontext);
                         Type type = nparam.getType();
                         String baseTypeName = null;
                         
                         if (type.isSimpleType())
-                            baseTypeName = CUtils.getclass4qname (type.getBaseType ());
+                            baseTypeName = CUtils.getBasicTypeForQName (type.getBaseType ());
                         else
                             baseTypeName = paramType;
                         

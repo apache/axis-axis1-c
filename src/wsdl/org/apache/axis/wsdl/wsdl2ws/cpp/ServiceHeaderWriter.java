@@ -29,7 +29,6 @@ import java.util.Iterator;
 
 import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
-import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.FaultInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.MethodInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.ParameterInfo;
@@ -135,7 +134,7 @@ public class ServiceHeaderWriter extends HeaderFileWriter
                                 .iterator()
                                 .next();
                         String returnTypeName = returntype.getLangName();
-                        String returnType = WrapperUtils.getClassNameFromParamInfoConsideringArrays(returntype,wscontext);
+                        String returnType = CUtils.getClassNameFromParamInfoConsideringArrays(returntype,wscontext);
                         
                         if ((returnType.lastIndexOf ("_Array") > 0)
                                 || (CUtils.isSimpleType(returnTypeName)
@@ -172,7 +171,7 @@ public class ServiceHeaderWriter extends HeaderFileWriter
                 	hasInputParms = true;
                 	ParameterInfo fparam = (ParameterInfo) params.next();
                     String paramTypeName = fparam.getLangName();
-                    String paramType = WrapperUtils.getClassNameFromParamInfoConsideringArrays(fparam,wscontext);
+                    String paramType = CUtils.getClassNameFromParamInfoConsideringArrays(fparam,wscontext);
                     
                     if (fparam.getType().isAttachment())
                     {
@@ -191,7 +190,7 @@ public class ServiceHeaderWriter extends HeaderFileWriter
                     else
                     {
 	                    writer.write(
-	                        WrapperUtils
+	                            CUtils
 	                            .getClassNameFromParamInfoConsideringArrays(
 	                            fparam,
 	                            wscontext)
@@ -204,7 +203,7 @@ public class ServiceHeaderWriter extends HeaderFileWriter
                 	
                     ParameterInfo nparam = (ParameterInfo) params.next();
                     String paramTypeName = nparam.getLangName();
-                    String typeName = WrapperUtils.getClassNameFromParamInfoConsideringArrays(nparam,wscontext);
+                    String typeName = CUtils.getClassNameFromParamInfoConsideringArrays(nparam,wscontext);
                     
                     if (nparam.getType().isAttachment())
                     {
@@ -242,7 +241,7 @@ public class ServiceHeaderWriter extends HeaderFileWriter
                             writer.write(",");
                         }
                         
-                        String typeName = WrapperUtils.getClassNameFromParamInfoConsideringArrays(
+                        String typeName = CUtils.getClassNameFromParamInfoConsideringArrays(
                                         	nparam, wscontext);
                         
                         writer.write(" AXIS_OUT_PARAM "
@@ -295,7 +294,7 @@ public class ServiceHeaderWriter extends HeaderFileWriter
                 if (!atype.isExternalized())
                     continue;
 
-                typeName = WrapperUtils.getLanguageTypeName4Type(atype);
+                typeName = CUtils.getLanguageTypeName4Type(atype);
                 if (null != typeName)
                     typeSet.add(typeName);
                    

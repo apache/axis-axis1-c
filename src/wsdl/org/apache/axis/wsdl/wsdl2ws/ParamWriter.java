@@ -52,7 +52,7 @@ public abstract class ParamWriter extends BasicFileWriter
 
     public ParamWriter(WebServiceContext wscontext, Type type) throws WrapperFault
     {
-        super(WrapperUtils.getLanguageTypeName4Type(type));
+        super(CUtils.getLanguageTypeName4Type(type));
         this.wscontext = wscontext;
         this.type = type;
         populateAttribList();
@@ -99,8 +99,8 @@ public abstract class ParamWriter extends BasicFileWriter
             
             Type elementType = elemi.getType();
 
-            if (CUtils.getclass4qname(elementType.getName()) != null)
-                extensionBaseAttrib.setTypeName(CUtils.getclass4qname(elementType.getName()));
+            if (CUtils.getBasicTypeForQName(elementType.getName()) != null)
+                extensionBaseAttrib.setTypeName(CUtils.getBasicTypeForQName(elementType.getName()));
             else
             {
                 extensionBaseAttrib.setTypeName(elementType.getLanguageSpecificName());
@@ -136,7 +136,7 @@ public abstract class ParamWriter extends BasicFileWriter
             this.attribs[i] = new ParameterInfo();
             this.attribs[i].setParamName(attr.getName(), wscontext.getTypemap());
             if (CUtils.isSimpleType(attr.getType().getName()))
-                this.attribs[i].setTypeName(CUtils.getclass4qname(attr.getType().getName()));
+                this.attribs[i].setTypeName(CUtils.getBasicTypeForQName(attr.getType().getName()));
             else
             {
                 this.attribs[i].setTypeName(attr.getType().getLanguageSpecificName());
@@ -158,7 +158,7 @@ public abstract class ParamWriter extends BasicFileWriter
                 this.attribs[i].setAnyType(true);
 
             if (CUtils.isSimpleType(elementType.getName()))
-                this.attribs[i].setTypeName(CUtils.getclass4qname(elementType.getName()));
+                this.attribs[i].setTypeName(CUtils.getBasicTypeForQName(elementType.getName()));
             else
             {
                 this.attribs[i].setTypeName(elementType.getLanguageSpecificName());
@@ -177,13 +177,13 @@ public abstract class ParamWriter extends BasicFileWriter
             
             if (elementType.isArray())
             { 
-                Type arrayType = WrapperUtils.getArrayType(elementType);
+                Type arrayType = CUtils.getArrayType(elementType);
                 
                 //get contained type
                 this.attribs[i].setArray(true);
                 if (CUtils.isSimpleType(arrayType.getName()))
                 {
-                    this.attribs[i].setTypeName(CUtils.getclass4qname(arrayType.getName()));
+                    this.attribs[i].setTypeName(CUtils.getBasicTypeForQName(arrayType.getName()));
                     this.attribs[i].setSimpleType(true);
                 }
                 else
@@ -224,7 +224,7 @@ public abstract class ParamWriter extends BasicFileWriter
             if (attrib.isSimpleType())
                 isPtrType = CUtils.isPointerType(attrib.getTypeName());
             else 
-                isPtrType = CUtils.isPointerType(CUtils.getclass4qname(attrib.getType().getBaseType()));
+                isPtrType = CUtils.isPointerType(CUtils.getBasicTypeForQName(attrib.getType().getBaseType()));
             
             if (isPtrType)
                 return attrib.getTypeName();
@@ -251,7 +251,7 @@ public abstract class ParamWriter extends BasicFileWriter
             }
             else if (attribs[index].getType().isSimpleType())
             {
-                if (!CUtils.isPointerType(CUtils.getclass4qname(attribs[index].getType().getBaseType())))
+                if (!CUtils.isPointerType(CUtils.getBasicTypeForQName(attribs[index].getType().getBaseType())))
                     bNillable = attribs[index].isNillable();
             }
         }
@@ -271,7 +271,7 @@ public abstract class ParamWriter extends BasicFileWriter
             }
             else if (attribs[index].getType().isSimpleType())
             {
-                if (!CUtils.isPointerType(CUtils.getclass4qname(attribs[index].getType().getBaseType())))
+                if (!CUtils.isPointerType(CUtils.getBasicTypeForQName(attribs[index].getType().getBaseType())))
                     bOptional = attribs[index].isOptional();
             }
         }

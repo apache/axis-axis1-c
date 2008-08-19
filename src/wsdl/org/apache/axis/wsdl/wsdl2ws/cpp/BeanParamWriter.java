@@ -201,7 +201,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     
                     boolean isPointerType = false;
                     if (attributeType.isSimpleType())
-                        isPointerType = CUtils.isPointerType(CUtils.getclass4qname(attributeType.getBaseType())); 
+                        isPointerType = CUtils.isPointerType(CUtils.getBasicTypeForQName(attributeType.getBaseType())); 
                     else
                         isPointerType = CUtils.isPointerType(getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]));
                     
@@ -377,7 +377,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
             String basicType = null;
             
             if (!attribs[i].isSimpleType() && attrType.isSimpleType())
-                basicType = CUtils.getclass4qname(attrType.getBaseType());
+                basicType = CUtils.getBasicTypeForQName(attrType.getBaseType());
             else
                 basicType = attribs[i].getTypeName();
 
@@ -481,7 +481,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 {
                     String baseTypeName = null;
                     if (!attribs[i].isSimpleType() && attribs[i].getType().isSimpleType())
-                        baseTypeName = CUtils.getclass4qname(attribs[i].getType().getBaseType());
+                        baseTypeName = CUtils.getBasicTypeForQName(attribs[i].getType().getBaseType());
                     else
                         baseTypeName = attribs[i].getTypeName();
                     
@@ -510,7 +510,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 String typeName = attribs[i].getTypeName();
                 String baseTypeName = null;
                 if (attribs[i].getType().isSimpleType())
-                    baseTypeName = CUtils.getclass4qname (attribs[i].getType().getBaseType ());
+                    baseTypeName = CUtils.getBasicTypeForQName (attribs[i].getType().getBaseType ());
                 else
                     baseTypeName = typeName;
                 
@@ -832,7 +832,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 {
                     String baseTypeName = null;
                     if (!attribs[i].isSimpleType() && attribs[i].getType().isSimpleType())
-                        baseTypeName = CUtils.getclass4qname(attribs[i].getType().getBaseType());
+                        baseTypeName = CUtils.getBasicTypeForQName(attribs[i].getType().getBaseType());
                     else
                         baseTypeName = attribs[i].getTypeName();
                     
@@ -874,27 +874,27 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 Type type = attribs[i].getType();
                 boolean isPointerType = false;
                 if (type.isSimpleType())
-                    isPointerType = CUtils.isPointerType(CUtils.getclass4qname(type.getBaseType())); 
+                    isPointerType = CUtils.isPointerType(CUtils.getBasicTypeForQName(type.getBaseType())); 
                 else
                     isPointerType = CUtils.isPointerType(attribs[i].getTypeName());
 
                 String typeName = attribs[i].getTypeName();
                 String baseTypeName = null;
                 if (type.isSimpleType())
-                    baseTypeName = CUtils.getclass4qname (type.getBaseType ());
+                    baseTypeName = CUtils.getBasicTypeForQName (type.getBaseType ());
                 else
                     baseTypeName = typeName;
                 
                 if( isPointerType)
                 {
                     writer.write(tab2 + typeName + " pValue" + i + " = pIWSDZ->" +
-                            CUtils.getParameterGetValueMethodName(baseTypeName, attribs[i].isAttribute()) +
+                            CUtils.getDeserializerMethodNameForType(baseTypeName, attribs[i].isAttribute()) +
                             "(\"" + soapTagName + "\", 0);\n");
                 }
                 else
                 {
                     writer.write(tab2 + typeName + " * pValue" + i + " = pIWSDZ->" +
-                            CUtils.getParameterGetValueMethodName(baseTypeName, attribs[i].isAttribute()) +
+                            CUtils.getDeserializerMethodNameForType(baseTypeName, attribs[i].isAttribute()) +
                             "(\"" + soapTagName + "\", 0);\n");
                 }
                 
@@ -1160,7 +1160,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     Type type = attribs[i].getType();
                     boolean isPointerType = false;
                     if (type.isSimpleType())
-                        isPointerType = CUtils.isPointerType(CUtils.getclass4qname(type.getBaseType())); 
+                        isPointerType = CUtils.isPointerType(CUtils.getBasicTypeForQName(type.getBaseType())); 
                     else
                         isPointerType = CUtils.isPointerType(attribs[i].getTypeName());
     
@@ -1214,7 +1214,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 Type type = attribs[i].getType();
                 boolean isPointerType = false;
                 if (type.isSimpleType())
-                    isPointerType = CUtils.isPointerType(CUtils.getclass4qname(type.getBaseType())); 
+                    isPointerType = CUtils.isPointerType(CUtils.getBasicTypeForQName(type.getBaseType())); 
                 else
                     isPointerType = CUtils.isPointerType(typename);
                 
@@ -1305,7 +1305,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
         {
             CUtils.printMethodComment(writer, "Function used to check whether object has allowed values. Not implemented yet.");
             
-            boolean isPtrType = CUtils.isPointerType( CUtils.getclass4qname( type.getBaseType()));
+            boolean isPtrType = CUtils.isPointerType( CUtils.getBasicTypeForQName( type.getBaseType()));
             
             writer.write("int Check_Restrictions_" + classname + "(" + classname + " value)\n"); 
             writer.write("{\n");

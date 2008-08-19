@@ -31,7 +31,6 @@ import javax.xml.namespace.QName;
 
 import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
-import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.FaultInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.MethodInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.ParameterInfo;
@@ -180,8 +179,7 @@ public class ClientStubWriter extends CFileWriter
         String outparamTypeName = null;
         if (returntype != null)
         {
-            outparamTypeName = 
-                WrapperUtils.getClassNameFromParamInfoConsideringArrays(returntype, wscontext);
+            outparamTypeName = CUtils.getClassNameFromParamInfoConsideringArrays(returntype, wscontext);
             retType = wscontext.getTypemap().getType(returntype.getSchemaName());
             if (retType != null)
             {
@@ -221,7 +219,7 @@ public class ClientStubWriter extends CFileWriter
             writer.write(", ");
             
             paramTypeName = 
-                WrapperUtils.getClassNameFromParamInfoConsideringArrays((ParameterInfo) paramsB.get(i), wscontext);
+                CUtils.getClassNameFromParamInfoConsideringArrays((ParameterInfo) paramsB.get(i), wscontext);
             
             typeissimple = CUtils.isSimpleType(paramTypeName);
             if (typeissimple
@@ -244,7 +242,7 @@ public class ClientStubWriter extends CFileWriter
                 type = wscontext.getTypemap().getType(
                         ((ParameterInfo) paramsC.get(i)).getSchemaName());
                 writer.write(", AXISC_OUT_PARAM  "
-                    + WrapperUtils.getClassNameFromParamInfoConsideringArrays(
+                    + CUtils.getClassNameFromParamInfoConsideringArrays(
                                 (ParameterInfo) paramsC.get(i),wscontext) + " *OutValue" + i);
             }
         }
@@ -259,8 +257,8 @@ public class ClientStubWriter extends CFileWriter
             if (returntypeisarray)
             {
                 QName qname = null;
-                if (WrapperUtils.getArrayType (retType) != null)
-                    qname = WrapperUtils.getArrayType (retType).getName ();
+                if (CUtils.getArrayType (retType) != null)
+                    qname = CUtils.getArrayType (retType).getName ();
                 else
                     qname = retType.getName ();
                 if (CUtils.isSimpleType (qname))               
@@ -281,7 +279,7 @@ public class ClientStubWriter extends CFileWriter
             }
             else
             {
-                String initValue = CUtils.getInitValue(outparamTypeName);
+                String initValue = CUtils.getInitValueForBasicType(outparamTypeName);
                 if (initValue != null)
                     writer.write(outparamTypeName + " Ret = " + initValue + ";\n");
                 else if (outparamTypeName.equals("xsdc__dateTime")
@@ -352,11 +350,11 @@ public class ClientStubWriter extends CFileWriter
             if (typeisarray)
             {
                 //arrays
-                QName qname = WrapperUtils.getArrayType(type).getName();
+                QName qname = CUtils.getArrayType(type).getName();
                 String containedType = null;
                 if (CUtils.isSimpleType(qname))
                 {
-                    containedType = CUtils.getclass4qname(qname);
+                    containedType = CUtils.getBasicTypeForQName(qname);
                     writer.write("\taxiscCallAddBasicArrayParameter(call, ");
                     writer.write("(Axisc_Array *)Value" + i + ", "
                             + CUtils.getXSDTypeForBasicType(containedType)
@@ -452,11 +450,11 @@ public class ClientStubWriter extends CFileWriter
                 // coding here.
                 if (typeisarray)
                 {
-                    QName qname = WrapperUtils.getArrayType(type).getName();
+                    QName qname = CUtils.getArrayType(type).getName();
                     String containedType = null;
                     if (CUtils.isSimpleType(qname))
                     {
-                        containedType = CUtils.getclass4qname(qname);
+                        containedType = CUtils.getBasicTypeForQName(qname);
                         writer.write("\n\t\tAxisc_Array * pReturn" + i 
                                 + " = axiscCallGetBasicArray(call, " 
                                 + CUtils.getXSDTypeForBasicType (containedType) 
@@ -509,7 +507,7 @@ public class ClientStubWriter extends CFileWriter
                         
                         if (CUtils.isPointerType(currentParaType))
                         {
-                            String xsdType =  WrapperUtils.getClassNameFromParamInfoConsideringArrays ((ParameterInfo) paramsC.get (i), wscontext);
+                            String xsdType =  CUtils.getClassNameFromParamInfoConsideringArrays ((ParameterInfo) paramsC.get (i), wscontext);
                             
                             if( !CUtils.isPointerType(xsdType))
                                 xsdType += " *";
@@ -541,7 +539,7 @@ public class ClientStubWriter extends CFileWriter
                         }
                         else 
                         {
-                            writer.write( "\t\t" + currentParaType + " * pReturn" + i + " = axiscCall" + CUtils.getParameterGetValueMethodName( currentParaType, false) + "(call, \"" + currentType.getParamNameAsSOAPString() + "\", 0);\n");
+                            writer.write( "\t\t" + currentParaType + " * pReturn" + i + " = axiscCall" + CUtils.getDeserializerMethodNameForType( currentParaType, false) + "(call, \"" + currentType.getParamNameAsSOAPString() + "\", 0);\n");
                             writer.write( "\n");
                             writer.write( "\t\tif( pReturn" + i + " != NULL && OutValue" + i + " != NULL)\n");
                             writer.write( "\t\t{\n");
@@ -578,11 +576,11 @@ public class ClientStubWriter extends CFileWriter
         }
         else if (returntypeisarray)
         {
-            QName qname = WrapperUtils.getArrayType(retType).getName();
+            QName qname = CUtils.getArrayType(retType).getName();
             String containedType = null;
             if (CUtils.isSimpleType(qname))
             {
-                containedType = CUtils.getclass4qname(qname);
+                containedType = CUtils.getBasicTypeForQName(qname);
                 writer.write("\t\t\tRetArray = (" + containedType + "_Array *)axiscCallGetBasicArray(call, "
                         + CUtils.getXSDTypeForBasicType(containedType) + ",\""
                         + paramTagName + "\",0);\n");
@@ -611,7 +609,7 @@ public class ClientStubWriter extends CFileWriter
                 writer.write(" *");
             
             writer.write(" pReturn = axiscCall"
-                    + CUtils.getParameterGetValueMethodName(outparamTypeName,
+                    + CUtils.getDeserializerMethodNameForType(outparamTypeName,
                             false) + "(call, \"" + paramTagName + "\", 0);\n\n");
             writer.write("\t\t\tif( pReturn)\n");
             writer.write("\t\t\t{\n");

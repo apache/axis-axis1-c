@@ -28,7 +28,6 @@ import java.util.Iterator;
 
 import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
-import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.MethodInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.ParameterInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
@@ -156,7 +155,7 @@ public class ServiceWriter extends CPPClassWriter
                                 .iterator()
                                 .next();
                         String returnTypeName = returntype.getLangName();
-                        String returnType = WrapperUtils.getClassNameFromParamInfoConsideringArrays(returntype,wscontext);
+                        String returnType = CUtils.getClassNameFromParamInfoConsideringArrays(returntype,wscontext);
                         if ((returnType.lastIndexOf ("_Array") > 0)||(CUtils.isSimpleType(returntype.getLangName())
                         		&& (returntype.isNillable()|| returntype.isOptional())
 								&& !(CUtils.isPointerType(returnTypeName))))
@@ -188,7 +187,7 @@ public class ServiceWriter extends CPPClassWriter
                 	hasInputParms = true;
                 	ParameterInfo fparam = (ParameterInfo) params.next();
                     String fparamTypeName = fparam.getLangName();
-                    String fparamType = WrapperUtils.getClassNameFromParamInfoConsideringArrays(fparam,wscontext);
+                    String fparamType = CUtils.getClassNameFromParamInfoConsideringArrays(fparam,wscontext);
                     
                     if (fparam.getType().isAttachment())
                     {
@@ -216,7 +215,7 @@ public class ServiceWriter extends CPPClassWriter
                 {
                 	ParameterInfo nparam = (ParameterInfo) params.next();
                     String paramTypeName = nparam.getLangName();
-                    String paramType = WrapperUtils.getClassNameFromParamInfoConsideringArrays(nparam,wscontext);
+                    String paramType = CUtils.getClassNameFromParamInfoConsideringArrays(nparam,wscontext);
                     
                     if (nparam.getType().isAttachment())
                     {
@@ -254,7 +253,7 @@ public class ServiceWriter extends CPPClassWriter
                             writer.write(",");
                         }
                         
-                        String typeName = WrapperUtils.getClassNameFromParamInfoConsideringArrays(
+                        String typeName = CUtils.getClassNameFromParamInfoConsideringArrays(
                                         	nparam, wscontext);
                         
                         writer.write(" AXIS_OUT_PARAM "

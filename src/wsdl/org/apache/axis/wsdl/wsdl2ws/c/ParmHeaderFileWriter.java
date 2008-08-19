@@ -116,7 +116,7 @@ public class ParmHeaderFileWriter extends ParamWriter
             if (!CUtils.isSimpleType(baseType))
                 return;
             
-            String baseTypeName = CUtils.getclass4qname(baseType);
+            String baseTypeName = CUtils.getBasicTypeForQName(baseType);
             String langTypeName;
             
             // User defined simple type based on another user-defined simple type

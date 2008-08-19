@@ -144,7 +144,7 @@ public class ParameterInfo
         attribNameAsMember = CUtils.sanitizeString(attribName);
         methodName = attribNameAsMember;
         
-        if (typeMap != null && CUtils.classExists(typeMap, attribNameAsMember))
+        if (typeMap != null && typeMap.doesTypeExist(attribNameAsMember))
             attribNameAsMember += "_Ref";
         attribNameAsMember = CUtils.resolveWSDL2LanguageNameClashes(attribNameAsMember);        
     }

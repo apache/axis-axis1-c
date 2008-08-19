@@ -124,7 +124,7 @@ public class ParmHeaderFileWriter extends ParamWriter
                 boolean isPointerType = false;
                 
                 if (type.isSimpleType())
-                    isPointerType = CUtils.isPointerType(CUtils.getclass4qname(type.getBaseType())); 
+                    isPointerType = CUtils.isPointerType(CUtils.getBasicTypeForQName(type.getBaseType())); 
                 else
                     isPointerType = CUtils.isPointerType(getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]));
 
@@ -167,7 +167,7 @@ public class ParmHeaderFileWriter extends ParamWriter
             if (!CUtils.isSimpleType(baseType))
                 return;   
             
-            String baseTypeName = CUtils.getclass4qname(baseType);
+            String baseTypeName = CUtils.getBasicTypeForQName(baseType);
             String langTypeName;
             
             // User defined simple type based on another user-defined simple type
@@ -405,7 +405,7 @@ public class ParmHeaderFileWriter extends ParamWriter
                 Type type = attribs[i].getType();
                 boolean isPointerType;                
                 if (type.isSimpleType())
-                    isPointerType = CUtils.isPointerType(CUtils.getclass4qname(type.getBaseType())); 
+                    isPointerType = CUtils.isPointerType(CUtils.getBasicTypeForQName(type.getBaseType())); 
                 else
                     isPointerType = CUtils.isPointerType(paramType);
                 

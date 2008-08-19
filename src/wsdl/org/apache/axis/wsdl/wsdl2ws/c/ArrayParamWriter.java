@@ -34,7 +34,6 @@ import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.ParamWriter;
 import org.apache.axis.wsdl.wsdl2ws.WSDL2Ws;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
-import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
@@ -73,7 +72,7 @@ public class ArrayParamWriter extends ParamWriter
             writer.write("#include \"" + classname + ".h\"\n");
             
             // include header file for the contained type
-            QName qname = WrapperUtils.getArrayType(type).getName();
+            QName qname = CUtils.getArrayType(type).getName();
             if (!CUtils.isSimpleType(qname))
                 writer.write("#include \"" + attribs[0].getTypeName() + CUtils.C_HEADER_SUFFIX + "\"\n");
             this.writer.write("\n");

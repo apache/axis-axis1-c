@@ -78,7 +78,7 @@ import org.w3c.dom.Node;
  * @author hemapani@opensource.lk
  * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
  * @author hawkeye (hawkinsj@uk.ibm.com)
- * @author amra (amra@us.ibm.com)
+ * @author nadir amra (amra@us.ibm.com)
  */
 public class WSDL2Ws
 {
@@ -172,10 +172,11 @@ public class WSDL2Ws
                 c_targetoutputLocation = "." + File.separator;
             c_targetoutputLocation = (new File(c_targetoutputLocation)).getCanonicalPath();
             
-            // language c or c++
+            // language c or c++ - CUtils.setLanguage MUST be invoked at the very beginning!
             c_language = cmdLineArgs.getOptionBykey("l");
             if (c_language == null)
                 c_language = "c++";
+            CUtils.setLanguage(c_language);
             
             // generate artifacts for server, client or both?
             c_targetEngine = cmdLineArgs.getOptionBykey("s");
@@ -234,14 +235,12 @@ public class WSDL2Ws
      * @throws WrapperFault
      */
     public void generateWrappers() throws Exception
-    {
-        CUtils.setLanguage(c_language);
-        
+    {        
         // ==================================================
         // Generate types, populating the type map
         // ==================================================            
         
-        c_typeMap = new TypeMap(c_language);
+        c_typeMap = new TypeMap();
         
         Iterator it = c_symbolTable.getTypeIndex().values().iterator();
         while (it.hasNext())
@@ -296,7 +295,7 @@ public class WSDL2Ws
                             c_wsdlInfo.getTargetNameSpaceOfWSDL());
         
         // Service info
-        String serviceName = WrapperUtils.getClassNameFromFullyQualifiedName(portType.getQName().getLocalPart());
+        String serviceName = CUtils.getClassNameFromFullyQualifiedName(portType.getQName().getLocalPart());
         ArrayList serviceMethods = processServiceMethods(portType, bindingEntry);
         ServiceInfo serviceInfo = new ServiceInfo(serviceName, serviceMethods, WSDLInfo.getTargetEndPointURI(port));
         
@@ -873,7 +872,7 @@ public class WSDL2Ws
                 return typedata;
             }            
             
-            typedata = new Type(newqn, newqn.getLocalPart(), c_language);
+            typedata = new Type(newqn, newqn.getLocalPart());
             
             if (type.getRefType().getRefType() != null)
                 typedata.setElementType(type.getRefType().getRefType().getQName().getLocalPart());
@@ -892,7 +891,7 @@ public class WSDL2Ws
                 return typedata;
             }
             
-            typedata = new Type(type.getQName(), type.getQName().getLocalPart(), c_language);
+            typedata = new Type(type.getQName(), type.getQName().getLocalPart());
         }
         
         // Add type to type map
@@ -923,7 +922,7 @@ public class WSDL2Ws
                             + type.getQName().getLocalPart() + "=====\n");
             }
             else
-                CUtils.setRestrictionBaseAndValues(typedata, node, c_symbolTable);
+                c_wsdlInfo.setRestrictionBaseAndValues(typedata, node);
             
             // There can be attributes in this extended basic type
             Vector attributes = CSchemaUtils.getContainedAttributeTypes(type.getNode(), c_symbolTable);
@@ -1031,8 +1030,7 @@ public class WSDL2Ws
                             
                             if (elem.getAnyElement())
                             {
-                                newSecondaryType =  new Type(CUtils.anyTypeQname,
-                                                             CUtils.anyTypeQname.getLocalPart(), c_language);
+                                newSecondaryType =  new Type(CUtils.anyTypeQname, CUtils.anyTypeQname.getLocalPart());
                             }
                             else
                             {
@@ -1426,7 +1424,7 @@ public class WSDL2Ws
         String minfo_nm = minfo.getMethodname();
         String type_nm  = type.getLanguageSpecificName();
         
-        String newName = WrapperUtils.capitalizeFirstCharacter(type_nm);
+        String newName = CUtils.capitalizeFirstCharacter(type_nm);
 
         if (!minfo_nm.equals(newName))
             return newName;
