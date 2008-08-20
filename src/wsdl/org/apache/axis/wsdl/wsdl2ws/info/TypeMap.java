@@ -57,7 +57,7 @@ public class TypeMap
      */
     public Type getType(QName name)
     {
-        if (CUtils.isPrimitiveBasicType(name))
+        if (CUtils.isPrimitiveType(name))
             return new Type(name, null);
 
         return (Type) this.typeInfo.get(name);

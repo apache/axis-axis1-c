@@ -69,30 +69,30 @@ public class CUtils
     };
     
     // Maps simple types to a QName.
-    public static Hashtable c_basicTypeToQNameMapper = new Hashtable();
+    public static Hashtable c_simpleTypeToQNameMapper = new Hashtable();
     
-    // Returns the initialization value string for a basic type.
-    public static Hashtable c_initValueForBasicType = new Hashtable();
+    // Returns the initialization value string for a simple type.
+    public static Hashtable c_initValueForSimpleType = new Hashtable();
     
-    // Maps a QName to a basic type (c++).
-    private static Hashtable c_qname2classmapCpp = new Hashtable();
+    // Maps a QName to a simple type (c++).
+    private static Hashtable c_qnameToSimpleTypeMapperCPP = new Hashtable();
     
-    //  Maps a QName to a basic type (c).
-    private static Hashtable c_qname2classmapC = new Hashtable();
+    // Maps a QName to a simple type (c).
+    private static Hashtable c_qnameToSimpleTypeMapperC = new Hashtable();
     
-    // The actual QName to basic type mapper (depends on what language is set to).
-    public static Hashtable c_qnameToBasicTypeMapper = c_qname2classmapCpp;
+    // Maps QName to simple type - uses one of the above maps depending on language.
+    public static Hashtable c_qnameToSimpleTypeMapper = c_qnameToSimpleTypeMapperCPP;
     
     // Schema-defined simple types (can probably eliminate - i.e. not needed?)
     private static Hashtable c_schemaDefinedSimpleTypesMap = new Hashtable();
     
-    // Maps axis basic type to method suffix
-    public static Hashtable c_basicTypeToMethodSuffixMapper = new Hashtable();
+    // Maps axis simple type to method suffix
+    public static Hashtable c_simpleTypeToMethodSuffixMapper = new Hashtable();
     
-    // Maps user-defined basic types to axis enumerator
-    public static Hashtable c_basicTypeToEnumMapper = new Hashtable();
+    // Maps user-defined simple types to axis enumerator
+    public static Hashtable c_simpleTypeToEnumMapper = new Hashtable();
     
-    // Used to find out whether a basic type is a pointer type.
+    // Used to find out whether a simple type is a pointer type.
     public static HashSet c_pointerBasedTypes = null;
     
     // Language
@@ -109,537 +109,537 @@ public class CUtils
     private static HashSet c_cppkeywords = null;
     
     static{              
-        c_basicTypeToQNameMapper.put("xsd__duration",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "duration"));
-        c_basicTypeToQNameMapper.put("xsd__dateTime",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"));
-        c_basicTypeToQNameMapper.put("xsd__time",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "time"));
-        c_basicTypeToQNameMapper.put("xsd__date",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "date"));
-        c_basicTypeToQNameMapper.put("xsd__gYearMonth",            new QName(WrapperConstants.SCHEMA_NAMESPACE, "gYearMonth"));
-        c_basicTypeToQNameMapper.put("xsd__gYear",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "gYear"));
-        c_basicTypeToQNameMapper.put("xsd__gMonthDay",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "gMonthDay"));
-        c_basicTypeToQNameMapper.put("xsd__gDay",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "gDay"));
-        c_basicTypeToQNameMapper.put("xsd__gMonth",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "gMonth"));
-        c_basicTypeToQNameMapper.put("xsd__string",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "string"));
-        c_basicTypeToQNameMapper.put("xsd__normalizedString",         new QName(WrapperConstants.SCHEMA_NAMESPACE, "normalizedString"));
-        c_basicTypeToQNameMapper.put("xsd__token",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "token"));
-        c_basicTypeToQNameMapper.put("xsd__language",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "language"));
-        c_basicTypeToQNameMapper.put("xsd__Name",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "Name"));
-        c_basicTypeToQNameMapper.put("xsd__NCName",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "NCName"));
-        c_basicTypeToQNameMapper.put("xsd__ID",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "ID"));
-        c_basicTypeToQNameMapper.put("xsd__IDREF",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "IDREF"));
-        c_basicTypeToQNameMapper.put("xsd__IDREFS",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "IDREFS"));
-        c_basicTypeToQNameMapper.put("xsd__ENTITY",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "ENTITY"));
-        c_basicTypeToQNameMapper.put("xsd__ENTITIES",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "ENTITIES"));
-        c_basicTypeToQNameMapper.put("xsd__NMTOKEN",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "NMTOKEN"));
-        c_basicTypeToQNameMapper.put("xsd__NMTOKENS",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "NMTOKENS"));
-        c_basicTypeToQNameMapper.put("xsd__boolean",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "boolean"));
-        c_basicTypeToQNameMapper.put("xsd__base64Binary",            new QName(WrapperConstants.SCHEMA_NAMESPACE, "base64Binary"));
-        c_basicTypeToQNameMapper.put("xsd__hexBinary",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "hexBinary"));
-        c_basicTypeToQNameMapper.put("xsd__float",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "float"));
-        c_basicTypeToQNameMapper.put("xsd__decimal",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"));
-        c_basicTypeToQNameMapper.put("xsd__integer",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "integer"));
-        c_basicTypeToQNameMapper.put("xsd__nonPositiveInteger",    new QName(WrapperConstants.SCHEMA_NAMESPACE, "nonPositiveInteger"));
-        c_basicTypeToQNameMapper.put("xsd__negativeInteger",        new QName(WrapperConstants.SCHEMA_NAMESPACE, "negativeInteger"));
-        c_basicTypeToQNameMapper.put("xsd__long",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "long"));
-        c_basicTypeToQNameMapper.put("xsd__int",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "int"));
-        c_basicTypeToQNameMapper.put("xsd__short",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "short"));
-        c_basicTypeToQNameMapper.put("xsd__byte",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "byte"));
-        c_basicTypeToQNameMapper.put("xsd__nonNegativeInteger",    new QName(WrapperConstants.SCHEMA_NAMESPACE, "nonNegativeInteger"));
-        c_basicTypeToQNameMapper.put("xsd__unsignedLong",            new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedLong"));
-        c_basicTypeToQNameMapper.put("xsd__unsignedInt",            new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedInt"));
-        c_basicTypeToQNameMapper.put("xsd__unsignedShort",            new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedShort"));
-        c_basicTypeToQNameMapper.put("xsd__unsignedByte",            new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedByte"));
-        c_basicTypeToQNameMapper.put("xsd__positiveInteger",        new QName(WrapperConstants.SCHEMA_NAMESPACE, "positiveInteger"));
-        c_basicTypeToQNameMapper.put("xsd__double",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "double"));
-        c_basicTypeToQNameMapper.put("xsd__anyURI",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "anyURI"));
-        c_basicTypeToQNameMapper.put("xsd__QName",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "QName"));
-        c_basicTypeToQNameMapper.put("xsd__NOTATION",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "NOTATION"));
+        c_simpleTypeToQNameMapper.put("xsd__duration",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "duration"));
+        c_simpleTypeToQNameMapper.put("xsd__dateTime",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"));
+        c_simpleTypeToQNameMapper.put("xsd__time",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "time"));
+        c_simpleTypeToQNameMapper.put("xsd__date",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "date"));
+        c_simpleTypeToQNameMapper.put("xsd__gYearMonth",            new QName(WrapperConstants.SCHEMA_NAMESPACE, "gYearMonth"));
+        c_simpleTypeToQNameMapper.put("xsd__gYear",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "gYear"));
+        c_simpleTypeToQNameMapper.put("xsd__gMonthDay",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "gMonthDay"));
+        c_simpleTypeToQNameMapper.put("xsd__gDay",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "gDay"));
+        c_simpleTypeToQNameMapper.put("xsd__gMonth",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "gMonth"));
+        c_simpleTypeToQNameMapper.put("xsd__string",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "string"));
+        c_simpleTypeToQNameMapper.put("xsd__normalizedString",         new QName(WrapperConstants.SCHEMA_NAMESPACE, "normalizedString"));
+        c_simpleTypeToQNameMapper.put("xsd__token",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "token"));
+        c_simpleTypeToQNameMapper.put("xsd__language",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "language"));
+        c_simpleTypeToQNameMapper.put("xsd__Name",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "Name"));
+        c_simpleTypeToQNameMapper.put("xsd__NCName",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "NCName"));
+        c_simpleTypeToQNameMapper.put("xsd__ID",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "ID"));
+        c_simpleTypeToQNameMapper.put("xsd__IDREF",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "IDREF"));
+        c_simpleTypeToQNameMapper.put("xsd__IDREFS",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "IDREFS"));
+        c_simpleTypeToQNameMapper.put("xsd__ENTITY",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "ENTITY"));
+        c_simpleTypeToQNameMapper.put("xsd__ENTITIES",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "ENTITIES"));
+        c_simpleTypeToQNameMapper.put("xsd__NMTOKEN",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "NMTOKEN"));
+        c_simpleTypeToQNameMapper.put("xsd__NMTOKENS",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "NMTOKENS"));
+        c_simpleTypeToQNameMapper.put("xsd__boolean",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "boolean"));
+        c_simpleTypeToQNameMapper.put("xsd__base64Binary",            new QName(WrapperConstants.SCHEMA_NAMESPACE, "base64Binary"));
+        c_simpleTypeToQNameMapper.put("xsd__hexBinary",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "hexBinary"));
+        c_simpleTypeToQNameMapper.put("xsd__float",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "float"));
+        c_simpleTypeToQNameMapper.put("xsd__decimal",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"));
+        c_simpleTypeToQNameMapper.put("xsd__integer",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "integer"));
+        c_simpleTypeToQNameMapper.put("xsd__nonPositiveInteger",    new QName(WrapperConstants.SCHEMA_NAMESPACE, "nonPositiveInteger"));
+        c_simpleTypeToQNameMapper.put("xsd__negativeInteger",        new QName(WrapperConstants.SCHEMA_NAMESPACE, "negativeInteger"));
+        c_simpleTypeToQNameMapper.put("xsd__long",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "long"));
+        c_simpleTypeToQNameMapper.put("xsd__int",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "int"));
+        c_simpleTypeToQNameMapper.put("xsd__short",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "short"));
+        c_simpleTypeToQNameMapper.put("xsd__byte",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "byte"));
+        c_simpleTypeToQNameMapper.put("xsd__nonNegativeInteger",    new QName(WrapperConstants.SCHEMA_NAMESPACE, "nonNegativeInteger"));
+        c_simpleTypeToQNameMapper.put("xsd__unsignedLong",            new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedLong"));
+        c_simpleTypeToQNameMapper.put("xsd__unsignedInt",            new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedInt"));
+        c_simpleTypeToQNameMapper.put("xsd__unsignedShort",            new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedShort"));
+        c_simpleTypeToQNameMapper.put("xsd__unsignedByte",            new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedByte"));
+        c_simpleTypeToQNameMapper.put("xsd__positiveInteger",        new QName(WrapperConstants.SCHEMA_NAMESPACE, "positiveInteger"));
+        c_simpleTypeToQNameMapper.put("xsd__double",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "double"));
+        c_simpleTypeToQNameMapper.put("xsd__anyURI",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "anyURI"));
+        c_simpleTypeToQNameMapper.put("xsd__QName",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "QName"));
+        c_simpleTypeToQNameMapper.put("xsd__NOTATION",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "NOTATION"));
 
-        c_basicTypeToQNameMapper.put("xsdc__duration",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "duration"));
-        c_basicTypeToQNameMapper.put("xsdc__dateTime",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"));
-        c_basicTypeToQNameMapper.put("xsdc__time",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "time"));
-        c_basicTypeToQNameMapper.put("xsdc__date",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "date"));
-        c_basicTypeToQNameMapper.put("xsdc__gYearMonth",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "gYearMonth"));
-        c_basicTypeToQNameMapper.put("xsdc__gYear",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "gYear"));
-        c_basicTypeToQNameMapper.put("xsdc__gMonthDay",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "gMonthDay"));
-        c_basicTypeToQNameMapper.put("xsdc__gDay",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "gDay"));
-        c_basicTypeToQNameMapper.put("xsdc__gMonth",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "gMonth"));
-        c_basicTypeToQNameMapper.put("xsdc__string",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "string"));
-        c_basicTypeToQNameMapper.put("xsdc__normalizedString",         new QName(WrapperConstants.SCHEMA_NAMESPACE, "normalizedString"));
-        c_basicTypeToQNameMapper.put("xsdc__token",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "token"));
-        c_basicTypeToQNameMapper.put("xsdc__language",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "language"));
-        c_basicTypeToQNameMapper.put("xsdc__Name",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "Name"));
-        c_basicTypeToQNameMapper.put("xsdc__NCName",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "NCName"));
-        c_basicTypeToQNameMapper.put("xsdc__ID",                        new QName(WrapperConstants.SCHEMA_NAMESPACE, "ID"));
-        c_basicTypeToQNameMapper.put("xsdc__IDREF",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "IDREF"));
-        c_basicTypeToQNameMapper.put("xsdc__IDREFS",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "IDREFS"));
-        c_basicTypeToQNameMapper.put("xsdc__ENTITY",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "ENTITY"));
-        c_basicTypeToQNameMapper.put("xsdc__ENTITIES",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "ENTITIES"));
-        c_basicTypeToQNameMapper.put("xsdc__NMTOKEN",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "NMTOKEN"));
-        c_basicTypeToQNameMapper.put("xsdc__NMTOKENS",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "NMTOKENS"));
-        c_basicTypeToQNameMapper.put("xsdc__boolean",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "boolean"));
-        c_basicTypeToQNameMapper.put("xsdc__base64Binary",            new QName(WrapperConstants.SCHEMA_NAMESPACE, "base64Binary"));
-        c_basicTypeToQNameMapper.put("xsdc__hexBinary",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "hexBinary"));
-        c_basicTypeToQNameMapper.put("xsdc__float",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "float"));
-        c_basicTypeToQNameMapper.put("xsdc__decimal",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"));
-        c_basicTypeToQNameMapper.put("xsdc__integer",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "integer"));
-        c_basicTypeToQNameMapper.put("xsdc__nonPositiveInteger",    new QName(WrapperConstants.SCHEMA_NAMESPACE, "nonPositiveInteger"));
-        c_basicTypeToQNameMapper.put("xsdc__negativeInteger",        new QName(WrapperConstants.SCHEMA_NAMESPACE, "negativeInteger"));
-        c_basicTypeToQNameMapper.put("xsdc__long",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "long"));
-        c_basicTypeToQNameMapper.put("xsdc__int",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "int"));
-        c_basicTypeToQNameMapper.put("xsdc__short",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "short"));
-        c_basicTypeToQNameMapper.put("xsdc__byte",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "byte"));
-        c_basicTypeToQNameMapper.put("xsdc__nonNegativeInteger",        new QName(WrapperConstants.SCHEMA_NAMESPACE, "nonNegativeInteger"));
-        c_basicTypeToQNameMapper.put("xsdc__unsignedLong",            new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedLong"));
-        c_basicTypeToQNameMapper.put("xsdc__unsignedInt",            new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedInt"));
-        c_basicTypeToQNameMapper.put("xsdc__unsignedShort",            new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedShort"));
-        c_basicTypeToQNameMapper.put("xsdc__unsignedByte",            new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedByte"));
-        c_basicTypeToQNameMapper.put("xsdc__positiveInteger",        new QName(WrapperConstants.SCHEMA_NAMESPACE, "positiveInteger"));
-        c_basicTypeToQNameMapper.put("xsdc__double",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "double"));
-        c_basicTypeToQNameMapper.put("xsdc__anyURI",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "anyURI"));
-        c_basicTypeToQNameMapper.put("xsdc__QName",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "QName"));
-        c_basicTypeToQNameMapper.put("xsdc__NOTATION",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "NOTATION"));
+        c_simpleTypeToQNameMapper.put("xsdc__duration",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "duration"));
+        c_simpleTypeToQNameMapper.put("xsdc__dateTime",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"));
+        c_simpleTypeToQNameMapper.put("xsdc__time",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "time"));
+        c_simpleTypeToQNameMapper.put("xsdc__date",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "date"));
+        c_simpleTypeToQNameMapper.put("xsdc__gYearMonth",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "gYearMonth"));
+        c_simpleTypeToQNameMapper.put("xsdc__gYear",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "gYear"));
+        c_simpleTypeToQNameMapper.put("xsdc__gMonthDay",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "gMonthDay"));
+        c_simpleTypeToQNameMapper.put("xsdc__gDay",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "gDay"));
+        c_simpleTypeToQNameMapper.put("xsdc__gMonth",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "gMonth"));
+        c_simpleTypeToQNameMapper.put("xsdc__string",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "string"));
+        c_simpleTypeToQNameMapper.put("xsdc__normalizedString",         new QName(WrapperConstants.SCHEMA_NAMESPACE, "normalizedString"));
+        c_simpleTypeToQNameMapper.put("xsdc__token",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "token"));
+        c_simpleTypeToQNameMapper.put("xsdc__language",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "language"));
+        c_simpleTypeToQNameMapper.put("xsdc__Name",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "Name"));
+        c_simpleTypeToQNameMapper.put("xsdc__NCName",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "NCName"));
+        c_simpleTypeToQNameMapper.put("xsdc__ID",                        new QName(WrapperConstants.SCHEMA_NAMESPACE, "ID"));
+        c_simpleTypeToQNameMapper.put("xsdc__IDREF",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "IDREF"));
+        c_simpleTypeToQNameMapper.put("xsdc__IDREFS",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "IDREFS"));
+        c_simpleTypeToQNameMapper.put("xsdc__ENTITY",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "ENTITY"));
+        c_simpleTypeToQNameMapper.put("xsdc__ENTITIES",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "ENTITIES"));
+        c_simpleTypeToQNameMapper.put("xsdc__NMTOKEN",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "NMTOKEN"));
+        c_simpleTypeToQNameMapper.put("xsdc__NMTOKENS",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "NMTOKENS"));
+        c_simpleTypeToQNameMapper.put("xsdc__boolean",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "boolean"));
+        c_simpleTypeToQNameMapper.put("xsdc__base64Binary",            new QName(WrapperConstants.SCHEMA_NAMESPACE, "base64Binary"));
+        c_simpleTypeToQNameMapper.put("xsdc__hexBinary",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "hexBinary"));
+        c_simpleTypeToQNameMapper.put("xsdc__float",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "float"));
+        c_simpleTypeToQNameMapper.put("xsdc__decimal",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"));
+        c_simpleTypeToQNameMapper.put("xsdc__integer",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "integer"));
+        c_simpleTypeToQNameMapper.put("xsdc__nonPositiveInteger",    new QName(WrapperConstants.SCHEMA_NAMESPACE, "nonPositiveInteger"));
+        c_simpleTypeToQNameMapper.put("xsdc__negativeInteger",        new QName(WrapperConstants.SCHEMA_NAMESPACE, "negativeInteger"));
+        c_simpleTypeToQNameMapper.put("xsdc__long",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "long"));
+        c_simpleTypeToQNameMapper.put("xsdc__int",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "int"));
+        c_simpleTypeToQNameMapper.put("xsdc__short",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "short"));
+        c_simpleTypeToQNameMapper.put("xsdc__byte",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "byte"));
+        c_simpleTypeToQNameMapper.put("xsdc__nonNegativeInteger",        new QName(WrapperConstants.SCHEMA_NAMESPACE, "nonNegativeInteger"));
+        c_simpleTypeToQNameMapper.put("xsdc__unsignedLong",            new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedLong"));
+        c_simpleTypeToQNameMapper.put("xsdc__unsignedInt",            new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedInt"));
+        c_simpleTypeToQNameMapper.put("xsdc__unsignedShort",            new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedShort"));
+        c_simpleTypeToQNameMapper.put("xsdc__unsignedByte",            new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedByte"));
+        c_simpleTypeToQNameMapper.put("xsdc__positiveInteger",        new QName(WrapperConstants.SCHEMA_NAMESPACE, "positiveInteger"));
+        c_simpleTypeToQNameMapper.put("xsdc__double",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "double"));
+        c_simpleTypeToQNameMapper.put("xsdc__anyURI",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "anyURI"));
+        c_simpleTypeToQNameMapper.put("xsdc__QName",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "QName"));
+        c_simpleTypeToQNameMapper.put("xsdc__NOTATION",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "NOTATION"));
         
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "duration"),                "xsd__duration");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"),                "xsd__dateTime");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "time"),                    "xsd__time");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "date"),                    "xsd__date");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "gYearMonth"),            "xsd__gYearMonth");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "gYear"),                "xsd__gYear");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "gMonthDay"),            "xsd__gMonthDay");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "gDay"),                    "xsd__gDay");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "gMonth"),                "xsd__gMonth");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "string"),                "xsd__string");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "normalizedString"),        "xsd__normalizedString");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "token"),                "xsd__token");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "language"),                "xsd__language");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "Name"),                    "xsd__Name");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "NCName"),                "xsd__NCName");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "ID"),                    "xsd__ID");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "IDREF"),                "xsd__IDREF");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "IDREFS"),                "xsd__IDREFS");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "ENTITY"),                "xsd__ENTITY");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "ENTITIES"),                "xsd__ENTITIES");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "NMTOKEN"),                "xsd__NMTOKEN");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "NMTOKENS"),                "xsd__NMTOKENS");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "boolean"),                "xsd__boolean");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "base64Binary"),            "xsd__base64Binary");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "hexBinary"),            "xsd__hexBinary");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "float"),                "xsd__float");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"),                "xsd__decimal");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "integer"),                "xsd__integer");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "nonPositiveInteger"),    "xsd__nonPositiveInteger");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "negativeInteger"),        "xsd__negativeInteger");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "long"),                    "xsd__long");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "int"),                    "xsd__int");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "short"),                "xsd__short");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "byte"),                    "xsd__byte");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "nonNegativeInteger"),    "xsd__nonNegativeInteger");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedLong"),            "xsd__unsignedLong");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedInt"),            "xsd__unsignedInt");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedShort"),        "xsd__unsignedShort");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedByte"),            "xsd__unsignedByte");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "positiveInteger"),        "xsd__positiveInteger");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "double"),                "xsd__double");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "QName"),                "xsd__QName");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "anyURI"),                "xsd__anyURI");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "NOTATION"),                "xsd__NOTATION");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "duration"),                "xsd__duration");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"),                "xsd__dateTime");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "time"),                    "xsd__time");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "date"),                    "xsd__date");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "gYearMonth"),            "xsd__gYearMonth");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "gYear"),                "xsd__gYear");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "gMonthDay"),            "xsd__gMonthDay");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "gDay"),                    "xsd__gDay");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "gMonth"),                "xsd__gMonth");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "string"),                "xsd__string");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "normalizedString"),        "xsd__normalizedString");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "token"),                "xsd__token");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "language"),                "xsd__language");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "Name"),                    "xsd__Name");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "NCName"),                "xsd__NCName");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "ID"),                    "xsd__ID");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "IDREF"),                "xsd__IDREF");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "IDREFS"),                "xsd__IDREFS");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "ENTITY"),                "xsd__ENTITY");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "ENTITIES"),                "xsd__ENTITIES");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "NMTOKEN"),                "xsd__NMTOKEN");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "NMTOKENS"),                "xsd__NMTOKENS");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "boolean"),                "xsd__boolean");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "base64Binary"),            "xsd__base64Binary");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "hexBinary"),            "xsd__hexBinary");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "float"),                "xsd__float");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"),                "xsd__decimal");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "integer"),                "xsd__integer");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "nonPositiveInteger"),    "xsd__nonPositiveInteger");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "negativeInteger"),        "xsd__negativeInteger");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "long"),                    "xsd__long");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "int"),                    "xsd__int");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "short"),                "xsd__short");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "byte"),                    "xsd__byte");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "nonNegativeInteger"),    "xsd__nonNegativeInteger");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedLong"),            "xsd__unsignedLong");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedInt"),            "xsd__unsignedInt");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedShort"),        "xsd__unsignedShort");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedByte"),            "xsd__unsignedByte");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "positiveInteger"),        "xsd__positiveInteger");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "double"),                "xsd__double");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "QName"),                "xsd__QName");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "anyURI"),                "xsd__anyURI");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "NOTATION"),                "xsd__NOTATION");
         
         // TODO revisit attachment support.
-        c_qname2classmapCpp.put(new QName(WrapperConstants.APACHE_XMLSOAP_NAMESPACE, "Image"),       "ISoapAttachment");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.APACHE_XMLSOAP_NAMESPACE, "PlainText"),  "ISoapAttachment");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.APACHE_XMLSOAP_NAMESPACE, "Multipart"),  "ISoapAttachment");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.APACHE_XMLSOAP_NAMESPACE, "Source"),     "ISoapAttachment");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.APACHE_XMLSOAP_NAMESPACE, "octet-stream"),   "ISoapAttachment");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.APACHE_XMLSOAP_NAMESPACE, "DataHandler"),    "ISoapAttachment");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.APACHE_XMLSOAP_NAMESPACE, "Image"),       "ISoapAttachment");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.APACHE_XMLSOAP_NAMESPACE, "PlainText"),  "ISoapAttachment");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.APACHE_XMLSOAP_NAMESPACE, "Multipart"),  "ISoapAttachment");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.APACHE_XMLSOAP_NAMESPACE, "Source"),     "ISoapAttachment");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.APACHE_XMLSOAP_NAMESPACE, "octet-stream"),   "ISoapAttachment");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.APACHE_XMLSOAP_NAMESPACE, "DataHandler"),    "ISoapAttachment");
 
 
         
-        c_qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "duration"),            "xsdc__duration");
-        c_qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"),            "xsdc__dateTime");
-        c_qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "time"),                "xsdc__time");
-        c_qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "date"),                "xsdc__date");
-        c_qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "gYearMonth"),            "xsdc__gYearMonth");
-        c_qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "gYear"),                "xsdc__gYear");
-        c_qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "gMonthDay"),            "xsdc__gMonthDay");
-        c_qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "gDay"),                "xsdc__gDay");
-        c_qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "gMonth"),                "xsdc__gMonth");
-        c_qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "string"),                "xsdc__string");
-        c_qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "normalizedString"),    "xsdc__normalizedString");
-        c_qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "token"),                "xsdc__token");
-        c_qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "language"),            "xsdc__language");
-        c_qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "Name"),                "xsdc__Name");
-        c_qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "NCName"),                "xsdc__NCName");
-        c_qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "ID"),                    "xsdc__ID");
-        c_qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "IDREF"),                "xsdc__IDREF");
-        c_qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "IDREFS"),                "xsdc__IDREFS");
-        c_qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "ENTITY"),                "xsdc__ENTITY");
-        c_qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "ENTITIES"),            "xsdc__ENTITIES");
-        c_qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "NMTOKEN"),            "xsdc__NMTOKEN");
-        c_qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "NMTOKENS"),            "xsdc__NMTOKENS");
-        c_qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "boolean"),            "xsdc__boolean");
-        c_qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "base64Binary"),        "xsdc__base64Binary");
-        c_qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "hexBinary"),            "xsdc__hexBinary");
-        c_qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "float"),                "xsdc__float");
-        c_qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"),            "xsdc__decimal");
-        c_qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "integer"),            "xsdc__integer");
-        c_qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "nonPositiveInteger"),    "xsdc__nonPositiveInteger");
-        c_qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "negativeInteger"),    "xsdc__negativeInteger");
-        c_qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "long"),                "xsdc__long");
-        c_qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "int"),                "xsdc__int");
-        c_qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "short"),                "xsdc__short");
-        c_qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "byte"),                "xsdc__byte");
-        c_qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "nonNegativeInteger"),    "xsdc__nonNegativeInteger");
-        c_qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedLong"),        "xsdc__unsignedLong");
-        c_qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedInt"),        "xsdc__unsignedInt");
-        c_qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedShort"),        "xsdc__unsignedShort");
-        c_qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedByte"),        "xsdc__unsignedByte");
-        c_qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "positiveInteger"),    "xsdc__positiveInteger");
-        c_qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "double"),                "xsdc__double");
-        c_qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "QName"),                "xsdc__QName");
-        c_qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "anyURI"),                "xsdc__anyURI");
-        c_qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "NOTATION"),            "xsdc__NOTATION");
-        
-        /* TODO:
-         *   Should be removed when the following issue will be fixed :
-         *     -> http://marc.theaimsgroup.com/?t=107907748000002&r=1&w=2 
-         */
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "int"),            "xsd__int");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "byte"),            "xsd__byte");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "float"),            "xsd__float");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "long"),            "xsd__long");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "integer"),        "xsd__integer");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "double"),            "xsd__double");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "char"),            "xsd__char");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "short"),            "xsd__short");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "string"),            "xsd__string");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "dateTime"),        "xsd__dateTime");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "date"),            "xsd__date");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "time"),            "xsd__time");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "duration"),        "xsd__duration");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "base64Binary"),    "xsd__base64Binary");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "hexBinary"),        "xsd__hexBinary");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "decimal"),        "xsd__decimal");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "boolean"),        "xsd__boolean");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "anyURI"),            "xsd__anyURI");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedByte"),    "xsd__unsignedByte");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedInt"),    "xsd__unsignedInt");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedLong"),    "xsd__unsignedLong");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedShort"),    "xsd__unsignedShort");
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "QName"),            "xsd__QName");        
-//        c_qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "NCName"),            "xsd__NCName");                
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "NMTOKEN"),       "xsd__NMTOKEN");
-        
-        /* TODO:
-         *  Another strange issue from Axis 1.1 runtime when base64binary is in input/output operations.
-         */    
-        c_qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "base64"), "xsd__base64Binary");        
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "duration"),            "xsdc__duration");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"),            "xsdc__dateTime");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "time"),                "xsdc__time");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "date"),                "xsdc__date");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "gYearMonth"),            "xsdc__gYearMonth");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "gYear"),                "xsdc__gYear");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "gMonthDay"),            "xsdc__gMonthDay");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "gDay"),                "xsdc__gDay");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "gMonth"),                "xsdc__gMonth");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "string"),                "xsdc__string");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "normalizedString"),    "xsdc__normalizedString");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "token"),                "xsdc__token");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "language"),            "xsdc__language");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "Name"),                "xsdc__Name");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "NCName"),                "xsdc__NCName");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "ID"),                    "xsdc__ID");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "IDREF"),                "xsdc__IDREF");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "IDREFS"),                "xsdc__IDREFS");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "ENTITY"),                "xsdc__ENTITY");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "ENTITIES"),            "xsdc__ENTITIES");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "NMTOKEN"),            "xsdc__NMTOKEN");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "NMTOKENS"),            "xsdc__NMTOKENS");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "boolean"),            "xsdc__boolean");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "base64Binary"),        "xsdc__base64Binary");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "hexBinary"),            "xsdc__hexBinary");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "float"),                "xsdc__float");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"),            "xsdc__decimal");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "integer"),            "xsdc__integer");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "nonPositiveInteger"),    "xsdc__nonPositiveInteger");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "negativeInteger"),    "xsdc__negativeInteger");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "long"),                "xsdc__long");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "int"),                "xsdc__int");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "short"),                "xsdc__short");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "byte"),                "xsdc__byte");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "nonNegativeInteger"),    "xsdc__nonNegativeInteger");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedLong"),        "xsdc__unsignedLong");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedInt"),        "xsdc__unsignedInt");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedShort"),        "xsdc__unsignedShort");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedByte"),        "xsdc__unsignedByte");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "positiveInteger"),    "xsdc__positiveInteger");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "double"),                "xsdc__double");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "QName"),                "xsdc__QName");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "anyURI"),                "xsdc__anyURI");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "NOTATION"),            "xsdc__NOTATION");
         
         /* TODO:
          *   Should be removed when the following issue will be fixed :
          *     -> http://marc.theaimsgroup.com/?t=107907748000002&r=1&w=2 
          */
-        c_qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "int"),            "xsdc__int");
-        c_qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "byte"),            "xsdc__byte");
-        c_qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "float"),            "xsdc__float");
-        c_qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "long"),            "xsdc__long");
-        c_qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "integer"),        "xsdc__integer");
-        c_qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "double"),            "xsdc__double");
-        c_qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "char"),            "xsdc__char");
-        c_qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "short"),            "xsdc__short");
-        c_qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "string"),            "xsdc__string");
-        c_qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "dateTime"),        "xsdc__dateTime");
-        c_qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "date"),            "xsdc__date");
-        c_qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "time"),            "xsdc__time");
-        c_qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "duration"),        "xsdc__duration");
-        c_qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "base64Binary"),    "xsdc__base64Binary");
-        c_qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "hexBinary"),        "xsdc__hexBinary");
-        c_qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "decimal"),        "xsdc__decimal");
-        c_qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "boolean"),        "xsdc__boolean");
-        c_qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "anyURI"),            "xsdc__anyURI");
-        c_qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedByte"),    "xsdc__unsignedByte");
-        c_qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedInt"),    "xsdc__unsignedInt");
-        c_qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedLong"),    "xsdc__unsignedLong");
-        c_qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedShort"),    "xsdc__unsignedShort");
-        c_qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "QName"),            "xsdc__QName");        
-//        qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "NCName"),            "xsdc__NCName");        
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "int"),            "xsd__int");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "byte"),            "xsd__byte");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "float"),            "xsd__float");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "long"),            "xsd__long");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "integer"),        "xsd__integer");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "double"),            "xsd__double");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "char"),            "xsd__char");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "short"),            "xsd__short");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "string"),            "xsd__string");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "dateTime"),        "xsd__dateTime");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "date"),            "xsd__date");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "time"),            "xsd__time");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "duration"),        "xsd__duration");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "base64Binary"),    "xsd__base64Binary");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "hexBinary"),        "xsd__hexBinary");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "decimal"),        "xsd__decimal");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "boolean"),        "xsd__boolean");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "anyURI"),            "xsd__anyURI");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedByte"),    "xsd__unsignedByte");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedInt"),    "xsd__unsignedInt");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedLong"),    "xsd__unsignedLong");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedShort"),    "xsd__unsignedShort");
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "QName"),            "xsd__QName");        
+//        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "NCName"),            "xsd__NCName");                
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "NMTOKEN"),       "xsd__NMTOKEN");
+        
+        /* TODO:
+         *  Another strange issue from Axis 1.1 runtime when base64binary is in input/output operations.
+         */    
+        c_qnameToSimpleTypeMapperCPP.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "base64"), "xsd__base64Binary");        
+        
+        /* TODO:
+         *   Should be removed when the following issue will be fixed :
+         *     -> http://marc.theaimsgroup.com/?t=107907748000002&r=1&w=2 
+         */
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "int"),            "xsdc__int");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "byte"),            "xsdc__byte");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "float"),            "xsdc__float");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "long"),            "xsdc__long");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "integer"),        "xsdc__integer");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "double"),            "xsdc__double");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "char"),            "xsdc__char");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "short"),            "xsdc__short");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "string"),            "xsdc__string");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "dateTime"),        "xsdc__dateTime");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "date"),            "xsdc__date");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "time"),            "xsdc__time");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "duration"),        "xsdc__duration");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "base64Binary"),    "xsdc__base64Binary");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "hexBinary"),        "xsdc__hexBinary");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "decimal"),        "xsdc__decimal");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "boolean"),        "xsdc__boolean");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "anyURI"),            "xsdc__anyURI");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedByte"),    "xsdc__unsignedByte");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedInt"),    "xsdc__unsignedInt");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedLong"),    "xsdc__unsignedLong");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedShort"),    "xsdc__unsignedShort");
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "QName"),            "xsdc__QName");        
+//        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "NCName"),            "xsdc__NCName");        
 
 
         /* TODO:
          *  Another strange issue from Axis 1.1 runtime when base64binary is in input/output operations.
          */    
-        c_qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "base64"), "xsdc__base64Binary");        
+        c_qnameToSimpleTypeMapperC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "base64"), "xsdc__base64Binary");        
         
-        c_basicTypeToMethodSuffixMapper.put("xsd__duration",                "Duration");
-        c_basicTypeToMethodSuffixMapper.put("xsd__dateTime",                "DateTime");
-        c_basicTypeToMethodSuffixMapper.put("xsd__time",                    "Time");
-        c_basicTypeToMethodSuffixMapper.put("xsd__date",                    "Date");
-        c_basicTypeToMethodSuffixMapper.put("xsd__gYearMonth",            "GYearMonth");
-        c_basicTypeToMethodSuffixMapper.put("xsd__gYear",                "GYear");
-        c_basicTypeToMethodSuffixMapper.put("xsd__gMonthDay",            "GMonthDay");
-        c_basicTypeToMethodSuffixMapper.put("xsd__gDay",                    "GDay");
-        c_basicTypeToMethodSuffixMapper.put("xsd__gMonth",                "GMonth");
-        c_basicTypeToMethodSuffixMapper.put("xsd__string",                "String");
-        c_basicTypeToMethodSuffixMapper.put("xsd__normalizedString",        "NormalizedString");
-        c_basicTypeToMethodSuffixMapper.put("xsd__token",                "Token");
-        c_basicTypeToMethodSuffixMapper.put("xsd__language",                "Language");
-        c_basicTypeToMethodSuffixMapper.put("xsd__Name",                    "Name");
-        c_basicTypeToMethodSuffixMapper.put("xsd__NCName",                "NCName");
-        c_basicTypeToMethodSuffixMapper.put("xsd__ID",                    "ID");
-        c_basicTypeToMethodSuffixMapper.put("xsd__IDREF",                "IDREF");
-        c_basicTypeToMethodSuffixMapper.put("xsd__IDREFS",                "IDREFS");
-        c_basicTypeToMethodSuffixMapper.put("xsd__ENTITY",                "ENTITY");
-        c_basicTypeToMethodSuffixMapper.put("xsd__ENTITIES",                "ENTITIES");
-        c_basicTypeToMethodSuffixMapper.put("xsd__NMTOKEN",                "NMTOKEN");
-        c_basicTypeToMethodSuffixMapper.put("xsd__NMTOKENS",                "NMTOKENS");
-        c_basicTypeToMethodSuffixMapper.put("xsd__boolean",                "Boolean");
-        c_basicTypeToMethodSuffixMapper.put("xsd__base64Binary",            "Base64Binary");
-        c_basicTypeToMethodSuffixMapper.put("xsd__hexBinary",            "HexBinary");
-        c_basicTypeToMethodSuffixMapper.put("xsd__float",                "Float");
-        c_basicTypeToMethodSuffixMapper.put("xsd__decimal",                "Decimal");
-        c_basicTypeToMethodSuffixMapper.put("xsd__integer",                "Integer");
-        c_basicTypeToMethodSuffixMapper.put("xsd__nonPositiveInteger",     "NonPositiveInteger");
-        c_basicTypeToMethodSuffixMapper.put("xsd__negativeInteger",        "NegativeInteger");
-        c_basicTypeToMethodSuffixMapper.put("xsd__long",                    "Long");
-        c_basicTypeToMethodSuffixMapper.put("xsd__int",                    "Int");
-        c_basicTypeToMethodSuffixMapper.put("xsd__short",                "Short");
-        c_basicTypeToMethodSuffixMapper.put("xsd__byte",                    "Byte");
-        c_basicTypeToMethodSuffixMapper.put("xsd__nonNegativeInteger",    "NonNegativeInteger");
-        c_basicTypeToMethodSuffixMapper.put("xsd__unsignedLong",            "UnsignedLong");
-        c_basicTypeToMethodSuffixMapper.put("xsd__unsignedInt",            "UnsignedInt");
-        c_basicTypeToMethodSuffixMapper.put("xsd__unsignedShort",        "UnsignedShort");
-        c_basicTypeToMethodSuffixMapper.put("xsd__unsignedByte",            "UnsignedByte");
-        c_basicTypeToMethodSuffixMapper.put("xsd__positiveInteger",        "PositiveInteger");
-        c_basicTypeToMethodSuffixMapper.put("xsd__double",                "Double");
-        c_basicTypeToMethodSuffixMapper.put("xsd__anyURI",                "AnyURI");
-        c_basicTypeToMethodSuffixMapper.put("xsd__QName",                "QName");
-        c_basicTypeToMethodSuffixMapper.put("xsd__NOTATION",                "NOTATION");
+        c_simpleTypeToMethodSuffixMapper.put("xsd__duration",                "Duration");
+        c_simpleTypeToMethodSuffixMapper.put("xsd__dateTime",                "DateTime");
+        c_simpleTypeToMethodSuffixMapper.put("xsd__time",                    "Time");
+        c_simpleTypeToMethodSuffixMapper.put("xsd__date",                    "Date");
+        c_simpleTypeToMethodSuffixMapper.put("xsd__gYearMonth",            "GYearMonth");
+        c_simpleTypeToMethodSuffixMapper.put("xsd__gYear",                "GYear");
+        c_simpleTypeToMethodSuffixMapper.put("xsd__gMonthDay",            "GMonthDay");
+        c_simpleTypeToMethodSuffixMapper.put("xsd__gDay",                    "GDay");
+        c_simpleTypeToMethodSuffixMapper.put("xsd__gMonth",                "GMonth");
+        c_simpleTypeToMethodSuffixMapper.put("xsd__string",                "String");
+        c_simpleTypeToMethodSuffixMapper.put("xsd__normalizedString",        "NormalizedString");
+        c_simpleTypeToMethodSuffixMapper.put("xsd__token",                "Token");
+        c_simpleTypeToMethodSuffixMapper.put("xsd__language",                "Language");
+        c_simpleTypeToMethodSuffixMapper.put("xsd__Name",                    "Name");
+        c_simpleTypeToMethodSuffixMapper.put("xsd__NCName",                "NCName");
+        c_simpleTypeToMethodSuffixMapper.put("xsd__ID",                    "ID");
+        c_simpleTypeToMethodSuffixMapper.put("xsd__IDREF",                "IDREF");
+        c_simpleTypeToMethodSuffixMapper.put("xsd__IDREFS",                "IDREFS");
+        c_simpleTypeToMethodSuffixMapper.put("xsd__ENTITY",                "ENTITY");
+        c_simpleTypeToMethodSuffixMapper.put("xsd__ENTITIES",                "ENTITIES");
+        c_simpleTypeToMethodSuffixMapper.put("xsd__NMTOKEN",                "NMTOKEN");
+        c_simpleTypeToMethodSuffixMapper.put("xsd__NMTOKENS",                "NMTOKENS");
+        c_simpleTypeToMethodSuffixMapper.put("xsd__boolean",                "Boolean");
+        c_simpleTypeToMethodSuffixMapper.put("xsd__base64Binary",            "Base64Binary");
+        c_simpleTypeToMethodSuffixMapper.put("xsd__hexBinary",            "HexBinary");
+        c_simpleTypeToMethodSuffixMapper.put("xsd__float",                "Float");
+        c_simpleTypeToMethodSuffixMapper.put("xsd__decimal",                "Decimal");
+        c_simpleTypeToMethodSuffixMapper.put("xsd__integer",                "Integer");
+        c_simpleTypeToMethodSuffixMapper.put("xsd__nonPositiveInteger",     "NonPositiveInteger");
+        c_simpleTypeToMethodSuffixMapper.put("xsd__negativeInteger",        "NegativeInteger");
+        c_simpleTypeToMethodSuffixMapper.put("xsd__long",                    "Long");
+        c_simpleTypeToMethodSuffixMapper.put("xsd__int",                    "Int");
+        c_simpleTypeToMethodSuffixMapper.put("xsd__short",                "Short");
+        c_simpleTypeToMethodSuffixMapper.put("xsd__byte",                    "Byte");
+        c_simpleTypeToMethodSuffixMapper.put("xsd__nonNegativeInteger",    "NonNegativeInteger");
+        c_simpleTypeToMethodSuffixMapper.put("xsd__unsignedLong",            "UnsignedLong");
+        c_simpleTypeToMethodSuffixMapper.put("xsd__unsignedInt",            "UnsignedInt");
+        c_simpleTypeToMethodSuffixMapper.put("xsd__unsignedShort",        "UnsignedShort");
+        c_simpleTypeToMethodSuffixMapper.put("xsd__unsignedByte",            "UnsignedByte");
+        c_simpleTypeToMethodSuffixMapper.put("xsd__positiveInteger",        "PositiveInteger");
+        c_simpleTypeToMethodSuffixMapper.put("xsd__double",                "Double");
+        c_simpleTypeToMethodSuffixMapper.put("xsd__anyURI",                "AnyURI");
+        c_simpleTypeToMethodSuffixMapper.put("xsd__QName",                "QName");
+        c_simpleTypeToMethodSuffixMapper.put("xsd__NOTATION",                "NOTATION");
         
-        c_basicTypeToMethodSuffixMapper.put("xsdc__duration",                "Duration");
-        c_basicTypeToMethodSuffixMapper.put("xsdc__dateTime",                "DateTime");
-        c_basicTypeToMethodSuffixMapper.put("xsdc__time",                    "Time");
-        c_basicTypeToMethodSuffixMapper.put("xsdc__date",                    "Date");
-        c_basicTypeToMethodSuffixMapper.put("xsdc__gYearMonth",            "GYearMonth");
-        c_basicTypeToMethodSuffixMapper.put("xsdc__gYear",                    "GYear");
-        c_basicTypeToMethodSuffixMapper.put("xsdc__gMonthDay",                "GMonthDay");
-        c_basicTypeToMethodSuffixMapper.put("xsdc__gDay",                    "GDay");
-        c_basicTypeToMethodSuffixMapper.put("xsdc__gMonth",                "GMonth");
-        c_basicTypeToMethodSuffixMapper.put("xsdc__string",                "String");
-        c_basicTypeToMethodSuffixMapper.put("xsdc__normalizedString",        "NormalizedString");
-        c_basicTypeToMethodSuffixMapper.put("xsdc__token",                    "Token");
-        c_basicTypeToMethodSuffixMapper.put("xsdc__language",                "Language");
-        c_basicTypeToMethodSuffixMapper.put("xsdc__Name",                    "Name");
-        c_basicTypeToMethodSuffixMapper.put("xsdc__NCName",                "NCName");
-        c_basicTypeToMethodSuffixMapper.put("xsdc__ID",                    "ID");
-        c_basicTypeToMethodSuffixMapper.put("xsdc__IDREF",                    "IDREF");
-        c_basicTypeToMethodSuffixMapper.put("xsdc__IDREFS",                "IDREFS");
-        c_basicTypeToMethodSuffixMapper.put("xsdc__ENTITY",                "ENTITY");
-        c_basicTypeToMethodSuffixMapper.put("xsdc__ENTITIES",                "ENTITIES");
-        c_basicTypeToMethodSuffixMapper.put("xsdc__NMTOKEN",                "NMTOKEN");
-        c_basicTypeToMethodSuffixMapper.put("xsdc__NMTOKENS",                "NMTOKENS");
-        c_basicTypeToMethodSuffixMapper.put("xsdc__boolean",                "Boolean");
-        c_basicTypeToMethodSuffixMapper.put("xsdc__base64Binary",            "Base64Binary");
-        c_basicTypeToMethodSuffixMapper.put("xsdc__hexBinary",                "HexBinary");
-        c_basicTypeToMethodSuffixMapper.put("xsdc__float",                    "Float");
-        c_basicTypeToMethodSuffixMapper.put("xsdc__decimal",                "Decimal");
-        c_basicTypeToMethodSuffixMapper.put("xsdc__integer",                "Integer");
-        c_basicTypeToMethodSuffixMapper.put("xsdc__nonPositiveInteger",     "NonPositiveInteger");
-        c_basicTypeToMethodSuffixMapper.put("xsdc__negativeInteger",        "NegativeInteger");
-        c_basicTypeToMethodSuffixMapper.put("xsdc__long",                    "Long");
-        c_basicTypeToMethodSuffixMapper.put("xsdc__int",                    "Int");
-        c_basicTypeToMethodSuffixMapper.put("xsdc__short",                    "Short");
-        c_basicTypeToMethodSuffixMapper.put("xsdc__byte",                    "Byte");
-        c_basicTypeToMethodSuffixMapper.put("xsdc__nonNegativeInteger",    "NonNegativeInteger");
-        c_basicTypeToMethodSuffixMapper.put("xsdc__unsignedLong",            "UnsignedLong");
-        c_basicTypeToMethodSuffixMapper.put("xsdc__unsignedInt",            "UnsignedInt");
-        c_basicTypeToMethodSuffixMapper.put("xsdc__unsignedShort",            "UnsignedShort");
-        c_basicTypeToMethodSuffixMapper.put("xsdc__unsignedByte",            "UnsignedByte");
-        c_basicTypeToMethodSuffixMapper.put("xsdc__positiveInteger",        "PositiveInteger");
-        c_basicTypeToMethodSuffixMapper.put("xsdc__double",                "Double");
-        c_basicTypeToMethodSuffixMapper.put("xsdc__anyURI",                "AnyURI");
-        c_basicTypeToMethodSuffixMapper.put("xsdc__QName",                    "QName");
-        c_basicTypeToMethodSuffixMapper.put("xsdc__NOTATION",                "NOTATION");
+        c_simpleTypeToMethodSuffixMapper.put("xsdc__duration",                "Duration");
+        c_simpleTypeToMethodSuffixMapper.put("xsdc__dateTime",                "DateTime");
+        c_simpleTypeToMethodSuffixMapper.put("xsdc__time",                    "Time");
+        c_simpleTypeToMethodSuffixMapper.put("xsdc__date",                    "Date");
+        c_simpleTypeToMethodSuffixMapper.put("xsdc__gYearMonth",            "GYearMonth");
+        c_simpleTypeToMethodSuffixMapper.put("xsdc__gYear",                    "GYear");
+        c_simpleTypeToMethodSuffixMapper.put("xsdc__gMonthDay",                "GMonthDay");
+        c_simpleTypeToMethodSuffixMapper.put("xsdc__gDay",                    "GDay");
+        c_simpleTypeToMethodSuffixMapper.put("xsdc__gMonth",                "GMonth");
+        c_simpleTypeToMethodSuffixMapper.put("xsdc__string",                "String");
+        c_simpleTypeToMethodSuffixMapper.put("xsdc__normalizedString",        "NormalizedString");
+        c_simpleTypeToMethodSuffixMapper.put("xsdc__token",                    "Token");
+        c_simpleTypeToMethodSuffixMapper.put("xsdc__language",                "Language");
+        c_simpleTypeToMethodSuffixMapper.put("xsdc__Name",                    "Name");
+        c_simpleTypeToMethodSuffixMapper.put("xsdc__NCName",                "NCName");
+        c_simpleTypeToMethodSuffixMapper.put("xsdc__ID",                    "ID");
+        c_simpleTypeToMethodSuffixMapper.put("xsdc__IDREF",                    "IDREF");
+        c_simpleTypeToMethodSuffixMapper.put("xsdc__IDREFS",                "IDREFS");
+        c_simpleTypeToMethodSuffixMapper.put("xsdc__ENTITY",                "ENTITY");
+        c_simpleTypeToMethodSuffixMapper.put("xsdc__ENTITIES",                "ENTITIES");
+        c_simpleTypeToMethodSuffixMapper.put("xsdc__NMTOKEN",                "NMTOKEN");
+        c_simpleTypeToMethodSuffixMapper.put("xsdc__NMTOKENS",                "NMTOKENS");
+        c_simpleTypeToMethodSuffixMapper.put("xsdc__boolean",                "Boolean");
+        c_simpleTypeToMethodSuffixMapper.put("xsdc__base64Binary",            "Base64Binary");
+        c_simpleTypeToMethodSuffixMapper.put("xsdc__hexBinary",                "HexBinary");
+        c_simpleTypeToMethodSuffixMapper.put("xsdc__float",                    "Float");
+        c_simpleTypeToMethodSuffixMapper.put("xsdc__decimal",                "Decimal");
+        c_simpleTypeToMethodSuffixMapper.put("xsdc__integer",                "Integer");
+        c_simpleTypeToMethodSuffixMapper.put("xsdc__nonPositiveInteger",     "NonPositiveInteger");
+        c_simpleTypeToMethodSuffixMapper.put("xsdc__negativeInteger",        "NegativeInteger");
+        c_simpleTypeToMethodSuffixMapper.put("xsdc__long",                    "Long");
+        c_simpleTypeToMethodSuffixMapper.put("xsdc__int",                    "Int");
+        c_simpleTypeToMethodSuffixMapper.put("xsdc__short",                    "Short");
+        c_simpleTypeToMethodSuffixMapper.put("xsdc__byte",                    "Byte");
+        c_simpleTypeToMethodSuffixMapper.put("xsdc__nonNegativeInteger",    "NonNegativeInteger");
+        c_simpleTypeToMethodSuffixMapper.put("xsdc__unsignedLong",            "UnsignedLong");
+        c_simpleTypeToMethodSuffixMapper.put("xsdc__unsignedInt",            "UnsignedInt");
+        c_simpleTypeToMethodSuffixMapper.put("xsdc__unsignedShort",            "UnsignedShort");
+        c_simpleTypeToMethodSuffixMapper.put("xsdc__unsignedByte",            "UnsignedByte");
+        c_simpleTypeToMethodSuffixMapper.put("xsdc__positiveInteger",        "PositiveInteger");
+        c_simpleTypeToMethodSuffixMapper.put("xsdc__double",                "Double");
+        c_simpleTypeToMethodSuffixMapper.put("xsdc__anyURI",                "AnyURI");
+        c_simpleTypeToMethodSuffixMapper.put("xsdc__QName",                    "QName");
+        c_simpleTypeToMethodSuffixMapper.put("xsdc__NOTATION",                "NOTATION");
         
-        c_basicTypeToEnumMapper.put("xsd__duration",            "XSD_DURATION");
-        c_basicTypeToEnumMapper.put("xsd__dateTime",            "XSD_DATETIME");
-        c_basicTypeToEnumMapper.put("xsd__time",                "XSD_TIME");
-        c_basicTypeToEnumMapper.put("xsd__date",                "XSD_DATE");
-        c_basicTypeToEnumMapper.put("xsd__gYearMonth",            "XSD_GYEARMONTH");
-        c_basicTypeToEnumMapper.put("xsd__gYear",                "XSD_GYEAR");
-        c_basicTypeToEnumMapper.put("xsd__gMonthDay",            "XSD_GMONTHDAY");
-        c_basicTypeToEnumMapper.put("xsd__gDay",                "XSD_GDAY");
-        c_basicTypeToEnumMapper.put("xsd__gMonth",                "XSD_GMONTH");
-        c_basicTypeToEnumMapper.put("xsd__string",                "XSD_STRING");
-        c_basicTypeToEnumMapper.put("xsd__normalizedString",    "XSD_NORMALIZEDSTRING");
-        c_basicTypeToEnumMapper.put("xsd__token",                "XSD_TOKEN");
-        c_basicTypeToEnumMapper.put("xsd__language",            "XSD_LANGUAGE");
-        c_basicTypeToEnumMapper.put("xsd__Name",                "XSD_NAME");
-        c_basicTypeToEnumMapper.put("xsd__NCName",                "XSD_NCNAME");
-        c_basicTypeToEnumMapper.put("xsd__ID",                    "XSD_ID");
-        c_basicTypeToEnumMapper.put("xsd__IDREF",                "XSD_IDREF");
-        c_basicTypeToEnumMapper.put("xsd__IDREFS",                "XSD_IDREFS");
-        c_basicTypeToEnumMapper.put("xsd__ENTITY",                "XSD_ENTITY");
-        c_basicTypeToEnumMapper.put("xsd__ENTITIES",            "XSD_ENTITIES");
-        c_basicTypeToEnumMapper.put("xsd__NMTOKEN",            "XSD_NMTOKEN");
-        c_basicTypeToEnumMapper.put("xsd__NMTOKENS",            "XSD_NMTOKENS");
-        c_basicTypeToEnumMapper.put("xsd__boolean",            "XSD_BOOLEAN");
-        c_basicTypeToEnumMapper.put("xsd__base64Binary",        "XSD_BASE64BINARY");
-        c_basicTypeToEnumMapper.put("xsd__hexBinary",            "XSD_HEXBINARY");
-        c_basicTypeToEnumMapper.put("xsd__float",                "XSD_FLOAT");
-        c_basicTypeToEnumMapper.put("xsd__decimal",            "XSD_DECIMAL");
-        c_basicTypeToEnumMapper.put("xsd__integer",            "XSD_INTEGER");
-        c_basicTypeToEnumMapper.put("xsd__nonPositiveInteger",    "XSD_NONPOSITIVEINTEGER");
-        c_basicTypeToEnumMapper.put("xsd__negativeInteger",    "XSD_NEGATIVEINTEGER");
-        c_basicTypeToEnumMapper.put("xsd__long",                "XSD_LONG");
-        c_basicTypeToEnumMapper.put("xsd__int",                "XSD_INT");
-        c_basicTypeToEnumMapper.put("xsd__short",                "XSD_SHORT");
-        c_basicTypeToEnumMapper.put("xsd__byte",                "XSD_BYTE");
-        c_basicTypeToEnumMapper.put("xsd__nonNegativeInteger",    "XSD_NONNEGATIVEINTEGER");
-        c_basicTypeToEnumMapper.put("xsd__unsignedLong",        "XSD_UNSIGNEDLONG");
-        c_basicTypeToEnumMapper.put("xsd__unsignedInt",        "XSD_UNSIGNEDINT");
-        c_basicTypeToEnumMapper.put("xsd__unsignedShort",        "XSD_UNSIGNEDSHORT");
-        c_basicTypeToEnumMapper.put("xsd__unsignedByte",        "XSD_UNSIGNEDBYTE");
-        c_basicTypeToEnumMapper.put("xsd__positiveInteger",        "XSD_POSITIVEINTEGER");
-        c_basicTypeToEnumMapper.put("xsd__double",                "XSD_DOUBLE");
-        c_basicTypeToEnumMapper.put("xsd__anyURI",                "XSD_ANYURI");
-        c_basicTypeToEnumMapper.put("xsd__QName",                "XSD_QNAME");
-        c_basicTypeToEnumMapper.put("xsd__NOTATION",            "XSD_NOTATION");
+        c_simpleTypeToEnumMapper.put("xsd__duration",            "XSD_DURATION");
+        c_simpleTypeToEnumMapper.put("xsd__dateTime",            "XSD_DATETIME");
+        c_simpleTypeToEnumMapper.put("xsd__time",                "XSD_TIME");
+        c_simpleTypeToEnumMapper.put("xsd__date",                "XSD_DATE");
+        c_simpleTypeToEnumMapper.put("xsd__gYearMonth",            "XSD_GYEARMONTH");
+        c_simpleTypeToEnumMapper.put("xsd__gYear",                "XSD_GYEAR");
+        c_simpleTypeToEnumMapper.put("xsd__gMonthDay",            "XSD_GMONTHDAY");
+        c_simpleTypeToEnumMapper.put("xsd__gDay",                "XSD_GDAY");
+        c_simpleTypeToEnumMapper.put("xsd__gMonth",                "XSD_GMONTH");
+        c_simpleTypeToEnumMapper.put("xsd__string",                "XSD_STRING");
+        c_simpleTypeToEnumMapper.put("xsd__normalizedString",    "XSD_NORMALIZEDSTRING");
+        c_simpleTypeToEnumMapper.put("xsd__token",                "XSD_TOKEN");
+        c_simpleTypeToEnumMapper.put("xsd__language",            "XSD_LANGUAGE");
+        c_simpleTypeToEnumMapper.put("xsd__Name",                "XSD_NAME");
+        c_simpleTypeToEnumMapper.put("xsd__NCName",                "XSD_NCNAME");
+        c_simpleTypeToEnumMapper.put("xsd__ID",                    "XSD_ID");
+        c_simpleTypeToEnumMapper.put("xsd__IDREF",                "XSD_IDREF");
+        c_simpleTypeToEnumMapper.put("xsd__IDREFS",                "XSD_IDREFS");
+        c_simpleTypeToEnumMapper.put("xsd__ENTITY",                "XSD_ENTITY");
+        c_simpleTypeToEnumMapper.put("xsd__ENTITIES",            "XSD_ENTITIES");
+        c_simpleTypeToEnumMapper.put("xsd__NMTOKEN",            "XSD_NMTOKEN");
+        c_simpleTypeToEnumMapper.put("xsd__NMTOKENS",            "XSD_NMTOKENS");
+        c_simpleTypeToEnumMapper.put("xsd__boolean",            "XSD_BOOLEAN");
+        c_simpleTypeToEnumMapper.put("xsd__base64Binary",        "XSD_BASE64BINARY");
+        c_simpleTypeToEnumMapper.put("xsd__hexBinary",            "XSD_HEXBINARY");
+        c_simpleTypeToEnumMapper.put("xsd__float",                "XSD_FLOAT");
+        c_simpleTypeToEnumMapper.put("xsd__decimal",            "XSD_DECIMAL");
+        c_simpleTypeToEnumMapper.put("xsd__integer",            "XSD_INTEGER");
+        c_simpleTypeToEnumMapper.put("xsd__nonPositiveInteger",    "XSD_NONPOSITIVEINTEGER");
+        c_simpleTypeToEnumMapper.put("xsd__negativeInteger",    "XSD_NEGATIVEINTEGER");
+        c_simpleTypeToEnumMapper.put("xsd__long",                "XSD_LONG");
+        c_simpleTypeToEnumMapper.put("xsd__int",                "XSD_INT");
+        c_simpleTypeToEnumMapper.put("xsd__short",                "XSD_SHORT");
+        c_simpleTypeToEnumMapper.put("xsd__byte",                "XSD_BYTE");
+        c_simpleTypeToEnumMapper.put("xsd__nonNegativeInteger",    "XSD_NONNEGATIVEINTEGER");
+        c_simpleTypeToEnumMapper.put("xsd__unsignedLong",        "XSD_UNSIGNEDLONG");
+        c_simpleTypeToEnumMapper.put("xsd__unsignedInt",        "XSD_UNSIGNEDINT");
+        c_simpleTypeToEnumMapper.put("xsd__unsignedShort",        "XSD_UNSIGNEDSHORT");
+        c_simpleTypeToEnumMapper.put("xsd__unsignedByte",        "XSD_UNSIGNEDBYTE");
+        c_simpleTypeToEnumMapper.put("xsd__positiveInteger",        "XSD_POSITIVEINTEGER");
+        c_simpleTypeToEnumMapper.put("xsd__double",                "XSD_DOUBLE");
+        c_simpleTypeToEnumMapper.put("xsd__anyURI",                "XSD_ANYURI");
+        c_simpleTypeToEnumMapper.put("xsd__QName",                "XSD_QNAME");
+        c_simpleTypeToEnumMapper.put("xsd__NOTATION",            "XSD_NOTATION");
 
-        c_basicTypeToEnumMapper.put("xsdc__duration",            "XSDC_DURATION");
-        c_basicTypeToEnumMapper.put("xsdc__dateTime",            "XSDC_DATETIME");
-        c_basicTypeToEnumMapper.put("xsdc__time",                "XSDC_TIME");
-        c_basicTypeToEnumMapper.put("xsdc__date",                "XSDC_DATE");
-        c_basicTypeToEnumMapper.put("xsdc__gYearMonth",            "XSDC_GYEARMONTH");
-        c_basicTypeToEnumMapper.put("xsdc__gYear",                "XSDC_GYEAR");
-        c_basicTypeToEnumMapper.put("xsdc__gMonthDay",            "XSDC_GMONTHDAY");
-        c_basicTypeToEnumMapper.put("xsdc__gDay",                "XSDC_GDAY");
-        c_basicTypeToEnumMapper.put("xsdc__gMonth",                "XSDC_GMONTH");
-        c_basicTypeToEnumMapper.put("xsdc__string",                "XSDC_STRING");
-        c_basicTypeToEnumMapper.put("xsdc__normalizedString",    "XSDC_NORMALIZEDSTRING");
-        c_basicTypeToEnumMapper.put("xsdc__token",                "XSDC_TOKEN");
-        c_basicTypeToEnumMapper.put("xsdc__language",            "XSDC_LANGUAGE");
-        c_basicTypeToEnumMapper.put("xsdc__Name",                "XSDC_NAME");
-        c_basicTypeToEnumMapper.put("xsdc__NCName",                "XSDC_NCNAME");
-        c_basicTypeToEnumMapper.put("xsdc__ID",                    "XSDC_ID");
-        c_basicTypeToEnumMapper.put("xsdc__IDREF",                "XSDC_IDREF");
-        c_basicTypeToEnumMapper.put("xsdc__IDREFS",                "XSDC_IDREFS");
-        c_basicTypeToEnumMapper.put("xsdc__ENTITY",                "XSDC_ENTITY");
-        c_basicTypeToEnumMapper.put("xsdc__ENTITIES",            "XSDC_ENTITIES");
-        c_basicTypeToEnumMapper.put("xsdc__NMTOKEN",                "XSDC_NMTOKEN");
-        c_basicTypeToEnumMapper.put("xsdc__NMTOKENS",            "XSDC_NMTOKENS");
-        c_basicTypeToEnumMapper.put("xsdc__boolean",                "XSDC_BOOLEAN");
-        c_basicTypeToEnumMapper.put("xsdc__base64Binary",        "XSDC_BASE64BINARY");
-        c_basicTypeToEnumMapper.put("xsdc__hexBinary",            "XSDC_HEXBINARY");
-        c_basicTypeToEnumMapper.put("xsdc__float",                "XSDC_FLOAT");
-        c_basicTypeToEnumMapper.put("xsdc__decimal",                "XSDC_DECIMAL");
-        c_basicTypeToEnumMapper.put("xsdc__integer",                "XSDC_INTEGER");
-        c_basicTypeToEnumMapper.put("xsdc__nonPositiveInteger",    "XSDC_NONPOSITIVEINTEGER");
-        c_basicTypeToEnumMapper.put("xsdc__negativeInteger",        "XSDC_NEGATIVEINTEGER");
-        c_basicTypeToEnumMapper.put("xsdc__long",                "XSDC_LONG");
-        c_basicTypeToEnumMapper.put("xsdc__int",                    "XSDC_INT");
-        c_basicTypeToEnumMapper.put("xsdc__short",                "XSDC_SHORT");
-        c_basicTypeToEnumMapper.put("xsdc__byte",                "XSDC_BYTE");
-        c_basicTypeToEnumMapper.put("xsdc__nonNegativeInteger",    "XSDC_NONNEGATIVEINTEGER");
-        c_basicTypeToEnumMapper.put("xsdc__unsignedLong",        "XSDC_UNSIGNEDLONG");
-        c_basicTypeToEnumMapper.put("xsdc__unsignedInt",            "XSDC_UNSIGNEDINT");
-        c_basicTypeToEnumMapper.put("xsdc__unsignedShort",        "XSDC_UNSIGNEDSHORT");
-        c_basicTypeToEnumMapper.put("xsdc__unsignedByte",        "XSDC_UNSIGNEDBYTE");
-        c_basicTypeToEnumMapper.put("xsdc__positiveInteger",        "XSDC_POSITIVEINTEGER");
-        c_basicTypeToEnumMapper.put("xsdc__double",                "XSDC_DOUBLE");
-        c_basicTypeToEnumMapper.put("xsdc__anyURI",                "XSDC_ANYURI");
-        c_basicTypeToEnumMapper.put("xsdc__QName",                "XSDC_QNAME");
-        c_basicTypeToEnumMapper.put("xsdc__NOTATION",            "XSDC_NOTATION");
+        c_simpleTypeToEnumMapper.put("xsdc__duration",            "XSDC_DURATION");
+        c_simpleTypeToEnumMapper.put("xsdc__dateTime",            "XSDC_DATETIME");
+        c_simpleTypeToEnumMapper.put("xsdc__time",                "XSDC_TIME");
+        c_simpleTypeToEnumMapper.put("xsdc__date",                "XSDC_DATE");
+        c_simpleTypeToEnumMapper.put("xsdc__gYearMonth",            "XSDC_GYEARMONTH");
+        c_simpleTypeToEnumMapper.put("xsdc__gYear",                "XSDC_GYEAR");
+        c_simpleTypeToEnumMapper.put("xsdc__gMonthDay",            "XSDC_GMONTHDAY");
+        c_simpleTypeToEnumMapper.put("xsdc__gDay",                "XSDC_GDAY");
+        c_simpleTypeToEnumMapper.put("xsdc__gMonth",                "XSDC_GMONTH");
+        c_simpleTypeToEnumMapper.put("xsdc__string",                "XSDC_STRING");
+        c_simpleTypeToEnumMapper.put("xsdc__normalizedString",    "XSDC_NORMALIZEDSTRING");
+        c_simpleTypeToEnumMapper.put("xsdc__token",                "XSDC_TOKEN");
+        c_simpleTypeToEnumMapper.put("xsdc__language",            "XSDC_LANGUAGE");
+        c_simpleTypeToEnumMapper.put("xsdc__Name",                "XSDC_NAME");
+        c_simpleTypeToEnumMapper.put("xsdc__NCName",                "XSDC_NCNAME");
+        c_simpleTypeToEnumMapper.put("xsdc__ID",                    "XSDC_ID");
+        c_simpleTypeToEnumMapper.put("xsdc__IDREF",                "XSDC_IDREF");
+        c_simpleTypeToEnumMapper.put("xsdc__IDREFS",                "XSDC_IDREFS");
+        c_simpleTypeToEnumMapper.put("xsdc__ENTITY",                "XSDC_ENTITY");
+        c_simpleTypeToEnumMapper.put("xsdc__ENTITIES",            "XSDC_ENTITIES");
+        c_simpleTypeToEnumMapper.put("xsdc__NMTOKEN",                "XSDC_NMTOKEN");
+        c_simpleTypeToEnumMapper.put("xsdc__NMTOKENS",            "XSDC_NMTOKENS");
+        c_simpleTypeToEnumMapper.put("xsdc__boolean",                "XSDC_BOOLEAN");
+        c_simpleTypeToEnumMapper.put("xsdc__base64Binary",        "XSDC_BASE64BINARY");
+        c_simpleTypeToEnumMapper.put("xsdc__hexBinary",            "XSDC_HEXBINARY");
+        c_simpleTypeToEnumMapper.put("xsdc__float",                "XSDC_FLOAT");
+        c_simpleTypeToEnumMapper.put("xsdc__decimal",                "XSDC_DECIMAL");
+        c_simpleTypeToEnumMapper.put("xsdc__integer",                "XSDC_INTEGER");
+        c_simpleTypeToEnumMapper.put("xsdc__nonPositiveInteger",    "XSDC_NONPOSITIVEINTEGER");
+        c_simpleTypeToEnumMapper.put("xsdc__negativeInteger",        "XSDC_NEGATIVEINTEGER");
+        c_simpleTypeToEnumMapper.put("xsdc__long",                "XSDC_LONG");
+        c_simpleTypeToEnumMapper.put("xsdc__int",                    "XSDC_INT");
+        c_simpleTypeToEnumMapper.put("xsdc__short",                "XSDC_SHORT");
+        c_simpleTypeToEnumMapper.put("xsdc__byte",                "XSDC_BYTE");
+        c_simpleTypeToEnumMapper.put("xsdc__nonNegativeInteger",    "XSDC_NONNEGATIVEINTEGER");
+        c_simpleTypeToEnumMapper.put("xsdc__unsignedLong",        "XSDC_UNSIGNEDLONG");
+        c_simpleTypeToEnumMapper.put("xsdc__unsignedInt",            "XSDC_UNSIGNEDINT");
+        c_simpleTypeToEnumMapper.put("xsdc__unsignedShort",        "XSDC_UNSIGNEDSHORT");
+        c_simpleTypeToEnumMapper.put("xsdc__unsignedByte",        "XSDC_UNSIGNEDBYTE");
+        c_simpleTypeToEnumMapper.put("xsdc__positiveInteger",        "XSDC_POSITIVEINTEGER");
+        c_simpleTypeToEnumMapper.put("xsdc__double",                "XSDC_DOUBLE");
+        c_simpleTypeToEnumMapper.put("xsdc__anyURI",                "XSDC_ANYURI");
+        c_simpleTypeToEnumMapper.put("xsdc__QName",                "XSDC_QNAME");
+        c_simpleTypeToEnumMapper.put("xsdc__NOTATION",            "XSDC_NOTATION");
 
 
-        c_initValueForBasicType.put("xsd__duration",                "0");
-        c_initValueForBasicType.put("xsd__dateTime",                "{0, 0, 0, 0, 0, 0, 0, 0, 0}");
-        c_initValueForBasicType.put("xsd__time",                    "{0, 0, 0, 0, 0, 0, 0, 0, 0}");
-        c_initValueForBasicType.put("xsd__date",                    "{0, 0, 0, 0, 0, 0, 0, 0, 0}");
-        c_initValueForBasicType.put("xsd__gYearMonth",            "{0, 0, 0, 0, 0, 0, 0, 0, 0}");
-        c_initValueForBasicType.put("xsd__gYear",                    "{0, 0, 0, 0, 0, 0, 0, 0, 0}");
-        c_initValueForBasicType.put("xsd__gMonthDay",                "{0, 0, 0, 0, 0, 0, 0, 0, 0}");
-        c_initValueForBasicType.put("xsd__gDay",                    "{0, 0, 0, 0, 0, 0, 0, 0, 0}");
-        c_initValueForBasicType.put("xsd__gMonth",                "{0, 0, 0, 0, 0, 0, 0, 0, 0}");
-        c_initValueForBasicType.put("xsd__string",                "NULL");
-        c_initValueForBasicType.put("xsd__normalizedString",        "NULL");
-        c_initValueForBasicType.put("xsd__token",                    "NULL");
-        c_initValueForBasicType.put("xsd__language",                "NULL");
-        c_initValueForBasicType.put("xsd__Name",                    "NULL");
-        c_initValueForBasicType.put("xsd__NCName",                "NULL");
-        c_initValueForBasicType.put("xsd__ID",                    "NULL");
-        c_initValueForBasicType.put("xsd__IDREF",                    "NULL");
-        c_initValueForBasicType.put("xsd__IDREFS",                "NULL");
-        c_initValueForBasicType.put("xsd__ENTITY",                "NULL");
-        c_initValueForBasicType.put("xsd__ENTITIES",                "NULL");
-        c_initValueForBasicType.put("xsd__NMTOKEN",                "NULL");
-        c_initValueForBasicType.put("xsd__NMTOKENS",                "NULL");
-        c_initValueForBasicType.put("xsd__boolean",                "false_");
+        c_initValueForSimpleType.put("xsd__duration",                "0");
+        c_initValueForSimpleType.put("xsd__dateTime",                "{0, 0, 0, 0, 0, 0, 0, 0, 0}");
+        c_initValueForSimpleType.put("xsd__time",                    "{0, 0, 0, 0, 0, 0, 0, 0, 0}");
+        c_initValueForSimpleType.put("xsd__date",                    "{0, 0, 0, 0, 0, 0, 0, 0, 0}");
+        c_initValueForSimpleType.put("xsd__gYearMonth",            "{0, 0, 0, 0, 0, 0, 0, 0, 0}");
+        c_initValueForSimpleType.put("xsd__gYear",                    "{0, 0, 0, 0, 0, 0, 0, 0, 0}");
+        c_initValueForSimpleType.put("xsd__gMonthDay",                "{0, 0, 0, 0, 0, 0, 0, 0, 0}");
+        c_initValueForSimpleType.put("xsd__gDay",                    "{0, 0, 0, 0, 0, 0, 0, 0, 0}");
+        c_initValueForSimpleType.put("xsd__gMonth",                "{0, 0, 0, 0, 0, 0, 0, 0, 0}");
+        c_initValueForSimpleType.put("xsd__string",                "NULL");
+        c_initValueForSimpleType.put("xsd__normalizedString",        "NULL");
+        c_initValueForSimpleType.put("xsd__token",                    "NULL");
+        c_initValueForSimpleType.put("xsd__language",                "NULL");
+        c_initValueForSimpleType.put("xsd__Name",                    "NULL");
+        c_initValueForSimpleType.put("xsd__NCName",                "NULL");
+        c_initValueForSimpleType.put("xsd__ID",                    "NULL");
+        c_initValueForSimpleType.put("xsd__IDREF",                    "NULL");
+        c_initValueForSimpleType.put("xsd__IDREFS",                "NULL");
+        c_initValueForSimpleType.put("xsd__ENTITY",                "NULL");
+        c_initValueForSimpleType.put("xsd__ENTITIES",                "NULL");
+        c_initValueForSimpleType.put("xsd__NMTOKEN",                "NULL");
+        c_initValueForSimpleType.put("xsd__NMTOKENS",                "NULL");
+        c_initValueForSimpleType.put("xsd__boolean",                "false_");
 //        initValuesCpp.put("xsd__base64Binary",            ""); // This is a class, so doesn't need to be initialized.
 //        initValuesCpp.put("xsd__hexBinary",                ""); // This is a class, so doesn't need to be initialized.
-        c_initValueForBasicType.put("xsd__float",                    "0.0");
-        c_initValueForBasicType.put("xsd__decimal",                "0.0");
-        c_initValueForBasicType.put("xsd__integer",                "0");
-        c_initValueForBasicType.put("xsd__nonPositiveInteger",    "0");
-        c_initValueForBasicType.put("xsd__negativeInteger",        "0");
-        c_initValueForBasicType.put("xsd__long",                    "0");
-        c_initValueForBasicType.put("xsd__int",                    "0");
-        c_initValueForBasicType.put("xsd__short",                    "0");
-        c_initValueForBasicType.put("xsd__byte",                    "0");
-        c_initValueForBasicType.put("xsd__nonNegativeInteger",    "0");
-        c_initValueForBasicType.put("xsd__unsignedByte",            "0");
-        c_initValueForBasicType.put("xsd__unsignedInt",            "0");
-        c_initValueForBasicType.put("xsd__unsignedLong",            "0");
-        c_initValueForBasicType.put("xsd__unsignedShort",            "0");
-        c_initValueForBasicType.put("xsd__positiveInteger",        "0");
-        c_initValueForBasicType.put("xsd__double",                "0.0");
-        c_initValueForBasicType.put("xsd__anyURI",                "NULL");
-        c_initValueForBasicType.put("xsd__QName",                    "NULL");
-        c_initValueForBasicType.put("xsd__NOTATION",                "NULL");
+        c_initValueForSimpleType.put("xsd__float",                    "0.0");
+        c_initValueForSimpleType.put("xsd__decimal",                "0.0");
+        c_initValueForSimpleType.put("xsd__integer",                "0");
+        c_initValueForSimpleType.put("xsd__nonPositiveInteger",    "0");
+        c_initValueForSimpleType.put("xsd__negativeInteger",        "0");
+        c_initValueForSimpleType.put("xsd__long",                    "0");
+        c_initValueForSimpleType.put("xsd__int",                    "0");
+        c_initValueForSimpleType.put("xsd__short",                    "0");
+        c_initValueForSimpleType.put("xsd__byte",                    "0");
+        c_initValueForSimpleType.put("xsd__nonNegativeInteger",    "0");
+        c_initValueForSimpleType.put("xsd__unsignedByte",            "0");
+        c_initValueForSimpleType.put("xsd__unsignedInt",            "0");
+        c_initValueForSimpleType.put("xsd__unsignedLong",            "0");
+        c_initValueForSimpleType.put("xsd__unsignedShort",            "0");
+        c_initValueForSimpleType.put("xsd__positiveInteger",        "0");
+        c_initValueForSimpleType.put("xsd__double",                "0.0");
+        c_initValueForSimpleType.put("xsd__anyURI",                "NULL");
+        c_initValueForSimpleType.put("xsd__QName",                    "NULL");
+        c_initValueForSimpleType.put("xsd__NOTATION",                "NULL");
  
         
-        c_initValueForBasicType.put("xsdc__duration",                "0");
-        c_initValueForBasicType.put("xsdc__dateTime",                "{0, 0, 0, 0, 0, 0, 0, 0, 0}");
-        c_initValueForBasicType.put("xsdc__time",                    "{0, 0, 0, 0, 0, 0, 0, 0, 0}");
-        c_initValueForBasicType.put("xsdc__date",                    "{0, 0, 0, 0, 0, 0, 0, 0, 0}");
-        c_initValueForBasicType.put("xsdc__gYearMonth",                "{0, 0, 0, 0, 0, 0, 0, 0, 0}");
-        c_initValueForBasicType.put("xsdc__gYear",                    "{0, 0, 0, 0, 0, 0, 0, 0, 0}");
-        c_initValueForBasicType.put("xsdc__gMonthDay",                "{0, 0, 0, 0, 0, 0, 0, 0, 0}");
-        c_initValueForBasicType.put("xsdc__gDay",                    "{0, 0, 0, 0, 0, 0, 0, 0, 0}");
-        c_initValueForBasicType.put("xsdc__gMonth",                    "{0, 0, 0, 0, 0, 0, 0, 0, 0}");
-        c_initValueForBasicType.put("xsdc__string",                    "NULL");
-        c_initValueForBasicType.put("xsdc__normalizedString",        "NULL");
-        c_initValueForBasicType.put("xsdc__token",                    "NULL");
-        c_initValueForBasicType.put("xsdc__language",                "NULL");
-        c_initValueForBasicType.put("xsdc__Name",                    "NULL");
-        c_initValueForBasicType.put("xsdc__NCName",                    "NULL");
-        c_initValueForBasicType.put("xsdc__ID",                        "NULL");
-        c_initValueForBasicType.put("xsdc__IDREF",                    "NULL");
-        c_initValueForBasicType.put("xsdc__IDREFS",                    "NULL");
-        c_initValueForBasicType.put("xsdc__ENTITY",                    "NULL");
-        c_initValueForBasicType.put("xsdc__ENTITIES",                "NULL");
-        c_initValueForBasicType.put("xsdc__NMTOKEN",                "NULL");
-        c_initValueForBasicType.put("xsdc__NMTOKENS",                "NULL");
-        c_initValueForBasicType.put("xsdc__boolean",                "false_");
-        c_initValueForBasicType.put("xsdc__base64Binary",            "{NULL, 0}");
-        c_initValueForBasicType.put("xsdc__hexBinary",                "{NULL, 0}");
-        c_initValueForBasicType.put("xsdc__float",                    "0.0");
-        c_initValueForBasicType.put("xsdc__decimal",                "0.0");
-        c_initValueForBasicType.put("xsdc__integer",                "0");
-        c_initValueForBasicType.put("xsdc__nonPositiveInteger",        "0");
-        c_initValueForBasicType.put("xsdc__negativeInteger",        "0");
-        c_initValueForBasicType.put("xsdc__long",                    "0");
-        c_initValueForBasicType.put("xsdc__int",                    "0");
-        c_initValueForBasicType.put("xsdc__short",                    "0");
-        c_initValueForBasicType.put("xsdc__byte",                    "0");
-        c_initValueForBasicType.put("xsdc__nonNegativeInteger",        "0");
-        c_initValueForBasicType.put("xsdc__unsignedByte",            "0");
-        c_initValueForBasicType.put("xsdc__unsignedInt",            "0");
-        c_initValueForBasicType.put("xsdc__unsignedLong",            "0");
-        c_initValueForBasicType.put("xsdc__unsignedShort",            "0");
-        c_initValueForBasicType.put("xsdc__positiveInteger",        "0");
-        c_initValueForBasicType.put("xsdc__double",                    "0.0");
-        c_initValueForBasicType.put("xsdc__anyURI",                    "NULL");
-        c_initValueForBasicType.put("xsdc__QName",                    "NULL");
-        c_initValueForBasicType.put("xsdc__NOTATION",                "NULL");
+        c_initValueForSimpleType.put("xsdc__duration",                "0");
+        c_initValueForSimpleType.put("xsdc__dateTime",                "{0, 0, 0, 0, 0, 0, 0, 0, 0}");
+        c_initValueForSimpleType.put("xsdc__time",                    "{0, 0, 0, 0, 0, 0, 0, 0, 0}");
+        c_initValueForSimpleType.put("xsdc__date",                    "{0, 0, 0, 0, 0, 0, 0, 0, 0}");
+        c_initValueForSimpleType.put("xsdc__gYearMonth",                "{0, 0, 0, 0, 0, 0, 0, 0, 0}");
+        c_initValueForSimpleType.put("xsdc__gYear",                    "{0, 0, 0, 0, 0, 0, 0, 0, 0}");
+        c_initValueForSimpleType.put("xsdc__gMonthDay",                "{0, 0, 0, 0, 0, 0, 0, 0, 0}");
+        c_initValueForSimpleType.put("xsdc__gDay",                    "{0, 0, 0, 0, 0, 0, 0, 0, 0}");
+        c_initValueForSimpleType.put("xsdc__gMonth",                    "{0, 0, 0, 0, 0, 0, 0, 0, 0}");
+        c_initValueForSimpleType.put("xsdc__string",                    "NULL");
+        c_initValueForSimpleType.put("xsdc__normalizedString",        "NULL");
+        c_initValueForSimpleType.put("xsdc__token",                    "NULL");
+        c_initValueForSimpleType.put("xsdc__language",                "NULL");
+        c_initValueForSimpleType.put("xsdc__Name",                    "NULL");
+        c_initValueForSimpleType.put("xsdc__NCName",                    "NULL");
+        c_initValueForSimpleType.put("xsdc__ID",                        "NULL");
+        c_initValueForSimpleType.put("xsdc__IDREF",                    "NULL");
+        c_initValueForSimpleType.put("xsdc__IDREFS",                    "NULL");
+        c_initValueForSimpleType.put("xsdc__ENTITY",                    "NULL");
+        c_initValueForSimpleType.put("xsdc__ENTITIES",                "NULL");
+        c_initValueForSimpleType.put("xsdc__NMTOKEN",                "NULL");
+        c_initValueForSimpleType.put("xsdc__NMTOKENS",                "NULL");
+        c_initValueForSimpleType.put("xsdc__boolean",                "false_");
+        c_initValueForSimpleType.put("xsdc__base64Binary",            "{NULL, 0}");
+        c_initValueForSimpleType.put("xsdc__hexBinary",                "{NULL, 0}");
+        c_initValueForSimpleType.put("xsdc__float",                    "0.0");
+        c_initValueForSimpleType.put("xsdc__decimal",                "0.0");
+        c_initValueForSimpleType.put("xsdc__integer",                "0");
+        c_initValueForSimpleType.put("xsdc__nonPositiveInteger",        "0");
+        c_initValueForSimpleType.put("xsdc__negativeInteger",        "0");
+        c_initValueForSimpleType.put("xsdc__long",                    "0");
+        c_initValueForSimpleType.put("xsdc__int",                    "0");
+        c_initValueForSimpleType.put("xsdc__short",                    "0");
+        c_initValueForSimpleType.put("xsdc__byte",                    "0");
+        c_initValueForSimpleType.put("xsdc__nonNegativeInteger",        "0");
+        c_initValueForSimpleType.put("xsdc__unsignedByte",            "0");
+        c_initValueForSimpleType.put("xsdc__unsignedInt",            "0");
+        c_initValueForSimpleType.put("xsdc__unsignedLong",            "0");
+        c_initValueForSimpleType.put("xsdc__unsignedShort",            "0");
+        c_initValueForSimpleType.put("xsdc__positiveInteger",        "0");
+        c_initValueForSimpleType.put("xsdc__double",                    "0.0");
+        c_initValueForSimpleType.put("xsdc__anyURI",                    "NULL");
+        c_initValueForSimpleType.put("xsdc__QName",                    "NULL");
+        c_initValueForSimpleType.put("xsdc__NOTATION",                "NULL");
         
         String[] pointerTypes = {
         // C++ types
@@ -712,13 +712,13 @@ public class CUtils
         c_language = language.toLowerCase();
         if (WrapperConstants.LANGUAGE_C.equalsIgnoreCase(language))
         {
-            c_qnameToBasicTypeMapper = c_qname2classmapC;
+            c_qnameToSimpleTypeMapper = c_qnameToSimpleTypeMapperC;
             c_getAttributeAs = "GetAttributeAs";
             c_getElementAs   = "GetElementAs";
         }
         else if (WrapperConstants.LANGUAGE_CPP.equalsIgnoreCase(language))
         {
-            c_qnameToBasicTypeMapper = c_qname2classmapCpp;
+            c_qnameToSimpleTypeMapper = c_qnameToSimpleTypeMapperCPP;
             c_getAttributeAs = "getAttributeAs";
             c_getElementAs   = "getElementAs";
         }
@@ -747,27 +747,46 @@ public class CUtils
         c_schemaDefinedSimpleTypesMap.put(qname, type);
     }
     
+    public static boolean isSimpleType(QName name)
+    {
+        if (c_qnameToSimpleTypeMapper.containsKey(name))
+            return true;
+        else 
+            return c_schemaDefinedSimpleTypesMap.containsKey(name);
+    } 
+        
     /**
-     * Returns boolean indicating whether qname represents a basic type.
+     * Returns boolean indicating whether qname represents a simple type.
      * 
      * @param qname
      * @return
      */
     public static boolean isBasicType(QName qname)
     {
-        return c_qnameToBasicTypeMapper.containsKey(qname);
+        return c_qnameToSimpleTypeMapper.containsKey(qname);
     }
     
     /**
-     * Returns boolean indicating whether QName represents a primitive basic type.
-     * Primitive basic types map to axis types such as xsd__xxxx or xsdc__xxxxx.
+     * Method to determine if name passed in is that of a simple type. 
+     * 
+     * @param name
+     * @return
+     */
+    public static boolean isSimpleType(String name)
+    {
+        return c_simpleTypeToQNameMapper.containsKey(name);
+    } 
+    
+    /**
+     * Returns boolean indicating whether QName represents a primitive type.
+     * Primitive types map to axis types such as xsd__xxxx or xsdc__xxxxx.
      * 
      * @param qname
      * @return
      */
-    public static boolean isPrimitiveBasicType(QName qname)
+    public static boolean isPrimitiveType(QName qname)
     {
-        String t = (String)c_qnameToBasicTypeMapper.get(qname);
+        String t = (String)c_qnameToSimpleTypeMapper.get(qname);
         return ((t != null) 
                 && (t.startsWith("xsd__") 
                         || t.startsWith("xsdc__")
@@ -787,22 +806,11 @@ public class CUtils
      * @param qname
      * @return
      */
-    public static boolean isPrimitiveBasicType(String name)
+    public static boolean isPrimitiveType(String name)
     {
-        return (c_basicTypeToQNameMapper.containsKey(name)
+        return (c_simpleTypeToQNameMapper.containsKey(name)
                 && (name.startsWith("xsd__") || name.startsWith("xsdc__")));
     }
-    
-    /**
-     * Method to determine if name passed in is that of a simple type. 
-     * 
-     * @param name
-     * @return
-     */
-    public static boolean isSimpleType(String name)
-    {
-        return c_basicTypeToQNameMapper.containsKey(name);
-    } 
     
     /**
      * Method to determine if simple type is a pointer type. 
@@ -826,7 +834,7 @@ public class CUtils
      */
     public static boolean isPointerType(QName name)
     {
-        return isPointerType((String)c_qnameToBasicTypeMapper.get(name));
+        return isPointerType((String)c_qnameToSimpleTypeMapper.get(name));
     }    
     
   
@@ -841,60 +849,29 @@ public class CUtils
             return name.equals(anyTypeQname);
     }
     
-    public static boolean isSimpleType(QName name)
-    {
-        if (c_qnameToBasicTypeMapper.containsKey(name))
-            return true;
-        else 
-            return c_schemaDefinedSimpleTypesMap.containsKey(name);
-    } 
-
-    /**
-     * Method to determine if QName represents a type that is a schema-defined 
-     * simple type.
-     * 
-     * @param name
-     * @return
-     */
-    public static boolean isDefinedSimpleType(QName name)
-    {
-        return c_schemaDefinedSimpleTypesMap.containsKey(name);    
-    }
-        
     /**
      * Returns deserializer method name for element or attribute to be deserialized.
      * 
-     * @param typeName
-     * @param isAttrib
+     * @param typeName String representing simple type.
+     * @param isAttrib Whether the attribute is an element or not.
      * @return
      */
-    public static String getDeserializerMethodNameForType(String typeName, boolean isAttrib)
+    public static String getDeserializerMethodName(String typeName, boolean isAttrib)
     {
-        String methodname = (String)c_basicTypeToMethodSuffixMapper.get(typeName);
+        String methodname = (String)c_simpleTypeToMethodSuffixMapper.get(typeName);
         methodname = (isAttrib ? c_getAttributeAs : c_getElementAs) + methodname;
         return methodname;
     }
-    
-    /**
-     * Returns QName for the specified type.
-     * 
-     * @param classname
-     * @return
-     */
-    public static QName getQnameForBasicType(String classname) 
-    {
-        return (QName)c_basicTypeToQNameMapper.get(classname);
-    }
 
     /**
-     * Returns basic type that matches QName.
+     * Returns simple type that matches QName.
      * 
      * @param qname
      * @return
      */
-    public static String getBasicTypeForQName(QName qname) 
+    public static String getSimpleType(QName qname) 
     {
-        Object val = c_qnameToBasicTypeMapper.get(qname);
+        Object val = c_qnameToSimpleTypeMapper.get(qname);
         if (val == null)
             val = c_schemaDefinedSimpleTypesMap.get(qname);
         
@@ -902,28 +879,28 @@ public class CUtils
     }
 
     /**
-     * Returns primitive basic type that matches QName.
+     * Returns primitive type that matches QName.
      * 
      * @param qname
      * @return
      */
-    public static String getPrimitiveBasicTypeForQName(QName qname) 
+    public static String getPrimitiveType(QName qname) 
     {
-        if (isPrimitiveBasicType(qname))
-            return (String)c_qnameToBasicTypeMapper.get(qname);
+        if (isPrimitiveType(qname))
+            return (String)c_qnameToSimpleTypeMapper.get(qname);
         
         return null;
     }
     
     /**
-     * Get initialization value string for a basic type. 
+     * Get initialization value string for a simple type. 
      * 
-     * @param typeName
-     * @return
+     * @param typeName string representing a simple type.
+     * @return String containing the axis XSD define for the type.
      */
-    public static String getInitValueForBasicType(String typeName) 
+    public static String getInitValue(String typeName) 
     {
-        return (String)c_initValueForBasicType.get(typeName);
+        return (String)c_initValueForSimpleType.get(typeName);
     }
         
     /**
@@ -937,20 +914,26 @@ public class CUtils
     }
     
     /**
-     * Return the XSD axis type enumerator for a basic type.
+     * Return the XSD axis type enumerator for a simple type.
      * 
-     * @param stype
+     * @param stype String representing a simple type.
      * @return
      */
-    public static String getXSDTypeForBasicType(String stype)
+    public static String getXSDEnumerator(String stype)
     {
-        return (String)c_basicTypeToEnumMapper.get(stype); 
+        return (String)c_simpleTypeToEnumMapper.get(stype); 
     }
     
-    public static String getCmplxArrayNameforType(QName qname)
+    /**
+     * Generates array name for complex type.
+     * 
+     * @param qname
+     * @return
+     */
+    public static String getArrayNameForComplexType(QName qname)
     {
         String arrayName = null;
-        if (!c_qnameToBasicTypeMapper.containsKey(qname))
+        if (!c_qnameToSimpleTypeMapper.containsKey(qname))
         {
             arrayName = qname.getLocalPart() + "_Array";
             if (TypeMap.isAnonymousType(qname))
@@ -960,7 +943,13 @@ public class CUtils
         return arrayName;        
     }
     
-    public static String getBasicArrayNameforType(String stype)
+    /**
+     * Generates array name for simple types.
+     * 
+     * @param stype
+     * @return
+     */
+    public static String getArrayNameforSimpleType(String stype)
     {
             return stype + "_Array";
     }   
@@ -1160,14 +1149,13 @@ public class CUtils
      *  the Wrapper Class name(service.0 wrapper class name)
      *  
      */
-    public static String getLanguageTypeName4Type(Type type)
-        throws WrapperFault
+    public static String getLanguageTypeName4Type(Type type) throws WrapperFault
     {
         if (type.isArray())
         {
             QName qname = getArrayType(type).getName();
             //this can never be a simple type
-            return CUtils.getCmplxArrayNameforType(qname);
+            return CUtils.getArrayNameForComplexType(qname);
         }
         else
             return type.getLanguageSpecificName();
@@ -1213,22 +1201,22 @@ public class CUtils
             String name = param.getLangName();
             
             if( name.indexOf(">") != -1)
-                name = CUtils.getBasicTypeForQName (param.getType().getBaseType());
+                name = CUtils.getSimpleType (param.getType().getBaseType());
             
             return name;
         }
-        else if (!CUtils.isPrimitiveBasicType(param.getSchemaName()))
+        else if (!CUtils.isPrimitiveType(param.getSchemaName()))
         { 
             //array or complex types
             if (null != type && type.isArray())
             {
-                String arrayName = CUtils.getCmplxArrayNameforType(getArrayType(type).getName());
+                String arrayName = CUtils.getArrayNameForComplexType(getArrayType(type).getName());
                 if (null == arrayName)
                 { 
                     //simple type array
                     /* Does the program flow ever come to this place ? if so in which situation ? - Susantha 20/10/2004 */
                     arrayName =
-                        CUtils.getBasicArrayNameforType(CUtils.getBasicTypeForQName(getArrayType(type).getName()));
+                        CUtils.getArrayNameforSimpleType(CUtils.getSimpleType(getArrayType(type).getName()));
                 }
                 return arrayName;
             }
@@ -1249,7 +1237,7 @@ public class CUtils
                 </s:complexType>
             </s:element>
              */
-            return CUtils.getBasicArrayNameforType(CUtils.getBasicTypeForQName(type.getName()));
+            return CUtils.getArrayNameforSimpleType(CUtils.getSimpleType(type.getName()));
         }
         else
             return param.getLangName();

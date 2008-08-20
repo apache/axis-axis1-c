@@ -328,14 +328,14 @@ public class WrapWriter extends CPPClassWriter
 	                            + " value"
 	                            + i
 	                            + " = pIWSDZ->"
-	                            + CUtils.getDeserializerMethodNameForType(paraTypeName, false)
+	                            + CUtils.getDeserializerMethodName(paraTypeName, false)
 	                            + "(\""
 	                            + parameterName + "\",0);\n");
             			writer.write("\tif (value" + i + ")\n");
             			writer.write("\t{\n");
             			writer.write("\t\tv" + i + " = new char[ strlen( value" + i + " ) + 1 ];\n");
             			writer.write("\t\tstrcpy( v" + i + ", value" + i + " );\n");
-            			writer.write("\t\tAxis::AxisDelete( (void *) value" + i + ", " + CUtils.getXSDTypeForBasicType(paraTypeName) + ");\n");
+            			writer.write("\t\tAxis::AxisDelete( (void *) value" + i + ", " + CUtils.getXSDEnumerator(paraTypeName) + ");\n");
             			writer.write("\t}\n");
         			}
             		else
@@ -346,14 +346,14 @@ public class WrapWriter extends CPPClassWriter
 								+ "* pValue"
 								+ i
 								+ " = pIWSDZ->"
-								+ CUtils.getDeserializerMethodNameForType(paraTypeName, false)
+								+ CUtils.getDeserializerMethodName(paraTypeName, false)
 								+ "(\""
 								+ parameterName + "\",0);\n");
             			writer.write("\tif (pValue" + i + ")\n");
             			writer.write("\t{\n");
             			writer.write("\t\tv" + i + " = new " + paraTypeName + "();");
             			writer.write("\t\t*v" + i + " = *pValue" + i + ";\n");
-            			writer.write("\t\tAxis::AxisDelete( (void *) pValue" + i + ", " + CUtils.getXSDTypeForBasicType(paraTypeName) + ");\n");
+            			writer.write("\t\tAxis::AxisDelete( (void *) pValue" + i + ", " + CUtils.getXSDEnumerator(paraTypeName) + ");\n");
             			writer.write("\t}\n");
             		}
             	}
@@ -367,20 +367,20 @@ public class WrapWriter extends CPPClassWriter
                             + " value"
                             + i
                             + " = pIWSDZ->"
-                            + CUtils.getDeserializerMethodNameForType(paraTypeName, false)
+                            + CUtils.getDeserializerMethodName(paraTypeName, false)
                             + "(\""
                             + parameterName + "\",0);\n");
             			writer.write("\tif (value" + i + ")\n");
             			writer.write("\t{\n");
             			writer.write("\t\tv" + i + " = new char[ strlen( value" + i + " ) + 1 ];\n");
             			writer.write("\t\tstrcpy( v" + i + ", value" + i + " );\n");
-            			writer.write("\t\tAxis::AxisDelete( (void *) value" + i + ", " + CUtils.getXSDTypeForBasicType(paraTypeName) + ");\n");
+            			writer.write("\t\tAxis::AxisDelete( (void *) value" + i + ", " + CUtils.getXSDEnumerator(paraTypeName) + ");\n");
             			writer.write("\t}\n");
             		}
             		else
             		{
             		    writer.write("\n\t" + paraTypeName + " v" + i);
-                        String typeInitValue = CUtils.getInitValueForBasicType(paraTypeName);
+                        String typeInitValue = CUtils.getInitValue(paraTypeName);
             		    if (typeInitValue != null)
             		        writer.write(" = " + typeInitValue);
 
@@ -390,13 +390,13 @@ public class WrapWriter extends CPPClassWriter
 							+ " * pValue"
 							+ i
 							+ " = pIWSDZ->"
-							+ CUtils.getDeserializerMethodNameForType(paraTypeName, false)
+							+ CUtils.getDeserializerMethodName(paraTypeName, false)
 							+ "(\""
 							+ parameterName + "\",0);\n");
 	            		writer.write("\tif (pValue" + i + ")\n");
 	            		writer.write("\t{\n");
 	            		writer.write("\t\tv" + i + " = *pValue" + i + ";\n");
-	            		writer.write("\t\tAxis::AxisDelete( (void *) pValue" + i + ", " + CUtils.getXSDTypeForBasicType(paraTypeName) + " );\n");
+	            		writer.write("\t\tAxis::AxisDelete( (void *) pValue" + i + ", " + CUtils.getXSDEnumerator(paraTypeName) + " );\n");
 	            		writer.write("\t}\n");
             		}
             	}
@@ -412,7 +412,7 @@ public class WrapWriter extends CPPClassWriter
                     String containedType = null;
                     if (CUtils.isSimpleType(qname))
                     {
-                        containedType = CUtils.getBasicTypeForQName(qname);
+                        containedType = CUtils.getSimpleType(qname);
                         
                         writer.write("\n\t" + containedType + "_Array * v" + i +" = new " + containedType + "_Array();\n");
                         writer.write(
@@ -420,7 +420,7 @@ public class WrapWriter extends CPPClassWriter
                                 + "Axis_Array * RetArray"
                                 + i
                                 + " = pIWSDZ->getBasicArray("
-                                + CUtils.getXSDTypeForBasicType(containedType)
+                                + CUtils.getXSDEnumerator(containedType)
                                 + ", \""
                                 + parameterName
                                 + "\",0);\n");
@@ -527,7 +527,7 @@ public class WrapWriter extends CPPClassWriter
     	                    "\t\treturn pIWSSZ->addOutputParam(\""
     	                        + methodName
     	                        + "Return\", (void*)ret, "
-    	                        + CUtils.getXSDTypeForBasicType(outparamTypeName)
+    	                        + CUtils.getXSDEnumerator(outparamTypeName)
     	                        + ");\n");
             	}
             	else
@@ -536,7 +536,7 @@ public class WrapWriter extends CPPClassWriter
 	                    "\t\treturn pIWSSZ->addOutputParam(\""
 	                        + methodName
 	                        + "Return\", (void*)&ret, "
-	                        + CUtils.getXSDTypeForBasicType(outparamTypeName)
+	                        + CUtils.getXSDEnumerator(outparamTypeName)
 	                        + ");\n");
             	}
             }
@@ -547,10 +547,10 @@ public class WrapWriter extends CPPClassWriter
                     String containedType = null;
                     if (CUtils.isSimpleType(qname))
                     {
-                        containedType = CUtils.getBasicTypeForQName(qname);
+                        containedType = CUtils.getSimpleType(qname);
                         writer.write(
                             "\t\tnStatus = pIWSSZ->addOutputBasicArrayParam(ret,"
-                                + CUtils.getXSDTypeForBasicType(containedType)
+                                + CUtils.getXSDEnumerator(containedType)
                                 + ", \""
                                 + methodName
                                 + "Return\");\n");
@@ -647,7 +647,7 @@ public class WrapWriter extends CPPClassWriter
                                         + "\", (void*)out"
                                         + i
                                         + ", "
-                                        + CUtils.getXSDTypeForBasicType(outparamType)
+                                        + CUtils.getXSDEnumerator(outparamType)
                                         + ");\n");
                     		if (param.isOptional())
                     		{
@@ -662,7 +662,7 @@ public class WrapWriter extends CPPClassWriter
                                         + "\", (void*)&out"
                                         + i
                                         + ", "
-                                        + CUtils.getXSDTypeForBasicType(outparamType)
+                                        + CUtils.getXSDEnumerator(outparamType)
                                         + ");\n");
                     	}
                     }
@@ -674,12 +674,12 @@ public class WrapWriter extends CPPClassWriter
                             String containedType = null;
                             if (CUtils.isSimpleType(qname))
                             {
-                                containedType = CUtils.getBasicTypeForQName(qname);
+                                containedType = CUtils.getSimpleType(qname);
                                 writer.write(
                                     "\t\tpIWSSZ->addOutputBasicArrayParam((Axis_Array*)(&out"
                                         + i
                                         + "),"
-                                        + CUtils.getXSDTypeForBasicType(
+                                        + CUtils.getXSDEnumerator(
                                             containedType)
                                         + ", \""
                                         + returnParamName

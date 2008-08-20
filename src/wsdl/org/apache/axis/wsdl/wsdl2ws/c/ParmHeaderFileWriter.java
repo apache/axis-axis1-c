@@ -115,7 +115,7 @@ public class ParmHeaderFileWriter extends ParamWriter
             if (!CUtils.isSimpleType(baseType))
                 return;
             
-            String baseTypeName = CUtils.getBasicTypeForQName(baseType);
+            String baseTypeName = CUtils.getSimpleType(baseType);
             String langTypeName;
             
             // User defined simple type based on another user-defined simple type
@@ -428,7 +428,7 @@ public class ParmHeaderFileWriter extends ParamWriter
                 String basicType = attribs[i].getTypeName();
                 Type theType = attribs[i].getType();
 
-                if (theType.isRestriction() && !CUtils.isPrimitiveBasicType(basicType))
+                if (theType.isRestriction() && !CUtils.isPrimitiveType(basicType))
                     typeSet.add(basicType);
                 else if (!attribs[i].isSimpleType())
                 {
@@ -450,7 +450,7 @@ public class ParmHeaderFileWriter extends ParamWriter
                 if (extBaseType.lastIndexOf("*") > -1)
                     extBaseType = extBaseType.substring(0, extBaseType.lastIndexOf("*"));
 
-                if (!CUtils.isPrimitiveBasicType(extBaseType))
+                if (!CUtils.isPrimitiveType(extBaseType))
                     typeSet.add(extBaseType);
             }            
             

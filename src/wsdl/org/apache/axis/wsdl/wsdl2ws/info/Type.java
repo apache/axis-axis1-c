@@ -120,7 +120,7 @@ public class Type
 
         // if the language specific name is not specified try a simple type       
         if (languageSpecificName == null)
-            this.languageSpecificName = CUtils.getBasicTypeForQName(name);
+            this.languageSpecificName = CUtils.getSimpleType(name);
 
         //if language specific name still not set, use localPart of QName
         if (this.languageSpecificName == null)
@@ -432,7 +432,7 @@ public class Type
      */
     public void addRelatedType(Type type)
     {
-        if (type != null && !CUtils.isPrimitiveBasicType(type.getName()))
+        if (type != null && !CUtils.isPrimitiveType(type.getName()))
             this.vRelatedTypes.add(type);
     }    
     // vvv FJP - 17667

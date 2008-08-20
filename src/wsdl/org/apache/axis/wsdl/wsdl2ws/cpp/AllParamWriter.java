@@ -91,13 +91,6 @@ public class AllParamWriter implements SourceWriter
                             }
                     }
                                             
-                    if (CUtils.isSimpleType(qname) && !CUtils.isDefinedSimpleType(qname))
-                    {
-                        throw new WrapperFault(
-                            "No need to create an Array for simple type " + qname + "\n"
-                                + "It seems that some thing wrong with symbolTable population");
-                    }
-                    
                     ArrayParamHeaderWriter writer = (new ArrayParamHeaderWriter(wscontext, type));
                     if (!writer.isSimpleTypeArray())
                     {

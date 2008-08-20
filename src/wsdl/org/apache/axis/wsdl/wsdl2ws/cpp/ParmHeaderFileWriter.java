@@ -123,7 +123,7 @@ public class ParmHeaderFileWriter extends ParamWriter
                 boolean isPointerType = false;
                 
                 if (type.isSimpleType())
-                    isPointerType = CUtils.isPointerType(CUtils.getBasicTypeForQName(type.getBaseType())); 
+                    isPointerType = CUtils.isPointerType(CUtils.getSimpleType(type.getBaseType())); 
                 else
                     isPointerType = CUtils.isPointerType(getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]));
 
@@ -166,7 +166,7 @@ public class ParmHeaderFileWriter extends ParamWriter
             if (!CUtils.isSimpleType(baseType))
                 return;   
             
-            String baseTypeName = CUtils.getBasicTypeForQName(baseType);
+            String baseTypeName = CUtils.getSimpleType(baseType);
             String langTypeName;
             
             // User defined simple type based on another user-defined simple type
@@ -404,7 +404,7 @@ public class ParmHeaderFileWriter extends ParamWriter
                 Type type = attribs[i].getType();
                 boolean isPointerType;                
                 if (type.isSimpleType())
-                    isPointerType = CUtils.isPointerType(CUtils.getBasicTypeForQName(type.getBaseType())); 
+                    isPointerType = CUtils.isPointerType(CUtils.getSimpleType(type.getBaseType())); 
                 else
                     isPointerType = CUtils.isPointerType(paramType);
                 
@@ -553,7 +553,7 @@ public class ParmHeaderFileWriter extends ParamWriter
                 String basicType = attribs[i].getTypeName();
                 Type theType = attribs[i].getType();
                 
-                if (theType.isRestriction() && !CUtils.isPrimitiveBasicType(basicType))
+                if (theType.isRestriction() && !CUtils.isPrimitiveType(basicType))
                     typeSet.add(basicType);
                 else if (!attribs[i].isSimpleType())
                 {
@@ -575,7 +575,7 @@ public class ParmHeaderFileWriter extends ParamWriter
                 if (extBaseType.lastIndexOf("*") > -1)
                     extBaseType = extBaseType.substring(0, extBaseType.lastIndexOf("*"));
 
-                if (!CUtils.isPrimitiveBasicType(extBaseType))
+                if (!CUtils.isPrimitiveType(extBaseType))
                     typeSet.add(extBaseType);
             }            
             

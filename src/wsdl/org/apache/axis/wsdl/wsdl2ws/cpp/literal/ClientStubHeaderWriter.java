@@ -102,7 +102,7 @@ public class ClientStubHeaderWriter
                     String baseTypeName = null;
                     
                     if (type.isSimpleType())
-                        baseTypeName = CUtils.getBasicTypeForQName (type.getBaseType ());
+                        baseTypeName = CUtils.getSimpleType (type.getBaseType ());
                     else
                         baseTypeName = paramTypeName;
                     
@@ -128,7 +128,7 @@ public class ClientStubHeaderWriter
                         String baseTypeName = null;
                         
                         if (type.isSimpleType())
-                            baseTypeName = CUtils.getBasicTypeForQName (type.getBaseType ());
+                            baseTypeName = CUtils.getSimpleType (type.getBaseType ());
                         else
                             baseTypeName = paramType;
                         

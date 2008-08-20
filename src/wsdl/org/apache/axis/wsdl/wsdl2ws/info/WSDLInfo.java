@@ -507,7 +507,7 @@ public class WSDLInfo
         if (!type.isReferenced())
             return null;
         
-        if (c_verbose && !CUtils.isPrimitiveBasicType(type.getQName()))
+        if (c_verbose && !CUtils.isPrimitiveType(type.getQName()))
             System.out.println("Attempting to create type: " + type.getQName());
         
         if (type instanceof CollectionElement)
@@ -545,7 +545,7 @@ public class WSDLInfo
             typedata = typeMap.getType(newqn);
             if (typedata != null)
             {
-                if (c_verbose && !CUtils.isPrimitiveBasicType(type.getQName()))
+                if (c_verbose && !CUtils.isPrimitiveType(type.getQName()))
                     System.out.println("Type not created, already exists: " + type.getQName());
                 
                 return typedata;
@@ -564,7 +564,7 @@ public class WSDLInfo
             typedata = typeMap.getType(type.getQName());
             if (typedata != null)
             {
-                if (c_verbose && !CUtils.isPrimitiveBasicType(type.getQName()))
+                if (c_verbose && !CUtils.isPrimitiveType(type.getQName()))
                     System.out.println("Type not created, already exists: " + type.getQName());
                 
                 return typedata;
@@ -832,7 +832,7 @@ public class WSDLInfo
                 String class4qname          = null;
                 String class4qnameSanitized = null;
                 
-                String javaName = CUtils.getPrimitiveBasicTypeForQName(baseEType.getQName());
+                String javaName = CUtils.getPrimitiveType(baseEType.getQName());
                 boolean isBaseTypePrimitive = javaName != null;
                 
                 QName primitiveBaseTypeQName = null;
@@ -855,8 +855,8 @@ public class WSDLInfo
                 else
                     primitiveBaseTypeQName = baseEType.getQName();
                 
-                classForPrimitiveType =  CUtils.getBasicTypeForQName(primitiveBaseTypeQName);
-                initValueForType      =  CUtils.getInitValueForBasicType(classForPrimitiveType);
+                classForPrimitiveType =  CUtils.getSimpleType(primitiveBaseTypeQName);
+                initValueForType      =  CUtils.getInitValue(classForPrimitiveType);
                 
                 // Set the base type for Type
                 typedata.setBaseType(primitiveBaseTypeQName);
@@ -871,7 +871,7 @@ public class WSDLInfo
                 // with the anonymous names, and once with the sanitized names. 
                 
                 boolean isPointerType = CUtils.isPointerType(primitiveBaseTypeQName);
-                primitiveXSDType = CUtils.getXSDTypeForBasicType(classForPrimitiveType);
+                primitiveXSDType = CUtils.getXSDEnumerator(classForPrimitiveType);
 
                 if (!isBaseTypePrimitive)
                 {
@@ -882,43 +882,43 @@ public class WSDLInfo
                 if (isPointerType)
                     CUtils.c_pointerBasedTypes.add(typedataLocalpart);                    
 
-                methodSuffix = (String)CUtils.c_basicTypeToMethodSuffixMapper.get(classForPrimitiveType);
-                CUtils.c_qnameToBasicTypeMapper.put(typedataQName, class4qname);
-                CUtils.c_basicTypeToQNameMapper.put(class4qname, typedataQName);
-                CUtils.c_basicTypeToEnumMapper.put(typedataLocalpart, primitiveXSDType);
+                methodSuffix = (String)CUtils.c_simpleTypeToMethodSuffixMapper.get(classForPrimitiveType);
+                CUtils.c_qnameToSimpleTypeMapper.put(typedataQName, class4qname);
+                CUtils.c_simpleTypeToQNameMapper.put(class4qname, typedataQName);
+                CUtils.c_simpleTypeToEnumMapper.put(typedataLocalpart, primitiveXSDType);
 
                 if (initValueForType != null)
-                    CUtils.c_initValueForBasicType.put(typedataLocalpart, initValueForType);
-                CUtils.c_basicTypeToMethodSuffixMapper.put(typedataLocalpart, methodSuffix);
+                    CUtils.c_initValueForSimpleType.put(typedataLocalpart, initValueForType);
+                CUtils.c_simpleTypeToMethodSuffixMapper.put(typedataLocalpart, methodSuffix);
                 
                 if (!isBaseTypePrimitive)
                 {
-                    CUtils.c_basicTypeToEnumMapper.put(baseTypeLocalpart, primitiveXSDType);
+                    CUtils.c_simpleTypeToEnumMapper.put(baseTypeLocalpart, primitiveXSDType);
                     if (initValueForType != null)
-                        CUtils.c_initValueForBasicType.put(baseTypeLocalpart, initValueForType);
-                    CUtils.c_basicTypeToMethodSuffixMapper.put(baseTypeLocalpart, methodSuffix);
+                        CUtils.c_initValueForSimpleType.put(baseTypeLocalpart, initValueForType);
+                    CUtils.c_simpleTypeToMethodSuffixMapper.put(baseTypeLocalpart, methodSuffix);
                 }
 
                 if (typedataQNameSanitized != null)
                 {
                     if (isPointerType)
                         CUtils.c_pointerBasedTypes.add(typedataLocalpartSanitized); 
-                    CUtils.c_qnameToBasicTypeMapper.put(typedataQNameSanitized, class4qnameSanitized);
-                    CUtils.c_basicTypeToQNameMapper.put(class4qnameSanitized, typedataQNameSanitized);
-                    CUtils.c_basicTypeToEnumMapper.put(typedataLocalpartSanitized, primitiveXSDType);
+                    CUtils.c_qnameToSimpleTypeMapper.put(typedataQNameSanitized, class4qnameSanitized);
+                    CUtils.c_simpleTypeToQNameMapper.put(class4qnameSanitized, typedataQNameSanitized);
+                    CUtils.c_simpleTypeToEnumMapper.put(typedataLocalpartSanitized, primitiveXSDType);
                     if (initValueForType != null)
-                        CUtils.c_initValueForBasicType.put(typedataLocalpartSanitized, initValueForType);
-                    CUtils.c_basicTypeToMethodSuffixMapper.put(typedataLocalpartSanitized, methodSuffix);
+                        CUtils.c_initValueForSimpleType.put(typedataLocalpartSanitized, initValueForType);
+                    CUtils.c_simpleTypeToMethodSuffixMapper.put(typedataLocalpartSanitized, methodSuffix);
                 }
                 
                 if (baseTypeLocalpartSanitized != null)
                 {
                     if (isPointerType)
                         CUtils.c_pointerBasedTypes.add(baseTypeLocalpartSanitized);
-                    CUtils.c_basicTypeToEnumMapper.put(baseTypeLocalpartSanitized, primitiveXSDType);
+                    CUtils.c_simpleTypeToEnumMapper.put(baseTypeLocalpartSanitized, primitiveXSDType);
                     if (initValueForType != null)
-                        CUtils.c_initValueForBasicType.put(baseTypeLocalpartSanitized, initValueForType);
-                    CUtils.c_basicTypeToMethodSuffixMapper.put(baseTypeLocalpartSanitized, methodSuffix);
+                        CUtils.c_initValueForSimpleType.put(baseTypeLocalpartSanitized, initValueForType);
+                    CUtils.c_simpleTypeToMethodSuffixMapper.put(baseTypeLocalpartSanitized, methodSuffix);
                 }         
                 
                 // Process the enumeration elements underneath the restriction node

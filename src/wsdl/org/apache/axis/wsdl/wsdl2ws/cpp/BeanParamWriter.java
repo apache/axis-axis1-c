@@ -201,7 +201,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     
                     boolean isPointerType = false;
                     if (attributeType.isSimpleType())
-                        isPointerType = CUtils.isPointerType(CUtils.getBasicTypeForQName(attributeType.getBaseType())); 
+                        isPointerType = CUtils.isPointerType(CUtils.getSimpleType(attributeType.getBaseType())); 
                     else
                         isPointerType = CUtils.isPointerType(getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i]));
                     
@@ -285,7 +285,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 if (!CUtils.isPointerType(typeName))
                     writer.write("&");    
                 writer.write("(param->" + extensionBaseAttrib.getParamNameAsMember() + "), "
-                        + CUtils.getXSDTypeForBasicType(typeName) + ");\n");
+                        + CUtils.getXSDEnumerator(typeName) + ");\n");
             }
             else
             {
@@ -377,7 +377,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
             String basicType = null;
             
             if (!attribs[i].isSimpleType() && attrType.isSimpleType())
-                basicType = CUtils.getBasicTypeForQName(attrType.getBaseType());
+                basicType = CUtils.getSimpleType(attrType.getBaseType());
             else
                 basicType = attribs[i].getTypeName();
 
@@ -388,14 +388,14 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 writer.write("\tpSZ->serializeAsAttribute(\""
                         + soapTagName + "\", 0, (void*)(param->"
                         + attribs[i].getParamNameAsMember() + "), "
-                        + CUtils.getXSDTypeForBasicType(basicType) + ");\n");
+                        + CUtils.getXSDEnumerator(basicType) + ");\n");
             }
             else
             {
                 writer.write("\tpSZ->serializeAsAttribute(\""
                         + soapTagName + "\", 0, (void*)&(param->"
                         + attribs[i].getParamNameAsMember() + "), "
-                        + CUtils.getXSDTypeForBasicType(attribs[i].getTypeName()) + ");\n");
+                        + CUtils.getXSDEnumerator(attribs[i].getTypeName()) + ");\n");
             }
         }
 
@@ -481,13 +481,13 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 {
                     String baseTypeName = null;
                     if (!attribs[i].isSimpleType() && attribs[i].getType().isSimpleType())
-                        baseTypeName = CUtils.getBasicTypeForQName(attribs[i].getType().getBaseType());
+                        baseTypeName = CUtils.getSimpleType(attribs[i].getType().getBaseType());
                     else
                         baseTypeName = attribs[i].getTypeName();
                     
                     writer.write("\tpSZ->serializeBasicArray(param->" + attribs[i].getParamNameAsMember()
                         + ", " + namespace + ","
-                        + CUtils.getXSDTypeForBasicType(baseTypeName) + ", \""
+                        + CUtils.getXSDEnumerator(baseTypeName) + ", \""
                         + attribs[i].getParamNameAsSOAPString() + "\");\n");
                 }
                 else
@@ -510,7 +510,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 String typeName = attribs[i].getTypeName();
                 String baseTypeName = null;
                 if (attribs[i].getType().isSimpleType())
-                    baseTypeName = CUtils.getBasicTypeForQName (attribs[i].getType().getBaseType ());
+                    baseTypeName = CUtils.getSimpleType (attribs[i].getType().getBaseType ());
                 else
                     baseTypeName = typeName;
                 
@@ -529,7 +529,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 writer.write("\tpSZ->serializeAsElement(\""
                         + attribs[i].getElementNameAsSOAPString() + "\", " + namespace
                         + ", (void*)" + ampersand + "(param->" + attribs[i].getParamNameAsMember() + "), " 
-                        + CUtils.getXSDTypeForBasicType(baseTypeName) + ");\n");
+                        + CUtils.getXSDEnumerator(baseTypeName) + ");\n");
             }
             else
             {
@@ -651,7 +651,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
             {
                 writer.write("\tvoid* pCharDataAs;\n");
                 String typeName = extensionBaseAttrib.getTypeName();
-                String xsdType = CUtils.getXSDTypeForBasicType(typeName);
+                String xsdType = CUtils.getXSDEnumerator(typeName);
                 writer.write("\tpIWSDZ->getChardataAs(&pCharDataAs, " + xsdType + ");\n");
                 writer.write("\tparam->" + extensionBaseAttrib.getParamNameAsMember() + " = ");
                 
@@ -832,12 +832,12 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 {
                     String baseTypeName = null;
                     if (!attribs[i].isSimpleType() && attribs[i].getType().isSimpleType())
-                        baseTypeName = CUtils.getBasicTypeForQName(attribs[i].getType().getBaseType());
+                        baseTypeName = CUtils.getSimpleType(attribs[i].getType().getBaseType());
                     else
                         baseTypeName = attribs[i].getTypeName();
                     
                     writer.write(tab2 + "Axis_Array * array" + arrayCount + " = pIWSDZ->getBasicArray("
-                            + CUtils.getXSDTypeForBasicType(baseTypeName) + ", \""
+                            + CUtils.getXSDEnumerator(baseTypeName) + ", \""
                             + attribs[i].getParamNameAsSOAPString()
                             + "\",0);\n");
                     writer.write(tab2 + "if(param->" + attribs[i].getParamNameAsMember() + " == NULL)\n");
@@ -874,27 +874,27 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 Type type = attribs[i].getType();
                 boolean isPointerType = false;
                 if (type.isSimpleType())
-                    isPointerType = CUtils.isPointerType(CUtils.getBasicTypeForQName(type.getBaseType())); 
+                    isPointerType = CUtils.isPointerType(CUtils.getSimpleType(type.getBaseType())); 
                 else
                     isPointerType = CUtils.isPointerType(attribs[i].getTypeName());
 
                 String typeName = attribs[i].getTypeName();
                 String baseTypeName = null;
                 if (type.isSimpleType())
-                    baseTypeName = CUtils.getBasicTypeForQName (type.getBaseType ());
+                    baseTypeName = CUtils.getSimpleType (type.getBaseType ());
                 else
                     baseTypeName = typeName;
                 
                 if( isPointerType)
                 {
                     writer.write(tab2 + typeName + " pValue" + i + " = pIWSDZ->" +
-                            CUtils.getDeserializerMethodNameForType(baseTypeName, attribs[i].isAttribute()) +
+                            CUtils.getDeserializerMethodName(baseTypeName, attribs[i].isAttribute()) +
                             "(\"" + soapTagName + "\", 0);\n");
                 }
                 else
                 {
                     writer.write(tab2 + typeName + " * pValue" + i + " = pIWSDZ->" +
-                            CUtils.getDeserializerMethodNameForType(baseTypeName, attribs[i].isAttribute()) +
+                            CUtils.getDeserializerMethodName(baseTypeName, attribs[i].isAttribute()) +
                             "(\"" + soapTagName + "\", 0);\n");
                 }
                 
@@ -917,7 +917,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     writer.write(tab2 + "{\n");
                     writer.write(tab2 + "\tparam->set" + attribs[i].getMethodName() + "(*pValue" + i + ");\n");
                     writer.write(tab2 + "\tAxis::AxisDelete((void *)pValue" + i 
-                            + ", " + CUtils.getXSDTypeForBasicType( attribs[i].getTypeName()) + ");\n");
+                            + ", " + CUtils.getXSDEnumerator( attribs[i].getTypeName()) + ");\n");
                     writer.write(tab2 + "}\n");                        
                 }
                 
@@ -1160,7 +1160,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     Type type = attribs[i].getType();
                     boolean isPointerType = false;
                     if (type.isSimpleType())
-                        isPointerType = CUtils.isPointerType(CUtils.getBasicTypeForQName(type.getBaseType())); 
+                        isPointerType = CUtils.isPointerType(CUtils.getSimpleType(type.getBaseType())); 
                     else
                         isPointerType = CUtils.isPointerType(attribs[i].getTypeName());
     
@@ -1214,7 +1214,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 Type type = attribs[i].getType();
                 boolean isPointerType = false;
                 if (type.isSimpleType())
-                    isPointerType = CUtils.isPointerType(CUtils.getBasicTypeForQName(type.getBaseType())); 
+                    isPointerType = CUtils.isPointerType(CUtils.getSimpleType(type.getBaseType())); 
                 else
                     isPointerType = CUtils.isPointerType(typename);
                 
@@ -1305,7 +1305,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
         {
             CUtils.printMethodComment(writer, "Function used to check whether object has allowed values. Not implemented yet.");
             
-            boolean isPtrType = CUtils.isPointerType( CUtils.getBasicTypeForQName( type.getBaseType()));
+            boolean isPtrType = CUtils.isPointerType( CUtils.getSimpleType( type.getBaseType()));
             
             writer.write("int Check_Restrictions_" + classname + "(" + classname + " value)\n"); 
             writer.write("{\n");
