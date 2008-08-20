@@ -222,9 +222,12 @@ public class WSDL2Ws
             if (c_wsdlInfo.getServices().size() == 0)
                 throw new WrapperFault("Service definition not found. A service definition must be specified.");
         }
+        catch (WrapperFault e)
+        {
+            throw e;
+        }
         catch (Exception e)
         {
-            e.printStackTrace();
             throw new WrapperFault(e);
         }
     }

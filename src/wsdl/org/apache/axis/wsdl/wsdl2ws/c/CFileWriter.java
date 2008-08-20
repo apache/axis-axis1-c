@@ -66,7 +66,6 @@ public abstract class CFileWriter extends BasicFileWriter
         }
         catch (IOException e)
         {
-            e.printStackTrace();
             throw new WrapperFault(e);
         }
 

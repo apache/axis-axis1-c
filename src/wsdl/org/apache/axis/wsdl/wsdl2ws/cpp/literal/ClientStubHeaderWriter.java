@@ -165,7 +165,6 @@ public class ClientStubHeaderWriter
         }
         catch (Exception e)
         {
-            e.printStackTrace();
             throw new WrapperFault(e);
         }
     }
@@ -226,7 +225,6 @@ public class ClientStubHeaderWriter
         }
         catch (IOException e)
         {
-            e.printStackTrace();
             throw new WrapperFault(e);
         }
     }

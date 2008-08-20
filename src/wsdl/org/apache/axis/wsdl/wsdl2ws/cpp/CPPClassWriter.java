@@ -67,7 +67,6 @@ public abstract class CPPClassWriter extends BasicFileWriter
         }
         catch (IOException e)
         {
-            e.printStackTrace();
             throw new WrapperFault(e);
         }
 

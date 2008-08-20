@@ -183,7 +183,6 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
         }
         catch (Exception e)
         {
-            e.printStackTrace();
             throw new WrapperFault(e);
         }
     }
@@ -241,7 +240,6 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
         }
         catch (IOException e)
         {
-            e.printStackTrace();
             throw new WrapperFault(e);
         }
     }

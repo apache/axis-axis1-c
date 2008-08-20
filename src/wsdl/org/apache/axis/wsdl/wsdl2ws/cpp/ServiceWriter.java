@@ -278,7 +278,6 @@ public class ServiceWriter extends CPPClassWriter
         }
         catch (Exception e)
         {
-            e.printStackTrace();
             throw new WrapperFault(e);
         }
     }

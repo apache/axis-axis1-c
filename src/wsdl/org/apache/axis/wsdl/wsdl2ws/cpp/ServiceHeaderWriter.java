@@ -265,7 +265,6 @@ public class ServiceHeaderWriter extends HeaderFileWriter
         }
         catch (Exception e)
         {
-            e.printStackTrace();
             throw new WrapperFault(e);
         }
     }
@@ -316,7 +315,6 @@ public class ServiceHeaderWriter extends HeaderFileWriter
         }
         catch (IOException e)
         {
-            e.printStackTrace();
             throw new WrapperFault(e);
         }
     }

@@ -63,7 +63,6 @@ public class ArrayParamWriter extends ParamWriter
         }
         catch (IOException e)
         {
-            e.printStackTrace();
             throw new WrapperFault(e);
         }
     }

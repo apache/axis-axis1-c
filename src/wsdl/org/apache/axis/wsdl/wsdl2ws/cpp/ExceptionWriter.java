@@ -291,7 +291,6 @@ public class ExceptionWriter extends BasicFileWriter
         }
         catch (IOException e)
         {
-            e.printStackTrace();
             throw new WrapperFault(e);
         }
     }

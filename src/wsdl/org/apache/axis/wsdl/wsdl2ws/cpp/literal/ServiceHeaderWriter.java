@@ -124,7 +124,6 @@ public class ServiceHeaderWriter
         }
         catch (IOException e)
         {
-            e.printStackTrace();
             throw new WrapperFault(e);
         }
     }

@@ -99,7 +99,6 @@ public class ParmHeaderFileWriter extends ParamWriter
         } 
         catch (IOException e)
         {
-            e.printStackTrace();
             throw new WrapperFault(e);
         }
     }

@@ -83,7 +83,6 @@ public abstract class ParamWriter extends BasicFileWriter
         }
         catch (IOException e)
         {
-            e.printStackTrace();
             throw new WrapperFault(e);
         }
     }

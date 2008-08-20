@@ -82,7 +82,6 @@ public abstract class HeaderFileWriter extends BasicFileWriter
         }
         catch (IOException e)
         {
-            e.printStackTrace();
             throw new WrapperFault(e);
         }
 

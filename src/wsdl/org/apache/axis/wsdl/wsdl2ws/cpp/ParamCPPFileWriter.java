@@ -76,7 +76,6 @@ public abstract class ParamCPPFileWriter extends ParamWriter
         }
         catch (IOException e)
         {
-            e.printStackTrace();
             throw new WrapperFault(e);
         }
     }
@@ -109,7 +108,6 @@ public abstract class ParamCPPFileWriter extends ParamWriter
         }
         catch (IOException e)
         {
-            e.printStackTrace();
             throw new WrapperFault(e);
         }
     }

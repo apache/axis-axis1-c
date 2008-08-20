@@ -181,7 +181,6 @@ public class ExceptionHeaderWriter extends HeaderFileWriter
         }
         catch (Exception e)
         {
-            e.printStackTrace();
             throw new WrapperFault(e);
         }
     }
