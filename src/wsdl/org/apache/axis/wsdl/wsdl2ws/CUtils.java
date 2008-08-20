@@ -28,9 +28,11 @@ import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.TypeMap;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Vector;
 import java.util.Hashtable;
+import java.util.Arrays;
 
 import javax.xml.namespace.QName;
 
@@ -91,7 +93,7 @@ public class CUtils
     public static Hashtable c_basicTypeToEnumMapper = new Hashtable();
     
     // Used to find out whether a basic type is a pointer type.
-    public static Hashtable c_isPointerBasedType = new Hashtable();
+    public static HashSet c_pointerBasedTypes = null;
     
     // Language
     private static String  c_language = WrapperConstants.LANGUAGE_CPP;
@@ -104,9 +106,9 @@ public class CUtils
     private static Vector c_uniqueNamesGenerated = new Vector();
     
     // list of c and cpp keywords
-    private static Hashtable c_cppkeywords = new Hashtable();
+    private static HashSet c_cppkeywords = null;
     
-    static{        
+    static{              
         c_basicTypeToQNameMapper.put("xsd__duration",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "duration"));
         c_basicTypeToQNameMapper.put("xsd__dateTime",                new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"));
         c_basicTypeToQNameMapper.put("xsd__time",                    new QName(WrapperConstants.SCHEMA_NAMESPACE, "time"));
@@ -242,6 +244,16 @@ public class CUtils
         c_qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "anyURI"),                "xsd__anyURI");
         c_qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "NOTATION"),                "xsd__NOTATION");
         
+        // TODO revisit attachment support.
+        c_qname2classmapCpp.put(new QName(WrapperConstants.APACHE_XMLSOAP_NAMESPACE, "Image"),       "ISoapAttachment");
+        c_qname2classmapCpp.put(new QName(WrapperConstants.APACHE_XMLSOAP_NAMESPACE, "PlainText"),  "ISoapAttachment");
+        c_qname2classmapCpp.put(new QName(WrapperConstants.APACHE_XMLSOAP_NAMESPACE, "Multipart"),  "ISoapAttachment");
+        c_qname2classmapCpp.put(new QName(WrapperConstants.APACHE_XMLSOAP_NAMESPACE, "Source"),     "ISoapAttachment");
+        c_qname2classmapCpp.put(new QName(WrapperConstants.APACHE_XMLSOAP_NAMESPACE, "octet-stream"),   "ISoapAttachment");
+        c_qname2classmapCpp.put(new QName(WrapperConstants.APACHE_XMLSOAP_NAMESPACE, "DataHandler"),    "ISoapAttachment");
+
+
+        
         c_qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "duration"),            "xsdc__duration");
         c_qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"),            "xsdc__dateTime");
         c_qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "time"),                "xsdc__time");
@@ -314,9 +326,9 @@ public class CUtils
         c_qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedLong"),    "xsd__unsignedLong");
         c_qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedShort"),    "xsd__unsignedShort");
         c_qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "QName"),            "xsd__QName");        
-//        qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "NCName"),            "xsd__NCName");        
-
-
+//        c_qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "NCName"),            "xsd__NCName");                
+        c_qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "NMTOKEN"),       "xsd__NMTOKEN");
+        
         /* TODO:
          *  Another strange issue from Axis 1.1 runtime when base64binary is in input/output operations.
          */    
@@ -629,96 +641,23 @@ public class CUtils
         c_initValueForBasicType.put("xsdc__QName",                    "NULL");
         c_initValueForBasicType.put("xsdc__NOTATION",                "NULL");
         
-        c_isPointerBasedType.put("xsd__duration", new Boolean(false));
-        c_isPointerBasedType.put("xsd__dateTime", new Boolean(false));
-        c_isPointerBasedType.put("xsd__time", new Boolean(false));
-        c_isPointerBasedType.put("xsd__date", new Boolean(false));
-        c_isPointerBasedType.put("xsd__gYearMonth", new Boolean(false));
-        c_isPointerBasedType.put("xsd__gYear", new Boolean(false));
-        c_isPointerBasedType.put("xsd__gMonthDay", new Boolean(false));
-        c_isPointerBasedType.put("xsd__gDay", new Boolean(false));
-        c_isPointerBasedType.put("xsd__gMonth", new Boolean(false));
-        c_isPointerBasedType.put("xsd__string", new Boolean(true));
-        c_isPointerBasedType.put("xsd__normalizedString", new Boolean(true));
-        c_isPointerBasedType.put("xsd__token", new Boolean(true));
-        c_isPointerBasedType.put("xsd__language", new Boolean(true));
-        c_isPointerBasedType.put("xsd__Name", new Boolean(true));
-        c_isPointerBasedType.put("xsd__NCName", new Boolean(true));
-        c_isPointerBasedType.put("xsd__ID", new Boolean(true));
-        c_isPointerBasedType.put("xsd__IDREF", new Boolean(true));
-        c_isPointerBasedType.put("xsd__IDREFS", new Boolean(true));
-        c_isPointerBasedType.put("xsd__ENTITY", new Boolean(true));
-        c_isPointerBasedType.put("xsd__ENTITIES", new Boolean(true));
-        c_isPointerBasedType.put("xsd__NMTOKEN", new Boolean(true));
-        c_isPointerBasedType.put("xsd__NMTOKENS", new Boolean(true));
-        c_isPointerBasedType.put("xsd__boolean", new Boolean(false));
-        c_isPointerBasedType.put("xsd__base64Binary", new Boolean(false));
-        c_isPointerBasedType.put("xsd__hexBinary", new Boolean(false));
-        c_isPointerBasedType.put("xsd__float", new Boolean(false));
-        c_isPointerBasedType.put("xsd__decimal", new Boolean(false));
-        c_isPointerBasedType.put("xsd__integer", new Boolean(false));
-        c_isPointerBasedType.put("xsd__nonPositiveInteger", new Boolean(false));
-        c_isPointerBasedType.put("xsd__negativeInteger", new Boolean(false));
-        c_isPointerBasedType.put("xsd__long", new Boolean(false));
-        c_isPointerBasedType.put("xsd__int", new Boolean(false));
-        c_isPointerBasedType.put("xsd__short", new Boolean(false));
-        c_isPointerBasedType.put("xsd__byte", new Boolean(false));
-        c_isPointerBasedType.put("xsd__nonNegativeInteger", new Boolean(false));
-        c_isPointerBasedType.put("xsd__unsignedLong", new Boolean(false));
-        c_isPointerBasedType.put("xsd__unsignedInt", new Boolean(false));
-        c_isPointerBasedType.put("xsd__unsignedShort", new Boolean(false));
-        c_isPointerBasedType.put("xsd__unsignedByte", new Boolean(false));
-        c_isPointerBasedType.put("xsd__positiveInteger", new Boolean(false));
-        c_isPointerBasedType.put("xsd__double", new Boolean(false));
-        c_isPointerBasedType.put("xsd__anyURI", new Boolean(true));
-        c_isPointerBasedType.put("xsd__QName", new Boolean(true));
-        c_isPointerBasedType.put("xsd__NOTATION", new Boolean(true));
-
-        c_isPointerBasedType.put("xsdc__duration", new Boolean(false));
-        c_isPointerBasedType.put("xsdc__dateTime", new Boolean(false));
-        c_isPointerBasedType.put("xsdc__time", new Boolean(false));
-        c_isPointerBasedType.put("xsdc__date", new Boolean(false));
-        c_isPointerBasedType.put("xsdc__gYearMonth", new Boolean(false));
-        c_isPointerBasedType.put("xsdc__gYear", new Boolean(false));
-        c_isPointerBasedType.put("xsdc__gMonthDay", new Boolean(false));
-        c_isPointerBasedType.put("xsdc__gDay", new Boolean(false));
-        c_isPointerBasedType.put("xsdc__gMonth", new Boolean(false));
-        c_isPointerBasedType.put("xsdc__string", new Boolean(true));
-        c_isPointerBasedType.put("xsdc__normalizedString", new Boolean(true));
-        c_isPointerBasedType.put("xsdc__token", new Boolean(true));
-        c_isPointerBasedType.put("xsdc__language", new Boolean(true));
-        c_isPointerBasedType.put("xsdc__Name", new Boolean(true));
-        c_isPointerBasedType.put("xsdc__NCName", new Boolean(true));
-        c_isPointerBasedType.put("xsdc__ID", new Boolean(true));
-        c_isPointerBasedType.put("xsdc__IDREF", new Boolean(true));
-        c_isPointerBasedType.put("xsdc__IDREF", new Boolean(true));
-        c_isPointerBasedType.put("xsdc__IDREFS", new Boolean(true));
-        c_isPointerBasedType.put("xsdc__ENTITY", new Boolean(true));
-        c_isPointerBasedType.put("xsdc__ENTITIES", new Boolean(true));
-        c_isPointerBasedType.put("xsdc__NMTOKEN", new Boolean(true));
-        c_isPointerBasedType.put("xsdc__NMTOKENS", new Boolean(true));
-        c_isPointerBasedType.put("xsdc__boolean", new Boolean(false));
-        c_isPointerBasedType.put("xsdc__base64Binary", new Boolean(false));
-        c_isPointerBasedType.put("xsdc__hexBinary", new Boolean(false));
-        c_isPointerBasedType.put("xsdc__float", new Boolean(false));
-        c_isPointerBasedType.put("xsdc__decimal", new Boolean(false));
-        c_isPointerBasedType.put("xsdc__integer", new Boolean(false));
-        c_isPointerBasedType.put("xsdc__nonPositiveInteger", new Boolean(false));
-        c_isPointerBasedType.put("xsdc__negativeInteger", new Boolean(false));
-        c_isPointerBasedType.put("xsdc__long", new Boolean(false));
-        c_isPointerBasedType.put("xsdc__int", new Boolean(false));
-        c_isPointerBasedType.put("xsdc__short", new Boolean(false));
-        c_isPointerBasedType.put("xsdc__byte", new Boolean(false));
-        c_isPointerBasedType.put("xsdc__nonNegativeInteger", new Boolean(false));
-        c_isPointerBasedType.put("xsdc__unsignedLong", new Boolean(false));
-        c_isPointerBasedType.put("xsdc__unsignedInt", new Boolean(false));
-        c_isPointerBasedType.put("xsdc__unsignedShort", new Boolean(false));
-        c_isPointerBasedType.put("xsdc__unsignedByte", new Boolean(false));
-        c_isPointerBasedType.put("xsdc__positiveInteger", new Boolean(false));
-        c_isPointerBasedType.put("xsdc__double", new Boolean(false));
-        c_isPointerBasedType.put("xsdc__anyURI", new Boolean(true));
-        c_isPointerBasedType.put("xsdc__QName", new Boolean(true));
-        c_isPointerBasedType.put("xsdc__NOTATION", new Boolean(true));
+        String[] pointerTypes = {
+        // C++ types
+        "xsd__string",         "xsd__normalizedString",             "xsd__token",
+        "xsd__language",       "xsd__Name",                         "xsd__NCName",
+        "xsd__ID",             "xsd__IDREF",                        "xsd__IDREFS",
+        "xsd__ENTITY",         "xsd__ENTITIES",                     "xsd__NMTOKEN",
+        "xsd__NMTOKENS",       "xsd__anyURI",                       "xsd__QName",
+        "xsd__NOTATION",    
+        // C types
+        "xsdc__string",        "xsdc__normalizedString",            "xsdc__token",
+        "xsdc__language",      "xsdc__Name",                        "xsdc__NCName",
+        "xsdc__ID",            "xsdc__IDREF",                       "xsdc__IDREFS",
+        "xsdc__ENTITY",        "xsdc__ENTITIES",                    "xsdc__NMTOKEN",       
+        "xsdc__NMTOKENS",      "xsdc__anyURI",                      "xsdc__QName",         
+        "xsdc__NOTATION"
+        };
+        c_pointerBasedTypes = new HashSet(Arrays.asList(pointerTypes));
     
         String[] words2 = {
                 "and", "and_eq", "asm", "auto",
@@ -743,8 +682,7 @@ public class CUtils
                 "xor", "xor_eq",
                 "string"
          };
-        for (int i = 0; i < words2.length; i++)
-            c_cppkeywords.put(words2[i], words2[i]);
+        c_cppkeywords = new HashSet(Arrays.asList(words2));
     }
     
     
@@ -757,10 +695,7 @@ public class CUtils
      */
     public static String resolveWSDL2LanguageNameClashes(String name)
     {
-       // C and C++ keywords are all in one hash table
-       Hashtable keywords = c_cppkeywords;
-
-       if (keywords.containsKey(name))
+       if (c_cppkeywords.contains(name))
            return "_" + name;
 
        return name;
@@ -789,7 +724,6 @@ public class CUtils
         }
         else
             throw new WrapperFault("Unsupported language.");
-
     }
     
     /**
@@ -825,6 +759,28 @@ public class CUtils
     }
     
     /**
+     * Returns boolean indicating whether QName represents a primitive basic type.
+     * Primitive basic types map to axis types such as xsd__xxxx or xsdc__xxxxx.
+     * 
+     * @param qname
+     * @return
+     */
+    public static boolean isPrimitiveBasicType(QName qname)
+    {
+        String t = (String)c_qnameToBasicTypeMapper.get(qname);
+        return ((t != null) 
+                && (t.startsWith("xsd__") 
+                        || t.startsWith("xsdc__")
+                        || (qname.getNamespaceURI().equals(WrapperConstants.APACHE_XMLSOAP_NAMESPACE) 
+                                && (qname.getLocalPart().equals("DataHandler") 
+                                        || qname.getLocalPart().equals("Image") 
+                                        || qname.getLocalPart().equals("MimeMultipart") 
+                                        || qname.getLocalPart().equals("Source") 
+                                        || qname.getLocalPart().equals("octet-stream") 
+                                        || qname.getLocalPart().equals("PlainText")))));
+    }
+    
+    /**
      * Method to determine if name passed in is that of a simple type. 
      * 
      * @param name
@@ -836,7 +792,7 @@ public class CUtils
     } 
     
     /**
-     * Method to determine if basic type is a pointer type. 
+     * Method to determine if simple type is a pointer type. 
      * 
      * @param name
      * @return
@@ -844,17 +800,13 @@ public class CUtils
     public static boolean isPointerType(String name)
     {
         if (name != null)
-        {
-            Object o = c_isPointerBasedType.get(name);
-            if( o != null)
-                return ((Boolean)o).booleanValue();
-        }
+            return c_pointerBasedTypes.contains(name);
         
         return false;
     }
     
     /**
-     * Method to determine if basic type is a pointer type. 
+     * Method to determine if simple type is a pointer type. 
      * 
      * @param name
      * @return
@@ -864,6 +816,13 @@ public class CUtils
         return isPointerType((String)c_qnameToBasicTypeMapper.get(name));
     }    
     
+  
+    /**
+     * Method to determine if QName represents an AnyType.
+     * 
+     * @param name
+     * @return
+     */
     public static boolean isAnyType(QName name)
     {
             return name.equals(anyTypeQname);
@@ -877,11 +836,25 @@ public class CUtils
             return c_schemaDefinedSimpleTypesMap.containsKey(name);
     } 
 
+    /**
+     * Method to determine if QName represents a type that is a schema-defined 
+     * simple type.
+     * 
+     * @param name
+     * @return
+     */
     public static boolean isDefinedSimpleType(QName name)
     {
         return c_schemaDefinedSimpleTypesMap.containsKey(name);    
     }
         
+    /**
+     * Returns deserializer method name for element or attribute to be deserialized.
+     * 
+     * @param typeName
+     * @param isAttrib
+     * @return
+     */
     public static String getDeserializerMethodNameForType(String typeName, boolean isAttrib)
     {
         String methodname = (String)c_basicTypeToMethodSuffixMapper.get(typeName);
@@ -915,6 +888,20 @@ public class CUtils
         return (String) val;
     }
 
+    /**
+     * Returns primitive basic type that matches QName.
+     * 
+     * @param qname
+     * @return
+     */
+    public static String getPrimitiveBasicTypeForQName(QName qname) 
+    {
+        if (isPrimitiveBasicType(qname))
+            return (String)c_qnameToBasicTypeMapper.get(qname);
+        
+        return null;
+    }
+    
     /**
      * Get initialization value string for a basic type. 
      * 
@@ -1156,7 +1143,7 @@ public class CUtils
     }
 
     /**
-     *  get classpart of the class and if name happen to be a Simple type return 
+     *  get class part of the class and if name happen to be a Simple type return 
      *  the Wrapper Class name(service.0 wrapper class name)
      *  
      */
@@ -1175,6 +1162,7 @@ public class CUtils
 
     /**
      * Capitalize the first Character of a given String. 
+     * 
      * @param value String 
      * @return changed String 
      */
@@ -1185,6 +1173,12 @@ public class CUtils
         return new String(chars);
     }
 
+    /**
+     * Lowercase the first character in a string.
+     * 
+     * @param value
+     * @return
+     */
     public static String firstCharacterToLowercase(String value)
     {
         char[] chars = value.toCharArray();
@@ -1210,7 +1204,7 @@ public class CUtils
             
             return name;
         }
-        else if (!TypeMap.isSimpleType(param.getSchemaName()))
+        else if (!CUtils.isPrimitiveBasicType(param.getSchemaName()))
         { 
             //array or complex types
             if (null != type && type.isArray())
@@ -1248,6 +1242,13 @@ public class CUtils
             return param.getLangName();
     }
 
+    /**
+     * Returns the Type of elements in the array.
+     * 
+     * @param type
+     * @return
+     * @throws WrapperFault
+     */
     public static Type getArrayType(Type type) throws WrapperFault
     {
         if (!type.isArray())

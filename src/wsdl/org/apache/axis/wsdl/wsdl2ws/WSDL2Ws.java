@@ -828,7 +828,7 @@ public class WSDL2Ws
         if (!type.isReferenced())
             return null;
         
-        if (c_verbose && !TypeMap.isSimpleType(type.getQName()))
+        if (c_verbose && !CUtils.isPrimitiveBasicType(type.getQName()))
             System.out.println("Attempting to create type: " + type.getQName());
         
         if (type instanceof CollectionElement)
@@ -866,7 +866,7 @@ public class WSDL2Ws
             typedata = c_typeMap.getType(newqn);
             if (typedata != null)
             {
-                if (c_verbose && !TypeMap.isSimpleType(type.getQName()))
+                if (c_verbose && !CUtils.isPrimitiveBasicType(type.getQName()))
                     System.out.println("Type not created, already exists: " + type.getQName());
                 
                 return typedata;
@@ -885,7 +885,7 @@ public class WSDL2Ws
             typedata = c_typeMap.getType(type.getQName());
             if (typedata != null)
             {
-                if (c_verbose && !TypeMap.isSimpleType(type.getQName()))
+                if (c_verbose && !CUtils.isPrimitiveBasicType(type.getQName()))
                     System.out.println("Type not created, already exists: " + type.getQName());
                 
                 return typedata;

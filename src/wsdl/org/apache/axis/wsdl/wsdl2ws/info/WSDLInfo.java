@@ -381,7 +381,6 @@ public class WSDLInfo
                 String typedataLocalpartSanitized = null;
                 String baseTypeLocalpartSanitized = null;
                 
-                Boolean isPointer   = null;
                 String methodSuffix = null;
                 
                 String primitiveXSDType          = null;
@@ -400,7 +399,7 @@ public class WSDLInfo
                 String class4qname          = null;
                 String class4qnameSanitized = null;
                 
-                String javaName = TypeMap.getBasicTypeClass4qname(baseEType.getQName());
+                String javaName = CUtils.getPrimitiveBasicTypeForQName(baseEType.getQName());
                 boolean isBaseTypePrimitive = javaName != null;
                 
                 QName primitiveBaseTypeQName = null;
@@ -438,15 +437,17 @@ public class WSDLInfo
                 // simple type. If anonymous type, we need to update mapping tables twice: once
                 // with the anonymous names, and once with the sanitized names. 
                 
-                isPointer = new Boolean(CUtils.isPointerType(primitiveBaseTypeQName));
+                boolean isPointerType = CUtils.isPointerType(primitiveBaseTypeQName);
                 primitiveXSDType = CUtils.getXSDTypeForBasicType(classForPrimitiveType);
 
                 if (!isBaseTypePrimitive)
                 {
                     typedata.setRestrictionBaseType(baseTypeLocalpart);
-                    CUtils.c_isPointerBasedType.put(baseTypeLocalpart, isPointer);
+                    if (isPointerType)
+                        CUtils.c_pointerBasedTypes.add(baseTypeLocalpart);
                 }
-                CUtils.c_isPointerBasedType.put(typedataLocalpart, isPointer);                    
+                if (isPointerType)
+                    CUtils.c_pointerBasedTypes.add(typedataLocalpart);                    
 
                 methodSuffix = (String)CUtils.c_basicTypeToMethodSuffixMapper.get(classForPrimitiveType);
                 CUtils.c_qnameToBasicTypeMapper.put(typedataQName, class4qname);
@@ -466,7 +467,8 @@ public class WSDLInfo
 
                 if (typedataQNameSanitized != null)
                 {
-                    CUtils.c_isPointerBasedType.put(typedataLocalpartSanitized, isPointer); 
+                    if (isPointerType)
+                        CUtils.c_pointerBasedTypes.add(typedataLocalpartSanitized); 
                     CUtils.c_qnameToBasicTypeMapper.put(typedataQNameSanitized, class4qnameSanitized);
                     CUtils.c_basicTypeToEnumMapper.put(typedataLocalpartSanitized, primitiveXSDType);
                     if (initValueForType != null)
@@ -476,7 +478,8 @@ public class WSDLInfo
                 
                 if (baseTypeLocalpartSanitized != null)
                 {
-                    CUtils.c_isPointerBasedType.put(baseTypeLocalpartSanitized, isPointer);
+                    if (isPointerType)
+                        CUtils.c_pointerBasedTypes.add(baseTypeLocalpartSanitized);
                     CUtils.c_basicTypeToEnumMapper.put(baseTypeLocalpartSanitized, primitiveXSDType);
                     if (initValueForType != null)
                         CUtils.c_initValueForBasicType.put(baseTypeLocalpartSanitized, initValueForType);

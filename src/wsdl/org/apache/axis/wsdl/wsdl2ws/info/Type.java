@@ -432,7 +432,7 @@ public class Type
      */
     public void addRelatedType(Type type)
     {
-        if (type != null && !TypeMap.isSimpleType(type.getName()))
+        if (type != null && !CUtils.isPrimitiveBasicType(type.getName()))
             this.vRelatedTypes.add(type);
     }    
     // vvv FJP - 17667
