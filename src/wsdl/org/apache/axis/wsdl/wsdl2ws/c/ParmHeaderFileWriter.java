@@ -428,7 +428,7 @@ public class ParmHeaderFileWriter extends ParamWriter
                 String basicType = attribs[i].getTypeName();
                 Type theType = attribs[i].getType();
 
-                if (theType.isRestriction() && !CUtils.isSimpleType(basicType))
+                if (theType.isRestriction() && !CUtils.isPrimitiveBasicType(basicType))
                     typeSet.add(basicType);
                 else if (!attribs[i].isSimpleType())
                 {
@@ -450,7 +450,7 @@ public class ParmHeaderFileWriter extends ParamWriter
                 if (extBaseType.lastIndexOf("*") > -1)
                     extBaseType = extBaseType.substring(0, extBaseType.lastIndexOf("*"));
 
-                if (!CUtils.isSimpleType(extBaseType))
+                if (!CUtils.isPrimitiveBasicType(extBaseType))
                     typeSet.add(extBaseType);
             }            
             

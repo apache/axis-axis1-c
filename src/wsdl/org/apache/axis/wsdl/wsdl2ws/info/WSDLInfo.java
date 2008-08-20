@@ -884,6 +884,7 @@ public class WSDLInfo
 
                 methodSuffix = (String)CUtils.c_basicTypeToMethodSuffixMapper.get(classForPrimitiveType);
                 CUtils.c_qnameToBasicTypeMapper.put(typedataQName, class4qname);
+                CUtils.c_basicTypeToQNameMapper.put(class4qname, typedataQName);
                 CUtils.c_basicTypeToEnumMapper.put(typedataLocalpart, primitiveXSDType);
 
                 if (initValueForType != null)
@@ -903,6 +904,7 @@ public class WSDLInfo
                     if (isPointerType)
                         CUtils.c_pointerBasedTypes.add(typedataLocalpartSanitized); 
                     CUtils.c_qnameToBasicTypeMapper.put(typedataQNameSanitized, class4qnameSanitized);
+                    CUtils.c_basicTypeToQNameMapper.put(class4qnameSanitized, typedataQNameSanitized);
                     CUtils.c_basicTypeToEnumMapper.put(typedataLocalpartSanitized, primitiveXSDType);
                     if (initValueForType != null)
                         CUtils.c_initValueForBasicType.put(typedataLocalpartSanitized, initValueForType);

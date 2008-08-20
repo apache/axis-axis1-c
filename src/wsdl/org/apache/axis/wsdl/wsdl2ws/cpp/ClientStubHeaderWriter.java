@@ -140,30 +140,21 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
 
                 //write parameter names 
                 Iterator params = minfo.getInputParameterTypes().iterator();
-                if (params.hasNext())
-                {
-                    ParameterInfo fparam = (ParameterInfo) params.next();
-                    String paramTypeName = CUtils.getClassNameFromParamInfoConsideringArrays(fparam,wscontext);
-                    if ((paramTypeName.lastIndexOf ("_Array") > 0)
-                            ||(CUtils.isSimpleType(paramTypeName)
-                                    && fparam.isNillable()
-                                    && !(CUtils.isPointerType(paramTypeName))))
-                        writer.write(paramTypeName + " * Value" + 0);
-                    else
-                        writer.write(paramTypeName + " Value" + 0);
-                }
-                
-                for (int j = 1; params.hasNext(); j++)
+                String commaSeperator = "";
+                for (int j = 0; params.hasNext(); j++)
                 {
                     ParameterInfo nparam = (ParameterInfo) params.next();
                     String paramTypeName = CUtils.getClassNameFromParamInfoConsideringArrays(nparam, wscontext);
                     if ((paramTypeName.lastIndexOf ("_Array") > 0)
                             || (CUtils.isSimpleType(paramTypeName)
-                                    && nparam.isNillable()
+                                    && (nparam.isNillable() || nparam.isOptional())
                                     && !(CUtils.isPointerType(paramTypeName))))
-                        writer.write(", " + paramTypeName + " * Value" + j);
+                        writer.write(commaSeperator + paramTypeName + " * Value" + j);
                     else
-                        writer.write(", " + paramTypeName + " Value" + j);
+                        writer.write(commaSeperator + paramTypeName + " Value" + j);
+                    
+                    if (j==0)
+                        commaSeperator = ", ";
                 }
                 
                 if (isAllTreatedAsOutParams)

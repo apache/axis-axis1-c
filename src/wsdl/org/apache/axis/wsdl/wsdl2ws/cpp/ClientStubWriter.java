@@ -212,14 +212,25 @@ public class ClientStubWriter extends CPPClassWriter
 
         if (returntype != null)
         {
-            outparamType = CUtils.getClassNameFromParamInfoConsideringArrays(returntype, wscontext);
             retType = wscontext.getTypemap().getType(returntype.getSchemaName());
             if (retType != null)
             {
-                returntypeisarray = retType.isArray();
-                if (CUtils.isSimpleType(retType.getLanguageSpecificName()))
-                    returntypeissimple = true;
+                outparamType = CUtils.getClassNameFromParamInfoConsideringArrays(returntype, wscontext);
+                if (retType.isSimpleType())
+                   returntypeissimple = true;
+                else
+                {
+                    returntypeissimple = CUtils.isSimpleType (outparamType);
+                    returntypeisarray = (outparamType.lastIndexOf ("_Array") > 0);
+                }
+            
+                returntypeisarray |= retType.isArray();
             }
+            else
+            {
+                outparamType = returntype.getLangName ();
+                returntypeissimple = CUtils.isSimpleType (outparamType);
+            } 
         }
 
         //=============================================================================
@@ -257,8 +268,8 @@ public class ClientStubWriter extends CPPClassWriter
             
             typeissimple = CUtils.isSimpleType(paramTypeName);
             if (typeissimple
-                    && (!(((ParameterInfo) paramsB.get (0)).isNillable () 
-                            || ((ParameterInfo) paramsB.get (0)).isOptional())
+                    && (!(((ParameterInfo) paramsB.get (i)).isNillable () 
+                            || ((ParameterInfo) paramsB.get (i)).isOptional())
                     || CUtils.isPointerType(paramTypeName)))
                 writer.write (paramTypeName + " Value" + i);
             else if (paramTypeName.lastIndexOf ("*") > 0)

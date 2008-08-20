@@ -69,7 +69,7 @@ public class CUtils
     };
     
     // Maps simple types to a QName.
-    private static Hashtable c_basicTypeToQNameMapper = new Hashtable();
+    public static Hashtable c_basicTypeToQNameMapper = new Hashtable();
     
     // Returns the initialization value string for a basic type.
     public static Hashtable c_initValueForBasicType = new Hashtable();
@@ -778,6 +778,19 @@ public class CUtils
                                         || qname.getLocalPart().equals("Source") 
                                         || qname.getLocalPart().equals("octet-stream") 
                                         || qname.getLocalPart().equals("PlainText")))));
+    }
+    
+    /**
+     * Returns boolean indicating whether name is a primitive type
+     * such as xsd__xxxx or xsdc__xxxxx.
+     * 
+     * @param qname
+     * @return
+     */
+    public static boolean isPrimitiveBasicType(String name)
+    {
+        return (c_basicTypeToQNameMapper.containsKey(name)
+                && (name.startsWith("xsd__") || name.startsWith("xsdc__")));
     }
     
     /**
