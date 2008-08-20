@@ -24,7 +24,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
@@ -36,19 +35,11 @@ import javax.wsdl.Port;
 import javax.wsdl.PortType;
 import javax.wsdl.Service;
 import javax.xml.namespace.QName;
-import javax.xml.rpc.holders.IntHolder;
-
-// hold off until we use 1.4 or newer axis.jar.
-//import org.apache.axis.constants.Style;
 
 import org.apache.axis.wsdl.symbolTable.BaseType;
 import org.apache.axis.wsdl.symbolTable.BindingEntry;
 import org.apache.axis.wsdl.symbolTable.CElementDecl;
-import org.apache.axis.wsdl.symbolTable.CSchemaUtils;
 import org.apache.axis.wsdl.symbolTable.CContainedAttribute;
-import org.apache.axis.wsdl.symbolTable.CollectionElement;
-import org.apache.axis.wsdl.symbolTable.CollectionType;
-import org.apache.axis.wsdl.symbolTable.DefinedElement;
 import org.apache.axis.wsdl.symbolTable.DefinedType;
 import org.apache.axis.wsdl.symbolTable.Element;
 import org.apache.axis.wsdl.symbolTable.Parameters;
@@ -63,7 +54,6 @@ import org.apache.axis.wsdl.wsdl2ws.info.TypeMap;
 import org.apache.axis.wsdl.wsdl2ws.info.WSDLInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 import org.apache.axis.wsdl.wsdl2ws.info.WrapperInfo;
-import org.w3c.dom.Node;
 
 /**
  * This is the main class for the WSDL2Ws Tool. This class reuses the code in the 
@@ -243,23 +233,7 @@ public class WSDL2Ws
         // Generate types, populating the type map
         // ==================================================            
         
-        c_typeMap = new TypeMap();
-        
-        Iterator it = c_symbolTable.getTypeIndex().values().iterator();
-        while (it.hasNext())
-        {
-            TypeEntry type = (TypeEntry) it.next();
-            Node node = type.getNode();
-            if (node != null)
-            {
-                if (c_verbose)
-                {
-                    System.out.println( "==>getTypeInfo: Processing type...." + type.getQName());                    
-                }
-                                
-                createTypeInfo(type);
-            }
-        }
+        c_typeMap = c_wsdlInfo.generateTypeMap();
         
         // ==================================================
         // Get service, ports, binding, and port type
@@ -320,7 +294,7 @@ public class WSDL2Ws
         {
             System.out.println( "Dumping typeMap....");
             
-            it = c_typeMap.getTypes().iterator();
+            Iterator it = c_typeMap.getTypes().iterator();
             while (it.hasNext())
             {
                 System.out.println(it.next());
@@ -789,283 +763,6 @@ public class WSDL2Ws
         }
     }
 
-
-    /**
-     * Iterates through symbol table, creating types in the typemap.
-     * 
-     * @param typename
-     * @return
-     * @throws WrapperFault
-     */
-    private Type createTypeInfo(QName typename)  throws WrapperFault
-    {
-        TypeEntry type = c_symbolTable.getType(typename);
-        if (type == null)
-        {
-            type = c_symbolTable.getElement(typename);
-            if (type == null)
-            {
-                throw new WrapperFault(
-                    "["
-                        + typename
-                        + "]unexpected condition occurred "
-                        + ".. please inform the axis-dev@apache.org mailing list ASAP");
-            }
-        }
-        return createTypeInfo(type);
-    }
-    
-    /**
-     * Creates a type map entry from a symbol table typeentry. 
-     * 
-     * @param type
-     * @return
-     * @throws WrapperFault
-     */
-    private Type createTypeInfo(TypeEntry type) throws WrapperFault
-    {
-        Type typedata = null;
-        Type newSecondaryType = null;
-        
-        // Do not add types which are not used in the WSDL
-        if (!type.isReferenced())
-            return null;
-        
-        if (c_verbose && !CUtils.isPrimitiveBasicType(type.getQName()))
-            System.out.println("Attempting to create type: " + type.getQName());
-        
-        if (type instanceof CollectionElement)
-        { //an array
-        }
-        else if (type instanceof DefinedElement)
-        { 
-            // if element references another type, process the referenced type
-            if (type.getRefType() != null)
-            {
-                if (c_verbose)
-                    System.out.println("Attempting to create new type from element-ref: " + type.getRefType().getQName());
-                
-                return createTypeInfo(type.getRefType());
-            }
-
-            return null;
-        }
-        
-        if (-1 != type.getQName().getLocalPart().indexOf('['))
-        { 
-            /* it seems that this is an array */
-            if (null == type.getRefType())
-                throw new WrapperFault("Array type found without a Ref type");
-            
-            QName qn = type.getRefType().getQName();
-            if (null == qn)
-                throw new WrapperFault("Array type found without a Ref type");
-            
-            if (CUtils.isBasicType(qn))
-                return null;
-            
-            QName newqn = new QName(type.getQName().getNamespaceURI(), qn.getLocalPart() + "_Array");
-            // type is a inbuilt type or a already created type?
-            typedata = c_typeMap.getType(newqn);
-            if (typedata != null)
-            {
-                if (c_verbose && !CUtils.isPrimitiveBasicType(type.getQName()))
-                    System.out.println("Type not created, already exists: " + type.getQName());
-                
-                return typedata;
-            }            
-            
-            typedata = new Type(newqn, newqn.getLocalPart());
-            
-            if (type.getRefType().getRefType() != null)
-                typedata.setElementType(type.getRefType().getRefType().getQName().getLocalPart());
-            else
-                typedata.setElementType(type.getRefType().getQName().getLocalPart());     
-        }
-        else
-        {
-            // type is a inbuilt type or a already created type?
-            typedata = c_typeMap.getType(type.getQName());
-            if (typedata != null)
-            {
-                if (c_verbose && !CUtils.isPrimitiveBasicType(type.getQName()))
-                    System.out.println("Type not created, already exists: " + type.getQName());
-                
-                return typedata;
-            }
-            
-            typedata = new Type(type.getQName(), type.getQName().getLocalPart());
-        }
-        
-        // Add type to type map
-        if (c_verbose)
-            System.out.println("Created new type: " + typedata.getName());
-        
-        c_typeMap.addType(typedata.getName(), typedata);
-        
-        // work out whether this type will be generated or not 
-        typedata.externalize(isTypeGenerated(type, typedata));
-
-        Node node = type.getNode();
-
-        if (type.isSimpleType())
-        {
-            //check for extended types
-            TypeEntry base = CSchemaUtils.getComplexElementExtensionBase(type.getNode(), c_symbolTable);
-            if (base != null)
-            {
-                String localpart = type.getQName().getLocalPart() + "_value";
-                QName typeName =  new QName(type.getQName().getNamespaceURI(), localpart);
-                newSecondaryType = createTypeInfo(base.getQName());
-                typedata.addRelatedType(newSecondaryType);
-                typedata.setExtensionBaseType(new CElementDecl(newSecondaryType, typeName));
-                if (c_verbose)
-                    System.out.print(
-                        "=====complexType with simpleContent is found : "
-                            + type.getQName().getLocalPart() + "=====\n");
-            }
-            else
-                c_wsdlInfo.setRestrictionBaseAndValues(typedata, node);
-            
-            // There can be attributes in this extended basic type
-            Vector attributes = CSchemaUtils.getContainedAttributeTypes(type.getNode(), c_symbolTable);
-            if (attributes != null)
-            {
-                for (int j = 0; j < attributes.size(); j++)
-                {
-                    CContainedAttribute attr = (CContainedAttribute)attributes.get(j);
-                    newSecondaryType = createTypeInfo(attr.getTypeEntry().getQName());
-                    attr.setType(newSecondaryType);
-                    typedata.addRelatedType(newSecondaryType);
-                }
-                typedata.addAttributes(attributes);
-            }
-        }
-        else if (type instanceof CollectionType)
-        {
-            newSecondaryType = createTypeInfo(type.getRefType().getQName());
-            typedata.addRelatedType(newSecondaryType);
-            typedata.setTypeNameForElementName(new CElementDecl(newSecondaryType, type.getQName()));
-            typedata.setArray(true);
-        }
-        else
-        {
-            //is this a SOAPEnc array type    
-            QName arrayType = CSchemaUtils.getArrayComponentQName(node,new IntHolder(0),c_symbolTable);
-            if (arrayType != null)
-            {
-                newSecondaryType = createTypeInfo(arrayType);
-                typedata.addRelatedType(newSecondaryType);
-                typedata.setTypeNameForElementName(new CElementDecl(newSecondaryType, new QName("item")));
-                typedata.setArray(true);
-            }
-            else if ((arrayType = CSchemaUtils.getCollectionComponentQName(node)) != null)
-            {
-                newSecondaryType = createTypeInfo(arrayType);
-                typedata.addRelatedType(newSecondaryType);
-                typedata.setTypeNameForElementName(new CElementDecl(newSecondaryType, new QName("item")));
-                typedata.setArray(true);
-            }
-            //Note in a array the parameter type is stored as under the name item all the time  
-            else
-            {
-                // get all extended types
-                Vector extendList = new Vector();
-                extendList.add(type);
-                
-                TypeEntry parent = CSchemaUtils.getComplexElementExtensionBase(type.getNode(), c_symbolTable);
-                while (parent != null)
-                {
-                    extendList.add(parent);
-                    parent = CSchemaUtils.getComplexElementExtensionBase(parent.getNode(), c_symbolTable);
-                }
-
-                // Now generate a list of names and types starting with
-                // the oldest parent.  (Attrs are considered before elements).
-                for (int i = extendList.size() - 1; i >= 0; i--)
-                {
-                    TypeEntry te = (TypeEntry) extendList.elementAt(i);
-
-                    //TODO the code require the attributes name at extension base types
-                    //different, the WSDL2Ws do not support it having same name at up and below.
-
-                    // Process the attributes
-                    if (c_verbose)
-                        System.out.println("Processing attributes for type: " + type.getQName());
-
-                    // TODO Need to handle whether attributes are qualified?
-                    Vector attributes = CSchemaUtils.getContainedAttributeTypes(te.getNode(), c_symbolTable);
-                    if (attributes != null)
-                    {
-                        for (int j = 0; j < attributes.size(); j++)
-                        {
-                            CContainedAttribute attr = (CContainedAttribute)attributes.get(j);
-                            newSecondaryType = createTypeInfo(attr.getTypeEntry().getQName());
-                            attr.setType(newSecondaryType);
-                            typedata.addRelatedType(newSecondaryType);
-                        }
-                        typedata.addAttributes(attributes);
-                    }                        
-                    
-                    // Process the elements
-                    if (c_verbose)
-                        System.out.println("Processing elements for type: " + type.getQName());
-                    
-                    Vector elements =  CSchemaUtils.getContainedElementDeclarations(te.getNode(), c_symbolTable);
-                    if (elements != null)
-                    {
-                        // The following will get elementFormDefault for the schema the element is in.
-                        boolean nsQualifyElementDefault = CSchemaUtils.isElementFormDefaultQualified(te.getNode());
-                        
-                        // Now process the elements.
-                        for (int j = 0; j < elements.size(); j++)
-                        {   
-                            CElementDecl elem = (CElementDecl) elements.get(j);
-                            
-                            // Set whether to namespace qualify or not. We only process if not set.
-                            if (!elem.getNsQualified())
-                            {
-                                boolean nsQualifyElement = 
-                                    CSchemaUtils.shouldWeNamespaceQualifyNode(elem.getTypeEntry().getNode(), 
-                                                                              nsQualifyElementDefault);
-                                elem.setNsQualified(nsQualifyElement);
-                            }
-                            
-                            if (elem.getAnyElement())
-                            {
-                                newSecondaryType =  new Type(CUtils.anyTypeQname, CUtils.anyTypeQname.getLocalPart());
-                            }
-                            else
-                            {
-                                QName typeName = elem.getTypeEntry().getQName();
-                                if (typeName.getLocalPart().indexOf('[') > 0)
-                                {
-                                    String localpart =
-                                        typeName.getLocalPart().substring(0, typeName.getLocalPart().indexOf('['));
-                                    
-                                    typeName = new QName(typeName.getNamespaceURI(), localpart);
-                                    
-                                    if (CUtils.isBasicType(typeName))
-                                        newSecondaryType = createTypeInfo(typeName);
-                                    else
-                                        newSecondaryType = createTypeInfo(elem.getTypeEntry());
-                                }
-                                else
-                                    newSecondaryType = createTypeInfo(typeName);
-                            }
-                            
-                            typedata.addRelatedType(newSecondaryType);
-                            elem.setType(newSecondaryType);
-                                                       
-                            typedata.setTypeNameForElementName(elem);
-                        }
-                    }
-                } // for-loop
-            }
-        }
-        return typedata;
-    }
-
     /**
      * Adds faults.
      * 
@@ -1389,30 +1086,6 @@ public class WSDL2Ws
         }
     }
 
-    /**
-     * Work out the various conditions that dictate whether this type will be generated into a new
-     * file or not.
-     * This method is only very partially implemented. 
-     *   
-     * @param type
-     * @param typedata
-     * @return true if the type will not be generated. False otherwise
-     */
-    private boolean isTypeGenerated(TypeEntry type, Type typedata)
-    {
-        // If the referenced type is actually a type that will not get generated because it's
-        //     a base type array then tell other people of this case. Do this to two levels of indirection
-        
-        if(type.getRefType()!=null)
-            if(type.getRefType().getRefType()!=null && type.getRefType().getRefType().isBaseType())
-                return false;
-            
-        if (typedata.isAnonymous())
-            return false;
-        else
-            return true;
-    }
-    
     /**
      * Resolves name conflict between a method name and a type name. 
      * When doing document-literal, usually the name of the wrapper element is same as the 
