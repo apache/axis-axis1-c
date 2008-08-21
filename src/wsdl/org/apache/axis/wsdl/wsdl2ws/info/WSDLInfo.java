@@ -537,7 +537,7 @@ public class WSDLInfo
             if (null == qn)
                 throw new WrapperFault("Array type found without a Ref type");
             
-            if (CUtils.isBasicType(qn))
+            if (CUtils.isPrimitiveType(qn))
                 return null;
             
             QName newqn = new QName(type.getQName().getNamespaceURI(), qn.getLocalPart() + "_Array");
@@ -721,7 +721,7 @@ public class WSDLInfo
                                     
                                     typeName = new QName(typeName.getNamespaceURI(), localpart);
                                     
-                                    if (CUtils.isBasicType(typeName))
+                                    if (CUtils.isPrimitiveType(typeName))
                                         newSecondaryType = createTypeInfo(typeName, typeMap);
                                     else
                                         newSecondaryType = createTypeInfo(elem.getTypeEntry(), typeMap);

@@ -753,17 +753,6 @@ public class CUtils
             return true;
         else 
             return c_schemaDefinedSimpleTypesMap.containsKey(name);
-    } 
-        
-    /**
-     * Returns boolean indicating whether qname represents a simple type.
-     * 
-     * @param qname
-     * @return
-     */
-    public static boolean isBasicType(QName qname)
-    {
-        return c_qnameToSimpleTypeMapper.containsKey(qname);
     }
     
     /**
