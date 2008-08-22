@@ -883,7 +883,7 @@ public class WSDLInfo
                     CUtils.addPointerType(typedataLocalpart);                    
 
                 methodSuffix = (String)CUtils.getDeserializerMethodSuffixForType(classForPrimitiveType);
-                CUtils.addDeserializerMethodSuffixForType(typedataLocalpart, primitiveXSDType);
+                CUtils.addXSDEnumeratorForType(typedataLocalpart, primitiveXSDType);
 
                 if (initValueForType != null)
                     CUtils.addInitValueForType(typedataLocalpart, initValueForType);
@@ -891,7 +891,7 @@ public class WSDLInfo
                 
                 if (!isBaseTypePrimitive)
                 {
-                    CUtils. addXSDEnumeratorForType(baseTypeLocalpart, primitiveXSDType);
+                    CUtils.addXSDEnumeratorForType(baseTypeLocalpart, primitiveXSDType);
                     if (initValueForType != null)
                         CUtils.addInitValueForType(baseTypeLocalpart, initValueForType);
                     CUtils.addDeserializerMethodSuffixForType(baseTypeLocalpart, methodSuffix);
@@ -901,7 +901,7 @@ public class WSDLInfo
                 {
                     if (isPointerType)
                         CUtils.addPointerType(typedataLocalpartSanitized); 
-                    CUtils. addXSDEnumeratorForType(typedataLocalpartSanitized, primitiveXSDType);
+                    CUtils.addXSDEnumeratorForType(typedataLocalpartSanitized, primitiveXSDType);
                     if (initValueForType != null)
                         CUtils.addInitValueForType(typedataLocalpartSanitized, initValueForType);
                     CUtils.addDeserializerMethodSuffixForType(typedataLocalpartSanitized, methodSuffix);
@@ -911,7 +911,7 @@ public class WSDLInfo
                 {
                     if (isPointerType)
                         CUtils.addPointerType(baseTypeLocalpartSanitized);
-                    CUtils. addXSDEnumeratorForType(baseTypeLocalpartSanitized, primitiveXSDType);
+                    CUtils.addXSDEnumeratorForType(baseTypeLocalpartSanitized, primitiveXSDType);
                     if (initValueForType != null)
                         CUtils.addInitValueForType(baseTypeLocalpartSanitized, initValueForType);
                     CUtils.addDeserializerMethodSuffixForType(baseTypeLocalpartSanitized, methodSuffix);
