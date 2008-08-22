@@ -58,7 +58,7 @@ public class ServiceHeaderWriter extends HeaderFileWriter
             writer.write(
                 " * "
                     + classname
-                    + CUtils.CPP_HEADER_SUFFIX
+                    + CUtils.getHeaderFileExtension()
                     + ": interface for the "
                     + classname
                     + "class.\n");
@@ -308,7 +308,7 @@ public class ServiceHeaderWriter extends HeaderFileWriter
             Iterator itr = typeSet.iterator();
             while (itr.hasNext())
             {
-                writer.write("#include \"" + itr.next().toString() + CUtils.CPP_HEADER_SUFFIX + "\"\n");
+                writer.write("#include \"" + itr.next().toString() + CUtils.getHeaderFileExtension() + "\"\n");
             }
             //writeFaultHeaders();
             writer.write("\n");
@@ -341,7 +341,7 @@ public class ServiceHeaderWriter extends HeaderFileWriter
                         "#include \"Axis"
                             + faultInfoName.toString()
                             + "Exception"
-                            + CUtils.CPP_HEADER_SUFFIX
+                            + CUtils.getHeaderFileExtension()
                             + "\"\n");
                 }
             }

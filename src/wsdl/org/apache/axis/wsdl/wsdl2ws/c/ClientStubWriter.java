@@ -134,7 +134,7 @@ public class ClientStubWriter extends CFileWriter
             writer.write("#include <string.h>\n");
             writer.write("\n");
             
-            writer.write("#include \"" + classname + CUtils.C_HEADER_SUFFIX + "\"\n");
+            writer.write("#include \"" + classname + CUtils.getHeaderFileExtension() + "\"\n");
             writer.write("\n");
             writer.write("#include <axis/client/Stub.h>\n");
             writer.write("#include <axis/client/Call.h>\n");

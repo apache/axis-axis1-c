@@ -159,10 +159,10 @@ public class ClientStubWriter extends CPPClassWriter
             if ("AxisClientException".equals(classname))
             {
                 writer.write("#include \"" + getServiceName() + "_" + classname
-                        + CUtils.CPP_HEADER_SUFFIX + "\"\n\n");
+                        + CUtils.getHeaderFileExtension() + "\"\n\n");
             }
             else
-                writer.write("#include \"" + classname + CUtils.CPP_HEADER_SUFFIX + "\"\n\n");
+                writer.write("#include \"" + classname + CUtils.getHeaderFileExtension() + "\"\n\n");
 
             writer.write("#include <axis/AxisWrapperAPI.hpp>\n");
             writer.write ("#include <axis/Axis.hpp>\n\n");

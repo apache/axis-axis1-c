@@ -74,7 +74,7 @@ public class ArrayParamWriter extends ParamWriter
             // include header file for the contained type
             QName qname = CUtils.getArrayType(type).getName();
             if (!CUtils.isSimpleType(qname))
-                writer.write("#include \"" + attribs[0].getTypeName() + CUtils.C_HEADER_SUFFIX + "\"\n");
+                writer.write("#include \"" + attribs[0].getTypeName() + CUtils.getHeaderFileExtension() + "\"\n");
             this.writer.write("\n");
             
             writer.write("\n");
@@ -204,14 +204,6 @@ public class ArrayParamWriter extends ParamWriter
             throw new WrapperFault(e);
         }
     }
-    
-    /* (non-Javadoc)
-     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#getFilePath()
-     */
-    protected File getFilePath() throws WrapperFault
-    {
-        return this.getFilePath(false);
-    }
 
     /* (non-Javadoc)
      * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#getFilePath(boolean)
@@ -221,14 +213,7 @@ public class ArrayParamWriter extends ParamWriter
         String targetOutputLocation = this.wscontext.getWrapperInfo().getTargetOutputLocation();
         new File(targetOutputLocation).mkdirs();
 
-        String fileName = targetOutputLocation + "/" + classname + CUtils.C_FILE_SUFFIX;
-
-        if (useServiceName)
-        {
-            fileName = targetOutputLocation + "/"
-                    + this.wscontext.getServiceInfo().getServicename()
-                    + "_" + classname + CUtils.C_HEADER_SUFFIX;
-        }
+        String fileName = targetOutputLocation + "/" + classname + CUtils.getImplFileExtension();
 
         return new File(fileName);
     }

@@ -116,7 +116,7 @@ public class ServiceHeaderWriter
             while (itr.hasNext())
             {
                 writer.write(
-                    "#include \"" + itr.next().toString() + CUtils.CPP_HEADER_SUFFIX + "\"\n");
+                    "#include \"" + itr.next().toString() + CUtils.getHeaderFileExtension() + "\"\n");
             }
 
             //writeFaultHeaders();            

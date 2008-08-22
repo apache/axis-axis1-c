@@ -50,14 +50,6 @@ public class ExceptionWriter extends BasicFileWriter
     }
 
     /* (non-Javadoc)
-     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#getFilePath()
-     */
-    protected File getFilePath() throws WrapperFault
-    {
-        return this.getFilePath(false);
-    }
-
-    /* (non-Javadoc)
      * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#getFilePath(boolean)
      */
     protected File getFilePath(boolean useServiceName) throws WrapperFault
@@ -65,16 +57,16 @@ public class ExceptionWriter extends BasicFileWriter
         String targetOutputLocation = this.wscontext.getWrapperInfo().getTargetOutputLocation();
         new File(targetOutputLocation).mkdirs();
 
-        String fileName = targetOutputLocation + "/" + faultInfoName + CUtils.CPP_CLASS_SUFFIX;
+        String fileName = targetOutputLocation + "/" + faultInfoName + CUtils.getImplFileExtension();
 
         if (useServiceName)
         {
-            fileName = targetOutputLocation + "/" + this.getServiceName() + "_" + faultInfoName + CUtils.CPP_CLASS_SUFFIX;
-            this.wscontext.addGeneratedFile(this.getServiceName() + "_" + faultInfoName + CUtils.CPP_CLASS_SUFFIX);
+            fileName = targetOutputLocation + "/" + this.getServiceName() + "_" + faultInfoName + CUtils.getImplFileExtension();
+            this.wscontext.addGeneratedFile(this.getServiceName() + "_" + faultInfoName + CUtils.getImplFileExtension());
         }
         else
         {
-            this.wscontext.addGeneratedFile(faultInfoName + CUtils.CPP_CLASS_SUFFIX);
+            this.wscontext.addGeneratedFile(faultInfoName + CUtils.getImplFileExtension());
         }
         return new File(fileName);
     }
@@ -98,7 +90,7 @@ public class ExceptionWriter extends BasicFileWriter
                         + getServiceName()
                         + "_"
                         + faultInfoName
-                        + CUtils.CPP_HEADER_SUFFIX
+                        + CUtils.getHeaderFileExtension()
                         + "\"\n\n");
             }
             else
@@ -106,7 +98,7 @@ public class ExceptionWriter extends BasicFileWriter
                 writer.write(
                     "#include \""
                         + faultInfoName
-                        + CUtils.CPP_HEADER_SUFFIX
+                        + CUtils.getHeaderFileExtension()
                         + "\"\n\n");
             }
             writer.write("#include <axis/AxisWrapperAPI.hpp>\n\n");

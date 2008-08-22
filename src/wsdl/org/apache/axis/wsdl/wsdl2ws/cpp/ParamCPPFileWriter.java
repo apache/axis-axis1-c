@@ -89,8 +89,8 @@ public abstract class ParamCPPFileWriter extends ParamWriter
 
         String targetOutputLocation = this.wscontext.getWrapperInfo().getTargetOutputLocation();
         new File(targetOutputLocation).mkdirs();
-        String fileName = targetOutputLocation + "/" + this.classname + CUtils.CPP_CLASS_SUFFIX;
-        this.wscontext.addGeneratedFile(classname + CUtils.CPP_CLASS_SUFFIX);
+        String fileName = targetOutputLocation + "/" + this.classname + CUtils.getImplFileExtension();
+        this.wscontext.addGeneratedFile(classname + CUtils.getImplFileExtension());
         return new File(fileName);
     }
 
@@ -104,7 +104,7 @@ public abstract class ParamCPPFileWriter extends ParamWriter
             writer.write("#include <axis/UnknownElementException.hpp>\n");
             writer.write("#include <axis/AxisWrapperAPI.hpp>\n");
             writer.write("#include <axis/Axis.hpp>\n\n");
-            writer.write("#include \"" + this.classname + CUtils.CPP_HEADER_SUFFIX + "\"\n");
+            writer.write("#include \"" + this.classname + CUtils.getHeaderFileExtension() + "\"\n");
         }
         catch (IOException e)
         {

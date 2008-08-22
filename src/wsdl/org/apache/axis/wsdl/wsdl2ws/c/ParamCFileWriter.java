@@ -100,8 +100,8 @@ public abstract class ParamCFileWriter extends ParamWriter
     {
         String targetOutputLocation = this.wscontext.getWrapperInfo().getTargetOutputLocation();
         new File(targetOutputLocation).mkdirs();
-        String fileName = targetOutputLocation + "/" + this.classname + CUtils.C_FILE_SUFFIX;
-        this.wscontext.addGeneratedFile(classname + CUtils.C_FILE_SUFFIX);
+        String fileName = targetOutputLocation + "/" + this.classname + CUtils.getImplFileExtension();
+        this.wscontext.addGeneratedFile(classname + CUtils.getImplFileExtension());
         return new File(fileName);
     }
 
@@ -116,7 +116,7 @@ public abstract class ParamCFileWriter extends ParamWriter
             writer.write("#include <string.h>\n");
             writer.write("\n");
             
-            writer.write("#include \"" + this.classname + CUtils.C_HEADER_SUFFIX + "\"\n");
+            writer.write("#include \"" + this.classname + CUtils.getHeaderFileExtension() + "\"\n");
             writer.write("\n");
 
             writer.write("#include <axis/client/Stub.h>\n");

@@ -74,7 +74,7 @@ public class ClassLoader implements SourceWriter
             writer.write(
                 "#include \""
                     + wrappername
-                    + CUtils.CPP_HEADER_SUFFIX
+                    + CUtils.getHeaderFileExtension()
                     + "\" \n");
             writer.write("extern \"C\" {\n");
             writer.write("STORAGE_CLASS_INFO\n");
@@ -125,8 +125,8 @@ public class ClassLoader implements SourceWriter
         String targetOutputLocation = this.wscontext.getWrapperInfo().getTargetOutputLocation();
         new File(targetOutputLocation).mkdirs();
         String fileName = targetOutputLocation
-                + "/" + classname + CUtils.CLASS_LOADER_APPENDER + CUtils.CPP_CLASS_SUFFIX;
-        this.wscontext.addGeneratedFile(classname + CUtils.CLASS_LOADER_APPENDER + CUtils.CPP_CLASS_SUFFIX);
+                + "/" + classname + CUtils.CLASS_LOADER_APPENDER + CUtils.getImplFileExtension();
+        this.wscontext.addGeneratedFile(classname + CUtils.CLASS_LOADER_APPENDER + CUtils.getImplFileExtension());
         return new File(fileName);
     }
 

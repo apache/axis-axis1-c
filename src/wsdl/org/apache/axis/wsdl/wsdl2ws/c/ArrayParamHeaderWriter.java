@@ -88,23 +88,18 @@ public class ArrayParamHeaderWriter extends ParamWriter
         return CUtils.isSimpleType(qname);
     }
 
-    protected File getFilePath() throws WrapperFault
-    {
-        return this.getFilePath(false);
-    }
-
     protected File getFilePath(boolean useServiceName) throws WrapperFault
     {
         String targetOutputLocation = this.wscontext.getWrapperInfo().getTargetOutputLocation();
         new File(targetOutputLocation).mkdirs();
 
-        String fileName = targetOutputLocation + "/" + classname + CUtils.C_HEADER_SUFFIX;
+        String fileName = targetOutputLocation + "/" + classname + CUtils.getHeaderFileExtension();
 
         if (useServiceName)
         {
             fileName =  targetOutputLocation + "/"
                     + this.wscontext.getServiceInfo().getServicename()
-                    + "_" + classname + CUtils.C_HEADER_SUFFIX;
+                    + "_" + classname + CUtils.getHeaderFileExtension();
         }
 
         return new File(fileName);

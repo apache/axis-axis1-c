@@ -50,17 +50,12 @@ public class ExceptionHeaderWriter extends HeaderFileWriter
         this.faultInfoName = "Axis" + faultInfoName + "Exception";
     }
 
-    protected File getFilePath() throws WrapperFault
-    {
-        return this.getFilePath(false);
-    }
-
     protected File getFilePath(boolean useServiceName) throws WrapperFault
     {
         String targetOutputLocation = this.wscontext.getWrapperInfo().getTargetOutputLocation();
         new File(targetOutputLocation).mkdirs();
 
-        String fileName = targetOutputLocation + "/" + faultInfoName + CUtils.CPP_HEADER_SUFFIX;
+        String fileName = targetOutputLocation + "/" + faultInfoName + CUtils.getHeaderFileExtension();
 
         if (useServiceName)
         {
@@ -70,7 +65,7 @@ public class ExceptionHeaderWriter extends HeaderFileWriter
                     + this.wscontext.getServiceInfo().getServicename()
                     + "_"
                     + faultInfoName
-                    + CUtils.CPP_HEADER_SUFFIX;
+                    + CUtils.getHeaderFileExtension();
         }
 
         return new File(fileName);
@@ -218,7 +213,7 @@ public class ExceptionHeaderWriter extends HeaderFileWriter
                         writer.write(
                             "#include \""
                                 + langName
-                                + CUtils.CPP_HEADER_SUFFIX
+                                + CUtils.getHeaderFileExtension()
                                 + "\"\n\n");
                     }
                 }

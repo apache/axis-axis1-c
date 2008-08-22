@@ -154,7 +154,7 @@ public class WrapHeaderWriter extends HeaderFileWriter
             
             writer.write("#include \""
                         + CUtils.getWebServiceNameFromWrapperName(classname)
-                        + CUtils.CPP_HEADER_SUFFIX
+                        + CUtils.getHeaderFileExtension()
                         + "\"\n");
             writer.write("#include \"AxisServiceException.hpp\" \n\n");
             writer.write("AXIS_CPP_NAMESPACE_USE \n\n");
@@ -188,7 +188,7 @@ public class WrapHeaderWriter extends HeaderFileWriter
                         "#include \"Axis"
                             + faultInfoName.toString()
                             + "Exception"
-                            + CUtils.CPP_HEADER_SUFFIX
+                            + CUtils.getHeaderFileExtension()
                             + "\"\n");
                 }
             }

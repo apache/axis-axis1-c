@@ -88,14 +88,6 @@ public abstract class HeaderFileWriter extends BasicFileWriter
     }
 
     /* (non-Javadoc)
-     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#getFilePath()
-     */
-    protected File getFilePath() throws WrapperFault
-    {
-        return this.getFilePath(false);
-    }
-
-    /* (non-Javadoc)
      * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#getFilePath(boolean)
      */
     protected File getFilePath(boolean useServiceName) throws WrapperFault

@@ -216,7 +216,7 @@ public class ClientStubHeaderWriter
             Iterator itr = typeSet.iterator();
             while (itr.hasNext())
             {
-                writer.write("#include \"" + itr.next().toString() + CUtils.CPP_HEADER_SUFFIX + "\"\n");
+                writer.write("#include \"" + itr.next().toString() + CUtils.getHeaderFileExtension() + "\"\n");
             }
             
             //    Method to print the Fault Exception headers

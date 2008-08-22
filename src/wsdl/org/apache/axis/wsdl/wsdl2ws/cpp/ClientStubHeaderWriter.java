@@ -222,7 +222,7 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
             Iterator itr = typeSet.iterator();
             while (itr.hasNext())
             {
-                writer.write("#include \"" + itr.next().toString() + CUtils.CPP_HEADER_SUFFIX + "\"\n");
+                writer.write("#include \"" + itr.next().toString() + CUtils.getHeaderFileExtension() + "\"\n");
             }
             
             //Method to print the Fault Exception headers
@@ -255,7 +255,7 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
                     faultInfoName = info.getFaultInfo();
                     writer.write(
                         "#include \"Axis" + faultInfoName.toString()
-                            + "Exception" + CUtils.CPP_HEADER_SUFFIX + "\"\n");
+                            + "Exception" + CUtils.getHeaderFileExtension() + "\"\n");
                 }
                 writer.write("\n");
             }

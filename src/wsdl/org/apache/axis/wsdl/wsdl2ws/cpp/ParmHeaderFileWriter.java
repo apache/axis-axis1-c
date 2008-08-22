@@ -470,23 +470,18 @@ public class ParmHeaderFileWriter extends ParamWriter
     {
     }
 
-    protected File getFilePath() throws WrapperFault
-    {
-        return this.getFilePath(false);
-    }
-
     protected File getFilePath(boolean useServiceName) throws WrapperFault
     {
         String targetOutputLocation = this.wscontext.getWrapperInfo().getTargetOutputLocation();
         new File(targetOutputLocation).mkdirs();
 
-        String fileName = targetOutputLocation + "/" + classname + CUtils.CPP_HEADER_SUFFIX;
+        String fileName = targetOutputLocation + "/" + classname + CUtils.getHeaderFileExtension();
 
         if (useServiceName)
         {
             fileName = targetOutputLocation + "/"
                     + this.wscontext.getServiceInfo().getServicename() + "_"
-                    + classname + CUtils.CPP_HEADER_SUFFIX;
+                    + classname + CUtils.getHeaderFileExtension();
         }
 
         return new File(fileName);
@@ -588,7 +583,7 @@ public class ParmHeaderFileWriter extends ParamWriter
                 // Do not want to include the header file we are generating!
                 String includeFile = itr.next().toString();
                 if (!includeFile.equals(classname))                
-                    writer.write("#include \"" + includeFile + CUtils.CPP_HEADER_SUFFIX + "\"\n");
+                    writer.write("#include \"" + includeFile + CUtils.getHeaderFileExtension() + "\"\n");
             }
 
             writer.write("\n");

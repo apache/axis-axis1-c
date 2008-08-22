@@ -77,26 +77,21 @@ public abstract class CPPClassWriter extends BasicFileWriter
 
     protected WebServiceContext wscontext;
 
-    protected File getFilePath() throws WrapperFault
-    {
-        return this.getFilePath(false);
-    }
-
     protected File getFilePath(boolean useServiceName) throws WrapperFault
     {
         String targetOutputLocation = this.wscontext.getWrapperInfo().getTargetOutputLocation();
         new File(targetOutputLocation).mkdirs();
-        String fileName = targetOutputLocation + "/" + classname + CUtils.CPP_CLASS_SUFFIX;
+        String fileName = targetOutputLocation + "/" + classname + CUtils.getImplFileExtension();
     
         if (useServiceName)
         {
             String serviceName = this.wscontext.getServiceInfo().getServicename();
-            fileName = targetOutputLocation + "/" + serviceName + "_" + classname + CUtils.CPP_CLASS_SUFFIX;
-            this.wscontext.addGeneratedFile(serviceName + "_" + classname + CUtils.CPP_CLASS_SUFFIX);
+            fileName = targetOutputLocation + "/" + serviceName + "_" + classname + CUtils.getImplFileExtension();
+            this.wscontext.addGeneratedFile(serviceName + "_" + classname + CUtils.getImplFileExtension());
         }
         else
         {
-            this.wscontext.addGeneratedFile(classname + CUtils.CPP_CLASS_SUFFIX);
+            this.wscontext.addGeneratedFile(classname + CUtils.getImplFileExtension());
         }
     
         return new File(fileName);

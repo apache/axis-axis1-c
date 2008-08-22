@@ -53,13 +53,13 @@ public class CUtils
     public static final QName anyTypeQname = new QName("http://ws.apache.org/axisc/types","AnyType");
 
     // File suffix for C++ Class files
-    public static final String CPP_CLASS_SUFFIX = ".cpp";
+    private static final String CPP_CLASS_SUFFIX = ".cpp";
     // File suffix for C++ Header files
-    public static final String CPP_HEADER_SUFFIX = ".hpp";
+    private static final String CPP_HEADER_SUFFIX = ".hpp";
     // File suffix for C Source files
-    public static final String C_FILE_SUFFIX = ".c";
+    private static final String C_FILE_SUFFIX = ".c";
     // File suffix fr C Header files
-    public static final String C_HEADER_SUFFIX = ".h";
+    private static final String C_HEADER_SUFFIX = ".h";
     
     // Valid XML but invalid or reserved C/C++ characters 
     private static final char c_invalidCChars[] = {
@@ -67,6 +67,10 @@ public class CUtils
         '-', '.', ':', ';', '<', '=', '>', '?',  '@', '\\','^', '`', '{',
         '|', '}', '~', '[', ']', '\u00A3'     
     };
+    
+    private static String c_fileExtension       = CPP_CLASS_SUFFIX;
+    private static String c_headerFileExtension = CPP_HEADER_SUFFIX;
+
     
     // Contains all primitive types.
     private static HashSet c_primitiveTypes = null;
@@ -666,12 +670,19 @@ public class CUtils
             c_qnameToPrimitiveTypeMapper = c_qnameToPrimitiveTypeMapperC;
             c_getAttributeAs = "GetAttributeAs";
             c_getElementAs   = "GetElementAs";
+            
+            c_fileExtension       = C_FILE_SUFFIX;
+            c_headerFileExtension = C_HEADER_SUFFIX;
+
         }
         else if (WrapperConstants.LANGUAGE_CPP.equalsIgnoreCase(language))
         {
             c_qnameToPrimitiveTypeMapper = c_qnameToPrimitiveTypeMapperCPP;
             c_getAttributeAs = "getAttributeAs";
             c_getElementAs   = "getElementAs";
+            
+            c_fileExtension       = CPP_CLASS_SUFFIX;
+            c_headerFileExtension = CPP_HEADER_SUFFIX;
         }
         else
             throw new WrapperFault("Unsupported language.");
@@ -1249,6 +1260,24 @@ public class CUtils
         throw new WrapperFault("Array type do not have any attibutes");
     }
 
+    /**
+     * Returns the implementation file extension for a file (i.e. ".c" or ".cpp").
+     * 
+     * @return the c_fileExtension
+     */
+    public static String getImplFileExtension()
+    {
+        return c_fileExtension;
+    }
 
+    /**
+     * Returns header file extension for a file (i.e. ".h" or ".hpp").
+     * 
+     * @return the c_headerFileExtension
+     */
+    public static String getHeaderFileExtension()
+    {
+        return c_headerFileExtension;
+    }
 }
 

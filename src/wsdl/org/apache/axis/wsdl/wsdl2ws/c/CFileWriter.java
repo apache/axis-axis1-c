@@ -78,30 +78,22 @@ public abstract class CFileWriter extends BasicFileWriter
     {}
 
     /* (non-Javadoc)
-     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#getFilePath()
-     */
-    protected File getFilePath() throws WrapperFault
-    {
-        return this.getFilePath(false);
-    }
-
-    /* (non-Javadoc)
      * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#getFilePath(boolean)
      */
     protected File getFilePath(boolean useServiceName) throws WrapperFault
     {
         String targetOutputLocation = this.wscontext.getWrapperInfo().getTargetOutputLocation();
         new File(targetOutputLocation).mkdirs();
-        String fileName = targetOutputLocation + "/" + classname + CUtils.C_FILE_SUFFIX;
+        String fileName = targetOutputLocation + "/" + classname + CUtils.getImplFileExtension();
 
         if (useServiceName)
         {
             String serviceName = this.wscontext.getServiceInfo().getServicename();
-            fileName = targetOutputLocation + "/" + serviceName + "_" + classname + CUtils.C_FILE_SUFFIX;
-            this.wscontext.addGeneratedFile(serviceName + "_" + classname + CUtils.C_FILE_SUFFIX);
+            fileName = targetOutputLocation + "/" + serviceName + "_" + classname + CUtils.getImplFileExtension();
+            this.wscontext.addGeneratedFile(serviceName + "_" + classname + CUtils.getImplFileExtension());
         }
         else
-            this.wscontext.addGeneratedFile(classname + CUtils.C_FILE_SUFFIX);
+            this.wscontext.addGeneratedFile(classname + CUtils.getImplFileExtension());
 
         return new File(fileName);
     }

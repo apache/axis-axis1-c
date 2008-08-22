@@ -257,14 +257,6 @@ public class ArrayParamWriter extends ParamWriter
             throw new WrapperFault(e);
         }
     }
-    
-    /* (non-Javadoc)
-     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#getFilePath()
-     */
-    protected File getFilePath() throws WrapperFault
-    {
-        return this.getFilePath(false);
-    }
 
     /* (non-Javadoc)
      * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#getFilePath(boolean)
@@ -274,13 +266,13 @@ public class ArrayParamWriter extends ParamWriter
         String targetOutputLocation = this.wscontext.getWrapperInfo().getTargetOutputLocation();
         new File(targetOutputLocation).mkdirs();
 
-        String fileName = targetOutputLocation + "/" + classname + CUtils.CPP_CLASS_SUFFIX;
+        String fileName = targetOutputLocation + "/" + classname + CUtils.getImplFileExtension();
 
         if (useServiceName)
         {
             fileName = targetOutputLocation + "/"
                     + this.wscontext.getServiceInfo().getServicename()
-                    + "_" + classname + CUtils.CPP_HEADER_SUFFIX;
+                    + "_" + classname + CUtils.getHeaderFileExtension();
         }
 
         return new File(fileName);
