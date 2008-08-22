@@ -31,7 +31,8 @@ import org.apache.axis.wsdl.wsdl2ws.CUtils;
  *
  * e.g.  C++  {urn:ns}classname -> ns:classname
  * 
- * @author hemapani  
+ * @author hemapani 
+ * @author nadir amra (amra@us.ibm.com) 
  */
 public class TypeMap
 {
@@ -146,4 +147,18 @@ public class TypeMap
         
         return false;
     }    
+    
+    /**
+     * Dump all the types in the collection to stdout.
+     */
+    public void dump()
+    {
+        System.out.println( "Dumping typeMap....");
+        
+        Iterator it = getTypes().iterator();
+        while (it.hasNext())
+        {
+            System.out.println(it.next());
+        }   
+    }
 }

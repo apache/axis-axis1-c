@@ -18,20 +18,22 @@
 package org.apache.axis.wsdl.wsdl2ws;
 
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
+
 /**
- * Create the concreate WebService Generator, depends on the options.
+ * Factory for creating concrete Web service generator, depends on the context.
+ * 
  * @author Srinath Perera (hemapani@opensource.lk)
  * @author Dimuthu Leelarathne (muthulee@opensource.lk)
  */
 public class WebServiceGeneratorFactory
 {
-    public static WebServiceGenerator createWebServiceGenerator(WebServiceContext wscontext)
+    public static WebServiceGenerator createWebServiceGenerator(WebServiceContext wscontext) throws WrapperFault
     {
         if (wscontext.getWrapperInfo().getBindingStyle() == WrapperConstants.STYLE_RPC)
             return new WebServiceGeneratorImpl(wscontext);
         else if (wscontext.getWrapperInfo().getBindingStyle() == WrapperConstants.STYLE_DOCUMENT)
             return new WebServiceGeneratorImpl(wscontext);
-        else
-            return null;
+     
+        throw new WrapperFault("Unable to generate code - Web service generator not found.");
     }
 }

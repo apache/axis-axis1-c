@@ -281,8 +281,10 @@ public class WSDL2Ws
         
         // Generator
         WebServiceGenerator wsg = WebServiceGeneratorFactory.createWebServiceGenerator(wsContext);
-        if (wsg == null)
-            throw new WrapperFault("WSDL2Ws does not support the option combination");
+        
+        // ==================================================
+        // Determine which types to externalize.
+        // ==================================================    
         
         // There must be a better way to do this
         exposeReferenceTypes(wsContext);
@@ -290,16 +292,9 @@ public class WSDL2Ws
         // This call must be last one called of the exposexxx methods!
         exposeNestedTypesThatAreAnonymousTypes(wsContext);
         
+        // Dump the map if requested.
         if (c_verbose)
-        {
-            System.out.println( "Dumping typeMap....");
-            
-            Iterator it = c_typeMap.getTypes().iterator();
-            while (it.hasNext())
-            {
-                System.out.println(it.next());
-            }
-        }
+            c_typeMap.dump();
         
         // ==================================================
         // Generate the artifacts
