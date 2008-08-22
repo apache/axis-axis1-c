@@ -181,7 +181,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                     writer.write("\n\t" + containedType + "_Array * v" + i +" = new " + containedType + "_Array();\n");
                     writer.write("\t"
                             + "Axis_Array * RetArray" + i + " = pIWSDZ->getBasicArray("
-                            + CUtils.getXSDEnumerator(containedType)
+                            + CUtils.getXSDEnumeratorForType(containedType)
                             + ", \"" + elementName + "\",0);\n");
                     writer.write ("\tv" + i + "->clone(*RetArray"+ i + ");\n");
                     writer.write ("\tAxis::AxisDelete( (void *)RetArray" + i + ", XSD_ARRAY);\n\n");
@@ -202,7 +202,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                     writer.write("\t{\n");
                     writer.write("\t\tv" + i + " = new char[ strlen( value" + i + ") + 1 ];\n");
                     writer.write("\t\tstrcpy( v" + i + ", value" + i + ");\n");
-                    writer.write("\t\tAxis::AxisDelete( (void *) value" + i + ", " + CUtils.getXSDEnumerator(paraTypeName) + " );\n");
+                    writer.write("\t\tAxis::AxisDelete( (void *) value" + i + ", " + CUtils.getXSDEnumeratorForType(paraTypeName) + " );\n");
                     writer.write("\t}\n");
                     if (param.isOptional())
                         writer.write("\t}\n");
@@ -223,7 +223,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                     writer.write("\t{\n");
                     writer.write("\t\tv" + i + " = new " + paraTypeName + "();\n");
                     writer.write("\t\t*v" + i + " = *pValue" + i + ";\n");
-                    writer.write("\t\tAxis::AxisDelete( (void *) pValue" + i + ", " + CUtils.getXSDEnumerator(paraTypeName) + ");\n");
+                    writer.write("\t\tAxis::AxisDelete( (void *) pValue" + i + ", " + CUtils.getXSDEnumeratorForType(paraTypeName) + ");\n");
                     writer.write("\t}\n");
                     if (param.isOptional())
                         writer.write("\t}\n");
@@ -231,7 +231,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                 else
                 {
                     writer.write("\n\t" + paraTypeName + " v" + i);
-                    String typeInitValue = CUtils.getInitValue(paraTypeName);
+                    String typeInitValue = CUtils.getInitValueForType(paraTypeName);
                     if (typeInitValue != null)
                         writer.write(" = " + typeInitValue);
 
@@ -244,7 +244,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                     writer.write("\t{\n");
                     writer.write("\t\tv" + i + " = *pValue" + i + ";\n");
                     writer.write("\t\tAxis::AxisDelete( (void *) pValue"
-                            + i + ", " + CUtils.getXSDEnumerator(paraTypeName)+ ");\n");
+                            + i + ", " + CUtils.getXSDEnumeratorForType(paraTypeName)+ ");\n");
                     writer.write("\t}\n");
                 }
             }
@@ -259,7 +259,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                     writer.write("\n\t" + outparamType + "_Array * v" + i +" = new " + outparamType + "_Array();\n");
                     writer.write("\t"
                         + "Axis_Array * RetArray" + i + " = pIWSDZ->getBasicArray("
-                        + CUtils.getXSDEnumerator(containedType)
+                        + CUtils.getXSDEnumeratorForType(containedType)
                         + ", \"" + elementName + "\",0);\n");
                     writer.write ("\tv" + i + "->clone(*RetArray"+ i + ");\n");
                     writer.write ("\tAxis::AxisDelete( (void *)RetArray" + i + ", XSD_ARRAY);\n\n");
@@ -270,7 +270,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                     writer.write("\n\t" + outparamType + " * v" + i +" = new " + outparamType + "();\n");
                     writer.write("\t"
                         + "Axis_Array * RetArray" + i + " = pIWSDZ->getBasicArray("
-                        + CUtils.getXSDEnumerator(containedType)
+                        + CUtils.getXSDEnumeratorForType(containedType)
                         + ", \"" + elementName + "\",0);\n");
                     writer.write ("\tv" + i + "->clone(*RetArray"+ i + ");\n");
                     writer.write ("\tAxis::AxisDelete( (void *)RetArray" + i + ", XSD_ARRAY);\n\n");
@@ -356,7 +356,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                 {
                     String containedType = CUtils.getSimpleType(retType.getName());
                     writer.write("\t\tnStatus = pIWSSZ->addOutputBasicArrayParam(ret, "
-                            + CUtils.getXSDEnumerator(containedType) + ", \""
+                            + CUtils.getXSDEnumeratorForType(containedType) + ", \""
                             + returnParamName + "\");\n");
                     writer.write("\t\tdelete ret;\n");
                     writer.write("\t\treturn nStatus;\n");
@@ -369,12 +369,12 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                             || CUtils.isPointerType(returnParamTypeName))
                     {
                         writer.write("\t\treturn pIWSSZ->addOutputParam(\"" + returnParamName
-                            + "\", (void*)ret, " + CUtils.getXSDEnumerator(outparamType) + ");\n");
+                            + "\", (void*)ret, " + CUtils.getXSDEnumeratorForType(outparamType) + ");\n");
                     }
                     else
                     {
                         writer.write("\t\treturn pIWSSZ->addOutputParam(\"" + returnParamName
-                            + "\", (void*)&ret, " + CUtils.getXSDEnumerator(outparamType) + ");\n");
+                            + "\", (void*)&ret, " + CUtils.getXSDEnumeratorForType(outparamType) + ");\n");
                     }
                 }
             }
@@ -387,7 +387,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                 {
                     containedType = CUtils.getSimpleType(qname);
                     writer.write("\t\tnStatus = pIWSSZ->addOutputBasicArrayParam(ret, "
-                                + CUtils.getXSDEnumerator(containedType)
+                                + CUtils.getXSDEnumeratorForType(containedType)
                                 + ", \"" + returnParamName + "\");\n");
                     writer.write("\t\tdelete ret;\n");
                     writer.write("\t\treturn nStatus;\n");
@@ -396,7 +396,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                 {
                     containedType = CUtils.getSimpleType(arrayType.getBaseType());
                     writer.write("\t\tnStatus = pIWSSZ->addOutputBasicArrayParam(ret, "
-                            + CUtils.getXSDEnumerator(containedType)
+                            + CUtils.getXSDEnumeratorForType(containedType)
                             + ", \"" + returnParamName + "\");\n");
                     writer.write("\t\tdelete ret;\n");
                     writer.write("\t\treturn nStatus;\n");
@@ -472,7 +472,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                     {
                         String containedType = CUtils.getSimpleType(retType.getName());
                         writer.write("\treturn pIWSSZ->addOutputBasicArrayParam((Axis_Array*)(&out" + i + "),"
-                                + CUtils.getXSDEnumerator(containedType)
+                                + CUtils.getXSDEnumeratorForType(containedType)
                                 + ", \"" + returnParamName + "\");\n");
                     }
                     else if (CUtils.isPointerType(outparamType) 
@@ -489,7 +489,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                         writer.write("\tpIWSSZ->addOutputParam(\""
                                     + returnParamName
                                     + "\", (void*)out" + i + ", "
-                                    + CUtils.getXSDEnumerator(outparamType) + ");\n");
+                                    + CUtils.getXSDEnumeratorForType(outparamType) + ");\n");
                         
                         if (param.isOptional())
                             writer.write("\t}\n");
@@ -499,7 +499,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                         writer.write("\tpIWSSZ->addOutputParam(\""
                                     + returnParamName
                                     + "\", (void*)&out" + i + ", "
-                                    + CUtils.getXSDEnumerator(outparamType) + ");\n");
+                                    + CUtils.getXSDEnumeratorForType(outparamType) + ");\n");
                     }
                 }
                 else if (returntypeisarray)
@@ -512,14 +512,14 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                     {
                         containedType = CUtils.getSimpleType(qname);
                         writer.write("\tpIWSSZ->addOutputBasicArrayParam((Axis_Array*)(&out"
-                                + i + ")," + CUtils.getXSDEnumerator( containedType)
+                                + i + ")," + CUtils.getXSDEnumeratorForType( containedType)
                                 + ", \"" + returnParamName + "\");\n");
                     }
                     else if (arrayType.isSimpleType())
                     {
                         containedType = CUtils.getSimpleType(arrayType.getBaseType());
                         writer.write("\tpIWSSZ->addOutputBasicArrayParam((Axis_Array*)(&out"
-                                + i + ")," + CUtils.getXSDEnumerator(containedType)
+                                + i + ")," + CUtils.getXSDEnumeratorForType(containedType)
                                 + ", \"" + returnParamName + "\");\n");
                     }
                     else

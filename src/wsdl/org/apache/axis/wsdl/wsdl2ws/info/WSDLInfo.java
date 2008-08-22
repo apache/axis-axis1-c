@@ -856,7 +856,7 @@ public class WSDLInfo
                     primitiveBaseTypeQName = baseEType.getQName();
                 
                 classForPrimitiveType =  CUtils.getSimpleType(primitiveBaseTypeQName);
-                initValueForType      =  CUtils.getInitValue(classForPrimitiveType);
+                initValueForType      =  CUtils.getInitValueForType(classForPrimitiveType);
                 
                 // Set the base type for Type
                 typedata.setBaseType(primitiveBaseTypeQName);
@@ -871,54 +871,50 @@ public class WSDLInfo
                 // with the anonymous names, and once with the sanitized names. 
                 
                 boolean isPointerType = CUtils.isPointerType(primitiveBaseTypeQName);
-                primitiveXSDType = CUtils.getXSDEnumerator(classForPrimitiveType);
+                primitiveXSDType = CUtils.getXSDEnumeratorForType(classForPrimitiveType);
 
                 if (!isBaseTypePrimitive)
                 {
                     typedata.setRestrictionBaseType(baseTypeLocalpart);
                     if (isPointerType)
-                        CUtils.c_pointerBasedTypes.add(baseTypeLocalpart);
+                        CUtils.addPointerType(baseTypeLocalpart);
                 }
                 if (isPointerType)
-                    CUtils.c_pointerBasedTypes.add(typedataLocalpart);                    
+                    CUtils.addPointerType(typedataLocalpart);                    
 
-                methodSuffix = (String)CUtils.c_simpleTypeToMethodSuffixMapper.get(classForPrimitiveType);
-                CUtils.c_qnameToSimpleTypeMapper.put(typedataQName, class4qname);
-                CUtils.c_simpleTypeToQNameMapper.put(class4qname, typedataQName);
-                CUtils.c_simpleTypeToEnumMapper.put(typedataLocalpart, primitiveXSDType);
+                methodSuffix = (String)CUtils.getDeserializerMethodSuffixForType(classForPrimitiveType);
+                CUtils.addDeserializerMethodSuffixForType(typedataLocalpart, primitiveXSDType);
 
                 if (initValueForType != null)
-                    CUtils.c_initValueForSimpleType.put(typedataLocalpart, initValueForType);
-                CUtils.c_simpleTypeToMethodSuffixMapper.put(typedataLocalpart, methodSuffix);
+                    CUtils.addInitValueForType(typedataLocalpart, initValueForType);
+                CUtils.addDeserializerMethodSuffixForType(typedataLocalpart, methodSuffix);
                 
                 if (!isBaseTypePrimitive)
                 {
-                    CUtils.c_simpleTypeToEnumMapper.put(baseTypeLocalpart, primitiveXSDType);
+                    CUtils. addXSDEnumeratorForType(baseTypeLocalpart, primitiveXSDType);
                     if (initValueForType != null)
-                        CUtils.c_initValueForSimpleType.put(baseTypeLocalpart, initValueForType);
-                    CUtils.c_simpleTypeToMethodSuffixMapper.put(baseTypeLocalpart, methodSuffix);
+                        CUtils.addInitValueForType(baseTypeLocalpart, initValueForType);
+                    CUtils.addDeserializerMethodSuffixForType(baseTypeLocalpart, methodSuffix);
                 }
 
                 if (typedataQNameSanitized != null)
                 {
                     if (isPointerType)
-                        CUtils.c_pointerBasedTypes.add(typedataLocalpartSanitized); 
-                    CUtils.c_qnameToSimpleTypeMapper.put(typedataQNameSanitized, class4qnameSanitized);
-                    CUtils.c_simpleTypeToQNameMapper.put(class4qnameSanitized, typedataQNameSanitized);
-                    CUtils.c_simpleTypeToEnumMapper.put(typedataLocalpartSanitized, primitiveXSDType);
+                        CUtils.addPointerType(typedataLocalpartSanitized); 
+                    CUtils. addXSDEnumeratorForType(typedataLocalpartSanitized, primitiveXSDType);
                     if (initValueForType != null)
-                        CUtils.c_initValueForSimpleType.put(typedataLocalpartSanitized, initValueForType);
-                    CUtils.c_simpleTypeToMethodSuffixMapper.put(typedataLocalpartSanitized, methodSuffix);
+                        CUtils.addInitValueForType(typedataLocalpartSanitized, initValueForType);
+                    CUtils.addDeserializerMethodSuffixForType(typedataLocalpartSanitized, methodSuffix);
                 }
                 
                 if (baseTypeLocalpartSanitized != null)
                 {
                     if (isPointerType)
-                        CUtils.c_pointerBasedTypes.add(baseTypeLocalpartSanitized);
-                    CUtils.c_simpleTypeToEnumMapper.put(baseTypeLocalpartSanitized, primitiveXSDType);
+                        CUtils.addPointerType(baseTypeLocalpartSanitized);
+                    CUtils. addXSDEnumeratorForType(baseTypeLocalpartSanitized, primitiveXSDType);
                     if (initValueForType != null)
-                        CUtils.c_initValueForSimpleType.put(baseTypeLocalpartSanitized, initValueForType);
-                    CUtils.c_simpleTypeToMethodSuffixMapper.put(baseTypeLocalpartSanitized, methodSuffix);
+                        CUtils.addInitValueForType(baseTypeLocalpartSanitized, initValueForType);
+                    CUtils.addDeserializerMethodSuffixForType(baseTypeLocalpartSanitized, methodSuffix);
                 }         
                 
                 // Process the enumeration elements underneath the restriction node

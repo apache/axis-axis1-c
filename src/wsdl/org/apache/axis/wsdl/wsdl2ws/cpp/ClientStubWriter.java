@@ -316,12 +316,12 @@ public class ClientStubWriter extends CPPClassWriter
             }
             else
             {
-                String initValue = CUtils.getInitValue (outparamType);
+                String initValue = CUtils.getInitValueForType (outparamType);
                 if (initValue != null)
                     writer.write (outparamType + " Ret = " + initValue + ";\n");
-                else if (CUtils.getXSDEnumerator( outparamType).equals("XSD_DATETIME")
-                        || CUtils.getXSDEnumerator( outparamType).equals("XSD_DATE")
-                        || CUtils.getXSDEnumerator( outparamType).equals("XSD_TIME"))
+                else if (CUtils.getXSDEnumeratorForType( outparamType).equals("XSD_DATETIME")
+                        || CUtils.getXSDEnumeratorForType( outparamType).equals("XSD_DATE")
+                        || CUtils.getXSDEnumeratorForType( outparamType).equals("XSD_TIME"))
                 {
                     writer.write (outparamType + " Ret;\n");
                     writer.write ("\tmemset(&Ret,0,sizeof(" + outparamType + "));\n");
@@ -416,7 +416,7 @@ public class ClientStubWriter extends CPPClassWriter
                     containedType = CUtils.getSimpleType(qname);
                     writer.write("\t\tm_pCall->addBasicArrayParameter( ");
                     writer.write("Value" + i + ", "
-                            + CUtils.getXSDEnumerator(containedType)
+                            + CUtils.getXSDEnumeratorForType(containedType)
                             + ", \""
                             + ((ParameterInfo) paramsB.get(i)).getParamNameAsSOAPString()
                             + "\"");
@@ -440,14 +440,14 @@ public class ClientStubWriter extends CPPClassWriter
                     writer.write("\t\tm_pCall->addParameter( ");
                     writer.write("(void *) Value" + i + ", \""
                             + ((ParameterInfo) paramsB.get(i)).getParamNameAsSOAPString() + "\", "
-                            + CUtils.getXSDEnumerator(paramTypeName));
+                            + CUtils.getXSDEnumeratorForType(paramTypeName));
                 }
                 else
                 {
                     writer.write("\t\tm_pCall->addParameter( ");
                     writer.write("(void *) &Value" + i + ", \""
                             + ((ParameterInfo) paramsB.get(i)).getParamNameAsSOAPString() + "\", "
-                            + CUtils.getXSDEnumerator(paramTypeName));
+                            + CUtils.getXSDEnumeratorForType(paramTypeName));
                 }
             }
             else
@@ -515,7 +515,7 @@ public class ClientStubWriter extends CPPClassWriter
                     if (CUtils.isSimpleType(qname))
                     {
                         containedType = CUtils.getSimpleType(qname);
-                        writer.write("\n\t\t\tAxis_Array * pReturn" + i + " = m_pCall->getBasicArray( " + CUtils.getXSDEnumerator (containedType) 
+                        writer.write("\n\t\t\tAxis_Array * pReturn" + i + " = m_pCall->getBasicArray( " + CUtils.getXSDEnumeratorForType (containedType) 
                                 + ",\"" + paramTagName
                                 + "\", 0);\n\n");
                         writer.write("\t\t\tif( pReturn" + i + " != NULL && OutValue" + i + " != NULL)\n");
@@ -598,7 +598,7 @@ public class ClientStubWriter extends CPPClassWriter
                         writer.write( "\t\t\t}\n");
                         writer.write( "\n");
                         writer.write( "\t\t\tAxis::AxisDelete( (void *) pReturn" + i + ", " 
-                                + CUtils.getXSDEnumerator( currentParaType) + ");\n");
+                                + CUtils.getXSDEnumeratorForType( currentParaType) + ");\n");
                     }
                     else 
                     {
@@ -615,7 +615,7 @@ public class ClientStubWriter extends CPPClassWriter
                         writer.write( "\t\t\t}\n");
                         writer.write( "\n");
                         writer.write( "\t\t\tAxis::AxisDelete( (void *) pReturn" + i + ", " 
-                                + CUtils.getXSDEnumerator( currentParaType) + ");\n");
+                                + CUtils.getXSDEnumeratorForType( currentParaType) + ");\n");
                     }
                 }
                 else
@@ -647,7 +647,7 @@ public class ClientStubWriter extends CPPClassWriter
             {
                 containedType = CUtils.getSimpleType(qname);
                 writer.write("\t\t\t\tAxis_Array * RetAxisArray = m_pCall->getBasicArray( "
-                        + CUtils.getXSDEnumerator(containedType) + ",\""
+                        + CUtils.getXSDEnumeratorForType(containedType) + ",\""
                         + paramTagName + "\",0);\n");
                 writer.write ("\t\t\t\tRetArray->clone( *RetAxisArray);\n");
                 writer.write ("\t\t\t\tAxis::AxisDelete( (void *) RetAxisArray, XSD_ARRAY);\n");
@@ -683,7 +683,7 @@ public class ClientStubWriter extends CPPClassWriter
                 writer.write ("\t\t\t\tif(pReturn)\n");
                 writer.write ("\t\t\t\t{\n");
                 writer.write ("\t\t\t\t\tRet = *pReturn;\n");
-                writer.write ("\t\t\t\t\tAxis::AxisDelete( (void *) pReturn, " + CUtils.getXSDEnumerator( outparamType) + ");\n");
+                writer.write ("\t\t\t\t\tAxis::AxisDelete( (void *) pReturn, " + CUtils.getXSDEnumeratorForType( outparamType) + ");\n");
                 writer.write ("\t\t\t\t}\n");
                 
                 // TODO If we unexpectedly receive a nill value, when nillable="false" we should do something appropriate, perhaps as below:

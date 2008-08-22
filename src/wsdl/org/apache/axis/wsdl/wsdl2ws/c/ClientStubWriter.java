@@ -279,7 +279,7 @@ public class ClientStubWriter extends CFileWriter
             }
             else
             {
-                String initValue = CUtils.getInitValue(outparamTypeName);
+                String initValue = CUtils.getInitValueForType(outparamTypeName);
                 if (initValue != null)
                     writer.write(outparamTypeName + " Ret = " + initValue + ";\n");
                 else if (outparamTypeName.equals("xsdc__dateTime")
@@ -357,7 +357,7 @@ public class ClientStubWriter extends CFileWriter
                     containedType = CUtils.getSimpleType(qname);
                     writer.write("\taxiscCallAddBasicArrayParameter(call, ");
                     writer.write("(Axisc_Array *)Value" + i + ", "
-                            + CUtils.getXSDEnumerator(containedType)
+                            + CUtils.getXSDEnumeratorForType(containedType)
                             + ", \""
                             + ((ParameterInfo) paramsB.get(i)).getParamNameAsSOAPString()
                             + "\"");
@@ -386,7 +386,7 @@ public class ClientStubWriter extends CFileWriter
                             + ", \""
                             + ((ParameterInfo) paramsB.get(i))
                                     .getParamNameAsSOAPString() + "\", "
-                            + CUtils.getXSDEnumerator(paramTypeName));
+                            + CUtils.getXSDEnumeratorForType(paramTypeName));
                 }
                 else
                 {
@@ -396,7 +396,7 @@ public class ClientStubWriter extends CFileWriter
                             + ", \""
                             + ((ParameterInfo) paramsB.get(i))
                                     .getParamNameAsSOAPString() + "\", "
-                            + CUtils.getXSDEnumerator(paramTypeName));
+                            + CUtils.getXSDEnumeratorForType(paramTypeName));
                 }
             }
             else
@@ -457,7 +457,7 @@ public class ClientStubWriter extends CFileWriter
                         containedType = CUtils.getSimpleType(qname);
                         writer.write("\n\t\tAxisc_Array * pReturn" + i 
                                 + " = axiscCallGetBasicArray(call, " 
-                                + CUtils.getXSDEnumerator (containedType) 
+                                + CUtils.getXSDEnumeratorForType (containedType) 
                                 + ",\"" + currentType.getParamNameAsSOAPString() + "\",0);\n\n");
                         writer.write("\t\tif( OutValue" + i + " != NULL)\n");
                         writer.write("\t\t{\n");
@@ -535,7 +535,7 @@ public class ClientStubWriter extends CFileWriter
                             writer.write( "\t\t\t\t}\n");
                             writer.write( "\t\t\t}\n");
                             writer.write( "\n");
-                            writer.write( "\t\t\taxiscAxisDelete( (void *) pReturn" + i + ", " + CUtils.getXSDEnumerator( currentParaType) + ");\n");
+                            writer.write( "\t\t\taxiscAxisDelete( (void *) pReturn" + i + ", " + CUtils.getXSDEnumeratorForType( currentParaType) + ");\n");
                         }
                         else 
                         {
@@ -547,7 +547,7 @@ public class ClientStubWriter extends CFileWriter
                             writer.write( "\t\t\t*OutValue" + i + " = *pReturn" + i + ";\n");
                             writer.write( "\t\t}\n");
                             writer.write( "\n");
-                            writer.write( "\t\taxiscAxisDelete(pReturn" + i + ", " + CUtils.getXSDEnumerator( currentParaType) + ");\n");
+                            writer.write( "\t\taxiscAxisDelete(pReturn" + i + ", " + CUtils.getXSDEnumeratorForType( currentParaType) + ");\n");
                         }
                     }
                     else
@@ -582,7 +582,7 @@ public class ClientStubWriter extends CFileWriter
             {
                 containedType = CUtils.getSimpleType(qname);
                 writer.write("\t\t\tRetArray = (" + containedType + "_Array *)axiscCallGetBasicArray(call, "
-                        + CUtils.getXSDEnumerator(containedType) + ",\""
+                        + CUtils.getXSDEnumeratorForType(containedType) + ",\""
                         + paramTagName + "\",0);\n");
             }
             else
@@ -622,7 +622,7 @@ public class ClientStubWriter extends CFileWriter
             else
             {
                 writer.write("\t\t\t\tRet = *pReturn;\n");
-                writer.write("\t\t\t\taxiscAxisDelete(pReturn, " + CUtils.getXSDEnumerator(outparamTypeName) + ");\n");                
+                writer.write("\t\t\t\taxiscAxisDelete(pReturn, " + CUtils.getXSDEnumeratorForType(outparamTypeName) + ");\n");                
             }
 
             writer.write("\t\t\t}\n");

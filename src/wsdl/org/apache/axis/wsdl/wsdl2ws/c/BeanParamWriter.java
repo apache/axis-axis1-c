@@ -77,7 +77,7 @@ public class BeanParamWriter extends ParamCFileWriter
                 if (!CUtils.isPointerType(typeName))
                     writer.write("&");                
                 writer.write("(param->" + extensionBaseAttrib.getParamNameAsMember() + "), "
-                        + CUtils.getXSDEnumerator(typeName) + ");\n");
+                        + CUtils.getXSDEnumeratorForType(typeName) + ");\n");
             }
             else
             {
@@ -172,14 +172,14 @@ public class BeanParamWriter extends ParamCFileWriter
                 writer.write("\taxiscSoapSerializerSerializeAsAttribute(pSZ,\""
                         + attribs[i].getParamNameAsSOAPString() + "\", 0, (void*)(param->"
                         + attribs[i].getParamNameAsMember() + "), "
-                        + CUtils.getXSDEnumerator(basicType) + ");\n");
+                        + CUtils.getXSDEnumeratorForType(basicType) + ");\n");
             }
             else
             {
                 writer.write("\taxiscSoapSerializerSerializeAsAttribute(pSZ,\""
                         + attribs[i].getParamNameAsSOAPString() + "\", 0, (void*)&(param->"
                         + attribs[i].getParamNameAsMember() + "), "
-                        + CUtils.getXSDEnumerator(attribs[i].getTypeName()) + ");\n");
+                        + CUtils.getXSDEnumeratorForType(attribs[i].getTypeName()) + ");\n");
             }
         }
 
@@ -271,7 +271,7 @@ public class BeanParamWriter extends ParamCFileWriter
                     
                     writer.write("\taxiscSoapSerializerSerializeBasicArray(pSZ, (const Axisc_Array *)param->" + attribs[i].getParamNameAsMember()
                         + ", " + namespace + ","
-                        + CUtils.getXSDEnumerator(baseTypeName) + ", \""
+                        + CUtils.getXSDEnumeratorForType(baseTypeName) + ", \""
                         + attribs[i].getParamNameAsSOAPString() + "\");\n");
                 }
                 else
@@ -314,7 +314,7 @@ public class BeanParamWriter extends ParamCFileWriter
                 writer.write("\taxiscSoapSerializerSerializeAsElement(pSZ, \""
                         + attribs[i].getElementNameAsSOAPString() + "\", " + namespace
                         + ", (void*)" + ampersand + "(param->" + attribs[i].getParamNameAsMember() + "), "
-                        + CUtils.getXSDEnumerator(baseTypeName) + ");\n");
+                        + CUtils.getXSDEnumeratorForType(baseTypeName) + ");\n");
             }
             else
             {
@@ -435,7 +435,7 @@ public class BeanParamWriter extends ParamCFileWriter
                 writer.write("\t{\n"); // ==== begin scope
                 writer.write("\t\tvoid* pCharDataAs;\n\n");
                 String typeName = extensionBaseAttrib.getTypeName();
-                String xsdType = CUtils.getXSDEnumerator(typeName);
+                String xsdType = CUtils.getXSDEnumeratorForType(typeName);
                 writer.write("\t\taxiscSoapDeSerializerGetChardataAs(pDZ, &pCharDataAs, " + xsdType + ");\n");
                 writer.write("\t\tparam->" + extensionBaseAttrib.getParamNameAsMember() + " = ");
                 
@@ -621,7 +621,7 @@ public class BeanParamWriter extends ParamCFileWriter
                     writer.write(tab2 + "param->" + attribs[i].getParamNameAsMember() 
                             + " = (" + baseTypeName + "_Array *)" 
                             + "axiscSoapDeSerializerGetBasicArray(pDZ, " 
-                            + CUtils.getXSDEnumerator(baseTypeName) + ", \"" 
+                            + CUtils.getXSDEnumeratorForType(baseTypeName) + ", \"" 
                             + attribs[i].getParamNameAsSOAPString() + "\",0);\n");
                 }
                 else
@@ -687,14 +687,14 @@ public class BeanParamWriter extends ParamCFileWriter
                     writer.write(tab2 + "\t\tparam->" + attribs[i].getParamNameAsMember() + " = *"
                             + attribs[i].getParamNameAsMember() + ";\n");
 
-                    if (CUtils.getXSDEnumerator( attribs[i].getTypeName()).equals("XSDC_HEXBINARY")
-                            || CUtils.getXSDEnumerator( attribs[i].getTypeName()).equals("XSDC_BASE64BINARY"))
+                    if (CUtils.getXSDEnumeratorForType( attribs[i].getTypeName()).equals("XSDC_HEXBINARY")
+                            || CUtils.getXSDEnumeratorForType( attribs[i].getTypeName()).equals("XSDC_BASE64BINARY"))
                     {
                         writer.write(tab2 + "\t\t" + attribs[i].getParamNameAsMember() + "->__ptr = NULL;\n");
                     }
                     
                     writer.write(tab2 + "\t\taxiscAxisDelete( (void *) " + attribs[i].getParamNameAsMember() 
-                            + ", " + CUtils.getXSDEnumerator( attribs[i].getTypeName()) + ");\n");
+                            + ", " + CUtils.getXSDEnumeratorForType( attribs[i].getTypeName()) + ");\n");
                     writer.write(tab2 + "\t}\n");
                     
                     writer.write(tab2 + "}\n");  // end local scope                
@@ -852,7 +852,7 @@ public class BeanParamWriter extends ParamCFileWriter
                             + " = (" + baseTypeName + "_Array *)axiscAxisNew(XSDC_ARRAY, 0);\n");
                     
                     writer.write("\t\tpTemp->" + attribs[i].getParamNameAsMember() + "->m_Type = " 
-                            + CUtils.getXSDEnumerator(baseTypeName) + ";\n");
+                            + CUtils.getXSDEnumeratorForType(baseTypeName) + ";\n");
                 }
                 else
                 {
@@ -914,8 +914,8 @@ public class BeanParamWriter extends ParamCFileWriter
                 else
                     baseTypeName = attribs[i].getTypeName();
                 
-                if (CUtils.getXSDEnumerator( baseTypeName).equals("XSDC_HEXBINARY")
-                        || CUtils.getXSDEnumerator( baseTypeName).equals("XSDC_BASE64BINARY"))
+                if (CUtils.getXSDEnumeratorForType( baseTypeName).equals("XSDC_HEXBINARY")
+                        || CUtils.getXSDEnumeratorForType( baseTypeName).equals("XSDC_BASE64BINARY"))
                 {
                     // need to delete the pointer
                     String dot = ".";
@@ -935,7 +935,7 @@ public class BeanParamWriter extends ParamCFileWriter
                     if (attribs[i].isArray())
                         passedInBaseType = "XSDC_ARRAY";
                     else
-                        passedInBaseType = CUtils.getXSDEnumerator(baseTypeName);
+                        passedInBaseType = CUtils.getXSDEnumeratorForType(baseTypeName);
                                     
                     writer.write("\t\tif (param->" + attribs[i].getParamNameAsMember() + " != NULL)\n");
                     writer.write("\t\t\taxiscAxisDelete(param->" + attribs[i].getParamNameAsMember() 

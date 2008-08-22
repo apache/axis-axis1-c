@@ -285,7 +285,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 if (!CUtils.isPointerType(typeName))
                     writer.write("&");    
                 writer.write("(param->" + extensionBaseAttrib.getParamNameAsMember() + "), "
-                        + CUtils.getXSDEnumerator(typeName) + ");\n");
+                        + CUtils.getXSDEnumeratorForType(typeName) + ");\n");
             }
             else
             {
@@ -388,14 +388,14 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 writer.write("\tpSZ->serializeAsAttribute(\""
                         + soapTagName + "\", 0, (void*)(param->"
                         + attribs[i].getParamNameAsMember() + "), "
-                        + CUtils.getXSDEnumerator(basicType) + ");\n");
+                        + CUtils.getXSDEnumeratorForType(basicType) + ");\n");
             }
             else
             {
                 writer.write("\tpSZ->serializeAsAttribute(\""
                         + soapTagName + "\", 0, (void*)&(param->"
                         + attribs[i].getParamNameAsMember() + "), "
-                        + CUtils.getXSDEnumerator(attribs[i].getTypeName()) + ");\n");
+                        + CUtils.getXSDEnumeratorForType(attribs[i].getTypeName()) + ");\n");
             }
         }
 
@@ -487,7 +487,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     
                     writer.write("\tpSZ->serializeBasicArray(param->" + attribs[i].getParamNameAsMember()
                         + ", " + namespace + ","
-                        + CUtils.getXSDEnumerator(baseTypeName) + ", \""
+                        + CUtils.getXSDEnumeratorForType(baseTypeName) + ", \""
                         + attribs[i].getParamNameAsSOAPString() + "\");\n");
                 }
                 else
@@ -529,7 +529,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 writer.write("\tpSZ->serializeAsElement(\""
                         + attribs[i].getElementNameAsSOAPString() + "\", " + namespace
                         + ", (void*)" + ampersand + "(param->" + attribs[i].getParamNameAsMember() + "), " 
-                        + CUtils.getXSDEnumerator(baseTypeName) + ");\n");
+                        + CUtils.getXSDEnumeratorForType(baseTypeName) + ");\n");
             }
             else
             {
@@ -651,7 +651,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
             {
                 writer.write("\tvoid* pCharDataAs;\n");
                 String typeName = extensionBaseAttrib.getTypeName();
-                String xsdType = CUtils.getXSDEnumerator(typeName);
+                String xsdType = CUtils.getXSDEnumeratorForType(typeName);
                 writer.write("\tpIWSDZ->getChardataAs(&pCharDataAs, " + xsdType + ");\n");
                 writer.write("\tparam->" + extensionBaseAttrib.getParamNameAsMember() + " = ");
                 
@@ -837,7 +837,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                         baseTypeName = attribs[i].getTypeName();
                     
                     writer.write(tab2 + "Axis_Array * array" + arrayCount + " = pIWSDZ->getBasicArray("
-                            + CUtils.getXSDEnumerator(baseTypeName) + ", \""
+                            + CUtils.getXSDEnumeratorForType(baseTypeName) + ", \""
                             + attribs[i].getParamNameAsSOAPString()
                             + "\",0);\n");
                     writer.write(tab2 + "if(param->" + attribs[i].getParamNameAsMember() + " == NULL)\n");
@@ -917,7 +917,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     writer.write(tab2 + "{\n");
                     writer.write(tab2 + "\tparam->set" + attribs[i].getMethodName() + "(*pValue" + i + ");\n");
                     writer.write(tab2 + "\tAxis::AxisDelete((void *)pValue" + i 
-                            + ", " + CUtils.getXSDEnumerator( attribs[i].getTypeName()) + ");\n");
+                            + ", " + CUtils.getXSDEnumeratorForType( attribs[i].getTypeName()) + ");\n");
                     writer.write(tab2 + "}\n");                        
                 }
                 
